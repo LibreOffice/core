@@ -2141,8 +2141,9 @@ OUString SAL_CALL PowerPointExport_getImplementationName() throw()
 
 uno::Sequence< OUString > SAL_CALL PowerPointExport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( "com.sun.star.comp.ooxpptx" );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    Sequence< OUString > aSeq( 2 );
+    aSeq[0] = "com.sun.star.comp.ooxpptx";
+    aSeq[1] = "com.sun.star.oox.PowerPointExport";
     return aSeq;
 }
 

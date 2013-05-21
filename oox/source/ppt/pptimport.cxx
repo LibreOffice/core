@@ -24,10 +24,12 @@
 #include "oox/helper/graphichelper.hxx"
 #include "oox/ole/vbaproject.hxx"
 
+#include "com/sun/star/oox/PowerPointExport.hpp"
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
-using namespace oox::core;
+using namespace ::oox::core;
 
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::lang::XComponent;
@@ -96,7 +98,7 @@ sal_Int32 PowerPointImport::getSchemeColor( sal_Int32 nToken ) const
     if ( mpActualSlidePersist )
     {
         sal_Bool bColorMapped = sal_False;
-        oox::drawingml::ClrMapPtr pClrMapPtr( mpActualSlidePersist->getClrMap() );
+        ::oox::drawingml::ClrMapPtr pClrMapPtr( mpActualSlidePersist->getClrMap() );
         if ( pClrMapPtr )
             bColorMapped = pClrMapPtr->getColorMap( nToken );
 
@@ -110,7 +112,7 @@ sal_Int32 PowerPointImport::getSchemeColor( sal_Int32 nToken ) const
                     bColorMapped = pClrMapPtr->getColorMap( nToken );
             }
         }
-        oox::drawingml::ClrSchemePtr pClrSchemePtr( mpActualSlidePersist->getClrScheme() );
+        ::oox::drawingml::ClrSchemePtr pClrSchemePtr( mpActualSlidePersist->getClrScheme() );
         if ( pClrSchemePtr )
             pClrSchemePtr->getColor( nToken, nColor );
         else
@@ -140,17 +142,15 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
         return true;
 
     if( isExportFilter() ) {
-        Reference< XExporter > xExporter( Reference<css::lang::XMultiServiceFactory>(getComponentContext()->getServiceManager(), UNO_QUERY_THROW)->createInstance( "com.sun.star.comp.Impress.oox.PowerPointExport" ), UNO_QUERY );;
+        Reference< XExporter > xExporter = css::oox::PowerPointExport::create( getComponentContext() );
 
-        if( xExporter.is() ) {
-            Reference< XComponent > xDocument( getModel(), UNO_QUERY );
-            Reference< XFilter > xFilter( xExporter, UNO_QUERY );
+        Reference< XComponent > xDocument( getModel(), UNO_QUERY );
+        Reference< XFilter > xFilter( xExporter, UNO_QUERY );
 
-            if( xFilter.is() ) {
-                xExporter->setSourceDocument( xDocument );
-                if( xFilter->filter( rDescriptor ) )
-                    return true;
-            }
+        if( xFilter.is() ) {
+            xExporter->setSourceDocument( xDocument );
+            if( xFilter->filter( rDescriptor ) )
+                return true;
         }
     }
 
@@ -162,12 +162,12 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
     return mpActualSlidePersist ? mpActualSlidePersist->getDrawing() : 0;
 }
 
-const oox::drawingml::table::TableStyleListPtr PowerPointImport::getTableStyles()
+const ::oox::drawingml::table::TableStyleListPtr PowerPointImport::getTableStyles()
 {
     if ( !mpTableStyleList && !maTableStyleListPath.isEmpty() )
     {
-        mpTableStyleList = oox::drawingml::table::TableStyleListPtr( new oox::drawingml::table::TableStyleList() );
-        importFragment( new oox::drawingml::table::TableStyleListFragmentHandler(
+        mpTableStyleList = ::oox::drawingml::table::TableStyleListPtr( new ::oox::drawingml::table::TableStyleList() );
+        importFragment( new ::oox::drawingml::table::TableStyleListFragmentHandler(
             *this, maTableStyleListPath, *mpTableStyleList ) );
     }
     return mpTableStyleList;
