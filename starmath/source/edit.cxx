@@ -706,25 +706,39 @@ void SmEditWindow::InsertCommand(sal_uInt16 nCommand)
     OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
     {
-        // Remember start of the selection and move the cursor there afterwards.
-        // Only this way the SelNextMark() makes sense...
         ESelection aSelection = pEditView->GetSelection();
-        aSelection.nEndPos  = aSelection.nStartPos;
-        aSelection.nEndPara = aSelection.nStartPara;
 
         OSL_ENSURE( pEditView, "NULL pointer" );
         OUString aText = SM_RESSTR(nCommand);
+
+        OUString aCurrentFormula = pEditView->GetEditEngine()->GetText();
+
+        int nSize = aText.getLength();
+
+        // remove right space of current symbol if there already one
+        if (aSelection.nStartPos > 0 &&
+            aSelection.nStartPos != aCurrentFormula.getLength() &&
+            aCurrentFormula.indexOf(" ", aSelection.nStartPos + nSize - 1 ) != aSelection.nStartPos + nSize - 1)
+            aText = aText.trim();
+
+        // put an space before put a new command when necessary
+        if (aSelection.nStartPos > 0 && (aCurrentFormula.indexOf(" ", aSelection.nStartPos - 1) != aSelection.nStartPos - 1))
+            aText = " " + aText;
+
         pEditView->InsertText(aText);
 
+        // Remember start of the selection and move the cursor there afterwards.
+        aSelection.nEndPara = aSelection.nStartPara;
         if (HasMark(aText))
-        {   // set selection to next mark
+        {
+            aSelection.nEndPos = aSelection.nStartPos;
             pEditView->SetSelection(aSelection);
             SelNextMark();
         }
         else
         {   // set selection after inserted text
-            aSelection.nEndPos += aText.getLength();
-            aSelection.nStartPos  = aSelection.nEndPos;
+            aSelection.nEndPos = aSelection.nStartPos + aText.getLength();
+            aSelection.nStartPos = aSelection.nEndPos;
             pEditView->SetSelection(aSelection);
         }
 
@@ -747,6 +761,7 @@ void SmEditWindow::MarkError(const Point &rPos)
     }
 }
 
+// Makes selection to next <?> symbol
 void SmEditWindow::SelNextMark()
 {
     EditEngine *pEditEngine = GetEditEngine();
