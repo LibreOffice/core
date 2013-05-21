@@ -1812,6 +1812,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	XFont \
 	XFont2 \
 	XGraphics \
+	XGraphics2 \
 	XImageButton \
 	XImageConsumer \
 	XImageProducer \

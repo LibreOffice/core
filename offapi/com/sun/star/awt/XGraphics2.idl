@@ -1,0 +1,79 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef __com_sun_star_awt_XGraphics2_idl__
+#define __com_sun_star_awt_XGraphics2_idl__
+
+#include <com/sun/star/awt/XGraphics.idl>
+#include <com/sun/star/awt/Rectangle.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
+
+module com {  module sun {  module star {  module awt {
+
+/** provides the basic output operation of a device.
+ */
+published interface XGraphics2: com::sun::star::awt::XGraphics
+{
+    /** clears the given rectangle on the device
+
+        @since LibreOffice 4.1
+     */
+    void clear( [in] Rectangle aRect );
+
+
+    /** draws a <type scope="com::sun::star::graphic">XGraphic</type>
+        in the output device.
+
+        <p>Note that some devices may not support this operation.</p>
+
+        @since LibreOffice 4.1
+
+        @param  nX
+            the X coordinate on the device where the graphic will be drawn
+
+        @param  nY
+            the Y coordinate on the device where the graphic will be drawn
+
+        @param  nWidth
+            the width of the region on the device
+
+        @param  nHeight
+            the height of the region on the device
+
+        @param  nStyle
+            the style used to draw the image.
+            See <type scope="com::sun::star::awt">ImageDrawMode</type>.
+
+        @param  aGraphic
+            the <type scope="com::sun::star::graphic">XGraphic</type>
+            to be drawn onto the device
+     */
+    void drawImage( [in] long nX,
+                             [in] long nY,
+                             [in] long nWidth,
+                             [in] long nHeight,
+                             [in] short nStyle,
+                             [in] ::com::sun::star::graphic::XGraphic aGraphic );
+
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
