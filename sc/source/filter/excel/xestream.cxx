@@ -1146,11 +1146,9 @@ bool XclExpXmlStream::exportDocument() throw()
 // UNO stuff so that the filter is registered
 //////////////////////////////////////////////////////////////////////////
 
-#define IMPL_NAME "com.sun.star.comp.oox.ExcelFilterExport"
-
 OUString XlsxExport_getImplementationName()
 {
-    return OUString( IMPL_NAME );
+    return OUString( "com.sun.star.comp.oox.ExcelFilterExport" );
 }
 
 ::oox::ole::VbaProject* XclExpXmlStream::implCreateVbaProject() const
@@ -1166,8 +1164,9 @@ OUString XclExpXmlStream::implGetImplementationName() const
 
 Sequence< OUString > SAL_CALL XlsxExport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( "com.sun.star.document.ExportFilter" );
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    Sequence< OUString > aSeq( 2 );
+    aSeq[0] = "com.sun.star.document.ExportFilter";
+    aSeq[1] = "com.sun.star.oox.ExcelFilterExport";
     return aSeq;
 }
 

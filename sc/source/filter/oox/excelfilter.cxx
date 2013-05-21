@@ -20,6 +20,8 @@
 #include "excelfilter.hxx"
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/oox/ExcelFilterExport.hpp>
+
 #include "oox/helper/binaryinputstream.hxx"
 #include "biffinputstream.hxx"
 #include "excelchartconverter.hxx"
@@ -175,19 +177,16 @@ sal_Bool SAL_CALL ExcelFilter::filter( const ::com::sun::star::uno::Sequence< ::
 
     if ( isExportFilter() )
     {
-        Reference< XExporter > xExporter( Reference<XMultiServiceFactory>(getComponentContext()->getServiceManager(), UNO_QUERY_THROW)->createInstance( "com.sun.star.comp.oox.ExcelFilterExport" ), UNO_QUERY );;
+        Reference< XExporter > xExporter = css::oox::ExcelFilterExport::create( getComponentContext() );
 
-        if ( xExporter.is() )
+        Reference< XComponent > xDocument( getModel(), UNO_QUERY );
+        Reference< XFilter > xFilter( xExporter, UNO_QUERY );
+
+        if ( xFilter.is() )
         {
-            Reference< XComponent > xDocument( getModel(), UNO_QUERY );
-            Reference< XFilter > xFilter( xExporter, UNO_QUERY );
-
-            if ( xFilter.is() )
-            {
-                xExporter->setSourceDocument( xDocument );
-                if ( xFilter->filter( rDescriptor ) )
-                    return true;
-            }
+            xExporter->setSourceDocument( xDocument );
+            if ( xFilter->filter( rDescriptor ) )
+                return true;
         }
     }
 

@@ -46,6 +46,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/oox/ExcelFilterExport.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
@@ -1312,8 +1313,8 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                 if( xSheetDoc.is() && mpFB)
                 {
                     Reference< XComponent > xDocument( mAny, UNO_QUERY );
-                    Reference< XExporter > xExporter( Reference<css::lang::XMultiServiceFactory>(mpFB->getComponentContext()->getServiceManager(), UNO_QUERY_THROW)->createInstance( "com.sun.star.comp.oox.ExcelFilterExport" ), UNO_QUERY );;
-                    if( xDocument.is() && xExporter.is())
+                    Reference< XExporter > xExporter = css::oox::ExcelFilterExport::create( mpFB->getComponentContext() );
+                    if( xDocument.is() )
                     {
                         Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()
                                                                                           .appendAscii( GetComponentDir() )
