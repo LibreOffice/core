@@ -62,11 +62,9 @@ using namespace ::com::sun::star;
 // -----------------------------------------------------------------------------
 ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
                                   Sequence< PropertyValue >& rFilterData,
-                                  const Reference< XComponent >& rxDoc,
-                                  const Reference< lang::XMultiServiceFactory >& xFact
+                                  const Reference< XComponent >& rxDoc
                                   ) :
     SfxTabDialog( pParent, PDFFilterResId( RID_PDF_EXPORT_DLG ), 0, sal_False, 0 ),
-    mxMSF( xFact ),
     maConfigItem( "Office.Common/Filter/PDF/Export/", &rFilterData ),
     maConfigI18N( "Office.Common/I18N/CTL/" ),
     mbIsPresentation( sal_False ),

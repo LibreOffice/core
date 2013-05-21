@@ -125,7 +125,7 @@ Dialog* PDFDialog::createDialog( Window* pParent )
 
     if( mxSrcDoc.is() )
     {
-        ImpPDFTabDialog* pDlg = new ImpPDFTabDialog( pParent, maFilterData, mxSrcDoc, uno::Reference<lang::XMultiServiceFactory>(m_aContext->getServiceManager(), uno::UNO_QUERY_THROW) );
+        ImpPDFTabDialog* pDlg = new ImpPDFTabDialog( pParent, maFilterData, mxSrcDoc );
         pRet = pDlg;
     }
 

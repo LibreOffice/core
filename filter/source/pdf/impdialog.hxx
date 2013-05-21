@@ -73,7 +73,7 @@ class ImplErrorDialog : public ModalDialog
 class ImpPDFTabDialog : public SfxTabDialog
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext> mxContext;
     FilterConfigItem            maConfigItem;
     FilterConfigItem            maConfigI18N;
 
@@ -161,13 +161,11 @@ public:
 
     ImpPDFTabDialog( Window* pParent,
                      Sequence< PropertyValue >& rFilterData,
-                     const Reference< XComponent >& rDoc,
-                     const Reference< lang::XMultiServiceFactory >& xFact
+                     const Reference< XComponent >& rDoc
                      );
     ~ImpPDFTabDialog();
 
     Sequence< PropertyValue >   GetFilterData();
-    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& getServiceFactory() const { return mxMSF; }
 
 protected:
     virtual void                PageCreated( sal_uInt16 _nId,
