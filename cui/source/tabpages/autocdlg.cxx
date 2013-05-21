@@ -896,7 +896,6 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
 
     aReplaceED.SetSpaces( sal_True );
     aShortED.SetSpaces( sal_True );
-    aShortED.SetMaxTextLen( 30 );
 }
 
 OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
