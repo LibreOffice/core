@@ -54,6 +54,7 @@ struct DocxSettingsData
     bool hasData() const; /// returns true if there are any non-default settings (i.e. something to write)
     bool evenAndOddHeaders;
     int defaultTabStop;
+    bool trackRevisions;    // Should 'Track Revisions' be set
 };
 
 /// The class that does all the actual DOCX export-related work.
