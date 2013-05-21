@@ -77,7 +77,7 @@ namespace XSLT
         static const char* const PARAM_DOCTYPE_PUBLIC;
 
         // the UNO ServiceFactory
-        com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> m_rServiceFactory;
+        com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> m_xContext;
 
         com::sun::star::uno::Reference<XInputStream> m_rInputStream;
 
@@ -104,7 +104,7 @@ namespace XSLT
     public:
 
         // ctor...
-        LibXSLTTransformer(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &r);
+        LibXSLTTransformer(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> &r);
 
         // XActiveDataSink
         virtual void SAL_CALL
@@ -144,9 +144,9 @@ namespace XSLT
         ::std::map<const char*, OString> SAL_CALL
         getParameters();
 
-        virtual com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> SAL_CALL
-        getServiceFactory() {
-            return m_rServiceFactory;
+        com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> SAL_CALL
+        getComponentContext() {
+            return m_xContext;
         }
 
     };

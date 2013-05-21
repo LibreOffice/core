@@ -61,8 +61,8 @@ namespace XSLT
     class OleHandler
     {
     public:
-        OleHandler(const com::sun::star::uno::Reference<XMultiServiceFactory>& msf){
-            m_msf =msf;
+        OleHandler(const com::sun::star::uno::Reference<XComponentContext>& rxContext){
+            m_xContext = rxContext;
         }
         void SAL_CALL
         insertByName(const OUString& streamName, const OString& content);
@@ -70,7 +70,7 @@ namespace XSLT
         getByName(const OUString& streamName);
 
     private:
-        com::sun::star::uno::Reference<XMultiServiceFactory> m_msf;
+        com::sun::star::uno::Reference<XComponentContext> m_xContext;
         com::sun::star::uno::Reference<XNameContainer> m_storage;
         com::sun::star::uno::Reference<XStream> m_rootStream;
         void SAL_CALL

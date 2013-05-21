@@ -561,7 +561,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
     static css::uno::Reference<XInterface> SAL_CALL
     CreateTransformerInstance(const css::uno::Reference<XMultiServiceFactory> &r)
     {
-        return css::uno::Reference<XInterface> ((OWeakObject *) new LibXSLTTransformer(r));
+        return css::uno::Reference<XInterface> ((OWeakObject *) new LibXSLTTransformer( comphelper::getComponentContext(r) ));
     }
 
     static css::uno::Reference<XInterface> SAL_CALL

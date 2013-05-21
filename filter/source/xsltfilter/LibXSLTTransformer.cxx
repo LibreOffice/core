@@ -307,7 +307,7 @@ namespace XSLT
         xsltSetGenericDebugFunc(stderr, NULL);
         xsltDebugDumpExtensions(NULL);
 #endif
-        OleHandler* oh = new OleHandler(m_transformer->getServiceFactory());
+        OleHandler* oh = new OleHandler(m_transformer->getComponentContext());
         if (styleSheet)
             {
                 tcontext = xsltNewTransformContext(styleSheet, doc);
@@ -368,8 +368,8 @@ namespace XSLT
     }
 
     LibXSLTTransformer::LibXSLTTransformer(
-            const css::uno::Reference<XMultiServiceFactory> &r) :
-        m_rServiceFactory(r)
+            const css::uno::Reference<XComponentContext> & rxContext) :
+        m_xContext(rxContext)
     {
     }
 

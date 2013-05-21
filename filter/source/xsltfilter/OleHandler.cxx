@@ -52,9 +52,7 @@ using namespace ::rtl;
 namespace XSLT
 {
     Reference<XStream> SAL_CALL OleHandler::createTempFile() {
-        Reference<XStream> tempFile(
-                        TempFile::create(comphelper::getComponentContext(m_msf)),
-                        UNO_QUERY);
+        Reference<XStream> tempFile( TempFile::create(m_xContext), UNO_QUERY);
         OSL_ASSERT(tempFile.is());
         return tempFile;
     }
@@ -66,9 +64,10 @@ namespace XSLT
                 m_rootStream = createTempFile();
                 Sequence<Any> args(1);
                 args[0] <<= m_rootStream->getInputStream();
-                OUString serviceName("com.sun.star.embed.OLESimpleStorage");
 
-                Reference<XNameContainer> cont(m_msf->createInstanceWithArguments(serviceName, args), UNO_QUERY);
+                Reference<XNameContainer> cont(
+                     Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW)
+                         ->createInstanceWithArguments("com.sun.star.embed.OLESimpleStorage", args), UNO_QUERY);
                 m_storage = cont;
             }
     }
@@ -89,7 +88,9 @@ namespace XSLT
         //create an com.sun.star.embed.OLESimpleStorage from the temp stream
         Sequence<Any> args(1);
         args[0] <<= xSeek;
-        Reference<XNameContainer> cont(m_msf->createInstanceWithArguments(OUString( "com.sun.star.embed.OLESimpleStorage" ), args), UNO_QUERY);
+        Reference<XNameContainer> cont(
+             Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW)
+                 ->createInstanceWithArguments("com.sun.star.embed.OLESimpleStorage", args), UNO_QUERY);
         m_storage = cont;
     }
 
