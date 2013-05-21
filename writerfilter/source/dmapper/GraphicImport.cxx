@@ -1234,9 +1234,9 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
                 pProperties->resolve( *pHandler );
                 if( !m_pImpl->bUseSimplePos )
                 {
-                    m_pImpl->nHoriRelation = pHandler->m_nRelation;
-                    m_pImpl->nHoriOrient = pHandler->m_nOrient;
-                    m_pImpl->nLeftPosition = pHandler->m_nPosition;
+                    m_pImpl->nHoriRelation = pHandler->relation();
+                    m_pImpl->nHoriOrient = pHandler->orientation();
+                    m_pImpl->nLeftPosition = pHandler->position();
                 }
             }
         }
@@ -1251,9 +1251,9 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
                 pProperties->resolve( *pHandler );
                 if( !m_pImpl->bUseSimplePos )
                 {
-                    m_pImpl->nVertRelation = pHandler->m_nRelation;
-                    m_pImpl->nVertOrient = pHandler->m_nOrient;
-                    m_pImpl->nTopPosition = pHandler->m_nPosition;
+                    m_pImpl->nVertRelation = pHandler->relation();
+                    m_pImpl->nVertOrient = pHandler->orientation();
+                    m_pImpl->nTopPosition = pHandler->position();
                 }
             }
         }
