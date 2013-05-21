@@ -92,8 +92,8 @@ sal_Bool SidebarDockingWindow::Close (void)
     {
         // Do not close the floating window.
         // Dock it and close just the deck instead.
-        mpSidebarController->RequestCloseDeck();
         SetFloatingMode(sal_False);
+        mpSidebarController->RequestCloseDeck();
         mpSidebarController->NotifyResize();
         return sal_False;
     }
