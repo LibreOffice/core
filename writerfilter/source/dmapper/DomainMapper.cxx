@@ -3486,6 +3486,19 @@ void DomainMapper::lcl_startShape( uno::Reference< drawing::XShape > xShape )
 {
     if (m_pImpl->GetTopContext())
     {
+        // If there is a deferred page break, handle it now, so that the
+        // started shape will be on the correct page.
+        if (m_pImpl->isBreakDeferred(PAGE_BREAK))
+        {
+            m_pImpl->clearDeferredBreak(PAGE_BREAK);
+            lcl_startCharacterGroup();
+            sal_uInt8 sBreak[] = { 0xd };
+            lcl_text(sBreak, 1);
+            lcl_endCharacterGroup();
+            lcl_endParagraphGroup();
+            lcl_startParagraphGroup();
+            m_pImpl->GetTopContext()->Insert(PROP_BREAK_TYPE, true, uno::makeAny( com::sun::star::style::BreakType_PAGE_BEFORE));
+        }
         m_pImpl->PushShapeContext( xShape );
         lcl_startParagraphGroup();
     }

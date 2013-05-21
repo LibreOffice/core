@@ -644,6 +644,21 @@ bool DomainMapper_Impl::isBreakDeferred( BreakType deferredBreakType )
     }
 }
 
+void DomainMapper_Impl::clearDeferredBreak(BreakType deferredBreakType)
+{
+    switch (deferredBreakType)
+    {
+    case COLUMN_BREAK:
+        m_bIsColumnBreakDeferred = false;
+        break;
+    case PAGE_BREAK:
+        m_bIsPageBreakDeferred = false;
+        break;
+    default:
+        break;
+    }
+}
+
 void DomainMapper_Impl::clearDeferredBreaks()
 {
     m_bIsColumnBreakDeferred = false;

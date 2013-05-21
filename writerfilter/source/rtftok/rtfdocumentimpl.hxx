@@ -516,6 +516,8 @@ namespace writerfilter {
                 bool m_bNeedPap;
                 /// If we need to emit a CR at the end of substream.
                 bool m_bNeedCr;
+                /// Original value of m_bNeedCr -- saved/restored before/after textframes.
+                bool m_bNeedCrOrig;
                 bool m_bNeedPar;
                 /// If set, an empty paragraph will be added at the end of the document.
                 bool m_bNeedFinalPar;

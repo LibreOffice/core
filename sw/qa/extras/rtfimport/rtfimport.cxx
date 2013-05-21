@@ -135,6 +135,7 @@ public:
     void testFdo63023();
     void testFdo42109();
     void testFdo62977();
+    void testN818997();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -259,6 +260,7 @@ void Test::run()
         {"fdo63023.rtf", &Test::testFdo63023},
         {"fdo42109.rtf", &Test::testFdo42109},
         {"fdo62977.rtf", &Test::testFdo62977},
+        {"n818997.rtf", &Test::testN818997},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1230,6 +1232,12 @@ void Test::testFdo62977()
 {
     // The middle character was imported as '?' instead of the proper unicode value.
     getRun(getParagraph(1), 1, OUString("\xE5\xB9\xB4\xEF\xBC\x94\xE6\x9C\x88", 9, RTL_TEXTENCODING_UTF8));
+}
+
+void Test::testN818997()
+{
+    // \page was ignored between two \shp tokens.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
