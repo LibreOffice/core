@@ -23,6 +23,7 @@ $(eval $(call gb_Library_use_libraries,macab1,\
 	dbtools \
 	sal \
 	salhelper \
+	tl \
 ))
 
 $(eval $(call gb_Library_set_include,macab1,\
