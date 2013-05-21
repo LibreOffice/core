@@ -875,7 +875,7 @@ ModalDialog RID_ALIGNDIALOG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     HelpId = CMD_SID_ALIGN ;
-    Size = MAP_APPFONT ( 139 , 66 ) ;
+    Size = MAP_APPFONT ( 139 , 80 ) ;
     Text [ en-US ] = "Alignment" ;
     RadioButton 1
     {
@@ -932,7 +932,7 @@ ModalDialog RID_ALIGNDIALOG
     {
         HelpID = "starmath:PushButton:RID_ALIGNDIALOG:1";
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 83 , 69 ) ;
+        Pos = MAP_APPFONT ( 83 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Default" ;
     };
