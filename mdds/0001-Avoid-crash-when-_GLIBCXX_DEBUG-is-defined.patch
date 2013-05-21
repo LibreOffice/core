@@ -1,0 +1,31 @@
+From e77d3ba18a2fd53488048b78264be011db5423f6 Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Tue, 21 May 2013 15:38:51 -0400
+Subject: [PATCH] Avoid crash when _GLIBCXX_DEBUG is defined.
+
+I'm not sure why gcc's STL debug complains when swapping two iterators
+when one of them is a singular, but doesn't when I assign one to the
+other via assignment. But whichever works....
+---
+ include/mdds/multi_type_vector_itr.hpp | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/include/mdds/multi_type_vector_itr.hpp b/include/mdds/multi_type_vector_itr.hpp
+index a7954d2..7923a22 100644
+--- a/b/include/mdds/multi_type_vector_itr.hpp
++++ u/r/screwed/include/mdds/multi_type_vector_itr.hpp
+@@ -216,8 +216,9 @@ public:
+ 
+     iterator_common_base& operator= (const iterator_common_base& other)
+     {
+-        iterator_common_base assigned(other);
+-        swap(assigned);
++        m_cur_node = other.m_cur_node;
++        m_pos = other.m_pos;
++        m_end = other.m_end;
+         return *this;
+     }
+ 
+-- 
+1.8.0
+
