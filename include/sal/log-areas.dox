@@ -222,6 +222,7 @@ certain functionality.
 
 @section tools
 
+@li @c tools
 @li @c tools.debug
 @li @c tools.datetime
 @li @c tools.generic
