@@ -71,9 +71,21 @@ ModalDialog RID_DEFAULTABOUT
         Left = TRUE ;
         Text = "http://www.openoffice.org/welcome/credits.html";
     };
-    String RID_CUI_ABOUT_STR_COPYRIGHT
+    String RID_CUI_ABOUT_STR_COPYRIGHT_VENDOR
     {
-        Text[ en-US ] = "Copyright © 2012 Apache Software Foundation.\nAll rights reserved.\n\nThis product was created by %OOOVENDOR, based on Apache OpenOffice.\nApache OpenOffice acknowledges all community members, especially those mentioned at";
+        Text[ en-US ] = "%OOOVENDOR";
+    };
+    String RID_CUI_ABOUT_STR_CREATED
+    {
+        Text[ en-US ] = "This product was created by the OpenOffice community.";
+    };
+    String RID_CUI_ABOUT_STR_CREATED_VENDOR
+    {
+        Text[ en-US ] = "This product was created by %OOOVENDOR, based on Apache OpenOffice.";
+    };
+    String RID_CUI_ABOUT_STR_ACKNOWLEDGE
+    {
+        Text[ en-US ] = "The OpenOffice community acknowledges all contributing members, especially those mentioned at";
     };
 };
 

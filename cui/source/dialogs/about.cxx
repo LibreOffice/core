@@ -28,6 +28,7 @@
 #include <dialmgr.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+//#include <rtl/ustrbuf.hxx>
 #include <sfx2/sfxcommands.h>
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/sfxuno.hxx>
@@ -279,15 +280,15 @@ namespace
 
 // -----------------------------------------------------------------------
 
-AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
+AboutDialog::AboutDialog( Window* pParent, const ResId  & rId ) :
     SfxModalDialog( pParent, rId ),
     maOKButton( this, ResId( RID_CUI_ABOUT_BTN_OK, *rId.GetResMgr() ) ),
     maReadmeButton( this, ResId( RID_CUI_ABOUT_BTN_README, *rId.GetResMgr() ) ),
     maVersionText( this, ResId( RID_CUI_ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
     maBuildInfoEdit( this, ResId( RID_CUI_ABOUT_FTXT_BUILDDATA, *rId.GetResMgr() ) ),
     maCopyrightEdit( this, ResId( RID_CUI_ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
-    maCreditsLink( this, ResId( RID_CUI_ABOUT_FTXT_WELCOME_LINK, *rId.GetResMgr() )  ),
-    maCopyrightTextStr( ResId( RID_CUI_ABOUT_STR_COPYRIGHT, *rId.GetResMgr() ) )
+    maCreditsLink( this, ResId( RID_CUI_ABOUT_FTXT_WELCOME_LINK, *rId.GetResMgr() )  )
+//    maCopyrightTextStr( ResId( RID_CUI_ABOUT_STR_COPYRIGHT, *rId.GetResMgr() ) )
 {
     bool bLoad = vcl::ImageRepository::loadBrandingImage(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("about")),
@@ -298,6 +299,39 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logo")),
             maMainLogo );
     OSL_ENSURE( bLoad, "Can't load logo image");
+
+    const String vendor( ResId( RID_CUI_ABOUT_STR_COPYRIGHT_VENDOR, *rId.GetResMgr() ) );
+    String createdRes( ResId( RID_CUI_ABOUT_STR_CREATED, *rId.GetResMgr() ) );
+    if ( !vendor.EqualsAscii("Apache Software Foundation") ) {
+        createdRes = String( ResId( RID_CUI_ABOUT_STR_CREATED_VENDOR, *rId.GetResMgr() ));
+    }
+    const String copyrightAcknowledge( ResId( RID_CUI_ABOUT_STR_ACKNOWLEDGE, *rId.GetResMgr() ) );
+
+    rtl::OUStringBuffer sbcopyright(250);
+    sbcopyright.appendAscii("Copyright ");
+    sbcopyright.append((sal_Unicode)0x00a9);
+    sbcopyright.appendAscii(" ");
+    rtl::OUString sYear( RTL_CONSTASCII_USTRINGPARAM("2013") );
+    if (vendor.EqualsAscii("Apache Software Foundation")) {
+        sbcopyright.append(sYear);
+        sbcopyright.appendAscii(" The Apache Software Foundation.\n\n");
+    } else {
+#ifdef COPYRIGHT_YEAR
+        const rtl::OUString sDefYear( RTL_CONSTASCII_USTRINGPARAM( STRINGIFY( COPYRIGHT_YEAR ) ) );
+        if ( sDefYear.getLength() > 0 )
+        {
+            sYear = sDefYear;
+        }
+#endif
+        sbcopyright.append(sYear);
+        sbcopyright.appendAscii(" ");
+        sbcopyright.append(vendor);
+        sbcopyright.appendAscii(".\nPortion copyright The Apache Software Foundation.\n\n");
+    }
+    sbcopyright.append( createdRes );
+    sbcopyright.appendAscii("\n\n");
+    sbcopyright.append( copyrightAcknowledge );
+    maCopyrightTextStr = sbcopyright.makeStringAndClear();
 
     InitControls();
 
