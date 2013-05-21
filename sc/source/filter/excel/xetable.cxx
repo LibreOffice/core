@@ -910,8 +910,8 @@ void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
 
         case NUMBERFORMAT_TEXT:
         {
-            String aResult = mrScFmlaCell.GetString();
-            if( aResult.Len() || (rStrm.GetRoot().GetBiff() <= EXC_BIFF5) )
+            OUString aResult = mrScFmlaCell.GetString();
+            if( !aResult.isEmpty() || (rStrm.GetRoot().GetBiff() <= EXC_BIFF5) )
             {
                 rStrm << EXC_FORMULA_RES_STRING;
                 mxStringRec.reset( new XclExpStringRec( rStrm.GetRoot(), aResult ) );
