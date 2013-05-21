@@ -95,8 +95,6 @@ void CellLineStyleValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     aSize.Height() = nRectHeight*3/5;
     aFont.SetSize( aSize );
 
-    Point aLineStart(aBLPos.X() + 5,            aBLPos.Y() + ( nRectHeight - nItemId )/2);
-    Point aLineEnd(aBLPos.X() + nRectWidth * 7 / 9 - 15, aBLPos.Y() + ( nRectHeight - nItemId )/2);
     long  nTLX = aBLPos.X() + 5,  nTLY = aBLPos.Y() + ( nRectHeight - nItemId )/2;
     long  nTRX = aBLPos.X() + nRectWidth * 7 / 9 - 15, nTRY = aBLPos.Y() + ( nRectHeight - nItemId )/2;
 
