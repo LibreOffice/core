@@ -357,7 +357,6 @@ namespace dbaui
             sConnectURL = pUrlItem->GetValue();
         }
 
-        ::rtl::OUString eOldSelection = m_eCurrentSelection;
         m_eNotSupportedKnownType =  ::dbaccess::DST_UNKNOWN;
         implSetCurrentType(  ::rtl::OUString() );
 
@@ -388,11 +387,9 @@ namespace dbaui
         m_pDatasourceType->SelectEntry(sDisplayName);
 
         // notify our listener that our type selection has changed (if so)
-        if ( eOldSelection != m_eCurrentSelection )
-        {
-            setParentTitle(m_eCurrentSelection);
-            onTypeSelected(m_eCurrentSelection);
-        }
+        // FIXME: how to detect that it did not changed? (fdo#62937)
+        setParentTitle(m_eCurrentSelection);
+        onTypeSelected(m_eCurrentSelection);
 
         // a special message for the current page state
         switchMessage(m_eCurrentSelection);
