@@ -755,7 +755,7 @@ bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchSt
     int nMatch = 0;
 
     const OUString& rFontName = rFSD.maTargetName;
-    if( rFontName == GetFamilyName() || rFontName.equalsIgnoreAsciiCase( GetFamilyName() ) )
+    if( rFontName.equalsIgnoreAsciiCase( GetFamilyName() ) )
         nMatch += 240000;
 
     if( rStatus.mpTargetStyleName
