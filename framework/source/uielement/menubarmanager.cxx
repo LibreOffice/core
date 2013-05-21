@@ -166,7 +166,7 @@ static sal_Int16 getImageTypeFromBools( sal_Bool bBig )
 }
 
 MenuBarManager::MenuBarManager(
-    const Reference< XMultiServiceFactory >& xServiceFactory,
+    const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& rFrame,
     const Reference< XURLTransformer >& _xURLTransformer,
     const Reference< XDispatchProvider >& rDispatchProvider,
@@ -178,17 +178,17 @@ MenuBarManager::MenuBarManager(
     , m_bAcceleratorCfg( sal_False )
     , m_bModuleIdentified( sal_False )
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
-    , mxServiceFactory(xServiceFactory)
+    , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
     , m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "MenuBarManager::MenuBarManager" );
-    m_xPopupMenuControllerRegistration = PopupMenuControllerFactory::create( comphelper::getComponentContext(getServiceFactory()) );
+    m_xPopupMenuControllerRegistration = PopupMenuControllerFactory::create( m_xContext );
     FillMenuManager( pMenu, rFrame, rDispatchProvider, rModuleIdentifier, bDelete, bDeleteChildren );
 }
 
 MenuBarManager::MenuBarManager(
-    const Reference< XMultiServiceFactory >& xServiceFactory,
+    const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& rFrame,
     const Reference< XURLTransformer >& _xURLTransformer,
     AddonMenu* pAddonMenu,
@@ -201,7 +201,7 @@ MenuBarManager::MenuBarManager(
     , m_bAcceleratorCfg( sal_False )
     , m_bModuleIdentified( sal_False )
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
-    , mxServiceFactory(xServiceFactory)
+    , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
     , m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
 {
@@ -210,7 +210,7 @@ MenuBarManager::MenuBarManager(
 }
 
 MenuBarManager::MenuBarManager(
-    const Reference< XMultiServiceFactory >& xServiceFactory,
+    const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& rFrame,
     const Reference< XURLTransformer >& _xURLTransformer,
     AddonPopupMenu* pAddonPopupMenu,
@@ -223,7 +223,7 @@ MenuBarManager::MenuBarManager(
     , m_bAcceleratorCfg( sal_False )
     , m_bModuleIdentified( sal_False )
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
-    , mxServiceFactory(xServiceFactory)
+    , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
     , m_nSymbolsStyle( SvtMiscOptions().GetCurrentSymbolsStyle() )
 {
@@ -387,7 +387,7 @@ void SAL_CALL MenuBarManager::dispose() throw( RuntimeException )
         m_xDocAcceleratorManager.clear();
         m_xUICommandLabels.clear();
         m_xPopupMenuControllerRegistration.clear();
-        mxServiceFactory.clear();
+        m_xContext.clear();
     }
 }
 
@@ -606,8 +606,7 @@ void MenuBarManager::RemoveListener()
     // Check service manager reference. Remove listener can be called due
     // to a disposing call from the frame and therefore we already removed
     // our listeners and release the service manager reference!
-    Reference< XMultiServiceFactory > xServiceManager = getServiceFactory();
-    if ( xServiceManager.is() )
+    if ( m_xContext.is() )
     {
         std::vector< MenuItemHandler* >::iterator p;
         for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
@@ -709,8 +708,7 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
 
         // Check reference of service manager before we use it. Reference could
         // be cleared due to RemoveListener call!
-        Reference< XMultiServiceFactory > xServiceManager( getServiceFactory() );
-        if ( xServiceManager.is() )
+        if ( m_xContext.is() )
         {
             m_xURLTransformer->parseStrict( aTargetURL );
 
@@ -850,7 +848,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
 
         OUString aMenuCommand( m_aMenuItemCommand );
         if ( m_aMenuItemCommand == aSpecialWindowMenu || m_aMenuItemCommand == aSlotSpecialWindowMenu || aMenuCommand == aSpecialWindowCommand )
-             MenuManager::UpdateSpecialWindowMenu( pMenu, comphelper::getComponentContext(getServiceFactory()), m_aLock );
+             MenuManager::UpdateSpecialWindowMenu( pMenu, m_xContext, m_aLock );
 
         // Check if some modes have changed so we have to update our menu images
         sal_Int16 nSymbolsStyle = SvtMiscOptions().GetCurrentSymbolsStyle();
@@ -1075,7 +1073,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
             {
                 // window list menu item selected
 
-                Reference< XDesktop2 > xDesktop = Desktop::create( comphelper::getComponentContext(getServiceFactory()) );
+                Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
 
                 sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
                 Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );
@@ -1176,11 +1174,11 @@ sal_Bool MenuBarManager::MustBeHidden( PopupMenu* pPopupMenu, const Reference< X
 
     return sal_True;
 }
+
 String MenuBarManager::RetrieveLabelFromCommand( const String& aCmdURL )
 {
-    return framework::RetrieveLabelFromCommand(aCmdURL, comphelper::getComponentContext(mxServiceFactory), m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,m_bModuleIdentified,"Label");
+    return framework::RetrieveLabelFromCommand(aCmdURL, m_xContext, m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,m_bModuleIdentified,"Label");
 }
-
 
 
 sal_Bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHandler )
@@ -1199,14 +1197,11 @@ sal_Bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHa
     aPropValue.Value      <<= m_xFrame;
     aSeq[1] <<= aPropValue;
 
-    Reference< XComponentContext > xComponentContext(
-        comphelper::getComponentContext( getServiceFactory() ) );
-
     Reference< XPopupMenuController > xPopupMenuController(
                                             m_xPopupMenuControllerRegistration->createInstanceWithArgumentsAndContext(
                                                 aItemCommand,
                                                 aSeq,
-                                                xComponentContext ),
+                                                m_xContext ),
                                             UNO_QUERY );
 
     if ( xPopupMenuController.is() )
@@ -1336,7 +1331,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                      ( aItemCommand.indexOf( ADDONSPOPUPMENU_URL_PREFIX ) == 0 ))
             {
                 // A special addon popup menu, must be created with a different ctor
-                MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), m_xFrame, m_xURLTransformer,(AddonPopupMenu *)pPopup, bDeleteChildren, bDeleteChildren );
+                MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer,(AddonPopupMenu *)pPopup, bDeleteChildren, bDeleteChildren );
                 AddMenu(pSubMenuManager,aItemCommand,nItemId);
             }
             else
@@ -1385,7 +1380,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     AddonMenu* pSubMenu = dynamic_cast< AddonMenu* >( pPopup );
                     if ( pSubMenu )
                     {
-                        MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), m_xFrame, m_xURLTransformer,pSubMenu, sal_True, sal_False );
+                        MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer,pSubMenu, sal_True, sal_False );
                         AddMenu(pSubMenuManager,aItemCommand,nItemId);
                         pSubMenuManager->m_aMenuItemCommand = OUString();
 
@@ -1401,7 +1396,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 }
                 else
                 {
-                    MenuBarManager* pSubMenuMgr = new MenuBarManager( getServiceFactory(), rFrame, m_xURLTransformer,rDispatchProvider, aModuleIdentifier, pPopup, bDeleteChildren, bDeleteChildren );
+                    MenuBarManager* pSubMenuMgr = new MenuBarManager( m_xContext, rFrame, m_xURLTransformer,rDispatchProvider, aModuleIdentifier, pPopup, bDeleteChildren, bDeleteChildren );
                     AddMenu(pSubMenuMgr,aItemCommand,nItemId);
                 }
             }
@@ -1519,7 +1514,7 @@ void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuSh
     if ( !m_bModuleIdentified )
     {
         m_bModuleIdentified = sal_True;
-        Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext( getServiceFactory() ) );
+        Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
 
         try
         {
@@ -1566,7 +1561,7 @@ void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuSh
             if ( !xModuleAccelCfg.is() )
             {
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
-                    ModuleUIConfigurationManagerSupplier::create( comphelper::getComponentContext(getServiceFactory()) );
+                    ModuleUIConfigurationManagerSupplier::create( m_xContext );
                 try
                 {
                     Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
@@ -1587,7 +1582,7 @@ void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuSh
 
             if ( !xGlobalAccelCfg.is() )
             {
-                xGlobalAccelCfg = GlobalAcceleratorConfiguration::create( comphelper::getComponentContext(getServiceFactory()) );
+                xGlobalAccelCfg = GlobalAcceleratorConfiguration::create( m_xContext );
                 m_xGlobalAcceleratorManager = xGlobalAccelCfg;
             }
         }
@@ -1637,7 +1632,7 @@ void MenuBarManager::RetrieveImageManagers()
 
     Reference< XModuleManager2 > xModuleManager;
     if ( m_aModuleIdentifier.isEmpty() )
-        xModuleManager.set( ModuleManager::create( comphelper::getComponentContext( getServiceFactory() ) ) );
+        xModuleManager.set( ModuleManager::create( m_xContext ) );
 
     try
     {
@@ -1651,7 +1646,7 @@ void MenuBarManager::RetrieveImageManagers()
     if ( !m_xModuleImageManager.is() )
     {
         Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
-            ModuleUIConfigurationManagerSupplier::create( comphelper::getComponentContext(getServiceFactory()) );
+            ModuleUIConfigurationManagerSupplier::create( m_xContext );
         Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
         m_xModuleImageManager.set( xUICfgMgr->getImageManager(), UNO_QUERY );
         m_xModuleImageManager->addConfigurationListener( Reference< XUIConfigurationListener >(
@@ -1872,7 +1867,7 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
     if ( !m_bModuleIdentified )
     {
         m_bModuleIdentified = sal_True;
-        Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(getServiceFactory()) );
+        Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
 
         try
         {
@@ -1968,9 +1963,9 @@ void MenuBarManager::GetPopupController( PopupControllerCache& rPopupController 
     }
 }
 
-const Reference< XMultiServiceFactory >& MenuBarManager::getServiceFactory()
+const Reference< XComponentContext >& MenuBarManager::getComponentContext()
 {
-    return mxServiceFactory;
+    return m_xContext;
 }
 
 void MenuBarManager::AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sItemCommand,sal_uInt16 _nItemId)
@@ -2017,7 +2012,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMen
     m_bIsBookmarkMenu   = sal_True;
 
     OUString aModuleIdentifier;
-    m_xPopupMenuControllerRegistration = PopupMenuControllerFactory::create( comphelper::getComponentContext(getServiceFactory()) );
+    m_xPopupMenuControllerRegistration = PopupMenuControllerFactory::create( m_xContext );
 
     Reference< XStatusListener > xStatusListener;
     Reference< XDispatch > xDispatch;
@@ -2032,7 +2027,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMen
         if ( pPopupMenu )
         {
             Reference< XDispatchProvider > xDispatchProvider;
-            MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), rFrame, m_xURLTransformer,xDispatchProvider, aModuleIdentifier, pPopupMenu, _bHandlePopUp ? sal_False : bDeleteChildren, _bHandlePopUp ? sal_False : bDeleteChildren );
+            MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, rFrame, m_xURLTransformer,xDispatchProvider, aModuleIdentifier, pPopupMenu, _bHandlePopUp ? sal_False : bDeleteChildren, _bHandlePopUp ? sal_False : bDeleteChildren );
 
             Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );
 
@@ -2089,10 +2084,8 @@ void MenuBarManager::SetHdl()
     m_pVCLMenu->SetDeactivateHdl( LINK( this, MenuBarManager, Deactivate ));
     m_pVCLMenu->SetSelectHdl( LINK( this, MenuBarManager, Select ));
 
-    if ( !m_xURLTransformer.is() && mxServiceFactory.is() )
-        m_xURLTransformer.set(
-             URLTransformer::create(
-                 ::comphelper::getComponentContext(mxServiceFactory)) );
+    if ( !m_xURLTransformer.is() && m_xContext.is() )
+        m_xURLTransformer.set( URLTransformer::create( m_xContext) );
 }
 
 }

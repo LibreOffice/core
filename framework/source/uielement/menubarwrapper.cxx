@@ -183,7 +183,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 // support. This feature is currently used for "Inplace editing"!
                 Reference< XDispatchProvider > xDispatchProvider;
 
-                MenuBarManager* pMenuBarManager = new MenuBarManager( m_xServiceFactory,
+                MenuBarManager* pMenuBarManager = new MenuBarManager( comphelper::getComponentContext(m_xServiceFactory),
                                                                       xFrame,
                                                                       xTrans,
                                                                       xDispatchProvider,

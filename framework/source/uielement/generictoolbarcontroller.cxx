@@ -354,7 +354,7 @@ MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::Runtime
         Reference< XDispatchProvider > xDispatch;
         Reference< XURLTransformer > xURLTransformer = URLTransformer::create( m_xContext );
         pMenu = new Toolbarmenu();
-        m_xMenuManager.set( new MenuBarManager( Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW), m_xFrame, xURLTransformer, xDispatch, m_aModuleIdentifier, pMenu, sal_True, sal_True ) );
+        m_xMenuManager.set( new MenuBarManager( m_xContext, m_xFrame, xURLTransformer, xDispatch, m_aModuleIdentifier, pMenu, sal_True, sal_True ) );
         if ( m_xMenuManager.is() )
         {
             MenuBarManager* pMgr = dynamic_cast< MenuBarManager* >( m_xMenuManager.get() );
