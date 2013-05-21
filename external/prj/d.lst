@@ -36,6 +36,10 @@ mkdir: %_DEST%\inc\external\wine
 ..\msvcp90\msvcr90*.dll %_DEST%\bin
 ..\msvcp90\Microsoft.VC90.CRT.manifest %_DEST%\bin\Microsoft.VC90.CRT.manifest
 ..\msvcp90\Microsoft.VC90.DebugCRT.manifest %_DEST%\bin\Microsoft.VC90.DebugCRT.manifest
+..\msvcp100\msvcp100*.dll %_DEST%\bin
+..\msvcp100\msvcr100*.dll %_DEST%\bin
+..\msvcp110\msvcp110*.dll %_DEST%\bin
+..\msvcp110\msvcr110*.dll %_DEST%\bin
 ..\msm90\*.msm %_DEST%\bin
 ..\msm100\*.msm %_DEST%\bin
 ..\msm110\*.msm %_DEST%\bin
