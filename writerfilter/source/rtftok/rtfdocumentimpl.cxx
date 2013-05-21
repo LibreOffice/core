@@ -230,6 +230,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bFirstRun(true),
     m_bNeedPap(true),
     m_bNeedCr(false),
+    m_bNeedCrOrig(false),
     m_bNeedPar(true),
     m_bNeedFinalPar(false),
     m_aListTableSprms(),
@@ -1317,6 +1318,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_SHAPEPROPERTYVALUE;
             break;
         case RTF_SHP:
+            m_bNeedCrOrig = m_bNeedCr;
             m_aStates.top().nDestinationState = DESTINATION_SHAPE;
             break;
         case RTF_SHPINST:
@@ -1937,6 +1939,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     Mapper().text(sBreak, 1);
                     if (!m_bNeedPap)
                         parBreak();
+                    m_bNeedCr = true;
                 }
             }
             break;
@@ -4134,6 +4137,7 @@ int RTFDocumentImpl::popState()
             }
             break;
         case DESTINATION_SHAPE:
+            m_bNeedCr = m_bNeedCrOrig;
             if (aState.aFrame.inFrame())
             {
                 // parBreak modify m_aStates.top() so we can't apply resetFrame directly on aState
