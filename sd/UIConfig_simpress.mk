@@ -71,6 +71,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/simpress,\
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/definecustomslideshow \
+	sd/uiconfig/simpress/ui/masterlayoutdlg \
 	sd/uiconfig/simpress/ui/presentationdialog \
 	sd/uiconfig/simpress/ui/printeroptions \
 	sd/uiconfig/simpress/ui/photoalbum \

@@ -55,7 +55,6 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/ui/dlg/inspagob.src \
     sd/source/ui/dlg/ins_paste.src \
     sd/source/ui/dlg/LayerDialog.src \
-    sd/source/ui/dlg/masterlayoutdlg.src \
     sd/source/ui/dlg/morphdlg.src \
     sd/source/ui/dlg/navigatr.src \
     sd/source/ui/dlg/PaneDockingWindow.src \

@@ -19,7 +19,6 @@
 
 /** module unique resource ids for dialogs */
 #define RID_SD_DLG_HEADERFOOTER                     (1000)
-#define RID_SD_DLG_MASTER_LAYOUT                    (1001)
 
 /** module unique resource ids for tabpages */
 #define RID_SD_TABPAGE_HEADERFOOTER                 (1000)

@@ -24,23 +24,21 @@
 #include "strings.hrc"
 #include "dialogs.hrc"
 #include "masterlayoutdlg.hxx"
-#include "masterlayoutdlg.hrc"
 #include "drawdoc.hxx"
 
 using namespace ::sd;
 
 MasterLayoutDialog::MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage )
-:   ModalDialog( pParent, SdResId( RID_SD_DLG_MASTER_LAYOUT ) ),
-    mpDoc( pDoc ),
-    mpCurrentPage( pCurrentPage ),
-    maFLPlaceholders( this, SdResId( FL_PLACEHOLDERS ) ),
-    maCBDate( this, SdResId( CB_DATE ) ),
-    maCBPageNumber( this, SdResId( CB_PAGE_NUMBER ) ),
-    maCBHeader( this, SdResId( CB_HEADER ) ),
-    maCBFooter( this, SdResId( CB_FOOTER ) ),
-    maPBOK( this, SdResId( BT_OK ) ),
-    maPBCancel( this, SdResId( BT_CANCEL ) )
+    : ModalDialog(pParent, "MasterLayoutDialog", "modules/simpress/ui/masterlayoutdlg.ui")
+    , mpDoc(pDoc)
+    , mpCurrentPage(pCurrentPage)
 {
+    get(mpCBDate, "datetime");
+    get(mpCBPageNumber, "pagenumber");
+    get(mpCBSlideNumber, "slidenumber");
+    get(mpCBHeader, "header");
+    get(mpCBFooter, "footer");
+
     if( mpCurrentPage && !mpCurrentPage->IsMasterPage() )
     {
         mpCurrentPage = (SdPage*)(&(mpCurrentPage->TRG_GetMasterPage()));
@@ -54,40 +52,27 @@ MasterLayoutDialog::MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, S
 
     switch( mpCurrentPage->GetPageKind() )
     {
-    case PK_STANDARD:
-    {
-        //      aTitle = String( SdResId( STR_MASTER_LAYOUT_TITLE ) );
-        maCBHeader.Enable( sal_False );
-    String aSlideNumberStr( SdResId( STR_SLIDE_NUMBER ) );
-        maCBPageNumber.SetText( aSlideNumberStr );
-        break;
+        case PK_STANDARD:
+        {
+            mpCBHeader->Enable(false);
+            mpCBPageNumber->SetText(mpCBSlideNumber->GetText());
+            break;
+        }
+        case PK_NOTES:
+            break;
+        case PK_HANDOUT:
+            break;
     }
-    case PK_NOTES:
-        //      aTitle = String( SdResId( STR_NOTES_MASTER_LAYOUT_TITLE ) );
-        break;
-    case PK_HANDOUT:
-        //      aTitle = String( SdResId( STR_HANDOUT_TEMPLATE_LAYOUT_TITLE ) );
-        break;
-    }
-    String aTitle (SdResId( STR_MASTER_LAYOUT_TITLE ) );
-
-    SetText( aTitle );
-
-    FreeResource();
 
     mbOldHeader = mpCurrentPage->GetPresObj( PRESOBJ_HEADER ) != NULL;
     mbOldDate = mpCurrentPage->GetPresObj( PRESOBJ_DATETIME ) != NULL;
     mbOldFooter = mpCurrentPage->GetPresObj( PRESOBJ_FOOTER ) != NULL;
     mbOldPageNumber = mpCurrentPage->GetPresObj( PRESOBJ_SLIDENUMBER ) != NULL;
 
-    maCBHeader.Check( mbOldHeader );
-    maCBDate.Check( mbOldDate );
-    maCBFooter.Check( mbOldFooter );
-    maCBPageNumber.Check( mbOldPageNumber );
-}
-
-MasterLayoutDialog::~MasterLayoutDialog()
-{
+    mpCBHeader->Check( mbOldHeader );
+    mpCBDate->Check( mbOldDate );
+    mpCBFooter->Check( mbOldFooter );
+    mpCBPageNumber->Check( mbOldPageNumber );
 }
 
 short MasterLayoutDialog::Execute()
@@ -101,7 +86,7 @@ void MasterLayoutDialog::applyChanges()
 {
     mpDoc->BegUndo(GetText());
 
-    if( (mpCurrentPage->GetPageKind() != PK_STANDARD) && (mbOldHeader != maCBHeader.IsChecked() ) )
+    if( (mpCurrentPage->GetPageKind() != PK_STANDARD) && (mbOldHeader != mpCBHeader->IsChecked() ) )
     {
         if( mbOldHeader )
             remove( PRESOBJ_HEADER );
@@ -109,7 +94,7 @@ void MasterLayoutDialog::applyChanges()
             create( PRESOBJ_HEADER );
     }
 
-    if( mbOldFooter != maCBFooter.IsChecked() )
+    if( mbOldFooter != mpCBFooter->IsChecked() )
     {
         if( mbOldFooter )
             remove( PRESOBJ_FOOTER );
@@ -117,7 +102,7 @@ void MasterLayoutDialog::applyChanges()
             create( PRESOBJ_FOOTER );
     }
 
-    if( mbOldDate != maCBDate.IsChecked() )
+    if( mbOldDate != mpCBDate->IsChecked() )
     {
         if( mbOldDate )
             remove( PRESOBJ_DATETIME );
@@ -125,7 +110,7 @@ void MasterLayoutDialog::applyChanges()
             create( PRESOBJ_DATETIME );
     }
 
-    if( mbOldPageNumber != maCBPageNumber.IsChecked() )
+    if( mbOldPageNumber != mpCBPageNumber->IsChecked() )
     {
         if( mbOldPageNumber )
             remove( PRESOBJ_SLIDENUMBER );

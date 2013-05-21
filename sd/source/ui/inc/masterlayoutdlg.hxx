@@ -37,19 +37,16 @@ private:
     SdDrawDocument* mpDoc;
     SdPage*         mpCurrentPage;
 
-    FixedLine       maFLPlaceholders;
-    CheckBox        maCBDate;
-    CheckBox        maCBPageNumber;
-    CheckBox        maCBHeader;
-    CheckBox        maCBFooter;
+    CheckBox*       mpCBDate;
+    CheckBox*       mpCBPageNumber;
+    CheckBox*       mpCBSlideNumber;
+    CheckBox*       mpCBHeader;
+    CheckBox*       mpCBFooter;
 
-    OKButton        maPBOK;
-    CancelButton    maPBCancel;
-
-    sal_Bool            mbOldHeader;
-    sal_Bool            mbOldFooter;
-    sal_Bool            mbOldDate;
-    sal_Bool            mbOldPageNumber;
+    bool            mbOldHeader;
+    bool            mbOldFooter;
+    bool            mbOldDate;
+    bool            mbOldPageNumber;
 
     void applyChanges();
     void remove( PresObjKind eKind );
@@ -57,7 +54,6 @@ private:
 
 public:
     MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage );
-    ~MasterLayoutDialog();
 
     virtual short Execute();
 };
