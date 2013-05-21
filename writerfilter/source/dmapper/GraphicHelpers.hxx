@@ -21,14 +21,15 @@ public:
     static void setPositionOffset(const ::rtl::OUString & sText, bool vertical);
     static void setAlignH(const ::rtl::OUString & sText);
     static void setAlignV(const ::rtl::OUString & sText);
-
-    sal_Int16 m_nOrient;
-    sal_Int16 m_nRelation;
-    sal_Int32 m_nPosition;
-
+    sal_Int16 orientation() const;
+    sal_Int16 relation() const;
+    sal_Int32 position() const;
  private:
     virtual void lcl_attribute( Id aName, Value& rVal );
     virtual void lcl_sprm( Sprm& rSprm );
+    sal_Int16 m_nOrient;
+    sal_Int16 m_nRelation;
+    sal_Int32 m_nPosition;
     static int savedPositionOffsetV, savedPositionOffsetH;
     static int savedAlignV, savedAlignH;
 };
