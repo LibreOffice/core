@@ -43,9 +43,9 @@ namespace connectivity
             connectivity::OWeakRefArray                         m_xConnections; //  vector containing a list
                                                                                 //  of all the Connection objects
                                                                                 //  for this Driver
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
         public:
-            OFileDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
+            OFileDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
@@ -69,7 +69,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& connection ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByURL( const OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getFactory() const { return m_xFactory; }
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getComponentContext() const { return m_xContext; }
         };
     }
 

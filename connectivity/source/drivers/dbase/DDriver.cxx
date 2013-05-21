@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "connectivity/dbexception.hxx"
 #include "resource/dbase_res.hrc"
+#include "comphelper/processfactory.hxx"
 
 using namespace connectivity::dbase;
 using namespace connectivity::file;
@@ -48,7 +49,7 @@ OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
 //------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL connectivity::dbase::ODriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
-    return *(new ODriver(_rxFactory));
+    return *(new ODriver( comphelper::getComponentContext(_rxFactory) ));
 }
 // --------------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)

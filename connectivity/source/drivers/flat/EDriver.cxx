@@ -24,6 +24,7 @@
 #include <comphelper/sequence.hxx>
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
+#include "comphelper/processfactory.hxx"
 
 
 using namespace connectivity::flat;
@@ -51,7 +52,7 @@ OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
 //------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL connectivity::flat::ODriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
-    return *(new ODriver(_rxFactory));
+    return *(new ODriver( comphelper::getComponentContext(_rxFactory) ));
 }
 // --------------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)

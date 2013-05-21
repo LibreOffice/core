@@ -23,6 +23,7 @@
 #include "connectivity/dbexception.hxx"
 #include "resource/sharedresources.hxx"
 #include "resource/calc_res.hrc"
+#include "comphelper/processfactory.hxx"
 
 using namespace connectivity::calc;
 using namespace connectivity::file;
@@ -54,7 +55,7 @@ OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
     connectivity::calc::ODriver_CreateInstance(const ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
-    return *(new ODriver(_rxFactory));
+    return *(new ODriver( comphelper::getComponentContext(_rxFactory) ));
 }
 
 Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url,

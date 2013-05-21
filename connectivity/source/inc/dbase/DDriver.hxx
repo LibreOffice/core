@@ -34,7 +34,7 @@ namespace connectivity
         class ODriver : public file::OFileDriver
         {
         public:
-            ODriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) : file::OFileDriver(_rxFactory){}
+            ODriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext) : file::OFileDriver(_rxContext){}
 
             // XInterface
             static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);

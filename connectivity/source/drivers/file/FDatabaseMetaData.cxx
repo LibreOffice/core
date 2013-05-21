@@ -202,7 +202,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
     Reference<XDynamicResultSet> xContent = m_pConnection->getDir();
     Reference < XSortedDynamicResultSetFactory > xSRSFac =
-                SortedDynamicResultSetFactory::create( comphelper::getComponentContext( m_pConnection->getDriver()->getFactory() ) );
+                SortedDynamicResultSetFactory::create( m_pConnection->getDriver()->getComponentContext() );
 
     Sequence< NumberedSortingInfo > aSortInfo( 1 );
     NumberedSortingInfo* pInfo = aSortInfo.getArray();

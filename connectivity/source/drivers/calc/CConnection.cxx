@@ -128,7 +128,7 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
         aArgs[nPos].Value <<= m_sPassword;
     }
 
-    Reference< XDesktop2 > xDesktop = Desktop::create( comphelper::getComponentContext(getDriver()->getFactory()) );
+    Reference< XDesktop2 > xDesktop = Desktop::create( getDriver()->getComponentContext() );
     Reference< XComponent > xComponent;
     Any aLoaderException;
     try

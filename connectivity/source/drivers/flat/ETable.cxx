@@ -124,7 +124,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     m_aScales.assign(nFieldCount+1,-1);
 
     const sal_Bool bCase = m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers();
-    CharClass aCharClass( comphelper::getComponentContext(pConnection->getDriver()->getFactory()), LanguageTag( _aLocale));
+    CharClass aCharClass( pConnection->getDriver()->getComponentContext(), LanguageTag( _aLocale));
     // read description
     const sal_Unicode cDecimalDelimiter  = pConnection->getDecimalDelimiter();
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
@@ -435,10 +435,8 @@ void OFlatTable::construct()
     SvtSysLocale aLocale;
     ::com::sun::star::lang::Locale aAppLocale(aLocale.GetLanguageTag().getLocale());
 
-    Reference< XNumberFormatsSupplier > xSupplier = NumberFormatsSupplier::createWithLocale( getComponentContext(m_pConnection->getDriver()->getFactory()), aAppLocale );
-    m_xNumberFormatter = Reference< XNumberFormatter >( NumberFormatter::create(
-             comphelper::getComponentContext(m_pConnection->getDriver()->getFactory())),
-          UNO_QUERY_THROW);
+    Reference< XNumberFormatsSupplier > xSupplier = NumberFormatsSupplier::createWithLocale( m_pConnection->getDriver()->getComponentContext(), aAppLocale );
+    m_xNumberFormatter.set( NumberFormatter::create( m_pConnection->getDriver()->getComponentContext()), UNO_QUERY_THROW);
     m_xNumberFormatter->attachNumberFormatsSupplier(xSupplier);
     Reference<XPropertySet> xProp(xSupplier->getNumberFormatSettings(),UNO_QUERY);
     xProp->getPropertyValue(OUString("NullDate")) >>= m_aNullDate;
