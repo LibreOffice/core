@@ -686,18 +686,33 @@ void DocxExport::WriteSettings()
     // Zoom
     OString aZoom(OString::valueOf(sal_Int32(pViewShell->GetViewOptions()->GetZoom())));
     pFS->singleElementNS(XML_w, XML_zoom, FSNS(XML_w, XML_percent), aZoom.getStr(), FSEND);
+
+    // Track Changes
+    if ( settings.trackRevisions )
+        pFS->singleElementNS( XML_w, XML_trackRevisions, FSEND );
+
+    // Embed Fonts
     if( pDoc->get( IDocumentSettingAccess::EMBED_FONTS ))
         pFS->singleElementNS( XML_w, XML_embedTrueTypeFonts, FSEND );
+
+    // Embed System Fonts
     if( pDoc->get( IDocumentSettingAccess::EMBED_SYSTEM_FONTS ))
         pFS->singleElementNS( XML_w, XML_embedSystemFonts, FSEND );
+
+    // Default Tab Stop
     if( settings.defaultTabStop != 0 )
         pFS->singleElementNS( XML_w, XML_defaultTabStop, FSNS( XML_w, XML_val ),
             OString::valueOf( sal_Int32( settings.defaultTabStop )).getStr(), FSEND );
+
+    // Even and Odd Headers
     if( settings.evenAndOddHeaders )
         pFS->singleElementNS( XML_w, XML_evenAndOddHeaders, FSEND );
 
+    // Has Footnotes
     if( m_pAttrOutput->HasFootnotes())
         m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_footnotePr, pDoc->GetFtnInfo(), XML_footnote );
+
+    // Has Endnotes
     if( m_pAttrOutput->HasEndnotes())
         m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_endnotePr, pDoc->GetEndNoteInfo(), XML_endnote );
 
@@ -809,6 +824,9 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
       m_nFooters( 0 ),
       m_pVMLExport( NULL )
 {
+    // Set the 'Track Revisions' flag in the settings structure
+    settings.trackRevisions = 0 != ( nsRedlineMode_t::REDLINE_ON & mnRedlineMode );
+
     // Write the document properies
     WriteProperties( );
 
@@ -840,6 +858,7 @@ DocxExport::~DocxExport()
 DocxSettingsData::DocxSettingsData()
 : evenAndOddHeaders( false )
 , defaultTabStop( 0 )
+, trackRevisions( false )
 {
 }
 
@@ -849,6 +868,9 @@ bool DocxSettingsData::hasData() const
         return true;
     if( defaultTabStop != 0 )
         return true;
+    if ( trackRevisions )
+        return true;
+
     return false;
 }
 
