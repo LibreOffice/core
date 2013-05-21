@@ -819,7 +819,7 @@ void UpdateHandler::focusControl( DialogControls eID )
 }
 
 //--------------------------------------------------------------------
-void UpdateHandler::insertControlModel( uno::Reference< awt::XControlModel > & rxDialogModel,
+void UpdateHandler::insertControlModel( uno::Reference< awt::XControlModel > const & rxDialogModel,
                                         OUString const & rServiceName,
                                         OUString const & rControlName,
                                         awt::Rectangle const & rPosSize,
@@ -1093,23 +1093,22 @@ void UpdateHandler::createDialog()
 
     loadStrings();
 
-    uno::Reference< awt::XUnoControlDialogModel > xControlDialogModel = awt::UnoControlDialogModel::create( mxContext );
+    uno::Reference< awt::XUnoControlDialogModel > xControlModel = awt::UnoControlDialogModel::create( mxContext );
     {
         // @see awt/UnoControlDialogModel.idl
-        xControlDialogModel->setTitle( msDlgTitle);
-        xControlDialogModel->setCloseable( true );
-        xControlDialogModel->setEnabled( true );
-        xControlDialogModel->setMoveable( true );
-        xControlDialogModel->setSizeable( true );
-        xControlDialogModel->setDesktopAsParent( true );
-        xControlDialogModel->setPositionX( 100 );
-        xControlDialogModel->setPositionY( 100 );
-        xControlDialogModel->setWidth( DIALOG_WIDTH );
-        xControlDialogModel->setHeight( DIALOG_HEIGHT );
-        xControlDialogModel->setHelpURL( INET_HID_SCHEME + OUString::createFromAscii( HID_CHECK_FOR_UPD_DLG ) );
+        xControlModel->setTitle( msDlgTitle);
+        xControlModel->setCloseable( true );
+        xControlModel->setEnabled( true );
+        xControlModel->setMoveable( true );
+        xControlModel->setSizeable( true );
+        xControlModel->setDesktopAsParent( true );
+        xControlModel->setPositionX( 100 );
+        xControlModel->setPositionY( 100 );
+        xControlModel->setWidth( DIALOG_WIDTH );
+        xControlModel->setHeight( DIALOG_HEIGHT );
+        xControlModel->setHelpURL( INET_HID_SCHEME + OUString::createFromAscii( HID_CHECK_FOR_UPD_DLG ) );
     }
 
-    uno::Reference< awt::XControlModel > xControlModel = xControlModel;
     {   // Label (fixed text) <status>
         uno::Sequence< beans::NamedValue > aProps(1);
 
