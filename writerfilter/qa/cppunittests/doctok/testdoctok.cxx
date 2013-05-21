@@ -27,7 +27,7 @@
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
-#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -49,7 +49,7 @@ namespace testdoctok
     uno::Reference<io::XInputStream> xStream;
     uno::Reference<uno::XComponentContext> xContext;
     WW8Document::Pointer_t pDocument;
-    uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess;
+    uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 > xSimpleFileAccess;
 
     class test : public CppUnit::TestFixture
     {
@@ -97,18 +97,8 @@ namespace testdoctok
                 OSL_ASSERT(bRet);
                 if (bRet)
                 {
-                    uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >
-                        xNameContainer(xFactory->createInstanceWithContext
-                                       (OUString::createFromAscii
-                                        ("com.sun.star.ucb.SimpleFileAccess" ),
-                                        xComponentContext), uno::UNO_QUERY );
-
-                    if (xNameContainer.is())
-                    {
-                        xSimpleFileAccess = xNameContainer;
-
-                        bResult = true;
-                    }
+                    xSimpleFileAccess = ucb::SimpleFileAccess::create(xComponentContext);
+                    bResult = true;
                 }
             }
 

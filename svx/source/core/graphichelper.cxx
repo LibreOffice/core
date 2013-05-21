@@ -31,19 +31,20 @@
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/graphic/GraphicType.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/graphic/GraphicType.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/document/XFilter.hpp>
 
 using namespace css::uno;
 using namespace css::lang;
@@ -202,7 +203,7 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
 {
     try
     {
-        Reference< XMultiServiceFactory > xServiceFactory( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         Reference< XPropertySet > xShapeSet( xShape, UNO_QUERY_THROW );
 
         OUString aMimeType;
@@ -274,15 +275,12 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
 
             if( xGraphStream.is() )
             {
-                OUString aSimpleFileAccessFilter( "com.sun.star.ucb.SimpleFileAccess" );
-                Reference<XSimpleFileAccess2> xFileAccess( xServiceFactory->createInstance( aSimpleFileAccessFilter ), UNO_QUERY_THROW );
+                Reference<XSimpleFileAccess3> xFileAccess = SimpleFileAccess::create( xContext );
                 xFileAccess->writeFile( sPath, xGraphStream );
             }
             else
             {
-                OUString aGraphicExportFilter("com.sun.star.drawing.GraphicExportFilter");
-                Reference<XExporter> xGraphicExporter( xServiceFactory->createInstance( aGraphicExportFilter ), UNO_QUERY_THROW );
-                Reference<XFilter> xFilter( xGraphicExporter, UNO_QUERY_THROW );
+                Reference<css::drawing::XGraphicExportFilter> xGraphicExporter = css::drawing::GraphicExportFilter::create( xContext );
 
                 Sequence<PropertyValue> aDescriptor( 2 );
                 aDescriptor[0].Name = OUString("MediaType");
@@ -294,7 +292,7 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
                 if ( xSourceDocument.is() )
                 {
                     xGraphicExporter->setSourceDocument( xSourceDocument );
-                    xFilter->filter( aDescriptor );
+                    xGraphicExporter->filter( aDescriptor );
                 }
             }
         }
