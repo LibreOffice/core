@@ -363,8 +363,7 @@ void TabBar::UpdateFocusManager (FocusManager& rFocusManager)
 
 IMPL_LINK(TabBar, OnToolboxClicked, void*, EMPTYARG)
 {
-    ::std::vector<DeckMenuData> aSelectionData;
-    ::std::vector<DeckMenuData> aShowData;
+    ::std::vector<DeckMenuData> aMenuData;
 
     for(ItemContainer::const_iterator iItem(maItems.begin()),iEnd(maItems.end());
         iItem!=iEnd;
@@ -373,18 +372,14 @@ IMPL_LINK(TabBar, OnToolboxClicked, void*, EMPTYARG)
         const DeckDescriptor* pDeckDescriptor = ResourceManager::Instance().GetDeckDescriptor(iItem->msDeckId);
         if (pDeckDescriptor != NULL)
         {
-            if ( ! iItem->mbIsHidden)
-                aSelectionData.push_back(
-                    DeckMenuData(
-                        pDeckDescriptor->msTitle,
-                        pDeckDescriptor->msId,
-                        iItem->mpButton->IsChecked()));
+            DeckMenuData aData;
+            aData.msDisplayName = pDeckDescriptor->msTitle;
+            aData.msDeckId = pDeckDescriptor->msId;
+            aData.mbIsCurrentDeck = iItem->mpButton->IsChecked();
+            aData.mbIsActive = !iItem->mbIsHidden;
+            aData.mbIsEnabled = iItem->mpButton->IsEnabled();
 
-            aShowData.push_back(
-                DeckMenuData(
-                    pDeckDescriptor->msTitle,
-                    pDeckDescriptor->msId,
-                    !iItem->mbIsHidden));
+            aMenuData.push_back(aData);
         }
     }
 
@@ -392,8 +387,7 @@ IMPL_LINK(TabBar, OnToolboxClicked, void*, EMPTYARG)
         Rectangle(
             mpMenuButton->GetPosPixel(),
             mpMenuButton->GetSizePixel()),
-        aSelectionData,
-        aShowData);
+        aMenuData);
 
     return 0;
 }
