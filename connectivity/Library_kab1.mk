@@ -32,6 +32,7 @@ $(eval $(call gb_Library_use_libraries,kab1,\
 	dbtools \
 	sal \
 	salhelper \
+	tl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,kab1,\
