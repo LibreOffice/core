@@ -137,7 +137,6 @@ void CellBorderStyleControl::Initialize()
 IMPL_LINK(CellBorderStyleControl, TB1SelectHdl, ToolBox*, pToolBox)
 {
     sal_uInt16 nId = pToolBox->GetCurItemId();
-    ::Color             aColBlack( COL_BLACK );
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
     editeng::SvxBorderLine theDefLine(NULL, 1);
@@ -198,7 +197,6 @@ IMPL_LINK(CellBorderStyleControl, TB2SelectHdl, ToolBox *, pToolBox)
 
     if( nId != TBI_BORDER2_BLTR && nId != TBI_BORDER2_TLBR )
     {
-        ::Color             aColBlack( COL_BLACK );
         SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
         SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
         editeng::SvxBorderLine theDefLine(NULL, 1);
@@ -282,7 +280,6 @@ IMPL_LINK(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox)
 {
     sal_uInt16 nId = pToolBox->GetCurItemId();
 
-    ::Color             aColBlack( COL_BLACK );
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
     editeng::SvxBorderLine *pTop = 0 ,
