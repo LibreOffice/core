@@ -714,6 +714,13 @@ void SmEditWindow::InsertCommand(sal_uInt16 nCommand)
 
         OSL_ENSURE( pEditView, "NULL pointer" );
         OUString aText = SM_RESSTR(nCommand);
+
+        // put an space before put a new command
+        OUString aTerm = pEditView->GetEditEngine()->GetText();
+
+        if (aSelection.nStartPos > 0 && (aTerm.indexOf(" ", aSelection.nStartPos - 1) != aSelection.nStartPos - 1))
+            aText = " " + aText;
+
         pEditView->InsertText(aText);
 
         if (HasMark(aText))
