@@ -1953,7 +1953,7 @@ sal_Bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_uIn
                          aFmt.SetBulletFont( &aCreateFont );
                         }
             }else
-            aFmt.SetBulletFont( &rActBulletFont );
+                aFmt.SetBulletFont( &rActBulletFont );
 
             sal_Unicode cChar = 0;
             if( pLevelSettings->sBulletChar.getLength() )
