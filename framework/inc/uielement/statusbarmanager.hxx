@@ -32,7 +32,7 @@
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <rtl/ustring.hxx>
@@ -55,7 +55,7 @@ class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener   
     friend class FrameworkStatusBar;
 
     public:
-        StatusBarManager( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServicveManager,
+        StatusBarManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                           const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                           const OUString& rResourceName,
                           StatusBar* pStatusBar );
@@ -117,8 +117,8 @@ class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener   
         com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >                        m_xUICommandLabels;
         StatusBarControllerMap                                                                          m_aControllerMap;
         ::cppu::OMultiTypeInterfaceContainerHelper                                                      m_aListenerContainer;   /// container for ALL Listener
-        ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >                  m_xServiceManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerFactory >  m_xStatusbarControllerFactory;
+        ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >                      m_xContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerFactory >               m_xStatusbarControllerFactory;
 };
 
 }

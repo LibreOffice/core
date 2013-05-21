@@ -156,7 +156,7 @@ DEFINE_XTYPEPROVIDER_5                  (   StatusBarManager                    
                                         )
 
 StatusBarManager::StatusBarManager(
-    const uno::Reference< lang::XMultiServiceFactory >& rServiceManager,
+    const uno::Reference< uno::XComponentContext >& rxContext,
     const uno::Reference< frame::XFrame >& rFrame,
     const OUString& rResourceName,
     StatusBar* pStatusBar ) :
@@ -170,7 +170,7 @@ StatusBarManager::StatusBarManager(
     m_aResourceName( rResourceName ),
     m_xFrame( rFrame ),
     m_aListenerContainer( m_aLock.getShareableOslMutex() ),
-    m_xServiceManager( rServiceManager )
+    m_xContext( rxContext )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "StatusBarManager::StatusBarManager" );
 
@@ -217,7 +217,7 @@ void SAL_CALL StatusBarManager::disposing( const lang::EventObject& Source ) thr
         if ( Source.Source == uno::Reference< uno::XInterface >( m_xFrame, uno::UNO_QUERY ))
             m_xFrame.clear();
 
-        m_xServiceManager.clear();
+        m_xContext.clear();
     }
 }
 
@@ -263,7 +263,7 @@ void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException )
             }
 
             m_xFrame.clear();
-            m_xServiceManager.clear();
+            m_xContext.clear();
 
             m_bDisposed = sal_True;
         }
@@ -347,14 +347,12 @@ void StatusBarManager::RemoveControllers()
 
 OUString StatusBarManager::RetrieveLabelFromCommand( const OUString& aCmdURL )
 {
-    return framework::RetrieveLabelFromCommand(aCmdURL, comphelper::getComponentContext(m_xServiceManager), m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,m_bModuleIdentified,"Name");
+    return framework::RetrieveLabelFromCommand(aCmdURL, m_xContext, m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,m_bModuleIdentified,"Name");
 }
 
 void StatusBarManager::CreateControllers()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "StatusBarManager::CreateControllers" );
-    uno::Reference< uno::XComponentContext > xComponentContext(
-        comphelper::getComponentContext( m_xServiceManager ) );
     uno::Reference< awt::XWindow > xStatusbarWindow = VCLUnoHelper::GetInterface( m_pStatusBar );
 
     for ( sal_uInt16 i = 0; i < m_pStatusBar->GetItemCount(); i++ )
@@ -390,7 +388,7 @@ void StatusBarManager::CreateControllers()
 
             // TODO remove this
             aPropValue.Name     = OUString( "ServiceManager" );
-            aPropValue.Value    = uno::makeAny( m_xServiceManager );
+            aPropValue.Value    = uno::makeAny( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW) );
             aPropVector.push_back( uno::makeAny( aPropValue ) );
 
             aPropValue.Name     = OUString( "ParentWindow" );
@@ -409,7 +407,7 @@ void StatusBarManager::CreateControllers()
             uno::Sequence< uno::Any > aArgs( comphelper::containerToSequence( aPropVector ) );
             xController = uno::Reference< frame::XStatusListener >(
                             m_xStatusbarControllerFactory->createInstanceWithArgumentsAndContext(
-                                aCommandURL, aArgs, xComponentContext ),
+                                aCommandURL, aArgs, m_xContext ),
                             uno::UNO_QUERY );
             bInit = sal_False; // Initialization is done through the factory service
         }
@@ -423,7 +421,7 @@ void StatusBarManager::CreateControllers()
                 // 3º) Is Add-on? Generic statusbar controller
                 if ( pItemData )
                 {
-                    pController = new GenericStatusbarController( m_xServiceManager,
+                    pController = new GenericStatusbarController( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW),
                                                                   m_xFrame,
                                                                   xStatusbarItem,
                                                                   pItemData );
@@ -431,7 +429,7 @@ void StatusBarManager::CreateControllers()
                 else
                 {
                     // 4º) Default Statusbar controller
-                    pController = new svt::StatusbarController( m_xServiceManager, m_xFrame, aCommandURL, nId );
+                    pController = new svt::StatusbarController( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), m_xFrame, aCommandURL, nId );
                 }
             }
 
@@ -457,7 +455,7 @@ void StatusBarManager::CreateControllers()
                 aPropValue.Value    = uno::makeAny( aCommandURL );
                 aArgs[1] = uno::makeAny( aPropValue );
                 aPropValue.Name     = OUString( "ServiceManager" );
-                aPropValue.Value    = uno::makeAny( m_xServiceManager );
+                aPropValue.Value    = uno::makeAny( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW) );
                 aArgs[2] = uno::makeAny( aPropValue );
                 aPropValue.Name     = OUString( "ParentWindow" );
                 aPropValue.Value    = uno::makeAny( xStatusbarWindow );

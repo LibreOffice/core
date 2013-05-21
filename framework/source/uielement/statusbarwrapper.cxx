@@ -114,7 +114,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
                     sal_uLong nStyles = WinBits( WB_LEFT | WB_3DLOOK );
 
                     pStatusBar = new FrameworkStatusBar( pWindow, nStyles );
-                    pStatusBarManager = new StatusBarManager( Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW), xFrame, m_aResourceURL, pStatusBar );
+                    pStatusBarManager = new StatusBarManager( m_xContext, xFrame, m_aResourceURL, pStatusBar );
                     ((FrameworkStatusBar*)pStatusBar)->SetStatusBarManager( pStatusBarManager );
                     m_xStatusBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pStatusBarManager ), UNO_QUERY );
                     pStatusBar->SetUniqueId( HID_STATUSBAR );
