@@ -22,6 +22,7 @@ $(eval $(call gb_Library_use_libraries,ucpext,\
 	cppuhelper \
 	sal \
 	salhelper \
+	tl \
 	ucbhelper \
 	$(gb_UWINAPI) \
 ))

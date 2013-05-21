@@ -20,6 +20,7 @@ $(eval $(call gb_Library_use_libraries,xmlscript,\
     cppu \
     cppuhelper \
     sal \
+    tl \
 	$(gb_UWINAPI) \
 ))
 

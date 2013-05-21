@@ -30,6 +30,7 @@ $(eval $(call gb_Library_use_libraries,jdbc,\
 	salhelper \
 	jvmaccess \
 	dbtools \
+	tl \
 	utl \
 	jvmfwk \
 	comphelper \
