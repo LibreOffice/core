@@ -302,7 +302,7 @@ BulletsTypeMgr::BulletsTypeMgr(const BulletsTypeMgr& aTypeMgr):
 void BulletsTypeMgr::Init()
 {
     Font& rActBulletFont = lcl_GetDefaultBulletFont();
-    String sName = rActBulletFont.GetName();
+
     if( Application::GetSettings().GetLayoutRTL() )
     {
         for (sal_uInt16 i=0;i<DEFAULT_BULLET_TYPES;i++)
@@ -679,7 +679,6 @@ sal_Bool GraphyicBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIn
     else
         return sal_False;
 
-    String sEmpty;
     if ( pGrf )
     {
         const String* pGrfName = pBrsh->GetGraphicLink();
@@ -988,14 +987,12 @@ sal_uInt16 MixBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 
     if( eNumType == SVX_NUM_CHAR_SPECIAL)
     {
         sal_Unicode cChar = aFmt.GetBulletChar();
-        const Font* pFont = aFmt.GetBulletFont();
-        String sName = pFont?pFont->GetName():String();
+        // const Font* pFont = aFmt.GetBulletFont();
 
         for(sal_uInt16 i = nFromIndex; i < DEFAULT_BULLET_TYPES; i++)
         {
             if ( pActualBullets[i]->eType == eNBType::BULLETS )
             {
-                String ssName = ((BulletsSettings_Impl*)(pActualBullets[i]->pBullets))->aFont.GetName();
                 if ( (cChar == ((BulletsSettings_Impl*)(pActualBullets[i]->pBullets))->cBulletChar||
                     (cChar == 9830 && 57356 == ((BulletsSettings_Impl*)(pActualBullets[i]->pBullets))->cBulletChar) ||
                     (cChar == 9632 && 57354 == ((BulletsSettings_Impl*)(pActualBullets[i]->pBullets))->cBulletChar)))//&&
@@ -1161,7 +1158,6 @@ sal_Bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,s
             else
                 return sal_False;
 
-            String sEmpty;
             const String* pGrfName = 0;
             if ( pGrf )
             {
@@ -1498,7 +1494,6 @@ sal_uInt16 NumberingTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 m
     //sal_Unicode cSuffix = rtl::OUString(aFmt.GetSuffix()).getStr()[0];
     String sPreFix = aFmt.GetPrefix();
     String sLclSuffix = aFmt.GetSuffix();
-    String sEmpty;
     sal_Int16 eNumType = aFmt.GetNumberingType();
 
     sal_uInt16 nCount = pNumberSettingsArr->size();
@@ -1757,14 +1752,13 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
             SvxNumberFormat aFmt(aNum.GetLevel(iLevel));
             String sPreFix = aFmt.GetPrefix();
             String sLclSuffix = aFmt.GetSuffix();
-            String sEmpty;
                 sal_Int16 eNumType = aFmt.GetNumberingType();
                 if( eNumType == SVX_NUM_CHAR_SPECIAL)
             {
                 sal_Unicode cChar = aFmt.GetBulletChar();
                 //const Font* pFont = aFmt.GetBulletFont();
                 sal_Unicode ccChar = _pSet->sBulletChar.getStr()[0];
-                rtl::OUString sFont = _pSet->sBulletFont;
+                // rtl::OUString sFont = _pSet->sBulletFont;
                 if ( !((cChar == ccChar) && //pFont && sFont.compareTo(pFont->GetName()) &&
                     _pSet->eLabelFollowedBy == aFmt.GetLabelFollowedBy() &&
                     _pSet->nTabValue == aFmt.GetListtabPos() &&
