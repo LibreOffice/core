@@ -706,25 +706,58 @@ void SmEditWindow::InsertCommand(sal_uInt16 nCommand)
     OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
     {
-        // Remember start of the selection and move the cursor there afterwards.
-        // Only this way the SelNextMark() makes sense...
         ESelection aSelection = pEditView->GetSelection();
-        aSelection.nEndPos  = aSelection.nStartPos;
-        aSelection.nEndPara = aSelection.nStartPara;
 
         OSL_ENSURE( pEditView, "NULL pointer" );
         OUString aText = SM_RESSTR(nCommand);
+
+        OUString aCurrentFormula = pEditView->GetEditEngine()->GetText();
+        OUString aStartParaFormula(aCurrentFormula);
+        OUString aEndParaFormula(aCurrentFormula);
+
+        // get line of current start paragraph position
+        if (aSelection.nStartPara > 0) {
+             sal_Int32 nTmp = aStartParaFormula.indexOf("\n") + 1;
+
+             for (sal_Int32 nParaPos = 0; nParaPos < aSelection.nStartPara; nParaPos++) {
+                  aStartParaFormula = aStartParaFormula.copy(nTmp);
+                  nTmp = aStartParaFormula.indexOf("\n") + 1;
+             }
+        }
+
+        // get line of current end paragraph position
+        if (aSelection.nEndPara > 0) {
+             sal_Int32 nTmp = aEndParaFormula.indexOf("\n") + 1;
+
+             for (sal_Int32 nParaPos = 0; nParaPos < aSelection.nEndPara; nParaPos++) {
+                  aEndParaFormula = aEndParaFormula.copy(nTmp);
+                  nTmp = aEndParaFormula.indexOf("\n") + 1;
+             }
+        }
+
+        // remove right space of current symbol if there already one
+        if (aSelection.nEndPos < aEndParaFormula.getLength() &&
+            aEndParaFormula[aSelection.nEndPos] == ' ')
+            aText = aText.trim();
+
+        // put an space before put a new command when necessary
+        if (aSelection.nStartPos > 0 && aStartParaFormula[aSelection.nStartPos - 1] != ' ')
+            aText = " " + aText;
+
         pEditView->InsertText(aText);
 
+        // Remember start of the selection and move the cursor there afterwards.
+        aSelection.nEndPara = aSelection.nStartPara;
         if (HasMark(aText))
-        {   // set selection to next mark
+        {
+            aSelection.nEndPos = aSelection.nStartPos;
             pEditView->SetSelection(aSelection);
             SelNextMark();
         }
         else
         {   // set selection after inserted text
-            aSelection.nEndPos += aText.getLength();
-            aSelection.nStartPos  = aSelection.nEndPos;
+            aSelection.nEndPos = aSelection.nStartPos + aText.getLength();
+            aSelection.nStartPos = aSelection.nEndPos;
             pEditView->SetSelection(aSelection);
         }
 
@@ -747,6 +780,7 @@ void SmEditWindow::MarkError(const Point &rPos)
     }
 }
 
+// Makes selection to next <?> symbol
 void SmEditWindow::SelNextMark()
 {
     EditEngine *pEditEngine = GetEditEngine();
