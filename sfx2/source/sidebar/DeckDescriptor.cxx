@@ -30,9 +30,12 @@ DeckDescriptor::DeckDescriptor (void)
       msId(),
       msIconURL(),
       msHighContrastIconURL(),
+      msTitleBarIconURL(),
+      msHighContrastTitleBarIconURL(),
       msHelpURL(),
       msHelpText(),
       maContextList(),
+      mbIsEnabled(true),
       mnOrderIndex(10000) // Default value as defined in Sidebar.xcs
 {
 }
@@ -45,9 +48,12 @@ DeckDescriptor::DeckDescriptor (const DeckDescriptor& rOther)
       msId(rOther.msId),
       msIconURL(rOther.msIconURL),
       msHighContrastIconURL(rOther.msHighContrastIconURL),
+      msTitleBarIconURL(rOther.msTitleBarIconURL),
+      msHighContrastTitleBarIconURL(rOther.msHighContrastTitleBarIconURL),
       msHelpURL(rOther.msHelpURL),
       msHelpText(rOther.msHelpText),
       maContextList(rOther.maContextList),
+          mbIsEnabled(rOther.mbIsEnabled),
       mnOrderIndex(rOther.mnOrderIndex)
 {
 }

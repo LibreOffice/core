@@ -209,6 +209,8 @@ void SAL_CALL SidebarController::disposing (void)
     Theme::GetPropertySet()->removePropertyChangeListener(
         A2S(""),
         static_cast<css::beans::XPropertyChangeListener*>(this));
+
+    maContextChangeUpdate.CancelRequest();
 }
 
 

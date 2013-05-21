@@ -31,10 +31,13 @@ PanelDescriptor::PanelDescriptor (void)
       mbIsTitleBarOptional(false),
       msId(),
       msDeckId(),
+      msTitleBarIconURL(),
+      msHighContrastTitleBarIconURL(),
       msHelpURL(),
       maContextList(),
       msImplementationURL(),
       mnOrderIndex(10000), // Default value as defined in Sidebar.xcs
+      mbShowForReadOnlyDocuments(false),
       mbWantsCanvas(false)
 {
 }
@@ -47,10 +50,13 @@ PanelDescriptor::PanelDescriptor (const PanelDescriptor& rOther)
       mbIsTitleBarOptional(rOther.mbIsTitleBarOptional),
       msId(rOther.msId),
       msDeckId(rOther.msDeckId),
+      msTitleBarIconURL(rOther.msTitleBarIconURL),
+      msHighContrastTitleBarIconURL(rOther.msHighContrastTitleBarIconURL),
       msHelpURL(rOther.msHelpURL),
       maContextList(rOther.maContextList),
       msImplementationURL(rOther.msImplementationURL),
       mnOrderIndex(rOther.mnOrderIndex),
+      mbShowForReadOnlyDocuments(rOther.mbShowForReadOnlyDocuments),
       mbWantsCanvas(rOther.mbWantsCanvas)
 {
 }
