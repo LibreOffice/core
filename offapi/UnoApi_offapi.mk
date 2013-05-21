@@ -2633,7 +2633,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame,\
 	XToolbarController \
 	XToolbarControllerListener \
 	XTransientDocumentsDocumentContentFactory \
-    XUIControllerFactory \
+	XUIControllerFactory \
+	XUIControllerRegistration \
 	XUntitledNumbers \
 	XUrlList \
 	XWindowArranger \
