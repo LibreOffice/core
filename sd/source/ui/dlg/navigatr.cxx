@@ -95,7 +95,8 @@ SdNavigatorWin::SdNavigatorWin(
     maToolbox.SetItemBits( TBI_DRAGTYPE, maToolbox.GetItemBits( TBI_DRAGTYPE ) | TIB_DROPDOWNONLY );
 
     // Shape filter drop down menu.
-    maToolbox.SetItemBits(TBI_SHAPE_FILTER,
+    maToolbox.SetItemBits(
+        TBI_SHAPE_FILTER,
         maToolbox.GetItemBits(TBI_SHAPE_FILTER) | TIB_DROPDOWNONLY);
 
     // TreeListBox
@@ -114,8 +115,18 @@ SdNavigatorWin::SdNavigatorWin(
     nListboxYPos = maTlbObjects.GetPosPixel().Y() + maTlbObjects.GetSizePixel().Height() + 4;
     maLbDocs.setPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
 
+    // assure that tool box is at least as wide as the tree list box
+    {
+        const Size aTlbSize( maTlbObjects.GetOutputSizePixel() );
+        if ( aTlbSize.Width() > aTbxSize.Width() )
+        {
+            maToolbox.setPosSizePixel( 0, 0, aTlbSize.Width(), 0, WINDOW_POSSIZE_WIDTH );
+            aTbxSize = maToolbox.GetOutputSizePixel();
+        }
+    }
+
     // set min outputsize after all sizes are known
-    long nFullHeight = nListboxYPos + maLbDocs.GetSizePixel().Height() + 4;
+    const long nFullHeight = nListboxYPos + maLbDocs.GetSizePixel().Height() + 4;
     maSize = GetOutputSizePixel();
     if( maSize.Height() < nFullHeight )
     {
@@ -123,7 +134,7 @@ SdNavigatorWin::SdNavigatorWin(
         SetOutputSizePixel( maSize );
     }
     maMinSize = maSize;
-    long nMinWidth = 2*maToolbox.GetPosPixel().X() + aTbxSize.Width(); // never clip the toolbox
+    const long nMinWidth = 2*maToolbox.GetPosPixel().X() + aTbxSize.Width(); // never clip the toolbox
     if( nMinWidth > maMinSize.Width() )
         maMinSize.Width() = nMinWidth;
     maMinSize.Height() -= 40;
