@@ -224,9 +224,13 @@ bluezCreateAttachListeningSocket( GMainContext *pContext, GPollFD *pSocketFD )
     }
 
     sockaddr_rc aAddr;
+    // Initialize whole structure. Mainly to appease valgrind, which
+    // doesn't know about the padding at the end of sockaddr_rc which
+    // it will dutifully check for definedness. But also the standard
+    // definition of BDADDR_ANY is unusable in C++ code, so just use
+    // memset to set aAddr.rc_bdaddr to 0.
+    memset( &aAddr, 0, sizeof( aAddr ) );
     aAddr.rc_family = AF_BLUETOOTH;
-    // BDADDR_ANY is broken, so use memset to set to 0.
-    memset( &aAddr.rc_bdaddr, 0, sizeof( aAddr.rc_bdaddr ) );
     aAddr.rc_channel = 5;
 
     int a;
