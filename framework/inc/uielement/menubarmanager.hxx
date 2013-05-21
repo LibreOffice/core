@@ -81,7 +81,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
 {
     protected:
         MenuBarManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
             const ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >& _xURLTransformer,
             AddonMenu*          pAddonMenu,
@@ -89,7 +89,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             sal_Bool            bDeleteChildren );
 
         MenuBarManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
             const ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >& _xURLTransformer,
             AddonPopupMenu*     pAddonMenu,
@@ -98,7 +98,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
 
     public:
         MenuBarManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >& _xURLTransformer,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
@@ -107,7 +107,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             sal_Bool bDelete,
             sal_Bool bDeleteChildren );
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getComponentContext();
 
         virtual ~MenuBarManager();
 
@@ -245,7 +245,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xModuleAcceleratorManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >       mxServiceFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >           m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >            m_xURLTransformer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >          m_xDeferedItemContainer;
         sal_Int16                                                                              m_nSymbolsStyle;

@@ -1169,7 +1169,7 @@ throw (uno::RuntimeException)
             Reference< XDispatchProvider > xDispatchProvider;
 
             MenuBar* pMenuBar = new MenuBar;
-            m_pInplaceMenuBar = new MenuBarManager( m_xSMGR, m_xFrame, m_xURLTransformer,xDispatchProvider, aModuleIdentifier, pMenuBar, sal_True, sal_True );
+            m_pInplaceMenuBar = new MenuBarManager( comphelper::getComponentContext(m_xSMGR), m_xFrame, m_xURLTransformer, xDispatchProvider, aModuleIdentifier, pMenuBar, sal_True, sal_True );
             m_pInplaceMenuBar->SetItemContainer( xMergedMenuBar );
 
             SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
