@@ -36,20 +36,13 @@ if ( !defined $completelangiso_var) {
     exit 1;
 }
 
-my $poorhelplocalizations_var = $ENV{WITH_POOR_HELP_LOCALIZATIONS};
-$poorhelplocalizations_var = $completelangiso_var if ( $poorhelplocalizations_var eq "ALL" );
-my %poorhelplocalizations;
-foreach $lang (split (/ /, $poorhelplocalizations_var)) {
-  next if ( $lang eq "en-US");
-  $poorhelplocalizations{$lang}++;
-}
-
 if (!args_require_build()) {
     print STDERR "No new languages, or config. Keeping old file\n";
     exit 0;
 }
 
 my @completelangiso = split " +", $completelangiso_var;
+my @helplangs = split " +", $ENV{HELP_LANGS};
 
 open OUTFILE, ">$outfile" or die "$0 ERROR: cannot open $outfile for writing!\n";
 
@@ -151,8 +144,7 @@ sub write_EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG
 {
     my $first = 1;
     print OUTFILE "#define EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(name) ";
-    foreach $lang (@completelangiso) {
-        next if ( $poorhelplocalizations{$lang} );
+    foreach $lang (@helplangs) {
         print OUTFILE ";" unless $first;
         $first = 0;
         print OUTFILE "\\\n\tName ($lang) = EXTRAFILELISTNAME(HelpTarget/,name,/$lang)";

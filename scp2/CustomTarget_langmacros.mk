@@ -16,6 +16,7 @@ $(call gb_CustomTarget_get_workdir,scp2/macros)/langmacros.inc :| $(call gb_Cust
 $(call gb_CustomTarget_get_workdir,scp2/macros)/langmacros.inc : $(SRCDIR)/scp2/macros/macro.pl $(BUILDDIR)/config_host.mk.stamp
 	$(call gb_Helper_abbreviate_dirs,\
 		export COMPLETELANGISO_VAR='$(gb_ScpTemplateTarget_LANGS)' && \
+		export HELP_LANGS='$(gb_HELP_LANGS)' && \
 		$(PERL) $< -verbose -o $@ -c $(BUILDDIR)/config_host.mk.stamp \
 	)
 
