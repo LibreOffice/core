@@ -89,7 +89,7 @@ DEFINE_XTYPEPROVIDER_10 (   UIConfigElementWrapperBase                          
                             ::com::sun::star::ui::XUIConfigurationListener
                         )
 
-UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory )
+UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType )
     :   ThreadHelpBase              ( &Application::GetSolarMutex()                      )
     ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex() )
     ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
@@ -101,7 +101,6 @@ UIConfigElementWrapperBase::UIConfigElementWrapperBase( sal_Int16 nType,const ::
     ,   m_bConfigListening          ( sal_False                                         )
     ,   m_bDisposed                 ( sal_False                                         )
     ,   m_bNoClose                  ( sal_False                                         )
-    ,   m_xServiceFactory           ( _xServiceFactory                                  )
     ,   m_aListenerContainer        ( m_aLock.getShareableOslMutex()                    )
 {
 }

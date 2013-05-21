@@ -83,10 +83,11 @@ DEFINE_XTYPEPROVIDER_11 (   MenuBarWrapper                                  ,
                         )
 
 MenuBarWrapper::MenuBarWrapper(
-    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager
+    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext
     )
-:    UIConfigElementWrapperBase( UIElementType::MENUBAR,xServiceManager ),
-     m_bRefreshPopupControllerCache( sal_True )
+:    UIConfigElementWrapperBase( UIElementType::MENUBAR ),
+     m_bRefreshPopupControllerCache( sal_True ),
+     m_xContext( rxContext )
 {
 }
 
@@ -138,7 +139,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 pVCLMenuBar = new MenuBar();
             }
 
-            Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceFactory) );
+            Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
 
             try
             {
@@ -151,7 +152,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             Reference< XURLTransformer > xTrans;
             try
             {
-                xTrans.set( URLTransformer::create(::comphelper::getComponentContext(m_xServiceFactory)) );
+                xTrans.set( URLTransformer::create(m_xContext) );
                 m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
                 if ( m_xConfigData.is() )
                 {
@@ -183,7 +184,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 // support. This feature is currently used for "Inplace editing"!
                 Reference< XDispatchProvider > xDispatchProvider;
 
-                MenuBarManager* pMenuBarManager = new MenuBarManager( comphelper::getComponentContext(m_xServiceFactory),
+                MenuBarManager* pMenuBarManager = new MenuBarManager( m_xContext,
                                                                       xFrame,
                                                                       xTrans,
                                                                       xDispatchProvider,

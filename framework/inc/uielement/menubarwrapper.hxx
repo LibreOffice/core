@@ -40,7 +40,7 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
 {
     public:
         MenuBarWrapper(
-            const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+            const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
         virtual ~MenuBarWrapper();
 
         //---------------------------------------------------------------------------------------------------------
@@ -80,6 +80,7 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
         sal_Bool                                                                                m_bRefreshPopupControllerCache : 1;
         com::sun::star::uno::Reference< com::sun::star::lang::XComponent >                      m_xMenuBarManager;
         PopupControllerCache                                                                    m_aPopupControllerCache;
+        com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >              m_xContext;
 };
 
 } // namespace framework

@@ -54,8 +54,9 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-ToolBarWrapper::ToolBarWrapper( const Reference< XMultiServiceFactory >& xServiceManager ) :
-    UIConfigElementWrapperBase( UIElementType::TOOLBAR,xServiceManager )
+ToolBarWrapper::ToolBarWrapper( const Reference< XComponentContext >& rxContext ) :
+    UIConfigElementWrapperBase( UIElementType::TOOLBAR ),
+    m_xContext( rxContext )
 {
 }
 
@@ -152,7 +153,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                     sal_uLong nStyles = WB_LINESPACING | WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
 
                     pToolBar = new ToolBox( pWindow, nStyles );
-                    pToolBarManager = new ToolBarManager( comphelper::getComponentContext(m_xServiceFactory), xFrame, m_aResourceURL, pToolBar );
+                    pToolBarManager = new ToolBarManager( m_xContext, xFrame, m_aResourceURL, pToolBar );
                     m_xToolBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
                     pToolBar->WillUsePopupMode( bPopupMode );
                 }

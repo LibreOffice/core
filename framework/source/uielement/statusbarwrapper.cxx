@@ -54,9 +54,10 @@ namespace framework
 {
 
 StatusBarWrapper::StatusBarWrapper(
-    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager
+    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext
     )
- :  UIConfigElementWrapperBase( UIElementType::STATUSBAR,xServiceManager )
+ :  UIConfigElementWrapperBase( UIElementType::STATUSBAR ),
+    m_xContext( rxContext )
 {
 }
 
@@ -79,7 +80,7 @@ void SAL_CALL StatusBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeE
         m_xStatusBarManager.clear();
         m_xConfigSource.clear();
         m_xConfigData.clear();
-        m_xServiceFactory.clear();
+        m_xContext.clear();
 
         m_bDisposed = sal_True;
     }
@@ -113,7 +114,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
                     sal_uLong nStyles = WinBits( WB_LEFT | WB_3DLOOK );
 
                     pStatusBar = new FrameworkStatusBar( pWindow, nStyles );
-                    pStatusBarManager = new StatusBarManager( m_xServiceFactory, xFrame, m_aResourceURL, pStatusBar );
+                    pStatusBarManager = new StatusBarManager( Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW), xFrame, m_aResourceURL, pStatusBar );
                     ((FrameworkStatusBar*)pStatusBar)->SetStatusBarManager( pStatusBarManager );
                     m_xStatusBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pStatusBarManager ), UNO_QUERY );
                     pStatusBar->SetUniqueId( HID_STATUSBAR );

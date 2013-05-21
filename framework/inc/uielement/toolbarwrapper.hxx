@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace framework
 {
@@ -35,7 +36,7 @@ class ToolBarWrapper : public ::com::sun::star::ui::XUIFunctionListener,
                        public UIConfigElementWrapperBase
 {
     public:
-        ToolBarWrapper( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        ToolBarWrapper( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
         virtual ~ToolBarWrapper();
 
         // XInterface
@@ -74,6 +75,7 @@ class ToolBarWrapper : public ::com::sun::star::ui::XUIFunctionListener,
 
     private:
         com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              m_xToolBarManager;
+        com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >      m_xContext;
 };
 
 }

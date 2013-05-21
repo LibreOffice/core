@@ -25,7 +25,7 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace framework
 {
@@ -34,7 +34,7 @@ class StatusBarWrapper : public UIConfigElementWrapperBase
 {
     public:
         StatusBarWrapper(
-            const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+            const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~StatusBarWrapper();
 
         // XComponent
@@ -51,6 +51,7 @@ class StatusBarWrapper : public UIConfigElementWrapperBase
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >           m_xStatusBarManager;
+        com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >       m_xContext;
 };
 
 } // namespace framework

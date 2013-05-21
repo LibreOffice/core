@@ -70,7 +70,7 @@ Reference< XUIElement > SAL_CALL ToolBoxFactory::createUIElement(
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
-    ToolBarWrapper* pWrapper = new ToolBarWrapper( m_xServiceManager );
+    ToolBarWrapper* pWrapper = new ToolBarWrapper( comphelper::getComponentContext(m_xServiceManager) );
     Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pWrapper, UNO_QUERY );
     Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
     aLock.unlock();

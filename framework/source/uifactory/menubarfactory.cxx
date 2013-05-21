@@ -87,7 +87,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
 {
     // SAFE
     ResetableGuard aLock( m_aLock );
-    MenuBarWrapper* pMenuBarWrapper = new MenuBarWrapper( m_xServiceManager );
+    MenuBarWrapper* pMenuBarWrapper = new MenuBarWrapper( comphelper::getComponentContext(m_xServiceManager) );
     Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pMenuBarWrapper, UNO_QUERY );
     Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
     aLock.unlock();

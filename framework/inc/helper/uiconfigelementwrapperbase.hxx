@@ -34,7 +34,6 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -60,7 +59,7 @@ class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider 
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
-         UIConfigElementWrapperBase( sal_Int16 nType,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory );
+        UIConfigElementWrapperBase( sal_Int16 nType );
         virtual  ~UIConfigElementWrapperBase();
 
         //  XInterface
@@ -132,8 +131,7 @@ class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider 
                                                                                                 m_bConfigListening : 1,
                                                                                                 m_bDisposed : 1,
                                                                                                 m_bNoClose : 1;
-        OUString                                                                           m_aResourceURL;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >        m_xServiceFactory;
+        OUString                                                                                m_aResourceURL;
         com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >         m_xConfigSource;
         com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >               m_xConfigData;
         com::sun::star::uno::WeakReference< com::sun::star::frame::XFrame >                     m_xWeakFrame;
