@@ -149,7 +149,7 @@ private:
     static void             setProperty( com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > &rProps,
                                          const int nIndex, const OUString &rPropName, const com::sun::star::uno::Any &rPropValue )
                                          { rProps[ nIndex ].Name = rPropName; rProps[ nIndex ].Value = rPropValue; }
-    static void             insertControlModel( com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > & rxDialogModel,
+    static void             insertControlModel( com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > const & rxDialogModel,
                                                 OUString const & rServiceName,
                                                 OUString const & rControlName,
                                                 com::sun::star::awt::Rectangle const & rPosSize,
