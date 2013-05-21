@@ -27,6 +27,7 @@
 #include "osl/endian.h"
 
 #include <float.h>
+#include <math.h>
 
 #if defined SOLARIS
 #include <ieeefp.h>
@@ -54,7 +55,13 @@ extern "C" {
 
 
 /* SAL_MATH_FINITE(d): test double d on INFINITY, NaN et al. */
-#if defined( WNT)
+#if defined(__GNUC__)
+    #define SAL_MATH_FINITE(d) __builtin_isfinite(d) // gcc bug 14608
+#elif defined(__STDC__)
+    // isfinite() should be available in math.h according to C99,C++99,SUSv3,etc.
+    // unless GCC bug 14608 hits us where cmath undefines isfinite as macro
+    #define SAL_MATH_FINITE(d) isfinite(d)
+#elif defined( WNT)
 #define SAL_MATH_FINITE(d) _finite(d)
 #elif defined OS2
 #define SAL_MATH_FINITE(d) finite(d)
