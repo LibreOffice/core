@@ -42,6 +42,7 @@
 #include <vector>
 
 #include <osl/diagnose.h>
+#include <tools/diagnose_ex.h>
 
 #ifdef DBG_UTIL
 
@@ -1584,5 +1585,53 @@ void DbgOutTypef( sal_uInt16, const sal_Char*, ... ) {}
 void DbgOutf( const sal_Char*, ... ) {}
 
 #endif
+
+
+#if OSL_DEBUG_LEVEL > 0
+
+void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunction)
+{
+        OString sMessage( "caught an exception!" );
+        sMessage += "\nin function:";
+        sMessage += currentFunction;
+        sMessage += "\ntype: ";
+        sMessage += OUStringToOString( caught.getValueTypeName(), osl_getThreadTextEncoding() );
+        ::com::sun::star::uno::Exception exception;
+        caught >>= exception;
+        if ( !exception.Message.isEmpty() )
+        {
+            sMessage += "\nmessage: ";
+            sMessage += OUStringToOString( exception.Message, osl_getThreadTextEncoding() );
+        }
+        if ( exception.Context.is() )
+        {
+            const char* pContext = typeid( *exception.Context.get() ).name();
+            sMessage += "\ncontext: ";
+            sMessage += pContext;
+        }
+        {
+            ::com::sun::star::configuration::CorruptedConfigurationException
+                specialized;
+            if ( caught >>= specialized )
+            {
+                sMessage += "\ndetails: ";
+                sMessage += OUStringToOString(
+                    specialized.Details, osl_getThreadTextEncoding() );
+            }
+        }
+        {
+            ::com::sun::star::task::ErrorCodeIOException specialized;
+            if ( caught >>= specialized )
+            {
+                sMessage += "\ndetails: ";
+                sMessage += OString::valueOf( specialized.ErrCode );
+            }
+        }
+        sMessage += "\n";
+        OSL_ENSURE( false, sMessage.getStr() );
+}
+
+#endif  // OSL_DEBUG_LEVEL
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

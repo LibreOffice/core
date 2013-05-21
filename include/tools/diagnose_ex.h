@@ -30,6 +30,8 @@
 #define OSL_UNUSED( expression ) \
     (void)(expression)
 
+
+
 #if OSL_DEBUG_LEVEL > 0
     #include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
     #include <com/sun/star/task/ErrorCodeIOException.hpp>
@@ -39,51 +41,15 @@
     #include <boost/current_function.hpp>
     #include <typeinfo>
 
+    void DbgUnhandledException(const ::com::sun::star::uno::Any& caughtException, const char* currentFunction);
+
     /** reports a caught UNO exception via OSL diagnostics
 
         Note that whenever you use this, it might be an indicator that your error
         handling is not correct ....
     */
     #define DBG_UNHANDLED_EXCEPTION()   \
-        ::com::sun::star::uno::Any caught( ::cppu::getCaughtException() ); \
-        OString sMessage( "caught an exception!" ); \
-        sMessage += "\nin function:"; \
-        sMessage += BOOST_CURRENT_FUNCTION; \
-        sMessage += "\ntype: "; \
-        sMessage += OUStringToOString( caught.getValueTypeName(), osl_getThreadTextEncoding() ); \
-        ::com::sun::star::uno::Exception exception; \
-        caught >>= exception; \
-        if ( !exception.Message.isEmpty() ) \
-        { \
-            sMessage += "\nmessage: "; \
-            sMessage += OUStringToOString( exception.Message, osl_getThreadTextEncoding() ); \
-        } \
-        if ( exception.Context.is() ) \
-        { \
-            const char* pContext = typeid( *exception.Context.get() ).name(); \
-            sMessage += "\ncontext: "; \
-            sMessage += pContext; \
-        } \
-        { \
-            ::com::sun::star::configuration::CorruptedConfigurationException \
-                specialized; \
-            if ( caught >>= specialized ) \
-            { \
-                sMessage += "\ndetails: "; \
-                sMessage += OUStringToOString( \
-                    specialized.Details, osl_getThreadTextEncoding() ); \
-            } \
-        } \
-        { \
-            ::com::sun::star::task::ErrorCodeIOException specialized; \
-            if ( caught >>= specialized ) \
-            { \
-                sMessage += "\ndetails: "; \
-                sMessage += OString::valueOf( specialized.ErrCode ); \
-            } \
-        } \
-        sMessage += "\n"; \
-        OSL_ENSURE( false, sMessage.getStr() )
+        DbgUnhandledException( ::cppu::getCaughtException(), BOOST_CURRENT_FUNCTION);
 
 #else   // OSL_DEBUG_LEVEL
     #define DBG_UNHANDLED_EXCEPTION()
