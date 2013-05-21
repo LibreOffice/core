@@ -312,7 +312,7 @@ void ScTable::InitSortCollator( const ScSortParam& rPar )
     if ( !rPar.aCollatorLocale.Language.isEmpty() )
     {
         if ( !pSortCollator || IsSortCollatorGlobal() )
-            pSortCollator = new CollatorWrapper( comphelper::getComponentContext(pDocument->GetServiceManager()) );
+            pSortCollator = new CollatorWrapper( comphelper::getProcessComponentContext() );
         pSortCollator->loadCollatorAlgorithm( rPar.aCollatorAlgorithm,
             rPar.aCollatorLocale, (rPar.bCaseSens ? 0 : SC_COLLATOR_IGNORES) );
     }

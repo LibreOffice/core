@@ -174,11 +174,7 @@ sal_Bool ScXMLSourceDlg::Close()
 
 void ScXMLSourceDlg::SelectSourceFile()
 {
-    uno::Reference<lang::XMultiServiceFactory> xServiceMgr = mpDoc->GetServiceManager();
-    if (!xServiceMgr.is())
-        return;
-
-    uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = ui::dialogs::FilePicker::createWithMode( comphelper::getComponentContext(xServiceMgr), ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
+    uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = ui::dialogs::FilePicker::createWithMode( comphelper::getProcessComponentContext(), ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
 
     if (maSrcPath.isEmpty())
         // Use default path.

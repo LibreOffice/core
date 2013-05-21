@@ -118,7 +118,6 @@ private:
 
 ScDocument::ScDocument( ScDocumentMode  eMode,
                         SfxObjectShell* pDocShell ) :
-        xServiceManager( ::comphelper::getProcessServiceFactory() ),
         mpUndoManager( NULL ),
         pEditEngine( NULL ),
         pNoteEngine( NULL ),

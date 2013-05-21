@@ -1223,7 +1223,7 @@ XclExpNumFmtBuffer::XclExpNumFmtBuffer( const XclExpRoot& rRoot ) :
     /*  Compiler needs a hint, this doesn't work: new NfKeywordTable;
         cannot convert from 'class String *' to 'class String (*)[54]'
         The effective result here is class String (*)[54*1] */
-    mxFormatter( new SvNumberFormatter( comphelper::getComponentContext(rRoot.GetDoc().GetServiceManager()), LANGUAGE_ENGLISH_US ) ),
+    mxFormatter( new SvNumberFormatter( comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US ) ),
     mpKeywordTable( new NfKeywordTable ),
     mnStdFmt( GetFormatter().GetStandardFormat( ScGlobal::eLnge ) )
 {
@@ -2864,7 +2864,7 @@ void XclExpXFBuffer::AddBorderAndFill( const XclExpXF& rXF )
 
 XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     : XclExpRoot( rRoot ),
-    mxFormatter( new SvNumberFormatter( comphelper::getComponentContext(rRoot.GetDoc().GetServiceManager()), LANGUAGE_ENGLISH_US ) ),
+    mxFormatter( new SvNumberFormatter( comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US ) ),
     mpKeywordTable( new NfKeywordTable )
 {
     mxFormatter->FillKeywordTable( *mpKeywordTable, LANGUAGE_ENGLISH_US );

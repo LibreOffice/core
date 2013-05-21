@@ -51,7 +51,7 @@ const uno::Reference< i18n::XBreakIterator >& ScDocument::GetBreakIterator()
         pScriptTypeData = new ScScriptTypeData;
     if ( !pScriptTypeData->xBreakIter.is() )
     {
-        pScriptTypeData->xBreakIter = i18n::BreakIterator::create( comphelper::getComponentContext(xServiceManager) );
+        pScriptTypeData->xBreakIter = i18n::BreakIterator::create( comphelper::getProcessComponentContext() );
     }
     return pScriptTypeData->xBreakIter;
 }

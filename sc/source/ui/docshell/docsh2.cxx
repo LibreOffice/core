@@ -125,7 +125,7 @@ void ScDocShell::InitItems()
             if (aLocales.getLength())
             {
                 rtl::Reference<SvxForbiddenCharactersTable> xForbiddenTable =
-                        new SvxForbiddenCharactersTable( comphelper::getComponentContext(aDocument.GetServiceManager()) );
+                        new SvxForbiddenCharactersTable( comphelper::getProcessComponentContext() );
 
                 const lang::Locale* pLocales = aLocales.getConstArray();
                 for (sal_Int32 i = 0; i < aLocales.getLength(); i++)

@@ -232,7 +232,6 @@ friend class ScDocumentImport;
 
     typedef ::std::vector<ScTable*> TableContainer;
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
 
     rtl::Reference<ScPoolHelper> xPoolHelper;
 
@@ -432,9 +431,6 @@ public:
     SC_DLLPUBLIC                ScDocument( ScDocumentMode eMode = SCDOCMODE_DOCUMENT,
                                 SfxObjectShell* pDocShell = NULL );
     SC_DLLPUBLIC                ~ScDocument();
-
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                    GetServiceManager() const { return xServiceManager; }
 
     SC_DLLPUBLIC const OUString&  GetName() const { return aDocName; }
     void            SetName( const OUString& r ) { aDocName = r; }

@@ -38,7 +38,7 @@ static rtl::Reference<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell*
             //  create an empty SvxForbiddenCharactersTable for SvxUnoForbiddenCharsTable,
             //  so changes can be stored.
 
-            xRet = new SvxForbiddenCharactersTable( comphelper::getComponentContext(pDoc->GetServiceManager()) );
+            xRet = new SvxForbiddenCharactersTable( comphelper::getProcessComponentContext() );
             pDoc->SetForbiddenCharacters( xRet );
         }
     }

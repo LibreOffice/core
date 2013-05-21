@@ -1284,14 +1284,14 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     long nSkipLines             = pExtOptions->GetStartRow();
 
     LanguageType eDocLang = pExtOptions->GetLanguage();
-    SvNumberFormatter aNumFormatter( comphelper::getComponentContext(pDoc->GetServiceManager()), eDocLang);
+    SvNumberFormatter aNumFormatter( comphelper::getProcessComponentContext(), eDocLang);
     bool bDetectNumFormat = pExtOptions->IsDetectSpecialNumber();
 
     // For date recognition
     ::utl::TransliterationWrapper aTransliteration(
-        comphelper::getComponentContext(pDoc->GetServiceManager()), SC_TRANSLITERATION_IGNORECASE );
+        comphelper::getProcessComponentContext(), SC_TRANSLITERATION_IGNORECASE );
     aTransliteration.loadModuleIfNeeded( eDocLang );
-    CalendarWrapper aCalendar( comphelper::getComponentContext(pDoc->GetServiceManager()) );
+    CalendarWrapper aCalendar( comphelper::getProcessComponentContext() );
     aCalendar.loadDefaultCalendar(
         LanguageTag( eDocLang ).getLocale() );
     boost::scoped_ptr< ::utl::TransliterationWrapper > pEnglishTransliteration;
@@ -1299,9 +1299,9 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     if ( eDocLang != LANGUAGE_ENGLISH_US )
     {
         pEnglishTransliteration.reset(new ::utl::TransliterationWrapper (
-            comphelper::getComponentContext(pDoc->GetServiceManager()), SC_TRANSLITERATION_IGNORECASE ));
+            comphelper::getProcessComponentContext(), SC_TRANSLITERATION_IGNORECASE ));
         aTransliteration.loadModuleIfNeeded( LANGUAGE_ENGLISH_US );
-        pEnglishCalendar.reset(new CalendarWrapper ( comphelper::getComponentContext(pDoc->GetServiceManager()) ));
+        pEnglishCalendar.reset(new CalendarWrapper ( comphelper::getProcessComponentContext() ));
         pEnglishCalendar->loadDefaultCalendar(
             LanguageTag( LANGUAGE_ENGLISH_US ).getLocale() );
     }
@@ -2192,7 +2192,7 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const String& rBaseURL )
         {
             // Pick up import options if available.
             LanguageType eLang = pExtOptions->GetLanguage();
-            SvNumberFormatter aNumFormatter( comphelper::getComponentContext(pDoc->GetServiceManager()), eLang);
+            SvNumberFormatter aNumFormatter( comphelper::getProcessComponentContext(), eLang);
             bool bSpecialNumber = pExtOptions->IsDetectSpecialNumber();
             pImp->WriteToDocument(false, 1.0, &aNumFormatter, bSpecialNumber);
         }

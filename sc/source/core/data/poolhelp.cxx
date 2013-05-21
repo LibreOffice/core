@@ -73,7 +73,7 @@ SvNumberFormatter*  ScPoolHelper::GetFormTable() const
 {
     if ( !pFormTable )
     {
-        pFormTable = new SvNumberFormatter( comphelper::getComponentContext(m_pSourceDoc->GetServiceManager()), ScGlobal::eLnge );
+        pFormTable = new SvNumberFormatter( comphelper::getProcessComponentContext(), ScGlobal::eLnge );
         pFormTable->SetColorLink( LINK( m_pSourceDoc, ScDocument, GetUserDefinedColor ) );
         pFormTable->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
 

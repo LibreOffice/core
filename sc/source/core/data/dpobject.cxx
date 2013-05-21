@@ -3023,7 +3023,7 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    SvNumberFormatter aFormat( comphelper::getComponentContext(mpDoc->GetServiceManager()), ScGlobal::eLnge);
+    SvNumberFormatter aFormat( comphelper::getProcessComponentContext(), ScGlobal::eLnge);
     DBConnector aDB(*pCache, xRowSet, *aFormat.GetNullDate());
     if (!aDB.isValid())
         return NULL;
@@ -3137,7 +3137,7 @@ void ScDPCollection::DBCaches::updateCache(
         return;
     }
 
-    SvNumberFormatter aFormat( comphelper::getComponentContext(mpDoc->GetServiceManager()), ScGlobal::eLnge);
+    SvNumberFormatter aFormat( comphelper::getProcessComponentContext(), ScGlobal::eLnge);
     DBConnector aDB(rCache, xRowSet, *aFormat.GetNullDate());
     if (!aDB.isValid())
         return;
