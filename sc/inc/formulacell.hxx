@@ -100,8 +100,6 @@ private:
     void            InterpretTail( ScInterpretTailParameter );
 
     ScFormulaCell( const ScFormulaCell& );
-    sal_uLong GetFormatIndex() const { return nFormatIndex; }
-
 public:
 
     enum CompareState { NotEqual = 0, EqualInvariant, EqualRelativeRef };
