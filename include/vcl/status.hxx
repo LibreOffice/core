@@ -130,10 +130,19 @@ public:
                                     StatusBarItemBits nBits = SIB_CENTER | SIB_IN,
                                     long nOffset = STATUSBAR_OFFSET,
                                     sal_uInt16 nPos = STATUSBAR_APPEND );
+    void                RemoveItem( sal_uInt16 nItemId );
 
+    void                ShowItem( sal_uInt16 nItemId );
+    void                HideItem( sal_uInt16 nItemId );
     sal_Bool                IsItemVisible( sal_uInt16 nItemId ) const;
+
+    void                ShowItems();
+    void                HideItems();
     sal_Bool                AreItemsVisible() const { return mbVisibleItems; }
 
+    void                RedrawItem( sal_uInt16 nItemId );
+
+    void                CopyItems( const StatusBar& rStatusBar );
     void                Clear();
 
     sal_uInt16              GetItemCount() const;
@@ -144,10 +153,16 @@ public:
     Point               GetItemTextPos( sal_uInt16 nItemId ) const;
     sal_uInt16              GetCurItemId() const { return mnCurItemId; }
 
+    sal_uLong               GetItemWidth( sal_uInt16 nItemId ) const;
+    StatusBarItemBits   GetItemBits( sal_uInt16 nItemId ) const;
+
+    long                GetItemOffset( sal_uInt16 nItemId ) const;
+
     void                SetItemText( sal_uInt16 nItemId, const XubString& rText );
     const XubString&    GetItemText( sal_uInt16 nItemId ) const;
 
     void                SetItemData( sal_uInt16 nItemId, void* pNewData );
+    void*               GetItemData( sal_uInt16 nItemId ) const;
 
     void                SetItemCommand( sal_uInt16 nItemId, const XubString& rCommand );
     const XubString&    GetItemCommand( sal_uInt16 nItemId );
