@@ -15,11 +15,10 @@
 module com {  module sun {  module star {  module awt {
 
 /** mechanism to discover and manage printers
+
+    @since LibreOffice 4.1
  */
-service PrinterServer
-{
-    interface com::sun::star::awt::XPrinterServer;
-};
+service PrinterServer: com::sun::star::awt::XPrinterServer;
 
 }; }; }; };
 
