@@ -40,8 +40,9 @@
     #include <osl/thread.h>
     #include <boost/current_function.hpp>
     #include <typeinfo>
+    #include <tools/toolsdllapi.h>
 
-    void DbgUnhandledException(const ::com::sun::star::uno::Any& caughtException, const char* currentFunction);
+    TOOLS_DLLPUBLIC void DbgUnhandledException(const ::com::sun::star::uno::Any& caughtException, const char* currentFunction);
 
     /** reports a caught UNO exception via OSL diagnostics
 
