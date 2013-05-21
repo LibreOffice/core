@@ -56,6 +56,8 @@
 #include "navipi.hxx"
 #include "navsett.hxx"
 
+#include <algorithm>
+
 //  Timeout, um Notizen zu suchen
 #define SC_CONTENT_TIMEOUT  1000
 
@@ -700,7 +702,11 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
 
     aTitleBase = GetText();
 
-    long nListboxYPos = aTbxCmd.GetPosPixel().Y() + aTbxCmd.GetSizePixel().Height() + 4;
+    const long nListboxYPos =
+        ::std::max(
+            (aTbxCmd.GetPosPixel().Y() + aTbxCmd.GetSizePixel().Height()),
+            (aEdRow.GetPosPixel().Y() + aEdRow.GetSizePixel().Height()) )
+        + 4;
     aLbEntries.SetPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y);
 
     nBorderOffset = aLbEntries.GetPosPixel().X();
