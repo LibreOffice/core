@@ -66,7 +66,7 @@ using ::rtl::OUString;
 
 namespace
 {
-    const static OUString gsReadOnlyCommandName (A2S(".uno:EditDoc"));
+    const static char gsReadOnlyCommandName[] = ".uno:EditDoc";
     const static sal_Int32 gnMaximumSidebarWidth (400);
     const static sal_Int32 gnWidthCloseThreshold (70);
     const static sal_Int32 gnWidthOpenThreshold (40);
@@ -88,7 +88,7 @@ namespace {
 
     /** When in doubt, show this deck.
     */
-    static const ::rtl::OUString gsDefaultDeckId(A2S("PropertyDeck"));
+    static const char gsDefaultDeckId[] = "PropertyDeck";
 }
 
 
