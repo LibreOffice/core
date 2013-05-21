@@ -178,12 +178,10 @@ private:
         const Context& rContext);
     void ShowPopupMenu (
         const Rectangle& rButtonBox,
-        const ::std::vector<TabBar::DeckMenuData>& rDeckSelectionData,
-        const ::std::vector<TabBar::DeckMenuData>& rDeckShowData) const;
+        const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
     void ShowDetailMenu (const ::rtl::OUString& rsMenuCommand) const;
     ::boost::shared_ptr<PopupMenu> CreatePopupMenu (
-        const ::std::vector<TabBar::DeckMenuData>& rDeckSelectionData,
-        const ::std::vector<TabBar::DeckMenuData>& rDeckShowData) const;
+        const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
     DECL_LINK(OnMenuItemSelected, Menu*);
     void BroadcastPropertyChange (void);
 

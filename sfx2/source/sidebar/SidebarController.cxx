@@ -102,7 +102,7 @@ SidebarController::SidebarController (
               mpParentWindow,
               rxFrame,
               ::boost::bind(&SidebarController::OpenThenSwitchToDeck, this, _1),
-              ::boost::bind(&SidebarController::ShowPopupMenu, this, _1,_2,_3))),
+              ::boost::bind(&SidebarController::ShowPopupMenu, this, _1,_2))),
       mxFrame(rxFrame),
       maCurrentContext(OUString(), OUString()),
       maRequestedContext(),
@@ -794,10 +794,9 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent*, pEvent)
 
 void SidebarController::ShowPopupMenu (
     const Rectangle& rButtonBox,
-    const ::std::vector<TabBar::DeckMenuData>& rDeckSelectionData,
-    const ::std::vector<TabBar::DeckMenuData>& rDeckShowData) const
+    const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
 {
-    ::boost::shared_ptr<PopupMenu> pMenu = CreatePopupMenu(rDeckSelectionData, rDeckShowData);
+    ::boost::shared_ptr<PopupMenu> pMenu = CreatePopupMenu(rMenuData);
     pMenu->SetSelectHdl(LINK(this, SidebarController, OnMenuItemSelected));
 
     // pass toolbox button rect so the menu can stay open on button up
@@ -829,9 +828,9 @@ void SidebarController::ShowDetailMenu (const ::rtl::OUString& rsMenuCommand) co
 
 
 ::boost::shared_ptr<PopupMenu> SidebarController::CreatePopupMenu (
-    const ::std::vector<TabBar::DeckMenuData>& rDeckSelectionData,
-    const ::std::vector<TabBar::DeckMenuData>& rDeckShowData) const
+    const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
 {
+    // Create the top level popup menu.
     ::boost::shared_ptr<PopupMenu> pMenu (new PopupMenu());
     FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
     if (pMenuWindow != NULL)
@@ -839,21 +838,36 @@ void SidebarController::ShowDetailMenu (const ::rtl::OUString& rsMenuCommand) co
         pMenuWindow->SetPopupModeFlags(pMenuWindow->GetPopupModeFlags() | FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE);
     }
 
+    // Create sub menu for customization (hiding of deck tabs.)
+    PopupMenu* pCustomizationMenu = new PopupMenu();
+
     SidebarResource aLocalResource;
 
     // Add one entry for every tool panel element to individually make
     // them visible or hide them.
+    sal_Int32 nIndex (0);
+    for(::std::vector<TabBar::DeckMenuData>::const_iterator
+            iItem(rMenuData.begin()),
+            iEnd(rMenuData.end());
+        iItem!=iEnd;
+        ++iItem,++nIndex)
     {
-        sal_Int32 nIndex (MID_FIRST_PANEL);
-        for(::std::vector<TabBar::DeckMenuData>::const_iterator
-                iItem(rDeckSelectionData.begin()),
-                iEnd(rDeckSelectionData.end());
-            iItem!=iEnd;
-            ++iItem)
+        const sal_Int32 nMenuIndex (nIndex+MID_FIRST_PANEL);
+        pMenu->InsertItem(nMenuIndex, iItem->msDisplayName, MIB_RADIOCHECK);
+        pMenu->CheckItem(nMenuIndex, iItem->mbIsCurrentDeck ? sal_True : sal_False);
+        pMenu->EnableItem(nMenuIndex, (iItem->mbIsEnabled&&iItem->mbIsActive) ? sal_True : sal_False);
+
+        const sal_Int32 nSubMenuIndex (nIndex+MID_FIRST_HIDE);
+        if (iItem->mbIsCurrentDeck)
         {
-            pMenu->InsertItem(nIndex, iItem->get<0>(), MIB_RADIOCHECK);
-            pMenu->CheckItem(nIndex, iItem->get<2>());
-            ++nIndex;
+            // Don't allow the currently visible deck to be disabled.
+            pCustomizationMenu->InsertItem(nSubMenuIndex, iItem->msDisplayName, MIB_RADIOCHECK);
+            pCustomizationMenu->CheckItem(nSubMenuIndex, sal_True);
+        }
+        else
+        {
+            pCustomizationMenu->InsertItem(nSubMenuIndex, iItem->msDisplayName, MIB_CHECKABLE);
+            pCustomizationMenu->CheckItem(nSubMenuIndex, iItem->mbIsActive ? sal_True : sal_False);
         }
     }
 
@@ -864,22 +878,6 @@ void SidebarController::ShowDetailMenu (const ::rtl::OUString& rsMenuCommand) co
         pMenu->InsertItem(MID_LOCK_TASK_PANEL, String(SfxResId(STR_SFX_DOCK)));
     else
         pMenu->InsertItem(MID_UNLOCK_TASK_PANEL, String(SfxResId(STR_SFX_UNDOCK)));
-
-    // Add sub menu for customization (hiding of deck tabs.)
-    PopupMenu* pCustomizationMenu = new PopupMenu();
-    {
-        sal_Int32 nIndex (MID_FIRST_HIDE);
-        for(::std::vector<TabBar::DeckMenuData>::const_iterator
-                iItem(rDeckShowData.begin()),
-                iEnd(rDeckShowData.end());
-            iItem!=iEnd;
-            ++iItem)
-        {
-            pCustomizationMenu->InsertItem(nIndex, iItem->get<0>(), MIB_CHECKABLE);
-            pCustomizationMenu->CheckItem(nIndex, iItem->get<2>());
-            ++nIndex;
-        }
-    }
 
     pCustomizationMenu->InsertSeparator();
     pCustomizationMenu->InsertItem(MID_RESTORE_DEFAULT, String(SfxResId(STRING_RESTORE)));
@@ -926,7 +924,8 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu)
                 if (nIndex >= MID_FIRST_PANEL && nIndex<MID_FIRST_HIDE)
                     SwitchToDeck(mpTabBar->GetDeckIdForIndex(nIndex - MID_FIRST_PANEL));
                 else if (nIndex >=MID_FIRST_HIDE)
-                    mpTabBar->ToggleHideFlag(nIndex-MID_FIRST_HIDE);
+                    if (pMenu->GetItemBits(nIndex) == MIB_CHECKABLE)
+                        mpTabBar->ToggleHideFlag(nIndex-MID_FIRST_HIDE);
             }
             catch (RuntimeException&)
             {

@@ -52,11 +52,18 @@ public:
          - isCurrentDeck for the deck selection data
          - isEnabled     for the show/hide menu
     */
-    typedef ::boost::tuple<rtl::OUString,rtl::OUString,bool> DeckMenuData;
+    class DeckMenuData
+    {
+    public:
+        ::rtl::OUString msDisplayName;
+        ::rtl::OUString msDeckId;
+        bool mbIsCurrentDeck;
+        bool mbIsActive;
+        bool mbIsEnabled;
+    };
     typedef ::boost::function<void(
             const Rectangle&,
-            const ::std::vector<DeckMenuData>& rDeckSelectionData,
-            const ::std::vector<DeckMenuData>& rDeckShowData)> PopupMenuProvider;
+            const ::std::vector<DeckMenuData>& rMenuData)> PopupMenuProvider;
     TabBar (
         Window* pParentWindow,
         const cssu::Reference<css::frame::XFrame>& rxFrame,
