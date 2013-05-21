@@ -101,6 +101,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_filters_test,\
     sfx2/util/sfx \
     sot/util/sot \
     svl/util/svl \
+    svx/util/svx \
     svtools/util/svt \
     toolkit/util/tk \
     ucb/source/core/ucb1 \
