@@ -231,7 +231,9 @@ Reference< XInterface > ConverterRoot::createInstance( const OUString& rServiceN
     Reference< XInterface > xInt;
     try
     {
-        xInt = mxData->mrFilter.getServiceFactory()->createInstance( rServiceName );
+        Reference<XMultiServiceFactory> xMSF = Reference<XMultiServiceFactory>(getComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW);
+
+        xInt = xMSF->createInstance( rServiceName );
     }
     catch( Exception& )
     {
@@ -242,7 +244,7 @@ Reference< XInterface > ConverterRoot::createInstance( const OUString& rServiceN
 
 Reference< XComponentContext > ConverterRoot::getComponentContext() const
 {
-    return comphelper::getComponentContext(mxData->mrFilter.getServiceFactory());
+    return mxData->mrFilter.getComponentContext();
 }
 
 XmlFilterBase& ConverterRoot::getFilter() const

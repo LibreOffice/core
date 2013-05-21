@@ -1312,7 +1312,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                 if( xSheetDoc.is() && mpFB)
                 {
                     Reference< XComponent > xDocument( mAny, UNO_QUERY );
-                    Reference< XExporter > xExporter( mpFB->getServiceFactory()->createInstance( "com.sun.star.comp.oox.ExcelFilterExport" ), UNO_QUERY );
+                    Reference< XExporter > xExporter( Reference<css::lang::XMultiServiceFactory>(mpFB->getComponentContext()->getServiceManager(), UNO_QUERY_THROW)->createInstance( "com.sun.star.comp.oox.ExcelFilterExport" ), UNO_QUERY );;
                     if( xDocument.is() && xExporter.is())
                     {
                         Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()

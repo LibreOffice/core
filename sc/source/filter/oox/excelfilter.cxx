@@ -175,7 +175,7 @@ sal_Bool SAL_CALL ExcelFilter::filter( const ::com::sun::star::uno::Sequence< ::
 
     if ( isExportFilter() )
     {
-        Reference< XExporter > xExporter( getServiceFactory()->createInstance( "com.sun.star.comp.oox.ExcelFilterExport" ), UNO_QUERY );
+        Reference< XExporter > xExporter( Reference<XMultiServiceFactory>(getComponentContext()->getServiceManager(), UNO_QUERY_THROW)->createInstance( "com.sun.star.comp.oox.ExcelFilterExport" ), UNO_QUERY );;
 
         if ( xExporter.is() )
         {

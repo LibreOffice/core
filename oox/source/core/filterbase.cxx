@@ -144,7 +144,6 @@ struct FilterBaseImpl
 
     Reference< XComponentContext >      mxComponentContext;
     Reference< XMultiComponentFactory > mxComponentFactory;
-    Reference< XMultiServiceFactory >   mxServiceFactory;
     Reference< XModel >                 mxModel;
     Reference< XMultiServiceFactory >   mxModelFactory;
     Reference< XFrame >                 mxTargetFrame;
@@ -168,8 +167,7 @@ FilterBaseImpl::FilterBaseImpl( const Reference< XComponentContext >& rxContext 
     meDirection( FILTERDIRECTION_UNKNOWN ),
     meVersion( ECMA_DIALECT ),
     mxComponentContext( rxContext, UNO_SET_THROW ),
-    mxComponentFactory( rxContext->getServiceManager(), UNO_SET_THROW ),
-    mxServiceFactory( rxContext->getServiceManager(), UNO_QUERY_THROW )
+    mxComponentFactory( rxContext->getServiceManager(), UNO_SET_THROW )
 {
 }
 
@@ -243,11 +241,6 @@ OoxmlVersion FilterBase::getVersion() const
 const Reference< XComponentContext >& FilterBase::getComponentContext() const
 {
     return mxImpl->mxComponentContext;
-}
-
-const Reference< XMultiServiceFactory >& FilterBase::getServiceFactory() const
-{
-    return mxImpl->mxServiceFactory;
 }
 
 const Reference< XModel >& FilterBase::getModel() const
@@ -561,7 +554,7 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
     OUString sFilterName = mxImpl->maMediaDesc.getUnpackedValueOrDefault( "FilterName", OUString() );
     try
     {
-        Reference< XNameAccess > xFilters( getServiceFactory()->createInstance("com.sun.star.document.FilterFactory" ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xFilters( Reference<XMultiServiceFactory>(getComponentContext()->getServiceManager(), UNO_QUERY_THROW)->createInstance("com.sun.star.document.FilterFactory" ), UNO_QUERY_THROW );
         Any aValues = xFilters->getByName( sFilterName );
         Sequence<PropertyValue > aPropSeq;
         aValues >>= aPropSeq;

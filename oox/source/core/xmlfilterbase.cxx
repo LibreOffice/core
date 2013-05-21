@@ -47,14 +47,10 @@
 #include <comphelper/processfactory.hxx>
 #include <oox/core/filterdetect.hxx>
 #include <comphelper/storagehelper.hxx>
-using ::com::sun::star::uno::XComponentContext;
-using ::com::sun::star::document::XOOXMLDocumentPropertiesImporter;
-using ::com::sun::star::document::XDocumentPropertiesSupplier;
+
 using ::com::sun::star::xml::dom::DocumentBuilder;
 using ::com::sun::star::xml::dom::XDocument;
 using ::com::sun::star::xml::dom::XDocumentBuilder;
-using ::com::sun::star::xml::sax::XFastSAXSerializable;
-using ::com::sun::star::lang::XComponent;
 
 namespace oox {
 namespace core {
@@ -204,10 +200,10 @@ XmlFilterBase::~XmlFilterBase()
 
 void XmlFilterBase::importDocumentProperties()
 {
-    Reference< XMultiServiceFactory > xFactory( getServiceFactory(), UNO_QUERY );
+    Reference< XMultiServiceFactory > xFactory( getComponentContext()->getServiceManager(), UNO_QUERY );
     MediaDescriptor aMediaDesc( getMediaDescriptor() );
     Reference< XInputStream > xInputStream;
-    Reference< XComponentContext > xContext = comphelper::getComponentContext(getServiceFactory());
+    Reference< XComponentContext > xContext = getComponentContext();
     ::oox::core::FilterDetect aDetector( xContext );
     xInputStream = aDetector.extractUnencryptedPackage( aMediaDesc );
     Reference< XComponent > xModel( getModel(), UNO_QUERY );
@@ -330,9 +326,7 @@ Reference<XDocument> XmlFilterBase::importFragment( const OUString& aFragmentPat
     try
     {
         // create the dom parser
-        Reference< XComponentContext > xContext =
-            comphelper::getComponentContext(getServiceFactory());
-        Reference<XDocumentBuilder> xDomBuilder( DocumentBuilder::create(xContext) );
+        Reference<XDocumentBuilder> xDomBuilder( DocumentBuilder::create( getComponentContext() ) );
 
         // create DOM from fragment
         xRet = xDomBuilder->parse(xInStrm);

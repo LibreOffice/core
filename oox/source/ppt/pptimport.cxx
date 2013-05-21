@@ -140,7 +140,7 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
         return true;
 
     if( isExportFilter() ) {
-        Reference< XExporter > xExporter( getServiceFactory()->createInstance( "com.sun.star.comp.Impress.oox.PowerPointExport" ), UNO_QUERY );
+        Reference< XExporter > xExporter( Reference<css::lang::XMultiServiceFactory>(getComponentContext()->getServiceManager(), UNO_QUERY_THROW)->createInstance( "com.sun.star.comp.Impress.oox.PowerPointExport" ), UNO_QUERY );;
 
         if( xExporter.is() ) {
             Reference< XComponent > xDocument( getModel(), UNO_QUERY );

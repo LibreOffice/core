@@ -117,10 +117,6 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
                         getComponentContext() const;
 
-    /** Returns the multi service factory of the component (always existing). */
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
-                        getServiceFactory() const;
-
     /** Returns the document model (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >&
                         getModel() const;
