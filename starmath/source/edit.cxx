@@ -714,6 +714,20 @@ void SmEditWindow::InsertCommand(sal_uInt16 nCommand)
 
         OSL_ENSURE( pEditView, "NULL pointer" );
         OUString aText = SM_RESSTR(nCommand);
+
+        OUString textFormula = pEditView->GetEditEngine()->GetText();
+
+        int varSize = aText.getLength();
+        // remove right space of current symbol if there already one
+        if (aSelection.nStartPos > 0 &&
+            aSelection.nEndPos != textFormula.getLength() &&
+            textFormula.indexOf(" ", aSelection.nEndPos + varSize - 1 ) != aSelection.nEndPos + varSize - 1)
+            aText = aText.trim();
+
+        // put an space before put a new command when necessary
+        if (aSelection.nStartPos > 0 && (textFormula.indexOf(" ", aSelection.nStartPos - 1) != aSelection.nStartPos - 1))
+            aText = " " + aText;
+
         pEditView->InsertText(aText);
 
         if (HasMark(aText))
