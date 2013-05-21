@@ -50,14 +50,9 @@ if [ "$COM" = "MSC" -a "$CPUNAME" = "INTEL" ]; then
 fi
 
 if [ "$COM" = "MSC" ]; then
-    if [ "$CPUNAME" = "INTEL" ]; then
-        ver=""
-    else
-        ver="-64"
-    fi
     # use oowintool to copy CRT dlls and manifest
-    if ! ./oowintool --msvc-copy-dlls"$ver" ./external/msvcp ; then
-       echo "oowintool failed to copy CRT"
+    if ! ./oowintool --msvc-copy-dlls-64 ./external/msvcp ; then
+       echo "oowintool failed to copy 64-bit CRT"
        exit 1
     fi
 
@@ -65,11 +60,6 @@ if [ "$COM" = "MSC" ]; then
     if ! ./oowintool --msvc-copy-msms"$ver" ./external/msm"$VCVER" ; then
        echo "oowintool failed to copy merge modules"
        exit 1
-    fi
-    if [ "$CPUNAME" = "INTEL" ]; then
-        if ! ./oowintool --msvc-copy-msms-64 ./external/msm"$VCVER" ; then
-           echo "WARNING: oowintool failed to copy x64 merge modules, installation will lack the 64-bit Explorer extension"
-        fi
     fi
 fi
 

@@ -313,7 +313,7 @@ sub msvc_copy_dlls($$)
     my $srcdir = (cygpath ($ver->{'product_dir'}, 'w', 'u') . '/' .
           $ver->{'dll_path'});
 
-    $srcdir =~ s/x86/amd64/ if ($arch eq 'amd64');
+    $srcdir =~ s|/x86/|/x64/| if ($arch eq 'amd64');
 
     copy_dll ($srcdir, "msvcp" . $ver->{'dll_suffix'} . ".dll",
           $dest . $ver->{'dll_suffix'});
