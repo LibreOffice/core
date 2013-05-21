@@ -43,6 +43,7 @@ certain functionality.
 @li @c canvas
 @li @c canvas.cairo
 @li @c canvas.null
+@li @c canvas.vcl
 
 @section chart2
 
