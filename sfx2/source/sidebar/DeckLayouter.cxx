@@ -318,7 +318,7 @@ void DeckLayouter::GetRequestedSizes (
                 if (xPanel.is())
                     aLayoutSize = xPanel->getHeightForWidth(rContentBox.GetWidth());
                 else
-                    aLayoutSize = ui::LayoutSize(MinimalPanelHeight, 0, -1);
+                    aLayoutSize = ui::LayoutSize(MinimalPanelHeight, -1, 0);
             }
         }
         iItem->maLayoutSize = aLayoutSize;
