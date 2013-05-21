@@ -134,6 +134,29 @@ void PositionHandler::lcl_sprm( Sprm& )
 {
 }
 
+sal_Int16 PositionHandler::orientation() const
+{
+    if( m_nRelation == text::RelOrientation::TEXT_LINE )
+    { // It appears that to 'line of text' alignment is backwards to other alignments,
+      // 'top' meaning putting on top of the line instead of having top at the line.
+        if( m_nOrient == text::VertOrientation::TOP )
+            return text::VertOrientation::BOTTOM;
+        else if( m_nOrient == text::VertOrientation::BOTTOM )
+            return text::VertOrientation::TOP;
+    }
+    return m_nOrient;
+}
+
+sal_Int16 PositionHandler::relation() const
+{
+    return m_nRelation;
+}
+
+sal_Int32 PositionHandler::position() const
+{
+    return m_nPosition;
+}
+
 void PositionHandler::setPositionOffset(const OUString & sText, bool vertical)
 {
     if( vertical )
