@@ -535,20 +535,27 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
         rDeckDescriptor.msId = rsNodeName;
         rDeckDescriptor.msIconURL = ::comphelper::getString(aChildNode.getNodeValue("ImageURL"));
         rDeckDescriptor.msHighContrastIconURL = rDeckDescriptor.msIconURL;
+        rDeckDescriptor.msTitleBarIconURL = OUString();
+        rDeckDescriptor.msHighContrastTitleBarIconURL = OUString();
         rDeckDescriptor.msHelpURL = ::comphelper::getString(aChildNode.getNodeValue("HelpURL"));
         rDeckDescriptor.msHelpText = rDeckDescriptor.msTitle;
-        rDeckDescriptor.maContextList.AddContextDescription(Context(sModuleName, A2S("any")), true, OUString());
         rDeckDescriptor.mbIsEnabled = true;
+        rDeckDescriptor.mnOrderIndex = 100000 + nReadIndex;
+        rDeckDescriptor.maContextList.AddContextDescription(Context(sModuleName, A2S("any")), true, OUString());
 
         PanelDescriptor& rPanelDescriptor (maPanels[nPanelWriteIndex++]);
         rPanelDescriptor.msTitle = ::comphelper::getString(aChildNode.getNodeValue("UIName"));
         rPanelDescriptor.mbIsTitleBarOptional = true;
         rPanelDescriptor.msId = rsNodeName;
         rPanelDescriptor.msDeckId = rsNodeName;
+        rPanelDescriptor.msTitleBarIconURL = OUString();
+        rPanelDescriptor.msHighContrastTitleBarIconURL = OUString();
         rPanelDescriptor.msHelpURL = ::comphelper::getString(aChildNode.getNodeValue("HelpURL"));
-        rPanelDescriptor.maContextList.AddContextDescription(Context(sModuleName, A2S("any")), true, OUString());
         rPanelDescriptor.msImplementationURL = rsNodeName;
+        rPanelDescriptor.mnOrderIndex = 100000 + nReadIndex;
         rPanelDescriptor.mbShowForReadOnlyDocuments = false;
+        rPanelDescriptor.mbWantsCanvas = false;
+        rPanelDescriptor.maContextList.AddContextDescription(Context(sModuleName, A2S("any")), true, OUString());
     }
 
     // When there where invalid nodes then we have to adapt the size
