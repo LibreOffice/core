@@ -41,10 +41,10 @@
 namespace framework
 {
 
-DropTargetListener::DropTargetListener( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
-                                        const css::uno::Reference< css::frame::XFrame >&              xFrame  )
+DropTargetListener::DropTargetListener( const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                                        const css::uno::Reference< css::frame::XFrame >&          xFrame  )
         : ThreadHelpBase  ( &Application::GetSolarMutex() )
-        , m_xFactory      ( xFactory                      )
+        , m_xContext      ( xContext                      )
         , m_xTargetFrame  ( xFrame                        )
         , m_pFormats      ( new DataFlavorExVector        )
 {
@@ -54,8 +54,8 @@ DropTargetListener::DropTargetListener( const css::uno::Reference< css::lang::XM
 
 DropTargetListener::~DropTargetListener()
 {
-    m_xTargetFrame = css::uno::WeakReference< css::frame::XFrame >();
-    m_xFactory     = css::uno::Reference< css::lang::XMultiServiceFactory >();
+    m_xTargetFrame.clear();
+    m_xContext.clear();
     delete m_pFormats;
     m_pFormats = NULL;
 }
@@ -64,8 +64,8 @@ DropTargetListener::~DropTargetListener()
 
 void SAL_CALL DropTargetListener::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException )
 {
-    m_xTargetFrame = css::uno::WeakReference< css::frame::XFrame >();
-    m_xFactory     = css::uno::Reference< css::lang::XMultiServiceFactory >();
+    m_xTargetFrame.clear();
+    m_xContext.clear();
 }
 
 // -----------------------------------------------------------------------------
@@ -212,7 +212,7 @@ void DropTargetListener::implts_OpenFile( const String& rFilePath )
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::frame::XFrame >         xTargetFrame( m_xTargetFrame.get(), css::uno::UNO_QUERY );
-    css::uno::Reference< css::util::XURLTransformer > xParser     ( css::util::URLTransformer::create(::comphelper::getComponentContext(m_xFactory)) );
+    css::uno::Reference< css::util::XURLTransformer > xParser     ( css::util::URLTransformer::create(m_xContext) );
     aReadLock.unlock();
     /* } SAFE */
     if (xTargetFrame.is() && xParser.is())

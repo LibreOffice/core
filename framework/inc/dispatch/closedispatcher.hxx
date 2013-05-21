@@ -35,7 +35,7 @@
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
 #include <cppuhelper/weak.hxx>
@@ -89,7 +89,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
         /** @short reference to an uno service manager,
                    which can be used to create own needed
                    uno resources. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         //---------------------------------------
         /** @short  reference to the target frame, which should be
@@ -132,7 +132,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
                     That makes an implementation (e.g. of listener support)
                     much more easier .-)
 
-            @param  xSMGR
+            @param  rxContext
                     an un oservice manager, which is needed to create uno resource
                     internaly.
 
@@ -142,9 +142,9 @@ class CloseDispatcher : public css::lang::XTypeProvider
             @param  sTarget
                     help us to find the right target for this close operation.
          */
-        CloseDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
-                        const css::uno::Reference< css::frame::XFrame >&              xFrame ,
-                        const OUString&                                        sTarget);
+        CloseDispatcher(const css::uno::Reference< css::uno::XComponentContext >& rxContext  ,
+                        const css::uno::Reference< css::frame::XFrame >&          xFrame ,
+                        const OUString&                                           sTarget);
 
         //---------------------------------------
         /** @short  does nothing real. */

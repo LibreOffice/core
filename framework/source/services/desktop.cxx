@@ -137,14 +137,14 @@ DEFINE_INIT_SERVICE                     (   Desktop,
                                                 // We hold member as reference ... not as pointer too!
                                                 // Attention: We share our frame container with this helper. Container is threadsafe himself ... So I think we can do that.
                                                 // But look on dispose() for right order of deinitialization.
-                                                OFrames* pFramesHelper = new OFrames( m_xFactory, this, &m_aChildTaskContainer );
+                                                OFrames* pFramesHelper = new OFrames( this, &m_aChildTaskContainer );
                                                 m_xFramesHelper = css::uno::Reference< css::frame::XFrames >( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
 
                                                 //-------------------------------------------------------------------------------------------------------------
                                                 // Initialize a new dispatchhelper-object to handle dispatches.
                                                 // We use these helper as slave for our interceptor helper ... not directly!
                                                 // But he is event listener on THIS instance!
-                                                DispatchProvider* pDispatchHelper = new DispatchProvider( m_xFactory, this );
+                                                DispatchProvider* pDispatchHelper = new DispatchProvider( comphelper::getComponentContext(m_xFactory), this );
                                                 css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY );
 
                                                 //-------------------------------------------------------------------------------------------------------------
@@ -648,7 +648,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
     aReadLock.unlock();
 
     RTL_LOGFILE_PRODUCT_CONTEXT( aLog2, "PERFORMANCE - Desktop::loadComponentFromURL()" );
-    return LoadEnv::loadComponentFromURL(xThis, xSMGR, sURL, sTargetFrameName, nSearchFlags, lArguments);
+    return LoadEnv::loadComponentFromURL(xThis, comphelper::getComponentContext(xSMGR), sURL, sTargetFrameName, nSearchFlags, lArguments);
 }
 
 /*-************************************************************************************************************//**
@@ -1050,7 +1050,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
     //-----------------------------------------------------------------------------------------------------
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
-        TaskCreator aCreator(xFactory);
+        TaskCreator aCreator( comphelper::getComponentContext(xFactory) );
         xTarget = aCreator.createTask(sTargetFrameName,sal_False);
     }
 
@@ -1148,7 +1148,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
             (nSearchFlags & css::frame::FrameSearchFlag::CREATE)
            )
         {
-            TaskCreator aCreator(xFactory);
+            TaskCreator aCreator( comphelper::getComponentContext(xFactory) );
             xTarget = aCreator.createTask(sTargetFrameName,sal_False);
         }
     }

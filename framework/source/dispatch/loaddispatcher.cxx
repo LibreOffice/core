@@ -25,22 +25,22 @@
 
 namespace framework{
 
-LoadDispatcher::LoadDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR       ,
-                               const css::uno::Reference< css::frame::XFrame >&              xOwnerFrame ,
+LoadDispatcher::LoadDispatcher(const css::uno::Reference< css::uno::XComponentContext >& xContext       ,
+                               const css::uno::Reference< css::frame::XFrame >&          xOwnerFrame ,
                                const OUString                                         sTargetName ,
                                      sal_Int32                                               nSearchFlags)
     : ThreadHelpBase(            )
-    , m_xSMGR       (xSMGR       )
+    , m_xContext    (xContext    )
     , m_xOwnerFrame (xOwnerFrame )
     , m_sTarget     (sTargetName )
     , m_nSearchFlags(nSearchFlags)
-    , m_aLoader     (xSMGR       )
+    , m_aLoader     (xContext    )
 {
 }
 
 LoadDispatcher::~LoadDispatcher()
 {
-    m_xSMGR.clear();
+    m_xContext.clear();
 }
 
 void SAL_CALL LoadDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,

@@ -129,8 +129,8 @@ class Frame :   // interfaces
         //---------------------------------------------------------------------------------------------------------
         //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
-                  Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
-        virtual ~Frame(                                                                         );
+                  Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        virtual ~Frame(                                                                     );
 
         //---------------------------------------------------------------------------------------------------------
         //  XInterface, XTypeProvider, XServiceInfo
@@ -365,7 +365,7 @@ class Frame :   // interfaces
 
     private:
 
-        static sal_Bool implcp_ctor                                (   const   css::uno::Reference< css::lang::XMultiServiceFactory >&             xFactory            );
+        static sal_Bool implcp_ctor                                (   const   css::uno::Reference< css::uno::XComponentContext >&                 xContext            );
         static sal_Bool implcp_setActiveFrame                      (   const   css::uno::Reference< css::frame::XFrame >&                          xFrame              );
         static sal_Bool implcp_addFrameActionListener              (   const   css::uno::Reference< css::frame::XFrameActionListener >&            xListener           );
         static sal_Bool implcp_removeFrameActionListener           (   const   css::uno::Reference< css::frame::XFrameActionListener >&            xListener           );
@@ -385,7 +385,7 @@ class Frame :   // interfaces
     //*************************************************************************************************************
     private:
 
-        css::uno::Reference< css::lang::XMultiServiceFactory >                  m_xFactory                          ;   /// reference to factory, which has create this instance
+        css::uno::Reference< css::uno::XComponentContext >                      m_xContext                          ;   /// reference to factory, which has create this instance
         css::uno::Reference< css::task::XStatusIndicatorFactory >               m_xIndicatorFactoryHelper           ;   /// reference to factory helper to create status indicator objects
         css::uno::WeakReference< css::task::XStatusIndicator >                  m_xIndicatorInterception            ;   /// points to an external set progress, which should be used instead of the internal one.
         css::uno::Reference< css::frame::XDispatchProvider >                    m_xDispatchHelper                   ;   /// helper for XDispatch/Provider and interception interfaces
@@ -416,10 +416,10 @@ class Frame :   // interfaces
 
         FrameContainer                                                          m_aChildFrameContainer              ;   /// array of child frames
 
-        inline css::uno::Reference< css::lang::XMultiServiceFactory > impl_getFactory()
+        inline css::uno::Reference< css::uno::XComponentContext > impl_getComponentContext()
         {
             ReadGuard aReadLock( m_aLock );
-            return m_xFactory;
+            return m_xContext;
         }
 
         inline OUString impl_getName()

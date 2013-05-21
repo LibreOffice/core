@@ -48,7 +48,7 @@ class WindowCommandDispatch : private ThreadHelpBase
     private:
 
         /// can be used to create own needed services on demand.
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /// knows the frame, where we dispatch our commands as weak reference
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
@@ -69,13 +69,13 @@ class WindowCommandDispatch : private ThreadHelpBase
                     Means: 1 MACDispatch object is bound to 1 Frame/Window pair in which context
                     the detected commands will be executed.
 
-            @param  xSMGR
+            @param  xContext
                     will be used to create own needed services on demand.
 
             @param  xFrame
                     used as for new detected commands.
          */
-        WindowCommandDispatch(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
+        WindowCommandDispatch(const css::uno::Reference< css::uno::XComponentContext >&     xContext ,
                               const css::uno::Reference< css::frame::XFrame >&              xFrame);
 
         //_______________________________________

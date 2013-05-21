@@ -72,12 +72,12 @@ DEFINE_XTYPEPROVIDER_4(CloseDispatcher                         ,
                        css::frame::XDispatch                   )
 
 //-----------------------------------------------
-CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
-                                 const css::uno::Reference< css::frame::XFrame >&              xFrame ,
-                                 const OUString&                                        sTarget)
+CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::uno::XComponentContext >& rxContext ,
+                                 const css::uno::Reference< css::frame::XFrame >&          xFrame ,
+                                 const OUString&                                           sTarget)
     : ThreadHelpBase     (&Application::GetSolarMutex()                   )
     , ::cppu::OWeakObject(                                                )
-    , m_xSMGR            (xSMGR                                           )
+    , m_xContext         (rxContext                                       )
     , m_aAsyncCallback   (LINK( this, CloseDispatcher, impl_asyncCallback))
     , m_lStatusListener  (m_aLock.getShareableOslMutex()                  )
     , m_pSysWindow(NULL)
@@ -282,7 +282,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
 
     // BTW: Make some copies, which are needed later ...
     EOperation                                                  eOperation  = m_eOperation;
-    css::uno::Reference< css::lang::XMultiServiceFactory >      xSMGR       = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext >          xContext    = m_xContext;
     css::uno::Reference< css::frame::XFrame >                   xCloseFrame (m_xCloseFrame.get(), css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XDispatchResultListener >  xListener   = m_xResultListener;
 
@@ -301,7 +301,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     // Analyze the environment a first time.
     // If we found some special cases, we can
     // make some decisions erliar!
-    css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create(comphelper::getComponentContext(xSMGR)), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create(xContext), css::uno::UNO_QUERY_THROW);
     FrameListAnalyzer aCheck1(xDesktop, xCloseFrame, FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
 
     // a) If the curent frame (where the close dispatch was requested for) does not have
@@ -465,11 +465,11 @@ sal_Bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Referenc
     {
         // SAFE -> ----------------------------------
         ReadGuard aReadLock(m_aLock);
-        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > xContext  = m_xContext;
         aReadLock.unlock();
         // <- SAFE ----------------------------------
 
-        css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create( comphelper::getComponentContext(xSMGR) ), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create( xContext ), css::uno::UNO_QUERY_THROW);
         FrameListAnalyzer aCheck(xDesktop, xFrame, FrameListAnalyzer::E_ALL);
 
         sal_Int32 c = aCheck.m_lModelFrames.getLength();
@@ -533,8 +533,8 @@ sal_Bool CloseDispatcher::implts_establishBackingMode()
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = m_xSMGR;
-    css::uno::Reference< css::frame::XFrame >              xFrame (m_xCloseFrame.get(), css::uno::UNO_QUERY);
+    css::uno::Reference< css::uno::XComponentContext > xContext  = m_xContext;
+    css::uno::Reference< css::frame::XFrame >          xFrame (m_xCloseFrame.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -548,7 +548,7 @@ sal_Bool CloseDispatcher::implts_establishBackingMode()
     css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
 
     css::uno::Reference< css::frame::XController > xStartModule = css::frame::StartModule::createWithParentWindow(
-                        comphelper::getComponentContext(xSMGR), xContainerWindow);
+                        xContext, xContainerWindow);
 
     // Attention: You MUST(!) call setComponent() before you call attachFrame().
     css::uno::Reference< css::awt::XWindow > xBackingWin(xStartModule, css::uno::UNO_QUERY);
@@ -564,11 +564,11 @@ sal_Bool CloseDispatcher::implts_terminateApplication()
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( comphelper::getComponentContext(xSMGR) );
+    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
 
     return xDesktop->terminate();
 }

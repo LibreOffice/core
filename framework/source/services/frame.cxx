@@ -146,7 +146,7 @@ DEFINE_XTYPEPROVIDER_21             (   Frame                                   
                                         css::frame::XTitleChangeBroadcaster
                                     )
 
-DEFINE_XSERVICEINFO_MULTISERVICE    (   Frame                                                                   ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2  (   Frame                                                                   ,
                                         ::cppu::OWeakObject                                                     ,
                                         "com.sun.star.frame.Frame"                                              ,
                                         OUString("com.sun.star.comp.framework.Frame")
@@ -165,11 +165,11 @@ DEFINE_INIT_SERVICE                 (   Frame,
                                             // Initialize a new dispatchhelper-object to handle dispatches.
                                             // We use these helper as slave for our interceptor helper ... not directly!
                                             // But he is event listener on THIS instance!
-                                            DispatchProvider* pDispatchHelper = new DispatchProvider( m_xFactory, this );
+                                            DispatchProvider* pDispatchHelper = new DispatchProvider( m_xContext, this );
                                             css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY );
 
                                             //-------------------------------------------------------------------------------------------------------------
-                                            DispatchInformationProvider* pInfoHelper = new DispatchInformationProvider(m_xFactory, this);
+                                            DispatchInformationProvider* pInfoHelper = new DispatchInformationProvider(m_xContext, this);
                                             m_xDispatchInfoHelper = css::uno::Reference< css::frame::XDispatchInformationProvider >( static_cast< ::cppu::OWeakObject* >(pInfoHelper), css::uno::UNO_QUERY );
 
                                             //-------------------------------------------------------------------------------------------------------------
@@ -185,13 +185,13 @@ DEFINE_INIT_SERVICE                 (   Frame,
                                             // We hold member as reference ... not as pointer too!
                                             // Attention: We share our frame container with this helper. Container is threadsafe himself ... So I think we can do that.
                                             // But look on dispose() for right order of deinitialization.
-                                            OFrames* pFramesHelper = new OFrames( m_xFactory, this, &m_aChildFrameContainer );
+                                            OFrames* pFramesHelper = new OFrames( this, &m_aChildFrameContainer );
                                             m_xFramesHelper = css::uno::Reference< css::frame::XFrames >( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
 
                                             //-------------------------------------------------------------------------------------------------------------
                                             // Initialize a the drop target listener.
                                             // We hold member as reference ... not as pointer too!
-                                            DropTargetListener* pDropListener = new DropTargetListener( m_xFactory, this );
+                                            DropTargetListener* pDropListener = new DropTargetListener( m_xContext, this );
                                             m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >( static_cast< ::cppu::OWeakObject* >(pDropListener), css::uno::UNO_QUERY );
 
                                             // Safe impossible cases
@@ -208,7 +208,7 @@ DEFINE_INIT_SERVICE                 (   Frame,
                                             //-------------------------------------------------------------------------------------------------------------
                                             // Create an initial layout manager
                                             // Create layout manager and connect it to the newly created frame
-                                            m_xLayoutManager = css::uno::Reference< css::frame::XLayoutManager >(m_xFactory->createInstance(SERVICENAME_LAYOUTMANAGER), css::uno::UNO_QUERY);
+                                            m_xLayoutManager.set(m_xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_LAYOUTMANAGER, m_xContext), css::uno::UNO_QUERY);
 
                                             //-------------------------------------------------------------------------------------------------------------
                                             // set information about all supported properties at the base class helper PropertySetHelper
@@ -231,22 +231,21 @@ DEFINE_INIT_SERVICE                 (   Frame,
 
     @seealso    method DEFINE_INIT_SERVICE()
 
-    @param      "xFactory" is the multi service manager, which create this instance.
-                The value must be different from NULL!
+    @param      xContext is the multi service manager, which creates this instance.
+                    The value must be different from NULL!
     @return     -
 
     @onerror    ASSERT in debug version or nothing in relaese version.
 *//*-*****************************************************************************************************/
-Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
+Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext )
         :   ThreadHelpBase              ( &Application::GetSolarMutex()                     )
         ,   TransactionBase             (                                                   )
-        ,   PropertySetHelper           ( xFactory,
-                                          &m_aLock,
+        ,   PropertySetHelper           ( &m_aLock,
                                           &m_aTransactionManager,
                                           sal_False) // sal_False => dont release shared mutex on calling us!
         ,   ::cppu::OWeakObject         (                                                   )
         //  init member
-        ,   m_xFactory                  ( xFactory                                          )
+        ,   m_xContext                  ( xContext                                          )
         ,   m_aListenerContainer        ( m_aLock.getShareableOslMutex()                    )
         ,   m_xParent                   (                                                   )
         ,   m_xContainerWindow          (                                                   )
@@ -264,7 +263,7 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
         ,   m_aChildFrameContainer      (                                                   )
 {
     // Check incoming parameter to avoid against wrong initialization.
-    LOG_ASSERT2( implcp_ctor( xFactory ), "Frame::Frame()", "Invalid parameter detected!" )
+    LOG_ASSERT2( implcp_ctor( xContext ), "Frame::Frame()", "Invalid parameter detected!" )
 
     /* Please have a look on "@attentions" of description before! */
 }
@@ -322,10 +321,10 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Frame::loadComponentFromUR
 
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xFactory;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
 
-    return LoadEnv::loadComponentFromURL(xThis, xSMGR, sURL, sTargetFrameName, nSearchFlags, lArguments);
+    return LoadEnv::loadComponentFromURL(xThis, xContext, sURL, sTargetFrameName, nSearchFlags, lArguments);
 }
 
 /*-****************************************************************************************************//**
@@ -554,8 +553,8 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     if (pWindow && pWindow->IsVisible())
         m_bIsHidden = sal_False;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR          = m_xFactory;
-    css::uno::Reference< css::frame::XLayoutManager >     xLayoutManager = m_xLayoutManager;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
+    css::uno::Reference< css::frame::XLayoutManager >  xLayoutManager = m_xLayoutManager;
 
     // Release lock ... because we call some impl methods, which are threadsafe by himself.
     // If we hold this lock - we will produce our own deadlock!
@@ -568,7 +567,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // create progress helper
     css::uno::Reference< css::frame::XFrame >                 xThis            (static_cast< css::frame::XFrame* >(this)                        , css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::task::XStatusIndicatorFactory > xIndicatorFactory =
-        css::task::StatusIndicatorFactory::createWithFrame(comphelper::getComponentContext(xSMGR), xThis, sal_False/*DisableReschedule*/, sal_True/*AllowParentShow*/ );
+        css::task::StatusIndicatorFactory::createWithFrame(xContext, xThis, sal_False/*DisableReschedule*/, sal_True/*AllowParentShow*/ );
 
     // SAFE -> ----------------------------------
     aWriteLock.lock();
@@ -582,10 +581,10 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 
     impl_enablePropertySet();
 
-    m_pWindowCommandDispatch = new WindowCommandDispatch(xSMGR, this);
+    m_pWindowCommandDispatch = new WindowCommandDispatch(xContext, this);
 
     // Initialize title functionality
-    TitleHelper* pTitleHelper = new TitleHelper( comphelper::getComponentContext(xSMGR) );
+    TitleHelper* pTitleHelper = new TitleHelper( xContext );
     m_xTitleHelper = css::uno::Reference< css::frame::XTitle >(static_cast< ::cppu::OWeakObject* >(pTitleHelper), css::uno::UNO_QUERY_THROW);
     pTitleHelper->setOwner(xThis);
 }
@@ -769,7 +768,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::frame::XFrame >              xParent      ( m_xParent, css::uno::UNO_QUERY );
-    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory     = m_xFactory;
+    css::uno::Reference< css::uno::XComponentContext >     xContext = m_xContext;
     sal_Bool                                               bIsTopFrame  = m_bIsFrameTop;
     sal_Bool                                               bIsTopWindow = WindowHelper::isTopWindow(m_xContainerWindow);
     aReadLock.unlock();
@@ -782,7 +781,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
     //-----------------------------------------------------------------------------------------------------
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
-        TaskCreator aCreator(xFactory);
+        TaskCreator aCreator(xContext);
         xTarget = aCreator.createTask(sTargetFrameName,sal_False);
     }
 
@@ -989,7 +988,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
             (nSearchFlags & css::frame::FrameSearchFlag::CREATE)
            )
         {
-            TaskCreator aCreator(xFactory);
+            TaskCreator aCreator(xContext);
             xTarget = aCreator.createTask(sTargetFrameName,sal_False);
         }
     }
@@ -1936,7 +1935,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // Release some other references.
     // This calls should be easy ... I hope it :-)
     m_xDispatchHelper.clear();
-    m_xFactory.clear();
+    m_xContext.clear();
     m_xDropTargetListener.clear();
     m_xDispatchRecorderSupplier.clear();
     m_xLayoutManager.clear();
@@ -2347,13 +2346,13 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::
 
     /* SAFE */
     ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory = m_xFactory;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     /* SAFE */
 
     css::util::URL aURL;
     aURL.Complete = DECLARE_ASCII(".uno:CloseFrame");
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(xFactory)));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(xContext));
     xParser->parseStrict(aURL);
 
     css::uno::Reference< css::frame::XDispatch > xCloser = queryDispatch(aURL, SPECIALTARGET_SELF, 0);
@@ -2394,7 +2393,7 @@ void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::frame::XDesktop >             xDesktopCheck( m_xParent, css::uno::UNO_QUERY );
-    css::uno::Reference< css::lang::XMultiServiceFactory >  xFactory     = m_xFactory;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     m_bIsHidden = sal_False;
     aReadLock.unlock();
     /* } SAFE */
@@ -2413,7 +2412,7 @@ void SAL_CALL Frame::windowShown( const css::lang::EventObject& ) throw(css::uno
         if (bMustBeTriggered)
         {
             css::uno::Reference< css::task::XJobExecutor > xExecutor
-                = css::task::JobExecutor::create( comphelper::getComponentContext(xFactory) );
+                = css::task::JobExecutor::create( xContext );
             xExecutor->trigger( DECLARE_ASCII("onFirstVisibleTask") );
         }
     }
@@ -2935,7 +2934,7 @@ void Frame::implts_startWindowListening()
     // Make snapshot of necessary member!
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow   ;
-    css::uno::Reference< css::lang::XMultiServiceFactory >              xFactory            = m_xFactory           ;
+    css::uno::Reference< css::uno::XComponentContext >                  xContext = m_xContext;
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >  xDragDropListener   = m_xDropTargetListener;
     css::uno::Reference< css::awt::XWindowListener >                    xWindowListener     ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XFocusListener >                     xFocusListener      ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
@@ -2953,7 +2952,7 @@ void Frame::implts_startWindowListening()
         {
             xTopWindow->addTopWindowListener( xTopWindowListener );
 
-            css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( comphelper::getComponentContext(xFactory) );
+            css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( xContext );
             css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xToolkit->getDropTarget( xContainerWindow );
             if( xDropTarget.is() == sal_True )
             {
@@ -2975,7 +2974,7 @@ void Frame::implts_stopWindowListening()
     // Make snapshot of necessary member!
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow   ;
-    css::uno::Reference< css::lang::XMultiServiceFactory >              xFactory            = m_xFactory           ;
+    css::uno::Reference< css::uno::XComponentContext >                  xContext            = m_xContext           ;
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >  xDragDropListener   = m_xDropTargetListener;
     css::uno::Reference< css::awt::XWindowListener >                    xWindowListener     ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XFocusListener >                     xFocusListener      ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
@@ -2993,7 +2992,7 @@ void Frame::implts_stopWindowListening()
         {
             xTopWindow->removeTopWindowListener( xTopWindowListener );
 
-            css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( comphelper::getComponentContext(xFactory) );
+            css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( xContext );
             css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xToolkit->getDropTarget( xContainerWindow );
             if( xDropTarget.is() == sal_True )
             {
@@ -3178,11 +3177,11 @@ void Frame::impl_checkMenuCloser()
 
 //*****************************************************************************************************************
 // We don't accept null pointer or references!
-sal_Bool Frame::implcp_ctor( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
+sal_Bool Frame::implcp_ctor( const css::uno::Reference< css::uno::XComponentContext >& xContext )
 {
     return  (
-                ( &xFactory     ==  NULL        )   ||
-                ( xFactory.is() ==  sal_False   )
+                ( &xContext     ==  NULL        )   ||
+                ( xContext.is() ==  sal_False   )
             );
 }
 

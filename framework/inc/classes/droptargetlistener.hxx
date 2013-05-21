@@ -41,7 +41,7 @@ class DropTargetListener : private ThreadHelpBase
     private:
 
         /// uno service manager to create necessary services
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
         /// weakreference to target frame (Don't use a hard reference. Owner can't delete us then!)
         css::uno::WeakReference< css::frame::XFrame > m_xTargetFrame;
         /// drag/drop info
@@ -51,7 +51,7 @@ class DropTargetListener : private ThreadHelpBase
     // c++ interface
     public:
 
-         DropTargetListener( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory ,
+         DropTargetListener( const css::uno::Reference< css::uno::XComponentContext >& xContext ,
                              const css::uno::Reference< css::frame::XFrame >& xFrame                );
         ~DropTargetListener(                                                                        );
 

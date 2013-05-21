@@ -26,7 +26,7 @@
 #include <general.h>
 
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
@@ -48,13 +48,13 @@ class TaskCreator : private ThreadHelpBase
     // member
     private:
 
-        css::uno::Reference< css::lang::XMultiServiceFactory >  m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 
     //_______________________
     // interface
     public:
 
-                 TaskCreator( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
+                 TaskCreator( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~TaskCreator(                                                                     );
 
         css::uno::Reference< css::frame::XFrame > createTask( const OUString& sName    ,

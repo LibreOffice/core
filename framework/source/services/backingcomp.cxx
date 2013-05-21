@@ -459,7 +459,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     m_xFrame = xFrame;
 
     // establish drag&drop mode
-    ::framework::DropTargetListener* pDropListener = new ::framework::DropTargetListener(m_xSMGR, m_xFrame);
+    ::framework::DropTargetListener* pDropListener = new ::framework::DropTargetListener( comphelper::getComponentContext(m_xSMGR), m_xFrame);
     m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >(static_cast< ::cppu::OWeakObject* >(pDropListener), css::uno::UNO_QUERY);
 
     css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( comphelper::getComponentContext(m_xSMGR) );

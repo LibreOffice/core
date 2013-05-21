@@ -77,16 +77,14 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
 
             @seealso    -
 
-            @param      "xFactory"          , reference to factory which has created ouer owner(!). We can use these to create new uno-services.
-            @param      "xOwner"            , reference to ouer owner. We hold a wekreference to prevent us against cross-references!
-            @param      "pFrameContainer"   , pointer to shared framecontainer of owner. It's valid only, if weakreference is valid!
+            @param      xOwner            , reference to ouer owner. We hold a wekreference to prevent us against cross-references!
+            @param      pFrameContainer   , pointer to shared framecontainer of owner. It's valid only, if weakreference is valid!
             @return     -
 
             @onerror    -
         *//*-*****************************************************************************************************/
 
-         OFrames(   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory        ,
-                    const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
+         OFrames(   const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
                             FrameContainer*                                         pFrameContainer );
 
         //---------------------------------------------------------------------------------------------------------
@@ -297,8 +295,7 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
 
     private:
 
-        static sal_Bool impldbg_checkParameter_OFramesCtor  (   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory        ,
-                                                                const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
+        static sal_Bool impldbg_checkParameter_OFramesCtor  (   const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
                                                                         FrameContainer*                                         pFrameContainer );
         static sal_Bool impldbg_checkParameter_append       (   const   css::uno::Reference< css::frame::XFrame >&              xFrame          );
         static sal_Bool impldbg_checkParameter_remove       (   const   css::uno::Reference< css::frame::XFrame >&              xFrame          );
@@ -313,7 +310,6 @@ class OFrames   :   private ThreadHelpBase      ,   // Must be the first of base
 
     private:
 
-        css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory                      ;   /// reference to global servicemanager
         css::uno::WeakReference< css::frame::XFrame >               m_xOwner                        ;   /// reference to owner of this instance (Hold no hard reference!)
         FrameContainer*                                             m_pFrameContainer               ;   /// with owner shared list to hold all direct children of an XFramesSupplier
         sal_Bool                                                    m_bRecursiveSearchProtection    ;   /// flag to protect against recursive searches of frames at parents

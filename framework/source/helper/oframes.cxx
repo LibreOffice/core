@@ -40,20 +40,18 @@ using namespace ::std                           ;
 //*****************************************************************************************************************
 //  constructor
 //*****************************************************************************************************************
-OFrames::OFrames(   const   css::uno::Reference< XMultiServiceFactory >&    xFactory        ,
-                    const   css::uno::Reference< XFrame >&              xOwner          ,
+OFrames::OFrames( const   css::uno::Reference< XFrame >&              xOwner          ,
                             FrameContainer*                     pFrameContainer )
         //  Init baseclasses first
         :   ThreadHelpBase              ( &Application::GetSolarMutex() )
         // Init member
-        ,   m_xFactory                  ( xFactory                      )
         ,   m_xOwner                    ( xOwner                        )
         ,   m_pFrameContainer           ( pFrameContainer               )
         ,   m_bRecursiveSearchProtection( sal_False                     )
 {
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
-    LOG_ASSERT( impldbg_checkParameter_OFramesCtor( xFactory, xOwner, pFrameContainer ), "OFrames::OFrames()\nInvalid parameter detected!\n" )
+    LOG_ASSERT( impldbg_checkParameter_OFramesCtor( xOwner, pFrameContainer ), "OFrames::OFrames()\nInvalid parameter detected!\n" )
 }
 
 //*****************************************************************************************************************
@@ -395,17 +393,14 @@ void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFram
 // An instance of this class can only work with valid initialization.
 // We share the mutex with ouer owner class, need a valid factory to instanciate new services and
 // use the access to ouer owner for some operations.
-sal_Bool OFrames::impldbg_checkParameter_OFramesCtor(   const   css::uno::Reference< XMultiServiceFactory >&    xFactory        ,
-                                                        const   css::uno::Reference< XFrame >&              xOwner          ,
+sal_Bool OFrames::impldbg_checkParameter_OFramesCtor(   const   css::uno::Reference< XFrame >&              xOwner          ,
                                                                 FrameContainer*                     pFrameContainer )
 {
     // Set default return value.
     sal_Bool bOK = sal_True;
     // Check parameter.
     if  (
-            ( &xFactory         ==  NULL        )   ||
             ( &xOwner           ==  NULL        )   ||
-            ( xFactory.is()     ==  sal_False   )   ||
             ( xOwner.is()       ==  sal_False   )   ||
             ( pFrameContainer   ==  NULL        )
         )

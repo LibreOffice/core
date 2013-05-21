@@ -80,8 +80,7 @@ TabWindowService::TabWindowService( const css::uno::Reference< css::lang::XMulti
         //      baseclasses and then members. And we need the mutex for other baseclasses !!!
         :   ThreadHelpBase          ( &Application::GetSolarMutex() )
         ,   TransactionBase         (                               )
-        ,   PropertySetHelper       ( xFactory                      ,
-                                      &m_aLock                      ,
+        ,   PropertySetHelper       ( &m_aLock                      ,
                                       &m_aTransactionManager        ,
                                       sal_False                     ) // sal_False => dont release shared mutex on calling us!
         ,   OWeakObject             (                               )

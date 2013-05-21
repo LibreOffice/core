@@ -110,7 +110,7 @@ private:
     /** @short  reference to an uno service manager, which must be used
                 to created on needed services on demand.
      */
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     /** @short  points to the frame, which uses this LoadEnv object
                 and must be used to start target search there.
@@ -200,7 +200,7 @@ public:
 
     /** @short  initialize a new instance of this load environment.
 
-        @param  xSMGR
+        @param  xContext
                 reference to an uno service manager, which can be used internaly
                 to create on needed services on demand.
 
@@ -209,7 +209,7 @@ public:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime cant be used any longer.
      */
-    LoadEnv(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+    LoadEnv(const css::uno::Reference< css::uno::XComponentContext >& xContext)
         throw(LoadEnvException, css::uno::RuntimeException);
 
     /** @short  deinitialize an instance of this class in the right way.
@@ -217,7 +217,7 @@ public:
     ~LoadEnv();
 
     static css::uno::Reference< css::lang::XComponent > loadComponentFromURL(const css::uno::Reference< css::frame::XComponentLoader >&    xLoader,
-                                                                             const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
+                                                                             const css::uno::Reference< css::uno::XComponentContext >&     xContext,
                                                                              const OUString&                                        sURL   ,
                                                                              const OUString&                                        sTarget,
                                                                                    sal_Int32                                               nFlags ,

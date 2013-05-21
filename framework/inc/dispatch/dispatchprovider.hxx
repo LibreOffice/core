@@ -90,7 +90,7 @@ class DispatchProvider  :   // interfaces
     /* member */
     private:
         /// reference to global service manager to create new services
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
         /// weakreference to owner frame (Don't use a hard reference. Owner can't delete us then!)
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
         /// different dispatcher to handle special dispatch calls, protocols or URLs (they will be created on demand.)
@@ -103,7 +103,7 @@ class DispatchProvider  :   // interfaces
         FWK_DECLARE_XINTERFACE
         FWK_DECLARE_XTYPEPROVIDER
 
-        DispatchProvider( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory ,
+        DispatchProvider( const css::uno::Reference< css::uno::XComponentContext >&     xContext ,
                           const css::uno::Reference< css::frame::XFrame >&              xFrame   );
 
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL                       queryDispatch  ( const css::util::URL&                                       aURL             ,

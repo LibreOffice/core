@@ -45,7 +45,7 @@ class LoadDispatcher : private ThreadHelpBase
     private:
 
         /** @short  can be used to create own needed services on demand. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /** @short  TODO document me */
         css::uno::WeakReference< css::frame::XFrame > m_xOwnerFrame;
@@ -70,7 +70,7 @@ class LoadDispatcher : private ThreadHelpBase
                     That means: It can be used to load any further requested content into tzhe here(!)
                     specified target frame.
 
-            @param  xSMGR
+            @param  xContext
                     will be used to create own needed services on demand.
 
             @param  xOwnerFrame
@@ -83,8 +83,8 @@ class LoadDispatcher : private ThreadHelpBase
             @param  nSearchFlags
                     used in case sTargetFrame isnt a special one.
          */
-        LoadDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR       ,
-                       const css::uno::Reference< css::frame::XFrame >&              xOwnerFrame ,
+        LoadDispatcher(const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                       const css::uno::Reference< css::frame::XFrame >&          xOwnerFrame ,
                        const OUString                                         sTargetName ,
                              sal_Int32                                               nSearchFlags);
 

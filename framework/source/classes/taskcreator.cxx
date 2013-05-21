@@ -37,12 +37,12 @@ namespace framework{
     @descr      We need a valid uno service manager to create or instanciate new services.
                 All other information to create frames or tasks come in on right interface methods.
 
-    @param      xSMGR
+    @param      xContext
                     points to the valid uno service manager
 *//*-*****************************************************************************************************/
-TaskCreator::TaskCreator( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
+TaskCreator::TaskCreator( const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : ThreadHelpBase(       )
-    , m_xSMGR       ( xSMGR )
+    , m_xContext    ( xContext )
 {
 }
 
@@ -52,7 +52,7 @@ TaskCreator::TaskCreator( const css::uno::Reference< css::lang::XMultiServiceFac
 *//*-*****************************************************************************************************/
 TaskCreator::~TaskCreator()
 {
-    m_xSMGR.clear();
+    m_xContext.clear();
 }
 
 /*-****************************************************************************************************//**
@@ -63,7 +63,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
 {
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     /* } SAFE */
 
@@ -78,7 +78,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
            )
         {
             ::comphelper::ConfigurationHelper::readDirectKey(
-                comphelper::getComponentContext(xSMGR),
+                xContext,
                 "org.openoffice.Office.TabBrowse",
                 "TaskCreatorService",
                 "ImplementationName",
@@ -86,7 +86,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
         }
 
         xCreator = css::uno::Reference< css::lang::XSingleServiceFactory >(
-                    xSMGR->createInstance(sCreator), css::uno::UNO_QUERY_THROW);
+                    xContext->getServiceManager()->createInstanceWithContext(sCreator, xContext), css::uno::UNO_QUERY_THROW);
     }
     catch(const css::uno::Exception&)
     {}
@@ -97,13 +97,13 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
     // library then these class here ... Why we should not be able to create it ?
     if ( ! xCreator.is())
         xCreator = css::uno::Reference< css::lang::XSingleServiceFactory >(
-                    xSMGR->createInstance(IMPLEMENTATIONNAME_FWK_TASKCREATOR), css::uno::UNO_QUERY_THROW);
+                    xContext->getServiceManager()->createInstanceWithContext(IMPLEMENTATIONNAME_FWK_TASKCREATOR, xContext), css::uno::UNO_QUERY_THROW);
 
     css::uno::Sequence< css::uno::Any > lArgs(5);
     css::beans::NamedValue              aArg    ;
 
     aArg.Name    = OUString(ARGUMENT_PARENTFRAME);
-    aArg.Value <<= css::uno::Reference< css::frame::XFrame >( css::frame::Desktop::create( comphelper::getComponentContext(xSMGR) ), css::uno::UNO_QUERY_THROW);
+    aArg.Value <<= css::uno::Reference< css::frame::XFrame >( css::frame::Desktop::create( xContext ), css::uno::UNO_QUERY_THROW);
     lArgs[0]   <<= aArg;
 
     aArg.Name    = OUString(ARGUMENT_CREATETOPWINDOW);

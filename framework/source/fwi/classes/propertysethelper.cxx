@@ -27,12 +27,10 @@ namespace framework{
 
 
 //-----------------------------------------------------------------------------
-PropertySetHelper::PropertySetHelper(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR                       ,
-                                           LockHelper*                                             pExternalLock               ,
+PropertySetHelper::PropertySetHelper(      LockHelper*                                             pExternalLock               ,
                                            TransactionManager*                                     pExternalTransactionManager ,
                                            sal_Bool                                                bReleaseLockOnCall          )
-    : m_xSMGR                (xSMGR                                )
-    , m_lSimpleChangeListener(pExternalLock->getShareableOslMutex())
+    : m_lSimpleChangeListener(pExternalLock->getShareableOslMutex())
     , m_lVetoChangeListener  (pExternalLock->getShareableOslMutex())
     , m_bReleaseLockOnCall   (bReleaseLockOnCall                   )
     , m_rLock                (*pExternalLock                       )

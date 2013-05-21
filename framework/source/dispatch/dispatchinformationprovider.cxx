@@ -35,10 +35,10 @@ DEFINE_XINTERFACE_1(DispatchInformationProvider                               ,
                     DIRECT_INTERFACE(css::frame::XDispatchInformationProvider))
 
 //_________________________________________________________________________________________________________________
-DispatchInformationProvider::DispatchInformationProvider(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
-                                                         const css::uno::Reference< css::frame::XFrame >&              xFrame)
+DispatchInformationProvider::DispatchInformationProvider(const css::uno::Reference< css::uno::XComponentContext >& xContext ,
+                                                         const css::uno::Reference< css::frame::XFrame >&          xFrame)
     : ThreadHelpBase(&Application::GetSolarMutex())
-    , m_xSMGR       (xSMGR                        )
+    , m_xContext    (xContext                     )
     , m_xFrame      (xFrame                       )
 {
 }
@@ -135,21 +135,22 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvide
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
-    css::uno::Reference< css::frame::XFrame >              xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
+    css::uno::Reference< css::frame::XFrame >          xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
     if (!xFrame.is())
         return css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > >();
 
-    CloseDispatcher* pCloser = new CloseDispatcher(xSMGR, xFrame, OUString("_self")); // explicit "_self" ... not "" ... see implementation of close dispatcher itself!
+    CloseDispatcher* pCloser = new CloseDispatcher(xContext, xFrame, OUString("_self")); // explicit "_self" ... not "" ... see implementation of close dispatcher itself!
     css::uno::Reference< css::uno::XInterface > xCloser(static_cast< css::frame::XDispatch* >(pCloser), css::uno::UNO_QUERY);
 
     css::uno::Reference< css::frame::XDispatchInformationProvider > xCloseDispatch(xCloser                                                      , css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XDispatchInformationProvider > xController   (xFrame->getController()                                      , css::uno::UNO_QUERY);
-    css::uno::Reference< css::frame::XDispatchInformationProvider > xAppDispatcher(xSMGR->createInstance(IMPLEMENTATIONNAME_APPDISPATCHPROVIDER), css::uno::UNO_QUERY);
-
+    css::uno::Reference< css::frame::XDispatchInformationProvider > xAppDispatcher(
+             css::uno::Reference<css::lang::XMultiServiceFactory>(xContext->getServiceManager(), css::uno::UNO_QUERY_THROW)
+                 ->createInstance(IMPLEMENTATIONNAME_APPDISPATCHPROVIDER), css::uno::UNO_QUERY);
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider(3);
     lProvider[0] = xController   ;
     lProvider[1] = xCloseDispatch;

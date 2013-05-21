@@ -40,10 +40,10 @@
 namespace framework{
 
 //-----------------------------------------------
-WindowCommandDispatch::WindowCommandDispatch(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
+WindowCommandDispatch::WindowCommandDispatch(const css::uno::Reference< css::uno::XComponentContext >& xContext ,
                          const css::uno::Reference< css::frame::XFrame >&              xFrame)
     : ThreadHelpBase(                            )
-    , m_xSMGR       (xSMGR                       )
+    , m_xContext    (xContext                    )
     , m_xFrame      (xFrame                      )
     , m_xWindow     (xFrame->getContainerWindow())
 {
@@ -54,7 +54,7 @@ WindowCommandDispatch::WindowCommandDispatch(const css::uno::Reference< css::lan
 WindowCommandDispatch::~WindowCommandDispatch()
 {
     impl_stopListening();
-    m_xSMGR.clear();
+    m_xContext.clear();
 }
 
 //-----------------------------------------------
@@ -156,7 +156,7 @@ void WindowCommandDispatch::impl_dispatchCommand(const OUString& sCommand)
         // SYNCHRONIZED ->
         ReadGuard aReadLock(m_aLock);
         css::uno::Reference< css::frame::XDispatchProvider >   xProvider(m_xFrame.get(), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR    = m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext >     xContext    = m_xContext;
         aReadLock.unlock();
         // <- SYNCHRONIZED
 
@@ -164,7 +164,7 @@ void WindowCommandDispatch::impl_dispatchCommand(const OUString& sCommand)
         if ( ! xProvider.is())
             return;
 
-        css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(xSMGR)));
+        css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(xContext));
         css::util::URL aCommand;
         aCommand.Complete = sCommand;
         xParser->parseStrict(aCommand);

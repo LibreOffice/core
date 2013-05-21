@@ -72,18 +72,18 @@ DEFINE_XTYPEPROVIDER_2( DispatchProvider             ,
 
     @seealso    using at owner
 
-    @param      xFactory
+    @param      rxContext
                     reference to servicemanager to create new services.
     @param      xFrame
                     reference to our owner frame.
 */
-DispatchProvider::DispatchProvider( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory  ,
+DispatchProvider::DispatchProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext  ,
                                     const css::uno::Reference< css::frame::XFrame >&              xFrame    )
         //  Init baseclasses first
         : ThreadHelpBase( &Application::GetSolarMutex() )
         , OWeakObject   (                               )
         // Init member
-        , m_xFactory    ( xFactory                      )
+        , m_xContext    ( rxContext                     )
         , m_xFrame      ( xFrame                        )
 {
 }
@@ -514,7 +514,8 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
         try
         {
             xHandler = css::uno::Reference< css::frame::XDispatchProvider >(
-                            m_xFactory->createInstance(aHandler.m_sUNOName),
+                            css::uno::Reference<css::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), css::uno::UNO_QUERY_THROW)
+                               ->createInstance(aHandler.m_sUNOName),
                             css::uno::UNO_QUERY);
         }
         catch(const css::uno::Exception&) {}
@@ -583,7 +584,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory = m_xFactory;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     /* } SAFE */
 
@@ -597,7 +598,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                     WriteGuard aWriteLock( m_aLock );
                     if ( ! m_xMenuDispatcher.is() )
                     {
-                        MenuDispatcher* pDispatcher = new MenuDispatcher( comphelper::getComponentContext(xFactory), xOwner );
+                        MenuDispatcher* pDispatcher = new MenuDispatcher( xContext, xOwner );
                         m_xMenuDispatcher = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                     }
                     xDispatchHelper = m_xMenuDispatcher;
@@ -608,7 +609,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
         case E_CREATEDISPATCHER :
                 {
-                    LoadDispatcher* pDispatcher = new LoadDispatcher(xFactory, xOwner, sTarget, nSearchFlags);
+                    LoadDispatcher* pDispatcher = new LoadDispatcher(xContext, xOwner, sTarget, nSearchFlags);
                     xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;
@@ -618,7 +619,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                     css::uno::Reference< css::frame::XFrame > xDesktop( xOwner, css::uno::UNO_QUERY );
                     if (xDesktop.is())
                     {
-                        LoadDispatcher* pDispatcher = new LoadDispatcher(xFactory, xOwner, SPECIALTARGET_BLANK, 0);
+                        LoadDispatcher* pDispatcher = new LoadDispatcher(xContext, xOwner, SPECIALTARGET_BLANK, 0);
                         xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                     }
                 }
@@ -629,7 +630,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                     css::uno::Reference< css::frame::XFrame > xDesktop( xOwner, css::uno::UNO_QUERY );
                     if (xDesktop.is())
                     {
-                        LoadDispatcher* pDispatcher = new LoadDispatcher(xFactory, xOwner, SPECIALTARGET_DEFAULT, 0);
+                        LoadDispatcher* pDispatcher = new LoadDispatcher(xContext, xOwner, SPECIALTARGET_DEFAULT, 0);
                         xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                     }
                 }
@@ -637,21 +638,21 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
         case E_SELFDISPATCHER :
                 {
-                    LoadDispatcher* pDispatcher = new LoadDispatcher(xFactory, xOwner, SPECIALTARGET_SELF, 0);
+                    LoadDispatcher* pDispatcher = new LoadDispatcher(xContext, xOwner, SPECIALTARGET_SELF, 0);
                     xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;
 
         case E_CLOSEDISPATCHER :
                 {
-                    CloseDispatcher* pDispatcher = new CloseDispatcher( xFactory, xOwner, sTarget );
+                    CloseDispatcher* pDispatcher = new CloseDispatcher( xContext, xOwner, sTarget );
                     xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;
 
         case E_STARTMODULEDISPATCHER :
                 {
-                    StartModuleDispatcher* pDispatcher = new StartModuleDispatcher( comphelper::getComponentContext(xFactory), xOwner, sTarget );
+                    StartModuleDispatcher* pDispatcher = new StartModuleDispatcher( xContext, xOwner, sTarget );
                     xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;

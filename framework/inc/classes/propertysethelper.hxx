@@ -26,7 +26,6 @@
 #include <general.h>
 #include <stdtypes.h>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyExistException.hpp>
@@ -62,8 +61,6 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
     /* member */
     protected:
 
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
-
         PropertySetHelper::TPropInfoHash m_lProps;
 
         ListenerHash m_lSimpleChangeListener;
@@ -84,10 +81,6 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
         //---------------------------------------------------------------------
         /** initialize new instance of this helper.
          *
-         *  @param  xSMGR
-         *          points to an uno service manager, which is used internaly to create own
-         *          needed uno services.
-         *
          *  @param  pExternalLock
          *          this helper must be used as a baseclass ...
          *          but then it should synchronize its own calls
@@ -101,8 +94,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
          *  @param  bReleaseLockOnCall
          *          see member m_bReleaseLockOnCall
          */
-        PropertySetHelper(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR                       ,
-                                LockHelper*                                             pExternalLock               ,
+        PropertySetHelper(      LockHelper*                                             pExternalLock               ,
                                 TransactionManager*                                     pExternalTransactionManager ,
                                 sal_Bool                                                bReleaseLockOnCall          );
 

@@ -129,10 +129,10 @@ class LoadEnvListener : private ThreadHelpBase
 };
 
 
-LoadEnv::LoadEnv(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+LoadEnv::LoadEnv(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     throw(LoadEnvException, css::uno::RuntimeException)
     : ThreadHelpBase(     )
-    , m_xSMGR       (xSMGR)
+    , m_xContext    (xContext)
     , m_pQuietInteraction( 0 )
 {
 }
@@ -144,7 +144,7 @@ LoadEnv::~LoadEnv()
 
 
 css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const css::uno::Reference< css::frame::XComponentLoader >&    xLoader,
-                                                                           const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
+                                                                           const css::uno::Reference< css::uno::XComponentContext >&     xContext  ,
                                                                            const OUString&                                        sURL   ,
                                                                            const OUString&                                        sTarget,
                                                                                  sal_Int32                                               nFlags ,
@@ -157,7 +157,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
 
     try
     {
-        LoadEnv aEnv(xSMGR);
+        LoadEnv aEnv(xContext);
 
         aEnv.initializeLoading(sURL,
                                lArgs,
@@ -268,7 +268,7 @@ void LoadEnv::initializeLoading(const OUString&                                 
 
     // parse it - because some following code require that
     m_aURL.Complete = sURL;
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
     xParser->parseStrict(m_aURL);
 
     // BTW: Split URL and JumpMark ...
@@ -294,7 +294,7 @@ void LoadEnv::initializeLoading(const OUString&                                 
         ( m_lMediaDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_PREVIEW(), sal_False ) == sal_False      );
 
     initializeUIDefaults(
-        comphelper::getComponentContext(m_xSMGR),
+        m_xContext,
         m_lMediaDescriptor,
         bUIMode,
         &m_pQuietInteraction
@@ -791,7 +791,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     // we can't use as an in/out parameter here. Copy it before and dont forget to
     // update structure afterwards again!
     css::uno::Sequence< css::beans::PropertyValue >        lDescriptor = m_lMediaDescriptor.getAsConstPropertyValueList();
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR       = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext >     xContext = m_xContext;
 
     aReadLock.unlock();
     // <- SAFE
@@ -808,7 +808,7 @@ void LoadEnv::impl_detectTypeAndFilter()
         return;
     }
 
-    css::uno::Reference< css::document::XTypeDetection > xDetect(xSMGR->createInstance(SERVICENAME_TYPEDETECTION), css::uno::UNO_QUERY);
+    css::uno::Reference< css::document::XTypeDetection > xDetect( xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_TYPEDETECTION, xContext), css::uno::UNO_QUERY);
     if (xDetect.is())
         sType = xDetect->queryTypeByDescriptor(lDescriptor, sal_True); /*TODO should deep detection be able for enable/disable it from outside? */
 
@@ -869,7 +869,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     sal_Bool bIsOwnTemplate = sal_False;
     if (!sFilter.isEmpty())
     {
-        css::uno::Reference< css::container::XNameAccess > xFilterCont(xSMGR->createInstance(SERVICENAME_FILTERFACTORY), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::container::XNameAccess > xFilterCont(xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_FILTERFACTORY, xContext), css::uno::UNO_QUERY_THROW);
         try
         {
             ::comphelper::SequenceAsHashMap lFilterProps(xFilterCont->getByName(sFilter));
@@ -910,7 +910,8 @@ sal_Bool LoadEnv::impl_handleContent()
     css::util::URL aURL = m_aURL;
 
     // get necessary container to query for a handler object
-    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory(m_xSMGR->createInstance(SERVICENAME_CONTENTHANDLERFACTORY), css::uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory(m_xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_CONTENTHANDLERFACTORY, m_xContext), css::uno::UNO_QUERY);
+
     css::uno::Reference< css::container::XContainerQuery > xQuery  (xFactory                                                  , css::uno::UNO_QUERY);
 
     aReadLock.unlock();
@@ -965,7 +966,7 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
 {
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE
 
@@ -974,7 +975,7 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
     try
     {
         css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                comphelper::getComponentContext(xSMGR),
+                                xContext,
                                 OUString("org.openoffice.Office.Common/"),
                                 OUString("Misc"),
                                 OUString("MaxOpenDocuments"),
@@ -990,7 +991,7 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
             aVal >>= nMaxOpenDocuments;
 
             css::uno::Reference< css::frame::XFramesSupplier > xDesktop(
-                css::frame::Desktop::create( comphelper::getComponentContext(xSMGR)),
+                css::frame::Desktop::create(xContext),
                 css::uno::UNO_QUERY_THROW);
 
             FrameListAnalyzer aAnalyzer(xDesktop,
@@ -1193,7 +1194,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
     {
         try
         {
-            return m_xSMGR->createInstance(IMPLEMENTATIONNAME_GENERICFRAMELOADER);
+            return m_xContext->getServiceManager()->createInstanceWithContext(IMPLEMENTATIONNAME_GENERICFRAMELOADER, m_xContext);
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
@@ -1210,7 +1211,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
         throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
 
     // try to locate any interested frame loader
-    css::uno::Reference< css::lang::XMultiServiceFactory > xLoaderFactory(m_xSMGR->createInstance(SERVICENAME_FRAMELOADERFACTORY), css::uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xLoaderFactory(m_xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_FRAMELOADERFACTORY, m_xContext), css::uno::UNO_QUERY);
     css::uno::Reference< css::container::XContainerQuery > xQuery        (xLoaderFactory                                         , css::uno::UNO_QUERY);
 
     aReadLock.unlock();
@@ -1261,14 +1262,14 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
 
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE
 
     css::util::URL aCmd;
     aCmd.Complete = OUString(".uno:JumpToMark");
 
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(xContext));
     xParser->parseStrict(aCmd);
 
     css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch(aCmd, SPECIALTARGET_SELF, 0);
@@ -1313,7 +1314,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
 
     // otherwise - iterate through the tasks of the desktop container
     // to find out, which of them might contains the requested document
-    css::uno::Reference< css::frame::XDesktop2 >  xSupplier = css::frame::Desktop::create( comphelper::getComponentContext(m_xSMGR) );
+    css::uno::Reference< css::frame::XDesktop2 >  xSupplier = css::frame::Desktop::create( m_xContext );
     css::uno::Reference< css::container::XIndexAccess > xTaskList(xSupplier->getFrames()                      , css::uno::UNO_QUERY);
 
     if (!xTaskList.is())
@@ -1454,7 +1455,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     if (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN(), sal_False) == sal_True)
         return css::uno::Reference< css::frame::XFrame >();
 
-    css::uno::Reference< css::frame::XFramesSupplier > xSupplier( css::frame::Desktop::create( comphelper::getComponentContext(m_xSMGR) ), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XFramesSupplier > xSupplier( css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY);
     FrameListAnalyzer aTasksAnalyzer(xSupplier, css::uno::Reference< css::frame::XFrame >(), FrameListAnalyzer::E_BACKINGCOMPONENT);
     if (aTasksAnalyzer.m_xBackingComponent.is())
     {
@@ -1696,7 +1697,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR( m_xSMGR.get(), css::uno::UNO_QUERY );
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -1712,7 +1713,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
         {
             css::uno::Any const a =
                 ::comphelper::ConfigurationHelper::readDirectKey(
-                  comphelper::getComponentContext(xSMGR),
+                  xContext,
                   OUString("org.openoffice.Office.Common/View"),
                   OUString("NewDocumentHandling"),
                   OUString("ForceFocusAndToFront"),
@@ -1776,7 +1777,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     if (sFilter.isEmpty())
         return;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
 
     aReadLock.unlock();
     // <- SAFE
@@ -1785,14 +1786,14 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     {
         // retrieve the module name from the filter configuration
         css::uno::Reference< css::container::XNameAccess > xFilterCfg(
-            xSMGR->createInstance(SERVICENAME_FILTERFACTORY),
+            xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_FILTERFACTORY, xContext),
             css::uno::UNO_QUERY_THROW);
         ::comphelper::SequenceAsHashMap lProps (xFilterCfg->getByName(sFilter));
         OUString                 sModule = lProps.getUnpackedValueOrDefault(FILTER_PROPNAME_DOCUMENTSERVICE, OUString());
 
         // get access to the configuration of this office module
         css::uno::Reference< css::container::XNameAccess > xModuleCfg(::comphelper::ConfigurationHelper::openConfig(
-                                                                        comphelper::getComponentContext(xSMGR),
+                                                                        xContext,
                                                                         PACKAGE_SETUP_MODULES,
                                                                         ::comphelper::ConfigurationHelper::E_READONLY),
                                                                       css::uno::UNO_QUERY_THROW);

@@ -48,15 +48,15 @@ class DispatchInformationProvider : public  css::frame::XDispatchInformationProv
     // member
     private:
 
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
 
     //_______________________
     // interface
     public:
 
-        DispatchInformationProvider(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
-                                    const css::uno::Reference< css::frame::XFrame >&              xFrame);
+        DispatchInformationProvider(const css::uno::Reference< css::uno::XComponentContext >& xContext ,
+                                    const css::uno::Reference< css::frame::XFrame >&          xFrame);
 
         virtual ~DispatchInformationProvider();
 
