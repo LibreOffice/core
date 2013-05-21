@@ -809,6 +809,7 @@ void LayoutMenu::UpdateSelection (void)
             break;
 
         // Find the entry of the menu for to the layout.
+        SetNoSelection();
         sal_uInt16 nItemCount (GetItemCount());
         for (sal_uInt16 nId=1; nId<=nItemCount; nId++)
         {
