@@ -25,8 +25,7 @@
 #include <com/sun/star/awt/FontDescriptor.idl>
 #include <com/sun/star/awt/RasterOperation.idl>
 #include <com/sun/star/awt/Gradient.idl>
-#include <com/sun/star/awt/Rectangle.idl>
-#include <com/sun/star/graphic/XGraphic.idl>
+
 
 module com {  module sun {  module star {  module awt {
 
@@ -35,48 +34,49 @@ published interface XDisplayBitmap;
 published interface XFont;
 published interface XDevice;
 
+
 /** provides the basic output operation of a device.
  */
 published interface XGraphics: com::sun::star::uno::XInterface
 {
-    /** the device of this graphics
+    /** returns the device of this graphics.
      */
-    [attribute, readonly] XDevice Device;
+    XDevice getDevice();
 
-    /** the text color used by text operations.
+    /** returns the font metric of the current font.
      */
-    [attribute] com::sun::star::util::Color TextColor;
+    SimpleFontMetric getFontMetric();
 
-    /** the fill color used by text operations.
+    /** sets the font used by text operations.
      */
-    [attribute] com::sun::star::util::Color TextFillColor;
-
-    /** the line color.
-     */
-    [attribute] com::sun::star::util::Color LineColor;
-
-    /** the fill color.
-     */
-    [attribute] com::sun::star::util::Color FillColor;
-
-    /** the raster operation.
-
-        <p>If the device does not support raster operations,
-        this attribute is ignored.</p>
-     */
-    [attribute] RasterOperation RasterOp;
-
-    /** the font used by text operations.
-     */
-    [attribute] XFont Font;
-
-    /** the font metric of the current font.
-     */
-    [attribute, readonly] SimpleFontMetric FontMetric;
+    void setFont( [in] XFont xNewFont );
 
     /** creates a new font and sets the font.
      */
     void selectFont( [in] FontDescriptor aDescription );
+
+    /** sets the text color used by text operations.
+     */
+    void setTextColor( [in] com::sun::star::util::Color nColor );
+
+    /** sets the fill color used by text operations.
+     */
+    void setTextFillColor( [in] com::sun::star::util::Color nColor );
+
+    /** sets the line color.
+     */
+    void setLineColor( [in] com::sun::star::util::Color nColor );
+
+    /** sets the fill color.
+     */
+    void setFillColor( [in] com::sun::star::util::Color nColor );
+
+    /** sets the raster operation.
+
+        <p>If the device does not support raster operations
+        then this call is ignored.</p>
+     */
+    void setRasterOp( [in] RasterOperation ROP );
 
     /** sets the clip region to specified clipping.
      */
@@ -94,12 +94,6 @@ published interface XGraphics: com::sun::star::uno::XInterface
     /** restores all previous saved settings.
      */
     void pop();
-
-    /** clears the given rectangle on the device
-
-        @since LibreOffice 4.1
-     */
-    void clear( [in] Rectangle aRect );
 
     /** copies a rectangle of pixels from another device into this one.
      */
@@ -232,42 +226,8 @@ published interface XGraphics: com::sun::star::uno::XInterface
              [in] long Y,
              [in] string Text,
              [in] sequence<long> Longs );
-
-    /** draws a <type scope="com::sun::star::graphic">XGraphic</type>
-        in the output device.
-
-        <p>Note that some devices may not support this operation.</p>
-
-        @since LibreOffice 4.1
-
-        @param  nX
-            the X coordinate on the device where the graphic will be drawn
-
-        @param  nY
-            the Y coordinate on the device where the graphic will be drawn
-
-        @param  nWidth
-            the width of the region on the device
-
-        @param  nHeight
-            the height of the region on the device
-
-        @param  nStyle
-            the style used to draw the image.
-            See <type scope="com::sun::star::awt">ImageDrawMode</type>.
-
-        @param  aGraphic
-            the <type scope="com::sun::star::graphic">XGraphic</type>
-            to be drawn onto the device
-     */
-    void drawImage( [in] long nX,
-                             [in] long nY,
-                             [in] long nWidth,
-                             [in] long nHeight,
-                             [in] short nStyle,
-                             [in] ::com::sun::star::graphic::XGraphic aGraphic );
-
 };
+
 
 }; }; }; };
 

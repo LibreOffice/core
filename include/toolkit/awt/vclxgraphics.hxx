@@ -21,7 +21,7 @@
 #define _TOOLKIT_AWT_VCLXGRAPHICS_HXX_
 
 
-#include <com/sun/star/awt/XGraphics.hpp>
+#include <com/sun/star/awt/XGraphics2.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -47,7 +47,7 @@ class Region;
 //  class VCLXGraphics
 //  ----------------------------------------------------
 
-class VCLXGraphics :    public ::com::sun::star::awt::XGraphics,
+class VCLXGraphics :    public ::com::sun::star::awt::XGraphics2,
                         public ::com::sun::star::lang::XTypeProvider,
                         public ::com::sun::star::lang::XUnoTunnel,
                         public ::cppu::OWeakObject
