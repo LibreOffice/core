@@ -80,12 +80,16 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/tree,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/chart2,\
 	CartesianCoordinateSystem2d \
 	CartesianCoordinateSystem3d \
+	ExponentialRegressionCurve \
 	ExponentialScaling \
 	FormattedString \
+	LogarithmicRegressionCurve \
 	LogarithmicScaling \
+	LinearRegressionCurve \
 	LinearScaling \
 	PolarCoordinateSystem2d \
 	PolarCoordinateSystem3d \
+	PotentialRegressionCurve \
 	PowerScaling \
 	RegressionEquation \
 	Scaling \

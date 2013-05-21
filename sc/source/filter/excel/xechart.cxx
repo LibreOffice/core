@@ -1692,16 +1692,16 @@ bool XclExpChSerTrendLine::Convert( Reference< XRegressionCurve > xRegCurve, sal
     // trend line type
     ScfPropertySet aCurveProp( xRegCurve );
     OUString aService = aCurveProp.GetServiceName();
-    if( aService == SERVICE_CHART2_LINEARREGCURVE )
+    if( aService == "com.sun.star.chart2.LinearRegressionCurve" )
     {
         maData.mnLineType = EXC_CHSERTREND_POLYNOMIAL;
         maData.mnOrder = 1;
     }
-    else if( aService == SERVICE_CHART2_EXPREGCURVE )
+    else if( aService == "com.sun.star.chart2.ExponentialRegressionCurve" )
         maData.mnLineType = EXC_CHSERTREND_EXPONENTIAL;
-    else if( aService == SERVICE_CHART2_LOGREGCURVE )
+    else if( aService == "com.sun.star.chart2.LogarithmicRegressionCurve" )
         maData.mnLineType = EXC_CHSERTREND_LOGARITHMIC;
-    else if( aService == SERVICE_CHART2_POTREGCURVE )
+    else if( aService == "com.sun.star.chart2.PotentialRegressionCurve" )
         maData.mnLineType = EXC_CHSERTREND_POWER;
     else
         return false;

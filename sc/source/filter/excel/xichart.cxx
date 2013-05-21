@@ -40,6 +40,10 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
+#include <com/sun/star/chart2/LinearRegressionCurve.hpp>
+#include <com/sun/star/chart2/ExponentialRegressionCurve.hpp>
+#include <com/sun/star/chart2/LogarithmicRegressionCurve.hpp>
+#include <com/sun/star/chart2/PotentialRegressionCurve.hpp>
 #include <com/sun/star/chart2/CartesianCoordinateSystem2d.hpp>
 #include <com/sun/star/chart2/CartesianCoordinateSystem3d.hpp>
 #include <com/sun/star/chart2/FormattedString.hpp>
@@ -104,27 +108,7 @@ using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::drawing::XDrawPageSupplier;
 using ::com::sun::star::drawing::XShape;
 
-using ::com::sun::star::chart2::IncrementData;
-using ::com::sun::star::chart2::RelativePosition;
-using ::com::sun::star::chart2::RelativeSize;
-using ::com::sun::star::chart2::ScaleData;
-using ::com::sun::star::chart2::SubIncrement;
-using ::com::sun::star::chart2::XAxis;
-using ::com::sun::star::chart2::XChartDocument;
-using ::com::sun::star::chart2::XChartType;
-using ::com::sun::star::chart2::XChartTypeContainer;
-using ::com::sun::star::chart2::XCoordinateSystem;
-using ::com::sun::star::chart2::XCoordinateSystemContainer;
-using ::com::sun::star::chart2::XDataSeries;
-using ::com::sun::star::chart2::XDataSeriesContainer;
-using ::com::sun::star::chart2::XDiagram;
-using ::com::sun::star::chart2::XFormattedString;
-using ::com::sun::star::chart2::XLegend;
-using ::com::sun::star::chart2::XRegressionCurve;
-using ::com::sun::star::chart2::XRegressionCurveContainer;
-using ::com::sun::star::chart2::XScaling;
-using ::com::sun::star::chart2::XTitle;
-using ::com::sun::star::chart2::XTitled;
+using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::chart2::data::XDataProvider;
 using ::com::sun::star::chart2::data::XDataReceiver;
@@ -1627,27 +1611,24 @@ void XclImpChSerTrendLine::ReadChSerTrendLine( XclImpStream& rStrm )
 Reference< XRegressionCurve > XclImpChSerTrendLine::CreateRegressionCurve() const
 {
     // trend line type
-    OUString aService;
+    Reference< XRegressionCurve > xRegCurve;
     switch( maData.mnLineType )
     {
         case EXC_CHSERTREND_POLYNOMIAL:
             // TODO: only linear trend lines are supported by OOChart (#i20819#)
             if( maData.mnOrder == 1 )
-                aService = SERVICE_CHART2_LINEARREGCURVE;
+                xRegCurve = LinearRegressionCurve::create( comphelper::getProcessComponentContext() );
         break;
         case EXC_CHSERTREND_EXPONENTIAL:
-            aService = SERVICE_CHART2_EXPREGCURVE;
+            xRegCurve = ExponentialRegressionCurve::create( comphelper::getProcessComponentContext() );
         break;
         case EXC_CHSERTREND_LOGARITHMIC:
-            aService = SERVICE_CHART2_LOGREGCURVE;
+            xRegCurve = LogarithmicRegressionCurve::create( comphelper::getProcessComponentContext() );
         break;
         case EXC_CHSERTREND_POWER:
-            aService = SERVICE_CHART2_POTREGCURVE;
+            xRegCurve = PotentialRegressionCurve::create( comphelper::getProcessComponentContext() );
         break;
     }
-    Reference< XRegressionCurve > xRegCurve;
-    if( !aService.isEmpty() )
-        xRegCurve.set( ScfApiHelper::CreateInstance( aService ), UNO_QUERY );
 
     // trend line formatting
     if( xRegCurve.is() && mxDataFmt )

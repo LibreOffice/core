@@ -53,11 +53,7 @@ class XclRoot;
 #define SERVICE_CHART2_DATASERIES           "com.sun.star.chart2.DataSeries"
 #define SERVICE_CHART2_DIAGRAM              "com.sun.star.chart2.Diagram"
 #define SERVICE_CHART2_ERRORBAR             "com.sun.star.chart2.ErrorBar"
-#define SERVICE_CHART2_EXPREGCURVE          "com.sun.star.chart2.ExponentialRegressionCurve"
 #define SERVICE_CHART2_LEGEND               "com.sun.star.chart2.Legend"
-#define SERVICE_CHART2_LINEARREGCURVE       "com.sun.star.chart2.LinearRegressionCurve"
-#define SERVICE_CHART2_LOGREGCURVE          "com.sun.star.chart2.LogarithmicRegressionCurve"
-#define SERVICE_CHART2_POTREGCURVE          "com.sun.star.chart2.PotentialRegressionCurve"
 
 // property names
 #define EXC_CHPROP_ADDITIONALSHAPES         "AdditionalShapes"
