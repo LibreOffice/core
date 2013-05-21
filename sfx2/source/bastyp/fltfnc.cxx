@@ -255,6 +255,14 @@ public:
         , pList(0)
     {
     }
+    ~SfxFilterMatcher_Impl()
+    {
+        // SfxFilterMatcher_Impl::InitForIterating() will set pList to
+        // either the global filter array matcher pFilterArr, or to
+        // a new SfxFilterList_Impl.
+        if (pList != pFilterArr)
+            delete pList;
+    }
 };
 
 namespace
@@ -287,7 +295,7 @@ namespace
         // previously
         SfxFilterMatcherArr_Impl::iterator aEnd = aImplArr.end();
         SfxFilterMatcherArr_Impl::iterator aIter =
-            std::find_if(aImplArr.begin(), aEnd, hasName(rName));
+            std::find_if(aImplArr.begin(), aEnd, hasName(aName));
         if (aIter != aEnd)
             return *aIter;
 
