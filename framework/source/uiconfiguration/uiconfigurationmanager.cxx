@@ -1043,9 +1043,7 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager() throw
 
     if ( !m_xImageManager.is() )
     {
-        Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
-
-        m_xImageManager = Reference< XComponent >( static_cast< cppu::OWeakObject *>( new ImageManager( xMSF )),
+        m_xImageManager = Reference< XComponent >( static_cast< cppu::OWeakObject *>( new ImageManager( m_xContext )),
                                                          UNO_QUERY );
         Reference< XInitialization > xInit( m_xImageManager, UNO_QUERY );
 

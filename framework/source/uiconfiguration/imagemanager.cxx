@@ -80,7 +80,7 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_MULTISERVICE        (   ImageManager                        ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ImageManager                        ,
                                             ::cppu::OWeakObject                 ,
                                             SERVICENAME_IMAGEMANAGER            ,
                                             IMPLEMENTATIONNAME_IMAGEMANAGER
@@ -88,9 +88,9 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   ImageManager                        
 
 DEFINE_INIT_SERVICE                     (   ImageManager, {} )
 
-ImageManager::ImageManager( uno::Reference< XMultiServiceFactory > xServiceManager ) :
+ImageManager::ImageManager( const uno::Reference< uno::XComponentContext >& rxContext ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_pImpl( new ImageManagerImpl(comphelper::getComponentContext(xServiceManager),this,false) )
+    , m_pImpl( new ImageManagerImpl(rxContext, this, false) )
 {
 }
 

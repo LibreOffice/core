@@ -65,7 +65,7 @@ namespace framework
             //  XInterface, XTypeProvider, XServiceInfo
             DECLARE_XSERVICEINFO
 
-            ImageManager( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xServiceManager );
+            ImageManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
             virtual ~ImageManager();
 
             // XComponent
