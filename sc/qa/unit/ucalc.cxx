@@ -445,11 +445,20 @@ public:
 class MeasureTimeSwitch
 {
     double& mrDiff;
+    double mnScale;
     TimeValue maTimeBefore;
 public:
     MeasureTimeSwitch(double& rDiff) : mrDiff(rDiff)
     {
         mrDiff = 9999.0;
+        mnScale = 1.0;
+        osl_getSystemTime(&maTimeBefore);
+    }
+    // Scaled pseudo-time
+    MeasureTimeSwitch(double& rDiff, const double nScale ) : mrDiff(rDiff)
+    {
+        mrDiff = 9999.0;
+        mnScale = nScale;
         osl_getSystemTime(&maTimeBefore);
     }
 
@@ -457,7 +466,7 @@ public:
     {
         TimeValue aTimeAfter;
         osl_getSystemTime(&aTimeAfter);
-        mrDiff = getTimeDiff(aTimeAfter, maTimeBefore);
+        mrDiff = getTimeDiff(aTimeAfter, maTimeBefore) / mnScale;
     }
 };
 
@@ -486,25 +495,58 @@ void Test::tearDown()
     BootstrapFixture::tearDown();
 }
 
+#define PERF_ASSERT(df,time,message) \
+    do { \
+        if ((df) >= (time)) \
+        { \
+            std::ostringstream os; \
+            os << message << " took " << diff << " psuedo-cycles, expected: " << time; \
+            /* debugging - fprintf (stderr, "'%s'\n", os.str().c_str()); */ \
+            CPPUNIT_FAIL(os.str().c_str()); \
+        } \
+    } while (0)
+
 void Test::testPerf()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));
 
-    double diff = 9999.0;
+    // First do a set of simple operations to try to work out
+    // how fast (or not) this particular machine is:
+    double scale;
+    {
+        MeasureTimeSwitch aTime(scale);
+        for (int i = 0; i < 10000000; ++i)
+        {
+            // Bang on the allocator
+            volatile ScRange *pRange = new ScRange (ScAddress (0,0,0));
+            // Calc does quite a bit of string conversion
+            volatile double it = OUString::number ((double)i/253.0).toDouble();
+            // Do we have floating point math ?
+            volatile double another = rtl::math::sin (it);
+            (void)another;
+            delete pRange;
+        }
+    }
+    printf("CPU scale factor %g\n", scale);
+
+    // FIXME: we should check if this already took too long
+    // and if so not run the perf. tests to have pity on some
+    // slow ARM machines - I think.
+
+    // to make the numbers more round and helpful,
+    // but the calculation of scale reasonably precise.
+    scale /= 100000.0;
+
+    double diff;
 
     // Clearing an already empty sheet should finish in a fraction of a
     // second.  Flag failure if it takes more than one second.  Clearing 100
     // columns should be large enough to flag if something goes wrong.
     {
-        MeasureTimeSwitch aTime(diff);
+        MeasureTimeSwitch aTime(diff, scale);
         clearRange(m_pDoc, ScRange(0,0,0,99,MAXROW,0));
     }
-    if (diff >= 1.0)
-    {
-        std::ostringstream os;
-        os << "Clearing an empty sheet took " << diff << " seconds. It should be instant.";
-        CPPUNIT_FAIL(os.str().c_str());
-    }
+    PERF_ASSERT(diff, 1.0, "Clearing an empty sheet");
 
     {
         // Switch to R1C1 to make it easier to input relative references in multiple cells.
@@ -519,15 +561,10 @@ void Test::testPerf()
         // Now, Delete B2:B100000. This should complete in a fraction of a second
         // (0.06 sec on my machine).
         {
-            MeasureTimeSwitch aTime(diff);
+            MeasureTimeSwitch aTime(diff, scale);
             clearRange(m_pDoc, ScRange(1,1,0,1,99999,0));
         }
-        if (diff >= 1.0)
-        {
-            std::ostringstream os;
-            os << "Removal of a large array of formula cells took " << diff << " seconds. It should be instant.";
-            CPPUNIT_FAIL(os.str().c_str());
-        }
+        PERF_ASSERT(diff, 2000, "Removal of a large array of formula cells");
     }
 
     clearRange(m_pDoc, ScRange(0,0,0,1,MAXROW,0)); // Clear columns A:B.
@@ -558,15 +595,10 @@ void Test::testPerf()
         aMark.SetMarkArea(aPasteRange);
 
         {
-            MeasureTimeSwitch aTime(diff);
+            MeasureTimeSwitch aTime(diff, scale);
             m_pDoc->CopyFromClip(aPasteRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc);
         }
-        if (diff >= 1.0)
-        {
-            std::ostringstream os;
-            os << "Pasting a single cell to A2:A100000 took " << diff << " seconds. It should be instant.";
-            CPPUNIT_FAIL(os.str().c_str());
-        }
+        PERF_ASSERT(diff, 1500.0, "Pasting a single cell to A2:A100000");
 
         ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
         pRedoDoc->InitUndo(m_pDoc, 0, 0);
@@ -581,15 +613,10 @@ void Test::testPerf()
         CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aEnd));
 
         {
-            MeasureTimeSwitch aTime(diff);
+            MeasureTimeSwitch aTime(diff, scale);
             aUndo.Undo();
         }
-        if (diff >= 1.0)
-        {
-            std::ostringstream os;
-            os << "Undoing a pasting of a cell to A2:A100000 took " << diff << " seconds. It should be instant.";
-            CPPUNIT_FAIL(os.str().c_str());
-        }
+        PERF_ASSERT(diff, 500.0, "Undoing a pasting of a cell to A2:A100000");
 
         // Make sure it's really undone.
         CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, m_pDoc->GetCellType(aPos));
@@ -598,15 +625,10 @@ void Test::testPerf()
 
         // Now redo.
         {
-            MeasureTimeSwitch aTime(diff);
+            MeasureTimeSwitch aTime(diff, scale);
             aUndo.Redo();
         }
-        if (diff >= 1.0)
-        {
-            std::ostringstream os;
-            os << "Redoing a pasting of a cell to A2:A100000 took " << diff << " seconds. It should be instant.";
-            CPPUNIT_FAIL(os.str().c_str());
-        }
+        PERF_ASSERT(diff, 1000.0, "Redoing a pasting of a cell to A2:A100000");
 
         // Make sure it's really redone.
         CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aStart));
@@ -644,15 +666,10 @@ void Test::testPerf()
         aMark.SetMarkArea(aPasteRange);
 
         {
-            MeasureTimeSwitch aTime(diff);
+            MeasureTimeSwitch aTime(diff, scale);
             m_pDoc->CopyFromClip(aPasteRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc);
         }
-        if (diff >= 1.0)
-        {
-            std::ostringstream os;
-            os << "Pasting A1:A2 to A3:A100001 took " << diff << " seconds. It should be instant.";
-            CPPUNIT_FAIL(os.str().c_str());
-        }
+        PERF_ASSERT(diff, 1000.0, "Pasting A1:A2 to A3:A100001");
 
         ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
         pRedoDoc->InitUndo(m_pDoc, 0, 0);
@@ -670,15 +687,10 @@ void Test::testPerf()
         CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(aTmp));
 
         {
-            MeasureTimeSwitch aTime(diff);
+            MeasureTimeSwitch aTime(diff, scale);
             aUndo.Undo();
         }
-        if (diff >= 1.0)
-        {
-            std::ostringstream os;
-            os << "Undoing took " << diff << " seconds. It should be instant.";
-            CPPUNIT_FAIL(os.str().c_str());
-        }
+        PERF_ASSERT(diff, 500.0, "Undoing");
 
         // Make sure it's really undone.
         CPPUNIT_ASSERT_EQUAL(CELLTYPE_VALUE, m_pDoc->GetCellType(aPos));
@@ -687,15 +699,10 @@ void Test::testPerf()
 
         // Now redo.
         {
-            MeasureTimeSwitch aTime(diff);
+            MeasureTimeSwitch aTime(diff, scale);
             aUndo.Redo();
         }
-        if (diff >= 1.0)
-        {
-            std::ostringstream os;
-            os << "Redoing took " << diff << " seconds. It should be instant.";
-            CPPUNIT_FAIL(os.str().c_str());
-        }
+        PERF_ASSERT(diff, 800.0, "Redoing");
 
         // Make sure it's really redone.
         CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aStart));
@@ -736,15 +743,10 @@ void Test::testPerf()
         aMark.SetMarkArea(aPasteRange);
 
         {
-            MeasureTimeSwitch aTime(diff);
+            MeasureTimeSwitch aTime(diff, scale);
             m_pDoc->CopyFromClip(aPasteRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc);
         }
-        if (diff >= 1.0)
-        {
-            std::ostringstream os;
-            os << "Pasting took " << diff << " seconds. It should be instant.";
-            CPPUNIT_FAIL(os.str().c_str());
-        }
+        PERF_ASSERT(diff, 2000.0, "Pasting");
 
         ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
         pRedoDoc->InitUndo(m_pDoc, 0, 0);
@@ -763,15 +765,10 @@ void Test::testPerf()
 
 #if 0 // TODO: Undo and redo of this scenario is currently not fast enough to be tested reliably.
         {
-            MeasureTimeSwitch aTime(diff);
+            MeasureTimeSwitch aTime(diff, scale);
             aUndo.Undo();
         }
-        if (diff >= 1.0)
-        {
-            std::ostringstream os;
-            os << "Undoing took " << diff << " seconds. It should be instant.";
-            CPPUNIT_FAIL(os.str().c_str());
-        }
+        PERF_ASSERT(diff, 1.0, "Undoing");
 
         // Make sure it's really undone.
         CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(aPos));
@@ -780,15 +777,10 @@ void Test::testPerf()
 
         // Now redo.
         {
-            MeasureTimeSwitch aTime(diff);
+            MeasureTimeSwitch aTime(diff, scale);
             aUndo.Redo();
         }
-        if (diff >= 1.0)
-        {
-            std::ostringstream os;
-            os << "Redoing took " << diff << " seconds. It should be instant.";
-            CPPUNIT_FAIL(os.str().c_str());
-        }
+        PERF_ASSERT(diff, 1.0, "Redoing");
 
         // Make sure it's really redone.
         CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(aPasteRange.aStart));
