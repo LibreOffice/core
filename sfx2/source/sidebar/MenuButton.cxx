@@ -102,18 +102,12 @@ void MenuButton::MouseMove (const MouseEvent& rEvent)
 
 void MenuButton::MouseButtonDown (const MouseEvent& rMouseEvent)
 {
-#if 0
-    Hide();
-    CheckBox::MouseButtonDown(rMouseEvent);
-    Show();
-#else
     if (rMouseEvent.IsLeft())
     {
         mbIsLeftButtonDown = true;
         CaptureMouse();
         Invalidate();
     }
-#endif
 }
 
 
@@ -121,11 +115,6 @@ void MenuButton::MouseButtonDown (const MouseEvent& rMouseEvent)
 
 void MenuButton::MouseButtonUp (const MouseEvent& rMouseEvent)
 {
-#if 0
-    Hide();
-    CheckBox::MouseButtonUp(rMouseEvent);
-    Show();
-#else
     if (IsMouseCaptured())
         ReleaseMouse();
 
@@ -143,7 +132,6 @@ void MenuButton::MouseButtonUp (const MouseEvent& rMouseEvent)
         mbIsLeftButtonDown = false;
         Invalidate();
     }
-#endif
 }
 
 

@@ -30,6 +30,7 @@
 #include <boost/scoped_ptr.hpp>
 
 class Button;
+class CheckBox;
 class RadioButton;
 
 namespace css = ::com::sun::star;
@@ -94,7 +95,7 @@ public:
 
 private:
     cssu::Reference<css::frame::XFrame> mxFrame;
-    ::boost::scoped_ptr<Button> mpMenuButton;
+    ::boost::scoped_ptr<CheckBox> mpMenuButton;
     class Item
     {
     public:
