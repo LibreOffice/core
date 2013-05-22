@@ -65,28 +65,28 @@ void Splitter::ImplInitSplitterData()
 
 // -----------------------------------------------------------------------
 
+// Should only be called from a ImplInit method for initialization or
+// after checking bNew is different from the current mbHorzSplit value.
+// The public method that does that check is Splitter::SetHorizontal().
 void Splitter::ImplInitHorVer(bool bNew)
 {
-    if(bNew != (bool)mbHorzSplit)
+    mbHorzSplit = bNew;
+
+    PointerStyle ePointerStyle;
+    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
+
+    if ( mbHorzSplit )
     {
-        mbHorzSplit = bNew;
-
-        PointerStyle ePointerStyle;
-        const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-
-        if ( mbHorzSplit )
-        {
-            ePointerStyle = POINTER_HSPLIT;
-            SetSizePixel( Size( rSettings.GetSplitSize(), rSettings.GetScrollBarSize() ) );
-        }
-        else
-        {
-            ePointerStyle = POINTER_VSPLIT;
-            SetSizePixel( Size( rSettings.GetScrollBarSize(), rSettings.GetSplitSize() ) );
-        }
-
-        SetPointer( Pointer( ePointerStyle ) );
+        ePointerStyle = POINTER_HSPLIT;
+        SetSizePixel( Size( rSettings.GetSplitSize(), rSettings.GetScrollBarSize() ) );
     }
+    else
+    {
+        ePointerStyle = POINTER_VSPLIT;
+        SetSizePixel( Size( rSettings.GetScrollBarSize(), rSettings.GetSplitSize() ) );
+    }
+
+    SetPointer( Pointer( ePointerStyle ) );
 }
 
 // -----------------------------------------------------------------------
