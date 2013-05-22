@@ -417,6 +417,7 @@ void SelectionFunction::NotifyDragFinished (void)
 sal_Bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
 {
     view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
+    PageSelector::BroadcastLock aBroadcastLock (mrSlideSorter);
     PageSelector::UpdateLock aLock (mrSlideSorter);
     FocusManager& rFocusManager (mrController.GetFocusManager());
     sal_Bool bResult = sal_False;
