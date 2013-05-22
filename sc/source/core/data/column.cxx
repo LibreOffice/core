@@ -1444,7 +1444,7 @@ void ScColumn::CopyToColumn(
                     // Special case to allow removing of cell instances.  A
                     // string cell with empty content is used to indicate an
                     // empty cell.
-                    sc::ColumnBlockPosition* p = rCxt.getBlockPosition(nTab, nCol);
+                    sc::ColumnBlockPosition* p = rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol);
                     if (pNew->GetCellType() == CELLTYPE_STRING)
                     {
                         OUString aStr = static_cast<ScStringCell*>(pNew)->GetString();
