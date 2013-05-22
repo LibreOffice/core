@@ -23,6 +23,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/combobox.hxx>
 #include <svx/charmap.hxx>
@@ -194,17 +195,17 @@ public:
 
 #define NOCATEGORIES    10
 
-class SmCategoryDesc : public Resource
+class SmCategoryDesc
 {
-    OUString   Name;
+    OUString Name;
     OUString  *Strings[4];
-    Bitmap         *Graphics[4];    /* regular bitmaps */
-    sal_uInt16          Minimum[4];
-    sal_uInt16          Maximum[4];
-    sal_uInt16          Value[4];
+    Image *Graphics[4];    /* regular bitmaps */
+    sal_uInt16 Minimum[4];
+    sal_uInt16 Maximum[4];
+    sal_uInt16 Value[4];
 
 public:
-    SmCategoryDesc(const ResId &rResId, sal_uInt16 nCategoryIdx);
+    SmCategoryDesc(VclBuilderContainer& rBuilder, sal_uInt16 nCategoryIdx);
     ~SmCategoryDesc();
 
     const OUString& GetName() const                 { return Name; }
@@ -214,7 +215,7 @@ public:
     sal_uInt16          GetValue(sal_uInt16 Index) const    { return Value[Index]; }
     void            SetValue(sal_uInt16 Index, sal_uInt16 nVal) { Value[Index] = nVal;}
 
-    const Bitmap *  GetGraphic(sal_uInt16 Index) const
+    const Image *  GetGraphic(sal_uInt16 Index) const
     {
         return Graphics[Index];
     }
@@ -223,22 +224,19 @@ public:
 
 class SmDistanceDialog : public ModalDialog
 {
-    FixedText       aFixedText1;
-    MetricField     aMetricField1;
-    FixedText       aFixedText2;
-    MetricField     aMetricField2;
-    FixedText       aFixedText3;
-    MetricField     aMetricField3;
-    CheckBox        aCheckBox1;
-    FixedText       aFixedText4;
-    MetricField     aMetricField4;
-    OKButton        aOKButton1;
-    HelpButton      aHelpButton1;
-    CancelButton    aCancelButton1;
-    MenuButton      aMenuButton;
-    PushButton      aDefaultButton;
-    FixedBitmap     aBitmap;
-    FixedLine       aFixedLine;
+    VclFrame*       m_pFrame;
+    FixedText*      m_pFixedText1;
+    MetricField*    m_pMetricField1;
+    FixedText*      m_pFixedText2;
+    MetricField*    m_pMetricField2;
+    FixedText*      m_pFixedText3;
+    MetricField*    m_pMetricField3;
+    CheckBox*       m_pCheckBox1;
+    FixedText*      m_pFixedText4;
+    MetricField*    m_pMetricField4;
+    MenuButton*     m_pMenuButton;
+    PushButton*     m_pDefaultButton;
+    FixedImage*     m_pBitmap;
 
     SmCategoryDesc *Categories[NOCATEGORIES];
     sal_uInt16          nActiveCategory;
@@ -247,7 +245,6 @@ class SmDistanceDialog : public ModalDialog
     DECL_LINK(GetFocusHdl, Control *);
     DECL_LINK(MenuSelectHdl, Menu *);
     DECL_LINK(DefaultButtonClickHdl, Button *);
-    DECL_LINK(HelpButtonClickHdl, Button *);
     DECL_LINK(CheckBoxClickHdl, CheckBox *);
 
     using   Window::SetHelpId;
@@ -255,7 +252,7 @@ class SmDistanceDialog : public ModalDialog
     void    SetCategory(sal_uInt16 Category);
 
 public:
-    SmDistanceDialog(Window *pParent, bool bFreeRes = true);
+    SmDistanceDialog(Window *pParent);
     ~SmDistanceDialog();
 
     void ReadFrom(const SmFormat &rFormat);

@@ -27,6 +27,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/smath,\
 	starmath/uiconfig/smath/ui/alignmentdialog \
 	starmath/uiconfig/smath/ui/catalogdialog \
 	starmath/uiconfig/smath/ui/printeroptions \
+	starmath/uiconfig/smath/ui/spacingdialog \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -683,45 +683,40 @@ static const FieldMinMax pMinMaxData[10][4] =
     {{ 0, 10000 },  { 0, 10000 },   { 0, 10000 },   { 0, 10000 }}
 };
 
-SmCategoryDesc::SmCategoryDesc(const ResId& rResId, sal_uInt16 nCategoryIdx) :
-    Resource(rResId)
+SmCategoryDesc::SmCategoryDesc(VclBuilderContainer& rBuilder, sal_uInt16 nCategoryIdx)
 {
-    if (IsAvailableRes(ResId(1,*rResId.GetResMgr()).SetRT(RSC_STRING)))
+    ++nCategoryIdx;
+    FixedText *pTitle = rBuilder.get<FixedText>(OString::number(nCategoryIdx)+"title");
+    if (pTitle)
     {
-        Name = ResId(1,*rResId.GetResMgr()).toString();
+        Name = pTitle->GetText();
 
-        int i;
-        for (i = 0; i < 4; i++)
+        for (int i = 0; i < 4; ++i)
         {
-            int nI2 = i + 2;
+            FixedText *pLabel = rBuilder.get<FixedText>(OString::number(nCategoryIdx)+"label"+OString::number(i+1));
 
-            if (IsAvailableRes(ResId(nI2,*rResId.GetResMgr()).SetRT(RSC_STRING)))
+            if (pLabel)
             {
-                Strings  [i] = new OUString(ResId(nI2,*rResId.GetResMgr()).toString());
-                Graphics [i] = new Bitmap(ResId(10*nI2,*rResId.GetResMgr()));
+                Strings  [i] = new OUString(pLabel->GetText());
+                FixedImage *pImage = rBuilder.get<FixedImage>(OString::number(nCategoryIdx)+"image"+OString::number(i+1));
+                Graphics [i] = new Image(pImage->GetImage());
             }
             else
             {
                 Strings  [i] = 0;
                 Graphics [i] = 0;
             }
-        }
 
-        for (i = 0; i < 4; i++)
-        {
             const FieldMinMax &rMinMax = pMinMaxData[ nCategoryIdx ][i];
             Value[i] = Minimum[i] = rMinMax.nMin;
             Maximum[i] = rMinMax.nMax;
         }
     }
-
-    FreeResource();
 }
-
 
 SmCategoryDesc::~SmCategoryDesc()
 {
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 4; ++i)
     {
         delete Strings  [i];
         delete Graphics [i];
@@ -736,17 +731,17 @@ IMPL_LINK( SmDistanceDialog, GetFocusHdl, Control *, pControl )
     {
         sal_uInt16  i;
 
-        if (pControl == &aMetricField1)
+        if (pControl == m_pMetricField1)
             i = 0;
-        else if (pControl == &aMetricField2)
+        else if (pControl == m_pMetricField2)
             i = 1;
-        else if (pControl == &aMetricField3)
+        else if (pControl == m_pMetricField3)
             i = 2;
-        else if (pControl == &aMetricField4)
+        else if (pControl == m_pMetricField4)
             i = 3;
         else
             return 0;
-        aBitmap.SetBitmap(*(Categories[nActiveCategory]->GetGraphic(i)));
+        m_pBitmap->SetImage(*(Categories[nActiveCategory]->GetGraphic(i)));
     }
     return 0;
 }
@@ -773,27 +768,15 @@ IMPL_LINK( SmDistanceDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton
     return 0;
 }
 
-IMPL_LINK( SmDistanceDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
-{
-    // start help system
-    Help* pHelp = Application::GetHelp();
-    if( pHelp )
-    {
-        pHelp->Start( OUString( "HID_SMA_DISTANCEDIALOG" ), &aHelpButton1 );
-    }
-    return 0;
-}
-
-
 IMPL_LINK( SmDistanceDialog, CheckBoxClickHdl, CheckBox *, pCheckBox )
 {
-    if (pCheckBox == &aCheckBox1)
+    if (pCheckBox == m_pCheckBox1)
     {
-        aCheckBox1.Toggle();
+        m_pCheckBox1->Toggle();
 
-        bool bChecked = aCheckBox1.IsChecked();
-        aFixedText4  .Enable( bChecked );
-        aMetricField4.Enable( bChecked );
+        bool bChecked = m_pCheckBox1->IsChecked();
+        m_pFixedText4->Enable( bChecked );
+        m_pMetricField4->Enable( bChecked );
     }
     return 0;
 }
@@ -847,10 +830,10 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
     // array to help iterate over the controls
     Window * const  aWin[4][2] =
     {
-        { &aFixedText1,  &aMetricField1 },
-        { &aFixedText2,  &aMetricField2 },
-        { &aFixedText3,  &aMetricField3 },
-        { &aFixedText4,  &aMetricField4 }
+        { m_pFixedText1, m_pMetricField1 },
+        { m_pFixedText2, m_pMetricField2 },
+        { m_pFixedText3, m_pMetricField3 },
+        { m_pFixedText4, m_pMetricField4 }
     };
 
     SmCategoryDesc *pCat;
@@ -860,15 +843,15 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
     if (nActiveCategory != CATEGORY_NONE)
     {
         pCat = Categories[nActiveCategory];
-        pCat->SetValue(0, (sal_uInt16) aMetricField1.GetValue());
-        pCat->SetValue(1, (sal_uInt16) aMetricField2.GetValue());
-        pCat->SetValue(2, (sal_uInt16) aMetricField3.GetValue());
-        pCat->SetValue(3, (sal_uInt16) aMetricField4.GetValue());
+        pCat->SetValue(0, (sal_uInt16) m_pMetricField1->GetValue());
+        pCat->SetValue(1, (sal_uInt16) m_pMetricField2->GetValue());
+        pCat->SetValue(2, (sal_uInt16) m_pMetricField3->GetValue());
+        pCat->SetValue(3, (sal_uInt16) m_pMetricField4->GetValue());
 
         if (nActiveCategory == 5)
-            bScaleAllBrackets = aCheckBox1.IsChecked();
+            bScaleAllBrackets = m_pCheckBox1->IsChecked();
 
-        aMenuButton.GetPopupMenu()->CheckItem(nActiveCategory + 1, false);
+        m_pMenuButton->GetPopupMenu()->CheckItem(nActiveCategory + 1, false);
     }
 
     // activation/deactivation of the associated controls depending on the chosen category
@@ -918,68 +901,63 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
     }
     // activate the CheckBox and the associated MetricField if we're dealing with the brackets menu
     bActive = nCategory == 5;
-    aCheckBox1.Show(bActive);
-    aCheckBox1.Enable(bActive);
+    m_pCheckBox1->Show(bActive);
+    m_pCheckBox1->Enable(bActive);
     if (bActive)
     {
-        aCheckBox1.Check( bScaleAllBrackets );
+        m_pCheckBox1->Check( bScaleAllBrackets );
 
-        bool bChecked = aCheckBox1.IsChecked();
-        aFixedText4  .Enable( bChecked );
-        aMetricField4.Enable( bChecked );
+        bool bChecked = m_pCheckBox1->IsChecked();
+        m_pFixedText4->Enable( bChecked );
+        m_pMetricField4->Enable( bChecked );
     }
 
-    aMenuButton.GetPopupMenu()->CheckItem(nCategory + 1, true);
-    aFixedLine.SetText(Categories[nCategory]->GetName());
+    m_pMenuButton->GetPopupMenu()->CheckItem(nCategory + 1, true);
+    m_pFrame->set_label(Categories[nCategory]->GetName());
 
     nActiveCategory = nCategory;
 
-    aMetricField1.GrabFocus();
+    m_pMetricField1->GrabFocus();
     Invalidate();
     Update();
 }
 
 
-SmDistanceDialog::SmDistanceDialog(Window *pParent, bool bFreeRes)
-    : ModalDialog(pParent, SmResId(RID_DISTANCEDIALOG)),
-    aFixedText1    (this, SmResId(1)),
-    aMetricField1  (this, SmResId(1)),
-    aFixedText2    (this, SmResId(2)),
-    aMetricField2  (this, SmResId(2)),
-    aFixedText3    (this, SmResId(3)),
-    aMetricField3  (this, SmResId(3)),
-    aCheckBox1     (this, SmResId(1)),
-    aFixedText4    (this, SmResId(4)),
-    aMetricField4  (this, SmResId(4)),
-    aOKButton1     (this, SmResId(1)),
-    aHelpButton1   (this, SmResId(1)),
-    aCancelButton1 (this, SmResId(1)),
-    aMenuButton    (this, SmResId(1)),
-    aDefaultButton (this, SmResId(1)),
-    aBitmap        (this, SmResId(1)),
-    aFixedLine     (this, SmResId(1))
+SmDistanceDialog::SmDistanceDialog(Window *pParent)
+    : ModalDialog(pParent, "SpacingDialog",
+        "modules/smath/ui/spacingdialog.ui")
 {
-    for (sal_uInt16 i = 0; i < NOCATEGORIES; i++)
-        Categories[i] = new SmCategoryDesc(SmResId(i + 1), i);
+    get(m_pFrame, "template");
+    get(m_pFixedText1, "label1");
+    get(m_pMetricField1, "spinbutton1");
+    get(m_pFixedText2, "label2");
+    get(m_pMetricField2, "spinbutton2");
+    get(m_pFixedText3, "label3");
+    get(m_pMetricField3, "spinbutton3");
+    get(m_pCheckBox1, "checkbutton");
+    get(m_pFixedText4, "label4");
+    get(m_pMetricField4, "spinbutton4");
+    get(m_pMenuButton, "category");
+    get(m_pDefaultButton, "default");
+    get(m_pBitmap, "image");
+
+    for (sal_uInt16 i = 0; i < NOCATEGORIES; ++i)
+        Categories[i] = new SmCategoryDesc(*this, i);
     nActiveCategory   = CATEGORY_NONE;
     bScaleAllBrackets = false;
 
-    if (bFreeRes)
-        FreeResource();
-
     // preview like controls should have a 2D look
-    aBitmap.SetBorderStyle( WINDOW_BORDER_MONO );
+    m_pBitmap->SetBorderStyle( WINDOW_BORDER_MONO );
 
-    aMetricField1.SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
-    aMetricField2.SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
-    aMetricField3.SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
-    aMetricField4.SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
-    aCheckBox1.SetClickHdl(LINK(this, SmDistanceDialog, CheckBoxClickHdl));
+    m_pMetricField1->SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
+    m_pMetricField2->SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
+    m_pMetricField3->SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
+    m_pMetricField4->SetGetFocusHdl(LINK(this, SmDistanceDialog, GetFocusHdl));
+    m_pCheckBox1->SetClickHdl(LINK(this, SmDistanceDialog, CheckBoxClickHdl));
 
-    aMenuButton.GetPopupMenu()->SetSelectHdl(LINK(this, SmDistanceDialog, MenuSelectHdl));
+    m_pMenuButton->GetPopupMenu()->SetSelectHdl(LINK(this, SmDistanceDialog, MenuSelectHdl));
 
-    aDefaultButton.SetClickHdl(LINK(this, SmDistanceDialog, DefaultButtonClickHdl));
-    aHelpButton1.SetClickHdl(LINK(this, SmDistanceDialog, HelpButtonClickHdl));
+    m_pDefaultButton->SetClickHdl(LINK(this, SmDistanceDialog, DefaultButtonClickHdl));
 }
 
 
