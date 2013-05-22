@@ -259,6 +259,7 @@ void SAL_CALL OFormattedFieldWrapper::write(const Reference<XObjectOutputStream>
 //------------------------------------------------------------------
 void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& _rxInStream) throw( IOException, RuntimeException )
 {
+    SolarMutexGuard g;
     if (m_xAggregate.is())
     {   //  we alread did a decision if we're an EditModel or a FormattedModel
 

@@ -365,6 +365,7 @@ void OGridControlModel::removeSelectionChangeListener(const Reference< XSelectio
 //------------------------------------------------------------------------------
 Reference<XPropertySet> SAL_CALL OGridControlModel::createColumn(const OUString& ColumnType) throw ( :: com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
     const Sequence< OUString >& rColumnTypes = frm::getColumnTypes();
     return createColumn( ::detail::findPos( ColumnType, rColumnTypes ) );
 }
@@ -994,6 +995,7 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
 //------------------------------------------------------------------------------
 void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
+    SolarMutexGuard g;
     OControlModel::read(_rxInStream);
 
     Reference<XMarkableStream>  xMark(_rxInStream, UNO_QUERY);
