@@ -15,10 +15,17 @@ $(eval $(call gb_Library_use_externals,firebird-sdbc,\
 	firebird \
 ))
 
+$(eval $(call gb_Library_set_include,firebird-sdbc,\
+	-I$(SRCDIR)/connectivity/source/inc \
+	$$(INCLUDE) \
+	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
+))
+
 $(eval $(call gb_Library_use_libraries,firebird-sdbc, \
     comphelper \
     cppu \
     cppuhelper \
+    dbtools \
     sal \
     salhelper \
 	$(gb_UWINAPI) \
