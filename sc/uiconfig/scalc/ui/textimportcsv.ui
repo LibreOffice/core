@@ -390,7 +390,7 @@
                                     <property name="column_spacing">12</property>
                                     <child>
                                       <object class="GtkCheckButton" id="other">
-                                        <property name="label" translatable="yes">_Other</property>
+                                        <property name="label" translatable="yes">Othe_r</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
