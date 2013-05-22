@@ -36,9 +36,6 @@ boost_patches += boost_1_44_0-clang-warnings.patch
 
 boost_patches += boost_1_44_0-gcc4.8.patch
 
-# https://svn.boost.org/trac/boost/changeset/78496
-boost_patches += boost.4874.patch
-
 boost_patches += boost.loplugin.patch
 boost_patches += boost.std.move.patch
 boost_patches += boost.wundef.patch
