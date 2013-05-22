@@ -1804,29 +1804,15 @@ const SwStartNode *SwXMLTableContext::GetPrevStartNode( sal_uInt32 nRow,
         // The last cell is the right one here.
         pPrevCell = GetCell( pRows->size()-1U, GetColumnCount()-1UL );
     }
-    else if( 0UL == nRow )
+    else if( nCol > 0UL )
     {
-        // There are no vertically merged cells within the first row, so the
-        // previous cell is the right one always.
-        if( nCol > 0UL )
-            pPrevCell = GetCell( nRow, nCol-1UL );
+        // The previous cell in this row.
+        pPrevCell = GetCell( nRow, nCol-1UL );
     }
-    else
+    else if( nRow > 0UL )
     {
-        // If there is a previous cell in the current row that is not spanned
-        // from the previous row, its the right one.
-        const SwXMLTableRow_Impl *pPrevRow = &(*pRows)[(sal_uInt16)nRow-1U];
-        sal_uInt32 i = nCol;
-        while( !pPrevCell &&  i > 0UL )
-        {
-            i--;
-            if( 1UL == pPrevRow->GetCell( i )->GetRowSpan() )
-                pPrevCell = GetCell( nRow, i );
-        }
-
-        // Otherwise, the last cell from the previous row is the right one.
-        if( !pPrevCell )
-            pPrevCell = pPrevRow->GetCell( GetColumnCount()-1UL );
+        // The last cell from the previous row.
+        pPrevCell = GetCell( nRow-1UL, GetColumnCount()-1UL );
     }
 
     const SwStartNode *pSttNd = 0;
