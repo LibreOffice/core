@@ -159,13 +159,10 @@
               <object class="GtkLabel" id="Placeholders">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">&lt;b&gt;Placeholders&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="Placeholders-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Placeholders</property>
-                  </object>
-                </child>
+                <property name="label" translatable="yes">Placeholders</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
               </object>
             </child>
           </object>
