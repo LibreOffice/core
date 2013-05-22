@@ -283,7 +283,7 @@ public:
     void testCondFormatINSDEL();
 
     CPPUNIT_TEST_SUITE(Test);
-#ifndef DBG_UTIL
+#if !defined(DBG_UTIL) && !defined(_WIN32_WINNT)
     CPPUNIT_TEST(testPerf);
 #endif
     CPPUNIT_TEST(testCollator);
