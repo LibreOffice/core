@@ -10,10 +10,10 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,libodfgen,libodfgen))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libodfgen,inc/external/libodfgen,\
-	src/libodfgen.hxx \
-	src/OdfDocumentHandler.hxx \
-	src/OdtGenerator.hxx \
-	src/OdgGenerator.hxx \
+	inc/libodfgen/libodfgen.hxx \
+	inc/libodfgen/OdfDocumentHandler.hxx \
+	inc/libodfgen/OdtGenerator.hxx \
+	inc/libodfgen/OdgGenerator.hxx \
 ))
 
 $(eval $(call gb_ExternalPackage_use_external_project,libodfgen,libodfgen))
