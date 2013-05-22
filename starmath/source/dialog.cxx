@@ -23,6 +23,7 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/app.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <sfx2/printer.hxx>
@@ -381,19 +382,28 @@ SmFontDialog::SmFontDialog(Window * pParent,
     }
 }
 
+namespace
+{
+    void getColors(Window &rRef, ColorData &rBgCol, ColorData &rTxtCol)
+    {
+        const StyleSettings &rS = rRef.GetSettings().GetStyleSettings();
+        if (rS.GetHighContrastMode())
+        {
+            rBgCol  = rS.GetFieldColor().GetColor();
+            rTxtCol = rS.GetFieldTextColor().GetColor();
+        }
+        else
+        {
+            rBgCol  = COL_WHITE;
+            rTxtCol = COL_BLACK;
+        }
+    }
+}
+
 void SmFontDialog::InitColor_Impl()
 {
-#if OSL_DEBUG_LEVEL > 1
-    Color aBC( GetDisplayBackground().GetColor() );
-#endif
-    ColorData   nBgCol  = COL_WHITE,
-                nTxtCol = COL_BLACK;
-    const StyleSettings &rS = GetSettings().GetStyleSettings();
-    if (rS.GetHighContrastMode())
-    {
-        nBgCol  = rS.GetFieldColor().GetColor();
-        nTxtCol = rS.GetFieldTextColor().GetColor();
-    }
+    ColorData nBgCol, nTxtCol;
+    getColors(*this, nBgCol, nTxtCol);
 
     Color aTmpColor( nBgCol );
     Wallpaper aWall( aTmpColor );
@@ -1127,17 +1137,34 @@ void SmAlignDialog::WriteTo(SmFormat &rFormat) const
 }
 
 
-/**************************************************************************/
+SmShowSymbolSetWindow::SmShowSymbolSetWindow(Window *pParent, WinBits nStyle)
+    : Control(pParent, nStyle)
+    , m_pVScrollBar(0)
+    , nSelectSymbol(SYMBOL_NONE)
+{
+    ColorData nBgCol, nTxtCol;
+    getColors(*this, nBgCol, nTxtCol);
 
+    Color aTmpColor( nBgCol );
+    Wallpaper aWall( aTmpColor );
+    Color aTxtColor( nTxtCol );
+    SetBackground( aWall );
+    SetTextColor( aTxtColor );
+}
 
-void SmShowSymbolSet::Paint(const Rectangle&)
+Point SmShowSymbolSetWindow::OffsetPoint(const Point &rPoint) const
+{
+    return Point(rPoint.X() + nXOffset, rPoint.Y() + nYOffset);
+}
+
+void SmShowSymbolSetWindow::Paint(const Rectangle&)
 {
     Push(PUSH_MAPMODE);
 
     // set MapUnit for which 'nLen' has been calculated
     SetMapMode(MapMode(MAP_PIXEL));
 
-    sal_uInt16 v        = sal::static_int_cast< sal_uInt16 >((aVScrollBar.GetThumbPos() * nColumns));
+    sal_uInt16 v        = sal::static_int_cast< sal_uInt16 >((m_pVScrollBar->GetThumbPos() * nColumns));
     size_t nSymbols = aSymbolSet.size();
 
     Color aTxtColor( GetTextColor() );
@@ -1159,41 +1186,49 @@ void SmShowSymbolSet::Paint(const Rectangle&)
         OUString aText(&cChar, 1);
         Size  aSize( GetTextWidth( aText ), GetTextHeight());
 
-        DrawText(Point((nIV % nColumns) * nLen + (nLen - aSize.Width()) / 2,
-                       (nIV / nColumns) * nLen + (nLen - aSize.Height()) / 2),
-                 aText);
+        Point aPoint((nIV % nColumns) * nLen + (nLen - aSize.Width()) / 2,
+                       (nIV / nColumns) * nLen + (nLen - aSize.Height()) / 2);
+
+        DrawText(OffsetPoint(aPoint), aText);
     }
 
     if (nSelectSymbol != SYMBOL_NONE)
     {
-        Invert(Rectangle(Point(((nSelectSymbol - v) % nColumns) * nLen,
-                                 ((nSelectSymbol - v) / nColumns) * nLen),
-                           Size(nLen, nLen)));
+        Point aPoint(((nSelectSymbol - v) % nColumns) * nLen,
+                                 ((nSelectSymbol - v) / nColumns) * nLen);
+
+        Invert(Rectangle(OffsetPoint(aPoint), Size(nLen, nLen)));
+
     }
 
     Pop();
 }
 
 
-void SmShowSymbolSet::MouseButtonDown(const MouseEvent& rMEvt)
+void SmShowSymbolSetWindow::MouseButtonDown(const MouseEvent& rMEvt)
 {
     GrabFocus();
 
+    Size aOutputSize(nColumns * nLen, nRows * nLen);
+    Point aPoint(rMEvt.GetPosPixel());
+    aPoint.X() -= nXOffset;
+    aPoint.Y() -= nYOffset;
+
     if (rMEvt.IsLeft() && Rectangle(Point(0, 0), aOutputSize).IsInside(rMEvt.GetPosPixel()))
     {
-        long nPos = (rMEvt.GetPosPixel().Y() / nLen) * nColumns + (rMEvt.GetPosPixel().X() / nLen) +
-                      aVScrollBar.GetThumbPos() * nColumns;
+        long nPos = (aPoint.Y() / nLen) * nColumns + (aPoint.X() / nLen) +
+                      m_pVScrollBar->GetThumbPos() * nColumns;
         SelectSymbol( sal::static_int_cast< sal_uInt16 >(nPos) );
 
         aSelectHdlLink.Call(this);
 
-        if (rMEvt.GetClicks() > 1) aDblClickHdlLink.Call(this);
+        if (rMEvt.GetClicks() > 1)
+            aDblClickHdlLink.Call(this);
     }
-    else Control::MouseButtonDown (rMEvt);
 }
 
 
-void SmShowSymbolSet::KeyInput(const KeyEvent& rKEvt)
+void SmShowSymbolSetWindow::KeyInput(const KeyEvent& rKEvt)
 {
     sal_uInt16 n = nSelectSymbol;
 
@@ -1222,10 +1257,10 @@ void SmShowSymbolSet::KeyInput(const KeyEvent& rKEvt)
         n = nSelectSymbol;
 
     // adjust scrollbar
-    if ((n < (sal_uInt16) (aVScrollBar.GetThumbPos() * nColumns)) ||
-        (n >= (sal_uInt16) ((aVScrollBar.GetThumbPos() + nRows) * nColumns)))
+    if ((n < (sal_uInt16) (m_pVScrollBar->GetThumbPos() * nColumns)) ||
+        (n >= (sal_uInt16) ((m_pVScrollBar->GetThumbPos() + nRows) * nColumns)))
     {
-        aVScrollBar.SetThumbPos(n / nColumns);
+        m_pVScrollBar->SetThumbPos(n / nColumns);
         Invalidate();
         Update();
     }
@@ -1234,72 +1269,87 @@ void SmShowSymbolSet::KeyInput(const KeyEvent& rKEvt)
     aSelectHdlLink.Call(this);
 }
 
-
-SmShowSymbolSet::SmShowSymbolSet(Window *pParent, const ResId& rResId) :
-    Control(pParent, rResId),
-    aVScrollBar(this, WinBits(WB_VSCROLL))
+void SmShowSymbolSetWindow::setScrollbar(ScrollBar *pVScrollBar)
 {
-    nSelectSymbol = SYMBOL_NONE;
+    m_pVScrollBar = pVScrollBar;
+    m_pVScrollBar->Enable(false);
+    m_pVScrollBar->Show();
+    m_pVScrollBar->SetScrollHdl(LINK(this, SmShowSymbolSetWindow, ScrollHdl));
+}
 
-    aOutputSize = GetOutputSizePixel();
-    long nScrollBarWidth = aVScrollBar.GetSizePixel().Width(),
-         nUseableWidth   = aOutputSize.Width() - nScrollBarWidth;
+SmShowSymbolSet::SmShowSymbolSet(Window *pParent)
+    : VclHBox(pParent, false, 6)
+    , aSymbolWindow(this, WB_TABSTOP)
+    , aVScrollBar(this, WinBits(WB_VSCROLL))
+{
+    aSymbolWindow.set_hexpand(true);
+    aSymbolWindow.set_vexpand(true);
+    aSymbolWindow.setScrollbar(&aVScrollBar);
+    aSymbolWindow.calccols();
+    aSymbolWindow.Show();
+}
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSmShowSymbolSet(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SmShowSymbolSet(pParent);
+}
+
+void SmShowSymbolSetWindow::calccols()
+{
     // Height of 16pt in pixels (matching 'aOutputSize')
     nLen = (sal_uInt16) LogicToPixel(Size(0, 16), MapMode(MAP_POINT)).Height();
 
-    nColumns = sal::static_int_cast< sal_uInt16 >(nUseableWidth / nLen);
+    Size aOutputSize = GetOutputSizePixel();
+
+    nColumns = sal::static_int_cast< sal_uInt16 >(aOutputSize.Width() / nLen);
     if (nColumns > 2  && nColumns % 2 != 0)
-        nColumns--;
-    nRows    = sal::static_int_cast< sal_uInt16 >(aOutputSize.Height() / nLen);
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE(nColumns > 0, "Sm : no columns");
-    OSL_ENSURE(nRows > 0, "Sm : no rows");
-#endif
+        --nColumns;
+    nRows = sal::static_int_cast< sal_uInt16 >(aOutputSize.Height() / nLen);
+    nColumns = std::max<sal_uInt16>(1, nColumns);
+    nRows = std::max<sal_uInt16>(1, nRows);
 
-    // make it fit exactly
-    aOutputSize.Width()  = nColumns * nLen;
-    aOutputSize.Height() = nRows * nLen;
+    nXOffset = (aOutputSize.Width() - (nColumns * nLen)) / 2;
+    nYOffset = (aOutputSize.Height() - (nRows * nLen)) / 2;
 
-    aVScrollBar.SetPosSizePixel(Point(aOutputSize.Width() + 1, -1),
-                                Size(nScrollBarWidth, aOutputSize.Height() + 2));
-    aVScrollBar.Enable(false);
-    aVScrollBar.Show();
-    aVScrollBar.SetScrollHdl(LINK(this, SmShowSymbolSet, ScrollHdl));
-
-    Size WindowSize (aOutputSize);
-    WindowSize.Width() += nScrollBarWidth;
-    SetOutputSizePixel(WindowSize);
-
+    SetScrollBarRange();
 }
 
+Size SmShowSymbolSetWindow::GetOptimalSize() const
+{
+    Window *pParent = GetParent();
+    return Size(pParent->approximate_char_width() * 24, pParent->GetTextHeight() * 8);
+}
 
-void SmShowSymbolSet::SetSymbolSet(const SymbolPtrVec_t& rSymbolSet)
+void SmShowSymbolSetWindow::SetSymbolSet(const SymbolPtrVec_t& rSymbolSet)
 {
     aSymbolSet = rSymbolSet;
 
+    SetScrollBarRange();
+}
+
+void SmShowSymbolSetWindow::SetScrollBarRange()
+{
     if (static_cast< sal_uInt16 >(aSymbolSet.size()) > (nColumns * nRows))
     {
-        aVScrollBar.SetRange(Range(0, ((aSymbolSet.size() + (nColumns - 1)) / nColumns) - nRows));
-        aVScrollBar.Enable(true);
+        m_pVScrollBar->SetRange(Range(0, ((aSymbolSet.size() + (nColumns - 1)) / nColumns) - nRows));
+        m_pVScrollBar->Enable(true);
     }
     else
     {
-        aVScrollBar.SetRange(Range(0,0));
-        aVScrollBar.Enable (false);
+        m_pVScrollBar->SetRange(Range(0,0));
+        m_pVScrollBar->Enable (false);
     }
 
     Invalidate();
 }
 
-
-void SmShowSymbolSet::SelectSymbol(sal_uInt16 nSymbol)
+void SmShowSymbolSetWindow::SelectSymbol(sal_uInt16 nSymbol)
 {
-    int v = (int) (aVScrollBar.GetThumbPos() * nColumns);
+    int v = (int) (m_pVScrollBar->GetThumbPos() * nColumns);
 
     if (nSelectSymbol != SYMBOL_NONE)
-        Invalidate(Rectangle(Point(((nSelectSymbol - v) % nColumns) * nLen,
-                                   ((nSelectSymbol - v) / nColumns) * nLen),
+        Invalidate(Rectangle(OffsetPoint(Point(((nSelectSymbol - v) % nColumns) * nLen,
+                                   ((nSelectSymbol - v) / nColumns) * nLen)),
                              Size(nLen, nLen)));
 
     if (nSymbol < aSymbolSet.size())
@@ -1309,25 +1359,58 @@ void SmShowSymbolSet::SelectSymbol(sal_uInt16 nSymbol)
         nSelectSymbol = SYMBOL_NONE;
 
     if (nSelectSymbol != SYMBOL_NONE)
-        Invalidate(Rectangle(Point(((nSelectSymbol - v) % nColumns) * nLen,
-                                   ((nSelectSymbol - v) / nColumns) * nLen),
+        Invalidate(Rectangle(OffsetPoint(Point(((nSelectSymbol - v) % nColumns) * nLen,
+                                   ((nSelectSymbol - v) / nColumns) * nLen)),
                              Size(nLen, nLen)));
 
     Update();
 }
 
+void SmShowSymbolSetWindow::Resize()
+{
+    Control::Resize();
+    calccols();
+}
 
-IMPL_LINK( SmShowSymbolSet, ScrollHdl, ScrollBar*, EMPTYARG /*pScrollBar*/)
+IMPL_LINK( SmShowSymbolSetWindow, ScrollHdl, ScrollBar*, EMPTYARG /*pScrollBar*/)
 {
     Invalidate();
     return 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSmShowSymbol(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinBits = 0;
+
+    VclBuilder::stringmap::iterator aFind = rMap.find(OString("border"));
+    if (aFind != rMap.end())
+    {
+        if (toBool(aFind->second))
+            nWinBits |= WB_BORDER;
+        rMap.erase(aFind);
+    }
+
+    return new SmShowSymbol(pParent, nWinBits);
+}
+
+void SmShowSymbol::Resize()
+{
+    Control::Resize();
+    Invalidate();
+}
+
+void SmShowSymbol::setFontSize(Font &rFont) const
+{
+    rFont.SetSize(Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
+}
 
 void SmShowSymbol::Paint(const Rectangle &rRect)
 {
     Control::Paint( rRect );
+
+    Font aFont(GetFont());
+    setFontSize(aFont);
+    SetFont(aFont);
 
     const OUString &rText = GetText();
     Size            aTextSize(GetTextWidth(rText), GetTextHeight());
@@ -1351,7 +1434,7 @@ void SmShowSymbol::SetSymbol(const SmSym *pSymbol)
     if (pSymbol)
     {
         Font aFont (pSymbol->GetFace());
-        aFont.SetSize(Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
+        setFontSize(aFont);
         aFont.SetAlign(ALIGN_BASELINE);
         SetFont(aFont);
 
@@ -1372,59 +1455,44 @@ void SmSymbolDialog::FillSymbolSets(bool bDeleteText)
     // populate the entries of possible SymbolsSets in the dialog with
     // current values of the SymbolSet manager but selects none of those
 {
-    aSymbolSets.Clear();
+    m_pSymbolSets->Clear();
     if (bDeleteText)
-        aSymbolSets.SetNoSelection();
+        m_pSymbolSets->SetNoSelection();
 
     std::set< OUString >  aSybolSetNames( rSymbolMgr.GetSymbolSetNames() );
     std::set< OUString >::const_iterator aIt( aSybolSetNames.begin() );
     for ( ; aIt != aSybolSetNames.end(); ++aIt)
-        aSymbolSets.InsertEntry( *aIt );
+        m_pSymbolSets->InsertEntry( *aIt );
 }
 
 
-IMPL_LINK( SmSymbolDialog, SymbolSetChangeHdl, ListBox *, EMPTYARG pListBox )
+IMPL_LINK_NOARG( SmSymbolDialog, SymbolSetChangeHdl )
 {
-    (void) pListBox;
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE(pListBox == &aSymbolSets, "Sm : wrong argument");
-#endif
-
-    SelectSymbolSet(aSymbolSets.GetSelectEntry());
+    SelectSymbolSet(m_pSymbolSets->GetSelectEntry());
     return 0;
 }
 
 
-IMPL_LINK( SmSymbolDialog, SymbolChangeHdl, SmShowSymbolSet *, EMPTYARG pShowSymbolSet )
+IMPL_LINK_NOARG( SmSymbolDialog, SymbolChangeHdl )
 {
-    (void) pShowSymbolSet;
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE(pShowSymbolSet == &aSymbolSetDisplay, "Sm : wrong argument");
-#endif
-
-    SelectSymbol(aSymbolSetDisplay.GetSelectSymbol());
+    SelectSymbol(m_pSymbolSetDisplay->GetSelectSymbol());
     return 0;
 }
 
-IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, EMPTYARG pButton )
+IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl)
 {
-    (void) pButton;
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE(pButton == &aEditBtn, "Sm : wrong argument");
-#endif
-
     SmSymDefineDialog *pDialog = new SmSymDefineDialog(this, pFontListDev, rSymbolMgr);
 
     // set current symbol and SymbolSet for the new dialog
-    const OUString  aSymSetName (aSymbolSets.GetSelectEntry()),
-                    aSymName    (aSymbolName.GetText());
+    const OUString  aSymSetName (m_pSymbolSets->GetSelectEntry()),
+                    aSymName    (m_pSymbolName->GetText());
     pDialog->SelectOldSymbolSet(aSymSetName);
     pDialog->SelectOldSymbol(aSymName);
     pDialog->SelectSymbolSet(aSymSetName);
     pDialog->SelectSymbol(aSymName);
 
     // remember old SymbolSet
-    OUString  aOldSymbolSet (aSymbolSets.GetSelectEntry());
+    OUString  aOldSymbolSet (m_pSymbolSets->GetSelectEntry());
 
     sal_uInt16 nSymPos = GetSelectedSymbol();
 
@@ -1436,14 +1504,14 @@ IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, EMPTYARG pButton )
     }
 
     // if the old SymbolSet doesn't exist anymore, go to the first one SymbolSet (if one exists)
-    if (!SelectSymbolSet(aOldSymbolSet)  &&  aSymbolSets.GetEntryCount() > 0)
-        SelectSymbolSet(aSymbolSets.GetEntry(0));
+    if (!SelectSymbolSet(aOldSymbolSet) && m_pSymbolSets->GetEntryCount() > 0)
+        SelectSymbolSet(m_pSymbolSets->GetEntry(0));
     else
     {
         // just update display of current symbol set
-        OSL_ENSURE( aSymSetName == aSymSetName, "unexpected change in symbol set name" );
-           aSymbolSet      = rSymbolMgr.GetSymbolSet( aSymbolSetName );
-        aSymbolSetDisplay.SetSymbolSet( aSymbolSet );
+        assert(aSymSetName == aSymSetName); //unexpected change in symbol set name
+        aSymbolSet = rSymbolMgr.GetSymbolSet( aSymbolSetName );
+        m_pSymbolSetDisplay->SetSymbolSet( aSymbolSet );
     }
 
     if (nSymPos >= aSymbolSet.size())
@@ -1455,26 +1523,16 @@ IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, EMPTYARG pButton )
 }
 
 
-IMPL_LINK( SmSymbolDialog, SymbolDblClickHdl, SmShowSymbolSet *, EMPTYARG pShowSymbolSet )
+IMPL_LINK_NOARG( SmSymbolDialog, SymbolDblClickHdl )
 {
-    (void) pShowSymbolSet;
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE(pShowSymbolSet == &aSymbolSetDisplay, "Sm : wrong argument");
-#endif
-
-    GetClickHdl(&aGetBtn);
+    GetClickHdl(m_pGetBtn);
     EndDialog(RET_OK);
     return 0;
 }
 
 
-IMPL_LINK( SmSymbolDialog, GetClickHdl, Button *, EMPTYARG pButton )
+IMPL_LINK_NOARG( SmSymbolDialog, GetClickHdl )
 {
-    (void) pButton;
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE(pButton == &aGetBtn, "Sm : wrong button");
-#endif
-
     const SmSym *pSym = GetSymbol();
     if (pSym)
     {
@@ -1490,96 +1548,57 @@ IMPL_LINK( SmSymbolDialog, GetClickHdl, Button *, EMPTYARG pButton )
 }
 
 
-IMPL_LINK_INLINE_START( SmSymbolDialog, CloseClickHdl, Button *, EMPTYARG pButton )
-{
-    (void) pButton;
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE(pButton == &aCloseBtn, "Sm : wrong button");
-#endif
-
-    EndDialog(true);
-    return 0;
-}
-IMPL_LINK_INLINE_END( SmSymbolDialog, CloseClickHdl, Button *, pButton )
-
-IMPL_LINK( SmSymbolDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
-{
-    // start help system
-    Help* pHelp = Application::GetHelp();
-    if( pHelp )
-    {
-        pHelp->Start( OUString( "HID_SMA_SYMBOLDIALOG" ), &aHelpBtn );
-    }
-    return 0;
-}
-
 SmSymbolDialog::SmSymbolDialog(Window *pParent, OutputDevice *pFntListDevice,
-        SmSymbolManager &rMgr, SmViewShell &rViewShell, bool bFreeRes) :
-    ModalDialog         (pParent, SmResId(RID_SYMBOLDIALOG)),
-    aSymbolSetText      (this, SmResId(1)),
-    aSymbolSets         (this, SmResId(1)),
-    aSymbolSetDisplay   (this, SmResId(1)),
-    aSymbolName         (this, SmResId(2)),
-    aSymbolDisplay      (this, SmResId(2)),
-    aHelpBtn            (this, SmResId(1)),
-    aGetBtn             (this, SmResId(2)),
-    aCloseBtn           (this, SmResId(3)),
-    aEditBtn            (this, SmResId(1)),
+        SmSymbolManager &rMgr, SmViewShell &rViewShell)
+    : ModalDialog(pParent, "CatalogDialog",
+        "modules/smath/ui/catalogdialog.ui")
+
+    ,
+
     rViewSh             (rViewShell),
     rSymbolMgr          (rMgr),
     pFontListDev        (pFntListDevice)
 {
-    if (bFreeRes)
-        FreeResource();
+    get(m_pSymbolSets, "symbolset");
+    m_pSymbolSets->SetStyle(m_pSymbolSets->GetStyle()|WB_SORT);
+    get(m_pSymbolName, "symbolname");
+    get(m_pGetBtn, "insert");
+    get(m_pEditBtn, "edit");
+    get(m_pSymbolSetDisplay, "symbolsetdisplay");
+    get(m_pSymbolDisplay, "preview");
 
-    aHelpBtn.SetClickHdl(LINK(this, SmSymbolDialog, HelpButtonClickHdl));
     aSymbolSetName = OUString();
     aSymbolSet.clear();
     FillSymbolSets();
-    if (aSymbolSets.GetEntryCount() > 0)
-        SelectSymbolSet(aSymbolSets.GetEntry(0));
+    if (m_pSymbolSets->GetEntryCount() > 0)
+        SelectSymbolSet(m_pSymbolSets->GetEntry(0));
 
     InitColor_Impl();
 
     // preview like controls should have a 2D look
-    aSymbolDisplay.SetBorderStyle( WINDOW_BORDER_MONO );
+    m_pSymbolDisplay->SetBorderStyle( WINDOW_BORDER_MONO );
 
-    aSymbolSets      .SetSelectHdl  (LINK(this, SmSymbolDialog, SymbolSetChangeHdl));
-    aSymbolSetDisplay.SetSelectHdl  (LINK(this, SmSymbolDialog, SymbolChangeHdl));
-    aSymbolSetDisplay.SetDblClickHdl(LINK(this, SmSymbolDialog, SymbolDblClickHdl));
-    aSymbolDisplay   .SetDblClickHdl(LINK(this, SmSymbolDialog, SymbolDblClickHdl));
-    aCloseBtn        .SetClickHdl   (LINK(this, SmSymbolDialog, CloseClickHdl));
-    aEditBtn         .SetClickHdl   (LINK(this, SmSymbolDialog, EditClickHdl));
-    aGetBtn          .SetClickHdl   (LINK(this, SmSymbolDialog, GetClickHdl));
-}
-
-
-SmSymbolDialog::~SmSymbolDialog()
-{
+    m_pSymbolSets->SetSelectHdl(LINK(this, SmSymbolDialog, SymbolSetChangeHdl));
+    m_pSymbolSetDisplay->SetSelectHdl(LINK(this, SmSymbolDialog, SymbolChangeHdl));
+    m_pSymbolSetDisplay->SetDblClickHdl(LINK(this, SmSymbolDialog, SymbolDblClickHdl));
+    m_pSymbolDisplay->SetDblClickHdl(LINK(this, SmSymbolDialog, SymbolDblClickHdl));
+    m_pEditBtn->SetClickHdl(LINK(this, SmSymbolDialog, EditClickHdl));
+    m_pGetBtn->SetClickHdl(LINK(this, SmSymbolDialog, GetClickHdl));
 }
 
 
 void SmSymbolDialog::InitColor_Impl()
 {
-#if OSL_DEBUG_LEVEL > 1
-    Color aBC( GetDisplayBackground().GetColor() );
-#endif
-    ColorData   nBgCol  = COL_WHITE,
-                nTxtCol = COL_BLACK;
-    const StyleSettings &rS = GetSettings().GetStyleSettings();
-    if (rS.GetHighContrastMode())
-    {
-        nBgCol  = rS.GetFieldColor().GetColor();
-        nTxtCol = rS.GetFieldTextColor().GetColor();
-    }
+    ColorData nBgCol, nTxtCol;
+    getColors(*this, nBgCol, nTxtCol);
 
     Color aTmpColor( nBgCol );
     Wallpaper aWall( aTmpColor );
     Color aTxtColor( nTxtCol );
-    aSymbolDisplay   .SetBackground( aWall );
-    aSymbolDisplay   .SetTextColor( aTxtColor );
-    aSymbolSetDisplay.SetBackground( aWall );
-    aSymbolSetDisplay.SetTextColor( aTxtColor );
+    m_pSymbolDisplay->SetBackground( aWall );
+    m_pSymbolDisplay->SetTextColor( aTxtColor );
+    m_pSymbolSetDisplay->SetBackground( aWall );
+    m_pSymbolSetDisplay->SetTextColor( aTxtColor );
 }
 
 
@@ -1596,13 +1615,13 @@ void SmSymbolDialog::DataChanged( const DataChangedEvent& rDCEvt )
 bool SmSymbolDialog::SelectSymbolSet(const OUString &rSymbolSetName)
 {
     bool    bRet = false;
-    sal_uInt16  nPos = aSymbolSets.GetEntryPos(rSymbolSetName);
+    sal_uInt16  nPos = m_pSymbolSets->GetEntryPos(rSymbolSetName);
 
     aSymbolSetName = OUString();
     aSymbolSet.clear();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        aSymbolSets.SelectEntryPos(nPos);
+        m_pSymbolSets->SelectEntryPos(nPos);
 
         aSymbolSetName  = rSymbolSetName;
         aSymbolSet      = rSymbolMgr.GetSymbolSet( aSymbolSetName );
@@ -1610,14 +1629,14 @@ bool SmSymbolDialog::SelectSymbolSet(const OUString &rSymbolSetName)
         // sort symbols by Unicode position (useful for displaying Greek characters alphabetically)
         std::sort( aSymbolSet.begin(), aSymbolSet.end(), lt_SmSymPtr() );
 
-        aSymbolSetDisplay.SetSymbolSet( aSymbolSet );
+        m_pSymbolSetDisplay->SetSymbolSet( aSymbolSet );
         if (aSymbolSet.size() > 0)
             SelectSymbol(0);
 
         bRet = true;
     }
     else
-        aSymbolSets.SetNoSelection();
+        m_pSymbolSets->SetNoSelection();
 
     return bRet;
 }
@@ -1629,15 +1648,15 @@ void SmSymbolDialog::SelectSymbol(sal_uInt16 nSymbolNo)
     if (!aSymbolSetName.isEmpty()  &&  nSymbolNo < static_cast< sal_uInt16 >(aSymbolSet.size()))
         pSym = aSymbolSet[ nSymbolNo ];
 
-    aSymbolSetDisplay.SelectSymbol(nSymbolNo);
-    aSymbolDisplay.SetSymbol(pSym);
-    aSymbolName.SetText(pSym ? pSym->GetName() : OUString());
+    m_pSymbolSetDisplay->SelectSymbol(nSymbolNo);
+    m_pSymbolDisplay->SetSymbol(pSym);
+    m_pSymbolName->SetText(pSym ? pSym->GetName() : OUString());
 }
 
 
 const SmSym * SmSymbolDialog::GetSymbol() const
 {
-    sal_uInt16 nSymbolNo = aSymbolSetDisplay.GetSelectSymbol();
+    sal_uInt16 nSymbolNo = m_pSymbolSetDisplay->GetSelectSymbol();
     bool bValid = !aSymbolSetName.isEmpty()  &&  nSymbolNo < static_cast< sal_uInt16 >(aSymbolSet.size());
     return bValid ? aSymbolSet[ nSymbolNo ] : NULL;
 }

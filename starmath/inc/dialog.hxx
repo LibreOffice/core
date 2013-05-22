@@ -287,33 +287,54 @@ public:
 
 /**************************************************************************/
 
-class SmShowSymbolSet : public Control
+class SmShowSymbolSetWindow : public Control
 {
+    ScrollBar*  m_pVScrollBar;
     SymbolPtrVec_t aSymbolSet;
-    ScrollBar   aVScrollBar;
-    Size        aOutputSize;
     Link        aSelectHdlLink;
     Link        aDblClickHdlLink;
-    sal_uInt16      nLen;
-    sal_uInt16      nRows, nColumns;
-    sal_uInt16      nSelectSymbol;
+    sal_uInt16  nLen;
+    sal_uInt16  nRows, nColumns;
+    sal_uInt16  nXOffset, nYOffset;
+    sal_uInt16  nSelectSymbol;
+
+    void SetScrollBarRange();
+    Point OffsetPoint(const Point &rPoint) const;
 
     virtual void    Paint(const Rectangle&);
     virtual void    MouseButtonDown(const MouseEvent& rMEvt);
     virtual void    KeyInput(const KeyEvent& rKEvt);
+    virtual void    Resize();
+    virtual Size    GetOptimalSize() const;
 
     DECL_LINK( ScrollHdl, ScrollBar* );
-
 public:
-    SmShowSymbolSet(Window *pParent, const ResId& rResId);
-
-    void    SetSymbolSet(const SymbolPtrVec_t& rSymbolSet);
-
+    SmShowSymbolSetWindow(Window *pParent, WinBits nStyle);
+    void setScrollbar(ScrollBar *pVScrollBar);
+    void calccols();
     void    SelectSymbol(sal_uInt16 nSymbol);
     sal_uInt16  GetSelectSymbol() const { return nSelectSymbol; }
-
+    void SetSymbolSet(const SymbolPtrVec_t& rSymbolSet);
     void SetSelectHdl(const Link& rLink)   { aSelectHdlLink = rLink; }
     void SetDblClickHdl(const Link& rLink) { aDblClickHdlLink = rLink; }
+};
+
+class SmShowSymbolSet : public VclHBox
+{
+    SmShowSymbolSetWindow aSymbolWindow;
+    ScrollBar   aVScrollBar;
+    Size        aOutputSize;
+
+public:
+    SmShowSymbolSet(Window *pParent);
+
+    void    SetSymbolSet(const SymbolPtrVec_t& rSymbolSet) { aSymbolWindow.SetSymbolSet(rSymbolSet); }
+
+    void    SelectSymbol(sal_uInt16 nSymbol) { aSymbolWindow.SelectSymbol(nSymbol); }
+    sal_uInt16  GetSelectSymbol() const { return aSymbolWindow.GetSelectSymbol(); }
+
+    void SetSelectHdl(const Link& rLink)   { aSymbolWindow.SetSelectHdl(rLink); }
+    void SetDblClickHdl(const Link& rLink) { aSymbolWindow.SetDblClickHdl(rLink); }
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -324,10 +345,15 @@ class SmShowSymbol : public Control
 
     virtual void    Paint(const Rectangle&);
     virtual void    MouseButtonDown(const MouseEvent& rMEvt);
+    virtual void    Resize();
+
+    void setFontSize(Font &rFont) const;
 
 public:
-    SmShowSymbol(Window *pParent, const ResId& rResId) :
-        Control(pParent, rResId) {}
+    SmShowSymbol(Window *pParent, WinBits nStyle)
+        : Control(pParent, nStyle)
+    {
+    }
 
     void    SetSymbol(const SmSym *pSymbol);
     void    SetDblClickHdl(const Link &rLink) { aDblClickHdlLink = rLink; }
@@ -339,15 +365,12 @@ class SmSymDefineDialog;
 
 class SmSymbolDialog : public ModalDialog
 {
-    FixedText       aSymbolSetText;
-    ListBox         aSymbolSets;
-    SmShowSymbolSet aSymbolSetDisplay;
-    FixedText       aSymbolName;
-    SmShowSymbol    aSymbolDisplay;
-    HelpButton      aHelpBtn;
-    PushButton      aGetBtn;
-    PushButton      aCloseBtn;
-    PushButton      aEditBtn;
+    ListBox*         m_pSymbolSets;
+    SmShowSymbolSet* m_pSymbolSetDisplay;
+    FixedText*       m_pSymbolName;
+    SmShowSymbol*    m_pSymbolDisplay;
+    PushButton*      m_pGetBtn;
+    PushButton*      m_pEditBtn;
 
     SmViewShell        &rViewSh;
     SmSymbolManager    &rSymbolMgr;
@@ -357,13 +380,11 @@ class SmSymbolDialog : public ModalDialog
 
     OutputDevice       *pFontListDev;
 
-    DECL_LINK(SymbolSetChangeHdl, ListBox *);
-    DECL_LINK(SymbolChangeHdl, SmShowSymbolSet *);
-    DECL_LINK(SymbolDblClickHdl, SmShowSymbolSet *);
-    DECL_LINK(CloseClickHdl, Button *);
-    DECL_LINK(EditClickHdl, Button *);
-    DECL_LINK(GetClickHdl, Button *);
-    DECL_LINK(HelpButtonClickHdl, Button *);
+    DECL_LINK(SymbolSetChangeHdl, void*);
+    DECL_LINK(SymbolChangeHdl, void*);
+    DECL_LINK(SymbolDblClickHdl, void*);
+    DECL_LINK(EditClickHdl, void*);
+    DECL_LINK(GetClickHdl, void*);
 
     void            FillSymbolSets(bool bDeleteText = true);
     void            SetSymbolSetManager(SmSymbolManager &rMgr);
@@ -374,12 +395,11 @@ class SmSymbolDialog : public ModalDialog
 
 public:
     SmSymbolDialog(Window * pParent, OutputDevice *pFntListDevice,
-            SmSymbolManager &rSymbolMgr, SmViewShell &rViewShell, bool bFreeRes = true);
-    virtual ~SmSymbolDialog();
+            SmSymbolManager &rSymbolMgr, SmViewShell &rViewShell);
 
     bool    SelectSymbolSet(const OUString &rSymbolSetName);
     void    SelectSymbol(sal_uInt16 nSymbolPos);
-    sal_uInt16  GetSelectedSymbol() const   { return aSymbolSetDisplay.GetSelectSymbol(); }
+    sal_uInt16  GetSelectedSymbol() const   { return m_pSymbolSetDisplay->GetSelectSymbol(); }
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -60,6 +60,12 @@
     <glade-widget-class title="Font Preview" name="svxlo-SvxFontPrevWindow"
                         generic-name="Font Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Show Math Symbol" name="smlo-SmShowSymbol"
+                        generic-name="Show Math Symbol" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Math Symbol Selection" name="smlo-SmShowSymbolSet"
+                        generic-name="Math Symbol Selection" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Number Preview" name="cuilo-SvxNumberPreview"
                         generic-name="Number Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
