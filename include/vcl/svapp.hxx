@@ -124,17 +124,7 @@ public:
         DIALOG_CANCEL_OFF, ///< do not automatically cancel dialogs
         DIALOG_CANCEL_SILENT, ///< silently cancel any dialogs
         DIALOG_CANCEL_FATAL
-            ///< cancel any dialogs by throwing a DialogCancelledException
-    };
-
-    class VCL_DLLPUBLIC DialogCancelledException:
-        virtual public std::runtime_error
-    {
-    public:
-        explicit DialogCancelledException(char const * what_arg):
-            runtime_error(what_arg) {}
-
-        virtual ~DialogCancelledException() throw ();
+            ///< cancel any dialogs by std::abort
     };
 
                                 Application();

@@ -835,8 +835,7 @@ sal_Bool Dialog::ImplStartExecuteModal()
         assert(false); // this cannot happen
         // fall through
     case Application::DIALOG_CANCEL_FATAL:
-        throw Application::DialogCancelledException(
-            ImplGetDialogText(this).getStr());
+        std::abort();
     }
 
 #ifdef DBG_UTIL

@@ -1877,6 +1877,4 @@ Application::createFolderPicker( const Reference< uno::XComponentContext >& xSM 
     return pSVData->mpDefInst->createFolderPicker( xSM );
 }
 
-Application::DialogCancelledException::~DialogCancelledException() throw () {}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
