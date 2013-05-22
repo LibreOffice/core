@@ -34,16 +34,30 @@
  *************************************************************************/
 
 #include "FDatabaseMetaData.hxx"
+#include "FDatabaseMetaDataResultSet.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
+#include <com/sun/star/sdbc/XParameters.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
 
 using namespace connectivity::firebird;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
+
+namespace connectivity
+{
+    namespace firebird
+    {
+        static sal_Int32    const s_nCOLUMN_SIZE = 256;
+        static sal_Int32    const s_nDECIMAL_DIGITS = 0;
+        static sal_Int32    const s_nNULLABLE = 1;
+        static sal_Int32 const s_nCHAR_OCTET_LENGTH = 65535;
+    }
+}
 
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
 : m_pConnection(_pCon)
@@ -776,7 +790,44 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
 {
-    return NULL;
+    printf("DEBUG !!! connectivity.firebird => ODatabaseMetaData::getTypeInfo got called \n");
+
+    // this returns an empty resultset where the column-names are already set
+    // in special the metadata of the resultset already returns the right columns
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
+    Reference< XResultSet > xResultSet = pResultSet;
+    static ODatabaseMetaDataResultSet::ORows aRows;
+
+    if(aRows.empty())
+    {
+        ODatabaseMetaDataResultSet::ORow aRow;
+        aRow.reserve(19);
+        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+        aRow.push_back(new ORowSetValueDecorator(OUString("VARCHAR")));
+        aRow.push_back(new ORowSetValueDecorator(DataType::VARCHAR));
+        aRow.push_back(new ORowSetValueDecorator((sal_Int32)s_nCHAR_OCTET_LENGTH));
+        aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
+        aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
+        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+        // aRow.push_back(new ORowSetValueDecorator((sal_Int32)ColumnValue::NULLABLE));
+        aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
+        aRow.push_back(new ORowSetValueDecorator((sal_Int32)ColumnSearch::CHAR));
+        aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
+        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+        aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
+        aRow.push_back(new ORowSetValueDecorator((sal_Int32)10));
+
+        aRows.push_back(aRow);
+
+    }
+    pResultSet->setRows(aRows);
+    return xResultSet;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLException, RuntimeException)
@@ -807,7 +858,86 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     const Any& catalog, const ::rtl::OUString& schemaPattern,
     const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
 {
-    return NULL;
+    printf("DEBUG !!! connectivity.firebird => ODatabaseMetaData::getTables() got called with schemaPattern: %s and tableNamePattern: %s \n",
+           OUStringToOString( schemaPattern, RTL_TEXTENCODING_ASCII_US ).getStr(),
+           OUStringToOString( tableNamePattern, RTL_TEXTENCODING_ASCII_US ).getStr());
+
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
+    Reference< XResultSet > xResultSet = pResultSet;
+
+    /*
+    Reference< XPreparedStatement > statement = m_pConnection->prepareStatement(
+            "SELECT "
+            "'schema' as schema, RDB$RELATION_NAME, RDB$SYSTEM_FLAG, RDB$RELATION_TYPE, 'description' as description " // avoid duplicates
+            "FROM RDB$RELATIONS "
+            "WHERE (RDB$RELATION_TYPE = 0 OR RDB$RELATION_TYPE = 1) "
+            "AND 'schema' LIKE ? "
+            "AND RDB$RELATION_NAME LIKE ? ");
+    */
+    Reference< XPreparedStatement > statement = m_pConnection->prepareStatement(
+            "SELECT "
+            "RDB$RELATION_NAME " // avoid duplicates
+            "FROM RDB$RELATIONS "
+            "WHERE (RDB$RELATION_TYPE = 0 OR RDB$RELATION_TYPE = 1) ");
+
+    printf("DEBUG !!! connectivity.firebird => ODatabaseMetaData::getTables() Setting query parameters. \n");
+
+    Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
+    parameters->setString( 1 , schemaPattern );
+    parameters->setString( 2 , tableNamePattern );
+
+    printf("DEBUG !!! connectivity.firebird => ODatabaseMetaData::getTables() About to execute the query. \n");
+
+    Reference< XResultSet > rs = statement->executeQuery();
+    Reference< XRow > xRow( rs, UNO_QUERY_THROW );
+    ODatabaseMetaDataResultSet::ORows aRows;
+    while( rs->next() )
+    {
+        ODatabaseMetaDataResultSet::ORow aRow(3);
+        OUString aTableName  = xRow->getString( 2 );
+
+        printf("DEBUG !!! connectivity.firebird => TableName: %s \n",
+               OUStringToOString( aTableName, RTL_TEXTENCODING_ASCII_US ).getStr());
+
+        OUString type = xRow->getString(3);
+        OUString aTableType;
+        if( 0 == type.compareToAscii( "1" ) )
+        {
+            aTableType = OUString::createFromAscii("SYSTEM TABLE");
+
+        } else {
+
+            if( 0 == xRow->getString(4).compareToAscii( "0" ) )
+            {
+                aTableType = OUString::createFromAscii("TABLE");
+            }
+            else
+            {
+                aTableType = OUString::createFromAscii("VIEW");
+            }
+        }
+
+        printf("DEBUG !!! connectivity.firebird => TableType: %s \n",
+               OUStringToOString( aTableType, RTL_TEXTENCODING_ASCII_US ).getStr());
+
+        aRow.push_back( new ORowSetValueDecorator( aTableName ) ); // Table name
+        aRow.push_back( new ORowSetValueDecorator( aTableType ) ); // Table type
+        aRow.push_back( ODatabaseMetaDataResultSet::getEmptyValue() ); // Remarks
+        aRows.push_back(aRow);
+    }
+
+    pResultSet->setRows( aRows );
+
+    try
+    {
+        Reference< XRow > xCurrentRow( xResultSet, UNO_QUERY_THROW );
+    }
+    catch (const Exception&)
+    {
+        printf("DEBUG !!! connectivity.firebird => getTables thrown an Exception. \n");
+    }
+
+    return xResultSet;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
