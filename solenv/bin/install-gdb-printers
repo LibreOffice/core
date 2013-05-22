@@ -157,13 +157,14 @@ if [[ ${DESTDIR}${pythondir} != ${GDBDIR} ]]; then
 fi
 
 if [[ -n "${MERGELIBS}" ]]; then
-    make_autoload merged program libmergedlo."$DYLIB" merge svl tl `[[ ${MERGELIBS} == "ALL" ]] && echo sw`
+    make_autoload merged program libmergedlo."$DYLIB" merge svl tl basegfx `[[ ${MERGELIBS} == "ALL" ]] && echo sw`
     if [[ ${MERGELIBS} == "ALL" ]]; then
         make_autoload urelibs ure-link/lib liburelibs."$DYLIB" merge cppu sal
     else
         make_autoload cppu ure-link/lib libuno_cppu."$DYLIB".3
         make_autoload sal ure-link/lib libuno_sal."$DYLIB".3
         make_autoload sw program libswlo."$DYLIB"
+        make_autoload basegfx program libbasegfxlo."$DYLIB"
     fi
 else
     make_autoload cppu ure-link/lib libuno_cppu."$DYLIB".3
@@ -171,6 +172,7 @@ else
     make_autoload svl program libsvllo."$DYLIB"
     make_autoload tl program libtllo."$DYLIB"
     make_autoload sw program libswlo."$DYLIB"
+    make_autoload basegfx program libbasegfxlo."$DYLIB"
 fi
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
