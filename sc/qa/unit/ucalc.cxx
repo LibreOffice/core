@@ -566,7 +566,7 @@ void Test::testPerf()
             MeasureTimeSwitch aTime(diff, scale);
             clearRange(m_pDoc, ScRange(1,1,0,1,99999,0));
         }
-        PERF_ASSERT(diff, 2000, "Removal of a large array of formula cells");
+        PERF_ASSERT(diff, 3000, "Removal of a large array of formula cells");
     }
 
     clearRange(m_pDoc, ScRange(0,0,0,1,MAXROW,0)); // Clear columns A:B.
