@@ -26,6 +26,10 @@ ifeq ($(OS),MACOSX)
 liborcus_patches += liborcus_0.1.0-tac.patch
 endif
 
+ifneq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
+liborcus_patches += visibility.patch
+endif
+
 # <https://gitorious.org/orcus/orcus/merge_requests/2#
 # f60d6eecee72349993a392a9a63ddf3383d3b8c8-
 # f60d6eecee72349993a392a9a63ddf3383d3b8c8@2>:
