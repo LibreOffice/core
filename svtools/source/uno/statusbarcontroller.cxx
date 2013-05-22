@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <osl/mutex.hxx>
@@ -45,7 +46,7 @@ namespace svt
 {
 
 StatusbarController::StatusbarController(
-    const Reference< XMultiServiceFactory >& rServiceManager,
+    const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& xFrame,
     const OUString& aCommandURL,
     unsigned short nID ) :
@@ -54,7 +55,7 @@ StatusbarController::StatusbarController(
     ,   m_bDisposed( sal_False )
     ,   m_nID( nID )
     ,   m_xFrame( xFrame )
-    ,   m_xServiceManager( rServiceManager )
+    ,   m_xContext( rxContext )
     ,   m_aCommandURL( aCommandURL )
     ,   m_aListenerContainer( m_aMutex )
 {
@@ -82,9 +83,9 @@ Reference< XFrame > StatusbarController::getFrameInterface() const
 Reference< XURLTransformer > StatusbarController::getURLTransformer() const
 {
     SolarMutexGuard aSolarMutexGuard;
-    if ( !m_xURLTransformer.is() && m_xServiceManager.is() )
+    if ( !m_xURLTransformer.is() && m_xContext.is() )
     {
-        m_xURLTransformer = com::sun::star::util::URLTransformer::create( ::comphelper::getComponentContext(m_xServiceManager) );
+        m_xURLTransformer = com::sun::star::util::URLTransformer::create( m_xContext );
     }
 
     return m_xURLTransformer;
@@ -148,7 +149,12 @@ throw ( Exception, RuntimeException )
                 else if ( aPropValue.Name == "CommandURL" )
                     aPropValue.Value >>= m_aCommandURL;
                 else if ( aPropValue.Name == "ServiceManager" )
-                    aPropValue.Value >>= m_xServiceManager;
+                {
+                    Reference<XMultiServiceFactory> xMSF;
+                    aPropValue.Value >>= xMSF;
+                    if( xMSF.is() )
+                        m_xContext = comphelper::getComponentContext(xMSF);
+                }
                 else if ( aPropValue.Name == "ParentWindow" )
                     aPropValue.Value >>= m_xParentWindow;
                 else if ( aPropValue.Name == "Identifier" )
@@ -219,7 +225,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
     // release references
     m_xURLTransformer.clear();
-    m_xServiceManager.clear();
+    m_xContext.clear();
     m_xFrame.clear();
     m_xParentWindow.clear();
     m_xStatusbarItem.clear();
@@ -373,7 +379,7 @@ void StatusbarController::addStatusListener( const OUString& aCommandURL )
         {
             // Add status listener directly as intialize has already been called.
             Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-            if ( m_xServiceManager.is() && xDispatchProvider.is() )
+            if ( m_xContext.is() && xDispatchProvider.is() )
             {
                 Reference< XURLTransformer > xURLTransformer = getURLTransformer();
                 aTargetURL.Complete = aCommandURL;
@@ -426,7 +432,7 @@ void StatusbarController::bindListener()
 
         // Collect all registered command URL's and store them temporary
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-        if ( m_xServiceManager.is() && xDispatchProvider.is() )
+        if ( m_xContext.is() && xDispatchProvider.is() )
         {
             xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
             URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
@@ -533,7 +539,7 @@ void StatusbarController::execute( const ::com::sun::star::uno::Sequence< ::com:
 
         if ( m_bInitialized &&
              m_xFrame.is() &&
-             m_xServiceManager.is() &&
+             m_xContext.is() &&
              !m_aCommandURL.isEmpty() )
         {
             xURLTransformer = getURLTransformer();
@@ -575,7 +581,7 @@ void StatusbarController::execute(
 
         if ( m_bInitialized &&
              m_xFrame.is() &&
-             m_xServiceManager.is() &&
+             m_xContext.is() &&
              !m_aCommandURL.isEmpty() )
         {
             Reference< XURLTransformer > xURLTransformer( getURLTransformer() );

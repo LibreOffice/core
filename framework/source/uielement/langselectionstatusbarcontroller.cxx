@@ -44,8 +44,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -75,7 +73,7 @@ using ::rtl::OUStringBuffer;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   LangSelectionStatusbarController            ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2      (   LangSelectionStatusbarController            ,
                                             OWeakObject                             ,
                                             SERVICENAME_STATUSBARCONTROLLER         ,
                                             IMPLEMENTATIONNAME_LANGSELECTIONSTATUSBARCONTROLLER
@@ -83,11 +81,11 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   LangSelectionStatusbarController    
 
 DEFINE_INIT_SERVICE                     (   LangSelectionStatusbarController, {} )
 
-LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::Reference< lang::XMultiServiceFactory >& xServiceManager ) :
-    svt::StatusbarController( xServiceManager, uno::Reference< frame::XFrame >(), OUString(), 0 ),
+LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::Reference< uno::XComponentContext >& xContext ) :
+    svt::StatusbarController( xContext, uno::Reference< frame::XFrame >(), OUString(), 0 ),
     m_bShowMenu( sal_True ),
     m_nScriptType( LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX ),
-    m_aLangGuessHelper( comphelper::getComponentContext(xServiceManager) )
+    m_aLangGuessHelper( xContext )
 {
 }
 
@@ -114,9 +112,9 @@ throw (::com::sun::star::uno::RuntimeException)
         return;
 
     //add context menu
-    Reference< awt::XPopupMenu > xPopupMenu( awt::PopupMenu::create( comphelper::getComponentContext(m_xServiceManager) ) );
+    Reference< awt::XPopupMenu > xPopupMenu( awt::PopupMenu::create( m_xContext ) );
     //sub menu that contains all items except the last two items: Separator + Set Language for Paragraph
-    Reference< awt::XPopupMenu > subPopupMenu( awt::PopupMenu::create( comphelper::getComponentContext(m_xServiceManager) ) );
+    Reference< awt::XPopupMenu > subPopupMenu( awt::PopupMenu::create( m_xContext ) );
 
     SvtLanguageTable    aLanguageTable;
 

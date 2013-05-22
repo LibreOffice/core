@@ -21,13 +21,13 @@
 #define _SVTOOLS_STATUSBARCONTROLLER_HXX
 
 #include "svtools/svtdllapi.h"
-#include <com/sun/star/ui/XStatusbarItem.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XStatusbarController.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/ui/XStatusbarItem.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -46,7 +46,7 @@ class SVT_DLLPUBLIC StatusbarController :
                             public ::cppu::OWeakObject
 {
     public:
-        StatusbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+        StatusbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
                              const OUString& aCommandURL,
                              unsigned short       nID );
@@ -123,7 +123,7 @@ class SVT_DLLPUBLIC StatusbarController :
         unsigned short                                                                      m_nID;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xFrame;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                  m_xParentWindow;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         OUString                                                                       m_aCommandURL;
         URLToDispatchMap                                                                    m_aListenerMap;
         ::cppu::OMultiTypeInterfaceContainerHelper                                          m_aListenerContainer;   /// container for ALL Listener

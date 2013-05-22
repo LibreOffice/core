@@ -41,6 +41,7 @@
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>

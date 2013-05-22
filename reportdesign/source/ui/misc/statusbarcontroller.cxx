@@ -69,15 +69,15 @@ Sequence< OUString> SAL_CALL OStatusbarController::getSupportedServiceNames() th
 // -------------------------------------------------------------------------
 Reference< XInterface > OStatusbarController::create(Reference< XComponentContext > const & xContext)
 {
-    return *(new OStatusbarController(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY)));
+    return *(new OStatusbarController(xContext));
 }
 IMPLEMENT_FORWARD_XINTERFACE2(OStatusbarController, ::svt::StatusbarController,OStatusbarController_BASE)
 
-OStatusbarController::OStatusbarController(const Reference< XMultiServiceFactory >& _rxORB)
-: m_nSlotId(0)
+OStatusbarController::OStatusbarController(const Reference< XComponentContext >& rxContext)
+: ::svt::StatusbarController(rxContext, Reference< XFrame >(), OUString(), 0)
+,m_nSlotId(0)
 ,m_nId(1)
 {
-    m_xServiceManager = _rxORB;
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)

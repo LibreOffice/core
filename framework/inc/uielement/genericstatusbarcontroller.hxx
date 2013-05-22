@@ -30,7 +30,7 @@ struct AddonStatusbarItemData;
 class GenericStatusbarController : public svt::StatusbarController
 {
     public:
-        GenericStatusbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+        GenericStatusbarController( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
                                     const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                     const com::sun::star::uno::Reference< com::sun::star::ui::XStatusbarItem >& rxItem,
                                     AddonStatusbarItemData *pItemData );

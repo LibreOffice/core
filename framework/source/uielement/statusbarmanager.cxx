@@ -421,7 +421,7 @@ void StatusBarManager::CreateControllers()
                 // 3º) Is Add-on? Generic statusbar controller
                 if ( pItemData )
                 {
-                    pController = new GenericStatusbarController( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW),
+                    pController = new GenericStatusbarController( m_xContext,
                                                                   m_xFrame,
                                                                   xStatusbarItem,
                                                                   pItemData );
@@ -429,7 +429,7 @@ void StatusBarManager::CreateControllers()
                 else
                 {
                     // 4º) Default Statusbar controller
-                    pController = new svt::StatusbarController( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), m_xFrame, aCommandURL, nId );
+                    pController = new svt::StatusbarController( m_xContext, m_xFrame, aCommandURL, nId );
                 }
             }
 

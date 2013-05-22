@@ -40,6 +40,7 @@
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/ToolbarControllerFactory.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>

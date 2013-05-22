@@ -43,11 +43,11 @@ namespace framework
 {
 
 GenericStatusbarController::GenericStatusbarController(
-    const Reference< XMultiServiceFactory >& rxServiceManager,
+    const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& rxFrame,
     const Reference< ui::XStatusbarItem >& rxItem,
     AddonStatusbarItemData *pItemData )
-    : svt::StatusbarController( rxServiceManager, rxFrame, OUString(), 0 )
+    : svt::StatusbarController( rxContext, rxFrame, OUString(), 0 )
     , m_bEnabled( sal_False )
     , m_bOwnerDraw( sal_False )
     , m_pItemData( pItemData )

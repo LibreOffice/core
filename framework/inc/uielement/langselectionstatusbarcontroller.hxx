@@ -42,7 +42,7 @@ namespace framework {
 class LangSelectionStatusbarController : public svt::StatusbarController
 {
     public:
-        explicit LangSelectionStatusbarController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        explicit LangSelectionStatusbarController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
 
         // XServiceInfo
         DECLARE_XSERVICEINFO
