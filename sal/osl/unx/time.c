@@ -23,15 +23,9 @@
 #include <osl/diagnose.h>
 #include <osl/time.h>
 #include <time.h>
-#include <assert.h>
-#include <unistd.h>
-
-#if defined(MACOSX) || defined(IOS)
-#include <mach/mach_time.h>
-#endif
 
 /* FIXME: detection should be done in configure script */
-#if defined(MACOSX) || defined(IOS) || defined(FREEBSD) || defined(NETBSD) || \
+#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || \
     defined(LINUX) || defined(OPENBSD) || defined(DRAGONFLY)
 #define STRUCT_TM_HAS_GMTOFF 1
 
@@ -39,36 +33,20 @@
 #define HAS_ALTZONE 1
 #endif
 
-#if defined(MACOSX) || defined(IOS)
-typedef sal_uInt64 osl_time_t;
-static double adjust_time_factor;
-#else
-#if defined(_POSIX_TIMERS)
-#define USE_CLOCK_GETTIME
-typedef struct timespec osl_time_t;
-#else
-typedef struct timeval osl_time_t;
-#endif
-#endif
-static osl_time_t startTime;
-
-
 /*--------------------------------------------------
  * osl_getSystemTime
  *-------------------------------------------------*/
 
 sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
 {
-#if defined(MACOSX) || defined(IOS)
-    double diff = (double)(mach_absolute_time() - startTime) * adjust_time_factor;
-    tv->Seconds = (sal_uInt32)diff;
-    tv->Nanosec = (sal_uInt32)((diff - tv->Seconds) * 1e9);
-#else
     int res;
-    osl_time_t tp;
-#if defined(USE_CLOCK_GETTIME)
+#if defined(LINUX)
+    struct timespec tp;
+
     res = clock_gettime(CLOCK_REALTIME, &tp);
 #else
+    struct timeval tp;
+
     res = gettimeofday(&tp, NULL);
 #endif
 
@@ -78,12 +56,12 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* tv)
     }
 
     tv->Seconds = tp.tv_sec;
-    #if defined(USE_CLOCK_GETTIME)
+    #if defined(LINUX)
     tv->Nanosec = tp.tv_nsec;
     #else
     tv->Nanosec = tp.tv_usec * 1000;
     #endif
-#endif
+
     return sal_True;
 }
 
@@ -275,54 +253,28 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, Time
     return sal_False;
 }
 
-void sal_initGlobalTimer()
-{
-#if defined(MACOSX) || defined(IOS)
-  mach_timebase_info_data_t timebase;
-  mach_timebase_info(&timebase);
-  adjust_time_factor = 1e-9 * (double)timebase.numer / (double)(timebase.denom);
-  startTime = mach_absolute_time();
-#else /* ! (MACOSX || IOS) */
-  int res;
-#if defined(USE_CLOCK_GETTIME)
-  res = clock_gettime(CLOCK_REALTIME, &startTime);
-#else /* Ndef USE_CLOCK_GETTIME */
-  res = gettimeofday( &startTime, NULL );
-#endif /* NDef USE_CLOCK_GETTIME */
-  assert(res == 0);
-  (void) res;
-#endif /* ! (MACOSX || IOS) */
-}
+
+
+static struct timeval startTime;
+static sal_Bool bGlobalTimer = sal_False;
 
 sal_uInt32 SAL_CALL osl_getGlobalTimer()
 {
-    sal_uInt32 nSeconds;
+  struct timeval currentTime;
+  sal_uInt32 nSeconds;
 
-#if defined(MACOSX) || defined(IOS)
-    double diff = (double)(mach_absolute_time() - startTime) * adjust_time_factor * 1000;
-    nSeconds = (sal_uInt32)diff;
-#else
-    osl_time_t currentTime;
-    int res;
+  // FIXME: not thread safe !!
+  if ( bGlobalTimer == sal_False )
+  {
+      gettimeofday( &startTime, NULL );
+      bGlobalTimer=sal_True;
+  }
 
-#if defined(USE_CLOCK_GETTIME)
-    res = clock_gettime(CLOCK_REALTIME, &currentTime);
-#else
-    res = gettimeofday( &currentTime, NULL );
-#endif
-    assert(res == 0);
+  gettimeofday( &currentTime, NULL );
 
-    if (res != 0)
-        return 0;
+  nSeconds = (sal_uInt32)( currentTime.tv_sec - startTime.tv_sec );
 
-    nSeconds = (sal_uInt32)( currentTime.tv_sec - startTime.tv_sec );
-#if defined(USE_CLOCK_GETTIME)
-    nSeconds = ( nSeconds * 1000 ) + (long) (( currentTime.tv_nsec - startTime.tv_nsec) / 1000000 );
-#else
-    nSeconds = ( nSeconds * 1000 ) + (long) (( currentTime.tv_usec - startTime.tv_usec) / 1000 );
-#endif
-#endif
-    return nSeconds;
+  return ( nSeconds * 1000 ) + (long) (( currentTime.tv_usec - startTime.tv_usec) / 1000 );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
