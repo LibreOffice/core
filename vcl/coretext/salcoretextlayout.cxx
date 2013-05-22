@@ -447,6 +447,10 @@ int CoreTextLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos
         nStart += 1;
     }
 
+    if( pCharIndexes ) {
+        pCharIndexes[i] = mpGlyphs2Chars[mnCurrentGlyphIndex];
+    }
+
     SAL_INFO( "vcl.coretext.layout", "GetNextGlyphs() returning " << i );
 
     return i;

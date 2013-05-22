@@ -619,6 +619,17 @@ int ATSLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int
                 break;
     }
 
+    // update returned index-into-string array
+    if( pCharIndexes )
+    {
+        int nCharPos;
+        if( mpGlyphs2Chars )
+            nCharPos = mpGlyphs2Chars[nStart];
+        else
+            nCharPos = nStart + mnMinCharPos;
+        *(pCharIndexes++) = nCharPos;
+    }
+
     return nCount;
 }
 

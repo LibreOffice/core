@@ -1427,7 +1427,11 @@ int GenericSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos
         nOldFlags = pG->mnGlyphIndex; // &GF_FLAGMASK not needed for test above
     }
 
-    aRelativePos.X() /= mnUnitsPerPixel;
+    // Calculate final pCharPosAry item
+    if( pCharPosAry )
+        *pCharPosAry = pG->mnCharPos;
+
+        aRelativePos.X() /= mnUnitsPerPixel;
     aRelativePos.Y() /= mnUnitsPerPixel;
     rPos = GetDrawPosition( aRelativePos );
 
@@ -1675,7 +1679,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     // prepare "merge sort"
     int nStartOld[ MAX_FALLBACK ];
     int nStartNew[ MAX_FALLBACK ];
-    int nCharPos[ MAX_FALLBACK ];
+    int nCharPos[ MAX_FALLBACK+1 ];
     sal_Int32 nGlyphAdv[ MAX_FALLBACK ];
     int nValid[ MAX_FALLBACK ] = {0};
 
