@@ -126,7 +126,7 @@ public:
 
     void            DisableSelectionOnFocus();
 
-    void            SetTextSelectable( sal_Bool bTextSelectable );
+    void            SetTextSelectable( bool bTextSelectable );
     void            EnableCursor( sal_Bool bEnable );
 
     virtual bool set_property(const OString &rKey, const OString &rValue);

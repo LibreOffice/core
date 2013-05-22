@@ -674,8 +674,8 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
 
     if ( pNode->GetText().Len() < STRING_MAXLEN )
     {
-        sal_Bool bDoOverwrite = ( bOverwrite &&
-                ( aPaM.GetIndex() < pNode->GetText().Len() ) ) ? sal_True : sal_False;
+        bool bDoOverwrite = ( bOverwrite &&
+                ( aPaM.GetIndex() < pNode->GetText().Len() ) );
 
         bool bUndoAction = ( rCurSel.HasRange() || bDoOverwrite );
 

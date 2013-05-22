@@ -74,7 +74,7 @@ public:
     sal_uInt8&      GetRightToLeft()            { return nRightToLeft; }
     sal_Bool        IsRightToLeft() const       { return (nRightToLeft&1); }
 
-    sal_Bool        HasValidSize() const        { return nWidth != (-1); }
+    bool        HasValidSize() const        { return nWidth != (-1); }
 };
 
 
@@ -116,14 +116,14 @@ private:
 
     short           mnStartX;
 
-    sal_Bool            mbInvalid;  // fuer geschickte Formatierung/Ausgabe
+    bool            mbInvalid;  // fuer geschickte Formatierung/Ausgabe
 
 public:
                     TextLine()  {
                                     mnStart = mnEnd = 0;
                                     mnStartPortion = mnEndPortion = 0;
                                     mnStartX = 0;
-                                    mbInvalid = sal_True;
+                                    mbInvalid = true;
                                 }
 
     sal_Bool            IsIn( sal_uInt16 nIndex ) const
@@ -150,18 +150,18 @@ public:
 
     sal_uInt16          GetLen() const                  { return mnEnd - mnStart; }
 
-    sal_Bool            IsInvalid() const               { return mbInvalid; }
-    sal_Bool            IsValid() const                 { return !mbInvalid; }
-    void            SetInvalid()                    { mbInvalid = sal_True; }
-    void            SetValid()                      { mbInvalid = sal_False; }
+    bool            IsInvalid() const               { return mbInvalid; }
+    bool            IsValid() const                 { return !mbInvalid; }
+    void            SetInvalid()                    { mbInvalid = true; }
+    void            SetValid()                      { mbInvalid = false; }
 
-    sal_Bool            IsEmpty() const                 { return (mnEnd > mnStart) ? sal_False : sal_True; }
+    bool            IsEmpty() const                 { return (mnEnd > mnStart) ? false : true; }
 
     short           GetStartX() const               { return mnStartX; }
     void            SetStartX( short n )            { mnStartX = n; }
 
-    inline sal_Bool operator == ( const TextLine& rLine ) const;
-    inline sal_Bool operator != ( const TextLine& rLine ) const;
+    inline bool operator == ( const TextLine& rLine ) const;
+    inline bool operator != ( const TextLine& rLine ) const;
 };
 
 class TextLines : public std::vector<TextLine*> {
@@ -173,7 +173,7 @@ public:
     }
 };
 
-inline sal_Bool TextLine::operator == ( const TextLine& rLine ) const
+inline bool TextLine::operator == ( const TextLine& rLine ) const
 {
     return (    ( mnStart == rLine.mnStart ) &&
                 ( mnEnd == rLine.mnEnd ) &&
@@ -181,7 +181,7 @@ inline sal_Bool TextLine::operator == ( const TextLine& rLine ) const
                 ( mnEndPortion == rLine.mnEndPortion ) );
 }
 
-inline sal_Bool TextLine::operator != ( const TextLine& rLine ) const
+inline bool TextLine::operator != ( const TextLine& rLine ) const
 {
     return !( *this == rLine );
 }
@@ -201,8 +201,8 @@ private:
     sal_uInt16              mnInvalidPosStart;
     short               mnInvalidDiff;
 
-    sal_Bool                mbInvalid;
-    sal_Bool                mbSimple;   // nur lineares Tippen
+    bool                mbInvalid;
+    bool                mbSimple;   // nur lineares Tippen
 
 
                         TEParaPortion( const TEParaPortion& ) {;}
@@ -212,10 +212,10 @@ public:
                         ~TEParaPortion();
 
 
-    sal_Bool                IsInvalid() const           { return mbInvalid; }
-    sal_Bool                IsSimpleInvalid() const     { return mbSimple; }
-    void                SetNotSimpleInvalid()       { mbSimple = sal_False; }
-    void                SetValid()                  { mbInvalid = sal_False; mbSimple = sal_True;}
+    bool                IsInvalid() const           { return mbInvalid; }
+    bool                IsSimpleInvalid() const     { return mbSimple; }
+    void                SetNotSimpleInvalid()       { mbSimple = false; }
+    void                SetValid()                  { mbInvalid = false; mbSimple = true;}
 
     void                MarkInvalid( sal_uInt16 nStart, short nDiff);
     void                MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 nEnd );

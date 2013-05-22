@@ -26,7 +26,7 @@
 class TextUndoDelPara : public TextUndo
 {
 private:
-    sal_Bool        mbDelObject;
+    bool            mbDelObject;
     sal_uLong       mnPara;
     TextNode*       mpNode; // points at the valid not-destroyed object
 

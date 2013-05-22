@@ -152,7 +152,7 @@ TextUndoDelPara::TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_
 {
     mpNode = pNode;
     mnPara = nPara;
-    mbDelObject = sal_True;
+    mbDelObject = true;
 }
 
 TextUndoDelPara::~TextUndoDelPara()
@@ -164,7 +164,7 @@ TextUndoDelPara::~TextUndoDelPara()
 void TextUndoDelPara::Undo()
 {
     GetTextEngine()->InsertContent( mpNode, mnPara );
-    mbDelObject = sal_False;    // belongs again to the engine
+    mbDelObject = false;    // belongs again to the engine
 
     if ( GetView() )
     {
@@ -185,7 +185,7 @@ void TextUndoDelPara::Redo()
     GetDoc()->GetNodes().Remove( mnPara );
     GetTextEngine()->ImpParagraphRemoved( mnPara );
 
-    mbDelObject = sal_True; // belongs again to the Undo
+    mbDelObject = true; // belongs again to the Undo
 
     sal_uLong nParas = GetDoc()->GetNodes().Count();
     sal_uLong n = mnPara < nParas ? mnPara : (nParas-1);

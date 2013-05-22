@@ -534,10 +534,10 @@ void TextView::EraseVirtualDevice()
 sal_Bool TextView::KeyInput( const KeyEvent& rKeyEvent )
 {
     sal_Bool bDone      = sal_True;
-    sal_Bool bModified  = sal_False;
-    sal_Bool bMoved     = sal_False;
+    bool bModified  = false;
+    bool bMoved     = false;
     sal_Bool bEndKey    = sal_False;    // special CursorPosition
-    sal_Bool bAllowIdle = sal_True;
+    bool bAllowIdle = true;
 
     // check mModified;
     // the local bModified is not set e.g. by Cut/Paste, as here
@@ -625,7 +625,7 @@ sal_Bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                         uno::Reference<datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
                         Copy( aSelection );
                     }
-                    bMoved = sal_True;
+                    bMoved = true;
                     if ( nCode == KEY_END )
                         bEndKey = sal_True;
                 }
@@ -691,8 +691,8 @@ sal_Bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                     }
                     aCurSel = ImpDelete( nDel, nMode );
                     mpImpl->mpTextEngine->UndoActionEnd();
-                    bModified = sal_True;
-                    bAllowIdle = sal_False;
+                    bModified = true;
+                    bAllowIdle = false;
                 }
                 else
                     bDone = sal_False;
@@ -705,7 +705,7 @@ sal_Bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                         ImplCheckTextLen( OUString('x') ) )
                 {
                     aCurSel = mpImpl->mpTextEngine->ImpInsertText( aCurSel, '\t', !IsInsertMode() );
-                    bModified = sal_True;
+                    bModified = true;
                 }
                 else
                     bDone = sal_False;
@@ -734,7 +734,7 @@ sal_Bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                             aCurSel = mpImpl->mpTextEngine->ImpInsertText( aCurSel, pPrev->GetText().Copy( 0, n ) );
                     }
                     mpImpl->mpTextEngine->UndoActionEnd();
-                    bModified = sal_True;
+                    bModified = true;
                 }
                 else
                     bDone = sal_False;
@@ -754,7 +754,7 @@ sal_Bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                     if ( !mpImpl->mbReadOnly && ImplCheckTextLen( OUString(nCharCode) ) )    // otherwise swallow the character anyway
                     {
                         aCurSel = mpImpl->mpTextEngine->ImpInsertText( nCharCode, aCurSel, !IsInsertMode(), sal_True );
-                        bModified = sal_True;
+                        bModified = true;
                     }
                 }
                 else
@@ -1244,7 +1244,7 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
 
     KeyEvent aTranslatedKeyEvent = rKeyEvent.LogicalTextDirectionality( eTextDirection );
 
-    sal_Bool bCtrl = aTranslatedKeyEvent.GetKeyCode().IsMod1() ? sal_True : sal_False;
+    bool bCtrl = aTranslatedKeyEvent.GetKeyCode().IsMod1();
     sal_uInt16 nCode = aTranslatedKeyEvent.GetKeyCode().GetCode();
 
     bool bSelect = aTranslatedKeyEvent.GetKeyCode().IsShift();

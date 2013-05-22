@@ -42,11 +42,11 @@ private:
     ExtTextView*    mpExtTextView;
 
     bool            mbInMBDown;
-    sal_Bool            mbFocusSelectionHide;
-    sal_Bool            mbIgnoreTab;
-    sal_Bool            mbActivePopup;
-    sal_Bool            mbSelectOnTab;
-    sal_Bool            mbTextSelectable;
+    bool            mbFocusSelectionHide;
+    bool            mbIgnoreTab;
+    bool            mbActivePopup;
+    bool            mbSelectOnTab;
+    bool            mbTextSelectable;
 
 public:
                     TextWindow( Window* pParent );
@@ -68,15 +68,15 @@ public:
     virtual void    GetFocus();
     virtual void    LoseFocus();
 
-    sal_Bool            IsAutoFocusHide() const { return mbFocusSelectionHide; }
-    void            SetAutoFocusHide( sal_Bool bAutoHide ) { mbFocusSelectionHide = bAutoHide; }
+    bool            IsAutoFocusHide() const { return mbFocusSelectionHide; }
+    void            SetAutoFocusHide( bool bAutoHide ) { mbFocusSelectionHide = bAutoHide; }
 
-    sal_Bool            IsIgnoreTab() const { return mbIgnoreTab; }
-    void            SetIgnoreTab( sal_Bool bIgnore ) { mbIgnoreTab = bIgnore; }
+    bool            IsIgnoreTab() const { return mbIgnoreTab; }
+    void            SetIgnoreTab( bool bIgnore ) { mbIgnoreTab = bIgnore; }
 
-    void            DisableSelectionOnFocus() { mbSelectOnTab = sal_False; }
+    void            DisableSelectionOnFocus() { mbSelectOnTab = false; }
 
-    void            SetTextSelectable( sal_Bool bTextSelectable ) { mbTextSelectable = bTextSelectable; }
+    void            SetTextSelectable( bool bTextSelectable ) { mbTextSelectable = bTextSelectable; }
 };
 
 
@@ -250,11 +250,11 @@ void ImpVclMEdit::InitFromStyle( WinBits nWinStyle )
 
     if ( nWinStyle & WB_IGNORETAB )
     {
-        mpTextWindow->SetIgnoreTab( sal_True );
+        mpTextWindow->SetIgnoreTab( true );
     }
     else
     {
-        mpTextWindow->SetIgnoreTab( sal_False );
+        mpTextWindow->SetIgnoreTab( false );
         // #103667# VclMultiLineEdit has the flag, but focusable window also needs this flag
         WinBits nStyle = mpTextWindow->GetStyle();
         nStyle |= WINDOW_DLGCTRL_MOD1TAB;
@@ -702,11 +702,11 @@ sal_Bool ImpVclMEdit::HandleCommand( const CommandEvent& rCEvt )
 TextWindow::TextWindow( Window* pParent ) : Window( pParent )
 {
     mbInMBDown = false;
-    mbFocusSelectionHide = sal_False;
-    mbIgnoreTab = sal_False;
-    mbActivePopup = sal_False;
-    mbSelectOnTab = sal_True;
-    mbTextSelectable = sal_True;
+    mbFocusSelectionHide = false;
+    mbIgnoreTab = false;
+    mbActivePopup = false;
+    mbSelectOnTab = true;
+    mbTextSelectable = true;
 
     SetPointer( Pointer( POINTER_TEXT ) );
 
@@ -771,14 +771,14 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
         if ( Edit::GetGetSpecialCharsFunction() )
         {
             // to maintain the selection
-            mbActivePopup = sal_True;
+            mbActivePopup = true;
             OUString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
             if (!aChars.isEmpty())
             {
                 mpExtTextView->InsertText( aChars );
                 mpExtTextView->GetTextEngine()->SetModified( sal_True );
             }
-            mbActivePopup = sal_False;
+            mbActivePopup = false;
             bDone = sal_True;
         }
     }
@@ -838,7 +838,7 @@ void TextWindow::Command( const CommandEvent& rCEvt )
             pPopup->RemoveItem( nPos-1 );
         }
 
-        mbActivePopup = sal_True;
+        mbActivePopup = true;
         Point aPos = rCEvt.GetMousePosPixel();
         if ( !rCEvt.IsMouseEvent() )
         {
@@ -883,7 +883,7 @@ void TextWindow::Command( const CommandEvent& rCEvt )
                 }
                 break;
         }
-        mbActivePopup = sal_False;
+        mbActivePopup = false;
     }
     else
     {
@@ -1547,7 +1547,7 @@ void VclMultiLineEdit::DisableSelectionOnFocus()
     pImpVclMEdit->GetTextWindow()->DisableSelectionOnFocus();
 }
 
-void VclMultiLineEdit::SetTextSelectable( sal_Bool bTextSelectable )
+void VclMultiLineEdit::SetTextSelectable( bool bTextSelectable )
 {
     pImpVclMEdit->GetTextWindow()->SetTextSelectable( bTextSelectable );
 }

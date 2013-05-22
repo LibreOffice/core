@@ -7068,7 +7068,7 @@ void Window::setPosSizePixel( long nX, long nY,
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    sal_Bool bHasValidSize = !mpWindowImpl->mbDefSize;
+    bool bHasValidSize = !mpWindowImpl->mbDefSize;
 
     if ( nFlags & WINDOW_POSSIZE_POS )
         mpWindowImpl->mbDefPos = sal_False;
