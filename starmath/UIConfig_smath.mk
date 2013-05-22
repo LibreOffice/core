@@ -24,6 +24,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/smath,\
 ))
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/smath,\
+	starmath/uiconfig/smath/ui/alignmentdialog \
 	starmath/uiconfig/smath/ui/printeroptions \
 ))
 

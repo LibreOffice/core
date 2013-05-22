@@ -271,20 +271,15 @@ public:
 
 class SmAlignDialog : public ModalDialog
 {
-    RadioButton  aLeft;
-    RadioButton  aCenter;
-    RadioButton  aRight;
-    FixedLine    aFixedLine1;
-    OKButton     aOKButton1;
-    HelpButton   aHelpButton1;
-    CancelButton aCancelButton1;
-    PushButton   aDefaultButton;
+    RadioButton* m_pLeft;
+    RadioButton* m_pCenter;
+    RadioButton* m_pRight;
+    PushButton*  m_pDefaultButton;
 
     DECL_LINK(DefaultButtonClickHdl, Button *);
-    DECL_LINK(HelpButtonClickHdl, Button *);
 
 public:
-    SmAlignDialog(Window *pParent, bool bFreeRes = true);
+    SmAlignDialog(Window *pParent);
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;

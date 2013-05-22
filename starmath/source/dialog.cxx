@@ -1077,33 +1077,15 @@ IMPL_LINK( SmAlignDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton*/ 
 }
 
 
-IMPL_LINK( SmAlignDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
+SmAlignDialog::SmAlignDialog(Window * pParent)
+    : ModalDialog(pParent, "AlignmentDialog",
+        "modules/smath/ui/alignmentdialog.ui")
 {
-    // start help system
-    Help* pHelp = Application::GetHelp();
-    if( pHelp )
-    {
-        pHelp->Start( OUString( "HID_SMA_ALIGNDIALOG" ), &aHelpButton1 );
-    }
-    return 0;
-}
-
-SmAlignDialog::SmAlignDialog(Window * pParent, bool bFreeRes)
-    : ModalDialog(pParent, SmResId(RID_ALIGNDIALOG)),
-    aLeft          (this, SmResId(1)),
-    aCenter        (this, SmResId(2)),
-    aRight         (this, SmResId(3)),
-    aFixedLine1    (this, SmResId(1)),
-    aOKButton1     (this, SmResId(1)),
-    aHelpButton1   (this, SmResId(1)),
-    aCancelButton1 (this, SmResId(1)),
-    aDefaultButton (this, SmResId(1))
-{
-    if (bFreeRes)
-        FreeResource();
-
-    aDefaultButton.SetClickHdl(LINK(this, SmAlignDialog, DefaultButtonClickHdl));
-    aHelpButton1.SetClickHdl(LINK(this, SmAlignDialog, HelpButtonClickHdl));
+    get(m_pLeft, "left");
+    get(m_pCenter, "center");
+    get(m_pRight, "right");
+    get(m_pDefaultButton, "default");
+    m_pDefaultButton->SetClickHdl(LINK(this, SmAlignDialog, DefaultButtonClickHdl));
 }
 
 
@@ -1112,21 +1094,21 @@ void SmAlignDialog::ReadFrom(const SmFormat &rFormat)
     switch (rFormat.GetHorAlign())
     {
         case AlignLeft:
-            aLeft  .Check(true);
-            aCenter.Check(false);
-            aRight .Check(false);
+            m_pLeft->Check(true);
+            m_pCenter->Check(false);
+            m_pRight->Check(false);
             break;
 
         case AlignCenter:
-            aLeft  .Check(false);
-            aCenter.Check(true);
-            aRight .Check(false);
+            m_pLeft->Check(false);
+            m_pCenter->Check(true);
+            m_pRight->Check(false);
             break;
 
         case AlignRight:
-            aLeft  .Check(false);
-            aCenter.Check(false);
-            aRight .Check(true);
+            m_pLeft->Check(false);
+            m_pCenter->Check(false);
+            m_pRight->Check(true);
             break;
     }
 }
@@ -1134,9 +1116,9 @@ void SmAlignDialog::ReadFrom(const SmFormat &rFormat)
 
 void SmAlignDialog::WriteTo(SmFormat &rFormat) const
 {
-    if (aLeft.IsChecked())
+    if (m_pLeft->IsChecked())
         rFormat.SetHorAlign(AlignLeft);
-    else if (aRight.IsChecked())
+    else if (m_pRight->IsChecked())
         rFormat.SetHorAlign(AlignRight);
     else
         rFormat.SetHorAlign(AlignCenter);

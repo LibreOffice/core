@@ -23,7 +23,6 @@
 #define HID_SMA_FONTSIZEDIALOG                            "STARMATH_HID_SMA_FONTSIZEDIALOG"
 #define HID_SMA_FONTTYPEDIALOG                            "STARMATH_HID_SMA_FONTTYPEDIALOG"
 #define HID_SMA_DISTANCEDIALOG                            "STARMATH_HID_SMA_DISTANCEDIALOG"
-#define HID_SMA_ALIGNDIALOG                               "STARMATH_HID_SMA_ALIGNDIALOG"
 #define HID_SMA_SYMBOLDIALOG                              "STARMATH_HID_SMA_SYMBOLDIALOG"
 #define HID_SMA_SYMDEFINEDIALOG                           "STARMATH_HID_SMA_SYMDEFINEDIALOG"
 #define HID_SMA_WIN_DOCUMENT                              "STARMATH_HID_SMA_WIN_DOCUMENT"
