@@ -8,64 +8,40 @@
 #
 
 boost_patches :=
-#https://svn.boost.org/trac/boost/ticket/3093
-boost_patches += boost.3093.warnings.patch
 #https://svn.boost.org/trac/boost/ticket/3780
 boost_patches += boost.3780.aliasing.patch
-#https://svn.boost.org/trac/boost/ticket/4127
-boost_patches += boost.4127.warnings.patch
 #https://svn.boost.org/trac/boost/ticket/4713
 boost_patches += boost.4713.warnings.patch
-#https://svn.boost.org/trac/boost/ticket/5119
-boost_patches += boost.5119.unordered_map-cp-ctor.patch
 #http://gcc.gnu.org/bugzilla/show_bug.cgi?id=47679
 boost_patches += boost.gcc47679.patch
 #https://svn.boost.org/trac/boost/ticket/6369
 boost_patches += boost.6369.warnings.patch
 #https://svn.boost.org/trac/boost/ticket/6397
 boost_patches += boost.6397.warnings.patch
-#backport from boost 1.48.0 fix for "opcode not supported on this processor"
-boost_patches += boost.mipsbackport.patch
 #https://svn.boost.org/trac/boost/ticket/7551
 boost_patches += boost.7551.unusedvars.patch
 boost_patches += boost.4100.warnings.patch
 boost_patches += boost.4510.warnings.patch
-#https://svn.boost.org/trac/boost/ticket/6139
-boost_patches += boost.6139.clang.patch
-#https://svn.boost.org/trac/boost/ticket/6940
-boost_patches += boost.6940.glibc.patch
-#https://svn.boost.org/trac/boost/ticket/7774
-boost_patches += boost.7774.warnings.patch.1
 #https://svn.boost.org/trac/boost/ticket/6142
 boost_patches += boost.6142.warnings.patch.1
-boost_patches += boost.wundef.patch.1
-
-boost_patches += boost.windows.patch
-boost_patches += boost.vc2012.patch
 boost_patches += boost.libcdr.warnings.patch.1
 
 # Help static analysis tools (see SAL_UNUSED_PARAMETER in sal/types.h):
 ifeq (GCC,$(COM))
 boost_patches += boost_1_44_0-unused-parameters.patch
-boost_patches += boost_1_44_0-logical-op-parentheses.patch
 endif
-
-# Backporting fixes for the GCC 4.7 -std=c++11 mode from Boost 1.48.0:
-boost_patches += boost_1_44_0-gcc4.7.patch
 
 # Clang warnings:
 boost_patches += boost_1_44_0-clang-warnings.patch
-
-# Backport http://svn.boost.org/svn/boost/trunk r76133 "Fix threading detection
-# in GCC-4.7 experimental":
-boost_patches += boost_1_44_0-gthreads.patch
 
 boost_patches += boost_1_44_0-gcc4.8.patch
 
 # https://svn.boost.org/trac/boost/changeset/78496
 boost_patches += boost.4874.patch
 
-boost_patches += boost.ptree.patch
+boost_patches += boost.loplugin.patch
+boost_patches += boost.wundef.patch
+boost_patches += boost.wshadow.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 

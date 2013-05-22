@@ -10,14 +10,6 @@ Index: branches/release/boost/multi_array/base.hpp
  #include "boost/multi_array/extent_range.hpp"
  #include "boost/multi_array/extent_gen.hpp"
  #include "boost/multi_array/index_range.hpp"
-@@ -82,5 +82,6 @@
- class const_sub_array;
- 
--template <typename T, typename TPtr, typename NumDims, typename Reference>
-+  template <typename T, typename TPtr, typename NumDims, typename Reference,
-+            typename IteratorCategory>
- class array_iterator;
- 
 @@ -252,5 +253,17 @@
  /////////////////////////////////////////////////////////////////////////
  
@@ -37,23 +29,6 @@ Index: branches/release/boost/multi_array/base.hpp
 +#endif
  
  ////////////////////////////////////////////////////////////////////////
-@@ -302,6 +315,14 @@
-   // iterator support
-   //
--  typedef array_iterator<T,T*,mpl::size_t<NumDims>,reference> iterator;
--  typedef array_iterator<T,T const*,mpl::size_t<NumDims>,const_reference> const_iterator;
-+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1600)
-+  // Deal with VC 2010 output_iterator_tag requirement
-+  typedef array_iterator<T,T*,mpl::size_t<NumDims>,reference,
-+                         mutable_iterator_tag> iterator;
-+#else
-+  typedef array_iterator<T,T*,mpl::size_t<NumDims>,reference,
-+                         boost::random_access_traversal_tag> iterator;
-+#endif
-+  typedef array_iterator<T,T const*,mpl::size_t<NumDims>,const_reference,
-+                         boost::random_access_traversal_tag> const_iterator;
- 
-   typedef ::boost::reverse_iterator<iterator> reverse_iterator;
 @@ -322,5 +343,6 @@
                             const index* strides,
                             const index* index_bases) const {
@@ -62,23 +37,6 @@ Index: branches/release/boost/multi_array/base.hpp
 +      detail::multi_array::CollectionConcept<IndexList> >();
      ignore_unused_variable_warning(index_bases);
      ignore_unused_variable_warning(extents);
-@@ -333,7 +355,13 @@
- 
-     index offset = 0;
--    for (size_type n = 0; n != NumDims; ++n) 
--      offset += indices[n] * strides[n];
--    
-+    {
-+      typename IndexList::const_iterator i = indices.begin();
-+      size_type n = 0; 
-+      while (n != NumDims) {
-+        offset += (*i) * strides[n];
-+        ++n;
-+        ++i;
-+      }
-+    }
-     return base[offset];
-   }
 Index: branches/release/boost/multi_array/concept_checks.hpp
 ===================================================================
 --- a/branches/release/boost/multi_array/concept_checks.hpp
@@ -89,52 +47,3 @@ Index: branches/release/boost/multi_array/concept_checks.hpp
 +      function_requires< boost::OutputIterator<iterator,value_type> >();
        
        // RG - a( CollectionArchetype) when available...
-Index: branches/release/boost/multi_array/iterator.hpp
-===================================================================
---- a/branches/release/boost/multi_array/iterator.hpp
-+++ b/branches/release/boost/multi_array/iterator.hpp
-@@ -45,14 +45,16 @@
- };
- 
--template <typename T, typename TPtr, typename NumDims, typename Reference>
-+template <typename T, typename TPtr, typename NumDims, typename Reference,
-+          typename IteratorCategory>
- class array_iterator;
- 
--template <typename T, typename TPtr, typename NumDims, typename Reference>
-+template <typename T, typename TPtr, typename NumDims, typename Reference,
-+          typename IteratorCategory>
- class array_iterator
-   : public
-     iterator_facade<
--        array_iterator<T,TPtr,NumDims,Reference>
-+        array_iterator<T,TPtr,NumDims,Reference,IteratorCategory>
-       , typename associated_types<T,NumDims>::value_type
--      , boost::random_access_traversal_tag
-+      , IteratorCategory
-       , Reference
-     >
-@@ -70,5 +72,5 @@
- 
-   typedef iterator_facade<
--        array_iterator<T,TPtr,NumDims,Reference>
-+            array_iterator<T,TPtr,NumDims,Reference,IteratorCategory>
-       , typename detail::multi_array::associated_types<T,NumDims>::value_type
-       , boost::random_access_traversal_tag
-@@ -80,5 +82,5 @@
- 
- #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
--  template <typename, typename, typename, typename>
-+  template <typename, typename, typename, typename, typename>
-     friend class array_iterator;
- #else
-@@ -106,7 +108,7 @@
-     strides_(strides), index_base_(index_base) { }
- 
--  template <typename OPtr, typename ORef>
-+  template <typename OPtr, typename ORef, typename Cat>
-   array_iterator(
--      const array_iterator<T,OPtr,NumDims,ORef>& rhs
-+      const array_iterator<T,OPtr,NumDims,ORef,Cat>& rhs
-     , typename boost::enable_if_convertible<OPtr,TPtr>::type* = 0
-   )

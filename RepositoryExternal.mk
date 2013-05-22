@@ -556,6 +556,24 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
+define gb_LinkTarget__use_boostsystem
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(BOOST_CPPFLAGS) \
+)
+
+$(call gb_LinkTarget_add_ldflags,$(1),\
+	$(BOOST_LDFLAGS) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(BOOST_SYSTEM_LIB) \
+)
+
+endef
+
+gb_ExternalProject__use_boostsystem :=
+
 define gb_LinkTarget__use_boost_headers
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
@@ -570,6 +588,7 @@ else # !SYSTEM_BOOST
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	boostdatetime \
+	boostsystem \
 ))
 
 ifeq ($(OS),WNT)
@@ -598,6 +617,21 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 	boostdatetime \
 )
 
+endef
+
+define gb_LinkTarget__use_boostsystem
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DBOOST_ALL_NO_LIB \
+)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	boostsystem \
+)
+
+endef
+
+define gb_ExternalProject__use_boostsystem
+$(call gb_LinkTarget_use_static_libraries,$(1),boostsystem)
 endef
 
 define gb_LinkTarget__use_boost_headers

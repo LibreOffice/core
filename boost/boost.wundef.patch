@@ -1,0 +1,66 @@
+--- foo/foo/foo/boost/multi_array/base.hpp
++++ foo/foo/foo/boost/multi_array/base.hpp
+@@ -65,7 +65,7 @@
+ // object creation in small-memory environments.  Thus, the objects
+ // can be left undefined by defining BOOST_MULTI_ARRAY_NO_GENERATORS 
+ // before loading multi_array.hpp.
+-#if !BOOST_MULTI_ARRAY_NO_GENERATORS
++#if !defined(BOOST_MULTI_ARRAY_NO_GENERATORS) || !BOOST_MULTI_ARRAY_NO_GENERATORS
+ namespace {
+   multi_array_types::extent_gen extents;
+   multi_array_types::index_gen indices;
+--- foo/foo/foo/boost/preprocessor/tuple/elem.hpp
++++ foo/foo/foo/boost/preprocessor/tuple/elem.hpp
+@@ -22,7 +22,7 @@
+ # include <boost/preprocessor/variadic/elem.hpp>
+ #
+ # if BOOST_PP_VARIADICS
+-#    if BOOST_PP_VARIADICS_MSVC
++#    if defined(BOOST_PP_VARIADICS_MSVC) && BOOST_PP_VARIADICS_MSVC
+ #        define BOOST_PP_TUPLE_ELEM(...) BOOST_PP_TUPLE_ELEM_I(BOOST_PP_OVERLOAD(BOOST_PP_TUPLE_ELEM_O_, __VA_ARGS__), (__VA_ARGS__))
+ #        define BOOST_PP_TUPLE_ELEM_I(m, args) BOOST_PP_TUPLE_ELEM_II(m, args)
+ #        define BOOST_PP_TUPLE_ELEM_II(m, args) BOOST_PP_CAT(m ## args,)
+--- foo/foo/foo/boost/preprocessor/tuple/rem.hpp
++++ foo/foo/foo/boost/preprocessor/tuple/rem.hpp
+@@ -105,7 +105,7 @@
+ # /* BOOST_PP_TUPLE_REM_CTOR */
+ #
+ # if BOOST_PP_VARIADICS
+-#    if BOOST_PP_VARIADICS_MSVC
++#    if defined(BOOST_PP_VARIADICS_MSVC) && BOOST_PP_VARIADICS_MSVC
+ #        define BOOST_PP_TUPLE_REM_CTOR(...) BOOST_PP_TUPLE_REM_CTOR_I(BOOST_PP_OVERLOAD(BOOST_PP_TUPLE_REM_CTOR_O_, __VA_ARGS__), (__VA_ARGS__))
+ #        define BOOST_PP_TUPLE_REM_CTOR_I(m, args) BOOST_PP_TUPLE_REM_CTOR_II(m, args)
+ #        define BOOST_PP_TUPLE_REM_CTOR_II(m, args) BOOST_PP_CAT(m ## args,)
+--- foo/foo/foo/boost/preprocessor/tuple/to_list.hpp
++++ foo/foo/foo/boost/preprocessor/tuple/to_list.hpp
+@@ -23,7 +23,7 @@
+ # /* BOOST_PP_TUPLE_TO_LIST */
+ #
+ # if BOOST_PP_VARIADICS
+-#    if BOOST_PP_VARIADICS_MSVC
++#    if defined(BOOST_PP_VARIADICS_MSVC) && BOOST_PP_VARIADICS_MSVC
+ #        define BOOST_PP_TUPLE_TO_LIST(...) BOOST_PP_TUPLE_TO_LIST_I(BOOST_PP_OVERLOAD(BOOST_PP_TUPLE_TO_LIST_O_, __VA_ARGS__), (__VA_ARGS__))
+ #        define BOOST_PP_TUPLE_TO_LIST_I(m, args) BOOST_PP_TUPLE_TO_LIST_II(m, args)
+ #        define BOOST_PP_TUPLE_TO_LIST_II(m, args) BOOST_PP_CAT(m ## args,)
+--- foo/foo/foo/boost/preprocessor/variadic/elem.hpp
++++ foo/foo/foo/boost/preprocessor/variadic/elem.hpp
+@@ -19,7 +19,7 @@
+ # /* BOOST_PP_VARIADIC_ELEM */
+ #
+ # if BOOST_PP_VARIADICS
+-#    if BOOST_PP_VARIADICS_MSVC
++#    if defined(BOOST_PP_VARIADICS_MSVC) && BOOST_PP_VARIADICS_MSVC
+ #        define BOOST_PP_VARIADIC_ELEM(n, ...) BOOST_PP_VARIADIC_ELEM_I(n,__VA_ARGS__)
+ #        define BOOST_PP_VARIADIC_ELEM_I(n, ...) BOOST_PP_CAT(BOOST_PP_CAT(BOOST_PP_VARIADIC_ELEM_, n)(__VA_ARGS__,),)
+ #    else
+--- foo/foo/foo/boost/preprocessor/variadic/size.hpp
++++ foo/foo/foo/boost/preprocessor/variadic/size.hpp
+@@ -19,7 +19,7 @@
+ # /* BOOST_PP_VARIADIC_SIZE */
+ #
+ # if BOOST_PP_VARIADICS
+-#    if BOOST_PP_VARIADICS_MSVC
++#    if defined(BOOST_PP_VARIADICS_MSVC) && BOOST_PP_VARIADICS_MSVC
+ #        define BOOST_PP_VARIADIC_SIZE(...) BOOST_PP_CAT(BOOST_PP_VARIADIC_SIZE_I(__VA_ARGS__, 64, 63, 62, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1,),)
+ #    else
+ #        define BOOST_PP_VARIADIC_SIZE(...) BOOST_PP_VARIADIC_SIZE_I(__VA_ARGS__, 64, 63, 62, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1,)

@@ -1,50 +1,3 @@
---- boost/boost/archive/basic_archive.hpp	2010-08-11 20:15:46.000000000 +0200
-+++ boost/boost/archive/basic_archive.hpp	2013-05-17 15:39:58.624333369 +0200
-@@ -54,7 +54,7 @@
-         return *this;
-     }
-     // used for text output
--    operator const base_type () const {
-+    operator base_type () const {
-         return t;
-     }                
-     // used for text input
-@@ -90,7 +90,7 @@
-         return *this;
-     }
-     // used for text output
--    operator const base_type () const {
-+    operator base_type () const {
-         return t;
-     }                
-     // used for text intput
-@@ -127,7 +127,7 @@
-     }
- 
-     // used for text output
--    operator const int () const {
-+    operator int () const {
-         return t;
-     }                
-     // used for text input
-@@ -161,7 +161,7 @@
-         return *this;
-     }
-     // used for text output
--    operator const uint_least32_t () const {
-+    operator uint_least32_t () const {
-         return t;
-     }                
-     // used for text input
-@@ -254,7 +254,7 @@
- #define BOOST_ARCHIVE_STRONG_TYPEDEF(T, D)         \
-     class D : public T {                           \
-     public:                                        \
--        explicit D(const T t) : T(t){}             \
-+        explicit D(const T t_) : T(t_){}             \
-     };                                             \
- /**/
- 
 --- boost/boost/multi_index/detail/index_matcher.hpp	2008-07-03 18:51:53.000000000 +0200
 +++ boost/boost/multi_index/detail/index_matcher.hpp	2013-05-17 15:30:12.539099597 +0200
 @@ -132,17 +132,17 @@
@@ -236,92 +189,6 @@
    }
  #endif
  
---- boost/boost/property_tree/detail/exception_implementation.hpp	2009-09-01 23:27:45.000000000 +0200
-+++ boost/boost/property_tree/detail/exception_implementation.hpp	2013-05-17 15:28:28.599529530 +0200
-@@ -30,8 +30,8 @@
-     ///////////////////////////////////////////////////////////////////////////
-     // ptree_error
- 
--    inline ptree_error::ptree_error(const std::string &what): 
--        std::runtime_error(what) 
-+    inline ptree_error::ptree_error(const std::string &what_): 
-+        std::runtime_error(what_) 
-     {
-     }
- 
-@@ -43,8 +43,8 @@
-     // ptree_bad_data
- 
-     template<class D> inline
--    ptree_bad_data::ptree_bad_data(const std::string &what, const D &data):
--        ptree_error(what), m_data(data)
-+    ptree_bad_data::ptree_bad_data(const std::string &what_, const D &data_):
-+        ptree_error(what_), m_data(data_)
-     {
-     }
- 
-@@ -62,8 +62,8 @@
-     // ptree_bad_path
- 
-     template<class P> inline
--    ptree_bad_path::ptree_bad_path(const std::string &what, const P &path):
--        ptree_error(detail::prepare_bad_path_what(what, path)), m_path(path)
-+    ptree_bad_path::ptree_bad_path(const std::string &what_, const P &path_):
-+        ptree_error(detail::prepare_bad_path_what(what_, path_)), m_path(path_)
-     {
- 
-     }
---- boost/boost/property_tree/detail/file_parser_error.hpp	2009-09-01 23:27:45.000000000 +0200
-+++ boost/boost/property_tree/detail/file_parser_error.hpp	2013-05-17 15:36:01.615914822 +0200
-@@ -26,11 +26,11 @@
-         // Construction & destruction
- 
-         // Construct error
--        file_parser_error(const std::string &message,
--                          const std::string &filename,
--                          unsigned long line) :
--            ptree_error(format_what(message, filename, line)),
--            m_message(message), m_filename(filename), m_line(line)
-+        file_parser_error(const std::string &message_,
-+                          const std::string &filename_,
-+                          unsigned long line_) :
-+            ptree_error(format_what(message_, filename_, line_)),
-+            m_message(message_), m_filename(filename_), m_line(line_)
-         {
-         }
- 
-@@ -69,20 +69,20 @@
-         unsigned long m_line;
- 
-         // Format error message to be returned by std::runtime_error::what()
--        std::string format_what(const std::string &message,
--                                const std::string &filename,
--                                unsigned long line)
-+        std::string format_what(const std::string &message_,
-+                                const std::string &filename_,
-+                                unsigned long line_)
-         {
-             std::stringstream stream;
--            if (line > 0)
--                stream << (filename.empty() ? "<unspecified file>"
--                                            : filename.c_str())
--                       << '(' << line << "): "
--                       << message;
-+            if (line_ > 0)
-+                stream << (filename_.empty() ? "<unspecified file>"
-+                                            : filename_.c_str())
-+                       << '(' << line_ << "): "
-+                       << message_;
-             else
--                stream << (filename.empty() ? "<unspecified file>"
--                                            : filename.c_str())
--                       << ": " << message;
-+                stream << (filename_.empty() ? "<unspecified file>"
-+                                            : filename_.c_str())
-+                       << ": " << message_;
-             return stream.str();
-         }
- 
 --- boost/boost/property_tree/detail/json_parser_error.hpp	2007-05-13 00:02:53.000000000 +0200
 +++ boost/boost/property_tree/detail/json_parser_error.hpp	2013-05-17 15:36:44.605902442 +0200
 @@ -20,10 +20,10 @@
@@ -417,17 +284,6 @@
                  u = (std::min)(u, static_cast<unsigned long>((std::numeric_limits<Ch>::max)()));
 --- boost/boost/property_tree/detail/ptree_implementation.hpp	2010-07-03 22:59:45.000000000 +0200
 +++ boost/boost/property_tree/detail/ptree_implementation.hpp	2013-05-17 15:55:56.449713452 +0200
-@@ -183,8 +183,8 @@
-     }
- 
-     template<class K, class D, class C> inline
--    basic_ptree<K, D, C>::basic_ptree(const data_type &data)
--        : m_data(data), m_children(new typename subs::base_container)
-+    basic_ptree<K, D, C>::basic_ptree(const data_type &data_)
-+        : m_data(data_), m_children(new typename subs::base_container)
-     {
-     }
- 
 @@ -539,48 +539,48 @@
  
      template<class K, class D, class C>
@@ -582,7 +438,7 @@
      }
  
      template<class K, class D, class C>
-@@ -759,17 +759,17 @@
+@@ -759,18 +759,18 @@
          std::basic_string<Ch>
      >::type
      basic_ptree<K, D, C>::get(
@@ -601,7 +457,8 @@
      {
 -        if (optional<const self_type&> child = get_child_optional(path))
 +        if (optional<const self_type&> child = get_child_optional(path_))
-             return child.get().BOOST_NESTED_TEMPLATE get_value_optional<Type>(tr);
+             return child.get().
+                 BOOST_NESTED_TEMPLATE get_value_optional<Type>(tr);
          else
              return optional<Type>();
 @@ -778,9 +778,9 @@
@@ -668,17 +525,6 @@
                     typename translator_between<data_type, Type>::type());
      }
  
---- boost/boost/serialization/collection_size_type.hpp	2010-07-09 18:50:03.000000000 +0200
-+++ boost/boost/serialization/collection_size_type.hpp	2013-05-17 15:40:32.789528782 +0200
-@@ -37,7 +37,7 @@
-         return *this;
-     }
-     // used for text output
--    operator const base_type () const {
-+    operator base_type () const {
-         return t;
-     }                
-     // used for text input
 --- boost/boost/spirit/home/classic/error_handling/exceptions.hpp	2013-05-17 15:57:23.722638823 +0200
 +++ boost/boost/spirit/home/classic/error_handling/exceptions.hpp	2013-05-17 15:26:32.319247352 +0200
 @@ -126,8 +126,8 @@

@@ -321,24 +321,3 @@
                  ).second;
              }
 
---- misc/boost_1_44_0/boost/variant/variant.hpp	2012-01-08 20:16:41.321760852 +0000
-+++ misc/build/boost_1_44_0/boost/variant/variant.hpp	2012-01-08 20:25:43.233484675 +0000
-@@ -1143,14 +1143,14 @@
-     which_t which_;
-     storage_t storage_;
- 
--    void indicate_which(int which)
-+    void indicate_which(int i_which)
-     {
--        which_ = static_cast<which_t>( which );
-+        which_ = static_cast<which_t>( i_which );
-     }
- 
--    void indicate_backup_which(int which)
-+    void indicate_backup_which(int i_which)
-     {
--        which_ = static_cast<which_t>( -(which + 1) );
-+        which_ = static_cast<which_t>( -(i_which + 1) );
-     }
- 
- private: // helpers, for queries (below)

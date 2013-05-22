@@ -1,74 +1,14 @@
---- misc/boost_1_44_0/boost/algorithm/string/detail/find_format_store.hpp	2010-07-10 22:29:03.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/algorithm/string/detail/find_format_store.hpp	2012-06-06 23:13:26.000000000 +0200
-@@ -71,7 +71,7 @@
-             };
+--- misc/boost_1_44_0/boost/math/tools/fraction.hpp
++++ misc/build/boost_1_44_0/boost/math/tools/fraction.hpp
+@@ -33,7 +33,7 @@
+        typedef typename Gen::result_type result_type;
+        typedef typename Gen::result_type value_type;
  
-             template<typename InputT, typename FindResultT>
--            bool check_find_result(InputT& Input, FindResultT& FindResult)
-+            bool check_find_result(InputT&, FindResultT& FindResult)
-             {
-                 typedef BOOST_STRING_TYPENAME 
-                     range_const_iterator<InputT>::type input_iterator_type; 
---- misc/boost_1_44_0/boost/concept_check.hpp
-+++ misc/build/boost_1_44_0/boost/concept_check.hpp
-@@ -136,7 +136,18 @@ namespace boost
-   {
-     BOOST_CONCEPT_USAGE(Assignable) {
- #if !defined(_ITERATOR_) // back_insert_iterator broken for VC++ STL
-+#if defined __clang__
-+#if __has_warning("-Wself-assign-field")
-+#pragma clang diagnostic push
-+#pragma clang diagnostic ignored "-Wself-assign-field"
-+#endif
-+#endif
-       a = a;             // require assignment operator
-+#if defined __clang__
-+#if __has_warning("-Wself-assign-field")
-+#pragma clang diagnostic pop
-+#endif
-+#endif
- #endif
-       const_constraints(a);
-     }
---- misc/boost_1_44_0/boost/date_time/dst_rules.hpp	2008-02-27 21:00:24.000000000 +0100
-+++ misc/build/boost_1_44_0/boost/date_time/dst_rules.hpp	2012-06-06 23:11:03.000000000 +0200
-@@ -371,7 +371,7 @@
-         return is_not_in_dst;
-       }
- 
--      static bool is_dst_boundary_day(date_type d)
-+      static bool is_dst_boundary_day(date_type)
-       {
-         return false;
-       }
---- misc/boost_1_44_0/boost/date_time/gregorian_calendar.ipp	2010-01-10 20:17:23.000000000 +0100
-+++ misc/build/boost_1_44_0/boost/date_time/gregorian_calendar.ipp	2012-06-06 22:27:07.000000000 +0200
-@@ -47,7 +47,7 @@
-       return week;
-     }
- 
--    if ((week == 53)) {
-+    if (week == 53) {
-       if((day==6) ||(day == 5 && is_leap_year(ymd.year))) {
-         return week; //under these circumstances week == 53.
-       } else {
---- misc/boost_1_44_0/boost/date_time/period_formatter.hpp	2008-02-27 21:00:24.000000000 +0100
-+++ misc/build/boost_1_44_0/boost/date_time/period_formatter.hpp	2012-06-06 23:12:48.000000000 +0200
-@@ -114,10 +114,10 @@
-     {
-       m_range_option = option;
-     }
--    void delimiter_strings(const string_type& separator,
--                           const string_type& start_delim,
--                           const string_type& open_end_delim,
--                           const string_type& closed_end_delim)
-+    void delimiter_strings(const string_type&,
-+                           const string_type&,
-+                           const string_type&,
-+                           const string_type&)
-     {
-       m_period_separator;
-       m_period_start_delimeter;
+-       static result_type a(const value_type& v)
++       static result_type a(const value_type&)
+        {
+           return 1;
+        }
 --- misc/boost_1_44_0/boost/token_functions.hpp	2010-06-12 14:06:28.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/token_functions.hpp	2012-06-06 23:12:27.000000000 +0200
 @@ -285,7 +285,7 @@
@@ -90,8 +30,8 @@
 +#pragma GCC system_header
 +#endif
 +
- #include <boost/config/no_tr1/cmath.hpp>
- #include <iostream>
+ #include <istream>
+ #include <iosfwd>
  #include <algorithm>     // std::max
 --- misc/boost_1_44_0/boost/random/shuffle_output.hpp
 +++ misc/build/boost_1_44_0/boost/random/shuffle_output.hpp
@@ -103,9 +43,9 @@
 +#pragma GCC system_header
 +#endif
 +
- #include <iostream>
- #include <algorithm>     // std::copy
- #include <cassert>
+ #include <boost/random/shuffle_order.hpp>
+ 
+ namespace boost {
 --- misc/boost_1_44_0/boost/random/subtract_with_carry.hpp
 +++ misc/build/boost_1_44_0/boost/random/subtract_with_carry.hpp
 @@ -16,6 +16,10 @@
@@ -116,34 +56,26 @@
 +#pragma GCC system_header
 +#endif
 +
- #include <boost/config/no_tr1/cmath.hpp>
+ #include <boost/config/no_tr1/cmath.hpp>         // std::pow
  #include <iostream>
  #include <algorithm>     // std::equal
---- misc/boost_1_44_0/boost/uuid/name_generator.hpp
-+++ misc/build/boost_1_44_0/boost/uuid/name_generator.hpp
-@@ -72,10 +72,10 @@
- 
-         for (size_t i=0; i<count; i++) {
-             uint32_t c = characters[i];
--            sha.process_byte( (c >> 0) && 0xFF );
--            sha.process_byte( (c >> 8) && 0xFF );
--            sha.process_byte( (c >> 16) && 0xFF );
--            sha.process_byte( (c >> 24) && 0xFF );
-+            sha.process_byte( (c >> 0) & 0xFF );
-+            sha.process_byte( (c >> 8) & 0xFF );
-+            sha.process_byte( (c >> 16) & 0xFF );
-+            sha.process_byte( (c >> 24) & 0xFF );
-         }
-     }
-     
---- misc/boost_1_44_0/boost/random/discard_block.hpp
-+++ misc/build/boost_1_44_0/boost/random/discard_block.hpp
-@@ -76,7 +76,7 @@
- 
-   result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (_rng.min)(); }
-   result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (_rng.max)(); }
--  static bool validation(result_type x) { return true; }  // dummy
-+  static bool validation(result_type) { return true; }  // dummy
- 
- #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
- 
+--- misc/boost_1_44_0/boost/smart_ptr/detail/make_array_helper.hpp
++++ misc/build/boost_1_44_0/boost/smart_ptr/detail/make_array_helper.hpp
+@@ -72,7 +72,7 @@
+                 memory->~Y();
+             }
+             template<typename U>
+-            bool operator==(const make_array_helper<T[], U>& other) const {
++            bool operator==(const make_array_helper<T[], U>&) const {
+                 return true;
+             }
+             template<typename U>
+@@ -138,7 +138,7 @@
+                 memory->~Y();
+             }
+             template<typename U>
+-            bool operator==(const make_array_helper<T[N], U>& other) const {
++            bool operator==(const make_array_helper<T[N], U>&) const {
+                 return true;
+             }
+             template<typename U>

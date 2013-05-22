@@ -1,0 +1,399 @@
+--- foo/foo/foo/boost/math/special_functions/detail/bessel_jy_series.hpp
++++ foo/foo/foo/boost/math/special_functions/detail/bessel_jy_series.hpp
+@@ -194,9 +194,9 @@
+    }
+    else
+    {
+-      int s;
+-      prefix = boost::math::lgamma(-v, &s, pol) + p;
+-      prefix = exp(prefix) * s / constants::pi<T>();
++      int s_lcl;
++      prefix = boost::math::lgamma(-v, &s_lcl, pol) + p;
++      prefix = exp(prefix) * s_lcl / constants::pi<T>();
+    }
+    bessel_y_small_z_series_term_b<T, Policy> s2(v, x);
+    max_iter = policies::get_max_series_iterations<Policy>();
+--- foo/foo/foo/boost/math/special_functions/ellint_rj.hpp
++++ foo/foo/foo/boost/math/special_functions/ellint_rj.hpp
+@@ -91,11 +91,11 @@
+ 
+        BOOST_ASSERT(pmy >= 0);
+ 
+-       T p = pmy + y;
+-       value = boost::math::ellint_rj(x, y, z, p, pol);
++       T p_lcl = pmy + y;
++       value = boost::math::ellint_rj(x, y, z, p_lcl, pol);
+        value *= pmy;
+        value -= 3 * boost::math::ellint_rf(x, y, z, pol);
+-       value += 3 * sqrt((x * y * z) / (x * z + p * q)) * boost::math::ellint_rc(x * z + p * q, p * q, pol);
++       value += 3 * sqrt((x * y * z) / (x * z + p_lcl * q)) * boost::math::ellint_rc(x * z + p_lcl * q, p_lcl * q, pol);
+        value /= (y + q);
+        return value;
+     }
+--- foo/foo/foo/boost/random/binomial_distribution.hpp
++++ foo/foo/foo/boost/random/binomial_distribution.hpp
+@@ -272,21 +272,21 @@
+         using std::sqrt;
+         using std::pow;
+ 
+-        RealType p = (0.5 < _p)? (1 - _p) : _p;
+-        IntType t = _t;
++        RealType p_lcl = (0.5 < _p)? (1 - _p) : _p;
++        IntType t_lcl = _t;
+         
+-        m = static_cast<IntType>((t+1)*p);
++        m = static_cast<IntType>((t_lcl+1)*p_lcl);
+ 
+         if(use_inversion()) {
+-            q_n = pow((1 - p), static_cast<RealType>(t));
++            q_n = pow((1 - p_lcl), static_cast<RealType>(t_lcl));
+         } else {
+-            btrd.r = p/(1-p);
+-            btrd.nr = (t+1)*btrd.r;
+-            btrd.npq = t*p*(1-p);
++            btrd.r = p_lcl/(1-p_lcl);
++            btrd.nr = (t_lcl+1)*btrd.r;
++            btrd.npq = t_lcl*p_lcl*(1-p_lcl);
+             RealType sqrt_npq = sqrt(btrd.npq);
+             btrd.b = 1.15 + 2.53 * sqrt_npq;
+-            btrd.a = -0.0873 + 0.0248*btrd.b + 0.01*p;
+-            btrd.c = t*p + 0.5;
++            btrd.a = -0.0873 + 0.0248*btrd.b + 0.01*p_lcl;
++            btrd.c = t_lcl*p_lcl + 0.5;
+             btrd.alpha = (2.83 + 5.1/btrd.b) * sqrt_npq;
+             btrd.v_r = 0.92 - 4.2/btrd.b;
+             btrd.u_rv_r = 0.86*btrd.v_r;
+@@ -304,9 +304,9 @@
+             RealType u;
+             RealType v = uniform_01<RealType>()(urng);
+             if(v <= btrd.u_rv_r) {
+-                RealType u = v/btrd.v_r - 0.43;
++                RealType u_lcl = v/btrd.v_r - 0.43;
+                 return static_cast<IntType>(floor(
+-                    (2*btrd.a/(0.5 - abs(u)) + btrd.b)*u + btrd.c));
++                    (2*btrd.a/(0.5 - abs(u_lcl)) + btrd.b)*u_lcl + btrd.c));
+             }
+ 
+             if(v >= btrd.v_r) {
+@@ -344,9 +344,9 @@
+                 v = log(v);
+                 RealType rho =
+                     (km/btrd.npq)*(((km/3. + 0.625)*km + 1./6)/btrd.npq + 0.5);
+-                RealType t = -km*km/(2*btrd.npq);
+-                if(v < t - rho) return k;
+-                if(v > t + rho) continue;
++                RealType t_lcl = -km*km/(2*btrd.npq);
++                if(v < t_lcl - rho) return k;
++                if(v > t_lcl + rho) continue;
+ 
+                 IntType nm = _t - m + 1;
+                 RealType h = (m + 0.5)*log((m + 1)/(btrd.r*nm))
+@@ -367,11 +367,11 @@
+     }
+ 
+     template<class URNG>
+-    IntType invert(IntType t, RealType p, URNG& urng) const
++    IntType invert(IntType t_arg, RealType p_arg, URNG& urng) const
+     {
+-        RealType q = 1 - p;
+-        RealType s = p / q;
+-        RealType a = (t + 1) * s;
++        RealType q = 1 - p_arg;
++        RealType s = p_arg / q;
++        RealType a = (t_arg + 1) * s;
+         RealType r = q_n;
+         RealType u = uniform_01<RealType>()(urng);
+         IntType x = 0;
+--- foo/foo/foo/boost/random/geometric_distribution.hpp
++++ foo/foo/foo/boost/random/geometric_distribution.hpp
+@@ -104,8 +104,8 @@
+      *
+      * Requires: 0 < p < 1
+      */
+-    explicit geometric_distribution(const RealType& p = RealType(0.5))
+-      : _p(p)
++    explicit geometric_distribution(const RealType& p_arg = RealType(0.5))
++      : _p(p_arg)
+     {
+         BOOST_ASSERT(RealType(0) < _p && _p < RealType(1));
+         init();
+--- foo/foo/foo/boost/random/shuffle_order.hpp
++++ foo/foo/foo/boost/random/shuffle_order.hpp
+@@ -200,8 +200,8 @@
+     }
+ 
+     /** Returns true if the two generators will produce identical sequences. */
+-    BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(shuffle_order_engine, x, y)
+-    { return x._rng == y._rng && x.y == y.y && std::equal(x.v, x.v+k, y.v); }
++    BOOST_RANDOM_DETAIL_EQUALITY_OPERATOR(shuffle_order_engine, x, y_arg)
++    { return x._rng == y_arg._rng && x.y == y_arg.y && std::equal(x.v, x.v+k, y_arg.v); }
+     /** Returns true if the two generators will produce different sequences. */
+     BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(shuffle_order_engine)
+  
+--- foo/foo/foo/boost/random/subtract_with_carry.hpp
++++ foo/foo/foo/boost/random/subtract_with_carry.hpp
+@@ -268,21 +268,21 @@
+ 
+     friend struct detail::subtract_with_carry_discard;
+ 
+-    IntType do_update(std::size_t current, std::size_t short_index, IntType carry)
++    IntType do_update(std::size_t current, std::size_t short_index, IntType carry_arg)
+     {
+         IntType delta;
+-        IntType temp = x[current] + carry;
++        IntType temp = x[current] + carry_arg;
+         if (x[short_index] >= temp) {
+             // x(n) >= 0
+             delta =  x[short_index] - temp;
+-            carry = 0;
++            carry_arg = 0;
+         } else {
+             // x(n) < 0
+             delta = modulus - temp + x[short_index];
+-            carry = 1;
++            carry_arg = 1;
+         }
+         x[current] = delta;
+-        return carry;
++        return carry_arg;
+     }
+     /// \endcond
+ 
+@@ -498,17 +498,17 @@
+ 
+     friend struct detail::subtract_with_carry_discard;
+ 
+-    RealType do_update(std::size_t current, std::size_t short_index, RealType carry)
++    RealType do_update(std::size_t current, std::size_t short_index, RealType carry_arg)
+     {
+-        RealType delta = x[short_index] - x[current] - carry;
++        RealType delta = x[short_index] - x[current] - carry_arg;
+         if(delta < 0) {
+             delta += RealType(1);
+-            carry = RealType(1)/_modulus;
++            carry_arg = RealType(1)/_modulus;
+         } else {
+-            carry = 0;
++            carry_arg = 0;
+         }
+         x[current] = delta;
+-        return carry;
++        return carry_arg;
+     }
+     /// \endcond
+     std::size_t k;
+--- foo/foo/foo/boost/smart_ptr/detail/allocate_array_helper.hpp
++++ foo/foo/foo/boost/smart_ptr/detail/allocate_array_helper.hpp
+@@ -33,10 +33,10 @@
+             struct rebind {
+                 typedef allocate_array_helper<A, T[], U> other;
+             };
+-            allocate_array_helper(const A& allocator, std::size_t size, T** data)
+-                : allocator(allocator),
+-                  size(sizeof(T) * size),
+-                  data(data) {
++            allocate_array_helper(const A& allocator_arg, std::size_t size_arg, T** data_arg)
++                : allocator(allocator_arg),
++                  size(sizeof(T) * size_arg),
++                  data(data_arg) {
+             }
+             template<class U>
+             allocate_array_helper(const allocate_array_helper<A, T[], U>& other) 
+@@ -107,9 +107,9 @@
+             struct rebind {
+                 typedef allocate_array_helper<A, T[N], U> other;
+             };
+-            allocate_array_helper(const A& allocator, T** data)
+-                : allocator(allocator),
+-                  data(data) {
++            allocate_array_helper(const A& allocator_arg, T** data_arg)
++                : allocator(allocator_arg),
++                  data(data_arg) {
+             }
+             template<class U>
+             allocate_array_helper(const allocate_array_helper<A, T[N], U>& other) 
+--- foo/foo/foo/boost/smart_ptr/detail/array_deleter.hpp
++++ foo/foo/foo/boost/smart_ptr/detail/array_deleter.hpp
+@@ -20,8 +20,8 @@
+         template<typename T>
+         class array_deleter<T[]> {
+         public:
+-            array_deleter(std::size_t size)
+-                : size(size),
++            array_deleter(std::size_t size_arg)
++                : size(size_arg),
+                   object(0) {
+             }
+             ~array_deleter() {
+--- foo/foo/foo/boost/smart_ptr/detail/make_array_helper.hpp
++++ foo/foo/foo/boost/smart_ptr/detail/make_array_helper.hpp
+@@ -31,9 +31,9 @@
+             struct rebind {
+                 typedef make_array_helper<T[], U> other;
+             };
+-            make_array_helper(std::size_t size, T** data)
+-                : size(sizeof(T) * size),
+-                  data(data) {
++            make_array_helper(std::size_t size_arg, T** data_arg)
++                : size(sizeof(T) * size_arg),
++                  data(data_arg) {
+             }
+             template<class U>
+             make_array_helper(const make_array_helper<T[], U>& other) 
+@@ -99,8 +99,8 @@
+             struct rebind {
+                 typedef make_array_helper<T[N], U> other;
+             };
+-            make_array_helper(T** data)
+-                : data(data) {
++            make_array_helper(T** data_arg)
++                : data(data_arg) {
+             }
+             template<class U>
+             make_array_helper(const make_array_helper<T[N], U>& other) 
+--- foo/foo/foo/boost/unordered/detail/equivalent.hpp
++++ foo/foo/foo/boost/unordered/detail/equivalent.hpp
+@@ -536,9 +536,9 @@
+             node_pointer first_node = static_cast<node_pointer>(prev->next_);
+             link_pointer end = first_node->group_prev_->next_;
+ 
+-            std::size_t count = this->delete_nodes(prev, end);
++            std::size_t count_lcl = this->delete_nodes(prev, end);
+             this->fix_bucket(bucket_index, prev);
+-            return count;
++            return count_lcl;
+         }
+ 
+         iterator erase(c_iterator r)
+@@ -557,21 +557,21 @@
+             return iterator(r2.node_);
+         }
+ 
+-        link_pointer erase_nodes(node_pointer begin, node_pointer end)
++        link_pointer erase_nodes(node_pointer begin_arg, node_pointer end)
+         {
+-            std::size_t bucket_index = this->hash_to_bucket(begin->hash_);
++            std::size_t bucket_index = this->hash_to_bucket(begin_arg->hash_);
+ 
+-            // Split the groups containing 'begin' and 'end'.
+-            // And get the pointer to the node before begin while
++            // Split the groups containing 'begin_arg' and 'end.'
++            // And get the pointer to the node before begin_arg while
+             // we're at it.
+-            link_pointer prev = split_groups(begin, end);
++            link_pointer prev = split_groups(begin_arg, end);
+ 
+-            // If we don't have a 'prev' it means that begin is at the
++            // If we don't have a 'prev' it means that begin_arg is at the
+             // beginning of a block, so search through the blocks in the
+             // same bucket.
+             if (!prev) {
+                 prev = this->get_previous_start(bucket_index);
+-                while (prev->next_ != begin)
++                while (prev->next_ != begin_arg)
+                     prev = static_cast<node_pointer>(prev->next_)->group_prev_;
+             }
+ 
+@@ -586,27 +586,27 @@
+             return prev;
+         }
+ 
+-        static link_pointer split_groups(node_pointer begin, node_pointer end)
++        static link_pointer split_groups(node_pointer begin_arg, node_pointer end)
+         {
+-            node_pointer prev = begin->group_prev_;
+-            if (prev->next_ != begin) prev = node_pointer();
++            node_pointer prev = begin_arg->group_prev_;
++            if (prev->next_ != begin_arg) prev = node_pointer();
+ 
+             if (end) {
+                 node_pointer first = end;
+-                while (first != begin && first->group_prev_->next_ == first) {
++                while (first != begin_arg && first->group_prev_->next_ == first) {
+                     first = first->group_prev_;
+                 }
+ 
+                 boost::swap(first->group_prev_, end->group_prev_);
+-                if (first == begin) return prev;
++                if (first == begin_arg) return prev;
+             }
+ 
+             if (prev) {
+                 node_pointer first = prev;
+                 while (first->group_prev_->next_ == first) {
+                     first = first->group_prev_;
+                 }
+-                boost::swap(first->group_prev_, begin->group_prev_);
++                boost::swap(first->group_prev_, begin_arg->group_prev_);
+             }
+ 
+             return prev;
+--- foo/foo/foo/boost/unordered/detail/table.hpp
++++ foo/foo/foo/boost/unordered/detail/table.hpp
+@@ -256,9 +256,9 @@
+             return prev ? iterator(prev->next_) : iterator();
+         }
+         
+-        std::size_t hash_to_bucket(std::size_t hash) const
++        std::size_t hash_to_bucket(std::size_t hash_arg) const
+         {
+-            return policy::to_bucket(bucket_count_, hash);
++            return policy::to_bucket(bucket_count_, hash_arg);
+         }
+ 
+         float load_factor() const
+@@ -655,8 +655,8 @@
+             // assign_nodes takes ownership of the container's elements,
+             // assigning to them if possible, and deleting any that are
+             // left over.
+-            assign_nodes<table> assign(*this);
+-            table_impl::fill_buckets(x.begin(), *this, assign);
++            assign_nodes<table> assign_lcl(*this);
++            table_impl::fill_buckets(x.begin(), *this, assign_lcl);
+         }
+ 
+         void assign(table const& x, true_type)
+@@ -732,9 +732,9 @@
+                 // move_assign_nodes takes ownership of the container's
+                 // elements, assigning to them if possible, and deleting
+                 // any that are left over.
+-                move_assign_nodes<table> assign(*this);
++                move_assign_nodes<table> assign_lcl(*this);
+                 node_holder<node_allocator> nodes(x);
+-                table_impl::fill_buckets(nodes.begin(), *this, assign);
++                table_impl::fill_buckets(nodes.begin(), *this, assign_lcl);
+             }
+         }
+         
+--- foo/foo/foo/boost/unordered/detail/unique.hpp
++++ foo/foo/foo/boost/unordered/detail/unique.hpp
+@@ -531,9 +531,9 @@
+ 
+             link_pointer end = static_cast<node_pointer>(prev->next_)->next_;
+ 
+-            std::size_t count = this->delete_nodes(prev, end);
++            std::size_t count_lcl = this->delete_nodes(prev, end);
+             this->fix_bucket(bucket_index, prev);
+-            return count;
++            return count_lcl;
+         }
+ 
+         iterator erase(c_iterator r)
+@@ -552,13 +552,13 @@
+             return iterator(r2.node_);
+         }
+ 
+-        void erase_nodes(node_pointer begin, node_pointer end)
++        void erase_nodes(node_pointer begin_arg, node_pointer end)
+         {
+-            std::size_t bucket_index = this->hash_to_bucket(begin->hash_);
++            std::size_t bucket_index = this->hash_to_bucket(begin_arg->hash_);
+ 
+-            // Find the node before begin.
++            // Find the node before begin_arg.
+             link_pointer prev = this->get_previous_start(bucket_index);
+-            while(prev->next_ != begin) prev = prev->next_;
++            while(prev->next_ != begin_arg) prev = prev->next_;
+ 
+             // Delete the nodes.
+             do {

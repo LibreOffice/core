@@ -56,6 +56,6 @@
 +      memset(&dummy_, 0, sizeof(dummy_));
 +    }
 +
-     void const* address() const { return &dummy_.data[0]; }
-     void      * address()       { return &dummy_.data[0]; }
- } ;
+ #if defined(BOOST_OPTIONAL_DETAIL_USE_ATTRIBUTE_MAY_ALIAS)
+     void const* address() const { return &dummy_; }
+     void      * address()       { return &dummy_; }

@@ -409,14 +409,14 @@
  
  template<class T>
  inline
--bool operator == ( none_t x, optional<T> const& y )
-+bool operator == ( __attribute__ ((unused)) none_t x, optional<T> const& y )
+-bool operator == ( none_t , optional<T> const& y )
++bool operator == ( __attribute__ ((unused)) none_t , optional<T> const& y )
  { return equal_pointees(optional<T>() ,y); }
  
  template<class T>
  inline
--bool operator < ( none_t x, optional<T> const& y )
-+bool operator < ( __attribute__ ((unused)) none_t x, optional<T> const& y )
+-bool operator < ( none_t , optional<T> const& y )
++bool operator < ( __attribute__ ((unused)) none_t , optional<T> const& y )
  { return less_pointees(optional<T>() ,y); }
  
  template<class T>
@@ -726,37 +726,6 @@
  
  template<class E> BOOST_ATTRIBUTE_NORETURN inline void throw_exception( E const & e )
  {
---- misc/boost_1_44_0/boost/unordered/detail/node.hpp	2009-09-24 23:12:46.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/unordered/detail/node.hpp	2012-01-20 12:44:07.128316328 +0100
-@@ -35,7 +35,7 @@
-     }
- 
-     template <class A>
--    inline std::size_t ungrouped_node_base<A>::group_count(node_ptr)
-+    inline std::size_t ungrouped_node_base<A>::group_count(__attribute__ ((unused)) node_ptr)
-     {
-         return 1;
-     }
---- misc/boost_1_44_0/boost/unordered/detail/util.hpp	2010-02-25 20:05:01.000000000 +0100
-+++ misc/build/boost_1_44_0/boost/unordered/detail/util.hpp	2012-01-20 12:44:07.128316328 +0100
-@@ -149,7 +149,7 @@
- #if defined(BOOST_UNORDERED_STD_FORWARD)
- 
-     template <class T, class... Args>
--    inline void construct_impl(T*, void* address, Args&&... args)
-+    inline void construct_impl(__attribute__ ((unused)) T*, void* address, Args&&... args)
-     {
-         new(address) T(std::forward<Args>(args)...);
-     }
-@@ -262,7 +262,7 @@
- 
- #endif
-         template <class K, class M>
--        void construct_pair(K const& k, M*)
-+        void construct_pair(K const& k, __attribute__ ((unused)) M*)
-         {
-             construct_preamble();
-             new(node_->address()) value_type(k, M());                    
 --- misc/boost_1_44_0/boost/utility/addressof.hpp	2009-05-16 20:15:17.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/utility/addressof.hpp	2012-01-20 12:44:07.128316328 +0100
 @@ -34,7 +34,7 @@
@@ -862,8 +831,8 @@
      }
  
      template <typename U>
--    bool operator()(U&)
-+    bool operator()(__attribute__ ((unused)) U&)
+-    bool operator()(U&) BOOST_NOEXCEPT
++    bool operator()(__attribute__ ((unused)) U&) BOOST_NOEXCEPT
      {
          return false;
      }
@@ -921,44 +890,6 @@
          {
              typedef typename has_nothrow_copy<RhsT>::type
                  nothrow_copy;
---- misc/boost_1_44_0/libs/date_time/src/gregorian/greg_month.cpp	2012-01-20 15:24:32.362576125 +0100
-+++ misc/build/boost_1_44_0/libs/date_time/src/gregorian/greg_month.cpp	2012-01-20 12:44:07.130316320 +0100
-@@ -108,7 +108,7 @@
-    */
-   BOOST_DATE_TIME_DECL 
-   boost::date_time::all_date_names_put<greg_facet_config, char>* 
--  create_facet_def(char /* type */)
-+  create_facet_def(__attribute__ ((unused)) char /* type */)
-   {
-     typedef 
-       boost::date_time::all_date_names_put<greg_facet_config, char> facet_def;
-@@ -121,7 +121,7 @@
-   }
-   
-   //! generates a locale with the set of gregorian name-strings of type char*
--  BOOST_DATE_TIME_DECL std::locale generate_locale(std::locale& loc, char /* type */){
-+  BOOST_DATE_TIME_DECL std::locale generate_locale(std::locale& loc, __attribute__ ((unused)) char /* type */){
-     typedef boost::date_time::all_date_names_put<greg_facet_config, char> facet_def;
-     return std::locale(loc, new facet_def(short_month_names,
-                                           long_month_names,
-@@ -139,7 +139,7 @@
-    */
-   BOOST_DATE_TIME_DECL 
-   boost::date_time::all_date_names_put<greg_facet_config, wchar_t>* 
--  create_facet_def(wchar_t /* type */)
-+  create_facet_def(__attribute__ ((unused)) wchar_t /* type */)
-   {
-     typedef 
-       boost::date_time::all_date_names_put<greg_facet_config,wchar_t> facet_def;
-@@ -152,7 +152,7 @@
-   }
- 
-   //! generates a locale with the set of gregorian name-strings of type wchar_t*
--  BOOST_DATE_TIME_DECL std::locale generate_locale(std::locale& loc, wchar_t /* type */){
-+  BOOST_DATE_TIME_DECL std::locale generate_locale(std::locale& loc, __attribute__ ((unused)) wchar_t /* type */){
-     typedef boost::date_time::all_date_names_put<greg_facet_config, wchar_t> facet_def;
-     return std::locale(loc, new facet_def(w_short_month_names,
-                                           w_long_month_names,
 --- misc/boost_1_44_0/boost/ptr_container/detail/default_deleter.hpp
 +++ misc/build/boost_1_44_0/boost/ptr_container/detail/default_deleter.hpp
 @@ -61,7 +61,7 @@

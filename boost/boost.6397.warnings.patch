@@ -19,25 +19,6 @@
      {
          process_bit( static_cast<bool>(bits & high_bit_mask) );
      }
---- misc/boost_1_44_0/boost/multi_array/collection_concept.hpp	2012-01-12 20:21:29.790009198 +0000
-+++ misc/build/boost_1_44_0/boost/multi_array/collection_concept.hpp	2012-01-12 20:28:55.457287835 +0000
-@@ -43,11 +43,11 @@
-       i = c.end();
-       c.swap(c);
-     }
--    void const_constraints(const Collection& c) {
--      ci = c.begin();
--      ci = c.end();
--      n = c.size();
--      b = c.empty();
-+    void const_constraints(const Collection& c_) {
-+      ci = c_.begin();
-+      ci = c_.end();
-+      n = c_.size();
-+      b = c_.empty();
-     }
-     Collection c;
-     bool b;
 --- misc/boost_1_44_0/boost/multi_array/concept_checks.hpp	2012-01-12 20:21:29.790009198 +0000
 +++ misc/build/boost_1_44_0/boost/multi_array/concept_checks.hpp	2012-01-12 20:29:56.482879277 +0000
 @@ -39,8 +39,8 @@
@@ -72,12 +53,12 @@
        //      value_type vt = a[ id ];
  
        // Test slicing, keeping only the first dimension, losing the rest
--      idgen_helper<NumDims-1>::call(a,idgen[range],id);
-+      idgen_helper<NumDims-1>::call(a_,idgen[range],id);
+-      detail::idgen_helper<NumDims-1>::call(a,idgen[range],id);
++      detail::idgen_helper<NumDims-1>::call(a_,idgen[range],id);
  
        // Test slicing, keeping all dimensions.
--      idgen_helper<NumDims-1>::call(a,idgen[range],range);
-+      idgen_helper<NumDims-1>::call(a_,idgen[range],range);
+-      detail::idgen_helper<NumDims-1>::call(a,idgen[range],range);
++      detail::idgen_helper<NumDims-1>::call(a_,idgen[range],range);
  
 -      st = a.size();
 -      st = a.num_dimensions();
@@ -161,7 +142,7 @@
 +  explicit const_multi_array_ref(TPtr base, const ExtentList& extents_) :
      base_(base), storage_(c_storage_order()) {
      boost::function_requires<
-       detail::multi_array::CollectionConcept<ExtentList> >();
+       CollectionConcept<ExtentList> >();
  
      index_base_list_.assign(0);
 -    init_multi_array_ref(extents.begin());
@@ -174,7 +155,7 @@
                         const general_storage_order<NumDims>& so) : 
      base_(base), storage_(so) {
      boost::function_requires<
-       detail::multi_array::CollectionConcept<ExtentList> >();
+       CollectionConcept<ExtentList> >();
  
      index_base_list_.assign(0);
 -    init_multi_array_ref(extents.begin());
@@ -206,7 +187,7 @@
 -  void reshape(const SizeList& extents) {
 +  void reshape(const SizeList& extents_) {
      boost::function_requires<
-       detail::multi_array::CollectionConcept<SizeList> >();
+       CollectionConcept<SizeList> >();
      BOOST_ASSERT(num_elements_ ==
 -                 std::accumulate(extents.begin(),extents.end(),
 +                 std::accumulate(extents_.begin(),extents_.end(),
@@ -224,7 +205,7 @@
 -  const element& operator()(IndexList indices) const {
 +  const element& operator()(IndexList indices_) const {
      boost::function_requires<
-       detail::multi_array::CollectionConcept<IndexList> >();
+       CollectionConcept<IndexList> >();
      return super_type::access_element(boost::type<const element&>(),
 -                                      indices,origin(),
 +                                      indices_,origin(),
@@ -299,7 +280,7 @@
 +  explicit multi_array_ref(T* base, const ExtentList& extents_) :
 +    super_type(base,extents_) {
      boost::function_requires<
-       detail::multi_array::CollectionConcept<ExtentList> >();
+       CollectionConcept<ExtentList> >();
    }
  
    template <class ExtentList>
@@ -309,7 +290,7 @@
 -    super_type(base,extents,so) {
 +    super_type(base,extents_,so) {
      boost::function_requires<
-       detail::multi_array::CollectionConcept<ExtentList> >();
+       CollectionConcept<ExtentList> >();
    }
 @@ -509,11 +509,11 @@
    element* data() { return super_type::base_; }
@@ -318,7 +299,7 @@
 -  element& operator()(const IndexList& indices) {
 +  element& operator()(const IndexList& indices_) {
      boost::function_requires<
-       detail::multi_array::CollectionConcept<IndexList> >();
+       CollectionConcept<IndexList> >();
      return super_type::access_element(boost::type<element&>(),
 -                                      indices,origin(),
 +                                      indices_,origin(),
@@ -346,7 +327,7 @@
 -  const element& operator()(const IndexList& indices) const {
 +  const element& operator()(const IndexList& indices_) const {
      boost::function_requires<
-       detail::multi_array::CollectionConcept<IndexList> >();
+       CollectionConcept<IndexList> >();
 -    return super_type::operator()(indices);
 +    return super_type::operator()(indices_);
    }
@@ -534,27 +515,33 @@
                     new_array.index_base_list_.end(),
 --- misc/boost_1_44_0/boost/random/mersenne_twister.hpp
 +++ misc/build/boost_1_44_0/boost/random/mersenne_twister.hpp
-@@ -195,16 +195,16 @@
-   }
- #endif
+@@ -195,19 +195,19 @@
+      * Returns true if the two generators are in the same state,
+      * and will thus produce identical sequences.
+      */
+-    friend bool operator==(const mersenne_twister_engine& x,
+-                           const mersenne_twister_engine& y)
++    friend bool operator==(const mersenne_twister_engine& x_arg,
++                           const mersenne_twister_engine& y_arg)
+     {
+-        if(x.i < y.i) return x.equal_imp(y);
+-        else return y.equal_imp(x);
++        if(x_arg.i < y_arg.i) return x_arg.equal_imp(y_arg);
++        else return y_arg.equal_imp(x_arg);
+     }
+     
+     /**
+      * Returns true if the two generators are in different states.
+      */
+-    friend bool operator!=(const mersenne_twister_engine& x,
+-                           const mersenne_twister_engine& y)
+-    { return !(x == y); }
++    friend bool operator!=(const mersenne_twister_engine& x_arg,
++                           const mersenne_twister_engine& y_arg)
++    { return !(x_arg == y_arg); }
  
--  friend bool operator==(const mersenne_twister& x, const mersenne_twister& y)
-+  friend bool operator==(const mersenne_twister& x_, const mersenne_twister& y_)
-   {
-     for(int j = 0; j < state_size; ++j)
--      if(x.compute(j) != y.compute(j))
-+      if(x_.compute(j) != y_.compute(j))
-         return false;
-     return true;
-   }
- 
--  friend bool operator!=(const mersenne_twister& x, const mersenne_twister& y)
--  { return !(x == y); }
-+  friend bool operator!=(const mersenne_twister& x_, const mersenne_twister& y_)
-+  { return !(x_ == y_); }
- #else
-   // Use a member function; Streamable concept not supported.
-   bool operator==(const mersenne_twister& rhs) const
+ private:
+     /// \cond show_private
 --- misc/boost_1_44_0/boost/uuid/uuid_io.hpp
 +++ misc/build/boost_1_44_0/boost/uuid/uuid_io.hpp
 @@ -59,7 +59,7 @@

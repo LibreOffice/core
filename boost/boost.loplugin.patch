@@ -1,0 +1,19 @@
+--- foo/foo/foo/boost/lexical_cast.hpp
++++ foo/foo/foo/boost/lexical_cast.hpp
+@@ -1016,7 +1016,7 @@
+                 if( !has_minus ) value = std::numeric_limits<T>::quiet_NaN();
+                 else value = (boost::math::changesign) (std::numeric_limits<T>::quiet_NaN());
+                 return true;
+-            } else
++            } else {
+             if (( /* 'INF' or 'inf' */
+                   end-begin==3
+                   &&
+@@ -1031,6 +1031,7 @@
+                 else value = (boost::math::changesign) (std::numeric_limits<T>::infinity());
+                 return true;
+             }
++            }
+ 
+             return false;
+         }
