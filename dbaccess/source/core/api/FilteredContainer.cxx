@@ -305,8 +305,12 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
 
         try
         {
+            printf ("DEBUG !!! __ OFilteredContainer::construct __ getting metadata ... \n");
+
             Reference< XConnection > xCon( m_xConnection, UNO_SET_THROW );
             m_xMetaData.set( xCon->getMetaData(), UNO_SET_THROW );
+
+            printf ("DEBUG !!! __ OFilteredContainer::construct __ metadata got \n");
 
             // create a table table filter suitable for the XDatabaseMetaData::getTables call,
             // taking into account both the externally-provided table type filter, and any
@@ -315,6 +319,8 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
             OUString sInherentTableTypeRestriction( getTableTypeRestriction() );
             if ( !sInherentTableTypeRestriction.isEmpty() )
             {
+                printf ("DEBUG !!! __ OFilteredContainer::construct __  NOT InherentTableTypeRestriction \n");
+
                 if ( _rTableTypeFilter.getLength() != 0 )
                 {
                     const OUString* tableType    = _rTableTypeFilter.getConstArray();
@@ -336,6 +342,8 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
             }
             else
             {
+                printf ("DEBUG !!! __ OFilteredContainer::construct __  InherentTableTypeRestriction \n");
+
                 // no container-inherent restriction for the table types
                 if ( _rTableTypeFilter.getLength() == 0 )
                 {   // no externally-provided table type filter => use the default filter
@@ -347,9 +355,13 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
                 }
             }
 
+            printf ("DEBUG !!! __ OFilteredContainer::construct __  getting tables ... \n");
+
             static const OUString sAll("%");
             Reference< XResultSet > xTables = m_xMetaData->getTables( Any(), sAll, sAll, aTableTypeFilter );
             Reference< XRow > xCurrentRow( xTables, UNO_QUERY_THROW );
+
+            printf ("DEBUG !!! __ OFilteredContainer::construct __  tables got \n");
 
             TableInfos aUnfilteredTables;
 

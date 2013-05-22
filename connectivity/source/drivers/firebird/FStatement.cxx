@@ -46,6 +46,8 @@
 #include <cppuhelper/typeprovider.hxx>
 #include "propertyids.hxx"
 
+#include <ibase.h>
+
 using namespace connectivity::firebird;
 //------------------------------------------------------------------------------
 using namespace com::sun::star::uno;
@@ -151,18 +153,84 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
 }
 // -------------------------------------------------------------------------
 
+/*
+ *    Print the status, the SQLCODE, and exit.
+ *    Also, indicate which operation the error occured on.
+ */
+static int pr_error (long* status, char* operation)
+{
+    printf("[\n");
+    printf("PROBLEM ON \"%s\".\n", operation);
+
+    isc_print_status(status);
+
+    printf("SQLCODE:%d\n", isc_sqlcode(status));
+
+    printf("]\n");
+
+    return 1;
+}
+
 Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
+    char sqlStr[128];
+    strcpy(sqlStr, OUStringToOString( sql, RTL_TEXTENCODING_ASCII_US ).getStr());
+    printf("DEBUG !!! connectivity.firebird => OStatement_Base::executeQuery() got called with sql: %s \n", sqlStr);
+
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
 
     Reference< XResultSet > xRS = NULL;
     // create a resultset as result of executing the sql statement
     // you have to here something :-)
+
+    ISC_STATUS_ARRAY status;               /* status vector */
+    isc_db_handle    db = NULL;         /* database handle */
+    isc_tr_handle    trans = NULL;         /* transaction handle */
+    isc_stmt_handle  stmt = NULL;          /* prepared statement handle */
+    XSQLDA *         sel_sqlda;
+    int              CURRENLEN = 10;
+    char             orig_name[CURRENLEN + 1];
+
+    if (isc_attach_database(status, 0, "new.fdb", &db, 0, NULL))
+        if (pr_error(status, "attach database"))
+            return xRS;
+
+    if (isc_start_transaction(status, &trans, 1, &db, 0, NULL))
+        if (pr_error(status, "start transaction"))
+            return xRS;
+
+    sel_sqlda = (XSQLDA *) malloc(XSQLDA_LENGTH(1));
+    sel_sqlda->sqln = 1;
+    sel_sqlda->version = 1;
+
+    if (isc_dsql_allocate_statement(status, &db, &stmt))
+        if (pr_error(status, "allocate statement"))
+            return xRS;
+    if (isc_dsql_prepare(status, &trans, &stmt, 0, sqlStr, 1, sel_sqlda))
+        if (pr_error(status, "prepare statement"))
+            return xRS;
+
+    sel_sqlda->sqlvar[0].sqldata = orig_name;
+    sel_sqlda->sqlvar[0].sqltype = SQL_TEXT;
+    sel_sqlda->sqlvar[0].sqllen = CURRENLEN;
+
+    if (isc_dsql_execute(status, &trans, &stmt, 1, NULL))
+        if (pr_error(status, "execute query"))
+            return xRS;
+    if (isc_dsql_fetch(status, &stmt, 1, sel_sqlda))
+        if (pr_error(status, "fetch data"))
+            return xRS;
+
+    if (isc_commit_transaction (status, &trans))
+        isc_print_status(status);
+    printf("DEBuG !!! connectivity.firebird => OStatement_Base::executeQuery() Changes committed.\n");
+
     m_xResultSet = xRS; // we nedd a reference to it for later use
     return xRS;
 }
+
+
 // -------------------------------------------------------------------------
 
 Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  ) throw(SQLException, RuntimeException)
