@@ -657,7 +657,7 @@ bool Outliner::SearchAndReplaceOnce (void)
         return true;
 
     ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
-    if (pViewShell != NULL)
+    if (pViewShell != 0)
     {
         mpView = pViewShell->GetView();
         mpWindow = pViewShell->GetActiveWindow();
@@ -907,7 +907,7 @@ void Outliner::RestoreStartPosition (void)
         bRestore = false;
     // Dont't restore when the view shell is not valid.
     ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
-    if (pViewShell == NULL)
+    if (pViewShell == 0)
         bRestore = false;
 
     if (bRestore)
@@ -1005,7 +1005,7 @@ void Outliner::ProvideNextTextObject (void)
                 PutTextIntoOutliner ();
 
                 ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
-                if (pViewShell != NULL)
+                if (pViewShell != 0)
                     switch (meMode)
                     {
                         case SEARCH:

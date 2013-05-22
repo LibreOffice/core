@@ -174,7 +174,7 @@ void setTextStyle( Reference< beans::XPropertySet >& rxPropSet, const XmlFilterB
     oox::drawingml::TextListStylePtr& pTextListStylePtr, int nLevel )
 {
     ::oox::drawingml::TextParagraphPropertiesPtr pTextParagraphPropertiesPtr( pTextListStylePtr->getListStyle()[ nLevel ] );
-    if( pTextParagraphPropertiesPtr == NULL )
+    if( pTextParagraphPropertiesPtr == 0 )
     {
         // no properties. return
         return;

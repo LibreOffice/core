@@ -1330,7 +1330,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                         ? ::utl::UcbStreamHelper::CreateStream(xStream)
                         : 0 );
 
-                if( pStream != NULL )
+                if( pStream != 0 )
                 {
                     Graphic aGraphic;
 

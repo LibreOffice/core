@@ -176,7 +176,7 @@ namespace rptui
                     if ( pUnoObj ) // this doesn't need to be done for shapes
                     {
                         ::boost::shared_ptr<OSectionWindow> pSectionWindow = pController->getSectionWindow(xSection);
-                        if (pSectionWindow != NULL)
+                        if (pSectionWindow != 0)
                         {
                             OReportSection& aOutputDevice = pSectionWindow->getReportSection(); // OutputDevice
                             OSectionView& aSdrView = aOutputDevice.getSectionView(); // SdrView

@@ -695,7 +695,7 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel (void)
     MasterPageContainerType::const_iterator iDescriptor;
     MasterPageContainerType::const_iterator iContainerEnd(maContainer.end());
     for (iDescriptor=maContainer.begin(); iDescriptor!=iContainerEnd; ++iDescriptor)
-        if (*iDescriptor!=NULL && (*iDescriptor)->mpMasterPage != NULL)
+        if (*iDescriptor!=0 && (*iDescriptor)->mpMasterPage != NULL)
         {
             Size aPageSize ((*iDescriptor)->mpMasterPage->GetSize());
             OSL_ASSERT(aPageSize.Width() > 0 && aPageSize.Height() > 0);

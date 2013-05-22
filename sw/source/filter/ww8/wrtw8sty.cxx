@@ -1825,7 +1825,7 @@ void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
     for (size_t i = 0; i < m_SectionAttributes.size(); i++) // all sections
     {
         WW8_PdAttrDesc *const pA = m_SectionAttributes[i].get();
-        if (pA->m_nLen && pA->m_pData != NULL)
+        if (pA->m_nLen && pA->m_pData != 0)
         {
             SVBT16 nL;
             pA->m_nSepxFcPos = rStrm.Tell();

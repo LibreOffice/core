@@ -63,9 +63,9 @@ oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, co
     {
         if ( (*aRevIter)->getSubType() == nMasterPlaceholder )
         {
-            if( !oSubTypeIndex.has() && aChoiceShapePtr1 == NULL )
+            if( !oSubTypeIndex.has() && aChoiceShapePtr1 == 0 )
                 aChoiceShapePtr1 = *aRevIter;
-            else if( aChoiceShapePtr2 == NULL )
+            else if( aChoiceShapePtr2 == 0 )
                 aChoiceShapePtr2 = *aRevIter;
             if( (*aRevIter)->getSubTypeIndex() == oSubTypeIndex )
             {
@@ -79,7 +79,7 @@ oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, co
             break;
         ++aRevIter;
     }
-    if( aShapePtr == NULL )
+    if( aShapePtr == 0 )
         return aChoiceShapePtr1 ? aChoiceShapePtr1 : aChoiceShapePtr2;
     return aShapePtr;
 }

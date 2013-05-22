@@ -1283,7 +1283,7 @@ WW8TableNodeInfo * WW8TableCellGrid::connectCells()
 
         WW8TableCellGridRow::Pointer_t pRow = getRow(*aTopsIt);
         WidthsPtr pWidths = pRow->getWidths();
-        if (pWidths != NULL)
+        if (pWidths != 0)
         {
             sResult += "<widths>";
 

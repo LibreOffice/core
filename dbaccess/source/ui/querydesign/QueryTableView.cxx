@@ -914,7 +914,7 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
         if (pTabWin->Init())
         {
             TTableWindowData::value_type pData = pTabWin->GetData();
-            OSL_ENSURE(pData != NULL, "OQueryTableView::ShowTabWin : TabWin has no data !");
+            OSL_ENSURE(pData != 0, "OQueryTableView::ShowTabWin : TabWin has no data !");
             // If there is a position and size defined, we use them
             if (pData->HasPosition() && pData->HasSize())
             {

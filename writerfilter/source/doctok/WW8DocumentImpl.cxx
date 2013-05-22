@@ -1174,7 +1174,7 @@ WW8DocumentImpl::getBlip(sal_uInt32 nBid)
 {
     writerfilter::Reference<Properties>::Pointer_t pResult;
 
-    if (mpDffBlock != NULL)
+    if (mpDffBlock != 0)
     {
         DffRecord::Pointer_t pDffRecord(mpDffBlock->getBlip(nBid));
 

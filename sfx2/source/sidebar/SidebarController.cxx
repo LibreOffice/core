@@ -291,9 +291,9 @@ void SidebarController::BroadcastPropertyChange (void)
 
 void SidebarController::NotifyResize (void)
 {
-    if (mpTabBar == NULL)
+    if (mpTabBar == 0)
     {
-        OSL_ASSERT(mpTabBar!=NULL);
+        OSL_ASSERT(mpTabBar!=0);
         return;
     }
 
@@ -572,7 +572,7 @@ void SidebarController::SwitchToDeck (
                 rContext);
             bHasPanelSetChanged = true;
         }
-        if (aNewPanels[nWriteIndex] != NULL)
+        if (aNewPanels[nWriteIndex] != 0)
         {
             // Depending on the context we have to change the command
             // for the "more options" dialog.
@@ -623,7 +623,7 @@ bool SidebarController::ArePanelSetsEqual (
         return false;
     for (sal_Int32 nIndex=0,nCount=rCurrentPanels.size(); nIndex<nCount; ++nIndex)
     {
-        if (rCurrentPanels[nIndex] == NULL)
+        if (rCurrentPanels[nIndex] == 0)
             return false;
         if ( ! rCurrentPanels[nIndex]->GetId().equals(rRequestedPanels[nIndex].msId))
             return false;

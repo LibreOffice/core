@@ -202,7 +202,7 @@ sal_Int32 DeckLayouter::PlacePanels (
     // Assign heights and places.
     IterateLayoutItems(iItem,rLayoutItems)
     {
-        if (iItem->mpPanel == NULL)
+        if (iItem->mpPanel == 0)
             continue;
 
         Panel& rPanel (*iItem->mpPanel);
@@ -294,7 +294,7 @@ void DeckLayouter::GetRequestedSizes (
     IterateLayoutItems(iItem,rLayoutItems)
     {
         ui::LayoutSize aLayoutSize (ui::LayoutSize(0,0,0));
-        if (iItem->mpPanel != NULL)
+        if (iItem->mpPanel != 0)
         {
             if (rLayoutItems.size() == 1
                 && iItem->mpPanel->IsTitleBarOptional())

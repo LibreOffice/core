@@ -1928,7 +1928,7 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
     static OUString s_NumberingStyleName( "NumberingStyleName");
     static OUString s_HeadingStyleName( "HeadingStyleName");
 
-    if ((m_pImpl->m_pOutlineStylesCandidates != NULL || bSetEmptyLevels) &&
+    if ((m_pImpl->m_pOutlineStylesCandidates != 0 || bSetEmptyLevels) &&
          m_pImpl->m_xChapterNumbering.is() &&
          !IsInsertMode())
     {

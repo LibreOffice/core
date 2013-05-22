@@ -345,7 +345,7 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
             // At this moment the controller may not yet been set at model
             // or ViewShellBase.  Take it from the view shell passed with
             // the event.
-            if (mrBase.GetMainViewShell() != NULL)
+            if (mrBase.GetMainViewShell() != 0)
             {
                 if( mrBase.GetMainViewShell()->GetShellType() == ViewShell::ST_IMPRESS )
                 {

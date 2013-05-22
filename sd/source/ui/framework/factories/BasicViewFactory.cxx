@@ -368,7 +368,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
         if (xWindow.is())
         {
             xWindow->addWindowListener(pDescriptor->mpWrapper);
-            if (pDescriptor->mpViewShell != NULL)
+            if (pDescriptor->mpViewShell != 0)
             {
                 pDescriptor->mpViewShell->Resize();
             }

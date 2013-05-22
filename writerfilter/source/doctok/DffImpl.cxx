@@ -39,7 +39,7 @@ protected:
 public:
     static Pointer_t Instance()
     {
-        if (pInstance == NULL)
+        if (pInstance == 0)
             pInstance = Pointer_t(new ShapeTypeToString());
 
         return pInstance;

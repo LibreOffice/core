@@ -118,7 +118,7 @@ string WW8TableReference::getType() const
 
 void WW8PropertiesReference::resolve(Properties & rHandler)
 {
-    if (mpPropSet != NULL)
+    if (mpPropSet != 0)
     {
         if (mpPropSet->isPap())
         {

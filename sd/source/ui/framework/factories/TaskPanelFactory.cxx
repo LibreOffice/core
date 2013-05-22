@@ -245,7 +245,7 @@ void SAL_CALL TaskPanelFactory::releaseResource (
         const OUString sPaneURL = aResourceURLs[ aResourceURLs.size() - 1 ];
         ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( *mpViewShellBase ) );
         const ::boost::shared_ptr< ViewShell > pPaneViewShell( pFrameworkHelper->GetViewShell( sPaneURL ) );
-        if ( pPaneViewShell != NULL )
+        if ( pPaneViewShell != 0 )
         {
             const OUString sPanelResourceURL( xResourceId->getResourceURL() );
             const toolpanel::PanelId ePanelId( toolpanel::GetStandardPanelId( sPanelResourceURL ) );

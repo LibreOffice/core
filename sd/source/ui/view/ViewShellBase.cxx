@@ -1520,7 +1520,7 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
     // shell types.
     if (bPanelIdGiven
         && ! (nPanelId==sidebar::PID_LAYOUT
-            && mrBase.GetMainViewShell()!=NULL
+            && mrBase.GetMainViewShell()!=0
             && mrBase.GetMainViewShell()->GetShellType()==ViewShell::ST_OUTLINE))
     {
         framework::FrameworkHelper::Instance(mrBase)->RequestSidebarPanel(
@@ -1551,7 +1551,7 @@ void CurrentPageSetter::operator() (bool)
 {
     FrameView* pFrameView = NULL;
 
-    if (mrBase.GetMainViewShell() != NULL)
+    if (mrBase.GetMainViewShell() != 0)
     {
         pFrameView = mrBase.GetMainViewShell()->GetFrameView();
     }
