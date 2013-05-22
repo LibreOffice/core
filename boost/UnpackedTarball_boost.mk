@@ -40,6 +40,7 @@ boost_patches += boost_1_44_0-gcc4.8.patch
 boost_patches += boost.4874.patch
 
 boost_patches += boost.loplugin.patch
+boost_patches += boost.std.move.patch
 boost_patches += boost.wundef.patch
 boost_patches += boost.wshadow.patch
 
