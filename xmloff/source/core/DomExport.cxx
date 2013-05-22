@@ -129,7 +129,7 @@ void visitNode( DomVisitor& rVisitor, const Reference<XNode>& xNode )
 
 void visit( DomVisitor& rVisitor, const Reference<XDocument>& xDocument )
 {
-    visit( rVisitor, xDocument );
+    visit( rVisitor, Reference<XNode>( xDocument, UNO_QUERY_THROW ) );
 }
 
 void visit( DomVisitor& rVisitor, const Reference<XNode>& xNode )
