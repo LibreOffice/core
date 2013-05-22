@@ -594,16 +594,6 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
                 break;
     }
 
-    if( pCharIndexes )
-    {
-        int nCharPos;
-        if( !mpGlyphs2Chars )
-            nCharPos = nStart + mnMinCharPos;
-        else
-            nCharPos = mpGlyphs2Chars[nStart];
-        *(pCharIndexes++) = nCharPos;
-    }
-
     return nCount;
 }
 
@@ -1892,10 +1882,6 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
 
     ++nStart;
     nStartx8 = (nStart << 8) + nSubIter;
-
-    if( pCharPosAry )
-        *(pCharPosAry++) = nCharPos;
-
     return nCount;
 }
 

@@ -294,7 +294,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
             if (bCluster)
             {
                 nBaseGlyphIndex = mvGlyphs.size();
-                mvGlyph2Char[nBaseGlyphIndex] = firstChar + mnSegCharOffset;
+                mvGlyph2Char[nBaseGlyphIndex] = iChar + mnSegCharOffset;
                 nFirstCharInCluster = firstChar;
                 nLastCharInCluster = lastChar;
             }
@@ -1295,24 +1295,6 @@ int GraphiteLayout::GetNextGlyphs( int length, sal_GlyphId * glyph_out,
      if (glyph_itr->mnGlyphIndex == GF_DROPPED)
        break;
   }
-
-    // Calculate final pCharPosAry item
-    if (char_index)
-    {
-        if (glyph_slot >= (signed)mvGlyph2Char.size())
-        {
-            *char_index++ = mnMinCharPos + mvCharDxs.size();
-        }
-        else
-        {
-            assert(glyph_slot > -1);
-            if (mvGlyph2Char[glyph_slot] == -1)
-                *char_index++ = mnMinCharPos + mvCharDxs.size();
-            else
-                *char_index++ = mvGlyph2Char[glyph_slot];
-        }
-    }
-
   int numGlyphs = glyph_slot - glyph_slot_begin;
   // move the next glyph_slot to a glyph that hasn't been dropped
   while (glyph_slot < static_cast<int>(mvGlyphs.size()) &&

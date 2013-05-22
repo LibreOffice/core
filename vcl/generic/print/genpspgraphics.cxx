@@ -731,7 +731,7 @@ static void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx
     sal_Int32   aWidthAry[ nMaxGlyphs ];
     sal_Int32   aIdxAry  [ nMaxGlyphs ];
     sal_Unicode aUnicodes[ nMaxGlyphs ];
-    int         aCharPosAry [ nMaxGlyphs+1 ];
+    int         aCharPosAry [ nMaxGlyphs ];
 
     Point aPos;
     long nUnitsPerPixel = rLayout.GetUnitsPerPixel();

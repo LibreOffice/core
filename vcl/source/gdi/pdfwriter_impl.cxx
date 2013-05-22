@@ -7619,7 +7619,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     std::vector<sal_Ucs> aUnicodes;
     aUnicodes.reserve( nMaxGlyphs );
     sal_Int32 pUnicodesPerGlyph[nMaxGlyphs];
-    int pCharPosAry[nMaxGlyphs+1];
+    int pCharPosAry[nMaxGlyphs];
     sal_Int32 nAdvanceWidths[nMaxGlyphs];
     const PhysicalFontFace* pFallbackFonts[nMaxGlyphs];
     bool bVertical = m_aCurrentPDFState.m_aFont.IsVertical();
@@ -7768,14 +7768,14 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 aUnicodes.push_back( rText.GetChar( sal::static_int_cast<xub_StrLen>(pCharPosAry[i]) ) );
                 pUnicodesPerGlyph[i] = 1;
                 // try to handle ligatures and such
-                if( i < nGlyphs )
+                if( i < nGlyphs-1 )
                 {
                     nChars = pCharPosAry[i+1] - pCharPosAry[i];
                     // #i115618# fix for simple RTL+CTL cases
                     // TODO: sanitize for RTL ligatures, more complex CTL, etc.
                     if( nChars < 0 )
                         nChars = -nChars;
-                    else if( nChars == 0 )
+            else if( nChars == 0 )
                         nChars = 1;
                     pUnicodesPerGlyph[i] = nChars;
                     for( int n = 1; n < nChars; n++ )
