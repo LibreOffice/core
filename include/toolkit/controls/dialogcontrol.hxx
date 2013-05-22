@@ -178,21 +178,21 @@ public:
 
 
     // overrides to resolve ambiguity
-    virtual com::sun::star::uno::Any SAL_CALL getPropertyValue(const rtl::OUString& p1) throw (::com::sun::star::uno::RuntimeException)
+    virtual com::sun::star::uno::Any SAL_CALL getPropertyValue(const rtl::OUString& p1) throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException)
         { return UnoControlDialogModel_Base::ControlModelContainerBase::getPropertyValue(p1); }
-    virtual void SAL_CALL setPropertyValue(const OUString& p1, const com::sun::star::uno::Any& p2) throw (::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setPropertyValue(const OUString& p1, const com::sun::star::uno::Any& p2) throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException)
         { return UnoControlDialogModel_Base::ControlModelContainerBase::setPropertyValue(p1, p2); }
-    virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener>& p2) throw (::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener>& p2) throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException)
         { return UnoControlDialogModel_Base::ControlModelContainerBase::addPropertyChangeListener(p1, p2); }
-    virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener>& p2) throw (::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener>& p2) throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException)
         { return UnoControlDialogModel_Base::ControlModelContainerBase::removePropertyChangeListener(p1, p2); }
-    virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener>& p2) throw (::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener>& p2) throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException)
         { return UnoControlDialogModel_Base::ControlModelContainerBase::addVetoableChangeListener(p1, p2); }
-    virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener>& p2) throw (::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener>& p2) throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException)
         { return UnoControlDialogModel_Base::ControlModelContainerBase::removeVetoableChangeListener(p1, p2); }
-    virtual com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL createInstance(const OUString& p1) throw (::com::sun::star::uno::RuntimeException)
+    virtual com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL createInstance(const OUString& p1) throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
         { return UnoControlDialogModel_Base::ControlModelContainerBase::createInstance(p1); }
-    virtual com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL createInstanceWithArguments(const OUString& p1, const com::sun::star::uno::Sequence<com::sun::star::uno::Any>& p2) throw (::com::sun::star::uno::RuntimeException)
+    virtual com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL createInstanceWithArguments(const OUString& p1, const com::sun::star::uno::Sequence<com::sun::star::uno::Any>& p2) throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
         { return UnoControlDialogModel_Base::ControlModelContainerBase::createInstanceWithArguments(p1, p2); }
     virtual com::sun::star::uno::Sequence<rtl::OUString> SAL_CALL getAvailableServiceNames() throw (::com::sun::star::uno::RuntimeException)
         { return UnoControlDialogModel_Base::ControlModelContainerBase::getAvailableServiceNames(); }
@@ -202,17 +202,17 @@ public:
         { return UnoControlDialogModel_Base::ControlModelContainerBase::getElementType(); }
     virtual sal_Bool SAL_CALL hasElements() throw (::com::sun::star::uno::RuntimeException)
         { return UnoControlDialogModel_Base::ControlModelContainerBase::hasElements(); }
-    virtual com::sun::star::uno::Any SAL_CALL getByName(const rtl::OUString& p1) throw (::com::sun::star::uno::RuntimeException)
+    virtual com::sun::star::uno::Any SAL_CALL getByName(const rtl::OUString& p1) throw (com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException)
         { return UnoControlDialogModel_Base::ControlModelContainerBase::getByName(p1); }
     virtual com::sun::star::uno::Sequence<rtl::OUString> SAL_CALL getElementNames() throw (::com::sun::star::uno::RuntimeException)
         { return UnoControlDialogModel_Base::ControlModelContainerBase::getElementNames(); }
     virtual sal_Bool SAL_CALL hasByName(const rtl::OUString& p1) throw (::com::sun::star::uno::RuntimeException)
         { return UnoControlDialogModel_Base::ControlModelContainerBase::hasByName(p1); }
-    virtual void SAL_CALL replaceByName(const rtl::OUString& p1, const com::sun::star::uno::Any& p2) throw (::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL replaceByName(const rtl::OUString& p1, const com::sun::star::uno::Any& p2) throw (com::sun::star::lang::IllegalArgumentException, com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException)
         { UnoControlDialogModel_Base::ControlModelContainerBase::replaceByName(p1, p2); }
-    virtual void SAL_CALL insertByName(const rtl::OUString& p1, const com::sun::star::uno::Any& p2) throw (::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL insertByName(const rtl::OUString& p1, const com::sun::star::uno::Any& p2) throw (com::sun::star::lang::IllegalArgumentException, com::sun::star::container::ElementExistException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException)
         { UnoControlDialogModel_Base::ControlModelContainerBase::insertByName(p1, p2); }
-    virtual void SAL_CALL removeByName(const rtl::OUString& p1) throw (::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL removeByName(const rtl::OUString& p1) throw (com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException)
         { UnoControlDialogModel_Base::ControlModelContainerBase::removeByName(p1); }
 
 
