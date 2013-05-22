@@ -1107,7 +1107,6 @@ sal_Bool AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstr
     sal_uInt32  nCount = aAddonMergeNodesSeq.getLength();
 
     Sequence< ::rtl::OUString > aNodePropNames( 5 );
-    ::rtl::OUString aURL;
 
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
