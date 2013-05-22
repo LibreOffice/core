@@ -363,6 +363,9 @@ void TabBar::UpdateFocusManager (FocusManager& rFocusManager)
 
 IMPL_LINK(TabBar, OnToolboxClicked, void*, EMPTYARG)
 {
+    if ( ! mpMenuButton)
+        return 0;
+
     ::std::vector<DeckMenuData> aMenuData;
 
     for(ItemContainer::const_iterator iItem(maItems.begin()),iEnd(maItems.end());
@@ -388,6 +391,7 @@ IMPL_LINK(TabBar, OnToolboxClicked, void*, EMPTYARG)
             mpMenuButton->GetPosPixel(),
             mpMenuButton->GetSizePixel()),
         aMenuData);
+    mpMenuButton->Check(sal_False);
 
     return 0;
 }
