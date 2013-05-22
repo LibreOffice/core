@@ -10,3 +10,58 @@
  ifdef USE_DEBUG_RTL
  NSPR_CONFIGURE_OPTS += --enable-debug-rtl
  endif
+--- misc/nss-3.13.5/mozilla/nsprpub/configure
++++ misc/build/nss-3.13.5/mozilla/nsprpub/configure
+@@ -3888,7 +3889,7 @@
+ fi
+ 
+     DSO_CFLAGS=-fPIC
+-    DSO_LDOPTS='-dynamiclib -compatibility_version 1 -current_version 1 -all_load -install_name @executable_path/$@ -headerpad_max_install_names'
++    DSO_LDOPTS='-dynamiclib -compatibility_version 1 -current_version 1 -all_load -install_name @__________________________________________________OOO/$@ -headerpad_max_install_names'
+     _OPTIMIZE_FLAGS=-O2
+     MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
+     STRIP="$STRIP -x -S"
+--- misc/nss-3.13.5/mozilla/nsprpub/lib/ds/Makefile.in
++++ misc/build/nss-3.13.5/mozilla/nsprpub/lib/ds/Makefile.in
+@@ -143,7 +143,7 @@
+ 
+ export:: $(TARGETS)
+ 	$(INSTALL) -m 444 $(HEADERS) $(dist_includedir)
+-	$(INSTALL) -m 444 $(TARGETS) $(dist_libdir)
++	$(INSTALL) -m 664 $(TARGETS) $(dist_libdir)
+ ifdef SHARED_LIBRARY
+ ifeq ($(OS_ARCH),HP-UX)
+ 	$(INSTALL) -m 755 $(SHARED_LIBRARY) $(dist_libdir)
+--- misc/nss-3.13.5/mozilla/nsprpub/lib/libc/src/Makefile.in
++++ misc/build/nss-3.13.5/mozilla/nsprpub/lib/libc/src/Makefile.in
+@@ -144,7 +144,7 @@
+ #
+ 
+ export:: $(TARGETS)
+-	$(INSTALL) -m 444 $(TARGETS) $(dist_libdir)
++	$(INSTALL) -m 664 $(TARGETS) $(dist_libdir)
+ ifdef SHARED_LIBRARY
+ ifeq ($(OS_ARCH),HP-UX)
+ 	$(INSTALL) -m 755 $(SHARED_LIBRARY) $(dist_libdir)
+--- misc/nss-3.13.5/mozilla/nsprpub/pr/src/Makefile.in
++++ misc/build/nss-3.13.5/mozilla/nsprpub/pr/src/Makefile.in
+@@ -365,7 +365,7 @@
+ #
+ 
+ build:: $(TARGETS)
+-	$(INSTALL) -m 444 $(TARGETS) $(dist_libdir)
++	$(INSTALL) -m 664 $(TARGETS) $(dist_libdir)
+ ifdef SHARED_LIBRARY
+ ifeq ($(OS_ARCH),HP-UX)
+ 	$(INSTALL) -m 755 $(SHARED_LIBRARY) $(dist_libdir)
+--- misc/nss-3.13.5/mozilla/security/coreconf/Darwin.mk
++++ misc/build/nss-3.13.5/mozilla/security/coreconf/Darwin.mk
+@@ -150,7 +150,7 @@
+ # May override this with different compatibility and current version numbers.
+ DARWIN_DYLIB_VERSIONS = -compatibility_version 1 -current_version 1
+ # May override this with -bundle to create a loadable module.
+-DSO_LDOPTS	= -dynamiclib $(DARWIN_DYLIB_VERSIONS) -install_name @executable_path/$(notdir $@) -headerpad_max_install_names
++DSO_LDOPTS	= -dynamiclib $(DARWIN_DYLIB_VERSIONS) -install_name @__________________________________________________OOO/$(notdir $@) -headerpad_max_install_names
+ 
+ MKSHLIB		= $(CC) $(DSO_LDOPTS) $(DARWIN_SDK_SHLIBFLAGS)
+ DLL_SUFFIX	= dylib
