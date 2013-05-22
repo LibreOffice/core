@@ -2874,7 +2874,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                 }
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                     aCell.nNumberFormat, aCell.fValue);
-                if( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+                if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                             aCell.nNumberFormat, aCell.fValue, false, XML_NAMESPACE_CALC_EXT);
             }
@@ -2885,7 +2885,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                 OUString sFormula(lcl_GetRawString(pDoc, aCellPos));
                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                         sFormula, aCell.sStringValue, true, true);
-                if( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+                if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                             sFormula, aCell.sStringValue, false, true, XML_NAMESPACE_CALC_EXT);
             }
@@ -2918,7 +2918,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                         GetCellText(aCell, aCellPos);
                         AddAttribute(sAttrValueType, XML_STRING);
                         AddAttribute(sAttrStringValue, aCell.sStringValue);
-                        if( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+                        if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                         {
                             //export calcext:value-type="error"
                             AddAttribute(XML_NAMESPACE_CALC_EXT,XML_VALUE_TYPE, OUString("error"));
@@ -2936,7 +2936,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                                     pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0),
                                     pDoc->GetValue( aCellPos ));
-                                if( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+                                if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                                 {
                                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                                             pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0),
@@ -2950,7 +2950,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                             {
                                 GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                                         aCell.nNumberFormat, pDoc->GetValue( aCellPos ));
-                                if( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+                                if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                                 {
                                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                                             aCell.nNumberFormat, pDoc->GetValue( aCellPos ), false, XML_NAMESPACE_CALC_EXT );
@@ -2966,7 +2966,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                         {
                             AddAttribute(sAttrValueType, XML_STRING);
                             AddAttribute(sAttrStringValue, aCell.sStringValue);
-                            if( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+                            if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                             {
                                 AddAttribute(XML_NAMESPACE_CALC_EXT,XML_VALUE_TYPE, XML_STRING);
                             }
