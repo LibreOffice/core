@@ -4494,6 +4494,7 @@ void Test::testPivotTableDocFunc()
 void Test::testSheetCopy()
 {
     m_pDoc->InsertTab(0, "TestTab");
+    m_pDoc->SetString(ScAddress(0,0,0), "copy me");
     CPPUNIT_ASSERT_MESSAGE("document should have one sheet to begin with.", m_pDoc->GetTableCount() == 1);
     SCROW nRow1, nRow2;
     bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
