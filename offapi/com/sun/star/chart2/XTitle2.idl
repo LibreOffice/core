@@ -23,6 +23,7 @@
 #include <com/sun/star/chart2/XTitle.idl>
 #include <com/sun/star/chart2/RelativePosition.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/beans/Optional.idl>
 #include <com/sun/star/drawing/LineProperties.idl>
 #include <com/sun/star/drawing/FillProperties.idl>
 //FIXME does not exist <com/sun/star/layout/LayoutElement.idl>
@@ -67,7 +68,7 @@ interface XTitle2
         <p>If a relative position is given the title is not automatically placed,
         but instead is placed relative on the page.</p>
      */
-    [attribute] ::com::sun::star::chart2::RelativePosition RelativePosition;
+    [attribute] ::com::sun::star::beans::Optional<::com::sun::star::chart2::RelativePosition> RelativePosition;
 
 
     /** contains the size of the page at the time when properties were
@@ -76,7 +77,7 @@ interface XTitle2
         <p>This way it is possible to resize objects (like text) in
         the view without modifying the model.</p>
      */
-    [attribute]  com::sun::star::awt::Size   ReferencePageSize;
+    [attribute]  ::com::sun::star::beans::Optional<com::sun::star::awt::Size>   ReferencePageSize;
 };
 
 }; }; }; };

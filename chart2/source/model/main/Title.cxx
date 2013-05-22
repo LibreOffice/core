@@ -386,18 +386,18 @@ double Title::getPropertyDouble(const OUString& aPropertyName) throw (css::uno::
    return b;
 }
 
-awt::Size Title::getReferencePageSize() throw(css::uno::RuntimeException)
+beans::Optional<awt::Size> Title::getReferencePageSize() throw(css::uno::RuntimeException)
 {
    uno::Any any = getPropertyValue("ReferencePageSize");
-   awt::Size b;
+   beans::Optional<awt::Size> b;
    any >>= b;
    return b;
 }
 
-chart2::RelativePosition Title::getRelativePosition() throw(css::uno::RuntimeException)
+beans::Optional<chart2::RelativePosition> Title::getRelativePosition() throw(css::uno::RuntimeException)
 {
    uno::Any any = getPropertyValue("RelativePosition");
-   chart2::RelativePosition b;
+   beans::Optional<chart2::RelativePosition> b;
    any >>= b;
    return b;
 }
