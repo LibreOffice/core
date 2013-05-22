@@ -89,11 +89,11 @@ public:
         { return getPropertyBool("StackCharacters"); }
     virtual void SAL_CALL setStackCharacters(sal_Bool p1) throw(css::uno::RuntimeException)
         { setPropertyBool("StackCharacters", p1); }
-    virtual com::sun::star::chart2::RelativePosition SAL_CALL getRelativePosition() throw(css::uno::RuntimeException);
-    virtual void SAL_CALL setRelativePosition(const com::sun::star::chart2::RelativePosition& p1) throw(css::uno::RuntimeException)
+    virtual css::beans::Optional<com::sun::star::chart2::RelativePosition> SAL_CALL getRelativePosition() throw(css::uno::RuntimeException);
+    virtual void SAL_CALL setRelativePosition(const css::beans::Optional<css::chart2::RelativePosition>& p1) throw(css::uno::RuntimeException)
         { setPropertyValue("RelativePosition", css::uno::Any(p1)); }
-    virtual com::sun::star::awt::Size SAL_CALL getReferencePageSize() throw(css::uno::RuntimeException);
-    virtual void SAL_CALL setReferencePageSize(const com::sun::star::awt::Size& p1) throw(css::uno::RuntimeException)
+    virtual css::beans::Optional<com::sun::star::awt::Size> SAL_CALL getReferencePageSize() throw(css::uno::RuntimeException);
+    virtual void SAL_CALL setReferencePageSize(const css::beans::Optional<css::awt::Size>& p1) throw(css::uno::RuntimeException)
         { setPropertyValue("ReferencePageSize", css::uno::Any(p1)); }
 
 
