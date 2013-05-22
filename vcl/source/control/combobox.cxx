@@ -569,7 +569,7 @@ void ComboBox::SetDropDownLineCount( sal_uInt16 nLines )
 void ComboBox::AdaptDropDownLineCountToMaximum()
 {
     // adapt to maximum allowed number
-    SetDropDownLineCount(std::min(GetEntryCount(), GetSettings().GetStyleSettings().GetListBoxMaximumLineCount()));
+    SetDropDownLineCount(GetSettings().GetStyleSettings().GetListBoxMaximumLineCount());
 }
 
 // -----------------------------------------------------------------------

@@ -593,7 +593,7 @@ void ListBox::SetDropDownLineCount( sal_uInt16 nLines )
 void ListBox::AdaptDropDownLineCountToMaximum()
 {
     // adapt to maximum allowed number
-    SetDropDownLineCount(std::min(GetEntryCount(), GetSettings().GetStyleSettings().GetListBoxMaximumLineCount()));
+    SetDropDownLineCount(GetSettings().GetStyleSettings().GetListBoxMaximumLineCount());
 }
 
 // -----------------------------------------------------------------------
