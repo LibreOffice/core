@@ -591,6 +591,7 @@ gr_segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
         }
         size_t numchars = gr_count_unicode_characters(gr_utf16, rArgs.mpStr + mnSegCharOffset,
                 rArgs.mpStr + (rArgs.mnLength > limit + 64 ? limit + 64 : rArgs.mnLength), NULL);
+        if (rArgs.mnMinCharPos + numchars > limit) numchars = limit - rArgs.mnMinCharPos; // fdo#52540
         if (mpFeatures)
             pSegment = gr_make_seg(mpFont, mpFace, 0, mpFeatures->values(), gr_utf16,
                                         rArgs.mpStr + mnSegCharOffset, numchars, bRtl);
