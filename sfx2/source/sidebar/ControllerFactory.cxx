@@ -191,7 +191,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
                 UNO_QUERY);
         }
     }
-    catch (Exception& rException)
+    catch (Exception&)
     {
         // Ignore exception.
     }
