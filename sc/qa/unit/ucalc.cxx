@@ -283,7 +283,9 @@ public:
     void testCondFormatINSDEL();
 
     CPPUNIT_TEST_SUITE(Test);
+#ifndef DBG_UTIL
     CPPUNIT_TEST(testPerf);
+#endif
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testRangeList);
     CPPUNIT_TEST(testInput);
