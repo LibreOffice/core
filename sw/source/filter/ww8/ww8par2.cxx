@@ -3385,11 +3385,6 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     if( pTableDesc->Ok() )
     {
         int nNewInTable = nInTable + 1;
-        if (InEqualApo(nNewInTable))
-        {
-            OSL_ENSURE(pSFlyPara->pFlyFmt,
-                "how could we be in a local apo and have no apo");
-        }
 
         if ((eAnchor == FLY_AT_CHAR)
             && !maTableStack.empty() && !InEqualApo(nNewInTable) )
