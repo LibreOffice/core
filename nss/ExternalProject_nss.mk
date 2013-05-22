@@ -20,7 +20,6 @@ $(call gb_ExternalProject_get_state_target,nss,configure):
 	mozilla/nsprpub/configure --includedir=$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		$(if $(filter MSCX,$(COM)$(CPU)),--enable-64bit) \
-		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 	&& sed -e 's%@prefix@%$(OUTDIR)%' \
 		-e 's%@includedir@%$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/public/nss%' \
 		-e 's%@MOD_MAJOR_VERSION@%$(NSS_MAJOR)%' \
@@ -73,6 +72,19 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 		NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/nss/nsinstall.py") \
 		NSDISTMODE=copy \
 		$(MAKE) -j1 nss_build_all \
+		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
+			$(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
+			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libfreebl3.dylib \
+			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libnspr4.dylib \
+			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libnss3.dylib \
+			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libnssckbi.dylib \
+			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libnssdbm3.dylib \
+			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libnssutil3.dylib \
+			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libplc4.dylib \
+			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libplds4.dylib \
+			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libsmime3.dylib \
+			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libsoftokn3.dylib \
+			$(gb_Package_SOURCEDIR_nss)/mozilla/dist/out/lib/libssl3.dylib) \
 	,mozilla/security/nss)
 
 endif
