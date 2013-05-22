@@ -25,7 +25,7 @@
         <node oor:name="Commands">
             <node oor:name=".uno:Adjust" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Show All</value>
+                    <value xml:lang="en-US">Sho~w All</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -33,27 +33,27 @@
             </node>
             <node oor:name=".uno:ChangeAlignment" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Alignment...</value>
+                    <value xml:lang="en-US">A~lignment...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ChangeDistance" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Spacing...</value>
+                    <value xml:lang="en-US">~Spacing...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ChangeFont" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Fonts...</value>
+                    <value xml:lang="en-US">~Fonts...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ChangeFontSize" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Font Size...</value>
+                    <value xml:lang="en-US">F~ont Size...</value>
                 </prop>
             </node>
             <node oor:name=".uno:Draw" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Update</value>
+                    <value xml:lang="en-US">U~pdate</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -74,7 +74,7 @@
             </node>
             <node oor:name=".uno:ImportFormula" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Import Formula...</value>
+                    <value xml:lang="en-US">~Import Formula...</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertCommand" oor:op="replace">
@@ -94,12 +94,12 @@
             </node>
             <node oor:name=".uno:NextError" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Next Error</value>
+                    <value xml:lang="en-US">Ne~xt Error</value>
                 </prop>
             </node>
             <node oor:name=".uno:NextMark" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Next Marker</value>
+                    <value xml:lang="en-US">~Next Marker</value>
                 </prop>
             </node>
             <node oor:name=".uno:Preferences" oor:op="replace">
@@ -109,22 +109,22 @@
             </node>
             <node oor:name=".uno:PrevError" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Previous Error</value>
+                    <value xml:lang="en-US">Pr~evious Error</value>
                 </prop>
             </node>
             <node oor:name=".uno:PrevMark" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Previous Marker</value>
+                    <value xml:lang="en-US">Previous ~Marker</value>
                 </prop>
             </node>
             <node oor:name=".uno:RedrawAutomatic" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">AutoUpdate Display</value>
+                    <value xml:lang="en-US">~AutoUpdate Display</value>
                 </prop>
             </node>
             <node oor:name=".uno:SymbolCatalogue" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Catalog...</value>
+                    <value xml:lang="en-US">~Catalog...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -142,7 +142,7 @@
             </node>
             <node oor:name=".uno:Textmode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Text Mode</value>
+                    <value xml:lang="en-US">~Text Mode</value>
                 </prop>
             </node>
             <node oor:name=".uno:ToolBox" oor:op="replace">
