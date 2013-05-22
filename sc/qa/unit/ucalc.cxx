@@ -77,6 +77,7 @@
 #include <vector>
 
 #define CALC_DEBUG_OUTPUT 0
+#define CALC_TEST_PERF 0
 
 #include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
@@ -91,16 +92,6 @@ using ::std::endl;
 using ::std::vector;
 
 namespace {
-
-double getTimeDiff(const TimeValue& t1, const TimeValue& t2)
-{
-    double tv1 = t1.Seconds;
-    double tv2 = t2.Seconds;
-    tv1 += t1.Nanosec / 1000000000.0;
-    tv2 += t2.Nanosec / 1000000000.0;
-
-    return tv1 - tv2;
-}
 
 class Test : public test::BootstrapFixture {
 public:
@@ -283,7 +274,7 @@ public:
     void testCondFormatINSDEL();
 
     CPPUNIT_TEST_SUITE(Test);
-#if !defined(DBG_UTIL) && !defined(_WIN32_WINNT)
+#if CALC_TEST_PERF
     CPPUNIT_TEST(testPerf);
 #endif
     CPPUNIT_TEST(testCollator);
@@ -447,20 +438,11 @@ public:
 class MeasureTimeSwitch
 {
     double& mrDiff;
-    double mnScale;
     TimeValue maTimeBefore;
 public:
     MeasureTimeSwitch(double& rDiff) : mrDiff(rDiff)
     {
         mrDiff = 9999.0;
-        mnScale = 1.0;
-        osl_getSystemTime(&maTimeBefore);
-    }
-    // Scaled pseudo-time
-    MeasureTimeSwitch(double& rDiff, const double nScale ) : mrDiff(rDiff)
-    {
-        mrDiff = 9999.0;
-        mnScale = nScale;
         osl_getSystemTime(&maTimeBefore);
     }
 
@@ -468,7 +450,17 @@ public:
     {
         TimeValue aTimeAfter;
         osl_getSystemTime(&aTimeAfter);
-        mrDiff = getTimeDiff(aTimeAfter, maTimeBefore) / mnScale;
+        mrDiff = getTimeDiff(aTimeAfter, maTimeBefore);
+    }
+
+    double getTimeDiff(const TimeValue& t1, const TimeValue& t2) const
+    {
+        double tv1 = t1.Seconds;
+        double tv2 = t2.Seconds;
+        tv1 += t1.Nanosec / 1000000000.0;
+        tv2 += t2.Nanosec / 1000000000.0;
+
+        return tv1 - tv2;
     }
 };
 
@@ -497,13 +489,13 @@ void Test::tearDown()
     BootstrapFixture::tearDown();
 }
 
-#define PERF_ASSERT(df,time,message) \
+#define PERF_ASSERT(df,scale,time,message) \
     do { \
-        if ((df) >= (time)) \
+        double dfscaled = df / scale; \
+        if ((dfscaled) >= (time)) \
         { \
             std::ostringstream os; \
-            os << message << " took " << diff << " psuedo-cycles, expected: " << time; \
-            /* debugging - fprintf (stderr, "'%s'\n", os.str().c_str()); */ \
+            os << message << " took " << dfscaled << " pseudo-cycles (" << df << " real-time seconds), expected: " << time << " pseudo-cycles."; \
             CPPUNIT_FAIL(os.str().c_str()); \
         } \
     } while (0)
@@ -545,10 +537,10 @@ void Test::testPerf()
     // second.  Flag failure if it takes more than one second.  Clearing 100
     // columns should be large enough to flag if something goes wrong.
     {
-        MeasureTimeSwitch aTime(diff, scale);
+        MeasureTimeSwitch aTime(diff);
         clearRange(m_pDoc, ScRange(0,0,0,99,MAXROW,0));
     }
-    PERF_ASSERT(diff, 1.0, "Clearing an empty sheet");
+    PERF_ASSERT(diff, scale, 1.0, "Clearing an empty sheet");
 
     {
         // Switch to R1C1 to make it easier to input relative references in multiple cells.
@@ -563,10 +555,10 @@ void Test::testPerf()
         // Now, Delete B2:B100000. This should complete in a fraction of a second
         // (0.06 sec on my machine).
         {
-            MeasureTimeSwitch aTime(diff, scale);
+            MeasureTimeSwitch aTime(diff);
             clearRange(m_pDoc, ScRange(1,1,0,1,99999,0));
         }
-        PERF_ASSERT(diff, 3000, "Removal of a large array of formula cells");
+        PERF_ASSERT(diff, scale, 2000, "Removal of a large array of formula cells");
     }
 
     clearRange(m_pDoc, ScRange(0,0,0,1,MAXROW,0)); // Clear columns A:B.
@@ -597,10 +589,10 @@ void Test::testPerf()
         aMark.SetMarkArea(aPasteRange);
 
         {
-            MeasureTimeSwitch aTime(diff, scale);
+            MeasureTimeSwitch aTime(diff);
             m_pDoc->CopyFromClip(aPasteRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc);
         }
-        PERF_ASSERT(diff, 1500.0, "Pasting a single cell to A2:A100000");
+        PERF_ASSERT(diff, scale, 1500.0, "Pasting a single cell to A2:A100000");
 
         ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
         pRedoDoc->InitUndo(m_pDoc, 0, 0);
@@ -615,10 +607,10 @@ void Test::testPerf()
         CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aEnd));
 
         {
-            MeasureTimeSwitch aTime(diff, scale);
+            MeasureTimeSwitch aTime(diff);
             aUndo.Undo();
         }
-        PERF_ASSERT(diff, 500.0, "Undoing a pasting of a cell to A2:A100000");
+        PERF_ASSERT(diff, scale, 500.0, "Undoing a pasting of a cell to A2:A100000");
 
         // Make sure it's really undone.
         CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, m_pDoc->GetCellType(aPos));
@@ -627,10 +619,10 @@ void Test::testPerf()
 
         // Now redo.
         {
-            MeasureTimeSwitch aTime(diff, scale);
+            MeasureTimeSwitch aTime(diff);
             aUndo.Redo();
         }
-        PERF_ASSERT(diff, 1000.0, "Redoing a pasting of a cell to A2:A100000");
+        PERF_ASSERT(diff, scale, 1000.0, "Redoing a pasting of a cell to A2:A100000");
 
         // Make sure it's really redone.
         CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aStart));
@@ -668,10 +660,10 @@ void Test::testPerf()
         aMark.SetMarkArea(aPasteRange);
 
         {
-            MeasureTimeSwitch aTime(diff, scale);
+            MeasureTimeSwitch aTime(diff);
             m_pDoc->CopyFromClip(aPasteRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc);
         }
-        PERF_ASSERT(diff, 1000.0, "Pasting A1:A2 to A3:A100001");
+        PERF_ASSERT(diff, scale, 1000.0, "Pasting A1:A2 to A3:A100001");
 
         ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
         pRedoDoc->InitUndo(m_pDoc, 0, 0);
@@ -689,10 +681,10 @@ void Test::testPerf()
         CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(aTmp));
 
         {
-            MeasureTimeSwitch aTime(diff, scale);
+            MeasureTimeSwitch aTime(diff);
             aUndo.Undo();
         }
-        PERF_ASSERT(diff, 500.0, "Undoing");
+        PERF_ASSERT(diff, scale, 500.0, "Undoing");
 
         // Make sure it's really undone.
         CPPUNIT_ASSERT_EQUAL(CELLTYPE_VALUE, m_pDoc->GetCellType(aPos));
@@ -701,10 +693,10 @@ void Test::testPerf()
 
         // Now redo.
         {
-            MeasureTimeSwitch aTime(diff, scale);
+            MeasureTimeSwitch aTime(diff);
             aUndo.Redo();
         }
-        PERF_ASSERT(diff, 800.0, "Redoing");
+        PERF_ASSERT(diff, scale, 800.0, "Redoing");
 
         // Make sure it's really redone.
         CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(aPos), m_pDoc->GetString(aPasteRange.aStart));
@@ -745,10 +737,10 @@ void Test::testPerf()
         aMark.SetMarkArea(aPasteRange);
 
         {
-            MeasureTimeSwitch aTime(diff, scale);
+            MeasureTimeSwitch aTime(diff);
             m_pDoc->CopyFromClip(aPasteRange, aMark, IDF_CONTENTS, pUndoDoc, &aClipDoc);
         }
-        PERF_ASSERT(diff, 2000.0, "Pasting");
+        PERF_ASSERT(diff, scale, 2000.0, "Pasting");
 
         ScDocument* pRedoDoc = new ScDocument(SCDOCMODE_UNDO);
         pRedoDoc->InitUndo(m_pDoc, 0, 0);
@@ -767,10 +759,10 @@ void Test::testPerf()
 
 #if 0 // TODO: Undo and redo of this scenario is currently not fast enough to be tested reliably.
         {
-            MeasureTimeSwitch aTime(diff, scale);
+            MeasureTimeSwitch aTime(diff);
             aUndo.Undo();
         }
-        PERF_ASSERT(diff, 1.0, "Undoing");
+        PERF_ASSERT(diff, scale, 1.0, "Undoing");
 
         // Make sure it's really undone.
         CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(aPos));
@@ -779,10 +771,10 @@ void Test::testPerf()
 
         // Now redo.
         {
-            MeasureTimeSwitch aTime(diff, scale);
+            MeasureTimeSwitch aTime(diff);
             aUndo.Redo();
         }
-        PERF_ASSERT(diff, 1.0, "Redoing");
+        PERF_ASSERT(diff, scale, 1.0, "Redoing");
 
         // Make sure it's really redone.
         CPPUNIT_ASSERT_EQUAL(CELLTYPE_FORMULA, m_pDoc->GetCellType(aPasteRange.aStart));
