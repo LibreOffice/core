@@ -28,12 +28,6 @@
 #include <tools/urlobj.hxx>
 #include "svx/svxdllapi.h"
 
-// -----------
-// - Defines -
-// -----------
-
-#define GALLERYBROWSER() ((GalleryBrowser*)( SfxViewFrame::Current()->GetChildWindow(GalleryChildWindow::GetChildWindowId())->GetWindow()))
-
 // -------------------------
 // - SvxGalleryChildWindow -
 // -------------------------
