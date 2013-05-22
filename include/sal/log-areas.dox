@@ -58,6 +58,11 @@ certain functionality.
 @li @c connectivity.parse
 @li @c connectivity.postgresql
 
+@section comphelper
+
+@li @c comphelper
+@li @c comphelper.container
+
 @section cui
 
 @li @c cui.customize
@@ -346,7 +351,6 @@ certain functionality.
 @li @c basebmp
 @li @c binaryurp
 @li @c bridges
-@li @c comphelper
 @li @c configmgr
 @li @c cppcanvas
 @li @c cppcanvas.emf
