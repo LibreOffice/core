@@ -19,22 +19,17 @@
 #ifndef CHART_MACROS_HXX
 #define CHART_MACROS_HXX
 
+#include "sal/config.h"
+
 #include <typeinfo>
 
-/** shows an error-box for an exception ex
-    else-branch necessary to avoid warning
-*/
-#if OSL_DEBUG_LEVEL > 0
+#include "sal/log.hxx"
+
 #define ASSERT_EXCEPTION(ex)                   \
   SAL_WARN("chart2", "Exception caught. Type: " <<\
     typeid( ex ).name() << ", Message: " << \
     ex.Message )
-#else
-//avoid compilation warnings
-#define ASSERT_EXCEPTION(ex) (void)(ex)
-#endif
 
-// CHART_MACROS_HXX
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
