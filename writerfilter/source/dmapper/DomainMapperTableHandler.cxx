@@ -828,9 +828,23 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
         if (xTable.is() && xStart.is() && xEnd.is())
         {
             uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
-            aFrameProperties.realloc(aFrameProperties.getLength() + 1);
-            aFrameProperties[aFrameProperties.getLength() - 1].Name = "Width";
-            aFrameProperties[aFrameProperties.getLength() - 1].Value = xTableProperties->getPropertyValue("Width");
+            sal_Bool bIsRelative = sal_False;
+            xTableProperties->getPropertyValue("IsWidthRelative") >>= bIsRelative;
+            if (!bIsRelative)
+            {
+                aFrameProperties.realloc(aFrameProperties.getLength() + 1);
+                aFrameProperties[aFrameProperties.getLength() - 1].Name = "Width";
+                aFrameProperties[aFrameProperties.getLength() - 1].Value = xTableProperties->getPropertyValue("Width");
+            }
+            else
+            {
+                aFrameProperties.realloc(aFrameProperties.getLength() + 1);
+                aFrameProperties[aFrameProperties.getLength() - 1].Name = "FrameWidthPercent";
+                aFrameProperties[aFrameProperties.getLength() - 1].Value = xTableProperties->getPropertyValue("RelativeWidth");
+
+                // Applying the relative width to the frame, needs to have the table width to be 100% of the frame width
+                xTableProperties->setPropertyValue("RelativeWidth", uno::makeAny(sal_Int16(100)));
+            }
 
             // A non-zero left margin would move the table out of the frame, move the frame itself instead.
             xTableProperties->setPropertyValue("LeftMargin", uno::makeAny(sal_Int32(0)));
