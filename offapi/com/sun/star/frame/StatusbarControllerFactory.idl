@@ -35,12 +35,7 @@ module com { module sun { module star { module frame {
 
     @since OOo 2.0
 */
-service StatusbarControllerFactory : XUIControllerFactory
-{
-    /** service constructor
-     */
-    create();
-};
+service StatusbarControllerFactory : XUIControllerFactory;
 
 }; }; }; };
 
