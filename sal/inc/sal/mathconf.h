@@ -56,7 +56,11 @@ extern "C" {
 
 /* SAL_MATH_FINITE(d): test double d on INFINITY, NaN et al. */
 #if defined(__GNUC__)
+#if defined(MACOSX)
+    #define SAL_MATH_FINITE(d) finite(d)
+#else
     #define SAL_MATH_FINITE(d) __builtin_isfinite(d) // gcc bug 14608
+#endif
 #elif defined(__STDC__)
     // isfinite() should be available in math.h according to C99,C++99,SUSv3,etc.
     // unless GCC bug 14608 hits us where cmath undefines isfinite as macro
