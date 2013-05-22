@@ -388,7 +388,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
         // get quickstart service
         try
         {
-            css::uno::Reference< css::beans::XFastPropertySet > xSet( xSMGR->createInstance(IMPLEMENTATIONNAME_QUICKLAUNCHER), css::uno::UNO_QUERY_THROW );
+            css::uno::Reference< css::beans::XFastPropertySet > xSet( xContext->getServiceManager()->createInstanceWithContext(IMPLEMENTATIONNAME_QUICKLAUNCHER, xContext), css::uno::UNO_QUERY_THROW );
             if( xSet.is() )
             {
                 css::uno::Any aVal( xSet->getFastPropertyValue( 0 ) );
