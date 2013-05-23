@@ -440,6 +440,17 @@
           <value>com.sun.star.svx.MatchCaseToolboxController</value>
         </prop>
       </node>
+      <node oor:name="com.sun.star.svx.FindAllToolboxController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FindAll</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.svx.FindAllToolboxController</value>
+        </prop>
+      </node>
       <node oor:name="c4" oor:op="replace" install:module="reportbuilder">
         <prop oor:name="Command">
           <value>.uno:FontColor</value>
