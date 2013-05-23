@@ -1956,8 +1956,11 @@ void SfxMedium::Transfer_Impl()
                 }
             }
 
-            if ( !sParentUrl.isEmpty() )
-                aDest = INetURLObject( sParentUrl );
+            if ( sParentUrl.isEmpty() )
+                aDestURL = aDest.GetMainURL( INetURLObject::NO_DECODE );
+                    // adjust to above aDest.removeSegment()
+            else
+                aDestURL = sParentUrl;
 
             // LongName wasn't defined anywhere, only used here... get the Title instead
             // as it's less probably empty
@@ -1969,7 +1972,7 @@ void SfxMedium::Transfer_Impl()
 
             try
             {
-                aTransferContent = ::ucbhelper::Content( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv );
+                aTransferContent = ::ucbhelper::Content( aDestURL, xComEnv );
             }
             catch (const ::com::sun::star::ucb::ContentCreationException& ex)
             {
