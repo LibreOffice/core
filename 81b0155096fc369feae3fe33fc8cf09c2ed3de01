@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8Pc\u003d",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6588,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-05-23T14:10:09Z",
+      "side": 0,
+      "message": "This should not be removed.",
+      "revId": "81b0155096fc369feae3fe33fc8cf09c2ed3de01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8PQ\u003d",
+        "filename": "sc/source/filter/inc/xiescher.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1299,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-05-23T14:10:09Z",
+      "side": 0,
+      "message": "Not to be removed.",
+      "revId": "81b0155096fc369feae3fe33fc8cf09c2ed3de01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
