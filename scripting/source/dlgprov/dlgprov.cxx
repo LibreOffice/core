@@ -88,6 +88,8 @@ namespace dlgprov
 {
 //.........................................................................
 
+static OUString aResourceResolverPropName("ResourceResolver");
+
     Reference< resource::XStringResourceManager > lcl_getStringResourceManager(const Reference< XComponentContext >& i_xContext,const OUString& i_sURL)
     {
         INetURLObject aInetObj( i_sURL );
@@ -147,7 +149,9 @@ namespace dlgprov
         // Set resource property
         if( xStringResourceManager.is() )
         {
-            xDialogModel->setResourceResolver( xStringResourceManager );
+            Any aStringResourceManagerAny;
+            aStringResourceManagerAny <<= xStringResourceManager;
+            xDialogModel->setPropertyValue( aResourceResolverPropName, aStringResourceManagerAny );
         }
 
         return xDialogModel;
