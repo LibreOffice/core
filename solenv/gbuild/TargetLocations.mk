@@ -46,9 +46,6 @@ gb_ResTarget_get_unittest_target = \
     $(OUTDIR)/unittest/install/program/resource/$(1).res
 gb_UnoApi_get_target = $(OUTDIR)/bin/$(1).rdb
 gb_Jar_get_outdir_target = $(OUTDIR)/bin/$(1).jar
-gb_Zip_get_outdir_target = $(OUTDIR)/pck/$(1).zip
-gb_Zip_get_outdir_target_for_build = $(OUTDIR_FOR_BUILD)/pck/$(1).zip
-# outdir targets: $(1) is path
 gb_Configuration_registry = $(OUTDIR)/xml/registry
 gb_XcsTarget_get_outdir_target = \
     $(gb_Configuration_registry)/schema$(if $(1),/)$(1)
@@ -228,7 +225,6 @@ gb_XcuModuleTarget_get_target = $(WORKDIR)/XcuModuleTarget/$(1)
 gb_XcuMergeTarget_get_target = $(WORKDIR)/XcuMergeTarget/$(1)
 gb_XcuResTarget_get_target = $(WORKDIR)/XcuResTarget/$(1)
 gb_Zip_get_target = $(WORKDIR)/Zip/$(1).zip
-gb_Zip_get_final_target = $(WORKDIR)/Zip/$(1).done
 
 gb_Library__get_final_target = $(WORKDIR)/Dummy/$(1)
 

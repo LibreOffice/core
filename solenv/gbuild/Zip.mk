@@ -27,11 +27,9 @@ gb_Zip_ZIPCOMMAND := zip $(if $(findstring s,$(MAKEFLAGS)),-q)
 $(call gb_Zip_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),ZIP,3)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_Zip_get_target,$*) && \
-		rm -f $(call gb_Zip__get_preparation_target,$*) && \
-		rm -f $(call gb_Zip_get_final_target,$*) && \
 		$(if $(CLEAR_LOCATION),rm -rf $(gb_Package_Location_$*) &&) \
-		rm -f $(call gb_Zip_get_outdir_target,$*))
+		rm -f $(call gb_Zip_get_target,$*) && \
+		rm -f $(call gb_Zip__get_preparation_target,$*))
 
 # rule to create zip package in workdir
 # --filesync makes sure that all files in the zip package will be removed that no longer are in $(FILES)
@@ -43,12 +41,6 @@ $(call gb_Zip_get_target,%) :
 	mkdir -p $(dir $(call gb_Zip_get_target,$*)) && \
 	cd $(LOCATION) && cat $${RESPONSEFILE} | tr "[:space:]" "\n" | $(gb_Zip_ZIPCOMMAND) -@rX --filesync --must-match $(call gb_Zip_get_target,$*) && \
 	rm -f $${RESPONSEFILE} )
-
-# the final target is a touch target; we use it as registered targets should be in workdir, not in outdir
-# the outdir target depends on the workdir target and is built by delivering the latter
-# the workdir target is created by cd'ing to the target directory and adding/updating the files
-$(call gb_Zip_get_final_target,%) : $(call gb_Zip_get_outdir_target,%)
-	touch $@
 
 # the preparation target is here to ensure proper ordering of actions in cases
 # when we want to, e.g., create a zip from files created by a custom target
@@ -74,10 +66,6 @@ endef
 define gb_Zip_Zip_internal
 $(call gb_Zip_Zip_internal_nodeliver,$(1),$(2))
 
-$(call gb_Deliver_add_deliverable,$(call gb_Zip_get_outdir_target,$(1)),$(call gb_Zip_get_target,$(1)),$(1))
-$(call gb_Zip_get_outdir_target,$(1)) : $(call gb_Zip_get_target,$(1)) \
-	| $(dir $(call gb_Zip_get_outdir_target,$(1))).dir
-
 endef
 
 # depend on makefile to enforce a rebuild if files are removed from the zip
@@ -85,8 +73,8 @@ define gb_Zip_Zip
 $(call gb_Zip_Zip_internal,$(1),$(2))
 $(call gb_Zip_get_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
 
-$(eval $(call gb_Module_register_target,$(call gb_Zip_get_final_target,$(1)),$(call gb_Zip_get_clean_target,$(1))))
-$(call gb_Helper_make_userfriendly_targets,$(1),Zip,$(call gb_Zip_get_final_target,$(1)))
+$(eval $(call gb_Module_register_target,$(call gb_Zip_get_target,$(1)),$(call gb_Zip_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),Zip,$(call gb_Zip_get_target,$(1)))
 
 endef
 
