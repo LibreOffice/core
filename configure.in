@@ -4093,7 +4093,7 @@ if test "$_os" = "Darwin" && test "$with_system_python" != "no"; then
    _python_hexversion=`$_python -c "import sys; print sys.hexversion;"`
    
    dnl hex version of Python 2.7.1 = 34013680
-   if test "$_python_hexversion" >= "34013680" ; then
+   if test $_python_hexversion -ge 34013680 ; then
       AC_MSG_RESULT([compiling against system python (version $_python_version)])
 
 	  _python_ver=`$_python -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('VERSION'));"`
