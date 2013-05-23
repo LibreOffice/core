@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//8O8\u003d",
+        "filename": "sc/source/core/tool/cellkeytranslator.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-05-23T16:42:53Z",
+      "side": 1,
+      "message": "!a.compareTo(b)  i.e.  a.compareTo(b)\u003d\u003d0  means  a\u003d\u003db  not  a!\u003db",
+      "revId": "6b48c7b50d8950d7e5dcc75d12ee3047583ab983",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//8PY\u003d",
         "filename": "sc/source/filter/excel/xiescher.cxx",
         "patchSetId": 1
