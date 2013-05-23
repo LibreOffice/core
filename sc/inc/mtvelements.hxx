@@ -11,7 +11,9 @@
 #define SC_MTVELEMENTS_HXX
 
 #include "address.hxx"
+#include "formulacell.hxx"
 #include "svl/broadcast.hxx"
+#include "editeng/editobj.hxx"
 
 #define DEBUG_COLUMN_STORAGE 0
 
@@ -25,6 +27,7 @@
 #include <mdds/multi_type_vector_macro.hpp>
 #include <mdds/multi_type_vector.hpp>
 #include <mdds/multi_type_vector_custom_func1.hpp>
+#include <mdds/multi_type_vector_custom_func3.hpp>
 
 #include <boost/unordered_map.hpp>
 
@@ -47,28 +50,52 @@ struct CellTextAttr
 const mdds::mtv::element_t element_type_broadcaster = mdds::mtv::element_type_user_start;
 const mdds::mtv::element_t element_type_celltextattr = mdds::mtv::element_type_user_start + 1;
 
+const mdds::mtv::element_t element_type_string = mdds::mtv::element_type_user_start + 2;
+const mdds::mtv::element_t element_type_edittext = mdds::mtv::element_type_user_start + 3;
+const mdds::mtv::element_t element_type_formula = mdds::mtv::element_type_user_start + 4;
+
+const mdds::mtv::element_t element_type_numeric = mdds::mtv::element_type_numeric;
+
 // Custom element blocks.
 
-typedef mdds::mtv::noncopyable_managed_element_block<element_type_broadcaster, SvtBroadcaster> custom_broadcaster_block;
-typedef mdds::mtv::default_element_block<element_type_celltextattr, CellTextAttr> custom_celltextattr_block;
+typedef mdds::mtv::noncopyable_managed_element_block<element_type_broadcaster, SvtBroadcaster> broadcaster_block;
+typedef mdds::mtv::default_element_block<element_type_celltextattr, CellTextAttr> celltextattr_block;
+typedef mdds::mtv::default_element_block<element_type_string, rtl::OUString> string_block;
+typedef mdds::mtv::noncopyable_managed_element_block<element_type_edittext, EditTextObject> edittext_block;
+typedef mdds::mtv::noncopyable_managed_element_block<element_type_formula, ScFormulaCell> formula_block;
 
 // This needs to be in the same namespace as CellTextAttr.
-MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(CellTextAttr, element_type_celltextattr, CellTextAttr(), custom_celltextattr_block)
+MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(CellTextAttr, element_type_celltextattr, CellTextAttr(), celltextattr_block)
 
 }
 
-// This needs to be in global namespace just like SvtBroacaster is.
-MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(SvtBroadcaster, sc::element_type_broadcaster, NULL, sc::custom_broadcaster_block)
+// These need to be in global namespace just like their respective types are.
+MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(SvtBroadcaster, sc::element_type_broadcaster, NULL, sc::broadcaster_block)
+MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(ScFormulaCell, sc::element_type_formula, NULL, sc::formula_block)
+MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(EditTextObject, sc::element_type_edittext, NULL, sc::edittext_block)
+
+namespace rtl {
+
+MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(OUString, sc::element_type_string, OUString(), sc::string_block)
+
+}
 
 namespace sc {
 
 // Broadcaster storage container
-typedef mdds::mtv::custom_block_func1<sc::element_type_broadcaster, sc::custom_broadcaster_block> BCBlkFunc;
+typedef mdds::mtv::custom_block_func1<sc::element_type_broadcaster, sc::broadcaster_block> BCBlkFunc;
 typedef mdds::multi_type_vector<BCBlkFunc> BroadcasterStoreType;
 
 // Cell text attribute container.
-typedef mdds::mtv::custom_block_func1<sc::element_type_celltextattr, sc::custom_celltextattr_block> CTAttrFunc;
+typedef mdds::mtv::custom_block_func1<sc::element_type_celltextattr, sc::celltextattr_block> CTAttrFunc;
 typedef mdds::multi_type_vector<CTAttrFunc> CellTextAttrStoreType;
+
+// Cell container
+typedef mdds::mtv::custom_block_func3<
+    sc::element_type_string, sc::string_block,
+    sc::element_type_edittext, sc::edittext_block,
+    sc::element_type_formula, sc::formula_block> CellFunc;
+typedef mdds::multi_type_vector<CellFunc> CellStoreType;
 
 /**
  * Store position data for column array storage.

@@ -21,8 +21,8 @@ class ScColumnTextWidthIterator : boost::noncopyable
     size_t mnCurPos;
     sc::CellTextAttrStoreType::iterator miBlockCur;
     sc::CellTextAttrStoreType::iterator miBlockEnd;
-    sc::custom_celltextattr_block::iterator miDataCur;
-    sc::custom_celltextattr_block::iterator miDataEnd;
+    sc::celltextattr_block::iterator miDataCur;
+    sc::celltextattr_block::iterator miDataEnd;
 
 public:
     ScColumnTextWidthIterator(ScColumn& rCol, SCROW nStartRow, SCROW nEndRow);

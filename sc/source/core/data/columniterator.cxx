@@ -147,11 +147,11 @@ void ScColumnTextWidthIterator::getDataIterators(size_t nOffsetInBlock)
     OSL_ENSURE(miBlockCur != miBlockEnd, "block is at end position");
 #if 0
     // Does not compile
-    OSL_ENSURE(miBlockCur->type == sc::custom_celltextattr_block,
+    OSL_ENSURE(miBlockCur->type == sc::celltextattr_block,
                "wrong block type - unsigned short block expected.");
 #endif
-    miDataCur = sc::custom_celltextattr_block::begin(*miBlockCur->data);
-    miDataEnd = sc::custom_celltextattr_block::end(*miBlockCur->data);
+    miDataCur = sc::celltextattr_block::begin(*miBlockCur->data);
+    miDataEnd = sc::celltextattr_block::end(*miBlockCur->data);
 
     std::advance(miDataCur, nOffsetInBlock);
 }
