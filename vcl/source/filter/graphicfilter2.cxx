@@ -265,8 +265,8 @@ sal_Bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  sal_Bool bExtendedInf
 
             sal_uInt32 nError( rStm.GetError() );
 
-            sal_Bool bScanFailure = sal_False;
-            sal_Bool bScanFinished = sal_False;
+            bool bScanFailure = false;
+            bool bScanFinished = false;
 
             while( !bScanFailure && !bScanFinished && !rStm.IsEof() && !rStm.GetError() )
             {
@@ -287,11 +287,11 @@ sal_Bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  sal_Bool bExtendedInf
 
                     case 0xd8 :     // SOI (has already been checked, there should not be a second one)
                     case 0x00 :     // marker is invalid, we should stop now
-                        bScanFailure = sal_True;
+                        bScanFailure = true;
                     break;
 
                     case 0xd9 :     // EOI
-                        bScanFinished = sal_True;
+                        bScanFinished = true;
                     break;
 
                     // per default we assume marker segments conaining a length parameter
@@ -301,7 +301,7 @@ sal_Bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  sal_Bool bExtendedInf
                         rStm >> nLength;
 
                         if ( nLength < 2 )
-                            bScanFailure = sal_True;
+                            bScanFailure = true;
                         else
                         {
                             sal_uInt32 nNextMarkerPos = rStm.Tell() + nLength - 2;
@@ -383,7 +383,7 @@ sal_Bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  sal_Bool bExtendedInf
                                     nBitsPerPixel = ( nNumberOfImageComponents == 3 ? 24 : nNumberOfImageComponents == 1 ? 8 : 0 );
                                     nPlanes = 1;
 
-                                    bScanFinished = sal_True;
+                                    bScanFinished = true;
                                 }
                                 break;
                             }
@@ -600,7 +600,7 @@ sal_Bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, sal_Bool bExtendedInfo
 
 sal_Bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo )
 {
-    sal_Bool    bDetectOk = sal_False;
+    bool    bDetectOk = false;
     sal_Bool    bRet = sal_False;
     sal_uInt8   cByte1;
     sal_uInt8   cByte2;
@@ -613,12 +613,12 @@ sal_Bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo
         if ( cByte1 == 0x49 )
         {
             rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-            bDetectOk = sal_True;
+            bDetectOk = true;
         }
         else if ( cByte1 == 0x4d )
         {
             rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-            bDetectOk = sal_True;
+            bDetectOk = true;
         }
 
         if ( bDetectOk )
@@ -636,7 +636,7 @@ sal_Bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo
                     sal_uLong   nCount;
                     sal_uLong   nMax = DATA_SIZE - 48;
                     sal_uInt32  nTemp32;
-                    sal_Bool    bOk = sal_False;
+                    bool        bOk = false;
 
                     // Offset of the first IFD
                     rStm >> nTemp32;

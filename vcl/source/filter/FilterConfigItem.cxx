@@ -38,9 +38,9 @@ using namespace ::com::sun::star::container ;   //
 using namespace ::com::sun::star::configuration;   //
 using namespace ::com::sun::star::task      ;   // XStatusIndicator
 
-static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, const OUString& rTree )
+static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, const OUString& rTree )
 {
-    sal_Bool bAvailable = !rTree.isEmpty();
+    bool bAvailable = !rTree.isEmpty();
     if ( bAvailable )
     {
         using comphelper::string::getTokenCount;
@@ -74,7 +74,7 @@ static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv
         }
         catch (const ::com::sun::star::uno::Exception&)
         {
-            bAvailable = sal_False;
+            bAvailable = false;
         }
         if ( xReadAccess.is() )
         {
@@ -84,12 +84,12 @@ static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv
                     ( xReadAccess, UNO_QUERY );
 
                 if ( !xHierarchicalNameAccess.is() )
-                    bAvailable = sal_False;
+                    bAvailable = false;
                 else
                 {
                     OUString aNode( getToken(rTree, i, '/') );
                     if ( !xHierarchicalNameAccess->hasByHierarchicalName( aNode ) )
-                        bAvailable = sal_False;
+                        bAvailable = false;
                     else
                     {
                         Any a( xHierarchicalNameAccess->getByHierarchicalName( aNode ) );
@@ -99,7 +99,7 @@ static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv
                         }
                         catch ( ::com::sun::star::uno::Exception& )
                         {
-                            bAvailable = sal_False;
+                            bAvailable = false;
                         }
                     }
                 }
