@@ -432,10 +432,10 @@ sub read_lcidlist
     {
         my $line = ${$lcidlist}[$i];
 
-        if ( $line =~ /^\s*\#/ ) { next; }  # this is a comment line
-        if ( $line =~ /^$/ ) { next; }  # this is an empty line
-        if ( $line =~ /^(.*?)(\#.*)$/ ) { $line = $1; } # removing comments after "#"
-        if ( $line =~ /^\s*([\w-]+)\s*(\d+)\s*(\d+)\s*$/ )
+        $line =~ s/\#.*$//; # removing comments after "#"
+        if ( $line =~ /^\s*$/ ) { next; }  # this is an empty line
+
+        if ( $line =~ /^\s*([\w-]+)\s+(\d+)\s+(\d+)\s*$/ )
         {
             my $onelanguage = $1;
             my $windowslanguage = $3;
@@ -443,7 +443,7 @@ sub read_lcidlist
         }
         else
         {
-            installer::exiter::exit_program("ERROR: Wrong syntax in Windows LCID list $installer::globals::lcidlistname in line $i.", "read_lcidlist");
+            installer::exiter::exit_program("ERROR: Wrong syntax in Windows LCID list $installer::globals::lcidlistname in line $i: '$line'", "read_lcidlist");
         }
     }
     $installer::globals::msilanguage = \%msilanguage;
