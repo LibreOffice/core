@@ -121,7 +121,11 @@ class ScColumn
     // type value or SC_SCRIPTTYPE_UNKNOWN.
     sc::CellTextAttrStoreType maCellTextAttrs;
 
+    // Broadcasters for formula cells.
     sc::BroadcasterStoreType maBroadcasters;
+
+    // Cell values.
+    sc::CellStoreType maCells;
 
     SCCOL           nCol;
     SCTAB           nTab;
