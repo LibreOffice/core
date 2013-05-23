@@ -159,6 +159,7 @@ FillBitmapURL
 FillColor
 FillGradient
 FillGradientName
+FillHatch
 FillStyle
 FillTransparence
 FillTransparenceGradient
