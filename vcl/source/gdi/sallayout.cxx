@@ -1090,7 +1090,7 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
         if( m_GlyphItems[i].IsClusterStart() )
         {
             // calculate original and adjusted cluster width
-            int nOldClusterWidth = m_GlyphItems[i].mnNewWidth;
+            int nOldClusterWidth = m_GlyphItems[i].mnNewWidth - m_GlyphItems[i].mnXOffset;
             int nNewClusterWidth = pNewGlyphWidths[i];
             size_t j;
             for( j = i; ++j < m_GlyphItems.size(); )
@@ -1098,7 +1098,7 @@ void GenericSalLayout::ApplyDXArray( ImplLayoutArgs& rArgs )
                 if( m_GlyphItems[j].IsClusterStart() )
                     break;
                 if( !m_GlyphItems[j].IsDiacritic() ) // #i99367# ignore diacritics
-                    nOldClusterWidth += m_GlyphItems[j].mnNewWidth;
+                    nOldClusterWidth += m_GlyphItems[j].mnNewWidth -  m_GlyphItems[j].mnXOffset;
                 nNewClusterWidth += pNewGlyphWidths[j];
             }
             const int nDiff = nNewClusterWidth - nOldClusterWidth;
