@@ -17,25 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scitems.hxx"
-#include <editeng/eeitem.hxx>
-
-#include <svx/algitem.hxx>
-#include <editeng/editobj.hxx>
-#include <editeng/editstat.hxx>
-#include <editeng/emphasismarkitem.hxx>
-#include <editeng/fhgtitem.hxx>
-#include <editeng/forbiddencharacterstable.hxx>
-#include <svx/rotmodit.hxx>
-#include <editeng/scripttypeitem.hxx>
-#include <editeng/unolingu.hxx>
-#include <editeng/justifyitem.hxx>
-#include <svl/zforlist.hxx>
-#include <svl/broadcast.hxx>
-#include <svl/listeneriter.hxx>
-#include <vcl/outdev.hxx>
-
 #include "column.hxx"
+#include "scitems.hxx"
 #include "cell.hxx"
 #include "formulacell.hxx"
 #include "document.hxx"
@@ -61,6 +44,23 @@
 #include "listenercontext.hxx"
 
 #include <math.h>
+
+#include <editeng/eeitem.hxx>
+
+#include <svx/algitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/emphasismarkitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
+#include <svx/rotmodit.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/justifyitem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/broadcast.hxx>
+#include <svl/listeneriter.hxx>
+#include <vcl/outdev.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

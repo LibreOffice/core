@@ -17,17 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/scoped_ptr.hpp>
-
-#include <mdds/flat_segment_tree.hpp>
-
-#include <sfx2/objsh.hxx>
-#include <svl/zforlist.hxx>
-#include <svl/zformat.hxx>
-#include <svl/broadcast.hxx>
+#include "column.hxx"
 
 #include "scitems.hxx"
-#include "column.hxx"
 #include "cell.hxx"
 #include "formulacell.hxx"
 #include "document.hxx"
@@ -53,6 +45,14 @@
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 
+#include <boost/scoped_ptr.hpp>
+
+#include <mdds/flat_segment_tree.hpp>
+
+#include <sfx2/objsh.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <svl/broadcast.hxx>
 #include <cstdio>
 
 using ::com::sun::star::i18n::LocaleDataItem;
