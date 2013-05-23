@@ -517,13 +517,17 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
 }
 
 void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
-    const sal_Int32 nNumberFormat, const double& rValue, sal_Bool bExportValue, sal_uInt16 nNamespace)
+    const sal_Int32 nNumberFormat, const double& rValue, sal_Bool bExportValue,
+    sal_uInt16 nNamespace, bool bExportCurrencySymbol)
 {
     if (pExport)
     {
         bool bIsStandard;
         OUString sCurrency;
         sal_Int16 nTypeKey = GetCellType(nNumberFormat, sCurrency, bIsStandard);
+        if(!bExportCurrencySymbol)
+            sCurrency = OUString();
+
         WriteAttributes(nTypeKey, rValue, sCurrency, bExportValue, nNamespace);
     }
     else {

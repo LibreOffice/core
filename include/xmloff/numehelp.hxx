@@ -104,7 +104,8 @@ public :
                                           sal_Bool bExportValue = sal_True, sal_uInt16 nNamespace = XML_NAMESPACE_OFFICE);
     void SetNumberFormatAttributes(const sal_Int32 nNumberFormat,
                                           const double& rValue,
-                                          sal_Bool bExportValue = sal_True, sal_uInt16 nNamespace = XML_NAMESPACE_OFFICE);
+                                          sal_Bool bExportValue = sal_True,
+                                          sal_uInt16 nNamespace = XML_NAMESPACE_OFFICE, bool bExportCurrencySymbol = true);
     void SetNumberFormatAttributes(const OUString& rValue,
                                           const OUString& rCharacters,
                                           sal_Bool bExportValue = sal_True,
