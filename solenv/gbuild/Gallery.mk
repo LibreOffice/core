@@ -35,7 +35,7 @@ gb_Gallery_TRANSLATE := $(SOLARENV)/bin/desktop-translate.pl
 # TODO: this should be in RepositoryExternal.mk, but it would lead to
 # duplication. Fix.
 gb_Gallery_EXTRA_DEPENCENCIES := \
-	$(foreach component,$(gb_Gallery__UNO_COMPONENTS),$(call gb_ComponentTarget_get_outdir_target_for_build,$(component))) \
+	$(foreach component,$(gb_Gallery__UNO_COMPONENTS),$(call gb_ComponentTarget_get_target_for_build,$(component))) \
 	$(foreach api,$(gb_Gallery__UNO_TYPES),$(call gb_UnoApi_get_target,$(api)))
 
 gb_Gallery_INSTDIR := share/gallery
@@ -47,7 +47,7 @@ define gb_Gallery__make_env_args
 	module:$(call gb_Helper_make_url,$(gb_Configuration_registry)/spool)" \
 "-env:UNO_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target_for_build,ure/services)) \
 	$(foreach item,$(gb_Gallery__UNO_COMPONENTS),\
-		$(call gb_Helper_make_url,$(call gb_ComponentTarget_get_outdir_target_for_build,$(item))))" \
+		$(call gb_Helper_make_url,$(call gb_ComponentTarget_get_target_for_build,$(item))))" \
 "-env:UNO_TYPES=$(foreach item,$(gb_Gallery__UNO_TYPES),\
 	$(call gb_Helper_make_url,$(call gb_UnoApi_get_target,$(item))))" \
 $(foreach dir,URE_INTERNAL_LIB_DIR LO_LIB_DIR,\

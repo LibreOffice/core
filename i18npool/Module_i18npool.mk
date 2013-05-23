@@ -34,6 +34,7 @@ $(eval $(call gb_Module_add_targets_for_build,i18npool,\
 	Executable_gendict \
 	Executable_genindex_data \
 	Executable_saxparser \
+	Rdb_saxparser \
 ))
 
 $(eval $(call gb_Module_add_check_targets,i18npool,\

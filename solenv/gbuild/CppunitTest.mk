@@ -243,9 +243,9 @@ endef
 
 define gb_CppunitTest_use_component
 $(call gb_CppunitTest_get_target,$(1)) : \
-    $(call gb_ComponentTarget_get_outdir_target,$(2))
+    $(call gb_ComponentTarget_get_target,$(2))
 $(call gb_CppunitTest_get_target,$(1)) : \
-    UNO_SERVICES += $(call gb_ComponentTarget_get_outdir_target,$(2))
+    UNO_SERVICES += $(call gb_ComponentTarget_get_target,$(2))
 
 endef
 

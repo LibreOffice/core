@@ -2966,7 +2966,7 @@ $(call gb_Executable_add_runtime_dependencies,$(1),\
 		ucb/source/core/ucb1 \
 		ucb/source/ucp/file/ucpfile1 \
 		unoxml/source/service/unoxml \
-	,$(call gb_ComponentTarget_get_outdir_target_for_build,$(component))) \
+	,$(call gb_ComponentTarget_get_target_for_build,$(component))) \
 	$(call gb_AllLangResTarget_get_target,ofa) \
 	$(call gb_Configuration_get_target,registry) \
 	$(call gb_Configuration_get_target,fcfg_langpack) \
@@ -3016,9 +3016,9 @@ endef
 # FIXME: the library target should be for build too
 define gb_Executable__register_saxparser
 $(call gb_Executable_add_runtime_dependencies,saxparser,\
-	$(call gb_ComponentTarget_get_outdir_target,sax/source/expatwrap/expwrap) \
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
+	$(call gb_Rdb_get_outdir_target_for_build,saxparser) \
 	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
 	$(call gb_UnoApi_get_target,udkapi) \
 )

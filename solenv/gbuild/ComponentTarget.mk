@@ -38,8 +38,7 @@ endef
 
 $(call gb_ComponentTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),CMP,1)
-	rm -f $(call gb_ComponentTarget_get_outdir_target,$*) \
-		$(call gb_ComponentTarget_get_target,$*) \
+	rm -f $(call gb_ComponentTarget_get_target,$*) \
 
 
 # when a library is renamed, the component file needs to be rebuilt to match.
@@ -54,10 +53,6 @@ $(call gb_ComponentTarget_get_target,%) : \
 define gb_ComponentTarget_ComponentTarget
 $(call gb_ComponentTarget_get_target,$(1)) : COMPONENTPREFIX := $(2)
 $(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(3)
-$(call gb_ComponentTarget_get_outdir_target,$(1)) : \
-	$(call gb_ComponentTarget_get_target,$(1)) \
-	| $(dir $(call gb_ComponentTarget_get_outdir_target,$(1))).dir
-$(call gb_Deliver_add_deliverable,$(call gb_ComponentTarget_get_outdir_target,$(1)),$(call gb_ComponentTarget_get_target,$(1)),$(1))
 
 endef
 

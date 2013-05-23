@@ -60,7 +60,7 @@ gb_Pyuno__COMPONENTPREFIX := vnd.openoffice.pymodule:
 
 define gb_Pyuno_set_componentfile_full
 $(call gb_ComponentTarget_ComponentTarget,$(2),$(3),$(4))
-$(call gb_Pyuno_get_target,$(1)) : $(call gb_ComponentTarget_get_outdir_target,$(2))
+$(call gb_Pyuno_get_target,$(1)) : $(call gb_ComponentTarget_get_target,$(2))
 $(call gb_Pyuno_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_target,$(2))
 
 endef

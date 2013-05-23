@@ -22,8 +22,6 @@
 gb_CliLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliLibrary_EXT)
 gb_CliNativeLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliNativeLibrary_EXT)
 gb_CliUnoApi_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliUnoApi_EXT)
-gb_ComponentTarget_get_outdir_target = $(OUTDIR)/xml/component/$(1).component
-gb_ComponentTarget_get_outdir_target_for_build = $(OUTDIR_FOR_BUILD)/xml/component/$(1).component
 gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
 gb_Executable_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1)$(gb_Executable_EXT_for_build)
 gb_Extension_get_target = $(OUTDIR)/bin/$(1).oxt
@@ -86,6 +84,7 @@ gb_CliNativeLibraryTarget_get_external_target = $(WORKDIR)/CliNativeLibraryTarge
 gb_CliNativeLibraryTarget_get_target = $(WORKDIR)/CliNativeLibraryTarget/$(1)$(gb_CliNativeLibraryTarget_EXT)
 gb_CliUnoApiTarget_get_target = $(WORKDIR)/CliUnoApiTarget/$(1)$(gb_CliUnoApiTarget_EXT)
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
+gb_ComponentTarget_get_target_for_build = $(WORKDIR_FOR_BUILD)/ComponentTarget/$(1).component
 gb_Configuration_get_preparation_target = $(WORKDIR)/Configuration/$(1).prepared
 gb_CppunitTest_get_target = $(WORKDIR)/CppunitTest/$(1).test
 gb_CppunitTestFakeExecutable_get_target = \

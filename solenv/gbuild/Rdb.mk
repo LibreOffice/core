@@ -12,7 +12,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $@) && \
 	(\
 		echo '<list>' && \
-		$(foreach component,$(COMPONENTS),echo "<filename>$(call gb_ComponentTarget_get_outdir_target,$(component))</filename>" &&) \
+		$(foreach component,$(COMPONENTS),echo "<filename>$(call gb_ComponentTarget_get_target,$(component))</filename>" &&) \
 		echo '</list>' \
 	) > $(1).input && \
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $(1) $(SOLARENV)/bin/packcomponents.xslt $(1).input && \
@@ -40,7 +40,7 @@ $(call gb_Helper_make_userfriendly_targets,$(1),Rdb,$(call gb_Rdb_get_outdir_tar
 endef
 
 define gb_Rdb_add_component
-$(call gb_Rdb_get_target,$(1)) : $(call gb_ComponentTarget_get_outdir_target,$(2))
+$(call gb_Rdb_get_target,$(1)) : $(call gb_ComponentTarget_get_target,$(2))
 $(call gb_Rdb_get_target,$(1)) : COMPONENTS += $(2)
 
 endef
