@@ -81,4 +81,13 @@ void NavigatorWrapper::UpdateNavigator (void)
 }
 
 
+
+
+void NavigatorWrapper::GetFocus (void)
+{
+    maNavigator.GrabFocus();
+}
+
+
+
 } } // end of namespace sd::sidebar

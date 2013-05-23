@@ -51,6 +51,7 @@ public:
 
     // Control
     virtual void Resize (void);
+    virtual void GetFocus (void);
 
     // From ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth);
