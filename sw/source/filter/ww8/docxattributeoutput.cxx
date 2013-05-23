@@ -2143,65 +2143,113 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         m_pSerializer->singleElementNS( XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND ); // required, unused
         const char* relativeFromH;
         const char* relativeFromV;
-        switch( pFrmFmt->GetAnchor().GetAnchorId())
+        const char* alignH = NULL;
+        const char* alignV = NULL;
+        switch (pFrmFmt->GetVertOrient().GetRelationOrient() )
         {
-            case FLY_AT_PAGE:
-                relativeFromV = relativeFromH = "page";
+            case text::RelOrientation::PAGE_PRINT_AREA:
+                relativeFromV = "margin";
                 break;
-            case FLY_AT_PARA:
-                relativeFromH = "column";
+            case text::RelOrientation::PAGE_FRAME:
+                relativeFromV = "page";
+                break;
+            case text::RelOrientation::FRAME:
                 relativeFromV = "paragraph";
                 break;
-            case FLY_AT_CHAR:
+            case text::RelOrientation::TEXT_LINE:
             default:
-                // We apply the same conversion that we do in import
-                // (see writerfilter/source/dmapper/GraphicHelper.cxx)
-                switch (pFrmFmt->GetVertOrient().GetRelationOrient() )
-                {
-                    case text::RelOrientation::PAGE_PRINT_AREA:
-                        relativeFromV = "margin";
-                        break;
-                    case text::RelOrientation::PAGE_FRAME:
-                        relativeFromV = "page";
-                        break;
-                    case text::RelOrientation::FRAME:
-                        relativeFromV = "paragraph";
-                        break;
-                    case text::RelOrientation::TEXT_LINE:
-                    default:
-                        relativeFromV = "line";
-                }
-                switch (pFrmFmt->GetHoriOrient().GetRelationOrient() )
-                {
-                    case text::RelOrientation::PAGE_PRINT_AREA:
-                        relativeFromH = "margin";
-                        break;
-                    case text::RelOrientation::PAGE_FRAME:
-                        relativeFromH = "page";
-                        break;
-                    case text::RelOrientation::CHAR:
-                        relativeFromH = "character";
-                        break;
-                    case text::RelOrientation::FRAME:
-                    default:
-                        relativeFromH = "column";
-                }
+                relativeFromV = "line";
                 break;
-        };
-        Point pos( 0, 0 );
-        if( const SwFlyFrmFmt* flyfmt = dynamic_cast<const SwFlyFrmFmt*>(pFrmFmt)) // TODO is always true?
-            pos = flyfmt->GetAnchoredObj()->GetCurrRelPos();
-        OString x( OString::valueOf( TwipsToEMU( pos.X())));
-        OString y( OString::valueOf( TwipsToEMU( pos.Y())));
+        }
+        switch (pFrmFmt->GetVertOrient().GetVertOrient() )
+        {
+            case text::VertOrientation::TOP:
+            case text::VertOrientation::CHAR_TOP:
+            case text::VertOrientation::LINE_TOP:
+                if( pFrmFmt->GetVertOrient().GetRelationOrient() == text::RelOrientation::TEXT_LINE)
+                    alignV = "bottom";
+                else
+                    alignV = "top";
+                break;
+            case text::VertOrientation::BOTTOM:
+            case text::VertOrientation::CHAR_BOTTOM:
+            case text::VertOrientation::LINE_BOTTOM:
+                if( pFrmFmt->GetVertOrient().GetRelationOrient() == text::RelOrientation::TEXT_LINE)
+                    alignV = "top";
+                else
+                    alignV = "bottom";
+                break;
+            case text::VertOrientation::CENTER:
+            case text::VertOrientation::CHAR_CENTER:
+            case text::VertOrientation::LINE_CENTER:
+                alignV = "center";
+                break;
+            default:
+                break;
+        }
+        switch (pFrmFmt->GetHoriOrient().GetRelationOrient() )
+        {
+            case text::RelOrientation::PAGE_PRINT_AREA:
+                relativeFromH = "margin";
+                break;
+            case text::RelOrientation::PAGE_FRAME:
+                relativeFromH = "page";
+                break;
+            case text::RelOrientation::CHAR:
+                relativeFromH = "character";
+                break;
+            case text::RelOrientation::FRAME:
+            default:
+                relativeFromH = "column";
+                break;
+        }
+        switch (pFrmFmt->GetHoriOrient().GetHoriOrient() )
+        {
+            case text::HoriOrientation::LEFT:
+                alignH = "left";
+                break;
+            case text::HoriOrientation::RIGHT:
+                alignH = "right";
+                break;
+            case text::HoriOrientation::CENTER:
+                alignH = "center";
+                break;
+            case text::HoriOrientation::INSIDE:
+                alignH = "inside";
+                break;
+            case text::HoriOrientation::OUTSIDE:
+                alignH = "outside";
+                break;
+            default:
+                break;
+        }
         m_pSerializer->startElementNS( XML_wp, XML_positionH, XML_relativeFrom, relativeFromH, FSEND );
-        m_pSerializer->startElementNS( XML_wp, XML_posOffset, FSEND );
-        m_pSerializer->write( x.getStr() );
-        m_pSerializer->endElementNS( XML_wp, XML_posOffset );
+        if( alignH != NULL )
+        {
+            m_pSerializer->startElementNS( XML_wp, XML_align, FSEND );
+            m_pSerializer->write( alignH );
+            m_pSerializer->endElementNS( XML_wp, XML_align );
+        }
+        else
+        {
+            m_pSerializer->startElementNS( XML_wp, XML_posOffset, FSEND );
+            m_pSerializer->write( TwipsToEMU( pFrmFmt->GetHoriOrient().GetPos()));
+            m_pSerializer->endElementNS( XML_wp, XML_posOffset );
+        }
         m_pSerializer->endElementNS( XML_wp, XML_positionH );
         m_pSerializer->startElementNS( XML_wp, XML_positionV, XML_relativeFrom, relativeFromV, FSEND );
-        m_pSerializer->startElementNS( XML_wp, XML_posOffset, FSEND );
-        m_pSerializer->write( y.getStr() );
-        m_pSerializer->endElementNS( XML_wp, XML_posOffset );
+        if( alignV != NULL )
+        {
+            m_pSerializer->startElementNS( XML_wp, XML_align, FSEND );
+            m_pSerializer->write( alignV );
+            m_pSerializer->endElementNS( XML_wp, XML_align );
+        }
+        else
+        {
+            m_pSerializer->startElementNS( XML_wp, XML_posOffset, FSEND );
+            m_pSerializer->write( TwipsToEMU( pFrmFmt->GetVertOrient().GetPos()));
+            m_pSerializer->endElementNS( XML_wp, XML_posOffset );
+        }
         m_pSerializer->endElementNS( XML_wp, XML_positionV );
     }
     else
