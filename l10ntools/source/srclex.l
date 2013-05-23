@@ -54,6 +54,7 @@
 #elif defined _MSC_VER
 #pragma warning(push, 1)
 #endif
+#define YY_NO_UNISTD_H
 
 /* external functions (C++ code, declared as extern "C" */
 extern "C" int WorkOnTokenSet( int, char* );
@@ -68,7 +69,6 @@ void YYWarning();
 
 %option yylineno
 %option never-interactive
-%option nounistd
 
 %p 24000
 %e 1200

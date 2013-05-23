@@ -257,11 +257,11 @@ static void parseLineAndFile(sal_Char* pBuf)
 #endif
 /**/
 #endif
+#define YY_NO_UNISTD_H
 %}
 
 %option noyywrap
 %option never-interactive
-%option nounistd
 
 %x DOCU
 %x COMMENT
