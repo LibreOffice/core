@@ -499,6 +499,7 @@ public:
         CELL_MAR_TOP,
         CELL_MAR_BOTTOM,
         TABLE_WIDTH,
+        TABLE_WIDTH_TYPE,
         GAP_HALF,
         LEFT_MARGIN,
         HORI_ORIENT,
