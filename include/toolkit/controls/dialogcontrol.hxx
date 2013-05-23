@@ -166,9 +166,6 @@ public:
        { return getPropertyString("ImageURL"); }
     virtual void SAL_CALL setImageURL(const rtl::OUString& p1) throw(::com::sun::star::uno::RuntimeException)
        { setPropertyString("ImageURL", p1); }
-    virtual com::sun::star::uno::Reference<com::sun::star::resource::XStringResourceManager> SAL_CALL getResourceResolver() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setResourceResolver(const com::sun::star::uno::Reference<com::sun::star::resource::XStringResourceManager>& p1) throw(::com::sun::star::uno::RuntimeException)
-        { setPropertyValue( "ResourceResolver", css::uno::Any(p1) ); }
     virtual com::sun::star::awt::FontDescriptor SAL_CALL getFontDescriptor() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setFontDescriptor(const com::sun::star::awt::FontDescriptor& p1) throw(::com::sun::star::uno::RuntimeException)
         { setPropertyValue( "FontDescriptor", css::uno::Any(p1) ); }

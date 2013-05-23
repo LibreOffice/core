@@ -307,14 +307,6 @@ sal_Int32 UnoControlDialogModel::getPropertyInt32(const OUString& aPropertyName)
    return b;
 }
 
-Reference<css::resource::XStringResourceManager> UnoControlDialogModel::getResourceResolver() throw(css::uno::RuntimeException)
-{
-   uno::Any any = getPropertyValue("ResourceResolver");
-   Reference<css::resource::XStringResourceManager> b;
-   any >>= b;
-   return b;
-}
-
 css::awt::FontDescriptor UnoControlDialogModel::getFontDescriptor() throw(css::uno::RuntimeException)
 {
    uno::Any any = getPropertyValue("FontDescriptor");
