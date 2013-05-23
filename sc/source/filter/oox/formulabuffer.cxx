@@ -155,16 +155,41 @@ void FormulaBuffer::applyCellFormulaValues( const std::vector< ValueAddressPair 
         }
     }
 }
+// bound to need this somewhere else, if so probably need to move it to
+// worksheethelper or somewhere else more suitable
+void StartCellListening( sal_Int16 nSheet, sal_Int32 nRow, sal_Int32 nCol, ScDocument& rDoc )
+{
+    ScAddress aCellPos;
+    CellAddress aAddress;
+    aAddress.Sheet = nSheet;
+    aAddress.Row = nRow;
+    aAddress.Column = nCol;
+    ScUnoConversion::FillScAddress( aCellPos, aAddress );
+    ScFormulaCell* pFCell = rDoc.GetFormulaCell( aCellPos );
+    if ( pFCell )
+        pFCell->StartListeningTo( &rDoc );
+}
 
 void FormulaBuffer::applyArrayFormulas( const std::vector< TokenRangeAddressItem >& rVector )
 {
+    ScDocument& rDoc = getScDocument();
     for ( std::vector< TokenRangeAddressItem >::const_iterator it = rVector.begin(), it_end = rVector.end(); it != it_end; ++it )
     {
         Reference< XArrayFormulaTokens > xTokens( getRange( it->maCellRangeAddress ), UNO_QUERY );
         OSL_ENSURE( xTokens.is(), "SheetDataBuffer::finalizeArrayFormula - missing formula token interface" );
         ApiTokenSequence aTokens = getFormulaParser().importFormula( it->maTokenAndAddress.maCellAddress, it->maTokenAndAddress.maTokenStr );
         if( xTokens.is() )
+        {
             xTokens->setArrayTokens( aTokens );
+            // set dependencies, add listeners on the cells in array
+            for ( sal_Int32 nCol = it->maCellRangeAddress.StartColumn; nCol <=  it->maCellRangeAddress.EndColumn; ++nCol )
+            {
+                for ( sal_Int32 nRow = it->maCellRangeAddress.StartRow; nRow <=  it->maCellRangeAddress.EndRow; ++nRow )
+                {
+                    StartCellListening( it->maCellRangeAddress.Sheet, nRow, nCol, rDoc );
+                }
+            }
+        }
     }
 }
 
