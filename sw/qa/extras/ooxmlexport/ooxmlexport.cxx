@@ -69,6 +69,7 @@ public:
     void testMathLiteral();
     void testFdo48557();
     void testI120928();
+    void testFdo64826();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -116,6 +117,7 @@ void Test::run()
         {"math-literal.docx", &Test::testMathLiteral},
         {"fdo48557.odt", &Test::testFdo48557},
         {"i120928.docx", &Test::testI120928},
+        {"fdo64826.docx", &Test::testFdo64826},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -670,6 +672,12 @@ void Test::testI120928()
             bIsGraphic = true;
     }
     CPPUNIT_ASSERT_EQUAL(true, bIsGraphic);
+}
+
+void Test::testFdo64826()
+{
+    // 'Track-Changes' (Track Revisions) wasn't exported.
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(mxComponent, "RecordChanges")));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
