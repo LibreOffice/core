@@ -563,7 +563,7 @@ ContainerUtilities::FieldInList( const uno::Sequence< OUString >& SearchList, co
         // I wonder why comparing lexicographically is done
         // when its a match is whats interesting?
         //if (SearchList[i].compareTo(SearchString) == 0)
-        if ( SearchList[i].equals( SearchString ) )
+        if ( SearchList[i] == SearchString )
         {
             retvalue = i;
             break;

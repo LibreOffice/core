@@ -3058,7 +3058,7 @@ void XclImpPictureObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nLinkSize )
     if( IsOcxControl() )
     {
         // #i26521# form controls to be ignored
-        if( maClassName.EqualsAscii( "Forms.HTML:Hidden.1" ) )
+        if( maClassName == "Forms.HTML:Hidden.1"  )
         {
             SetProcessSdrObj( false );
             return;

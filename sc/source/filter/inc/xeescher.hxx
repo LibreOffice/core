@@ -27,6 +27,7 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include "svx/sdtaitm.hxx"
 #include <boost/shared_ptr.hpp>
+#include "rtl/ustring.hxx"
 
 class ScPostIt;
 
@@ -252,7 +253,7 @@ private:
     virtual void        WriteSubRecs( XclExpStream& rStrm );
 
 private:
-    String              maClassName;        /// Class name of the control.
+    OUString            maClassName;        /// Class name of the control.
     sal_uInt32          mnStrmStart;        /// Start position in 'Ctls' stream.
     sal_uInt32          mnStrmSize;         /// Size in 'Ctls' stream.
 };

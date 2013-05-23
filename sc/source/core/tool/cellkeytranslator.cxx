@@ -44,17 +44,17 @@ enum LocaleMatch
 static LocaleMatch lclLocaleCompare(const Locale& rLocale1, const Locale& rLocale2)
 {
     LocaleMatch eMatchLevel = LOCALE_MATCH_NONE;
-    if ( !rLocale1.Language.compareTo(rLocale2.Language) )
+    if ( rLocale1.Language == rLocale2.Language )
         eMatchLevel = LOCALE_MATCH_LANG;
     else
         return eMatchLevel;
 
-    if ( !rLocale1.Country.compareTo(rLocale2.Country) )
+    if ( rLocale1.Country == rLocale2.Country )
         eMatchLevel = LOCALE_MATCH_LANG_COUNTRY;
     else
         return eMatchLevel;
 
-    if ( !rLocale1.Variant.compareTo(rLocale2.Variant) )
+    if ( rLocale1.Variant == rLocale2.Variant )
         eMatchLevel = LOCALE_MATCH_ALL;
 
     return eMatchLevel;
