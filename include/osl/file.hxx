@@ -127,7 +127,7 @@ public:
 
     static inline RC getCanonicalName( const ::rtl::OUString& ustrRequestedURL, ::rtl::OUString& ustrValidURL )
     {
-        return (RC) osl_getCanonicalName( ustrRequestedURL.pData, &ustrValidURL.pData );
+        return static_cast< RC >( osl_getCanonicalName( ustrRequestedURL.pData, &ustrValidURL.pData ) );
     }
 
     /** Convert a path relative to a given directory into an full qualified file URL.
@@ -167,7 +167,7 @@ public:
 
     static inline RC getAbsoluteFileURL( const ::rtl::OUString& ustrBaseDirectoryURL, const ::rtl::OUString& ustrRelativeFileURL, ::rtl::OUString& ustrAbsoluteFileURL )
     {
-        return (RC) osl_getAbsoluteFileURL( ustrBaseDirectoryURL.pData, ustrRelativeFileURL.pData, &ustrAbsoluteFileURL.pData );
+        return static_cast< RC >( osl_getAbsoluteFileURL( ustrBaseDirectoryURL.pData, ustrRelativeFileURL.pData, &ustrAbsoluteFileURL.pData ) );
     }
 
     /** Convert a file URL into a system dependend path.
@@ -187,7 +187,7 @@ public:
 
     static inline RC getSystemPathFromFileURL( const ::rtl::OUString& ustrFileURL, ::rtl::OUString& ustrSystemPath )
     {
-        return (RC) osl_getSystemPathFromFileURL( ustrFileURL.pData, &ustrSystemPath.pData );
+        return static_cast< RC >( osl_getSystemPathFromFileURL( ustrFileURL.pData, &ustrSystemPath.pData ) );
     }
 
     /** Convert a system dependend path into a file URL.
@@ -207,7 +207,7 @@ public:
 
     static inline RC getFileURLFromSystemPath( const ::rtl::OUString& ustrSystemPath, ::rtl::OUString& ustrFileURL )
     {
-        return (RC) osl_getFileURLFromSystemPath( ustrSystemPath.pData, &ustrFileURL.pData );
+        return static_cast< RC >( osl_getFileURLFromSystemPath( ustrSystemPath.pData, &ustrFileURL.pData ) );
     }
 
     /** Searche a full qualified system path or a file URL.
@@ -240,7 +240,7 @@ public:
 
     static inline RC searchFileURL( const ::rtl::OUString& ustrFileName, const ::rtl::OUString& ustrSearchPath, ::rtl::OUString& ustrFileURL )
     {
-        return (RC) osl_searchFileURL( ustrFileName.pData, ustrSearchPath.pData, &ustrFileURL.pData );
+        return static_cast< RC >( osl_searchFileURL( ustrFileName.pData, ustrSearchPath.pData, &ustrFileURL.pData ) );
     }
 
     /** Retrieves the file URL of the system's temporary directory path.
@@ -255,7 +255,7 @@ public:
 
     static inline RC getTempDirURL( ::rtl::OUString& ustrTempDirURL )
     {
-        return (RC) osl_getTempDirURL( &ustrTempDirURL.pData );
+        return static_cast< RC >( osl_getTempDirURL( &ustrTempDirURL.pData ) );
     }
 
     /** Creates a temporary file in the directory provided by the caller or the
@@ -314,7 +314,7 @@ public:
         rtl_uString*  pustr_dir_url       = pustrDirectoryURL ? pustrDirectoryURL->pData : 0;
         rtl_uString** ppustr_tmp_file_url = pustrTempFileURL  ? &pustrTempFileURL->pData : 0;
 
-        return (RC) osl_createTempFile(pustr_dir_url, pHandle, ppustr_tmp_file_url);
+        return static_cast< RC >( osl_createTempFile(pustr_dir_url, pHandle, ppustr_tmp_file_url) );
     }
 };
 
@@ -988,7 +988,7 @@ public:
 
     inline RC open( sal_uInt32 uFlags )
     {
-        return (RC) osl_openFile( _aPath.pData, &_pData, uFlags );
+        return static_cast< RC >( osl_openFile( _aPath.pData, &_pData, uFlags ) );
     }
 
     /** Close an open file.
@@ -1015,7 +1015,7 @@ public:
             _pData = NULL;
         }
 
-        return (RC) Error;
+        return static_cast< RC >( Error );
     }
 
     /** Set the internal position pointer of an open file.
@@ -1037,7 +1037,7 @@ public:
 
     inline RC setPos( sal_uInt32 uHow, sal_Int64 uPos ) SAL_WARN_UNUSED_RESULT
     {
-        return (RC) osl_setFilePos( _pData, uHow, uPos );
+        return static_cast< RC >( osl_setFilePos( _pData, uHow, uPos ) );
     }
 
     /** Retrieve the current position of the internal pointer of an open file.
@@ -1058,7 +1058,7 @@ public:
 
     inline RC getPos( sal_uInt64& uPos )
     {
-        return (RC) osl_getFilePos( _pData, &uPos );
+        return static_cast< RC >( osl_getFilePos( _pData, &uPos ) );
     }
 
     /** Test if the end of a file is reached.
@@ -1085,7 +1085,7 @@ public:
 
     inline RC isEndOfFile( sal_Bool *pIsEOF )
     {
-        return (RC) osl_isEndOfFile( _pData, pIsEOF );
+        return static_cast< RC >( osl_isEndOfFile( _pData, pIsEOF ) );
     }
 
     /** Set the file size of an open file.
@@ -1108,7 +1108,7 @@ public:
 
     inline RC setSize( sal_uInt64 uSize )
     {
-        return (RC) osl_setFileSize( _pData, uSize );
+        return static_cast< RC >( osl_setFileSize( _pData, uSize ) );
     }
 
     /** Get the file size of an open file.
@@ -1133,7 +1133,7 @@ public:
 
     inline RC getSize( sal_uInt64 &rSize )
     {
-        return (RC) osl_getFileSize( _pData, &rSize );
+        return static_cast< RC >( osl_getFileSize( _pData, &rSize ) );
     }
 
     /** Read a number of bytes from a file.
@@ -1170,7 +1170,7 @@ public:
 
     inline RC read( void *pBuffer, sal_uInt64 uBytesRequested, sal_uInt64& rBytesRead )
     {
-        return (RC) osl_readFile( _pData, pBuffer, uBytesRequested, &rBytesRead );
+        return static_cast< RC >( osl_readFile( _pData, pBuffer, uBytesRequested, &rBytesRead ) );
     }
 
     /** Write a number of bytes to a file.
@@ -1209,7 +1209,7 @@ public:
 
     inline RC write(const void *pBuffer, sal_uInt64 uBytesToWrite, sal_uInt64& rBytesWritten)
     {
-        return (RC) osl_writeFile( _pData, pBuffer, uBytesToWrite, &rBytesWritten );
+        return static_cast< RC >( osl_writeFile( _pData, pBuffer, uBytesToWrite, &rBytesWritten ) );
     }
 
 
@@ -1239,7 +1239,7 @@ public:
 
     inline RC readLine( ::rtl::ByteSequence& aSeq )
     {
-        return (RC) osl_readLine( _pData, reinterpret_cast<sal_Sequence**>(&aSeq) );
+        return static_cast< RC >( osl_readLine( _pData, reinterpret_cast<sal_Sequence**>(&aSeq) ) );
     }
 
     /** Synchronize the memory representation of a file with that on the physical medium.
@@ -1275,7 +1275,7 @@ public:
     inline RC sync() const
     {
         OSL_PRECOND(_pData, "File::sync(): File not open");
-        return (RC)osl_syncFile(_pData);
+        return static_cast< RC >(osl_syncFile(_pData));
     }
 
     /** Copy a file to a new destination.
@@ -1306,7 +1306,7 @@ public:
 
     inline static RC copy( const ::rtl::OUString& ustrSourceFileURL, const ::rtl::OUString& ustrDestFileURL )
     {
-        return (RC) osl_copyFile( ustrSourceFileURL.pData, ustrDestFileURL.pData );
+        return static_cast< RC >( osl_copyFile( ustrSourceFileURL.pData, ustrDestFileURL.pData ) );
     }
 
     /** Move a file or directory to a new destination or renames it.
@@ -1335,7 +1335,7 @@ public:
 
     inline static RC move( const ::rtl::OUString& ustrSourceFileURL, const ::rtl::OUString& ustrDestFileURL )
     {
-        return (RC) osl_moveFile( ustrSourceFileURL.pData, ustrDestFileURL.pData );
+        return static_cast< RC >( osl_moveFile( ustrSourceFileURL.pData, ustrDestFileURL.pData ) );
     }
 
     /** Remove a regular file.
@@ -1368,7 +1368,7 @@ public:
 
     inline static RC remove( const ::rtl::OUString& ustrFileURL )
     {
-        return (RC) osl_removeFile( ustrFileURL.pData );
+        return static_cast< RC >( osl_removeFile( ustrFileURL.pData ) );
     }
 
     /** Set file attributes.
@@ -1388,7 +1388,7 @@ public:
 
     inline static RC setAttributes( const ::rtl::OUString& ustrFileURL, sal_uInt64 uAttributes )
     {
-        return (RC) osl_setFileAttributes( ustrFileURL.pData, uAttributes );
+        return static_cast< RC >( osl_setFileAttributes( ustrFileURL.pData, uAttributes ) );
     }
 
     /** Set the file time.
@@ -1419,11 +1419,11 @@ public:
         const TimeValue& rLastAccessTime,
         const TimeValue& rLastWriteTime )
     {
-        return (RC)  osl_setFileTime(
+        return static_cast< RC >( osl_setFileTime(
             ustrFileURL.pData,
             &rCreationTime,
             &rLastAccessTime,
-            &rLastWriteTime );
+            &rLastWriteTime ) );
     }
 
     friend class DirectoryItem;
@@ -1537,7 +1537,7 @@ public:
             rItem._pData = NULL;
         }
 
-        return (RC) osl_getDirectoryItem( ustrFileURL.pData, &rItem._pData );
+        return static_cast< RC >( osl_getDirectoryItem( ustrFileURL.pData, &rItem._pData ) );
     }
 
     /** Retrieve information about a single file or directory.
@@ -1574,7 +1574,7 @@ public:
 
     inline RC getFileStatus( FileStatus& rStatus )
     {
-        return (RC) osl_getFileStatus( _pData, &rStatus._aStatus, rStatus._nMask );
+        return static_cast< RC >( osl_getFileStatus( _pData, &rStatus._aStatus, rStatus._nMask ) );
     }
 
 /** Determine if a directory item point the same underlying file
@@ -1709,7 +1709,7 @@ public:
 
     inline RC open()
     {
-        return (RC) osl_openDirectory( _aPath.pData, &_pData );
+        return static_cast< RC >( osl_openDirectory( _aPath.pData, &_pData ) );
     }
 
     /** Query if directory is open.
@@ -1747,7 +1747,7 @@ public:
             _pData = NULL;
         }
 
-        return (RC) Error;
+        return static_cast< RC >( Error );
     }
 
 
@@ -1841,7 +1841,7 @@ public:
 
     inline static RC getVolumeInfo( const ::rtl::OUString& ustrDirectoryURL, VolumeInfo& rInfo )
     {
-        return (RC) osl_getVolumeInformation( ustrDirectoryURL.pData, &rInfo._aInfo, rInfo._nMask );
+        return static_cast< RC >( osl_getVolumeInformation( ustrDirectoryURL.pData, &rInfo._aInfo, rInfo._nMask ) );
     }
 
     /** Create a directory.
@@ -1873,7 +1873,7 @@ public:
 
     inline static RC create( const ::rtl::OUString& ustrDirectoryURL )
     {
-        return (RC) osl_createDirectory( ustrDirectoryURL.pData );
+        return static_cast< RC >( osl_createDirectory( ustrDirectoryURL.pData ) );
     }
 
     /** Remove an empty directory.
@@ -1906,7 +1906,7 @@ public:
 
     inline static RC remove( const ::rtl::OUString& ustrDirectoryURL )
     {
-        return (RC) osl_removeDirectory( ustrDirectoryURL.pData );
+        return static_cast< RC >( osl_removeDirectory( ustrDirectoryURL.pData ) );
     }
 
     /** Create a directory path.
@@ -1965,10 +1965,10 @@ public:
         const ::rtl::OUString& aDirectoryUrl,
         DirectoryCreationObserver* aDirectoryCreationObserver = NULL)
     {
-        return (RC)osl_createDirectoryPath(
+        return static_cast< RC >(osl_createDirectoryPath(
             aDirectoryUrl.pData,
             (aDirectoryCreationObserver) ? onDirectoryCreated : NULL,
-            aDirectoryCreationObserver);
+            aDirectoryCreationObserver));
     }
 };
 
