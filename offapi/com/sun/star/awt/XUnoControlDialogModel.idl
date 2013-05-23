@@ -28,7 +28,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
 #include <com/sun/star/util/Color.idl>
 #include <com/sun/star/graphic/XGraphic.idl>
-#include <com/sun/star/resource/XStringResourceManager.idl>
 
 
 module com {  module sun {  module star {  module awt {
@@ -66,8 +65,6 @@ published interface XUnoControlDialogModel
     [attribute] long Height;
 
     [attribute] string DialogSourceURL;
-
-    [attribute] com::sun::star::resource::XStringResourceManager ResourceResolver;
 
     /** specifies the text that is displayed in the caption bar of the dialog.
      */
