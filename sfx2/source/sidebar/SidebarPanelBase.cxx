@@ -21,6 +21,7 @@
 #include "sfx2/sidebar/IContextChangeReceiver.hxx"
 #include "sfx2/imagemgr.hxx"
 #include <vcl/ctrl.hxx>
+#include <vcl/layout.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
@@ -228,7 +229,14 @@ ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWi
     else
     {
         ILayoutableWindow* pLayoutableWindow = dynamic_cast<ILayoutableWindow*>(mpControl);
-        if (pLayoutableWindow != NULL)
+
+        if (isLayoutEnabled(mpControl))
+        {
+            // widget layout-based sidebar
+            Size aSize(mpControl->GetOptimalSize());
+            return ui::LayoutSize(aSize.Height(), aSize.Height(), aSize.Height());
+        }
+        else if (pLayoutableWindow != NULL)
             return pLayoutableWindow->GetHeightForWidth(nWidth);
         else if (mpControl != NULL)
         {
