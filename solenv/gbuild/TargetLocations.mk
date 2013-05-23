@@ -38,7 +38,6 @@ gb_PackagePart_get_destinations = \
 	$(OUTDIR)/xml \
 
 gb_InstallScript_get_target = $(OUTDIR)/bin/$(1)$(gb_InstallScript_EXT)
-gb_PackagePart_get_target = $(OUTDIR)/$(1)
 gb_Rdb_get_outdir_target = $(OUTDIR)/xml/$(1).rdb
 gb_Rdb_get_outdir_target_for_build = $(OUTDIR_FOR_BUILD)/xml/$(1).rdb
 gb_ResTarget_get_outdir_target = $(OUTDIR)/bin/$(1).res
