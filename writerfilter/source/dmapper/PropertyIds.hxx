@@ -298,6 +298,8 @@ enum PropertyIds
         ,PROP_PARA_CONTEXT_MARGIN
         ,PROP_PAGE_STYLE_LAYOUT
         ,PROP_Z_ORDER
+        ,PROP_RELATIVE_WIDTH
+        ,PROP_IS_WIDTH_RELATIVE
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier
