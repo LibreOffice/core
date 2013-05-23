@@ -38,6 +38,7 @@
 #include "FPreparedStatement.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include "FResultSetMetaData.hxx"
+#include "FResultSet.hxx"
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "propertyids.hxx"
@@ -52,6 +53,11 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
+
+typedef struct vary {
+    short vary_length;
+    char vary_string[1];
+} VARY;
 
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.firebird.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
@@ -182,61 +188,97 @@ static int pr_error (long* status, char* operation)
 
 Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLException, RuntimeException)
 {
-    char sqlStr[128];
-    strcpy(sqlStr, OUStringToOString( m_sSqlStatement, RTL_TEXTENCODING_ASCII_US ).getStr());
+    char *sqlStr = strdup(OUStringToOString( m_sSqlStatement, RTL_TEXTENCODING_ASCII_US ).getStr());
     printf("DEBUG !!! connectivity.firebird => OPreparedStatement::executeQuery() got called with sql: %s \n", sqlStr);
 
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    Reference< XResultSet > xRS = NULL;
     // create a resultset as result of executing the sql statement
     // you have to here something :-)
 
-    ISC_STATUS_ARRAY status;               /* status vector */
-    isc_db_handle    db = NULL;         /* database handle */
+    ISC_STATUS_ARRAY status;            /* status vector */
+    ISC_STATUS retcode;
+    isc_db_handle    db = NULL;            /* database handle */
     isc_tr_handle    trans = NULL;         /* transaction handle */
     isc_stmt_handle  stmt = NULL;          /* prepared statement handle */
-    XSQLDA *         sel_sqlda;
-    int              CURRENLEN = 10;
-    char             orig_name[CURRENLEN + 1];
+    XSQLDA *         sel_sqlda = NULL;
+    int              CURRENLEN = 30;
 
     if (isc_attach_database(status, 0, "/home/javi/Firebird/test/new.fdb", &db, 0, NULL))
         if (pr_error(status, "attach database"))
-            return xRS;
+            return NULL;
 
     if (isc_start_transaction(status, &trans, 1, &db, 0, NULL))
         if (pr_error(status, "start transaction"))
-            return xRS;
+            return NULL;
 
-    sel_sqlda = (XSQLDA *) malloc(XSQLDA_LENGTH(1));
-    sel_sqlda->sqln = 1;
+    sel_sqlda = (XSQLDA *) malloc(XSQLDA_LENGTH(5));
+    sel_sqlda->sqln = 5;
     sel_sqlda->version = 1;
 
     if (isc_dsql_allocate_statement(status, &db, &stmt))
         if (pr_error(status, "allocate statement"))
-            return xRS;
+            return NULL;
     if (isc_dsql_prepare(status, &trans, &stmt, 0, sqlStr, 1, sel_sqlda))
         if (pr_error(status, "prepare statement"))
-            return xRS;
+            return NULL;
 
-    sel_sqlda->sqlvar[0].sqldata = orig_name;
-    sel_sqlda->sqlvar[0].sqltype = SQL_TEXT;
+    sel_sqlda->sqlvar[0].sqldata = (char *) malloc(sizeof(char)*CURRENLEN);
+    sel_sqlda->sqlvar[0].sqltype = SQL_VARYING;
     sel_sqlda->sqlvar[0].sqllen = CURRENLEN;
+    sel_sqlda->sqlvar[1].sqldata = (char *) malloc(sizeof(char)*CURRENLEN);
+    sel_sqlda->sqlvar[1].sqltype = SQL_VARYING;
+    sel_sqlda->sqlvar[1].sqllen = CURRENLEN;
+    sel_sqlda->sqlvar[2].sqldata = (char *) malloc(sizeof(char)*CURRENLEN);
+    sel_sqlda->sqlvar[2].sqltype = SQL_VARYING;
+    sel_sqlda->sqlvar[2].sqllen = CURRENLEN;
+    sel_sqlda->sqlvar[3].sqldata = (char *) malloc(sizeof(char)*CURRENLEN);
+    sel_sqlda->sqlvar[3].sqltype = SQL_VARYING;
+    sel_sqlda->sqlvar[3].sqllen = CURRENLEN;
+    sel_sqlda->sqlvar[4].sqldata = (char *) malloc(sizeof(char)*CURRENLEN);
+    sel_sqlda->sqlvar[4].sqltype = SQL_VARYING;
+    sel_sqlda->sqlvar[4].sqllen = CURRENLEN;
 
     if (isc_dsql_execute(status, &trans, &stmt, 1, NULL))
         if (pr_error(status, "execute query"))
-            return xRS;
-    if (isc_dsql_fetch(status, &stmt, 1, sel_sqlda))
+            return NULL;
+
+    int i = 0,j = 0;
+    TTable table;
+    VARY *data = NULL;
+    while ((retcode = isc_dsql_fetch(status, &stmt, 1, sel_sqlda)) == 0)
+    {
+        i++;
+        if (i < 10)
+            printf("DEBUG !!! row %i : ", i);
+        else
+            printf("DEBUG !!! row %i: ", i);
+
+        TRow row(sel_sqlda->sqln);
+        for (j=0; j < sel_sqlda->sqln; j++)
+        {
+            data = (VARY *) sel_sqlda->sqlvar[j].sqldata;
+            printf("%-30.*s ", data->vary_length, data->vary_string);
+            row[j] = OUString(data->vary_string, data->vary_length, RTL_TEXTENCODING_UTF8);
+        }
+        printf("\n");
+        table.push_back(row);
+    }
+    if (retcode != 100L)
+    {
+        printf("DEBUG !!! retcode %i: ", retcode);
         if (pr_error(status, "fetch data"))
-            return xRS;
+            return NULL;
+    }
 
     if (isc_commit_transaction (status, &trans))
         isc_print_status(status);
     printf("DEBuG !!! connectivity.firebird => OPreparedStatement::executeQuery() Changes committed.\n");
 
-    orig_name[CURRENLEN] = '\0';
-    printf("Modifying currency string:  %s\n", orig_name);
+    Reference< OResultSet > pResult( new OResultSet( this, table, i, sel_sqlda->sqln ) );
+    //initializeResultSet( pResult.get() );
+    Reference< XResultSet > xRS = pResult.get();
 
     return xRS;
 }
