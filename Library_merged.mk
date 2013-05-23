@@ -90,6 +90,7 @@ $(eval $(call gb_Library_add_libs,merged,\
 	-lm \
 	-ldl \
 	-lpthread \
+	-lrt \
 ))
 endif
 
