@@ -525,6 +525,7 @@ OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
 
     sal_Int32 nIndex = 0;
     OUString aOrgName = GetNextFontToken( rName, nIndex );
+    // clean up and lowercase font name
     GetEnglishSearchFontName( aOrgName );
 
     // #93662# do not try to replace StarSymbol with MS only font

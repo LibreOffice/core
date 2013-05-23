@@ -798,7 +798,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                             // instead of a Unicode encoding the encoding RTL_TEXTENCODING_SYMBOL was used.
                             // Because there might exist a lot of damaged documemts I added this two lines
                             // which fixes the bullet problem for the export.
-                            if ( aFontDesc.Name == "StarSymbol" )
+                            if ( aFontDesc.Name.equalsIgnoreAsciiCase("StarSymbol") )
                                 aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;
 
                         }
@@ -884,7 +884,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
                     case SVX_NUM_CHAR_SPECIAL :                           // Bullet
                     {
-                        if ( aFontDesc.Name.equals("starsymbol") || aFontDesc.Name.equals("opensymbol") )
+                        if ( aFontDesc.Name.equalsIgnoreAsciiCase("starsymbol") || aFontDesc.Name.equalsIgnoreAsciiCase("opensymbol") )
                         {
                             rtl_TextEncoding eChrSet = aFontDesc.CharSet;
                             cBulletId = msfilter::util::bestFitOpenSymbolToMSFont(cBulletId, eChrSet, aFontDesc.Name);

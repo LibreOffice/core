@@ -921,8 +921,8 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 
     //Always consider [star]symbol as symbol fonts
     if (
-         (rTo.GetFamilyName() == "OpenSymbol" ) ||
-         (rTo.GetFamilyName() == "StarSymbol" )
+         (rTo.GetFamilyName().equalsIgnoreAsciiCase("OpenSymbol")) ||
+         (rTo.GetFamilyName().equalsIgnoreAsciiCase("StarSymbol"))
        )
     {
         rTo.SetSymbolFlag( true );
