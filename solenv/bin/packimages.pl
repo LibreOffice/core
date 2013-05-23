@@ -27,6 +27,8 @@ use strict;
 use Getopt::Long;
 use File::Find;
 use File::Basename;
+require File::Temp;
+use File::Temp ();
 use Archive::Zip qw(:ERROR_CODES :CONSTANTS);
 
 #### globals ####
@@ -64,10 +66,18 @@ $do_rebuild = is_file_newer(\%image_lists_hash) if $do_rebuild == 0;
 my ($global_hash_ref, $module_hash_ref, $custom_hash_ref) = iterate_image_lists($image_lists_ref);
 # custom_hash filled from filesystem lookup
 find_custom($custom_hash_ref);
+
+# build a consolidated set of links
+my %links;
+read_links(\%links, $global_path);
+for my $path (@custom_path) {
+    read_links(\%links, $path);
+}
+
 my $zip_hash_ref = create_zip_list($global_hash_ref, $module_hash_ref, $custom_hash_ref);
 $do_rebuild = is_file_newer($zip_hash_ref) if $do_rebuild == 0;
 if ( $do_rebuild == 1 ) {
-    create_zip_archive($zip_hash_ref);
+    create_zip_archive($zip_hash_ref, \%links);
     replace_file($tmp_out_file, $out_file);
     print_message("packing  $out_file finished.") if $verbose;
 } else {
@@ -333,9 +343,18 @@ sub optimize_zip_layout($)
 sub create_zip_archive
 {
     my $zip_hash_ref = shift;
+    my $links_hash_ref = shift;
 
     print_message("creating image archive ...") if $verbose;
     my $zip = Archive::Zip->new();
+
+    if (keys %{$links_hash_ref}) {
+        my $linktmp = write_links($links_hash_ref);
+        my $member = $zip->addFile($linktmp->filename, "links.txt", COMPRESSION_DEFLATED);
+        if (!$member) {
+            print_error("failed to add links file: $!", 5);
+        }
+    }
 
 # FIXME: test - $member = addfile ... $member->desiredCompressionMethod( COMPRESSION_STORED );
 # any measurable performance win/loss ?
@@ -424,4 +443,51 @@ sub print_error
         exit($error_code);
     }
     return;
+}
+
+sub read_links($$)
+{
+    my $links = shift;
+    my $path = shift;
+
+    my $fname = "$path/links.txt";
+    if (!-f "$fname") {
+        print STDERR "no links in $fname\n";
+        return;
+    }
+
+    my $fh;
+    open ($fh, $fname) || die "Can't open: $fname: $!";
+    # Syntax of links file:
+    # # comment
+    # missing-image image-to-load-instead
+    while (<$fh>) {
+        my $line = $_;
+        $line =~ s/\r//g;   # DOS line-feeds
+        $line =~ s/\#.*$//; # kill comments
+        $line =~ m/^\s*$/ && next; # blank lines
+        if ($line =~ m/^([^\s]+)\s+(.*)$/) {
+            my ($missing, $replace) = ($1, $2);
+            # enter into hash, and overwrite previous layer if necessary
+            $links->{$1} = $2;
+        } else {
+            die "Malformed links line: '$line'\n";
+        }
+    }
+    close ($fh);
+}
+
+# write out the links to a tmp file
+sub write_links($)
+{
+    my $links = shift;
+    my $tmp = File::Temp->new( TEMPLATE => "linksXXXXXXX",
+                               UNLINK => 0 );
+    $tmp || die "can't create tmp: $!";
+    for my $missing (sort keys %{$links}) {
+        my $line = $missing . " " . $links->{$missing} . "\n";
+        print $tmp $line;
+    }
+    binmode $tmp; # force flush
+    return $tmp;
 }
