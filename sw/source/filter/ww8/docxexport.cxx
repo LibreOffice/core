@@ -318,6 +318,9 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_In
 
 void DocxExport::ExportDocument_Impl()
 {
+    // Set the 'Track Revisions' flag in the settings structure
+    settings.trackRevisions = 0 != ( nsRedlineMode_t::REDLINE_ON & mnRedlineMode );
+
     InitStyles();
 
     // init sections
@@ -824,9 +827,6 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
       m_nFooters( 0 ),
       m_pVMLExport( NULL )
 {
-    // Set the 'Track Revisions' flag in the settings structure
-    settings.trackRevisions = 0 != ( nsRedlineMode_t::REDLINE_ON & mnRedlineMode );
-
     // Write the document properies
     WriteProperties( );
 
