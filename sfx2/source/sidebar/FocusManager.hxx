@@ -72,6 +72,9 @@ private:
     ::std::vector<Panel*> maPanels;
     ::std::vector<Button*> maButtons;
     const ::boost::function<void(const Panel&)> maShowPanelFunctor;
+    bool mbObservingContentControlFocus;
+    Window* mpFirstFocusedContentControl;
+    Window* mpLastFocusedWindow;
 
     enum PanelComponent
     {
@@ -114,15 +117,28 @@ private:
 
     void FocusDeckTitle (void);
     bool IsDeckTitleVisible (void) const;
+    bool IsPanelTitleVisible (const sal_Int32 nPanelIndex) const;
 
     /** Set the focus to the title bar of the panel or, if the the
         title bar is not visible, directly to the panel.
+        @param nPanelIndex
+            Index of the panel to focus.
+        @param bFallbackToDeckTitle
+            When the panel title bar is not visible then The fallback
+            bias defines whether to focus the deck (true) or the panel
+            content (false) will be focused instead.
     */
-    void FocusPanel (const sal_Int32 nPanelIndex);
+    void FocusPanel (
+        const sal_Int32 nPanelIndex,
+        const bool bFallbackToDeckTitle);
+
     void FocusPanelContent (const sal_Int32 nPanelIndex);
     void FocusButton (const sal_Int32 nButtonIndex);
     void ClickButton (const sal_Int32 nButtonIndex);
     bool MoveFocusInsidePanel (
+        const FocusLocation aLocation,
+        const sal_Int32 nDirection);
+    bool MoveFocusInsideDeckTitle (
         const FocusLocation aLocation,
         const sal_Int32 nDirection);
 
