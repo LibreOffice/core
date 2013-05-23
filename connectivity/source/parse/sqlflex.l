@@ -60,6 +60,7 @@
 #endif
 /**/
 #endif
+#define YY_NO_UNISTD_H
 
 using namespace connectivity;
 
@@ -110,7 +111,6 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 
 %option noyywrap
 %option never-interactive
-%option nounistd
 %%
 
 ABS                 {SQL_NEW_KEYWORD(SQL_TOKEN_ABS);  }
