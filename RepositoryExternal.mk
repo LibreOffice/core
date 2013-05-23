@@ -2877,8 +2877,8 @@ endef
 
 # Better duplication with gb_Gallery__UNO_COMPONENTS than nothing.
 # This is used to determine what we need for 'build' platform.
-define gb_Executable__register_gengal.bin
-$(call gb_Executable_add_runtime_dependencies,gengal.bin,\
+define gb_Executable__register_gengal_impl
+$(call gb_Executable_add_runtime_dependencies,$(1),\
 	$(foreach component, \
 		comphelper/util/comphelp \
 		configmgr/source/configmgr \
@@ -2907,6 +2907,12 @@ $(call gb_Executable_add_runtime_dependencies,gengal.bin,\
 	$(call gb_UnoApi_get_target,udkapi) \
 )
 endef
+
+ifeq ($(OS),WNT)
+gb_Executable__register_gengal = $(call gb_Executable__register_gengal_impl,gengal)
+else
+gb_Executable__register_gengal.bin = $(call gb_Executable__register_gengal_impl,gengal.bin)
+endif
 
 ifneq ($(SYSTEM_ICU),YES)
 
