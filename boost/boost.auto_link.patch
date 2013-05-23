@@ -1,0 +1,40 @@
+--- foo/foo/foo/boost/config/auto_link.hpp
++++ foo/foo/foo/boost/config/auto_link.hpp
+@@ -357,37 +357,6 @@
+ #  define BOOST_LIB_PREFIX "lib"
+ #endif
+ 
+-//
+-// now include the lib:
+-//
+-#if defined(BOOST_LIB_NAME) \
+-      && defined(BOOST_LIB_PREFIX) \
+-      && defined(BOOST_LIB_TOOLSET) \
+-      && defined(BOOST_LIB_THREAD_OPT) \
+-      && defined(BOOST_LIB_RT_OPT) \
+-      && defined(BOOST_LIB_VERSION)
+-
+-#ifdef BOOST_AUTO_LINK_TAGGED
+-#  pragma comment(lib, BOOST_LIB_PREFIX BOOST_STRINGIZE(BOOST_LIB_NAME) BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT ".lib")
+-#  ifdef BOOST_LIB_DIAGNOSTIC
+-#     pragma message ("Linking to lib file: " BOOST_LIB_PREFIX BOOST_STRINGIZE(BOOST_LIB_NAME) BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT ".lib")
+-#  endif
+-#elif defined(BOOST_AUTO_LINK_NOMANGLE)
+-#  pragma comment(lib, BOOST_STRINGIZE(BOOST_LIB_NAME) ".lib")
+-#  ifdef BOOST_LIB_DIAGNOSTIC
+-#     pragma message ("Linking to lib file: " BOOST_STRINGIZE(BOOST_LIB_NAME) ".lib")
+-#  endif
+-#else
+-#  pragma comment(lib, BOOST_LIB_PREFIX BOOST_STRINGIZE(BOOST_LIB_NAME) "-" BOOST_LIB_TOOLSET BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT "-" BOOST_LIB_VERSION ".lib")
+-#  ifdef BOOST_LIB_DIAGNOSTIC
+-#     pragma message ("Linking to lib file: " BOOST_LIB_PREFIX BOOST_STRINGIZE(BOOST_LIB_NAME) "-" BOOST_LIB_TOOLSET BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT "-" BOOST_LIB_VERSION ".lib")
+-#  endif
+-#endif
+-
+-#else
+-#  error "some required macros where not defined (internal logic error)."
+-#endif
+-
+ 
+ #endif // _MSC_VER || __BORLANDC__
+ 
