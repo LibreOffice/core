@@ -374,8 +374,8 @@ SfxPoolItem* SvxFontItem::Clone( SfxItemPool * ) const
 SvStream& SvxFontItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) const
 {
     sal_Bool bToBats =
-        GetFamilyName().EqualsAscii( "StarSymbol", 0, sizeof("StarSymbol")-1 ) ||
-        GetFamilyName().EqualsAscii( "OpenSymbol", 0, sizeof("OpenSymbol")-1 );
+        GetFamilyName().EqualsIgnoreCaseAscii( "StarSymbol", 0, sizeof("StarSymbol")-1 ) ||
+        GetFamilyName().EqualsIgnoreCaseAscii( "OpenSymbol", 0, sizeof("OpenSymbol")-1 );
 
     rStrm << (sal_uInt8) GetFamily() << (sal_uInt8) GetPitch()
           << (sal_uInt8)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetSOStoreTextEncoding(GetCharSet()));
