@@ -29,6 +29,8 @@
 #include "xistring.hxx"
 #include <boost/shared_ptr.hpp>
 #include <oox/ole/olehelper.hxx>
+#include "rtl/ustring.hxx"
+
 namespace com { namespace sun { namespace star {
     namespace drawing { class XShape; }
     namespace form { class XForm; }
@@ -905,7 +907,7 @@ private:
 private:
     Graphic             maGraphic;      /// Picture or OLE placeholder graphic.
     Rectangle           maVisArea;      /// Size of graphic.
-    String              maClassName;    /// Class name of embedded OLE object.
+    OUString            maClassName;    /// Class name of embedded OLE object.
     sal_uInt32          mnStorageId;    /// Identifier of the storage for this object.
     sal_Size            mnCtlsStrmPos;  /// Position in 'Ctls' stream for this control.
     sal_Size            mnCtlsStrmSize; /// Size in 'Ctls' stream for this control.
