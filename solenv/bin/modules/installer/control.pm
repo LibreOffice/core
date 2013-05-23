@@ -431,8 +431,10 @@ sub read_lcidlist
     for ( my $i = 0; $i <= $#{$lcidlist}; $i++ )
     {
         my $line = ${$lcidlist}[$i];
-
-        $line =~ s/\#.*$//; # removing comments after "#"
+        # de-mangle various potential DOS line-ending problems
+        $line =~ s/\r//g;
+        $line =~ s/\n//g;
+        $line =~ s/\s*\#.*$//; # removing comments after "#"
         if ( $line =~ /^\s*$/ ) { next; }  # this is an empty line
 
         if ( $line =~ /^\s*([\w-]+)\s+(\d+)\s+(\d+)\s*$/ )
