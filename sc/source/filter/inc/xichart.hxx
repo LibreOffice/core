@@ -61,7 +61,6 @@ namespace com { namespace sun { namespace star {
         class XAxis;
         class XLegend;
         class XTitle;
-        class XTitle2;
         class XFormattedString;
         namespace data
         {
@@ -488,6 +487,9 @@ typedef boost::shared_ptr< XclImpChFont > XclImpChFontRef;
 class XclImpChText : public XclImpChGroupBase, public XclImpChFontBase, protected XclImpChRoot
 {
 public:
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle > XTitleRef;
+
+public:
     explicit            XclImpChText( const XclImpChRoot& rRoot );
 
     /** Reads the CHTEXT record (called by base class). */
@@ -529,8 +531,7 @@ public:
     /** Converts and writes all contained data to the passed data point label property set. */
     void                ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo ) const;
     /** Creates a title text object. */
-    css::uno::Reference< css::chart2::XTitle2 >
-                        CreateTitle() const;
+    XTitleRef           CreateTitle() const;
     /** Converts the manual position of the specified title */
     void                ConvertTitlePosition( const XclChTextKey& rTitleKey ) const;
 

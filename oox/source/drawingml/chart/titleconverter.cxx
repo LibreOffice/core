@@ -22,9 +22,9 @@
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/FormattedString.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
-#include <com/sun/star/chart2/Title.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XLegend.hpp>
+#include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/textparagraph.hxx"
@@ -152,7 +152,7 @@ void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, con
         if( aStringSeq.hasElements() ) try
         {
             // create the title object and set the string data
-            Reference< XTitle2 > xTitle = Title::create( getComponentContext() );
+            Reference< XTitle > xTitle( createInstance( "com.sun.star.chart2.Title" ), UNO_QUERY_THROW );
             xTitle->setText( aStringSeq );
             rxTitled->setTitleObject( xTitle );
 

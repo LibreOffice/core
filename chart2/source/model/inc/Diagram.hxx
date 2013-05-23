@@ -150,10 +150,10 @@ protected:
 
     // ____ XTitled ____
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XTitle2 > SAL_CALL getTitleObject()
+        ::com::sun::star::chart2::XTitle > SAL_CALL getTitleObject()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTitleObject( const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::chart2::XTitle2 >& Title )
+                                          ::com::sun::star::chart2::XTitle >& Title )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ X3DDefaultSetter ____
@@ -209,7 +209,7 @@ private:
                         m_xFloor;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XTitle2 >
+        ::com::sun::star::chart2::XTitle >
                         m_xTitle;
 
     ::com::sun::star::uno::Reference<
