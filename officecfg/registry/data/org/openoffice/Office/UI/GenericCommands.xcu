@@ -1483,6 +1483,11 @@
           <value xml:lang="en-US">Match Case</value>
         </prop>
       </node>
+      <node oor:name=".uno:FindAll" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Find All</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ExitSearch" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Exit Search</value>

@@ -315,6 +315,13 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL svx_component_getFactory (
                 svx::MatchCaseToolboxController_createInstance,
                 svx::MatchCaseToolboxController::getSupportedServiceNames_Static() );
         }
+        else if ( svx::FindAllToolboxController::getImplementationName_Static().equalsAscii( pImplName ) )
+        {
+            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                svx::FindAllToolboxController::getImplementationName_Static(),
+                svx::FindAllToolboxController_createInstance,
+                svx::FindAllToolboxController::getSupportedServiceNames_Static() );
+        }
         else if ( svx::ExitSearchToolboxController::getImplementationName_Static().equalsAscii( pImplName ) )
         {
             xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),

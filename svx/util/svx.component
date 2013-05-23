@@ -61,6 +61,9 @@
   <implementation name="com.sun.star.svx.MatchCaseToolboxController">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.svx.FindAllToolboxController">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
   <implementation name="com.sun.star.svx.FontHeightToolBoxController">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
