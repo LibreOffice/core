@@ -126,6 +126,9 @@ gb_AFLAGS := $(AFLAGS)
 # C4800: 'type' : forcing value to bool 'true' or 'false' (performance
 #   warning)
 
+# C4913: user defined binary operator ',' exists but no overload could
+#    convert all operands, default built-in binary operator ',' used
+
 # C4996: 'function': was declared deprecated
 #   Also generated for C++ library functions that "may be unsafe"
 
@@ -177,6 +180,7 @@ gb_CXXFLAGS := \
 	-wd4611 \
 	-wd4706 \
 	-wd4800 \
+	-wd4913 \
 	-Zc:forScope,wchar_t- \
 	-Zm500 \
 
