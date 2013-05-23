@@ -44,12 +44,6 @@
 
 #include "ucb.hxx"
 
-// Definitions for ProviderMap_Impl (Solaris wouldn't find explicit template
-// instantiations for these in another compilation unit...):
-#ifndef _UCB_REGEXPMAP_TPT_
-#include <regexpmap.tpt>
-#endif
-
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
