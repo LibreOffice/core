@@ -1438,6 +1438,7 @@ const ConvertChar* ConvertChar::GetRecodeData( const String& rOrgFontName, const
     OUString aOrgName( rOrgFontName );
     GetEnglishSearchFontName( aOrgName );
     OUString aMapName( rMapFontName );
+    // clean up and lowercase font name
     GetEnglishSearchFontName( aMapName );
 
     if( aMapName == "starsymbol"

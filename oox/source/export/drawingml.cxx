@@ -1077,7 +1077,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                             // instead of a Unicode encoding the encoding RTL_TEXTENCODING_SYMBOL was used.
                             // Because there might exist a lot of damaged documemts I added this two lines
                             // which fixes the bullet problem for the export.
-                            if ( aFontDesc.Name == "StarSymbol" )
+                            if ( aFontDesc.Name.equalsIgnoreAsciiCase("StarSymbol") )
                                 aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;
 
                         } else if ( aPropName == "BulletRelSize" ) {
