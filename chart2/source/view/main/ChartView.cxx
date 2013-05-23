@@ -2167,7 +2167,7 @@ boost::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
         nXDistance = nXOffset;
     }
 
-    uno::Reference< XTitle2 > xTitle( TitleHelper::getTitle( eType, xChartModel ) );
+    uno::Reference< XTitle > xTitle( TitleHelper::getTitle( eType, xChartModel ) );
     OUString aCompleteString( TitleHelper::getCompleteString( xTitle ) );
     if( !aCompleteString.isEmpty() )
     {

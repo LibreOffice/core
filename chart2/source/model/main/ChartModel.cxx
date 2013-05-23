@@ -156,7 +156,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
         m_xOldModelAgg->setDelegator( *this );
 
         Reference< util::XModifyListener > xListener;
-        Reference< chart2::XTitle2 > xNewTitle = CreateRefClone< Reference< chart2::XTitle2 > >()( rOther.m_xTitle );
+        Reference< chart2::XTitle > xNewTitle = CreateRefClone< Reference< chart2::XTitle > >()( rOther.m_xTitle );
         Reference< chart2::XDiagram > xNewDiagram = CreateRefClone< Reference< chart2::XDiagram > >()( rOther.m_xDiagram );
         Reference< beans::XPropertySet > xNewPageBackground = CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xPageBackground );
         Reference< chart2::XChartTypeManager > xChartTypeManager = CreateRefClone< Reference< chart2::XChartTypeManager > >()( rOther.m_xChartTypeManager );
@@ -967,14 +967,14 @@ uno::Reference< beans::XPropertySet > SAL_CALL ChartModel::getPageBackground()
 }
 
 // ____ XTitled ____
-uno::Reference< chart2::XTitle2 > SAL_CALL ChartModel::getTitleObject()
+uno::Reference< chart2::XTitle > SAL_CALL ChartModel::getTitleObject()
     throw (uno::RuntimeException)
 {
     MutexGuard aGuard( m_aModelMutex );
     return m_xTitle;
 }
 
-void SAL_CALL ChartModel::setTitleObject( const uno::Reference< chart2::XTitle2 >& xTitle )
+void SAL_CALL ChartModel::setTitleObject( const uno::Reference< chart2::XTitle >& xTitle )
     throw (uno::RuntimeException)
 {
     {

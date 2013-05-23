@@ -93,7 +93,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/chart2,\
 	PowerScaling \
 	RegressionEquation \
 	Scaling \
-	Title \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/chart2/data,\
 	DatabaseDataProvider \
@@ -641,6 +640,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/chart2,
 	RegressionCurve \
 	RegressionCurveEquation \
 	StandardDiagramCreationParameters \
+	Title \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/chart2/data,\
 	DataFilter \
@@ -2037,7 +2037,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/chart2,\
 	XScaling \
 	XTarget \
 	XTitle \
-	XTitle2 \
 	XTitled \
 	XTransformation \
 ))

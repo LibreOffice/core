@@ -307,7 +307,7 @@ Diagram::Diagram( const Diagram & rOther ) :
 
     m_xWall.set( CloneHelper::CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xWall ));
     m_xFloor.set( CloneHelper::CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xFloor ));
-    m_xTitle.set( CloneHelper::CreateRefClone< Reference< chart2::XTitle2 > >()( rOther.m_xTitle ));
+    m_xTitle.set( CloneHelper::CreateRefClone< Reference< chart2::XTitle > >()( rOther.m_xTitle ));
     m_xLegend.set( CloneHelper::CreateRefClone< Reference< chart2::XLegend > >()( rOther.m_xLegend ));
 
     ModifyListenerHelper::addListener( m_xWall, m_xModifyEventForwarder );
@@ -442,17 +442,17 @@ void SAL_CALL Diagram::setDiagramData(
 }
 
 // ____ XTitled ____
-uno::Reference< chart2::XTitle2 > SAL_CALL Diagram::getTitleObject()
+uno::Reference< chart2::XTitle > SAL_CALL Diagram::getTitleObject()
     throw (uno::RuntimeException)
 {
     MutexGuard aGuard( GetMutex() );
     return m_xTitle;
 }
 
-void SAL_CALL Diagram::setTitleObject( const uno::Reference< chart2::XTitle2 >& xNewTitle )
+void SAL_CALL Diagram::setTitleObject( const uno::Reference< chart2::XTitle >& xNewTitle )
     throw (uno::RuntimeException)
 {
-    Reference< chart2::XTitle2 > xOldTitle;
+    Reference< chart2::XTitle > xOldTitle;
     {
         MutexGuard aGuard( GetMutex() );
         if( m_xTitle == xNewTitle )

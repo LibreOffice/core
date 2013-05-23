@@ -54,6 +54,7 @@ class XclRoot;
 #define SERVICE_CHART2_DIAGRAM              "com.sun.star.chart2.Diagram"
 #define SERVICE_CHART2_ERRORBAR             "com.sun.star.chart2.ErrorBar"
 #define SERVICE_CHART2_LEGEND               "com.sun.star.chart2.Legend"
+#define SERVICE_CHART2_TITLE                "com.sun.star.chart2.Title"
 
 // property names
 #define EXC_CHPROP_ADDITIONALSHAPES         "AdditionalShapes"
