@@ -2876,7 +2876,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                     aCell.nNumberFormat, aCell.fValue);
                 if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                            aCell.nNumberFormat, aCell.fValue, false, XML_NAMESPACE_CALC_EXT);
+                            aCell.nNumberFormat, aCell.fValue, false, XML_NAMESPACE_CALC_EXT, false);
             }
             break;
         case table::CellContentType_TEXT :
@@ -2940,7 +2940,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                                 {
                                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                                             pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0),
-                                            pDoc->GetValue( aCellPos ), false, XML_NAMESPACE_CALC_EXT);
+                                            pDoc->GetValue( aCellPos ), false, XML_NAMESPACE_CALC_EXT, false);
                                 }
                             }
                         }
@@ -2953,7 +2953,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                                 if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                                 {
                                     GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                                            aCell.nNumberFormat, pDoc->GetValue( aCellPos ), false, XML_NAMESPACE_CALC_EXT );
+                                            aCell.nNumberFormat, pDoc->GetValue( aCellPos ), false, XML_NAMESPACE_CALC_EXT, false );
 
                                 }
                             }
