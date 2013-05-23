@@ -12,18 +12,21 @@
 
 #include "address.hxx"
 #include "columnspanset.hxx"
-#include "mtvelements.hxx"
 
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ScDocument;
 
 namespace sc {
 
+struct ColumnBlockPosition;
+class ColumnBlockPositionSet;
+
 class StartListeningContext : boost::noncopyable
 {
     ScDocument& mrDoc;
-    ColumnBlockPositionSet maSet;
+    boost::scoped_ptr<ColumnBlockPositionSet> mpSet;
 public:
     StartListeningContext(ScDocument& rDoc);
     ScDocument& getDoc();
@@ -35,7 +38,7 @@ class EndListeningContext : boost::noncopyable
 {
     ScDocument& mrDoc;
     ColumnSpanSet maSet;
-    ColumnBlockPositionSet maPosSet;
+    boost::scoped_ptr<ColumnBlockPositionSet> mpPosSet;
 public:
     EndListeningContext(ScDocument& rDoc);
     ScDocument& getDoc();

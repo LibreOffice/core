@@ -9,17 +9,18 @@
 
 #include "clipcontext.hxx"
 #include "document.hxx"
+#include "mtvelements.hxx"
 
 namespace sc {
 
 ClipContextBase::ClipContextBase(ScDocument& rDoc) :
-    maSet(rDoc) {}
+    mpSet(new ColumnBlockPositionSet(rDoc)) {}
 
 ClipContextBase::~ClipContextBase() {}
 
 ColumnBlockPosition* ClipContextBase::getBlockPosition(SCTAB nTab, SCCOL nCol)
 {
-    return maSet.getBlockPosition(nTab, nCol);
+    return mpSet->getBlockPosition(nTab, nCol);
 }
 
 CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,

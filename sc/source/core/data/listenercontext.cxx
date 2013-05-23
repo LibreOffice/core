@@ -9,6 +9,7 @@
 
 #include "listenercontext.hxx"
 #include "document.hxx"
+#include "mtvelements.hxx"
 
 namespace sc {
 
@@ -38,7 +39,8 @@ public:
 
 }
 
-StartListeningContext::StartListeningContext(ScDocument& rDoc) : mrDoc(rDoc), maSet(rDoc) {}
+StartListeningContext::StartListeningContext(ScDocument& rDoc) :
+    mrDoc(rDoc), mpSet(new ColumnBlockPositionSet(rDoc)) {}
 
 ScDocument& StartListeningContext::getDoc()
 {
@@ -47,10 +49,11 @@ ScDocument& StartListeningContext::getDoc()
 
 ColumnBlockPosition* StartListeningContext::getBlockPosition(SCTAB nTab, SCCOL nCol)
 {
-    return maSet.getBlockPosition(nTab, nCol);
+    return mpSet->getBlockPosition(nTab, nCol);
 }
 
-EndListeningContext::EndListeningContext(ScDocument& rDoc) : mrDoc(rDoc), maPosSet(rDoc) {}
+EndListeningContext::EndListeningContext(ScDocument& rDoc) :
+    mrDoc(rDoc), mpPosSet(new ColumnBlockPositionSet(rDoc)) {}
 
 ScDocument& EndListeningContext::getDoc()
 {
@@ -59,7 +62,7 @@ ScDocument& EndListeningContext::getDoc()
 
 ColumnBlockPosition* EndListeningContext::getBlockPosition(SCTAB nTab, SCCOL nCol)
 {
-    return maPosSet.getBlockPosition(nTab, nCol);
+    return mpPosSet->getBlockPosition(nTab, nCol);
 }
 
 void EndListeningContext::addEmptyBroadcasterPosition(SCTAB nTab, SCCOL nCol, SCROW nRow)

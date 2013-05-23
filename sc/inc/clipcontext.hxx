@@ -11,18 +11,22 @@
 #define SC_CLIPCONTEXT_HXX
 
 #include "address.hxx"
-#include "mtvelements.hxx"
 
 #include <vector>
 #include <boost/unordered_map.hpp>
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ScDocument;
 
 namespace sc {
 
-class ClipContextBase
+struct ColumnBlockPosition;
+class ColumnBlockPositionSet;
+
+class ClipContextBase : boost::noncopyable
 {
-    sc::ColumnBlockPositionSet maSet;
+    boost::scoped_ptr<ColumnBlockPositionSet> mpSet;
 
     ClipContextBase(); // disabled
 
