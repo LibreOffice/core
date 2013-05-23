@@ -1949,6 +1949,7 @@ void SfxMedium::Transfer_Impl()
 
             ::ucbhelper::Content aDestContent;
             ::ucbhelper::Content::create( aDestURL, xComEnv, comphelper::getProcessComponentContext(), aDestContent );
+            // For checkin, we need the object URL, not the parent folder:
             if ( !IsInCheckIn( ) )
             {
                 // Get the parent URL from the XChild if possible: why would the URL necessarily have
@@ -1964,13 +1965,11 @@ void SfxMedium::Transfer_Impl()
                     }
                 }
 
-                if ( !sParentUrl.isEmpty() )
-                    aDest = INetURLObject( sParentUrl );
-            }
-            else
-            {
-                // For checkin, we need the object URL, not the parent folder
-                aDest = INetURLObject( aDestURL );
+                if ( sParentUrl.isEmpty() )
+                    aDestURL = aDest.GetMainURL( INetURLObject::NO_DECODE );
+                        // adjust to above aDest.removeSegment()
+                else
+                    aDestURL = sParentUrl;
             }
 
             // LongName wasn't defined anywhere, only used here... get the Title instead
@@ -1983,7 +1982,7 @@ void SfxMedium::Transfer_Impl()
 
             try
             {
-                aTransferContent = ::ucbhelper::Content( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext() );
+                aTransferContent = ::ucbhelper::Content( aDestURL, xComEnv, comphelper::getProcessComponentContext() );
             }
             catch (const ::com::sun::star::ucb::ContentCreationException& ex)
             {
