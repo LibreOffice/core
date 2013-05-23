@@ -94,15 +94,6 @@ public:
     rtl_String * pData;
     /// @endcond
 
-private:
-    class DO_NOT_ACQUIRE;
-
-    OString( rtl_String * value, SAL_UNUSED_PARAMETER DO_NOT_ACQUIRE * )
-    {
-        pData = value;
-    }
-
-public:
     /**
       New string containing no characters.
     */
@@ -1070,7 +1061,7 @@ public:
     {
         rtl_String *pNew = 0;
         rtl_string_newFromSubString( &pNew, pData, beginIndex, getLength() - beginIndex );
-        return OString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1089,7 +1080,7 @@ public:
     {
         rtl_String *pNew = 0;
         rtl_string_newFromSubString( &pNew, pData, beginIndex, count );
-        return OString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1104,7 +1095,7 @@ public:
     {
         rtl_String* pNew = 0;
         rtl_string_newConcat( &pNew, pData, str.pData );
-        return OString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OString( pNew, SAL_NO_ACQUIRE );
     }
 
 #ifndef RTL_FAST_STRING
@@ -1131,7 +1122,7 @@ public:
     {
         rtl_String* pNew = 0;
         rtl_string_newReplaceStrAt( &pNew, pData, index, count, newStr.pData );
-        return OString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1151,7 +1142,7 @@ public:
     {
         rtl_String* pNew = 0;
         rtl_string_newReplace( &pNew, pData, oldChar, newChar );
-        return OString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1218,7 +1209,7 @@ public:
     {
         rtl_String* pNew = 0;
         rtl_string_newToAsciiLowerCase( &pNew, pData );
-        return OString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1235,7 +1226,7 @@ public:
     {
         rtl_String* pNew = 0;
         rtl_string_newToAsciiUpperCase( &pNew, pData );
-        return OString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1253,7 +1244,7 @@ public:
     {
         rtl_String* pNew = 0;
         rtl_string_newTrim( &pNew, pData );
-        return OString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1284,7 +1275,7 @@ public:
     {
         rtl_String * pNew = 0;
         index = rtl_string_getToken( &pNew, pData, token, cTok, index );
-        return OString( pNew, (DO_NOT_ACQUIRE *)0 );
+        return OString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1441,7 +1432,7 @@ public:
         sal_Char aBuf[RTL_STR_MAX_VALUEOFINT64];
         rtl_String* pNewData = 0;
         rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfInt64( aBuf, ll, radix ) );
-        return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
+        return OString( pNewData, SAL_NO_ACQUIRE );
     }
     /// @overload
     /// @since LibreOffice 4.1
@@ -1450,7 +1441,7 @@ public:
         sal_Char aBuf[RTL_STR_MAX_VALUEOFUINT64];
         rtl_String* pNewData = 0;
         rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfUInt64( aBuf, ll, radix ) );
-        return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
+        return OString( pNewData, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1467,7 +1458,7 @@ public:
         sal_Char aBuf[RTL_STR_MAX_VALUEOFFLOAT];
         rtl_String* pNewData = 0;
         rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfFloat( aBuf, f ) );
-        return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
+        return OString( pNewData, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1484,7 +1475,7 @@ public:
         sal_Char aBuf[RTL_STR_MAX_VALUEOFDOUBLE];
         rtl_String* pNewData = 0;
         rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfDouble( aBuf, d ) );
-        return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
+        return OString( pNewData, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1519,7 +1510,7 @@ public:
         sal_Char aBuf[RTL_STR_MAX_VALUEOFBOOLEAN];
         rtl_String* pNewData = 0;
         rtl_string_newFromStr_WithLength( &pNewData, aBuf, rtl_str_valueOfBoolean( aBuf, b ) );
-        return OString( pNewData, (DO_NOT_ACQUIRE*)0 );
+        return OString( pNewData, SAL_NO_ACQUIRE );
     }
 
     /**

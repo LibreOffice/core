@@ -91,15 +91,6 @@ public:
     rtl_uString * pData;
     /// @endcond
 
-private:
-    class DO_NOT_ACQUIRE{};
-
-    OUString( rtl_uString * value, SAL_UNUSED_PARAMETER DO_NOT_ACQUIRE * )
-    {
-        pData = value;
-    }
-
-public:
     /**
       New string containing no characters.
     */
@@ -1422,7 +1413,7 @@ public:
     {
         rtl_uString *pNew = 0;
         rtl_uString_newFromSubString( &pNew, pData, beginIndex, getLength() - beginIndex );
-        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1441,7 +1432,7 @@ public:
     {
         rtl_uString *pNew = 0;
         rtl_uString_newFromSubString( &pNew, pData, beginIndex, count );
-        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1456,7 +1447,7 @@ public:
     {
         rtl_uString* pNew = 0;
         rtl_uString_newConcat( &pNew, pData, str.pData );
-        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
 #ifndef RTL_FAST_STRING
@@ -1483,7 +1474,7 @@ public:
     {
         rtl_uString* pNew = 0;
         rtl_uString_newReplaceStrAt( &pNew, pData, index, count, newStr.pData );
-        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1503,7 +1494,7 @@ public:
     {
         rtl_uString* pNew = 0;
         rtl_uString_newReplace( &pNew, pData, oldChar, newChar );
-        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1681,7 +1672,7 @@ public:
     {
         rtl_uString* pNew = 0;
         rtl_uString_newToAsciiLowerCase( &pNew, pData );
-        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1698,7 +1689,7 @@ public:
     {
         rtl_uString* pNew = 0;
         rtl_uString_newToAsciiUpperCase( &pNew, pData );
-        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1716,7 +1707,7 @@ public:
     {
         rtl_uString* pNew = 0;
         rtl_uString_newTrim( &pNew, pData );
-        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1747,7 +1738,7 @@ public:
     {
         rtl_uString * pNew = 0;
         index = rtl_uString_getToken( &pNew, pData, token, cTok, index );
-        return OUString( pNew, (DO_NOT_ACQUIRE *)0 );
+        return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1892,7 +1883,7 @@ public:
             throw std::bad_alloc();
 #endif
         }
-        return OUString( pNew, (DO_NOT_ACQUIRE *)0 );
+        return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -1935,7 +1926,7 @@ public:
             throw std::bad_alloc();
 #endif
         }
-        return OUString( pNew, (DO_NOT_ACQUIRE *)0 );
+        return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -2042,7 +2033,7 @@ public:
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT32];
         rtl_uString* pNewData = 0;
         rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt32( aBuf, i, radix ) );
-        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+        return OUString( pNewData, SAL_NO_ACQUIRE );
     }
     /// @overload
     /// @since LibreOffice 4.1
@@ -2069,7 +2060,7 @@ public:
         sal_Unicode aBuf[RTL_STR_MAX_VALUEOFINT64];
         rtl_uString* pNewData = 0;
         rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt64( aBuf, ll, radix ) );
-        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+        return OUString( pNewData, SAL_NO_ACQUIRE );
     }
     /// @overload
     /// @since LibreOffice 4.1
@@ -2078,7 +2069,7 @@ public:
         sal_Unicode aBuf[RTL_STR_MAX_VALUEOFUINT64];
         rtl_uString* pNewData = 0;
         rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfUInt64( aBuf, ll, radix ) );
-        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+        return OUString( pNewData, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -2095,7 +2086,7 @@ public:
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFFLOAT];
         rtl_uString* pNewData = 0;
         rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfFloat( aBuf, f ) );
-        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+        return OUString( pNewData, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -2112,7 +2103,7 @@ public:
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFDOUBLE];
         rtl_uString* pNewData = 0;
         rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfDouble( aBuf, d ) );
-        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+        return OUString( pNewData, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -2147,7 +2138,7 @@ public:
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFBOOLEAN];
         rtl_uString* pNewData = 0;
         rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfBoolean( aBuf, b ) );
-        return OUString( pNewData, (DO_NOT_ACQUIRE*)0 );
+        return OUString( pNewData, SAL_NO_ACQUIRE );
     }
 
     /**
@@ -2239,7 +2230,7 @@ public:
     {
         rtl_uString* pNew = 0;
         rtl_uString_newFromAscii( &pNew, value );
-        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
+        return OUString( pNew, SAL_NO_ACQUIRE );
     }
 };
 
