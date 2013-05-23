@@ -66,6 +66,7 @@ void SdFiltersTest::testDocumentLayout()
         { "n758621.ppt", "xml/n758621_" },
         { "fdo64586.ppt", "xml/fdo64586_" },
         { "n819614.pptx", "xml/n819614_" },
+        { "n820786.pptx", "xml/n820786_" },
     };
 
     for ( int i = 0; i < static_cast< int >( SAL_N_ELEMENTS( aFilesToCompare ) ); ++i )
