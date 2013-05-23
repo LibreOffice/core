@@ -259,13 +259,13 @@ protected:
 
     void header()
     {
-        fprintf(stderr, "File tested,Execution Time (ms)\n");
+        std::cerr << "File tested,Execution Time (ms)" << std::endl;
     }
 
     void load(const char* pDir, const char* pName, bool bCalcLayout = true)
     {
         // Output name early, so in the case of a hang, the name of the hanging input file is visible.
-        fprintf(stderr, "%s,", pName);
+        std::cerr << pName << ",";
         m_nStartTime = osl_getGlobalTimer();
         mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.text.TextDocument");
         if (bCalcLayout)
@@ -306,7 +306,7 @@ protected:
     void finish()
     {
         sal_uInt32 nEndTime = osl_getGlobalTimer();
-        fprintf(stderr, "%" SAL_PRIuUINT32"\n", nEndTime - m_nStartTime);
+        std::cerr << (nEndTime - m_nStartTime) << std::endl;
         if (mpXmlBuffer)
         {
             xmlBufferFree(mpXmlBuffer);
