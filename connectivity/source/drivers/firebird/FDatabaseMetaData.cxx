@@ -876,7 +876,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     */
     Reference< XPreparedStatement > statement = m_pConnection->prepareStatement(
             "SELECT "
-            "RDB$RELATION_NAME " // avoid duplicates
+            "'schema' as schema, RDB$RELATION_NAME, RDB$SYSTEM_FLAG, RDB$RELATION_TYPE, 'description' as description " // avoid duplicates
             "FROM RDB$RELATIONS "
             "WHERE (RDB$RELATION_TYPE = 0 OR RDB$RELATION_TYPE = 1) ");
 

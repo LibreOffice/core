@@ -51,10 +51,15 @@
 #include "FStatement.hxx"
 #include "OSubComponent.hxx"
 
+#include <ibase.h>
+
 namespace connectivity
 {
     namespace firebird
     {
+
+        typedef std::vector< OUString> TRow;
+        typedef std::vector< TRow> TTable;
 
         /*
         **  OResultSet
@@ -83,6 +88,10 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
             rtl_TextEncoding                            m_nTextEncoding;
             sal_Bool                                    m_bWasNull;
+            sal_Int32                                   m_row;
+            sal_Int32                                   m_rowCount;
+            sal_Int32                                   m_fieldCount;
+            TTable                                      m_sqldata;
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
@@ -105,12 +114,16 @@ namespace connectivity
                                     sal_Int32 nHandle
                                          ) const;
 
+            virtual void checkColumnIndex( sal_Int32 index )
+                throw ( com::sun::star::sdbc::SQLException, com::sun::star::uno::RuntimeException );
+            virtual void checkRowIndex( sal_Bool mustBeOnValidRow );
+
             // you can't delete objects of this type
             virtual ~OResultSet();
         public:
             DECLARE_SERVICE_INFO();
 
-            OResultSet( OStatement_Base* pStmt);
+            OResultSet( OStatement_Base* pStmt, TTable sqldata, sal_Int32 rows, sal_Int32 fields);
 
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
