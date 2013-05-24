@@ -396,8 +396,7 @@ public:
                         mbVexpand:1,
                         mbExpand:1,
                         mbFill:1,
-                        mbSecondary:1,
-                        mbIsThemingEnabled:1;
+                        mbSecondary:1;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };
