@@ -1284,6 +1284,12 @@ void SdrTextObj::ImpAutoFitText( SdrOutliner& rOutliner, const Size& rTextSize, 
             fFactor = double(rTextSize.Width())/aCurrTextSize.Width();
         else
             fFactor = double(rTextSize.Height())/aCurrTextSize.Height();
+        // fFactor scales in both x and y directions
+        // - this is fine for bulleted words
+        // - but it scales too much for a long paragraph
+        // - taking sqrt scales long paragraphs the best
+        // - bulleted words will have to go through more iterations
+        fFactor = std::sqrt(fFactor);
 
         sal_uInt16 nCurrStretchX, nCurrStretchY;
         rOutliner.GetGlobalCharStretching(nCurrStretchX, nCurrStretchY);
