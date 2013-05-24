@@ -40,7 +40,6 @@ gb_Pagein_get_outdir_target = $(OUTDIR)/bin/pagein-$(1)
 gb_PackagePart_get_destinations = \
 	$(INSTDIR) \
 	$(OUTDIR)/bin \
-	$(OUTDIR)/inc \
 	$(OUTDIR)/lib \
 	$(OUTDIR)/par \
 	$(OUTDIR)/pck \
@@ -419,6 +418,5 @@ gb_StaticLibrary_OUTDIRLOCATION = $(OUTDIR)/lib
 # static variables declared here because they are used globally
 
 gb_POLOCATION := $(SRCDIR)/translations/source
-gb_EXTERNAL_HEADERS_DIR := $(OUTDIR)/inc/external
 
 # vim: set noet sw=4:
