@@ -353,25 +353,15 @@ void BackingWindow::prepareRecentFileMenu()
 
             if ( aURLObj.GetProtocol() == INET_PROT_FILE )
             {
-                // Do handle file URL differently => convert it to a system
-                // path and abbreviate it with a special function:
-                String aFileSystemPath( aURLObj.getFSysPath( INetURLObject::FSYS_DETECT ) );
-
-                OUString   aSystemPath( aFileSystemPath );
-                OUString   aCompactedSystemPath;
-
-                oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
-                if ( !nError )
-                    aMenuTitle = String( aCompactedSystemPath );
-                else
-                    aMenuTitle = aSystemPath;
+                // Do handle file URL differently: don't show the protocol, just the file name
+                aMenuTitle = aURLObj.GetLastName(INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8);
             }
             else
             {
-                // Use INetURLObject to abbreviate all other URLs
-                Reference< util::XStringWidth > xStringLength( new RecentFilesStringLength() );
-                aMenuTitle = aURLObj.getAbbreviated( xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
+                // In all other URLs show the protocol name before the file name
+                aMenuTitle = aURLObj.GetSchemeName(aURLObj.GetProtocol()) + ": " + aURLObj.getName();
             }
+
             OUStringBuffer aBuf( aMenuTitle.getLength() + 5 );
             if( i < 9 )
             {
@@ -382,7 +372,7 @@ void BackingWindow::prepareRecentFileMenu()
                 aBuf.appendAscii( "1~0" );
             else
                 aBuf.append( i+1 );
-            aBuf.appendAscii( ": " );
+            aBuf.appendAscii( ". " );
             aBuf.append( aMenuTitle );
             mpRecentMenu->InsertItem( static_cast<sal_uInt16>(i+1), aBuf.makeStringAndClear() );
         }
