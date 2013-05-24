@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8N4\u003d",
+        "filename": "vcl/unx/gtk/gdi/salnativewidgets-gtk.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1053,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-05-24T12:19:33Z",
+      "side": 1,
+      "message": "Any reason not to simplify this to\n\n  returnVal \u003d Application::GetSetting().GetLayoutRTL();\n\n?",
+      "revId": "beabbfeabcd466aa803b646d7b71b10940e6df5f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
