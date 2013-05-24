@@ -646,35 +646,35 @@ File gid_File_Txt_Pagein_Calc
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
-    Name = "pagein-calc";
+    Name = "Pagein/pagein-calc";
 End
 
 File gid_File_Txt_Pagein_Common
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
-    Name = "pagein-common";
+    Name = "Pagein/pagein-common";
 End
 
 File gid_File_Txt_Pagein_Draw
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
-    Name = "pagein-draw";
+    Name = "Pagein/pagein-draw";
 End
 
 File gid_File_Txt_Pagein_Impress
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
-    Name = "pagein-impress";
+    Name = "Pagein/pagein-impress";
 End
 
 File gid_File_Txt_Pagein_Writer
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
-    Name = "pagein-writer";
+    Name = "Pagein/pagein-writer";
 End
 
 #endif

@@ -22,7 +22,6 @@
 gb_CliLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliLibrary_EXT)
 gb_CliNativeLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliNativeLibrary_EXT)
 gb_CliUnoApi_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliUnoApi_EXT)
-gb_Pagein_get_outdir_target = $(OUTDIR)/bin/pagein-$(1)
 gb_PackagePart_get_destinations = \
 	$(INSTDIR) \
 	$(OUTDIR)/bin \
@@ -148,7 +147,7 @@ gb_Module_get_subsequentcheck_target = $(WORKDIR)/Module/subsequentcheck/$(1)
 gb_Module_get_target = $(WORKDIR)/Module/$(1)
 gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
 gb_ObjCObject_get_target = $(WORKDIR)/ObjCObject/$(1).o
-gb_Pagein_get_target = $(WORKDIR)/Pagein/$(1)
+gb_Pagein_get_target = $(WORKDIR)/Pagein/pagein-$(1)
 gb_Package_get_preparation_target = $(WORKDIR)/Package/prepared/$(1)
 gb_Package_get_target = $(WORKDIR)/Package/$(1).filelist
 gb_Package_get_target_for_build = $(WORKDIR_FOR_BUILD)/Package/$(1).filelist

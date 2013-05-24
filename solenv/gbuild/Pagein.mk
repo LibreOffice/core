@@ -18,6 +18,9 @@ gb_Pagein__make_library_path = $(call gb_Pagein__get_libdir,$(1))$(call gb_Libra
 gb_Pagein__make_path = \
 $(if $(call gb_Pagein__is_library,$(1)),$(call gb_Pagein__make_library_path,$(1)),$(1))
 
+gb_Pagein__get_install_target = $(INSTDIR)/$(gb_PROGRAMDIRNAME)/pagein-$(1)
+gb_Pagein__get_final_target = $(WORKDIR)/Pagein/pagein-$(1).final
+
 define gb_Pagein__command
 $(call gb_Output_announce,$(2),$(true),PAG,5)
 $(call gb_Helper_abbreviate_dirs,\
@@ -31,24 +34,23 @@ endef
 $(call gb_Pagein_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),PAG,5)
 	$(call gb_Helper_abbreviate_dirs,\
-        rm -f $(call gb_Pagein_get_target,$*) $(call gb_Pagein_get_outdir_target,$*))
+        rm -f $(call gb_Pagein__get_final_target,$*) $(call gb_Pagein_get_target,$*))
 
 $(call gb_Pagein_get_target,%) :
 	$(call gb_Pagein__command,$@,$*,$^)
-	
-gb_Pagein_get_install_target = $(INSTDIR)/$(gb_PROGRAMDIRNAME)/pagein-$(1)
+
+$(call gb_Pagein__get_final_target,%) :
+	touch $@
 
 define gb_Pagein_Pagein
 $(call gb_Pagein_get_target,$(1)) : OBJECTS :=
 $(call gb_Pagein_get_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
-$$(eval $$(call gb_Module_register_target,$(call gb_Pagein_get_outdir_target,$(1)),$(call gb_Pagein_get_clean_target,$(1))))
-$(call gb_Helper_make_userfriendly_targets,$(1),Pagein,$(call gb_Pagein_get_outdir_target,$(1)))
-$(call gb_Deliver_add_deliverable,$(call gb_Pagein_get_outdir_target,$(1)),$(call gb_Pagein_get_target,$(1)),$(1))
-$(call gb_Pagein_get_outdir_target,$(1)) : $(call gb_Pagein_get_target,$(1))
-$(call gb_Pagein_get_outdir_target,$(1)) :| $(dir $(call gb_Pagein_get_outdir_target,$(1))).dir
+$(call gb_Pagein__get_final_target,$(1)) : $(call gb_Pagein_get_target,$(1))
+$$(eval $$(call gb_Module_register_target,$(call gb_Pagein__get_final_target,$(1)),$(call gb_Pagein_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),Pagein,$(call gb_Pagein_get_target,$(1)))
 
-$(call gb_Helper_install,$(call gb_Pagein_get_outdir_target,$(1)), \
-	$(call gb_Pagein_get_install_target,$(1)), \
+$(call gb_Helper_install,$(call gb_Pagein__get_final_target,$(1)), \
+	$(call gb_Pagein__get_install_target,$(1)), \
 	$(call gb_Pagein_get_target,$(1)))
 
 endef
