@@ -299,6 +299,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	Package \
 	PackageSet \
 	Pagein \
+	Postprocess \
 	PrecompiledHeader \
 	PropertiesTranslateTarget \
 	Pyuno \
