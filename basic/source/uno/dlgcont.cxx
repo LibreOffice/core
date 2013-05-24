@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
@@ -237,7 +236,9 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
                 if ( xISP.is() )
                 {
                     Reference< io::XInputStream > xInput( xISP->createInputStream() );
-                    Reference< awt::XUnoControlDialogModel > xDialogModel = awt::UnoControlDialogModel::create( mxContext );
+                    Reference< XNameContainer > xDialogModel(
+                        mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", mxContext),
+                        UNO_QUERY );
                     ::xmlscript::importDialogModel( xInput, xDialogModel, mxContext, mxOwnerDocument );
                     std::vector< OUString > vEmbeddedImageURLs;
                     GraphicObject::InspectForGraphicObjectImageURL( xDialogModel,  vEmbeddedImageURLs );
@@ -279,7 +280,14 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
 
     Reference< XParser > xParser = xml::sax::Parser::create( mxContext );
 
-    Reference< awt::XUnoControlDialogModel > xDialogModel = awt::UnoControlDialogModel::create( mxContext );
+    Reference< XNameContainer > xDialogModel(
+        mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", mxContext),
+        UNO_QUERY );
+    if( !xDialogModel.is() )
+    {
+        OSL_FAIL( "### couldn't create com.sun.star.awt.UnoControlDialogModel component\n" );
+        return aRetAny;
+    }
 
     // Read from storage?
     sal_Bool bStorage = xElementStream.is();

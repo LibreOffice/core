@@ -33,8 +33,6 @@
 
 #include "com/sun/star/awt/ActionEvent.hpp"
 #include "com/sun/star/awt/PushButtonType.hpp"
-#include "com/sun/star/awt/UnoControlDialog.hpp"
-#include "com/sun/star/awt/UnoControlDialogModel.hpp"
 #include "com/sun/star/awt/VclWindowPeerAttribute.hpp"
 #include "com/sun/star/awt/WindowAttribute.hpp"
 #include "com/sun/star/awt/XButton.hpp"
@@ -1093,22 +1091,26 @@ void UpdateHandler::createDialog()
 
     loadStrings();
 
-    uno::Reference< awt::XUnoControlDialogModel > xControlModel = awt::UnoControlDialogModel::create( mxContext );
+    uno::Reference< lang::XMultiComponentFactory > xFactory( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
+    uno::Reference< awt::XControlModel > xControlModel( xFactory->createInstanceWithContext(
+                                                         "com.sun.star.awt.UnoControlDialogModel",
+                                                         mxContext), uno::UNO_QUERY_THROW );
     {
         // @see awt/UnoControlDialogModel.idl
-        xControlModel->setTitle( msDlgTitle);
-        xControlModel->setCloseable( true );
-        xControlModel->setEnabled( true );
-        xControlModel->setMoveable( true );
-        xControlModel->setSizeable( true );
-        xControlModel->setDesktopAsParent( true );
-        xControlModel->setPositionX( 100 );
-        xControlModel->setPositionY( 100 );
-        xControlModel->setWidth( DIALOG_WIDTH );
-        xControlModel->setHeight( DIALOG_HEIGHT );
-        xControlModel->setHelpURL( INET_HID_SCHEME + OUString::createFromAscii( HID_CHECK_FOR_UPD_DLG ) );
-    }
+        uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY_THROW );
 
+        xPropSet->setPropertyValue( "Title", uno::Any( msDlgTitle ) );
+        xPropSet->setPropertyValue( "Closeable", uno::Any( true ) );
+        xPropSet->setPropertyValue( "Enabled", uno::Any( true ) );
+        xPropSet->setPropertyValue( "Moveable", uno::Any( true ) );
+        xPropSet->setPropertyValue( "Sizeable", uno::Any( true ) );
+        xPropSet->setPropertyValue( "DesktopAsParent", uno::Any( true ) );
+        xPropSet->setPropertyValue( "PositionX", uno::Any(sal_Int32( 100 )) );
+        xPropSet->setPropertyValue( "PositionY", uno::Any(sal_Int32( 100 )) );
+        xPropSet->setPropertyValue( "Width", uno::Any(sal_Int32( DIALOG_WIDTH )) );
+        xPropSet->setPropertyValue( "Height", uno::Any(sal_Int32( DIALOG_HEIGHT )) );
+        xPropSet->setPropertyValue( "HelpURL", uno::makeAny( INET_HID_SCHEME + OUString::createFromAscii( HID_CHECK_FOR_UPD_DLG ) ) );
+    }
     {   // Label (fixed text) <status>
         uno::Sequence< beans::NamedValue > aProps(1);
 
@@ -1320,19 +1322,25 @@ void UpdateHandler::createDialog()
                             aProps);
     }
 
-    uno::Reference< awt::XUnoControlDialog > xControl = awt::UnoControlDialog::create( mxContext );
+    uno::Reference< awt::XControl > xControl(
+        xFactory->createInstanceWithContext( "com.sun.star.awt.UnoControlDialog", mxContext),
+        uno::UNO_QUERY_THROW );
     xControl->setModel( xControlModel );
 
     if ( mbVisible == false )
     {
-        xControl->setVisible( false );
+        uno::Reference< awt::XWindow > xWindow( xControl, uno::UNO_QUERY );
+
+        if ( xWindow.is() )
+            xWindow->setVisible( false );
     }
 
     xControl->createPeer( NULL, NULL );
     {
+        uno::Reference< awt::XControlContainer > xContainer (xControl, uno::UNO_QUERY);
         for ( int i = 0; i < HELP_BUTTON; i++ )
         {
-            uno::Reference< awt::XButton > xButton ( xControl->getControl( msButtonIDs[i] ), uno::UNO_QUERY);
+            uno::Reference< awt::XButton > xButton ( xContainer->getControl( msButtonIDs[i] ), uno::UNO_QUERY);
             if (xButton.is())
             {
                 xButton->setActionCommand( msButtonIDs[i] );
