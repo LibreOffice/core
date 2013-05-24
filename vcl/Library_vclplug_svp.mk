@@ -24,10 +24,6 @@ $(eval $(call gb_Library_set_include,vclplug_svp,\
     -I$(SRCDIR)/vcl/inc \
 ))
 
-$(eval $(call gb_Library_add_cxxflags,vclplug_svp,\
-    $$(FREETYPE_CFLAGS) \
-))
-
 $(eval $(call gb_Library_add_defs,vclplug_svp,\
     -DVCLPLUG_SVP_IMPLEMENTATION \
 ))
@@ -54,6 +50,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_svp,\
 
 $(eval $(call gb_Library_use_externals,vclplug_svp,\
 	boost_headers \
+	freetype_headers \
 	icule \
 	icuuc \
 ))

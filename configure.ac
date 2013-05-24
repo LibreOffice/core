@@ -7268,15 +7268,11 @@ if test  "$test_freetype" = "yes"; then
     # 9.4.3 is 2.1.5; the first FreeType release to provide a freetype2.pc file
     # XXX: replace this with a real minimum required version
     PKG_CHECK_MODULES( FREETYPE, freetype2 >= 9.4.3 )
-else
-    case "$BUILD_TYPE" in
-    *FREETYPE*)
-        FREETYPE_LIBS="-lfreetype"
-        ;;
-    esac
+    SYSTEM_FREETYPE=YES
 fi
 AC_SUBST(FREETYPE_CFLAGS)
 AC_SUBST(FREETYPE_LIBS)
+AC_SUBST([SYSTEM_FREETYPE])
 
 dnl ===================================================================
 dnl Check for system libwps

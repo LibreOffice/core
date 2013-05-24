@@ -8,15 +8,14 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,headless))
 
-$(eval $(call gb_StaticLibrary_use_external,headless,boost_headers))
+$(eval $(call gb_StaticLibrary_use_externals,headless,\
+    boost_headers \
+    freetype_headers \
+))
 
 $(eval $(call gb_StaticLibrary_use_api,headless,\
     offapi \
     udkapi \
-))
-
-$(eval $(call gb_StaticLibrary_add_cxxflags,headless,\
-    $$(FREETYPE_CFLAGS) \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,headless,\

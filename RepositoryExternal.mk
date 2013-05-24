@@ -994,13 +994,12 @@ endif # SYSTEM_REDLAND
 
 ifeq ($(SYSTEM_CAIRO),YES)
 
-# FREETYPE_CLAGS from environment if ENABLE_CAIRO is used
 define gb_LinkTarget__use_cairo
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	$(FREETYPE_CFLAGS) \
 	$(CAIRO_CFLAGS) \
 )
+$(call gb_LinkTarget_use_external,$(1),freetype_headers)
 $(call gb_LinkTarget_add_libs,$(1),$(CAIRO_LIBS))
 
 endef
@@ -1017,10 +1016,10 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 define gb_LinkTarget__use_cairo
 $(call gb_LinkTarget_use_package,$(1),cairo)
 $(call gb_LinkTarget_use_package,$(1),pixman)
+$(call gb_LinkTarget_use_external,$(1),freetype_headers)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,cairo) \
 	-I$(call gb_UnpackedTarball_get_dir,cairo)/src \
-	$(FREETYPE_CFLAGS) \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_libraries,$(1),\
@@ -1034,19 +1033,37 @@ endef
 
 endif # SYSTEM_CAIRO
 
-define gb_LinkTarget__use_freetype
+ifeq ($(SYSTEM_FREETYPE),YES)
+
+define gb_LinkTarget__use_freetype_headers
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(FREETYPE_CFLAGS) \
 )
 
-ifneq ($(OS),ANDROID)
+endef
+
+define gb_LinkTarget__use_freetype
+$(call gb_LinkTarget_use_external,$(1),freetype_headers)
 $(call gb_LinkTarget_add_libs,$(1),$(FREETYPE_LIBS))
-else
-$(call gb_LinkTarget_use_static_libraries,$(1),freetype)
-endif
 
 endef
+
+else # ! SYSTEM_FREETYPE
+
+define gb_LinkTarget__use_freetype_headers
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,freetype)/include \
+	$$(INCLUDE) \
+)
+
+define gb_LinkTarget__use_freetype
+$(call gb_LinkTarget_use_external,$(1),freetype_headers)
+$(call gb_LinkTarget_use_static_libraries,$(1),freetype)
+
+endef
+
+endif # SYSTEM_FREETYPE
 
 ifeq ($(SYSTEM_FONTCONFIG),YES)
 
