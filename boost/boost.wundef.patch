@@ -9,6 +9,17 @@
  namespace {
    multi_array_types::extent_gen extents;
    multi_array_types::index_gen indices;
+--- foo/foo/foo/boost/preprocessor/config/config.hpp
++++ foo/foo/foo/boost/preprocessor/config/config.hpp
+@@ -90,7 +90,7 @@
+ #            define BOOST_PP_VARIADICS 0
+ #        endif
+ #    /* Wave (C/C++), GCC (C++) */
+-#    elif defined __WAVE__ && __WAVE_HAS_VARIADICS__ || defined __GNUC__ && __GXX_EXPERIMENTAL_CXX0X__
++#    elif defined __WAVE__ && __WAVE_HAS_VARIADICS__ || defined __GNUC__ && defined __GXX_EXPERIMENTAL_CXX0X__ && __GXX_EXPERIMENTAL_CXX0X__
+ #        define BOOST_PP_VARIADICS 1
+ #    /* EDG-based (C/C++), GCC (C), and unknown (C/C++) */
+ #    elif !defined __cplusplus && __STDC_VERSION__ >= 199901L || __cplusplus >= 201103L
 --- foo/foo/foo/boost/preprocessor/tuple/elem.hpp
 +++ foo/foo/foo/boost/preprocessor/tuple/elem.hpp
 @@ -22,7 +22,7 @@
