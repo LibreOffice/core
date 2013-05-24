@@ -540,7 +540,7 @@ endif # SYSTEM_HUNSPELL
 
 ifeq ($(SYSTEM_BOOST),YES)
 
-define gb_LinkTarget__use_boost_date_time
+define gb_LinkTarget__use_boostdatetime
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(BOOST_CPPFLAGS) \
@@ -556,7 +556,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
-define gb_LinkTarget__use_boost_system
+define gb_LinkTarget__use_boostsystem
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(BOOST_CPPFLAGS) \
@@ -572,7 +572,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
-gb_ExternalProject__use_boost_system :=
+gb_ExternalProject__use_boostsystem :=
 
 define gb_LinkTarget__use_boost_headers
 $(call gb_LinkTarget_set_include,$(1),\
@@ -587,8 +587,8 @@ gb_ExternalProject__use_boost_headers:=
 else # !SYSTEM_BOOST
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	boost_date_time \
-	boost_system \
+	boostdatetime \
+	boostsystem \
 ))
 
 ifeq ($(OS),WNT)
@@ -608,30 +608,30 @@ endef
 
 endif # WNT
 
-define gb_LinkTarget__use_boost_date_time
+define gb_LinkTarget__use_boostdatetime
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DBOOST_ALL_NO_LIB \
 )
 
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	boost_date_time \
+	boostdatetime \
 )
 
 endef
 
-define gb_LinkTarget__use_boost_system
+define gb_LinkTarget__use_boostsystem
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DBOOST_ALL_NO_LIB \
 )
 
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	boost_system \
+	boostsystem \
 )
 
 endef
 
-define gb_ExternalProject__use_boost_system
-$(call gb_LinkTarget_use_static_libraries,$(1),boost_system)
+define gb_ExternalProject__use_boostsystem
+$(call gb_LinkTarget_use_static_libraries,$(1),boostsystem)
 endef
 
 define gb_LinkTarget__use_boost_headers

@@ -7,20 +7,20 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,boost_system))
+$(eval $(call gb_StaticLibrary_StaticLibrary,boostsystem))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,boost_system))
+$(eval $(call gb_StaticLibrary_set_warnings_not_errors,boostsystem))
 
 # disable "auto link" "feature" on MSVC
-$(eval $(call gb_StaticLibrary_add_defs,boost_system,\
+$(eval $(call gb_StaticLibrary_add_defs,boostsystem,\
 	-DBOOST_ALL_NO_LIB \
 ))
 
-$(eval $(call gb_StaticLibrary_use_external,boost_system,boost_headers))
+$(eval $(call gb_StaticLibrary_use_external,boostsystem,boost_headers))
 
-$(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,boost_system,cpp))
+$(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,boostsystem,cpp))
 
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,boost_system,\
+$(eval $(call gb_StaticLibrary_add_generated_exception_objects,boostsystem,\
 	UnpackedTarball/boost/libs/system/src/error_code \
 ))
 

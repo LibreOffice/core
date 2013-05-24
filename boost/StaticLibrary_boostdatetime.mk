@@ -7,20 +7,20 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,boost_date_time))
+$(eval $(call gb_StaticLibrary_StaticLibrary,boostdatetime))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,boost_date_time))
+$(eval $(call gb_StaticLibrary_set_warnings_not_errors,boostdatetime))
 
 # disable "auto link" "feature" on MSVC
-$(eval $(call gb_StaticLibrary_add_defs,boost_date_time,\
+$(eval $(call gb_StaticLibrary_add_defs,boostdatetime,\
 	-DBOOST_ALL_NO_LIB \
 ))
 
-$(eval $(call gb_StaticLibrary_use_external,boost_date_time,boost_headers))
+$(eval $(call gb_StaticLibrary_use_external,boostdatetime,boost_headers))
 
-$(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,boost_date_time,cpp))
+$(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,boostdatetime,cpp))
 
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,boost_date_time,\
+$(eval $(call gb_StaticLibrary_add_generated_exception_objects,boostdatetime,\
 	UnpackedTarball/boost/libs/date_time/src/gregorian/date_generators \
 	UnpackedTarball/boost/libs/date_time/src/gregorian/gregorian_types \
 	UnpackedTarball/boost/libs/date_time/src/gregorian/greg_month \

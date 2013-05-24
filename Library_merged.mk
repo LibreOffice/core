@@ -31,7 +31,7 @@ $(eval $(call gb_Library_use_libraries,merged,\
 ))
 
 $(eval $(call gb_Library_use_externals,merged,\
-	boost_date_time \
+	boostdatetime \
 	$(call gb_Helper_optional,DESKTOP,clucene) \
 	cups \
 	curl \

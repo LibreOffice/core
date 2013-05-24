@@ -27,7 +27,7 @@ $(eval $(call gb_Library_use_libraries,ucpcmis1,\
 
 $(eval $(call gb_Library_use_externals,ucpcmis1,\
 	boost_headers \
-	boost_date_time \
+	boostdatetime \
 	cmis \
 	curl \
 	libxml2 \
