@@ -96,6 +96,8 @@ public:
     void        FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const;
     void        ExtendRangeListTables( ScRangeList* pList ) const;
 
+    ScRangeList GetMarkedRanges() const;
+
     void        MarkFromRangeList( const ScRangeList& rList, bool bReset );
 
     SCCOLROW    GetMarkColumnRanges( SCCOLROW* pRanges );

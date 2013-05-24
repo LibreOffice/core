@@ -587,19 +587,6 @@ void ScDocument::EnsureTable( SCTAB nTab )
         maTabs[nTab] = new ScTable(this, nTab, "temp", bExtras, bExtras);
 }
 
-void ScDocument::PutCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                          ScBaseCell* pCell, sal_uLong nFormatIndex, bool bForceTab )
-{
-    if (ValidTab(nTab))
-    {
-        if (bForceTab)
-            EnsureTable(nTab);
-
-        if ( nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-            maTabs[nTab]->PutCell( nCol, nRow, nFormatIndex, pCell );
-    }
-}
-
 ScRefCellValue ScDocument::GetRefCellValue( const ScAddress& rPos )
 {
     if (!TableExists(rPos.Tab()))

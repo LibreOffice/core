@@ -675,7 +675,7 @@ void ScMyNotEmptyCellsIterator::Clear()
 
 void ScMyNotEmptyCellsIterator::UpdateAddress( table::CellAddress& rAddress )
 {
-    if( pCellItr->ReturnNext( nCellCol, nCellRow ) )
+    if( pCellItr->GetPos( nCellCol, nCellRow ) )
     {
         rAddress.Column = nCellCol;
         rAddress.Row = nCellRow;

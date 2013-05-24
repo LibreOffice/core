@@ -1168,8 +1168,8 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
         SCCOL nCol = pAdrFrom->Col();
         SCROW nRow = pAdrFrom->Row();
         ScColumn& rCol = aCol[nCol];
-        ScBaseCell* pCell = rCol.GetCell(nRow);
-        if (!pCell)
+        ScRefCellValue aCell = rCol.GetCellValue(nRow);
+        if (aCell.isEmpty())
             return;
 
         rCol.SetTextWidth(nRow, TEXTWIDTH_DIRTY);
@@ -1179,13 +1179,13 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
 
         if ( bBroadcast )
         {   // nur bei CalcAsShown
-            switch ( pCell->GetCellType() )
+            switch (aCell.meType)
             {
                 case CELLTYPE_VALUE :
                     pDocument->Broadcast(ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab)));
                     break;
                 case CELLTYPE_FORMULA :
-                    ((ScFormulaCell*)pCell)->SetDirty();
+                    aCell.mpFormula->SetDirty();
                     break;
                 default:
                 {
@@ -1210,25 +1210,23 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
         {
             SCROW nRow = aIter.getPos();
             aIter.setValue(TEXTWIDTH_DIRTY);
-            ScBaseCell* pCell = aCol[nCol].GetCell(nRow);
-            if (pCell == 0)
-            {
+            ScRefCellValue aCell = aCol[nCol].GetCellValue(nRow);
+            if (aCell.isEmpty())
                 continue;
-            }
 
             if ( bNumFormatChanged )
                 aCol[nCol].SetScriptType(nRow, SC_SCRIPTTYPE_UNKNOWN);
 
             if ( bBroadcast )
             {   // nur bei CalcAsShown
-                switch ( pCell->GetCellType() )
+                switch (aCell.meType)
                 {
                     case CELLTYPE_VALUE :
                         pDocument->Broadcast(
                             ScHint(SC_HINT_DATACHANGED, ScAddress(nCol, nRow, nTab)));
                         break;
                     case CELLTYPE_FORMULA :
-                        ((ScFormulaCell*)pCell)->SetDirty();
+                        aCell.mpFormula->SetDirty();
                         break;
                     default:
                     {

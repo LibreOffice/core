@@ -426,6 +426,13 @@ void ScMarkData::ExtendRangeListTables( ScRangeList* pList ) const
         }
 }
 
+ScRangeList ScMarkData::GetMarkedRanges() const
+{
+    ScRangeList aRet;
+    FillRangeListWithMarks(&aRet, false);
+    return aRet;
+}
+
 SCCOLROW ScMarkData::GetMarkColumnRanges( SCCOLROW* pRanges )
 {
     if (bMarked)

@@ -1111,7 +1111,7 @@ bool ScDocument::CanInsertRow( const ScRange& rRange ) const
     bool bTest = true;
     for (SCTAB i=nStartTab; i<=nEndTab && bTest && i < static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i])
-            bTest &= maTabs[i]->TestInsertRow( nStartCol, nEndCol, nSize );
+            bTest &= maTabs[i]->TestInsertRow( nStartCol, nEndCol, nStartRow, nSize );
 
     return bTest;
 }
@@ -1138,7 +1138,7 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
     SetAutoCalc( false );   // avoid mulitple calculations
     for ( i = nStartTab; i <= nEndTab && bTest && i < static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
-            bTest &= maTabs[i]->TestInsertRow( nStartCol, nEndCol, nSize );
+            bTest &= maTabs[i]->TestInsertRow(nStartCol, nEndCol, nStartRow, nSize);
     if (bTest)
     {
         // UpdateBroadcastAreas have to be called before UpdateReference, so that entries
@@ -3014,24 +3014,6 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
     {
         OSL_FAIL("wrong table");
     }
-}
-
-void ScDocument::PutCell( const ScAddress& rPos, ScBaseCell* pCell, bool bForceTab )
-{
-    SCTAB nTab = rPos.Tab();
-    if ( bForceTab && ( nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab]) )
-    {
-        bool bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
-
-        if (nTab >= static_cast<SCTAB>(maTabs.size()))
-            maTabs.resize(nTab + 1,NULL);
-        maTabs[nTab] = new ScTable(this, nTab,
-                        OUString("temp"),
-                        bExtras, bExtras);
-    }
-
-    if (maTabs[nTab])
-        maTabs[nTab]->PutCell( rPos, pCell );
 }
 
 

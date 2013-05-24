@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_TYPES_HXX__
-#define __SC_TYPES_HXX__
+#ifndef SC_TYPES_HXX
+#define SC_TYPES_HXX
 
 #include <boost/intrusive_ptr.hpp>
 
@@ -35,6 +35,18 @@ enum ScFormulaVectorState
     FormulaVectorCheckReference,
     FormulaVectorUnknown
 };
+
+namespace sc {
+
+const sal_uInt16 MatrixEdgeNothing = 0;
+const sal_uInt16 MatrixEdgeInside  = 1;
+const sal_uInt16 MatrixEdgeBottom  = 2;
+const sal_uInt16 MatrixEdgeLeft    = 4;
+const sal_uInt16 MatrixEdgeTop     = 8;
+const sal_uInt16 MatrixEdgeRight   = 16;
+const sal_uInt16 MatrixEdgeOpen    = 32;
+
+}
 
 #endif
 

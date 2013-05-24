@@ -423,6 +423,15 @@ ScMacroManager* ScDocument::GetMacroManager()
     return mpMacroMgr.get();
 }
 
+bool ScDocument::IsEmptyData( SCTAB nTab, SCCOL nCol ) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return true;
+
+    return pTab->IsEmptyData(nCol);
+}
+
 //------------------------------------------------------------------------
 
 void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,

@@ -75,32 +75,51 @@ void ScDocumentImport::setOriginDate(sal_uInt16 nYear, sal_uInt16 nMonth, sal_uI
 
 void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr)
 {
-    if (!mpImpl->mrDoc.TableExists(rPos.Tab()))
+    ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
+    if (!pTab)
         return;
 
-    mpImpl->mrDoc.maTabs[rPos.Tab()]->aCol[rPos.Col()].SetString(
+    pTab->aCol[rPos.Col()].SetString(
         rPos.Row(), rPos.Tab(), rStr, mpImpl->mrDoc.GetAddressConvention());
 }
 
 void ScDocumentImport::setNumericCell(const ScAddress& rPos, double fVal)
 {
-    insertCell(rPos, new ScValueCell(fVal));
+    ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
+    if (!pTab)
+        return;
+
+    pTab->aCol[rPos.Col()].SetValue(rPos.Row(), fVal);
 }
 
 void ScDocumentImport::setStringCell(const ScAddress& rPos, const OUString& rStr)
 {
-    insertCell(rPos, new ScStringCell(rStr));
+    ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
+    if (!pTab)
+        return;
+
+    pTab->aCol[rPos.Col()].SetRawString(rPos.Row(), rStr);
 }
 
 void ScDocumentImport::setFormulaCell(
     const ScAddress& rPos, const OUString& rFormula, formula::FormulaGrammar::Grammar eGrammar)
 {
-    insertCell(rPos, new ScFormulaCell(&mpImpl->mrDoc, rPos, rFormula, eGrammar));
+    ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
+    if (!pTab)
+        return;
+
+    pTab->aCol[rPos.Col()].SetFormulaCell(
+        rPos.Row(), new ScFormulaCell(&mpImpl->mrDoc, rPos, rFormula, eGrammar));
 }
 
 void ScDocumentImport::setFormulaCell(const ScAddress& rPos, const ScTokenArray& rArray)
 {
-    insertCell(rPos, new ScFormulaCell(&mpImpl->mrDoc, rPos, &rArray));
+    ScTable* pTab = mpImpl->mrDoc.FetchTable(rPos.Tab());
+    if (!pTab)
+        return;
+
+    pTab->aCol[rPos.Col()].SetFormulaCell(
+        rPos.Row(), new ScFormulaCell(&mpImpl->mrDoc, rPos, &rArray));
 }
 
 void ScDocumentImport::finalize()
@@ -121,22 +140,6 @@ void ScDocumentImport::finalize()
             rCol.ResetCellTextAttrs();
         }
     }
-}
-
-void ScDocumentImport::insertCell(const ScAddress& rPos, ScBaseCell* pCell)
-{
-    if (!mpImpl->mrDoc.TableExists(rPos.Tab()))
-    {
-        pCell->Delete();
-        return;
-    }
-
-    ScColumn& rCol = mpImpl->mrDoc.maTabs[rPos.Tab()]->aCol[rPos.Col()];
-    sc::ColumnBlockPosition* p = mpImpl->maBlockPosSet.getBlockPosition(rPos.Tab(), rPos.Col());
-    if (p)
-        rCol.SetCell(*p, rPos.Row(), pCell);
-    else
-        rCol.SetCell(rPos.Row(), pCell);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

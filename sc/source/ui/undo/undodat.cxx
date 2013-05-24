@@ -1236,7 +1236,6 @@ void ScUndoImportData::Undo()
                 pDoc->CopyToDocument( nCopyCol,nRow1,nTab, nCopyCol,nRow2,nTab,
                                         IDF_CONTENTS & ~IDF_NOTE, false, pRedoDoc );
                 pDoc->DeleteAreaTab( nCopyCol,nRow1, nCopyCol,nRow2, nTab, IDF_CONTENTS & ~IDF_NOTE );
-                pDoc->DoColResize( nTab, nCopyCol, nCopyCol, 0 );
             }
             pDoc->SetAutoCalc( bOldAutoCalc );
             bRedoFilled = sal_True;

@@ -54,7 +54,9 @@ const mdds::mtv::element_t element_type_string = mdds::mtv::element_type_user_st
 const mdds::mtv::element_t element_type_edittext = mdds::mtv::element_type_user_start + 3;
 const mdds::mtv::element_t element_type_formula = mdds::mtv::element_type_user_start + 4;
 
+// Mapped standard element types (for convenience).
 const mdds::mtv::element_t element_type_numeric = mdds::mtv::element_type_numeric;
+const mdds::mtv::element_t element_type_empty = mdds::mtv::element_type_empty;
 
 // Custom element blocks.
 
@@ -63,6 +65,9 @@ typedef mdds::mtv::default_element_block<element_type_celltextattr, CellTextAttr
 typedef mdds::mtv::default_element_block<element_type_string, rtl::OUString> string_block;
 typedef mdds::mtv::noncopyable_managed_element_block<element_type_edittext, EditTextObject> edittext_block;
 typedef mdds::mtv::noncopyable_managed_element_block<element_type_formula, ScFormulaCell> formula_block;
+
+// Mapped standard element blocks (for convenience).
+typedef mdds::mtv::numeric_element_block numeric_block;
 
 // This needs to be in the same namespace as CellTextAttr.
 MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(CellTextAttr, element_type_celltextattr, CellTextAttr(), celltextattr_block)
@@ -83,18 +88,15 @@ MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(OUString, sc::element_type_string, OUString(),
 namespace sc {
 
 // Broadcaster storage container
-typedef mdds::mtv::custom_block_func1<sc::element_type_broadcaster, sc::broadcaster_block> BCBlkFunc;
+typedef mdds::mtv::custom_block_func1<sc::broadcaster_block> BCBlkFunc;
 typedef mdds::multi_type_vector<BCBlkFunc> BroadcasterStoreType;
 
 // Cell text attribute container.
-typedef mdds::mtv::custom_block_func1<sc::element_type_celltextattr, sc::celltextattr_block> CTAttrFunc;
+typedef mdds::mtv::custom_block_func1<sc::celltextattr_block> CTAttrFunc;
 typedef mdds::multi_type_vector<CTAttrFunc> CellTextAttrStoreType;
 
 // Cell container
-typedef mdds::mtv::custom_block_func3<
-    sc::element_type_string, sc::string_block,
-    sc::element_type_edittext, sc::edittext_block,
-    sc::element_type_formula, sc::formula_block> CellFunc;
+typedef mdds::mtv::custom_block_func3<sc::string_block, sc::edittext_block, sc::formula_block> CellFunc;
 typedef mdds::multi_type_vector<CellFunc> CellStoreType;
 
 /**
@@ -104,6 +106,18 @@ struct ColumnBlockPosition
 {
     BroadcasterStoreType::iterator miBroadcasterPos;
     CellTextAttrStoreType::iterator miCellTextAttrPos;
+    CellStoreType::iterator miCellPos;
+
+    ColumnBlockPosition& operator= (const ColumnBlockPosition& r);
+};
+
+struct ColumnBlockConstPosition
+{
+    BroadcasterStoreType::const_iterator miBroadcasterPos;
+    CellTextAttrStoreType::const_iterator miCellTextAttrPos;
+    CellStoreType::const_iterator miCellPos;
+
+    ColumnBlockConstPosition& operator= (const ColumnBlockConstPosition& r);
 };
 
 class ColumnBlockPositionSet
@@ -125,3 +139,4 @@ public:
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

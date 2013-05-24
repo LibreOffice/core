@@ -401,8 +401,6 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         OSL_FAIL("Unexpected exception in database");
     }
 
-    pImportDoc->DoColResize( nTab, rParam.nCol1,nEndCol, 0 );
-
     //
     //  test for cell protection
     //
@@ -565,7 +563,6 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             pImportDoc->CopyToDocument( nCopyCol, rParam.nRow1, nTab, nCopyCol, nEndRow, nTab,
                                         IDF_ALL, false, pDoc );
             pImportDoc->DeleteAreaTab( nCopyCol, rParam.nRow1, nCopyCol, nEndRow, nTab, IDF_CONTENTS );
-            pImportDoc->DoColResize( nTab, nCopyCol, nCopyCol, 0 );
         }
         pDoc->SetAutoCalc( bOldAutoCalc );
 

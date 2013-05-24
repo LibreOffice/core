@@ -71,6 +71,7 @@ public:
     EditTextObject( const EditTextObject& r );
     virtual ~EditTextObject();
 
+    const SfxItemPool* GetPool() const;
     sal_uInt16 GetUserType() const;    // For OutlinerMode, it can however not save in compatible format
     void SetUserType( sal_uInt16 n );
 

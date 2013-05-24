@@ -7,15 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_CELLVALUE_HXX__
-#define __SC_CELLVALUE_HXX__
+#ifndef SC_CELLVALUE_HXX
+#define SC_CELLVALUE_HXX
 
 #include "global.hxx"
+#include "mtvelements.hxx"
 
 class ScDocument;
 class ScFormulaCell;
 class EditTextObject;
-class ScBaseCell;
+class ScColumn;
 
 /**
  * Store arbitrary cell value of any kind.  It only stores cell value and
@@ -42,17 +43,18 @@ struct SC_DLLPUBLIC ScCellValue
 
     void clear();
 
+    void set( double fValue );
+    void set( const OUString& rStr );
+    void set( const EditTextObject& rEditText );
+    void set( const ScFormulaCell& rFormula );
+    void set( ScFormulaCell* pFormula );
+
     /**
      * Take cell value from specified position in specified document.
      */
     void assign( const ScDocument& rDoc, const ScAddress& rPos );
 
     void assign( const ScCellValue& rOther, ScDocument& rDestDoc, int nCloneFlags = SC_CLONECELL_DEFAULT );
-
-    /**
-     * TODO: Remove this later.
-     */
-    void assign( const ScBaseCell& rCell );
 
     /**
      * Set cell value at specified position in specified document.
@@ -65,6 +67,8 @@ struct SC_DLLPUBLIC ScCellValue
      * copying.  After this call, the value gets cleared.
      */
     void release( ScDocument& rDoc, const ScAddress& rPos );
+
+    void release( ScColumn& rColumn, SCROW nRow );
 
     bool hasString() const;
 
@@ -110,15 +114,14 @@ struct SC_DLLPUBLIC ScRefCellValue
      */
     void assign( ScDocument& rDoc, const ScAddress& rPos );
 
-    /**
-     * TODO: Remove this later.
-     */
-    void assign( ScBaseCell& rCell );
+    void assign( const sc::CellStoreType::const_iterator& itPos, size_t nOffset );
 
     /**
      * Set cell value at specified position in specified document.
      */
     void commit( ScDocument& rDoc, const ScAddress& rPos ) const;
+
+    void commit( ScColumn& rColumn, SCROW nRow ) const;
 
     bool hasString() const;
 

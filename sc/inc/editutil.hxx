@@ -66,6 +66,8 @@ public:
 
     static void RemoveCharAttribs( EditTextObject& rEditText, const ScPatternAttr& rAttr );
 
+    static EditTextObject* Clone( const EditTextObject& rSrc, ScDocument& rDestDoc );
+
 public:
                 ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
                             const Point& rScrPosPixel,

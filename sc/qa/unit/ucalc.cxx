@@ -52,6 +52,7 @@
 #include "conditio.hxx"
 #include "globstr.hrc"
 #include "tokenarray.hxx"
+#include "scopetools.hxx"
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -415,25 +416,6 @@ ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const char* aDa
     printRange(pDoc, aRange, "Range data content");
     return aRange;
 }
-
-/**
- * Temporarily switch on/off auto calculation mode.
- */
-class AutoCalcSwitch
-{
-    ScDocument* mpDoc;
-    bool mbOldValue;
-public:
-    AutoCalcSwitch(ScDocument* pDoc, bool bAutoCalc) : mpDoc(pDoc), mbOldValue(pDoc->GetAutoCalc())
-    {
-        mpDoc->SetAutoCalc(bAutoCalc);
-    }
-
-    ~AutoCalcSwitch()
-    {
-        mpDoc->SetAutoCalc(mbOldValue);
-    }
-};
 
 /**
  * Temporarily set formula grammar.
@@ -1800,7 +1782,7 @@ void Test::testFormulaDepTracking()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));
 
-    AutoCalcSwitch aACSwitch(m_pDoc, true); // turn on auto calculation.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
 
     // B2 listens on D2.
     m_pDoc->SetString(1, 1, 0, "=D2");
@@ -1908,7 +1890,7 @@ void Test::testFormulaDepTracking2()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));
 
-    AutoCalcSwitch aACSwitch(m_pDoc, true); // turn on auto calculation.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
 
     double val = 2.0;
     m_pDoc->SetValue(0, 0, 0, val);
@@ -2018,7 +2000,7 @@ void Test::testCellBroadcaster()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));
 
-    AutoCalcSwitch aACSwitch(m_pDoc, true); // turn on auto calculation.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
     m_pDoc->SetString(ScAddress(1,0,0), "=A1"); // B1 depends on A1.
     double val = m_pDoc->GetValue(ScAddress(1,0,0)); // A1 is empty, so the result should be 0.
     CPPUNIT_ASSERT_EQUAL(0.0, val);
@@ -3059,7 +3041,7 @@ void Test::testPivotTableFilters()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    AutoCalcSwitch aACSwitch(m_pDoc, true); // turn on auto calculation.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
 
     ScAddress aFormulaAddr = aOutRange.aEnd;
     aFormulaAddr.IncRow(2);

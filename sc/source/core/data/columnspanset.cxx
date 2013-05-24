@@ -9,6 +9,10 @@
 
 #include "columnspanset.hxx"
 #include "stlalgorithm.hxx"
+#include "column.hxx"
+#include "mtvfunctions.hxx"
+#include "markdata.hxx"
+#include "rangelst.hxx"
 
 #include <algorithm>
 
@@ -96,6 +100,119 @@ void ColumnSpanSet::executeFromTop(Action& ac) const
             }
         }
     }
+}
+
+namespace {
+
+class Scanner
+{
+    SingleColumnSpanSet::ColumnSpansType& mrRanges;
+public:
+    Scanner(SingleColumnSpanSet::ColumnSpansType& rRanges) : mrRanges(rRanges) {}
+
+    void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
+    {
+        if (node.type == sc::element_type_empty)
+            return;
+
+        size_t nRow = node.position + nOffset;
+        size_t nEndRow = nRow + nDataSize; // Last row of current block plus 1
+        mrRanges.insert_back(nRow, nEndRow, true);
+    }
+};
+
+}
+
+SingleColumnSpanSet::SingleColumnSpanSet() : maSpans(0, MAXROWCOUNT, false) {}
+
+void SingleColumnSpanSet::scan(const ScColumn& rColumn)
+{
+    const CellStoreType& rCells = rColumn.maCells;
+    sc::CellStoreType::const_iterator it = rCells.begin(), itEnd = rCells.end();
+    SCROW nCurRow = 0;
+    for (;it != itEnd; ++it)
+    {
+        SCROW nEndRow = nCurRow + it->size; // Last row of current block plus 1.
+        if (it->type != sc::element_type_empty)
+            maSpans.insert_back(nCurRow, nEndRow, true);
+
+        nCurRow = nEndRow;
+    }
+}
+
+void SingleColumnSpanSet::scan(const ScColumn& rColumn, SCROW nStart, SCROW nEnd)
+{
+    const CellStoreType& rCells = rColumn.maCells;
+    Scanner aScanner(maSpans);
+    sc::ParseBlock(rCells.begin(), rCells, aScanner, nStart, nEnd);
+}
+
+void SingleColumnSpanSet::scan(
+    ColumnBlockConstPosition& rBlockPos, const ScColumn& rColumn, SCROW nStart, SCROW nEnd)
+{
+    const CellStoreType& rCells = rColumn.maCells;
+    Scanner aScanner(maSpans);
+    rBlockPos.miCellPos = sc::ParseBlock(rBlockPos.miCellPos, rCells, aScanner, nStart, nEnd);
+}
+
+void SingleColumnSpanSet::scan(const ScMarkData& rMark, SCTAB nTab, SCCOL nCol)
+{
+    if (!rMark.GetTableSelect(nTab))
+        // This table is not selected. Nothing to scan.
+        return;
+
+    ScRangeList aRanges = rMark.GetMarkedRanges();
+    for (size_t i = 0, n = aRanges.size(); i < n; ++i)
+    {
+        const ScRange* p = aRanges[i];
+        if (nCol < p->aStart.Col() || p->aEnd.Col() < nCol)
+            // This column is not in this range. Skip it.
+            continue;
+
+        maSpans.insert_back(p->aStart.Row(), p->aEnd.Row()+1, true);
+    }
+}
+
+void SingleColumnSpanSet::set(SCROW nRow1, SCROW nRow2, bool bVal)
+{
+    maSpans.insert_back(nRow1, nRow2+1, bVal);
+}
+
+void SingleColumnSpanSet::getRows(std::vector<SCROW> &rRows) const
+{
+    std::vector<SCROW> aRows;
+
+    SpansType aRanges;
+    getSpans(aRanges);
+    SpansType::const_iterator it = aRanges.begin(), itEnd = aRanges.end();
+    for (; it != itEnd; ++it)
+    {
+        for (SCROW nRow = it->mnRow1; nRow <= it->mnRow2; ++nRow)
+            aRows.push_back(nRow);
+    }
+
+    rRows.swap(aRows);
+}
+
+void SingleColumnSpanSet::getSpans(SpansType& rSpans) const
+{
+    SpansType aSpans;
+    ColumnSpansType::const_iterator it = maSpans.begin(), itEnd = maSpans.end();
+    SCROW nLastRow = it->first;
+    bool bLastVal = it->second;
+    for (++it; it != itEnd; ++it)
+    {
+        SCROW nThisRow = it->first;
+        bool bThisVal = it->second;
+
+        if (bLastVal)
+            aSpans.push_back(Span(nLastRow, nThisRow-1));
+
+        nLastRow = nThisRow;
+        bLastVal = bThisVal;
+    }
+
+    rSpans.swap(aSpans);
 }
 
 }

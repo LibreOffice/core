@@ -40,13 +40,12 @@ using ::com::sun::star::util::SearchOptions;
 
 namespace {
 
-bool lcl_GetTextWithBreaks( const ScEditCell& rCell, ScDocument* pDoc, OUString& rVal )
+bool lcl_GetTextWithBreaks( const EditTextObject& rData, ScDocument* pDoc, OUString& rVal )
 {
     //  true = more than 1 paragraph
 
-    const EditTextObject* pData = rCell.GetData();
     EditEngine& rEngine = pDoc->GetEditEngine();
-    rEngine.SetText( *pData );
+    rEngine.SetText(rData);
     rVal = rEngine.GetText( LINEEND_LF );
     return ( rEngine.GetParagraphCount() > 1 );
 }
@@ -61,177 +60,179 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
     bool    bDoBack = rSearchItem.GetBackward();
 
     OUString  aString;
-    ScBaseCell* pCell;
+    ScRefCellValue aCell;
     if (rSearchItem.GetSelection())
         bDoSearch = rMark.IsCellMarked(nCol, nRow);
-    if ( bDoSearch && ((pCell = aCol[nCol].GetCell( nRow )) != NULL) )
+
+    if (!bDoSearch)
+        return false;
+
+    aCell = aCol[nCol].GetCellValue(nRow);
+    if (aCell.isEmpty())
+        return false;
+
+    bool bMultiLine = false;
+    CellType eCellType = aCell.meType;
+    switch (rSearchItem.GetCellType())
     {
-        bool bMultiLine = false;
-        CellType eCellType = pCell->GetCellType();
-        switch (rSearchItem.GetCellType())
+        case SVX_SEARCHIN_FORMULA:
         {
-            case SVX_SEARCHIN_FORMULA:
-            {
-                if ( eCellType == CELLTYPE_FORMULA )
-                    static_cast<ScFormulaCell*>(pCell)->GetFormula(aString, pDocument->GetGrammar());
-                else if ( eCellType == CELLTYPE_EDIT )
-                    bMultiLine = lcl_GetTextWithBreaks(
-                        *(const ScEditCell*)pCell, pDocument, aString );
-                else
-                {
-                    aCol[nCol].GetInputString( nRow, aString );
-                }
-            }
-            break;
-            case SVX_SEARCHIN_VALUE:
-                if ( eCellType == CELLTYPE_EDIT )
-                    bMultiLine = lcl_GetTextWithBreaks(
-                        *(const ScEditCell*)pCell, pDocument, aString );
-                else
-                {
-                    aCol[nCol].GetInputString( nRow, aString );
-                }
-                break;
-            case SVX_SEARCHIN_NOTE:
-                break; // don't search this case here
-            default:
-                break;
-        }
-        xub_StrLen nStart = 0;
-        xub_StrLen nEnd = aString.getLength();
-        ::com::sun::star::util::SearchResult aSearchResult;
-        if (pSearchText)
-        {
-            if ( bDoBack )
-            {
-                xub_StrLen nTemp=nStart; nStart=nEnd; nEnd=nTemp;
-                bFound = (bool)(pSearchText->SearchBkwrd(aString, &nStart, &nEnd, &aSearchResult));
-                // change results to definition before 614:
-                --nEnd;
-            }
+            if ( eCellType == CELLTYPE_FORMULA )
+                aCell.mpFormula->GetFormula(aString, pDocument->GetGrammar());
+            else if ( eCellType == CELLTYPE_EDIT )
+                bMultiLine = lcl_GetTextWithBreaks(*aCell.mpEditText, pDocument, aString);
             else
             {
-                bFound = (bool)(pSearchText->SearchFrwrd(aString, &nStart, &nEnd, &aSearchResult));
-                // change results to definition before 614:
-                --nEnd;
+                aCol[nCol].GetInputString( nRow, aString );
             }
-
-            if (bFound && rSearchItem.GetWordOnly())
-                bFound = (nStart == 0 && nEnd == aString.getLength() - 1);
+        }
+        break;
+        case SVX_SEARCHIN_VALUE:
+            if ( eCellType == CELLTYPE_EDIT )
+                bMultiLine = lcl_GetTextWithBreaks(*aCell.mpEditText, pDocument, aString);
+            else
+            {
+                aCol[nCol].GetInputString( nRow, aString );
+            }
+            break;
+        case SVX_SEARCHIN_NOTE:
+            break; // don't search this case here
+        default:
+            break;
+    }
+    xub_StrLen nStart = 0;
+    xub_StrLen nEnd = aString.getLength();
+    ::com::sun::star::util::SearchResult aSearchResult;
+    if (pSearchText)
+    {
+        if ( bDoBack )
+        {
+            xub_StrLen nTemp=nStart; nStart=nEnd; nEnd=nTemp;
+            bFound = (bool)(pSearchText->SearchBkwrd(aString, &nStart, &nEnd, &aSearchResult));
+            // change results to definition before 614:
+            --nEnd;
         }
         else
         {
-            OSL_FAIL("pSearchText == NULL");
-            return bFound;
+            bFound = (bool)(pSearchText->SearchFrwrd(aString, &nStart, &nEnd, &aSearchResult));
+            // change results to definition before 614:
+            --nEnd;
         }
 
-        sal_uInt8 cMatrixFlag = MM_NONE;
-        if ( bFound &&
-            ( (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE)
-            ||(rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL) ) &&
-                // Matrix nicht zerreissen, nur Matrixformel ersetzen
-                !( (eCellType == CELLTYPE_FORMULA &&
-                ((cMatrixFlag = ((ScFormulaCell*)pCell)->GetMatrixFlag()) == MM_REFERENCE))
-                // kein UndoDoc => Matrix nicht wiederherstellbar => nicht ersetzen
-                || (cMatrixFlag != MM_NONE && !pUndoDoc) ) &&
-             IsBlockEditable(nCol, nRow, nCol, nRow)
-            )
+        if (bFound && rSearchItem.GetWordOnly())
+            bFound = (nStart == 0 && nEnd == aString.getLength() - 1);
+    }
+    else
+    {
+        OSL_FAIL("pSearchText == NULL");
+        return bFound;
+    }
+
+    sal_uInt8 cMatrixFlag = MM_NONE;
+    if ( bFound &&
+        ( (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE)
+        ||(rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL) ) &&
+            // Matrix nicht zerreissen, nur Matrixformel ersetzen
+            !( (eCellType == CELLTYPE_FORMULA &&
+            ((cMatrixFlag = aCell.mpFormula->GetMatrixFlag()) == MM_REFERENCE))
+            // kein UndoDoc => Matrix nicht wiederherstellbar => nicht ersetzen
+            || (cMatrixFlag != MM_NONE && !pUndoDoc) ) &&
+         IsBlockEditable(nCol, nRow, nCol, nRow)
+        )
+    {
+        if ( cMatrixFlag == MM_NONE && rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE )
+            rUndoStr = aString;
+        else if (pUndoDoc)
         {
-            if ( cMatrixFlag == MM_NONE && rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE )
-                rUndoStr = aString;
-            else if (pUndoDoc)
+            ScAddress aAdr( nCol, nRow, nTab );
+            aCell.commit(*pUndoDoc, aAdr);
+        }
+        bool bRepeat = !rSearchItem.GetWordOnly();
+        do
+        {
+            //  wenn der gefundene Text leer ist, nicht weitersuchen,
+            //  sonst wuerde man nie mehr aufhoeren (#35410#)
+            if ( nEnd < nStart || nEnd == STRING_MAXLEN )
+                bRepeat = false;
+
+            String sReplStr = rSearchItem.GetReplaceString();
+            if (rSearchItem.GetRegExp())
             {
-                ScAddress aAdr( nCol, nRow, nTab );
-                ScBaseCell* pUndoCell = pCell->Clone( *pUndoDoc );
-                pUndoDoc->PutCell( aAdr, pUndoCell);
-            }
-            bool bRepeat = !rSearchItem.GetWordOnly();
-            do
-            {
-                //  wenn der gefundene Text leer ist, nicht weitersuchen,
-                //  sonst wuerde man nie mehr aufhoeren (#35410#)
-                if ( nEnd < nStart || nEnd == STRING_MAXLEN )
-                    bRepeat = false;
-
-                String sReplStr = rSearchItem.GetReplaceString();
-                if (rSearchItem.GetRegExp())
-                {
-                    pSearchText->ReplaceBackReferences( sReplStr, aString, aSearchResult );
-                    OUStringBuffer aStrBuffer(aString);
-                    aStrBuffer.remove(nStart, nEnd-nStart+1);
-                    aStrBuffer.insert(nStart, sReplStr);
-                    aString = aStrBuffer.makeStringAndClear();
-                }
-                else
-                {
-                    OUStringBuffer aStrBuffer(aString);
-                    aStrBuffer.remove(nStart, nEnd-nStart+1);
-                    aStrBuffer.insert(nStart, rSearchItem.GetReplaceString());
-                    aString = aStrBuffer.makeStringAndClear();
-                }
-
-                        //  Indizes anpassen
-                if (bDoBack)
-                {
-                    nEnd = nStart;
-                    nStart = 0;
-                }
-                else
-                {
-                    nStart = sal::static_int_cast<xub_StrLen>( nStart + sReplStr.Len() );
-                    nEnd = aString.getLength();
-                }
-
-                        //  weitersuchen ?
-                if (bRepeat)
-                {
-                    if ( rSearchItem.GetCommand() != SVX_SEARCHCMD_REPLACE_ALL || nStart >= nEnd )
-                        bRepeat = false;
-                    else if (bDoBack)
-                    {
-                        xub_StrLen nTemp=nStart; nStart=nEnd; nEnd=nTemp;
-                        bRepeat = ((bool)(pSearchText->SearchBkwrd(aString, &nStart, &nEnd, &aSearchResult)));
-                        // change results to definition before 614:
-                        --nEnd;
-                    }
-                    else
-                    {
-                        bRepeat = ((bool)(pSearchText->SearchFrwrd(aString, &nStart, &nEnd, &aSearchResult)));
-                        // change results to definition before 614:
-                        --nEnd;
-                    }
-                }
-            }
-            while (bRepeat);
-
-            if ( cMatrixFlag != MM_NONE )
-            {   // Matrix nicht zerreissen
-                if ( aString.getLength() > 2 )
-                {   // {} raus, erst hier damit auch "{=" durch "{=..." ersetzt werden kann
-                    if ( aString[ aString.getLength()-1 ] == '}' )
-                        aString = aString.copy( 0, aString.getLength()-1 );
-                    if ( aString[0] == '{' )
-                        aString = aString.copy( 1 );
-                }
-                ScAddress aAdr( nCol, nRow, nTab );
-                ScFormulaCell* pFCell = new ScFormulaCell( pDocument, aAdr,
-                    aString, pDocument->GetGrammar(), cMatrixFlag );
-                SCCOL nMatCols;
-                SCROW nMatRows;
-                ((ScFormulaCell*)pCell)->GetMatColsRows( nMatCols, nMatRows );
-                pFCell->SetMatColsRows( nMatCols, nMatRows );
-                aCol[nCol].Insert( nRow, pFCell );
-            }
-            else if ( bMultiLine && aString.indexOf('\n') != -1 )
-            {
-                ScFieldEditEngine& rEngine = pDocument->GetEditEngine();
-                rEngine.SetText(aString);
-                SetEditText(nCol, nRow, rEngine.CreateTextObject());
+                pSearchText->ReplaceBackReferences( sReplStr, aString, aSearchResult );
+                OUStringBuffer aStrBuffer(aString);
+                aStrBuffer.remove(nStart, nEnd-nStart+1);
+                aStrBuffer.insert(nStart, sReplStr);
+                aString = aStrBuffer.makeStringAndClear();
             }
             else
-                aCol[nCol].SetString(nRow, nTab, aString, pDocument->GetAddressConvention());
-            // pCell is invalid now (deleted)
+            {
+                OUStringBuffer aStrBuffer(aString);
+                aStrBuffer.remove(nStart, nEnd-nStart+1);
+                aStrBuffer.insert(nStart, rSearchItem.GetReplaceString());
+                aString = aStrBuffer.makeStringAndClear();
+            }
+
+                    //  Indizes anpassen
+            if (bDoBack)
+            {
+                nEnd = nStart;
+                nStart = 0;
+            }
+            else
+            {
+                nStart = sal::static_int_cast<xub_StrLen>( nStart + sReplStr.Len() );
+                nEnd = aString.getLength();
+            }
+
+                    //  weitersuchen ?
+            if (bRepeat)
+            {
+                if ( rSearchItem.GetCommand() != SVX_SEARCHCMD_REPLACE_ALL || nStart >= nEnd )
+                    bRepeat = false;
+                else if (bDoBack)
+                {
+                    xub_StrLen nTemp=nStart; nStart=nEnd; nEnd=nTemp;
+                    bRepeat = ((bool)(pSearchText->SearchBkwrd(aString, &nStart, &nEnd, &aSearchResult)));
+                    // change results to definition before 614:
+                    --nEnd;
+                }
+                else
+                {
+                    bRepeat = ((bool)(pSearchText->SearchFrwrd(aString, &nStart, &nEnd, &aSearchResult)));
+                    // change results to definition before 614:
+                    --nEnd;
+                }
+            }
         }
+        while (bRepeat);
+
+        if ( cMatrixFlag != MM_NONE )
+        {   // Matrix nicht zerreissen
+            if ( aString.getLength() > 2 )
+            {   // {} raus, erst hier damit auch "{=" durch "{=..." ersetzt werden kann
+                if ( aString[ aString.getLength()-1 ] == '}' )
+                    aString = aString.copy( 0, aString.getLength()-1 );
+                if ( aString[0] == '{' )
+                    aString = aString.copy( 1 );
+            }
+            ScAddress aAdr( nCol, nRow, nTab );
+            ScFormulaCell* pFCell = new ScFormulaCell( pDocument, aAdr,
+                aString, pDocument->GetGrammar(), cMatrixFlag );
+            SCCOL nMatCols;
+            SCROW nMatRows;
+            aCell.mpFormula->GetMatColsRows(nMatCols, nMatRows);
+            pFCell->SetMatColsRows( nMatCols, nMatRows );
+            aCol[nCol].SetFormulaCell(nRow, pFCell);
+        }
+        else if ( bMultiLine && aString.indexOf('\n') != -1 )
+        {
+            ScFieldEditEngine& rEngine = pDocument->GetEditEngine();
+            rEngine.SetText(aString);
+            SetEditText(nCol, nRow, rEngine.CreateTextObject());
+        }
+        else
+            aCol[nCol].SetString(nRow, nTab, aString, pDocument->GetAddressConvention());
+        // pCell is invalid now (deleted)
     }
     return bFound;
 }
@@ -816,8 +817,8 @@ namespace {
 bool lcl_maybeReplaceCellString(
     ScColumn& rColObj, SCCOL& rCol, SCROW& rRow, OUString& rUndoStr, SCCOL nCol, SCROW nRow, const SvxSearchItem& rSearchItem)
 {
-    ScBaseCell* pCell = rColObj.GetCell(nRow);
-    if (!pCell)
+    ScRefCellValue aCell = rColObj.GetCellValue(nRow);
+    if (aCell.isEmpty())
     {
         // empty cell found.
         rCol = nCol;
@@ -825,7 +826,7 @@ bool lcl_maybeReplaceCellString(
         if (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE &&
             rSearchItem.GetReplaceString().Len())
         {
-            rColObj.Insert(nRow, new ScStringCell(rSearchItem.GetReplaceString()));
+            rColObj.SetRawString(nRow, rSearchItem.GetReplaceString());
             rUndoStr = OUString();
         }
         return true;
@@ -971,7 +972,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
                         const String& rNewStr = rSearchItem.GetReplaceString();
                         for (SCROW i = nRow; i <= nLastRow; ++i)
                         {
-                            aCol[nCol].Insert(i, new ScStringCell(rNewStr));
+                            aCol[nCol].SetRawString(i, rNewStr);
                             if (pUndoDoc)
                             {
                                 // TODO: I'm using a string cell with empty content to
@@ -999,8 +1000,8 @@ bool ScTable::SearchRangeForAllEmptyCells(
             if (nRow > rRange.aEnd.Row())
                 break;
 
-            ScBaseCell* pCell = aCol[nCol].GetCell(nRow);
-            if (!pCell)
+            ScRefCellValue aCell = aCol[nCol].GetCellValue(nRow);
+            if (aCell.isEmpty())
             {
                 // empty cell found
                 rMatchedRanges.Join(ScRange(nCol, nRow, nTab));
@@ -1008,7 +1009,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
 
                 if (bReplace)
                 {
-                    aCol[nCol].Insert(nRow, new ScStringCell(rSearchItem.GetReplaceString()));
+                    aCol[nCol].SetRawString(nRow, rSearchItem.GetReplaceString());
                     if (pUndoDoc)
                     {
                         // TODO: I'm using a string cell with empty content to

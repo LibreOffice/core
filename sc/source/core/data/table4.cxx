@@ -59,6 +59,7 @@
 #include "progress.hxx"
 #include "segmenttree.hxx"
 #include "conditio.hxx"
+#include "editutil.hxx"
 
 #include <math.h>
 #include <boost/scoped_ptr.hpp>
@@ -69,9 +70,9 @@
 
 extern sal_uInt16 nScFillModeMouseModifier;     // global.cxx
 
-// -----------------------------------------------------------------------
+namespace {
 
-static short lcl_DecompValueString( String& aValue, sal_Int32& nVal, sal_uInt16* pMinDigits = NULL )
+short lcl_DecompValueString( String& aValue, sal_Int32& nVal, sal_uInt16* pMinDigits = NULL )
 {
     if ( !aValue.Len() )
     {
@@ -126,7 +127,7 @@ static short lcl_DecompValueString( String& aValue, sal_Int32& nVal, sal_uInt16*
     return 0;
 }
 
-static OUString lcl_ValueString( sal_Int32 nValue, sal_uInt16 nMinDigits )
+OUString lcl_ValueString( sal_Int32 nValue, sal_uInt16 nMinDigits )
 {
     if ( nMinDigits <= 1 )
         return OUString::number( nValue );           // simple case...
@@ -146,31 +147,43 @@ static OUString lcl_ValueString( sal_Int32 nValue, sal_uInt16 nMinDigits )
     }
 }
 
-static ScBaseCell * lcl_getSuffixCell( ScDocument* pDocument, sal_Int32 nValue,
-        sal_uInt16 nDigits, const String& rSuffix, CellType eCellType,
-        bool bIsOrdinalSuffix )
+void setSuffixCell(
+    ScColumn& rColumn, SCROW nRow, sal_Int32 nValue, sal_uInt16 nDigits, const OUString& rSuffix,
+    CellType eCellType, bool bIsOrdinalSuffix )
 {
-    String aValue( lcl_ValueString( nValue, nDigits ));
+    ScDocument& rDoc = rColumn.GetDoc();
+    OUString aValue = lcl_ValueString(nValue, nDigits);
     if (!bIsOrdinalSuffix)
-        return new ScStringCell( aValue += rSuffix);
+    {
+        rColumn.SetRawString(nRow, aValue += rSuffix);
+        return;
+    }
 
-    String aOrdinalSuffix( ScGlobal::GetOrdinalSuffix( nValue));
+    OUString aOrdinalSuffix = ScGlobal::GetOrdinalSuffix(nValue);
     if (eCellType != CELLTYPE_EDIT)
-        return new ScStringCell( aValue += aOrdinalSuffix);
+    {
+        rColumn.SetRawString(nRow, aValue += aOrdinalSuffix);
+        return;
+    }
 
-    EditEngine aEngine( pDocument->GetEnginePool() );
-    aEngine.SetEditTextObjectPool(pDocument->GetEditPool());
+    EditEngine aEngine(rDoc.GetEnginePool());
+    aEngine.SetEditTextObjectPool(rDoc.GetEditPool());
 
     SfxItemSet aAttr = aEngine.GetEmptyItemSet();
     aAttr.Put( SvxEscapementItem( SVX_ESCAPEMENT_SUPERSCRIPT, EE_CHAR_ESCAPEMENT));
     aEngine.SetText( aValue );
-    aEngine.QuickInsertText( aOrdinalSuffix, ESelection( 0, aValue.Len(), 0,
-                aValue.Len() + aOrdinalSuffix.Len()));
-    aEngine.QuickSetAttribs( aAttr, ESelection( 0, aValue.Len(), 0, aValue.Len() +
-                aOrdinalSuffix.Len()));
+    aEngine.QuickInsertText(
+        aOrdinalSuffix,
+        ESelection(0, aValue.getLength(), 0, aValue.getLength() + aOrdinalSuffix.getLength()));
+
+    aEngine.QuickSetAttribs(
+        aAttr,
+        ESelection(0, aValue.getLength(), 0, aValue.getLength() + aOrdinalSuffix.getLength()));
 
     // Text object instance will be owned by the cell.
-    return new ScEditCell(aEngine.CreateTextObject(), pDocument);
+    rColumn.SetEditText(nRow, aEngine.CreateTextObject());
+}
+
 }
 
 void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -206,8 +219,8 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     SCCOL nCol = nCol1;
     SCROW nRow = nRow1;
 
-    ScBaseCell* pFirstCell = GetCell( nCol, nRow );
-    CellType eCellType = pFirstCell ? pFirstCell->GetCellType() : CELLTYPE_NONE;
+    ScRefCellValue aFirstCell = GetCellValue(nCol, nRow);
+    CellType eCellType = aFirstCell.meType;
 
     if (eCellType == CELLTYPE_VALUE)
     {
@@ -220,7 +233,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 double nVal;
                 Date aNullDate = *pDocument->GetFormatTable()->GetNullDate();
                 Date aDate1 = aNullDate;
-                nVal = ((ScValueCell*)pFirstCell)->GetValue();
+                nVal = aFirstCell.mfValue;
                 aDate1 += (long)nVal;
                 Date aDate2 = aNullDate;
                 nVal = GetValue(nCol+nAddX, nRow+nAddY);
@@ -248,10 +261,10 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     bool bVal = true;
                     for (sal_uInt16 i=1; i<nCount && bVal; i++)
                     {
-                        ScBaseCell* pCell = GetCell(nCol,nRow);
-                        if (pCell && pCell->GetCellType() == CELLTYPE_VALUE)
+                        ScRefCellValue aCell = GetCellValue(nCol,nRow);
+                        if (aCell.meType == CELLTYPE_VALUE)
                         {
-                            nVal = ((ScValueCell*)pCell)->GetValue();
+                            nVal = aCell.mfValue;
                             aDate2 = aNullDate + (long) nVal;
                             if ( eType == FILL_DAY )
                             {
@@ -297,7 +310,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         {
             if (nCount > 1)
             {
-                double nVal1 = ((ScValueCell*)pFirstCell)->GetValue();
+                double nVal1 = aFirstCell.mfValue;
                 double nVal2 = GetValue(nCol+nAddX, nRow+nAddY);
                 rInc = nVal2 - nVal1;
                 nCol = sal::static_int_cast<SCCOL>( nCol + nAddX );
@@ -305,10 +318,10 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 bool bVal = true;
                 for (sal_uInt16 i=1; i<nCount && bVal; i++)
                 {
-                    ScBaseCell* pCell = GetCell(nCol,nRow);
-                    if (pCell && pCell->GetCellType() == CELLTYPE_VALUE)
+                    ScRefCellValue aCell = GetCellValue(nCol,nRow);
+                    if (aCell.meType == CELLTYPE_VALUE)
                     {
-                        nVal2 = ((ScValueCell*)pCell)->GetValue();
+                        nVal2 = aCell.mfValue;
                         double nDiff = nVal2 - nVal1;
                         if ( !::rtl::math::approxEqual( nDiff, rInc, 13 ) )
                             bVal = false;
@@ -383,14 +396,11 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     bool bVal = true;
                     for (sal_uInt16 i=1; i<nCount && bVal; i++)
                     {
-                        ScBaseCell* pCell = GetCell(nCol,nRow);
-                        CellType eType = pCell ? pCell->GetCellType() : CELLTYPE_NONE;
+                        ScRefCellValue aCell = GetCellValue(nCol, nRow);
+                        CellType eType = aCell.meType;
                         if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
                         {
-                            if ( eType == CELLTYPE_STRING )
-                                aStr = ((ScStringCell*)pCell)->GetString();
-                            else
-                                aStr = ((ScEditCell*)pCell)->GetString();
+                            aStr = aCell.getString();
                             aString = aStr;
                             nFlag2 = lcl_DecompValueString( aString, nVal2, &rMinDigits );
                             aStr = aString;
@@ -431,7 +441,7 @@ void ScTable::FillFormula(sal_uLong& /* nFormulaCounter */, bool /* bFirst */, S
     pDocument->SetNoListening( true );  // still the wrong reference
     ScAddress aAddr( nDestCol, nDestRow, nTab );
     ScFormulaCell* pDestCell = new ScFormulaCell( *pSrcCell, *pDocument, aAddr );
-    aCol[nDestCol].Insert(nDestRow, pDestCell);
+    aCol[nDestCol].SetFormulaCell(nDestRow, pDestCell);
 
     if ( bLast && pDestCell->GetMatrixFlag() )
     {
@@ -697,9 +707,6 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     nCol2,static_cast<SCROW>(nRow), eFillCmd,eDateCmd,
                     nInc,nMinDigits, pListData,nListIndex);
 
-        if (bVertical)
-            aCol[nCol].ReserveSize(aCol[nCol].GetCellCount() + nFillCount);
-
         if (pListData)
         {
             sal_uInt16 nListCount = pListData->GetSubCount();
@@ -729,7 +736,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if (nListIndex == 0) nListIndex = nListCount;
                         --nListIndex;
                     }
-                    aCol[nCol].Insert(static_cast<SCROW>(nRow), new ScStringCell(pListData->GetSubStr(nListIndex)));
+                    aCol[nCol].SetRawString(static_cast<SCROW>(nRow), pListData->GetSubStr(nListIndex));
                 }
 
                 if (rInner == nIEnd) break;
@@ -759,7 +766,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             short nHeadNoneTail = 0;
             sal_Int32 nStringValue = 0;
             String aValue;
-            ScBaseCell* pSrcCell = NULL;
+            ScRefCellValue aSrcCell;
             CellType eCellType = CELLTYPE_NONE;
             bool bIsOrdinalSuffix = false;
 
@@ -771,24 +778,25 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     if ( bGetCell )
                     {
                         if (bVertical)      // rInner&:=nRow, rOuter&:=nCol
-                            pSrcCell = aCol[nCol].GetCell( static_cast<SCROW>(nSource) );
+                            aSrcCell = aCol[nCol].GetCellValue(static_cast<SCROW>(nSource));
                         else                // rInner&:=nCol, rOuter&:=nRow
-                            pSrcCell = aCol[nSource].GetCell( static_cast<SCROW>(nRow) );
+                            aSrcCell = aCol[nSource].GetCellValue(static_cast<SCROW>(nRow));
+
                         bGetCell = false;
-                        if ( pSrcCell )
+                        if (!aSrcCell.isEmpty())
                         {
-                            eCellType = pSrcCell->GetCellType();
-                            switch ( eCellType )
+                            eCellType = aSrcCell.meType;
+                            switch (eCellType)
                             {
                                 case CELLTYPE_VALUE:
-                                    nVal = ((ScValueCell*)pSrcCell)->GetValue();
+                                    nVal = aSrcCell.mfValue;
                                     break;
                                 case CELLTYPE_STRING:
                                 case CELLTYPE_EDIT:
                                     if ( eCellType == CELLTYPE_STRING )
-                                        aValue = ((ScStringCell*)pSrcCell)->GetString();
+                                        aValue = *aSrcCell.mpString;
                                     else
-                                        aValue = ((ScEditCell*)pSrcCell)->GetString();
+                                        aValue = ScEditUtil::GetString(*aSrcCell.mpEditText);
                                     if ( !(nScFillModeMouseModifier & KEY_MOD1) && !bHasFiltered )
                                     {
                                         nCellDigits = 0;    // look at each source cell individually
@@ -812,7 +820,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     switch (eCellType)
                     {
                         case CELLTYPE_VALUE:
-                            aCol[nCol].Insert(static_cast<SCROW>(nRow), new ScValueCell(nVal + nDelta));
+                            aCol[nCol].SetValue(static_cast<SCROW>(nRow), nVal + nDelta);
                             break;
                         case CELLTYPE_STRING:
                         case CELLTYPE_EDIT:
@@ -826,16 +834,15 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 OUString aStr;
                                 if ( nHeadNoneTail < 0 )
                                 {
-                                    aCol[nCol].Insert( static_cast<SCROW>(nRow),
-                                            lcl_getSuffixCell( pDocument,
-                                                nNextValue, nCellDigits, aValue,
-                                                eCellType, bIsOrdinalSuffix));
+                                    setSuffixCell(
+                                        aCol[nCol], static_cast<SCROW>(nRow),
+                                        nNextValue, nCellDigits, aValue,
+                                        eCellType, bIsOrdinalSuffix);
                                 }
                                 else
                                 {
                                     aStr = aValue + lcl_ValueString( nNextValue, nCellDigits );
-                                    aCol[nCol].Insert( static_cast<SCROW>(nRow),
-                                            new ScStringCell( aStr));
+                                    aCol[nCol].SetRawString(static_cast<SCROW>(nRow), aStr);
                                 }
                             }
                             else
@@ -844,8 +851,9 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 switch ( eCellType )
                                 {
                                     case CELLTYPE_STRING:
+                                        aCol[nCol].SetRawString(aDestPos.Row(), *aSrcCell.mpString);
                                     case CELLTYPE_EDIT:
-                                        aCol[nCol].Insert( aDestPos.Row(), pSrcCell->Clone( *pDocument ) );
+                                        aCol[nCol].SetEditText(aDestPos.Row(), aSrcCell.mpEditText->Clone());
                                         break;
                                     default:
                                         {
@@ -855,8 +863,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             }
                             break;
                         case CELLTYPE_FORMULA :
-                            FillFormula( nFormulaCounter, bFirst,
-                                    (ScFormulaCell*) pSrcCell,
+                            FillFormula( nFormulaCounter, bFirst, aSrcCell.mpFormula,
                                     static_cast<SCCOL>(nCol),
                                     static_cast<SCROW>(nRow), (rInner == nIEnd) );
                             if (nFormulaCounter - nActFormCnt > nMaxFormCnt)
@@ -1031,8 +1038,8 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
             else
                 nSrcX = sal::static_int_cast<SCCOL>( nSrcX + static_cast<SCCOL>(nPos) );
 
-            ScBaseCell* pCell = GetCell( nSrcX, nSrcY );
-            if ( pCell )
+            ScRefCellValue aCell = GetCellValue(nSrcX, nSrcY);
+            if (!aCell.isEmpty())
             {
                 sal_Int32 nDelta;
                 if (nIndex >= 0)
@@ -1040,16 +1047,14 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                 else
                     nDelta = ( nIndex - nSrcCount + 1 ) / nSrcCount;    // -1 -> -1
 
-                CellType eType = pCell->GetCellType();
+                CellType eType = aCell.meType;
                 switch ( eType )
                 {
                     case CELLTYPE_STRING:
                     case CELLTYPE_EDIT:
                     {
-                        if ( eType == CELLTYPE_STRING )
-                            aValue = ((ScStringCell*)pCell)->GetString();
-                        else
-                            aValue = ((ScEditCell*)pCell)->GetString();
+                        aValue = aCell.getString();
+
                         if ( !(nScFillModeMouseModifier & KEY_MOD1) )
                         {
                             sal_Int32 nVal;
@@ -1070,7 +1075,7 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                     case CELLTYPE_VALUE:
                     {
                         //  overflow is possible...
-                        double nVal = ((ScValueCell*)pCell)->GetValue();
+                        double nVal = aCell.mfValue;
                         if ( !(nScFillModeMouseModifier & KEY_MOD1) )
                             nVal += (double) nDelta;
 
@@ -1094,19 +1099,16 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
             double nStart;
             sal_Int32 nVal = 0;
             short nHeadNoneTail = 0;
-            ScBaseCell* pCell = GetCell( nCol1, nRow1 );
-            if ( pCell )
+            ScRefCellValue aCell = GetCellValue(nCol1, nRow1);
+            if (!aCell.isEmpty())
             {
-                CellType eType = pCell->GetCellType();
+                CellType eType = aCell.meType;
                 switch ( eType )
                 {
                     case CELLTYPE_STRING:
                     case CELLTYPE_EDIT:
                     {
-                        if ( eType == CELLTYPE_STRING )
-                            aValue = ((ScStringCell*)pCell)->GetString();
-                        else
-                            aValue = ((ScEditCell*)pCell)->GetString();
+                        aValue = aCell.getString();
                         nHeadNoneTail = lcl_DecompValueString( aValue, nVal );
                         if ( nHeadNoneTail )
                             nStart = (double)nVal;
@@ -1115,10 +1117,10 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
                     }
                     break;
                     case CELLTYPE_VALUE:
-                        nStart = ((ScValueCell*)pCell)->GetValue();
+                        nStart = aCell.mfValue;
                     break;
                     case CELLTYPE_FORMULA:
-                        nStart = ((ScFormulaCell*)pCell)->GetValue();
+                        nStart = aCell.mpFormula->GetValue();
                     break;
                     default:
                         nStart = 0.0;
@@ -1388,10 +1390,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     for (rOuter = nOStart; rOuter <= nOEnd; rOuter++)
     {
         rInner = nISource;
-        ScBaseCell* pSrcCell = aCol[nCol].GetCell(static_cast<SCROW>(nRow));
-
-        if (bVertical && bAttribs)
-            aCol[nCol].ReserveSize(aCol[nCol].GetCellCount() + nFillCount);
+        ScRefCellValue aSrcCell = aCol[nCol].GetCellValue(static_cast<SCROW>(nRow));
 
         if (bAttribs)
         {
@@ -1455,9 +1454,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     }
         }
 
-        if (pSrcCell)
+        if (!aSrcCell.isEmpty())
         {
-            CellType eCellType = pSrcCell->GetCellType();
+            CellType eCellType = aSrcCell.meType;
 
             if (eFillCmd == FILL_SIMPLE)                // copy
             {
@@ -1469,7 +1468,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if(HiddenRowColumn(rInner, bVertical, this))
                             continue;
                         sal_uLong nInd = nActFormCnt;
-                        FillFormula(nInd, bFirst, (ScFormulaCell*)pSrcCell,
+                        FillFormula(nInd, bFirst, aSrcCell.mpFormula,
                             static_cast<SCCOL>(nCol), nRow, (rInner == nIEnd) );
                         bFirst = false;
                         if(pProgress)
@@ -1483,7 +1482,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if(HiddenRowColumn(rInner, bVertical, this))
                             continue;
                         ScAddress aDestPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nTab );
-                        aCol[nCol].Insert( aDestPos.Row(), pSrcCell->Clone( *pDocument ) );
+                        aSrcCell.commit(aCol[nCol], aDestPos.Row());
                     }
                     nProgress += nIMax - nIMin + 1;
                     if(pProgress)
@@ -1494,9 +1493,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             {
                 double nStartVal;
                 if (eCellType == CELLTYPE_VALUE)
-                    nStartVal = ((ScValueCell*)pSrcCell)->GetValue();
+                    nStartVal = aSrcCell.mfValue;
                 else
-                    nStartVal = ((ScFormulaCell*)pSrcCell)->GetValue();
+                    nStartVal = aSrcCell.mpFormula->GetValue();
                 double nVal = nStartVal;
                 long nIndex = 0;
 
@@ -1595,9 +1594,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 }
                 String aValue;
                 if (eCellType == CELLTYPE_STRING)
-                    aValue = ((ScStringCell*)pSrcCell)->GetString();
+                    aValue = *aSrcCell.mpString;
                 else
-                    aValue = ((ScEditCell*)pSrcCell)->GetString();
+                    aValue = ScEditUtil::GetString(*aSrcCell.mpEditText);
                 sal_Int32 nStringValue;
                 sal_uInt16 nMinDigits = nArgMinDigits;
                 short nHeadNoneTail = lcl_DecompValueString( aValue, nStringValue, &nMinDigits );
@@ -1670,17 +1669,16 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 String aStr;
                                 if ( nHeadNoneTail < 0 )
                                 {
-                                    aCol[nCol].Insert( static_cast<SCROW>(nRow),
-                                            lcl_getSuffixCell( pDocument,
-                                                nStringValue, nMinDigits, aValue,
-                                                eCellType, bIsOrdinalSuffix ));
+                                    setSuffixCell(
+                                        aCol[nCol], static_cast<SCROW>(nRow),
+                                        nStringValue, nMinDigits, aValue,
+                                        eCellType, bIsOrdinalSuffix);
                                 }
                                 else
                                 {
                                     aStr = aValue;
                                     aStr += lcl_ValueString( nStringValue, nMinDigits );
-                                    ScStringCell* pCell = new ScStringCell( aStr );
-                                    aCol[nCol].Insert( static_cast<SCROW>(nRow), pCell );
+                                    aCol[nCol].SetRawString(static_cast<SCROW>(nRow), aStr);
                                 }
                             }
                         }

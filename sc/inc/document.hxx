@@ -83,7 +83,6 @@ class XColorList;
 
 struct ScAttrEntry;
 class ScAutoFormatData;
-class ScBaseCell;
 class ScBroadcastAreaSlotMachine;
 class ScChangeViewSettings;
 class ScChartCollection;
@@ -212,7 +211,6 @@ const sal_uInt8 SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink()
 
 class ScDocument
 {
-friend class ScDocumentIterator;
 friend class ScValueIterator;
 friend class ScHorizontalValueIterator;
 friend class ScDBQueryDataIterator;
@@ -1616,8 +1614,6 @@ public:
                                  SCCOL nCol, SCROW nRow, SCTAB nTab,
                                  ScMarkData& rMark, bool bIsUndo);
 
-    void            DoColResize( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd );
-
     void            InvalidateTextWidth( const OUString& rStyleName );
     void            InvalidateTextWidth( SCTAB nTab );
     void            InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo, bool bNumFormatChanged );
@@ -1699,6 +1695,11 @@ public:
     void            SetLinkMode( ScLkUpdMode nSet ) {   eLinkMode  = nSet;}
 
     SC_DLLPUBLIC ScMacroManager* GetMacroManager();
+
+    /**
+     * See if specified column has any non-empty cells.
+     */
+    bool IsEmptyData( SCTAB nTab, SCCOL nCol ) const;
 
 private:
     ScDocument(const ScDocument& r); // disabled with no definition
@@ -2010,9 +2011,6 @@ private: // CLOOK-Impl-methods
     void    CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks, bool bAllTabs);
 
     bool    HasPartOfMerged( const ScRange& rRange );
-
-    void PutCell( const ScAddress&, ScBaseCell* pCell, bool bForceTab = false );
-    void PutCell(SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell* pCell, sal_uLong nFormatIndex, bool bForceTab = false );
 
     ScRefCellValue GetRefCellValue( const ScAddress& rPos );
 

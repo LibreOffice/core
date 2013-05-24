@@ -30,6 +30,7 @@
 #include "compressedarray.hxx"
 #include "postit.hxx"
 #include "types.hxx"
+#include "cellvalue.hxx"
 #include "formula/types.hxx"
 
 #include <set>
@@ -65,7 +66,6 @@ class SvxBoxItem;
 class SvxSearchItem;
 
 class ScAutoFormatData;
-class ScBaseCell;
 class ScDocument;
 class ScEditDataArray;
 class ScFormulaCell;
@@ -191,7 +191,6 @@ private:
     bool            mbPageBreaksValid:1;
 
 friend class ScDocument;                    // for FillInfo
-friend class ScDocumentIterator;
 friend class ScValueIterator;
 friend class ScHorizontalValueIterator;
 friend class ScDBQueryDataIterator;
@@ -208,6 +207,10 @@ public:
                 ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
                          bool bColInfo = true, bool bRowInfo = true );
                 ~ScTable();
+
+    ScDocument& GetDoc();
+    const ScDocument& GetDoc() const;
+    SCTAB GetTab() const { return nTab; }
 
     ScOutlineTable* GetOutlineTable()               { return pOutlineTable; }
 
@@ -310,10 +313,6 @@ public:
 
     bool        IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bIgnoreNotes = false ) const;
 
-    void        PutCell( const ScAddress&, ScBaseCell* pCell );
-    void        PutCell( SCCOL nCol, SCROW nRow, ScBaseCell* pCell );
-    void        PutCell(SCCOL nCol, SCROW nRow, sal_uLong nFormatIndex, ScBaseCell* pCell);
-
     bool        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
                            ScSetStringParam* pParam = NULL );
 
@@ -331,6 +330,7 @@ public:
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
 
+    void SetRawString( SCCOL nCol, SCROW nRow, const OUString& rStr );
     void        GetString( SCCOL nCol, SCROW nRow, OUString& rString ) const;
     const OUString* GetStringCell( SCCOL nCol, SCROW nRow ) const;
     double* GetValueCell( SCCOL nCol, SCROW nRow );
@@ -356,13 +356,7 @@ public:
                             CELLTYPE_NONE;
                     }
     CellType    GetCellType( SCCOL nCol, SCROW nRow ) const;
-    ScBaseCell* GetCell( const ScAddress& rPos ) const
-                    {
-                        return ValidColRow(rPos.Col(),rPos.Row()) ?
-                            aCol[rPos.Col()].GetCell( rPos.Row() ) :
-                            NULL;
-                    }
-    ScBaseCell* GetCell( SCCOL nCol, SCROW nRow ) const;
+    ScRefCellValue GetCellValue( SCCOL nCol, SCROW nRow ) const;
 
     void        GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const;
     void        GetLastDataPos(SCCOL& rCol, SCROW& rRow) const;
@@ -372,7 +366,7 @@ public:
         @param bForced  True = always create all captions, false = skip when Undo is disabled. */
     void        InitializeNoteCaptions( bool bForced = false );
 
-    bool        TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize ) const;
+    bool TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize ) const;
     void        InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize );
     void        DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize,
                             bool* pUndoOutline = NULL );
@@ -479,6 +473,8 @@ public:
                             aCol[rPos.Col()].GetErrCode( rPos.Row() ) :
                             0;
                     }
+
+    bool IsEmptyData( SCCOL nCol ) const;
 
     void        ResetChanged( const ScRange& rRange );
 
@@ -793,8 +789,8 @@ public:
     void        ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
 
     void        Sort(const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* pProgress);
-    bool        ValidQuery(
-        SCROW nRow, const ScQueryParam& rQueryParam, ScBaseCell* pCell = NULL,
+    bool ValidQuery(
+        SCROW nRow, const ScQueryParam& rQueryParam, ScRefCellValue* pCell = NULL,
         bool* pbTestEqualCondition = NULL);
     void        TopTenQuery( ScQueryParam& );
     SCSIZE      Query(ScQueryParam& rQueryParam, bool bKeepSub);
@@ -806,9 +802,6 @@ public:
 
     bool        HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) const;
     bool        HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) const;
-
-    void        DoColResize( SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd );
-
 
     sal_Int32   GetMaxStringLen( SCCOL nCol,
                                     SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const;
@@ -918,9 +911,10 @@ private:
     void        DecoladeRow( ScSortInfoArray*, SCROW nRow1, SCROW nRow2 );
     void        SwapCol(SCCOL nCol1, SCCOL nCol2);
     void        SwapRow(SCROW nRow1, SCROW nRow2);
-    short       CompareCell( sal_uInt16 nSort,
-                    ScBaseCell* pCell1, SCCOL nCell1Col, SCROW nCell1Row,
-                    ScBaseCell* pCell2, SCCOL nCell2Col, SCROW nCell2Row ) const;
+    short CompareCell(
+        sal_uInt16 nSort,
+        ScRefCellValue& rCell1, SCCOL nCell1Col, SCROW nCell1Row,
+        ScRefCellValue& rCell2, SCCOL nCell2Col, SCROW nCell2Row ) const;
     short       Compare(SCCOLROW nIndex1, SCCOLROW nIndex2) const;
     short       Compare( ScSortInfoArray*, SCCOLROW nIndex1, SCCOLROW nIndex2) const;
     ScSortInfoArray*    CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2 );
@@ -1000,14 +994,14 @@ private:
          *
          * @return First visible data cell if found, or NULL otherwise.
          */
-        ScBaseCell* reset(SCROW nRow);
+        ScRefCellValue reset(SCROW nRow);
 
         /**
          * Find the next visible data cell position.
          *
          * @return Next visible data cell if found, or NULL otherwise.
          */
-        ScBaseCell* next();
+        ScRefCellValue next();
 
         /**
          * Get the current row position.
@@ -1020,7 +1014,7 @@ private:
     private:
         ScFlatBoolRowSegments& mrRowSegs;
         ScColumn& mrColumn;
-        ScBaseCell* mpCell;
+        ScRefCellValue maCell;
         SCROW mnCurRow;
         SCROW mnUBound;
     };

@@ -516,11 +516,11 @@ bool ScTable::GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const
     SCCOL nMaxX = 0;
     SCROW nMaxY = 0;
     for (SCCOL i=0; i<=MAXCOL; i++)
-        if (!aCol[i].IsEmptyVisData())
+        if (!aCol[i].IsEmptyData())
         {
             bFound = true;
             nMaxX = i;
-            SCROW nColY = aCol[i].GetLastVisDataPos();
+            SCROW nColY = aCol[i].GetLastDataPos();
             if (nColY > nMaxY)
                 nMaxY = nColY;
         }
@@ -564,12 +564,12 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bF
     SCCOL i;
 
     for (i=0; i<=MAXCOL; i++)               // Daten testen
-        if (!aCol[i].IsEmptyVisData())
+        if (!aCol[i].IsEmptyData())
         {
             bFound = true;
             if (i>nMaxX)
                 nMaxX = i;
-            SCROW nColY = aCol[i].GetLastVisDataPos();
+            SCROW nColY = aCol[i].GetLastDataPos();
             if (nColY > nMaxY)
                 nMaxY = nColY;
         }
@@ -697,10 +697,10 @@ bool ScTable::GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
     }
 
     for (i=nStartCol; i<=nEndCol; i++)              // Daten testen
-        if (!aCol[i].IsEmptyVisData())
+        if (!aCol[i].IsEmptyData())
         {
             bFound = true;
-            SCROW nColY = aCol[i].GetLastVisDataPos();
+            SCROW nColY = aCol[i].GetLastDataPos();
             if (nColY > nMaxY)
                 nMaxY = nColY;
         }
@@ -756,12 +756,12 @@ bool ScTable::GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const
 
     bool bDatFound = false;
     for (i=0; i<=MAXCOL; i++)                   // Daten testen
-        if (!aCol[i].IsEmptyVisData())
+        if (!aCol[i].IsEmptyData())
         {
             if (!bDatFound && i<nMinX)
                 nMinX = i;
             bFound = bDatFound = true;
-            SCROW nColY = aCol[i].GetFirstVisDataPos();
+            SCROW nColY = aCol[i].GetFirstDataPos();
             if (nColY < nMinY)
                 nMinY = nColY;
         }
@@ -991,7 +991,7 @@ SCSIZE ScTable::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
     SCCOL nCol;
     if ((eDir == DIR_BOTTOM) || (eDir == DIR_TOP))
     {
-        nCount = static_cast<SCSIZE>(nEndRow - nStartRow);
+        nCount = static_cast<SCSIZE>(nEndRow - nStartRow + 1);
         for (nCol = nStartCol; nCol <= nEndCol; nCol++)
             nCount = std::min(nCount, aCol[nCol].GetEmptyLinesInBlock(nStartRow, nEndRow, eDir));
     }
@@ -1385,17 +1385,31 @@ bool ScTable::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMa
             if ( nStart <= MAXROW )
             {
                 SCROW nEnd = rArray.GetMarkEnd( nStart, false );
-                ScColumnIterator aColIter( &aCol[rCol], nStart, nEnd );
-                SCROW nCellRow;
-                ScBaseCell* pCell = NULL;
-                while ( aColIter.Next( nCellRow, pCell ) )
+
+                const sc::CellStoreType& rCells = aCol[rCol].maCells;
+                std::pair<sc::CellStoreType::const_iterator,size_t> aPos = rCells.position(nStart);
+                sc::CellStoreType::const_iterator it = aPos.first;
+                SCROW nTestRow = nStart;
+                if (it->type == sc::element_type_empty)
                 {
-                    if (pCell)
+                    // Skip the empty block.
+                    nTestRow += it->size - aPos.second;
+                    ++it;
+                    if (it == rCells.end())
                     {
-                        rRow = nCellRow;
-                        return true;            // Zelle gefunden
+                        // No more block.
+                        rRow = MAXROW + 1;
+                        return false;
                     }
                 }
+
+                if (nTestRow < nEnd)
+                {
+                    // Cell found.
+                    rRow = nTestRow;
+                    return true;
+                }
+
                 rRow = nEnd + 1;                // naechsten markierten Bereich suchen
             }
             else
@@ -1719,12 +1733,12 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
         {
             SCCOL nPrintCol = nDataCol;
             VisibleDataCellIterator aIter(*mpHiddenRows, aCol[nDataCol]);
-            ScBaseCell* pCell = aIter.reset(nStartRow);
-            if (!pCell)
+            ScRefCellValue aCell = aIter.reset(nStartRow);
+            if (aCell.isEmpty())
                 // No visible cells found in this column.  Skip it.
                 continue;
 
-            while (pCell)
+            while (!aCell.isEmpty())
             {
                 SCCOL nNewCol = nDataCol;
                 SCROW nRow = aIter.getRow();
@@ -1735,7 +1749,7 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
                 MaybeAddExtraColumn(nNewCol, nRow, pDev, nPPTX, nPPTY);
                 if (nNewCol > nPrintCol)
                     nPrintCol = nNewCol;
-                pCell = aIter.next();
+                aCell = aIter.next();
             }
 
             if (nPrintCol > rEndCol)
@@ -1748,8 +1762,8 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
 
 void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY)
 {
-    ScBaseCell* pCell = aCol[rCol].GetCell(nRow);
-    if (!pCell || !pCell->HasStringData())
+    ScRefCellValue aCell = aCol[rCol].GetCellValue(nRow);
+    if (!aCell.hasString())
         return;
 
     bool bFormula = false;  //! ueberge
@@ -1799,8 +1813,8 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
     SCCOL nNewCol = rCol;
     while (nMissing > 0 && nNewCol < MAXCOL)
     {
-        ScBaseCell* pNextCell = aCol[nNewCol+1].GetCell(nRow);
-        if (pNextCell)
+        ScRefCellValue aNextCell = aCol[nNewCol+1].GetCellValue(nRow);
+        if (!aNextCell.isEmpty())
             // Cell content in a next column ends display of this string.
             nMissing = 0;
         else
@@ -1866,12 +1880,6 @@ void ScTable::CopyPrintRange(const ScTable& rTable)
         pRepeatRowRange->aStart.SetTab(nTab);
         pRepeatRowRange->aEnd.SetTab(nTab);
     }
-}
-
-void ScTable::DoColResize( SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd )
-{
-    for (SCCOL nCol=nCol1; nCol<=nCol2; nCol++)
-        aCol[nCol].ReserveSize(aCol[nCol].GetCellCount() + nAdd);
 }
 
 void ScTable::SetRepeatColRange( const ScRange* pNew )
@@ -1954,7 +1962,6 @@ SCROW ScTable::VisibleDataCellIterator::ROW_NOT_FOUND = -1;
 ScTable::VisibleDataCellIterator::VisibleDataCellIterator(ScFlatBoolRowSegments& rRowSegs, ScColumn& rColumn) :
     mrRowSegs(rRowSegs),
     mrColumn(rColumn),
-    mpCell(NULL),
     mnCurRow(ROW_NOT_FOUND),
     mnUBound(ROW_NOT_FOUND)
 {
@@ -1964,19 +1971,19 @@ ScTable::VisibleDataCellIterator::~VisibleDataCellIterator()
 {
 }
 
-ScBaseCell* ScTable::VisibleDataCellIterator::reset(SCROW nRow)
+ScRefCellValue ScTable::VisibleDataCellIterator::reset(SCROW nRow)
 {
     if (nRow > MAXROW)
     {
         mnCurRow = ROW_NOT_FOUND;
-        return NULL;
+        return ScRefCellValue();
     }
 
     ScFlatBoolRowSegments::RangeData aData;
     if (!mrRowSegs.getRangeData(nRow, aData))
     {
         mnCurRow = ROW_NOT_FOUND;
-        return NULL;
+        return ScRefCellValue();
     }
 
     if (!aData.mbValue)
@@ -1995,23 +2002,23 @@ ScBaseCell* ScTable::VisibleDataCellIterator::reset(SCROW nRow)
         {
             // Make sure the row doesn't exceed our current limit.
             mnCurRow = ROW_NOT_FOUND;
-            return NULL;
+            return ScRefCellValue();
         }
     }
 
-    mpCell = mrColumn.GetCell(mnCurRow);
-    if (mpCell)
+    maCell = mrColumn.GetCellValue(mnCurRow);
+    if (!maCell.isEmpty())
         // First visible cell found.
-        return mpCell;
+        return maCell;
 
     // Find a first visible cell below this row (if any).
     return next();
 }
 
-ScBaseCell* ScTable::VisibleDataCellIterator::next()
+ScRefCellValue ScTable::VisibleDataCellIterator::next()
 {
     if (mnCurRow == ROW_NOT_FOUND)
-        return NULL;
+        return ScRefCellValue();
 
     while (mrColumn.GetNextDataPos(mnCurRow))
     {
@@ -2022,7 +2029,7 @@ ScBaseCell* ScTable::VisibleDataCellIterator::next()
             if (!mrRowSegs.getRangeData(mnCurRow, aData))
             {
                 mnCurRow = ROW_NOT_FOUND;
-                return NULL;
+                return ScRefCellValue();
             }
 
             if (aData.mbValue)
@@ -2037,12 +2044,13 @@ ScBaseCell* ScTable::VisibleDataCellIterator::next()
             mnUBound = aData.mnRow2;
         }
 
-        mpCell = mrColumn.GetCell(mnCurRow);
-        if (mpCell)
-            return mpCell;
+        maCell = mrColumn.GetCellValue(mnCurRow);
+        if (!maCell.isEmpty())
+            return maCell;
     }
+
     mnCurRow = ROW_NOT_FOUND;
-    return NULL;
+    return ScRefCellValue();
 }
 
 SCROW ScTable::VisibleDataCellIterator::getRow() const
@@ -2166,7 +2174,7 @@ ScRefCellValue ScTable::GetRefCellValue( SCCOL nCol, SCROW nRow )
     if (!ValidColRow(nCol, nRow))
         return ScRefCellValue();
 
-    return aCol[nCol].GetRefCellValue(nRow);
+    return aCol[nCol].GetCellValue(nRow);
 }
 
 SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow )

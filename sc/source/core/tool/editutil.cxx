@@ -137,6 +137,32 @@ void ScEditUtil::RemoveCharAttribs( EditTextObject& rEditText, const ScPatternAt
     }
 }
 
+EditTextObject* ScEditUtil::Clone( const EditTextObject& rObj, ScDocument& rDestDoc )
+{
+    EditTextObject* pNew = NULL;
+
+    EditEngine& rEngine = rDestDoc.GetEditEngine();
+    if (rObj.HasOnlineSpellErrors())
+    {
+        sal_uLong nControl = rEngine.GetControlWord();
+        const sal_uLong nSpellControl = EE_CNTRL_ONLINESPELLING | EE_CNTRL_ALLOWBIGOBJS;
+        bool bNewControl = ( (nControl & nSpellControl) != nSpellControl );
+        if (bNewControl)
+            rEngine.SetControlWord(nControl | nSpellControl);
+        rEngine.SetText(rObj);
+        pNew = rEngine.CreateTextObject();
+        if (bNewControl)
+            rEngine.SetControlWord(nControl);
+    }
+    else
+    {
+        rEngine.SetText(rObj);
+        pNew = rEngine.CreateTextObject();
+    }
+
+    return pNew;
+}
+
 //------------------------------------------------------------------------
 
 Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, sal_Bool bForceToTop )

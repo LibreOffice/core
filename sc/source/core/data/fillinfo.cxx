@@ -40,6 +40,7 @@
 #include "colorscale.hxx"
 #include "stlpool.hxx"
 #include "cellvalue.hxx"
+#include "mtvcellfunc.hxx"
 
 #include <iostream>
 
@@ -129,6 +130,68 @@ static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
 }
 
 #define CELLINFO(x,y) pRowInfo[nArrY+y].pCellInfo[nArrX+x]
+
+namespace {
+
+class RowInfoFiller
+{
+    ScDocument& mrDoc;
+    SCTAB mnTab;
+    RowInfo* mpRowInfo;
+    SCCOL mnArrX;
+    SCSIZE& mrArrY;
+    SCROW mnHiddenEndRow;
+    bool mbHiddenRow;
+
+    bool isHidden(size_t nRow)
+    {
+        SCROW nThisRow = static_cast<SCROW>(nRow);
+        if (nThisRow > mnHiddenEndRow)
+            mbHiddenRow = mrDoc.RowHidden(nThisRow, mnTab, NULL, &mnHiddenEndRow);
+        return mbHiddenRow;
+    }
+
+    void setInfo(const ScRefCellValue& rCell)
+    {
+        RowInfo* pThisRowInfo = &mpRowInfo[mrArrY];
+        CellInfo* pInfo = &pThisRowInfo->pCellInfo[mnArrX];
+        pInfo->maCell = rCell;
+        pThisRowInfo->bEmptyText = false;
+        pInfo->bEmptyCellText = false;
+        ++mrArrY;
+    }
+
+public:
+    RowInfoFiller(ScDocument& rDoc, SCTAB nTab, RowInfo* pRowInfo, SCCOL nArrX, SCSIZE& rArrY) :
+        mrDoc(rDoc), mnTab(nTab), mpRowInfo(pRowInfo), mnArrX(nArrX), mrArrY(rArrY),
+        mnHiddenEndRow(-1), mbHiddenRow(false) {}
+
+    void operator() (size_t nRow, double fVal)
+    {
+        if (!isHidden(nRow))
+            setInfo(ScRefCellValue(fVal));
+    }
+
+    void operator() (size_t nRow, const OUString& rStr)
+    {
+        if (!isHidden(nRow))
+            setInfo(ScRefCellValue(&rStr));
+    }
+
+    void operator() (size_t nRow, const EditTextObject* p)
+    {
+        if (!isHidden(nRow))
+            setInfo(ScRefCellValue(p));
+    }
+
+    void operator() (size_t nRow, const ScFormulaCell* p)
+    {
+        if (!isHidden(nRow))
+            setInfo(ScRefCellValue(const_cast<ScFormulaCell*>(p)));
+    }
+};
+
+}
 
 void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                             SCTAB nTab, double nScaleX, double nScaleY,
@@ -363,30 +426,11 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                 ScColumn* pThisCol = &maTabs[nTab]->aCol[nX];                   // Spalten-Daten
 
                 nArrY = 1;
-                SCSIZE nUIndex;
-                bool bHiddenRow = true;
-                SCROW nHiddenEndRow = -1;
-                (void) pThisCol->Search( nY1, nUIndex );
-                while ( nUIndex < pThisCol->maItems.size() &&
-                        (nThisRow=pThisCol->maItems[nUIndex].nRow) <= nY2 )
-                {
-                    if (nThisRow > nHiddenEndRow)
-                        bHiddenRow = RowHidden( nThisRow, nTab, NULL, &nHiddenEndRow);
-                    if ( !bHiddenRow )
-                    {
-                        while ( pRowInfo[nArrY].nRowNo < nThisRow )
-                            ++nArrY;
-                        OSL_ENSURE( pRowInfo[nArrY].nRowNo == nThisRow, "FillInfo: Row not found" );
-
-                        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-                        CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
-                        pInfo->maCell.assign(*pThisCol->maItems[nUIndex].pCell);
-                        pThisRowInfo->bEmptyText = false;                   // Zeile nicht leer
-                        pInfo->bEmptyCellText = false;                      // Zelle nicht leer
-                        ++nArrY;
-                    }
-                    ++nUIndex;
-                }
+                // Iterate between rows nY1 and nY2 and pick up non-empty
+                // cells that are not hidden.
+                RowInfoFiller aFunc(*this, nTab, pRowInfo, nArrX, nArrY);
+                sc::ParseAllNonEmpty(
+                    pThisCol->maCells.begin(), pThisCol->maCells, nY1, nY2, aFunc);
 
                 if (nX+1 >= nX1)                                // Attribute/Blockmarken ab nX1-1
                 {

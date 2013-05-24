@@ -35,7 +35,6 @@
 
 class ScDocument;
 class SbxVariable;
-class ScValueCell;
 class ScFormulaCell;
 class SvNumberFormatter;
 class ScDBRangeBase;

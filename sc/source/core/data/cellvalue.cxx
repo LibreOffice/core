@@ -9,6 +9,7 @@
 
 #include "cellvalue.hxx"
 #include "document.hxx"
+#include "column.hxx"
 #include "cell.hxx"
 #include "formulacell.hxx"
 #include "editeng/editobj.hxx"
@@ -182,6 +183,41 @@ void ScCellValue::clear()
     mfValue = 0.0;
 }
 
+void ScCellValue::set( double fValue )
+{
+    clear();
+    meType = CELLTYPE_VALUE;
+    mfValue = fValue;
+}
+
+void ScCellValue::set( const OUString& rStr )
+{
+    clear();
+    meType = CELLTYPE_STRING;
+    mpString = new OUString(rStr);
+}
+
+void ScCellValue::set( const EditTextObject& rEditText )
+{
+    clear();
+    meType = CELLTYPE_EDIT;
+    mpEditText = rEditText.Clone();
+}
+
+void ScCellValue::set( const ScFormulaCell& rFormula )
+{
+    clear();
+    meType = CELLTYPE_FORMULA;
+    mpFormula = rFormula.Clone();
+}
+
+void ScCellValue::set( ScFormulaCell* pFormula )
+{
+    clear();
+    meType = CELLTYPE_FORMULA;
+    mpFormula = pFormula;
+}
+
 void ScCellValue::assign( const ScDocument& rDoc, const ScAddress& rPos )
 {
     clear();
@@ -255,34 +291,6 @@ void ScCellValue::assign( const ScCellValue& rOther, ScDocument& rDestDoc, int n
     }
 }
 
-void ScCellValue::assign( const ScBaseCell& rCell )
-{
-    clear();
-
-    meType = rCell.GetCellType();
-    switch (meType)
-    {
-        case CELLTYPE_STRING:
-            mpString = new OUString(static_cast<const ScStringCell&>(rCell).GetString());
-        break;
-        case CELLTYPE_EDIT:
-        {
-            const EditTextObject* p = static_cast<const ScEditCell&>(rCell).GetData();
-            if (p)
-                mpEditText = p->Clone();
-        }
-        break;
-        case CELLTYPE_VALUE:
-            mfValue = static_cast<const ScValueCell&>(rCell).GetValue();
-        break;
-        case CELLTYPE_FORMULA:
-            mpFormula = static_cast<const ScFormulaCell&>(rCell).Clone();
-        break;
-        default:
-            meType = CELLTYPE_NONE; // reset to empty.
-    }
-}
-
 void ScCellValue::commit( ScDocument& rDoc, const ScAddress& rPos ) const
 {
     switch (meType)
@@ -334,6 +342,36 @@ void ScCellValue::release( ScDocument& rDoc, const ScAddress& rPos )
         break;
         default:
             rDoc.SetEmptyCell(rPos);
+    }
+
+    meType = CELLTYPE_NONE;
+    mfValue = 0.0;
+}
+
+void ScCellValue::release( ScColumn& rColumn, SCROW nRow )
+{
+    switch (meType)
+    {
+        case CELLTYPE_STRING:
+        {
+            // Currently, string cannot be placed without copying.
+            rColumn.SetRawString(nRow, *mpString);
+            delete mpString;
+        }
+        break;
+        case CELLTYPE_EDIT:
+            // Cell takes the ownership of the text object.
+            rColumn.SetEditText(nRow, mpEditText);
+        break;
+        case CELLTYPE_VALUE:
+            rColumn.SetValue(nRow, mfValue);
+        break;
+        case CELLTYPE_FORMULA:
+            // This formula cell instance is directly placed in the document without copying.
+            rColumn.SetFormulaCell(nRow, mpFormula);
+        break;
+        default:
+            rColumn.Delete(nRow);
     }
 
     meType = CELLTYPE_NONE;
@@ -403,27 +441,32 @@ void ScRefCellValue::assign( ScDocument& rDoc, const ScAddress& rPos )
     *this = rDoc.GetRefCellValue(rPos);
 }
 
-void ScRefCellValue::assign( ScBaseCell& rCell )
+void ScRefCellValue::assign( const sc::CellStoreType::const_iterator& itPos, size_t nOffset )
 {
-    clear();
-
-    meType = rCell.GetCellType();
-    switch (meType)
+    switch (itPos->type)
     {
-        case CELLTYPE_STRING:
-            mpString = static_cast<const ScStringCell&>(rCell).GetStringPtr();
+        case sc::element_type_numeric:
+            // Numeric cell
+            mfValue = sc::numeric_block::at(*itPos->data, nOffset);
+            meType = CELLTYPE_VALUE;
         break;
-        case CELLTYPE_EDIT:
-            mpEditText = static_cast<const ScEditCell&>(rCell).GetData();
+        case sc::element_type_string:
+            // String cell
+            mpString = &sc::string_block::at(*itPos->data, nOffset);
+            meType = CELLTYPE_STRING;
         break;
-        case CELLTYPE_VALUE:
-            mfValue = static_cast<const ScValueCell&>(rCell).GetValue();
+        case sc::element_type_edittext:
+            // Edit cell
+            mpEditText = sc::edittext_block::at(*itPos->data, nOffset);
+            meType = CELLTYPE_EDIT;
         break;
-        case CELLTYPE_FORMULA:
-            mpFormula = static_cast<ScFormulaCell*>(&rCell);
+        case sc::element_type_formula:
+            // Formula cell
+            mpFormula = sc::formula_block::at(*itPos->data, nOffset);
+            meType = CELLTYPE_FORMULA;
         break;
         default:
-            meType = CELLTYPE_NONE; // reset to empty.
+            clear();
     }
 }
 
@@ -439,16 +482,40 @@ void ScRefCellValue::commit( ScDocument& rDoc, const ScAddress& rPos ) const
         }
         break;
         case CELLTYPE_EDIT:
-            rDoc.SetEditText(rPos, mpEditText->Clone());
+            rDoc.SetEditText(rPos, ScEditUtil::Clone(*mpEditText, rDoc));
         break;
         case CELLTYPE_VALUE:
             rDoc.SetValue(rPos, mfValue);
         break;
         case CELLTYPE_FORMULA:
-            rDoc.SetFormulaCell(rPos, mpFormula->Clone());
+            rDoc.SetFormulaCell(rPos, new ScFormulaCell(*mpFormula, rDoc, rPos));
         break;
         default:
             rDoc.SetEmptyCell(rPos);
+    }
+}
+
+void ScRefCellValue::commit( ScColumn& rColumn, SCROW nRow ) const
+{
+    switch (meType)
+    {
+        case CELLTYPE_STRING:
+            rColumn.SetRawString(nRow, *mpString);
+        break;
+        case CELLTYPE_EDIT:
+            rColumn.SetEditText(nRow, ScEditUtil::Clone(*mpEditText, rColumn.GetDoc()));
+        break;
+        case CELLTYPE_VALUE:
+            rColumn.SetValue(nRow, mfValue);
+        break;
+        case CELLTYPE_FORMULA:
+        {
+            ScAddress aDestPos(rColumn.GetCol(), nRow, rColumn.GetTab());
+            rColumn.SetFormulaCell(nRow, new ScFormulaCell(*mpFormula, rColumn.GetDoc(), aDestPos));
+        }
+        break;
+        default:
+            rColumn.Delete(nRow);
     }
 }
 

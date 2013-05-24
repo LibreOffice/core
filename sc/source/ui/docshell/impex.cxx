@@ -1470,8 +1470,6 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
         bDetermineRange = !bDetermineRange;     // toggle
     } while (!bDetermineRange);
 
-    pDoc->DoColResize( nTab, nStartCol, nEndCol, 0 );
-
     xProgress.reset();    // make room for AdjustRowHeight progress
     if (bRangeIsDetermined)
         EndPaste();

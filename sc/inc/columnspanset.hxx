@@ -16,7 +16,12 @@
 #include <mdds/flat_segment_tree.hpp>
 #include <boost/noncopyable.hpp>
 
+class ScColumn;
+class ScMarkData;
+
 namespace sc {
+
+struct ColumnBlockConstPosition;
 
 /**
  * Structure that stores segments of boolean flags per column, and perform
@@ -47,6 +52,55 @@ public:
     void set(SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, bool bVal);
 
     void executeFromTop(Action& ac) const;
+};
+
+/**
+ * Keep track of spans in a single column only.
+ */
+class SingleColumnSpanSet
+{
+public:
+    typedef mdds::flat_segment_tree<SCROW, bool> ColumnSpansType;
+
+    struct Span
+    {
+        SCROW mnRow1;
+        SCROW mnRow2;
+
+        Span(SCROW nRow1, SCROW nRow2) : mnRow1(nRow1), mnRow2(nRow2) {}
+    };
+
+    typedef std::vector<Span> SpansType;
+
+    SingleColumnSpanSet();
+
+    /**
+     * Scan an entire column and tag all non-empty cell positions.
+     */
+    void scan(const ScColumn& rColumn);
+
+    /**
+     * Scan a column between specified range, and tag all non-empty cell
+     * positions.
+     */
+    void scan(const ScColumn& rColumn, SCROW nStart, SCROW nEnd);
+
+    void scan(
+        ColumnBlockConstPosition& rBlockPos, const ScColumn& rColumn, SCROW nStart, SCROW nEnd);
+
+    /**
+     * Scan all marked data and tag all marked segments in specified column.
+     */
+    void scan(const ScMarkData& rMark, SCTAB nTab, SCCOL nCol);
+
+    void set(SCROW nRow1, SCROW nRow2, bool bVal);
+
+    void getRows(std::vector<SCROW> &rRows) const;
+
+    void getSpans(SpansType& rSpans) const;
+
+private:
+    ColumnSpansType maSpans;
 };
 
 }

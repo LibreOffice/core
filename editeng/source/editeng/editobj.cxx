@@ -303,6 +303,11 @@ editeng::FieldUpdater EditTextObject::GetFieldUpdater()
     return mpImpl->GetFieldUpdater();
 }
 
+const SfxItemPool* EditTextObject::GetPool() const
+{
+    return mpImpl->GetPool();
+}
+
 sal_uInt16 EditTextObject::GetUserType() const
 {
     return mpImpl->GetUserType();

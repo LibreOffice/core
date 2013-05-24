@@ -20,7 +20,6 @@
 class ScDocument;
 class ScAddress;
 class ScTokenArray;
-class ScBaseCell;
 struct ScDocumentImportImpl;
 
 /**
@@ -62,9 +61,6 @@ public:
     void setFormulaCell(const ScAddress& rPos, const ScTokenArray& rArray);
 
     void finalize();
-
-private:
-    void insertCell(const ScAddress& rPos, ScBaseCell* pCell);
 };
 
 #endif

@@ -465,9 +465,6 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
         nErr = ERRCODE_IO_GENERAL;
     }
 
-    if ( nColCount > 0 )
-        aDocument.DoColResize( 0, 0, static_cast<SCCOL>(nColCount) - 1, 0 );
-
     return nErr;
 #endif // !DISABLE_DBCONNECTIVITY
 }

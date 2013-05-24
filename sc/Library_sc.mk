@@ -102,6 +102,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/bigrange \
 	sc/source/core/data/cell \
 	sc/source/core/data/cell2 \
+	sc/source/core/data/cellclonehandler \
 	sc/source/core/data/cellvalue \
 	sc/source/core/data/clipcontext \
 	sc/source/core/data/clipparam \
@@ -249,6 +250,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/tool/reftokenhelper \
 	sc/source/core/tool/refupdat \
 	sc/source/core/tool/scmatrix \
+	sc/source/core/tool/scopetools \
 	sc/source/core/tool/simplerangelist \
 	sc/source/core/tool/stringutil \
 	sc/source/core/tool/subtotal \

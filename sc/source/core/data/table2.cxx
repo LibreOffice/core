@@ -44,6 +44,9 @@
 #include "colorscale.hxx"
 #include "tokenarray.hxx"
 #include "clipcontext.hxx"
+#include "types.hxx"
+#include "editutil.hxx"
+#include "mtvcellfunc.hxx"
 
 #include "scitems.hxx"
 #include <editeng/boxitem.hxx>
@@ -121,7 +124,7 @@ void ScTable::SetCalcNotification( bool bSet )
 }
 
 
-bool ScTable::TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize ) const
+bool ScTable::TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize ) const
 {
     bool bTest = true;
 
@@ -129,7 +132,7 @@ bool ScTable::TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize ) cons
         bTest = pOutlineTable->TestInsertRow(nSize);
 
     for (SCCOL i=nStartCol; (i<=nEndCol) && bTest; i++)
-        bTest = aCol[i].TestInsertRow( nSize );
+        bTest = aCol[i].TestInsertRow(nStartRow, nSize);
 
     return bTest;
 }
@@ -850,6 +853,106 @@ void ScTable::MixMarked(
         aCol[i].MixMarked(rCxt, rMark, nFunction, bSkipEmpty, pSrcTab->aCol[i]);
 }
 
+namespace {
+
+class TransClipHandler
+{
+    ScTable& mrClipTab;
+    SCTAB mnSrcTab;
+    SCCOL mnSrcCol;
+    size_t mnTopRow;
+    SCROW mnTransRow;
+    bool mbAsLink;
+    bool mbWasCut;
+
+    ScAddress getDestPos(size_t nRow) const
+    {
+        return ScAddress(static_cast<SCCOL>(nRow-mnTopRow), mnTransRow, mrClipTab.GetTab());
+    }
+
+    ScFormulaCell* createRefCell(size_t nSrcRow, const ScAddress& rDestPos) const
+    {
+        ScAddress aSrcPos(mnSrcCol, nSrcRow, mnSrcTab);
+        ScSingleRefData aRef;
+        aRef.InitAddress(aSrcPos); // Absolute reference.
+        aRef.SetFlag3D(true);
+
+        ScTokenArray aArr;
+        aArr.AddSingleReference(aRef);
+        return new ScFormulaCell(&mrClipTab.GetDoc(), rDestPos, &aArr);
+    }
+
+    void setLink(size_t nRow)
+    {
+        SCCOL nTransCol = nRow - mnTopRow;
+        mrClipTab.SetFormulaCell(
+            nTransCol, mnTransRow, createRefCell(nRow, getDestPos(nRow)));
+    }
+
+public:
+    TransClipHandler(ScTable& rClipTab, SCTAB nSrcTab, SCCOL nSrcCol, size_t nTopRow, SCROW nTransRow, bool bAsLink, bool bWasCut) :
+        mrClipTab(rClipTab), mnSrcTab(nSrcTab), mnSrcCol(nSrcCol),
+        mnTopRow(nTopRow), mnTransRow(nTransRow), mbAsLink(bAsLink), mbWasCut(bWasCut) {}
+
+    void operator() (size_t nRow, double fVal)
+    {
+        if (mbAsLink)
+        {
+            setLink(nRow);
+            return;
+        }
+
+        SCCOL nTransCol = nRow - mnTopRow;
+        mrClipTab.SetValue(nTransCol, mnTransRow, fVal);
+    }
+
+    void operator() (size_t nRow, const OUString& rStr)
+    {
+        if (mbAsLink)
+        {
+            setLink(nRow);
+            return;
+        }
+
+        SCCOL nTransCol = nRow - mnTopRow;
+        mrClipTab.SetRawString(nTransCol, mnTransRow, rStr);
+    }
+
+    void operator() (size_t nRow, const EditTextObject* p)
+    {
+        if (mbAsLink)
+        {
+            setLink(nRow);
+            return;
+        }
+
+        SCCOL nTransCol = nRow - mnTopRow;
+        mrClipTab.SetEditText(nTransCol, mnTransRow, ScEditUtil::Clone(*p, mrClipTab.GetDoc()));
+    }
+
+    void operator() (size_t nRow, const ScFormulaCell* p)
+    {
+        if (mbAsLink)
+        {
+            setLink(nRow);
+            return;
+        }
+
+        ScFormulaCell* pNew = new ScFormulaCell(
+            *p, mrClipTab.GetDoc(), getDestPos(nRow), SC_CLONECELL_STARTLISTENING);
+
+        //  Referenzen drehen
+        //  bei Cut werden Referenzen spaeter per UpdateTranspose angepasst
+
+        if (!mbWasCut)
+            pNew->TransposeReference();
+
+        SCCOL nTransCol = nRow - mnTopRow;
+        mrClipTab.SetFormulaCell(nTransCol, mnTransRow, pNew);
+    }
+};
+
+}
 
 void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 ScTable* pTransClip, sal_uInt16 nFlags, bool bAsLink )
@@ -861,8 +964,6 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     for (SCCOL nCol=nCol1; nCol<=nCol2; nCol++)
     {
         SCROW nRow;
-        ScBaseCell* pCell;
-
         if ( bAsLink && nFlags == IDF_ALL )
         {
             //  with IDF_ALL, also create links (formulas) for empty cells
@@ -882,41 +983,16 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 ScTokenArray aArr;
                 aArr.AddSingleReference( aRef );
 
-                ScBaseCell* pNew = new ScFormulaCell( pDestDoc, aDestPos, &aArr );
-                pTransClip->PutCell( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), pNew );
+                pTransClip->SetFormulaCell(
+                    static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1),
+                    new ScFormulaCell(pDestDoc, aDestPos, &aArr));
             }
         }
         else
         {
-            ScColumnIterator aIter( &aCol[nCol], nRow1, nRow2 );
-            while (aIter.Next( nRow, pCell ))
-            {
-                ScAddress aDestPos( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), pTransClip->nTab );
-                ScBaseCell* pNew;
-                if ( bAsLink )                  // Referenz erzeugen ?
-                {
-                    pNew = aCol[nCol].CreateRefCell( pDestDoc, aDestPos, aIter.GetIndex(), nFlags );
-                }
-                else                            // kopieren
-                {
-                    ScAddress aOwnPos( nCol, nRow, nTab );
-                    if (pCell->GetCellType() == CELLTYPE_FORMULA)
-                    {
-                        pNew = pCell->Clone( *pDestDoc, aDestPos, SC_CLONECELL_STARTLISTENING );
-
-                        //  Referenzen drehen
-                        //  bei Cut werden Referenzen spaeter per UpdateTranspose angepasst
-
-                        if (!bWasCut)
-                            ((ScFormulaCell*)pNew)->TransposeReference();
-                    }
-                    else
-                    {
-                        pNew = pCell->Clone( *pDestDoc, aDestPos );
-                    }
-                }
-                pTransClip->PutCell( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), pNew );
-            }
+            TransClipHandler aFunc(*pTransClip, nTab, nCol, nRow1, static_cast<SCROW>(nCol-nCol1), bAsLink, bWasCut);
+            const sc::CellStoreType& rCells = aCol[nCol].maCells;
+            sc::ParseAllNonEmpty(rCells.begin(), rCells, nRow1, nRow2, aFunc);
         }
 
         //  Attribute
@@ -1008,7 +1084,7 @@ void ScTable::BroadcastInArea( SCCOL nCol1, SCROW nRow1,
     if (nRow2 > MAXROW) nRow2 = MAXROW;
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
         for (SCCOL i = nCol1; i <= nCol2; i++)
-            aCol[i].BroadcastInArea( nRow1, nRow2 );
+            aCol[i].SetDirty(nRow1, nRow2);
 }
 
 
@@ -1312,39 +1388,6 @@ bool ScTable::TestCopyScenarioTo( const ScTable* pDestTab ) const
     return bOk;
 }
 
-void ScTable::PutCell( SCCOL nCol, SCROW nRow, ScBaseCell* pCell )
-{
-    if (ValidColRow(nCol,nRow))
-    {
-        if (pCell)
-            aCol[nCol].Insert( nRow, pCell );
-        else
-            aCol[nCol].Delete( nRow );
-    }
-}
-
-
-void ScTable::PutCell( SCCOL nCol, SCROW nRow, sal_uLong nFormatIndex, ScBaseCell* pCell )
-{
-    if (ValidColRow(nCol,nRow))
-    {
-        if (pCell)
-            aCol[nCol].Insert( nRow, nFormatIndex, pCell );
-        else
-            aCol[nCol].Delete( nRow );
-    }
-}
-
-
-void ScTable::PutCell( const ScAddress& rPos, ScBaseCell* pCell )
-{
-    if (pCell)
-        aCol[rPos.Col()].Insert( rPos.Row(), pCell );
-    else
-        aCol[rPos.Col()].Delete( rPos.Row() );
-}
-
-
 bool ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const String& rString,
                          ScSetStringParam* pParam )
 {
@@ -1417,6 +1460,11 @@ void ScTable::SetValue( SCCOL nCol, SCROW nRow, const double& rVal )
         aCol[nCol].SetValue( nRow, rVal );
 }
 
+void ScTable::SetRawString( SCCOL nCol, SCROW nRow, const OUString& rStr )
+{
+    if (ValidColRow(nCol, nRow))
+        aCol[nCol].SetRawString(nRow, rStr);
+}
 
 void ScTable::GetString( SCCOL nCol, SCROW nRow, OUString& rString ) const
 {
@@ -1530,14 +1578,12 @@ CellType ScTable::GetCellType( SCCOL nCol, SCROW nRow ) const
     return CELLTYPE_NONE;
 }
 
-
-ScBaseCell* ScTable::GetCell( SCCOL nCol, SCROW nRow ) const
+ScRefCellValue ScTable::GetCellValue( SCCOL nCol, SCROW nRow ) const
 {
-    if (ValidColRow( nCol, nRow ))
-        return aCol[nCol].GetCell( nRow );
+    if (!ValidColRow(nCol, nRow))
+        return ScRefCellValue();
 
-    OSL_FAIL("GetCell: out of range");
-    return NULL;
+    return aCol[nCol].GetCellValue(nRow);
 }
 
 void ScTable::GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const
@@ -1629,7 +1675,7 @@ void ScTable::SetDirty( const ScRange& rRange )
     pDocument->SetAutoCalc( false );    // Mehrfachberechnungen vermeiden
     SCCOL nCol2 = rRange.aEnd.Col();
     for (SCCOL i=rRange.aStart.Col(); i<=nCol2; i++)
-        aCol[i].SetDirty( rRange );
+        aCol[i].SetDirty(rRange.aStart.Row(), rRange.aEnd.Row());
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
 
@@ -1717,6 +1763,13 @@ void ScTable::CalcAfterLoad()
     for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].CalcAfterLoad();
 }
 
+bool ScTable::IsEmptyData( SCCOL nCol ) const
+{
+    if (!ValidCol(nCol))
+        return true;
+
+    return aCol[nCol].IsEmptyData();
+}
 
 void ScTable::ResetChanged( const ScRange& rRange )
 {
@@ -2001,34 +2054,35 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
 
 bool ScTable::HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
 {
-    // nix:0, mitte:1, unten:2, links:4, oben:8, rechts:16, offen:32
-    sal_uInt16 nEdges;
+    using namespace sc;
+
+    sal_uInt16 nEdges = 0;
 
     if ( nCol1 == nCol2 )
     {   // linke und rechte Spalte
-        const sal_uInt16 n = 4 | 16;
+        const sal_uInt16 n = MatrixEdgeLeft | MatrixEdgeRight;
         nEdges = aCol[nCol1].GetBlockMatrixEdges( nRow1, nRow2, n );
         // nicht (4 und 16) oder 1 oder 32
-        if ( nEdges && (((nEdges & n) != n) || (nEdges & 33)) )
+        if (nEdges && (((nEdges & n) != n) || (nEdges & (MatrixEdgeInside|MatrixEdgeOpen))))
             return true;        // linke oder rechte Kante fehlt oder offen
     }
     else
     {   // linke Spalte
-        nEdges = aCol[nCol1].GetBlockMatrixEdges( nRow1, nRow2, 4 );
+        nEdges = aCol[nCol1].GetBlockMatrixEdges(nRow1, nRow2, MatrixEdgeLeft);
         // nicht 4 oder 1 oder 32
-        if ( nEdges && (((nEdges & 4) != 4) || (nEdges & 33)) )
+        if (nEdges && (((nEdges & MatrixEdgeLeft) != MatrixEdgeLeft) || (nEdges & (MatrixEdgeInside|MatrixEdgeOpen))))
             return true;        // linke Kante fehlt oder offen
         // rechte Spalte
-        nEdges = aCol[nCol2].GetBlockMatrixEdges( nRow1, nRow2, 16 );
+        nEdges = aCol[nCol2].GetBlockMatrixEdges(nRow1, nRow2, MatrixEdgeRight);
         // nicht 16 oder 1 oder 32
-        if ( nEdges && (((nEdges & 16) != 16) || (nEdges & 33)) )
+        if (nEdges && (((nEdges & MatrixEdgeRight) != MatrixEdgeRight) || (nEdges & (MatrixEdgeInside|MatrixEdgeOpen))))
             return true;        // rechte Kante fehlt oder offen
     }
 
     if ( nRow1 == nRow2 )
     {   // obere und untere Zeile
         bool bOpen = false;
-        const sal_uInt16 n = 2 | 8;
+        const sal_uInt16 n = MatrixEdgeBottom | MatrixEdgeTop;
         for ( SCCOL i=nCol1; i<=nCol2; i++)
         {
             nEdges = aCol[i].GetBlockMatrixEdges( nRow1, nRow1, n );
@@ -2036,11 +2090,11 @@ bool ScTable::HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
             {
                 if ( (nEdges & n) != n )
                     return true;        // obere oder untere Kante fehlt
-                if ( nEdges & 4 )
+                if (nEdges & MatrixEdgeLeft)
                     bOpen = true;       // linke Kante oeffnet, weitersehen
                 else if ( !bOpen )
                     return true;        // es gibt was, was nicht geoeffnet wurde
-                if ( nEdges & 16 )
+                if (nEdges & MatrixEdgeRight)
                     bOpen = false;      // rechte Kante schliesst
             }
         }
@@ -2064,11 +2118,11 @@ bool ScTable::HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
                     // in unterer Zeile keine untere Kante
                     if ( (nEdges & n) != n )
                         return true;
-                    if ( nEdges & 4 )
+                    if (nEdges & MatrixEdgeLeft)
                         bOpen = true;       // linke Kante oeffnet, weitersehen
                     else if ( !bOpen )
                         return true;        // es gibt was, was nicht geoeffnet wurde
-                    if ( nEdges & 16 )
+                    if (nEdges & MatrixEdgeRight)
                         bOpen = false;      // rechte Kante schliesst
                 }
             }
@@ -3332,83 +3386,108 @@ short DiffSign( T a, T b )
             (a>b) ? 1 : 0;
 }
 
+namespace {
+
+class OutlineArrayFinder
+{
+    ScRange maRef;
+    SCCOL mnCol;
+    SCTAB mnTab;
+    ScOutlineArray* mpArray;
+    bool mbSizeChanged;
+
+public:
+    OutlineArrayFinder(const ScRange& rRef, SCCOL nCol, SCTAB nTab, ScOutlineArray* pArray, bool bSizeChanged) :
+        maRef(rRef), mnCol(nCol), mnTab(nTab), mpArray(pArray),
+        mbSizeChanged(bSizeChanged) {}
+
+    bool operator() (size_t nRow, const ScFormulaCell* pCell)
+    {
+        SCROW nRow2 = static_cast<SCROW>(nRow);
+
+        if (!pCell->HasRefListExpressibleAsOneReference(maRef))
+            return false;
+
+        if (maRef.aStart.Row() != nRow2 || maRef.aEnd.Row() != nRow2 ||
+            maRef.aStart.Tab() != mnTab || maRef.aEnd.Tab() != mnTab)
+            return false;
+
+        if (DiffSign(maRef.aStart.Col(), mnCol) != DiffSign(maRef.aEnd.Col(), mnCol))
+            return false;
+
+        return mpArray->Insert(maRef.aStart.Col(), maRef.aEnd.Col(), mbSizeChanged);
+    }
+};
+
+}
 
 void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
+    typedef mdds::flat_segment_tree<SCROW, bool> UsedRowsType;
+
     bool bSizeChanged = false;
 
     SCCOL nCol;
     SCROW nRow;
-    SCROW i;
     bool bFound;
     ScOutlineArray* pArray;
-    ScBaseCell* pCell;
     ScRange aRef;
 
     StartOutlineTable();
 
                             // Zeilen
 
-    SCROW   nCount = nEndRow-nStartRow+1;
-    bool*   pUsed = new bool[nCount];
-    for (i=0; i<nCount; i++)
-        pUsed[i] = false;
+    UsedRowsType aUsed(0, MAXROW+1, false);
     for (nCol=nStartCol; nCol<=nEndCol; nCol++)
-        if (!aCol[nCol].IsEmptyData())
-            aCol[nCol].FindUsed( nStartRow, nEndRow, pUsed );
+        aCol[nCol].FindUsed(nStartRow, nEndRow, aUsed);
+    aUsed.build_tree();
 
     pArray = pOutlineTable->GetRowArray();
     for (nRow=nStartRow; nRow<=nEndRow; nRow++)
-        if (pUsed[nRow-nStartRow])
+    {
+        bool bUsed = false;
+        SCROW nLastRow = nRow;
+        aUsed.search_tree(nRow, bUsed, NULL, &nLastRow);
+        if (!bUsed)
         {
-            bFound = false;
-            for (nCol=nStartCol; nCol<=nEndCol && !bFound; nCol++)
-                if (!aCol[nCol].IsEmptyData())
-                {
-                    pCell = aCol[nCol].GetCell( nRow );
-                    if (pCell)
-                        if ( pCell->GetCellType() == CELLTYPE_FORMULA )
-                            if (((ScFormulaCell*)pCell)->HasRefListExpressibleAsOneReference( aRef ))
-                                if ( aRef.aStart.Col() == nCol && aRef.aEnd.Col() == nCol &&
-                                     aRef.aStart.Tab() == nTab && aRef.aEnd.Tab() == nTab &&
-                                     DiffSign( aRef.aStart.Row(), nRow ) ==
-                                        DiffSign( aRef.aEnd.Row(), nRow ) )
-                                {
-                                    if (pArray->Insert( aRef.aStart.Row(), aRef.aEnd.Row(), bSizeChanged ))
-                                    {
-                                        bFound = true;
-                                    }
-                                }
-                }
+            nRow = nLastRow;
+            continue;
         }
 
-    delete[] pUsed;
+        bFound = false;
+        for (nCol=nStartCol; nCol<=nEndCol && !bFound; nCol++)
+        {
+            ScRefCellValue aCell = aCol[nCol].GetCellValue(nRow);
 
-                            // Spalten
+            if (aCell.meType != CELLTYPE_FORMULA)
+                continue;
 
+            if (!aCell.mpFormula->HasRefListExpressibleAsOneReference(aRef))
+                continue;
+
+            if ( aRef.aStart.Col() == nCol && aRef.aEnd.Col() == nCol &&
+                 aRef.aStart.Tab() == nTab && aRef.aEnd.Tab() == nTab &&
+                 DiffSign( aRef.aStart.Row(), nRow ) ==
+                    DiffSign( aRef.aEnd.Row(), nRow ) )
+            {
+                if (pArray->Insert( aRef.aStart.Row(), aRef.aEnd.Row(), bSizeChanged ))
+                {
+                    bFound = true;
+                }
+            }
+        }
+    }
+
+    // Column
     pArray = pOutlineTable->GetColArray();
     for (nCol=nStartCol; nCol<=nEndCol; nCol++)
     {
-        if (!aCol[nCol].IsEmptyData())
-        {
-            bFound = false;
-            ScColumnIterator aIter( &aCol[nCol], nStartRow, nEndRow );
-            while ( aIter.Next( nRow, pCell ) && !bFound )
-            {
-                if ( pCell->GetCellType() == CELLTYPE_FORMULA )
-                    if (((ScFormulaCell*)pCell)->HasRefListExpressibleAsOneReference( aRef ))
-                        if ( aRef.aStart.Row() == nRow && aRef.aEnd.Row() == nRow &&
-                             aRef.aStart.Tab() == nTab && aRef.aEnd.Tab() == nTab &&
-                             DiffSign( aRef.aStart.Col(), nCol ) ==
-                                DiffSign( aRef.aEnd.Col(), nCol ) )
-                        {
-                            if (pArray->Insert( aRef.aStart.Col(), aRef.aEnd.Col(), bSizeChanged ))
-                            {
-                                bFound = true;
-                            }
-                        }
-            }
-        }
+        if (aCol[nCol].IsEmptyData())
+            continue;
+
+        OutlineArrayFinder aFunc(aRef, nCol, nTab, pArray, bSizeChanged);
+        std::pair<sc::CellStoreType::const_iterator,size_t> aPos =
+            sc::FindFormula(aCol[nCol].maCells, nStartRow, nEndRow, aFunc);
     }
 }
 
@@ -3433,27 +3512,26 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
         {
             aSrc.SetCol( nCol );
             aDest.SetCol( nDestX );
-            ScBaseCell* pCell = GetCell( nCol, nRow );
-            if (pCell)
+            ScCellValue aCell;
+            aCell.assign(*pDocument, ScAddress(nCol, nRow, nTab));
+
+            if (aCell.meType == CELLTYPE_FORMULA)
             {
-                pCell = pCell->Clone( *pDocument );
-                if (pCell->GetCellType() == CELLTYPE_FORMULA)
-                {
-                    ((ScFormulaCell*)pCell)->UpdateReference( URM_COPY, aRange,
-                                    ((SCsCOL) nDestCol) - ((SCsCOL) nStartCol),
-                                    ((SCsROW) nDestRow) - ((SCsROW) nStartRow),
-                                    ((SCsTAB) nDestTab) - ((SCsTAB) nTab) );
-                    ((ScFormulaCell*)pCell)->aPos = aDest;
-                }
+                aCell.mpFormula->UpdateReference( URM_COPY, aRange,
+                                ((SCsCOL) nDestCol) - ((SCsCOL) nStartCol),
+                                ((SCsROW) nDestRow) - ((SCsROW) nStartRow),
+                                ((SCsTAB) nDestTab) - ((SCsTAB) nTab) );
+                aCell.mpFormula->aPos = aDest;
             }
+
             if (bThisTab)
             {
-                PutCell( nDestX, nDestY, pCell );
+                aCell.release(aCol[nDestX], nDestY);
                 SetPattern( nDestX, nDestY, *GetPattern( nCol, nRow ), true );
             }
             else
             {
-                pDocument->PutCell( aDest, pCell );
+                aCell.release(*pDocument, aDest);
                 pDocument->SetPattern( aDest, *GetPattern( nCol, nRow ), true );
             }
 

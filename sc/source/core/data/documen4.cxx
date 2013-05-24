@@ -143,13 +143,16 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
     for (; itr != itrEnd && *itr < nMax; ++itr)
     {
-        if (maTabs[*itr])
-        {
-            if (*itr == nTab1)
-                maTabs[*itr]->PutCell(nCol1, nRow1, pCell);
-            else
-                maTabs[*itr]->PutCell(nCol1, nRow1, pCell->Clone(*this, ScAddress( nCol1, nRow1, *itr), SC_CLONECELL_STARTLISTENING));
-        }
+        if (!maTabs[*itr])
+            continue;
+
+        if (*itr == nTab1)
+            maTabs[*itr]->SetFormulaCell(nCol1, nRow1, pCell);
+        else
+            maTabs[*itr]->SetFormulaCell(
+                nCol1, nRow1,
+                new ScFormulaCell(
+                    *pCell, *this, ScAddress(nCol1, nRow1, *itr), SC_CLONECELL_STARTLISTENING));
     }
 
     ScSingleRefData aRefData;
@@ -170,7 +173,6 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     {
         if (maTabs[*itr])
         {
-            maTabs[*itr]->DoColResize( nCol1, nCol2, static_cast<SCSIZE>(nRow2 - nRow1 + 1) );
             if (*itr != nTab1)
             {
                 aRefData.nTab = *itr;
@@ -189,7 +191,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                         t->CalcRelFromAbs( aPos );
                         boost::scoped_ptr<ScTokenArray> pTokArr(aArr.Clone());
                         pCell = new ScFormulaCell( this, aPos, pTokArr.get(), eGram, MM_REFERENCE );
-                        maTabs[*itr]->PutCell(j, k, (ScBaseCell*) pCell);
+                        maTabs[*itr]->SetFormulaCell(j, k, pCell);
                     }
                 }
             }
@@ -284,7 +286,8 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
                 itr = rMark.begin();
                 for (; itr != itrEnd && *itr < nMax; ++itr)
                 if( maTabs[*itr] )
-                    maTabs[*itr]->PutCell( j, k, aRefCell.Clone( *this, ScAddress( j, k, *itr ), SC_CLONECELL_STARTLISTENING ) );
+                    maTabs[*itr]->SetFormulaCell(
+                        j, k, new ScFormulaCell(aRefCell, *this, ScAddress(j, k, *itr), SC_CLONECELL_STARTLISTENING));
             }
 }
 
@@ -425,16 +428,6 @@ void ScDocument::CompileColRowNameFormula()
     {
         if (*it)
             (*it)->CompileColRowNameFormula();
-    }
-}
-
-void ScDocument::DoColResize( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd )
-{
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->DoColResize( nCol1, nCol2, nAdd );
-    else
-    {
-        OSL_FAIL("DoColResize: wrong table");
     }
 }
 

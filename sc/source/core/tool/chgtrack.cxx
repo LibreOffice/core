@@ -2899,22 +2899,21 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
 void ScChangeTrack::AppendContentsIfInRefDoc( ScDocument* pRefDoc,
             sal_uLong& nStartAction, sal_uLong& nEndAction )
 {
-    ScDocumentIterator aIter( pRefDoc, 0, MAXTAB );
-    if ( aIter.GetFirst() )
+    ScCellIterator aIter(pRefDoc, ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB));
+    if (aIter.first())
     {
         nStartAction = GetActionMax() + 1;
         StartBlockModify( SC_CTM_APPEND, nStartAction );
         SvNumberFormatter* pFormatter = pRefDoc->GetFormatTable();
         do
         {
-            SCCOL nCol;
-            SCROW nRow;
-            SCTAB nTab;
-            aIter.GetPos( nCol, nRow, nTab );
-            ScAddress aPos( nCol, nRow, nTab );
-            AppendContent( aPos, aIter.GetCellValue(),
-                aIter.GetPattern()->GetNumberFormat( pFormatter ), pRefDoc );
-        } while ( aIter.GetNext() );
+            const ScAddress& rPos = aIter.GetPos();
+            const ScPatternAttr* pPat = pRefDoc->GetPattern(rPos);
+            AppendContent(
+                rPos, aIter.getCellValue(), pPat->GetNumberFormat(pFormatter), pRefDoc);
+        }
+        while (aIter.next());
+
         nEndAction = GetActionMax();
         EndBlockModify( nEndAction );
     }

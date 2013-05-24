@@ -135,39 +135,22 @@ void ScEditCell::UpdateFields(SCTAB nTab)
     aUpdater.updateTableFields(nTab);
 }
 
-void ScEditCell::SetTextObject( const EditTextObject* pObject,
-            const SfxItemPool* pFromPool )
+void ScEditCell::SetTextObject(
+    const EditTextObject* pObject, const SfxItemPool* pFromPool )
 {
-    if ( pObject )
+    if (!pObject)
     {
-        if ( pFromPool && mpDoc->GetEditPool() == pFromPool )
-            mpData = pObject->Clone();
-        else
-        {   //! another "spool"
-            // Sadly there is no other way to change the Pool than to
-            // "spool" the Object through a corresponding Engine
-            EditEngine& rEngine = mpDoc->GetEditEngine();
-            if ( pObject->HasOnlineSpellErrors() )
-            {
-                sal_uLong nControl = rEngine.GetControlWord();
-                const sal_uLong nSpellControl = EE_CNTRL_ONLINESPELLING | EE_CNTRL_ALLOWBIGOBJS;
-                bool bNewControl = ( (nControl & nSpellControl) != nSpellControl );
-                if ( bNewControl )
-                    rEngine.SetControlWord( nControl | nSpellControl );
-                rEngine.SetText( *pObject );
-                mpData = rEngine.CreateTextObject();
-                if ( bNewControl )
-                    rEngine.SetControlWord( nControl );
-            }
-            else
-            {
-                rEngine.SetText( *pObject );
-                mpData = rEngine.CreateTextObject();
-            }
-        }
-    }
-    else
         mpData = NULL;
+        return;
+    }
+
+    if ( pFromPool && mpDoc->GetEditPool() == pFromPool )
+    {
+        mpData = pObject->Clone();
+        return;
+    }
+
+    mpData = ScEditUtil::Clone(*pObject, *mpDoc);
 }
 
 ScEditDataArray::ScEditDataArray()
