@@ -1448,13 +1448,22 @@ void ScColumn::SetEditText( SCROW nRow, const EditTextObject& rEditText, const S
 void ScColumn::SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram )
 {
     ScAddress aPos(nCol, nRow, nTab);
-    Insert(nRow, new ScFormulaCell(pDocument, aPos, &rArray, eGram));
+    ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, &rArray, eGram);
+    sal_uInt32 nCellFormat = GetNumberFormat( nRow );
+    if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
+        pCell->SetNeedNumberFormat(true);
+    Insert(nRow, pCell);
 }
 
 void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram )
 {
     ScAddress aPos(nCol, nRow, nTab);
-    Insert(nRow, new ScFormulaCell(pDocument, aPos, rFormula, eGram));
+    ScFormulaCell* pCell = new ScFormulaCell(pDocument, aPos, rFormula, eGram);
+
+    sal_uInt32 nCellFormat = GetNumberFormat( nRow );
+    if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
+        pCell->SetNeedNumberFormat(true);
+    Insert(nRow, pCell);
 }
 
 void ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell )

@@ -2235,7 +2235,14 @@ void ScColumn::CompileXML( ScProgress& rProgress )
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
             {
                 SCROW nRow = maItems[i].nRow;
-                static_cast<ScFormulaCell*>(pCell)->CompileXML( rProgress );
+                ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+                sal_uInt32 nCellFormat = GetNumberFormat( nRow );
+                if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
+                    pFCell->SetNeedNumberFormat(false);
+                else
+                    pFCell->SetDirty(true);
+
+                pFCell->CompileXML( rProgress );
                 if ( nRow != maItems[i].nRow )
                     Search( nRow, i );      // Listener deleted/inserted?
             }

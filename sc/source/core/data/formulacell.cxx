@@ -414,6 +414,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     bInChangeTrack( false ),
     bTableOpDirty( false ),
     bNeedListening( false ),
+    mbNeedsNumberFormat( false ),
     aPos( rPos )
 {
     Compile( rFormula, true, eGrammar );    // bNoListening, Insert does that
@@ -448,6 +449,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     bInChangeTrack( false ),
     bTableOpDirty( false ),
     bNeedListening( false ),
+    mbNeedsNumberFormat( false ),
     aPos( rPos )
 {
     // UPN-Array generation
@@ -494,6 +496,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     bInChangeTrack( false ),
     bTableOpDirty( false ),
     bNeedListening( false ),
+    mbNeedsNumberFormat( false ),
     aPos( rPos )
 {
     pCode = rCell.pCode->Clone();
@@ -1292,16 +1295,21 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             if ( aResult.GetCellResultType() != svUnknown )
                 bContentChanged = true;
         }
-        // Different number format?
-        if( nFormatType != p->GetRetFormatType() )
+
+        if( mbNeedsNumberFormat )
         {
-            nFormatType = p->GetRetFormatType();
+            sal_uInt16 nFormatType = p->GetRetFormatType();
+            sal_Int32 nFormatIndex = p->GetRetFormatIndex();
+
+            if((nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+                nFormatIndex = ScGlobal::GetStandardFormat(*pDocument->GetFormatTable(),
+                        nFormatIndex, nFormatType);
+
+            // set number format explicitly
+            pDocument->SetNumberFormat( aPos, nFormatIndex );
+
             bChanged = true;
-        }
-        if( nFormatIndex != p->GetRetFormatIndex() )
-        {
-            nFormatIndex = p->GetRetFormatIndex();
-            bChanged = true;
+            mbNeedsNumberFormat = false;
         }
 
         // In case of changes just obtain the result, no temporary and

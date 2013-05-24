@@ -90,6 +90,7 @@ private:
     bool            bInChangeTrack : 1; // Cell is in ChangeTrack
     bool            bTableOpDirty  : 1; // Dirty flag for TableOp
     bool            bNeedListening : 1; // Listeners need to be re-established after UpdateReference
+    bool            mbNeedsNumberFormat : 1; // set the calculated number format as hard number format
 
                     enum ScInterpretTailParameter
                     {
@@ -152,6 +153,7 @@ public:
     void            ResetDirty() { bDirty = false; }
     bool            NeedsListening() const { return bNeedListening; }
     void            SetNeedsListening( bool bVar ) { bNeedListening = bVar; }
+    void            SetNeedNumberFormat( bool bVal ) { mbNeedsNumberFormat = bVal; }
     void            Compile(const OUString& rFormula,
                             bool bNoListening = false,
                             const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
