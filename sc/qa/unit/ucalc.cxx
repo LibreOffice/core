@@ -1475,7 +1475,7 @@ void testFuncINDIRECT(ScDocument* pDoc)
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
         {
             OUString aVal = pDoc->GetString(0, i, 0);
-            CPPUNIT_ASSERT_MESSAGE("Wrong value!", aVal == *aChecks[i]);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong value!", *aChecks[i], aVal);
         }
     }
 
