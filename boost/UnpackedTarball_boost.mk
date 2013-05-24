@@ -37,6 +37,7 @@ boost_patches += boost_1_44_0-clang-warnings.patch
 boost_patches += boost_1_44_0-gcc4.8.patch
 
 boost_patches += boost.auto_link.patch
+boost_patches += boost.endian.patch
 boost_patches += boost.loplugin.patch
 boost_patches += boost.std.move.patch
 boost_patches += boost.wundef.patch
