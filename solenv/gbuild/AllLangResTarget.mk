@@ -370,9 +370,6 @@ $(call gb_ResTarget_get_clean_target,%) :
 		rm -f \
 			$(call gb_ResTarget_get_target,$*) \
 			$(call gb_ResTarget_get_imagelist_target,$*) \
-			$(if $(gb_RUNNABLE_INSTDIR),, \
-				$(call gb_ResTarget_get_outdir_target,$*) \
-			) \
 			$(call gb_ResTarget_get_unittest_target,$*))
 
 $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) \
@@ -412,13 +409,6 @@ $(call gb_ResTarget_get_imagelist_target,$(1)) : $(call gb_ResTarget_get_target,
 $(call gb_ResTarget_get_unittest_target,$(1)) : $(call gb_ResTarget_get_target,$(1))
 $(call gb_ResTarget_get_unittest_target,$(1)) :| $(dir $(call gb_ResTarget_get_unittest_target,$(1))).dir
 $(call gb_Deliver_add_deliverable,$(call gb_ResTarget_get_unittest_target,$(1)),$(call gb_ResTarget_get_target,$(1)),$(1))
-
-ifeq ($(gb_RUNNABLE_INSTDIR),)
-$(call gb_AllLangResTarget_get_target,$(2)) : $(call gb_ResTarget_get_outdir_target,$(1))
-$(call gb_ResTarget_get_outdir_target,$(1)) : $(call gb_ResTarget_get_target,$(1))
-$(call gb_ResTarget_get_outdir_target,$(1)) :| $(dir $(call gb_ResTarget_get_outdir_target,$(1))).dir
-$(call gb_Deliver_add_deliverable,$(call gb_ResTarget_get_outdir_target,$(1)),$(call gb_ResTarget_get_target,$(1)),$(1))
-endif
 
 endef
 

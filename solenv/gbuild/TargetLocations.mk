@@ -35,7 +35,6 @@ gb_PackagePart_get_destinations = \
 	$(OUTDIR)/xml \
 
 gb_InstallScript_get_target = $(OUTDIR)/bin/$(1)$(gb_InstallScript_EXT)
-gb_ResTarget_get_outdir_target = $(OUTDIR)/bin/$(1).res
 gb_ResTarget_get_unittest_target = \
     $(OUTDIR)/unittest/install/$(LIBO_SHARE_RESOURCE_FOLDER)/$(1).res
 gb_UnoApi_get_target = $(OUTDIR)/bin/$(1).rdb

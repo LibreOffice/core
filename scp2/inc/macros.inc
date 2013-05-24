@@ -95,7 +95,7 @@
     #define GID_DIR_URE_SHARE_MISC gid_Dir_Ure_Misc
 #endif
 
-#define RESFILENAME(name,lang)                STRING(CONCAT3(name,lang,.res))
+#define RESFILENAME(name,lang)                STRING(CONCAT4(ResTarget/,name,lang,.res))
 #define READMETXTFILENAME(name,lang,ext)      STRING(CONCAT4(name,lang,.,ext))
 #define READMEFILENAME(name,lang)             STRING(CONCAT2(name,lang))
 #define EXTRAFILENAME(name,lang)              STRING(CONCAT3(name,lang,.zip))
