@@ -52,13 +52,30 @@ using namespace ::com::sun::star::container;
 void OptimizerDialog::InitDialog()
 {
    // setting the dialog properties
-    mxDialogModel->setCloseable(sal_True);
-    mxDialogModel->setHeight(sal_Int32( DIALOG_HEIGHT ));
-    mxDialogModel->setMoveable(sal_True);
-    mxDialogModel->setPositionX(200);
-    mxDialogModel->setPositionY(52);
-    mxDialogModel->setTitle(getString( STR_SUN_OPTIMIZATION_WIZARD2 ));
-    mxDialogModel->setWidth(sal_Int32( OD_DIALOG_WIDTH ) );
+    OUString pNames[] = {
+        TKGet( TK_Closeable ),
+        TKGet( TK_Height ),
+        TKGet( TK_Moveable ),
+        TKGet( TK_PositionX ),
+        TKGet( TK_PositionY ),
+        TKGet( TK_Title ),
+        TKGet( TK_Width ) };
+
+    Any pValues[] = {
+        Any( sal_True ),
+        Any( sal_Int32( DIALOG_HEIGHT ) ),
+        Any( sal_True ),
+        Any( sal_Int32( 200 ) ),
+        Any( sal_Int32( 52 ) ),
+        Any( getString( STR_SUN_OPTIMIZATION_WIZARD2 ) ),
+        Any( sal_Int32( OD_DIALOG_WIDTH ) ) };
+
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+
+    Sequence< OUString >   aNames( pNames, nCount );
+    Sequence< Any >             aValues( pValues, nCount );
+
+    mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues );
 }
 
 // -----------------------------------------------------------------------------
@@ -93,7 +110,7 @@ void OptimizerDialog::InitRoadmap()
 
         Reference< XPropertySet > xPropertySet( mxRoadmapControlModel, UNO_QUERY_THROW );
         xPropertySet->setPropertyValue( TKGet( TK_Name ), Any( TKGet( TK_rdmNavi ) ) );
-        mxRoadmapControl = mxDialog->getControl( TKGet( TK_rdmNavi ) );
+        mxRoadmapControl = mxDialogControlContainer->getControl( TKGet( TK_rdmNavi ) );
         InsertRoadmapItem( 0, sal_True, getString( STR_INTRODUCTION ), ITEM_ID_INTRODUCTION );
         InsertRoadmapItem( 1, sal_True, getString( STR_SLIDES ), ITEM_ID_SLIDES );
         InsertRoadmapItem( 2, sal_True, getString( STR_IMAGE_OPTIMIZATION ), ITEM_ID_GRAPHIC_OPTIMIZATION );
@@ -505,7 +522,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             if ( nInt16 )
             {
                 OUString aSaveAsURL;
-                FileOpenDialog aFileOpenDialog( ((UnoDialog&)mrOptimizerDialog).mxContext );
+                FileOpenDialog aFileOpenDialog( ((UnoDialog&)mrOptimizerDialog).mxMSF );
 
                 // generating default file name
                 Reference< XStorable > xStorable( mrOptimizerDialog.mxController->getModel(), UNO_QUERY );

@@ -26,9 +26,8 @@
 #include <localizationmgr.hxx>
 #include <dlgedview.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/awt/UnoControlDialogModel.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfac.hxx>
@@ -76,9 +75,12 @@ DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const OUStri
             if ( xISP.is() )
             {
                 // create dialog model
-                Reference< uno::XComponentContext > xContext = getProcessComponentContext();
-                Reference< awt::XUnoControlDialogModel > xDialogModel = awt::UnoControlDialogModel::create( xContext );
+                Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
+                Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
+                    ( "com.sun.star.awt.UnoControlDialogModel" ), UNO_QUERY );
                 Reference< XInputStream > xInput( xISP->createInputStream() );
+                Reference< XComponentContext > xContext(
+                    comphelper::getComponentContext( xMSF ) );
                 ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
                 LocalizationMgr::setStringResourceAtDialog( rDocument, rLibName, aDlgName, xDialogModel );
 

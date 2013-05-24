@@ -28,7 +28,6 @@
 #include "iderdll.hxx"
 
 #include <basic/basmgr.hxx>
-#include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/app.hxx>
@@ -285,25 +284,31 @@ void Shell::CopyDialogResources(
         return;
 
     // create dialog model
-    Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    Reference< awt::XUnoControlDialogModel > xDialogModel = awt::UnoControlDialogModel::create( xContext );
+    Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    Reference< container::XNameContainer > xDialogModel = Reference< container::XNameContainer >( xMSF->createInstance
+        ( "com.sun.star.awt.UnoControlDialogModel" ), UNO_QUERY );
     Reference< io::XInputStream > xInput( io_xISP->createInputStream() );
+    Reference< XComponentContext > xContext(
+        comphelper::getComponentContext( xMSF ) );
     ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rSourceDoc.isDocument() ? rSourceDoc.getDocument() : Reference< frame::XModel >() );
 
-    if( bSourceLocalized && bDestLocalized )
+    if( xDialogModel.is() )
     {
-        Reference< resource::XStringResourceResolver > xSourceStringResolver( xSourceMgr, UNO_QUERY );
-        LocalizationMgr::copyResourceForDroppedDialog( xDialogModel, rDlgName, xDestMgr, xSourceStringResolver );
+        if( bSourceLocalized && bDestLocalized )
+        {
+            Reference< resource::XStringResourceResolver > xSourceStringResolver( xSourceMgr, UNO_QUERY );
+            LocalizationMgr::copyResourceForDroppedDialog( xDialogModel, rDlgName, xDestMgr, xSourceStringResolver );
+        }
+        else if( bSourceLocalized )
+        {
+            LocalizationMgr::resetResourceForDialog( xDialogModel, xSourceMgr );
+        }
+        else if( bDestLocalized )
+        {
+            LocalizationMgr::setResourceIDsForDialog( xDialogModel, xDestMgr );
+        }
+        io_xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, rDestDoc.isDocument() ? rDestDoc.getDocument() : Reference< frame::XModel >() );
     }
-    else if( bSourceLocalized )
-    {
-        LocalizationMgr::resetResourceForDialog( xDialogModel, xSourceMgr );
-    }
-    else if( bDestLocalized )
-    {
-        LocalizationMgr::setResourceIDsForDialog( xDialogModel, xDestMgr );
-    }
-    io_xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, rDestDoc.isDocument() ? rDestDoc.getDocument() : Reference< frame::XModel >() );
 }
 
 

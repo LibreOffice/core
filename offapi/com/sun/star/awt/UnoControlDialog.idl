@@ -19,14 +19,28 @@
 #ifndef __com_sun_star_awt_UnoControlDialog_idl__
 #define __com_sun_star_awt_UnoControlDialog_idl__
 
-#include <com/sun/star/awt/XUnoControlDialog.idl>
+#include <com/sun/star/awt/UnoControlContainer.idl>
 
-module com {  module sun {  module star {  module awt {
+#include <com/sun/star/awt/XTopWindow.idl>
+
+#include <com/sun/star/awt/XDialog2.idl>
+
+
+
+ module com {  module sun {  module star {  module awt {
 
 
 /** specifies a dialog control.
  */
-published service UnoControlDialog : XUnoControlDialog;
+published service UnoControlDialog
+{
+    service com::sun::star::awt::UnoControlContainer;
+
+    interface com::sun::star::awt::XTopWindow;
+
+    interface com::sun::star::awt::XDialog2;
+
+};
 
 
 }; }; }; };

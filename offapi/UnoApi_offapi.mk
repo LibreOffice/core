@@ -60,8 +60,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt,\
 	PopupMenu \
 	TabController \
 	Toolkit \
-	UnoControlDialog \
-	UnoControlDialogModel \
 	UnoControlDialogModelProvider \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/grid,\
@@ -518,7 +516,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt,\
 	UnoControlCurrencyFieldModel \
 	UnoControlDateField \
 	UnoControlDateFieldModel \
+	UnoControlDialog \
 	UnoControlDialogElement \
+	UnoControlDialogModel \
 	UnoControlEdit \
 	UnoControlEditModel \
 	UnoControlFileControl \
@@ -1876,8 +1876,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	XTopWindowListener \
 	XUnitConversion \
 	XUnoControlContainer \
-	XUnoControlDialog \
-	XUnoControlDialogModel \
 	XUserInputInterception \
 	XVclContainer \
 	XVclContainerListener \

@@ -33,8 +33,6 @@
 #include "baside3.hxx"
 
 #include <com/sun/star/awt/Toolkit.hpp>
-#include <com/sun/star/awt/UnoControlDialog.hpp>
-#include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/resource/StringResource.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -93,7 +91,7 @@ void DlgEditor::ShowDialog()
     uno::Reference< uno::XComponentContext >  xContext = getProcessComponentContext();
 
     // create a dialog
-    uno::Reference< awt::XUnoControlDialog > xDlg = awt::UnoControlDialog::create( xContext );
+    uno::Reference< awt::XControl > xDlg( getProcessServiceFactory()->createInstance( "com.sun.star.awt.UnoControlDialog" ), uno::UNO_QUERY );
 
     // clone the dialog model
     uno::Reference< util::XCloneable > xC( m_xUnoControlDialogModel, uno::UNO_QUERY );
@@ -875,9 +873,9 @@ void DlgEditor::Paste()
             if ( xTransf->isDataFlavorSupported( m_ClipboardDataFlavors[0] ) )
             {
                 // create clipboard dialog model from xml
-                Reference< uno::XComponentContext > xContext = getProcessComponentContext();
-                Reference< awt::XUnoControlDialogModel > xClipDialogModel =
-                    awt::UnoControlDialogModel::create( xContext );
+                Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
+                Reference< container::XNameContainer > xClipDialogModel( xMSF->createInstance(
+                    "com.sun.star.awt.UnoControlDialogModel" ), uno::UNO_QUERY );
 
                 bool bSourceIsLocalized = false;
                 Sequence< sal_Int8 > DialogModelBytes;
@@ -917,93 +915,102 @@ void DlgEditor::Paste()
                     aAny >>= DialogModelBytes;
                 }
 
-                ::xmlscript::importDialogModel( ::xmlscript::createInputStream( rtl::ByteSequence(DialogModelBytes.getArray(), DialogModelBytes.getLength()) ) , xClipDialogModel, xContext, m_xDocument );
+                if ( xClipDialogModel.is() )
+                {
+                    Reference< XComponentContext > xContext(
+                        comphelper::getComponentContext( xMSF ) );
+                    ::xmlscript::importDialogModel( ::xmlscript::createInputStream( rtl::ByteSequence(DialogModelBytes.getArray(), DialogModelBytes.getLength()) ) , xClipDialogModel, xContext, m_xDocument );
+                }
 
                 // get control models from clipboard dialog model
-                Sequence< OUString > aNames = xClipDialogModel->getElementNames();
-                const OUString* pNames = aNames.getConstArray();
-                sal_uInt32 nCtrls = aNames.getLength();
-
-                Reference< resource::XStringResourcePersistence > xStringResourcePersistence;
-                if( nCtrls > 0 && bSourceIsLocalized )
+                Reference< ::com::sun::star::container::XNameAccess > xNameAcc( xClipDialogModel, UNO_QUERY );
+                if ( xNameAcc.is() )
                 {
-                    xStringResourcePersistence = css::resource::StringResource::create( getProcessComponentContext() );
-                    xStringResourcePersistence->importBinary( aResData );
-                }
-                for( sal_uInt32 n = 0; n < nCtrls; n++ )
-                {
-                    Any aA = xClipDialogModel->getByName( pNames[n] );
-                    Reference< ::com::sun::star::awt::XControlModel > xCM;
-                    aA >>= xCM;
+                       Sequence< OUString > aNames = xNameAcc->getElementNames();
+                       const OUString* pNames = aNames.getConstArray();
+                    sal_uInt32 nCtrls = aNames.getLength();
 
-                    // clone the control model
-                    Reference< util::XCloneable > xClone( xCM, uno::UNO_QUERY );
-                    Reference< awt::XControlModel > xCtrlModel( xClone->createClone(), uno::UNO_QUERY );
-
-                    DlgEdObj* pCtrlObj = new DlgEdObj();
-                    pCtrlObj->SetDlgEdForm(pDlgEdForm);         // set parent form
-                    pDlgEdForm->AddChild(pCtrlObj);             // add child to parent form
-                    pCtrlObj->SetUnoControlModel( xCtrlModel ); // set control model
-
-                    // set new name
-                    OUString aOUniqueName( pCtrlObj->GetUniqueName() );
-                    Reference< beans::XPropertySet > xPSet( xCtrlModel , UNO_QUERY );
-                    Any aUniqueName;
-                    aUniqueName <<= aOUniqueName;
-                    xPSet->setPropertyValue( DLGED_PROP_NAME, aUniqueName );
-
-                    // set tabindex
-                    Reference< container::XNameAccess > xNA( m_xUnoControlDialogModel , UNO_QUERY );
-                       Sequence< OUString > aNames_ = xNA->getElementNames();
-                    Any aTabIndex;
-                    aTabIndex <<= (sal_Int16) aNames_.getLength();
-                    xPSet->setPropertyValue( DLGED_PROP_TABINDEX, aTabIndex );
-
-                    if( bLocalized )
+                    Reference< resource::XStringResourcePersistence > xStringResourcePersistence;
+                    if( nCtrls > 0 && bSourceIsLocalized )
                     {
-                        Any aControlAny;
-                        aControlAny <<= xCtrlModel;
-                        if( bSourceIsLocalized && xStringResourcePersistence.is() )
+                        xStringResourcePersistence = css::resource::StringResource::create( getProcessComponentContext() );
+                        xStringResourcePersistence->importBinary( aResData );
+                    }
+                    for( sal_uInt32 n = 0; n < nCtrls; n++ )
+                    {
+                           Any aA = xNameAcc->getByName( pNames[n] );
+                        Reference< ::com::sun::star::awt::XControlModel > xCM;
+                           aA >>= xCM;
+
+                        // clone the control model
+                        Reference< util::XCloneable > xClone( xCM, uno::UNO_QUERY );
+                        Reference< awt::XControlModel > xCtrlModel( xClone->createClone(), uno::UNO_QUERY );
+
+                        DlgEdObj* pCtrlObj = new DlgEdObj();
+                        pCtrlObj->SetDlgEdForm(pDlgEdForm);         // set parent form
+                        pDlgEdForm->AddChild(pCtrlObj);             // add child to parent form
+                        pCtrlObj->SetUnoControlModel( xCtrlModel ); // set control model
+
+                        // set new name
+                        OUString aOUniqueName( pCtrlObj->GetUniqueName() );
+                        Reference< beans::XPropertySet > xPSet( xCtrlModel , UNO_QUERY );
+                        Any aUniqueName;
+                        aUniqueName <<= aOUniqueName;
+                        xPSet->setPropertyValue( DLGED_PROP_NAME, aUniqueName );
+
+                        // set tabindex
+                        Reference< container::XNameAccess > xNA( m_xUnoControlDialogModel , UNO_QUERY );
+                           Sequence< OUString > aNames_ = xNA->getElementNames();
+                        Any aTabIndex;
+                        aTabIndex <<= (sal_Int16) aNames_.getLength();
+                        xPSet->setPropertyValue( DLGED_PROP_TABINDEX, aTabIndex );
+
+                        if( bLocalized )
                         {
-                            Reference< resource::XStringResourceResolver >
-                                xSourceStringResolver( xStringResourcePersistence, UNO_QUERY );
-                            LocalizationMgr::copyResourcesForPastedEditorObject( this,
-                                aControlAny, aOUniqueName, xSourceStringResolver );
+                            Any aControlAny;
+                            aControlAny <<= xCtrlModel;
+                            if( bSourceIsLocalized && xStringResourcePersistence.is() )
+                            {
+                                Reference< resource::XStringResourceResolver >
+                                    xSourceStringResolver( xStringResourcePersistence, UNO_QUERY );
+                                LocalizationMgr::copyResourcesForPastedEditorObject( this,
+                                    aControlAny, aOUniqueName, xSourceStringResolver );
+                            }
+                            else
+                            {
+                                LocalizationMgr::setControlResourceIDsForNewEditorObject
+                                    ( this, aControlAny, aOUniqueName );
+                            }
                         }
-                        else
-                        {
-                            LocalizationMgr::setControlResourceIDsForNewEditorObject
-                                ( this, aControlAny, aOUniqueName );
-                        }
+
+                        // insert control model in editor dialog model
+                        Any aCtrlModel;
+                        aCtrlModel <<= xCtrlModel;
+                        m_xUnoControlDialogModel->insertByName( aOUniqueName , aCtrlModel );
+
+                        // insert object into drawing page
+                        pDlgEdModel->GetPage(0)->InsertObject( pCtrlObj );
+                        pCtrlObj->SetRectFromProps();
+                        pCtrlObj->UpdateStep();
+                        pDlgEdForm->UpdateTabOrderAndGroups();
+                        pCtrlObj->StartListening();                         // start listening
+
+                        // mark object
+                        SdrPageView* pPgView = pDlgEdView->GetSdrPageView();
+                        pDlgEdView->MarkObj( pCtrlObj, pPgView, false, true);
                     }
 
-                    // insert control model in editor dialog model
-                    Any aCtrlModel;
-                    aCtrlModel <<= xCtrlModel;
-                    m_xUnoControlDialogModel->insertByName( aOUniqueName , aCtrlModel );
+                    // center marked objects in dialog editor form
+                    Point aMarkCenter = (pDlgEdView->GetMarkedObjRect()).Center();
+                    Point aFormCenter = (pDlgEdForm->GetSnapRect()).Center();
+                    Point aPoint = aFormCenter - aMarkCenter;
+                    Size  aSize( aPoint.X() , aPoint.Y() );
+                    pDlgEdView->MoveMarkedObj( aSize );                     // update of control model properties (position + size) in NbcMove
+                    pDlgEdView->MarkListHasChanged();
 
-                    // insert object into drawing page
-                    pDlgEdModel->GetPage(0)->InsertObject( pCtrlObj );
-                    pCtrlObj->SetRectFromProps();
-                    pCtrlObj->UpdateStep();
-                    pDlgEdForm->UpdateTabOrderAndGroups();
-                    pCtrlObj->StartListening();                         // start listening
-
-                    // mark object
-                    SdrPageView* pPgView = pDlgEdView->GetSdrPageView();
-                    pDlgEdView->MarkObj( pCtrlObj, pPgView, false, true);
+                    // dialog model changed
+                    SetDialogModelChanged(true);
                 }
-
-                // center marked objects in dialog editor form
-                Point aMarkCenter = (pDlgEdView->GetMarkedObjRect()).Center();
-                Point aFormCenter = (pDlgEdForm->GetSnapRect()).Center();
-                Point aPoint = aFormCenter - aMarkCenter;
-                Size  aSize( aPoint.X() , aPoint.Y() );
-                pDlgEdView->MoveMarkedObj( aSize );                     // update of control model properties (position + size) in NbcMove
-                pDlgEdView->MarkListHasChanged();
-
-                // dialog model changed
-                SetDialogModelChanged(true);
             }
         }
     }

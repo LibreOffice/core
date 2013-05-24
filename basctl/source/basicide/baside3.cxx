@@ -35,7 +35,6 @@
 #include "objdlg.hxx"
 
 #include <basic/basmgr.hxx>
-#include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -945,7 +944,8 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
 {
     bool bDone = false;
 
-    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+    Reference< XComponentContext > xContext( comphelper::getComponentContext( xMSF ) );
     Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_SIMPLE);
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
@@ -977,9 +977,10 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
         try
         {
             // create dialog model
-            Reference< awt::XUnoControlDialogModel > xDialogModel = awt::UnoControlDialogModel::create( xContext );
+            Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
+                ( "com.sun.star.awt.UnoControlDialogModel" ), UNO_QUERY_THROW );
 
-            Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create(xContext) );
+            Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
 
             Reference< XInputStream > xInput;
             if( xSFI->exists( aCurPath ) )
@@ -987,7 +988,20 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
 
             ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
 
-            OUString aXmlDlgName = xDialogModel->getName();
+            OUString aXmlDlgName;
+            Reference< beans::XPropertySet > xDialogModelPropSet( xDialogModel, UNO_QUERY );
+            if( xDialogModelPropSet.is() )
+            {
+                try
+                {
+                    Any aXmlDialogNameAny = xDialogModelPropSet->getPropertyValue( DLGED_PROP_NAME );
+                    OUString aOUXmlDialogName;
+                    aXmlDialogNameAny >>= aOUXmlDialogName;
+                    aXmlDlgName = aOUXmlDialogName;
+                }
+                catch(const beans::UnknownPropertyException& )
+                {}
+            }
             bool bValidName = !aXmlDlgName.isEmpty();
             OSL_ASSERT( bValidName );
             if( !bValidName )
@@ -1172,8 +1186,30 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
 
             if( eNameClashMode == CLASH_RENAME_DIALOG )
             {
-                xDialogModel->setName( aNewDlgName );
-                LocalizationMgr::renameStringResourceIDs( rDocument, aLibName, aNewDlgName, xDialogModel );
+                bool bRenamed = false;
+                if( xDialogModelPropSet.is() )
+                {
+                    try
+                    {
+                        Any aXmlDialogNameAny;
+                        aXmlDialogNameAny <<= OUString( aNewDlgName );
+                        xDialogModelPropSet->setPropertyValue( DLGED_PROP_NAME, aXmlDialogNameAny );
+                        bRenamed = true;
+                    }
+                    catch(const beans::UnknownPropertyException& )
+                    {}
+                }
+
+
+                if( bRenamed )
+                {
+                    LocalizationMgr::renameStringResourceIDs( rDocument, aLibName, aNewDlgName, xDialogModel );
+                }
+                else
+                {
+                    // TODO: Assertion?
+                    return bDone;
+                }
             }
 
             Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );

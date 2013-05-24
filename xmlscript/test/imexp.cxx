@@ -35,20 +35,22 @@
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/awt/Toolkit.hpp>
-#include <com/sun/star/awt/UnoControlDialog.hpp>
-#include <com/sun/star/awt/UnoControlDialogModel.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
+
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
+
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 
 using namespace ::rtl;
@@ -88,7 +90,7 @@ Reference< XComponentContext > createInitialComponentContext(
 
 // -----------------------------------------------------------------------
 
-Reference< awt::XUnoControlDialogModel > importFile(
+Reference< container::XNameContainer > importFile(
     char const * fname,
     Reference< XComponentContext > const & xContext )
 {
@@ -104,7 +106,8 @@ Reference< awt::XUnoControlDialogModel > importFile(
         ::fread( bytes.getArray(), nLength, 1, f );
         ::fclose( f );
 
-        Reference< awt::XUnoControlDialogModel > xModel = awt::UnoControlDialogModel::create( xContext );
+        Reference< container::XNameContainer > xModel( xContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.awt.UnoControlDialogModel", xContext ), UNO_QUERY );
         ::xmlscript::importDialogModel( ::xmlscript::createInputStream( bytes ), xModel, xContext );
 
         return xModel;
@@ -183,10 +186,11 @@ void MyApp::Main()
             importFile( aParam1.getStr(), xContext ) );
         OSL_ASSERT( xModel.is() );
 
-        Reference< awt::XUnoControlDialog > xDlg = UnoControlDialog::create( xContext );;
-        xDlg->setModel( xModel );
+        Reference< awt::XControl > xDlg( xMSF->createInstance( "com.sun.star.awt.UnoControlDialog" ), UNO_QUERY );
+        xDlg->setModel( Reference< awt::XControlModel >::query( xModel ) );
         xDlg->createPeer( xToolkit, 0 );
-        xDlg->execute();
+        Reference< awt::XDialog > xD( xDlg, UNO_QUERY );
+        xD->execute();
 
         if (GetCommandLineParamCount() == 3)
         {

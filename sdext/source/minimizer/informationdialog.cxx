@@ -216,13 +216,30 @@ void InformationDialog::InitDialog()
         nDialogHeight -= 22;
 
    // setting the dialog properties
-    mxDialogModel->setCloseable(sal_True);
-    mxDialogModel->setHeight(nDialogHeight);
-    mxDialogModel->setMoveable(sal_True);
-    mxDialogModel->setPositionX(245);
-    mxDialogModel->setPositionY(115);
-    mxDialogModel->setTitle(getString( STR_SUN_OPTIMIZATION_WIZARD2 ));
-    mxDialogModel->setWidth(sal_Int32( DIALOG_WIDTH ) );
+    OUString pNames[] = {
+        TKGet( TK_Closeable ),
+        TKGet( TK_Height ),
+        TKGet( TK_Moveable ),
+        TKGet( TK_PositionX ),
+        TKGet( TK_PositionY ),
+        TKGet( TK_Title ),
+        TKGet( TK_Width ) };
+
+    Any pValues[] = {
+        Any( sal_True ),
+        Any( nDialogHeight ),
+        Any( sal_True ),
+        Any( sal_Int32( 245 ) ),
+        Any( sal_Int32( 115 ) ),
+        Any( getString( STR_SUN_OPTIMIZATION_WIZARD2 ) ),
+        Any( sal_Int32( DIALOG_WIDTH ) ) };
+
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
+
+    Sequence< OUString >   aNames( pNames, nCount );
+    Sequence< Any >             aValues( pValues, nCount );
+
+    mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues );
 
     sal_Int64 nSource = mnSourceSize;
     sal_Int64 nDest   = mnDestSize;

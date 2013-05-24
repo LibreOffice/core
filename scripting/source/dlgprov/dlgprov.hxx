@@ -21,20 +21,18 @@
 #define SCRIPTING_DLGPROV_HXX
 
 #include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XContainerWindowProvider.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/awt/XDialogProvider2.hpp>
-#include <com/sun/star/awt/XUnoControlDialog.hpp>
-#include <com/sun/star/awt/XUnoControlDialogModel.hpp>
-#include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/awt/XContainerWindowProvider.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/script/XScriptEventsAttacher.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/beans/XIntrospectionAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/resource/XStringResourceManager.hpp>
 
 #include <cppuhelper/implbase4.hxx>
 #include <osl/mutex.hxx>
@@ -55,14 +53,14 @@ namespace dlgprov
     // =============================================================================
     // class DialogProviderImpl
     // =============================================================================
-    ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > lcl_getStringResourceManager(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_xContext,const OUString& i_sURL);;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnoControlDialogModel > lcl_createDialogModel(
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > lcl_createControlModel(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_xContext);
+    ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > lcl_getStringResourceManager(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_xContext,const OUString& i_sURL);
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > lcl_createDialogModel(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_xContext,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInput,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >& xStringResourceManager,
-                const OUString& aDialogSourceURL) throw ( ::com::sun::star::uno::Exception );
+                const ::com::sun::star::uno::Any &aDialogSourceURL) throw ( ::com::sun::star::uno::Exception );
 
     typedef ::cppu::WeakImplHelper4<
         ::com::sun::star::lang::XServiceInfo,
@@ -82,11 +80,11 @@ namespace dlgprov
         std::auto_ptr< BasicRTLParams > m_BasicInfo;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
-        OUString msDialogLibName;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnoControlDialogModel > createDialogModel( const OUString& sURL );
+    OUString msDialogLibName;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > createDialogModel( const OUString& sURL );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnoControlDialog > createDialogControl(
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > createDialogControl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxDialogModel,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent );
 
@@ -97,11 +95,11 @@ namespace dlgprov
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > inspectHandler(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxHandler );
     // helper methods
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnoControlDialogModel > createDialogModel(
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createDialogModel(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInput,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >& xStringResourceManager,
-                const OUString &aDialogSourceURL) throw ( ::com::sun::star::uno::Exception );
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XUnoControlDialogModel > createDialogModelForBasic() throw ( ::com::sun::star::uno::Exception );
+                const ::com::sun::star::uno::Any &aDialogSourceURL) throw ( ::com::sun::star::uno::Exception );
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > createDialogModelForBasic() throw ( ::com::sun::star::uno::Exception );
 
         // XDialogProvider / XDialogProvider2 impl method
         virtual ::com::sun::star::uno::Reference < ::com::sun::star::awt::XControl > SAL_CALL createDialogImpl(

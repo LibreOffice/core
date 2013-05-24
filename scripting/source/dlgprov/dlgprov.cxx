@@ -21,8 +21,6 @@
 #include "DialogModelProvider.hxx"
 #include "dlgprov.hxx"
 #include "dlgevtatt.hxx"
-#include <com/sun/star/awt/UnoControlDialog.hpp>
-#include <com/sun/star/awt/UnoControlDialogModel.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
@@ -122,20 +120,23 @@ static OUString aResourceResolverPropName("ResourceResolver");
         }
         return xStringResourceManager;
     }
-    static Reference< XUnoControlDialogModel > lcl_createControlModel(const Reference< XComponentContext >& i_xContext)
+    Reference< container::XNameContainer > lcl_createControlModel(const Reference< XComponentContext >& i_xContext)
     {
-        Reference< XUnoControlDialogModel > xControlModel = UnoControlDialogModel::create( i_xContext );
+        Reference< XMultiComponentFactory > xSMgr_( i_xContext->getServiceManager(), UNO_QUERY_THROW );
+        Reference< container::XNameContainer > xControlModel( xSMgr_->createInstanceWithContext( OUString( "com.sun.star.awt.UnoControlDialogModel"  ), i_xContext ), UNO_QUERY_THROW );
         return xControlModel;
     }
-    Reference< XUnoControlDialogModel > lcl_createDialogModel( const Reference< XComponentContext >& i_xContext,
+    Reference< container::XNameContainer > lcl_createDialogModel( const Reference< XComponentContext >& i_xContext,
         const Reference< io::XInputStream >& xInput,
         const Reference< frame::XModel >& xModel,
         const Reference< resource::XStringResourceManager >& xStringResourceManager,
-        const OUString& aDialogSourceURL) throw ( Exception )
+        const Any &aDialogSourceURL) throw ( Exception )
     {
-        Reference< XUnoControlDialogModel > xDialogModel(  lcl_createControlModel(i_xContext) );
+        Reference< container::XNameContainer > xDialogModel(  lcl_createControlModel(i_xContext) );
 
-        xDialogModel->setDialogSourceURL( aDialogSourceURL );
+        OUString aDlgSrcUrlPropName( "DialogSourceURL"  );
+        Reference< beans::XPropertySet > xDlgPropSet( xDialogModel, UNO_QUERY );
+        xDlgPropSet->setPropertyValue( aDlgSrcUrlPropName, aDialogSourceURL );
 
         // #TODO we really need to detect the source of the Dialog, is it
         // the dialog. E.g. if the dialog was created from basic ( then we just
@@ -254,15 +255,15 @@ static OUString aResourceResolverPropName("ResourceResolver");
         return xStringResourceManager;
     }
 
-    Reference< XUnoControlDialogModel > DialogProviderImpl::createDialogModel(
+    Reference< container::XNameContainer > DialogProviderImpl::createDialogModel(
         const Reference< io::XInputStream >& xInput,
         const Reference< resource::XStringResourceManager >& xStringResourceManager,
-        const OUString &aDialogSourceURL) throw ( Exception )
+        const Any &aDialogSourceURL) throw ( Exception )
     {
         return lcl_createDialogModel(m_xContext,xInput,m_xModel,xStringResourceManager,aDialogSourceURL);
     }
 
-    Reference< XUnoControlDialogModel > DialogProviderImpl::createDialogModelForBasic() throw ( Exception )
+    Reference< XControlModel > DialogProviderImpl::createDialogModelForBasic() throw ( Exception )
     {
         if ( !m_BasicInfo.get() )
             // shouln't get here
@@ -270,10 +271,13 @@ static OUString aResourceResolverPropName("ResourceResolver");
         Reference< resource::XStringResourceManager > xStringResourceManager = getStringResourceFromDialogLibrary( m_BasicInfo->mxDlgLib );
 
         OUString aURL("" );
-        return createDialogModel( m_BasicInfo->mxInput, xStringResourceManager, aURL );
+        Any aDialogSourceURL;
+        aDialogSourceURL <<= aURL;
+        Reference< XControlModel > xCtrlModel( createDialogModel( m_BasicInfo->mxInput, xStringResourceManager, aDialogSourceURL ), UNO_QUERY_THROW );
+        return xCtrlModel;
     }
 
-    Reference< XUnoControlDialogModel > DialogProviderImpl::createDialogModel( const OUString& sURL )
+    Reference< XControlModel > DialogProviderImpl::createDialogModel( const OUString& sURL )
     {
 
         OUString aURL( sURL );
@@ -443,7 +447,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         }
 
         // import dialog model
-        Reference< XUnoControlDialogModel > xCtrlModel;
+        Reference< XControlModel > xCtrlModel;
         if ( xInput.is() && m_xContext.is() )
         {
             Reference< resource::XStringResourceManager > xStringResourceManager;
@@ -456,51 +460,67 @@ static OUString aResourceResolverPropName("ResourceResolver");
                 xStringResourceManager = getStringResourceFromDialogLibrary( xDialogLib );
             }
 
-            xCtrlModel = createDialogModel( xInput , xStringResourceManager, aURL  );
+            Any aDialogSourceURLAny;
+            aDialogSourceURLAny <<= aURL;
+
+            Reference< container::XNameContainer > xDialogModel( createDialogModel( xInput , xStringResourceManager, aDialogSourceURLAny  ), UNO_QUERY_THROW);
+
+            xCtrlModel = Reference< XControlModel >( xDialogModel, UNO_QUERY );
         }
         return xCtrlModel;
     }
 
     // -----------------------------------------------------------------------------
 
-    Reference< XUnoControlDialog > DialogProviderImpl::createDialogControl
+    Reference< XControl > DialogProviderImpl::createDialogControl
         ( const Reference< XControlModel >& rxDialogModel, const Reference< XWindowPeer >& xParent )
     {
         OSL_ENSURE( rxDialogModel.is(), "DialogProviderImpl::getDialogControl: no dialog model" );
 
-        Reference< XUnoControlDialog > xDialogControl;
+        Reference< XControl > xDialogControl;
 
         if ( m_xContext.is() )
         {
-            xDialogControl = UnoControlDialog::create( m_xContext );
+            Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
 
-            // set the model
-            if ( rxDialogModel.is() )
-                xDialogControl->setModel( rxDialogModel );
-
-            // set visible
-            xDialogControl->setVisible( sal_False );
-
-            // get the parent of the dialog control
-            Reference< XWindowPeer > xPeer;
-            if( xParent.is() )
+            if ( xSMgr.is() )
             {
-                xPeer = xParent;
-            }
-            else if ( m_xModel.is() )
-            {
-                Reference< frame::XController > xController( m_xModel->getCurrentController(), UNO_QUERY );
-                if ( xController.is() )
+                xDialogControl = Reference< XControl >( xSMgr->createInstanceWithContext(
+                    OUString( "com.sun.star.awt.UnoControlDialog"  ), m_xContext ), UNO_QUERY );
+
+                if ( xDialogControl.is() )
                 {
-                    Reference< frame::XFrame > xFrame( xController->getFrame(), UNO_QUERY );
-                    if ( xFrame.is() )
-                        xPeer = Reference< XWindowPeer>( xFrame->getContainerWindow(), UNO_QUERY );
+                    // set the model
+                    if ( rxDialogModel.is() )
+                        xDialogControl->setModel( rxDialogModel );
+
+                    // set visible
+                    Reference< XWindow > xW( xDialogControl, UNO_QUERY );
+                    if ( xW.is() )
+                        xW->setVisible( sal_False );
+
+                    // get the parent of the dialog control
+                    Reference< XWindowPeer > xPeer;
+                    if( xParent.is() )
+                    {
+                        xPeer = xParent;
+                    }
+                    else if ( m_xModel.is() )
+                    {
+                        Reference< frame::XController > xController( m_xModel->getCurrentController(), UNO_QUERY );
+                        if ( xController.is() )
+                        {
+                            Reference< frame::XFrame > xFrame( xController->getFrame(), UNO_QUERY );
+                            if ( xFrame.is() )
+                                xPeer = Reference< XWindowPeer>( xFrame->getContainerWindow(), UNO_QUERY );
+                        }
+                    }
+
+                    // create a peer
+                    Reference< XToolkit> xToolkit( Toolkit::create( m_xContext ), UNO_QUERY_THROW );
+                    xDialogControl->createPeer( xToolkit, xPeer );
                 }
             }
-
-            // create a peer
-            Reference< XToolkit> xToolkit( Toolkit::create( m_xContext ), UNO_QUERY_THROW );
-            xDialogControl->createPeer( xToolkit, xPeer );
         }
 
         return xDialogControl;
