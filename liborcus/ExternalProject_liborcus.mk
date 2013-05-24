@@ -13,7 +13,7 @@ $(eval $(call gb_ExternalProject_use_autoconf,liborcus,build))
 
 $(eval $(call gb_ExternalProject_use_externals,liborcus, \
     boost_headers \
-	boostsystem \
+	boost_system \
     zlib \
 ))
 
@@ -38,7 +38,7 @@ endif
 ifeq ($(SYSTEM_BOOST),YES)
 liborcus_LIBS+=$(BOOST_SYSTEM_LIB)
 else
-liborcus_LIBS+=$(SOLARLIB) -lboostsystem
+liborcus_LIBS+=$(SOLARLIB) -lboost_system
 endif
 ifeq ($(OS),ANDROID)
 liborcus_LIBS+=-lgnustl_shared -lm

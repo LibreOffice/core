@@ -1,3 +1,5 @@
 m4 - Macros to locate and utilise pkg-config.
 
+The ax_*.m4 files are from GNU autoconf-archive, http://www.gnu.org/software/autoconf-archive/
+
 work around m4 bracket stripping in MINGWSTRIP construction

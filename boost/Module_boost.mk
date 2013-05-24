@@ -12,8 +12,8 @@ $(eval $(call gb_Module_Module,boost))
 ifeq ($(SYSTEM_BOOST),NO)
 
 $(eval $(call gb_Module_add_targets,boost,\
-	StaticLibrary_boostdatetime \
-	StaticLibrary_boostsystem \
+	StaticLibrary_boost_date_time \
+	StaticLibrary_boost_system \
 	UnpackedTarball_boost \
 ))
 
