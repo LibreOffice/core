@@ -1044,6 +1044,10 @@ endef
 
 else # ! SYSTEM_FREETYPE
 
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
+	freetype \
+))
+
 define gb_LinkTarget__use_freetype_headers
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,freetype)/include \
