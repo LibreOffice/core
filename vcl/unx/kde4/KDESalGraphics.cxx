@@ -300,6 +300,9 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             if ( nControlState & CTRL_STATE_ROLLOVER )
                 option.state |= QStyle::State_Selected;
 
+            if ( nControlState & CTRL_STATE_SELECTED ) // Passing State_Sunken is currently not documented.
+                option.state |= QStyle::State_Sunken;  // But some kinds of QStyle interpret it.
+
             draw( QStyle::CE_MenuBarItem, &option, m_image,
                   vclStateValue2StateFlag(nControlState, value) );
         }
