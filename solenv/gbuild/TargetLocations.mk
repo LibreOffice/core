@@ -24,7 +24,6 @@ gb_CliNativeLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliNativeLib
 gb_CliUnoApi_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliUnoApi_EXT)
 gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
 gb_Executable_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1)$(gb_Executable_EXT_for_build)
-gb_Extension_get_target = $(OUTDIR)/bin/$(1).oxt
 gb_Pagein_get_outdir_target = $(OUTDIR)/bin/pagein-$(1)
 gb_PackagePart_get_destinations = \
 	$(INSTDIR) \
@@ -96,9 +95,9 @@ gb_GenCxxObject_get_target = $(WORKDIR)/GenCxxObject/$(1).o
 gb_Executable_get_external_headers_target = $(WORKDIR)/ExternalHeaders/Executable/$(1)
 gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
 gb_Executable_get_runtime_target = $(WORKDIR_FOR_BUILD)/Executable/$(1).run
-gb_ExtensionTarget_get_target = $(WORKDIR)/ExtensionTarget/$(1).oxt
-gb_ExtensionTarget_get_rootdir = $(WORKDIR)/ExtensionTarget/$(1)/root
-gb_ExtensionTarget_get_workdir = $(WORKDIR)/ExtensionTarget/$(1)
+gb_Extension_get_target = $(WORKDIR)/Extension/$(1).oxt
+gb_Extension_get_rootdir = $(WORKDIR)/Extension/$(1)/root
+gb_Extension_get_workdir = $(WORKDIR)/Extension/$(1)
 gb_ExternalPackage_get_target = $(WORKDIR)/ExternalPackage/$(1)
 gb_ExternalProject_get_statedir = $(WORKDIR)/ExternalProject/$(1)
 gb_ExternalProject_get_preparation_target = $(WORKDIR)/ExternalProject/$(1).prepare
@@ -259,7 +258,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	DescriptionTranslateTarget \
 	Dictionary \
 	ExternalPackage \
-	ExtensionTarget \
+	Extension \
 	Gallery \
 	GeneratedPackage \
 	HelpTarget \
@@ -328,7 +327,6 @@ $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	CliNativeLibrary \
 	CliUnoApi \
 	Executable \
-	Extension \
 	InstallScript \
 	Library \
 	StaticLibrary \

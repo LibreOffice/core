@@ -396,9 +396,9 @@ gb_InstallScript_EXT := .ins
 gb_CliAssemblyTarget_POLICYEXT :=
 gb_CliAssemblyTarget_get_dll :=
 
-# ExtensionTarget class
+# Extension class
 
-gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/LICENSE
+gb_Extension_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/LICENSE
 
 # UnpackedTarget class
 

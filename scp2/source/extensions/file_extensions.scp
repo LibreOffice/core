@@ -30,7 +30,7 @@ File gid_File_Oxt_Presentation_Minimizer
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
     Dir = gid_Brand_Dir_Share_Extensions_Presentation_Minimizer;
-    Name = "presentation-minimizer.oxt";
+    Name = "Extension/presentation-minimizer.oxt";
 End
 
 #endif
@@ -43,7 +43,7 @@ File gid_File_Oxt_MediaWiki
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
     Dir = gid_Brand_Dir_Share_Extensions_MediaWiki;
-    Name = "wiki-publisher.oxt";
+    Name = "Extension/wiki-publisher.oxt";
 End
 
 #endif
@@ -173,7 +173,7 @@ File gid_File_Oxt_NLPSolver
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
     Dir = gid_Brand_Dir_Share_Extensions_NLPSolver;
-    Name = "nlpsolver.oxt";
+    Name = "Extension/nlpsolver.oxt";
 End
 
 #endif
@@ -199,7 +199,7 @@ File gid_File_Oxt_MySQLConnector
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
     Dir = gid_Brand_Dir_Share_Extensions_MySQLConnector;
-    Name = "mysql-connector-ooo.oxt";
+    Name = "Extension/mysql-connector-ooo.oxt";
 End
 
 #endif

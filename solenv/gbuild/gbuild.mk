@@ -331,9 +331,8 @@ include $(foreach class, \
 	Configuration \
 	HelpTarget \
 	AllLangHelp \
-	ExtensionTarget \
-	Dictionary \
 	Extension \
+	Dictionary \
 	InstallModuleTarget \
 	InstallModule \
 	InstallScript \
