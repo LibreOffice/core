@@ -60,11 +60,11 @@ class ImpressHTMLExporter(ConfiguredExporter):
         size = session.cp_Design.cp_OptimizeDisplaySize
         if (size ==  0):
             return self.SMALL_IMAGE
-        elif (size ==  1)
+        elif (size ==  1):
             return self.MEDIUM_IMAGE
-        elif (size ==  2)
+        elif (size ==  2):
             return self.LARGE_IMAGE
         return self.MEDIUM_IMAGE
 
-    def getSession(doc)
+    def getSession(doc):
         return doc.getSettings().cp_DefaultSession
