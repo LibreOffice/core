@@ -1678,11 +1678,14 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
             aSize = Size( 16, 12 );
         else
             aSize = Size( 26, 24 );
-        if( mnDDStyle == PUSHBUTTON_DROPDOWN_MENUBUTTON )
-            aSize.Width() += 4;
     }
     else if ( IsImage() && ! (ImplGetButtonState() & BUTTON_DRAW_NOIMAGE) )
         aSize = GetModeImage().GetSizePixel();
+    if( mnDDStyle == PUSHBUTTON_DROPDOWN_MENUBUTTON )
+    {
+        long nSymbolSize = GetTextHeight() / 2 + 1;
+        aSize.Width() += 2*nSymbolSize;
+    }
     if ( !PushButton::GetText().isEmpty() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
     {
         sal_uLong nDrawFlags = 0;
