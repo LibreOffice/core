@@ -58,7 +58,7 @@ gb_Library__get_dir_for_layer = $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library
 gb_Library_get_instdir = $(call gb_Library__get_dir_for_layer,$(call gb_Library_get_layer,$(1)))
 
 define gb_Library_Library
-$(call gb_Postprocess_get_target,AllLibraries) : $(call gb_Library_get_target,$(1))
+$(call gb_Postprocess_register_target,AllLibraries,Library,$(1))
 ifeq (,$$(findstring $(1),$$(gb_Library_KNOWNLIBS)))
 $$(eval $$(call gb_Output_info,Currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
 $$(eval $$(call gb_Output_error,Library $(1) must be registered in Repository.mk))

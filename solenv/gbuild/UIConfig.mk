@@ -216,7 +216,6 @@ $(call gb_PackageSet_add_package,$(call gb_UIConfig_get_packagesetname,$(1)),$(c
 $(call gb_UIConfig_get_target,$(1)) :| $(dir $(call gb_UIConfig_get_target,$(1))).dir
 $(call gb_UIConfig_get_imagelist_target,$(1)) :| $(dir $(call gb_UIConfig_get_imagelist_target,$(1))).dir
 $(call gb_UIConfig_get_target,$(1)) : $(call gb_PackageSet_get_target,$(call gb_UIConfig_get_packagesetname,$(1)))
-$(call gb_Postprocess_get_target,AllUIConfigs) : $(call gb_UIConfig_get_target,$(1))
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_PackageSet_get_clean_target,$(call gb_UIConfig_get_packagesetname,$(1)))
 
 ifneq ($(gb_UIConfig_LANGS),)
@@ -225,6 +224,7 @@ endif
 
 $$(eval $$(call gb_Module_register_target,$(call gb_UIConfig_get_target,$(1)),$(call gb_UIConfig_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),UIConfig)
+$(call gb_Postprocess_register_target,AllUIConfigs,UIConfig,$(1))
 
 endef
 

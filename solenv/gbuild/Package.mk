@@ -100,7 +100,8 @@ $(call gb_Package_get_target,$(1)) :| $(dir $(call gb_Package_get_target,$(1))).
 endef
 
 define gb_Package_Package
-$(if $(filter postprocess% instsetoo_native%,$(1)),,$(call gb_Postprocess_get_target,AllPackages) : $(call gb_Package_get_target,$(1)))
+$(if $(filter postprocess% instsetoo_native%,$(1)),,\
+    $(call gb_Postprocess_register_target,AllPackages,Package,$(1)))
 $(call gb_Package_Package_internal,$(1),$(2))
 $$(eval $$(call gb_Module_register_target,$(call gb_Package_get_target,$(1)),$(call gb_Package_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Package)

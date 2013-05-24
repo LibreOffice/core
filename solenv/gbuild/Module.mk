@@ -167,7 +167,6 @@ gb_Module__debug_enabled = \
        $(filter all $(1)/,$(ENABLE_DEBUGINFO_FOR)))
 
 define gb_Module_Module
-$(if $(filter-out libreoffice instsetoo_native android ios,$(1)),$(call gb_Postprocess_get_target,AllModulesButInstsetNative) : $(call gb_Module_get_target,$(1)))
 gb_Module_ALLMODULES += $(1)
 gb_Module_MODULELOCATIONS += $(1):$(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 gb_Module_TARGETSTACK := $(call gb_Module_get_target,$(1)) $(gb_Module_TARGETSTACK)
@@ -178,6 +177,8 @@ gb_Module_CLEANTARGETSTACK := $(call gb_Module_get_clean_target,$(1)) $(gb_Modul
 gb_Module_CURRENTMODULE_DEBUG_ENABLED := $(call gb_Module__debug_enabled,$(1))
 gb_Module_CURRENTMODULE_NAME := $(1)
 $(call gb_Helper_make_userfriendly_targets,$(1),Module)
+$(if $(filter-out libreoffice instsetoo_native android ios,$(1)),\
+    $(call gb_Postprocess_register_target,AllModulesButInstsetNative,Module,$(1)))
 
 endef
 

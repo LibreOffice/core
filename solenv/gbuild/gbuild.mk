@@ -302,6 +302,7 @@ $(eval $(call gb_Deliver_init))
 
 include $(foreach class, \
 	ComponentTarget \
+	Postprocess \
 	AllLangResTarget \
 	WinResTarget \
 	LinkTarget \
@@ -345,7 +346,6 @@ include $(foreach class, \
 	InstallModule \
 	InstallScript \
 	AutoInstallLibs \
-	Postprocess \
 	PackageSet \
 	GeneratedPackage \
 ,$(GBUILDDIR)/$(class).mk)

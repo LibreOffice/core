@@ -22,6 +22,12 @@ $(call gb_Postprocess_get_target,$(1)) :| $(dir $(call gb_Postprocess_get_target
 
 endef
 
+# gb_Postprocess_register_target category class targetname
+define gb_Postprocess_register_target
+$(call gb_Postprocess_get_target,$(1)) : $(call gb_$(2)_get_target,$(3))
+
+endef
+
 define gb_Postprocess_make_targets
 $(call gb_Postprocess_Postprocess,AllExecutables,All executables)
 $(call gb_Postprocess_Postprocess,AllLibraries,All libraries)
