@@ -4341,15 +4341,11 @@ AC_SUBST(ENABLE_CUPS)
 # fontconfig checks
 if test "$test_fontconfig" = "yes"; then
     PKG_CHECK_MODULES([FONTCONFIG], [fontconfig >= 2.2.0])
-else
-    case "$BUILD_TYPE" in
-    *FONTCONFIG*)
-        FONTCONFIG_LIBS="-lfontconfig"
-        ;;
-    esac
+    SYSTEM_FONTCONFIG=YES
 fi
 AC_SUBST(FONTCONFIG_CFLAGS)
 AC_SUBST(FONTCONFIG_LIBS)
+AC_SUBST([SYSTEM_FONTCONFIG])
 
 dnl whether to find & fetch external tarballs?
 dnl ===================================================================

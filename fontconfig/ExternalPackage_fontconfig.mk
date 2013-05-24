@@ -11,12 +11,6 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,fontconfig,fontconfig))
 
 $(eval $(call gb_ExternalPackage_use_external_project,fontconfig,fontconfig))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,fontconfig,inc/fontconfig,\
-	fontconfig/fcfreetype.h \
-	fontconfig/fcprivate.h \
-	fontconfig/fontconfig.h \
-))
-
 $(eval $(call gb_ExternalPackage_add_files,fontconfig,lib,\
 	src/.libs/libfontconfig.a \
 ))

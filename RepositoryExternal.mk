@@ -1048,19 +1048,35 @@ endif
 
 endef
 
+ifeq ($(SYSTEM_FONTCONFIG),YES)
+
 define gb_LinkTarget__use_fontconfig
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(FONTCONFIG_CFLAGS) \
 )
 
-ifneq ($(OS),ANDROID)
 $(call gb_LinkTarget_add_libs,$(1),$(FONTCONFIG_LIBS))
-else
-$(call gb_LinkTarget_use_static_libraries,$(1),fontconfig)
-endif
 
 endef
+
+else # ! SYSTEM_FONTCONFIG
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
+	fontconfig \
+))
+
+define gb_LinkTarget__use_fontconfig
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,fontconfig) \
+	$$(INCLUDE) \
+)
+
+$(call gb_LinkTarget_use_static_libraries,$(1),fontconfig)
+
+endef
+
+endif # SYSTEM_FONTCONFIG
 
 ifeq ($(SYSTEM_GRAPHITE),YES)
 
