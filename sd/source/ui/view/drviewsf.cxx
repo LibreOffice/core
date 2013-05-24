@@ -630,9 +630,10 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                             }
                         }
                     }
+                  delete pNumRule;
                 }
             }
-                    break;
+            break;
             //End
             // Added by Li Hui for story 179.
             case FN_NUM_BULLET_ON:
