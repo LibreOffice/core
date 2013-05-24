@@ -146,8 +146,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/options/optHeaderTabListbox \
     cui/source/options/opthtml \
     cui/source/options/optinet2 \
-    $(if $(filter TRUE,$(SOLAR_JAVA)), \
-        cui/source/options/optjava) \
+    cui/source/options/optjava \
     cui/source/options/optjsearch \
     cui/source/options/optlingu \
     cui/source/options/optmemory \

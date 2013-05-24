@@ -43,7 +43,9 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
+#ifdef SOLAR_JAVA
 #include <jvmfwk/framework.h>
+#endif
 
 // define ----------------------------------------------------------------
 
@@ -180,7 +182,11 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     xDialogListener->SetDialogClosedLink( LINK( this, SvxJavaOptionsPage, DialogClosedHdl ) );
 
     EnableHdl_Impl(m_pJavaEnableCB);
+#ifdef SOLAR_JAVA
     jfw_lock();
+#else
+    get<Window>("javaframe")->Disable();
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -191,6 +197,7 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
     delete m_pParamDlg;
     delete m_pPathDlg;
     ClearJavaInfo();
+#ifdef SOLAR_JAVA
     std::vector< JavaInfo* >::iterator pIter;
     for ( pIter = m_aAddedInfos.begin(); pIter != m_aAddedInfos.end(); ++pIter )
     {
@@ -199,6 +206,7 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
     }
 
     jfw_unlock();
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -269,6 +277,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl)
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
 {
+#ifdef SOLAR_JAVA
     Sequence< OUString > aParameterList;
     if ( !m_pParamDlg )
     {
@@ -309,7 +318,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
     }
     else
         m_pParamDlg->SetParameters( aParameterList );
-
+#endif
     return 0;
 }
 
@@ -317,6 +326,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
 {
+#ifdef SOLAR_JAVA
     String sClassPath;
 
     if ( !m_pPathDlg )
@@ -353,7 +363,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
     }
     else
         m_pPathDlg->SetClassPath( sClassPath );
-
+#endif
     return 0;
 }
 
@@ -402,6 +412,7 @@ IMPL_LINK( SvxJavaOptionsPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
 
 void SvxJavaOptionsPage::ClearJavaInfo()
 {
+#ifdef SOLAR_JAVA
     if ( m_parJavaInfo )
     {
         JavaInfo** parInfo = m_parJavaInfo;
@@ -415,6 +426,7 @@ void SvxJavaOptionsPage::ClearJavaInfo()
         m_parJavaInfo = NULL;
         m_nInfoSize = 0;
     }
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -435,6 +447,7 @@ void SvxJavaOptionsPage::ClearJavaList()
 
 void SvxJavaOptionsPage::LoadJREs()
 {
+#ifdef SOLAR_JAVA
     WaitObject aWaitObj(m_pJavaList);
     javaFrameworkError eErr = jfw_findAllJREs( &m_parJavaInfo, &m_nInfoSize );
     if ( JFW_E_NONE == eErr && m_parJavaInfo )
@@ -473,12 +486,14 @@ void SvxJavaOptionsPage::LoadJREs()
     }
 
     jfw_freeJavaInfo( pSelectedJava );
+#endif
 }
 
 // -----------------------------------------------------------------------
 
 void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
 {
+#ifdef SOLAR_JAVA
     OUStringBuffer sEntry;
     sEntry.append('\t');
     sEntry.append(_pInfo->sVendor);
@@ -491,6 +506,9 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
     INetURLObject aLocObj( OUString( _pInfo->sLocation ) );
     String* pLocation = new String( aLocObj.getFSysPath( INetURLObject::FSYS_DETECT ) );
     pEntry->SetUserData( pLocation );
+#else
+    (void)_pInfo;
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -519,6 +537,7 @@ void SvxJavaOptionsPage::HandleCheckEntry( SvTreeListEntry* _pEntry )
 
 void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 {
+#ifdef SOLAR_JAVA
     bool bStartAgain = true;
     JavaInfo* pInfo = NULL;
     javaFrameworkError eErr = jfw_getJavaInfoByPath( _rFolder.pData, &pInfo );
@@ -584,6 +603,9 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
         xFolderPicker->setDisplayDirectory( _rFolder );
         Application::PostUserEvent( LINK( this, SvxJavaOptionsPage, StartFolderPickerHdl ) );
     }
+#else
+    (void)_rFolder;
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -598,23 +620,6 @@ SfxTabPage* SvxJavaOptionsPage::Create( Window* pParent, const SfxItemSet& rAttr
 sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
 {
     sal_Bool bModified = sal_False;
-    javaFrameworkError eErr = JFW_E_NONE;
-    if ( m_pParamDlg )
-    {
-        Sequence< OUString > aParamList = m_pParamDlg->GetParameters();
-        sal_Int32 i, nSize = aParamList.getLength();
-        rtl_uString** pParamArr = (rtl_uString**)rtl_allocateMemory( sizeof(rtl_uString*) * nSize );
-        rtl_uString** pParamArrIter = pParamArr;
-        const OUString* pList = aParamList.getConstArray();
-        for ( i = 0; i < nSize; ++i )
-            pParamArr[i] = pList[i].pData;
-        eErr = jfw_setVMParameters( pParamArrIter, nSize );
-        DBG_ASSERT( JFW_E_NONE == eErr,
-                    "SvxJavaOptionsPage::FillItemSet(): error in jfw_setVMParameters" );
-        pParamArrIter = pParamArr;
-        rtl_freeMemory( pParamArr );
-        bModified = sal_True;
-    }
 
     if ( m_pExperimentalCB->IsChecked() != m_pExperimentalCB->GetSavedValue() )
     {
@@ -634,6 +639,25 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetMacroRecorderMode( m_pMacroCB->IsChecked() );
+        bModified = sal_True;
+    }
+
+#ifdef SOLAR_JAVA
+    javaFrameworkError eErr = JFW_E_NONE;
+    if ( m_pParamDlg )
+    {
+        Sequence< OUString > aParamList = m_pParamDlg->GetParameters();
+        sal_Int32 i, nSize = aParamList.getLength();
+        rtl_uString** pParamArr = (rtl_uString**)rtl_allocateMemory( sizeof(rtl_uString*) * nSize );
+        rtl_uString** pParamArrIter = pParamArr;
+        const OUString* pList = aParamList.getConstArray();
+        for ( i = 0; i < nSize; ++i )
+            pParamArr[i] = pList[i].pData;
+        eErr = jfw_setVMParameters( pParamArrIter, nSize );
+        DBG_ASSERT( JFW_E_NONE == eErr,
+                    "SvxJavaOptionsPage::FillItemSet(): error in jfw_setVMParameters" );
+        pParamArrIter = pParamArr;
+        rtl_freeMemory( pParamArr );
         bModified = sal_True;
     }
 
@@ -700,6 +724,7 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
                     "SvxJavaOptionsPage::FillItemSet(): error in jfw_setEnabled" );
         bModified = sal_True;
     }
+#endif
 
     return bModified;
 }
@@ -713,12 +738,17 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet& /*rSet*/ )
 
     SvtMiscOptions aMiscOpt;
 
+#ifdef SOLAR_JAVA
     sal_Bool bEnabled = sal_False;
     javaFrameworkError eErr = jfw_getEnabled( &bEnabled );
     if ( eErr != JFW_E_NONE )
         bEnabled = sal_False;
     m_pJavaEnableCB->Check( bEnabled );
     EnableHdl_Impl(m_pJavaEnableCB);
+#else
+    m_pJavaEnableCB->Check( false );
+    m_pJavaEnableCB->Disable();
+#endif
 
     m_pExperimentalCB->Check( aMiscOpt.IsExperimentalMode() );
     m_pExperimentalCB->SaveValue();

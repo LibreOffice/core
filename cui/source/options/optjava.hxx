@@ -32,7 +32,11 @@
 
 // forward ---------------------------------------------------------------
 
+#ifdef SOLAR_JAVA
 typedef struct _JavaInfo JavaInfo;
+#else
+typedef void* JavaInfo;
+#endif
 
 class   SvxJavaParameterDlg;
 class   SvxJavaClassPathDlg;
