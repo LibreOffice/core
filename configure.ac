@@ -7277,7 +7277,7 @@ AC_SUBST([SYSTEM_FREETYPE])
 dnl ===================================================================
 dnl Check for system libwps
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.2],["-I${OUTDIR}/inc/external"],["-L${OUTDIR}/lib -lwpslib"])
+libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.2],["-I${WORKDIR}/UnpackedTarball/libwps/inc"],["-L${OUTDIR}/lib -lwpslib"])
 
 dnl ===================================================================
 dnl Check for system libwpg

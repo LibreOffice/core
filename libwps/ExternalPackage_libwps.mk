@@ -9,11 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,libwps,libwps))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,libwps,inc/external/libwps,\
-	src/lib/libwps.h \
-	src/lib/WPSDocument.h \
-))
-
 $(eval $(call gb_ExternalPackage_use_external_project,libwps,libwps))
 
 ifeq ($(OS)$(COM),WNTMSC)
