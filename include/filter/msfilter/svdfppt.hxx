@@ -573,9 +573,6 @@ protected:
     SdrOutliner*            GetDrawOutliner( SdrTextObj* pSdrText ) const;
     void                    SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOptions );
 
-    void        ApplyTextAnchorAttributes( PPTTextObj& rTextObj, SfxItemSet& rSet ) const;
-    sal_Bool    IsVerticalText() const;
-
 public:
                             SdrPowerPointImport( PowerPointImportParam&, const OUString& rBaseURL );
     virtual                 ~SdrPowerPointImport();
