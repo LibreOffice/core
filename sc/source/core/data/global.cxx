@@ -934,9 +934,10 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
         //Ctrl key is pressed and ctrl+click hyperlink security control is set
         bProceedHyperlink = true;
     }
-    else if( !aSecOpt.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK ) )
+    else if( !(nScClickMouseModifier & KEY_MOD1) && !aSecOpt.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK ) )
     {
         //ctrl+click hyperlink security control is disabled just click will do
+        //However if ctrl+click happens the condition fails
         bProceedHyperlink = true;
     }
     if ( !bProceedHyperlink )
