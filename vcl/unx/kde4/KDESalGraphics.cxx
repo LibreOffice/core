@@ -297,7 +297,8 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         if (part == PART_MENU_ITEM)
         {
             QStyleOptionMenuItem option;
-            if ( nControlState & CTRL_STATE_ROLLOVER )
+            if ( ( nControlState & CTRL_STATE_ROLLOVER )
+                && kapp->style()->styleHint( QStyle::SH_MenuBar_MouseTracking ) )
                 option.state |= QStyle::State_Selected;
 
             if ( nControlState & CTRL_STATE_SELECTED ) // Passing State_Sunken is currently not documented.
