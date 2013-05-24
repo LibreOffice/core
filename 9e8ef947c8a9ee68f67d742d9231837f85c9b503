@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8M4\u003d",
+        "filename": "sc/source/core/data/global.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2013-05-24T20:04:13Z",
+      "side": 1,
+      "message": "Let\u0027s move this (nScClickMouseModifier \u0026 KEY_MOD1) up before the if statement, and store the result in a boolean variable, to avoid duplicating this check twice.  The same goes for aSecOpt.IsOptionSet(....) check.  That would make the code easier to read.",
+      "revId": "9e8ef947c8a9ee68f67d742d9231837f85c9b503",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
