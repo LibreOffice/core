@@ -1273,14 +1273,6 @@ public:
 
     virtual OUString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
-
-    void EnableThemeSupport (void);
-    void DisableThemeSupport (void);
-
-    virtual ImplBorderWindow* CreateBorderWindow (
-        Window* pParent,
-        const WinBits nStyle,
-        const sal_uInt16 nTypeStyle);
 };
 
 
