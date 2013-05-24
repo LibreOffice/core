@@ -7282,7 +7282,7 @@ libo_CHECK_SYSTEM_MODULE([libwps],[WPS],[libwps-0.2],["-I${OUTDIR}/inc/external"
 dnl ===================================================================
 dnl Check for system libwpg
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libwpg],[WPG],[libwpg-0.2],["-I${OUTDIR}/inc/external"],["-L${OUTDIR}/lib -lwpglib"])
+libo_CHECK_SYSTEM_MODULE([libwpg],[WPG],[libwpg-0.2],["-I${WORKDIR}/UnpackedTarball/libwpg/inc"],["-L${OUTDIR}/lib -lwpglib"])
 
 # ===================================================================
 # Check for system libxslt

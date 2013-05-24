@@ -9,12 +9,6 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,libwpg,libwpg))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,libwpg,inc/external/libwpg,\
-	src/lib/libwpg.h \
-	src/lib/WPGPaintInterface.h \
-	src/lib/WPGraphics.h \
-))
-
 $(eval $(call gb_ExternalPackage_use_external_project,libwpg,libwpg))
 
 ifeq ($(OS)$(COM),WNTMSC)

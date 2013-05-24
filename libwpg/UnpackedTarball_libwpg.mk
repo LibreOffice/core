@@ -11,4 +11,11 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libwpg))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libwpg,$(WPG_TARBALL)))
 
+# HACK to avoid the need to deliver the headers to $(OUTDIR). This
+# should be removed when libwpg is updated.
+$(eval $(call gb_UnpackedTarball_set_post_action,libwpg,\
+	mkdir -p inc/libwpg && \
+	cp -f src/lib/libwpg.h src/lib/WPGPaintInterface.h src/lib/WPGraphics.h inc/libwpg \
+))
+
 # vim: set noet sw=4 ts=4:
