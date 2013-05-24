@@ -149,9 +149,10 @@ static OUString aResourceResolverPropName("ResourceResolver");
         // Set resource property
         if( xStringResourceManager.is() )
         {
+            Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
             Any aStringResourceManagerAny;
             aStringResourceManagerAny <<= xStringResourceManager;
-            xDialogModel->setPropertyValue( aResourceResolverPropName, aStringResourceManagerAny );
+            xDlgPSet->setPropertyValue( aResourceResolverPropName, aStringResourceManagerAny );
         }
 
         return xDialogModel;
