@@ -1,0 +1,11 @@
+--- foo/foo/foo/boost/unordered/detail/table.hpp
++++ foo/foo/foo/boost/unordered/detail/table.hpp
+@@ -458,6 +458,7 @@
+             // According to 23.2.1.8, if propagate_on_container_swap is
+             // false the behaviour is undefined unless the allocators
+             // are equal.
++            (void) other;
+             BOOST_ASSERT(node_alloc() == other.node_alloc());
+         }
+ 
+
