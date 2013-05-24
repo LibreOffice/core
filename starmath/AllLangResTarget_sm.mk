@@ -20,11 +20,8 @@ $(eval $(call gb_SrsTarget_SrsTarget,sm/res))
 
 $(eval $(call gb_SrsTarget_set_include,sm/res,\
 	-I$(SRCDIR)/starmath/inc \
+    -I$(call gb_SrsTemplateTarget_get_include_dir,) \
 	$$(INCLUDE) \
-))
-
-$(eval $(call gb_SrsTarget_use_packages,sm/res,\
-	svx_globlmn_hrc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,sm/res,\

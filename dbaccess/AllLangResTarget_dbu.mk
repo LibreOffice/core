@@ -17,15 +17,12 @@ $(eval $(call gb_AllLangResTarget_add_srs,dbu,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,dbaccess/dbu))
 
-$(eval $(call gb_SrsTarget_use_packages,dbaccess/dbu,\
-	svx_globlmn_hrc \
-))
-
 $(eval $(call gb_SrsTarget_set_include,dbaccess/dbu,\
     $$(INCLUDE) \
 	-I$(call gb_SrsTemplateTarget_get_include_dir,dbaccess) \
     -I$(SRCDIR)/dbaccess/inc \
     -I$(SRCDIR)/dbaccess/source/ui/inc \
+    -I$(call gb_SrsTemplateTarget_get_include_dir,) \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,dbaccess/dbu,\

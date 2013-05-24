@@ -27,7 +27,6 @@ $(eval $(call gb_Module_add_targets,svx,\
     AllLangResTarget_ofa \
     AllLangResTarget_gal \
     AllLangResTarget_textconversiondlgs \
-    Package_globlmn_hrc \
     UIConfig_svx \
 ))
 

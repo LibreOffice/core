@@ -34,11 +34,8 @@ $(eval $(call gb_AllLangResTarget_add_srs,basctl,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,basctl/res))
 
-$(eval $(call gb_SrsTarget_use_packages,basctl/res,\
-	svx_globlmn_hrc \
-))
-
 $(eval $(call gb_SrsTarget_set_include,basctl/res,\
+    -I$(call gb_SrsTemplateTarget_get_include_dir,) \
 	-I$(SRCDIR)/basctl/inc \
 	-I$(SRCDIR)/basctl/source/inc \
 	-I$(SRCDIR)/basctl/source/basicide \

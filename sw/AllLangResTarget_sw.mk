@@ -25,10 +25,6 @@ $(eval $(call gb_AllLangResTarget_add_srs,sw,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,sw/res))
 
-$(eval $(call gb_SrsTarget_use_packages,sw/res,\
-	svx_globlmn_hrc \
-))
-
 $(eval $(call gb_SrsTarget_set_include,sw/res,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sw/inc \
@@ -57,6 +53,7 @@ $(eval $(call gb_SrsTarget_set_include,sw/res,\
     -I$(SRCDIR)/sw/source/ui/utlui \
     -I$(SRCDIR)/sw/source/ui/web \
     -I$(SRCDIR)/sw/source/ui/wrtsh \
+    -I$(call gb_SrsTemplateTarget_get_include_dir,) \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,sw/res,\
