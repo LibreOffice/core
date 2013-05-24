@@ -308,6 +308,9 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         }
         else if (part == PART_ENTIRE_CONTROL)
         {
+            QStyleOptionMenuItem option;
+            draw( QStyle::CE_MenuBarEmptyArea, &option, m_image,
+                  vclStateValue2StateFlag(nControlState, value) );
         }
         else
         {
