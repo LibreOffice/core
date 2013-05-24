@@ -39,6 +39,7 @@
 #include <editeng/fontitem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <svl/ctloptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
@@ -1650,6 +1651,8 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                     bNeedEdit = aVars.HasEditCharacters() || (bFormulaCell && aCell.mpFormula->IsMultilineResult());
                 }
                 long nTotalMargin = 0;
+                const SfxPoolItem* pWritingDirectionItem =  mpDoc->GetAttr( nCellX, nCellY, nTab, ATTR_WRITINGDIR );
+                const SvxFrameDirectionItem* pCurrentWritingMode = (const SvxFrameDirectionItem*) pWritingDirectionItem;
                 if (bDoCell && !bNeedEdit)
                 {
                     CellType eCellType = aCell.meType;
@@ -1674,8 +1677,6 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
 
                     if ( eOutHorJust == SVX_HOR_JUSTIFY_BLOCK || eOutHorJust == SVX_HOR_JUSTIFY_REPEAT )
                     {
-                        const SfxPoolItem* pItem =  mpDoc->GetAttr( nCellX, nCellY, nTab, ATTR_WRITINGDIR );
-                        const SvxFrameDirectionItem* pCurrentWritingMode = (const SvxFrameDirectionItem*) pItem;
                         if (pCurrentWritingMode->GetValue() == FRMDIR_HORI_LEFT_TOP)
                             eOutHorJust = SVX_HOR_JUSTIFY_LEFT;
                         else
@@ -1987,7 +1988,30 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                             if (bRightAdjusted)
                                 aDrawTextPos.X() -= aVars.GetOriginalWidth();
                         }
-
+                        SvtCTLOptions aCTLOptions;
+                        if (pCurrentWritingMode->GetValue() == FRMDIR_HORI_RIGHT_TOP && aCTLOptions.GetCTLTextNumerals() == SvtCTLOptions::NUMERALS_CONTEXT)
+                        {
+                            LanguageType ctl,cjk,latin;
+                            mpDoc->GetLanguage(latin,cjk,ctl);
+                            switch (ctl & LANGUAGE_MASK_PRIMARY)
+                            {
+                                case LANGUAGE_ARABIC_SAUDI_ARABIA & LANGUAGE_MASK_PRIMARY :
+                                {
+                                    mpDev->SetDigitLanguage(ctl);
+                                    break;
+                                }
+                                case LANGUAGE_FARSI & LANGUAGE_MASK_PRIMARY :
+                                {
+                                    mpDev->SetDigitLanguage(ctl);
+                                    break;
+                                }
+                                case LANGUAGE_URDU_PAKISTAN & LANGUAGE_MASK_PRIMARY :
+                                {
+                                    mpDev->SetDigitLanguage(ctl);
+                                    break;
+                                }
+                            }
+                        }
                         //  in Metafiles immer DrawTextArray, damit die Positionen mit
                         //  aufgezeichnet werden (fuer nicht-proportionales Resize):
 
