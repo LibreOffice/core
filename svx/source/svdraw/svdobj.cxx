@@ -499,7 +499,7 @@ SdrObject::~SdrObject()
         mpViewContact = 0L;
     }
 
-    mnLayerID = static_cast<SdrLayerID>(0xdead);
+    mnLayerID = 59; // random value
 }
 
 void SdrObject::Free( SdrObject*& _rpObject )
