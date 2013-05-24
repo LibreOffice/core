@@ -234,7 +234,7 @@ STD_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShel
 
 File gid_File_Rdb_Scriptproviderforbeanshell
     TXT_FILE_BODY;
-    Name = "scriptproviderforbeanshell.rdb";
+    Name = "Rdb/scriptproviderforbeanshell.rdb";
     Dir = gid_Brand_Dir_Program_Services;
     Styles = (PACKED);
 End
@@ -251,7 +251,7 @@ STD_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScr
 
 File gid_File_Rdb_Scriptproviderforjavascript
     TXT_FILE_BODY;
-    Name = "scriptproviderforjavascript.rdb";
+    Name = "Rdb/scriptproviderforjavascript.rdb";
     Dir = gid_Brand_Dir_Program_Services;
     Styles = (PACKED);
 End

@@ -688,7 +688,7 @@ End
 
 File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
-    Name = "services.rdb";
+    Name = "Rdb/services.rdb";
     Dir = gid_Brand_Dir_Program_Services;
     Styles = (PACKED);
 End

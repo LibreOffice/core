@@ -2899,7 +2899,7 @@ define gb_Executable__register_climaker
 $(call gb_Executable_add_runtime_dependencies,climaker,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
-	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
+	$(call gb_Rdb_get_target_for_build,ure/services) \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
 endef
@@ -2931,7 +2931,7 @@ $(call gb_Executable_add_runtime_dependencies,gengal,\
 		$(call gb_Library_get_target,vclplug_svp) \
 	)) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
-	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
+	$(call gb_Rdb_get_target_for_build,ure/services) \
 	$(call gb_UnoApi_get_target,offapi) \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
@@ -2970,8 +2970,8 @@ define gb_Executable__register_saxparser
 $(call gb_Executable_add_runtime_dependencies,saxparser,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
-	$(call gb_Rdb_get_outdir_target_for_build,saxparser) \
-	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
+	$(call gb_Rdb_get_target_for_build,saxparser) \
+	$(call gb_Rdb_get_target_for_build,ure/services) \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
 endef
@@ -2984,7 +2984,7 @@ define gb_Executable__register_uno
 $(call gb_Executable_add_runtime_dependencies,uno,\
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
-	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
+	$(call gb_Rdb_get_target_for_build,ure/services) \
 	$(call gb_UnoApi_get_target,udkapi) \
 )
 endef

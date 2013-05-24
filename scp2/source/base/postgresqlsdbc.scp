@@ -39,7 +39,7 @@ End
 File gid_File_PostgresqlSdbc_Rdb
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program_Services;
-    Name = "postgresql-sdbc.rdb";
+    Name = "Rdb/postgresql-sdbc.rdb";
     Styles = (PACKED);
 End
 

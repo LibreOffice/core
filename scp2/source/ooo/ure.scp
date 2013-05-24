@@ -574,7 +574,7 @@ End
 File gid_File_Misc_ServicesRdb
     TXT_FILE_BODY;
     Dir = GID_DIR_URE_SHARE_MISC;
-    Name = "/ure/services.rdb";
+    Name = "Rdb/ure/services.rdb";
     Styles = (PACKED);
 End
 

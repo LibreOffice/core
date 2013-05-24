@@ -220,8 +220,8 @@ $$(call gb_Output_error,gb_CppunitTest_use_service_rdb: use gb_CppunitTest_use_r
 endef
 
 define gb_CppunitTest_use_rdb
-$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Rdb_get_outdir_target,$(2))
-$(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES += $(call gb_Rdb_get_outdir_target,$(2))
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Rdb_get_target_for_build,$(2))
+$(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES += $(call gb_Rdb_get_target_for_build,$(2))
 
 endef
 

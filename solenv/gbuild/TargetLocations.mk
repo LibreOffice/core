@@ -35,8 +35,6 @@ gb_PackagePart_get_destinations = \
 	$(OUTDIR)/xml \
 
 gb_InstallScript_get_target = $(OUTDIR)/bin/$(1)$(gb_InstallScript_EXT)
-gb_Rdb_get_outdir_target = $(OUTDIR)/xml/$(1).rdb
-gb_Rdb_get_outdir_target_for_build = $(OUTDIR_FOR_BUILD)/xml/$(1).rdb
 gb_ResTarget_get_outdir_target = $(OUTDIR)/bin/$(1).res
 gb_ResTarget_get_unittest_target = \
     $(OUTDIR)/unittest/install/$(LIBO_SHARE_RESOURCE_FOLDER)/$(1).res
@@ -163,6 +161,7 @@ gb_PrecompiledHeader_get_timestamp = $(WORKDIR)/PrecompiledHeader/$(gb_Precompil
 gb_PropertiesTranslateTarget_get_target = $(WORKDIR)/PropertiesTranslateTarget/$(1).properties
 gb_Pyuno_get_target = $(WORKDIR)/Pyuno/$(1).done
 gb_Rdb_get_target = $(WORKDIR)/Rdb/$(1).rdb
+gb_Rdb_get_target_for_build = $(WORKDIR_FOR_BUILD)/Rdb/$(1).rdb
 gb_ResTarget_get_imagelist_target = $(WORKDIR)/ResTarget/$(1).ilst
 gb_ResTarget_get_target = $(WORKDIR)/ResTarget/$(1).res
 gb_ScpMergeTarget_get_target = $(WORKDIR)/ScpMergeTarget/$(1).ulf
