@@ -1301,7 +1301,10 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             sal_uInt16 nFormatType = p->GetRetFormatType();
             sal_Int32 nFormatIndex = p->GetRetFormatIndex();
 
-            if((nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+            // don't set text format as hard format
+            if(nFormatType == NUMBERFORMAT_TEXT)
+                nFormatIndex = 0;
+            else if((nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
                 nFormatIndex = ScGlobal::GetStandardFormat(*pDocument->GetFormatTable(),
                         nFormatIndex, nFormatType);
 
