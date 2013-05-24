@@ -200,7 +200,6 @@ void MenuButton::SetPopupMenu( PopupMenu* pNewMenu )
     if (pNewMenu == mpMenu)
         return;
 
-    // FIXME: It's better to not inline this for 5.1; in 6.0 we can make it inline, however
     mpMenu = pNewMenu;
 }
 
