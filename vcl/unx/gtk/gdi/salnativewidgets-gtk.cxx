@@ -1027,7 +1027,13 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
             rNativeContentRegion.Right() = rNativeContentRegion.Left() + 1;
         if (!rNativeContentRegion.GetHeight())
             rNativeContentRegion.Bottom() = rNativeContentRegion.Top() + 1;
-        returnVal = sal_True;
+        //fdo#63254 horizontal scrool bar isn't displayed in RTL tab
+        // with LTR UI in calc
+        returnVal =Application::GetSettings().GetLayoutRTL();
+
+        //See fdo#44582, Horizontal scrollbar in navigator window is broken
+        if ((nPart==PART_BUTTON_LEFT || nPart==PART_BUTTON_RIGHT) && Application::GetSettings().GetLayoutRTL())
+            returnVal = false;
     }
     if( (nType == CTRL_MENUBAR) && (nPart == PART_ENTIRE_CONTROL) )
     {
