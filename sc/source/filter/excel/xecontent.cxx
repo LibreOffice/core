@@ -808,7 +808,6 @@ const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
             pRet = "uniqueValues";
             break;
         case SC_COND_DIRECT:
-            pRet = "expression";
             break;
         case SC_COND_NONE:
         default:
