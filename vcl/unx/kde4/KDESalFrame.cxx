@@ -301,21 +301,24 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         style.SetMenuBarTextColor( aMenuFore );
         style.SetMenuColor( aMenuBack );
         style.SetMenuBarColor( aMenuBack );
-
         style.SetMenuHighlightColor( toColor ( qMenuCG.color( QPalette::Highlight ) ) );
-        style.SetMenuBarRolloverColor( toColor ( qMenuCG.color( QPalette::Highlight ) ) );
-
         style.SetMenuHighlightTextColor( aMenuFore );
 
         // set special menubar higlight text color
         if ( kapp->style()->inherits( "HighContrastStyle" ) )
-        {
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.color( QPalette::HighlightedText ) );
-            style.SetMenuBarRolloverTextColor( toColor( qMenuCG.color( QPalette::HighlightedText ) ) );
+        else
+            ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = aMenuFore;
+
+        // set menubar rollover color
+        if ( pMenuBar->style()->styleHint( QStyle::SH_MenuBar_MouseTracking ) )
+        {
+            style.SetMenuBarRolloverColor( toColor ( qMenuCG.color( QPalette::Highlight ) ) );
+            style.SetMenuBarRolloverTextColor( ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor );
         }
         else
         {
-            ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = aMenuFore;
+            style.SetMenuBarRolloverColor( aMenuBack );
             style.SetMenuBarRolloverTextColor( aMenuFore );
         }
 
