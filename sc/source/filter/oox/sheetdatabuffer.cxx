@@ -361,50 +361,6 @@ void SheetDataBuffer::finalizeImport()
 
     // write default formatting of remaining row range
     maXfIdRowRangeList[ maXfIdRowRange.mnXfId ].push_back( maXfIdRowRange.maRowRange );
-
-    typedef ::std::pair< sal_Int32, sal_Int32 > RowRange;
-    struct RowRangeStyle
-    {
-        sal_Int32 mnStartRow;
-        sal_Int32 mnEndRow;
-        XfIdNumFmtKey mnNumFmt;
-    };
-    struct StyleRowRangeComp
-    {
-        bool operator() (const RowRangeStyle& lhs, const RowRangeStyle& rhs) const
-        {
-            return lhs.mnEndRow<rhs.mnStartRow;
-        }
-    };
-
-    typedef ::std::set< RowRangeStyle, StyleRowRangeComp > RowStyles;
-    typedef ::std::map< sal_Int32, RowStyles > ColStyles;
-
-    ColStyles aStylesPerColumn;
-    StylesBuffer& rStyles = getStyles();
-
-    std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList > rangeStyleListMap;
-
-    for( XfIdRangeListMap::const_iterator aIt = maXfIdRangeLists.begin(), aEnd = maXfIdRangeLists.end(); aIt != aEnd; ++aIt )
-        addIfNotInMyMap( getStyles(), rangeStyleListMap, aIt->first.first, aIt->first.second, aIt->second );
-
-    // gather all ranges that have the same style and apply them in bulk
-    for (  std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList >::iterator it = rangeStyleListMap.begin(), it_end = rangeStyleListMap.end(); it != it_end; ++it )
-    {
-        const ApiCellRangeList& rRanges( it->second );
-        for ( ApiCellRangeList::const_iterator it_range = rRanges.begin(), it_rangeend = rRanges.end(); it_range!=it_rangeend; ++it_range )
-        {
-            RowRangeStyle aStyleRows;
-            aStyleRows.mnNumFmt.first = it->first.first;
-            aStyleRows.mnNumFmt.second = it->first.second;
-            aStyleRows.mnStartRow = it_range->StartRow;
-            aStyleRows.mnEndRow = it_range->EndRow;
-            for ( sal_Int32 nCol = it_range->StartColumn; nCol <= it_range->EndColumn; ++nCol )
-                aStylesPerColumn[ nCol ].insert( aStyleRows );
-        }
-    }
-
-    // process row ranges for each column, don't overwrite any existing row entries for a column
     for ( std::map< sal_Int32, std::vector< ValueRange > >::iterator it = maXfIdRowRangeList.begin(), it_end =  maXfIdRowRangeList.end(); it != it_end; ++it )
     {
         ApiCellRangeList rangeList;
@@ -412,91 +368,27 @@ void SheetDataBuffer::finalizeImport()
         // get all row ranges for id
         for ( std::vector< ValueRange >::iterator rangeIter = it->second.begin(), rangeIter_end = it->second.end(); rangeIter != rangeIter_end; ++rangeIter )
         {
-            RowRangeStyle aStyleRows;
-            aStyleRows.mnNumFmt.first = it->first;
-            if ( aStyleRows.mnNumFmt.first == -1 ) // dud
-                continue;
-            aStyleRows.mnNumFmt.second = -1;
-            aStyleRows.mnStartRow = rangeIter->mnFirst;
-            aStyleRows.mnEndRow = rangeIter->mnLast;
-            for ( sal_Int32 nCol = 0; nCol <= rAddrConv.getMaxApiAddress().Column; ++nCol )
-            {
-                RowStyles& rRowStyles =  aStylesPerColumn[ nCol ];
-                // If the rowrange style includes rows already
-                // allocated to a style then we need to split
-                // the range style Rows into sections ( to
-                // occupy only rows that have no style definition )
-
-                // We dont want to set any rowstyle 'rows'
-                // for rows where there is an existing 'style' )
-                std::vector< RowRangeStyle > aRangeRowsSplits;
-
-                RowStyles::iterator rows_it = rRowStyles.begin();
-                RowStyles::iterator rows_end = rRowStyles.end();
-                bool bAddRange = true;
-                for ( ; rows_it != rows_end; ++rows_it )
-                {
-                    const RowRangeStyle& r = *rows_it;
-                    // if row is completely within existing style, discard it
-                    if ( aStyleRows.mnStartRow >= r.mnStartRow && aStyleRows.mnEndRow <= r.mnEndRow )
-                        bAddRange = false;
-                    else if ( aStyleRows.mnStartRow <= r.mnStartRow )
-                    {
-                        // not intersecting at all?, if so finish as none left
-                        // to check ( row ranges are in ascending order
-                        if ( aStyleRows.mnEndRow < r.mnStartRow )
-                            break;
-                        else if ( aStyleRows.mnEndRow <= r.mnEndRow )
-                        {
-                            aStyleRows.mnEndRow = r.mnStartRow - 1;
-                            break;
-                        }
-                        if ( aStyleRows.mnStartRow < r.mnStartRow )
-                        {
-                            RowRangeStyle aSplit = aStyleRows;
-                            aSplit.mnEndRow = r.mnStartRow - 1;
-                            aRangeRowsSplits.push_back( aSplit );
-                        }
-                    }
-                }
-                std::vector< RowRangeStyle >::iterator splits_it = aRangeRowsSplits.begin();
-                std::vector< RowRangeStyle >::iterator splits_end = aRangeRowsSplits.end();
-                for ( ; splits_it != splits_end; ++splits_it )
-                    rRowStyles.insert( *splits_it );
-                if ( bAddRange )
-                    rRowStyles.insert( aStyleRows );
-            }
+            CellRangeAddress aRange( getSheetIndex(), 0, rangeIter->mnFirst, rAddrConv.getMaxApiAddress().Column, rangeIter->mnLast );
+            rangeList.push_back( aRange );
         }
-    }
-    ScDocument& rDoc = getScDocument();
-    for ( ColStyles::iterator col = aStylesPerColumn.begin(), col_end = aStylesPerColumn.end(); col != col_end; ++col )
-    {
-        RowStyles& rRowStyles = col->second;
-        std::list<ScAttrEntry> aAttrs;
-        SCCOL nScCol = static_cast< SCCOL >( col->first );
-        for ( RowStyles::iterator rRows = rRowStyles.begin(), rRows_end = rRowStyles.end(); rRows != rRows_end; ++rRows )
+        ScRangeList aList;
+        for ( ApiCellRangeList::const_iterator itRange = rangeList.begin(), itRange_end = rangeList.end(); itRange!=itRange_end; ++itRange )
         {
-             Xf* pXf = rStyles.getCellXf( rRows->mnNumFmt.first ).get();
-
-             if ( pXf )
-                 pXf->applyPatternToAttrList( aAttrs,  rRows->mnStartRow,  rRows->mnEndRow,  rRows->mnNumFmt.second );
+            ScRange* pRange = new ScRange();
+            ScUnoConversion::FillScRange( *pRange, *itRange );
+            aList.push_back( pRange );
         }
-        if (aAttrs.empty() || aAttrs.back().nRow != MAXROW)
-        {
-            ScAttrEntry aEntry;
-            aEntry.nRow = MAXROW;
-            aEntry.pPattern = rDoc.GetDefPattern();
-            aAttrs.push_back(aEntry);
-        }
+        ScMarkData aMark;
+        aMark.MarkFromRangeList( aList, false );
 
-        size_t nAttrSize = aAttrs.size();
-        ScAttrEntry* pData = new ScAttrEntry[nAttrSize];
-        std::list<ScAttrEntry>::const_iterator itr = aAttrs.begin(), itrEnd = aAttrs.end();
-        for (size_t i = 0; itr != itrEnd; ++itr, ++i)
-            pData[i] = *itr;
-
-        rDoc.SetAttrEntries(nScCol, getSheetIndex(), pData, static_cast<SCSIZE>(nAttrSize));
+        getStyles().writeCellXfToMarkData( aMark, it->first, -1 );
     }
+    std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList > rangeStyleListMap;
+    // gather all ranges that have the same style and apply them in bulk
+    for( XfIdRangeListMap::const_iterator aIt = maXfIdRangeLists.begin(), aEnd = maXfIdRangeLists.end(); aIt != aEnd; ++aIt )
+        addIfNotInMyMap( getStyles(), rangeStyleListMap, aIt->first.first, aIt->first.second, aIt->second );
+    for (  std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList >::iterator it = rangeStyleListMap.begin(), it_end = rangeStyleListMap.end(); it != it_end; ++it )
+        writeXfIdRangeListProperties( it->first.first, it->first.second, it->second );
     // merge all cached merged ranges and update right/bottom cell borders
     for( MergedRangeList::iterator aIt = maMergedRanges.begin(), aEnd = maMergedRanges.end(); aIt != aEnd; ++aIt )
         applyCellMerging( aIt->maRange );

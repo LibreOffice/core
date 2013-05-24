@@ -35,8 +35,6 @@
 #include "stlsheet.hxx"
 #include <editeng/svxenum.hxx>
 #include <editeng/frmdir.hxx>
-#include "attarray.hxx"
-#include <list>
 
 class ScMarkData;
 namespace com { namespace sun { namespace star {
@@ -721,8 +719,6 @@ public:
     inline const Protection& getProtection() const { return maProtection; }
 
     void  writeToMarkData( ::ScMarkData& rMarkData, sal_Int32 nNumFmtId  );
-    void  applyPatternToAttrList( ::std::list<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2,
-                                  sal_uInt32 nForceScNumFmt );
     /** Writes all formatting attributes to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
     /** Writes all formatting attributes to the passed property set. */
