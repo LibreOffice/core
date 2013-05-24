@@ -184,8 +184,8 @@ void NBOTypeMgrBase::ImplLoad(String filename)
     aFile.Append( filename);
     SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
     if( pIStm ) {
-        sal_uInt32                      nVersion;
-        sal_Int32                   nNumIndex;
+        sal_uInt32                  nVersion = 0;
+        sal_Int32                   nNumIndex = 0;
         *pIStm >> nVersion;
         if (nVersion==DEFAULT_NUMBERING_CACHE_FORMAT_VERSION) //first version
         {
@@ -209,8 +209,8 @@ void NBOTypeMgrBase::ImplLoad(String filename)
                 RelplaceNumRule(aNum,nNumIndex,mLevel);
                 *pIStm >> nNumIndex;
             }
-            delete pIStm;
         }
+        delete pIStm;
     }
     eCoreUnit = eOldCoreUnit;
     bIsLoading = false;
