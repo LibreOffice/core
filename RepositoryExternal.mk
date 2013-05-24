@@ -1057,6 +1057,8 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 )
 
+endef
+
 define gb_LinkTarget__use_freetype
 $(call gb_LinkTarget_use_external,$(1),freetype_headers)
 $(call gb_LinkTarget_use_static_libraries,$(1),freetype)
