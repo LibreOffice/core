@@ -192,7 +192,7 @@ private:
     /** Writes all cell formatting attributes to the passed cell range list. (depreciates writeXfIdRangeProperties) */
     void                writeXfIdRangeListProperties( sal_Int32 nXfId, sal_Int32 nNumFmtId, const ApiCellRangeList& rRanges ) const;
     void                applyCellMerging( const ::com::sun::star::table::CellRangeAddress& rRange );
-    void                addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const ::com::sun::star::table::CellRangeAddress& rAddress, bool bProcessRowRange = false );
+
 private:
     /** Stores cell range address and formula token array of an array formula. */
     typedef ::std::pair< ::com::sun::star::table::CellRangeAddress, ApiTokenSequence > ArrayFormula;
@@ -217,22 +217,6 @@ private:
     typedef ::std::pair< sal_Int32, sal_Int32 > XfIdNumFmtKey;
     typedef ::std::map< XfIdNumFmtKey, ApiCellRangeList > XfIdRangeListMap;
 
-    typedef ::std::pair< sal_Int32, sal_Int32 > RowRange;
-    struct RowRangeStyle
-    {
-        sal_Int32 mnStartRow;
-        sal_Int32 mnEndRow;
-        XfIdNumFmtKey mnNumFmt;
-    };
-    struct StyleRowRangeComp
-    {
-        bool operator() (const RowRangeStyle& lhs, const RowRangeStyle& rhs) const
-        {
-            return lhs.mnEndRow<rhs.mnStartRow;
-        }
-    };
-    typedef ::std::set< RowRangeStyle, StyleRowRangeComp > RowStyles;
-    typedef ::std::map< sal_Int32, RowStyles > ColStyles;
     /** Stores information about a merged cell range. */
     struct MergedRange
     {
@@ -246,7 +230,6 @@ private:
     };
     typedef ::std::list< MergedRange > MergedRangeList;
 
-    ColStyles           maStylesPerColumn;      /// Stores cell styles by column ( in row ranges )
     CellBlockBuffer     maCellBlocks;           /// Manages all open cell blocks.
     ArrayFormulaList    maArrayFormulas;        /// All array formulas in the sheet.
     TableOperationList  maTableOperations;      /// All table operations in the sheet.

@@ -346,66 +346,6 @@ void addIfNotInMyMap( StylesBuffer& rStyles, std::map< std::pair< sal_Int32, sal
     }
 }
 
-void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const ::com::sun::star::table::CellRangeAddress& rAddress, bool bProcessRowRange )
-{
-    RowRangeStyle aStyleRows;
-    aStyleRows.mnNumFmt.first = nXfId;
-    aStyleRows.mnNumFmt.second = nFormatId;
-    aStyleRows.mnStartRow = rAddress.StartRow;
-    aStyleRows.mnEndRow = rAddress.EndRow;
-    for ( sal_Int32 nCol = rAddress.StartColumn; nCol <= rAddress.EndColumn; ++nCol )
-    {
-        if ( !bProcessRowRange )
-            maStylesPerColumn[ nCol ].insert( aStyleRows );
-        else
-        {
-            RowStyles& rRowStyles =  maStylesPerColumn[ nCol ];
-            // If the rowrange style includes rows already
-            // allocated to a style then we need to split
-            // the range style Rows into sections ( to
-            // occupy only rows that have no style definition )
-
-            // We dont want to set any rowstyle 'rows'
-            // for rows where there is an existing 'style' )
-            std::vector< RowRangeStyle > aRangeRowsSplits;
-
-            RowStyles::iterator rows_it = rRowStyles.begin();
-            RowStyles::iterator rows_end = rRowStyles.end();
-            bool bAddRange = true;
-            for ( ; rows_it != rows_end; ++rows_it )
-            {
-                const RowRangeStyle& r = *rows_it;
-                // if row is completely within existing style, discard it
-                if ( aStyleRows.mnStartRow >= r.mnStartRow && aStyleRows.mnEndRow <= r.mnEndRow )
-                    bAddRange = false;
-                else if ( aStyleRows.mnStartRow <= r.mnStartRow )
-                {
-                    // not intersecting at all?, if so finish as none left
-                    // to check ( row ranges are in ascending order
-                    if ( aStyleRows.mnEndRow < r.mnStartRow )
-                        break;
-                    else if ( aStyleRows.mnEndRow <= r.mnEndRow )
-                    {
-                        aStyleRows.mnEndRow = r.mnStartRow - 1;
-                        break;
-                    }
-                    if ( aStyleRows.mnStartRow < r.mnStartRow )
-                    {
-                        RowRangeStyle aSplit = aStyleRows;
-                        aSplit.mnEndRow = r.mnStartRow - 1;
-                        aRangeRowsSplits.push_back( aSplit );
-                    }
-                }
-            }
-            std::vector< RowRangeStyle >::iterator splits_it = aRangeRowsSplits.begin();
-            std::vector< RowRangeStyle >::iterator splits_end = aRangeRowsSplits.end();
-            for ( ; splits_it != splits_end; ++splits_it )
-                rRowStyles.insert( *splits_it );
-            if ( bAddRange )
-                rRowStyles.insert( aStyleRows );
-        }
-    }
-}
 void SheetDataBuffer::finalizeImport()
 {
     // insert all cells of all open cell blocks
@@ -422,19 +362,49 @@ void SheetDataBuffer::finalizeImport()
     // write default formatting of remaining row range
     maXfIdRowRangeList[ maXfIdRowRange.mnXfId ].push_back( maXfIdRowRange.maRowRange );
 
-    std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList > rangeStyleListMap;
-    for( XfIdRangeListMap::const_iterator aIt = maXfIdRangeLists.begin(), aEnd = maXfIdRangeLists.end(); aIt != aEnd; ++aIt )
+    typedef ::std::pair< sal_Int32, sal_Int32 > RowRange;
+    struct RowRangeStyle
     {
+        sal_Int32 mnStartRow;
+        sal_Int32 mnEndRow;
+        XfIdNumFmtKey mnNumFmt;
+    };
+    struct StyleRowRangeComp
+    {
+        bool operator() (const RowRangeStyle& lhs, const RowRangeStyle& rhs) const
+        {
+            return lhs.mnEndRow<rhs.mnStartRow;
+        }
+    };
+
+    typedef ::std::set< RowRangeStyle, StyleRowRangeComp > RowStyles;
+    typedef ::std::map< sal_Int32, RowStyles > ColStyles;
+
+    ColStyles aStylesPerColumn;
+    StylesBuffer& rStyles = getStyles();
+
+    std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList > rangeStyleListMap;
+
+    for( XfIdRangeListMap::const_iterator aIt = maXfIdRangeLists.begin(), aEnd = maXfIdRangeLists.end(); aIt != aEnd; ++aIt )
         addIfNotInMyMap( getStyles(), rangeStyleListMap, aIt->first.first, aIt->first.second, aIt->second );
-    }
+
     // gather all ranges that have the same style and apply them in bulk
     for (  std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList >::iterator it = rangeStyleListMap.begin(), it_end = rangeStyleListMap.end(); it != it_end; ++it )
     {
         const ApiCellRangeList& rRanges( it->second );
         for ( ApiCellRangeList::const_iterator it_range = rRanges.begin(), it_rangeend = rRanges.end(); it_range!=it_rangeend; ++it_range )
-            addColXfStyle( it->first.first, it->first.second, *it_range );
+        {
+            RowRangeStyle aStyleRows;
+            aStyleRows.mnNumFmt.first = it->first.first;
+            aStyleRows.mnNumFmt.second = it->first.second;
+            aStyleRows.mnStartRow = it_range->StartRow;
+            aStyleRows.mnEndRow = it_range->EndRow;
+            for ( sal_Int32 nCol = it_range->StartColumn; nCol <= it_range->EndColumn; ++nCol )
+                aStylesPerColumn[ nCol ].insert( aStyleRows );
+        }
     }
 
+    // process row ranges for each column, don't overwrite any existing row entries for a column
     for ( std::map< sal_Int32, std::vector< ValueRange > >::iterator it = maXfIdRowRangeList.begin(), it_end =  maXfIdRowRangeList.end(); it != it_end; ++it )
     {
         ApiCellRangeList rangeList;
@@ -442,17 +412,64 @@ void SheetDataBuffer::finalizeImport()
         // get all row ranges for id
         for ( std::vector< ValueRange >::iterator rangeIter = it->second.begin(), rangeIter_end = it->second.end(); rangeIter != rangeIter_end; ++rangeIter )
         {
-            if ( it->first == -1 ) // it's a dud skip it
+            RowRangeStyle aStyleRows;
+            aStyleRows.mnNumFmt.first = it->first;
+            if ( aStyleRows.mnNumFmt.first == -1 ) // dud
                 continue;
-            CellRangeAddress aRange( getSheetIndex(), 0, rangeIter->mnFirst, rAddrConv.getMaxApiAddress().Column, rangeIter->mnLast );
+            aStyleRows.mnNumFmt.second = -1;
+            aStyleRows.mnStartRow = rangeIter->mnFirst;
+            aStyleRows.mnEndRow = rangeIter->mnLast;
+            for ( sal_Int32 nCol = 0; nCol <= rAddrConv.getMaxApiAddress().Column; ++nCol )
+            {
+                RowStyles& rRowStyles =  aStylesPerColumn[ nCol ];
+                // If the rowrange style includes rows already
+                // allocated to a style then we need to split
+                // the range style Rows into sections ( to
+                // occupy only rows that have no style definition )
 
-            addColXfStyle( it->first, -1, aRange, true );
+                // We dont want to set any rowstyle 'rows'
+                // for rows where there is an existing 'style' )
+                std::vector< RowRangeStyle > aRangeRowsSplits;
+
+                RowStyles::iterator rows_it = rRowStyles.begin();
+                RowStyles::iterator rows_end = rRowStyles.end();
+                bool bAddRange = true;
+                for ( ; rows_it != rows_end; ++rows_it )
+                {
+                    const RowRangeStyle& r = *rows_it;
+                    // if row is completely within existing style, discard it
+                    if ( aStyleRows.mnStartRow >= r.mnStartRow && aStyleRows.mnEndRow <= r.mnEndRow )
+                        bAddRange = false;
+                    else if ( aStyleRows.mnStartRow <= r.mnStartRow )
+                    {
+                        // not intersecting at all?, if so finish as none left
+                        // to check ( row ranges are in ascending order
+                        if ( aStyleRows.mnEndRow < r.mnStartRow )
+                            break;
+                        else if ( aStyleRows.mnEndRow <= r.mnEndRow )
+                        {
+                            aStyleRows.mnEndRow = r.mnStartRow - 1;
+                            break;
+                        }
+                        if ( aStyleRows.mnStartRow < r.mnStartRow )
+                        {
+                            RowRangeStyle aSplit = aStyleRows;
+                            aSplit.mnEndRow = r.mnStartRow - 1;
+                            aRangeRowsSplits.push_back( aSplit );
+                        }
+                    }
+                }
+                std::vector< RowRangeStyle >::iterator splits_it = aRangeRowsSplits.begin();
+                std::vector< RowRangeStyle >::iterator splits_end = aRangeRowsSplits.end();
+                for ( ; splits_it != splits_end; ++splits_it )
+                    rRowStyles.insert( *splits_it );
+                if ( bAddRange )
+                    rRowStyles.insert( aStyleRows );
+            }
         }
     }
-
     ScDocument& rDoc = getScDocument();
-    StylesBuffer& rStyles = getStyles();
-    for ( ColStyles::iterator col = maStylesPerColumn.begin(), col_end = maStylesPerColumn.end(); col != col_end; ++col )
+    for ( ColStyles::iterator col = aStylesPerColumn.begin(), col_end = aStylesPerColumn.end(); col != col_end; ++col )
     {
         RowStyles& rRowStyles = col->second;
         std::list<ScAttrEntry> aAttrs;
@@ -480,7 +497,6 @@ void SheetDataBuffer::finalizeImport()
 
         rDoc.SetAttrEntries(nScCol, getSheetIndex(), pData, static_cast<SCSIZE>(nAttrSize));
     }
-
     // merge all cached merged ranges and update right/bottom cell borders
     for( MergedRangeList::iterator aIt = maMergedRanges.begin(), aEnd = maMergedRanges.end(); aIt != aEnd; ++aIt )
         applyCellMerging( aIt->maRange );
