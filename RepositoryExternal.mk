@@ -469,13 +469,6 @@ $(call gb_LinkTarget__use_expat_impl,$(1),expat_x64)
 
 endef
 
-ifeq ($(OS),ANDROID)
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	fontconfig \
-	freetype \
-))
-endif
-
 ifeq ($(SYSTEM_HYPH),YES)
 
 define gb_LinkTarget__use_hyphen
