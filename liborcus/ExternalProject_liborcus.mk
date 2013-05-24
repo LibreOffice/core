@@ -13,7 +13,7 @@ $(eval $(call gb_ExternalProject_use_autoconf,liborcus,build))
 
 $(eval $(call gb_ExternalProject_use_externals,liborcus, \
     boost_headers \
-	boostsystem \
+    boostsystem \
     zlib \
 ))
 
@@ -92,6 +92,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 			--disable-spreadsheet-model \
 			--disable-werror \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(filter NO,$(SYSTEM_BOOST)),--with-boost-system=boostsystem) \
 		&& $(MAKE) \
 	)
 
