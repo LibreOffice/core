@@ -61,7 +61,7 @@ public class _XPopupMenuController extends MultiMethodTest {
             System.out.println("enableItem called.");
         }
 
-        public short execute(com.sun.star.awt.XWindowPeer xWindowPeer, com.sun.star.awt.Point pos, short param) {
+        public short execute(com.sun.star.awt.XWindowPeer xWindowPeer, com.sun.star.awt.Rectangle pos, short param) {
             System.out.println("execute called.");
             return 0;
         }

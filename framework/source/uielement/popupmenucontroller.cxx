@@ -66,7 +66,7 @@ class PopupMenuControllerImpl
 };
 
 //========================================================================
-// class PopupMenuController
+// class PopupMenuController REMOVE REMOVE REMOVE
 //========================================================================
 
 PopupMenuController::PopupMenuController( const Reference< lang::XMultiServiceFactory >& rServiceManager )
@@ -221,7 +221,7 @@ Reference< awt::XWindow > SAL_CALL PopupMenuController::createPopupWindow() thro
         }
         pToolBox->SetItemDown( nItemId, sal_True );
         Reference< awt::XWindowPeer > xPeer( getParent(), UNO_QUERY_THROW );
-        mxPopupMenu->execute( xPeer, awt::Point( aRect.getX(), aRect.getY() ), 0 );
+        mxPopupMenu->execute( xPeer, VCLUnoHelper::ConvertToAWTRect( aRect ), 0 );
         pToolBox->SetItemDown( nItemId, sal_False );
     }
     catch( Exception& )

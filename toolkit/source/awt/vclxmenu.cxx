@@ -578,7 +578,7 @@ throw(css::uno::RuntimeException)
 
 sal_Int16 VCLXMenu::execute(
     const css::uno::Reference< css::awt::XWindowPeer >& rxWindowPeer,
-    const css::awt::Point& rPos,
+    const css::awt::Rectangle& rPos,
     sal_Int16 nFlags )
 throw(css::uno::RuntimeException)
 {
@@ -588,9 +588,8 @@ throw(css::uno::RuntimeException)
     sal_Int16 nRet = 0;
     if ( mpMenu && IsPopupMenu() )
     {
-        const ::Point aPoint = VCLPoint( rPos );
         nRet = ((PopupMenu*)mpMenu)->Execute( VCLUnoHelper::GetWindow( rxWindowPeer ),
-                                              ::Rectangle(aPoint,aPoint),
+                                              VCLRectangle( rPos ),
                                               nFlags | POPUPMENU_NOMOUSEUPCLOSE );
     }
     return nRet;

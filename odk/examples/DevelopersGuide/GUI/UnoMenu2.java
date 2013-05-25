@@ -20,7 +20,7 @@
  *************************************************************/
 
 import com.sun.star.awt.MouseEvent;
-import com.sun.star.awt.Point;
+import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XMouseListener;
 import com.sun.star.awt.XTopWindow;
@@ -99,7 +99,7 @@ public UnoMenu2(XComponentContext _xContext, XMultiComponentFactory _xMCF) {
 
     public void mousePressed(MouseEvent mouseEvent) {
         if (mouseEvent.PopupTrigger){
-            Point aPos = new Point(mouseEvent.X, mouseEvent.Y);
+            Rectangle aPos = new Rectangle(mouseEvent.X, mouseEvent.Y, 0, 0);
             XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, mouseEvent.Source);
             getPopupMenu().execute( xControl.getPeer(), aPos, com.sun.star.awt.PopupMenuDirection.EXECUTE_DEFAULT);
         }

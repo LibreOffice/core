@@ -203,7 +203,8 @@ throw (::com::sun::star::uno::RuntimeException)
     //
 
     Reference< awt::XWindowPeer > xParent( m_xParentWindow, UNO_QUERY );
-    sal_Int16 nId = xPopupMenu->execute( xParent, aPos, com::sun::star::awt::PopupMenuDirection::EXECUTE_UP+16 );
+    com::sun::star::awt::Rectangle aRect( aPos.X, aPos.Y, 0, 0 );
+    sal_Int16 nId = xPopupMenu->execute( xParent, aRect, com::sun::star::awt::PopupMenuDirection::EXECUTE_UP+16 );
     //click "More..."
     if ( nId && m_xFrame.is() )
     {

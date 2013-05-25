@@ -23,7 +23,7 @@
 #define __com_sun_star_awt_XPopupMenu_idl__
 
 #include <com/sun/star/awt/KeyEvent.idl>
-#include <com/sun/star/awt/Point.idl>
+#include <com/sun/star/awt/Rectangle.idl>
 #include <com/sun/star/awt/XMenu.idl>
 #include <com/sun/star/graphic/XGraphic.idl>
 
@@ -84,7 +84,8 @@ published interface XPopupMenu: XMenu
             the parent window.
 
         @param Position
-            the coordinates where the popup menu should be executed.
+            a <type>Rectangle</type> representing the coordinates system
+            where the popup menu should be executed.
 
         @param Direction
             the direction in which a popup menu will grow, as specified
@@ -94,7 +95,7 @@ published interface XPopupMenu: XMenu
             returns the selected item or <code>0</code>, if cancelled.
      */
     short execute( [in] XWindowPeer Parent,
-                   [in] Point Position,
+                   [in] Rectangle Position,
                    [in] short Direction );
 
     /** queries if the <type>PopupMenu</type> is being.

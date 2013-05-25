@@ -120,7 +120,7 @@ public:
     virtual ::sal_Int16 SAL_CALL getDefaultItem(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL checkItem( ::sal_Int16 nItemId, ::sal_Bool bCheck ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isItemChecked( ::sal_Int16 nItemId ) throw (css::uno::RuntimeException);
-    virtual ::sal_Int16 SAL_CALL execute( const css::uno::Reference< css::awt::XWindowPeer >& Parent, const css::awt::Point& Position, ::sal_Int16 Direction ) throw (css::uno::RuntimeException);
+    virtual ::sal_Int16 SAL_CALL execute( const css::uno::Reference< css::awt::XWindowPeer >& Parent, const css::awt::Rectangle& Position, ::sal_Int16 Direction ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isInExecute(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL endExecute(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL setAcceleratorKeyEvent( ::sal_Int16 nItemId, const css::awt::KeyEvent& aKeyEvent ) throw (css::uno::RuntimeException);
