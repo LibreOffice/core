@@ -243,10 +243,6 @@ public:
     void            SetInChangeTrack( bool bVal ) { bInChangeTrack = bVal; }
     bool            IsInChangeTrack() const { return bInChangeTrack; }
 
-                    // standard format for type and format
-                    // for format "Standard" possibly the format used in the formula cell
-    sal_uLong       GetStandardFormat( SvNumberFormatter& rFormatter, sal_uLong nFormat ) const;
-
     // For import filters!
     void            AddRecalcMode( formula::ScRecalcMode );
     /** For import only: set a double result. */

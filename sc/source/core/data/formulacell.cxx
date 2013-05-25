@@ -1495,16 +1495,6 @@ void ScFormulaCell::GetMatColsRows( SCCOL & nCols, SCROW & nRows ) const
 }
 
 
-sal_uLong ScFormulaCell::GetStandardFormat( SvNumberFormatter& rFormatter, sal_uLong nFormat ) const
-{
-    //! not ScFormulaCell::IsValue(), that could reinterpret the formula again.
-    if ( aResult.IsValue() )
-        return ScGlobal::GetStandardFormat( aResult.GetDouble(), rFormatter, nFormat, nFormatType );
-    else
-        return ScGlobal::GetStandardFormat( rFormatter, nFormat, nFormatType );
-}
-
-
 void ScFormulaCell::Notify( SvtBroadcaster&, const SfxHint& rHint)
 {
     if ( !pDocument->IsInDtorClear() && !pDocument->GetHardRecalcState() )
@@ -1652,10 +1642,7 @@ void ScFormulaCell::GetURLResult( OUString& rURL, OUString& rCellText )
     sal_uLong nCellFormat = pDocument->GetNumberFormat( aPos );
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
 
-    if ( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-        nCellFormat = GetStandardFormat( *pFormatter,nCellFormat );
-
-   sal_uLong nURLFormat = ScGlobal::GetStandardFormat( *pFormatter,nCellFormat, NUMBERFORMAT_NUMBER);
+    sal_uLong nURLFormat = ScGlobal::GetStandardFormat( *pFormatter, nCellFormat, NUMBERFORMAT_NUMBER);
 
     if ( IsValue() )
     {

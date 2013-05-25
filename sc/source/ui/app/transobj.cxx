@@ -831,18 +831,6 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
                     pDestDoc->SetString(aPos, aStr);
                 }
             }
-
-            //  number formats
-
-            sal_uLong nOldFormat = ((const SfxUInt32Item*)
-                            pDestDoc->GetAttr(nCol,nRow,nDestTab, ATTR_VALUE_FORMAT))->GetValue();
-            if ( (nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-            {
-                sal_uLong nNewFormat = pFCell->GetStandardFormat( *pFormatter,
-                    nOldFormat );
-                pDestDoc->ApplyAttr( nCol,nRow,nDestTab,
-                            SfxUInt32Item(ATTR_VALUE_FORMAT, nNewFormat) );
-            }
         }
     }
 }

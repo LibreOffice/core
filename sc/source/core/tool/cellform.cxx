@@ -101,11 +101,6 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
                 {
                     sal_uInt16 nErrCode = pFCell->GetErrCode();
 
-                    // get the number format only after interpretation (GetErrCode):
-                    if ( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-                        nFormat = pFCell->GetStandardFormat( rFormatter,
-                            nFormat );
-
                     if (nErrCode != 0)
                         rString = ScGlobal::GetErrorString(nErrCode);
                     else if ( pFCell->IsEmptyDisplayedAsString() )
