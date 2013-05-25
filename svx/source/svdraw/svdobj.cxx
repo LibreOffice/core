@@ -498,8 +498,6 @@ SdrObject::~SdrObject()
         delete mpViewContact;
         mpViewContact = 0L;
     }
-
-    mnLayerID = static_cast<SdrLayerID>(0xdead);
 }
 
 void SdrObject::Free( SdrObject*& _rpObject )
