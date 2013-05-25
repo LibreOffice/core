@@ -2392,7 +2392,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         // #114999# special emboldening for Ricoh fonts
         // TODO: smarter check for special cases by using PreMatch infrastructure?
         if( (rFSD.GetWeight() > WEIGHT_MEDIUM)
-        &&  aSearchName.equalsIgnoreAsciiCase( "hg" ) )
+        &&  aSearchName.startsWithIgnoreAsciiCase( "hg" ) )
         {
             OUString aBoldName;
             if( aSearchName.equalsIgnoreAsciiCase( "hggothicb" ) )
