@@ -61,7 +61,7 @@
             </child>
             <child>
               <object class="GtkButton" id="default">
-                <property name="label">_Default</property>
+                <property name="label" translatable="yes">_Default</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

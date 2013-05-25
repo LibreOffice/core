@@ -49,7 +49,7 @@
             </child>
             <child>
               <object class="GtkButton" id="options">
-                <property name="label">_Options...</property>
+                <property name="label" translatable="yes">_Options...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>

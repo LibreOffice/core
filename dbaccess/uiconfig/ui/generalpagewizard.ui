@@ -136,7 +136,7 @@
     </child>
     <child>
       <object class="dbulo-OpenDocumentButton" id="openDatabase">
-        <property name="label">Open</property>
+        <property name="label" translatable="yes">Open</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>

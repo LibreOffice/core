@@ -336,7 +336,7 @@
                             </child>
                             <child>
                               <object class="GtkButton" id="buttonEdit">
-                                <property name="label">_Edit...</property>
+                                <property name="label" translatable="yes">_Edit...</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_underline">True</property>

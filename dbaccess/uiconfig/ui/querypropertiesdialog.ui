@@ -118,7 +118,7 @@
                             <property name="layout_style">start</property>
                             <child>
                               <object class="GtkRadioButton" id="distinct">
-                                <property name="label">Yes</property>
+                                <property name="label" translatable="yes">Yes</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -134,7 +134,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="nondistinct">
-                                <property name="label">No</property>
+                                <property name="label" translatable="yes">No</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
