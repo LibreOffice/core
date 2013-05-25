@@ -20,7 +20,7 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:AddDirect" toolbar:text="" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:NewDoc" toolbar:text="" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Open" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:Open" toolbar:text="" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:Save" toolbar:text=""/>
  <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:text="" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SendMail" toolbar:text=""/>
