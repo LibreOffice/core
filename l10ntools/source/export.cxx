@@ -1201,7 +1201,7 @@ void Export::ConvertMergeContent( OString &rText )
     sal_Bool bNoClose = !rText.endsWith("\\\"");
 
 
-    rText = rText.replaceAll("\\\"'","\'"); // Temporary: until PO files contain escaped single quotes
+    rText = rText.replaceAll("\\\'","\'"); // Temporary: until PO files contain escaped single quotes
                                             // (Maybe next PO update solve this)
     rText =
         helper::escapeAll(
