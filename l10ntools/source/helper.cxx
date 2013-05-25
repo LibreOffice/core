@@ -46,6 +46,10 @@ OString unEscapeAll(
                 sReturn.append(rUnEscaped[nEscapedOne/2]);
                 ++nIndex;
             }
+            else
+            {
+                sReturn.append(rText[nIndex]);
+            }
         }
         else
             sReturn.append(rText[nIndex]);
