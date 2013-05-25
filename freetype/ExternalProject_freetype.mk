@@ -20,7 +20,7 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 		--disable-shared \
 		--without-zlib \
 		--without-bzip2 \
-		--prefix=$(OUTDIR) --includedir=$(OUTDIR)/inc/external \
+		--prefix=$(OUTDIR) --includedir=$(call gb_UnpackedTarball_get_dir,freetype)/include \
 		--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 	&& chmod +x builds/unix/freetype-config \
 	&& $(MAKE) \
