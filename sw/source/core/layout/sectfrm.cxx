@@ -2619,11 +2619,11 @@ void SwSectionFrm::InvalidateFtnPos()
 
 long SwSectionFrm::Undersize( sal_Bool bOverSize )
 {
-    bUndersized = sal_False;
+    m_bUndersized = sal_False;
     SWRECTFN( this )
     long nRet = InnerHeight() - (Prt().*fnRect->fnGetHeight)();
     if( nRet > 0 )
-        bUndersized = sal_True;
+        m_bUndersized = sal_True;
     else if( !bOverSize )
         nRet = 0;
     return nRet;

@@ -70,7 +70,7 @@ class SwFlowFrm
 
     friend class SwNode2LayImpl;
 
-    SwFrm &rThis;
+    SwFrm& m_rThis;
 
     // helper methods for MoveSubTree()
     static SwLayoutFrm *CutTree( SwFrm* );
@@ -82,7 +82,7 @@ class SwFlowFrm
         pages can be skipped at the same time. In addition, it is evaluated by
         the MoveBwd() method in TabFrm.
     */
-    static sal_Bool bMoveBwdJump;
+    static sal_Bool m_bMoveBwdJump;
 
     /** helper method to determine previous frame for calculation of the
         upper space
@@ -114,9 +114,9 @@ protected:
     SwFlowFrm *m_pFollow;
     SwFlowFrm *m_pPrecede;
 
-    sal_Bool bLockJoin  :1; // if sal_True than joins (and thus deletes) are prohibited!
-    sal_Bool bUndersized:1; // I am smaller than needed
-    sal_Bool bFlyLock   :1; // stop positioning of at-character flyframes
+    sal_Bool m_bLockJoin  :1; // if sal_True than joins (and thus deletes) are prohibited!
+    sal_Bool m_bUndersized:1; // I am smaller than needed
+    sal_Bool m_bFlyLock   :1; // stop positioning of at-character flyframes
 
     // checks if forward flow makes sense to prevent infinite moves
     inline sal_Bool IsFwdMoveAllowed();
@@ -133,8 +133,8 @@ protected:
     */
     sal_uInt8 BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRect );
 
-    void LockJoin()   { bLockJoin = sal_True;  }
-    void UnlockJoin() { bLockJoin = sal_False; }
+    void LockJoin()   { m_bLockJoin = sal_True;  }
+    void UnlockJoin() { m_bLockJoin = sal_False; }
 
     sal_Bool CheckMoveFwd( bool& rbMakePage, sal_Bool bKeep, sal_Bool bMovedBwd );
     sal_Bool MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool bMoveAlways = sal_False );
@@ -145,14 +145,14 @@ public:
     SwFlowFrm( SwFrm &rFrm );
     virtual ~SwFlowFrm();
 
-    const SwFrm *GetFrm() const { return &rThis; }
-          SwFrm *GetFrm()       { return &rThis; }
+    const SwFrm *GetFrm() const { return &m_rThis; }
+          SwFrm *GetFrm()       { return &m_rThis; }
 
-    static sal_Bool IsMoveBwdJump() { return bMoveBwdJump; }
-    static void SetMoveBwdJump( sal_Bool bNew ){ bMoveBwdJump = bNew; }
+    static sal_Bool IsMoveBwdJump() { return m_bMoveBwdJump; }
+    static void SetMoveBwdJump( sal_Bool bNew ){ m_bMoveBwdJump = bNew; }
 
-    inline void SetUndersized( const sal_Bool bNew ) { bUndersized = bNew; }
-    inline sal_Bool IsUndersized()  const { return bUndersized; }
+    inline void SetUndersized( const sal_Bool bNew ) { m_bUndersized = bNew; }
+    inline sal_Bool IsUndersized()  const { return m_bUndersized; }
 
     sal_Bool IsPrevObjMove() const;
 
@@ -169,8 +169,8 @@ public:
     const SwFlowFrm *GetPrecede() const { return m_pPrecede; }
           SwFlowFrm *GetPrecede()       { return m_pPrecede; }
 
-    sal_Bool IsJoinLocked() const { return bLockJoin; }
-    sal_Bool IsAnyJoinLocked() const { return bLockJoin || HasLockedFollow(); }
+    sal_Bool IsJoinLocked() const { return m_bLockJoin; }
+    sal_Bool IsAnyJoinLocked() const { return m_bLockJoin || HasLockedFollow(); }
 
     sal_Bool IsPageBreak( sal_Bool bAct ) const;
     sal_Bool IsColBreak( sal_Bool bAct ) const;
@@ -221,8 +221,8 @@ public:
 
     void CheckKeep();
 
-    void SetFlyLock( sal_Bool bNew ){ bFlyLock = bNew; }
-    sal_Bool IsFlyLock() const {    return bFlyLock; }
+    void SetFlyLock( sal_Bool bNew ){ m_bFlyLock = bNew; }
+    sal_Bool IsFlyLock() const {    return m_bFlyLock; }
 
     // Casting of a Frm into a FlowFrm (if it is one, otherwise 0)
     // These methods need to be customized in subclasses!
@@ -232,7 +232,7 @@ public:
 
 inline sal_Bool SwFlowFrm::IsFwdMoveAllowed()
 {
-    return rThis.GetIndPrev() != 0;
+    return m_rThis.GetIndPrev() != 0;
 }
 #endif
 
