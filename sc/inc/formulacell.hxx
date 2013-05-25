@@ -77,10 +77,9 @@ private:
     ScFormulaCell*  pPreviousTrack;
     ScFormulaCell*  pNextTrack;
     ScFormulaCellGroupRef xGroup;       // re-factoring hack - group of formulae we're part of.
-    sal_uLong       nFormatIndex;       // Number format set by calculation
-    short           nFormatType;        // Number format type set by calculation
     sal_uInt16      nSeenInIteration;   // Iteration cycle in which the cell was last encountered
     sal_uInt8       cMatrixFlag;        // One of ScMatrixMode
+    short           nFormatType;
     bool            bDirty         : 1; // Must be (re)calculated
     bool            bChanged       : 1; // Whether something changed regarding display/representation
     bool            bRunning       : 1; // Already interpreting right now
@@ -154,6 +153,7 @@ public:
     bool            NeedsListening() const { return bNeedListening; }
     void            SetNeedsListening( bool bVar ) { bNeedListening = bVar; }
     void            SetNeedNumberFormat( bool bVal ) { mbNeedsNumberFormat = bVal; }
+    short           GetFormatType() const { return nFormatType; }
     void            Compile(const OUString& rFormula,
                             bool bNoListening = false,
                             const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
@@ -215,7 +215,6 @@ public:
     sal_uInt16      GetMatrixEdge( ScAddress& rOrgPos );
     sal_uInt16      GetErrCode();   // interpret first if necessary
     sal_uInt16      GetRawError();  // don't interpret, just return code or result error
-    short           GetFormatType() const                   { return nFormatType; }
     sal_uInt8       GetMatrixFlag() const                   { return cMatrixFlag; }
     ScTokenArray*   GetCode() const                         { return pCode; }
 

@@ -160,10 +160,7 @@ long ScColumn::GetNeededSize(
         // #i111387# disable automatic line breaks only for "General" number format
         if (bBreak && aCell.hasNumeric() && ( nFormat % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 )
         {
-            // also take formula result type into account for number format
-            if (aCell.meType != CELLTYPE_FORMULA ||
-                (aCell.mpFormula->GetStandardFormat(*pFormatter, nFormat) % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
-                bBreak = false;
+            bBreak = false;
         }
 
         //  get other attributes from pattern and conditional formatting

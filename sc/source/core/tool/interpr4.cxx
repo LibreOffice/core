@@ -170,8 +170,6 @@ sal_uLong ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, ScRefCellVa
         else
             nErr = 0;
         nFormat = pDok->GetNumberFormat( rPos );
-        if (rCell.meType == CELLTYPE_FORMULA && ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0))
-            nFormat = rCell.mpFormula->GetStandardFormat(*pFormatter, nFormat);
     }
 
     SetError(nErr);
