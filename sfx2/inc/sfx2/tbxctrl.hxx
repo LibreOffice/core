@@ -346,46 +346,6 @@ public:
 
 //------------------------------------------------------------------------
 
-class SfxAppToolBoxControl_Impl : public SfxToolBoxControl
-
-/*  [Beschreibung]
-
-    Interne Hilfsklasse f"ur um das Popup-Menu <AppMenu_Impl> unter Neu
-    im SDT zu starten.
-*/
-
-{
-public:
-                            SFX_DECL_TOOLBOX_CONTROL();
-                            SfxAppToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
-                            ~SfxAppToolBoxControl_Impl();
-    void                    SetImage( const String& rFacName );
-
-                            struct ExecuteInfo
-                            {
-                                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
-                                ::com::sun::star::util::URL                                                aTargetURL;
-                                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
-                            };
-
-                            DECL_STATIC_LINK( SfxAppToolBoxControl_Impl, ExecuteHdl_Impl, ExecuteInfo* );
-
-protected:
-    virtual void            Click();
-    using SfxToolBoxControl::Select;
-    virtual void            Select( sal_Bool );
-    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual SfxPopupWindow* CreatePopupWindow();
-                            DECL_LINK( Activate, Menu * ); // Needed to support high contrast images
-private:
-    String                  aLastURL;
-    sal_Bool                    bBigImages;
-    PopupMenu*              pMenu;
-    sal_uIntPtr                   m_nSymbolsStyle;
-    sal_Bool                    m_bWasHiContrastMode;
-    sal_Bool                    m_bShowMenuImages;
-};
-
 class SfxHistoryToolBoxControl_Impl : public SfxToolBoxControl
 {
     Timer                   aTimer;

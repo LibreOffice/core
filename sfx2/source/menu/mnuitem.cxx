@@ -574,3 +574,62 @@ void SfxUnoMenuControl::Select()
 {
     pUnoCtrl->Execute();
 }
+
+long Select_Impl( void* /*pHdl*/, void* pVoid )
+{
+    Menu* pMenu = (Menu*)pVoid;
+    String aURL( pMenu->GetItemCommand( pMenu->GetCurItemId() ) );
+
+    if( !aURL.Len() )
+        return 0;
+
+    Reference < ::com::sun::star::frame::XFramesSupplier > xDesktop =
+            Reference < ::com::sun::star::frame::XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance(
+                                                                        DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    Reference < ::com::sun::star::frame::XFrame > xFrame( xDesktop, UNO_QUERY );
+
+    URL aTargetURL;
+    aTargetURL.Complete = aURL;
+    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+                                            rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )),
+                                          UNO_QUERY );
+    xTrans->parseStrict( aTargetURL );
+
+    Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
+    Reference < XDispatch > xDisp;
+    if ( xProv.is() )
+    {
+        if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
+            xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+        else
+        {
+            ::rtl::OUString aTargetFrame( ::rtl::OUString::createFromAscii( "_blank" ) );
+            ::framework::MenuConfiguration::Attributes* pMenuAttributes =
+                (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( pMenu->GetCurItemId() );
+
+            if ( pMenuAttributes )
+                aTargetFrame = pMenuAttributes->aTargetFrame;
+
+            xDisp = xProv->queryDispatch( aTargetURL, aTargetFrame , 0 );
+        }
+    }
+
+    if ( xDisp.is() )
+    {
+        SfxAppMenuControl_Impl::ExecuteInfo* pExecuteInfo = new SfxAppMenuControl_Impl::ExecuteInfo;
+        pExecuteInfo->xDispatch     = xDisp;
+        pExecuteInfo->aTargetURL    = aTargetURL;
+        pExecuteInfo->aArgs         = Sequence< PropertyValue >();
+        Application::PostUserEvent( STATIC_LINK( 0, SfxAppMenuControl_Impl, ExecuteHdl_Impl), pExecuteInfo );
+    }
+
+    return sal_True;
+}
+
+
+IMPL_STATIC_LINK_NOINSTANCE( SfxAppMenuControl_Impl, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+{
+    pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
+    delete pExecuteInfo;
+    return 0;
+}

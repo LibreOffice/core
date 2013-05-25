@@ -37,6 +37,9 @@ struct SfxMenuCtrlFactory;
 #include <tools/string.hxx>
 #include <sfx2/ctrlitem.hxx>
 
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/util/URL.hpp>
+
 class SFX2_DLLPUBLIC SfxMenuControl: public SfxControllerItem
 {
 //friend SvStream& operator<<( SvStream& rStream, const SfxMenuControl& rItem );
@@ -165,6 +168,15 @@ public:
     SFX_DECL_MENU_CONTROL();
     SfxAppMenuControl_Impl( sal_uInt16 nPos, Menu& rMenu, SfxBindings& rBindings );
     ~SfxAppMenuControl_Impl();
+
+    struct ExecuteInfo
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
+        ::com::sun::star::util::URL                                                aTargetURL;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
+    };
+
+    DECL_STATIC_LINK( SfxAppMenuControl_Impl, ExecuteHdl_Impl, ExecuteInfo* );
 };
 
 //#endif
