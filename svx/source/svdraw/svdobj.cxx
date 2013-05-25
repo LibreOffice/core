@@ -498,8 +498,6 @@ SdrObject::~SdrObject()
         delete mpViewContact;
         mpViewContact = 0L;
     }
-
-    mnLayerID = 59; // random value
 }
 
 void SdrObject::Free( SdrObject*& _rpObject )
