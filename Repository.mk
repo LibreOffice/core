@@ -39,7 +39,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     genconv_dict \
     gendict \
     genindex_data \
-    gsicheck \
     helpex \
     idxdict \
 	langsupport \
