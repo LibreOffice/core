@@ -850,12 +850,12 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const sal_Bool bGrey )
     SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
 
     Point aPos( rInf.GetPos() );
-    const Point &rOld = rInf.GetPos();
-    rInf.SetPos( aPos );
 
     if( GetEscapement() )
         CalcEsc( rInf, aPos );
 
+    const Point &rOld = rInf.GetPos();
+    rInf.SetPos( aPos );
     rInf.SetKern( CheckKerning() + rInf.GetSperren() / SPACING_PRECISION_FACTOR );
 
     if( IsCapital() )
