@@ -362,8 +362,14 @@ MenuToolbarController::createPopupWindow() throw (::com::sun::star::uno::Runtime
         }
     }
 
+    if ( !pMenu || !m_pToolbar )
+        return NULL;
+
+    OSL_ENSURE ( pMenu->GetItemCount(), "Empty PopupMenu!" );
+
     ::Rectangle aRect( m_pToolbar->GetItemRect( m_nID ) );
     pMenu->Execute( m_pToolbar, aRect, POPUPMENU_EXECUTE_DOWN );
+
     return NULL;
 }
 } // namespace

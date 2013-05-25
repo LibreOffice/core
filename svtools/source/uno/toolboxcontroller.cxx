@@ -59,20 +59,6 @@ struct DispatchInfo
         : mxDispatch( xDispatch ), maURL( rURL ), maArgs( rArgs ) {}
 };
 
-struct ToolboxController_Impl
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >          m_xParentWindow;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xUrlTransformer;
-    OUString m_sModuleName;
-     sal_uInt16 m_nToolBoxId;
-
-    DECL_STATIC_LINK( ToolboxController_Impl, ExecuteHdl_Impl, DispatchInfo* );
-
-    ToolboxController_Impl()
-        : m_nToolBoxId( SAL_MAX_UINT16 )
-    {}
-};
-
 ToolboxController::ToolboxController(
     const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& xFrame,
@@ -82,6 +68,7 @@ ToolboxController::ToolboxController(
     ,   m_bSupportVisible(sal_False)
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
+    ,   m_nToolBoxId( SAL_MAX_UINT16 )
     ,   m_xFrame(xFrame)
     ,   m_xContext( rxContext )
     ,   m_aCommandURL( aCommandURL )
@@ -93,11 +80,9 @@ ToolboxController::ToolboxController(
         css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY,
         &m_bSupportVisible, getCppuType(&m_bSupportVisible));
 
-    m_pImpl = new ToolboxController_Impl;
-
     try
     {
-        m_pImpl->m_xUrlTransformer = URLTransformer::create( rxContext );
+        m_xUrlTransformer = URLTransformer::create( rxContext );
     }
     catch(const Exception&)
     {
@@ -110,19 +95,17 @@ ToolboxController::ToolboxController() :
     ,   m_bSupportVisible(sal_False)
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
+    ,   m_nToolBoxId( SAL_MAX_UINT16 )
     ,   m_aListenerContainer( m_aMutex )
 {
     registerProperty( OUString(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE),
         TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE,
         css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY,
         &m_bSupportVisible, getCppuType(&m_bSupportVisible));
-
-    m_pImpl = new ToolboxController_Impl;
 }
 
 ToolboxController::~ToolboxController()
 {
-    delete m_pImpl;
 }
 
 Reference< XFrame > ToolboxController::getFrameInterface() const
@@ -230,16 +213,18 @@ throw ( Exception, RuntimeException )
                         m_xContext = comphelper::getComponentContext(xMSF);
                 }
                 else if ( aPropValue.Name == "ParentWindow" )
-                    m_pImpl->m_xParentWindow.set(aPropValue.Value,UNO_QUERY);
+                    m_xParentWindow.set(aPropValue.Value,UNO_QUERY);
                 else if ( aPropValue.Name == "ModuleIdentifier" )
-                    aPropValue.Value >>= m_pImpl->m_sModuleName;
+                    aPropValue.Value >>= m_sModuleName;
+                else if ( aPropValue.Name == "Identifier" )
+                    aPropValue.Value >>= m_nToolBoxId;
             }
         }
 
         try
         {
-            if ( !m_pImpl->m_xUrlTransformer.is() && m_xContext.is() )
-                m_pImpl->m_xUrlTransformer = URLTransformer::create( m_xContext );
+            if ( !m_xUrlTransformer.is() && m_xContext.is() )
+                m_xUrlTransformer = URLTransformer::create( m_xContext );
         }
         catch(const Exception&)
         {
@@ -289,8 +274,8 @@ throw (::com::sun::star::uno::RuntimeException)
 
             com::sun::star::util::URL aTargetURL;
             aTargetURL.Complete = pIter->first;
-            if ( m_pImpl->m_xUrlTransformer.is() )
-                m_pImpl->m_xUrlTransformer->parseStrict( aTargetURL );
+            if ( m_xUrlTransformer.is() )
+                m_xUrlTransformer->parseStrict( aTargetURL );
 
             if ( xDispatch.is() && xStatusListener.is() )
                 xDispatch->removeStatusListener( xStatusListener, aTargetURL );
@@ -388,8 +373,8 @@ throw (::com::sun::star::uno::RuntimeException)
             aArgs[0].Value  = makeAny( KeyModifier );
 
             aTargetURL.Complete = aCommandURL;
-            if ( m_pImpl->m_xUrlTransformer.is() )
-                m_pImpl->m_xUrlTransformer->parseStrict( aTargetURL );
+            if ( m_xUrlTransformer.is() )
+                m_xUrlTransformer->parseStrict( aTargetURL );
             xDispatch->dispatch( aTargetURL, aArgs );
         }
         catch ( DisposedException& )
@@ -449,8 +434,8 @@ void ToolboxController::addStatusListener( const OUString& aCommandURL )
             if ( m_xContext.is() && xDispatchProvider.is() )
             {
                 aTargetURL.Complete = aCommandURL;
-                if ( m_pImpl->m_xUrlTransformer.is() )
-                    m_pImpl->m_xUrlTransformer->parseStrict( aTargetURL );
+                if ( m_xUrlTransformer.is() )
+                    m_xUrlTransformer->parseStrict( aTargetURL );
                 xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
                 xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
@@ -501,8 +486,8 @@ void ToolboxController::removeStatusListener( const OUString& aCommandURL )
         {
             com::sun::star::util::URL aTargetURL;
             aTargetURL.Complete = aCommandURL;
-            if ( m_pImpl->m_xUrlTransformer.is() )
-                m_pImpl->m_xUrlTransformer->parseStrict( aTargetURL );
+            if ( m_xUrlTransformer.is() )
+                m_xUrlTransformer->parseStrict( aTargetURL );
 
             if ( xDispatch.is() && xStatusListener.is() )
                 xDispatch->removeStatusListener( xStatusListener, aTargetURL );
@@ -534,8 +519,8 @@ void ToolboxController::bindListener()
             {
                 com::sun::star::util::URL aTargetURL;
                 aTargetURL.Complete = pIter->first;
-                if ( m_pImpl->m_xUrlTransformer.is() )
-                    m_pImpl->m_xUrlTransformer->parseStrict( aTargetURL );
+                if ( m_xUrlTransformer.is() )
+                    m_xUrlTransformer->parseStrict( aTargetURL );
 
                 Reference< XDispatch > xDispatch( pIter->second );
                 if ( xDispatch.is() )
@@ -623,8 +608,8 @@ void ToolboxController::unbindListener()
         {
             com::sun::star::util::URL aTargetURL;
             aTargetURL.Complete = pIter->first;
-            if ( m_pImpl->m_xUrlTransformer.is() )
-                m_pImpl->m_xUrlTransformer->parseStrict( aTargetURL );
+            if ( m_xUrlTransformer.is() )
+                m_xUrlTransformer->parseStrict( aTargetURL );
 
             Reference< XDispatch > xDispatch( pIter->second );
             if ( xDispatch.is() )
@@ -687,8 +672,8 @@ void ToolboxController::updateStatus( const OUString aCommandURL )
         if ( m_xContext.is() && xDispatchProvider.is() )
         {
             aTargetURL.Complete = aCommandURL;
-            if ( m_pImpl->m_xUrlTransformer.is() )
-                m_pImpl->m_xUrlTransformer->parseStrict( aTargetURL );
+            if ( m_xUrlTransformer.is() )
+                m_xUrlTransformer->parseStrict( aTargetURL );
             xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
         }
     }
@@ -712,17 +697,12 @@ void ToolboxController::updateStatus( const OUString aCommandURL )
 
 Reference< XURLTransformer > ToolboxController::getURLTransformer() const
 {
-    return m_pImpl->m_xUrlTransformer;
+    return m_xUrlTransformer;
 }
 
 Reference< ::com::sun::star::awt::XWindow > ToolboxController::getParent() const
 {
-    return m_pImpl->m_xParentWindow;
-}
-
-const OUString& ToolboxController::getModuleName() const
-{
-    return m_pImpl->m_sModuleName;
+    return m_xParentWindow;
 }
 
 void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequence< PropertyValue >& rArgs )
@@ -736,7 +716,7 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
 
         Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch( aURL, OUString(), 0 ), UNO_QUERY_THROW );
 
-        Application::PostUserEvent( STATIC_LINK(0, ToolboxController_Impl, ExecuteHdl_Impl), new DispatchInfo( xDispatch, aURL, rArgs ) );
+        Application::PostUserEvent( STATIC_LINK(0, ToolboxController, ExecuteHdl_Impl), new DispatchInfo( xDispatch, aURL, rArgs ) );
 
     }
     catch( Exception& )
@@ -810,7 +790,7 @@ throw( com::sun::star::uno::Exception)
 
 //--------------------------------------------------------------------
 
-IMPL_STATIC_LINK_NOINSTANCE( ToolboxController_Impl, ExecuteHdl_Impl, DispatchInfo*, pDispatchInfo )
+IMPL_STATIC_LINK_NOINSTANCE( ToolboxController, ExecuteHdl_Impl, DispatchInfo*, pDispatchInfo )
 {
     pDispatchInfo->mxDispatch->dispatch( pDispatchInfo->maURL, pDispatchInfo->maArgs );
     delete pDispatchInfo;
@@ -829,12 +809,12 @@ void ToolboxController::enable( bool bEnable )
 
 bool ToolboxController::getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox )
 {
-    if( (m_pImpl->m_nToolBoxId != SAL_MAX_UINT16) && (ppToolBox == 0) )
-        return m_pImpl->m_nToolBoxId;
+    if( (m_nToolBoxId != SAL_MAX_UINT16) && (ppToolBox == 0) )
+        return m_nToolBoxId;
 
     ToolBox* pToolBox = static_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ) );
 
-    if( (m_pImpl->m_nToolBoxId == SAL_MAX_UINT16) && pToolBox )
+    if( (m_nToolBoxId == SAL_MAX_UINT16) && pToolBox )
     {
         const sal_uInt16 nCount = pToolBox->GetItemCount();
         for ( sal_uInt16 nPos = 0; nPos < nCount; ++nPos )
@@ -842,7 +822,7 @@ bool ToolboxController::getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox )
             const sal_uInt16 nItemId = pToolBox->GetItemId( nPos );
             if ( pToolBox->GetItemCommand( nItemId ) == String( m_aCommandURL ) )
             {
-                m_pImpl->m_nToolBoxId = nItemId;
+                m_nToolBoxId = nItemId;
                 break;
             }
         }
@@ -851,7 +831,7 @@ bool ToolboxController::getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox )
     if( ppToolBox )
         *ppToolBox = pToolBox;
 
-    rItemId = m_pImpl->m_nToolBoxId;
+    rItemId = m_nToolBoxId;
 
     return (rItemId != SAL_MAX_UINT16) && (( ppToolBox == 0) || (*ppToolBox != 0) );
 }
