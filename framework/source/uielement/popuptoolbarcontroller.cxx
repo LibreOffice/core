@@ -312,7 +312,7 @@ static sal_Bool Impl_ExistURLInMenu(
 {
     sal_Bool bValidFallback( sal_False );
     sal_uInt16 nCount( 0 );
-    if ( rPopupMenu.is() && ( nCount = rPopupMenu->getItemCount() ) && sURL.getLength() )
+    if ( rPopupMenu.is() && ( nCount = rPopupMenu->getItemCount() ) != 0 && sURL.getLength() )
     {
         for ( sal_uInt16 n = 0; n < nCount; ++n )
         {

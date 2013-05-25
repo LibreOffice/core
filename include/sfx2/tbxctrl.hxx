@@ -313,44 +313,6 @@ public:
 
 //------------------------------------------------------------------------
 
-class SfxAppToolBoxControl_Impl : public SfxToolBoxControl
-
-/*  [Description]
-
-    Internal helper class for the pop-up menu <AppMenu_Impl> under new
-    start in the SDT.
-*/
-
-{
-public:
-                            SFX_DECL_TOOLBOX_CONTROL();
-                            SfxAppToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
-                            ~SfxAppToolBoxControl_Impl();
-    void                    SetImage( const String& rFacName );
-
-                            struct ExecuteInfo
-                            {
-                                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
-                                ::com::sun::star::util::URL                                                aTargetURL;
-                                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
-                            };
-
-                            DECL_STATIC_LINK( SfxAppToolBoxControl_Impl, ExecuteHdl_Impl, ExecuteInfo* );
-
-protected:
-    virtual void            Click();
-    using SfxToolBoxControl::Select;
-    virtual void            Select( sal_Bool );
-    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual SfxPopupWindow* CreatePopupWindow();
-                            DECL_LINK( Activate, Menu * );
-private:
-    String                  aLastURL;
-    PopupMenu*              pMenu;
-    sal_uIntPtr             m_nSymbolsStyle;
-    sal_Bool                m_bShowMenuImages;
-};
-
 /** Toolbox that implements recent files menu for the Open file toolbar button.
 
 To use that, the appropriate Sfx*Item (like Open, OpenFromCalc, or
