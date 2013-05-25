@@ -231,7 +231,7 @@
                     <property name="layout_style">end</property>
                     <child>
                       <object class="GtkButton" id="addfile">
-                        <property name="label">A_dd...</property>
+                        <property name="label" translatable="yes">A_dd...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
