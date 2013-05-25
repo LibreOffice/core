@@ -46,6 +46,8 @@
 #include "comphelper/sequenceashashmap.hxx"
 #include "comphelper/configurationhelper.hxx"
 
+#include <toolkit/awt/vclxmenu.hxx>
+
 #include "cppuhelper/implbase1.hxx"
 
 #include "rtl/strbuf.hxx"
@@ -61,13 +63,15 @@
 #include "com/sun/star/task/XJobExecutor.hpp"
 #include "com/sun/star/util/XStringWidth.hpp"
 #include <com/sun/star/util/URLTransformer.hpp>
-
+#include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace framework;
+
+#define RECENT_FILE_LIST    ".uno:RecentFileList"
 
 #define WRITER_URL      "private:factory/swriter"
 #define CALC_URL        "private:factory/scalc"
@@ -149,15 +153,15 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     mnHideExternalLinks( 0 ),
     mpAccExec( NULL ),
     mnBtnPos( 120 ),
-    mnBtnTop( 150 ),
-    mpRecentMenu( NULL )
+    mnBtnTop( 150 )
 {
     mnColumnWidth[0] = mnColumnWidth[1] = 0;
     mnTextColumnWidth[0] = mnTextColumnWidth[1] = 0;
 
     try
     {
-        Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
+        mxContext.set( ::comphelper::getProcessComponentContext(), uno::UNO_SET_THROW );
+        Reference<lang::XMultiServiceFactory> xConfig = configuration::theDefaultProvider::get( mxContext );
         Sequence<Any> args(1);
         PropertyValue val(
             "nodepath",
@@ -172,9 +176,20 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
             Any value( xNameAccess->getByName("StartCenterHideExternalLinks") );
             mnHideExternalLinks = value.get<sal_Int32>();
         }
+
+        mxPopupMenuFactory.set(
+            frame::PopupMenuControllerFactory::create( mxContext ) );
+        // TODO If there is no PopupMenuController, the button should be a nomral one not a MenuButton
+        if ( mxPopupMenuFactory->hasController(
+            OUString( RECENT_FILE_LIST ) , OUString("com.sun.star.frame.StartModule") ) )
+        {
+            mxPopupMenu.set( mxContext->getServiceManager()->createInstanceWithContext(
+                OUString( "com.sun.star.awt.PopupMenu" ), mxContext ), uno::UNO_QUERY_THROW );
+        }
     }
-    catch (const Exception&)
+    catch (const Exception& e)
     {
+        SAL_WARN( "fwk", "BackingWindow - caught an exception! " << e.Message );
     }
 
     OUString aExtHelpText( FwkResId( STR_BACKING_EXTHELP ) );
@@ -244,8 +259,24 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
 BackingWindow::~BackingWindow()
 {
     maToolbox.RemoveEventListener( LINK( this, BackingWindow, WindowEventListener ) );
-    delete mpRecentMenu;
     delete mpAccExec;
+
+    if( mxPopupMenuController.is() )
+    {
+        Reference< lang::XComponent > xComponent( mxPopupMenuController, UNO_QUERY );
+        if( xComponent.is() )
+        {
+            try
+            {
+                xComponent->dispose();
+            }
+            catch (...)
+            {}
+        }
+        mxPopupMenuController.clear();
+    }
+    mxPopupMenuFactory.clear();
+    mxPopupMenu.clear();
 }
 
 void BackingWindow::GetFocus()
@@ -282,117 +313,40 @@ IMPL_LINK( BackingWindow, WindowEventListener, VclSimpleEvent*, pEvent )
 
 void BackingWindow::prepareRecentFileMenu()
 {
-    if( ! mpRecentMenu )
-        mpRecentMenu = new PopupMenu();
-    mpRecentMenu->Clear();
-    maRecentFiles.clear();
+    if( ! mxPopupMenu.is() )
+        return;
 
-    // get recent file list and dispatch arguments
-    Sequence< Sequence< PropertyValue > > aHistoryList( SvtHistoryOptions().GetList( ePICKLIST ) );
-
-    sal_Int32 nPickListMenuItems = ( aHistoryList.getLength() > 99 ) ? 99 : aHistoryList.getLength();
-
-    if( ( nPickListMenuItems > 0 ) )
+    if ( !mxPopupMenuController.is() )
     {
-        maRecentFiles.reserve( nPickListMenuItems );
-        for ( sal_Int32 i = 0; i < nPickListMenuItems; i++ )
+        uno::Sequence< uno::Any > aArgs( 2 );
+        beans::PropertyValue aProp;
+
+        aProp.Name = OUString( "Frame" );
+        aProp.Value <<= mxFrame;
+        aArgs[0] <<= aProp;
+
+        aProp.Name = OUString( "ModuleIdentifier" );
+        aProp.Value <<= OUString("com.sun.star.frame.StartModule");
+        aArgs[1] <<= aProp;
+        try
         {
-            Sequence< PropertyValue >& rPickListEntry = aHistoryList[i];
-            OUString aURL, aFilter, aFilterOpt, aTitle;
-
-            for ( sal_Int32 j = 0; j < rPickListEntry.getLength(); j++ )
-            {
-                const Any& a = rPickListEntry[j].Value;
-
-                if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_URL )
-                    a >>= aURL;
-                else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_FILTER )
-                {
-                    a >>= aFilter;
-                    sal_Int32 nPos = aFilter.indexOf( '|' );
-                    if ( nPos >= 0 )
-                    {
-                        if ( nPos < ( aFilter.getLength() - 1 ) )
-                            aFilterOpt = aFilter.copy( nPos+1 );
-                        aFilter = aFilter.copy( 0, nPos-1 );
-                    }
-                }
-                else if ( rPickListEntry[j].Name == HISTORY_PROPERTYNAME_TITLE )
-                    a >>= aTitle;
-            }
-            maRecentFiles.push_back( LoadRecentFile() );
-            maRecentFiles.back().aTargetURL = aURL;
-
-            sal_Int32 nArgs = aFilterOpt.isEmpty() ? 3 : 4;
-            Sequence< PropertyValue >& rArgsList( maRecentFiles.back().aArgSeq );
-            rArgsList.realloc( nArgs );
-
-            nArgs--;
-            rArgsList[nArgs].Name = "FilterName";
-            rArgsList[nArgs].Value = makeAny( aFilter );
-
-            if( !aFilterOpt.isEmpty() )
-            {
-                nArgs--;
-                rArgsList[nArgs].Name = "FilterOptions";
-                rArgsList[nArgs].Value = makeAny( aFilterOpt );
-            }
-
-            // documents in the picklist will never be opened as templates
-            nArgs--;
-            rArgsList[nArgs].Name = "AsTemplate";
-            rArgsList[nArgs].Value = makeAny( (sal_Bool) sal_False );
-
-            nArgs--;
-            rArgsList[nArgs].Name = "Referer";
-            rArgsList[nArgs].Value = makeAny( OUString("private:user") );
-
-            // and finally create an entry in the popupmenu
-            OUString   aMenuTitle;
-            INetURLObject   aURLObj( aURL );
-
-            if ( aURLObj.GetProtocol() == INET_PROT_FILE )
-            {
-                // Do handle file URL differently => convert it to a system
-                // path and abbreviate it with a special function:
-                String aFileSystemPath( aURLObj.getFSysPath( INetURLObject::FSYS_DETECT ) );
-
-                OUString   aSystemPath( aFileSystemPath );
-                OUString   aCompactedSystemPath;
-
-                oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
-                if ( !nError )
-                    aMenuTitle = String( aCompactedSystemPath );
-                else
-                    aMenuTitle = aSystemPath;
-            }
-            else
-            {
-                // Use INetURLObject to abbreviate all other URLs
-                Reference< util::XStringWidth > xStringLength( new RecentFilesStringLength() );
-                aMenuTitle = aURLObj.getAbbreviated( xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
-            }
-            OUStringBuffer aBuf( aMenuTitle.getLength() + 5 );
-            if( i < 9 )
-            {
-                aBuf.append( sal_Unicode( '~' ) );
-                aBuf.append( i+1 );
-            }
-            else if( i == 9 )
-                aBuf.appendAscii( "1~0" );
-            else
-                aBuf.append( i+1 );
-            aBuf.appendAscii( ": " );
-            aBuf.append( aMenuTitle );
-            mpRecentMenu->InsertItem( static_cast<sal_uInt16>(i+1), aBuf.makeStringAndClear() );
+            mxPopupMenuController.set(
+                mxPopupMenuFactory->createInstanceWithArgumentsAndContext(
+                    OUString( RECENT_FILE_LIST ), aArgs, mxContext),
+                        uno::UNO_QUERY_THROW );
+            mxPopupMenuController->setPopupMenu( mxPopupMenu );
         }
+        catch ( const Exception &e )
+        {
+            SAL_WARN( "fwk", "BackingWindow - caught an exception! " << e.Message );
+        }
+
+        PopupMenu *pRecentMenu = NULL;
+        VCLXMenu* pTKMenu = VCLXMenu::GetImplementation( mxPopupMenu );
+        if ( pTKMenu )
+            pRecentMenu = dynamic_cast< PopupMenu * >( pTKMenu->GetMenu() );
+        maOpenButton.SetPopupMenu( pRecentMenu );
     }
-    else
-    {
-        OUString aNoDoc( FwkResId( STR_NODOCUMENT ) );
-        mpRecentMenu->InsertItem( 0xffff, aNoDoc );
-    }
-    maOpenButton.SetPopupMenu( mpRecentMenu );
 }
 
 namespace
@@ -453,7 +407,6 @@ void BackingWindow::initBackground()
     loadImage( FwkResId( BMP_BACKING_OPENTEMPLATE ), maTemplateButton );
 
     maOpenButton.SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
-    maOpenButton.SetSelectHdl( LINK( this, BackingWindow, SelectHdl ) );
     maOpenButton.SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
 
     // fdo#41440: force black text color, since the background image is white.
@@ -949,20 +902,6 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
         pArg[0].Value <<= OUString("private:user");
 
         dispatchURL( TEMPLATE_URL, OUString(), xFrame, aArgs );
-    }
-    return 0;
-}
-
-IMPL_LINK( BackingWindow, SelectHdl, Button*, pButton )
-{
-    if( pButton == &maOpenButton )
-    {
-        sal_Int32 nItem = sal_Int32(maOpenButton.GetCurItemId())-1;
-        if( nItem >= 0 && nItem < sal_Int32(maRecentFiles.size()) )
-        {
-            Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
-            dispatchURL( maRecentFiles[nItem].aTargetURL, OUString(), xFrame, maRecentFiles[nItem].aArgSeq );
-        }
     }
     return 0;
 }

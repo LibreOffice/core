@@ -31,6 +31,10 @@
 #include "unotools/moduleoptions.hxx"
 #include "svtools/acceleratorexecute.hxx"
 
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/frame/XUIControllerFactory.hpp>
+#include <com/sun/star/frame/XPopupMenuController.hpp>
+#include <com/sun/star/awt/XPopupMenu.hpp>
 #include "com/sun/star/frame/XDispatchProvider.hpp"
 #include "com/sun/star/frame/XDesktop.hpp"
 #include "com/sun/star/frame/XFrame.hpp"
@@ -69,15 +73,12 @@ namespace framework
 
     class BackingWindow : public Window
     {
-        struct LoadRecentFile
-        {
-            OUString                                                             aTargetURL;
-            com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >     aArgSeq;
-        };
-
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >         mxContext;
         com::sun::star::uno::Reference<com::sun::star::frame::XDispatchProvider >        mxDesktopDispatchProvider;
         com::sun::star::uno::Reference<com::sun::star::frame::XFrame>                    mxFrame;
-        com::sun::star::uno::Reference<com::sun::star::document::XEventBroadcaster>      mxBroadcaster;
+        com::sun::star::uno::Reference< com::sun::star::frame::XUIControllerFactory >    mxPopupMenuFactory;
+        com::sun::star::uno::Reference< com::sun::star::frame::XPopupMenuController >    mxPopupMenuController;
+        com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >                mxPopupMenu;
 
         ImageButton                     maWriterButton;
         ImageButton                     maCalcButton;
@@ -113,9 +114,6 @@ namespace framework
         long                            mnBtnPos;
         long                            mnBtnTop;
 
-        PopupMenu*                      mpRecentMenu;
-        std::vector< LoadRecentFile >   maRecentFiles;
-
         static const int nItemId_Extensions = 1;
         static const int nItemId_Info = 3;
         static const int nItemId_TplRep = 4;
@@ -140,7 +138,6 @@ namespace framework
                           );
 
         DECL_LINK( ClickHdl, Button* );
-        DECL_LINK( SelectHdl, Button* );
         DECL_LINK( ActivateHdl, Button* );
         DECL_LINK( ToolboxHdl, void* );
         DECL_LINK( WindowEventListener, VclSimpleEvent* );
