@@ -973,7 +973,7 @@
                               <object class="GtkLabel" id="label29">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">_Toolbare</property>
+                                <property name="label" translatable="yes">_Toolbars</property>
                                 <property name="use_underline">True</property>
                               </object>
                               <packing>
