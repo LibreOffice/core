@@ -66,7 +66,6 @@
 #include <uielement/macrosmenucontroller.hxx>
 #include <uielement/newmenucontroller.hxx>
 #include <uielement/toolbarsmenucontroller.hxx>
-#include <uielement/popupmenucontroller.hxx>
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
@@ -87,6 +86,5 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        
                         IFFACTORY( ::framework::FooterMenuController                    )   else
                         IFFACTORY( ::framework::HeaderMenuController                    )   else
                         IFFACTORY( ::framework::LanguageSelectionMenuController         )   else
-                        IFFACTORY( ::framework::Oxt_Handler                             )   else
-                        IFFACTORY( ::framework::PopupMenuController                     )
+                        IFFACTORY( ::framework::Oxt_Handler                             )
                     )

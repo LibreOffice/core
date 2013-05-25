@@ -112,11 +112,11 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/loadenv/loadenv \
     framework/source/loadenv/targethelper \
     framework/source/register/registerservices \
+    framework/source/services/ContextChangeEventMultiplexer \
     framework/source/services/autorecovery \
     framework/source/services/backingcomp \
     framework/source/services/backingwindow \
     framework/source/services/desktop \
-    framework/source/services/ContextChangeEventMultiplexer \
     framework/source/services/frame \
     framework/source/services/modelwinservice \
     framework/source/services/modulemanager \
@@ -154,6 +154,7 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uielement/menubarmerger \
     framework/source/uielement/menubarwrapper \
     framework/source/uielement/objectmenucontroller \
+    framework/source/uielement/popuptoolbarcontroller \
     framework/source/uielement/panelwindow \
     framework/source/uielement/panelwrapper \
     framework/source/uielement/progressbarwrapper \
@@ -175,8 +176,8 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uifactory/factoryconfiguration \
     framework/source/uifactory/menubarfactory \
     framework/source/uifactory/statusbarfactory \
-    framework/source/uifactory/uicontrollerfactory \
     framework/source/uifactory/toolboxfactory \
+    framework/source/uifactory/uicontrollerfactory \
     framework/source/uifactory/uielementfactorymanager \
     framework/source/uifactory/windowcontentfactorymanager \
     framework/source/xml/acceleratorconfigurationreader \

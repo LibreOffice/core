@@ -85,6 +85,7 @@
 #include <services/substitutepathvars.hxx>
 #include <services/pathsettings.hxx>
 #include <services/ContextChangeEventMultiplexer.hxx>
+#include <uielement/popuptoolbarcontroller.hxx>
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
@@ -127,6 +128,9 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::TabWindowService                        )   else
                         IFFACTORY( ::framework::SubstitutePathVariables                 )   else
                         IFFACTORY( ::framework::PathSettings                            )   else
-                        IFFACTORY( ::framework::ContextChangeEventMultiplexer           )
+                        IFFACTORY( ::framework::ContextChangeEventMultiplexer           )   else
+                        IFFACTORY( ::framework::OpenToolbarController                   )   else
+                        IFFACTORY( ::framework::NewToolbarController                    )   else
+                        IFFACTORY( ::framework::WizardsToolbarController                )
             )
 
