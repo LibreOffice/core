@@ -137,4 +137,13 @@
   <implementation name="com.sun.star.comp.framework.TabWindowService">
     <service name="com.sun.star.ui.dialogs.TabContainerWindow"/>
   </implementation>
+  <implementation name="org.apache.openoffice.comp.framework.OpenToolbarController">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="org.apache.openoffice.comp.framework.NewToolbarController">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
+  <implementation name="org.apache.openoffice.comp.framework.WizardsToolbarController">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
 </component>

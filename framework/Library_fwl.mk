@@ -68,7 +68,6 @@ $(eval $(call gb_Library_add_exception_objects,fwl,\
     framework/source/uielement/langselectionmenucontroller \
     framework/source/uielement/macrosmenucontroller \
     framework/source/uielement/newmenucontroller \
-    framework/source/uielement/popupmenucontroller \
     framework/source/uielement/toolbarsmenucontroller \
 ))
 

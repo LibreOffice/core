@@ -58,9 +58,6 @@
   <implementation name="com.sun.star.comp.framework.OXTFileHandler">
     <service name="com.sun.star.frame.ContentHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.PopupMenuController">
-    <service name="com.sun.star.frame.ToolbarController"/>
-  </implementation>
   <implementation name="com.sun.star.comp.framework.PopupMenuControllerDispatcher">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>

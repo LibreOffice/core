@@ -50,7 +50,6 @@
 #include <uielement/macrosmenucontroller.hxx>
 #include <uielement/newmenucontroller.hxx>
 #include <uielement/toolbarsmenucontroller.hxx>
-#include <uielement/popupmenucontroller.hxx>
 
 COMPONENTGETFACTORY ( fwl,
                         IFFACTORY( ::framework::MediaTypeDetectionHelper        )
@@ -70,8 +69,7 @@ COMPONENTGETFACTORY ( fwl,
                         IFFACTORY( ::framework::FooterMenuController                    )   else
                         IFFACTORY( ::framework::HeaderMenuController                    )   else
                         IFFACTORY( ::framework::LanguageSelectionMenuController         )   else
-                        IFFACTORY( ::framework::Oxt_Handler                             )   else
-                        IFFACTORY( ::framework::PopupMenuController                     )
+                        IFFACTORY( ::framework::Oxt_Handler                             )
                     )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

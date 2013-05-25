@@ -561,6 +561,39 @@
           <value>com.sun.star.report.ReportToolboxController</value>
         </prop>
       </node>
+      <node oor:name="org.apache.openoffice.comp.framework.OpenToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Open</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>org.apache.openoffice.comp.framework.OpenToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="org.apache.openoffice.comp.framework.NewToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AddDirect</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>org.apache.openoffice.comp.framework.NewToolbarController</value>
+        </prop>
+      </node>
+      <node oor:name="org.apache.openoffice.comp.framework.WizardsToolbarController" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AutoPilotMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>org.apache.openoffice.comp.framework.WizardsToolbarController</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="StatusBar">
       <node oor:name="c1" oor:op="replace">
