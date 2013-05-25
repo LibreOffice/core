@@ -186,7 +186,9 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         {
             // No recent documents => insert "no document" string
             pVCLPopupMenu->InsertItem( 1, String( FwkResId( STR_NODOCUMENT ) ) );
-            pVCLPopupMenu->EnableItem( 1, sal_False );
+            // Do not disable it, otherwise the Toolbar controller and MenuButton
+            // will display SV_RESID_STRING_NOSELECTIONPOSSIBLE instead of STR_NODOCUMENT
+            pVCLPopupMenu->SetItemBits( 1, pVCLPopupMenu->GetItemBits( 1 ) | MIB_NOSELECT );
         }
     }
 }
