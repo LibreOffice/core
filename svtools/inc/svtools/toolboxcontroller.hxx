@@ -38,12 +38,13 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/util/XURLTransformer.hpp>
-//shizhoubo for ToolbarController Visiable
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <tools/link.hxx>
+
 //end
 #ifndef INCLUDED_HASH_MAP
 #include <hash_map>
@@ -54,7 +55,8 @@ class ToolBox;
 
 namespace svt
 {
-struct ToolboxController_Impl;
+
+struct DispatchInfo;
 
 class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusListener,
                           public ::com::sun::star::frame::XToolbarController,
@@ -122,11 +124,13 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
 
 
         const rtl::OUString& getCommandURL() const { return  m_aCommandURL; }
-        const rtl::OUString& getModuleName() const;
+        const rtl::OUString& getModuleName() const { return m_sModuleName; }
 
         void dispatchCommand( const ::rtl::OUString& sCommandURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
 
         void enable( bool bEnable );
+
+        DECL_STATIC_LINK( ToolboxController, ExecuteHdl_Impl, DispatchInfo* );
 
     protected:
         bool getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox );
@@ -153,17 +157,24 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
         sal_Bool isBound() const;
         sal_Bool hasBigImages() const;
         sal_Bool isHighContrast() const;
+        // TODO remove
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > getURLTransformer() const;
+        // TODO remove
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > getParent() const;
 
         sal_Bool                                                                            m_bInitialized : 1,
                                                                                             m_bDisposed : 1;
+        sal_uInt16                                                                          m_nToolBoxId;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xFrame;
-        ToolboxController_Impl*                                                             m_pImpl;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
         rtl::OUString                                                                       m_aCommandURL;
         URLToDispatchMap                                                                    m_aListenerMap;
         ::cppu::OMultiTypeInterfaceContainerHelper                                          m_aListenerContainer;   /// container for ALL Listener
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >          m_xParentWindow;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xUrlTransformer;
+        rtl::OUString m_sModuleName;
+
 };
 
 }

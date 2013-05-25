@@ -985,6 +985,9 @@ void ToolBarManager::CreateControllers()
             aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
             aPropValue.Value    <<= xToolbarWindow;
             aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Identifier" ));
+            aPropValue.Value    = uno::makeAny( nId );
+            aPropertyVector.push_back( uno::makeAny( aPropValue ) );
 
             if ( nWidth > 0 )
             {
@@ -1097,6 +1100,9 @@ void ToolBarManager::CreateControllers()
                 aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ));
                 aPropValue.Value <<= m_aModuleIdentifier;
                 aPropertyVector.push_back( makeAny( aPropValue ));
+                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Identifier" ));
+                aPropValue.Value    = uno::makeAny( nId );
+                aPropertyVector.push_back( uno::makeAny( aPropValue ) );
 
                 if ( nWidth > 0 )
                 {
@@ -1312,9 +1318,12 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                             try
                             {
                                 Reference< XIndexAccess > xMenuContainer;
-                                if ( m_xDocUICfgMgr.is() )
+                                if ( m_xDocUICfgMgr.is() &&
+                                     m_xDocUICfgMgr->hasSettings( aCommandURL ) )
                                     xMenuContainer  = m_xDocUICfgMgr->getSettings( aCommandURL, sal_False );
-                                if ( !xMenuContainer.is() && m_xUICfgMgr.is() )
+                                if ( !xMenuContainer.is() &&
+                                     m_xUICfgMgr.is() &&
+                                     m_xUICfgMgr->hasSettings( aCommandURL ) )
                                     xMenuContainer = m_xUICfgMgr->getSettings( aCommandURL, sal_False );
                                 if ( xMenuContainer.is() && xMenuContainer->getCount() )
                                 {
@@ -1361,7 +1370,10 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
                     sal_uInt16 nItemBits = ConvertStyleToToolboxItemBits( nStyle );
                     if ( aMenuDesc.is() )
+                    {
                         m_aMenuMap[ nId ] = aMenuDesc;
+                        nItemBits |= TIB_DROPDOWNONLY;
+                    }
                     m_pToolBar->InsertItem( nId, aString, nItemBits );
                     m_pToolBar->SetItemCommand( nId, aCommandURL );
                     if ( aTooltip.getLength() )
