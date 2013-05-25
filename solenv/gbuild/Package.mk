@@ -44,6 +44,14 @@ endef
 $(foreach destination,$(call gb_PackagePart_get_destinations),$(eval \
   $(call gb_PackagePart__rule,$(destination))))
 
+# Dummy rule to force rebuild of files that depend on headers in
+# $(OUTDIR)/inc (thus the dep files will be rebuild too). Otherwise
+# incremental build will fail with 'No rule to make target ...'.
+#
+# This should be removed again after some time.
+$(OUTDIR)/inc/% :
+	@true
+
 # Deliver one file to the output dir.
 #
 # gb_PackagePart_PackagePart destfile source prep-target outdir
