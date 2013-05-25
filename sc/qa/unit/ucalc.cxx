@@ -111,7 +111,17 @@ public:
     void testRangeList();
     void testInput();
     void testFormulaHashAndTag();
-    void testCellFunctions();
+    void testFuncSUM();
+    void testFuncPRODUCT();
+    void testFuncN();
+    void testFuncCOUNTIF();
+    void testFuncNUMBERVALUE();
+    void testFuncVLOOKUP();
+    void testFuncMATCH();
+    void testFuncCELL();
+    void testFuncDATEDIF();
+    void testFuncINDIRECT();
+    void testFuncIFERROR();
     void testCopyToDocument();
     /**
      * Make sure the SHEETS function gets properly updated during sheet
@@ -281,7 +291,17 @@ public:
     CPPUNIT_TEST(testRangeList);
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testFormulaHashAndTag);
-    CPPUNIT_TEST(testCellFunctions);
+    CPPUNIT_TEST(testFuncSUM);
+    CPPUNIT_TEST(testFuncPRODUCT);
+    CPPUNIT_TEST(testFuncN);
+    CPPUNIT_TEST(testFuncCOUNTIF);
+    CPPUNIT_TEST(testFuncNUMBERVALUE);
+    CPPUNIT_TEST(testFuncVLOOKUP);
+    CPPUNIT_TEST(testFuncMATCH);
+    CPPUNIT_TEST(testFuncCELL);
+    CPPUNIT_TEST(testFuncDATEDIF);
+    CPPUNIT_TEST(testFuncINDIRECT);
+    CPPUNIT_TEST(testFuncIFERROR);
     CPPUNIT_TEST(testCopyToDocument);
     CPPUNIT_TEST(testSheetsFunc);
     CPPUNIT_TEST(testVolatileFunc);
@@ -839,90 +859,106 @@ void Test::testInput()
     m_pDoc->DeleteTab(0);
 }
 
-void testFuncSUM(ScDocument* pDoc)
+void Test::testFuncSUM()
 {
+    OUString aTabName("foo");
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
     double val = 1;
     double result;
-    pDoc->SetValue (0, 0, 0, val);
-    pDoc->SetValue (0, 1, 0, val);
-    pDoc->SetString (0, 2, 0, OUString("=SUM(A1:A2)"));
-    pDoc->CalcAll();
-    pDoc->GetValue (0, 2, 0, result);
+    m_pDoc->SetValue (0, 0, 0, val);
+    m_pDoc->SetValue (0, 1, 0, val);
+    m_pDoc->SetString (0, 2, 0, OUString("=SUM(A1:A2)"));
+    m_pDoc->CalcAll();
+    m_pDoc->GetValue (0, 2, 0, result);
     CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 2.0);
+
+    m_pDoc->DeleteTab(0);
 }
 
-void testFuncPRODUCT(ScDocument* pDoc)
+void Test::testFuncPRODUCT()
 {
+    OUString aTabName("foo");
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
     double val = 1;
     double result;
-    pDoc->SetValue(0, 0, 0, val);
+    m_pDoc->SetValue(0, 0, 0, val);
     val = 2;
-    pDoc->SetValue(0, 1, 0, val);
+    m_pDoc->SetValue(0, 1, 0, val);
     val = 3;
-    pDoc->SetValue(0, 2, 0, val);
-    pDoc->SetString(0, 3, 0, OUString("=PRODUCT(A1:A3)"));
-    pDoc->CalcAll();
-    pDoc->GetValue(0, 3, 0, result);
+    m_pDoc->SetValue(0, 2, 0, val);
+    m_pDoc->SetString(0, 3, 0, OUString("=PRODUCT(A1:A3)"));
+    m_pDoc->CalcAll();
+    m_pDoc->GetValue(0, 3, 0, result);
     CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT failed", result == 6.0);
 
-    pDoc->SetString(0, 4, 0, OUString("=PRODUCT({1;2;3})"));
-    pDoc->CalcAll();
-    pDoc->GetValue(0, 4, 0, result);
+    m_pDoc->SetString(0, 4, 0, OUString("=PRODUCT({1;2;3})"));
+    m_pDoc->CalcAll();
+    m_pDoc->GetValue(0, 4, 0, result);
     CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT with inline array failed", result == 6.0);
+
+    m_pDoc->DeleteTab(0);
 }
 
-void testFuncN(ScDocument* pDoc)
+void Test::testFuncN()
 {
+    OUString aTabName("foo");
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
     double result;
 
     // Clear the area first.
-    clearRange(pDoc, ScRange(0, 0, 0, 1, 20, 0));
+    clearRange(m_pDoc, ScRange(0, 0, 0, 1, 20, 0));
 
     // Put values to reference.
     double val = 0;
-    pDoc->SetValue(0, 0, 0, val);
-    pDoc->SetString(0, 2, 0, OUString("Text"));
+    m_pDoc->SetValue(0, 0, 0, val);
+    m_pDoc->SetString(0, 2, 0, OUString("Text"));
     val = 1;
-    pDoc->SetValue(0, 3, 0, val);
+    m_pDoc->SetValue(0, 3, 0, val);
     val = -1;
-    pDoc->SetValue(0, 4, 0, val);
+    m_pDoc->SetValue(0, 4, 0, val);
     val = 12.3;
-    pDoc->SetValue(0, 5, 0, val);
-    pDoc->SetString(0, 6, 0, OUString("'12.3"));
+    m_pDoc->SetValue(0, 5, 0, val);
+    m_pDoc->SetString(0, 6, 0, OUString("'12.3"));
 
     // Cell references
-    pDoc->SetString(1, 0, 0, OUString("=N(A1)"));
-    pDoc->SetString(1, 1, 0, OUString("=N(A2)"));
-    pDoc->SetString(1, 2, 0, OUString("=N(A3)"));
-    pDoc->SetString(1, 3, 0, OUString("=N(A4)"));
-    pDoc->SetString(1, 4, 0, OUString("=N(A5)"));
-    pDoc->SetString(1, 5, 0, OUString("=N(A6)"));
-    pDoc->SetString(1, 6, 0, OUString("=N(A9)"));
+    m_pDoc->SetString(1, 0, 0, OUString("=N(A1)"));
+    m_pDoc->SetString(1, 1, 0, OUString("=N(A2)"));
+    m_pDoc->SetString(1, 2, 0, OUString("=N(A3)"));
+    m_pDoc->SetString(1, 3, 0, OUString("=N(A4)"));
+    m_pDoc->SetString(1, 4, 0, OUString("=N(A5)"));
+    m_pDoc->SetString(1, 5, 0, OUString("=N(A6)"));
+    m_pDoc->SetString(1, 6, 0, OUString("=N(A9)"));
 
     // In-line values
-    pDoc->SetString(1, 7, 0, OUString("=N(0)"));
-    pDoc->SetString(1, 8, 0, OUString("=N(1)"));
-    pDoc->SetString(1, 9, 0, OUString("=N(-1)"));
-    pDoc->SetString(1, 10, 0, OUString("=N(123)"));
-    pDoc->SetString(1, 11, 0, OUString("=N(\"\")"));
-    pDoc->SetString(1, 12, 0, OUString("=N(\"12\")"));
-    pDoc->SetString(1, 13, 0, OUString("=N(\"foo\")"));
+    m_pDoc->SetString(1, 7, 0, OUString("=N(0)"));
+    m_pDoc->SetString(1, 8, 0, OUString("=N(1)"));
+    m_pDoc->SetString(1, 9, 0, OUString("=N(-1)"));
+    m_pDoc->SetString(1, 10, 0, OUString("=N(123)"));
+    m_pDoc->SetString(1, 11, 0, OUString("=N(\"\")"));
+    m_pDoc->SetString(1, 12, 0, OUString("=N(\"12\")"));
+    m_pDoc->SetString(1, 13, 0, OUString("=N(\"foo\")"));
 
     // Range references
-    pDoc->SetString(2, 2, 0, OUString("=N(A1:A8)"));
-    pDoc->SetString(2, 3, 0, OUString("=N(A1:A8)"));
-    pDoc->SetString(2, 4, 0, OUString("=N(A1:A8)"));
-    pDoc->SetString(2, 5, 0, OUString("=N(A1:A8)"));
+    m_pDoc->SetString(2, 2, 0, OUString("=N(A1:A8)"));
+    m_pDoc->SetString(2, 3, 0, OUString("=N(A1:A8)"));
+    m_pDoc->SetString(2, 4, 0, OUString("=N(A1:A8)"));
+    m_pDoc->SetString(2, 5, 0, OUString("=N(A1:A8)"));
 
     // Calculate and check the results.
-    pDoc->CalcAll();
+    m_pDoc->CalcAll();
     double checks1[] = {
         0, 0,  0,    1, -1, 12.3, 0, // cell reference
         0, 1, -1, 123,  0,    0, 0   // in-line values
     };
     for (size_t i = 0; i < SAL_N_ELEMENTS(checks1); ++i)
     {
-        pDoc->GetValue(1, i, 0, result);
+        m_pDoc->GetValue(1, i, 0, result);
         bool bGood = result == checks1[i];
         if (!bGood)
         {
@@ -935,7 +971,7 @@ void testFuncN(ScDocument* pDoc)
     };
     for (size_t i = 0; i < SAL_N_ELEMENTS(checks2); ++i)
     {
-        pDoc->GetValue(1, i+2, 0, result);
+        m_pDoc->GetValue(1, i+2, 0, result);
         bool bGood = result == checks2[i];
         if (!bGood)
         {
@@ -943,14 +979,20 @@ void testFuncN(ScDocument* pDoc)
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for N", false);
         }
     }
+
+    m_pDoc->DeleteTab(0);
 }
 
-void testFuncCOUNTIF(ScDocument* pDoc)
+void Test::testFuncCOUNTIF()
 {
     // COUNTIF (test case adopted from OOo i#36381)
 
+    OUString aTabName("foo");
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
     // Empty A1:A39 first.
-    clearRange(pDoc, ScRange(0, 0, 0, 0, 40, 0));
+    clearRange(m_pDoc, ScRange(0, 0, 0, 0, 40, 0));
 
     // Raw data (rows 1 through 9)
     const char* aData[] = {
@@ -967,9 +1009,9 @@ void testFuncCOUNTIF(ScDocument* pDoc)
 
     SCROW nRows = SAL_N_ELEMENTS(aData);
     for (SCROW i = 0; i < nRows; ++i)
-        pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i]));
+        m_pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i]));
 
-    printRange(pDoc, ScRange(0, 0, 0, 0, 8, 0), "data range for COUNTIF");
+    printRange(m_pDoc, ScRange(0, 0, 0, 0, 8, 0), "data range for COUNTIF");
 
     // formulas and results
     struct {
@@ -992,15 +1034,15 @@ void testFuncCOUNTIF(ScDocument* pDoc)
     for (SCROW i = 0; i < nRows; ++i)
     {
         SCROW nRow = 20 + i;
-        pDoc->SetString(0, nRow, 0, OUString::createFromAscii(aChecks[i].pFormula));
+        m_pDoc->SetString(0, nRow, 0, OUString::createFromAscii(aChecks[i].pFormula));
     }
-    pDoc->CalcAll();
+    m_pDoc->CalcAll();
 
     for (SCROW i = 0; i < nRows; ++i)
     {
         double result;
         SCROW nRow = 20 + i;
-        pDoc->GetValue(0, nRow, 0, result);
+        m_pDoc->GetValue(0, nRow, 0, result);
         bool bGood = result == aChecks[i].fResult;
         if (!bGood)
         {
@@ -1013,22 +1055,28 @@ void testFuncCOUNTIF(ScDocument* pDoc)
     // Don't count empty strings when searching for a number.
 
     // Clear A1:A2.
-    clearRange(pDoc, ScRange(0, 0, 0, 0, 1, 0));
+    clearRange(m_pDoc, ScRange(0, 0, 0, 0, 1, 0));
 
-    pDoc->SetString(0, 0, 0, OUString("=\"\""));
-    pDoc->SetString(0, 1, 0, OUString("=COUNTIF(A1;1)"));
-    pDoc->CalcAll();
+    m_pDoc->SetString(0, 0, 0, OUString("=\"\""));
+    m_pDoc->SetString(0, 1, 0, OUString("=COUNTIF(A1;1)"));
+    m_pDoc->CalcAll();
 
-    double result = pDoc->GetValue(0, 1, 0);
+    double result = m_pDoc->GetValue(0, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("We shouldn't count empty string as valid number.", result == 0.0);
+
+    m_pDoc->DeleteTab(0);
 }
 
-void testFuncIFERROR(ScDocument* pDoc)
+void Test::testFuncIFERROR()
 {
     // IFERROR/IFNA (fdo#56124)
 
+    OUString aTabName("foo");
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
     // Empty A1:A39 first.
-    clearRange(pDoc, ScRange(0, 0, 0, 0, 40, 0));
+    clearRange(m_pDoc, ScRange(0, 0, 0, 0, 40, 0));
 
     // Raw data (rows 1 through 12)
     const char* aData[] = {
@@ -1048,9 +1096,9 @@ void testFuncIFERROR(ScDocument* pDoc)
 
     SCROW nRows = SAL_N_ELEMENTS(aData);
     for (SCROW i = 0; i < nRows; ++i)
-        pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i]));
+        m_pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i]));
 
-    printRange(pDoc, ScRange(0, 0, 0, 0, nRows-1, 0), "data range for IFERROR/IFNA");
+    printRange(m_pDoc, ScRange(0, 0, 0, 0, nRows-1, 0), "data range for IFERROR/IFNA");
 
     // formulas and results
     struct {
@@ -1075,32 +1123,38 @@ void testFuncIFERROR(ScDocument* pDoc)
     for (SCROW i = 0; i < nRows-2; ++i)
     {
         SCROW nRow = 20 + i;
-        pDoc->SetString(0, nRow, 0, OUString::createFromAscii(aChecks[i].pFormula));
+        m_pDoc->SetString(0, nRow, 0, OUString::createFromAscii(aChecks[i].pFormula));
     }
 
     // Create a matrix range in last two rows of the range above, actual data
     // of the placeholders.
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    pDoc->InsertMatrixFormula(0, 20 + nRows-2, 0, 20 + nRows-1, aMark, "=IFERROR(3*A11:A12;1998)", NULL);
+    m_pDoc->InsertMatrixFormula(0, 20 + nRows-2, 0, 20 + nRows-1, aMark, "=IFERROR(3*A11:A12;1998)", NULL);
 
-    pDoc->CalcAll();
+    m_pDoc->CalcAll();
 
     for (SCROW i = 0; i < nRows; ++i)
     {
         SCROW nRow = 20 + i;
-        OUString aResult = pDoc->GetString(0, nRow, 0);
+        OUString aResult = m_pDoc->GetString(0, nRow, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             aChecks[i].pFormula, OUString::createFromAscii( aChecks[i].pResult), aResult);
     }
+
+    m_pDoc->DeleteTab(0);
 }
 
-void testFuncNUMBERVALUE( ScDocument* pDoc )
+void Test::testFuncNUMBERVALUE()
 {
     // NUMBERVALUE fdo#57180
 
+    OUString aTabName("foo");
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
     // Empty A1:A39 first.
-    clearRange(pDoc, ScRange(0, 0, 0, 0, 40, 0));
+    clearRange(m_pDoc, ScRange(0, 0, 0, 0, 40, 0));
 
     // Raw data (rows 1 through 6)
     const char* aData[] = {
@@ -1114,9 +1168,9 @@ void testFuncNUMBERVALUE( ScDocument* pDoc )
 
     SCROW nRows = SAL_N_ELEMENTS(aData);
     for (SCROW i = 0; i < nRows; ++i)
-        pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i]));
+        m_pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i]));
 
-    printRange(pDoc, ScRange(0, 0, 0, 0, nRows - 1, 0), "data range for NUMBERVALUE");
+    printRange(m_pDoc, ScRange(0, 0, 0, 0, nRows - 1, 0), "data range for NUMBERVALUE");
 
     // formulas and results
     struct {
@@ -1136,25 +1190,31 @@ void testFuncNUMBERVALUE( ScDocument* pDoc )
     for (SCROW i = 0; i < nRows; ++i)
     {
         SCROW nRow = 20 + i;
-        pDoc->SetString(0, nRow, 0, OUString::createFromAscii(aChecks[i].pFormula));
+        m_pDoc->SetString(0, nRow, 0, OUString::createFromAscii(aChecks[i].pFormula));
     }
-    pDoc->CalcAll();
+    m_pDoc->CalcAll();
 
     for (SCROW i = 0; i < nRows; ++i)
     {
         SCROW nRow = 20 + i;
-        OUString aResult = pDoc->GetString(0, nRow, 0);
+        OUString aResult = m_pDoc->GetString(0, nRow, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             aChecks[i].pFormula, OUString::createFromAscii( aChecks[i].pResult), aResult);
     }
+
+    m_pDoc->DeleteTab(0);
 }
 
-void testFuncVLOOKUP(ScDocument* pDoc)
+void Test::testFuncVLOOKUP()
 {
     // VLOOKUP
 
+    OUString aTabName("foo");
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
     // Clear A1:F40.
-    clearRange(pDoc, ScRange(0, 0, 0, 5, 39, 0));
+    clearRange(m_pDoc, ScRange(0, 0, 0, 5, 39, 0));
 
     // Raw data
     const char* aData[][2] = {
@@ -1178,11 +1238,11 @@ void testFuncVLOOKUP(ScDocument* pDoc)
     // Insert raw data into A1:B14.
     for (SCROW i = 0; aData[i][0]; ++i)
     {
-        pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i][0]));
-        pDoc->SetString(1, i, 0, OUString::createFromAscii(aData[i][1]));
+        m_pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i][0]));
+        m_pDoc->SetString(1, i, 0, OUString::createFromAscii(aData[i][1]));
     }
 
-    printRange(pDoc, ScRange(0, 0, 0, 1, 13, 0), "raw data for VLOOKUP");
+    printRange(m_pDoc, ScRange(0, 0, 0, 1, 13, 0), "raw data for VLOOKUP");
 
     // Formula data
     struct {
@@ -1211,11 +1271,11 @@ void testFuncVLOOKUP(ScDocument* pDoc)
     // Insert formula data into D1:E18.
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
     {
-        pDoc->SetString(3, i, 0, OUString::createFromAscii(aChecks[i].pLookup));
-        pDoc->SetString(4, i, 0, OUString::createFromAscii(aChecks[i].pFormula));
+        m_pDoc->SetString(3, i, 0, OUString::createFromAscii(aChecks[i].pLookup));
+        m_pDoc->SetString(4, i, 0, OUString::createFromAscii(aChecks[i].pFormula));
     }
-    pDoc->CalcAll();
-    printRange(pDoc, ScRange(3, 0, 0, 4, 17, 0), "formula data for VLOOKUP");
+    m_pDoc->CalcAll();
+    printRange(m_pDoc, ScRange(3, 0, 0, 4, 17, 0), "formula data for VLOOKUP");
 
     // Verify results.
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
@@ -1224,7 +1284,7 @@ void testFuncVLOOKUP(ScDocument* pDoc)
             // Skip the header row.
             continue;
 
-        OUString aRes = pDoc->GetString(4, i, 0);
+        OUString aRes = m_pDoc->GetString(4, i, 0);
         bool bGood = aRes.equalsAscii(aChecks[i].pRes);
         if (!bGood)
         {
@@ -1233,6 +1293,8 @@ void testFuncVLOOKUP(ScDocument* pDoc)
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for VLOOKUP", false);
         }
     }
+
+    m_pDoc->DeleteTab(0);
 }
 
 struct NumStrCheck {
@@ -1284,9 +1346,13 @@ void runTestMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrStrCheck aC
     }
 }
 
-void testFuncMATCH(ScDocument* pDoc)
+void Test::testFuncMATCH()
 {
-    clearRange(pDoc, ScRange(0, 0, 0, 4, 40, 0));
+    OUString aTabName("foo");
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
+    clearRange(m_pDoc, ScRange(0, 0, 0, 4, 40, 0));
     {
         // Ascending in-exact match
 
@@ -1325,7 +1391,7 @@ void testFuncMATCH(ScDocument* pDoc)
             { "Charlie", "12" }
         };
 
-        runTestMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),1>(pDoc, aData, aChecks);
+        runTestMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),1>(m_pDoc, aData, aChecks);
     }
 
     {
@@ -1367,19 +1433,25 @@ void testFuncMATCH(ScDocument* pDoc)
             { "David", "#N/A" }
         };
 
-        runTestMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),-1>(pDoc, aData, aChecks);
+        runTestMATCH<SAL_N_ELEMENTS(aData),SAL_N_ELEMENTS(aChecks),-1>(m_pDoc, aData, aChecks);
     }
+
+    m_pDoc->DeleteTab(0);
 }
 
-void testFuncCELL(ScDocument* pDoc)
+void Test::testFuncCELL()
 {
-    clearRange(pDoc, ScRange(0, 0, 0, 2, 20, 0)); // Clear A1:C21.
+    OUString aTabName("foo");
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
+    clearRange(m_pDoc, ScRange(0, 0, 0, 2, 20, 0)); // Clear A1:C21.
 
     {
         const char* pContent = "Some random text";
-        pDoc->SetString(2, 9, 0, OUString::createFromAscii(pContent)); // Set this value to C10.
+        m_pDoc->SetString(2, 9, 0, OUString::createFromAscii(pContent)); // Set this value to C10.
         double val = 1.2;
-        pDoc->SetValue(2, 0, 0, val); // Set numeric value to C1;
+        m_pDoc->SetValue(2, 0, 0, val); // Set numeric value to C1;
 
         // We don't test: FILENAME, FORMAT, WIDTH, PROTECT, PREFIX
         StrStrCheck aChecks[] = {
@@ -1396,20 +1468,26 @@ void testFuncCELL(ScDocument* pDoc)
         };
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
-            pDoc->SetString(0, i, 0, OUString::createFromAscii(aChecks[i].pVal));
-        pDoc->CalcAll();
+            m_pDoc->SetString(0, i, 0, OUString::createFromAscii(aChecks[i].pVal));
+        m_pDoc->CalcAll();
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
         {
-            OUString aVal = pDoc->GetString(0, i, 0);
+            OUString aVal = m_pDoc->GetString(0, i, 0);
             CPPUNIT_ASSERT_MESSAGE("Unexpected result for CELL", aVal.equalsAscii(aChecks[i].pRes));
         }
     }
+
+    m_pDoc->DeleteTab(0);
 }
 
 /** See also test case document fdo#44456 sheet cpearson */
-void testFuncDATEDIF( ScDocument* pDoc )
+void Test::testFuncDATEDIF()
 {
+    OUString aTabName("foo");
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+
     const char* aData[][5] = {
         { "2007-01-01", "2007-01-10",  "d",   "9", "=DATEDIF(A1;B1;C1)" } ,
         { "2007-01-01", "2007-01-31",  "m",   "0", "=DATEDIF(A2;B2;C2)" } ,
@@ -1428,44 +1506,49 @@ void testFuncDATEDIF( ScDocument* pDoc )
         { "2007-01-02", "2007-01-01", "md", "Err:502", "=DATEDIF(A15;B15;C15)" }    // fail date1 > date2
     };
 
-    clearRange( pDoc, ScRange(0, 0, 0, 4, SAL_N_ELEMENTS(aData), 0));
+    clearRange( m_pDoc, ScRange(0, 0, 0, 4, SAL_N_ELEMENTS(aData), 0));
     ScAddress aPos(0,0,0);
-    ScRange aDataRange = insertRangeData( pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData( m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
     CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
 
-    pDoc->CalcAll();
+    m_pDoc->CalcAll();
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aData); ++i)
     {
-        OUString aVal = pDoc->GetString( 4, i, 0);
+        OUString aVal = m_pDoc->GetString( 4, i, 0);
         //std::cout << "row "<< i << ": " << OUStringToOString( aVal, RTL_TEXTENCODING_UTF8).getStr() << ", expected " << aData[i][3] << std::endl;
         CPPUNIT_ASSERT_MESSAGE("Unexpected result for DATEDIF", aVal.equalsAscii( aData[i][3]));
     }
+
+    m_pDoc->DeleteTab(0);
 }
 
-void testFuncINDIRECT(ScDocument* pDoc)
+void Test::testFuncINDIRECT()
 {
-    clearRange(pDoc, ScRange(0, 0, 0, 0, 10, 0)); // Clear A1:A11
-    OUString aTabName;
-    bool bGood = pDoc->GetName(0, aTabName);
+    OUString aTabName("foo");
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
+                            m_pDoc->InsertTab (0, aTabName));
+    clearRange(m_pDoc, ScRange(0, 0, 0, 0, 10, 0)); // Clear A1:A11
+
+    bool bGood = m_pDoc->GetName(0, aTabName);
     CPPUNIT_ASSERT_MESSAGE("failed to get sheet name.", bGood);
 
     OUString aTest = "Test", aRefErr = "#REF!";
-    pDoc->SetString(0, 10, 0, aTest);
-    CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", pDoc->GetString(0,10,0) == aTest);
+    m_pDoc->SetString(0, 10, 0, aTest);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", m_pDoc->GetString(0,10,0) == aTest);
 
     OUString aPrefix = "=INDIRECT(\"";
 
     OUString aFormula = aPrefix + aTabName + ".A11\")"; // Calc A1
-    pDoc->SetString(0, 0, 0, aFormula);
+    m_pDoc->SetString(0, 0, 0, aFormula);
     aFormula = aPrefix + aTabName + "!A11\")"; // Excel A1
-    pDoc->SetString(0, 1, 0, aFormula);
+    m_pDoc->SetString(0, 1, 0, aFormula);
     aFormula = aPrefix + aTabName + "!R11C1\")"; // Excel R1C1
-    pDoc->SetString(0, 2, 0, aFormula);
+    m_pDoc->SetString(0, 2, 0, aFormula);
     aFormula = aPrefix + aTabName + "!R11C1\";0)"; // Excel R1C1 (forced)
-    pDoc->SetString(0, 3, 0, aFormula);
+    m_pDoc->SetString(0, 3, 0, aFormula);
 
-    pDoc->CalcAll();
+    m_pDoc->CalcAll();
     {
         // Default is to use the current formula syntax, which is Calc A1.
         const OUString* aChecks[] = {
@@ -1474,7 +1557,7 @@ void testFuncINDIRECT(ScDocument* pDoc)
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
         {
-            OUString aVal = pDoc->GetString(0, i, 0);
+            OUString aVal = m_pDoc->GetString(0, i, 0);
             CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong value!", *aChecks[i], aVal);
         }
     }
@@ -1482,7 +1565,7 @@ void testFuncINDIRECT(ScDocument* pDoc)
     ScCalcConfig aConfig;
     aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_OOO;
     ScInterpreter::SetGlobalConfig(aConfig);
-    pDoc->CalcAll();
+    m_pDoc->CalcAll();
     {
         // Explicit Calc A1 syntax
         const OUString* aChecks[] = {
@@ -1491,14 +1574,14 @@ void testFuncINDIRECT(ScDocument* pDoc)
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
         {
-            OUString aVal = pDoc->GetString(0, i, 0);
+            OUString aVal = m_pDoc->GetString(0, i, 0);
             CPPUNIT_ASSERT_MESSAGE("Wrong value!", aVal == *aChecks[i]);
         }
     }
 
     aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_XL_A1;
     ScInterpreter::SetGlobalConfig(aConfig);
-    pDoc->CalcAll();
+    m_pDoc->CalcAll();
     {
         // Excel A1 syntax
         const OUString* aChecks[] = {
@@ -1507,14 +1590,14 @@ void testFuncINDIRECT(ScDocument* pDoc)
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
         {
-            OUString aVal = pDoc->GetString(0, i, 0);
+            OUString aVal = m_pDoc->GetString(0, i, 0);
             CPPUNIT_ASSERT_MESSAGE("Wrong value!", aVal == *aChecks[i]);
         }
     }
 
     aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_XL_R1C1;
     ScInterpreter::SetGlobalConfig(aConfig);
-    pDoc->CalcAll();
+    m_pDoc->CalcAll();
     {
         // Excel R1C1 syntax
         const OUString* aChecks[] = {
@@ -1523,10 +1606,12 @@ void testFuncINDIRECT(ScDocument* pDoc)
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
         {
-            OUString aVal = pDoc->GetString(0, i, 0);
+            OUString aVal = m_pDoc->GetString(0, i, 0);
             CPPUNIT_ASSERT_MESSAGE("Wrong value!", aVal == *aChecks[i]);
         }
     }
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testFormulaHashAndTag()
@@ -1616,27 +1701,6 @@ void Test::testFormulaHashAndTag()
         }
         aPos1.IncRow();
     }
-
-    m_pDoc->DeleteTab(0);
-}
-
-void Test::testCellFunctions()
-{
-    OUString aTabName("foo");
-    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (0, aTabName));
-
-    testFuncSUM(m_pDoc);
-    testFuncPRODUCT(m_pDoc);
-    testFuncN(m_pDoc);
-    testFuncCOUNTIF(m_pDoc);
-    testFuncIFERROR(m_pDoc);
-    testFuncNUMBERVALUE(m_pDoc);
-    testFuncVLOOKUP(m_pDoc);
-    testFuncMATCH(m_pDoc);
-    testFuncCELL(m_pDoc);
-    testFuncDATEDIF(m_pDoc);
-    testFuncINDIRECT(m_pDoc);
 
     m_pDoc->DeleteTab(0);
 }
