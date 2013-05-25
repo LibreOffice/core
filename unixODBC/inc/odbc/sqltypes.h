@@ -84,7 +84,7 @@ typedef char                CHAR;
 /*
  * NOTE: The Microsoft unicode define is only for apps that want to use TCHARs and
  *  be able to compile for both unicode and non-unicode with the same source.
- *  This is not recommanded for linux applications and is not supported
+ *  This is not recommended for linux applications and is not supported
  *  by the standard linux string header files.
  */
 #ifdef SQL_WCHART_CONVERT
