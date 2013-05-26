@@ -13,9 +13,9 @@ $(eval $(call gb_CustomTarget_CustomTarget,postprocess/registry))
 # Variables
 #
 
-postprocess_XCS := registry/schema/org/openoffice
-postprocess_XCU := registry/data/org/openoffice
-postprocess_MOD := registry/spool
+postprocess_XCS := $(call gb_XcsTarget_get_outdir_target,org/openoffice)
+postprocess_XCU := $(call gb_XcuDataTarget_get_outdir_target,org/openoffice)
+postprocess_MOD := $(call gb_XcuModuleTarget_get_outdir_target,)
 postprocess_DRIVERS :=
 
 postprocess_XCDS := \
@@ -474,7 +474,9 @@ postprocess_OPTDEPS_pdfimport := calc draw impress math writer
 	# include pdf_Portable_Document_Format (i.e., X in calc, draw, global,
 	# impress, math, web, writer), add optional dependencies on those XCDS that
 	# include those fcfg_X_types.xcu
-postprocess_FILES_pdfimport := pdfimport/pdf_import_filter.xcu pdfimport/pdf_types.xcu
+postprocess_FILES_pdfimport := \
+	$(OUTDIR)/xml/pdfimport/pdf_import_filter.xcu \
+	$(OUTDIR)/xml/pdfimport/pdf_types.xcu
 endif
 
 ifeq (WNT,$(OS))
@@ -508,7 +510,7 @@ $(call gb_XcdTarget_get_target,$(1)).xcd : \
 	$(call gb_CustomTarget_get_workdir,postprocess/registry)/$(1).list
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/$(1).list : \
-	$(foreach file,$(postprocess_FILES_$(1)),$(OUTDIR)/xml/$(file)) \
+	$(postprocess_FILES_$(1)) \
 	$(SRCDIR)/postprocess/CustomTarget_registry.mk \
 	$(call gb_Postprocess_get_target,AllPackages) \
 	| $(call gb_CustomTarget_get_workdir,postprocess/registry)/.dir
@@ -613,6 +615,6 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
 	echo '<list>' $(foreach i,$(postprocess_DEPS_$*), '<dependency file="$i"/>') \
 		$(foreach i,$(postprocess_OPTDEPS_$*), '<dependency file="$i" optional="true"/>') \
-		$(foreach i,$(postprocess_FILES_$*), '<filename>$(OUTDIR)/xml/$(i)</filename>') '</list>' > $@
+		$(foreach i,$(postprocess_FILES_$*), '<filename>$(i)</filename>') '</list>' > $@
 
 # vim: set noet sw=4 ts=4:
