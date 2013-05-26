@@ -17,32 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <com/sun/star/text/RelOrientation.hpp>
-#include <com/sun/star/text/VertOrientation.hpp>
-#include <com/sun/star/text/HorizontalAdjust.hpp>
-#include <com/sun/star/text/DocumentStatistic.hpp>
-#include <com/sun/star/text/HoriOrientation.hpp>
-#include <com/sun/star/text/HoriOrientationFormat.hpp>
-#include <com/sun/star/text/NotePrintMode.hpp>
-#include <com/sun/star/text/SizeType.hpp>
-#include <com/sun/star/text/VertOrientationFormat.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
-#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
-#include <com/sun/star/text/InvalidTextContentException.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/text/TextGridMode.hpp>
-#include <com/sun/star/awt/Size.hpp>
 #include <svtools/unoimap.hxx>
-#include <svtools/unoevent.hxx>
-#include <basic/sbxvar.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/lrspitem.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
 #include <unosett.hxx>
 #include <unostyle.hxx>
 #include <fmtclds.hxx>
@@ -53,28 +34,23 @@
 #include <fmtfsize.hxx>
 #include <fmtfordr.hxx>
 #include <fmtsrnd.hxx>
-#include <fmtanchr.hxx>
 #include <fmtlsplt.hxx>
 #include <fmtrowsplt.hxx>
 #include <fmtftntx.hxx>
 #include <fmteiro.hxx>
 #include <fmturl.hxx>
 #include <fmtcnct.hxx>
-#include <node.hxx>
 #include <section.hxx>
 #include <fmtline.hxx>
 #include <tgrditem.hxx>
 #include <hfspacingitem.hxx>
-#include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
 #include <crsrsh.hxx>
-#include <pam.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
-#include <flyfrm.hxx>
 #include <frmtool.hxx>
 #include <flyfrms.hxx>
 #include <pagedesc.hxx>
@@ -89,13 +65,11 @@
 #include <SwStyleNameMapper.hxx>
 #include <editeng/brushitem.hxx>
 #include <svtools/grfmgr.hxx>
-#include <cmdid.h>
 #include <unomid.h>
 #include <comcore.hrc>
 #include <svx/svdundo.hxx> // #111827#
 #include <sortedobjs.hxx>
 #include <HandleAnchorNodeChg.hxx>
-#include <svl/cjkoptions.hxx>
 #include <switerator.hxx>
 #include <pagedeschint.hxx>
 #ifndef NDEBUG
