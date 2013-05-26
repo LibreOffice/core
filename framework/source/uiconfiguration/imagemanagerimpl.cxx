@@ -45,7 +45,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
 #include <svtools/miscopt.hxx>
 
@@ -169,7 +168,7 @@ CmdImageList::~CmdImageList()
 
 void CmdImageList::impl_fillCommandToImageNameMap()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "framework: CmdImageList::impl_fillCommandToImageNameMap" );
+    SAL_INFO( "fwk", "framework: CmdImageList::impl_fillCommandToImageNameMap" );
 
     if ( !m_bVectorInit )
     {

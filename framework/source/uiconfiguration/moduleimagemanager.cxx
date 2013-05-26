@@ -18,7 +18,6 @@
  */
 
 
-#include <rtl/logfile.hxx>
 #include <uiconfiguration/moduleimagemanager.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <xml/imagesconfiguration.hxx>
@@ -128,7 +127,7 @@ Sequence< uno::Reference< XGraphic > > SAL_CALL ModuleImageManager::getImages(
     const Sequence< OUString >& aCommandURLSequence )
 throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "framework: ModuleImageManager::getImages" );
+    SAL_INFO( "fwk", "framework: ModuleImageManager::getImages" );
     return m_pImpl->getImages(nImageType,aCommandURLSequence);
 }
 

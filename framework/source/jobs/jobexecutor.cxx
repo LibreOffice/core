@@ -39,7 +39,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
-#include <rtl/logfile.hxx>
 
 namespace framework{
 
@@ -143,7 +142,7 @@ JobExecutor::~JobExecutor()
  */
 void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT(aLog, "fwk (as96863) JobExecutor::trigger()");
+    SAL_INFO( "fwk", "fwk (as96863) JobExecutor::trigger()");
 
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);

@@ -44,7 +44,6 @@
 
 #include <unotools/configpaths.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/uri.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/wldcrd.hxx>
@@ -60,14 +59,14 @@ FilterCache::FilterCache()
     : BaseLock    (                                        )
     , m_eFillState(E_CONTAINS_NOTHING                      )
 {
-    RTL_LOGFILE_TRACE("{ (as96863) FilterCache lifetime");
+   SAL_INFO( "filter.config", "{ (as96863) FilterCache lifetime");
 }
 
 
 
 FilterCache::~FilterCache()
 {
-    RTL_LOGFILE_TRACE("} (as96863) FilterCache lifetime");
+   SAL_INFO( "filter.config", "} (as96863) FilterCache lifetime");
     if (m_xTypesChglisteners.is())
         m_xTypesChglisteners->stopListening();
     if (m_xFiltersChgListener.is())
@@ -188,7 +187,7 @@ void FilterCache::load(EFillState eRequired,
 #if OSL_DEBUG_LEVEL > 1
     if (!bByThread && ((eRequired & E_CONTAINS_ALL) == E_CONTAINS_ALL))
     {
-        OSL_FAIL("Who disturb our \"fill cache on demand\" feature and force loading of ALL data during office startup? Please optimize your code, so a full filled filter cache is not realy needed here!");
+        SAL_WARN( "filter.config", "Who disturb our \"fill cache on demand\" feature and force loading of ALL data during office startup? Please optimize your code, so a full filled filter cache is not realy needed here!");
     }
 #endif
 
@@ -858,7 +857,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
     }
 
     {
-        RTL_LOGFILE_CONTEXT(aLog, sRtlLog.getStr());
+        SAL_INFO( "filter.config", "" << sRtlLog.getStr());
         *pConfig = impl_createConfigAccess(sPath    ,
                                            sal_False,   // bReadOnly
                                            sal_True );  // bLocalesMode
@@ -999,7 +998,7 @@ void FilterCache::impl_validateAndOptimize()
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::FilterCache::impl_validateAndOptimize");
+    SAL_INFO( "filter.config", "framework (as96863) ::FilterCache::impl_validateAndOptimize");
 
     // First check if any filter or type could be readed
     // from the underlying configuration!
@@ -1378,7 +1377,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         {
-            RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::FilterCache::load std");
+            SAL_INFO( "filter.config", "framework (as96863) ::FilterCache::load std");
             impl_loadSet(xTypes, E_TYPE, E_READ_STANDARD, &m_lTypes);
         }
     }
@@ -1395,7 +1394,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         {
-            RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::FilterCache::load all types");
+            SAL_INFO( "filter.config", "framework (as96863) ::FilterCache::load all types");
             impl_loadSet(xTypes, E_TYPE, E_READ_UPDATE, &m_lTypes);
         }
     }
@@ -1412,7 +1411,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xFilters(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
         {
-            RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::FilterCache::load all filters");
+            SAL_INFO( "filter.config", "framework (as96863) ::FilterCache::load all filters");
             impl_loadSet(xFilters, E_FILTER, E_READ_ALL, &m_lFilters);
         }
     }
@@ -1429,7 +1428,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xLoaders(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
         {
-            RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::FilterCache::load all frame loader");
+            SAL_INFO( "filter.config", "framework (as96863) ::FilterCache::load all frame loader");
             impl_loadSet(xLoaders, E_FRAMELOADER, E_READ_ALL, &m_lFrameLoaders);
         }
     }
@@ -1446,7 +1445,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xHandlers(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
         {
-            RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::FilterCache::load all content handler");
+            SAL_INFO( "filter.config", "framework (as96863) ::FilterCache::load all content handler");
             impl_loadSet(xHandlers, E_CONTENTHANDLER, E_READ_ALL, &m_lContentHandlers);
         }
     }
@@ -1848,7 +1847,7 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
 
         case E_DETECTSERVICE :
         {
-            OSL_FAIL("Cant load detect services on demand. Who use this unsupported feature?");
+            SAL_WARN( "filter.config", "Cant load detect services on demand. Who use this unsupported feature?");
         }
         break;
     }
@@ -2198,7 +2197,7 @@ void FilterCache::impl_interpretDataVal4Filter(const OUString& sValue,
                         sal_Int32 nOrder = sValue.toInt32();
                         if (nOrder > 0)
                         {
-                            OSL_FAIL("FilterCache::impl_interpretDataVal4Filter()\nCant move Order value from filter to type on demand!\n");
+                            SAL_WARN( "filter.config", "FilterCache::impl_interpretDataVal4Filter()\nCant move Order value from filter to type on demand!");
                             _FILTER_CONFIG_LOG_2_("impl_interpretDataVal4Filter(%d, \"%s\") ... OK", (int)eType, _FILTER_CONFIG_TO_ASCII_(rItem).getStr())
                         }
                     }

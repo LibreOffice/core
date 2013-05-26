@@ -93,16 +93,16 @@ void SAL_CALL Acceptor::run()
 {
     while ( m_rAcceptor.is() )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "desktop (lo119109) Acceptor::run" );
+        SAL_INFO( "desktop.offacc", "desktop (lo119109) Acceptor::run" );
         try
         {
             // wait until we get enabled
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109)"\
+            SAL_INFO( "desktop.offacc", "desktop (lo119109)"\
                 "Acceptor::run waiting for office to come up");
             m_cEnable.wait();
             if (m_bDying) //see destructor
                 break;
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109)"\
+            SAL_INFO( "desktop.offacc", "desktop (lo119109)"\
                 "Acceptor::run now enabled and continuing");
 
             // accept connection
@@ -111,8 +111,7 @@ void SAL_CALL Acceptor::run()
             // is destructed so we break out of the run method terminating the thread
             if (! rConnection.is()) break;
             OUString aDescription = rConnection->getDescription();
-            RTL_LOGFILE_CONTEXT_TRACE1( aLog, "desktop (lo119109) Acceptor::run connection %s",
-                OUStringToOString(aDescription, RTL_TEXTENCODING_ASCII_US).getStr());
+            SAL_INFO( "desktop.offacc", "desktop (lo119109) Acceptor::run connection " << aDescription );
 
             // create instanceprovider for this connection
             Reference< XInstanceProvider > rInstanceProvider(
@@ -125,7 +124,7 @@ void SAL_CALL Acceptor::run()
             osl::MutexGuard g(m_aMutex);
             m_bridges.add(rBridge);
         } catch (const Exception& e) {
-            SAL_WARN("desktop", "caught Exception \"" << e.Message << "\"");
+            SAL_WARN("desktop.offacc", "caught Exception \"" << e.Message << "\"");
             // connection failed...
             // something went wrong during connection setup.
             // just wait for a new connection to accept
@@ -139,7 +138,7 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
 {
     // prevent multiple initialization
     ClearableMutexGuard aGuard( m_aMutex );
-    RTL_LOGFILE_CONTEXT( aLog, "destop (lo119109) Acceptor::initialize()" );
+    SAL_INFO( "desktop.offacc", "destop (lo119109) Acceptor::initialize()" );
 
     sal_Bool bOk = sal_False;
 
@@ -149,8 +148,7 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
     // not yet initialized and acceptstring
     if (!m_bInit && nArgs > 0 && (aArguments[0] >>= m_aAcceptString))
     {
-        RTL_LOGFILE_CONTEXT_TRACE1( aLog, "desktop (lo119109) Acceptor::initialize string=%s",
-            OUStringToOString(m_aAcceptString, RTL_TEXTENCODING_ASCII_US).getStr());
+        SAL_INFO( "desktop.offacc", "desktop (lo119109) Acceptor::initialize string=" << m_aAcceptString );
 
         // get connect string and protocol from accept string
         // "<connectString>;<protocol>"

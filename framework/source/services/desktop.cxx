@@ -66,7 +66,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/proptypehlp.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/logfile.hxx>
 #include <vcl/svapp.hxx>
 
 #include <tools/errinf.hxx>
@@ -640,14 +639,14 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-    RTL_LOGFILE_CONTEXT( aLog, "framework (as96863) ::Desktop::loadComponentFromURL" );
+    SAL_INFO( "fwk.desktop", "framework (as96863) ::Desktop::loadComponentFromURL" );
 
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xFactory;
     aReadLock.unlock();
 
-    RTL_LOGFILE_PRODUCT_CONTEXT( aLog2, "PERFORMANCE - Desktop::loadComponentFromURL()" );
+    SAL_INFO( "fwk.desktop", "PERFORMANCE - Desktop::loadComponentFromURL()" );
     return LoadEnv::loadComponentFromURL(xThis, comphelper::getComponentContext(xSMGR), sURL, sTargetFrameName, nSearchFlags, lArguments);
 }
 

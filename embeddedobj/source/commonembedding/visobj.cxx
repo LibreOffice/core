@@ -23,8 +23,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 
-#include <rtl/logfile.hxx>
-
 
 #include <commonembobj.hxx>
 
@@ -37,13 +35,13 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OCommonEmbeddedObject::setVisualAreaSize" );
+    SAL_WARN( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::setVisualAreaSize" );
 
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.common", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( OUString( "Illegal call!\n" ),
@@ -79,7 +77,7 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OCommonEmbeddedObject::getVisualAreaSize" );
+    SAL_WARN( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::getVisualAreaSize" );
 
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -89,7 +87,7 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         throw embed::WrongStateException( OUString( "The own object has no persistence!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
-    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.common", "For iconified objects no graphical replacement is required!" );
 
     if ( m_bHasClonedSize )
         return m_aClonedSize;
@@ -123,7 +121,7 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.common", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( OUString( "Illegal call!\n" ),
@@ -162,7 +160,7 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OCommonEmbeddedObject::getPrefferedVisualRepresentation" );
+    SAL_WARN( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::getPrefferedVisualRepresentation" );
 
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -173,7 +171,7 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
 
-    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.common", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( OUString( "Illegal call!\n" ),
@@ -188,7 +186,7 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
         bBackToLoaded = m_bIsLink;
     }
 
-    OSL_ENSURE( m_pDocHolder->GetComponent().is(), "Running or Active object has no component!\n" );
+    SAL_WARN_IF( !m_pDocHolder->GetComponent().is(), "embeddedobj.common", "Running or Active object has no component!" );
 
     // TODO: return for the aspect of the document
     embed::VisualRepresentation aVisualRepresentation;

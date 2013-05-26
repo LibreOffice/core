@@ -37,8 +37,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
-#include <rtl/logfile.hxx>
-
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
@@ -77,7 +75,7 @@ sal_Bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMulti
 //----------------------------------------------
 OUString GetNewTempFileURL_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
 {
-    OSL_ENSURE( xFactory.is(), "No factory is provided!\n" );
+    SAL_WARN_IF( !xFactory.is(), "embeddedobj.ole", "No factory is provided!" );
 
     OUString aResult;
 
@@ -263,7 +261,7 @@ void VerbExecutionController::UnlockNotification()
 uno::Reference< io::XStream > OleEmbeddedObject::GetNewFilledTempStream_Impl( const uno::Reference< io::XInputStream >& xInStream )
         throw( io::IOException )
 {
-    OSL_ENSURE( xInStream.is(), "Wrong parameter is provided!\n" );
+    SAL_WARN_IF( !xInStream.is(), "embeddedobj.ole", "Wrong parameter is provided!" );
 
     uno::Reference < io::XStream > xTempFile(
             io::TempFile::create(comphelper::getComponentContext(m_xFactory)),
@@ -481,7 +479,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
         sal_Int64 nLength = xTempSeek->getLength() - 40;
         if ( nLength < 0 || nLength >= 0xFFFFFFFF )
         {
-            OSL_FAIL( "Length is not acceptable!" );
+            SAL_WARN( "embeddedobj.ole", "Length is not acceptable!" );
             return;
         }
         for ( sal_Int32 nInd = 0; nInd < 4; nInd++ )
@@ -566,7 +564,7 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
             SetVisReplInStream( sal_True );
         else
         {
-            RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::HasVisualReplInStream, analizing" );
+            SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::HasVisualReplInStream, analizing" );
 
             uno::Reference< io::XInputStream > xStream;
 
@@ -634,7 +632,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
 
     if ( xStream.is() )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::TryToRetrieveCachedVisualRepresentation, retrieving" );
+        SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::TryToRetrieveCachedVisualRepresentation, retrieving" );
 
         uno::Reference< container::XNameContainer > xNameContainer;
         uno::Sequence< uno::Any > aArgs( 2 );
@@ -768,7 +766,7 @@ void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStor
 {
     if ( xNewParentStorage == m_xParentStorage && aNewName.equals( m_aEntryName ) )
     {
-        OSL_ENSURE( xNewObjectStream == m_xObjectStream, "The streams must be the same!\n" );
+        SAL_WARN_IF( xNewObjectStream != m_xObjectStream, "embeddedobj.ole", "The streams must be the same!" );
         return;
     }
 
@@ -797,7 +795,7 @@ void OleEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::XStor
     sal_Int32 nStreamMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
 
     uno::Reference< io::XStream > xNewOwnStream = xNewParentStorage->openStreamElement( aNewName, nStreamMode );
-    OSL_ENSURE( xNewOwnStream.is(), "The method can not return empty reference!" );
+    SAL_WARN_IF( !xNewOwnStream.is(), "embeddedobj.ole", "The method can not return empty reference!" );
 
     SwitchOwnPersistence( xNewParentStorage, xNewOwnStream, aNewName );
 }
@@ -830,8 +828,8 @@ sal_Bool OleEmbeddedObject::OnShowWindow_Impl( sal_Bool bShow )
 
     sal_Bool bResult = sal_False;
 
-    OSL_ENSURE( m_nObjectState != -1, "The object has no persistence!\n" );
-    OSL_ENSURE( m_nObjectState != embed::EmbedStates::LOADED, "The object get OnShowWindow in loaded state!\n" );
+    SAL_WARN_IF( m_nObjectState == -1, "embeddedobj.ole", "The object has no persistence!" );
+    SAL_WARN_IF( m_nObjectState == embed::EmbedStates::LOADED, "embeddedobj.ole", "The object get OnShowWindow in loaded state!" );
     if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
         return sal_False;
 
@@ -923,7 +921,7 @@ void OleEmbeddedObject::OnClosed_Impl()
 //------------------------------------------------------
 OUString OleEmbeddedObject::CreateTempURLEmpty_Impl()
 {
-    OSL_ENSURE( m_aTempURL.isEmpty(), "The object has already the temporary file!" );
+    SAL_WARN_IF( !m_aTempURL.isEmpty(), "embeddedobj.ole", "The object has already the temporary file!" );
     m_aTempURL = GetNewTempFileURL_Impl( m_xFactory );
 
     return m_aTempURL;
@@ -934,7 +932,7 @@ OUString OleEmbeddedObject::GetTempURL_Impl()
 {
     if ( m_aTempURL.isEmpty() )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::GetTempURL_Impl, tempfile creation" );
+        SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::GetTempURL_Impl, tempfile creation" );
 
         // if there is no temporary file, it will be created from the own entry
         uno::Reference< embed::XOptimizedStorage > xOptParStorage( m_xParentStorage, uno::UNO_QUERY );
@@ -1046,7 +1044,7 @@ void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream >
             ucb::SimpleFileAccess::create( comphelper::getComponentContext(m_xFactory) ) );
 
     uno::Reference< io::XInputStream > xTempInStream = xTempAccess->openFileRead( m_aTempURL );
-    OSL_ENSURE( xTempInStream.is(), "The object's temporary file can not be reopened for reading!\n" );
+    SAL_WARN_IF( !xTempInStream.is(), "embeddedobj.ole", "The object's temporary file can not be reopened for reading!" );
 
     // TODO: use bStoreVisReplace
 
@@ -1218,7 +1216,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
             if ( !xCachedVisualRepresentation.is() )
                 xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( xTargetStream );
 
-            OSL_ENSURE( xCachedVisualRepresentation.is(), "No representation is available!" );
+            SAL_WARN_IF( !xCachedVisualRepresentation.is(), "embeddedobj.ole", "No representation is available!" );
 
             // the following copying will be done in case it is SaveAs anyway
             // if it is not SaveAs the seekable access is not required currently
@@ -1293,7 +1291,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::setPersistentEntry" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::setPersistentEntry" );
 
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1501,7 +1499,7 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::storeToEntry" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::storeToEntry" );
 
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1535,7 +1533,7 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::storeAsEntry" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::storeAsEntry" );
 
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1564,7 +1562,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::saveCompleted" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::saveCompleted" );
 
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1591,7 +1589,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     if ( !m_bWaitSaveCompleted && !bUseNew )
         return;
 
-    OSL_ENSURE( m_bWaitSaveCompleted, "Unexpected saveCompleted() call!\n" );
+    SAL_WARN_IF( !m_bWaitSaveCompleted, "embeddedobj.ole", "Unexpected saveCompleted() call!\n" );
     if ( !m_bWaitSaveCompleted )
         throw io::IOException(); // TODO: illegal call
 
@@ -1611,7 +1609,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         // close remembered stream
         try {
             uno::Reference< lang::XComponent > xComponent( m_xNewObjectStream, uno::UNO_QUERY );
-            OSL_ENSURE( xComponent.is(), "Wrong storage implementation!" );
+            SAL_WARN_IF( !xComponent.is(), "embeddedobj.ole", "Wrong storage implementation!" );
             if ( xComponent.is() )
                 xComponent->dispose();
         }
@@ -1729,7 +1727,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::storeOwn" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::storeOwn" );
 
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1805,7 +1803,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
             else
             {
                 m_xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( m_xObjectStream );
-                OSL_ENSURE( m_xCachedVisualRepresentation.is(), "No representation is available!" );
+                SAL_WARN_IF( !m_xCachedVisualRepresentation.is(), "embeddedobj.ole", "No representation is available!" );
             }
         }
         else

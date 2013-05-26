@@ -39,7 +39,6 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include <rtl/logfile.hxx>
 #include <vcl/svapp.hxx>
 
 #include <targetstatecontrol.hxx>
@@ -205,7 +204,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         }
         else
         {
-            OSL_FAIL( "Unacceptable state switch!\n" );
+            SAL_WARN( "embeddedobj.common", "Unacceptable state switch!" );
             throw uno::RuntimeException(); // TODO
         }
     }
@@ -277,7 +276,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             }
             else
             {
-                OSL_FAIL( "Unacceptable state switch!\n" );
+                SAL_WARN( "embeddedobj.common", "Unacceptable state switch!" );
                 throw uno::RuntimeException(); // TODO
             }
         }
@@ -347,7 +346,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         }
         else
         {
-            OSL_FAIL( "Unacceptable state switch!\n" );
+            SAL_WARN( "embeddedobj.common", "Unacceptable state switch!" );
             throw uno::RuntimeException(); // TODO
         }
     }
@@ -360,7 +359,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         }
         else
         {
-            OSL_FAIL( "Unacceptable state switch!\n" );
+            SAL_WARN( "embeddedobj.common", "Unacceptable state switch!" );
             throw uno::RuntimeException(); // TODO
         }
     }
@@ -425,7 +424,7 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OCommonEmbeddedObject::changeState" );
+    SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::changeState" );
 
     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ), uno::UNO_QUERY);
     {
@@ -529,7 +528,7 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OCommonEmbeddedObject::doVerb" );
+    SAL_INFO( "embeddedobj.common", "embeddedobj (mv76033) OCommonEmbeddedObject::doVerb" );
 
     SolarMutexGuard aSolarGuard;
         //TODO: a gross hack to avoid deadlocks when this is called from the
