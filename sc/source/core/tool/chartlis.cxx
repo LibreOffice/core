@@ -469,6 +469,11 @@ void ScChartListenerCollection::insert(ScChartListener* pListener)
     maListeners.insert(aName, pListener);
 }
 
+void ScChartListenerCollection::removeByName(const OUString& rName)
+{
+    maListeners.erase(rName);
+}
+
 ScChartListener* ScChartListenerCollection::findByName(const OUString& rName)
 {
     ListenersType::iterator it = maListeners.find(rName);
