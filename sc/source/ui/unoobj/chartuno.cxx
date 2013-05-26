@@ -55,7 +55,7 @@ SC_SIMPLE_SERVICE_INFO( ScChartsObj, "ScChartsObj", "com.sun.star.table.TableCha
 
 //------------------------------------------------------------------------
 
-static SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, SCTAB nTab, const String& rName )
+static SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, SCTAB nTab, const OUString& rName )
 {
     if (pDocShell)
     {
@@ -76,7 +76,7 @@ static SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, SCTAB nTab, const St
                         uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                         if ( xObj.is() )
                         {
-                            String aObjName = pDocShell->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
+                            OUString aObjName = pDocShell->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
                             if ( aObjName == rName )
                                 return (SdrOle2Obj*)pObject;
                         }
@@ -157,15 +157,14 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
 
 ScChartObj* ScChartsObj::GetObjectByName_Impl(const OUString& aName) const
 {
-    String aNameString(aName);
-    if ( lcl_FindChartObj( pDocShell, nTab, aNameString ) )
-        return new ScChartObj( pDocShell, nTab, aNameString );
+    if ( lcl_FindChartObj( pDocShell, nTab, aName ) )
+        return new ScChartObj( pDocShell, nTab, aName );
     return NULL;
 }
 
 // XTableCharts
 
-void SAL_CALL ScChartsObj::addNewByName( const OUString& aName,
+void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
                                         const awt::Rectangle& aRect,
                                         const uno::Sequence<table::CellRangeAddress>& aRanges,
                                         sal_Bool bColumnHeaders, sal_Bool bRowHeaders )
@@ -185,20 +184,20 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& aName,
     //  chart can't be inserted if any ole object with that name exists on any table
     //  (empty string: generate valid name)
 
-    String aNameString(aName);
+    OUString aName = rName;
     SCTAB nDummy;
-    if ( aNameString.Len() && pModel->GetNamedObject( aNameString, OBJ_OLE2, nDummy ) )
+    if ( !aName.isEmpty() && pModel->GetNamedObject( aName, OBJ_OLE2, nDummy ) )
     {
         //  object exists - only RuntimeException is specified
         throw uno::RuntimeException();
     }
 
     ScRangeList* pList = new ScRangeList;
-    sal_uInt16 nRangeCount = (sal_uInt16)aRanges.getLength();
+    sal_Int32 nRangeCount = aRanges.getLength();
     if (nRangeCount)
     {
         const table::CellRangeAddress* pAry = aRanges.getConstArray();
-        for (sal_uInt16 i=0; i<nRangeCount; i++)
+        for (sal_Int32 i=0; i<nRangeCount; i++)
         {
             ScRange aRange( static_cast<SCCOL>(pAry[i].StartColumn), pAry[i].StartRow, pAry[i].Sheet,
                             static_cast<SCCOL>(pAry[i].EndColumn),   pAry[i].EndRow,   pAry[i].Sheet );
@@ -208,22 +207,26 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& aName,
     ScRangeListRef xNewRanges( pList );
 
     uno::Reference < embed::XEmbeddedObject > xObj;
-    OUString aTmp( aNameString );
     if ( SvtModuleOptions().IsChart() )
-        xObj = pDocShell->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aTmp );
+        xObj = pDocShell->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aName );
     if ( xObj.is() )
     {
-            String aObjName = aTmp;       // wirklich eingefuegter Name...
-
             //  Rechteck anpassen
             //! Fehler/Exception, wenn leer/ungueltig ???
             Point aRectPos( aRect.X, aRect.Y );
             bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-            if ( ( aRectPos.X() < 0 && !bLayoutRTL ) || ( aRectPos.X() > 0 && bLayoutRTL ) ) aRectPos.X() = 0;
-            if (aRectPos.Y() < 0) aRectPos.Y() = 0;
+            if ( ( aRectPos.X() < 0 && !bLayoutRTL ) || ( aRectPos.X() > 0 && bLayoutRTL ) )
+                aRectPos.X() = 0;
+
+            if (aRectPos.Y() < 0)
+                aRectPos.Y() = 0;
+
             Size aRectSize( aRect.Width, aRect.Height );
-            if (aRectSize.Width() <= 0) aRectSize.Width() = 5000;   // Default-Groesse
-            if (aRectSize.Height() <= 0) aRectSize.Height() = 5000;
+            if (aRectSize.Width() <= 0)
+                aRectSize.Width() = 5000;   // Default-Groesse
+
+            if (aRectSize.Height() <= 0)
+                aRectSize.Height() = 5000;
             Rectangle aInsRect( aRectPos, aRectSize );
 
             sal_Int64 nAspect(embed::Aspects::MSOLE_CONTENT);
@@ -274,11 +277,11 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& aName,
             }
 
             ScChartListener* pChartListener =
-                new ScChartListener( aObjName, pDoc, xNewRanges );
+                new ScChartListener( aName, pDoc, xNewRanges );
             pDoc->GetChartListenerCollection()->insert( pChartListener );
             pChartListener->StartListeningTo();
 
-            SdrOle2Obj* pObj = new SdrOle2Obj( ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), aObjName, aInsRect );
+            SdrOle2Obj* pObj = new SdrOle2Obj( ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), aName, aInsRect );
 
             // set VisArea
             if( xObj.is())
@@ -293,8 +296,7 @@ void SAL_CALL ScChartsObj::removeByName( const OUString& aName )
                                             throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameString(aName);
-    SdrOle2Obj* pObj = lcl_FindChartObj( pDocShell, nTab, aNameString );
+    SdrOle2Obj* pObj = lcl_FindChartObj( pDocShell, nTab, aName );
     if (pObj)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
@@ -431,8 +433,7 @@ sal_Bool SAL_CALL ScChartsObj::hasByName( const OUString& aName )
                                         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aNameString(aName);
-    return ( lcl_FindChartObj( pDocShell, nTab, aNameString ) != NULL );
+    return ( lcl_FindChartObj( pDocShell, nTab, aName ) != NULL );
 }
 
 //------------------------------------------------------------------------
