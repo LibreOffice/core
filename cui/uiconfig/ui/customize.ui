@@ -245,7 +245,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">LiberOffice Writer Menus</property>
+                        <property name="label" translatable="yes">%PRODUCTNAME Writer Menus</property>
                       </object>
                     </child>
                   </object>
@@ -1159,7 +1159,7 @@
                       <object class="GtkLabel" id="label26">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">LiberOffice Writer Toolbars</property>
+                        <property name="label" translatable="yes">%PRODUCTNAME Writer Toolbars</property>
                       </object>
                     </child>
                   </object>
