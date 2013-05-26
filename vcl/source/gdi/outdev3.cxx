@@ -2395,13 +2395,13 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         &&  aSearchName.startsWithIgnoreAsciiCase( "hg" ) )
         {
             OUString aBoldName;
-            if( aSearchName.equalsIgnoreAsciiCase( "hggothicb" ) )
+            if( aSearchName.startsWithIgnoreAsciiCase( "hggothicb" ) )
                 aBoldName = OUString("hggothice");
-            else if( aSearchName.equalsIgnoreAsciiCase( "hgpgothicb" ) )
+            else if( aSearchName.startsWithIgnoreAsciiCase( "hgpgothicb" ) )
                 aBoldName = OUString("hgpgothice");
-            else if( aSearchName.equalsIgnoreAsciiCase( "hgminchol" ) )
+            else if( aSearchName.startsWithIgnoreAsciiCase( "hgminchol" ) )
                 aBoldName = OUString("hgminchob");
-            else if( aSearchName.equalsIgnoreAsciiCase( "hgpminchol" ) )
+            else if( aSearchName.startsWithIgnoreAsciiCase( "hgpminchol" ) )
                 aBoldName = OUString("hgpminchob");
             else if( aSearchName.equalsIgnoreAsciiCase( "hgminchob" ) )
                 aBoldName = OUString("hgminchoe");
