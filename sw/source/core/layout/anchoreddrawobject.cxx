@@ -17,13 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <anchoreddrawobject.hxx>
-#include <svx/svdobj.hxx>
 #include <dcontact.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
-#include <cntfrm.hxx>
-#include <doc.hxx>
 #include <tocntntanchoredobjectposition.hxx>
 #include <tolayoutanchoredobjectposition.hxx>
 #include <frmtool.hxx>
@@ -33,12 +29,6 @@
 // --> #i32795#
 // template class <std::vector>
 #include <vector>
-#include <tools/gen.hxx>
-
-// --> #i28749#
-#include <com/sun/star/text/PositionLayoutDir.hpp>
-// --> #i44559#
-#include <ndtxt.hxx>
 
 using namespace ::com::sun::star;
 
