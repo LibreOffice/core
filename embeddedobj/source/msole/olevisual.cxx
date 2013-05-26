@@ -25,8 +25,6 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 
-#include <rtl/logfile.hxx>
-
 #include <oleembobj.hxx>
 #include <olecomponent.hxx>
 #include <comphelper/mimeconfighelper.hxx>
@@ -81,7 +79,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::setVisualAreaSize" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::setVisualAreaSize" );
 
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -97,7 +95,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.ole", "For iconified objects no graphical replacement is required!\n" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( OUString( "Illegal call!\n" ),
@@ -126,7 +124,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
         }
         catch( const uno::Exception& )
         {
-            OSL_FAIL( "The object should not be resized without activation!\n" );
+            SAL_WARN( "embeddedobj.ole", "The object should not be resized without activation!\n" );
         }
         aGuard.reset();
     }
@@ -162,7 +160,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::getVisualAreaSize" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::getVisualAreaSize" );
 
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -177,7 +175,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.ole", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( OUString( "Illegal call!\n" ),
@@ -209,7 +207,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 sal_Bool bSuccess = sal_False;
                 if ( getCurrentState() == embed::EmbedStates::LOADED )
                 {
-                    OSL_FAIL( "Loaded object has no cached size!\n" );
+                    SAL_WARN( "embeddedobj.ole", "Loaded object has no cached size!" );
 
                     // try to switch the object to RUNNING state and request the value again
                     try {
@@ -290,7 +288,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         // return cached value
         if ( m_bHasCachedSize )
         {
-            OSL_ENSURE( nAspect == m_nCachedAspect, "Unexpected aspect is requested!\n" );
+            SAL_WARN_IF( nAspect != m_nCachedAspect, "embeddedobj.ole", "Unexpected aspect is requested!" );
             aResult = m_aCachedSize;
         }
         else
@@ -310,7 +308,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::getPreferredVisualRepresentation" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::getPreferredVisualRepresentation" );
 
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -325,7 +323,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.ole", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( OUString( "Illegal call!\n" ),
@@ -418,7 +416,7 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
+    SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.ole", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
         throw embed::WrongStateException( OUString( "Illegal call!\n" ),

@@ -36,7 +36,6 @@
 #include <vcl/svapp.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <svtools/menuoptions.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
@@ -106,7 +105,7 @@ BmkMenu::~BmkMenu()
 
 void BmkMenu::Initialize()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::BmkMenu::Initialize" );
+    SAL_INFO( "fwk", "framework (cd100003) ::BmkMenu::Initialize" );
 
     if( _pImp->m_bInitialized )
         return;

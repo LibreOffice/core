@@ -42,7 +42,6 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
-#include <rtl/logfile.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/mimeconfighelper.hxx>
@@ -104,7 +103,7 @@ uno::Sequence< sal_Int32 > OleEmbeddedObject::GetReachableStatesList_Impl(
 //----------------------------------------------
 uno::Sequence< sal_Int32 > OleEmbeddedObject::GetIntermediateVerbsSequence_Impl( sal_Int32 nNewState )
 {
-    OSL_ENSURE( m_nObjectState != embed::EmbedStates::LOADED, "Loaded object is switched to running state without verbs using!" );
+    SAL_WARN_IF( m_nObjectState == embed::EmbedStates::LOADED, "embeddedobj.ole", "Loaded object is switched to running state without verbs using!" );
 
     // actually there will be only one verb
     if ( m_nObjectState == embed::EmbedStates::RUNNING && nNewState == embed::EmbedStates::ACTIVE )
@@ -415,7 +414,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 if ( !aStorageName.isEmpty() )
                     try {
                         m_xParentStorage->removeElement( aStorageName );
-                    } catch( const uno::Exception& ) { OSL_FAIL( "Can not remove temporary storage!" ); }
+                    } catch( const uno::Exception& ) { SAL_WARN( "embeddedobj.ole", "Can not remove temporary storage!" ); }
                 break;
         }
     }
@@ -445,7 +444,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::changeState" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::changeState" );
 
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -603,7 +602,7 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::getReachableStates" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::getReachableStates" );
 
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -762,7 +761,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::doVerb" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::doVerb" );
 
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -898,7 +897,7 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObject::getSupportedVerb" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::getSupportedVerb" );
 
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -1022,7 +1021,7 @@ void SAL_CALL OleEmbeddedObject::update()
     else
     {
         // the object must be up to date
-        OSL_ENSURE( m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE, "Unknown update mode!\n" );
+        SAL_WARN_IF( m_nUpdateMode != embed::EmbedUpdateModes::ALWAYS_UPDATE, "embeddedobj.ole", "Unknown update mode!" );
     }
 }
 

@@ -86,7 +86,6 @@
 #include <unotools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/menuoptions.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/bootstrap.hxx>
 #include <vcl/help.hxx>
 #include <vcl/msgbox.hxx>
@@ -166,8 +165,7 @@ void removeTree(OUString const & url) {
     case osl::FileBase::E_NOENT:
         return; //TODO: SAL_WARN if recursive
     default:
-        SAL_WARN(
-            "desktop", "cannot open directory " << dir.getURL() << ": " << +rc);
+        SAL_WARN("desktop.app", "cannot open directory " << dir.getURL() << ": " << +rc);
         return;
     }
     for (;;) {
@@ -177,9 +175,7 @@ void removeTree(OUString const & url) {
             break;
         }
         if (rc != osl::FileBase::E_None) {
-            SAL_WARN(
-                "desktop",
-                "cannot iterate directory " << dir.getURL() << ": " << +rc);
+            SAL_WARN( "desktop.app", "cannot iterate directory " << dir.getURL() << ": " << +rc);
             break;
         }
         osl::FileStatus stat(
@@ -187,9 +183,7 @@ void removeTree(OUString const & url) {
             osl_FileStatus_Mask_FileURL);
         rc = i.getFileStatus(stat);
         if (rc != osl::FileBase::E_None) {
-            SAL_WARN(
-                "desktop",
-                "cannot stat in directory " << dir.getURL() << ": " << +rc);
+            SAL_WARN( "desktop.app", "cannot stat in directory " << dir.getURL() << ": " << +rc);
             continue;
         }
         if (stat.getFileType() == osl::FileStatus::Directory) { //TODO: symlinks
@@ -197,19 +191,19 @@ void removeTree(OUString const & url) {
         } else {
             rc = osl::File::remove(stat.getFileURL());
             SAL_WARN_IF(
-                rc != osl::FileBase::E_None, "desktop",
+                rc != osl::FileBase::E_None, "desktop.app",
                 "cannot remove file " << stat.getFileURL() << ": " << +rc);
         }
     }
     if (dir.isOpen()) {
         rc = dir.close();
         SAL_WARN_IF(
-            rc != osl::FileBase::E_None, "desktop",
+            rc != osl::FileBase::E_None, "desktop.app",
             "cannot close directory " << dir.getURL() << ": " << +rc);
     }
     rc = osl::Directory::remove(url);
     SAL_WARN_IF(
-        rc != osl::FileBase::E_None, "desktop",
+        rc != osl::FileBase::E_None, "desktop.app",
         "cannot remove directory " << url << ": " << +rc);
 }
 
@@ -261,12 +255,10 @@ bool cleanExtensionCache() {
             rc = fr.readLine(s1);
             osl::FileBase::RC rc2 = fr.close();
             SAL_WARN_IF(
-                rc2 != osl::FileBase::E_None, "desktop",
+                rc2 != osl::FileBase::E_None, "desktop.app",
                 "cannot close " << fr.getURL() << " after reading: " << +rc2);
             if (rc != osl::FileBase::E_None) {
-                SAL_WARN(
-                    "desktop",
-                    "cannot read from " << fr.getURL() << ": " << +rc);
+                SAL_WARN( "desktop.app", "cannot read from " << fr.getURL() << ": " << +rc);
                 break;
             }
             OUString s2(
@@ -282,9 +274,7 @@ bool cleanExtensionCache() {
     case osl::FileBase::E_NOENT:
         break;
     default:
-        SAL_WARN(
-            "desktop",
-            "cannot open " << fr.getURL() << " for reading: " << +rc);
+        SAL_WARN( "desktop.app", "cannot open " << fr.getURL() << " for reading: " << +rc);
         break;
     }
     removeTree(extDir);
@@ -294,18 +284,16 @@ bool cleanExtensionCache() {
     rtl::Bootstrap::expandMacros(userRcFile); //TODO: detect failure
     rc = osl::File::remove(userRcFile);
     SAL_WARN_IF(
-        rc != osl::FileBase::E_None && rc != osl::FileBase::E_NOENT, "desktop",
+        rc != osl::FileBase::E_None && rc != osl::FileBase::E_NOENT, "desktop.app",
         "cannot remove file " << userRcFile << ": " << +rc);
     rc = osl::Directory::createPath(extDir);
     SAL_WARN_IF(
-        rc != osl::FileBase::E_None && rc != osl::FileBase::E_EXIST, "desktop",
+        rc != osl::FileBase::E_None && rc != osl::FileBase::E_EXIST, "desktop.app",
         "cannot create path " << extDir << ": " << +rc);
     osl::File fw(buildIdFile);
     rc = fw.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
     if (rc != osl::FileBase::E_None) {
-        SAL_WARN(
-            "desktop",
-            "cannot open " << fw.getURL() << " for writing: " << +rc);
+        SAL_WARN( "desktop.app", "cannot open " << fw.getURL() << " for writing: " << +rc);
         return true;
     }
     OString buf(OUStringToOString(buildId, RTL_TEXTENCODING_UTF8));
@@ -317,11 +305,11 @@ bool cleanExtensionCache() {
     SAL_WARN_IF(
         (rc != osl::FileBase::E_None
          || n != static_cast< sal_uInt32 >(buf.getLength())),
-        "desktop",
+        "desktop.app",
         "cannot write to " << fw.getURL() << ": " << +rc << ", " << n);
     rc = fw.close();
     SAL_WARN_IF(
-        rc != osl::FileBase::E_None, "desktop",
+        rc != osl::FileBase::E_None, "desktop.app",
         "cannot close " << fw.getURL() << " after writing: " << +rc);
     return true;
 }
@@ -557,7 +545,7 @@ Desktop::Desktop()
 , m_bServicesRegistered( false )
 , m_aBootstrapError( BE_OK )
 {
-    RTL_LOGFILE_TRACE( "desktop (cd100003) ::Desktop::Desktop" );
+    SAL_INFO( "desktop.app", "desktop (cd100003) ::Desktop::Desktop" );
 }
 
 Desktop::~Desktop()
@@ -569,7 +557,7 @@ Desktop::~Desktop()
 
 void Desktop::Init()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Init" );
+    SAL_INFO( "desktop.app",  "desktop (cd100003) ::Desktop::Init" );
     SetBootstrapStatus(BS_OK);
 
     m_bCleanedExtensionCache = cleanExtensionCache();
@@ -605,7 +593,7 @@ void Desktop::Init()
         const CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
 
         // start ipc thread only for non-remote offices
-        RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
+        SAL_INFO( "desktop.app",  "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
         OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
         if ( aStatus == OfficeIPCThread::IPC_STATUS_PIPE_ERROR )
         {
@@ -650,21 +638,21 @@ void Desktop::Init()
 
 void Desktop::InitFinished()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::InitFinished" );
+    SAL_INFO( "desktop.app", "desktop (cd100003) ::Desktop::InitFinished" );
 
     CloseSplashScreen();
 }
 
 void Desktop::DeInit()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::DeInit" );
+    SAL_INFO( "desktop.app", "desktop (cd100003) ::Desktop::DeInit" );
 
     try {
         // instead of removing of the configManager just let it commit all the changes
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
+        SAL_INFO( "desktop.app", "<- store config items" );
         utl::ConfigManager::storeConfigItems();
         FlushConfiguration();
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
+        SAL_INFO( "desktop.app", "<- store config items" );
 
         // close splashscreen if it's still open
         CloseSplashScreen();
@@ -685,16 +673,16 @@ void Desktop::DeInit()
         // this will leave some garbage behind..
     }
 
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "FINISHED WITH Destop::DeInit" );
+    SAL_INFO( "desktop.app", "FINISHED WITH Destop::DeInit" );
 }
 
 sal_Bool Desktop::QueryExit()
 {
     try
     {
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
+        SAL_INFO( "desktop.app", "<- store config items" );
         utl::ConfigManager::storeConfigItems();
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- store config items" );
+        SAL_INFO( "desktop.app", "<- store config items" );
     }
     catch ( const RuntimeException& )
     {
@@ -881,8 +869,8 @@ void Desktop::HandleBootstrapErrors(
                 /// the bootstrap INI file could not be found or read
                 /// the bootstrap INI is missing a required entry
                 /// the bootstrap INI contains invalid data
-                 case ::utl::Bootstrap::MISSING_BOOTSTRAP_FILE_ENTRY:
-                 case ::utl::Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY:
+                case ::utl::Bootstrap::MISSING_BOOTSTRAP_FILE_ENTRY:
+                case ::utl::Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY:
                 case ::utl::Bootstrap::MISSING_BOOTSTRAP_FILE:
                 {
                     OUString aBootstrapFileURL;
@@ -895,7 +883,7 @@ void Desktop::HandleBootstrapErrors(
                 /// the version locator INI file could not be found or read
                 /// the version locator INI has no entry for this version
                 /// the version locator INI entry is not a valid directory URL
-                   case ::utl::Bootstrap::INVALID_VERSION_FILE_ENTRY:
+                 case ::utl::Bootstrap::INVALID_VERSION_FILE_ENTRY:
                  case ::utl::Bootstrap::MISSING_VERSION_FILE_ENTRY:
                  case ::utl::Bootstrap::MISSING_VERSION_FILE:
                 {
@@ -907,7 +895,7 @@ void Desktop::HandleBootstrapErrors(
                 break;
 
                 /// the user installation directory does not exist
-                   case ::utl::Bootstrap::MISSING_USER_DIRECTORY:
+                 case ::utl::Bootstrap::MISSING_USER_DIRECTORY:
                 {
                     OUString aUserInstallationURL;
 
@@ -1336,7 +1324,7 @@ namespace {
         // frame/window is created. Since we do not use the TaskCreator here, we need to mimic its behavior,
         // otherwise documents loaded into this frame will later on miss functionality depending on the style.
         Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
-        OSL_ENSURE( pContainerWindow, "Desktop::Main: no implementation access to the frame's container window!" );
+        SAL_WARN_IF( !pContainerWindow, "desktop.app", "Desktop::Main: no implementation access to the frame's container window!" );
         if (!pContainerWindow) {
             fprintf (stderr, "Error: It very much looks as if you have used 'linkoo' (or bin/ooinstall -l)\n"
                      "but have then forgotten to source 'ooenv' into your shell before running !\n"
@@ -1367,7 +1355,7 @@ int Desktop::Main()
 {
     pExecGlobals = new ExecuteGlobals();
 
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Main" );
+    SAL_INFO( "desktop.app", "desktop (cd100003) ::Desktop::Main" );
 
     // Remember current context object
     com::sun::star::uno::ContextLayer layer(
@@ -1416,16 +1404,16 @@ int Desktop::Main()
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
 
     // Startup screen
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main { OpenSplashScreen" );
+    SAL_INFO( "desktop.app", "desktop (lo119109) Desktop::Main { OpenSplashScreen" );
     OpenSplashScreen();
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main } OpenSplashScreen" );
+    SAL_INFO( "desktop.app", "desktop (lo119109) Desktop::Main } OpenSplashScreen" );
 
     SetSplashScreenProgress(10);
 
     UserInstall::UserInstallStatus inst_fin = UserInstall::finalize();
     if (inst_fin != UserInstall::Ok && inst_fin != UserInstall::Created)
     {
-        OSL_FAIL("userinstall failed");
+        SAL_WARN( "desktop.app", "userinstall failed");
         if ( inst_fin == UserInstall::E_NoDiskSpace )
             HandleBootstrapErrors(
                 BE_USERINSTALL_NOTENOUGHDISKSPACE, OUString() );
@@ -1452,7 +1440,7 @@ int Desktop::Main()
 
         // check user installation directory for lockfile so we can be sure
         // there is no other instance using our data files from a remote host
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main -> Lockfile" );
+        SAL_INFO( "desktop.app", "desktop (lo119109) Desktop::Main -> Lockfile" );
         m_xLockfile.reset(new Lockfile);
 
 #if HAVE_FEATURE_DESKTOP
@@ -1462,10 +1450,10 @@ int Desktop::Main()
             // Lockfile exists, and user clicked 'no'
             return EXIT_FAILURE;
         }
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main <- Lockfile" );
+        SAL_INFO( "desktop.app", "desktop (lo119109) Desktop::Main <- Lockfile" );
 
         // check if accessibility is enabled but not working and allow to quit
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ GetEnableATToolSupport" );
+        SAL_INFO( "desktop.app", "{ GetEnableATToolSupport" );
         if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
         {
             bool bQuitApp;
@@ -1474,7 +1462,7 @@ int Desktop::Main()
                 if( bQuitApp )
                     return EXIT_FAILURE;
         }
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} GetEnableATToolSupport" );
+        SAL_INFO( "desktop.app", "} GetEnableATToolSupport" );
 #endif
 
         // terminate if requested...
@@ -1512,10 +1500,10 @@ int Desktop::Main()
 
         SetDisplayName( aTitle );
         SetSplashScreenProgress(35);
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtLanguageOptions" );
+        SAL_INFO( "desktop.app", "{ create SvtPathOptions and SvtLanguageOptions" );
         pExecGlobals->pPathOptions.reset( new SvtPathOptions);
         SetSplashScreenProgress(40);
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
+        SAL_INFO( "desktop.app", "} create SvtPathOptions and SvtLanguageOptions" );
 
         xDesktop = css::frame::Desktop::create( xContext );
 
@@ -1559,9 +1547,9 @@ int Desktop::Main()
         sal_Bool bExistsRecoveryData = sal_False;
         sal_Bool bExistsSessionData  = sal_False;
 
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ impl_checkRecoveryState" );
+        SAL_INFO( "desktop.app", "{ impl_checkRecoveryState" );
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} impl_checkRecoveryState" );
+        SAL_INFO( "desktop.app", "} impl_checkRecoveryState" );
 
         OUString pidfileName = rCmdLineArgs.GetPidfileName();
         if ( !pidfileName.isEmpty() )
@@ -1580,18 +1568,18 @@ int Desktop::Main()
                     sal_uInt64 written = 0;
                     if ( pidfile.write(pid.getStr(), pid.getLength(), written) != osl::File::E_None )
                     {
-                        SAL_WARN("desktop", "cannot write pidfile " << pidfile.getURL());
+                        SAL_WARN("desktop.app", "cannot write pidfile " << pidfile.getURL());
                     }
                     pidfile.close();
                 }
                 else
                 {
-                    SAL_WARN("desktop", "cannot open pidfile " << pidfile.getURL() << osl::FileBase::RC(rc));
+                    SAL_WARN("desktop.app", "cannot open pidfile " << pidfile.getURL() << osl::FileBase::RC(rc));
                 }
             }
             else
             {
-                SAL_WARN("desktop", "cannot get pidfile URL from path" << pidfileName);
+                SAL_WARN("desktop.app", "cannot get pidfile URL from path" << pidfileName);
             }
         }
 
@@ -1615,9 +1603,9 @@ int Desktop::Main()
                 (!bExistsSessionData                                                   ) &&
                 (!Application::AnyInput( VCL_INPUT_APPEVENT )                          ))
             {
-                 RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create BackingComponent" );
+                 SAL_INFO( "desktop.app", "{ create BackingComponent" );
                  ShowBackingComponent(this);
-                 RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create BackingComponent" );
+                 SAL_INFO( "desktop.app", "} create BackingComponent" );
             }
         }
     }
@@ -1666,7 +1654,7 @@ int Desktop::Main()
              !rCmdLineArgs.IsNoQuickstart() )
             InitializeQuickstartMode( xContext );
 
-        RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) createInstance com.sun.star.frame.Desktop" );
+        SAL_INFO( "desktop.app", "desktop (cd100003) createInstance com.sun.star.frame.Desktop" );
         try
         {
             if ( xDesktop.is() )
@@ -1698,7 +1686,7 @@ int Desktop::Main()
             Application::AcquireSolarMutex( nAcquireCount );
 
         // call Application::Execute to process messages in vcl message loop
-        RTL_LOGFILE_PRODUCT_TRACE( "PERFORMANCE - enter Application::Execute()" );
+        SAL_INFO( "desktop.app", "PERFORMANCE - enter Application::Execute()" );
 
         try
         {
@@ -1774,12 +1762,12 @@ int Desktop::doShutdown()
         {
             if ( osl::File::remove( pidfileURL ) != osl::FileBase::E_None )
             {
-                SAL_WARN("desktop", "shutdown: cannot remove pidfile " << pidfileURL);
+                SAL_WARN("desktop.app", "shutdown: cannot remove pidfile " << pidfileURL);
             }
         }
         else
         {
-            SAL_WARN("desktop", "shutdown: cannot get pidfile URL from path" << pidfileName);
+            SAL_WARN("desktop.app", "shutdown: cannot get pidfile URL from path" << pidfileName);
         }
     }
 
@@ -1793,15 +1781,15 @@ int Desktop::doShutdown()
     Application::AcquireSolarMutex(nAcquireCount);
     // be sure that path/language options gets destroyed before
     // UCB is deinitialized
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> dispose path/language options" );
+    SAL_INFO( "desktop.app", "-> dispose path/language options" );
     pExecGlobals->pLanguageOptions.reset( 0 );
     pExecGlobals->pPathOptions.reset( 0 );
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- dispose path/language options" );
+    SAL_INFO( "desktop.app", "<- dispose path/language options" );
 
     sal_Bool bRR = pExecGlobals->bRestartRequested;
     delete pExecGlobals, pExecGlobals = NULL;
 
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "FINISHED WITH Destop::Main" );
+    SAL_INFO( "desktop.app", "FINISHED WITH Destop::Main" );
     if ( bRR )
     {
         restartOnMac(true);
@@ -1820,7 +1808,7 @@ IMPL_LINK( Desktop, ImplInitFilterHdl, ConvertData*, pData )
 
 bool Desktop::InitializeConfiguration()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (jb99855) ::InitConfiguration" );
+    SAL_INFO( "desktop.app",  "desktop (jb99855) ::InitConfiguration" );
     try
     {
         css::configuration::theDefaultProvider::get(
@@ -1916,7 +1904,7 @@ sal_Bool Desktop::InitializeQuickstartMode( const Reference< XComponentContext >
         // the shutdown icon sits in the systray and allows the user to keep
         // the office instance running for quicker restart
         // this will only be activated if --quickstart was specified on cmdline
-        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) createInstance com.sun.star.office.Quickstart" );
+        SAL_INFO( "desktop.app", "desktop (cd100003) createInstance com.sun.star.office.Quickstart" );
 
         sal_Bool bQuickstart = shouldLaunchQuickstart();
 
@@ -2012,7 +2000,7 @@ class ExitTimer : public Timer
 
 IMPL_LINK_NOARG(Desktop, OpenClients_Impl)
 {
-    RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE - DesktopOpenClients_Impl()" );
+    SAL_INFO( "desktop.app", "PERFORMANCE - DesktopOpenClients_Impl()" );
 
     try {
         OpenClients();
@@ -2043,7 +2031,7 @@ IMPL_LINK_NOARG(Desktop, EnableAcceptors_Impl)
 // Registers a COM class factory of the service manager with the windows operating system.
 void Desktop::EnableOleAutomation()
 {
-      RTL_LOGFILE_CONTEXT( aLog, "desktop (jl97489) ::Desktop::EnableOleAutomation" );
+      SAL_INFO( "desktop.app",  "desktop (jl97489) ::Desktop::EnableOleAutomation" );
 #ifdef WNT
     Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
     xSMgr->createInstance(OUString("com.sun.star.bridge.OleApplicationRegistration"));
@@ -2376,9 +2364,7 @@ void Desktop::OpenClients()
         }
         catch(const css::uno::Exception& e)
         {
-            OUString aMessage = OUString("Could not disable AutoRecovery.\n")
-                + e.Message;
-            OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+            SAL_WARN( "desktop.app", "Could not disable AutoRecovery." << e.Message);
         }
     }
     else
@@ -2405,9 +2391,7 @@ void Desktop::OpenClients()
             }
             catch(const css::uno::Exception& e)
             {
-                OUString aMessage = OUString("Error during recovery\n")
-                    + e.Message;
-                OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+                SAL_WARN( "desktop.app", "Error during recovery" << e.Message);
             }
         }
 
@@ -2428,9 +2412,7 @@ void Desktop::OpenClients()
         }
         catch(const com::sun::star::uno::Exception& e)
         {
-            OUString aMessage = OUString("Registration of session listener failed\n")
-                + e.Message;
-            OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+            SAL_WARN( "desktop.app", "Registration of session listener failed" << e.Message);
         }
 
         if ( !bExistsRecoveryData )
@@ -2442,9 +2424,7 @@ void Desktop::OpenClients()
             }
             catch(const com::sun::star::uno::Exception& e)
             {
-                OUString aMessage = OUString("Error in session management\n")
-                    + e.Message;
-                OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+                SAL_WARN( "desktop.app", "Error in session management" << e.Message);
             }
         }
     }
@@ -2536,7 +2516,7 @@ void Desktop::OpenClients()
 void Desktop::OpenDefault()
 {
 
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::OpenDefault" );
+    SAL_INFO( "desktop.app",  "desktop (cd100003) ::Desktop::OpenDefault" );
 
     OUString        aName;
     SvtModuleOptions    aOpt;
@@ -2791,7 +2771,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         destroyAcceptor(rAppEvent.GetData());
         break;
     default:
-        OSL_FAIL("this cannot happen");
+        SAL_WARN( "desktop.app", "this cannot happen");
         break;
     }
 }
@@ -2885,7 +2865,7 @@ void Desktop::DoFirstRunInitializations()
     }
     catch(const ::com::sun::star::uno::Exception&)
     {
-        OSL_FAIL( "Desktop::DoFirstRunInitializations: caught an exception while trigger job executor ..." );
+        SAL_WARN( "desktop.app", "Desktop::DoFirstRunInitializations: caught an exception while trigger job executor ..." );
     }
 }
 

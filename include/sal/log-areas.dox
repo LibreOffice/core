@@ -80,8 +80,11 @@ certain functionality.
 @section desktop
 
 @li @c desktop
+@li @c desktop.app
 @li @c desktop.deployment
 @li @c desktop.migration
+@li @c desktop.offacc
+@li @c desktop.splash
 
 @section Draw
 
@@ -103,6 +106,8 @@ certain functionality.
 @section embeddedobj
 
 @li @c embeddedobj - embedded objects
+@li @c embeddedobj.common
+@li @c embeddedobj.general
 @li @c embeddedobj.ole - OLE embedded objects
 
 @section extensions
@@ -114,6 +119,7 @@ certain functionality.
 
 @section Filter
 
+@li @c filter.config
 @li @c filter.ms - escher import/export
 @li @c filter.xslt - xslt import/export
 @li @c oox.xmlstream - XmlStream class

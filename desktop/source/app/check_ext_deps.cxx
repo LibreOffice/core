@@ -22,7 +22,6 @@
 
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/logfile.hxx>
 #include "cppuhelper/compbase3.hxx"
 
 #include "vcl/wrkwin.hxx"
@@ -246,7 +245,7 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
 
     if ( !xExtensionManager.is() )
     {
-        OSL_FAIL( "Could not get the Extension Manager!" );
+       SAL_WARN( "desktop.app", "Could not get the Extension Manager!" );
         return true;
     }
 
@@ -293,7 +292,7 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
                 catch ( const uno::RuntimeException & ) { throw; }
                 catch (const uno::Exception & exc) {
                     (void) exc;
-                    OSL_FAIL( OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                   SAL_WARN( "desktop.app", "" <<  exc.Message );
                 }
 
                 if ( bRegistered )
@@ -411,7 +410,7 @@ sal_Bool Desktop::CheckExtensionDependencies()
 
 void Desktop::SynchronizeExtensionRepositories()
 {
-    RTL_LOGFILE_CONTEXT(aLog,"desktop (jl) ::Desktop::SynchronizeExtensionRepositories");
+    SAL_INFO( "desktop.app", "desktop (jl) ::Desktop::SynchronizeExtensionRepositories");
     uno::Reference< uno::XComponentContext > context(
         comphelper_getProcessComponentContext());
     uno::Reference< ucb::XCommandEnvironment > silent(

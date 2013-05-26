@@ -30,7 +30,6 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/bootstrap.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/math.hxx>
 #include <vcl/introwin.hxx>
@@ -207,8 +206,8 @@ void SAL_CALL SplashScreen::setText(const OUString& rText)
 void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
     throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "::SplashScreen::setValue (lo119109)" );
-    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "value=%d", nValue );
+    SAL_INFO( "desktop.splash", "::SplashScreen::setValue (lo119109)" );
+    SAL_INFO( "desktop.splash", "value=" << nValue );
 
     SolarMutexGuard aSolarGuard;
     if (_bVisible && !_bProgressEnd) {

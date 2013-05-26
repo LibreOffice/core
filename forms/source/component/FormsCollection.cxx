@@ -23,7 +23,6 @@
 #include <comphelper/sequence.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/form/XForm.hpp>
-#include <rtl/logfile.hxx>
 
 //.........................................................................
 namespace frm
@@ -149,7 +148,7 @@ Reference< XCloneable > SAL_CALL OFormsCollection::createClone(  ) throw (Runtim
 void OFormsCollection::disposing()
 {
     {
-        RTL_LOGFILE_CONTEXT( aLogger, "forms::OFormsCollection::disposing" );
+        SAL_INFO( "forms.component", "forms::OFormsCollection::disposing" );
         OInterfaceContainer::disposing();
     }
     FormsCollectionComponentBase::disposing();

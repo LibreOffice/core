@@ -24,9 +24,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 
-#include <rtl/logfile.hxx>
-
-
 #include "xolefactory.hxx"
 #include "oleembobj.hxx"
 
@@ -69,7 +66,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObjectFactory::createInstanceInitFromEntry" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObjectFactory::createInstanceInitFromEntry" );
 
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
@@ -141,7 +138,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor" );
 
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
@@ -183,7 +180,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObjectFactory::createInstanceInitNew" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObjectFactory::createInstanceInitNew" );
 
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
@@ -224,7 +221,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObjectFactory::createInstanceLink" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObjectFactory::createInstanceLink" );
 
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
@@ -270,7 +267,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
             uno::Exception,
             uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OleEmbeddedObjectFactory::createInstanceUserInit" );
+    SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObjectFactory::createInstanceUserInit" );
 
     // the initialization is completelly controlled by user
     if ( !xStorage.is() )
