@@ -17,25 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <anchoredobject.hxx>
-#include <pam.hxx>
-#include <frame.hxx>
 #include <txtfrm.hxx>
-#include <frmfmt.hxx>
-#include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 // --> #i28701#
 #include <doc.hxx>
 #include <fmtsrnd.hxx>
-#include <svx/svdobj.hxx>
 #include <dcontact.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <sortedobjs.hxx>
 #include <pagefrm.hxx>
-#include <frmatr.hxx>
-// --> #i3317#
-#include <colfrm.hxx>
 // --> #i35911#
 #include <layouter.hxx>
 
