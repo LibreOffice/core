@@ -659,9 +659,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Contour Mode</value>
                 </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
-                </prop>
             </node>
             <node oor:name=".uno:GlueEditMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
@@ -775,9 +772,6 @@
             <node oor:name=".uno:GraphicDraft" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Picture Placeholders</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:GridFront" oor:op="replace">
@@ -1027,9 +1021,6 @@
             <node oor:name=".uno:LineDraft" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Line Contour Only</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:LineSquareArrow" oor:op="replace">
@@ -1477,9 +1468,6 @@
             <node oor:name=".uno:TextDraft" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Text Placeholders</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:TextFitToSizeTool" oor:op="replace">
