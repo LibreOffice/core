@@ -46,7 +46,6 @@
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <rtl/logfile.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
@@ -342,7 +341,7 @@ namespace frm
         break;
 
         case PROPERTY_ID_VALUE_SEQ :
-            OSL_FAIL( "ValueItemList is read-only!" );
+            SAL_WARN( "forms.component", "ValueItemList is read-only!" );
             throw PropertyVetoException();
 
         case PROPERTY_ID_SELECT_VALUE_SEQ :
@@ -411,7 +410,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_VALUE_SEQ :
-            OSL_FAIL( "ValueItemList is read-only!" );
+            SAL_WARN( "forms.component", "ValueItemList is read-only!" );
             throw PropertyVetoException();
 
         case PROPERTY_ID_SELECT_VALUE_SEQ :
@@ -575,7 +574,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OComboBoxModel::read: caught an exception while examining the aggregate's string item list!" );
+            SAL_WARN( "forms.component", "OComboBoxModel::read: caught an exception while examining the aggregate's string item list!" );
         }
 
         // Version
@@ -584,7 +583,7 @@ namespace frm
 
         if (nVersion > 0x0004)
         {
-            OSL_FAIL("OListBoxModel::read : invalid (means unknown) version !");
+            SAL_WARN( "forms.component", "OListBoxModel::read : invalid (means unknown) version !");
             ValueList().swap(m_aListSourceValues);
             m_aBoundColumn <<= (sal_Int16)0;
             clearBoundValues();
@@ -675,7 +674,7 @@ namespace frm
     //------------------------------------------------------------------------------
     void OListBoxModel::loadData( bool _bForce )
     {
-        RTL_LOGFILE_CONTEXT( aLogContext, "OListBoxModel::loadData" );
+        SAL_INFO( "forms.component", "OListBoxModel::loadData" );
         DBG_ASSERT( m_eListSourceType != ListSourceType_VALUELIST, "OListBoxModel::loadData: cannot load value list from DB!" );
         DBG_ASSERT( !hasExternalListSource(), "OListBoxModel::loadData: cannot load from DB when I have an external list source!" );
 
@@ -899,7 +898,7 @@ namespace frm
 
                     //  If the LB is bound to a field and empty entries are valid, we remember the position
                     //  for an empty entry
-                    RTL_LOGFILE_CONTEXT( aLogContext, "OListBoxModel::loadData: string collection" );
+                    SAL_INFO( "forms.component", "OListBoxModel::loadData: string collection" );
                     OUString aStr;
                     sal_Int16 entryPos = 0;
                     ORowSetValue aBoundValue;
@@ -937,7 +936,7 @@ namespace frm
                 }
                 break;
             default:
-                OSL_FAIL( "OListBoxModel::loadData: unreachable!" );
+                SAL_WARN( "forms.component", "OListBoxModel::loadData: unreachable!" );
                 break;
             }
         }
@@ -1086,7 +1085,7 @@ namespace frm
         size_t selectedValue = aSelectedIndices[0];
         if ( selectedValue >= aValues.size() )
         {
-            OSL_FAIL( "OListBoxModel::getFirstSelectedValue: inconsistent selection/valuelist!" );
+            SAL_WARN( "forms.component", "OListBoxModel::getFirstSelectedValue: inconsistent selection/valuelist!" );
             return s_aEmptyVaue;
         }
 
@@ -1194,7 +1193,7 @@ namespace frm
         Reference< XPropertySet > xBoundField( getField() );
         if ( !xBoundField.is() )
         {
-            OSL_FAIL( "OListBoxModel::translateDbColumnToControlValue: no field? How could that happen?!" );
+            SAL_WARN( "forms.component", "OListBoxModel::translateDbColumnToControlValue: no field? How could that happen?!" );
             return Any();
         }
 
@@ -1285,7 +1284,7 @@ namespace frm
             default:
                 break;
             }
-            OSL_FAIL( "lcl_getCurrentExchangeType: unsupported (unexpected) exchange type!" );
+            SAL_WARN( "forms.component", "lcl_getCurrentExchangeType: unsupported (unexpected) exchange type!" );
             return eEntry;
         }
     }

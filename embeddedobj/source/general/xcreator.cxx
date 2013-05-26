@@ -29,7 +29,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <rtl/logfile.hxx>
 #include <comphelper/processfactory.hxx>
 
 
@@ -74,7 +73,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             uno::Exception,
             uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceInitNew" );
+    SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceInitNew" );
 
     uno::Reference< uno::XInterface > xResult;
 
@@ -119,7 +118,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             uno::Exception,
             uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceInitFromEntry" );
+    SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceInitFromEntry" );
 
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
@@ -238,7 +237,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             uno::Exception,
             uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceInitFromMediaDescriptor" );
+    SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceInitFromMediaDescriptor" );
 
     // TODO: use lObjArgs
 
@@ -303,7 +302,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             uno::Exception,
             uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceUserInit" );
+    SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceUserInit" );
 
     uno::Reference< uno::XInterface > xResult;
 
@@ -344,7 +343,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceLink" );
+    SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceLink" );
 
     uno::Reference< uno::XInterface > xResult;
 
@@ -419,7 +418,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                 uno::Exception,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceLinkUserInit" );
+    SAL_INFO( "embeddedobj.general", "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceLinkUserInit" );
 
     uno::Reference< uno::XInterface > xResult;
 

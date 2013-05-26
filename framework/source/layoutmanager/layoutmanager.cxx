@@ -73,7 +73,6 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/uno3.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
 #include <unotools/cmdoptions.hxx>
 
@@ -1432,7 +1431,7 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
 void SAL_CALL LayoutManager::createElement( const OUString& aName )
 throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::createElement" );
+    SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::createElement" );
 
     ReadGuard aReadLock( m_aLock );
     Reference< XFrame > xFrame = m_xFrame;
@@ -1566,7 +1565,7 @@ throw (RuntimeException)
 void SAL_CALL LayoutManager::destroyElement( const OUString& aName )
 throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::destroyElement" );
+    SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::destroyElement" );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
@@ -1653,7 +1652,7 @@ throw (uno::RuntimeException)
     WriteGuard aWriteLock( m_aLock );
 
     OString aResName = OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
-    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) Element %s requested.", aResName.getStr() );
+    SAL_INFO( "fwk", "framework (cd100003) Element " << aResName.getStr() << " requested." );
 
     if (( aElementType.equalsIgnoreAsciiCase("statusbar") &&
           aElementName.equalsIgnoreAsciiCase("statusbar") ) ||
@@ -1773,7 +1772,7 @@ throw (uno::RuntimeException)
 sal_Bool SAL_CALL LayoutManager::showElement( const OUString& aName )
 throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::showElement" );
+    SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::showElement" );
 
     bool            bResult( false );
     bool            bNotify( false );
@@ -1784,7 +1783,7 @@ throw (RuntimeException)
     parseResourceURL( aName, aElementType, aElementName );
 
     OString aResName = OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
-    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) Element %s", aResName.getStr() );
+    SAL_INFO( "fwk", "framework (cd100003) Element " << aResName.getStr() );
 
     if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
          aElementName.equalsIgnoreAsciiCase("menubar") )
@@ -1858,7 +1857,7 @@ throw (RuntimeException)
 sal_Bool SAL_CALL LayoutManager::hideElement( const OUString& aName )
 throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::hideElement" );
+    SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::hideElement" );
 
     bool            bNotify( false );
     bool            bMustLayout( false );
@@ -1867,7 +1866,7 @@ throw (RuntimeException)
 
     parseResourceURL( aName, aElementType, aElementName );
     OString aResName = OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
-    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) Element %s", aResName.getStr() );
+    SAL_INFO( "fwk", "framework (cd100003) Element " << aResName.getStr() );
 
     if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
          aElementName.equalsIgnoreAsciiCase("menubar") )
@@ -2256,13 +2255,13 @@ throw (RuntimeException)
     sal_Int32 nLockCount( m_nLockCount );
     aReadLock.unlock();
 
-    RTL_LOGFILE_TRACE1( "framework (cd100003) ::LayoutManager::lock lockCount=%d", nLockCount );
+    SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::lock lockCount=" << nLockCount );
 #ifdef DBG_UTIL
     OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("LayoutManager::lock "));
     aStr.append(reinterpret_cast<sal_Int64>(this));
     aStr.append(RTL_CONSTASCII_STRINGPARAM(" - "));
     aStr.append(nLockCount);
-    OSL_TRACE(aStr.getStr());
+    SAL_INFO( "fwk", "" << aStr.getStr());
 #endif
 
     Any a( nLockCount );
@@ -2278,13 +2277,13 @@ throw (RuntimeException)
     sal_Int32 nLockCount( m_nLockCount );
     aReadLock.unlock();
 
-    RTL_LOGFILE_TRACE1( "framework (cd100003) ::LayoutManager::unlock lockCount=%d", nLockCount );
+    SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::unlock lockCount=" << nLockCount );
 #ifdef DBG_UTIL
     OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("LayoutManager::unlock "));
     aStr.append(reinterpret_cast<sal_Int64>(this));
     aStr.append(RTL_CONSTASCII_STRINGPARAM(" - "));
     aStr.append(nLockCount);
-    OSL_TRACE(aStr.getStr());
+    SAL_INFO( "fwk", "" << aStr.getStr());
 #endif
     // conform to documentation: unlock with lock count == 0 means force a layout
 
@@ -2324,7 +2323,7 @@ void LayoutManager::implts_doLayout_notify( sal_Bool bOuterResize )
 
 sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_Bool bOuterResize )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::implts_doLayout" );
+    SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::implts_doLayout" );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
@@ -2809,7 +2808,7 @@ throw ( RuntimeException )
 {
     if (( aEvent.Action == FrameAction_COMPONENT_ATTACHED ) || ( aEvent.Action == FrameAction_COMPONENT_REATTACHED ))
     {
-        RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_ATTACHED|REATTACHED)" );
+        SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_ATTACHED|REATTACHED)" );
 
         WriteGuard aWriteLock( m_aLock );
         m_bComponentAttached = sal_True;
@@ -2822,7 +2821,7 @@ throw ( RuntimeException )
     }
     else if (( aEvent.Action == FrameAction_FRAME_UI_ACTIVATED ) || ( aEvent.Action == FrameAction_FRAME_UI_DEACTIVATING ))
     {
-        RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::frameAction (FRAME_UI_ACTIVATED|DEACTIVATING)" );
+        SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::frameAction (FRAME_UI_ACTIVATED|DEACTIVATING)" );
 
         WriteGuard aWriteLock( m_aLock );
         m_bActive = ( aEvent.Action == FrameAction_FRAME_UI_ACTIVATED );
@@ -2832,7 +2831,7 @@ throw ( RuntimeException )
     }
     else if ( aEvent.Action == FrameAction_COMPONENT_DETACHING )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_DETACHING)" );
+        SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_DETACHING)" );
 
         WriteGuard aWriteLock( m_aLock );
         m_bComponentAttached = sal_False;
