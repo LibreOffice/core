@@ -475,8 +475,8 @@ postprocess_OPTDEPS_pdfimport := calc draw impress math writer
 	# impress, math, web, writer), add optional dependencies on those XCDS that
 	# include those fcfg_X_types.xcu
 postprocess_FILES_pdfimport := \
-	$(OUTDIR)/xml/pdfimport/pdf_import_filter.xcu \
-	$(OUTDIR)/xml/pdfimport/pdf_types.xcu
+	$(SRCDIR)/sdext/source/pdfimport/config/pdf_import_filter.xcu \
+	$(SRCDIR)/sdext/source/pdfimport/config/pdf_types.xcu
 endif
 
 ifeq (WNT,$(OS))

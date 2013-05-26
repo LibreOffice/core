@@ -27,7 +27,6 @@ $(eval $(call gb_Module_add_targets,sdext,\
     CustomTarget_pdfimport \
     Executable_xpdfimport \
     Library_pdfimport \
-    Package_pdfimport_xcu \
     Package_pdfimport_xpdfimport \
     StaticLibrary_pdfimport_s \
 ))
