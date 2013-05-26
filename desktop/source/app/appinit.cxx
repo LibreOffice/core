@@ -46,7 +46,6 @@
 
 #include <tools/rcid.h>
 
-#include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -69,7 +68,7 @@ namespace desktop
 
 static void configureUcb()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (sb93797) ::configureUcb" );
+    SAL_INFO( "desktop.app", "desktop (sb93797) ::configureUcb" );
 
     // For backwards compatibility, in case some code still uses plain
     // createInstance w/o args directly to obtain an instance:
@@ -98,14 +97,14 @@ static void configureUcb()
     }
     catch ( const Exception & )
     {
-        SAL_WARN( "desktop", "missing gnome-vfs component to initialize thread workaround" );
+        SAL_WARN( "desktop.app", "missing gnome-vfs component to initialize thread workaround" );
     }
 #endif // ENABLE_GNOME_VFS
 }
 
 void Desktop::InitApplicationServiceManager()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createApplicationServiceManager" );
+    SAL_INFO( "desktop.app", "desktop (cd100003) ::createApplicationServiceManager" );
     Reference<XMultiServiceFactory> sm;
 #ifdef ANDROID
     OUString aUnoRc( OUString( "file:///assets/program/unorc"  ) );
@@ -124,7 +123,7 @@ void Desktop::RegisterServices(Reference< XComponentContext > const & context)
 {
     if( !m_bServicesRegistered )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::registerServices" );
+        SAL_INFO( "desktop.app", "desktop (cd100003) ::registerServices" );
 
         // interpret command line arguments
         CommandLineArgs& rCmdLine = GetCommandLineArgs();
@@ -188,13 +187,13 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
             {
                 // no error handling needed...
                 // acceptor just won't come up
-                OSL_FAIL("Acceptor could not be created.");
+                SAL_WARN( "desktop.app", "Acceptor could not be created.");
             }
         }
         else
         {
             // there is already an acceptor with this description
-            OSL_FAIL("Acceptor already exists.");
+            SAL_WARN( "desktop.app", "Acceptor already exists.");
         }
     }
 }
@@ -216,7 +215,7 @@ class enable
 
 void Desktop::enableAcceptors()
 {
-    RTL_LOGFILE_CONTEXT(aLog, "desktop (lo119109) Desktop::enableAcceptors");
+    SAL_INFO( "desktop.app", "desktop (lo119109) Desktop::enableAcceptors");
     if (!bAccept)
     {
         // from now on, all new acceptors are enabled
@@ -243,7 +242,7 @@ void Desktop::destroyAcceptor(const OUString& aAcceptString)
             // this is the last reference and the acceptor will be destructed
             rMap.erase(aAcceptString);
         } else {
-            OSL_FAIL("Found no acceptor to remove");
+            SAL_WARN( "desktop.app", "Found no acceptor to remove");
         }
     }
 }
@@ -257,7 +256,7 @@ void Desktop::DeregisterServices()
 
 void Desktop::CreateTemporaryDirectory()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createTemporaryDirectory" );
+    SAL_INFO( "desktop.app", "desktop (cd100003) ::createTemporaryDirectory" );
 
     OUString aTempBaseURL;
     try
@@ -312,7 +311,7 @@ void Desktop::CreateTemporaryDirectory()
 
 void Desktop::RemoveTemporaryDirectory()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::removeTemporaryDirectory" );
+    SAL_INFO( "desktop.app", "desktop (cd100003) ::removeTemporaryDirectory" );
 
     // remove current temporary directory
     String &rCurrentTempURL = CurrentTempURL::get();
