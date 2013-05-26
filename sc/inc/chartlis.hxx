@@ -171,6 +171,8 @@ public:
     const ScChartListener* findByName(const OUString& rName) const;
     bool hasListeners() const;
 
+    void removeByName(const OUString& rName);
+
     const ListenersType& getListeners() const;
     ListenersType& getListeners();
     StringSetType& getNonOleObjectNames();

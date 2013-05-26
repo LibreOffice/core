@@ -300,6 +300,7 @@ void SAL_CALL ScChartsObj::removeByName( const OUString& aName )
     if (pObj)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
+        pDoc->GetChartListenerCollection()->removeByName(aName);
         ScDrawLayer* pModel = pDoc->GetDrawLayer();     // ist nicht 0
         SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));    // ist nicht 0
 
