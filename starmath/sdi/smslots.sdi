@@ -283,6 +283,11 @@ interface FormulaView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+    SID_ATTR_ZOOMSLIDER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     //idlpp kein Menueeintrag , also keine Texte
     SID_TEXTSTATUS //idlpp ole : no , status : no
     [
