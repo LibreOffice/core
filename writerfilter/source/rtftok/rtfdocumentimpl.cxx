@@ -887,7 +887,7 @@ int RTFDocumentImpl::resolveChars(char ch)
 
     bool bUnicodeChecked = false;
     bool bSkipped = false;
-    while(!Strm().IsEof() && ch != '{' && ch != '}' && ch != '\\')
+    while(!Strm().IsEof() && (m_aStates.top().nInternalState == INTERNAL_HEX || (ch != '{' && ch != '}' && ch != '\\')))
     {
         if (m_aStates.top().nInternalState == INTERNAL_HEX || (ch != 0x0d && ch != 0x0a))
         {
