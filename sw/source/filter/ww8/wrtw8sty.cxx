@@ -549,7 +549,7 @@ void MSWordStyles::OutputStyle( SwFmt* pFmt, sal_uInt16 nPos )
                 if (!clash)
                     break;
                 aName = aBaseName;
-                aName += OUString::number(++nSuffix);
+                aName += OUString::valueOf(sal_Int32(++nSuffix));
             }
         }
 
