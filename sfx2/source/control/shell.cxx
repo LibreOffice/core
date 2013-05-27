@@ -638,17 +638,13 @@ void SfxShell::Activate
     in order to give the Subclasses the opportunity to respond to the
     to the enabling.
 
-    The base implementation is empty and does not need to be called.
-
     [Cross-reference]
 
     StarView SystemWindow::Activate(sal_Bool)
 */
 
 {
-    SfxViewFrame* pViewFrame = GetFrame();
-    if (pViewFrame != NULL)
-        pImp->maContextChangeBroadcaster.Activate(pViewFrame->GetFrame().GetFrameInterface());
+    BroadcastContextForActivation(true);
 }
 
 //--------------------------------------------------------------------
@@ -673,18 +669,15 @@ void SfxShell::Deactivate
     Virtual method that is called when disabling the SfxShell instance,
     to give the Subclasses the opportunity to respond to the disabling.
 
-    The base implementation is empty and does not need to be called.
-
     [Cross-reference]
 
     StarView SystemWindow::Dectivate(sal_Bool)
 */
 
 {
-    SfxViewFrame* pViewFrame = GetFrame();
-    if (pViewFrame != NULL)
-        pImp->maContextChangeBroadcaster.Deactivate(pViewFrame->GetFrame().GetFrameInterface());
+    BroadcastContextForActivation(false);
 }
+
 
 void SfxShell::ParentActivate
 (
@@ -1171,6 +1164,16 @@ void SfxShell::SetViewShell_Impl( SfxViewShell* pView )
     pImp->pViewSh = pView;
 }
 
-
+void SfxShell::BroadcastContextForActivation (const bool bIsActivated)
+{
+    SfxViewFrame* pViewFrame = GetFrame();
+    if (pViewFrame != NULL)
+    {
+        if (bIsActivated)
+            pImp->maContextChangeBroadcaster.Activate(pViewFrame->GetFrame().GetFrameInterface());
+        else
+            pImp->maContextChangeBroadcaster.Deactivate(pViewFrame->GetFrame().GetFrameInterface());
+   }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,7 +23,6 @@
 #include <sfx2/shell.hxx>
 #include "shellids.hxx"
 #include <sfx2/module.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
 #include <svx/svdmark.hxx>
 #include <tools/link.hxx>
 #include <rtl/ref.hxx>
@@ -45,6 +44,7 @@ class ScDrawShell : public SfxShell
     void SetHlinkForObject( SdrObject* pObj, const OUString& rHlnk );
 
 protected:
+    virtual void    Activate(sal_Bool bMDI);
     ScViewData* GetViewData()   { return pViewData; }
 
 public:
@@ -83,7 +83,7 @@ public:
     sal_Bool    AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList& rMark);
 
     void GetDrawAttrStateForIFBX( SfxItemSet& rSet );
-    ::sfx2::sidebar::EnumContext::Context GetContextForSelection (void);
+    ::rtl::OUString GetSidebarContextName (void);
 };
 
 

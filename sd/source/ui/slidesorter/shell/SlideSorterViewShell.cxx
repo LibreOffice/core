@@ -51,6 +51,7 @@
 #include "SdUnoSlideView.hxx"
 #include "ViewShellManager.hxx"
 #include "Window.hxx"
+#include "drawview.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
@@ -62,6 +63,7 @@
 #include <svx/svxids.hrc>
 #include <sfx2/sidebar/EnumContext.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
+#include <svx/sidebar/SelectionAnalyzer.hxx>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <cppuhelper/bootstrap.hxx>
@@ -563,21 +565,18 @@ void SlideSorterViewShell::Activate (sal_Bool bIsMDIActivate)
     switch (eMainViewShellType)
     {
         case ViewShell::ST_IMPRESS:
+        case ViewShell::ST_SLIDE_SORTER:
+        case ViewShell::ST_NOTES:
             eContext = EnumContext::Context_DrawPage;
             if (pMainViewShell->ISA(DrawViewShell))
             {
-                DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell.get());
-                if (pDrawViewShell && (pDrawViewShell->GetEditMode()== EM_MASTERPAGE))
-                    eContext = EnumContext::Context_MasterPage;
+                DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell.get());
+                if (pDrawViewShell != NULL)
+                    eContext = EnumContext::GetContextEnum(pDrawViewShell->GetSidebarContextName());
             }
             break;
 
-        case ViewShell::ST_SLIDE_SORTER:
             eContext = EnumContext::Context_SlidesorterPage;
-            break;
-
-        case ViewShell::ST_NOTES:
-            eContext = EnumContext::Context_NotesPage;
             break;
 
         default:
@@ -593,9 +592,6 @@ void SlideSorterViewShell::Activate (sal_Bool bIsMDIActivate)
 
 void SlideSorterViewShell::Deactivate (sal_Bool /*bIsMDIActivate*/)
 {
-    ContextChangeEventMultiplexer::NotifyContextChange(
-        &GetViewShellBase(),
-        EnumContext::Context_Default);
 }
 
 

@@ -114,9 +114,9 @@ void DrawViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 }
 
 
-void DrawViewShell::Deactivate(sal_Bool bIsMDIActivate)
+void DrawViewShell::Deactivate(sal_Bool /*bIsMDIActivate*/)
 {
-    ViewShell::Deactivate(bIsMDIActivate);
+    // Do not forward to ViewShell::Deactivate() to prevent a context change.
 }
 
 namespace
@@ -459,13 +459,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         Invalidate( SID_NOTES_MASTERPAGE );
         Invalidate( SID_HANDOUT_MASTERPAGE );
 
-        if (meEditMode == EM_PAGE)
-            SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_DrawPage));
-        else if (mePageKind == PK_HANDOUT)
-
-            SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_HandoutPage));
-        else
-            SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_MasterPage));
+        SetContextName(GetSidebarContextName());
     }
 }
 

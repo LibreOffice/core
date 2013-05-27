@@ -93,9 +93,7 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC (const SdrMark
 
 EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
     const SdrMarkList& rMarkList,
-    const bool bIsMasterPage,
-    const bool bIsHandoutPage,
-    const bool bIsNotesPage)
+    const ViewType eViewType)
 {
     EnumContext::Context eContext = EnumContext::Context_Unknown;
 
@@ -104,14 +102,24 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
     switch (rMarkList.GetMarkCount())
     {
         case 0:
-            if (bIsHandoutPage)
-                eContext = EnumContext::Context_HandoutPage;
-            else if (bIsNotesPage)
-                eContext = EnumContext::Context_NotesPage;
-            else if (bIsMasterPage)
-                eContext = EnumContext::Context_MasterPage;
-            else
-                eContext = EnumContext::Context_DrawPage;
+            switch(eViewType)
+            {
+                case VT_Standard:
+                    eContext = EnumContext::Context_DrawPage;
+                    break;
+                case VT_Master:
+                    eContext = EnumContext::Context_MasterPage;
+                    break;
+                case VT_Handout:
+                    eContext = EnumContext::Context_HandoutPage;
+                    break;
+                case VT_Notes:
+                    eContext = EnumContext::Context_NotesPage;
+                    break;
+                case VT_Outline:
+                    eContext = EnumContext::Context_OutlineText;
+                    break;
+            }
             break;
 
         case 1:
@@ -141,7 +149,7 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
                         if (nObjId == 0)
                             nObjId = OBJ_GRUP;
                     }
-                    eContext = GetContextForObjectId_SD(nObjId, bIsHandoutPage, bIsNotesPage);
+                    eContext = GetContextForObjectId_SD(nObjId, eViewType);
                 }
                 else if (nInv == E3dInventor)
                 {
@@ -165,7 +173,7 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
                     if (nObjId == 0)
                         eContext = EnumContext::Context_MultiObject;
                     else
-                        eContext = GetContextForObjectId_SD(nObjId, bIsHandoutPage, bIsNotesPage);
+                        eContext = GetContextForObjectId_SD(nObjId, eViewType);
                     break;
                 }
 
@@ -238,8 +246,7 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SC (const sal_uInt
 
 EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SD (
     const sal_uInt16 nObjectId,
-    const bool bIsHandoutPage,
-    const bool bIsNotesPage)
+    const ViewType eViewType)
 {
     switch (nObjectId)
     {
@@ -281,12 +288,17 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SD (
             return EnumContext::Context_Table;
 
         case OBJ_PAGE:
-            if (bIsHandoutPage)
-                return EnumContext::Context_HandoutPage;
-            else if (bIsNotesPage)
-                return EnumContext::Context_NotesPage;
-            else
-                return EnumContext::Context_Unknown;
+            switch (eViewType)
+            {
+                case VT_Handout:
+                    return EnumContext::Context_HandoutPage;
+                case VT_Notes:
+                    return EnumContext::Context_NotesPage;
+                case VT_Outline:
+                    return EnumContext::Context_OutlineText;
+                default:
+                    return EnumContext::Context_Unknown;
+            }
 
         default:
             return EnumContext::Context_Unknown;
