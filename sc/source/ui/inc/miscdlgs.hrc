@@ -37,11 +37,6 @@
 #define FL_FRAME        112
 #define STR_BTN_CLOSE   200
 
-// Insert Cell Dialog
-#define BTN_CELLSDOWN   11
-#define BTN_CELLSRIGHT  12
-#define BTN_INSROWS     16
-#define BTN_INSCOLS     17
 
 // Insert Contents Dialog
 #define BTN_INSALL      20
