@@ -27,10 +27,6 @@
 
 #include "macros.inc"
 
-STD_LIB_FILE( gid_File_Lib_Sm , sm)
-
-STD_LIB_FILE( gid_File_Lib_Smd , smd)
-
 STD_RES_FILE( gid_File_Res_Sm, sm )
 
 File gid_File_Share_Registry_Math_Xcd

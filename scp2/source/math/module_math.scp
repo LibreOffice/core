@@ -27,6 +27,8 @@
 
 #include "macros.inc"
 
+#include "AutoInstallLibs/math"
+
 Module gid_Module_Prg_Math
     MOD_NAME_DESC ( MODULE_PRG_MATH );
     ParentID = gid_Module_Prg;
@@ -42,7 +44,8 @@ Module gid_Module_Prg_Math_Bin
     Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Files = (gid_File_Lib_Sm,gid_File_Lib_Smd,gid_File_Extra_Urlmore_Math,gid_File_Extra_Urlnew_Math,gid_File_Extra_Urltasks_Math,
+    Files = (auto_Math_Lib_ALL
+	gid_File_Extra_Urlmore_Math,gid_File_Extra_Urlnew_Math,gid_File_Extra_Urltasks_Math,
     gid_File_Share_Registry_Math_Xcd,
     gid_File_Tmp_Userinstall_Math_Inf);
 End
