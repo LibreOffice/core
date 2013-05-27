@@ -1089,16 +1089,6 @@ CondFormatRef CondFormatBuffer::createCondFormat()
     maCondFormats.push_back( xCondFmt );
     return xCondFmt;
 }
-/*
-::Color RgbToRgbComponents( sal_Int32 nRgb )
-{
-    sal_Int32 ornR = (nRgb >> 16) & 0xFF;
-    sal_Int32 ornG = (nRgb >> 8) & 0xFF;
-    sal_Int32 ornB = nRgb & 0xFF;
-
-    return ::Color(ornR, ornG, ornB);
-}
-*/
 
 void ExtCfRule::finalizeImport()
 {
