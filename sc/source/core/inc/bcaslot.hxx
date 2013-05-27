@@ -128,7 +128,7 @@ private:
     ScDocument*         pDoc;
     ScBroadcastAreaSlotMachine* pBASM;
 
-    ScBroadcastAreas::iterator  FindBroadcastArea( const ScRange& rRange ) const;
+    ScBroadcastAreas::const_iterator  FindBroadcastArea( const ScRange& rRange ) const;
 
     /**
         More hypothetical (memory would probably be doomed anyway) check
