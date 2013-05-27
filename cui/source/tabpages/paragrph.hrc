@@ -21,55 +21,6 @@
 
 // StandardTabPage ----------------------------------------------------------
 
-#define FT_LEFTINDENT           10
-#define ED_LEFTINDENT           11
-#define FT_FLINEINDENT          12
-#define ED_FLINEINDENT          13
-#define FT_RIGHTINDENT          14
-#define ED_RIGHTINDENT          15
-#define FL_INDENT                       16
-
-#define FT_TOPDIST                      20
-#define ED_TOPDIST                      21
-#define FT_BOTTOMDIST           22
-#define ED_BOTTOMDIST           23
-#define FL_DIST                         24
-#define CB_CONTEXTUALSPACING            25
-
-#define BTN_LEFTALIGN           30
-#define BTN_RIGHTALIGN          31
-#define BTN_CENTERALIGN         32
-#define BTN_JUSTIFYALIGN        33
-#define FL_ALIGN                        34
-#define FL_VERTALIGN                    35
-#define LB_VERTALIGN                    36
-#define CB_SNAP                         38
-#define FT_VERTALIGN                    39
-
-
-#define LB_LINEDIST                     40
-#define FT_LINEDIST                     41
-#define ED_LINEDISTPERCENT      42
-#define ED_LINEDISTMETRIC       43
-#define FL_LINEDIST                     44
-#define WN_EXAMPLE                      46
-
-#define CB_AUTO                         48
-#define FT_LASTLINE                     49
-#define LB_LASTLINE                     50
-#define CB_EXPAND                       51
-#define ST_LINEDIST_ABS                 52
-#define ST_LEFTALIGN_ASIAN              53
-#define ST_RIGHTALIGN_ASIAN             54
-
-
-#define CB_REGISTER                     84
-#define FL_REGISTER                     85
-#define FL_PROPERTIES                   90
-#define FT_TEXTDIRECTION                91
-#define LB_TEXTDIRECTION                92
-
-
 #define STR_EXAMPLE                     5010
 #define STR_PAGE_STYLE                  5011
 #endif

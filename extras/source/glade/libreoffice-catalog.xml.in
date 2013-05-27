@@ -96,6 +96,9 @@
     <glade-widget-class title="Table Container" name="svxcorelo-SvxSimpleTableContainer"
                         generic-name="Simple Table Container" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="Paragraph Preview" name="svxlo-SvxParaPrevWindow"
+                        generic-name="Paragraph Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Page Preview" name="svxlo-SvxPageWindow"
                         generic-name="Page Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -183,7 +186,9 @@
     <glade-widget-class title="Wrap Field" name="svxlo-WrapField"
                         generic-name="Wrap Field" parent="GtkSpinButton"
                         icon-name="widget-gtk-spinbutton"/>
-
+    <glade-widget-class title="Relative Numeric Field" name="svxlo-SvxRelativeField"
+                        generic-name="Relative Numeric Field" parent="GtkSpinButton"
+                        icon-name="widget-gtk-spinbutton"/>                        
     <glade-widget-class title="VclComboBoxText" name="VclComboBoxText"
                         generic-name="ComboBoxText" parent="GtkComboBoxText"
                         icon-name="widget-gtk-comboboxtext">
