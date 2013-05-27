@@ -231,7 +231,47 @@ private:
     bool                mbReadyForFinalize;
 };
 
+struct ExCfRuleModel
+{
+    ExCfRuleModel() : mbGradient( false ), mbNegativeBarColorSameAsPositive( false ), mnAxisColor( API_RGB_TRANSPARENT ), mnNegativeColor( API_RGB_TRANSPARENT ), mbIsLower( true ) {}
+    // DataBar
+    bool mbGradient;
+    OUString maAxisPosition;
+    bool mbNegativeBarColorSameAsPositive;
+    // AxisColor
+    sal_Int32 mnAxisColor;
+    // NegativeFillColor
+    sal_Int32 mnNegativeColor;
+    // Cfvo
+    bool mbIsLower;
+    OUString maColorScaleType;
+};
+
+class ExtCfRule
+{
+    enum RuleType
+    {
+        DATABAR,
+        NEGATIVEFILLCOLOR,
+        AXISCOLOR,
+        CFVO,
+        UNKNOWN,
+    };
+    ExCfRuleModel maModel;
+    RuleType mnRuleType;
+    void*    mpTarget;
+public:
+    ExtCfRule(void* pTarget = NULL ) : mnRuleType( ExtCfRule::RuleType::UNKNOWN ), mpTarget(pTarget) {}
+    void finalizeImport();
+    void importDataBar(  const AttributeList& rAttribs );
+    void importNegativeFillColor(  const AttributeList& rAttribs );
+    void importAxisColor(  const AttributeList& rAttribs );
+    void importCfvo(  const AttributeList& rAttribs );
+    ExCfRuleModel& getModel() { return maModel; }
+};
+
 typedef ::boost::shared_ptr< CondFormat > CondFormatRef;
+typedef ::boost::shared_ptr< ExtCfRule > ExtCfRuleRef;
 
 // ============================================================================
 
@@ -244,6 +284,7 @@ public:
     CondFormatRef       importConditionalFormatting( const AttributeList& rAttribs );
     /** Imports settings from the CONDFORMATTING record. */
     CondFormatRef       importCondFormatting( SequenceInputStream& rStrm );
+    ExtCfRuleRef        createExtCfRule( void* pTarget );
 
     /** Converts an OOXML condition operator token to the API constant. */
     static sal_Int32    convertToApiOperator( sal_Int32 nToken );
@@ -254,7 +295,9 @@ private:
 
 private:
     typedef RefVector< CondFormat > CondFormatVec;
+    typedef RefVector< ExtCfRule > ExtCfRuleVec;
     CondFormatVec       maCondFormats;      /// All conditional formatting in a sheet.
+    ExtCfRuleVec        maCfRules;          /// All external conditional formatting rules in a sheet.
 };
 
 // ============================================================================
