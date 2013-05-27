@@ -9,6 +9,9 @@
 
 $(eval $(call gb_Executable_Executable,concat-deps))
 
+$(eval $(call gb_Executable_set_ldflags,concat-deps,\
+    $(filter-out $(SOLARLIB),$$(LDFLAGS))))
+
 $(eval $(call gb_Executable_add_cobjects,concat-deps,\
 	solenv/bin/concat-deps, $(gb_COMPILEROPTFLAGS) \
 ))
