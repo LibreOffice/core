@@ -1680,7 +1680,9 @@ void ScFuncDesc::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArgumen
     if (!bHasSuppressedArgs || !pDefArgFlags)
     {
         _rArguments.resize( nArgCount);
-        ::std::iota( _rArguments.begin(), _rArguments.end(), 0);
+        ::std::vector<sal_uInt16>::iterator it = _rArguments.begin();
+        for( sal_uInt16 n = 0; n < nArgCount; ++n, ++it )
+            *it = n;
     }
 
     _rArguments.reserve( nArgCount);
