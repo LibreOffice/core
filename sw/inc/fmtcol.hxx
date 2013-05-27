@@ -20,7 +20,7 @@
 #define _FMTCOL_HXX
 
 #include "swdllapi.h"
-#include <format.hxx>
+#include <frmatr.hxx>
 #include <swtypes.hxx> // For MAXLEVEL.
 #include <boost/ptr_container/ptr_vector.hpp>
 
