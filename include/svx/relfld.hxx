@@ -40,12 +40,13 @@ protected:
 
 public:
     SvxRelativeField( Window* pParent, const ResId& rResId );
+    SvxRelativeField( Window* pParent, WinBits nBits);
 
     void            EnableRelativeMode( sal_uInt16 nMin = 50, sal_uInt16 nMax = 150,
                                         sal_uInt16 nStep = 5 );
-    sal_Bool            IsRelativeMode() const { return bRelativeMode; }
+    sal_Bool        IsRelativeMode() const { return bRelativeMode; }
     void            SetRelative( sal_Bool bRelative = sal_False );
-    sal_Bool            IsRelative() const { return bRelative; }
+    sal_Bool        IsRelative() const { return bRelative; }
     void            EnableNegativeMode() {bNegativeEnabled = sal_True;}
 };
 
