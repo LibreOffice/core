@@ -54,10 +54,23 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
-typedef struct vary {
-short vary_length;
-char vary_string[1];
-} VARY;
+/*
+ *    Print the status, the SQLCODE, and exit.
+ *    Also, indicate which operation the error occured on.
+ */
+static int pr_error (long* status, char* operation)
+{
+    printf("[\n");
+    printf("PROBLEM ON \"%s\".\n", operation);
+
+    isc_print_status(status);
+
+    printf("SQLCODE:%d\n", isc_sqlcode(status));
+
+    printf("]\n");
+
+    return 1;
+}
 
 //------------------------------------------------------------------------------
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
@@ -86,7 +99,7 @@ sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceN
 }
 
 // -------------------------------------------------------------------------
-OResultSet::OResultSet(OStatement_Base* pStmt, TTable table, sal_Int32 rows, sal_Int32 fields)
+OResultSet::OResultSet(OStatement_Base* pStmt)
     : OResultSet_BASE(m_aMutex)
     ,OPropertySetHelper(OResultSet_BASE::rBHelper)
     ,m_aStatement((OWeakObject*)pStmt)
@@ -95,11 +108,39 @@ OResultSet::OResultSet(OStatement_Base* pStmt, TTable table, sal_Int32 rows, sal
     ,m_pStatement(pStmt)
     ,m_bWasNull(sal_True)
     ,m_row(-1)
-    ,m_rowCount(rows)
-    ,m_fieldCount(fields)
-    ,m_sqldata(table)
 {
+    isc_stmt_handle stmt = m_pStatement->getSTMTHandler();
+    XSQLDA *sqlda = m_pStatement->getOUTsqlda();
+    if (sqlda == NULL)
+    {
+        m_rowCount = 0;
+        m_fieldCount = 0;
+    } else {
+        m_rowCount = 0;
+        m_fieldCount = sqlda->sqld;
+    }
 
+    ISC_STATUS_ARRAY status;  // status vector
+    ISC_STATUS retcode;
+    int j = 0;
+    while ((retcode = isc_dsql_fetch(status, &stmt, 1, sqlda)) == 0)
+    {
+        m_rowCount++;
+
+        TRow row(m_fieldCount);
+        XSQLVAR *var = NULL;
+        for (j=0, var = sqlda->sqlvar; j < m_fieldCount; j++, var++)
+        {
+            row[j] = OUString(var->sqldata, var->sqllen, RTL_TEXTENCODING_UTF8);
+        }
+        m_sqldata.push_back(row);
+    }
+    if (retcode != 100L)
+    {
+        printf("DEBUG !!! retcode %i: ", retcode);
+        if (pr_error(status, "fetch data"))
+            return;
+    }
 }
 // -------------------------------------------------------------------------
 OResultSet::~OResultSet()
@@ -325,30 +366,12 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
+    char *str = strdup(OUStringToOString(m_sqldata[m_row][columnIndex-1] , RTL_TEXTENCODING_UTF8 ).getStr());
 
-    sal_Int16 nRet=0;
+    sal_Int16 nRet= *str;
     return nRet;
 }
 // -------------------------------------------------------------------------
-
-/*
- *    Print the status, the SQLCODE, and exit.
- *    Also, indicate which operation the error occured on.
- */
-static int pr_error (long* status, char* operation)
-{
-    printf("[\n");
-    printf("PROBLEM ON \"%s\".\n", operation);
-
-    isc_print_status(status);
-
-    printf("SQLCODE:%d\n", isc_sqlcode(status));
-
-    printf("]\n");
-
-    return 1;
-}
-
 
 ::rtl::OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
@@ -356,8 +379,6 @@ static int pr_error (long* status, char* operation)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     checkColumnIndex( columnIndex );
     checkRowIndex( sal_True /* must be on row */ );
-
-    printf("DEBUG !!! OResultSet::getString => row: %i, column: %i \n", m_row, columnIndex);
 
     return m_sqldata[m_row][columnIndex-1];
 }
