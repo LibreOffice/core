@@ -108,6 +108,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInf
     if (isc_dsql_prepare(status, &m_TRANSHandler, &m_STMTHandler, 0, sqlStr, 1, NULL))
         if (pr_error(status, "prepare statement"))
             return;
+    free(sqlStr);
 
     // fill the output XSQLDA with information about the select-list items.
     if (isc_dsql_describe(status, &m_STMTHandler, 1, out_sqlda))
