@@ -1445,6 +1445,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_SdtListItem_value:
             m_pImpl->m_pSdtHelper->getDropDownItems().push_back(sStringValue);
         break;
+        case NS_ooxml::LN_CT_Background_color:
+            m_pImpl->m_oBackgroundColor.reset(nIntValue);
+        break;
         default:
             {
 #if OSL_DEBUG_LEVEL > 0
