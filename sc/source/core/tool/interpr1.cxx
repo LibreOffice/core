@@ -5490,7 +5490,7 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             case svExternalSingleRef:
             case svExternalDoubleRef:
                 {
-                    pQueryMatrix = PopMatrix();
+                    pQueryMatrix = GetMatrix();
                     if (!pQueryMatrix)
                     {
                         SetError( errIllegalParameter);
