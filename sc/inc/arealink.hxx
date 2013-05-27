@@ -41,7 +41,7 @@ private:
     bool            bAddUndo;
     bool            bInCreate;
     bool            bDoInsert;      // is set to FALSE for first update
-    bool FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName );
+    bool FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const OUString& rAreaName );
 
 public:
     TYPEINFO();

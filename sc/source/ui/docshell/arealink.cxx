@@ -190,13 +190,14 @@ bool ScAreaLink::IsEqual( const String& rFile, const String& rFilter, const Stri
 }
 
 // find a range with name >rAreaName< in >pSrcDoc<, return it in >rRange<
-bool ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName )
+bool ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const OUString& rAreaName )
 {
     bool bFound = false;
+    OUString aUpperName = ScGlobal::pCharClass->uppercase(rAreaName);
     ScRangeName* pNames = pSrcDoc->GetRangeName();
     if (pNames)         // benannte Bereiche
     {
-        const ScRangeData* p = pNames->findByUpperName(rAreaName);
+        const ScRangeData* p = pNames->findByUpperName(aUpperName);
         if (p && p->IsValidReference(rRange))
             bFound = true;
     }
@@ -205,7 +206,7 @@ bool ScAreaLink::FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const Strin
         ScDBCollection* pDBColl = pSrcDoc->GetDBCollection();
         if (pDBColl)
         {
-            const ScDBData* pDB = pDBColl->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rAreaName));
+            const ScDBData* pDB = pDBColl->getNamedDBs().findByUpperName(aUpperName);
             if (pDB)
             {
                 SCTAB nTab;
