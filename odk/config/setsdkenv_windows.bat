@@ -52,7 +52,7 @@ if not exist "%OO_USER_SDKENV_SCRIPT%". (
    echo  ******************************************************************
    echo  *
    echo  *  You have to configure your SDK environment first before you can
-   echo  *  can use it! The configuration has to be done only once.
+   echo  *  use it. The configuration has to be done only once.
    echo  *
    echo  ******************************************************************
    echo.
