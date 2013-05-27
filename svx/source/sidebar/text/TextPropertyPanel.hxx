@@ -97,6 +97,8 @@ private:
     ::boost::scoped_ptr<ToolBox> mpToolBoxSpacing;
     ::boost::scoped_ptr<Window> mpToolBoxFontColorBackground;
     ::boost::scoped_ptr<ToolBox> mpToolBoxFontColor;
+    ::boost::scoped_ptr<Window> mpToolBoxFontColorBackgroundSW;
+    ::boost::scoped_ptr<ToolBox> mpToolBoxFontColorSW;
     ::boost::scoped_ptr<Window> mpToolBoxHighlightBackground;
     ::boost::scoped_ptr<ToolBox> mpToolBoxHighlight;
     ::boost::scoped_ptr<ToolboxButtonColorUpdater> mpFontColorUpdater;
@@ -173,6 +175,13 @@ private:
     DECL_LINK(ToolBoxScriptSelectHdl, ToolBox *);
 
     void UpdateItem (const sal_uInt16 nSlotId);
+
+    /** Depending on the given context make one of the toolboxes
+        mpToolBoxFontColor and mpToolBoxFontColorSW visible.  Both
+        occupy the same space.
+    */
+    void UpdateFontColorToolbox (
+        const ::sfx2::sidebar::EnumContext aContext);
 };
 
 } } // end of namespace ::svx::sidebar
