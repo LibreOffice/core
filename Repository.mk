@@ -252,6 +252,11 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,KDE, \
     $(if $(ENABLE_KDE4),kde4be1) \
 ))
 
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,MATH, \
+    sm \
+    smd \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
 	avmedia \
 	$(if $(DISABLE_SCRIPTING),,basctl) \
@@ -419,8 +424,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     scfilt \
     scui \
     simplecm \
-    sm \
-    smd \
     solver \
     spa \
     spell \

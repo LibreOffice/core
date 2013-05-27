@@ -15,6 +15,7 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	AutoInstallLibs_tde \
 	AutoInstallLibs_gnome \
 	AutoInstallLibs_kde \
+	AutoInstallLibs_math \
 	AutoInstallLibs_ooo \
 	AutoInstallLibs_ure \
 	AutoInstallLibs_writer \
