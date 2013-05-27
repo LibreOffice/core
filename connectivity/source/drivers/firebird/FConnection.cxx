@@ -107,13 +107,10 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     // some example code how to get the information out of the sequence
 
     ISC_STATUS_ARRAY status;            /* status vector */
-    isc_db_handle    db = NULL;         /* database handle */
 
-    if (isc_attach_database(status, 0, "/home/javi/Firebird/test/new.fdb", &db, 0, NULL))
+    if (isc_attach_database(status, 0, "/home/javi/Firebird/test/new.fdb", &m_DBHandler, 0, NULL))
         if (pr_error(status, "attach database"))
             return;
-
-    m_DBHandler = db;
 
     osl_atomic_decrement( &m_refCount );
 }
@@ -397,6 +394,11 @@ void OConnection::disposing()
 
     m_bClosed   = sal_True;
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
+
+    ISC_STATUS_ARRAY status;            /* status vector */
+    if (isc_detach_database(status, &m_DBHandler))
+        if (pr_error(status, "dattach database"))
+            return;
 
     dispose_ChildImpl();
     OConnection_BASE::disposing();
