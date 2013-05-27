@@ -449,7 +449,6 @@ void StatusIndicatorFactory::impl_createProgress()
 
     css::uno::Reference< css::frame::XFrame >              xFrame (m_xFrame.get()      , css::uno::UNO_QUERY);
     css::uno::Reference< css::awt::XWindow >               xWindow(m_xPluggWindow.get(), css::uno::UNO_QUERY);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = m_xSMGR;
 
     aReadLock.lock();
     // <- SAFE ----------------------------------
@@ -459,7 +458,7 @@ void StatusIndicatorFactory::impl_createProgress()
     if (xWindow.is())
     {
         // use vcl based progress implementation in plugged mode
-        VCLStatusIndicator* pVCLProgress = new VCLStatusIndicator(xSMGR, xWindow);
+        VCLStatusIndicator* pVCLProgress = new VCLStatusIndicator(xWindow);
         xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pVCLProgress), css::uno::UNO_QUERY);
     }
     else if (xFrame.is())

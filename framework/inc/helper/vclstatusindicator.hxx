@@ -47,9 +47,6 @@ class VCLStatusIndicator : public  css::task::XStatusIndicator
 
     private:
 
-        /** can be used to create own needed uno resources. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
-
         /** points to the parent window of this progress and
             hold it alive. */
         css::uno::Reference< css::awt::XWindow > m_xParentWindow;
@@ -79,8 +76,7 @@ class VCLStatusIndicator : public  css::task::XStatusIndicator
         FWK_DECLARE_XINTERFACE
 
         /// ctor
-        VCLStatusIndicator(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR        ,
-                           const css::uno::Reference< css::awt::XWindow >&               xParentWindow);
+        VCLStatusIndicator(const css::uno::Reference< css::awt::XWindow >&               xParentWindow);
 
         /// dtor
         virtual ~VCLStatusIndicator();
