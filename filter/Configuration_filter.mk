@@ -257,8 +257,7 @@ endef
 # $(call filter_Configuration_add_ui_filter,configuration,prefix,xcufile)
 define filter_Configuration_add_ui_filter
 ifeq ($(WITH_LANG),)
-$(filter_XcuFilterUiTarget) : \
-	$(call gb_Configuration__get_source,$(1),$(2)/$(3))
+$(filter_XcuFilterUiTarget) : $(SRCDIR)/$(2)/$(3)
 else
 $(call gb_XcuMergeTarget_XcuMergeTarget,$(2)/$(3),$(1),$(2),$(3))
 $(filter_XcuFilterUiTarget) : \

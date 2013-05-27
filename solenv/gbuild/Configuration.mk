@@ -40,9 +40,6 @@
 #       => *.po
 #    => XcsTarget (schema)
 
-# TODO: This is obsolete--we do not have multiple repos anymore. Drop
-# the first arugment of gb_Configuration__get_source and clean up its
-# uses. Or just replace it by $(SRCDIR)/... .
 # Per-repo pattern rules for each repository do not work for all targets
 # because the prerequisites of some targets need to have the stem mangled
 # and this does not seem to be possible in GNU make because when the stem is
@@ -54,7 +51,6 @@
 # Targets where % rule per repo works: XcsTarget XcuDataTarget XcuMergeTarget
 # fails: XcuModuleTarget XcuLangpackTarget XcuResTarget
 #
-gb_Configuration__get_source = $(SRCDIR)/$(2)
 
 # The main LibreOffice registry (cf. officecfg/Configuration_officecfg.mk):
 gb_Configuration_PRIMARY_REGISTRY_NAME := registry
@@ -158,7 +154,7 @@ $(call gb_XcuDataTarget_get_clean_target,%) :
 # XcuModuleTarget class
 
 define gb_XcuDataSource_for_XcuModuleTarget
-$(call gb_Configuration__get_source,$(1),$(basename $(subst -,.,$(basename $(2)))).xcu)
+$(SRCDIR)/$(basename $(subst -,.,$(basename $(1)))).xcu
 endef
 
 define gb_XcsTarget_for_XcuModuleTarget
@@ -253,7 +249,7 @@ $(call gb_XcuMergeTarget_get_clean_target,%) :
 # $(call gb_XcuMergeTarget_XcuMergeTarget,target,configuration,prefix,xcufile)
 define gb_XcuMergeTarget_XcuMergeTarget
 $(call gb_XcuMergeTarget_get_target,$(1)) : \
-	$(call gb_Configuration__get_source,$(2),$(3)/$(4)) \
+	$(SRCDIR)/$(3)/$(4) \
 	$(wildcard $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po))
 $(call gb_XcuMergeTarget_get_target,$(1)) : \
 	POFILES := $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
@@ -291,8 +287,7 @@ $(call gb_XcuResTarget_get_clean_target,%) :
 # this depends either on the source or on the merge target (if WITH_LANG)
 define gb_XcuResTarget_XcuResTarget
 ifeq ($(strip $(gb_WITH_LANG)),)
-$(call gb_XcuResTarget_get_target,$(1)) : \
-	$(call gb_Configuration__get_source,$(2),$(3)/$(4))
+$(call gb_XcuResTarget_get_target,$(1)) : $(SRCDIR)/$(3)/$(4)
 else
 $(call gb_XcuResTarget_get_target,$(1)) : \
 	$(call gb_XcuMergeTarget_get_target,$(3)/$(4))
@@ -338,7 +333,7 @@ define gb_Configuration_add_schema
 $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcsTarget_get_clean_target,$(2)/$(3))
 $(call gb_XcsTarget_get_target,$(2)/$(3)) : \
-	$(call gb_Configuration__get_source,$(1),$(2)/$(3)) \
+	$(SRCDIR)/$(2)/$(3) \
 	$(call gb_Configuration_get_preparation_target,$(1))
 $(call gb_XcsTarget_get_target,$(2)/$(3)) : PRIMARY_REGISTRY := $(filter $(1),$(gb_Configuration_PRIMARY_REGISTRY_NAME))
 $(call gb_XcsTarget_get_target,$(2)/$(3)) : XCSFILE := $(3)
@@ -364,7 +359,7 @@ define gb_Configuration_add_data
 $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcuDataTarget_get_clean_target,$(2)/$(3))
 $(call gb_XcuDataTarget_get_target,$(2)/$(3)) : \
-	$(call gb_Configuration__get_source,$(1),$(2)/$(3)) \
+	$(SRCDIR)/$(2)/$(3) \
 	$(call gb_Configuration_get_preparation_target,$(1)) \
 	$(call gb_XcsTarget_for_XcuTarget,$(3))
 $(call gb_XcuDataTarget_get_target,$(2)/$(3)) : PRIMARY_REGISTRY := $(filter $(1),$(gb_Configuration_PRIMARY_REGISTRY_NAME))
@@ -398,7 +393,7 @@ define gb_Configuration_add_spool_module
 $(call gb_Configuration_get_clean_target,$(1)) : \
 	$(call gb_XcuModuleTarget_get_clean_target,$(2)/$(3))
 $(call gb_XcuModuleTarget_get_target,$(2)/$(3)) : \
-	$(call gb_XcuDataSource_for_XcuModuleTarget,$(1),$(2)/$(3)) \
+	$(call gb_XcuDataSource_for_XcuModuleTarget,$(2)/$(3)) \
 	$(call gb_Configuration_get_preparation_target,$(1)) \
 	$(call gb_XcsTarget_for_XcuModuleTarget,$(3))
 $(call gb_XcuModuleTarget_get_target,$(2)/$(3)) : PRIMARY_REGISTRY := $(filter $(1),$(gb_Configuration_PRIMARY_REGISTRY_NAME))
@@ -492,7 +487,7 @@ endef
 # apparently extensions package the XcuMergeTarget directly...
 # trivial convenience function to get the right file:
 ifeq ($(gb_WITH_LANG),)
-gb_XcuFile_for_extension = $(call gb_Configuration__get_source,,$(1))
+gb_XcuFile_for_extension = $(SRCDIR)/$(1)
 else
 gb_XcuFile_for_extension = $(call gb_XcuMergeTarget_get_target,$(1))
 endif
