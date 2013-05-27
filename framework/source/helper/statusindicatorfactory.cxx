@@ -69,10 +69,10 @@ DEFINE_XTYPEPROVIDER_5(StatusIndicatorFactory            ,
                        css::task::XStatusIndicatorFactory,
                        css::util::XUpdatable             )
 
-DEFINE_XSERVICEINFO_MULTISERVICE(StatusIndicatorFactory                   ,
-                                 ::cppu::OWeakObject                      ,
-                                 OUString("com.sun.star.task.StatusIndicatorFactory"),
-                                 OUString("com.sun.star.comp.framework.StatusIndicatorFactory"))
+DEFINE_XSERVICEINFO_MULTISERVICE_2(StatusIndicatorFactory                   ,
+                                   ::cppu::OWeakObject                      ,
+                                   OUString("com.sun.star.task.StatusIndicatorFactory"),
+                                   OUString("com.sun.star.comp.framework.StatusIndicatorFactory"))
 
 DEFINE_INIT_SERVICE(StatusIndicatorFactory,
                     {
@@ -85,10 +85,10 @@ DEFINE_INIT_SERVICE(StatusIndicatorFactory,
                    )
 
 //-----------------------------------------------
-StatusIndicatorFactory::StatusIndicatorFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+StatusIndicatorFactory::StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase      (         )
     , ::cppu::OWeakObject (         )
-    , m_xSMGR             (xSMGR    )
+    , m_xContext          (xContext )
     , m_pWakeUp           (0        )
     , m_bAllowReschedule  (sal_False)
     , m_bAllowParentShow  (sal_False)
@@ -352,7 +352,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
 
     css::uno::Reference< css::frame::XFrame > xFrame      (m_xFrame.get()      , css::uno::UNO_QUERY);
     css::uno::Reference< css::awt::XWindow >  xPluggWindow(m_xPluggWindow.get(), css::uno::UNO_QUERY);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR( m_xSMGR.get(), css::uno::UNO_QUERY);
+    css::uno::Reference< css::uno::XComponentContext > xContext( m_xContext);
 
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -430,7 +430,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     {
         bool bForceFrontAndFocus(false);
         ::comphelper::ConfigurationHelper::readDirectKey(
-            comphelper::getComponentContext(xSMGR),
+            xContext,
             OUString("org.openoffice.Office.Common/View"),
             OUString("NewDocumentHandling"),
             OUString("ForceFocusAndToFront"),
@@ -499,7 +499,6 @@ void StatusIndicatorFactory::impl_showProgress()
 
     css::uno::Reference< css::frame::XFrame >              xFrame (m_xFrame.get()      , css::uno::UNO_QUERY);
     css::uno::Reference< css::awt::XWindow >               xWindow(m_xPluggWindow.get(), css::uno::UNO_QUERY);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = m_xSMGR;
 
     aReadLock.lock();
     // <- SAFE ----------------------------------
@@ -545,7 +544,6 @@ void StatusIndicatorFactory::impl_hideProgress()
 
     css::uno::Reference< css::frame::XFrame >              xFrame (m_xFrame.get()      , css::uno::UNO_QUERY);
     css::uno::Reference< css::awt::XWindow >               xWindow(m_xPluggWindow.get(), css::uno::UNO_QUERY);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = m_xSMGR;
 
     aReadLock.lock();
     // <- SAFE ----------------------------------

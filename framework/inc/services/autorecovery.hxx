@@ -307,7 +307,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         /** @short  the global uno service manager.
             @descr  Must be used to create own needed services.
          */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         //---------------------------------------
         /** @short  points to the underlying recovery configuration.
@@ -439,7 +439,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
     public:
 
-                 AutoRecovery(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+                 AutoRecovery(const css::uno::Reference< css::uno::XComponentContext >& xContext);
         virtual ~AutoRecovery(                                                                   );
 
         // XInterface, XTypeProvider, XServiceInfo

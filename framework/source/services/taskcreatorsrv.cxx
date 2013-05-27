@@ -348,7 +348,7 @@ void TaskCreatorService::implts_establishTitleBarUpdate( const css::uno::Referen
     aReadLock.unlock();
     // <- SAFE
 
-    TitleBarUpdate* pHelper = new TitleBarUpdate (xSMGR);
+    TitleBarUpdate* pHelper = new TitleBarUpdate (comphelper::getComponentContext(xSMGR));
     css::uno::Reference< css::lang::XInitialization > xInit(static_cast< ::cppu::OWeakObject* >(pHelper), css::uno::UNO_QUERY_THROW);
 
     css::uno::Sequence< css::uno::Any > lInitData(1);

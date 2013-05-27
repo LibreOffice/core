@@ -65,9 +65,9 @@ namespace framework
 
 //_______________________________________________
 
-BackingComp::BackingComp( const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR )
+BackingComp::BackingComp( const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : ThreadHelpBase    (&Application::GetSolarMutex()                  )
-    , m_xSMGR           (xSMGR                                          )
+    , m_xContext        (xContext                                          )
 {
 }
 
@@ -348,7 +348,7 @@ css::uno::Sequence< OUString > BackingComp::impl_getStaticSupportedServiceNames(
 css::uno::Reference< css::uno::XInterface > SAL_CALL BackingComp::impl_createInstance( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
     throw(css::uno::Exception)
 {
-    BackingComp* pObject = new BackingComp(xSMGR);
+    BackingComp* pObject = new BackingComp(comphelper::getComponentContext(xSMGR));
     return css::uno::Reference< css::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(pObject), css::uno::UNO_QUERY);
 }
 
@@ -459,10 +459,10 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     m_xFrame = xFrame;
 
     // establish drag&drop mode
-    ::framework::DropTargetListener* pDropListener = new ::framework::DropTargetListener( comphelper::getComponentContext(m_xSMGR), m_xFrame);
+    ::framework::DropTargetListener* pDropListener = new ::framework::DropTargetListener( m_xContext, m_xFrame);
     m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >(static_cast< ::cppu::OWeakObject* >(pDropListener), css::uno::UNO_QUERY);
 
-    css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( comphelper::getComponentContext(m_xSMGR) );
+    css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( m_xContext );
     css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xToolkit->getDropTarget(m_xWindow);
     if (xDropTarget.is())
     {
@@ -663,7 +663,7 @@ void SAL_CALL BackingComp::dispose()
     // kill the menu
     css::util::URL aURL;
     aURL.Complete = DECLARE_ASCII(".uno:close");
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
+    css::uno::Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(m_xContext);
     if (xParser.is())
         xParser->parseStrict(aURL);
 
@@ -678,7 +678,7 @@ void SAL_CALL BackingComp::dispose()
     // deregister drag&drop helper
     if (m_xDropTargetListener.is())
     {
-        css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( comphelper::getComponentContext(m_xSMGR) );
+        css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( m_xContext );
         css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xToolkit->getDropTarget(m_xWindow);
         if (xDropTarget.is())
         {
@@ -703,8 +703,8 @@ void SAL_CALL BackingComp::dispose()
     }
 
     // forget all other used references
-    m_xFrame  = css::uno::Reference< css::frame::XFrame >();
-    m_xSMGR   = css::uno::Reference< css::lang::XMultiServiceFactory >();
+    m_xFrame.clear();
+    m_xContext.clear();
 
     aWriteLock.unlock();
     /* } SAFE */

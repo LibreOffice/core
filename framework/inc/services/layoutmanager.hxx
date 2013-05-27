@@ -93,7 +93,7 @@ namespace framework
         public:
             enum { DOCKINGAREAS_COUNT = 4 };
 
-            LayoutManager( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMGR );
+            LayoutManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
             virtual ~LayoutManager();
 
             /** declaration of XInterface, XTypeProvider, XServiceInfo */
@@ -285,7 +285,7 @@ namespace framework
             virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper();
             virtual ::com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException);
 
-            css::uno::Reference< css::lang::XMultiServiceFactory >                      m_xSMGR; /** reference to factory, which has created this instance. */
+            css::uno::Reference< css::uno::XComponentContext >                          m_xContext; /** reference to factory, which has created this instance. */
             css::uno::Reference< css::util::XURLTransformer >                           m_xURLTransformer;
             css::uno::Reference< css::frame::XFrame >                                   m_xFrame;
             css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >        m_xModuleCfgMgr;

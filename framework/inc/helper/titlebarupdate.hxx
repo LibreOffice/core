@@ -30,7 +30,7 @@
 
 #include <general.h>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 
@@ -88,7 +88,7 @@ class TitleBarUpdate : // interfaces
     private:
 
         /// may we need an uno service manager to create own services
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /// reference to the frame which was created by the office himself
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
@@ -100,7 +100,7 @@ class TitleBarUpdate : // interfaces
 
         //____________________________
         // ctor/dtor
-                 TitleBarUpdate(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+                 TitleBarUpdate(const css::uno::Reference< css::uno::XComponentContext >& xContext);
         virtual ~TitleBarUpdate(                                                                   );
 
         //____________________________

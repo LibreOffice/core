@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XKeyListener.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <com/sun/star/frame/XFrame.hpp>
 
@@ -74,7 +75,7 @@ class BackingComp : public  css::lang::XTypeProvider
 
         /** the global uno service manager.
             Must be used to create own needed services. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /** reference to the component window. */
         css::uno::Reference< css::awt::XWindow > m_xWindow;
@@ -90,7 +91,7 @@ class BackingComp : public  css::lang::XTypeProvider
 
     public:
 
-                 BackingComp( const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR );
+                 BackingComp( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~BackingComp(                                                                    );
 
         // XInterface

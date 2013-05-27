@@ -109,15 +109,15 @@ namespace framework
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( LayoutManager, LayoutManager_Base, LayoutManager_PBase )
 IMPLEMENT_FORWARD_XINTERFACE2( LayoutManager, LayoutManager_Base, LayoutManager_PBase )
-DEFINE_XSERVICEINFO_MULTISERVICE( LayoutManager, ::cppu::OWeakObject, SERVICENAME_LAYOUTMANAGER, IMPLEMENTATIONNAME_LAYOUTMANAGER)
+DEFINE_XSERVICEINFO_MULTISERVICE_2( LayoutManager, ::cppu::OWeakObject, SERVICENAME_LAYOUTMANAGER, IMPLEMENTATIONNAME_LAYOUTMANAGER)
 DEFINE_INIT_SERVICE( LayoutManager, {} )
 
-LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceManager ) : LayoutManager_Base()
+LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) : LayoutManager_Base()
         , ThreadHelpBase( &Application::GetSolarMutex())
         , ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex())
         , LayoutManager_PBase( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
-        , m_xSMGR( xServiceManager )
-        , m_xURLTransformer( URLTransformer::create(::comphelper::getComponentContext(xServiceManager)) )
+        , m_xContext( xContext )
+        , m_xURLTransformer( URLTransformer::create(xContext) )
         , m_nLockCount( 0 )
         , m_bActive( false )
         , m_bInplaceMenuSet( false )
@@ -135,9 +135,9 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         , m_bPreserveContentSize( false )
         , m_bMenuBarCloser( false )
         , m_pInplaceMenuBar( NULL )
-        , m_xModuleManager( ModuleManager::create( comphelper::getComponentContext(xServiceManager) ))
-        , m_xUIElementFactoryManager( ui::UIElementFactoryManager::create(comphelper::getComponentContext(xServiceManager)) )
-        , m_xPersistentWindowStateSupplier( ui::WindowStateConfiguration::create( comphelper::getComponentContext(xServiceManager) ) )
+        , m_xModuleManager( ModuleManager::create( xContext ))
+        , m_xUIElementFactoryManager( ui::UIElementFactoryManager::create(xContext) )
+        , m_xPersistentWindowStateSupplier( ui::WindowStateConfiguration::create( xContext ) )
         , m_pGlobalSettings( 0 )
         , m_aListenerContainer( m_aLock.getShareableOslMutex() )
         , m_pToolbarManager( 0 )
@@ -148,7 +148,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
     m_aStatusBarElement.m_aType = "statusbar";
     m_aStatusBarElement.m_aName = STATUS_BAR_ALIAS;
 
-    m_pToolbarManager = new ToolbarLayoutManager( comphelper::getComponentContext(xServiceManager), Reference<XUIElementFactory>(m_xUIElementFactoryManager, UNO_QUERY_THROW), this );
+    m_pToolbarManager = new ToolbarLayoutManager( xContext, Reference<XUIElementFactory>(m_xUIElementFactoryManager, UNO_QUERY_THROW), this );
     m_xToolbarManager = uno::Reference< ui::XUIConfigurationListener >( static_cast< OWeakObject* >( m_pToolbarManager ), uno::UNO_QUERY );
 
     Application::AddEventListener( LINK( this, LayoutManager, SettingsChanged ) );
@@ -254,7 +254,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
     Reference< XUIConfiguration > xModuleCfgMgr( m_xModuleCfgMgr, UNO_QUERY );
     Reference< XUIConfiguration > xDocCfgMgr( m_xDocCfgMgr, UNO_QUERY );
     Reference< XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
-    Reference< XMultiServiceFactory > xServiceManager( m_xSMGR );
+    Reference< XComponentContext > xContext( m_xContext );
     Reference< XNameAccess > xPersistentWindowStateSupplier( m_xPersistentWindowStateSupplier );
     ToolbarLayoutManager* pToolbarManager( m_pToolbarManager );
     OUString aModuleIdentifier( m_aModuleIdentifier );
@@ -279,8 +279,8 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
             if ( !aModuleIdentifier.isEmpty() && aOldModuleIdentifier != aModuleIdentifier )
             {
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier;
-                if ( xServiceManager.is() )
-                    xModuleCfgSupplier = ModuleUIConfigurationManagerSupplier::create( comphelper::getComponentContext(xServiceManager) );
+                if ( xContext.is() )
+                    xModuleCfgSupplier = ModuleUIConfigurationManagerSupplier::create( xContext );
 
                 if ( xModuleCfgMgr.is() )
                 {
@@ -485,7 +485,7 @@ uno::Reference< ui::XUIElement > LayoutManager::implts_findElement( const OUStri
 sal_Bool LayoutManager::implts_readWindowStateData( const OUString& aName, UIElement& rElementData )
 {
     return readWindowStateData( aName, rElementData, m_aLock, m_xPersistentWindowState,
-            m_pGlobalSettings, m_bGlobalSettings, comphelper::getComponentContext(m_xSMGR) );
+            m_pGlobalSettings, m_bGlobalSettings, m_xContext );
 }
 
 sal_Bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElementData,
@@ -1171,7 +1171,7 @@ throw (uno::RuntimeException)
             Reference< XDispatchProvider > xDispatchProvider;
 
             MenuBar* pMenuBar = new MenuBar;
-            m_pInplaceMenuBar = new MenuBarManager( comphelper::getComponentContext(m_xSMGR), m_xFrame, m_xURLTransformer, xDispatchProvider, aModuleIdentifier, pMenuBar, sal_True, sal_True );
+            m_pInplaceMenuBar = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, aModuleIdentifier, pMenuBar, sal_True, sal_True );
             m_pInplaceMenuBar->SetItemContainer( xMergedMenuBar );
 
             SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
@@ -1619,10 +1619,10 @@ throw (RuntimeException)
     else if ( aElementType.equalsIgnoreAsciiCase("dockingwindow"))
     {
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
-        uno::Reference< lang::XMultiServiceFactory > xSMGR( m_xSMGR );
+        uno::Reference< XComponentContext > xContext( m_xContext );
         aWriteLock.unlock();
 
-        impl_setDockingWindowVisibility( comphelper::getComponentContext(xSMGR), xFrame, aElementName, false );
+        impl_setDockingWindowVisibility( xContext, xFrame, aElementName, false );
         bMustBeLayouted = false;
         bNotify         = false;
     }
@@ -1836,10 +1836,10 @@ throw (RuntimeException)
     {
         ReadGuard aReadGuard( m_aLock );
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
-        uno::Reference< lang::XMultiServiceFactory > xSMGR( m_xSMGR );
+        uno::Reference< XComponentContext > xContext( m_xContext );
         aReadGuard.unlock();
 
-        impl_setDockingWindowVisibility( comphelper::getComponentContext(xSMGR), xFrame, aElementName, true );
+        impl_setDockingWindowVisibility( xContext, xFrame, aElementName, true );
     }
     else if ( aElementType.equalsIgnoreAsciiCase("toolpanel"))
     {
@@ -1928,10 +1928,10 @@ throw (RuntimeException)
     {
         ReadGuard aReadGuard( m_aLock );
         uno::Reference< frame::XFrame > xFrame( m_xFrame );
-        uno::Reference< lang::XMultiServiceFactory > xSMGR( m_xSMGR );
+        uno::Reference< XComponentContext > xContext( m_xContext );
         aReadGuard.unlock();
 
-        impl_setDockingWindowVisibility( comphelper::getComponentContext(xSMGR), xFrame, aElementName, false );
+        impl_setDockingWindowVisibility( xContext, xFrame, aElementName, false );
     }
 
     if ( bMustLayout )
@@ -2623,13 +2623,13 @@ IMPL_LINK_NOARG(LayoutManager, MenuBarClose)
 {
     ReadGuard aReadLock( m_aLock );
     uno::Reference< frame::XDispatchProvider >   xProvider(m_xFrame, uno::UNO_QUERY);
-    uno::Reference< lang::XMultiServiceFactory > xSMGR    = m_xSMGR;
+    uno::Reference< XComponentContext > xContext( m_xContext );
     aReadLock.unlock();
 
     if ( !xProvider.is())
         return 0;
 
-    uno::Reference< frame::XDispatchHelper > xDispatcher = frame::DispatchHelper::create( comphelper::getComponentContext( xSMGR ) );
+    uno::Reference< frame::XDispatchHelper > xDispatcher = frame::DispatchHelper::create( xContext );
 
     xDispatcher->executeDispatch(
         xProvider,

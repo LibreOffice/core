@@ -416,10 +416,10 @@ DEFINE_XTYPEPROVIDER_6(AutoRecovery                 ,
                        css::beans::XPropertySet     )
 
 //-----------------------------------------------
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE(AutoRecovery                   ,
-                                       ::cppu::OWeakObject            ,
-                                       "com.sun.star.frame.AutoRecovery",
-                                       IMPLEMENTATIONNAME_AUTORECOVERY)
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(AutoRecovery                   ,
+                                         ::cppu::OWeakObject            ,
+                                         "com.sun.star.frame.AutoRecovery",
+                                         IMPLEMENTATIONNAME_AUTORECOVERY)
 
 //-----------------------------------------------
 DEFINE_INIT_SERVICE(
@@ -443,12 +443,12 @@ DEFINE_INIT_SERVICE(
                    )
 
 //-----------------------------------------------
-AutoRecovery::AutoRecovery(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+AutoRecovery::AutoRecovery(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase            (&Application::GetSolarMutex()                      )
     , ::cppu::OBroadcastHelper  ( m_aLock.getShareableOslMutex()                    )
     , ::cppu::OPropertySetHelper( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
     , ::cppu::OWeakObject       (                                                   )
-    , m_xSMGR                   (xSMGR                                              )
+    , m_xContext                (xContext                                           )
     , m_bListenForDocEvents     (sal_False                                          )
     , m_bListenForConfigChanges (sal_False                                          )
     , m_nAutoSaveTimeIntervall  (0                                                  )
@@ -930,7 +930,7 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
 
     if (m_xRecoveryCFG.is())
         return m_xRecoveryCFG;
-    css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getComponentContext(m_xSMGR);
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
@@ -1130,7 +1130,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     css::uno::Reference< css::container::XNameAccess>      xCFG  = m_xModuleCFG;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -1141,7 +1141,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         {
             // open module config on demand and cache the update access
             xCFG = css::uno::Reference< css::container::XNameAccess >(
-                ::comphelper::ConfigurationHelper::openConfig(comphelper::getComponentContext(xSMGR), OUString(CFG_PACKAGE_MODULES),
+                ::comphelper::ConfigurationHelper::openConfig(xContext, OUString(CFG_PACKAGE_MODULES),
                 ::comphelper::ConfigurationHelper::E_STANDARD),
                 css::uno::UNO_QUERY_THROW);
 
@@ -1158,8 +1158,8 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
 
         xModuleProps->getByName(OUString(CFG_ENTRY_REALDEFAULTFILTER)) >>= rInfo.DefaultFilter;
 
-        css::uno::Reference< css::container::XNameAccess > xFilterCFG(xSMGR->createInstance(SERVICENAME_FILTERFACTORY), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::container::XNameAccess > xTypeCFG  (xSMGR->createInstance(SERVICENAME_TYPEDETECTION), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::container::XNameAccess > xFilterCFG(xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_FILTERFACTORY, xContext), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::container::XNameAccess > xTypeCFG  (xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_TYPEDETECTION, xContext), css::uno::UNO_QUERY_THROW);
 
         ::comphelper::SequenceAsHashMap       lFilterProps        (xFilterCFG->getByName(rInfo.DefaultFilter));
         OUString                       sTypeRegistration   = lFilterProps.getUnpackedValueOrDefault(OUString(FILTER_PROP_TYPE), OUString());
@@ -1190,11 +1190,11 @@ void AutoRecovery::implts_specifyAppModuleAndFactory(AutoRecovery::TDocumentInfo
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::frame::XModuleManager2 > xManager = ModuleManager::create( comphelper::getComponentContext(xSMGR) );
+    css::uno::Reference< css::frame::XModuleManager2 > xManager = ModuleManager::create( xContext );
 
     if (rInfo.AppModule.isEmpty())
         rInfo.AppModule = xManager->identify(rInfo.Document);
@@ -1373,7 +1373,7 @@ void AutoRecovery::implts_startListening()
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory >  xSMGR               = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     css::uno::Reference< css::util::XChangesNotifier >      xCFG                (m_xRecoveryCFG, css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XGlobalEventBroadcaster > xBroadcaster        = m_xNewDocBroadcaster;
     sal_Bool                                                bListenForDocEvents = m_bListenForDocEvents;
@@ -1392,7 +1392,7 @@ void AutoRecovery::implts_startListening()
 
     if (!xBroadcaster.is())
     {
-        xBroadcaster = css::frame::GlobalEventBroadcaster::create( comphelper::getComponentContext(xSMGR) );
+        xBroadcaster = css::frame::GlobalEventBroadcaster::create( xContext );
         // SAFE -> ----------------------------------
         WriteGuard aWriteLock(m_aLock);
         m_xNewDocBroadcaster = xBroadcaster;
@@ -1717,7 +1717,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -2004,11 +2004,11 @@ void AutoRecovery::implts_changeAllDocVisibility(sal_Bool bVisible)
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create( comphelper::getComponentContext(xSMGR) ), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create( xContext ), css::uno::UNO_QUERY);
     lcl_changeVisibility( xDesktop, bVisible );
 
     aReadLock.unlock();
@@ -2144,7 +2144,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -2152,7 +2152,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
     if (pParams)
         xExternalProgress = pParams->m_xProgress;
 
-    css::uno::Reference< css::frame::XDesktop2 > xDesktop   = css::frame::Desktop::create( comphelper::getComponentContext(xSMGR));
+    css::uno::Reference< css::frame::XDesktop2 > xDesktop   = css::frame::Desktop::create( xContext);
     OUString                              sBackupPath(SvtPathOptions().GetBackupPath());
 
     css::uno::Reference< css::frame::XController > xActiveController;
@@ -2557,7 +2557,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         else
             continue; // TODO ERROR!
 
-        LoadEnv::initializeUIDefaults( comphelper::getComponentContext(m_xSMGR), lDescriptor, true, NULL );
+        LoadEnv::initializeUIDefaults( m_xContext, lDescriptor, true, NULL );
 
         // <- SAFE ------------------------------
         aWriteLock.unlock();
@@ -2648,17 +2648,17 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::frame::XDesktop2 > xDesktop   = css::frame::Desktop::create( comphelper::getComponentContext(xSMGR));
+    css::uno::Reference< css::frame::XDesktop2 > xDesktop   = css::frame::Desktop::create( xContext);
 
     ::std::vector< Reference< XComponent > > aCleanup;
     try
     {
         // create a new document of the desired type
-        Reference< XModel2 > xModel( xSMGR->createInstance( rInfo.FactoryService ), UNO_QUERY_THROW );
+        Reference< XModel2 > xModel( xContext->getServiceManager()->createInstanceWithContext(rInfo.FactoryService, xContext), UNO_QUERY_THROW );
         aCleanup.push_back( xModel.get() );
 
         // put the filter name into the descriptor - we're not going to involve any type detection, so
@@ -2773,7 +2773,7 @@ void AutoRecovery::implts_generateNewTempURL(const OUString&               sBack
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -2788,7 +2788,7 @@ void AutoRecovery::implts_generateNewTempURL(const OUString&               sBack
     OUStringBuffer sUniqueName;
     if (!rInfo.OrgURL.isEmpty())
     {
-        css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
+        css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
         css::util::URL aURL;
         aURL.Complete = rInfo.OrgURL;
         xParser->parseStrict(aURL);
@@ -2980,7 +2980,7 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     // the error report tool is started too in case no recovery
     // documents exists and was saved.
     ::comphelper::ConfigurationHelper::writeDirectKey(
-        comphelper::getComponentContext(m_xSMGR),
+        m_xContext,
         OUString(CFG_PACKAGE_RECOVERY),
         OUString(CFG_PATH_RECOVERYINFO),
         OUString(CFG_ENTRY_CRASHED),
@@ -3041,7 +3041,7 @@ void AutoRecovery::implts_doRecovery(const DispatchParams& aParams)
 
     // Reset the configuration hint "we was crashed"!
     ::comphelper::ConfigurationHelper::writeDirectKey(
-        comphelper::getComponentContext(m_xSMGR),
+        m_xContext,
         OUString(CFG_PACKAGE_RECOVERY),
         OUString(CFG_PATH_RECOVERYINFO),
         OUString(CFG_ENTRY_CRASHED),
@@ -3108,7 +3108,7 @@ void AutoRecovery::implts_doSessionQuietQuit(const DispatchParams& /*aParams*/)
     // Write a hint for "stored session data" into the configuration, so
     // the on next startup we know what's happen last time
     ::comphelper::ConfigurationHelper::writeDirectKey(
-        comphelper::getComponentContext(m_xSMGR),
+        m_xContext,
         OUString(CFG_PACKAGE_RECOVERY),
         OUString(CFG_PATH_RECOVERYINFO),
         OUString(CFG_ENTRY_SESSIONDATA),
@@ -3145,7 +3145,7 @@ void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)
     // Reset the configuration hint for "session save"!
     LOG_RECOVERY("... reset config key 'SessionData'")
     ::comphelper::ConfigurationHelper::writeDirectKey(
-        comphelper::getComponentContext(m_xSMGR),
+        m_xContext,
         OUString(CFG_PACKAGE_RECOVERY),
         OUString(CFG_PATH_RECOVERYINFO),
         OUString(CFG_ENTRY_SESSIONDATA),
@@ -3230,7 +3230,7 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const OUString& s
 
     try
     {
-        aTargetContent = ::ucbhelper::Content(sTargetPath, xEnvironment, comphelper::getComponentContext(m_xSMGR));
+        aTargetContent = ::ucbhelper::Content(sTargetPath, xEnvironment, m_xContext);
     }
     catch(const css::uno::Exception&)
     {
@@ -3242,7 +3242,7 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const OUString& s
 
     try
     {
-        ::ucbhelper::Content::create(sSource, xEnvironment, comphelper::getComponentContext(m_xSMGR), aSourceContent);
+        ::ucbhelper::Content::create(sSource, xEnvironment, m_xContext, aSourceContent);
         aTargetContent.transferContent(aSourceContent, ::ucbhelper::InsertOperation_COPY, sTargetName, nNameClash);
     }
     catch(const css::uno::Exception&)
@@ -3282,7 +3282,7 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
                 {
                     sal_Bool bSessionData  = sal_False;
                     ::comphelper::ConfigurationHelper::readDirectKey(
-                                                    comphelper::getComponentContext(m_xSMGR),
+                                                    m_xContext,
                                                     OUString(CFG_PACKAGE_RECOVERY),
                                                     OUString(CFG_PATH_RECOVERYINFO),
                                                     OUString(CFG_ENTRY_SESSIONDATA),
@@ -3301,7 +3301,7 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
 
         case AUTORECOVERY_PROPHANDLE_CRASHED :
                 aValue = ::comphelper::ConfigurationHelper::readDirectKey(
-                            comphelper::getComponentContext(m_xSMGR),
+                            m_xContext,
                             OUString(CFG_PACKAGE_RECOVERY),
                             OUString(CFG_PATH_RECOVERYINFO),
                             OUString(CFG_ENTRY_CRASHED),
@@ -3310,7 +3310,7 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
 
         case AUTORECOVERY_PROPHANDLE_EXISTS_SESSIONDATA :
                 aValue = ::comphelper::ConfigurationHelper::readDirectKey(
-                            comphelper::getComponentContext(m_xSMGR),
+                            m_xContext,
                             OUString(CFG_PACKAGE_RECOVERY),
                             OUString(CFG_PATH_RECOVERYINFO),
                             OUString(CFG_ENTRY_SESSIONDATA),
@@ -3374,13 +3374,13 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
 
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
     try
     {
-        css::uno::Reference< css::frame::XDesktop2 > xDesktop   = css::frame::Desktop::create( comphelper::getComponentContext(xSMGR));
+        css::uno::Reference< css::frame::XDesktop2 > xDesktop   = css::frame::Desktop::create( xContext);
 
         css::uno::Reference< css::container::XIndexAccess > xContainer(
             xDesktop->getFrames(),
@@ -3628,7 +3628,7 @@ void AutoRecovery::st_impl_removeFile(const OUString& sURL)
 
     try
     {
-        ::ucbhelper::Content aContent = ::ucbhelper::Content(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getComponentContext(m_xSMGR));
+        ::ucbhelper::Content aContent = ::ucbhelper::Content(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), m_xContext);
         aContent.executeCommand(OUString("delete"), css::uno::makeAny(sal_True));
     }
     catch(const css::uno::Exception&)

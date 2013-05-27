@@ -170,7 +170,7 @@ class StatusIndicatorFactory : public  css::lang::XTypeProvider
         IndicatorStack m_aStack;
 
         /** uno service manager to create own needed uno resources. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /** most active indicator child, which could work with our shared indicator window only. */
         css::uno::Reference< css::task::XStatusIndicator > m_xActiveChild;
@@ -213,7 +213,7 @@ class StatusIndicatorFactory : public  css::lang::XTypeProvider
 
         //---------------------------------------
         // ctor
-        StatusIndicatorFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
         //---------------------------------------
         // XInterface, XTypeProvider, XServiceInfo

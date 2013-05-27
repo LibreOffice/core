@@ -58,7 +58,7 @@ class ShellJob : private ThreadHelpBase
 
         //.......................................
         /** @short  reference to an uno service manager. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     //-------------------------------------------
     // native interface
@@ -67,11 +67,11 @@ class ShellJob : private ThreadHelpBase
         //---------------------------------------
         /** @short  create new instance of this class.
 
-            @param  xSMGR
+            @param  xContext
                     reference to the uno service manager, which created this instance.
                     Can be used later to create own needed uno resources on demand.
          */
-        ShellJob(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        ShellJob(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
         //---------------------------------------
         /** @short  does nothing real ...

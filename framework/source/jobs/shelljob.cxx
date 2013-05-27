@@ -63,10 +63,10 @@ static const OUString PROP_CHECKEXITCODE("CheckExitCode");
 
 //-----------------------------------------------
 
-DEFINE_XSERVICEINFO_MULTISERVICE(ShellJob                   ,
-                                 ::cppu::OWeakObject        ,
-                                 SERVICENAME_JOB            ,
-                                 IMPLEMENTATIONNAME_SHELLJOB)
+DEFINE_XSERVICEINFO_MULTISERVICE_2(ShellJob                   ,
+                                   ::cppu::OWeakObject        ,
+                                   SERVICENAME_JOB            ,
+                                   IMPLEMENTATIONNAME_SHELLJOB)
 
 DEFINE_INIT_SERVICE(ShellJob,
                     {
@@ -79,9 +79,9 @@ DEFINE_INIT_SERVICE(ShellJob,
                    )
 
 //-----------------------------------------------
-ShellJob::ShellJob(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+ShellJob::ShellJob(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase(     )
-    , m_xSMGR       (xSMGR)
+    , m_xContext    (xContext)
 {
 }
 
@@ -143,13 +143,12 @@ OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
 {
     // SYNCHRONIZED ->
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SYNCHRONIZED
 
     try
     {
-        css::uno::Reference< css::uno::XComponentContext >    xContext( comphelper::getComponentContext(xSMGR) );
         css::uno::Reference< css::util::XStringSubstitution > xSubst(  css::util::PathSubstitution::create(xContext) );
         const ::sal_Bool                                      bSubstRequired   = sal_True;
         const OUString                                 sCompleteCommand = xSubst->substituteVariables(sCommand, bSubstRequired);

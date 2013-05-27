@@ -72,9 +72,9 @@ DEFINE_XTYPEPROVIDER_5(TitleBarUpdate                  ,
                        css::lang::XEventListener       )
 
 //*****************************************************************************************************************
-TitleBarUpdate::TitleBarUpdate(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+TitleBarUpdate::TitleBarUpdate(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase          (&Application::GetSolarMutex())
-    , m_xSMGR                 (xSMGR                        )
+    , m_xContext              (xContext                     )
     , m_xFrame                (                             )
 {
 }
@@ -163,12 +163,12 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     {
         // SYNCHRONIZED ->
         ReadGuard aReadLock(m_aLock);
-        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
         aReadLock.unlock();
         // <- SYNCHRONIZED
 
         css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
-            css::frame::ModuleManager::create( comphelper::getComponentContext(xSMGR) );
+            css::frame::ModuleManager::create( xContext );
 
         OUString aModuleId = xModuleManager->identify(xFrame);
         OUString sDesktopName;
@@ -228,14 +228,14 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
 
     // SYNCHRONIZED ->
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SYNCHRONIZED
 
     try
     {
         css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
-            css::frame::ModuleManager::create( comphelper::getComponentContext(xSMGR) );
+            css::frame::ModuleManager::create( xContext );
 
         rInfo.sID = xModuleManager->identify(xFrame);
         ::comphelper::SequenceAsHashMap lProps    = xModuleManager->getByName (rInfo.sID);
@@ -259,7 +259,6 @@ void TitleBarUpdate::impl_forceUpdate()
 {
     // SYNCHRONIZED ->
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR ;
     css::uno::Reference< css::frame::XFrame >              xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();
     // <- SYNCHRONIZED

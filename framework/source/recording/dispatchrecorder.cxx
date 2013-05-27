@@ -56,7 +56,7 @@ DEFINE_XTYPEPROVIDER_6(
     css::container::XIndexAccess,
     css::container::XElementAccess)
 
-DEFINE_XSERVICEINFO_MULTISERVICE(
+DEFINE_XSERVICEINFO_MULTISERVICE_2(
     DispatchRecorder,
     ::cppu::OWeakObject,
     OUString("com.sun.star.frame.DispatchRecorder"),
@@ -119,11 +119,10 @@ Sequence< Any > make_seq_out_of_struct(
 }
 
 //***********************************************************************
-DispatchRecorder::DispatchRecorder( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
+DispatchRecorder::DispatchRecorder( const css::uno::Reference< css::uno::XComponentContext >& xContext )
         : ThreadHelpBase     ( &Application::GetSolarMutex() )
         , ::cppu::OWeakObject(                               )
-        , m_xSMGR            ( xSMGR                         )
-        , m_xConverter( css::script::Converter::create(comphelper::getComponentContext(m_xSMGR)) )
+        , m_xConverter( css::script::Converter::create(xContext) )
 {
 }
 
