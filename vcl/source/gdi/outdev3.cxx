@@ -2287,8 +2287,9 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
         // create a new logical font instance from this physical font face
         pEntry = pFontData->CreateFontInstance( aFontSelData );
 
-        // if we found a different symbol font we need a symbol conversion table
-        if( pFontData->IsSymbolFont() )
+        // if we're subtituting from or to a symbol font we may need a symbol
+        // conversion table
+        if( pFontData->IsSymbolFont() || aFontSelData.IsSymbolFont() )
         {
             if( aFontSelData.maTargetName != aFontSelData.maSearchName )
                 pEntry->mpConversion = ConvertChar::GetRecodeData( aFontSelData.maTargetName, aFontSelData.maSearchName );
@@ -2307,13 +2308,6 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
 
         // add the new entry to the cache
         maFontInstanceList[ aFontSelData ] = pEntry;
-    }
-
-    // We might have selected a non-symbol font as a fallback for a
-    // symbol font. Ensure that conversion is done
-    if (aFontSelData.IsSymbolFont() && !pEntry->maMetric.IsSymbolFont() && !pEntry->mpConversion)
-    {
-        pEntry->mpConversion = ConvertChar::GetRecodeData( aFontSelData.maTargetName, aFontSelData.maSearchName );
     }
 
     mpFirstEntry = pEntry;
