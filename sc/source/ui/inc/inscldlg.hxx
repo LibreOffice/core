@@ -32,14 +32,10 @@
 class ScInsertCellDlg : public ModalDialog
 {
 private:
-    FixedLine       aFlFrame;
-    RadioButton     aBtnCellsDown;
-    RadioButton     aBtnCellsRight;
-    RadioButton     aBtnInsRows;
-    RadioButton     aBtnInsCols;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    RadioButton* m_pBtnCellsDown;
+    RadioButton* m_pBtnCellsRight;
+    RadioButton* m_pBtnInsRow;
+    RadioButton* m_pBtnInsCol;
 
 public:
             ScInsertCellDlg( Window* pParent,sal_Bool bDisallowCellMove = false );

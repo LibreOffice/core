@@ -34,42 +34,36 @@ static sal_uInt8 nInsItemChecked=0;
 //==================================================================
 
 ScInsertCellDlg::ScInsertCellDlg( Window* pParent,sal_Bool bDisallowCellMove) :
-    ModalDialog     ( pParent, ScResId( RID_SCDLG_INSCELL ) ),
-    //
-    aFlFrame        ( this, ScResId( FL_FRAME ) ),
-    aBtnCellsDown   ( this, ScResId( BTN_CELLSDOWN ) ),
-    aBtnCellsRight  ( this, ScResId( BTN_CELLSRIGHT ) ),
-    aBtnInsRows     ( this, ScResId( BTN_INSROWS ) ),
-    aBtnInsCols     ( this, ScResId( BTN_INSCOLS ) ),
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) )
+    ModalDialog     ( pParent, "InsertCellsDialog", "modules/scalc/ui/insertcells.ui")
 {
+    get(m_pBtnCellsDown, "down");
+    get(m_pBtnCellsRight, "right");
+    get(m_pBtnInsRow, "rows");
+    get(m_pBtnInsCol, "cols");
+
     if (bDisallowCellMove)
     {
-        aBtnCellsDown.Disable();
-        aBtnCellsRight.Disable();
-        aBtnInsRows.Check();
+        m_pBtnCellsDown->Disable();
+        m_pBtnCellsRight->Disable();
+        m_pBtnInsRow->Check();
 
         switch(nInsItemChecked)
         {
-            case 2: aBtnInsRows   .Check();break;
-            case 3: aBtnInsCols   .Check();break;
-            default:aBtnInsRows   .Check();break;
+            case 2: m_pBtnInsRow->Check();break;
+            case 3: m_pBtnInsCol->Check();break;
+            default:m_pBtnInsRow->Check();break;
         }
     }
     else
     {
         switch(nInsItemChecked)
         {
-            case 0: aBtnCellsDown .Check();break;
-            case 1: aBtnCellsRight.Check();break;
-            case 2: aBtnInsRows   .Check();break;
-            case 3: aBtnInsCols   .Check();break;
+            case 0: m_pBtnCellsDown->Check();break;
+            case 1: m_pBtnCellsRight->Check();break;
+            case 2: m_pBtnInsRow->Check();break;
+            case 3: m_pBtnInsCol->Check();break;
         }
     }
-    //-------------
-    FreeResource();
 }
 
 //------------------------------------------------------------------------
@@ -78,22 +72,22 @@ InsCellCmd ScInsertCellDlg::GetInsCellCmd() const
 {
     InsCellCmd nReturn = INS_NONE;
 
-    if ( aBtnCellsDown.IsChecked() )
+    if ( m_pBtnCellsDown->IsChecked() )
     {
         nInsItemChecked=0;
         nReturn = INS_CELLSDOWN;
     }
-    else if ( aBtnCellsRight.IsChecked())
+    else if ( m_pBtnCellsRight->IsChecked())
     {
         nInsItemChecked=1;
         nReturn = INS_CELLSRIGHT;
     }
-    else if ( aBtnInsRows.IsChecked()   )
+    else if ( m_pBtnInsRow->IsChecked()   )
     {
         nInsItemChecked=2;
         nReturn = INS_INSROWS;
     }
-    else if ( aBtnInsCols.IsChecked()   )
+    else if ( m_pBtnInsCol->IsChecked()   )
     {
         nInsItemChecked=3;
         nReturn = INS_INSCOLS;
