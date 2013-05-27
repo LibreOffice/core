@@ -1656,12 +1656,14 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
                         || ((const SvxHorJustifyItem*)pItem)->GetValue() != SVX_HOR_JUSTIFY_LEFT );
         sal_uInt16 nOldValue = ((const SfxUInt16Item&)rOldSet.Get( ATTR_INDENT )).GetValue();
         sal_uInt16 nNewValue = nOldValue;
+        //to keep Increment indent from running outside the cell1659
+        long nColWidth = (long)pDocument->GetColWidth(nCol,nTab);
         if ( bIncrement )
         {
-            if ( nNewValue < SC_MAX_INDENT )
+            if ( nNewValue < nColWidth-SC_INDENT_STEP )
             {
                 nNewValue += SC_INDENT_STEP;
-                if ( nNewValue > SC_MAX_INDENT ) nNewValue = SC_MAX_INDENT;
+                if ( nNewValue > nColWidth-SC_INDENT_STEP ) nNewValue = nColWidth-SC_INDENT_STEP;
             }
         }
         else
