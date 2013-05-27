@@ -148,6 +148,7 @@ public:
     void testFdo61193();
     void testFdo63023();
     void testN818997();
+    void testFdo64671();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -266,6 +267,7 @@ void Test::run()
         {"hello.rtf", &Test::testFdo61193},
         {"fdo63023.rtf", &Test::testFdo63023},
         {"n818997.rtf", &Test::testN818997},
+        {"fdo64671.rtf", &Test::testFdo64671},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1220,6 +1222,12 @@ void Test::testN818997()
 {
     // \page was ignored between two \shp tokens.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+void Test::testFdo64671()
+{
+    // Additional '}' was inserted before the special character.
+    getRun(getParagraph(1), 1, OUString("\xC5\xBD", 2, RTL_TEXTENCODING_UTF8));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
