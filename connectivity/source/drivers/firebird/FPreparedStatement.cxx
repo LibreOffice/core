@@ -89,9 +89,9 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInf
     isc_db_handle db = _pConnection->getDBHandler();   // database handle
 
     // enabling the XSQLDA to accommodate up to 10 select-list items (DEFAULT)
-    XSQLDA *out_sqlda = (XSQLDA *)malloc(XSQLDA_LENGTH(10));
-    out_sqlda->version = SQLDA_VERSION1;
-    out_sqlda->sqln = 10;
+    m_OUTsqlda = (XSQLDA *)malloc(XSQLDA_LENGTH(10));
+    m_OUTsqlda->version = SQLDA_VERSION1;
+    m_OUTsqlda->sqln = 10;
 
     m_STMTHandler = NULL;          // Set handle to NULL before allocation.
     if (isc_dsql_allocate_statement(status, &db, &m_STMTHandler))
@@ -111,27 +111,27 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInf
     free(sqlStr);
 
     // fill the output XSQLDA with information about the select-list items.
-    if (isc_dsql_describe(status, &m_STMTHandler, 1, out_sqlda))
+    if (isc_dsql_describe(status, &m_STMTHandler, 1, m_OUTsqlda))
         if (pr_error(status, "describe statement"))
             return;
 
     // determine if the output descriptor can accommodate the number of select-list
     // items specified in the statement.
-    if (out_sqlda->sqld > out_sqlda->sqln)
+    if (m_OUTsqlda->sqld > m_OUTsqlda->sqln)
     {
-        int n = out_sqlda->sqld;
-        free(out_sqlda);
-        out_sqlda = (XSQLDA *)malloc(XSQLDA_LENGTH(n));
-        out_sqlda->sqln = n;
-        out_sqlda->version = SQLDA_VERSION1;
-        if (isc_dsql_describe(status, &m_STMTHandler, 1, out_sqlda))
+        int n = m_OUTsqlda->sqld;
+        free(m_OUTsqlda);
+        m_OUTsqlda = (XSQLDA *)malloc(XSQLDA_LENGTH(n));
+        m_OUTsqlda->sqln = n;
+        m_OUTsqlda->version = SQLDA_VERSION1;
+        if (isc_dsql_describe(status, &m_STMTHandler, 1, m_OUTsqlda))
             if (pr_error(status, "describe statement 2"))
                 return;
     }
 
     XSQLVAR *var = NULL;
     int i, dtype;
-    for (i=0, var = out_sqlda->sqlvar; i < out_sqlda->sqld; i++, var++)
+    for (i=0, var = m_OUTsqlda->sqlvar; i < m_OUTsqlda->sqld; i++, var++)
     {
         dtype = (var->sqltype & ~1); /* drop flag bit for now */
         switch(dtype) {
@@ -146,7 +146,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInf
             var->sqldata = (char *)malloc(sizeof(long));
             break;
         case SQL_SHORT:
-            var->sqldata = (char *)malloc(sizeof(char));
+            var->sqldata = (char *)malloc(sizeof(char)*var->sqllen);
             break;
         case SQL_FLOAT:
             var->sqldata = (char *)malloc(sizeof(double));
@@ -174,8 +174,6 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInf
             var->sqlind = (short *)malloc(sizeof(short));
         }
     }
-
-    m_OUTsqlda = out_sqlda;
 }
 
 // -----------------------------------------------------------------------------
@@ -220,6 +218,8 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
 
 void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException)
 {
+    printf("DEBUG !!! connectivity.firebird => OPreparedStatement::close() \n");
+
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
