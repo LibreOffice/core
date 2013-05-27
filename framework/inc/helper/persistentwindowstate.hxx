@@ -70,7 +70,7 @@ class PersistentWindowState :   // interfaces
     private:
 
         /// may we need an uno service manager to create own services
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /// reference to the frame which was created by the office himself
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
@@ -85,7 +85,7 @@ class PersistentWindowState :   // interfaces
 
         //____________________________
         // ctor/dtor
-                 PersistentWindowState(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+                 PersistentWindowState(const css::uno::Reference< css::uno::XComponentContext >& xContext);
         virtual ~PersistentWindowState(                                                                   );
 
         //____________________________

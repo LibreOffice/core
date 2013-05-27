@@ -61,9 +61,9 @@ DEFINE_XTYPEPROVIDER_4(PersistentWindowState           ,
                        css::lang::XEventListener       )
 
 //*****************************************************************************************************************
-PersistentWindowState::PersistentWindowState(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+PersistentWindowState::PersistentWindowState(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase          (&Application::GetSolarMutex())
-    , m_xSMGR                 (xSMGR                        )
+    , m_xContext              (xContext                     )
     , m_bWindowStateAlreadySet(sal_False                    )
 {
 }
@@ -110,7 +110,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::uno::XComponentContext >     xContext = comphelper::getComponentContext(m_xSMGR);
+    css::uno::Reference< css::uno::XComponentContext >     xContext = m_xContext;
     css::uno::Reference< css::frame::XFrame >              xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
     sal_Bool                                               bRestoreWindowState = !m_bWindowStateAlreadySet;
     aReadLock.unlock();
