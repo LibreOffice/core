@@ -45,6 +45,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 using namespace connectivity::firebird;
+using namespace connectivity;
 
 //------------------------------------------------------------------------------
 using namespace com::sun::star::uno;
@@ -62,6 +63,7 @@ OConnection::OConnection(FirebirdDriver*    _pDriver)
                          m_bUseOldDateFormat(sal_False)
 {
     m_pDriver->acquire();
+    m_DBHandler = NULL;
 }
 //-----------------------------------------------------------------------------
 OConnection::~OConnection()
@@ -78,56 +80,40 @@ void SAL_CALL OConnection::release() throw()
 }
 // -----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
+
+/*    Print the status, the SQLCODE, and exit.
+ *    Also, indicate which operation the error occured on.
+ */
+static int pr_error (long* status, char* operation)
+{
+    printf("[\n");
+    printf("PROBLEM ON \"%s\".\n", operation);
+
+    isc_print_status(status);
+
+    printf("SQLCODE:%d\n", isc_sqlcode(status));
+
+    printf("]\n");
+
+    return 1;
+}
+
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
+    printf("DEBUG !!! connectivity.firebird", "=> OConnection::construct()" );
+
     osl_atomic_increment( &m_refCount );
 
     // some example code how to get the information out of the sequence
 
-    sal_Int32 nLen = url.indexOf(':');
-    nLen = url.indexOf(':',nLen+1);
-    ::rtl::OUString aDSN("DSN="), aUID, aPWD, aSysDrvSettings;
-    aDSN += url.copy(nLen+1);
+    ISC_STATUS_ARRAY status;            /* status vector */
+    isc_db_handle    db = NULL;         /* database handle */
 
-    const char* pUser       = "user";
-    const char* pTimeout    = "Timeout";
-    const char* pSilent     = "Silent";
-    const char* pPwd        = "password";
-    const char* pUseCatalog = "UseCatalog";
-    const char* pSysDrv     = "SystemDriverSettings";
+    if (isc_attach_database(status, 0, "/home/javi/Firebird/test/new.fdb", &db, 0, NULL))
+        if (pr_error(status, "attach database"))
+            return;
 
-    sal_Int32 nTimeout = 20;
-    sal_Bool bSilent = sal_True;
-    const PropertyValue *pBegin = info.getConstArray();
-    const PropertyValue *pEnd   = pBegin + info.getLength();
-    for(;pBegin != pEnd;++pBegin)
-    {
-        if(!pBegin->Name.compareToAscii(pTimeout))
-            pBegin->Value >>= nTimeout;
-        else if(!pBegin->Name.compareToAscii(pSilent))
-            pBegin->Value >>= bSilent;
-        else if(!pBegin->Name.compareToAscii(pUser))
-        {
-            pBegin->Value >>= aUID;
-            aDSN = aDSN + ::rtl::OUString(";UID=") + aUID;
-        }
-        else if(!pBegin->Name.compareToAscii(pPwd))
-        {
-            pBegin->Value >>= aPWD;
-            aDSN = aDSN + ::rtl::OUString(";PWD=") + aPWD;
-        }
-        else if(!pBegin->Name.compareToAscii(pUseCatalog))
-        {
-            pBegin->Value >>= m_bUseCatalog;
-        }
-        else if(!pBegin->Name.compareToAscii(pSysDrv))
-        {
-            pBegin->Value >>= aSysDrvSettings;
-            aDSN += ::rtl::OUString(";");
-            aDSN += aSysDrvSettings;
-        }
-    }
-    m_sUser = aUID;
+    m_DBHandler = db;
 
     osl_atomic_decrement( &m_refCount );
 }
