@@ -43,7 +43,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/frame/XLayoutManager2.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
@@ -60,7 +60,7 @@
 #include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
 
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <tools/wintypes.hxx>
@@ -77,13 +77,9 @@ namespace framework
     {
         class InfoHelperBuilder;
     }
-    typedef ::cppu::WeakImplHelper7 <   ::com::sun::star::lang::XServiceInfo
-                                    ,   ::com::sun::star::frame::XLayoutManager
+    typedef ::cppu::WeakImplHelper3 <   ::com::sun::star::lang::XServiceInfo
+                                    ,   ::com::sun::star::frame::XLayoutManager2
                                     ,   ::com::sun::star::awt::XWindowListener
-                                    ,   ::com::sun::star::frame::XFrameActionListener
-                                    ,   ::com::sun::star::ui::XUIConfigurationListener
-                                    ,   ::com::sun::star::frame::XMenuBarMergingAcceptor
-                                    ,   ::com::sun::star::frame::XLayoutManagerEventBroadcaster
                                     >   LayoutManager_Base;
     typedef ::comphelper::OPropertyContainer    LayoutManager_PBase;
     class LayoutManager : public  LayoutManager_Base                    ,

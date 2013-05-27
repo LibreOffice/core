@@ -381,7 +381,7 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
 {
     if ( !m_xPopupCtrlQuery.is() )
     {
-        css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+        css::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
         css::uno::Reference< css::frame::XFrame > xFrame( m_xWeakFrame );
 
         if ( xFrame.is() )

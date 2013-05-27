@@ -1,0 +1,88 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef __com_sun_star_frame_XLayoutManager2_idl__
+#define __com_sun_star_frame_XLayoutManager2_idl__
+
+#include <com/sun/star/frame/XLayoutManager.idl>
+#include <com/sun/star/frame/XFrameActionListener.idl>
+#include <com/sun/star/ui/XUIConfigurationListener.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/frame/XMenuBarMergingAcceptor.idl>
+#include <com/sun/star/frame/XLayoutManagerEventBroadcaster.idl>
+
+
+ module com { module sun { module star { module frame {
+
+/**
+    Unified interface for LayoutManager service.
+
+    @since LibreOffice 4.2
+*/
+interface XLayoutManager2
+{
+    /** central interface to query for, create, destroy and manipulate user
+        interface elements which are bound to a frame.
+
+        @see ::com::sun::star::frame::XLayoutManager;
+    */
+    interface ::com::sun::star::frame::XLayoutManager;
+
+    /** notification interface to receive status information about the state
+        of the connected frame.
+
+        <p>
+        E.g., you can receive events of instantiation/destruction and
+        activation/deactivation of a frame.
+        </p>
+
+        @see XFrame::addFrameActionListener()
+        @see XFrame::removeFrameActionListener()
+    */
+    interface ::com::sun::star::frame::XFrameActionListener;
+
+    /** notification interface to receive change messages of user interface
+        elements which are part of the layout manager.
+
+        <p>
+        E.g., you can receive events of insertion/replacing and
+        removing of settings data of user interface elements.
+        </p>
+
+        @see com::sun::star::ui::XUIConfiguration
+    */
+    interface ::com::sun::star::ui::XUIConfigurationListener;
+
+    /** provides functions to merge menus for inplace editing of components
+        inside OpenOffice.org.
+    */
+    interface ::com::sun::star::frame::XMenuBarMergingAcceptor;
+
+    /** registers listeners that want to receive layout manager
+        events.
+    */
+    interface ::com::sun::star::frame::XLayoutManagerEventBroadcaster;
+
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

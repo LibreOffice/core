@@ -38,34 +38,34 @@
 #include <services.h>
 #include <properties.h>
 
+#include <com/sun/star/awt/Toolkit.hpp>
+#include <com/sun/star/awt/XDevice.hpp>
+#include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
+#include <com/sun/star/awt/WindowAttribute.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
+#include <com/sun/star/frame/LayoutManager.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/task/StatusIndicatorFactory.hpp>
 #include <com/sun/star/task/JobExecutor.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/awt/Toolkit.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
-#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-#include <com/sun/star/awt/WindowAttribute.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/beans/XMaterialHolder.hpp>
-
-#include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -208,7 +208,7 @@ DEFINE_INIT_SERVICE                 (   Frame,
                                             //-------------------------------------------------------------------------------------------------------------
                                             // Create an initial layout manager
                                             // Create layout manager and connect it to the newly created frame
-                                            m_xLayoutManager.set(m_xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_LAYOUTMANAGER, m_xContext), css::uno::UNO_QUERY);
+                                            m_xLayoutManager = css::frame::LayoutManager::create(m_xContext);
 
                                             //-------------------------------------------------------------------------------------------------------------
                                             // set information about all supported properties at the base class helper PropertySetHelper
@@ -479,14 +479,13 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
 /*-****************************************************************************************************//**
    initialize new created layout manager
 **/
-void lcl_enableLayoutManager(const css::uno::Reference< css::frame::XLayoutManager >& xLayoutManager,
+void lcl_enableLayoutManager(const css::uno::Reference< css::frame::XLayoutManager2 >& xLayoutManager,
                              const css::uno::Reference< css::frame::XFrame >&         xFrame        )
 {
     // Provide container window to our layout manager implementation
     xLayoutManager->attachFrame(xFrame);
 
-    css::uno::Reference< css::frame::XFrameActionListener > xListen(xLayoutManager, css::uno::UNO_QUERY_THROW);
-    xFrame->addFrameActionListener(xListen);
+    xFrame->addFrameActionListener(xLayoutManager);
 
     DockingAreaDefaultAcceptor* pAcceptor = new DockingAreaDefaultAcceptor(xFrame);
     css::uno::Reference< css::ui::XDockingAreaAcceptor > xDockingAreaAcceptor( static_cast< ::cppu::OWeakObject* >(pAcceptor), css::uno::UNO_QUERY_THROW);
@@ -496,11 +495,10 @@ void lcl_enableLayoutManager(const css::uno::Reference< css::frame::XLayoutManag
 /*-****************************************************************************************************//**
    deinitialize layout manager
 **/
-void lcl_disableLayoutManager(const css::uno::Reference< css::frame::XLayoutManager >& xLayoutManager,
+void lcl_disableLayoutManager(const css::uno::Reference< css::frame::XLayoutManager2 >& xLayoutManager,
                               const css::uno::Reference< css::frame::XFrame >&         xFrame        )
 {
-    css::uno::Reference< css::frame::XFrameActionListener > xListen(xLayoutManager, css::uno::UNO_QUERY_THROW);
-    xFrame->removeFrameActionListener(xListen);
+    xFrame->removeFrameActionListener(xLayoutManager);
     xLayoutManager->setDockingAreaAcceptor(css::uno::Reference< css::ui::XDockingAreaAcceptor >());
     xLayoutManager->attachFrame(css::uno::Reference< css::frame::XFrame >());
 }
@@ -554,7 +552,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
         m_bIsHidden = sal_False;
 
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    css::uno::Reference< css::frame::XLayoutManager >  xLayoutManager = m_xLayoutManager;
+    css::uno::Reference< css::frame::XLayoutManager2 >  xLayoutManager = m_xLayoutManager;
 
     // Release lock ... because we call some impl methods, which are threadsafe by himself.
     // If we hold this lock - we will produce our own deadlock!
@@ -2621,8 +2619,8 @@ void SAL_CALL Frame::impl_setPropertyValue(const OUString& /*sProperty*/,
 
         case FRAME_PROPHANDLE_LAYOUTMANAGER :
                 {
-                    css::uno::Reference< css::frame::XLayoutManager > xOldLayoutManager = m_xLayoutManager;
-                    css::uno::Reference< css::frame::XLayoutManager > xNewLayoutManager;
+                    css::uno::Reference< css::frame::XLayoutManager2 > xOldLayoutManager = m_xLayoutManager;
+                    css::uno::Reference< css::frame::XLayoutManager2 > xNewLayoutManager;
                     aValue >>= xNewLayoutManager;
 
                     if (xOldLayoutManager != xNewLayoutManager)

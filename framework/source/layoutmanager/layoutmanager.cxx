@@ -101,6 +101,9 @@ static const sal_Int32 DOCKWIN_ID_BASE = 9800;
 static const char STATUS_BAR_ALIAS[] = "private:resource/statusbar/statusbar";
 static const char PROGRESS_BAR_ALIAS[] = "private:resource/progressbar/progressbar";
 
+#define SERVICENAME_LAYOUTMANAGER                               DECLARE_ASCII("com.sun.star.frame.LayoutManager"             )
+#define IMPLEMENTATIONNAME_LAYOUTMANAGER                        DECLARE_ASCII("com.sun.star.comp.framework.LayoutManager"           )
+
 namespace framework
 {
 
