@@ -49,6 +49,40 @@ SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent, const ResId& rId ) :
 
     SetBorderStyle( WINDOW_BORDER_MONO );
 }
+SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent,  WinBits nBits) :
+
+    Window( pParent, nBits),
+
+    nLeftMargin     ( 0 ),
+    nRightMargin    ( 0 ),
+    nFirstLineOfst  ( 0 ),
+    nUpper          ( 0 ),
+    nLower          ( 0 ),
+    eAdjust         ( SVX_ADJUST_LEFT ),
+    eLastLine       ( SVX_ADJUST_LEFT ),
+    eLine           ( SVX_PREV_LINESPACE_1 ),
+    nLineVal        ( 0 )
+
+{
+    // Count in Twips by default
+    SetMapMode( MapMode( MAP_TWIP ) );
+    aWinSize = GetOutputSizePixel();
+    aWinSize = PixelToLogic( aWinSize );
+    Size aTmp(1, 1);
+    aTmp = PixelToLogic(aTmp);
+    aWinSize.Width() -= aTmp.Width() /2;
+    aWinSize.Height() -= aTmp.Height() /2;
+
+    aSize = Size( 11905, 16837 );
+
+    SetBorderStyle( WINDOW_BORDER_MONO );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxParaPrevWindow(Window *pParent, WinBits nBits)
+{
+    return new SvxParaPrevWindow(pParent, WB_BORDER);
+}
+
 
 // -----------------------------------------------------------------------
 
