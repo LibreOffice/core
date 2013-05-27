@@ -30,7 +30,7 @@
           <object class="GtkLabel" id="position">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Postion</property>
+            <property name="label" translatable="yes">Position</property>
           </object>
           <packing>
             <property name="expand">False</property>

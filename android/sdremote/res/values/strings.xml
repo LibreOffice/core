@@ -17,7 +17,7 @@
     <string name="clock_timer_resume">Resume</string>
     <string name="options_autodecline">Decline Calls</string>
     <string name="help">Help</string>
-    <string name="ConnectionFailedHelp">#1 Verify Impress is running \n#2 For Bluetooth user, enable \"Preference\"-\"LibreOffice Impress\"-\"General\"-\"Enable remote control\"\n#3 For WiFi user, tick \"Preferece\"-\"LibreOffice\"-\"Advanced\"-\"Enable Experimental Features\" \n </string>
+    <string name="ConnectionFailedHelp">#1 Verify Impress is running \n#2 For Bluetooth user, enable \"Preferences\"-\"LibreOffice Impress\"-\"General\"-\"Enable remote control\"\n#3 For WiFi user, tick \"Preferences\"-\"LibreOffice\"-\"Advanced\"-\"Enable Experimental Features\" \n </string>
     <string name="options_description">Automatically decline all incoming calls.</string>
     <string name="options_volumeswitching">Volume Switching</string>
     <string name="options_volumeswitching_descripton">Change slides using volume buttons</string>
@@ -53,7 +53,7 @@
     <string name="addserver_cancel">Cancel</string>
     <string name="reconnect_description1">Your connection has been dropped.</string>
     <string name="reconnect_description2">Please try to reconnect</string>
-    <string name="wifiAlertMsg">This is still an experimental feature. You need to \"enable experimental features\" in \"Preference\"-\"LibreOffice\"-\"Advanced\" on your computer. \nThe use over Bluetooth is recommended.</string>
+    <string name="wifiAlertMsg">This is still an experimental feature. You need to \"enable experimental features\" in \"Preferences\"-\"LibreOffice\"-\"Advanced\" on your computer. \nThe use over Bluetooth is recommended.</string>
     <string-array name="countdown_values">
         <item >5:00</item>
         <item >10:00</item>
