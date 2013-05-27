@@ -206,7 +206,7 @@
                         <property name="id_column">1</property>
                         <items>
                           <item translatable="yes">RGB</item>
-                          <item translatable="yes">CYMK</item>
+                          <item translatable="yes">CMYK</item>
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="modellb-atkobject">
