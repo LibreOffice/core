@@ -3,14 +3,18 @@ The writerfilter module contains import filters for Writer, using its UNO API.
 Import filter for docx, doc and rtf.
 
 == Module contents ==
+ * documentation
  * inc: global headers (can be included by other modules)
- * prj: information for dmake
  * qa: unittests and subsequenttests
  * source: the filters themselves
+ * util: UNO passive registration config
 
 == Source contents ==
- * dmapper: the domain mapper, hiding UNO from the tokenizers
- * doctok: incomplete ww8 (.doc) tokenizer
- * filter: the uno filter service implementations
+ * dmapper: the domain mapper, hiding UNO from the tokenizers, used by DOCX and RTF import
+ * doctok: incomplete and unused ww8 (.doc) tokenizer
+ * filter: the UNO filter service implementations, invoked by UNO and calling
+   the dmapper + one of the tokenizers
+ * odiapi
  * ooxml: the docx tokenizer
+ * resourcemodel
  * rtftok: the rtf tokenizer
