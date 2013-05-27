@@ -21,6 +21,7 @@
 #include <svx/svxids.hrc>
 #include <svx/modctrl.hxx>
 #include <svx/zoomctrl.hxx>
+#include <svx/zoomsliderctrl.hxx>
 #include <sfx2/docfac.hxx>
 #include <svx/lboxctrl.hxx>
 #include <sfx2/docfile.hxx>
@@ -67,6 +68,7 @@ namespace
         SmViewShell::RegisterFactory(1);
 
         SvxZoomStatusBarControl::RegisterControl(SID_ATTR_ZOOM, pModule);
+        SvxZoomSliderControl::RegisterControl(SID_ATTR_ZOOMSLIDER, pModule);
         SvxModifyControl::RegisterControl(SID_TEXTSTATUS, pModule);
         SvxUndoRedoControl::RegisterControl(SID_UNDO, pModule);
         SvxUndoRedoControl::RegisterControl(SID_REDO, pModule);

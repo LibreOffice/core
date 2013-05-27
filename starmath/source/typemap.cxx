@@ -21,6 +21,7 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/zoomitem.hxx>
+#include <svx/zoomslideritem.hxx>
 #include <svx/svxids.hrc>
 #include <svl/slstitm.hxx>
 
