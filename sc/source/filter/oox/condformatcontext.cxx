@@ -179,7 +179,7 @@ void CondFormatContext::onEndElement()
     {
         case XLS_TOKEN( conditionalFormatting ):
             if(mxCondFmt.get())
-                mxCondFmt->finalizeImport();
+                mxCondFmt->setReadyForFinalize();
             break;
     }
 }

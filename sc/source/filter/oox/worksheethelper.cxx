@@ -943,6 +943,7 @@ void WorksheetGlobals::finalizeWorksheetImport()
 {
     lclUpdateProgressBar( mxRowProgress, 1.0 );
     maSheetData.finalizeImport();
+    getCondFormats().finalizeImport();
     lclUpdateProgressBar( mxFinalProgress, 0.25 );
     finalizeHyperlinkRanges();
     finalizeValidationRanges();

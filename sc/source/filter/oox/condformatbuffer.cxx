@@ -922,7 +922,8 @@ CondFormatModel::CondFormatModel() :
 
 CondFormat::CondFormat( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
-    mpFormat(NULL)
+    mpFormat(NULL),
+    mbReadyForFinalize(false)
 {
 }
 
@@ -1001,6 +1002,17 @@ CondFormatRef CondFormatBuffer::importConditionalFormatting( const AttributeList
     CondFormatRef xCondFmt = createCondFormat();
     xCondFmt->importConditionalFormatting( rAttribs );
     return xCondFmt;
+}
+
+void CondFormatBuffer::finalizeImport()
+{
+    CondFormatVec::iterator it = maCondFormats.begin();
+    CondFormatVec::iterator it_end = maCondFormats.end();
+    for( ; it != it_end; ++it )
+    {
+        if ( (*it).get() )
+            (*it).get()->finalizeImport();
+    }
 }
 
 CondFormatRef CondFormatBuffer::importCondFormatting( SequenceInputStream& rStrm )

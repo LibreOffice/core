@@ -217,6 +217,7 @@ public:
     /** Returns the cell ranges this conditional formatting belongs to. */
     inline const ApiCellRangeList& getRanges() const { return maModel.maRanges; }
 
+    void                setReadyForFinalize() { mbReadyForFinalize = true; }
 private:
     CondFormatRuleRef   createRule();
     void                insertRule( CondFormatRuleRef xRule );
@@ -227,6 +228,7 @@ private:
     CondFormatModel     maModel;            /// Model of this conditional formatting.
     CondFormatRuleMap   maRules;            /// Maps formatting rules by priority.
     ScConditionalFormat* mpFormat;
+    bool                mbReadyForFinalize;
 };
 
 typedef ::boost::shared_ptr< CondFormat > CondFormatRef;
@@ -246,7 +248,7 @@ public:
     /** Converts an OOXML condition operator token to the API constant. */
     static sal_Int32    convertToApiOperator( sal_Int32 nToken );
     static sal_Int32    convertToInternalOperator( sal_Int32 nToken );
-
+    void                finalizeImport();
 private:
     CondFormatRef       createCondFormat();
 
