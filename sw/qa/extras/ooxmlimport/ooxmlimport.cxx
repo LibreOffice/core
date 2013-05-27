@@ -113,6 +113,7 @@ public:
     void testN592908_Picture();
     void testN779630();
     void testIndentation();
+    void testPageBackground();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -194,6 +195,7 @@ void Test::run()
         {"n592908-picture.docx", &Test::testN592908_Picture},
         {"n779630.docx", &Test::testN779630},
         {"indentation.docx", &Test::testIndentation},
+        {"page-background.docx", &Test::testPageBackground},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1377,6 +1379,13 @@ void Test::testIndentation()
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
     // This was RL_TB (e.g. right-to-left).
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>(xPropertySet, "WritingMode"));
+}
+
+void Test::testPageBackground()
+{
+    // The problem was that  <w:background w:color="92D050"/> was ignored.
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

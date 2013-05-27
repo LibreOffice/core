@@ -14997,7 +14997,7 @@
         <ref name="CT_PictureBase"/>
         <optional>
           <attribute name="color">
-            <text/>
+            <ref name="ST_HexColor"/>
             <xs:documentation>Background Color</xs:documentation>
           </attribute>
         </optional>
