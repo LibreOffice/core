@@ -97,9 +97,9 @@ OUString PresetHandler::RESOURCETYPE_STATUSBAR()
 }
 
 //-----------------------------------------------
-PresetHandler::PresetHandler(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+PresetHandler::PresetHandler(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase     (&Application::GetSolarMutex()        )
-    , m_xSMGR            (xSMGR                                )
+    , m_xContext         (xContext                                )
     , m_aSharedStorages  (                                     )
     , m_lDocumentStorages()
     , m_aLanguageTag     (LANGUAGE_USER_PRIV_NOTRANSLATE)
@@ -111,7 +111,7 @@ PresetHandler::PresetHandler(const PresetHandler& rCopy)
     : ThreadHelpBase     (&Application::GetSolarMutex()        )
     , m_aLanguageTag( rCopy.m_aLanguageTag)
 {
-    m_xSMGR                 = rCopy.m_xSMGR;
+    m_xContext              = rCopy.m_xContext;
     m_eConfigType           = rCopy.m_eConfigType;
     m_sResourceType         = rCopy.m_sResourceType;
     m_sModule               = rCopy.m_sModule;
@@ -222,12 +222,12 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::util::XPathSettings > xPathSettings =
-        css::util::PathSettings::create( comphelper::getComponentContext(xSMGR) );
+        css::util::PathSettings::create( xContext );
 
     OUString sShareLayer = xPathSettings->getBasePathShareLayer();
 
@@ -252,7 +252,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     lArgs[0] <<= sShareLayer;
     lArgs[1] <<= css::embed::ElementModes::READ | css::embed::ElementModes::NOCREATE;
 
-    css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory = css::embed::FileSystemStorageFactory::create( comphelper::getComponentContext(xSMGR) );
+    css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory = css::embed::FileSystemStorageFactory::create( xContext );
     css::uno::Reference< css::embed::XStorage >             xStorage;
 
     try
@@ -280,12 +280,12 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::util::XPathSettings > xPathSettings =
-        css::util::PathSettings::create( comphelper::getComponentContext(xSMGR) );
+        css::util::PathSettings::create( xContext );
 
     OUString sUserLayer = xPathSettings->getBasePathUserLayer();
 
@@ -300,7 +300,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     lArgs[0] <<= sUserLayer;
     lArgs[1] <<= css::embed::ElementModes::READWRITE;
 
-    css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory = css::embed::FileSystemStorageFactory::create( comphelper::getComponentContext(xSMGR) );
+    css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory = css::embed::FileSystemStorageFactory::create( xContext );
     css::uno::Reference< css::embed::XStorage >             xStorage;
 
     try

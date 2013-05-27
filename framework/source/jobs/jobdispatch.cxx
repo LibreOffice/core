@@ -55,11 +55,11 @@ DEFINE_XTYPEPROVIDER_6( JobDispatch                   ,
                         css::frame::XDispatch
                       )
 
-DEFINE_XSERVICEINFO_MULTISERVICE( JobDispatch                   ,
-                                  ::cppu::OWeakObject           ,
-                                  SERVICENAME_PROTOCOLHANDLER   ,
-                                  IMPLEMENTATIONNAME_JOBDISPATCH
-                                )
+DEFINE_XSERVICEINFO_MULTISERVICE_2( JobDispatch                   ,
+                                    ::cppu::OWeakObject           ,
+                                    SERVICENAME_PROTOCOLHANDLER   ,
+                                    IMPLEMENTATIONNAME_JOBDISPATCH
+                                  )
 
 DEFINE_INIT_SERVICE( JobDispatch,
                      {
@@ -76,13 +76,13 @@ DEFINE_INIT_SERVICE( JobDispatch,
     @short      standard ctor
     @descr      It initialize this new instance.
 
-    @param      xSMGR
+    @param      xContext
                     reference to the uno service manager
 */
-JobDispatch::JobDispatch( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
+JobDispatch::JobDispatch( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : ThreadHelpBase(&Application::GetSolarMutex())
     , OWeakObject   (                             )
-    , m_xSMGR       (xSMGR                        )
+    , m_xContext    (xContext                        )
 {
 }
 
@@ -94,8 +94,8 @@ JobDispatch::JobDispatch( /*IN*/ const css::uno::Reference< css::lang::XMultiSer
 JobDispatch::~JobDispatch()
 {
     // release all used resources
-    m_xSMGR  = css::uno::Reference< css::lang::XMultiServiceFactory >();
-    m_xFrame = css::uno::Reference< css::frame::XFrame >();
+    m_xContext.clear();
+    m_xFrame.clear();
 }
 
 //________________________________
@@ -121,7 +121,7 @@ void SAL_CALL JobDispatch::initialize( const css::uno::Sequence< css::uno::Any >
             lArguments[a] >>= m_xFrame;
 
             css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
-                css::frame::ModuleManager::create(comphelper::getComponentContext(m_xSMGR));
+                css::frame::ModuleManager::create(m_xContext);
             try
             {
                 m_sModuleIdentifier = xModuleManager->identify( m_xFrame );
@@ -262,7 +262,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
     // filter disabled jobs using it's time stamp values.
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
-    css::uno::Sequence< OUString > lJobs = JobData::getEnabledJobsForEvent(comphelper::getComponentContext(m_xSMGR), sEvent);
+    css::uno::Sequence< OUString > lJobs = JobData::getEnabledJobsForEvent(m_xContext, sEvent);
     aReadLock.unlock();
     /* } SAFE */
 
@@ -279,7 +279,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
         /* SAFE { */
         aReadLock.lock();
 
-        JobData aCfg(comphelper::getComponentContext(m_xSMGR));
+        JobData aCfg(m_xContext);
         aCfg.setEvent(sEvent, lJobs[j]);
         aCfg.setEnvironment(JobData::E_DISPATCH);
         const bool bIsEnabled=aCfg.hasCorrectContext(m_sModuleIdentifier);
@@ -289,7 +289,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
             And freeing of such uno object is done by uno itself.
             So we have to use dynamic memory everytimes.
          */
-        Job* pJob = new Job(m_xSMGR, m_xFrame);
+        Job* pJob = new Job(m_xContext, m_xFrame);
         css::uno::Reference< css::uno::XInterface > xJob(static_cast< ::cppu::OWeakObject* >(pJob), css::uno::UNO_QUERY);
         pJob->setJobData(aCfg);
 
@@ -343,7 +343,7 @@ void JobDispatch::impl_dispatchService( /*IN*/ const OUString&                  
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
-    JobData aCfg(comphelper::getComponentContext(m_xSMGR));
+    JobData aCfg(m_xContext);
     aCfg.setService(sService);
     aCfg.setEnvironment(JobData::E_DISPATCH);
 
@@ -352,7 +352,7 @@ void JobDispatch::impl_dispatchService( /*IN*/ const OUString&                  
         And freeing of such uno object is done by uno itself.
         So we have to use dynamic memory everytimes.
      */
-    Job* pJob = new Job(m_xSMGR, m_xFrame);
+    Job* pJob = new Job(m_xContext, m_xFrame);
     css::uno::Reference< css::uno::XInterface > xJob(static_cast< ::cppu::OWeakObject* >(pJob), css::uno::UNO_QUERY);
     pJob->setJobData(aCfg);
 
@@ -394,7 +394,7 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const OUString&                    
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
-    JobData aCfg(comphelper::getComponentContext(m_xSMGR));
+    JobData aCfg(m_xContext);
     aCfg.setAlias(sAlias);
     aCfg.setEnvironment(JobData::E_DISPATCH);
 
@@ -403,7 +403,7 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const OUString&                    
         And freeing of such uno object is done by uno itself.
         So we have to use dynamic memory everytimes.
      */
-    Job* pJob = new Job(m_xSMGR, m_xFrame);
+    Job* pJob = new Job(m_xContext, m_xFrame);
     css::uno::Reference< css::uno::XInterface > xJob(static_cast< ::cppu::OWeakObject* >(pJob), css::uno::UNO_QUERY);
     pJob->setJobData(aCfg);
 

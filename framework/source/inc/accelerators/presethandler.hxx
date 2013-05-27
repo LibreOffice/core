@@ -119,7 +119,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
 
         //---------------------------------------
         /** @short  can be used to create on needed uno resources. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         //---------------------------------------
         /** @short  knows the type of provided configuration.
@@ -225,11 +225,11 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                     with ::salhelper::SingletonRef template this ctor
                     cant have any special parameters!
 
-            @param  xSMGR
+            @param  xContext
                     points to an uno service manager, which is used internaly
                     to create own needed uno resources.
          */
-        PresetHandler(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        PresetHandler(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
         //---------------------------------------
         /** @short  copy ctor */

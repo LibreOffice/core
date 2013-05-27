@@ -66,10 +66,10 @@ DEFINE_XTYPEPROVIDER_2_WITH_BASECLASS(DocumentAcceleratorConfiguration ,
                                       css::lang::XInitialization)
 //                                      css::ui::XUIConfigurationStorage)
 
-DEFINE_XSERVICEINFO_MULTISERVICE(DocumentAcceleratorConfiguration                   ,
-                                 ::cppu::OWeakObject                                ,
-                                 SERVICENAME_DOCUMENTACCELERATORCONFIGURATION       ,
-                                 IMPLEMENTATIONNAME_DOCUMENTACCELERATORCONFIGURATION)
+DEFINE_XSERVICEINFO_MULTISERVICE_2(DocumentAcceleratorConfiguration                   ,
+                                   ::cppu::OWeakObject                                ,
+                                   SERVICENAME_DOCUMENTACCELERATORCONFIGURATION       ,
+                                   IMPLEMENTATIONNAME_DOCUMENTACCELERATORCONFIGURATION)
 
 DEFINE_INIT_SERVICE(DocumentAcceleratorConfiguration,
                     {
@@ -82,8 +82,8 @@ DEFINE_INIT_SERVICE(DocumentAcceleratorConfiguration,
                    )
 
 //-----------------------------------------------
-DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR)
-    : XMLBasedAcceleratorConfiguration(xSMGR)
+DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
+    : XMLBasedAcceleratorConfiguration(xContext)
 {
 }
 

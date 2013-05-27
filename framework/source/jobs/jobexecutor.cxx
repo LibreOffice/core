@@ -62,15 +62,15 @@ DEFINE_XTYPEPROVIDER_6( JobExecutor                       ,
                         css::lang::XEventListener
                       )
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE( JobExecutor                   ,
-                                        ::cppu::OWeakObject           ,
-                                        "com.sun.star.task.JobExecutor",
-                                        IMPLEMENTATIONNAME_JOBEXECUTOR
-                                      )
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2( JobExecutor                   ,
+                                          ::cppu::OWeakObject           ,
+                                          "com.sun.star.task.JobExecutor",
+                                          IMPLEMENTATIONNAME_JOBEXECUTOR
+                                        )
 
 DEFINE_INIT_SERVICE( JobExecutor,
                      {
-                         m_xModuleManager = css::frame::ModuleManager::create( comphelper::getComponentContext(m_xSMGR) );
+                         m_xModuleManager = css::frame::ModuleManager::create( m_xContext );
 
                          /*Attention
                              I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
@@ -109,15 +109,15 @@ DEFINE_INIT_SERVICE( JobExecutor,
     @short      standard ctor
     @descr      It initialize this new instance.
 
-    @param      xSMGR
+    @param      xContext
                     reference to the uno service manager
  */
-JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
+JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext )
     : ThreadHelpBase      (&Application::GetSolarMutex()                                   )
     , ::cppu::OWeakObject (                                                                )
-    , m_xSMGR             (xSMGR                                                           )
+    , m_xContext          (xContext                                                        )
     , m_xModuleManager    (                                                                )
-    , m_aConfig           (comphelper::getComponentContext(xSMGR), OUString::createFromAscii(JobData::EVENTCFG_ROOT) )
+    , m_aConfig           (xContext, OUString::createFromAscii(JobData::EVENTCFG_ROOT) )
 {
     // Don't do any reference related code here! Do it inside special
     // impl_ method() ... see DEFINE_INIT_SERVICE() macro for further information.
@@ -157,7 +157,7 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::Run
     // get list of all enabled jobs
     // The called static helper methods read it from the configuration and
     // filter disabled jobs using it's time stamp values.
-    css::uno::Sequence< OUString > lJobs = JobData::getEnabledJobsForEvent(comphelper::getComponentContext(m_xSMGR), sEvent);
+    css::uno::Sequence< OUString > lJobs = JobData::getEnabledJobsForEvent(m_xContext, sEvent);
 
     aReadLock.unlock();
     /* } SAFE */
@@ -169,7 +169,7 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::Run
         /* SAFE { */
         aReadLock.lock();
 
-        JobData aCfg(comphelper::getComponentContext(m_xSMGR));
+        JobData aCfg(m_xContext);
         aCfg.setEvent(sEvent, lJobs[j]);
         aCfg.setEnvironment(JobData::E_EXECUTION);
 
@@ -178,7 +178,7 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::Run
             And freeing of such uno object is done by uno itself.
             So we have to use dynamic memory everytimes.
          */
-        Job* pJob = new Job(m_xSMGR, css::uno::Reference< css::frame::XFrame >());
+        Job* pJob = new Job(m_xContext, css::uno::Reference< css::frame::XFrame >());
         css::uno::Reference< css::uno::XInterface > xJob(static_cast< ::cppu::OWeakObject* >(pJob), css::uno::UNO_QUERY);
         pJob->setJobData(aCfg);
 
@@ -226,7 +226,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
        )
     {
         if (m_lEvents.find(EVENT_ON_DOCUMENT_OPENED) != m_lEvents.end())
-            JobData::appendEnabledJobsForEvent(comphelper::getComponentContext(m_xSMGR), EVENT_ON_DOCUMENT_OPENED, lJobs);
+            JobData::appendEnabledJobsForEvent(m_xContext, EVENT_ON_DOCUMENT_OPENED, lJobs);
     }
 
     // Special feature: If the events "OnCreate" or "OnLoadFinished" occures - we generate our own event "onDocumentAdded".
@@ -236,12 +236,12 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
        )
     {
         if (m_lEvents.find(EVENT_ON_DOCUMENT_ADDED) != m_lEvents.end())
-            JobData::appendEnabledJobsForEvent(comphelper::getComponentContext(m_xSMGR), EVENT_ON_DOCUMENT_ADDED, lJobs);
+            JobData::appendEnabledJobsForEvent(m_xContext, EVENT_ON_DOCUMENT_ADDED, lJobs);
     }
 
     // Add all jobs for "real" notified event too .-)
     if (m_lEvents.find(aEvent.EventName) != m_lEvents.end())
-        JobData::appendEnabledJobsForEvent(comphelper::getComponentContext(m_xSMGR), aEvent.EventName, lJobs);
+        JobData::appendEnabledJobsForEvent(m_xContext, aEvent.EventName, lJobs);
 
     aReadLock.unlock();
     /* } SAFE */
@@ -257,7 +257,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
 
         const JobData::TJob2DocEventBinding& rBinding = *pIt;
 
-        JobData aCfg(comphelper::getComponentContext(m_xSMGR));
+        JobData aCfg(m_xContext);
         aCfg.setEvent(rBinding.m_sDocEvent, rBinding.m_sJobName);
         aCfg.setEnvironment(JobData::E_DOCUMENTEVENT);
 
@@ -270,7 +270,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
             So we have to use dynamic memory everytimes.
          */
         css::uno::Reference< css::frame::XModel > xModel(aEvent.Source, css::uno::UNO_QUERY);
-        Job* pJob = new Job(m_xSMGR, xModel);
+        Job* pJob = new Job(m_xContext, xModel);
         css::uno::Reference< css::uno::XInterface > xJob(static_cast< ::cppu::OWeakObject* >(pJob), css::uno::UNO_QUERY);
         pJob->setJobData(aCfg);
 

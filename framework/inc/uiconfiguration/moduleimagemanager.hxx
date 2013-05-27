@@ -63,7 +63,7 @@ namespace framework
                                   public ::cppu::WeakImplHelper1< ::com::sun::star::ui::XImageManager>
     {
         public:
-            ModuleImageManager( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xServiceManager );
+            ModuleImageManager( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
             virtual ~ModuleImageManager();
 
             // XComponent

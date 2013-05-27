@@ -92,7 +92,7 @@ class Job : public  css::lang::XTypeProvider
         /**
             We need it to create own services on demand.
          */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /**
             Hold the (may asynchronous) job alive.
@@ -176,9 +176,9 @@ class Job : public  css::lang::XTypeProvider
 
     public:
 
-                 Job( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
+                 Job( const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
                       const css::uno::Reference< css::frame::XFrame >&              xFrame );
-                 Job( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
+                 Job( const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
                       const css::uno::Reference< css::frame::XModel >&              xModel );
         virtual ~Job(                                                                      );
 

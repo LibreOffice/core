@@ -65,7 +65,7 @@ class JobExecutor : public  css::lang::XTypeProvider
     private:
 
         /** reference to the uno service manager */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /** reference to the module info service */
         css::uno::Reference< css::frame::XModuleManager2 > m_xModuleManager;
@@ -84,7 +84,7 @@ class JobExecutor : public  css::lang::XTypeProvider
 
     public:
 
-                  JobExecutor( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
+                  JobExecutor( const css::uno::Reference< css::uno::XComponentContext >& xContext );
          virtual ~JobExecutor(                                                                     );
 
     //___________________________________

@@ -59,10 +59,10 @@ DEFINE_XTYPEPROVIDER_2_WITH_BASECLASS(ModuleAcceleratorConfiguration,
                                       css::lang::XServiceInfo       ,
                                       css::lang::XInitialization    )
 
-DEFINE_XSERVICEINFO_MULTISERVICE(ModuleAcceleratorConfiguration                   ,
-                                 ::cppu::OWeakObject                              ,
-                                 SERVICENAME_MODULEACCELERATORCONFIGURATION       ,
-                                 IMPLEMENTATIONNAME_MODULEACCELERATORCONFIGURATION)
+DEFINE_XSERVICEINFO_MULTISERVICE_2(ModuleAcceleratorConfiguration                   ,
+                                   ::cppu::OWeakObject                              ,
+                                   SERVICENAME_MODULEACCELERATORCONFIGURATION       ,
+                                   IMPLEMENTATIONNAME_MODULEACCELERATORCONFIGURATION)
 
 DEFINE_INIT_SERVICE(ModuleAcceleratorConfiguration,
                     {
@@ -75,8 +75,8 @@ DEFINE_INIT_SERVICE(ModuleAcceleratorConfiguration,
                    )
 
 //-----------------------------------------------
-ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR)
-    : XCUBasedAcceleratorConfiguration(xSMGR)
+ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
+    : XCUBasedAcceleratorConfiguration(xContext)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration" );
 }

@@ -52,10 +52,10 @@ DEFINE_XTYPEPROVIDER_2_WITH_BASECLASS(GlobalAcceleratorConfiguration,
                                       css::lang::XServiceInfo       ,
                                       css::lang::XInitialization)
 
-DEFINE_XSERVICEINFO_MULTISERVICE(GlobalAcceleratorConfiguration                   ,
-                                 ::cppu::OWeakObject                              ,
-                                 DECLARE_ASCII("com.sun.star.ui.GlobalAcceleratorConfiguration"),
-                                 IMPLEMENTATIONNAME_GLOBALACCELERATORCONFIGURATION)
+DEFINE_XSERVICEINFO_MULTISERVICE_2(GlobalAcceleratorConfiguration                   ,
+                                   ::cppu::OWeakObject                              ,
+                                   DECLARE_ASCII("com.sun.star.ui.GlobalAcceleratorConfiguration"),
+                                   IMPLEMENTATIONNAME_GLOBALACCELERATORCONFIGURATION)
 
 DEFINE_INIT_SERVICE(GlobalAcceleratorConfiguration,
                     {
@@ -69,8 +69,8 @@ DEFINE_INIT_SERVICE(GlobalAcceleratorConfiguration,
                    )
 
 //-----------------------------------------------
-GlobalAcceleratorConfiguration::GlobalAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR)
-    : XCUBasedAcceleratorConfiguration(xSMGR)
+GlobalAcceleratorConfiguration::GlobalAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)
+    : XCUBasedAcceleratorConfiguration(xContext)
 {
 }
 

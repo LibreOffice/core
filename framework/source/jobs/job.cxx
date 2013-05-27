@@ -58,19 +58,19 @@ DEFINE_XTYPEPROVIDER_4( Job                           ,
                 Specialized information (e.g. the alias or service name ofthis job) will be set
                 later using the method setJobData().
 
-    @param      xSMGR
+    @param      xContext
                 reference to the uno service manager
 
     @param      xFrame
                 reference to the frame, in which environment we run
                 (May be null!)
 */
-Job::Job( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
+Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
           /*IN*/ const css::uno::Reference< css::frame::XFrame >&              xFrame )
     : ThreadHelpBase       (&Application::GetSolarMutex())
     , ::cppu::OWeakObject  (                             )
-    , m_aJobCfg            (comphelper::getComponentContext(xSMGR))
-    , m_xSMGR              (xSMGR                        )
+    , m_aJobCfg            (xContext                     )
+    , m_xContext           (xContext                     )
     , m_xFrame             (xFrame                       )
     , m_bListenOnDesktop   (sal_False                    )
     , m_bListenOnFrame     (sal_False                    )
@@ -88,19 +88,19 @@ Job::Job( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& x
                 Specialized information (e.g. the alias or service name ofthis job) will be set
                 later using the method setJobData().
 
-    @param      xSMGR
+    @param      xContext
                 reference to the uno service manager
 
     @param      xModel
                 reference to the model, in which environment we run
                 (May be null!)
 */
-Job::Job( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
+Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xContext  ,
           /*IN*/ const css::uno::Reference< css::frame::XModel >&              xModel )
     : ThreadHelpBase       (&Application::GetSolarMutex())
     , ::cppu::OWeakObject  (                             )
-    , m_aJobCfg            (comphelper::getComponentContext(xSMGR))
-    , m_xSMGR              (xSMGR                        )
+    , m_aJobCfg            (xContext                     )
+    , m_xContext           (xContext                     )
     , m_xModel             (xModel                       )
     , m_bListenOnDesktop   (sal_False                    )
     , m_bListenOnFrame     (sal_False                    )
@@ -212,7 +212,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
         // create the job
         // We must check for the supported interface on demand!
         // But we preferr the synchronous one ...
-        m_xJob = m_xSMGR->createInstance(m_aJobCfg.getService());
+        m_xJob = m_xContext->getServiceManager()->createInstanceWithContext(m_aJobCfg.getService(), m_xContext);
         xSJob  = css::uno::Reference< css::task::XJob >(m_xJob, css::uno::UNO_QUERY);
         if (!xSJob.is())
             xAJob = css::uno::Reference< css::task::XAsyncJob >(m_xJob, css::uno::UNO_QUERY);
@@ -542,7 +542,7 @@ void Job::impl_startListening()
     {
         try
         {
-            m_xDesktop = css::frame::Desktop::create( comphelper::getComponentContext(m_xSMGR) );
+            m_xDesktop = css::frame::Desktop::create( m_xContext );
             css::uno::Reference< css::frame::XTerminateListener > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
             m_xDesktop->addTerminateListener(xThis);
             m_bListenOnDesktop = sal_True;

@@ -65,7 +65,7 @@ class ModuleAcceleratorConfiguration : public XCUBasedAcceleratorConfiguration
             @param  xSMGR
                     reference to an uno service manager, which is used internaly.
          */
-        ModuleAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR);
+        ModuleAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
         //----------------------------------
         /** TODO */

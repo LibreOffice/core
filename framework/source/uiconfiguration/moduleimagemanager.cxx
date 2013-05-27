@@ -71,9 +71,9 @@ using namespace ::com::sun::star::ui;
 
 namespace framework
 {
-ModuleImageManager::ModuleImageManager( uno::Reference< XMultiServiceFactory > xServiceManager ) :
+ModuleImageManager::ModuleImageManager( const uno::Reference< uno::XComponentContext >& xContext ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_pImpl( new ImageManagerImpl(comphelper::getComponentContext(xServiceManager),static_cast< OWeakObject* >(this),true) )
+    , m_pImpl( new ImageManagerImpl(xContext,static_cast< OWeakObject* >(this),true) )
 {
 }
 

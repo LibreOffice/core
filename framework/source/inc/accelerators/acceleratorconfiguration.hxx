@@ -85,7 +85,7 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase               
         //---------------------------------------
         /** the global uno service manager.
         Must be used to create own needed services. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         //---------------------------------------
         /** used to:
@@ -108,7 +108,7 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase               
 
     public:
 
-        XMLBasedAcceleratorConfiguration( const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR );
+        XMLBasedAcceleratorConfiguration( const css::uno::Reference< css::uno::XComponentContext >& xContext);
         virtual ~XMLBasedAcceleratorConfiguration(                                                                    );
 
         //______________________________________
@@ -304,7 +304,7 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase               
         //---------------------------------------
         /** the global uno service manager.
         Must be used to create own needed services. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         css::uno::Reference< css::container::XNameAccess > m_xCfg;
         AcceleratorCache m_aPrimaryReadCache;
@@ -322,7 +322,7 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase               
 
     public:
 
-        XCUBasedAcceleratorConfiguration( const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR );
+        XCUBasedAcceleratorConfiguration( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~XCUBasedAcceleratorConfiguration(                                                           );
 
         //______________________________________

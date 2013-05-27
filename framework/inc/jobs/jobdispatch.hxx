@@ -77,7 +77,7 @@ class JobDispatch : public  css::lang::XTypeProvider
     private:
 
         /** reference to the uno service manager */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /** reference to the frame, inside which this dispatch is used */
         css::uno::Reference< css::frame::XFrame > m_xFrame;
@@ -90,7 +90,7 @@ class JobDispatch : public  css::lang::XTypeProvider
 
     public:
 
-                  JobDispatch( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
+                  JobDispatch( const css::uno::Reference< css::uno::XComponentContext >& xContext );
          virtual ~JobDispatch(                                                                     );
 
         void impl_dispatchEvent  ( const OUString&                                            sEvent    ,
