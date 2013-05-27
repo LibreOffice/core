@@ -11,6 +11,7 @@
 #include "worksheethelper.hxx"
 #include <oox/core/contexthandler.hxx>
 #include "colorscale.hxx"
+#include "condformatbuffer.hxx"
 
 using ::oox::core::ContextHandlerRef;
 
@@ -34,18 +35,31 @@ void ExtCfRuleContext::onStartElement( const AttributeList& rAttribs )
     switch( getCurrentElement() )
     {
         case XLS_EXT_TOKEN( dataBar ):
-            importDataBar( rAttribs );
+        {
+            ExtCfRuleRef xRule = getCondFormats().createExtCfRule(mpTarget);
+            xRule->importDataBar( rAttribs );
             break;
+        }
         case XLS_EXT_TOKEN( negativeFillColor ):
-            importNegativeFillColor( rAttribs );
+        {
+            ExtCfRuleRef xRule = getCondFormats().createExtCfRule(mpTarget);
+            xRule->importNegativeFillColor( rAttribs );
             break;
+        }
         case XLS_EXT_TOKEN( axisColor ):
-            importAxisColor( rAttribs );
+        {
+            ExtCfRuleRef xRule = getCondFormats().createExtCfRule(mpTarget);
+            xRule->importAxisColor( rAttribs );
             break;
+        }
         case XLS_EXT_TOKEN( cfvo ):
-            importCfvo( rAttribs );
+        {
+            ExtCfRuleRef xRule = getCondFormats().createExtCfRule(mpTarget);
+            xRule->importCfvo( rAttribs );
+            xRule->getModel().mbIsLower = mbFirstEntry;
+            mbFirstEntry = false;
             break;
-
+        }
         default:
             break;
     }

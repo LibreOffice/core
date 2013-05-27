@@ -1023,6 +1023,13 @@ void CondFormatBuffer::finalizeImport()
         if ( (*it).get() )
             (*it).get()->finalizeImport();
     }
+    ExtCfRuleVec::iterator ext_it = maCfRules.begin();
+    ExtCfRuleVec::iterator ext_end = maCfRules.end();
+    for ( ; ext_it != ext_end; ++ext_it )
+    {
+        if ( (*ext_it).get() )
+            (*ext_it).get()->finalizeImport();
+    }
 }
 
 CondFormatRef CondFormatBuffer::importCondFormatting( SequenceInputStream& rStrm )
@@ -1030,6 +1037,13 @@ CondFormatRef CondFormatBuffer::importCondFormatting( SequenceInputStream& rStrm
     CondFormatRef xCondFmt = createCondFormat();
     xCondFmt->importCondFormatting( rStrm );
     return xCondFmt;
+}
+
+ExtCfRuleRef CondFormatBuffer::createExtCfRule( void* pTarget )
+{
+    ExtCfRuleRef extRule( new ExtCfRule( pTarget ) );
+    maCfRules.push_back( extRule );
+    return extRule;
 }
 
 sal_Int32 CondFormatBuffer::convertToApiOperator( sal_Int32 nToken )
@@ -1075,7 +1089,100 @@ CondFormatRef CondFormatBuffer::createCondFormat()
     maCondFormats.push_back( xCondFmt );
     return xCondFmt;
 }
+/*
+::Color RgbToRgbComponents( sal_Int32 nRgb )
+{
+    sal_Int32 ornR = (nRgb >> 16) & 0xFF;
+    sal_Int32 ornG = (nRgb >> 8) & 0xFF;
+    sal_Int32 ornB = nRgb & 0xFF;
 
+    return ::Color(ornR, ornG, ornB);
+}
+*/
+
+void ExtCfRule::finalizeImport()
+{
+    switch ( mnRuleType )
+    {
+        case DATABAR:
+        {
+            ScDataBarFormatData* pDataBar = static_cast<ScDataBarFormatData*>(mpTarget);
+            if( maModel.maAxisPosition == "none" )
+                pDataBar->meAxisPosition = databar::NONE;
+            else if( maModel.maAxisPosition == "middle" )
+                pDataBar->meAxisPosition = databar::MIDDLE;
+            else
+                pDataBar->meAxisPosition = databar::AUTOMATIC;
+            pDataBar->mbNeg = !maModel.mbGradient;
+            break;
+        }
+        case AXISCOLOR:
+        {
+            ScDataBarFormatData* pDataBar = static_cast<ScDataBarFormatData*>(mpTarget);
+            pDataBar->maAxisColor = RgbToRgbComponents(maModel.mnAxisColor);
+            break;
+        }
+        case NEGATIVEFILLCOLOR:
+        {
+            ScDataBarFormatData* pDataBar = static_cast<ScDataBarFormatData*>(mpTarget);
+            pDataBar->mpNegativeColor.reset( new ::Color( RgbToRgbComponents(maModel.mnNegativeColor) ) );
+            break;
+        }
+        case CFVO:
+        {
+            ScDataBarFormatData* pDataBar = static_cast<ScDataBarFormatData*>(mpTarget);
+            ScColorScaleEntry* pEntry = NULL;
+            if(maModel.mbIsLower)
+                pEntry = pDataBar->mpLowerLimit.get();
+            else
+                pEntry = pDataBar->mpUpperLimit.get();
+
+            if(maModel.maColorScaleType == "min")
+                pEntry->SetType(COLORSCALE_MIN);
+            else if (maModel.maColorScaleType == "max")
+                pEntry->SetType(COLORSCALE_MAX);
+            else if (maModel.maColorScaleType == "autoMin")
+                pEntry->SetType(COLORSCALE_AUTO);
+            else if (maModel.maColorScaleType == "autoMax")
+                pEntry->SetType(COLORSCALE_AUTO);
+            else if (maModel.maColorScaleType == "percentile")
+                pEntry->SetType(COLORSCALE_PERCENTILE);
+            else if (maModel.maColorScaleType == "percent")
+                pEntry->SetType(COLORSCALE_PERCENT);
+            else if (maModel.maColorScaleType == "formula")
+                pEntry->SetType(COLORSCALE_FORMULA);
+            break;
+        }
+        case UNKNOWN: // nothing to do
+        default:
+            break;
+    };
+}
+
+void ExtCfRule::importDataBar( const AttributeList& rAttribs )
+{
+    mnRuleType = DATABAR;
+    maModel.mbGradient = rAttribs.getBool( XML_gradient, true );
+    maModel.maAxisPosition = rAttribs.getString( XML_axisPosition, "automatic" );
+}
+
+void ExtCfRule::importNegativeFillColor( const AttributeList& rAttribs )
+{
+     mnRuleType = NEGATIVEFILLCOLOR;
+     maModel.mnNegativeColor = rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT );
+}
+
+void ExtCfRule::importAxisColor( const AttributeList& rAttribs )
+{
+    mnRuleType = AXISCOLOR;
+    maModel.mnAxisColor = rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT );
+}
+
+void ExtCfRule::importCfvo( const AttributeList& rAttribs )
+{
+    mnRuleType = CFVO;
+    maModel.maColorScaleType = rAttribs.getString( XML_type, OUString() );
+}
 // ============================================================================
 
 } // namespace xls
