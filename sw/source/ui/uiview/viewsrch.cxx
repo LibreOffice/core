@@ -444,6 +444,24 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
         // aus 'Suche alle'
     m_pWrtShell->StartAllAction();
     m_pWrtShell->Push();
+
+    // Move the cursor to the front/back of selected areas to avoid searching
+    // through the selected area when doing a normal search.
+    SwPaM* pCrsr = m_pWrtShell->GetCrsr();
+    SwPaM* pStartCrsr = pCrsr;
+    SwPosition* pStart =( *pCrsr->GetPoint() < *pCrsr->GetMark() ) ?
+                                    pCrsr->GetPoint() : pCrsr->GetMark();
+    SwPosition* pEnd = ( *pCrsr->GetPoint() < *pCrsr->GetMark() ) ?
+                                    pCrsr->GetMark() : pCrsr->GetPoint();
+    while ( ( pCrsr = ( SwPaM* ) pCrsr->GetNext() ) != pStartCrsr );
+    {
+        pStart = ( *pCrsr->GetPoint() < *pStart ) ? pCrsr->GetPoint() : pStart;
+        pStart = ( *pCrsr->GetMark() < *pStart ) ? pCrsr->GetMark() : pStart;
+        pEnd = ( *pCrsr->GetPoint() > *pEnd ) ? pCrsr->GetPoint() : pEnd;
+        pEnd = ( *pCrsr->GetMark() > *pEnd ) ? pCrsr->GetMark() : pEnd;
+    }
+    *pStartCrsr->GetPoint() = m_pSrchItem->GetBackward() ? *pStart : *pEnd;
+
         // falls in selektierten Bereichen gesucht werden soll, duerfen sie
         // nicht aufgehoben werden
     if (!m_pSrchItem->GetSelection())
