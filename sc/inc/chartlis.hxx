@@ -181,7 +181,7 @@ public:
     const ScChartListener* findByName(const rtl::OUString& rName) const;
     bool hasListeners() const;
 
-    void removeByName(const OUString& rName);
+    void removeByName(const rtl::OUString& rName);
 
     const ListenersType& getListeners() const;
     ListenersType& getListeners();
