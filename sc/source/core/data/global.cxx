@@ -925,20 +925,20 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
     //  aufgerufen, darum stimmen pScActiveViewShell und nScClickMouseModifier.
     //SvtSecurityOptions to access Libreoffice global security parameters
     SvtSecurityOptions aSecOpt;
-    bool bProceedHyperlink = false;
-    if ( (nScClickMouseModifier & KEY_MOD1) && aSecOpt.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK ))     // control-click -> into new window
+    bool bCtrlClickHappened = (nScClickMouseModifier & KEY_MOD1);
+    bool bCtrlClickSecOption = aSecOpt.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
+    if( bCtrlClickHappened && !( bCtrlClickSecOption ) )
     {
-        //Ctrl key is pressed and ctrl+click hyperlink security control is set
-        bProceedHyperlink = true;
-    }
-    else if( !aSecOpt.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK ) )
-    {
-        //ctrl+click hyperlink security control is disabled just click will do
-        bProceedHyperlink = true;
-    }
-    if ( !bProceedHyperlink )
+        //return since ctrl+click happened when the
+        //ctrl+click security option was disabled, link should not open
         return;
-
+    }
+    else if( !( bCtrlClickHappened ) && bCtrlClickSecOption )
+    {
+        //ctrl+click did not happen; only click happened maybe with some
+        //other key combo. and security option is set, so return
+        return;
+    }
     SfxStringItem aUrl( SID_FILE_NAME, rURL );
     SfxStringItem aTarget( SID_TARGETNAME, rTarget );
     aTarget.SetValue(OUString("_blank"));

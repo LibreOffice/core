@@ -2081,6 +2081,14 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Cells without text have been ignored." ;
     };
+    String STR_CTRLCLICKHYPERLINK
+    {
+        Text [ en-US ] = "ctrl+click to open hyperlink:";
+    };
+    String STR_CLICKHYPERLINK
+    {
+        Text [ en-US ] = "click to open hyperlink:";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

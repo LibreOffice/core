@@ -31,6 +31,7 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include "viewuno.hxx"
 #include "AccessibleDocument.hxx"
@@ -49,7 +50,8 @@
 #include "tabvwsh.hxx"
 #include "userdat.hxx"
 #include "postit.hxx"
-
+#include "global.hxx"
+#include "globstr.hrc"
 // -----------------------------------------------------------------------
 
 bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
@@ -241,16 +243,21 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
 
 void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 {
+    //To know whether to prefix STR_CTRLCLICKHYERLINK or STR_CLICKHYPERLINK
+    //to hyperlink tooltips/help text
+    SvtSecurityOptions aSecOpt;
+    bool bCtrlClickHlink = aSecOpt.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
+    //Global string STR_CTRLCLICKHYPERLINK i.e, "ctrl+click to open hyperlink:"
+    OUString aCtrlClickHlinkStr = ScGlobal::GetRscString( STR_CTRLCLICKHYPERLINK );
+    //Global string STR_CLICKHYPERLINK i.e, "click to open hyperlink"
+    OUString aClickHlinkStr = ScGlobal::GetRscString( STR_CLICKHYPERLINK );
     sal_Bool bDone = false;
     sal_Bool bHelpEnabled = ( rHEvt.GetMode() & ( HELPMODE_BALLOON | HELPMODE_QUICK ) ) != 0;
     SdrView* pDrView = pViewData->GetScDrawView();
-
     sal_Bool bDrawTextEdit = false;
     if (pDrView)
         bDrawTextEdit = pDrView->IsTextEdit();
-
     //  notes or change tracking
-
     if ( bHelpEnabled && !bDrawTextEdit )
     {
         Point       aPosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
@@ -304,6 +311,16 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                         aHelpText = pIMapObj->GetAltText();
                         if (!aHelpText.Len())
                             aHelpText = pIMapObj->GetURL();
+                        if( bCtrlClickHlink )
+                        {
+                            //prefix STR_CTRLCLICKHYPERLINK to aHelpText
+                            aHelpText = aCtrlClickHlinkStr + aHelpText;
+                        }
+                        else
+                        {
+                            //Option not set, so prefix STR_CLICKHYPERLINK
+                            aHelpText = aClickHlinkStr + aHelpText;
+                        }
                         aPixRect = LogicToPixel(aVEvt.pObj->GetLogicRect());
                     }
                 }
@@ -333,6 +350,17 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                             {
                                 aPixRect = LogicToPixel(aVEvt.pObj->GetLogicRect());
                                 aHelpText = pInfo->GetHlink();
+                                if( bCtrlClickHlink )
+                                {
+                                    //prefix STR_CTRLCLICKHYPERLINK to aHelpText
+                                    aHelpText = aCtrlClickHlinkStr + aHelpText;
+                                }
+                                else
+                                {
+                                    //Option not set, so prefix STR_CLICKHYPERLINK
+                                    aHelpText = aClickHlinkStr + aHelpText;
+                                }
+
                             }
                         }
                     }
@@ -347,6 +375,18 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
             {
                 aHelpText = INetURLObject::decode( aUrl, INET_HEX_ESCAPE,
                     INetURLObject::DECODE_UNAMBIGUOUS );
+
+                if( bCtrlClickHlink )
+                {
+                    //prefix STR_CTRLCLICKHYPERLINK to aHelpText
+                    aHelpText = aCtrlClickHlinkStr + aHelpText;
+                }
+                else
+                {
+                    //Option not set, so prefix STR_CLICKHYPERLINK
+                    aHelpText = aClickHlinkStr + aHelpText;
+                }
+
 
                 ScDocument* pDoc = pViewData->GetDocument();
                 SCsCOL nPosX;

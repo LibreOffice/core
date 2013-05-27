@@ -678,7 +678,10 @@
 #define STR_COPYFROM                549
 #define STR_COPYERR                 550
 
-#define STR_COUNT                   551
+#define STR_CTRLCLICKHYPERLINK      551
+#define STR_CLICKHYPERLINK          552
+
+#define STR_COUNT                   553
 
 #endif
 
