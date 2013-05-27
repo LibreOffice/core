@@ -152,6 +152,8 @@ OResultSet::~OResultSet()
 // -------------------------------------------------------------------------
 void OResultSet::disposing(void)
 {
+    printf("DEBUG !!! connectivity.firebird => OResultSet::disposing() \n" );
+
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -462,6 +464,8 @@ void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 
 void SAL_CALL OResultSet::close(  ) throw(SQLException, RuntimeException)
 {
+    printf("DEBUG !!! connectivity.firebird => OResultSet::close() \n" );
+
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);

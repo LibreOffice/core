@@ -85,7 +85,7 @@ void OStatement_Base::disposeResultSet()
 //------------------------------------------------------------------------------
 void OStatement_BASE2::disposing()
 {
-    printf("DEBUG !!! connectivity.firebird => OStatement_BASE2::disposing: \n");
+    printf("DEBUG !!! connectivity.firebird => OStatement_BASE2::disposing() \n");
 
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -146,6 +146,8 @@ void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
 
 void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
 {
+    printf("DEBUG !!! connectivity.firebird => OStatement_Base::close() \n");
+
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(OStatement_BASE::rBHelper.bDisposed);

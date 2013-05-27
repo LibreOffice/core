@@ -76,6 +76,8 @@ OConnection::~OConnection()
 //-----------------------------------------------------------------------------
 void SAL_CALL OConnection::release() throw()
 {
+    printf("DEBUG !!! connectivity.firebird => OConnection::release() \n" );
+
     relase_ChildImpl();
 }
 // -----------------------------------------------------------------------------
@@ -100,7 +102,7 @@ static int pr_error (long* status, char* operation)
 
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
-    printf("DEBUG !!! connectivity.firebird", "=> OConnection::construct()" );
+    printf("DEBUG !!! connectivity.firebird => OConnection::construct() \n" );
 
     osl_atomic_increment( &m_refCount );
 
@@ -218,7 +220,7 @@ sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException
 // --------------------------------------------------------------------------------
 Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
-    printf ("DEBUG !!! __ OConnection::getMetaData() __ \n");
+    printf ("DEBUG !!! connectivity.firebird => OConnection::getMetaData() \n");
 
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -307,6 +309,8 @@ void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::contai
 // XCloseable
 void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
 {
+    printf("DEBUG !!! connectivity.firebird => OConnection::close() \n" );
+
     // we just dispose us
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -381,6 +385,8 @@ void OConnection::buildTypeInfo() throw( SQLException)
 //------------------------------------------------------------------------------
 void OConnection::disposing()
 {
+    printf("DEBUG !!! connectivity.firebird => OConnection::disposing(). \n");
+
     // we noticed that we should be destroied in near future so we have to dispose our statements
     ::osl::MutexGuard aGuard(m_aMutex);
 
