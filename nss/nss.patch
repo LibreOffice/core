@@ -13,7 +13,7 @@
 +++ misc/build/nss-3.13.5/mozilla/security/coreconf/Darwin.mk	2010-06-11 16:35:54.966185975 +0200
 @@ -39,8 +39,12 @@
  
- DEFAULT_COMPILER = cc
+ DEFAULT_COMPILER = gcc
  
 -CC		= gcc
 -CCC		= g++
@@ -88,8 +88,8 @@
  
  # INCLUDES += -I/usr/include -Y/usr/include/linux
 @@ -158,8 +161,13 @@
- #
- CPU_TAG = _$(CPU_ARCH)
+ endif
+ endif
  
 +ifeq ($(SYSTEM_ZLIB),YES)  
 +# Currently (3.12.4) only the tools modutil and signtool are linked with libz

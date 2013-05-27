@@ -272,8 +272,8 @@
 --- misc/hsqldb/src/org/hsqldb/jdbc/jdbcStatement.java	2012-02-08 15:14:42.802123563 +0000
 +++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcStatement.java	2012-02-08 15:47:35.872635595 +0000
 @@ -1608,4 +1608,16 @@
-         throw new UnsupportedOperationException("Not supported yet.");
      }
+ */
  //#endif JAVA6
 +
 +//#ifdef JAVA7

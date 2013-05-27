@@ -1,6 +1,6 @@
 --- misc/boost_1_44_0/boost/function/function_base.hpp
 +++ misc/build/boost_1_44_0/boost/function/function_base.hpp
-@@ -314,15 +322,15 @@
+@@ -314,17 +322,17 @@
          {
            if (op == clone_functor_tag || op == move_functor_tag) {
              const functor_type* in_functor = 

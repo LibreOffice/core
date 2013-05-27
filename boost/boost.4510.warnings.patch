@@ -1,8 +1,8 @@
 --- misc/boost_1_44_0/boost/multi_array/concept_checks.hpp
 +++ misc/build/boost_1_44_0/boost/multi_array/concept_checks.hpp
 @@ -56,6 +56,13 @@
- } // namespace detail
  
+ } // namespace detail
  
 +// MSVC 2008 produces 2 warnings "default constructor could not be generated"
 +// here that run over ~100 lines :(

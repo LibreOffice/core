@@ -40,7 +40,7 @@
 +++ misc/build/boost_1_44_0/boost/optional/optional.hpp	2011-04-05 13:19:01.223587256 +0100
 @@ -31,6 +31,8 @@
  
- #include "boost/optional/optional_fwd.hpp"
+ #include <boost/optional/optional_fwd.hpp>
  
 +#include <string.h>
 +

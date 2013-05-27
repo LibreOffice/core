@@ -6,9 +6,9 @@
  
 +#include <limits>
 +
+ #include <vector>
+ 
  #include "affixmgr.hxx"
- #include "affentry.hxx"
- #include "langnum.hxx"
 @@ -4000,7 +4002,10 @@
               case 3: { 
                         np++;
