@@ -291,8 +291,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     aPropValue.Value    <<= m_xFrame;
                     aArgs[1] <<= aPropValue;
                     aPropValue.Name     = OUString( "ServiceManager" );
-                    Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
-                    aPropValue.Value    <<= xMSF;
+                    aPropValue.Value    <<= Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW);
                     aArgs[2] <<= aPropValue;
                     aPropValue.Name     = OUString( "ParentWindow" );
                     aPropValue.Value    <<= xToolbarWindow;
@@ -335,8 +334,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     aPropValue.Value <<= aURL;
                     aArgs[1] <<= aPropValue;
                     aPropValue.Name = OUString( "ServiceManager" );
-                    Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
-                    aPropValue.Value <<= xMSF;
+                    aPropValue.Value <<= Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW);
                     aArgs[2] <<= aPropValue;
                     try
                     {

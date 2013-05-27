@@ -24,6 +24,7 @@
 #include <services.h>
 
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/TaskCreator.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
@@ -96,8 +97,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
     // BTW: The used fallback creator service (IMPLEMENTATIONNAME_FWK_TASKCREATOR) is implemented in the same
     // library then these class here ... Why we should not be able to create it ?
     if ( ! xCreator.is())
-        xCreator = css::uno::Reference< css::lang::XSingleServiceFactory >(
-                    xContext->getServiceManager()->createInstanceWithContext(IMPLEMENTATIONNAME_FWK_TASKCREATOR, xContext), css::uno::UNO_QUERY_THROW);
+        xCreator = css::frame::TaskCreator::create(xContext);
 
     css::uno::Sequence< css::uno::Any > lArgs(5);
     css::beans::NamedValue              aArg    ;

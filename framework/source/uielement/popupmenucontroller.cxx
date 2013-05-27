@@ -18,7 +18,7 @@
  */
 
 
-#include <com/sun/star/awt/XPopupMenu.hpp>
+#include <com/sun/star/awt/PopupMenu.hpp>
 #include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 
@@ -201,8 +201,7 @@ Reference< awt::XWindow > SAL_CALL PopupMenuController::createPopupWindow() thro
 
         if( !mxPopupMenu.is() )
         {
-            mxPopupMenu = Reference< awt::XPopupMenu >(
-                m_xContext->getServiceManager()->createInstanceWithContext("stardiv.Toolkit.VCLXPopupMenu", m_xContext), UNO_QUERY_THROW );
+            mxPopupMenu = awt::PopupMenu::create(m_xContext);
             mxPopupMenuController->setPopupMenu( mxPopupMenu );
         }
         else

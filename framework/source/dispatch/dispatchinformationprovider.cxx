@@ -149,8 +149,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvide
     css::uno::Reference< css::frame::XDispatchInformationProvider > xCloseDispatch(xCloser                                                      , css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XDispatchInformationProvider > xController   (xFrame->getController()                                      , css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XDispatchInformationProvider > xAppDispatcher(
-             css::uno::Reference<css::lang::XMultiServiceFactory>(xContext->getServiceManager(), css::uno::UNO_QUERY_THROW)
-                 ->createInstance(IMPLEMENTATIONNAME_APPDISPATCHPROVIDER), css::uno::UNO_QUERY);
+             xContext->getServiceManager()->createInstanceWithContext(IMPLEMENTATIONNAME_APPDISPATCHPROVIDER, xContext), css::uno::UNO_QUERY);
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider(3);
     lProvider[0] = xController   ;
     lProvider[1] = xCloseDispatch;
