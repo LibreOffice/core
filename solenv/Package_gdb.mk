@@ -16,6 +16,7 @@ $(eval $(call gb_Package_add_files,solenv_gdb,lib,\
 		$(call gb_Library_get_runtime_filename,cppu).3-gdb.py \
 		$(call gb_Library_get_runtime_filename,sal).3-gdb.py \
 		$(call gb_Library_get_runtime_filename,sw)-gdb.py \
+		$(call gb_Library_get_runtime_filename,writerfilter)-gdb.py \
 	) \
 	$(call gb_Library_get_runtime_filename,merged)-gdb.py, \
 	$(call gb_Library_get_runtime_filename,cppu).3-gdb.py \
@@ -23,6 +24,7 @@ $(eval $(call gb_Package_add_files,solenv_gdb,lib,\
 	$(call gb_Library_get_runtime_filename,svl)-gdb.py \
 	$(call gb_Library_get_runtime_filename,sw)-gdb.py \
 	$(call gb_Library_get_runtime_filename,tl)-gdb.py) \
+	$(call gb_Library_get_runtime_filename,writerfilter)-gdb.py \
 ))
 
 $(eval $(call gb_Package_use_custom_target,solenv_gdb,solenv/gdb))
