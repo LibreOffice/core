@@ -123,7 +123,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
 
-            OResultSet( OStatement_Base* pStmt, TTable sqldata, sal_Int32 rows, sal_Int32 fields);
+            OResultSet( OStatement_Base* pStmt);
 
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()
