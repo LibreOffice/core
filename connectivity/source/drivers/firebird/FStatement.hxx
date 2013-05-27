@@ -78,6 +78,10 @@ namespace connectivity
             ::std::list< ::rtl::OUString>               m_aBatchList;
 
             OConnection*                                m_pConnection;  // The owning Connection object
+            isc_stmt_handle                             m_STMTHandler;
+            isc_tr_handle                               m_TRANSHandler;
+            XSQLDA *                                    m_OUTsqlda;
+            XSQLDA *                                    m_INsqlda;
         protected:
 
             void disposeResultSet();
@@ -136,6 +140,10 @@ namespace connectivity
 
             // other methods
             OConnection* getOwnConnection() const { return m_pConnection;}
+
+            inline isc_stmt_handle getSTMTHandler()  const { return m_STMTHandler; }
+            inline XSQLDA * getOUTsqlda()            const { return m_OUTsqlda; }
+            inline XSQLDA * getINsqlda()             const { return m_INsqlda; }
         };
 
         class OStatement_BASE2  :public OStatement_Base
