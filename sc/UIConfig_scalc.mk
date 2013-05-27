@@ -73,6 +73,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/headerdialog \
 	sc/uiconfig/scalc/ui/headerfootercontent \
 	sc/uiconfig/scalc/ui/headerfooterdialog \
+	sc/uiconfig/scalc/ui/insertcells \
 	sc/uiconfig/scalc/ui/insertname \
 	sc/uiconfig/scalc/ui/insertsheet \
 	sc/uiconfig/scalc/ui/leftfooterdialog \
