@@ -18,6 +18,7 @@
  */
 
 #include <svx/paraprev.hxx>
+#include <vcl/builder.hxx>
 
 // class SvxParaPrevWindow -----------------------------------------------
 
@@ -38,16 +39,43 @@ SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent, const ResId& rId ) :
 {
     // Count in Twips by default
     SetMapMode( MapMode( MAP_TWIP ) );
-    aWinSize = GetOutputSizePixel();
-    aWinSize = PixelToLogic( aWinSize );
-    Size aTmp(1, 1);
-    aTmp = PixelToLogic(aTmp);
-    aWinSize.Width() -= aTmp.Width() /2;
-    aWinSize.Height() -= aTmp.Height() /2;
 
     aSize = Size( 11905, 16837 );
 
     SetBorderStyle( WINDOW_BORDER_MONO );
+}
+
+SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent,  WinBits nBits) :
+
+    Window( pParent, nBits),
+
+    nLeftMargin     ( 0 ),
+    nRightMargin    ( 0 ),
+    nFirstLineOfst  ( 0 ),
+    nUpper          ( 0 ),
+    nLower          ( 0 ),
+    eAdjust         ( SVX_ADJUST_LEFT ),
+    eLastLine       ( SVX_ADJUST_LEFT ),
+    eLine           ( SVX_PREV_LINESPACE_1 ),
+    nLineVal        ( 0 )
+
+{
+    // Count in Twips by default
+    SetMapMode( MapMode( MAP_TWIP ) );
+
+    aSize = Size( 11905, 16837 );
+
+    SetBorderStyle( WINDOW_BORDER_MONO );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxParaPrevWindow(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxParaPrevWindow(pParent, WB_BORDER);
+}
+
+Size SvxParaPrevWindow::GetOptimalSize() const
+{
+    return LogicToPixel(Size(68 , 112), MAP_APPFONT);
 }
 
 // -----------------------------------------------------------------------
@@ -63,6 +91,13 @@ void SvxParaPrevWindow::Paint( const Rectangle& )
 
 void SvxParaPrevWindow::DrawParagraph( sal_Bool bAll )
 {
+    Size aWinSize = GetOutputSizePixel();
+    aWinSize = PixelToLogic( aWinSize );
+    Size aTmp(1, 1);
+    aTmp = PixelToLogic(aTmp);
+    aWinSize.Width() -= aTmp.Width() /2;
+    aWinSize.Height() -= aTmp.Height() /2;
+
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const Color& rWinColor = rStyleSettings.GetWindowColor();
     Color aGrayColor(COL_LIGHTGRAY);

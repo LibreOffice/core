@@ -172,41 +172,40 @@ IMPL_LINK_NOARG(SvxStdParagraphTabPage, ELRLoseFocusHdl)
     FieldUnit eUnit =
         MapToFieldUnit( pPool->GetMetric( GetWhich( SID_ATTR_LRSPACE ) ) );
 
-    sal_Int64 nL = aLeftIndent.Denormalize( aLeftIndent.GetValue( eUnit ) );
-    sal_Int64 nR = aRightIndent.Denormalize( aRightIndent.GetValue( eUnit ) );
-    String aTmp = aFLineIndent.GetText();
+    sal_Int64 nL = m_pLeftIndent->Denormalize( m_pLeftIndent->GetValue( eUnit ) );
+    sal_Int64 nR = m_pRightIndent->Denormalize( m_pRightIndent->GetValue( eUnit ) );
+    OUString aTmp = m_pFLineIndent->GetText();
 
-    if( aLeftIndent.GetMin() < 0 )
-        aFLineIndent.SetMin( -99999, FUNIT_MM );
+    if( m_pLeftIndent->GetMin() < 0 )
+        m_pFLineIndent->SetMin( -99999, FUNIT_MM );
     else
-        aFLineIndent.SetMin( aFLineIndent.Normalize( -nL ), eUnit );
+        m_pFLineIndent->SetMin( m_pFLineIndent->Normalize( -nL ), eUnit );
 
     // Check only for concrete width (Shell)
     sal_Int64 nTmp = nWidth - nL - nR - MM50;
-    aFLineIndent.SetMax( aFLineIndent.Normalize( nTmp ), eUnit );
+    m_pFLineIndent->SetMax( m_pFLineIndent->Normalize( nTmp ), eUnit );
 
-    if ( !aTmp.Len() )
-        aFLineIndent.SetEmptyFieldValue();
+    if ( aTmp.isEmpty() )
+        m_pFLineIndent->SetEmptyFieldValue();
     // maximum left right
-    aTmp = aLeftIndent.GetText();
+    aTmp = m_pLeftIndent->GetText();
     nTmp = nWidth - nR - MM50;
-    aLeftIndent.SetMax( aLeftIndent.Normalize( nTmp ), eUnit );
+    m_pLeftIndent->SetMax( m_pLeftIndent->Normalize( nTmp ), eUnit );
 
-    if ( !aTmp.Len() )
-        aLeftIndent.SetEmptyFieldValue();
-    aTmp = aRightIndent.GetText();
+    if ( aTmp.isEmpty() )
+        m_pLeftIndent->SetEmptyFieldValue();
+    aTmp = m_pRightIndent->GetText();
     nTmp = nWidth - nL - MM50;
-    aRightIndent.SetMax( aRightIndent.Normalize( nTmp ), eUnit );
+    m_pRightIndent->SetMax( m_pRightIndent->Normalize( nTmp ), eUnit );
 
-    if ( !aTmp.Len() )
-        aRightIndent.SetEmptyFieldValue();
+    if ( aTmp.isEmpty() )
+        m_pRightIndent->SetEmptyFieldValue();
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* SvxStdParagraphTabPage::Create( Window* pParent,
-                                            const SfxItemSet& rSet)
+SfxTabPage* SvxStdParagraphTabPage::Create( Window* pParent, const SfxItemSet& rSet)
 {
     return new SvxStdParagraphTabPage( pParent, rSet );
 }
@@ -222,12 +221,12 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
 
     sal_Bool bModified = sal_False;
     sal_uInt16 nWhich;
-    sal_uInt16 nPos = aLineDist.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLineDist->GetSelectEntryPos();
 
     if ( LISTBOX_ENTRY_NOTFOUND != nPos &&
-         ( nPos != aLineDist.GetSavedValue() ||
-           aLineDistAtPercentBox.IsValueModified() ||
-           aLineDistAtMetricBox.IsValueModified() ) )
+         ( nPos != m_pLineDist->GetSavedValue() ||
+           m_pLineDistAtPercentBox->IsValueModified() ||
+           m_pLineDistAtMetricBox->IsValueModified() ) )
     {
         nWhich = GetWhich( SID_ATTR_PARA_LINESPACE );
         SfxMapUnit eUnit = pPool->GetMetric( nWhich );
@@ -244,15 +243,15 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
 
             case LLINESPACE_PROP:
                 SetLineSpace_Impl( aSpacing, nPos,
-                                   static_cast<long>(aLineDistAtPercentBox.Denormalize(
-                                   aLineDistAtPercentBox.GetValue() )) );
+                                   static_cast<long>(m_pLineDistAtPercentBox->Denormalize(
+                                   m_pLineDistAtPercentBox->GetValue() )) );
                 break;
 
             case LLINESPACE_MIN:
             case LLINESPACE_DURCH:
             case LLINESPACE_FIX:
                 SetLineSpace_Impl( aSpacing, nPos,
-                    GetCoreValue( aLineDistAtMetricBox, eUnit ) );
+                    GetCoreValue( *m_pLineDistAtMetricBox, eUnit ) );
             break;
 
             default:
@@ -270,8 +269,8 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         }
     }
 
-    if ( aTopDist.IsValueModified() || aBottomDist.IsValueModified()
-            || aContextualCB.GetSavedValue() != aContextualCB.IsChecked())
+    if ( m_pTopDist->IsValueModified() || m_pBottomDist->IsValueModified()
+            || m_pContextualCB->GetSavedValue() != m_pContextualCB->IsChecked())
     {
         nWhich = GetWhich( SID_ATTR_ULSPACE );
         SfxMapUnit eUnit = pPool->GetMetric( nWhich );
@@ -285,25 +284,25 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             const SvxULSpaceItem& rOldItem =
                 (const SvxULSpaceItem&)GetItemSet().GetParent()->Get( nWhich );
 
-            if ( aTopDist.IsRelative() )
+            if ( m_pTopDist->IsRelative() )
                 aMargin.SetUpper( rOldItem.GetUpper(),
-                                  (sal_uInt16)aTopDist.GetValue() );
+                                  (sal_uInt16)m_pTopDist->GetValue() );
             else
-                aMargin.SetUpper( (sal_uInt16)GetCoreValue( aTopDist, eUnit ) );
+                aMargin.SetUpper( (sal_uInt16)GetCoreValue( *m_pTopDist, eUnit ) );
 
-            if ( aBottomDist.IsRelative() )
+            if ( m_pBottomDist->IsRelative() )
                 aMargin.SetLower( rOldItem.GetLower(),
-                                  (sal_uInt16)aBottomDist.GetValue() );
+                                  (sal_uInt16)m_pBottomDist->GetValue() );
             else
-                aMargin.SetLower( (sal_uInt16)GetCoreValue( aBottomDist, eUnit ) );
+                aMargin.SetLower( (sal_uInt16)GetCoreValue( *m_pBottomDist, eUnit ) );
 
         }
         else
         {
-            aMargin.SetUpper( (sal_uInt16)GetCoreValue( aTopDist, eUnit ) );
-            aMargin.SetLower( (sal_uInt16)GetCoreValue( aBottomDist, eUnit ) );
+            aMargin.SetUpper( (sal_uInt16)GetCoreValue( *m_pTopDist, eUnit ) );
+            aMargin.SetLower( (sal_uInt16)GetCoreValue( *m_pBottomDist, eUnit ) );
         }
-        aMargin.SetContextValue(aContextualCB.IsChecked());
+        aMargin.SetContextValue(m_pContextualCB->IsChecked());
         eState = GetItemSet().GetItemState( nWhich );
 
         if ( !pOld || !( *(const SvxULSpaceItem*)pOld == aMargin ) ||
@@ -315,10 +314,10 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     }
     bool bNullTab = false;
 
-    if ( aLeftIndent.IsValueModified() ||
-         aFLineIndent.IsValueModified() ||
-         aRightIndent.IsValueModified()
-         ||  aAutoCB.GetSavedValue() != aAutoCB.IsChecked() )
+    if ( m_pLeftIndent->IsValueModified() ||
+         m_pFLineIndent->IsValueModified() ||
+         m_pRightIndent->IsValueModified()
+         ||  m_pAutoCB->GetSavedValue() != m_pAutoCB->IsChecked() )
     {
         nWhich = GetWhich( SID_ATTR_LRSPACE );
         SfxMapUnit eUnit = pPool->GetMetric( nWhich );
@@ -332,33 +331,33 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             const SvxLRSpaceItem& rOldItem =
                 (const SvxLRSpaceItem&)GetItemSet().GetParent()->Get( nWhich );
 
-            if ( aLeftIndent.IsRelative() )
+            if ( m_pLeftIndent->IsRelative() )
                 aMargin.SetTxtLeft( rOldItem.GetTxtLeft(),
-                                    (sal_uInt16)aLeftIndent.GetValue() );
+                                    (sal_uInt16)m_pLeftIndent->GetValue() );
             else
-                aMargin.SetTxtLeft( GetCoreValue( aLeftIndent, eUnit ) );
+                aMargin.SetTxtLeft( GetCoreValue( *m_pLeftIndent, eUnit ) );
 
-            if ( aRightIndent.IsRelative() )
+            if ( m_pRightIndent->IsRelative() )
                 aMargin.SetRight( rOldItem.GetRight(),
-                                  (sal_uInt16)aRightIndent.GetValue() );
+                                  (sal_uInt16)m_pRightIndent->GetValue() );
             else
-                aMargin.SetRight( GetCoreValue( aRightIndent, eUnit ) );
+                aMargin.SetRight( GetCoreValue( *m_pRightIndent, eUnit ) );
 
-            if ( aFLineIndent.IsRelative() )
+            if ( m_pFLineIndent->IsRelative() )
                 aMargin.SetTxtFirstLineOfst( rOldItem.GetTxtFirstLineOfst(),
-                                             (sal_uInt16)aFLineIndent.GetValue() );
+                                             (sal_uInt16)m_pFLineIndent->GetValue() );
             else
                 aMargin.SetTxtFirstLineOfst(
-                    (sal_uInt16)GetCoreValue( aFLineIndent, eUnit ) );
+                    (sal_uInt16)GetCoreValue( *m_pFLineIndent, eUnit ) );
         }
         else
         {
-            aMargin.SetTxtLeft( GetCoreValue( aLeftIndent, eUnit ) );
-            aMargin.SetRight( GetCoreValue( aRightIndent, eUnit ) );
+            aMargin.SetTxtLeft( GetCoreValue( *m_pLeftIndent, eUnit ) );
+            aMargin.SetRight( GetCoreValue( *m_pRightIndent, eUnit ) );
             aMargin.SetTxtFirstLineOfst(
-                (sal_uInt16)GetCoreValue( aFLineIndent, eUnit ) );
+                (sal_uInt16)GetCoreValue( *m_pFLineIndent, eUnit ) );
         }
-        aMargin.SetAutoFirst(aAutoCB.IsChecked());
+        aMargin.SetAutoFirst(m_pAutoCB->IsChecked());
         if ( aMargin.GetTxtFirstLineOfst() < 0 )
             bNullTab = true;
         eState = GetItemSet().GetItemState( nWhich );
@@ -392,7 +391,7 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             }
         }
     }
-    if( aRegisterCB.IsVisible())
+    if( m_pRegisterCB->IsVisible())
     {
         const SfxBoolItem* pBoolItem = (SfxBoolItem*)GetOldItem(
                             rOutSet, SID_ATTR_PARA_REGISTER);
@@ -400,7 +399,7 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_REGISTER );
         sal_Bool bSet = pRegItem->GetValue();
 
-        if(aRegisterCB.IsChecked() != bSet )
+        if(m_pRegisterCB->IsChecked() != bSet )
         {
             pRegItem->SetValue(!bSet);
             rOutSet.Put(*pRegItem);
@@ -430,20 +429,20 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
     if(aCJKOptions.IsAsianTypographyEnabled() && bApplyCharUnit )
         eFUnit = FUNIT_CHAR;
 
-    SetFieldUnit( aLeftIndent, eFUnit );
-    SetFieldUnit( aRightIndent, eFUnit );
-    SetFieldUnit( aFLineIndent, eFUnit );
+    SetFieldUnit( *m_pLeftIndent, eFUnit );
+    SetFieldUnit( *m_pRightIndent, eFUnit );
+    SetFieldUnit( *m_pFLineIndent, eFUnit );
     if ( eFUnit == FUNIT_CHAR )
     {
-        SetFieldUnit( aTopDist, FUNIT_LINE );
-        SetFieldUnit( aBottomDist, FUNIT_LINE );
-        SetFieldUnit( aLineDistAtMetricBox, FUNIT_POINT );
+        SetFieldUnit( *m_pTopDist, FUNIT_LINE );
+        SetFieldUnit( *m_pBottomDist, FUNIT_LINE );
+        SetFieldUnit( *m_pLineDistAtMetricBox, FUNIT_POINT );
     }
     else
     {
-        SetFieldUnit( aTopDist, eFUnit );
-        SetFieldUnit( aBottomDist, eFUnit );
-        SetFieldUnit( aLineDistAtMetricBox, eFUnit );
+        SetFieldUnit( *m_pTopDist, eFUnit );
+        SetFieldUnit( *m_pBottomDist, eFUnit );
+        SetFieldUnit( *m_pLineDistAtMetricBox, eFUnit );
     }
 
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_LRSPACE );
@@ -460,60 +459,60 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
 
             if ( rOldItem.GetPropLeft() != 100 )
             {
-                aLeftIndent.SetRelative( sal_True );
-                aLeftIndent.SetValue( rOldItem.GetPropLeft() );
+                m_pLeftIndent->SetRelative( sal_True );
+                m_pLeftIndent->SetValue( rOldItem.GetPropLeft() );
             }
             else
             {
-                aLeftIndent.SetRelative();
-                SetFieldUnit( aLeftIndent, eFUnit );
-                SetMetricValue( aLeftIndent, rOldItem.GetTxtLeft(), eUnit );
+                m_pLeftIndent->SetRelative();
+                SetFieldUnit( *m_pLeftIndent, eFUnit );
+                SetMetricValue( *m_pLeftIndent, rOldItem.GetTxtLeft(), eUnit );
             }
 
             if ( rOldItem.GetPropRight() != 100 )
             {
-                aRightIndent.SetRelative( sal_True );
-                aRightIndent.SetValue( rOldItem.GetPropRight() );
+                m_pRightIndent->SetRelative( sal_True );
+                m_pRightIndent->SetValue( rOldItem.GetPropRight() );
             }
             else
             {
-                aRightIndent.SetRelative();
-                SetFieldUnit( aRightIndent, eFUnit );
-                SetMetricValue( aRightIndent, rOldItem.GetRight(), eUnit );
+                m_pRightIndent->SetRelative();
+                SetFieldUnit( *m_pRightIndent, eFUnit );
+                SetMetricValue( *m_pRightIndent, rOldItem.GetRight(), eUnit );
             }
 
             if ( rOldItem.GetPropTxtFirstLineOfst() != 100 )
             {
-                aFLineIndent.SetRelative( sal_True );
-                aFLineIndent.SetValue( rOldItem.GetPropTxtFirstLineOfst() );
+                m_pFLineIndent->SetRelative( sal_True );
+                m_pFLineIndent->SetValue( rOldItem.GetPropTxtFirstLineOfst() );
             }
             else
             {
-                aFLineIndent.SetRelative();
-                aFLineIndent.SetMin(-9999);
-                SetFieldUnit( aFLineIndent, eFUnit );
-                SetMetricValue( aFLineIndent, rOldItem.GetTxtFirstLineOfst(),
+                m_pFLineIndent->SetRelative();
+                m_pFLineIndent->SetMin(-9999);
+                SetFieldUnit( *m_pFLineIndent, eFUnit );
+                SetMetricValue( *m_pFLineIndent, rOldItem.GetTxtFirstLineOfst(),
                                 eUnit );
             }
-            aAutoCB.Check(rOldItem.IsAutoFirst());
+            m_pAutoCB->Check(rOldItem.IsAutoFirst());
         }
         else
         {
             const SvxLRSpaceItem& rSpace =
                 (const SvxLRSpaceItem&)rSet.Get( _nWhich );
 
-            SetMetricValue( aLeftIndent, rSpace.GetTxtLeft(), eUnit );
-            SetMetricValue( aRightIndent, rSpace.GetRight(), eUnit );
-            SetMetricValue( aFLineIndent, rSpace.GetTxtFirstLineOfst(), eUnit );
-            aAutoCB.Check(rSpace.IsAutoFirst());
+            SetMetricValue( *m_pLeftIndent, rSpace.GetTxtLeft(), eUnit );
+            SetMetricValue( *m_pRightIndent, rSpace.GetRight(), eUnit );
+            SetMetricValue( *m_pFLineIndent, rSpace.GetTxtFirstLineOfst(), eUnit );
+            m_pAutoCB->Check(rSpace.IsAutoFirst());
         }
-        AutoHdl_Impl(&aAutoCB);
+        AutoHdl_Impl(m_pAutoCB);
     }
     else
     {
-        aLeftIndent.SetEmptyFieldValue();
-        aRightIndent.SetEmptyFieldValue();
-        aFLineIndent.SetEmptyFieldValue();
+        m_pLeftIndent->SetEmptyFieldValue();
+        m_pRightIndent->SetEmptyFieldValue();
+        m_pFLineIndent->SetEmptyFieldValue();
     }
 
     _nWhich = GetWhich( SID_ATTR_ULSPACE );
@@ -530,45 +529,45 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
 
             if ( rOldItem.GetPropUpper() != 100 )
             {
-                aTopDist.SetRelative( sal_True );
-                aTopDist.SetValue( rOldItem.GetPropUpper() );
+                m_pTopDist->SetRelative( sal_True );
+                m_pTopDist->SetValue( rOldItem.GetPropUpper() );
             }
             else
             {
-                aTopDist.SetRelative();
+                m_pTopDist->SetRelative();
                 if ( eFUnit == FUNIT_CHAR )
-                    SetFieldUnit( aTopDist, FUNIT_LINE );
+                    SetFieldUnit( *m_pTopDist, FUNIT_LINE );
                 else
-                    SetFieldUnit( aTopDist, eFUnit );
-                SetMetricValue( aTopDist, rOldItem.GetUpper(), eUnit );
+                    SetFieldUnit( *m_pTopDist, eFUnit );
+                SetMetricValue( *m_pTopDist, rOldItem.GetUpper(), eUnit );
             }
 
             if ( rOldItem.GetPropLower() != 100 )
             {
-                aBottomDist.SetRelative( sal_True );
-                aBottomDist.SetValue( rOldItem.GetPropLower() );
+                m_pBottomDist->SetRelative( sal_True );
+                m_pBottomDist->SetValue( rOldItem.GetPropLower() );
             }
             else
             {
-                aBottomDist.SetRelative();
+                m_pBottomDist->SetRelative();
                 if ( eFUnit == FUNIT_CHAR )
-                    SetFieldUnit( aBottomDist, FUNIT_LINE );
+                    SetFieldUnit( *m_pBottomDist, FUNIT_LINE );
                 else
-                    SetFieldUnit( aBottomDist, eFUnit );
-                SetMetricValue( aBottomDist, rOldItem.GetLower(), eUnit );
+                    SetFieldUnit( *m_pBottomDist, eFUnit );
+                SetMetricValue( *m_pBottomDist, rOldItem.GetLower(), eUnit );
             }
         }
         else
         {
-            SetMetricValue( aTopDist, rOldItem.GetUpper(), eUnit );
-            SetMetricValue( aBottomDist, rOldItem.GetLower(), eUnit );
+            SetMetricValue( *m_pTopDist, rOldItem.GetUpper(), eUnit );
+            SetMetricValue( *m_pBottomDist, rOldItem.GetLower(), eUnit );
         }
-        aContextualCB.Check(rOldItem.GetContext());
+        m_pContextualCB->Check(rOldItem.GetContext());
     }
     else
     {
-        aTopDist.SetEmptyFieldValue();
-        aBottomDist.SetEmptyFieldValue();
+        m_pTopDist->SetEmptyFieldValue();
+        m_pBottomDist->SetEmptyFieldValue();
     }
 
     _nWhich = GetWhich( SID_ATTR_PARA_LINESPACE );
@@ -577,36 +576,37 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
     if ( eItemState >= SFX_ITEM_AVAILABLE )
         SetLineSpacing_Impl( (const SvxLineSpacingItem &)rSet.Get( _nWhich ) );
     else
-        aLineDist.SetNoSelection();
+        m_pLineDist->SetNoSelection();
 
 
     _nWhich = GetWhich( SID_ATTR_PARA_REGISTER );
     eItemState = rSet.GetItemState( _nWhich );
 
     if ( eItemState >= SFX_ITEM_AVAILABLE )
-        aRegisterCB.Check( ((const SfxBoolItem &)rSet.Get( _nWhich )).GetValue());
-    aRegisterCB.SaveValue();
+        m_pRegisterCB->Check( ((const SfxBoolItem &)rSet.Get( _nWhich )).GetValue());
+    m_pRegisterCB->SaveValue();
     sal_uInt16 nHtmlMode = GetHtmlMode_Impl(rSet);
     if(nHtmlMode & HTMLMODE_ON)
     {
-        aRegisterCB.Hide();
-        aRegisterFL.Hide();
-        aAutoCB.Hide();
+        m_pRegisterFL->Hide();
+        m_pRegisterCB->Hide();
+        m_pAutoCB->Hide();
+
         if(!(nHtmlMode & HTMLMODE_SOME_STYLES)) // IE or SW
         {
-            aRightLabel.Disable();
-            aRightIndent.Disable();
-            aTopDist.Disable();  //HTML3.2 and NS 3.0
-            aBottomDist.Disable();
-            aFLineIndent.Disable();
-            aFLineLabel.Disable();
+            m_pRightLabel->Disable();
+            m_pRightIndent->Disable();
+            m_pTopDist->Disable();  //HTML3.2 and NS 3.0
+            m_pBottomDist->Disable();
+            m_pFLineIndent->Disable();
+            m_pFLineLabel->Disable();
         }
     }
 
     ELRLoseFocusHdl( NULL );
-    aAutoCB.SaveValue();
-    aContextualCB.SaveValue();
-    aLineDist.SaveValue();
+    m_pAutoCB->SaveValue();
+    m_pContextualCB->SaveValue();
+    m_pLineDist->SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -615,11 +615,11 @@ void SvxStdParagraphTabPage::EnableRelativeMode()
 {
     DBG_ASSERT( GetItemSet().GetParent(), "RelativeMode, but no parent-set!" );
 
-    aLeftIndent.EnableRelativeMode( 0, 999 );
-    aFLineIndent.EnableRelativeMode( 0, 999 );
-    aRightIndent.EnableRelativeMode( 0, 999 );
-    aTopDist.EnableRelativeMode( 0, 999 );
-    aBottomDist.EnableRelativeMode( 0, 999 );
+    m_pLeftIndent->EnableRelativeMode( 0, 999 );
+    m_pFLineIndent->EnableRelativeMode( 0, 999 );
+    m_pRightIndent->EnableRelativeMode( 0, 999 );
+    m_pTopDist->EnableRelativeMode( 0, 999 );
+    m_pBottomDist->EnableRelativeMode( 0, 999 );
     bRelativeMode = sal_True;
 }
 
@@ -636,37 +636,9 @@ int SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 // -----------------------------------------------------------------------
 
-SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,
-                                                const SfxItemSet& rAttr ) :
+SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,  const SfxItemSet& rAttr ) :
+    SfxTabPage( pParent, "ParaIndentSpacing","cui/ui/paraindentspacing.ui", rAttr ),
 
-    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_STD_PARAGRAPH ), rAttr ),
-
-    aIndentFrm              ( this, CUI_RES( FL_INDENT ) ),
-    aLeftLabel              ( this, CUI_RES( FT_LEFTINDENT ) ),
-    aLeftIndent             ( this, CUI_RES( ED_LEFTINDENT ) ),
-    aRightLabel             ( this, CUI_RES( FT_RIGHTINDENT ) ),
-    aRightIndent            ( this, CUI_RES( ED_RIGHTINDENT ) ),
-
-    aFLineLabel             ( this, CUI_RES( FT_FLINEINDENT ) ),
-    aFLineIndent            ( this, CUI_RES( ED_FLINEINDENT ) ),
-    aAutoCB                 ( this, CUI_RES( CB_AUTO ) ),
-    aDistFrm                ( this, CUI_RES( FL_DIST ) ),
-    aTopLabel               ( this, CUI_RES( FT_TOPDIST ) ),
-    aTopDist                ( this, CUI_RES( ED_TOPDIST ) ),
-    aBottomLabel            ( this, CUI_RES( FT_BOTTOMDIST ) ),
-    aBottomDist             ( this, CUI_RES( ED_BOTTOMDIST ) ),
-    aContextualCB           ( this, CUI_RES( CB_CONTEXTUALSPACING ) ),
-
-    aLineDistFrm            ( this, CUI_RES( FL_LINEDIST ) ),
-    aLineDist               ( this, CUI_RES( LB_LINEDIST ) ),
-    aLineDistAtLabel        ( this, CUI_RES( FT_LINEDIST ) ),
-    aLineDistAtPercentBox   ( this, CUI_RES( ED_LINEDISTPERCENT ) ),
-    aLineDistAtMetricBox    ( this, CUI_RES( ED_LINEDISTMETRIC ) ),
-    sAbsDist                ( CUI_RES(ST_LINEDIST_ABS) ),
-    aExampleWin             ( this, CUI_RES( WN_EXAMPLE ) ),
-    aRegisterFL             ( this, CUI_RES( FL_REGISTER ) ),
-    aRegisterCB             ( this, CUI_RES( CB_REGISTER ) ),
-    pActLineDistFld ( &aLineDistAtPercentBox ),
     nAbst           ( MAX_DURCH ),
     nWidth          ( 11905 /*567 * 50*/ ),
     nMinFixDist(0L),
@@ -675,27 +647,53 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,
     bNegativeIndents(sal_False)
 
 {
+    get(m_pLeftIndent,"spinED_LEFTINDENT");
+    get(m_pRightIndent,"spinED_RIGHTINDENT");
+    get(m_pRightLabel,"labelFT_RIGHTINDENT");
+    get(m_pFLineLabel,"labelFT_FLINEINDENT");
+    get(m_pFLineIndent,"spinED_FLINEINDENT");
+    get(m_pAutoCB,"checkCB_AUTO");
+
+    get(m_pTopDist,"spinED_TOPDIST");
+    get(m_pBottomDist,"spinED_BOTTOMDIST");
+    get(m_pContextualCB,"checkCB_CONTEXTUALSPACING");
+
+    get(m_pLineDist,"comboLB_LINEDIST");
+    get(m_pLineDistAtPercentBox,"spinED_LINEDISTPERCENT");
+    get(m_pLineDistAtMetricBox,"spinED_LINEDISTMETRIC");
+    get(m_pLineDistAtLabel,"labelFT_LINEDIST");
+
+    get(m_pAbsDist,"labelST_LINEDIST_ABS");
+    sAbsDist = m_pAbsDist->GetText();
+
+    get(m_pRegisterFL,"frameFL_REGISTER");
+    get(m_pRegisterCB,"checkCB_REGISTER");
+
+    get(m_pExampleWin,"drawingareaWN_EXAMPLE");
+
     // this page needs ExchangeSupport
     SetExchangeSupport();
 
-    aLineDistAtMetricBox.Hide();
-    FreeResource();
-    Init_Impl();
-    aFLineIndent.SetMin(-9999);    // is set to 0 on default
+    m_pLineDistAtMetricBox->Hide();
 
-    aExampleWin.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
+    Init_Impl();
+    m_pFLineIndent->SetMin(-9999);    // is set to 0 on default
+
+    //aExampleWin.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
 
 }
 
+SvxStdParagraphTabPage::~SvxStdParagraphTabPage()
+{}
 
 // -----------------------------------------------------------------------
 
 void SvxStdParagraphTabPage::EnableNegativeMode()
 {
-    aLeftIndent.SetMin(-9999);
-    aRightIndent.SetMin(-9999);
-    aRightIndent.EnableNegativeMode();
-    aLeftIndent.EnableNegativeMode();
+    m_pLeftIndent->SetMin(-9999);
+    m_pRightIndent->SetMin(-9999);
+    m_pRightIndent->EnableNegativeMode();
+    m_pLeftIndent->EnableNegativeMode();
     bNegativeIndents = sal_True;
 }
 
@@ -725,56 +723,53 @@ void SvxStdParagraphTabPage::SetLineSpacing_Impl
             {
                 // Default single line spacing
                 case SVX_INTER_LINE_SPACE_OFF:
-                    aLineDist.SelectEntryPos( LLINESPACE_1 );
+                    m_pLineDist->SelectEntryPos( LLINESPACE_1 );
                     break;
 
                 // Default single line spacing
                 case SVX_INTER_LINE_SPACE_PROP:
                     if ( 100 == rAttr.GetPropLineSpace() )
                     {
-                        aLineDist.SelectEntryPos( LLINESPACE_1 );
+                        m_pLineDist->SelectEntryPos( LLINESPACE_1 );
                         break;
                     }
                     // 1.5 line spacing
                     if ( 150 == rAttr.GetPropLineSpace() )
                     {
-                        aLineDist.SelectEntryPos( LLINESPACE_15 );
+                        m_pLineDist->SelectEntryPos( LLINESPACE_15 );
                         break;
                     }
                     // double line spacing
                     if ( 200 == rAttr.GetPropLineSpace() )
                     {
-                        aLineDist.SelectEntryPos( LLINESPACE_2 );
+                        m_pLineDist->SelectEntryPos( LLINESPACE_2 );
                         break;
                     }
                     // the set per cent value
-                    aLineDistAtPercentBox.
-                        SetValue( aLineDistAtPercentBox.Normalize(
-                                        rAttr.GetPropLineSpace() ) );
-                    aLineDist.SelectEntryPos( LLINESPACE_PROP );
+                    m_pLineDistAtPercentBox->SetValue( m_pLineDistAtPercentBox->Normalize(rAttr.GetPropLineSpace() ) );
+                    m_pLineDist->SelectEntryPos( LLINESPACE_PROP );
                     break;
 
                 case SVX_INTER_LINE_SPACE_FIX:
-                    SetMetricValue( aLineDistAtMetricBox,
-                                    rAttr.GetInterLineSpace(), eUnit );
-                    aLineDist.SelectEntryPos( LLINESPACE_DURCH );
+                    SetMetricValue( *m_pLineDistAtMetricBox, rAttr.GetInterLineSpace(), eUnit );
+                    m_pLineDist->SelectEntryPos( LLINESPACE_DURCH );
                     break;
                 default: ;//prevent warning
             }
         }
         break;
         case SVX_LINE_SPACE_FIX:
-            SetMetricValue(aLineDistAtMetricBox, rAttr.GetLineHeight(), eUnit);
-            aLineDist.SelectEntryPos( LLINESPACE_FIX );
+            SetMetricValue(*m_pLineDistAtMetricBox, rAttr.GetLineHeight(), eUnit);
+            m_pLineDist->SelectEntryPos( LLINESPACE_FIX );
         break;
 
         case SVX_LINE_SPACE_MIN:
-            SetMetricValue(aLineDistAtMetricBox, rAttr.GetLineHeight(), eUnit);
-            aLineDist.SelectEntryPos( LLINESPACE_MIN );
+            SetMetricValue(*m_pLineDistAtMetricBox, rAttr.GetLineHeight(), eUnit);
+            m_pLineDist->SelectEntryPos( LLINESPACE_MIN );
             break;
         default: ;//prevent warning
     }
-    LineDistHdl_Impl( &aLineDist );
+    LineDistHdl_Impl( m_pLineDist );
 }
 
 // -----------------------------------------------------------------------
@@ -786,70 +781,59 @@ IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox *, pBox )
         case LLINESPACE_1:
         case LLINESPACE_15:
         case LLINESPACE_2:
-            aLineDistAtLabel.Enable(sal_False);
-            pActLineDistFld->Enable(sal_False);
-            pActLineDistFld->SetText( String() );
+            m_pLineDistAtLabel->Enable(sal_False);
+            m_pLineDistAtPercentBox->Enable(sal_False);
+            m_pLineDistAtPercentBox->SetText( OUString() );
+            m_pLineDistAtMetricBox->Enable(sal_False);
+            m_pLineDistAtMetricBox->SetText( OUString() );
             break;
 
         case LLINESPACE_DURCH:
             // setting a sensible default?
             // limit MS min(10, aPageSize)
-            aLineDistAtPercentBox.Hide();
-            pActLineDistFld = &aLineDistAtMetricBox;
-            aLineDistAtMetricBox.SetMin(0);
+            m_pLineDistAtMetricBox->SetMin(0);
 
-
-            if ( aLineDistAtMetricBox.GetText().isEmpty() )
-                aLineDistAtMetricBox.SetValue(
-                    aLineDistAtMetricBox.Normalize( 1 ) );
-            aLineDistAtPercentBox.Hide();
-            pActLineDistFld->Show();
-            pActLineDistFld->Enable();
-            aLineDistAtLabel.Enable();
+            if ( m_pLineDistAtMetricBox->GetText().isEmpty() )
+                m_pLineDistAtMetricBox->SetValue( m_pLineDistAtMetricBox->Normalize( 1 ) );
+            m_pLineDistAtPercentBox->Hide();
+            m_pLineDistAtMetricBox->Show();
+            m_pLineDistAtMetricBox->Enable();
+            m_pLineDistAtLabel->Enable();
             break;
 
         case LLINESPACE_MIN:
-            aLineDistAtPercentBox.Hide();
-            pActLineDistFld = &aLineDistAtMetricBox;
-            aLineDistAtMetricBox.SetMin(0);
+            m_pLineDistAtMetricBox->SetMin(0);
 
-            if ( aLineDistAtMetricBox.GetText().isEmpty() )
-                aLineDistAtMetricBox.SetValue(
-                    aLineDistAtMetricBox.Normalize( 10 ), FUNIT_TWIP );
-            aLineDistAtPercentBox.Hide();
-            pActLineDistFld->Show();
-            pActLineDistFld->Enable();
-            aLineDistAtLabel.Enable();
+            if ( m_pLineDistAtMetricBox->GetText().isEmpty() )
+                m_pLineDistAtMetricBox->SetValue( m_pLineDistAtMetricBox->Normalize( 10 ), FUNIT_TWIP );
+            m_pLineDistAtPercentBox->Hide();
+            m_pLineDistAtMetricBox->Show();
+            m_pLineDistAtMetricBox->Enable();
+            m_pLineDistAtLabel->Enable();
             break;
 
         case LLINESPACE_PROP:
-            aLineDistAtMetricBox.Hide();
-            pActLineDistFld = &aLineDistAtPercentBox;
 
-            if ( aLineDistAtPercentBox.GetText().isEmpty() )
-                aLineDistAtPercentBox.SetValue(
-                    aLineDistAtPercentBox.Normalize( 100 ), FUNIT_TWIP );
-            aLineDistAtMetricBox.Hide();
-            pActLineDistFld->Show();
-            pActLineDistFld->Enable();
-            aLineDistAtLabel.Enable();
+            if ( m_pLineDistAtPercentBox->GetText().isEmpty() )
+                m_pLineDistAtPercentBox->SetValue( m_pLineDistAtPercentBox->Normalize( 100 ), FUNIT_TWIP );
+            m_pLineDistAtMetricBox->Hide();
+            m_pLineDistAtPercentBox->Show();
+            m_pLineDistAtPercentBox->Enable();
+            m_pLineDistAtLabel->Enable();
             break;
         case LLINESPACE_FIX:
         {
-            aLineDistAtPercentBox.Hide();
-            pActLineDistFld = &aLineDistAtMetricBox;
-            sal_Int64 nTemp = aLineDistAtMetricBox.GetValue();
-            aLineDistAtMetricBox.SetMin(aLineDistAtMetricBox.Normalize(nMinFixDist), FUNIT_TWIP);
+            sal_Int64 nTemp = m_pLineDistAtMetricBox->GetValue();
+            m_pLineDistAtMetricBox->SetMin(m_pLineDistAtMetricBox->Normalize(nMinFixDist), FUNIT_TWIP);
 
             // if the value has been changed at SetMin,
             // it is time for the default
-            if ( aLineDistAtMetricBox.GetValue() != nTemp )
-                SetMetricValue( aLineDistAtMetricBox,
-                                    FIX_DIST_DEF, SFX_MAPUNIT_TWIP ); // fix is only in Writer
-            aLineDistAtPercentBox.Hide();
-            pActLineDistFld->Show();
-            pActLineDistFld->Enable();
-            aLineDistAtLabel.Enable();
+            if ( m_pLineDistAtMetricBox->GetValue() != nTemp )
+                SetMetricValue( *m_pLineDistAtMetricBox, FIX_DIST_DEF, SFX_MAPUNIT_TWIP ); // fix is only in Writer
+            m_pLineDistAtPercentBox->Hide();
+            m_pLineDistAtMetricBox->Show();
+            m_pLineDistAtMetricBox->Enable();
+            m_pLineDistAtLabel->Enable();
         }
         break;
     }
@@ -870,94 +854,84 @@ IMPL_LINK_NOARG_INLINE_END(SvxStdParagraphTabPage, ModifyHdl_Impl)
 
 void SvxStdParagraphTabPage::Init_Impl()
 {
-    aLineDist.SetSelectHdl(
+    m_pLineDist->SetSelectHdl(
         LINK( this, SvxStdParagraphTabPage, LineDistHdl_Impl ) );
 
     Link aLink = LINK( this, SvxStdParagraphTabPage, ELRLoseFocusHdl );
-    aFLineIndent.SetLoseFocusHdl( aLink );
-    aLeftIndent.SetLoseFocusHdl( aLink );
-    aRightIndent.SetLoseFocusHdl( aLink );
+    m_pFLineIndent->SetLoseFocusHdl( aLink );
+    m_pLeftIndent->SetLoseFocusHdl( aLink );
+    m_pRightIndent->SetLoseFocusHdl( aLink );
 
     aLink = LINK( this, SvxStdParagraphTabPage, ModifyHdl_Impl );
-    aFLineIndent.SetModifyHdl( aLink );
-    aLeftIndent.SetModifyHdl( aLink );
-    aRightIndent.SetModifyHdl( aLink );
-    aTopDist.SetModifyHdl( aLink );
-    aBottomDist.SetModifyHdl( aLink );
+    m_pFLineIndent->SetModifyHdl( aLink );
+    m_pLeftIndent->SetModifyHdl( aLink );
+    m_pRightIndent->SetModifyHdl( aLink );
+    m_pTopDist->SetModifyHdl( aLink );
+    m_pBottomDist->SetModifyHdl( aLink );
 
-    aAutoCB.SetClickHdl( LINK( this, SvxStdParagraphTabPage, AutoHdl_Impl ));
+    m_pAutoCB->SetClickHdl( LINK( this, SvxStdParagraphTabPage, AutoHdl_Impl ));
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
-    FieldUnit eUnit =
-        MapToFieldUnit( pPool->GetMetric( GetWhich( SID_ATTR_LRSPACE ) ) );
+    FieldUnit eUnit = MapToFieldUnit( pPool->GetMetric( GetWhich( SID_ATTR_LRSPACE ) ) );
 
-    aTopDist.SetMax( aTopDist.Normalize( nAbst ), eUnit );
-    aBottomDist.SetMax( aBottomDist.Normalize( nAbst ), eUnit );
-    aLineDistAtMetricBox.SetMax(
-        aLineDistAtMetricBox.Normalize( nAbst ), eUnit );
+    m_pTopDist->SetMax( m_pTopDist->Normalize( nAbst ), eUnit );
+    m_pBottomDist->SetMax( m_pBottomDist->Normalize( nAbst ), eUnit );
+    m_pLineDistAtMetricBox->SetMax( m_pLineDistAtMetricBox->Normalize( nAbst ), eUnit );
 }
 
 // -----------------------------------------------------------------------
 
 void SvxStdParagraphTabPage::UpdateExample_Impl( sal_Bool bAll )
 {
-    aExampleWin.SetFirstLineOfst(
-        (short)aFLineIndent.Denormalize( aFLineIndent.GetValue( FUNIT_TWIP ) ) );
-    aExampleWin.SetLeftMargin(
-        static_cast<long>(aLeftIndent.Denormalize( aLeftIndent.GetValue( FUNIT_TWIP ) ) ) );
-    aExampleWin.SetRightMargin(
-        static_cast<long>(aRightIndent.Denormalize( aRightIndent.GetValue( FUNIT_TWIP ) ) ) );
-    aExampleWin.SetUpper(
-        (sal_uInt16)aTopDist.Denormalize( aTopDist.GetValue( FUNIT_TWIP ) ) );
-    aExampleWin.SetLower(
-        (sal_uInt16)aBottomDist.Denormalize( aBottomDist.GetValue( FUNIT_TWIP ) ) );
+    m_pExampleWin->SetFirstLineOfst( (short)m_pFLineIndent->Denormalize( m_pFLineIndent->GetValue( FUNIT_TWIP ) ) );
+    m_pExampleWin->SetLeftMargin( static_cast<long>(m_pLeftIndent->Denormalize( m_pLeftIndent->GetValue( FUNIT_TWIP ) ) ) );
+    m_pExampleWin->SetRightMargin( static_cast<long>(m_pRightIndent->Denormalize( m_pRightIndent->GetValue( FUNIT_TWIP ) ) ) );
+    m_pExampleWin->SetUpper( (sal_uInt16)m_pTopDist->Denormalize( m_pTopDist->GetValue( FUNIT_TWIP ) ) );
+    m_pExampleWin->SetLower( (sal_uInt16)m_pBottomDist->Denormalize( m_pBottomDist->GetValue( FUNIT_TWIP ) ) );
 
-
-
-    sal_uInt16 nPos = aLineDist.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLineDist->GetSelectEntryPos();
 
     switch ( nPos )
     {
         case LLINESPACE_1:
         case LLINESPACE_15:
         case LLINESPACE_2:
-            aExampleWin.SetLineSpace( (SvxPrevLineSpace)nPos );
+            m_pExampleWin->SetLineSpace( (SvxPrevLineSpace)nPos );
             break;
 
         case LLINESPACE_PROP:
-            aExampleWin.SetLineSpace( (SvxPrevLineSpace)nPos,
-                (sal_uInt16)aLineDistAtPercentBox.Denormalize(
-                aLineDistAtPercentBox.GetValue() ) );
+            m_pExampleWin->SetLineSpace( (SvxPrevLineSpace)nPos,
+                (sal_uInt16)m_pLineDistAtPercentBox->Denormalize( m_pLineDistAtPercentBox->GetValue() ) );
             break;
 
         case LLINESPACE_MIN:
         case LLINESPACE_DURCH:
         case LLINESPACE_FIX:
-            aExampleWin.SetLineSpace( (SvxPrevLineSpace)nPos,
-                (sal_uInt16)GetCoreValue( aLineDistAtMetricBox, SFX_MAPUNIT_TWIP ) );
+            m_pExampleWin->SetLineSpace( (SvxPrevLineSpace)nPos,
+                (sal_uInt16)GetCoreValue( *m_pLineDistAtMetricBox, SFX_MAPUNIT_TWIP ) );
             break;
     }
-    aExampleWin.Draw( bAll );
+    m_pExampleWin->Draw( bAll );
 }
 
 // -----------------------------------------------------------------------
 
 void SvxStdParagraphTabPage::EnableRegisterMode()
 {
-    aRegisterCB.Show();
-    aRegisterFL.Show();
+    m_pRegisterCB->Show();
+    m_pRegisterFL->Show();
 }
 
 void SvxStdParagraphTabPage::EnableContextualMode()
 {
-    aContextualCB.Show();
+    m_pContextualCB->Show();
 }
 
 IMPL_LINK( SvxStdParagraphTabPage, AutoHdl_Impl, CheckBox*, pBox )
 {
     sal_Bool bEnable = !pBox->IsChecked();
-    aFLineLabel .Enable(bEnable);
-    aFLineIndent.Enable(bEnable);
+    m_pFLineLabel->Enable(bEnable);
+    m_pFLineIndent->Enable(bEnable);
     return 0;
 }
 
@@ -969,13 +943,13 @@ void SvxStdParagraphTabPage::SetPageWidth( sal_uInt16 nPageWidth )
 
 void SvxStdParagraphTabPage::EnableAutoFirstLine()
 {
-    aAutoCB.Show();
+    m_pAutoCB->Show();
 }
 
 
 void    SvxStdParagraphTabPage::EnableAbsLineDist(long nMinTwip)
 {
-    aLineDist.InsertEntry(sAbsDist);
+    m_pLineDist->InsertEntry(sAbsDist);
     nMinFixDist = nMinTwip;
 }
 
@@ -1031,74 +1005,72 @@ void    SvxStdParagraphTabPage::PageCreated(SfxAllItemSet aSet)
 // class SvxParaAlignTabPage ------------------------------------------------
 
 SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSet )
-    : SfxTabPage(pParent, CUI_RES( RID_SVXPAGE_ALIGN_PARAGRAPH ),rSet),
-    aAlignFrm           ( this, CUI_RES( FL_ALIGN ) ),
-    aLeft               ( this, CUI_RES( BTN_LEFTALIGN ) ),
-    aRight              ( this, CUI_RES( BTN_RIGHTALIGN ) ),
-    aCenter             ( this, CUI_RES( BTN_CENTERALIGN ) ),
-    aJustify            ( this, CUI_RES( BTN_JUSTIFYALIGN ) ),
-    aLastLineFT         ( this, CUI_RES( FT_LASTLINE ) ),
-    aLastLineLB         ( this, CUI_RES( LB_LASTLINE ) ),
-    aExpandCB           ( this, CUI_RES( CB_EXPAND ) ),
-    aSnapToGridCB       ( this, CUI_RES( CB_SNAP ) ),
-    aExampleWin         ( this, CUI_RES( WN_EXAMPLE ) ),
 
-    aVertAlignFL        ( this, CUI_RES( FL_VERTALIGN ) ),
-    aVertAlignFT        ( this, CUI_RES( FT_VERTALIGN ) ),
-    aVertAlignLB        ( this, CUI_RES( LB_VERTALIGN ) ),
-
-    aPropertiesFL       ( this, CUI_RES( FL_PROPERTIES    )),
-    aTextDirectionFT    ( this, CUI_RES( FT_TEXTDIRECTION )),
-    aTextDirectionLB    ( this, CUI_RES( LB_TEXTDIRECTION ))
+    : SfxTabPage(pParent, "ParaAlignPage", "cui/ui/paragalignpage.ui",rSet)
 {
+    get(m_pLeft,"radioBTN_LEFTALIGN");
+    get(m_pRight,"radioBTN_RIGHTALIGN");
+    get(m_pCenter,"radioBTN_CENTERALIGN");
+    get(m_pJustify,"radioBTN_JUSTIFYALIGN");
+    get(m_pLeftBottom,"labelST_LEFTALIGN_ASIAN");
+    get(m_pRightTop,"labelST_RIGHTALIGN_ASIAN");
+
+    get(m_pLastLineFT,"labelLB_LASTLINE");
+    get(m_pLastLineLB,"comboLB_LASTLINE");
+    get(m_pExpandCB,"checkCB_EXPAND");
+    get(m_pSnapToGridCB,"checkCB_SNAP");
+    get(m_pExampleWin,"drawingareaWN_EXAMPLE");
+
+    get(m_pVertAlignLB,"comboLB_VERTALIGN");
+    get(m_pVertAlignFL,"frameFL_VERTALIGN");
+
+    get(m_pPropertiesFL,"framePROPERTIES");
+    get(m_pTextDirectionLB,"comboLB_TEXTDIRECTION");
+
     SvtLanguageOptions aLangOptions;
     sal_uInt16 nLastLinePos = LASTLINEPOS_DEFAULT;
 
     if ( aLangOptions.IsAsianTypographyEnabled() )
     {
-        String sLeft(CUI_RES(ST_LEFTALIGN_ASIAN));
-        aLeft.SetText(sLeft);
-        aRight.SetText(String(CUI_RES(ST_RIGHTALIGN_ASIAN)));
+        m_pLeft->SetText(m_pLeftBottom->GetText());
+        m_pRight->SetText(m_pRightTop->GetText());
+
+        OUString sLeft(m_pLeft->GetText());
         sLeft = MnemonicGenerator::EraseAllMnemonicChars( sLeft );
 
-        if ( aLastLineLB.GetEntryCount() == LASTLINECOUNT_OLD )
+        if ( m_pLastLineLB->GetEntryCount() == LASTLINECOUNT_OLD )
         {
-            aLastLineLB.RemoveEntry( 0 );
-            aLastLineLB.InsertEntry( sLeft, 0 );
+            m_pLastLineLB->RemoveEntry( 0 );
+            m_pLastLineLB->InsertEntry( sLeft, 0 );
         }
         else
             nLastLinePos = LASTLINEPOS_LEFT;
     }
-    // remove "Default" or "Left" entry, depends on CJKOptions
-    if ( aLastLineLB.GetEntryCount() == LASTLINECOUNT_NEW )
-        aLastLineLB.RemoveEntry( nLastLinePos );
 
-    FreeResource();
+    // remove "Default" or "Left" entry, depends on CJKOptions
+    if ( m_pLastLineLB->GetEntryCount() == LASTLINECOUNT_NEW )
+        m_pLastLineLB->RemoveEntry( nLastLinePos );
+
     Link aLink = LINK( this, SvxParaAlignTabPage, AlignHdl_Impl );
-    aLeft.SetClickHdl( aLink );
-    aRight.SetClickHdl( aLink );
-    aCenter.SetClickHdl( aLink );
-    aJustify.SetClickHdl( aLink );
-    aLastLineLB.SetSelectHdl( LINK( this, SvxParaAlignTabPage, LastLineHdl_Impl ) );
-    aTextDirectionLB.SetSelectHdl( LINK( this, SvxParaAlignTabPage, TextDirectionHdl_Impl ) );
+    m_pLeft->SetClickHdl( aLink );
+    m_pRight->SetClickHdl( aLink );
+    m_pCenter->SetClickHdl( aLink );
+    m_pJustify->SetClickHdl( aLink );
+    m_pLastLineLB->SetSelectHdl( LINK( this, SvxParaAlignTabPage, LastLineHdl_Impl ) );
+    m_pTextDirectionLB->SetSelectHdl( LINK( this, SvxParaAlignTabPage, TextDirectionHdl_Impl ) );
 
     sal_uInt16 nHtmlMode = GetHtmlMode_Impl(rSet);
     if(!(nHtmlMode & HTMLMODE_ON) || (0 != (nHtmlMode & HTMLMODE_SOME_STYLES)) )
     {
         if( aLangOptions.IsCTLFontEnabled() )
         {
-            aTextDirectionLB.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
-            aTextDirectionLB.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
-            aTextDirectionLB.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
+            m_pTextDirectionLB->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
+            m_pTextDirectionLB->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
+            m_pTextDirectionLB->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
 
-            aPropertiesFL.Show();
-            aTextDirectionFT.Show();
-            aTextDirectionLB.Show();
+            m_pPropertiesFL->Show();
         }
     }
-
-    aExampleWin.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
-
 }
 
 SvxParaAlignTabPage::~SvxParaAlignTabPage()
@@ -1130,41 +1102,41 @@ sal_Bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
     bool bAdj = false, bChecked = false;
     SvxAdjust eAdjust = SVX_ADJUST_LEFT;
 
-    if ( aLeft.IsChecked() )
+    if ( m_pLeft->IsChecked() )
     {
         eAdjust = SVX_ADJUST_LEFT;
-        bAdj = !aLeft.GetSavedValue();
+        bAdj = !m_pLeft->GetSavedValue();
         bChecked = true;
     }
-    else if ( aRight.IsChecked() )
+    else if ( m_pRight->IsChecked() )
     {
         eAdjust = SVX_ADJUST_RIGHT;
-        bAdj = !aRight.GetSavedValue();
+        bAdj = !m_pRight->GetSavedValue();
         bChecked = true;
     }
-    else if ( aCenter.IsChecked() )
+    else if ( m_pCenter->IsChecked() )
     {
         eAdjust = SVX_ADJUST_CENTER;
-        bAdj = !aCenter.GetSavedValue();
+        bAdj = !m_pCenter->GetSavedValue();
         bChecked = true;
     }
-    else if ( aJustify.IsChecked() )
+    else if ( m_pJustify->IsChecked() )
     {
         eAdjust = SVX_ADJUST_BLOCK;
-        bAdj = !aJustify.GetSavedValue() ||
-            aExpandCB.IsChecked() != aExpandCB.GetSavedValue() ||
-            aLastLineLB.GetSelectEntryPos() != aLastLineLB.GetSavedValue();
+        bAdj = !m_pJustify->GetSavedValue() ||
+            m_pExpandCB->IsChecked() != m_pExpandCB->GetSavedValue() ||
+            m_pLastLineLB->GetSelectEntryPos() != m_pLastLineLB->GetSavedValue();
         bChecked = true;
     }
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_ADJUST );
 
     if ( bAdj )
     {
-        const SvxAdjustItem* pOld =
-            (const SvxAdjustItem*)GetOldItem( rOutSet, SID_ATTR_PARA_ADJUST );
-        SvxAdjust eOneWord = aExpandCB.IsChecked() ? SVX_ADJUST_BLOCK
-                                                   : SVX_ADJUST_LEFT;
-        sal_uInt16 nLBPos = aLastLineLB.GetSelectEntryPos();
+        const SvxAdjustItem* pOld = (const SvxAdjustItem*)GetOldItem( rOutSet, SID_ATTR_PARA_ADJUST );
+
+        SvxAdjust eOneWord = m_pExpandCB->IsChecked() ? SVX_ADJUST_BLOCK : SVX_ADJUST_LEFT;
+
+        sal_uInt16 nLBPos = m_pLastLineLB->GetSelectEntryPos();
         SvxAdjust eLastBlock = SVX_ADJUST_LEFT;
 
         if ( 1 == nLBPos )
@@ -1173,8 +1145,8 @@ sal_Bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
             eLastBlock = SVX_ADJUST_BLOCK;
 
         bool bNothingWasChecked =
-            !aLeft.GetSavedValue() && !aRight.GetSavedValue() &&
-            !aCenter.GetSavedValue() && !aJustify.GetSavedValue();
+            !m_pLeft->GetSavedValue() && !m_pRight->GetSavedValue() &&
+            !m_pCenter->GetSavedValue() && !m_pJustify->GetSavedValue();
 
         if ( !pOld || pOld->GetAdjust() != eAdjust ||
              pOld->GetOneWord() != eOneWord ||
@@ -1190,21 +1162,21 @@ sal_Bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
             rOutSet.Put( aAdj );
         }
     }
-    if(aSnapToGridCB.IsChecked() != aSnapToGridCB.GetSavedValue())
+    if(m_pSnapToGridCB->IsChecked() != m_pSnapToGridCB->GetSavedValue())
     {
-        rOutSet.Put(SvxParaGridItem(aSnapToGridCB.IsChecked(), GetWhich( SID_ATTR_PARA_SNAPTOGRID )));
+        rOutSet.Put(SvxParaGridItem(m_pSnapToGridCB->IsChecked(), GetWhich( SID_ATTR_PARA_SNAPTOGRID )));
         bModified = sal_True;
     }
-    if(aVertAlignLB.GetSavedValue() != aVertAlignLB.GetSelectEntryPos())
+    if(m_pVertAlignLB->GetSavedValue() != m_pVertAlignLB->GetSelectEntryPos())
     {
-        rOutSet.Put(SvxParaVertAlignItem(aVertAlignLB.GetSelectEntryPos(), GetWhich( SID_PARA_VERTALIGN )));
+        rOutSet.Put(SvxParaVertAlignItem(m_pVertAlignLB->GetSelectEntryPos(), GetWhich( SID_PARA_VERTALIGN )));
         bModified = sal_True;
     }
 
-    if( aTextDirectionLB.IsVisible() )
+    if( m_pTextDirectionLB->IsVisible() )
     {
-        SvxFrameDirection eDir = aTextDirectionLB.GetSelectEntryValue();
-        if( eDir != aTextDirectionLB.GetSavedValue() )
+        SvxFrameDirection eDir = m_pTextDirectionLB->GetSelectEntryValue();
+        if( eDir != m_pTextDirectionLB->GetSavedValue() )
         {
             rOutSet.Put( SvxFrameDirectionItem( eDir, GetWhich( SID_ATTR_FRAMEDIRECTION ) ) );
             bModified = sal_True;
@@ -1226,21 +1198,21 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
 
         switch ( rAdj.GetAdjust() /*!!! ask VB rAdj.GetLastBlock()*/ )
         {
-            case SVX_ADJUST_LEFT: aLeft.Check(); break;
+            case SVX_ADJUST_LEFT: m_pLeft->Check(); break;
 
-            case SVX_ADJUST_RIGHT: aRight.Check(); break;
+            case SVX_ADJUST_RIGHT: m_pRight->Check(); break;
 
-            case SVX_ADJUST_CENTER: aCenter.Check(); break;
+            case SVX_ADJUST_CENTER: m_pCenter->Check(); break;
 
-            case SVX_ADJUST_BLOCK: aJustify.Check(); break;
+            case SVX_ADJUST_BLOCK: m_pJustify->Check(); break;
             default: ; //prevent warning
         }
-        sal_Bool bEnable = aJustify.IsChecked();
-        aLastLineFT.Enable(bEnable);
-        aLastLineLB.Enable(bEnable);
-        aExpandCB  .Enable(bEnable);
+        sal_Bool bEnable = m_pJustify->IsChecked();
+        m_pLastLineFT->Enable(bEnable);
+        m_pLastLineLB->Enable(bEnable);
+        m_pExpandCB->Enable(bEnable);
 
-        aExpandCB.Check(SVX_ADJUST_BLOCK == rAdj.GetOneWord());
+        m_pExpandCB->Check(SVX_ADJUST_BLOCK == rAdj.GetOneWord());
         switch(rAdj.GetLastBlock())
         {
             case SVX_ADJUST_LEFT:  nLBSelect = 0; break;
@@ -1253,29 +1225,29 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
     }
     else
     {
-        aLeft.Check( sal_False );
-        aRight.Check( sal_False );
-        aCenter.Check( sal_False );
-        aJustify.Check( sal_False );
+        m_pLeft->Check( sal_False );
+        m_pRight->Check( sal_False );
+        m_pCenter->Check( sal_False );
+        m_pJustify->Check( sal_False );
     }
-    aLastLineLB.SelectEntryPos(nLBSelect);
+    m_pLastLineLB->SelectEntryPos(nLBSelect);
 
     sal_uInt16 nHtmlMode = GetHtmlMode_Impl(rSet);
     if(nHtmlMode & HTMLMODE_ON)
     {
-        aLastLineLB.Hide();
-        aLastLineFT.Hide();
-        aExpandCB.Hide();
+        m_pLastLineLB->Hide();
+        m_pLastLineFT->Hide();
+        m_pExpandCB->Hide();
         if(!(nHtmlMode & HTMLMODE_FULL_STYLES) )
-            aJustify.Disable();
-        aSnapToGridCB.Show(sal_False);
+            m_pJustify->Disable();
+        m_pSnapToGridCB->Show(sal_False);
     }
     _nWhich = GetWhich(SID_ATTR_PARA_SNAPTOGRID);
     eItemState = rSet.GetItemState( _nWhich );
     if ( eItemState >= SFX_ITEM_AVAILABLE )
     {
         const SvxParaGridItem& rSnap = (const SvxParaGridItem&)rSet.Get( _nWhich );
-        aSnapToGridCB.Check(rSnap.GetValue());
+        m_pSnapToGridCB->Check(rSnap.GetValue());
     }
 
     _nWhich = GetWhich( SID_PARA_VERTALIGN );
@@ -1283,12 +1255,11 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
 
     if ( eItemState >= SFX_ITEM_AVAILABLE )
     {
-        aVertAlignLB.Show();
-        aVertAlignFL.Show();
-        aVertAlignFT.Show();
+        m_pVertAlignFL->Show();
 
         const SvxParaVertAlignItem& rAlign = (const SvxParaVertAlignItem&)rSet.Get( _nWhich );
-        aVertAlignLB.SelectEntryPos(rAlign.GetValue());
+
+        m_pVertAlignLB->SelectEntryPos(rAlign.GetValue());
     }
 
     _nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
@@ -1296,28 +1267,28 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
     if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( _nWhich ) )
     {
         const SvxFrameDirectionItem& rFrameDirItem = ( const SvxFrameDirectionItem& ) rSet.Get( _nWhich );
-        aTextDirectionLB.SelectEntryValue( (SvxFrameDirection)rFrameDirItem.GetValue() );
-        aTextDirectionLB.SaveValue();
+        m_pTextDirectionLB->SelectEntryValue( (SvxFrameDirection)rFrameDirItem.GetValue() );
+        m_pTextDirectionLB->SaveValue();
     }
 
-    aSnapToGridCB.SaveValue();
-    aVertAlignLB.SaveValue();
-    aLeft.SaveValue();
-    aRight.SaveValue();
-    aCenter.SaveValue();
-    aJustify.SaveValue();
-    aLastLineLB.SaveValue();
-    aExpandCB.SaveValue();
+    m_pSnapToGridCB->SaveValue();
+    m_pVertAlignLB->SaveValue();
+    m_pLeft->SaveValue();
+    m_pRight->SaveValue();
+    m_pCenter->SaveValue();
+    m_pJustify->SaveValue();
+    m_pLastLineLB->SaveValue();
+    m_pExpandCB->SaveValue();
 
     UpdateExample_Impl(sal_True);
 }
 
 IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl)
 {
-    sal_Bool bJustify = aJustify.IsChecked();
-    aLastLineFT.Enable(bJustify);
-    aLastLineLB.Enable(bJustify);
-    aExpandCB.Enable(bJustify);
+    sal_Bool bJustify = m_pJustify->IsChecked();
+    m_pLastLineFT->Enable(bJustify);
+    m_pLastLineLB->Enable(bJustify);
+    m_pExpandCB->Enable(bJustify);
     UpdateExample_Impl(sal_False);
     return 0;
 }
@@ -1330,12 +1301,12 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl)
 
 IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl)
 {
-    SvxFrameDirection eDir = aTextDirectionLB.GetSelectEntryValue();
+    SvxFrameDirection eDir = m_pTextDirectionLB->GetSelectEntryValue();
     switch ( eDir )
     {
         // check the default alignment for this text direction
-        case FRMDIR_HORI_LEFT_TOP :     aLeft.Check( sal_True ); break;
-        case FRMDIR_HORI_RIGHT_TOP :    aRight.Check( sal_True ); break;
+        case FRMDIR_HORI_LEFT_TOP :     m_pLeft->Check( sal_True ); break;
+        case FRMDIR_HORI_RIGHT_TOP :    m_pRight->Check( sal_True ); break;
         case FRMDIR_ENVIRONMENT :       /* do nothing */ break;
         default:
         {
@@ -1348,35 +1319,35 @@ IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl)
 
 void    SvxParaAlignTabPage::UpdateExample_Impl( sal_Bool bAll )
 {
-    if ( aLeft.IsChecked() )
-        aExampleWin.SetAdjust( SVX_ADJUST_LEFT );
-    else if ( aRight.IsChecked() )
-        aExampleWin.SetAdjust( SVX_ADJUST_RIGHT );
-    else if ( aCenter.IsChecked() )
-        aExampleWin.SetAdjust( SVX_ADJUST_CENTER );
-    else if ( aJustify.IsChecked() )
+    if ( m_pLeft->IsChecked() )
+        m_pExampleWin->SetAdjust( SVX_ADJUST_LEFT );
+    else if ( m_pRight->IsChecked() )
+        m_pExampleWin->SetAdjust( SVX_ADJUST_RIGHT );
+    else if ( m_pCenter->IsChecked() )
+        m_pExampleWin->SetAdjust( SVX_ADJUST_CENTER );
+    else if ( m_pJustify->IsChecked() )
     {
-        aExampleWin.SetAdjust( SVX_ADJUST_BLOCK );
+        m_pExampleWin->SetAdjust( SVX_ADJUST_BLOCK );
         SvxAdjust eLastBlock = SVX_ADJUST_LEFT;
-        sal_uInt16 nLBPos = aLastLineLB.GetSelectEntryPos();
+        sal_uInt16 nLBPos = m_pLastLineLB->GetSelectEntryPos();
         if(nLBPos == 1)
             eLastBlock = SVX_ADJUST_CENTER;
         else if(nLBPos == 2)
             eLastBlock = SVX_ADJUST_BLOCK;
-        aExampleWin.SetLastLine( eLastBlock );
+        m_pExampleWin->SetLastLine( eLastBlock );
     }
 
-    aExampleWin.Draw( bAll );
+    m_pExampleWin->Draw( bAll );
 }
 
 void SvxParaAlignTabPage::EnableJustifyExt()
 {
-    aLastLineFT.Show();
-    aLastLineLB.Show();
-    aExpandCB  .Show();
+    m_pLastLineFT->Show();
+    m_pLastLineLB->Show();
+    m_pExpandCB->Show();
     SvtLanguageOptions aCJKOptions;
     if(aCJKOptions.IsAsianTypographyEnabled())
-        aSnapToGridCB.Show();
+        m_pSnapToGridCB->Show();
 
 }
 
