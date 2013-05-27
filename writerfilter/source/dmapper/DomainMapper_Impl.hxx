@@ -661,6 +661,9 @@ public:
     bool IsNewDoc();
 
     SdtHelper* m_pSdtHelper;
+
+    /// Document background color, applied to every page style.
+    boost::optional<sal_Int32> m_oBackgroundColor;
 };
 } //namespace dmapper
 } //namespace writerfilter
