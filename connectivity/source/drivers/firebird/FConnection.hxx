@@ -50,6 +50,8 @@
 
 #include <map>
 
+#include <ibase.h>
+
 namespace connectivity
 {
     namespace firebird
@@ -63,6 +65,7 @@ namespace connectivity
         class OStatement_Base;
         class FirebirdDriver;
         class ODatabaseMetaData;
+
 
         typedef OMetaConnection_BASE                OConnection_BASE; // implements basics and text encoding
         typedef ::std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
@@ -99,7 +102,7 @@ namespace connectivity
             sal_Bool                                m_bClosed;
             sal_Bool                                m_bUseCatalog;  // should we use the catalog on filebased databases
             sal_Bool                                m_bUseOldDateFormat;
-
+            isc_db_handle                           m_DBHandler;
 
             void                    buildTypeInfo() throw( ::com::sun::star::sdbc::SQLException);
 
@@ -147,6 +150,7 @@ namespace connectivity
             // should we use the catalog on filebased databases
             inline sal_Bool         isCatalogUsed()     const { return m_bUseCatalog; }
             inline ::rtl::OUString  getUserName()       const { return m_sUser; }
+            inline isc_db_handle    getDBHandler()      const { return m_DBHandler; }
             inline FirebirdDriver*  getDriver()         const { return m_pDriver;}
             inline rtl_TextEncoding getTextEncoding()   const { return m_nTextEncoding; }
         };
