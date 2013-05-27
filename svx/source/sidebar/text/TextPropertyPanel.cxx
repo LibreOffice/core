@@ -147,9 +147,12 @@ TextPropertyPanel::TextPropertyPanel (
         mpToolBoxFontColorBackground(ControlFactory::CreateToolBoxBackground(this)),
         mpToolBoxFontColor(ControlFactory::CreateToolBox(
                 mpToolBoxFontColorBackground.get(),
-                rContext.GetApplication_DI() == sfx2::sidebar::EnumContext::Application_WriterVariants
-                    ? SVX_RES(TB_FONTCOLOR_SW)
-                    : SVX_RES(TB_FONTCOLOR),
+                SVX_RES(TB_FONTCOLOR),
+                rxFrame)),
+        mpToolBoxFontColorBackgroundSW(ControlFactory::CreateToolBoxBackground(this)),
+        mpToolBoxFontColorSW(ControlFactory::CreateToolBox(
+                mpToolBoxFontColorBackgroundSW.get(),
+                SVX_RES(TB_FONTCOLOR_SW),
                 rxFrame)),
         mpToolBoxHighlightBackground(ControlFactory::CreateToolBoxBackground(this)),
         mpToolBoxHighlight(ControlFactory::CreateToolBox(
@@ -186,6 +189,8 @@ TextPropertyPanel::TextPropertyPanel (
     Initialize();
 
     FreeResource();
+
+    UpdateFontColorToolbox(rContext);
 }
 
 
@@ -200,6 +205,7 @@ TextPropertyPanel::~TextPropertyPanel (void)
     mpToolBoxIncDec.reset();
     mpToolBoxFont.reset();
     mpToolBoxFontColor.reset();
+    mpToolBoxFontColorSW.reset();
     mpToolBoxScript.reset();
     mpToolBoxScriptSw.reset();
     mpToolBoxSpacing.reset();
@@ -209,6 +215,7 @@ TextPropertyPanel::~TextPropertyPanel (void)
     mpToolBoxIncDecBackground.reset();
     mpToolBoxFontBackground.reset();
     mpToolBoxFontColorBackground.reset();
+    mpToolBoxFontColorBackgroundSW.reset();
     mpToolBoxScriptBackground.reset();
     mpToolBoxScriptSwBackground.reset();
     mpToolBoxSpacingBackground.reset();
@@ -283,6 +290,30 @@ void TextPropertyPanel::HandleContextChange (
 
         default:
             break;
+    }
+
+    UpdateFontColorToolbox(aContext);
+}
+
+
+
+
+void TextPropertyPanel::UpdateFontColorToolbox (
+    const ::sfx2::sidebar::EnumContext /* aContext */)
+{
+    bool bIsWriterFontColor (false);
+    if (maContext.GetApplication_DI() == sfx2::sidebar::EnumContext::Application_WriterVariants)
+        if (maContext.GetContext() != sfx2::sidebar::EnumContext::Context_DrawText)
+            bIsWriterFontColor = true;
+    if (bIsWriterFontColor)
+    {
+        mpToolBoxFontColor->Hide();
+        mpToolBoxFontColorSW->Show();
+    }
+    else
+    {
+        mpToolBoxFontColor->Show();
+        mpToolBoxFontColorSW->Hide();
     }
 }
 
