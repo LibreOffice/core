@@ -412,7 +412,9 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ucb,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
     AddressBookSourceDialog \
+	DocumentAcceleratorConfiguration \
 	GlobalAcceleratorConfiguration \
+	ModuleAcceleratorConfiguration \
     ModuleUIConfigurationManagerSupplier \
 	UICategoryDescription \
 	UIConfigurationManager \

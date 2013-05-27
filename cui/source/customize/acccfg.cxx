@@ -856,7 +856,7 @@ void SfxAcceleratorConfigPage::InitAccCfg()
 
         css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier( css::ui::ModuleUIConfigurationManagerSupplier::create(m_xContext) );
         css::uno::Reference< css::ui::XUIConfigurationManager > xUICfgManager = xModuleCfgSupplier->getUIConfigurationManager(m_sModuleLongName);
-        m_xModule = css::uno::Reference< css::ui::XAcceleratorConfiguration >(xUICfgManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+        m_xModule = xUICfgManager->getShortCutManager();
     }
     catch(const css::uno::RuntimeException&)
         { throw; }

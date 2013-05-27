@@ -38,6 +38,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
+#include <com/sun/star/ui/DocumentAcceleratorConfiguration.hpp>
 
 #include <comphelper/componentcontext.hxx>
 #include <vcl/svapp.hxx>
@@ -1062,7 +1063,7 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager() throw
     return Reference< XInterface >( m_xImageManager, UNO_QUERY );
 }
 
-Reference< XInterface > SAL_CALL UIConfigurationManager::getShortCutManager() throw (::com::sun::star::uno::RuntimeException)
+Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::getShortCutManager() throw (::com::sun::star::uno::RuntimeException)
 {
     // SAFE ->
     ResetableGuard aGuard( m_aLock );
@@ -1070,23 +1071,13 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getShortCutManager() th
     if (m_xAccConfig.is())
         return m_xAccConfig;
 
-    Reference<XMultiServiceFactory>   xSMGR(m_xContext->getServiceManager(), UNO_QUERY_THROW);
+    Reference< XComponentContext >    xContext = m_xContext;
     Reference< XStorage >             xDocumentRoot = m_xDocConfigStorage;
 
     aGuard.unlock();
     // <- SAFE
 
-    Reference< XInterface >      xAccConfig = xSMGR->createInstance(SERVICENAME_DOCUMENTACCELERATORCONFIGURATION);
-    Reference< XInitialization > xInit      (xAccConfig, UNO_QUERY_THROW);
-
-    PropertyValue aProp;
-    aProp.Name    = OUString("DocumentRoot");
-    aProp.Value <<= xDocumentRoot;
-
-    Sequence< Any > lArgs(1);
-    lArgs[0] <<= aProp;
-
-    xInit->initialize(lArgs);
+    Reference< XAcceleratorConfiguration >      xAccConfig = DocumentAcceleratorConfiguration::createWithDocumentRoot(xContext, xDocumentRoot);
 
     // SAFE ->
     aGuard.lock();

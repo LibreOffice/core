@@ -30,6 +30,7 @@
 
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
+#include <com/sun/star/ui/ModuleAcceleratorConfiguration.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -1346,7 +1347,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
     return Reference< XInterface >( m_xModuleImageManager, UNO_QUERY );
 }
 
-Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getShortCutManager() throw (::com::sun::star::uno::RuntimeException)
+Reference< XAcceleratorConfiguration > SAL_CALL ModuleUIConfigurationManager::getShortCutManager() throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -1358,17 +1359,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getShortCutManage
 
     if ( !m_xModuleAcceleratorManager.is() )
     {
-        Reference< XInterface >      xManager = xSMGR->createInstance(SERVICENAME_MODULEACCELERATORCONFIGURATION);
-        Reference< XInitialization > xInit    (xManager, UNO_QUERY_THROW);
-
-        PropertyValue aProp;
-        aProp.Name    = OUString("ModuleIdentifier");
-        aProp.Value <<= aModule;
-
-        Sequence< Any > lArgs(1);
-        lArgs[0] <<= aProp;
-
-        xInit->initialize(lArgs);
+        Reference< XAcceleratorConfiguration >  xManager = ModuleAcceleratorConfiguration::createWithModuleIdentifier(comphelper::getComponentContext(xSMGR), aModule);
         m_xModuleAcceleratorManager = xManager;
     }
 

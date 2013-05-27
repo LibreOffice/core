@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <framework/sfxhelperfunctions.hxx>
 #include <svtools/generictoolboxcontroller.hxx>

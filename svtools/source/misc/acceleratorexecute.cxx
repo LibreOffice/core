@@ -387,7 +387,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
     try
     {
         css::uno::Reference< css::ui::XUIConfigurationManager >   xUIManager = xUISupplier->getUIConfigurationManager(sModule);
-        xAccCfg = css::uno::Reference< css::ui::XAcceleratorConfiguration >(xUIManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+        xAccCfg = xUIManager->getShortCutManager();
     }
     catch(const css::container::NoSuchElementException&)
         {}
@@ -402,7 +402,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
     if (xUISupplier.is())
     {
         css::uno::Reference< css::ui::XUIConfigurationManager >     xUIManager = xUISupplier->getUIConfigurationManager();
-        xAccCfg.set(xUIManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+        xAccCfg = xUIManager->getShortCutManager();
     }
     return xAccCfg;
 }

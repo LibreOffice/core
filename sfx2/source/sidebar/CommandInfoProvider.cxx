@@ -23,9 +23,11 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 
 using namespace css;
 using namespace cssu;
@@ -89,7 +91,7 @@ CommandInfoProvider& CommandInfoProvider::Instance (void)
 
 
 CommandInfoProvider::CommandInfoProvider (void)
-    : mxServiceFactory(comphelper::getProcessServiceFactory()),
+    : mxContext(comphelper::getProcessComponentContext()),
       mxCachedDataFrame(),
       mxCachedDocumentAcceleratorConfiguration(),
       mxCachedModuleAcceleratorConfiguration(),
@@ -178,9 +180,7 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetDocumentAcceler
                             UNO_QUERY);
                         if (xConfigurationManager.is())
                         {
-                            mxCachedDocumentAcceleratorConfiguration = Reference<ui::XAcceleratorConfiguration>(
-                                xConfigurationManager->getShortCutManager(),
-                                UNO_QUERY);
+                            mxCachedDocumentAcceleratorConfiguration = xConfigurationManager->getShortCutManager();
                         }
                     }
                 }
@@ -199,16 +199,12 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetModuleAccelerat
     {
         try
         {
-            Reference<ui::XModuleUIConfigurationManagerSupplier> xSupplier (
-                mxServiceFactory->createInstance(A2S("com.sun.star.ui.ModuleUIConfigurationManagerSupplier")),
-                UNO_QUERY);
+            Reference<ui::XModuleUIConfigurationManagerSupplier> xSupplier  = ui::ModuleUIConfigurationManagerSupplier::create(mxContext);
             Reference<ui::XUIConfigurationManager> xManager (
                 xSupplier->getUIConfigurationManager(GetModuleIdentifier()));
             if (xManager.is())
             {
-                mxCachedModuleAcceleratorConfiguration = Reference<ui::XAcceleratorConfiguration>(
-                    xManager->getShortCutManager(),
-                    UNO_QUERY);
+                mxCachedModuleAcceleratorConfiguration = xManager->getShortCutManager();
             }
         }
         catch (Exception&)
@@ -226,9 +222,7 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetGlobalAccelerat
     // Get the global accelerator configuration.
     if ( ! mxCachedGlobalAcceleratorConfiguration.is())
     {
-        mxCachedGlobalAcceleratorConfiguration = Reference<ui::XAcceleratorConfiguration>(
-            mxServiceFactory->createInstance(A2S("com.sun.star.ui.GlobalAcceleratorConfiguration")),
-            UNO_QUERY);
+        mxCachedGlobalAcceleratorConfiguration = ui::GlobalAcceleratorConfiguration::create(mxContext);
     }
 
     return mxCachedGlobalAcceleratorConfiguration;
@@ -241,11 +235,8 @@ OUString CommandInfoProvider::GetModuleIdentifier (void)
 {
     if (msCachedModuleIdentifier.getLength() == 0)
     {
-        Reference<frame::XModuleManager> xModuleManager (
-            mxServiceFactory->createInstance(A2S("com.sun.star.frame.ModuleManager")),
-            UNO_QUERY);
-        if (xModuleManager.is())
-            msCachedModuleIdentifier = xModuleManager->identify(mxCachedDataFrame);
+        Reference<frame::XModuleManager2> xModuleManager = frame::ModuleManager::create(mxContext);
+        msCachedModuleIdentifier = xModuleManager->identify(mxCachedDataFrame);
     }
     return msCachedModuleIdentifier;
 }
@@ -315,14 +306,10 @@ Sequence<beans::PropertyValue> CommandInfoProvider::GetCommandProperties (const 
         const OUString sModuleIdentifier (GetModuleIdentifier());
         if (sModuleIdentifier.getLength() > 0)
         {
-            Reference<container::XNameAccess> xNameAccess (
-                mxServiceFactory->createInstance(
-                    OUString::createFromAscii("com.sun.star.frame.UICommandDescription")),
-                UNO_QUERY);
+            Reference<container::XNameAccess> xNameAccess  = frame::UICommandDescription::create(mxContext);
             Reference<container::XNameAccess> xUICommandLabels;
-            if (xNameAccess.is())
-                if (xNameAccess->getByName(sModuleIdentifier) >>= xUICommandLabels)
-                    xUICommandLabels->getByName(rsCommandName) >>= aProperties;
+            if (xNameAccess->getByName(sModuleIdentifier) >>= xUICommandLabels)
+                xUICommandLabels->getByName(rsCommandName) >>= aProperties;
         }
     }
     catch (Exception&)

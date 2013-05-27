@@ -46,6 +46,8 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
+#define SERVICENAME_DOCUMENTACCELERATORCONFIGURATION            DECLARE_ASCII("com.sun.star.ui.DocumentAcceleratorConfiguration")
+#define IMPLEMENTATIONNAME_DOCUMENTACCELERATORCONFIGURATION     DECLARE_ASCII("com.sun.star.comp.framework.DocumentAcceleratorConfiguration")
 
 namespace framework
 {
@@ -99,10 +101,18 @@ void SAL_CALL DocumentAcceleratorConfiguration::initialize(const css::uno::Seque
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
-    ::comphelper::SequenceAsHashMap lArgs(lArguments);
-    m_xDocumentRoot = lArgs.getUnpackedValueOrDefault(
-                        OUString("DocumentRoot"),
-                        css::uno::Reference< css::embed::XStorage >());
+    css::uno::Reference<css::embed::XStorage> xRoot;
+    if (lArguments.getLength() == 1 && (lArguments[0] >>= xRoot))
+    {
+        m_xDocumentRoot = xRoot;
+    }
+    else
+    {
+        ::comphelper::SequenceAsHashMap lArgs(lArguments);
+        m_xDocumentRoot = lArgs.getUnpackedValueOrDefault(
+                            OUString("DocumentRoot"),
+                            css::uno::Reference< css::embed::XStorage >());
+    }
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------

@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/beans/PropertyValue.idl>
 #include <com/sun/star/ui/XUIConfigurationListener.idl>
+#include <com/sun/star/ui/XAcceleratorConfiguration.idl>
 #include <com/sun/star/container/ElementExistException.idl>
 #include <com/sun/star/container/NoSuchElementException.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
@@ -216,7 +217,7 @@ interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
         @return
             the short cut manager of the user interface configuration manager.
     */
-    com::sun::star::uno::XInterface getShortCutManager();
+    com::sun::star::ui::XAcceleratorConfiguration getShortCutManager();
 
     /** retrieves the events manager from the user interface configuration manager.
 

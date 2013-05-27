@@ -2952,8 +2952,7 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
         return;
 
     // shortcut manager
-    Reference<XAcceleratorConfiguration> xScAccel(
-        xConfigMgr->getShortCutManager(), UNO_QUERY);
+    Reference<XAcceleratorConfiguration> xScAccel = xConfigMgr->getShortCutManager();
 
     if (!xScAccel.is())
         return;

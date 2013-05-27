@@ -99,7 +99,7 @@ namespace framework
             virtual void SAL_CALL removeSettings( const OUString& ResourceURL ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL insertSettings( const OUString& NewResourceURL, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& aNewData ) throw (::com::sun::star::container::ElementExistException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getImageManager() throw (::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getShortCutManager() throw (::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > SAL_CALL getShortCutManager() throw (::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getEventsManager() throw (::com::sun::star::uno::RuntimeException);
 
             // XModuleUIConfigurationManager
@@ -202,7 +202,7 @@ namespace framework
             com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
             ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener
             com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              m_xModuleImageManager;
-            com::sun::star::uno::Reference< com::sun::star::uno::XInterface >               m_xModuleAcceleratorManager;
+            com::sun::star::uno::Reference< com::sun::star::ui::XAcceleratorConfiguration > m_xModuleAcceleratorManager;
    };
 }
 

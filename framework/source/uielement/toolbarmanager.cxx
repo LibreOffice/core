@@ -2227,7 +2227,7 @@ bool ToolBarManager::RetrieveShortcut( const OUString& rCommandURL, OUString& rS
                             Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
                             if ( xDocUICfgMgr.is() )
                             {
-                                xDocAccelCfg = Reference< XAcceleratorConfiguration >( xDocUICfgMgr->getShortCutManager(), UNO_QUERY );
+                                xDocAccelCfg = xDocUICfgMgr->getShortCutManager();
                                 m_xDocAcceleratorManager = xDocAccelCfg;
                             }
                         }
@@ -2244,7 +2244,7 @@ bool ToolBarManager::RetrieveShortcut( const OUString& rCommandURL, OUString& rS
                     Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
                     if ( xUICfgMgr.is() )
                     {
-                        xModuleAccelCfg = Reference< XAcceleratorConfiguration >( xUICfgMgr->getShortCutManager(), UNO_QUERY );
+                        xModuleAccelCfg = xUICfgMgr->getShortCutManager();
                         m_xModuleAcceleratorManager = xModuleAccelCfg;
                     }
                 }

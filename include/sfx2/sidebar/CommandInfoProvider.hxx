@@ -21,7 +21,7 @@
 #include "sfx2/dllapi.h"
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
 
@@ -65,7 +65,7 @@ public:
     void SetFrame (const cssu::Reference<css::frame::XFrame>& rxFrame);
 
   private:
-    cssu::Reference<css::lang::XMultiServiceFactory> mxServiceFactory;
+    cssu::Reference<css::uno::XComponentContext> mxContext;
     cssu::Reference<css::frame::XFrame> mxCachedDataFrame;
     cssu::Reference<css::ui::XAcceleratorConfiguration> mxCachedDocumentAcceleratorConfiguration;
     cssu::Reference<css::ui::XAcceleratorConfiguration> mxCachedModuleAcceleratorConfiguration;

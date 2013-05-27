@@ -42,8 +42,6 @@ namespace framework{
 #define SERVICENAME_MODULEUICONFIGURATIONMANAGER                DECLARE_ASCII("com.sun.star.ui.ModuleUIConfigurationManager" )
 #define SERVICENAME_MENUBARFACTORY                              DECLARE_ASCII("com.sun.star.ui.UIElementFactory"             )
 #define SERVICENAME_FRAMECONTROLLER                             DECLARE_ASCII("com.sun.star.frame.Controller"                       )
-#define SERVICENAME_MODULEACCELERATORCONFIGURATION              DECLARE_ASCII("com.sun.star.ui.ModuleAcceleratorConfiguration")
-#define SERVICENAME_DOCUMENTACCELERATORCONFIGURATION            DECLARE_ASCII("com.sun.star.ui.DocumentAcceleratorConfiguration")
 #define SERVICENAME_TOOLBARFACTORY                              DECLARE_ASCII("com.sun.star.ui.ToolBarFactory"               )
 #define SERVICENAME_TOOLBARCONTROLLERFACTORY                    DECLARE_ASCII("com.sun.star.frame.ToolbarControllerFactory"         )
 #define SERVICENAME_LICENSE                                     SERVICENAME_JOB
@@ -91,9 +89,6 @@ namespace framework{
 #define IMPLEMENTATIONNAME_MODULEUICONFIGURATIONMANAGER         DECLARE_ASCII("com.sun.star.comp.framework.ModuleUIConfigurationManager" )
 #define IMPLEMENTATIONNAME_MENUBARFACTORY                       DECLARE_ASCII("com.sun.star.comp.framework.MenuBarFactory"          )
 #define IMPLEMENTATIONNAME_STARTMODULE                          DECLARE_ASCII("com.sun.star.comp.framework.BackingComp"             )
-#define IMPLEMENTATIONNAME_GLOBALACCELERATORCONFIGURATION       DECLARE_ASCII("com.sun.star.comp.framework.GlobalAcceleratorConfiguration")
-#define IMPLEMENTATIONNAME_MODULEACCELERATORCONFIGURATION       DECLARE_ASCII("com.sun.star.comp.framework.ModuleAcceleratorConfiguration")
-#define IMPLEMENTATIONNAME_DOCUMENTACCELERATORCONFIGURATION     DECLARE_ASCII("com.sun.star.comp.framework.DocumentAcceleratorConfiguration")
 #define IMPLEMENTATIONNAME_WINDOWSTATECONFIGURATION             DECLARE_ASCII("com.sun.star.comp.framework.WindowStateConfiguration" )
 #define IMPLEMENTATIONNAME_TOOLBARFACTORY                       DECLARE_ASCII("com.sun.star.comp.framework.ToolBarFactory"          )
 #define IMPLEMENTATIONNAME_ADDONSTOOLBARFACTORY                 DECLARE_ASCII("com.sun.star.comp.framework.AddonsToolBarFactory"    )

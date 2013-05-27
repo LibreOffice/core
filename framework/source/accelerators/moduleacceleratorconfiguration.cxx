@@ -41,6 +41,8 @@
 
 #include <rtl/logfile.h>
 
+#define SERVICENAME_MODULEACCELERATORCONFIGURATION              DECLARE_ASCII("com.sun.star.ui.ModuleAcceleratorConfiguration")
+#define IMPLEMENTATIONNAME_MODULEACCELERATORCONFIGURATION       DECLARE_ASCII("com.sun.star.comp.framework.ModuleAcceleratorConfiguration")
 
 namespace framework
 {
@@ -93,9 +95,16 @@ void SAL_CALL ModuleAcceleratorConfiguration::initialize(const css::uno::Sequenc
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
-    ::comphelper::SequenceAsHashMap lArgs(lArguments);
-    m_sModule = lArgs.getUnpackedValueOrDefault(OUString("ModuleIdentifier"), OUString());
-    m_sLocale = lArgs.getUnpackedValueOrDefault(OUString("Locale")          , OUString("x-default"));
+    OUString sModule;
+    if (lArguments.getLength() == 1 && (lArguments[0] >>= sModule))
+    {
+        m_sModule = sModule;
+    } else
+    {
+        ::comphelper::SequenceAsHashMap lArgs(lArguments);
+        m_sModule = lArgs.getUnpackedValueOrDefault(OUString("ModuleIdentifier"), OUString());
+        m_sLocale = lArgs.getUnpackedValueOrDefault(OUString("Locale")          , OUString("x-default"));
+    }
 
     if (m_sModule.isEmpty())
         throw css::uno::RuntimeException(

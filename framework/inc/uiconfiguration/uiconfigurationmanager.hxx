@@ -36,13 +36,14 @@
 #include <stdtypes.h>
 #include <uiconfiguration/imagemanager.hxx>
 
+#include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager2.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
-#include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -85,7 +86,7 @@ namespace framework
             virtual void SAL_CALL removeSettings( const OUString& ResourceURL ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL insertSettings( const OUString& NewResourceURL, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& aNewData ) throw (::com::sun::star::container::ElementExistException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getImageManager() throw (::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getShortCutManager() throw (::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > SAL_CALL getShortCutManager() throw (::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getEventsManager() throw (::com::sun::star::uno::RuntimeException);
 
             // XUIConfigurationPersistence
@@ -175,7 +176,7 @@ namespace framework
             com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >        m_xContext;
             ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener
             com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              m_xImageManager;
-            com::sun::star::uno::Reference< com::sun::star::uno::XInterface >               m_xAccConfig;
+            com::sun::star::uno::Reference< com::sun::star::ui::XAcceleratorConfiguration > m_xAccConfig;
    };
 }
 
