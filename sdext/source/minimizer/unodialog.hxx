@@ -43,6 +43,7 @@
 #include <com/sun/star/awt/XRadioButton.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/awt/XFixedText.hpp>
+#include <com/sun/star/awt/XUnoControlDialog.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XReschedule.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
@@ -119,13 +120,9 @@ public :
 
     com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >            mxControlModel;
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XDialog >                  mxDialog;
+    com::sun::star::uno::Reference< com::sun::star::awt::XUnoControlDialog >        mxDialog;
     com::sun::star::uno::Reference< com::sun::star::awt::XControl >                 mxControl;
     com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer >              mxWindowPeer;
-
-    com::sun::star::uno::Reference< com::sun::star::awt::XControlContainer >        mxDialogControlContainer;
-    com::sun::star::uno::Reference< com::sun::star::lang::XComponent >              mxDialogComponent;
-    com::sun::star::uno::Reference< com::sun::star::awt::XWindow >                  mxDialogWindow;
 
     sal_Bool                                                                        mbStatus;
 };

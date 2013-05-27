@@ -21,6 +21,7 @@
 #define TOOLKIT_DIALOG_CONTROL_HXX
 
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
+#include <com/sun/star/awt/UnoControlDialog.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XDialog2.hpp>
 #include <com/sun/star/awt/XSimpleTabController.hpp>
@@ -30,6 +31,7 @@
 #include "toolkit/helper/macros.hxx"
 #include <toolkit/controls/unocontrolcontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <list>
 
@@ -62,9 +64,8 @@ public:
 
 };
 
-typedef ::cppu::AggImplInheritanceHelper3   <   ControlContainerBase
-                                            ,   ::com::sun::star::awt::XTopWindow
-                                            ,   ::com::sun::star::awt::XDialog2
+typedef ::cppu::AggImplInheritanceHelper2   <   ControlContainerBase
+                                            ,   ::com::sun::star::awt::XUnoControlDialog
                                             ,   ::com::sun::star::awt::XWindowListener
                                             >   UnoDialogControl_Base;
 class UnoDialogControl : public UnoDialogControl_Base
@@ -112,6 +113,73 @@ public:
 
     // XModifyListener
     virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+
+    // resolve some ambigous methods
+    virtual com::sun::star::uno::Reference<com::sun::star::awt::XWindowPeer> SAL_CALL getPeer() throw (com::sun::star::uno::RuntimeException)
+        { return UnoDialogControl_Base::ControlContainerBase::getPeer(); }
+    virtual void SAL_CALL addWindowListener(const com::sun::star::uno::Reference<com::sun::star::awt::XWindowListener>& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::addWindowListener(p1); }
+    virtual com::sun::star::uno::Reference<com::sun::star::awt::XControlModel> SAL_CALL getModel() throw (com::sun::star::uno::RuntimeException)
+        { return UnoDialogControl_Base::ControlContainerBase::getModel(); }
+    virtual void SAL_CALL addEventListener(const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener>& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::addEventListener(p1); }
+    virtual void SAL_CALL removeEventListener(const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener>& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::removeEventListener(p1); }
+    virtual void SAL_CALL setContext(const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::setContext(p1); }
+    virtual com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL getContext() throw (com::sun::star::uno::RuntimeException)
+        { return UnoDialogControl_Base::ControlContainerBase::getContext(); }
+    virtual com::sun::star::uno::Reference<com::sun::star::awt::XView> SAL_CALL getView() throw (com::sun::star::uno::RuntimeException)
+        { return UnoDialogControl_Base::ControlContainerBase::getView(); }
+    virtual void SAL_CALL setDesignMode(sal_Bool p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::setDesignMode(p1); }
+    virtual sal_Bool SAL_CALL isDesignMode() throw (com::sun::star::uno::RuntimeException)
+        { return UnoDialogControl_Base::ControlContainerBase::isDesignMode(); }
+    virtual sal_Bool SAL_CALL isTransparent() throw (com::sun::star::uno::RuntimeException)
+        { return UnoDialogControl_Base::ControlContainerBase::isTransparent(); }
+    virtual void SAL_CALL setPosSize(sal_Int32 p1, sal_Int32 p2, sal_Int32 p3, sal_Int32 p4, sal_Int16 p5) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::setPosSize(p1, p2, p3, p4, p5); }
+    virtual com::sun::star::awt::Rectangle SAL_CALL getPosSize() throw (com::sun::star::uno::RuntimeException)
+        { return UnoDialogControl_Base::ControlContainerBase::getPosSize(); }
+    virtual void SAL_CALL setVisible(sal_Bool p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::setVisible(p1); }
+    virtual void SAL_CALL setEnable(sal_Bool p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::setEnable(p1); }
+    virtual void SAL_CALL setFocus() throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::setFocus(); }
+    virtual void SAL_CALL removeWindowListener(const com::sun::star::uno::Reference<com::sun::star::awt::XWindowListener>& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::removeWindowListener(p1); }
+    virtual void SAL_CALL addFocusListener(const com::sun::star::uno::Reference<com::sun::star::awt::XFocusListener>& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::addFocusListener(p1); }
+    virtual void SAL_CALL removeFocusListener(const com::sun::star::uno::Reference<com::sun::star::awt::XFocusListener>& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::removeFocusListener(p1); }
+    virtual void SAL_CALL addKeyListener(const com::sun::star::uno::Reference<com::sun::star::awt::XKeyListener>& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::addKeyListener(p1); }
+    virtual void SAL_CALL removeKeyListener(const com::sun::star::uno::Reference<com::sun::star::awt::XKeyListener>& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::removeKeyListener(p1); }
+    virtual void SAL_CALL addMouseListener(const com::sun::star::uno::Reference<com::sun::star::awt::XMouseListener>& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::addMouseListener(p1); }
+    virtual void SAL_CALL removeMouseListener(const com::sun::star::uno::Reference<com::sun::star::awt::XMouseListener>& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::removeMouseListener(p1); }
+    virtual void SAL_CALL addMouseMotionListener(const com::sun::star::uno::Reference<com::sun::star::awt::XMouseMotionListener>& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::addMouseMotionListener(p1); }
+    virtual void SAL_CALL removeMouseMotionListener(const com::sun::star::uno::Reference<com::sun::star::awt::XMouseMotionListener>& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::removeMouseMotionListener(p1); }
+    virtual void SAL_CALL addPaintListener(const com::sun::star::uno::Reference<com::sun::star::awt::XPaintListener>& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::addPaintListener(p1); }
+    virtual void SAL_CALL removePaintListener(const com::sun::star::uno::Reference<com::sun::star::awt::XPaintListener>& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::removePaintListener(p1); }
+    virtual void SAL_CALL setStatusText(const rtl::OUString& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::setStatusText(p1); }
+    virtual com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::awt::XControl> > SAL_CALL getControls() throw (com::sun::star::uno::RuntimeException)
+        { return UnoDialogControl_Base::ControlContainerBase::getControls(); }
+    virtual com::sun::star::uno::Reference<com::sun::star::awt::XControl> SAL_CALL getControl(const rtl::OUString& p1) throw (com::sun::star::uno::RuntimeException)
+        { return UnoDialogControl_Base::ControlContainerBase::getControl(p1); }
+    virtual void SAL_CALL addControl(const rtl::OUString& p1, const com::sun::star::uno::Reference<com::sun::star::awt::XControl>& p2) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::addControl(p1, p2); }
+    virtual void SAL_CALL removeControl(const com::sun::star::uno::Reference<com::sun::star::awt::XControl>& p1) throw (com::sun::star::uno::RuntimeException)
+        { UnoDialogControl_Base::ControlContainerBase::removeControl(p1); }
+
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO( UnoDialogControl, szServiceName2_UnoControlDialog )

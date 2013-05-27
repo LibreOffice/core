@@ -21,33 +21,34 @@
 #include "DialogModelProvider.hxx"
 #include "dlgprov.hxx"
 #include "dlgevtatt.hxx"
+#include <com/sun/star/awt/UnoControlDialog.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/io/XInputStreamProvider.hpp>
+#include <com/sun/star/beans/Introspection.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/script/XLibraryContainer.hpp>
-#include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/exc_hlp.hxx>
-#include <com/sun/star/beans/Introspection.hpp>
+#include <com/sun/star/io/XInputStreamProvider.hpp>
+#include <com/sun/star/resource/XStringResourceWithLocation.hpp>
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/resource/XStringResourceWithLocation.hpp>
-#include <com/sun/star/document/XEmbeddedScripts.hpp>
-#include <sfx2/app.hxx>
-#include <sfx2/objsh.hxx>
-#include <xmlscript/xmldlg_imexp.hxx>
-#include <tools/urlobj.hxx>
-#include <comphelper/namedvaluecollection.hxx>
-
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
+
+#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/objsh.hxx>
+#include <xmlscript/xmldlg_imexp.hxx>
+#include <tools/urlobj.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 
 #include <util/MiscUtils.hxx>
 
@@ -472,55 +473,44 @@ static OUString aResourceResolverPropName("ResourceResolver");
 
     // -----------------------------------------------------------------------------
 
-    Reference< XControl > DialogProviderImpl::createDialogControl
+    Reference< XUnoControlDialog > DialogProviderImpl::createDialogControl
         ( const Reference< XControlModel >& rxDialogModel, const Reference< XWindowPeer >& xParent )
     {
         OSL_ENSURE( rxDialogModel.is(), "DialogProviderImpl::getDialogControl: no dialog model" );
 
-        Reference< XControl > xDialogControl;
+        Reference< XUnoControlDialog > xDialogControl;
 
         if ( m_xContext.is() )
         {
-            Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
+            xDialogControl = UnoControlDialog::create( m_xContext );
 
-            if ( xSMgr.is() )
+            // set the model
+            if ( rxDialogModel.is() )
+                xDialogControl->setModel( rxDialogModel );
+
+            // set visible
+            xDialogControl->setVisible( sal_False );
+
+            // get the parent of the dialog control
+            Reference< XWindowPeer > xPeer;
+            if( xParent.is() )
             {
-                xDialogControl = Reference< XControl >( xSMgr->createInstanceWithContext(
-                    OUString( "com.sun.star.awt.UnoControlDialog"  ), m_xContext ), UNO_QUERY );
-
-                if ( xDialogControl.is() )
+                xPeer = xParent;
+            }
+            else if ( m_xModel.is() )
+            {
+                Reference< frame::XController > xController( m_xModel->getCurrentController(), UNO_QUERY );
+                if ( xController.is() )
                 {
-                    // set the model
-                    if ( rxDialogModel.is() )
-                        xDialogControl->setModel( rxDialogModel );
-
-                    // set visible
-                    Reference< XWindow > xW( xDialogControl, UNO_QUERY );
-                    if ( xW.is() )
-                        xW->setVisible( sal_False );
-
-                    // get the parent of the dialog control
-                    Reference< XWindowPeer > xPeer;
-                    if( xParent.is() )
-                    {
-                        xPeer = xParent;
-                    }
-                    else if ( m_xModel.is() )
-                    {
-                        Reference< frame::XController > xController( m_xModel->getCurrentController(), UNO_QUERY );
-                        if ( xController.is() )
-                        {
-                            Reference< frame::XFrame > xFrame( xController->getFrame(), UNO_QUERY );
-                            if ( xFrame.is() )
-                                xPeer = Reference< XWindowPeer>( xFrame->getContainerWindow(), UNO_QUERY );
-                        }
-                    }
-
-                    // create a peer
-                    Reference< XToolkit> xToolkit( Toolkit::create( m_xContext ), UNO_QUERY_THROW );
-                    xDialogControl->createPeer( xToolkit, xPeer );
+                    Reference< frame::XFrame > xFrame( xController->getFrame(), UNO_QUERY );
+                    if ( xFrame.is() )
+                        xPeer = Reference< XWindowPeer>( xFrame->getContainerWindow(), UNO_QUERY );
                 }
             }
+
+            // create a peer
+            Reference< XToolkit> xToolkit( Toolkit::create( m_xContext ), UNO_QUERY_THROW );
+            xDialogControl->createPeer( xToolkit, xPeer );
         }
 
         return xDialogControl;

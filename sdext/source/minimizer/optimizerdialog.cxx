@@ -110,7 +110,7 @@ void OptimizerDialog::InitRoadmap()
 
         Reference< XPropertySet > xPropertySet( mxRoadmapControlModel, UNO_QUERY_THROW );
         xPropertySet->setPropertyValue( TKGet( TK_Name ), Any( TKGet( TK_rdmNavi ) ) );
-        mxRoadmapControl = mxDialogControlContainer->getControl( TKGet( TK_rdmNavi ) );
+        mxRoadmapControl = mxDialog->getControl( TKGet( TK_rdmNavi ) );
         InsertRoadmapItem( 0, sal_True, getString( STR_INTRODUCTION ), ITEM_ID_INTRODUCTION );
         InsertRoadmapItem( 1, sal_True, getString( STR_SLIDES ), ITEM_ID_SLIDES );
         InsertRoadmapItem( 2, sal_True, getString( STR_IMAGE_OPTIMIZATION ), ITEM_ID_GRAPHIC_OPTIMIZATION );

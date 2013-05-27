@@ -16,17 +16,39 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_awt_UnoControlDialog_idl__
-#define __com_sun_star_awt_UnoControlDialog_idl__
+#ifndef __com_sun_star_awt_XUnoControlDialog_idl__
+#define __com_sun_star_awt_XUnoControlDialog_idl__
 
-#include <com/sun/star/awt/XUnoControlDialog.idl>
+#include <com/sun/star/container/XNameContainer.idl>
+#include <com/sun/star/awt/XControl.idl>
+#include <com/sun/star/awt/XDialog2.idl>
+#include <com/sun/star/awt/XTopWindow.idl>
+#include <com/sun/star/awt/XControlContainer.idl>
+#include <com/sun/star/awt/XWindow.idl>
+
 
 module com {  module sun {  module star {  module awt {
 
+/**
+   The interface for the UnoControlDialog service.
+   This service actually implements a whole whack of interfaces. This is the just
+   the subset that our code needs.
 
-/** specifies a dialog control.
+   @since LibreOffice 4.1
  */
-published service UnoControlDialog : XUnoControlDialog;
+published interface XUnoControlDialog
+{
+
+    interface com::sun::star::awt::XControlContainer; // -> XInterface
+
+    interface com::sun::star::awt::XControl; // -> XComponent
+
+    interface com::sun::star::awt::XWindow; // -> XComponent
+
+    interface com::sun::star::awt::XTopWindow; // -> XInterface
+
+    interface com::sun::star::awt::XDialog2; // -> XDialog -> XInterface
+};
 
 
 }; }; }; };

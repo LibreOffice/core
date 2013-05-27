@@ -33,6 +33,7 @@
 #include "baside3.hxx"
 
 #include <com/sun/star/awt/Toolkit.hpp>
+#include <com/sun/star/awt/UnoControlDialog.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/resource/StringResource.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -91,7 +92,7 @@ void DlgEditor::ShowDialog()
     uno::Reference< uno::XComponentContext >  xContext = getProcessComponentContext();
 
     // create a dialog
-    uno::Reference< awt::XControl > xDlg( getProcessServiceFactory()->createInstance( "com.sun.star.awt.UnoControlDialog" ), uno::UNO_QUERY );
+    uno::Reference< awt::XUnoControlDialog > xDlg = awt::UnoControlDialog::create( xContext );
 
     // clone the dialog model
     uno::Reference< util::XCloneable > xC( m_xUnoControlDialogModel, uno::UNO_QUERY );
@@ -138,12 +139,10 @@ void DlgEditor::ShowDialog()
     uno::Reference< awt::XToolkit> xToolkit = awt::Toolkit::create( xContext );
     xDlg->createPeer( xToolkit, rWindow.GetComponentInterface() );
 
-    uno::Reference< awt::XDialog > xD( xDlg, uno::UNO_QUERY );
-    xD->execute();
+    xDlg->execute();
 
-    uno::Reference< lang::XComponent > xComponent(xDlg, uno::UNO_QUERY);
-    if (xComponent.is())
-        xComponent->dispose();
+    // need to cast because of multiple inheritance
+    Reference<awt::XControl>(xDlg)->dispose();
 }
 
 
