@@ -312,7 +312,7 @@ void TextPropertyPanel::HandleContextChange (
 
 
 void TextPropertyPanel::UpdateFontColorToolbox (
-    const ::sfx2::sidebar::EnumContext aContext)
+    const ::sfx2::sidebar::EnumContext /* aContext */)
 {
     bool bIsWriterFontColor (false);
     if (maContext.GetApplication_DI() == sfx2::sidebar::EnumContext::Application_WriterVariants)
