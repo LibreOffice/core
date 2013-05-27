@@ -177,8 +177,6 @@ $(call gb_XcuModuleTarget_get_clean_target,%) :
 
 gb_XcuLangpackTarget__get_name_with_lang = $(basename $(1))-$(2)$(suffix $(1))
 
-gb_XcuLangpackTarget__get_outdir_target_with_lang = \
- $(call gb_XcuLangpackTarget_get_outdir_target,$(call gb_XcuLangpackTarget__get_name_with_lang,$(1),$(2)))
 gb_XcuLangpackTarget__get_target_with_lang = \
  $(call gb_XcuLangpackTarget_get_target,$(call gb_XcuLangpackTarget__get_name_with_lang,$(1),$(2)))
 
@@ -200,8 +198,7 @@ $(call gb_XcuLangpackTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCL,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(foreach lang,$(gb_Configuration_LANGS),\
-			  $(call gb_XcuLangpackTarget__get_target_with_lang,$*,$(lang)) \
-			  $(call gb_XcuLangpackTarget__get_outdir_target_with_lang,$(XCUFILE),$(lang))))
+			  $(call gb_XcuLangpackTarget__get_target_with_lang,$*,$(lang))))
 
 
 # XcuMergeTarget class
@@ -412,21 +409,11 @@ endef
 define gb_Configuration__add_langpack
 $(if $(gb_Configuration_NODELIVER_$(1)),\
 	$(error TODO not needed yet: cannot add langpack if nodeliver))
-$(call gb_Configuration_get_clean_target,$(1)) : \
-	$(call gb_XcuLangpackTarget_get_clean_target,$(2)/$(3))
 $(call gb_Configuration_get_target,$(1)) : \
-	$(call gb_XcuLangpackTarget__get_outdir_target_with_lang,$(3),$(4))
-$(call gb_XcuLangpackTarget__get_target_with_lang,$(2)/$(3),$(4)) : \
+	$(call gb_XcuLangpackTarget__get_target_with_lang,$(3),$(4))
+$(call gb_XcuLangpackTarget__get_target_with_lang,$(3),$(4)) : \
 	$(SRCDIR)/$(2)/$(3).tmpl
-$(call gb_XcuLangpackTarget_get_clean_target,$(2)/$(3)) : XCUFILE := $(3)
-$(call gb_XcuLangpackTarget__get_target_with_lang,$(2)/$(3),$(4)) : LANG := $(4)
-$(call gb_XcuLangpackTarget__get_outdir_target_with_lang,$(3),$(4)) : \
-	$(call gb_XcuLangpackTarget__get_target_with_lang,$(2)/$(3),$(4)) \
-	| $(dir $(call gb_XcuLangpackTarget__get_outdir_target_with_lang,$(3),$(4))).dir
-$(call gb_Deliver_add_deliverable,\
-	$(call gb_XcuLangpackTarget__get_outdir_target_with_lang,$(3),$(4)),\
-	$(call gb_XcuLangpackTarget__get_target_with_lang,$(2)/$(3),$(4)),\
-	$(call gb_XcuLangpackTarget__get_name_with_lang,$(2)/$(3),$(4)))
+$(call gb_XcuLangpackTarget__get_target_with_lang,$(3),$(4)) : LANG := $(4)
 
 endef
 
@@ -434,6 +421,8 @@ endef
 define gb_Configuration_add_spool_langpack
 $(foreach lang,$(gb_Configuration_LANGS),$(eval \
 	$(call gb_Configuration__add_langpack,$(1),$(2),$(strip $(3)),$(lang))))
+$(call gb_Configuration_get_clean_target,$(1)) : \
+	$(call gb_XcuLangpackTarget_get_clean_target,$(strip $(3)))
 
 endef
 

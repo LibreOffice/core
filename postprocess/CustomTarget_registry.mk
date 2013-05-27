@@ -523,7 +523,7 @@ $(call gb_XcdTarget_get_target,Langpack-$(1).xcd) : \
 	$(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-$(1).list
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-$(1).list : \
-	$(call gb_XcuLangpackTarget_get_outdir_target,Langpack-$(1).xcu)
+	$(call gb_XcuLangpackTarget_get_target,Langpack-$(1).xcu)
 
 $(call gb_XcdTarget_get_target,fcfg_langpack_$(1).xcd) : \
 	$(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_$(1).list
@@ -582,7 +582,7 @@ $(call gb_XcdTarget_get_target,%.xcd) : \
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
-	echo '<list><dependency file="main"/><filename>$(call gb_XcuLangpackTarget_get_outdir_target,Langpack-$*.xcu)</filename></list>' > $@
+	echo '<list><dependency file="main"/><filename>$(call gb_XcuLangpackTarget_get_target,Langpack-$*.xcu)</filename></list>' > $@
 
 # It can happen that localized fcfg_langpack_*.zip contains
 # zero-sized org/openoffice/TypeDectection/Filter.xcu; filter them out in the
