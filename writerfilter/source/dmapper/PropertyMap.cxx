@@ -889,6 +889,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         operator[]( PropertyDefinition( PROP_LEFT_MARGIN, false )) =  uno::makeAny( m_nLeftMargin  );
         operator[]( PropertyDefinition( PROP_RIGHT_MARGIN, false )) = uno::makeAny( m_nRightMargin );
 
+        if (rDM_Impl.m_oBackgroundColor)
+            operator[](PropertyDefinition(PROP_BACK_COLOR, false)) = uno::makeAny(*rDM_Impl.m_oBackgroundColor);
+
         /*** if headers/footers are available then the top/bottom margins of the
             header/footer are copied to the top/bottom margin of the page
           */
