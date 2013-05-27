@@ -1512,12 +1512,13 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
     rComments->endElement( XML_authors );
     rComments->startElement( XML_commentList, FSEND );
 
+    Authors::const_iterator aAuthorsBegin = aAuthors.begin();
     for( size_t i = 0; i < nNotes; ++i )
     {
         XclExpNoteList::RecordRefType xNote = mrNotes.GetRecord( i );
         Authors::iterator aAuthor = aAuthors.find(
                 XclXmlUtils::ToOUString( xNote->GetAuthor() ) );
-        sal_Int32 nAuthorId = distance( aAuthors.begin(), aAuthor );
+        sal_Int32 nAuthorId = distance( aAuthorsBegin, aAuthor );
         xNote->WriteXml( nAuthorId, rStrm );
     }
 

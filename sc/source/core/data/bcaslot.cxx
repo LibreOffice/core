@@ -219,7 +219,7 @@ void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
     OSL_ENSURE(pListener, "EndListeningArea: pListener Null");
     if ( !rpArea )
     {
-        ScBroadcastAreas::iterator aIter( FindBroadcastArea( rRange));
+        ScBroadcastAreas::const_iterator aIter( FindBroadcastArea( rRange));
         if (aIter == aBroadcastAreaTbl.end() || isMarkedErased( aIter))
             return;
         rpArea = (*aIter).mpArea;
@@ -235,7 +235,7 @@ void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
     {
         if ( !rpArea->GetBroadcaster().HasListeners() )
         {
-            ScBroadcastAreas::iterator aIter( FindBroadcastArea( rRange));
+            ScBroadcastAreas::const_iterator aIter( FindBroadcastArea( rRange));
             if (aIter == aBroadcastAreaTbl.end() || isMarkedErased( aIter))
                 return;
             OSL_ENSURE( (*aIter).mpArea == rpArea, "EndListeningArea: area pointer mismatch");
@@ -247,7 +247,7 @@ void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
 }
 
 
-ScBroadcastAreas::iterator ScBroadcastAreaSlot::FindBroadcastArea(
+ScBroadcastAreas::const_iterator ScBroadcastAreaSlot::FindBroadcastArea(
         const ScRange& rRange ) const
 {
     aTmpSeekBroadcastArea.UpdateRange( rRange);
