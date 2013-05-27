@@ -19,14 +19,8 @@
  *
  *************************************************************/
 
-
-
 #ifndef __FRAMEWORK_UIELEMENT_STATUSBARMANAGER_HXX_
 #define __FRAMEWORK_UIELEMENT_STATUSBARMANAGER_HXX_
-
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
 
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/generic.hxx>
@@ -34,11 +28,7 @@
 #include <macros/xtypeprovider.hxx>
 #include <stdtypes.h>
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XStatusbarController.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
@@ -46,9 +36,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -118,7 +105,7 @@ class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener   
         void MouseButton( const MouseEvent& rMEvt ,sal_Bool ( SAL_CALL ::com::sun::star::frame::XStatusbarController::*_pMethod )(const ::com::sun::star::awt::MouseEvent&));
 
     protected:
-        typedef std::map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > > StatusBarControllerMap;
+        typedef std::map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusbarController > > StatusBarControllerMap;
 
         sal_Bool                                                                                        m_bDisposed : 1,
                                                                                                         m_bFrameActionRegistered : 1,
