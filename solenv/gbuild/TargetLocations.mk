@@ -41,7 +41,6 @@ gb_Jar_get_outdir_target = $(OUTDIR)/bin/$(1).jar
 gb_Configuration_registry = $(OUTDIR)/xml/registry
 gb_XcsTarget_get_outdir_target = \
     $(gb_Configuration_registry)/schema$(if $(1),/)$(1)
-gb_XcuDataTarget_get_outdir_target = $(gb_Configuration_registry)/data/$(1)
 gb_XcuModuleTarget_get_outdir_target = $(gb_Configuration_registry)/spool/$(1)
 
 gb_Executable_get_target = $(gb_Executable__get_linktarget_target)

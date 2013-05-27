@@ -135,8 +135,7 @@ $(call gb_XcuDataTarget_get_target,%) : $(gb_XcuDataTarget_XSLT_DataVal) \
 $(call gb_XcuDataTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCU,2)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_XcuDataTarget_get_target,$*) \
-			  $(call gb_XcuDataTarget_get_outdir_target,$(XCUFILE)))
+		rm -f $(call gb_XcuDataTarget_get_target,$*))
 
 
 # XcuModuleTarget class
@@ -349,21 +348,8 @@ $(call gb_XcuDataTarget_get_target,$(2)/$(3)) : \
 	$(call gb_XcsTarget_for_XcuTarget,$(3))
 $(call gb_XcuDataTarget_get_target,$(2)/$(3)) : PRIMARY_REGISTRY := $(filter $(1),$(gb_Configuration_PRIMARY_REGISTRY_NAME))
 $(call gb_XcuDataTarget_get_target,$(2)/$(3)) : XCUFILE := $(3)
-$(call gb_XcuDataTarget_get_clean_target,$(2)/$(3)) : XCUFILE := $(3)
-ifeq ($(strip $(gb_Configuration_NODELIVER_$(1))),)
-$(call gb_Configuration_get_target,$(1)) : \
-	$(call gb_XcuDataTarget_get_outdir_target,$(3))
-$(call gb_XcuDataTarget_get_outdir_target,$(3)) : \
-	$(call gb_XcuDataTarget_get_target,$(2)/$(3)) \
-	| $(dir $(call gb_XcuDataTarget_get_outdir_target,$(3))).dir
-$(call gb_Deliver_add_deliverable,\
-	$(call gb_XcuDataTarget_get_outdir_target,$(3)),\
-	$(call gb_XcuDataTarget_get_target,$(2)/$(3)),\
-	$(2)/$(3))
-else
 $(call gb_Configuration_get_target,$(1)) : \
 	$(call gb_XcuDataTarget_get_target,$(2)/$(3))
-endif
 
 endef
 
