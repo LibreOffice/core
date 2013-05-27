@@ -66,15 +66,17 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     m_pConnection(_pConnection)
 {
     m_pConnection->acquire();
+    m_OUTsqlda = NULL;
+    m_INsqlda = NULL;
 }
-// -----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 OStatement_Base::~OStatement_Base()
 {
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::disposeResultSet()
 {
-    // free the cursor if alive
+    //free the cursor if alive
     Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
     if (xComp.is())
         xComp->dispose();
@@ -83,6 +85,8 @@ void OStatement_Base::disposeResultSet()
 //------------------------------------------------------------------------------
 void OStatement_BASE2::disposing()
 {
+    printf("DEBUG !!! connectivity.firebird => OStatement_BASE2::disposing: \n");
+
     ::osl::MutexGuard aGuard(m_aMutex);
 
     disposeResultSet();
@@ -90,6 +94,19 @@ void OStatement_BASE2::disposing()
     if (m_pConnection)
         m_pConnection->release();
     m_pConnection = NULL;
+
+    if (m_OUTsqlda)
+    {
+        int i;
+        XSQLVAR *var;
+        for (i=0, var = m_OUTsqlda->sqlvar; i < m_OUTsqlda->sqld; i++, var++)
+            free(var->sqldata);
+        free(m_OUTsqlda);
+    }
+    if (m_INsqlda)
+    {
+        free(m_INsqlda);
+    }
 
     dispose_ChildImpl();
     OStatement_Base::disposing();
