@@ -444,6 +444,13 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
         // aus 'Suche alle'
     m_pWrtShell->StartAllAction();
     m_pWrtShell->Push();
+
+    // fdo#65014 : Ensure that the point of the cursor is at the extremity of the
+    // selection closest to the end being searched to as to exclude the selected
+    // region from the search. (This doesn't work in the case of multiple
+    // selected regions as the cursor doesn't mark the selection in that case.)
+    m_pWrtShell->GetCrsr()->Normalize( m_pSrchItem->GetBackward() );
+
         // falls in selektierten Bereichen gesucht werden soll, duerfen sie
         // nicht aufgehoben werden
     if (!m_pSrchItem->GetSelection())
