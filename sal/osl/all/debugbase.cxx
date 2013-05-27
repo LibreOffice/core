@@ -31,6 +31,7 @@
 #include "osl/diagnose.hxx"
 #include "boost/bind.hpp"
 #include <vector>
+#include <algorithm>
 
 // define own ones, independent of OSL_DEBUG_LEVEL:
 #define DEBUGBASE_ENSURE_(c, f, l, m) \

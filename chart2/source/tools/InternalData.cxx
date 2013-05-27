@@ -30,6 +30,7 @@
 #include "macros.hxx"
 
 #include <rtl/math.hxx>
+#include <algorithm>
 
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
