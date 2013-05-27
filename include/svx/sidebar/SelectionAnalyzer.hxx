@@ -37,19 +37,25 @@ class SVX_DLLPUBLIC SelectionAnalyzer
 public :
     static sfx2::sidebar::EnumContext::Context GetContextForSelection_SC (
         const SdrMarkList& rMarkList);
+
+    enum ViewType
+    {
+        VT_Standard,
+        VT_Master,
+        VT_Handout,
+        VT_Notes,
+        VT_Outline
+    };
     static sfx2::sidebar::EnumContext::Context GetContextForSelection_SD (
         const SdrMarkList& rMarkList,
-        const bool bIsMasterPage,
-        const bool bIsHandoutPage,
-        const bool bIsNotesPage);
+        const ViewType eViewType);
 
 private:
     static sfx2::sidebar::EnumContext::Context GetContextForObjectId_SC (
         const sal_uInt16 nObjectId);
     static sfx2::sidebar::EnumContext::Context GetContextForObjectId_SD (
         const sal_uInt16 nObjectId,
-        const bool bIsHandoutPage,
-        const bool bIsNotesPage);
+        const ViewType eViewType);
     static sal_uInt32 GetInventorTypeFromMark (
         const SdrMarkList& rMarkList);
     static sal_uInt16 GetObjectTypeFromMark (

@@ -125,7 +125,7 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBas
     , mbIsLayerModeActive(false)
     , mbIsInSwitchPage(false)
     , mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
-          ::boost::bind(&DrawViewShell::GetContextForSelection, this),
+          ::boost::bind(&DrawViewShell::GetSidebarContextName, this),
           uno::Reference<frame::XController>(&rViewShellBase.GetDrawController()),
           sfx2::sidebar::EnumContext::Context_Default))
 {
@@ -137,12 +137,7 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBas
 
     mpSelectionChangeHandler->Connect();
 
-    if (mpFrameView->GetViewShEditMode(mePageKind) == EM_PAGE)
-        SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_DrawPage));
-    else if (mePageKind == PK_HANDOUT)
-        SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_HandoutPage));
-    else
-        SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_MasterPage));
+    SetContextName(GetSidebarContextName());
 
     doShow();
 }
@@ -833,13 +828,28 @@ void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
 
 
 
-EnumContext::Context DrawViewShell::GetContextForSelection (void) const
+::rtl::OUString DrawViewShell::GetSidebarContextName (void) const
 {
-    return ::svx::sidebar::SelectionAnalyzer::GetContextForSelection_SD(
-        mpDrawView->GetMarkedObjectList(),
-        meEditMode == EM_MASTERPAGE,
-        mePageKind == PK_HANDOUT,
-        mePageKind == PK_NOTES);
+    ::svx::sidebar::SelectionAnalyzer::ViewType eViewType (::svx::sidebar::SelectionAnalyzer::VT_Standard);
+    switch (mePageKind)
+    {
+        case PK_HANDOUT:
+            eViewType = ::svx::sidebar::SelectionAnalyzer::VT_Handout;
+            break;
+        case PK_NOTES:
+            eViewType = ::svx::sidebar::SelectionAnalyzer::VT_Notes;
+            break;
+        case PK_STANDARD:
+            if (meEditMode == EM_MASTERPAGE)
+                eViewType = ::svx::sidebar::SelectionAnalyzer::VT_Master;
+            else
+                eViewType = ::svx::sidebar::SelectionAnalyzer::VT_Standard;
+            break;
+    }
+    return EnumContext::GetContextName(
+        ::svx::sidebar::SelectionAnalyzer::GetContextForSelection_SD(
+            mpDrawView->GetMarkedObjectList(),
+            eViewType));
 }
 
 

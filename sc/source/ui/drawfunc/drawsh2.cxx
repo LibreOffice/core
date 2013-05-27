@@ -35,6 +35,7 @@
 #include <svx/fontworkbar.hxx>
 #include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <svx/sidebar/SelectionAnalyzer.hxx>
+#include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 
 #include "drawsh.hxx"
 #include "drawview.hxx"
@@ -61,7 +62,7 @@ ScDrawShell::ScDrawShell( ScViewData* pData ) :
     SfxShell(pData->GetViewShell()),
     pViewData( pData ),
     mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
-            ::boost::bind(&ScDrawShell::GetContextForSelection, this),
+            ::boost::bind(&ScDrawShell::GetSidebarContextName, this),
             GetFrame()->GetFrame().GetController(),
             sfx2::sidebar::EnumContext::Context_Cell))
 {
@@ -396,10 +397,27 @@ void ScDrawShell::GetDrawAttrStateForIFBX( SfxItemSet& rSet )
     }
 }
 
-sfx2::sidebar::EnumContext::Context ScDrawShell::GetContextForSelection (void)
+
+
+
+void ScDrawShell::Activate (const sal_Bool bMDI)
 {
-    return ::svx::sidebar::SelectionAnalyzer::GetContextForSelection_SC(
-        GetDrawView()->GetMarkedObjectList());
+    (void)bMDI;
+
+    ContextChangeEventMultiplexer::NotifyContextChange(
+        GetFrame()->GetFrame().GetController(),
+        ::sfx2::sidebar::EnumContext::GetContextEnum(
+            GetSidebarContextName()));
+}
+
+
+
+
+::rtl::OUString ScDrawShell::GetSidebarContextName (void)
+{
+    return sfx2::sidebar::EnumContext::GetContextName(
+        ::svx::sidebar::SelectionAnalyzer::GetContextForSelection_SC(
+            GetDrawView()->GetMarkedObjectList()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

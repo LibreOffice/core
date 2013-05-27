@@ -304,7 +304,7 @@ void ViewShell::Exit (void)
  */
 void ViewShell::Activate(sal_Bool bIsMDIActivate)
 {
-    SfxShell::Activate(bIsMDIActivate);
+    // Do not forward to SfxShell::Activate()
 
     /* According to MI, nobody is allowed to call GrabFocus, who does not
        exactly know from which window the focus is grabbed. Since Activate()

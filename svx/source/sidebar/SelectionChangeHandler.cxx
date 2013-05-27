@@ -32,7 +32,7 @@ using namespace sfx2::sidebar;
 namespace svx { namespace sidebar {
 
 SelectionChangeHandler::SelectionChangeHandler (
-    const boost::function<sfx2::sidebar::EnumContext::Context(void)>& rSelectionChangeCallback,
+    const boost::function<rtl::OUString(void)>& rSelectionChangeCallback,
     const Reference<frame::XController>& rxController,
     const EnumContext::Context eDefaultContext)
     : SelectionChangeHandlerInterfaceBase(m_aMutex),
@@ -58,7 +58,8 @@ void SAL_CALL SelectionChangeHandler::selectionChanged (const lang::EventObject&
 {
     if (maSelectionChangeCallback)
     {
-        const EnumContext::Context eContext (maSelectionChangeCallback());
+        const EnumContext::Context eContext (
+            EnumContext::GetContextEnum(maSelectionChangeCallback()));
         ContextChangeEventMultiplexer::NotifyContextChange(
             mxController,
             eContext==EnumContext::Context_Unknown

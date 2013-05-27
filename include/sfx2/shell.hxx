@@ -238,7 +238,20 @@ public:
     virtual SfxItemSet*         CreateItemSet( sal_uInt16 nId );
     virtual void                ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
 
-    void                        SetContextName (const ::rtl::OUString& rsContextName);
+    /** Set the name of the sidebar context that is broadcast on calls
+        to Activation().
+    */
+    void SetContextName (const ::rtl::OUString& rsContextName);
+
+    /** Broadcast a sidebar context change.
+        This method is typically called from Activate() or
+        Deactivate().
+        @param bIsActivated
+            When <TRUE/> then broadcast the context name that was
+            defined with an earlier call to SetContextName().
+            When <FALSE/> then broadcast the 'default' context.
+    */
+    void BroadcastContextForActivation (const bool bIsActivated);
 
 #ifndef _SFXSH_HXX
     SAL_DLLPRIVATE bool CanExecuteSlot_Impl( const SfxSlot &rSlot );

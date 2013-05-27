@@ -363,6 +363,8 @@ void OutlineViewShell::Activate( sal_Bool bIsMDIActivate )
     }
 
     ViewShell::Activate( bIsMDIActivate );
+    SfxShell::BroadcastContextForActivation(true);
+
     pOlView->SetLinks();
     pOlView->ConnectToApplication();
 

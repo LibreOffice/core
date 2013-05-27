@@ -53,7 +53,7 @@ class SVX_DLLPUBLIC SelectionChangeHandler
 {
 public:
     SelectionChangeHandler (
-        const boost::function<sfx2::sidebar::EnumContext::Context(void)>& rSelectionChangeCallback,
+        const boost::function<rtl::OUString(void)>& rSelectionChangeCallback,
         const cssu::Reference<css::frame::XController>& rxController,
         const sfx2::sidebar::EnumContext::Context eDefaultContext);
     virtual ~SelectionChangeHandler (void);
@@ -71,7 +71,7 @@ public:
     void Disconnect (void);
 
 private:
-    const boost::function<sfx2::sidebar::EnumContext::Context(void)> maSelectionChangeCallback;
+    const boost::function<rtl::OUString(void)> maSelectionChangeCallback;
     cssu::Reference<css::frame::XController> mxController;
     const sfx2::sidebar::EnumContext::Context meDefaultContext;
     bool mbIsConnected;
