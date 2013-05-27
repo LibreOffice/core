@@ -479,11 +479,21 @@ gb_Library_FILENAMES :=\
 gb_Library_DLLEXT := .dll
 gb_Library_MAJORVER := 3
 gb_Library_RTEXT := MSC$(gb_Library_DLLEXT)
+
+ifeq ($(USE_SYSTEM_STL),YES)
+ifeq ($(gb_PRODUCT),$(true))
+gb_Library_STLEXT := msvcprt.lib
+else
+gb_Library_STLEXT := msvcprtd.lib
+endif
+else
 ifeq ($(gb_PRODUCT),$(true))
 gb_Library_STLEXT := port_vc7145$(gb_Library_DLLEXT)
 else
 gb_Library_STLEXT := port_vc7145_stldebug$(gb_Library_DLLEXT)
 endif
+endif
+
 gb_Library_OOOEXT := $(gb_Library_DLLEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_DLLEXT)
 gb_Library_UNOVEREXT := $(gb_Library_MAJORVER)$(gb_Library_DLLEXT)

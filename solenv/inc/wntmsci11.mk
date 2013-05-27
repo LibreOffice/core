@@ -309,12 +309,28 @@ STDLIBCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 STDSHLGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 STDSHLCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 
+.IF "$(USE_SYSTEM_STL)" == "YES"
+.IF "$(DYNAMIC_CRT)"!=""
+.IF "$(USE_STLP_DEBUG)" != ""
+LIBCMT+= msvcprtd.lib
+.ELSE
+LIBCMT+= msvcprt.lib
+.ENDIF
+.ELSE # "$(DYNAMIC_CRT)"==""
+.IF "$(USE_STLP_DEBUG)" != ""
+LIBCMT+= libcpmtd.lib
+.ELSE
+LIBCMT+= libcpmt.lib
+.ENDIF "$(USE_STLP_DEBUG)" == ""
+.ENDIF # "$(DYNAMIC_CRT)"!=""
+.ELSE # !USE_SYSTEM_STL
 .IF "$(USE_STLP_DEBUG)" != ""
 LIBSTLPORT=stlport_vc71_stldebug.lib
 LIBSTLPORTST=stlport_vc71_stldebug_static.lib
 .ELSE
 LIBSTLPORT=stlport_vc71.lib
 LIBSTLPORTST=stlport_vc71_static.lib
+.ENDIF
 .ENDIF
 
 .IF "$(PROF_EDITION)" == ""
