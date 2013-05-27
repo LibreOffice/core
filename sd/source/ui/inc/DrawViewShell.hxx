@@ -28,7 +28,6 @@
 #include "tools/AsynchronousCall.hxx"
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/sidebar/EnumContext.hxx>
 #include "TabControl.hxx"
 #include "pres.hxx"
 #include <svx/sidebar/SelectionChangeHandler.hxx>
@@ -371,6 +370,8 @@ public:
     */
     virtual bool RelocateToParentWindow (::Window* pParentWindow);
 
+    ::rtl::OUString GetSidebarContextName (void) const;
+
 protected:
     DrawView*       mpDrawView;
     SdPage*         mpActualPage;
@@ -494,8 +495,6 @@ private:
         SdrPageView& rPageView,
         const sal_uInt16 nSnapLineIndex,
         const Point& rMouseLocation);
-
-    ::sfx2::sidebar::EnumContext::Context GetContextForSelection (void) const;
 
     using ViewShell::Notify;
 

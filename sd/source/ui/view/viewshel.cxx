@@ -329,7 +329,7 @@ void ViewShell::Exit (void)
 
 void ViewShell::Activate(sal_Bool bIsMDIActivate)
 {
-    SfxShell::Activate(bIsMDIActivate);
+    // Do not forward to SfxShell::Activate()
 
     // Laut MI darf keiner GrabFocus rufen, der nicht genau weiss von
     // welchem Window der Focus gegrabt wird. Da Activate() vom SFX teilweise

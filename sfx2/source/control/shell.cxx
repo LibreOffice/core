@@ -761,17 +761,12 @@ void SfxShell::Activate
     wird, um den Subclasses die Gelegenheit zu geben, auf das Aktivieren
     zu reagieren.
 
-    Die Basisimplementation ist leer und braucht nicht gerufen zu werden.
-
-
     [Querverweise]
     StarView SystemWindow::Activate(sal_Bool)
 */
 
 {
-    SfxViewFrame* pViewFrame = GetFrame();
-    if (pViewFrame != NULL)
-        pImp->maContextChangeBroadcaster.Activate(pViewFrame->GetFrame().GetFrameInterface());
+    BroadcastContextForActivation(true);
 }
 
 //--------------------------------------------------------------------
@@ -797,18 +792,14 @@ void SfxShell::Deactivate
     wird, um den Subclasses die Gelegenheit zu geben, auf das Deaktivieren
     zu reagieren.
 
-    Die Basisimplementation ist leer und braucht nicht gerufen zu werden.
-
-
     [Querverweise]
     StarView SystemWindow::Dectivate(sal_Bool)
 */
 
 {
-    SfxViewFrame* pViewFrame = GetFrame();
-    if (pViewFrame != NULL)
-        pImp->maContextChangeBroadcaster.Deactivate(pViewFrame->GetFrame().GetFrameInterface());
+    BroadcastContextForActivation(false);
 }
+
 
 void SfxShell::ParentActivate
 (
@@ -1298,3 +1289,12 @@ void SfxShell::SetViewShell_Impl( SfxViewShell* pView )
 
 
 
+void SfxShell::BroadcastContextForActivation (const bool bIsActivated)
+{
+    SfxViewFrame* pViewFrame = GetFrame();
+    if (pViewFrame != NULL)
+        if (bIsActivated)
+            pImp->maContextChangeBroadcaster.Activate(pViewFrame->GetFrame().GetFrameInterface());
+        else
+            pImp->maContextChangeBroadcaster.Deactivate(pViewFrame->GetFrame().GetFrameInterface());
+}
