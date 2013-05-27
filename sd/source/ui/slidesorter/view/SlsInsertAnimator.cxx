@@ -154,7 +154,7 @@ private:
         view::Layouter& rLayouter,
         const InsertPosition& rInsertPosition,
         const bool bCreate = true);
-    RunContainer::iterator FindRun (const sal_Int32 nRunIndex) const;
+    RunContainer::const_iterator FindRun (const sal_Int32 nRunIndex) const;
 };
 
 
@@ -247,7 +247,7 @@ SharedPageObjectRun InsertAnimator::Implementation::GetRun (
     if (nRow < 0)
         return SharedPageObjectRun();
 
-    RunContainer::iterator iRun (maRuns.end());
+    RunContainer::const_iterator iRun (maRuns.end());
     if (rLayouter.GetColumnCount() == 1)
     {
         // There is only one run that contains all slides.
@@ -288,7 +288,7 @@ SharedPageObjectRun InsertAnimator::Implementation::GetRun (
 
 
 
-InsertAnimator::Implementation::RunContainer::iterator
+InsertAnimator::Implementation::RunContainer::const_iterator
     InsertAnimator::Implementation::FindRun (const sal_Int32 nRunIndex) const
 {
     return std::find_if(
@@ -326,7 +326,7 @@ void InsertAnimator::Implementation::RemoveRun (const ::boost::shared_ptr<PageOb
         // Do not remove runs that show the space for the insertion indicator.
         if (pRun->mnLocalInsertIndex == -1)
         {
-            InsertAnimator::Implementation::RunContainer::iterator iRun (FindRun(pRun->mnRunIndex));
+            InsertAnimator::Implementation::RunContainer::const_iterator iRun (FindRun(pRun->mnRunIndex));
             if (iRun != maRuns.end())
             {
                 OSL_ASSERT(*iRun == pRun);
