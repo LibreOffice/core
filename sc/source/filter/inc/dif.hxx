@@ -62,7 +62,7 @@ class ScPatternAttr;
 class DifParser
 {
 public:
-    String              aData;
+    OUString              aData;
     double              fVal;
     sal_uInt32              nVector;
     sal_uInt32              nVal;

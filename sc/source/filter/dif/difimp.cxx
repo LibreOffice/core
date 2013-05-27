@@ -61,7 +61,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
     sal_Bool        bSyntErrWarn = false;
     sal_Bool        bOverflowWarn = false;
 
-    rtl::OUString   aData = aDifParser.aData;
+    rtl::OUString&   aData = aDifParser.aData;
     sal_Bool        bData = false;
 
     rIn.Seek( 0 );
@@ -372,7 +372,7 @@ TOPIC DifParser::GetNextTopic( void )
                 if( aLine.getLength() > 2 )
                     aData = aLine.copy( 1, aLine.getLength() - 2 );
                 else
-                    aData.Erase();
+                    aData = OUString();
                 eS = S_END;
                 break;
             case S_END:
@@ -395,20 +395,14 @@ TOPIC DifParser::GetNextTopic( void )
 }
 
 
-static void lcl_DeEscapeQuotesDif( String& rString )
+static void lcl_DeEscapeQuotesDif( OUString& rString )
 {
     //  Special handling for DIF import: Escaped (duplicated) quotes are resolved.
     //  Single quote characters are left in place because older versions didn't
     //  escape quotes in strings (and Excel doesn't when using the clipboard).
     //  The quotes around the string are removed before this function is called.
 
-    static const sal_Unicode aDQ[] = { '"', '"', 0 };
-    xub_StrLen nPos = 0;
-    while ( (nPos = rString.Search( aDQ, nPos )) != STRING_NOTFOUND )
-    {
-        rString.Erase( nPos, 1 );
-        ++nPos;
-    }
+    rString = rString.replaceAll("\"\"", "\"");
 }
 
 // Determine if passed in string is numeric data and set fVal/nNumFormat if so
@@ -528,18 +522,14 @@ DATASET DifParser::GetNextDataset( void )
                 ReadNextLine( aTmpLine );
                 if ( eRet == D_SYNT_ERROR )
                 {   // for broken records write "#ERR: data" to cell
-                    String aTmp( RTL_CONSTASCII_USTRINGPARAM( "#ERR: " ));
-                    aTmp += pAktBuffer;
-                    aTmp.AppendAscii( " (" );
-                    OSL_ENSURE( aTmpLine.getLength() <= STRING_MAXLEN - aTmp.Len() - 1, "GetNextDataset(): line doesn't fit into data");
-                    aTmp += aTmpLine;
-                    aTmp += sal_Unicode(')');
-                    aData = aTmp;
+                    OUStringBuffer aTmp("#ERR: ");
+                    aTmp.append(pAktBuffer).append(" (");
+                    aTmp.append(aTmpLine).append(')');
+                    aData = aTmp.makeStringAndClear();
                     eRet = D_STRING;
                 }
                 else
                 {
-                    OSL_ENSURE( aTmpLine.getLength() <= STRING_MAXLEN, "GetNextDataset(): line doesn't fit into data");
                     aData = aTmpLine;
                 }
             }
@@ -561,7 +551,6 @@ DATASET DifParser::GetNextDataset( void )
                         // Single line string
                         if( nLineLength >= 2 && pLine[nLineLength - 1] == '"' )
                         {
-                            OSL_ENSURE( aLine.getLength() - 2 <= STRING_MAXLEN, "GetNextDataset(): line doesn't fit into data");
                             aData = aLine.copy( 1, nLineLength - 2 );
                             lcl_DeEscapeQuotesDif( aData );
                             eRet = D_STRING;
@@ -570,12 +559,11 @@ DATASET DifParser::GetNextDataset( void )
                     else
                     {
                         // Multiline string
-                        OSL_ENSURE( aLine.getLength() - 1 <= STRING_MAXLEN, "GetNextDataset(): line doesn't fit into data");
                         aData = aLine.copy( 1 );
                         bool bContinue = true;
                         while ( bContinue )
                         {
-                            aData.Append( '\n' );
+                            aData = aData + "\n";
                             bContinue = !rIn.IsEof() && ReadNextLine( aLine );
                             if( bContinue )
                             {
@@ -586,13 +574,11 @@ DATASET DifParser::GetNextDataset( void )
                                     bContinue = !LookAhead();
                                     if( bContinue )
                                     {
-                                        OSL_ENSURE( aLine.getLength() <= STRING_MAXLEN - aData.Len(), "GetNextDataset(): line doesn't fit into data");
-                                        aData.Append( aLine );
+                                        aData = aData + aLine;
                                     }
                                     else if( pLine[nLineLength - 1] == '"' )
                                     {
-                                        OSL_ENSURE( nLineLength - 1 <= STRING_MAXLEN - aData.Len(), "GetNextDataset(): line doesn't fit into data");
-                                        aData.Append( pLine, nLineLength - 1 );
+                                        aData = aData + aLine.copy(0, nLineLength -1 );
                                         lcl_DeEscapeQuotesDif( aData );
                                         eRet = D_STRING;
                                     }
