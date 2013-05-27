@@ -47,9 +47,53 @@ static const OUString lcl_aImplementationName_Exponential(
     "com.sun.star.comp.chart2.ExponentialRegressionCurve" );
 static const OUString lcl_aImplementationName_Potential(
     "com.sun.star.comp.chart2.PotentialRegressionCurve" );
+static const OUString lcl_aImplementationName_Polynomial(
+    "com.sun.star.comp.chart2.PolynomialRegressionCurve" );
+static const OUString lcl_aImplementationName_MovingAverage(
+    "com.sun.star.comp.chart2.MovingAverageRegressionCurve" );
 
 static const OUString lcl_aServiceName(
     "com.sun.star.chart2.RegressionCurve" );
+
+enum
+{
+    PROPERTY_DEGREE,
+    PROPERTY_PERIOD,
+    PROPERTY_EXTRAPOLATE_FORWARD,
+    PROPERTY_EXTRAPOLATE_BACKWARD
+};
+
+void lcl_AddPropertiesToVector(
+    ::std::vector< Property > & rOutProperties )
+{
+    rOutProperties.push_back(
+        Property( "PolynomialDegree",
+                PROPERTY_DEGREE,
+                ::getCppuType( reinterpret_cast< const sal_Int32* >(0)),
+                beans::PropertyAttribute::BOUND |
+                beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( "MovingAveragePeriod",
+                PROPERTY_PERIOD,
+                ::getCppuType( reinterpret_cast< const sal_Int32* >(0)),
+                beans::PropertyAttribute::BOUND |
+                beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( "ExtrapolateForward",
+                PROPERTY_EXTRAPOLATE_FORWARD,
+                ::getCppuType( reinterpret_cast< const double* >(0) ),
+                beans::PropertyAttribute::BOUND |
+                beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( "ExtrapolateBackward",
+                PROPERTY_EXTRAPOLATE_BACKWARD,
+                ::getCppuType( reinterpret_cast< const double* >(0) ),
+                beans::PropertyAttribute::BOUND |
+                beans::PropertyAttribute::MAYBEDEFAULT ));
+}
 
 struct StaticXXXDefaults_Initializer
 {
@@ -82,6 +126,7 @@ private:
     uno::Sequence< Property > lcl_GetPropertySequence()
     {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        lcl_AddPropertiesToVector( aProperties );
         ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
 
         ::std::sort( aProperties.begin(), aProperties.end(),
@@ -189,6 +234,10 @@ OUString SAL_CALL RegressionCurveModel::getServiceName()
             return OUString("com.sun.star.chart2.ExponentialRegressionCurve");
         case CURVE_TYPE_POWER:
             return OUString("com.sun.star.chart2.PotentialRegressionCurve");
+        case CURVE_TYPE_POLYNOMIAL:
+            return OUString("com.sun.star.chart2.PolynomialRegressionCurve");
+        case CURVE_TYPE_MOVING_AVERAGE:
+            return OUString("com.sun.star.chart2.MovingAverageRegressionCurve");
     }
 
     return OUString();
@@ -423,6 +472,59 @@ uno::Reference< util::XCloneable > SAL_CALL PotentialRegressionCurve::createClon
     throw (uno::RuntimeException)
 {
     return uno::Reference< util::XCloneable >( new PotentialRegressionCurve( *this ));
+}
+
+
+PolynomialRegressionCurve::PolynomialRegressionCurve(
+    const uno::Reference< uno::XComponentContext > & xContext )
+        : RegressionCurveModel( xContext, RegressionCurveModel::CURVE_TYPE_POLYNOMIAL )
+{}
+PolynomialRegressionCurve::PolynomialRegressionCurve(
+    const PolynomialRegressionCurve & rOther ) :
+        RegressionCurveModel( rOther )
+{}
+PolynomialRegressionCurve::~PolynomialRegressionCurve()
+{}
+uno::Sequence< OUString > PolynomialRegressionCurve::getSupportedServiceNames_Static()
+{
+    uno::Sequence< OUString > aServices( 2 );
+    aServices[ 0 ] = lcl_aServiceName;
+    aServices[ 1 ] = "com.sun.star.chart2.PolynomialRegressionCurve";
+    return aServices;
+}
+// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+APPHELPER_XSERVICEINFO_IMPL( PolynomialRegressionCurve, lcl_aImplementationName_Polynomial );
+
+uno::Reference< util::XCloneable > SAL_CALL PolynomialRegressionCurve::createClone()
+    throw (uno::RuntimeException)
+{
+    return uno::Reference< util::XCloneable >( new PolynomialRegressionCurve( *this ));
+}
+
+MovingAverageRegressionCurve::MovingAverageRegressionCurve(
+    const uno::Reference< uno::XComponentContext > & xContext )
+        : RegressionCurveModel( xContext, RegressionCurveModel::CURVE_TYPE_MOVING_AVERAGE )
+{}
+MovingAverageRegressionCurve::MovingAverageRegressionCurve(
+    const MovingAverageRegressionCurve & rOther ) :
+        RegressionCurveModel( rOther )
+{}
+MovingAverageRegressionCurve::~MovingAverageRegressionCurve()
+{}
+uno::Sequence< OUString > MovingAverageRegressionCurve::getSupportedServiceNames_Static()
+{
+    uno::Sequence< OUString > aServices( 2 );
+    aServices[ 0 ] = lcl_aServiceName;
+    aServices[ 1 ] = "com.sun.star.chart2.MovingAverageRegressionCurve";
+    return aServices;
+}
+// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+APPHELPER_XSERVICEINFO_IMPL( MovingAverageRegressionCurve, lcl_aImplementationName_MovingAverage );
+
+uno::Reference< util::XCloneable > SAL_CALL MovingAverageRegressionCurve::createClone()
+    throw (uno::RuntimeException)
+{
+    return uno::Reference< util::XCloneable >( new MovingAverageRegressionCurve( *this ));
 }
 
 

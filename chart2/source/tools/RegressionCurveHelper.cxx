@@ -20,6 +20,8 @@
 #include "RegressionCurveHelper.hxx"
 #include "MeanValueRegressionCurveCalculator.hxx"
 #include "LinearRegressionCurveCalculator.hxx"
+#include "PolynomialRegressionCurveCalculator.hxx"
+#include "MovingAverageRegressionCurveCalculator.hxx"
 #include "LogarithmicRegressionCurveCalculator.hxx"
 #include "ExponentialRegressionCurveCalculator.hxx"
 #include "PotentialRegressionCurveCalculator.hxx"
@@ -62,6 +64,12 @@ OUString lcl_getServiceNameForType( ::chart::RegressionCurveHelper::tRegressionT
             break;
         case ::chart::RegressionCurveHelper::REGRESSION_TYPE_POWER:
             aServiceName = "com.sun.star.chart2.PotentialRegressionCurve";
+            break;
+        case ::chart::RegressionCurveHelper::REGRESSION_TYPE_POLYNOMIAL:
+            aServiceName = "com.sun.star.chart2.PolynomialRegressionCurve";
+            break;
+        case ::chart::RegressionCurveHelper::REGRESSION_TYPE_MOVING_AVERAGE:
+            aServiceName = "com.sun.star.chart2.MovingAverageRegressionCurve";
             break;
         default:
             OSL_FAIL("unknown regression curve type - use linear instead");
@@ -107,6 +115,14 @@ Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServ
     {
         xResult.set( new PotentialRegressionCurve( xContext ) );
     }
+    else if( aServiceName == "com.sun.star.chart2.PolynomialRegressionCurve" )
+    {
+        xResult.set( new PolynomialRegressionCurve( xContext ) );
+    }
+    else if( aServiceName == "com.sun.star.chart2.MovingAverageRegressionCurve" )
+    {
+        xResult.set( new MovingAverageRegressionCurve( xContext ) );
+    }
 
     return xResult;
 }
@@ -138,6 +154,14 @@ Reference< XRegressionCurveCalculator > RegressionCurveHelper::createRegressionC
     else if( aServiceName == "com.sun.star.chart2.PotentialRegressionCurve" )
     {
         xResult.set( new PotentialRegressionCurveCalculator() );
+    }
+    else if( aServiceName == "com.sun.star.chart2.PolynomialRegressionCurve" )
+    {
+        xResult.set( new PolynomialRegressionCurveCalculator() );
+    }
+    else if( aServiceName == "com.sun.star.chart2.MovingAverageRegressionCurve" )
+    {
+        xResult.set( new MovingAverageRegressionCurveCalculator() );
     }
 
     return xResult;
@@ -349,7 +373,6 @@ void RegressionCurveHelper::addRegressionCurve(
 
     uno::Reference< chart2::XRegressionCurve > xCurve;
     OUString aServiceName( lcl_getServiceNameForType( eType ));
-
     if( !aServiceName.isEmpty())
     {
         // todo: use a valid context
@@ -529,6 +552,14 @@ RegressionCurveHelper::tRegressionType RegressionCurveHelper::getRegressionType(
             {
                 eResult = REGRESSION_TYPE_MEAN_VALUE;
             }
+            else if( aServiceName == "com.sun.star.chart2.PolynomialRegressionCurve" )
+            {
+                eResult = REGRESSION_TYPE_POLYNOMIAL;
+            }
+            else if( aServiceName == "com.sun.star.chart2.MovingAverageRegressionCurve" )
+            {
+                eResult = REGRESSION_TYPE_MOVING_AVERAGE;
+            }
         }
     }
     catch( const Exception & ex )
@@ -590,6 +621,14 @@ OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XR
     else if( aServiceName == "com.sun.star.chart2.PotentialRegressionCurve" )
     {
         aResult = SCH_RESSTR(STR_REGRESSION_POWER);
+    }
+    else if( aServiceName == "com.sun.star.chart2.PolynomialRegressionCurve" )
+    {
+        aResult = SCH_RESSTR(STR_REGRESSION_POLYNOMIAL);
+    }
+    else if( aServiceName == "com.sun.star.chart2.MovingAverageRegressionCurve" )
+    {
+        aResult = SCH_RESSTR(STR_REGRESSION_MOVING_AVERAGE);
     }
 
     return aResult;

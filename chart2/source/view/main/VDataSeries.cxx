@@ -515,6 +515,33 @@ double VDataSeries::getYValue( sal_Int32 index ) const
     return fRet;
 }
 
+void VDataSeries::getMinMaxXValue(double& fMin, double& fMax) const
+{
+    rtl::math::setNan( &fMax );
+    rtl::math::setNan( &fMin );
+
+    uno::Sequence< double > aValuesX = getAllX();
+
+    if(aValuesX.getLength() > 0)
+    {
+        double aValue;
+
+        fMax = fMin = aValuesX[0];
+
+        for (sal_Int32 i = 1; i < aValuesX.getLength(); i++)
+        {
+            aValue = aValuesX[i];
+            if ( aValue > fMax)
+            {
+                fMax = aValue;
+            }
+            else if ( aValue < fMin)
+            {
+                fMin = aValue;
+            }
+        }
+    }
+}
 double VDataSeries::getY_Min( sal_Int32 index ) const
 {
     return m_aValues_Y_Min.getValue( index );

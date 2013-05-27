@@ -73,6 +73,14 @@
     <service name="com.sun.star.chart2.PotentialRegressionCurve"/>
     <service name="com.sun.star.chart2.RegressionCurve"/>
   </implementation>
+  <implementation name="com.sun.star.comp.chart2.PolynomialRegressionCurve">
+    <service name="com.sun.star.chart2.PolynomialRegressionCurve"/>
+    <service name="com.sun.star.chart2.RegressionCurve"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.chart2.MovingAverageRegressionCurve">
+    <service name="com.sun.star.chart2.MovingAverageRegressionCurve"/>
+    <service name="com.sun.star.chart2.RegressionCurve"/>
+  </implementation>
   <implementation name="com.sun.star.comp.chart2.RegressionEquation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.RegressionEquation"/>

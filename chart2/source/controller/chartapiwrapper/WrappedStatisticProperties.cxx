@@ -76,6 +76,12 @@ Any lcl_getRegressionDefault()
         case RegressionCurveHelper::REGRESSION_TYPE_POWER:
             eRet = ::com::sun::star::chart::ChartRegressionCurveType_POWER;
             break;
+        case RegressionCurveHelper::REGRESSION_TYPE_POLYNOMIAL:
+            eRet = ::com::sun::star::chart::ChartRegressionCurveType_POLYNOMIAL;
+            break;
+        /*case RegressionCurveHelper::REGRESSION_TYPE_MOVING_AVERAGE:
+            eRet = ::com::sun::star::chart::ChartRegressionCurveType_MOVING_AVERAGE;
+            break;*/
         default:
             eRet = ::com::sun::star::chart::ChartRegressionCurveType_NONE;
             break;
@@ -100,6 +106,7 @@ RegressionCurveHelper::tRegressionType lcl_getRegressionType( ::com::sun::star::
             eRet = RegressionCurveHelper::REGRESSION_TYPE_EXP;
             break;
         case ::com::sun::star::chart::ChartRegressionCurveType_POLYNOMIAL:
+        //case ::com::sun::star::chart::ChartRegressionCurveType_MOVING_AVERAGE:
         case ::com::sun::star::chart::ChartRegressionCurveType_POWER:
             eRet = RegressionCurveHelper::REGRESSION_TYPE_POWER;
             break;

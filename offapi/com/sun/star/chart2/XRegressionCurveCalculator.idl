@@ -36,6 +36,11 @@ module chart2
 
 interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
 {
+
+    void setRegressionProperties( [in] long degree,
+                                  [in] double intercept,
+                                  [in] long period);
+
     /** recalculates the parameters of the internal regression curve according to
         the <i>x</i>- and <i>y</i>-values given.
 
@@ -48,7 +53,7 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
             which the regression is based
     */
     void recalculateRegression( [in] sequence< double > aXValues,
-                                [in] sequence< double > aYValues );
+                                [in] sequence< double > aYValues);
 
 
     /** calculates the value of the regression curve for <i>x</i>.

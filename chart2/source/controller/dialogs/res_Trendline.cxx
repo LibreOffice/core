@@ -26,32 +26,33 @@
 #include "Bitmaps.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
 
+#include <svl/intitem.hxx>
+
 #include <vector>
 #include <algorithm>
 
 namespace
 {
-template< class T >
-    long lcl_getRightEdge( T & rControl )
-{
-    return rControl.CalcMinimumSize().Width() + rControl.GetPosPixel().X() - rControl.GetParent()->GetPosPixel().X();
-}
 
-template< class T >
-    void lcl_AdjustControlSize( T & rControl )
-{
-    Size aSize( rControl.GetSizePixel());
-    aSize.setWidth( rControl.CalcMinimumSize().Width());
-    rControl.SetSizePixel( aSize );
-}
+    template< class T > long lcl_getRightEdge( T & rControl )
+    {
+        return rControl.CalcMinimumSize().Width() + rControl.GetPosPixel().X() - rControl.GetParent()->GetPosPixel().X();
+    }
 
-void lcl_AdjustControlSize( Control & rControl, long nRightEdge )
-{
-    Size aSize( rControl.GetSizePixel());
-    Point aPosition( rControl.GetPosPixel());
-    aSize.setWidth( nRightEdge - aPosition.getX());
-    rControl.SetSizePixel( aSize );
-}
+    template< class T > void lcl_AdjustControlSize( T & rControl )
+    {
+        Size aSize( rControl.GetSizePixel());
+        aSize.setWidth( rControl.CalcMinimumSize().Width());
+        rControl.SetSizePixel( aSize );
+    }
+
+    void lcl_AdjustControlSize( Control & rControl, long nRightEdge )
+    {
+        Size aSize( rControl.GetSizePixel());
+        Point aPosition( rControl.GetPosPixel());
+        aSize.setWidth( nRightEdge - aPosition.getX());
+        rControl.SetSizePixel( aSize );
+    }
 
 } // anonymous namespace
 
@@ -61,17 +62,29 @@ namespace chart
 TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInAttrs, bool bNoneAvailable ) :
         m_aFLType( pParent, SchResId( FL_TYPE )),
 
-        m_aRBNone(        pParent, SchResId( RB_NONE        )),
-        m_aRBLinear(      pParent, SchResId( RB_LINEAR      )),
-        m_aRBLogarithmic( pParent, SchResId( RB_LOGARITHMIC )),
-        m_aRBExponential( pParent, SchResId( RB_EXPONENTIAL )),
-        m_aRBPower(       pParent, SchResId( RB_POWER       )),
+        m_aRBNone(          pParent, SchResId( RB_NONE              )),
+        m_aRBLinear(        pParent, SchResId( RB_LINEAR            )),
+        m_aRBLogarithmic(   pParent, SchResId( RB_LOGARITHMIC       )),
+        m_aRBExponential(   pParent, SchResId( RB_EXPONENTIAL       )),
+        m_aRBPower(         pParent, SchResId( RB_POWER             )),
+        m_aRBPolynomial(    pParent, SchResId( RB_POLYNOMIAL        )),
+        m_aRBMovingAverage( pParent, SchResId( RB_MOVING_AVERAGE    )),
 
-        m_aFINone(        pParent, SchResId( FI_NONE        )),
-        m_aFILinear(      pParent, SchResId( FI_LINEAR      )),
-        m_aFILogarithmic( pParent, SchResId( FI_LOGARITHMIC )),
-        m_aFIExponential( pParent, SchResId( FI_EXPONENTIAL )),
-        m_aFIPower(       pParent, SchResId( FI_POWER       )),
+        m_aFINone(          pParent, SchResId( FI_NONE              )),
+        m_aFILinear(        pParent, SchResId( FI_LINEAR            )),
+        m_aFILogarithmic(   pParent, SchResId( FI_LOGARITHMIC       )),
+        m_aFIExponential(   pParent, SchResId( FI_EXPONENTIAL       )),
+        m_aFIPower(         pParent, SchResId( FI_POWER             )),
+        m_aFIPolynomial(    pParent, SchResId( FI_POLYNOMIAL       )),
+        m_aFIMovingAverage( pParent, SchResId( FI_MOVING_AVERAGE    )),
+
+        m_aNF_Degree(       pParent, SchResId( NF_DEGREE            )),
+        m_aNF_Period(       pParent, SchResId( NF_PERIOD            )),
+
+        m_aNF_ExtrapolateForward(   pParent, SchResId( NF_EXTRAPOLATE_FORWARD            )),
+        m_aNF_ExtrapolateBackward(  pParent, SchResId( NF_EXTRAPOLATE_BACKWARD            )),
+        m_aCB_SetIntercept(         pParent, SchResId( CB_SET_INTERCEPT          )),
+        m_aNF_InterceptValue(       pParent, SchResId( NF_INTERCEPT_VALUE            )),
 
         m_aFLEquation(             pParent, SchResId( FL_EQUATION               )),
         m_aCBShowEquation(         pParent, SchResId( CB_SHOW_EQUATION          )),
@@ -92,6 +105,11 @@ TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInA
     m_aRBLogarithmic.SetClickHdl( LINK(this, TrendlineResources, SelectTrendLine ));
     m_aRBExponential.SetClickHdl( LINK(this, TrendlineResources, SelectTrendLine ));
     m_aRBPower.SetClickHdl( LINK(this, TrendlineResources, SelectTrendLine ));
+    m_aRBPolynomial.SetClickHdl( LINK(this, TrendlineResources, SelectTrendLine ));
+    m_aRBMovingAverage.SetClickHdl( LINK(this, TrendlineResources, SelectTrendLine ));
+
+    m_aNF_InterceptValue.SetMin( SAL_MIN_INT64 );
+    m_aNF_InterceptValue.SetMax( SAL_MAX_INT64 );
 
     Reset( rInAttrs );
     UpdateControlStates();
@@ -109,6 +127,8 @@ long TrendlineResources::adjustControlSizes()
     aControlRightEdges.push_back( lcl_getRightEdge( m_aRBLogarithmic ));
     aControlRightEdges.push_back( lcl_getRightEdge( m_aRBExponential ));
     aControlRightEdges.push_back( lcl_getRightEdge( m_aRBPower ));
+    aControlRightEdges.push_back( lcl_getRightEdge( m_aRBPolynomial ));
+    aControlRightEdges.push_back( lcl_getRightEdge( m_aRBMovingAverage ));
     aControlRightEdges.push_back( lcl_getRightEdge( m_aCBShowEquation ));
     aControlRightEdges.push_back( lcl_getRightEdge( m_aCBShowCorrelationCoeff ));
 
@@ -117,6 +137,8 @@ long TrendlineResources::adjustControlSizes()
     lcl_AdjustControlSize( m_aRBLogarithmic );
     lcl_AdjustControlSize( m_aRBExponential );
     lcl_AdjustControlSize( m_aRBPower );
+    lcl_AdjustControlSize( m_aRBPolynomial );
+    lcl_AdjustControlSize( m_aRBMovingAverage );
     lcl_AdjustControlSize( m_aCBShowEquation );
     lcl_AdjustControlSize( m_aCBShowCorrelationCoeff );
 
@@ -147,6 +169,10 @@ IMPL_LINK( TrendlineResources, SelectTrendLine, RadioButton *, pRadioButton )
         m_eTrendLineType = CHREGRESS_EXP;
     else if( pRadioButton == &m_aRBPower )
         m_eTrendLineType = CHREGRESS_POWER;
+    else if( pRadioButton == &m_aRBPolynomial )
+        m_eTrendLineType = CHREGRESS_POLYNOMIAL;
+    else if( pRadioButton == &m_aRBMovingAverage )
+        m_eTrendLineType = CHREGRESS_MOVING_AVERAGE;
     else if( pRadioButton == &m_aRBNone )
     {
         OSL_ASSERT( m_bNoneAvailable );
@@ -169,7 +195,49 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     {
         const SvxChartRegressItem * pItem = dynamic_cast< const SvxChartRegressItem * >( pPoolItem );
         if( pItem )
+        {
             m_eTrendLineType = pItem->GetValue();
+        }
+    }
+
+    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_DEGREE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    {
+        sal_Int32 nDegree = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
+        m_aNF_Degree.SetValue( nDegree );
+    }
+    else
+    {
+        m_aNF_Period.SetValue( 2 );
+    }
+
+    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_PERIOD, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    {
+        sal_Int32 nPeriod = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
+        m_aNF_Period.SetValue( nPeriod );
+    }
+    else
+    {
+        m_aNF_Period.SetValue( 2 );
+    }
+
+    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    {
+        double nValue = static_cast< const SvxDoubleItem * >( pPoolItem )->GetValue() * 100;
+        m_aNF_ExtrapolateForward.SetValue( (sal_Int64) nValue );
+    }
+    else
+    {
+        m_aNF_ExtrapolateForward.SetValue( 0 );
+    }
+
+    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    {
+        double nValue = static_cast< const SvxDoubleItem * >( pPoolItem )->GetValue() * 100;
+        m_aNF_ExtrapolateBackward.SetValue( (sal_Int64) nValue );
+    }
+    else
+    {
+        m_aNF_ExtrapolateBackward.SetValue( 0 );
     }
 
     aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_EQUATION, sal_True, &pPoolItem );
@@ -214,6 +282,12 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
             case CHREGRESS_POWER :
                 m_aRBPower.Check();
                 break;
+            case CHREGRESS_POLYNOMIAL :
+                m_aRBPolynomial.Check();
+                break;
+            case CHREGRESS_MOVING_AVERAGE :
+                m_aRBMovingAverage.Check();
+                break;
             case CHREGRESS_NONE:
                 OSL_ASSERT( m_bNoneAvailable );
                 m_aRBNone.Check();
@@ -230,17 +304,32 @@ sal_Bool TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
         rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_EQUATION, m_aCBShowEquation.IsChecked() ));
     if( m_aCBShowCorrelationCoeff.GetState() != STATE_DONTKNOW )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_COEFF, m_aCBShowCorrelationCoeff.IsChecked() ));
+
+    sal_Int32 aDegree = m_aNF_Degree.GetValue();
+    rOutAttrs.Put(SfxInt32Item( SCHATTR_REGRESSION_DEGREE, aDegree ) );
+
+    sal_Int32 aPeriod = m_aNF_Period.GetValue();
+    rOutAttrs.Put(SfxInt32Item( SCHATTR_REGRESSION_PERIOD, aPeriod ) );
+
+    double aExtrapolateForwardValue = m_aNF_ExtrapolateForward.GetValue() / 100.0;
+    rOutAttrs.Put(SvxDoubleItem( aExtrapolateForwardValue, SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD ) );
+
+    double aExtrapolateBackwardValue = m_aNF_ExtrapolateBackward.GetValue() / 100.0;
+    rOutAttrs.Put(SvxDoubleItem( aExtrapolateBackwardValue, SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD ) );
+
     return sal_True;
 }
 
 void TrendlineResources::FillValueSets()
 {
     if( m_bNoneAvailable )
-        m_aFINone.SetImage(    Image( SchResId( BMP_REGRESSION_NONE   ) ) );
-    m_aFILinear.SetImage(      Image( SchResId( BMP_REGRESSION_LINEAR ) ) );
-    m_aFILogarithmic.SetImage( Image( SchResId( BMP_REGRESSION_LOG    ) ) );
-    m_aFIExponential.SetImage( Image( SchResId( BMP_REGRESSION_EXP    ) ) );
-    m_aFIPower.SetImage(       Image( SchResId( BMP_REGRESSION_POWER  ) ) );
+        m_aFINone.SetImage(     Image( SchResId( BMP_REGRESSION_NONE            ) ) );
+    m_aFILinear.SetImage(       Image( SchResId( BMP_REGRESSION_LINEAR          ) ) );
+    m_aFILogarithmic.SetImage(  Image( SchResId( BMP_REGRESSION_LOG             ) ) );
+    m_aFIExponential.SetImage(  Image( SchResId( BMP_REGRESSION_EXP             ) ) );
+    m_aFIPower.SetImage(        Image( SchResId( BMP_REGRESSION_POWER           ) ) );
+    m_aFIPolynomial.SetImage(   Image( SchResId( BMP_REGRESSION_POLYNOMIAL      ) ) );
+    m_aFIMovingAverage.SetImage(Image( SchResId( BMP_REGRESSION_MOVING_AVERAGE  ) ) );
 }
 
 void TrendlineResources::UpdateControlStates()

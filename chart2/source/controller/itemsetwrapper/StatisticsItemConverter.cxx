@@ -84,6 +84,12 @@ uno::Reference< beans::XPropertySet > lcl_GetErrorBar(
         case CHREGRESS_POWER:
             eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_POWER;
             break;
+        case CHREGRESS_POLYNOMIAL:
+            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_POLYNOMIAL;
+            break;
+        case CHREGRESS_MOVING_AVERAGE:
+            eType = ::chart::RegressionCurveHelper::REGRESSION_TYPE_MOVING_AVERAGE;
+            break;
         case CHREGRESS_NONE:
             break;
     }
@@ -164,6 +170,38 @@ uno::Reference< beans::XPropertySet > lcl_getEquationProperties(
     return uno::Reference< beans::XPropertySet >();
 }
 
+uno::Reference< beans::XPropertySet > lcl_getCurveProperties(
+    const uno::Reference< beans::XPropertySet > & xSeriesPropSet, const SfxItemSet * pItemSet )
+{
+    bool bExists = true;
+
+    // ensure that a trendline is on
+    if( pItemSet )
+    {
+        SvxChartRegress eRegress = CHREGRESS_NONE;
+        const SfxPoolItem *pPoolItem = NULL;
+        if( pItemSet->GetItemState( SCHATTR_REGRESSION_TYPE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+        {
+            eRegress = static_cast< const SvxChartRegressItem * >( pPoolItem )->GetValue();
+            bExists = ( eRegress != CHREGRESS_NONE );
+        }
+    }
+
+    if( bExists )
+    {
+        uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropSet, uno::UNO_QUERY );
+        uno::Reference< chart2::XRegressionCurve > xCurve(
+            ::chart::RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ));
+        if( xCurve.is())
+        {
+            uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
+            return xProperties;
+        }
+    }
+
+    return uno::Reference< beans::XPropertySet >();
+}
+
 } // anonymous namespace
 
 namespace chart
@@ -188,6 +226,10 @@ StatisticsItemConverter::StatisticsItemConverter(
                 static_cast< int >( CHREGRESS_EXP ));
     OSL_ASSERT( static_cast< int >( RegressionCurveHelper::REGRESSION_TYPE_POWER ) ==
                 static_cast< int >( CHREGRESS_POWER ));
+    OSL_ASSERT( static_cast< int >( RegressionCurveHelper::REGRESSION_TYPE_POLYNOMIAL ) ==
+                static_cast< int >( CHREGRESS_POLYNOMIAL ));
+    OSL_ASSERT( static_cast< int >( RegressionCurveHelper::REGRESSION_TYPE_MOVING_AVERAGE ) ==
+                static_cast< int >( CHREGRESS_MOVING_AVERAGE ));
 }
 
 StatisticsItemConverter::~StatisticsItemConverter()
@@ -391,6 +433,78 @@ bool StatisticsItemConverter::ApplySpecialItem(
                     RegressionCurveHelper::replaceOrAddCurveAndReduceToOne(
                         lcl_convertRegressionType( eRegress ), xRegCnt,
                         uno::Reference< uno::XComponentContext >());
+                    bChanged = true;
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_REGRESSION_DEGREE:
+        {
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), &rItemSet ));
+            if( xProperties.is())
+            {
+                sal_Int32 aDegree = 1;
+                xProperties->getPropertyValue( "PolynomialDegree" ) >>= aDegree;
+                sal_Int32 aNewDegree =
+                    static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+                if( aDegree != aNewDegree )
+                {
+                    xProperties->setPropertyValue( "PolynomialDegree" , uno::makeAny( aNewDegree ));
+                    bChanged = true;
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_REGRESSION_PERIOD:
+        {
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), &rItemSet ));
+            if( xProperties.is())
+            {
+                sal_Int32 aPeriod = 2;
+                xProperties->getPropertyValue( "MovingAveragePeriod" ) >>= aPeriod;
+                sal_Int32 aNewPeriod =
+                    static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+                if( aPeriod != aNewPeriod )
+                {
+                    xProperties->setPropertyValue( "MovingAveragePeriod" , uno::makeAny( aNewPeriod ));
+                    bChanged = true;
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD:
+        {
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), &rItemSet ));
+            if( xProperties.is())
+            {
+                double aExtrapolationValue = 0.0;
+                xProperties->getPropertyValue( "ExtrapolateForward" ) >>= aExtrapolationValue;
+                double aNewValue =
+                    static_cast< const SvxDoubleItem & >( rItemSet.Get( nWhichId )).GetValue();
+                if( aExtrapolationValue != aNewValue )
+                {
+                    xProperties->setPropertyValue( "ExtrapolateForward" , uno::makeAny( aNewValue ));
+                    bChanged = true;
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD:
+        {
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), &rItemSet ));
+            if( xProperties.is())
+            {
+                double aExtrapolationValue = 0.0;
+                xProperties->getPropertyValue( "ExtrapolateBackward" ) >>= aExtrapolationValue;
+                double aNewValue =
+                    static_cast< const SvxDoubleItem & >( rItemSet.Get( nWhichId )).GetValue();
+                if( aExtrapolationValue != aNewValue )
+                {
+                    xProperties->setPropertyValue( "ExtrapolateBackward" , uno::makeAny( aNewValue ));
                     bChanged = true;
                 }
             }
@@ -636,6 +750,46 @@ void StatisticsItemConverter::FillSpecialItem(
                         uno::Reference< chart2::XRegressionCurveContainer >(
                             GetPropertySet(), uno::UNO_QUERY ) )));
             rOutItemSet.Put( SvxChartRegressItem( eRegress, SCHATTR_REGRESSION_TYPE ));
+        }
+        break;
+
+        case SCHATTR_REGRESSION_DEGREE:
+        {
+            sal_Int32 aDegree = 1;
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), 0 ));
+            if( xProperties.is())
+                xProperties->getPropertyValue( "PolynomialDegree" ) >>= aDegree;
+            rOutItemSet.Put( SfxInt32Item( nWhichId, aDegree ));
+        }
+        break;
+
+        case SCHATTR_REGRESSION_PERIOD:
+        {
+            sal_Int32 aPeriod = 2;
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), 0 ));
+            if( xProperties.is())
+                xProperties->getPropertyValue( "MovingAveragePeriod" ) >>= aPeriod;
+            rOutItemSet.Put( SfxInt32Item( nWhichId, aPeriod ));
+        }
+        break;
+
+        case SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD:
+        {
+            double aValue = 0.0;
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), 0 ));
+            if( xProperties.is())
+                xProperties->getPropertyValue( "ExtrapolateForward" ) >>= aValue;
+            rOutItemSet.Put( SvxDoubleItem( aValue, nWhichId ));
+        }
+        break;
+
+        case SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD:
+        {
+            double aValue = 0.0;
+            uno::Reference< beans::XPropertySet > xProperties( lcl_getCurveProperties( GetPropertySet(), 0 ));
+            if( xProperties.is())
+                xProperties->getPropertyValue( "ExtrapolateBackward" ) >>= aValue;
+            rOutItemSet.Put( SvxDoubleItem( aValue, nWhichId ));
         }
         break;
 

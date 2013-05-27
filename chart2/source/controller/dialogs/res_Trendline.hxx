@@ -24,6 +24,7 @@
 #include <vcl/fixed.hxx>
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
+#include <vcl/field.hxx>
 
 namespace chart
 {
@@ -48,14 +49,27 @@ private:
     RadioButton m_aRBLogarithmic;
     RadioButton m_aRBExponential;
     RadioButton m_aRBPower;
+    RadioButton m_aRBPolynomial;
+    RadioButton m_aRBMovingAverage;
 
     FixedImage  m_aFINone;
     FixedImage  m_aFILinear;
     FixedImage  m_aFILogarithmic;
     FixedImage  m_aFIExponential;
     FixedImage  m_aFIPower;
+    FixedImage  m_aFIPolynomial;
+    FixedImage  m_aFIMovingAverage;
+
+    NumericField      m_aNF_Degree;
+    NumericField      m_aNF_Period;
+
+    NumericField      m_aNF_ExtrapolateForward;
+    NumericField      m_aNF_ExtrapolateBackward;
+    CheckBox          m_aCB_SetIntercept;
+    NumericField      m_aNF_InterceptValue;
 
     FixedLine m_aFLEquation;
+
     CheckBox m_aCBShowEquation;
     CheckBox m_aCBShowCorrelationCoeff;
 

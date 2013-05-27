@@ -25,14 +25,25 @@
 #define FI_LOGARITHMIC 3
 #define FI_EXPONENTIAL 4
 #define FI_POWER 5
+#define FI_POLYNOMIAL 6
+#define FI_MOVING_AVERAGE 7
+
+#define NF_DEGREE 1
+#define NF_PERIOD 2
+#define NF_EXTRAPOLATE_FORWARD 3
+#define NF_EXTRAPOLATE_BACKWARD 4
+#define NF_INTERCEPT_VALUE 5
 
 #define RB_NONE 1
 #define RB_LINEAR 2
 #define RB_LOGARITHMIC 3
 #define RB_EXPONENTIAL 4
 #define RB_POWER 5
+#define RB_POLYNOMIAL 6
+#define RB_MOVING_AVERAGE 7
 
 #define CB_SHOW_EQUATION 1
 #define CB_SHOW_CORRELATION_COEFF 2
+#define CB_SET_INTERCEPT 3
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,11 +60,8 @@ published enum ChartRegressionCurveType
 
 
     /** displays a polynomial regression curve.
-
-        @deprecated
     */
     POLYNOMIAL,
-
 
     /** displays a regression curve using a power function.
 
@@ -72,6 +69,10 @@ published enum ChartRegressionCurveType
         <i>y</i> = <i>A&sdot;<i>x</i><sup>B</sup></i>.</p>
      */
     POWER
+
+    /** displays a moving average regression curve.
+    */
+    //MOVING_AVERAGE
 
 };
 

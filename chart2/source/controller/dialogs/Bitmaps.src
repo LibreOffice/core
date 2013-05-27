@@ -581,6 +581,20 @@ Image BMP_REGRESSION_POWER
         File = "regpow.png" ;
     };
 };
+Image BMP_REGRESSION_POLYNOMIAL
+{
+    ImageBitmap = Bitmap
+    {
+        File = "regpoly.png" ;
+    };
+};
+Image BMP_REGRESSION_MOVING_AVERAGE
+{
+    ImageBitmap = Bitmap
+    {
+        File = "regavg.png" ;
+    };
+};
 //---------------------
 Image IMG_SELECTRANGE
 {

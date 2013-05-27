@@ -155,10 +155,12 @@ enum SvxChartRegress
     CHREGRESS_LINEAR,
     CHREGRESS_LOG,
     CHREGRESS_EXP,
-    CHREGRESS_POWER
+    CHREGRESS_POWER,
+    CHREGRESS_POLYNOMIAL,
+    CHREGRESS_MOVING_AVERAGE
 };
 
-#define CHREGRESS_COUNT (CHREGRESS_POWER + 1)
+#define CHREGRESS_COUNT (CHREGRESS_MOVING_AVERAGE + 1)
 
 //------------------------------------------------------------------
 

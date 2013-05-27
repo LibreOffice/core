@@ -974,20 +974,45 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries
                 rVDataSeries.getModel(), uno::UNO_QUERY );
     if(!xRegressionContainer.is())
         return;
-    double fMinX = m_pPosHelper->getLogicMinX();
-    double fMaxX = m_pPosHelper->getLogicMaxX();
 
     uno::Sequence< uno::Reference< XRegressionCurve > > aCurveList =
         xRegressionContainer->getRegressionCurves();
     for(sal_Int32 nN=0; nN<aCurveList.getLength(); nN++)
     {
+        uno::Reference< beans::XPropertySet > xProperties( aCurveList[nN], uno::UNO_QUERY );
+
+        sal_Int32 aDegree = 2;
+        sal_Int32 aPeriod = 2;
+        double aExtrapolateForward = 0.0;
+        double aExtrapolateBackward = 0.0;
+        double aIntercept;
+        rtl::math::setNan(&aIntercept);
+
+        if ( xProperties.is() )
+        {
+            xProperties->getPropertyValue( "PolynomialDegree") >>= aDegree;
+            xProperties->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
+            xProperties->getPropertyValue( "ExtrapolateForward") >>= aExtrapolateForward;
+            xProperties->getPropertyValue( "ExtrapolateBackward") >>= aExtrapolateBackward;
+        }
+
         uno::Reference< XRegressionCurveCalculator > xRegressionCurveCalculator(
             aCurveList[nN]->getCalculator() );
+
         if( ! xRegressionCurveCalculator.is())
             continue;
+
+        double fMinX;
+        double fMaxX;
+
+        rVDataSeries.getMinMaxXValue(fMinX, fMaxX);
+        fMaxX += aExtrapolateForward;
+        fMinX -= aExtrapolateBackward;
+
+        xRegressionCurveCalculator->setRegressionProperties(aDegree, aIntercept, aPeriod);
         xRegressionCurveCalculator->recalculateRegression( rVDataSeries.getAllX(), rVDataSeries.getAllY() );
 
-        sal_Int32 nRegressionPointCount = 50;//@todo find a more optimal solution if more complicated curve types are introduced
+        sal_Int32 nRegressionPointCount = 100; //@todo find a more optimal solution if more complicated curve types are introduced
         drawing::PolyPolygonShape3D aRegressionPoly;
         aRegressionPoly.SequenceX.realloc(1);
         aRegressionPoly.SequenceY.realloc(1);
@@ -1056,12 +1081,12 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries
         }
 
         // curve equation and correlation coefficient
-        uno::Reference< beans::XPropertySet > xEqProp( aCurveList[nN]->getEquationProperties());
-        if( xEqProp.is())
+        uno::Reference< beans::XPropertySet > xEquationProperties( aCurveList[nN]->getEquationProperties());
+        if( xEquationProperties.is())
         {
             createRegressionCurveEquationShapes(
                 rVDataSeries.getDataCurveEquationCID( nN ),
-                xEqProp, xEquationTarget, xRegressionCurveCalculator,
+                xEquationProperties, xEquationTarget, xRegressionCurveCalculator,
                 aDefaultPos );
         }
     }

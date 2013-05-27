@@ -81,6 +81,8 @@ public:
     double      getXValue( sal_Int32 index ) const;
     double      getYValue( sal_Int32 index ) const;
 
+    void        getMinMaxXValue( double& fMin, double& fMax ) const;
+
     double      getY_Min( sal_Int32 index ) const;
     double      getY_Max( sal_Int32 index ) const;
     double      getY_First( sal_Int32 index ) const;

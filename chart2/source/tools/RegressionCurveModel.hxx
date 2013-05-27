@@ -61,7 +61,9 @@ public:
         CURVE_TYPE_LINEAR,
         CURVE_TYPE_LOGARITHM,
         CURVE_TYPE_EXPONENTIAL,
-        CURVE_TYPE_POWER
+        CURVE_TYPE_POWER,
+        CURVE_TYPE_POLYNOMIAL,
+        CURVE_TYPE_MOVING_AVERAGE
     };
 
     RegressionCurveModel( ::com::sun::star::uno::Reference<
@@ -243,6 +245,46 @@ public:
     APPHELPER_XSERVICEINFO_DECL()
     /// establish methods for factory instatiation
     APPHELPER_SERVICE_FACTORY_HELPER( PotentialRegressionCurve )
+};
+
+class PolynomialRegressionCurve : public RegressionCurveModel
+{
+public:
+    explicit PolynomialRegressionCurve(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XComponentContext > & xContext );
+    explicit PolynomialRegressionCurve(
+        const PolynomialRegressionCurve & rOther );
+    virtual ~PolynomialRegressionCurve();
+
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// XServiceInfo declarations
+    APPHELPER_XSERVICEINFO_DECL()
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( PolynomialRegressionCurve )
+};
+
+class MovingAverageRegressionCurve : public RegressionCurveModel
+{
+public:
+    explicit MovingAverageRegressionCurve(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XComponentContext > & xContext );
+    explicit MovingAverageRegressionCurve(
+        const MovingAverageRegressionCurve & rOther );
+    virtual ~MovingAverageRegressionCurve();
+
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// XServiceInfo declarations
+    APPHELPER_XSERVICEINFO_DECL()
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( MovingAverageRegressionCurve )
 };
 
 } //  namespace chart

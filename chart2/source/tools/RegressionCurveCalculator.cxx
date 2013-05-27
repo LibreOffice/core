@@ -37,9 +37,13 @@ namespace chart
 {
 
 RegressionCurveCalculator::RegressionCurveCalculator() :
-        m_fCorrelationCoeffitient( 0.0 )
+        m_fCorrelationCoeffitient( 0.0 ),
+        mDegree(2),
+        mIntercept(0.0),
+        mPeriod(2)
 {
-    ::rtl::math::setNan( & m_fCorrelationCoeffitient );
+    ::rtl::math::setNan( &m_fCorrelationCoeffitient );
+    ::rtl::math::setNan( &mIntercept );
 }
 
 RegressionCurveCalculator::~RegressionCurveCalculator()
@@ -64,6 +68,15 @@ bool RegressionCurveCalculator::isLogarithmicScaling(
     return (xServiceName.is() && xServiceName->getServiceName().equals( aLogScalingServiceName ));
 }
 
+void RegressionCurveCalculator::setRegressionProperties(
+    sal_Int32   aDegree,
+    double      aIntercept,
+    sal_Int32   aPeriod)
+{
+    mDegree    = aDegree;
+    mIntercept = aIntercept;
+    mPeriod    = aPeriod;
+}
 
 OUString RegressionCurveCalculator::getFormattedString(
     const Reference< util::XNumberFormatter >& xNumFormatter,
@@ -102,6 +115,7 @@ Sequence< geometry::RealPoint2D > SAL_CALL RegressionCurveCalculator::getCurveVa
 
     double fMin( min );
     double fFact = (max - min) / double(nPointCount-1);
+
     if( bDoXScaling )
     {
         fMin = xScalingX->doScaling( min );
