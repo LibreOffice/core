@@ -117,6 +117,8 @@ void Camera3D::SetBankAngle(double fAngle)
     }
 
     // Calculate from aDiff to uppwards pointing View-Up-Vector
+    // duplicated line is intentional!
+    aPrj = aPrj.getPerpendicular(aDiff);
     aPrj = aPrj.getPerpendicular(aDiff);
     aDiff.normalize();
 
