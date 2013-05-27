@@ -891,23 +891,35 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     Reference< XResultSet > rs = statement->executeQuery();
     Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     ODatabaseMetaDataResultSet::ORows aRows;
+    int rows = 0;
     while( rs->next() )
     {
         ODatabaseMetaDataResultSet::ORow aRow(3);
+
+        OUString schema  = xRow->getString( 1 );
         OUString aTableName  = xRow->getString( 2 );
+        sal_Int16 systemFlag = xRow->getShort(3);
+        sal_Int16 tableType = xRow->getShort(4);
+        OUString desc  = xRow->getString( 5 );
 
-        printf("DEBUG !!! connectivity.firebird => TableName: %s \n",
-               OUStringToOString( aTableName, RTL_TEXTENCODING_ASCII_US ).getStr());
+        rows++;
+        if (rows < 10)
+            printf("DEBUG !!! row %i : ", rows);
+        else
+            printf("DEBUG !!! row %i: ", rows);
+        printf("%s | ", OUStringToOString( schema, RTL_TEXTENCODING_UTF8 ).getStr());
+        printf("%s | ", OUStringToOString( aTableName, RTL_TEXTENCODING_UTF8 ).getStr());
+        printf("%i | ", systemFlag);
+        printf("%i | ", systemFlag);
+        printf("%s | \n", OUStringToOString( desc, RTL_TEXTENCODING_UTF8 ).getStr());
 
-        OUString type = xRow->getString(3);
         OUString aTableType;
-        if( 0 == type.compareToAscii( "1" ) )
+        if( 1 == systemFlag )
         {
             aTableType = OUString::createFromAscii("SYSTEM TABLE");
 
         } else {
-
-            if( 0 == xRow->getString(4).compareToAscii( "0" ) )
+            if( 0 == tableType )
             {
                 aTableType = OUString::createFromAscii("TABLE");
             }
@@ -917,9 +929,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             }
         }
 
-        printf("DEBUG !!! connectivity.firebird => TableType: %s \n",
-               OUStringToOString( aTableType, RTL_TEXTENCODING_ASCII_US ).getStr());
-
         aRow.push_back( new ORowSetValueDecorator( aTableName ) ); // Table name
         aRow.push_back( new ORowSetValueDecorator( aTableType ) ); // Table type
         aRow.push_back( ODatabaseMetaDataResultSet::getEmptyValue() ); // Remarks
@@ -927,15 +936,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     }
 
     pResultSet->setRows( aRows );
-
-    try
-    {
-        Reference< XRow > xCurrentRow( xResultSet, UNO_QUERY_THROW );
-    }
-    catch (const Exception&)
-    {
-        printf("DEBUG !!! connectivity.firebird => getTables thrown an Exception. \n");
-    }
 
     return xResultSet;
 }
