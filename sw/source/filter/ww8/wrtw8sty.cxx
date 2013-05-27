@@ -531,7 +531,7 @@ void MSWordStyles::OutputStyle( SwFmt* pFmt, sal_uInt16 nPos )
         // (It must be the English word regardless of language settings)
         if ( nPos == 0 ) {
             assert( pFmt->GetPoolFmtId() == RES_POOLCOLL_STANDARD );
-            aName = OUString("Normal");
+            aName = rtl::OUString("Normal");
         } else if (aName.EqualsIgnoreCaseAscii("Normal")) {
             // If LO has a style named "Normal"(!) rename it to something unique
             aName.InsertAscii("LO-" , 0);
@@ -549,7 +549,7 @@ void MSWordStyles::OutputStyle( SwFmt* pFmt, sal_uInt16 nPos )
                 if (!clash)
                     break;
                 aName = aBaseName;
-                aName += OUString::number(++nSuffix);
+                aName += OUString::valueOf(sal_Int32(++nSuffix));
             }
         }
 
