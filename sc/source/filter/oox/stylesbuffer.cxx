@@ -2245,7 +2245,6 @@ void Xf::finalizeImport()
     // alignment and protection
     maAlignment.finalizeImport();
     maProtection.finalizeImport();
-    createPattern();
 }
 
 FontRef Xf::getFont() const
@@ -2342,8 +2341,12 @@ Xf::createPattern( bool bSkipPoolDefs )
     StylesBuffer& rStyles = getStyles();
 
     const Xf* pStyleXf = isCellXf() ? rStyles.getStyleXf( maModel.mnStyleXfId ).get() : 0;
-    if( pStyleXf )
+    if( pStyleXf && !mpStyleSheet )
     {
+        rStyles.createCellStyle( maModel.mnStyleXfId );
+        mpStyleSheet = rStyles.getCellStyleSheet(  maModel.mnStyleXfId );
+        OSL_ENSURE( mpStyleSheet, "Xf::createPattern - no parentStyle created" );
+
         const XfModel& rStyleData = pStyleXf->maModel;
         if( !maModel.mbFontUsed )
             maModel.mbFontUsed = !rStyleData.mbFontUsed || (maModel.mnFontId != rStyleData.mnFontId);
@@ -2686,8 +2689,13 @@ void CellStyle::createCellStyle()
 {
 
     // #i1624# #i1768# ignore unnamed user styles
+    bool bDefStyle = maModel.isDefaultStyle();
     if( !mbCreated )
+    {
+        if ( bDefStyle && maFinalName.isEmpty() )
+            maFinalName = ScGlobal::GetRscString( STR_STYLENAME_STANDARD );
         mbCreated = maFinalName.isEmpty();
+    }
 
     ::ScDocument& rDoc = getScDocument();
     if( !mbCreated && !mpStyleSheet )
@@ -2695,12 +2703,11 @@ void CellStyle::createCellStyle()
         bool bCreatePattern = false;
         Xf* pXF = getStyles().getStyleXf( maModel.mnXfId ).get();
 
-        bool bDefStyle = maModel.isDefaultStyle();
         if( bDefStyle )
         {
             // use existing "Default" style sheet
             mpStyleSheet = static_cast< ScStyleSheet* >( static_cast< ScStyleSheetPool* >( rDoc.GetStyleSheetPool() )->Find(
-                getStyles().getDefaultStyleName(), SFX_STYLE_FAMILY_PARA ) );
+                ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SFX_STYLE_FAMILY_PARA ) );
             OSL_ENSURE( mpStyleSheet, "CellStyle::createStyle - Default style not found" );
             bCreatePattern = true;
         }
@@ -2834,15 +2841,6 @@ void CellStyleBuffer::finalizeImport()
     // set final names and create user-defined and modified built-in cell styles
     aCellStyles.forEachMemWithKey( &CellStyle::finalizeImport );
 
-    if (mxDefStyle)
-    {
-        Reference<XNameAccess> xNA(getStyleFamily(false), UNO_QUERY_THROW);
-        if (xNA->hasByName(CREATE_OUSTRING("Default")))
-        {
-            PropertySet aPropSet(xNA->getByName(CREATE_OUSTRING("Default")));
-            getStyles().writeStyleXfToPropertySet(aPropSet, mxDefStyle->getModel().mnXfId);
-        }
-    }
 }
 
 sal_Int32 CellStyleBuffer::getDefaultXfId() const
