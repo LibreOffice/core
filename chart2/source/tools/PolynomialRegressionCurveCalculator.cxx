@@ -77,9 +77,7 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
             aPowers[j] += pow(x, j);
         }
 
-        aMatrix[ 0 * aNumberOfRows + aNumberOfPolyElements] += y;
-
-        for (int j = 1; j < aNumberOfPolyElements; j++) {
+        for (int j = 0; j < aNumberOfPolyElements; j++) {
             aMatrix[j * aNumberOfRows + aNumberOfPolyElements] += pow(x, j) * y;
         }
 
