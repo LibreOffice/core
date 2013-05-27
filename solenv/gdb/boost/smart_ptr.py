@@ -32,9 +32,14 @@ class SmartPtrPrinter:
 
     def to_string(self):
         if self.value['px']:
-            return "%s %s" % (self.typename, self.value['px'].dereference())
+            print_object = gdb.parameter('print object')
+            value = self.value['px'].dereference()
+            if print_object:
+                dynamic_type = self.value['px'].dynamic_type
+                value = self.value['px'].cast(dynamic_type).dereference()
+            return "%s %s" % (self.typename, value)
         else:
-            return "empty %s" % (self.typename,)
+            return "empty %s" % (self.typename)
 
 
 printer = None
