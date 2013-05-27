@@ -51,6 +51,7 @@
 #include <svl/undo.hxx>
 #include <svl/whiter.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/zoomslideritem.hxx>
 #include <editeng/editeng.hxx>
 #include <svx/svxdlg.hxx>
 #include <sfx2/zoomitem.hxx>
@@ -613,7 +614,10 @@ void SmGraphicWindow::SetZoom(sal_uInt16 Factor)
     SetTotalSize();
     SmViewShell *pViewSh = GetView();
     if (pViewSh)
+    {
         pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_ATTR_ZOOM);
+        pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_ATTR_ZOOMSLIDER);
+    }
     Invalidate();
 }
 
@@ -1853,6 +1857,19 @@ void SmViewShell::Execute(SfxRequest& rReq)
         }
         break;
 
+        case SID_ATTR_ZOOMSLIDER:
+        {
+            const SfxItemSet *pArgs = rReq.GetArgs();
+            const SfxPoolItem* pItem;
+
+            if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, sal_True, &pItem ) )
+            {
+                const sal_uInt16 nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();
+                aGraphic.SetZoom( nCurrentZoom );
+            }
+        }
+        break;
+
         case SID_TOOLBOX:
         {
             GetViewFrame()->ToggleChildWindow( SmToolBoxWrapper::GetChildWindowId() );
@@ -1935,6 +1952,15 @@ void SmViewShell::GetState(SfxItemSet &rSet)
             if ( GetViewFrame()->GetFrame().IsInPlace() )
                 rSet.DisableItem( nWh );
             break;
+
+        case SID_ATTR_ZOOMSLIDER :
+            {
+                const sal_uInt16 nCurrentZoom = aGraphic.GetZoom();
+                SvxZoomSliderItem aZoomSliderItem( nCurrentZoom, MINZOOM, MAXZOOM );
+                aZoomSliderItem.AddSnappingPoint( 100 );
+                rSet.Put( aZoomSliderItem );
+            }
+        break;
 
         case SID_NEXTERR:
         case SID_PREVERR:
