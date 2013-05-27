@@ -1407,13 +1407,14 @@ void BackendImpl::PackageImpl::scanBundle(
 {
     OSL_ASSERT( !m_legacyBundle );
 
+    OUString mfUrl( makeURL( m_url_expanded, "META-INF/manifest.xml" ) );
     ::ucbhelper::Content manifestContent;
     if (! create_ucb_content(
-            &manifestContent,
-            makeURL( m_url_expanded, "META-INF/manifest.xml" ),
-            xCmdEnv, false /* no throw */ ))
+            &manifestContent, mfUrl, xCmdEnv, false /* no throw */ ))
     {
-        OSL_FAIL( "### missing META-INF/manifest.xml file!" );
+        SAL_WARN(
+            "desktop.deployment",
+            "cannot create UCB Content for <" << mfUrl << ">" );
         return;
     }
 
