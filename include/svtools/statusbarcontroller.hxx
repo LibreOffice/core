@@ -41,7 +41,6 @@ namespace svt
 
 class SVT_DLLPUBLIC StatusbarController :
                             public ::com::sun::star::frame::XStatusbarController,
-                            public ::com::sun::star::lang::XComponent,
                             public ::comphelper::OBaseMutex,
                             public ::cppu::OWeakObject
 {

@@ -27,7 +27,6 @@
 #include <stdtypes.h>
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XStatusbarController.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
@@ -104,7 +103,7 @@ class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener   
         void MouseButton( const MouseEvent& rMEvt ,sal_Bool ( SAL_CALL ::com::sun::star::frame::XStatusbarController::*_pMethod )(const ::com::sun::star::awt::MouseEvent&));
 
     protected:
-        typedef std::map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > > StatusBarControllerMap;
+        typedef std::map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusbarController > > StatusBarControllerMap;
 
         sal_Bool                                                                                        m_bDisposed : 1,
                                                                                                         m_bFrameActionRegistered : 1,

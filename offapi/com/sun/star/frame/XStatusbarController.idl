@@ -24,6 +24,7 @@
 #include <com/sun/star/awt/Rectangle.idl>
 #include <com/sun/star/awt/XGraphics.idl>
 #include <com/sun/star/frame/XStatusListener.idl>
+#include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/lang/XInitialization.idl>
 #include <com/sun/star/util/XUpdatable.idl>
 
@@ -47,6 +48,14 @@ module com {  module sun {  module star {  module frame {
 */
 interface XStatusbarController
 {
+    /** used to control the life-time of the component
+
+        Used by a status bar implementation to control the life-time of
+        a status bar controller. The status bar is the only instance which
+        is allowed to dispose the component.
+     */
+    interface com::sun::star::lang::XComponent;
+
     /** used to initialize a component with required arguments.
 
         <p>A status bar controller is initialized with <b>five</b> additional
