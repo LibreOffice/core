@@ -30,6 +30,7 @@
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include "pkgprovider.hxx"
 #include "pkgcontent.hxx"
 #include "pkguri.hxx"
@@ -232,17 +233,11 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
 //=========================================================================
 
 uno::Reference< container::XHierarchicalNameAccess >
-ContentProvider::createPackage( const OUString & rName, const OUString & rParam )
+ContentProvider::createPackage( const PackageUri & rURI )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    if ( rName.isEmpty() )
-    {
-        OSL_FAIL( "ContentProvider::createPackage - Invalid URL!" );
-        return uno::Reference< container::XHierarchicalNameAccess >();
-    }
-
-    OUString rURL = rName + rParam;
+    OUString rURL = rURI.getPackage() + rURI.getParam();
 
     if ( m_pPackages )
     {
@@ -257,43 +252,30 @@ ContentProvider::createPackage( const OUString & rName, const OUString & rParam 
         m_pPackages = new Packages;
 
     // Create new package...
+    uno::Sequence< uno::Any > aArguments( 1 );
+    aArguments[ 0 ] <<= rURL;
+    uno::Reference< container::XHierarchicalNameAccess > xNameAccess;
     try
     {
-        uno::Sequence< uno::Any > aArguments( 1 );
-        aArguments[ 0 ] <<= rURL;
-
-        uno::Reference< uno::XInterface > xIfc
-            = m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.packages.comp.ZipPackage",
-                aArguments, m_xContext );
-
-        if ( xIfc.is() )
-        {
-            uno::Reference<
-                container::XHierarchicalNameAccess > xNameAccess(
-                                                        xIfc, uno::UNO_QUERY );
-
-            OSL_ENSURE( xNameAccess.is(),
-                        "ContentProvider::createPackage - "
-                        "Got no hierarchical name access!" );
-
-            rtl::Reference< Package> xPackage
-                = new Package( rURL, xNameAccess, this );
-
-            (*m_pPackages)[ rURL ] = xPackage.get();
-
-            return xPackage.get();
-        }
+        xNameAccess = uno::Reference< container::XHierarchicalNameAccess >(
+            m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                "com.sun.star.packages.comp.ZipPackage",
+                aArguments, m_xContext ),
+            css::uno::UNO_QUERY_THROW );
     }
     catch ( uno::RuntimeException const & )
     {
-        // createInstanceWithArguemts
+        throw;
     }
-    catch ( uno::Exception const & )
+    catch ( uno::Exception const & e )
     {
-        // createInstanceWithArguemts
+        throw css::lang::WrappedTargetRuntimeException(
+            e.Message, e.Context, css::uno::makeAny(e));
     }
 
-    return uno::Reference< container::XHierarchicalNameAccess >();
+    rtl::Reference< Package> xPackage = new Package( rURL, xNameAccess, this );
+    (*m_pPackages)[ rURL ] = xPackage.get();
+    return xPackage.get();
 }
 
 //=========================================================================

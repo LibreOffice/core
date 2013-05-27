@@ -217,7 +217,7 @@ Content* Content::create(
 
     uno::Reference< container::XHierarchicalNameAccess > xPackage;
 
-    xPackage = pProvider->createPackage( aURI.getPackage(), aURI.getParam() );
+    xPackage = pProvider->createPackage( aURI );
 
     uno::Reference< ucb::XContentIdentifier > xId
         = new ::ucbhelper::ContentIdentifier( aURI.getUri() );
@@ -2217,12 +2217,12 @@ uno::Reference< container::XHierarchicalNameAccess > Content::getPackage(
     if ( rURI.getPackage() == m_aUri.getPackage() )
     {
         if ( !m_xPackage.is() )
-            m_xPackage = m_pProvider->createPackage( m_aUri.getPackage(), m_aUri.getParam() );
+            m_xPackage = m_pProvider->createPackage( m_aUri );
 
         return m_xPackage;
     }
 
-    return m_pProvider->createPackage( rURI.getPackage(), rURI.getParam() );
+    return m_pProvider->createPackage( rURI );
 }
 
 //=========================================================================
@@ -2238,10 +2238,7 @@ sal_Bool Content::hasData(
             const PackageUri& rURI,
             uno::Reference< container::XHierarchicalNameAccess > & rxPackage )
 {
-    rxPackage = pProvider->createPackage( rURI.getPackage(), rURI.getParam() );
-    if ( !rxPackage.is() )
-        return sal_False;
-
+    rxPackage = pProvider->createPackage( rURI );
     return rxPackage->hasByHierarchicalName( rURI.getPath() );
 }
 
@@ -2254,9 +2251,6 @@ sal_Bool Content::hasData( const PackageUri& rURI )
     if ( rURI.getPackage() == m_aUri.getPackage() )
     {
         xPackage = getPackage();
-        if ( !xPackage.is() )
-            return sal_False;
-
         return xPackage->hasByHierarchicalName( rURI.getPath() );
     }
 
@@ -2271,9 +2265,7 @@ sal_Bool Content::loadData(
             ContentProperties& rProps,
             uno::Reference< container::XHierarchicalNameAccess > & rxPackage )
 {
-    rxPackage = pProvider->createPackage( rURI.getPackage(), rURI.getParam() );
-    if ( !rxPackage.is() )
-        return sal_False;
+    rxPackage = pProvider->createPackage( rURI );
 
     if ( rURI.isRootFolder() )
     {
@@ -2469,8 +2461,6 @@ sal_Bool Content::renameData(
     PackageUri aURI( xOldId->getContentIdentifier() );
     uno::Reference< container::XHierarchicalNameAccess > xNA = getPackage(
                                                                         aURI );
-    if ( !xNA.is() )
-        return sal_False;
 
     if ( !xNA->hasByHierarchicalName( aURI.getPath() ) )
         return sal_False;
@@ -2508,8 +2498,6 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     uno::Reference< container::XHierarchicalNameAccess > xNA = getPackage();
-    if ( !xNA.is() )
-        return sal_False;
 
     uno::Reference< beans::XPropertySet > xPackagePropSet(
                                                     xNA, uno::UNO_QUERY );
@@ -2740,8 +2728,6 @@ sal_Bool Content::removeData()
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     uno::Reference< container::XHierarchicalNameAccess > xNA = getPackage();
-    if ( !xNA.is() )
-        return sal_False;
 
     PackageUri aParentUri( getParentURL() );
     if ( !xNA->hasByHierarchicalName( aParentUri.getPath() ) )
@@ -2785,8 +2771,6 @@ sal_Bool Content::flushData()
     //       by the single entries. Maybe this has to change...
 
     uno::Reference< container::XHierarchicalNameAccess > xNA = getPackage();
-    if ( !xNA.is() )
-        return sal_False;
 
     uno::Reference< util::XChangesBatch > xBatch( xNA, uno::UNO_QUERY );
     if ( !xBatch.is() )
@@ -2815,8 +2799,6 @@ uno::Reference< io::XInputStream > Content::getInputStream()
 
     uno::Reference< io::XInputStream > xStream;
     uno::Reference< container::XHierarchicalNameAccess > xNA = getPackage();
-    if ( !xNA.is() )
-        return xStream;
 
     if ( !xNA->hasByHierarchicalName( m_aUri.getPath() ) )
         return xStream;
@@ -2854,8 +2836,6 @@ uno::Reference< container::XEnumeration > Content::getIterator()
 
     uno::Reference< container::XEnumeration > xIter;
     uno::Reference< container::XHierarchicalNameAccess > xNA = getPackage();
-    if ( !xNA.is() )
-        return xIter;
 
     if ( !xNA->hasByHierarchicalName( m_aUri.getPath() ) )
         return xIter;

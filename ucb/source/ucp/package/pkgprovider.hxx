@@ -87,7 +87,7 @@ public:
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XHierarchicalNameAccess >
-    createPackage( const OUString & rName, const OUString & rParam );
+    createPackage( const PackageUri & rParam );
     sal_Bool
     removePackage( const OUString & rName );
 };
