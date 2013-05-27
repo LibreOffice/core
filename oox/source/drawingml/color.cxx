@@ -624,12 +624,14 @@ void Color::toHsl() const
             double fMax = ::std::max( ::std::max( fR, fG ), fB );
             double fD = fMax - fMin;
 
+            using ::rtl::math::approxEqual;
+
             // hue: 0deg = red, 120deg = green, 240deg = blue
             if( fD == 0.0 )         // black/gray/white
                 mnC1 = 0;
-            else if( fMax == fR )   // magenta...red...yellow
+            else if( approxEqual(fMax, fR, 64) )   // magenta...red...yellow
                 mnC1 = static_cast< sal_Int32 >( ((fG - fB) / fD * 60.0 + 360.0) * PER_DEGREE + 0.5 ) % MAX_DEGREE;
-            else if( fMax == fG )   // yellow...green...cyan
+            else if( approxEqual(fMax, fG, 64) )   // yellow...green...cyan
                 mnC1 = static_cast< sal_Int32 >( ((fB - fR) / fD * 60.0 + 120.0) * PER_DEGREE + 0.5 );
             else                    // cyan...blue...magenta
                 mnC1 = static_cast< sal_Int32 >( ((fR - fG) / fD * 60.0 + 240.0) * PER_DEGREE + 0.5 );
