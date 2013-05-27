@@ -58,6 +58,8 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/optuserpage \
 	cui/uiconfig/ui/optviewpage \
 	cui/uiconfig/ui/pageformatpage \
+        cui/uiconfig/ui/paragalignpage \
+        cui/uiconfig/ui/paraindentspacing \
 	cui/uiconfig/ui/pastespecial \
 	cui/uiconfig/ui/personalization_tab \
 	cui/uiconfig/ui/pickbulletpage \

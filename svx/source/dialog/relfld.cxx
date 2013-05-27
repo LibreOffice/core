@@ -18,6 +18,7 @@
  */
 
 #include "svx/relfld.hxx"
+#include "vcl/builder.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -32,7 +33,22 @@ SvxRelativeField::SvxRelativeField( Window* pParent, const ResId& rResId ) :
     SetMin( 0 );
     SetMax( 9999 );
 }
+SvxRelativeField::SvxRelativeField( Window* pParent, WinBits nBits) :
+    MetricField( pParent, nBits)
+{
+    bNegativeEnabled = sal_False;
+    bRelativeMode = sal_False;
+    bRelative     = sal_False;
 
+    SetDecimalDigits( 2 );
+    SetMin( 0 );
+    SetMax( 9999 );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxRelativeField(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxRelativeField(pParent, WB_BORDER | WB_SPIN | WB_REPEAT | WB_LEFT | WB_GROUP);
+}
 // -----------------------------------------------------------------------
 
 void SvxRelativeField::Modify()

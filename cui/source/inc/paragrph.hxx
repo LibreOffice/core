@@ -54,46 +54,39 @@ class SvxStdParagraphTabPage: public SfxTabPage
 private:
     SvxStdParagraphTabPage( Window* pParent, const SfxItemSet& rSet );
 
-    FixedLine               aIndentFrm;
     // indention
-    FixedText               aLeftLabel;
-    SvxRelativeField        aLeftIndent;
+    SvxRelativeField*       m_pLeftIndent;
 
-    FixedText               aRightLabel;
-    SvxRelativeField        aRightIndent;
+    FixedText*              m_pRightLabel;
+    SvxRelativeField*       m_pRightIndent;
 
-    FixedText               aFLineLabel;
-    SvxRelativeField        aFLineIndent;
-    CheckBox                aAutoCB;
-
-    FixedLine               aDistFrm;
+    FixedText*              m_pFLineLabel;
+    SvxRelativeField*       m_pFLineIndent;
+    CheckBox*               m_pAutoCB;
 
     // distance
-    FixedText               aTopLabel;
-    SvxRelativeField        aTopDist;
-    FixedText               aBottomLabel;
-    SvxRelativeField        aBottomDist;
-    CheckBox                aContextualCB;
+    SvxRelativeField*       m_pTopDist;
+    SvxRelativeField*       m_pBottomDist;
+    CheckBox*               m_pContextualCB;
 
     // line spacing
-    FixedLine               aLineDistFrm;
-    ListBox                 aLineDist;
-    FixedText               aLineDistAtLabel;
-    MetricField             aLineDistAtPercentBox;
-    MetricField             aLineDistAtMetricBox;
-    String                  sAbsDist;
-    SvxParaPrevWindow       aExampleWin;
+    ListBox*                m_pLineDist;
+    FixedText*              m_pLineDistAtLabel;
+    MetricField*            m_pLineDistAtPercentBox;
+    MetricField*            m_pLineDistAtMetricBox;
+    FixedText*              m_pAbsDist;
+    OUString                sAbsDist;
+    SvxParaPrevWindow*      m_pExampleWin;
 
     // only writer
-    FixedLine               aRegisterFL;
-    CheckBox                aRegisterCB;
+    VclFrame*               m_pRegisterFL;
+    CheckBox*               m_pRegisterCB;
 
-    Edit*                   pActLineDistFld;
     long                    nAbst;
     long                    nWidth;
     long                    nMinFixDist;
-    sal_Bool                    bRelativeMode;
-    sal_Bool                    bNegativeIndents;
+    sal_Bool                bRelativeMode;
+    sal_Bool                bNegativeIndents;
 
     void                    SetLineSpacing_Impl( const SvxLineSpacingItem& rAttr );
     void                    Init_Impl();
@@ -106,13 +99,14 @@ private:
 protected:
     virtual int             DeactivatePage( SfxItemSet* pSet = 0 );
 
+
 public:
     DECL_LINK(ELRLoseFocusHdl, void *);
 
     static SfxTabPage*      Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*          GetRanges();
+    static sal_uInt16*      GetRanges();
 
-    virtual sal_Bool            FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void            Reset( const SfxItemSet& rSet );
 
 
@@ -124,6 +118,8 @@ public:
     void                    EnableAbsLineDist(long nMinTwip);
     void                    EnableNegativeMode();
     virtual void            PageCreated(SfxAllItemSet aSet);
+
+    virtual                ~SvxStdParagraphTabPage();
 };
 
 // class SvxParaAlignTabPage ------------------------------------------------
@@ -133,28 +129,27 @@ class SvxParaAlignTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
     // alignment
-    FixedLine               aAlignFrm;
-    RadioButton             aLeft;
-    RadioButton             aRight;
-    RadioButton             aCenter;
-    RadioButton             aJustify;
-    FixedText               aLastLineFT;
-    ListBox                 aLastLineLB;
-    CheckBox                aExpandCB;
+    RadioButton*             m_pLeft;
+    RadioButton*             m_pRight;
+    RadioButton*             m_pCenter;
+    RadioButton*             m_pJustify;
+    FixedText*               m_pLeftBottom;
+    FixedText*               m_pRightTop;
 
-    CheckBox                aSnapToGridCB;
+    FixedText*               m_pLastLineFT;
+    ListBox*                 m_pLastLineLB;
+    CheckBox*                m_pExpandCB;
+
+    CheckBox*                m_pSnapToGridCB;
 
     //preview
-    SvxParaPrevWindow       aExampleWin;
+    SvxParaPrevWindow*       m_pExampleWin;
     //vertical alignment
-    FixedLine               aVertAlignFL;
+    VclFrame*                m_pVertAlignFL;
+    ListBox*                 m_pVertAlignLB;
 
-    FixedText               aVertAlignFT;
-    ListBox                 aVertAlignLB;
-
-    FixedLine                   aPropertiesFL;
-    FixedText                   aTextDirectionFT;
-    svx::FrameDirectionListBox  aTextDirectionLB;
+    VclFrame*                m_pPropertiesFL;
+    svx::FrameDirectionListBox*  m_pTextDirectionLB;
 
     DECL_LINK(AlignHdl_Impl, void *);
     DECL_LINK(LastLineHdl_Impl, void *);
@@ -170,9 +165,9 @@ protected:
 
 public:
     static SfxTabPage*      Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*          GetRanges();
+    static sal_uInt16*      GetRanges();
 
-    virtual sal_Bool            FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void            Reset( const SfxItemSet& rSet );
 
     void                    EnableJustifyExt();
