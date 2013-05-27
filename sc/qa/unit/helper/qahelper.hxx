@@ -33,6 +33,7 @@
 #define LOTUS123_FORMAT_TYPE 268435649
 #define CSV_FORMAT_TYPE  (SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN | SFX_FILTER_USESOPTIONS)
 #define HTML_FORMAT_TYPE (SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN | SFX_FILTER_USESOPTIONS)
+#define DIF_FORMAT_TYPE 195
 
 #define ODS      0
 #define XLS      1
@@ -40,6 +41,7 @@
 #define CSV      3
 #define HTML     4
 #define LOTUS123 5
+#define DIF      6
 
 bool testEqualsWithTolerance( long nVal1, long nVal2, long nTol )
 {
@@ -78,6 +80,7 @@ FileFormat aFileFormats[] = {
     { "csv" , "Text - txt - csv (StarCalc)", "generic_Text", CSV_FORMAT_TYPE },
     { "html" , "calc_HTML_WebQuery", "generic_HTML", HTML_FORMAT_TYPE },
     { "123" , "Lotus", "calc_Lotus", LOTUS123_FORMAT_TYPE },
+    { "dif", "DIF", "calc_DIF", DIF_FORMAT_TYPE },
 };
 
 // Why is this here and not in osl, and using the already existing file

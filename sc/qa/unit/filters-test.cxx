@@ -64,6 +64,7 @@ public:
     void testContentXLS();
     void testContentXLSX();
     void testContentLotus123();
+    void testContentDIF();
 #if TEST_BUG_FILES
     //goes recursively through all files in this dir and tries to open them
     void testDir(osl::Directory& rDir, sal_Int32 nType);
@@ -81,6 +82,7 @@ public:
     CPPUNIT_TEST(testContentXLS);
     CPPUNIT_TEST(testContentXLSX);
     CPPUNIT_TEST(testContentLotus123);
+    CPPUNIT_TEST(testContentDIF);
     CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
 
 #if TEST_BUG_FILES
@@ -246,6 +248,7 @@ void testContentImpl(ScDocument* pDoc, sal_Int32 nFormat ) //same code for ods, 
     CPPUNIT_ASSERT_MESSAGE("string not imported correctly", aString == OUString("String2"));
 
     //check basic formula import
+    // in case of DIF it just contains values
     pDoc->GetValue(2,0,0,fValue);
     CPPUNIT_ASSERT_MESSAGE("=2*3", fValue == 6);
     pDoc->GetValue(2,1,0,fValue);
@@ -256,7 +259,7 @@ void testContentImpl(ScDocument* pDoc, sal_Int32 nFormat ) //same code for ods, 
     CPPUNIT_ASSERT_MESSAGE("=C1+C2", fValue == 11);
 
     //check merged cells import
-    if(nFormat != LOTUS123)
+    if(nFormat != LOTUS123 && nFormat != DIF)
     {
         SCCOL nCol = 4;
         SCROW nRow = 1;
@@ -315,6 +318,16 @@ void ScFiltersTest::testContentLotus123()
     testContentImpl(pDoc, LOTUS123);
     xDocSh->DoClose();
 }
+
+void ScFiltersTest::testContentDIF()
+{
+    ScDocShellRef xDocSh = loadDoc("universal-content.", DIF);
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+}
+
 void impl_testLegacyCellAnchoredRotatedShape( ScDocument* pDoc, Rectangle& aRect, ScDrawObjData& aAnchor, long TOLERANCE = 30 /* 30 hmm */ )
 {
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
