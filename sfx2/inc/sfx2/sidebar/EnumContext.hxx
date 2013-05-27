@@ -133,6 +133,7 @@ public:
     Application GetApplication_DI (void) const;
 
     const ::rtl::OUString& GetContextName (void) const;
+    Context GetContext (void) const;
 
     bool operator == (const EnumContext aOther);
     bool operator != (const EnumContext aOther);

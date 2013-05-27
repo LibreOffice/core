@@ -142,6 +142,14 @@ const ::rtl::OUString& EnumContext::GetContextName (void) const
 
 
 
+EnumContext::Context EnumContext::GetContext (void) const
+{
+    return meContext;
+}
+
+
+
+
 bool EnumContext::operator== (const EnumContext aOther)
 {
     return meApplication==aOther.meApplication
