@@ -129,7 +129,7 @@
 +    { return x._rng == y_arg._rng && x.y == y_arg.y && std::equal(x.v, x.v+k, y_arg.v); }
      /** Returns true if the two generators will produce different sequences. */
      BOOST_RANDOM_DETAIL_INEQUALITY_OPERATOR(shuffle_order_engine)
-  
+ 
 --- foo/foo/foo/boost/random/subtract_with_carry.hpp
 +++ foo/foo/foo/boost/random/subtract_with_carry.hpp
 @@ -268,21 +268,21 @@

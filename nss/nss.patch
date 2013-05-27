@@ -86,7 +86,7 @@
 +DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG)) -Wl,-z,origin '-Wl,-rpath,$$ORIGIN'
  LDFLAGS			+= $(ARCHFLAG)
  
- # INCLUDES += -I/usr/include -Y/usr/include/linux
+ # On Maemo, we need to use the -rpath-link flag for even the standard system
 @@ -158,8 +161,13 @@
  endif
  endif

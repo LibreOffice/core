@@ -14,7 +14,7 @@ Usual patch to produce Linux-like .so files on FreeBSD
 +	    revision="$number_revision"
  	    ;;
  	  irix|nonstopux)
- 	    current=`expr $number_major + $number_minor`
+ 	    func_arith $number_major + $number_minor
 @@ -7420,8 +7420,8 @@
  	  ;;
  

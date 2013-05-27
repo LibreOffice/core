@@ -1,6 +1,6 @@
 --- include/orcus/env.hpp
 +++ include/orcus/env.hpp
-@@ -35,15 +35,9 @@
+@@ -35,14 +35,8 @@
      #else
        #define ORCUS_DLLPUBLIC __declspec(dllexport)
      #endif

@@ -438,7 +438,7 @@
      }
  
      template<class K, class D, class C>
-@@ -759,18 +759,18 @@
+@@ -759,17 +759,17 @@
          std::basic_string<Ch>
      >::type
      basic_ptree<K, D, C>::get(
@@ -460,7 +460,6 @@
              return child.get().
                  BOOST_NESTED_TEMPLATE get_value_optional<Type>(tr);
          else
-             return optional<Type>();
 @@ -778,9 +778,9 @@
      template<class K, class D, class C>
      template<class Type>

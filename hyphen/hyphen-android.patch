@@ -10,7 +10,7 @@
    storm-chaos* | os2-emx* | rtmk-nova*)
      os=-$maybe_os
 @@ -1215,7 +1215,7 @@
- 	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+ 	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
  	      | -chorusos* | -chorusrdb* \
  	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
 -	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \

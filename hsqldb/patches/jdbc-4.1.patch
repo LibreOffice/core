@@ -128,7 +128,7 @@
 --- misc/hsqldb/src/org/hsqldb/jdbc/jdbcCallableStatement.java	2012-02-08 15:14:42.802123563 +0000
 +++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcCallableStatement.java	2012-02-08 15:47:35.842635642 +0000
 @@ -3375,4 +3375,18 @@
-     }
+ */
  
  //#endif JAVA6
 +
@@ -149,7 +149,7 @@
 --- misc/hsqldb/src/org/hsqldb/jdbc/jdbcConnection.java	2012-02-08 15:14:42.802123563 +0000
 +++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcConnection.java	2012-02-08 15:47:35.851635628 +0000
 @@ -48,6 +48,12 @@
- import java.sql.SQLXML;
+ */
  
  //#endif JAVA6
 +
@@ -162,7 +162,7 @@
  import java.sql.SQLException;
  import java.sql.SQLWarning;
 @@ -2793,4 +2799,31 @@
-     }
+ */
  
  //#endif JAVA6
 +
@@ -196,7 +196,7 @@
 --- misc/hsqldb/src/org/hsqldb/jdbc/jdbcDatabaseMetaData.java	2012-02-08 15:14:42.802123563 +0000
 +++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcDatabaseMetaData.java	2012-02-08 15:47:35.835635654 +0000
 @@ -5693,4 +5693,21 @@
-     }
+ */
  
  //#endif JAVA6
 +
@@ -232,7 +232,7 @@
  
  /**
 @@ -323,4 +328,15 @@
-     }
+ */
  
  //#endif JAVA6
 +
@@ -250,7 +250,7 @@
 --- misc/hsqldb/src/org/hsqldb/jdbc/jdbcResultSet.java	2012-02-08 15:14:42.802123563 +0000
 +++ misc/build/hsqldb/src/org/hsqldb/jdbc/jdbcResultSet.java	2012-02-08 15:47:35.866635606 +0000
 @@ -5324,4 +5324,19 @@
-     }
+ */
  
  //#endif JAVA6
 +

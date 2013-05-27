@@ -125,7 +125,7 @@ index 587a05b..432e140 100644
 +                    url, username, password, verbose );
          
              cout << "Repositories: name (id)" << endl;
-             for ( list< libcmis::RepositoryPtr >::iterator it = repos.begin(); it != repos.end(); ++it )
+             for ( list< libcmis::RepositoryPtr >::iterator it = repos.begin(); it != repos.end(); it++ )
 @@ -828,6 +870,11 @@ options_description CmisClient::getOptionsDescription( )
          ( "repository,r", value< string >(), "Name of the repository to use" )
          ( "username,u", value< string >(), "Username used to authenticate to the repository" )

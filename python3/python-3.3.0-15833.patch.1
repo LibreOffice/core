@@ -23,3 +23,6 @@ iff --git a/Lib/importlib/_bootstrap.py b/Lib/importlib/_bootstrap.py
 +        except OSError as exc:
 +            # Same as above: just don't write the bytecode.
 +            _verbose_message('could not create {!r}: {!r}', path, exc)
+ 
+ 
+ class SourcelessFileLoader(FileLoader, _LoaderBasics):
