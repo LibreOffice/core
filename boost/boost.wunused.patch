@@ -1,3 +1,13 @@
+--- foo/foo/foo/boost/math/special_functions/fpclassify.hpp
++++ foo/foo/foo/boost/math/special_functions/fpclassify.hpp
+@@ -100,6 +100,7 @@
+ #ifdef isnan
+    return isnan(t);
+ #elif defined(BOOST_MATH_DISABLE_STD_FPCLASSIFY) || !defined(BOOST_HAS_FPCLASSIFY)
++   (void) t;
+    return false;
+ #else // BOOST_HAS_FPCLASSIFY
+    return (BOOST_FPCLASSIFY_PREFIX fpclassify(t) == (int)FP_NAN);
 --- foo/foo/foo/boost/unordered/detail/table.hpp
 +++ foo/foo/foo/boost/unordered/detail/table.hpp
 @@ -458,6 +458,7 @@
@@ -8,4 +18,3 @@
              BOOST_ASSERT(node_alloc() == other.node_alloc());
          }
  
-
