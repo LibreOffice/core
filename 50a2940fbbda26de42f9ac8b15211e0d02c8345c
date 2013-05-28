@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8Do\u003d",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1997,
+      "author": {
+        "id": 1000105
+      },
+      "writtenOn": "2013-05-28T20:46:31Z",
+      "side": 1,
+      "message": "case ....:\ncase ....:\ncase ....:\n  mpDev-\u003eSetDigitLanguage(ctl);\n  break;\nlike this it will be better",
+      "revId": "50a2940fbbda26de42f9ac8b15211e0d02c8345c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
