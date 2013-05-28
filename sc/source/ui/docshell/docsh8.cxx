@@ -132,7 +132,8 @@ namespace
         } // if ( aIter == aMap.end() )
         OUString aCharSetStr;
         if ( RTL_TEXTENCODING_DONTKNOW != *aIter )
-        {   // it's not the virtual "system charset"
+        {
+            // it's not the virtual "system charset"
             const char* pIanaName = rtl_getMimeCharsetFromTextEncoding( *aIter );
             OSL_ENSURE( pIanaName, "invalid mime name!" );
             if ( pIanaName )
@@ -519,8 +520,8 @@ void lcl_GetColumnTypes(
         sal_Int32 nDbType = sdbc::DataType::SQLNULL;
         String aFieldName, aString;
 
-        // Feldname[,Type[,Width[,Prec]]]
-        // Typ etc.: L; D; C[,W]; N[,W[,P]]
+        // field name[,Type[,Width[,Prec]]]
+        // type etc.: L; D; C[,W]; N[,W[,P]]
         if ( bHasFieldNames )
         {
             aString = pDoc->GetString(nCol, nFirstRow, nTab);
@@ -577,11 +578,13 @@ void lcl_GetColumnTypes(
             else
                 aFieldName = aString;
 
-            // Feldnamen pruefen und ggbf. gueltigen Feldnamen erzeugen.
-            // Erstes Zeichen muss Buchstabe sein,
-            // weitere nur alphanumerisch und Unterstrich erlaubt,
-            // "_DBASELOCK" ist reserviert (obsolet weil erstes Zeichen kein Buchstabe),
-            // keine doppelten Namen.
+            /*
+             * Check field name and if necessary create valid field name.
+             * First sign has to be a character,
+             * further only alpha-numeric and underscore allowed,
+             * "_DBASELOCK" is reserved (obsoled, because first sign is no character),
+             * no double names.
+             */
             if ( !IsAsciiAlpha( aFieldName.GetChar(0) ) )
                 aFieldName.Insert( 'N', 0 );
             String aTmpStr;
@@ -598,7 +601,8 @@ void lcl_GetColumnTypes(
                 aFieldName.Erase( 10 );
 
             if (!aFieldNames.insert(aFieldName).second)
-            {   // doppelter Feldname, numerisch erweitern
+            {
+                // double field name, enhance numeric
                 sal_uInt16 nSub = 1;
                 String aFixPart( aFieldName );
                 do
@@ -619,7 +623,8 @@ void lcl_GetColumnTypes(
         }
 
         if ( !bTypeDefined )
-        {   // Feldtyp
+        {
+            // field type
             ScRefCellValue aCell;
             aCell.assign(*pDoc, ScAddress(nCol, nFirstDataRow, nTab));
             if (aCell.isEmpty() || aCell.hasString())
@@ -655,31 +660,34 @@ void lcl_GetColumnTypes(
         }
         bool bSdbLenAdjusted = false;
         bool bSdbLenBad = false;
-        // Feldlaenge
+        // field length
         if ( nDbType == sdbc::DataType::VARCHAR && !nFieldLen )
-        {   // maximale Feldbreite bestimmen
+        {
+            // determine maximum field width
             nFieldLen = pDoc->GetMaxStringLen( nTab, nCol, nFirstDataRow,
                 nLastRow, eCharSet );
             if ( nFieldLen == 0 )
                 nFieldLen = 1;
         }
         else if ( nDbType == sdbc::DataType::DECIMAL )
-        {   // maximale Feldbreite und Nachkommastellen bestimmen
+        {
+            // determine maximum field with and positions after decimal point.
             xub_StrLen nLen;
             sal_uInt16 nPrec;
             nLen = pDoc->GetMaxNumberStringLen( nPrec, nTab, nCol,
                 nFirstDataRow, nLastRow );
-            // dBaseIII Limit Nachkommastellen: 15
+            // dBaseIII limit points after decimal point: 15
             if ( nPrecision > 15 )
                 nPrecision = 15;
             if ( nPrec > 15 )
                 nPrec = 15;
             if ( bPrecDefined && nPrecision != nPrec )
-            {   // Laenge auf vorgegebene Nachkommastellen anpassen
+            {
+                // Adjust length to given positions after decimal point.
                 if ( nPrecision )
                     nLen = sal::static_int_cast<xub_StrLen>( nLen + ( nPrecision - nPrec ) );
                 else
-                    nLen -= nPrec+1;            // auch den . mit raus
+                    nLen -= nPrec+1;            // also remove the dot '.'
             }
             if ( nLen > nFieldLen && !bTypeDefined )
                 nFieldLen = nLen;
@@ -688,9 +696,9 @@ void lcl_GetColumnTypes(
             if ( nFieldLen == 0 )
                 nFieldLen = 1;
             else if ( nFieldLen > 19 )
-                nFieldLen = 19;     // dBaseIII Limit Feldlaenge numerisch: 19
+                nFieldLen = 19;     // dBaseIII limit field length numeric: 19
             if ( nPrecision && nFieldLen < nPrecision + 2 )
-                nFieldLen = nPrecision + 2;     // 0. muss mit reinpassen
+                nFieldLen = nPrecision + 2;     // 0. has to fit in
             // 538 MUST: Sdb internal representation adds 2 to the field length!
             // To give the user what he wants we must substract it here.
              //! CAVEAT! There is no way to define a numeric field with a length
@@ -709,7 +717,9 @@ void lcl_GetColumnTypes(
                 bHasMemo = sal_True;
             }
             else
-                nFieldLen = 254;                    // dumm gelaufen..
+            {
+                nFieldLen = 254;                    // shit happens ...
+            }
         }
 
         pColNames[nField] = aFieldName;
@@ -725,7 +735,7 @@ void lcl_GetColumnTypes(
                 nFieldLen = 2;      // THIS is reality
         }
         if ( bUpdateTitles )
-        {   // Angabe anpassen und ausgeben
+        {   // Adjust declaration and display
             OUString aOutString = aFieldName;
             switch ( nDbType )
             {
@@ -810,7 +820,8 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, CharSet eCharS
 
     sal_Bool bHasFieldNames = sal_True;
     for ( SCCOL nDocCol = nFirstCol; nDocCol <= nLastCol && bHasFieldNames; nDocCol++ )
-    {   // nur Strings in erster Zeile => sind Feldnamen
+    {
+        // Only strings in first line => these are fieldnames.
         if ( !aDocument.HasStringData( nDocCol, nFirstRow, nTab ) )
             bHasFieldNames = false;
     }
@@ -969,7 +980,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, CharSet eCharS
                         if (!aCell.isEmpty())
                         {
                             if (aCell.meType == CELLTYPE_EDIT)
-                            {   // Paragraphs erhalten
+                            {   // get paragraphs
                                 lcl_getLongVarCharEditString(aString, aCell, aEditEngine);
                             }
                             else
@@ -994,7 +1005,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, CharSet eCharS
                     case sdbc::DataType::DATE:
                         {
                             aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
-                            // zwischen 0 Wert und 0 kein Wert unterscheiden
+                            // differ between 0 value and 0 no value
                             sal_Bool bIsNull = (fVal == 0.0);
                             if ( bIsNull )
                                 bIsNull = !aDocument.HasValueData( nDocCol, nDocRow, nTab );
@@ -1042,7 +1053,8 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, CharSet eCharS
             //! ScDocShell::SbaSdbExport is still missing!
 
             if ( !aProgress.SetStateOnPercent( nDocRow - nFirstRow ) )
-            {   // UserBreak
+            {
+                // UserBreak
                 nErr = SCERR_EXPORT_DATA;
                 break;
             }

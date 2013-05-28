@@ -179,10 +179,9 @@ sal_Bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
     return false;
 }
 
-//
-//  Der Options-String darf kein Semikolon mehr enthalten (wegen Pickliste)
-//  darum ab Version 336 Komma stattdessen
-//
+/* The Options string must not contain a semicolon (due to the pick list).
+ * Therefor a comma instead from version 336 on.
+ */
 
 
 void ScAsciiOptions::ReadFromString( const String& rString )
@@ -192,9 +191,9 @@ void ScAsciiOptions::ReadFromString( const String& rString )
     xub_StrLen nSub;
     xub_StrLen i;
 
-        //
-        //  Feld-Trenner
-        //
+        /*
+         * field separator
+         */
 
     if ( nCount >= 1 )
     {
@@ -219,9 +218,9 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         }
     }
 
-        //
-        //  Text-Trenner
-        //
+        /*
+         * text separator
+         */
 
     if ( nCount >= 2 )
     {
@@ -230,9 +229,9 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         cTextSep = (sal_Unicode) nVal;
     }
 
-        //
-        //  Zeichensatz
-        //
+        /*
+         * character set
+         */
 
     if ( nCount >= 3 )
     {
@@ -240,9 +239,9 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         eCharSet = ScGlobal::GetCharsetValue( aToken );
     }
 
-        //
-        //  Startzeile
-        //
+        /*
+         * start line
+         */
 
     if ( nCount >= 4 )
     {
@@ -250,9 +249,9 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         nStartRow = aToken.ToInt32();
     }
 
-        //
-        //  Spalten-Infos
-        //
+        /*
+         * column information
+         */
 
     if ( nCount >= 5 )
     {
@@ -311,9 +310,9 @@ String ScAsciiOptions::WriteToString() const
 {
     OUString aOutStr;
 
-        //
-        //  Feld-Trenner
-        //
+        /*
+         * field separator
+         */
 
     if ( bFixedLen )
         aOutStr += pStrFix;
@@ -336,24 +335,24 @@ String ScAsciiOptions::WriteToString() const
     }
 
     aOutStr += "," +
-               // Text-Trenner
+               // text separator
                OUString::number(cTextSep) + ",";
 
-        //
-        //  Zeichensatz
-        //
+        /*
+         * character set
+         */
 
     if ( bCharSetSystem )           // force "SYSTEM"
         aOutStr += ScGlobal::GetCharsetString( RTL_TEXTENCODING_DONTKNOW );
     else
         aOutStr += ScGlobal::GetCharsetString( eCharSet );
     aOutStr += "," +
-               // Startzeile
+               // start line
                OUString::number(nStartRow) + ",";
 
-        //
-        //  Spalten-Infos
-        //
+        /*
+         * column information
+         */
 
     OSL_ENSURE( !nInfoCount || (pColStart && pColFormat), "0-Zeiger in ScAsciiOptions" );
     for (sal_uInt16 nInfo=0; nInfo<nInfoCount; nInfo++)

@@ -40,12 +40,12 @@ class RscCmdLine
 
 public:
 
-    RscStrList          aInputList;     // Liste der Quelldateien
-    OString        aPath;          // Liste der Pfade
+    RscStrList          aInputList;     // List of source files
+    OString             aPath;          // List of paths
     RSCBYTEORDER_TYPE   nByteOrder;
-    unsigned short      nCommands;      // Steuerbits
-    OString        aOutputSrs;     // Name der Srs-Ausgabedatei
-    OString        aILDir;
+    unsigned short      nCommands;      // control bits
+    OString             aOutputSrs;     // Name of the Srs output file
+    OString             aILDir;
 
     struct OutputFile
     {
@@ -86,10 +86,10 @@ private:
                                        const OUString& rSrsOutPath );
 
 public:
-    RscTypCont*     pTC;        // String und Id-Verwalter
-    RscCmdLine*     pCL;        // Kommandozeile
-    FILE *          fListing;   // Ausgabedatei fuer Listings
-    FILE *          fExitFile;  // bei Abbruch muss diese Datei geschlossen werden
+    RscTypCont*     pTC;        // String and Id manager
+    RscCmdLine*     pCL;        // Command line
+    FILE *          fListing;   // Output file for listings
+    FILE *          fExitFile;  // in case of abortion this file must be closed
 
                     RscCompiler( RscCmdLine *, RscTypCont * );
                     ~RscCompiler();

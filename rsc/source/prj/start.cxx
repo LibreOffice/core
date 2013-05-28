@@ -50,8 +50,8 @@ static sal_Bool CallPrePro( const OString& rInput,
     const OString& rOutput, RscPtrPtr * pCmdLine,
     sal_Bool bResponse )
 {
-    RscPtrPtr       aNewCmdL;   // Kommandozeile
-    RscPtrPtr       aRespCmdL;   // Kommandozeile
+    RscPtrPtr       aNewCmdL;   // Command line
+    RscPtrPtr       aRespCmdL;  // Command line
     RscPtrPtr *     pCmdL = &aNewCmdL;
     int             i, nRet;
     FILE*           fRspFile = NULL;
@@ -216,7 +216,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     RscStrList      aTmpList;
     char *          pStr;
     char **         ppStr;
-    RscPtrPtr       aCmdLine;       // Kommandozeile
+    RscPtrPtr       aCmdLine;       // Command line
     sal_uInt32      i;
     OString*   pString;
 
@@ -260,7 +260,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else
         {
-            // Eingabedatei
+            // Input file
             aInputList.push_back( new OString(*ppStr) );
         }
         ppStr++;

@@ -85,7 +85,7 @@ ScMetricInputDlg::~ScMetricInputDlg()
 long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 {
 /*
-    mit Nachkommastellen:
+    with positions after decimal point:
 
     double  nVal    = aEdValue.GetValue( eUnit );
     sal_uInt16  nDecs   = aEdValue.GetDecimalDigits();
@@ -101,7 +101,7 @@ long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 
     return nVal / nFactor;
 */
-    // erstmal Nachkommastellen abschneiden - nich so doll...
+    // at first cutting of the positions after the decimal point - not that good...
 
     return sal::static_int_cast<long>( aEdValue.Denormalize( aEdValue.GetValue( eUnit ) ) );
 }
