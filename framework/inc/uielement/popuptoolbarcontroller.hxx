@@ -81,6 +81,7 @@ namespace framework
         DECLARE_XSERVICEINFO
     private:
         void functionExecuted( const rtl::OUString &rCommand );
+        void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
         void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& rEvent ) throw ( ::com::sun::star::uno::RuntimeException );
         void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException);
         void setItemImage( const rtl::OUString &rCommand );
