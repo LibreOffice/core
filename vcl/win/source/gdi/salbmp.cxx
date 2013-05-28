@@ -182,6 +182,7 @@ public:
                 if(pSource->maGdiPlusBitmap.get())
                 {
                     pSource->maGdiPlusBitmap.reset();
+                    pSource->mpAssociatedAlpha = 0;
                 }
             }
         }
@@ -207,6 +208,7 @@ WinSalBitmap::WinSalBitmap()
     mhDIB(0),
     mhDDB(0),
     maGdiPlusBitmap(),
+    mpAssociatedAlpha(0),
     mnBitCount(0)
 {
 }
@@ -240,6 +242,16 @@ void WinSalBitmap::Destroy()
 
 GdiPlusBmpPtr WinSalBitmap::ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSource) const
 {
+    WinSalBitmap* pThat = const_cast< WinSalBitmap* >(this);
+
+    if(maGdiPlusBitmap.get() && pAlphaSource != mpAssociatedAlpha)
+    {
+        // #122350# if associated alpha with which the GDIPlus was constructed has changed
+        // it is necessary to remove it from buffer, reset reference to it and reconstruct
+        pThat->maGdiPlusBitmap.reset();
+        aGdiPlusBuffer.remEntry(const_cast< WinSalBitmap& >(*this));
+    }
+
     if(maGdiPlusBitmap.get())
     {
         aGdiPlusBuffer.touchEntry(const_cast< WinSalBitmap& >(*this));
@@ -248,15 +260,15 @@ GdiPlusBmpPtr WinSalBitmap::ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSourc
     {
         if(maSize.Width() > 0 && maSize.Height() > 0)
         {
-            WinSalBitmap* pThat = const_cast< WinSalBitmap* >(this);
-
             if(pAlphaSource)
             {
                 pThat->maGdiPlusBitmap.reset(pThat->ImplCreateGdiPlusBitmap(*pAlphaSource));
+                pThat->mpAssociatedAlpha = pAlphaSource;
             }
             else
             {
                 pThat->maGdiPlusBitmap.reset(pThat->ImplCreateGdiPlusBitmap());
+                pThat->mpAssociatedAlpha = 0;
             }
 
             if(maGdiPlusBitmap.get())

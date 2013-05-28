@@ -39,7 +39,7 @@ typedef boost::shared_ptr< Gdiplus::Bitmap > GdiPlusBmpPtr;
 class WinSalBitmap : public SalBitmap
 {
 private:
-    friend class GdiPlusBuffer; // allow buffer to remove maGdiPlusBitmap eventually
+    friend class GdiPlusBuffer; // allow buffer to remove maGdiPlusBitmap and mpAssociatedAlpha eventually
 
     Size                maSize;
     HGLOBAL             mhDIB;
@@ -47,8 +47,14 @@ private:
 
     // the buffered evtl. used Gdiplus::Bitmap instance. It is managed by
     // GdiPlusBuffer. To make this safe, it is only handed out as shared
-    // pointer; the GdiPlusBuffer may delete the local instance
+    // pointer; the GdiPlusBuffer may delete the local instance.
+    //
+    // mpAssociatedAlpha holds the last WinSalBitmap used to construct an
+    // evtl. buffered GdiPlusBmp. This is needed since the GdiPlusBmp is a single
+    // instance and remembered only on the content-WinSalBitmap, not on the
+    // alpha-WinSalBitmap.
     GdiPlusBmpPtr       maGdiPlusBitmap;
+    const WinSalBitmap* mpAssociatedAlpha;
 
     sal_uInt16          mnBitCount;
 
