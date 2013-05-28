@@ -407,18 +407,39 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         OUString aServiceName;
         switch( mrModel.mnTypeId )
         {
-            case XML_exp:       aServiceName = "com.sun.star.chart2.ExponentialRegressionCurve"; break;
-            case XML_linear:    aServiceName = "com.sun.star.chart2.LinearRegressionCurve";      break;
-            case XML_log:       aServiceName = "com.sun.star.chart2.LogarithmicRegressionCurve"; break;
-            case XML_movingAvg: /* #i66819# moving average trendlines not supported */                              break;
-            case XML_poly:      /* #i20819# polynomial trendlines not supported */                                  break;
-            case XML_power:     aServiceName = "com.sun.star.chart2.PotentialRegressionCurve";   break;
-            default:            OSL_FAIL( "TrendlineConverter::convertFromModel - unknown trendline type" );
+            case XML_exp:
+                aServiceName = "com.sun.star.chart2.ExponentialRegressionCurve";
+            break;
+            case XML_linear:
+                aServiceName = "com.sun.star.chart2.LinearRegressionCurve";
+            break;
+            case XML_log:
+                aServiceName = "com.sun.star.chart2.LogarithmicRegressionCurve";
+            break;
+            case XML_movingAvg:
+                aServiceName = "com.sun.star.chart2.MovingAverageRegressionCurve";
+            break;
+            case XML_poly:
+                aServiceName = "com.sun.star.chart2.PolynomialRegressionCurve";
+            break;
+            case XML_power:
+                aServiceName = "com.sun.star.chart2.PotentialRegressionCurve";
+            break;
+            default:
+                OSL_FAIL( "TrendlineConverter::convertFromModel - unknown trendline type" );
         }
         if( !aServiceName.isEmpty() )
         {
             Reference< XRegressionCurve > xRegCurve( createInstance( aServiceName ), UNO_QUERY_THROW );
             PropertySet aPropSet( xRegCurve );
+
+            aPropSet.setProperty( PROP_PolynomialDegree, mrModel.mnOrder );
+            aPropSet.setProperty( PROP_MovingAveragePeriod, mrModel.mnPeriod );
+
+            if (mrModel.mfForward.has())
+                aPropSet.setProperty( PROP_ExtrapolateForward, mrModel.mfForward.get() );
+            if (mrModel.mfBackward.has())
+                aPropSet.setProperty( PROP_ExtrapolateBackward, mrModel.mfBackward.get() );
 
             // trendline formatting
             getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, OBJECTTYPE_TRENDLINE );

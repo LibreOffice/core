@@ -147,6 +147,8 @@ ErrorTitle
 Expansion
 ExternalDocLinks
 ExternalLinks
+ExtrapolateForward
+ExtrapolateBackward
 FileFormat
 FillBitmapMode
 FillBitmapName
@@ -304,6 +306,7 @@ MoveProtect
 MultiLine
 MultiPageValue
 MultiSelection
+MovingAveragePeriod
 Name
 NamedRanges
 NegativeError
@@ -338,9 +341,10 @@ Path
 PercentageNumberFormat
 PersistName
 Perspective
+PolygonKind
+PolynomialDegree
 PolyPolygon
 PolyPolygonBezier
-PolygonKind
 Position
 PositionBottom
 PositionLeft
