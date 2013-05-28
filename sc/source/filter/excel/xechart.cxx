@@ -1698,13 +1698,38 @@ bool XclExpChSerTrendLine::Convert( Reference< XRegressionCurve > xRegCurve, sal
         maData.mnOrder = 1;
     }
     else if( aService == "com.sun.star.chart2.ExponentialRegressionCurve" )
+    {
         maData.mnLineType = EXC_CHSERTREND_EXPONENTIAL;
+    }
     else if( aService == "com.sun.star.chart2.LogarithmicRegressionCurve" )
+    {
         maData.mnLineType = EXC_CHSERTREND_LOGARITHMIC;
+    }
     else if( aService == "com.sun.star.chart2.PotentialRegressionCurve" )
+    {
         maData.mnLineType = EXC_CHSERTREND_POWER;
+    }
+    else if( aService == "com.sun.star.chart2.PolynomialRegressionCurve" )
+    {
+        maData.mnLineType = EXC_CHSERTREND_POLYNOMIAL;
+        sal_Int32 aDegree;
+        aCurveProp.GetProperty(aDegree, EXC_CHPROP_POLYNOMIAL_DEGREE);
+        maData.mnOrder = static_cast<sal_uInt8> (aDegree);
+    }
+    else if( aService == "com.sun.star.chart2.MovingAverageRegressionCurve" )
+    {
+        maData.mnLineType = EXC_CHSERTREND_MOVING_AVG;
+        sal_Int32 aPeriod;
+        aCurveProp.GetProperty(aPeriod, EXC_CHPROP_MOVING_AVERAGE_PERIOD);
+        maData.mnOrder = static_cast<sal_uInt8> (aPeriod);
+    }
     else
+    {
         return false;
+    }
+
+    aCurveProp.GetProperty(maData.mfForecastFor,  EXC_CHPROP_EXTRAPOLATE_FORWARD);
+    aCurveProp.GetProperty(maData.mfForecastBack, EXC_CHPROP_EXTRAPOLATE_BACKWARD);
 
     // line formatting
     XclChDataPointPos aPointPos( nSeriesIdx );

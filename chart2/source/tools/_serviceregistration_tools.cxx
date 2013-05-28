@@ -145,6 +145,22 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_tools[] =
         , 0
     }
    ,{
+          ::chart::PolynomialRegressionCurve::create
+        , ::chart::PolynomialRegressionCurve::getImplementationName_Static
+        , ::chart::PolynomialRegressionCurve::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+   ,{
+          ::chart::MovingAverageRegressionCurve::create
+        , ::chart::MovingAverageRegressionCurve::getImplementationName_Static
+        , ::chart::MovingAverageRegressionCurve::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+   ,{
           ::chart::RegressionEquation::create
         , ::chart::RegressionEquation::getImplementationName_Static
         , ::chart::RegressionEquation::getSupportedServiceNames_Static

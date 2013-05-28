@@ -44,6 +44,8 @@
 #include <com/sun/star/chart2/ExponentialRegressionCurve.hpp>
 #include <com/sun/star/chart2/LogarithmicRegressionCurve.hpp>
 #include <com/sun/star/chart2/PotentialRegressionCurve.hpp>
+#include <com/sun/star/chart2/PolynomialRegressionCurve.hpp>
+#include <com/sun/star/chart2/MovingAverageRegressionCurve.hpp>
 #include <com/sun/star/chart2/CartesianCoordinateSystem2d.hpp>
 #include <com/sun/star/chart2/CartesianCoordinateSystem3d.hpp>
 #include <com/sun/star/chart2/FormattedString.hpp>
@@ -1616,9 +1618,12 @@ Reference< XRegressionCurve > XclImpChSerTrendLine::CreateRegressionCurve() cons
     switch( maData.mnLineType )
     {
         case EXC_CHSERTREND_POLYNOMIAL:
-            // TODO: only linear trend lines are supported by OOChart (#i20819#)
             if( maData.mnOrder == 1 )
+            {
                 xRegCurve = LinearRegressionCurve::create( comphelper::getProcessComponentContext() );
+            } else {
+                xRegCurve = PolynomialRegressionCurve::create( comphelper::getProcessComponentContext() );
+            }
         break;
         case EXC_CHSERTREND_EXPONENTIAL:
             xRegCurve = ExponentialRegressionCurve::create( comphelper::getProcessComponentContext() );
@@ -1629,6 +1634,9 @@ Reference< XRegressionCurve > XclImpChSerTrendLine::CreateRegressionCurve() cons
         case EXC_CHSERTREND_POWER:
             xRegCurve = PotentialRegressionCurve::create( comphelper::getProcessComponentContext() );
         break;
+        case EXC_CHSERTREND_MOVING_AVG:
+            xRegCurve = MovingAverageRegressionCurve::create( comphelper::getProcessComponentContext() );
+        break;
     }
 
     // trend line formatting
@@ -1636,6 +1644,11 @@ Reference< XRegressionCurve > XclImpChSerTrendLine::CreateRegressionCurve() cons
     {
         ScfPropertySet aPropSet( xRegCurve );
         mxDataFmt->ConvertLine( aPropSet, EXC_CHOBJTYPE_TRENDLINE );
+
+        aPropSet.SetProperty(EXC_CHPROP_POLYNOMIAL_DEGREE, static_cast<sal_Int32> (maData.mnOrder) );
+        aPropSet.SetProperty(EXC_CHPROP_MOVING_AVERAGE_PERIOD, static_cast<sal_Int32> (maData.mnOrder) );
+        aPropSet.SetProperty(EXC_CHPROP_EXTRAPOLATE_FORWARD, maData.mfForecastFor);
+        aPropSet.SetProperty(EXC_CHPROP_EXTRAPOLATE_BACKWARD, maData.mfForecastBack);
 
         // #i83100# show equation and correlation coefficient
         ScfPropertySet aLabelProp( xRegCurve->getEquationProperties() );
