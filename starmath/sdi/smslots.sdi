@@ -176,21 +176,6 @@ interface FormulaView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    SID_VIEW050 //idlpp ole : no , status : no
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
-    SID_VIEW100 //idlpp ole : no , status : no
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
-    SID_VIEW200 //idlpp ole : no , status : no
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
     SID_ZOOMIN //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
@@ -202,17 +187,6 @@ interface FormulaView
         StateMethod = GetState ;
     ]
     SID_DRAW //idlpp ole : no , status : no
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
-    SID_ADJUST //idlpp ole : no , status : no
-    [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
-    ]
-    //idlpp kein Menueeintrag , also keine Texte
-    SID_FITINWINDOW //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

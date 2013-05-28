@@ -827,6 +827,22 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     }
                     break;
 
+                case SID_ZOOM_50_PERCENT:
+                case SID_ZOOM_75_PERCENT:
+                case SID_ZOOM_100_PERCENT:
+                case SID_ZOOM_150_PERCENT:
+                case SID_ZOOM_200_PERCENT:
+                case SID_ZOOM_OPTIMAL:
+                case SID_ZOOM_ENTIRE_PAGE:
+                case SID_ZOOM_PAGE_WIDTH:
+                    {
+                        const SfxPoolItem *pItem;
+                        SfxItemState aState = SfxViewFrame::Current()->GetDispatcher()->QueryState(SID_ATTR_ZOOM, pItem);
+                        if ( aState == SFX_ITEM_DISABLED )
+                            rSet.DisableItem( nWhich );
+                    }
+                    break;
+
                 default:
                     break;
             }
