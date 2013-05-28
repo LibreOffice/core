@@ -194,7 +194,7 @@ interface I1 {
 
 EXPECT FAILURE "attribute.tests 23":
 interface I1 {
-    [attribute, removeable] long a;
+    [attribute, removable] long a;
 };
 
 

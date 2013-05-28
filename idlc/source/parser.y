@@ -271,7 +271,7 @@ bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
 %token 			IDL_PROPERTY
 %token 			IDL_RAISES
 %token 			IDL_READONLY
-%token 			IDL_REMOVEABLE
+%token 			IDL_REMOVABLE
 %token 			IDL_SERVICE
 %token 			IDL_SEQUENCE
 %token 			IDL_SINGLETON
@@ -848,10 +848,10 @@ opt_attrflag :
 		idlc()->setParseState(PS_MayBeDefaultSeen);
 		$$ = AF_MAYBEDEFAULT;
 	}
-	| IDL_REMOVEABLE
+	| IDL_REMOVABLE
 	{
 		idlc()->setParseState(PS_RemoveableSeen);
-		$$ = AF_REMOVEABLE;
+		$$ = AF_REMOVABLE;
 	}
 	| error ']' 
 	{

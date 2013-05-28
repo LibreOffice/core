@@ -339,7 +339,7 @@ static sal_uInt16 GetFolderImageId_Impl( const String& rURL )
             else if ( aVolumeInfo.m_bIsCompactDisc )
                 nRet = IMG_CDROMDEV;
             else if ( aVolumeInfo.m_bIsRemoveable )
-                nRet = IMG_REMOVEABLEDEV;
+                nRet = IMG_REMOVABLEDEV;
             else if ( aVolumeInfo.m_bIsVolume )
                 nRet = IMG_FIXEDDEV;
         }
@@ -629,7 +629,7 @@ Image SvFileInformationManager::GetFolderImage( const svtools::VolumeInfo& rInfo
     else if ( rInfo.m_bIsCompactDisc )
         nImage = IMG_CDROMDEV;
     else if ( rInfo.m_bIsRemoveable || rInfo.m_bIsFloppy )
-        nImage = IMG_REMOVEABLEDEV;
+        nImage = IMG_REMOVABLEDEV;
     else if ( rInfo.m_bIsVolume )
         nImage = IMG_FIXEDDEV;
 

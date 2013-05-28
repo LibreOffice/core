@@ -456,7 +456,7 @@ static OString flagToString(sal_uInt32 flag)
         flagStr += "'maybeambiguous'";
     if ( (flag & AF_MAYBEDEFAULT) == AF_MAYBEDEFAULT )
         flagStr += "'maybedefault'";
-    if ( (flag & AF_REMOVEABLE) == AF_REMOVEABLE )
+    if ( (flag & AF_REMOVABLE) == AF_REMOVABLE )
         flagStr += "'removable'";
     if ( (flag & AF_ATTRIBUTE) == AF_ATTRIBUTE )
         flagStr += "'attribute'";

@@ -600,7 +600,7 @@ void PADialog::RemDevice()
 
     if( ! m_rPIManager.removePrinter( aPrinter ) )
     {
-        String aText( PaResId( RID_ERR_PRINTERNOTREMOVEABLE ) );
+        String aText( PaResId( RID_ERR_PRINTERNOTREMOVABLE ) );
         aText.SearchAndReplace( String( "%s" ), aPrinter );
         ErrorBox aBox( this, WB_OK | WB_DEF_OK, aText );
         aBox.Execute();

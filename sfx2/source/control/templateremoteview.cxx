@@ -40,7 +40,7 @@ enum
     ROW_TARGET_URL,
     ROW_IS_HIDDEN,
     ROW_IS_REMOTE,
-    ROW_IS_REMOVEABLE
+    ROW_IS_REMOVABLE
 };
 
 TemplateRemoteView::TemplateRemoteView (Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)

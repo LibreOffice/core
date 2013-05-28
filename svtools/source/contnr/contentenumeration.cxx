@@ -50,7 +50,7 @@ namespace svt
 #define ROW_IS_HIDDEN       7
 #define ROW_IS_VOLUME       8
 #define ROW_IS_REMOTE       9
-#define ROW_IS_REMOVEABLE   10
+#define ROW_IS_REMOVABLE    10
 #define ROW_IS_FLOPPY       11
 #define ROW_IS_COMPACTDISC  12
 
@@ -244,7 +244,7 @@ namespace svt
                             pData->mbIsFolder = xRow->getBoolean( ROW_IS_FOLDER ) && !xRow->wasNull();
                             pData->mbIsVolume = xRow->getBoolean( ROW_IS_VOLUME ) && !xRow->wasNull();
                             pData->mbIsRemote = xRow->getBoolean( ROW_IS_REMOTE ) && !xRow->wasNull();
-                            pData->mbIsRemoveable = xRow->getBoolean( ROW_IS_REMOVEABLE ) && !xRow->wasNull();
+                            pData->mbIsRemoveable = xRow->getBoolean( ROW_IS_REMOVABLE ) && !xRow->wasNull();
                             pData->mbIsFloppy = xRow->getBoolean( ROW_IS_FLOPPY ) && !xRow->wasNull();
                             pData->mbIsCompactDisc = xRow->getBoolean( ROW_IS_COMPACTDISC ) && !xRow->wasNull();
                             pData->SetNewTitle( xRow->getString( ROW_TITLE ) );
