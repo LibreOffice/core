@@ -56,8 +56,6 @@ class ToolBox;
 namespace svt
 {
 
-struct DispatchInfo;
-
 class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusListener,
                           public ::com::sun::star::frame::XToolbarController,
                           public ::com::sun::star::lang::XInitialization,
@@ -126,11 +124,9 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
         const rtl::OUString& getCommandURL() const { return  m_aCommandURL; }
         const rtl::OUString& getModuleName() const { return m_sModuleName; }
 
-        void dispatchCommand( const ::rtl::OUString& sCommandURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
+        void dispatchCommand( const ::rtl::OUString& sCommandURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs, const rtl::OUString &sTarget = rtl::OUString() );
 
         void enable( bool bEnable );
-
-        DECL_STATIC_LINK( ToolboxController, ExecuteHdl_Impl, DispatchInfo* );
 
     protected:
         bool getToolboxId( sal_uInt16& rItemId, ToolBox** ppToolBox );
@@ -143,6 +139,23 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
             ::com::sun::star::util::URL aURL;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch;
         };
+
+        struct DispatchInfo
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > mxDispatch;
+            const ::com::sun::star::util::URL maURL;
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > maArgs;
+
+            DispatchInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& xDispatch,
+                          const ::com::sun::star::util::URL& rURL,
+                          const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs )
+                : mxDispatch( xDispatch )
+                , maURL( rURL )
+                , maArgs( rArgs )
+                {}
+        };
+
+        DECL_STATIC_LINK( ToolboxController, ExecuteHdl_Impl, DispatchInfo* );
 
         typedef ::std::hash_map< ::rtl::OUString,
                                  com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >,
