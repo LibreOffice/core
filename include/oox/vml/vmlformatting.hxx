@@ -24,6 +24,7 @@
 #include "oox/dllapi.h"
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 
 #include <vector>
 
@@ -238,6 +239,17 @@ struct OOX_DLLPUBLIC ShadowModel
 
     /** Writes the properties to the passed property map. */
     void pushToPropMap(oox::drawingml::ShapePropertyMap& rPropMap, const GraphicHelper& rGraphicHelper) const;
+};
+
+/** The shadow model structure contains all shape textpath properties. */
+struct OOX_DLLPUBLIC TextpathModel
+{
+    OptValue<OUString> moString;                  ///< Specifies the string of the textpath.
+
+    TextpathModel();
+
+    /** Writes the properties to the passed property map. */
+    void pushToPropMap(oox::drawingml::ShapePropertyMap& rPropMap, com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape) const;
 };
 
 } // namespace vml
