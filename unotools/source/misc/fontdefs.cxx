@@ -583,4 +583,12 @@ int FontNameHash::operator()( const String& rStr ) const
     return nHash;
 }
 
+bool IsStarSymbol(const OUString &rFontName)
+{
+    sal_uInt16 nIndex = 0;
+    OUString sFamilyNm(GetNextFontToken(rFontName, nIndex));
+    return (sFamilyNm.equalsIgnoreAsciiCase("starsymbol") ||
+        sFamilyNm.equalsIgnoreAsciiCase("opensymbol"));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

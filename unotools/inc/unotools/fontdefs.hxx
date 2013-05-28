@@ -88,6 +88,15 @@ UNOTOOLS_DLLPUBLIC String GetNextFontToken( const String& rTokenStr, xub_StrLen&
 
 UNOTOOLS_DLLPUBLIC void GetEnglishSearchFontName( String& rName );
 
+/** Determine if the font is the special Star|Open Symbol font
+
+    @param rFontName
+    The FontName to test for being Star|Open Symbol
+
+    @return true if this is Star|Open Symbol
+*/
+UNOTOOLS_DLLPUBLIC bool IsStarSymbol(const OUString &rFontName);
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

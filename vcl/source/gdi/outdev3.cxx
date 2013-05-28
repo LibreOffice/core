@@ -745,8 +745,7 @@ PhysicalFontFace::PhysicalFontFace( const ImplDevFontAttributes& rDFA, int nMagi
 {
     // StarSymbol is a unicode font, but it still deserves the symbol flag
     if( !mbSymbolFlag )
-        if( 0 == GetFamilyName().CompareIgnoreCaseToAscii( "starsymbol", 10)
-        ||  0 == GetFamilyName().CompareIgnoreCaseToAscii( "opensymbol", 10) )
+        if ( IsStarSymbol( GetFamilyName() ) )
             mbSymbolFlag = true;
 }
 

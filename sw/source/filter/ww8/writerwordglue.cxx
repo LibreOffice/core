@@ -311,7 +311,7 @@ namespace myImplHelpers
     String FindBestMSSubstituteFont(const String &rFont)
     {
         String sRet;
-        if (sw::util::IsStarSymbol(rFont))
+        if ( IsStarSymbol(rFont) )
             sRet.ASSIGN_CONST_ASC("Arial Unicode MS");
         else
             sRet = GetSubsFontName(rFont, SUBSFONT_ONLYONE | SUBSFONT_MS);

@@ -502,12 +502,6 @@ void WMFWriter::WMFRecord_Ellipse(const Rectangle & rRect)
     WriteRectangle(rRect);
 }
 
-bool IsStarSymbol(const String &rStr)
-{
-    return rStr.EqualsIgnoreCaseAscii("starsymbol") ||
-        rStr.EqualsIgnoreCaseAscii("opensymbol");
-}
-
 void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_Int8* pData )
 {
 #ifdef OSL_BIGENDIAN
