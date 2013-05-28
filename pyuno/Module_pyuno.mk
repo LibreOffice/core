@@ -16,6 +16,7 @@ $(eval $(call gb_Module_add_targets,pyuno,\
     Library_pythonloader \
     Package_pyunorc \
     Package_python_scripts \
+    Rdb_pyuno \
 ))
 
 ifneq ($(OS),WNT)

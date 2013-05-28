@@ -159,9 +159,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(DISABLE_NEON),, \
 		ucb/source/ucp/webdav-neon/ucpdav1 \
 	) \
-	$(if $(DISABLE_PYTHON),, \
-		pyuno/source/loader/pythonloader \
-	) \
 	$(if $(DISABLE_SCRIPTING),, \
 		basctl/util/basctl \
 		basic/util/sb \

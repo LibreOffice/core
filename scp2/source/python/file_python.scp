@@ -53,6 +53,13 @@ End
 
 STD_LIB_FILE( gid_File_Lib_Pythonloader, pythonloader )
 
+File gid_File_Pyuno_Rdb
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program_Services;
+    Name = "pyuno.rdb";
+    Styles = (PACKED);
+End
+
 File gid_File_Py_Unohelper
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
