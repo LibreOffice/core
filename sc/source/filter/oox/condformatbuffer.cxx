@@ -970,6 +970,9 @@ void CondFormat::importCfRule( SequenceInputStream& rStrm )
 
 void CondFormat::finalizeImport()
 {
+    // probably some error in the xml if we are not ready
+    if ( !mbReadyForFinalize )
+        return;
     ScDocument& rDoc = getScDocument();
     maRules.forEachMem( &CondFormatRule::finalizeImport );
     SCTAB nTab = maModel.maRanges.getBaseAddress().Sheet;
