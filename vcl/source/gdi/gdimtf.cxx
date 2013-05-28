@@ -48,6 +48,14 @@
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
 #include <comphelper/processfactory.hxx>
 
+#ifdef UNX
+#include <tools/prex.h>
+#include "unx/Xproto.h"
+#include <tools/postx.h>
+#include <unx/salunx.h>
+#include <unx/salbmp.h>
+#endif
+
 using namespace com::sun::star;
 
 // -----------
@@ -494,18 +502,39 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
                     }
 
                     SalBitmap* pSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-                    pSalBmp->SetHasAlpha( true );
-
-                    if( pSalBmp->Create( xBitmapCanvas, aSize ) )
+                    // I don't quite understand this, but the old code didn't work properly on X11 when alpha was used,
+                    // and the commit that changed to the new code relied on alpha support in bitmap
+                    // (which that commit implemented only in X11SalBitmap) and so it didn't work on Windows.
+                    // So keep both.
+#ifdef UNX
+                    X11SalBitmap* X11Bmp = static_cast< X11SalBitmap* >( pSalBmp );
+                    X11Bmp->SetHasAlpha( true );
+                    if( X11Bmp->Create( xBitmapCanvas, aSize ) )
                     {
-                        Bitmap aBitmap( pSalBmp );
+                        Bitmap aBitmap( X11Bmp );
                         if ( pOut->GetMapMode() == MAP_PIXEL )
                             pOut->DrawBitmap( rPos, aBitmap );
                         else
                             pOut->DrawBitmap( rPos, rLogicDestSize, aBitmap );
                         return true;
                     }
+#else
+                    SalBitmap* pSalMask = ImplGetSVData()->mpDefInst->CreateSalBitmap();
 
+                    if( pSalBmp->Create( xBitmapCanvas, aSize ) && pSalMask->Create( xBitmapCanvas, aSize, true ) )
+                    {
+                        Bitmap aBitmap( pSalBmp );
+                        Bitmap aMask( pSalMask );
+                        AlphaMask aAlphaMask( aMask );
+                        BitmapEx aBitmapEx( aBitmap, aAlphaMask );
+                        if ( pOut->GetMapMode() == MAP_PIXEL )
+                            pOut->DrawBitmapEx( rPos, aBitmapEx );
+                        else
+                            pOut->DrawBitmapEx( rPos, rLogicDestSize, aBitmapEx );
+                        return true;
+                    }
+                    delete pSalMask;
+#endif
                     delete pSalBmp;
                 }
             }
