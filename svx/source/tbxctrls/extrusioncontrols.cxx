@@ -533,7 +533,7 @@ OUString SAL_CALL ExtrusionDepthController_getImplementationName()
 Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
-    aSNS.getArray()[0] = OUString( "com.sun.star.frame.PopupMenuController" );
+    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
     return aSNS;
 }
 

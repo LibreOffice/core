@@ -19,7 +19,7 @@
 <component loader="com.sun.star.loader.SharedLibrary" prefix="svxcore"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.svx.ExtrusionDepthController">
-    <service name="com.sun.star.frame.PopupMenuController"/>
+    <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
   <implementation name="com.sun.star.comp.svx.ExtrusionDirectionController">
     <service name="com.sun.star.frame.ToolbarController"/>
