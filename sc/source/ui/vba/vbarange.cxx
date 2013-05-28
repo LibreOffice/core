@@ -1831,6 +1831,7 @@ ScVbaRange::fillSeries( sheet::FillDirection nFillDirection, sheet::FillMode nFi
 
     uno::Reference< sheet::XCellSeries > xCellSeries(mxRange, uno::UNO_QUERY_THROW );
     xCellSeries->fillSeries( nFillDirection, nFillMode, nFillDateMode, fStep, fEndValue );
+    fireChangeEvent();
 }
 
 void
@@ -3095,7 +3096,28 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
         // OOo.org afaik
 
         uno::Reference< util::XSearchDescriptor > xSearch( xDescriptor, uno::UNO_QUERY );
+        uno::Reference< container::XIndexAccess > xIndexAccess = xReplace->findAll( xSearch );
         xReplace->replaceAll( xSearch );
+        if ( xIndexAccess.is() && xIndexAccess->getCount() > 0 )
+        {
+            for ( sal_Int32 i = 0; i < xIndexAccess->getCount(); ++i )
+            {
+                uno::Reference< table::XCellRange > xCellRange( xIndexAccess->getByIndex( i ), uno::UNO_QUERY );
+                if ( xCellRange.is() )
+                {
+                    uno::Reference< excel::XRange > xRange( new ScVbaRange( mxParent, mxContext, xCellRange ) );
+                    uno::Reference< container::XEnumerationAccess > xEnumAccess( xRange, uno::UNO_QUERY_THROW );
+                    uno::Reference< container::XEnumeration > xEnum = xEnumAccess->createEnumeration();
+                    while ( xEnum->hasMoreElements() )
+                    {
+                        uno::Reference< excel::XRange > xNextRange( xEnum->nextElement(), uno::UNO_QUERY_THROW );
+                        ScVbaRange* pRange = dynamic_cast< ScVbaRange * > ( xNextRange.get() );
+                        if ( pRange )
+                            pRange->fireChangeEvent();
+                    }
+                }
+            }
+        }
     }
     return sal_True; // always
 }
