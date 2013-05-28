@@ -1,4 +1,4 @@
-/*
+﻿/*
  *
  * Copyright © 2000 SuSE, Inc.
  *

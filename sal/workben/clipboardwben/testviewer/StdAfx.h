@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+ï»¿/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 // stdafx.h : Include-Datei für Standard-System-Include-Dateien,
 //  oder projektspezifische Include-Dateien, die häufig benutzt, aber
 //      in unregelmäßigen Abständen geändert werden.

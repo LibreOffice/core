@@ -1,4 +1,4 @@
-/*
+﻿/*
  * empathy-ft-handler.c - Source for EmpathyFTHandler
  * Copyright © 2009, 2012 Collabora Ltd.
  * Copyright © 2009 Frédéric Péters

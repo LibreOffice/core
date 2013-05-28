@@ -1,4 +1,4 @@
-/* This comment added at LibrOffice:
+﻿/* This comment added at LibrOffice:
 
    This file is covered by the "TWAIN License", at the time of this
    writing in http://www.twain.org/devfiles/readme.txt, which says:
