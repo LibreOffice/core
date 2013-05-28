@@ -44,7 +44,7 @@
 #define IMG_WRITER                      (IMAGELIST_START + 86)
 #define IMG_WRITERTEMPLATE              (IMAGELIST_START + 87)
 #define IMG_FIXEDDEV                    (IMAGELIST_START + 88)
-#define IMG_REMOVEABLEDEV               (IMAGELIST_START + 89)
+#define IMG_REMOVABLEDEV                (IMAGELIST_START + 89)
 #define IMG_CDROMDEV                    (IMAGELIST_START + 90)
 #define IMG_NETWORKDEV                  (IMAGELIST_START + 91)
 #define IMG_TABLE                       (IMAGELIST_START + 112)

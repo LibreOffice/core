@@ -87,7 +87,7 @@ AstScope* SAL_CALL declAsScope(AstDeclaration* pDecl);
 #define AF_TRANSIENT        0x0020
 #define AF_MAYBEAMBIGUOUS   0x0040
 #define AF_MAYBEDEFAULT     0x0080
-#define AF_REMOVEABLE       0x0100
+#define AF_REMOVABLE        0x0100
 #define AF_ATTRIBUTE        0x0200
 #define AF_PROPERTY         0x0400
 

@@ -258,7 +258,7 @@ ServiceTypeDescriptionImpl::getProperties()
             nAttribs |= beans::PropertyAttribute::MAYBEAMBIGUOUS;
         if ( nFlags & RT_ACCESS_MAYBEDEFAULT )
             nAttribs |= beans::PropertyAttribute::MAYBEDEFAULT;
-        if ( nFlags & RT_ACCESS_REMOVEABLE )
+        if ( nFlags & RT_ACCESS_REMOVABLE )
             nAttribs |= beans::PropertyAttribute::REMOVABLE;
 
         OSL_ENSURE( !(nFlags & RT_ACCESS_PROPERTY),

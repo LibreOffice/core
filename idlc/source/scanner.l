@@ -307,7 +307,7 @@ optional        return IDL_OPTIONAL;
 property        return IDL_PROPERTY;
 raises          return IDL_RAISES;
 readonly        return IDL_READONLY;
-removable       return IDL_REMOVEABLE;
+removable       return IDL_REMOVABLE;
 service         return IDL_SERVICE;
 sequence        return IDL_SEQUENCE;
 singleton       return IDL_SINGLETON;

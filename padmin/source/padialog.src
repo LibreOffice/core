@@ -453,7 +453,7 @@ String RID_ERR_REMOVEDEFAULTDRIVER
     Text [ en-US ] = "The driver \"%s\" is used by your default printer. Therefore, it cannot be removed.";
 };
 
-String RID_ERR_PRINTERNOTREMOVEABLE
+String RID_ERR_PRINTERNOTREMOVABLE
 {
     Text [ en-US ] = "The printer %s cannot be removed.";
 };

@@ -118,7 +118,7 @@ namespace comphelper
             @throws UnknownPropertyException
                 if the bag does not contain a property with the given name
             @throws NotRemoveableException
-                if the property with the given name is not removeable, as indicated
+                if the property with the given name is not removable, as indicated
                 by the property attributes used in a previous <code>addProperty</code>
                 call.
         */

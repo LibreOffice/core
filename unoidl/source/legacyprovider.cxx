@@ -564,7 +564,7 @@ rtl::Reference< Entity > readEntity(
                         attrs |= AccumulationBasedServiceEntity::Property::
                             ATTRIBUTE_MAYBE_DEFAULT;
                     }
-                    if ((acc & RT_ACCESS_REMOVEABLE) != 0) {
+                    if ((acc & RT_ACCESS_REMOVABLE) != 0) {
                         attrs |= AccumulationBasedServiceEntity::Property::
                             ATTRIBUTE_REMOVABLE;
                     }

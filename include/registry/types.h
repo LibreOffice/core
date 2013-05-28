@@ -123,7 +123,7 @@ enum RTTypeClass {
     @see RT_ACCESS_TRANSIENT
     @see RT_ACCESS_MAYBEAMBIGUOUS
     @see RT_ACCESS_MAYBEDEFAULT
-    @see RT_ACCESS_REMOVEABLE
+    @see RT_ACCESS_REMOVABLE
     @see RT_ACCESS_ATTRIBUTE
     @see RT_ACCESS_PROPERTY
     @see RT_ACCESS_CONST
@@ -153,7 +153,7 @@ typedef sal_uInt16 RTFieldAccess;
 /// @see com::sun::star::beans::PropertyAttribute
 #define RT_ACCESS_MAYBEDEFAULT 0x0080
 /// @see com::sun::star::beans::PropertyAttribute
-#define RT_ACCESS_REMOVEABLE 0x0100
+#define RT_ACCESS_REMOVABLE 0x0100
 /// @see com::sun::star::beans::PropertyAttribute
 #define RT_ACCESS_ATTRIBUTE 0x0200
 /// specifies that the field is a property

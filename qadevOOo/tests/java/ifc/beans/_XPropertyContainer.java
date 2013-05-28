@@ -246,7 +246,7 @@ public class _XPropertyContainer extends MultiMethodTest {
         exp=false;
 
         try {
-            log.println("remove not removeable property '" + propertyNotRemovable + "'") ;
+            log.println("remove not removable property '" + propertyNotRemovable + "'") ;
             oObj.removeProperty(propertyNotRemovable);
         } catch (NotRemoveableException ex) {
             log.println("OK: expected Exception was thrown: " + ex.toString());

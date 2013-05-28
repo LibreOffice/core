@@ -90,7 +90,7 @@ public:
     sal_Bool isMayBeDefault() const
         { return ((m_flags & AF_MAYBEDEFAULT) == AF_MAYBEDEFAULT); }
     sal_Bool isRemoveable() const
-        { return ((m_flags & AF_REMOVEABLE) == AF_REMOVEABLE); }
+        { return ((m_flags & AF_REMOVABLE) == AF_REMOVABLE); }
 
     sal_Bool dumpBlob(
         typereg::Writer & rBlob, sal_uInt16 index, sal_uInt16 * methodIndex);

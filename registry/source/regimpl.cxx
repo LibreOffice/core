@@ -104,7 +104,7 @@ void printFieldOrReferenceFlags(RTFieldAccess flags) {
         printFieldOrReferenceFlag(
             &flags, RT_ACCESS_MAYBEDEFAULT, "maybedefault", &first);
         printFieldOrReferenceFlag(
-            &flags, RT_ACCESS_REMOVEABLE, "removeable", &first);
+            &flags, RT_ACCESS_REMOVABLE, "removable", &first);
         printFieldOrReferenceFlag(
             &flags, RT_ACCESS_ATTRIBUTE, "attribute", &first);
         printFieldOrReferenceFlag(

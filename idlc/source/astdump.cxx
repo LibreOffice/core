@@ -366,7 +366,7 @@ sal_Bool AstAttribute::dumpBlob(
     }
     if (isRemoveable())
     {
-        accessMode |= RT_ACCESS_REMOVEABLE;
+        accessMode |= RT_ACCESS_REMOVABLE;
     }
 
     OUString name(OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8));
