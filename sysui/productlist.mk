@@ -13,8 +13,8 @@ PKGVERSIONSHORT := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR)
 PRODUCTNAME.libreoffice := LibreOffice
 PRODUCTNAME.libreofficeodev := LibreOfficeDev
 PRODUCTNAME.oxygenoffice := OxygenOffice
-UNIXFILENAME.libreoffice := $(PRODUCTNAMELC.libreoffice)$(PKGVERSIONSHORT)
-UNIXFILENAME.libreofficedev := $(PRODUCTNAMELC.libreofficedev)$(PKGVERSIONSHORT)
-UNIXFILENAME.oxygenoffice := $(PRODUCTNAMELC.oxygenoffice)$(PKGVERSIONSHORT)
+UNIXFILENAME.libreoffice := libreoffice$(PKGVERSIONSHORT)
+UNIXFILENAME.libreofficedev := libreofficedev$(PKGVERSIONSHORT)
+UNIXFILENAME.oxygenoffice := oxygenoffice$(PKGVERSIONSHORT)
 
 # vim: set noet sw=4 ts=4:
