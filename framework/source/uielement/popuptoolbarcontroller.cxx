@@ -257,6 +257,17 @@ NewToolbarController::NewToolbarController(
 }
 
 void SAL_CALL
+NewToolbarController::initialize(
+    const css::uno::Sequence< css::uno::Any >& aArguments )
+throw ( css::uno::Exception, css::uno::RuntimeException )
+{
+    PopupMenuToolbarController::initialize( aArguments );
+
+    osl::MutexGuard aGuard( m_aMutex );
+    createPopupMenuController();
+}
+
+void SAL_CALL
 NewToolbarController::statusChanged(
     const css::frame::FeatureStateEvent& rEvent )
     throw ( css::uno::RuntimeException )
@@ -401,10 +412,7 @@ void NewToolbarController::setItemImage( const OUString &rCommand )
     Image aMenuImage;
 
     sal_Bool bValid( Impl_ExistURLInMenu( m_xPopupMenu, aURL, sFallback, aMenuImage ) );
-    // do not change aURL if Impl_ExistURLInMenu returned sal_False
-    // this allows later initialization of the PopupMenuController on createPopupWindow()
-    // and works even if SvFileInformationManager does not know the module
-    if ( !aURL.getLength() )
+    if ( !bValid )
         aURL = sFallback;
 
     sal_Bool bBig = SvtMiscOptions().AreCurrentSymbolsLarge();
@@ -412,16 +420,9 @@ void NewToolbarController::setItemImage( const OUString &rCommand )
     INetURLObject aURLObj( aURL );
     Image aImage = SvFileInformationManager::GetImageNoDefault( aURLObj, bBig );
     if ( !aImage )
-    {
-        if ( !!aMenuImage )
-            aImage =  aMenuImage;
-        else if ( !bValid )
-            // If SvFileInformationManager didn't know the module, try with the default
-            aImage = SvFileInformationManager::GetImageNoDefault( INetURLObject( sFallback ), bBig );
-
-        if ( !aImage )
-            aImage = SvFileInformationManager::GetImage( aURLObj, bBig );
-    }
+        aImage = !!aMenuImage ?
+            aMenuImage :
+            SvFileInformationManager::GetImage( aURLObj, bBig );
 
     // if everything failed, just use the image associated with the toolbar item command
     if ( !aImage )
