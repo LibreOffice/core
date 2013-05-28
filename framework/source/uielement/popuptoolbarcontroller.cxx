@@ -17,6 +17,8 @@
  */
 
 #include <uielement/popuptoolbarcontroller.hxx>
+#include <framework/menuconfiguration.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
@@ -28,9 +30,10 @@
 
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
-
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 
 #define UNO_COMMAND_RECENT_FILE_LIST    ".uno:RecentFileList"
+#define SFX_REFERER_USER                "private:user"
 
 namespace css = ::com::sun::star;
 
@@ -270,6 +273,39 @@ NewToolbarController::statusChanged(
     enable( rEvent.IsEnabled );
 }
 
+void SAL_CALL
+NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
+    throw ( css::uno::RuntimeException )
+{
+    osl::MutexGuard aGuard( m_aMutex );
+    if ( !m_aLastURL.getLength() )
+        return;
+
+    OUString aTarget( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );
+    if ( m_xPopupMenu.is() )
+    {
+        // TODO investigate how to wrap Get/SetUserValue in css::awt::XMenu
+        MenuConfiguration::Attributes* pMenuAttributes( 0 );
+        VCLXPopupMenu*  pTkPopupMenu = dynamic_cast< VCLXPopupMenu * >(
+            VCLXMenu::GetImplementation( m_xPopupMenu ) );
+
+        SolarMutexGuard aSolarMutexGuard;
+        PopupMenu* pVCLPopupMenu = dynamic_cast< PopupMenu * >( pTkPopupMenu->GetMenu() );
+        if ( pVCLPopupMenu )
+            pMenuAttributes = reinterpret_cast< MenuConfiguration::Attributes* >(
+                pVCLPopupMenu->GetUserValue( pVCLPopupMenu->GetCurItemId() ) );
+
+        if ( pMenuAttributes )
+            aTarget = pMenuAttributes->aTargetFrame;
+    }
+
+    css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
+    aArgs[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer"  ));
+    aArgs[0].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER ) );
+
+    dispatchCommand( m_aLastURL, aArgs, aTarget );
+}
+
 void NewToolbarController::functionExecuted( const OUString &rCommand )
 {
     setItemImage( rCommand );
@@ -400,6 +436,8 @@ void NewToolbarController::setItemImage( const OUString &rCommand )
     }
     else
         pToolBox->SetItemImage( m_nToolBoxId, aImage );
+
+    m_aLastURL = aURL;
 }
 
 

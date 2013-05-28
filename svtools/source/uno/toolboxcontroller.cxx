@@ -49,16 +49,6 @@ using namespace ::com::sun::star::frame;
 namespace svt
 {
 
-struct DispatchInfo
-{
-    Reference< XDispatch > mxDispatch;
-    const URL maURL;
-    const Sequence< PropertyValue > maArgs;
-
-    DispatchInfo( const Reference< XDispatch >& xDispatch, const URL& rURL, const Sequence< PropertyValue >& rArgs )
-        : mxDispatch( xDispatch ), maURL( rURL ), maArgs( rArgs ) {}
-};
-
 ToolboxController::ToolboxController(
     const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& xFrame,
@@ -705,7 +695,7 @@ Reference< ::com::sun::star::awt::XWindow > ToolboxController::getParent() const
     return m_xParentWindow;
 }
 
-void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequence< PropertyValue >& rArgs )
+void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequence< PropertyValue >& rArgs, const OUString &sTarget )
 {
     try
     {
@@ -714,9 +704,12 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
         aURL.Complete = sCommandURL;
         getURLTransformer()->parseStrict( aURL );
 
-        Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch( aURL, OUString(), 0 ), UNO_QUERY_THROW );
+        Reference< XDispatch > xDispatch( xDispatchProvider->queryDispatch( aURL, sTarget, 0 ), UNO_QUERY_THROW );
 
-        Application::PostUserEvent( STATIC_LINK(0, ToolboxController, ExecuteHdl_Impl), new DispatchInfo( xDispatch, aURL, rArgs ) );
+        DispatchInfo *pDispatchInfo = new DispatchInfo( xDispatch, aURL, rArgs );
+        if ( !Application::PostUserEvent( STATIC_LINK(0, ToolboxController, ExecuteHdl_Impl),
+                                          pDispatchInfo ) )
+            delete pDispatchInfo;
 
     }
     catch( Exception& )

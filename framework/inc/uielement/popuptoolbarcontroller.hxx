@@ -78,7 +78,10 @@ namespace framework
     private:
         void functionExecuted( const OUString &rCommand );
         void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& rEvent ) throw ( ::com::sun::star::uno::RuntimeException );
+        void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException);
         void setItemImage( const OUString &rCommand );
+
+        OUString m_aLastURL;
     };
 
     class WizardsToolbarController : public PopupMenuToolbarController
