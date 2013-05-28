@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8F0\u003d",
+        "filename": "sw/source/ui/uiview/viewsrch.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-05-28T11:50:05Z",
+      "side": 1,
+      "message": "there is SwPaM::Start() method already for this",
+      "revId": "f00d4afe7efd9abe21c2870c9c7f0751a650fdcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8Fw\u003d",
+        "filename": "sw/source/ui/uiview/viewsrch.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-05-28T11:50:05Z",
+      "side": 1,
+      "message": "there is SwPaM::End() method already for this",
+      "revId": "f00d4afe7efd9abe21c2870c9c7f0751a650fdcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8Fs\u003d",
+        "filename": "sw/source/ui/uiview/viewsrch.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-05-28T11:50:05Z",
+      "side": 1,
+      "message": "please use C++ casts (static_cast/const_cast) instead of C casts",
+      "revId": "f00d4afe7efd9abe21c2870c9c7f0751a650fdcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8Fo\u003d",
+        "filename": "sw/source/ui/uiview/viewsrch.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-05-28T11:50:05Z",
+      "side": 1,
+      "message": "what does this do?\non the first iteration it will set pStart to pStart...\non subsequent iterations it will set pStart to the earliest point/mark on any cursor in the ring.... it\u0027s not obvous to me what good this does?\n\n\nah wait /me reads commit message... it\u0027s intentional... but iirc there is an option to search in the \"selected\" text, and i guess in that case changing the position in this way will give wrong results.",
+      "revId": "f00d4afe7efd9abe21c2870c9c7f0751a650fdcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8Fc\u003d",
+        "filename": "sw/source/ui/uiview/viewsrch.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-05-28T11:50:05Z",
+      "side": 1,
+      "message": "depending on whether GetMark() is pEnd or not this will result in having a selection or not... is the problem the selection as such or would it be sufficient to re-order point and mark?\nthere is a SwPaM::Normalize(bool) that will re-order and put either point or mark first depending on parameter - perhaps that\u0027s sufficient to fix the problem?",
+      "revId": "f00d4afe7efd9abe21c2870c9c7f0751a650fdcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//8FY\u003d",
+        "filename": "sw/source/ui/uiview/viewsrch.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-05-28T11:50:05Z",
+      "side": 1,
+      "message": "also i\u0027m not entirely sure if it\u0027s a good idea to modify the shell cursor directly from outside - there also is a SwCrsrShell::NormalizePam method, i wonder if calling that would be sufficient here?  it wraps some weird SwCallLink around it, not sure what that does...",
+      "revId": "f00d4afe7efd9abe21c2870c9c7f0751a650fdcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
