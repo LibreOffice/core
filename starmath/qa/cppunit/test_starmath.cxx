@@ -254,7 +254,7 @@ void Test::viewZoom()
     sal_uInt16 nOptimalZoom=0;
 
     {
-        SfxRequest aZoom(SID_FITINWINDOW, SFX_CALLMODE_SYNCHRON, m_pViewShell->GetPool());
+        SfxRequest aZoom(SID_ZOOM_OPTIMAL, SFX_CALLMODE_SYNCHRON, m_pViewShell->GetPool());
         m_pViewShell->Execute(aZoom);
         nOptimalZoom = rGraphicWindow.GetZoom();
         CPPUNIT_ASSERT_MESSAGE("Should be about 800%", nOptimalZoom > nOrigZoom);
@@ -331,13 +331,6 @@ void Test::viewZoom()
         m_pViewShell->Execute(aZoom);
         nFinalZoom = rGraphicWindow.GetZoom();
         CPPUNIT_ASSERT_MESSAGE("Should be Clipped to 800%", nFinalZoom == 800);
-    }
-
-    {
-        SfxRequest aZoom(SID_ADJUST, SFX_CALLMODE_SYNCHRON, m_pViewShell->GetPool());
-        m_pViewShell->Execute(aZoom);
-        nFinalZoom = rGraphicWindow.GetZoom();
-        CPPUNIT_ASSERT_MESSAGE("Should be the same as optimal", nOptimalZoom == nFinalZoom);
     }
 
 }

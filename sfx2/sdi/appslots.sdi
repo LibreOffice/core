@@ -182,34 +182,42 @@ interface Application
     SID_ZOOM_ENTIRE_PAGE
     [
         ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
     ]
     SID_ZOOM_OPTIMAL
     [
         ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
     ]
     SID_ZOOM_PAGE_WIDTH
     [
         ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
     ]
     SID_ZOOM_50_PERCENT
     [
         ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
     ]
     SID_ZOOM_75_PERCENT
     [
         ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
     ]
     SID_ZOOM_100_PERCENT
     [
         ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
     ]
     SID_ZOOM_150_PERCENT
     [
         ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
     ]
     SID_ZOOM_200_PERCENT
     [
         ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
     ]
     SID_HELP_TUTORIALS
     [

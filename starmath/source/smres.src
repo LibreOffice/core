@@ -831,19 +831,19 @@ Menu RID_VIEWMENU
     {
         MenuItem
         {
-            Identifier = SID_VIEW050 ;
+            Identifier = SID_ZOOM_50_PERCENT;
             HelpId = CMD_SID_VIEW050 ;
             Text [ en-US ] = "~View 50%" ;
         };
         MenuItem
         {
-            Identifier = SID_VIEW100 ;
+            Identifier = SID_ZOOM_100_PERCENT ;
             HelpId = CMD_SID_VIEW100 ;
             Text [ en-US ] = "View ~100%" ;
         };
         MenuItem
         {
-            Identifier = SID_VIEW200 ;
+            Identifier = SID_ZOOM_200_PERCENT ;
             HelpId = CMD_SID_VIEW200 ;
             Text [ en-US ] = "View ~200%" ;
         };
@@ -861,7 +861,7 @@ Menu RID_VIEWMENU
         };
         MenuItem
         {
-            Identifier = SID_ADJUST ;
+            Identifier = SID_ZOOM_OPTIMAL ;
             HelpId = CMD_SID_ADJUST ;
             Text [ en-US ] = "~Display All" ;
         };

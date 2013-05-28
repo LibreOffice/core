@@ -1573,21 +1573,8 @@ void SmViewShell::Execute(SfxRequest& rReq)
             }
             break;
 
-        case SID_ADJUST:
-        case SID_FITINWINDOW:
+        case SID_ZOOM_OPTIMAL:
             aGraphic.ZoomToFitInWindow();
-            break;
-
-        case SID_VIEW050:
-            aGraphic.SetZoom(50);
-            break;
-
-        case SID_VIEW100:
-            aGraphic.SetZoom(100);
-            break;
-
-        case SID_VIEW200:
-            aGraphic.SetZoom(200);
             break;
 
         case SID_ZOOMIN:
@@ -1942,13 +1929,9 @@ void SmViewShell::GetState(SfxItemSet &rSet)
         case SID_ATTR_ZOOM:
             rSet.Put(SvxZoomItem( SVX_ZOOM_PERCENT, aGraphic.GetZoom()));
             /* no break here */
-        case SID_VIEW050:
-        case SID_VIEW100:
-        case SID_VIEW200:
-        case SID_ADJUST:
         case SID_ZOOMIN:
         case SID_ZOOMOUT:
-        case SID_FITINWINDOW:
+        case SID_ZOOM_OPTIMAL:
             if ( GetViewFrame()->GetFrame().IsInPlace() )
                 rSet.DisableItem( nWh );
             break;

@@ -31,13 +31,9 @@
 #define SID_PREVMARK                (SID_SMA_START + 4)
 #define SID_SYMBOLS_CATALOGUE       (SID_SMA_START + 5)
 #define SID_PREFERENCES             (SID_SMA_START + 6)
-#define SID_VIEW050                 (SID_SMA_START + 7)
-#define SID_VIEW100                 (SID_SMA_START + 8)
-#define SID_VIEW200                 (SID_SMA_START + 9)
 #define SID_ZOOMIN                  (SID_SMA_START + 10)
 #define SID_ZOOMOUT                 (SID_SMA_START + 11)
 #define SID_DRAW                    (SID_SMA_START + 12)
-#define SID_ADJUST                  (SID_SMA_START + 13)
 #define SID_TOOLBOX                 (SID_SMA_START + 14)
 #define SID_FORMULACURSOR           (SID_SMA_START + 15)
 #define SID_FONT                    (SID_SMA_START + 50)
@@ -51,7 +47,6 @@
 #define SID_IMPORT_FORMULA          (SID_SMA_START + 58)
 #define SID_TEXT                    (SID_SMA_START + 100)
 #define SID_GAPHIC_SM               (SID_SMA_START + 101)
-#define SID_FITINWINDOW             (SID_SMA_START + 103)
 /** Command for inserting a symbol specified by a string (Inserts an SmSpecialNode) */
 #define SID_INSERTSYMBOL            (SID_SMA_START + 104)
 /** Command for inserting a math construction specified in commands.src */
