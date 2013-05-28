@@ -156,13 +156,13 @@ void SvXMLNumUsedList_Impl::SetUsed( sal_uInt32 nKey )
 
 sal_Bool SvXMLNumUsedList_Impl::IsUsed( sal_uInt32 nKey ) const
 {
-    SvXMLuInt32Set::iterator aItr = aUsed.find(nKey);
+    SvXMLuInt32Set::const_iterator aItr = aUsed.find(nKey);
     return (aItr != aUsed.end());
 }
 
 sal_Bool SvXMLNumUsedList_Impl::IsWasUsed( sal_uInt32 nKey ) const
 {
-    SvXMLuInt32Set::iterator aItr = aWasUsed.find(nKey);
+    SvXMLuInt32Set::const_iterator aItr = aWasUsed.find(nKey);
     return (aItr != aWasUsed.end());
 }
 
