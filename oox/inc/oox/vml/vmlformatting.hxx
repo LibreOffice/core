@@ -31,6 +31,11 @@
 
 #include "oox/helper/helper.hxx"
 #include "oox/dllapi.h"
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+
+#include <vector>
 
 namespace oox {
     class GraphicHelper;
@@ -212,6 +217,17 @@ struct FillModel
 };
 
 // ============================================================================
+
+/** The shadow model structure contains all shape textpath properties. */
+struct OOX_DLLPUBLIC TextpathModel
+{
+    OptValue<rtl::OUString> moString;                  ///< Specifies the string of the textpath.
+
+    TextpathModel();
+
+    /** Writes the properties to the passed property map. */
+    void pushToPropMap(oox::drawingml::ShapePropertyMap& rPropMap, com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape) const;
+};
 
 } // namespace vml
 } // namespace oox

@@ -28,6 +28,10 @@
 
 #include "oox/vml/vmlformatting.hxx"
 
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <rtl/strbuf.hxx>
 #include "oox/drawingml/color.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
@@ -43,6 +47,7 @@ namespace vml {
 // ============================================================================
 
 using namespace ::com::sun::star::geometry;
+using namespace ::com::sun::star;
 
 using ::oox::drawingml::Color;
 using ::oox::drawingml::FillProperties;
@@ -586,6 +591,57 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
 }
 
 // ============================================================================
+
+TextpathModel::TextpathModel()
+{
+}
+
+beans::PropertyValue lcl_createTextpathProps()
+{
+    uno::Sequence<beans::PropertyValue> aTextpathPropSeq(4);
+    aTextpathPropSeq[0].Name = "TextPath";
+    aTextpathPropSeq[0].Value <<= sal_True;
+    aTextpathPropSeq[1].Name = "TextPathMode";
+    aTextpathPropSeq[1].Value <<= drawing::EnhancedCustomShapeTextPathMode_SHAPE;
+    aTextpathPropSeq[2].Name = "ScaleX";
+    aTextpathPropSeq[2].Value <<= sal_False;
+    aTextpathPropSeq[3].Name = "SameLetterHeights";
+    aTextpathPropSeq[3].Value <<= sal_False;
+
+    beans::PropertyValue aRet;
+    aRet.Name = "TextPath";
+    aRet.Value <<= aTextpathPropSeq;
+    return aRet;
+}
+
+void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, uno::Reference<drawing::XShape> xShape) const
+{
+    if (moString.has())
+    {
+        uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
+        xTextRange->setString(moString.get());
+
+        uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> aGeomPropSeq = xPropertySet->getPropertyValue("CustomShapeGeometry").get< uno::Sequence<beans::PropertyValue> >();
+        bool bFound = false;
+        for (int i = 0; i < aGeomPropSeq.getLength(); ++i)
+        {
+            beans::PropertyValue& rProp = aGeomPropSeq[i];
+            if (rProp.Name == "TextPath")
+            {
+                bFound = true;
+                rProp = lcl_createTextpathProps();
+            }
+        }
+        if (!bFound)
+        {
+            sal_Int32 nSize = aGeomPropSeq.getLength();
+            aGeomPropSeq.realloc(nSize+1);
+            aGeomPropSeq[nSize] = lcl_createTextpathProps();
+        }
+        rPropMap.setAnyProperty(PROP_CustomShapeGeometry, uno::makeAny(aGeomPropSeq));
+    }
+}
 
 } // namespace vml
 } // namespace oox
