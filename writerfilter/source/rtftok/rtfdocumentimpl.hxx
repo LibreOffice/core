@@ -163,6 +163,7 @@ namespace writerfilter {
             DESTINATION_MEQARR,
             DESTINATION_UPR,
             DESTINATION_LFOLEVEL,
+            DESTINATION_BACKGROUND,
         };
 
         enum RTFBorderState
@@ -399,6 +400,9 @@ namespace writerfilter {
 
                 /// If we're inside a \listpicture group.
                 bool bInListpicture;
+
+                /// If we're inside a \background group.
+                bool bInBackground;
         };
 
         class RTFTokenizer;

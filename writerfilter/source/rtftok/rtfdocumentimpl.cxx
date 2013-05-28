@@ -1672,6 +1672,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             // Anything inside \ud is just normal Unicode content.
             m_aStates.top().nDestinationState = DESTINATION_NORMAL;
             break;
+        case RTF_BACKGROUND:
+            m_aStates.top().nDestinationState = DESTINATION_BACKGROUND;
+            m_aStates.top().bInBackground = true;
+            break;
         default:
             SAL_INFO("writerfilter", "TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
             // Make sure we skip destinations (even without \*) till we don't handle them
@@ -4707,7 +4711,8 @@ RTFParserState::RTFParserState(RTFDocumentImpl *pDocumentImpl)
     nCurrentStyleIndex(-1),
     pCurrentBuffer(0),
     bHasTableStyle(false),
-    bInListpicture(false)
+    bInListpicture(false),
+    bInBackground(false)
 {
 }
 

@@ -29,6 +29,7 @@
 #include <dmapper/DomainMapper.hxx>
 #include "../dmapper/GraphicHelpers.hxx"
 #include <rtfsdrimport.hxx>
+#include <rtfreferenceproperties.hxx>
 
 #include <oox/vml/vmlformatting.hxx>
 #include <oox/helper/modelobjecthelper.hxx>
@@ -524,6 +525,18 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             // Sets the ShadowFormat UNO property.
             oox::PropertySet(xShape).setProperties(aPropMap);
         }
+    }
+
+    if (m_rImport.getState().bInBackground)
+    {
+        RTFSprms aAttributes;
+        aAttributes.set(NS_ooxml::LN_CT_Background_color, RTFValue::Pointer_t(new RTFValue(xPropertySet->getPropertyValue("FillColor").get<sal_Int32>())));
+        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes));
+        m_rImport.Mapper().props(pProperties);
+
+        uno::Reference<lang::XComponent> xComponent(xShape, uno::UNO_QUERY);
+        xComponent->dispose();
+        return;
     }
 
     // Send it to dmapper

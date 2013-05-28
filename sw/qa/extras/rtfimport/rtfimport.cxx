@@ -137,6 +137,7 @@ public:
     void testFdo62977();
     void testN818997();
     void testFdo64671();
+    void testPageBackground();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -263,6 +264,7 @@ void Test::run()
         {"fdo62977.rtf", &Test::testFdo62977},
         {"n818997.rtf", &Test::testN818997},
         {"fdo64671.rtf", &Test::testFdo64671},
+        {"page-background.rtf", &Test::testPageBackground},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1246,6 +1248,13 @@ void Test::testFdo64671()
 {
     // Additional '}' was inserted before the special character.
     getRun(getParagraph(1), 1, OUString("\xC5\xBD", 2, RTL_TEXTENCODING_UTF8));
+}
+
+void Test::testPageBackground()
+{
+    // The problem was that \background was ignored.
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
