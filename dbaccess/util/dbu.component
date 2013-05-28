@@ -42,9 +42,6 @@
   <implementation name="com.sun.star.comp.sdb.DirectSQLDialog">
     <service name="org.openoffice.comp.dbu.DirectSqlDialog"/>
   </implementation>
-  <implementation name="com.sun.star.sdb.ApplicationStatusbarController">
-    <service name="com.sun.star.frame.StatusbarController"/>
-  </implementation>
   <implementation name="com.sun.star.sdb.ApplicationToolboxController">
     <service name="com.sun.star.frame.ToolboxController"/>
   </implementation>

@@ -116,7 +116,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/control/ScrollHelper \
     dbaccess/source/ui/control/sqledit \
     dbaccess/source/ui/control/SqlNameEdit \
-    dbaccess/source/ui/control/statusbarontroller \
     dbaccess/source/ui/control/TableGrantCtrl \
     dbaccess/source/ui/control/tabletree \
     dbaccess/source/ui/control/toolboxcontroller \
