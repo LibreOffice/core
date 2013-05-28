@@ -877,7 +877,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
             }
             else
             {
-                OSL_ENSURE(false, "´Got UndoManager back in SdrEndTextEdit which is NOT the expected document UndoManager (!)");
+                OSL_ENSURE(false, "Got UndoManager back in SdrEndTextEdit which is NOT the expected document UndoManager (!)");
                 delete pOriginal;
             }
         }
