@@ -775,10 +775,10 @@
         </node>
         <node oor:name="c" oor:op="replace">
           <prop oor:name="Left">
-            <value xml:lang="en-US"> </value>
+            <value xml:lang="x-no-translate"> </value>
           </prop>
           <prop oor:name="Right">
-            <value xml:lang="en-US"> </value>
+            <value xml:lang="x-no-translate"> </value>
           </prop>
         </node>
         <node oor:name="d" oor:op="replace">
@@ -799,10 +799,10 @@
         </node>
         <node oor:name="f" oor:op="replace">
           <prop oor:name="Left">
-            <value xml:lang="en-US"> </value>
+            <value xml:lang="x-no-translate"> </value>
           </prop>
           <prop oor:name="Right">
-            <value xml:lang="en-US"> </value>
+            <value xml:lang="x-no-translate"> </value>
           </prop>
         </node>
         <node oor:name="g" oor:op="replace">
@@ -823,10 +823,10 @@
         </node>
         <node oor:name="i" oor:op="replace">
           <prop oor:name="Left">
-            <value xml:lang="en-US"> </value>
+            <value xml:lang="x-no-translate"> </value>
           </prop>
           <prop oor:name="Right">
-            <value xml:lang="en-US"> </value>
+            <value xml:lang="x-no-translate"> </value>
           </prop>
         </node>
         <node oor:name="j" oor:op="replace">
@@ -847,10 +847,10 @@
         </node>
         <node oor:name="l" oor:op="replace">
           <prop oor:name="Left">
-            <value xml:lang="en-US"> </value>
+            <value xml:lang="x-no-translate"> </value>
           </prop>
           <prop oor:name="Right">
-            <value xml:lang="en-US"> </value>
+            <value xml:lang="x-no-translate"> </value>
           </prop>
         </node>
         <node oor:name="m" oor:op="replace">
@@ -863,10 +863,10 @@
         </node>
         <node oor:name="n" oor:op="replace">
           <prop oor:name="Left">
-            <value xml:lang="en-US"> </value>
+            <value xml:lang="x-no-translate"> </value>
           </prop>
           <prop oor:name="Right">
-            <value xml:lang="en-US"> </value>
+            <value xml:lang="x-no-translate"> </value>
           </prop>
         </node>
         <node oor:name="o" oor:op="replace">
@@ -879,10 +879,10 @@
         </node>
         <node oor:name="p" oor:op="replace">
           <prop oor:name="Left">
-            <value xml:lang="en-US"> </value>
+            <value xml:lang="x-no-translate"> </value>
           </prop>
           <prop oor:name="Right">
-            <value xml:lang="en-US"> </value>
+            <value xml:lang="x-no-translate"> </value>
           </prop>
         </node>
         <node oor:name="q" oor:op="replace">
@@ -911,10 +911,10 @@
         </node>
         <node oor:name="t" oor:op="replace">
           <prop oor:name="Left">
-            <value xml:lang="en-US"> </value>
+            <value xml:lang="x-no-translate"> </value>
           </prop>
           <prop oor:name="Right">
-            <value xml:lang="en-US"> </value>
+            <value xml:lang="x-no-translate"> </value>
           </prop>
         </node>
         <node oor:name="u" oor:op="replace">
