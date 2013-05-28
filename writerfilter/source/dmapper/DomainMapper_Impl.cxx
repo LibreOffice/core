@@ -305,7 +305,10 @@ void DomainMapper_Impl::RemoveLastParagraph( )
         else
         {
             xCursor->goLeft( 1, true );
-            xCursor->setString(OUString());
+            // If this is a text on a shape, possibly the text has the trailing
+            // newline removed already.
+            if (xCursor->getString() == "\n")
+                xCursor->setString(OUString());
         }
     }
     catch( const uno::Exception& )
