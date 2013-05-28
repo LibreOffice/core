@@ -25,6 +25,8 @@
 #include <services.h>
 
 #include <com/sun/star/frame/CommandGroup.hpp>
+#include <com/sun/star/frame/AppDispatchProvider.hpp>
+
 
 #include <comphelper/sequenceasvector.hxx>
 
@@ -148,8 +150,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvide
 
     css::uno::Reference< css::frame::XDispatchInformationProvider > xCloseDispatch(xCloser                                                      , css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XDispatchInformationProvider > xController   (xFrame->getController()                                      , css::uno::UNO_QUERY);
-    css::uno::Reference< css::frame::XDispatchInformationProvider > xAppDispatcher(
-             xContext->getServiceManager()->createInstanceWithContext(IMPLEMENTATIONNAME_APPDISPATCHPROVIDER, xContext), css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XDispatchInformationProvider > xAppDispatcher = css::frame::AppDispatchProvider::create(xContext);
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider(3);
     lProvider[0] = xController   ;
     lProvider[1] = xCloseDispatch;

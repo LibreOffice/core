@@ -186,6 +186,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/runti
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
 	AutoRecovery \
+	AppDispatchProvider \
 	Bibliography \
 	Desktop \
 	DispatchHelper \
@@ -2563,6 +2564,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame,\
 	UnknownModuleException \
 	UntitledNumbersConst \
 	WindowArrange \
+	XAppDispatchProvider \
 	XBorderResizeListener \
 	XBrowseHistoryRegistry \
 	XComponentLoader \

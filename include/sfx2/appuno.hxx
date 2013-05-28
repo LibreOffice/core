@@ -28,7 +28,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XAppDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
@@ -40,6 +40,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 
 #include <tools/errcode.hxx>
@@ -81,10 +82,9 @@ public:
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 };
 
-class SfxAppDispatchProvider : public ::cppu::WeakImplHelper4< ::com::sun::star::frame::XDispatchProvider,
+class SfxAppDispatchProvider : public ::cppu::WeakImplHelper3< ::com::sun::star::frame::XAppDispatchProvider,
                                                                ::com::sun::star::lang::XServiceInfo,
-                                                               ::com::sun::star::lang::XInitialization,
-                                                               ::com::sun::star::frame::XDispatchInformationProvider >
+                                                               ::com::sun::star::lang::XInitialization >
 {
     ::com::sun::star::uno::WeakReference < ::com::sun::star::frame::XFrame > m_xFrame;
 public:

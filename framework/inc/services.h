@@ -99,7 +99,6 @@ namespace framework{
 #define IMPLEMENTATIONNAME_RECENTFILESMENUCONTROLLER            DECLARE_ASCII("com.sun.star.comp.framework.RecentFilesMenuController" )
 #define IMPLEMENTATIONNAME_STATUSBARFACTORY                     DECLARE_ASCII("com.sun.star.comp.framework.StatusBarFactory"        )
 #define IMPLEMENTATIONNAME_STATUSBARCONTROLLERFACTORY           DECLARE_ASCII("com.sun.star.comp.framework.StatusBarControllerFactory" )
-#define IMPLEMENTATIONNAME_APPDISPATCHPROVIDER                  DECLARE_ASCII("com.sun.star.comp.sfx2.AppDispatchProvider"          )
 #define IMPLEMENTATIONNAME_SESSIONLISTENER                      DECLARE_ASCII("com.sun.star.comp.frame.SessionListener"             )
 #define IMPLEMENTATIONNAME_HELPONSTARTUP                        DECLARE_ASCII("com.sun.star.comp.framework.HelpOnStartup"           )
 #define IMPLEMENTATIONNAME_SHELLJOB                             DECLARE_ASCII("com.sun.star.comp.framework.ShellJob"                )

@@ -1990,7 +1990,54 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
 #endif
 }
 
-SFX_IMPL_XSERVICEINFO( SfxAppDispatchProvider, "com.sun.star.frame.DispatchProvider", "com.sun.star.comp.sfx2.AppDispatchProvider" )                                                                \
+ /* XServiceInfo */
+OUString SAL_CALL SfxAppDispatchProvider::getImplementationName() throw( css::uno::RuntimeException )
+{
+    return impl_getStaticImplementationName();
+}
+
+/* XServiceInfo */
+sal_Bool SAL_CALL SfxAppDispatchProvider::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException )
+{
+    css::uno::Sequence< OUString > seqServiceNames = getSupportedServiceNames();
+    const OUString*         pArray          = seqServiceNames.getConstArray();
+    for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
+    {
+        if ( pArray[nCounter] == sServiceName )
+        {
+            return sal_True;
+        }
+    }
+    return sal_False;
+}
+
+/* XServiceInfo */
+css::uno::Sequence< OUString > SAL_CALL SfxAppDispatchProvider::getSupportedServiceNames() throw( css::uno::RuntimeException )
+{
+    return impl_getStaticSupportedServiceNames();
+}
+
+/* Helper for XServiceInfo */
+css::uno::Sequence< OUString > SfxAppDispatchProvider::impl_getStaticSupportedServiceNames()
+{
+    css::uno::Sequence< OUString > seqServiceNames( 2 );
+    seqServiceNames.getArray()[0] = "com.sun.star.frame.DispatchProvider";
+    seqServiceNames.getArray()[1] = "com.sun.star.frame.AppDispatchProvider";
+    return seqServiceNames;
+}
+
+/* Helper for XServiceInfo */
+OUString SfxAppDispatchProvider::impl_getStaticImplementationName()
+{
+    return OUString::createFromAscii( "com.sun.star.comp.sfx2.AppDispatchProvider" );
+}
+
+/* Helper for registry */
+css::uno::Reference< css::uno::XInterface > SAL_CALL SfxAppDispatchProvider::impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception )
+{
+    return css::uno::Reference< css::uno::XInterface >( *new SfxAppDispatchProvider( xServiceManager ) );
+}
+
 SFX_IMPL_SINGLEFACTORY( SfxAppDispatchProvider );
 
 void SAL_CALL SfxAppDispatchProvider::initialize( const uno::Sequence<uno::Any>& aArguments ) throw (uno::Exception, uno::RuntimeException)

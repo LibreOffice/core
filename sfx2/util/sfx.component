@@ -41,6 +41,7 @@
   </implementation>
   <implementation name="com.sun.star.comp.sfx2.AppDispatchProvider">
     <service name="com.sun.star.frame.ProtocolHandler"/>
+    <service name="com.sun.star.frame.AppDispatchProvider"/>
   </implementation>
   <implementation name="com.sun.star.comp.sfx2.ApplicationDialogLibraryContainer">
     <service name="com.sun.star.script.ApplicationDialogLibraryContainer"/>
