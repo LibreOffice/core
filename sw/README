@@ -3,3 +3,25 @@ Writer application code.
 Exact history was lost before Sept. 18th, 2000, but old source code
 comments show that Writer core dates back until at least November
 1990.
+
+== Module contents ==
+ * inc: headers available to all source files inside the module
+ * qa: unit, slow and subsequent tests
+ * sdi
+ * source: see below
+ * uiconfig: user interface configuration
+ * util: UNO passive registration config
+
+== Source contents ==
+ * core: Writer core (document model, layout, UNO API implementation)
+ * filter: Writer internal filters
+   * ascii: plan text filter
+   * basflt
+   * html: HTML filter
+   * inc: include files for filters
+   * rtf: thin copy&paste helper around the UNO RTF import filter (in writerfilter)
+   * writer
+   * ww1
+   * ww8: DOC import, DOC/DOCX/RTF export
+   * xml: ODF import/export, subclassed from xmloff (where most of the work is done)
+ * ui: user interface
