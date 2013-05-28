@@ -261,7 +261,7 @@ class ExtCfRule
     RuleType mnRuleType;
     void*    mpTarget;
 public:
-    ExtCfRule(void* pTarget = NULL ) : mnRuleType( ExtCfRule::RuleType::UNKNOWN ), mpTarget(pTarget) {}
+    ExtCfRule(void* pTarget = NULL ) : mnRuleType( ExtCfRule::UNKNOWN ), mpTarget(pTarget) {}
     void finalizeImport();
     void importDataBar(  const AttributeList& rAttribs );
     void importNegativeFillColor(  const AttributeList& rAttribs );
