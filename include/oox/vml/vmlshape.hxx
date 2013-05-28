@@ -88,6 +88,7 @@ struct OOX_DLLPUBLIC ShapeTypeModel
     StrokeModel         maStrokeModel;          ///< Border line formatting.
     FillModel           maFillModel;            ///< Shape fill formatting.
     ShadowModel         maShadowModel;          ///< Shape shadow formatting.
+    TextpathModel       maTextpathModel;        ///< Shape textpath formatting.
 
     OptValue< OUString > moGraphicPath;  ///< Path to a graphic for this shape.
     OptValue< OUString > moGraphicTitle; ///< Title of the graphic.
