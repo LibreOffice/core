@@ -69,7 +69,7 @@ MOZINC = . \
   .IF "$(COM)" == "GCC"
     INCPOST += $(MOZINC)
     CFLAGSCXX += \
-                -fno-rtti \
+                -fno-rtti -DBOOST_NO_TYPEID \
                 -Wall \
                 -Wconversion \
                 -Wpointer-arith \
@@ -95,7 +95,7 @@ MOZINC = . \
     CFLAGS  += -fPIC -g
     CDEFS   += -DOJI
     CFLAGSCXX += \
-            -fno-rtti \
+            -fno-rtti -DBOOST_NO_TYPEID \
             -Wconversion \
             -Wpointer-arith \
             -Wcast-align \
@@ -107,7 +107,7 @@ MOZINC = . \
   .ELIF "$(OS)" == "NETBSD" || "$(OS)" == "MACOSX"
     CFLAGS +=   -fPIC
     CFLAGSCXX += \
-            -fno-rtti \
+            -fno-rtti -DBOOST_NO_TYPEID \
             -Wconversion \
             -Wpointer-arith \
             -Wcast-align \
