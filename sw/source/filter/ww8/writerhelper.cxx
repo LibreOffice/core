@@ -666,14 +666,6 @@ namespace sw
             }
         }
 
-        bool IsStarSymbol(const OUString &rFontName)
-        {
-            sal_Int32 nIndex = 0;
-            OUString sFamilyNm(GetNextFontToken(rFontName, nIndex));
-            return (sFamilyNm.equalsIgnoreAsciiCase("starsymbol") ||
-                sFamilyNm.equalsIgnoreAsciiCase("opensymbol"));
-        }
-
         Size GetSwappedInSize(const SwNoTxtNode& rNd)
         {
             Size aGrTwipSz(rNd.GetTwipSize());

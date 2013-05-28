@@ -1354,7 +1354,7 @@ sal_Unicode ConvertChar::RecodeChar( sal_Unicode cChar ) const
 
             if (!cRetVal && mpSubsFontName)
             {
-                if (!strcmp(mpSubsFontName, "OpenSymbol") || (!strcmp(mpSubsFontName, "StarSymbol")))
+                if ( IsStarSymbol( OUString::createFromAscii(mpSubsFontName) ) )
                 {
                     cRetVal = 0xE12C;
                     SAL_WARN( "unotools.misc", "Forcing a bullet substition from 0x" <<
