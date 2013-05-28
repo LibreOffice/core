@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <cerrno>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -55,7 +56,16 @@ int main(int argc, char *argv[])
                         exit(99);
                 }
                 currentOffset += strlen(inputBuffer)+1;
-                int entryCount(strtol(inputBuffer, NULL, 10));
+                char * endptr;
+                errno = 0;
+                int entryCount(strtol(inputBuffer, &endptr, 10));
+                if (errno != 0 || endptr == inputBuffer || *endptr != '\0')
+                {
+                    cerr
+                        << "Unable to read count from \"" << inputBuffer
+                        << "\" input.\n";
+                    exit(99);
+                }
                 for (int i(0); i < entryCount; ++i)
                 {
                         cin.getline(inputBuffer, MAXLINE);
