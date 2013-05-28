@@ -47,7 +47,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
 
-#ifdef UNX
+#if defined(UNX) && !defined(ANDROID) && !defined(IOS) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
 #include <unx/salbmp.h>
 #endif
 
@@ -450,7 +450,7 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
                 // and the commit that changed to the new code relied on alpha support in bitmap
                 // (which that commit implemented only in X11SalBitmap) and so it didn't work on Windows.
                 // So keep both.
-#ifdef UNX
+#if defined(UNX) && !defined(ANDROID) && !defined(IOS) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
                 X11SalBitmap* X11Bmp = static_cast< X11SalBitmap* >( pSalBmp );
                 X11Bmp->SetHasAlpha( true );
                 if( X11Bmp->Create( xBitmapCanvas, aSize ) )
