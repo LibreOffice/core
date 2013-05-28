@@ -4877,48 +4877,30 @@ find_msms()
             else
                 AC_MSG_ERROR([Merge module Microsoft_VC90_CRT_x86_x64.msm not found])
             fi
-        else
-            if test -e $msmdir/Microsoft_VC${VCVER}_CRT_x64.msm; then
-                msms="$msms Microsoft_VC${VCVER}_CRT_x64.msm"
-            else
-                AC_MSG_ERROR([Merge module Microsoft_VC${VCVER}_CRT_x64.msm not found])
-            fi
         fi
     fi
 }
 
-find_msvc_dlls()
+find_msvc_x64_dlls()
 {
-    if test "$CPUNAME" = "INTEL"; then
-        vsarch=x86
-    elif test $VCVER = 9; then
-        vsarch=amd64
-    else
-        vsarch=x64
-    fi
-
-    msvcdllpath="$VC_PRODUCT_DIR/redist/$vsarch/Microsoft.VC${VCVER}.CRT"
-    MSVC_DEBUG_DLL_PATH="$VC_PRODUCT_DIR/redist/Debug_NonRedist/$vsarch/Microsoft.VC${VCVER}.DebugCRT"
-    msvcdlls="msvcp${VCVER}.dll msvcr${VCVER}.dll"
-    MSVC_DEBUG_DLLS="msvcp${VCVER}d.dll msvcr${VCVER}d.dll"
-    if test "$VCVER" = "90"; then
-        msvcdlls="$msvcdlls msvcm90.dll Microsoft.VC90.CRT.manifest"
-        MSVC_DEBUG_DLLS="$MSVC_DEBUG_DLLS msvcm90d.dll Microsoft.VC90.DebugCRT.manifest"
-    fi
-
-    for dll in $msvcdlls; do
-        if ! test -f "$msvcdllpath/$dll"; then
-            AC_MSG_ERROR([can not find $dll in $msvcdllpath])
-        fi
-    done
-    if test -n "$MSVC_USE_DEBUG_RUNTIME"; then
-        for dll in $MSVC_DEBUG_DLLS; do
-            if ! test -f "$MSVC_DEBUG_DLL_PATH/$dll"; then
-                AC_MSG_ERROR([can not find $dll in $MSVC_DEBUG_DLL_PATH])
+    if test "$VCVER" != "90"; then
+        msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
+        MSVC_DEBUG_DLL_PATH="$VC_PRODUCT_DIR/redist/Debug_NonRedist/$vsarch/Microsoft.VC${VCVER}.DebugCRT"
+        msvcdlls="msvcp${VCVER}.dll msvcr${VCVER}.dll"
+        MSVC_DEBUG_DLLS="msvcp${VCVER}d.dll msvcr${VCVER}d.dll"
+        for dll in $msvcdlls; do
+            if ! test -f "$msvcdllpath/$dll"; then
+                AC_MSG_ERROR([can not find $dll in $msvcdllpath])
             fi
         done
+        if test -n "$MSVC_USE_DEBUG_RUNTIME"; then
+            for dll in $MSVC_DEBUG_DLLS; do
+                if ! test -f "$MSVC_DEBUG_DLL_PATH/$dll"; then
+                    AC_MSG_ERROR([can not find $dll in $MSVC_DEBUG_DLL_PATH])
+                fi
+            done
+        fi
     fi
-
 }
 
 if test "$build_os" = "cygwin"; then
@@ -6086,7 +6068,7 @@ AC_SUBST([JITC_PROCESSOR_TYPE])
 
 # Misc Windows Stuff
 if test $_os = "WINNT" -a "$WITH_MINGW" != yes; then
-    find_msvc_dlls
+    find_msvc_x64_dlls
     find_msms
     MSVC_DLL_PATH="$msvcdllpath"
     MSVC_DLLS="$msvcdlls"

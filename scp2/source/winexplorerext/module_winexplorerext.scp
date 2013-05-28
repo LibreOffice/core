@@ -51,5 +51,9 @@ Module gid_Module_Optional_Winexplorerext_x64
     Dirs = (gid_Dir_Shlxthdl);
     Files = (gid_File_Lib_Shlxthdl64,
              gid_File_Lib_OOoFilt64,
-             gid_File_Lib_PropertyHdl64);
+             gid_File_Lib_PropertyHdl64,
+             gid_File_Lib_Msvcp100,
+             gid_File_Lib_Msvcr100,
+             gid_File_Lib_Msvcp110,
+             gid_File_Lib_Msvcr110);
 End

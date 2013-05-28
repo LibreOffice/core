@@ -87,26 +87,4 @@ End
 
 #endif
 
-#if defined(WITH_VC100_REDIST)
-
-MergeModule gid_MergeModule_Microsoft_VC100_CRT_x64
-    Feature = gm_Root;
-    Name = "Microsoft_VC100_CRT_x64.msm";
-    RootDir = "TARGETDIR";
-    ComponentCondition = "(VC_REDIST=1) AND VersionNT64";
-End
-
-#endif
-
-#if defined(WITH_VC110_REDIST)
-
-MergeModule gid_MergeModule_Microsoft_VC110_CRT_x64
-    Feature = gm_Root;
-    Name = "Microsoft_VC110_CRT_x64.msm";
-    RootDir = "TARGETDIR";
-    ComponentCondition = "(VC_REDIST=1) AND VersionNT64";
-End
-
-#endif
-
 #endif
