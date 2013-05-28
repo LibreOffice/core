@@ -51,6 +51,8 @@ using namespace ::__cxxabiv1;
 namespace CPPU_CURRENT_NAMESPACE
 {
 
+#ifndef _LIBCPP_VERSION
+
 #if MACOSX_SDK_VERSION >= 1070
 
 // MacOSX10.4u.sdk/usr/include/c++/4.0.0/cxxabi.h defined
@@ -97,6 +99,8 @@ std::type_info * create_FAKE_si_class_type_info(
         // copy correct __cxxabiv1::__si_class_type_info vtable into place
     return p;
 }
+
+#endif
 
 #endif
 
@@ -212,6 +216,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
             t_rtti_map::const_iterator iFind2( m_generatedRttis.find( unoName ) );
             if (iFind2 == m_generatedRttis.end())
             {
+#ifndef _LIBCPP_VERSION
                 // we must generate it !
                 // symbol and rtti-name is nearly identical,
                 // the symbol is prefixed with _ZTI
@@ -247,6 +252,10 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
                 SAL_WARN_IF( !insertion.second,
                              "bridges",
                              "inserting new generated rtti failed" );
+#else
+                OSL_FAIL("Cannot generate type_infos with libc++, sigh");
+                return NULL;
+#endif
             }
             else // taking already generated rtti
             {
