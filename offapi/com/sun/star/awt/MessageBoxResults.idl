@@ -19,8 +19,8 @@
  *
  *************************************************************/
 
-#ifndef __com_sun_star_awt_MessageBoxCommand_idl__
-#define __com_sun_star_awt_MessageBoxCommand_idl__
+#ifndef __com_sun_star_awt_MessageBoxResults_idl__
+#define __com_sun_star_awt_MessageBoxResults_idl__
 
 module com {  module sun {  module star {  module awt {
 
