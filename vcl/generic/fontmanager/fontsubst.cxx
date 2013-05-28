@@ -32,6 +32,7 @@
 #include "salprn.hxx"
 #include "region.h"
 
+#include <unotools/fontdefs.hxx>
 #include <list>
 
 // ===========================================================================
@@ -160,8 +161,7 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
     if( rFontSelData.IsSymbolFont() )
         return false;
     // StarSymbol is a unicode font, but it still deserves the symbol flag
-    if(rFontSelData.maSearchName.startsWithIgnoreAsciiCase( "starsymbol" )
-    || rFontSelData.maSearchName.startsWithIgnoreAsciiCase( "opensymbol" ) )
+    if ( IsStarSymbol(rFontSelData.maSearchName) )
         return false;
 
     //see fdo#41556 and fdo#47636
@@ -229,8 +229,7 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFont
     if( rFontSelData.IsSymbolFont() )
         return false;
     // StarSymbol is a unicode font, but it still deserves the symbol flag
-    if(rFontSelData.maSearchName.startsWithIgnoreAsciiCase( "starsymbol" )
-    || rFontSelData.maSearchName.startsWithIgnoreAsciiCase( "opensymbol" ) )
+    if ( IsStarSymbol(rFontSelData.maSearchName) )
         return false;
 
     const FontSelectPattern aOut = GetFcSubstitute( rFontSelData, rMissingCodes );

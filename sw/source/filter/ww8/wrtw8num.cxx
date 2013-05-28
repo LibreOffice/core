@@ -28,6 +28,7 @@
 #include <paratr.hxx>
 #include <charfmt.hxx>
 #include <ndtxt.hxx>
+#include <unotools/fontcfg.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <doctok/sprmids.hxx>
@@ -385,7 +386,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                 sFontName = pBulletFont->GetName();
                 eFamily = pBulletFont->GetFamily();
 
-                if ( sw::util::IsStarSymbol( sFontName ) )
+                if ( IsStarSymbol(sFontName) )
                     SubstituteBullet( sNumStr, eChrSet, sFontName );
 
                 // #i86652#
@@ -642,7 +643,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
         String sFontName = rFont.GetName();
 
         sal_uInt16 nFontId;
-        if (sw::util::IsStarSymbol(sFontName))
+        if ( IsStarSymbol(sFontName) )
         {
             /*
             If we are starsymbol then in ww7- mode we will always convert to a
