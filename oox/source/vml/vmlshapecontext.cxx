@@ -335,6 +335,9 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.moWrapType = rAttribs.getString(XML_type);
             mrTypeModel.moWrapSide = rAttribs.getString(XML_side);
         break;
+        case VML_TOKEN( textpath ):
+            mrTypeModel.maTextpathModel.moString.assignIfUsed(rAttribs.getString(XML_string));
+        break;
     }
     return 0;
 }

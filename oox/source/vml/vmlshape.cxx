@@ -369,6 +369,8 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
         aPropMap.setProperty(PROP_BackColor, aPropMap[PROP_FillColor]);
         aPropMap.erase(PROP_FillColor);
     }
+    else if (xSInfo->supportsService("com.sun.star.drawing.CustomShape"))
+        maTypeModel.maTextpathModel.pushToPropMap(aPropMap, rxShape);
 
     PropertySet( rxShape ).setProperties( aPropMap );
 }
