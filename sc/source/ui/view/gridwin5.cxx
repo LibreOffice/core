@@ -222,6 +222,10 @@ bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
                     MapMode aDrawMode = GetDrawMapMode();
                     Point aCurPosHmm = PixelToLogic(aScreenPos, aDrawMode );
                     Point aGridOff = aCurPosHmm -aOldPos;
+                    // fdo#63323 fix the X Position for the showing comment when
+                    // the mouse over the cell when the sheet are RTL
+                    if ( pDoc->IsNegativePage(nTab))
+                        aGridOff.setX(aCurPosHmm.getX() + aOldPos.getX());
                     pNoteMarker->SetGridOff( aGridOff );
                 }
             }
