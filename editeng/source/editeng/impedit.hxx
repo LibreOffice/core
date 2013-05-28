@@ -735,7 +735,14 @@ public:
 
     void                EnableUndo( bool bEnable );
     bool                IsUndoEnabled()         { return bUndoEnabled; }
-    void                SetUndoMode( bool b )   { bIsInUndo = b; }
+    void                SetUndoMode( bool b )
+    {
+        bIsInUndo = b;
+        if (bIsInUndo)
+            EnterBlockNotifications();
+        else
+            LeaveBlockNotifications();
+    }
     bool                IsInUndo()              { return bIsInUndo; }
 
     void                SetCallParaInsertedOrDeleted( bool b ) { bCallParaInsertedOrDeleted = b; }
