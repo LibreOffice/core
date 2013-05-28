@@ -747,18 +747,6 @@ namespace sw
         */
         Polygon PolygonFromPolyPolygon(const PolyPolygon &rPolyPoly);
 
-        /** Determine if the font is the special Star|Open Symbol font
-
-            @param rFontName
-            The FontName to test for being Star|Open Symbol
-
-            @return true if this is Star|Open Symbol
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-        */
-        bool IsStarSymbol(const OUString &rFontName);
-
         /** Make setting a drawing object's layer in a Writer document easy
 
 

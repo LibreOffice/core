@@ -26,6 +26,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/graphictools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <unotools/fontdefs.hxx>
 
 // ========================================================================
 
@@ -3437,9 +3438,8 @@ MetaFontAction::MetaFontAction( const Font& rFont ) :
     // we change the textencoding to RTL_TEXTENCODING_UNICODE here, which seems
     // to be the right way; changing the textencoding at other sources
     // is too dangerous at the moment
-    if( ( ( maFont.GetName().SearchAscii( "StarSymbol" ) != STRING_NOTFOUND )
-       || ( maFont.GetName().SearchAscii( "OpenSymbol" ) != STRING_NOTFOUND ) )
-     && ( maFont.GetCharSet() != RTL_TEXTENCODING_UNICODE ) )
+    if ( IsStarSymbol( maFont.GetName() )
+        && ( maFont.GetCharSet() != RTL_TEXTENCODING_UNICODE ) )
     {
         maFont.SetCharSet( RTL_TEXTENCODING_UNICODE );
     }

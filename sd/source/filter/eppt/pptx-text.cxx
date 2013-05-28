@@ -884,7 +884,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
                     case SVX_NUM_CHAR_SPECIAL :                           // Bullet
                     {
-                        if ( aFontDesc.Name.equalsIgnoreAsciiCase("starsymbol") || aFontDesc.Name.equalsIgnoreAsciiCase("opensymbol") )
+                        if ( IsStarSymbol(aFontDesc.Name) )
                         {
                             rtl_TextEncoding eChrSet = aFontDesc.CharSet;
                             cBulletId = msfilter::util::bestFitOpenSymbolToMSFont(cBulletId, eChrSet, aFontDesc.Name);

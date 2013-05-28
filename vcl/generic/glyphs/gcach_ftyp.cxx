@@ -33,6 +33,7 @@
 #include <graphite2/Font.h>
 #include <graphite_layout.hxx>
 #endif
+#include <unotools/fontdefs.hxx>
 
 #include "tools/poly.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
@@ -920,13 +921,8 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
     rTo.mnOrientation = GetFontSelData().mnOrientation;
 
     //Always consider [star]symbol as symbol fonts
-    if (
-         (rTo.GetFamilyName().equalsIgnoreAsciiCase("OpenSymbol")) ||
-         (rTo.GetFamilyName().equalsIgnoreAsciiCase("StarSymbol"))
-       )
-    {
+    if ( IsStarSymbol( rTo.GetFamilyName() ) )
         rTo.SetSymbolFlag( true );
-    }
 
     if( maSizeFT )
         pFTActivateSize( maSizeFT );
