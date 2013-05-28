@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8Es\u003d",
+        "filename": "starmath/uiconfig/smath/statusbar/statusbar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000227
+      },
+      "writtenOn": "2013-05-28T15:48:10Z",
+      "side": 1,
+      "message": "In other components like Writer and Calc, the order is different: first the slider and at its right the simple controller.",
+      "revId": "c1bf2963455a4b494e7aec0cb507e17f9a82fa58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
