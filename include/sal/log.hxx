@@ -157,8 +157,13 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 
     @since LibreOffice 3.5
 */
+#ifdef _LIBCPP_VERSION
 #define SAL_STREAM(stream) \
     (::std::ostringstream() << stream).str()
+#else
+#define SAL_STREAM(stream) \
+    (dynamic_cast< ::std::ostringstream & >(::std::ostringstream() << stream).str())
+#endif
 
 /**
     @page sal_log Basic logging functionality.
