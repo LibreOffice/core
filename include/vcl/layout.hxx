@@ -647,18 +647,33 @@ public:
     bool set_property(const OString &rKey, const OString &rValue);
 };
 
+enum VclButtonsType
+{
+    VCL_BUTTONS_NONE,
+    VCL_BUTTONS_OK,
+    VCL_BUTTONS_CLOSE,
+    VCL_BUTTONS_CANCEL,
+    VCL_BUTTONS_YES_NO,
+    VCL_BUTTONS_OK_CANCEL
+};
+
 class VCL_DLLPUBLIC MessageDialog : public Dialog
 {
 private:
+    VclButtonsType m_eType;
     VclGrid* m_pGrid;
     FixedImage* m_pImage;
     VclMultiLineEdit* m_pPrimaryMessage;
     VclMultiLineEdit* m_pSecondaryMessage;
+    std::vector<PushButton*> m_aOwnedButtons;
+    std::map<const Window*, short> m_aResponses;
     OUString m_sPrimaryString;
     OUString m_sSecondaryString;
     DECL_DLLPRIVATE_LINK(ButtonHdl, Button *);
-    void setButtonHandlers();
+    void setButtonHandlers(VclButtonBox *pButtonBox);
+    short get_response(const Window *pWindow) const;
 public:
+
     MessageDialog(Window* pParent, WinBits nStyle);
     MessageDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
     virtual bool set_property(const OString &rKey, const OString &rValue);

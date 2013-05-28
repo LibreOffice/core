@@ -485,7 +485,14 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
         bool bDelete = true;
 
         if ( !bDisableQueryBox && pBox && m_pTurnOnBox->GetSavedValue() == sal_True )
-            bDelete = ( QueryBox( this, SVX_RES( RID_SVXQBX_DELETE_HEADFOOT ) ).Execute() == RET_YES );
+        {
+            short nResult;
+            if (nId == SID_ATTR_PAGE_HEADERSET)
+                nResult = DeleteHeaderDialog(this).Execute();
+            else
+                nResult = DeleteFooterDialog(this).Execute();
+            bDelete = nResult == RET_YES;
+        }
 
         if ( bDelete )
         {

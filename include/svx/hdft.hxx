@@ -22,10 +22,10 @@
 #include <sfx2/tabdlg.hxx>
 
 #include <vcl/fixed.hxx>
-
 #include <vcl/field.hxx>
-
 #include <vcl/group.hxx>
+#include <vcl/layout.hxx>
+
 #include <svx/pagectrl.hxx>
 #include "svx/svxdllapi.h"
 
@@ -118,6 +118,26 @@ public:
 
 private:
     SVX_DLLPRIVATE SvxFooterPage(   Window* pParent, const SfxItemSet& rSet );
+};
+
+class SVX_DLLPUBLIC DeleteHeaderDialog : public MessageDialog
+{
+public:
+    DeleteHeaderDialog(Window *pParent)
+        : MessageDialog(pParent, "DeleteHeaderDialog",
+            "svx/ui/deleteheaderdialog.ui")
+    {
+    }
+};
+
+class SVX_DLLPUBLIC DeleteFooterDialog : public MessageDialog
+{
+public:
+    DeleteFooterDialog(Window *pParent)
+        : MessageDialog(pParent, "DeleteFooterDialog",
+            "svx/ui/deletefooterdialog.ui")
+    {
+    }
 };
 
 #endif

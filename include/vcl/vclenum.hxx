@@ -143,6 +143,10 @@ enum VclResponseType
     RET_NO      = 3,
     RET_RETRY   = 4,
     RET_IGNORE  = 5,
+    RET_ACCEPT  = 6,
+    RET_CLOSE   = 7,
+    RET_APPLY   = 8,
+    RET_NONE    = 9,
     RET_HELP    = 10
 };
 

@@ -155,9 +155,6 @@
 
 //---------------------------------------------------------------------
 
-// ResId fuer die PageDialog
-#define RID_SVXQBX_DELETE_HEADFOOT          (RID_SVX_START +  28)
-
 // ResId's fuer Dialoge aus StarDraw
 #define RID_SVXSW_FRAMEPOSITIONS            (RID_SVX_START + 289)
 

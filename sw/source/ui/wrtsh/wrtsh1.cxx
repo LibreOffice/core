@@ -31,6 +31,7 @@
 
 #include <math.h>
 #include <hintids.hxx>
+#include <svx/hdft.hxx>
 #include <svx/svdview.hxx>
 #include <sot/factory.hxx>
 #include <svl/itemiter.hxx>
@@ -1754,9 +1755,13 @@ void SwWrtShell::ChangeHeaderOrFooter(
                 EndAllAction();
 
                 Window* pParent = &GetView().GetViewFrame()->GetWindow();
-                bool bRet = RET_YES == QueryBox( pParent, ResId( RID_SVXQBX_DELETE_HEADFOOT,
-                                        DIALOG_MGR() ) ).Execute();
-                bExecute = bRet;
+                short nResult;
+                if (bHeader)
+                    nResult = DeleteHeaderDialog(pParent).Execute();
+                else
+                    nResult = DeleteFooterDialog(pParent).Execute();
+                bExecute = nResult == RET_YES;
+
                 StartAllAction();
             }
             if( bExecute )

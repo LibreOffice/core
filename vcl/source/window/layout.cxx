@@ -1672,6 +1672,7 @@ bool VclSizeGroup::set_property(const OString &rKey, const OString &rValue)
 
 MessageDialog::MessageDialog(Window* pParent, WinBits nStyle)
     : Dialog(pParent, nStyle)
+    , m_eType(VCL_BUTTONS_NONE)
     , m_pGrid(NULL)
     , m_pImage(NULL)
     , m_pPrimaryMessage(NULL)
@@ -1682,6 +1683,7 @@ MessageDialog::MessageDialog(Window* pParent, WinBits nStyle)
 
 MessageDialog::MessageDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : Dialog(pParent, rID, rUIXMLDescription, WINDOW_MESSBOX)
+    , m_eType(VCL_BUTTONS_NONE)
     , m_pGrid(NULL)
     , m_pImage(NULL)
     , m_pPrimaryMessage(NULL)
@@ -1691,6 +1693,8 @@ MessageDialog::MessageDialog(Window* pParent, const OString& rID, const OUString
 
 MessageDialog::~MessageDialog()
 {
+    for (size_t i = 0; i < m_aOwnedButtons.size(); ++i)
+        delete m_aOwnedButtons[i];
     delete m_pSecondaryMessage;
     delete m_pPrimaryMessage;
     delete m_pImage;
@@ -1699,19 +1703,20 @@ MessageDialog::~MessageDialog()
 
 IMPL_LINK(MessageDialog, ButtonHdl, Button *, pButton)
 {
-    //for now insist that we have a builder, we can relax that in
-    //the future if we need it
-    assert(m_pUIBuilder);
-    EndDialog(m_pUIBuilder->get_response(pButton));
+    EndDialog(get_response(pButton));
     return 0;
 }
 
-void MessageDialog::setButtonHandlers()
+short MessageDialog::get_response(const Window *pWindow) const
 {
-    SAL_WARN_IF(!m_pUIBuilder, "vcl.layout", "MessageDialog non-ui load button responses not implemented yet");
-    if (!m_pUIBuilder)
-        return;
-    VclButtonBox *pButtonBox = get_action_area();
+    std::map<const Window*, short>::const_iterator aFind = m_aResponses.find(pWindow);
+    if (aFind != m_aResponses.end())
+        return aFind->second;
+    return m_pUIBuilder->get_response(pWindow);
+}
+
+void MessageDialog::setButtonHandlers(VclButtonBox *pButtonBox)
+{
     assert(pButtonBox);
     for (Window* pChild = pButtonBox->GetWindow(WINDOW_FIRSTCHILD); pChild;
         pChild = pChild->GetWindow(WINDOW_NEXT))
@@ -1724,17 +1729,16 @@ void MessageDialog::setButtonHandlers()
                 pButton->SetClickHdl(LINK(this, MessageDialog, ButtonHdl));
                 break;
             }
-            //for now at least, insist that the response ids match
-            //the default actions for those widgets, and leave
-            //their default handlers in place
+            //insist that the response ids match the default actions for those
+            //widgets, and leave their default handlers in place
             case WINDOW_OKBUTTON:
-                assert(m_pUIBuilder->get_response(pChild) == RET_OK);
+                assert(get_response(pChild) == RET_OK);
                 break;
             case WINDOW_CANCELBUTTON:
-                assert(m_pUIBuilder->get_response(pChild) == RET_CANCEL);
+                assert(get_response(pChild) == RET_CANCEL);
                 break;
             case WINDOW_HELPBUTTON:
-                assert(m_pUIBuilder->get_response(pChild) == RET_HELP);
+                assert(get_response(pChild) == RET_HELP);
                 break;
             default:
                 SAL_WARN("vcl.layout", "The type of widget " <<
@@ -1793,13 +1797,58 @@ short MessageDialog::Execute()
         m_pSecondaryMessage->SetText(m_sSecondaryString);
         m_pSecondaryMessage->Show(!m_sSecondaryString.isEmpty());
 
-        m_pGrid->Show();
-
-        setButtonHandlers();
-
         VclButtonBox *pButtonBox = get_action_area();
         assert(pButtonBox);
+        PushButton *pBtn;
+        switch (m_eType)
+        {
+            case VCL_BUTTONS_NONE:
+                break;
+            case VCL_BUTTONS_OK:
+                pBtn = new OKButton(pButtonBox);
+                pBtn->Show();
+                m_aOwnedButtons.push_back(pBtn);
+                m_aResponses[pBtn] = RET_OK;
+                break;
+            case VCL_BUTTONS_CLOSE:
+                pBtn = new CloseButton(pButtonBox);
+                pBtn->Show();
+                m_aOwnedButtons.push_back(pBtn);
+                m_aResponses[pBtn] = RET_CLOSE;
+                break;
+            case VCL_BUTTONS_CANCEL:
+                pBtn = new CancelButton(pButtonBox);
+                m_aOwnedButtons.push_back(pBtn);
+                m_aResponses[pBtn] = RET_CANCEL;
+                break;
+            case VCL_BUTTONS_YES_NO:
+                pBtn = new PushButton(pButtonBox);
+                pBtn->SetText(Button::GetStandardText(BUTTON_YES));
+                pBtn->Show();
+                m_aOwnedButtons.push_back(pBtn);
+                m_aResponses[pBtn] = RET_YES;
+
+                pBtn = new PushButton(pButtonBox);
+                pBtn->SetText(Button::GetStandardText(BUTTON_NO));
+                pBtn->Show();
+                m_aOwnedButtons.push_back(pBtn);
+                m_aResponses[pBtn] = RET_NO;
+                break;
+            case VCL_BUTTONS_OK_CANCEL:
+                pBtn = new OKButton(pButtonBox);
+                pBtn->Show();
+                m_aOwnedButtons.push_back(pBtn);
+                m_aResponses[pBtn] = RET_OK;
+
+                pBtn = new CancelButton(pButtonBox);
+                pBtn->Show();
+                m_aOwnedButtons.push_back(pBtn);
+                m_aResponses[pBtn] = RET_CANCEL;
+                break;
+        }
+        setButtonHandlers(pButtonBox);
         pButtonBox->sort_native_button_order();
+        m_pGrid->Show();
 
     }
     return Dialog::Execute();
@@ -1825,6 +1874,27 @@ bool MessageDialog::set_property(const OString &rKey, const OString &rValue)
         set_primary_text(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else if (rKey == "secondary-text")
         set_secondary_text(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+    else if (rKey == "buttons")
+    {
+        VclButtonsType eMode = VCL_BUTTONS_NONE;
+        if (rValue.equals("none"))
+            eMode = VCL_BUTTONS_NONE;
+        else if (rValue.equals("ok"))
+            eMode = VCL_BUTTONS_OK;
+        else if (rValue.equals("cancel"))
+            eMode = VCL_BUTTONS_CANCEL;
+        else if (rValue.equals("close"))
+            eMode = VCL_BUTTONS_CLOSE;
+        else if (rValue.equals("yes-no"))
+            eMode = VCL_BUTTONS_YES_NO;
+        else if (rValue.equals("ok-cancel"))
+            eMode = VCL_BUTTONS_OK_CANCEL;
+        else
+        {
+            SAL_WARN("vcl.layout", "unknown buttons type mode" << rValue.getStr());
+        }
+        m_eType = eMode;
+    }
     else
         return Dialog::set_property(rKey, rValue);
     return true;
