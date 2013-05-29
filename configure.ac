@@ -1015,6 +1015,11 @@ AC_ARG_ENABLE(gstreamer-0-10,
         [Disable building the gstreamer avmedia backend.]),
 ,enable_gstreamer_0_10=yes)
 
+AC_ARG_ENABLE(vlc,
+    AS_HELP_STRING([--enable-vlc],
+        [Enable building with the VLC avmedia backend.]),
+,enable_vlc=no)
+
 AC_ARG_ENABLE(neon,
     AS_HELP_STRING([--disable-neon],
         [Disable neon and the compilation of webdav binding.]),
@@ -9908,6 +9913,27 @@ fi
 AC_SUBST(GSTREAMER_0_10_CFLAGS)
 AC_SUBST(GSTREAMER_0_10_LIBS)
 AC_SUBST(ENABLE_GSTREAMER_0_10)
+
+dnl ===================================================================
+dnl Check whether the VLC libraries are available.
+dnl ===================================================================
+
+ENABLE_VLC=""
+
+if test "$build_gstreamer" = "yes"; then
+
+    AC_MSG_CHECKING([whether to enable the new VLC avmedia backend])
+    if test "x$enable_vlc" != "xno"; then
+        ENABLE_VLC="TRUE"
+        AC_MSG_RESULT([yes])
+        PKG_CHECK_MODULES( VLC, libvlc >= 2.0.0 )
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+AC_SUBST(VLC_CFLAGS)
+AC_SUBST(VLC_LIBS)
+AC_SUBST(ENABLE_VLC)
 
 dnl ===================================================================
 dnl Check whether the OpenGL libraries are available
