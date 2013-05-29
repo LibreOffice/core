@@ -793,13 +793,6 @@ WarningBox RID_NOMATHTYPEFACEWARNING
     Message [ en-US ] = "The 'StarMath' font has not been installed.\nWithout this font %PRODUCTNAME Math cannot function correctly.\nPlease install this font and restart %PRODUCTNAME Math." ;
 };
 
-QueryBox RID_DEFAULTSAVEQUERY
-{
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_YES ;
-    Message [ en-US ] = "Should the changes be saved as defaults?\n\nThese changes will apply for all new formulas." ;
-};
-
 String RID_FONTREGULAR
 {
     Text [ en-US ] = "Standard" ;

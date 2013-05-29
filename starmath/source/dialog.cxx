@@ -24,6 +24,7 @@
 #include <svl/stritem.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/builder.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <sfx2/printer.hxx>
@@ -421,22 +422,25 @@ void SmFontDialog::DataChanged( const DataChangedEvent& rDCEvt )
     ModalDialog::DataChanged( rDCEvt );
 }
 
-/**************************************************************************/
-
+class SaveDefaultsQuery : public MessageDialog
+{
+public:
+    SaveDefaultsQuery(Window *pParent)
+        : MessageDialog(pParent, "SaveDefaultsDialog",
+            "modules/smath/ui/savedefaultsdialog.ui")
+    {
+    }
+};
 
 IMPL_LINK( SmFontSizeDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
 {
-    QueryBox *pQueryBox = new QueryBox(this, SmResId(RID_DEFAULTSAVEQUERY));
-
-    if (pQueryBox->Execute() == RET_YES)
+    if (SaveDefaultsQuery(this).Execute() == RET_YES)
     {
         SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
         WriteTo( aFmt );
         pp->GetConfig()->SetStandardFormat( aFmt );
     }
-
-    delete pQueryBox;
     return 0;
 }
 
@@ -546,16 +550,13 @@ IMPL_LINK( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu )
 
 IMPL_LINK_INLINE_START( SmFontTypeDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
 {
-    QueryBox *pQueryBox = new QueryBox(this, SmResId(RID_DEFAULTSAVEQUERY));
-    if (pQueryBox->Execute() == RET_YES)
+    if (SaveDefaultsQuery(this).Execute() == RET_YES)
     {
         SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
         WriteTo( aFmt );
         pp->GetConfig()->SetStandardFormat( aFmt, true );
     }
-
-    delete pQueryBox;
     return 0;
 }
 IMPL_LINK_INLINE_END( SmFontTypeDialog, DefaultButtonClickHdl, Button *, pButton )
@@ -755,16 +756,13 @@ IMPL_LINK( SmDistanceDialog, MenuSelectHdl, Menu *, pMenu )
 
 IMPL_LINK( SmDistanceDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
 {
-    QueryBox *pQueryBox = new QueryBox(this, SmResId(RID_DEFAULTSAVEQUERY));
-
-    if (pQueryBox->Execute() == RET_YES)
+    if (SaveDefaultsQuery(this).Execute() == RET_YES)
     {
         SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
         WriteTo( aFmt );
         pp->GetConfig()->SetStandardFormat( aFmt );
     }
-    delete pQueryBox;
     return 0;
 }
 
@@ -1044,26 +1042,17 @@ void SmDistanceDialog::WriteTo(SmFormat &rFormat) /*const*/
     rFormat.RequestApplyChanges();
 }
 
-
-/**************************************************************************/
-
-
 IMPL_LINK( SmAlignDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
 {
-   QueryBox *pQueryBox = new QueryBox(this, SmResId(RID_DEFAULTSAVEQUERY));
-
-    if (pQueryBox->Execute() == RET_YES)
+    if (SaveDefaultsQuery(this).Execute() == RET_YES)
     {
         SmModule *pp = SM_MOD();
         SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
         WriteTo( aFmt );
         pp->GetConfig()->SetStandardFormat( aFmt );
     }
-
-    delete pQueryBox;
     return 0;
 }
-
 
 SmAlignDialog::SmAlignDialog(Window * pParent)
     : ModalDialog(pParent, "AlignmentDialog",

@@ -1672,7 +1672,8 @@ bool VclSizeGroup::set_property(const OString &rKey, const OString &rValue)
 
 MessageDialog::MessageDialog(Window* pParent, WinBits nStyle)
     : Dialog(pParent, nStyle)
-    , m_eType(VCL_BUTTONS_NONE)
+    , m_eButtonsType(VCL_BUTTONS_NONE)
+    , m_eMessageType(VCL_MESSAGE_INFO)
     , m_pGrid(NULL)
     , m_pImage(NULL)
     , m_pPrimaryMessage(NULL)
@@ -1683,7 +1684,8 @@ MessageDialog::MessageDialog(Window* pParent, WinBits nStyle)
 
 MessageDialog::MessageDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : Dialog(pParent, rID, rUIXMLDescription, WINDOW_MESSBOX)
-    , m_eType(VCL_BUTTONS_NONE)
+    , m_eButtonsType(VCL_BUTTONS_NONE)
+    , m_eMessageType(VCL_MESSAGE_INFO)
     , m_pGrid(NULL)
     , m_pImage(NULL)
     , m_pPrimaryMessage(NULL)
@@ -1767,7 +1769,21 @@ short MessageDialog::Execute()
         m_pGrid->set_column_spacing(12);
 
         m_pImage = new FixedImage(m_pGrid, WB_CENTER | WB_VCENTER | WB_3DLOOK);
-        m_pImage->SetImage(WarningBox::GetStandardImage());
+        switch (m_eMessageType)
+        {
+            case VCL_MESSAGE_INFO:
+                m_pImage->SetImage(InfoBox::GetStandardImage());
+                break;
+            case VCL_MESSAGE_WARNING:
+                m_pImage->SetImage(WarningBox::GetStandardImage());
+                break;
+            case VCL_MESSAGE_QUESTION:
+                m_pImage->SetImage(QueryBox::GetStandardImage());
+                break;
+            case VCL_MESSAGE_ERROR:
+                m_pImage->SetImage(ErrorBox::GetStandardImage());
+                break;
+        }
         m_pImage->set_grid_left_attach(0);
         m_pImage->set_grid_top_attach(0);
         m_pImage->set_valign(VCL_ALIGN_START);
@@ -1800,7 +1816,7 @@ short MessageDialog::Execute()
         VclButtonBox *pButtonBox = get_action_area();
         assert(pButtonBox);
         PushButton *pBtn;
-        switch (m_eType)
+        switch (m_eButtonsType)
         {
             case VCL_BUTTONS_NONE:
                 break;
@@ -1874,6 +1890,23 @@ bool MessageDialog::set_property(const OString &rKey, const OString &rValue)
         set_primary_text(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else if (rKey == "secondary-text")
         set_secondary_text(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+    else if (rKey == "message-type")
+    {
+        VclMessageType eMode = VCL_MESSAGE_INFO;
+        if (rValue.equals("info"))
+            eMode = VCL_MESSAGE_INFO;
+        else if (rValue.equals("warning"))
+            eMode = VCL_MESSAGE_WARNING;
+        else if (rValue.equals("question"))
+            eMode = VCL_MESSAGE_QUESTION;
+        else if (rValue.equals("error"))
+            eMode = VCL_MESSAGE_ERROR;
+        else
+        {
+            SAL_WARN("vcl.layout", "unknown message type mode" << rValue.getStr());
+        }
+        m_eMessageType = eMode;
+    }
     else if (rKey == "buttons")
     {
         VclButtonsType eMode = VCL_BUTTONS_NONE;
@@ -1893,7 +1926,7 @@ bool MessageDialog::set_property(const OString &rKey, const OString &rValue)
         {
             SAL_WARN("vcl.layout", "unknown buttons type mode" << rValue.getStr());
         }
-        m_eType = eMode;
+        m_eButtonsType = eMode;
     }
     else
         return Dialog::set_property(rKey, rValue);

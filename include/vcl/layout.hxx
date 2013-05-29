@@ -657,10 +657,19 @@ enum VclButtonsType
     VCL_BUTTONS_OK_CANCEL
 };
 
+enum VclMessageType
+{
+    VCL_MESSAGE_INFO,
+    VCL_MESSAGE_WARNING,
+    VCL_MESSAGE_QUESTION,
+    VCL_MESSAGE_ERROR
+};
+
 class VCL_DLLPUBLIC MessageDialog : public Dialog
 {
 private:
-    VclButtonsType m_eType;
+    VclButtonsType m_eButtonsType;
+    VclMessageType m_eMessageType;
     VclGrid* m_pGrid;
     FixedImage* m_pImage;
     VclMultiLineEdit* m_pPrimaryMessage;

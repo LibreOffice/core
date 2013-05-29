@@ -90,7 +90,6 @@
 
 #define RID_MATH_TOOLBOX            (RID_APP_START + 50)
 
-#define RID_DEFAULTSAVEQUERY        (RID_APP_START + 102)
 #define RID_NOMATHTYPEFACEWARNING   (RID_APP_START + 204)
 #define RID_OBJECTNAME              (RID_APP_START + 501)
     // free
