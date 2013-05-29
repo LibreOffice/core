@@ -76,7 +76,7 @@ Rectangle OutlinerEditEng::GetBulletArea( sal_uInt16 nPara )
     Rectangle aBulletArea = Rectangle( Point(), Point() );
     if ( nPara < pOwner->pParaList->GetParagraphCount() )
     {
-        if ( pOwner->ImplHasBullet( nPara ) )
+        if ( pOwner->ImplHasNumberFormat( nPara ) )
             aBulletArea = pOwner->ImpCalcBulletArea( nPara, sal_False, sal_False );
     }
     return aBulletArea;
