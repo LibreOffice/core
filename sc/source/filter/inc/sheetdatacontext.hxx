@@ -117,6 +117,9 @@ private:
     BinAddress          maCurrPos;          /// Current cell position (BIFF12 only).
     bool                mbHasFormula;       /// True = current cell has formula data (OOXML only).
     bool                mbValidRange;       /// True = maFmlaData.maFormulaRef is valid (OOXML only).
+
+    sal_Int32 mnRow;
+    sal_Int32 mnCol;
 };
 
 // ============================================================================
