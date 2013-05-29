@@ -484,6 +484,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
+	$(if $(ENABLE_VLC),avmediavlc) \
 	$(if $(ENABLE_GSTREAMER),avmediagst) \
 	$(if $(ENABLE_GSTREAMER_0_10),avmediagst_0_10) \
 	$(if $(ENABLE_DIRECTX),avmediawin) \
