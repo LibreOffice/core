@@ -2916,19 +2916,8 @@ dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================
 if test "$USE_SYSTEM_STL" = "YES"; then
-   AC_MSG_CHECKING([if hash_map will be in __gnu_cxx namespace])
+   AC_MSG_CHECKING([system stl sanity])
    AC_LANG_PUSH([C++])
-
-   AC_TRY_COMPILE([#include <ext/hash_map>
-using namespace __gnu_cxx;
-],[hash_map<int, int> t; return 0;],
-  ac_cv_cxx_have_ext_hash_map=yes, ac_cv_cxx_have_ext_hash_map=no)
-
-   if test "$ac_cv_cxx_have_ext_hash_map" = "no"; then
-      AC_MSG_ERROR([Can't find hash_map. Try with --with-stlport])
-   else
-      AC_MSG_RESULT([$ac_cv_cxx_have_ext_hash_map])
-   fi
 
    if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
       AC_MSG_CHECKING([if STL headers are visibility safe])
