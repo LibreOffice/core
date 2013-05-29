@@ -29,19 +29,15 @@
 class SvxCTLOptionsPage : public SfxTabPage
 {
 private:
-    FixedLine           m_aSequenceCheckingFL;
-    CheckBox            m_aSequenceCheckingCB;
-    CheckBox            m_aRestrictedCB;
-    CheckBox            m_aTypeReplaceCB;
 
-    FixedLine           m_aCursorControlFL;
-    FixedText           m_aMovementFT;
-    RadioButton         m_aMovementLogicalRB;
-    RadioButton         m_aMovementVisualRB;
+    CheckBox*            m_pSequenceCheckingCB;
+    CheckBox*            m_pRestrictedCB;
+    CheckBox*            m_pTypeReplaceCB;
 
-    FixedLine           m_aGeneralFL;
-    FixedText           m_aNumeralsFT;
-    ListBox             m_aNumeralsLB;
+    RadioButton*         m_pMovementLogicalRB;
+    RadioButton*         m_pMovementVisualRB;
+
+    ListBox*             m_pNumeralsLB;
 
     DECL_LINK( SequenceCheckingCB_Hdl, void* );
 

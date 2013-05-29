@@ -19,7 +19,6 @@
 
 #include "optctl.hxx"
 #include <dialmgr.hxx>
-#include "optctl.hrc"
 #include <cuires.hrc>
 #include <svl/ctloptions.hxx>
 
@@ -27,40 +26,35 @@
 
 IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl)
 {
-    sal_Bool bIsSequenceChecking = m_aSequenceCheckingCB.IsChecked();
-    m_aRestrictedCB.Enable( bIsSequenceChecking );
-    m_aTypeReplaceCB.Enable( bIsSequenceChecking );
+    sal_Bool bIsSequenceChecking = m_pSequenceCheckingCB->IsChecked();
+    m_pRestrictedCB->Enable( bIsSequenceChecking );
+    m_pTypeReplaceCB->Enable( bIsSequenceChecking );
     // #i48117#: by default restricted and type&replace have to be switched on
     if(bIsSequenceChecking)
     {
-        m_aTypeReplaceCB.Check( sal_True );
-        m_aRestrictedCB.Check( sal_True );
+        m_pTypeReplaceCB->Check( sal_True );
+        m_pRestrictedCB->Check( sal_True );
     }
     return 0;
 }
 
 SvxCTLOptionsPage::SvxCTLOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_OPTIONS_CTL ), rSet ),
-
-    m_aSequenceCheckingFL   ( this, CUI_RES( FL_SEQUENCECHECKING ) ),
-    m_aSequenceCheckingCB   ( this, CUI_RES( CB_SEQUENCECHECKING ) ),
-    m_aRestrictedCB         ( this, CUI_RES( CB_RESTRICTED ) ),
-    m_aTypeReplaceCB        ( this, CUI_RES( CB_TYPE_REPLACE ) ),
-    m_aCursorControlFL      ( this, CUI_RES( FL_CURSORCONTROL ) ),
-    m_aMovementFT           ( this, CUI_RES( FT_MOVEMENT ) ),
-    m_aMovementLogicalRB    ( this, CUI_RES( RB_MOVEMENT_LOGICAL ) ),
-    m_aMovementVisualRB     ( this, CUI_RES( RB_MOVEMENT_VISUAL ) ),
-    m_aGeneralFL            ( this, CUI_RES( FL_GENERAL ) ),
-    m_aNumeralsFT           ( this, CUI_RES( FT_NUMERALS ) ),
-    m_aNumeralsLB           ( this, CUI_RES( LB_NUMERALS ) )
+    SfxTabPage( pParent, "OptCTLPage", "cui/ui/optctlpage.ui", rSet  )
 
 {
-    FreeResource();
+    get( m_pSequenceCheckingCB, "sequencechecking");
+    get( m_pRestrictedCB, "restricted");
+    get( m_pTypeReplaceCB, "typeandreplace");
 
-    m_aSequenceCheckingCB.SetClickHdl( LINK( this, SvxCTLOptionsPage, SequenceCheckingCB_Hdl ) );
+    get( m_pMovementLogicalRB, "movementlogical");
+    get( m_pMovementVisualRB, "movementvisual");
 
-    m_aNumeralsLB.SetDropDownLineCount( m_aNumeralsLB.GetEntryCount() );
+    get( m_pNumeralsLB, "numerals");
+
+    m_pSequenceCheckingCB->SetClickHdl( LINK( this, SvxCTLOptionsPage, SequenceCheckingCB_Hdl ) );
+
+    m_pNumeralsLB->SetDropDownLineCount( m_pNumeralsLB->GetEntryCount() );
 }
 // -----------------------------------------------------------------------------
 SvxCTLOptionsPage::~SvxCTLOptionsPage()
@@ -78,30 +72,30 @@ sal_Bool SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
     SvtCTLOptions aCTLOptions;
 
     // Sequence checking
-    sal_Bool bChecked = m_aSequenceCheckingCB.IsChecked();
-    if ( bChecked != m_aSequenceCheckingCB.GetSavedValue() )
+    sal_Bool bChecked = m_pSequenceCheckingCB->IsChecked();
+    if ( bChecked != m_pSequenceCheckingCB->GetSavedValue() )
     {
         aCTLOptions.SetCTLSequenceChecking( bChecked );
         bModified = sal_True;
     }
 
-    bChecked = m_aRestrictedCB.IsChecked();
-    if( bChecked != m_aRestrictedCB.GetSavedValue() )
+    bChecked = m_pRestrictedCB->IsChecked();
+    if( bChecked != m_pRestrictedCB->GetSavedValue() )
     {
         aCTLOptions.SetCTLSequenceCheckingRestricted( bChecked );
         bModified = sal_True;
     }
-    bChecked = m_aTypeReplaceCB.IsChecked();
-    if( bChecked != m_aTypeReplaceCB.GetSavedValue())
+    bChecked = m_pTypeReplaceCB->IsChecked();
+    if( bChecked != m_pTypeReplaceCB->GetSavedValue())
     {
         aCTLOptions.SetCTLSequenceCheckingTypeAndReplace(bChecked);
         bModified = sal_True;
     }
 
-    sal_Bool bLogicalChecked = m_aMovementLogicalRB.IsChecked();
-    sal_Bool bVisualChecked = m_aMovementVisualRB.IsChecked();
-    if ( bLogicalChecked != m_aMovementLogicalRB.GetSavedValue() ||
-         bVisualChecked != m_aMovementVisualRB.GetSavedValue() )
+    sal_Bool bLogicalChecked = m_pMovementLogicalRB->IsChecked();
+    sal_Bool bVisualChecked = m_pMovementVisualRB->IsChecked();
+    if ( bLogicalChecked != m_pMovementLogicalRB->GetSavedValue() ||
+         bVisualChecked != m_pMovementVisualRB->GetSavedValue() )
     {
         SvtCTLOptions::CursorMovement eMovement =
             bLogicalChecked ? SvtCTLOptions::MOVEMENT_LOGICAL : SvtCTLOptions::MOVEMENT_VISUAL;
@@ -109,8 +103,8 @@ sal_Bool SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
         bModified = sal_True;
     }
 
-    sal_uInt16 nPos = m_aNumeralsLB.GetSelectEntryPos();
-    if ( nPos != m_aNumeralsLB.GetSavedValue() )
+    sal_uInt16 nPos = m_pNumeralsLB->GetSelectEntryPos();
+    if ( nPos != m_pNumeralsLB->GetSavedValue() )
     {
         aCTLOptions.SetCTLTextNumerals( (SvtCTLOptions::TextNumerals)nPos );
         bModified = sal_True;
@@ -123,19 +117,19 @@ void SvxCTLOptionsPage::Reset( const SfxItemSet& )
 {
     SvtCTLOptions aCTLOptions;
 
-    m_aSequenceCheckingCB.Check( aCTLOptions.IsCTLSequenceChecking() );
-    m_aRestrictedCB.Check( aCTLOptions.IsCTLSequenceCheckingRestricted() );
-    m_aTypeReplaceCB.Check( aCTLOptions.IsCTLSequenceCheckingTypeAndReplace() );
+    m_pSequenceCheckingCB->Check( aCTLOptions.IsCTLSequenceChecking() );
+    m_pRestrictedCB->Check( aCTLOptions.IsCTLSequenceCheckingRestricted() );
+    m_pTypeReplaceCB->Check( aCTLOptions.IsCTLSequenceCheckingTypeAndReplace() );
 
     SvtCTLOptions::CursorMovement eMovement = aCTLOptions.GetCTLCursorMovement();
     switch ( eMovement )
     {
         case SvtCTLOptions::MOVEMENT_LOGICAL :
-            m_aMovementLogicalRB.Check();
+            m_pMovementLogicalRB->Check();
             break;
 
         case SvtCTLOptions::MOVEMENT_VISUAL :
-            m_aMovementVisualRB.Check();
+            m_pMovementVisualRB->Check();
             break;
 
         default:
@@ -143,19 +137,19 @@ void SvxCTLOptionsPage::Reset( const SfxItemSet& )
     }
 
     sal_uInt16 nPos = (sal_uInt16)aCTLOptions.GetCTLTextNumerals();
-    DBG_ASSERT( nPos < m_aNumeralsLB.GetEntryCount(), "SvxCTLOptionsPage::Reset(): invalid numerals enum" );
-    m_aNumeralsLB.SelectEntryPos( nPos );
+    DBG_ASSERT( nPos < m_pNumeralsLB->GetEntryCount(), "SvxCTLOptionsPage::Reset(): invalid numerals enum" );
+    m_pNumeralsLB->SelectEntryPos( nPos );
 
-    m_aSequenceCheckingCB.SaveValue();
-    m_aRestrictedCB.SaveValue();
-    m_aTypeReplaceCB.SaveValue();
-    m_aMovementLogicalRB.SaveValue();
-    m_aMovementVisualRB.SaveValue();
-    m_aNumeralsLB.SaveValue();
+    m_pSequenceCheckingCB->SaveValue();
+    m_pRestrictedCB->SaveValue();
+    m_pTypeReplaceCB->SaveValue();
+    m_pMovementLogicalRB->SaveValue();
+    m_pMovementVisualRB->SaveValue();
+    m_pNumeralsLB->SaveValue();
 
-    sal_Bool bIsSequenceChecking = m_aSequenceCheckingCB.IsChecked();
-    m_aRestrictedCB.Enable( bIsSequenceChecking );
-    m_aTypeReplaceCB.Enable( bIsSequenceChecking );
+    sal_Bool bIsSequenceChecking = m_pSequenceCheckingCB->IsChecked();
+    m_pRestrictedCB->Enable( bIsSequenceChecking );
+    m_pTypeReplaceCB->Enable( bIsSequenceChecking );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

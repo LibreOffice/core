@@ -54,7 +54,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/options/optasian.src \
     cui/source/options/optchart.src \
     cui/source/options/optcolor.src \
-    cui/source/options/optctl.src \
     cui/source/options/optdict.src \
     cui/source/options/optfltr.src \
     cui/source/options/optgdlg.src \

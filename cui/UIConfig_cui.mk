@@ -43,6 +43,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/optadvancedpage \
 	cui/uiconfig/ui/optappearancepage \
 	cui/uiconfig/ui/optbrowserpage \
+	cui/uiconfig/ui/optctlpage \
 	cui/uiconfig/ui/optemailpage \
 	cui/uiconfig/ui/optfltrpage \
 	cui/uiconfig/ui/optfontspage \
