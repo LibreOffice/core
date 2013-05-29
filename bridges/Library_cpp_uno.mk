@@ -58,7 +58,8 @@ else ifeq ($(CPU),I)
 ifneq ($(filter ANDROID DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_intel
 bridge_asm_objects := call
-bridge_exception_objects := callvirtualmethod cpp2uno except uno2cpp
+bridge_exception_objects := cpp2uno except uno2cpp
+bridge_noncallexception_objects := callvirtualmethod
 else ifeq ($(OS),MACOSX)
 bridges_SELECTED_BRIDGE := gcc3_macosx_intel
 bridge_asm_objects := call
@@ -121,12 +122,12 @@ else ifeq ($(CPU),X)
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 bridges_SELECTED_BRIDGE := gcc3_linux_x86-64
 bridge_asm_objects := call
-bridge_noopt_objects := callvirtualmethod
+bridge_noncallexception_noopt_objects := callvirtualmethod
 bridge_exception_objects := abi cpp2uno except uno2cpp
 else ifeq ($(OS),MACOSX)
 bridges_SELECTED_BRIDGE := gcc3_macosx_x86-64
 bridge_exception_objects := abi call cpp2uno except uno2cpp
-bridge_noopt_objects := callvirtualmethod
+bridge_noncallexception_noopt_objects := callvirtualmethod
 else ifeq ($(COM),MSC)
 bridges_SELECTED_BRIDGE := msvc_win32_x86-64
 bridge_exception_objects := cpp2uno dllinit uno2cpp
@@ -195,6 +196,12 @@ $(eval $(call gb_Library_add_libs,gcc3_uno,\
 endif
 endif
 
+ifeq ($(COM),GCC)
+ifneq ($(COM_GCC_IS_CLANG),TRUE)
+bridges_NON_CALL_EXCEPTIONS_FLAGS := -fnon-call-exceptions
+endif
+endif
+
 $(eval $(call gb_Library_use_libraries,$(gb_CPPU_ENV)_uno,\
 	cppu \
 	sal \
@@ -204,11 +211,20 @@ $(foreach obj,$(bridge_exception_objects),\
 	$(eval $(call gb_Library_add_exception_objects,$(gb_CPPU_ENV)_uno,\
 	bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj))) \
 )
-
+$(foreach obj,$(bridge_noncallexception_objects),\
+	$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
+	bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj) \
+    , $(bridges_NON_CALL_EXCEPTIONS_FLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS))) \
+)
 $(foreach obj,$(bridge_noopt_objects),\
 	$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
 	bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj) \
 	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS))) \
+)
+$(foreach obj,$(bridge_noncallexception_noopt_objects),\
+	$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
+	bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj) \
+	, $(gb_COMPILERNOOPTFLAGS) $(bridges_NON_CALL_EXCEPTIONS_FLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS))) \
 )
 $(foreach obj,$(bridge_cxx_objects),\
 	$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
