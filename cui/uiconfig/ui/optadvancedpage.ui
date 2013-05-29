@@ -358,7 +358,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="macrorecording">
-                    <property name="label" translatable="yes">Enable macro recording</property>
+                    <property name="label" translatable="yes">Enable macro recording (limited)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
