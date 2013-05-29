@@ -318,7 +318,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         case FN_NUM_BULLET_ON:
             if( pOLV )
                 pOLV->ToggleBullets();
-        break;
+            break;
 
         case SID_GROW_FONT_SIZE:
         case SID_SHRINK_FONT_SIZE:

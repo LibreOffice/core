@@ -1018,52 +1018,71 @@ void ParaPropertyPanel::NotifyItemUpdate(
 {
     (void)bIsEnabled;
 
-    if( nSID == SID_ATTR_METRIC )
+    switch (nSID)
     {
-        m_eMetricUnit = GetCurrentUnit(eState,pState);
-        if( m_eMetricUnit!=m_last_eMetricUnit )
+    case SID_ATTR_METRIC:
         {
-            SetFieldUnit( *maLeftIndent.get(), m_eMetricUnit );
-            SetFieldUnit( *maRightIndent.get(), m_eMetricUnit );
-            SetFieldUnit( *maFLineIndent.get(), m_eMetricUnit );
-            SetFieldUnit( *maTopDist.get(), m_eMetricUnit );
-            SetFieldUnit( *maBottomDist.get(), m_eMetricUnit );
+            m_eMetricUnit = GetCurrentUnit(eState,pState);
+            if( m_eMetricUnit!=m_last_eMetricUnit )
+            {
+                SetFieldUnit( *maLeftIndent.get(), m_eMetricUnit );
+                SetFieldUnit( *maRightIndent.get(), m_eMetricUnit );
+                SetFieldUnit( *maFLineIndent.get(), m_eMetricUnit );
+                SetFieldUnit( *maTopDist.get(), m_eMetricUnit );
+                SetFieldUnit( *maBottomDist.get(), m_eMetricUnit );
+            }
+            m_last_eMetricUnit = m_eMetricUnit;
         }
-        m_last_eMetricUnit = m_eMetricUnit;
-    }
+        break;
 
-    if( nSID == SID_ATTR_PARA_LRSPACE )
+    case SID_ATTR_PARA_LRSPACE:
         StateChangedIndentImpl( nSID, eState, pState );
+        break;
 
-    if( nSID == SID_ATTR_PARA_LINESPACE )
+    case SID_ATTR_PARA_LINESPACE:
         StateChangedLnSPImpl( nSID, eState, pState );
+        break;
 
-    if( nSID == SID_ATTR_PARA_ULSPACE)
+    case SID_ATTR_PARA_ULSPACE:
         StateChangedULImpl( nSID, eState, pState );
+        break;
 
-    if (nSID==SID_ATTR_PARA_ADJUST_LEFT || nSID==SID_ATTR_PARA_ADJUST_CENTER || nSID==SID_ATTR_PARA_ADJUST_RIGHT || nSID==SID_ATTR_PARA_ADJUST_BLOCK)
+    case SID_ATTR_PARA_ADJUST_LEFT:
+    case SID_ATTR_PARA_ADJUST_CENTER:
+    case SID_ATTR_PARA_ADJUST_RIGHT:
+    case SID_ATTR_PARA_ADJUST_BLOCK:
         StateChangedAlignmentImpl( nSID, eState, pState );
+        break;
 
-    if (nSID==SID_OUTLINE_LEFT || nSID==SID_OUTLINE_RIGHT)
+    case SID_OUTLINE_LEFT:
+    case SID_OUTLINE_RIGHT:
         StateChangeOutLineImpl( nSID, eState, pState );
+        break;
 
-    if (nSID==SID_INC_INDENT || nSID==SID_DEC_INDENT)
+    case SID_INC_INDENT:
+    case SID_DEC_INDENT:
         StateChangeIncDecImpl( nSID, eState, pState );
-    // Add toggle state for numbering and bullet icons
-    if (nSID==FN_NUM_NUMBERING_ON || nSID==FN_NUM_BULLET_ON)
+        break;
+
+    case FN_NUM_NUMBERING_ON:
+    case FN_NUM_BULLET_ON:
         StateChangeBulletNumImpl( nSID, eState, pState );
+        break;
 
-    //Get the num rule index data of the current selection
-    if ( nSID == FN_BUL_NUM_RULE_INDEX ||nSID == FN_NUM_NUM_RULE_INDEX)
+    case FN_BUL_NUM_RULE_INDEX:
+    case FN_NUM_NUM_RULE_INDEX:
         StateChangeBulletNumRuleImpl( nSID, eState, pState );
+        break;
 
-    if ((nSID == SID_TABLE_VERT_NONE)||(nSID == SID_TABLE_VERT_CENTER)||(nSID == SID_TABLE_VERT_BOTTOM))
-    {
+    case SID_TABLE_VERT_NONE:
+    case SID_TABLE_VERT_CENTER:
+    case SID_TABLE_VERT_BOTTOM:
         VertStateChanged( nSID, eState, pState);
-    }
-    else if (nSID == SID_BACKGROUND_COLOR)
-    {
+        break;
+
+    case SID_BACKGROUND_COLOR:
         ParaBKGStateChanged(nSID, eState, pState);
+        break;
     }
 }
 
@@ -1400,25 +1419,19 @@ void ParaPropertyPanel::StateChangeBulletNumImpl( sal_uInt16 nSID, SfxItemState 
 {
     if ( (eState >= SFX_ITEM_DEFAULT) && (pState->ISA(SfxBoolItem)) )
     {
+        const SfxBoolItem* pItem= (const SfxBoolItem*)pState;
+        const sal_Bool aBool = (sal_Bool)pItem->GetValue();
         if (nSID==FN_NUM_NUMBERING_ON)
         {
-            const SfxBoolItem* pItem= (const SfxBoolItem*)pState;
-            sal_Bool aBool = (sal_Bool)pItem->GetValue();
-            if (aBool) {
-                maTBxNumBullet->SetItemState(IID_NUMBER,    STATE_CHECK);
-            } else {
-                maTBxNumBullet->SetItemState(IID_NUMBER,    STATE_NOCHECK);
-            }
+            maTBxNumBullet->SetItemState(
+                IID_NUMBER,
+                aBool ? STATE_CHECK : STATE_NOCHECK );
         }
         else if (nSID==FN_NUM_BULLET_ON)
         {
-            const SfxBoolItem* pItem= (const SfxBoolItem*)pState;
-            sal_Bool aBool = (sal_Bool)pItem->GetValue();
-            if (aBool) {
-                maTBxNumBullet->SetItemState(IID_BULLET,    STATE_CHECK);
-            } else {
-                maTBxNumBullet->SetItemState(IID_BULLET,    STATE_NOCHECK);
-            }
+            maTBxNumBullet->SetItemState(
+                IID_BULLET,
+                aBool ? STATE_CHECK : STATE_NOCHECK );
         }
     }
 }

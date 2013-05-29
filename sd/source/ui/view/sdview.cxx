@@ -1230,7 +1230,9 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
     }
 }
 
-sal_Bool View::ShouldToggleOn(sal_Bool bBulletOnOffMode, sal_Bool bNormalBullet)
+bool View::ShouldToggleOn(
+    const bool bBulletOnOffMode,
+    const bool bNormalBullet)
 {
     // If setting bullets/numbering by the dialog, always should toggle on.
     if (!bBulletOnOffMode)
@@ -1294,23 +1296,29 @@ sal_Bool View::ShouldToggleOn(sal_Bool bBulletOnOffMode, sal_Bool bNormalBullet)
     return bToggleOn;
 }
 
-void View::ToggleMarkedObjectsBullets(sal_Bool bBulletOnOffMode, sal_Bool bNormalBullet, sal_Bool bMasterView, SvxNumRule* pNumRule, sal_Bool bForceBulletOnOff)
+void View::ChangeMarkedObjectsBulletsNumbering(
+    const bool bToggle,
+    const bool bHandleBullets,
+    const SvxNumRule* pNumRule,
+    const bool bSwitchOff )
 {
     SdrModel* pSdrModel = GetModel();
     Window* pWindow = dynamic_cast< Window* >(GetFirstOutputDevice());
     if (!pSdrModel || !pWindow)
         return;
 
-    sal_Bool bUndoEnabled = pSdrModel->IsUndoEnabled();
-    sal_Bool bToggleOn = ShouldToggleOn(bBulletOnOffMode, bNormalBullet);
-    if ( bForceBulletOnOff ) {
-        bToggleOn = bBulletOnOffMode;
-    }
-    SdrUndoGroup* pUndoGroup = new SdrUndoGroup(*pSdrModel);
+    const bool bUndoEnabled = pSdrModel->IsUndoEnabled();
+    SdrUndoGroup* pUndoGroup = bUndoEnabled ? new SdrUndoGroup(*pSdrModel) : 0;
+
+    const bool bToggleOn =
+        bSwitchOff
+        ? false
+        : ShouldToggleOn( bToggle, bHandleBullets );
+
     SdrOutliner* pOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, pSdrModel);
     OutlinerView* pOutlinerView = new OutlinerView(pOutliner, pWindow);
 
-    sal_uInt32 nMarkCount = GetMarkedObjectCount();
+    const sal_uInt32 nMarkCount = GetMarkedObjectCount();
     for (sal_uInt32 nIndex = 0; nIndex < nMarkCount; nIndex++)
     {
         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >(GetMarkedObjectByIndex(nIndex));
@@ -1348,7 +1356,14 @@ void View::ToggleMarkedObjectsBullets(sal_Bool bBulletOnOffMode, sal_Bool bNorma
                         SdrUndoObjSetText* pTxtUndo = dynamic_cast< SdrUndoObjSetText* >(pSdrModel->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, nCellIndex));
                         pUndoGroup->AddAction(pTxtUndo);
                     }
-                    pOutlinerView->ToggleAllParagraphsBullets(bBulletOnOffMode, bNormalBullet, bToggleOn, bMasterView, pNumRule);
+                    if ( !bToggleOn )
+                    {
+                        pOutlinerView->SwitchOffBulletsNumbering();
+                    }
+                    else
+                    {
+                        pOutlinerView->ApplyBulletsNumbering( bHandleBullets, pNumRule, bToggle );
+                    }
                     sal_uInt32 nParaCount = pOutliner->GetParagraphCount();
                     pText->SetOutlinerParaObject(pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount));
                     pOutliner->Clear();
@@ -1372,23 +1387,27 @@ void View::ToggleMarkedObjectsBullets(sal_Bool bBulletOnOffMode, sal_Bool bNorma
                 SdrUndoObjSetText* pTxtUndo = dynamic_cast< SdrUndoObjSetText* >(pSdrModel->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, 0));
                 pUndoGroup->AddAction(pTxtUndo);
             }
-            pOutlinerView->ToggleAllParagraphsBullets(bBulletOnOffMode, bNormalBullet, bToggleOn, bMasterView, pNumRule);
+            if ( !bToggleOn )
+            {
+                pOutlinerView->SwitchOffBulletsNumbering();
+            }
+            else
+            {
+                pOutlinerView->ApplyBulletsNumbering( bHandleBullets, pNumRule, bToggle );
+            }
             sal_uInt32 nParaCount = pOutliner->GetParagraphCount();
             pTextObj->SetOutlinerParaObject(pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount));
             pOutliner->Clear();
         }
     }
 
-    if (pUndoGroup->GetActionCount() > 0 && bUndoEnabled)
+    if ( bUndoEnabled && pUndoGroup->GetActionCount() > 0 )
     {
         pSdrModel->BegUndo();
         pSdrModel->AddUndo(pUndoGroup);
         pSdrModel->EndUndo();
     }
-    else
-    {
-        delete pUndoGroup;
-    }
+
     delete pOutliner;
     delete pOutlinerView;
 }

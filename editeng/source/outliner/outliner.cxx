@@ -336,50 +336,60 @@ void Outliner::SetParaIsNumberingRestart( sal_Int32 nPara, sal_Bool bParaIsNumbe
     }
 }
 
-sal_Int32 Outliner::GetBulletsNumberingStatus()
+sal_Int32 Outliner::GetBulletsNumberingStatus(
+    const sal_Int32 nParaStart,
+    const sal_Int32 nParaEnd ) const
 {
-    sal_Bool bHasBulletsNumbering = FALSE;
-    sal_uInt32 nParaCount = (sal_uInt32)(pParaList->GetParagraphCount());
-    for (sal_uInt32 nPara = 0; nPara < nParaCount; nPara++)
+    if ( nParaStart > nParaEnd
+         || nParaEnd >= pParaList->GetParagraphCount() )
     {
-        if ((bHasBulletsNumbering = ImplHasBullet(nPara)))
+        DBG_ASSERT( false,"<Outliner::GetBulletsNumberingStatus> - unexpected parameter values" );
+        return 2;
+    }
+
+    sal_Int32 nBulletsCount = 0;
+    sal_Int32 nNumberingCount = 0;
+    for (sal_Int32 nPara = nParaStart; nPara <= nParaEnd; ++nPara)
+    {
+        if ( !pParaList->GetParagraph(nPara) )
         {
             break;
         }
-    }
-    sal_uInt16 nBulletsCount = 0;
-    sal_uInt16 nNumberingCount = 0;
-    if (bHasBulletsNumbering)
-    {
-        // At least have one paragraph that having bullets or numbering.
-        for (sal_uInt32 nPara = 0; nPara < nParaCount; nPara++)
+        const SvxNumberFormat* pFmt = GetNumberFormat(nPara);
+        if (!pFmt)
         {
-            Paragraph* pPara = pParaList->GetParagraph(nPara);
-            if (!pPara)
-            {
-                continue;
-            }
-            const SvxNumberFormat* pFmt = GetNumberFormat(nPara);
-            if (!pFmt)
-            {
-                // At least, exists one paragraph that has no Bullets/Numbering.
-                break;
-            }
-            else if ((pFmt->GetNumberingType() == SVX_NUM_BITMAP) || (pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL))
-            {
-                // Having Bullets in this paragraph.
-                nBulletsCount++;
-            }
-            else
-            {
-                // Having Numbering in this paragraph.
-                nNumberingCount++;
-            }
+            // At least, exists one paragraph that has no Bullets/Numbering.
+            break;
+        }
+        else if ((pFmt->GetNumberingType() == SVX_NUM_BITMAP) || (pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL))
+        {
+            // Having Bullets in this paragraph.
+            nBulletsCount++;
+        }
+        else
+        {
+            // Having Numbering in this paragraph.
+            nNumberingCount++;
         }
     }
-    sal_Int32 nValue = (nBulletsCount == nParaCount) ? 0 : 2;
-    nValue = (nNumberingCount == nParaCount) ? 1 : nValue;
-    return nValue;
+
+    const sal_Int32 nParaCount = nParaEnd - nParaStart + 1;
+    if ( nBulletsCount == nParaCount )
+    {
+        return 0;
+    }
+    else if ( nNumberingCount == nParaCount )
+    {
+        return 1;
+    }
+    return 2;
+}
+
+sal_Int32 Outliner::GetBulletsNumberingStatus() const
+{
+    return pParaList->GetParagraphCount() > 0
+           ? GetBulletsNumberingStatus( 0, pParaList->GetParagraphCount()-1 )
+           : 2;
 }
 
 OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 nCount ) const
@@ -944,7 +954,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
         bDrawBullet = rBulletState.GetValue() ? true : false;
     }
 
-    if ( ImplHasBullet( nPara ) && bDrawBullet)
+    if ( ImplHasNumberFormat( nPara ) && bDrawBullet)
     {
         sal_Bool bVertical = IsVertical();
 
@@ -1467,7 +1477,7 @@ sal_Bool Outliner::HasChildren( Paragraph* pParagraph ) const
     return pParaList->HasChildren( pParagraph );
 }
 
-sal_Bool Outliner::ImplHasBullet( sal_Int32 nPara ) const
+bool Outliner::ImplHasNumberFormat( sal_Int32 nPara ) const
 {
     return GetNumberFormat(nPara) != 0;
 }
@@ -1711,7 +1721,7 @@ EBulletInfo Outliner::GetBulletInfo( sal_Int32 nPara )
     EBulletInfo aInfo;
 
     aInfo.nParagraph = nPara;
-    aInfo.bVisible = ImplHasBullet( nPara );
+    aInfo.bVisible = ImplHasNumberFormat( nPara );
 
     const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
     aInfo.nType = pFmt ? pFmt->GetNumberingType() : 0;

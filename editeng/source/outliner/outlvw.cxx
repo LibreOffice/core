@@ -20,6 +20,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 
 #include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/editdata.hxx>
@@ -169,7 +170,7 @@ sal_Bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
                         bKeyProcessed = sal_True;
                     }
                     else if ( ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_TEXTOBJECT ) &&
-                              !bSelection && !aSel.nEndPos && pOwner->ImplHasBullet( aSel.nEndPara ) )
+                              !bSelection && !aSel.nEndPos && pOwner->ImplHasNumberFormat( aSel.nEndPara ) )
                     {
                         Indent( aKeyCode.IsShift() ? (-1) : (+1) );
                         bKeyProcessed = sal_True;
@@ -886,7 +887,8 @@ void OutlinerView::ToggleBullets()
     const bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
     pOwner->pEditEngine->SetUpdateMode( sal_False );
 
-    sal_Int16 nDepth = -2;
+    sal_Int16 nNewDepth = -2;
+    const SvxNumRule* pDefaultBulletNumRule = 0;
 
     for ( sal_Int32 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
     {
@@ -895,25 +897,52 @@ void OutlinerView::ToggleBullets()
 
         if( pPara )
         {
-            if( nDepth == -2 )
-                nDepth = (pOwner->GetDepth(nPara) == -1) ? 0 : -1;
+            if( nNewDepth == -2 )
+            {
+                nNewDepth = (pOwner->GetDepth(nPara) == -1) ? 0 : -1;
+                if ( nNewDepth == 0 )
+                {
+                    // determine default numbering rule for bullets
+                    const ESelection aSelection(nPara, 0);
+                    const SfxItemSet aTmpSet(pOwner->pEditEngine->GetAttribs(aSelection));
+                    const SfxPoolItem& rPoolItem = aTmpSet.GetPool()->GetDefaultItem( EE_PARA_NUMBULLET );
+                    const SvxNumBulletItem* pNumBulletItem = dynamic_cast< const SvxNumBulletItem* >(&rPoolItem);
+                    pDefaultBulletNumRule =  pNumBulletItem ? pNumBulletItem->GetNumRule() : 0;
+                }
+            }
 
-            pOwner->SetDepth( pPara, nDepth );
+            pOwner->SetDepth( pPara, nNewDepth );
 
-            if( nDepth == -1 )
+            if( nNewDepth == -1 )
             {
                 const SfxItemSet& rAttrs = pOwner->GetParaAttribs( nPara );
-                if(rAttrs.GetItemState( EE_PARA_BULLETSTATE ) == SFX_ITEM_SET)
+                if ( rAttrs.GetItemState( EE_PARA_BULLETSTATE ) == SFX_ITEM_SET )
                 {
                     SfxItemSet aAttrs(rAttrs);
                     aAttrs.ClearItem( EE_PARA_BULLETSTATE );
                     pOwner->SetParaAttribs( nPara, aAttrs );
                 }
             }
+            else
+            {
+                if ( pDefaultBulletNumRule )
+                {
+                    const SvxNumberFormat* pFmt = pOwner ->GetNumberFormat( nPara );
+                    if ( !pFmt
+                         || ( pFmt->GetNumberingType() != SVX_NUM_BITMAP
+                              && pFmt->GetNumberingType() != SVX_NUM_CHAR_SPECIAL ) )
+                    {
+                        SfxItemSet aAttrs( pOwner->GetParaAttribs( nPara ) );
+                        SvxNumRule aNewNumRule( *pDefaultBulletNumRule );
+                        aAttrs.Put( SvxNumBulletItem( aNewNumRule ), EE_PARA_NUMBULLET );
+                        pOwner->SetParaAttribs( nPara, aAttrs );
+                    }
+                }
+            }
         }
     }
 
-    sal_Int32 nParaCount = pOwner->pParaList->GetParagraphCount();
+    const sal_Int32 nParaCount = pOwner->pParaList->GetParagraphCount();
     pOwner->ImplCheckParagraphs( aSel.nStartPara, nParaCount );
 
     sal_Int32 nEndPara = (nParaCount > 0) ? nParaCount-1 : nParaCount;
@@ -924,203 +953,45 @@ void OutlinerView::ToggleBullets()
     pOwner->UndoActionEnd( OLUNDO_DEPTH );
 }
 
-sal_Bool    OutlinerView::ToggleBullets(sal_Bool bBulletOnOff, sal_Bool bNormalBullet, sal_Bool bMasterView, SvxNumRule* pNumRule, sal_Bool bForceBulletOnOff)
-{
-    pOwner->UndoActionStart( OLUNDO_DEPTH );
 
+void OutlinerView::ToggleBulletsNumbering(
+    const bool bToggle,
+    const bool bHandleBullets,
+    const SvxNumRule* pNumRule )
+{
     ESelection aSel( pEditView->GetSelection() );
     aSel.Adjust();
 
-    const bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
-    pOwner->pEditEngine->SetUpdateMode( sal_False );
-
-    sal_Int16 nDepth = -2;
-    sal_Bool bRet = sal_False;
-
-    //Modified by xuezhiy for bullet enhancement
-    bool bBulletOn = sal_True;
-
-    if( bBulletOnOff )
+    bool bToggleOn = true;
+    if ( bToggle )
     {
-        bool bHasBullet = sal_False;
-        for ( sal_uInt16 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
+        bToggleOn = false;
+        const sal_Int16 nBulletNumberingStatus( pOwner->GetBulletsNumberingStatus( aSel.nStartPara, aSel.nEndPara ) );
+        if ( nBulletNumberingStatus != 0 && bHandleBullets )
         {
-            bHasBullet = pOwner->ImplHasBullet(nPara);
-            if(bHasBullet)
-                break;
+            // not all paragraphs have bullets and method called to toggle bullets --> bullets on
+            bToggleOn = true;
         }
-
-        if( bHasBullet )
+        else if ( nBulletNumberingStatus != 1 && !bHandleBullets )
         {
-            bBulletOn = sal_False;
-
-            for ( sal_uInt16 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
-            {
-                Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-                DBG_ASSERT(pPara, "OutlinerView::ToggleBullets(), illegal selection?");
-
-                if( pPara )
-                {
-                    const SvxNumberFormat* pFmt = pOwner ->GetNumberFormat(nPara);
-
-                    if( !pFmt )
-                    {
-                        // Has no Bullet paragraph
-                        bBulletOn = sal_True;
-                        break;
-                    }
-                    else if( ( pFmt->GetNumberingType() == SVX_NUM_BITMAP ) || ( pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL ) )
-                    {
-                        // Normal ==>> Numbering
-                        if( !bNormalBullet )
-                        {
-                            bBulletOn = sal_True;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        // Numbering ==>> Normal
-                        if( bNormalBullet )
-                        {
-                            bBulletOn = sal_True;
-                            break;
-                        }
-                    }
-                }
-            }
+            // not all paragraphs have numbering and method called to toggle numberings --> numberings on
+            bToggleOn = true;
         }
-
     }
-    if (bForceBulletOnOff) {
-        bBulletOn = bBulletOnOff;
-    }
-    for ( sal_uInt16 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
+    if ( bToggleOn )
     {
-        Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-        DBG_ASSERT(pPara, "OutlinerView::ToggleBullets(), illegal selection?");
-
-        if( pPara )
-        {
-            bRet = sal_True;
-
-            nDepth = pOwner->GetDepth(nPara);
-
-            if( bBulletOn && nDepth == -1 )
-            {
-                // Off ==>> On
-                nDepth = 0;
-            }
-            else if( !bBulletOn && nDepth == 0 )
-            {
-                // On ==>> Off
-                nDepth = -1;
-            }
-            pOwner->SetDepth( pPara, nDepth );
-
-            const SfxItemSet& rAttrs = pOwner->GetParaAttribs( nPara );
-//          bool bBulletState = ((const SfxBoolItem&) rAttrs.Get( EE_PARA_BULLETSTATE ) ).GetValue();
-
-            SfxItemSet aAttrs(rAttrs);
-            aAttrs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, bBulletOn ) );
-
-            // Change bullet types
-            if( bBulletOn && pNumRule)
-            {
-                bool bSetBulletType = false;
-                if( !bBulletOnOff )
-                {
-                    // Not bullet on/off button
-                    bSetBulletType = true;
-                }
-                else
-                {
-                    const SvxNumberFormat* pFmt = pOwner ->GetNumberFormat(nPara);
-
-                    if( !pFmt )
-                    {
-                        // Has no bullet
-                        bSetBulletType = true;
-                    }
-                    else
-                    {
-                        sal_Int16 nNumType = pFmt->GetNumberingType();
-                        if( bNormalBullet && nNumType != SVX_NUM_BITMAP && nNumType != SVX_NUM_CHAR_SPECIAL )
-                        {
-                            // Set to Normal bullet, old bullet type is Numbering bullet
-                            bSetBulletType = true;
-                        }
-                        else if( !bNormalBullet && (nNumType == SVX_NUM_BITMAP || nNumType == SVX_NUM_CHAR_SPECIAL) )
-                        {
-                            // Set to Numbering bullet, old bullet type is Normal bullet
-                            bSetBulletType = true;
-                        }
-                    }
-                }
-
-                // Get old bullet space
-                SvxNumRule aNewRule( *pNumRule );
-
-                const SfxPoolItem* pPoolItem=NULL;
-                SfxItemState eState = rAttrs.GetItemState(EE_PARA_NUMBULLET, sal_False, &pPoolItem);
-                if (eState != SFX_ITEM_SET)
-                {
-                    // Use default value when has not contain bullet item
-                    ESelection aSelection(nPara, 0);
-                    SfxItemSet aTmpSet( pOwner->pEditEngine->GetAttribs( aSelection ) );
-                    pPoolItem = aTmpSet.GetItem( EE_PARA_NUMBULLET );
-                }
-
-                const SvxNumBulletItem* pNumBulletItem = dynamic_cast< const SvxNumBulletItem* >( pPoolItem );
-                //const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) rAttrs.Get( EE_PARA_NUMBULLET );
-                if( pNumBulletItem )
-                {
-                    sal_uInt16 nLevelCnt = pNumBulletItem->GetNumRule()->GetLevelCount();
-                    nLevelCnt = std::min( nLevelCnt, pNumRule->GetLevelCount() );
-
-                    for( sal_uInt16 nLevel = 0; nLevel < nLevelCnt; ++nLevel )
-                    {
-                        const SvxNumberFormat* pOldFmt = pNumBulletItem->GetNumRule()->Get( nLevel );
-                        const SvxNumberFormat* pNewFmt = pNumRule->Get( nLevel );
-
-                        if( pOldFmt && pNewFmt && (pOldFmt->GetFirstLineOffset() != pNewFmt->GetFirstLineOffset()
-                            || pOldFmt->GetAbsLSpace() != pNewFmt->GetAbsLSpace() ) )
-                        {
-                            SvxNumberFormat* pNewFmtClone = new SvxNumberFormat( *pNewFmt );
-                            pNewFmtClone->SetFirstLineOffset( pOldFmt->GetFirstLineOffset() );
-                            pNewFmtClone->SetAbsLSpace( pOldFmt->GetAbsLSpace() );
-
-                            aNewRule.SetLevel( nLevel, pNewFmtClone );
-                            delete pNewFmtClone;
-                        }
-                    }
-                }
-
-                // Don't set bullet attribute to paragraph in Master view
-                // Because it will be set into style sheet
-                if( bSetBulletType && !bMasterView )
-                    aAttrs.Put(SvxNumBulletItem( aNewRule ), EE_PARA_NUMBULLET);
-            }
-
-            pOwner->SetParaAttribs( nPara, aAttrs );
-
-        }
+        // apply bullets/numbering for selected paragraphs
+        ApplyBulletsNumbering( bHandleBullets, pNumRule, bToggle, true );
+    }
+    else
+    {
+        // switch off bullets/numbering for selected paragraphs
+        SwitchOffBulletsNumbering( true );
     }
 
-    // --> OD 2009-03-10 #i100014#
-    // It is not a good idea to substract 1 from a count and cast the result
-    // to sal_uInt16 without check, if the count is 0.
-    sal_uInt16 nParaCount = (sal_uInt16) (pOwner->pParaList->GetParagraphCount());
-    // <--
-    pOwner->ImplCheckParagraphs( aSel.nStartPara, nParaCount );
-    pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nParaCount, 0 ) );
-
-    pOwner->pEditEngine->SetUpdateMode( bUpdate );
-
-    pOwner->UndoActionEnd( OLUNDO_DEPTH );
-
-    return bRet;
+    return;
 }
+
 
 void OutlinerView::EnableBullets()
 {
@@ -1135,7 +1006,7 @@ void OutlinerView::EnableBullets()
     for ( sal_Int32 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-        DBG_ASSERT(pPara, "OutlinerView::ToggleBullets(), illegal selection?");
+        DBG_ASSERT(pPara, "OutlinerView::EnableBullets(), illegal selection?");
 
         if( pPara && (pOwner->GetDepth(nPara) == -1) )
         {
@@ -1154,126 +1025,191 @@ void OutlinerView::EnableBullets()
     pOwner->UndoActionEnd( OLUNDO_DEPTH );
 }
 
-sal_Bool OutlinerView::ToggleAllParagraphsBullets(sal_Bool bBulletOnOffMode, sal_Bool bNormalBullet, sal_Bool bToggleOn, sal_Bool bMasterView, SvxNumRule* pNumRule)
+
+void OutlinerView::ApplyBulletsNumbering(
+    const bool bHandleBullets,
+    const SvxNumRule* pNewNumRule,
+    const bool bCheckCurrentNumRuleBeforeApplyingNewNumRule,
+    const bool bAtSelection )
 {
     if (!pOwner || !pOwner->pEditEngine || !pOwner->pParaList)
     {
-        return sal_False;
+        return;
     }
 
-    sal_Bool bReturn = sal_False;
     pOwner->UndoActionStart(OLUNDO_DEPTH);
     const sal_Bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
     pOwner->pEditEngine->SetUpdateMode(sal_False);
 
-    sal_Int16 nDepth = -2;
-    sal_uInt16 nParaCount = (sal_uInt16)(pOwner->pParaList->GetParagraphCount());
-    for (sal_uInt16 nPara = 0; nPara < nParaCount; nPara++)
+    sal_Int32 nStartPara = 0;
+    sal_Int32 nEndPara = 0;
+    if ( bAtSelection )
+    {
+        ESelection aSel( pEditView->GetSelection() );
+        aSel.Adjust();
+        nStartPara = aSel.nStartPara;
+        nEndPara = aSel.nEndPara;
+    }
+    else
+    {
+        nStartPara = 0;
+        nEndPara = pOwner->pParaList->GetParagraphCount() - 1;
+    }
+
+    for (sal_Int32 nPara = nStartPara; nPara <= nEndPara; ++nPara)
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph(nPara);
-        DBG_ASSERT(pPara, "OutlinerView::ToggleAllParagraphsBullets(), illegal selection?");
+        DBG_ASSERT(pPara, "OutlinerView::ApplyBulletsNumbering(..), illegal selection?");
 
         if (pPara)
         {
-            bReturn = sal_True;
-            nDepth = pOwner->GetDepth(nPara);
-            if (bToggleOn && nDepth == -1)
+            const sal_Int16 nDepth = pOwner->GetDepth(nPara);
+            if ( nDepth == -1 )
             {
-                // Off ==>> On
-                nDepth = 0;
+                pOwner->SetDepth( pPara, 0 );
             }
-            else if (!bToggleOn && nDepth == 0)
-            {
-                // On ==>> Off
-                nDepth = -1;
-            }
-            pOwner->SetDepth(pPara, nDepth);
 
             const SfxItemSet& rAttrs = pOwner->GetParaAttribs(nPara);
             SfxItemSet aAttrs(rAttrs);
-            aAttrs.Put(SfxBoolItem(EE_PARA_BULLETSTATE, bToggleOn));
+            aAttrs.Put(SfxBoolItem(EE_PARA_BULLETSTATE, true));
 
-            // Change bullet types.
-            if (bToggleOn && pNumRule)
+            // apply new numbering rule
+            if ( pNewNumRule )
             {
-                sal_Bool bSetBulletType = sal_False;
-                if (!bBulletOnOffMode)
+                bool bApplyNumRule = false;
+                if ( !bCheckCurrentNumRuleBeforeApplyingNewNumRule )
                 {
-                    // Not bullet on/off button.
-                    bSetBulletType = sal_True;
+                    bApplyNumRule = true;
                 }
                 else
                 {
                     const SvxNumberFormat* pFmt = pOwner ->GetNumberFormat(nPara);
                     if (!pFmt)
                     {
-                        // Has no bullet.
-                        bSetBulletType = sal_True;
+                        bApplyNumRule = true;
                     }
                     else
                     {
                         sal_Int16 nNumType = pFmt->GetNumberingType();
-                        if (bNormalBullet && nNumType != SVX_NUM_BITMAP && nNumType != SVX_NUM_CHAR_SPECIAL)
+                        if ( bHandleBullets
+                             && nNumType != SVX_NUM_BITMAP && nNumType != SVX_NUM_CHAR_SPECIAL)
                         {
                             // Set to Normal bullet, old bullet type is Numbering bullet.
-                            bSetBulletType = sal_True;
+                            bApplyNumRule = true;
                         }
-                        else if (!bNormalBullet && (nNumType == SVX_NUM_BITMAP || nNumType == SVX_NUM_CHAR_SPECIAL))
+                        else if ( !bHandleBullets
+                                  && (nNumType == SVX_NUM_BITMAP || nNumType == SVX_NUM_CHAR_SPECIAL))
                         {
                             // Set to Numbering bullet, old bullet type is Normal bullet.
-                            bSetBulletType = sal_True;
+                            bApplyNumRule = true;
                         }
                     }
                 }
 
-                // Get old bullet space.
-                SvxNumRule aNewRule(*pNumRule);
-                const SfxPoolItem* pPoolItem=NULL;
-                SfxItemState eState = rAttrs.GetItemState(EE_PARA_NUMBULLET, sal_False, &pPoolItem);
-                ESelection aSelection(nPara, 0);
-                SfxItemSet aTmpSet(pOwner->pEditEngine->GetAttribs(aSelection));
-                if (eState != SFX_ITEM_SET)
+                if ( bApplyNumRule )
                 {
-                    // Use default value when has not contain bullet item.
-                    pPoolItem = aTmpSet.GetItem(EE_PARA_NUMBULLET);
-                }
+                    SvxNumRule aNewRule(*pNewNumRule);
 
-                const SvxNumBulletItem* pNumBulletItem = dynamic_cast< const SvxNumBulletItem* >(pPoolItem);
-                if (pNumBulletItem)
-                {
-                    sal_uInt16 nLevelCnt = pNumBulletItem->GetNumRule()->GetLevelCount();
-                    nLevelCnt = std::min(nLevelCnt, pNumRule->GetLevelCount());
-
-                    for (sal_uInt16 nLevel = 0; nLevel < nLevelCnt; nLevel++)
+                    // Get old bullet space.
                     {
-                        const SvxNumberFormat* pOldFmt = pNumBulletItem->GetNumRule()->Get(nLevel);
-                        const SvxNumberFormat* pNewFmt = pNumRule->Get(nLevel);
-                        if (pOldFmt && pNewFmt && (pOldFmt->GetFirstLineOffset() != pNewFmt->GetFirstLineOffset() || pOldFmt->GetAbsLSpace() != pNewFmt->GetAbsLSpace()))
+                        const SfxPoolItem* pPoolItem=NULL;
+                        SfxItemState eState = rAttrs.GetItemState(EE_PARA_NUMBULLET, sal_False, &pPoolItem);
+                        if (eState != SFX_ITEM_SET)
                         {
-                            SvxNumberFormat* pNewFmtClone = new SvxNumberFormat(*pNewFmt);
-                            pNewFmtClone->SetFirstLineOffset(pOldFmt->GetFirstLineOffset());
-                            pNewFmtClone->SetAbsLSpace(pOldFmt->GetAbsLSpace());
-                            aNewRule.SetLevel(nLevel, pNewFmtClone);
-                            delete pNewFmtClone;
+                            // Use default value when has not contain bullet item.
+                            ESelection aSelection(nPara, 0);
+                            SfxItemSet aTmpSet(pOwner->pEditEngine->GetAttribs(aSelection));
+                            pPoolItem = aTmpSet.GetItem(EE_PARA_NUMBULLET);
+                        }
+
+                        const SvxNumBulletItem* pNumBulletItem = dynamic_cast< const SvxNumBulletItem* >(pPoolItem);
+                        if (pNumBulletItem)
+                        {
+                            const sal_uInt16 nLevelCnt = std::min(pNumBulletItem->GetNumRule()->GetLevelCount(), aNewRule.GetLevelCount());
+                            for ( sal_uInt16 nLevel = 0; nLevel < nLevelCnt; ++nLevel )
+                            {
+                                const SvxNumberFormat* pOldFmt = pNumBulletItem->GetNumRule()->Get(nLevel);
+                                const SvxNumberFormat* pNewFmt = aNewRule.Get(nLevel);
+                                if (pOldFmt && pNewFmt && (pOldFmt->GetFirstLineOffset() != pNewFmt->GetFirstLineOffset() || pOldFmt->GetAbsLSpace() != pNewFmt->GetAbsLSpace()))
+                                {
+                                    SvxNumberFormat* pNewFmtClone = new SvxNumberFormat(*pNewFmt);
+                                    pNewFmtClone->SetFirstLineOffset(pOldFmt->GetFirstLineOffset());
+                                    pNewFmtClone->SetAbsLSpace(pOldFmt->GetAbsLSpace());
+                                    aNewRule.SetLevel(nLevel, pNewFmtClone);
+                                    delete pNewFmtClone;
+                                }
+                            }
                         }
                     }
-                }
 
-                // Don't set bullet attribute to paragraph in Master view, because it will be set into style sheet.
-                if (bSetBulletType && !bMasterView)
                     aAttrs.Put(SvxNumBulletItem(aNewRule), EE_PARA_NUMBULLET);
+                }
             }
             pOwner->SetParaAttribs(nPara, aAttrs);
         }
     }
 
-    pOwner->ImplCheckParagraphs(0, nParaCount);
-    pOwner->pEditEngine->QuickMarkInvalid(ESelection(0, 0, nParaCount, 0));
-    pOwner->pEditEngine->SetUpdateMode(bUpdate);
-    pOwner->UndoActionEnd(OLUNDO_DEPTH);
+    const sal_uInt16 nParaCount = (sal_uInt16) (pOwner->pParaList->GetParagraphCount());
+    pOwner->ImplCheckParagraphs( nStartPara, nParaCount );
+    pOwner->pEditEngine->QuickMarkInvalid( ESelection( nStartPara, 0, nParaCount, 0 ) );
 
-    return bReturn;
+    pOwner->pEditEngine->SetUpdateMode( bUpdate );
+
+    pOwner->UndoActionEnd( OLUNDO_DEPTH );
+
+    return;
 }
+
+
+void OutlinerView::SwitchOffBulletsNumbering(
+    const bool bAtSelection )
+{
+    sal_Int32 nStartPara = 0;
+    sal_Int32 nEndPara = 0;
+    if ( bAtSelection )
+    {
+        ESelection aSel( pEditView->GetSelection() );
+        aSel.Adjust();
+        nStartPara = aSel.nStartPara;
+        nEndPara = aSel.nEndPara;
+    }
+    else
+    {
+        nStartPara = 0;
+        nEndPara = pOwner->pParaList->GetParagraphCount() - 1;
+    }
+
+    pOwner->UndoActionStart( OLUNDO_DEPTH );
+    const bool bUpdate = pOwner->pEditEngine->GetUpdateMode();
+    pOwner->pEditEngine->SetUpdateMode( sal_False );
+
+    for ( sal_Int32 nPara = nStartPara; nPara <= nEndPara; ++nPara )
+    {
+        Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
+        DBG_ASSERT(pPara, "OutlinerView::SwitchOffBulletsNumbering(...), illegal paragraph index?");
+
+        if( pPara )
+        {
+            pOwner->SetDepth( pPara, -1 );
+
+            const SfxItemSet& rAttrs = pOwner->GetParaAttribs( nPara );
+            if (rAttrs.GetItemState( EE_PARA_BULLETSTATE ) == SFX_ITEM_SET)
+            {
+                SfxItemSet aAttrs(rAttrs);
+                aAttrs.ClearItem( EE_PARA_BULLETSTATE );
+                pOwner->SetParaAttribs( nPara, aAttrs );
+            }
+        }
+    }
+
+    const sal_uInt16 nParaCount = (sal_uInt16) (pOwner->pParaList->GetParagraphCount());
+    pOwner->ImplCheckParagraphs( nStartPara, nParaCount );
+    pOwner->pEditEngine->QuickMarkInvalid( ESelection( nStartPara, 0, nParaCount, 0 ) );
+
+    pOwner->pEditEngine->SetUpdateMode( bUpdate );
+    pOwner->UndoActionEnd( OLUNDO_DEPTH );
+}
+
 
 void OutlinerView::RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs )
 {

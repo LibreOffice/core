@@ -194,8 +194,31 @@ public:
     virtual void CheckPossibilities();
     virtual sal_Bool MarkPoints(const ::Rectangle* pRect, sal_Bool bUnmark);
     using SdrMarkView::MarkPoints;
-    sal_Bool ShouldToggleOn(sal_Bool bBulletOnOffMode, sal_Bool bNormalBullet);
-    void ToggleMarkedObjectsBullets(sal_Bool bBulletOnOffMode, sal_Bool bNormalBullet, sal_Bool bMasterView, SvxNumRule* pNumRule = NULL, sal_Bool bForceBulletOnOff = false);
+
+    bool ShouldToggleOn(
+        const bool bBulletOnOffMode,
+        const bool bNormalBullet);
+
+    /** change the bullets/numbering of the marked objects
+
+        @param bToggle
+        true: just toggle the current bullets/numbering on --> off resp. off --> on
+
+        @param bHandleBullets
+        true: handle bullets
+        false: handle numbering
+
+        @param pNumRule
+        numbering rule which needs to be applied. can be 0.
+
+        @param bSwitchOff
+        true: switch off bullets/numbering
+    */
+    void ChangeMarkedObjectsBulletsNumbering(
+        const bool bToggle,
+        const bool bHandleBullets,
+        const SvxNumRule* pNumRule,
+        const bool bSwitchOff);
 
     void SetPossibilitiesDirty() { bPossibilitiesDirty = true; }
     void SetMoveAllowed( bool bSet ) { bMoveAllowed = bSet; }
