@@ -162,6 +162,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_AVMediaWin,
 	gid_File_Lib_AVMediaGStreamer,
 	gid_File_Lib_AVMediaGStreamer_0_10,
+	gid_File_Lib_AVMediaVLC,
 	gid_File_Lib_Sysdtrans,
 	gid_File_Lib_Acc,
 	gid_File_Lib_BaseBmp,

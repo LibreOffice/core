@@ -925,6 +925,9 @@ SPECIAL_LIB_FILE( gid_File_Lib_AVMediaGStreamer, avmediagst )
 #if defined ENABLE_GSTREAMER_0_10
 SPECIAL_LIB_FILE( gid_File_Lib_AVMediaGStreamer_0_10, avmediagst_0_10 )
 #endif
+#if defined ENABLE_VLC
+SPECIAL_LIB_FILE( gid_File_Lib_AVMediaVLC, avmediavlc )
+#endif
 #if defined WNT
 #ifdef ENABLE_DIRECTX
 SPECIAL_LIB_FILE( gid_File_Lib_AVMediaWin, avmediawin )

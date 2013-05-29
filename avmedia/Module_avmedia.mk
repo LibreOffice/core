@@ -26,6 +26,12 @@ $(eval $(call gb_Module_add_targets,avmedia,\
 ))
 endif
 
+ifeq ($(ENABLE_VLC),TRUE)
+$(eval $(call gb_Module_add_targets,avmedia,\
+	Library_avmediavlc \
+))
+endif
+
 ifeq ($(OS),MACOSX)
 ifneq ($(CPUNAME),X86_64)
 $(eval $(call gb_Module_add_targets,avmedia,\

@@ -25,6 +25,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_EVOAB2 \
 	ENABLE_GSTREAMER \
 	ENABLE_GSTREAMER_0_10 \
+	ENABLE_VLC \
 	ENABLE_GTK \
 	ENABLE_GTK3 \
 	ENABLE_KAB \

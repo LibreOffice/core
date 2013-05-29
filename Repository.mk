@@ -522,6 +522,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,OOO, \
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     avmediagst \
     avmediagst_0_10 \
+    avmediavlc \
     avmediawin \
     bluez_bluetooth \
     cached1 \
