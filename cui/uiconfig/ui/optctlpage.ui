@@ -51,6 +51,7 @@
                       <object class="GtkGrid" id="grid4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="row_spacing">6</property>
                         <child>
                           <object class="GtkCheckButton" id="restricted">
                             <property name="label" translatable="yes">Restricted</property>
@@ -280,11 +281,5 @@
         <property name="position">2</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">2</property>
-    <property name="upper">256</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
 </interface>
