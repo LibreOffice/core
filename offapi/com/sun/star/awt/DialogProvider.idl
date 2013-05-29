@@ -21,6 +21,7 @@
 #define __com_sun_star_awt_DialogProvider_idl__
 
 #include <com/sun/star/awt/XDialogProvider.idl>
+#include <com/sun/star/container/XNameContainer.idl>
 #include <com/sun/star/frame/XModel.idl>
 #include <com/sun/star/io/XInputStream.idl>
 #include <com/sun/star/script/XScriptListener.idl>
@@ -38,9 +39,9 @@ service DialogProvider : com::sun::star::awt::XDialogProvider
 
     createWithModel([in] com::sun::star::frame::XModel Model);
 
-    createWithModelAndListener([in] com::sun::star::frame::XModel Model,
+    createWithModelAndScripting([in] com::sun::star::frame::XModel Model,
                      [in] com::sun::star::io::XInputStream InStream,
-                     [in] any DialogLib,
+                     [in] com::sun::star::container::XNameContainer DialogLib,
                      [in] com::sun::star::script::XScriptListener ScriptListener);
 };
 
