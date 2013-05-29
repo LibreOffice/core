@@ -624,7 +624,7 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 endef
 
 define gb_ExternalProject__use_boostsystem
-$(call gb_LinkTarget_use_static_libraries,$(1),boostsystem)
+$(call gb_ExternalProject_use_static_libraries,$(1),boostsystem)
 endef
 
 define gb_LinkTarget__use_boost_headers
