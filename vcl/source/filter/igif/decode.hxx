@@ -38,13 +38,13 @@ class GIFLZWDecompressor
     sal_uInt16              nOldCode;
     sal_uInt16              nOutBufDataLen;
     sal_uInt16              nInputBitsBufSize;
-    sal_Bool                bEOIFound;
+    bool                bEOIFound;
     sal_uInt8               nDataSize;
     sal_uInt8               nBlockBufSize;
     sal_uInt8               nBlockBufPos;
 
     void                AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData);
-    sal_Bool                ProcessOneCode();
+    bool                ProcessOneCode();
 
 
 public:
@@ -52,7 +52,7 @@ public:
                         GIFLZWDecompressor( sal_uInt8 cDataSize );
                         ~GIFLZWDecompressor();
 
-    HPBYTE              DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize, sal_uLong& rCount, sal_Bool& rEOI );
+    HPBYTE              DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize, sal_uLong& rCount, bool& rEOI );
 };
 
 #endif

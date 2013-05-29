@@ -78,12 +78,12 @@ class GIFReader : public GraphicReader
     sal_uInt16              nLastInterCount;
     sal_uInt16              nLoops;
     GIFAction           eActAction;
-    sal_Bool                bStatus;
-    sal_Bool                bGCTransparent;         // Ob das Bild Transparent ist, wenn ja:
-    sal_Bool                bInterlaced;
-    sal_Bool                bOverreadBlock;
-    sal_Bool                bImGraphicReady;
-    sal_Bool                bGlobalPalette;
+    bool                bStatus;
+    bool                bGCTransparent;         // Ob das Bild Transparent ist, wenn ja:
+    bool                bInterlaced;
+    bool                bOverreadBlock;
+    bool                bImGraphicReady;
+    bool                bGlobalPalette;
     sal_uInt8               nBackgroundColor;       // Hintergrundfarbe
     sal_uInt8               nGCTransparentIndex;    // Pixel von diesem Index sind durchsichtig
     sal_uInt8               nGCDisposalMethod;      // 'Disposal Method' (siehe GIF-Doku)
@@ -92,14 +92,14 @@ class GIFReader : public GraphicReader
 
     void                ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount );
     void                ClearImageExtensions();
-    sal_Bool                CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal, sal_Bool bWatchForBackgroundColor );
-    sal_Bool                ReadGlobalHeader();
-    sal_Bool                ReadExtension();
-    sal_Bool                ReadLocalHeader();
+    bool                CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal, bool bWatchForBackgroundColor );
+    bool                ReadGlobalHeader();
+    bool                ReadExtension();
+    bool                ReadLocalHeader();
     sal_uLong               ReadNextBlock();
     void                FillImages( HPBYTE pBytes, sal_uLong nCount );
     void                CreateNewBitmaps();
-    sal_Bool                ProcessGIF();
+    bool                ProcessGIF();
 
 public:
 
@@ -112,7 +112,7 @@ public:
 
 #endif // _GIFPRIVATE
 
-sal_Bool ImportGIF( SvStream& rStream, Graphic& rGraphic );
+bool ImportGIF( SvStream& rStream, Graphic& rGraphic );
 
 #endif // _GIFREAD_HXX
 

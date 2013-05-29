@@ -35,7 +35,7 @@ GIFLZWDecompressor::GIFLZWDecompressor( sal_uInt8 cDataSize ) :
             nInputBitsBuf       ( 0 ),
             nOutBufDataLen      ( 0 ),
             nInputBitsBufSize   ( 0 ),
-            bEOIFound           ( sal_False ),
+            bEOIFound           ( false ),
             nDataSize           ( cDataSize )
 {
     pOutBuf = new sal_uInt8[ 4096 ];
@@ -68,7 +68,7 @@ GIFLZWDecompressor::~GIFLZWDecompressor()
 // ------------------------------------------------------------------------
 
 HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize,
-                                            sal_uLong& rCount, sal_Bool& rEOI )
+                                            sal_uLong& rCount, bool& rEOI )
 {
     sal_uLong   nTargetSize = 4096;
     sal_uLong   nCount = 0;
@@ -132,18 +132,18 @@ void GIFLZWDecompressor::AddToTable( sal_uInt16 nPrevCode, sal_uInt16 nCodeFirst
 
 // ------------------------------------------------------------------------
 
-sal_Bool GIFLZWDecompressor::ProcessOneCode()
+bool GIFLZWDecompressor::ProcessOneCode()
 {
     GIFLZWTableEntry*   pE;
     sal_uInt16              nCode;
-    sal_Bool                bRet = sal_False;
-    sal_Bool                bEndOfBlock = sal_False;
+    bool                bRet = false;
+    bool                bEndOfBlock = false;
 
     while( nInputBitsBufSize < nCodeSize )
     {
         if( nBlockBufPos >= nBlockBufSize )
         {
-            bEndOfBlock = sal_True;
+            bEndOfBlock = true;
             break;
         }
 
@@ -181,9 +181,9 @@ sal_Bool GIFLZWDecompressor::ProcessOneCode()
                 nOutBufDataLen = 0;
             }
             else
-                bEOIFound = sal_True;
+                bEOIFound = true;
 
-            return sal_True;
+            return true;
         }
 
         nOldCode = nCode;
@@ -198,7 +198,7 @@ sal_Bool GIFLZWDecompressor::ProcessOneCode()
         }
         while( pE );
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;

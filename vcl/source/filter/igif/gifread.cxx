@@ -42,8 +42,8 @@ GIFReader::GIFReader( SvStream& rStm ) :
             nImageHeight    ( 0 ),
             nLoops          ( 1 ),
             eActAction      ( GLOBAL_HEADER_READING ),
-            bGCTransparent  ( sal_False ),
-            bImGraphicReady ( sal_False )
+            bGCTransparent  ( false ),
+            bImGraphicReady ( false )
 {
     maUpperName = OUString("SVIGIF");
     pSrcBuf = new sal_uInt8[ 256 ];
@@ -67,12 +67,12 @@ GIFReader::~GIFReader()
 void GIFReader::ClearImageExtensions()
 {
     nGCDisposalMethod = 0;
-    bGCTransparent = sal_False;
+    bGCTransparent = false;
     nTimer = 0;
 }
 
-sal_Bool GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
-                               sal_Bool bWatchForBackgroundColor )
+bool GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
+                               bool bWatchForBackgroundColor )
 {
     const Size aSize( nWidth, nHeight );
 
@@ -85,7 +85,7 @@ sal_Bool GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPa
     // fails on 64-bit Linux, no idea.
     if (nWidth >= 64000 && nHeight >= 64000)
     {
-        bStatus = sal_False;
+        bStatus = false;
         return bStatus;
     }
 #endif
@@ -107,7 +107,7 @@ sal_Bool GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPa
             cNonTransIndex1 = cTransIndex1 ? 0 : 1;
         }
         else
-            bStatus = sal_False;
+            bStatus = false;
     }
 
     if( bStatus )
@@ -126,12 +126,12 @@ sal_Bool GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPa
     return bStatus;
 }
 
-sal_Bool GIFReader::ReadGlobalHeader()
+bool GIFReader::ReadGlobalHeader()
 {
     char    pBuf[ 7 ];
     sal_uInt8   nRF;
     sal_uInt8   nAspect;
-    sal_Bool    bRet = sal_False;
+    bool    bRet = false;
 
     rIStm.Read( pBuf, 6 );
     if( NO_PENDING( rIStm ) )
@@ -151,7 +151,7 @@ sal_Bool GIFReader::ReadGlobalHeader()
                 aMemStm >> nBackgroundColor;
                 aMemStm >> nAspect;
 
-                bGlobalPalette = (sal_Bool) ( nRF & 0x80 );
+                bGlobalPalette = ( nRF & 0x80 );
 
                 if( bGlobalPalette )
                     ReadPaletteEntries( &aGPalette, 1 << ( ( nRF & 7 ) + 1 ) );
@@ -159,11 +159,11 @@ sal_Bool GIFReader::ReadGlobalHeader()
                     nBackgroundColor = 0;
 
                 if( NO_PENDING( rIStm ) )
-                    bRet = sal_True;
+                    bRet = true;
             }
         }
         else
-            bStatus = sal_False;
+            bStatus = false;
     }
 
     return bRet;
@@ -201,13 +201,13 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
     delete[] pBuf;
 }
 
-sal_Bool GIFReader::ReadExtension()
+bool GIFReader::ReadExtension()
 {
     sal_uInt8   cFunction;
     sal_uInt8   cSize;
     sal_uInt8   cByte;
-    sal_Bool    bRet = sal_False;
-    sal_Bool    bOverreadDataBlocks = sal_False;
+    bool    bRet = false;
+    bool    bOverreadDataBlocks = false;
 
     // Extension-Label
     rIStm >> cFunction;
@@ -231,9 +231,9 @@ sal_Bool GIFReader::ReadExtension()
                 if ( NO_PENDING( rIStm ) )
                 {
                     nGCDisposalMethod = ( cFlags >> 2) & 7;
-                    bGCTransparent = ( cFlags & 1 ) ? sal_True : sal_False;
+                    bGCTransparent = ( cFlags & 1 );
                     bStatus = ( cSize == 4 ) && ( cByte == 0 );
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
             break;
@@ -244,7 +244,7 @@ sal_Bool GIFReader::ReadExtension()
                 if ( NO_PENDING( rIStm ) )
                 {
                     // default diese Extension ueberlesen
-                    bOverreadDataBlocks = sal_True;
+                    bOverreadDataBlocks = true;
 
                     // Appl.-Extension hat Laenge 11
                     if ( cSize == 0x0b )
@@ -269,7 +269,7 @@ sal_Bool GIFReader::ReadExtension()
 
                                 bStatus = ( cByte == 0 );
                                 bRet = NO_PENDING( rIStm );
-                                bOverreadDataBlocks = sal_False;
+                                bOverreadDataBlocks = false;
 
                                 // Netscape interpretiert den LoopCount
                                 // als reine Anzahl der _Wiederholungen_;
@@ -292,7 +292,7 @@ sal_Bool GIFReader::ReadExtension()
                                 rIStm >> cByte;
                                 bStatus = ( cByte == 0 );
                                 bRet = NO_PENDING( rIStm );
-                                bOverreadDataBlocks = sal_False;
+                                bOverreadDataBlocks = false;
                             }
                             else
                                 rIStm.SeekRel( -1 );
@@ -305,25 +305,25 @@ sal_Bool GIFReader::ReadExtension()
 
             // alles andere ueberlesen
             default:
-                bOverreadDataBlocks = sal_True;
+                bOverreadDataBlocks = true;
             break;
         }
 
         // Sub-Blocks ueberlesen
         if ( bOverreadDataBlocks )
         {
-            bRet = sal_True;
+            bRet = true;
             while( cSize && bStatus && !rIStm.IsEof() )
             {
                 sal_uInt16  nCount = (sal_uInt16) cSize + 1;
                 char*   pBuffer = new char[ nCount ];
 
-                bRet = sal_False;
+                bRet = false;
                 rIStm.Read( pBuffer, nCount );
                 if( NO_PENDING( rIStm ) )
                 {
                     cSize = (sal_uInt8) pBuffer[ cSize ];
-                    bRet = sal_True;
+                    bRet = true;
                 }
                 else
                     cSize = 0;
@@ -336,10 +336,10 @@ sal_Bool GIFReader::ReadExtension()
     return bRet;
 }
 
-sal_Bool GIFReader::ReadLocalHeader()
+bool GIFReader::ReadLocalHeader()
 {
     sal_uInt8   pBuf[ 9 ];
-    sal_Bool    bRet = sal_False;
+    bool    bRet = false;
 
     rIStm.Read( pBuf, 9 );
     if( NO_PENDING( rIStm ) )
@@ -376,7 +376,7 @@ sal_Bool GIFReader::ReadLocalHeader()
         if( NO_PENDING( rIStm ) )
         {
             CreateBitmaps( nImageWidth, nImageHeight, pPal, bGlobalPalette && ( pPal == &aGPalette ) );
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -407,7 +407,7 @@ sal_uLong GIFReader::ReadNextBlock()
                     nRet = 3UL;
                 else
                 {
-                    sal_Bool    bEOI;
+                    bool    bEOI;
                     HPBYTE  pTarget = pDecomp->DecompressBlock( pSrcBuf, cBlockSize, nRead, bEOI );
 
                     nRet = ( bEOI ? 3 : 1 );
@@ -521,7 +521,7 @@ void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
         }
         else
         {
-            bOverreadBlock = sal_True;
+            bOverreadBlock = true;
             break;
         }
     }
@@ -593,10 +593,10 @@ const Graphic& GIFReader::GetIntermediateGraphic()
     return aImGraphic;
 }
 
-sal_Bool GIFReader::ProcessGIF()
+bool GIFReader::ProcessGIF()
 {
-    sal_Bool bRead = sal_False;
-    sal_Bool bEnd = sal_False;
+    bool bRead = false;
+    bool bEnd = false;
 
     if ( !bStatus )
         eActAction = ABORT_READING;
@@ -617,7 +617,7 @@ sal_Bool GIFReader::ProcessGIF()
                 eActAction = END_READING;
             else if( NO_PENDING( rIStm ) )
             {
-                bRead = sal_True;
+                bRead = true;
 
                 if( cByte == '!' )
                     eActAction = EXTENSION_READING;
@@ -634,7 +634,7 @@ sal_Bool GIFReader::ProcessGIF()
         // ScreenDescriptor lesen
         case( GLOBAL_HEADER_READING ):
         {
-            if( ( bRead = ReadGlobalHeader() ) == sal_True )
+            if( ( bRead = ReadGlobalHeader() ) )
             {
                 ClearImageExtensions();
                 eActAction = MARKER_READING;
@@ -646,7 +646,7 @@ sal_Bool GIFReader::ProcessGIF()
         // Extension lesen
         case( EXTENSION_READING ):
         {
-            if( ( bRead = ReadExtension() ) == sal_True )
+            if( ( bRead = ReadExtension() ) )
                 eActAction = MARKER_READING;
         }
         break;
@@ -655,7 +655,7 @@ sal_Bool GIFReader::ProcessGIF()
         // Image-Descriptor lesen
         case( LOCAL_HEADER_READING ):
         {
-            if( ( bRead = ReadLocalHeader() ) == sal_True )
+            if( ( bRead = ReadLocalHeader() ) )
             {
                 nYAcc = nImageX = nImageY = 0;
                 eActAction = FIRST_BLOCK_READING;
@@ -674,13 +674,13 @@ sal_Bool GIFReader::ProcessGIF()
             if( rIStm.IsEof() )
                 eActAction = ABORT_READING;
             else if( cDataSize > 12 )
-                bStatus = sal_False;
+                bStatus = false;
             else if( NO_PENDING( rIStm ) )
             {
-                bRead = sal_True;
+                bRead = true;
                 pDecomp = new GIFLZWDecompressor( cDataSize );
                 eActAction = NEXT_BLOCK_READING;
-                bOverreadBlock = sal_False;
+                bOverreadBlock = false;
             }
             else
                 eActAction = FIRST_BLOCK_READING;
@@ -697,13 +697,13 @@ sal_Bool GIFReader::ProcessGIF()
             // Return: 0:Pending / 1:OK; / 2:OK und letzter Block: / 3:EOI / 4:HardAbort
             if( nRet )
             {
-                bRead = sal_True;
+                bRead = true;
 
                 if ( nRet == 1UL )
                 {
-                    bImGraphicReady = sal_True;
+                    bImGraphicReady = true;
                     eActAction = NEXT_BLOCK_READING;
-                    bOverreadBlock = sal_False;
+                    bOverreadBlock = false;
                 }
                 else
                 {
@@ -717,7 +717,7 @@ sal_Bool GIFReader::ProcessGIF()
                     else if( nRet == 3UL )
                     {
                         eActAction = NEXT_BLOCK_READING;
-                        bOverreadBlock = sal_True;
+                        bOverreadBlock = true;
                     }
                     else
                     {
@@ -739,7 +739,7 @@ sal_Bool GIFReader::ProcessGIF()
         // ein Fehler trat auf
         case( ABORT_READING ):
         {
-            bEnd = sal_True;
+            bEnd = true;
             eActAction = END_READING;
         }
         break;
@@ -761,7 +761,7 @@ ReadState GIFReader::ReadGIF( Graphic& rGraphic )
 {
     ReadState eReadState;
 
-    bStatus = sal_True;
+    bStatus = true;
 
     while( ProcessGIF() && ( eActAction != END_READING ) ) {}
 
@@ -793,12 +793,12 @@ ReadState GIFReader::ReadGIF( Graphic& rGraphic )
     return eReadState;
 }
 
-sal_Bool ImportGIF( SvStream & rStm, Graphic& rGraphic )
+bool ImportGIF( SvStream & rStm, Graphic& rGraphic )
 {
     GIFReader*  pGIFReader = (GIFReader*) rGraphic.GetContext();
     sal_uInt16      nOldFormat = rStm.GetNumberFormatInt();
     ReadState   eReadState;
-    sal_Bool        bRet = sal_True;
+    bool        bRet = true;
 
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
@@ -810,7 +810,7 @@ sal_Bool ImportGIF( SvStream & rStm, Graphic& rGraphic )
 
     if( eReadState == GIFREAD_ERROR )
     {
-        bRet = sal_False;
+        bRet = false;
         delete pGIFReader;
     }
     else if( eReadState == GIFREAD_OK )
