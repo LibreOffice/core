@@ -205,7 +205,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 		avmedia/source/gstreamer/avmediagstreamer_0_10 \
 	) \
 	$(if $(ENABLE_VLC), \
-		avmedia/source/gstreamer/avmediavlc \
+		avmedia/source/vlc/avmediavlc \
 	) \
 	$(if $(ENABLE_KAB), \
 		connectivity/source/drivers/kab/kab1 \
