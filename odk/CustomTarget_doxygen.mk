@@ -25,13 +25,14 @@ odk_INCFILELIST := com/sun/star/uno/Any.h \
 	com/sun/star/uno/Type.hxx
 
 # Cygwin Doxygen needs unix paths
+DOXY_INCLUDEDIR := $(INSTDIR)/$(gb_Package_SDKDIRNAME)/include
 DOXY_INPUT := $(SRCDIR)/odk/pack/gendocu/main.dox $(SRCDIR)/include/sal/log-areas.dox \
-	$(addprefix $(INSTDIR)/$(gb_Package_SDKDIRNAME)/include/,$(odk_INCDIRLIST) $(odk_INCFILELIST))
+	$(addprefix $(DOXY_INCLUDEDIR)/,$(odk_INCDIRLIST) $(odk_INCFILELIST))
 DOXY_INPUT := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(DOXY_INPUT)),$(DOXY_INPUT))
 DOXY_WORKDIR := $(if $(filter WNT,$(OS)),\
 	$(shell cygpath -u $(call gb_CustomTarget_get_workdir,odk/docs/cpp)/ref),\
 	$(call gb_CustomTarget_get_workdir,odk/docs/cpp)/ref)
-DOXY_STRIP_PATH := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(OUTDIR)/inc),$(OUTDIR)/inc)
+DOXY_STRIP_PATH := $(if $(filter WNT,$(OS)),$(shell cygpath -u $(DOXY_INCLUDEDIR)),$(DOXY_INCLUDEDIR))
 
 
 $(eval $(call gb_CustomTarget_register_targets,odk/docs/cpp,\
