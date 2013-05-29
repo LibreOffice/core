@@ -187,6 +187,33 @@ bool WinSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
             Gdiplus::DllExports::GdipSetSmoothingMode(pGraphics, Gdiplus::SmoothingModeNone);
         }
 
+        if(mbPrinter)
+        {
+            // #i121591#
+            // Normally GdiPlus should not be used for printing at all since printers cannot
+            // print transparent filled polygon geometry and normally this does not happen
+            // since OutputDevice::RemoveTransparenciesFromMetaFile is used as preparation
+            // and no transparent parts should remain for printing. But this can be overriden
+            // by the user and thus happens. This call can only come (currently) from
+            // OutputDevice::DrawTransparent, see comments there with the same TaskID.
+            // If it is used, the mapping for the printer is wrong and needs to be corrected. I
+            // checked that there is *no* transformation set (testcode commented out below) and
+            // estimated that a stable factor dependent of the printer's DPI is used. Create
+            // and set a transformation here to correct this
+            const Gdiplus::REAL aDpiX(aGraphics.GetDpiX());
+            const Gdiplus::REAL aDpiY(aGraphics.GetDpiY());
+
+            // test code to check the current transformation at the graphics device
+            //Gdiplus::Matrix matrix;
+            //aGraphics.GetTransform(&matrix);
+            //Gdiplus::REAL elements[6];
+            //matrix.GetElements(elements);
+
+            Gdiplus::Matrix aPrinterTransform;
+            aPrinterTransform.Scale(Gdiplus::REAL(100.0) / aDpiX, Gdiplus::REAL(100.0) / aDpiY);
+            aGraphics.SetTransform(&aPrinterTransform);
+        }
+
         Gdiplus::DllExports::GdipFillPath(pGraphics, pTestBrush, pPath);
 
         Gdiplus::DllExports::GdipDeletePath(pPath);

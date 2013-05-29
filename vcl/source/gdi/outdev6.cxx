@@ -282,8 +282,14 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
         const double fTransparency = 0.01 * nTransparencePercent;
         if( mbFillColor )
         {
-            // draw the transparent polygon
-            // NOTE: filled polygons are assumed to be drawn as if they were always closed
+            // #i121591#
+            // CAUTION: Only non printing (pixel-renderer) VCL commands from OutputDevices
+            // should be used when printing. Normally this is avoided by the printer being
+            // non-AAed and thus e.g. on WIN GdiPlus calls are not used. It may be necessary
+            // to add (OUTDEV_PRINTER != meOutDevType) to the entering if statement, thus
+            // using the fallbacl some lines below (which is not very good, though). For
+            // now, WinSalGraphics::drawPolyPolygon will detect printer usage and correct
+            // the wrong mapping (see there for details)
             bDrawn = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, fTransparency, this );
         }
 
