@@ -1379,7 +1379,6 @@ bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
     }
     else
     {
-        OSL_FAIL( "invalid Id" );
         bFnd = false;
     }
 
