@@ -86,13 +86,6 @@ void Panel::Dispose (void)
 {
     mxPanelComponent = NULL;
 
-    if (mxElement.is())
-    {
-        Reference<lang::XComponent> xComponent (mxElement->getRealInterface(), UNO_QUERY);
-        if (xComponent.is())
-            xComponent->dispose();
-    }
-
     {
         Reference<lang::XComponent> xComponent (mxElement, UNO_QUERY);
         mxElement = NULL;
