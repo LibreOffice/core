@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//8CA\u003d",
+        "filename": "starmath/source/edit.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 717,
+      "author": {
+        "id": 1000227
+      },
+      "writtenOn": "2013-05-29T13:18:51Z",
+      "side": 1,
+      "message": "By using array access, you should check if it\u0027s a valid index, as you did before.\n\nhttp://opengrok.libreoffice.org/xref/core/include/rtl/ustring.hxx#432",
+      "revId": "b45112f2f8dd05b920ac75aa8a21688977c691b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
