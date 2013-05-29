@@ -106,6 +106,7 @@ SidebarController::SidebarController (
       mxFrame(rxFrame),
       maCurrentContext(OUString(), OUString()),
       maRequestedContext(),
+      mnRequestedForceFlags(SwitchFlag_NoForce),
       msCurrentDeckId(gsDefaultDeckId),
       msCurrentDeckTitle(),
       maPropertyChangeForwarder(::boost::bind(&SidebarController::BroadcastPropertyChange, this)),
@@ -260,7 +261,7 @@ void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEv
         // Force the current deck to update its panel list.
         if ( ! mbIsDocumentReadOnly)
             msCurrentDeckId = gsDefaultDeckId;
-        maCurrentContext = Context();
+        mnRequestedForceFlags |= SwitchFlag_ForceSwitch;
         maContextChangeUpdate.RequestCall();
     }
 }
@@ -381,7 +382,8 @@ void SidebarController::ProcessNewWidth (const sal_Int32 nNewWidth)
 
 void SidebarController::UpdateConfigurations (void)
 {
-    if (maCurrentContext != maRequestedContext)
+    if (maCurrentContext != maRequestedContext
+        || mnRequestedForceFlags!=SwitchFlag_NoForce)
     {
         maCurrentContext = maRequestedContext;
 
@@ -461,7 +463,9 @@ void SidebarController::OpenThenSwitchToDeck (
 void SidebarController::SwitchToDeck (
     const ::rtl::OUString& rsDeckId)
 {
-    if ( ! msCurrentDeckId.equals(rsDeckId) || ! mbIsDeckOpen)
+    if ( ! msCurrentDeckId.equals(rsDeckId)
+        || ! mbIsDeckOpen
+        || mnRequestedForceFlags!=SwitchFlag_NoForce)
     {
         const DeckDescriptor* pDeckDescriptor = ResourceManager::Instance().GetDeckDescriptor(rsDeckId);
         if (pDeckDescriptor != NULL)
@@ -478,7 +482,12 @@ void SidebarController::SwitchToDeck (
 {
     maFocusManager.Clear();
 
-    if ( ! msCurrentDeckId.equals(rDeckDescriptor.msId))
+    const bool bForceNewDeck ((mnRequestedForceFlags&SwitchFlag_ForceNewDeck)!=0);
+    const bool bForceNewPanels ((mnRequestedForceFlags&SwitchFlag_ForceNewPanels)!=0);
+    mnRequestedForceFlags = SwitchFlag_NoForce;
+
+    if ( ! msCurrentDeckId.equals(rDeckDescriptor.msId)
+        || bForceNewDeck)
     {
         // When the deck changes then destroy the deck and all panels
         // and create everything new.
@@ -552,10 +561,20 @@ void SidebarController::SwitchToDeck (
 
         // Find the corresponding panel among the currently active
         // panels.
-        SharedPanelContainer::const_iterator iPanel (::std::find_if(
+        SharedPanelContainer::const_iterator iPanel;
+        if (bForceNewPanels)
+        {
+            // All panels have to be created in any case.  There is no
+            // point in searching already existing panels.
+            iPanel = rCurrentPanels.end();
+        }
+        else
+        {
+            iPanel = ::std::find_if(
                 rCurrentPanels.begin(),
                 rCurrentPanels.end(),
-                ::boost::bind(&Panel::HasIdPredicate, _1, ::boost::cref(rPanelContexDescriptor.msId))));
+                ::boost::bind(&Panel::HasIdPredicate, _1, ::boost::cref(rPanelContexDescriptor.msId)));
+        }
         if (iPanel != rCurrentPanels.end())
         {
             // Panel already exists in current deck.  Reuse it.
@@ -564,7 +583,8 @@ void SidebarController::SwitchToDeck (
         }
         else
         {
-            // Panel does not yet exist.  Create it.
+            // Panel does not yet exist or creation of new panels is forced.
+            // Create it.
             aNewPanels[nWriteIndex] = CreatePanel(
                 rPanelContexDescriptor.msId,
                 mpCurrentDeck->GetPanelParentWindow(),
@@ -610,30 +630,6 @@ void SidebarController::SwitchToDeck (
     maFocusManager.SetPanels(aNewPanels);
     mpTabBar->UpdateFocusManager(maFocusManager);
     UpdateTitleBarIcons();
-}
-
-
-
-
-bool SidebarController::ArePanelSetsEqual (
-    const SharedPanelContainer& rCurrentPanels,
-    const ResourceManager::PanelContextDescriptorContainer& rRequestedPanels)
-{
-    if (rCurrentPanels.size() != rRequestedPanels.size())
-        return false;
-    for (sal_Int32 nIndex=0,nCount=rCurrentPanels.size(); nIndex<nCount; ++nIndex)
-    {
-        if (rCurrentPanels[nIndex] == 0)
-            return false;
-        if ( ! rCurrentPanels[nIndex]->GetId().equals(rRequestedPanels[nIndex].msId))
-            return false;
-
-        // Check if the panels still can be displayed.  This may not be the case when
-        // the document just become rea-only.
-        if (mbIsDocumentReadOnly && ! rRequestedPanels[nIndex].mbShowForReadOnlyDocuments)
-            return false;
-    }
-    return true;
 }
 
 
@@ -753,6 +749,8 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent*, pEvent)
                 Theme::HandleDataChange();
                 UpdateTitleBarIcons();
                 mpParentWindow->Invalidate();
+                mnRequestedForceFlags |= SwitchFlag_ForceNewDeck | SwitchFlag_ForceNewPanels;
+                maContextChangeUpdate.RequestCall();
                 break;
 
             case SFX_HINT_DYING:
