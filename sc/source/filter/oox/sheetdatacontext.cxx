@@ -110,7 +110,9 @@ SheetDataContext::SheetDataContext( WorksheetFragmentBase& rFragment ) :
     WorksheetContextBase( rFragment ),
     SheetDataContextBase( rFragment ),
     mbHasFormula( false ),
-    mbValidRange( false )
+    mbValidRange( false ),
+    mnRow( -1 ),
+    mnCol( -1 )
 {
 }
 
@@ -293,7 +295,13 @@ ContextHandlerRef SheetDataContext::onCreateRecordContext( sal_Int32 nRecId, Seq
 void SheetDataContext::importRow( const AttributeList& rAttribs )
 {
     RowModel aModel;
-    aModel.mnRow          = rAttribs.getInteger( XML_r, -1 );
+    sal_Int32 nRow = rAttribs.getInteger( XML_r, -1 );
+    if(nRow != -1)
+        aModel.mnRow          = nRow;
+    else
+        aModel.mnRow = ++mnRow;
+    mnCol = -1;
+
     aModel.mfHeight       = rAttribs.getDouble( XML_ht, -1.0 );
     aModel.mnXfId         = rAttribs.getInteger( XML_s, -1 );
     aModel.mnLevel        = rAttribs.getInteger( XML_outlineLevel, 0 );
@@ -327,8 +335,21 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
 
 bool SheetDataContext::importCell( const AttributeList& rAttribs )
 {
-    bool bValidAddr = mrAddressConv.convertToCellAddress( maCellData.maCellAddr, rAttribs.getString( XML_r, OUString() ), mnSheet, true );
-    if( bValidAddr )
+    OUString aCellAddrStr =  rAttribs.getString( XML_r, OUString() );
+    bool bValid = true;
+    if(aCellAddrStr.isEmpty())
+    {
+        ++mnCol;
+        maCellData.maCellAddr = CellAddress( mnSheet, mnCol, mnRow );
+    }
+    else
+    {
+        bValid = mrAddressConv.convertToCellAddress( maCellData.maCellAddr, aCellAddrStr, mnSheet, true );
+
+        mnCol = maCellData.maCellAddr.Column;
+    }
+
+    if( bValid )
     {
         maCellData.mnCellType     = rAttribs.getToken( XML_t, XML_n );
         maCellData.mnXfId         = rAttribs.getInteger( XML_s, -1 );
@@ -342,7 +363,7 @@ bool SheetDataContext::importCell( const AttributeList& rAttribs )
         // update used area of the sheet
         extendUsedArea( maCellData.maCellAddr );
     }
-    return bValidAddr;
+    return bValid;
 }
 
 void SheetDataContext::importFormula( const AttributeList& rAttribs )
