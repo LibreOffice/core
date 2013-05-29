@@ -1809,8 +1809,8 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
                 const sal_uInt32 nShadowType = 131074;    // shadow type of ms word. need to set the default value.
 
                 sal_uInt32  nColor = (sal_uInt32)(pSI->GetColor().GetColor()) ;
-                sal_uInt32  nOffX = pSI->GetWidth() * nCstScale;
-                sal_uInt32  nOffY = pSI->GetWidth() * nCstScale;
+                sal_Int32 nOffX = pSI->GetWidth() * nCstScale;
+                sal_Int32 nOffY = pSI->GetWidth() * nCstScale;
                 sal_uInt32  nShadow = nShadowType;
 
                 SvxShadowLocation eLocation = pSI->GetLocation();
