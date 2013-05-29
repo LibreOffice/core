@@ -148,20 +148,13 @@
  * --------------------------------------------------*/
 
 #include "dbg_lay.hxx"
-#include <tools/stream.hxx>
 
 #include <stdio.h>
 
-#include "frame.hxx"
-#include "layfrm.hxx"
 #include "flyfrm.hxx"
 #include "txtfrm.hxx"
-#include "ndtxt.hxx"
-#include "dflyobj.hxx"
 #include <fntcache.hxx>
-#include <sortedobjs.hxx> // #i28701#
 
-#include <rtl/strbuf.hxx>
 #include <comphelper/string.hxx>
 
 sal_uLong SwProtocol::nRecord = 0;
