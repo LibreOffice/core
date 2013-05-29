@@ -52,7 +52,7 @@
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/editstat.hxx>
-
+#include <svl/itempool.hxx>
 
 // Breite der Randzonen innerhalb derer beim D&D gescrollt wird
 #define OL_SCROLL_LRBORDERWIDTHPIX  10
