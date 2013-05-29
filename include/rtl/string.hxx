@@ -53,6 +53,7 @@
 namespace rtl
 {
 
+/// @cond INTERNAL
 #ifdef RTL_STRING_UNITTEST
 #undef rtl
 // helper macro to make functions appear more readable
@@ -60,6 +61,7 @@ namespace rtl
 #else
 #define RTL_STRING_CONST_FUNCTION
 #endif
+/// @endcond
 
 /* ======================================================================= */
 
@@ -1638,8 +1640,10 @@ inline std::basic_ostream<charT, traits> & operator <<(
     return stream << OString( concat );
 }
 #else
-// non-RTL_FAST_CODE needs this to compile
+// non-RTL_FAST_STRING needs this to compile
+/// @cond INTERNAL
 typedef OString OStringLiteral;
+/// @endcond
 #endif
 
 
@@ -1663,14 +1667,14 @@ struct OStringHash
         { return (size_t)rString.hashCode(); }
 };
 
-/** Equality functor for classic c-strings (i.e. null-terminated char* strings) */
+/** Equality functor for classic c-strings (i.e., null-terminated char* strings). */
 struct CStringEqual
 {
     bool operator()( const char* p1, const char* p2) const
         { return rtl_str_compare(p1, p2) == 0; }
 };
 
-/** Hashing functor for classic c-strings (i.e. null-terminated char* strings) */
+/** Hashing functor for classic c-strings (i.e., null-terminated char* strings). */
 struct CStringHash
 {
     size_t operator()(const char* p) const

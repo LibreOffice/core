@@ -48,9 +48,10 @@ namespace osl
 
         /** The SocketAddr takes over the responsibility of the handle ( which means,
             that the handle gets destructed by the destructor of this reference)
+            @param Addr a handle
             @param nocopy use SAL_NO_COPY
          */
-        inline SocketAddr(const oslSocketAddr , __osl_socket_NoCopy nocopy );
+        inline SocketAddr(const oslSocketAddr Addr, __osl_socket_NoCopy nocopy );
 
         /** Copyconstructs the oslSocketAddr handle.
          */

@@ -163,12 +163,11 @@ public:
         sal_Int32 myVal = myAny.get<sal_Int32>();
         </pre>
         Widening conversion without data loss is taken into account.
-        Throws a
-        <type scope="com::sun::star::uno">RuntimeException</type>
-        if the specified type cannot be provided.
+        Throws a com::sun::star::uno::RuntimeException if the specified type
+        cannot be provided.
 
         @return value of specified type
-        @exception <type scope="com::sun::star::uno">RuntimeException</type>
+        @exception com::sun::star::uno::RuntimeException
                    in case the specified type cannot be provided
     */
     template <typename T>

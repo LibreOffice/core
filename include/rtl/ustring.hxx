@@ -2287,8 +2287,10 @@ inline std::basic_ostream<charT, traits> & operator <<(
     return stream << OUString( concat );
 }
 #else
-// non-RTL_FAST_CODE needs this to compile
+// non-RTL_FAST_STRING needs this to compile
+/// @cond INTERNAL
 typedef OUString OUStringLiteral;
+/// @endcond
 #endif
 
 /** A helper to use OUStrings with hash maps.

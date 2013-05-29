@@ -30,7 +30,7 @@
 module com { module sun { module star { module awt {
 
 
-/** Sspecifies a provider for dialogs implementing the
+/** Specifies a provider for dialogs implementing the
     <type scope="com::sun::star::awt">XDialog</type> interface.
  */
 service DialogProvider : com::sun::star::awt::XDialogProvider

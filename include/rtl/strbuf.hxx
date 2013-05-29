@@ -47,6 +47,7 @@
 namespace rtl
 {
 
+/// @cond INTERNAL
 #ifdef RTL_STRING_UNITTEST
 #undef rtl
 // helper macro to make functions appear more readable
@@ -54,6 +55,7 @@ namespace rtl
 #else
 #define RTL_STRING_CONST_FUNCTION
 #endif
+/// @endcond
 
 /** A string buffer implements a mutable sequence of characters.
     <p>
