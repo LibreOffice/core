@@ -18,17 +18,10 @@
  */
 
 
-#include <hintids.hxx>
-#include "cntfrm.hxx"
-#include "doc.hxx"
-
-#include "hintids.hxx"
 #include <editeng/ulspitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <fmtclds.hxx>
 #include <fmtfordr.hxx>
 #include <frmfmt.hxx>
-#include <node.hxx>
 #include "frmtool.hxx"
 #include "colfrm.hxx"
 #include "pagefrm.hxx"
