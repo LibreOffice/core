@@ -576,9 +576,6 @@ void SlideSorterViewShell::Activate (sal_Bool bIsMDIActivate)
             }
             break;
 
-            eContext = EnumContext::Context_SlidesorterPage;
-            break;
-
         default:
             break;
     }
