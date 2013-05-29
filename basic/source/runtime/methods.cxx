@@ -4381,11 +4381,11 @@ RTLFUNC(MsgBox)
     };
     static const sal_Int16 nButtonMap[] =
     {
-        2, // #define RET_CANCEL sal_False
-        1, // #define RET_OK     sal_True
-        6, // #define RET_YES    2
-        7, // #define RET_NO     3
-        4  // #define RET_RETRY  4
+        2, // RET_CANCEL is 0
+        1, // RET_OK     is 1
+        6, // RET_YES    is 2
+        7, // RET_NO     is 3
+        4  // RET_RETRY  is 4
     };
 
 
