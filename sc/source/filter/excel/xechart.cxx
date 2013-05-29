@@ -1691,6 +1691,7 @@ bool XclExpChSerTrendLine::Convert( Reference< XRegressionCurve > xRegCurve, sal
 
     // trend line type
     ScfPropertySet aCurveProp( xRegCurve );
+
     OUString aService = aCurveProp.GetServiceName();
     if( aService == "com.sun.star.chart2.LinearRegressionCurve" )
     {
@@ -1749,8 +1750,6 @@ bool XclExpChSerTrendLine::Convert( Reference< XRegressionCurve > xRegCurve, sal
     }
 
     // missing features
-    // #i20819# polynomial trend lines
-    // #i66819# moving average trend lines
     // #i5085# manual trend line size
     // #i34093# manual crossing point
     return true;

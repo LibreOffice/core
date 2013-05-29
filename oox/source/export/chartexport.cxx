@@ -69,6 +69,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
+#include <com/sun/star/lang/XServiceName.hpp>
 
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
@@ -1520,6 +1521,7 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                         case chart::TYPEID_SCATTER:
                         {
                             exportMarker( );
+                            exportTrendlines( aSeriesSeq[nSeriesIdx] );
                             exportSmooth( );
                             break;
                         }
@@ -1799,6 +1801,7 @@ void ChartExport::exportShapeProps( Reference< XPropertySet > xPropSet )
 
     WriteFill( xPropSet );
     WriteOutline( xPropSet );
+
     pFS->endElement( FSNS( XML_c, XML_spPr ) );
 }
 
@@ -2467,6 +2470,126 @@ void ChartExport::exportGrouping( sal_Bool isBar )
     pFS->singleElement( FSNS( XML_c, XML_grouping ),
             XML_val, grouping,
             FSEND );
+}
+
+void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
+{
+    FSHelperPtr pFS = GetFS();
+    Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer( xSeries, UNO_QUERY );
+    if( xRegressionCurveContainer.is() )
+    {
+        Sequence< Reference< chart2::XRegressionCurve > > aRegCurveSeq = xRegressionCurveContainer->getRegressionCurves();
+        const Reference< chart2::XRegressionCurve >* pBeg = aRegCurveSeq.getConstArray();
+        const Reference< chart2::XRegressionCurve >* pEnd = pBeg + aRegCurveSeq.getLength();
+        for( const Reference< chart2::XRegressionCurve >* pIt = pBeg; pIt != pEnd; ++pIt )
+        {
+            Reference< chart2::XRegressionCurve > xRegCurve = *pIt;
+            if (!xRegCurve.is())
+                continue;
+
+            pFS->startElement( FSNS( XML_c, XML_trendline ), FSEND );
+
+            Reference< XPropertySet > xProperties( xRegCurve , uno::UNO_QUERY );
+
+            OUString aService;
+
+            Reference< lang::XServiceName > xServiceName( xProperties, UNO_QUERY );
+            if( !xServiceName.is() )
+                continue;
+            aService = xServiceName->getServiceName();
+
+            if( aService == "com.sun.star.chart2.LinearRegressionCurve" )
+            {
+                pFS->singleElement( FSNS( XML_c, XML_trendlineType ),
+                    XML_val, "linear",
+                    FSEND );
+            }
+            else if( aService == "com.sun.star.chart2.ExponentialRegressionCurve" )
+            {
+                pFS->singleElement( FSNS( XML_c, XML_trendlineType ),
+                    XML_val, "exp",
+                    FSEND );
+            }
+            else if( aService == "com.sun.star.chart2.LogarithmicRegressionCurve" )
+            {
+                pFS->singleElement( FSNS( XML_c, XML_trendlineType ),
+                    XML_val, "log",
+                    FSEND );
+            }
+            else if( aService == "com.sun.star.chart2.PotentialRegressionCurve" )
+            {
+                pFS->singleElement( FSNS( XML_c, XML_trendlineType ),
+                    XML_val, "power",
+                    FSEND );
+            }
+            else if( aService == "com.sun.star.chart2.PolynomialRegressionCurve" )
+            {
+                pFS->singleElement( FSNS( XML_c, XML_trendlineType ),
+                    XML_val, "poly",
+                    FSEND );
+
+                sal_Int32 aDegree = 2;
+                xProperties->getPropertyValue( "PolynomialDegree") >>= aDegree;
+                pFS->singleElement( FSNS( XML_c, XML_order ),
+                    XML_val, I32S(aDegree),
+                    FSEND );
+            }
+            else if( aService == "com.sun.star.chart2.MovingAverageRegressionCurve" )
+            {
+                pFS->singleElement( FSNS( XML_c, XML_trendlineType ),
+                    XML_val, "movingAvg",
+                    FSEND );
+
+                sal_Int32 aPeriod = 2;
+                xProperties->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
+
+                pFS->singleElement( FSNS( XML_c, XML_period ),
+                    XML_val, I32S(aPeriod),
+                    FSEND );
+            }
+            else
+            {
+                continue;
+            }
+
+            double aExtrapolateForward = 0.0;
+            double aExtrapolateBackward = 0.0;
+
+            xProperties->getPropertyValue( "ExtrapolateForward") >>= aExtrapolateForward;
+            xProperties->getPropertyValue( "ExtrapolateBackward") >>= aExtrapolateBackward;
+
+            pFS->singleElement( FSNS( XML_c, XML_forward ),
+                    XML_val, OString::number(aExtrapolateForward).getStr(),
+                    FSEND );
+
+            pFS->singleElement( FSNS( XML_c, XML_backward ),
+                    XML_val, OString::number(aExtrapolateBackward).getStr(),
+                    FSEND );
+
+            exportShapeProps( xProperties );
+
+            // Equation properties
+            Reference< XPropertySet > xEquationProperties( xRegCurve->getEquationProperties() );
+
+            // Show Equation
+            sal_Bool aShowEquation = false;
+            xEquationProperties->getPropertyValue( "ShowEquation" ) >>= aShowEquation;
+
+            pFS->singleElement( FSNS( XML_c, XML_dispEq ),
+                    XML_val, aShowEquation ? "1" : "0",
+                    FSEND );
+
+            // Show R^2
+            sal_Bool aShowCorrelationCoefficient = false;
+            xEquationProperties->getPropertyValue( "ShowCorrelationCoefficient" ) >>= aShowCorrelationCoefficient;
+
+            pFS->singleElement( FSNS( XML_c, XML_dispRSqr ),
+                    XML_val, aShowCorrelationCoefficient ? "1" : "0",
+                    FSEND );
+
+            pFS->endElement( FSNS( XML_c, XML_trendline ) );
+        }
+    }
 }
 
 void ChartExport::exportMarker()
