@@ -457,6 +457,10 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
         {
             rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_FRAME);
         }
+        else if ( rTypeModel.maPositionVerticalRelative == "margin" )
+        {
+            rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_PRINT_AREA);
+        }
         else
         {
             // Vertical placement relative to margin, because parent style must not modify vertical position
