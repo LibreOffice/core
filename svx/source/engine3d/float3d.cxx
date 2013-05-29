@@ -467,6 +467,7 @@ void Svx3DWin::Reset()
 
     // Select nothing, to avoid errors when selecting the first
     aCtlLightPreview.GetSvx3DLightControl().SelectLight(0);
+    aCtlLightPreview.CheckSelection();
 }
 
 bool Svx3DWin::GetUILightState( const ImageButton& rBtn ) const
