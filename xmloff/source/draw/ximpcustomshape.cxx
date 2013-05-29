@@ -418,9 +418,24 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
         }
     }
     if ( bValid )
-    {   // skipping white spaces
-        while( ( nIndex < rParaString.getLength() ) && rParaString[ nIndex ] == (sal_Unicode)' ' )
-            nIndex++;
+    {
+        // skipping white spaces and commas (#i121507#)
+        const sal_Unicode aSpace(sal_Unicode(' '));
+        const sal_Unicode aCommata(sal_Unicode(','));
+
+        while(nIndex < rParaString.getLength())
+        {
+            const sal_Unicode aCandidate(rParaString[nIndex]);
+
+            if(aSpace == aCandidate || aCommata == aCandidate)
+            {
+                nIndex++;
+            }
+            else
+            {
+                break;
+            }
+        }
     }
     return bValid;
 }
