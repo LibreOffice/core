@@ -87,6 +87,7 @@ static sal_Unicode NumberChar[][10] = {
     { 0x0020, 0x05D0, 0x05D1, 0x05D2, 0x05D3, 0x05D4, 0x05D5, 0x05D6, 0x05D7, 0x05D8 }, // Hebrew
     { 0x0966, 0x0967, 0x0968, 0x0969, 0x096A, 0x096B, 0x096C, 0x096D, 0x096E, 0x096F }, // Nepali
     { 0x0F20, 0x0F21, 0x0F22, 0x0F23, 0x0F24, 0x0F25, 0x0F26, 0x0F27, 0x0F28, 0x0F29 }, // Dzongkha
+    { 0x0F20, 0x0F21, 0x0F22, 0x0F23, 0x0F24, 0x0F25, 0x0F26, 0x0F27, 0x0F28, 0x0F29 }, // Tibetan
 };
 
 static sal_Unicode DecimalChar[] = {
@@ -121,6 +122,7 @@ static sal_Unicode DecimalChar[] = {
     0x0000, // Hebrew
     0x0000, // Nepali
     0x0000, // Dzongkha
+    0x0000, // Tibetan
 };
 
 static sal_Unicode MinusChar[] = {
@@ -155,6 +157,7 @@ static sal_Unicode MinusChar[] = {
     0x0000, // Hebrew
     0x0000, // Nepali
     0x0000, // Dzongkha
+    0x0000, // Tibetan
 };
 
 static sal_uInt16 SeparatorChar[] = {
@@ -189,6 +192,7 @@ static sal_uInt16 SeparatorChar[] = {
     0x0000, // Hebrew
     0x0000, // Nepali
     0x0000, // Dzongkha
+    0x0000, // Tibetan
 };
 
 #define NUMBER_ZERO     NumberChar[NumberChar_HalfWidth][0] // 0x0030
