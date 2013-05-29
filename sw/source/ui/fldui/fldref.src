@@ -38,7 +38,7 @@ TabPage TP_FLD_REF
         HelpID = "sw:ListBox:TP_FLD_REF:LB_REFTYPE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 14 ) ;
-        Size = MAP_APPFONT ( 76 , 165 ) ;
+        Size = MAP_APPFONT ( 76 , 73 ) ;
         TabStop = TRUE ;
         AutoHScroll = TRUE ;
     };
@@ -54,7 +54,7 @@ TabPage TP_FLD_REF
         HelpID = "sw:ListBox:TP_FLD_REF:LB_REFSELECTION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88 , 14 ) ;
-        Size = MAP_APPFONT ( 166 , 73 ) ;
+        Size = MAP_APPFONT ( 166 , 136 ) ;
         TabStop = TRUE ;
         Sort = TRUE ;
     };
@@ -64,12 +64,12 @@ TabPage TP_FLD_REF
         HelpID = HID_REFSELECTION_TOOLTIP ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88 , 14 ) ;
-        Size = MAP_APPFONT ( 166 , 73 ) ;
+        Size = MAP_APPFONT ( 166 , 136 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_REFFORMAT
     {
-        Pos = MAP_APPFONT ( 88 , 93 ) ;
+        Pos = MAP_APPFONT ( 6 , 93 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "Insert ~reference to" ;
@@ -78,7 +78,7 @@ TabPage TP_FLD_REF
     {
         HelpID = "sw:ListBox:TP_FLD_REF:LB_REFFORMAT";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 88 , 104 ) ;
+        Pos = MAP_APPFONT ( 6 , 104 ) ;
         Size = MAP_APPFONT ( 76 , 75 ) ;
         TabStop = TRUE ;
         DropDown = FALSE ;
@@ -86,8 +86,8 @@ TabPage TP_FLD_REF
     };
     FixedText FT_REFNAME
     {
-        Pos = MAP_APPFONT ( 170 , 93 ) ;
-        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Pos = MAP_APPFONT ( 88 , 155 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
         Left = TRUE ;
         Text [ en-US ] = "Na~me" ;
     };
@@ -95,15 +95,15 @@ TabPage TP_FLD_REF
     {
         HelpID = "sw:Edit:TP_FLD_REF:ED_REFNAME";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 104 ) ;
-        Size = MAP_APPFONT ( 84 , 12 ) ;
+        Pos = MAP_APPFONT ( 88 , 167 ) ;
+        Size = MAP_APPFONT ( 80 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
     };
     FixedText FT_REFVALUE
     {
-        Pos = MAP_APPFONT ( 170 , 122 ) ;
-        Size = MAP_APPFONT ( 84 , 8 ) ;
+        Pos = MAP_APPFONT ( 174 , 155 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
         Text [ en-US ] = "~Value" ;
         Disable = TRUE ;
         Left = TRUE ;
@@ -112,8 +112,8 @@ TabPage TP_FLD_REF
     {
         HelpID = "sw:Edit:TP_FLD_REF:ED_REFVALUE";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 136 ) ;
-        Size = MAP_APPFONT ( 84 , 12 ) ;
+        Pos = MAP_APPFONT ( 174 , 167 ) ;
+        Size = MAP_APPFONT ( 80 , 12 ) ;
         TabStop = TRUE ;
         Disable = TRUE ;
         Left = TRUE ;
