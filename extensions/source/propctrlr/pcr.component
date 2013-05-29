@@ -78,5 +78,6 @@
   </implementation>
   <implementation name="org.openoffice.comp.form.ui.OTabOrderDialog">
     <service name="com.sun.star.form.ui.TabOrderDialog"/>
+    <service name="com.sun.star.form.TabOrderDialog"/>
   </implementation>
 </component>

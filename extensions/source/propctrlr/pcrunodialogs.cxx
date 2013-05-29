@@ -98,8 +98,9 @@ namespace pcr
     //---------------------------------------------------------------------
     ::comphelper::StringSequence OTabOrderDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
-        ::comphelper::StringSequence aSupported(1);
+        ::comphelper::StringSequence aSupported(2);
         aSupported.getArray()[0] = OUString(  "com.sun.star.form.ui.TabOrderDialog"  );
+        aSupported.getArray()[1] = OUString(  "com.sun.star.form.TabOrderDialog"  );
         return aSupported;
     }
 
@@ -129,6 +130,34 @@ namespace pcr
     {
         return new TabOrderDialog( _pParent, m_xTabbingModel, m_xControlContext, m_aContext );
     }
+
+    void OTabOrderDialog::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
+    {
+        Reference<css::awt::XTabControllerModel> xTabbingModel;
+        Reference<css::awt::XControlContainer> xControlContext;
+        Reference<css::awt::XWindow> xParentWindow;
+        if (aArguments.getLength() == 3 && (aArguments[0] >>= xTabbingModel) && (aArguments[1] >>= xControlContext) && (aArguments[2] >>= xParentWindow))
+        {
+            Sequence< Any > aNewArguments( 3 );
+            aNewArguments[0] <<= NamedValue(
+                OUString( "TabbingModel" ),
+                makeAny( xTabbingModel )
+            );
+            aNewArguments[1] <<= NamedValue(
+                OUString( "ControlContext" ),
+                makeAny( xControlContext )
+            );
+            aNewArguments[2] <<= NamedValue(
+                OUString( "ParentWindow"  ),
+                makeAny( xParentWindow )
+            );
+            OTabOrderDialog_DBase::initialize(aNewArguments);
+        }
+        else
+            OTabOrderDialog_DBase::initialize(aArguments);
+    }
+
+
 
 //........................................................................
 }   // namespace pcr

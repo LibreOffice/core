@@ -60,6 +60,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/form/ListSourceType.hpp>
+#include <com/sun/star/form/TabOrderDialog.hpp>
 #include <com/sun/star/form/XBoundComponent.hpp>
 #include <com/sun/star/form/XBoundControl.hpp>
 #include <com/sun/star/form/XGrid.hpp>
@@ -1472,35 +1473,16 @@ void FmXFormShell::ExecuteTabOrderDialog( const Reference< XTabControllerModel >
 
     try
     {
-        Sequence< Any > aDialogArgs( 3 );
-        aDialogArgs[0] <<= NamedValue(
-            OUString( "TabbingModel"  ),
-            makeAny( _rxForForm )
-        );
-        aDialogArgs[1] <<= NamedValue(
-            OUString( "ControlContext"  ),
-            makeAny( getControlContainerForView() )
-        );
-
         Reference< XWindow > xParentWindow;
         if ( m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() )
             xParentWindow = VCLUnoHelper::GetInterface ( &m_pShell->GetViewShell()->GetViewFrame()->GetWindow() );
-        aDialogArgs[2] <<= NamedValue(
-            OUString( "ParentWindow"  ),
-            makeAny( xParentWindow )
-        );
 
-        Reference< dialogs::XExecutableDialog > xDialog(
-            ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(
-                OUString( "com.sun.star.form.ui.TabOrderDialog"  ),
-                aDialogArgs
-            ),
-            UNO_QUERY
-        );
-        OSL_ENSURE( xDialog.is(), "FmXFormShell::ExecuteTabOrderDialog: could not create the dialog!" );
+        Reference< dialogs::XExecutableDialog > xDialog = form::TabOrderDialog::createWithModel(
+                comphelper::getProcessComponentContext(),
+                _rxForForm, getControlContainerForView(), xParentWindow
+            );
 
-        if ( xDialog.is() )
-            xDialog->execute();
+        xDialog->execute();
     }
     catch( const Exception& )
     {
