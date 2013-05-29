@@ -330,9 +330,9 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
     }
 }
 
-Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
+css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
 {
-    Any aRetDlgLibAny;
+    css::uno::Reference< css::container::XNameContainer > aRetDlgLib;
 
     SbxVariable* pDlgLibContVar = pBasic->Find(OUString("DialogLibraries"), SbxCLASS_OBJECT);
     if( pDlgLibContVar && pDlgLibContVar->ISA(SbUnoObject) )
@@ -356,20 +356,20 @@ Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
 
                 Any aDlgLibAny = xDlgLibContNameAccess->getByName( pLibNames[ iLib ] );
 
-                Reference< XNameAccess > xDlgLibNameAccess( aDlgLibAny, UNO_QUERY );
-                OSL_ENSURE( xDlgLibNameAccess.is(), "implFindDialogLibForDialog: invalid dialog lib!" );
-                if( xDlgLibNameAccess.is() )
+                Reference< XNameContainer > xDlgLibNameCont( aDlgLibAny, UNO_QUERY );
+                OSL_ENSURE( xDlgLibNameCont.is(), "implFindDialogLibForDialog: invalid dialog lib!" );
+                if( xDlgLibNameCont.is() )
                 {
-                    Sequence< OUString > aDlgNames = xDlgLibNameAccess->getElementNames();
+                    Sequence< OUString > aDlgNames = xDlgLibNameCont->getElementNames();
                     const OUString* pDlgNames = aDlgNames.getConstArray();
                     sal_Int32 nDlgNameCount = aDlgNames.getLength();
 
                     for( sal_Int32 iDlg = 0 ; iDlg < nDlgNameCount ; iDlg++ )
                     {
-                        Any aDlgAny = xDlgLibNameAccess->getByName( pDlgNames[ iDlg ] );
+                        Any aDlgAny = xDlgLibNameCont->getByName( pDlgNames[ iDlg ] );
                         if( aDlgAny == rDlgAny )
                         {
-                            aRetDlgLibAny = aDlgLibAny;
+                            aRetDlgLib = xDlgLibNameCont;
                             break;
                         }
                     }
@@ -378,12 +378,12 @@ Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
         }
     }
 
-    return aRetDlgLibAny;
+    return aRetDlgLib;
 }
 
-Any implFindDialogLibForDialogBasic( const Any& aAnyISP, SbxObject* pBasic, StarBASIC*& pFoundBasic )
+css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialogBasic( const Any& aAnyISP, SbxObject* pBasic, StarBASIC*& pFoundBasic )
 {
-    Any aDlgLibAny;
+    css::uno::Reference< css::container::XNameContainer > aDlgLib;
     // Find dialog library for dialog, direct access is not possible here
     StarBASIC* pStartedBasic = (StarBASIC*)pBasic;
     SbxObject* pParentBasic = pStartedBasic ? pStartedBasic->GetParent() : NULL;
@@ -403,19 +403,19 @@ Any implFindDialogLibForDialogBasic( const Any& aAnyISP, SbxObject* pBasic, Star
     }
     if( pSearchBasic1 )
     {
-        aDlgLibAny = implFindDialogLibForDialog( aAnyISP, pSearchBasic1 );
+        aDlgLib = implFindDialogLibForDialog( aAnyISP, pSearchBasic1 );
 
-        if ( aDlgLibAny.hasValue() )
+        if ( aDlgLib.is() )
             pFoundBasic = (StarBASIC*)pSearchBasic1;
 
         else if( pSearchBasic2 )
         {
-            aDlgLibAny = implFindDialogLibForDialog( aAnyISP, pSearchBasic2 );
-            if ( aDlgLibAny.hasValue() )
+            aDlgLib = implFindDialogLibForDialog( aAnyISP, pSearchBasic2 );
+            if ( aDlgLib.is() )
                 pFoundBasic = (StarBASIC*)pSearchBasic2;
         }
     }
-    return aDlgLibAny;
+    return aDlgLib;
 }
 
 void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
@@ -489,12 +489,12 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
         {}
     }
 
-    Any aDlgLibAny;
+    css::uno::Reference< css::container::XNameContainer > aDlgLib;
     bool bDocDialog = false;
     StarBASIC* pFoundBasic = NULL;
     OSL_TRACE("About to try get a hold of ThisComponent");
     Reference< frame::XModel > xModel = StarBASIC::GetModelFromBasic( GetSbData()->pInst->GetBasic() ) ;
-    aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, GetSbData()->pInst->GetBasic(), pFoundBasic );
+    aDlgLib = implFindDialogLibForDialogBasic( aAnyISP, GetSbData()->pInst->GetBasic(), pFoundBasic );
     // If we found the dialog then it belongs to the Search basic
     if ( !pFoundBasic )
     {
@@ -515,9 +515,9 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
                     BasicManager* pMgr = basic::BasicManagerRepository::getDocumentBasicManager( xNextModel );
                     if ( pMgr )
                     {
-                        aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pMgr->GetLib(0), pFoundBasic );
+                        aDlgLib = implFindDialogLibForDialogBasic( aAnyISP, pMgr->GetLib(0), pFoundBasic );
                     }
-                    if ( aDlgLibAny.hasValue() )
+                    if ( aDlgLib.is() )
                     {
                         bDocDialog = true;
                         xModel = xNextModel;
@@ -539,9 +539,9 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     {
        Reference< XDialogProvider >  xDlgProv;;
        if( bDocDialog )
-           xDlgProv = css::awt::DialogProvider::createWithModelAndListener( xContext, xModel, xInput, aDlgLibAny, xScriptListener );
+           xDlgProv = css::awt::DialogProvider::createWithModelAndScripting( xContext, xModel, xInput, aDlgLib, xScriptListener );
        else
-           xDlgProv = css::awt::DialogProvider::createWithModelAndListener( xContext, uno::Reference< frame::XModel >(), xInput, aDlgLibAny, xScriptListener );
+           xDlgProv = css::awt::DialogProvider::createWithModelAndScripting( xContext, uno::Reference< frame::XModel >(), xInput, aDlgLib, xScriptListener );
 
        xCntrl.set( xDlgProv->createDialog(OUString() ), UNO_QUERY_THROW );
        // Add dialog model to dispose vector
