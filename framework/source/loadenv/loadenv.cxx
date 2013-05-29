@@ -52,6 +52,7 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/OfficeFrameLoader.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrameLoader.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
@@ -1194,7 +1195,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
     {
         try
         {
-            return m_xContext->getServiceManager()->createInstanceWithContext(IMPLEMENTATIONNAME_GENERICFRAMELOADER, m_xContext);
+            return css::frame::OfficeFrameLoader::create(m_xContext);
         }
         catch(const css::uno::RuntimeException&)
             { throw; }

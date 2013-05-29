@@ -198,6 +198,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
 	LayoutManager \
 	MediaTypeDetectionHelper \
 	ModuleManager \
+	OfficeFrameLoader \
     SessionListener \
     StartModule \
     TaskCreator \

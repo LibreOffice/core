@@ -38,6 +38,7 @@
   </implementation>
   <implementation name="com.sun.star.comp.office.FrameLoader">
     <service name="com.sun.star.frame.SynchronousFrameLoader"/>
+    <service name="com.sun.star.frame.OfficeFrameLoader"/>
   </implementation>
   <implementation name="com.sun.star.comp.sfx2.AppDispatchProvider">
     <service name="com.sun.star.frame.ProtocolHandler"/>
