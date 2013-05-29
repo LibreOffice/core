@@ -393,7 +393,7 @@ Resource RID_SUBSETMAP
     };
     String RID_SUBSETSTR_YIJING_HEXAGRAM_SYMBOLS
     {
-        Text [ en-US ] = "Yijing Hexagram Ssymbols";
+        Text [ en-US ] = "Yijing Hexagram Symbols";
     };
     String RID_SUBSETSTR_LINEAR_B_SYLLABARY
     {
