@@ -121,14 +121,21 @@ void SerfLockStore::startTicker()
 
 void SerfLockStore::stopTicker()
 {
-    osl::MutexGuard aGuard( m_aMutex );
-
-    if ( m_pTickerThread.is() )
+    rtl::Reference<TickerThread> pTickerThread;
     {
-        m_pTickerThread->finish();
-        m_pTickerThread->join();
+        osl::MutexGuard aGuard( m_aMutex );
+
+        if (!m_pTickerThread.is())
+        {
+            return; // nothing to do
+        }
+        m_pTickerThread->finish(); // needs mutex
+        // the TickerThread may run refreshLocks() at most once after this
+        pTickerThread = m_pTickerThread;
         m_pTickerThread.clear();
     }
+
+    pTickerThread->join(); // without m_aMutex locked (to prevent deadlock)
 }
 
 OUString SerfLockStore::getLockToken( const OUString& rLock )
