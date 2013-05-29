@@ -43,6 +43,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <svx/svdtrans.hxx>
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -476,12 +477,17 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
 Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
     awt::Rectangle aShapeRect(rShapeRect);
+    boost::optional<sal_Int32> oRotation;
+    if (!maTypeModel.maRotation.isEmpty())
+        oRotation.reset(maTypeModel.maRotation.toInt32());
     if (!maTypeModel.maFlip.isEmpty())
     {
         if (maTypeModel.maFlip.equalsAscii("x"))
         {
             aShapeRect.X += aShapeRect.Width;
             aShapeRect.Width *= -1;
+            if (oRotation)
+                oRotation.reset(360 - *oRotation);
         }
         else if (maTypeModel.maFlip.equalsAscii("y"))
         {
@@ -548,9 +554,11 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     }
 
     PropertySet aPropertySet(xShape);
-    if (xShape.is() && !maTypeModel.maRotation.isEmpty())
+    if (xShape.is() && oRotation)
     {
-        aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(maTypeModel.maRotation.toInt32() * 100));
+        // See DffPropertyReader::Fix16ToAngle(): in VML, positive rotation angles are clockwise, we have them as counter-clockwise.
+        // Additionally, VML type is 0..360, our is 0.36000.
+        aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(sal_Int32(NormAngle360((*oRotation) * -100))));
         // If rotation is used, simple setPosition() is not enough.
         aPropertySet.setAnyProperty(PROP_HoriOrientPosition, makeAny( aShapeRect.X ) );
         aPropertySet.setAnyProperty(PROP_VertOrientPosition, makeAny( aShapeRect.Y ) );
