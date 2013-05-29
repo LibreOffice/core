@@ -119,6 +119,7 @@ public:
     void testN592908_Frame();
     void testN592908_Picture();
     void testPageBackground();
+    void testWatermark();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -190,6 +191,7 @@ void Test::run()
         {"n592908-frame.docx", &Test::testN592908_Frame},
         {"n592908-picture.docx", &Test::testN592908_Picture},
         {"page-background.docx", &Test::testPageBackground},
+        {"watermark.docx", &Test::testWatermark},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1186,6 +1188,30 @@ void Test::testPageBackground()
     // The problem was that  <w:background w:color="92D050"/> was ignored.
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
+}
+
+void Test::testWatermark()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    // 1st problem: last character was missing
+    CPPUNIT_ASSERT_EQUAL(OUString("SAMPLE"), xShape->getString());
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xShape, "CustomShapeGeometry");
+    bool bFound = false;
+    for (int i = 0; i < aProps.getLength(); ++i)
+        if (aProps[i].Name == "TextPath")
+            bFound = true;
+    // 2nd problem: v:textpath wasn't imported
+    CPPUNIT_ASSERT_EQUAL(true, bFound);
+
+    // 3rd problem: rotation angle was 315, not 45.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(45 * 100), getProperty<sal_Int32>(xShape, "RotateAngle"));
+
+    // 4th problem: mso-position-vertical-relative:margin was ignored, VertOrientRelation was text::RelOrientation::FRAME.
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_PRINT_AREA, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
