@@ -19,22 +19,13 @@
 
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
-#include "cntfrm.hxx"
-#include "viewsh.hxx"
-#include "doc.hxx"
-#include "viewimp.hxx"
 #include "viewopt.hxx"
-#include "swtypes.hxx"
-#include "dflyobj.hxx"
-#include "dcontact.hxx"
-#include "flyfrm.hxx"
 #include "frmtool.hxx"
 #include "txtftn.hxx"
 #include "fmtftn.hxx"
 #include <editeng/ulspitem.hxx>
 #include <editeng/keepitem.hxx>
 
-#include <vcl/outdev.hxx>
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
 #include <fmtclbl.hxx>
@@ -42,8 +33,6 @@
 #include "tabfrm.hxx"
 #include "ftnfrm.hxx"
 #include "txtfrm.hxx"
-#include "pagedesc.hxx"
-#include "ftninfo.hxx"
 #include "sectfrm.hxx"
 #include "dbg_lay.hxx"
 
@@ -52,8 +41,6 @@
 #include <layouter.hxx>
 // #i36347#
 #include <flyfrms.hxx>
-
-#include <ndtxt.hxx>
 
 //------------------------------------------------------------------------
 //              Move methods
