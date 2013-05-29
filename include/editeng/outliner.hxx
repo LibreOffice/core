@@ -329,12 +329,44 @@ public:
     const SvxFieldItem* GetFieldUnderMousePointer() const;
     const SvxFieldItem* GetFieldAtSelection() const;
 
-    /** enables numbering for the selected paragraphs if the numbering of the first paragraph is off
-        or disables numbering for the selected paragraphs if the numbering of the first paragraph is on
+    /** enables bullets for the selected paragraphs if the bullets/numbering of the first paragraph is off
+        or disables bullets/numbering for the selected paragraphs if the bullets/numbering of the first paragraph is on
     */
-    void        ToggleBullets();
-    sal_Bool    ToggleBullets(sal_Bool bBulletOnOff, sal_Bool bNormalBullet, sal_Bool bMasterView, SvxNumRule* pNumRule = NULL, sal_Bool bForceBulletOnOff = false);
-    sal_Bool        ToggleAllParagraphsBullets(sal_Bool bBulletOnOffMode, sal_Bool bNormalBullet, sal_Bool bToggleOn, sal_Bool bMasterView, SvxNumRule* pNumRule = NULL);
+    void ToggleBullets();
+
+    void ToggleBulletsNumbering(
+        const bool bToggle,
+        const bool bHandleBullets,
+        const SvxNumRule* pNumRule = NULL );
+
+    /** apply bullets/numbering for paragraphs
+
+        @param boolean bHandleBullets
+        true: handle bullets
+        false: handle numbering
+
+        @param pNewNumRule
+        numbering rule which needs to be applied. can be 0.
+
+        @param boolean bAtSelection
+        true: apply bullets/numbering at selected paragraphs
+        false: apply bullets/numbering at all paragraphs
+    */
+    void ApplyBulletsNumbering(
+        const bool bHandleBullets,
+        const SvxNumRule* pNewNumRule,
+        const bool bCheckCurrentNumRuleBeforeApplyingNewNumRule,
+        const bool bAtSelection = false );
+
+    /** switch off bullets/numbering for paragraphs
+
+        @param boolean bAtSelection
+        true: switch off bullets/numbering at selected paragraphs
+        false: switch off bullets/numbering at all paragraphs
+    */
+    void SwitchOffBulletsNumbering(
+        const bool bAtSelection = false );
+
     /** enables numbering for the selected paragraphs that are not enabled and ignore all selected
         paragraphs that already have numbering enabled.
     */
@@ -608,7 +640,7 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     DECL_LINK(              EndPasteOrDropHdl, PasteOrDropInfos* );
     DECL_LINK(              EditEngineNotifyHdl, EENotify* );
     void                    ImplCheckParagraphs( sal_Int32 nStart, sal_Int32 nEnd );
-    sal_Bool                ImplHasBullet( sal_Int32 nPara ) const;
+    bool ImplHasNumberFormat( sal_Int32 nPara ) const;
     Size                    ImplGetBulletSize( sal_Int32 nPara );
     sal_uInt16              ImplGetNumbering( sal_Int32 nPara, const SvxNumberFormat* pParaFmt );
     void                    ImplCalcBulletText( sal_Int32 nPara, sal_Bool bRecalcLevel, sal_Bool bRecalcChildren );
@@ -989,7 +1021,25 @@ public:
     virtual sal_Bool IsParaIsNumberingRestart( sal_Int32 nPara );
     virtual void SetParaIsNumberingRestart( sal_Int32 nPara, sal_Bool bParaIsNumberingRestart );
 
-    sal_Int32 GetBulletsNumberingStatus();
+    /** determine the bullets/numbering status of the given paragraphs
+
+        @param nParaStart
+        index of paragraph at which the check starts
+
+        @param nParaEnd
+        index of paragraph at which the check ends
+
+        @returns
+        0 : all paragraphs have bullets
+        1 : all paragraphs have numbering
+        2 : otherwise
+    */
+    sal_Int32 GetBulletsNumberingStatus(
+        const sal_Int32 nParaStart,
+        const sal_Int32 nParaEnd ) const;
+
+    // convenient method to determine the bullets/numbering status for all paragraphs
+    sal_Int32 GetBulletsNumberingStatus() const;
 };
 
 #endif

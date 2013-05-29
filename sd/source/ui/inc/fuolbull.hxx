@@ -44,8 +44,6 @@ public:
 
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq );
-    void SetCurrentBullet(SfxRequest& rReq);
-    void SetCurrentNumbering(SfxRequest& rReq);
 
 private:
     FuOutlineBullet (
@@ -54,6 +52,8 @@ private:
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
+
+    void SetCurrentBulletsNumbering(SfxRequest& rReq);
 
     const SfxPoolItem* GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt32& nNumItemId);
 };

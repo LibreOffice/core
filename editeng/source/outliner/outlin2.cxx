@@ -520,7 +520,7 @@ sal_Bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, sal_Bo
     {
         Point aDocPos = GetDocPos( rPaperPos );
         sal_Int32 nPara = pEditEngine->FindParagraph( aDocPos.Y() );
-        if ( ( nPara != EE_PARA_NOT_FOUND ) && ImplHasBullet( nPara ) )
+        if ( ( nPara != EE_PARA_NOT_FOUND ) && ImplHasNumberFormat( nPara ) )
         {
             Rectangle aBulArea = ImpCalcBulletArea( nPara, sal_True, sal_True );
             if ( aBulArea.IsInside( rPaperPos ) )
