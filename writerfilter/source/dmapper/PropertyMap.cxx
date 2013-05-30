@@ -31,6 +31,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
+#include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
@@ -285,7 +286,10 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     nSectionNumber = nNumber++;
     memset(&m_pBorderLines, 0x00, sizeof(m_pBorderLines));
     for( sal_Int32 nBorder = 0; nBorder < 4; ++nBorder )
+    {
         m_nBorderDistances[ nBorder ] = -1;
+        m_bBorderShadows[nBorder] = false;
+    }
     //todo: set defaults in ApplyPropertiesToPageStyles
     //initialize defaults
     PaperInfo aLetter(PAPER_LETTER);
@@ -405,11 +409,12 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
 }
 
 
-void SectionPropertyMap::SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const table::BorderLine2& rBorderLine )
+void SectionPropertyMap::SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const table::BorderLine2& rBorderLine, bool bShadow )
 {
     delete m_pBorderLines[ePos];
     m_pBorderLines[ePos] = new table::BorderLine2( rBorderLine );
     m_nBorderDistances[ePos] = nLineDistance;
+    m_bBorderShadows[ePos] = bShadow;
 }
 
 
@@ -501,6 +506,22 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
                 SetBorderDistance( xSecond, aMarginIds[nBorder], aBorderDistanceIds[nBorder],
                       m_nBorderDistances[nBorder], nOffsetFrom, nLineWidth );
         }
+    }
+
+    if (m_bBorderShadows[BORDER_RIGHT])
+    {
+        // In Word UI, shadow is a boolean property, in OOXML, it's a boolean
+        // property of each 4 border type, finally in Writer the border is a
+        // property of the page style, with shadow location, distance and
+        // color. See SwWW8ImplReader::SetShadow().
+        table::ShadowFormat aFormat;
+        aFormat.Color = COL_BLACK;
+        aFormat.Location = table::ShadowLocation_BOTTOM_RIGHT;
+        aFormat.ShadowWidth = m_pBorderLines[BORDER_RIGHT]->LineWidth;
+        if (xFirst.is())
+            xFirst->setPropertyValue(rPropNameSupplier.GetName(PROP_SHADOW_FORMAT), uno::makeAny(aFormat));
+        if (xSecond.is())
+            xSecond->setPropertyValue(rPropNameSupplier.GetName(PROP_SHADOW_FORMAT), uno::makeAny(aFormat));
     }
 }
 

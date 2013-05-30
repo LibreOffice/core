@@ -28,7 +28,8 @@ namespace dmapper {
 
 _PgBorder::_PgBorder( ) :
     m_nDistance( 0 ),
-    m_ePos( BORDER_RIGHT )
+    m_ePos( BORDER_RIGHT ),
+    m_bShadow(false)
 {
 }
 
@@ -123,6 +124,7 @@ void PageBordersHandler::lcl_sprm( Sprm& rSprm )
                 aPgBorder.m_rLine = pBorderHandler->getBorderLine( );
                 aPgBorder.m_nDistance = pBorderHandler->getLineDistance( );
                 aPgBorder.m_ePos = ePos;
+                aPgBorder.m_bShadow = pBorderHandler->getShadow();
                 m_aBorders.push_back( aPgBorder );
             }
         }
@@ -136,7 +138,7 @@ void PageBordersHandler::SetBorders( SectionPropertyMap* pSectContext )
     for ( int i = 0, length = m_aBorders.size( ); i < length; i++ )
     {
         _PgBorder aBorder = m_aBorders[i];
-        pSectContext->SetBorder( aBorder.m_ePos, aBorder.m_nDistance, aBorder.m_rLine );
+        pSectContext->SetBorder( aBorder.m_ePos, aBorder.m_nDistance, aBorder.m_rLine, aBorder.m_bShadow );
     }
 }
 
