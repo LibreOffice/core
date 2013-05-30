@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <algorithm>
+#include <boost/optional.hpp>
 
 #include "oox/vml/vmlshape.hxx"
 
@@ -49,6 +50,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/oustringostreaminserter.hxx>
+#include <svx/svdtrans.hxx>
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -91,21 +93,21 @@ const sal_Int32 VML_SHAPETYPE_HOSTCONTROL   = 201;
 
 // ----------------------------------------------------------------------------
 
-Point lclGetAbsPoint( const Point& rRelPoint, const Rectangle& rShapeRect, const Rectangle& rCoordSys )
+awt::Point lclGetAbsPoint( const awt::Point& rRelPoint, const awt::Rectangle& rShapeRect, const awt::Rectangle& rCoordSys )
 {
     double fWidthRatio = static_cast< double >( rShapeRect.Width ) / rCoordSys.Width;
     double fHeightRatio = static_cast< double >( rShapeRect.Height ) / rCoordSys.Height;
-    Point aAbsPoint;
+    awt::Point aAbsPoint;
     aAbsPoint.X = static_cast< sal_Int32 >( rShapeRect.X + fWidthRatio * (rRelPoint.X - rCoordSys.X) + 0.5 );
     aAbsPoint.Y = static_cast< sal_Int32 >( rShapeRect.Y + fHeightRatio * (rRelPoint.Y - rCoordSys.Y) + 0.5 );
     return aAbsPoint;
 }
 
-Rectangle lclGetAbsRect( const Rectangle& rRelRect, const Rectangle& rShapeRect, const Rectangle& rCoordSys )
+awt::Rectangle lclGetAbsRect( const awt::Rectangle& rRelRect, const awt::Rectangle& rShapeRect, const awt::Rectangle& rCoordSys )
 {
     double fWidthRatio = static_cast< double >( rShapeRect.Width ) / rCoordSys.Width;
     double fHeightRatio = static_cast< double >( rShapeRect.Height ) / rCoordSys.Height;
-    Rectangle aAbsRect;
+    awt::Rectangle aAbsRect;
     aAbsRect.X = static_cast< sal_Int32 >( rShapeRect.X + fWidthRatio * (rRelRect.X - rCoordSys.X) + 0.5 );
     aAbsRect.Y = static_cast< sal_Int32 >( rShapeRect.Y + fHeightRatio * (rRelRect.Y - rCoordSys.Y) + 0.5 );
     aAbsRect.Width = static_cast< sal_Int32 >( fWidthRatio * rRelRect.Width + 0.5 );
@@ -156,21 +158,21 @@ OUString ShapeType::getGraphicPath() const
     return maTypeModel.moGraphicPath.get( OUString() );
 }
 
-Rectangle ShapeType::getCoordSystem() const
+awt::Rectangle ShapeType::getCoordSystem() const
 {
     Int32Pair aCoordPos = maTypeModel.moCoordPos.get( Int32Pair( 0, 0 ) );
     Int32Pair aCoordSize = maTypeModel.moCoordSize.get( Int32Pair( 1000, 1000 ) );
-    return Rectangle( aCoordPos.first, aCoordPos.second, aCoordSize.first, aCoordSize.second );
+    return awt::Rectangle( aCoordPos.first, aCoordPos.second, aCoordSize.first, aCoordSize.second );
 }
 
-Rectangle ShapeType::getRectangle( const ShapeParentAnchor* pParentAnchor ) const
+awt::Rectangle ShapeType::getRectangle( const ShapeParentAnchor* pParentAnchor ) const
 {
     return pParentAnchor ?
         lclGetAbsRect( getRelRectangle(), pParentAnchor->maShapeRect, pParentAnchor->maCoordSys ) :
         getAbsRectangle();
 }
 
-Rectangle ShapeType::getAbsRectangle() const
+awt::Rectangle ShapeType::getAbsRectangle() const
 {
     const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
 
@@ -182,15 +184,15 @@ Rectangle ShapeType::getAbsRectangle() const
     if ( nHeight == 0 )
         nHeight = 1;
 
-    return Rectangle(
+    return awt::Rectangle(
         ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maLeft, 0, true, true ) + ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maMarginLeft, 0, true, true ),
         ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maTop, 0, false, true ) + ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maMarginTop, 0, false, true ),
         nWidth, nHeight );
 }
 
-Rectangle ShapeType::getRelRectangle() const
+awt::Rectangle ShapeType::getRelRectangle() const
 {
-    return Rectangle(
+    return awt::Rectangle(
         maTypeModel.maLeft.toInt32(),
         maTypeModel.maTop.toInt32(),
         maTypeModel.maWidth.toInt32(),
@@ -296,7 +298,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
     {
         /*  Calculate shape rectangle. Applications may do something special
             according to some imported shape client data (e.g. Excel cell anchor). */
-        Rectangle aShapeRect = calcShapeRectangle( pParentAnchor );
+        awt::Rectangle aShapeRect = calcShapeRectangle( pParentAnchor );
 
         if( ((aShapeRect.Width > 0) || (aShapeRect.Height > 0)) && rxShapes.is() )
         {
@@ -332,13 +334,13 @@ void ShapeBase::convertFormatting( const Reference< XShape >& rxShape, const Sha
     {
         /*  Calculate shape rectangle. Applications may do something special
             according to some imported shape client data (e.g. Excel cell anchor). */
-        Rectangle aShapeRect = calcShapeRectangle( pParentAnchor );
+        awt::Rectangle aShapeRect = calcShapeRectangle( pParentAnchor );
 
         // convert the shape, if the calculated rectangle is not empty
         if( (aShapeRect.Width > 0) || (aShapeRect.Height > 0) )
         {
-            rxShape->setPosition( Point( aShapeRect.X, aShapeRect.Y ) );
-            rxShape->setSize( Size( aShapeRect.Width, aShapeRect.Height ) );
+            rxShape->setPosition( awt::Point( aShapeRect.X, aShapeRect.Y ) );
+            rxShape->setSize( awt::Size( aShapeRect.Width, aShapeRect.Height ) );
             convertShapeProperties( rxShape );
         }
     }
@@ -346,11 +348,11 @@ void ShapeBase::convertFormatting( const Reference< XShape >& rxShape, const Sha
 
 // protected ------------------------------------------------------------------
 
-Rectangle ShapeBase::calcShapeRectangle( const ShapeParentAnchor* pParentAnchor ) const
+awt::Rectangle ShapeBase::calcShapeRectangle( const ShapeParentAnchor* pParentAnchor ) const
 {
     /*  Calculate shape rectangle. Applications may do something special
         according to some imported shape client data (e.g. Excel cell anchor). */
-    Rectangle aShapeRect;
+    awt::Rectangle aShapeRect;
     const ClientData* pClientData = getClientData();
     if( !pClientData || !mrDrawing.convertClientAnchor( aShapeRect, pClientData->maAnchor ) )
         aShapeRect = getRectangle( pParentAnchor );
@@ -422,15 +424,20 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
     }
 }
 
-Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
+Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
-    Rectangle aShapeRect(rShapeRect);
+    awt::Rectangle aShapeRect(rShapeRect);
+    boost::optional<sal_Int32> oRotation;
+    if (!maTypeModel.maRotation.isEmpty())
+        oRotation.reset(maTypeModel.maRotation.toInt32());
     if (!maTypeModel.maFlip.isEmpty())
     {
         if (maTypeModel.maFlip.equalsAscii("x"))
         {
             aShapeRect.X += aShapeRect.Width;
             aShapeRect.Width *= -1;
+            if (oRotation)
+                oRotation.reset(360 - *oRotation);
         }
         else if (maTypeModel.maFlip.equalsAscii("y"))
         {
@@ -497,9 +504,11 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     }
 
     PropertySet aPropertySet(xShape);
-    if (xShape.is() && !maTypeModel.maRotation.isEmpty())
+    if (xShape.is() && oRotation)
     {
-        aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(maTypeModel.maRotation.toInt32() * 100));
+        // See DffPropertyReader::Fix16ToAngle(): in VML, positive rotation angles are clockwise, we have them as counter-clockwise.
+        // Additionally, VML type is 0..360, our is 0.36000.
+        aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(sal_Int32(NormAngle360((*oRotation) * -100))));
         // If rotation is used, simple setPosition() is not enough.
         aPropertySet.setAnyProperty(PROP_HoriOrientPosition, makeAny( aShapeRect.X ) );
         aPropertySet.setAnyProperty(PROP_VertOrientPosition, makeAny( aShapeRect.Y ) );
@@ -510,7 +519,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     return xShape;
 }
 
-Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect, OUString& rGraphicPath ) const
+Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect, OUString& rGraphicPath ) const
 {
     Reference< XShape > xShape = mrDrawing.createAndInsertXShape( "com.sun.star.drawing.GraphicObjectShape", rxShapes, rShapeRect );
     if( xShape.is() )
@@ -548,7 +557,7 @@ RectangleShape::RectangleShape( Drawing& rDrawing ) :
 {
 }
 
-Reference<XShape> RectangleShape::implConvertAndInsert(const Reference<XShapes>& rxShapes, const Rectangle& rShapeRect) const
+Reference<XShape> RectangleShape::implConvertAndInsert(const Reference<XShapes>& rxShapes, const awt::Rectangle& rShapeRect) const
 {
     OUString aGraphicPath = getGraphicPath();
 
@@ -589,14 +598,14 @@ PolyLineShape::PolyLineShape( Drawing& rDrawing ) :
 {
 }
 
-Reference< XShape > PolyLineShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
+Reference< XShape > PolyLineShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
     Reference< XShape > xShape = SimpleShape::implConvertAndInsert( rxShapes, rShapeRect );
     // polygon path
-    Rectangle aCoordSys = getCoordSystem();
+    awt::Rectangle aCoordSys = getCoordSystem();
     if( !maShapeModel.maPoints.empty() && (aCoordSys.Width > 0) && (aCoordSys.Height > 0) )
     {
-        ::std::vector< Point > aAbsPoints;
+        ::std::vector< awt::Point > aAbsPoints;
         for( ShapeModel::PointVector::const_iterator aIt = maShapeModel.maPoints.begin(), aEnd = maShapeModel.maPoints.end(); aIt != aEnd; ++aIt )
             aAbsPoints.push_back( lclGetAbsPoint( *aIt, rShapeRect, aCoordSys ) );
         PointSequenceSequence aPointSeq( 1 );
@@ -646,7 +655,7 @@ CustomShape::CustomShape( Drawing& rDrawing ) :
 {
 }
 
-Reference< XShape > CustomShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
+Reference< XShape > CustomShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
     // try to create a custom shape
     Reference< XShape > xShape = SimpleShape::implConvertAndInsert( rxShapes, rShapeRect );
@@ -671,7 +680,7 @@ ComplexShape::ComplexShape( Drawing& rDrawing ) :
 {
 }
 
-Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
+Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
     XmlFilterBase& rFilter = mrDrawing.getFilter();
     sal_Int32 nShapeType = getShapeType();
@@ -687,7 +696,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
             return Reference< XShape >();
 
         PropertyMap aOleProps;
-        Size aOleSize( rShapeRect.Width, rShapeRect.Height );
+        awt::Size aOleSize( rShapeRect.Width, rShapeRect.Height );
         if( rFilter.getOleObjectHelper().importOleObject( aOleProps, *pOleObjectInfo, aOleSize ) )
         {
             Reference< XShape > xShape = mrDrawing.createAndInsertXShape( CREATE_OUSTRING( "com.sun.star.drawing.OLE2Shape" ), rxShapes, rShapeRect );
@@ -779,7 +788,7 @@ const ShapeBase* GroupShape::getChildById( const OUString& rShapeId ) const
     return mxChildren->getShapeById( rShapeId, true );
 }
 
-Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
+Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
     Reference< XShape > xGroupShape;
     // check that this shape contains children and a valid coordinate system
