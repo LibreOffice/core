@@ -632,6 +632,11 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
     {
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetExperimentalSidebar( m_pExpSidebarCB->IsChecked() );
+
+        svtools::executeRestartDialog(
+            comphelper::getProcessComponentContext(), this,
+            svtools::RESTART_REASON_MODIFIED_SIDEBAR);
+
         bModified = sal_True;
     }
 
