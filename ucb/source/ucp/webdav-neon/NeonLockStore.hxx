@@ -96,7 +96,7 @@ public:
 
 private:
     void startTicker();
-    void stopTicker();
+    void stopTicker(osl::ClearableMutexGuard & rGuard);
 };
 
 } // namespace webdav_ucp

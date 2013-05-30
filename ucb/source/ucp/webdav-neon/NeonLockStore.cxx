@@ -93,7 +93,9 @@ NeonLockStore::NeonLockStore()
 
 NeonLockStore::~NeonLockStore()
 {
-    stopTicker();
+    osl::ResettableMutexGuard aGuard(m_aMutex);
+    stopTicker(aGuard);
+    aGuard.reset(); // actually no threads should even try to access members now
 
     // release active locks, if any.
     OSL_ENSURE( m_aLockInfoMap.empty(),
@@ -126,23 +128,22 @@ void NeonLockStore::startTicker()
     }
 }
 
-void NeonLockStore::stopTicker()
+void NeonLockStore::stopTicker(osl::ClearableMutexGuard & rGuard)
 {
     rtl::Reference<TickerThread> pTickerThread;
-    {
-        osl::MutexGuard aGuard( m_aMutex );
 
-        if (!m_pTickerThread.is())
-        {
-            return; // nothing to do
-        }
+    if (m_pTickerThread.is())
+    {
         m_pTickerThread->finish(); // needs mutex
         // the TickerThread may run refreshLocks() at most once after this
         pTickerThread = m_pTickerThread;
         m_pTickerThread.clear();
     }
 
-    pTickerThread->join(); // without m_aMutex locked (to prevent deadlock)
+    rGuard.clear();
+
+    if (pTickerThread.is())
+        pTickerThread->join(); // without m_aMutex locked (to prevent deadlock)
 }
 
 void NeonLockStore::registerSession( HttpSession * pHttpSession )
@@ -193,13 +194,13 @@ void NeonLockStore::updateLock( NeonLock * pLock,
 
 void NeonLockStore::removeLock( NeonLock * pLock )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    osl::ClearableMutexGuard aGuard( m_aMutex );
 
     m_aLockInfoMap.erase( pLock );
     ne_lockstore_remove( m_pNeonLockStore, pLock );
 
     if ( m_aLockInfoMap.empty() )
-        stopTicker();
+        stopTicker(aGuard);
 }
 
 void NeonLockStore::refreshLocks()
