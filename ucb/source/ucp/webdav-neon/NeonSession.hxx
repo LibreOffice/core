@@ -65,12 +65,13 @@ private:
     DAVRequestEnvironment m_aEnv;
 
     static bool          m_bGlobalsInited;
-    static NeonLockStore m_aNeonLockStore;
 
 protected:
     virtual ~NeonSession();
 
 public:
+    static NeonLockStore m_aNeonLockStore;
+
     NeonSession( const rtl::Reference< DAVSessionFactory > & rSessionFactory,
                  const OUString& inUri,
                  const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rFlags,

@@ -92,6 +92,8 @@ public:
 
     void removeLock( NeonLock * pLock );
 
+    void unlockLock( NeonLock * pLock );
+
     void refreshLocks();
 
 private:

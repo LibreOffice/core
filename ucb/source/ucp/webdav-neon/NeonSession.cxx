@@ -2074,4 +2074,15 @@ OUString NeonSession::makeAbsoluteURL( OUString const & rURL ) const
     return OUString();
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT void NeonSessionUnlockByUri(rtl::OUString uri)
+{
+    NeonLock *pLock = NeonSession::m_aNeonLockStore.findByUri(uri);
+
+    if (!pLock)
+        return;
+
+    NeonSession::m_aNeonLockStore.unlockLock(pLock);
+    NeonSession::m_aNeonLockStore.removeLock(pLock);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
