@@ -73,12 +73,12 @@ void ExcelFilterBase::unregisterWorkbookGlobals()
 
 // ============================================================================
 
-OUString SAL_CALL ExcelFilter_getImplementationName() throw()
+OUString ExcelFilter_getImplementationName()
 {
     return OUString( "com.sun.star.comp.oox.xls.ExcelFilter" );
 }
 
-Sequence< OUString > SAL_CALL ExcelFilter_getSupportedServiceNames() throw()
+Sequence< OUString > ExcelFilter_getSupportedServiceNames()
 {
     Sequence< OUString > aSeq( 2 );
     aSeq[ 0 ] = "com.sun.star.document.ImportFilter";
@@ -86,8 +86,8 @@ Sequence< OUString > SAL_CALL ExcelFilter_getSupportedServiceNames() throw()
     return aSeq;
 }
 
-Reference< XInterface > SAL_CALL ExcelFilter_createInstance(
-        const Reference< XComponentContext >& rxContext ) throw( Exception )
+Reference< XInterface > ExcelFilter_create(
+        const Reference< XComponentContext >& rxContext )
 {
     return static_cast< ::cppu::OWeakObject* >( new ExcelFilter( rxContext ) );
 }

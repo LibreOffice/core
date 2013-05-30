@@ -52,7 +52,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
-#include <cppuhelper/implementationentry.hxx>
 
 #define DEBUG_XL_ENCRYPTION 0
 
@@ -1162,7 +1161,7 @@ OUString XclExpXmlStream::implGetImplementationName() const
 }
 
 
-Sequence< OUString > SAL_CALL XlsxExport_getSupportedServiceNames() throw()
+Sequence< OUString > XlsxExport_getSupportedServiceNames()
 {
     Sequence< OUString > aSeq( 2 );
     aSeq[0] = "com.sun.star.document.ExportFilter";
@@ -1170,48 +1169,9 @@ Sequence< OUString > SAL_CALL XlsxExport_getSupportedServiceNames() throw()
     return aSeq;
 }
 
-Reference< XInterface > SAL_CALL XlsxExport_createInstance(const Reference< XComponentContext > & rCC ) throw( Exception )
+Reference< XInterface > SAL_CALL XlsxExport_create(const Reference< XComponentContext > & rCC )
 {
     return (cppu::OWeakObject*) new XclExpXmlStream( rCC );
 }
 
-namespace oox { namespace xls {
-    OUString SAL_CALL ExcelFilter_getImplementationName() throw();
-    Sequence< OUString > SAL_CALL ExcelFilter_getSupportedServiceNames() throw();
-    Reference< XInterface > SAL_CALL ExcelFilter_createInstance(
-        const Reference< XComponentContext >& rxContext ) throw( Exception );
-} }
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-// ------------------------
-// - component_getFactory -
-// ------------------------
-::cppu::ImplementationEntry entries [] =
-{
-    {
-        XlsxExport_createInstance, XlsxExport_getImplementationName,
-        XlsxExport_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        0, 0
-    },
-    {
-        oox::xls::ExcelFilter_createInstance, oox::xls::ExcelFilter_getImplementationName,
-        oox::xls::ExcelFilter_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        0, 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL scfilt_component_getFactory( const sal_Char* pImplName, XMultiServiceFactory* pServiceManager, XRegistryKey*  pRegistryKey )
-{
-    return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, entries );
-
-}
-
-#ifdef __cplusplus
-}
-#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

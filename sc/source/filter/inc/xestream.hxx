@@ -381,6 +381,13 @@ private:
     XclExpXmlPathToStateMap                     maOpenedStreamMap;
 };
 
+css::uno::Reference< css::uno::XInterface > SAL_CALL XlsxExport_create(
+    css::uno::Reference< css::uno::XComponentContext > const & context);
+
+OUString SAL_CALL XlsxExport_getImplementationName();
+
+css::uno::Sequence< OUString > SAL_CALL XlsxExport_getSupportedServiceNames();
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
