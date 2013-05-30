@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7/c\u003d",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 910,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-05-30T14:57:32Z",
+      "side": 0,
+      "message": "I expect these whitespace changes were not intended.",
+      "revId": "6b562710cb8051e921726899246b421b197d49f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
