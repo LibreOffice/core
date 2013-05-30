@@ -44,8 +44,6 @@ using namespace cssu;
 using namespace ::sd::framework;
 using ::rtl::OUString;
 
-#define A2S(pString) (OUString(pString))
-
 namespace sd {
     extern ::Window * createTableDesignPanel (::Window* pParent, ViewShellBase& rBase);
 }
@@ -153,11 +151,11 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     ::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
     if ( ! xParentWindow.is() || pParentWindow==NULL)
         throw RuntimeException(
-            A2S("PanelFactory::createUIElement called without ParentWindow"),
+            OUString("PanelFactory::createUIElement called without ParentWindow"),
             NULL);
     if ( ! xFrame.is())
         throw RuntimeException(
-            A2S("PanelFactory::createUIElement called without XFrame"),
+            OUString("PanelFactory::createUIElement called without XFrame"),
             NULL);
 
     // Tunnel through the controller to obtain a ViewShellBase.
@@ -171,7 +169,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
             pBase = pController->GetViewShellBase();
     }
     if (pBase == NULL)
-        throw RuntimeException(A2S("can not get ViewShellBase for frame"), NULL);
+        throw RuntimeException(OUString("can not get ViewShellBase for frame"), NULL);
 
     // Get bindings from given arguments.
     const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
