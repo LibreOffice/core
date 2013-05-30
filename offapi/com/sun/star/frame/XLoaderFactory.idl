@@ -37,8 +37,8 @@ published interface XLoaderFactory
     /** interface to create loader objects by using his internal name
 
         <p>
-        Returned objects must support the service specification of a <type>FrameLoader</type>
-        or <type>SynchronousFrameLoader</type>. (Note: last one will be preferred if both ones
+        Returned objects must support the service specification of a FrameLoader
+        or SynchronousFrameLoader. (Note: last one will be preferred if both
         are available)
         They can be created by using of his internal name, which must be unambiguous everytime, only.
         To get this name use further specified interfaces of this factory for access on
@@ -50,8 +50,9 @@ published interface XLoaderFactory
     /** provides access to the whole frame loader configuration
 
     <p>This interface supports an access to the internal configuration of all accessible loader objects.
-        The return value of <member scope="com::sun::star::container">XNameAccess::getByName()</member>
-    is a property sequence packed in an any.  </p>
+        The return value of com::sun::star::container::XNameAccess::getByName()
+        is a property sequence packed in an any.
+    </p>
         <table border=1>
             <tr>
                 <td><b>Types<b></td>

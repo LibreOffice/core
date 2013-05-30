@@ -82,18 +82,15 @@ published service Content
         <h4>Mandatory commands</h4>
 
         <table style="border-width: 1px; border-spacing: 0px; border-style: solid; border-color: gray; border-collapse: collapse; background-color: white;" class="devdoc">
-            <thead>
                 <tr>
                     <th>Command Name</th>
                     <th>Return Type</th>
                     <th>Parameters</th>
                     <th>Description</th>
                 </tr>
-            </thead>
-            <tbody>
                 <tr>
                     <td>getCommandInfo</td>
-                    <td><type>XCommandInfo</type></td>
+                    <td>XCommandInfo</td>
                     <td>void</td>
                     <td>This command obtains an interface which allows to query
                         information on commands supported by a content.
@@ -101,7 +98,7 @@ published service Content
                 </tr>
                 <tr>
                     <td>getPropertySetInfo</td>
-                    <td><type scope="com::sun::star::beans">XPropertySetInfo</type></td>
+                    <td>com::sun::star::beans::XPropertySetInfo</td>
                     <td>void</td>
                     <td>This command obtains an interface which allows to query
                         information on properties supported by a content.
@@ -109,8 +106,8 @@ published service Content
                 </tr>
                 <tr>
                     <td>getPropertyValues</td>
-                    <td><type scope="com::sun::star::sdbc">XRow</type></td>
-                    <td>sequence&lt; <type scope="com::sun::star::beans">Property</type> &gt; aProps</td>
+                    <td>com::sun::star::sdbc::XRow</td>
+                    <td>sequence&lt; com::sun::star::beans::Property &gt; aProps</td>
                     <td>This command obtains property values from the content.
                         <blockquote>
                             <b>Note</b>: The execution will not be aborted, if there
@@ -123,7 +120,7 @@ published service Content
                 <tr>
                     <td>setPropertyValues</td>
                     <td>sequence&lt; any &gt;</td>
-                    <td>sequence&lt; <type scope="com::sun::star::beans">PropertyValue</type> &gt; aValues</td>
+                    <td>sequence&lt; com::sun::star::beans::PropertyValue &gt; aValues</td>
                     <td>This command sets property values of the content.
                         <p>Note that setPropertyValues does not throw an exception in the case
                         that one or more of the requested property values cannot be set.
@@ -133,131 +130,127 @@ published service Content
                         of elements like the number of properties to set. Every sequence
                         element contains the status for a property. The first sequence
                         elements corresponds to the first element in the sequence of
-                        <type scope="com::sun::star::beans">PropertyValue</type>s passed as
+                        com::sun::star::beans::PropertyValue passed as
                         command argument, and so on. The exceptions will never be passed to
-                        an <type scope="com::sun::star::task">InteractionHandler</type>.</p>
+                        an com::sun::star::task::InteractionHandler.</p>
 
                         <p>Every element in the returned sequence is an any containing:</p>
                         <ul>
                             <li>No value indicates, that the property value was set successfully.</li>
-                            <li><type scope="com::sun::star::beans">UnknownPropertyException</type>
+                            <li>com::sun::star::beans::UnknownPropertyException
                             indicates, that the property is not known to the content
                             implementation.</li>
-                            <li><type scope="com::sun::star::beans">IllegalTypeException</type>
+                            <li>com::sun::star::beans::IllegalTypeException
                             indicates, that the data type of the property value is not
                             acceptable.</li>
-                            <li><type scope="com::sun::star::lang">IllegalAccessException</type>
+                            <li>com::sun::star::lang::IllegalAccessException
                             indicates, that the property is constant
-                            (<member scope="com::sun::star::beans">PropertyAttribute::READONLY</member>
+                            (com::sun::star::beans::PropertyAttribute::READONLY
                             is set).</li>
-                            <li><type scope="com::sun::star::lang">IllegalArgumentException</type>
+                            <li>com::sun::star::lang::IllegalArgumentException
                             indicates, that the property value is not acceptable. For instance,
                             setting an empty title may be illegal.</li>
-                            <li>Any other execption derived from <type scope="com::sun::star::uno">Exception</type>
+                            <li>Any other execption derived from com::sun::star::uno::Exception
                             indicates, that the value was not set successfully. For example,
-                            this can be a <type>InteractiveAugmentedIOException</type>
-                            transporting the error code <member>IOErrorCode::ACCESS_DENIED</member>.</li>
+                            this can be a InteractiveAugmentedIOException
+                            transporting the error code IOErrorCode::ACCESS_DENIED.</li>
                         </ul>
 
                         <p>If the value to set is equal to the current value, no exception must
                         be added to the returned sequence</p>
                     </td>
                 </tr>
-            </tbody>
         </table>
 
         <h4>Optional commands</h4>
         <table style="border-width: 1px; border-spacing: 0px; border-style: solid; border-color: gray; border-collapse: collapse; background-color: white;" class="devdoc">
-            <thead>
                 <tr>
                     <th>Command Name</th>
                     <th>Return Type</th>
                     <th>Parameters</th>
                     <th>Description</th>
                 </tr>
-            </thead>
-            <tbody>
                 <tr>
                     <td>open</td>
-                    <td><type>XDynamicResultSet</type></td>
-                    <td><type>OpenCommandArgument2</type> aOpenCommandArg</td>
+                    <td>XDynamicResultSet</td>
+                    <td>OpenCommandArgument2 aOpenCommandArg</td>
                     <td>
                         For <b>folder</b> objects, this command will return an
-                        implementation of service <type>DynamicResultSet</type>.
-                        <p>The <type>OpenCommandArgument2</type> members must be
+                        implementation of service DynamicResultSet.
+                        <p>The OpenCommandArgument2 members must be
                         filled as follows:</p>
                         <ul>
-                            <li><member scope="com::sun::star::ucb">OpenCommandArgument::Mode</member>:
-                                <const scope="com::sun::star::ucb">OpenMode::ALL</const> or
-                                <const scope="com::sun::star::ucb">OpenMode::FOLDERS</const> or
-                                <const scope="com::sun::star::ucb">OpenMode::DOCUMENTS</const>.
+                            <li>com::sun::star::ucb::OpenCommandArgument::Mode:
+                                com::sun::star::ucb::OpenMode::ALL or
+                                com::sun::star::ucb::OpenMode::FOLDERS or
+                                com::sun::star::ucb::OpenMode::DOCUMENTS.
                                 The implementation of the open command MUST support all these modes!
                             </li>
-                            <li><member scope="com::sun::star::ucb">OpenCommandArgument::Priority</member>:
+                            <li>com::sun::star::ucb::OpenCommandArgument::Priority:
                                 can be set, but implementation may ignore the value
                             </li>
-                            <li><member scope="com::sun::star::ucb">OpenCommandArgument::Sink</member>:
+                            <li>com::sun::star::ucb::OpenCommandArgument::Sink:
                                 empty( ignored )
                             </li>
-                            <li><member scope="com::sun::star::ucb">OpenCommandArgument::Properties</member>:
+                            <li>com::sun::star::ucb::OpenCommandArgument::Properties:
                                 The properties for which the result set shall
                                 contain the property values. The order of the
                                 sequence is the same as the order of result set
                                 columns. First element of sequence will be row
                                 number one, second will be row number two, ...
                             </li>
-                            <li><member scope="com::sun::star::ucb">OpenCommandArgument2::SortingInfo</member>:
+                            <li>com::sun::star::ucb::OpenCommandArgument2::SortingInfo:
                                 contains sort criteria, if result set shall
                                 be sorted, otherwise it can be left empty.
                             </li>
                         </ul>
                         The exceution must be aborted by the implementation of this command
-                        (by throwing a <type>CommandAbortedException</type>), if an
+                        (by throwing a CommandAbortedException), if an
                         unsupported mode is requested.
                     </td>
                 </tr>
                 <tr>
                     <td>open</td>
                     <td>void</td>
-                    <td><type>OpenCommandArgument2</type> aOpenCommandArg</td>
-                    <td>For non-folder objects, the <type>OpenCommandArgument2</type>
+                    <td>OpenCommandArgument2 aOpenCommandArg</td>
+                    <td>For non-folder objects, the OpenCommandArgument2
                         struct will be prefilled with a data sink object, which
                         will be filled with the content data.
-                        <p>The <type>OpenCommandArgument2</type> members must be
+                        <p>The OpenCommandArgument2 members must be
                         filled as follows:</p>
                         <ul>
-                            <li><member scope="com::sun::star::ucb">OpenCommandArgument::Mode</member>:
-                                <const scope="com::sun::star::ucb">OpenMode::DOCUMENT</const> or
-                                <const scope="com::sun::star::ucb">OpenMode::DOCUMENT_SHARE_DENY_NONE</const> or
-                                <const scope="com::sun::star::ucb">OpenMode::DOCUMENT_SHARE_DENY_WRITE</const>.
+                            <li>com::sun::star::ucb::OpenCommandArgument::Mode:
+                                com::sun::star::ucb::OpenMode::DOCUMENT or
+                                com::sun::star::ucb::OpenMode::DOCUMENT_SHARE_DENY_NONE or
+                                com::sun::star::ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE.
                                 Support for DOCUMENT is mandatory, all others are optional.
                             </li>
-                            <li><member scope="com::sun::star::ucb">OpenCommandArgument::Priority</member>:
+                            <li>com::sun::star::ucb">OpenCommandArgument::Priority:
                                 can be set, but implementation may ignore the value
                             </li>
-                            <li><member scope="com::sun::star::ucb">OpenCommandArgument::Sink</member>:
+                            <li>com::sun::star::ucb::OpenCommandArgument::Sink:
                                 a sink, where the implementation can put the document data into.
                             </li>
-                            <li><member scope="com::sun::star::ucb">OpenCommandArgument::Properties</member>: empty ( ignored )</li>
-                            <li><member scope="com::sun::star::ucb">OpenCommandArgument2::SortingInfo</member>: empty ( ignored )</li>
+                            <li>com::sun::star::ucb::OpenCommandArgument::Properties: empty ( ignored )</li>
+                            <li>com::sun::star::ucb">OpenCommandArgument2::SortingInfo: empty ( ignored )</li>
                         </ul>
                         <p>The exceution must be aborted by the implementation of this command
-                        (by throwing a <type>CommandAbortedException</type>), if an
+                        (by throwing a CommandAbortedException), if an
                         unsupported mode is requested.</p>
                     </td>
                 </tr>
                 <tr>
                     <td>createNewContent</td>
-                    <td><type>XContent</type></td>
-                    <td><type>ContentInfo</type> contentinfo</td>
+                    <td>XContent</td>
+                    <td>ContentInfo contentinfo</td>
                     <td>
                         This command creates a new <b>non-persistent</b> content of a given type.
-                        <p>This command must be supported by every <type>Content</type>
+                        <p>This command must be supported by every Content
                         that supports the property "CreatableContentsInfo", if the returned
                         property value contains a non-empty sequence of creatable types.
                         <blockquote>
                             Note: This command is part of the replacement for the deprecated
-                            interface <type>XContentCreator</type>.
+                            interface XContentCreator.
                         </blockquote>
                         <p>Creation of a new <b>persistent</b> content:
                         <ol>
@@ -273,13 +266,13 @@ published service Content
                 <tr>
                     <td>insert</td>
                     <td>void</td>
-                    <td><type>InsertCommandArgument</type> aInsertCommandArg</td>
+                    <td>InsertCommandArgument aInsertCommandArg</td>
                     <td>
                         <ol>
                             <li>
                                 This command inserts a <b>new content</b>. It commits the process of
                                 creating a new content via executing the command "createNewContent"
-                                and initializing it via setting properties, afterwards.</br>
+                                and initializing it via setting properties, afterwards.<br>
                                 The command is not called on the content which created the new
                                 content, because the new object already knows where it is to be
                                 inserted (i.e. Calling createNewContent with the content type for a
@@ -288,10 +281,10 @@ published service Content
                                 posting the article to the appropriate News Group). Not calling
                                 "insert" for the new content, i.e. because the user cancels writing
                                 a new message, simply discards the new object. No extra call to
-                                "delete" is necessary.</br>
+                                "delete" is necessary.<br>
                                 On successful completion of this command, the parent of the inserted
                                 content must propagate the change by notifying a
-                                <type>ContentEvent</type> - <member>ContentAction::INSERTED</member>.
+                                ContentEvent - ContentAction::INSERTED.
                             </li>
                             <li>
                                 Additionally this command can be called at any time to overwrite
@@ -303,19 +296,19 @@ published service Content
                 <tr>
                     <td>update</td>
                     <td>void</td>
-                    <td><type>OpenCommandArgument2</type> aOpenCommandArg</td>
+                    <td>OpenCommandArgument2 aOpenCommandArg</td>
                     <td>This command triggers an update operation on a content.
                         For example, when "updating" a POP3-Inbox, the content
                         for that box will get and store all new objects on the
                         appropriate server. The inserted contents will be
                         notified by calling
-                        <member>XContentEventListener::contentEvent</member>.
+                        XContentEventListener::contentEvent().
                     </td>
                 </tr>
                 <tr>
                     <td>synchronize</td>
                     <td>void</td>
-                    <td><type>OpenCommandArgument2</type> aOpenCommandArg</td>
+                    <td>OpenCommandArgument2 aOpenCommandArg</td>
                     <td>
                         This command triggers a synchronization operation between locally
                         cached data and remote server's data. For example, when
@@ -323,7 +316,7 @@ published service Content
                         store all new objects and destroy all cached data for objects no
                         longer existing on the server. The inserted/deleted contents will
                         be notified by calling
-                        <member>XContent::contentEvent</member>.
+                        XContent::contentEvent().
                     </td>
                 </tr>
                 <tr>
@@ -337,15 +330,15 @@ published service Content
                     <td>void</td>
                     <td>boolean bDeletePhysically</td>
                     <td>
-                        This command deletes an object. If <TRUE/> is passed as parameter,
+                        This command deletes an object. If `TRUE` is passed as parameter,
                         the object will be destroyed physically. Otherwise it will be put
                         into trash can, if such a service is available and the object to
                         be deleted supports the command "undelete".
                         On successful completion of this command, the deleted content
-                        must propagate its deletion by notifying a <type>ContentEvent</type>
-                        - <member>ContentAction::DELETED</member>. Additionally, the contents
-                        parent must notify a <type>ContentEvent</type>
-                        - <member>ContentAction::REMOVED</member>
+                        must propagate its deletion by notifying a ContentEvent
+                        - ContentAction::DELETED. Additionally, the contents
+                        parent must notify a ContentEvent
+                        - ContentAction::REMOVED
                     </td>
                 </tr>
                 <tr>
@@ -360,60 +353,60 @@ published service Content
                 </tr>
                 <tr>
                     <td>search</td>
-                    <td><type>XDynamicResultSet</type></td>
-                    <td><type>SearchCommandArgument</type> aSearchCommandArg</td>
+                    <td>XDynamicResultSet</td>
+                    <td>SearchCommandArgument aSearchCommandArg</td>
                     <td>
                         This command searches for subcontents of a content matching the
                         given search criteria. The command will return an implemenation
-                        of service <type>DynamicResultSet</type>.
+                        of service DynamicResultSet.
                     </td>
                 </tr>
                 <tr>
                     <td>transfer</td>
                     <td>void</td>
-                    <td><type>TransferInfo</type> aTransferInfo</td>
+                    <td>TransferInfo aTransferInfo</td>
                     <td>
                         <blockquote>
                             <b>Important note:</b> A client that wants to transfer data should
                             not execute this command, but it should execute the command
-                            "globalTransfer" at the <type>UniversalContentBroker</type>.
+                            "globalTransfer" at the UniversalContentBroker.
                             This command is able to transfer all kind of content
                             supported by that UCB.
                         </blockquote>
                         This command transfers (copies/moves) an object from one location
                         to another. It must be executed at the folder content representing
-                        the <b>destination</b> of the transfer operation.</br>
+                        the <b>destination</b> of the transfer operation.<br>
                         Note that the implementation need not be able to handle
-                        any type of contents.</br>
+                        any type of contents.<br>
                         Generally, there are good chances that a transfer of a content will
                         succeed, if source and target folder have the same URL scheme.
-                        But there is no guaranty for that.</br>
+                        But there is no guaranty for that.<br>
                         For instance, moving a message from a folder on IMAP server A
                         to a folder on IMAP server B may fail, because the transfer
                         command can't be implemented efficiently for this scenario,
                         because it is not directly supported by the IMAP protocol.
                         On the other hand, moving a message from one folder to
                         another folder on the same IMAP server should work, because it can
-                        be implemeted efficiently.</br>
+                        be implemeted efficiently.<br>
                         If an implementation is not able to handle a given source URL,
                         it should indicate this by issuing a
-                        <type>InteractiveBadTransferURLException</type> interaction request.</br>
+                        InteractiveBadTransferURLException interaction request.<br>
                         Source and target folder may be the same when doing a move operation.
-                        </br>
+                        <br>
                         Transfers without the transfer command can be done as follows:
                         <ol>
-                            <li>Create a new content at the target folder</br>
+                            <li>Create a new content at the target folder<br>
                             <code>targetContent = target.execute( "createNewContent", type )</code>
                             </li>
-                            <li>Transfer data from source to target content</br>
+                            <li>Transfer data from source to target content<br>
                             <code>props = sourceContent.execute( "getPropertyValues", ... )</code>
                             <code>dataStream = sourceContent.execute( "open", ... )</code>
                             <code>targetContent.execute( "setPropertyValues", props )</code>
                             </li>
-                            <li>Insert ( commit ) the new content</br>
+                            <li>Insert ( commit ) the new content<br>
                             <code>targetContent.execute( "insert", dataStream )</code>
                             </li>
-                            <li>For move operations only: destroy the source content</br>
+                            <li>For move operations only: destroy the source content<br>
                             <code>sourceContent.execute( "delete", ... )</code>
                             </li>
                         </ol>
@@ -429,11 +422,11 @@ published service Content
                         This command obtains an exlusive write lock for the resource. The
                         lock is active until command "unlock" is executed, or the OOo
                         session that obtained the lock ends, or until the lock is released by
-                        a third party (e.g. a system administrator).</br>
+                        a third party (e.g. a system administrator).<br>
                         Exceptions:
                         <ul>
-                            <li><type>InteractiveLockingLockedException</type></li>
-                            <li><type>InteractiveLockingLockExpiredException</type></li>
+                            <li>InteractiveLockingLockedException</li>
+                            <li>InteractiveLockingLockExpiredException</li>
                         </ul>
                     </td>
                 </tr>
@@ -443,33 +436,29 @@ published service Content
                     <td>void</td>
                     <td>
                         This command removes a lock obtained by executing the command "lock"
-                        from the resource.</br>
+                        from the resource.<br>
                         <p>Exceptions:
                         <ul>
-                            <li><type>InteractiveLockingLockedException</type></li>
-                            <li><type>InteractiveLockingLockExpiredException</type></li>
+                            <li>InteractiveLockingLockedException</li>
+                            <li>InteractiveLockingLockExpiredException</li>
                         </ul>
                         </p>
-                        <p>Note that <type>InteractiveLockingLockExpiredException</type> might
+                        <p>Note that InteractiveLockingLockExpiredException might
                         be raised by any command that requires a previously obtained lock.
                         </p>
                     </td>
                 </tr>
-            </tbody>
         </table>
 
         <h3>Properties</h3>
         <h4>Mandatory properties</h4>
 
         <table style="border-width: 1px; border-spacing: 0px; border-style: solid; border-color: gray; border-collapse: collapse; background-color: white;" class="devdoc">
-            <thead>
                 <tr>
                     <th>Name</th>
                     <th>Type</th>
                     <th>Description</th>
                 </tr>
-            </thead>
-            <tbody>
                 <tr>
                     <td>ContentType</td>
                     <td>string</td>
@@ -502,20 +491,16 @@ published service Content
                     <td>string</td>
                     <td>contains the title of an object (e.g. the subject of a message).</td>
                 </tr>
-            </tbody>
         </table>
 
         <h4>Optional properties</h4>
 
         <table style="border-width: 1px; border-spacing: 0px; border-style: solid; border-color: gray; border-collapse: collapse; background-color: white;" class="devdoc">
-            <thead>
                 <tr>
                     <th>Name</th>
                     <th>Type</th>
                     <th>Description</th>
                 </tr>
-            </thead>
-            <tbody>
                 <tr>
                     <td>AutoUpdateInterval</td>
                     <td>long</td>
@@ -536,12 +521,12 @@ published service Content
                     <td>ConnectionMode</td>
                     <td>short</td>
                     <td>contains the current connection mode for the object.
-                        (see <type>ConnectionMode</type>)
+                        (see ConnectionMode)
                     </td>
                 </tr>
                 <tr>
                     <td>CreatableContentsInfo</td>
-                    <td>sequence <type>ContentInfo</type></td>
+                    <td>sequence ContentInfo</td>
                     <td>
                         contains the types of Contents a Content object can create via
                         command "createNewContent".
@@ -549,18 +534,18 @@ published service Content
                         Content must also support command "createNewContent".</p>
                         <blockquote>
                             Note: This property is part of the replacement for the deprecated
-                            interface <type>XContentCreator</type>.
+                            interface XContentCreator.
                         </blockquote>
                     </td>
                 </tr>
                 <tr>
                     <td>DateCreated</td>
-                    <td><type scope"com::sun::star::util">DateTime</type></td>
+                    <td>com::sun::star::util::DateTime</td>
                     <td>contains the date and time the object was created.</td>
                 </tr>
                 <tr>
                     <td>DateModified</td>
-                    <td><type scope"com::sun::star::util">DateTime</type></td>
+                    <td>com::sun::star::util::DateTime</td>
                     <td>contains the date and time the object was last modified.</td>
                 </tr>
                 <tr>
@@ -575,7 +560,7 @@ published service Content
                 </tr>
                 <tr>
                     <td>DocumentHeader</td>
-                    <td>sequence&lt; <type>DocumentHeaderField</type> &gt; </td>
+                    <td>sequence&lt; DocumentHeaderField &gt; </td>
                     <td>contains a sequence of documemt header fields (i.e. header
                         fields of a MIME-message, or the document info of an
                         office document ). For some standard header fields there
@@ -584,7 +569,7 @@ published service Content
                 </tr>
                 <tr>
                     <td>DocumentStoreMode</td>
-                    <td><type>DocumentStoreMode</type></td>
+                    <td>DocumentStoreMode</td>
                     <td>contains information about the way a folder stores the
                         contents of (remote) documents.
                     </td>
@@ -640,7 +625,7 @@ published service Content
                     <td>UpdateOnOpen</td>
                     <td>boolean</td>
                     <td>indicates whether (sub)contents shall be automatically updated
-                        everytime a (folder) content is opened.</br>This property may be
+                        everytime a (folder) content is opened.<br>This property may be
                         used to control whether a folder content should read data only
                         from local cache when it is opened, or whether it should connect
                         to a server to obtain latest data.</td>
@@ -707,7 +692,7 @@ published service Content
                 </tr>
                 <tr>
                     <td>Priority</td>
-                    <td><type>Priority</type></td>
+                    <td>Priority</td>
                     <td>contains a priority (i.e. of a message).</td>
                 </tr>
                 <tr>
@@ -717,7 +702,7 @@ published service Content
                 </tr>
                 <tr>
                     <td>Rules</td>
-                    <td><type>RuleSet</type></td>
+                    <td>RuleSet</td>
                     <td>contains the rules set for a content.</td>
                 </tr>
                 <tr>
@@ -765,7 +750,7 @@ published service Content
                 </tr>
                 <tr>
                     <td>SynchronizePolicy</td>
-                    <td><type>SynchronizePolicy</type></td>
+                    <td>SynchronizePolicy</td>
                     <td>contains the policy to use when synchronizing two objects.</td>
                 </tr>
                 <tr>
@@ -815,16 +800,15 @@ published service Content
                 </tr>
                 <tr>
                     <td>VerificationMode</td>
-                    <td><type>VerificationMode</type> </td>
+                    <td>VerificationMode </td>
                     <td>describes a verification policy.</td>
                 </tr>
-            </tbody>
         </table>
      */
     interface com::sun::star::ucb::XCommandProcessor;
 
 
-    /** is an enhanced version of <type>XCommandProcessor</type> that has an
+    /** is an enhanced version of XCommandProcessor that has an
         additional method for releasing command identifiers obtained via
         XCommandProcessor::createCommandIdentifier() to avoid
         resource leaks. For a detailed description of the problem refer to
@@ -874,8 +858,8 @@ published service Content
 
         @deprecated
             <p>This interface is <b>deprecated</b>, because a
-            <type>ContentProvider</type> might need a
-            <type>XCommandEnvironment</type> to perform the tasks of adding and
+            ContentProvider might need a
+            XCommandEnvironment to perform the tasks of adding and
             removing properties. New implementations should implement the
             respective commands "addProperty" and "removeProperty" instead.
      */

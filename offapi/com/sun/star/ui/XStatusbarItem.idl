@@ -25,7 +25,7 @@ module com {  module sun {  module star {  module ui {
 
 /** Represents an item in a status bar
 
-    @see <type scope="com::sun::star::frame">XStatusbarController</type>
+    @see com::sun::star::frame::XStatusbarController
 
     @since LibreOffice 4.1
 */
@@ -49,23 +49,23 @@ interface XStatusbarItem
         <ul>
             <li>Alignment
                 <ul>
-                    <li><member scope="com::sun::star::ui">ItemStyle::ALIGN_LEFT</member></li>
-                    <li><member scope="com::sun::star::ui">ItemStyle::ALIGN_CENTER</member></li>
-                    <li><member scope="com::sun::star::ui">ItemStyle::ALIGN_RIGHT</member></li>
+                    <li>com::sun::star::ui::ItemStyle::ALIGN_LEFT</li>
+                    <li>com::sun::star::ui::ItemStyle::ALIGN_CENTER</li>
+                    <li>com::sun::star::ui::ItemStyle::ALIGN_RIGHT</li>
                 </ul>
             </li>
             <li>Drawing
                 <ul>
-                    <li><member scope="com::sun::star::ui">ItemStyle::DRAW_OUT3D</member></li>
-                    <li><member scope="com::sun::star::ui">ItemStyle::DRAW_IN3D</member></li>
-                    <li><member scope="com::sun::star::ui">ItemStyle::DRAW_FLAT</member></li>
+                    <li>com::sun::star::ui::ItemStyle::DRAW_OUT3D</li>
+                    <li>com::sun::star::ui::ItemStyle::DRAW_IN3D</li>
+                    <li>com::sun::star::ui::ItemStyle::DRAW_FLAT</li>
                 </ul>
             </li>
-            <li><member scope="com::sun::star::ui">ItemStyle::AUTO_SIZE</member></li>
-            <li><member scope="com::sun::star::ui">ItemStyle::OWNER_DRAW</member></li>
+            <li>com::sun::star::ui::ItemStyle::AUTO_SIZE</li>
+            <li>com::sun::star::ui::ItemStyle::OWNER_DRAW</li>
         </ul>
 
-        @see <type scope="com::sun::star::ui">ItemStyle</type>
+        @see com::sun::star::ui::ItemStyle
      */
     [attribute, readonly] unsigned short Style;
 
@@ -75,7 +75,7 @@ interface XStatusbarItem
 
     /** the rectangle on the status bar device onto which the item is drawn
 
-        @see <member scope="com::sun::star::frame">XStatusbarController::paint()</member>
+        @see com::sun::star::frame::XStatusbarController::paint()
      */
     [attribute, readonly] com::sun::star::awt::Rectangle ItemRect;
 
@@ -101,7 +101,7 @@ interface XStatusbarItem
 
     /** forces repainting the item onto the status bar device
 
-        @see <member scope="com::sun::star::frame">XStatusbarController::paint()</member>
+        @see com::sun::star::frame::XStatusbarController::paint()
      */
     void repaint();
 };

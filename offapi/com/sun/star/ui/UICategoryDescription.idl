@@ -41,11 +41,11 @@ module com {  module sun {  module star {  module ui {
     <p>
     To access the user interface command categories of a module, a unique
     module specifier must be provided to
-    <member scope="com::sun::star::container">XNameAccess::getByName()</member>
+    com::sun::star::container::XNameAccess::getByName()
     function. The module specifier can be retrieved from the
-    <type scope="com::sun::star::frame">ModuleManager</type>
+    com::sun::star::frame::ModuleManager
     service. The interface provides references to
-    <type scope="com::sun:star::ui">ModuleUICommandDescription</type>.
+    com::sun:star::ui::ModuleUICommandDescription.
     </p>
 
     @see com::sun::star::frame::ModuleManager

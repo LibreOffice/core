@@ -42,20 +42,20 @@ interface XUIControllerFactory
     /** this interface provides functions to create new instances of a registered UI controller.
 
         <p>
-        Use <member scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithArgumentsAndContext()</member> to create
+        Use com::sun::star::lang::XMultiComponentFactory::createInstanceWithArgumentsAndContext() to create
         a new UI controller instance. Use the CommandURL as the service specifier.
 
         This call supports the following arguments provided as com::sun::star::beans::PropertyValue:
         <ul>
             <li>
-                <b>Frame</b><br>specifies the <type scope="com::sun::star::frame">XFrame</type>
+                <b>Frame</b><br>specifies the com::sun::star::frame::XFrame
                 instance to which the UI controller belongs to. This property must be provided to
                 the UI controller, otherwise it cannot dispatch its internal commands.
              </li>
             <li>
                 <b>ModuleIdentifier</b><br>optional string that specifies in which module context the UI
-                controller should be created.</br>The module identifier can be retrieved using the
-                <type>ModuleManager</type>.
+                controller should be created.<br>The module identifier can be retrieved using the
+                ModuleManager.
             </li>
         </ul>
         </p>

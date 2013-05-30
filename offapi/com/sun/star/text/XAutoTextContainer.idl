@@ -27,14 +27,14 @@
 
 module com {  module sun {  module star {  module text {
 
-/** handles blocks of <type>AutoTextEntry</type>.
+/** handles blocks of AutoTextEntry.
     @see AutoTextContainer
 */
 published interface XAutoTextContainer: com::sun::star::container::XNameAccess
 {
     /** creates a new AutoText group.
 
-    @param aGroupName the name of the <type>AutoTextContainer</type>
+    @param aGroupName the name of the AutoTextContainer
 
     <p>The name must follow the pattern <code>groupname*pathid</code>, where:</p>
 
@@ -46,7 +46,7 @@ published interface XAutoTextContainer: com::sun::star::container::XNameAccess
         <li><code>pathid</code> is a number (0 or 1) identifying the directory
         where the AutoText file is stored. Paths are stored in the Office
         configuration and accessed through
-        <member scope="com::sun::star::util">PathSettings::AutoText</member>.
+        com::sun::star::util::PathSettings::AutoText.
             <ul>
                 <li>0 indicates the path of the <b>Office Basis</b> layer</li>
                 <li>1 indicates the path of the <b>user</b> directory</li>
@@ -54,15 +54,15 @@ published interface XAutoTextContainer: com::sun::star::container::XNameAccess
         </li>
     </ul>
     If only <code>groupname</code> is specified, the path defaults to 0, the
-    <b>Office Basis</b> layer.</br>Note that in some systems the user may lack of
+    <b>Office Basis</b> layer.<br>Note that in some systems the user may lack of
     write access to the Office Basis directory.
 
-    @example
+    Example:
 
     <ul>
-        <li><code>standard*0</code></br>the "standard" AutoTextGroup in the Office Basis layer</li>
-        <li><code>template</code></br>the "template" AutoTextGroup in the Office Basis layer</li>
-        <li><code>mytexts*1</code></br>the "mytexts" AutoTextGroup in the user directory</li>
+        <li><code>standard*0</code><br>the "standard" AutoTextGroup in the Office Basis layer</li>
+        <li><code>template</code><br>the "template" AutoTextGroup in the Office Basis layer</li>
+        <li><code>mytexts*1</code><br>the "mytexts" AutoTextGroup in the user directory</li>
     </ul>
 
     */
@@ -71,7 +71,8 @@ published interface XAutoTextContainer: com::sun::star::container::XNameAccess
                     com::sun::star::container::ElementExistException );
 
     /** deletes the specified AutoText group.
-        @param aGroupName see the documentation for <member>XAutoTextContainer::insertNewByName()</member>
+        @param aGroupName
+            see the documentation for XAutoTextContainer::insertNewByName()
     */
     void removeByName( [in] string aGroupName )
             raises( com::sun::star::container::NoSuchElementException );

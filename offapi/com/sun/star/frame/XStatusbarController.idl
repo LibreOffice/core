@@ -60,28 +60,28 @@ interface XStatusbarController
 
         <p>A status bar controller is initialized with <b>five</b> additional
         arguments provided as a sequence of
-        <type scope="com::sun::star::beans">PropertyValue</type>:</p>
+        com::sun::star::beans::PropertyValue:</p>
 
         <ul>
-            <li><b>Frame</b><br/>a <type scope="com::sun::star::frame">XFrame</type>
+            <li><b>Frame</b><br/>a com::sun::star::frame::XFrame
                 instance to which the status bar controller belongs.
             </li>
             <li><b>CommandURL</b><br/>a string which specifies the command
-                associated with the statusbar controller.</br>
+                associated with the statusbar controller.<br>
                 The command is used to identify the status bar controller
                 implementation.
             </li>
-            <li><b>StatusbarItem</b><br/>a <type scope="com::sun::star::ui">XStatusbarItem</type>
+            <li><b>StatusbarItem</b><br/>a com::sun::star::ui::XStatusbarItem
                 instance which represents the status bar item asociated with
                 this controller.
             </li>
-            <li><b>ParentWindow</b><br/>a <type scope="com::sun::star::awt">Window</type>
+            <li><b>ParentWindow</b><br/>a com::sun::star::awt::Window
                 instance which represents the parent window (status bar window).
             </li>
             <li><b>ModuleName</b><br/>a string which specifies the name of the
                 office module attached to the frame to which this controller
                 belongs; the value is taken from
-                <member scope="com::sun::star::frame">XModuleManager::identify()</member>.
+                com::sun::star::frame::XModuleManager::identify().
             </li>
         </ul>
     */
@@ -91,7 +91,7 @@ interface XStatusbarController
         changed.
 
         <p>The status bar controller implementation should register itself as a
-        listener when its <member scope="com::sun::star::util">XUpdatable</member>
+        listener when its com::sun::star::util::XUpdatable
         interface has been called.</p>
     */
     interface com::sun::star::frame::XStatusListener;
@@ -157,7 +157,7 @@ interface XStatusbarController
 
         @param nCommand
             describes which command has been invoked.
-            <br/>See <type scope="com::sun::star::awt">Command</type> for
+            <br/>See com::sun::star::awt::Command for
             possible values.
 
         @param bMouseEvent

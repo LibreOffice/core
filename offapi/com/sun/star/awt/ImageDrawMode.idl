@@ -22,7 +22,7 @@ module com { module sun { module star { module awt {
 
 /** defines modes how an image is drawn onto a device
 
-    @see <member scope="com::sun::star::awt">XGraphics2::drawImage</member>
+    @see com::sun::star::awt::XGraphics2::drawImage()
     @since LibreOffice 4.1
  */
 constants ImageDrawMode
@@ -36,12 +36,12 @@ constants ImageDrawMode
     const short DISABLE = 0x0001;
 
     /** the image is drawn as being highlighted.
-        See <member scope="com::sun::star::awt">XStyleSettings::HighlightColor</member>.
+        See com::sun::star::awt::XStyleSettings::HighlightColor.
      */
     const short HIGHLIGHT = 0x0002;
 
     /** the image is drawn as being deactivated.
-        See <member scope="com::sun::star::awt">XStyleSettings::DeactiveColor</member>.
+        See com::sun::star::awt::XStyleSettings::DeactiveColor.
      */
     const short DEACTIVE = 0x0004;
 

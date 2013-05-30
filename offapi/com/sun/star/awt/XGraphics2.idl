@@ -36,7 +36,7 @@ published interface XGraphics2: com::sun::star::awt::XGraphics
     void clear( [in] Rectangle aRect );
 
 
-    /** draws a <type scope="com::sun::star::graphic">XGraphic</type>
+    /** draws a com::sun::star::graphic::XGraphic
         in the output device.
 
         <p>Note that some devices may not support this operation.</p>
@@ -57,10 +57,10 @@ published interface XGraphics2: com::sun::star::awt::XGraphics
 
         @param  nStyle
             the style used to draw the image.
-            See <type scope="com::sun::star::awt">ImageDrawMode</type>.
+            See com::sun::star::awt::ImageDrawMode.
 
         @param  aGraphic
-            the <type scope="com::sun::star::graphic">XGraphic</type>
+            the com::sun::star::graphic::XGraphic
             to be drawn onto the device
      */
     void drawImage( [in] long nX,
