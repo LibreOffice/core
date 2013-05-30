@@ -38,10 +38,18 @@
 
 #include <unotools/confignode.hxx>
 
+#include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/ui/ImageType.hpp>
+#include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/XImageManager.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 
 using namespace vcl;
-
+using namespace com::sun::star;
 
 // =======================================================================
 
@@ -652,6 +660,92 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const XubString& rText,
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
+/// Get label of the command (like of .uno:Save) from the description service.
+static OUString getCommandLabel(const OUString& rCommand, const uno::Reference<uno::XComponentContext>& rContext, const OUString& rModuleId)
+{
+    if (rCommand.isEmpty())
+        return OUString();
+
+    try
+    {
+        uno::Reference<container::XNameAccess> xUICommandLabels;
+        uno::Reference<container::XNameAccess> xUICommandDescription(frame::UICommandDescription::create(rContext));
+
+        if ((xUICommandDescription->getByName(rModuleId) >>= xUICommandLabels) && xUICommandLabels.is())
+        {
+            uno::Sequence<beans::PropertyValue> aProperties;
+            if (xUICommandLabels->getByName(rCommand) >>= aProperties)
+            {
+                for ( sal_Int32 i = 0; i < aProperties.getLength(); i++ )
+                {
+                    if (aProperties[i].Name == "Label")
+                    {
+                        OUString aLabel;
+                        if (aProperties[i].Value >>= aLabel)
+                            return aLabel;
+                    }
+                }
+            }
+        }
+    }
+    catch (uno::Exception&)
+    {
+    }
+
+    return OUString();
+}
+
+
+/// Get label of the command (like of .uno:Save) from the description service.
+static Image getCommandImage(const OUString& rCommand, bool bLarge, const uno::Reference<uno::XComponentContext>& rContext, const OUString& rModuleId)
+{
+    if (rCommand.isEmpty())
+        return Image();
+
+    try {
+        uno::Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ui::ModuleUIConfigurationManagerSupplier::create(rContext));
+        uno::Reference<ui::XUIConfigurationManager> xUICfgMgr(xModuleCfgMgrSupplier->getUIConfigurationManager(rModuleId));
+
+        uno::Sequence< uno::Reference<graphic::XGraphic> > aGraphicSeq;
+        uno::Reference<ui::XImageManager> xModuleImageManager(xUICfgMgr->getImageManager(), uno::UNO_QUERY);
+
+        uno::Sequence<OUString> aImageCmdSeq(1);
+        aImageCmdSeq[0] = rCommand;
+
+        sal_Int16 nImageType(ui::ImageType::COLOR_NORMAL | ui::ImageType::SIZE_DEFAULT);
+        if (bLarge)
+            nImageType |= ui::ImageType::SIZE_LARGE;
+
+        aGraphicSeq = xModuleImageManager->getImages(nImageType, aImageCmdSeq);
+
+        uno::Reference<graphic::XGraphic> xGraphic(aGraphicSeq[0]);
+
+        return Image(xGraphic);
+    }
+    catch (uno::Exception&)
+    {
+    }
+
+    return Image();
+}
+
+void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::XFrame>& rFrame, ToolBoxItemBits nBits, sal_uInt16 nPos)
+{
+    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    uno::Reference<frame::XModuleManager2> xModuleManager(frame::ModuleManager::create(xContext));
+    OUString aModuleId(xModuleManager->identify(rFrame));
+
+    OUString aLabel(getCommandLabel(rCommand, xContext, aModuleId));
+    Image aImage(getCommandImage(rCommand, false /*FIXME large or small?*/, xContext, aModuleId));
+
+    // let's invent an ItemId
+    const sal_uInt16 COMMAND_ITEMID_START = 30000;
+    sal_uInt16 nItemId = COMMAND_ITEMID_START + GetItemCount();
+
+    InsertItem(nItemId, aImage, aLabel, nBits, nPos);
+    SetItemCommand(nItemId, rCommand);
+}
+
 // -----------------------------------------------------------------------
 
 void ToolBox::InsertWindow( sal_uInt16 nItemId, Window* pWindow,
@@ -1007,6 +1101,17 @@ sal_uInt16 ToolBox::GetItemId( const Point& rPos ) const
         }
 
         ++it;
+    }
+
+    return 0;
+}
+
+sal_uInt16 ToolBox::GetItemId(const OUString &rCommand) const
+{
+    for (std::vector<ImplToolItem>::const_iterator it = mpData->m_aItems.begin(); it != mpData->m_aItems.end(); ++it)
+    {
+        if (it->maCommandStr == rCommand)
+            return it->mnId;
     }
 
     return 0;

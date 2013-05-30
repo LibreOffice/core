@@ -10,10 +10,10 @@
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/layout.hxx>
 
-PanelLayout::PanelLayout(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+PanelLayout::PanelLayout(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame)
     : Control(pParent)
 {
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame);
 }
 
 Size PanelLayout::GetOptimalSize() const
