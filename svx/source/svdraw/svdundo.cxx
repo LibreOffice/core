@@ -1168,6 +1168,11 @@ void SdrUndoObjSetText::Undo()
 
     pObj->SetEmptyPresObj( bEmptyPresObj );
     pObj->ActionChanged();
+
+    // #122410# SetOutlinerParaObject at SdrText does not trigger a
+    // BroadcastObjectChange, but it is needed to make evtl. SlideSorters
+    // update their preview.
+    pObj->BroadcastObjectChange();
 }
 
 void SdrUndoObjSetText::Redo()
@@ -1183,6 +1188,11 @@ void SdrUndoObjSetText::Redo()
         static_cast< SdrTextObj* >( pObj )->NbcSetOutlinerParaObjectForText( pText1, pText );
 
     pObj->ActionChanged();
+
+    // #122410# NbcSetOutlinerParaObjectForText at SdrTextObj does not trigger a
+    // BroadcastObjectChange, but it is needed to make evtl. SlideSorters
+    // update their preview.
+    pObj->BroadcastObjectChange();
 
     // #94278# Trigger PageChangeCall
     ImpShowPageOfThisObject();
