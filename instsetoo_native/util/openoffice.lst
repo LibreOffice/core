@@ -14,8 +14,8 @@ Globals
             HIDELICENSEDIALOG 1
             PACKAGEPREFIX 
             BASISPACKAGEPREFIX aoobasis
-            UREPACKAGEPREFIX apacheopenoffice
-            SOLSUREPACKAGEPREFIX apacheopenoffice
+            UREPACKAGEPREFIX openoffice
+            SOLSUREPACKAGEPREFIX openoffice
             USE_FILEVERSION 1
             LIBRARYVERSION 10.0.0
             POOLPRODUCT 1
