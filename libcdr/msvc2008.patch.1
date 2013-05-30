@@ -1,0 +1,13 @@
+Fix broken MSVC 2008 project file
+
+--- cdr/build/win32/libcdr.vcproj	2013-05-30 17:36:43.084800000 +0200
++++ cdr/build/win32/libcdr.vcproj	2013-05-30 17:36:52.710000000 +0200
+@@ -217,7 +217,7 @@
+ 				</FileConfiguration>
+ 			</File>
+ 			<File
+-				RelativePath="..\..\inc\libcdr\CDRDocument.cpp"
++				RelativePath="..\..\src\lib\CDRDocument.cpp"
+ 				>
+ 				<FileConfiguration
+ 					Name="Debug|Win32"
