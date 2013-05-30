@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-<object class="GtkAdjustment" id="adjustment1">
+  <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">99</property>
     <property name="value">1</property>
@@ -31,7 +31,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="row_spacing">6</property>
-                <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkRadioButton" id="auto">
                     <property name="label" translatable="yes">A_uto</property>
@@ -75,6 +74,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -123,9 +123,10 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="ignore">
-                    <property name="label" translatable="yes">Ignore _pieces of lengthAsian</property>
+                    <property name="label" translatable="yes">Ignore _pieces of length</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -159,9 +160,6 @@
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
                   <object class="GtkSpinButton" id="ignorelen">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -175,6 +173,9 @@
                     <property name="width">1</property>
                     <property name="height">1</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
             </child>
