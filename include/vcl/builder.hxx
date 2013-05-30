@@ -23,6 +23,8 @@
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 
+#include <com/sun/star/frame/XFrame.hpp>
+
 class ListBox;
 class NumericFormatter;
 class PopupMenu;
@@ -235,8 +237,13 @@ private:
         }
         bool operator()(const Window *pA, const Window *pB) const;
     };
+
+    /// XFrame to be able to extract labels and other properties of the UNO commands (like of .uno:Bold).
+    com::sun::star::uno::Reference<com::sun::star::frame::XFrame> m_xFrame;
+
 public:
-    VclBuilder(Window *pParent, OUString sUIRootDir, OUString sUIFile, OString sID = OString());
+    VclBuilder(Window *pParent, OUString sUIRootDir, OUString sUIFile, OString sID = OString(),
+            const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame = com::sun::star::uno::Reference<com::sun::star::frame::XFrame>());
     ~VclBuilder();
     Window *get_widget_root();
     //sID must exist and be of type T

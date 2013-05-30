@@ -26,10 +26,13 @@
 #include <vcl/svapp.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/toolbox.hxx>
 #include <vcl/vclmedit.hxx>
 #include <svdata.hxx>
 #include <svids.hrc>
 #include <window.h>
+
+using namespace com::sun::star;
 
 #ifdef DISABLE_DYNLOADING
 #include <dlfcn.h>              //  For RTLD_DEFAULT
@@ -135,13 +138,14 @@ namespace
 }
 #endif
 
-VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OString sID)
+VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OString sID, const uno::Reference<frame::XFrame>& rFrame)
     : m_sID(sID)
     , m_sHelpRoot(OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
     , m_pStringReplace(ResMgr::GetReadStringHook())
     , m_pParent(pParent)
     , m_bToplevelParentFound(false)
     , m_pParserState(new ParserState)
+    , m_xFrame(rFrame)
 {
     m_bToplevelHasDeferredInit = (pParent && pParent->IsDialog()) ? ((Dialog*)pParent)->isDeferredInit() : false;
     m_bToplevelHasDeferredProperties = m_bToplevelHasDeferredInit;
@@ -615,6 +619,18 @@ namespace
             rMap.erase(aFind);
         }
         return sType;
+    }
+
+    OString extractActionName(VclBuilder::stringmap &rMap)
+    {
+        OString sActionName;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("action-name"));
+        if (aFind != rMap.end())
+        {
+            sActionName = aFind->second;
+            rMap.erase(aFind);
+        }
+        return sActionName;
     }
 
     Window * extractStockAndBuildPushButton(Window *pParent, VclBuilder::stringmap &rMap)
@@ -1208,6 +1224,22 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         pWindow = new VclMultiLineEdit(pRealParent, nWinStyle);
         if (pRealParent != pParent)
             cleanupWidgetOwnScrolling(pParent, pWindow, rMap);
+    }
+    else if (name == "GtkToolbar")
+    {
+        pWindow = new ToolBox(pParent, WB_3DLOOK | WB_TABSTOP);
+    }
+    else if (name == "GtkToolButton")
+    {
+        ToolBox *pToolBox = dynamic_cast<ToolBox*>(pParent);
+        if (pToolBox)
+        {
+            OUString aCommand(OStringToOUString(extractActionName(rMap), RTL_TEXTENCODING_UTF8));
+            if (!aCommand.isEmpty())
+                pToolBox->InsertItem(aCommand, m_xFrame);
+
+            return NULL; // no widget to be created
+        }
     }
     else
     {

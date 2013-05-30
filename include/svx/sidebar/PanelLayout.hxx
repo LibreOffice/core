@@ -15,11 +15,14 @@
 #include <vcl/builder.hxx>
 #include <vcl/ctrl.hxx>
 
+#include <com/sun/star/frame/XFrame.hpp>
+
 /// This class is the base for the Widget Layout-based sidebar panels.
 class SVX_DLLPUBLIC PanelLayout : public Control, public VclBuilderContainer
 {
 public:
-    PanelLayout(Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
+    PanelLayout(Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+            const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame);
     virtual ~PanelLayout() {}
 
     virtual Size GetOptimalSize() const;

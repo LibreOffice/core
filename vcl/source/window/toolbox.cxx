@@ -4777,7 +4777,10 @@ void ToolBox::Resizing( Size& rSize )
     mnLastResizeDY = rSize.Height();
 }
 
-// -----------------------------------------------------------------------
+Size ToolBox::GetOptimalSize() const
+{
+    return ImplCalcSize( this, mnLines );
+}
 
 Size ToolBox::CalcWindowSizePixel( sal_uInt16 nCalcLines ) const
 {

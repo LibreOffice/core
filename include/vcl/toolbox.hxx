@@ -28,6 +28,8 @@
 #include <vcl/timer.hxx>
 #include <vector>
 
+#include <com/sun/star/frame/XFrame.hpp>
+
 class UserDrawEvent;
 
 struct ImplToolItem;
@@ -333,8 +335,14 @@ public:
     virtual sal_Bool        Docking( const Point& rPos, Rectangle& rRect );
     virtual void        EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
     virtual void        Resizing( Size& rSize );
+    virtual Size        GetOptimalSize() const;
 
     void                InsertItem( const ResId& rResId,
+                                    sal_uInt16 nPos = TOOLBOX_APPEND );
+    /// Insert a command (like '.uno:Save').
+    void                InsertItem( const OUString& rCommand,
+                                    const com::sun::star::uno::Reference<com::sun::star::frame::XFrame>& rFrame,
+                                    ToolBoxItemBits nBits = 0,
                                     sal_uInt16 nPos = TOOLBOX_APPEND );
     void                InsertItem( sal_uInt16 nItemId, const Image& rImage,
                                     ToolBoxItemBits nBits = 0,
@@ -386,10 +394,12 @@ public:
     sal_uInt16              GetItemPos( const Point& rPos ) const;
     sal_uInt16              GetItemId( sal_uInt16 nPos ) const;
     sal_uInt16              GetItemId( const Point& rPos ) const;
+    /// Map the command name (like .uno:Save) back to item id.
+    sal_uInt16          GetItemId( const OUString& rCommand ) const;
     Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
     Rectangle           GetItemPosRect( sal_uInt16 nPos ) const;
 
-    // retrieves the optimal position to place a popup window for this item (subtoolbar or dropdown)
+    /// Retrieves the optimal position to place a popup window for this item (subtoolbar or dropdown)
     Point               GetItemPopupPosition( sal_uInt16 nItemId, const Size& rSize ) const;
 
     Rectangle           GetScrollRect() const;
