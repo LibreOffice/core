@@ -156,11 +156,4 @@
 #define FT_KEY_BINDINGS       2
 #define LB_KEY_BINDINGS       3
 
-// TP_DEFAULTS
-#define FL_INIT_SPREADSHEET  1
-#define FT_NSHEETS           2
-#define ED_NSHEETS           3
-#define FT_SHEETPREFIX       4
-#define ED_SHEETPREFIX       5
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,36 +19,35 @@
 
 
 ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCoreSet) :
-    SfxTabPage(pParent, ScResId(RID_SCPAGE_DEFAULTS), rCoreSet),
-    aFLInitSpreadSheet ( this, ScResId( FL_INIT_SPREADSHEET ) ),
-    aFtNSheets         ( this, ScResId( FT_NSHEETS ) ),
-    aEdNSheets         ( this, ScResId( ED_NSHEETS ) ),
-    aFtSheetPrefix     ( this, ScResId( FT_SHEETPREFIX ) ),
-    aEdSheetPrefix     ( this, ScResId( ED_SHEETPREFIX ) )
+    SfxTabPage(pParent, "OptDefaultPage", "modules/scalc/ui/optdefaultpage.ui", rCoreSet)
+
 {
-    FreeResource();
+    get( m_pFtNSheets, "textsheetsnumber");
+    get( m_pEdNSheets, "sheetsnumber");
+    get( m_pFtSheetPrefix, "textsheetprefix");
+    get( m_pEdSheetPrefix, "sheetprefix");
 
     // the following computation must be modified accordingly if a third line is added to this dialog
-    long nTxtW1 = aFtNSheets.GetCtrlTextWidth( aFtNSheets.GetText() );
-    long nCtrlW1 = aFtNSheets.GetSizePixel().Width();
-    long nTxtW2 = aFtSheetPrefix.GetCtrlTextWidth(aFtSheetPrefix.GetText() );
-    long nCtrlW2 = aFtSheetPrefix.GetSizePixel().Width();
+    long nTxtW1  = m_pFtNSheets->GetCtrlTextWidth( m_pFtNSheets->GetText() );
+    long nCtrlW1 = m_pFtNSheets->GetSizePixel().Width();
+    long nTxtW2  = m_pFtSheetPrefix->GetCtrlTextWidth(m_pFtSheetPrefix->GetText() );
+    long nCtrlW2 = m_pFtSheetPrefix->GetSizePixel().Width();
     if ( nTxtW1 >= nCtrlW1 || nTxtW2 >= nCtrlW2)
     {
         long nTxtW = std::max(nTxtW1,nTxtW2);
-        Size aNewSize = aFtNSheets.GetSizePixel();
+        Size aNewSize = m_pFtNSheets->GetSizePixel();
         aNewSize.Width() = nTxtW;
-        aFtNSheets.SetSizePixel( aNewSize );
-        aFtSheetPrefix.SetSizePixel( aNewSize );
-        Point aNewPoint = aEdNSheets.GetPosPixel();
+        m_pFtNSheets->SetSizePixel( aNewSize );
+        m_pFtSheetPrefix->SetSizePixel( aNewSize );
+        Point aNewPoint = m_pEdNSheets->GetPosPixel();
         aNewPoint.X() += (nTxtW - nCtrlW1);
-        aEdNSheets.SetPosPixel( aNewPoint );
-        aNewPoint.Y() = aEdSheetPrefix.GetPosPixel().Y();
-        aEdSheetPrefix.SetPosPixel( aNewPoint );
+        m_pEdNSheets->SetPosPixel( aNewPoint );
+        aNewPoint.Y() = m_pEdSheetPrefix->GetPosPixel().Y();
+        m_pEdSheetPrefix->SetPosPixel( aNewPoint );
     }
-    aEdNSheets.SetModifyHdl( LINK(this, ScTpDefaultsOptions, NumModifiedHdl) );
-    aEdSheetPrefix.SetModifyHdl( LINK(this, ScTpDefaultsOptions, PrefixModifiedHdl) );
-    aEdSheetPrefix.SetGetFocusHdl( LINK(this, ScTpDefaultsOptions, PrefixEditOnFocusHdl) );
+    m_pEdNSheets->SetModifyHdl( LINK(this, ScTpDefaultsOptions, NumModifiedHdl) );
+    m_pEdSheetPrefix->SetModifyHdl( LINK(this, ScTpDefaultsOptions, PrefixModifiedHdl) );
+    m_pEdSheetPrefix->SetGetFocusHdl( LINK(this, ScTpDefaultsOptions, PrefixEditOnFocusHdl) );
 }
 
 ScTpDefaultsOptions::~ScTpDefaultsOptions()
@@ -65,12 +64,12 @@ sal_Bool ScTpDefaultsOptions::FillItemSet(SfxItemSet &rCoreSet)
     sal_Bool bRet = false;
     ScDefaultsOptions aOpt;
 
-    SCTAB nTabCount = static_cast<SCTAB>(aEdNSheets.GetValue());
-    OUString aSheetPrefix = aEdSheetPrefix.GetText();
+    SCTAB nTabCount = static_cast<SCTAB>(m_pEdNSheets->GetValue());
+    OUString aSheetPrefix = m_pEdSheetPrefix->GetText();
 
 
-    if ( aEdNSheets.GetSavedValue() != aEdNSheets.GetText()
-         || aEdSheetPrefix.GetSavedValue() != aSheetPrefix )
+    if ( m_pEdNSheets->GetSavedValue() != m_pEdNSheets->GetText()
+         || m_pEdSheetPrefix->GetSavedValue() != aSheetPrefix )
     {
         aOpt.SetInitTabCount( nTabCount );
         aOpt.SetInitTabPrefix( aSheetPrefix );
@@ -89,10 +88,10 @@ void ScTpDefaultsOptions::Reset(const SfxItemSet& rCoreSet)
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SCDEFAULTSOPTIONS, false , &pItem))
         aOpt = ((const ScTpDefaultsItem*)pItem)->GetDefaultsOptions();
 
-    aEdNSheets.SetValue( static_cast<sal_uInt16>( aOpt.GetInitTabCount()) );
-    aEdSheetPrefix.SetText( aOpt.GetInitTabPrefix() );
-    aEdNSheets.SaveValue();
-    aEdSheetPrefix.SaveValue();
+    m_pEdNSheets->SetValue( static_cast<sal_uInt16>( aOpt.GetInitTabCount()) );
+    m_pEdSheetPrefix->SetText( aOpt.GetInitTabPrefix() );
+    m_pEdNSheets->SaveValue();
+    m_pEdSheetPrefix->SaveValue();
 }
 
 int ScTpDefaultsOptions::DeactivatePage(SfxItemSet* /*pSet*/)
@@ -102,11 +101,11 @@ int ScTpDefaultsOptions::DeactivatePage(SfxItemSet* /*pSet*/)
 
 void ScTpDefaultsOptions::CheckNumSheets()
 {
-    sal_Int64 nVal = aEdNSheets.GetValue();
+    sal_Int64 nVal = m_pEdNSheets->GetValue();
     if (nVal > MAXINITTAB)
-        aEdNSheets.SetValue(MAXINITTAB);
+        m_pEdNSheets->SetValue(MAXINITTAB);
     if (nVal < MININITTAB)
-        aEdNSheets.SetValue(MININITTAB);
+        m_pEdNSheets->SetValue(MININITTAB);
 }
 
 void ScTpDefaultsOptions::CheckPrefix(Edit* pEdit)

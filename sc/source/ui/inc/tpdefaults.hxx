@@ -38,11 +38,10 @@ private:
     DECL_LINK( PrefixEditOnFocusHdl, Edit* );
 
 private:
-    FixedLine     aFLInitSpreadSheet;
-    FixedText     aFtNSheets;
-    NumericField  aEdNSheets;
-    FixedText     aFtSheetPrefix;
-    Edit          aEdSheetPrefix;
+    FixedText*    m_pFtNSheets;
+    NumericField* m_pEdNSheets;
+    FixedText*    m_pFtSheetPrefix;
+    Edit*         m_pEdSheetPrefix;
 
     // Stores old Sheet Prefix
     OUString maOldPrefixValue;
