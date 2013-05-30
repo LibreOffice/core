@@ -402,6 +402,10 @@ void ParaPropertyPanel::InitToolBoxIndent()
     maRightIndent->SetModifyHdl( aLink );
     maFLineIndent->SetModifyHdl( aLink );
 
+    maLeftIndent->SetAccessibleName(maLeftIndent->GetQuickHelpText());
+    maRightIndent->SetAccessibleName(maRightIndent->GetQuickHelpText());
+    maFLineIndent->SetAccessibleName(maFLineIndent->GetQuickHelpText());
+
     if( Application::GetSettings().GetLayoutRTL())
     {
         maTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM1, maIncIndentControl.GetIcon());
@@ -466,6 +470,9 @@ void ParaPropertyPanel::InitToolBoxSpacing()
     Link aLink = LINK( this, ParaPropertyPanel, ULSpaceHdl_Impl );
     maTopDist->SetModifyHdl(aLink);
     maBottomDist->SetModifyHdl( aLink );
+
+    maTopDist->SetAccessibleName(maTopDist->GetQuickHelpText());
+    maBottomDist->SetAccessibleName(maBottomDist->GetQuickHelpText());
 
     maTbxUL_IncDec->SetItemImage(TOOLBOX_ITEM1, maParInc);
     maTbxUL_IncDec->SetItemImage(TOOLBOX_ITEM2, maParDec);
