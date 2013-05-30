@@ -1150,6 +1150,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
     AddTabPage("description", SfxDocumentDescPage::Create, 0);
     AddTabPage("customprops", SfxCustomPropertiesPage::Create, 0);
     AddTabPage("security", SfxSecurityPage::Create, 0);
+    AddTabPage("cmisprops", SfxCmisPropertiesPage::Create, 0);
 }
 
 // -----------------------------------------------------------------------
@@ -2116,5 +2117,35 @@ SfxTabPage* SfxCustomPropertiesPage::Create( Window* pParent, const SfxItemSet& 
 {
     return new SfxCustomPropertiesPage( pParent, rItemSet );
 }
+
+// class SfxCmisPropertiesPage -----------------------------------------
+SfxCmisPropertiesPage::SfxCmisPropertiesPage( Window* pParent, const SfxItemSet& rItemSet )
+    : SfxTabPage(pParent, "CmisInfoPage", "sfx/ui/cmisinfopage.ui", rItemSet)
+{
+}
+
+sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& /*rSet*/ )
+{
+    sal_Bool bModified = sal_False;
+    return bModified;
+}
+
+void SfxCmisPropertiesPage::Reset( const SfxItemSet& /*rItemSet*/ )
+{
+
+}
+
+int SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
+{
+    int nRet = LEAVE_PAGE;
+
+    return nRet;
+}
+
+SfxTabPage* SfxCmisPropertiesPage::Create( Window* pParent, const SfxItemSet& rItemSet )
+{
+    return new SfxCmisPropertiesPage( pParent, rItemSet );
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

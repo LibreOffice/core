@@ -502,6 +502,25 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
 };
 
+// class SfxCmisPropertiesPage -------------------------------------------------
+
+class SfxCmisPropertiesPage : public SfxTabPage
+{
+private:
+
+    using TabPage::DeactivatePage;
+
+protected:
+    SfxCmisPropertiesPage( Window* pParent, const SfxItemSet& );
+
+    virtual sal_Bool        FillItemSet( SfxItemSet& );
+    virtual void        Reset( const SfxItemSet& );
+    virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
+
+public:
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
+};
+
 #endif // #ifndef _SFX_DINFDLG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
