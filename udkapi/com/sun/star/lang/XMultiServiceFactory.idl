@@ -28,15 +28,13 @@
 module com {  module sun {  module star {  module lang {
 
 
-/** Factories support this interface creating instances giving a name,
-    e.g. a service name.
+/** Allows creating instances specified by a string name.
 
-    <p>
-    Note:
-    Although this interface deals with the notion of "services", this is not
-    generally be meant.  In general this interface can be used for all kinds
-    of factories for all kinds of instances, indeed not only UNO services.
-    </p>
+    @note
+    Although this interface deals with the notion of "services", it is
+    not restricted to services but is more general.
+    This interface can be used for all kinds
+    of factories for all kinds of instances, not only UNO services.
 */
 published interface XMultiServiceFactory: com::sun::star::uno::XInterface
 {

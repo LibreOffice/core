@@ -35,7 +35,8 @@ published interface XTypeProvider: com::sun::star::uno::XInterface
 
     /** returns
         a sequence of all types (usually interface types) provided by the object.
-        Important: If the object aggregates other objects the sequence also has
+        @attention
+        If the object aggregates other objects the sequence also has
         to contain all types supported by the aggregated objects.
      */
     sequence<type> getTypes();
@@ -43,14 +44,15 @@ published interface XTypeProvider: com::sun::star::uno::XInterface
 
     /** returns
         a sequence of bytes with length > 0 that is used as an Id to distinguish
-        unambiguously between two sets of types, e.g. to realise hashing
+        unambiguously between two sets of types, for example to realise hashing
         functionality when the object is introspected. Two objects that return
         the same UUID also have to return the same set of types in getTypes().
 
         If a unique implementation Id cannot be provided this method has to return
         an empty sequence.
 
-        Important: If the object aggregates other objects the UUID has to be unique
+        @attention
+        If the object aggregates other objects the UUID has to be unique
         for the whole combination of objects.
      */
     sequence<byte> getImplementationId();

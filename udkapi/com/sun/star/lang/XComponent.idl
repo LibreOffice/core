@@ -63,7 +63,7 @@ published interface XComponent: com::sun::star::uno::XInterface
         Often the object can't fulfill its specification anymore,
         in this case it must throw the DisposedException
         (which is derived from com::sun::star::uno::RuntimeException)
-    when it gets called.</p>
+        when it gets called.</p>
 
         <p>For some objects no real owner can be identified, thus it can be
         disposed from multiple reference holders. In this case
@@ -80,15 +80,12 @@ published interface XComponent: com::sun::star::uno::XInterface
         <p>It is suggested to allow multiple registration of the same listener,
         thus for each time a listener is added, it has to be removed.</p>
 
-        <p>If this com::sun::star::lang::XComponent is
-        already disposed when
-        com::sun::star::lang::XComponent::addEventListener()
-        is called, the call will not fail
-        with a com::sun::star::lang::DisposedException, but
-        the caller will be notified via the
-        com::sun::star::lang::XEventListener::disposing()
+        <p>If this XComponent is already disposed when
+        XComponent::addEventListener() is called, the call will not fail
+        with a DisposedException, but the caller will be notified via the
+        XEventListener::disposing()
         callback.  This callback can occur synchronously within the
-        com::sun::star::lang::XComponent::addEventListener() call.</p>
+        addEventListener() call.</p>
 
         @see XComponent::removeEventListener
      */
@@ -101,11 +98,9 @@ published interface XComponent: com::sun::star::uno::XInterface
         <p>It is suggested to allow multiple registration of the same listener,
         thus for each time a listener is added, it has to be removed.
 
-        <p>If this com::sun::star::lang::XComponent is
-        already disposed when
-        com::sun::star::lang::XComponent::removeEventListener()
-        is called, the call will not
-        fail with a com::sun::star::lang::DisposedException,
+        <p>If this XComponent is already disposed when
+        XComponent::removeEventListener() is called, the call will not
+        fail with a DisposedException,
         but will rather be ignored silently.</p>
 
         @see XComponent::addEventListener

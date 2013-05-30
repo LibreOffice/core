@@ -56,14 +56,14 @@ published interface XPersistObject: com::sun::star::uno::XInterface
 
     /** gives the service name of the object
 
-      @returns
-            the service name that specifies the behavior and the
-            persistent data format of this implementation.
-
         <p>This name is used to create such an object by a factory
         during deserialization. </p>
 
-        @see com::sun::star::lang::XServiceInfo::getAvailableServiceNames
+        @returns
+            the service name that specifies the behavior and the
+            persistent data format of this implementation.
+
+        @see com::sun::star::lang::XMultiComponentFactory::getAvailableServiceNames()
      */
     string getServiceName();
 

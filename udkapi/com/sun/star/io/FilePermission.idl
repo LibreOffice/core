@@ -29,7 +29,7 @@ module com {  module sun {  module star {  module io {
     directories contained in that directory.  A path that ends with <code>"/-"</code>
     indicates (recursively) all files and subdirectories contained in that
     directory.  A file url string consisting of the special token
-    <code>"&lt;&lt;ALL FILES&gt;&gt;"</code> matches any file.
+    <code>"<<ALL FILES>>"</code> matches any file.
     <br>
     Note: A file url string consisting of a single <code>"*"</code> indicates all the files
     in the current directory, while a string consisting of a single <code>"-"</code> indicates
@@ -52,7 +52,7 @@ module com {  module sun {  module star {  module io {
     @attention
     Be careful when granting FilePermissions.  Think about the implications of
     granting read and especially write access to various files and directories.
-    The <code>"&lt;&lt;ALL FILES&gt;&gt;"</code> permission with write action is
+    The <code>"<<ALL FILES>>"</code> permission with write action is
     especially dangerous.  This grants permission to write to the entire file system.
 
     @since OOo 1.1.2

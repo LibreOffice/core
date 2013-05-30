@@ -43,11 +43,11 @@ published interface XInputStream: com::sun::star::uno::XInterface
         and the return value indicates that EOF has been reached. This means
         that the method blocks until the specified number of bytes are
         available or the EOF is reached.  </p>
-       @param aData
+
+        @param aData
              after the call, the byte sequence contains the requested number
              of bytes (or less as a sign of EOF).
-
-             <p>
+             <br>
              C++ only : Note that for unbridged (e.g., in-process)
              calls, using the same sequence for repetive readBytes()-calls
              can bear a performance advantage. The callee can put the data
@@ -63,13 +63,14 @@ published interface XInputStream: com::sun::star::uno::XInterface
               <li> the call is not bridged (e.g., betweeen different compilers
                    or different processes ).
              </ol>
-
+             <br>
              If the same 'optimized' code runs against an interface in a different process,
              there is an unnecessary memory allocation/deallocation (the out parameter
              is of course NOT transported over the connection), but this should
              be negligible compared to a synchron call.
+
          @param nBytesToRead
-        the total number of bytes to read
+             the total number of bytes to read
      */
     long readBytes( [out] sequence<byte> aData,
              [in] long nBytesToRead )
@@ -87,6 +88,7 @@ published interface XInputStream: com::sun::star::uno::XInterface
            returns 0 and the corresponding byte sequence is empty.
            Otherwise, after the call, aData contains the available,
            but no more than nMaxBytesToRead, bytes.
+
         @param aData contains the data read from the stream.
         @param nMaxBytesToRead The maximum number of bytes to be read from this
                                stream during the call.
@@ -102,8 +104,9 @@ published interface XInputStream: com::sun::star::uno::XInterface
 
         <p>It is up to the implementation whether this method is
         blocking the thread or not.  </p>
-      @param nBytesToSkip
-        number of bytes to skip
+
+        @param nBytesToSkip
+            number of bytes to skip
      */
     void skipBytes( [in] long nBytesToSkip )
             raises( com::sun::star::io::NotConnectedException,

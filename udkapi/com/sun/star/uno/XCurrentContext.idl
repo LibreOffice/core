@@ -24,7 +24,7 @@
 
 module com {  module sun {  module star {  module uno {
 
-/** Task (e.g. thread) local execution context for UNO.
+/** Task (thread) local execution context for UNO.
     Arbitrary values can be retrieved from the context.
     <p>
     You have to use UNO runtime functions to obtain the current context

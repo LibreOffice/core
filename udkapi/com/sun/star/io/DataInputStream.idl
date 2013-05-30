@@ -47,7 +47,7 @@ published service DataInputStream
      */
     interface com::sun::star::io::XActiveDataSink;
 
-    /** Allows to chain the DataInputStream, so that
+    /** Allows to chain the DataInputStream.
      */
     interface com::sun::star::io::XConnectable;
 
