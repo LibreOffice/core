@@ -1904,7 +1904,11 @@ NumberFormat::NumberFormat( const WorkbookHelper& rHelper ) :
 
 void NumberFormat::setFormatCode( const OUString& rFmtCode )
 {
-    maModel.maFmtCode = rFmtCode;
+    // especiall for a fraction code '\ ?/?' is passed to us in xml, the '\' is not
+    // an escape character but merely should be telling the formatter to display the next
+    // char in the format ( afaics it does that anyhow )
+
+    maModel.maFmtCode = rFmtCode.replaceAll("\\", "");
 }
 
 void NumberFormat::setFormatCode( const Locale& rLocale, const sal_Char* pcFmtCode )
