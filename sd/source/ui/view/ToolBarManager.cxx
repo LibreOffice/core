@@ -954,7 +954,11 @@ void ToolBarManager::Implementation::Update (
         }
         else
         {
-            mpViewShellManagerLock.reset();
+            //do this in two steps, first clear mpViewShellManagerLock to be NULL
+            ViewShellManager::UpdateLock* pLock = mpViewShellManagerLock.release();
+            //now delete the lock so reentry to this method triggered by this
+            //delete will encounter an empty mpViewShellManagerLock
+            delete pLock;
             pLocalLayouterLock.reset();
         }
     }
