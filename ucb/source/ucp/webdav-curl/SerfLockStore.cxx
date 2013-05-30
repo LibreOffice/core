@@ -89,7 +89,9 @@ SerfLockStore::SerfLockStore()
 
 SerfLockStore::~SerfLockStore()
 {
-    stopTicker();
+    osl::ResettableMutexGuard aGuard(m_aMutex);
+    stopTicker(aGuard);
+    aGuard.reset(); // actually no threads should even try to access members now
     m_bFinishing = true;
 
     // release active locks, if any.
@@ -119,23 +121,22 @@ void SerfLockStore::startTicker()
 }
 
 
-void SerfLockStore::stopTicker()
+void SerfLockStore::stopTicker(osl::ClearableMutexGuard & rGuard)
 {
     rtl::Reference<TickerThread> pTickerThread;
-    {
-        osl::MutexGuard aGuard( m_aMutex );
 
-        if (!m_pTickerThread.is())
-        {
-            return; // nothing to do
-        }
+    if (m_pTickerThread.is())
+    {
         m_pTickerThread->finish(); // needs mutex
         // the TickerThread may run refreshLocks() at most once after this
         pTickerThread = m_pTickerThread;
         m_pTickerThread.clear();
     }
 
-    pTickerThread->join(); // without m_aMutex locked (to prevent deadlock)
+    rGuard.clear();
+
+    if (pTickerThread.is())
+        pTickerThread->join(); // without m_aMutex locked (to prevent deadlock)
 }
 
 OUString SerfLockStore::getLockToken( const OUString& rLock )
@@ -214,12 +215,12 @@ void SerfLockStore::updateLock( const OUString& rLock,
 
 void SerfLockStore::removeLock( const OUString& rLock )
 {
-    osl::MutexGuard aGuard( m_aMutex );
+    osl::ClearableMutexGuard aGuard( m_aMutex );
 
     m_aLockInfoMap.erase( rLock );
 
     if ( m_aLockInfoMap.empty() )
-        stopTicker();
+        stopTicker(aGuard);
 }
 
 
