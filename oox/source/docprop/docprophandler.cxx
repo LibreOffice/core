@@ -25,6 +25,8 @@
 
 #include <osl/time.h>
 
+#include <boost/algorithm/string.hpp>
+
 #include "oox/helper/attributelist.hxx"
 
 using namespace ::com::sun::star;
@@ -158,39 +160,21 @@ uno::Sequence< OUString > OOXMLDocPropHandler::GetKeywordsSet( const OUString& a
 {
     if ( !aChars.isEmpty() )
     {
-        uno::Sequence< OUString > aResult( 20 );
-        sal_Int32 nCounter = 0;
+        std::string aUtf8Chars = OUStringToOString( aChars, RTL_TEXTENCODING_UTF8 ).getStr();
+        std::vector<std::string> aUtf8Result;
+        boost::split( aUtf8Result, aUtf8Chars, boost::is_any_of(" ,;:\t"), boost::token_compress_on );
 
-        const sal_Unicode* pStr = aChars.getStr();
-        for( sal_Int32 nInd = 0; nInd < aChars.getLength() && pStr[nInd] != 0; nInd++ )
+        if (!aUtf8Result.empty())
         {
-            switch( pStr[nInd] )
-            {
-            case (sal_Unicode)' ':
-            case (sal_Unicode)',':
-            case (sal_Unicode)';':
-            case (sal_Unicode)':':
-            case (sal_Unicode)'\t':
-                // this is a delimiter
-                // unfortunately I did not find any specification for the possible delimiters
-                if ( !aResult[nCounter].isEmpty() )
-                {
-                    if ( nCounter >= aResult.getLength() )
-                        aResult.realloc( nCounter + 10 );
-                    nCounter++;
-                }
-                break;
+            uno::Sequence< OUString > aResult( aUtf8Result.size() );
+            OUString* pResultValues = aResult.getArray();
+            for ( std::vector< std::string >::const_iterator i = aUtf8Result.begin();
+                  i != aUtf8Result.end(); ++i, ++pResultValues )
+                *pResultValues = OUString( i->c_str(), static_cast< sal_Int32 >( i->size() ),RTL_TEXTENCODING_UTF8 );
 
-            default:
-                // this should be a part of keyword
-                aResult[nCounter] += OUString( (sal_Unicode)pStr[nInd] );
-            }
+            return aResult;
         }
-
-        aResult.realloc( nCounter + 1 );
-        return aResult;
     }
-
     return uno::Sequence< OUString >();
 }
 // ------------------------------------------------
