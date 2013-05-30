@@ -8380,7 +8380,7 @@ dnl Graphite
 dnl ===================================================================
 
 AC_MSG_CHECKING([whether to enable graphite support])
-if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "$enable_graphite" = "" -o "$enable_graphite" != "no"; then
+if test "$_os" != "Darwin" && test "$enable_graphite" = "" -o "$enable_graphite" != "no"; then
     AC_MSG_RESULT([yes])
     ENABLE_GRAPHITE="TRUE"
     AC_DEFINE(ENABLE_GRAPHITE)
