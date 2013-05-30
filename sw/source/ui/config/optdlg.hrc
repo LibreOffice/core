@@ -135,13 +135,4 @@
 #define CB_MATH_BASELINE_ALIGNMENT    16
 
 
-#define FL_CMP						141
-#define RB_AUTO						142
-#define RB_WORD						143
-#define RB_CHAR						144
-#define FL_SET						145
-#define CB_RSID						146
-#define CB_IGNORE					147
-#define NF_LEN						148
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

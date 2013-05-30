@@ -462,15 +462,13 @@ private:
 
 class SwCompareOptionsTabPage : public SfxTabPage
 {
-    FixedLine aComparisonFL;
-    RadioButton aAutoRB;
-    RadioButton aWordRB;
-    RadioButton aCharRB;
+    RadioButton*  m_pAutoRB;
+    RadioButton*  m_pWordRB;
+    RadioButton*  m_pCharRB;
 
-    FixedLine aSettingsFL;
-    CheckBox aRsidCB;
-    CheckBox aIgnoreCB;
-    NumericField aLenNF;
+    CheckBox*     m_pRsidCB;
+    CheckBox*     m_pIgnoreCB;
+    NumericField* m_pLenNF;
 
     SwCompareOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
     ~SwCompareOptionsTabPage();
