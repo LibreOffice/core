@@ -51,9 +51,23 @@ fi
 
 if [ "$COM" = "MSC" ]; then
     # use oowintool to copy CRT dlls and manifest
-    if ! ./oowintool --msvc-copy-dlls-64 ./external/msvcp ; then
-       echo "oowintool failed to copy 64-bit CRT"
-       exit 1
+    if [ "$VCVER" = "90" ]; then
+        # need only 32 bit DLLs in solver for MSVC 2008
+        if ! ./oowintool --msvc-copy-dlls ./external/msvcp ; then
+           echo "oowintool failed to copy CRT"
+           exit 1
+        fi
+        # 64 bit DLLs handled via MSM
+        if [ "$CPUNAME" = "INTEL" ]; then
+            if ! ./oowintool --msvc-copy-msms-64 ./external/msm"$VCVER" ; then
+               echo "WARNING: oowintool failed to copy x64 merge modules, installation will lack the 64-bit Explorer extension"
+            fi
+        fi
+    else
+        if ! ./oowintool --msvc-copy-dlls-64 ./external/msvcp ; then
+           echo "oowintool failed to copy 64-bit CRT"
+           exit 1
+        fi
     fi
 
     # use oowintool to copy VC redist merge modules
