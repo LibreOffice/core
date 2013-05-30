@@ -27,6 +27,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
+#include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/listenernotification.hxx>
@@ -78,7 +80,7 @@ namespace pcr
         // XPropertyHandler overridables
         virtual void                                SAL_CALL inspect( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxIntrospectee ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Any          SAL_CALL getPropertyValue( const OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-        virtual void                                SAL_CALL setPropertyValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual void                                SAL_CALL setPropertyValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::PropertyVetoException);
         virtual ::com::sun::star::uno::Any SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rControlValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Any SAL_CALL convertToControlValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rPropertyValue, const ::com::sun::star::uno::Type& _rControlValueType ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::beans::PropertyState

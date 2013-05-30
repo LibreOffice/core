@@ -129,7 +129,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL PropertyComposer::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
+    void SAL_CALL PropertyComposer::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException, PropertyVetoException)
     {
         MethodGuard aGuard( *this );
         ::std::for_each( m_aSlaveHandlers.begin(), m_aSlaveHandlers.end(), SetPropertyValue( _rPropertyName, _rValue ) );
