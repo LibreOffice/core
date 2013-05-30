@@ -23,6 +23,8 @@
 #include <basic/sbstar.hxx>
 #include <sbunoobj.hxx>
 
+#include <limits.h> // USHRT_MAX
+
 using com::sun::star::uno::Reference;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
