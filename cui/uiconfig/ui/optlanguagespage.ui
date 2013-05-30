@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="OptLanguagesPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -11,24 +12,28 @@
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
           <object class="GtkAlignment" id="alignment1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="top_padding">5</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="row_spacing">6</property>
-                <property name="column_homogeneous">True</property>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_User interface</property>
                     <property name="use_underline">True</property>
@@ -45,8 +50,11 @@
                   <object class="GtkLabel" id="localesettingFT">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Locale setting</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">localesetting</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -59,8 +67,11 @@
                   <object class="GtkLabel" id="label6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Decimal separator key</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">decimalseparator</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -73,8 +84,9 @@
                   <object class="GtkLabel" id="defaultcurrency">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Defalut currency</property>
+                    <property name="label" translatable="yes">_Default currency</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">currencylb</property>
                   </object>
@@ -89,6 +101,7 @@
                   <object class="GtkLabel" id="dataaccpatterns">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Date acceptance _patterns</property>
                     <property name="use_underline">True</property>
@@ -192,84 +205,23 @@
       <object class="GtkFrame" id="frame2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="hexpand">True</property>
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
           <object class="GtkAlignment" id="alignment2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="row_spacing">6</property>
-                <property name="column_homogeneous">True</property>
-                <child>
-                  <object class="GtkCheckButton" id="asiansupport">
-                    <property name="label" translatable="yes">Asian</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="ctlsupport">
-                    <property name="label" translatable="yes">C_TL</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="western">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Western</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="currentdoc">
-                    <property name="label" translatable="yes">For the current document only</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="xalign">0</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="svxcorelo-SvxLanguageBox" id="westernlanguage">
                     <property name="visible">True</property>
@@ -307,7 +259,73 @@
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkCheckButton" id="currentdoc">
+                    <property name="label" translatable="yes">For the current document only</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="halign">end</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">2</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="ctlsupport">
+                    <property name="label" translatable="yes">C_TL</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="asiansupport">
+                    <property name="label" translatable="yes">Asian</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="western">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Western</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">westernlanguage</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
                 </child>
               </object>
             </child>
@@ -385,5 +403,29 @@
         <property name="position">2</property>
       </packing>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="label4"/>
+      <widget name="localesettingFT"/>
+      <widget name="label6"/>
+      <widget name="defaultcurrency"/>
+      <widget name="dataaccpatterns"/>
+      <widget name="ctlsupport"/>
+      <widget name="asiansupport"/>
+      <widget name="western"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup2">
+    <widgets>
+      <widget name="userinterface"/>
+      <widget name="localesetting"/>
+      <widget name="currencylb"/>
+      <widget name="datepatterns"/>
+      <widget name="decimalseparator"/>
+      <widget name="westernlanguage"/>
+      <widget name="asianlanguage"/>
+      <widget name="complexlanguage"/>
+    </widgets>
   </object>
 </interface>

@@ -1016,18 +1016,24 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
      pLangConfig(new LanguageConfig_Impl)
 {
     get(m_pUserInterfaceLB, "userinterface");
+    m_pUserInterfaceLB->SetStyle(m_pUserInterfaceLB->GetStyle() | WB_SORT);
     get(m_pLocaleSettingLB, "localesetting");
+    m_pLocaleSettingLB->SetStyle(m_pLocaleSettingLB->GetStyle() | WB_SORT);
     get(m_pLocaleSettingFT, "localesettingFT");
     get(m_pDecimalSeparatorCB, "decimalseparator");
     get(m_pCurrencyFT, "defaultcurrency");
     get(m_pCurrencyLB, "currencylb");
+    m_pCurrencyLB->SetStyle(m_pCurrencyLB->GetStyle() | WB_SORT);
     get(m_pDatePatternsFT,"dataaccpatterns");
     get(m_pDatePatternsED, "datepatterns");
 
     get(m_pWesternLanguageLB, "westernlanguage");
+    m_pWesternLanguageLB->SetStyle(m_pWesternLanguageLB->GetStyle() | WB_SORT);
     get(m_pWesternLanguageFT, "western");
     get(m_pAsianLanguageLB, "asianlanguage");
+    m_pAsianLanguageLB->SetStyle(m_pAsianLanguageLB->GetStyle() | WB_SORT);
     get(m_pComplexLanguageLB, "complexlanguage");
+    m_pComplexLanguageLB->SetStyle(m_pComplexLanguageLB->GetStyle() | WB_SORT);
     get(m_pCurrentDocCB, "currentdoc");
     get(m_pAsianSupportCB, "asiansupport");
     get(m_pCTLSupportCB, "ctlsupport");
