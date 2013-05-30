@@ -2656,7 +2656,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                         BORDER_BOTTOM,
                         BORDER_RIGHT
                     };
-                pSectionContext->SetBorder( aPositions[nSprmId - NS_sprm::LN_SBrcTop], nLineDistance, aBorderLine );
+                pSectionContext->SetBorder( aPositions[nSprmId - NS_sprm::LN_SBrcTop], nLineDistance, aBorderLine, /*bShadow =*/ false );
             }
         }
         break;

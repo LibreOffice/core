@@ -39,6 +39,7 @@ m_nLineWidth(15), // Word default, in twips
 m_nLineType(0),
 m_nLineColor(0),
 m_nLineDistance(0),
+m_bShadow(false),
 m_bOOXML( bOOXML )
 {
     const int nBorderCount(BORDER_COUNT);
@@ -83,7 +84,8 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
             m_nLineDistance = ConversionHelper::convertTwipToMM100( nIntValue * 20 );
         break;
         case NS_rtf::LN_FSHADOW:    // 0x2875
-            //if 1 then line has shadow - unsupported
+            m_bShadow = nIntValue;
+        break;
         case NS_rtf::LN_FFRAME:     // 0x2876
         case NS_rtf::LN_UNUSED2_15: // 0x2877
             // ignored
@@ -171,6 +173,11 @@ table::BorderLine2 BorderHandler::getBorderLine()
     table::BorderLine2 aBorderLine;
     ConversionHelper::MakeBorderLine( m_nLineWidth, m_nLineType, m_nLineColor, aBorderLine, m_bOOXML );
     return aBorderLine;
+}
+
+bool BorderHandler::getShadow()
+{
+    return m_bShadow;
 }
 
 } //namespace dmapper
