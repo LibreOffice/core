@@ -80,7 +80,7 @@ public:
 
 private:
     void startTicker();
-    void stopTicker();
+    void stopTicker(osl::ClearableMutexGuard & rGuard);
 };
 
 } // namespace http_dav_ucp
