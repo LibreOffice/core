@@ -159,7 +159,7 @@ String sMSDocumentCheckbox_2_
 
 String sMSDocumentCheckbox_3_
 {
-    Text [ en-US ] = "PowerPoint documents";
+    Text [ en-US ] = "PowerPoint/Publisher documents";
 };
 
 
@@ -400,7 +400,7 @@ String sSumMSTableDocuments
 
 String sSumMSDrawDocuments
 {
-    Text [ en-US ] = "All PowerPoint documents contained in the following directory will be imported:";
+    Text [ en-US ] = "All PowerPoint/Publisher documents contained in the following directory will be imported:";
 };
 
 
