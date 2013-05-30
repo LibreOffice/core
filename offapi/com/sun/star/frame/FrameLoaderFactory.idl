@@ -19,9 +19,7 @@
 #ifndef __com_sun_star_frame_FrameLoaderFactory_idl__
 #define __com_sun_star_frame_FrameLoaderFactory_idl__
 
-#include <com/sun/star/lang/XMultiServiceFactory.idl>
-#include <com/sun/star/container/XNameAccess.idl>
-#include <com/sun/star/container/XContainerQuery.idl>
+#include <com/sun/star/frame/XLoaderFactory.idl>
 
 
 module com { module sun { module star { module frame {
@@ -37,50 +35,7 @@ module com { module sun { module star { module frame {
     </ul>
     </p>
  */
-published service FrameLoaderFactory
-{
-    /** interface to create loader objects by using his internal name
-
-        <p>
-        Returned objects must support the service specification of a <type>FrameLoader</type>
-        or <type>SynchronousFrameLoader</type>. (Note: last one will be preferred if both ones
-        are available)
-        They can be created by using of his internal name, which must be unambiguous everytime, only.
-        To get this name use further specified interfaces of this factory for access on
-        the flat configuration.
-        </p>
-    */
-    interface com::sun::star::lang::XMultiServiceFactory;
-
-    /** provides access to the whole frame loader configuration
-
-    <p>This interface supports an access to the internal configuration of all accessible loader objects.
-        The return value of <member scope="com::sun::star::container">XNameAccess::getByName()</member>
-    is a property sequence packed in an any.  </p>
-        <table border=1>
-            <tr>
-                <td><b>Types<b></td>
-                <td>[string]</td>
-                <td>file types which loader is registered for</td>
-            </tr>
-            <tr>
-                <td><b>UIName<b></td>
-                <td>[string]</td>
-                <td>UI representable and localized name</td>
-            </tr>
-        </table>
-    */
-    interface com::sun::star::container::XNameAccess;
-
-    /** supports query mode for configuration access
-
-        <p>
-        This interface can be used to get sub sets of current configuration entries
-        which represent given search parameters.
-        </p>
-     */
-    interface com::sun::star::container::XContainerQuery;
-};
+published service FrameLoaderFactory : XLoaderFactory;
 
 
 }; }; }; };

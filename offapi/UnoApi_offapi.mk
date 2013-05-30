@@ -189,12 +189,14 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
 	AutoRecovery \
 	AppDispatchProvider \
 	Bibliography \
+	ContentHandlerFactory \
 	Desktop \
 	DispatchHelper \
 	DispatchRecorder \
 	DispatchRecorderSupplier \
 	DocumentTemplates \
 	Frame \
+	FrameLoaderFactory \
 	GlobalEventBroadcaster \
 	LayoutManager \
 	MediaTypeDetectionHelper \
@@ -935,14 +937,12 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/formula
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/frame,\
 	Components \
 	ContentHandler \
-	ContentHandlerFactory \
 	Controller \
 	DesktopTask \
 	DesktopTasks \
 	DispatchProvider \
 	FrameControl \
 	FrameLoader \
-	FrameLoaderFactory \
 	FramesContainer \
 	PopupMenuController \
 	PopupMenuControllerFactory \
@@ -2607,6 +2607,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame,\
 	XLayoutManagerListener \
 	XLoadEventListener \
 	XLoadable \
+	XLoaderFactory \
 	XMenuBarAcceptor \
 	XMenuBarMergingAcceptor \
 	XModel \

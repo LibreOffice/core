@@ -21,7 +21,7 @@
 #define __FILTER_CONFIG_FRAMELOADERFACTORY_HXX_
 
 #include "basecontainer.hxx"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/frame/XLoaderFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cppuhelper/implbase1.hxx>
 
@@ -35,7 +35,7 @@ namespace filter{
 /** @short      implements the service <type scope="com.sun.star.document">FrameLoaderFactory</type>.
  */
 class FrameLoaderFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer                   ,
-                                                                  css::lang::XMultiServiceFactory >
+                                                                  css::frame::XLoaderFactory >
 {
     //-------------------------------------------
     // native interface
@@ -125,6 +125,25 @@ class FrameLoaderFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer 
             @return The new instance of this service as an uno reference.
          */
         static css::uno::Reference< css::uno::XInterface > impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+
+      // Overrides to resolve ambiguity
+      virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+        { return BaseContainer::getByName(aName); }
+      virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames() throw (::com::sun::star::uno::RuntimeException)
+        { return BaseContainer::getElementNames(); }
+      virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException)
+        { return BaseContainer::hasByName(aName); }
+
+      virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException)
+        { return BaseContainer::getElementType(); }
+      virtual ::sal_Bool SAL_CALL hasElements() throw (::com::sun::star::uno::RuntimeException)
+        { return BaseContainer::hasElements(); }
+
+      virtual ::com::sun::star::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery( const ::rtl::OUString& Query ) throw (::com::sun::star::uno::RuntimeException)
+        { return BaseContainer::createSubSetEnumerationByQuery(Query); }
+      virtual ::com::sun::star::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties( const ::com::sun::star::uno::Sequence< css::beans::NamedValue >& Properties ) throw (::com::sun::star::uno::RuntimeException)
+        { return BaseContainer::createSubSetEnumerationByProperties(Properties); }
+
 };
 
     } // namespace config

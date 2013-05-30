@@ -89,7 +89,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
             lQuery[0].Name    = PROPNAME_TYPES;
             lQuery[0].Value <<= lTypes;
 
-            css::uno::Reference< css::container::XEnumeration > xSet = createSubSetEnumerationByProperties(lQuery);
+            css::uno::Reference< css::container::XEnumeration > xSet = BaseContainer::createSubSetEnumerationByProperties(lQuery);
             while(xSet->hasMoreElements())
             {
                 ::comphelper::SequenceAsHashMap lHandlerProps(xSet->nextElement());
@@ -143,7 +143,7 @@ css::uno::Sequence< OUString > SAL_CALL ContentHandlerFactory::getAvailableServi
     throw(css::uno::RuntimeException)
 {
     // must be the same list as ((XNameAccess*)this)->getElementNames() return!
-    return getElementNames();
+    return BaseContainer::getElementNames();
 }
 
 

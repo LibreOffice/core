@@ -86,7 +86,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
             lQuery[0].Name    = PROPNAME_TYPES;
             lQuery[0].Value <<= lTypes;
 
-            css::uno::Reference< css::container::XEnumeration > xSet = createSubSetEnumerationByProperties(lQuery);
+            css::uno::Reference< css::container::XEnumeration > xSet = BaseContainer::createSubSetEnumerationByProperties(lQuery);
             while(xSet->hasMoreElements())
             {
                 ::comphelper::SequenceAsHashMap lLoaderProps(xSet->nextElement());
@@ -140,7 +140,7 @@ css::uno::Sequence< OUString > SAL_CALL FrameLoaderFactory::getAvailableServiceN
     throw(css::uno::RuntimeException)
 {
     // must be the same list as ((XNameAccess*)this)->getElementNames() return!
-    return getElementNames();
+    return BaseContainer::getElementNames();
 }
 
 

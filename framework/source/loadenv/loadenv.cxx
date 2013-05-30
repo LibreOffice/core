@@ -36,40 +36,42 @@
 #include <comphelper/configuration.hxx>
 #include "officecfg/Office/Common.hxx"
 
-#include <com/sun/star/task/ErrorCodeRequest.hpp>
-#include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/frame/DispatchResultState.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/ucb/UniversalContentBroker.hpp>
-#include <com/sun/star/util/XCloseable.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XContainerQuery.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/document/XTypeDetection.hpp>
+#include <com/sun/star/document/XActionLockable.hpp>
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/OfficeFrameLoader.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrameLoader.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/frame/FrameLoaderFactory.hpp>
+#include <com/sun/star/frame/ContentHandlerFactory.hpp>
+#include <com/sun/star/frame/DispatchResultState.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/document/XTypeDetection.hpp>
-#include <com/sun/star/document/XActionLockable.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XContainerQuery.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/task/ErrorCodeRequest.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
@@ -644,7 +646,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     OUString sType = xDetect->queryTypeByURL(sURL);
 
     css::uno::Sequence< css::beans::NamedValue >           lQuery(1)   ;
-    css::uno::Reference< css::container::XContainerQuery > xContainer  ;
+    css::uno::Reference< css::frame::XLoaderFactory >      xLoaderFactory;
     css::uno::Reference< css::container::XEnumeration >    xSet        ;
     css::uno::Sequence< OUString >                  lTypesReg(1);
 
@@ -669,10 +671,8 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     lQuery[0].Name    = sPROP_TYPES;
     lQuery[0].Value <<= lTypesReg;
 
-    xContainer = css::uno::Reference< css::container::XContainerQuery >(
-         xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_FRAMELOADERFACTORY, xContext),
-         css::uno::UNO_QUERY);
-    xSet       = xContainer->createSubSetEnumerationByProperties(lQuery);
+    xLoaderFactory = css::frame::FrameLoaderFactory::create(xContext);
+    xSet       = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
     // at least one registered frame loader is enough!
     if (xSet->hasMoreElements())
         return E_CAN_BE_LOADED;
@@ -686,10 +686,8 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     lQuery[0].Name    = sPROP_TYPES;
     lQuery[0].Value <<= lTypesReg;
 
-    xContainer = css::uno::Reference< css::container::XContainerQuery >(
-         xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_CONTENTHANDLERFACTORY, xContext),
-         css::uno::UNO_QUERY);
-    xSet       = xContainer->createSubSetEnumerationByProperties(lQuery);
+    xLoaderFactory = css::frame::ContentHandlerFactory::create(xContext);
+    xSet       = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
     // at least one registered content handler is enough!
     if (xSet->hasMoreElements())
         return E_CAN_BE_HANDLED;
@@ -911,9 +909,7 @@ sal_Bool LoadEnv::impl_handleContent()
     css::util::URL aURL = m_aURL;
 
     // get necessary container to query for a handler object
-    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory(m_xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_CONTENTHANDLERFACTORY, m_xContext), css::uno::UNO_QUERY);
-
-    css::uno::Reference< css::container::XContainerQuery > xQuery  (xFactory                                                  , css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XLoaderFactory > xLoaderFactory = css::frame::ContentHandlerFactory::create(m_xContext);
 
     aReadLock.unlock();
     // <- SAFE -----------------------------------
@@ -928,7 +924,7 @@ sal_Bool LoadEnv::impl_handleContent()
 
     OUString sPROP_NAME(PROP_NAME);
 
-    css::uno::Reference< css::container::XEnumeration > xSet = xQuery->createSubSetEnumerationByProperties(lQuery);
+    css::uno::Reference< css::container::XEnumeration > xSet = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())
     {
         ::comphelper::SequenceAsHashMap lProps   (xSet->nextElement());
@@ -937,7 +933,7 @@ sal_Bool LoadEnv::impl_handleContent()
         css::uno::Reference< css::frame::XNotifyingDispatch > xHandler;
         try
         {
-            xHandler = css::uno::Reference< css::frame::XNotifyingDispatch >(xFactory->createInstance(sHandler), css::uno::UNO_QUERY);
+            xHandler = css::uno::Reference< css::frame::XNotifyingDispatch >(xLoaderFactory->createInstance(sHandler), css::uno::UNO_QUERY);
             if (!xHandler.is())
                 continue;
         }
@@ -1212,8 +1208,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
         throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
 
     // try to locate any interested frame loader
-    css::uno::Reference< css::lang::XMultiServiceFactory > xLoaderFactory(m_xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_FRAMELOADERFACTORY, m_xContext), css::uno::UNO_QUERY);
-    css::uno::Reference< css::container::XContainerQuery > xQuery        (xLoaderFactory                                         , css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XLoaderFactory > xLoaderFactory = css::frame::FrameLoaderFactory::create(m_xContext);
 
     aReadLock.unlock();
     // <- SAFE -----------------------------------
@@ -1227,7 +1222,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
 
     OUString sPROP_NAME(PROP_NAME);
 
-    css::uno::Reference< css::container::XEnumeration > xSet = xQuery->createSubSetEnumerationByProperties(lQuery);
+    css::uno::Reference< css::container::XEnumeration > xSet = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())
     {
         // try everyone ...
