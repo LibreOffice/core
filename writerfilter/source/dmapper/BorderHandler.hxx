@@ -50,6 +50,7 @@ private:
     sal_Int32       m_nLineType;
     sal_Int32       m_nLineColor;
     sal_Int32       m_nLineDistance;
+    bool            m_bShadow;
     bool            m_bOOXML;
 
     bool                                        m_aFilledLines[BORDER_COUNT];
@@ -66,6 +67,7 @@ public:
     ::boost::shared_ptr<PropertyMap>            getProperties();
     ::com::sun::star::table::BorderLine2        getBorderLine();
     sal_Int32                                   getLineDistance() const { return m_nLineDistance;}
+    bool                                        getShadow();
 };
 typedef boost::shared_ptr< BorderHandler >          BorderHandlerPtr;
 }}

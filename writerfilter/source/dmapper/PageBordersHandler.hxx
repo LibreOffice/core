@@ -40,6 +40,7 @@ public:
     com::sun::star::table::BorderLine2 m_rLine;
     sal_Int32   m_nDistance;
     BorderPosition m_ePos;
+    bool m_bShadow;
 
     _PgBorder( );
     ~_PgBorder( );

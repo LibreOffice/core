@@ -149,6 +149,7 @@ class SectionPropertyMap : public PropertyMap
     ::com::sun::star::table::BorderLine2*   m_pBorderLines[4];
     sal_Int32                               m_nBorderDistances[4];
     sal_Int32                               m_nBorderParams;
+    bool                                    m_bBorderShadows[4];
 
     bool                                    m_bTitlePage;
     sal_Int16                               m_nColumnCount;
@@ -219,7 +220,7 @@ public:
             const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xTextFactory,
             bool bFirst );
 
-    void SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const ::com::sun::star::table::BorderLine2& rBorderLine );
+    void SetBorder( BorderPosition ePos, sal_Int32 nLineDistance, const ::com::sun::star::table::BorderLine2& rBorderLine, bool bShadow );
     void SetBorderParams( sal_Int32 nSet ) { m_nBorderParams = nSet; }
 
     void SetColumnCount( sal_Int16 nCount ) { m_nColumnCount = nCount; }
