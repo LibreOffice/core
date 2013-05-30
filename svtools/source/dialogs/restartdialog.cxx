@@ -40,6 +40,9 @@ public:
         case svtools::RESTART_REASON_BIBLIOGRAPHY_INSTALL:
             get(reason_, "reason_bibliography_install");
             break;
+        case svtools::RESTART_REASON_MODIFIED_SIDEBAR:
+            get(reason_, "reason_sidebar");
+            break;
         default:
             assert(false); // this cannot happen
         }
