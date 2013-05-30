@@ -208,23 +208,6 @@ pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-base"
 End
 
 Start
-module = "gid_Module_Langpack_Binfilter"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-binfilter"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
-packagename = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-binfilter"
-linuxreplaces = "ooobasis3.0-%LANGUAGESTRING-binfilter,ooobasis3.1-%LANGUAGESTRING-binfilter,ooobasis3.2-%LANGUAGESTRING-binfilter,ooobasis3.3-%LANGUAGESTRING-binfilter,ooobasis3.4-%LANGUAGESTRING-binfilter"
-provides = "%BASISPACKAGEPREFIX-%LANGUAGESTRING-binfilter"
-requires = "%BASISPACKAGEPREFIX-%LANGUAGESTRING"
-copyright = "2012 by The Apache Software Foundation"
-solariscopyright = "solariscopyrightfile"
-vendor = "Apache Software Foundation"
-description = "Legacy filters (e.g. StarOffice 5.2) for %APACHEPROJECTNAME %OOOBASEVERSION, language %LANGUAGESTRING"
-destpath = "/opt"
-packageversion = "%OOOPACKAGEVERSION"
-pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-binfilter"
-End
-
-Start
 module = "gid_Module_Langpack_Onlineupdate"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-onlineupd"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"

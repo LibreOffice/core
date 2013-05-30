@@ -189,21 +189,6 @@ destpath = "/opt"
 packageversion = "%OOOPACKAGEVERSION"
 End
 
-Start
-module = "gid_Module_Optional_Binfilter"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-binfilter"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core04,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core05"
-packagename = "%BASISPACKAGEPREFIX-binfilter"
-linuxreplaces = "ooobasis3.0-binfilter,ooobasis3.1-binfilter,ooobasis3.2-binfilter,ooobasis3.3-binfilter,ooobasis3.4-binfilter"
-freebsdrequires = "%BASISPACKAGEPREFIX-core01" 
-requires = "%BASISPACKAGEPREFIX-core01"
-copyright = "2012 by The Apache Software Foundation"
-solariscopyright = "solariscopyrightfile"
-vendor = "Apache Software Foundation"
-description = "Legacy filters (e.g. StarOffice 5.2) for %APACHEPROJECTNAME %OOOBASEVERSION"
-destpath = "/opt"
-packageversion = "%OOOPACKAGEVERSION"
-End
 
 Start
 module = "gid_Module_Optional_Grfflt"
