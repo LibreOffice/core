@@ -1405,7 +1405,7 @@ bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
 
 
 
-static void lcl_GetStdPgSize( SwDoc* pDoc, SfxItemSet& rSet )
+static void lcl_PutStdPageSizeIntoItemSet( SwDoc* pDoc, SfxItemSet& rSet )
 {
     SwPageDesc* pStdPgDsc = pDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );
     SwFmtFrmSize aFrmSz( pStdPgDsc->GetMaster().GetFrmSize() );
@@ -1423,52 +1423,58 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     OSL_ENSURE( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
             "Wrong AutoFormat Id" );
 
-    SwPageDesc *pNewPgDsc;
-    sal_uInt16 n;
-
-    for( n = 0; n < maPageDescs.size(); ++n )
-        if( nId == ( pNewPgDsc = maPageDescs[ n ] )->GetPoolFmtId() )
+    for( sal_uInt16 n = 0; n < maPageDescs.size(); ++n )
+    {
+        if ( nId == maPageDescs[ n ]->GetPoolFmtId() )
         {
-            return pNewPgDsc;
+            return maPageDescs[ n ];
         }
+    }
 
-    // error: unknown Pool style
     if( RES_POOLPAGE_BEGIN > nId ||  nId >= RES_POOLPAGE_END )
     {
-        OSL_ENSURE( !this, "invalid Id" );
+        // unknown page pool ID
+        OSL_ENSURE( !this, "<SwDoc::GetPageDescFromPool(..)> - unknown page pool ID" );
         nId = RES_POOLPAGE_BEGIN;
     }
 
-    ResId aResId( sal_uInt32(RC_POOLPAGEDESC_BEGIN + nId - RES_POOLPAGE_BEGIN), *pSwResMgr );
-    String aNm( aResId );
+    SwPageDesc* pNewPgDsc = 0;
     {
-        bool bIsModified = IsModified();
+        const ResId aResId( sal_uInt32(RC_POOLPAGEDESC_BEGIN + nId - RES_POOLPAGE_BEGIN), *pSwResMgr );
+        const String aNm( aResId );
+        const bool bIsModified = IsModified();
 
+        sal_uInt16 nPageDescIdx = 0;
         {
             ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-            n = MakePageDesc( aNm, 0, bRegardLanguage );
+            nPageDescIdx = MakePageDesc( aNm, 0, bRegardLanguage );
         }
 
-        pNewPgDsc = maPageDescs[ n ];
+        pNewPgDsc = maPageDescs[ nPageDescIdx ];
         pNewPgDsc->SetPoolFmtId( nId );
-        if( !bIsModified )
+        if ( !bIsModified )
+        {
             ResetModified();
+        }
     }
 
-
     SvxLRSpaceItem aLR( RES_LR_SPACE );
-    aLR.SetLeft( GetMetricVal( CM_1 ) * 2 );
-    aLR.SetRight( aLR.GetLeft() );
+    {
+        aLR.SetLeft( GetMetricVal( CM_1 ) * 2 );
+        aLR.SetRight( aLR.GetLeft() );
+    }
     SvxULSpaceItem aUL( RES_UL_SPACE );
-    aUL.SetUpper( (sal_uInt16)aLR.GetLeft() );
-    aUL.SetLower( (sal_uInt16)aLR.GetLeft() );
+    {
+        aUL.SetUpper( (sal_uInt16)aLR.GetLeft() );
+        aUL.SetLower( (sal_uInt16)aLR.GetLeft() );
+    }
 
     SwAttrSet aSet( GetAttrPool(), aPgFrmFmtSetRange );
     bool bSetLeft = true;
 
     switch( nId )
     {
-    case RES_POOLPAGE_STANDARD:             // Standard page
+    case RES_POOLPAGE_STANDARD:     // "Default"
         {
             aSet.Put( aLR );
             aSet.Put( aUL );
@@ -1477,10 +1483,10 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
         }
         break;
 
-    case RES_POOLPAGE_FIRST:                // First page
-    case RES_POOLPAGE_REGISTER:             // ToX
+    case RES_POOLPAGE_FIRST:        // "First Page"
+    case RES_POOLPAGE_REGISTER:     // "Index"
         {
-            lcl_GetStdPgSize( this, aSet );
+            lcl_PutStdPageSizeIntoItemSet( this, aSet );
             aSet.Put( aLR );
             aSet.Put( aUL );
             if( pNewPgDsc )
@@ -1492,9 +1498,9 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
         }
         break;
 
-    case RES_POOLPAGE_LEFT:                 // Left page
+    case RES_POOLPAGE_LEFT:         // "Left Page"
         {
-            lcl_GetStdPgSize( this, aSet );
+            lcl_PutStdPageSizeIntoItemSet( this, aSet );
             aSet.Put( aLR );
             aSet.Put( aUL );
             bSetLeft = false;
@@ -1507,9 +1513,9 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             }
         }
         break;
-    case RES_POOLPAGE_RIGHT:                // Right page
+    case RES_POOLPAGE_RIGHT:        // "Right Page"
         {
-            lcl_GetStdPgSize( this, aSet );
+            lcl_PutStdPageSizeIntoItemSet( this, aSet );
             aSet.Put( aLR );
             aSet.Put( aUL );
             bSetLeft = false;
@@ -1521,13 +1527,13 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
         }
         break;
 
-    case RES_POOLPAGE_JAKET:                // envelope
+    case RES_POOLPAGE_JAKET:        // "Envelope"
         {
-            aLR.SetLeft( 0 ); aLR.SetRight( 0 );
-            aUL.SetUpper( 0 ); aUL.SetLower( 0 );
             Size aPSize( SvxPaperInfo::GetPaperSize( PAPER_ENV_C65 ) );
             LandscapeSwap( aPSize );
             aSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, aPSize.Width(), aPSize.Height() ));
+            aLR.SetLeft( 0 ); aLR.SetRight( 0 );
+            aUL.SetUpper( 0 ); aUL.SetLower( 0 );
             aSet.Put( aLR );
             aSet.Put( aUL );
 
@@ -1539,9 +1545,9 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
         }
         break;
 
-    case RES_POOLPAGE_HTML:             // HTML
+    case RES_POOLPAGE_HTML:         // "HTML"
         {
-            lcl_GetStdPgSize( this, aSet );
+            lcl_PutStdPageSizeIntoItemSet( this, aSet );
             aLR.SetRight( GetMetricVal( CM_1 ));
             aUL.SetUpper( (sal_uInt16)aLR.GetRight() );
             aUL.SetLower( (sal_uInt16)aLR.GetRight() );
@@ -1552,10 +1558,11 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
                 pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
         }
         break;
-    case RES_POOLPAGE_FOOTNOTE:
-    case RES_POOLPAGE_ENDNOTE:
+
+    case RES_POOLPAGE_FOOTNOTE:     // "Footnote"
+    case RES_POOLPAGE_ENDNOTE:      // "Endnote"
         {
-            lcl_GetStdPgSize( this, aSet );
+            lcl_PutStdPageSizeIntoItemSet( this, aSet );
             aSet.Put( aLR );
             aSet.Put( aUL );
             if( pNewPgDsc )
@@ -1567,13 +1574,17 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             pNewPgDsc->SetFtnInfo( aInf );
         }
         break;
-        case RES_POOLPAGE_LANDSCAPE:
+
+    case RES_POOLPAGE_LANDSCAPE:    // "Landscape"
         {
             SwPageDesc* pStdPgDsc = this->GetPageDescFromPool( RES_POOLPAGE_STANDARD );
             SwFmtFrmSize aFrmSz( pStdPgDsc->GetMaster().GetFrmSize() );
-            SwTwips nTmp = aFrmSz.GetHeight();
-            aFrmSz.SetHeight( aFrmSz.GetWidth() );
-            aFrmSz.SetWidth( nTmp );
+            if ( !pStdPgDsc->GetLandscape() )
+            {
+                const SwTwips nTmp = aFrmSz.GetHeight();
+                aFrmSz.SetHeight( aFrmSz.GetWidth() );
+                aFrmSz.SetWidth( nTmp );
+            }
             aSet.Put( aFrmSz );
             aSet.Put( aLR );
             aSet.Put( aUL );
@@ -1582,19 +1593,17 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
                 pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
                 pNewPgDsc->SetLandscape( sal_True );
             }
-       }
-       break;
+        }
+        break;
 
     }
 
     if( aSet.Count() )
     {
-        {
-            if( bSetLeft )
-                pNewPgDsc->GetLeft().SetFmtAttr( aSet );
-            pNewPgDsc->GetMaster().SetFmtAttr( aSet );
-            pNewPgDsc->GetFirst().SetFmtAttr( aSet );
-        }
+        if( bSetLeft )
+            pNewPgDsc->GetLeft().SetFmtAttr( aSet );
+        pNewPgDsc->GetMaster().SetFmtAttr( aSet );
+        pNewPgDsc->GetFirst().SetFmtAttr( aSet );
     }
     return pNewPgDsc;
 }
