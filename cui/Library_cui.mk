@@ -155,7 +155,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/options/optupdt \
     cui/source/options/personalization \
     cui/source/options/radiobtnbox \
-    cui/source/options/readonlyimage \
     cui/source/options/sdbcdriverenum \
     cui/source/options/securityoptions \
     cui/source/options/treeopt \

@@ -24,7 +24,6 @@
 #include <vcl/fixed.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
-#include <readonlyimage.hxx>
 
 // predeclarations
 class CanvasSettings;
@@ -135,40 +134,23 @@ public:
 struct LanguageConfig_Impl;
 class OfaLanguagesTabPage : public SfxTabPage
 {
-    FixedLine       aUILanguageGB;
-    ReadOnlyImage   aLocaleSettingFI;
-    FixedText       aUserInterfaceFT;
-    ListBox         aUserInterfaceLB;
-    FixedText       aLocaleSettingFT;
-    SvxLanguageBox  aLocaleSettingLB;
-    ReadOnlyImage   aCurrencyFI;
-    FixedText       aDecimalSeparatorFT;
-    CheckBox        aDecimalSeparatorCB;
-    FixedText       aCurrencyFT;
-    ListBox         aCurrencyLB;
-    ReadOnlyImage   aDatePatternsFI;
-    FixedText       aDatePatternsFT;
-    Edit            aDatePatternsED;
+    ListBox*        m_pUserInterfaceLB;
+    FixedText*      m_pLocaleSettingFT;
+    SvxLanguageBox* m_pLocaleSettingLB;
+    CheckBox*       m_pDecimalSeparatorCB;
+    FixedText*      m_pCurrencyFT;
+    ListBox*        m_pCurrencyLB;
+    FixedText*      m_pDatePatternsFT;
+    Edit*           m_pDatePatternsED;
 
-    FixedLine       aLinguLanguageGB;
-    ReadOnlyImage   aWesternLanguageFI;
-    FixedText       aWesternLanguageFT;
-    SvxLanguageBox  aWesternLanguageLB;
-    ReadOnlyImage   aAsianLanguageFI;
-    FixedText       aAsianLanguageFT;
-    SvxLanguageBox  aAsianLanguageLB;
-    ReadOnlyImage   aComplexLanguageFI;
-    FixedText       aComplexLanguageFT;
-    SvxLanguageBox  aComplexLanguageLB;
-    CheckBox        aCurrentDocCB;
-    FixedLine       aEnhancedFL;
-    ReadOnlyImage   aAsianSupportFI;
-    CheckBox        aAsianSupportCB;
-    ReadOnlyImage   aCTLSupportFI;
-    CheckBox        aCTLSupportCB;
-    CheckBox        aIgnoreLanguageChangeCB;
-
-    const String    sDecimalSeparatorLabel;
+    SvxLanguageBox* m_pWesternLanguageLB;
+    FixedText*      m_pWesternLanguageFT;
+    SvxLanguageBox* m_pAsianLanguageLB;
+    SvxLanguageBox* m_pComplexLanguageLB;
+    CheckBox*       m_pCurrentDocCB;
+    CheckBox*       m_pAsianSupportCB;
+    CheckBox*       m_pCTLSupportCB;
+    CheckBox*       m_pIgnoreLanguageChangeCB;
 
     sal_Bool        m_bOldAsian;
     sal_Bool        m_bOldCtl;

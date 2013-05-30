@@ -83,7 +83,6 @@
 
 #include <vcl/svapp.hxx>
 
-#include "optgdlg.hrc"
 #include "optgdlg.hxx"
 #include <svx/ofaitem.hxx>
 #include <svtools/apearcfg.hxx>
@@ -1013,42 +1012,26 @@ static OUString lcl_getDatePatternsConfigString( const LocaleDataWrapper& rLocal
 }
 
 OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage( pParent, CUI_RES( OFA_TP_LANGUAGES ), rSet ),
-    aUILanguageGB(this,         CUI_RES(FL_UI_LANG      )),
-    aLocaleSettingFI(this,      CUI_RES(FI_LOCALESETTING)),
-    aUserInterfaceFT(this,      CUI_RES(FT_USERINTERFACE)),
-    aUserInterfaceLB(this,      CUI_RES(LB_USERINTERFACE)),
-    aLocaleSettingFT(this,      CUI_RES(FT_LOCALESETTING)),
-    aLocaleSettingLB(this,      CUI_RES(LB_LOCALESETTING)),
-    aCurrencyFI( this,          CUI_RES(FI_CURRENCY       )),
-    aDecimalSeparatorFT(this,   CUI_RES(FT_DECIMALSEPARATOR)),
-    aDecimalSeparatorCB(this,   CUI_RES(CB_DECIMALSEPARATOR)),
-    aCurrencyFT( this,          CUI_RES(FT_CURRENCY       )),
-    aCurrencyLB( this,          CUI_RES(LB_CURRENCY       )),
-    aDatePatternsFI( this,      CUI_RES(FI_DATEPATTERNS   )),
-    aDatePatternsFT( this,      CUI_RES(FT_DATEPATTERNS   )),
-    aDatePatternsED( this,      CUI_RES(ED_DATEPATTERNS   )),
-    aLinguLanguageGB(this,      CUI_RES(FL_LINGU_LANG       )),
-    aWesternLanguageFI(this,    CUI_RES(FI_WEST_LANG      )),
-    aWesternLanguageFT(this,    CUI_RES(FT_WEST_LANG      )),
-    aWesternLanguageLB(this,    CUI_RES(LB_WEST_LANG        )),
-    aAsianLanguageFI(this,      CUI_RES(FI_ASIAN_LANG     )),
-    aAsianLanguageFT(this,      CUI_RES(FT_ASIAN_LANG     )),
-    aAsianLanguageLB(this,      CUI_RES(LB_ASIAN_LANG       )),
-    aComplexLanguageFI(this,    CUI_RES(FI_COMPLEX_LANG   )),
-    aComplexLanguageFT(this,    CUI_RES(FT_COMPLEX_LANG   )),
-    aComplexLanguageLB(this,    CUI_RES(LB_COMPLEX_LANG )),
-    aCurrentDocCB(this,         CUI_RES(CB_CURRENT_DOC  )),
-    aEnhancedFL(this,           CUI_RES(FL_ENHANCED    )),
-    aAsianSupportFI(this,       CUI_RES(FI_ASIANSUPPORT   )),
-    aAsianSupportCB(this,       CUI_RES(CB_ASIANSUPPORT   )),
-    aCTLSupportFI(this,         CUI_RES(FI_CTLSUPPORT    )),
-    aCTLSupportCB(this,         CUI_RES(CB_CTLSUPPORT   )),
-    aIgnoreLanguageChangeCB(this, CUI_RES(CB_IGNORE_LANG_CHANGE   )),
-    sDecimalSeparatorLabel(aDecimalSeparatorCB.GetText()),
-    pLangConfig(new LanguageConfig_Impl)
+      SfxTabPage( pParent,"OptLanguagesPage","cui/ui/optlanguagespage.ui", rSet ),
+     pLangConfig(new LanguageConfig_Impl)
 {
-    FreeResource();
+    get(m_pUserInterfaceLB, "userinterface");
+    get(m_pLocaleSettingLB, "localesetting");
+    get(m_pLocaleSettingFT, "localesettingFT");
+    get(m_pDecimalSeparatorCB, "decimalseparator");
+    get(m_pCurrencyFT, "defaultcurrency");
+    get(m_pCurrencyLB, "currencylb");
+    get(m_pDatePatternsFT,"dataaccpatterns");
+    get(m_pDatePatternsED, "datepatterns");
+
+    get(m_pWesternLanguageLB, "westernlanguage");
+    get(m_pWesternLanguageFT, "western");
+    get(m_pAsianLanguageLB, "asianlanguage");
+    get(m_pComplexLanguageLB, "complexlanguage");
+    get(m_pCurrentDocCB, "currentdoc");
+    get(m_pAsianSupportCB, "asiansupport");
+    get(m_pCTLSupportCB, "ctlsupport");
+    get(m_pIgnoreLanguageChangeCB, "ignorelanguagechange");
 
     // initialize user interface language selection
     SvtLanguageTable* pLanguageTable = new SvtLanguageTable;
@@ -1058,9 +1041,9 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
                        " - " +
                        pLanguageTable->GetString( Application::GetSettings().GetUILanguageTag().getLanguageType(), true );
 
-    aUserInterfaceLB.InsertEntry(aUILang);
-    aUserInterfaceLB.SetEntryData(0, 0);
-    aUserInterfaceLB.SelectEntryPos(0);
+    m_pUserInterfaceLB->InsertEntry(aUILang);
+    m_pUserInterfaceLB->SetEntryData(0, 0);
+    m_pUserInterfaceLB->SelectEntryPos(0);
     try
     {
         Reference< XMultiServiceFactory > theConfigProvider(
@@ -1080,10 +1063,10 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
             aLang = LanguageTag(seqInstalledLanguages[i]).getLanguageType();
             if (aLang != LANGUAGE_DONTKNOW)
             {
-                //sal_uInt16 p = aUserInterfaceLB.InsertLanguage(aLang);
+                //sal_uInt16 p = m_pUserInterfaceLB->InsertLanguage(aLang);
                 OUString aLangStr( pLanguageTable->GetString( aLang, true ) );
-                sal_uInt16 p = aUserInterfaceLB.InsertEntry(aLangStr);
-                aUserInterfaceLB.SetEntryData(p, (void*)(i+1));
+                sal_uInt16 p = m_pUserInterfaceLB->InsertEntry(aLangStr);
+                m_pUserInterfaceLB->SetEntryData(p, (void*)(i+1));
             }
         }
 
@@ -1098,11 +1081,11 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         if (!m_sUserLocaleValue.isEmpty())
         {
             sal_Int32 d = 0;
-            for (sal_uInt16 i=0; i < aUserInterfaceLB.GetEntryCount(); i++)
+            for (sal_uInt16 i=0; i < m_pUserInterfaceLB->GetEntryCount(); i++)
             {
-                d = (sal_Int32)(sal_IntPtr)aUserInterfaceLB.GetEntryData(i);
+                d = (sal_Int32)(sal_IntPtr)m_pUserInterfaceLB->GetEntryData(i);
                 if ( d > 0 && seqInstalledLanguages.getLength() > d-1 && seqInstalledLanguages[d-1].equals(m_sUserLocaleValue))
-                    aUserInterfaceLB.SelectEntryPos(i);
+                    m_pUserInterfaceLB->SelectEntryPos(i);
             }
         }
 
@@ -1115,21 +1098,21 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         OSL_FAIL(aMsg.getStr());
     }
 
-    aWesternLanguageLB.SetLanguageList( LANG_LIST_WESTERN | LANG_LIST_ONLY_KNOWN, sal_True,  sal_False, sal_True );
-    aWesternLanguageLB.InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::LATIN );
-    aAsianLanguageLB.SetLanguageList( LANG_LIST_CJK     | LANG_LIST_ONLY_KNOWN, sal_True,  sal_False, sal_True );
-    aAsianLanguageLB.InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::ASIAN );
-    aComplexLanguageLB.SetLanguageList( LANG_LIST_CTL     | LANG_LIST_ONLY_KNOWN, sal_True,  sal_False, sal_True );
-    aComplexLanguageLB.InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::COMPLEX );
+    m_pWesternLanguageLB->SetLanguageList( LANG_LIST_WESTERN | LANG_LIST_ONLY_KNOWN, sal_True,  sal_False, sal_True );
+    m_pWesternLanguageLB->InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::LATIN );
+    m_pAsianLanguageLB->SetLanguageList( LANG_LIST_CJK     | LANG_LIST_ONLY_KNOWN, sal_True,  sal_False, sal_True );
+    m_pAsianLanguageLB->InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::ASIAN );
+    m_pComplexLanguageLB->SetLanguageList( LANG_LIST_CTL     | LANG_LIST_ONLY_KNOWN, sal_True,  sal_False, sal_True );
+    m_pComplexLanguageLB->InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::COMPLEX );
 
-    aLocaleSettingLB.SetLanguageList( LANG_LIST_ALL     | LANG_LIST_ONLY_KNOWN, sal_False, sal_False, sal_False);
-    aLocaleSettingLB.InsertSystemLanguage( );
+    m_pLocaleSettingLB->SetLanguageList( LANG_LIST_ALL     | LANG_LIST_ONLY_KNOWN, sal_False, sal_False, sal_False);
+    m_pLocaleSettingLB->InsertSystemLanguage( );
 
     const NfCurrencyTable& rCurrTab = SvNumberFormatter::GetTheCurrencyTable();
     const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry( LANGUAGE_SYSTEM );
     // insert SYSTEM entry
     OUString aDefaultCurr = aStr + " - " + rCurr.GetBankSymbol();
-    aCurrencyLB.InsertEntry( aDefaultCurr );
+    m_pCurrencyLB->InsertEntry( aDefaultCurr );
     // all currencies
     OUString aTwoSpace( "  " );
     sal_uInt16 nCurrCount = rCurrTab.size();
@@ -1143,33 +1126,31 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         aStr_ = ApplyLreOrRleEmbedding( aStr_ ) +
                 aTwoSpace +
                 ApplyLreOrRleEmbedding( pLanguageTable->GetString( pCurr->GetLanguage() ) );
-        sal_uInt16 nPos = aCurrencyLB.InsertEntry( aStr_ );
-        aCurrencyLB.SetEntryData( nPos, (void*) pCurr );
+        sal_uInt16 nPos = m_pCurrencyLB->InsertEntry( aStr_ );
+        m_pCurrencyLB->SetEntryData( nPos, (void*) pCurr );
     }
     delete pLanguageTable;
 
-    aLocaleSettingLB.SetSelectHdl( LINK( this, OfaLanguagesTabPage, LocaleSettingHdl ) );
-    aDatePatternsED.SetModifyHdl( LINK( this, OfaLanguagesTabPage, DatePatternsHdl ) );
+    m_pLocaleSettingLB->SetSelectHdl( LINK( this, OfaLanguagesTabPage, LocaleSettingHdl ) );
+    m_pDatePatternsED->SetModifyHdl( LINK( this, OfaLanguagesTabPage, DatePatternsHdl ) );
 
     Link aLink( LINK( this, OfaLanguagesTabPage, SupportHdl ) );
-    aAsianSupportCB.SetClickHdl( aLink );
-    aCTLSupportCB.SetClickHdl( aLink );
+    m_pAsianSupportCB->SetClickHdl( aLink );
+    m_pCTLSupportCB->SetClickHdl( aLink );
 
-    aAsianSupportCB.Check( m_bOldAsian = pLangConfig->aLanguageOptions.IsAnyEnabled() );
-    aAsianSupportCB.SaveValue();
+    m_pAsianSupportCB->Check( m_bOldAsian = pLangConfig->aLanguageOptions.IsAnyEnabled() );
+    m_pAsianSupportCB->SaveValue();
     sal_Bool bReadonly = pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_ALLCJK);
-    aAsianSupportCB.Enable(!bReadonly);
-    aAsianSupportFI.Show(bReadonly);
-    SupportHdl( &aAsianSupportCB );
+    m_pAsianSupportCB->Enable(!bReadonly);
+    SupportHdl( m_pAsianSupportCB );
 
-    aCTLSupportCB.Check( m_bOldCtl = pLangConfig->aLanguageOptions.IsCTLFontEnabled() );
-    aCTLSupportCB.SaveValue();
+    m_pCTLSupportCB->Check( m_bOldCtl = pLangConfig->aLanguageOptions.IsCTLFontEnabled() );
+    m_pCTLSupportCB->SaveValue();
     bReadonly = pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_CTLFONT);
-    aCTLSupportCB.Enable(!bReadonly);
-    aCTLSupportFI.Show(bReadonly);
-    SupportHdl( &aCTLSupportCB );
+    m_pCTLSupportCB->Enable(!bReadonly);
+    SupportHdl( m_pCTLSupportCB );
 
-    aIgnoreLanguageChangeCB.Check( pLangConfig->aSysLocaleOptions.IsIgnoreLanguageChange() );
+    m_pIgnoreLanguageChangeCB->Check( pLangConfig->aSysLocaleOptions.IsIgnoreLanguageChange() );
 }
 
 OfaLanguagesTabPage::~OfaLanguagesTabPage()
@@ -1236,13 +1217,13 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
      * b) it was already checked but the CTL language has changed
      */
     if (
-         aCTLSupportCB.IsChecked() &&
-         (aCTLSupportCB.GetSavedValue() != STATE_CHECK ||
-         aComplexLanguageLB.GetSavedValue() != aComplexLanguageLB.GetSelectEntryPos())
+         m_pCTLSupportCB->IsChecked() &&
+         (m_pCTLSupportCB->GetSavedValue() != STATE_CHECK ||
+         m_pComplexLanguageLB->GetSavedValue() != m_pComplexLanguageLB->GetSelectEntryPos())
        )
     {
         //sequence checking has to be switched on depending on the selected CTL language
-        LanguageType eCTLLang = aComplexLanguageLB.GetSelectLanguage();
+        LanguageType eCTLLang = m_pComplexLanguageLB->GetSelectLanguage();
         sal_Bool bOn = MsLangId::needsSequenceChecking( eCTLLang);
         pLangConfig->aLanguageOptions.SetCTLSequenceCheckingRestricted(bOn);
         pLangConfig->aLanguageOptions.SetCTLSequenceChecking(bOn);
@@ -1253,13 +1234,13 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         // handle settings for UI Language
         // a change of setting needs to bring up a warning message
         OUString aLangString;
-        sal_Int32 d = (sal_Int32)(sal_IntPtr)aUserInterfaceLB.GetEntryData(aUserInterfaceLB.GetSelectEntryPos());
+        sal_Int32 d = (sal_Int32)(sal_IntPtr)m_pUserInterfaceLB->GetEntryData(m_pUserInterfaceLB->GetSelectEntryPos());
         if( d > 0 && seqInstalledLanguages.getLength() > d-1)
             aLangString = seqInstalledLanguages[d-1];
 
         /*
-        if( aUserInterfaceLB.GetSelectEntryPos() > 0)
-            aLangString = ConvertLanguageToIsoString(aUserInterfaceLB.GetSelectLanguage());
+        if( m_pUserInterfaceLB->GetSelectEntryPos() > 0)
+            aLangString = ConvertLanguageToIsoString(m_pUserInterfaceLB->GetSelectLanguage());
         */
         Reference< XMultiServiceFactory > theConfigProvider(
             com::sun::star::configuration::theDefaultProvider::get(
@@ -1305,7 +1286,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
     LanguageType eOldLocale = (!sLang.isEmpty() ?
         lcl_LangStringToLangType( sLang ) : LANGUAGE_SYSTEM);
-    LanguageType eNewLocale = aLocaleSettingLB.GetSelectLanguage();
+    LanguageType eNewLocale = m_pLocaleSettingLB->GetSelectLanguage();
     if ( eOldLocale != eNewLocale )
     {
         // an empty string denotes SYSTEM locale
@@ -1325,17 +1306,17 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         aCompatOpts.SetDefault( COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE, !bNewCJK );
     }
 
-    if(aDecimalSeparatorCB.GetSavedValue() != aDecimalSeparatorCB.IsChecked())
-        pLangConfig->aSysLocaleOptions.SetDecimalSeparatorAsLocale(aDecimalSeparatorCB.IsChecked());
+    if(m_pDecimalSeparatorCB->GetSavedValue() != m_pDecimalSeparatorCB->IsChecked())
+        pLangConfig->aSysLocaleOptions.SetDecimalSeparatorAsLocale(m_pDecimalSeparatorCB->IsChecked());
 
-    if(aIgnoreLanguageChangeCB.GetSavedValue() != aIgnoreLanguageChangeCB.IsChecked())
-        pLangConfig->aSysLocaleOptions.SetIgnoreLanguageChange(aIgnoreLanguageChangeCB.IsChecked());
+    if(m_pIgnoreLanguageChangeCB->GetSavedValue() != m_pIgnoreLanguageChangeCB->IsChecked())
+        pLangConfig->aSysLocaleOptions.SetIgnoreLanguageChange(m_pIgnoreLanguageChangeCB->IsChecked());
 
     // Configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default.
     OUString sOldCurr = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
-    sal_uInt16 nCurrPos = aCurrencyLB.GetSelectEntryPos();
+    sal_uInt16 nCurrPos = m_pCurrencyLB->GetSelectEntryPos();
     const NfCurrencyEntry* pCurr = (const NfCurrencyEntry*)
-        aCurrencyLB.GetEntryData( nCurrPos );
+        m_pCurrencyLB->GetEntryData( nCurrPos );
     OUString sNewCurr;
     if ( pCurr )
         sNewCurr = SvtSysLocaleOptions::CreateCurrencyConfigString(
@@ -1345,20 +1326,20 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
     // Configured date acceptance patterns, for example Y-M-D;M-D or empty for
     // locale default.
-    if (aDatePatternsED.GetText() != aDatePatternsED.GetSavedValue())
-        pLangConfig->aSysLocaleOptions.SetDatePatternsConfigString( aDatePatternsED.GetText());
+    if (m_pDatePatternsED->GetText() != m_pDatePatternsED->GetSavedValue())
+        pLangConfig->aSysLocaleOptions.SetDatePatternsConfigString( m_pDatePatternsED->GetText());
 
     SfxObjectShell* pCurrentDocShell = SfxObjectShell::Current();
     Reference< css::linguistic2::XLinguProperties > xLinguProp = LinguMgr::GetLinguPropertySet();
-    sal_Bool bCurrentDocCBChecked = aCurrentDocCB.IsChecked();
-    if(aCurrentDocCB.IsEnabled())
+    sal_Bool bCurrentDocCBChecked = m_pCurrentDocCB->IsChecked();
+    if(m_pCurrentDocCB->IsEnabled())
         bLanguageCurrentDoc_Impl = bCurrentDocCBChecked;
-    sal_Bool bCurrentDocCBChanged = bCurrentDocCBChecked != aCurrentDocCB.GetSavedValue();
+    sal_Bool bCurrentDocCBChanged = bCurrentDocCBChecked != m_pCurrentDocCB->GetSavedValue();
 
-    sal_Bool bValChanged = aWesternLanguageLB.GetSavedValue() != aWesternLanguageLB.GetSelectEntryPos();
+    sal_Bool bValChanged = m_pWesternLanguageLB->GetSavedValue() != m_pWesternLanguageLB->GetSelectEntryPos();
     if( (bCurrentDocCBChanged && !bCurrentDocCBChecked) || bValChanged)
     {
-        LanguageType eSelectLang = aWesternLanguageLB.GetSelectLanguage();
+        LanguageType eSelectLang = m_pWesternLanguageLB->GetSelectLanguage();
         if(!bCurrentDocCBChecked)
         {
             Any aValue;
@@ -1375,10 +1356,10 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
                 SID_ATTR_LANGUAGE));
         }
     }
-    bValChanged = aAsianLanguageLB.GetSavedValue() != aAsianLanguageLB.GetSelectEntryPos();
+    bValChanged = m_pAsianLanguageLB->GetSavedValue() != m_pAsianLanguageLB->GetSelectEntryPos();
     if( (bCurrentDocCBChanged && !bCurrentDocCBChecked) || bValChanged)
     {
-        LanguageType eSelectLang = aAsianLanguageLB.GetSelectLanguage();
+        LanguageType eSelectLang = m_pAsianLanguageLB->GetSelectLanguage();
         if(!bCurrentDocCBChecked)
         {
             Any aValue;
@@ -1395,10 +1376,10 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
                 SID_ATTR_CHAR_CJK_LANGUAGE));
         }
     }
-    bValChanged = aComplexLanguageLB.GetSavedValue() != aComplexLanguageLB.GetSelectEntryPos();
+    bValChanged = m_pComplexLanguageLB->GetSavedValue() != m_pComplexLanguageLB->GetSelectEntryPos();
     if( (bCurrentDocCBChanged && !bCurrentDocCBChecked) || bValChanged)
     {
-        LanguageType eSelectLang = aComplexLanguageLB.GetSelectLanguage();
+        LanguageType eSelectLang = m_pComplexLanguageLB->GetSelectLanguage();
         if(!bCurrentDocCBChecked)
         {
             Any aValue;
@@ -1416,9 +1397,9 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         }
     }
 
-    if(aAsianSupportCB.GetSavedValue() != aAsianSupportCB.IsChecked() )
+    if(m_pAsianSupportCB->GetSavedValue() != m_pAsianSupportCB->IsChecked() )
     {
-        sal_Bool bChecked = aAsianSupportCB.IsChecked();
+        sal_Bool bChecked = m_pAsianSupportCB->IsChecked();
         pLangConfig->aLanguageOptions.SetAll(bChecked);
 
         //iterate over all bindings to invalidate vertical text direction
@@ -1435,9 +1416,9 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         lcl_UpdateAndDelete(pInvalidItems, pBoolItems, STATE_COUNT);
     }
 
-    if ( aCTLSupportCB.GetSavedValue() != aCTLSupportCB.IsChecked() )
+    if ( m_pCTLSupportCB->GetSavedValue() != m_pCTLSupportCB->IsChecked() )
     {
-        pLangConfig->aLanguageOptions.SetCTLFontEnabled( aCTLSupportCB.IsChecked() );
+        pLangConfig->aLanguageOptions.SetCTLFontEnabled( m_pCTLSupportCB->IsChecked() );
 
         const sal_uInt16 STATE_COUNT = 1;
         SfxBoolItem* pBoolItems[STATE_COUNT];
@@ -1464,25 +1445,24 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
 {
     OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
     if ( !sLang.isEmpty() )
-        aLocaleSettingLB.SelectLanguage(lcl_LangStringToLangType(sLang));
+        m_pLocaleSettingLB->SelectLanguage(lcl_LangStringToLangType(sLang));
     else
-        aLocaleSettingLB.SelectLanguage( LANGUAGE_USER_SYSTEM_CONFIG );
+        m_pLocaleSettingLB->SelectLanguage( LANGUAGE_USER_SYSTEM_CONFIG );
     sal_Bool bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_LOCALE);
-    aLocaleSettingLB.Enable(!bReadonly);
-    aLocaleSettingFT.Enable(!bReadonly);
-    aLocaleSettingFI.Show(bReadonly);
+    m_pLocaleSettingLB->Enable(!bReadonly);
+    m_pLocaleSettingFT->Enable(!bReadonly);
 
     //
-    aDecimalSeparatorCB.Check( pLangConfig->aSysLocaleOptions.IsDecimalSeparatorAsLocale());
-    aDecimalSeparatorCB.SaveValue();
+    m_pDecimalSeparatorCB->Check( pLangConfig->aSysLocaleOptions.IsDecimalSeparatorAsLocale());
+    m_pDecimalSeparatorCB->SaveValue();
 
-    aIgnoreLanguageChangeCB.Check( pLangConfig->aSysLocaleOptions.IsIgnoreLanguageChange());
-    aIgnoreLanguageChangeCB.SaveValue();
+    m_pIgnoreLanguageChangeCB->Check( pLangConfig->aSysLocaleOptions.IsIgnoreLanguageChange());
+    m_pIgnoreLanguageChangeCB->SaveValue();
 
     // let LocaleSettingHdl enable/disable checkboxes for CJK/CTL support
     // #i15812# must be done *before* the configured currency is set
     // and update the decimal separator used for the given locale
-    LocaleSettingHdl(&aLocaleSettingLB);
+    LocaleSettingHdl(m_pLocaleSettingLB);
 
     // configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default
     String aAbbrev;
@@ -1495,12 +1475,11 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
         pCurr = SvNumberFormatter::GetCurrencyEntry( aAbbrev, eLang );
     }
     // if pCurr==NULL the SYSTEM entry is selected
-    sal_uInt16 nPos = aCurrencyLB.GetEntryPos( (void*) pCurr );
-    aCurrencyLB.SelectEntryPos( nPos );
+    sal_uInt16 nPos = m_pCurrencyLB->GetEntryPos( (void*) pCurr );
+    m_pCurrencyLB->SelectEntryPos( nPos );
     bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_CURRENCY);
-    aCurrencyLB.Enable(!bReadonly);
-    aCurrencyFT.Enable(!bReadonly);
-    aCurrencyFI.Show(bReadonly);
+    m_pCurrencyLB->Enable(!bReadonly);
+    m_pCurrencyFT->Enable(!bReadonly);
 
     // date acceptance patterns
     OUString aDatePatternsString = pLangConfig->aSysLocaleOptions.GetDatePatternsConfigString();
@@ -1509,12 +1488,11 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
         const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
         aDatePatternsString = lcl_getDatePatternsConfigString( rLocaleWrapper);
     }
-    aDatePatternsED.SetText( aDatePatternsString);
+    m_pDatePatternsED->SetText( aDatePatternsString);
     bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_DATEPATTERNS);
-    aDatePatternsED.Enable(!bReadonly);
-    aDatePatternsFT.Enable(!bReadonly);
-    aDatePatternsFI.Show(bReadonly);
-    aDatePatternsED.SaveValue();
+    m_pDatePatternsED->Enable(!bReadonly);
+    m_pDatePatternsFT->Enable(!bReadonly);
+    m_pDatePatternsED->SaveValue();
 
     //western/CJK/CLK language
     LanguageType eCurLang = LANGUAGE_NONE;
@@ -1522,7 +1500,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     LanguageType eCurLangCTL = LANGUAGE_NONE;
     SfxObjectShell* pCurrentDocShell = SfxObjectShell::Current();
     //collect the configuration values first
-    aCurrentDocCB.Enable(sal_False);
+    m_pCurrentDocCB->Enable(sal_False);
     //
     Any aWestLang;
     Any aCJKLang;
@@ -1551,8 +1529,8 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     //overwrite them by the values provided by the DocShell
     if(pCurrentDocShell)
     {
-        aCurrentDocCB.Enable(sal_True);
-        aCurrentDocCB.Check(bLanguageCurrentDoc_Impl);
+        m_pCurrentDocCB->Enable(sal_True);
+        m_pCurrentDocCB->Check(bLanguageCurrentDoc_Impl);
         const SfxPoolItem* pLang;
         if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_LANGUAGE, sal_False, &pLang))
         {
@@ -1576,51 +1554,48 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
         }
     }
     if(LANGUAGE_NONE == eCurLang || LANGUAGE_DONTKNOW == eCurLang)
-        aWesternLanguageLB.SelectLanguage(LANGUAGE_NONE);
+        m_pWesternLanguageLB->SelectLanguage(LANGUAGE_NONE);
     else
-        aWesternLanguageLB.SelectLanguage(eCurLang);
+        m_pWesternLanguageLB->SelectLanguage(eCurLang);
 
     if(LANGUAGE_NONE == eCurLangCJK || LANGUAGE_DONTKNOW == eCurLangCJK)
-        aAsianLanguageLB.SelectLanguage(LANGUAGE_NONE);
+        m_pAsianLanguageLB->SelectLanguage(LANGUAGE_NONE);
     else
-        aAsianLanguageLB.SelectLanguage(eCurLangCJK);
+        m_pAsianLanguageLB->SelectLanguage(eCurLangCJK);
 
     if(LANGUAGE_NONE == eCurLangCTL || LANGUAGE_DONTKNOW == eCurLangCTL)
-        aComplexLanguageLB.SelectLanguage(LANGUAGE_NONE);
+        m_pComplexLanguageLB->SelectLanguage(LANGUAGE_NONE);
     else
-        aComplexLanguageLB.SelectLanguage(eCurLangCTL);
+        m_pComplexLanguageLB->SelectLanguage(eCurLangCTL);
 
-    aWesternLanguageLB.SaveValue();
-    aAsianLanguageLB.SaveValue();
-    aComplexLanguageLB.SaveValue();
-    aIgnoreLanguageChangeCB.SaveValue();
-    aCurrentDocCB.SaveValue();
+    m_pWesternLanguageLB->SaveValue();
+    m_pAsianLanguageLB->SaveValue();
+    m_pComplexLanguageLB->SaveValue();
+    m_pIgnoreLanguageChangeCB->SaveValue();
+    m_pCurrentDocCB->SaveValue();
 
     sal_Bool bEnable = !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale" );
-    aWesternLanguageFT.Enable( bEnable );
-    aWesternLanguageLB.Enable( bEnable );
+    m_pWesternLanguageFT->Enable( bEnable );
+    m_pWesternLanguageLB->Enable( bEnable );
 
 
-    aWesternLanguageFI.Show(!bEnable);
 
     // #i15812# controls for CJK/CTL already enabled/disabled from LocaleSettingHdl
 #if 0
-    bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale_CJK" ) && aAsianSupportCB.IsChecked() );
-    aAsianLanguageFT.Enable( bEnable );
-    aAsianLanguageLB.Enable( bEnable );
+    bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale_CJK" ) && m_pAsianSupportCB->IsChecked() );
+    m_pAsianLanguageLB->Enable( bEnable );
 
-    bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale_CTL" ) && aCTLSupportCB.IsChecked() );
-    aComplexLanguageFT.Enable( bEnable );
-    aComplexLanguageLB.Enable( bEnable );
+    bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale_CTL" ) && m_pCTLSupportCB->IsChecked() );
+    m_pComplexLanguageLB->Enable( bEnable );
 #endif
     // check the box "For the current document only"
     // set the focus to the Western Language box
     const SfxPoolItem* pLang = 0;
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_SET_DOCUMENT_LANGUAGE, sal_False, &pLang ) &&( (const SfxBoolItem*)pLang)->GetValue() == sal_True )
     {
-        aWesternLanguageLB.GrabFocus();
-        aCurrentDocCB.Enable(sal_True);
-        aCurrentDocCB.Check(sal_True);
+        m_pWesternLanguageLB->GrabFocus();
+        m_pCurrentDocCB->Enable(sal_True);
+        m_pCurrentDocCB->Check(sal_True);
     }
 }
 
@@ -1629,23 +1604,19 @@ IMPL_LINK(  OfaLanguagesTabPage, SupportHdl, CheckBox*, pBox )
     DBG_ASSERT( pBox, "OfaLanguagesTabPage::SupportHdl(): pBox invalid" );
 
     sal_Bool bCheck = pBox->IsChecked();
-    if ( &aAsianSupportCB == pBox )
+    if ( m_pAsianSupportCB == pBox )
     {
         sal_Bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly("DefaultLocale_CJK");
         bCheck = ( bCheck && !bReadonly );
-        aAsianLanguageFT.Enable( bCheck );
-        aAsianLanguageLB.Enable( bCheck );
-        aAsianLanguageFI.Show(bReadonly);
+        m_pAsianLanguageLB->Enable( bCheck );
         if( pBox->IsEnabled() )
             m_bOldAsian = bCheck;
     }
-    else if ( &aCTLSupportCB == pBox )
+    else if ( m_pCTLSupportCB == pBox )
     {
         sal_Bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly("DefaultLocale_CTL");
         bCheck = ( bCheck && !bReadonly  );
-        aComplexLanguageFT.Enable( bCheck );
-        aComplexLanguageLB.Enable( bCheck );
-        aComplexLanguageFI.Show(bReadonly);
+        m_pComplexLanguageLB->Enable( bCheck );
         if( pBox->IsEnabled() )
             m_bOldCtl = bCheck;
     }
@@ -1657,15 +1628,15 @@ IMPL_LINK(  OfaLanguagesTabPage, SupportHdl, CheckBox*, pBox )
 
 namespace
 {
-    void lcl_checkLanguageCheckBox(CheckBox& _rCB,sal_Bool _bNewValue,sal_Bool _bOldValue)
+    void lcl_checkLanguageCheckBox(CheckBox* _rCB,sal_Bool _bNewValue,sal_Bool _bOldValue)
     {
         if ( _bNewValue )
-            _rCB.Check(sal_True);
+            _rCB->Check(sal_True);
         else
-            _rCB.Check( _bOldValue );
+            _rCB->Check( _bOldValue );
 // #i15082# do not call SaveValue() in running dialog...
 //      _rCB.SaveValue();
-        _rCB.Enable( !_bNewValue );
+        _rCB->Enable( !_bNewValue );
     }
 }
 
@@ -1678,40 +1649,40 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
     if(!pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_CTLFONT))
     {
         bool bIsCTLFixed = (nType & SCRIPTTYPE_COMPLEX) != 0;
-        lcl_checkLanguageCheckBox(aCTLSupportCB, bIsCTLFixed, m_bOldCtl);
-        SupportHdl( &aCTLSupportCB );
+        lcl_checkLanguageCheckBox(m_pCTLSupportCB, bIsCTLFixed, m_bOldCtl);
+        SupportHdl( m_pCTLSupportCB );
     }
     // second check if CJK must be enabled
     // #103299# - if CJK support is not readonly
     if(!pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_ALLCJK))
     {
         bool bIsCJKFixed = (nType & SCRIPTTYPE_ASIAN) != 0;
-        lcl_checkLanguageCheckBox(aAsianSupportCB, bIsCJKFixed, m_bOldAsian);
-        SupportHdl( &aAsianSupportCB );
+        lcl_checkLanguageCheckBox(m_pAsianSupportCB, bIsCJKFixed, m_bOldAsian);
+        SupportHdl( m_pAsianSupportCB );
     }
 
     sal_uInt16 nPos;
     if ( eLang == LANGUAGE_USER_SYSTEM_CONFIG )
-        nPos = aCurrencyLB.GetEntryPos( (void*) NULL );
+        nPos = m_pCurrencyLB->GetEntryPos( (void*) NULL );
     else
     {
         const NfCurrencyEntry* pCurr = &SvNumberFormatter::GetCurrencyEntry( eLang );
-        nPos = aCurrencyLB.GetEntryPos( (void*) pCurr );
+        nPos = m_pCurrencyLB->GetEntryPos( (void*) pCurr );
     }
-    aCurrencyLB.SelectEntryPos( nPos );
+    m_pCurrencyLB->SelectEntryPos( nPos );
 
     // obtain corresponding locale data
     LanguageTag aLanguageTag( eLang);
     LocaleDataWrapper aLocaleWrapper( aLanguageTag );
 
     // update the decimal separator key of the related CheckBox
-    OUString sTempLabel(sDecimalSeparatorLabel);
+    OUString sTempLabel(m_pDecimalSeparatorCB->GetText());
     sTempLabel = sTempLabel.replaceFirst("%1", aLocaleWrapper.getNumDecimalSep() );
-    aDecimalSeparatorCB.SetText(sTempLabel);
+    m_pDecimalSeparatorCB->SetText(sTempLabel);
 
     // update the date acceptance patterns
     OUString aDatePatternsString = lcl_getDatePatternsConfigString( aLocaleWrapper);
-    aDatePatternsED.SetText( aDatePatternsString);
+    m_pDatePatternsED->SetText( aDatePatternsString);
 
     return 0;
 }

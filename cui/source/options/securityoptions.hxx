@@ -23,7 +23,6 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 
-#include "readonlyimage.hxx"
 
 class SvtSecurityOptions;
 

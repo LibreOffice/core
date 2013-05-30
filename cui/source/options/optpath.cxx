@@ -50,7 +50,6 @@
 #include <com/sun/star/util/PathSettings.hpp>
 #include <officecfg/Office/Common.hxx>
 #include "optHeaderTabListbox.hxx"
-#include <readonlyimage.hxx>
 #include <vcl/help.hxx>
 
 using namespace ::com::sun::star::beans;

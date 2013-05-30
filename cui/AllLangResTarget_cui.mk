@@ -56,7 +56,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/options/optcolor.src \
     cui/source/options/optdict.src \
     cui/source/options/optfltr.src \
-    cui/source/options/optgdlg.src \
     cui/source/options/opthtml.src \
     cui/source/options/optinet2.src \
     cui/source/options/optjava.src \
@@ -64,7 +63,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/options/optlingu.src \
     cui/source/options/optpath.src \
     cui/source/options/optsave.src \
-    cui/source/options/readonlyimage.src \
     cui/source/options/treeopt.src \
     cui/source/tabpages/align.src \
     cui/source/tabpages/autocdlg.src \

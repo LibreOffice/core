@@ -30,7 +30,6 @@
 #include <unotools/configitem.hxx>
 
 #include <svtools/headbar.hxx>
-#include <readonlyimage.hxx>
 
 namespace svx {
     class SecurityOptionsDialog;
