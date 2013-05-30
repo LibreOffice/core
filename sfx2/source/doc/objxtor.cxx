@@ -21,6 +21,8 @@
 #include "arrdecl.hxx"
 #include <map>
 
+#include <osl/module.h>
+
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/util/XCloseable.hpp>
@@ -469,6 +471,19 @@ sal_Bool SfxObjectShell::Close()
             if ( it != rDocs.end() )
                 rDocs.erase( it );
             pImp->bInList = sal_False;
+
+            if (pMedium && !pMedium->GetOrigURL().isEmpty())
+            {
+                oslModule aUcpDav1;
+                if (osl_getModuleHandle(OUString(SAL_MODULENAME("ucpdav1")).pData, &aUcpDav1))
+                {
+                    void (*pNeonSessionUnlockByUri)(rtl::OUString uri) =
+                        (void (*)(rtl::OUString)) osl_getAsciiFunctionSymbol(aUcpDav1, "NeonSessionUnlockByUri");
+                    if (pNeonSessionUnlockByUri)
+                        pNeonSessionUnlockByUri(pMedium->GetOrigURL());
+                }
+            }
+
         }
     }
 

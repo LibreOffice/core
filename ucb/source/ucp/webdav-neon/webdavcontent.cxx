@@ -500,6 +500,12 @@ uno::Any SAL_CALL Content::execute(
         }
 
         aRet = open( aOpenCommand, Environment );
+#if 1
+        if ( (aOpenCommand.Mode == ucb::OpenMode::DOCUMENT ||
+              aOpenCommand.Mode == ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE) &&
+             supportsExclusiveWriteLock( Environment ) )
+            lock( Environment );
+#endif
     }
     else if ( aCommand.Name == "insert" )
     {

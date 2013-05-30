@@ -212,6 +212,21 @@ void NeonLockStore::removeLock( NeonLock * pLock )
         stopTicker();
 }
 
+void NeonLockStore::unlockLock( NeonLock * pLock )
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    LockInfoMap::const_iterator it( m_aLockInfoMap.begin() );
+    const LockInfoMap::const_iterator end( m_aLockInfoMap.end() );
+    while ( it != end )
+    {
+        NeonLock * pLockIt = (*it).first;
+        if (pLockIt == pLock)
+            (*it).second.xSession->UNLOCK( pLock );
+        ++it;
+    }
+ }
+
 // -------------------------------------------------------------------
 void NeonLockStore::refreshLocks()
 {
