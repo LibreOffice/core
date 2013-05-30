@@ -16,12 +16,16 @@ endif
 SHELL=/usr/bin/env bash
 SRCDIR := @SRC_ROOT@
 BUILDDIR := @BUILDDIR@
+GIT_BUILD := $(if $(wildcard $(SRCDIR)/.git),T)
 
-# Next 'if' means:
-# If you want to make something more than help clean distclean,
-# and make has not yet restarted itself..
-# ..run autogen.sh if needed and force make to restart itself.
-ifeq (,$(MAKE_RESTARTS)$(if $(filter-out help clean distclean,$(MAKECMDGOALS)),,T))
+# Run autogen.sh if needed and force make to restart itself.
+# ... but there are several cases where we do not want to run
+# autogen.sh:
+# 1. if we are building from tarballs, not git checkout (I do not
+#    think packagers would ever want that. I certainly do not.)
+# 2. if we are making help, clean or distclean, because they do not
+#    need updated configuration
+ifeq (,$(MAKE_RESTARTS)$(if $(GIT_BUILD),,T)$(if $(filter-out help clean distclean,$(MAKECMDGOALS)),,T))
 
 .PHONY : force-restart
 Makefile: $(BUILDDIR)/config_host.mk force-restart
