@@ -63,16 +63,19 @@ struct ImplConfigData
     sal_Bool            mbIsUTF8BOM;
 };
 
-static String toUncPath( const String& rPath )
+static OUString toUncPath( const OUString& rPath )
 {
     OUString aFileURL;
 
     // check if rFileName is already a URL; if not make it so
-    if( rPath.CompareToAscii( "file://", 7 ) == COMPARE_EQUAL )
+    if( rPath.compareToAscii( "file://") == 0 )
+    {
         aFileURL = rPath;
+    }
     else if( ::osl::FileBase::getFileURLFromSystemPath( rPath, aFileURL ) != ::osl::FileBase::E_None )
+    {
         aFileURL = rPath;
-
+    }
     return aFileURL;
 }
 

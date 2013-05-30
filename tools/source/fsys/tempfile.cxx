@@ -34,7 +34,7 @@ namespace { struct TempNameBase_Impl : public rtl::Static< OUString, TempNameBas
 
 struct TempFile_Impl
 {
-    String      aName;
+    OUString      aName;
 };
 
 OUString ConstructTempDir_Impl()
@@ -52,16 +52,16 @@ OUString ConstructTempDir_Impl()
     return aName;
 }
 
-void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_True )
+void CreateTempName_Impl( OUString& rName, sal_Bool bKeep, sal_Bool bDir = sal_True )
 {
     // add a suitable tempname
     // Prefix can have 5 chars, leaving 3 for numbers. 26 ** 3 == 17576
     // ER 13.07.00  why not radix 36 [0-9A-Z] ?!?
     const unsigned nRadix = 26;
-    String aName( rName );
+    OUString aName( rName );
     aName += OUString("sv");
 
-    rName.Erase();
+    rName = "";
     static unsigned long u = Time::GetSystemTicks();
     for ( unsigned long nOld = u; ++u != nOld; )
     {
@@ -107,10 +107,10 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
     }
 }
 
-String TempFile::CreateTempName()
+OUString TempFile::CreateTempName()
 {
     // get correct directory
-    String aName = ConstructTempDir_Impl();
+    OUString aName = ConstructTempDir_Impl();
 
     // get TempFile name with default naming scheme
     CreateTempName_Impl( aName, sal_False );
@@ -129,12 +129,12 @@ TempFile::TempFile()
     CreateTempName_Impl( pImp->aName, sal_True, false );
 }
 
-TempFile::TempFile( const String& rLeadingChars, const String* pExtension )
+TempFile::TempFile( const OUString& rLeadingChars, const OUString* pExtension )
     : pImp( new TempFile_Impl )
     , bKillingFileEnabled( sal_False )
 {
     // get correct directory
-    String aName = ConstructTempDir_Impl();
+    OUString aName = ConstructTempDir_Impl();
 
     // now use special naming scheme ( name takes leading chars and an index counting up from zero
     aName += rLeadingChars;
@@ -172,7 +172,7 @@ TempFile::~TempFile()
     delete pImp;
 }
 
-String TempFile::GetName() const
+OUString TempFile::GetName() const
 {
     OUString aTmp;
     aTmp = pImp->aName;

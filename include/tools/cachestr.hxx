@@ -28,7 +28,7 @@ class TempFile;
 class TOOLS_DLLPUBLIC SvCacheStream : public SvStream
 {
 private:
-    String          aFileName;
+    OUString        aFileName;
     sal_uIntPtr     nMaxSize;
     int             bPersistent;
 
@@ -48,9 +48,9 @@ public:
                     SvCacheStream( sal_uIntPtr nMaxMemSize = 0 );
                     ~SvCacheStream();
 
-    void            SetFilename( const String& rFN )
+    void            SetFilename( const OUString& rFN )
                  { aFileName = rFN; } // call only from FilenameHdl
-    const String&   GetFilename() const { return aFileName; }
+    const OUString& GetFilename() const { return aFileName; }
 
     void            SwapOut();
     const void*     GetBuffer();

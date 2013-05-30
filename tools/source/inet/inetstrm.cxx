@@ -1123,23 +1123,23 @@ INetMIMEMessageStream::~INetMIMEMessageStream (void)
 }
 
 INetMessageEncoding
-INetMIMEMessageStream::GetMsgEncoding (const String& rContentType)
+INetMIMEMessageStream::GetMsgEncoding (const OUString& rContentType)
 {
-    if ((rContentType.CompareIgnoreCaseToAscii ("message"  , 7) == 0) ||
-        (rContentType.CompareIgnoreCaseToAscii ("multipart", 9) == 0)    )
+    if ((rContentType.compareToIgnoreAsciiCase("message") == 0) ||
+        (rContentType.compareToIgnoreAsciiCase("multipart") == 0)    )
         return INETMSG_ENCODING_7BIT;
 
-    if (rContentType.CompareIgnoreCaseToAscii ("text", 4) == 0)
+    if (rContentType.compareToIgnoreAsciiCase("text") == 0)
     {
-        if (rContentType.CompareIgnoreCaseToAscii ("text/plain", 10) == 0)
+        if (rContentType.compareToIgnoreAsciiCase("text/plain") == 0)
         {
             if (comphelper::string::getTokenCount(rContentType, '=') > 1)
             {
-                String aCharset (rContentType.GetToken (1, '='));
+                OUString aCharset (rContentType.getToken (1, '='));
                 aCharset = comphelper::string::stripStart(aCharset, ' ');
                 aCharset = comphelper::string::stripStart(aCharset, '"');
 
-                if (aCharset.CompareIgnoreCaseToAscii ("us-ascii", 8) == 0)
+                if (aCharset.compareToIgnoreAsciiCase("us-ascii") == 0)
                     return INETMSG_ENCODING_7BIT;
                 else
                     return INETMSG_ENCODING_QUOTED;
@@ -1169,11 +1169,11 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
             // Prepare special header fields.
             if (pMsg->GetParent())
             {
-                String aPCT (pMsg->GetParent()->GetContentType());
-                if (aPCT.CompareIgnoreCaseToAscii ("message/rfc822", 14) == 0)
+                OUString aPCT (pMsg->GetParent()->GetContentType());
+                if (aPCT.compareToIgnoreAsciiCase("message/rfc822") == 0)
                     pMsg->SetMIMEVersion ("1.0");
                 else
-                    pMsg->SetMIMEVersion (String());
+                    pMsg->SetMIMEVersion (OUString());
             }
             else
             {
@@ -1181,8 +1181,8 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
             }
 
             // Check ContentType.
-            String aContentType (pMsg->GetContentType());
-            if (aContentType.Len())
+            OUString aContentType (pMsg->GetContentType());
+            if (!aContentType.isEmpty())
             {
                 // Determine default Content-Type.
                 OUString aDefaultType = pMsg->GetDefaultContentType();
@@ -1190,20 +1190,20 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
                 if (aDefaultType.equalsIgnoreAsciiCase(aContentType))
                 {
                     // No need to specify default.
-                    pMsg->SetContentType (String());
+                    pMsg->SetContentType (OUString());
                 }
             }
 
             // Check Encoding.
-            String aEncoding (pMsg->GetContentTransferEncoding());
-            if (aEncoding.Len())
+            OUString aEncoding (pMsg->GetContentTransferEncoding());
+            if (!aEncoding.isEmpty())
             {
                 // Use given Encoding.
-                if (aEncoding.CompareIgnoreCaseToAscii (
-                    "base64", 6) == 0)
+                if (aEncoding.compareToIgnoreAsciiCase(
+                    "base64") == 0)
                     eEncoding = INETMSG_ENCODING_BASE64;
-                else if (aEncoding.CompareIgnoreCaseToAscii (
-                    "quoted-printable", 16) == 0)
+                else if (aEncoding.compareToIgnoreAsciiCase(
+                    "quoted-printable") == 0)
                     eEncoding = INETMSG_ENCODING_QUOTED;
                 else
                     eEncoding = INETMSG_ENCODING_7BIT;
@@ -1211,7 +1211,7 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
             else
             {
                 // Use default Encoding for (given|default) Content-Type.
-                if (aContentType.Len() == 0)
+                if (aContentType.isEmpty())
                 {
                     // Determine default Content-Type.
                     aContentType = pMsg->GetDefaultContentType();
@@ -1233,7 +1233,7 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
             else
             {
                 // No need to specify default.
-                pMsg->SetContentTransferEncoding (String());
+                pMsg->SetContentTransferEncoding(OUString());
             }
 
             // Mark we're done.
@@ -1569,12 +1569,12 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
 
             if (eEncoding == INETMSG_ENCODING_BINARY)
             {
-                String aEncoding (pMsg->GetContentTransferEncoding());
-                if (aEncoding.CompareIgnoreCaseToAscii (
-                    "base64", 6) == COMPARE_EQUAL)
+                OUString aEncoding (pMsg->GetContentTransferEncoding());
+                if (aEncoding.compareToIgnoreAsciiCase(
+                    "base64") == 0)
                     eEncoding = INETMSG_ENCODING_BASE64;
-                else if (aEncoding.CompareIgnoreCaseToAscii (
-                    "quoted-printable", 16) == COMPARE_EQUAL)
+                else if (aEncoding.compareToIgnoreAsciiCase(
+                    "quoted-printable") == 0)
                     eEncoding = INETMSG_ENCODING_QUOTED;
                 else
                     eEncoding = INETMSG_ENCODING_7BIT;

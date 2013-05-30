@@ -262,26 +262,28 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 /* Compilerstack */
 
 %union {
-	Atom			varid;
-	struct {
-		Atom			hashid;
-		sal_Int32			nValue;
-	}				constname;
-	RscTop *		pClass;
-	RSCHEADER		header;
-	struct {
-		CLASS_DATA	pData;
-		RscTop *	pClass;
-	}				instance;
-	sal_Int32			value;
-	sal_uInt16			ushort;
-	short			exp_short;
-	char *			string;
-	sal_Bool			svbool;
-	REF_ENUM		copyref;
-	RscDefine	  * defineele;
-	CharSet 		charset;
-	RscExpType		macrostruct;
+	Atom varid;
+	struct
+        {
+            Atom hashid;
+            sal_Int32 nValue;
+	} constname;
+	RscTop* pClass;
+	RSCHEADER header;
+	struct
+        {
+            CLASS_DATA pData;
+            RscTop* pClass;
+	} instance;
+	sal_Int32 value;
+	sal_uInt16 ushort;
+	short exp_short;
+	char* string;
+	sal_Bool svbool;
+	REF_ENUM copyref;
+	RscDefine* defineele;
+	rtl_TextEncoding charset;
+	RscExpType macrostruct;
 }
 
 /* Token */

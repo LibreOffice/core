@@ -231,7 +231,7 @@ private:
     sal_uInt16  nNumberFormatInt;
     sal_uInt16  nCompressMode;
     LineEnd     eLineDelimiter;
-    CharSet     eStreamCharSet;
+    rtl_TextEncoding eStreamCharSet;
 
     // Encryption
     OString m_aCryptMaskKey;// aCryptMaskKey.getLength != 0  -> Encryption used
@@ -294,9 +294,9 @@ public:
     void SetCryptMaskKey(const OString& rCryptMaskKey);
     const OString& GetCryptMaskKey() const { return m_aCryptMaskKey; }
 
-    void            SetStreamCharSet( CharSet eCharSet )
+    void            SetStreamCharSet( rtl_TextEncoding eCharSet )
                         { eStreamCharSet = eCharSet; }
-    CharSet         GetStreamCharSet() const { return eStreamCharSet; }
+    rtl_TextEncoding GetStreamCharSet() const { return eStreamCharSet; }
 
     void            SetLineDelimiter( LineEnd eLineEnd )
                         { eLineDelimiter = eLineEnd; }
@@ -381,9 +381,9 @@ public:
               causing endless loops ...
     */
     sal_Bool        ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
-                                        sal_Int32 nMaxBytesToRead = 0xFFFE );
-    sal_Bool        ReadByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet );
-    sal_Bool        WriteByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet );
+                                        sal_Int32 nMaxBytesToRead);
+    sal_Bool        ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet );
+    sal_Bool        WriteByteStringLine( const OUString& rStr, rtl_TextEncoding eDestCharSet );
 
     /// Switch to no endian swapping and write 0xfeff
     sal_Bool        StartWritingUnicodeText();
@@ -443,8 +443,8 @@ public:
     /** Write a sequence of Unicode characters if
         eDestCharSet==RTL_TEXTENCODING_UNICODE, otherwise write a sequence of
         Bytecodes converted to eDestCharSet */
-    sal_Bool        WriteUnicodeOrByteText( const String& rStr, rtl_TextEncoding eDestCharSet );
-    sal_Bool        WriteUnicodeOrByteText( const String& rStr )
+    sal_Bool        WriteUnicodeOrByteText( const OUString& rStr, rtl_TextEncoding eDestCharSet );
+    sal_Bool        WriteUnicodeOrByteText( const OUString& rStr )
                     { return WriteUnicodeOrByteText( rStr, GetStreamCharSet() ); }
 
     /** Write a Unicode character if eDestCharSet==RTL_TEXTENCODING_UNICODE,
@@ -653,7 +653,7 @@ class TOOLS_DLLPUBLIC SvFileStream : public SvStream
 {
 private:
     StreamData*     pInstanceData;
-    String          aFilename;
+    OUString        aFilename;
     sal_uInt16      nLockCounter;
     sal_Bool        bIsOpen;
 #ifdef UNX
@@ -677,19 +677,19 @@ protected:
 
 public:
                     // Switches to Read StreamMode on failed attempt of Write opening
-                    SvFileStream( const String& rFileName, StreamMode eOpenMode );
+                    SvFileStream( const OUString& rFileName, StreamMode eOpenMode );
                     SvFileStream();
                     ~SvFileStream();
 
     virtual void    ResetError();
 
-    void            Open( const String& rFileName, StreamMode eOpenMode );
+    void            Open( const OUString& rFileName, StreamMode eOpenMode );
     void            Close();
     sal_Bool        IsOpen() const { return bIsOpen; }
     sal_Bool        IsLocked() const { return ( nLockCounter!=0 ); }
     virtual sal_uInt16 IsA() const;
 
-    const String&   GetFileName() const { return aFilename; }
+    const OUString&   GetFileName() const { return aFilename; }
 };
 
 // MemoryStream

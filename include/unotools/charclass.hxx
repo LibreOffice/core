@@ -33,7 +33,6 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <osl/mutex.hxx>
 
-class String;
 namespace com { namespace sun { namespace star {
     namespace uno {
         class XComponentContext;
@@ -111,13 +110,13 @@ public:
     }
 
     /// isdigit() on ascii values of entire string
-    static sal_Bool isAsciiNumeric( const String& rStr );
+    static sal_Bool isAsciiNumeric( const OUString& rStr );
 
     /// isalpha() on ascii values of entire string
-    static sal_Bool isAsciiAlpha( const String& rStr );
+    static sal_Bool isAsciiAlpha( const OUString& rStr );
 
     /// isalnum() on ascii values of entire string
-    static sal_Bool isAsciiAlphaNumeric( const String& rStr );
+    static sal_Bool isAsciiAlphaNumeric( const OUString& rStr );
 
     /// whether type is pure alpha or not, e.g. return of getStringType
     static inline sal_Bool isAlphaType( sal_Int32 nType )
@@ -178,42 +177,42 @@ public:
         return titlecase(_rStr, 0, _rStr.getLength());
     }
 
-    sal_Int16 getType( const String& rStr, xub_StrLen nPos ) const;
-    sal_Int16 getCharacterDirection( const String& rStr, xub_StrLen nPos ) const;
-    sal_Int16 getScript( const String& rStr, xub_StrLen nPos ) const;
-    sal_Int32 getCharacterType( const String& rStr, xub_StrLen nPos ) const;
-    sal_Int32 getStringType( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const;
+    sal_Int16 getType( const OUString& rStr, sal_Int32 nPos ) const;
+    sal_Int16 getCharacterDirection( const OUString& rStr, sal_Int32 nPos ) const;
+    sal_Int16 getScript( const OUString& rStr, sal_Int32 nPos ) const;
+    sal_Int32 getCharacterType( const OUString& rStr, sal_Int32 nPos ) const;
+    sal_Int32 getStringType( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
 
     ::com::sun::star::i18n::ParseResult parseAnyToken(
-                                    const String& rStr,
+                                    const OUString& rStr,
                                     sal_Int32 nPos,
                                     sal_Int32 nStartCharFlags,
-                                    const String& userDefinedCharactersStart,
+                                    const OUString& userDefinedCharactersStart,
                                     sal_Int32 nContCharFlags,
-                                    const String& userDefinedCharactersCont ) const;
+                                    const OUString& userDefinedCharactersCont ) const;
 
     ::com::sun::star::i18n::ParseResult parsePredefinedToken(
                                     sal_Int32 nTokenType,
-                                    const String& rStr,
+                                    const OUString& rStr,
                                     sal_Int32 nPos,
                                     sal_Int32 nStartCharFlags,
-                                    const String& userDefinedCharactersStart,
+                                    const OUString& userDefinedCharactersStart,
                                     sal_Int32 nContCharFlags,
-                                    const String& userDefinedCharactersCont ) const;
+                                    const OUString& userDefinedCharactersCont ) const;
 
 
     // Functionality of class International methods
 
-    sal_Bool isAlpha( const String& rStr, xub_StrLen nPos ) const;
-    sal_Bool isLetter( const String& rStr, xub_StrLen nPos ) const;
-    sal_Bool isDigit( const String& rStr, xub_StrLen nPos ) const;
-    sal_Bool isAlphaNumeric( const String& rStr, xub_StrLen nPos ) const;
-    sal_Bool isLetterNumeric( const String& rStr, xub_StrLen nPos ) const;
-    sal_Bool isAlpha( const String& rStr ) const;
-    sal_Bool isLetter( const String& rStr ) const;
-    sal_Bool isNumeric( const String& rStr ) const;
-    sal_Bool isAlphaNumeric( const String& rStr ) const;
-    sal_Bool isLetterNumeric( const String& rStr ) const;
+    sal_Bool isAlpha( const OUString& rStr, sal_Int32 nPos ) const;
+    sal_Bool isLetter( const OUString& rStr, sal_Int32 nPos ) const;
+    sal_Bool isDigit( const OUString& rStr, sal_Int32 nPos ) const;
+    sal_Bool isAlphaNumeric( const OUString& rStr, sal_Int32 nPos ) const;
+    sal_Bool isLetterNumeric( const OUString& rStr, sal_Int32 nPos ) const;
+    sal_Bool isAlpha( const OUString& rStr ) const;
+    sal_Bool isLetter( const OUString& rStr ) const;
+    sal_Bool isNumeric( const OUString& rStr ) const;
+    sal_Bool isAlphaNumeric( const OUString& rStr ) const;
+    sal_Bool isLetterNumeric( const OUString& rStr ) const;
 
 private:
 

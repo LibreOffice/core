@@ -294,7 +294,7 @@ static sal_uInt32 GetSvError( oslFileError nErrno )
     return nRetVal;
 }
 
-SvFileStream::SvFileStream( const String& rFileName, StreamMode nOpenMode )
+SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nOpenMode )
 {
     bIsOpen             = sal_False;
     nLockCounter        = 0;
@@ -492,7 +492,7 @@ sal_Bool SvFileStream::UnlockFile()
     return UnlockRange( 0UL, 0UL );
 }
 
-void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
+void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
 {
     sal_uInt32 uFlags;
     oslFileHandle nHandleTmp;

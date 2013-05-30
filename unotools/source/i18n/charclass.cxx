@@ -77,12 +77,12 @@ const ::com::sun::star::lang::Locale& CharClass::getMyLocale() const
 
 
 // static
-sal_Bool CharClass::isAsciiNumeric( const String& rStr )
+sal_Bool CharClass::isAsciiNumeric( const OUString& rStr )
 {
-    if ( !rStr.Len() )
+    if ( rStr.isEmpty() )
         return sal_False;
-    register const sal_Unicode* p = rStr.GetBuffer();
-    register const sal_Unicode* const pStop = p + rStr.Len();
+    register const sal_Unicode* p = rStr.getStr();
+    register const sal_Unicode* const pStop = p + rStr.getLength();
     do
     {
         if ( !isAsciiDigit( *p ) )
@@ -93,12 +93,12 @@ sal_Bool CharClass::isAsciiNumeric( const String& rStr )
 
 
 // static
-sal_Bool CharClass::isAsciiAlpha( const String& rStr )
+sal_Bool CharClass::isAsciiAlpha( const OUString& rStr )
 {
-    if ( !rStr.Len() )
+    if ( rStr.isEmpty() )
         return sal_False;
-    register const sal_Unicode* p = rStr.GetBuffer();
-    register const sal_Unicode* const pStop = p + rStr.Len();
+    register const sal_Unicode* p = rStr.getStr();
+    register const sal_Unicode* const pStop = p + rStr.getLength();
     do
     {
         if ( !isAsciiAlpha( *p ) )
@@ -109,9 +109,9 @@ sal_Bool CharClass::isAsciiAlpha( const String& rStr )
 
 
 
-sal_Bool CharClass::isAlpha( const String& rStr, xub_StrLen nPos ) const
+sal_Bool CharClass::isAlpha( const OUString& rStr, sal_Int32 nPos ) const
 {
-    sal_Unicode c = rStr.GetChar( nPos );
+    sal_Unicode c = rStr[ nPos ];
     if ( c < 128 )
         return isAsciiAlpha( c );
 
@@ -132,9 +132,9 @@ sal_Bool CharClass::isAlpha( const String& rStr, xub_StrLen nPos ) const
 
 
 
-sal_Bool CharClass::isLetter( const String& rStr, xub_StrLen nPos ) const
+sal_Bool CharClass::isLetter( const OUString& rStr, sal_Int32 nPos ) const
 {
-    sal_Unicode c = rStr.GetChar( nPos );
+    sal_Unicode c = rStr[ nPos ];
     if ( c < 128 )
         return isAsciiAlpha( c );
 
@@ -154,12 +154,12 @@ sal_Bool CharClass::isLetter( const String& rStr, xub_StrLen nPos ) const
 }
 
 
-sal_Bool CharClass::isLetter( const String& rStr ) const
+sal_Bool CharClass::isLetter( const OUString& rStr ) const
 {
     try
     {
         if ( xCC.is() )
-            return isLetterType( xCC->getStringType( rStr, 0, rStr.Len(), getMyLocale() ) );
+            return isLetterType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
         else
             return sal_False;
     }
@@ -171,9 +171,9 @@ sal_Bool CharClass::isLetter( const String& rStr ) const
 }
 
 
-sal_Bool CharClass::isDigit( const String& rStr, xub_StrLen nPos ) const
+sal_Bool CharClass::isDigit( const OUString& rStr, sal_Int32 nPos ) const
 {
-    sal_Unicode c = rStr.GetChar( nPos );
+    sal_Unicode c = rStr[nPos];
     if ( c < 128 )
         return isAsciiDigit( c );
 
@@ -193,12 +193,12 @@ sal_Bool CharClass::isDigit( const String& rStr, xub_StrLen nPos ) const
 }
 
 
-sal_Bool CharClass::isNumeric( const String& rStr ) const
+sal_Bool CharClass::isNumeric( const OUString& rStr ) const
 {
     try
     {
         if ( xCC.is() )
-            return isNumericType( xCC->getStringType( rStr, 0, rStr.Len(), getMyLocale() ) );
+            return isNumericType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
         else
             return sal_False;
     }
@@ -210,9 +210,9 @@ sal_Bool CharClass::isNumeric( const String& rStr ) const
 }
 
 
-sal_Bool CharClass::isAlphaNumeric( const String& rStr, xub_StrLen nPos ) const
+sal_Bool CharClass::isAlphaNumeric( const OUString& rStr, sal_Int32 nPos ) const
 {
-    sal_Unicode c = rStr.GetChar( nPos );
+    sal_Unicode c = rStr[nPos];
     if ( c < 128 )
         return isAsciiAlphaNumeric( c );
 
@@ -232,9 +232,9 @@ sal_Bool CharClass::isAlphaNumeric( const String& rStr, xub_StrLen nPos ) const
 }
 
 
-sal_Bool CharClass::isLetterNumeric( const String& rStr, xub_StrLen nPos ) const
+sal_Bool CharClass::isLetterNumeric( const OUString& rStr, sal_Int32 nPos ) const
 {
-    sal_Unicode c = rStr.GetChar( nPos );
+    sal_Unicode c = rStr[nPos];
     if ( c < 128 )
         return isAsciiAlphaNumeric( c );
 
@@ -254,12 +254,12 @@ sal_Bool CharClass::isLetterNumeric( const String& rStr, xub_StrLen nPos ) const
 }
 
 
-sal_Bool CharClass::isLetterNumeric( const String& rStr ) const
+sal_Bool CharClass::isLetterNumeric( const OUString& rStr ) const
 {
     try
     {
         if ( xCC.is() )
-            return isLetterNumericType( xCC->getStringType( rStr, 0, rStr.Len(), getMyLocale() ) );
+            return isLetterNumericType( xCC->getStringType( rStr, 0, rStr.getLength(), getMyLocale() ) );
         else
             return sal_False;
     }
@@ -318,7 +318,7 @@ OUString CharClass::lowercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 n
     }
 }
 
-sal_Int16 CharClass::getType( const String& rStr, xub_StrLen nPos ) const
+sal_Int16 CharClass::getType( const OUString& rStr, sal_Int32 nPos ) const
 {
     try
     {
@@ -335,7 +335,7 @@ sal_Int16 CharClass::getType( const String& rStr, xub_StrLen nPos ) const
 }
 
 
-sal_Int16 CharClass::getCharacterDirection( const String& rStr, xub_StrLen nPos ) const
+sal_Int16 CharClass::getCharacterDirection( const OUString& rStr, sal_Int32 nPos ) const
 {
     try
     {
@@ -352,7 +352,7 @@ sal_Int16 CharClass::getCharacterDirection( const String& rStr, xub_StrLen nPos 
 }
 
 
-sal_Int16 CharClass::getScript( const String& rStr, xub_StrLen nPos ) const
+sal_Int16 CharClass::getScript( const OUString& rStr, sal_Int32 nPos ) const
 {
     try
     {
@@ -369,7 +369,7 @@ sal_Int16 CharClass::getScript( const String& rStr, xub_StrLen nPos ) const
 }
 
 
-sal_Int32 CharClass::getCharacterType( const String& rStr, xub_StrLen nPos ) const
+sal_Int32 CharClass::getCharacterType( const OUString& rStr, sal_Int32 nPos ) const
 {
     try
     {
@@ -386,7 +386,7 @@ sal_Int32 CharClass::getCharacterType( const String& rStr, xub_StrLen nPos ) con
 }
 
 
-sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const
+sal_Int32 CharClass::getStringType( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
 {
     try
     {
@@ -404,12 +404,12 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
 
 
 ::com::sun::star::i18n::ParseResult CharClass::parseAnyToken(
-            const String& rStr,
+            const OUString& rStr,
             sal_Int32 nPos,
             sal_Int32 nStartCharFlags,
-            const String& userDefinedCharactersStart,
+            const OUString& userDefinedCharactersStart,
             sal_Int32 nContCharFlags,
-            const String& userDefinedCharactersCont ) const
+            const OUString& userDefinedCharactersCont ) const
 {
     try
     {
@@ -430,12 +430,12 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
 
 ::com::sun::star::i18n::ParseResult CharClass::parsePredefinedToken(
             sal_Int32 nTokenType,
-            const String& rStr,
+            const OUString& rStr,
             sal_Int32 nPos,
             sal_Int32 nStartCharFlags,
-            const String& userDefinedCharactersStart,
+            const OUString& userDefinedCharactersStart,
             sal_Int32 nContCharFlags,
-            const String& userDefinedCharactersCont ) const
+            const OUString& userDefinedCharactersCont ) const
 {
     try
     {

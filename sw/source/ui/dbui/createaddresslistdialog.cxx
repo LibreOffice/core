@@ -406,26 +406,24 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
 
             OUString sQuote('"');
-            String sTempMiddle(sQuote);
-            sTempMiddle += sal_Unicode(9);
 
-            String sLine;
+            OUString sLine;
             sal_Bool bRead = pStream->ReadByteStringLine( sLine, RTL_TEXTENCODING_UTF8 );
 
             if(bRead)
             {
                 //header line
-                xub_StrLen nHeaders = comphelper::string::getTokenCount(sLine, '\t');
+                sal_Int32 nHeaders = comphelper::string::getTokenCount(sLine, '\t');
                 sal_Int32 nIndex = 0;
-                for( xub_StrLen nToken = 0; nToken < nHeaders; ++nToken)
+                for( sal_Int32 nToken = 0; nToken < nHeaders; ++nToken)
                 {
-                    String sHeader = sLine.GetToken( 0, '\t', nIndex );
-                    OSL_ENSURE(sHeader.Len() > 2 &&
-                            sHeader.GetChar(0) == '\"' && sHeader.GetChar(sHeader.Len() - 1) == '\"',
+                    OUString sHeader = sLine.getToken( 0, '\t', nIndex );
+                    OSL_ENSURE(sHeader.getLength() > 2 &&
+                            sHeader[0] == '\"' && sHeader[sHeader.getLength() - 1] == '\"',
                             "Wrong format of header");
-                    if(sHeader.Len() > 2)
+                    if(sHeader.getLength() > 2)
                     {
-                        m_pCSVData->aDBColumnHeaders.push_back( sHeader.Copy(1, sHeader.Len() -2));
+                        m_pCSVData->aDBColumnHeaders.push_back( sHeader.copy(1, sHeader.getLength() -2));
                     }
                 }
             }
@@ -433,16 +431,16 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
             {
                 ::std::vector<OUString> aNewData;
                 //analyze data line
-                xub_StrLen nDataCount = comphelper::string::getTokenCount(sLine, '\t');
+                sal_Int32 nDataCount = comphelper::string::getTokenCount(sLine, '\t');
                 sal_Int32 nIndex = 0;
-                for( xub_StrLen nToken = 0; nToken < nDataCount; ++nToken)
+                for( sal_Int32 nToken = 0; nToken < nDataCount; ++nToken)
                 {
-                    String sData = sLine.GetToken( 0, '\t', nIndex );
-                    OSL_ENSURE(sData.Len() >= 2 &&
-                                sData.GetChar(0) == '\"' && sData.GetChar(sData.Len() - 1) == '\"',
+                    OUString sData = sLine.getToken( 0, '\t', nIndex );
+                    OSL_ENSURE(sData.getLength() >= 2 &&
+                                sData[0] == '\"' && sData[sData.getLength() - 1] == '\"',
                             "Wrong format of line");
-                    if(sData.Len() >= 2)
-                        aNewData.push_back(sData.Copy(1, sData.Len() - 2));
+                    if(sData.getLength() >= 2)
+                        aNewData.push_back(sData.copy(1, sData.getLength() - 2));
                     else
                         aNewData.push_back(sData);
                 }
@@ -458,7 +456,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
         for(sal_uInt16 nHeader = 0; nHeader < nCount; ++nHeader)
             m_pCSVData->aDBColumnHeaders.push_back( rAddressHeader.GetString(nHeader));
         ::std::vector<OUString> aNewData;
-        String sTemp;
+        OUString sTemp;
         aNewData.insert(aNewData.begin(), nCount, sTemp);
         m_pCSVData->aDBData.push_back(aNewData);
     }
@@ -480,7 +478,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, NewHdl_Impl)
 {
     sal_uInt32 nCurrent = m_pAddressControl->GetCurrentDataSet();
     ::std::vector<OUString> aNewData;
-    String sTemp;
+    OUString sTemp;
     aNewData.insert(aNewData.begin(), m_pCSVData->aDBColumnHeaders.size(), sTemp);
     m_pCSVData->aDBData.insert(m_pCSVData->aDBData.begin() + ++nCurrent, aNewData);
     m_aSetNoNF.SetMax(m_pCSVData->aDBData.size());
@@ -504,7 +502,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, DeleteHdl_Impl)
     else
     {
         // if only one set is available then clear the data
-        String sTemp;
+        OUString sTemp;
         m_pCSVData->aDBData[0].assign(m_pCSVData->aDBData[0].size(), sTemp);
         m_aDeletePB.Enable(sal_False);
     }
@@ -565,8 +563,8 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
         sfx2::FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE, 0 );
         uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
-        String sPath( SvtPathOptions().SubstituteVariable(
-                    OUString("$(userurl)/database") ));
+        OUString sPath( SvtPathOptions().SubstituteVariable(
+                                OUString("$(userurl)/database") ));
         aDlgHelper.SetDisplayDirectory( sPath );
         uno::Reference< XFilterManager > xFltMgr(xFP, uno::UNO_QUERY);
         OUString sCSV("*.csv");
@@ -589,10 +587,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
         pStream->SetStreamCharSet(RTL_TEXTENCODING_UTF8);
 
         OUString sQuote('"');
-        String sTempMiddle(sQuote);
-        sTempMiddle += sal_Unicode(9);
-        OUString sMiddle(sTempMiddle);
-        sMiddle += sQuote;
+        OUString sMiddle("\"\0x09\"");
 
         //create a string for the header line
         OUString sLine(sQuote);

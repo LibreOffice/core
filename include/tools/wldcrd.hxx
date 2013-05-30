@@ -54,7 +54,7 @@ public:
         aWildString = OUStringToOString(rString, osl_getThreadTextEncoding());
     }
 
-    sal_Bool Matches( const String& rStr ) const;
+    sal_Bool Matches( const OUString& rStr ) const;
 };
 
 #endif

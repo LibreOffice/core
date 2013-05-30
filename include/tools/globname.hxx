@@ -90,9 +90,9 @@ public:
     sal_Bool    operator != ( const SvGlobalName & rObj ) const
             { return !(*this == rObj); }
 
-    void    MakeFromMemory( void * pData );
-    sal_Bool    MakeId( const String & rId );
-    String  GetHexName() const;
+    void      MakeFromMemory( void * pData );
+    sal_Bool  MakeId( const OUString & rId );
+    OUString  GetHexName() const;
 
                   SvGlobalName( const CLSID & rId );
     const CLSID & GetCLSID() const { return *(CLSID *)pImp->szData; }

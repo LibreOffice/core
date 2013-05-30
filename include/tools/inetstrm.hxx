@@ -182,7 +182,7 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream : public INetMessageIOStream
     SvMemoryStream        *pMsgBuffer;
 
     static INetMessageEncoding GetMsgEncoding (
-        const String& rContentType);
+        const OUString& rContentType);
 
     // Not implemented.
     INetMIMEMessageStream (const INetMIMEMessageStream& rStrm);

@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <math.h>
+#include <rtl/ustring.hxx>
 
 #include <tools/tools.h>
 #include <tools/bigint.hxx>
-#include <tools/string.hxx>
 
+#include <math.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -608,7 +608,7 @@ BigInt::operator double() const
 
 OUString BigInt::GetString() const
 {
-    String aString;
+    OUString aString;
 
     if ( !bIsBig )
         aString = OUString::number( nVal );
@@ -624,19 +624,21 @@ OUString BigInt::GetString() const
             a    %= a1000000000;
             aTmp /= a1000000000;
 
-            String aStr = aString;
+            OUString aStr = aString;
             if ( a.nVal < 100000000L )
             { // leading 0s
                 aString = OUString::number( a.nVal + 1000000000L );
-                aString.Erase(0,1);
+                aString = OUString(aString.getStr() + 1, aString.getLength() - 1);
             }
             else
+            {
                 aString = OUString::number( a.nVal );
+            }
             aString += aStr;
         }
         while( aTmp.bIsBig );
 
-        String aStr = aString;
+        OUString aStr = aString;
         if ( bIsNeg )
             aString = OUString::number( -aTmp.nVal );
         else

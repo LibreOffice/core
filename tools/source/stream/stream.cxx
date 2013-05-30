@@ -527,7 +527,7 @@ sal_Bool SvStream::ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcChar
     return bRet;
 }
 
-sal_Bool SvStream::ReadByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet )
+sal_Bool SvStream::ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet )
 {
     OString aStr;
     sal_Bool bRet = ReadLine(aStr);
@@ -772,11 +772,11 @@ sal_Size write_uInt16s_FromOUString(SvStream& rStrm, const OUString& rStr,
     return nWritten;
 }
 
-sal_Bool SvStream::WriteUnicodeOrByteText( const String& rStr, rtl_TextEncoding eDestCharSet )
+sal_Bool SvStream::WriteUnicodeOrByteText( const OUString& rStr, rtl_TextEncoding eDestCharSet )
 {
     if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
     {
-        write_uInt16s_FromOUString(*this, rStr, rStr.Len());
+        write_uInt16s_FromOUString(*this, rStr, rStr.getLength());
         return nError == SVSTREAM_OK;
     }
     else
@@ -787,7 +787,7 @@ sal_Bool SvStream::WriteUnicodeOrByteText( const String& rStr, rtl_TextEncoding 
     }
 }
 
-sal_Bool SvStream::WriteByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet )
+sal_Bool SvStream::WriteByteStringLine( const OUString& rStr, rtl_TextEncoding eDestCharSet )
 {
     return WriteLine(OUStringToOString(rStr, eDestCharSet));
 }

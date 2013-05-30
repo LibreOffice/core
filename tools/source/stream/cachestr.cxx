@@ -52,7 +52,7 @@ void SvCacheStream::SwapOut()
 {
     if( pCurrentStream != pSwapStream )
     {
-        if( !pSwapStream && !aFileName.Len() )
+        if( !pSwapStream && aFileName.isEmpty() )
         {
             pTempFile = new TempFile;
             aFileName = pTempFile->GetName();

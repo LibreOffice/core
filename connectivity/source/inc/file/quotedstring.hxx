@@ -20,7 +20,7 @@
 #ifndef CONNECTIVITY_QUOTED_STRING_HXX
 #define CONNECTIVITY_QUOTED_STRING_HXX
 
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include "file/filedllapi.hxx"
 
 namespace connectivity
@@ -31,16 +31,16 @@ namespace connectivity
     //==================================================================
     class OOO_DLLPUBLIC_FILE QuotedTokenizedString
     {
-        String m_sString;
+        OUString m_sString;
     public:
         QuotedTokenizedString() {}
-        QuotedTokenizedString(const String& _sString) : m_sString(_sString){}
+        QuotedTokenizedString(const OUString& _sString) : m_sString(_sString){}
 
-        xub_StrLen  GetTokenCount( sal_Unicode cTok , sal_Unicode cStrDel ) const;
-        String      GetTokenSpecial(xub_StrLen& nStartPos, sal_Unicode cTok = ';', sal_Unicode cStrDel = '\0') const;
-        inline String& GetString() { return m_sString; }
-        inline xub_StrLen Len() const { return m_sString.Len(); }
-        inline operator String&() { return m_sString; }
+        sal_Int32  GetTokenCount( sal_Unicode cTok , sal_Unicode cStrDel ) const;
+        OUString   GetTokenSpecial(sal_Int32& nStartPos, sal_Unicode cTok = ';', sal_Unicode cStrDel = '\0') const;
+        inline OUString& GetString() { return m_sString; }
+        inline sal_Int32 Len() const { return m_sString.getLength(); }
+        inline operator OUString&() { return m_sString; }
     };
 }
 

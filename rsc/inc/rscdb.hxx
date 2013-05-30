@@ -63,7 +63,7 @@ typedef ::std::vector< RscSysEntry* > RscSysList;
 
 class RscTypCont
 {
-    CharSet             nSourceCharSet;
+    rtl_TextEncoding    nSourceCharSet;
     sal_uInt32          nMachineId;         // Globaler Maschinentyp
     RSCBYTEORDER_TYPE   nByteOrder;         // Intel oder
     OString        aLanguage;          // output language
@@ -306,10 +306,10 @@ public:
     { return aLangFallbacks; }
 
     RSCBYTEORDER_TYPE GetByteOrder() const { return nByteOrder; }
-    CharSet         GetSourceCharSet() const { return nSourceCharSet; }
-    CharSet         SetSourceCharSet( CharSet aCharSet )
+    rtl_TextEncoding         GetSourceCharSet() const { return nSourceCharSet; }
+    rtl_TextEncoding         SetSourceCharSet( rtl_TextEncoding aCharSet )
     {
-        CharSet aOld = nSourceCharSet;
+        rtl_TextEncoding aOld = nSourceCharSet;
         nSourceCharSet = aCharSet;
         return aOld;
     }

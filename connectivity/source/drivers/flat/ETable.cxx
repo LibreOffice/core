@@ -107,7 +107,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         aHeaderLine = m_aCurrentLine;
     }
     // column count
-    const xub_StrLen nFieldCount = aHeaderLine.GetTokenCount(m_cFieldDelimiter,m_cStringDelimiter);
+    const sal_Int32 nFieldCount = aHeaderLine.GetTokenCount(m_cFieldDelimiter,m_cStringDelimiter);
 
     if(!m_aColumns.is())
         m_aColumns = new OSQLColumns();
@@ -131,24 +131,26 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     OUString aColumnName;
     ::comphelper::UStringMixEqual aCase(bCase);
     vector<OUString> aColumnNames;
-    vector<String> m_aTypeNames;
+    vector<OUString> m_aTypeNames;
     m_aTypeNames.resize(nFieldCount);
     const sal_Int32 nMaxRowsToScan = pConnection->getMaxRowsToScan();
     sal_Int32 nRowCount = 0;
 
     do
     {
-        xub_StrLen nStartPosHeaderLine = 0; // use for efficient way to get the tokens
-        xub_StrLen nStartPosFirstLine = 0; // use for efficient way to get the tokens
-        xub_StrLen nStartPosFirstLine2 = 0;
-        for (xub_StrLen i = 0; i < nFieldCount; i++)
+        sal_Int32 nStartPosHeaderLine = 0; // use for efficient way to get the tokens
+        sal_Int32 nStartPosFirstLine = 0; // use for efficient way to get the tokens
+        sal_Int32 nStartPosFirstLine2 = 0;
+        for (sal_Int32 i = 0; i < nFieldCount; i++)
         {
             if ( nRowCount == 0)
             {
                 if ( bHasHeaderLine )
                 {
-                    aColumnName = aHeaderLine.GetTokenSpecial(nStartPosHeaderLine,m_cFieldDelimiter,m_cStringDelimiter);
-                    if ( !aColumnName.getLength() )
+                    aColumnName = aHeaderLine.GetTokenSpecial(nStartPosHeaderLine,
+                                                              m_cFieldDelimiter,
+                                                              m_cStringDelimiter);
+                    if ( aColumnName.isEmpty() )
                     {
                         aColumnName = "C" + OUString::number(i+1);
                     }
@@ -161,7 +163,10 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                 aColumnNames.push_back(aColumnName);
             }
             if(bRead)
-                impl_fillColumnInfo_nothrow(m_aCurrentLine,nStartPosFirstLine,nStartPosFirstLine2,m_aTypes[i],m_aPrecisions[i],m_aScales[i],m_aTypeNames[i],cDecimalDelimiter,cThousandDelimiter,aCharClass);
+                impl_fillColumnInfo_nothrow(m_aCurrentLine, nStartPosFirstLine,
+                                            nStartPosFirstLine2,m_aTypes[i], m_aPrecisions[i],
+                                            m_aScales[i], m_aTypeNames[i], cDecimalDelimiter,
+                                            cThousandDelimiter, aCharClass);
         }
         ++nRowCount;
         bRead = readLine(&rowPos.second, &rowPos.first, false);
@@ -170,7 +175,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     }
     while(nRowCount < nMaxRowsToScan && bRead);
 
-    for (xub_StrLen i = 0; i < nFieldCount; i++)
+    for (sal_Int32 i = 0; i < nFieldCount; i++)
     {
         // check if the columname already exists
         OUString aAlias(aColumnNames[i]);
@@ -198,9 +203,9 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 
     m_pFileStream->Seek(m_aRowPosToFilePos[0].second);
 }
-void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,xub_StrLen& nStartPosFirstLine,xub_StrLen& nStartPosFirstLine2
-                                             ,sal_Int32& io_nType,sal_Int32& io_nPrecisions,sal_Int32& io_nScales,String& o_sTypeName
-                                             ,const sal_Unicode cDecimalDelimiter,const sal_Unicode cThousandDelimiter,const CharClass&  aCharClass)
+void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, sal_Int32& nStartPosFirstLine, sal_Int32& nStartPosFirstLine2
+                                             ,sal_Int32& io_nType, sal_Int32& io_nPrecisions, sal_Int32& io_nScales, OUString& o_sTypeName
+                                             ,const sal_Unicode cDecimalDelimiter, const sal_Unicode cThousandDelimiter, const CharClass&  aCharClass)
 {
     if ( io_nType != DataType::VARCHAR )
     {
@@ -210,37 +215,37 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
         if ( bNumeric )
         {
             // first without fielddelimiter
-            String aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine,m_cFieldDelimiter,'\0');
-            if (aField.Len() == 0 ||
-                (m_cStringDelimiter && m_cStringDelimiter == aField.GetChar(0)))
+            OUString aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine,m_cFieldDelimiter,'\0');
+            if (aField.isEmpty() ||
+                (m_cStringDelimiter && m_cStringDelimiter == aField[0]))
             {
                 bNumeric = sal_False;
                 if ( m_cStringDelimiter != '\0' )
-                    aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+                    aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine2, m_cFieldDelimiter, m_cStringDelimiter);
                 else
                     nStartPosFirstLine2 = nStartPosFirstLine;
             }
             else
             {
-                String aField2;
+                OUString aField2;
                 if ( m_cStringDelimiter != '\0' )
-                    aField2 = aFirstLine.GetTokenSpecial(nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+                    aField2 = aFirstLine.GetTokenSpecial(nStartPosFirstLine2, m_cFieldDelimiter, m_cStringDelimiter);
                 else
                     aField2 = aField;
 
-                if (aField2.Len() == 0)
+                if (aField2.isEmpty())
                 {
                     bNumeric = sal_False;
                 }
                 else
                 {
                     bNumeric = sal_True;
-                    xub_StrLen nDot = 0;
-                    xub_StrLen nDecimalDelCount = 0;
-                    xub_StrLen nSpaceCount = 0;
-                    for (xub_StrLen j = 0; j < aField2.Len(); j++)
+                    sal_Int32 nDot = 0;
+                    sal_Int32 nDecimalDelCount = 0;
+                    sal_Int32 nSpaceCount = 0;
+                    for (sal_Int32 j = 0; j < aField2.getLength(); j++)
                     {
-                        const sal_Unicode c = aField2.GetChar(j);
+                        const sal_Unicode c = aField2[j];
                         if ( j == nSpaceCount && m_cFieldDelimiter != 32 && c == 32 )
                         {
                             ++nSpaceCount;
@@ -270,10 +275,10 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
                     if (bNumeric && cThousandDelimiter)
                     {
                         // Is the delimiter correct?
-                        const String aValue = aField2.GetToken(0,cDecimalDelimiter);
-                        for (sal_Int32 j = aValue.Len() - 4; j >= 0; j -= 4)
+                        const OUString aValue = aField2.getToken(0, cDecimalDelimiter);
+                        for (sal_Int32 j = aValue.getLength() - 4; j >= 0; j -= 4)
                         {
-                            const sal_Unicode c = aValue.GetChar(static_cast<sal_uInt16>(j));
+                            const sal_Unicode c = aValue[j];
                             // just digits, decimal- and thousands-delimiter?
                             if (c == cThousandDelimiter && j)
                                 continue;
@@ -301,19 +306,19 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
         }
         else if ( io_nType == DataType::DATE || io_nType == DataType::TIMESTAMP || io_nType == DataType::TIME)
         {
-            String aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine,m_cFieldDelimiter,'\0');
-            if (aField.Len() == 0 ||
-                (m_cStringDelimiter && m_cStringDelimiter == aField.GetChar(0)))
+            OUString aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine, m_cFieldDelimiter, '\0');
+            if (aField.isEmpty() ||
+                (m_cStringDelimiter && m_cStringDelimiter == aField[0]))
             {
             }
             else
             {
-                String aField2;
+                OUString aField2;
                 if ( m_cStringDelimiter != '\0' )
-                    aField2 = aFirstLine.GetTokenSpecial(nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+                    aField2 = aFirstLine.GetTokenSpecial(nStartPosFirstLine2, m_cFieldDelimiter, m_cStringDelimiter);
                 else
                     aField2 = aField;
-                if (aField2.Len() )
+                if (!aField2.isEmpty() )
                 {
                     try
                     {
@@ -391,19 +396,19 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
     }
     else
     {
-        String aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine,m_cFieldDelimiter,'\0');
-        if (aField.Len() == 0 ||
-                (m_cStringDelimiter && m_cStringDelimiter == aField.GetChar(0)))
+        OUString aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine, m_cFieldDelimiter, '\0');
+        if (aField.isEmpty() ||
+                (m_cStringDelimiter && m_cStringDelimiter == aField[0]))
         {
             if ( m_cStringDelimiter != '\0' )
-                aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+                aField = aFirstLine.GetTokenSpecial(nStartPosFirstLine2, m_cFieldDelimiter, m_cStringDelimiter);
             else
                 nStartPosFirstLine2 = nStartPosFirstLine;
         }
         else
         {
             if ( m_cStringDelimiter != '\0' )
-                aFirstLine.GetTokenSpecial(nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+                aFirstLine.GetTokenSpecial(nStartPosFirstLine2, m_cFieldDelimiter, m_cStringDelimiter);
         }
     }
 }
@@ -447,7 +452,7 @@ void OFlatTable::construct()
     if(aURL.getExtension() != OUString(m_pConnection->getExtension()))
         aURL.setExtension(m_pConnection->getExtension());
 
-    String aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
+    OUString aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
     m_pFileStream = createStream_simpleError( aFileName,STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
 
@@ -471,7 +476,7 @@ void OFlatTable::construct()
     }
 }
 // -------------------------------------------------------------------------
-String OFlatTable::getEntry()
+OUString OFlatTable::getEntry()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::getEntry" );
     OUString sURL;
@@ -489,7 +494,7 @@ String OFlatTable::getEntry()
         {
             sName = xRow->getString(1);
             aURL.SetSmartProtocol(INET_PROT_FILE);
-            String sUrl = m_pConnection->getURL() +  s_sSeparator + sName;
+            OUString sUrl = m_pConnection->getURL() +  s_sSeparator + sName;
             aURL.SetSmartURL( sUrl );
 
             // cut the extension
@@ -631,7 +636,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, s
     const sal_Unicode cDecimalDelimiter = pConnection->getDecimalDelimiter();
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
     // Fields:
-    xub_StrLen nStartPos = 0;
+    sal_Int32 nStartPos = 0;
     OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
     OSQLColumns::Vector::const_iterator aEnd = _rCols.get().end();
     const OValueRefVector::Vector::size_type nCount = _rRow->get().size();
@@ -639,9 +644,9 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, s
          aIter != aEnd && i < nCount;
          ++aIter, i++)
     {
-        String aStr = m_aCurrentLine.GetTokenSpecial(nStartPos,m_cFieldDelimiter,m_cStringDelimiter);
+        OUString aStr = m_aCurrentLine.GetTokenSpecial(nStartPos, m_cFieldDelimiter, m_cStringDelimiter);
 
-        if (aStr.Len() == 0)
+        if (aStr.isEmpty())
             (_rRow->get())[i]->setNull();
         else
         {
@@ -699,11 +704,11 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, s
                                    (!cDecimalDelimiter && nType == DataType::INTEGER),
                                    "FalscherTyp");
 
-                        OUStringBuffer aBuf(aStr.Len());
+                        OUStringBuffer aBuf(aStr.getLength());
                         // convert to Standard-Notation (DecimalPOINT without thousands-comma):
-                        for (xub_StrLen j = 0; j < aStr.Len(); ++j)
+                        for (sal_Int32 j = 0; j < aStr.getLength(); ++j)
                         {
-                            const sal_Unicode cChar = aStr.GetChar(j);
+                            const sal_Unicode cChar = aStr[j];
                             if (cDecimalDelimiter && cChar == cDecimalDelimiter)
                                 aBuf.append('.');
                             else if ( cChar == '.' ) // special case, if decimal separator isn't '.' we have to put the string after it
@@ -946,7 +951,7 @@ bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos
             m_pFileStream->ReadByteStringLine(sLine,nEncoding);
             if ( !m_pFileStream->IsEof() )
             {
-                m_aCurrentLine.GetString().Append('\n');
+                m_aCurrentLine.GetString() += "\n";
                 m_aCurrentLine.GetString() += sLine.GetString();
                 sLine = m_aCurrentLine;
             }

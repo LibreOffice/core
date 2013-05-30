@@ -379,7 +379,7 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
 }
 
 
-String CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType ) const
+OUString CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType ) const
 {
     try
     {
@@ -390,13 +390,13 @@ String CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int
     {
         SAL_WARN( "unotools.i18n", "getDisplayName: Exception caught " << e.Message );
     }
-    return String();
+    return OUString();
 }
 
 
 // --- XExtendedCalendar -----------------------------------------------------
 
-String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) const
+OUString CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) const
 {
     try
     {
@@ -407,7 +407,7 @@ String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_In
     {
         SAL_WARN( "unotools.i18n", "getDisplayString: Exception caught " << e.Message );
     }
-    return String();
+    return OUString();
 }
 
 

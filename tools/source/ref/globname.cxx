@@ -220,12 +220,12 @@ void SvGlobalName::MakeFromMemory( void * pData )
     memcpy( pImp->szData, pData, sizeof( pImp->szData ) );
 }
 
-sal_Bool SvGlobalName::MakeId( const String & rIdStr )
+sal_Bool SvGlobalName::MakeId( const OUString & rIdStr )
 {
     OString aStr(OUStringToOString(rIdStr,
         RTL_TEXTENCODING_ASCII_US));
     const sal_Char *pStr = aStr.getStr();
-    if( rIdStr.Len() == 36
+    if( rIdStr.getLength() == 36
       && '-' == pStr[ 8 ]  && '-' == pStr[ 13 ]
       && '-' == pStr[ 18 ] && '-' == pStr[ 23 ] )
     {
@@ -298,7 +298,7 @@ sal_Bool SvGlobalName::MakeId( const String & rIdStr )
     return sal_False;
 }
 
-String SvGlobalName::GetHexName() const
+OUString SvGlobalName::GetHexName() const
 {
     OStringBuffer aHexBuffer;
 

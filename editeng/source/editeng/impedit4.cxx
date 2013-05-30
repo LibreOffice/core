@@ -123,11 +123,14 @@ EditPaM ImpEditEngine::ReadText( SvStream& rInput, EditSelection aSel )
         aSel = ImpDeleteSelection( aSel );
     EditPaM aPaM = aSel.Max();
 
-    XubString aTmpStr;
+    OUString aTmpStr;
     sal_Bool bDone = rInput.ReadByteStringLine( aTmpStr, rInput.GetStreamCharSet() );
     while ( bDone )
     {
-        aTmpStr.Erase( MAXCHARSINPARA );
+        if(aTmpStr.getLength() > MAXCHARSINPARA)
+        {
+            aTmpStr = aTmpStr.copy(0, MAXCHARSINPARA);
+        }
         aPaM = ImpInsertText( EditSelection( aPaM, aPaM ), aTmpStr );
         aPaM = ImpInsertParaBreak( aPaM );
         bDone = rInput.ReadByteStringLine( aTmpStr, rInput.GetStreamCharSet() );

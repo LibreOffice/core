@@ -84,7 +84,7 @@ void INetMessage::SetHeaderField_Impl (
     const OUString &rValue,
     sal_uIntPtr &rnIndex)
 {
-    INetMIMEStringOutputSink aSink (0, STRING_MAXLEN);
+    INetMIMEStringOutputSink aSink (0, 32767); /* Fixme: why do we have to give a 'limit' ? */
     INetMIME::writeHeaderFieldBody (
         aSink, eType, rValue, osl_getThreadTextEncoding(), false);
     SetHeaderField_Impl (
