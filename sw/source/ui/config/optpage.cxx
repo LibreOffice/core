@@ -2262,24 +2262,22 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 
 //----------------------------------------------------------
 SwCompareOptionsTabPage::SwCompareOptionsTabPage(  Window* pParent, const SfxItemSet& rSet )
-    : SfxTabPage( pParent, SW_RES( TP_COMPARISON_OPT ), rSet ),
-
-    aComparisonFL(	this, SW_RES( FL_CMP ) ),
-    aAutoRB(		this, SW_RES( RB_AUTO ) ),
-    aWordRB(		this, SW_RES( RB_WORD ) ),
-    aCharRB(		this, SW_RES( RB_CHAR ) ),
-    aSettingsFL(	this, SW_RES( FL_SET ) ),
-    aRsidCB(		this, SW_RES( CB_RSID) ),
-    aIgnoreCB(		this, SW_RES( CB_IGNORE ) ),
-    aLenNF(			this, SW_RES( NF_LEN ) )
+    : SfxTabPage( pParent,"OptComparison","modules/swriter/ui/optcomparison.ui", rSet )
 {
-    FreeResource();
-    Link aLnk( LINK( this, SwCompareOptionsTabPage, ComparisonHdl ) );
-    aAutoRB.SetClickHdl( aLnk );
-    aWordRB.SetClickHdl( aLnk );
-    aCharRB.SetClickHdl( aLnk );
+    get(m_pAutoRB,"auto");
+    get(m_pWordRB, "byword");
+    get(m_pCharRB, "bycharacter");
 
-    aIgnoreCB.SetClickHdl( LINK( this, SwCompareOptionsTabPage, IgnoreHdl) );
+    get(m_pRsidCB, "useRSID");
+    get(m_pIgnoreCB, "ignore");
+    get(m_pLenNF, "ignorelen");
+
+    Link aLnk( LINK( this, SwCompareOptionsTabPage, ComparisonHdl ) );
+    m_pAutoRB->SetClickHdl( aLnk );
+    m_pWordRB->SetClickHdl( aLnk );
+    m_pCharRB->SetClickHdl( aLnk );
+
+    m_pIgnoreCB->SetClickHdl( LINK( this, SwCompareOptionsTabPage, IgnoreHdl) );
 }
 
 SwCompareOptionsTabPage::~SwCompareOptionsTabPage()
@@ -2296,35 +2294,35 @@ sal_Bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet& )
     sal_Bool bRet = sal_False;
     SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
 
-    if( aAutoRB.IsChecked() != aAutoRB.GetSavedValue() ||
-        aWordRB.IsChecked() != aWordRB.GetSavedValue() ||
-        aCharRB.IsChecked() != aCharRB.GetSavedValue() )
+    if( m_pAutoRB->IsChecked() != m_pAutoRB->GetSavedValue() ||
+        m_pWordRB->IsChecked() != m_pWordRB->GetSavedValue() ||
+        m_pCharRB->IsChecked() != m_pCharRB->GetSavedValue() )
     {
         SvxCompareMode eCmpMode = SVX_CMP_AUTO;
 
-        if ( aAutoRB.IsChecked() ) eCmpMode = SVX_CMP_AUTO;
-        if ( aWordRB.IsChecked() ) eCmpMode = SVX_CMP_BY_WORD;
-        if ( aCharRB.IsChecked() ) eCmpMode = SVX_CMP_BY_CHAR;
+        if ( m_pAutoRB->IsChecked() ) eCmpMode = SVX_CMP_AUTO;
+        if ( m_pWordRB->IsChecked() ) eCmpMode = SVX_CMP_BY_WORD;
+        if ( m_pCharRB->IsChecked() ) eCmpMode = SVX_CMP_BY_CHAR;
 
         pOpt->SetCompareMode( eCmpMode );
         bRet = sal_True;
     }
 
-    if( aRsidCB.IsChecked() != aRsidCB.GetSavedValue() )
+    if( m_pRsidCB->IsChecked() != m_pRsidCB->GetSavedValue() )
     {
-        pOpt->SetUseRsid( aRsidCB.IsChecked() );
+        pOpt->SetUseRsid( m_pRsidCB->IsChecked() );
         bRet = sal_True;
     }
 
-    if( aIgnoreCB.IsChecked() != aIgnoreCB.GetSavedValue() )
+    if( m_pIgnoreCB->IsChecked() != m_pIgnoreCB->GetSavedValue() )
     {
-        pOpt->SetIgnorePieces( aIgnoreCB.IsChecked() );
+        pOpt->SetIgnorePieces( m_pIgnoreCB->IsChecked() );
         bRet = sal_True;
     }
 
-    if( aLenNF.IsModified() )
+    if( m_pLenNF->IsModified() )
     {
-        pOpt->SetPieceLen( aLenNF.GetValue() );
+        pOpt->SetPieceLen( m_pLenNF->GetValue() );
         bRet = sal_True;
     }
 
@@ -2338,58 +2336,54 @@ void SwCompareOptionsTabPage::Reset( const SfxItemSet& )
     SvxCompareMode eCmpMode = pOpt->GetCompareMode();
     if( eCmpMode == SVX_CMP_AUTO )
     {
-        aAutoRB.Check();
-        aSettingsFL.Disable();
-        aRsidCB.Disable();
-        aIgnoreCB.Disable();
-        aLenNF.Disable();
+        m_pAutoRB->Check();
+        m_pRsidCB->Disable();
+        m_pIgnoreCB->Disable();
+        m_pLenNF->Disable();
     }
     else if( eCmpMode == SVX_CMP_BY_WORD )
     {
-        aWordRB.Check();
-        aSettingsFL.Enable();
-        aRsidCB.Enable();
-        aIgnoreCB.Enable();
-        aLenNF.Enable();
+        m_pWordRB->Check();
+        m_pRsidCB->Enable();
+        m_pIgnoreCB->Enable();
+        m_pLenNF->Enable();
     }
     else if( eCmpMode == SVX_CMP_BY_CHAR)
     {
-        aCharRB.Check();
-        aSettingsFL.Enable();
-        aRsidCB.Enable();
-        aIgnoreCB.Enable();
-        aLenNF.Enable();
+        m_pCharRB->Check();
+        m_pRsidCB->Enable();
+        m_pIgnoreCB->Enable();
+        m_pLenNF->Enable();
     }
-    aAutoRB.SaveValue();
-    aWordRB.SaveValue();
-    aCharRB.SaveValue();
+    m_pAutoRB->SaveValue();
+    m_pWordRB->SaveValue();
+    m_pCharRB->SaveValue();
 
-    aRsidCB.Check( pOpt->IsUseRsid() );
-    aRsidCB.SaveValue();
+    m_pRsidCB->Check( pOpt->IsUseRsid() );
+    m_pRsidCB->SaveValue();
 
-    aIgnoreCB.Check( pOpt->IsIgnorePieces() );
-    aIgnoreCB.SaveValue();
+    m_pIgnoreCB->Check( pOpt->IsIgnorePieces() );
+    m_pIgnoreCB->SaveValue();
 
-    aLenNF.Enable( aIgnoreCB.IsChecked() && eCmpMode );
+    m_pLenNF->Enable( m_pIgnoreCB->IsChecked() && eCmpMode );
 
-    aLenNF.SetValue( pOpt->GetPieceLen() );
-    aLenNF.SaveValue();
+    m_pLenNF->SetValue( pOpt->GetPieceLen() );
+    m_pLenNF->SaveValue();
 }
 
 IMPL_LINK_NOARG(SwCompareOptionsTabPage, ComparisonHdl)
 {
-    bool bChecked = !aAutoRB.IsChecked();
-    aSettingsFL.Enable( bChecked );
-    aRsidCB.Enable( bChecked );
-    aIgnoreCB.Enable( bChecked );
-    aLenNF.Enable( bChecked && aIgnoreCB.IsChecked() );
+    bool bChecked = !m_pAutoRB->IsChecked();
+    m_pRsidCB->Enable( bChecked );
+    m_pIgnoreCB->Enable( bChecked );
+    m_pLenNF->Enable( bChecked && m_pIgnoreCB->IsChecked() );
 
     return 0;
 }
 
 IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl)
 {
-    aLenNF.Enable( aIgnoreCB.IsChecked() );
+    m_pLenNF->Enable( m_pIgnoreCB->IsChecked() );
     return 0;
 }
 

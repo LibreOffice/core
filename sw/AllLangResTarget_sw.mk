@@ -70,7 +70,7 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/chrdlg/paradlg.src \
     sw/source/ui/config/mailconfigpage.src \
     sw/source/ui/config/optcomp.src \
-    sw/source/ui/config/optdlg.src \
+	sw/source/ui/config/optdlg.src \
     sw/source/ui/config/optload.src \
     sw/source/ui/config/redlopt.src \
     sw/source/ui/dbui/addresslistdialog.src \
