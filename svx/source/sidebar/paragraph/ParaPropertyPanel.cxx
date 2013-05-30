@@ -416,6 +416,10 @@ void ParaPropertyPanel::InitToolBoxIndent()
     maRightIndent->SetModifyHdl( aLink );
     maFLineIndent->SetModifyHdl( aLink );
 
+    maLeftIndent->SetAccessibleName(maLeftIndent->GetQuickHelpText());
+    maRightIndent->SetAccessibleName(maRightIndent->GetQuickHelpText());
+    maFLineIndent->SetAccessibleName(maFLineIndent->GetQuickHelpText());
+
     const bool bIsHighContrastModeActive (Theme::IsHighContrastMode());
 
     if( Application::GetSettings().GetLayoutRTL())
@@ -483,6 +487,9 @@ void ParaPropertyPanel::InitToolBoxSpacing()
     Link aLink = LINK( this, ParaPropertyPanel, ULSpaceHdl_Impl );
     maTopDist->SetModifyHdl(aLink);
     maBottomDist->SetModifyHdl( aLink );
+
+    mpTopDist->SetAccessibleName(mpTopDist->GetQuickHelpText());
+    mpBottomDist->SetAccessibleName(mpBottomDist->GetQuickHelpText());
 
     maTbxUL_IncDec->SetItemImage(TOOLBOX_ITEM1, maParInc);
     maTbxUL_IncDec->SetItemImage(TOOLBOX_ITEM2, maParDec);
