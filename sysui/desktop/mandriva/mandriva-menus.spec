@@ -23,6 +23,11 @@ Version: %version
 Release: %release
 Summary: %productname desktop integration
 Name: %pkgprefix-mandriva-menus
+Obsoletes: openoffice.org3.0-mandriva-menus
+Obsoletes: openoffice.org3.1-mandriva-menus
+Obsoletes: openoffice.org3.2-mandriva-menus
+Obsoletes: openoffice.org3.3-mandriva-menus
+Obsoletes: openoffice.org3.4-mandriva-menus
 Group: Office
 License: ALv2
 AutoReqProv: no
