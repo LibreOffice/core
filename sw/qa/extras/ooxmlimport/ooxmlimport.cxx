@@ -115,6 +115,7 @@ public:
     void testIndentation();
     void testPageBackground();
     void testWatermark();
+    void testPageBorderShadow();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -198,6 +199,7 @@ void Test::run()
         {"indentation.docx", &Test::testIndentation},
         {"page-background.docx", &Test::testPageBackground},
         {"watermark.docx", &Test::testWatermark},
+        {"page-border-shadow.docx", &Test::testPageBorderShadow},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1416,6 +1418,16 @@ void Test::testWatermark()
 
     // 4th problem: mso-position-vertical-relative:margin was ignored, VertOrientRelation was text::RelOrientation::FRAME.
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_PRINT_AREA, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
+}
+
+void Test::testPageBorderShadow()
+{
+    // The problem was that in w:pgBorders, child elements had a w:shadow attribute, but that was ignored.
+    table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "ShadowFormat");
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, sal_uInt32(aShadow.Color));
+    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
+    // w:sz="48" is in eights of a point, 1 pt is 20 twips.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(TWIP_TO_MM100(48/8*20)), aShadow.ShadowWidth);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
