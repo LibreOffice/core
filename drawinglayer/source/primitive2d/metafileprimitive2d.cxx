@@ -2992,6 +2992,9 @@ namespace
 
                             if(xSubContent.hasElements())
                             {
+                                // prepare sub-content transform
+                                basegfx::B2DHomMatrix aSubTransform;
+
                                 // create SourceRange
                                 const basegfx::B2DRange aSourceRange(
                                     rContent.GetPrefMapMode().GetOrigin().X(),
@@ -3002,17 +3005,22 @@ namespace
                                 // apply mapping if aTargetRange and aSourceRange are not equal
                                 if(!aSourceRange.equal(aTargetRange))
                                 {
-                                    basegfx::B2DHomMatrix aTransform;
-
-                                    aTransform.translate(-aSourceRange.getMinX(), -aSourceRange.getMinY());
-                                    aTransform.scale(
+                                    aSubTransform.translate(-aSourceRange.getMinX(), -aSourceRange.getMinY());
+                                    aSubTransform.scale(
                                         aTargetRange.getWidth() / (basegfx::fTools::equalZero(aSourceRange.getWidth()) ? 1.0 : aSourceRange.getWidth()),
                                         aTargetRange.getHeight() / (basegfx::fTools::equalZero(aSourceRange.getHeight()) ? 1.0 : aSourceRange.getHeight()));
-                                    aTransform.translate(aTargetRange.getMinX(), aTargetRange.getMinY());
+                                    aSubTransform.translate(aTargetRange.getMinX(), aTargetRange.getMinY());
+                                }
 
+                                // apply general current transformation
+                                aSubTransform = rPropertyHolders.Current().getTransformation() * aSubTransform;
+
+                                // evtl. embed sub-content to it's transformation
+                                if(!aSubTransform.isIdentity())
+                                {
                                     const drawinglayer::primitive2d::Primitive2DReference aEmbeddedTransform(
                                         new drawinglayer::primitive2d::TransformPrimitive2D(
-                                            aTransform,
+                                            aSubTransform,
                                             xSubContent));
 
                                     xSubContent = drawinglayer::primitive2d::Primitive2DSequence(&aEmbeddedTransform, 1);
