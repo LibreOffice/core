@@ -223,22 +223,6 @@ packageversion = "%OOOPACKAGEVERSION"
 End
 
 Start
-module = "gid_Module_Optional_Testtool"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-testtool"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core04,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core05,SUNWmfrun"
-packagename = "%BASISPACKAGEPREFIX-testtool"
-linuxreplaces = "ooobasis3.0-testtool,ooobasis3.1-testtool,ooobasis3.2-testtool,ooobasis3.3-testtool,ooobasis3.4-testtool"
-freebsdrequires = "%BASISPACKAGEPREFIX-core01"
-requires = "%BASISPACKAGEPREFIX-core01"
-copyright = "2012 by The Apache Software Foundation"
-solariscopyright = "solariscopyrightfile"
-vendor = "Apache Software Foundation"
-description = "Testtool module for %APACHEPROJECTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%OOOPACKAGEVERSION"
-End
-
-Start
 module = "gid_Module_Optional_Oo_English"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-spellcheck"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01"
