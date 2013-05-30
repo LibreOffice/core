@@ -691,6 +691,7 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
         // with timestamp difference in the central directory entry and local
         // file header.
         bBroken = rEntry.nVersion != nVersion
+                        || (rEntry.nFlag & ~6L) != (nFlag & ~6L)
                         || rEntry.nPathLen != nPathLen
                         || !rEntry.sPath.equals( sLOCPath );
     }
