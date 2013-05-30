@@ -604,6 +604,8 @@ sub get_packinfo
                 if (( $onekey eq "solarispackagename" ) ||
                    ( $onekey eq "solarisrequires" ) ||
                    ( $onekey eq "packagename" ) ||
+                   ( $onekey eq "linuxreplaces" ) ||
+                   ( $onekey eq "provides" ) ||
                    ( $onekey eq "requires" )) { $locallang =~ s/_/-/g; } # avoiding illegal package abbreviation
                 $onepackage->{$onekey} =~ s/\%LANGUAGESTRING/$locallang/g;
             }
