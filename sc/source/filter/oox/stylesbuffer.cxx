@@ -2548,11 +2548,6 @@ void Dxf::importNumFmt( const AttributeList& rAttribs )
     // import has already taken place )
     sal_Int32 nNumFmtId  = getStyles().nextFreeNumFmtId();
     OUString aFmtCode = rAttribs.getXString( XML_formatCode, OUString() );
-    // we might need to do this generally for format codes,
-    // specifically for a fraction code '\ ?/?' is passed to us in xml, the '\' is not
-    // an escape character but merely should be telling the formatter to display the next
-    // char in the format ( afaics it does that anyhow )
-    aFmtCode = aFmtCode.replaceAll("\\", "");
     mxNumFmt = getStyles().createNumFmt( nNumFmtId, aFmtCode );
 }
 
