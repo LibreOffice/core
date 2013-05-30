@@ -152,10 +152,15 @@ namespace sdbtools
     {
         ::osl::MutexGuard aGuard( getMutex() );
 
-        ::comphelper::NamedValueCollection aArguments( _rArguments );
-
         Reference< XConnection > xConnection;
-        aArguments.get( "Connection" ) >>= xConnection;
+        if (_rArguments.getLength()==1 && (_rArguments[0] >>= xConnection))
+        {
+        }
+        else
+        {
+            ::comphelper::NamedValueCollection aArguments( _rArguments );
+            aArguments.get( "Connection" ) >>= xConnection;
+        }
         if ( !xConnection.is() )
             throw IllegalArgumentException();
 
