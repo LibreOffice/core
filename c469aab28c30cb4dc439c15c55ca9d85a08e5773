@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//79Q\u003d",
+        "filename": "starmath/source/edit.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-05-30T17:34:05Z",
+      "side": 1,
+      "message": "I suggest you have a closer look at indexOf(), e.g. its second argument, and possibly lastIndexOf() as well. Surely it\u0027s not necessary to a search for leading/trailing line space (if that\u0027s what it does) in such a complicated way.\n\nMoreover, I don\u0027t actually get the point of this. Isn\u0027t the patch supposed to be only about inserting a separating space if necessary? Why care about multiple lines at all?",
+      "revId": "c469aab28c30cb4dc439c15c55ca9d85a08e5773",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
