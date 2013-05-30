@@ -127,13 +127,6 @@ $(eval $(call gb_Helper_register_executables,OOO,\
 	unopkgio \
 ))
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	directxcanvas \
-	winextendloaderenv \
-	winlauncher \
-	wrapper \
-))
-
 else
 
 $(eval $(call gb_Helper_register_executables,OOO,\
@@ -672,49 +665,6 @@ $(eval $(call gb_Helper_register_libraries,EXTENSIONLIBS, \
     passive_native \
 ))
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-    $(if $(filter $(OS),ANDROID), \
-	    basebmp \
-	) \
-    basegfx_s \
-    codemaker \
-    codemaker_cpp \
-    codemaker_java \
-    dtobj \
-	findsofficepath \
-	gnu_getopt \
-	gnu_readdir_r \
-    headless \
-    libeay32 \
-    npsoenv \
-    nputils \
-    pdfimport_s \
-    plugcon \
-	quickstarter \
-	seterror \
-    ssleay32 \
-    ooopathutils \
-    sample \
-    sax_shared \
-    simplemapi \
-    shell_xmlparser \
-    shell_xmlparser_x64 \
-    shlxthandler_common \
-    shlxthandler_common_x64 \
-    salcpprt \
-    testtools_bridgetest_s \
-    transex \
-    ulingu \
-    vclmain \
-    writerperfect \
-    $(if $(filter-out $(OS),IOS), \
-        registry_helper \
-    ) \
-    $(if $(filter $(OS),IOS), \
-        uno \
-    ) \
-))
-
 ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     xmlsec1 \
@@ -725,11 +675,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     xmlsec1-mscrypto \
 ))
 endif
-else
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-    xmlsec1 \
-    xmlsec1-nss \
-))
 endif
 
 $(eval $(call gb_Helper_register_jars,URE, \

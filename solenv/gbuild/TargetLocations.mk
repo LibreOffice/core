@@ -57,7 +57,7 @@ $(patsubst $(1):%,$(gb_Library_OUTDIRLOCATION)/%,$(filter $(1):%,$(gb_Library_FI
 endef
 
 define gb_StaticLibrary_get_target
-$(patsubst $(1):%,$(gb_StaticLibrary_OUTDIRLOCATION)/%,$(filter $(1):%,$(gb_StaticLibrary_FILENAMES)))
+$(gb_StaticLibrary_OUTDIRLOCATION)/$(call gb_StaticLibrary_get_filename,$(1))
 endef
 
 
@@ -235,11 +235,11 @@ $(patsubst $(1):%,$(WORKDIR)/Headers/Library/%,$(filter $(1):%,$(gb_Library_FILE
 endef
 
 define gb_StaticLibrary_get_external_headers_target
-$(patsubst $(1):%,$(WORKDIR)/ExternalHeaders/StaticLibrary/%,$(filter $(1):%,$(gb_StaticLibrary_FILENAMES)))
+$(WORKDIR)/ExternalHeaders/StaticLibrary/$(call gb_StaticLibrary_get_filename,$(1))
 endef
 
 define gb_StaticLibrary_get_headers_target
-$(patsubst $(1):%,$(WORKDIR)/Headers/StaticLibrary/%,$(filter $(1):%,$(gb_StaticLibrary_FILENAMES)))
+$(WORKDIR)/Headers/StaticLibrary/$(call gb_StaticLibrary_get_filename,$(1))
 endef
 
 $(eval $(call gb_Helper_make_clean_targets,\
@@ -361,10 +361,6 @@ endef
 
 define gb_Library_get_filename
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_FILENAMES)))
-endef
-
-define gb_StaticLibrary_get_filename
-$(patsubst $(1):%,%,$(filter $(1):%,$(gb_StaticLibrary_FILENAMES)))
 endef
 
 # Get dependencies needed for running the executable

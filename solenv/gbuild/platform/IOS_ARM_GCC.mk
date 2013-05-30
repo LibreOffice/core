@@ -189,17 +189,6 @@ $(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Library_get_layer,$(1
 endef
 
 
-# StaticLibrary class
-
-gb_StaticLibrary_SYSPRE := lib
-gb_StaticLibrary_PLAINEXT := .a
-
-gb_StaticLibrary_FILENAMES := \
-	$(foreach lib,$(gb_StaticLibrary_PLAINLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_PLAINEXT)) \
-
-gb_StaticLibrary_StaticLibrary_platform =
-
-
 # Executable class
 
 gb_Executable_EXT :=

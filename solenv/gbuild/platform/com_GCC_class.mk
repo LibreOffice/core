@@ -264,4 +264,10 @@ endif
 
 gb_ExternalProject_use_autoconf :=
 
+# StaticLibrary class
+
+gb_StaticLibrary_get_filename = lib$(1).a
+gb_StaticLibrary_PLAINEXT := .a
+gb_StaticLibrary_StaticLibrary_platform :=
+
 # vim: set noet sw=4 ts=4:

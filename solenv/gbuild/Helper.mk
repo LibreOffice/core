@@ -110,19 +110,16 @@ define gb_Helper_init_registries
 gb_Executable_VALIDGROUPS := UREBIN SDK OOO NONE
 gb_Library_VALIDGROUPS := OOOLIBS PLAINLIBS_NONE PLAINLIBS_URE PLAINLIBS_OOO RTVERLIBS UNOLIBS_URE UNOVERLIBS EXTENSIONLIBS
 gb_Library_VALIDINSTALLMODULES := BASE ONLINEUPDATE GRAPHICFILTER GNOME TDE IMPRESS KDE MATH OOO URE WRITER
-gb_StaticLibrary_VALIDGROUPS := PLAINLIBS
 gb_Jar_VALIDGROUPS := URE OOO OXT NONE
 
 $$(foreach group,$$(gb_Executable_VALIDGROUPS),$$(eval gb_Executable_$$(group) :=))
 $$(foreach group,$$(gb_Library_VALIDGROUPS),$$(eval gb_Library_$$(group) :=))
-$$(foreach group,$$(gb_StaticLibrary_VALIDGROUPS),$$(eval gb_StaticLibrary_$$(group) :=))
 $$(foreach group,$$(gb_Jar_VALIDGROUPS),$$(eval gb_Jar_$$(group) :=))
 
 endef
 
 define gb_Helper_collect_knownlibs
 gb_Library_KNOWNLIBS := $$(foreach group,$$(gb_Library_VALIDGROUPS),$$(gb_Library_$$(group)))
-gb_StaticLibrary_KNOWNLIBS := $$(foreach group,$$(gb_StaticLibrary_VALIDGROUPS),$$(gb_StaticLibrary_$$(group)))
 gb_Executable_KNOWN := $$(foreach group,$$(gb_Executable_VALIDGROUPS),$$(gb_Executable_$$(group)))
 gb_Jar_KNOWN := $$(foreach group,$$(gb_Jar_VALIDGROUPS),$$(gb_Jar_$$(group)))
 
@@ -175,21 +172,6 @@ endif
 $(call gb_Helper_register_libraries,$(1),$(3))
 
 gb_Library_MODULE_$(2) += $(filter-out $(gb_MERGEDLIBS) $(gb_URELIBS),$(3))
-
-endef
-
-define gb_Helper_register_static_libraries
-ifeq ($$(filter $(1),$$(gb_StaticLibrary_VALIDGROUPS)),)
-$$(eval $$(call gb_Output_error,$(1) is not a valid group for static libraries. Valid groups are: $$(gb_StaticLibrary_VALIDGROUPS)))
-endif
-$(foreach group,$(gb_StaticLibrary_VALIDGROUPS),\
- $(foreach target,$(2),\
-  $(if $(filter $(target),$(gb_StaticLibrary_$(group))),\
-   $(call gb_Output_error,gb_Helper_register_static_libraries: already registered: $(target)))))
-$(if $(filter-out $(words $(2)),$(words $(sort $(2)))),\
- $(call gb_Output_error,gb_Helper_register_static_libraries: contains duplicates: $(2)))
-
-gb_StaticLibrary_$(1) += $(2)
 
 endef
 

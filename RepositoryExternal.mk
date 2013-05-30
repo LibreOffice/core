@@ -43,10 +43,6 @@ gb_ExternalProject__use_mariadb :=
 
 else # !SYSTEM_MARIADB
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	mariadblib \
-))
-
 define gb_LinkTarget__use_mariadb
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
@@ -306,11 +302,6 @@ gb_ExternalProject__use_zlib :=
 
 else # !SYSTEM_ZLIB
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	zlib \
-	zlib_x64 \
-))
-
 define gb_LinkTarget__use_zlib_multiarch
 $(if $(2),,$(call gb_Output_error,gb_LinkTarget__use_zlib_multiarch needs two arguments))
 
@@ -355,10 +346,6 @@ endef
 
 else # !SYSTEM_JPEG
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	jpeg \
-))
-
 define gb_LinkTarget__use_jpeg
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,jpeg) \
@@ -385,10 +372,6 @@ $(call gb_LinkTarget_add_libs,$(1),$(MYTHES_LIBS))
 endef
 
 else # !SYSTEM_MYTHES
-
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	mythes \
-))
 
 define gb_LinkTarget__use_mythes
 $(call gb_LinkTarget_set_include,$(1),\
@@ -423,11 +406,6 @@ endef
 gb_ExternalProject__use_expat :=
 
 else # !SYSTEM_EXPAT
-
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	expat \
-	expat_x64 \
-))
 
 define gb_LinkTarget__use_expat_impl
 $(if $(2),,$(error gb_LinkTarget__use_expat_impl needs additional parameter))
@@ -469,10 +447,6 @@ endef
 
 else # !SYSTEM_HYPH
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	hyphen \
-))
-
 define gb_LinkTarget__use_hyphen
 $(call gb_LinkTarget_use_unpacked,$(1),hyphen)
 $(call gb_LinkTarget_set_include,$(1),\
@@ -499,10 +473,6 @@ $(call gb_LinkTarget_add_libs,$(1),$(HUNSPELL_LIBS))
 endef
 
 else # !SYSTEM_HUNSPELL
-
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	hunspell \
-))
 
 define gb_LinkTarget__use_hunspell
 $(call gb_LinkTarget_add_defs,$(1),\
@@ -570,16 +540,7 @@ gb_ExternalProject__use_boost_headers:=
 
 else # !SYSTEM_BOOST
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	boostdatetime \
-	boostsystem \
-))
-
 ifeq ($(OS),WNT)
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	boostthread \
-))
-
 define gb_LinkTarget__use_boostthread
 $(call gb_LinkTarget_add_defs,$(1),\
 	-DBOOST_ALL_NO_LIB \
@@ -589,8 +550,7 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 	boostthread \
 )
 endef
-
-endif # WNT
+endif
 
 define gb_LinkTarget__use_boostdatetime
 $(call gb_LinkTarget_add_defs,$(1),\
@@ -647,10 +607,6 @@ endef
 
 else # !SYSTEM_CMIS
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	cmislib \
-))
-
 define gb_LinkTarget__use_cmis
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,cmis)/src \
@@ -695,10 +651,6 @@ $(call gb_LinkTarget_add_libs,$(1),$(LIBEXTTEXTCAT_LIBS))
 endef
 
 else # !SYSTEM_LIBEXTTEXTCAT
-
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
-	exttextcat \
-))
 
 define gb_LinkTarget__use_libexttextcat
 $(call gb_LinkTarget_use_static_libraries,$(1),\
@@ -830,10 +782,6 @@ endef
 
 else # !SYSTEM_LIBLANGTAG
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	langtag \
-))
-
 define gb_LinkTarget__use_liblangtag
 $(call gb_LinkTarget_use_unpacked,$(1),langtag)
 $(call gb_LinkTarget_set_include,$(1),\
@@ -955,12 +903,6 @@ endef
 
 else # ANDROID
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	rdf \
-	rasqal \
-	raptor2 \
-))
-
 define gb_LinkTarget__use_librdf
 $(call gb_LinkTarget_use_packages,$(1),raptor rasqal redland)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
@@ -1035,10 +977,6 @@ endef
 
 else # ! SYSTEM_FREETYPE
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
-	freetype \
-))
-
 define gb_LinkTarget__use_freetype_headers
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,freetype)/include \
@@ -1069,10 +1007,6 @@ endef
 
 else # ! SYSTEM_FONTCONFIG
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
-	fontconfig \
-))
-
 define gb_LinkTarget__use_fontconfig
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,fontconfig) \
@@ -1098,9 +1032,6 @@ endef
 
 else ifeq ($(SYSTEM_GRAPHITE),NO)
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	graphite \
-))
 define gb_LinkTarget__use_graphite
 $(call gb_LinkTarget_use_unpacked,$(1),graphite)
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1256,9 +1187,6 @@ endef
 
 else # SYSTEM_HARFBUZZ != YES
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	harfbuzz \
-))
 define gb_LinkTarget__use_harfbuzz
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,harfbuzz)/src \
@@ -1306,11 +1234,6 @@ else # !SYSTEM_OPENSSL
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-    crypto \
-    ssl \
-))
-else
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     crypto \
     ssl \
 ))
@@ -1402,10 +1325,6 @@ endef
 
 else # !SYSTEM_CDR
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	cdr-0.0 \
-))
-
 define gb_LinkTarget__use_cdr
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,libcdr)/inc \
@@ -1435,10 +1354,6 @@ $(call gb_LinkTarget_add_libs,$(1),$(ODFGEN_LIBS))
 endef
 
 else # !SYSTEM_ODFGEN
-
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	odfgen-0.0 \
-))
 
 define gb_LinkTarget__use_odfgen
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1470,10 +1385,6 @@ endef
 
 else # !SYSTEM_MSPUB
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	mspub-0.0 \
-))
-
 define gb_LinkTarget__use_mspub
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,libmspub)/inc \
@@ -1503,10 +1414,6 @@ $(call gb_LinkTarget_add_libs,$(1),$(VISIO_LIBS))
 endef
 
 else # !SYSTEM_VISIO
-
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	visio-0.0 \
-))
 
 define gb_LinkTarget__use_visio
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1538,10 +1445,6 @@ endef
 gb_ExternalProject__use_wpd :=
 
 else # !SYSTEM_WPD
-
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	wpd-0.9 \
-))
 
 define gb_LinkTarget__use_wpd
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1578,10 +1481,6 @@ gb_ExternalProject__use_wpg :=
 
 else # !SYSTEM_WPG
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	wpg-0.2 \
-))
-
 define gb_LinkTarget__use_wpg
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,libwpg)/inc \
@@ -1617,10 +1516,6 @@ gb_ExternalProject__use_wps :=
 
 else # !SYSTEM_WPS
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	wps-0.2 \
-))
-
 define gb_LinkTarget__use_wps
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,libwps)/inc \
@@ -1654,10 +1549,6 @@ $(call gb_LinkTarget_add_libs,$(1),$(MWAW_LIBS))
 endef
 
 else # !SYSTEM_MWAW
-
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	mwaw-0.1 \
-))
 
 define gb_LinkTarget__use_mwaw
 $(call gb_LinkTarget_set_include,$(1),\
@@ -1697,10 +1588,6 @@ $(call gb_ExternalProject_use_package,$(1),lcms2)
 endef
 
 ifeq ($(OS),ANDROID)
-
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	lcms2 \
-))
 
 define gb_LinkTarget__use_lcms2
 $(call gb_LinkTarget_use_package,$(1),lcms2)
@@ -1934,10 +1821,6 @@ endef
 
 else # !SYSTEM_LIBPNG
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
-	png \
-))
-
 define gb_LinkTarget__use_png
 $(call gb_LinkTarget_set_include,$(1),\
 	$(LIBPNG_CFLAGS) \
@@ -2025,12 +1908,6 @@ $(call gb_LinkTarget_add_libs,$(1),\
 endef
 
 else # !SYSTEM_POPPLER
-
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
-	fofi \
-	Goo \
-	xpdf \
-))
 
 define gb_LinkTarget__use_poppler
 $(call gb_LinkTarget_use_package,$(1),xpdf)
@@ -2148,11 +2025,6 @@ endef
 
 else ifeq ($(SYSTEM_OPENLDAP),NO)
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
-	ldap \
-	lber \
-))
-
 define gb_LinkTarget__use_openldap
 $(call gb_LinkTarget_use_unpacked,$(1),openldap)
 $(call gb_LinkTarget_set_include,$(1),\
@@ -2222,10 +2094,6 @@ $(call gb_LinkTarget_use_system_win32_libs,$(1),\
 endif
 
 endef
-
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
-	$(if $(filter MSC,$(COM)),lib)pq \
-))
 
 endif # SYSTEM_POSTGRESQL
 
@@ -2298,11 +2166,6 @@ endef
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE,\
 	xpcom \
 	xpcom_core \
-))
-
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
-	embed_base_s \
-	mozreg_s \
 ))
 
 endif # DESKTOP
@@ -2504,14 +2367,6 @@ define gb_LinkTarget__use_orcus-parser
 endef
 
 else # !SYSTEM_LIBORCUS
-
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
-	orcus \
-))
-
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
-	orcus-parser \
-))
 
 define gb_LinkTarget__use_orcus
 $(call gb_LinkTarget_use_unpacked,$(1),liborcus)

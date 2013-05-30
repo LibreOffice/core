@@ -253,17 +253,6 @@ $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : \
 	RPATH :=
 endef
 
-# StaticLibrary class
-
-gb_StaticLibrary_SYSPRE := lib
-gb_StaticLibrary_PLAINEXT := .a
-
-gb_StaticLibrary_FILENAMES := \
-	$(foreach lib,$(gb_StaticLibrary_PLAINLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_PLAINEXT)) \
-
-gb_StaticLibrary_StaticLibrary_platform =
-
-
 # Executable class
 
 gb_Executable_EXT :=

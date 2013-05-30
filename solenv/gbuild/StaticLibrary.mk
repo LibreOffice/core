@@ -23,7 +23,9 @@
 # defined globally in gbuild.mk
 #  gb_StaticLibrary_OUTDIRLOCATION := $(OUTDIR)/lib
 # defined by platform
-#  gb_StaticLibrary_FILENAMES
+#  gb_StaticLibrary_get_filename
+#  gb_StaticLibrary_PLAINEXT
+#  gb_StaticLibrary_StaticLibrary_platform
 
 
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
@@ -34,10 +36,6 @@ $(WORKDIR)/Clean/OutDir/lib/%$(gb_StaticLibrary_PLAINEXT) :
 			$(AUXTARGETS))
 
 define gb_StaticLibrary_StaticLibrary
-ifeq (,$$(findstring $(1),$$(gb_StaticLibrary_KNOWNLIBS)))
-$$(eval $$(call gb_Output_info,Currently known static libraries are: $(sort $(gb_StaticLibrary_KNOWNLIBS)),ALL))
-$$(eval $$(call gb_Output_error,Static library $(1) must be registered in Repository.mk))
-endif
 $(call gb_StaticLibrary__StaticLibrary_impl,$(1),$(call gb_StaticLibrary_get_linktargetname,$(1)))
 
 endef

@@ -55,9 +55,6 @@ gb_Library_DLLFILENAMES := $(patsubst rdf:rdf%,rdf:librdf%,$(gb_Library_DLLFILEN
 # libpyuno_wrapper.dll => pyuno.pyd
 gb_Library_DLLFILENAMES := $(patsubst pyuno:pyuno.dll,pyuno:pyuno$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd,$(gb_Library_DLLFILENAMES))
 
-gb_StaticLibrary_FILENAMES := $(patsubst png:png%,png:libpng%,$(gb_StaticLibrary_FILENAMES))
-gb_StaticLibrary_FILENAMES := $(patsubst salcpprt:salcpprt%,salcpprt:cpprtl%,$(gb_StaticLibrary_FILENAMES))
-
 ifeq ($(COM),GCC)
 gb_Library_FILENAMES := $(patsubst crypto:icrypto%,crypto:crypto%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst exslt:iexslt%,exslt:libexslt$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))

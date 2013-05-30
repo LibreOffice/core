@@ -159,11 +159,6 @@ endef
 #
 # gb_ExternalProject_use_static_libraries external staticlibraries
 define gb_ExternalProject_use_static_libraries
-ifneq (,$$(filter-out $(gb_StaticLibrary_KNOWNLIBS),$(2)))
-$$(eval $$(call gb_Output_info, currently known static libraries are: $(sort $(gb_StaticLibrary_KNOWNLIBS)),ALL))
-$$(eval $$(call gb_Output_error,Cannot link against static library/libraries $$(filter-out $(gb_StaticLibrary_KNOWNLIBS),$(2)). Static libraries must be registered in Repository.mk))
-endif
-
 $(call gb_ExternalProject_get_preparation_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_StaticLibrary_get_target,$(lib)))
 
