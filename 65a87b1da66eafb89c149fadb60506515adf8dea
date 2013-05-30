@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7/w\u003d",
+        "filename": "sc/inc/globstr.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-05-30T14:39:09Z",
+      "side": 1,
+      "message": "This skips 547. Since there\u0027s STR_COUNT as total count, presumably there should be no holes.",
+      "revId": "65a87b1da66eafb89c149fadb60506515adf8dea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7/o\u003d",
+        "filename": "sc/source/ui/view/gridwin5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-05-30T14:39:09Z",
+      "side": 1,
+      "message": "Sal_Bool is obsolete, please do not use it in new code unless there\u0027s a special reason for it.",
+      "revId": "65a87b1da66eafb89c149fadb60506515adf8dea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7/k\u003d",
+        "filename": "sc/source/ui/view/gridwin5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-05-30T14:39:09Z",
+      "side": 1,
+      "message": "Yes it may need localization, also the word order may be different in other languages, so using two strings is the correct way.",
+      "revId": "65a87b1da66eafb89c149fadb60506515adf8dea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7/s\u003d",
+        "filename": "sc/source/ui/view/gridwin5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-05-30T14:39:09Z",
+      "side": 1,
+      "message": "Please fix the indent while fixing the other details.",
+      "revId": "65a87b1da66eafb89c149fadb60506515adf8dea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
