@@ -13,7 +13,7 @@ Globals
             UNIXBASISROOTNAME openoffice
             HIDELICENSEDIALOG 1
             PACKAGEPREFIX 
-            BASISPACKAGEPREFIX aoobasis
+            BASISPACKAGEPREFIX openoffice
             UREPACKAGEPREFIX openoffice
             SOLSUREPACKAGEPREFIX openoffice
             USE_FILEVERSION 1
@@ -193,7 +193,7 @@ Apache_OpenOffice_Dev
             ABOUTBOXPRODUCTVERSION 4.0.0
             BASEPRODUCTVERSION 4.0
             DEVELOPMENTPRODUCT 1
-            BASISPACKAGEPREFIX aoobasis-dev
+            BASISPACKAGEPREFIX aoodev
             UREPACKAGEPREFIX aoodev
             SOLSUREPACKAGEPREFIX aoodev
             REGISTRYLAYERNAME LayerDev
@@ -351,7 +351,7 @@ Apache_OpenOffice_Dev_SDK
             BRANDPACKAGEVERSION 4
             PACKAGEVERSION 4.0.0
             PACKAGEREVISION {milestone}
-            BASISPACKAGEPREFIX aoobasis-dev
+            BASISPACKAGEPREFIX aoodev
             UREPACKAGEPREFIX aoodev
             SOLSUREPACKAGEPREFIX aoodev
             REGISTRYLAYERNAME LayerDev
