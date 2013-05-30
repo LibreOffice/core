@@ -254,7 +254,7 @@
                             <child>
                               <object class="GtkLabel" id="monitor_str">
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">Display %1label</property>
+                                <property name="label" translatable="yes">Display %1</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
