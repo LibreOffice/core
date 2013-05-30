@@ -34,6 +34,10 @@ $(eval $(call gb_AllLangResTarget_add_srs,rptui,reportdesign/rptui))
 
 $(eval $(call gb_SrsTarget_SrsTarget,reportdesign/rptui))
 
+$(eval $(call gb_SrsTarget_use_srstargets,reportdesign/rptui,\
+	svx/res \
+))
+
 $(eval $(call gb_SrsTarget_set_include,reportdesign/rptui,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/reportdesign/source/ui/inc \

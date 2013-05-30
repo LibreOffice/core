@@ -34,6 +34,10 @@ $(eval $(call gb_AllLangResTarget_add_srs,basctl,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,basctl/res))
 
+$(eval $(call gb_SrsTarget_use_srstargets,basctl/res,\
+	svx/res \
+))
+
 $(eval $(call gb_SrsTarget_set_include,basctl/res,\
     -I$(call gb_SrsTemplateTarget_get_include_dir,) \
 	-I$(SRCDIR)/basctl/inc \

@@ -17,6 +17,10 @@ $(eval $(call gb_AllLangResTarget_add_srs,sd,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,sd/res))
 
+$(eval $(call gb_SrsTarget_use_srstargets,sd/res,\
+	svx/res \
+))
+
 $(eval $(call gb_SrsTarget_set_include,sd/res,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sd/inc \

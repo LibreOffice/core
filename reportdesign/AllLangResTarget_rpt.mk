@@ -17,6 +17,10 @@ $(eval $(call gb_AllLangResTarget_add_srs,rpt,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,reportdesign/res))
 
+$(eval $(call gb_SrsTarget_use_srstargets,reportdesign/res,\
+	svx/res \
+))
+
 $(eval $(call gb_SrsTarget_set_include,reportdesign/res,\
     $$(INCLUDE) \
     -I$(SRCDIR)/reportdesign/source/core/inc \

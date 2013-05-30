@@ -352,6 +352,22 @@ $(foreach package,$(2),$(call gb_SrsTarget_use_package,$(1),$(package)))
 
 endef
 
+# Use templates built by another SrsTarget.
+#
+# gb_SrsTarget_use_srstarget srs other-srs
+define gb_SrsTarget_use_srstarget
+$(call gb_SrsTarget_get_external_headers_target,$(1)) : $(call gb_SrsTemplateTarget_get_target,$(2))
+
+endef
+
+# Use templates built by other SrsTargets.
+#
+# gb_SrsTarget_use_srstargets srs other-srs(s)
+define gb_SrsTarget_use_srstargets
+$(foreach srstarget,$(2),$(call gb_SrsTarget_use_srstarget,$(1),$(srstarget)))
+
+endef
+
 
 # ResTarget
 
