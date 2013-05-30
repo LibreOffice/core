@@ -44,6 +44,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
+#include <svtools/miscopt.hxx>
 #include <svtools/toolpanel/toolpaneldeck.hxx>
 #include <svtools/toolpanel/tablayouter.hxx>
 #include <svtools/toolpanel/drawerlayouter.hxx>
@@ -1237,14 +1238,17 @@ namespace sfx2
         }
         pMenu->InsertSeparator();
 
-    #if OSL_DEBUG_LEVEL > 0
-        pMenu->InsertItem( MID_LAYOUT_TABS, OUString("Tab-Layout (exp.)"), MIB_CHECKABLE );
-        pMenu->CheckItem( MID_LAYOUT_TABS, impl_getLayout() != LAYOUT_DRAWERS );
-        pMenu->InsertItem( MID_LAYOUT_DRAWERS, OUString("Drawer-Layout"), MIB_CHECKABLE );
-        pMenu->CheckItem( MID_LAYOUT_DRAWERS, impl_getLayout() == LAYOUT_DRAWERS );
+#if OSL_DEBUG_LEVEL > 0
+        if (SvtMiscOptions().IsExperimentalMode())
+        {
+            pMenu->InsertItem( MID_LAYOUT_TABS, OUString("Tab-Layout (exp.)"), MIB_CHECKABLE );
+            pMenu->CheckItem( MID_LAYOUT_TABS, impl_getLayout() != LAYOUT_DRAWERS );
+            pMenu->InsertItem( MID_LAYOUT_DRAWERS, OUString("Drawer-Layout"), MIB_CHECKABLE );
+            pMenu->CheckItem( MID_LAYOUT_DRAWERS, impl_getLayout() == LAYOUT_DRAWERS );
 
-        pMenu->InsertSeparator();
-    #endif
+            pMenu->InsertSeparator();
+        }
+#endif
 
         // Add entry for docking or un-docking the tool panel.
         if ( m_rDockingWindow.IsFloatingMode() )
