@@ -450,7 +450,7 @@ Dim s as Integer
 		FirstList(i,1) = SecList(s,1)
 		sLocExtension = lcase(FirstList(i,1))
 		Select Case sLocExtension
-			Case &quot;sdw&quot;, &quot;sdc&quot;, &quot;sda&quot;, &quot;sdd&quot;, &quot;smf&quot;, &quot;sgl&quot;, &quot;doc&quot;, &quot;docx&quot;, &quot;docm&quot;, &quot;xls&quot;, &quot;xlsx&quot;, &quot;xlsm&quot;, &quot;ppt&quot;, &quot;pps&quot;, &quot;pptx&quot;, &quot;pptm&quot;, &quot;ppsx&quot;, &quot;ppsm&quot;, &quot;sxi&quot;, &quot;sxw&quot;, &quot;sxd&quot;, &quot;sxg&quot;, &quot;sxm&quot;, &quot;sxc&quot;
+			Case &quot;sdw&quot;, &quot;sdc&quot;, &quot;sda&quot;, &quot;sdd&quot;, &quot;smf&quot;, &quot;sgl&quot;, &quot;doc&quot;, &quot;docx&quot;, &quot;docm&quot;, &quot;xls&quot;, &quot;xlsx&quot;, &quot;xlsm&quot;, &quot;ppt&quot;, &quot;pps&quot;, &quot;pptx&quot;, &quot;pptm&quot;, &quot;ppsx&quot;, &quot;ppsm&quot;, &quot;pub&quot;, &quot;sxi&quot;, &quot;sxw&quot;, &quot;sxd&quot;, &quot;sxg&quot;, &quot;sxm&quot;, &quot;sxc&quot;
                         AbsDocuFound = AbsDocuFound + 1
 			Case else
 				AbsTemplateFound = AbsTemplateFound + 1
