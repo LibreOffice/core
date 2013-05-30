@@ -22,22 +22,38 @@
 #ifndef SYSTEM_STL_VECTOR
 #define SYSTEM_STL_VECTOR
 
-#ifdef GCC
-
-#ifdef __MINGW32__
-#  define _SYSTEM_STL_MAKE_HEADER(path,header) <path/header>
-#  include _SYSTEM_STL_MAKE_HEADER(GXX_INCLUDE_PATH,vector)
-#else
-#  include <ext/../vector>
+#ifdef HAVE_STL_INCLUDE_PATH
+	// TODO: use computed include file name
+	#include_next <vector>
+#elif defined(_MSC_VER)
+	#include <../../VC/include/vector>
+#else // fall back to boost/tr1
+	#include <boost/tr1/tr1/vector>
 #endif
+
+
+#ifndef NO_STLPORT4_EMULATION
 
 namespace std
 {
-    typedef vector<bool, std::allocator<bool> > bit_vector;
+    typedef vector<bool> bit_vector;
 }
 
+// workaround some STL implementations having problems with their vector<bool>::count() specialization
+inline int std_bitset_count( std::bit_vector::const_iterator it, std::bit_vector::const_iterator itEnd, bool bValue)
+{
+#if 0 && defined(_LIBCPP___BIT_REFERENCE) // TODO: reenable for libc++ >= r156543/r156546/etc.
+	int nCount = std::count( it, itEnd, bValue);
 #else
-#error UNSUPPORTED COMPILER
+	int nCount = 0;
+	for(; it != itEnd; ++it)
+		if( *it == bValue)
+			++nCount;
 #endif
+	return nCount;
+}
+
+#endif // NO_STLPORT4_EMULATION
+
 #endif
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+

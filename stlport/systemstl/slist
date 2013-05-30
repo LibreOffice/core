@@ -22,18 +22,54 @@
 #ifndef SYSTEM_STL_SLIST
 #define SYSTEM_STL_SLIST
 
-#ifdef GCC
+#ifdef HAVE_STL_INCLUDE_PATH
+	// TODO: use computed include file name
+	#include_next <forward_list>
+#elif defined(_MSC_VER)
+	#include <../../VC/include/list>
+	#define STLP4_SLIST_WITH_LIST
+	// MSVC's list would cause a lot of expression-result-unused warnings
+	// unless it is compiled in iterator-debugging mode. Silence this noise
+	#pragma warning(disable:4555)
+#else // fall back to boost/tr1 (forward_list or plain list)
+	#include <boost/config.hpp>
+	#ifndef BOOST_NO_0X_HDR_FORWARD_LIST
+		#include <boost/tr1/tr1/forward_list>
+	#else // fall back to the classic list
+		#include <boost/tr1/tr1/list>
+		#define STLP4_SLIST_WITH_LIST
+	#endif
+#endif
 
-#include <ext/slist>
+
+#ifndef NO_STLPORT4_EMULATION
+
+#ifndef STLP4_SLIST_WITH_LIST
+    #define STLP4_SLIST_EMUBASE std::forward_list
+#else
+    #define STLP4_SLIST_EMUBASE std::list
+#endif
 
 namespace std
 {
-	using __gnu_cxx::slist;
+using STLP4_SLIST_EMUBASE;
+
+// lame emulation of the pre-C++11 slist using the std::forward_list (or std::list)
+template< typename T, class A=allocator<T> >
+class slist : public STLP4_SLIST_EMUBASE<T,A>
+{
+public:
+	typedef typename STLP4_SLIST_EMUBASE<T,A> _super;
+	typedef typename _super::iterator slist_mit;
+	typedef typename _super::const_iterator slist_cit;
+#ifndef STLP4_SLIST_WITH_LIST
+	slist_mit insert( slist_cit aI, const T& rT) { return _super::insert_after( aI, rT); }
+#endif
+};
+
 }
-#else
-#error UNSUPPORTED COMPILER
-#endif
 
+#endif // NO_STLPORT4_EMULATION
 
 #endif
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+
