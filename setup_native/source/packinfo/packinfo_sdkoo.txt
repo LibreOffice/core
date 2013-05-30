@@ -30,7 +30,7 @@ requires = "%BASISPACKAGEPREFIX-core01"
 copyright = "2012 by The Apache Software Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "Apache Software Foundation"
-description = "Software Development Kit for %APACHEPROJECTNAME %OOOBASEVERSION"
+description = "Software Development Kit for %APACHEPROJECTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%OOOPACKAGEVERSION"
 End
