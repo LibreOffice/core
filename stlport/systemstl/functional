@@ -28,7 +28,7 @@
 #elif defined(_MSC_VER)
 	#include <../../VC/include/functional>
 	namespace std { using tr1::hash; }
-#if 1 // TODO: enable only when std::_Swap_adl is not available
+#if 0 // TODO: enable only when std::_Swap_adl is not available
 	// note: VS2008SP1 has known problems after a security update (KB971092,KB974479,KB974223)
 	namespace std{ template<class _T> void _Swap_adl(_T& l, _T& r) {swap(l,r);} }
 #endif	
