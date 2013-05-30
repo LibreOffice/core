@@ -2560,7 +2560,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
 IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pInfo)
 {
     Reference< ::com::sun::star::sdbcx::XRowLocate >  xCursor(getRowSet(), UNO_QUERY);
-    OSL_ENSURE(xCursor.is(), "SbaXDataBrowserController::OnFoundData : this is simply impossible !");
+    OSL_ENSURE(xCursor.is(), "SbaXDataBrowserController::OnFoundData : xCursor is empty");
 
     // move the cursor
     xCursor->moveToBookmark(pInfo->aPosition);
@@ -2601,7 +2601,7 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
 
     try
     {
-        OSL_ENSURE(xCursor.is(), "SbaXDataBrowserController::OnCanceledNotFound : this is simply impossible !");
+        OSL_ENSURE(xCursor.is(), "SbaXDataBrowserController::OnCanceledNotFound : xCursor is empty");
         // move the cursor
         xCursor->moveToBookmark(pInfo->aPosition);
     }
