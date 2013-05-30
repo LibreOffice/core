@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
+#include <com/sun/star/office/Quickstart.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/task/XJob.hpp>
@@ -710,13 +711,9 @@ ShutdownThread::run()
     m_aCondition.wait(&tv);
 
     // Tell QuickStarter not to veto ..
-    uno::Reference< beans::XFastPropertySet > xQuickStarter(
-        UpdateCheck::createService("com.sun.star.office.Quickstart", m_xContext),
-        uno::UNO_QUERY
-    );
+    uno::Reference< css::beans::XFastPropertySet > xQuickStarter = css::office::Quickstart::createDefault(m_xContext);
 
-    if (xQuickStarter.is())
-        xQuickStarter->setFastPropertyValue(0, uno::makeAny(false));
+    xQuickStarter->setFastPropertyValue(0, uno::makeAny(false));
 
     // Shutdown the office
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xContext);
@@ -1566,27 +1563,6 @@ UpdateCheck::getInteractionHandler() const
         xHandler = m_aUpdateHandler.get();
 
     return xHandler;
-}
-
-//------------------------------------------------------------------------------
-
-uno::Reference< uno::XInterface >
-UpdateCheck::createService(const OUString& rServiceName,
-                           const uno::Reference<uno::XComponentContext>& xContext)
-{
-    if( !xContext.is() )
-        throw uno::RuntimeException(
-            "UpdateCheckConfig: empty component context",
-            uno::Reference< uno::XInterface >() );
-
-    const uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
-
-    if( !xServiceManager.is() )
-        throw uno::RuntimeException(
-            "UpdateCheckConfig: unable to obtain service manager from component context",
-            uno::Reference< uno::XInterface >() );
-
-    return xServiceManager->createInstanceWithContext(rServiceName, xContext);
 }
 
 //------------------------------------------------------------------------------

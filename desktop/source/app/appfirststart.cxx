@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/office/Quickstart.hpp>
 
 #include "app.hxx"
 
@@ -67,15 +68,10 @@ void Desktop::DoRestartActionsIfNecessary( sal_Bool bQuickStart )
                 xPSet->setPropertyValue( sPropName, makeAny( sal_False ) );
                 Reference< util::XChangesBatch >( xPSet, UNO_QUERY_THROW )->commitChanges();
 
-                Sequence< Any > aSeq( 1 );
                 sal_Bool bQuickstart = shouldLaunchQuickstart();
-                aSeq[0] <<= bQuickstart;
 
                 css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-                Reference < XInitialization > xQuickstart(
-                    xContext->getServiceManager()->createInstanceWithContext("com.sun.star.office.Quickstart", xContext),
-                    UNO_QUERY_THROW );
-                xQuickstart->initialize( aSeq );
+                css::office::Quickstart::createStart(xContext, bQuickstart);
             }
         }
         catch( const uno::Exception& )

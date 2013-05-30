@@ -71,6 +71,7 @@
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
 #include <com/sun/star/frame/ToolbarControllerFactory.hpp>
 #include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
+#include <com/sun/star/office/Quickstart.hpp>
 
 #include <toolkit/unohlp.hxx>
 #include <comphelper/configuration.hxx>
@@ -1916,11 +1917,7 @@ sal_Bool Desktop::InitializeQuickstartMode( const Reference< XComponentContext >
         if ( bQuickstart )
         #endif
         {
-            Sequence< Any > aSeq( 1 );
-            aSeq[0] <<= bQuickstart;
-            Reference < XComponent > xQuickstart(
-                    rxContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.office.Quickstart", aSeq, rxContext),
-                    UNO_QUERY );
+            css::office::Quickstart::createStart(rxContext, bQuickstart);
         }
         return sal_True;
     }
@@ -2725,15 +2722,8 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             // NOTICE: The quickstart service must be initialized inside the "main thread", so we use the
             // application events to do this (they are executed inside main thread)!!!
             // Don't start quickstart service if the user specified "--invisible" on the command line!
-            sal_Bool bQuickstart( sal_True );
-            Sequence< Any > aSeq( 1 );
-            aSeq[0] <<= bQuickstart;
-
             Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-            Reference < XInitialization > xQuickstart( xContext->getServiceManager()->createInstanceWithContext("com.sun.star.office.Quickstart", xContext),
-                                                       UNO_QUERY );
-            if ( xQuickstart.is() )
-                xQuickstart->initialize( aSeq );
+            css::office::Quickstart::createStart(xContext, true/*Quickstart*/);
         }
         break;
     case ApplicationEvent::TYPE_SHOWDIALOG:
@@ -2931,18 +2921,8 @@ void Desktop::CheckFirstRun( )
         {
             if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("RunQuickstartAtFirstStart"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
             {
-                sal_Bool bQuickstart( sal_True );
-                sal_Bool bAutostart( sal_True );
-                Sequence< Any > aSeq( 2 );
-                aSeq[0] <<= bQuickstart;
-                aSeq[1] <<= bAutostart;
-
                 css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-                Reference < XInitialization > xQuickstart(
-                                                xContext->getServiceManager()->createInstanceWithContext("com.sun.star.office.Quickstart", xContext),
-                                                UNO_QUERY );
-                if ( xQuickstart.is() )
-                    xQuickstart->initialize( aSeq );
+                css::office::Quickstart::createAutoStart(xContext, true/*Quickstart*/, true/*bAutostart*/);
                 RegCloseKey( hKey );
             }
         }

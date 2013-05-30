@@ -80,6 +80,7 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/office/Quickstart.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -1267,18 +1268,9 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
             // tell quickstarter to stop being a veto listener
 
-            Reference< XMultiServiceFactory > theMSF(
-                comphelper::getProcessServiceFactory());
-            Reference< XInitialization > xInit(theMSF->createInstance(
-                OUString("com.sun.star.office.Quickstart")), UNO_QUERY);
-            if (xInit.is())
-            {
-                Sequence< Any > args(3);
-                args[0] = makeAny(sal_False); // will be ignored
-                args[1] = makeAny(sal_False); // will be ignored
-                args[2] = makeAny(sal_False); // disable veto
-                xInit->initialize(args);
-            }
+            Reference< XComponentContext > xContext(
+                comphelper::getProcessComponentContext());
+            css::office::Quickstart::createAndSetVeto(xContext, false, false, false/*DisableVeto*/);
         }
     }
     catch (const Exception& e)

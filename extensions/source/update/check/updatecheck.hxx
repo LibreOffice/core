@@ -66,14 +66,6 @@ public:
     void initialize(const com::sun::star::uno::Sequence<com::sun::star::beans::NamedValue>& rValues,
                     const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext);
 
-    /* Returns an instance of the specified service obtained from the specified
-     * component context
-     */
-
-    static com::sun::star::uno::Reference< com::sun::star::uno::XInterface > createService(
-        const OUString& aServiceName,
-        const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext);
-
     // Update internal update info member
     void setUpdateInfo(const UpdateInfo& aInfo);
 

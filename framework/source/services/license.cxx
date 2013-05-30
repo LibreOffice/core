@@ -32,6 +32,7 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/office/Quickstart.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
@@ -293,18 +294,9 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
 
             // enable quickstarter
-            sal_Bool bQuickstart( sal_True );
-            sal_Bool bAutostart( sal_True );
-            Sequence< Any > aSeq( 2 );
-            aSeq[0] <<= bQuickstart;
-            aSeq[1] <<= bAutostart;
 
             Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-            Reference < XInitialization > xQuickstart(
-                xContext->getServiceManager()->createInstanceWithContext("com.sun.star.office.Quickstart", xContext),
-                UNO_QUERY );
-            if ( xQuickstart.is() )
-                xQuickstart->initialize( aSeq );
+            css::office::Quickstart::createAutoStart(xContext, true/*Quickstart*/, true/*Autostart*/);
 
             aRet <<= sal_True;
         }
