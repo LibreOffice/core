@@ -167,10 +167,12 @@ gb_CXXFLAGS := \
 	-wd4373 \
 	-wd4505 \
 	-wd4512 \
+	-wd4566 \
 	-wd4611 \
 	-wd4706 \
 	-wd4800 \
 	-wd4913 \
+	-wd4819 \
 	-Zc:forScope,wchar_t- \
 	-Zm500 \
 
