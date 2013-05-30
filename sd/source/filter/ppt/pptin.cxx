@@ -616,7 +616,7 @@ sal_Bool ImplSdPPTImport::Import()
                             aLayoutName = ( (SdPage*)mpDoc->GetMasterPage( nMasterNum - 1 ) )->GetName();
                     }
                     pPage->SetName( aLayoutName );
-                    aLayoutName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
+                    aLayoutName.AppendAscii( SD_LT_SEPARATOR );
                     aLayoutName += String( SdResId( STR_LAYOUT_OUTLINE ) );
                     pPage->SetLayoutName( aLayoutName );
 

@@ -268,8 +268,7 @@ sal_Int32 ReadThroughComponent(
             return ERRCODE_SFX_WRONGPASSWORD;
 
 #if OSL_DEBUG_LEVEL > 1
-        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
-            "SAX parse exception caught while importing:\n"));
+        OStringBuffer aError("SAX parse exception caught while importing:\n");
         aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
@@ -304,8 +303,7 @@ sal_Int32 ReadThroughComponent(
             return ERRCODE_SFX_WRONGPASSWORD;
 
 #if OSL_DEBUG_LEVEL > 1
-        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
-            "SAX exception caught while importing:\n"));
+        OStringBuffer aError("SAX exception caught while importing:\n");
         aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
@@ -315,8 +313,7 @@ sal_Int32 ReadThroughComponent(
     catch (const packages::zip::ZipIOException& r)
     {
 #if OSL_DEBUG_LEVEL > 1
-        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
-            "Zip exception caught while importing:\n"));
+        OStringBuffer aError("Zip exception caught while importing:\n");
         aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
@@ -328,8 +325,7 @@ sal_Int32 ReadThroughComponent(
     catch (const io::IOException& r)
     {
 #if OSL_DEBUG_LEVEL > 1
-        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
-            "IO exception caught while importing:\n"));
+        OStringBuffer aError("IO exception caught while importing:\n");
         aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
@@ -341,8 +337,7 @@ sal_Int32 ReadThroughComponent(
     catch (const uno::Exception& r)
     {
 #if OSL_DEBUG_LEVEL > 1
-        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
-            "uno exception caught while importing:\n"));
+        OStringBuffer aError("uno exception caught while importing:\n");
         aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
@@ -810,8 +805,8 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
                     {
                         const String& rTypeName = pFilter->GetRealTypeName();
 
-                        if( (rTypeName.CompareToAscii( RTL_CONSTASCII_STRINGPARAM("impress_StarImpress" ) ) == 0) ||
-                            (rTypeName.CompareToAscii( RTL_CONSTASCII_STRINGPARAM("draw_StarDraw" ) ) == 0) )
+                        if( (rTypeName.CompareToAscii( "impress_StarImpress" ) == 0) ||
+                            (rTypeName.CompareToAscii( "draw_StarDraw" ) == 0) )
                         {
                             bTransform = true;
                         }
@@ -1071,8 +1066,7 @@ sal_Bool SdXMLFilter::Export()
     catch (const uno::Exception &e)
     {
 #if OSL_DEBUG_LEVEL > 1
-        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
-            "uno Exception caught while exporting:\n"));
+        OStringBuffer aError("uno Exception caught while exporting:\n");
         aError.append(OUStringToOString(e.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());

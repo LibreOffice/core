@@ -274,10 +274,10 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
                 //  add a new entry to the resulting list (which is created
                 //  first if necessary).
                 if (    (sContentType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE)
-                    ||  (sContentType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(IMPRESS_XML_TEMPLATE_OASIS)))
-                    ||  (sContentType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(IMPRESS_BIN_TEMPLATE)))
-                    ||  (sContentType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(IMPRESS_XML_TEMPLATE)))
-                    ||  (sContentType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(IMPRESS_XML_TEMPLATE_B))))
+                    ||  (sContentType == IMPRESS_XML_TEMPLATE_OASIS)
+                    ||  (sContentType == IMPRESS_BIN_TEMPLATE)
+                    ||  (sContentType == IMPRESS_XML_TEMPLATE)
+                    ||  (sContentType == IMPRESS_XML_TEMPLATE_B))
                 {
                     OUString sLocalisedTitle = SfxDocumentTemplates::ConvertResourceString(
                         STR_TEMPLATE_NAME1_DEF, STR_TEMPLATE_NAME1, NUM_TEMPLATE_NAMES, sTitle );

@@ -561,7 +561,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 SfxStyleSheet* SdPage::GetStyleSheetForMasterPageBackground() const
 {
     String aName(GetLayoutName());
-    String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
+    String aSep( SD_LT_SEPARATOR );
     sal_uInt16 nPos = aName.Search(aSep);
 
     if (nPos != STRING_NOTFOUND)
@@ -580,7 +580,7 @@ SfxStyleSheet* SdPage::GetStyleSheetForMasterPageBackground() const
 SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
 {
     String aName(GetLayoutName());
-    String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
+    String aSep( SD_LT_SEPARATOR );
     sal_uInt16 nPos = aName.Search(aSep);
     if (nPos != STRING_NOTFOUND)
     {
@@ -631,7 +631,7 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
 SdStyleSheet* SdPage::getPresentationStyle( sal_uInt32 nHelpId ) const
 {
     String aStyleName( pPage->GetLayoutName() );
-    const String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
+    const String aSep( SD_LT_SEPARATOR );
     aStyleName.Erase(aStyleName.Search(aSep) + aSep.Len());
 
     sal_uInt16 nNameId;

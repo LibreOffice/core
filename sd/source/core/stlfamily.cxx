@@ -68,7 +68,7 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
         maLayoutName = mxMasterPage->GetLayoutName();
 
         String aLayoutName( maLayoutName );
-        const sal_uInt16 nLen = aLayoutName.Search(String( RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR)))+4;
+        const sal_uInt16 nLen = aLayoutName.Search(String( SD_LT_SEPARATOR ))+4;
         aLayoutName.Erase( nLen );
 
         if( (maStyleSheets.empty()) || !((*maStyleSheets.begin()).second->GetName().Equals( aLayoutName, 0, nLen )) )
@@ -209,7 +209,7 @@ OUString SAL_CALL SdStyleFamily::getName() throw (RuntimeException)
             throw DisposedException();
 
         String aLayoutName( pPage->GetLayoutName() );
-        const String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
+        const String aSep( SD_LT_SEPARATOR );
         aLayoutName.Erase(aLayoutName.Search(aSep));
 
         return OUString( aLayoutName );

@@ -991,7 +991,7 @@ String AssistentDlgImpl::GetDocFileName()
         {
             aDocFile = pEntry->msPath;
 
-            aTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM(  " (" ) );
+            aTitle.AppendAscii( " (" );
             aTitle.Append( pEntry->msTitle );
             aTitle.Append( sal_Unicode(')') );
         }
@@ -1438,7 +1438,7 @@ void AssistentDlgImpl::UpdateUserData()
         {
             String aStrTmp( aName );
             if( aName.Len() )
-                aStrTmp.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\n\n" ) );
+                aStrTmp.AppendAscii( "\n\n" );
             aStrTmp.Append( aInfo );
 
             pObj = dynamic_cast<SdrTextObj*>( pPage->GetPresObj( PRESOBJ_OUTLINE ) );

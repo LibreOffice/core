@@ -44,7 +44,7 @@ using namespace cssu;
 using namespace ::sd::framework;
 using ::rtl::OUString;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
+#define A2S(pString) (OUString(pString))
 
 namespace sd {
     extern ::Window * createTableDesignPanel (::Window* pParent, ViewShellBase& rBase);
@@ -91,8 +91,7 @@ Reference<XInterface> SAL_CALL PanelFactory_createInstance (
 
 ::rtl::OUString PanelFactory_getImplementationName (void) throw(RuntimeException)
 {
-    return ::rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.Draw.framework.PanelFactory"));
+    return OUString("org.openoffice.comp.Draw.framework.PanelFactory");
 }
 
 

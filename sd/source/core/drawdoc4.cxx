@@ -1110,7 +1110,7 @@ void SdDrawDocument::RenameLayoutTemplate(const String& rOldLayoutName, const St
     // Now set the layout name of the drawing and the notes page, as well as
     // their master pages.
     String aPageLayoutName(rNewName);
-    aPageLayoutName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
+    aPageLayoutName.AppendAscii( SD_LT_SEPARATOR );
     aPageLayoutName += String(SdResId(STR_LAYOUT_OUTLINE));
 
     // Inform all text objects on pages that use the renamed layout and set the

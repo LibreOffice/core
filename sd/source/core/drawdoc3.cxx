@@ -1667,7 +1667,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         }
         aName = aTest;
         String aPageLayoutName(aName);
-        aPageLayoutName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
+        aPageLayoutName.AppendAscii( SD_LT_SEPARATOR );
         aPageLayoutName += String(SdResId(STR_LAYOUT_OUTLINE));
 
         // Generate new stylesheets

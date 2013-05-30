@@ -886,7 +886,7 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
             {
                 // jump to object/page
                 aHelpText = String(SdResId(STR_CLICK_ACTION_BOOKMARK));
-                aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                aHelpText.AppendAscii( ": " );
                 aHelpText.Append( String(INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET ) ));
             }
             break;
@@ -895,7 +895,7 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
             {
                 // jump to document (object/page)
                 aHelpText = String(SdResId(STR_CLICK_ACTION_DOCUMENT));
-                aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                aHelpText.AppendAscii( ": " );
                 aHelpText.Append( String(INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET ) ));
             }
             break;
@@ -904,7 +904,7 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
             {
                 // execute program
                 aHelpText = String(SdResId(STR_CLICK_ACTION_PROGRAM));
-                aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                aHelpText.AppendAscii( ": " );
                 aHelpText.Append( String(INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET ) ));
             }
             break;
@@ -913,7 +913,7 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
             {
                 // execute program
                 aHelpText = String(SdResId(STR_CLICK_ACTION_MACRO));
-                aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                aHelpText.AppendAscii( ": " );
 
                 if ( SfxApplication::IsXScriptURL( pInfo->GetBookmark() ) )
                 {

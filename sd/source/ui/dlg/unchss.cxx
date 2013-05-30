@@ -55,7 +55,7 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
     String aName(pStyleSheet->GetName());
 
     // delete layout name and separator
-    String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ) );
+    String aSep( SD_LT_SEPARATOR );
     sal_uInt16 nPos = aName.Search(aSep);
     if( nPos != STRING_NOTFOUND )
         aName.Erase(0, nPos + aSep.Len());

@@ -97,7 +97,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         if( SFX_ITEM_SET != aInputSet.GetItemState(EE_PARA_NUMBULLET, sal_False, &pItem ))
         {
             String aStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
-            aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
+            aStyleName.AppendAscii( " 1" );
             SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
 
             if(pFirstStyleSheet)

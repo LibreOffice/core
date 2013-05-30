@@ -36,7 +36,7 @@ TableDesignPanel::TableDesignPanel (
     : PanelBase(pParentWindow, rViewShellBase)
 {
 #ifdef DEBUG
-    SetText(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sd:TableDesignPanel")));
+    SetText(OUString("sd:TableDesignPanel"));
 #endif
 }
 
