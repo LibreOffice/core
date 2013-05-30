@@ -44,7 +44,7 @@ End
 Start
 module = "gid_Module_Brand_Prg_Wrt"
 solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME-writer"
-packagename = "%UNIXPACKAGENAME-writer"
+packagename = "%UNIXPACKAGENAME-brand-writer"
 linuxreplaces = "openoffice.org3-writer"
 requires = "%UNIXPACKAGENAME,%BASISPACKAGEPREFIX-writer"
 solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-writer"
@@ -59,7 +59,7 @@ End
 Start
 module = "gid_Module_Brand_Prg_Calc"
 solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME-calc"
-packagename = "%UNIXPACKAGENAME-calc"
+packagename = "%UNIXPACKAGENAME-brand-calc"
 linuxreplaces = "openoffice.org3-calc"
 requires = "%UNIXPACKAGENAME,%BASISPACKAGEPREFIX-calc"
 solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-calc"
@@ -74,7 +74,7 @@ End
 Start
 module = "gid_Module_Brand_Prg_Impress"
 solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME-impress"
-packagename = "%UNIXPACKAGENAME-impress"
+packagename = "%UNIXPACKAGENAME-brand-impress"
 linuxreplaces = "openoffice.org3-impress"
 requires = "%UNIXPACKAGENAME,%BASISPACKAGEPREFIX-impress"
 solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-impress"
@@ -89,7 +89,7 @@ End
 Start
 module = "gid_Module_Brand_Prg_Draw"
 solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME-draw"
-packagename = "%UNIXPACKAGENAME-draw"
+packagename = "%UNIXPACKAGENAME-brand-draw"
 linuxreplaces = "openoffice.org3-draw"
 requires = "%UNIXPACKAGENAME,%BASISPACKAGEPREFIX-draw"
 solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-draw"
@@ -104,7 +104,7 @@ End
 Start
 module = "gid_Module_Brand_Prg_Math"
 solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME-math"
-packagename = "%UNIXPACKAGENAME-math"
+packagename = "%UNIXPACKAGENAME-brand-math"
 linuxreplaces = "openoffice.org3-math"
 requires = "%UNIXPACKAGENAME,%BASISPACKAGEPREFIX-math"
 solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-math"
@@ -119,7 +119,7 @@ End
 Start
 module = "gid_Module_Brand_Prg_Base"
 solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME-base"
-packagename = "%UNIXPACKAGENAME-base"
+packagename = "%UNIXPACKAGENAME-brand-base"
 linuxreplaces = "openoffice.org3-base"
 requires = "%UNIXPACKAGENAME,%BASISPACKAGEPREFIX-base"
 solarisrequires = "%WITHOUTDOTUNIXPACKAGENAME,%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-base"
@@ -134,7 +134,7 @@ End
 Start
 module = "gid_Module_Langpack_Brand"
 solarispackagename = "%WITHOUTDOTUNIXPACKAGENAME-%LANGUAGESTRING"
-packagename = "%UNIXPACKAGENAME-%LANGUAGESTRING"
+packagename = "%UNIXPACKAGENAME-brand-%LANGUAGESTRING"
 # replace ooobasis3.*-%LANGUAGESTRING-binfilter
 linuxreplaces = "openoffice.org3-%LANGUAGESTRING,ooobasis3.0-%LANGUAGESTRING-binfilter,ooobasis3.1-%LANGUAGESTRING-binfilter,ooobasis3.2-%LANGUAGESTRING-binfilter,ooobasis3.3-%LANGUAGESTRING-binfilter,ooobasis3.4-%LANGUAGESTRING-binfilter,aoobasis3.4.1-%LANGUAGESTRING-binfilter"
 requires = "%UNIXPACKAGENAME,%BASISPACKAGEPREFIX-%LANGUAGESTRING,%BASISPACKAGEPREFIX-%LANGUAGESTRING-base,%BASISPACKAGEPREFIX-%LANGUAGESTRING-calc,%BASISPACKAGEPREFIX-%LANGUAGESTRING-draw,%BASISPACKAGEPREFIX-%LANGUAGESTRING-help,%BASISPACKAGEPREFIX-%LANGUAGESTRING-impress,%BASISPACKAGEPREFIX-%LANGUAGESTRING-math,%BASISPACKAGEPREFIX-%LANGUAGESTRING-res,%BASISPACKAGEPREFIX-%LANGUAGESTRING-writer"
