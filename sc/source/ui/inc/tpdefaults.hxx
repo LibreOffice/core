@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SC_TPDEFAULTS_HXX__
-#define __SC_TPDEFAULTS_HXX__
+//#ifndef __SC_TPDEFAULTS_HXX__
+//#define __SC_TPDEFAULTS_HXX__
 
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
@@ -38,16 +38,15 @@ private:
     DECL_LINK( PrefixEditOnFocusHdl, Edit* );
 
 private:
-    FixedLine     aFLInitSpreadSheet;
-    FixedText     aFtNSheets;
-    NumericField  aEdNSheets;
-    FixedText     aFtSheetPrefix;
-    Edit          aEdSheetPrefix;
+    FixedText*    m_pFtNSheets;
+    NumericField* m_pEdNSheets;
+    FixedText*    m_pFtSheetPrefix;
+    Edit*         m_pEdSheetPrefix;
 
     // Stores old Sheet Prefix
     OUString maOldPrefixValue;
 };
 
-#endif
+//#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
