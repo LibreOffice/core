@@ -40,7 +40,7 @@ CustomAnimationPanel::CustomAnimationPanel (
         rViewShellBase)
 {
 #ifdef DEBUG
-    SetText(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sd:CustomAnimationPanel")));
+    SetText(OUString("sd:CustomAnimationPanel"));
 #endif
 }
 

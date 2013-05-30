@@ -123,7 +123,7 @@ SfxStyleSheetBase* SdStyleSheetPool::Create(const SdStyleSheet& rStyle)
 SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const String& rLayoutName)
 {
     String aName(rLayoutName);
-    aName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
+    aName.AppendAscii( SD_LT_SEPARATOR );
     aName += String(SdResId(STR_LAYOUT_TITLE));
     SfxStyleSheetBase* pResult = Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
     return pResult;
@@ -139,7 +139,7 @@ SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const String& rLayoutName)
 void SdStyleSheetPool::CreateOutlineSheetList (const String& rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles)
 {
     String aName(rLayoutName);
-    aName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
+    aName.AppendAscii( SD_LT_SEPARATOR );
     aName += String(SdResId(STR_LAYOUT_OUTLINE));
 
     for (sal_uInt16 nSheet = 1; nSheet < 10; nSheet++)
@@ -170,7 +170,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
     SfxStyleSheetBase* pSheet = NULL;
 
     String aPrefix(rLayoutName);
-    String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
+    String aSep( SD_LT_SEPARATOR );
     aPrefix.Insert(aSep);
 
     Font aLatinFont, aCJKFont, aCTLFont;
@@ -715,7 +715,7 @@ void SdStyleSheetPool::CopyLayoutSheets(const String& rLayoutName, SdStyleSheetP
 void SdStyleSheetPool::CreateLayoutSheetNames(const String& rLayoutName, std::vector<String> &aNameList) const
 {
     String aPrefix(rLayoutName);
-    String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
+    String aSep( SD_LT_SEPARATOR );
     aPrefix.Insert(aSep);
 
     String aName(SdResId(STR_LAYOUT_OUTLINE));
@@ -761,7 +761,7 @@ void SdStyleSheetPool::CreateLayoutSheetNames(const String& rLayoutName, std::ve
 void SdStyleSheetPool::CreateLayoutSheetList(const String& rLayoutName, SdStyleSheetVector& rLayoutSheets )
 {
     String aLayoutNameWithSep(rLayoutName);
-    aLayoutNameWithSep.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
+    aLayoutNameWithSep.AppendAscii( SD_LT_SEPARATOR );
     sal_uInt16 nLen = aLayoutNameWithSep.Len();
 
     SfxStyleSheetIterator aIter(this, SD_STYLE_FAMILY_MASTERPAGE);

@@ -172,7 +172,7 @@ void SdStartPresentationDlg::InitMonitorSettings()
             sal_Int32 nDefaultExternalIndex (-1);
             const sal_Int32 nDefaultSelectedDisplay (
                 ( ( const SfxInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_DISPLAY ) ).GetValue());
-            const String sPlaceHolder( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
+            const String sPlaceHolder( "%1" );
             for( sal_Int32 nDisplay = 0; nDisplay < mnMonitors; nDisplay++ )
             {
                 String aName( nDisplay == nExternalIndex ?

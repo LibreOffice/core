@@ -34,7 +34,7 @@ PanelBase::PanelBase (
     OSL_TRACE("created PanelBase at %x for parent %x", this, pParentWindow);
 
 #ifdef DEBUG
-    SetText(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sd:PanelBase")));
+    SetText(OUString("sd:PanelBase"));
 #endif
 }
 

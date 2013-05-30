@@ -38,7 +38,7 @@ SlideTransitionPanel::SlideTransitionPanel (
     : PanelBase(pParentWindow, rViewShellBase)
 {
 #ifdef DEBUG
-    SetText(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sd:SlideTransitionPanel")));
+    SetText(OUString("sd:SlideTransitionPanel"));
 #endif
 }
 

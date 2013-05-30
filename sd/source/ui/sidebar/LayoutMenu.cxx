@@ -152,7 +152,7 @@ LayoutMenu::LayoutMenu (
     SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Paint_PanelBackground));
 
 #ifdef DEBUG
-    SetText(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sd:LayoutMenu")));
+    SetText(OUString("sd:LayoutMenu"));
 #endif
 }
 

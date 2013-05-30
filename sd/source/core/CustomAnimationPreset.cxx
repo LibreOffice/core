@@ -471,7 +471,7 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
                         else
                         {
                             aMissedPresetIds += String(*pEffectNames);
-                            aMissedPresetIds += String( RTL_CONSTASCII_USTRINGPARAM("\n") );
+                            aMissedPresetIds += String( "\n" );
                         }
 #endif
                         pEffectNames++;
@@ -491,7 +491,7 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
 #ifdef DEBUG
     if( aMissedPresetIds.Len() )
     {
-        OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM("sd::CustomAnimationPresets::importPresets(), invalid preset id!\n"));
+        OStringBuffer aTmp("sd::CustomAnimationPresets::importPresets(), invalid preset id!\n");
         aTmp.append(OUStringToOString(aMissedPresetIds,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aTmp.getStr());

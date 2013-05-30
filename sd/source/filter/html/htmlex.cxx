@@ -338,14 +338,14 @@ static String getParagraphStyle( SdrOutliner* pOutliner, sal_Int32 nPara )
 {
     SfxItemSet aParaSet( pOutliner->GetParaAttribs( nPara ) );
 
-    String sStyle( RTL_CONSTASCII_USTRINGPARAM("direction:") );
+    String sStyle( "direction:" );
     if( static_cast<const SvxFrameDirectionItem*>(aParaSet.GetItem( EE_PARA_WRITINGDIR ))->GetValue() == FRMDIR_HORI_RIGHT_TOP )
     {
-        sStyle += String( RTL_CONSTASCII_USTRINGPARAM("rtl;") );
+        sStyle += String( "rtl;" );
     }
     else
     {
-         sStyle += String( RTL_CONSTASCII_USTRINGPARAM("ltr;") );
+         sStyle += String( "ltr;" );
     }
     return sStyle;
 }
@@ -2037,7 +2037,7 @@ bool HtmlExport::CreateOutlinePages()
             SdPage* pPage = maPages[ nSdPage ];
 
             aStr.AppendAscii( "<div align=\"left\">" );
-            String aLink( RTL_CONSTASCII_USTRINGPARAM( "JavaScript:parent.NavigateAbs(" ) );
+            String aLink( "JavaScript:parent.NavigateAbs(" );
             aLink += OUString::number(nSdPage);
             aLink.Append( sal_Unicode(')') );
 
@@ -2093,14 +2093,14 @@ void HtmlExport::CreateFileNames()
             pName = new String(maIndex);
         else
         {
-            pName = new String( RTL_CONSTASCII_USTRINGPARAM("img") );
+            pName = new String( "img" );
             *pName += OUString::number(nSdPage);
             *pName += maHTMLExtension;
         }
 
         mpHTMLFiles[nSdPage] = pName;
 
-        pName = new String( RTL_CONSTASCII_USTRINGPARAM("img") );
+        pName = new String( "img" );
         *pName += OUString::number(nSdPage);
         if( meFormat==FORMAT_GIF )
             pName->AppendAscii( ".gif" );
@@ -2111,7 +2111,7 @@ void HtmlExport::CreateFileNames()
 
         mpImageFiles[nSdPage] = pName;
 
-        pName = new String( RTL_CONSTASCII_USTRINGPARAM("thumb") );
+        pName = new String( "thumb" );
         *pName += OUString::number(nSdPage);
         if( meFormat!=FORMAT_JPG )
             pName->AppendAscii( ".png" );
@@ -2120,7 +2120,7 @@ void HtmlExport::CreateFileNames()
 
         mpThumbnailFiles[nSdPage] = pName;
 
-        pName = new String( RTL_CONSTASCII_USTRINGPARAM("text"));
+        pName = new String( "text" );
         *pName += OUString::number(nSdPage);
         *pName += maHTMLExtension;
         mpTextFiles[nSdPage] = pName;
@@ -2239,10 +2239,9 @@ static const char * JS_CollapseOutline =
 bool HtmlExport::CreateFrames()
 {
     String aTmp;
-    String aStr( RTL_CONSTASCII_USTRINGPARAM(
-                    "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\"\r\n"
+    String aStr( "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\"\r\n"
                     "    \"http://www.w3.org/TR/html4/frameset.dtd\">\r\n"
-            "<html>\r\n<head>\r\n" ) );
+            "<html>\r\n<head>\r\n"  );
 
     aStr += WriteMetaCharset();
     aStr.AppendAscii( "  <title>" );
@@ -2260,12 +2259,12 @@ bool HtmlExport::CreateFrames()
 
     if(mbNotes)
     {
-        String aSlash( RTL_CONSTASCII_USTRINGPARAM( "//" ) );
+        String aSlash( "//" );
         aFunction.SearchAndReplaceAll(aSlash, OUString());
     }
 
     // substitute HTML file extension
-    String aPlaceHolder(RTL_CONSTASCII_USTRINGPARAM(".$EXT"));
+    String aPlaceHolder(".$EXT");
     aFunction.SearchAndReplaceAll(aPlaceHolder, maHTMLExtension);
     aStr += aFunction;
 
@@ -2378,7 +2377,7 @@ bool HtmlExport::CreateNavBarFrames()
                                   BTN_FIRST_0:BTN_FIRST_1)), aButton);
 
         if(nFile != 0 && mnSdPageCount > 1)
-            aButton = CreateLink( String(RTL_CONSTASCII_USTRINGPARAM("JavaScript:parent.NavigateAbs(0)")), aButton);
+            aButton = CreateLink( String("JavaScript:parent.NavigateAbs(0)"), aButton);
 
         aStr += aButton;
         aStr.AppendAscii( "\r\n" );
@@ -2390,7 +2389,7 @@ bool HtmlExport::CreateNavBarFrames()
                                     BTN_PREV_0:BTN_PREV_1)), aButton);
 
         if(nFile != 0 && mnSdPageCount > 1)
-            aButton = CreateLink( String(RTL_CONSTASCII_USTRINGPARAM("JavaScript:parent.NavigateRel(-1)")), aButton);
+            aButton = CreateLink( String("JavaScript:parent.NavigateRel(-1)"), aButton);
 
         aStr += aButton;
         aStr.AppendAscii( "\r\n" );
@@ -2402,7 +2401,7 @@ bool HtmlExport::CreateNavBarFrames()
                                     BTN_NEXT_0:BTN_NEXT_1)), aButton);
 
         if(nFile != 2 && mnSdPageCount > 1)
-            aButton = CreateLink(String(RTL_CONSTASCII_USTRINGPARAM("JavaScript:parent.NavigateRel(1)")), aButton);
+            aButton = CreateLink(String("JavaScript:parent.NavigateRel(1)"), aButton);
 
         aStr += aButton;
         aStr.AppendAscii( "\r\n" );
@@ -2415,7 +2414,7 @@ bool HtmlExport::CreateNavBarFrames()
 
         if(nFile != 2 && mnSdPageCount > 1)
         {
-            String aLink(RTL_CONSTASCII_USTRINGPARAM("JavaScript:parent.NavigateAbs("));
+            String aLink("JavaScript:parent.NavigateAbs(");
             aLink += OUString::number(mnSdPageCount-1);
             aLink.AppendAscii( ")" );
             aButton = CreateLink( aLink, aButton);
@@ -2432,7 +2431,7 @@ bool HtmlExport::CreateNavBarFrames()
                 aButton = CreateImage(GetButtonName(BTN_INDEX), aButton);
 
             // to the overview
-            aStr += CreateLink(maIndex, aButton, String(RTL_CONSTASCII_USTRINGPARAM("_top")));
+            aStr += CreateLink(maIndex, aButton, String("_top"));
             aStr.AppendAscii( "\r\n" );
         }
 
@@ -2443,9 +2442,9 @@ bool HtmlExport::CreateNavBarFrames()
             if(mnButtonThema != -1)
                 aButton = CreateImage(GetButtonName(BTN_TEXT), aButton);
 
-            String  aText0( RTL_CONSTASCII_USTRINGPARAM("text0"));
+            String  aText0( "text0" );
             aText0 += maHTMLExtension;
-            aStr += CreateLink( aText0, aButton, String(RTL_CONSTASCII_USTRINGPARAM("_top")));
+            aStr += CreateLink( aText0, aButton, String("_top"));
             aStr.AppendAscii( "\r\n" );
         }
 
@@ -2453,7 +2452,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.AppendAscii( "</center>\r\n" );
         aStr.AppendAscii( "</body>\r\n</html>" );
 
-        String aFileName( RTL_CONSTASCII_USTRINGPARAM("navbar") );
+        String aFileName( "navbar" );
         aFileName += OUString::number(nFile);
 
         bOk = WriteHtml( aFileName, true, aStr );
@@ -2476,10 +2475,10 @@ bool HtmlExport::CreateNavBarFrames()
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName(BTN_MORE), aButton);
 
-        aStr += CreateLink(String(RTL_CONSTASCII_USTRINGPARAM("JavaScript:parent.ExpandOutline()")), aButton);
+        aStr += CreateLink(String("JavaScript:parent.ExpandOutline()"), aButton);
         aStr.AppendAscii( "</body>\r\n</html>" );
 
-        String aFileName( RTL_CONSTASCII_USTRINGPARAM("navbar3") );
+        String aFileName( "navbar3" );
 
         bOk = WriteHtml( aFileName, true, aStr );
 
@@ -2501,10 +2500,10 @@ bool HtmlExport::CreateNavBarFrames()
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName(BTN_LESS), aButton);
 
-        aStr += CreateLink(String(RTL_CONSTASCII_USTRINGPARAM("JavaScript:parent.CollapseOutline()")), aButton);
+        aStr += CreateLink(String("JavaScript:parent.CollapseOutline()"), aButton);
         aStr.AppendAscii( "</body>\r\n</html>" );
 
-        String aFileName( RTL_CONSTASCII_USTRINGPARAM("navbar4") );
+        String aFileName( "navbar4" );
         bOk = WriteHtml( aFileName, true, aStr );
 
         if (mpProgress)
@@ -2564,7 +2563,7 @@ String HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
         aStrNavText    = CreateImage(GetButtonName(BTN_TEXT), aStrNavText);
     }
 
-    String aStr( RTL_CONSTASCII_USTRINGPARAM("<center>\r\n")); //<table><tr>\r\n");
+    String aStr( "<center>\r\n"); //<table><tr>\r\n");
 
     // first page
     if(nSdPage > 0)
@@ -2644,7 +2643,7 @@ bool HtmlExport::CreateBitmaps()
 // =====================================================================
 String HtmlExport::CreateBodyTag() const
 {
-    String aStr( RTL_CONSTASCII_USTRINGPARAM("<body") );
+    String aStr( "<body" );
 
     if( mbUserAttr || mbDocColors )
     {
@@ -2677,7 +2676,7 @@ String HtmlExport::CreateLink( const String& aLink,
                                const String& aText,
                                const String& aTarget ) const
 {
-    String aStr( RTL_CONSTASCII_USTRINGPARAM("<a href=\""));
+    String aStr( "<a href=\"" );
     aStr += StringToURL(aLink);
     if(aTarget.Len())
     {
@@ -2698,7 +2697,7 @@ String HtmlExport::CreateImage( const String& aImage, const String& aAltText,
                                 sal_Int16 nWidth,
                                 sal_Int16 nHeight ) const
 {
-    String aStr( RTL_CONSTASCII_USTRINGPARAM("<img src=\""));
+    String aStr( "<img src=\"");
     aStr += StringToURL(aImage);
     aStr.AppendAscii( "\" border=0" );
 
@@ -2737,7 +2736,7 @@ String HtmlExport::CreateImage( const String& aImage, const String& aAltText,
 String HtmlExport::ColorToHTMLString( Color aColor )
 {
     static char hex[] = "0123456789ABCDEF";
-    String aStr( RTL_CONSTASCII_USTRINGPARAM("#xxxxxx"));
+    String aStr( "#xxxxxx" );
     aStr.SetChar(1, hex[(aColor.GetRed() >> 4) & 0xf] );
     aStr.SetChar(2, hex[aColor.GetRed()   & 0xf] );
     aStr.SetChar(3, hex[(aColor.GetGreen() >> 4) & 0xf] );
@@ -2756,7 +2755,7 @@ String HtmlExport::CreateHTMLCircleArea( sal_uLong nRadius,
                                          sal_uLong nCenterY,
                                          const String& rHRef ) const
 {
-    String aStr( RTL_CONSTASCII_USTRINGPARAM("<area shape=\"circle\" alt=\"\" coords=\"" ));
+    String aStr( "<area shape=\"circle\" alt=\"\" coords=\"" );
 
     aStr += OUString::number(nCenterX);
     aStr.Append(sal_Unicode(','));
@@ -2818,7 +2817,7 @@ String HtmlExport::CreateHTMLPolygonArea( const ::basegfx::B2DPolyPolygon& rPoly
 String HtmlExport::CreateHTMLRectArea( const Rectangle& rRect,
                                        const String& rHRef ) const
 {
-    String aStr( RTL_CONSTASCII_USTRINGPARAM("<area shape=\"rect\" alt=\"\" coords=\"") );
+    String aStr( "<area shape=\"rect\" alt=\"\" coords=\"" );
 
     aStr += OUString::number(rRect.Left());
     aStr.Append(sal_Unicode(','));
@@ -2852,7 +2851,7 @@ String HtmlExport::CreatePageURL( sal_uInt16 nPgNum )
 {
     if(mbFrames)
     {
-        String aUrl( RTL_CONSTASCII_USTRINGPARAM("JavaScript:parent.NavigateAbs("));
+        String aUrl( "JavaScript:parent.NavigateAbs(" );
         aUrl += OUString::number(nPgNum);
         aUrl.Append(sal_Unicode(')'));
         return aUrl;
@@ -2902,15 +2901,15 @@ bool HtmlExport::CopyScript( const String& rPath, const String& rSource, const S
     }
 
 
-    aScript.SearchAndReplaceAll( String(RTL_CONSTASCII_USTRINGPARAM("$$1")), getDocumentTitle() );
+    aScript.SearchAndReplaceAll( String("$$1"), getDocumentTitle() );
 
     const String aSaveStr( RESTOHTML( STR_WEBVIEW_SAVE ));
-    aScript.SearchAndReplaceAll( String(RTL_CONSTASCII_USTRINGPARAM("$$2")), aSaveStr );
+    aScript.SearchAndReplaceAll( String("$$2"), aSaveStr );
 
-    aScript.SearchAndReplaceAll( String(RTL_CONSTASCII_USTRINGPARAM("$$3")), maCGIPath );
+    aScript.SearchAndReplaceAll( String("$$3"), maCGIPath );
 
-    aScript.SearchAndReplaceAll( String(RTL_CONSTASCII_USTRINGPARAM("$$4")), OUString::number(mnWidthPixel) );
-    aScript.SearchAndReplaceAll( String(RTL_CONSTASCII_USTRINGPARAM("$$5")), OUString::number(mnHeightPixel) );
+    aScript.SearchAndReplaceAll( String("$$4"), OUString::number(mnWidthPixel) );
+    aScript.SearchAndReplaceAll( String("$$5"), OUString::number(mnHeightPixel) );
 
 
     String aDest( rPath );
@@ -2955,7 +2954,7 @@ bool HtmlExport::CreateASPScripts()
             return false;
     }
 
-    if(!CopyScript(maExportPath, String(RTL_CONSTASCII_USTRINGPARAM("edit.asp")), maIndex ))
+    if(!CopyScript(maExportPath, String("edit.asp"), maIndex ))
         return false;
 
     return true;
@@ -2997,7 +2996,7 @@ bool HtmlExport::CreateImageFileList()
         aStr.AppendAscii( "\r\n" );
     }
 
-    String aFileName( RTL_CONSTASCII_USTRINGPARAM("picture.txt") );
+    String aFileName( "picture.txt" );
     bool bOk = WriteHtml( aFileName, false, aStr );
 
     if (mpProgress)
@@ -3010,7 +3009,7 @@ bool HtmlExport::CreateImageFileList()
 bool HtmlExport::CreateImageNumberFile()
 {
     String aFull( maExportPath );
-    String aFileName( RTL_CONSTASCII_USTRINGPARAM("currpic.txt") );
+    String aFileName( "currpic.txt" );
     aFull += aFileName;
 
     meEC.SetContext( STR_HTMLEXP_ERROR_CREATE_FILE, aFileName );
@@ -3039,7 +3038,7 @@ String HtmlExport::InsertSound( const String& rSoundFile )
     if( rSoundFile.Len() == 0 )
         return rSoundFile;
 
-    String      aStr( RTL_CONSTASCII_USTRINGPARAM("<embed src=\"") );
+    String      aStr( "<embed src=\"" );
     INetURLObject   aURL( rSoundFile );
     String aSoundFileName = String(aURL.getName());
 

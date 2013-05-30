@@ -203,9 +203,9 @@ SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
         }
 
         if( DOCUMENT_TYPE_DRAW == eType )
-            aStmName.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Draw_" ) );
+            aStmName.AssignAscii( "Draw_" );
         else
-            aStmName.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "Impress_" ) );
+            aStmName.AssignAscii( "Impress_" );
 
         aStmName += rOptionName;
 

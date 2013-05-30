@@ -52,7 +52,7 @@ SdPagesField::SdPagesField( Window* pParent,
     SetCustomUnitText( aStr );
 
     // set size
-    aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "XXX" ) );
+    aStr.AppendAscii( "XXX" );
     Size aSize( GetTextWidth( aStr )+20, GetTextHeight()+6 );
 
 

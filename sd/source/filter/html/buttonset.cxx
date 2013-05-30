@@ -177,7 +177,7 @@ void ButtonSetImpl::scanForButtonSets( const OUString& rPath )
             if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None )
             {
                 OUString sFileName( aStatus.getFileName() );
-                if( sFileName.endsWithIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM(".zip" ) ) )
+                if( sFileName.endsWithIgnoreAsciiCase( ".zip" ) )
                     maButtons.push_back( boost::shared_ptr< ButtonsImpl >( new ButtonsImpl( aStatus.getFileURL() ) ) );
             }
         }

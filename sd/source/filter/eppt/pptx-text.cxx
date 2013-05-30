@@ -926,9 +926,9 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 case SVX_NUM_CHARS_UPPER_LETTER :
                                 case SVX_NUM_CHARS_UPPER_LETTER_N :
                                 {
-                                    if ( sSuffix == String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) )
+                                    if ( sSuffix == String( ")" ) )
                                     {
-                                        if ( sPrefix == String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) )
+                                        if ( sPrefix == String( "(" ) )
                                             nMappedNumType = 0xa0001;   // (A)
                                         else
                                             nMappedNumType = 0xb0001;   // A)
@@ -940,9 +940,9 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 case SVX_NUM_CHARS_LOWER_LETTER :
                                 case SVX_NUM_CHARS_LOWER_LETTER_N :
                                 {
-                                    if ( sSuffix == String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) )
+                                    if ( sSuffix == String( ")" ) )
                                     {
-                                        if ( sPrefix == String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) )
+                                        if ( sPrefix == String( "(" ) )
                                             nMappedNumType = 0x80001;   // (a)
                                         else
                                             nMappedNumType = 0x90001;   // a)
@@ -953,9 +953,9 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 break;
                                 case SVX_NUM_ROMAN_UPPER :
                                 {
-                                    if ( sSuffix == String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) )
+                                    if ( sSuffix == String( ")" ) )
                                     {
-                                        if ( sPrefix == String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) )
+                                        if ( sPrefix == String( "(" ) )
                                             nMappedNumType = 0xe0001;   // (I)
                                         else
                                             nMappedNumType = 0xf0001;   // I)
@@ -966,9 +966,9 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 break;
                                 case SVX_NUM_ROMAN_LOWER :
                                 {
-                                    if ( sSuffix == String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) )
+                                    if ( sSuffix == String( ")" ) )
                                     {
-                                        if ( sPrefix == String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) )
+                                        if ( sPrefix == String( "(" ) )
                                             nMappedNumType = 0x40001;   // (i)
                                         else
                                             nMappedNumType = 0x50001;   // i)
@@ -979,9 +979,9 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 break;
                                 case SVX_NUM_ARABIC :
                                 {
-                                    if ( sSuffix == String( RTL_CONSTASCII_USTRINGPARAM( ")" ) ) )
+                                    if ( sSuffix == String( ")" ) )
                                     {
-                                        if ( sPrefix == String( RTL_CONSTASCII_USTRINGPARAM( "(" ) ) )
+                                        if ( sPrefix == String( "(" ) )
                                             nMappedNumType = 0xc0001;   // (1)
                                         else
                                             nMappedNumType = 0x20001;   // 1)
@@ -1054,7 +1054,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
 void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Bool bGetPropStateValue )
 {
-    static String sNumberingLevel   ( RTL_CONSTASCII_USTRINGPARAM( "NumberingLevel" ) );
+    static String sNumberingLevel( "NumberingLevel" );
 
     ::com::sun::star::uno::Any aAny;
     if ( GetPropertyValue( aAny, mXPropSet, sNumberingLevel, sal_True ) )
