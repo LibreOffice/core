@@ -49,13 +49,6 @@ else ifeq ($(VCVER),100)
 		&& cd $(EXTERNAL_WORKDIR) \
 		&& ln -s PCbuild LO_lib \
 	,PCBuild)
-else ifeq ($(VCVER),90)
-	$(call gb_ExternalProject_run,build,\
-		MAKEFLAGS= $(COMPATH)/vcpackages/vcbuild.exe pcbuild.sln \
-			"$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)|$(if $(filter INTEL,$(CPUNAME)),Win32,x64)" \
-		&& cd $(EXTERNAL_WORKDIR) \
-		&& ln -s PC/VS9.0 LO_lib \
-	,PC/VS9.0)
 endif
 
 else
