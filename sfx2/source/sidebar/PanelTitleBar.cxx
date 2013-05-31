@@ -30,7 +30,6 @@
 #include <vcl/image.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-
 using namespace css;
 using namespace cssu;
 
@@ -50,15 +49,10 @@ PanelTitleBar::PanelTitleBar (
       mpPanel(pPanel),
       mnMenuItemIndex(1),
       mxFrame(),
-      msMoreOptionsCommand()
+      msMoreOptionsCommand(),
+      msAccessibleNamePrefix(String(SfxResId(SFX_STR_SIDEBAR_ACCESSIBILITY_PANEL_PREFIX)))
 {
     OSL_ASSERT(mpPanel != NULL);
-
-    const ::rtl::OUString sAccessibleName(
-        String(SfxResId(SFX_STR_SIDEBAR_ACCESSIBILITY_PANEL_PREFIX))
-            + rsTitle);
-    SetAccessibleName(sAccessibleName);
-    SetAccessibleDescription(sAccessibleName);
 
 #ifdef DEBUG
     SetText(A2S("PanelTitleBar"));
@@ -185,6 +179,17 @@ void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
                     OUStringToOString(rException.Message, RTL_TEXTENCODING_ASCII_US).getStr());
             }
         }
+}
+
+
+
+
+Reference<accessibility::XAccessible> PanelTitleBar::CreateAccessible (void)
+{
+    const ::rtl::OUString sAccessibleName(msAccessibleNamePrefix + msTitle);
+    SetAccessibleName(sAccessibleName);
+    SetAccessibleDescription(sAccessibleName);
+    return TitleBar::CreateAccessible();
 }
 
 

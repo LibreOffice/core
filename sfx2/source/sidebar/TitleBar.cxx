@@ -18,10 +18,15 @@
 
 #include "TitleBar.hxx"
 #include "Paint.hxx"
+#include "Accessible.hxx"
+#include "AccessibleTitleBar.hxx"
 
 #include <tools/svborder.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
+
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+
 
 namespace
 {
@@ -89,8 +94,7 @@ void TitleBar::Paint (const Rectangle& rUpdateArea)
     PaintDecoration(aTitleBarBox);
     const Rectangle aTitleBox (GetTitleArea(aTitleBarBox));
     PaintTitle(aTitleBox);
-    if (HasFocus())
-        PaintFocus(aTitleBox);
+    PaintFocus(aTitleBox);
 }
 
 
@@ -149,6 +153,15 @@ void TitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 
 
 
+cssu::Reference<css::accessibility::XAccessible> TitleBar::CreateAccessible (void)
+{
+    SetAccessibleRole(css::accessibility::AccessibleRole::PANEL);
+    return AccessibleTitleBar::Create(*this);
+}
+
+
+
+
 void TitleBar::PaintTitle (const Rectangle& rTitleBox)
 {
     Push(PUSH_FONT | PUSH_TEXTCOLOR);
@@ -186,7 +199,7 @@ void TitleBar::PaintTitle (const Rectangle& rTitleBox)
 
 void TitleBar::PaintFocus (const Rectangle& rFocusBox)
 {
-    Push(PUSH_FONT | PUSH_TEXTCOLOR | PUSH_LINECOLOR | PUSH_FILLCOLOR);
+    Push(PUSH_FONT | PUSH_TEXTCOLOR);
 
     Font aFont(GetFont());
     aFont.SetWeight(WEIGHT_BOLD);
@@ -203,15 +216,10 @@ void TitleBar::PaintFocus (const Rectangle& rFocusBox)
         aTextBox.Right() + 2,
         aTextBox.Bottom() + 2);
 
-    LineInfo aDottedStyle (LINE_DASH);
-    aDottedStyle.SetDashCount(0);
-    aDottedStyle.SetDotCount(1);
-    aDottedStyle.SetDotLen(1);
-    aDottedStyle.SetDistance(1);
-
-    SetFillColor();
-    SetLineColor(COL_BLACK);
-    DrawPolyLine(Polygon(aLargerTextBox), aDottedStyle);
+    if (HasFocus())
+        Window::ShowFocus(aLargerTextBox);
+    else
+        Window::HideFocus();
 
     Pop();
 }
