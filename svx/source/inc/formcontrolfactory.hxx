@@ -51,7 +51,8 @@ namespace svxform
     class FormControlFactory
     {
     public:
-        FormControlFactory( const ::comphelper::ComponentContext& _rContext );
+        FormControlFactory( const css::uno::Reference<css::uno::XComponentContext>& _rContext );
+        FormControlFactory();
         ~FormControlFactory();
 
         /** initializes the given control model which is to be newly inserted into a document

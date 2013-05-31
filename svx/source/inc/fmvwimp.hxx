@@ -86,7 +86,7 @@ class FormViewPageWindowAdapter : public FormViewPageWindowAdapter_Base
 
     ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > >   m_aControllerList;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >                            m_xControlContainer;
-    ::comphelper::ComponentContext                                                                          m_aContext;
+    css::uno::Reference<css::uno::XComponentContext>                                                        m_xContext;
     FmXFormView*                m_pViewImpl;
     Window*                     m_pWindow;
 
@@ -94,7 +94,7 @@ protected:
     ~FormViewPageWindowAdapter();
 
 public:
-    FormViewPageWindowAdapter(  const ::comphelper::ComponentContext& _rContext,
+    FormViewPageWindowAdapter(  const css::uno::Reference<css::uno::XComponentContext>& _rContext,
         const SdrPageWindow&, FmXFormView* pView);
         //const SdrPageViewWinRec*, FmXFormView* pView);
 
@@ -150,7 +150,6 @@ class FmXFormView : public ::cppu::WeakImplHelper3<
     class ObjectRemoveListener;
     friend class ObjectRemoveListener;
 
-    ::comphelper::ComponentContext                                                      m_aContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>                   m_xWindow;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           m_xLastCreatedControlModel;
 
@@ -181,7 +180,7 @@ class FmXFormView : public ::cppu::WeakImplHelper3<
     void removeGridWindowListening();
 
 protected:
-    FmXFormView( const ::comphelper::ComponentContext& _rContext, FmFormView* _pView );
+    FmXFormView( FmFormView* _pView );
     ~FmXFormView();
 
     void    saveMarkList( sal_Bool _bSmartUnmark = sal_True );
@@ -252,7 +251,6 @@ private:
     SdrObject*  implCreateXFormsControl( const ::svx::OXFormsDescriptor &_rDesc );
 
     static bool createControlLabelPair(
-        const ::comphelper::ComponentContext& _rContext,
         OutputDevice& _rOutDev,
         sal_Int32 _nXOffsetMM,
         sal_Int32 _nYOffsetMM,

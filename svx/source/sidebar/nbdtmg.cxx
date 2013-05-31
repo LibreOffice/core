@@ -44,7 +44,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/text/XDefaultNumberingProvider.hpp>
+#include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingFormatter.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
@@ -1410,72 +1410,67 @@ NumberingTypeMgr::NumberingTypeMgr(const NumberingTypeMgr& aTypeMgr):
 
 void NumberingTypeMgr::Init()
 {
-    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    Reference < XInterface > xI = xMSF->createInstance(
-        ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
-    Reference<XDefaultNumberingProvider> xDefNum(xI, UNO_QUERY);
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    Reference<XDefaultNumberingProvider> xDefNum = DefaultNumberingProvider::create( xContext );
 
-    if(xDefNum.is())
+    Sequence< Sequence< PropertyValue > > aNumberings;
+    Locale aLocale(Application::GetSettings().GetLanguageTag().getLocale());
+    try
     {
-        Sequence< Sequence< PropertyValue > > aNumberings;
-        Locale aLocale(Application::GetSettings().GetLanguageTag().getLocale());
-        try
+        aNumberings = xDefNum->getDefaultContinuousNumberingLevels( aLocale );
+
+        sal_Int32 nLength = aNumberings.getLength() > DEFAULT_NUM_VALUSET_COUNT ? DEFAULT_NUM_VALUSET_COUNT :aNumberings.getLength();
+
+        const Sequence<PropertyValue>* pValuesArr = aNumberings.getConstArray();
+        for(sal_Int32 i = 0; i < nLength; i++)
         {
-            aNumberings = xDefNum->getDefaultContinuousNumberingLevels( aLocale );
-
-                    sal_Int32 nLength = aNumberings.getLength() > DEFAULT_NUM_VALUSET_COUNT ? DEFAULT_NUM_VALUSET_COUNT :aNumberings.getLength();
-
-            const Sequence<PropertyValue>* pValuesArr = aNumberings.getConstArray();
-            for(sal_Int32 i = 0; i < nLength; i++)
+            NumSettings_ImplPtr pNew = lcl_CreateNumberingSettingsPtr(pValuesArr[i]);
+            NumberSettings_Impl* pNumEntry = new NumberSettings_Impl;
+            pNumEntry->nIndex = i + 1;
+            pNumEntry->nIndexDefault = i;
+            pNumEntry->pNumSetting = pNew;
+            //SetItemText( i + 1, SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i ));
             {
-                NumSettings_ImplPtr pNew = lcl_CreateNumberingSettingsPtr(pValuesArr[i]);
-                NumberSettings_Impl* pNumEntry = new NumberSettings_Impl;
-                pNumEntry->nIndex = i + 1;
-                pNumEntry->nIndexDefault = i;
-                pNumEntry->pNumSetting = pNew;
-                //SetItemText( i + 1, SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i ));
+                String sText;
+                //const OUString sValue(C2U("Value"));
+                Reference<XNumberingFormatter> xFormatter(xDefNum, UNO_QUERY);
+                if(xFormatter.is() && aNumberings.getLength() > i)
                 {
-                    String sText;
-                    //const OUString sValue(C2U("Value"));
-                    Reference<XNumberingFormatter> xFormatter(xDefNum, UNO_QUERY);
-                    if(xFormatter.is() && aNumberings.getLength() > i)
+
+                    for (sal_uInt16 j=0;j<3;j++)
                     {
-
-                        for (sal_uInt16 j=0;j<3;j++)
+                        Sequence<PropertyValue> aLevel = aNumberings.getConstArray()[i];
+                        try
                         {
-                            Sequence<PropertyValue> aLevel = aNumberings.getConstArray()[i];
-                            try
-                            {
-                                aLevel.realloc(aLevel.getLength() + 1);
-                                PropertyValue& rValue = aLevel.getArray()[aLevel.getLength() - 1];
-                                rValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
-                                rValue.Value <<= (sal_Int32)(j + 1);
+                            aLevel.realloc(aLevel.getLength() + 1);
+                            PropertyValue& rValue = aLevel.getArray()[aLevel.getLength() - 1];
+                            rValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
+                            rValue.Value <<= (sal_Int32)(j + 1);
 
-                                if (j!=0)
-                                    sText += OUString(" ");
+                            if (j!=0)
+                                sText += OUString(" ");
 
-                                sText+=String(xFormatter->makeNumberingString( aLevel, aLocale ));
-                            }
-                            catch (const Exception&)
-                            {
-                                OSL_ENSURE(false, "Exception in DefaultNumberingProvider::makeNumberingString");
-                            }
+                            sText+=String(xFormatter->makeNumberingString( aLevel, aLocale ));
+                        }
+                        catch (const Exception&)
+                        {
+                            OSL_ENSURE(false, "Exception in DefaultNumberingProvider::makeNumberingString");
                         }
                     }
-                    String aStrFromRES(SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS));
-                    String aReplace = OUString("%NUMBERINGSAMPLE");
-                    aStrFromRES.SearchAndReplace(aReplace,sText);
-                    pNumEntry->sDescription = aStrFromRES;
                 }
-        //End modification
-
-                //pNumEntry->sDescription = SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTION_0 + i );
-                pNumberSettingsArr->push_back(boost::shared_ptr<NumberSettings_Impl>(pNumEntry));
+                String aStrFromRES(SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS));
+                String aReplace = OUString("%NUMBERINGSAMPLE");
+                aStrFromRES.SearchAndReplace(aReplace,sText);
+                pNumEntry->sDescription = aStrFromRES;
             }
+    //End modification
+
+            //pNumEntry->sDescription = SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTION_0 + i );
+            pNumberSettingsArr->push_back(boost::shared_ptr<NumberSettings_Impl>(pNumEntry));
         }
-        catch(Exception&)
-        {
-        }
+    }
+    catch(Exception&)
+    {
     }
 }
 
@@ -1689,50 +1684,45 @@ OutlineTypeMgr::OutlineTypeMgr(const OutlineTypeMgr& aTypeMgr):
 
 void OutlineTypeMgr::Init()
 {
-    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    Reference < XInterface > xI = xMSF->createInstance(
-        ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
-    Reference<XDefaultNumberingProvider> xDefNum(xI, UNO_QUERY);
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    Reference<XDefaultNumberingProvider> xDefNum = DefaultNumberingProvider::create( xContext );
 
-    if(xDefNum.is())
+    Sequence<Reference<XIndexAccess> > aOutlineAccess;
+    Locale aLocale(Application::GetSettings().GetLanguageTag().getLocale());
+    try
     {
-        Sequence<Reference<XIndexAccess> > aOutlineAccess;
-        Locale aLocale(Application::GetSettings().GetLanguageTag().getLocale());
-        try
+        aOutlineAccess = xDefNum->getDefaultOutlineNumberings( aLocale );
+
+        SvxNumRule aDefNumRule( NUM_BULLET_REL_SIZE|NUM_CONTINUOUS|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE|NUM_SYMBOL_ALIGNMENT,10, sal_False ,
+            SVX_RULETYPE_NUMBERING,SvxNumberFormat::LABEL_ALIGNMENT);
+
+        for(sal_Int32 nItem = 0;
+            nItem < aOutlineAccess.getLength() && nItem < DEFAULT_NUM_VALUSET_COUNT;
+            nItem++ )
         {
-            aOutlineAccess = xDefNum->getDefaultOutlineNumberings( aLocale );
-
-            SvxNumRule aDefNumRule( NUM_BULLET_REL_SIZE|NUM_CONTINUOUS|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE|NUM_SYMBOL_ALIGNMENT,10, sal_False ,
-                SVX_RULETYPE_NUMBERING,SvxNumberFormat::LABEL_ALIGNMENT);
-
-            for(sal_Int32 nItem = 0;
-                nItem < aOutlineAccess.getLength() && nItem < DEFAULT_NUM_VALUSET_COUNT;
-                nItem++ )
+            pOutlineSettingsArrs[ nItem ] = new OutlineSettings_Impl;
+            OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[ nItem ];
+            pItemArr->sDescription = SVX_RESSTR( RID_SVXSTR_OUTLINENUM_DESCRIPTION_0 + nItem );
+            pItemArr->pNumSettingsArr = new NumSettingsArr_Impl;
+            Reference<XIndexAccess> xLevel = aOutlineAccess.getConstArray()[nItem];
+            for(sal_Int32 nLevel = 0; nLevel < xLevel->getCount() && nLevel < 5; nLevel++)
             {
-                pOutlineSettingsArrs[ nItem ] = new OutlineSettings_Impl;
-                OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[ nItem ];
-                pItemArr->sDescription = SVX_RESSTR( RID_SVXSTR_OUTLINENUM_DESCRIPTION_0 + nItem );
-                pItemArr->pNumSettingsArr = new NumSettingsArr_Impl;
-                Reference<XIndexAccess> xLevel = aOutlineAccess.getConstArray()[nItem];
-                for(sal_Int32 nLevel = 0; nLevel < xLevel->getCount() && nLevel < 5; nLevel++)
-                {
-                    Any aValueAny = xLevel->getByIndex(nLevel);
-                    Sequence<PropertyValue> aLevelProps;
-                    aValueAny >>= aLevelProps;
-                    NumSettings_ImplPtr pNew = lcl_CreateNumberingSettingsPtr(aLevelProps);
-                    SvxNumberFormat aNumFmt( aDefNumRule.GetLevel( nLevel) );
-                    pNew->eLabelFollowedBy = aNumFmt.GetLabelFollowedBy();
-                    pNew->nTabValue = aNumFmt.GetListtabPos();
-                    pNew->eNumAlign = aNumFmt.GetNumAdjust();
-                    pNew->nNumAlignAt = aNumFmt.GetFirstLineIndent();
-                    pNew->nNumIndentAt = aNumFmt.GetIndentAt();
-                    pItemArr->pNumSettingsArr->push_back(boost::shared_ptr<NumSettings_Impl>(pNew));
-                }
+                Any aValueAny = xLevel->getByIndex(nLevel);
+                Sequence<PropertyValue> aLevelProps;
+                aValueAny >>= aLevelProps;
+                NumSettings_ImplPtr pNew = lcl_CreateNumberingSettingsPtr(aLevelProps);
+                SvxNumberFormat aNumFmt( aDefNumRule.GetLevel( nLevel) );
+                pNew->eLabelFollowedBy = aNumFmt.GetLabelFollowedBy();
+                pNew->nTabValue = aNumFmt.GetListtabPos();
+                pNew->eNumAlign = aNumFmt.GetNumAdjust();
+                pNew->nNumAlignAt = aNumFmt.GetFirstLineIndent();
+                pNew->nNumIndentAt = aNumFmt.GetIndentAt();
+                pItemArr->pNumSettingsArr->push_back(boost::shared_ptr<NumSettings_Impl>(pNew));
             }
         }
-        catch(Exception&)
-        {
-        }
+    }
+    catch(Exception&)
+    {
     }
 }
 

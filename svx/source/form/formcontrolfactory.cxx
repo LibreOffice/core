@@ -41,8 +41,8 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/numbers.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/syslocale.hxx>
 #include <tools/gen.hxx>
 #include <tools/diagnose_ex.h>
@@ -65,6 +65,7 @@ namespace svxform
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::awt::XControlModel;
     using ::com::sun::star::form::XFormComponent;
@@ -98,10 +99,10 @@ namespace svxform
     //====================================================================
     struct FormControlFactory_Data
     {
-        ::comphelper::ComponentContext  m_aContext;
+        Reference<XComponentContext>  m_xContext;
 
-        FormControlFactory_Data( const ::comphelper::ComponentContext& _rContext )
-            :m_aContext( _rContext )
+        FormControlFactory_Data( const Reference<XComponentContext>& _rContext )
+            :m_xContext( _rContext )
         {
         }
     };
@@ -110,8 +111,13 @@ namespace svxform
     //= FormControlFactory
     //====================================================================
     //--------------------------------------------------------------------
-    FormControlFactory::FormControlFactory( const ::comphelper::ComponentContext& _rContext )
+    FormControlFactory::FormControlFactory( const Reference<XComponentContext>& _rContext )
         :m_pData( new FormControlFactory_Data( _rContext ) )
+    {
+    }
+
+    FormControlFactory::FormControlFactory( )
+        :m_pData( new FormControlFactory_Data( comphelper::getProcessComponentContext() ) )
     {
     }
 
@@ -187,7 +193,7 @@ namespace svxform
 
         //....................................................................
         static Sequence< PropertyValue > lcl_getDataSourceIndirectProperties( const Reference< XPropertySet >& _rxControlModel,
-            const ::comphelper::ComponentContext& _rContext )
+            const Reference<XComponentContext>& _rContext )
         {
             OSL_PRECOND( _rxControlModel.is(), "lcl_getDataSourceIndirectProperties: invalid model!" );
 
@@ -213,7 +219,7 @@ namespace svxform
 
                 Reference< XPropertySet > xDsProperties;
                 if ( !sDataSourceName.isEmpty() )
-                    xDsProperties = xDsProperties.query( OStaticDataAccessTools().getDataSource( sDataSourceName, _rContext.getUNOContext() ) );
+                    xDsProperties = xDsProperties.query( OStaticDataAccessTools().getDataSource( sDataSourceName, _rContext ) );
                 if ( xDsProperties.is() )
                     xDsProperties->getPropertyValue( OUString( "Info" ) ) >>= aInfo;
             }
@@ -528,7 +534,7 @@ namespace svxform
             // let's see if the data source which the form belongs to (if any)
             // has a setting for the preferred line end format
             sal_Bool bDosLineEnds = sal_False;
-            Sequence< PropertyValue > aInfo = lcl_getDataSourceIndirectProperties( _rxModel, m_pData->m_aContext );
+            Sequence< PropertyValue > aInfo = lcl_getDataSourceIndirectProperties( _rxModel, m_pData->m_xContext );
             const PropertyValue* pInfo = aInfo.getConstArray();
             const PropertyValue* pInfoEnd = pInfo + aInfo.getLength();
             for ( ; pInfo != pInfoEnd; ++pInfo )

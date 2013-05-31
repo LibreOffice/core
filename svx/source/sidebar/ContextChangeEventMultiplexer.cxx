@@ -21,7 +21,7 @@
 #include <com/sun/star/ui/ContextChangeEventObject.hpp>
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <sfx2/viewsh.hxx>
@@ -69,10 +69,8 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
 {
     try
     {
-        const ::comphelper::ComponentContext aContext (::comphelper::getProcessServiceFactory());
-        const Reference<frame::XModuleManager> xModuleManager (
-            aContext.createComponent("com.sun.star.frame.ModuleManager" ),
-            UNO_QUERY_THROW );
+        const Reference<frame::XModuleManager> xModuleManager =
+            frame::ModuleManager::create( comphelper::getProcessComponentContext() );
         return xModuleManager->identify(rxFrame);
     }
     catch (const Exception&)

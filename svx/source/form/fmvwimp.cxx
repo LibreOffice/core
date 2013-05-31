@@ -77,6 +77,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <tools/diagnose_ex.h>
@@ -103,6 +104,7 @@ using namespace ::svxform;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::style::VerticalAlignment_MIDDLE;
     using ::com::sun::star::form::FormButtonType_SUBMIT;
     using ::com::sun::star::form::binding::XValueBinding;
@@ -163,9 +165,9 @@ public:
 //========================================================================
 DBG_NAME(FormViewPageWindowAdapter)
 //------------------------------------------------------------------------
-FormViewPageWindowAdapter::FormViewPageWindowAdapter( const ::comphelper::ComponentContext& _rContext, const SdrPageWindow& _rWindow, FmXFormView* _pViewImpl )
+FormViewPageWindowAdapter::FormViewPageWindowAdapter( const css::uno::Reference<css::uno::XComponentContext>& _rContext, const SdrPageWindow& _rWindow, FmXFormView* _pViewImpl )
 :   m_xControlContainer( _rWindow.GetControlContainer() ),
-    m_aContext( _rContext ),
+    m_xContext( _rContext ),
     m_pViewImpl( _pViewImpl ),
     m_pWindow( dynamic_cast< Window* >( &_rWindow.GetPaintWindow().GetOutputDevice() ) )
 {
@@ -339,7 +341,7 @@ void FormViewPageWindowAdapter::setController(const Reference< XForm > & xForm, 
     Reference< XTabControllerModel >  xTabOrder(xForm, UNO_QUERY);
 
     // create a form controller
-    Reference< XFormController > xController( FormController::create(m_aContext.getUNOContext()) );
+    Reference< XFormController > xController( FormController::create(m_xContext) );
 
     Reference< XInteractionHandler > xHandler;
     if ( _rxParentController.is() )
@@ -417,9 +419,8 @@ void FormViewPageWindowAdapter::updateTabOrder( const Reference< XForm >& _rxFor
 }
 
 //------------------------------------------------------------------------
-FmXFormView::FmXFormView(const ::comphelper::ComponentContext& _rContext, FmFormView* _pView )
-    :m_aContext( _rContext )
-    ,m_pMarkedGrid(NULL)
+FmXFormView::FmXFormView(FmFormView* _pView )
+    :m_pMarkedGrid(NULL)
     ,m_pView(_pView)
     ,m_nActivationEvent(0)
     ,m_nErrorMessageEvent( 0 )
@@ -577,7 +578,7 @@ void FmXFormView::addWindow(const SdrPageWindow& rWindow)
         &&  ( !findWindow( xCC ).is() )
         )
     {
-        PFormViewPageWindowAdapter pAdapter = new FormViewPageWindowAdapter( m_aContext, rWindow, this );
+        PFormViewPageWindowAdapter pAdapter = new FormViewPageWindowAdapter( comphelper::getProcessComponentContext(), rWindow, this );
         m_aPageWindowAdapters.push_back( pAdapter );
 
         // Am ControlContainer horchen um Aenderungen mitzbekommen
@@ -1004,7 +1005,7 @@ void FmXFormView::onCreatedFormObject( FmFormObj& _rFormObject )
         return;
 
     // some initial property defaults
-    FormControlFactory aControlFactory( m_aContext );
+    FormControlFactory aControlFactory;
     aControlFactory.initializeControlModel( pShellImpl->getDocumentType(), _rFormObject );
 
     if ( !pShellImpl->GetWizardUsing() )
@@ -1067,7 +1068,8 @@ IMPL_LINK( FmXFormView, OnStartControlWizard, void*, /**/ )
         Reference< XExecutableDialog > xWizard;
         try
         {
-            m_aContext.createComponentWithArguments( pWizardAsciiName, aWizardArgs.getWrappedPropertyValues(), xWizard );
+            Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+            xWizard.set( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii(pWizardAsciiName), aWizardArgs.getWrappedPropertyValues(), xContext ), UNO_QUERY);;
         }
         catch (const Exception&)
         {
@@ -1161,7 +1163,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
 
         // obtain the data source
         if ( !xDataSource.is() )
-            xDataSource = OStaticDataAccessTools().getDataSource( sDataSource, m_aContext.getUNOContext() );
+            xDataSource = OStaticDataAccessTools().getDataSource( sDataSource, comphelper::getProcessComponentContext() );
 
         // and the connection, if necessary
         if ( !xConnection.is() )
@@ -1169,7 +1171,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
                 sDataSource,
                 OUString(),
                 OUString(),
-                m_aContext.getUNOContext()
+                comphelper::getProcessComponentContext()
             ) );
     }
     catch (const SQLException&)
@@ -1489,7 +1491,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
         const Reference< XDataSource >& _rxDataSource, const OUString& _rDataSourceName,
         const OUString& _rCommand, const sal_Int32 _nCommandType )
 {
-    if  (   !createControlLabelPair( m_aContext, _rOutDev, _nXOffsetMM, _nYOffsetMM,
+    if  (   !createControlLabelPair( _rOutDev, _nXOffsetMM, _nYOffsetMM,
                 _rxField, _rxNumberFormats, _nControlObjectID, _rFieldPostfix, FmFormInventor, OBJ_FM_FIXEDTEXT,
                 NULL, NULL, NULL, _rpLabel, _rpControl )
         )
@@ -1501,7 +1503,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
     lcl_insertIntoFormComponentHierarchy_throw( *m_pView, *_rpControl, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType );
 
     // some context-dependent initializations
-    FormControlFactory aControlFactory( m_aContext );
+    FormControlFactory aControlFactory;
     if ( _rpLabel )
         aControlFactory.initializeControlModel( impl_getDocumentType(), *_rpLabel );
     aControlFactory.initializeControlModel( impl_getDocumentType(), *_rpControl );
@@ -1510,8 +1512,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
 }
 
 //------------------------------------------------------------------------
-bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& _rContext,
-    OutputDevice& _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM, const Reference< XPropertySet >& _rxField,
+bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
+    const Reference< XPropertySet >& _rxField,
     const Reference< XNumberFormats >& _rxNumberFormats, sal_uInt16 _nControlObjectID,
     const OUString& _rFieldPostfix, sal_uInt32 _nInventor, sal_uInt16 _nLabelObjectID,
     SdrPage* _pLabelPage, SdrPage* _pControlPage, SdrModel* _pModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
@@ -1660,7 +1662,7 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
 
     if ( _rxField.is() )
     {
-        FormControlFactory aControlFactory( _rContext );
+        FormControlFactory aControlFactory;
         aControlFactory.initializeFieldDependentProperties( _rxField, xControlSet, _rxNumberFormats );
     }
 

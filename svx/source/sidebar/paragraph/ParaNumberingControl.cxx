@@ -27,7 +27,7 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <svtools/unitconv.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/text/XDefaultNumberingProvider.hpp>
+#include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingFormatter.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
@@ -44,12 +44,7 @@ namespace svx { namespace sidebar {
 
 Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
 {
-    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    Reference < XInterface > xI = xMSF->createInstance(
-        ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
-    Reference<XDefaultNumberingProvider> xRet(xI, UNO_QUERY);
-
-    return xRet;
+    return DefaultNumberingProvider::create( comphelper::getProcessComponentContext() );
 }
 
 ParaNumberingControl::ParaNumberingControl(

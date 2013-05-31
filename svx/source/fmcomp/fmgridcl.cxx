@@ -545,7 +545,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         else
             xCol->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName));
 
-        FormControlFactory aControlFactory( ::comphelper::getProcessServiceFactory() );
+        FormControlFactory aControlFactory;
         aControlFactory.initializeControlModel( DocumentClassification::classifyHostDocument( xCols ), xCol );
         aControlFactory.initializeFieldDependentProperties( xField, xCol, xNumberFormats );
 
@@ -938,7 +938,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             }
             else
             {
-                FormControlFactory factory( ::comphelper::getProcessServiceFactory() );
+                FormControlFactory factory;
 
                 OUString sLabel = factory.getDefaultUniqueName_ByComponentType(
                     Reference< XNameAccess >( xCols, UNO_QUERY_THROW ), xNewCol );
