@@ -427,7 +427,6 @@ namespace svxform
 
         ::svxform::OControlExchangeHelper   m_aControlExchange;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
         NavigatorTreeModel* m_pNavModel;
         SvTreeListEntry*        m_pRootEntry;
         SvTreeListEntry*        m_pEditEntry;
@@ -509,7 +508,7 @@ namespace svxform
         virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
     public:
-        NavigatorTree(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&   _xORB, Window* pParent );
+        NavigatorTree(Window* pParent );
         virtual ~NavigatorTree();
 
         void Clear();

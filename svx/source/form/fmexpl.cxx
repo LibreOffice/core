@@ -601,7 +601,7 @@ namespace svxform
         DBG_CTOR(NavigatorFrame,NULL);
         SetHelpId( HID_FORM_NAVIGATOR_WIN );
 
-        m_pNavigatorTree = new NavigatorTree(comphelper::getProcessServiceFactory(), this );
+        m_pNavigatorTree = new NavigatorTree( this );
         m_pNavigatorTree->Show();
         SetText( SVX_RES(RID_STR_FMEXPLORER) );
         SfxDockingWindow::SetFloatingSize( Size(200,200) );

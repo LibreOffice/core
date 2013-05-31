@@ -119,11 +119,9 @@ namespace svxform
     //========================================================================
 
     //------------------------------------------------------------------------
-    NavigatorTree::NavigatorTree( const Reference< XMultiServiceFactory >& _xORB,
-                           Window* pParent )
+    NavigatorTree::NavigatorTree( Window* pParent )
         :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL ) // #100258# OJ WB_HSCROLL added
         ,m_aControlExchange(this)
-        ,m_xORB(_xORB)
         ,m_pNavModel( NULL )
         ,m_pRootEntry(NULL)
         ,m_pEditEntry(NULL)
@@ -1364,7 +1362,8 @@ namespace svxform
 
         //////////////////////////////////////////////////////////////////////
         // Neue Form erzeugen
-        Reference< XForm >  xNewForm(m_xORB->createInstance(FM_SUN_COMPONENT_FORM), UNO_QUERY);
+        Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+        Reference< XForm >  xNewForm(xContext->getServiceManager()->createInstanceWithContext(FM_SUN_COMPONENT_FORM, xContext), UNO_QUERY);
         if (!xNewForm.is())
             return;
 
