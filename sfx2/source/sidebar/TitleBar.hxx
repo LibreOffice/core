@@ -20,7 +20,7 @@
 
 #include "Paint.hxx"
 
-#include <vcl/window.hxx>
+#include <vcl/fixed.hxx>
 #include "sfx2/sidebar/SidebarToolBox.hxx"
 
 
@@ -53,6 +53,7 @@ public:
 
 protected:
     SidebarToolBox maToolBox;
+    ::rtl::OUString msTitle;
 
     virtual Rectangle GetTitleArea (const Rectangle& rTitleBarBox) = 0;
     virtual void PaintDecoration (const Rectangle& rTitleBarBox) = 0;
@@ -60,9 +61,9 @@ protected:
     virtual sidebar::Paint GetBackgroundPaint (void) = 0;
     virtual Color GetTextColor (void) = 0;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex);
+    virtual cssu::Reference<css::accessibility::XAccessible> CreateAccessible (void);
 
 private:
-    ::rtl::OUString msTitle;
     Image maIcon;
 
     void PaintTitle (const Rectangle& rTitleBox);
