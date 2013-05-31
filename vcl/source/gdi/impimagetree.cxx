@@ -299,14 +299,8 @@ bool ImplImageTree::find(
     }
 
     if (!m_path.second.is()) {
-        css::uno::Sequence< css::uno::Any > args(1);
-        args[0] <<= m_path.first + ".zip";
         try {
-            m_path.second.set(
-                comphelper::getProcessServiceFactory()->createInstanceWithArguments(
-                    OUString( "com.sun.star.packages.zip.ZipFileAccess"),
-                    args),
-                css::uno::UNO_QUERY_THROW);
+            m_path.second = css::packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), m_path.first + ".zip");
         } catch (css::uno::RuntimeException &) {
             throw;
         } catch (const css::uno::Exception & e) {
@@ -346,15 +340,9 @@ void ImplImageTree::loadImageLinks()
 
     if ( !m_path.second.is() )
     {
-        css::uno::Sequence< css::uno::Any > args(1);
-        args[0] <<= m_path.first + ".zip";
         try
         {
-            m_path.second.set(
-                comphelper::getProcessServiceFactory()->createInstanceWithArguments(
-                    OUString( "com.sun.star.packages.zip.ZipFileAccess"),
-                    args),
-                css::uno::UNO_QUERY_THROW);
+            m_path.second = css::packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), m_path.first + ".zip");
         }
         catch (css::uno::RuntimeException &)
         {

@@ -11,6 +11,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/style/TabStop.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -586,9 +587,7 @@ void Test::testCellBtlr()
     save("Office Open XML Text", aTempFile);
 
     // Read the XML stream we're interested in.
-    uno::Sequence<uno::Any> aArgs(1);
-    aArgs[0] <<= OUString(aTempFile.GetURL());
-    uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments("com.sun.star.packages.zip.ZipFileAccess", aArgs), uno::UNO_QUERY);
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), aTempFile.GetURL());
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName("word/document.xml"), uno::UNO_QUERY);
     boost::shared_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
     pStream->Seek(STREAM_SEEK_TO_END);
