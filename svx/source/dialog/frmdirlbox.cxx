@@ -56,7 +56,9 @@ FrameDirectionListBox::~FrameDirectionListBox()
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFrameDirectionListBox(Window *pParent, VclBuilder::stringmap &)
 {
-    return new FrameDirectionListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP);
+    FrameDirectionListBox* pListBox = new FrameDirectionListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP);
+    pListBox->EnableAutoSize(true);
+    return pListBox;
 }
 
 
