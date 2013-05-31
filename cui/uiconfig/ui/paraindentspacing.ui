@@ -475,6 +475,11 @@
             <property name="valign">start</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="drawingareaWN_EXAMPLE-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes">Example</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>

@@ -678,9 +678,6 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,  const SfxItemS
 
     Init_Impl();
     m_pFLineIndent->SetMin(-9999);    // is set to 0 on default
-
-    //aExampleWin.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
-
 }
 
 SvxStdParagraphTabPage::~SvxStdParagraphTabPage()
