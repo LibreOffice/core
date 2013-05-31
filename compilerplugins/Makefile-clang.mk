@@ -31,6 +31,10 @@ CLANGOUTDIR=$(BUILDDIR)/compilerplugins/obj
 
 QUIET=$(if $(VERBOSE)$(verbose),,@)
 
+ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
+CLANGWERROR := -Werror
+endif
+
 compilerplugins: compilerplugins-build
 
 # The list of source files, generated automatically (all files in clang/, but not subdirs).
@@ -69,7 +73,7 @@ CLANGOBJS=
 define clangbuildsrc
 $(3): $(2) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
 	@echo [build CXX] $(subst $(SRCDIR)/,,$(2))
-	$(QUIET)$(CXX) $(CLANGCXXFLAGS) $(CLANGDEFS) $(CLANGINCLUDES) -I$(BUILDDIR)/config_host $(2) -fPIC -std=c++11 -c -o $(3) -MMD -MT $(3) -MP -MF $(CLANGOUTDIR)/$(1).d
+	$(QUIET)$(CXX) $(CLANGCXXFLAGS) $(CLANGWERROR) $(CLANGDEFS) $(CLANGINCLUDES) -I$(BUILDDIR)/config_host $(2) -fPIC -std=c++11 -c -o $(3) -MMD -MT $(3) -MP -MF $(CLANGOUTDIR)/$(1).d
 
 -include $(CLANGOUTDIR)/$(1).d
 
