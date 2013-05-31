@@ -22,7 +22,7 @@ class PostfixIncrementFix
     {
     public:
         explicit PostfixIncrementFix( CompilerInstance& compiler, Rewriter& rewriter );
-        virtual void run();
+        virtual void run() override;
         bool VisitFunctionDecl( const FunctionDecl* declaration );
     private:
         typedef std::vector< const Stmt* > StmtParents;

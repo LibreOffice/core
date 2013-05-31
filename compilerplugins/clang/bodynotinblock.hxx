@@ -22,7 +22,7 @@ class BodyNotInBlock
     {
     public:
         explicit BodyNotInBlock( CompilerInstance& compiler );
-        virtual void run();
+        virtual void run() override;
         bool VisitFunctionDecl( const FunctionDecl* declaration );
     private:
         typedef vector< const Stmt* > StmtParents;

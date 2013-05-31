@@ -23,7 +23,7 @@ class Tutorial2
     {
     public:
         Tutorial2( CompilerInstance& compiler );
-        virtual void run();
+        virtual void run() override;
         // Will be called for every if statement.
         bool VisitIfStmt( const IfStmt* ifstmt );
     private:

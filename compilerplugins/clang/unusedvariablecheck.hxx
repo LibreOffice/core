@@ -22,7 +22,7 @@ class UnusedVariableCheck
     {
     public:
         explicit UnusedVariableCheck( CompilerInstance& compiler );
-        virtual void run();
+        virtual void run() override;
         bool VisitVarDecl( const VarDecl* var );
     };
 

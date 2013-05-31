@@ -27,7 +27,7 @@ class Tutorial1
         // Ctor, nothing special.
         Tutorial1( CompilerInstance& compiler );
         // The function that will be called to perform the actual action.
-        virtual void run();
+        virtual void run() override;
         // Function from Clang, it will be called for every return statement in the source.
         bool VisitReturnStmt( const ReturnStmt* returnstmt );
     };

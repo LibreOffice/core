@@ -24,7 +24,7 @@ class SalLogAreas
     {
     public:
         explicit SalLogAreas( CompilerInstance& compiler );
-        virtual void run();
+        virtual void run() override;
         bool VisitFunctionDecl( const FunctionDecl* function );
         bool VisitCallExpr( const CallExpr* call );
     private:
