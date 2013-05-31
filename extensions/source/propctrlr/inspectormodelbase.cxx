@@ -156,9 +156,8 @@ namespace pcr
     //====================================================================
     //= ImplInspectorModel
     //====================================================================
-    ImplInspectorModel::ImplInspectorModel( const Reference< XComponentContext >& _rxContext )
+    ImplInspectorModel::ImplInspectorModel()
         :ImplInspectorModel_PBase( GetBroadcastHelper() )
-        ,m_aContext( _rxContext )
         ,m_pProperties( new InspectorModelProperties( m_aMutex ) )
     {
     }

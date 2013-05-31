@@ -189,7 +189,7 @@ void OPatternModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm 
     if ( !xField.is() )
         return;
 
-    m_pFormattedValue.reset( new ::dbtools::FormattedColumnValue( getContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
+    m_pFormattedValue.reset( new ::dbtools::FormattedColumnValue( getContext().getUNOContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
 }
 
 //------------------------------------------------------------------------------

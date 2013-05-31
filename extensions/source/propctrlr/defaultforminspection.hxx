@@ -66,7 +66,7 @@ namespace pcr
                         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
     public:
-        DefaultFormComponentInspectorModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext, bool _bUseFormFormComponentHandlers = true );
+        DefaultFormComponentInspectorModel( bool _bUseFormFormComponentHandlers = true );
 
     protected:
         // Service constructors

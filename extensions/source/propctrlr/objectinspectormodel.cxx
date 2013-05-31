@@ -59,7 +59,7 @@ namespace pcr
         Sequence< Any >             m_aFactories;
 
     public:
-        ObjectInspectorModel( const Reference< XComponentContext >& _rxContext );
+        ObjectInspectorModel();
 
         // XObjectInspectorModel
         virtual Sequence< Any > SAL_CALL getHandlerFactories() throw (RuntimeException);
@@ -93,8 +93,8 @@ namespace pcr
     //====================================================================
     //= ObjectInspectorModel
     //====================================================================
-    ObjectInspectorModel::ObjectInspectorModel( const Reference< XComponentContext >& _rxContext )
-        :ImplInspectorModel( _rxContext )
+    ObjectInspectorModel::ObjectInspectorModel()
+        :ImplInspectorModel()
     {
     }
 
@@ -181,7 +181,7 @@ namespace pcr
     //--------------------------------------------------------------------
     Reference< XInterface > SAL_CALL ObjectInspectorModel::Create(const Reference< XComponentContext >& _rxContext )
     {
-        return *( new ObjectInspectorModel( _rxContext ) );
+        return *( new ObjectInspectorModel() );
     }
 
     //--------------------------------------------------------------------

@@ -21,11 +21,7 @@
 #define EXTENSIONS_LOGGERCONFIG_HXX
 
 #include <com/sun/star/logging/XLogger.hpp>
-
-namespace comphelper
-{
-    class ComponentContext;
-}
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 //........................................................................
 namespace logging
@@ -44,7 +40,7 @@ namespace logging
         run, be moved to the logger implementation - not sure if it's the best place.
     */
     void    initializeLoggerFromConfiguration(
-                const ::comphelper::ComponentContext& _rContext,
+                const css::uno::Reference<css::uno::XComponentContext>& _rContext,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::logging::XLogger >& _rxLogger
             );
 

@@ -37,8 +37,6 @@
 #include <osl/process.h>
 #include <rtl/ustrbuf.hxx>
 
-#include <comphelper/componentcontext.hxx>
-
 #include <cppuhelper/component_context.hxx>
 
 #include <vector>
@@ -174,7 +172,7 @@ namespace logging
 
         //----------------------------------------------------------------
         Reference< XInterface > lcl_createInstanceFromSetting_throw(
-                const ::comphelper::ComponentContext& _rContext,
+                const Reference<XComponentContext>& _rContext,
                 const Reference< XLogger >& _rxLogger,
                 const Reference< XNameAccess >& _rxLoggerSettings,
                 const sal_Char* _pServiceNameAsciiNodeName,
@@ -219,11 +217,13 @@ namespace logging
                 {
                     Sequence< Any > aConstructionArgs(1);
                     aConstructionArgs[0] <<= aSettings;
-                    bSuccess = _rContext.createComponentWithArguments( sServiceName, aConstructionArgs, xInstance );
+                    xInstance = _rContext->getServiceManager()->createInstanceWithArgumentsAndContext(sServiceName, aConstructionArgs, _rContext);
+                    bSuccess = xInstance.is();
                 }
                 else
                 {
-                    bSuccess = _rContext.createComponent( sServiceName, xInstance );
+                    xInstance = _rContext->getServiceManager()->createInstanceWithContext(sServiceName, _rContext);
+                    bSuccess = xInstance.is();
                 }
 
                 if ( !bSuccess )
@@ -235,7 +235,7 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    void initializeLoggerFromConfiguration( const ::comphelper::ComponentContext& _rContext, const Reference< XLogger >& _rxLogger )
+    void initializeLoggerFromConfiguration( const Reference<XComponentContext>& _rContext, const Reference< XLogger >& _rxLogger )
     {
         try
         {
@@ -243,8 +243,7 @@ namespace logging
                 throw NullPointerException();
 
             Reference< XMultiServiceFactory > xConfigProvider(
-                com::sun::star::configuration::theDefaultProvider::get(
-                    _rContext.getUNOContext()));
+                com::sun::star::configuration::theDefaultProvider::get(_rContext));
 
             // write access to the "Settings" node (which includes settings for all loggers)
             Sequence< Any > aArguments(1);

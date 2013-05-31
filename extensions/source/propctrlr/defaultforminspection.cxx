@@ -59,8 +59,8 @@ namespace pcr
     //= DefaultFormComponentInspectorModel
     //====================================================================
     //--------------------------------------------------------------------
-    DefaultFormComponentInspectorModel::DefaultFormComponentInspectorModel( const Reference< XComponentContext >& _rxContext, bool _bUseFormFormComponentHandlers )
-        :ImplInspectorModel( _rxContext )
+    DefaultFormComponentInspectorModel::DefaultFormComponentInspectorModel( bool _bUseFormFormComponentHandlers )
+        :ImplInspectorModel()
         ,m_bUseFormComponentHandlers( _bUseFormFormComponentHandlers )
         ,m_bConstructed( false )
         ,m_pInfoService( new OPropertyInfoService )
@@ -99,9 +99,9 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL DefaultFormComponentInspectorModel::Create( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > SAL_CALL DefaultFormComponentInspectorModel::Create( const Reference< XComponentContext >& )
     {
-        return *new DefaultFormComponentInspectorModel( _rxContext );
+        return *new DefaultFormComponentInspectorModel();
     }
 
     //--------------------------------------------------------------------

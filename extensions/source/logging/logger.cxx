@@ -28,8 +28,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/logging/XLoggerPool.hpp>
 
-#include <comphelper/componentcontext.hxx>
-
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -89,7 +87,6 @@ namespace logging
                         ,public EventLogger_Base
     {
     private:
-        ::comphelper::ComponentContext      m_aContext;
         ::cppu::OInterfaceContainerHelper   m_aHandlers;
         oslInterlockedCount                 m_nEventNumber;
 
@@ -145,7 +142,7 @@ namespace logging
 
     private:
         ::osl::Mutex                    m_aMutex;
-        ::comphelper::ComponentContext  m_aContext;
+        Reference<XComponentContext>    m_xContext;
         ImplPool                        m_aImpl;
 
     public:
@@ -172,15 +169,14 @@ namespace logging
     //====================================================================
     //--------------------------------------------------------------------
     EventLogger::EventLogger( const Reference< XComponentContext >& _rxContext, const OUString& _rName )
-        :m_aContext( _rxContext )
-        ,m_aHandlers( m_aMutex )
+        :m_aHandlers( m_aMutex )
         ,m_nEventNumber( 0 )
         ,m_nLogLevel( LogLevel::OFF )
         ,m_sName( _rName )
     {
         osl_atomic_increment( &m_refCount );
         {
-            initializeLoggerFromConfiguration( m_aContext, this );
+            initializeLoggerFromConfiguration( _rxContext, this );
         }
         osl_atomic_decrement( &m_refCount );
     }
@@ -306,7 +302,7 @@ namespace logging
     //====================================================================
     //--------------------------------------------------------------------
     LoggerPool::LoggerPool( const Reference< XComponentContext >& _rxContext )
-        :m_aContext( _rxContext )
+        :m_xContext( _rxContext )
     {
     }
 
@@ -364,7 +360,7 @@ namespace logging
         if ( !xLogger.is() )
         {
             // never requested before, or already dead
-            xLogger = new EventLogger( m_aContext.getUNOContext(), _rName );
+            xLogger = new EventLogger( m_xContext, _rName );
             rLogger = xLogger;
         }
 

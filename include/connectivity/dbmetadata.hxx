@@ -21,14 +21,10 @@
 #define CONNECTIVITY_INC_CONNECTIVITY_DBMETADATA_HXX
 
 #include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <memory>
 #include "connectivity/dbtoolsdllapi.hxx"
-
-namespace comphelper
-{
-    class ComponentContext;
-}
 
 //........................................................................
 namespace dbtools
@@ -170,7 +166,7 @@ namespace dbtools
                 the component context we operate in. Might be needed to create the
                 css.sdbc.DriverManager instance.
         */
-        bool    supportsUserAdministration( const ::comphelper::ComponentContext& _rContext ) const;
+        bool    supportsUserAdministration( const css::uno::Reference<css::uno::XComponentContext>& _rContext ) const;
 
         /** determines whether in the application UI, empty table folders (aka catalogs/schemas) should be displayed
         */

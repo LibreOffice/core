@@ -23,9 +23,9 @@
 #include <com/sun/star/inspection/XPropertyControlObserver.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase2.hxx>
-#include <comphelper/componentcontext.hxx>
 
 class Window;
 
@@ -43,13 +43,12 @@ namespace pcr
     class DefaultHelpProvider : public DefaultHelpProvider_Base
     {
     private:
-        ::comphelper::ComponentContext  m_aContext;
         bool                            m_bConstructed;
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >
                                         m_xInspectorUI;
 
     public:
-        DefaultHelpProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
+        DefaultHelpProvider();
 
         // XServiceInfo - static versions
         static OUString getImplementationName_static(  ) throw(::com::sun::star::uno::RuntimeException);

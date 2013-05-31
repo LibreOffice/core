@@ -76,10 +76,6 @@ namespace dbtools {
     class FormattedColumnValue;
 }
 
-namespace comphelper {
-    class ComponentContext;
-}
-
 //========================================================================
 //= entry into this library
 //========================================================================
@@ -336,7 +332,7 @@ namespace connectivity
         public:
             /// creates a simple version of the class OSQLParser
             virtual ::rtl::Reference< ISQLParser > createSQLParser(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                 const IParseContext* _pContext
                 ) const = 0;
 
@@ -350,7 +346,7 @@ namespace connectivity
             virtual ::rtl::Reference< IDataAccessTools > getDataAccessTools() = 0;
 
             virtual ::std::auto_ptr< ::dbtools::FormattedColumnValue >  createFormattedColumnValue(
-                const ::comphelper::ComponentContext& _rContext,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn
             ) = 0;

@@ -331,7 +331,7 @@ namespace svxform
     //----------------------------------------------------------------
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ::dbtools::FormattedColumnValue > DBToolsObjectFactory::createFormattedColumnValue(
-        const ::comphelper::ComponentContext& _rContext, const Reference< XRowSet >& _rxRowSet, const Reference< XPropertySet >& _rxColumn )
+        const Reference<XComponentContext>& _rContext, const Reference< XRowSet >& _rxRowSet, const Reference< XPropertySet >& _rxColumn )
     {
         ::std::auto_ptr< ::dbtools::FormattedColumnValue > pValue;
         if ( ensureLoaded() )

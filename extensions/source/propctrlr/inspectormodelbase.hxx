@@ -23,12 +23,12 @@
 #include <com/sun/star/inspection/XObjectInspectorModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/propshlp.hxx>
 
 #include <comphelper/broadcasthelper.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <memory>
@@ -54,14 +54,13 @@ namespace pcr
             ,public ImplInspectorModel_PBase
     {
     protected:
-        ::comphelper::ComponentContext                                  m_aContext;
         ::std::auto_ptr< InspectorModelProperties >                     m_pProperties;
 
     protected:
         ~ImplInspectorModel();
 
     public:
-        ImplInspectorModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
+        ImplInspectorModel();
 
         DECLARE_XINTERFACE()
         DECLARE_XTYPEPROVIDER()

@@ -628,7 +628,7 @@ void OComboBoxModel::loadData( bool _bForce )
                 if ( !xDataField.is() )
                     return;
 
-                ::dbtools::FormattedColumnValue aValueFormatter( getContext(), xForm, xDataField );
+                ::dbtools::FormattedColumnValue aValueFormatter( getContext().getUNOContext(), xForm, xDataField );
 
                 // Fill Lists
                 sal_Int16 i = 0;
@@ -684,7 +684,7 @@ void OComboBoxModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm
 {
     Reference<XPropertySet> xField = getField();
     if ( xField.is() )
-        m_pValueFormatter.reset( new ::dbtools::FormattedColumnValue( getContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
+        m_pValueFormatter.reset( new ::dbtools::FormattedColumnValue( getContext().getUNOContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
     getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= m_aDesignModeStringItems;
 
     // Only load data if a ListSource was supplied

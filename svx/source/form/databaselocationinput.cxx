@@ -25,7 +25,6 @@
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -44,6 +43,7 @@ namespace svx
 
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
@@ -57,7 +57,7 @@ namespace svx
     {
     public:
         DatabaseLocationInputController_Impl(
-            const ::comphelper::ComponentContext&   _rContext,
+            const Reference<XComponentContext>&     _rContext,
             ::svt::OFileURLControl&                 _rLocationInput,
             PushButton&                             _rBrowseButton
         );
@@ -76,7 +76,7 @@ namespace svx
         DECL_LINK( OnControlAction, VclWindowEvent* );
 
     private:
-        const ::comphelper::ComponentContext    m_aContext;
+        const Reference<XComponentContext>      m_xContext;
         ::svt::OFileURLControl&                 m_rLocationInput;
         PushButton&                             m_rBrowseButton;
         Sequence< OUString >             m_aFilterExtensions;
@@ -85,9 +85,9 @@ namespace svx
     };
 
     //--------------------------------------------------------------------
-    DatabaseLocationInputController_Impl::DatabaseLocationInputController_Impl( const ::comphelper::ComponentContext& _rContext,
+    DatabaseLocationInputController_Impl::DatabaseLocationInputController_Impl( const Reference<XComponentContext>& _rContext,
             ::svt::OFileURLControl& _rLocationInput, PushButton& _rBrowseButton )
-        :m_aContext( _rContext )
+        :m_xContext( _rContext )
         ,m_rLocationInput( _rLocationInput )
         ,m_rBrowseButton( _rBrowseButton )
         ,m_aFilterExtensions()
@@ -161,7 +161,7 @@ namespace svx
             // get the name of the default filter for database documents
             ::utl::OConfigurationTreeRoot aConfig(
                 ::utl::OConfigurationTreeRoot::createWithComponentContext(
-                    m_aContext.getUNOContext(),
+                    m_xContext,
                     OUString( "/org.openoffice.Setup/Office/Factories/com.sun.star.sdb.OfficeDatabaseDocument" )
             ) );
             OUString sDatabaseFilter;
@@ -169,14 +169,14 @@ namespace svx
 
             // get the type this filter is responsible for
             Reference< XNameAccess > xFilterFactory(
-                m_aContext.createComponent( "com.sun.star.document.FilterFactory" ),
+                m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", m_xContext),
                 UNO_QUERY_THROW );
             ::comphelper::NamedValueCollection aFilterProperties( xFilterFactory->getByName( sDatabaseFilter ) );
             OUString sDocumentType = aFilterProperties.getOrDefault( "Type", OUString() );
 
             // get the extension(s) for this type
             Reference< XNameAccess > xTypeDetection(
-                m_aContext.createComponent( "com.sun.star.document.TypeDetection" ),
+                m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", m_xContext),
                 UNO_QUERY_THROW );
 
             ::comphelper::NamedValueCollection aTypeProperties( xTypeDetection->getByName( sDocumentType ) );
@@ -267,7 +267,7 @@ namespace svx
     //= DatabaseLocationInputController
     //====================================================================
     //--------------------------------------------------------------------
-    DatabaseLocationInputController::DatabaseLocationInputController( const ::comphelper::ComponentContext& _rContext,
+    DatabaseLocationInputController::DatabaseLocationInputController( const Reference<XComponentContext>& _rContext,
             ::svt::OFileURLControl& _rLocationInput, PushButton& _rBrowseButton )
         :m_pImpl( new DatabaseLocationInputController_Impl( _rContext, _rLocationInput, _rBrowseButton ) )
     {

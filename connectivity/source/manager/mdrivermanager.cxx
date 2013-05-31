@@ -65,7 +65,7 @@ class ODriverEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
 {
     friend class OSDBCDriverManager;
 
-    DECLARE_STL_VECTOR( SdbcDriver, DriverArray );
+    DECLARE_STL_VECTOR( Reference< XDriver >, DriverArray );
     DriverArray                 m_aDrivers;
     ConstDriverArrayIterator    m_aPos;
     // order matters!
@@ -127,9 +127,9 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
     };
 
     /// an STL functor which extracts a SdbcDriver from a DriverAccess
-    struct ExtractDriverFromAccess : public ::std::unary_function< DriverAccess, SdbcDriver >
+    struct ExtractDriverFromAccess : public ::std::unary_function< DriverAccess, Reference<XDriver> >
     {
-        SdbcDriver operator()( const DriverAccess& _rAccess ) const
+        Reference<XDriver> operator()( const DriverAccess& _rAccess ) const
         {
             return _rAccess.xDriver;
         }
@@ -142,16 +142,16 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         ExtractAfterLoad() : ExtractAfterLoad_BASE( ExtractDriverFromAccess(), EnsureDriver() ) { }
     };
 
-    struct ExtractDriverFromCollectionElement : public ::std::unary_function< DriverCollection::value_type, SdbcDriver >
+    struct ExtractDriverFromCollectionElement : public ::std::unary_function< DriverCollection::value_type, Reference<XDriver> >
     {
-        SdbcDriver operator()( const DriverCollection::value_type& _rElement ) const
+        Reference<XDriver> operator()( const DriverCollection::value_type& _rElement ) const
         {
             return _rElement.second;
         }
     };
 
     // predicate for checking whether or not a driver accepts a given URL
-    class AcceptsURL : public ::std::unary_function< SdbcDriver, bool >
+    class AcceptsURL : public ::std::unary_function< Reference<XDriver>, bool >
     {
     protected:
         const OUString& m_rURL;
@@ -161,7 +161,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         AcceptsURL( const OUString& _rURL ) : m_rURL( _rURL ) { }
 
         //.................................................................
-        bool operator()( const SdbcDriver& _rDriver ) const
+        bool operator()( const Reference<XDriver>& _rDriver ) const
         {
             // ask the driver
             if ( _rDriver.is() && _rDriver->acceptsURL( m_rURL ) )
@@ -172,7 +172,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         }
     };
 
-    static sal_Int32 lcl_getDriverPrecedence( const ::comphelper::ComponentContext& _rContext, Sequence< OUString >& _rPrecedence )
+    static sal_Int32 lcl_getDriverPrecedence( const Reference<XComponentContext>& _rContext, Sequence< OUString >& _rPrecedence )
     {
         _rPrecedence.realloc( 0 );
         try
@@ -185,8 +185,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
 
             // create a configuration provider
             Reference< XMultiServiceFactory > xConfigurationProvider(
-                com::sun::star::configuration::theDefaultProvider::get(
-                    _rContext.getUNOContext() ) );
+                com::sun::star::configuration::theDefaultProvider::get( _rContext ) );
 
             // one argument for creating the node access: the path to the configuration node
             Sequence< Any > aCreationArgs(1);
@@ -242,9 +241,9 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
 //==========================================================================
 //--------------------------------------------------------------------------
 OSDBCDriverManager::OSDBCDriverManager( const Reference< XComponentContext >& _rxContext )
-    :m_aContext( _rxContext )
+    :m_xContext( _rxContext )
     ,m_aEventLogger( _rxContext, "org.openoffice.logging.sdbc.DriverManager" )
-    ,m_aDriverConfig(m_aContext.getUNOContext())
+    ,m_aDriverConfig(m_xContext)
     ,m_nLoginTimeout(0)
 {
     // bootstrap all objects supporting the .sdb.Driver service
@@ -261,7 +260,7 @@ OSDBCDriverManager::~OSDBCDriverManager()
 
 void OSDBCDriverManager::bootstrapDrivers()
 {
-    Reference< XContentEnumerationAccess > xEnumAccess( m_aContext.getLegacyServiceFactory(), UNO_QUERY );
+    Reference< XContentEnumerationAccess > xEnumAccess( m_xContext->getServiceManager(), UNO_QUERY );
     Reference< XEnumeration > xEnumDrivers;
     if (xEnumAccess.is())
         xEnumDrivers = xEnumAccess->createContentEnumeration(SERVICE_SDBC_DRIVER);
@@ -288,7 +287,7 @@ void OSDBCDriverManager::bootstrapDrivers()
                 {   // yes -> no need to load the driver immediately (load it later when needed)
                     aDriverDescriptor.sImplementationName = xSI->getImplementationName();
                     aDriverDescriptor.xComponentFactory = xFactory;
-                    aDriverDescriptor.xUNOContext = m_aContext.getUNOContext();
+                    aDriverDescriptor.xUNOContext = m_xContext;
                     bValidDescriptor = sal_True;
 
                     m_aEventLogger.log( LogLevel::CONFIG,
@@ -299,7 +298,7 @@ void OSDBCDriverManager::bootstrapDrivers()
                 else
                 {
                     // no -> create the driver
-                    Reference< XDriver > xDriver( xFactory->createInstanceWithContext( m_aContext.getUNOContext() ), UNO_QUERY );
+                    Reference< XDriver > xDriver( xFactory->createInstanceWithContext( m_xContext ), UNO_QUERY );
                     OSL_ENSURE( xDriver.is(), "OSDBCDriverManager::bootstrapDrivers: a driver which is no driver?!" );
 
                     if ( xDriver.is() )
@@ -341,7 +340,7 @@ void OSDBCDriverManager::initializeDriverPrecedence()
     {
         // get the precedence of the drivers from the configuration
         Sequence< OUString > aDriverOrder;
-        if ( 0 == lcl_getDriverPrecedence( m_aContext, aDriverOrder ) )
+        if ( 0 == lcl_getDriverPrecedence( m_xContext, aDriverOrder ) )
             // nothing to do
             return;
 

@@ -20,18 +20,17 @@
 #ifndef CONNECTIVITY_FORMATTEDCOLUMNVALUE_HXX
 #define CONNECTIVITY_FORMATTEDCOLUMNVALUE_HXX
 
-#include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdb/XColumnUpdate.hpp>
+#include <com/sun/star/sdbc/XRowSet.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 
 #include <boost/noncopyable.hpp>
 
 #include <memory>
 #include "connectivity/dbtoolsdllapi.hxx"
-
-namespace comphelper { class ComponentContext; }
 
 //........................................................................
 namespace dbtools
@@ -60,7 +59,7 @@ namespace dbtools
             examining its <code>ActiveConnection</code>.
         */
         FormattedColumnValue(
-            const ::comphelper::ComponentContext& _rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn
         );

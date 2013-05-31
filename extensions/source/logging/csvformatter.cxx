@@ -28,8 +28,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <comphelper/componentcontext.hxx>
-
 #include <cppuhelper/implbase2.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -65,7 +63,7 @@ namespace logging
         static Reference< XInterface > Create( const Reference< XComponentContext >& context );
 
     protected:
-        CsvFormatter( const Reference< XComponentContext >& context );
+        CsvFormatter();
         virtual ~CsvFormatter();
 
         // XCsvLogFormatter
@@ -92,7 +90,6 @@ namespace logging
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
     private:
-        ::comphelper::ComponentContext m_aContext;
         ::sal_Bool m_LogEventNo;
         ::sal_Bool m_LogThread;
         ::sal_Bool m_LogTimestamp;
@@ -156,9 +153,8 @@ namespace
 //= CsvFormatter - implementation
 namespace logging
 {
-    CsvFormatter::CsvFormatter( const Reference< XComponentContext >& context )
-        :m_aContext( context ),
-        m_LogEventNo(true),
+    CsvFormatter::CsvFormatter()
+        :m_LogEventNo(true),
         m_LogThread(true),
         m_LogTimestamp(true),
         m_LogSource(false),
@@ -349,9 +345,9 @@ namespace logging
         return aServiceNames;
     }
 
-    Reference< XInterface > CsvFormatter::Create( const Reference< XComponentContext >& context )
+    Reference< XInterface > CsvFormatter::Create( const Reference< XComponentContext >& )
     {
-        return *( new CsvFormatter( context ) );
+        return *( new CsvFormatter );
     }
 
     void createRegistryInfo_CsvFormatter()

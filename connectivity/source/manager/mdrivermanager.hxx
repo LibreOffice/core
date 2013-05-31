@@ -31,7 +31,6 @@
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/logging.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <osl/mutex.hxx>
 #include "connectivity/DriversConfig.hxx"
 
@@ -41,17 +40,14 @@ namespace drivermanager
     //======================================================================
     //= various
     //======================================================================
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                     SdbcDriver;
-    DECLARE_STL_USTRINGACCESS_MAP( SdbcDriver, DriverCollection );
+    DECLARE_STL_USTRINGACCESS_MAP( css::uno::Reference< css::sdbc::XDriver >, DriverCollection );
 
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >     DriverFactory;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            UNOContext;
     struct DriverAccess
     {
-        OUString     sImplementationName;        /// the implementation name of the driver
-        DriverFactory       xComponentFactory;          /// the factory to create the driver component (if not already done so)
-        UNOContext          xUNOContext;                /// ensure UNO context propagation
-        SdbcDriver          xDriver;                    /// the driver itself
+        OUString           sImplementationName;        /// the implementation name of the driver
+        css::uno::Reference< css::sdbc::XDriver >                  xDriver;                    /// the driver itself
+        css::uno::Reference< css::lang::XSingleComponentFactory >  xComponentFactory;          /// the factory to create the driver component (if not already done so)
+        css::uno::Reference<css::uno::XComponentContext>           xUNOContext;                /// ensure UNO context propagation
     };
 
     //==========================================================================
@@ -67,7 +63,7 @@ namespace drivermanager
         friend class ODriverEnumeration;
 
         ::osl::Mutex                    m_aMutex;
-        ::comphelper::ComponentContext  m_aContext;
+        css::uno::Reference<css::uno::XComponentContext>  m_xContext;
         ::comphelper::EventLogger       m_aEventLogger;
 
         DECLARE_STL_VECTOR(DriverAccess, DriverAccessArray);
@@ -75,7 +71,7 @@ namespace drivermanager
 
         // for drivers registered at runtime (not bootstrapped) we don't require an XServiceInfo interface,
         // so we have to remember their impl-name in another way
-        DECLARE_STL_USTRINGACCESS_MAP(SdbcDriver, DriverCollection);
+        DECLARE_STL_USTRINGACCESS_MAP(css::uno::Reference< css::sdbc::XDriver >, DriverCollection);
         DriverCollection                m_aDriversRT;
 
         ::connectivity::DriversConfig   m_aDriverConfig;

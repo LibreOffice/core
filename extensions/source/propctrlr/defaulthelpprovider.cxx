@@ -61,9 +61,8 @@ namespace pcr
     //= DefaultHelpProvider
     //====================================================================
     //--------------------------------------------------------------------
-    DefaultHelpProvider::DefaultHelpProvider( const Reference< XComponentContext >& _rxContext )
-        :m_aContext( _rxContext )
-        ,m_bConstructed( false )
+    DefaultHelpProvider::DefaultHelpProvider()
+        :m_bConstructed( false )
     {
     }
 
@@ -87,9 +86,9 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL DefaultHelpProvider::Create( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > SAL_CALL DefaultHelpProvider::Create( const Reference< XComponentContext >& )
     {
-        return *new DefaultHelpProvider( _rxContext );
+        return *new DefaultHelpProvider;
     }
 
     //--------------------------------------------------------------------

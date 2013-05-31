@@ -41,7 +41,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 
 #include <comphelper/propmultiplex.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -198,7 +197,7 @@ private:
 
 //==================================================================
 // DbCellControl, liefert die Daten fuer einen CellController
-// wird in der Regel nur für komplexe Controls wie z.B ComboBoxen
+// wird in der Regel nur f\FCr komplexe Controls wie z.B ComboBoxen
 // benoetigt
 //==================================================================
 class DbCellControl
@@ -532,7 +531,7 @@ class DbPatternField : public DbCellControl
 {
 public:
     TYPEINFO();
-    DbPatternField( DbGridColumn& _rColumn, const ::comphelper::ComponentContext& _rContext );
+    DbPatternField( DbGridColumn& _rColumn, const css::uno::Reference<css::uno::XComponentContext>& _rContext );
     virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
@@ -553,7 +552,7 @@ private:
     ::std::auto_ptr< ::dbtools::FormattedColumnValue >  m_pValueFormatter;
     ::std::auto_ptr< ::dbtools::FormattedColumnValue >  m_pPaintFormatter;
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    ::comphelper::ComponentContext                      m_aContext;
+    css::uno::Reference<css::uno::XComponentContext>    m_xContext;
 };
 
 //==================================================================

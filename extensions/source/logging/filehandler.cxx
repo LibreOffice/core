@@ -32,8 +32,6 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <comphelper/componentcontext.hxx>
-
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/basemutex.hxx>
 
@@ -90,7 +88,7 @@ namespace logging
         };
 
     private:
-        ::comphelper::ComponentContext  m_aContext;
+        Reference<XComponentContext>    m_xContext;
         LogHandlerHelper                m_aHandlerHelper;
         OUString                 m_sFileURL;
         ::std::auto_ptr< ::osl::File >  m_pFile;
@@ -151,7 +149,7 @@ namespace logging
     //--------------------------------------------------------------------
     FileHandler::FileHandler( const Reference< XComponentContext >& _rxContext )
         :FileHandler_Base( m_aMutex )
-        ,m_aContext( _rxContext )
+        ,m_xContext( _rxContext )
         ,m_aHandlerHelper( _rxContext, m_aMutex, rBHelper )
         ,m_sFileURL( )
         ,m_pFile( )
@@ -229,7 +227,7 @@ namespace logging
     {
         try
         {
-            Reference< XStringSubstitution > xStringSubst(PathSubstitution::create(m_aContext.getUNOContext()));
+            Reference< XStringSubstitution > xStringSubst(PathSubstitution::create(m_xContext));
             _inout_rURL = xStringSubst->substituteVariables( _inout_rURL, true );
         }
         catch( const Exception& )

@@ -30,8 +30,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#include <comphelper/componentcontext.hxx>
-
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/basemutex.hxx>
 
@@ -73,7 +71,6 @@ namespace logging
                             ,public ConsoleHandler_Base
     {
     private:
-        ::comphelper::ComponentContext  m_aContext;
         LogHandlerHelper                m_aHandlerHelper;
         sal_Int32                       m_nThreshold;
 
@@ -124,7 +121,6 @@ namespace logging
     //--------------------------------------------------------------------
     ConsoleHandler::ConsoleHandler( const Reference< XComponentContext >& _rxContext )
         :ConsoleHandler_Base( m_aMutex )
-        ,m_aContext( _rxContext )
         ,m_aHandlerHelper( _rxContext, m_aMutex, rBHelper )
         ,m_nThreshold( LogLevel::SEVERE )
     {

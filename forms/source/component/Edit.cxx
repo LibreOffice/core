@@ -611,7 +611,7 @@ void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
     Reference< XPropertySet > xField = getField();
     if ( xField.is() )
     {
-        m_pValueFormatter.reset( new ::dbtools::FormattedColumnValue( getContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
+        m_pValueFormatter.reset( new ::dbtools::FormattedColumnValue( getContext().getUNOContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
 
         if ( m_pValueFormatter->getKeyType() != NumberFormat::SCIENTIFIC )
         {

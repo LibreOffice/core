@@ -26,8 +26,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <comphelper/componentcontext.hxx>
-
 #include <cppuhelper/implbase2.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -56,11 +54,8 @@ namespace logging
                                     >   PlainTextFormatter_Base;
     class PlainTextFormatter : public PlainTextFormatter_Base
     {
-    private:
-        ::comphelper::ComponentContext  m_aContext;
-
     protected:
-        PlainTextFormatter( const Reference< XComponentContext >& _rxContext );
+        PlainTextFormatter();
         virtual ~PlainTextFormatter();
 
         // XLogFormatter
@@ -84,8 +79,7 @@ namespace logging
     //= PlainTextFormatter - implementation
     //====================================================================
     //--------------------------------------------------------------------
-    PlainTextFormatter::PlainTextFormatter( const Reference< XComponentContext >& _rxContext )
-        :m_aContext( _rxContext )
+    PlainTextFormatter::PlainTextFormatter()
     {
     }
 
@@ -196,9 +190,9 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    Reference< XInterface > PlainTextFormatter::Create( const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > PlainTextFormatter::Create( const Reference< XComponentContext >& )
     {
-        return *( new PlainTextFormatter( _rxContext ) );
+        return *( new PlainTextFormatter );
     }
 
     //--------------------------------------------------------------------

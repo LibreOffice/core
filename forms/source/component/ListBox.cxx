@@ -877,7 +877,7 @@ namespace frm
                     if ( !xDataField.is() )
                         return;
 
-                    ::dbtools::FormattedColumnValue aValueFormatter( getContext(), m_xCursor, xDataField );
+                    ::dbtools::FormattedColumnValue aValueFormatter( getContext().getUNOContext(), m_xCursor, xDataField );
 
                     // Get the field of BoundColumn of the ResultSet
                     m_nBoundColumnType = DataType::SQLNULL;

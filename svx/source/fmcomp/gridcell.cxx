@@ -1762,9 +1762,9 @@ OUString DbCheckBox::GetFormatText(const Reference< XColumn >& /*_rxField*/, con
 //==============================================================================
 //= DbPatternField
 //------------------------------------------------------------------------------
-DbPatternField::DbPatternField( DbGridColumn& _rColumn, const ::comphelper::ComponentContext& _rContext )
+DbPatternField::DbPatternField( DbGridColumn& _rColumn, const Reference<XComponentContext>& _rContext )
     :DbCellControl( _rColumn )
-    ,m_aContext( _rContext )
+    ,m_xContext( _rContext )
 {
     doPropertyListening( FM_PROP_LITERALMASK );
     doPropertyListening( FM_PROP_EDITMASK );
@@ -1835,7 +1835,7 @@ OUString DbPatternField::GetFormatText(const Reference< ::com::sun::star::sdb::X
     {
         DBToolsObjectFactory aFactory;
         rpFormatter = aFactory.createFormattedColumnValue(
-            m_aContext, getCursor(), Reference< XPropertySet >( _rxField, UNO_QUERY ) );
+            m_xContext, getCursor(), Reference< XPropertySet >( _rxField, UNO_QUERY ) );
         OSL_ENSURE( rpFormatter.get(), "DbPatternField::Init: no value formatter!" );
     }
     else
@@ -2738,7 +2738,7 @@ sal_Bool DbListBox::commitControl()
 
 DBG_NAME(DbFilterField);
 /*************************************************************************/
-DbFilterField::DbFilterField(const Reference< ::com::sun::star::uno::XComponentContext >& rxContext,DbGridColumn& _rColumn)
+DbFilterField::DbFilterField(const Reference< XComponentContext >& rxContext,DbGridColumn& _rColumn)
               :DbCellControl(_rColumn)
               ,OSQLParserClient(rxContext)
               ,m_nControlClass(::com::sun::star::form::FormComponentType::TEXTFIELD)

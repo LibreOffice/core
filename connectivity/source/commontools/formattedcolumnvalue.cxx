@@ -33,7 +33,6 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/numbers.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <unotools/sharedunocomponent.hxx>
 
 //........................................................................
@@ -49,6 +48,7 @@ namespace dbtools
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::util::NumberFormatter;
@@ -184,7 +184,7 @@ namespace dbtools
         }
 
         //................................................................
-        void lcl_initColumnDataValue_nothrow( const ::comphelper::ComponentContext& i_rContext, FormattedColumnValue_Data& i_rData,
+        void lcl_initColumnDataValue_nothrow( const Reference<XComponentContext>& i_rContext, FormattedColumnValue_Data& i_rData,
             const Reference< XRowSet >& i_rRowSet, const Reference< XPropertySet >& i_rColumn )
         {
             OSL_PRECOND( i_rRowSet.is(), "lcl_initColumnDataValue_nothrow: no row set!" );
@@ -196,10 +196,10 @@ namespace dbtools
             {
                 // get the number formats supplier of the connection of the form
                 Reference< XConnection > xConnection( getConnection( i_rRowSet ), UNO_QUERY_THROW );
-                Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( xConnection, sal_True, i_rContext.getUNOContext() ), UNO_SET_THROW );
+                Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( xConnection, sal_True, i_rContext ), UNO_SET_THROW );
 
                 // create a number formatter for it
-                xNumberFormatter.set( NumberFormatter::create(i_rContext.getUNOContext()), UNO_QUERY_THROW );
+                xNumberFormatter.set( NumberFormatter::create( i_rContext ), UNO_QUERY_THROW );
                 xNumberFormatter->attachNumberFormatsSupplier( xSupplier );
             }
             catch( const Exception& )
@@ -215,11 +215,11 @@ namespace dbtools
     //= FormattedColumnValue
     //====================================================================
     //--------------------------------------------------------------------
-    FormattedColumnValue::FormattedColumnValue( const ::comphelper::ComponentContext& i_rContext,
+    FormattedColumnValue::FormattedColumnValue( const Reference< XComponentContext >& _rxContext,
             const Reference< XRowSet >& _rxRowSet, const Reference< XPropertySet >& i_rColumn )
         :m_pData( new FormattedColumnValue_Data )
     {
-        lcl_initColumnDataValue_nothrow( i_rContext, *m_pData, _rxRowSet, i_rColumn );
+        lcl_initColumnDataValue_nothrow( _rxContext, *m_pData, _rxRowSet, i_rColumn );
     }
 
     //--------------------------------------------------------------------

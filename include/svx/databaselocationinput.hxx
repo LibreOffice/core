@@ -21,11 +21,11 @@
 #define SVX_DATABASELOCATIONINPUT_HXX
 
 #include "svx/svxdllapi.h"
+#include "com/sun/star/uno/XComponentContext.hpp"
 
 class PushButton;
 class String;
 namespace svt { class OFileURLControl; }
-namespace comphelper { class ComponentContext; }
 
 #include <memory>
 
@@ -50,7 +50,7 @@ namespace svx
     {
     public:
         DatabaseLocationInputController(
-            const ::comphelper::ComponentContext&   _rContext,
+            const css::uno::Reference<css::uno::XComponentContext>& _rContext,
             ::svt::OFileURLControl&                 _rLocationInput,
             PushButton&                             _rBrowseButton
         );

@@ -82,7 +82,7 @@ namespace pcr
         osl_atomic_increment( &m_refCount );
         {
             Reference< XObjectInspectorModel > xModel(
-                *(new DefaultFormComponentInspectorModel( _rxContext, _bUseFormFormComponentHandlers )),
+                *(new DefaultFormComponentInspectorModel( _bUseFormFormComponentHandlers )),
                 UNO_QUERY_THROW
             );
             setInspectorModel( xModel );

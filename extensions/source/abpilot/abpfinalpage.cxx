@@ -26,7 +26,6 @@
 #include <svl/filenotation.hxx>
 #include <sfx2/docfilt.hxx>
 #include <vcl/msgbox.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 //.........................................................................
@@ -56,7 +55,7 @@ namespace abp
         ,m_aNameLabel           ( this, ModuleRes( FT_NAME_EXPL ) )
         ,m_aName                ( this, ModuleRes( ET_DATASOURCENAME ) )
         ,m_aDuplicateNameError  ( this, ModuleRes( FT_DUPLICATENAME ) )
-        ,m_aLocationController( ::comphelper::ComponentContext( _pParent->getORB() ), m_aLocation, m_aBrowse )
+        ,m_aLocationController( _pParent->getORB(), m_aLocation, m_aBrowse )
     {
         FreeResource();
 

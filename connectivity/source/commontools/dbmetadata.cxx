@@ -38,7 +38,6 @@
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/namedvaluecollection.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sal/macros.h>
 
@@ -56,6 +55,7 @@ namespace dbtools
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Any;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::beans::XPropertySet;
@@ -364,7 +364,7 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    bool DatabaseMetaData::supportsUserAdministration( const ::comphelper::ComponentContext& _rContext ) const
+    bool DatabaseMetaData::supportsUserAdministration( const Reference<XComponentContext>& _rContext ) const
     {
         lcl_checkConnected( *m_pImpl  );
 
@@ -377,7 +377,7 @@ namespace dbtools
             if ( !xUsersSupp.is() )
             {
                 // - or at the driver manager
-                Reference< XDriverManager2 > xDriverManager = DriverManager::create( _rContext.getUNOContext() );
+                Reference< XDriverManager2 > xDriverManager = DriverManager::create( _rContext );
                 Reference< XDataDefinitionSupplier > xDriver( xDriverManager->getDriverByURL( m_pImpl->xConnectionMetaData->getURL() ), UNO_QUERY );
                 if ( xDriver.is() )
                     xUsersSupp.set( xDriver->getDataDefinitionByConnection( m_pImpl->xConnection ), UNO_QUERY );
