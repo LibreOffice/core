@@ -116,16 +116,15 @@ void ScXMLDDELinkContext::CreateDDELink()
         !sTopic.isEmpty() &&
         !sItem.isEmpty())
     {
-        String sAppl(sApplication);
-        String sTop(sTopic);
-        String sIt(sItem);
-        GetScImport().GetDocument()->CreateDdeLink(sAppl, sTop, sIt, nMode, ScMatrixRef());
-        sal_uInt16 nPos;
-        if(GetScImport().GetDocument()->FindDdeLink(sAppl, sTop, sIt, nMode, nPos))
+        GetScImport().GetDocument()->CreateDdeLink(sApplication, sTopic, sItem, nMode, ScMatrixRef());
+        size_t nPos;
+        if(GetScImport().GetDocument()->FindDdeLink(sApplication, sTopic, sItem, nMode, nPos))
             nPosition = nPos;
         else
+        {
             nPosition = -1;
-        OSL_ENSURE(nPosition > -1, "DDE Link not inserted");
+            SAL_WARN("sc" , "DDE Link not inserted");
+        }
     }
 }
 

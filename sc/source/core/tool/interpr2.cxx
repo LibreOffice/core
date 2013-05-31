@@ -2223,15 +2223,15 @@ void ScInterpreter::ScStyle()
 }
 
 static ScDdeLink* lcl_GetDdeLink( sfx2::LinkManager* pLinkMgr,
-                                const String& rA, const String& rT, const String& rI, sal_uInt8 nM )
+                                const OUString& rA, const OUString& rT, const OUString& rI, sal_uInt8 nM )
 {
-    sal_uInt16 nCount = pLinkMgr->GetLinks().size();
-    for (sal_uInt16 i=0; i<nCount; i++ )
+    size_t nCount = pLinkMgr->GetLinks().size();
+    for (size_t i=0; i<nCount; i++ )
     {
         ::sfx2::SvBaseLink* pBase = *pLinkMgr->GetLinks()[i];
         if (pBase->ISA(ScDdeLink))
         {
-            ScDdeLink* pLink = (ScDdeLink*)pBase;
+            ScDdeLink* pLink = static_cast<ScDdeLink*>(pBase);
             if ( pLink->GetAppl() == rA &&
                  pLink->GetTopic() == rT &&
                  pLink->GetItem() == rI &&
@@ -2255,9 +2255,9 @@ void ScInterpreter::ScDde()
         sal_uInt8 nMode = SC_DDE_DEFAULT;
         if (nParamCount == 4)
             nMode = (sal_uInt8) ::rtl::math::approxFloor(GetDouble());
-        String aItem  = GetString();
-        String aTopic = GetString();
-        String aAppl  = GetString();
+        const OUString& aItem  = GetString();
+        const OUString& aTopic = GetString();
+        const OUString& aAppl  = GetString();
 
         if (nMode > SC_DDE_TEXT)
             nMode = SC_DDE_DEFAULT;

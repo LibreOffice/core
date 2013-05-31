@@ -1257,8 +1257,8 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
     else if (GetLinkManager())              // Links direkt kopieren
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.size();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        size_t nCount = rLinks.size();
+        for (size_t i=0; i<nCount; i++)
         {
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScDdeLink))
@@ -1272,14 +1272,14 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
     }
 }
 
-sal_uInt16 ScDocument::GetDdeLinkCount() const
+size_t ScDocument::GetDdeLinkCount() const
 {
-    sal_uInt16 nDdeCount = 0;
+    size_t nDdeCount = 0;
     if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.size();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        size_t nCount = rLinks.size();
+        for (size_t i=0; i<nCount; i++)
             if ((*rLinks[i])->ISA(ScDdeLink))
                 ++nDdeCount;
     }
@@ -1297,14 +1297,14 @@ namespace {
 ScDdeLink* lclGetDdeLink(
         const sfx2::LinkManager* pLinkManager,
         const OUString& rAppl, const OUString& rTopic, const OUString& rItem, sal_uInt8 nMode,
-        sal_uInt16* pnDdePos = NULL )
+        size_t* pnDdePos = NULL )
 {
     if( pLinkManager )
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.size();
+        size_t nCount = rLinks.size();
         if( pnDdePos ) *pnDdePos = 0;
-        for( sal_uInt16 nIndex = 0; nIndex < nCount; ++nIndex )
+        for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
         {
             ::sfx2::SvBaseLink* pLink = *rLinks[ nIndex ];
             if( ScDdeLink* pDdeLink = PTR_CAST( ScDdeLink, pLink ) )
@@ -1324,14 +1324,14 @@ ScDdeLink* lclGetDdeLink(
 /** Returns a pointer to the specified DDE link.
     @param nDdePos  Index of the DDE link (does not include other links from link manager).
     @return  The DDE link, if it exists, otherwise 0. */
-ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, sal_uInt16 nDdePos )
+ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, size_t nDdePos )
 {
     if( pLinkManager )
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        sal_uInt16 nCount = rLinks.size();
-        sal_uInt16 nDdeIndex = 0;       // counts only the DDE links
-        for( sal_uInt16 nIndex = 0; nIndex < nCount; ++nIndex )
+        size_t nCount = rLinks.size();
+        size_t nDdeIndex = 0;       // counts only the DDE links
+        for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
         {
             ::sfx2::SvBaseLink* pLink = *rLinks[ nIndex ];
             if( ScDdeLink* pDdeLink = PTR_CAST( ScDdeLink, pLink ) )
@@ -1349,12 +1349,13 @@ ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, sal_uInt16 nDde
 
 // ----------------------------------------------------------------------------
 
-bool ScDocument::FindDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem, sal_uInt8 nMode, sal_uInt16& rnDdePos )
+bool ScDocument::FindDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem,
+        sal_uInt8 nMode, size_t& rnDdePos )
 {
     return lclGetDdeLink( GetLinkManager(), rAppl, rTopic, rItem, nMode, &rnDdePos ) != NULL;
 }
 
-bool ScDocument::GetDdeLinkData( sal_uInt16 nDdePos, OUString& rAppl, OUString& rTopic, OUString& rItem ) const
+bool ScDocument::GetDdeLinkData( size_t nDdePos, OUString& rAppl, OUString& rTopic, OUString& rItem ) const
 {
     if( const ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos ) )
     {
@@ -1366,7 +1367,7 @@ bool ScDocument::GetDdeLinkData( sal_uInt16 nDdePos, OUString& rAppl, OUString& 
     return false;
 }
 
-bool ScDocument::GetDdeLinkMode( sal_uInt16 nDdePos, sal_uInt8& rnMode ) const
+bool ScDocument::GetDdeLinkMode( size_t nDdePos, sal_uInt8& rnMode ) const
 {
     if( const ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos ) )
     {
@@ -1408,7 +1409,7 @@ bool ScDocument::CreateDdeLink( const OUString& rAppl, const OUString& rTopic, c
     return false;
 }
 
-bool ScDocument::SetDdeLinkResultMatrix( sal_uInt16 nDdePos, ScMatrixRef pResults )
+bool ScDocument::SetDdeLinkResultMatrix( size_t nDdePos, ScMatrixRef pResults )
 {
     if( ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos ) )
     {

@@ -370,14 +370,14 @@ void ScDocShell::UpdateLinks()
 
     // nicht mehr benutzte Links raus
 
-    sal_uInt16 nCount = pLinkManager->GetLinks().size();
-    for (sal_uInt16 k=nCount; k>0; )
+    size_t nCount = pLinkManager->GetLinks().size();
+    for (size_t k=nCount; k>0; )
     {
         --k;
         ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[k];
         if (pBase->ISA(ScTableLink))
         {
-            ScTableLink* pTabLink = (ScTableLink*)pBase;
+            ScTableLink* pTabLink = static_cast<ScTableLink*>(pBase);
             if (pTabLink->IsUsed())
                 aNames.insert(pTabLink->GetFileName());
             else        // nicht mehr benutzt -> loeschen
@@ -434,14 +434,14 @@ sal_Bool ScDocShell::ReloadTabLinks()
 {
     sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();
 
-    sal_Bool bAny = false;
-    sal_uInt16 nCount = pLinkManager->GetLinks().size();
-    for (sal_uInt16 i=0; i<nCount; i++ )
+    bool bAny = false;
+    size_t nCount = pLinkManager->GetLinks().size();
+    for (size_t i=0; i<nCount; i++ )
     {
         ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[i];
         if (pBase->ISA(ScTableLink))
         {
-            ScTableLink* pTabLink = (ScTableLink*)pBase;
+            ScTableLink* pTabLink = static_cast<ScTableLink*>(pBase);
 //			pTabLink->SetAddUndo(sal_False);		//! Undo's zusammenfassen
 
 			// Painting only after Update() makes no sense:

@@ -219,7 +219,7 @@ class ScAreaLinkObj : public cppu::WeakImplHelper4<
 private:
     SfxItemPropertySet      aPropSet;
     ScDocShell*             pDocShell;
-    sal_uInt16                  nPos;
+    size_t                  nPos;
     XRefreshListenerArr_Impl aRefreshListeners;
 
     void    Modify_Impl( const OUString* pNewFile, const OUString* pNewFilter,
@@ -229,7 +229,7 @@ private:
     void    Refreshed_Impl();
 
 public:
-                            ScAreaLinkObj(ScDocShell* pDocSh, sal_uInt16 nP);
+                            ScAreaLinkObj(ScDocShell* pDocSh, size_t nP);
     virtual                 ~ScAreaLinkObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

@@ -1052,7 +1052,7 @@ sal_uInt16 XclExpExtNameBuffer::InsertDde(
     sal_uInt16 nIndex = GetIndex( rItem );
     if( nIndex == 0 )
     {
-        sal_uInt16 nPos;
+        size_t nPos;
         if( GetDoc().FindDdeLink( rApplic, rTopic, rItem, SC_DDE_IGNOREMODE, nPos ) )
         {
             // create the leading 'StdDocumentName' EXTERNNAME record

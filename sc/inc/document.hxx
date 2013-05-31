@@ -668,13 +668,14 @@ public:
     void            DisconnectDdeLinks();
 
                     // for StarOne Api:
-    sal_uInt16          GetDdeLinkCount() const;
+    size_t          GetDdeLinkCount() const;
     bool            UpdateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem );
 
     /** Tries to find a DDE link with the specified connection data.
         @param rnDdePos  (out-param) Returns the index of the DDE link (does not include other links from link manager).
         @return  true = DDE link found, rnDdePos valid. */
-    SC_DLLPUBLIC bool            FindDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem, sal_uInt8 nMode, sal_uInt16& rnDdePos );
+    SC_DLLPUBLIC bool            FindDdeLink( const OUString& rAppl, const OUString& rTopic,
+            const OUString& rItem, sal_uInt8 nMode, size_t& rnDdePos );
 
     /** Returns the connection data of the specified DDE link.
         @param nDdePos  Index of the DDE link (does not include other links from link manager).
@@ -682,16 +683,16 @@ public:
         @param rTopic  (out-param) The DDE topic.
         @param rItem  (out-param) The DDE item.
         @return  true = DDE link found, out-parameters valid. */
-    bool            GetDdeLinkData( sal_uInt16 nDdePos, OUString& rAppl, OUString& rTopic, OUString& rItem ) const;
+    bool            GetDdeLinkData( size_t nDdePos, OUString& rAppl, OUString& rTopic, OUString& rItem ) const;
     /** Returns the link mode of the specified DDE link.
         @param nDdePos  Index of the DDE link (does not include other links from link manager).
         @param rnMode  (out-param) The link mode of the specified DDE link.
         @return  true = DDE link found, rnMode valid. */
-    bool            GetDdeLinkMode( sal_uInt16 nDdePos, sal_uInt8& rnMode ) const;
+    bool            GetDdeLinkMode( size_t nDdePos, sal_uInt8& rnMode ) const;
     /** Returns the result matrix of the specified DDE link.
         @param nDdePos  Index of the DDE link (does not include other links from link manager).
         @return  The result matrix, if the DDE link has been found, 0 otherwise. */
-    SC_DLLPUBLIC const ScMatrix* GetDdeLinkResultMatrix( sal_uInt16 nDdePos ) const;
+    SC_DLLPUBLIC const ScMatrix* GetDdeLinkResultMatrix( sal_uInt16 size_t ) const;
 
     /** Tries to find a DDE link or creates a new, if not extant.
         @param pResults  If not 0, sets the matrix as as DDE link result matrix (also for existing links).
@@ -701,7 +702,7 @@ public:
         @param nDdePos  Index of the DDE link (does not include other links from link manager).
         @param pResults  The array containing all results of the DDE link (intrusive-ref-counted, do not delete).
         @return  true = DDE link found and matrix set. */
-    bool            SetDdeLinkResultMatrix( sal_uInt16 nDdePos, ScMatrixRef pResults );
+    bool            SetDdeLinkResultMatrix( size_t nDdePos, ScMatrixRef pResults );
 
 
     SfxBindings*    GetViewBindings();
