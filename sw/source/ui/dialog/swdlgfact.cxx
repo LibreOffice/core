@@ -1357,7 +1357,6 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
             pRet = SwMailConfigPage::Create;
         break;
         case RID_SW_TP_COMPARISON_OPT :
-        case TP_COMPARISON_OPT :
             pRet = SwCompareOptionsTabPage::Create;
         break;
     }
