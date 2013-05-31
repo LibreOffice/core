@@ -776,14 +776,14 @@ AC_ARG_ENABLE(directx,
 AC_ARG_ENABLE(activex,
     AS_HELP_STRING([--disable-activex],
         [Disable the use of ActiveX for a Windows build.
-        This switch is mandatory when using VC++ 2008 Express.])
+        This switch is mandatory when using an Express edition of Visual Studio.])
 )
 
 AC_ARG_ENABLE(atl,
     AS_HELP_STRING([--disable-atl],
         [Disable the use of ATL for a Windows build.])
     [
-                          This switch is mandatory when using VC++ 2008 Express.
+        This switch is mandatory when using an Express edition of Visual Studio.
     ],
 ,)
 
@@ -1721,12 +1721,12 @@ AC_ARG_WITH(
     [with_doxygen=yes])
 
 AC_ARG_WITH(visual-studio,
-    AS_HELP_STRING([--with-visual-studio=<2012/2010/2008>],
+    AS_HELP_STRING([--with-visual-studio=<2012/2010>],
         [Specify which Visual Studio version to use in case several are
          are installed. If not specified, the order of preference is
-         2012, 2010 and 2008 (including Express editions).])
+         2012, 2010 (including Express editions).])
     [
-                          Usage:     --with-visual-studio=<2012/2010/2008>
+                          Usage:     --with-visual-studio=<2012/2010>
     ],
 ,)
 
@@ -2933,8 +2933,6 @@ map_vs_year_to_version()
     unset vsversion
 
     case $1 in
-    2008)
-        vsversion=9.0;;
     2010)
         vsversion=10.0;;
     2012)
@@ -2955,14 +2953,14 @@ vs_versions_to_check()
         map_vs_year_to_version "$1"
         vsversions=$vsversion
     else
-        # By default we prefer 2012, then 2010, then 2008
-        vsversions="11.0 10.0 9.0"
+        # By default we prefer 2012, then 2010
+        vsversions="11.0 10.0"
     fi
 }
 
 find_msvs()
 {
-    # Find Visual Studio 2012/2010/2008
+    # Find Visual Studio 2012/2010
     # Args: $1 (optional) : versions to check, in the order of preference
     # Return value: $vstest
 
@@ -2986,7 +2984,7 @@ find_msvs()
 
 find_msvc()
 {
-    # Find Visual C++ 2012/2010/2008
+    # Find Visual C++ 2012/2010
     # Args: $1 (optional) : The VS version year
     # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot
 
@@ -3009,10 +3007,6 @@ find_msvc()
     if test -n "$vctest"; then
         vcnumwithdot=$ver
         case "$vcnumwithdot" in
-        9.0)
-            vcyear=2008
-            vcnum=90
-            ;;
         10.0)
             vcyear=2010
             vcnum=100
@@ -3036,7 +3030,7 @@ if test "$_os" = "WINNT"; then
             if test -n "$with_visual_studio"; then
                 AC_MSG_ERROR([No Visual Studio $with_visual_studio installation found])
             else
-                AC_MSG_ERROR([No Visual Studio 2012, 2010 or 2008 installation found])
+                AC_MSG_ERROR([No Visual Studio 2012 or 2010 installation found])
             fi
         fi
 
@@ -3047,11 +3041,6 @@ if test "$_os" = "WINNT"; then
                 AC_MSG_ERROR([No compiler (cl.exe) in $vctest/bin/cl.exe])
             fi
         else
-            # It makes sense, I think, to restrict 64-bit support to VS2010 or newer
-            if test $vcnum -lt 100; then
-               AC_MSG_ERROR([We have no plans to support building a 64-bit LibreOffice with VS 2008])
-            fi
-
             if test -f "$vctest/bin/amd64/cl.exe"; then
                 VC_PRODUCT_DIR=$vctest
             else
@@ -3075,12 +3064,7 @@ if test "$_os" = "WINNT"; then
             MSPDB_PATH="$VC_PRODUCT_DIR/bin/amd64"
         fi
 
-        case $vcnum in
-        90)
-            mspdbnum=80;;
-        *)
-            mspdbnum=$vcnum;;
-        esac
+        mspdbnum=$vcnum
 
         if test ! -e "$MSPDB_PATH/mspdb${mspdbnum}.dll"; then
             AC_MSG_ERROR([No mspdb${mspdbnum}.dll in $MSPDB_PATH, Visual Studio installation broken?])
@@ -3138,10 +3122,6 @@ if test "$_os" = "WINNT"; then
             # are always "better", we list them in reverse chronological order.
 
             case $vcnum in
-            90)
-                COMEX=12
-                WINDOWS_SDK_ACCEPTABLE_VERSIONS="7.1A 7.1 7.0A 6.0A"
-                ;;
             100)
                 COMEX=13
                 WINDOWS_SDK_ACCEPTABLE_VERSIONS="7.1A 7.1 7.0A 6.0A"
@@ -4750,23 +4730,10 @@ find_csc()
 
     unset csctest
 
-    if test $VCVER -eq 90; then
-        reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v3.5/InstallPath"
-        if test -n "$regvalue"; then
-            csctest=$regvalue
-            return
-        fi
-        reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/InstallRoot
-        if test -n "$regvalue"; then
-            csctest=${regvalue}"v2.0.50727"
-            return
-        fi
-    else
-        reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v4/Client/InstallPath"
-        if test -n "$regvalue"; then
-            csctest=$regvalue
-            return
-        fi
+    reg_get_value "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v4/Client/InstallPath"
+    if test -n "$regvalue"; then
+        csctest=$regvalue
+        return
     fi
 }
 
@@ -4849,7 +4816,7 @@ find_winsdk()
 
 find_msms()
 {
-    for ver in 9.0 10.0 11.0; do
+    for ver in 10.0 11.0; do
         reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
         if test -n "$regvalue"; then
             if test -e "$regvalue/Microsoft_VC${VCVER}_CRT_x86.msm"; then
@@ -4869,56 +4836,31 @@ find_msms()
     fi
 
     msms="Microsoft_VC${VCVER}_CRT_x86.msm"
-
-    if test "$VCVER" = "90"; then
-        if test -e $msmdir/policy_9_0_Microsoft_VC90_CRT_x86.msm; then
-            msms="$msms policy_9_0_Microsoft_VC90_CRT_x86.msm"
-        else
-            AC_MSG_ERROR([Merge module policy_9_0_Microsoft_VC90_CRT_x86.msm not found])
-        fi
-    fi
-
-    if test "$BUILD_X64" = TRUE; then
-        if test "$VCVER" = "90"; then
-            if test -e $msmdir/policy_9_0_Microsoft_VC90_CRT_x86_x64.msm; then
-                msms="$msms policy_9_0_Microsoft_VC90_CRT_x86_x64.msm"
-            else
-                AC_MSG_ERROR([Merge module policy_9_0_Microsoft_VC90_CRT_x86_x64.msm not found])
-            fi
-            if test -e $msmdir/Microsoft_VC90_CRT_x86_x64.msm; then
-                msms="$msms Microsoft_VC90_CRT_x86_x64.msm"
-            else
-                AC_MSG_ERROR([Merge module Microsoft_VC90_CRT_x86_x64.msm not found])
-            fi
-        fi
-    fi
 }
 
 find_msvc_x64_dlls()
 {
-    if test "$VCVER" != "90"; then
-        if test "$CPUNAME" = "INTEL"; then
-            vsarch=x86
-        else
-            vsarch=x64
-        fi
+    if test "$CPUNAME" = "INTEL"; then
+        vsarch=x86
+    else
+        vsarch=x64
+    fi
 
-        msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
-        MSVC_DEBUG_DLL_PATH="$VC_PRODUCT_DIR/redist/Debug_NonRedist/$vsarch/Microsoft.VC${VCVER}.DebugCRT"
-        msvcdlls="msvcp${VCVER}.dll msvcr${VCVER}.dll"
-        MSVC_DEBUG_DLLS="msvcp${VCVER}d.dll msvcr${VCVER}d.dll"
-        for dll in $msvcdlls; do
-            if ! test -f "$msvcdllpath/$dll"; then
-                AC_MSG_ERROR([can not find $dll in $msvcdllpath])
+    msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
+    MSVC_DEBUG_DLL_PATH="$VC_PRODUCT_DIR/redist/Debug_NonRedist/$vsarch/Microsoft.VC${VCVER}.DebugCRT"
+    msvcdlls="msvcp${VCVER}.dll msvcr${VCVER}.dll"
+    MSVC_DEBUG_DLLS="msvcp${VCVER}d.dll msvcr${VCVER}d.dll"
+    for dll in $msvcdlls; do
+        if ! test -f "$msvcdllpath/$dll"; then
+            AC_MSG_ERROR([can not find $dll in $msvcdllpath])
+        fi
+    done
+    if test -n "$MSVC_USE_DEBUG_RUNTIME"; then
+        for dll in $MSVC_DEBUG_DLLS; do
+            if ! test -f "$MSVC_DEBUG_DLL_PATH/$dll"; then
+                AC_MSG_ERROR([can not find $dll in $MSVC_DEBUG_DLL_PATH])
             fi
         done
-        if test -n "$MSVC_USE_DEBUG_RUNTIME"; then
-            for dll in $MSVC_DEBUG_DLLS; do
-                if ! test -f "$MSVC_DEBUG_DLL_PATH/$dll"; then
-                    AC_MSG_ERROR([can not find $dll in $MSVC_DEBUG_DLL_PATH])
-                fi
-            done
-        fi
     fi
 }
 
