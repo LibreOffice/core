@@ -43,6 +43,8 @@ namespace writerfilter {
                 properties before actually using them.
               */
             com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getTablePosition() const;
+
+            bool operator== (const TablePositionHandler& rHandler) const;
         };
 
         typedef boost::shared_ptr<TablePositionHandler> TablePositionHandlerPtr;

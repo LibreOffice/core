@@ -164,6 +164,16 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     return aFrameProperties;
 }
 
+bool TablePositionHandler::operator== (const TablePositionHandler& rHandler) const
+{
+    return m_aVertAnchor == rHandler.m_aVertAnchor &&
+           m_aYSpec == rHandler.m_aYSpec &&
+           m_aHorzAnchor == rHandler.m_aHorzAnchor &&
+           m_aXSpec == rHandler.m_aXSpec &&
+           m_nY == rHandler.m_nY &&
+           m_nX == rHandler.m_nX;
+}
+
 } // namespace dmapper
 } // namespace writerfilter
 

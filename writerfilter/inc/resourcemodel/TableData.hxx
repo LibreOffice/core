@@ -409,6 +409,11 @@ public:
     {
         return mRows[i];
     }
+
+    const RowPointer_t getCurrentRow() const
+    {
+        return mpRow;
+    }
 };
 
 }
