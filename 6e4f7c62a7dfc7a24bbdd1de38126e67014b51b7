@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//78c\u003d",
+        "filename": "svx/source/dialog/charmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2013-05-31T03:10:22Z",
+      "side": 1,
+      "message": "If UBLOCK_MANDAIC is not defined in earlier ICUs\u0027 would it not be more logical to use #ifdef UBLOCK_MANDAIC ? But yeah, the surrounding code already seems to use this convention of just \"knowing\" the relationship between U_ICU_VERSION_MAJOR_NUM and what UBLOCK_* are defined, so OK.",
+      "revId": "6e4f7c62a7dfc7a24bbdd1de38126e67014b51b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
