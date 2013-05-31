@@ -803,10 +803,9 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
                      const SfxFilter * pFilter = mrMedium.GetFilter();
                     if( pFilter )
                     {
-                        const String& rTypeName = pFilter->GetRealTypeName();
-
-                        if( (rTypeName.CompareToAscii( "impress_StarImpress" ) == 0) ||
-                            (rTypeName.CompareToAscii( "draw_StarDraw" ) == 0) )
+                        OUString typeName(pFilter->GetRealTypeName());
+                        if( typeName.startsWith( "impress_StarImpress" ) ||
+                            typeName.startsWith( "draw_StarDraw" ) )
                         {
                             bTransform = true;
                         }
