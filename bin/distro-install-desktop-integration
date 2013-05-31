@@ -95,7 +95,7 @@ add_wrapper()
 
 # install desktop integration from plain packages
 sysui_temp=`mktemp -t -d distro-pack-desktop-integration-XXXXXX`
-cp -a sysui/unxlng*/misc/libreoffice/* "$sysui_temp"
+cp -a workdir/unxlng*/CustomTarget/sysui/share/libreoffice/* "$sysui_temp"
 cp -a sysui/desktop/share/create_tree.sh "$sysui_temp"
 builddir=`pwd`
 cd $sysui_temp
