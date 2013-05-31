@@ -2253,8 +2253,6 @@ void Desktop::OpenClients()
 
     const CommandLineArgs& rArgs = GetCommandLineArgs();
 
-    Reference<XMultiServiceFactory> rFactory = ::comphelper::getProcessServiceFactory();
-
     if (!rArgs.IsQuickstart())
     {
         sal_Bool bShowHelp = sal_False;

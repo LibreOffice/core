@@ -942,8 +942,7 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
 {
     bool bDone = false;
 
-    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-    Reference< XComponentContext > xContext( comphelper::getComponentContext( xMSF ) );
+    Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
     Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_SIMPLE);
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
@@ -975,10 +974,11 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
         try
         {
             // create dialog model
-            Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
-                ( "com.sun.star.awt.UnoControlDialogModel" ), UNO_QUERY_THROW );
+            Reference< container::XNameContainer > xDialogModel(
+                xContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", xContext),
+                UNO_QUERY_THROW );
 
-            Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
+            Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create(xContext) );
 
             Reference< XInputStream > xInput;
             if( xSFI->exists( aCurPath ) )

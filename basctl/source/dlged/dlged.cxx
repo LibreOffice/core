@@ -872,9 +872,9 @@ void DlgEditor::Paste()
             if ( xTransf->isDataFlavorSupported( m_ClipboardDataFlavors[0] ) )
             {
                 // create clipboard dialog model from xml
-                Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
-                Reference< container::XNameContainer > xClipDialogModel( xMSF->createInstance(
-                    "com.sun.star.awt.UnoControlDialogModel" ), uno::UNO_QUERY );
+                Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+                Reference< container::XNameContainer > xClipDialogModel( xContext->getServiceManager()->createInstanceWithContext(
+                    "com.sun.star.awt.UnoControlDialogModel", xContext ), uno::UNO_QUERY );
 
                 bool bSourceIsLocalized = false;
                 Sequence< sal_Int8 > DialogModelBytes;
@@ -916,8 +916,6 @@ void DlgEditor::Paste()
 
                 if ( xClipDialogModel.is() )
                 {
-                    Reference< XComponentContext > xContext(
-                        comphelper::getComponentContext( xMSF ) );
                     ::xmlscript::importDialogModel( ::xmlscript::createInputStream( rtl::ByteSequence(DialogModelBytes.getArray(), DialogModelBytes.getLength()) ) , xClipDialogModel, xContext, m_xDocument );
                 }
 

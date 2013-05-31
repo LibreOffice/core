@@ -27,9 +27,9 @@
 #include <vcl/gradient.hxx>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/graphic/GraphicProvider.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 
 #include <cstring>
 
@@ -80,20 +80,16 @@ Image Tools::GetImage (
         }
         else
         {
-            const ::comphelper::ComponentContext aContext (::comphelper::getProcessServiceFactory());
-            const Reference<graphic::XGraphicProvider> xGraphicProvider (
-                aContext.createComponent("com.sun.star.graphic.GraphicProvider"),
+            const Reference<XComponentContext> xContext (::comphelper::getProcessComponentContext());
+            const Reference<graphic::XGraphicProvider> xGraphicProvider =
+                graphic::GraphicProvider::create( xContext );
+            ::comphelper::NamedValueCollection aMediaProperties;
+            aMediaProperties.put("URL", rsURL);
+            const Reference<graphic::XGraphic> xGraphic (
+                xGraphicProvider->queryGraphic(aMediaProperties.getPropertyValues()),
                 UNO_QUERY);
-            if ( xGraphicProvider.is())
-            {
-                ::comphelper::NamedValueCollection aMediaProperties;
-                aMediaProperties.put("URL", rsURL);
-                const Reference<graphic::XGraphic> xGraphic (
-                    xGraphicProvider->queryGraphic(aMediaProperties.getPropertyValues()),
-                    UNO_QUERY);
-                if (xGraphic.is())
-                    return Image(xGraphic);
-            }
+            if (xGraphic.is())
+                return Image(xGraphic);
         }
     }
     return Image();
@@ -158,10 +154,8 @@ util::URL Tools::GetURL (const ::rtl::OUString& rsCommand)
     util::URL aURL;
     aURL.Complete = rsCommand;
 
-    const ::comphelper::ComponentContext aComponentContext (::comphelper::getProcessServiceFactory());
-    const Reference<util::XURLTransformer> xParser (
-        aComponentContext.createComponent("com.sun.star.util.URLTransformer"),
-            UNO_QUERY_THROW);
+    const Reference<XComponentContext> xComponentContext (::comphelper::getProcessComponentContext());
+    const Reference<util::XURLTransformer> xParser = util::URLTransformer::create( xComponentContext );
     xParser->parseStrict(aURL);
 
     return aURL;
@@ -190,10 +184,8 @@ Reference<frame::XDispatch> Tools::GetDispatch (
 
     try
     {
-        const ::comphelper::ComponentContext aContext (::comphelper::getProcessServiceFactory());
-        const Reference<frame::XModuleManager> xModuleManager (
-            aContext.createComponent("com.sun.star.frame.ModuleManager"),
-            UNO_QUERY_THROW);
+        const Reference<XComponentContext> xComponentContext (::comphelper::getProcessComponentContext());
+        const Reference<frame::XModuleManager> xModuleManager = frame::ModuleManager::create( xComponentContext );
         return xModuleManager->identify(rxFrame);
     }
     catch (const Exception&)

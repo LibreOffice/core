@@ -75,12 +75,10 @@ DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const OUStri
             if ( xISP.is() )
             {
                 // create dialog model
-                Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
-                Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
-                    ( "com.sun.star.awt.UnoControlDialogModel" ), UNO_QUERY );
+                Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+                Reference< container::XNameContainer > xDialogModel( xContext->getServiceManager()->createInstanceWithContext
+                    ( "com.sun.star.awt.UnoControlDialogModel", xContext ), UNO_QUERY );
                 Reference< XInputStream > xInput( xISP->createInputStream() );
-                Reference< XComponentContext > xContext(
-                    comphelper::getComponentContext( xMSF ) );
                 ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
                 LocalizationMgr::setStringResourceAtDialog( rDocument, rLibName, aDlgName, xDialogModel );
 

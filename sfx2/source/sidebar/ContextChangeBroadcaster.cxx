@@ -19,7 +19,7 @@
 #include "sfx2/sidebar/EnumContext.hxx"
 #include <com/sun/star/ui/ContextChangeEventObject.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -115,10 +115,8 @@ OUString ContextChangeBroadcaster::GetModuleName (const cssu::Reference<css::fra
         return OUString();
     try
     {
-        const ::comphelper::ComponentContext aContext (::comphelper::getProcessServiceFactory());
-        const Reference<frame::XModuleManager> xModuleManager (
-            aContext.createComponent("com.sun.star.frame.ModuleManager" ),
-            UNO_QUERY_THROW );
+        const Reference<XComponentContext> xContext (::comphelper::getProcessComponentContext() );
+        const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
         return xModuleManager->identify(rxFrame);
     }
     catch (const Exception&)

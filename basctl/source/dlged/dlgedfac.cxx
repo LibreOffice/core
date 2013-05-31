@@ -50,8 +50,8 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
 
     if( bNeedsInit )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        uno::Reference< container::XNameContainer > xC( xMSF->createInstance( "com.sun.star.awt.UnoControlDialogModel" ), uno::UNO_QUERY );
+        uno::Reference< uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+        uno::Reference< container::XNameContainer > xC( xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.awt.UnoControlDialogModel", xContext ), uno::UNO_QUERY );
         if( xC.is() )
         {
             uno::Reference< lang::XMultiServiceFactory > xModFact( xC, uno::UNO_QUERY );

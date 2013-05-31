@@ -29,7 +29,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 
 #include <map>
 
@@ -598,10 +598,9 @@ void ResourceManager::StorePanelExpansionState (
 {
     try
     {
-        const ::comphelper::ComponentContext aContext (::comphelper::getProcessServiceFactory());
-        const Reference<container::XNameAccess> xModuleAccess (
-            aContext.createComponent("com.sun.star.frame.ModuleManager"),
-            UNO_QUERY_THROW);
+        const Reference<XComponentContext> xContext (::comphelper::getProcessComponentContext() );
+        const Reference<frame::XModuleManager2> xModuleAccess =
+            frame::ModuleManager::create( xContext );
         const ::comphelper::NamedValueCollection aModuleProperties (xModuleAccess->getByName(rsModuleName));
         const ::rtl::OUString sWindowStateRef (aModuleProperties.getOrDefault(
                 "ooSetupFactoryWindowStateConfigRef",
@@ -612,7 +611,7 @@ void ResourceManager::StorePanelExpansionState (
         aPathComposer.append(sWindowStateRef);
         aPathComposer.appendAscii("/UIElements/States");
 
-        return ::utl::OConfigurationTreeRoot(::comphelper::getProcessComponentContext(),
+        return ::utl::OConfigurationTreeRoot(xContext,
             aPathComposer.makeStringAndClear(), false);
     }
     catch( const Exception& )

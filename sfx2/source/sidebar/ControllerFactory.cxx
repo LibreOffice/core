@@ -22,7 +22,7 @@
 
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XUIControllerFactory.hpp>
+#include <com/sun/star/frame/ToolbarControllerFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <framework/sfxhelperfunctions.hxx>
@@ -145,9 +145,8 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
 {
     try
     {
-        Reference<frame::XUIControllerFactory> xFactory (
-            comphelper::getProcessServiceFactory()->createInstance(A2S("com.sun.star.frame.ToolbarControllerFactory")),
-            UNO_QUERY);
+        Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+        Reference<frame::XUIControllerFactory> xFactory = frame::ToolbarControllerFactory::create( xContext );
         OUString sModuleName (Tools::GetModuleName(rxFrame));
 
         if (xFactory.is() && xFactory->hasController(rsCommandName,  sModuleName))
@@ -178,17 +177,12 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
                 aPropertyVector.push_back( makeAny( aPropValue ));
             }
 
-            Reference<beans::XPropertySet> xFactoryProperties (comphelper::getProcessServiceFactory(), UNO_QUERY);
-            Reference<XComponentContext > xComponentContext;
-            if (xFactoryProperties.is())
-                xFactoryProperties->getPropertyValue(A2S("DefaultContext")) >>= xComponentContext;
-
             Sequence<Any> aArgs (comphelper::containerToSequence(aPropertyVector));
             return Reference<frame::XToolbarController>(
                 xFactory->createInstanceWithArgumentsAndContext(
                     rsCommandName,
                     aArgs,
-                    xComponentContext),
+                    xContext),
                 UNO_QUERY);
         }
     }

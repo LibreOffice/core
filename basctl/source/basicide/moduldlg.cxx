@@ -284,12 +284,10 @@ void Shell::CopyDialogResources(
         return;
 
     // create dialog model
-    Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    Reference< container::XNameContainer > xDialogModel = Reference< container::XNameContainer >( xMSF->createInstance
-        ( "com.sun.star.awt.UnoControlDialogModel" ), UNO_QUERY );
+    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    Reference< container::XNameContainer > xDialogModel = Reference< container::XNameContainer >( xContext->getServiceManager()->createInstanceWithContext
+        ( "com.sun.star.awt.UnoControlDialogModel", xContext ), UNO_QUERY );
     Reference< io::XInputStream > xInput( io_xISP->createInputStream() );
-    Reference< XComponentContext > xContext(
-        comphelper::getComponentContext( xMSF ) );
     ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rSourceDoc.isDocument() ? rSourceDoc.getDocument() : Reference< frame::XModel >() );
 
     if( xDialogModel.is() )

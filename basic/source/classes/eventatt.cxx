@@ -423,7 +423,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     (void)pBasic;
     (void)bWrite;
 
-    Reference< XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory() );
+    Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
     // We need at least 1 parameter
     if ( rPar.Count() < 2 )
@@ -450,8 +450,8 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     }
 
     // Create new uno dialog
-    Reference< XNameContainer > xDialogModel( xMSF->createInstance(
-                      OUString("com.sun.star.awt.UnoControlDialogModel")), UNO_QUERY );
+    Reference< XNameContainer > xDialogModel( xContext->getServiceManager()->createInstanceWithContext(
+                      "com.sun.star.awt.UnoControlDialogModel", xContext), UNO_QUERY );
     if( !xDialogModel.is() )
     {
         return;
@@ -462,7 +462,6 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     {
         return;
     }
-    Reference< XComponentContext > xContext( comphelper::getComponentContext( xMSF ) );
 
     // Import the DialogModel
     Reference< XInputStream > xInput( xISP->createInputStream() );

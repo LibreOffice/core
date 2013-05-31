@@ -47,7 +47,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/ContextChangeEventObject.hpp>
-#include <com/sun/star/ui/XUIElementFactory.hpp>
+#include <com/sun/star/ui/UIElementFactoryManager.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
@@ -689,10 +689,9 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
 {
     try
     {
-        const ::comphelper::ComponentContext aComponentContext (::comphelper::getProcessServiceFactory());
-        const Reference<ui::XUIElementFactory> xUIElementFactory (
-            aComponentContext.createComponent("com.sun.star.ui.UIElementFactoryManager"),
-            UNO_QUERY_THROW);
+        const Reference<XComponentContext> xComponentContext (::comphelper::getProcessComponentContext() );
+        const Reference<ui::XUIElementFactory> xUIElementFactory =
+               ui::UIElementFactoryManager::create( xComponentContext );
 
        // Create the XUIElement.
         ::comphelper::NamedValueCollection aCreationArguments;
