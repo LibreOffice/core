@@ -135,9 +135,9 @@ endif
 
 LINK_JAVA_LIBS=/LIBPATH:"$(OO_SDK_JAVA_HOME)/lib"
 
-ifneq "$(OO_SDK_URE_HOME)" ""
-URE_MISC=$(OO_SDK_URE_HOME)\misc
-endif
+#ifneq "$(OFFICE_PROGRAM_PATH)" ""
+#URE_MISC=$(OFFICE_PROGRAM_PATH)\misc
+#endif
 
 # use this for release version
 #EXE_LINK_FLAGS=/MAP /OPT:NOREF /SUBSYSTEM:CONSOLE /BASE:0x1100000
@@ -154,7 +154,7 @@ endif
 ifneq (,$(findstring solaris,$(PLATFORM)))
 # Settings for Solaris using Sun Workshop compiler
 
-PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)$(shell /usr/ccs/bin/elfdump -e "$(OO_SDK_URE_HOME)/lib/libuno_sal.so.3" | /usr/xpg4/bin/grep -q -w ELFCLASS64 && echo 64)
+PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)$(shell /usr/ccs/bin/elfdump -e "$(OFFICE_PROGRAM_PATH)/libuno_sal.so.3" | /usr/xpg4/bin/grep -q -w ELFCLASS64 && echo 64)
 
 ifeq "$(PROCTYPE)" "sparc"
 PLATFORM=solsparc
@@ -255,8 +255,8 @@ LIBRARY_LINK_FLAGS+=-m64
 EXE_LINK_FLAGS+=-m64
 endif
 
-ifneq "$(OO_SDK_URE_HOME)" ""
-URE_MISC=$(OO_SDK_URE_HOME)/share/misc
+ifneq "$(OFFICE_PROGRAM_PATH)" ""
+URE_MISC=$(OFFICE_PROGRAM_PATH)/share/misc
 endif
 
 endif
@@ -402,8 +402,8 @@ EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs -Wl,-
 LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)"
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 
-ifneq "$(OO_SDK_URE_HOME)" ""
-URE_MISC=$(OO_SDK_URE_HOME)/share/misc
+ifneq "$(OFFICE_PROGRAM_PATH)" ""
+URE_MISC=$(OFFICE_PROGRAM_PATH)/share/misc
 endif
 
 endif
@@ -490,7 +490,7 @@ SALHELPERDYLIB=-Wl,-dylib_file,@________________________________________________
 REGDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libreg.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libreg.dylib'
 STOREDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libstore.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libstore.dylib'
 
-INSTALL_NAME_URELIBS=install_name_tool -change @__________________________________________________URELIB/libuno_sal.dylib.3 @executable_path/urelibs/libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 @executable_path/urelibs/libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 @executable_path/urelibs/libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 @executable_path/urelibs/libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 @executable_path/urelibs/libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 @executable_path/urelibs/libstore.dylib.3
+INSTALL_NAME_URELIBS=install_name_tool -change @__________________________________________________URELIB/libuno_sal.dylib.3 @executable_path/libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 @executable_path/libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 @executable_path/libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 @executable_path/libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 @executable_path/libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 @executable_path/libstore.dylib.3
 
 INSTALL_NAME_URELIBS_BIN=install_name_tool -change @__________________________________________________URELIB/libuno_sal.dylib.3 libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 libstore.dylib.3
 
@@ -528,8 +528,8 @@ LINK_LIBS=-L$(OUT)/lib -L$(OO_SDK_OUT)/$(PLATFORM)/lib -L"$(OO_SDK_URE_LIB_DIR)"
 LINK_JAVA_LIBS=-framework JavaVM
 #LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/Libraries"
 
-ifneq "$(OO_SDK_URE_HOME)" ""
-URE_MISC=$(OO_SDK_URE_HOME)/share/misc
+ifneq "$(OFFICE_PROGRAM_PATH)" ""
+URE_MISC=$(OFFICE_PROGRAM_PATH)/share/misc
 endif
 
 endif
@@ -652,9 +652,9 @@ EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined
 LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)" $(PTHREAD_LIBS)
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 
-ifneq "$(OO_SDK_URE_HOME)" ""
-URE_MISC=$(OO_SDK_URE_HOME)/share/misc
-endif
+#ifneq "$(OFFICE_PROGRAM_PATH)" ""
+#URE_MISC=$(OFFICE_PROGRAM_PATH)/share/misc
+#endif
 
 endif
 

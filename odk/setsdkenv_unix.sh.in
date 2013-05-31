@@ -35,12 +35,6 @@ OO_SDK_HOME='@OO_SDK_HOME@'
 # Office installation directory.
 # Example: OFFICE_HOME=/opt/openoffice4
 OFFICE_HOME='@OFFICE_HOME@'
-OFFICE_BASE_HOME='@OFFICE_BASE_HOME@'
-
-# URE installation directory.
-# Example: OO_SDK_URE_HOME=/opt/openoffice/ure
-OO_SDK_URE_HOME='@OO_SDK_URE_HOME@'
-export OO_SDK_URE_HOME
 
 # Directory of the make command.
 # Example: OO_SDK_MAKE_HOME=/usr/bin
@@ -115,14 +109,6 @@ then
     export OFFICE_PROGRAM_PATH
 fi
 
-# Set office program path (only set when using an Office).
-if [ "${OFFICE_BASE_HOME}" ]
-then
-    OFFICE_BASE_PROGRAM_PATH=${OFFICE_BASE_HOME}/program
-    export OFFICE_BASE_PROGRAM_PATH
-fi
-
-
 # Set UNO path, necessary to ensure that the cpp examples using the
 # new UNO bootstrap mechanism use the configured office installation (only set
 # when using an Office).
@@ -132,16 +118,10 @@ then
     export UNO_PATH
 fi
 
-if [ "${OO_SDK_URE_HOME}" ]
-then
-    OO_SDK_URE_BIN_DIR=${OO_SDK_URE_HOME}/bin
-    OO_SDK_URE_LIB_DIR=${OO_SDK_URE_HOME}/lib
-    OO_SDK_URE_JAVA_DIR=${OO_SDK_URE_HOME}/share/java
-else
-    OO_SDK_URE_BIN_DIR=${OFFICE_PROGRAM_PATH}
-    OO_SDK_URE_LIB_DIR=${OFFICE_BASE_PROGRAM_PATH}
-    OO_SDK_URE_JAVA_DIR=${OFFICE_BASE_PROGRAM_PATH}/classes
-fi
+OO_SDK_URE_BIN_DIR=${OFFICE_PROGRAM_PATH}
+OO_SDK_URE_LIB_DIR=${OFFICE_PROGRAM_PATH}
+OO_SDK_URE_JAVA_DIR=${OFFICE_PROGRAM_PATH}/classes
+
 export OO_SDK_URE_BIN_DIR
 export OO_SDK_URE_LIB_DIR
 export OO_SDK_URE_JAVA_DIR
@@ -189,7 +169,7 @@ case ${sdk_platform} in
     exampleout=MACOSXexample.out
     platform=MacOSX
     stldebug=_stldebug
-    DYLD_LIBRARY_PATH=${OO_SDK_OUT}/${directoryname}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${DYLD_LIBRARY_PATH}
+    DYLD_LIBRARY_PATH=/usr/lib:${OO_SDK_OUT}/${directoryname}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${DYLD_LIBRARY_PATH}
     export DYLD_LIBRARY_PATH
     ;;
 
@@ -257,7 +237,7 @@ esac
 PATH=${OO_SDK_HOME}/bin:${OO_SDK_OUT}/${exampleout}/bin:${OO_SDK_URE_BIN_DIR}:${OFFICE_PROGRAM_PATH}:.:${PATH}
 
 # Set the classpath
-CLASSPATH=${OO_SDK_URE_JAVA_DIR}/juh.jar:${OO_SDK_URE_JAVA_DIR}/jurt.jar:${OO_SDK_URE_JAVA_DIR}/ridl.jar:${OO_SDK_URE_JAVA_DIR}/unoloader.jar:${OFFICE_BASE_PROGRAM_PATH}/classes/unoil.jar:${CLASSPATH}
+CLASSPATH=${OO_SDK_URE_JAVA_DIR}/juh.jar:${OO_SDK_URE_JAVA_DIR}/jurt.jar:${OO_SDK_URE_JAVA_DIR}/ridl.jar:${OO_SDK_URE_JAVA_DIR}/unoloader.jar:${OO_SDK_URE_JAVA_DIR}/unoil.jar:${CLASSPATH}
 export CLASSPATH
 
 
@@ -339,7 +319,7 @@ then
     fi
 
 #    prepare links 
-    if [ "${OO_SDK_URE_HOME}" ]
+    if [ "${OFFICE_HOME}" ]
     then
 	mkdir -p "${OO_SDK_OUT}/${directoryname}/lib"
 	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_cppu.${soext}.3" \
@@ -370,8 +350,6 @@ echo " * SDK environment is prepared for ${platform}"
 echo " *"
 echo " * SDK = $OO_SDK_HOME"
 echo " * Office = $OFFICE_HOME"
-echo " * Office Base = $OFFICE_BASE_HOME"
-echo " * URE = $OO_SDK_URE_HOME"
 echo " * Make = $OO_SDK_MAKE_HOME"
 echo " * Zip = $OO_SDK_ZIP_HOME"
 echo " * cat = $OO_SDK_CAT_HOME"

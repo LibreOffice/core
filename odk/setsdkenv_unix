@@ -30,7 +30,7 @@ if [ "$OSTYPE" = "Darwin" ]
 then
     OO_SDK_NAME=`basename $OO_SDK_HOME`
 else
-    OO_SDK_NAME=apacheopenoffice${OOVERSION}_sdk
+    OO_SDK_NAME=openoffice${OOVERSION}_sdk
 fi
 
 export OO_SDK_HOME
@@ -41,11 +41,7 @@ then
     then
 	rm $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.sh
     fi	
-    if [ -r $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.csh ]
-    then
-	rm $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.csh
-    fi
-    shift
+   shift
 elif [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ -n "$1" ]
 then
     echo 

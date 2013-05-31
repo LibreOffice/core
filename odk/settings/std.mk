@@ -40,17 +40,17 @@ OUT_DEPLOY=$(OUT)/deploy
 IDL_DIR=$(PRJ)/idl
 BIN_DIR=$(PRJ)/bin
 CLASSES_DIR=$(PRJ)/classes
-URE_CLASSES_DIR=$(subst \,/,$(OO_SDK_URE_JAVA_DIR))
-OFFICE_CLASSES_DIR=$(subst \,/,$(OFFICE_BASE_PROGRAM_PATH))/classes
+URE_CLASSES_DIR=$(subst \,/,$(OFFICE_PROGRAM_PATH))/classes
+OFFICE_CLASSES_DIR=$(subst \,/,$(OFFICE_PROGRAM_PATH))/classes
 COMP_PACKAGE_DIR=$(subst /,$(PS),$(OUT_BIN))
 
 SDKTYPEFLAG=$(OUT_MISC)/oosdk_cpp_types.flag
 
-URE_TYPES="$(subst \,/,$(URE_MISC)$(PS)types.rdb)"
-URE_SERVICES=$(subst \\,\,$(URE_MISC)$(PS)services.rdb)
+URE_TYPES="$(subst \,/,$(OFFICE_PROGRAM_PATH)$(PS)types.rdb)"
+URE_SERVICES=$(subst \\,\,$(OFFICE_PROGRAM_PATH)$(PS)services.rdb)
 
-OFFICE_TYPES="$(subst \,/,$(OFFICE_BASE_PROGRAM_PATH)$(PS)offapi.rdb)"
-OFFICE_SERVICES=$(subst \\,\,$(OFFICE_BASE_PROGRAM_PATH)$(PS)services.rdb)
+OFFICE_TYPES="$(subst \,/,$(OFFICE_PROGRAM_PATH)$(PS)types.rdb)"
+OFFICE_SERVICES=$(subst \\,\,$(OFFICE_PROGRAM_PATH)$(PS)services.rdb)
 
 OFFICE_TYPE_LIBRARY="$(OFFICE_TYPES)"
 
@@ -64,6 +64,12 @@ endif
 endif
 endif
 
+ifeq "$(PLATFORM)" "macosx"
+OFFICE_LAUNCHER=DYLD_LIBRARY_PATH="" && "$(OFFICE_PROGRAM_PATH)$(PS)soffice"
+else
+OFFICE_LAUNCHER="$(OFFICE_PROGRAM_PATH)$(PS)soffice"
+endif
+
 DEPLOYTOOL="$(OFFICE_PROGRAM_PATH)$(PS)unopkg" add -f
 SDK_JAVA="$(OO_SDK_JAVA_HOME)/$(JAVABIN)/java" $(JAVA_OPTIONS)
 SDK_JAVAC="$(OO_SDK_JAVA_HOME)/$(JAVABIN)/javac"
@@ -74,8 +80,8 @@ SDK_SED="$(OO_SDK_SED_HOME)/sed"
 IDLC="$(OO_SDK_HOME)/bin/idlc"
 CPPUMAKER="$(OO_SDK_HOME)/bin/cppumaker"
 JAVAMAKER="$(OO_SDK_HOME)/bin/javamaker"
-REGMERGE="$(OO_SDK_URE_HOME)/bin/regmerge"
-REGCOMP="$(OO_SDK_URE_HOME)/bin/regcomp"
+REGMERGE="$(OFFICE_PROGRAM_PATH)/regmerge"
+REGCOMP="$(OFFICE_PROGRAM_PATH)/regcomp"
 
 SDK_JAVA_UNO_BOOTSTRAP_FILES=\
     -C $(CLASSES_DIR) $(SQM)com/sun/star/lib/loader/Loader.class$(SQM) \
