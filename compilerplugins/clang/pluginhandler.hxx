@@ -28,7 +28,7 @@ class PluginHandler
     public:
         PluginHandler( CompilerInstance& compiler, const vector< string >& args );
         virtual ~PluginHandler();
-        virtual void HandleTranslationUnit( ASTContext& context );
+        virtual void HandleTranslationUnit( ASTContext& context ) override;
         static void registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter );
     private:
         void handleOption( const string& option );

@@ -23,7 +23,7 @@ class LiteralAlternative:
 public:
     explicit LiteralAlternative(CompilerInstance & compiler): Plugin(compiler) {}
 
-    virtual void run() { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
+    virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitCallExpr(const CallExpr * expr);
 };

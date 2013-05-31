@@ -22,7 +22,7 @@ class LclStaticFix
     {
     public:
         explicit LclStaticFix( CompilerInstance& compiler, Rewriter& rewriter );
-        virtual void run();
+        virtual void run() override;
         bool VisitFunctionDecl( const FunctionDecl* declaration );
     };
 

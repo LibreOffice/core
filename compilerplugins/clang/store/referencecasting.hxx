@@ -22,7 +22,7 @@ class ReferenceCasting
     {
     public:
         explicit ReferenceCasting( CompilerInstance& compiler );
-        virtual void run();
+        virtual void run() override;
         bool VisitCXXConstructExpr( CXXConstructExpr* cce );
     };
 

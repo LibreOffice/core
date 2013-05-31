@@ -31,12 +31,12 @@ class CheckConfigMacros
     {
     public:
         explicit CheckConfigMacros( CompilerInstance& compiler );
-        virtual void run();
-        virtual void MacroDefined( const Token& macroToken, const MacroInfo* info );
-        virtual void MacroUndefined( const Token& macroToken , const MacroInfo* info );
-        virtual void Ifdef( SourceLocation location, const Token& macroToken );
-        virtual void Ifndef( SourceLocation location, const Token& macroToken );
-        virtual void Defined( const Token& macroToken );
+        virtual void run() override;
+        virtual void MacroDefined( const Token& macroToken, const MacroInfo* info ) override;
+        virtual void MacroUndefined( const Token& macroToken , const MacroInfo* info ) override;
+        virtual void Ifdef( SourceLocation location, const Token& macroToken ) override;
+        virtual void Ifndef( SourceLocation location, const Token& macroToken ) override;
+        virtual void Defined( const Token& macroToken ) override;
     private:
         void checkMacro( const Token& macroToken, SourceLocation location );
         std::set< string > configMacros;

@@ -29,11 +29,11 @@ class RtlConstAsciiMacro
     {
     public:
         explicit RtlConstAsciiMacro( CompilerInstance& compiler, Rewriter& rewriter );
-        virtual void run();
+        virtual void run() override;
         bool VisitCXXConstructExpr( CXXConstructExpr* expr );
         bool VisitCXXTemporaryObjectExpr( CXXTemporaryObjectExpr* expr );
         bool VisitStringLiteral( const StringLiteral* literal );
-        virtual void MacroExpands( const Token& macro, const MacroInfo* info, SourceRange range );
+        virtual void MacroExpands( const Token& macro, const MacroInfo* info, SourceRange range ) override;
     private:
         map< SourceLocation, SourceLocation > expansions; // start location -> end location
         bool searchingForString;

@@ -29,7 +29,7 @@ class UnusedCode
     {
     public:
         explicit UnusedCode( CompilerInstance& compiler, Rewriter& rewriter );
-        virtual void run();
+        virtual void run() override;
         bool VisitFunctionDecl( const FunctionDecl* declaration );
     };
 
