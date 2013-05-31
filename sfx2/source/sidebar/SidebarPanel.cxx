@@ -105,7 +105,7 @@ cssu::Reference<css::rendering::XCanvas> SAL_CALL SidebarPanel::getCanvas (void)
         const ::comphelper::ComponentContext aComponentContext (::comphelper::getProcessServiceFactory());
         mxCanvas = Reference<rendering::XCanvas>(
             aComponentContext.createComponentWithArguments(
-                "com.sun.star.rendering.VCLCanvas",
+                "com.sun.star.rendering.Canvas.VCL",
                 aArg),
             UNO_QUERY);
     }

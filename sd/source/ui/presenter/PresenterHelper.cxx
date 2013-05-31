@@ -215,7 +215,7 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createCanvas (
             xFactory->createInstanceWithArguments(
                 !rsOptionalCanvasServiceName.isEmpty()
                     ? rsOptionalCanvasServiceName
-                    : OUString("com.sun.star.rendering.VCLCanvas"),
+                    : OUString("com.sun.star.rendering.Canvas.VCL"),
                 aArg),
             UNO_QUERY);
     }
