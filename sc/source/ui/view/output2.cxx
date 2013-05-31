@@ -148,7 +148,8 @@ public:
     SvxCellJustifyMethod    GetVerJustMethod() const { return eAttrVerJustMethod; }
     const SvxMarginItem*    GetMargin() const       { return pMargin; }
 
-    sal_uInt16  GetLeftTotal() const        { return pMargin->GetLeftMargin() + nIndent; }
+    sal_uInt16              GetLeftTotal() const     { return pMargin->GetLeftMargin() + nIndent; }
+    sal_uInt16              GetRightTotal() const    { return pMargin->GetRightMargin() + nIndent; }
 
     const String&           GetString() const       { return aString; }
     const Size&             GetTextSize() const     { return aTextSize; }
@@ -422,7 +423,7 @@ void ScDrawStringsVars::SetPattern(
     //  Raender
 
     pMargin = (const SvxMarginItem*)&pPattern->GetItem( ATTR_MARGIN, pCondSet );
-    if ( eAttrHorJust == SVX_HOR_JUSTIFY_LEFT )
+    if ( eAttrHorJust == SVX_HOR_JUSTIFY_LEFT || eAttrHorJust == SVX_HOR_JUSTIFY_RIGHT )
         nIndent = ((const SfxUInt16Item&)pPattern->GetItem( ATTR_INDENT, pCondSet )).GetValue();
     else
         nIndent = 0;
@@ -1863,7 +1864,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
                                 break;
                             case SVX_HOR_JUSTIFY_RIGHT:
                                 nJustPosX += nAvailWidth - aVars.GetTextSize().Width() -
-                                            (long) ( aVars.GetMargin()->GetRightMargin() * mnPPTX );
+                                            (long) ( aVars.GetRightTotal() * mnPPTX );
                                 bRightAdjusted = sal_True;
                                 break;
                             case SVX_HOR_JUSTIFY_CENTER:
@@ -2376,13 +2377,18 @@ void ScOutputData::DrawEditParam::calcMargins(long& rTopM, long& rLeftM, long& r
         static_cast<const SvxMarginItem&>(mpPattern->GetItem(ATTR_MARGIN, mpCondSet));
 
     sal_uInt16 nIndent = 0;
-    if (meHorJust == SVX_HOR_JUSTIFY_LEFT)
+    if (meHorJust == SVX_HOR_JUSTIFY_LEFT || meHorJust == SVX_HOR_JUSTIFY_RIGHT)
         nIndent = lcl_GetValue<SfxUInt16Item, sal_uInt16>(*mpPattern, ATTR_INDENT, mpCondSet);
 
     rLeftM   = static_cast<long>(((rMargin.GetLeftMargin() + nIndent) * nPPTX));
     rTopM    = static_cast<long>((rMargin.GetTopMargin() * nPPTY));
     rRightM  = static_cast<long>((rMargin.GetRightMargin() * nPPTX));
     rBottomM = static_cast<long>((rMargin.GetBottomMargin() * nPPTY));
+    if(meHorJust == SVX_HOR_JUSTIFY_RIGHT)
+    {
+        rLeftM   = static_cast<long>((rMargin.GetLeftMargin()  * nPPTX));
+        rRightM  = static_cast<long>(((rMargin.GetRightMargin() + nIndent) * nPPTX));
+    }
 }
 
 void ScOutputData::DrawEditParam::calcPaperSize(
