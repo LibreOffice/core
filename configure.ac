@@ -9499,6 +9499,7 @@ if test "$build_gstreamer" = "yes"; then
         ENABLE_GSTREAMER="TRUE"
         AC_MSG_RESULT([yes])
         PKG_CHECK_MODULES( GSTREAMER, gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-video-1.0 )
+        GSTREAMER_CFLAGS="`echo $GSTREAMER_CFLAGS | sed -e \"s/-I/${ISYSTEM}/g\"`"
     else
         AC_MSG_RESULT([no])
     fi
@@ -9518,6 +9519,7 @@ if test "$build_gstreamer_0_10" = "yes"; then
         PKG_CHECK_MODULES( [GSTREAMER_0_10], [gstreamer-0.10 gstreamer-plugins-base-0.10 gstreamer-interfaces-0.10],, [
             PKG_CHECK_MODULES(  [GSTREAMER_0_10], [gstreamer-0.10 gstreamer-plugins-base-0.10] )
         ])
+        GSTREAMER_0_10_CFLAGS="`echo $GSTREAMER_0_10_CFLAGS | sed -e \"s/-I/${ISYSTEM}/g\"`"
     else
         AC_MSG_RESULT([no])
     fi
