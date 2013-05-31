@@ -17,20 +17,8 @@ Libraries: libraptor, librasqal, librdf
 
 == Patches ==
 There are several patches, most of which contain only hacks to get it to
-build with OOo build system.
+build with the LO build system.
 
-There used to be also 3 patches here that fix bugs in redland and ought to be
-of general interest:
-- redland-1.0.8.patch.free_null:
-  redland destructor functions don't check if argument is NULL
-- redland-1.0.8.patch.storage_hashes_context_serialize_get_statement:
-  hashes storage: the function to create statements during serialization does
-                  not fill in the context propery (i.e. context is NULL)
-- redland-1.0.8.patch.storage_hashes_list_duplicates:
-  hashes, list storage: if contexts are enabled, then it is possible to add
-                        duplicate statements
-
-Attempts to upstream these patches failed for reasons upstream kept to
-themselves.  Now these patches are replaced with workarounds in unoxml.
-Note to future maintainers: work around redland bugs in client code.
+Upstream may merge patches that are attached to the bug tracker, but don't
+send patches to the mailing list, those will most likely be ignored.
 
