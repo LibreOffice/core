@@ -1073,7 +1073,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             if ( !OWizardMachine::Finnish( RET_CANCEL ) )
                 return sal_False;
 
-            Reference< XComponentLoader > xFrameLoader;
             try
             {
                 AsyncLoader* pAsyncLoader = new AsyncLoader( getORB(), m_pGeneralPage->GetSelectedDocument().sURL );
