@@ -634,6 +634,34 @@ int SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
+namespace
+{
+    //these tab pages both have the same basic layout with a preview on the
+    //right, get both of their non-preview areas to request the same size
+    //so that the preview appears in the same place in each one so
+    //flipping between tabs isn't distracting as it jumps around
+    void setPreviewsToSamePlace(Window *pParent, VclBuilderContainer *pPage)
+    {
+        for (Window* pChild = pParent->GetWindow(WINDOW_FIRSTCHILD); pChild;
+            pChild = pChild->GetWindow(WINDOW_NEXT))
+        {
+            VclBuilderContainer *pPeer = dynamic_cast<VclBuilderContainer*>(pChild);
+            if (pPeer != pPage)
+            {
+                Window *pOtherGrid = pPeer->get<Window>("maingrid");
+                Window *pOurGrid = pPage->get<Window>("maingrid");
+                if (pOtherGrid && pOurGrid)
+                {
+                    boost::shared_ptr< VclSizeGroup > xGroup(new VclSizeGroup);
+                    pOtherGrid->add_to_size_group(xGroup);
+                    pOurGrid->add_to_size_group(xGroup);
+                }
+            }
+        }
+    }
+}
+
+
 // -----------------------------------------------------------------------
 
 SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,  const SfxItemSet& rAttr ) :
@@ -678,6 +706,8 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,  const SfxItemS
 
     Init_Impl();
     m_pFLineIndent->SetMin(-9999);    // is set to 0 on default
+
+    setPreviewsToSamePlace(pParent, this);
 }
 
 SvxStdParagraphTabPage::~SvxStdParagraphTabPage()
@@ -1068,6 +1098,8 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
             m_pPropertiesFL->Show();
         }
     }
+
+    setPreviewsToSamePlace(pParent, this);
 }
 
 SvxParaAlignTabPage::~SvxParaAlignTabPage()
