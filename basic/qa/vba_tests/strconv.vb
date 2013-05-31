@@ -56,7 +56,7 @@ Function verify_testStrConv() as String
     
     'x = StrConv("ÉÏº£ÊÐABC", vbFromUnicode)
     'MsgBox retStr
-    'TestLog_ASSERT UBound(x) = 8, "Converts the string from Unicode, the lenght is : " & UBound(x) + 1
+    'TestLog_ASSERT UBound(x) = 8, "Converts the string from Unicode, the length is : " & UBound(x) + 1
     
    ' retStr = StrConv(x, vbUnicode)
     'MsgBox retStr
