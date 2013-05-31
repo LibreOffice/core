@@ -1002,6 +1002,8 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
 
             if ( rInf.GetFrm()->IsVertical() )
                 rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+
+            rInf.SetPos( aPos );
         }
 
         if ( !IsCaseMap() )
