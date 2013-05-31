@@ -131,11 +131,13 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     : SfxTabPage(pParent, "OptAdvancedPage", "cui/ui/optadvancedpage.ui", rSet)
     , m_pParamDlg(NULL)
     , m_pPathDlg(NULL)
+#ifdef SOLAR_JAVA
     , m_parJavaInfo(NULL)
     , m_parParameters(NULL)
     , m_pClassPath(NULL)
     , m_nInfoSize(0)
     , m_nParamSize(0)
+#endif
     , xDialogListener(new ::svt::DialogClosedListener())
 {
     get(m_pJavaEnableCB, "javaenabled");

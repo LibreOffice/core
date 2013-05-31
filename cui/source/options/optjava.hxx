@@ -58,11 +58,13 @@ private:
     SvxJavaParameterDlg*    m_pParamDlg;
     SvxJavaClassPathDlg*    m_pPathDlg;
 
+#ifdef SOLAR_JAVA
     JavaInfo**              m_parJavaInfo;
     rtl_uString**           m_parParameters;
     rtl_uString*            m_pClassPath;
     sal_Int32               m_nInfoSize;
     sal_Int32               m_nParamSize;
+#endif
     String                  m_sInstallText;
     String                  m_sAccessibilityText;
     String                  m_sAddDialogText;
