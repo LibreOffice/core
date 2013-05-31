@@ -39,15 +39,6 @@ SHL1STDLIBS= \
         $(CPPULIB) 	\
         $(CPPUHELPERLIB)
 
-.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
-.IF "$(USE_DEBUG_RUNTIME)" != ""
-    SHL1STDLIBS+= $(ATL_LIB)$/atlsd.lib
-.ELSE
-    SHL1STDLIBS+= $(ATL_LIB)$/atls.lib
-.ENDIF
-.ENDIF
-
-
 SHL1DEPN=
 SHL1IMPLIB=		i$(TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib

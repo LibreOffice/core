@@ -3210,7 +3210,6 @@ if test "$_os" = "WINNT"; then
         fi
     fi
 fi
-AC_SUBST(COMEX)
 AC_SUBST(VCVER)
 PathFormat "$MSPDB_PATH"
 MSPDB_PATH="$formatted_path"
