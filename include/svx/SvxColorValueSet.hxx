@@ -35,6 +35,8 @@ public:
     SvxColorValueSet(Window* pParent, WinBits nWinStyle = WB_ITEMBORDER);
     SvxColorValueSet(Window* pParent, const ResId& rResId);
 
+    virtual void Resize();
+
     sal_uInt32 getMaxRowCount() const;
     sal_uInt32 getEntryEdgeLength() const;
     sal_uInt32 getColumnCount() const;
