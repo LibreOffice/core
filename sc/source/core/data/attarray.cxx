@@ -1653,7 +1653,8 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
         const SfxPoolItem* pItem;
 
         bool bNeedJust = ( rOldSet.GetItemState( ATTR_HOR_JUSTIFY, false, &pItem ) != SFX_ITEM_SET
-                        || ((const SvxHorJustifyItem*)pItem)->GetValue() != SVX_HOR_JUSTIFY_LEFT );
+                           || (((const SvxHorJustifyItem*)pItem)->GetValue() != SVX_HOR_JUSTIFY_LEFT &&
+                               ((const SvxHorJustifyItem*)pItem)->GetValue() != SVX_HOR_JUSTIFY_RIGHT ));
         sal_uInt16 nOldValue = ((const SfxUInt16Item&)rOldSet.Get( ATTR_INDENT )).GetValue();
         sal_uInt16 nNewValue = nOldValue;
         if ( bIncrement )
