@@ -488,8 +488,8 @@ void ParaPropertyPanel::InitToolBoxSpacing()
     maTopDist->SetModifyHdl(aLink);
     maBottomDist->SetModifyHdl( aLink );
 
-    mpTopDist->SetAccessibleName(mpTopDist->GetQuickHelpText());
-    mpBottomDist->SetAccessibleName(mpBottomDist->GetQuickHelpText());
+    maTopDist->SetAccessibleName(maTopDist->GetQuickHelpText());
+    maBottomDist->SetAccessibleName(maBottomDist->GetQuickHelpText());
 
     maTbxUL_IncDec->SetItemImage(TOOLBOX_ITEM1, maParInc);
     maTbxUL_IncDec->SetItemImage(TOOLBOX_ITEM2, maParDec);
