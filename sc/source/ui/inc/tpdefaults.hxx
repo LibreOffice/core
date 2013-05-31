@@ -38,9 +38,7 @@ private:
     DECL_LINK( PrefixEditOnFocusHdl, Edit* );
 
 private:
-    FixedText*    m_pFtNSheets;
     NumericField* m_pEdNSheets;
-    FixedText*    m_pFtSheetPrefix;
     Edit*         m_pEdSheetPrefix;
 
     // Stores old Sheet Prefix

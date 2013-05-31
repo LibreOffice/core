@@ -22,29 +22,9 @@ ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCor
     SfxTabPage(pParent, "OptDefaultPage", "modules/scalc/ui/optdefaultpage.ui", rCoreSet)
 
 {
-    get( m_pFtNSheets, "textsheetsnumber");
     get( m_pEdNSheets, "sheetsnumber");
-    get( m_pFtSheetPrefix, "textsheetprefix");
     get( m_pEdSheetPrefix, "sheetprefix");
 
-    // the following computation must be modified accordingly if a third line is added to this dialog
-    long nTxtW1  = m_pFtNSheets->GetCtrlTextWidth( m_pFtNSheets->GetText() );
-    long nCtrlW1 = m_pFtNSheets->GetSizePixel().Width();
-    long nTxtW2  = m_pFtSheetPrefix->GetCtrlTextWidth(m_pFtSheetPrefix->GetText() );
-    long nCtrlW2 = m_pFtSheetPrefix->GetSizePixel().Width();
-    if ( nTxtW1 >= nCtrlW1 || nTxtW2 >= nCtrlW2)
-    {
-        long nTxtW = std::max(nTxtW1,nTxtW2);
-        Size aNewSize = m_pFtNSheets->GetSizePixel();
-        aNewSize.Width() = nTxtW;
-        m_pFtNSheets->SetSizePixel( aNewSize );
-        m_pFtSheetPrefix->SetSizePixel( aNewSize );
-        Point aNewPoint = m_pEdNSheets->GetPosPixel();
-        aNewPoint.X() += (nTxtW - nCtrlW1);
-        m_pEdNSheets->SetPosPixel( aNewPoint );
-        aNewPoint.Y() = m_pEdSheetPrefix->GetPosPixel().Y();
-        m_pEdSheetPrefix->SetPosPixel( aNewPoint );
-    }
     m_pEdNSheets->SetModifyHdl( LINK(this, ScTpDefaultsOptions, NumModifiedHdl) );
     m_pEdSheetPrefix->SetModifyHdl( LINK(this, ScTpDefaultsOptions, PrefixModifiedHdl) );
     m_pEdSheetPrefix->SetGetFocusHdl( LINK(this, ScTpDefaultsOptions, PrefixEditOnFocusHdl) );
