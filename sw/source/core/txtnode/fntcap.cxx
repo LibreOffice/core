@@ -556,7 +556,6 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 {
     OSL_ENSURE( pLastFont, "SwFont::DoOnCapitals: No LastFont?!" );
 
-    Size aPartSize;
     long nKana = 0;
     const XubString aTxt( CalcCaseMap( rDo.GetInf().GetText() ) );
     xub_StrLen nMaxPos = std::min( sal_uInt16(rDo.GetInf().GetText().getLength() - rDo.GetInf().GetIdx()),
@@ -565,7 +564,6 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 
     const XubString& rOldText = rDo.GetInf().GetText();
     rDo.GetInf().SetText( aTxt );
-    rDo.GetInf().SetSize( aPartSize );
     xub_StrLen nPos = rDo.GetInf().GetIdx();
     xub_StrLen nOldPos = nPos;
     nMaxPos = nMaxPos + nPos;
@@ -686,11 +684,12 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 
             rDo.GetInf().SetUpper( sal_False );
             rDo.GetInf().SetOut( *pOutSize );
-            aPartSize = pSmallFont->GetTextSize( rDo.GetInf() );
+            Size aPartSize = pSmallFont->GetTextSize( rDo.GetInf() );
             nKana += rDo.GetInf().GetKanaDiff();
             rDo.GetInf().SetOut( *pOldOut );
             if( nTmpKern && nPos < nMaxPos )
                 aPartSize.Width() += nTmpKern;
+            rDo.GetInf().SetSize( aPartSize );
             rDo.Do();
             nOldPos = nPos;
         }
@@ -750,13 +749,14 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                         }
 
                         rDo.GetInf().SetOut( *pOutSize );
-                        aPartSize = pBigFont->GetTextSize( rDo.GetInf() );
+                        Size aPartSize = pBigFont->GetTextSize( rDo.GetInf() );
                         nKana += rDo.GetInf().GetKanaDiff();
                         rDo.GetInf().SetOut( *pOldOut );
                         if( nSpaceAdd )
                             aPartSize.Width() += nSpaceAdd * ( nTmp - nOldPos );
                         if( nTmpKern && nPos < nMaxPos )
                             aPartSize.Width() += nTmpKern;
+                        rDo.GetInf().SetSize( aPartSize );
                         rDo.Do();
                         aStartPos = rDo.GetInf().GetPos();
                         nOldPos = nTmp;
@@ -790,7 +790,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                     }
 
                     rDo.GetInf().SetOut( *pOutSize );
-                    aPartSize = pBigFont->GetTextSize( rDo.GetInf() );
+                    Size aPartSize = pBigFont->GetTextSize( rDo.GetInf() );
                     nKana += rDo.GetInf().GetKanaDiff();
                     rDo.GetInf().SetOut( *pOldOut );
                     if( !bWordWise && rDo.GetInf().GetSpace() )
@@ -803,6 +803,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                     }
                     if( nTmpKern && nPos < nMaxPos )
                         aPartSize.Width() += nTmpKern;
+                    rDo.GetInf().SetSize( aPartSize );
                     rDo.Do();
                     nOldPos = nTmp;
                 }
