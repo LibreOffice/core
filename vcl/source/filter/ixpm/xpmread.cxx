@@ -37,8 +37,8 @@ XPMReader::XPMReader( SvStream& rStm ) :
             mnHeight        ( 0 ),
             mnColors        ( 0 ),
             mnCpp           ( 0 ),
-            mbTransparent   ( sal_False ),
-            mbStatus        ( sal_True ),
+            mbTransparent   ( false ),
+            mbStatus        ( true ),
             mnStatus        ( 0 ),
             mnIdentifier    ( XPMIDENTIFIER ),
             mcThisByte      ( 0 ),
@@ -73,14 +73,14 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
     if ( mrIStm.GetError() != ERRCODE_IO_PENDING )
     {
         mrIStm.Seek( mnLastPos );
-        mbStatus = sal_True;
+        mbStatus = true;
 
         if ( mbStatus )
         {
             mpStringBuf = new sal_uInt8 [ XPMSTRINGBUF ];
             mpTempBuf = new sal_uInt8 [ XPMTEMPBUFSIZE ];
 
-            if ( ( mbStatus = ImplGetString() ) == sal_True )
+            if ( ( mbStatus = ImplGetString() ) )
             {
                 mnIdentifier = XPMVALUES;           // Bitmap informationen einholen
                 mnWidth = ImplGetULONG( 0 );
@@ -89,9 +89,9 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                 mnCpp = ImplGetULONG( 3 );
             }
             if ( mnColors > ( SAL_MAX_UINT32 / ( 4 + mnCpp ) ) )
-                mbStatus = sal_False;
+                mbStatus = false;
             if ( ( mnWidth * mnCpp ) >= XPMSTRINGBUF )
-                mbStatus = sal_False;
+                mbStatus = false;
             if ( mbStatus && mnWidth && mnHeight && mnColors && mnCpp )
             {
                 mnIdentifier = XPMCOLORS;
@@ -105,15 +105,15 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                 {
                     for ( sal_uLong i = 0; i < mnColors; i++ )
                     {
-                        if ( ImplGetColor( i ) == sal_False )
+                        if ( !ImplGetColor( i ) )
                         {
-                            mbStatus = sal_False;
+                            mbStatus = false;
                             break;
                         }
                     }
                 }
                 else
-                    mbStatus = sal_False;
+                    mbStatus = false;
 
                 if ( mbStatus )
                 {
@@ -131,12 +131,12 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                     maBmp = Bitmap( Size( mnWidth, mnHeight ), nBits );
                     mpAcc = maBmp.AcquireWriteAccess();
 
-                    // mbTransparent ist sal_True wenn mindestens eine Farbe Transparent ist
+                    // mbTransparent ist true wenn mindestens eine Farbe Transparent ist
                     if ( mbTransparent )
                     {
                         maMaskBmp = Bitmap( Size( mnWidth, mnHeight ), 1 );
                         if ( ( mpMaskAcc = maMaskBmp.AcquireWriteAccess() ) == NULL )
-                            mbStatus =  sal_False;
+                            mbStatus = false;
                     }
                     if( mpAcc && mbStatus )
                     {
@@ -167,9 +167,9 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                         mnIdentifier = XPMPIXELS;
                         for ( i = 0; i < mnHeight; i++ )
                         {
-                            if ( ImplGetScanLine( i ) == sal_False )
+                            if ( !ImplGetScanLine( i ) )
                             {
-                                mbStatus = sal_False;
+                                mbStatus = false;
                                 break;
                             }
                         }
@@ -216,13 +216,13 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
 
 // ------------------------------------------------------------------------
 // ImplGetColor ermittelt saemtliche Farbwerte,
-// die Rueckgabe ist sal_True wenn saemtliche Farben zugeordnet werden konnten
+// die Rueckgabe ist true wenn saemtliche Farben zugeordnet werden konnten
 
-sal_Bool XPMReader::ImplGetColor( sal_uLong nNumb )
+bool XPMReader::ImplGetColor( sal_uLong nNumb )
 {
     sal_uInt8*  pString = mpStringBuf;
     sal_uInt8*  pPtr =  ( mpColMap + nNumb * ( 4 + mnCpp ) );
-    sal_Bool    bStatus = ImplGetString();
+    bool    bStatus = ImplGetString();
 
     if ( bStatus )
     {
@@ -237,9 +237,9 @@ sal_Bool XPMReader::ImplGetColor( sal_uLong nNumb )
 // ImpGetScanLine liest den String mpBufSize aus und schreibt die Pixel in die
 // Bitmap. Der Parameter nY gibt die horizontale Position an.
 
-sal_Bool XPMReader::ImplGetScanLine( sal_uLong nY )
+bool XPMReader::ImplGetScanLine( sal_uLong nY )
 {
-    sal_Bool    bStatus = ImplGetString();
+    bool    bStatus = ImplGetString();
     sal_uInt8*  pString = mpStringBuf;
     sal_uInt8*  pColor;
     BitmapColor     aWhite;
@@ -253,7 +253,7 @@ sal_Bool XPMReader::ImplGetScanLine( sal_uLong nY )
             aBlack = mpMaskAcc->GetBestMatchingColor( Color( COL_BLACK ) );
         }
         if ( mnStringSize != ( mnWidth * mnCpp ))
-            bStatus = sal_False;
+            bStatus = false;
         else
         {
             sal_uLong i, j;
@@ -276,7 +276,7 @@ sal_Bool XPMReader::ImplGetScanLine( sal_uLong nY )
                 pColor = mpColMap;
                 for ( j = 0; j < mnColors; j++ )
                 {
-                    if ( ImplCompare( pString, pColor, mnCpp, XPMCASESENSITIVE ) == sal_True )
+                    if ( ImplCompare( pString, pColor, mnCpp, XPMCASESENSITIVE ) )
                     {
                         if ( mnColors > 256 )
                             mpAcc->SetPixel( nY, i, Color ( pColor[3], pColor[4], pColor[5] ) );
@@ -304,11 +304,11 @@ sal_Bool XPMReader::ImplGetScanLine( sal_uLong nY )
 // wurde eine Farbe gefunden wird an pDest[1]..pDest[2] der RGB wert geschrieben
 // pDest[0] enthaelt 0xff wenn die Farbe transparent ist sonst 0
 
-sal_Bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
+bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
 {
     unsigned char cTransparent[] = "None";
 
-    sal_Bool bColStatus = sal_False;
+    bool bColStatus = false;
 
     if ( ImplGetColKey( 'c' ) || ImplGetColKey( 'm' ) || ImplGetColKey( 'g' ) )
     {
@@ -316,7 +316,7 @@ sal_Bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
         if ( *mpPara == '#' )
         {
                 *pDest++ = 0;
-                bColStatus = sal_True;
+                bColStatus = true;
                 switch ( mnParaSize )
                 {
                     case 25 :
@@ -329,7 +329,7 @@ sal_Bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
                         ImplGetRGBHex ( pDest, 0 );
                         break;
                     default:
-                        bColStatus = sal_False;
+                        bColStatus = false;
                         break;
                 }
         }
@@ -337,8 +337,8 @@ sal_Bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
         else if ( ImplCompare( &cTransparent[0], mpPara, 4 ))
         {
             *pDest++ = 0xff;
-            bColStatus = sal_True;
-            mbTransparent = sal_True;
+            bColStatus = true;
+            mbTransparent = true;
         }
         // last we will try to get the colorname
         else if ( mnParaSize > 2 )  // name must enlarge the minimum size
@@ -353,7 +353,7 @@ sal_Bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
                     if ( ImplCompare ( (unsigned char*)pRGBTable[ i ].name,
                             mpPara, mnParaSize, XPMCASENONSENSITIVE ) )
                     {
-                        bColStatus = sal_True;
+                        bColStatus = true;
                         *pDest++ = 0;
                         *pDest++ = pRGBTable[ i ].red;
                         *pDest++ = pRGBTable[ i ].green;
@@ -369,9 +369,9 @@ sal_Bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
 
 // ------------------------------------------------------------------------
 // ImplGetColKey durchsuch den String mpStringBuf nach einem Parameter 'nKey'
-// und gibt einen sal_Bool zurueck. ( wenn sal_True werden mpPara und mnParaSize gesetzt )
+// und gibt einen bool zurueck. ( wenn true werden mpPara und mnParaSize gesetzt )
 
-sal_Bool XPMReader::ImplGetColKey( sal_uInt8 nKey )
+bool XPMReader::ImplGetColKey( sal_uInt8 nKey )
 {
     sal_uInt8 nTemp, nPrev = ' ';
 
@@ -408,7 +408,7 @@ sal_Bool XPMReader::ImplGetColKey( sal_uInt8 nKey )
             }
         }
     }
-    return ( mnParaSize ) ? sal_True : sal_False;
+    return ( mnParaSize ) ? true : false;
 }
 
 // ------------------------------------------------------------------------
@@ -466,9 +466,9 @@ sal_uLong XPMReader::ImplGetULONG( sal_uLong nPara )
 
 // ------------------------------------------------------------------------
 
-sal_Bool XPMReader::ImplCompare( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nSize, sal_uLong nMode )
+bool XPMReader::ImplCompare( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nSize, sal_uLong nMode )
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     if ( nMode == XPMCASENONSENSITIVE )
     {
@@ -476,7 +476,7 @@ sal_Bool XPMReader::ImplCompare( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong
         {
             if ( ( pSource[i]&~0x20 ) != ( pDest[i]&~0x20 ) )
             {
-                bRet = sal_False;
+                bRet = false;
                 break;
             }
         }
@@ -487,7 +487,7 @@ sal_Bool XPMReader::ImplCompare( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong
         {
             if ( pSource[i] != pDest[i] )
             {
-                bRet = sal_False;
+                bRet = false;
                 break;
             }
         }
@@ -498,10 +498,10 @@ sal_Bool XPMReader::ImplCompare( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong
 // ------------------------------------------------------------------------
 // ImplGetPara versucht den nNumb  ( 0...x ) Parameter aus mpStringBuf zu ermitteln.
 // Ein Parameter ist durch Spaces oder Tabs von den anderen getrennt.
-// Konnte der Parameter gefunden werden ist der Rueckgabewert sal_True und mpPara + mnParaSize
+// Konnte der Parameter gefunden werden ist der Rueckgabewert true und mpPara + mnParaSize
 // werden gesetzt.
 
-sal_Bool XPMReader::ImplGetPara ( sal_uLong nNumb )
+bool XPMReader::ImplGetPara ( sal_uLong nNumb )
 {
     sal_uInt8   nByte;
     sal_uLong   pSize = 0;
@@ -548,7 +548,7 @@ sal_Bool XPMReader::ImplGetPara ( sal_uLong nNumb )
         pSize++;
         pPtr++;
     }
-    return ( ( nCount == nNumb ) && ( mpPara ) ) ? sal_True : sal_False;
+    return ( ( nCount == nNumb ) && ( mpPara ) );
 }
 
 // ------------------------------------------------------------------------
@@ -556,7 +556,7 @@ sal_Bool XPMReader::ImplGetPara ( sal_uLong nNumb )
 // mnStringSize enthaelt die Groesse des gelesenen Strings.
 // Bemerkungen wie '//' und '/*.....*/' werden uebersprungen.
 
-sal_Bool XPMReader::ImplGetString( void )
+bool XPMReader::ImplGetString( void )
 {
     sal_uInt8       sID[] = "/* XPM */";
     sal_uInt8*      pString = mpStringBuf;
@@ -578,13 +578,13 @@ sal_Bool XPMReader::ImplGetString( void )
             {
                 if ( mnTempAvail <= 50 )
                 {
-                    mbStatus = sal_False;   // file is too short to be a correct XPM format
+                    mbStatus = false;   // file is too short to be a correct XPM format
                     break;
                 }
                 for ( int i = 0; i < 9; i++ )   // searching for "/* XPM */"
                     if ( *mpTempPtr++ != sID[i] )
                     {
-                        mbStatus = sal_False;
+                        mbStatus = false;
                         break;
                     }
                 mnTempAvail-=9;
@@ -616,7 +616,7 @@ sal_Bool XPMReader::ImplGetString( void )
             }
             if ( mnStringSize >= ( XPMSTRINGBUF - 1 ) )
             {
-                mbStatus = sal_False;
+                mbStatus = false;
                 break;
             }
             *pString++ = mcThisByte;
@@ -654,11 +654,11 @@ sal_Bool XPMReader::ImplGetString( void )
 // - ImportXPM -
 // -------------
 
-sal_Bool ImportXPM( SvStream& rStm, Graphic& rGraphic )
+bool ImportXPM( SvStream& rStm, Graphic& rGraphic )
 {
     XPMReader*  pXPMReader = (XPMReader*) rGraphic.GetContext();
     ReadState   eReadState;
-    sal_Bool        bRet = sal_True;
+    bool        bRet = true;
 
     if( !pXPMReader )
         pXPMReader = new XPMReader( rStm );
@@ -668,7 +668,7 @@ sal_Bool ImportXPM( SvStream& rStm, Graphic& rGraphic )
 
     if( eReadState == XPMREAD_ERROR )
     {
-        bRet = sal_False;
+        bRet = false;
         delete pXPMReader;
     }
     else if( eReadState == XPMREAD_OK )

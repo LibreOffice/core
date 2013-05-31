@@ -69,8 +69,8 @@ private:
     sal_uLong               mnHeight;
     sal_uLong               mnColors;
     sal_uLong               mnCpp;                              // characters per pix
-    sal_Bool                mbTransparent;
-    sal_Bool                mbStatus;
+    bool                mbTransparent;
+    bool                mbStatus;
     sal_uLong               mnStatus;
     sal_uLong               mnIdentifier;
     sal_uInt8               mcThisByte;
@@ -85,14 +85,14 @@ private:
     sal_uLong               mnParaSize;
     sal_uInt8*              mpPara;
 
-    sal_Bool                ImplGetString( void );
-    sal_Bool                ImplGetColor( sal_uLong );
-    sal_Bool                ImplGetScanLine( sal_uLong );
-    sal_Bool                ImplGetColSub( sal_uInt8* );
-    sal_Bool                ImplGetColKey( sal_uInt8 );
+    bool                ImplGetString( void );
+    bool                ImplGetColor( sal_uLong );
+    bool                ImplGetScanLine( sal_uLong );
+    bool                ImplGetColSub( sal_uInt8* );
+    bool                ImplGetColKey( sal_uInt8 );
     void                ImplGetRGBHex( sal_uInt8*, sal_uLong );
-    sal_Bool                ImplGetPara( sal_uLong numb );
-    sal_Bool                ImplCompare( sal_uInt8*, sal_uInt8*, sal_uLong, sal_uLong nmode = XPMCASENONSENSITIVE );
+    bool                ImplGetPara( sal_uLong numb );
+    bool                ImplCompare( sal_uInt8*, sal_uInt8*, sal_uLong, sal_uLong nmode = XPMCASENONSENSITIVE );
     sal_uLong               ImplGetULONG( sal_uLong nPara );
 
 public:
@@ -104,7 +104,7 @@ public:
 
 #endif // _XPMPRIVATE
 
-sal_Bool ImportXPM( SvStream& rStream, Graphic& rGraphic );
+bool ImportXPM( SvStream& rStream, Graphic& rGraphic );
 
 #endif // _XPMREAD_HXX
 
