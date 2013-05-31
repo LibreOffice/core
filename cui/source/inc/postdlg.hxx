@@ -89,7 +89,7 @@ public:
 private:
     FixedText*          m_pLastEditFT;
 
-    MultiLineEdit*      m_pEditED;
+    VclMultiLineEdit*   m_pEditED;
 
     VclContainer*       m_pInsertAuthor;
     PushButton*         m_pAuthorBtn;
