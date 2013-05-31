@@ -24,15 +24,11 @@
 #include "sal/types.h"
 
 #include "excelfilter.hxx"
-#include "xestream.hxx"
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL scfilt_component_getFactory(
     char const * pImplName, void * pServiceManager, void * pRegistryKey)
 {
     static cppu::ImplementationEntry const services[] = {
-        { XlsxExport_create, XlsxExport_getImplementationName,
-          XlsxExport_getSupportedServiceNames,
-          cppu::createSingleComponentFactory, 0, 0 },
         { oox::xls::ExcelFilter_create,
           oox::xls::ExcelFilter_getImplementationName,
           oox::xls::ExcelFilter_getSupportedServiceNames,

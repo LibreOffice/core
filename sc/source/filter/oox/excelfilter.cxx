@@ -29,6 +29,7 @@
 #include "stylesbuffer.hxx"
 #include "themebuffer.hxx"
 #include "workbookfragment.hxx"
+#include "xestream.hxx"
 
 namespace oox {
 namespace xls {
@@ -167,7 +168,8 @@ sal_Bool SAL_CALL ExcelFilter::filter( const ::com::sun::star::uno::Sequence< ::
 
     if ( isExportFilter() )
     {
-        Reference< XExporter > xExporter = css::oox::ExcelFilterExport::create( getComponentContext() );
+        Reference< XExporter > xExporter(
+            new XclExpXmlStream( getComponentContext() ) );
 
         Reference< XComponent > xDocument( getModel(), UNO_QUERY );
         Reference< XFilter > xFilter( xExporter, UNO_QUERY );

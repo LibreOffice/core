@@ -19,9 +19,6 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" prefix="scfilt"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.oox.ExcelFilterExport">
-    <service name="com.sun.star.oox.ExcelFilterExport"/>
-  </implementation>
   <implementation name="com.sun.star.comp.oox.xls.ExcelFilter">
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExportFilter"/>

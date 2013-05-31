@@ -1141,15 +1141,6 @@ bool XclExpXmlStream::exportDocument() throw()
     return true;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// UNO stuff so that the filter is registered
-//////////////////////////////////////////////////////////////////////////
-
-OUString XlsxExport_getImplementationName()
-{
-    return OUString( "com.sun.star.comp.oox.ExcelFilterExport" );
-}
-
 ::oox::ole::VbaProject* XclExpXmlStream::implCreateVbaProject() const
 {
     return new ::oox::xls::ExcelVbaProject( getComponentContext(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
@@ -1158,20 +1149,6 @@ OUString XlsxExport_getImplementationName()
 OUString XclExpXmlStream::implGetImplementationName() const
 {
     return OUString( "TODO" );
-}
-
-
-Sequence< OUString > XlsxExport_getSupportedServiceNames()
-{
-    Sequence< OUString > aSeq( 2 );
-    aSeq[0] = "com.sun.star.document.ExportFilter";
-    aSeq[1] = "com.sun.star.oox.ExcelFilterExport";
-    return aSeq;
-}
-
-Reference< XInterface > SAL_CALL XlsxExport_create(const Reference< XComponentContext > & rCC )
-{
-    return (cppu::OWeakObject*) new XclExpXmlStream( rCC );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
