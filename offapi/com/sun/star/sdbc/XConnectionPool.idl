@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*
+/**
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -24,7 +24,7 @@
 
 module com {  module sun {  module star {  module sdbc {
 
-/*
+/**
   @since LibreOffice 4.1
 */
 published interface XConnectionPool
