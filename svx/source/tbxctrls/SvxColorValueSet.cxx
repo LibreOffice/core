@@ -118,6 +118,15 @@ Size SvxColorValueSet::layoutAllVisible(sal_uInt32 nEntryCount)
     return CalcWindowSizePixel(aItemSize);
 }
 
+void SvxColorValueSet::Resize()
+{
+    Window *pParent = GetParent();
+    //don't do this for the drop down color palettes
+    if (pParent && pParent->GetType() != WINDOW_FLOATINGWINDOW)
+        layoutToGivenHeight(GetOutputSizePixel().Height(), GetItemCount());
+    ValueSet::Resize();
+}
+
 Size SvxColorValueSet::layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntryCount)
 {
     if(!nEntryCount)
