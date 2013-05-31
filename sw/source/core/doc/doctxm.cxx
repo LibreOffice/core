@@ -1533,6 +1533,8 @@ static String lcl_GetNumString( const SwTOXSortTabBase& rBase, bool bUsePrefix, 
 /// to a single space, and trailing space removed.
 String lcl_RemoveLineBreaks( String sRet )
 {
+    if (!sRet.Len())
+        return sRet;
     xub_StrLen nOffset = 0;
     sRet.SearchAndReplaceAll('\n', ' ');
     for (xub_StrLen i = 1; i < sRet.Len(); i++)
