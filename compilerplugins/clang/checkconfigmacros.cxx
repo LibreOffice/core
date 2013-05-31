@@ -32,11 +32,19 @@ class CheckConfigMacros
     public:
         explicit CheckConfigMacros( CompilerInstance& compiler );
         virtual void run() override;
+#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
         virtual void MacroDefined( const Token& macroToken, const MacroInfo* info ) override;
-        virtual void MacroUndefined( const Token& macroToken , const MacroInfo* info ) override;
+        virtual void MacroUndefined( const Token& macroToken, const MacroInfo* info ) override;
         virtual void Ifdef( SourceLocation location, const Token& macroToken ) override;
         virtual void Ifndef( SourceLocation location, const Token& macroToken ) override;
         virtual void Defined( const Token& macroToken ) override;
+#else
+        virtual void MacroDefined( const Token& macroToken, const MacroDirective* info ) override;
+        virtual void MacroUndefined( const Token& macroToken, const MacroDirective* info ) override;
+        virtual void Ifdef( SourceLocation location, const Token& macroToken, const MacroDirective* info ) override;
+        virtual void Ifndef( SourceLocation location, const Token& macroToken, const MacroDirective* info ) override;
+        virtual void Defined( const Token& macroToken, const MacroDirective* info ) override;
+#endif
     private:
         void checkMacro( const Token& macroToken, SourceLocation location );
         std::set< string > configMacros;
@@ -53,9 +61,16 @@ void CheckConfigMacros::run()
     // nothing, only check preprocessor usage
     }
 
+#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
 void CheckConfigMacros::MacroDefined( const Token& macroToken, const MacroInfo* info )
     {
-    const char* filename = compiler.getSourceManager().getPresumedLoc( info->getDefinitionLoc()).getFilename();
+    SourceLocation location = info->getDefinitionLoc();
+#else
+void CheckConfigMacros::MacroDefined( const Token& macroToken, const MacroDirective* info )
+    {
+    SourceLocation location = info->getLocation();
+#endif
+    const char* filename = compiler.getSourceManager().getPresumedLoc( location ).getFilename();
     if( filename != NULL
         && ( strncmp( filename, BUILDDIR "/config_host/", strlen( BUILDDIR "/config_host/" )) == 0
             || strncmp( filename, BUILDDIR "/config_build/", strlen( BUILDDIR "/config_build/" )) == 0 ))
@@ -65,22 +80,38 @@ void CheckConfigMacros::MacroDefined( const Token& macroToken, const MacroInfo* 
         }
     }
 
+#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
 void CheckConfigMacros::MacroUndefined( const Token& macroToken, const MacroInfo* )
+#else
+void CheckConfigMacros::MacroUndefined( const Token& macroToken, const MacroDirective* )
+#endif
     {
     configMacros.erase( macroToken.getIdentifierInfo()->getName());
     }
 
+#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
 void CheckConfigMacros::Ifdef( SourceLocation location, const Token& macroToken )
+#else
+void CheckConfigMacros::Ifdef( SourceLocation location, const Token& macroToken, const MacroDirective* )
+#endif
     {
     checkMacro( macroToken, location );
     }
 
+#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
 void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken )
+#else
+void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken, const MacroDirective* )
+#endif
     {
     checkMacro( macroToken, location );
     }
 
+#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
 void CheckConfigMacros::Defined( const Token& macroToken )
+#else
+void CheckConfigMacros::Defined( const Token& macroToken, const MacroDirective* )
+#endif
     {
     checkMacro( macroToken, macroToken.getLocation());
     }
