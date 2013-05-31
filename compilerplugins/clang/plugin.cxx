@@ -34,13 +34,11 @@ DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef mess
     SourceLocation loc )
     {
     DiagnosticsEngine& diag = compiler.getDiagnostics();
-#if 0
     // Do some mappings (e.g. for -Werror) that clang does not do for custom messages for some reason.
     if( level == DiagnosticsEngine::Warning && diag.getWarningsAsErrors())
         level = DiagnosticsEngine::Error;
     if( level == DiagnosticsEngine::Error && diag.getErrorsAsFatal())
         level = DiagnosticsEngine::Fatal;
-#endif
     string fullMessage = ( message + " [loplugin]" ).str();
     if( loc.isValid())
         return diag.Report( loc, diag.getCustomDiagID( level, fullMessage ));
