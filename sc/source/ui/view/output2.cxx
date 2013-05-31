@@ -140,19 +140,19 @@ public:
     void SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth );
     void        SetAutoText( const String& rAutoText );
 
-    const ScPatternAttr*    GetPattern() const      { return pPattern; }
-    SvxCellOrientation      GetOrient() const       { return eAttrOrient; }
-    SvxCellHorJustify       GetHorJust() const      { return eAttrHorJust; }
-    SvxCellVerJustify       GetVerJust() const      { return eAttrVerJust; }
+    const ScPatternAttr*    GetPattern() const       { return pPattern; }
+    SvxCellOrientation      GetOrient() const        { return eAttrOrient; }
+    SvxCellHorJustify       GetHorJust() const       { return eAttrHorJust; }
+    SvxCellVerJustify       GetVerJust() const       { return eAttrVerJust; }
     SvxCellJustifyMethod    GetHorJustMethod() const { return eAttrHorJustMethod; }
     SvxCellJustifyMethod    GetVerJustMethod() const { return eAttrVerJustMethod; }
-    const SvxMarginItem*    GetMargin() const       { return pMargin; }
+    const SvxMarginItem*    GetMargin() const        { return pMargin; }
 
     sal_uInt16              GetLeftTotal() const     { return pMargin->GetLeftMargin() + nIndent; }
     sal_uInt16              GetRightTotal() const    { return pMargin->GetRightMargin() + nIndent; }
 
-    const String&           GetString() const       { return aString; }
-    const Size&             GetTextSize() const     { return aTextSize; }
+    const String&           GetString() const        { return aString; }
+    const Size&             GetTextSize() const      { return aTextSize; }
     long                    GetOriginalWidth() const { return nOriginalWidth; }
 
     sal_uLong GetResultValueFormat( const ScRefCellValue& rCell ) const;
