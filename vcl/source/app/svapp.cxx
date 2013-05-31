@@ -1728,7 +1728,7 @@ UnoWrapperBase* Application::GetUnoWrapper( sal_Bool bCreateIfNotExist )
     static sal_Bool bAlreadyTriedToCreate = sal_False;
     if ( !pSVData->mpUnoWrapper && bCreateIfNotExist && !bAlreadyTriedToCreate )
     {
-        ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName( "tk", sal_True );
+        ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName( "ootk", sal_True );
         oslModule hTkLib = osl_loadModuleRelative(
             &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
         if ( hTkLib )

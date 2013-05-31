@@ -69,7 +69,7 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     svt \
     svx \
     svxcore \
-    tk \
+    ootk \
     tl \
     ucbhelper \
     utl \

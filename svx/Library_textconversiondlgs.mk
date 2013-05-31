@@ -43,8 +43,8 @@ $(eval $(call gb_Library_add_linked_libs,textconversiondlgs,\
     sal \
     svl \
     svt \
-    stl \
-    tk \
+        stl \
+    ootk \
     tl \
     utl \
     vcl \

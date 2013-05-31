@@ -65,7 +65,7 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     stl \
     svl \
     svt \
-    tk \
+    ootk \
     tl \
     ucbhelper \
     utl \

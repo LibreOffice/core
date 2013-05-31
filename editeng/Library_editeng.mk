@@ -140,7 +140,7 @@ $(eval $(call gb_Library_add_linked_libs,editeng,\
     basegfx \
     lng \
     svt \
-    tk \
+    ootk \
     vcl \
     svl \
     stl \

@@ -44,7 +44,7 @@ $(eval $(call gb_Library_add_linked_libs,fwm,\
     stl \
     svl \
     svt \
-    tk \
+    ootk \
     tl \
     utl \
     vcl \

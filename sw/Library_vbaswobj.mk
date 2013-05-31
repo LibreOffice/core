@@ -52,7 +52,7 @@ $(eval $(call gb_Library_add_linked_libs,vbaswobj,\
     svx \
     svxcore \
     sw \
-    tk \
+    ootk \
     tl \
     utl \
     vbahelper \

@@ -49,7 +49,7 @@ $(eval $(call gb_Library_add_linked_libs,fwi,\
     stl \
     svl \
     svt \
-    tk \
+    ootk \
     tl \
     utl \
     vcl \

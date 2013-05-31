@@ -1503,7 +1503,7 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Wininetbe, wininetbe1.uno )
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Macbe, macbe1.uno )
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Tk, tk )
+STD_LIB_FILE( gid_File_Lib_Tk, ootk )
 STD_LIB_FILE( gid_File_Lib_Acc, acc )
 
 STD_LIB_FILE( gid_File_Lib_Tools, tl )

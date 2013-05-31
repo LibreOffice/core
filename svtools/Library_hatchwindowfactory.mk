@@ -40,7 +40,7 @@ $(eval $(call gb_Library_add_linked_libs,hatchwindowfactory,\
     cppu \
     cppuhelper \
     sal \
-    tk \
+    ootk \
     tl \
     vcl \
     stl \

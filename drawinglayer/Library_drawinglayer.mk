@@ -56,7 +56,7 @@ $(eval $(call gb_Library_add_linked_libs,drawinglayer,\
 	stl \
 	svl \
 	svt \
-	tk \
+	ootk \
 	tl \
 	vcl \
     $(gb_STDLIBS) \
