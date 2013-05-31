@@ -408,6 +408,8 @@ private:
        for each level of nested tables there is one frame in the stack
      */
     stack<typename TableData<T, PropertiesPointer>::Pointer_t > mTableDataStack;
+    typename RowData<T, PropertiesPointer>::Pointer_t mpUnfinishedRow;
+    bool mbKeepUnfinishedRow;
 
     typedef typename TableDataHandler<T, PropertiesPointer>::Pointer_t TableDataHandlerPointer_t;
 
@@ -485,6 +487,14 @@ protected:
     /** let the derived class clear their table related data
      */
     virtual void clearData();
+
+    /** Should we keep the unfinished row in endLevel to initialize the table
+        data in the following startLevel.
+      */
+    void setKeepUnfinishedRow(bool bKeep)
+    {
+        mbKeepUnfinishedRow = bKeep;
+    }
 
 
 public:
@@ -618,7 +628,7 @@ public:
 
 template <typename T, typename PropertiesPointer>
 TableManager<T, PropertiesPointer>::TableManager()
-: mnTableDepthNew(0), mnTableDepth(0)
+: mnTableDepthNew(0), mnTableDepth(0), mbKeepUnfinishedRow( false )
 {
     setRowEnd(false);
     setInCell(false);
@@ -731,6 +741,18 @@ void TableManager<T, PropertiesPointer>::startLevel()
     typename TableData<T, PropertiesPointer>::Pointer_t pTableData
         (new TableData<T, PropertiesPointer>(mTableDataStack.size()));
 
+    // If we have an unfinished row stored here, then push it to the new TableData
+    if ( mpUnfinishedRow )
+    {
+        for (unsigned int i = 0; i < mpUnfinishedRow->getCellCount(); ++i)
+        {
+            pTableData->addCell( mpUnfinishedRow->getCellStart(i),
+                                 mpUnfinishedRow->getCellProperties(i) );
+            pTableData->endCell( mpUnfinishedRow->getCellEnd(i) );
+        }
+        mpUnfinishedRow.reset();
+    }
+
     mTableDataStack.push(pTableData);
     mState.startLevel();
 }
@@ -741,6 +763,9 @@ void TableManager<T, PropertiesPointer>::endLevel()
     if (mpTableDataHandler.get() != NULL)
         resolveCurrentTable();
 
+    // Store the unfinished row as it will be used for the next table
+    if ( mbKeepUnfinishedRow )
+        mpUnfinishedRow = mTableDataStack.top()->getCurrentRow();
     mState.endLevel();
     mTableDataStack.pop();
 
@@ -802,7 +827,7 @@ void TableManager<T, PropertiesPointer>::endParagraphGroup()
         if (isRowEnd())
         {
             endOfRowAction();
-            pTableData->endRow(getRowProps());
+            mTableDataStack.top()->endRow(getRowProps());
             resetRowProps();
         }
 
@@ -963,7 +988,7 @@ void TableManager<T, PropertiesPointer>::insertTableProps(PropertiesPointer pPro
         mpTableLogger->startElement("tablemanager.insertTableProps");
 #endif
 
-    if( getTableProps().get() )
+    if( getTableProps().get() && getTableProps() != pProps)
         getTableProps()->InsertProps(pProps);
     else
         setTableProps(pProps);

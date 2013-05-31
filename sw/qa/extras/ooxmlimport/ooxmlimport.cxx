@@ -116,6 +116,7 @@ public:
     void testPageBackground();
     void testWatermark();
     void testPageBorderShadow();
+    void testN816593();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -200,6 +201,7 @@ void Test::run()
         {"page-background.docx", &Test::testPageBackground},
         {"watermark.docx", &Test::testWatermark},
         {"page-border-shadow.docx", &Test::testPageBorderShadow},
+        {"n816593.docx", &Test::testN816593},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1428,6 +1430,15 @@ void Test::testPageBorderShadow()
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
     // w:sz="48" is in eights of a point, 1 pt is 20 twips.
     CPPUNIT_ASSERT_EQUAL(sal_Int16(TWIP_TO_MM100(48/8*20)), aShadow.ShadowWidth);
+}
+
+void Test::testN816593()
+{
+    // Two consecutive <w:tbl> without any paragraph in between, but with different tblpPr. In this
+    // case we need to have 2 different tables instead of 1
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -46,6 +46,8 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     bool            m_bOOXML;
     OUString m_sTableStyleName;
     std::vector< TablePositionHandlerPtr > m_aTablePositions;
+    std::vector< TablePositionHandlerPtr > m_aTmpPosition; ///< Temporarily stores the position to compare it later
+    std::vector< TablePropertyMapPtr > m_aTmpTableProperties; ///< Temporarily stores the table properties until end of row
     PropertyMapPtr  m_pTableStyleTextProperies;
 
     ::std::vector< IntVectorPtr >  m_aTableGrid;
@@ -122,7 +124,7 @@ public:
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
         else
-           DomainMapperTableManager_Base_t::insertTableProps( pProps );
+            m_aTmpTableProperties.back()->InsertProps(pProps);
     };
 
     bool IsRowSizeTypeInserted() const

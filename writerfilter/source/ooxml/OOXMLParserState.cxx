@@ -229,7 +229,8 @@ void OOXMLParserState::resolveTableProperties(Stream & rStream)
         if (rTableProps.get() != NULL)
         {
             rStream.props(rTableProps);
-            rTableProps.reset(new OOXMLPropertySetImpl());
+            // Don't clean the table props to send them again for each row
+            // This mimics the behaviour from RTF tokenizer.
         }
     }
 }

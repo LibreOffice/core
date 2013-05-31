@@ -51,6 +51,8 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
     m_bOOXML( bOOXML ),
+    m_aTmpPosition(),
+    m_aTmpTableProperties(),
     m_bPushCurrentWidth(false),
     m_bRowSizeTypeInserted(false),
     m_bTableSizeTypeInserted(false),
@@ -344,14 +346,14 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                     if (pProperties.get())
                     {
-                        TablePositionHandlerPtr pHandler = m_aTablePositions.back();
+                        TablePositionHandlerPtr pHandler = m_aTmpPosition.back();
                         if ( !pHandler )
                         {
-                            m_aTablePositions.pop_back();
+                            m_aTmpPosition.pop_back();
                             pHandler.reset( new TablePositionHandler );
-                            m_aTablePositions.push_back( pHandler );
+                            m_aTmpPosition.push_back( pHandler );
                         }
-                        pProperties->resolve(*pHandler);
+                        pProperties->resolve(*m_aTmpPosition.back());
                     }
                 }
                 break;
@@ -415,6 +417,11 @@ void DomainMapperTableManager::startLevel( )
     m_aGridSpans.push_back( pNewSpans );
     m_aCellWidths.push_back( pNewCellWidths );
     m_aTablePositions.push_back( pNewPositionHandler );
+
+    TablePositionHandlerPtr pTmpPosition;
+    TablePropertyMapPtr pTmpProperties( new TablePropertyMap( ) );
+    m_aTmpPosition.push_back( pTmpPosition );
+    m_aTmpTableProperties.push_back( pTmpProperties );
     m_nCell.push_back( 0 );
     m_nTableWidth = 0;
     m_nLayoutType = 0;
@@ -433,6 +440,8 @@ void DomainMapperTableManager::endLevel( )
     m_nTableWidth = 0;
     m_nLayoutType = 0;
 
+    m_aTmpPosition.pop_back( );
+    m_aTmpTableProperties.pop_back( );
 
     DomainMapperTableManager_Base_t::endLevel( );
 #ifdef DEBUG_DOMAINMAPPER
@@ -468,6 +477,42 @@ void DomainMapperTableManager::endOfRowAction()
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("endOfRowAction");
 #endif
+
+    // Compare the table position with the previous ones. We may need to split
+    // into two tables if those are different. We surely don't want to do anything
+    // if we don't have any row yet.
+    TablePositionHandlerPtr pTmpPosition = m_aTmpPosition.back();
+    TablePropertyMapPtr pTmpTableProperties = m_aTmpTableProperties.back( );
+    TablePositionHandlerPtr pCurrentPosition = m_aTablePositions.back();
+    bool bSamePosition = ( pTmpPosition == pCurrentPosition ) ||
+                         ( pTmpPosition && pCurrentPosition && *pTmpPosition == *pCurrentPosition );
+    if ( !bSamePosition && m_nRow > 0 )
+    {
+        // Save the grid infos to have them survive the end/start level
+        IntVectorPtr pTmpTableGrid = m_aTableGrid.back();
+        IntVectorPtr pTmpGridSpans = m_aGridSpans.back();
+        IntVectorPtr pTmpCellWidths = m_aCellWidths.back();
+
+        // endLevel and startLevel are taking care of the non finished row
+        // to carry it over to the next table
+        setKeepUnfinishedRow( true );
+        endLevel();
+        setKeepUnfinishedRow( false );
+        startLevel();
+
+        m_aTableGrid.pop_back();
+        m_aGridSpans.pop_back();
+        m_aCellWidths.pop_back();
+        m_aTableGrid.push_back(pTmpTableGrid);
+        m_aGridSpans.push_back(pTmpGridSpans);
+        m_aCellWidths.push_back(pTmpCellWidths);
+    }
+
+    // Push the tmp position now that we compared it
+    m_aTablePositions.pop_back();
+    m_aTablePositions.push_back( pTmpPosition );
+    m_aTmpPosition.back().reset( );
+
 
     IntVectorPtr pTableGrid = getCurrentGrid( );
     IntVectorPtr pCellWidths = getCurrentCellWidths( );
@@ -607,9 +652,17 @@ void DomainMapperTableManager::endOfRowAction()
         insertRowProps(pPropMap);
     }
 
+    // Now that potentially opened table is closed, save the table properties
+    DomainMapperTableManager_Base_t::insertTableProps( pTmpTableProperties );
+
+    m_aTmpTableProperties.pop_back();
+    TablePropertyMapPtr pEmptyTableProps( new TablePropertyMap() );
+    m_aTmpTableProperties.push_back( pEmptyTableProps );
+
     ++m_nRow;
     m_nCell.back( ) = 0;
     m_nCellBorderIndex = 0;
+    getCurrentGrid()->clear();
     pCurrentSpans->clear();
     pCellWidths->clear();
 
