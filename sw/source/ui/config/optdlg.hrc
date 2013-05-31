@@ -17,20 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/* TabPage View */
-#define FL_NOPRINT              2
-
-#define CB_PARA                 5
-#define CB_TAB                  6
-#define CB_SPACE                7
-#define CB_HSPACE               8
-#define CB_SHYPH                9
-#define CB_FLD_HIDDEN           10
-#define CB_BREAK                11
-
-//test tab page
-
-#define CB_FLD_HIDDEN_PARA 36  // right in the middle of it, so that HelpIds stay compatible to FPII
 #define CB_SMOOTH_SCROLL 37
 
 #define BT_OK           38
@@ -43,7 +29,6 @@
 #define BT_EDIT         55
 #define BT_NEW          56
 #define BT_DELETE       57
-#define CB_CHAR_HIDDEN  61
 // Print-Extra-Page
 #define CB_PGRF            61
 #define CB_LEFTP           64
@@ -120,19 +105,5 @@
 #define FT_COMMENT                  133
 #define FL_TABLE_SEPARATOR          139
 #define CB_PROSPECT_RTL        140
-
-#define FL_SHDWCRSFLAG                 1
-#define CB_SHDWCRSONOFF                2
-#define FT_SHDWCRSFILLMODE             4
-#define RB_SHDWCRSFILLMARGIN           5
-#define RB_SHDWCRSFILLINDENT           6
-#define RB_SHDWCRSFILLTAB              7
-#define RB_SHDWCRSFILLSPACE            8
-#define CB_ALLOW_IN_PROT              12
-#define FL_CRSR_OPT                   13
-#define FL_SEPARATOR_SHDW             14
-#define FL_LAYOUT_OPTIONS             15
-#define CB_MATH_BASELINE_ALIGNMENT    16
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

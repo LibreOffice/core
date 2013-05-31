@@ -284,33 +284,28 @@ public:
 class SwShdwCrsrOptionsTabPage : public SfxTabPage
 {
     //nonprinting characters
-    FixedLine   aUnprintFL;
-    CheckBox    aParaCB;
-    CheckBox    aSHyphCB;
-    CheckBox    aSpacesCB;
-    CheckBox    aHSpacesCB;
-    CheckBox    aTabCB;
-    CheckBox    aBreakCB;
-    CheckBox    aCharHiddenCB;
-    CheckBox    aFldHiddenCB;
-    CheckBox    aFldHiddenParaCB;
+    CheckBox* m_pParaCB;
+    CheckBox* m_pSHyphCB;
+    CheckBox* m_pSpacesCB;
+    CheckBox* m_pHSpacesCB;
+    CheckBox* m_pTabCB;
+    CheckBox* m_pBreakCB;
+    CheckBox* m_pCharHiddenCB;
+    CheckBox* m_pFldHiddenCB;
+    CheckBox* m_pFldHiddenParaCB;
 
-    FixedLine   aSeparatorFL;
+    VclFrame* m_pDirectCursorFrame;
+    CheckBox* m_pOnOffCB;
 
-    FixedLine       aFlagFL;
-    CheckBox        aOnOffCB;
+    RadioButton* m_pFillMarginRB;
+    RadioButton* m_pFillIndentRB;
+    RadioButton* m_pFillTabRB;
+    RadioButton* m_pFillSpaceRB;
 
-    FixedText       aFillModeFT;
-    RadioButton     aFillMarginRB;
-    RadioButton     aFillIndentRB;
-    RadioButton     aFillTabRB;
-    RadioButton     aFillSpaceRB;
+    VclFrame* m_pCursorProtFrame;
+    CheckBox* m_pCrsrInProtCB;
 
-    FixedLine       aCrsrOptFL;
-    CheckBox        aCrsrInProtCB;
-
-    FixedLine       m_aLayoutOptionsFL;
-    CheckBox        m_aMathBaselineAlignmentCB;
+    CheckBox* m_pMathBaselineAlignmentCB;
 
     SwWrtShell *    m_pWrtShell;
 

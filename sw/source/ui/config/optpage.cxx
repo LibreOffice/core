@@ -1299,71 +1299,64 @@ void SwTableOptionsTabPage::PageCreated (SfxAllItemSet aSet)
 
 SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
-    : SfxTabPage(pParent, SW_RES(TP_OPTSHDWCRSR), rSet),
-    aUnprintFL   ( this,   SW_RES( FL_NOPRINT  ) ),
-    aParaCB       ( this,   SW_RES( CB_PARA      ) ),
-    aSHyphCB      ( this,   SW_RES( CB_SHYPH        ) ),
-    aSpacesCB     ( this,   SW_RES( CB_SPACE    ) ),
-    aHSpacesCB    ( this,   SW_RES( CB_HSPACE   ) ),
-    aTabCB        ( this,   SW_RES( CB_TAB      ) ),
-    aBreakCB      ( this,   SW_RES( CB_BREAK        ) ),
-    aCharHiddenCB     ( this,   SW_RES( CB_CHAR_HIDDEN   ) ),
-    aFldHiddenCB     ( this,   SW_RES( CB_FLD_HIDDEN   ) ),
-    aFldHiddenParaCB ( this,   SW_RES( CB_FLD_HIDDEN_PARA ) ),
-
-    aSeparatorFL(   this, SW_RES( FL_SEPARATOR_SHDW)),
-
-    aFlagFL( this, SW_RES( FL_SHDWCRSFLAG )),
-    aOnOffCB( this, SW_RES( CB_SHDWCRSONOFF )),
-
-    aFillModeFT( this, SW_RES( FT_SHDWCRSFILLMODE )),
-    aFillMarginRB( this, SW_RES( RB_SHDWCRSFILLMARGIN )),
-    aFillIndentRB( this, SW_RES( RB_SHDWCRSFILLINDENT )),
-    aFillTabRB( this, SW_RES( RB_SHDWCRSFILLTAB )),
-    aFillSpaceRB( this, SW_RES( RB_SHDWCRSFILLSPACE )),
-    aCrsrOptFL   ( this, SW_RES( FL_CRSR_OPT)),
-    aCrsrInProtCB( this, SW_RES( CB_ALLOW_IN_PROT )),
-    m_aLayoutOptionsFL( this, SW_RES( FL_LAYOUT_OPTIONS ) ),
-    m_aMathBaselineAlignmentCB( this, SW_RES( CB_MATH_BASELINE_ALIGNMENT ) ),
+   : SfxTabPage(pParent, "OptFormatAidsPage",
+                "modules/swriter/ui/optformataidspage.ui", rSet),
     m_pWrtShell( NULL )
 {
-    FreeResource();
+    get(m_pParaCB, "paragraph");
+    get(m_pSHyphCB, "hyphens");
+    get(m_pSpacesCB, "spaces");
+    get(m_pHSpacesCB, "nonbreak");
+    get(m_pTabCB, "tabs");
+    get(m_pBreakCB, "break");
+    get(m_pCharHiddenCB, "hiddentext");
+    get(m_pFldHiddenCB, "hiddentextfield");
+    get(m_pFldHiddenParaCB, "hiddenparafield");
+
+    get(m_pDirectCursorFrame, "directcrsrframe");
+    get(m_pOnOffCB, "cursoronoff");
+
+    get(m_pFillMarginRB, "fillmargin");
+    get(m_pFillIndentRB, "fillindent");
+    get(m_pFillTabRB, "filltab");
+    get(m_pFillSpaceRB, "fillspace");
+
+    get(m_pCursorProtFrame, "crsrprotframe");
+    get(m_pCrsrInProtCB, "cursorinprot");
+
+    get(m_pMathBaselineAlignmentCB, "mathbaseline");
+
     const SfxPoolItem* pItem = 0;
 
     SwShadowCursorItem aOpt;
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, sal_False, &pItem ))
         aOpt = *(SwShadowCursorItem*)pItem;
-    aOnOffCB.Check( aOpt.IsOn() );
+    m_pOnOffCB->Check( aOpt.IsOn() );
 
     sal_uInt8 eMode = aOpt.GetMode();
-    aFillIndentRB.Check( FILL_INDENT == eMode );
-    aFillMarginRB.Check( FILL_MARGIN == eMode );
-    aFillTabRB.Check( FILL_TAB == eMode );
-    aFillSpaceRB.Check( FILL_SPACE == eMode );
+    m_pFillIndentRB->Check( FILL_INDENT == eMode );
+    m_pFillMarginRB->Check( FILL_MARGIN == eMode );
+    m_pFillTabRB->Check( FILL_TAB == eMode );
+    m_pFillSpaceRB->Check( FILL_SPACE == eMode );
 
     if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, sal_False, &pItem )
         && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
     {
-        aTabCB      .Hide();
-        aCharHiddenCB.Hide();
-        aFldHiddenCB    .Hide();
-        aFldHiddenParaCB.Hide();
-        aBreakCB.SetPosPixel(aTabCB.GetPosPixel());
-        aFlagFL         .Hide();
-        aOnOffCB        .Hide();
-        aFillModeFT     .Hide();
-        aFillMarginRB   .Hide();
-        aFillIndentRB   .Hide();
-        aFillTabRB      .Hide();
-        aFillSpaceRB    .Hide();
-        aCrsrOptFL      .Hide();
-        aCrsrInProtCB   .Hide();
-        aSeparatorFL.Hide();
-        long nWidth = aFlagFL.GetSizePixel().Width() + aFlagFL.GetPosPixel().X()
-                                                        - aUnprintFL.GetPosPixel().X();
-        Size aSize(aUnprintFL.GetSizePixel());
-        aSize.Width() = nWidth;
-        aUnprintFL.SetSizePixel(aSize);
+        m_pTabCB->Hide();
+        m_pCharHiddenCB->Hide();
+        m_pFldHiddenCB->Hide();
+        m_pFldHiddenParaCB->Hide();
+        m_pBreakCB->SetPosPixel(m_pTabCB->GetPosPixel());
+
+        m_pDirectCursorFrame->Hide();
+        m_pOnOffCB->Hide();
+        m_pFillMarginRB->Hide();
+        m_pFillIndentRB->Hide();
+        m_pFillTabRB->Hide();
+        m_pFillSpaceRB->Hide();
+
+        m_pCursorProtFrame->Hide();
+        m_pCrsrInProtCB->Hide();
     }
 }
 
@@ -1388,14 +1381,14 @@ void SwShdwCrsrOptionsTabPage::PageCreated( SfxAllItemSet aSet )
 sal_Bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 {
     SwShadowCursorItem aOpt;
-    aOpt.SetOn( aOnOffCB.IsChecked() );
+    aOpt.SetOn( m_pOnOffCB->IsChecked() );
 
     sal_uInt8 eMode;
-    if( aFillIndentRB.IsChecked() )
+    if( m_pFillIndentRB->IsChecked() )
         eMode= FILL_INDENT;
-    else if( aFillMarginRB.IsChecked() )
+    else if( m_pFillMarginRB->IsChecked() )
         eMode = FILL_MARGIN;
-    else if( aFillTabRB.IsChecked() )
+    else if( m_pFillTabRB->IsChecked() )
         eMode = FILL_TAB;
     else
         eMode = FILL_SPACE;
@@ -1412,13 +1405,13 @@ sal_Bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 
     if (m_pWrtShell) {
         m_pWrtShell->GetDoc()->set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT,
-                                    m_aMathBaselineAlignmentCB.IsChecked() );
-        bRet |= m_aMathBaselineAlignmentCB.IsChecked() != m_aMathBaselineAlignmentCB.GetSavedValue();
+                                    m_pMathBaselineAlignmentCB->IsChecked() );
+        bRet |= m_pMathBaselineAlignmentCB->IsChecked() != m_pMathBaselineAlignmentCB->GetSavedValue();
     }
 
-    if( aCrsrInProtCB.IsChecked() != aCrsrInProtCB.GetSavedValue())
+    if( m_pCrsrInProtCB->IsChecked() != m_pCrsrInProtCB->GetSavedValue())
     {
-        rSet.Put(SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, aCrsrInProtCB.IsChecked()));
+        rSet.Put(SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, m_pCrsrInProtCB->IsChecked()));
         bRet |= sal_True;
     }
 
@@ -1429,15 +1422,15 @@ sal_Bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
     if(pOldAttr)
         aDisp = *pOldAttr;
 
-    aDisp.bParagraphEnd         = aParaCB       .IsChecked();
-    aDisp.bTab                  = aTabCB        .IsChecked();
-    aDisp.bSpace                = aSpacesCB     .IsChecked();
-    aDisp.bNonbreakingSpace     = aHSpacesCB    .IsChecked();
-    aDisp.bSoftHyphen           = aSHyphCB      .IsChecked();
-    aDisp.bFldHiddenText        = aFldHiddenCB     .IsChecked();
-    aDisp.bCharHiddenText       = aCharHiddenCB.IsChecked();
-    aDisp.bShowHiddenPara       = aFldHiddenParaCB .IsChecked();
-    aDisp.bManualBreak          = aBreakCB      .IsChecked();
+    aDisp.bParagraphEnd         = m_pParaCB->IsChecked();
+    aDisp.bTab                  = m_pTabCB->IsChecked();
+    aDisp.bSpace                = m_pSpacesCB->IsChecked();
+    aDisp.bNonbreakingSpace     = m_pHSpacesCB->IsChecked();
+    aDisp.bSoftHyphen           = m_pSHyphCB->IsChecked();
+    aDisp.bFldHiddenText        = m_pFldHiddenCB->IsChecked();
+    aDisp.bCharHiddenText       = m_pCharHiddenCB->IsChecked();
+    aDisp.bShowHiddenPara       = m_pFldHiddenParaCB->IsChecked();
+    aDisp.bManualBreak          = m_pBreakCB->IsChecked();
 
     bRet |= (!pOldAttr || aDisp != *pOldAttr);
     if(bRet)
@@ -1453,24 +1446,24 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet& rSet )
     SwShadowCursorItem aOpt;
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, sal_False, &pItem ))
         aOpt = *(SwShadowCursorItem*)pItem;
-    aOnOffCB.Check( aOpt.IsOn() );
+    m_pOnOffCB->Check( aOpt.IsOn() );
 
     sal_uInt8 eMode = aOpt.GetMode();
-    aFillIndentRB.Check( FILL_INDENT == eMode );
-    aFillMarginRB.Check( FILL_MARGIN == eMode );
-    aFillTabRB.Check( FILL_TAB == eMode );
-    aFillSpaceRB.Check( FILL_SPACE == eMode );
+    m_pFillIndentRB->Check( FILL_INDENT == eMode );
+    m_pFillMarginRB->Check( FILL_MARGIN == eMode );
+    m_pFillTabRB->Check( FILL_TAB == eMode );
+    m_pFillSpaceRB->Check( FILL_SPACE == eMode );
 
     if (m_pWrtShell) {
-        m_aMathBaselineAlignmentCB.Check( m_pWrtShell->GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) );
-        m_aMathBaselineAlignmentCB.SaveValue();
+       m_pMathBaselineAlignmentCB->Check( m_pWrtShell->GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) );
+       m_pMathBaselineAlignmentCB->SaveValue();
     } else {
-        m_aMathBaselineAlignmentCB.Hide();
+        m_pMathBaselineAlignmentCB->Hide();
     }
 
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_CRSR_IN_PROTECTED, sal_False, &pItem ))
-        aCrsrInProtCB.Check(((const SfxBoolItem*)pItem)->GetValue());
-    aCrsrInProtCB.SaveValue();
+        m_pCrsrInProtCB->Check(((const SfxBoolItem*)pItem)->GetValue());
+    m_pCrsrInProtCB->SaveValue();
 
     const SwDocDisplayItem* pDocDisplayAttr = 0;
 
@@ -1478,15 +1471,15 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet& rSet )
                                     (const SfxPoolItem**)&pDocDisplayAttr );
     if(pDocDisplayAttr)
     {
-        aParaCB     .Check  (pDocDisplayAttr->bParagraphEnd         );
-        aTabCB      .Check  (pDocDisplayAttr->bTab                  );
-        aSpacesCB   .Check  (pDocDisplayAttr->bSpace                );
-        aHSpacesCB  .Check  (pDocDisplayAttr->bNonbreakingSpace     );
-        aSHyphCB    .Check  (pDocDisplayAttr->bSoftHyphen           );
-        aCharHiddenCB.Check (pDocDisplayAttr->bCharHiddenText );
-        aFldHiddenCB   .Check  (pDocDisplayAttr->bFldHiddenText );
-        aFldHiddenParaCB.Check (pDocDisplayAttr->bShowHiddenPara       );
-        aBreakCB    .Check  (pDocDisplayAttr->bManualBreak          );
+        m_pParaCB->Check  ( pDocDisplayAttr->bParagraphEnd );
+        m_pTabCB->Check  ( pDocDisplayAttr->bTab );
+        m_pSpacesCB->Check  ( pDocDisplayAttr->bSpace );
+        m_pHSpacesCB->Check  ( pDocDisplayAttr->bNonbreakingSpace );
+        m_pSHyphCB->Check  ( pDocDisplayAttr->bSoftHyphen );
+        m_pCharHiddenCB->Check ( pDocDisplayAttr->bCharHiddenText );
+        m_pFldHiddenCB->Check  ( pDocDisplayAttr->bFldHiddenText );
+        m_pFldHiddenParaCB->Check ( pDocDisplayAttr->bShowHiddenPara );
+        m_pBreakCB->Check  ( pDocDisplayAttr->bManualBreak );
     }
 }
 
