@@ -241,7 +241,9 @@ $(if $(strip $(1)),\
 $(call repositorymodule_serialize,$(wordlist 2,$(words $(1)),$(1))))
 endef
 
-ifeq (all,$(filter all,$(MAKECMDGOALS)))
+# do not serialize on a partial build as that may fail due to missing deps.
+# the default goal is all (see Module.mk)
+ifeq (,$(filter-out all,$(MAKECMDGOALS)))
 $(eval $(call repositorymodule_serialize,\
 	scfilt \
 	$(if $(filter SCRIPTING,$(BUILD_TYPE)),vbaobj) \
