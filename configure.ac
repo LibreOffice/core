@@ -6965,6 +6965,11 @@ else
             DOXYGEN=$with_doxygen
             AC_MSG_RESULT([$DOXYGEN])
         fi
+        DOXYGEN_VERSION=`$DOXYGEN --version 2>/dev/null`
+        DOXYGEN_NUMVERSION=`echo $DOXYGEN_VERSION | $AWK -F. '{ print \$1*10000 + \$2*100 + \$3 }'`
+        if ! test "$DOXYGEN_NUMVERSION" -ge "10804" ; then
+            AC_MSG_ERROR([found doxygen is too old; need at least version 1.8.4 or specify --without-doxygen])
+        fi
     fi
 fi
 AC_SUBST([DOXYGEN])
