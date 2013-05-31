@@ -350,9 +350,9 @@ if (-d "$SdkDir") {
     foreach $i (@idl_dirlist)
     {
         $i =~ s/\//_1_1/g;
-        if (!check_file("docs/idl/ref/com_1_1sun_1_1star_1_1$i.html")) {
+        if (!check_file("docs/idl/ref/namespacecom_1_1sun_1_1star_1_1$i.html")) {
         $return++;
-        print "\nERROR: \"docs/idl/ref/com_1_1sun_1_1star_1_1$i.html\" is missing\n";
+        print "\nERROR: \"docs/idl/ref/namespacecom_1_1sun_1_1star_1_1$i.html\" is missing\n";
         } else {
         print "+";
         }
