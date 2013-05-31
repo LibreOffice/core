@@ -45,34 +45,6 @@ using ::oox::drawingml::table::TableStyleListPtr;
 
 // ============================================================================
 
-ExcelFilterBase::ExcelFilterBase() :
-    mpBookGlob( 0 )
-{
-}
-
-ExcelFilterBase::~ExcelFilterBase()
-{
-    OSL_ENSURE( !mpBookGlob, "ExcelFilterBase::~ExcelFilterBase - workbook data not cleared" );
-}
-
-void ExcelFilterBase::registerWorkbookGlobals( WorkbookGlobals& rBookGlob )
-{
-    mpBookGlob = &rBookGlob;
-}
-
-WorkbookGlobals& ExcelFilterBase::getWorkbookGlobals() const
-{
-    OSL_ENSURE( mpBookGlob, "ExcelFilterBase::getWorkbookGlobals - missing workbook data" );
-    return *mpBookGlob;
-}
-
-void ExcelFilterBase::unregisterWorkbookGlobals()
-{
-    mpBookGlob = 0;
-}
-
-// ============================================================================
-
 OUString ExcelFilter_getImplementationName()
 {
     return OUString( "com.sun.star.comp.oox.xls.ExcelFilter" );
@@ -95,12 +67,30 @@ Reference< XInterface > ExcelFilter_create(
 // ----------------------------------------------------------------------------
 
 ExcelFilter::ExcelFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
-    XmlFilterBase( rxContext )
+    XmlFilterBase( rxContext ),
+    mpBookGlob( 0 )
 {
 }
 
 ExcelFilter::~ExcelFilter()
 {
+    OSL_ENSURE( !mpBookGlob, "ExcelFilter::~ExcelFilter - workbook data not cleared" );
+}
+
+void ExcelFilter::registerWorkbookGlobals( WorkbookGlobals& rBookGlob )
+{
+    mpBookGlob = &rBookGlob;
+}
+
+WorkbookGlobals& ExcelFilter::getWorkbookGlobals() const
+{
+    OSL_ENSURE( mpBookGlob, "ExcelFilter::getWorkbookGlobals - missing workbook data" );
+    return *mpBookGlob;
+}
+
+void ExcelFilter::unregisterWorkbookGlobals()
+{
+    mpBookGlob = 0;
 }
 
 bool ExcelFilter::importDocument() throw()

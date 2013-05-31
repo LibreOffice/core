@@ -272,7 +272,7 @@ private:
     OUString            maPageStyleServ;        /// Service name for a page style.
     Reference< XSpreadsheetDocument > mxDoc;    /// Document model.
     FilterBase&         mrBaseFilter;           /// Base filter object.
-    ExcelFilterBase&    mrExcelBase;            /// Base object for registration of this structure.
+    ExcelFilter&        mrExcelFilter;          /// Base object for registration of this structure.
     FilterType          meFilterType;           /// File type of the filter.
     ProgressBarPtr      mxProgressBar;          /// The progress bar.
     StorageRef          mxVbaPrjStrg;           /// Storage containing the VBA project.
@@ -319,21 +319,21 @@ private:
 
 WorkbookGlobals::WorkbookGlobals( ExcelFilter& rFilter ) :
     mrBaseFilter( rFilter ),
-    mrExcelBase( rFilter ),
+    mrExcelFilter( rFilter ),
     meFilterType( FILTER_OOXML ),
     mpOoxFilter( &rFilter ),
     meBiff( BIFF_UNKNOWN ),
     mpDoc( NULL )
 {
     // register at the filter, needed for virtual callbacks (even during construction)
-    mrExcelBase.registerWorkbookGlobals( *this );
+    mrExcelFilter.registerWorkbookGlobals( *this );
     initialize( true );
 }
 
 WorkbookGlobals::~WorkbookGlobals()
 {
     finalize();
-    mrExcelBase.unregisterWorkbookGlobals();
+    mrExcelFilter.unregisterWorkbookGlobals();
 }
 
 // document model -------------------------------------------------------------

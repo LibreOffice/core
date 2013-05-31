@@ -29,30 +29,17 @@ class WorkbookGlobals;
 
 // ============================================================================
 
-class ExcelFilterBase
-{
-public:
-    void                registerWorkbookGlobals( WorkbookGlobals& rBookGlob );
-    WorkbookGlobals&    getWorkbookGlobals() const;
-    void                unregisterWorkbookGlobals();
-
-protected:
-    explicit            ExcelFilterBase();
-    virtual             ~ExcelFilterBase();
-
-private:
-    WorkbookGlobals*    mpBookGlob;
-};
-
-// ============================================================================
-
-class ExcelFilter : public ::oox::core::XmlFilterBase, public ExcelFilterBase
+class ExcelFilter : public ::oox::core::XmlFilterBase
 {
 public:
     explicit            ExcelFilter(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
                             throw( ::com::sun::star::uno::RuntimeException );
     virtual             ~ExcelFilter();
+
+    void                registerWorkbookGlobals( WorkbookGlobals& rBookGlob );
+    WorkbookGlobals&    getWorkbookGlobals() const;
+    void                unregisterWorkbookGlobals();
 
     virtual bool        importDocument() throw();
     virtual bool        exportDocument() throw();
@@ -68,6 +55,8 @@ private:
     virtual GraphicHelper* implCreateGraphicHelper() const;
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
     virtual OUString implGetImplementationName() const;
+
+    WorkbookGlobals*    mpBookGlob;
 };
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL ExcelFilter_create(
