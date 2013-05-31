@@ -13,8 +13,6 @@
 # Compile flags ('make CLANGCXXFLAGS=-g' if you need to debug the plugin)
 CLANGCXXFLAGS=-O2 -Wall -Wextra -g
 
-QUIET=$(if $(VERBOSE)$(verbose),,@)
-
 # The uninteresting rest.
 
 # Clang headers require these.
@@ -30,6 +28,8 @@ CLANGINDIR=$(SRCDIR)/compilerplugins/clang
 # Cannot use $(WORKDIR), the plugin should survive even 'make clean', otherwise the rebuilt
 # plugin will cause cache misses with ccache.
 CLANGOUTDIR=$(BUILDDIR)/compilerplugins/obj
+
+QUIET=$(if $(VERBOSE)$(verbose),,@)
 
 compilerplugins: compilerplugins-build
 
