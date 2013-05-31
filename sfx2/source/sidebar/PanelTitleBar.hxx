@@ -56,6 +56,7 @@ protected:
     virtual sidebar::Paint GetBackgroundPaint (void);
     virtual Color GetTextColor (void);
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex);
+    virtual cssu::Reference<css::accessibility::XAccessible> CreateAccessible (void);
 
 private:
     bool mbIsLeftButtonDown;
@@ -63,6 +64,7 @@ private:
     const sal_uInt16 mnMenuItemIndex;
     cssu::Reference<css::frame::XFrame> mxFrame;
     ::rtl::OUString msMoreOptionsCommand;
+    ::rtl::OUString msAccessibleNamePrefix;
 };
 
 
