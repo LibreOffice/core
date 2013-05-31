@@ -1644,17 +1644,15 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 switch( rKeyCode.GetModifier() | rKeyCode.GetCode() )
                 {
                 case KEY_RIGHT | KEY_MOD2:
-                case KEY_RIGHT | KEY_SHIFT:
                     eKeyState = KS_ColRightBig;
                     eFlyState = KS_Fly_Change;
-                    nDir = rKeyCode.GetModifier() & KEY_SHIFT ? MOVE_RIGHT_HUGE : MOVE_RIGHT_SMALL;
+                    nDir = MOVE_RIGHT_SMALL;
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_LEFT | KEY_MOD2:
-                case KEY_LEFT | KEY_SHIFT:
                     eKeyState = KS_ColRightSmall;
                     eFlyState = KS_Fly_Change;
-                    nDir = rKeyCode.GetModifier() & KEY_SHIFT ? MOVE_LEFT_HUGE : MOVE_LEFT_SMALL;
+                    nDir = MOVE_LEFT_SMALL;
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_RIGHT | KEY_MOD2 | KEY_SHIFT:
@@ -1682,17 +1680,15 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_UP | KEY_MOD2:
-                case KEY_UP | KEY_SHIFT:
                     eKeyState = KS_ColBottomSmall;
                     eFlyState = KS_Fly_Change;
-                    nDir = rKeyCode.GetModifier() & KEY_SHIFT ? MOVE_UP_HUGE : MOVE_UP_SMALL;
+                    nDir = MOVE_UP_SMALL;
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_DOWN | KEY_MOD2:
-                case KEY_DOWN | KEY_SHIFT:
                     eKeyState = KS_ColBottomBig;
                     eFlyState = KS_Fly_Change;
-                    nDir = rKeyCode.GetModifier() & KEY_SHIFT ? MOVE_DOWN_HUGE : MOVE_DOWN_SMALL;
+                    nDir = MOVE_DOWN_SMALL;
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_UP | KEY_MOD2 | KEY_MOD1:
@@ -1728,6 +1724,28 @@ KEYINPUT_CHECKTABLE:
                             eKeyState = KS_EnterCharCell;
                     }
                     break;
+
+                // huge object move
+                case KEY_RIGHT | KEY_SHIFT:
+                case KEY_LEFT | KEY_SHIFT:
+                case KEY_UP | KEY_SHIFT:
+                case KEY_DOWN | KEY_SHIFT:
+                {
+                    if ( pFlyFmt
+                         || ( (rSh.GetSelectionType() & (nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_FORM))
+                              && rSh.GetDrawView()->AreObjectsMarked() ) )
+                    {
+                        eKeyState = pFlyFmt ? KS_Fly_Change : KS_Draw_Change;
+                        switch ( rKeyCode.GetCode() )
+                        {
+                            case KEY_RIGHT: nDir = MOVE_RIGHT_HUGE; break;
+                            case KEY_LEFT: nDir = MOVE_LEFT_HUGE; break;
+                            case KEY_UP: nDir = MOVE_UP_HUGE; break;
+                            case KEY_DOWN: nDir = MOVE_DOWN_HUGE; break;
+                        }
+                    }
+                    break;
+                }
 
                 case KEY_LEFT:
                 case KEY_LEFT | KEY_MOD1:
