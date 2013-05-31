@@ -46,7 +46,6 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/oox/ExcelFilterExport.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
@@ -1311,7 +1310,6 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                 if( xSheetDoc.is() && mpFB)
                 {
                     Reference< XComponent > xDocument( mAny, UNO_QUERY );
-                    Reference< XExporter > xExporter = css::oox::ExcelFilterExport::create( mpFB->getComponentContext() );
                     if( xDocument.is() )
                     {
                         Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()
@@ -1327,13 +1325,15 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                         rMedia[0].Name = MediaDescriptor::PROP_STREAMFOROUTPUT();
                         rMedia[0].Value <<= xOutStream;
 
-                        Reference< XFilter > xFilter( xExporter, UNO_QUERY );
-
-                        if( xFilter.is() )
-                        {
-                            xExporter->setSourceDocument( xDocument );
-                            xFilter->filter( rMedia );
-                        }
+                        Reference< XExporter > xExporter(
+                            mpFB->getComponentContext()->getServiceManager()->
+                                createInstanceWithContext(
+                                    "com.sun.star.comp.oox.xls.ExcelFilter",
+                                    mpFB->getComponentContext() ),
+                            UNO_QUERY_THROW );
+                        xExporter->setSourceDocument( xDocument );
+                        Reference< XFilter >( xExporter, UNO_QUERY_THROW )->
+                            filter( rMedia );
 
                         xOutStream->closeOutput();
 
