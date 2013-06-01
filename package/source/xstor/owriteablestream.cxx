@@ -39,7 +39,6 @@
 #include <comphelper/ofopxmlhelper.hxx>
 
 #include <rtl/digest.h>
-#include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
 
 #include <PackageConstants.hxx>
@@ -103,7 +102,7 @@ namespace
 void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >& xPropertySet,
                                     const uno::Sequence< beans::NamedValue >& aKey )
 {
-    OSL_ENSURE( xPropertySet.is(), "No property set is provided!\n" );
+    SAL_WARN_IF( !xPropertySet.is(), "package.xstor", "No property set is provided!" );
     if ( !xPropertySet.is() )
         throw uno::RuntimeException();
 
@@ -114,7 +113,7 @@ void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >&
     {
         ::package::StaticAddLog( rException.Message );
         ::package::StaticAddLog( OSL_LOG_PREFIX "Can't set encryption");
-        OSL_FAIL( "Can't write encryption related properties!\n" );
+        SAL_WARN( "package.xstor", "Can't write encryption related properties!" );
         throw io::IOException(); // TODO
     }
 }
@@ -122,7 +121,7 @@ void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >&
 //-----------------------------------------------
 uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >& xPropertySet )
 {
-    OSL_ENSURE( xPropertySet.is(), "No property set is provided!\n" );
+    SAL_WARN_IF( !xPropertySet.is(), "package.xstor", "No property set is provided!" );
     if ( !xPropertySet.is() )
         throw uno::RuntimeException();
 
@@ -134,7 +133,7 @@ uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySe
         ::package::StaticAddLog( rException.Message );
         ::package::StaticAddLog( OSL_LOG_PREFIX "Can't get encryption property" );
 
-        OSL_FAIL( "Can't get encryption related properties!\n" );
+        SAL_WARN( "package.xstor", "Can't get encryption related properties!" );
         throw io::IOException(); // TODO
     }
 }
@@ -291,9 +290,9 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
 , m_nRelInfoStatus( RELINFO_NO_INIT )
 , m_nRelId( 1 )
 {
-    OSL_ENSURE( xPackageStream.is(), "No package stream is provided!\n" );
-    OSL_ENSURE( xPackage.is(), "No package component is provided!\n" );
-    OSL_ENSURE( m_xContext.is(), "No package stream is provided!\n" );
+    SAL_WARN_IF( !xPackageStream.is(), "package.xstor", "No package stream is provided!" );
+    SAL_WARN_IF( !xPackage.is(), "package.xstor", "No package component is provided!" );
+    SAL_WARN_IF( !m_xContext.is(), "package.xstor", "No package stream is provided!" );
     OSL_ENSURE( pParent, "No parent storage is provided!\n" );
     OSL_ENSURE( m_nStorageType == embed::StorageFormats::OFOPXML || !m_xOrigRelInfoStream.is(), "The Relations info makes sence only for OFOPXML format!\n" );
 }
@@ -367,10 +366,10 @@ void OWriteStream_Impl::InsertIntoPackageFolder( const OUString& aName,
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
-    OSL_ENSURE( m_bFlushed, "This method must not be called for nonflushed streams!\n" );
+    SAL_WARN_IF( !m_bFlushed, "package.xstor", "This method must not be called for nonflushed streams!" );
     if ( m_bFlushed )
     {
-        OSL_ENSURE( m_xPackageStream.is(), "An inserted stream is incomplete!\n" );
+        SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "An inserted stream is incomplete!\n" );
         uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageStream, uno::UNO_QUERY );
         if ( !xTunnel.is() )
             throw uno::RuntimeException(); // TODO
@@ -403,7 +402,7 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
         uno::Any aValue = xPropSet->getPropertyValue("WasEncrypted");
         if ( !( aValue >>= bWasEncr ) )
         {
-            OSL_FAIL( "The property WasEncrypted has wrong type!\n" );
+            SAL_WARN( "package.xstor", "The property WasEncrypted has wrong type!" );
         }
     }
 
@@ -414,7 +413,7 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
         {
             if ( !( m_aProps[nInd].Value >>= bToBeEncr ) )
             {
-                OSL_FAIL( "The property has wrong type!\n" );
+                SAL_WARN( "package.xstor", "The property has wrong type!" );
             }
         }
     }
@@ -444,7 +443,7 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
 //-----------------------------------------------
 void OWriteStream_Impl::SetDecrypted()
 {
-    OSL_ENSURE( m_nStorageType == embed::StorageFormats::PACKAGE, "The encryption is supported only for package storages!\n" );
+    SAL_WARN_IF( m_nStorageType != embed::StorageFormats::PACKAGE, "package.xstor", "The encryption is supported only for package storages!" );
     if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw uno::RuntimeException();
 
@@ -469,7 +468,7 @@ void OWriteStream_Impl::SetDecrypted()
 //-----------------------------------------------
 void OWriteStream_Impl::SetEncrypted( const ::comphelper::SequenceAsHashMap& aEncryptionData )
 {
-    OSL_ENSURE( m_nStorageType == embed::StorageFormats::PACKAGE, "The encryption is supported only for package storages!\n" );
+    SAL_WARN_IF( m_nStorageType != embed::StorageFormats::PACKAGE, "package.xstor", "The encryption is supported only for package storages!" );
     if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw uno::RuntimeException();
 
@@ -591,7 +590,7 @@ OUString OWriteStream_Impl::FillTempGetFileName()
         {
             // in case of new inserted package stream it is possible that input stream still was not set
             uno::Reference< io::XStream > xCacheStream = CreateMemoryStream( m_xContext );
-            OSL_ENSURE( xCacheStream.is(), "If the stream can not be created an exception must be thrown!\n" );
+            SAL_WARN_IF( !xCacheStream.is(), "package.xstor", "If the stream can not be created an exception must be thrown!" );
             m_xCacheSeek.set( xCacheStream, uno::UNO_QUERY_THROW );
             m_xCacheStream = xCacheStream;
         }
@@ -606,7 +605,7 @@ OUString OWriteStream_Impl::FillTempGetFileName()
             if ( nRead <= MAX_STORCACHE_SIZE )
             {
                 uno::Reference< io::XStream > xCacheStream = CreateMemoryStream( m_xContext );
-                OSL_ENSURE( xCacheStream.is(), "If the stream can not be created an exception must be thrown!\n" );
+                SAL_WARN_IF( !xCacheStream.is(), "package.xstor", "If the stream can not be created an exception must be thrown!" );
 
                 if ( nRead )
                 {
@@ -750,7 +749,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
     // the  parent storage is responsible for the correct handling
     // of deleted and renamed contents
 
-    OSL_ENSURE( m_xPackageStream.is(), "No package stream is set!\n" );
+    SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "No package stream is set!" );
 
     if ( m_bHasDataToFlush )
         throw io::IOException();
@@ -830,7 +829,7 @@ void OWriteStream_Impl::Commit()
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
-    OSL_ENSURE( m_xPackageStream.is(), "No package stream is set!\n" );
+    SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "No package stream is set!" );
 
     if ( !m_bHasDataToFlush )
         return;
@@ -1148,13 +1147,13 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
                 AddLog( rException.Message );
                 AddLog( OSL_LOG_PREFIX "Quiet exception" );
 
-                OSL_FAIL( "A property can't be retrieved!\n" );
+                SAL_WARN( "package.xstor", "A property can't be retrieved!" );
             }
         }
     }
     else
     {
-        OSL_FAIL( "Can not get properties from a package stream!\n" );
+        SAL_WARN( "package.xstor", "Can not get properties from a package stream!" );
         throw uno::RuntimeException();
     }
 
@@ -1167,7 +1166,7 @@ void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
-    OSL_ENSURE( !m_bUseCommonEncryption, "The stream can not be encrypted!" );
+    SAL_WARN_IF( m_bUseCommonEncryption, "package.xstor", "The stream can not be encrypted!" );
 
     if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw packages::NoEncryptionException();
@@ -1231,7 +1230,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
-    OSL_ENSURE( m_xPackageStream.is(), "No package stream is set!\n" );
+    SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "No package stream is set!" );
 
     if ( m_pAntiImpl )
         throw io::IOException(); // TODO:
@@ -1276,13 +1275,13 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
             AddLog( rException.Message );
             AddLog( OSL_LOG_PREFIX "Quiet exception" );
 
-            OSL_FAIL( "Can't write encryption related properties!\n" );
+            SAL_WARN( "package.xstor", "Can't write encryption related properties!" );
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
             throw io::IOException(); // TODO:
         }
     }
 
-    OSL_ENSURE( xResultStream.is(), "In case stream can not be retrieved an exception must be thrown!\n" );
+    SAL_WARN_IF( !xResultStream.is(), "package.xstor", "In case stream can not be retrieved an exception must be thrown!" );
 
     return xResultStream;
 }
@@ -1292,7 +1291,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
-    OSL_ENSURE( m_xPackageStream.is(), "No package stream is set!\n" );
+    SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "No package stream is set!" );
 
     if ( m_pAntiImpl )
         throw io::IOException(); // TODO:
@@ -1347,8 +1346,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         uno::Reference< io::XStream > xCompStream(
                         static_cast< ::cppu::OWeakObject* >( pStream ),
                         uno::UNO_QUERY );
-        OSL_ENSURE( xCompStream.is(),
-                    "OInputCompStream MUST provide XStream interfaces!\n" );
+        SAL_WARN_IF( !xCompStream.is(), "package.xstor", "OInputCompStream MUST provide XStream interfaces!" );
 
         m_aInputStreamsList.push_back( pStream );
         return xCompStream;
@@ -1372,8 +1370,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
         uno::Reference< io::XStream > xSeekStream(
                         static_cast< ::cppu::OWeakObject* >( pStream ),
                         uno::UNO_QUERY );
-        OSL_ENSURE( xSeekStream.is(),
-                    "OInputSeekStream MUST provide XStream interfaces!\n" );
+        SAL_WARN_IF( !xSeekStream.is(), "package.xstor", "OInputSeekStream MUST provide XStream interfaces!" );
 
         m_aInputStreamsList.push_back( pStream );
         return xSeekStream;
@@ -1430,7 +1427,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
                                 uno::Reference< io::XStream >( static_cast< ::cppu::OWeakObject* >( m_pAntiImpl ),
                                                                 uno::UNO_QUERY );
 
-        OSL_ENSURE( xWriteStream.is(), "OWriteStream MUST implement XStream && XComponent interfaces!\n" );
+        SAL_WARN_IF( !xWriteStream.is(), "package.xstor", "OWriteStream MUST implement XStream && XComponent interfaces!" );
 
         return xWriteStream;
     }
@@ -1443,7 +1440,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetPlainRawInStream()
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
-    OSL_ENSURE( m_xPackageStream.is(), "No package stream is set!\n" );
+    SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "No package stream is set!" );
 
     // this method is used only internally, this stream object should not go outside of this implementation
     // if ( m_pAntiImpl )
@@ -1457,12 +1454,12 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetRawInStream()
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
-    OSL_ENSURE( m_xPackageStream.is(), "No package stream is set!\n" );
+    SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "No package stream is set!" );
 
     if ( m_pAntiImpl )
         throw io::IOException(); // TODO:
 
-    OSL_ENSURE( IsEncrypted(), "Impossible to get raw representation for nonencrypted stream!\n" );
+    SAL_WARN_IF( !IsEncrypted(), "package.xstor", "Impossible to get raw representation for nonencrypted stream!" );
     if ( !IsEncrypted() )
         throw packages::NoEncryptionException();
 
@@ -1530,7 +1527,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
-    OSL_ENSURE( m_xPackageStream.is(), "The source stream for copying is incomplete!\n" );
+    SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "The source stream for copying is incomplete!" );
     if ( !m_xPackageStream.is() )
         throw uno::RuntimeException();
 
@@ -1569,7 +1566,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
-    OSL_ENSURE( m_xPackageStream.is(), "The source stream for copying is incomplete!\n" );
+    SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "The source stream for copying is incomplete!" );
     if ( !m_xPackageStream.is() )
         throw uno::RuntimeException();
 
@@ -1611,13 +1608,13 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
 
             if ( !xDataToCopy.is() )
             {
-                OSL_FAIL( "Encrypted ZipStream must already have input stream inside!\n" );
+                SAL_WARN( "package.xstor", "Encrypted ZipStream must already have input stream inside!" );
                 SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
             }
         }
         catch( const uno::Exception& rException )
         {
-            OSL_FAIL( "Can't open encrypted stream!\n" );
+            SAL_WARN( "package.xstor", "Can't open encrypted stream!" );
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
             AddLog( rException.Message );
             AddLog( OSL_LOG_PREFIX "Rethrow" );
@@ -1832,7 +1829,7 @@ void OWriteStream::CheckInitOnDemand()
 
     if ( m_bInitOnDemand )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OWriteStream::CheckInitOnDemand, initializing" );
+        SAL_INFO( "package.xstor", "package (mv76033) OWriteStream::CheckInitOnDemand, initializing" );
         uno::Reference< io::XStream > xStream = m_pImpl->GetTempFileAsStream();
         if ( xStream.is() )
         {
@@ -1893,7 +1890,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
         m_pImpl->AddLog( OSL_LOG_PREFIX "Quiet exception" );
 
         // TODO: set the stoream in invalid state or dispose
-        OSL_FAIL( "The stream become invalid during copiing!\n" );
+        SAL_WARN( "package.xstor", "The stream become invalid during copiing!" );
         throw uno::RuntimeException();
     }
 
@@ -2322,7 +2319,7 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
 
     if ( m_bInitOnDemand )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OWriteStream::CheckInitOnDemand, initializing" );
+        SAL_INFO( "package.xstor", "package (mv76033) OWriteStream::CheckInitOnDemand, initializing" );
         uno::Reference< io::XStream > xStream = m_pImpl->GetTempFileAsStream();
         if ( xStream.is() )
         {
@@ -2511,7 +2508,7 @@ void SAL_CALL OWriteStream::truncate()
 
     if ( !xTruncate.is() )
     {
-        OSL_FAIL( "The output stream must support XTruncate interface!\n" );
+        SAL_WARN( "package.xstor", "The output stream must support XTruncate interface!" );
         throw uno::RuntimeException();
     }
 
@@ -3404,7 +3401,7 @@ void SAL_CALL OWriteStream::commit()
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OWriteStream::commit" );
+    SAL_INFO( "package.xstor", "package (mv76033) OWriteStream::commit" );
 
     if ( !m_pImpl )
     {
@@ -3469,7 +3466,7 @@ void SAL_CALL OWriteStream::revert()
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OWriteStream::revert" );
+    SAL_INFO( "package.xstor", "package (mv76033) OWriteStream::revert" );
 
     // the method removes all the changes done after last commit
 

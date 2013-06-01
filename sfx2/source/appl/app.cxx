@@ -63,7 +63,6 @@
 #include <basic/basmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/logfile.hxx>
 #include <sfx2/appuno.hxx>
 #include "sfx2/sfxhelp.hxx"
 #include <sfx2/request.hxx>
@@ -149,7 +148,7 @@ SfxApplication* SfxApplication::GetOrCreate()
     ::osl::MutexGuard aGuard(theApplicationMutex::get());
     if (!pApp)
     {
-        RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SetApp" );
+        SAL_INFO( "sfx2.appl", "sfx2 (mb93783) ::SfxApplication::SetApp" );
 
         pApp = new SfxApplication;
 
@@ -183,7 +182,7 @@ SfxApplication* SfxApplication::GetOrCreate()
 SfxApplication::SfxApplication()
     : pAppData_Impl( 0 )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SfxApplication" );
+    SAL_INFO( "sfx2.appl", "sfx2 (mb93783) ::SfxApplication::SfxApplication" );
 
     SetName( OUString("StarOffice") );
     SvtViewOptions::AcquireOptions();
@@ -191,7 +190,7 @@ SfxApplication::SfxApplication()
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->m_xImeStatusWindow->init();
 
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ initialize DDE" );
+    SAL_INFO( "sfx2.appl", "{ initialize DDE" );
 
     sal_Bool bOk = InitializeDde();
 
@@ -218,7 +217,7 @@ SfxApplication::SfxApplication()
     pBasic   = new BasicDLL;
     StarBASIC::SetGlobalErrorHdl( LINK( this, SfxApplication, GlobalBasicErrorHdl_Impl ) );
 #endif
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} initialize DDE" );
+    SAL_INFO( "sfx2.appl", "} initialize DDE" );
 }
 
 SfxApplication::~SfxApplication()
@@ -571,7 +570,7 @@ SfxApplication::ChooseScript()
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     if ( pFact )
     {
-        OSL_TRACE("create selector dialog");
+        SAL_INFO( "sfx2.appl", "create selector dialog");
 
         const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
         const SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
@@ -580,11 +579,11 @@ SfxApplication::ChooseScript()
           AbstractScriptSelectorDialog* pDlg =
             pFact->CreateScriptSelectorDialog( NULL, sal_False, xFrame );
 
-        OSL_TRACE("done, now exec it");
+        SAL_INFO( "sfx2.appl", "done, now exec it");
 
           sal_uInt16 nRet = pDlg->Execute();
 
-        OSL_TRACE("has returned");
+        SAL_INFO( "sfx2.appl", "has returned");
 
         if ( nRet == RET_OK )
         {

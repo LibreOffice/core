@@ -52,7 +52,6 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <framework/interaction.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/ustring.h>
 #include <sot/storinfo.hxx>
 #include <svtools/ehdl.hxx>
@@ -311,7 +310,7 @@ SfxObjectShellRef SfxFrameLoader_Impl::impl_findObjectShell( const Reference< XM
         }
     }
 
-    OSL_FAIL( "SfxFrameLoader_Impl::impl_findObjectShell: model is not based on SfxObjectShell - wrong frame loader usage!" );
+    SAL_WARN( "sfx2.view", "SfxFrameLoader_Impl::impl_findObjectShell: model is not based on SfxObjectShell - wrong frame loader usage!" );
     return NULL;
 }
 
@@ -515,7 +514,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
 
     SolarMutexGuard aGuard;
 
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxFrameLoader::load" );
+    SAL_INFO( "sfx2.view", "sfx2 (mb93783) ::SfxFrameLoader::load" );
 
     ::comphelper::NamedValueCollection aDescriptor( rArgs );
 

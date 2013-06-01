@@ -24,7 +24,6 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/eventcfg.hxx>
 #include <sfx2/event.hxx>
@@ -133,7 +132,7 @@ void SmDocShell::SFX_NOTIFY(SfxBroadcaster&, const TypeId&,
 
 void SmDocShell::LoadSymbols()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::LoadSymbols" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::LoadSymbols" );
 
     SmModule *pp = SM_MOD();
     pp->GetSymbolManager().Load();
@@ -142,7 +141,7 @@ void SmDocShell::LoadSymbols()
 
 const String SmDocShell::GetComment() const
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetComment" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::GetComment" );
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
         const_cast<SmDocShell*>(this)->GetModel(), uno::UNO_QUERY_THROW);
     uno::Reference<document::XDocumentProperties> xDocProps(
@@ -153,7 +152,7 @@ const String SmDocShell::GetComment() const
 
 void SmDocShell::SetText(const OUString& rBuffer)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetText" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::SetText" );
 
     if (rBuffer != OUString(aText))
     {
@@ -206,7 +205,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
 
 void SmDocShell::SetFormat(SmFormat& rFormat)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetFormat" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::SetFormat" );
 
     aFormat = rFormat;
     SetFormulaArranged( false );
@@ -226,7 +225,7 @@ void SmDocShell::SetFormat(SmFormat& rFormat)
 
 OUString SmDocShell::GetAccessibleText()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetAccessibleText" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::GetAccessibleText" );
 
     if (!IsFormulaArranged())
         ArrangeFormula();
@@ -245,7 +244,7 @@ OUString SmDocShell::GetAccessibleText()
 
 void SmDocShell::Parse()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Parse" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::Parse" );
 
     if (pTree)
         delete pTree;
@@ -260,7 +259,7 @@ void SmDocShell::Parse()
 
 void SmDocShell::ArrangeFormula()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::ArrangeFormula" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::ArrangeFormula" );
 
     if (IsFormulaArranged())
         return;
@@ -273,7 +272,7 @@ void SmDocShell::ArrangeFormula()
     if (!pOutDev)
     {
 #if OSL_DEBUG_LEVEL > 1
-        OSL_FAIL("!! SmDocShell::ArrangeFormula: reference device missing !!");
+        SAL_WARN( "starmath", "!! SmDocShell::ArrangeFormula: reference device missing !!");
 #endif
     }
 
@@ -371,7 +370,7 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool)
 
 EditEngine& SmDocShell::GetEditEngine()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetEditEngine" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::GetEditEngine" );
 
     if (!pEditEngine)
     {
@@ -416,7 +415,7 @@ EditEngine& SmDocShell::GetEditEngine()
 
 SfxItemPool& SmDocShell::GetEditEngineItemPool()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetEditEngineItemPool" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::GetEditEngineItemPool" );
 
     if (!pEditEngineItemPool)
         GetEditEngine();
@@ -426,7 +425,7 @@ SfxItemPool& SmDocShell::GetEditEngineItemPool()
 
 void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSelection)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Draw" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::Draw" );
 
     if (!pTree)
         Parse();
@@ -483,7 +482,7 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
 
 Size SmDocShell::GetSize()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetSize" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::GetSize" );
 
     Size aRet;
 
@@ -590,7 +589,7 @@ SmPrinterAccess::~SmPrinterAccess()
 
 Printer* SmDocShell::GetPrt()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetPrt" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::GetPrt" );
 
     if ( SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
     {
@@ -625,7 +624,7 @@ Printer* SmDocShell::GetPrt()
 
 OutputDevice* SmDocShell::GetRefDev()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetRefDev" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::GetRefDev" );
 
     if ( SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
     {
@@ -640,7 +639,7 @@ OutputDevice* SmDocShell::GetRefDev()
 
 void SmDocShell::SetPrinter( SfxPrinter *pNew )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetPrinter" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::SetPrinter" );
 
     delete pPrinter;
     pPrinter = pNew;    //Transfer ownership
@@ -651,7 +650,7 @@ void SmDocShell::SetPrinter( SfxPrinter *pNew )
 
 void SmDocShell::OnDocumentPrinterChanged( Printer *pPrt )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::OnDocumentPrinterChanged" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::OnDocumentPrinterChanged" );
 
     pTmpPrinter = pPrt;
     SetFormulaArranged(false);
@@ -664,7 +663,7 @@ void SmDocShell::OnDocumentPrinterChanged( Printer *pPrt )
 
 void SmDocShell::Repaint()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Repaint" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::Repaint" );
 
     bool bIsEnabled = IsEnableSetModified();
     if ( bIsEnabled )
@@ -694,7 +693,7 @@ SmDocShell::SmDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     bIsFormulaArranged  ( false )
 {
     pCursor = NULL;
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SmDocShell" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::SmDocShell" );
 
     SetPool(&SFX_APP()->GetPool());
 
@@ -711,7 +710,7 @@ SmDocShell::SmDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
 
 SmDocShell::~SmDocShell()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::~SmDocShell" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::~SmDocShell" );
 
     SmModule *pp = SM_MOD();
 
@@ -732,7 +731,7 @@ SmDocShell::~SmDocShell()
 
 sal_Bool SmDocShell::SetData( const String& rData )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetData" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::SetData" );
 
     SetText( rData );
     return true;
@@ -741,7 +740,7 @@ sal_Bool SmDocShell::SetData( const String& rData )
 
 sal_Bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::ConvertFrom" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::ConvertFrom" );
 
     bool     bSuccess = false;
     const String& rFltName = rMedium.GetFilter()->GetFilterName();
@@ -792,7 +791,7 @@ sal_Bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
 
 sal_Bool SmDocShell::InitNew( const uno::Reference < embed::XStorage >& xStorage )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::InitNew" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::InitNew" );
 
     bool bRet = false;
     if ( SfxObjectShell::InitNew( xStorage ) )
@@ -806,7 +805,7 @@ sal_Bool SmDocShell::InitNew( const uno::Reference < embed::XStorage >& xStorage
 
 sal_Bool SmDocShell::Load( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Load" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::Load" );
 
     bool bRet = false;
     if( SfxObjectShell::Load( rMedium ))
@@ -847,7 +846,7 @@ sal_Bool SmDocShell::Load( SfxMedium& rMedium )
 
 sal_Bool SmDocShell::Save()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Save" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::Save" );
 
     //! apply latest changes if necessary
     UpdateText();
@@ -905,7 +904,7 @@ sal_Bool SmDocShell::ReplaceBadChars()
 
 void SmDocShell::UpdateText()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::UpdateText" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::UpdateText" );
 
     if (pEditEngine && pEditEngine->IsModified())
     {
@@ -918,7 +917,7 @@ void SmDocShell::UpdateText()
 
 sal_Bool SmDocShell::SaveAs( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SaveAs" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::SaveAs" );
 
     bool bRet = false;
 
@@ -942,7 +941,7 @@ sal_Bool SmDocShell::SaveAs( SfxMedium& rMedium )
 
 sal_Bool SmDocShell::ConvertTo( SfxMedium &rMedium )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::ConvertTo" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::ConvertTo" );
 
     bool bRet = false;
     const SfxFilter* pFlt = rMedium.GetFilter();
@@ -976,7 +975,7 @@ sal_Bool SmDocShell::ConvertTo( SfxMedium &rMedium )
 
 bool SmDocShell::writeFormulaOoxml( ::sax_fastparser::FSHelperPtr pSerializer, oox::core::OoxmlVersion version )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::writeFormulaOoxml" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::writeFormulaOoxml" );
 
     if( !pTree )
         Parse();
@@ -998,7 +997,7 @@ void SmDocShell::writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncod
 
 void SmDocShell::readFormulaOoxml( oox::formulaimport::XmlStream& stream )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::readFormulaOoxml" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::readFormulaOoxml" );
 
     SmOoxmlImport aEquation( stream );
     SetText( aEquation.ConvertToStarMath());
@@ -1006,7 +1005,7 @@ void SmDocShell::readFormulaOoxml( oox::formulaimport::XmlStream& stream )
 
 sal_Bool SmDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SaveCompleted" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::SaveCompleted" );
 
     if( SfxObjectShell::SaveCompleted( xStorage ))
         return true;
@@ -1017,7 +1016,7 @@ sal_Bool SmDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::co
 
 void SmDocShell::Execute(SfxRequest& rReq)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Execute" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::Execute" );
 
     switch (rReq.GetSlot())
     {
@@ -1225,7 +1224,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
 void SmDocShell::GetState(SfxItemSet &rSet)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetState" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::GetState" );
 
     SfxWhichIter aIter(rSet);
 
@@ -1324,7 +1323,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
 
 ::svl::IUndoManager *SmDocShell::GetUndoManager()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetUndoManager" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::GetUndoManager" );
 
     if (!pEditEngine)
         GetEditEngine();
@@ -1334,7 +1333,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
 
 void SmDocShell::SaveSymbols()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SaveSymbols" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::SaveSymbols" );
 
     SmModule *pp = SM_MOD();
     pp->GetSymbolManager().Save();
@@ -1345,7 +1344,7 @@ void SmDocShell::Draw(OutputDevice *pDevice,
                       const JobSetup &,
                       sal_uInt16 /*nAspect*/)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::Draw" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::Draw" );
 
     pDevice->IntersectClipRegion(GetVisArea());
     Point atmppoint;
@@ -1359,7 +1358,7 @@ SfxItemPool& SmDocShell::GetPool() const
 
 void SmDocShell::SetVisArea(const Rectangle & rVisArea)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetVisArea" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::SetVisArea" );
 
     Rectangle aNewRect(rVisArea);
 
@@ -1402,7 +1401,7 @@ void SmDocShell::FillClass(SvGlobalName* pClassName,
                            sal_Int32 nFileFormat,
                            sal_Bool bTemplate /* = sal_False */) const
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::FillClass" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::FillClass" );
 
     if (nFileFormat == SOFFICE_FILEFORMAT_60 )
     {
@@ -1428,7 +1427,7 @@ sal_uLong SmDocShell::GetMiscStatus() const
 
 void SmDocShell::SetModified(sal_Bool bModified)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetModified" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::SetModified" );
 
     if( IsEnableSetModified() )
     {
@@ -1439,7 +1438,7 @@ void SmDocShell::SetModified(sal_Bool bModified)
 
 bool SmDocShell::WriteAsMathType3( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::WriteAsMathType3" );
+    SAL_INFO( "starmath", "starmath: SmDocShell::WriteAsMathType3" );
 
     MathType aEquation( aText, pTree );
 

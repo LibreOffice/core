@@ -22,7 +22,6 @@
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
 
-#include <rtl/logfile.hxx>
 #include <osl/diagnose.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -150,8 +149,8 @@ namespace slideshow
 
         bool DrawShape::implRender( int nUpdateFlags ) const
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::DrawShape::implRender()" );
-            RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::presentation::internal::DrawShape: 0x%X", this );
+            SAL_INFO( "slideshow", "::presentation::internal::DrawShape::implRender()" );
+            SAL_INFO( "slideshow", "::presentation::internal::DrawShape: 0x" << std::hex << this );
 
             // will perform the update now, clear update-enforcing
             // flags
@@ -621,10 +620,7 @@ namespace slideshow
             }
             catch (uno::Exception &)
             {
-                OSL_FAIL( OUStringToOString(
-                                comphelper::anyToString(
-                                    cppu::getCaughtException() ),
-                                RTL_TEXTENCODING_UTF8 ).getStr() );
+                SAL_WARN( "slideshow", "" << comphelper::anyToString(cppu::getCaughtException() ) );
             }
         }
 
@@ -930,7 +926,7 @@ namespace slideshow
                     {
                         if (!maHyperlinkIndices.empty() &&
                             maHyperlinkIndices.back().second == -1) {
-                            OSL_FAIL( "### pending FIELD_SEQ_END!" );
+                            SAL_WARN( "slideshow", "### pending FIELD_SEQ_END!" );
                             maHyperlinkIndices.pop_back();
                             maHyperlinkRegions.pop_back();
                         }
@@ -961,7 +957,7 @@ namespace slideshow
             }
             if (!maHyperlinkIndices.empty() &&
                 maHyperlinkIndices.back().second == -1) {
-                OSL_FAIL( "### pending FIELD_SEQ_END!" );
+                SAL_WARN( "slideshow", "### pending FIELD_SEQ_END!" );
                 maHyperlinkIndices.pop_back();
                 maHyperlinkRegions.pop_back();
             }
