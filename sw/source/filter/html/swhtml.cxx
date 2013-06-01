@@ -144,12 +144,12 @@ HTMLReader::HTMLReader()
 
 String HTMLReader::GetTemplateName() const
 {
-    String sTemplate("internal");
-    sTemplate += INET_PATH_TOKEN;
-    sTemplate.Append(String("html"));
-    String sTemplateWithoutExt( sTemplate );
+    OUString sTemplate("internal");
+    sTemplate += OUString(INET_PATH_TOKEN);
+    sTemplate += "html";
+    OUString sTemplateWithoutExt( sTemplate );
     // first search for OpenDocument Writer/Web template
-    sTemplate.Append(String(".oth"));
+    sTemplate += ".oth";
 
     SvtPathOptions aPathOpt;
     // OpenDocument Writer/Web template (extension .oth)
@@ -160,7 +160,7 @@ String HTMLReader::GetTemplateName() const
         // no OpenDocument Writer/Web template found.
         // search for OpenOffice.org Writer/Web template
         sTemplate = sTemplateWithoutExt;
-        sTemplate.Append(String(".stw"));
+        sTemplate += ".stw";
         bSet = aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
     }
 

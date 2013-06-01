@@ -61,7 +61,7 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
     SwOneExampleFrame*  m_pExampleFrame;
     SwWrtShell*         m_pExampleWrtShell;
 
-    String              m_sExampleURL;
+    OUString            m_sExampleURL;
     SwFrmFmt*           m_pAddressBlockFormat;
 
     bool                m_bIsGreetingInserted;
