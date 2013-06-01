@@ -8386,7 +8386,7 @@ if test "$_os" != "WINNT" -a "$_os" != "Darwin"; then
     AC_MSG_RESULT([yes])
     ENABLE_HARFBUZZ="TRUE"
     if test "$with_system_harfbuzz" = "yes"; then
-	if pkg-config --atleast-version 0.9.18 harfbuzz; then
+	if $PKG_CONFIG --atleast-version 0.9.18 harfbuzz; then
 		libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.18])
         fi
     else
