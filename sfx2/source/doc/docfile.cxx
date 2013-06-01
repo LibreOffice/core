@@ -2092,7 +2092,11 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
     if ( !pImp->m_aBackupURL.isEmpty() )
         return; // the backup was done already
 
-    ::utl::TempFile aTransactTemp( aPrefix, &aExtension, &aDestDir );
+    OUString aExt(aExtension);
+    OUString aDest(aDestDir);
+    OUString aPre(aPrefix);
+
+    ::utl::TempFile aTransactTemp( aPre, &aExt, &aDest );
     aTransactTemp.EnableKillingFile( false );
 
     INetURLObject aBackObj( aTransactTemp.GetURL() );
@@ -3540,9 +3544,9 @@ OUString SfxMedium::CreateTempCopyWithExt( const OUString& aURL )
     if ( !aURL.isEmpty() )
     {
         sal_Int32 nPrefixLen = aURL.lastIndexOf( '.' );
-        String aExt = ( nPrefixLen == -1 ) ? String() : String( aURL.copy( nPrefixLen ) );
+        OUString aExt = ( nPrefixLen == -1 ) ? OUString() : OUString( aURL.copy( nPrefixLen ) );
 
-        OUString aNewTempFileURL = ::utl::TempFile( String(), &aExt ).GetURL();
+        OUString aNewTempFileURL = ::utl::TempFile( OUString(), &aExt ).GetURL();
         if ( !aNewTempFileURL.isEmpty() )
         {
             INetURLObject aSource( aURL );
@@ -3614,8 +3618,8 @@ OUString SfxMedium::SwitchDocumentToTempFile()
     if ( !aOrigURL.isEmpty() )
     {
         sal_Int32 nPrefixLen = aOrigURL.lastIndexOf( '.' );
-        String aExt = ( nPrefixLen == -1 ) ? String() : String( aOrigURL.copy( nPrefixLen ) );
-        OUString aNewURL = ::utl::TempFile( String(), &aExt ).GetURL();
+        OUString aExt = ( nPrefixLen == -1 ) ? String() : String( aOrigURL.copy( nPrefixLen ) );
+        OUString aNewURL = ::utl::TempFile( OUString(), &aExt ).GetURL();
 
         // TODO/LATER: In future the aLogicName should be set to shared folder URL
         //             and a temporary file should be created. Transport_Impl should be impossible then.

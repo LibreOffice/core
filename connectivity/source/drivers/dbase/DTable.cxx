@@ -2493,12 +2493,11 @@ String ODbaseTable::createTempFile()
     OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
     if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
         aIdent += "/";
-    String sTempName(aIdent);
-    String sExt;
-    sExt.AssignAscii(".");
+    OUString sTempName(aIdent);
+    OUString sExt(".");
     sExt += m_pConnection->getExtension();
 
-    String sName(m_Name);
+    OUString sName(m_Name);
     TempFile aTempFile(sName,&sExt,&sTempName);
     if(!aTempFile.IsValid())
         getConnection()->throwGenericSQLException(STR_COULD_NOT_ALTER_TABLE,*this);
@@ -2508,7 +2507,7 @@ String ODbaseTable::createTempFile()
     aURL.SetURL(aTempFile.GetURL());
 
     String sNewName(aURL.getName());
-    sNewName.Erase(sNewName.Len() - sExt.Len());
+    sNewName.Erase(sNewName.Len() - sExt.getLength());
     return sNewName;
 }
 // -----------------------------------------------------------------------------

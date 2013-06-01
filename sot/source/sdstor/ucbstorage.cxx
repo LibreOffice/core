@@ -2274,7 +2274,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         if ( bRet )
                         {
                             // create a stream to write the manifest file - use a temp file
-                            String aURL( aNewSubFolder.getURL() );
+                            OUString aURL( aNewSubFolder.getURL() );
                             ::utl::TempFile* pTempFile = new ::utl::TempFile( &aURL );
 
                             // get the stream from the temp file and create an output stream wrapper
@@ -3182,7 +3182,7 @@ String UCBStorage::CreateLinkFile( const String& rName )
     INetURLObject aFolderObj( rName );
     String aName = aFolderObj.GetName();
     aFolderObj.removeSegment();
-    String aFolderURL( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ) );
+    OUString aFolderURL( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ) );
     ::utl::TempFile* pTempFile = new ::utl::TempFile( &aFolderURL );
 
     // get the stream from the temp file

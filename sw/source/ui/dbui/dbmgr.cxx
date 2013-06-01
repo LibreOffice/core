@@ -974,7 +974,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             {
                 nStartRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
                 {
-                    String sPath(sSubject);
+                    OUString sPath(sSubject);
 
                     String sAddress;
                     if( !bEMail && bColumnName )
@@ -992,7 +992,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     if( 1 == nDocNo || (!rMergeDescriptor.bCreateSingleFile && !bAsSingleFile) )
                     {
                         INetURLObject aEntry(sPath);
-                        String sLeading;
+                        OUString sLeading;
                         //#i97667# if the name is from a database field then it will be used _as is_
                         if( sAddress.Len() )
                             sLeading = sAddress;
@@ -1000,7 +1000,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                             sLeading = aEntry.GetBase();
                         aEntry.removeSegment();
                         sPath = aEntry.GetMainURL( INetURLObject::NO_DECODE );
-                        String sExt(comphelper::string::stripStart(pStoreToFilter->GetDefaultExtension(), '*'));
+                        OUString sExt(comphelper::string::stripStart(pStoreToFilter->GetDefaultExtension(), '*'));
                         aTempFile = std::auto_ptr< utl::TempFile >(
                                 new utl::TempFile(sLeading,&sExt,&sPath ));
                         if( bAsSingleFile )
@@ -1246,7 +1246,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 if( rMergeDescriptor.nMergeType != DBMGR_MERGE_MAILMERGE )
                 {
                     OSL_ENSURE( aTempFile.get(), "Temporary file not available" );
-                    INetURLObject aTempFileURL(bAsSingleFile ? sSubject : aTempFile->GetURL());
+                    INetURLObject aTempFileURL(bAsSingleFile ? OUString(sSubject) : aTempFile->GetURL());
                     SfxMedium* pDstMed = new SfxMedium(
                         aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
                         STREAM_STD_READWRITE );
@@ -2175,7 +2175,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
     sfx2::FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
     Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
-    String sHomePath(SvtPathOptions().GetWorkPath());
+    OUString sHomePath(SvtPathOptions().GetWorkPath());
     aDlgHelper.SetDisplayDirectory( sHomePath );
 
     Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
@@ -2335,7 +2335,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
 
                 Reference<XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
                 Reference<XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
-                String sOutputExt = OUString(".odb");
+                OUString sOutputExt = OUString(".odb");
                 String sTmpName;
                 {
                     utl::TempFile aTempFile(sNewName , &sOutputExt, &sHomePath);

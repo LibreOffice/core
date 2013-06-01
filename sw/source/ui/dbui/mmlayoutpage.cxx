@@ -110,8 +110,8 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     {
         //temp file needs it's own block
         //creating with extension is not supported by a static method :-(
-        String sLeading;
-        String sExt(comphelper::string::stripStart(pSfxFlt->GetDefaultExtension(), '*'));
+        OUString sLeading;
+        OUString sExt(comphelper::string::stripStart(pSfxFlt->GetDefaultExtension(), '*'));
         utl::TempFile aTempFile( sLeading, &sExt );
         m_sExampleURL = aTempFile.GetURL();
         aTempFile.EnableKillingFile();

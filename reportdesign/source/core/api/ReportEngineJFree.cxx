@@ -172,7 +172,7 @@ OUString OReportEngineJFree::getNewOutputName()
             MimeConfigurationHelper aConfighelper(m_xContext);
             const OUString sMimeType = m_xReport->getMimeType();
             const SfxFilter* pFilter = SfxFilter::GetDefaultFilter( aConfighelper.GetDocServiceNameFromMediaType(sMimeType) );
-            String sExt;
+            OUString sExt;
             if ( pFilter )
                 sExt = ::comphelper::string::stripStart(pFilter->GetDefaultExtension(), '*');
             else
@@ -195,8 +195,8 @@ OUString OReportEngineJFree::getNewOutputName()
             aConvertedProperties[nPos].Name = OUString("OutputStorage");
 
             OUString sFileURL;
-            String sName = m_xReport->getCaption();
-            if ( !sName.Len() )
+            OUString sName = m_xReport->getCaption();
+            if ( sName.isEmpty() )
                 sName = m_xReport->getName();
             {
                 ::utl::TempFile aTestFile(sName,sal_False,&sExt);

@@ -77,10 +77,11 @@ static String lcl_CheckFileName( const String& rNewFilePath,
 
     if( !bOk )
     {
-        String rSG = SwGlossaries::GetExtension();
+        OUString rSG = SwGlossaries::GetExtension();
+        OUString sNF(rNewFilePath);
         //generate generic name
         utl::TempFile aTemp(OUString("group"),
-            &rSG, &rNewFilePath );
+            &rSG, &sNF );
         aTemp.EnableKillingFile();
 
         INetURLObject aTempURL( aTemp.GetURL() );

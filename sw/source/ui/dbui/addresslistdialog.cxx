@@ -396,10 +396,10 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
 
             uno::Reference<sdb::XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
             uno::Reference<frame::XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
-            String sExt = OUString(".odb");
+            OUString sExt = OUString(".odb");
             String sTmpName;
             {
-                String sHomePath(SvtPathOptions().GetWorkPath());
+                OUString sHomePath(SvtPathOptions().GetWorkPath());
                 utl::TempFile aTempFile(sFind , &sExt, &sHomePath);
                 aTempFile.EnableKillingFile(sal_True);
                 sTmpName = aTempFile.GetURL();
