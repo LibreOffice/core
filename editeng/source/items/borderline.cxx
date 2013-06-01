@@ -683,6 +683,11 @@ bool SvxBorderLine::HasPriority( const SvxBorderLine& rOtherLine ) const
     return false;
 }
 
+bool operator!=( const SvxBorderLine& rLeft, const SvxBorderLine& rRight )
+{
+    return !(rLeft == rRight);
+}
+
 } // namespace editeng
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

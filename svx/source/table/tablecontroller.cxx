@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
 
 #include <svx/sdr/table/tablecontroller.hxx>
 #include <tablemodel.hxx>
@@ -724,7 +725,6 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
     if( !pArgs && pTableObj->GetModel() )
     {
         SfxItemSet aNewAttr( pTableObj->GetModel()->GetItemPool() );
-        MergeAttrFromSelectedCells(aNewAttr, sal_False);
 
         // merge drawing layer text distance items into SvxBoxItem used by the dialog
         SvxBoxItem aBoxItem( static_cast< const SvxBoxItem& >( aNewAttr.Get( SDRATTR_TABLE_BORDER ) ) );
@@ -732,7 +732,13 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
         aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrTextRightDistItem&)(aNewAttr.Get(SDRATTR_TEXT_RIGHTDIST))).GetValue()), BOX_LINE_RIGHT );
         aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrTextUpperDistItem&)(aNewAttr.Get(SDRATTR_TEXT_UPPERDIST))).GetValue()), BOX_LINE_TOP );
         aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( ((SdrTextLowerDistItem&)(aNewAttr.Get(SDRATTR_TEXT_LOWERDIST))).GetValue()), BOX_LINE_BOTTOM );
+
+        SvxBoxInfoItem aBoxInfoItem( static_cast< const SvxBoxInfoItem& >( aNewAttr.Get( SDRATTR_TABLE_BORDER_INNER ) ) );
+
+        MergeAttrFromSelectedCells(aNewAttr, sal_False);
+        FillCommonBorderAttrFromSelectedCells( aBoxItem, aBoxInfoItem );
         aNewAttr.Put( aBoxItem );
+        aNewAttr.Put( aBoxInfoItem );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact ? pFact->CreateSvxFormatCellsDialog( NULL, &aNewAttr, pTableObj->GetModel(), pTableObj) : 0 );
@@ -2579,6 +2585,217 @@ IMPL_LINK_NOARG(SvxTableController, UpdateHdl)
     updateSelectionOverlay();
 
     return 0;
+}
+
+namespace
+{
+
+struct LinesState
+{
+    LinesState(SvxBoxItem& rBoxItem_, SvxBoxInfoItem& rBoxInfoItem_)
+        : rBoxItem(rBoxItem_)
+        , rBoxInfoItem(rBoxInfoItem_)
+    {
+        std::fill_n(aBorderSet, 4, false);
+        std::fill_n(aInnerLineSet, 2, false);
+        std::fill_n(aBorderIndeterminate, 4, false);
+        std::fill_n(aInnerLineIndeterminate, 2, false);
+    }
+
+    SvxBoxItem& rBoxItem;
+    SvxBoxInfoItem& rBoxInfoItem;
+    bool aBorderSet[4];
+    bool aInnerLineSet[2];
+    bool aBorderIndeterminate[4];
+    bool aInnerLineIndeterminate[2];
+};
+
+class BoxItemWrapper
+{
+public:
+    BoxItemWrapper(SvxBoxItem& rBoxItem, SvxBoxInfoItem& rBoxInfoItem, sal_uInt16 nBorderLine, sal_uInt16 nInnerLine, bool bBorder);
+
+    const SvxBorderLine* getLine() const;
+    void setLine(const SvxBorderLine* pLine);
+
+private:
+    SvxBoxItem& m_rBoxItem;
+    SvxBoxInfoItem& m_rBoxInfoItem;
+    const sal_uInt16 m_nLine;
+    const bool m_bBorder;
+};
+
+BoxItemWrapper::BoxItemWrapper(
+        SvxBoxItem& rBoxItem, SvxBoxInfoItem& rBoxInfoItem,
+        const sal_uInt16 nBorderLine, const sal_uInt16 nInnerLine, const bool bBorder)
+    : m_rBoxItem(rBoxItem)
+    , m_rBoxInfoItem(rBoxInfoItem)
+    , m_nLine(bBorder ? nBorderLine : nInnerLine)
+    , m_bBorder(bBorder)
+{
+    assert(bBorder ? (m_nLine <= BOX_LINE_RIGHT) : (m_nLine <= BOXINFO_LINE_VERT));
+}
+
+const SvxBorderLine* BoxItemWrapper::getLine() const
+{
+    if (m_bBorder)
+        return m_rBoxItem.GetLine(m_nLine);
+    else
+        return (m_nLine == BOXINFO_LINE_HORI) ? m_rBoxInfoItem.GetHori() : m_rBoxInfoItem.GetVert();
+}
+
+void BoxItemWrapper::setLine(const SvxBorderLine* pLine)
+{
+    if (m_bBorder)
+        m_rBoxItem.SetLine(pLine, m_nLine);
+    else
+        m_rBoxInfoItem.SetLine(pLine, m_nLine);
+}
+
+void lcl_MergeBorderLine(
+        LinesState& rLinesState, const SvxBorderLine* const pLine, const sal_uInt16 nLine,
+        const sal_uInt8 nValidFlag, const bool bBorder = true)
+{
+    const sal_uInt16 nInnerLine(bBorder ? 0 : ((nValidFlag & VALID_HORI) ? BOXINFO_LINE_HORI : BOXINFO_LINE_VERT));
+    BoxItemWrapper aBoxItem(rLinesState.rBoxItem, rLinesState.rBoxInfoItem, nLine, nInnerLine, bBorder);
+    bool& rbSet(bBorder ? rLinesState.aBorderSet[nLine] : rLinesState.aInnerLineSet[nInnerLine]);
+    bool& rbIndeterminate(bBorder ? rLinesState.aBorderIndeterminate[nLine] : rLinesState.aInnerLineIndeterminate[nInnerLine]);
+
+    if (rbSet)
+    {
+        if (!rbIndeterminate)
+        {
+            const SvxBorderLine* const pMergedLine(aBoxItem.getLine());
+            if ((pLine && !pMergedLine) || (!pLine && pMergedLine) || (pLine && (*pLine != *pMergedLine)))
+            {
+                aBoxItem.setLine(0);
+                rbIndeterminate = true;
+            }
+        }
+    }
+    else
+    {
+        aBoxItem.setLine(pLine);
+        rbSet = true;
+    }
+}
+
+void lcl_MergeBorderOrInnerLine(
+        LinesState& rLinesState, const SvxBorderLine* const pLine, const sal_uInt16 nLine,
+        const sal_uInt8 nValidFlag, const bool bBorder)
+{
+    if (bBorder)
+        lcl_MergeBorderLine(rLinesState, pLine, nLine, nValidFlag);
+    else
+    {
+        const bool bVertical = (nLine == BOX_LINE_LEFT) || (nLine == BOX_LINE_RIGHT);
+        lcl_MergeBorderLine(rLinesState, pLine, nLine, bVertical ? VALID_VERT : VALID_HORI, false);
+    }
+}
+
+void lcl_MergeCommonBorderAttr(LinesState& rLinesState, const SvxBoxItem& rCellBoxItem, const sal_Int32 nCellFlags)
+{
+    if( (nCellFlags & (CELL_BEFORE|CELL_AFTER|CELL_UPPER|CELL_LOWER)) != 0 )
+    {
+        // current cell is outside the selection
+
+        if( (nCellFlags & ( CELL_BEFORE|CELL_AFTER)) == 0 ) // check if its not nw or ne corner
+        {
+            if( nCellFlags & CELL_UPPER )
+                lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetBottom(), BOX_LINE_TOP, VALID_TOP);
+            else if( nCellFlags & CELL_LOWER )
+                lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetTop(), BOX_LINE_BOTTOM, VALID_BOTTOM);
+        }
+        else if( (nCellFlags & ( CELL_UPPER|CELL_LOWER)) == 0 ) // check if its not sw or se corner
+        {
+            if( nCellFlags & CELL_BEFORE )
+                lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetRight(), BOX_LINE_LEFT, VALID_LEFT);
+            else if( nCellFlags & CELL_AFTER )
+                lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetLeft(), BOX_LINE_RIGHT, VALID_RIGHT);
+        }
+    }
+    else
+    {
+        // current cell is inside the selection
+
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetTop(), BOX_LINE_TOP, VALID_TOP, nCellFlags & CELL_TOP);
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetBottom(), BOX_LINE_BOTTOM, VALID_BOTTOM, nCellFlags & CELL_BOTTOM);
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetLeft(), BOX_LINE_LEFT, VALID_LEFT, nCellFlags & CELL_LEFT);
+        lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetRight(), BOX_LINE_RIGHT, VALID_RIGHT, nCellFlags & CELL_RIGHT);
+    }
+}
+
+}
+
+void SvxTableController::FillCommonBorderAttrFromSelectedCells( SvxBoxItem& rBoxItem, SvxBoxInfoItem& rBoxInfoItem ) const
+{
+    if( mxTable.is() )
+    {
+        const sal_Int32 nRowCount = mxTable->getRowCount();
+        const sal_Int32 nColCount = mxTable->getColumnCount();
+        if( nRowCount && nColCount )
+        {
+            CellPos aStart, aEnd;
+            const_cast< SvxTableController* >( this )->getSelectedCells( aStart, aEnd );
+
+            // We are adding one more row/column around the block of selected cells.
+            // We will be checking the adjoining border of these too.
+            const sal_Int32 nLastRow = std::min( aEnd.mnRow + 2, nRowCount );
+            const sal_Int32 nLastCol = std::min( aEnd.mnCol + 2, nColCount );
+
+            rBoxInfoItem.SetValid( sal_uInt8( ~0 ), sal_False );
+            LinesState aLinesState( rBoxItem, rBoxInfoItem );
+
+            /* Here we go through all the selected cells (enhanced by
+             * the adjoining row/column on each side) and determine the
+             * lines for presentation. The algorithm is simple:
+             * 1. if a border or inner line is set in all cells to the
+             *    same value, it will be used.
+             * 2. if a border or inner line is set only in some cells,
+             *    or it has different values, it will be set to
+             *    indeterminate state (SetValid() on rBoxInfoItem).
+             * 3. otherwise it will be unset.
+             */
+            for( sal_Int32 nRow = std::max( aStart.mnRow - 1, (sal_Int32)0 ); nRow < nLastRow; nRow++ )
+            {
+                sal_uInt16 nRowFlags = 0;
+                nRowFlags |= (nRow == aStart.mnRow) ? CELL_TOP : 0;
+                nRowFlags |= (nRow == aEnd.mnRow)   ? CELL_BOTTOM : 0;
+                nRowFlags |= (nRow < aStart.mnRow)  ? CELL_UPPER : 0;
+                nRowFlags |= (nRow > aEnd.mnRow)    ? CELL_LOWER : 0;
+
+                for( sal_Int32 nCol = std::max( aStart.mnCol - 1, (sal_Int32)0 ); nCol < nLastCol; nCol++ )
+                {
+                    CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+                    if( !xCell.is() )
+                        continue;
+
+                    sal_uInt16 nCellFlags = nRowFlags;
+                    nCellFlags |= (nCol == aStart.mnCol) ? CELL_LEFT : 0;
+                    nCellFlags |= (nCol == aEnd.mnCol)   ? CELL_RIGHT : 0;
+                    nCellFlags |= (nCol < aStart.mnCol)  ? CELL_BEFORE : 0;
+                    nCellFlags |= (nCol > aEnd.mnCol)    ? CELL_AFTER : 0;
+
+                    const SfxItemSet& rSet = xCell->GetItemSet();
+                    const SvxBoxItem& rCellBoxItem = static_cast< const SvxBoxItem& >( rSet.Get(SDRATTR_TABLE_BORDER ) );
+                    lcl_MergeCommonBorderAttr( aLinesState, rCellBoxItem, nCellFlags );
+                }
+            }
+
+            if (!aLinesState.aBorderIndeterminate[BOX_LINE_TOP])
+                aLinesState.rBoxInfoItem.SetValid(VALID_TOP);
+            if (!aLinesState.aBorderIndeterminate[BOX_LINE_BOTTOM])
+                aLinesState.rBoxInfoItem.SetValid(VALID_BOTTOM);
+            if (!aLinesState.aBorderIndeterminate[BOX_LINE_LEFT])
+                aLinesState.rBoxInfoItem.SetValid(VALID_LEFT);
+            if (!aLinesState.aBorderIndeterminate[BOX_LINE_RIGHT])
+                aLinesState.rBoxInfoItem.SetValid(VALID_RIGHT);
+            if (!aLinesState.aInnerLineIndeterminate[BOXINFO_LINE_HORI])
+                aLinesState.rBoxInfoItem.SetValid(VALID_HORI);
+            if (!aLinesState.aInnerLineIndeterminate[BOXINFO_LINE_VERT])
+                aLinesState.rBoxInfoItem.SetValid(VALID_VERT);
+        }
+    }
 }
 
 } }
