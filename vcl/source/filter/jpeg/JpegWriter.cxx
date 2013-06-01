@@ -227,7 +227,7 @@ sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
     if ( !mbGreys )  // bitmap was not explicitly converted into greyscale,
     {                // check if source is greyscale only
 
-        sal_Bool bIsGrey = sal_True;
+        bool bIsGrey = true;
 
         long nWidth = mpReadAccess->Width();
         for ( long nY = 0; bIsGrey && ( nY < mpReadAccess->Height() ); nY++ )

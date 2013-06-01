@@ -22,9 +22,9 @@
 #include <tools/urlobj.hxx>
 
 sal_uInt8 CheckSgfTyp(SvStream& rInp, sal_uInt16& nVersion);
-sal_Bool SgfBMapFilter(SvStream& rInp, SvStream& rOut);
-sal_Bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf);
-sal_Bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath );
+bool SgfBMapFilter(SvStream& rInp, SvStream& rOut);
+bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf);
+bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath );
 
 // Konstanten fÅr CheckSgfTyp()
 #define SGF_BITIMAGE   1     /* Bitmap                      */

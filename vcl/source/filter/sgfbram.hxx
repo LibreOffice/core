@@ -59,7 +59,7 @@ public:
 
     sal_uInt32 GetOffset();
     friend SvStream& operator>>(SvStream& rIStream, SgfHeader& rHead);
-    sal_Bool   ChkMagic();
+    bool   ChkMagic();
 };
 
 #define SgfEntrySize 22
@@ -94,7 +94,7 @@ extern long SgfVectXmul;
 extern long SgfVectYmul;
 extern long SgfVectXdiv;
 extern long SgfVectYdiv;
-extern sal_Bool SgfVectScal;
+extern bool SgfVectScal;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Windows BMP /////////////////////////////////////////////////////////////////////////////////////

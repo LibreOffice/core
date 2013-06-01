@@ -46,7 +46,7 @@ SvStream& operator>>(SvStream& rIStream, SgfHeader& rHead)
     return rIStream;
 }
 
-sal_Bool SgfHeader::ChkMagic()
+bool SgfHeader::ChkMagic()
 { return Magic=='J'*256+'J'; }
 
 sal_uInt32 SgfHeader::GetOffset()
@@ -194,7 +194,7 @@ sal_uInt8 PcxExpand::GetByte(SvStream& rInp)
 // SgfBMapFilter ///////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
+bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
 {
     BmpFileHeader  aBmpHead;
     BmpInfoHeader  aBmpInfo;
@@ -230,7 +230,7 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
     aBmpInfo.ColUsed=0;
     aBmpInfo.ColMust=0;
     pBuf=new sal_uInt8[nWdtOut];
-    if (!pBuf) return sal_False;       // Fehler: kein Speichel da
+    if (!pBuf) return false;       // Fehler: kein Speichel da
     rOut<<aBmpHead<<aBmpInfo;
     memset(pBuf,0,nWdtOut);        // Buffer mit Nullen fuellen
 
@@ -320,17 +320,17 @@ sal_Bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntr
         }
     }
     delete[] pBuf;
-    return sal_True;
+    return true;
 }
 
-sal_Bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
+bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
 {
     sal_uLong     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
     SgfHeader aHead;
     SgfEntry  aEntr;
     sal_uLong     nNext;
-    sal_Bool      bRdFlag=sal_False;         // Grafikentry gelesen ?
-    sal_Bool      bRet=sal_False;            // Returncode
+    bool      bRdFlag=false;         // Grafikentry gelesen ?
+    bool      bRet=false;            // Returncode
 
     nFileStart=rInp.Tell();
     rInp>>aHead;
@@ -342,7 +342,7 @@ sal_Bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
             rInp>>aEntr;
             nNext=aEntr.GetOffset();
             if (aEntr.Typ==aHead.Typ) {
-                bRdFlag=sal_True;
+                bRdFlag=true;
                 switch(aEntr.Typ) {
                     case SgfBitImag0:
                     case SgfBitImag1:
@@ -352,7 +352,7 @@ sal_Bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
             }
         } // while(nNext)
     }
-    if (rInp.GetError()) bRet=sal_False;
+    if (rInp.GetError()) bRet=false;
     return(bRet);
 }
 
@@ -368,7 +368,7 @@ long SgfVectXmul=0;
 long SgfVectYmul=0;
 long SgfVectXdiv=0;
 long SgfVectYdiv=0;
-sal_Bool SgfVectScal=sal_False;
+bool SgfVectScal=false;
 
 ////////////////////////////////////////////////////////////
 // Hpgl2SvFarbe ////////////////////////////////////////////
@@ -392,7 +392,7 @@ Color Hpgl2SvFarbe( sal_uInt8 nFarb )
     return aColor;
 }
 
-sal_Bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMtf)
+bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile& rMtf)
 {
     VirtualDevice aOutDev;
     SgfVector aVect;
@@ -400,8 +400,8 @@ sal_Bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile&
     sal_uInt8      nFrb0=7;
     sal_uInt8      nLTyp;
     sal_uInt8      nOTyp;
-    sal_Bool      bEoDt=sal_False;
-    sal_Bool      bPDwn=sal_False;
+    bool      bEoDt=false;
+    bool      bPDwn=false;
     Point     aP0(0,0);
     Point     aP1(0,0);
     sal_uInt16    RecNr=0;
@@ -455,18 +455,18 @@ sal_Bool SgfFilterVect(SvStream& rInp, SgfHeader& rHead, SgfEntry&, GDIMetaFile&
                   Fraction( 1, 4 ), Fraction( 1, 4 ) );
     rMtf.SetPrefMapMode( aMap );
     rMtf.SetPrefSize( Size( (short)rHead.Xsize, (short)rHead.Ysize ) );
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
+bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
 {
     sal_uLong     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
     SgfHeader aHead;
     SgfEntry  aEntr;
     sal_uLong     nNext;
-    sal_Bool      bRdFlag=sal_False;         // Grafikentry gelesen ?
-    sal_Bool      bRet=sal_False;            // Returncode
+    bool      bRdFlag=false;         // Grafikentry gelesen ?
+    bool      bRet=false;            // Returncode
 
     nFileStart=rInp.Tell();
     rInp>>aHead;
@@ -481,7 +481,7 @@ sal_Bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
             }
         } // while(nNext)
         if (bRdFlag) {
-            if (!rInp.GetError()) bRet=sal_True;  // Scheinbar Ok
+            if (!rInp.GetError()) bRet=true;  // Scheinbar Ok
         }
     }
     return(bRet);

@@ -733,7 +733,7 @@ void BmapType::Draw(OutputDevice& rOut)
                 SgfVectYmul=Pos2.y-Pos1.y;
                 SgfVectXdiv=0;
                 SgfVectYdiv=0;
-                SgfVectScal=sal_True;
+                SgfVectScal=true;
                 SgfVectFilter(*pInp,aMtf);
                 SgfVectXofs=0;
                 SgfVectYofs=0;
@@ -741,7 +741,7 @@ void BmapType::Draw(OutputDevice& rOut)
                 SgfVectYmul=0;
                 SgfVectXdiv=0;
                 SgfVectYdiv=0;
-                SgfVectScal=sal_False;
+                SgfVectScal=false;
                 aMtf.Play(&rOut);
             } break;
         }
@@ -769,7 +769,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
 {
     ObjkType aObjk;
     sal_uInt16 nGrpCnt=0;
-    sal_Bool bEnde=sal_False;
+    bool bEnde=false;
     do {
         rInp>>aObjk;
         if (!rInp.GetError()) {
@@ -836,11 +836,11 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
         } // if rInp
         if (!rInp.GetError()) {
             if (aObjk.Next==0L) {
-                if (nGrpCnt==0) bEnde=sal_True;
+                if (nGrpCnt==0) bEnde=true;
                 else nGrpCnt--;
             }
         } else {
-            bEnde=sal_True;  // Lesefehler
+            bEnde=true;  // Lesefehler
         }
     } while (!bEnde);
 }
@@ -872,9 +872,9 @@ void SkipObjkList(SvStream& rInp)
 |*    SgfFilterSDrw()
 |*
 *************************************************************************/
-sal_Bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
+bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
 {
-    sal_Bool          bRet = sal_False;
+    bool          bRet = false;
     PageType      aPage;
     VirtualDevice aOutDev;
     OutputDevice* pOutDev;
@@ -917,7 +917,7 @@ sal_Bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf
     MapMode aMap(MAP_10TH_MM,Point(),Fraction(1,4),Fraction(1,4));
     rMtf.SetPrefMapMode(aMap);
     rMtf.SetPrefSize(Size((sal_Int16)aPage.Paper.Size.x,(sal_Int16)aPage.Paper.Size.y));
-    bRet=sal_True;
+    bRet=true;
     return bRet;
 }
 
@@ -928,18 +928,18 @@ sal_Bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf
 |*    SgfSDrwFilter()
 |*
 *************************************************************************/
-sal_Bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
+bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
 {
 #if OSL_DEBUG_LEVEL > 1 // Recordgroessen checken. Neuer Compiler hat vielleichte anderes Alignment!
-    if (sizeof(ObjTextType)!=ObjTextTypeSize)  return sal_False;
+    if (sizeof(ObjTextType)!=ObjTextTypeSize)  return false;
 #endif
 
     sal_uLong     nFileStart;            // Offset des SgfHeaders. Im allgemeinen 0.
     SgfHeader aHead;
     SgfEntry  aEntr;
     sal_uLong     nNext;
-    sal_Bool      bRdFlag=sal_False;         // Grafikentry gelesen ?
-    sal_Bool      bRet=sal_False;            // Returncode
+    bool      bRdFlag=false;         // Grafikentry gelesen ?
+    bool      bRet=false;            // Returncode
 
     aIniPath.Append(OUString("sgf.ini"));
 
@@ -959,7 +959,7 @@ sal_Bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath
             }
         } // while(nNext)
         if (bRdFlag) {
-            if (!rInp.GetError()) bRet=sal_True;  // Scheinbar Ok
+            if (!rInp.GetError()) bRet=true;  // Scheinbar Ok
         }
     }
     delete pSgfFonts;

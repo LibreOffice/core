@@ -32,7 +32,7 @@ class JPEGWriter
     Bitmap              maBitmap;
     BitmapReadAccess*   mpReadAccess;
     sal_uInt8*          mpBuffer;
-    sal_Bool            mbNative;
+    bool                mbNative;
     sal_Bool            mbGreys;
     sal_Int32           mnQuality;
     sal_Int32           maChromaSubsampling;

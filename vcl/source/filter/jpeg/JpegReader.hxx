@@ -44,13 +44,13 @@ class JPEGReader : public GraphicReader
     long                mnLastPos;
     long                mnFormerPos;
     long                mnLastLines;
-    sal_Bool            mbSetLogSize;
+    bool                mbSetLogSize;
 
     Graphic CreateIntermediateGraphic( const Bitmap& rBitmap, long nLines );
     void    FillBitmap();
 
 public:
-            JPEGReader( SvStream& rStream, void* pCallData, sal_Bool bSetLogSize );
+            JPEGReader( SvStream& rStream, void* pCallData, bool bSetLogSize );
     virtual ~JPEGReader();
 
     ReadState   Read( Graphic& rGraphic );

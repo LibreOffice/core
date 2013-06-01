@@ -186,7 +186,7 @@ extern "C" void jpeg_svstream_src (j_decompress_ptr cinfo, void* input)
     source->pub.next_input_byte = NULL; /* until buffer loaded */
 }
 
-JPEGReader::JPEGReader( SvStream& rStream, void* /*pCallData*/, sal_Bool bSetLogSize ) :
+JPEGReader::JPEGReader( SvStream& rStream, void* /*pCallData*/, bool bSetLogSize ) :
     mrStream         ( rStream ),
     mpAcc            ( NULL ),
     mpAcc1           ( NULL ),
@@ -222,7 +222,7 @@ void* JPEGReader::CreateBitmap( void* _pParam )
         return NULL;
 
     Size        aSize( pParam->nWidth, pParam->nHeight );
-    sal_Bool    bGray = pParam->bGray != 0;
+    bool        bGray = pParam->bGray != 0;
 
     void* pBmpBuf = NULL;
 
@@ -419,7 +419,7 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
     long        nEndPosition;
     long        nLines;
     ReadState   eReadState;
-    sal_Bool    bRet = sal_False;
+    bool        bRet = false;
     sal_uInt8   cDummy;
 
     // TODO: is it possible to get rid of this seek to the end?
@@ -469,11 +469,11 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
             rGraphic = maBmp;
         }
 
-        bRet = sal_True;
+        bRet = true;
     }
     else if( mrStream.GetError() == ERRCODE_IO_PENDING )
     {
-        bRet = sal_True;
+        bRet = true;
     }
 
     // Set status ( Pending has priority )
