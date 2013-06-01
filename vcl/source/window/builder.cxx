@@ -1229,14 +1229,19 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     {
         pWindow = new ToolBox(pParent, WB_3DLOOK | WB_TABSTOP);
     }
-    else if (name == "GtkToolButton")
+    else if (name == "GtkToolButton" || name == "GtkMenuToolButton")
     {
         ToolBox *pToolBox = dynamic_cast<ToolBox*>(pParent);
         if (pToolBox)
         {
             OUString aCommand(OStringToOUString(extractActionName(rMap), RTL_TEXTENCODING_UTF8));
+
+            ToolBoxItemBits nBits = 0;
+            if (name == "GtkMenuToolButton")
+                nBits |= TIB_DROPDOWN;
+
             if (!aCommand.isEmpty())
-                pToolBox->InsertItem(aCommand, m_xFrame);
+                pToolBox->InsertItem(aCommand, m_xFrame, nBits);
 
             return NULL; // no widget to be created
         }
