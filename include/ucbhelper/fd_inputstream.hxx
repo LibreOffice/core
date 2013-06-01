@@ -22,23 +22,26 @@
 
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/queryinterface.hxx>
+#include <osl/file.h>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#include <stdio.h>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 #include "ucbhelper/ucbhelperdllapi.h"
 
 namespace ucbhelper
 {
+    typedef ::cppu::WeakImplHelper2<
+        com::sun::star::io::XInputStream,
+        com::sun::star::io::XSeekable > FdInputStream_Base;
+
     /** Implements a seekable InputStream
      *  working on a buffer.
      */
     class UCBHELPER_DLLPUBLIC FdInputStream
-        : public cppu::OWeakObject,
-          public com::sun::star::io::XInputStream,
-          public com::sun::star::io::XSeekable
+        : protected cppu::BaseMutex,
+          public FdInputStream_Base
     {
     public:
 
@@ -46,16 +49,9 @@ namespace ucbhelper
          *  on which the inputstream acts.
          */
 
-        FdInputStream(FILE* tmpfl = 0);
+        FdInputStream(oslFileHandle tmpfl = 0);
 
-        ~FdInputStream();
-
-        virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& rType)
-            throw(css::uno::RuntimeException);
-
-        virtual void SAL_CALL acquire(void) throw();
-
-        virtual void SAL_CALL release(void) throw();
+        virtual ~FdInputStream();
 
         virtual sal_Int32 SAL_CALL
         readBytes(css::uno::Sequence< sal_Int8 >& aData,
@@ -114,14 +110,9 @@ namespace ucbhelper
             throw(css::io::IOException,
                   css::uno::RuntimeException);
 
-        // additional
-//          void append(const void* pBuffer,size_t size,size_t nmemb);
-
     private:
-
-        osl::Mutex m_aMutex;
-        FILE* m_tmpfl;
-        sal_Int64 m_nLength;
+        oslFileHandle m_tmpfl;
+        sal_uInt64 m_nLength;
     };
 }
 

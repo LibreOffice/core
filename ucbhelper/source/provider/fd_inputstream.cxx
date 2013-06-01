@@ -21,7 +21,6 @@
 
 #include <rtl/alloc.h>
 #include <algorithm>
-#include <stdio.h>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -29,47 +28,28 @@ using namespace com::sun::star::io;
 
 namespace ucbhelper
 {
-    FdInputStream::FdInputStream(FILE* tmpfl)
-        : m_tmpfl(tmpfl ? tmpfl : tmpfile())
+    FdInputStream:::FdInputStream:( oslFileHandle tmpfl )
+        : m_tmpfl(tmpfl)
+        , m_nLength( 0 )
     {
-        fseek(m_tmpfl,0,SEEK_END);
-        long pos = ftell(m_tmpfl);
-        rewind(m_tmpfl);
-        m_nLength = sal_Int64(pos);
+        if ( !m_tmpfl )
+            osl_createTempFile( NULL, &m_tmpfl, NULL );
+        OSL_ENSURE( m_tmpfl, "input stream without tempfile!" );
+
+        if ( osl_setFilePos( m_tmpfl, osl_Pos_End, 0 ) == osl_File_E_None )
+        {
+            sal_uInt64 nFileSize = 0;
+            if ( osl_getFilePos( m_tmpfl, &nFileSize ) == osl_File_E_None )
+                m_nLength = nFileSize;
+            osl_setFilePos( m_tmpfl, osl_Pos_Absolut, 0 );
+        }
     }
-
-
 
     FdInputStream::~FdInputStream()
     {
         if ( 0 != m_tmpfl)
-            fclose(m_tmpfl);
+            osl_closeFile(m_tmpfl);
     }
-
-
-    Any SAL_CALL FdInputStream::queryInterface(
-        const Type& rType
-    )
-        throw(
-            RuntimeException
-        )
-    {
-        Any aRet = ::cppu::queryInterface(rType,
-                                          (static_cast< XInputStream* >(this)),
-                                          (static_cast< XSeekable* >(this)) );
-
-        return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-    }
-
-
-    void SAL_CALL FdInputStream::acquire( void ) throw() {
-        OWeakObject::acquire();
-    }
-
-    void SAL_CALL FdInputStream::release( void ) throw() {
-        OWeakObject::release();
-    }
-
 
     sal_Int32 SAL_CALL FdInputStream::readBytes(Sequence< sal_Int8 >& aData,
                                                  sal_Int32 nBytesToRead)
@@ -80,15 +60,22 @@ namespace ucbhelper
     {
         osl::MutexGuard aGuard(m_aMutex);
 
-        if(0 <= nBytesToRead && aData.getLength() < nBytesToRead)
-            aData.realloc(nBytesToRead);
+        sal_uInt64 nBeforePos( 0 );
+        sal_uInt64 nBytesRequested( nBytesToRead );
+        sal_uInt64 nBytesRead( 0 );
 
-        size_t nWanted = static_cast<size_t>(nBytesToRead);
-        size_t nRead = fread(aData.getArray(), 1, nWanted, m_tmpfl);
-        if (nRead != nWanted && ferror(m_tmpfl))
+        osl_getFilePos( m_tmpfl, &nBeforePos );
+
+        if ( 0 == ( nBytesRequested = std::min< sal_uInt64 >( m_nLength - nBeforePos, nBytesRequested ) ) )
+            return 0;
+
+        if ( 0 <= nBytesToRead && aData.getLength() < nBytesToRead )
+            aData.realloc( nBytesToRead );
+
+        if ( osl_readFile( m_tmpfl, aData.getArray(), nBytesRequested, &nBytesRead ) != osl_File_E_None )
             throw IOException();
 
-        return static_cast<sal_Int32>(nRead);
+        return sal_Int32( nBytesRead );
     }
 
 
@@ -114,7 +101,7 @@ namespace ucbhelper
         if(!m_tmpfl)
             throw IOException();
 
-        fseek(m_tmpfl,long(nBytesToSkip),SEEK_CUR);
+        osl_setFilePos( m_tmpfl, osl_Pos_Current, nBytesToSkip );
     }
 
 
@@ -165,11 +152,9 @@ namespace ucbhelper
         if(!m_tmpfl)
             throw IOException();
 
-    //     fpos_t pos;
-    //     fgetpos(m_tmpfl,&pos);
-        long pos;
-        pos = ftell(m_tmpfl);
-        return sal_Int64(pos);
+        sal_uInt64 nFilePos = 0;
+        osl_getFilePos( m_tmpfl, &nFilePos );
+        return nFilePos;
     }
 
 

@@ -23,10 +23,8 @@
  **************************************************************************
 
  *************************************************************************/
-#include <string.h>
-
+#include <osl/file.h>
 #include "ftpcontentidentifier.hxx"
-#include <stdio.h>
 
 using namespace ftp;
 using namespace com::sun::star::uno;
@@ -35,11 +33,15 @@ extern "C" {
 
     int file_write(void *buffer,size_t size,size_t nmemb,void *stream)
     {
-        FILE* file =
-            reinterpret_cast<FILE*>(stream);
-        if(!file)
+        oslFileHandle aFile = reinterpret_cast< oslFileHandle >( stream );
+        if( !aFile )
             return 0;
-        return fwrite(buffer,size,nmemb,file);
+
+        sal_uInt64 nWritten = 0;
+        sal_uInt64 nToWrite( size * nmemb );
+        osl_writeFile( aFile, buffer, nToWrite, &nWritten );
+
+        return nWritten != nToWrite ? 0 : nmemb;
     }
 
 }
