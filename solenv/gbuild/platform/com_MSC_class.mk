@@ -482,7 +482,6 @@ endif
 
 gb_WinResTarget_POSTFIX :=.res
 
-# rc.exe does not support -nologo in 6.1.6723.1 that is in the Windows SDK 6.0A
 define gb_WinResTarget__command
 $(call gb_Output_announce,$(2),$(true),RC ,1)
 $(call gb_Helper_abbreviate_dirs,\

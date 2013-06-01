@@ -190,6 +190,11 @@ ifeq ($(VCVER),100)
 
 endif
 
+ifeq ($(shell [ $(VCVER) -ge 110 ] && echo $(true)),$(true))
+# rc.exe does not support -nologo in 6.1.6723.1 that is in the Windows SDK 6.0A
+gb_RCFLAGS += -nologo
+endif
+
 # C4005: 'identifier' : macro redefinition
 
 gb_PCHWARNINGS = \
