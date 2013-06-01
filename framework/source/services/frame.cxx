@@ -1554,7 +1554,7 @@ void SAL_CALL Frame::removeFrameActionListener( const css::uno::Reference< css::
                     veto exception and must try to close this frame at later time again. Otherwhise the
                     source of throwed exception is the right one. May it will be the frame himself.
 
-    @thrown     CloseVetoException
+    @throws     CloseVetoException
                     if any internal things willn't be closed
 
     @threadsafe yes
