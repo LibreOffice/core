@@ -33,6 +33,8 @@
 class SdrObjEditView;
 class SdrObject;
 class SfxItemSet;
+class SvxBoxInfoItem;
+class SvxBoxItem;
 
 namespace sdr { namespace table {
 
@@ -78,6 +80,12 @@ public:
 
     SVX_DLLPRIVATE void MergeAttrFromSelectedCells(SfxItemSet& rAttr, bool bOnlyHardAttr) const;
     SVX_DLLPRIVATE void SetAttrToSelectedCells(const SfxItemSet& rAttr, bool bReplaceAll);
+    /** Fill the values that are common for all selected cells.
+      *
+      * This lets the Borders dialog to display the line arrangement
+      * properly.
+      */
+    SVX_DLLPRIVATE void FillCommonBorderAttrFromSelectedCells(SvxBoxItem& rBox, SvxBoxInfoItem& rBoxInfo) const;
 
     SVX_DLLPRIVATE virtual bool GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) const;
     SVX_DLLPRIVATE virtual bool SetAttributes(const SfxItemSet& rSet, bool bReplaceAll);
