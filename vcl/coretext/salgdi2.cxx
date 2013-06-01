@@ -1,0 +1,918 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "sal/config.h"
+
+#include "osl/file.hxx"
+#include "osl/process.h"
+
+#include "osl/mutex.hxx"
+
+#include "rtl/bootstrap.h"
+#include "rtl/strbuf.hxx"
+
+#include "basegfx/range/b2drectangle.hxx"
+#include "basegfx/polygon/b2dpolygon.hxx"
+#include "basegfx/polygon/b2dpolygontools.hxx"
+#include "basegfx/matrix/b2dhommatrix.hxx"
+#include "basegfx/matrix/b2dhommatrixtools.hxx"
+
+#include "vcl/sysdata.hxx"
+#include "vcl/svapp.hxx"
+
+#include "aqua/atsui/salgdi.h"
+#include "aqua/salframe.h"
+#ifdef ENABLE_CORETEXT
+#include "ctfonts.hxx"
+#else
+#include "atsfonts.hxx"
+#endif
+
+#include "fontsubset.hxx"
+#include "impfont.hxx"
+#include "sallayout.hxx"
+#include "sft.hxx"
+
+
+using namespace vcl;
+
+// =======================================================================
+
+SystemFontList::~SystemFontList( void )
+{}
+
+
+// ATSUI is deprecated in 10.6 (or already 10.5?)
+#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
+#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#endif
+
+// =======================================================================
+
+ImplMacTextStyle::ImplMacTextStyle( const ImplFontSelectData& rReqFont )
+:   mpFontData( (ImplMacFontData*)rReqFont.mpFontData )
+,   mfFontScale( 1.0 )
+,   mfFontStretch( 1.0 )
+,   mfFontRotation( 0.0 )
+{}
+
+// -----------------------------------------------------------------------
+
+ImplMacTextStyle::~ImplMacTextStyle( void )
+{}
+
+// =======================================================================
+
+ImplMacFontData::ImplMacFontData( const ImplMacFontData& rSrc )
+:   ImplFontData( rSrc )
+,   mnFontId( rSrc.mnFontId )
+,   mpCharMap( rSrc.mpCharMap )
+,   mbOs2Read( rSrc.mbOs2Read )
+,   mbHasOs2Table( rSrc.mbHasOs2Table )
+,   mbCmapEncodingRead( rSrc.mbCmapEncodingRead )
+,   mbHasCJKSupport( rSrc.mbHasCJKSupport )
+{
+    if( mpCharMap )
+        mpCharMap->AddReference();
+}
+
+// -----------------------------------------------------------------------
+
+ImplMacFontData::ImplMacFontData( const ImplDevFontAttributes& rDFA, sal_IntPtr nFontId )
+:   ImplFontData( rDFA, 0 )
+,   mnFontId( nFontId )
+,   mpCharMap( NULL )
+,   mbOs2Read( false )
+,   mbHasOs2Table( false )
+,   mbCmapEncodingRead( false )
+,   mbHasCJKSupport( false )
+,   mbFontCapabilitiesRead( false )
+{}
+
+// -----------------------------------------------------------------------
+
+ImplMacFontData::~ImplMacFontData()
+{
+    if( mpCharMap )
+        mpCharMap->DeReference();
+}
+
+// -----------------------------------------------------------------------
+
+sal_IntPtr ImplMacFontData::GetFontId() const
+{
+    return (sal_IntPtr)mnFontId;
+}
+
+// -----------------------------------------------------------------------
+
+ImplFontEntry* ImplMacFontData::CreateFontInstance(FontSelectPattern& rFSD) const
+{
+    return new ImplFontEntry(rFSD);
+}
+
+// -----------------------------------------------------------------------
+
+static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
+static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
+
+#if MACOSX_SDK_VERSION >= 1070
+extern "C" {
+extern ATSFontRef FMGetATSFontRefFromFont(FMFont iFont);
+}
+#endif
+
+const ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
+{
+    // return the cached charmap
+    if( mpCharMap )
+        return mpCharMap;
+
+    // set the default charmap
+    mpCharMap = ImplFontCharMap::GetDefaultMap();
+    mpCharMap->AddReference();
+
+    // get the CMAP byte size
+    // allocate a buffer for the CMAP raw data
+    const int nBufSize = GetFontTable( "cmap", NULL );
+    DBG_ASSERT( (nBufSize > 0), "ImplMacFontData::GetImplFontCharMap : GetFontTable1 failed!\n");
+    if( nBufSize <= 0 )
+        return mpCharMap;
+
+    // get the CMAP raw data
+    ByteVector aBuffer( nBufSize );
+    const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
+    DBG_ASSERT( (nRawLength > 0), "ImplMacFontData::GetImplFontCharMap : GetFontTable2 failed!\n");
+    if( nRawLength <= 0 )
+        return mpCharMap;
+    DBG_ASSERT( (nBufSize==nRawLength), "ImplMacFontData::GetImplFontCharMap : ByteCount mismatch!\n");
+
+    // parse the CMAP
+    CmapResult aCmapResult;
+    if( ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
+    {
+        // create the matching charmap
+        mpCharMap->DeReference();
+        mpCharMap = new ImplFontCharMap( aCmapResult );
+        mpCharMap->AddReference();
+    }
+
+    return mpCharMap;
+}
+
+bool ImplMacFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+{
+    // read this only once per font
+    if( mbFontCapabilitiesRead )
+    {
+        rFontCapabilities = maFontCapabilities;
+        return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
+    }
+    mbFontCapabilitiesRead = true;
+
+    // prepare to get the GSUB table raw data
+    ATSFontRef rFont = FMGetATSFontRefFromFont( mnFontId );
+    ByteCount nBufSize = 0;
+    OSStatus eStatus;
+    eStatus = ATSFontGetTable( rFont, GetTag("GSUB"), 0, 0, NULL, &nBufSize );
+    if( eStatus == noErr )
+    {
+        // allocate a buffer for the GSUB raw data
+        ByteVector aBuffer( nBufSize );
+        // get the GSUB raw data
+        ByteCount nRawLength = 0;
+        eStatus = ATSFontGetTable( rFont, GetTag("GSUB"), 0, nBufSize, (void*)&aBuffer[0], &nRawLength );
+        if( eStatus == noErr )
+        {
+            const unsigned char* pGSUBTable = &aBuffer[0];
+            vcl::getTTScripts(maFontCapabilities.maGSUBScriptTags, pGSUBTable, nRawLength);
+        }
+    }
+    eStatus = ATSFontGetTable( rFont, GetTag("OS/2"), 0, 0, NULL, &nBufSize );
+    if( eStatus == noErr )
+    {
+        // allocate a buffer for the GSUB raw data
+        ByteVector aBuffer( nBufSize );
+        // get the OS/2 raw data
+        ByteCount nRawLength = 0;
+        eStatus = ATSFontGetTable( rFont, GetTag("OS/2"), 0, nBufSize, (void*)&aBuffer[0], &nRawLength );
+        if( eStatus == noErr )
+        {
+            const unsigned char* pOS2Table = &aBuffer[0];
+            vcl::getTTCoverage(
+                maFontCapabilities.maUnicodeRange,
+                maFontCapabilities.maCodePageRange,
+                pOS2Table, nRawLength);
+        }
+    }
+    rFontCapabilities = maFontCapabilities;
+    return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
+}
+
+// -----------------------------------------------------------------------
+
+void ImplMacFontData::ReadOs2Table( void ) const
+{
+    // read this only once per font
+    if( mbOs2Read )
+        return;
+    mbOs2Read = true;
+    mbHasOs2Table = false;
+
+    // prepare to get the OS/2 table raw data
+    const int nBufSize = GetFontTable( "OS/2", NULL );
+    DBG_ASSERT( (nBufSize > 0), "ImplMacFontData::ReadOs2Table : GetFontTable1 failed!\n");
+    if( nBufSize <= 0 )
+        return;
+
+    // get the OS/2 raw data
+    ByteVector aBuffer( nBufSize );
+    const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
+    DBG_ASSERT( (nRawLength > 0), "ImplMacFontData::ReadOs2Table : GetFontTable2 failed!\n");
+    if( nRawLength <= 0 )
+        return;
+    DBG_ASSERT( (nBufSize==nRawLength), "ImplMacFontData::ReadOs2Table : ByteCount mismatch!\n");
+    mbHasOs2Table = true;
+
+    // parse the OS/2 raw data
+    // TODO: also analyze panose info, etc.
+
+    // check if the fonts needs the "CJK extra leading" heuristic
+    const unsigned char* pOS2map = &aBuffer[0];
+    const sal_uInt32 nVersion = GetUShort( pOS2map );
+    if( nVersion >= 0x0001 )
+    {
+        sal_uInt32 ulUnicodeRange2 = GetUInt( pOS2map + 46 );
+        if( ulUnicodeRange2 & 0x2DF00000 )
+            mbHasCJKSupport = true;
+    }
+}
+
+void ImplMacFontData::ReadMacCmapEncoding( void ) const
+{
+    // read this only once per font
+    if( mbCmapEncodingRead )
+        return;
+    mbCmapEncodingRead = true;
+
+    const int nBufSize = GetFontTable( "cmap", NULL );
+    if( nBufSize <= 0 )
+        return;
+
+    // get the CMAP raw data
+    ByteVector aBuffer( nBufSize );
+    const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
+    if( nRawLength < 24 )
+        return;
+    DBG_ASSERT( (nBufSize==nRawLength), "ImplMacFontData::ReadMacCmapEncoding : ByteCount mismatch!\n");
+
+    const unsigned char* pCmap = &aBuffer[0];
+    if( GetUShort( pCmap ) != 0x0000 )
+        return;
+
+    // check if the fonts needs the "CJK extra leading" heuristic
+    int nSubTables = GetUShort( pCmap + 2 );
+
+    for( const unsigned char* p = pCmap + 4; --nSubTables >= 0; p += 8 )
+    {
+        int nPlatform = GetUShort( p );
+        if( nPlatform == kFontMacintoshPlatform ) {
+            int nEncoding = GetUShort (p + 2 );
+            if( nEncoding == kFontJapaneseScript ||
+                nEncoding == kFontTraditionalChineseScript ||
+                nEncoding == kFontKoreanScript ||
+                nEncoding == kFontSimpleChineseScript )
+            {
+                mbHasCJKSupport = true;
+                break;
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+bool ImplMacFontData::HasCJKSupport( void ) const
+{
+    ReadOs2Table();
+    if( !mbHasOs2Table )
+        ReadMacCmapEncoding();
+
+    return mbHasCJKSupport;
+}
+
+// =======================================================================
+
+AquaSalGraphics::AquaSalGraphics()
+    : mpFrame( NULL )
+    , mxLayer( NULL )
+    , mrContext( NULL )
+    , mpXorEmulation( NULL )
+    , mnXorMode( 0 )
+    , mnWidth( 0 )
+    , mnHeight( 0 )
+    , mnBitmapDepth( 0 )
+    , mnRealDPIX( 0 )
+    , mnRealDPIY( 0 )
+    , mfFakeDPIScale( 1.0 )
+    , mxClipPath( NULL )
+    , maLineColor( COL_WHITE )
+    , maFillColor( COL_BLACK )
+    , mpMacFontData( NULL )
+    , mpMacTextStyle( NULL )
+    , maTextColor( COL_BLACK )
+    , mbNonAntialiasedText( false )
+    , mbPrinter( false )
+    , mbVirDev( false )
+    , mbWindow( false )
+{}
+
+// -----------------------------------------------------------------------
+
+AquaSalGraphics::~AquaSalGraphics()
+{
+    CGPathRelease( mxClipPath );
+    delete mpMacTextStyle;
+
+    if( mpXorEmulation )
+        delete mpXorEmulation;
+
+    if( mxLayer )
+        CGLayerRelease( mxLayer );
+    else if( mrContext && mbWindow )
+    {
+        // destroy backbuffer bitmap context that we created ourself
+        CGContextRelease( mrContext );
+        mrContext = NULL;
+        // memory is freed automatically by maOwnContextMemory
+    }
+}
+
+// =======================================================================
+
+void AquaSalGraphics::SetTextColor( SalColor nSalColor )
+{
+    maTextColor = RGBAColor( nSalColor );
+    if( mpMacTextStyle)
+        mpMacTextStyle->SetTextColor( maTextColor );
+}
+
+// -----------------------------------------------------------------------
+
+void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int /*nFallbackLevel*/ )
+{
+    mpMacTextStyle->GetFontMetric( mfFakeDPIScale, *pMetric );
+}
+
+// -----------------------------------------------------------------------
+
+sal_uLong AquaSalGraphics::GetKernPairs( sal_uLong, ImplKernPairData* )
+{
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+static bool AddTempFontDir( const char* pDir )
+{
+    FSRef aPathFSRef;
+    Boolean bIsDirectory = true;
+    OSStatus eStatus = FSPathMakeRef( reinterpret_cast<const UInt8*>(pDir), &aPathFSRef, &bIsDirectory );
+    DBG_ASSERTWARNING( (eStatus==noErr) && bIsDirectory, "vcl AddTempFontDir() with invalid directory name!" );
+    if( eStatus != noErr )
+        return false;
+
+    // TODO: deactivate ATSFontContainerRef when closing app
+    ATSFontContainerRef aATSFontContainer;
+
+    const ATSFontContext eContext = kATSFontContextLocal; // TODO: *Global???
+    eStatus = ::ATSFontActivateFromFileReference( &aPathFSRef,
+        eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
+        &aATSFontContainer );
+    if( eStatus != noErr )
+        return false;
+
+    return true;
+}
+
+static bool AddLocalTempFontDirs( void )
+{
+    static bool bFirst = true;
+    if( !bFirst )
+        return false;
+    bFirst = false;
+
+    // add private font files
+
+    OUString aBrandStr( "$BRAND_BASE_DIR" );
+    rtl_bootstrap_expandMacros( &aBrandStr.pData );
+    OUString aBrandSysPath;
+    OSL_VERIFY( osl_getSystemPathFromFileURL( aBrandStr.pData, &aBrandSysPath.pData ) == osl_File_E_None );
+
+    OStringBuffer aBrandFontDir( aBrandSysPath.getLength()*2 );
+    aBrandFontDir.append( OUStringToOString( aBrandSysPath, RTL_TEXTENCODING_UTF8 ) );
+    aBrandFontDir.append( "/share/fonts/truetype/" );
+    return AddTempFontDir( aBrandFontDir.getStr() );
+}
+
+void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
+{
+    DBG_ASSERT( pFontList, "AquaSalGraphics::GetDevFontList(NULL) !");
+
+    AddLocalTempFontDirs();
+
+    // The idea is to cache the list of system fonts once it has been generated.
+    // SalData seems to be a good place for this caching. However we have to
+    // carefully make the access to the font list thread-safe. If we register
+    // a font-change event handler to update the font list in case fonts have
+    // changed on the system we have to lock access to the list. The right
+    // way to do that is the solar mutex since GetDevFontList is protected
+    // through it as should be all event handlers
+
+    SalData* pSalData = GetSalData();
+#ifdef ENABLE_CORETEXT
+    SystemFontList* GetCoretextFontList(void); // forward declaration
+    if( !pSalData->mpFontList )
+        pSalData->mpFontList = GetCoretextFontList();
+#else
+    SystemFontList* GetAtsFontList(void);      // forward declaration
+    if( !pSalData->mpFontList )
+        pSalData->mpFontList = GetAtsFontList();
+#endif
+
+    // Copy all PhysicalFontFace objects contained in the SystemFontList
+    pSalData->mpFontList->AnnounceFonts( *pFontList );
+}
+
+void AquaSalGraphics::ClearDevFontCache()
+{
+    SalData* pSalData = GetSalData();
+    delete pSalData->mpFontList;
+    pSalData->mpFontList = NULL;
+}
+
+// -----------------------------------------------------------------------
+
+bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
+    const OUString& rFontFileURL, const OUString& /*rFontName*/ )
+{
+    OUString aUSytemPath;
+    OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
+
+    FSRef aNewRef;
+    Boolean bIsDirectory = true;
+    OString aCFileName = OUStringToOString( aUSytemPath, RTL_TEXTENCODING_UTF8 );
+    OSStatus eStatus = FSPathMakeRef( (UInt8*)aCFileName.getStr(), &aNewRef, &bIsDirectory );
+    DBG_ASSERT( (eStatus==noErr) && !bIsDirectory, "vcl AddTempDevFont() with invalid fontfile name!" );
+    if( eStatus != noErr )
+        return false;
+
+    ATSFontContainerRef oContainer;
+
+    const ATSFontContext eContext = kATSFontContextLocal; // TODO: *Global???
+    eStatus = ::ATSFontActivateFromFileReference( &aNewRef,
+        eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
+        &oContainer );
+    if( eStatus != noErr )
+        return false;
+
+    // TODO: ATSFontDeactivate( oContainer ) when fonts are no longer needed
+    // TODO: register new ImplMacFontdata in pFontList
+    return true;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool AquaSalGraphics::GetGlyphOutline( sal_GlyphId nGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
+{
+    const bool bRC = mpMacTextStyle->GetGlyphOutline( nGlyphId, rPolyPoly );
+    return bRC;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool AquaSalGraphics::GetGlyphBoundRect( sal_GlyphId nGlyphId, Rectangle& rRect )
+{
+    const bool bRC = mpMacTextStyle->GetGlyphBoundRect( nGlyphId, rRect );
+    return bRC;
+}
+
+// -----------------------------------------------------------------------
+
+void AquaSalGraphics::GetDevFontSubstList( OutputDevice* )
+{
+    // nothing to do since there are no device-specific fonts on Aqua
+}
+
+// -----------------------------------------------------------------------
+
+void AquaSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
+{
+}
+
+// -----------------------------------------------------------------------
+
+sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbackLevel*/ )
+{
+    // release the text style
+    delete mpMacTextStyle;
+    mpMacTextStyle = NULL;
+
+    // handle NULL request meaning: release-font-resources request
+    if( !pReqFont )
+    {
+        mpMacFontData = NULL;
+        return 0;
+    }
+
+    // update the text style
+    mpMacFontData = static_cast<const ImplMacFontData*>( pReqFont->mpFontData );
+    mpMacTextStyle = mpMacFontData->CreateMacTextStyle( *pReqFont );
+    mpMacTextStyle->SetTextColor( maTextColor );
+
+#if OSL_DEBUG_LEVEL > 3
+    fprintf( stderr, "SetFont to (\"%s\", \"%s\", fontid=%d) for (\"%s\" \"%s\" weight=%d, slant=%d size=%dx%d orientation=%d)\n",
+             OUStringToOString( mpMacFontData->GetFamilyName(), RTL_TEXTENCODING_UTF8 ).getStr(),
+             OUStringToOString( mpMacFontData->GetStyleName(), RTL_TEXTENCODING_UTF8 ).getStr(),
+             (int)nFontID,
+             OUStringToOString( pReqFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ).getStr(),
+             OUStringToOString( pReqFont->GetStyleName(), RTL_TEXTENCODING_UTF8 ).getStr(),
+             pReqFont->GetWeight(),
+             pReqFont->GetSlant(),
+             pReqFont->mnHeight,
+             pReqFont->mnWidth,
+             pReqFont->mnOrientation);
+#endif
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs& /*rArgs*/, int /*nFallbackLevel*/ )
+{
+    SalLayout* pSalLayout = mpMacTextStyle->GetTextLayout();
+    return pSalLayout;
+}
+
+// -----------------------------------------------------------------------
+
+const ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
+{
+    if( !mpMacFontData )
+        return ImplFontCharMap::GetDefaultMap();
+
+    return mpMacFontData->GetImplFontCharMap();
+}
+
+bool AquaSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+{
+    if( !mpMacFontData )
+        return false;
+
+    return mpMacFontData->GetImplFontCapabilities(rFontCapabilities);
+}
+
+// -----------------------------------------------------------------------
+
+// fake a SFNT font directory entry for a font table
+// see http://developer.apple.com/textfonts/TTRefMan/RM06/Chap6.html#Directory
+static void FakeDirEntry( const char aTag[5], ByteCount nOfs, ByteCount nLen,
+    const unsigned char* /*pData*/, unsigned char*& rpDest )
+{
+    // write entry tag
+    rpDest[ 0] = aTag[0];
+    rpDest[ 1] = aTag[1];
+    rpDest[ 2] = aTag[2];
+    rpDest[ 3] = aTag[3];
+    // TODO: get entry checksum and write it
+    //      not too important since the subsetter doesn't care currently
+    //      for( pData+nOfs ... pData+nOfs+nLen )
+    // write entry offset
+    rpDest[ 8] = (char)(nOfs >> 24);
+    rpDest[ 9] = (char)(nOfs >> 16);
+    rpDest[10] = (char)(nOfs >>  8);
+    rpDest[11] = (char)(nOfs >>  0);
+    // write entry length
+    rpDest[12] = (char)(nLen >> 24);
+    rpDest[13] = (char)(nLen >> 16);
+    rpDest[14] = (char)(nLen >>  8);
+    rpDest[15] = (char)(nLen >>  0);
+    // advance to next entry
+    rpDest += 16;
+}
+
+// fake a TTF or CFF font as directly accessing font file is not possible
+// when only the fontid is known. This approach also handles *.dfont fonts.
+bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
+                                      ByteVector& rBuffer, bool* pJustCFF )
+{
+    const ImplMacFontData* pMacFont = static_cast<const ImplMacFontData*>(pFontData);
+
+    // short circuit for CFF-only fonts
+    const int nCffSize = pMacFont->GetFontTable( "CFF ", NULL);
+    if( pJustCFF != NULL )
+    {
+        *pJustCFF = (nCffSize > 0);
+        if( *pJustCFF)
+        {
+            rBuffer.resize( nCffSize);
+            const int nCffRead = pMacFont->GetFontTable( "CFF ", &rBuffer[0]);
+            if( nCffRead != nCffSize)
+                return false;
+            return true;
+        }
+    }
+
+    // get font table availability and size in bytes
+    const int nHeadSize = pMacFont->GetFontTable( "head", NULL);
+    if( nHeadSize <= 0)
+        return false;
+    const int nMaxpSize = pMacFont->GetFontTable( "maxp", NULL);
+    if( nMaxpSize <= 0)
+        return false;
+    const int nCmapSize = pMacFont->GetFontTable( "cmap", NULL);
+    if( nCmapSize <= 0)
+        return false;
+    const int nNameSize = pMacFont->GetFontTable( "name", NULL);
+    if( nNameSize <= 0)
+        return false;
+    const int nHheaSize = pMacFont->GetFontTable( "hhea", NULL);
+    if( nHheaSize <= 0)
+        return false;
+    const int nHmtxSize = pMacFont->GetFontTable( "hmtx", NULL);
+    if( nHmtxSize <= 0)
+        return false;
+
+    // get the ttf-glyf outline tables
+    int nLocaSize = 0;
+    int nGlyfSize = 0;
+    if( nCffSize <= 0)
+    {
+        nLocaSize = pMacFont->GetFontTable( "loca", NULL);
+        if( nLocaSize <= 0)
+            return false;
+        nGlyfSize = pMacFont->GetFontTable( "glyf", NULL);
+        if( nGlyfSize <= 0)
+            return false;
+    }
+
+    int nPrepSize = 0, nCvtSize = 0, nFpgmSize = 0;
+    if( nGlyfSize) // TODO: reduce PDF size by making hint subsetting optional
+    {
+        nPrepSize = pMacFont->GetFontTable( "prep", NULL);
+        nCvtSize  = pMacFont->GetFontTable( "cvt ", NULL);
+        nFpgmSize = pMacFont->GetFontTable( "fpgm", NULL);
+    }
+
+    // prepare a byte buffer for a fake font
+    int nTableCount = 7;
+    nTableCount += (nPrepSize>0) + (nCvtSize>0) + (nFpgmSize>0) + (nGlyfSize>0);
+    const ByteCount nFdirSize = 12 + 16*nTableCount;
+    ByteCount nTotalSize = nFdirSize;
+    nTotalSize += nHeadSize + nMaxpSize + nNameSize + nCmapSize;
+    if( nGlyfSize )
+        nTotalSize += nLocaSize + nGlyfSize;
+    else
+        nTotalSize += nCffSize;
+    nTotalSize += nHheaSize + nHmtxSize;
+    nTotalSize += nPrepSize + nCvtSize + nFpgmSize;
+    rBuffer.resize( nTotalSize );
+
+    // fake a SFNT font directory header
+    if( nTableCount < 16 )
+    {
+        int nLog2 = 0;
+        while( (nTableCount >> nLog2) > 1 ) ++nLog2;
+        rBuffer[ 1] = 1;                        // Win-TTF style scaler
+        rBuffer[ 5] = nTableCount;              // table count
+        rBuffer[ 7] = nLog2*16;                 // searchRange
+        rBuffer[ 9] = nLog2;                    // entrySelector
+        rBuffer[11] = (nTableCount-nLog2)*16;   // rangeShift
+    }
+
+    // get font table raw data and update the fake directory entries
+    ByteCount nOfs = nFdirSize;
+    unsigned char* pFakeEntry = &rBuffer[12];
+    if( nCmapSize != pMacFont->GetFontTable( "cmap", &rBuffer[nOfs]))
+        return false;
+    FakeDirEntry( "cmap", nOfs, nCmapSize, &rBuffer[0], pFakeEntry );
+    nOfs += nCmapSize;
+    if( nCvtSize ) {
+        if( nCvtSize != pMacFont->GetFontTable( "cvt ", &rBuffer[nOfs]))
+            return false;
+        FakeDirEntry( "cvt ", nOfs, nCvtSize, &rBuffer[0], pFakeEntry );
+        nOfs += nCvtSize;
+    }
+    if( nFpgmSize ) {
+        if( nFpgmSize != pMacFont->GetFontTable( "fpgm", &rBuffer[nOfs]))
+            return false;
+        FakeDirEntry( "fpgm", nOfs, nFpgmSize, &rBuffer[0], pFakeEntry );
+        nOfs += nFpgmSize;
+    }
+    if( nCffSize ) {
+        if( nCffSize != pMacFont->GetFontTable( "CFF ", &rBuffer[nOfs]))
+            return false;
+        FakeDirEntry( "CFF ", nOfs, nCffSize, &rBuffer[0], pFakeEntry );
+        nOfs += nGlyfSize;
+    } else {
+        if( nGlyfSize != pMacFont->GetFontTable( "glyf", &rBuffer[nOfs]))
+            return false;
+        FakeDirEntry( "glyf", nOfs, nGlyfSize, &rBuffer[0], pFakeEntry );
+        nOfs += nGlyfSize;
+        if( nLocaSize != pMacFont->GetFontTable( "loca", &rBuffer[nOfs]))
+            return false;
+        FakeDirEntry( "loca", nOfs, nLocaSize, &rBuffer[0], pFakeEntry );
+        nOfs += nLocaSize;
+    }
+    if( nHeadSize != pMacFont->GetFontTable( "head", &rBuffer[nOfs]))
+        return false;
+    FakeDirEntry( "head", nOfs, nHeadSize, &rBuffer[0], pFakeEntry );
+    nOfs += nHeadSize;
+    if( nHheaSize != pMacFont->GetFontTable( "hhea", &rBuffer[nOfs]))
+        return false;
+    FakeDirEntry( "hhea", nOfs, nHheaSize, &rBuffer[0], pFakeEntry );
+    nOfs += nHheaSize;
+    if( nHmtxSize != pMacFont->GetFontTable( "hmtx", &rBuffer[nOfs]))
+        return false;
+    FakeDirEntry( "hmtx", nOfs, nHmtxSize, &rBuffer[0], pFakeEntry );
+    nOfs += nHmtxSize;
+    if( nMaxpSize != pMacFont->GetFontTable( "maxp", &rBuffer[nOfs]))
+        return false;
+    FakeDirEntry( "maxp", nOfs, nMaxpSize, &rBuffer[0], pFakeEntry );
+    nOfs += nMaxpSize;
+    if( nNameSize != pMacFont->GetFontTable( "name", &rBuffer[nOfs]))
+        return false;
+    FakeDirEntry( "name", nOfs, nNameSize, &rBuffer[0], pFakeEntry );
+    nOfs += nNameSize;
+    if( nPrepSize ) {
+        if( nPrepSize != pMacFont->GetFontTable( "prep", &rBuffer[nOfs]))
+            return false;
+        FakeDirEntry( "prep", nOfs, nPrepSize, &rBuffer[0], pFakeEntry );
+        nOfs += nPrepSize;
+    }
+
+    DBG_ASSERT( (nOfs==nTotalSize), "AquaSalGraphics::CreateFontSubset (nOfs!=nTotalSize)");
+
+    return true;
+}
+
+// -----------------------------------------------------------------------
+
+void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bVertical,
+    Int32Vector& rGlyphWidths, Ucs2UIntMap& rUnicodeEnc )
+{
+    rGlyphWidths.clear();
+    rUnicodeEnc.clear();
+
+    if( pFontData->IsSubsettable() )
+    {
+        ByteVector aBuffer;
+        if( !GetRawFontData( pFontData, aBuffer, NULL ) )
+            return;
+
+        // TODO: modernize psprint's horrible fontsubset C-API
+        // this probably only makes sense after the switch to another SCM
+        // that can preserve change history after file renames
+
+        // use the font subsetter to get the widths
+        TrueTypeFont* pSftFont = NULL;
+        int nRC = ::OpenTTFontBuffer( (void*)&aBuffer[0], aBuffer.size(), 0, &pSftFont);
+        if( nRC != SF_OK )
+            return;
+
+        const int nGlyphCount = ::GetTTGlyphCount( pSftFont );
+        if( nGlyphCount > 0 )
+        {
+            // get glyph metrics
+            rGlyphWidths.resize(nGlyphCount);
+            std::vector<sal_uInt16> aGlyphIds(nGlyphCount);
+            for( int i = 0; i < nGlyphCount; i++ )
+                aGlyphIds[i] = static_cast<sal_uInt16>(i);
+            const TTSimpleGlyphMetrics* pGlyphMetrics = ::GetTTSimpleGlyphMetrics(
+                pSftFont, &aGlyphIds[0], nGlyphCount, bVertical );
+            if( pGlyphMetrics )
+            {
+                for( int i = 0; i < nGlyphCount; ++i )
+                    rGlyphWidths[i] = pGlyphMetrics[i].adv;
+                free( (void*)pGlyphMetrics );
+            }
+
+            const ImplFontCharMap* pMap = mpMacFontData->GetImplFontCharMap();
+            DBG_ASSERT( pMap && pMap->GetCharCount(), "no charmap" );
+            pMap->AddReference(); // TODO: add and use RAII object instead
+
+            // get unicode<->glyph encoding
+            // TODO? avoid sft mapping by using the pMap itself
+            int nCharCount = pMap->GetCharCount();
+            sal_uInt32 nChar = pMap->GetFirstChar();
+            for(; --nCharCount >= 0; nChar = pMap->GetNextChar( nChar ) )
+            {
+                if( nChar > 0xFFFF ) // TODO: allow UTF-32 chars
+                    break;
+                sal_Ucs nUcsChar = static_cast<sal_Ucs>(nChar);
+                sal_uInt32 nGlyph = ::MapChar( pSftFont, nUcsChar, bVertical );
+                if( nGlyph > 0 )
+                    rUnicodeEnc[ nUcsChar ] = nGlyph;
+            }
+
+            pMap->DeReference(); // TODO: add and use RAII object instead
+        }
+
+        ::CloseTTFont( pSftFont );
+    }
+    else if( pFontData->IsEmbeddable() )
+    {
+        // get individual character widths
+        OSL_FAIL("not implemented for non-subsettable fonts!\n");
+    }
+}
+
+// -----------------------------------------------------------------------
+
+const Ucs2SIntMap* AquaSalGraphics::GetFontEncodingVector(
+    const PhysicalFontFace*, const Ucs2OStrMap** /*ppNonEncoded*/ )
+{
+    return NULL;
+}
+
+// -----------------------------------------------------------------------
+
+const void* AquaSalGraphics::GetEmbedFontData( const PhysicalFontFace*,
+                              const sal_Ucs* /*pUnicodes*/,
+                              sal_Int32* /*pWidths*/,
+                              FontSubsetInfo&,
+                              long* /*pDataLen*/ )
+{
+    return NULL;
+}
+
+// -----------------------------------------------------------------------
+
+void AquaSalGraphics::FreeEmbedFontData( const void* pData, long /*nDataLen*/ )
+{
+    // TODO: implementing this only makes sense when the implementation of
+    //      AquaSalGraphics::GetEmbedFontData() returns non-NULL
+    (void)pData;
+    DBG_ASSERT( (pData!=NULL), "AquaSalGraphics::FreeEmbedFontData() is not implemented\n");
+}
+
+// -----------------------------------------------------------------------
+
+SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
+{
+    SystemFontData aSysFontData;
+    aSysFontData.nSize = sizeof( SystemFontData );
+
+#ifndef ENABLE_CORETEXT
+    // NOTE: Native ATSU font fallbacks are used, not the VCL fallbacks.
+    ATSUFontID fontId;
+    OSStatus err;
+    err = ATSUGetAttribute( maATSUStyle, kATSUFontTag, sizeof(fontId), &fontId, 0 );
+    if (err) fontId = 0;
+    aSysFontData.aATSUFontID = (void *) fontId;
+
+    Boolean bFbold;
+    err = ATSUGetAttribute( maATSUStyle, kATSUQDBoldfaceTag, sizeof(bFbold), &bFbold, 0 );
+    if (err) bFbold = FALSE;
+    aSysFontData.bFakeBold = (bool) bFbold;
+
+    Boolean bFItalic;
+    err = ATSUGetAttribute( maATSUStyle, kATSUQDItalicTag, sizeof(bFItalic), &bFItalic, 0 );
+    if (err) bFItalic = FALSE;
+    aSysFontData.bFakeItalic = (bool) bFItalic;
+
+    ATSUVerticalCharacterType aVerticalCharacterType;
+    err = ATSUGetAttribute( maATSUStyle, kATSUVerticalCharacterTag, sizeof(aVerticalCharacterType), &aVerticalCharacterType, 0 );
+    if (!err && aVerticalCharacterType == kATSUStronglyVertical) {
+        aSysFontData.bVerticalCharacterType = true;
+    } else {
+        aSysFontData.bVerticalCharacterType = false;
+    }
+#endif
+
+    aSysFontData.bAntialias = !mbNonAntialiasedText;
+
+    return aSysFontData;
+}
+
+// -----------------------------------------------------------------------
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,6 +39,11 @@ public:
     const CGFloat* AsArray() const { return m_fRGBA; }
     bool IsVisible() const { return m_fRGBA[3] > 0; }
     void SetAlpha( float fAlpha ) { m_fRGBA[3] = fAlpha; }
+
+    CGFloat GetRed() const   { return m_fRGBA[0]; }
+    CGFloat GetGreen() const { return m_fRGBA[1]; }
+    CGFloat GetBlue() const  { return m_fRGBA[2]; }
+    CGFloat GetAlpha() const { return m_fRGBA[3]; }
 private:
     CGFloat m_fRGBA[4]; // red, green, blue, alpha
 };
