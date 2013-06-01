@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/logfile.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
 #include <svl/intitem.hxx>
@@ -48,7 +47,7 @@ static sal_uInt16  GetImageListRID( sal_uInt16 nCategoryRID )
         case RID_FORMAT_CAT         : nRes = RID_IL_FORMAT; break;
         case RID_MISC_CAT           : nRes = RID_IL_MISC; break;
         default :
-            OSL_FAIL( "unknown category" );
+            SAL_WARN( "starmath", "unknown category" );
     }
     return nRes;
 }
@@ -93,7 +92,7 @@ static sal_uInt16  GetCategoryRID( sal_uInt16 nResId )
             if (nResId != RID_IL_CATALOG)
             {
 #if OSL_DEBUG_LEVEL > 1
-                OSL_FAIL( "unknown category" );
+                SAL_WARN( "starmath", "unknown category" );
 #endif
             }
     }
@@ -111,7 +110,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
     aToolBoxCat(this, SmResId(TOOLBOX_CATALOG)),
     aToolBoxCat_Delim(this, SmResId( FL_TOOLBOX_CAT_DELIM ))
 {
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmToolBoxWindow::SmToolBoxWindow" );
+    SAL_INFO( "starmath", "starmath: SmToolBoxWindow::SmToolBoxWindow" );
 
     // allow for cursor travelling between toolbox and sub-categories
     SetStyle( GetStyle() | WB_DIALOGCONTROL );

@@ -35,7 +35,6 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <cppuhelper/factory.hxx>
 #include <comphelper/extract.hxx>
-#include <rtl/logfile.hxx>
 
 #include <boost/checked_delete.hpp>
 
@@ -107,7 +106,7 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
             }
             catch (uno::Exception &)
             {
-                DBG_ASSERT( 0, "createInstanceWithArguments failed" );
+                SAL_WARN( "linguistic", "createInstanceWithArguments failed" );
             }
 
             if (xSuppLoc.is())
@@ -126,7 +125,7 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
             }
             else
             {
-                DBG_ASSERT( 0, "interface not supported by service" );
+                SAL_WARN( "linguistic", "interface not supported by service" );
             }
         }
 
@@ -628,13 +627,13 @@ namespace
             Sequence< Any > aValues( rCfg.GetProperties( aNames ) );
             if (aValues.getLength())
             {
-                OSL_ENSURE( aValues.getLength() == 1, "unexpected length of sequence" );
+                SAL_WARN_IF( aValues.getLength() != 1, "linguistic", "unexpected length of sequence" );
                 Sequence< OUString > aSvcImplNames;
                 if (aValues.getConstArray()[0] >>= aSvcImplNames)
                     aRes = aSvcImplNames;
                 else
                 {
-                    OSL_FAIL( "type mismatch" );
+                    SAL_WARN( "linguistic", "type mismatch" );
                 }
             }
         }
@@ -820,7 +819,7 @@ void LngSvcMgr::UpdateAll()
                 if (!bRes)
                 {
 #if OSL_DEBUG_LEVEL > 1
-                    OSL_FAIL( "failed to set new configuration values" );
+                    SAL_WARN( "linguistic", "failed to set new configuration values" );
 #endif
                 }
             }
@@ -861,7 +860,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         OUString aKeyText;
         if (nKeyStart != -1)
             aKeyText = rName.copy( nKeyStart + 1 );
-        DBG_ASSERT( !aKeyText.isEmpty(), "unexpected key (lang::Locale) string" );
+        SAL_WARN_IF( aKeyText.isEmpty(), "linguistic", "unexpected key (lang::Locale) string" );
         if (rName.startsWith( aSpellCheckerList ))
         {
             // delete old cached data, needs to be acquired new on demand
@@ -967,7 +966,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
         }
         else
         {
-            DBG_ASSERT( 0, "nofified for unexpected property" );
+            SAL_WARN( "linguistic", "nofified for unexpected property" );
         }
     }
 }
@@ -1017,13 +1016,13 @@ void LngSvcMgr::GetGrammarCheckerDsp_Impl( sal_Bool bSetSvcList  )
         catch (const uno::Exception &)
         {
         }
-        DBG_ASSERT( xGCI.is(), "instantiating grammar checking iterator failed" );
+        SAL_WARN_IF( !xGCI.is(), "linguistic", "instantiating grammar checking iterator failed" );
 
         if (xGCI.is())
         {
             pGrammarDsp    = dynamic_cast< GrammarCheckingIterator * >(xGCI.get());
             xGrammarDsp    = xGCI;
-            DBG_ASSERT( pGrammarDsp, "failed to get implementation" );
+            SAL_WARN_IF( pGrammarDsp == NULL, "linguistic", "failed to get implementation" );
             if (bSetSvcList)
                 SetCfgServiceLists( *pGrammarDsp );
         }
@@ -1085,7 +1084,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                     }
                     catch (const uno::Exception &)
                     {
-                        DBG_ASSERT( 0, "createInstance failed" );
+                        SAL_WARN( "linguistic", "createInstance failed" );
                     }
                 }
 
@@ -1096,9 +1095,9 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                     uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
                     if (xInfo.is())
                         aImplName = xInfo->getImplementationName();
-                    DBG_ASSERT( !aImplName.isEmpty(), "empty implementation name" );
+                    SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
                     uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
-                    DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
+                    SAL_WARN_IF( !xSuppLoc.is(), "linguistic", "interfaces not supported" );
                     if (xSuppLoc.is()) {
                         uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
                         aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
@@ -1142,7 +1141,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                     }
                     catch (const uno::Exception &)
                     {
-                        DBG_ASSERT( 0, "createInstance failed" );
+                        SAL_WARN( "linguistic", "createInstance failed" );
                     }
                 }
 
@@ -1153,9 +1152,9 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                     uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
                     if (xInfo.is())
                         aImplName = xInfo->getImplementationName();
-                    DBG_ASSERT( !aImplName.isEmpty(),"empty implementation name" );
+                    SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
                     uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
-                    DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
+                    SAL_WARN_IF( !xSuppLoc.is(), "linguistic", "interfaces not supported" );
                     if (xSuppLoc.is())
                     {
                         uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
@@ -1199,7 +1198,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                     }
                     catch (const uno::Exception &)
                     {
-                        DBG_ASSERT( 0, "createInstance failed" );
+                        SAL_WARN( "linguistic", "createInstance failed" );
                     }
                 }
                 if (xSvc.is())
@@ -1209,9 +1208,9 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                     uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
                     if (xInfo.is())
                         aImplName = xInfo->getImplementationName();
-                    DBG_ASSERT( !aImplName.isEmpty(), "empty implementation name" );
+                    SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
                     uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
-                    DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
+                    SAL_WARN_IF( !xSuppLoc.is(), "linguistic", "interfaces not supported" );
                     if (xSuppLoc.is())
                     {
                         uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
@@ -1255,7 +1254,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                     }
                     catch (const uno::Exception &)
                     {
-                        DBG_ASSERT( 0, "createInstance failed" );
+                       SAL_WARN( "linguistic", "createInstance failed" );
                     }
                 }
                 if (xSvc.is())
@@ -1265,9 +1264,9 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                     uno::Reference< XServiceInfo > xInfo( xSvc, uno::UNO_QUERY );
                     if (xInfo.is())
                         aImplName = xInfo->getImplementationName();
-                    DBG_ASSERT( !aImplName.isEmpty(), "empty implementation name" );
+                    SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
                     uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xSvc, uno::UNO_QUERY );
-                    DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
+                    SAL_WARN_IF( !xSuppLoc.is(), "linguistic", "interfaces not supported" );
                     if (xSuppLoc.is())
                     {
                         uno::Sequence<lang::Locale> aLocaleSequence(xSuppLoc->getLocales());
@@ -1284,7 +1283,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
 
 void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "linguistic: LngSvcMgr::SetCfgServiceLists - Spell" );
+    SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SetCfgServiceLists - Spell" );
 
     OUString aNode("ServiceManager/SpellCheckerList");
     uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
@@ -1322,7 +1321,7 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
 
 void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "linguistic: LngSvcMgr::SetCfgServiceLists - Grammar" );
+    SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SetCfgServiceLists - Grammar" );
 
     OUString aNode("ServiceManager/GrammarCheckerList");
     uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
@@ -1364,7 +1363,7 @@ void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
 
 void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "linguistic: LngSvcMgr::SetCfgServiceLists - Hyph" );
+    SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SetCfgServiceLists - Hyph" );
 
     OUString aNode("ServiceManager/HyphenatorList");
     uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
@@ -1406,7 +1405,7 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
 
 void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "linguistic: LngSvcMgr::SetCfgServiceLists - Thes" );
+    SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SetCfgServiceLists - Thes" );
 
     OUString aNode("ServiceManager/ThesaurusList");
     uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
@@ -1659,7 +1658,7 @@ void SAL_CALL
             const uno::Sequence< OUString >& rServiceImplNames )
         throw(uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "linguistic: LngSvcMgr::setConfiguredServices" );
+    SAL_INFO( "linguistic", "linguistic: LngSvcMgr::setConfiguredServices" );
 
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -1736,7 +1735,7 @@ void SAL_CALL
 
 sal_Bool LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "linguistic: LngSvcMgr::SaveCfgSvcs" );
+    SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SaveCfgSvcs" );
 
     sal_Bool bRes = sal_False;
 
@@ -1793,7 +1792,7 @@ sal_Bool LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
             pNodeName = "ServiceManager/ThesaurusList";
         else
         {
-            DBG_ASSERT( 0, "node name missing" );
+            SAL_WARN( "linguistic", "node name missing" );
         }
         OUString aNodeName( OUString::createFromAscii(pNodeName) );
 
@@ -1825,7 +1824,7 @@ sal_Bool LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
             pValue++;
         }
         {
-        RTL_LOGFILE_CONTEXT( aLog, "linguistic: LngSvcMgr::SaveCfgSvcs - ReplaceSetProperties" );
+        SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SaveCfgSvcs - ReplaceSetProperties" );
         // change, add new or replace existing entries.
         bRes |= /*aCfg.*/ReplaceSetProperties( aNodeName, aValues );
         }
@@ -1850,7 +1849,7 @@ static uno::Sequence< OUString > GetLangSvcList( const uno::Any &rVal )
             for (sal_Int32 j = 0;  j < nSvcs;  ++j)
             {
                 OUString aImplName( pSvcName[j] );
-                DBG_ASSERT( !aImplName.isEmpty(), "service impl-name missing" );
+                SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "service impl-name missing" );
             }
         }
 #endif
@@ -1886,7 +1885,7 @@ static uno::Sequence< OUString > GetLangSvc( const uno::Any &rVal )
         }
         else
         {
-            DBG_ASSERT( 0, "GetLangSvc: unexpected type encountered" );
+            SAL_WARN( "linguistic", "GetLangSvc: unexpected type encountered" );
         }
     }
 

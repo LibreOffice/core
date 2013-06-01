@@ -89,6 +89,7 @@ certain functionality.
 @section Draw
 
 @li @c sd
+@li @c sd.filter
 @li @c sd.fwk
 @li @c sd.sls - slidesorter
 @li @c sd.tools
@@ -175,6 +176,10 @@ certain functionality.
 @li @c starmath.ooxml - OOXML import/export
 @li @c starmath.wordbase
 
+@section package
+
+@li @c package.xstor
+
 @section sdext
 
 @li @c sdext.minimizer
@@ -196,6 +201,7 @@ certain functionality.
 
 @section slideshow
 
+@li @c slideshow
 @li @c slideshow.opengl
 @li @c slideshow.eventqueue
 
@@ -371,7 +377,6 @@ certain functionality.
 @li @c helpcompiler
 @li @c linguistic
 @li @c oox
-@li @c package
 @li @c rsc
 @li @c sax
 @li @c shell

@@ -24,7 +24,6 @@
 #include <canvas/verbosetrace.hxx>
 
 #include <rtl/math.hxx>
-#include <rtl/logfile.hxx>
 
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
@@ -300,7 +299,7 @@ namespace slideshow
 
         AttributableShapeSharedPtr DrawShapeSubsetting::getSubsetShape( const DocTreeNode& rTreeNode ) const
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::DrawShapeSubsetting::getSubsetShape()" );
+            SAL_INFO( "slideshow", "::presentation::internal::DrawShapeSubsetting::getSubsetShape()" );
 
             // subset shape already created for this DocTreeNode?
             SubsetEntry aEntry;
@@ -320,7 +319,7 @@ namespace slideshow
 
         void DrawShapeSubsetting::addSubsetShape( const AttributableShapeSharedPtr& rShape )
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::DrawShapeSubsetting::addSubsetShape()" );
+            SAL_INFO( "slideshow", "::presentation::internal::DrawShapeSubsetting::addSubsetShape()" );
 
             // subset shape already created for this DocTreeNode?
             SubsetEntry aEntry;
@@ -354,7 +353,7 @@ namespace slideshow
 
         bool DrawShapeSubsetting::revokeSubsetShape( const AttributableShapeSharedPtr& rShape )
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::DrawShapeSubsetting::revokeSubsetShape()" );
+            SAL_INFO( "slideshow", "::presentation::internal::DrawShapeSubsetting::revokeSubsetShape()" );
 
             // lookup subset shape
             SubsetEntry aEntry;
@@ -610,7 +609,7 @@ namespace slideshow
                     case DocTreeNode::NODETYPE_INVALID:
                         // FALLTHROUGH intended
                     default:
-                        OSL_FAIL("DrawShapeSubsetting::mapDocTreeNode(): unexpected node type");
+                        SAL_WARN( "slideshow", "DrawShapeSubsetting::mapDocTreeNode(): unexpected node type");
                         return DrawShapeSubsetting::CLASS_NOOP;
 
                     case DocTreeNode::NODETYPE_LOGICAL_SHAPE:

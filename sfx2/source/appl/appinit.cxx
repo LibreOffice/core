@@ -43,7 +43,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#include <rtl/logfile.hxx>
 #include <vcl/edit.hxx>
 
 #include <sfx2/unoctitm.hxx>
@@ -209,7 +208,7 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
 
 bool SfxApplication::Initialize_Impl()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::Initialize_Impl" );
+    SAL_INFO( "sfx2.appl", "sfx2 (mb93783) ::SfxApplication::Initialize_Impl" );
 
 #ifdef TLX_VALIDATE
     StgIo::SetErrorLink( LINK( this, SfxStorageErrHdl, Error ) );
