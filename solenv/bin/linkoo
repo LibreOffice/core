@@ -572,11 +572,11 @@ evilness ('undo');
 my $installed_files = build_installed_list ($OOO_INSTALL);
 
 scan_and_link_files ($OOO_BUILD, $installed_files, $TARGET);
+link_instdir("$OOO_BUILD/instdir/$TARGET", $OOO_INSTALL);
 link_gdb_py();
 link_pagein_files();
 link_ui_files();
 link_rdb_files();
-link_instdir("$OOO_BUILD/instdir/$TARGET", $OOO_INSTALL);
 
 if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
     my $ooenv;
