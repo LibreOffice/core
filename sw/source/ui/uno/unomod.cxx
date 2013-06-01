@@ -189,9 +189,6 @@ static ChainablePropertySetInfo * lcl_createPrintSettingsInfo()
     return new ChainablePropertySetInfo ( aPrintSettingsMap_Impl );
 }
 
-/******************************************************************
- * SwXModule
- ******************************************************************/
 Reference< uno::XInterface > SAL_CALL SwXModule_createInstance(
     const Reference< XMultiServiceFactory > & /*rSMgr*/) throw( Exception )
 {
@@ -268,9 +265,6 @@ Sequence< OUString > SwXModule::getSupportedServiceNames(void) throw( RuntimeExc
     return SwXModule_getSupportedServiceNames();
 }
 
-/******************************************************************
- * SwXPrintSettings
- ******************************************************************/
 SwXPrintSettings::SwXPrintSettings(SwXPrintSettingsType eType, SwDoc* pDoc)
 : ChainableHelperNoState ( lcl_createPrintSettingsInfo (), &Application::GetSolarMutex() )
 , meType(eType)
