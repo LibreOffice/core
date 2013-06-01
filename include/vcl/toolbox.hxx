@@ -340,7 +340,7 @@ public:
     void                InsertItem( const ResId& rResId,
                                     sal_uInt16 nPos = TOOLBOX_APPEND );
     /// Insert a command (like '.uno:Save').
-    void                InsertItem( const OUString& rCommand,
+    virtual void        InsertItem( const OUString& rCommand,
                                     const com::sun::star::uno::Reference<com::sun::star::frame::XFrame>& rFrame,
                                     ToolBoxItemBits nBits = 0,
                                     sal_uInt16 nPos = TOOLBOX_APPEND );

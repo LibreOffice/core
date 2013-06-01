@@ -52,6 +52,12 @@ public:
         Window* pParentWindow);
     virtual ~SidebarToolBox (void);
 
+    using ToolBox::InsertItem;
+    virtual void InsertItem(const OUString& rCommand,
+            const com::sun::star::uno::Reference<com::sun::star::frame::XFrame>& rFrame,
+            ToolBoxItemBits nBits = 0,
+            sal_uInt16 nPos = TOOLBOX_APPEND);
+
     void SetBorderWindow (const Window* pBorderWindow);
     virtual void Paint (const Rectangle& rRect);
 
