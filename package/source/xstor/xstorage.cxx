@@ -42,7 +42,6 @@
 
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -212,7 +211,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
 , m_nRelInfoStatus( RELINFO_NO_INIT )
 {
     // all the checks done below by assertion statements must be done by factory
-    OSL_ENSURE( xInputStream.is(), "No input stream is provided!\n" );
+    SAL_WARN_IF( !xInputStream.is(), "package.xstor", "No input stream is provided!" );
 
     m_pSwitchStream = (SwitchablePersistenceStream*) new SwitchablePersistenceStream( xContext, xInputStream );
     m_xInputStream = m_pSwitchStream->getInputStream();
@@ -220,7 +219,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
     if ( m_nStorageMode & embed::ElementModes::WRITE )
     {
         // check that the stream allows to write
-        OSL_FAIL( "No stream for writing is provided!\n" );
+        SAL_WARN( "package.xstor", "No stream for writing is provided!" );
     }
 }
 
@@ -252,7 +251,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
 , m_nRelInfoStatus( RELINFO_NO_INIT )
 {
     // all the checks done below by assertion statements must be done by factory
-    OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
+    SAL_WARN_IF( !xStream.is(), "package.xstor", "No stream is provided!" );
 
     if ( m_nStorageMode & embed::ElementModes::WRITE )
     {
@@ -295,7 +294,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
 , m_pRelStorElement( NULL )
 , m_nRelInfoStatus( RELINFO_NO_INIT )
 {
-    OSL_ENSURE( xPackageFolder.is(), "No package folder!\n" );
+    SAL_WARN_IF( !xPackageFolder.is(), "package.xstor", "No package folder!" );
 }
 
 //-----------------------------------------------
@@ -305,7 +304,7 @@ OStorage_Impl::~OStorage_Impl()
         ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
         if ( m_pAntiImpl ) // root storage wrapper must set this member to NULL before destruction of object
         {
-            OSL_ENSURE( !m_bIsRoot, "The root storage wrapper must be disposed already" );
+            SAL_WARN_IF( m_bIsRoot, "package.xstor", "The root storage wrapper must be disposed already" );
 
             try {
                 m_pAntiImpl->InternalDispose( sal_False );
@@ -453,7 +452,7 @@ void OStorage_Impl::RemoveReadOnlyWrap( OStorage& aStorage )
 //-----------------------------------------------
 void OStorage_Impl::OpenOwnPackage()
 {
-    OSL_ENSURE( m_bIsRoot, "Opening of the package has no sence!\n" );
+    SAL_WARN_IF( !m_bIsRoot, "package.xstor", "Opening of the package has no sence!" );
 
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
@@ -466,7 +465,7 @@ void OStorage_Impl::OpenOwnPackage()
                 aArguments[ 0 ] <<= m_xStream;
             else
             {
-                OSL_ENSURE( m_xInputStream.is(), "Input stream must be set for readonly access!\n" );
+                SAL_WARN_IF( !m_xInputStream.is(), "package.xstor", "Input stream must be set for readonly access!" );
                 aArguments[ 0 ] <<= m_xInputStream;
                 // TODO: if input stream is not seekable or XSeekable interface is supported
                 // on XStream object a wrapper must be used
@@ -520,7 +519,7 @@ void OStorage_Impl::OpenOwnPackage()
         }
 
         uno::Reference< container::XHierarchicalNameAccess > xHNameAccess( m_xPackage, uno::UNO_QUERY );
-        OSL_ENSURE( xHNameAccess.is(), "The package could not be created!\n" );
+        SAL_WARN_IF( !xHNameAccess.is(), "package.xstor", "The package could not be created!" );
 
         if ( xHNameAccess.is() )
         {
@@ -529,7 +528,7 @@ void OStorage_Impl::OpenOwnPackage()
         }
     }
 
-    OSL_ENSURE( m_xPackageFolder.is(), "The package root folder can not be opened!\n" );
+    SAL_WARN_IF( !m_xPackageFolder.is(), "package.xstor", "The package root folder can not be opened!" );
     if ( !m_xPackageFolder.is() )
         throw embed::InvalidStorageException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 }
@@ -645,12 +644,12 @@ void OStorage_Impl::ReadContents()
 
             if ( !xNamed.is() )
             {
-                OSL_FAIL( "XNamed is not supported!\n" );
+                SAL_WARN( "package.xstor", "XNamed is not supported!" );
                 throw uno::RuntimeException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
             }
 
             OUString aName = xNamed->getName();
-            OSL_ENSURE( !aName.isEmpty(), "Empty name!\n" );
+            SAL_WARN_IF( aName.isEmpty(), "package.xstor", "Empty name!" );
 
             uno::Reference< container::XNameContainer > xNameContainer( xNamed, uno::UNO_QUERY );
 
@@ -679,7 +678,7 @@ void OStorage_Impl::ReadContents()
             AddLog( rNoSuchElementException.Message );
             AddLog( OSL_LOG_PREFIX "NoSuchElement" );
 
-            OSL_FAIL( "hasMoreElements() implementation has problems!\n" );
+            SAL_WARN( "package.xstor", "hasMoreElements() implementation has problems!" );
             break;
         }
     }
@@ -792,8 +791,8 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                                         OUString aName,
                                         sal_Bool bDirect )
 {
-    OSL_ENSURE( xDest.is(), "No destination storage!\n" );
-    OSL_ENSURE( !aName.isEmpty(), "Empty element name!\n" );
+    SAL_WARN_IF( !xDest.is(), "package.xstor", "No destination storage!" );
+    SAL_WARN_IF( aName.isEmpty(), "package.xstor", "Empty element name!" );
 
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
@@ -811,7 +810,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                                     xDest->openStorageElement(  aName,
                                                                 embed::ElementModes::WRITE );
 
-        OSL_ENSURE( xSubDest.is(), "No destination substorage!\n" );
+        SAL_WARN_IF( !xSubDest.is(), "package.xstor", "No destination substorage!" );
 
         if ( !pElement->m_pStorage )
         {
@@ -878,7 +877,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
 
                 if ( pElement->m_pStream->HasTempFile_Impl() || !pElement->m_pStream->m_xPackageStream.is() )
                 {
-                    OSL_ENSURE( pElement->m_pStream->m_xPackageStream.is(), "No package stream!" );
+                    SAL_WARN_IF( !pElement->m_pStream->m_xPackageStream.is(), "package.xstor", "No package stream!" );
 
                     // if the stream is modified - the temporary file must be used for insertion
                     xInputToInsert = pElement->m_pStream->GetTempFileAsInputStream();
@@ -901,14 +900,14 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 uno::Reference< io::XStream > xSubStr =
                                             xDest->openStreamElement( aName,
                                             embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
-                OSL_ENSURE( xSubStr.is(), "No destination substream!\n" );
+                SAL_WARN_IF( !xSubStr.is(), "package.xstor", "No destination substream!" );
 
                 pElement->m_pStream->CopyInternallyTo_Impl( xSubStr );
             }
         }
         else if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         {
-            OSL_FAIL( "Encryption is only supported in package storage!\n" );
+            SAL_WARN( "package.xstor", "Encryption is only supported in package storage!" );
             throw io::IOException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
         }
         else if ( pElement->m_pStream->HasCachedEncryptionData()
@@ -950,7 +949,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                                             xDest2->openEncryptedStream( aName,
                                                 embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE,
                                                 pElement->m_pStream->GetCachedEncryptionData().getAsConstNamedValueList() );
-                OSL_ENSURE( xSubStr.is(), "No destination substream!\n" );
+                SAL_WARN_IF( !xSubStr.is(), "package.xstor", "No destination substream!" );
 
                 pElement->m_pStream->CopyInternallyTo_Impl( xSubStr, pElement->m_pStream->GetCachedEncryptionData() );
             }
@@ -968,7 +967,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 uno::Reference< io::XStream > xDestStream =
                                             xDest->openStreamElement( aName,
                                                 embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
-                OSL_ENSURE( xDestStream.is(), "No destination substream!\n" );
+                SAL_WARN_IF( !xDestStream.is(), "package.xstor", "No destination substream!" );
                 completeStorageStreamCopy_Impl( xOwnStream, xDestStream, m_nStorageType, GetAllRelationshipsIfAny() );
 
                 uno::Reference< beans::XPropertySet > xProps( xDestStream, uno::UNO_QUERY_THROW );
@@ -1014,7 +1013,7 @@ void OStorage_Impl::CopyLastCommitTo( const uno::Reference< embed::XStorage >& x
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
-    OSL_ENSURE( m_xPackageFolder.is(), "A commited storage is incomplete!\n" );
+    SAL_WARN_IF( !m_xPackageFolder.is(), "package.xstor", "A commited storage is incomplete!" );
     if ( !m_xPackageFolder.is() )
         throw uno::RuntimeException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
@@ -1035,7 +1034,7 @@ void OStorage_Impl::InsertIntoPackageFolder( const OUString& aName,
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
-    OSL_ENSURE( m_xPackageFolder.is(), "An inserted storage is incomplete!\n" );
+    SAL_WARN_IF( !m_xPackageFolder.is(), "package.xstor", "An inserted storage is incomplete!" );
     uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageFolder, uno::UNO_QUERY );
     if ( !xTunnel.is() )
         throw uno::RuntimeException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
@@ -1059,7 +1058,7 @@ void OStorage_Impl::Commit()
     ReadContents();
 
     // if storage is commited it should have a valid Package representation
-    OSL_ENSURE( m_xPackageFolder.is(), "The package representation should exist!\n" );
+    SAL_WARN_IF( !m_xPackageFolder.is(), "package.xstor", "The package representation should exist!" );
     if ( !m_xPackageFolder.is() )
         throw embed::InvalidStorageException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
@@ -1264,7 +1263,7 @@ void OStorage_Impl::Commit()
     {
         uno::Reference< util::XChangesBatch > xChangesBatch( m_xPackage, uno::UNO_QUERY );
 
-        OSL_ENSURE( xChangesBatch.is(), "Impossible to commit package!\n" );
+        SAL_WARN_IF( !xChangesBatch.is(), "package.xstor", "Impossible to commit package!" );
         if ( !xChangesBatch.is() )
             throw uno::RuntimeException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
@@ -1388,7 +1387,7 @@ void OStorage_Impl::Revert()
 //-----------------------------------------------
 SotElement_Impl* OStorage_Impl::FindElement( const OUString& rName )
 {
-    OSL_ENSURE( !rName.isEmpty(), "Name is empty!" );
+    SAL_WARN_IF( rName.isEmpty(), "package.xstor", "Name is empty!" );
 
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
@@ -1407,7 +1406,7 @@ SotElement_Impl* OStorage_Impl::FindElement( const OUString& rName )
 //-----------------------------------------------
 SotElement_Impl* OStorage_Impl::InsertStream( OUString aName, sal_Bool bEncr )
 {
-    OSL_ENSURE( m_xPackage.is(), "Not possible to refer to package as to factory!\n" );
+    SAL_WARN_IF( !m_xPackage.is(), "package.xstor", "Not possible to refer to package as to factory!" );
     if ( !m_xPackage.is() )
         throw embed::InvalidStorageException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
@@ -1416,7 +1415,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( OUString aName, sal_Bool bEncr )
     uno::Reference< lang::XUnoTunnel > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ),
                                                     uno::UNO_QUERY );
 
-    OSL_ENSURE( xNewElement.is(), "Not possible to create a new stream!\n" );
+    SAL_WARN_IF( !xNewElement.is(), "package.xstor", "Not possible to create a new stream!" );
     if ( !xNewElement.is() )
         throw io::IOException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
@@ -1443,7 +1442,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( OUString aName, sal_Bool bEncr )
 SotElement_Impl* OStorage_Impl::InsertRawStream( OUString aName, const uno::Reference< io::XInputStream >& xInStream )
 {
     // insert of raw stream means insert and commit
-    OSL_ENSURE( m_xPackage.is(), "Not possible to refer to package as to factory!\n" );
+    SAL_WARN_IF( !m_xPackage.is(), "package.xstor", "Not possible to refer to package as to factory!" );
     if ( !m_xPackage.is() )
         throw embed::InvalidStorageException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
@@ -1459,7 +1458,7 @@ SotElement_Impl* OStorage_Impl::InsertRawStream( OUString aName, const uno::Refe
     uno::Reference< lang::XUnoTunnel > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ),
                                                     uno::UNO_QUERY );
 
-    OSL_ENSURE( xNewElement.is(), "Not possible to create a new stream!\n" );
+    SAL_WARN_IF( !xNewElement.is(), "package.xstor", "Not possible to create a new stream!" );
     if ( !xNewElement.is() )
         throw io::IOException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
@@ -1485,7 +1484,7 @@ SotElement_Impl* OStorage_Impl::InsertRawStream( OUString aName, const uno::Refe
 //-----------------------------------------------
 OStorage_Impl* OStorage_Impl::CreateNewStorageImpl( sal_Int32 nStorageMode )
 {
-    OSL_ENSURE( m_xPackage.is(), "Not possible to refer to package as to factory!\n" );
+    SAL_WARN_IF( !m_xPackage.is(), "package.xstor", "Not possible to refer to package as to factory!" );
     if ( !m_xPackage.is() )
         throw embed::InvalidStorageException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
@@ -1494,7 +1493,7 @@ OStorage_Impl* OStorage_Impl::CreateNewStorageImpl( sal_Int32 nStorageMode )
     uno::Reference< lang::XUnoTunnel > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ),
                                                     uno::UNO_QUERY );
 
-    OSL_ENSURE( xNewElement.is(), "Not possible to create a new storage!\n" );
+    SAL_WARN_IF( !xNewElement.is(), "package.xstor", "Not possible to create a new storage!" );
     if ( !xNewElement.is() )
         throw io::IOException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
@@ -1535,10 +1534,10 @@ SotElement_Impl* OStorage_Impl::InsertElement( OUString aName, sal_Bool bIsStora
     {
         if ( (*pElementIter)->m_aName == aName )
         {
-            OSL_ENSURE( (*pElementIter)->m_bIsRemoved, "Try to insert an element instead of existing one!\n" );
+            SAL_WARN_IF( !(*pElementIter)->m_bIsRemoved, "package.xstor", "Try to insert an element instead of existing one!" );
             if ( (*pElementIter)->m_bIsRemoved )
             {
-                OSL_ENSURE( !(*pElementIter)->m_bIsInserted, "Inserted elements must be deleted immediatelly!\n" );
+                SAL_WARN_IF( (*pElementIter)->m_bIsInserted, "package.xstor", "Inserted elements must be deleted immediatelly!" );
                 pDeletedElm = *pElementIter;
                 break;
             }
@@ -1563,14 +1562,14 @@ SotElement_Impl* OStorage_Impl::InsertElement( OUString aName, sal_Bool bIsStora
 //-----------------------------------------------
 void OStorage_Impl::OpenSubStorage( SotElement_Impl* pElement, sal_Int32 nStorageMode )
 {
-    OSL_ENSURE( pElement, "pElement is not set!\n" );
-    OSL_ENSURE( pElement->m_bIsStorage, "Storage flag is not set!\n" );
+    SAL_WARN_IF( !pElement, "package.xstor", "pElement is not set!" );
+    SAL_WARN_IF( !pElement->m_bIsStorage, "package.xstor", "Storage flag is not set!" );
 
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
     if ( !pElement->m_pStorage )
     {
-        OSL_ENSURE( !pElement->m_bIsInserted, "Inserted element must be created already!\n" );
+        SAL_WARN_IF( pElement->m_bIsInserted, "package.xstor", "Inserted element must be created already!" );
 
         uno::Reference< lang::XUnoTunnel > xTunnel;
         m_xPackageFolder->getByName( pElement->m_aOriginalName ) >>= xTunnel;
@@ -1579,7 +1578,7 @@ void OStorage_Impl::OpenSubStorage( SotElement_Impl* pElement, sal_Int32 nStorag
 
         uno::Reference< container::XNameContainer > xPackageSubFolder( xTunnel, uno::UNO_QUERY );
 
-        OSL_ENSURE( xPackageSubFolder.is(), "Can not get XNameContainer interface from folder!\n" );
+        SAL_WARN_IF( !xPackageSubFolder.is(), "package.xstor", "Can not get XNameContainer interface from folder!" );
 
         if ( !xPackageSubFolder.is() )
             throw uno::RuntimeException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
@@ -1591,14 +1590,14 @@ void OStorage_Impl::OpenSubStorage( SotElement_Impl* pElement, sal_Int32 nStorag
 //-----------------------------------------------
 void OStorage_Impl::OpenSubStream( SotElement_Impl* pElement )
 {
-    OSL_ENSURE( pElement, "pElement is not set!\n" );
-    OSL_ENSURE( !pElement->m_bIsStorage, "Storage flag is set!\n" );
+    SAL_WARN_IF( !pElement, "package.xstor", "pElement is not set!" );
+    SAL_WARN_IF( pElement->m_bIsStorage, "package.xstor", "Storage flag is set!" );
 
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
     if ( !pElement->m_pStream )
     {
-        OSL_ENSURE( !pElement->m_bIsInserted, "Inserted element must be created already!\n" );
+        SAL_WARN_IF( pElement->m_bIsInserted, "package.xstor", "Inserted element must be created already!" );
 
         uno::Reference< lang::XUnoTunnel > xTunnel;
         m_xPackageFolder->getByName( pElement->m_aOriginalName ) >>= xTunnel;
@@ -1639,7 +1638,7 @@ uno::Sequence< OUString > OStorage_Impl::GetElementNames()
 //-----------------------------------------------
 void OStorage_Impl::RemoveElement( SotElement_Impl* pElement )
 {
-    OSL_ENSURE( pElement, "Element must be provided!" );
+    SAL_WARN_IF( !pElement, "package.xstor", "Element must be provided!" );
 
     if ( !pElement )
         return;
@@ -1776,7 +1775,7 @@ void OStorage_Impl::CommitStreamRelInfo( SotElement_Impl* pStreamElement )
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML && pStreamElement->m_pStream )
     {
-        OSL_ENSURE( !pStreamElement->m_aName.isEmpty(), "The name must not be empty!\n" );
+        SAL_WARN_IF( pStreamElement->m_aName.isEmpty(), "package.xstor", "The name must not be empty!" );
 
         if ( !m_xRelStorage.is() )
         {
@@ -1999,7 +1998,7 @@ OStorage::~OStorage()
 //-----------------------------------------------
 void SAL_CALL OStorage::InternalDispose( sal_Bool bNotifyImpl )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::InternalDispose" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::InternalDispose" );
 
     if ( !m_pImpl )
     {
@@ -2111,7 +2110,7 @@ void OStorage::BroadcastModifiedIfNecessary()
 
     m_pImpl->m_bBroadcastModified = sal_False;
 
-    OSL_ENSURE( !m_pData->m_bReadOnlyWrap, "The storage can not be modified at all!\n" );
+    SAL_WARN_IF( m_pData->m_bReadOnlyWrap, "package.xstor", "The storage can not be modified at all!" );
 
        lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
 
@@ -2144,7 +2143,7 @@ void OStorage::BroadcastTransaction( sal_Int8 nMessage )
         throw lang::DisposedException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
     }
 
-    OSL_ENSURE( !m_pData->m_bReadOnlyWrap, "The storage can not be modified at all!\n" );
+    SAL_WARN_IF( m_pData->m_bReadOnlyWrap, "package.xstor", "The storage can not be modified at all!" );
 
        lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
 
@@ -2202,7 +2201,7 @@ SotElement_Impl* OStorage::OpenStreamElement_Impl( const OUString& aStreamName, 
         throw io::IOException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
     }
 
-    OSL_ENSURE( pElement, "In case element can not be created an exception must be thrown!" );
+    SAL_WARN_IF( !pElement, "package.xstor", "In case element can not be created an exception must be thrown!" );
 
     if ( !pElement->m_pStream )
         m_pImpl->OpenSubStream( pElement );
@@ -2404,7 +2403,7 @@ void SAL_CALL OStorage::copyToStorage( const uno::Reference< embed::XStorage >& 
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::copyToStorage" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::copyToStorage" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2472,7 +2471,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::openStreamElement" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::openStreamElement" );
 
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2498,7 +2497,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
         OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
 
         xResult = pElement->m_pStream->GetStream( nOpenMode, sal_False );
-        OSL_ENSURE( xResult.is(), "The method must throw exception instead of removing empty result!\n" );
+        SAL_WARN_IF( !xResult.is(), "package.xstor", "The method must throw exception instead of removing empty result!" );
 
         if ( m_pData->m_bReadOnlyWrap )
         {
@@ -2575,7 +2574,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::openEncryptedStreamElement" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::openEncryptedStreamElement" );
 
     return openEncryptedStream( aStreamName, nOpenMode, ::comphelper::OStorageHelper::CreatePackageEncryptionData( aPass ) );
 }
@@ -2589,7 +2588,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::openStorageElement" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::openStorageElement" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2743,7 +2742,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneStreamElement( const OUStr
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::cloneStreamElement" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::cloneStreamElement" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2827,7 +2826,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::cloneEncryptedStreamElement" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::cloneEncryptedStreamElement" );
 
     return cloneEncryptedStream( aStreamName, ::comphelper::OStorageHelper::CreatePackageEncryptionData( aPass ) );
 }
@@ -2841,7 +2840,7 @@ void SAL_CALL OStorage::copyLastCommitTo(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::copyLastCommitTo" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::copyLastCommitTo" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2908,7 +2907,7 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::copyStorageElementLastCommitTo" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::copyStorageElementLastCommitTo" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3141,7 +3140,7 @@ void SAL_CALL OStorage::removeElement( const OUString& aElementName )
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::removeElement" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::removeElement" );
 
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3234,7 +3233,7 @@ void SAL_CALL OStorage::renameElement( const OUString& aElementName, const OUStr
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::renameElement" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::renameElement" );
 
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3339,7 +3338,7 @@ void SAL_CALL OStorage::copyElementTo(  const OUString& aElementName,
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::copyElementTo" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::copyElementTo" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3442,7 +3441,7 @@ void SAL_CALL OStorage::moveElementTo(  const OUString& aElementName,
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::moveElementTo" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::moveElementTo" );
 
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3558,7 +3557,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::openEncryptedStream" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::openEncryptedStream" );
 
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3584,7 +3583,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
         OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
 
         xResult = pElement->m_pStream->GetStream( nOpenMode, aEncryptionData, sal_False );
-        OSL_ENSURE( xResult.is(), "The method must throw exception instead of removing empty result!\n" );
+        SAL_WARN_IF( !xResult.is(), "package.xstor", "The method must throw exception instead of removing empty result!" );
 
         if ( m_pData->m_bReadOnlyWrap )
         {
@@ -3668,7 +3667,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStream(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::cloneEncryptedStream" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::cloneEncryptedStream" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3761,7 +3760,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::getPlainRawStreamElement" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::getPlainRawStreamElement" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3869,7 +3868,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::getRawEncrStreamElement" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::getRawEncrStreamElement" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3987,7 +3986,7 @@ void SAL_CALL OStorage::insertRawEncrStreamElement( const OUString& aStreamName,
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::insertRawEncrStreamElement" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::insertRawEncrStreamElement" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -4081,7 +4080,7 @@ void SAL_CALL OStorage::commit()
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::commit" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::commit" );
 
     uno::Reference< util::XModifiable > xParentModif;
 
@@ -4147,7 +4146,7 @@ void SAL_CALL OStorage::revert()
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::revert" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::revert" );
 
     // the method removes all the changes done after last commit
 
@@ -4345,7 +4344,7 @@ uno::Any SAL_CALL OStorage::getByName( const OUString& aName )
                 lang::WrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::getByName" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::getByName" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -4411,7 +4410,7 @@ uno::Any SAL_CALL OStorage::getByName( const OUString& aName )
 uno::Sequence< OUString > SAL_CALL OStorage::getElementNames()
         throw ( uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::getElementNames" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::getElementNames" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -4449,7 +4448,7 @@ uno::Sequence< OUString > SAL_CALL OStorage::getElementNames()
 sal_Bool SAL_CALL OStorage::hasByName( const OUString& aName )
         throw ( uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::hasByName" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::hasByName" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -4513,7 +4512,7 @@ uno::Type SAL_CALL OStorage::getElementType()
 sal_Bool SAL_CALL OStorage::hasElements()
         throw ( uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::hasElements" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::hasElements" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -4628,7 +4627,7 @@ void SAL_CALL OStorage::setEncryptionPassword( const OUString& aPass )
     throw ( uno::RuntimeException,
             io::IOException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::setEncryptionPassword" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::setEncryptionPassword" );
     setEncryptionData( ::comphelper::OStorageHelper::CreatePackageEncryptionData( aPass ) );
 }
 
@@ -4637,7 +4636,7 @@ void SAL_CALL OStorage::removeEncryption()
     throw ( uno::RuntimeException,
             io::IOException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::removeEncryption" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::removeEncryption" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -4650,7 +4649,7 @@ void SAL_CALL OStorage::removeEncryption()
     if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
         throw uno::RuntimeException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() ); // the interface must be visible only for package storage
 
-    OSL_ENSURE( m_pData->m_bIsRoot, "removeEncryption() method is not available for nonroot storages!\n" );
+    SAL_WARN_IF( !m_pData->m_bIsRoot, "package.xstor", "removeEncryption() method is not available for nonroot storages!" );
     if ( m_pData->m_bIsRoot )
     {
         try {
@@ -4691,7 +4690,7 @@ void SAL_CALL OStorage::removeEncryption()
             m_pImpl->AddLog( rRException.Message );
             m_pImpl->AddLog( OSL_LOG_PREFIX "Rethrow" );
 
-            OSL_ENSURE( sal_False, "The call must not fail, it is pretty simple!" );
+            SAL_WARN( "package.xstor", "The call must not fail, it is pretty simple!" );
             throw;
         }
         catch( const uno::Exception& rException )
@@ -4699,7 +4698,7 @@ void SAL_CALL OStorage::removeEncryption()
             m_pImpl->AddLog( rException.Message );
             m_pImpl->AddLog( OSL_LOG_PREFIX "Rethrow" );
 
-            OSL_FAIL( "The call must not fail, it is pretty simple!" );
+            SAL_WARN( "package.xstor", "The call must not fail, it is pretty simple!" );
             throw io::IOException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
         }
     }
@@ -4713,7 +4712,7 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
     throw ( io::IOException,
             uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::setEncryptionData" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::setEncryptionData" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -4729,7 +4728,7 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
     if ( !aEncryptionData.getLength() )
         throw uno::RuntimeException( OSL_LOG_PREFIX "Unexpected empty encryption data!", uno::Reference< uno::XInterface >() );
 
-    OSL_ENSURE( m_pData->m_bIsRoot, "setEncryptionData() method is not available for nonroot storages!\n" );
+    SAL_WARN_IF( !m_pData->m_bIsRoot, "package.xstor", "setEncryptionData() method is not available for nonroot storages!" );
     if ( m_pData->m_bIsRoot )
     {
         try {
@@ -4789,7 +4788,7 @@ sal_Bool SAL_CALL OStorage::hasEncryptionData()
 void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::NamedValue >& aAlgorithms )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::setEncryptionAlgorithms" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::setEncryptionAlgorithms" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -4805,7 +4804,7 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
     if ( !aAlgorithms.getLength() )
         throw uno::RuntimeException( OSL_LOG_PREFIX "Unexpected empty encryption algorithms list!", uno::Reference< uno::XInterface >() );
 
-    OSL_ENSURE( m_pData->m_bIsRoot, "setEncryptionAlgorithms() method is not available for nonroot storages!\n" );
+    SAL_WARN_IF( !m_pData->m_bIsRoot, "package.xstor", "setEncryptionAlgorithms() method is not available for nonroot storages!" );
     if ( m_pData->m_bIsRoot )
     {
         try {
@@ -4855,7 +4854,7 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
 uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
     throw (uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::getEncryptionAlgorithms" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::getEncryptionAlgorithms" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -4869,7 +4868,7 @@ uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
         throw uno::RuntimeException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() ); // the interface must be visible only for package storage
 
     uno::Sequence< beans::NamedValue > aResult;
-    OSL_ENSURE( m_pData->m_bIsRoot, "getEncryptionAlgorithms() method is not available for nonroot storages!\n" );
+    SAL_WARN_IF( !m_pData->m_bIsRoot, "package.xstor", "getEncryptionAlgorithms() method is not available for nonroot storages!" );
     if ( m_pData->m_bIsRoot )
     {
         try {
@@ -4946,7 +4945,7 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
                 lang::WrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::setPropertyValue" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::setPropertyValue" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -5055,7 +5054,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
                 lang::WrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::getPropertyValue" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::getPropertyValue" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -5652,7 +5651,7 @@ void SAL_CALL OStorage::insertStreamElementDirect(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::insertStreamElementDirect" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::insertStreamElementDirect" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -5744,7 +5743,7 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::copyElementDirectlyTo" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::copyElementDirectlyTo" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -5843,7 +5842,7 @@ void SAL_CALL OStorage::writeAndAttachToStream( const uno::Reference< io::XStrea
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::writeAndAttachToStream" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::writeAndAttachToStream" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -5915,7 +5914,7 @@ void SAL_CALL OStorage::attachToURL( const OUString& sURL,
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::attachToURL" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::attachToURL" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -6000,7 +5999,7 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const OUString& aElementNam
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT( aLog, "package (mv76033) OStorage::getElementPropertyValue" );
+    SAL_INFO( "package.xstor", "package (mv76033) OStorage::getElementPropertyValue" );
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -6126,7 +6125,7 @@ void SAL_CALL OStorage::copyStreamElementData( const OUString& aStreamName, cons
         uno::Reference< io::XStream > xNonconstRef = xTargetStream;
         m_pImpl->CloneStreamElement( aStreamName, sal_False, ::comphelper::SequenceAsHashMap(), xNonconstRef );
 
-        OSL_ENSURE( xNonconstRef == xTargetStream, "The provided stream reference seems not be filled in correctly!\n" );
+        SAL_WARN_IF( xNonconstRef != xTargetStream, "package.xstor", "The provided stream reference seems not be filled in correctly!" );
         if ( xNonconstRef != xTargetStream )
             throw uno::RuntimeException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() ); // if the stream reference is set it must not be changed!
     }

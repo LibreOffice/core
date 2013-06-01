@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -211,7 +210,7 @@ sal_Int32 ReadThroughComponent(
     DBG_ASSERT(rxContext.is(), "factory missing");
     DBG_ASSERT(NULL != pFilterName,"I need a service name for the component!");
 
-    RTL_LOGFILE_CONTEXT( aLog, "ReadThroughComponent" );
+    SAL_INFO( "sd.filter", "ReadThroughComponent" );
 
     // prepare ParserInputSrouce
     xml::sax::InputSource aParserInput;
@@ -220,17 +219,17 @@ sal_Int32 ReadThroughComponent(
 
     // get parser
     Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(rxContext);
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
+    SAL_INFO( "sd.filter", "parser created" );
 
     // get filter
     OUString aFilterName(OUString::createFromAscii(pFilterName));
     Reference< xml::sax::XDocumentHandler > xFilter(
         rxContext->getServiceManager()->createInstanceWithArgumentsAndContext(aFilterName, rFilterArguments, rxContext),
         UNO_QUERY );
-    SAL_WARN_IF(!xFilter.is(), "sd", "Can't instantiate filter component: " << aFilterName);
+    SAL_WARN_IF(!xFilter.is(), "sd.filter", "Can't instantiate filter component: " << aFilterName);
     if( !xFilter.is() )
         return SD_XML_READERROR;
-    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "%s created", pFilterName );
+    SAL_INFO( "sd.filter", "" << pFilterName << " created" );
 
     // connect parser and filter
     xParser->setDocumentHandler( xFilter );
@@ -239,7 +238,7 @@ sal_Int32 ReadThroughComponent(
     Reference < XImporter > xImporter( xFilter, UNO_QUERY );
     xImporter->setTargetDocument( xModelComponent );
     // finally, parser the stream
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "parsing stream" );
+    SAL_INFO( "sd.filter", "parsing stream" );
     try
     {
         xParser->parseStream( aParserInput );
@@ -268,10 +267,7 @@ sal_Int32 ReadThroughComponent(
             return ERRCODE_SFX_WRONGPASSWORD;
 
 #if OSL_DEBUG_LEVEL > 1
-        OStringBuffer aError("SAX parse exception caught while importing:\n");
-        aError.append(OUStringToOString(r.Message,
-            RTL_TEXTENCODING_ASCII_US));
-        OSL_FAIL(aError.getStr());
+        SAL_WARN( "sd.filter", "SAX parse exception caught while importing:" << r.Message);
 #endif
 
         String sErr( OUString::number( r.LineNumber ));
@@ -303,20 +299,14 @@ sal_Int32 ReadThroughComponent(
             return ERRCODE_SFX_WRONGPASSWORD;
 
 #if OSL_DEBUG_LEVEL > 1
-        OStringBuffer aError("SAX exception caught while importing:\n");
-        aError.append(OUStringToOString(r.Message,
-            RTL_TEXTENCODING_ASCII_US));
-        OSL_FAIL(aError.getStr());
+        SAL_WARN( "sd.filter", "SAX exception caught while importing:" << r.Message);
 #endif
         return SD_XML_READERROR;
     }
     catch (const packages::zip::ZipIOException& r)
     {
 #if OSL_DEBUG_LEVEL > 1
-        OStringBuffer aError("Zip exception caught while importing:\n");
-        aError.append(OUStringToOString(r.Message,
-            RTL_TEXTENCODING_ASCII_US));
-        OSL_FAIL(aError.getStr());
+        SAL_WARN( "sd.filter", "Zip exception caught while importing:" << r.Message);
 #else
         (void)r;
 #endif
@@ -325,10 +315,7 @@ sal_Int32 ReadThroughComponent(
     catch (const io::IOException& r)
     {
 #if OSL_DEBUG_LEVEL > 1
-        OStringBuffer aError("IO exception caught while importing:\n");
-        aError.append(OUStringToOString(r.Message,
-            RTL_TEXTENCODING_ASCII_US));
-        OSL_FAIL(aError.getStr());
+        SAL_WARN( "sd.filter", "IO exception caught while importing:" << r.Message);
 #else
         (void)r;
 #endif
@@ -337,10 +324,7 @@ sal_Int32 ReadThroughComponent(
     catch (const uno::Exception& r)
     {
 #if OSL_DEBUG_LEVEL > 1
-        OStringBuffer aError("uno exception caught while importing:\n");
-        aError.append(OUStringToOString(r.Message,
-            RTL_TEXTENCODING_ASCII_US));
-        OSL_FAIL(aError.getStr());
+        SAL_WARN( "sd.filter", "uno exception caught while importing:" << r.Message);
 #else
         (void)r;
 #endif
@@ -450,10 +434,10 @@ sal_Int32 ReadThroughComponent(
 
 sal_Bool SdXMLFilter::Import( ErrCode& nError )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sd", "cl93746", "SdXMLFilter::Import" );
+    SAL_INFO( "sd.filter", "sd cl93746 SdXMLFilter::Import" );
 #ifdef TIMELOG
     OString aFile(OUStringToOString(mrMedium.GetName(), RTL_TEXTENCODING_ASCII_US));
-    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "importing %s", aFile.getStr() );
+    SAL_INFO( "sd.filter", "importing " << aFile.getStr() );
 #endif
 
     sal_uInt32  nRet = 0;
@@ -755,7 +739,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         }
         catch (const Exception&)
         {
-            OSL_FAIL("sd::SdXMLFilter::Import(), exception during clearing of unused named items");
+            SAL_WARN( "sd.filter","sd::SdXMLFilter::Import(), exception during clearing of unused named items");
         }
     }
 
@@ -828,9 +812,9 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
 sal_Bool SdXMLFilter::Export()
 {
 #ifdef TIMELOG
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sd", "cl93746", "SdXMLFilter::Export" );
+    SAL_INFO( "sd.filter", "sd cl93746 SdXMLFilter::Export" );
     OString aFile(OUStringToOString(mrMedium.GetName(), RTL_TEXTENCODING_ASCII_US));
-    RTL_LOGFILE_CONTEXT_TRACE1( aLog, "exporting %s", aFile.getStr() );
+    SAL_INFO( "sd.filter", "exporting " << aFile.getStr() );
 #endif
 
     SvXMLEmbeddedObjectHelper*  pObjectHelper = NULL;
@@ -839,7 +823,7 @@ sal_Bool SdXMLFilter::Export()
 
     if( !mxModel.is() )
     {
-        OSL_FAIL("Got NO Model in XMLExport");
+        SAL_WARN( "sd.filter","Got NO Model in XMLExport");
         return sal_False;
     }
 
@@ -853,7 +837,7 @@ sal_Bool SdXMLFilter::Export()
 
         if( !xServiceInfo.is() || !xServiceInfo->supportsService( "com.sun.star.drawing.GenericDrawingDocument" ) )
         {
-            OSL_FAIL( "Model is no DrawingDocument in XMLExport" );
+            SAL_WARN( "sd.filter", "Model is no DrawingDocument in XMLExport" );
             return sal_False;
         }
 
@@ -997,7 +981,7 @@ sal_Bool SdXMLFilter::Export()
             // doc export
             do
             {
-                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "exporting substream %s", pServices->mpStream );
+                SAL_INFO( "sd.filter", "exporting substream " << pServices->mpStream );
 
                 uno::Reference<io::XOutputStream> xDocOut;
                 if( xStorage.is() )
@@ -1065,10 +1049,7 @@ sal_Bool SdXMLFilter::Export()
     catch (const uno::Exception &e)
     {
 #if OSL_DEBUG_LEVEL > 1
-        OStringBuffer aError("uno Exception caught while exporting:\n");
-        aError.append(OUStringToOString(e.Message,
-            RTL_TEXTENCODING_ASCII_US));
-        OSL_FAIL(aError.getStr());
+        SAL_WARN( "sd.filter", "uno Exception caught while exporting:" << e.Message);
 #else
         (void)e;
 #endif

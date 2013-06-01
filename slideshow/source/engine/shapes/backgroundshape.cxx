@@ -24,7 +24,6 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
-#include <rtl/logfile.hxx>
 
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
@@ -270,8 +269,8 @@ namespace slideshow
 
         bool BackgroundShape::render() const
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::BackgroundShape::render()" );
-            RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::presentation::internal::BackgroundShape: 0x%X", this );
+            SAL_INFO( "slideshow", "::presentation::internal::BackgroundShape::render()" );
+            SAL_INFO( "slideshow", "::presentation::internal::BackgroundShape: 0x" << std::hex << this );
 
             // gcc again...
             const ::basegfx::B2DRectangle& rCurrBounds( BackgroundShape::getBounds() );

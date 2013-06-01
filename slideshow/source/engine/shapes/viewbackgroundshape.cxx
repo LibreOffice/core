@@ -25,7 +25,6 @@
 #include "viewbackgroundshape.hxx"
 #include "tools.hxx"
 
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 
 #include <comphelper/anytostring.hxx>
@@ -57,7 +56,7 @@ namespace slideshow
         bool ViewBackgroundShape::prefetch( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
                                             const GDIMetaFileSharedPtr&         rMtf ) const
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewBackgroundShape::prefetch()" );
+            SAL_INFO( "slideshow", "::presentation::internal::ViewBackgroundShape::prefetch()" );
             ENSURE_OR_RETURN_FALSE( rMtf,
                                "ViewBackgroundShape::prefetch(): no valid metafile!" );
 
@@ -152,7 +151,7 @@ namespace slideshow
 
         bool ViewBackgroundShape::render( const GDIMetaFileSharedPtr& rMtf ) const
         {
-            RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewBackgroundShape::draw()" );
+            SAL_INFO( "slideshow", "::presentation::internal::ViewBackgroundShape::draw()" );
 
             const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas( mpViewLayer->getCanvas() );
 

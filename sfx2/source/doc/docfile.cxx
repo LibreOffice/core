@@ -85,7 +85,6 @@
 
 #include <unotools/streamwrap.hxx>
 
-#include <rtl/logfile.hxx>
 #include <osl/file.hxx>
 
 #include <comphelper/storagehelper.hxx>
@@ -512,7 +511,7 @@ Reference < XContent > SfxMedium::GetContent() const
         }
         else
         {
-            // TODO: OSL_FAIL("SfxMedium::GetContent()\nCreate Content? This code exists as fallback only. Please clarify, why its used.");
+            // TODO: SAL_WARN( "sfx2.doc", "SfxMedium::GetContent()\nCreate Content? This code exists as fallback only. Please clarify, why its used.");
             OUString aURL;
             if ( !pImp->m_aName.isEmpty() )
                 ::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aURL );
@@ -755,7 +754,7 @@ sal_Bool SfxMedium::IsStorage()
         OUString aURL;
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aURL ) )
         {
-            OSL_FAIL("Physical name not convertible!");
+            SAL_WARN( "sfx2.doc", "Physical name not convertible!");
         }
         pImp->bIsStorage = SotStorage::IsStorageFile( aURL ) && !SotStorage::IsOLEStorage( aURL);
         if ( !pImp->bIsStorage )
@@ -866,7 +865,7 @@ void SfxMedium::SetEncryptionDataToStorage_Impl()
             }
             catch( const uno::Exception& )
             {
-                OSL_FAIL( "It must be possible to set a common password for the storage" );
+                SAL_WARN( "sfx2.doc", "It must be possible to set a common password for the storage" );
                 // TODO/LATER: set the error code in case of problem
                 // SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );
             }
@@ -1238,7 +1237,7 @@ bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
     }
     catch( const uno::Exception& )
     {
-        OSL_FAIL( "Locking exception: high probability, that the content has not been created" );
+        SAL_WARN( "sfx2.doc", "Locking exception: high probability, that the content has not been created" );
     }
     return bResult;
 #endif
@@ -1433,7 +1432,7 @@ uno::Reference< embed::XStorage > SfxMedium::GetZipStorageToSign_Impl( sal_Bool 
         }
         catch( const uno::Exception& )
         {
-            OSL_FAIL( "No possibility to get readonly version of storage from medium!\n" );
+            SAL_WARN( "sfx2.doc", "No possibility to get readonly version of storage from medium!" );
         }
 
         if ( GetError() ) // do not remove warnings
@@ -1469,7 +1468,7 @@ void SfxMedium::CloseStorage()
                 xComp->dispose();
             } catch( const uno::Exception& )
             {
-                OSL_FAIL( "Medium's storage is already disposed!\n" );
+                SAL_WARN( "sfx2.doc", "Medium's storage is already disposed!" );
             }
         }
 
@@ -1801,12 +1800,12 @@ void SfxMedium::Transfer_Impl()
     {
         // makes sence only in case logic name is set
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aNameURL ) )
-            OSL_FAIL( "The medium name is not convertible!\n" );
+            SAL_WARN( "sfx2.doc", "The medium name is not convertible!" );
     }
 
     if ( !aNameURL.isEmpty() && ( !pImp->m_eError || (pImp->m_eError & ERRCODE_WARNING_MASK) ) )
     {
-        RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxMedium::Transfer_Impl, copying to target" );
+        SAL_INFO( "sfx2.doc", "sfx2 (mv76033) SfxMedium::Transfer_Impl, copying to target" );
 
         Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
         Reference< XOutputStream > rOutStream;
@@ -1862,7 +1861,7 @@ void SfxMedium::Transfer_Impl()
                }
             else
             {
-                OSL_FAIL( "Illegal Output stream parameter!\n" );
+                SAL_WARN( "sfx2.doc", "Illegal Output stream parameter!" );
                 SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );
             }
 
@@ -1935,8 +1934,7 @@ void SfxMedium::Transfer_Impl()
             if ( aFile.open( osl_File_OpenFlag_Write ) == osl::FileBase::E_None )
             {
                 aFile.sync();
-                OSL_TRACE("fsync'd saved file '%s'\n",
-                          OUStringToOString( aDestURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+                SAL_INFO( "sfx2.doc", "fsync'd saved file '" << aDestURL << "'" );
                 aFile.close();
             }
         }
@@ -2090,7 +2088,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
                                        const String& aExtension,
                                        const String& aDestDir )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxMedium::DoInternalBackup_Impl( with destdir )" );
+    SAL_INFO( "sfx2.doc", "sfx2 (mv76033) SfxMedium::DoInternalBackup_Impl( with destdir )" );
 
     if ( !pImp->m_aBackupURL.isEmpty() )
         return; // the backup was done already
@@ -2162,7 +2160,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
 //------------------------------------------------------------------
 void SfxMedium::DoBackup_Impl()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxMedium::DoBackup_Impl" );
+    SAL_INFO( "sfx2.doc", "sfx2 (mv76033) SfxMedium::DoBackup_Impl" );
 
        // source file name is the logical name of this medium
     INetURLObject aSource( GetURLObject() );
@@ -2237,7 +2235,7 @@ void SfxMedium::ClearBackup_Impl()
             else
             {
 
-                OSL_FAIL("Couldn't remove backup file!");
+                SAL_WARN( "sfx2.doc", "Couldn't remove backup file!");
             }
         }
     }
@@ -2317,7 +2315,7 @@ void SfxMedium::GetMedium_Impl()
             {
                 if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aFileName ) )
                 {
-                    OSL_FAIL("Physical name not convertible!");
+                    SAL_WARN( "sfx2.doc", "Physical name not convertible!");
                 }
             }
             else
@@ -2483,7 +2481,7 @@ void SfxMedium::Init_Impl()
         INetProtocol eProt = aUrl.GetProtocol();
         if ( eProt == INET_PROT_NOT_VALID )
         {
-            OSL_FAIL( "Unknown protocol!" );
+            SAL_WARN( "sfx2.doc", "Unknown protocol!" );
         }
         else
         {
@@ -2519,7 +2517,7 @@ void SfxMedium::Init_Impl()
           || !pImp->m_aLogicName.startsWith("private:stream")) )
     {
         pImp->m_pSet->ClearItem( SID_OUTPUTSTREAM );
-        OSL_FAIL( "Unexpected Output stream parameter!\n" );
+        SAL_WARN( "sfx2.doc", "Unexpected Output stream parameter!\n" );
     }
 
     if (!pImp->m_aLogicName.isEmpty())
@@ -2914,7 +2912,7 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
             }
             else
             {
-                OSL_FAIL( "Can not create a new temporary file for crash recovery!\n" );
+                SAL_WARN( "sfx2.doc", "Can not create a new temporary file for crash recovery!\n" );
             }
         }
     }
@@ -2982,12 +2980,12 @@ SfxMedium::~SfxMedium()
         OUString aTemp;
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->m_aName, aTemp ))
         {
-            OSL_FAIL("Physical name not convertible!");
+            SAL_WARN( "sfx2.doc", "Physical name not convertible!");
         }
 
         if ( !::utl::UCBContentHelper::Kill( aTemp ) )
         {
-            OSL_FAIL("Couldn't remove temporary file!");
+            SAL_WARN( "sfx2.doc", "Couldn't remove temporary file!");
         }
     }
 
@@ -3488,7 +3486,7 @@ sal_Bool SfxMedium::SignContents_Impl( sal_Bool bScriptingContent, const OUStrin
             }
             catch ( const uno::Exception& )
             {
-                OSL_FAIL( "Couldn't use signing functionality!\n" );
+                SAL_WARN( "sfx2.doc", "Couldn't use signing functionality!\n" );
             }
 
             CloseAndRelease();
@@ -3504,7 +3502,7 @@ sal_Bool SfxMedium::SignContents_Impl( sal_Bool bScriptingContent, const OUStrin
             }
             catch( const uno::Exception& )
             {
-                OSL_FAIL( "Couldn't use signing functionality!\n" );
+                SAL_WARN( "sfx2.doc", "Couldn't use signing functionality!\n" );
             }
         }
 
