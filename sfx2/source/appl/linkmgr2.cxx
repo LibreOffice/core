@@ -70,7 +70,7 @@ LinkManager::LinkManager(SfxObjectShell* p)
 
 LinkManager::~LinkManager()
 {
-    for( sal_uInt16 n = 0; n < aLinkTbl.size(); ++n)
+    for( size_t n = 0; n < aLinkTbl.size(); ++n)
     {
         SvBaseLinkRef* pTmp = aLinkTbl[ n ];
         if( pTmp->Is() )
@@ -107,7 +107,7 @@ void LinkManager::Remove( SvBaseLink *pLink )
 {
     // No duplicate links inserted
     int bFound = sal_False;
-    for( sal_uInt16 n = 0; n < aLinkTbl.size(); )
+    for( size_t n = 0; n < aLinkTbl.size(); )
     {
         SvBaseLinkRef* pTmp = aLinkTbl[ n ];
         if( pLink == *pTmp )
@@ -132,14 +132,14 @@ void LinkManager::Remove( SvBaseLink *pLink )
 }
 
 
-void LinkManager::Remove( sal_uInt16 nPos, sal_uInt16 nCnt )
+void LinkManager::Remove( size_t nPos, size_t nCnt )
 {
     if( nCnt && nPos < aLinkTbl.size() )
     {
         if (sal::static_int_cast<size_t>(nPos + nCnt) > aLinkTbl.size())
             nCnt = aLinkTbl.size() - nPos;
 
-        for( sal_uInt16 n = nPos; n < nPos + nCnt; ++n)
+        for( size_t n = nPos; n < nPos + nCnt; ++n)
         {
             SvBaseLinkRef* pTmp = aLinkTbl[ n ];
             if( pTmp->Is() )
@@ -156,7 +156,7 @@ void LinkManager::Remove( sal_uInt16 nPos, sal_uInt16 nCnt )
 
 sal_Bool LinkManager::Insert( SvBaseLink* pLink )
 {
-    for( sal_uInt16 n = 0; n < aLinkTbl.size(); ++n )
+    for( size_t n = 0; n < aLinkTbl.size(); ++n )
     {
         SvBaseLinkRef* pTmp = aLinkTbl[ n ];
         if( !pTmp->Is() )
@@ -308,8 +308,7 @@ void LinkManager::UpdateAllLinks(
     // First make a copy of the array in order to update links
     // links in ... no contact between them!
     std::vector<SvBaseLink*> aTmpArr;
-    sal_uInt16 n;
-    for( n = 0; n < aLinkTbl.size(); ++n )
+    for( size_t n = 0; n < aLinkTbl.size(); ++n )
     {
         SvBaseLink* pLink = *aLinkTbl[ n ];
         if( !pLink )
@@ -320,20 +319,20 @@ void LinkManager::UpdateAllLinks(
         aTmpArr.push_back( pLink );
     }
 
-    for( n = 0; n < aTmpArr.size(); ++n )
+    for( size_t n = 0; n < aTmpArr.size(); ++n )
     {
         SvBaseLink* pLink = aTmpArr[ n ];
 
         // search first in the array after the entry
-        sal_uInt16 nFndPos = USHRT_MAX;
-        for( sal_uInt16 i = 0; i < aLinkTbl.size(); ++i )
+        bool bFound = false;
+        for( size_t i = 0; i < aLinkTbl.size(); ++i )
             if( pLink == *aLinkTbl[ i ] )
             {
-                nFndPos = i;
+                bFound = true;
                 break;
             }
 
-        if( USHRT_MAX == nFndPos )
+        if( !bFound )
             continue;  // was not available!
 
         // Graphic-Links not to update yet
@@ -421,9 +420,9 @@ void LinkManager::ReconnectDdeLink(SfxObjectShell& rServer)
         return;
 
     const ::sfx2::SvBaseLinks& rLinks = GetLinks();
-    sal_uInt16 n = rLinks.size();
+    size_t n = rLinks.size();
 
-    for (sal_uInt16 i = 0; i < n; ++i)
+    for (size_t i = 0; i < n; ++i)
     {
         ::sfx2::SvBaseLink* p = *rLinks[i];
         String aType, aFile, aLink, aFilter;
@@ -515,7 +514,7 @@ void LinkManager::CancelTransfers()
     sfx2::SvBaseLink* pLnk;
 
     const sfx2::SvBaseLinks& rLnks = GetLinks();
-    for( sal_uInt16 n = rLnks.size(); n; )
+    for( size_t n = rLnks.size(); n; )
         if( 0 != ( pLnk = &(*rLnks[ --n ])) &&
             OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & pLnk->GetObjType()) &&
             0 != ( pFileObj = (SvFileObject*)pLnk->GetObj() ) )

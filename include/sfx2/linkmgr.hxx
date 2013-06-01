@@ -90,7 +90,7 @@ public:
     void        SetPersist( SfxObjectShell * p )   { pPersist = p; }
 
     void        Remove( SvBaseLink *pLink );
-    void        Remove( sal_uInt16 nPos, sal_uInt16 nCnt = 1 );
+    void        Remove( size_t nPos, size_t nCnt = 1 );
     sal_Bool        Insert( SvBaseLink* pLink );
 
     // the links connect to a SvLinkSource and adds to the list
