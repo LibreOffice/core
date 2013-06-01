@@ -48,8 +48,8 @@ gb_COMPILERDEFS += -DBOOST_MEM_FN_ENABLE_CDECL
 endif
 
 gb_RCDEFS := \
-	 -DWINVER=0x0400 \
-	 -DWIN32 \
+	-DWINVER=0x0400 \
+	-DWIN32 \
 
 gb_RCFLAGS := \
 	 -V

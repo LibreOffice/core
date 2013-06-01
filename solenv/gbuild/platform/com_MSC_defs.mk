@@ -56,8 +56,8 @@ gb_COMPILERDEFS += \
 endif
 
 gb_RCDEFS := \
-	 -DWINVER=0x0400 \
-	 -DWIN32 \
+	-DWINVER=0x0400 \
+	-DWIN32 \
 
 gb_RCFLAGS := \
 	 -V
