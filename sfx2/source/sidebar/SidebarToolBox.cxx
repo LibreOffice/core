@@ -87,14 +87,17 @@ SidebarToolBox::SidebarToolBox (Window* pParentWindow)
 {
     SetBackground(Wallpaper());
     SetPaintTransparent(true);
+    SetToolboxButtonSize( TOOLBOX_BUTTONSIZE_SMALL );
 
 #ifdef DEBUG
     SetText(A2S("SidebarToolBox"));
 #endif
 }
 
-
-
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSidebarToolBox(Window *pParent)
+{
+    return new SidebarToolBox(pParent);
+}
 
 SidebarToolBox::~SidebarToolBox (void)
 {
@@ -120,8 +123,15 @@ SidebarToolBox::~SidebarToolBox (void)
     }
 }
 
+void SidebarToolBox::InsertItem(const OUString& rCommand,
+        const com::sun::star::uno::Reference<com::sun::star::frame::XFrame>& rFrame,
+        ToolBoxItemBits nBits, sal_uInt16 nPos)
+{
+    ToolBox::InsertItem(rCommand, rFrame, nBits, nPos);
 
-
+    CreateController(GetItemId(rCommand), rFrame, 0);
+    RegisterHandlers();
+}
 
 void SidebarToolBox::SetBorderWindow (const Window* pBorderWindow)
 {
