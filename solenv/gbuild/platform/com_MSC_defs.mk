@@ -59,8 +59,7 @@ gb_RCDEFS := \
 	-DWINVER=0x0400 \
 	-DWIN32 \
 
-gb_RCFLAGS := \
-	 -V
+gb_RCFLAGS :=
 
 gb_AFLAGS := $(AFLAGS)
 

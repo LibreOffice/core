@@ -33,6 +33,7 @@ endef
 
 define gb_WinResTarget_WinResTarget_init
 $(call gb_WinResTarget_get_target,$(1)) : DEFS := $(gb_WinResTarget_DEFAULTDEFS)
+$(call gb_WinResTarget_get_target,$(1)) : FLAGS := $(gb_RCFLAGS)
 $(call gb_WinResTarget_get_target,$(1)) : INCLUDE := $(subst -isystem,-I,$(SOLARINC)) -I$(BUILDDIR)/config_$(gb_Side)
 $(call gb_WinResTarget_get_clean_target,$(1)) : RCFILE :=
 $(call gb_WinResTarget_get_target,$(1)) : RCFILE :=
@@ -41,6 +42,7 @@ $(call gb_WinResTarget_WinResTarget_platform,$(1))
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_WinResTarget_get_dep_target,$(1)) : DEFS := $$(gb_WinResTarget_DEFAULTDEFS)
+$(call gb_WinResTarget_get_dep_target,$(1)) : FLAGS := $$(gb_RCFLAGS)
 $(call gb_WinResTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_WinResTarget_INCLUDE) -I$(BUILDDIR)/config_$(gb_Side)
 $(call gb_WinResTarget_get_dep_target,$(1)) : RCFILE :=
 
