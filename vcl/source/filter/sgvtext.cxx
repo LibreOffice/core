@@ -183,8 +183,6 @@ extern SgfFontLst* pSgfFonts;
 /////////////////////////////////////////////////////////////////////////////////
 
 
-sal_Bool CheckTextOutl(ObjAreaType& F, ObjLineType& L);
-
 sal_Bool CheckTextOutl(ObjAreaType& F, ObjLineType& L)
 {
     return (F.FIntens!=L.LIntens) ||
