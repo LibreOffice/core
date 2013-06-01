@@ -1521,7 +1521,6 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                         case chart::TYPEID_SCATTER:
                         {
                             exportMarker( );
-                            exportTrendlines( aSeriesSeq[nSeriesIdx] );
                             exportSmooth( );
                             break;
                         }
@@ -1540,6 +1539,9 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                     // for scatter charts
                     if( eChartType != chart::TYPEID_SCATTER && eChartType != chart::TYPEID_BAR )
                         exportDataLabels( uno::Reference< beans::XPropertySet >( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY ), nSeriesLength );
+
+                    if( eChartType == chart::TYPEID_SCATTER )
+                        exportTrendlines( aSeriesSeq[nSeriesIdx] );
 
                     //export error bars here
                     Reference< XPropertySet > xSeriesPropSet( xSource, uno::UNO_QUERY );
@@ -2491,6 +2493,8 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
 
             Reference< XPropertySet > xProperties( xRegCurve , uno::UNO_QUERY );
 
+            exportShapeProps( xProperties );
+
             OUString aService;
 
             Reference< lang::XServiceName > xServiceName( xProperties, UNO_QUERY );
@@ -2566,8 +2570,6 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
                     XML_val, OString::number(aExtrapolateBackward).getStr(),
                     FSEND );
 
-            exportShapeProps( xProperties );
-
             // Equation properties
             Reference< XPropertySet > xEquationProperties( xRegCurve->getEquationProperties() );
 
@@ -2575,16 +2577,16 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
             sal_Bool aShowEquation = false;
             xEquationProperties->getPropertyValue( "ShowEquation" ) >>= aShowEquation;
 
-            pFS->singleElement( FSNS( XML_c, XML_dispEq ),
-                    XML_val, aShowEquation ? "1" : "0",
-                    FSEND );
-
             // Show R^2
             sal_Bool aShowCorrelationCoefficient = false;
             xEquationProperties->getPropertyValue( "ShowCorrelationCoefficient" ) >>= aShowCorrelationCoefficient;
 
             pFS->singleElement( FSNS( XML_c, XML_dispRSqr ),
                     XML_val, aShowCorrelationCoefficient ? "1" : "0",
+                    FSEND );
+
+            pFS->singleElement( FSNS( XML_c, XML_dispEq ),
+                    XML_val, aShowEquation ? "1" : "0",
                     FSEND );
 
             pFS->endElement( FSNS( XML_c, XML_trendline ) );
