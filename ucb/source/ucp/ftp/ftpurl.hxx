@@ -34,9 +34,9 @@
 #include <curl/easy.h>
 #include <com/sun/star/io/XOutputStream.hpp>
 
-#include <stdio.h>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
+#include <osl/file.h>
 #include <vector>
 
 #include "ftpdirp.hxx"
@@ -127,7 +127,7 @@ namespace ftp {
 
         // returns a pointer to an open tempfile,
         // seeked to the beginning of.
-        FILE* open() throw(curl_exception);
+        oslFileHandle open() throw(curl_exception);
 
         FTPDirentry direntry() const throw(curl_exception);
 

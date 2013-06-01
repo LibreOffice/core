@@ -48,7 +48,7 @@ extern "C" {
 
     /** callback for curl_easy_perform(),
      *  forwarding the written content to the stream.
-     *  stream has to be of type 'FTPStreamContainer'.
+     *  stream has to be of type oslFileHandle.
      */
 
 

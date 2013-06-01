@@ -412,7 +412,7 @@ namespace ftp {
 
 
 
-FILE* FTPURL::open()
+oslFileHandle FTPURL::open()
     throw(curl_exception)
 {
     if(!m_aPathSegmentVec.size())
@@ -423,18 +423,22 @@ FILE* FTPURL::open()
     SET_CONTROL_CONTAINER;
     rtl::OUString url(ident(false,true));
     SET_URL(url);
-    FILE *res = tmpfile();
-    curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,file_write);
-    curl_easy_setopt(curl,CURLOPT_WRITEDATA,res);
 
-    curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);
-    CURLcode err = curl_easy_perform(curl);
+    oslFileHandle res( NULL );
+    if ( osl_createTempFile( NULL, &res, NULL ) == osl_File_E_None )
+    {
+        curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,file_write);
+        curl_easy_setopt(curl,CURLOPT_WRITEDATA,res);
 
-    if(err == CURLE_OK)
-        rewind(res);
-    else {
-        fclose(res),res = 0;
-        throw curl_exception(err);
+        curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);
+        CURLcode err = curl_easy_perform(curl);
+
+        if(err == CURLE_OK)
+            osl_setFilePos( res, osl_Pos_Absolut, 0 );
+        else {
+            osl_closeFile(res),res = 0;
+            throw curl_exception(err);
+        }
     }
 
     return res;
