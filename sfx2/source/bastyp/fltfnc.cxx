@@ -76,7 +76,6 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <tools/urlobj.hxx>
 
-#include <rtl/logfile.hxx>
 #include <rtl/instance.hxx>
 
 #include <svl/ctypeitm.hxx>
@@ -792,7 +791,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, Sf
     sal_uInt16 nIndex = aName.SearchAscii(": ");
     if (  nIndex != STRING_NOTFOUND )
     {
-        OSL_FAIL("Old filter name used!");
+        SAL_WARN( "sfx2.bastyp", "Old filter name used!");
         aName = rName.Copy( nIndex + 2 );
     }
 
@@ -1074,7 +1073,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         sal_Int32 nStartRealName = sFilterName.indexOf( ": ", 0 );
         if( nStartRealName != -1 )
         {
-            OSL_FAIL("Old format, not supported!");
+            SAL_WARN( "sfx2.bastyp", "Old format, not supported!");
             sFilterName = sFilterName.copy( nStartRealName+2 );
         }
 
@@ -1123,7 +1122,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
 
 void SfxFilterContainer::ReadFilters_Impl( sal_Bool bUpdate )
 {
-    RTL_LOGFILE_CONTEXT( aMeasure, "sfx2 (as96863) ::SfxFilterContainer::ReadFilters" );
+    SAL_INFO( "sfx2.bastyp", "sfx2 (as96863) ::SfxFilterContainer::ReadFilters" );
     if ( !pFilterArr )
         CreateFilterArr();
 
@@ -1181,7 +1180,7 @@ void SfxFilterContainer::ReadFilters_Impl( sal_Bool bUpdate )
     }
     catch(const uno::Exception&)
     {
-        DBG_ASSERT( sal_False, "SfxFilterContainer::ReadFilter()\nException detected. Possible not all filters could be cached.\n" );
+        SAL_WARN( "sfx2.bastyp", "SfxFilterContainer::ReadFilter()\nException detected. Possible not all filters could be cached.\n" );
     }
 
     if ( bUpdate )

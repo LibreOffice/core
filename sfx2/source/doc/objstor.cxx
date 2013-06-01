@@ -98,7 +98,6 @@
 #include <comphelper/string.hxx>
 #include <vcl/bitmapex.hxx>
 #include <svtools/embedhlp.hxx>
-#include <rtl/logfile.hxx>
 #include <basic/modsizeexceeded.hxx>
 #include <osl/file.hxx>
 
@@ -158,7 +157,7 @@ void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& 
     }
     catch ( uno::Exception& )
     {
-        OSL_FAIL( "The document seems to be in the collection already!\n" );
+        SAL_WARN( "sfx2.doc", "The document seems to be in the collection already!\n" );
     }
 }
 
@@ -288,7 +287,7 @@ OUString SfxObjectShell::CreateTempCopyOfStorage_Impl( const uno::Reference< emb
         }
         catch ( uno::Exception& )
         {
-            OSL_FAIL( "Creation of a storage copy is failed!" );
+            SAL_WARN( "sfx2.doc", "Creation of a storage copy is failed!" );
             ::utl::UCBContentHelper::Kill( aTempURL );
 
             aTempURL = OUString();
@@ -460,7 +459,7 @@ sal_Bool SfxObjectShell::GeneralInit_Impl( const uno::Reference< embed::XStorage
         }
         catch ( uno::Exception& )
         {
-            OSL_FAIL( "Can't check storage's mediatype!\n" );
+            SAL_WARN( "sfx2.doc", "Can't check storage's mediatype!" );
         }
     }
     else
@@ -1103,13 +1102,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 */
 
 {
-    RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE SfxObjectShell::SaveTo_Impl" );
-    if( RTL_LOGFILE_HASLOGFILE() )
-    {
-        OString aString(
-            OUStringToOString(rMedium.GetName(), RTL_TEXTENCODING_ASCII_US));
-        RTL_LOGFILE_PRODUCT_CONTEXT_TRACE1(aLog, "saving \"%s\"", aString.getStr());
-    }
+    SAL_INFO( "sfx2.doc", "PERFORMANCE SfxObjectShell::SaveTo_Impl" );
+    SAL_INFO( "sfx2.doc", "saving \"" << rMedium.GetName() << "\"" );
 
     AddLog( OUString( OSL_LOG_PREFIX "Begin"  ) );
 
@@ -1120,7 +1114,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     {
         // if no filter was set, use the default filter
         // this should be changed in the feature, it should be an error!
-        OSL_FAIL("No filter set!");
+        SAL_WARN( "sfx2.doc","No filter set!");
         pFilter = GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT );
         rMedium.SetFilter(pFilter);
     }
@@ -1403,7 +1397,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             }
             catch( uno::Exception& )
             {
-                OSL_FAIL( "Setting of common encryption key failed!" );
+                SAL_WARN( "sfx2.doc", "Setting of common encryption key failed!" );
                 SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );
             }
         }
@@ -1453,7 +1447,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                                             xMedStorage ) )
             {
                 // TODO: error handling
-                OSL_FAIL( "Couldn't store thumbnail representation!" );
+                SAL_WARN( "sfx2.doc", "Couldn't store thumbnail representation!" );
             }
         }
 
@@ -1492,7 +1486,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 catch( uno::Exception& )
                 {
                     AddLog( OUString( OSL_LOG_PREFIX "Preserve versions has failed."  ) );
-                    OSL_FAIL( "Couldn't copy versions!\n" );
+                    SAL_WARN( "sfx2.doc", "Couldn't copy versions!" );
                     bOk = sal_False;
                     // TODO/LATER: a specific error could be set
                 }
@@ -1646,7 +1640,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                         {
                             // it should not happen, the copies signature is invalid!
                             // throw the changes away
-                            OSL_FAIL( "An invalid signature was copied!" );
+                            SAL_WARN( "sfx2.doc", "An invalid signature was copied!" );
                         }
                     }
                 }
@@ -1758,7 +1752,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 //------------------------------------------------------------------------
 sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& rTargetMedium )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::DisconnectStorage_Impl" );
+    SAL_INFO( "sfx2.doc", "sfx2 (mv76033) SfxObjectShell::DisconnectStorage_Impl" );
 
     // this method disconnects the storage from source medium, and attaches it to the backup created by the target medium
 
@@ -1816,7 +1810,7 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
 */
 
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::ConnectTmpStorage_Impl" );
+    SAL_INFO( "sfx2.doc", "sfx2 (mv76033) SfxObjectShell::ConnectTmpStorage_Impl" );
 
     sal_Bool bResult = sal_False;
 
@@ -1905,7 +1899,7 @@ sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, sal_Bool bCommit )
             OUString aMediaType;
             if ( !(a>>=aMediaType) || aMediaType.isEmpty() )
             {
-                OSL_FAIL( "The mediatype must be set already!\n" );
+                SAL_WARN( "sfx2.doc", "The mediatype must be set already!" );
                 SetupStorage( xNewStor, SOFFICE_FILEFORMAT_CURRENT, sal_False, false );
             }
 
@@ -1920,7 +1914,7 @@ sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, sal_Bool bCommit )
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_FAIL( "The strotage was not commited on DoSaveAs!\n" );
+                    SAL_WARN( "sfx2.doc", "The strotage was not commited on DoSaveAs!" );
                 }
             }
         }
@@ -1953,7 +1947,7 @@ sal_Bool SfxObjectShell::DoSaveAs( SfxMedium& rMedium )
 
 sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::DoSaveCompleted" );
+    SAL_INFO( "sfx2.doc", "sfx2 (mv76033) SfxObjectShell::DoSaveCompleted" );
 
     sal_Bool bOk = sal_True;
     sal_Bool bMedChanged = pNewMed && pNewMed!=pMedium;
@@ -2772,7 +2766,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
 #ifdef DBG_UTIL
     if ( pMergedParams->GetItemState( SID_DOC_SALVAGE) >= SFX_ITEM_SET )
-        OSL_FAIL("Salvage item present in Itemset, check the parameters!");
+        SAL_WARN( "sfx2.doc","Salvage item present in Itemset, check the parameters!");
 #endif
 
     // should be unneccessary - too hot to handle!
@@ -2876,7 +2870,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
 sal_Bool SfxObjectShell::LoadFrom( SfxMedium& /*rMedium*/ )
 {
-    OSL_FAIL( "Base implementation, must not be called in general!" );
+    SAL_WARN( "sfx2.doc", "Base implementation, must not be called in general!" );
     return sal_True;
 }
 
@@ -3026,13 +3020,8 @@ void SfxObjectShell::SetSecurityOptOpenReadOnly( sal_Bool _b )
 
 sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE SfxObjectShell::LoadOwnFormat" );
-    if( RTL_LOGFILE_HASLOGFILE() )
-    {
-        OString aString(
-            OUStringToOString(rMedium.GetName(), RTL_TEXTENCODING_ASCII_US));
-        RTL_LOGFILE_PRODUCT_CONTEXT_TRACE1(aLog, "loading \"%s\"", aString.getStr());
-    }
+    SAL_INFO( "sfx2.doc", "PERFORMANCE SfxObjectShell::LoadOwnFormat" );
+    SAL_INFO( "sfx2.doc", "loading \" " << rMedium.GetName() << "\"" );
 
     uno::Reference< embed::XStorage > xStorage = rMedium.GetStorage();
     if ( xStorage.is() )
@@ -3123,7 +3112,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
 
 sal_Bool SfxObjectShell::SaveChildren( sal_Bool bObjectsOnly )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::SaveChildren" );
+    SAL_INFO( "sfx2.doc", "sfx2 (mv76033) SfxObjectShell::SaveChildren" );
 
     sal_Bool bResult = sal_True;
     if ( pImp->mpObjectContainer )
@@ -3137,7 +3126,7 @@ sal_Bool SfxObjectShell::SaveChildren( sal_Bool bObjectsOnly )
 
 sal_Bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::SaveAsChildren" );
+    SAL_INFO( "sfx2.doc", "sfx2 (mv76033) SfxObjectShell::SaveAsChildren" );
 
     sal_Bool bResult = sal_True;
 
@@ -3163,7 +3152,7 @@ sal_Bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
 
 sal_Bool SfxObjectShell::SaveCompletedChildren( sal_Bool bSuccess )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::SaveCompletedChildren" );
+    SAL_INFO( "sfx2.doc", "sfx2 (mv76033) SfxObjectShell::SaveCompletedChildren" );
 
     sal_Bool bResult = sal_True;
 
@@ -3200,7 +3189,7 @@ sal_Bool SfxObjectShell::SaveCompletedChildren( sal_Bool bSuccess )
 sal_Bool SfxObjectShell::SwitchChildrenPersistance( const uno::Reference< embed::XStorage >& xStorage,
                                                     sal_Bool bForceNonModified )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::SwitchChildrenPersistence" );
+    SAL_INFO( "sfx2.doc", "sfx2 (mv76033) SfxObjectShell::SwitchChildrenPersistence" );
 
     if ( !xStorage.is() )
     {
@@ -3219,7 +3208,7 @@ sal_Bool SfxObjectShell::SwitchChildrenPersistance( const uno::Reference< embed:
 // Never call this method directly, always use the DoSaveCompleted call
 sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xStorage )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::SaveCompleted" );
+    SAL_INFO( "sfx2.doc", "sfx2 (mv76033) SfxObjectShell::SaveCompleted" );
 
     sal_Bool bResult = sal_False;
     sal_Bool bSendNotification = sal_False;
@@ -3362,7 +3351,7 @@ sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( "Cant check storage consistency!\n" );
+        SAL_WARN( "sfx2.doc", "Cant check storage consistency!" );
     }
 
     return sal_True;
@@ -3371,7 +3360,7 @@ sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::
 
 sal_Bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorage >& xStorage )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::SwitchPersistance" );
+    SAL_INFO( "sfx2.doc", "sfx2 (mv76033) SfxObjectShell::SwitchPersistance" );
 
     sal_Bool bResult = sal_False;
 #ifdef DBG_UTIL
@@ -3406,7 +3395,7 @@ sal_Bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorag
 sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed::XStorage >& xSource,
                                                          const uno::Reference< embed::XStorage >& xTarget )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::CopyStoragesOfUnknownMediaType" );
+    SAL_INFO( "sfx2.doc", "sfx2 (mv76033) SfxObjectShell::CopyStoragesOfUnknownMediaType" );
 
     // This method does not commit the target storage and should not do it
     sal_Bool bResult = sal_True;
@@ -3521,7 +3510,7 @@ sal_Bool SfxObjectShell::GenerateAndStoreThumbnail( sal_Bool bEncrypted,
                                                     sal_Bool bIsTemplate,
                                                     const uno::Reference< embed::XStorage >& xStor )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::GenerateAndStoreThumbnail" );
+    SAL_INFO( "sfx2.doc", "sfx2 (mv76033) SfxObjectShell::GenerateAndStoreThumbnail" );
 
     bIsInGenerateThumbnail = sal_True;//optimize thumbnail generate and store procedure to improve odt saving performance, i120030
 
