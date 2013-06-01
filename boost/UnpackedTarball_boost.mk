@@ -26,8 +26,6 @@ boost_patches += boost.4510.warnings.patch
 boost_patches += boost.6142.warnings.patch.1
 boost_patches += boost.libcdr.warnings.patch.1
 
-boost_patches += boost.wunused-local-typedef.patch.1
-
 # Help static analysis tools (see SAL_UNUSED_PARAMETER in sal/types.h):
 ifeq (GCC,$(COM))
 boost_patches += boost_1_44_0-unused-parameters.patch
