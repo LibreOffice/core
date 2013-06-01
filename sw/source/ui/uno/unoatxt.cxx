@@ -112,7 +112,7 @@ uno::Type SwXAutoTextContainer::getElementType(void) throw( uno::RuntimeExceptio
 
 sal_Bool SwXAutoTextContainer::hasElements(void) throw( uno::RuntimeException )
 {
-    //zumindest Standard sollte es immer geben!
+    // At least standard should always exists!
     return sal_True;
 }
 
@@ -142,15 +142,13 @@ uno::Sequence< OUString > SwXAutoTextContainer::getElementNames(void) throw( uno
 
     for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        // Die Namen werden ohne Pfad-Extension weitergegeben
+        // The names will be passed without a path extension.
         String sGroupName(pGlossaries->GetGroupName(i));
         pArr[i] = sGroupName.GetToken(0, GLOS_DELIM);
     }
     return aGroupNames;
 }
-/*-----------------------------------------------------------------------
-    findet Gruppennamen mit und ohne Pfadindex
-  -----------------------------------------------------------------------*/
+// Finds group names with or without path index.
 sal_Bool SwXAutoTextContainer::hasByName(const OUString& Name)
     throw( uno::RuntimeException )
 {
@@ -199,7 +197,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
 
     uno::Reference< text::XAutoTextGroup > xGroup = pGlossaries->GetAutoTextGroup( sGroup, true );
     OSL_ENSURE( xGroup.is(), "SwXAutoTextContainer::insertNewByName: no UNO object created? How this?" );
-        // we just inserted the group into the glossaries, so why doesn't it exist?
+        // We just inserted the group into the glossaries, so why doesn't it exist?
 
     return xGroup;
 }
@@ -208,7 +206,7 @@ void SwXAutoTextContainer::removeByName(const OUString& aGroupName)
     throw( container::NoSuchElementException, uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    //zunaechst den Namen mit Pfad-Extension finden
+    // At first find the name with path extension
     String sGroupName = pGlossaries->GetCompleteGroupName( aGroupName );
     if(!sGroupName.Len())
         throw container::NoSuchElementException();
@@ -403,7 +401,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
 
         SwDoc* pGDoc = pGlosGroup->GetDoc();
 
-        // Bis es eine Option dafuer gibt, base util::URL loeschen
+        // Until there is an option for that, delete base util::URL
         if(rCfg.IsSaveRelFile())
         {
             INetURLObject aTemp(pGlosGroup->GetFileName());
@@ -1126,8 +1124,5 @@ void SwAutoTextEventDescriptor::getByName(
         delete pBlocks;
     }
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

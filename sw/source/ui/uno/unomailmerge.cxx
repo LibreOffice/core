@@ -70,7 +70,6 @@
 
 #include <unomid.h>
 
-
 #define SN_MAIL_MERGE               "com.sun.star.text.MailMerge"
 #define SN_DATA_ACCESS_DESCRIPTOR   "com.sun.star.sdb.DataAccessDescriptor"
 
@@ -82,19 +81,13 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace SWUnoHelper;
 
-////////////////////////////////////////////////////////////
-
 typedef ::utl::SharedUNOComponent< XInterface > SharedComponent;
-
-////////////////////////////////////////////////////////////
 
 osl::Mutex &    GetMailMergeMutex()
 {
     static osl::Mutex   aMutex;
     return aMutex;
 }
-
-////////////////////////////////////////////////////////////
 
 enum CloseResult
 {
@@ -135,8 +128,6 @@ static CloseResult CloseModelAndDocSh(
     }
     return eResult;
 }
-
-////////////////////////////////////////////////////////////
 
 static bool LoadFromURL_impl(
         Reference< frame::XModel > &rxModel,
@@ -192,7 +183,6 @@ static bool LoadFromURL_impl(
     return bRes;
 }
 
-//==========================================================
 namespace
 {
     class DelayedFileDeletion : public ::cppu::WeakImplHelper1< util::XCloseListener >
@@ -227,7 +217,6 @@ namespace
         DelayedFileDeletion& operator=( const DelayedFileDeletion& );       // never implemented
     };
 
-    //------------------------------------------------------
     DelayedFileDeletion::DelayedFileDeletion( const Reference< XModel >& _rxModel, const String& _rTemporaryFile )
         :
         m_xDocument( _rxModel, UNO_QUERY )
@@ -254,7 +243,6 @@ namespace
         osl_atomic_decrement( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
     IMPL_LINK_NOARG(DelayedFileDeletion, OnTryDeleteFile)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
@@ -296,7 +284,6 @@ namespace
         return 0L;
     }
 
-    //--------------------------------------------------------------------
     void DelayedFileDeletion::implTakeOwnership( )
     {
         // revoke ourself as listener
@@ -315,7 +302,6 @@ namespace
         m_aDeleteTimer.Start( );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL DelayedFileDeletion::queryClosing( const EventObject& , sal_Bool _bGetsOwnership ) throw (util::CloseVetoException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -327,7 +313,6 @@ namespace
         throw util::CloseVetoException( );
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL DelayedFileDeletion::notifyClosing( const EventObject&  ) throw (RuntimeException)
     {
         OSL_FAIL("DelayedFileDeletion::notifyClosing: how this?" );
@@ -336,7 +321,6 @@ namespace
         // Or, we ourself close the document, then we should not be a listener anymore
     }
 
-    //------------------------------------------------------
     void SAL_CALL DelayedFileDeletion::disposing( const EventObject&  ) throw (RuntimeException)
     {
         OSL_FAIL("DelayedFileDeletion::disposing: how this?" );
@@ -345,13 +329,10 @@ namespace
         // Or, we ourself close the document, then we should not be a listener anymore
     }
 
-    //------------------------------------------------------
     DelayedFileDeletion::~DelayedFileDeletion( )
     {
     }
 }
-
-////////////////////////////////////////////////////////////
 
 static bool DeleteTmpFile_Impl(
         Reference< frame::XModel > &rxModel,
@@ -389,8 +370,6 @@ static bool DeleteTmpFile_Impl(
     return bRes;
 }
 
-////////////////////////////////////////////////////////////
-
 SwXMailMerge::SwXMailMerge() :
     aEvtListeners   ( GetMailMergeMutex() ),
     aMergeListeners ( GetMailMergeMutex() ),
@@ -408,7 +387,7 @@ SwXMailMerge::SwXMailMerge() :
     xDocSh->DoInitNew( 0 );
     SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     SwView *pView = (SwView*) pFrame->GetViewShell();
-    pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
+    pView->AttrChangedNotify( &pView->GetWrtShell() );//So that SelectShell is called.
 
     xModel = pDocShell->GetModel();
 
@@ -444,11 +423,10 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 {
     SolarMutexGuard aGuard;
 
-    //
     // get property values to be used
     // (use values from the service as default and override them with
     // the values that are provided as arguments)
-    //
+
     uno::Sequence< uno::Any >           aCurSelection   = aSelection;
     uno::Reference< sdbc::XResultSet >  xCurResultSet   = xResultSet;
     uno::Reference< sdbc::XConnection > xCurConnection  = xConnection;
@@ -464,9 +442,9 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     sal_Bool   bCurEscapeProcessing     = bEscapeProcessing;
     sal_Bool   bCurSinglePrintJobs      = bSinglePrintJobs;
     sal_Bool   bCurFileNameFromColumn   = bFileNameFromColumn;
-    //
+
     SfxObjectShellRef xCurDocSh = xDocSh;   // the document
-    //
+
     const beans::NamedValue *pArguments = rArguments.getConstArray();
     sal_Int32 nArgs = rArguments.getLength();
     for (sal_Int32 i = 0;  i < nArgs;  ++i)
@@ -615,7 +593,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     // while still in Update of Sfx.
     // (GetSelection in Update is not allowed)
     if (!aCurDocumentURL.isEmpty())
-        pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
+        pView->AttrChangedNotify( &pView->GetWrtShell() );//So that SelectShell is called.
 
     SharedComponent aRowSetDisposeHelper;
     if (!xCurResultSet.is())
@@ -771,7 +749,6 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                 throw RuntimeException( OUString( "Failed to connect to mail server." ), static_cast < cppu::OWeakObject * > ( this ) );
         }
     }
-
 
     // save document with temporary filename
     const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
@@ -1195,8 +1172,6 @@ uno::Sequence< OUString > SAL_CALL SwXMailMerge::getSupportedServiceNames()
     SolarMutexGuard aGuard;
     return SwXMailMerge_getSupportedServiceNames();
 }
-
-////////////////////////////////////////////////////////////
 
 uno::Sequence< OUString > SAL_CALL SwXMailMerge_getSupportedServiceNames()
     throw()

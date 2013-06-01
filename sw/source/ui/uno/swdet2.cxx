@@ -43,8 +43,6 @@ bool IsDocShellRegistered()
     return SvtModuleOptions().IsWriter();
 }
 
-//-------------------------------------------------------------------------
-
 sal_uLong SwFilterDetect::DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter )
 {
     sal_uLong nRet = ERRCODE_NONE;
