@@ -8,7 +8,7 @@
  */
 
 #ifdef ENABLE_CORETEXT
-#  include "coretext/salgdi.h"
+#  include "coretext/salgdi2.h"
 #else
 #  include "aqua/atsui/salgdi.h"
 #endif
