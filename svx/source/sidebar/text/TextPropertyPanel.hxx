@@ -36,6 +36,7 @@
 #include "TextCharacterSpacingPopup.hxx"
 #include "TextUnderlinePopup.hxx"
 #include <svx/sidebar/ColorPopup.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/vclenum.hxx>
 
 class FloatingWindow;
@@ -48,7 +49,7 @@ class PopupControl;
 class PopupContainer;
 
 class TextPropertyPanel
-    : public Control,
+    : public PanelLayout,
       public ::sfx2::sidebar::IContextChangeReceiver,
       public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
@@ -83,26 +84,13 @@ public:
 
 private:
     //ui controls
-    ::boost::scoped_ptr<SvxSBFontNameBox> mpFontNameBox;
-    FontSizeBox maFontSizeBox;
-    ::boost::scoped_ptr<Window> mpToolBoxFontBackground;
-    ::boost::scoped_ptr<ToolBox> mpToolBoxFont;
-    ::boost::scoped_ptr<Window> mpToolBoxIncDecBackground;
-    ::boost::scoped_ptr<ToolBox> mpToolBoxIncDec;
-    ::boost::scoped_ptr<Window> mpToolBoxScriptBackground;
-    ::boost::scoped_ptr<ToolBox> mpToolBoxScript;
-    ::boost::scoped_ptr<Window> mpToolBoxScriptSwBackground;
-    ::boost::scoped_ptr<ToolBox> mpToolBoxScriptSw;
-    ::boost::scoped_ptr<Window> mpToolBoxSpacingBackground;
-    ::boost::scoped_ptr<ToolBox> mpToolBoxSpacing;
-    ::boost::scoped_ptr<Window> mpToolBoxFontColorBackground;
-    ::boost::scoped_ptr<ToolBox> mpToolBoxFontColor;
-    ::boost::scoped_ptr<Window> mpToolBoxFontColorBackgroundSW;
-    ::boost::scoped_ptr<ToolBox> mpToolBoxFontColorSW;
-    ::boost::scoped_ptr<Window> mpToolBoxHighlightBackground;
-    ::boost::scoped_ptr<ToolBox> mpToolBoxHighlight;
-    ::boost::scoped_ptr<ToolboxButtonColorUpdater> mpFontColorUpdater;
-    ::boost::scoped_ptr<ToolboxButtonColorUpdater> mpHighlightUpdater;
+    SvxSBFontNameBox* mpFontNameBox;
+    FontSizeBox* mpFontSizeBox;
+    ToolBox* mpToolBoxFont;
+    ToolBox* mpToolBoxIncDec;
+    ToolBox* mpToolBoxScript;
+    ToolBox* mpToolBoxSpacing;
+    ToolBox* mpToolBoxFontColor;
 
     //control items
     ::sfx2::sidebar::ControllerItem maFontNameControl;
@@ -141,7 +129,6 @@ private:
     TextCharacterSpacingPopup maCharSpacePopup;
     TextUnderlinePopup maUnderlinePopup;
 
-    cssu::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext maContext;
     SfxBindings* mpBindings;
 
@@ -171,7 +158,6 @@ private:
     DECL_LINK(FontSizeLoseFocus, FontSizeBox *);
     DECL_LINK(ToolboxFontSelectHandler, ToolBox *);
     DECL_LINK(ToolboxIncDecSelectHdl, ToolBox *);
-    DECL_LINK(ToolBoxSwScriptSelectHdl, ToolBox *);
     DECL_LINK(ToolBoxScriptSelectHdl, ToolBox *);
 
     void UpdateItem (const sal_uInt16 nSlotId);
@@ -182,6 +168,8 @@ private:
     */
     void UpdateFontColorToolbox (
         const ::sfx2::sidebar::EnumContext aContext);
+
+    bool isWriter();
 };
 
 } } // end of namespace ::svx::sidebar

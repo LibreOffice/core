@@ -24,32 +24,6 @@
 #define CUSTOM_Y                OFFSET_Y + POPUPPANEL_MARGIN_SMALL * 3 + 15 * 6 + TEXT_HEIGHT
 #define VS_UNDERLINE_WIDTH  57
 #define VS_UNDERLINE_HEIGHT  12 * 10
-//#define FT_TEST                   1
-#define CB_SBFONT_FONT          2
-#define MB_SBFONT_FONTSIZE      3
-#define TB_FONT                 4
-#define TB_INCREASE_DECREASE    5
-#define TB_FONTCOLOR            6
-#define TB_FONTCOLOR_SW         7
-#define TB_HIGHLIGHT            8
-#define TB_SPACING              9
-#define TB_SCRIPT               10
-#define TB_SCRIPT_SW            11
-
-#define TBI_FONTCOLOR           50
-#define TBI_BOLD                51
-#define TBI_ITALIC              52
-#define TBI_UNDERLINE           53
-#define TBI_STRIKEOUT           54
-#define TBI_SHADOWED            55
-#define TBI_INCREASE            56
-#define TBI_DECREASE            57
-#define TBI_HIGHLIGHT           58
-#define TBI_SUPER               59
-#define TBI_SUB                 60
-#define TBI_SUPER_SW            61
-#define TBI_SUB_SW              62
-#define TBI_SPACING             63
 
 #define IMG_SPACING_D               71
 
