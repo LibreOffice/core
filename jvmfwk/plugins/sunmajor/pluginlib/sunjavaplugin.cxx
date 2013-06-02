@@ -482,20 +482,15 @@ static void load_msvcr71(LPCWSTR jvm_dll)
 // and just let the implicit loading try to take care of it.
 static void do_msvcr71_magic(rtl_uString *jvm_dll)
 {
-    FILE *f;
-    rtl_uString* Module;
-    oslFileError nError;
+    rtl_uString* Module(0);
     struct stat st;
-    PIMAGE_DOS_HEADER dos_hdr;
-    IMAGE_NT_HEADERS *nt_hdr;
-    IMAGE_IMPORT_DESCRIPTOR *imports;
 
-    nError = osl_getSystemPathFromFileURL(jvm_dll, &Module);
+    oslFileError nError = osl_getSystemPathFromFileURL(jvm_dll, &Module);
 
     if ( osl_File_E_None != nError )
         rtl_uString_assign(&Module, jvm_dll);
 
-    f = _wfopen(reinterpret_cast<LPCWSTR>(Module->buffer), L"rb");
+    FILE *f = _wfopen(reinterpret_cast<LPCWSTR>(Module->buffer), L"rb");
 
     if (fstat(fileno(f), &st) == -1)
     {
@@ -503,7 +498,7 @@ static void do_msvcr71_magic(rtl_uString *jvm_dll)
         return;
     }
 
-    dos_hdr = (PIMAGE_DOS_HEADER) malloc(st.st_size);
+    PIMAGE_DOS_HEADER dos_hdr = (PIMAGE_DOS_HEADER) malloc(st.st_size);
 
     if (fread(dos_hdr, st.st_size, 1, f) != 1 ||
         memcmp(dos_hdr, "MZ", 2) != 0 ||
@@ -517,9 +512,10 @@ static void do_msvcr71_magic(rtl_uString *jvm_dll)
 
     fclose(f);
 
-    nt_hdr = (IMAGE_NT_HEADERS *) ((char *)dos_hdr + dos_hdr->e_lfanew);
+    IMAGE_NT_HEADERS *nt_hdr = (IMAGE_NT_HEADERS *) ((char *)dos_hdr + dos_hdr->e_lfanew);
 
-    imports = (IMAGE_IMPORT_DESCRIPTOR *) ((char *) dos_hdr + nt_hdr->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress);
+    IMAGE_IMPORT_DESCRIPTOR *imports =
+        (IMAGE_IMPORT_DESCRIPTOR *) ((char *) dos_hdr + nt_hdr->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress);
 
     while (imports <= (IMAGE_IMPORT_DESCRIPTOR *) ((char *) dos_hdr + st.st_size - sizeof (IMAGE_IMPORT_DESCRIPTOR)) &&
            imports->Name != 0 &&
