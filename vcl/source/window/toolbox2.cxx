@@ -40,12 +40,15 @@
 
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 
 using namespace vcl;
@@ -697,10 +700,40 @@ static OUString getCommandLabel(const OUString& rCommand, const uno::Reference<u
 
 
 /// Get label of the command (like of .uno:Save) from the description service.
-static Image getCommandImage(const OUString& rCommand, bool bLarge, const uno::Reference<uno::XComponentContext>& rContext, const OUString& rModuleId)
+static Image getCommandImage(const OUString& rCommand, bool bLarge,
+        const uno::Reference<uno::XComponentContext>& rContext, const uno::Reference<frame::XFrame>& rFrame,
+        const OUString& rModuleId)
 {
     if (rCommand.isEmpty())
         return Image();
+
+    sal_Int16 nImageType(ui::ImageType::COLOR_NORMAL | ui::ImageType::SIZE_DEFAULT);
+    if (bLarge)
+        nImageType |= ui::ImageType::SIZE_LARGE;
+
+    try
+    {
+        uno::Reference<frame::XController> xController(rFrame->getController());
+        uno::Reference<frame::XModel> xModel(xController->getModel());
+
+        uno::Reference<ui::XUIConfigurationManagerSupplier> xSupplier(xModel, uno::UNO_QUERY);
+        uno::Reference<ui::XUIConfigurationManager> xDocUICfgMgr(xSupplier->getUIConfigurationManager(), uno::UNO_QUERY);
+        uno::Reference<ui::XImageManager> xDocImgMgr(xDocUICfgMgr->getImageManager(), uno::UNO_QUERY);
+
+        uno::Sequence< uno::Reference<graphic::XGraphic> > aGraphicSeq;
+        uno::Sequence<OUString> aImageCmdSeq(1);
+        aImageCmdSeq[0] = rCommand;
+
+        aGraphicSeq = xDocImgMgr->getImages( nImageType, aImageCmdSeq );
+        uno::Reference<graphic::XGraphic> xGraphic = aGraphicSeq[0];
+        Image aImage(xGraphic);
+
+        if (!!aImage)
+            return aImage;
+    }
+    catch (uno::Exception&)
+    {
+    }
 
     try {
         uno::Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ui::ModuleUIConfigurationManagerSupplier::create(rContext));
@@ -711,10 +744,6 @@ static Image getCommandImage(const OUString& rCommand, bool bLarge, const uno::R
 
         uno::Sequence<OUString> aImageCmdSeq(1);
         aImageCmdSeq[0] = rCommand;
-
-        sal_Int16 nImageType(ui::ImageType::COLOR_NORMAL | ui::ImageType::SIZE_DEFAULT);
-        if (bLarge)
-            nImageType |= ui::ImageType::SIZE_LARGE;
 
         aGraphicSeq = xModuleImageManager->getImages(nImageType, aImageCmdSeq);
 
@@ -736,7 +765,7 @@ void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::X
     OUString aModuleId(xModuleManager->identify(rFrame));
 
     OUString aLabel(getCommandLabel(rCommand, xContext, aModuleId));
-    Image aImage(getCommandImage(rCommand, false /*FIXME large or small?*/, xContext, aModuleId));
+    Image aImage(getCommandImage(rCommand, (GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE), xContext, rFrame, aModuleId));
 
     // let's invent an ItemId
     const sal_uInt16 COMMAND_ITEMID_START = 30000;
