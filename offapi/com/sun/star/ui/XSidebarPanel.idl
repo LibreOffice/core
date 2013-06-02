@@ -51,6 +51,10 @@ interface XSidebarPanel
         The height is set via the XWindow interface.
     */
     LayoutSize getHeightForWidth ( [in] long nWidth);
+
+    /** Minimal possible width of this panel.
+    */
+    long getMinimalWidth();
 } ;
 
 } ; } ; } ; } ;

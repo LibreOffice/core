@@ -97,6 +97,8 @@ public:
     // XSidebarPanel
     virtual css::ui::LayoutSize SAL_CALL getHeightForWidth (sal_Int32 nWidth)
         throw(cssu::RuntimeException);
+    virtual sal_Int32 SAL_CALL getMinimalWidth ()
+        throw(cssu::RuntimeException);
 
 protected:
     cssu::Reference<css::frame::XFrame> mxFrame;

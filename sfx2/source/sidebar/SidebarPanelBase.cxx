@@ -248,4 +248,15 @@ ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWi
     return ui::LayoutSize(0,0,0);
 }
 
+sal_Int32 SAL_CALL SidebarPanelBase::getMinimalWidth () throw(cssu::RuntimeException)
+{
+    if (isLayoutEnabled(mpControl))
+    {
+        // widget layout-based sidebar
+        Size aSize(mpControl->GetOptimalSize());
+        return aSize.Width();
+    }
+    return 0;
+}
+
 } } // end of namespace sfx2::sidebar
