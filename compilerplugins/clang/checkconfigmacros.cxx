@@ -32,7 +32,7 @@ class CheckConfigMacros
     public:
         explicit CheckConfigMacros( CompilerInstance& compiler );
         virtual void run() override;
-#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
+#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 3
         virtual void MacroDefined( const Token& macroToken, const MacroInfo* info ) override;
         virtual void MacroUndefined( const Token& macroToken, const MacroInfo* info ) override;
         virtual void Ifdef( SourceLocation location, const Token& macroToken ) override;
@@ -61,7 +61,7 @@ void CheckConfigMacros::run()
     // nothing, only check preprocessor usage
     }
 
-#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
+#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 3
 void CheckConfigMacros::MacroDefined( const Token& macroToken, const MacroInfo* info )
     {
     SourceLocation location = info->getDefinitionLoc();
@@ -80,7 +80,7 @@ void CheckConfigMacros::MacroDefined( const Token& macroToken, const MacroDirect
         }
     }
 
-#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
+#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 3
 void CheckConfigMacros::MacroUndefined( const Token& macroToken, const MacroInfo* )
 #else
 void CheckConfigMacros::MacroUndefined( const Token& macroToken, const MacroDirective* )
@@ -89,7 +89,7 @@ void CheckConfigMacros::MacroUndefined( const Token& macroToken, const MacroDire
     configMacros.erase( macroToken.getIdentifierInfo()->getName());
     }
 
-#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
+#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 3
 void CheckConfigMacros::Ifdef( SourceLocation location, const Token& macroToken )
 #else
 void CheckConfigMacros::Ifdef( SourceLocation location, const Token& macroToken, const MacroDirective* )
@@ -98,7 +98,7 @@ void CheckConfigMacros::Ifdef( SourceLocation location, const Token& macroToken,
     checkMacro( macroToken, location );
     }
 
-#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
+#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 3
 void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken )
 #else
 void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken, const MacroDirective* )
@@ -107,7 +107,7 @@ void CheckConfigMacros::Ifndef( SourceLocation location, const Token& macroToken
     checkMacro( macroToken, location );
     }
 
-#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
+#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 3
 void CheckConfigMacros::Defined( const Token& macroToken )
 #else
 void CheckConfigMacros::Defined( const Token& macroToken, const MacroDirective* )
