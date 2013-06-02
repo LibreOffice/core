@@ -145,10 +145,9 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     if( !mpCTLine)
         return;
 
-    const DynCoreTextSyms& rCT = DynCoreTextSyms::get();
     // CoreText fills trailing space during justification so we have to
     // take that into account when requesting CT to justify something
-    mfTrailingSpaceWidth = rCT.LineGetTrailingWhitespaceWidth( mpCTLine );
+    mfTrailingSpaceWidth = CTLineGetTrailingWhitespaceWidth( mpCTLine );
     const int nTrailingSpaceWidth = rint( mfFontScale * mfTrailingSpaceWidth );
 
     int nOrigWidth = GetTextWidth();
@@ -181,7 +180,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     if( (nOrigWidth >= nPixelWidth-1) && (nOrigWidth <= nPixelWidth+1) )
         return;
 
-    CTLineRef pNewCTLine = rCT.LineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth / mfFontScale );
+    CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth / mfFontScale );
     if( !pNewCTLine ) { // CTLineCreateJustifiedLine can and does fail
         // handle failure by keeping the unjustified layout
         // TODO: a better solution such as
@@ -258,7 +257,6 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int&
     int nCount = 0;
     int nSubIndex = nStart;
 
-    const DynCoreTextSyms& rCT = DynCoreTextSyms::get();
     typedef std::vector<CGGlyph> CGGlyphVector;
     typedef std::vector<CGPoint> CGPointVector;
     typedef std::vector<CGSize>  CGSizeVector;
@@ -269,11 +267,11 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int&
     CFIndexVector aCFIndexVec;
 
     // TODO: iterate over cached layout
-    CFArrayRef aGlyphRuns = rCT.LineGetGlyphRuns( mpCTLine );
+    CFArrayRef aGlyphRuns = CTLineGetGlyphRuns( mpCTLine );
     const int nRunCount = CFArrayGetCount( aGlyphRuns );
     for( int nRunIndex = 0; nRunIndex < nRunCount; ++nRunIndex ) {
         CTRunRef pGlyphRun = (CTRunRef)CFArrayGetValueAtIndex( aGlyphRuns, nRunIndex );
-        const CFIndex nGlyphsInRun = rCT.RunGetGlyphCount( pGlyphRun );
+        const CFIndex nGlyphsInRun = CTRunGetGlyphCount( pGlyphRun );
         // skip to the first glyph run of interest
         if( nSubIndex >= nGlyphsInRun ) {
             nSubIndex -= nGlyphsInRun;
@@ -282,13 +280,13 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int&
         const CFRange aFullRange = CFRangeMake( 0, nGlyphsInRun );
 
         // get glyph run details
-        const CGGlyph* pCGGlyphIdx = rCT.RunGetGlyphsPtr( pGlyphRun );
+        const CGGlyph* pCGGlyphIdx = CTRunGetGlyphsPtr( pGlyphRun );
         if( !pCGGlyphIdx ) {
             aCGGlyphVec.reserve( nGlyphsInRun );
             CTRunGetGlyphs( pGlyphRun, aFullRange, &aCGGlyphVec[0] );
             pCGGlyphIdx = &aCGGlyphVec[0];
         }
-        const CGPoint* pCGGlyphPos = rCT.RunGetPositionsPtr( pGlyphRun );
+        const CGPoint* pCGGlyphPos = CTRunGetPositionsPtr( pGlyphRun );
         if( !pCGGlyphPos ) {
             aCGPointVec.reserve( nGlyphsInRun );
             CTRunGetPositions( pGlyphRun, aFullRange, &aCGPointVec[0] );
@@ -297,7 +295,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int&
 
         const CGSize* pCGGlyphAdvs = NULL;
         if( pGlyphAdvances) {
-            pCGGlyphAdvs = rCT.RunGetAdvancesPtr( pGlyphRun );
+            pCGGlyphAdvs = CTRunGetAdvancesPtr( pGlyphRun );
             if( !pCGGlyphAdvs) {
                 aCGSizeVec.reserve( nGlyphsInRun );
                 CTRunGetAdvances( pGlyphRun, aFullRange, &aCGSizeVec[0] );
@@ -307,7 +305,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int&
 
         const CFIndex* pCGGlyphStrIdx = NULL;
         if( pCharIndexes) {
-            pCGGlyphStrIdx = rCT.RunGetStringIndicesPtr( pGlyphRun );
+            pCGGlyphStrIdx = CTRunGetStringIndicesPtr( pGlyphRun );
             if( !pCGGlyphStrIdx) {
                 aCFIndexVec.reserve( nGlyphsInRun );
                 CTRunGetStringIndices( pGlyphRun, aFullRange, &aCFIndexVec[0] );
@@ -422,12 +420,11 @@ void CTLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
     for( int i = 0; i < nMaxIndex; ++i )
         pCaretXArray[ i ] = -1;
 
-    const DynCoreTextSyms& rCT = DynCoreTextSyms::get();
     for( int n = 0; n <= mnCharCount; ++n )
     {
         // measure the characters cursor position
         CGFloat fPos2 = -1;
-        const CGFloat fPos1 = rCT.LineGetOffsetForStringIndex( mpCTLine, n, &fPos2 );
+        const CGFloat fPos1 = CTLineGetOffsetForStringIndex( mpCTLine, n, &fPos2 );
         (void)fPos2; // TODO: split cursor at line direction change
         // update previous trailing position
         if( n > 0 )
