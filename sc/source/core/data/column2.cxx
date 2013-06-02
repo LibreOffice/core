@@ -1519,6 +1519,15 @@ void ScColumn::SetCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScBaseCe
 
 void ScColumn::SetCell( SCROW nRow, ScBaseCell* pNewCell )
 {
+    if(pNewCell->GetCellType() == CELLTYPE_FORMULA)
+    {
+        ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pNewCell);
+        sal_uInt32 nCellFormat = GetNumberFormat( nRow );
+        if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+            pFCell->SetNeedNumberFormat(true);
+
+    }
+
     bool bIsAppended = false;
     if ( !maItems.empty() )
     {
