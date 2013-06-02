@@ -26,6 +26,10 @@ Size PanelLayout::GetOptimalSize() const
 
 void PanelLayout::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
 {
+    Size aSize(GetOptimalSize());
+    nWidth = std::max(nWidth,aSize.Width());
+    nHeight = std::max(nHeight,aSize.Height());
+
     Control::setPosSizePixel(nX, nY, nWidth, nHeight, nFlags);
 
     if (isLayoutEnabled(this) && (nFlags & WINDOW_POSSIZE_SIZE))
