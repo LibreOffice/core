@@ -1614,12 +1614,10 @@ int Desktop::Main()
         com::sun::star::uno::Exception te;
         wte.TargetException >>= te;
         FatalError( MakeStartupConfigAccessErrorMessage(wte.Message + te.Message) );
-        return EXIT_FAILURE;
     }
     catch ( const com::sun::star::uno::Exception& e )
     {
         FatalError( MakeStartupErrorMessage(e.Message) );
-        return EXIT_FAILURE;
     }
     SetSplashScreenProgress(55);
 
@@ -1664,7 +1662,6 @@ int Desktop::Main()
         catch ( const com::sun::star::uno::Exception& e )
         {
             FatalError( MakeStartupErrorMessage(e.Message) );
-            return EXIT_FAILURE;
         }
 
         // Release solar mutex just before we wait for our client to connect
