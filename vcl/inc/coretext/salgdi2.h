@@ -62,7 +62,7 @@ public:
     virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const;
     virtual sal_IntPtr      GetFontId() const;
 
-    virtual ImplMacTextStyle* CreateMacTextStyle( const ImplFontSelectData& ) const = 0;
+    virtual ImplMacTextStyle* CreateMacTextStyle( const FontSelectPattern& ) const = 0;
     virtual int             GetFontTable( const char pTagName[5], unsigned char* ) const = 0;
 
     const ImplFontCharMap*  GetImplFontCharMap() const;
@@ -92,7 +92,7 @@ private:
 class ImplMacTextStyle
 {
 public:
-    explicit        ImplMacTextStyle( const ImplFontSelectData& );
+    explicit        ImplMacTextStyle( const FontSelectPattern& );
     virtual         ~ImplMacTextStyle( void );
 
     virtual SalLayout* GetTextLayout( void ) const = 0;

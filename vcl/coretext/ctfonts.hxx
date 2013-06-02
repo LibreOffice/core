@@ -30,7 +30,7 @@ class CTTextStyle
 :   public ImplMacTextStyle
 {
 public:
-    explicit    CTTextStyle( const ImplFontSelectData& );
+    explicit    CTTextStyle( const FontSelectPattern& );
     virtual     ~CTTextStyle( void );
 
     virtual SalLayout* GetTextLayout( void ) const;
