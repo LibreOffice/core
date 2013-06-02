@@ -63,7 +63,7 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
 #endif
 
     volatile long edx = 0, eax = 0; // for register returns
-    void * stackptr;
+    void * stackptr = 0;
     asm volatile (
         "mov   %%esp, %6\n\t"
         // preserve potential 128bit stack alignment

@@ -58,7 +58,7 @@ static void callVirtualMethod(
     if (! pAdjustedThisPtr) CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something
 
     volatile long edx = 0, eax = 0; // for register returns
-    void * stackptr;
+    void * stackptr = 0;
     asm volatile (
         "mov   %%esp, %6\n\t"
         // copy values
