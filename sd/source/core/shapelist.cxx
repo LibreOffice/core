@@ -99,28 +99,6 @@ bool ShapeList::hasShape( SdrObject& rObject ) const
     return std::find( maShapeList.begin(), maShapeList.end(), &rObject )  != maShapeList.end();
 }
 
-SdrObject* ShapeList::getNextShape(SdrObject* pObj) const
-{
-    if( pObj )
-    {
-        ListImpl::const_iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), pObj ) );
-        if( aIter != maShapeList.end() )
-        {
-            ++aIter;
-            if( aIter != maShapeList.end() )
-            {
-                return (*aIter);
-            }
-        }
-    }
-    else if( !maShapeList.empty() )
-    {
-        return (*maShapeList.begin());
-    }
-
-    return 0;
-}
-
 void ShapeList::ObjectInDestruction(const SdrObject& rObject)
 {
     ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rObject ) );

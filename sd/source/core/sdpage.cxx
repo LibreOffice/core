@@ -156,7 +156,9 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearc
     std::vector< SdrObject* > aMatches;
 
     SdrObject* pObj = 0;
-    while( (pObj = maPresentationShapeList.getNextShape(pObj)) != 0 )
+    maPresentationShapeList.seekShape(0);
+
+    while( (pObj = maPresentationShapeList.getNextShape()) )
     {
         SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj);
         if( pInfo )
@@ -1572,11 +1574,11 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate 
     // now delete all empty presentation objects that are no longer used by the new layout
     if( bInit )
     {
-        SdrObject* pObj = maPresentationShapeList.getNextShape(0);
+        SdrObject* pObj = 0;
+        maPresentationShapeList.seekShape(0);
 
-        while( pObj )
+        while( (pObj = maPresentationShapeList.getNextShape()) )
         {
-            SdrObject* pNext = maPresentationShapeList.getNextShape(pObj);
             if( aUsedPresentationObjects.count(pObj) == 0 )
             {
 
@@ -1592,7 +1594,6 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate 
                 }
 /* #i108541# keep non empty pres obj as pres obj even if they are not part of the current layout */
             }
-            pObj = pNext;
         }
     }
 }

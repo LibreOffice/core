@@ -379,9 +379,14 @@ SdPage::SdPage(const SdPage& rSrcPage)
     mePageKind           = rSrcPage.mePageKind;
     meAutoLayout         = rSrcPage.meAutoLayout;
 
-    SdrObject* pObj = 0;
-    while((pObj = rSrcPage.maPresentationShapeList.getNextShape(pObj)) != 0)
+    // use shape list directly to preserve constness of rSrcPage
+    const std::list< SdrObject* >& rShapeList = rSrcPage.maPresentationShapeList.getList();
+    for( std::list< SdrObject* >::const_iterator aIter = rShapeList.begin();
+         aIter != rShapeList.end(); ++aIter )
+    {
+        SdrObject* pObj = *aIter;
         InsertPresObj(GetObj(pObj->GetOrdNum()), rSrcPage.GetPresObjKind(pObj));
+    }
 
     mbSelected           = sal_False;
     mnTransitionType    = rSrcPage.mnTransitionType;

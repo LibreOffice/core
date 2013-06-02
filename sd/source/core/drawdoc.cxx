@@ -694,7 +694,7 @@ void SdDrawDocument::UpdateAllLinks()
 */
 void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool )
 {
-    const sd::ShapeList& rPresentationShapes( pPage->GetPresentationShapeList() );
+    sd::ShapeList& rPresentationShapes( pPage->GetPresentationShapeList() );
     if(!rPresentationShapes.isEmpty())
     {
         // Create lists of title and outline styles
@@ -706,11 +706,12 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
         SfxStyleSheet* pTitleSheet = (SfxStyleSheet*)pSPool->GetTitleSheet(aName);
 
-        SdrObject* pObj = rPresentationShapes.getNextShape(0);
+        SdrObject* pObj = 0;
+        rPresentationShapes.seekShape(0);
 
         // Now look for title and outline text objects, then make those objects
         // listeners.
-        while(pObj)
+        while( (pObj = rPresentationShapes.getNextShape()) )
         {
             if (pObj->GetObjInventor() == SdrInventor)
             {
@@ -761,8 +762,6 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                     }
                 }
             }
-
-            pObj = rPresentationShapes.getNextShape(pObj);
         }
     }
 }

@@ -1060,8 +1060,9 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                 // set pages for all available handout presentation objects
                 sd::ShapeList& rShapeList = pMaster->GetPresentationShapeList();
                 SdrObject* pObj = 0;
+                rShapeList.seekShape(0);
 
-                while( (pObj = rShapeList.getNextShape(pObj)) != 0 )
+                while( (pObj = rShapeList.getNextShape()) )
                 {
                     if( pMaster->GetPresObjKind(pObj) == PRESOBJ_HANDOUT )
                     {

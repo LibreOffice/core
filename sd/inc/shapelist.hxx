@@ -48,16 +48,12 @@ namespace sd
         /** @return true if given shape is part of this list */
         bool hasShape( SdrObject& rObject ) const;
 
-        /** returns the shape following the given shape in the list or 0
-            returns the first shape if pObj is 0 */
-        SdrObject* getNextShape(SdrObject* pObj) const;
-
-        /**
-        */
+        /** returns the shape the internal iterator points to, or 0 if
+         * the list end is reached. moves the internal iterator to the
+         * next shape. */
         SdrObject* getNextShape();
 
-        /**
-        */
+        /** Sets the internal iterator to the shape at given index. */
         void seekShape( sal_uInt32 nIndex );
 
         /**
