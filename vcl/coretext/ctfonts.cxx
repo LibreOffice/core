@@ -19,8 +19,7 @@
  *
  *************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_vcl.hxx"
+#include <boost/unordered_map.hpp>
 
 #include "impfont.hxx"
 #include "outfont.hxx"
@@ -29,6 +28,7 @@
 #include "aqua/salinst.h"
 #include "aqua/saldata.hxx"
 #include "coretext/salgdi2.h"
+#include "quartz/utils.h"
 #include "ctfonts.hxx"
 
 #include "basegfx/polygon/b2dpolygon.hxx"
@@ -47,10 +47,10 @@ class CTFontData
 public:
     explicit                CTFontData( const ImplDevFontAttributes&, sal_IntPtr nFontId );
     virtual                 ~CTFontData( void );
-    virtual ImplFontData*   Clone( void ) const;
+    virtual PhysicalFontFace*   Clone( void ) const;
 
-    virtual ImplMacTextStyle*   CreateMacTextStyle( const ImplFontSelectData& ) const;
-    virtual ImplFontEntry*      CreateFontInstance( /*const*/ ImplFontSelectData& ) const;
+    virtual ImplMacTextStyle*   CreateMacTextStyle( const FontSelectPattern& ) const;
+    virtual ImplFontEntry*      CreateFontInstance( /*const*/ FontSelectPattern& ) const;
     virtual int                 GetFontTable( const char pTagName[5], unsigned char* ) const;
 };
 
@@ -73,18 +73,18 @@ private:
     CTFontCollectionRef mpCTFontCollection;
     CFArrayRef mpCTFontArray;
 
-    typedef std::hash_map<sal_IntPtr,CTFontData*> CTFontContainer;
+    typedef boost::unordered_map<sal_IntPtr,CTFontData*> CTFontContainer;
     CTFontContainer maFontContainer;
 };
 
 // =======================================================================
 
-CTTextStyle::CTTextStyle( const ImplFontSelectData& rFSD )
+CTTextStyle::CTTextStyle( const FontSelectPattern& rFSD )
 :   ImplMacTextStyle( rFSD )
 ,   mpStyleDict( NULL )
 {
     mpFontData = (CTFontData*)rFSD.mpFontData;
-    const ImplFontSelectData* const pReqFont = &rFSD;
+    const FontSelectPattern* const pReqFont = &rFSD;
 
     double fScaledFontHeight = pReqFont->mfExactHeight;
 #if 0 // TODO: does CoreText need font size limiting???
@@ -264,13 +264,8 @@ bool CTTextStyle::GetGlyphOutline( sal_GlyphId nGlyphId, basegfx::B2DPolyPolygon
 
 void CTTextStyle::SetTextColor( const RGBAColor& rColor )
 {
-#if (MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_5)
     CGColorRef pCGColor = CGColorCreateGenericRGB( rColor.GetRed(),
         rColor.GetGreen(), rColor.GetBlue(), rColor.GetAlpha() );
-#else // for builds on OSX 10.4 SDK
-    const CGColorSpaceRef pCGColorSpace = GetSalData()->mxRGBSpace;
-    CGColorRef pCGColor = CGColorCreate( pCGColorSpace, rColor.AsArray() );
-#endif
     CFDictionarySetValue( mpStyleDict, kCTForegroundColorAttributeName, pCGColor );
     CFRelease( pCGColor);
 }
@@ -290,21 +285,21 @@ CTFontData::~CTFontData( void )
 
 // -----------------------------------------------------------------------
 
-ImplFontData* CTFontData::Clone( void ) const
+PhysicalFontFace* CTFontData::Clone( void ) const
 {
     return new CTFontData( *this);
 }
 
 // -----------------------------------------------------------------------
 
-ImplMacTextStyle* CTFontData::CreateMacTextStyle( const ImplFontSelectData& rFSD ) const
+ImplMacTextStyle* CTFontData::CreateMacTextStyle( const FontSelectPattern& rFSD ) const
 {
     return new CTTextStyle( rFSD);
 }
 
 // -----------------------------------------------------------------------
 
-ImplFontEntry* CTFontData::CreateFontInstance( /*const*/ ImplFontSelectData& rFSD ) const
+ImplFontEntry* CTFontData::CreateFontInstance( /*const*/ FontSelectPattern& rFSD ) const
 {
     return new ImplFontEntry( rFSD);
 }
@@ -352,12 +347,12 @@ static void CTFontEnumCallBack( const void* pValue, void* pContext )
     rDFA.mnQuality     = 0;
 
     // reset the font attributes
-    rDFA.meFamily     = FAMILY_DONTKNOW;
-    rDFA.mePitch      = PITCH_VARIABLE;
-    rDFA.meWidthType  = WIDTH_NORMAL;
-    rDFA.meWeight     = WEIGHT_NORMAL;
-    rDFA.meItalic     = ITALIC_NONE;
-    rDFA.mbSymbolFlag = false;
+    rDFA.SetFamilyType( FAMILY_DONTKNOW );
+    rDFA.SetPitch( PITCH_VARIABLE );
+    rDFA.SetWidthType( WIDTH_NORMAL );
+    rDFA.SetWeight( WEIGHT_NORMAL );
+    rDFA.SetItalic( ITALIC_NONE );
+    rDFA.SetSymbolFlag( false );
 
     // all scalable fonts on this platform are subsettable
     rDFA.mbEmbeddable = false;
@@ -366,10 +361,10 @@ static void CTFontEnumCallBack( const void* pValue, void* pContext )
     // get font name
     // TODO: use kCTFontDisplayNameAttribute instead???
     CFStringRef pFamilyName = (CFStringRef)CTFontDescriptorCopyAttribute( pFD, kCTFontFamilyNameAttribute );
-    rDFA.maName = GetOUString( pFamilyName );
+    rDFA.SetFamilyName( GetOUString( pFamilyName ) );
     // get font style
     CFStringRef pStyleName = (CFStringRef)CTFontDescriptorCopyAttribute( pFD, kCTFontStyleNameAttribute );
-    rDFA.maStyleName = GetOUString( pStyleName );
+    rDFA.SetStyleName( GetOUString( pStyleName ) );
 
     // get font-enabled status
     int bFontEnabled = FALSE;
@@ -385,7 +380,7 @@ static void CTFontEnumCallBack( const void* pValue, void* pContext )
     CFNumberRef pSymbolNum = NULL;
     if( CFDictionaryGetValueIfPresent( pAttrDict, kCTFontSymbolicTrait, (const void**)&pSymbolNum ) ) {
         CFNumberGetValue( pSymbolNum, kCFNumberSInt64Type, &nSymbolTrait );
-        rDFA.mbSymbolFlag = ((nSymbolTrait & kCTFontClassMaskTrait) == kCTFontSymbolicClass);
+        rDFA.SetSymbolFlag( ((nSymbolTrait & kCTFontClassMaskTrait) == kCTFontSymbolicClass) );
     }
 
     // get the font weight
@@ -402,14 +397,14 @@ static void CTFontEnumCallBack( const void* pValue, void* pContext )
         if( nInt < WEIGHT_THIN )
             nInt = WEIGHT_THIN;
     }
-    rDFA.meWeight = (FontWeight)nInt;
+    rDFA.SetWeight( (FontWeight)nInt );
 
     // get the font slant
     double fSlant = 0;
     CFNumberRef pSlantNum = (CFNumberRef)CFDictionaryGetValue( pAttrDict, kCTFontSlantTrait );
     CFNumberGetValue( pSlantNum, kCFNumberDoubleType, &fSlant );
     if( fSlant >= 0.035 )
-        rDFA.meItalic = ITALIC_NORMAL;
+        rDFA.SetItalic( ITALIC_NORMAL );
 
     // get width trait
     double fWidth = 0;
@@ -425,51 +420,13 @@ static void CTFontEnumCallBack( const void* pValue, void* pContext )
         if( nInt < WIDTH_ULTRA_CONDENSED )
             nInt = WIDTH_ULTRA_CONDENSED;
     }
-    rDFA.meWidthType = (FontWidth)nInt;
+    rDFA.SetWidthType( (FontWidth)nInt );
 
     // release the attribute dict that we had copied
     CFRelease( pAttrDict );
 
     // TODO? also use the HEAD table if available to get more attributes
 //  CFDataRef CTFontCopyTable( CTFontRef, kCTFontTableHead, /*kCTFontTableOptionNoOptions*/kCTFontTableOptionExcludeSynthetic );
-
-#if (OSL_DEBUG_LEVEL >= 1)
-    // update font attributes using the font's postscript name
-    ImplDevFontAttributes rDFA2;
-    CTFontRef pFont = CTFontCreateWithFontDescriptor( pFD, 0.0, NULL );
-    CFStringRef pPSName = CTFontCopyPostScriptName( pFont );
-    const String aPSName = GetOUString( pPSName );
-
-    rDFA2.mbSymbolFlag = false;
-    rDFA2.mePitch      = PITCH_VARIABLE;
-    rDFA2.meWidthType  = WIDTH_NORMAL;
-    rDFA2.meWeight     = WEIGHT_NORMAL;
-    rDFA2.meItalic     = ITALIC_NONE;
-
-    UpdateAttributesFromPSName( aPSName, rDFA2 );
-    CFRelease( pPSName );
-    CFRelease( pFont );
-
-    // show the font details and compare the CTFontDescriptor vs. PSName traits
-    char cMatch = (rDFA.mbSymbolFlag==rDFA2.mbSymbolFlag);
-    cMatch &= (rDFA.meWeight==rDFA2.meWeight);
-    cMatch &= ((rDFA.meItalic==ITALIC_NONE) == (rDFA2.meItalic==ITALIC_NONE));
-    cMatch &= (rDFA.meWidthType==rDFA2.meWidthType);
-    cMatch = cMatch ? '.' : '#';
-
-    char aFN[256], aSN[256];
-    CFStringGetCString( pFamilyName, aFN, sizeof(aFN), kCFStringEncodingUTF8 );
-    CFStringGetCString( pStyleName, aSN, sizeof(aSN), kCFStringEncodingUTF8 );
-
-    const ByteString aPSCName( aPSName, RTL_TEXTENCODING_UTF8 );
-    const char* aPN = aPSCName.GetBuffer();
-    printf("\tCTFont_%d%x%d%d_%c_%d%x%d%d ena=%d s=%02d b=%+.2f i=%+.2f w=%+.2f (\"%s\", \"%s\", \"%s\")\n",
-        (int)rDFA.mbSymbolFlag,(int)rDFA.meWeight,(int)rDFA.meItalic,(int)rDFA.meWidthType,
-        cMatch,
-        (int)rDFA2.mbSymbolFlag,(int)rDFA2.meWeight,(int)rDFA2.meItalic,(int)rDFA2.meWidthType,
-        bFontEnabled,
-        (int)(nSymbolTrait>>kCTFontClassMaskShift),fWeight,fSlant,fWidth,aFN,aSN,aPN);
-#endif // (OSL_DEBUG_LEVEL >= 1)
 
     if( bFontEnabled)
     {

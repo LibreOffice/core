@@ -36,7 +36,7 @@
 #include "vcl/sysdata.hxx"
 #include "vcl/svapp.hxx"
 
-#include "aqua/atsui/salgdi.h"
+#include "coretext/salgdi2.h"
 #include "aqua/salframe.h"
 #ifdef ENABLE_CORETEXT
 #include "ctfonts.hxx"
@@ -65,7 +65,7 @@ SystemFontList::~SystemFontList( void )
 
 // =======================================================================
 
-ImplMacTextStyle::ImplMacTextStyle( const ImplFontSelectData& rReqFont )
+ImplMacTextStyle::ImplMacTextStyle( const FontSelectPattern& rReqFont )
 :   mpFontData( (ImplMacFontData*)rReqFont.mpFontData )
 ,   mfFontScale( 1.0 )
 ,   mfFontStretch( 1.0 )
@@ -80,7 +80,7 @@ ImplMacTextStyle::~ImplMacTextStyle( void )
 // =======================================================================
 
 ImplMacFontData::ImplMacFontData( const ImplMacFontData& rSrc )
-:   ImplFontData( rSrc )
+:   PhysicalFontFace( rSrc )
 ,   mnFontId( rSrc.mnFontId )
 ,   mpCharMap( rSrc.mpCharMap )
 ,   mbOs2Read( rSrc.mbOs2Read )
@@ -95,7 +95,7 @@ ImplMacFontData::ImplMacFontData( const ImplMacFontData& rSrc )
 // -----------------------------------------------------------------------
 
 ImplMacFontData::ImplMacFontData( const ImplDevFontAttributes& rDFA, sal_IntPtr nFontId )
-:   ImplFontData( rDFA, 0 )
+:   PhysicalFontFace( rDFA, 0 )
 ,   mnFontId( nFontId )
 ,   mpCharMap( NULL )
 ,   mbOs2Read( false )
@@ -131,12 +131,6 @@ ImplFontEntry* ImplMacFontData::CreateFontInstance(FontSelectPattern& rFSD) cons
 
 static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
-
-#if MACOSX_SDK_VERSION >= 1070
-extern "C" {
-extern ATSFontRef FMGetATSFontRefFromFont(FMFont iFont);
-}
-#endif
 
 const ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
 {
@@ -186,33 +180,29 @@ bool ImplMacFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabi
     }
     mbFontCapabilitiesRead = true;
 
+    int nBufSize = 0;
     // prepare to get the GSUB table raw data
-    ATSFontRef rFont = FMGetATSFontRefFromFont( mnFontId );
-    ByteCount nBufSize = 0;
-    OSStatus eStatus;
-    eStatus = ATSFontGetTable( rFont, GetTag("GSUB"), 0, 0, NULL, &nBufSize );
-    if( eStatus == noErr )
+    nBufSize = GetFontTable( "GSUB", NULL );
+    if( nBufSize > 0 )
     {
         // allocate a buffer for the GSUB raw data
         ByteVector aBuffer( nBufSize );
         // get the GSUB raw data
-        ByteCount nRawLength = 0;
-        eStatus = ATSFontGetTable( rFont, GetTag("GSUB"), 0, nBufSize, (void*)&aBuffer[0], &nRawLength );
-        if( eStatus == noErr )
+        const int nRawLength = GetFontTable( "GSUB", &aBuffer[0] );
+        if( nRawLength > 0 )
         {
             const unsigned char* pGSUBTable = &aBuffer[0];
             vcl::getTTScripts(maFontCapabilities.maGSUBScriptTags, pGSUBTable, nRawLength);
         }
     }
-    eStatus = ATSFontGetTable( rFont, GetTag("OS/2"), 0, 0, NULL, &nBufSize );
-    if( eStatus == noErr )
+    nBufSize = GetFontTable( "OS/2", NULL );
+    if( nBufSize > 0 )
     {
-        // allocate a buffer for the GSUB raw data
+        // allocate a buffer for the OS/2 raw data
         ByteVector aBuffer( nBufSize );
         // get the OS/2 raw data
-        ByteCount nRawLength = 0;
-        eStatus = ATSFontGetTable( rFont, GetTag("OS/2"), 0, nBufSize, (void*)&aBuffer[0], &nRawLength );
-        if( eStatus == noErr )
+        const int nRawLength = GetFontTable( "OS/2", &aBuffer[0] );
+        if( nRawLength > 0 )
         {
             const unsigned char* pOS2Table = &aBuffer[0];
             vcl::getTTCoverage(
