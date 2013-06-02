@@ -21,6 +21,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/redlinecontrol \
 	svx/uiconfig/ui/redlinefilterpage \
 	svx/uiconfig/ui/redlineviewpage \
+	svx/uiconfig/ui/sidebartextpanel \
 ))
 
 # vim: set noet sw=4 ts=4:

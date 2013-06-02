@@ -58,7 +58,8 @@ protected:
     virtual void    Select();
 
 public:
-    SvxSBFontNameBox( Window* pParent, const ResId& rResId  );
+    SvxSBFontNameBox( Window* pParent, const ResId& rResId );
+    SvxSBFontNameBox( Window* pParent );
     void            FillList();
     sal_uInt16 GetListCount() { return nFtCount; }
     void            Clear() { FontNameBox::Clear(); nFtCount = 0; }
