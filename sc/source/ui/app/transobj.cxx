@@ -773,7 +773,6 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
         return;
     }
 
-    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
     ScRange aRef;
 
     ScCellIterator aIter( pDoc, ScRange(nStartX, nStartY, nSrcTab, nEndX, nEndY, nSrcTab) );
