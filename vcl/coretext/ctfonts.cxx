@@ -34,10 +34,6 @@
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
 
-#ifndef DISABLE_CORETEXT_DYNLOAD
-#include <dlfcn.h>
-#endif
-
 // =======================================================================
 
 // CoreText specific physically available font face
@@ -176,12 +172,11 @@ void CTTextStyle::GetFontMetric( float fDPIY, ImplFontMetricData& rMetric ) cons
 
 bool CTTextStyle::GetGlyphBoundRect( sal_GlyphId nGlyphId, Rectangle& rRect ) const
 {
-    const DynCoreTextSyms& rCT = DynCoreTextSyms::get();
     CGGlyph nCGGlyph = nGlyphId & GF_IDXMASK; // NOTE: CoreText handles glyph fallback itself
     CTFontRef aCTFontRef = (CTFontRef)CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName );
 
     const CTFontOrientation aFontOrientation = kCTFontDefaultOrientation; // TODO: horz/vert
-    const CGRect aCGRect = rCT.FontGetBoundingRectsForGlyphs( aCTFontRef, aFontOrientation, &nCGGlyph, NULL, 1 );
+    const CGRect aCGRect = CTFontGetBoundingRectsForGlyphs( aCTFontRef, aFontOrientation, &nCGGlyph, NULL, 1 );
 
     rRect.Left()   = lrint( mfFontScale * aCGRect.origin.x );
     rRect.Top()    = lrint( mfFontScale * aCGRect.origin.y );
@@ -236,11 +231,10 @@ bool CTTextStyle::GetGlyphOutline( sal_GlyphId nGlyphId, basegfx::B2DPolyPolygon
 {
     rResult.clear();
 
-    const DynCoreTextSyms& rCT = DynCoreTextSyms::get();
     // TODO: GF_FONTMASK if using non-native glyph fallback
     CGGlyph nCGGlyph = nGlyphId & GF_IDXMASK;
     CTFontRef pCTFont = (CTFontRef)CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName );
-    CGPathRef xPath = rCT.FontCreatePathForGlyph( pCTFont, nCGGlyph, NULL );
+    CGPathRef xPath = CTFontCreatePathForGlyph( pCTFont, nCGGlyph, NULL );
 
     GgoData aGgoData;
     aGgoData.mpPolyPoly = &rResult;
@@ -490,103 +484,21 @@ ImplMacFontData* CTFontList::GetFontDataFromId( sal_IntPtr nFontId ) const
 
 bool CTFontList::Init( void )
 {
-#ifndef DISABLE_CORETEXT_DYNLOAD
-    // check availability of the CoreText API
-    const DynCoreTextSyms& rCT = DynCoreTextSyms::get();
-    if( !rCT.IsActive() )
-        return false;
-#endif // DISABLE_CORETEXT_DYNLOAD
-
     // enumerate available system fonts
     static const int nMaxDictEntries = 8;
     CFMutableDictionaryRef pCFDict = CFDictionaryCreateMutable( NULL,
         nMaxDictEntries, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks );
     CFDictionaryAddValue( pCFDict, kCTFontCollectionRemoveDuplicatesOption, kCFBooleanTrue );
-    mpCTFontCollection = rCT.FontCollectionCreateFromAvailableFonts( pCFDict );
+    mpCTFontCollection = CTFontCollectionCreateFromAvailableFonts( pCFDict );
     CFRelease( pCFDict );
 
-    mpCTFontArray = rCT.FontCollectionCreateMatchingFontDescriptors( mpCTFontCollection );
+    mpCTFontArray = CTFontCollectionCreateMatchingFontDescriptors( mpCTFontCollection );
     const int nFontCount = CFArrayGetCount( mpCTFontArray );
     const CFRange aFullRange = CFRangeMake( 0, nFontCount );
     CFArrayApplyFunction( mpCTFontArray, aFullRange, CTFontEnumCallBack, this );
 
     return true;
 }
-
-// =======================================================================
-
-#ifndef DISABLE_CORETEXT_DYNLOAD
-
-DynCoreTextSyms::DynCoreTextSyms( void )
-{
-    mbIsActive = false;
-
-    // check if CoreText has been explicitely disabled
-    const char* pEnvStr = getenv( "SAL_DISABLE_CORETEXT");
-    if( pEnvStr && (pEnvStr[0] != '0') )
-        return;
-
-    // check CoreText version
-    GetCoreTextVersion = (uint32_t(*)(void))dlsym( RTLD_DEFAULT, "CTGetCoreTextVersion");
-    if( !GetCoreTextVersion) return;
-
-    const uint32_t nCTVersion = GetCoreTextVersion();
-    static const uint32_t mykCTVersionNumber10_5 = 0x00020000;
-    if( nCTVersion < mykCTVersionNumber10_5)
-        return;
-
-    // load CoreText symbols dynamically
-    LineGetTrailingWhitespaceWidth = (double(*)(CTLineRef))dlsym( RTLD_DEFAULT, "CTLineGetTrailingWhitespaceWidth");
-    if( !LineGetTrailingWhitespaceWidth) return;
-
-    LineCreateJustifiedLine = (CTLineRef(*)(CTLineRef,CGFloat,double))dlsym( RTLD_DEFAULT, "CTLineCreateJustifiedLine");
-    if( !LineCreateJustifiedLine) return;
-
-    LineGetOffsetForStringIndex = (CGFloat(*)(CTLineRef,CFIndex,CGFloat*))dlsym( RTLD_DEFAULT, "CTLineGetOffsetForStringIndex");
-    if( !LineGetOffsetForStringIndex) return;
-
-    LineGetGlyphRuns = (CFArrayRef(*)(CTLineRef))dlsym( RTLD_DEFAULT, "CTLineGetGlyphRuns");
-    if( !LineGetGlyphRuns) return;
-
-    RunGetGlyphCount = (CFIndex(*)(CTRunRef))dlsym( RTLD_DEFAULT, "CTRunGetGlyphCount");
-    if( !RunGetGlyphCount) return;
-
-    RunGetGlyphsPtr = (const CGGlyph*(*)(CTRunRef))dlsym( RTLD_DEFAULT, "CTRunGetGlyphsPtr");
-    if( !RunGetGlyphsPtr) return;
-
-    RunGetPositionsPtr = (const CGPoint*(*)(CTRunRef))dlsym( RTLD_DEFAULT, "CTRunGetPositionsPtr");
-    if( !RunGetPositionsPtr) return;
-
-    RunGetAdvancesPtr = (const CGSize*(*)(CTRunRef))dlsym( RTLD_DEFAULT, "CTRunGetAdvancesPtr");
-    if( !RunGetAdvancesPtr) return;
-
-    RunGetStringIndicesPtr = (const CFIndex*(*)(CTRunRef))dlsym( RTLD_DEFAULT, "CTRunGetStringIndicesPtr");
-    if( !RunGetStringIndicesPtr) return;
-
-    FontCollectionCreateFromAvailableFonts = (CTFontCollectionRef(*)(CFDictionaryRef))dlsym( RTLD_DEFAULT, "CTFontCollectionCreateFromAvailableFonts");
-    if( !FontCollectionCreateFromAvailableFonts) return;
-
-    FontCollectionCreateMatchingFontDescriptors = (CFArrayRef(*)(CTFontCollectionRef))dlsym( RTLD_DEFAULT, "CTFontCollectionCreateMatchingFontDescriptors");
-    if( !FontCollectionCreateMatchingFontDescriptors) return;
-
-    FontCreatePathForGlyph = (CGPathRef(*)(CTFontRef,CGGlyph,const CGAffineTransform*))dlsym( RTLD_DEFAULT, "CTFontCreatePathForGlyph");
-    if( !FontCreatePathForGlyph) return;
-
-    FontGetBoundingRectsForGlyphs = (CGRect(*)(CTFontRef,CTFontOrientation,CGGlyph*,CGRect*,CFIndex))dlsym( RTLD_DEFAULT, "CTFontGetBoundingRectsForGlyphs");
-    if( !FontGetBoundingRectsForGlyphs) return;
-
-    mbIsActive = true;
-}
-
-// -----------------------------------------------------------------------
-
-const DynCoreTextSyms& DynCoreTextSyms::get( void )
-{
-    static DynCoreTextSyms aCT;
-    return aCT;
-}
-
-#endif // DISABLE_CORETEXT_DYNLOAD
 
 // =======================================================================
 
