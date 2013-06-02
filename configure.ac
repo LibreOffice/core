@@ -7397,7 +7397,7 @@ no|disable)
     AC_MSG_RESULT([none])
     ;;
 ""|yes|auto)
-    if test "$DISABLE_SCRIPTING" = TRUE -a -n $PYTHON_FOR_BUILD; then
+    if test "$DISABLE_SCRIPTING" = TRUE -a -n "$PYTHON_FOR_BUILD"; then
         AC_MSG_RESULT([no, overridden by --disable-scripting])
         enable_python=no
     elif test $build_os = cygwin; then
