@@ -47,7 +47,7 @@ public:
     virtual bool    GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
-    const ImplFontData* GetFallbackFontData( sal_GlyphId ) const;
+    const PhysicalFontFace* GetFallbackFontData( sal_GlyphId ) const;
 
     virtual void    InitFont( void) const;
     virtual void    MoveGlyph( int nStart, long nNewXPos );
@@ -396,7 +396,7 @@ long CTLayout::FillDXArray( sal_Int32* pDXArray ) const
 
 // -----------------------------------------------------------------------
 
-int CTLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
+int CTLayout::GetTextBreak( long nMaxWidth, long /*nCharExtra*/, int nFactor ) const
 {
     if( !mpCTLine )
         return STRING_LEN;
@@ -469,9 +469,9 @@ void CTLayout::MoveGlyph( int /*nStart*/, long /*nNewXPos*/ ) {}
 void CTLayout::DropGlyph( int /*nStart*/ ) {}
 void CTLayout::Simplify( bool /*bIsBase*/ ) {}
 
-// get the ImplFontData for a glyph fallback font
+// get the PhysicalFontFace for a glyph fallback font
 // for a glyphid that was returned by CTLayout::GetNextGlyphs()
-const ImplFontData* CTLayout::GetFallbackFontData( sal_GlyphId /*nGlyphId*/ ) const
+const PhysicalFontFace* CTLayout::GetFallbackFontData( sal_GlyphId /*nGlyphId*/ ) const
 {
 #if 0
     // check if any fallback fonts were needed
@@ -484,7 +484,7 @@ const ImplFontData* CTLayout::GetFallbackFontData( sal_GlyphId /*nGlyphId*/ ) co
     pFallbackFont = mpFallbackInfo->GetFallbackFontData( nFallbackLevel );
 #else
     // let CoreText's font cascading handle glyph fallback
-    const ImplFontData* pFallbackFont = NULL;
+    const PhysicalFontFace* pFallbackFont = NULL;
 #endif
     return pFallbackFont;
 }
