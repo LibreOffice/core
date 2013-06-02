@@ -1673,7 +1673,7 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
 
                     bool bBreak = ( aVars.GetLineBreak() || aVars.GetHorJust() == SVX_HOR_JUSTIFY_BLOCK );
                     // #i111387# #o11817313# disable automatic line breaks only for "General" number format
-                    if (bBreak && bCellIsValue && (aVars.GetResultValueFormat(aCell) % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+                    if (bBreak && bCellIsValue && (aVars.GetResultValueFormat() % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
                         bBreak = false;
 
                     bool bRepeat = aVars.IsRepeat() && !bBreak;
