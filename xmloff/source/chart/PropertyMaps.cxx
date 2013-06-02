@@ -28,8 +28,15 @@
 
 #include <sax/tools/converter.hxx>
 
-#include "XMLChartPropertySetMapper.hxx"
 #include "SchXMLTools.hxx"
+#include "XMLChartPropertySetMapper.hxx"
+#include "XMLErrorIndicatorPropertyHdl.hxx"
+#include "XMLErrorBarStylePropertyHdl.hxx"
+#include "XMLTextOrientationHdl.hxx"
+#include "XMLSymbolTypePropertyHdl.hxx"
+#include "XMLAxisPositionPropertyHdl.hxx"
+#include "XMLRegressionTypePropertyHdl.hxx"
+
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include <xmloff/attrlist.hxx>
@@ -39,17 +46,13 @@
 #include <xmloff/NamedBoolPropertyHdl.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "XMLErrorIndicatorPropertyHdl.hxx"
-#include "XMLErrorBarStylePropertyHdl.hxx"
-#include "XMLTextOrientationHdl.hxx"
-#include "XMLSymbolTypePropertyHdl.hxx"
-#include "XMLAxisPositionPropertyHdl.hxx"
-#include <com/sun/star/chart/ChartAxisMarks.hpp>
-#include <com/sun/star/chart/ChartDataCaption.hpp>
-#include <com/sun/star/chart/ChartSymbolType.hpp>
+
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
+#include <com/sun/star/chart/ChartAxisMarks.hpp>
+#include <com/sun/star/chart/ChartDataCaption.hpp>
+#include <com/sun/star/chart/ChartSymbolType.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -116,8 +119,7 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 break;
 
             case XML_SCH_TYPE_REGRESSION_TYPE:
-                pHdl = new XMLEnumPropertyHdl( aXMLChartRegressionCurveTypeEnumMap,
-                                               ::getCppuType((const chart::ChartRegressionCurveType*)0) );
+                pHdl = new XMLRegressionTypePropertyHdl( );
                 break;
 
             case XML_SCH_TYPE_ERROR_INDICATOR_LOWER:

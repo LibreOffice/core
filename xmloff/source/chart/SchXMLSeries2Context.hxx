@@ -48,6 +48,8 @@ private:
             ::com::sun::star::chart2::XChartDocument > mxNewDoc;
     ::std::vector< SchXMLAxis >& mrAxes;
     ::std::list< DataRowPointStyle >& mrStyleList;
+    ::std::list< RegressionStyle >& mrRegressionStyleList;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries > m_xSeries;
     sal_Int32 mnSeriesIndex;
     sal_Int32 mnDataPointIndex;
@@ -77,6 +79,7 @@ public:
                               ::com::sun::star::chart2::XChartDocument > & xNewDoc,
                           std::vector< SchXMLAxis >& rAxes,
                           ::std::list< DataRowPointStyle >& rStyleList,
+                          ::std::list< RegressionStyle >& rRegressionStyleList,
                           sal_Int32 nSeriesIndex,
                           sal_Bool bStockHasVolume,
                           GlobalSeriesImportInfo& rGlobalSeriesImportInfo,
@@ -111,6 +114,12 @@ public:
         , const SvXMLStylesContext* pStylesCtxt
         , const SvXMLStyleContext*& rpStyle
         , OUString &rCurrStyleName );
+
+    static void setStylesToRegressionCurves(
+                    SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles,
+                    const SvXMLStylesContext* pStylesCtxt,
+                    const SvXMLStyleContext*& rpStyle,
+                    OUString &rCurrStyleName );
 
     static void setStylesToDataPoints( SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles
         , const SvXMLStylesContext* pStylesCtxt

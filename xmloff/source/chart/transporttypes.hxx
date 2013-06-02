@@ -151,6 +151,23 @@ struct GlobalSeriesImportInfo
     sal_Int32 nFirstSecondDomainIndex;
 };
 
+struct RegressionStyle
+{
+    com::sun::star::uno::Reference<
+                com::sun::star::chart2::XDataSeries > m_xSeries;
+    com::sun::star::uno::Reference<
+                com::sun::star::beans::XPropertySet > m_xEquationProperties;
+
+    OUString msStyleName;
+
+    RegressionStyle(const com::sun::star::uno::Reference<
+                          com::sun::star::chart2::XDataSeries >& xSeries,
+                    OUString sStyleName) :
+            m_xSeries    ( xSeries ),
+            msStyleName  ( sStyleName )
+    {}
+};
+
 struct DataRowPointStyle
 {
     enum StyleType
@@ -158,21 +175,22 @@ struct DataRowPointStyle
         DATA_POINT,
         DATA_SERIES,
         MEAN_VALUE,
-        REGRESSION,
         ERROR_INDICATOR
     };
 
     StyleType meType;
-    ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries > m_xSeries;
-    ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > m_xOldAPISeries;
+    com::sun::star::uno::Reference<
+                com::sun::star::chart2::XDataSeries > m_xSeries;
+
+    com::sun::star::uno::Reference<
+                com::sun::star::beans::XPropertySet > m_xOldAPISeries;
+
     com::sun::star::uno::Reference<
                 com::sun::star::beans::XPropertySet > m_xErrorXProperties;
+
     com::sun::star::uno::Reference<
                 com::sun::star::beans::XPropertySet > m_xErrorYProperties;
-    ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet > m_xEquationProperties;
+
     sal_Int32 m_nPointIndex;
     sal_Int32 m_nPointRepeat;
     OUString msStyleName;
@@ -181,8 +199,8 @@ struct DataRowPointStyle
     bool mbSymbolSizeForSeriesIsMissingInFile;
 
     DataRowPointStyle( StyleType eType
-                       , const ::com::sun::star::uno::Reference<
-                          ::com::sun::star::chart2::XDataSeries >& xSeries
+                        , const com::sun::star::uno::Reference<
+                          com::sun::star::chart2::XDataSeries >& xSeries
                         , sal_Int32 nPointIndex
                         , sal_Int32 nPointRepeat
                         , OUString sStyleName

@@ -20,12 +20,14 @@
 
 #include "SchXMLSeries2Context.hxx"
 #include "SchXMLPlotAreaContext.hxx"
+#include "SchXMLRegressionCurveObjectContext.hxx"
 #include "SchXMLTools.hxx"
 #include "PropertyMap.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
+#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 
@@ -37,6 +39,8 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+
+#include <comphelper/processfactory.hxx>
 
 // header for define DBG_ERROR1
 #include <tools/debug.hxx>
@@ -247,6 +251,7 @@ SchXMLSeries2Context::SchXMLSeries2Context(
     const Reference< chart2::XChartDocument > & xNewDoc,
     std::vector< SchXMLAxis >& rAxes,
     ::std::list< DataRowPointStyle >& rStyleList,
+    ::std::list< RegressionStyle >& rRegressionStyleList,
     sal_Int32 nSeriesIndex,
     sal_Bool bStockHasVolume,
     GlobalSeriesImportInfo& rGlobalSeriesImportInfo,
@@ -259,6 +264,7 @@ SchXMLSeries2Context::SchXMLSeries2Context(
         mxNewDoc( xNewDoc ),
         mrAxes( rAxes ),
         mrStyleList( rStyleList ),
+        mrRegressionStyleList( rRegressionStyleList ),
         m_xSeries(0),
         mnSeriesIndex( nSeriesIndex ),
         mnDataPointIndex( 0 ),
@@ -644,12 +650,10 @@ SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
                 maChartSize, mrLSequencesPerIndex );
             break;
         case XML_TOK_SERIES_REGRESSION_CURVE:
-            pContext = new SchXMLStatisticsObjectContext(
+            pContext = new SchXMLRegressionCurveObjectContext(
                 mrImportHelper, GetImport(),
-                nPrefix, rLocalName, msAutoStyleName,
-                mrStyleList, m_xSeries,
-                SchXMLStatisticsObjectContext::CONTEXT_TYPE_REGRESSION_CURVE,
-                maChartSize, mrLSequencesPerIndex );
+                nPrefix, rLocalName, msAutoStyleName, mrRegressionStyleList,
+                m_xSeries, maChartSize );
             break;
         case XML_TOK_SERIES_ERROR_INDICATOR:
             pContext = new SchXMLStatisticsObjectContext(
@@ -842,6 +846,70 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
 }
 
 // static
+void SchXMLSeries2Context::setStylesToRegressionCurves(
+                                SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles,
+                                const SvXMLStylesContext* pStylesCtxt,
+                                const SvXMLStyleContext*& rpStyle,
+                                OUString& rCurrStyleName )
+{
+    std::list< RegressionStyle >::iterator iStyle;
+
+    // iterate over regession etc
+    for( iStyle = rSeriesDefaultsAndStyles.maRegressionStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maRegressionStyleList.end(); ++iStyle )
+    {
+        try
+        {
+            if( !(iStyle->msStyleName).isEmpty() )
+            {
+                if( !rCurrStyleName.equals( iStyle->msStyleName ) )
+                {
+                    rCurrStyleName = iStyle->msStyleName;
+                    rpStyle = pStylesCtxt->FindStyleChildContext(
+                        SchXMLImportHelper::GetChartFamilyID(), rCurrStyleName );
+                }
+
+                XMLPropStyleContext* pPropStyleContext =
+                    const_cast< XMLPropStyleContext* >(
+                        dynamic_cast< const XMLPropStyleContext* >( rpStyle ));
+
+                if( pPropStyleContext )
+                {
+                    uno::Any aAny = SchXMLTools::getPropertyFromContext("RegressionType", pPropStyleContext, pStylesCtxt);
+
+                    if ( aAny.hasValue() )
+                    {
+                        OUString aServiceName;
+                        aAny >>= aServiceName;
+
+                        if( !aServiceName.isEmpty() )
+                        {
+                            Reference< lang::XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
+                            Reference< chart2::XRegressionCurve > xRegCurve( xMSF->createInstance( aServiceName ), uno::UNO_QUERY_THROW );
+                            if( xRegCurve.is())
+                            {
+                                Reference< beans::XPropertySet > xCurveProperties( xRegCurve, uno::UNO_QUERY );
+                                pPropStyleContext->FillPropertySet( xCurveProperties );
+
+                                xRegCurve->setEquationProperties( iStyle->m_xEquationProperties );
+                            }
+
+                            Reference< chart2::XRegressionCurveContainer > xRegCurveCont( iStyle->m_xSeries, uno::UNO_QUERY_THROW );
+                            xRegCurveCont->addRegressionCurve( xRegCurve );
+
+                        }
+                    }
+                }
+            }
+        }
+        catch( const uno::Exception & rEx )
+        {
+            SAL_INFO("xmloff.chart", "Exception caught during setting styles to series: " << rEx.Message );
+        }
+
+    }
+}
+
+// static
 void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles
         , const SvXMLStylesContext* pStylesCtxt
         , const SvXMLStyleContext*& rpStyle
@@ -852,8 +920,7 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
     // iterate over regession etc
     for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); ++iStyle )
     {
-        if( iStyle->meType == DataRowPointStyle::REGRESSION ||
-            iStyle->meType == DataRowPointStyle::ERROR_INDICATOR ||
+        if( iStyle->meType == DataRowPointStyle::ERROR_INDICATOR ||
             iStyle->meType == DataRowPointStyle::MEAN_VALUE )
         {
             if ( iStyle->meType == DataRowPointStyle::ERROR_INDICATOR )
@@ -895,10 +962,6 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
                                 xSeriesProp->getPropertyValue(
                                     OUString( "DataMeanValueProperties" )) >>= xStatPropSet;
                                 break;
-                            case DataRowPointStyle::REGRESSION:
-                                xSeriesProp->getPropertyValue(
-                                    OUString( "DataRegressionProperties" )) >>= xStatPropSet;
-                                break;
                             case DataRowPointStyle::ERROR_INDICATOR:
                                 xSeriesProp->getPropertyValue(
                                     OUString( "DataErrorProperties" ))  >>= xStatPropSet;
@@ -909,18 +972,6 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
                         if( xStatPropSet.is())
                             pPropStyleContext->FillPropertySet( xStatPropSet );
                     }
-                }
-
-                // set equation properties at a regression curve
-                // note: this must be done after setting the regression
-                // properties at the old API, otherwise the curve itself does
-                // not exist here
-                if( iStyle->meType == DataRowPointStyle::REGRESSION && iStyle->m_xEquationProperties.is())
-                {
-                    SAL_WARN_IF( !iStyle->m_xSeries.is(), "xmloff.chart", "iStyle->m_xSeries is NULL");
-                    Reference< chart2::XRegressionCurve > xRegCurve( SchXMLTools::getRegressionCurve( iStyle->m_xSeries ));
-                    if( xRegCurve.is())
-                        xRegCurve->setEquationProperties( iStyle->m_xEquationProperties );
                 }
             }
             catch( const uno::Exception & rEx )

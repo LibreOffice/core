@@ -2668,7 +2668,6 @@ void SchXMLExportHelper_Impl::exportSeries(
                     sal_Int32 nSeriesLength = 0;
                     sal_Int32 nAttachedAxis = chart::ChartAxisAssign::PRIMARY_Y;
                     sal_Bool bHasMeanValueLine = false;
-                    chart::ChartRegressionCurveType eRegressionType( chart::ChartRegressionCurveType_NONE );
                     Reference< beans::XPropertySet > xPropSet;
                     tLabelValuesDataPair aSeriesLabelValuesPair;
 
@@ -2725,10 +2724,6 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     aAny = xPropSet->getPropertyValue(
                                         OUString(  "MeanValue" ));
                                     aAny >>= bHasMeanValueLine;
-
-                                    aAny = xPropSet->getPropertyValue(
-                                        OUString(  "RegressionCurves" ));
-                                    aAny >>= eRegressionType;
                                 }
                                 catch( const beans::UnknownPropertyException & rEx )
                                 {
@@ -2889,8 +2884,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                         }
                     }
 
-                    if( eRegressionType != chart::ChartRegressionCurveType_NONE &&
-                        xPropSet.is() &&
+                    if( xPropSet.is() &&
                         mxExpPropMapper.is() )
                     {
                         exportRegressionCurve( aSeriesSeq[nSeriesIdx], xPropSet, rPageSize, bExportContent );
@@ -2914,9 +2908,9 @@ void SchXMLExportHelper_Impl::exportSeries(
 }
 
 void SchXMLExportHelper_Impl::exportRegressionCurve(
-    const Reference< chart2::XDataSeries > & xSeries,
-    const Reference< beans::XPropertySet > & xSeriesProp,
-    const awt::Size & rPageSize,
+    const Reference< chart2::XDataSeries >& xSeries,
+    const Reference< beans::XPropertySet >& xSeriesProp,
+    const awt::Size& rPageSize,
     sal_Bool bExportContent )
 {
     OSL_ASSERT( mxExpPropMapper.is());

@@ -1225,6 +1225,7 @@ namespace xmloff { namespace token {
         XML_MOVEMENT,
         XML_MOVEMENT_CUT_OFF,
         XML_MOVER,
+        XML_MOVING_AVERAGE,
         XML_MPADDED,
         XML_MPHANTOM,
         XML_MPRESCRIPTS,

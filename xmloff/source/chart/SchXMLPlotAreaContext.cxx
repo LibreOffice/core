@@ -21,6 +21,7 @@
 #include <sax/tools/converter.hxx>
 
 #include "SchXMLPlotAreaContext.hxx"
+#include "SchXMLRegressionCurveObjectContext.hxx"
 #include "SchXMLImport.hxx"
 #include "SchXMLAxisContext.hxx"
 #include "SchXMLSeries2Context.hxx"
@@ -46,7 +47,6 @@
 #include <com/sun/star/chart/X3DDisplay.hpp>
 #include <com/sun/star/chart/XStatisticDisplay.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
-#include <com/sun/star/chart2/RegressionEquation.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -491,6 +491,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
                         mrImportHelper, GetImport(), rLocalName,
                         mxNewDoc, maAxes,
                         mrSeriesDefaultsAndStyles.maSeriesStyleList,
+                        mrSeriesDefaultsAndStyles.maRegressionStyleList,
                         mnSeries,
                         mbStockHasVolume,
                         m_aGlobalSeriesImportInfo,
@@ -996,7 +997,6 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
 }
 
 SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
-
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
@@ -1136,7 +1136,6 @@ void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, uno::Refere
 
 }
 
-
 void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
@@ -1149,6 +1148,7 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
     {
         OUString sAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
+
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_CHART )
@@ -1164,9 +1164,7 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
         }
     }
 
-    // note: regression-curves must get a style-object even if there is no
-    // auto-style set, because they can contain an equation
-    if( !sAutoStyleName.isEmpty() || meContextType == CONTEXT_TYPE_REGRESSION_CURVE )
+    if( !sAutoStyleName.isEmpty() )
     {
         DataRowPointStyle aStyle( DataRowPointStyle::MEAN_VALUE, m_xSeries, -1, 1, sAutoStyleName );
 
@@ -1175,14 +1173,10 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
             case CONTEXT_TYPE_MEAN_VALUE_LINE:
                 aStyle.meType = DataRowPointStyle::MEAN_VALUE;
                 break;
-            case CONTEXT_TYPE_REGRESSION_CURVE:
-                aStyle.meType = DataRowPointStyle::REGRESSION;
-                break;
             case CONTEXT_TYPE_ERROR_INDICATOR:
                 {
                     aStyle.meType = DataRowPointStyle::ERROR_INDICATOR;
 
-                    ;
                     uno::Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory(),
                                                                         uno::UNO_QUERY );
 
@@ -1231,120 +1225,8 @@ SvXMLImportContext* SchXMLStatisticsObjectContext::CreateChildContext(
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = 0;
-
-    if( nPrefix == XML_NAMESPACE_CHART &&
-        IsXMLToken( rLocalName, XML_EQUATION ) )
-    {
-        pContext = new SchXMLEquationContext(
-            mrImportHelper, GetImport(), nPrefix, rLocalName, m_xSeries, maChartSize, mrStyleList.back());
-    }
-    else
-    {
-        pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
-    }
-
+    pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
     return pContext;
-}
-
-// ========================================
-
-SchXMLEquationContext::SchXMLEquationContext(
-    SchXMLImportHelper& rImpHelper,
-    SvXMLImport& rImport,
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const ::com::sun::star::uno::Reference<
-    ::com::sun::star::chart2::XDataSeries >& xSeries,
-    const awt::Size & rChartSize,
-    DataRowPointStyle & rRegressionStyle ) :
-        SvXMLImportContext( rImport, nPrefix, rLocalName ),
-        mrImportHelper( rImpHelper ),
-        mrRegressionStyle( rRegressionStyle ),
-        m_xSeries( xSeries ),
-        maChartSize( rChartSize )
-{}
-
-SchXMLEquationContext::~SchXMLEquationContext()
-{}
-
-void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
-{
-    // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    SchXMLImport& rImport = ( SchXMLImport& )GetImport();
-    const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetRegEquationAttrTokenMap();
-    OUString sAutoStyleName;
-
-    bool bShowEquation = true;
-    bool bShowRSquare = false;
-    awt::Point aPosition;
-    bool bHasXPos = false;
-    bool bHasYPos = false;
-
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
-    {
-        OUString sAttrName = xAttrList->getNameByIndex( i );
-        OUString aLocalName;
-        OUString aValue = xAttrList->getValueByIndex( i );
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
-        {
-            case XML_TOK_REGEQ_POS_X:
-                rImport.GetMM100UnitConverter().convertMeasureToCore(
-                        aPosition.X, aValue );
-                bHasXPos = true;
-                break;
-            case XML_TOK_REGEQ_POS_Y:
-                rImport.GetMM100UnitConverter().convertMeasureToCore(
-                        aPosition.Y, aValue );
-                bHasYPos = true;
-                break;
-            case XML_TOK_REGEQ_DISPLAY_EQUATION:
-                ::sax::Converter::convertBool(bShowEquation, aValue);
-                break;
-            case XML_TOK_REGEQ_DISPLAY_R_SQUARE:
-                ::sax::Converter::convertBool(bShowRSquare, aValue);
-                break;
-            case XML_TOK_REGEQ_STYLE_NAME:
-                sAutoStyleName = aValue;
-                break;
-        }
-    }
-
-    if( !sAutoStyleName.isEmpty() || bShowEquation || bShowRSquare )
-    {
-        uno::Reference< beans::XPropertySet > xEqProp = chart2::RegressionEquation::create( comphelper::getProcessComponentContext() );
-
-        if( !sAutoStyleName.isEmpty() )
-        {
-            const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-            if( pStylesCtxt )
-            {
-                const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    mrImportHelper.GetChartFamilyID(), sAutoStyleName );
-                // note: SvXMLStyleContext::FillPropertySet is not const
-                XMLPropStyleContext * pPropStyleContext =
-                    const_cast< XMLPropStyleContext * >( dynamic_cast< const XMLPropStyleContext * >( pStyle ));
-
-                if( pPropStyleContext )
-                    pPropStyleContext->FillPropertySet( xEqProp );
-            }
-        }
-        xEqProp->setPropertyValue("ShowEquation", uno::makeAny( bShowEquation ));
-        xEqProp->setPropertyValue("ShowCorrelationCoefficient", uno::makeAny( bShowRSquare ));
-
-        if( bHasXPos && bHasYPos )
-        {
-            chart2::RelativePosition aRelPos;
-            aRelPos.Primary = static_cast< double >( aPosition.X ) / static_cast< double >( maChartSize.Width );
-            aRelPos.Secondary = static_cast< double >( aPosition.Y ) / static_cast< double >( maChartSize.Height );
-            xEqProp->setPropertyValue("RelativePosition",
-                                       uno::makeAny( aRelPos ));
-        }
-        SAL_WARN_IF( mrRegressionStyle.meType != DataRowPointStyle::REGRESSION, "xmloff.chart", "mrRegressionStyle.meType != DataRowPointStyle::REGRESSION" );
-        mrRegressionStyle.m_xEquationProperties.set( xEqProp );
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

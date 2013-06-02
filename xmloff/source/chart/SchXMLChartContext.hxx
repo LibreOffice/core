@@ -73,6 +73,7 @@ struct SeriesDefaultsAndStyles
 
     //styles for series and datapoints
     ::std::list< DataRowPointStyle > maSeriesStyleList;
+    ::std::list< RegressionStyle >   maRegressionStyleList;
 };
 
 class SchXMLChartContext : public SvXMLImportContext

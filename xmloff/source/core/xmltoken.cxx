@@ -1231,6 +1231,7 @@ namespace xmloff { namespace token {
         TOKEN( "movement",                        XML_MOVEMENT ),
         TOKEN( "movement-cut-off",                XML_MOVEMENT_CUT_OFF ),
         TOKEN( "mover",                           XML_MOVER ),
+        TOKEN( "moving-average",                  XML_MOVING_AVERAGE ),
         TOKEN( "mpadded",                         XML_MPADDED ),
         TOKEN( "mphantom",                        XML_MPHANTOM ),
         TOKEN( "mprescripts",                     XML_MPRESCRIPTS ),

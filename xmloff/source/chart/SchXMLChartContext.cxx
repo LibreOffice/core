@@ -887,6 +887,9 @@ void SchXMLChartContext::EndElement()
                 // ... then set attributes for statistics (after their existence was set in the series)
                 SchXMLSeries2Context::setStylesToStatisticsObjects( maSeriesDefaultsAndStyles
                             , pStylesCtxt, pStyle, sCurrStyleName );
+
+                SchXMLSeries2Context::setStylesToRegressionCurves( maSeriesDefaultsAndStyles
+                            , pStylesCtxt, pStyle, sCurrStyleName );
             }
         }
 

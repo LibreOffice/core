@@ -30,7 +30,6 @@
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
-#include <com/sun/star/chart/ChartRegressionCurveType.hpp>
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
@@ -184,7 +183,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY( "ShowNegativeError", CHART, XML_ERROR_LOWER_INDICATOR, XML_TYPE_BOOL),
     MAP_ENTRY( "ErrorBarStyle", CHART, XML_ERROR_CATEGORY, XML_SCH_TYPE_ERROR_BAR_STYLE ),
     MAP_ENTRY( "PercentageError", CHART, XML_ERROR_PERCENTAGE, XML_TYPE_DOUBLE ),
-    MAP_ENTRY( "RegressionCurves", CHART, XML_REGRESSION_TYPE, XML_SCH_TYPE_REGRESSION_TYPE ),
+    MAP_ENTRY( "RegressionType", CHART, XML_REGRESSION_TYPE, XML_SCH_TYPE_REGRESSION_TYPE ),
     MAP_SPECIAL_ODF12( "ErrorBarRangePositive", CHART, XML_ERROR_UPPER_RANGE, XML_TYPE_STRING, XML_SCH_CONTEXT_SPECIAL_ERRORBAR_RANGE ), // export only
     MAP_SPECIAL_ODF12( "ErrorBarRangeNegative", CHART, XML_ERROR_LOWER_RANGE, XML_TYPE_STRING, XML_SCH_CONTEXT_SPECIAL_ERRORBAR_RANGE ), // export only
 
@@ -253,17 +252,6 @@ SvXMLEnumMapEntry aXMLChartErrorBarStyleEnumMap[] =
     { ::xmloff::token::XML_ERROR_MARGIN,        ::com::sun::star::chart::ErrorBarStyle::ERROR_MARGIN },
     { ::xmloff::token::XML_STANDARD_ERROR,      ::com::sun::star::chart::ErrorBarStyle::STANDARD_ERROR },
     { ::xmloff::token::XML_CELL_RANGE,          ::com::sun::star::chart::ErrorBarStyle::FROM_DATA },
-    { ::xmloff::token::XML_TOKEN_INVALID, 0 }
-};
-
-SvXMLEnumMapEntry aXMLChartRegressionCurveTypeEnumMap[] =
-{
-    { ::xmloff::token::XML_NONE,        ::com::sun::star::chart::ChartRegressionCurveType_NONE },
-    { ::xmloff::token::XML_LINEAR,      ::com::sun::star::chart::ChartRegressionCurveType_LINEAR },
-    { ::xmloff::token::XML_LOGARITHMIC, ::com::sun::star::chart::ChartRegressionCurveType_LOGARITHM },
-    { ::xmloff::token::XML_EXPONENTIAL, ::com::sun::star::chart::ChartRegressionCurveType_EXPONENTIAL },
-    { ::xmloff::token::XML_POLYNOMIAL,  ::com::sun::star::chart::ChartRegressionCurveType_POLYNOMIAL },
-    { ::xmloff::token::XML_POWER,       ::com::sun::star::chart::ChartRegressionCurveType_POWER },
     { ::xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 

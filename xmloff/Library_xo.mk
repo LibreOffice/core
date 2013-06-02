@@ -69,6 +69,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/chart/SchXMLLegendContext \
     xmloff/source/chart/SchXMLParagraphContext \
     xmloff/source/chart/SchXMLPlotAreaContext \
+    xmloff/source/chart/SchXMLRegressionCurveObjectContext \
     xmloff/source/chart/SchXMLSeries2Context \
     xmloff/source/chart/SchXMLSeriesHelper \
     xmloff/source/chart/SchXMLTableContext \
@@ -80,6 +81,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/chart/XMLErrorBarStylePropertyHdl \
     xmloff/source/chart/XMLErrorIndicatorPropertyHdl \
     xmloff/source/chart/XMLLabelSeparatorContext \
+    xmloff/source/chart/XMLRegressionTypePropertyHdl \
     xmloff/source/chart/XMLSymbolImageContext \
     xmloff/source/chart/XMLSymbolTypePropertyHdl \
     xmloff/source/chart/XMLTextOrientationHdl \

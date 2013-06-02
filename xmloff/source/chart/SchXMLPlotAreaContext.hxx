@@ -251,7 +251,6 @@ public:
     enum ContextType
     {
         CONTEXT_TYPE_MEAN_VALUE_LINE,
-        CONTEXT_TYPE_REGRESSION_CURVE,
         CONTEXT_TYPE_ERROR_INDICATOR
     };
 
@@ -285,33 +284,6 @@ private:
     ::com::sun::star::awt::Size                    maChartSize;
     OUString maSeriesStyleName;
     tSchXMLLSequencesPerIndex& mrLSequencesPerIndex;
-};
-
-// ----------------------------------------
-
-class SchXMLEquationContext : public SvXMLImportContext
-{
-public:
-    SchXMLEquationContext(
-        SchXMLImportHelper& rImportHelper,
-        SvXMLImport& rImport,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries >& xSeries,
-        const ::com::sun::star::awt::Size & rChartSize,
-        DataRowPointStyle & rRegressionStyle );
-
-    virtual ~SchXMLEquationContext();
-
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-
-private:
-    SchXMLImportHelper &                           mrImportHelper;
-    DataRowPointStyle &                            mrRegressionStyle;
-    ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XDataSeries > m_xSeries;
-    ::com::sun::star::awt::Size maChartSize;
 };
 
 #endif  // _SCH_XMLPLOTAREACONTEXT_HXX_
