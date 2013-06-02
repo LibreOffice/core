@@ -56,6 +56,7 @@ Deck::Deck (
       msIconURL(rDeckDescriptor.msIconURL),
       msHighContrastIconURL(rDeckDescriptor.msHighContrastIconURL),
       maPanels(),
+      mnMinimalWidth(0),
       mpTitleBar(new DeckTitleBar(rDeckDescriptor.msTitle, this, rCloserAction)),
       mpScrollClipWindow(new Window(this)),
       mpScrollContainer(new ScrollContainerWindow(mpScrollClipWindow.get())),
@@ -294,8 +295,11 @@ const SharedPanelContainer& Deck::GetPanels (void) const
 
 void Deck::RequestLayout (void)
 {
+    mnMinimalWidth = 0;
+
     DeckLayouter::LayoutDeck(
         GetContentArea(),
+        mnMinimalWidth,
         maPanels,
         *GetTitleBar(),
         *mpScrollClipWindow,

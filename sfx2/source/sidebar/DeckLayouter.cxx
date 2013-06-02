@@ -47,6 +47,7 @@ namespace {
 
 void DeckLayouter::LayoutDeck (
     const Rectangle aContentArea,
+    sal_Int32& rMinimalWidth,
     SharedPanelContainer& rPanels,
     Window& rDeckTitleBar,
     Window& rScrollClipWindow,
@@ -70,6 +71,7 @@ void DeckLayouter::LayoutDeck (
         }
         aBox = LayoutPanels(
             aBox,
+            rMinimalWidth,
             aLayoutItems,
             rScrollClipWindow,
             rScrollContainer,
@@ -84,6 +86,7 @@ void DeckLayouter::LayoutDeck (
 
 Rectangle DeckLayouter::LayoutPanels (
     const Rectangle aContentArea,
+    sal_Int32& rMinimalWidth,
     ::std::vector<LayoutItem>& rLayoutItems,
     Window& rScrollClipWindow,
     Window& rScrollContainer,
@@ -98,7 +101,7 @@ Rectangle DeckLayouter::LayoutPanels (
     // height that is left when all panel titles and separators are
     // taken into account.
     sal_Int32 nAvailableHeight (aBox.GetHeight());
-    GetRequestedSizes(rLayoutItems, nAvailableHeight, aBox);
+    GetRequestedSizes(rLayoutItems, nAvailableHeight, rMinimalWidth, aBox);
     const sal_Int32 nTotalDecorationHeight (aBox.GetHeight() - nAvailableHeight);
 
     // Analyze the requested heights.
@@ -120,6 +123,7 @@ Rectangle DeckLayouter::LayoutPanels (
         // Show a vertical scrollbar.
         return LayoutPanels(
             aContentArea,
+            rMinimalWidth,
             rLayoutItems,
             rScrollClipWindow,
             rScrollContainer,
@@ -284,6 +288,7 @@ sal_Int32 DeckLayouter::PlacePanels (
 void DeckLayouter::GetRequestedSizes (
     ::std::vector<LayoutItem>& rLayoutItems,
     sal_Int32& rAvailableHeight,
+    sal_Int32& rMinimalWidth,
     const Rectangle& rContentBox)
 {
     rAvailableHeight = rContentBox.GetHeight();
@@ -316,7 +321,13 @@ void DeckLayouter::GetRequestedSizes (
             {
                 Reference<ui::XSidebarPanel> xPanel (iItem->mpPanel->GetPanelComponent());
                 if (xPanel.is())
+                {
                     aLayoutSize = xPanel->getHeightForWidth(rContentBox.GetWidth());
+
+                    sal_Int32 nWidth = xPanel->getMinimalWidth();
+                    if (nWidth > rMinimalWidth)
+                        rMinimalWidth = nWidth;
+                }
                 else
                     aLayoutSize = ui::LayoutSize(MinimalPanelHeight, -1, 0);
             }

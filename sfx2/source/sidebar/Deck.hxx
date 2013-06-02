@@ -75,6 +75,8 @@ public:
     void PrintWindowTree (const ::std::vector<Panel*>& rPanels);
     static void PrintWindowSubTree (Window* pRoot, int nIndentation);
 
+    sal_Int32 GetMinimalWidth() const { return mnMinimalWidth; }
+
     class ScrollContainerWindow : public Window
     {
     public:
@@ -92,6 +94,7 @@ private:
     Image maIcon;
     const ::rtl::OUString msIconURL;
     const ::rtl::OUString msHighContrastIconURL;
+    sal_Int32 mnMinimalWidth;
     SharedPanelContainer maPanels;
     ::boost::scoped_ptr<DeckTitleBar> mpTitleBar;
     ::boost::scoped_ptr<Window> mpScrollClipWindow;

@@ -272,9 +272,13 @@ void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEv
 void SAL_CALL SidebarController::requestLayout (void)
     throw(cssu::RuntimeException)
 {
+    sal_Int32 nMinimalWidth = 0;
     if (mpCurrentDeck)
+    {
         mpCurrentDeck->RequestLayout();
-    RestrictWidth();
+        nMinimalWidth = mpCurrentDeck->GetMinimalWidth();
+    }
+    RestrictWidth(nMinimalWidth);
 }
 
 
@@ -340,14 +344,16 @@ void SidebarController::NotifyResize (void)
     mpTabBar->Show();
 
     // Determine if the closer of the deck can be shown.
+    sal_Int32 nMinimalWidth = 0;
     if (mpCurrentDeck)
     {
         DeckTitleBar* pTitleBar = mpCurrentDeck->GetTitleBar();
         if (pTitleBar != NULL && pTitleBar->IsVisible())
             pTitleBar->SetCloserVisible(CanModifyChildWindowWidth());
+        nMinimalWidth = mpCurrentDeck->GetMinimalWidth();
     }
 
-    RestrictWidth();
+    RestrictWidth(nMinimalWidth);
 }
 
 
@@ -1050,7 +1056,7 @@ sal_Int32 SidebarController::SetChildWindowWidth (const sal_Int32 nNewWidth)
 
 
 
-void SidebarController::RestrictWidth (void)
+void SidebarController::RestrictWidth (sal_Int32 nWidth)
 {
     SfxSplitWindow* pSplitWindow = GetSplitWindow();
     if (pSplitWindow != NULL)
@@ -1059,7 +1065,7 @@ void SidebarController::RestrictWidth (void)
         const sal_uInt16 nSetId (pSplitWindow->GetSet(nId));
         pSplitWindow->SetItemSizeRange(
             nSetId,
-            Range(TabBar::GetDefaultWidth(), gnMaximumSidebarWidth));
+            Range(TabBar::GetDefaultWidth() + nWidth, gnMaximumSidebarWidth));
     }
 }
 

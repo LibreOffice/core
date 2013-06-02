@@ -44,6 +44,7 @@ class DeckLayouter
 public:
     static void LayoutDeck (
         const Rectangle aContentArea,
+        sal_Int32& rMinimalWidth,
         SharedPanelContainer& rPanels,
         Window& pDeckTitleBar,
         Window& pScrollClipWindow,
@@ -78,6 +79,7 @@ private:
     };
     static Rectangle LayoutPanels (
         const Rectangle aContentArea,
+        sal_Int32& rMinimalWidth,
         ::std::vector<LayoutItem>& rLayoutItems,
         Window& rScrollClipWindow,
         Window& rScrollContainer,
@@ -86,6 +88,7 @@ private:
     static void GetRequestedSizes (
         ::std::vector<LayoutItem>& rLayoutItem,
         sal_Int32& rAvailableHeight,
+        sal_Int32& rMinimalWidth,
         const Rectangle& rContentBox);
     static void DistributeHeights (
         ::std::vector<LayoutItem>& rLayoutItems,
