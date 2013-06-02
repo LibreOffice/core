@@ -70,6 +70,7 @@ public:
     void testFdo48557();
     void testI120928();
     void testFdo64826();
+    void testPageBackground();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -118,6 +119,7 @@ void Test::run()
         {"fdo48557.odt", &Test::testFdo48557},
         {"i120928.docx", &Test::testI120928},
         {"fdo64826.docx", &Test::testFdo64826},
+        {"page-background.docx", &Test::testPageBackground},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -678,6 +680,13 @@ void Test::testFdo64826()
 {
     // 'Track-Changes' (Track Revisions) wasn't exported.
     CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(mxComponent, "RecordChanges")));
+}
+
+void Test::testPageBackground()
+{
+    // 'Document Background' wasn't exported.
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

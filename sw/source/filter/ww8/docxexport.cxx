@@ -44,6 +44,7 @@
 #include <frmfmt.hxx>
 #include <section.hxx>
 #include <ftninfo.hxx>
+#include <pagedesc.hxx>
 
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
@@ -690,6 +691,16 @@ void DocxExport::WriteSettings()
     OString aZoom(OString::valueOf(sal_Int32(pViewShell->GetViewOptions()->GetZoom())));
     pFS->singleElementNS(XML_w, XML_zoom, FSNS(XML_w, XML_percent), aZoom.getStr(), FSEND);
 
+    // Display Background Shape
+    const SwFrmFmt &rFmt = pDoc->GetPageDesc(0).GetMaster();
+    const SfxPoolItem* pItem = 0;
+    SfxItemState eState = rFmt.GetItemState(RES_BACKGROUND, true, &pItem);
+    if (SFX_ITEM_SET == eState && pItem)
+    {
+        // Turn on the 'displayBackgroundShape'
+        pFS->singleElementNS( XML_w, XML_displayBackgroundShape, FSEND );
+    }
+
     // Track Changes
     if ( settings.trackRevisions )
         pFS->singleElementNS( XML_w, XML_trackRevisions, FSEND );
@@ -731,6 +742,20 @@ void DocxExport::WriteMainText()
 {
     // setup the namespaces
     m_pDocumentFS->startElementNS( XML_w, XML_document, MainXmlNamespaces( m_pDocumentFS ));
+
+    // Write background page color
+    const SwFrmFmt &rFmt = pDoc->GetPageDesc(0).GetMaster();
+    const SfxPoolItem* pItem = 0;
+    SfxItemState eState = rFmt.GetItemState(RES_BACKGROUND, true, &pItem);
+    if (SFX_ITEM_SET == eState && pItem)
+    {
+        // The 'color' is set for the first page style - take it and use it as the background color of the entire DOCX
+        const SvxBrushItem* pBrush = (const SvxBrushItem*)pItem;
+        Color backgroundColor = pBrush->GetColor();
+        OString aBackgroundColorStr = msfilter::util::ConvertColor(backgroundColor);
+
+        m_pDocumentFS->singleElementNS( XML_w, XML_background, FSNS( XML_w, XML_color ), aBackgroundColorStr, FSEND );
+    }
 
     // body
     m_pDocumentFS->startElementNS( XML_w, XML_body, FSEND );
