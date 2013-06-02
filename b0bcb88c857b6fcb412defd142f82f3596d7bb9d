@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//72k\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2013-06-02T13:47:59Z",
+      "side": 1,
+      "message": "No, iterating over the complete ShapeList with this method it is not exponential, it is *quadratic*. Which is still bad, and should still in some way be made linear.",
+      "revId": "b0bcb88c857b6fcb412defd142f82f3596d7bb9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
