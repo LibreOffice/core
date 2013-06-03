@@ -3274,7 +3274,7 @@ const NfCurrencyEntry* SvNumberFormatter::GetLegacyOnlyCurrencyEntry( const OUSt
 IMPL_STATIC_LINK_NOINSTANCE( SvNumberFormatter, CurrencyChangeLink, SAL_UNUSED_PARAMETER void*, EMPTYARG )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
-    String aAbbrev;
+    OUString aAbbrev;
     LanguageType eLang = LANGUAGE_SYSTEM;
     SvtSysLocaleOptions().GetCurrencyAbbrevAndLanguage( aAbbrev, eLang );
     SetDefaultSystemCurrency( aAbbrev, eLang );
@@ -3704,7 +3704,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         ::comphelper::getProcessComponentContext(),
         SvtSysLocale().GetLanguageTag() );
     // get user configured currency
-    String aConfiguredCurrencyAbbrev;
+    OUString aConfiguredCurrencyAbbrev;
     LanguageType eConfiguredCurrencyLanguage = LANGUAGE_SYSTEM;
     SvtSysLocaleOptions().GetCurrencyAbbrevAndLanguage(
         aConfiguredCurrencyAbbrev, eConfiguredCurrencyLanguage );
@@ -3755,7 +3755,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
             lcl_CheckCurrencySymbolPosition( *pEntry );
         }
         rCurrencyTable.insert( rCurrencyTable.begin() + nCurrencyPos++, pEntry );
-        if ( !nSystemCurrencyPosition && (aConfiguredCurrencyAbbrev.Len() ?
+        if ( !nSystemCurrencyPosition && (!aConfiguredCurrencyAbbrev.isEmpty() ?
                                           pEntry->GetBankSymbol() == OUString(aConfiguredCurrencyAbbrev) &&
                                           pEntry->GetLanguage() == eConfiguredCurrencyLanguage : false) )
         {
@@ -3800,7 +3800,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
                     {
                         rCurrencyTable.insert( rCurrencyTable.begin() + nCurrencyPos++, pEntry );
                         if ( !nSecondarySystemCurrencyPosition &&
-                             (aConfiguredCurrencyAbbrev.Len() ?
+                             (!aConfiguredCurrencyAbbrev.isEmpty() ?
                               pEntry->GetBankSymbol() == OUString(aConfiguredCurrencyAbbrev) :
                               pEntry->GetLanguage() == eConfiguredCurrencyLanguage) )
                         {
@@ -3820,7 +3820,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     {
         nSystemCurrencyPosition = nSecondarySystemCurrencyPosition;
     }
-    if ((aConfiguredCurrencyAbbrev.Len() && !nSystemCurrencyPosition) &&
+    if ((!aConfiguredCurrencyAbbrev.isEmpty() && !nSystemCurrencyPosition) &&
         LocaleDataWrapper::areChecksEnabled())
     {
         LocaleDataWrapper::outputCheckMessage(
@@ -3831,7 +3831,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     {
         nSystemCurrencyPosition = nMatchingSystemCurrencyPosition;
     }
-    if ((!aConfiguredCurrencyAbbrev.Len() && !nSystemCurrencyPosition) &&
+    if ((aConfiguredCurrencyAbbrev.isEmpty() && !nSystemCurrencyPosition) &&
         LocaleDataWrapper::areChecksEnabled())
     {
         LocaleDataWrapper::outputCheckMessage(

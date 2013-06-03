@@ -340,7 +340,7 @@ SvtDefaultOptions::~SvtDefaultOptions()
 
 // -----------------------------------------------------------------------
 
-String SvtDefaultOptions::GetDefaultPath( sal_uInt16 nId ) const
+OUString SvtDefaultOptions::GetDefaultPath( sal_uInt16 nId ) const
 {
     return pImp->GetDefaultPath( nId );
 }

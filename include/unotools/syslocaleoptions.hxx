@@ -133,17 +133,17 @@ public:
 
     /// Get currency abbreviation and locale from an USD-en-US or EUR-de-DE string
     static  void                GetCurrencyAbbrevAndLanguage(
-                                    String& rAbbrev,
+                                    OUString& rAbbrev,
                                     LanguageType& eLang,
                                     const OUString& rConfigString );
 
     /// Create an USD-en-US or EUR-de-DE string
     static  OUString     CreateCurrencyConfigString(
-                                    const String& rAbbrev,
+                                    const OUString& rAbbrev,
                                     LanguageType eLang );
 
             void                GetCurrencyAbbrevAndLanguage(
-                                        String& rAbbrev,
+                                        OUString& rAbbrev,
                                         LanguageType& eLang ) const
                                     {
                                         GetCurrencyAbbrevAndLanguage( rAbbrev,
@@ -151,7 +151,7 @@ public:
                                     }
 
             void                SetCurrencyAbbrevAndLanguage(
-                                        const String& rAbbrev,
+                                        const OUString& rAbbrev,
                                         LanguageType eLang )
                                     {
                                         SetCurrencyConfigString(

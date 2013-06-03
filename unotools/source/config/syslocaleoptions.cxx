@@ -667,32 +667,32 @@ sal_Bool SvtSysLocaleOptions::IsReadOnly( EOption eOption ) const
 }
 
 // static
-void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( String& rAbbrev,
+void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( OUString& rAbbrev,
         LanguageType& eLang, const OUString& rConfigString )
 {
     sal_Int32 nDelim = rConfigString.indexOf( '-' );
     if ( nDelim >= 0 )
     {
         rAbbrev = rConfigString.copy( 0, nDelim );
-        String aIsoStr( rConfigString.copy( nDelim+1 ) );
+        OUString aIsoStr( rConfigString.copy( nDelim+1 ) );
         eLang = LanguageTag( aIsoStr ).getLanguageType();
     }
     else
     {
         rAbbrev = rConfigString;
-        eLang = (rAbbrev.Len() ? LANGUAGE_NONE : LANGUAGE_SYSTEM);
+        eLang = (!rAbbrev.isEmpty() ? LANGUAGE_NONE : LANGUAGE_SYSTEM);
     }
 }
 
 
 // static
 OUString SvtSysLocaleOptions::CreateCurrencyConfigString(
-        const String& rAbbrev, LanguageType eLang )
+        const OUString& rAbbrev, LanguageType eLang )
 {
-    String aIsoStr( LanguageTag( eLang ).getBcp47() );
-    if ( aIsoStr.Len() )
+    OUString aIsoStr( LanguageTag( eLang ).getBcp47() );
+    if ( !aIsoStr.isEmpty() )
     {
-        OUStringBuffer aStr( rAbbrev.Len() + 1 + aIsoStr.Len() );
+        OUStringBuffer aStr( rAbbrev.getLength() + 1 + aIsoStr.getLength() );
         aStr.append( rAbbrev );
         aStr.append( sal_Unicode('-') );
         aStr.append( aIsoStr );
