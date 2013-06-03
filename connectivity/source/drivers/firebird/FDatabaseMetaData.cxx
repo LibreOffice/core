@@ -865,7 +865,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
     Reference< XResultSet > xResultSet = pResultSet;
 
-    /*
     Reference< XPreparedStatement > statement = m_pConnection->prepareStatement(
             "SELECT "
             "'schema' as schema, RDB$RELATION_NAME, RDB$SYSTEM_FLAG, RDB$RELATION_TYPE, 'description' as description " // avoid duplicates
@@ -873,12 +872,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             "WHERE (RDB$RELATION_TYPE = 0 OR RDB$RELATION_TYPE = 1) "
             "AND 'schema' LIKE ? "
             "AND RDB$RELATION_NAME LIKE ? ");
-    */
-    Reference< XPreparedStatement > statement = m_pConnection->prepareStatement(
-            "SELECT "
-            "'schema' as schema, RDB$RELATION_NAME, RDB$SYSTEM_FLAG, RDB$RELATION_TYPE, 'description' as description " // avoid duplicates
-            "FROM RDB$RELATIONS "
-            "WHERE (RDB$RELATION_TYPE = 0 OR RDB$RELATION_TYPE = 1) ");
 
     printf("DEBUG !!! connectivity.firebird => ODatabaseMetaData::getTables() Setting query parameters. \n");
 
