@@ -2255,9 +2255,9 @@ void ScInterpreter::ScDde()
         sal_uInt8 nMode = SC_DDE_DEFAULT;
         if (nParamCount == 4)
             nMode = (sal_uInt8) ::rtl::math::approxFloor(GetDouble());
-        const OUString& aItem  = GetString();
-        const OUString& aTopic = GetString();
-        const OUString& aAppl  = GetString();
+        OUString aItem  = GetString();
+        OUString aTopic = GetString();
+        OUString aAppl  = GetString();
 
         if (nMode > SC_DDE_TEXT)
             nMode = SC_DDE_DEFAULT;
