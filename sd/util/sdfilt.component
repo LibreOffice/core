@@ -9,7 +9,5 @@
 -->
 <component loader="com.sun.star.loader.SharedLibrary" prefix="sdfilt"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Impress.oox.PowerPointExport">
-    <service name="com.sun.star.comp.ooxpptx"/>
-  </implementation>
+  <implementation name="com.sun.star.comp.Impress.oox.PowerPointExport"/>
 </component>
