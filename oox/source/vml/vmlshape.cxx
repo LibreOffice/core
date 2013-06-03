@@ -769,7 +769,8 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
         for ( unsigned int i = 0; i < aFlagLists.size(); i++ )
             aBezierCoords.Flags[i] = ContainerHelper::vectorToSequence( aFlagLists[i] );
 
-        if( aCoordLists.front().front().X == aCoordLists.back().back().X
+        if( !aCoordLists.front().empty() && !aCoordLists.back().empty()
+            && aCoordLists.front().front().X == aCoordLists.back().back().X
             && aCoordLists.front().front().Y == aCoordLists.back().back().Y )
         { // HACK: If the shape is in fact closed, which can be found out only when the path is known,
           // force to closed bezier shape (otherwise e.g. fill won't work).
