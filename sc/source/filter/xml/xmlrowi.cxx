@@ -218,7 +218,7 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
                                       const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                      const bool bTempHeader, const bool bTempGroup, bool bFirstRow ) :
+                                      const bool bTempHeader, const bool bTempGroup ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     nHeaderStartRow(0),
     nHeaderEndRow(0),
@@ -232,14 +232,12 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
     if (bHeader)
     {
         nHeaderStartRow = rImport.GetTables().GetCurrentRow();
-        if(!bFirstRow)
-            ++nHeaderStartRow;
+        ++nHeaderStartRow;
     }
     else if (bGroup)
     {
         nGroupStartRow = rImport.GetTables().GetCurrentRow();
-        if(!bFirstRow)
-            ++nGroupStartRow;
+        ++nGroupStartRow;
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
