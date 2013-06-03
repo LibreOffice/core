@@ -428,7 +428,7 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
                 {
                     T nX(0), nY(0);
                     *pWMF >> nX >> nY;
-                    pPtAry[ i ] = Point( nX, nY );
+                    pPtAry[ j ] = Point( nX, nY );
                     ++nReadPoints;
                 }
 
