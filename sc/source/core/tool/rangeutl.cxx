@@ -374,7 +374,7 @@ sal_Int32 ScRangeStringConverter::IndexOf(
     sal_Bool        bQuoted     = false;
     sal_Bool        bExitLoop   = false;
 
-    while( !bExitLoop && (nIndex < nLength) )
+    while( !bExitLoop && (nIndex >= 0 && nIndex < nLength) )
     {
         sal_Unicode cCode = rString[ nIndex ];
         bExitLoop = (cCode == cSearchChar) && !bQuoted;
