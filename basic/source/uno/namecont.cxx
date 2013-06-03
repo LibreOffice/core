@@ -1922,6 +1922,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
         if( pImplLib->implIsModified() || bComplete )
         {
+            {
             uno::Reference< embed::XStorage > xLibraryStor;
             if( bStorage )
             {
@@ -1943,6 +1944,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                     #endif
                     return;
                 }
+            }
 
                 // Maybe lib is not loaded?!
                 if( bComplete )
