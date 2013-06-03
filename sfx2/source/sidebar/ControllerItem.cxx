@@ -25,6 +25,7 @@
 #include "sfx2/sidebar/CommandInfoProvider.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/help.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
@@ -202,6 +203,23 @@ void ControllerItem::ResetFrame (void)
 
 
 
+::rtl::OUString ControllerItem::GetHelpText (void) const
+{
+    Help* pHelp = Application::GetHelp();
+    if (pHelp != NULL)
+    {
+        if (msCommandName.getLength() > 0)
+        {
+            const ::rtl::OUString sHelp (pHelp->GetHelpText(A2S(".uno:")+msCommandName, NULL));
+            return sHelp;
+        }
+    }
+    return ::rtl::OUString();
+}
+
+
+
+
 Image ControllerItem::GetIcon (void) const
 {
     return GetImage(mxFrame, A2S(".uno:")+msCommandName, sal_False);
@@ -218,6 +236,7 @@ ControllerItem::ItemUpdateReceiverInterface::~ItemUpdateReceiverInterface()
 void ControllerItem::SetupToolBoxItem (ToolBox& rToolBox, const sal_uInt16 nIndex)
 {
     rToolBox.SetQuickHelpText(nIndex, GetLabel());
+    rToolBox.SetHelpText(nIndex, GetHelpText());
     rToolBox.SetItemImage(nIndex, GetIcon());
 }
 
