@@ -47,7 +47,8 @@ bool GraphicNativeTransform::canBeRotated()
 
     if (   aLink.GetType() == GFX_LINK_TYPE_NATIVE_JPG
         || aLink.GetType() == GFX_LINK_TYPE_NATIVE_PNG
-        || aLink.GetType() == GFX_LINK_TYPE_NATIVE_GIF)
+        || aLink.GetType() == GFX_LINK_TYPE_NATIVE_GIF
+        || aLink.GetType() == GFX_LINK_TYPE_NONE)
     {
         return true;
     }
@@ -82,7 +83,25 @@ bool GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)
     {
         return rotateGeneric(aRotation, OUString("gif"));
     }
+    else if ( aLink.GetType() == GFX_LINK_TYPE_NONE )
+    {
+        return rotateBitmapOnly(aRotation);
+    }
     return false;
+}
+
+bool GraphicNativeTransform::rotateBitmapOnly(sal_uInt16 aRotation)
+{
+    if (mrGraphic.IsAnimated())
+    {
+        return false;
+    }
+
+    BitmapEx aBitmap = mrGraphic.GetBitmapEx();
+    aBitmap.Rotate(aRotation, COL_BLACK);
+    mrGraphic = aBitmap;
+
+    return true;
 }
 
 bool GraphicNativeTransform::rotateGeneric(sal_uInt16 aRotation, OUString aType)
