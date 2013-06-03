@@ -45,7 +45,6 @@ namespace com
     }
 }
 
-class String;
 namespace utl
 {
     class UcbLockBytesHandler;
@@ -53,12 +52,12 @@ namespace utl
     class UNOTOOLS_DLLPUBLIC UcbStreamHelper : public SvStream
     {
     public:
-        static SvStream*    CreateStream( const String& rFileName, StreamMode eOpenMode,
+        static SvStream*    CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                 UcbLockBytesHandler* pHandler=0 );
-        static SvStream*    CreateStream( const String& rFileName, StreamMode eOpenMode,
+        static SvStream*    CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                 ::com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionHandler >,
                                 UcbLockBytesHandler* pHandler=0 );
-        static SvStream*    CreateStream( const String& rFileName, StreamMode eOpenMode,
+        static SvStream*    CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                 sal_Bool bFileExists,
                                 UcbLockBytesHandler* pHandler=0 );
         static SvStream*    CreateStream( ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xStream );

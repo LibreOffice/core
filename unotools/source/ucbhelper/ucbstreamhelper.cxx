@@ -40,7 +40,7 @@ using namespace ::com::sun::star::beans;
 namespace utl
 {
 
-static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode,
+static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMode,
         Reference < XInteractionHandler > xInteractionHandler,
         UcbLockBytesHandler* pHandler, sal_Bool bEnsureFileExists )
 {
@@ -140,20 +140,20 @@ static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode
 
 //============================================================================
 
-SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOpenMode,
+SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
         UcbLockBytesHandler* pHandler )
 {
     return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), pHandler, sal_True /* bEnsureFileExists */ );
 }
 
-SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOpenMode,
+SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
         Reference < XInteractionHandler > xInteractionHandler,
         UcbLockBytesHandler* pHandler )
 {
     return lcl_CreateStream( rFileName, eOpenMode, xInteractionHandler, pHandler, sal_True /* bEnsureFileExists */ );
 }
 
-SvStream* UcbStreamHelper::CreateStream( const String& rFileName, StreamMode eOpenMode,
+SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
         sal_Bool bFileExists,
         UcbLockBytesHandler* pHandler )
 {

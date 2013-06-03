@@ -34,7 +34,7 @@ namespace tools
             sal_uInt16 i = 1;
             while( IsAvailableRes(ResId(i,*m_pResMgr).SetRT(RSC_STRING)) )
             {
-                String sStr = String(ResId(i,*m_pResMgr));
+                OUString sStr = OUString(ResId(i,*m_pResMgr));
                 _rToFill.push_back(sStr);
                 ++i;
             }
