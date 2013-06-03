@@ -299,7 +299,7 @@ ImplFontEntry* CTFontData::CreateFontInstance( /*const*/ FontSelectPattern& rFSD
 
 int CTFontData::GetFontTable( const char pTagName[5], unsigned char* pResultBuf ) const
 {
-    DBG_ASSERT( aTagName[4]=='\0', "CTFontData::GetFontTable with invalid tagname!\n" );
+    DBG_ASSERT( pTagName[4]=='\0', "CTFontData::GetFontTable with invalid tagname!\n" );
 
     const CTFontTableTag nTagCode = (pTagName[0]<<24) + (pTagName[1]<<16) + (pTagName[2]<<8) + (pTagName[3]<<0);
 
