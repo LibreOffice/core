@@ -826,15 +826,15 @@ OString SAL_CALL unicode::getExemplerLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_TAI_VIET:
             sRet = "blt";
             break;
+        case USCRIPT_MANDAEAN: /* Aliased to USCRIPT_MANDAIC in icu 4.6. */
+            sRet = "mic";
+            break;
 #if (U_ICU_VERSION_MAJOR_NUM > 4) || (U_ICU_VERSION_MAJOR_NUM == 4 && U_ICU_VERSION_MINOR_NUM >= 4)
         case USCRIPT_NABATAEAN: //no language with an assigned code yet
             sRet = "mis";
             break;
         case USCRIPT_PALMYRENE: //no language with an assigned code yet
             sRet = "mis";
-            break;
-        case USCRIPT_MANDAIC:
-            sRet = "mic";
             break;
         case USCRIPT_BAMUM:
             sRet = "bax";

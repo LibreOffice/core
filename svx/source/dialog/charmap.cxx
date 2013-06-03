@@ -1302,7 +1302,7 @@ void SubsetMap::InitList()
                 case UBLOCK_DOMINO_TILES:
                     aAllSubsets.push_back( Subset( 0x1F030, 0x1F09F, RID_SUBSETSTR_DOMINO_TILES ) );
                     break;
-#if U_ICU_VERSION_MAJOR_NUM >= 44
+#if (U_ICU_VERSION_MAJOR_NUM > 4) || (U_ICU_VERSION_MAJOR_NUM == 4 && U_ICU_VERSION_MINOR_NUM >= 4)
                 case UBLOCK_SAMARITAN:
                     aAllSubsets.push_back( Subset( 0x0800, 0x083F, RID_SUBSETSTR_SAMARITAN ) );
                     break;
@@ -1382,7 +1382,7 @@ void SubsetMap::InitList()
                     aAllSubsets.push_back( Subset( 0x2A700, 0x2B73F, RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C ) );
                     break;
 #endif
-#if U_ICU_VERSION_MAJOR_NUM >= 46
+#if (U_ICU_VERSION_MAJOR_NUM > 4) || (U_ICU_VERSION_MAJOR_NUM == 4 && U_ICU_VERSION_MINOR_NUM >= 6)
                 case UBLOCK_MANDAIC:
                     aAllSubsets.push_back( Subset( 0x0840, 0x085F, RID_SUBSETSTR_MANDAIC ) );
                     break;
@@ -1420,6 +1420,7 @@ void SubsetMap::InitList()
                     aAllSubsets.push_back( Subset( 0x2B740, 0x2B81F, RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D ) );
                     break;
 #endif
+// Note ICU version 49 (NOT 4.9), so the MAJOR_NUM is two digits.
 #if U_ICU_VERSION_MAJOR_NUM >= 49
                 case UBLOCK_ARABIC_EXTENDED_A:
                     aAllSubsets.push_back( Subset( 0x08A0, 0x08FF, RID_SUBSETSTR_ARABIC_EXTENDED_A ) );
