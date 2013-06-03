@@ -1969,9 +1969,8 @@ void FileDialogHelper_Impl::saveConfig()
 
         try
         {
-            sal_Bool bValue = sal_False;
             aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
-            bValue = sal_False;
+            sal_Bool bValue = sal_False;
             aValue >>= bValue;
             aUserData.SetToken( 1, ' ', OUString::number( (sal_Int32) bValue ) );
 
