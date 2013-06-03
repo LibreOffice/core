@@ -70,7 +70,7 @@ public:
                        const OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                       const bool bHeader, const bool bGroup, bool bFirstRow = false);
+                       const bool bHeader, const bool bGroup);
 
     virtual ~ScXMLTableRowsContext();
 
