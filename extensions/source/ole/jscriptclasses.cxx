@@ -136,9 +136,8 @@ STDMETHODIMP JScriptValue::Invoke( DISPID dispIdMember,
 STDMETHODIMP JScriptValue::Set( VARIANT type, VARIANT value)
 {
     Lock();
-    HRESULT hr= S_OK;
     m_varValue.Clear();
-    hr= VariantCopyInd( &m_varValue, &value);
+    HRESULT hr= VariantCopyInd( &m_varValue, &value);
     VARIANT var;
     VariantInit( &var);
     if( SUCCEEDED( hr= VariantChangeType( &var, &type, 0, VT_BSTR)))
