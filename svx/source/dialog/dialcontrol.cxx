@@ -390,7 +390,7 @@ void DialControl::SetRotation( sal_Int32 nAngle )
 
 void DialControl::SetLinkedField( NumericField* pField, sal_Int32 nDecimalPlaces )
 {
-    mpImpl->mnLinkedFieldValueMultiplyer = 100 / pow(10, nDecimalPlaces);
+    mpImpl->mnLinkedFieldValueMultiplyer = static_cast<sal_Int32> (100.0 / pow(10.0, nDecimalPlaces));
 
     // remove modify handler from old linked field
     ImplSetFieldLink( Link() );
