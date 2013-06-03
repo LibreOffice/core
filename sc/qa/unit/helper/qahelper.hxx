@@ -115,6 +115,36 @@ void loadFile(const OUString& aFileName, std::string& aContent)
     aContent = aOStream.str();
 }
 
+std::string print(const ScAddress& rAddr)
+{
+    std::stringstream str;
+    str << "Col: " << rAddr.Col();
+    str << " Row: " << rAddr.Row();
+    str << " Tab: " << rAddr.Tab();
+    return str.str();
+}
+
+namespace CppUnit {
+
+template<>
+struct assertion_traits<ScRange>
+{
+    static bool equal( const ScRange& x, const ScRange& y )
+    {
+        return x == y;
+    }
+
+    static std::string toString( const ScRange& x )
+    {
+        std::stringstream str;
+        str << "Start: " << print(x.aStart);
+        str << "\nEnd: " << print(x.aEnd);
+        return str.str();
+    }
+};
+
+}
+
 class ScBootstrapFixture : public test::BootstrapFixture
 {
 protected:

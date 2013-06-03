@@ -136,6 +136,8 @@ public:
     void testMiscRowHeights();
     void testOptimalHeightReset();
 
+    void testPrintRangeODS();
+
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBasicCellContentODS);
     CPPUNIT_TEST(testRangeNameXLS);
@@ -198,6 +200,7 @@ public:
 #endif
     CPPUNIT_TEST(testMiscRowHeights);
     CPPUNIT_TEST(testOptimalHeightReset);
+    CPPUNIT_TEST(testPrintRangeODS);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1923,6 +1926,19 @@ void ScFiltersTest::testOptimalHeightReset()
     // check if the new height of A1 ( after delete ) is now the optimal height of an empty cell
     CPPUNIT_ASSERT_EQUAL(nOptimalHeight, nHeight );
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testPrintRangeODS()
+{
+    ScDocShellRef xDocSh = loadDoc("print-range.", ODS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    const ScRange* pRange = pDoc->GetRepeatRowRange(0);
+    CPPUNIT_ASSERT(pRange);
+    CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,0,1,0), *pRange);
+
+    pRange = pDoc->GetRepeatRowRange(0);
+    CPPUNIT_ASSERT(pRange);
+    CPPUNIT_ASSERT_EQUAL(ScRange(0,2,1,0,4,1), *pRange);
 }
 
 ScFiltersTest::ScFiltersTest()
