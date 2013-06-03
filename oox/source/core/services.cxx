@@ -48,6 +48,11 @@ namespace {
 #define IMPLEMENTATION_ENTRY( className ) \
     { &className##_createInstance, &className##_getImplementationName, &className##_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0 }
 
+//TODO: QuickDiagrammingImport and QuickDiagrammingLayout are not listed in
+// oox/util/oox.component (and not directly referenced from anywhere in the code
+// either); it is unclear whether they are dead code or whether
+// a81327ff2faaf21c22f1a902bea170942d5207e6 "Import SmartArt graphics to
+// Impress" would actually want to make use of them:
 static ::cppu::ImplementationEntry const spServices[] =
 {
     IMPLEMENTATION_ENTRY( ::oox::core::FastTokenHandler ),
