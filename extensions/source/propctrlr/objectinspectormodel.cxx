@@ -179,7 +179,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL ObjectInspectorModel::Create(const Reference< XComponentContext >& _rxContext )
+    Reference< XInterface > SAL_CALL ObjectInspectorModel::Create(const Reference< XComponentContext >& /* _rxContext */ )
     {
         return *( new ObjectInspectorModel() );
     }
