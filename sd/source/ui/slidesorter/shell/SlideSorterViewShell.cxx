@@ -567,6 +567,7 @@ void SlideSorterViewShell::Activate (sal_Bool bIsMDIActivate)
         case ViewShell::ST_IMPRESS:
         case ViewShell::ST_SLIDE_SORTER:
         case ViewShell::ST_NOTES:
+        case ViewShell::ST_DRAW:
             eContext = EnumContext::Context_DrawPage;
             if (pMainViewShell->ISA(DrawViewShell))
             {
