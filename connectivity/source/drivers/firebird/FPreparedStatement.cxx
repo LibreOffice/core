@@ -93,6 +93,11 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInf
     m_OUTsqlda->version = SQLDA_VERSION1;
     m_OUTsqlda->sqln = 10;
 
+    // enabling the XSQLDA to accommodate up to 10 parameter items (DEFAULT)
+    m_INsqlda = (XSQLDA *)malloc(XSQLDA_LENGTH(10));
+    m_INsqlda->version = SQLDA_VERSION1;
+    m_INsqlda->sqln = 10;
+
     m_STMTHandler = NULL;          // Set handle to NULL before allocation.
     if (isc_dsql_allocate_statement(status, &db, &m_STMTHandler))
         if (pr_error(status, "allocate statement"))
@@ -105,10 +110,41 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInf
 
     // sets the statement handle (stmt) to refer to the parsed format.
     char *sqlStr = strdup(OUStringToOString( m_sSqlStatement, RTL_TEXTENCODING_UTF8 ).getStr());
-    if (isc_dsql_prepare(status, &m_TRANSHandler, &m_STMTHandler, 0, sqlStr, 1, NULL))
+    if (isc_dsql_prepare(status, &m_TRANSHandler, &m_STMTHandler, 0, sqlStr, 1, m_OUTsqlda))
         if (pr_error(status, "prepare statement"))
             return;
     free(sqlStr);
+
+
+    // fill the input XSQLDA with information about the parameters
+    if (isc_dsql_describe_bind(status, &m_STMTHandler, 1, m_INsqlda))
+        if (pr_error(status, "bind statement"))
+            return;
+
+    XSQLVAR *var = NULL;
+    int i, dtype;
+
+    // determine if the input descriptor can accommodate the number of parameters
+    // contained in the statement.
+    if (0 == m_INsqlda->sqld)
+    {
+        free(m_INsqlda);
+        m_INsqlda = NULL;
+    }
+    else
+    {
+        if (m_INsqlda->sqld > m_INsqlda->sqln)
+        {
+            int n = m_INsqlda->sqld;
+            free(m_INsqlda);
+            m_INsqlda = (XSQLDA *)malloc(XSQLDA_LENGTH(n));
+            m_INsqlda->sqln = n;
+            m_INsqlda->version = SQLDA_VERSION1;
+            if (isc_dsql_describe_bind(status, &m_STMTHandler, 1, m_INsqlda))
+                if (pr_error(status, "bind statement 2"))
+                    return;
+        }
+    }
 
     // fill the output XSQLDA with information about the select-list items.
     if (isc_dsql_describe(status, &m_STMTHandler, 1, m_OUTsqlda))
@@ -129,8 +165,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInf
                 return;
     }
 
-    XSQLVAR *var = NULL;
-    int i, dtype;
+    // Process each XSQLVAR parameter structure in the output XSQLDA
     for (i=0, var = m_OUTsqlda->sqlvar; i < m_OUTsqlda->sqld; i++, var++)
     {
         dtype = (var->sqltype & ~1); /* drop flag bit for now */
@@ -264,6 +299,33 @@ void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::r
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
+    if (NULL == m_INsqlda)
+    {
+        printf ("DEBUG !!! OPreparedStatement::setString => The query has not input parameters \n.");
+        return;
+    }
+
+    OString str = OUStringToOString(x , RTL_TEXTENCODING_UTF8 );
+    printf ("DEBUG !!! OPreparedStatement::setString => Setting parameter %i as: %s \n.",
+            parameterIndex, str.getStr());
+
+    XSQLVAR *var = m_INsqlda->sqlvar + (parameterIndex - 1);
+
+    int dtype = (var->sqltype & ~1); // drop flag bit for now
+    switch(dtype) {
+    case SQL_VARYING:
+        var->sqltype = SQL_TEXT;
+    case SQL_TEXT:
+        var->sqllen = str.getLength();
+        var->sqldata = (char *)malloc(sizeof(char)*var->sqllen);
+        sprintf(var->sqldata , "%s", str.getStr());
+        break;
+    default:
+        OSL_ASSERT( false );
+    }
+
+    sprintf(var->sqldata , "%s", OUStringToOString(x , RTL_TEXTENCODING_UTF8 ).getStr());
 }
 // -------------------------------------------------------------------------
 
@@ -286,9 +348,18 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     ISC_STATUS_ARRAY status; /* status vector */
-    if (isc_dsql_execute(status, &m_TRANSHandler, &m_STMTHandler, 1, NULL))
-        if (pr_error(status, "execute query"))
-            return NULL;
+    if (NULL != m_INsqlda)
+    {
+        if (isc_dsql_execute2(status, &m_TRANSHandler, &m_STMTHandler, 1, m_INsqlda, NULL))
+            if (pr_error(status, "execute2 query"))
+                return NULL;
+    }
+    else
+    {
+        if (isc_dsql_execute(status, &m_TRANSHandler, &m_STMTHandler, 1, NULL))
+            if (pr_error(status, "execute query"))
+                return NULL;
+    }
 
     Reference< OResultSet > pResult( new OResultSet( this) );
     //initializeResultSet( pResult.get() );
