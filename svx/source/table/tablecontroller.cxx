@@ -2750,12 +2750,11 @@ void SvxTableController::FillCommonBorderAttrFromSelectedCells( SvxBoxItem& rBox
             /* Here we go through all the selected cells (enhanced by
              * the adjoining row/column on each side) and determine the
              * lines for presentation. The algorithm is simple:
-             * 1. if a border or inner line is set in all cells to the
-             *    same value, it will be used.
+             * 1. if a border or inner line is set (or unset) in all
+             *    cells to the same value, it will be used.
              * 2. if a border or inner line is set only in some cells,
-             *    or it has different values, it will be set to
-             *    indeterminate state (SetValid() on rBoxInfoItem).
-             * 3. otherwise it will be unset.
+             *    it will be set to indeterminate state (SetValid() on
+             *    rBoxInfoItem).
              */
             for( sal_Int32 nRow = std::max( aStart.mnRow - 1, (sal_Int32)0 ); nRow < nLastRow; nRow++ )
             {
