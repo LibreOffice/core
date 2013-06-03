@@ -1377,7 +1377,7 @@ bool ScDocument::GetDdeLinkMode( size_t nDdePos, sal_uInt8& rnMode ) const
     return false;
 }
 
-const ScMatrix* ScDocument::GetDdeLinkResultMatrix( sal_uInt16 nDdePos ) const
+const ScMatrix* ScDocument::GetDdeLinkResultMatrix( size_t nDdePos ) const
 {
     const ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos );
     return pDdeLink ? pDdeLink->GetResult() : NULL;
