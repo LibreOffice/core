@@ -202,7 +202,7 @@
                 <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkCheckButton" id="checkBTN_HEADER">
-                    <property name="label" translatable="yes">_Columns and row headers</property>
+                    <property name="label" translatable="yes">_Column and row headers</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
