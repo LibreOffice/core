@@ -28,6 +28,7 @@
 
 #include <cstdio>
 #include <vector>
+#include <boost/optional.hpp>
 
 class DocxAttributeOutput;
 class DocxExportFilter;
@@ -205,6 +206,9 @@ private:
 
     /// All xml namespaces to be used at the top of any text .xml file (main doc, headers, footers,...)
     sax_fastparser::XFastAttributeListRef MainXmlNamespaces( sax_fastparser::FSHelperPtr serializer );
+
+    /// Get background color of the document, if there is one.
+    boost::optional<const SvxBrushItem*> getBackground();
 
 public:
     /// FIXME this is temporary, remotely reminding the method of the same

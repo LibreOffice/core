@@ -692,10 +692,7 @@ void DocxExport::WriteSettings()
     pFS->singleElementNS(XML_w, XML_zoom, FSNS(XML_w, XML_percent), aZoom.getStr(), FSEND);
 
     // Display Background Shape
-    const SwFrmFmt &rFmt = pDoc->GetPageDesc(0).GetMaster();
-    const SfxPoolItem* pItem = 0;
-    SfxItemState eState = rFmt.GetItemState(RES_BACKGROUND, true, &pItem);
-    if (SFX_ITEM_SET == eState && pItem)
+    if (boost::optional<const SvxBrushItem*> oBrush = getBackground())
     {
         // Turn on the 'displayBackgroundShape'
         pFS->singleElementNS( XML_w, XML_displayBackgroundShape, FSEND );
@@ -738,20 +735,31 @@ VMLExport& DocxExport::VMLExporter()
     return *m_pVMLExport;
 }
 
+boost::optional<const SvxBrushItem*> DocxExport::getBackground()
+{
+    boost::optional<const SvxBrushItem*> oRet;
+    const SwFrmFmt &rFmt = pDoc->GetPageDesc(0).GetMaster();
+    const SfxPoolItem* pItem = 0;
+    SfxItemState eState = rFmt.GetItemState(RES_BACKGROUND, true, &pItem);
+
+    if (SFX_ITEM_SET == eState && pItem)
+    {
+        // The 'color' is set for the first page style - take it and use it as the background color of the entire DOCX
+        const SvxBrushItem* pBrush = (const SvxBrushItem*)pItem;
+        oRet.reset(pBrush);
+    }
+    return oRet;
+}
+
 void DocxExport::WriteMainText()
 {
     // setup the namespaces
     m_pDocumentFS->startElementNS( XML_w, XML_document, MainXmlNamespaces( m_pDocumentFS ));
 
     // Write background page color
-    const SwFrmFmt &rFmt = pDoc->GetPageDesc(0).GetMaster();
-    const SfxPoolItem* pItem = 0;
-    SfxItemState eState = rFmt.GetItemState(RES_BACKGROUND, true, &pItem);
-    if (SFX_ITEM_SET == eState && pItem)
+    if (boost::optional<const SvxBrushItem*> oBrush = getBackground())
     {
-        // The 'color' is set for the first page style - take it and use it as the background color of the entire DOCX
-        const SvxBrushItem* pBrush = (const SvxBrushItem*)pItem;
-        Color backgroundColor = pBrush->GetColor();
+        Color backgroundColor = (*oBrush)->GetColor();
         OString aBackgroundColorStr = msfilter::util::ConvertColor(backgroundColor);
 
         m_pDocumentFS->singleElementNS( XML_w, XML_background, FSNS( XML_w, XML_color ), aBackgroundColorStr, FSEND );
