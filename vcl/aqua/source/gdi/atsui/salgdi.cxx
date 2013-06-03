@@ -66,7 +66,6 @@ ImplMacFontData::ImplMacFontData( const ImplDevFontAttributes& rDFA, ATSUFontID 
 ,   mbOs2Read( false )
 ,   mbHasOs2Table( false )
 ,   mbCmapEncodingRead( false )
-,   mbHasCJKSupport( false )
 ,   mbFontCapabilitiesRead( false )
 {}
 
@@ -110,7 +109,6 @@ inline FourCharCode GetTag(const char aTagName[5])
 }
 
 static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
-static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 
 #if MACOSX_SDK_VERSION >= 1070
 extern "C" {
@@ -240,16 +238,6 @@ void ImplMacFontData::ReadOs2Table( void ) const
 
     // parse the OS/2 raw data
     // TODO: also analyze panose info, etc.
-
-    // check if the fonts needs the "CJK extra leading" heuristic
-    const unsigned char* pOS2map = &aBuffer[0];
-    const sal_uInt32 nVersion = GetUShort( pOS2map );
-    if( nVersion >= 0x0001 )
-    {
-        sal_uInt32 ulUnicodeRange2 = GetUInt( pOS2map + 46 );
-        if( ulUnicodeRange2 & 0x2DF00000 )
-            mbHasCJKSupport = true;
-    }
 }
 
 void ImplMacFontData::ReadMacCmapEncoding( void ) const
@@ -281,36 +269,6 @@ void ImplMacFontData::ReadMacCmapEncoding( void ) const
         return;
     if( GetUShort( pCmap ) != 0x0000 )
         return;
-
-    // check if the fonts needs the "CJK extra leading" heuristic
-    int nSubTables = GetUShort( pCmap + 2 );
-
-    for( const unsigned char* p = pCmap + 4; --nSubTables >= 0; p += 8 )
-    {
-        int nPlatform = GetUShort( p );
-        if( nPlatform == kFontMacintoshPlatform ) {
-            int nEncoding = GetUShort (p + 2 );
-            if( nEncoding == kFontJapaneseScript ||
-                nEncoding == kFontTraditionalChineseScript ||
-                nEncoding == kFontKoreanScript ||
-                nEncoding == kFontSimpleChineseScript )
-            {
-                mbHasCJKSupport = true;
-                break;
-            }
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
-bool ImplMacFontData::HasCJKSupport( void ) const
-{
-    ReadOs2Table();
-    if( !mbHasOs2Table )
-        ReadMacCmapEncoding();
-
-    return mbHasCJKSupport;
 }
 
 // =======================================================================
