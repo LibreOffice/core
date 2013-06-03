@@ -32,7 +32,7 @@
             </child>
             <child>
               <object class="svtlo-FontSizeBox" id="fontsize">
-                <property name="width_request">50</property>
+                <property name="width_request">60</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
