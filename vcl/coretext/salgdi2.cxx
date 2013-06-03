@@ -38,11 +38,7 @@
 
 #include "coretext/salgdi2.h"
 #include "aqua/salframe.h"
-#ifdef ENABLE_CORETEXT
 #include "ctfonts.hxx"
-#else
-#include "atsfonts.hxx"
-#endif
 
 #include "fontsubset.hxx"
 #include "impfont.hxx"
@@ -436,15 +432,9 @@ void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     // through it as should be all event handlers
 
     SalData* pSalData = GetSalData();
-#ifdef ENABLE_CORETEXT
     SystemFontList* GetCoretextFontList(void); // forward declaration
     if( !pSalData->mpFontList )
         pSalData->mpFontList = GetCoretextFontList();
-#else
-    SystemFontList* GetAtsFontList(void);      // forward declaration
-    if( !pSalData->mpFontList )
-        pSalData->mpFontList = GetAtsFontList();
-#endif
 
     // Copy all PhysicalFontFace objects contained in the SystemFontList
     pSalData->mpFontList->AnnounceFonts( *pFontList );
@@ -869,33 +859,6 @@ SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
 {
     SystemFontData aSysFontData;
     aSysFontData.nSize = sizeof( SystemFontData );
-
-#ifndef ENABLE_CORETEXT
-    // NOTE: Native ATSU font fallbacks are used, not the VCL fallbacks.
-    ATSUFontID fontId;
-    OSStatus err;
-    err = ATSUGetAttribute( maATSUStyle, kATSUFontTag, sizeof(fontId), &fontId, 0 );
-    if (err) fontId = 0;
-    aSysFontData.aATSUFontID = (void *) fontId;
-
-    Boolean bFbold;
-    err = ATSUGetAttribute( maATSUStyle, kATSUQDBoldfaceTag, sizeof(bFbold), &bFbold, 0 );
-    if (err) bFbold = FALSE;
-    aSysFontData.bFakeBold = (bool) bFbold;
-
-    Boolean bFItalic;
-    err = ATSUGetAttribute( maATSUStyle, kATSUQDItalicTag, sizeof(bFItalic), &bFItalic, 0 );
-    if (err) bFItalic = FALSE;
-    aSysFontData.bFakeItalic = (bool) bFItalic;
-
-    ATSUVerticalCharacterType aVerticalCharacterType;
-    err = ATSUGetAttribute( maATSUStyle, kATSUVerticalCharacterTag, sizeof(aVerticalCharacterType), &aVerticalCharacterType, 0 );
-    if (!err && aVerticalCharacterType == kATSUStronglyVertical) {
-        aSysFontData.bVerticalCharacterType = true;
-    } else {
-        aSysFontData.bVerticalCharacterType = false;
-    }
-#endif
 
     aSysFontData.bAntialias = !mbNonAntialiasedText;
 
