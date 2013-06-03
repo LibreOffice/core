@@ -745,7 +745,8 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
         // Even Cancel Button is returning positive(101) value,
         if( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
         {
-            SfxItemSet aNewSet( *(pDlg->GetOutputItemSet ()) );
+            SfxItemSet aNewSet( aNewAttr );
+            aNewSet.Put( *(pDlg->GetOutputItemSet ()) );
 
             SvxBoxItem aNewBoxItem( static_cast< const SvxBoxItem& >( aNewSet.Get( SDRATTR_TABLE_BORDER ) ) );
 
