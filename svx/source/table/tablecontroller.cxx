@@ -732,7 +732,8 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
         std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact ? pFact->CreateSvxFormatCellsDialog( NULL, &aNewAttr, pTableObj->GetModel(), pTableObj) : 0 );
         if( pDlg.get() && pDlg->Execute() )
         {
-            SfxItemSet aNewSet( *(pDlg->GetOutputItemSet ()) );
+            SfxItemSet aNewSet( aNewAttr );
+            aNewSet.Put( *(pDlg->GetOutputItemSet ()) );
 
             SvxBoxItem aNewBoxItem( static_cast< const SvxBoxItem& >( aNewSet.Get( SDRATTR_TABLE_BORDER ) ) );
 
