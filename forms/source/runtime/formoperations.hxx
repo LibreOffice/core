@@ -30,8 +30,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
-
-#include <comphelper/componentcontext.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase6.hxx>
@@ -59,7 +58,7 @@ namespace frm
         class MethodGuard;
 
     private:
-        ::comphelper::ComponentContext                                                          m_aContext;
+        css::uno::Reference<css::uno::XComponentContext>                                        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xController;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                     m_xCursor;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >            m_xUpdateCursor;
@@ -79,7 +78,7 @@ namespace frm
     #endif
 
     public:
-        FormOperations( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxContext );
+        FormOperations( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
 
         // XServiceInfo - static versions
         static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);

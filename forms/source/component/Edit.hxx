@@ -135,7 +135,7 @@ class OEditControl : public OBoundControl
     sal_uInt32              m_nKeyEvent;
 
 public:
-    OEditControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    OEditControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
     virtual ~OEditControl();
 
     DECLARE_UNO3_AGG_DEFAULTS(OEditControl, OBoundControl);

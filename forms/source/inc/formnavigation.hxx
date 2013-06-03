@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include "featuredispatcher.hxx"
@@ -63,7 +64,7 @@ namespace frm
         typedef ::std::map< sal_Int16, FeatureInfo >    FeatureMap;
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                             m_xORB;
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< ControlFeatureInterception >
@@ -76,11 +77,11 @@ namespace frm
         sal_Int32           m_nConnectedFeatures;
 
     protected:
-        inline const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
+        inline const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
             getORB( ) const { return m_xORB; }
 
     protected:
-        OFormNavigationHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );
+        OFormNavigationHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB );
         virtual ~OFormNavigationHelper();
 
         // XComponent
@@ -189,7 +190,7 @@ namespace frm
 
     public:
         OFormNavigationMapper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
         );
         ~OFormNavigationMapper( );
 

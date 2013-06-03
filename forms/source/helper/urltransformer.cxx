@@ -36,7 +36,7 @@ namespace frm
     //= UrlTransformer
     //====================================================================
     //--------------------------------------------------------------------
-    UrlTransformer::UrlTransformer( const Reference< XMultiServiceFactory >& _rxORB )
+    UrlTransformer::UrlTransformer( const Reference< XComponentContext >& _rxORB )
         :m_xORB( _rxORB )
         ,m_bTriedToCreateTransformer( false )
     {
@@ -51,7 +51,7 @@ namespace frm
         {
             if ( m_xORB.is() )
             {
-                m_xTransformer.set(URLTransformer::create(comphelper::getComponentContext(m_xORB)));
+                m_xTransformer.set(URLTransformer::create(m_xORB));
             }
 
             m_bTriedToCreateTransformer = true;

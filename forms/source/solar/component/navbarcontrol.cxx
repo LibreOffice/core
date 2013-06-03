@@ -145,7 +145,7 @@ namespace frm
             }
 
             // create the peer
-            ONavigationBarPeer* pPeer = ONavigationBarPeer::Create( Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW), pParentWin, getModel() );
+            ONavigationBarPeer* pPeer = ONavigationBarPeer::Create( m_xContext, pParentWin, getModel() );
             DBG_ASSERT( pPeer, "ONavigationBarControl::createPeer: invalid peer returned!" );
             if ( pPeer )
                 // by definition, the returned component is aquired once
@@ -236,7 +236,7 @@ namespace frm
     //==================================================================
     DBG_NAME( ONavigationBarPeer )
     //------------------------------------------------------------------
-    ONavigationBarPeer* ONavigationBarPeer::Create( const Reference< XMultiServiceFactory >& _rxORB,
+    ONavigationBarPeer* ONavigationBarPeer::Create( const Reference< XComponentContext >& _rxORB,
         Window* _pParentWindow, const Reference< XControlModel >& _rxModel )
     {
         DBG_TESTSOLARMUTEX();
@@ -251,7 +251,7 @@ namespace frm
             _pParentWindow,
             lcl_getWinBits_nothrow( _rxModel ),
             createDocumentCommandImageProvider( _rxORB, xContextDocument ),
-            createDocumentCommandDescriptionProvider( comphelper::getComponentContext(_rxORB), xContextDocument )
+            createDocumentCommandDescriptionProvider( _rxORB, xContextDocument )
         );
 
         // some knittings
@@ -271,7 +271,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    ONavigationBarPeer::ONavigationBarPeer( const Reference< XMultiServiceFactory >& _rxORB )
+    ONavigationBarPeer::ONavigationBarPeer( const Reference< XComponentContext >& _rxORB )
         :OFormNavigationHelper( _rxORB )
     {
         DBG_CTOR( ONavigationBarPeer, NULL );

@@ -40,6 +40,7 @@
 #include "services.hxx"
 #include <comphelper/container.hxx>
 #include <comphelper/listenernotification.hxx>
+#include <comphelper/processfactory.hxx>
 #include <svtools/imageresourceaccess.hxx>
 #define LOCAL_URL_PREFIX    '#'
 
@@ -77,7 +78,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    OClickableImageBaseControl::OClickableImageBaseControl(const Reference<XMultiServiceFactory>& _rxFactory, const OUString& _aService)
+    OClickableImageBaseControl::OClickableImageBaseControl(const Reference<XComponentContext>& _rxFactory, const OUString& _aService)
         :OControl(_rxFactory, _aService)
         ,m_pThread(NULL)
         ,m_aSubmissionVetoListeners( m_aMutex )
@@ -448,7 +449,7 @@ namespace frm
     //------------------------------------------------------------------
     DBG_NAME( OClickableImageBaseModel )
     //------------------------------------------------------------------
-    OClickableImageBaseModel::OClickableImageBaseModel( const Reference< XMultiServiceFactory >& _rxFactory, const OUString& _rUnoControlModelTypeName,
+    OClickableImageBaseModel::OClickableImageBaseModel( const Reference< XComponentContext >& _rxFactory, const OUString& _rUnoControlModelTypeName,
             const OUString& rDefault )
         :OControlModel( _rxFactory, _rUnoControlModelTypeName, rDefault )
         ,OPropertyChangeListener(m_aMutex)
@@ -464,7 +465,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    OClickableImageBaseModel::OClickableImageBaseModel( const OClickableImageBaseModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+    OClickableImageBaseModel::OClickableImageBaseModel( const OClickableImageBaseModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
         :OControlModel( _pOriginal, _rxFactory )
         ,OPropertyChangeListener( m_aMutex )
         ,m_pMedium( NULL )

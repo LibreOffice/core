@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/basicio.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/MouseButton.hpp>
 
 //.........................................................................
@@ -48,11 +49,11 @@ DBG_NAME(OImageButtonModel)
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OImageButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-     return *(new OImageButtonModel(_rxFactory));
+     return *(new OImageButtonModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------
-OImageButtonModel::OImageButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
+OImageButtonModel::OImageButtonModel(const Reference<XComponentContext>& _rxFactory)
                     :OClickableImageBaseModel( _rxFactory, VCL_CONTROLMODEL_IMAGEBUTTON, FRM_SUN_CONTROL_IMAGEBUTTON )
                                     // use the old control name for compytibility reasons
 {
@@ -61,7 +62,7 @@ OImageButtonModel::OImageButtonModel(const Reference<XMultiServiceFactory>& _rxF
 }
 
 //------------------------------------------------------------------
-OImageButtonModel::OImageButtonModel( const OImageButtonModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory)
+OImageButtonModel::OImageButtonModel( const OImageButtonModel* _pOriginal, const Reference<XComponentContext>& _rxFactory)
     :OClickableImageBaseModel( _pOriginal, _rxFactory )
 {
     DBG_CTOR(OImageButtonModel, NULL);
@@ -168,7 +169,7 @@ void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) t
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OImageButtonControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OImageButtonControl(_rxFactory));
+    return *(new OImageButtonControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -192,7 +193,7 @@ StringSequence  OImageButtonControl::getSupportedServiceNames() throw()
 }
 
 //------------------------------------------------------------------------------
-OImageButtonControl::OImageButtonControl(const Reference<XMultiServiceFactory>& _rxFactory)
+OImageButtonControl::OImageButtonControl(const Reference<XComponentContext>& _rxFactory)
             :OClickableImageBaseControl(_rxFactory, VCL_CONTROL_IMAGEBUTTON)
 {
     increment(m_refCount);

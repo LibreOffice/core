@@ -132,9 +132,9 @@ namespace frm
 //=============================================================================
 DBG_NAME(frm_OControl)
 //------------------------------------------------------------------------------
-OControl::OControl( const Reference< XMultiServiceFactory >& _rxFactory, const OUString& _rAggregateService, const sal_Bool _bSetDelegator )
+OControl::OControl( const Reference< XComponentContext >& _rxContext, const OUString& _rAggregateService, const sal_Bool _bSetDelegator )
             :OComponentHelper(m_aMutex)
-            ,m_aContext( _rxFactory )
+            ,m_xContext( _rxContext )
 {
     DBG_CTOR(frm_OControl, NULL);
     // VCL-Control aggregieren
@@ -142,7 +142,7 @@ OControl::OControl( const Reference< XMultiServiceFactory >& _rxFactory, const O
     // das Aggregat selbst den Refcount erhoeht
     increment( m_refCount );
     {
-        m_xAggregate = m_xAggregate.query( _rxFactory->createInstance( _rAggregateService ) );
+        m_xAggregate = m_xAggregate.query( _rxContext->getServiceManager()->createInstanceWithContext(_rAggregateService, _rxContext) );
         m_xControl = m_xControl.query( m_xAggregate );
     }
     decrement( m_refCount );
@@ -390,9 +390,9 @@ sal_Bool SAL_CALL OControl::isTransparent() throw ( RuntimeException)
 //==================================================================
 DBG_NAME(frm_OBoundControl);
 //------------------------------------------------------------------
-OBoundControl::OBoundControl( const Reference< XMultiServiceFactory >& _rxFactory,
+OBoundControl::OBoundControl( const Reference< XComponentContext >& _rxContext,
             const OUString& _rAggregateService, const sal_Bool _bSetDelegator )
-    :OControl( _rxFactory, _rAggregateService, _bSetDelegator )
+    :OControl( _rxContext, _rAggregateService, _bSetDelegator )
     ,m_bLocked(sal_False)
     ,m_aOriginalFont( EmptyFontDescriptor() )
     ,m_nOriginalTextLineColor( 0 )
@@ -573,12 +573,12 @@ void OControlModel::writeHelpTextCompatibly(const staruno::Reference< stario::XO
 
 //------------------------------------------------------------------
 OControlModel::OControlModel(
-                        const Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
+            const Reference<XComponentContext>& _rxContext,
             const OUString& _rUnoControlModelTypeName,
             const OUString& rDefault, const sal_Bool _bSetDelegator)
     :OComponentHelper(m_aMutex)
     ,OPropertySetAggregationHelper(OComponentHelper::rBHelper)
-    ,m_aContext( _rxFactory )
+    ,m_xContext( _rxContext )
     ,m_lockCount( 0 )
     ,m_aPropertyBagHelper( *this )
     ,m_nTabIndex(FRM_DEFAULT_TABINDEX)
@@ -595,7 +595,7 @@ OControlModel::OControlModel(
         increment(m_refCount);
 
         {
-            m_xAggregate = Reference<XAggregation>(_rxFactory->createInstance(_rUnoControlModelTypeName), UNO_QUERY);
+            m_xAggregate = Reference<XAggregation>(m_xContext->getServiceManager()->createInstanceWithContext(_rUnoControlModelTypeName, m_xContext), UNO_QUERY);
             setAggregation(m_xAggregate);
 
             if ( m_xAggregateSet.is() )
@@ -622,10 +622,10 @@ OControlModel::OControlModel(
 }
 
 //------------------------------------------------------------------
-OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< XMultiServiceFactory>& _rxFactory, const sal_Bool _bCloneAggregate, const sal_Bool _bSetDelegator )
+OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< XComponentContext>& _rxFactory, const sal_Bool _bCloneAggregate, const sal_Bool _bSetDelegator )
     :OComponentHelper( m_aMutex )
     ,OPropertySetAggregationHelper( OComponentHelper::rBHelper )
-    ,m_aContext( _rxFactory )
+    ,m_xContext( _rxFactory )
     ,m_lockCount( 0 )
     ,m_aPropertyBagHelper( *this )
     ,m_nTabIndex( FRM_DEFAULT_TABINDEX )
@@ -1227,7 +1227,7 @@ Any SAL_CALL OBoundControlModel::queryAggregation( const Type& _rType ) throw (R
 
 //------------------------------------------------------------------
 OBoundControlModel::OBoundControlModel(
-        const Reference< XMultiServiceFactory>& _rxFactory,
+        const Reference< XComponentContext>& _rxFactory,
         const OUString& _rUnoControlModelTypeName, const OUString& _rDefault,
         const sal_Bool _bCommitable, const sal_Bool _bSupportExternalBinding, const sal_Bool _bSupportsValidation )
     :OControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, sal_False )
@@ -1264,7 +1264,7 @@ OBoundControlModel::OBoundControlModel(
 
 //------------------------------------------------------------------
 OBoundControlModel::OBoundControlModel(
-        const OBoundControlModel* _pOriginal, const Reference< XMultiServiceFactory>& _rxFactory )
+        const OBoundControlModel* _pOriginal, const Reference< XComponentContext>& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory, sal_True, sal_False )
     ,OPropertyChangeListener( m_aMutex )
     ,m_xField()

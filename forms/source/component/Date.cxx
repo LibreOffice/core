@@ -45,7 +45,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 
 //------------------------------------------------------------------
-ODateControl::ODateControl(const Reference<XMultiServiceFactory>& _rxFactory)
+ODateControl::ODateControl(const Reference<XComponentContext>& _rxFactory)
                :OBoundControl(_rxFactory, VCL_CONTROL_DATEFIELD)
 {
 }
@@ -53,7 +53,7 @@ ODateControl::ODateControl(const Reference<XMultiServiceFactory>& _rxFactory)
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL ODateControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new ODateControl(_rxFactory));
+    return *(new ODateControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ StringSequence SAL_CALL ODateControl::getSupportedServiceNames() throw()
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL ODateModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new ODateModel(_rxFactory));
+    return *(new ODateModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -89,10 +89,10 @@ Sequence<Type> ODateModel::_getTypes()
 //------------------------------------------------------------------
 DBG_NAME( ODateModel )
 //------------------------------------------------------------------
-ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
+ODateModel::ODateModel(const Reference<XComponentContext>& _rxFactory)
             :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_DATEFIELD, FRM_SUN_CONTROL_DATEFIELD, sal_True, sal_True )
                         // use the old control name for compytibility reasons
-            ,OLimitedFormats( comphelper::getComponentContext(_rxFactory), FormComponentType::DATEFIELD )
+            ,OLimitedFormats( _rxFactory, FormComponentType::DATEFIELD )
 {
     DBG_CTOR( ODateModel, NULL );
 
@@ -115,9 +115,9 @@ ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
 }
 
 //------------------------------------------------------------------------------
-ODateModel::ODateModel( const ODateModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+ODateModel::ODateModel( const ODateModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
-    ,OLimitedFormats( comphelper::getComponentContext(_rxFactory), FormComponentType::DATEFIELD )
+    ,OLimitedFormats( _rxFactory, FormComponentType::DATEFIELD )
 {
     DBG_CTOR( ODateModel, NULL );
 

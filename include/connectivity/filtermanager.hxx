@@ -19,7 +19,6 @@
 #ifndef CONNECTIVITY_FILTERMANAGER_HXX
 #define CONNECTIVITY_FILTERMANAGER_HXX
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -70,18 +69,14 @@ namespace dbtools
         };
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                            m_xORB;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                             m_xComponentAggregate;
-        ::std::vector< OUString >    m_aFilterComponents;
+        ::std::vector< OUString >           m_aFilterComponents;
         sal_Bool                            m_bApplyPublicFilter;
 
     public:
         /// ctor
-        explicit FilterManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
-        );
+        explicit FilterManager();
 
         /// late ctor
         void    initialize(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxComponentAggregate );

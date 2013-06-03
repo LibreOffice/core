@@ -22,6 +22,7 @@
 #include "property.hrc"
 #include "services.hxx"
 #include <tools/debug.hxx>
+#include <comphelper/processfactory.hxx>
 
 //.........................................................................
 namespace frm
@@ -45,13 +46,13 @@ using namespace ::com::sun::star::util;
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OGroupBoxModel_CreateInstance(const Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
-    return *(new OGroupBoxModel(_rxFactory));
+    return *(new OGroupBoxModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------
 DBG_NAME( OGroupBoxModel )
 //------------------------------------------------------------------
-OGroupBoxModel::OGroupBoxModel(const Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OGroupBoxModel::OGroupBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OControlModel(_rxFactory, VCL_CONTROLMODEL_GROUPBOX, VCL_CONTROL_GROUPBOX)
 {
     DBG_CTOR( OGroupBoxModel, NULL );
@@ -59,7 +60,7 @@ OGroupBoxModel::OGroupBoxModel(const Reference<starlang::XMultiServiceFactory>& 
 }
 
 //------------------------------------------------------------------
-OGroupBoxModel::OGroupBoxModel( const OGroupBoxModel* _pOriginal, const Reference<starlang::XMultiServiceFactory>& _rxFactory )
+OGroupBoxModel::OGroupBoxModel( const OGroupBoxModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory )
 {
     DBG_CTOR( OGroupBoxModel, NULL );
@@ -137,11 +138,11 @@ void SAL_CALL OGroupBoxModel::read(const Reference< XObjectInputStream>& _rxInSt
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OGroupBoxControl_CreateInstance(const Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
-    return *(new OGroupBoxControl(_rxFactory));
+    return *(new OGroupBoxControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
-OGroupBoxControl::OGroupBoxControl(const Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OGroupBoxControl::OGroupBoxControl(const Reference<XComponentContext>& _rxFactory)
                    :OControl(_rxFactory, VCL_CONTROL_GROUPBOX)
 {
 }

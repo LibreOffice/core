@@ -218,7 +218,7 @@ class ODatabaseForm :public OFormComponents
     sal_Bool                    m_bSharingConnection : 1;       // sal_True if the connection we're using is shared with out parent
 
 public:
-    ODatabaseForm(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    ODatabaseForm(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
     ODatabaseForm( const ODatabaseForm& _cloneSource );
     ~ODatabaseForm();
 

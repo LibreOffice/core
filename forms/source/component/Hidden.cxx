@@ -23,6 +23,7 @@
 #include "services.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/basicio.hxx>
+#include <comphelper/processfactory.hxx>
 
 //.........................................................................
 namespace frm
@@ -42,13 +43,13 @@ using namespace ::com::sun::star::util;
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OHiddenModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
-    return *(new OHiddenModel(_rxFactory));
+    return *(new OHiddenModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------
 DBG_NAME( OHiddenModel )
 //------------------------------------------------------------------
-OHiddenModel::OHiddenModel(const Reference<XMultiServiceFactory>& _rxFactory)
+OHiddenModel::OHiddenModel(const Reference<XComponentContext>& _rxFactory)
     :OControlModel(_rxFactory, OUString())
 {
     DBG_CTOR( OHiddenModel, NULL );
@@ -56,7 +57,7 @@ OHiddenModel::OHiddenModel(const Reference<XMultiServiceFactory>& _rxFactory)
 }
 
 //------------------------------------------------------------------
-OHiddenModel::OHiddenModel( const OHiddenModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+OHiddenModel::OHiddenModel( const OHiddenModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory )
 {
     DBG_CTOR( OHiddenModel, NULL );

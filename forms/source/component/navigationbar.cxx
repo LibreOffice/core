@@ -24,6 +24,7 @@
 
 #include <comphelper/streamsection.hxx>
 #include <comphelper/basicio.hxx>
+#include <comphelper/processfactory.hxx>
 
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_ONavigationBarModel()
@@ -57,7 +58,7 @@ namespace frm
     //==================================================================
     DBG_NAME( ONavigationBarModel )
     //------------------------------------------------------------------
-    ONavigationBarModel::ONavigationBarModel( const Reference< XMultiServiceFactory >& _rxFactory )
+    ONavigationBarModel::ONavigationBarModel( const Reference< XComponentContext >& _rxFactory )
         :OControlModel( _rxFactory, OUString() )
         ,FontControlModel( true )
     {
@@ -81,7 +82,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    ONavigationBarModel::ONavigationBarModel( const ONavigationBarModel* _pOriginal, const Reference< XMultiServiceFactory >& _rxFactory )
+    ONavigationBarModel::ONavigationBarModel( const ONavigationBarModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
         :OControlModel( _pOriginal, _rxFactory )
         ,FontControlModel( _pOriginal )
     {
@@ -191,7 +192,7 @@ namespace frm
     //------------------------------------------------------------------
     Reference< XInterface > SAL_CALL ONavigationBarModel::Create( const Reference< XMultiServiceFactory >& _rxFactory )
     {
-        return *( new ONavigationBarModel( _rxFactory ) );
+        return *( new ONavigationBarModel( comphelper::getComponentContext(_rxFactory) ) );
     }
 
     //------------------------------------------------------------------

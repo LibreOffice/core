@@ -22,6 +22,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <memory>
 
@@ -58,7 +59,7 @@ namespace frm
         const UrlTransformer& getTransformer() const { return *m_pUrlTransformer; }
 
     public:
-        ControlFeatureInterception( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );
+        ControlFeatureInterception( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB );
 
         // XDispatchProviderInterception
         void SAL_CALL registerDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException );

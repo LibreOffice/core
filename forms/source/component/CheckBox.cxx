@@ -23,6 +23,7 @@
 #include "services.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/basicio.hxx>
+#include <comphelper/processfactory.hxx>
 
 //.........................................................................
 namespace frm
@@ -45,7 +46,7 @@ using namespace ::com::sun::star::form::binding;
 //==================================================================
 
 //------------------------------------------------------------------
-OCheckBoxControl::OCheckBoxControl(const Reference<XMultiServiceFactory>& _rxFactory)
+OCheckBoxControl::OCheckBoxControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_CHECKBOX)
 {
 }
@@ -53,7 +54,7 @@ OCheckBoxControl::OCheckBoxControl(const Reference<XMultiServiceFactory>& _rxFac
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OCheckBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
-    return *(new OCheckBoxControl(_rxFactory));
+    return *(new OCheckBoxControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -74,13 +75,13 @@ StringSequence SAL_CALL OCheckBoxControl::getSupportedServiceNames() throw(::com
 //==================================================================
 InterfaceRef SAL_CALL OCheckBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
-    return *(new OCheckBoxModel(_rxFactory));
+    return *(new OCheckBoxModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------
 DBG_NAME( OCheckBoxModel )
 //------------------------------------------------------------------
-OCheckBoxModel::OCheckBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
+OCheckBoxModel::OCheckBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_SUN_CONTROL_CHECKBOX, sal_True )
                     // use the old control name for compytibility reasons
 {
@@ -91,7 +92,7 @@ OCheckBoxModel::OCheckBoxModel(const Reference<XMultiServiceFactory>& _rxFactory
 }
 
 //------------------------------------------------------------------
-OCheckBoxModel::OCheckBoxModel( const OCheckBoxModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+OCheckBoxModel::OCheckBoxModel( const OCheckBoxModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OReferenceValueComponent( _pOriginal, _rxFactory )
 {
     DBG_CTOR( OCheckBoxModel, NULL );

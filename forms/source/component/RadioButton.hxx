@@ -86,7 +86,7 @@ private:
 class ORadioButtonControl: public OBoundControl
 {
 public:
-    ORadioButtonControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    ORadioButtonControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
     IMPLEMENTATION_NAME(ORadioButtonControl);

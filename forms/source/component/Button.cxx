@@ -24,6 +24,7 @@
 
 #include <comphelper/streamsection.hxx>
 #include <comphelper/basicio.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -55,11 +56,11 @@ DBG_NAME(OButtonModel)
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OButtonModel(_rxFactory));
+    return *(new OButtonModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------
-OButtonModel::OButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
+OButtonModel::OButtonModel(const Reference<XComponentContext>& _rxFactory)
     :OClickableImageBaseModel( _rxFactory, VCL_CONTROLMODEL_COMMANDBUTTON, FRM_SUN_CONTROL_COMMANDBUTTON )
                                     // use the old control name for compatibility reasons
     ,m_aResetHelper( *this, m_aMutex )
@@ -88,7 +89,7 @@ Sequence< Type > OButtonModel::_getTypes()
 }
 
 //------------------------------------------------------------------
-OButtonModel::OButtonModel( const OButtonModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+OButtonModel::OButtonModel( const OButtonModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OClickableImageBaseModel( _pOriginal, _rxFactory )
     ,m_aResetHelper( *this, m_aMutex )
     ,m_eDefaultState( _pOriginal->m_eDefaultState )
@@ -339,7 +340,7 @@ void OButtonModel::impl_resetNoBroadcast_nothrow()
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OButtonControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OButtonControl(_rxFactory));
+    return *(new OButtonControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -364,7 +365,7 @@ StringSequence  OButtonControl::getSupportedServiceNames() throw()
 }
 
 //------------------------------------------------------------------------------
-OButtonControl::OButtonControl(const Reference<XMultiServiceFactory>& _rxFactory)
+OButtonControl::OButtonControl(const Reference<XComponentContext>& _rxFactory)
                  :OClickableImageBaseControl(_rxFactory, VCL_CONTROL_COMMANDBUTTON)
                  ,OFormNavigationHelper( _rxFactory )
                  ,m_nClickEvent( 0 )
@@ -681,7 +682,7 @@ sal_Int16 OButtonControl::getModelUrlFeatureId( ) const
         // is it a feature URL?
         if ( isFormControllerURL( sUrl ) )
         {
-            OFormNavigationMapper aMapper( m_aContext.getLegacyServiceFactory() );
+            OFormNavigationMapper aMapper( m_xContext );
             nFeatureId = aMapper.getFeatureId( sUrl );
         }
     }

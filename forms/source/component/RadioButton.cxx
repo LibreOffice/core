@@ -25,6 +25,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/basicio.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 
@@ -48,7 +49,7 @@ using namespace ::com::sun::star::form::binding;
 //------------------------------------------------------------------------------
 InterfaceRef SAL_CALL ORadioButtonControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
-    return *(new ORadioButtonControl(_rxFactory));
+    return *(new ORadioButtonControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -64,7 +65,7 @@ StringSequence SAL_CALL ORadioButtonControl::getSupportedServiceNames() throw(Ru
 
 
 //------------------------------------------------------------------
-ORadioButtonControl::ORadioButtonControl(const Reference<XMultiServiceFactory>& _rxFactory)
+ORadioButtonControl::ORadioButtonControl(const Reference<XComponentContext>& _rxFactory)
                       :OBoundControl(_rxFactory, VCL_CONTROL_RADIOBUTTON)
 {
 }
@@ -93,13 +94,13 @@ void SAL_CALL ORadioButtonControl::createPeer(const Reference<starawt::XToolkit>
 //==================================================================
 InterfaceRef SAL_CALL ORadioButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
-    return *(new ORadioButtonModel(_rxFactory));
+    return *(new ORadioButtonModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------
 DBG_NAME( ORadioButtonModel )
 //------------------------------------------------------------------
-ORadioButtonModel::ORadioButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
+ORadioButtonModel::ORadioButtonModel(const Reference<XComponentContext>& _rxFactory)
     :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_RADIOBUTTON, FRM_SUN_CONTROL_RADIOBUTTON,sal_True )
                     // use the old control name for compytibility reasons
 {
@@ -112,7 +113,7 @@ ORadioButtonModel::ORadioButtonModel(const Reference<XMultiServiceFactory>& _rxF
 }
 
 //------------------------------------------------------------------
-ORadioButtonModel::ORadioButtonModel( const ORadioButtonModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+ORadioButtonModel::ORadioButtonModel( const ORadioButtonModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OReferenceValueComponent( _pOriginal, _rxFactory )
 {
     DBG_CTOR( ORadioButtonModel, NULL );

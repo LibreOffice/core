@@ -40,7 +40,7 @@ typedef ::cppu::WeakAggImplHelper3  <   ::com::sun::star::io::XPersistObject
 
 class OFormattedFieldWrapper : public OFormattedFieldWrapper_Base
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xServiceFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
 
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>      m_xAggregate;
@@ -52,10 +52,10 @@ protected:
     // to read and write the FormattedModel part
     // if bActAsFormatted is false, the state is undetermined until somebody calls
     // ::read or does anything which requires a living aggregate
-    static InterfaceRef createFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, bool bActAsFormatted);
+    static InterfaceRef createFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory, bool bActAsFormatted);
 
 private:
-    OFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    OFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
 
 protected:
     virtual ~OFormattedFieldWrapper();

@@ -25,6 +25,7 @@
 #include "services.hxx"
 #include <connectivity/dbtools.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/processfactory.hxx>
 
 //.........................................................................
 namespace frm
@@ -46,23 +47,23 @@ using namespace ::com::sun::star::util;
 //==================================================================
 DBG_NAME(OFormattedFieldWrapper)
 
-InterfaceRef SAL_CALL OFormattedFieldWrapper_CreateInstance_ForceFormatted(const Reference<XMultiServiceFactory>& _rxFactory)
+Reference<XInterface> SAL_CALL OFormattedFieldWrapper_CreateInstance_ForceFormatted(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return OFormattedFieldWrapper::createFormattedFieldWrapper(_rxFactory, true);
+    return OFormattedFieldWrapper::createFormattedFieldWrapper( comphelper::getComponentContext(_rxFactory), true);
 }
 
 InterfaceRef SAL_CALL OFormattedFieldWrapper_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return OFormattedFieldWrapper::createFormattedFieldWrapper(_rxFactory, false);
+    return OFormattedFieldWrapper::createFormattedFieldWrapper( comphelper::getComponentContext(_rxFactory), false);
 }
 
-OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XMultiServiceFactory>& _rxFactory)
-    :m_xServiceFactory(_rxFactory)
+OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XComponentContext>& _rxFactory)
+    :m_xContext(_rxFactory)
 {
     DBG_CTOR(OFormattedFieldWrapper, NULL);
 }
 
-InterfaceRef OFormattedFieldWrapper::createFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, bool bActAsFormatted)
+InterfaceRef OFormattedFieldWrapper::createFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory, bool bActAsFormatted)
 {
     OFormattedFieldWrapper *pRef = new OFormattedFieldWrapper(_rxFactory);
 
@@ -72,7 +73,7 @@ InterfaceRef OFormattedFieldWrapper::createFormattedFieldWrapper(const ::com::su
         InterfaceRef  xFormattedModel;
         // (instantiate it directly ..., as the OFormattedModel isn't
         // registered for any service names anymore)
-        OFormattedModel* pModel = new OFormattedModel(pRef->m_xServiceFactory);
+        OFormattedModel* pModel = new OFormattedModel(pRef->m_xContext);
         query_interface(static_cast<XWeak*>(pModel), xFormattedModel);
 
         pRef->m_xAggregate = Reference<XAggregation> (xFormattedModel, UNO_QUERY);
@@ -80,7 +81,7 @@ InterfaceRef OFormattedFieldWrapper::createFormattedFieldWrapper(const ::com::su
 
         // _before_ setting the delegator, give it to the member references
         query_interface(xFormattedModel, pRef->m_xFormattedPart);
-        pRef->m_pEditPart = rtl::Reference< OEditModel >(new OEditModel(pRef->m_xServiceFactory));
+        pRef->m_pEditPart = rtl::Reference< OEditModel >(new OEditModel(pRef->m_xContext));
     }
 
     increment(pRef->m_refCount);
@@ -100,7 +101,7 @@ Reference< XCloneable > SAL_CALL OFormattedFieldWrapper::createClone() throw (Ru
 {
     ensureAggregate();
 
-    rtl::Reference< OFormattedFieldWrapper > xRef(new OFormattedFieldWrapper(m_xServiceFactory));
+    rtl::Reference< OFormattedFieldWrapper > xRef(new OFormattedFieldWrapper(m_xContext));
 
     Reference< XCloneable > xCloneAccess;
     query_aggregation( m_xAggregate, xCloneAccess );
@@ -116,7 +117,7 @@ Reference< XCloneable > SAL_CALL OFormattedFieldWrapper::createClone() throw (Ru
 
         if ( m_pEditPart.is() )
         {
-            xRef->m_pEditPart = rtl::Reference< OEditModel >( new OEditModel(m_pEditPart.get(), m_xServiceFactory));
+            xRef->m_pEditPart = rtl::Reference< OEditModel >( new OEditModel(m_pEditPart.get(), m_xContext));
         }
     }
     else
@@ -301,7 +302,7 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
 
     {
         // let an OEditModel do the reading
-        rtl::Reference< OEditModel > pBasicReader(new OEditModel(m_xServiceFactory));
+        rtl::Reference< OEditModel > pBasicReader(new OEditModel(m_xContext));
         pBasicReader->read(_rxInStream);
 
         // was it really an edit model ?
@@ -313,7 +314,7 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
         else
         {   // no -> substitute it with a formatted model
             // let the formmatted model do the reading
-            m_xFormattedPart = Reference< XPersistObject >(new OFormattedModel(m_xServiceFactory));
+            m_xFormattedPart = Reference< XPersistObject >(new OFormattedModel(m_xContext));
             m_xFormattedPart->read(_rxInStream);
             m_pEditPart = pBasicReader;
             m_xAggregate = Reference< XAggregation >( m_xFormattedPart, UNO_QUERY );
@@ -338,11 +339,11 @@ void OFormattedFieldWrapper::ensureAggregate()
     {
         // instantiate an EditModel (the only place where we are allowed to decide that we're an FormattedModel
         // is in ::read)
-        InterfaceRef  xEditModel = m_xServiceFactory->createInstance(FRM_SUN_COMPONENT_TEXTFIELD);
+        InterfaceRef  xEditModel = m_xContext->getServiceManager()->createInstanceWithContext(FRM_SUN_COMPONENT_TEXTFIELD, m_xContext);
         if (!xEditModel.is())
         {
             // arghhh ... instantiate it directly ... it's dirty, but we really need this aggregate
-            OEditModel* pModel = new OEditModel(m_xServiceFactory);
+            OEditModel* pModel = new OEditModel(m_xContext);
             query_interface(static_cast<XWeak*>(pModel), xEditModel);
         }
 

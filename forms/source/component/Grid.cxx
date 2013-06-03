@@ -33,6 +33,7 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/container.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
@@ -72,12 +73,12 @@ const sal_uInt16 BACKGROUNDCOLOR    =   0x0100;
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OGridControlModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OGridControlModel(_rxFactory));
+    return *(new OGridControlModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 DBG_NAME(OGridControlModel);
 //------------------------------------------------------------------
-OGridControlModel::OGridControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
+OGridControlModel::OGridControlModel(const Reference<XComponentContext>& _rxFactory)
     :OControlModel(_rxFactory, OUString())
     ,OInterfaceContainer(_rxFactory, m_aMutex, ::getCppuType(static_cast<Reference<XPropertySet>*>(NULL)))
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
@@ -103,7 +104,7 @@ OGridControlModel::OGridControlModel(const Reference<XMultiServiceFactory>& _rxF
 }
 
 //------------------------------------------------------------------
-OGridControlModel::OGridControlModel( const OGridControlModel* _pOriginal, const Reference< XMultiServiceFactory >& _rxFactory )
+OGridControlModel::OGridControlModel( const OGridControlModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory )
     ,OInterfaceContainer( _rxFactory, m_aMutex, ::getCppuType( static_cast<Reference<XPropertySet>*>( NULL ) ) )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
@@ -148,7 +149,7 @@ OGridControlModel::~OGridControlModel()
 //------------------------------------------------------------------------------
 Reference< XCloneable > SAL_CALL OGridControlModel::createClone( ) throw (RuntimeException)
 {
-    OGridControlModel* pClone = new OGridControlModel( this, getContext().getLegacyServiceFactory() );
+    OGridControlModel* pClone = new OGridControlModel( this, getContext() );
     osl_atomic_increment( &pClone->m_refCount );
     pClone->OControlModel::clonedFrom( this );
     // do not call OInterfaceContainer::clonedFrom, it would clone the elements aka columns, which is

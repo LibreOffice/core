@@ -52,7 +52,7 @@ using namespace ::com::sun::star::lang;
 //= OTimeControl
 //==================================================================
 //------------------------------------------------------------------
-OTimeControl::OTimeControl(const Reference<XMultiServiceFactory>& _rxFactory)
+OTimeControl::OTimeControl(const Reference<XComponentContext>& _rxFactory)
                :OBoundControl(_rxFactory, VCL_CONTROL_TIMEFIELD)
 {
 }
@@ -60,7 +60,7 @@ OTimeControl::OTimeControl(const Reference<XMultiServiceFactory>& _rxFactory)
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OTimeControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OTimeControl(_rxFactory));
+    return *(new OTimeControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -86,7 +86,7 @@ StringSequence SAL_CALL OTimeControl::getSupportedServiceNames() throw()
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OTimeModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OTimeModel(_rxFactory));
+    return *(new OTimeModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 // XServiceInfo
@@ -122,10 +122,10 @@ Sequence<Type> OTimeModel::_getTypes()
 //------------------------------------------------------------------
 DBG_NAME( OTimeModel )
 //------------------------------------------------------------------
-OTimeModel::OTimeModel(const Reference<XMultiServiceFactory>& _rxFactory)
+OTimeModel::OTimeModel(const Reference<XComponentContext>& _rxFactory)
             :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_TIMEFIELD, FRM_SUN_CONTROL_TIMEFIELD, sal_True, sal_True )
                                     // use the old control name for compytibility reasons
-            ,OLimitedFormats( comphelper::getComponentContext(_rxFactory), FormComponentType::TIMEFIELD)
+            ,OLimitedFormats( _rxFactory, FormComponentType::TIMEFIELD)
 {
     DBG_CTOR( OTimeModel, NULL );
 
@@ -136,9 +136,9 @@ OTimeModel::OTimeModel(const Reference<XMultiServiceFactory>& _rxFactory)
 }
 
 //------------------------------------------------------------------------------
-OTimeModel::OTimeModel( const OTimeModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+OTimeModel::OTimeModel( const OTimeModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
-    ,OLimitedFormats( comphelper::getComponentContext(_rxFactory), FormComponentType::TIMEFIELD )
+    ,OLimitedFormats( _rxFactory, FormComponentType::TIMEFIELD )
 {
     DBG_CTOR( OTimeModel, NULL );
 

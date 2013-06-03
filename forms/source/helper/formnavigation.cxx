@@ -44,7 +44,7 @@ namespace frm
     //==================================================================
     DBG_NAME( OFormNavigationHelper )
     //------------------------------------------------------------------
-    OFormNavigationHelper::OFormNavigationHelper( const Reference< XMultiServiceFactory >& _rxORB )
+    OFormNavigationHelper::OFormNavigationHelper( const Reference< XComponentContext >& _rxORB )
         :m_xORB( _rxORB )
         ,m_nConnectedFeatures( 0 )
     {
@@ -379,7 +379,7 @@ namespace frm
     //= OFormNavigationMapper
     //==================================================================
     //------------------------------------------------------------------
-    OFormNavigationMapper::OFormNavigationMapper( const Reference< XMultiServiceFactory >& _rxORB )
+    OFormNavigationMapper::OFormNavigationMapper( const Reference< XComponentContext >& _rxORB )
     {
         m_pUrlTransformer.reset( new UrlTransformer( _rxORB ) );
     }

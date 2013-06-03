@@ -203,7 +203,7 @@ namespace frm
 
     public:
         OClickableImageBaseControl(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory,
             const OUString& _aService);
         virtual ~OClickableImageBaseControl();
 

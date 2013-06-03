@@ -44,6 +44,7 @@ namespace frm
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::ui::XImageManager;
     using ::com::sun::star::ui::XUIConfigurationManagerSupplier;
@@ -62,7 +63,7 @@ namespace frm
     class DocumentCommandImageProvider : public ICommandImageProvider
     {
     public:
-        DocumentCommandImageProvider( const ::comphelper::ComponentContext& _rContext, const Reference< XModel >& _rxDocument )
+        DocumentCommandImageProvider( const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument )
         {
             impl_init_nothrow( _rContext, _rxDocument );
         }
@@ -74,7 +75,7 @@ namespace frm
         virtual CommandImages getCommandImages( const CommandURLs& _rCommandURLs, const bool _bLarge ) const;
 
     private:
-        void    impl_init_nothrow( const ::comphelper::ComponentContext& _rContext, const Reference< XModel >& _rxDocument );
+        void    impl_init_nothrow( const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument );
 
     private:
         Reference< XImageManager >    m_xDocumentImageManager;
@@ -82,7 +83,7 @@ namespace frm
     };
 
     //--------------------------------------------------------------------
-    void DocumentCommandImageProvider::impl_init_nothrow( const ::comphelper::ComponentContext& _rContext, const Reference< XModel >& _rxDocument )
+    void DocumentCommandImageProvider::impl_init_nothrow( const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument )
     {
         OSL_ENSURE( _rxDocument.is(), "DocumentCommandImageProvider::impl_init_nothrow: no document => no images!" );
         if ( !_rxDocument.is() )
@@ -103,11 +104,11 @@ namespace frm
         // obtain the image manager or the module
         try
         {
-            Reference< XModuleManager2 > xModuleManager( ModuleManager::create(_rContext.getUNOContext()) );
+            Reference< XModuleManager2 > xModuleManager( ModuleManager::create(_rContext) );
             OUString sModuleID = xModuleManager->identify( _rxDocument );
 
             Reference< XModuleUIConfigurationManagerSupplier > xSuppUIConfig(
-                ModuleUIConfigurationManagerSupplier::create(_rContext.getUNOContext()) );
+                ModuleUIConfigurationManagerSupplier::create(_rContext) );
             Reference< XUIConfigurationManager > xUIConfig(
                 xSuppUIConfig->getUIConfigurationManager( sModuleID ), UNO_SET_THROW );
             m_xModuleImageManager.set( xUIConfig->getImageManager(), UNO_QUERY_THROW );
@@ -159,7 +160,7 @@ namespace frm
 
     //--------------------------------------------------------------------
     PCommandImageProvider createDocumentCommandImageProvider(
-        const ::comphelper::ComponentContext& _rContext, const Reference< XModel >& _rxDocument )
+        const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument )
     {
         PCommandImageProvider pImageProvider( new DocumentCommandImageProvider( _rContext, _rxDocument ) );
         return pImageProvider;

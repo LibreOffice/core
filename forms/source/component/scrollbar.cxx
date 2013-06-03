@@ -100,7 +100,7 @@ namespace frm
     //--------------------------------------------------------------------
     DBG_NAME( OScrollBarModel )
     //--------------------------------------------------------------------
-    OScrollBarModel::OScrollBarModel( const Reference<XMultiServiceFactory>& _rxFactory )
+    OScrollBarModel::OScrollBarModel( const Reference<XComponentContext>& _rxFactory )
         :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_SCROLLBAR, VCL_CONTROL_SCROLLBAR, sal_True, sal_True, sal_False )
         ,m_nDefaultScrollValue( 0 )
     {
@@ -111,7 +111,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    OScrollBarModel::OScrollBarModel( const OScrollBarModel* _pOriginal, const Reference< XMultiServiceFactory >& _rxFactory )
+    OScrollBarModel::OScrollBarModel( const OScrollBarModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
         :OBoundControlModel( _pOriginal, _rxFactory )
     {
         DBG_CTOR( OScrollBarModel, NULL );

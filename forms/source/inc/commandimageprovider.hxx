@@ -21,8 +21,8 @@
 #define COMMANDIMAGEPROVIDER_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <vcl/image.hxx>
 
 #include <boost/shared_ptr.hpp>
@@ -57,7 +57,7 @@ namespace frm
     //=====================================================================
     PCommandImageProvider
         createDocumentCommandImageProvider(
-            const ::comphelper::ComponentContext& _rContext,
+            const css::uno::Reference<css::uno::XComponentContext>& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument
         );
 

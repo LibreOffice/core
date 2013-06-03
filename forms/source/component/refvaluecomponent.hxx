@@ -55,7 +55,7 @@ namespace frm
 
     protected:
         OReferenceValueComponent(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory,
             const OUString& _rUnoControlModelTypeName,
             const OUString& _rDefault,
             sal_Bool _bSupportNoCheckRefValue = sal_False

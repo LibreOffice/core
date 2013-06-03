@@ -22,6 +22,7 @@
 
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/URL.hpp>
 
 //........................................................................
@@ -35,14 +36,14 @@ namespace frm
     class UrlTransformer
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                         m_xORB;
         mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >
                         m_xTransformer;
         mutable bool    m_bTriedToCreateTransformer;
 
     public:
-        UrlTransformer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );
+        UrlTransformer( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB );
 
         /** returns an URL object for the given URL string
         */

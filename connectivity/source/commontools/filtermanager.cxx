@@ -42,9 +42,8 @@ namespace dbtools
     //= FilterManager
     //====================================================================
     //--------------------------------------------------------------------
-    FilterManager::FilterManager( const Reference< XMultiServiceFactory >& _rxORB )
-        :m_xORB( _rxORB )
-        ,m_aFilterComponents( FC_COMPONENT_COUNT )
+    FilterManager::FilterManager( )
+        :m_aFilterComponents( FC_COMPONENT_COUNT )
         ,m_bApplyPublicFilter( true )
     {
     }

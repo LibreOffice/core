@@ -40,6 +40,7 @@
 
 #include <comphelper/container.hxx>
 #include <comphelper/numbers.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace dbtools;
 
@@ -62,7 +63,7 @@ using namespace ::com::sun::star::form::binding;
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OEditControl_CreateInstance(const Reference< XMultiServiceFactory > & _rxFactory)
 {
-    return *(new OEditControl(_rxFactory));
+    return *(new OEditControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -89,7 +90,7 @@ Any SAL_CALL OEditControl::queryAggregation(const Type& _rType) throw (RuntimeEx
 
 DBG_NAME(OEditControl);
 //------------------------------------------------------------------------------
-OEditControl::OEditControl(const Reference<XMultiServiceFactory>& _rxFactory)
+OEditControl::OEditControl(const Reference<XComponentContext>& _rxFactory)
                :OBoundControl( _rxFactory, FRM_SUN_CONTROL_RICHTEXTCONTROL )
                ,m_aChangeListeners(m_aMutex)
                ,m_nKeyEvent( 0 )
@@ -276,7 +277,7 @@ void SAL_CALL OEditControl::createPeer( const Reference< XToolkit>& _rxToolkit, 
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OEditModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OEditModel(_rxFactory));
+    return *(new OEditModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -288,7 +289,7 @@ Sequence<Type> OEditModel::_getTypes()
 
 DBG_NAME(OEditModel);
 //------------------------------------------------------------------
-OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
+OEditModel::OEditModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, FRM_SUN_COMPONENT_RICHTEXTCONTROL, FRM_SUN_CONTROL_TEXTFIELD, sal_True, sal_True )
     ,m_bMaxTextLenModified(sal_False)
     ,m_bWritingFormattedFake(sal_False)
@@ -300,7 +301,7 @@ OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
 }
 
 //------------------------------------------------------------------
-OEditModel::OEditModel( const OEditModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+OEditModel::OEditModel( const OEditModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
     ,m_bMaxTextLenModified(sal_False)
     ,m_bWritingFormattedFake(sal_False)
@@ -508,7 +509,7 @@ void OEditModel::writeAggregate( const Reference< XObjectOutputStream >& _rxOutS
     // but for compatibility, we need to use an "old" aggregate for writing and reading
 
     Reference< XPropertySet > xFakedAggregate(
-        getContext().createComponent( (OUString)VCL_CONTROLMODEL_EDIT ),
+        getContext()->getServiceManager()->createInstanceWithContext( (OUString)VCL_CONTROLMODEL_EDIT, getContext() ),
         UNO_QUERY
     );
     OSL_ENSURE( xFakedAggregate.is(), "OEditModel::writeAggregate: could not create an old EditControlModel!" );
@@ -530,7 +531,7 @@ void OEditModel::readAggregate( const Reference< XObjectInputStream >& _rxInStre
     // but for compatibility, we need to use an "old" aggregate for writing and reading
 
     Reference< XPropertySet > xFakedAggregate(
-        getContext().createComponent( (OUString)VCL_CONTROLMODEL_EDIT ),
+        getContext()->getServiceManager()->createInstanceWithContext( (OUString)VCL_CONTROLMODEL_EDIT, getContext() ),
         UNO_QUERY
     );
     Reference< XPersistObject > xFakedPersist( xFakedAggregate, UNO_QUERY );
@@ -611,7 +612,7 @@ void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
     Reference< XPropertySet > xField = getField();
     if ( xField.is() )
     {
-        m_pValueFormatter.reset( new ::dbtools::FormattedColumnValue( getContext().getUNOContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
+        m_pValueFormatter.reset( new ::dbtools::FormattedColumnValue( getContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
 
         if ( m_pValueFormatter->getKeyType() != NumberFormat::SCIENTIFIC )
         {

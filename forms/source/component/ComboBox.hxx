@@ -151,7 +151,7 @@ protected:
 class OComboBoxControl : public OBoundControl
 {
 public:
-    OComboBoxControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    OComboBoxControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
 
     // XServiceInfo
     IMPLEMENTATION_NAME(OComboBoxControl);

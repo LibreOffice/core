@@ -182,7 +182,7 @@ void StandardFormatsSupplier::notifyTermination()
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OFormattedControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OFormattedControl(_rxFactory));
+    return *(new OFormattedControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------
@@ -206,7 +206,7 @@ Any SAL_CALL OFormattedControl::queryAggregation(const Type& _rType) throw (Runt
 
 DBG_NAME(OFormattedControl);
 //------------------------------------------------------------------------------
-OFormattedControl::OFormattedControl(const Reference<XMultiServiceFactory>& _rxFactory)
+OFormattedControl::OFormattedControl(const Reference<XComponentContext>& _rxFactory)
                :OBoundControl(_rxFactory, VCL_CONTROL_FORMATTEDFIELD)
                ,m_nKeyEvent(0)
 {
@@ -356,7 +356,7 @@ void OFormattedModel::implConstruct()
 }
 
 //------------------------------------------------------------------
-OFormattedModel::OFormattedModel(const Reference<XMultiServiceFactory>& _rxFactory)
+OFormattedModel::OFormattedModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_SUN_CONTROL_FORMATTEDFIELD, sal_True, sal_True )
                             // use the old control name for compytibility reasons
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
@@ -370,7 +370,7 @@ OFormattedModel::OFormattedModel(const Reference<XMultiServiceFactory>& _rxFacto
 }
 
 //------------------------------------------------------------------
-OFormattedModel::OFormattedModel( const OFormattedModel* _pOriginal, const Reference< XMultiServiceFactory >& _rxFactory )
+OFormattedModel::OFormattedModel( const OFormattedModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
 {
@@ -654,14 +654,14 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
     Reference< XRowSet > xRowSet( xNextParentForm, UNO_QUERY );
     Reference< XNumberFormatsSupplier > xSupplier;
     if (xRowSet.is())
-        xSupplier = getNumberFormats( getConnection(xRowSet), sal_True, getContext().getUNOContext() );
+        xSupplier = getNumberFormats( getConnection(xRowSet), sal_True, getContext() );
     return xSupplier;
 }
 
 //------------------------------------------------------------------------------
 Reference< XNumberFormatsSupplier > OFormattedModel::calcDefaultFormatsSupplier() const
 {
-    return StandardFormatsSupplier::get( getContext().getUNOContext() );
+    return StandardFormatsSupplier::get( getContext() );
 }
 
 // XBoundComponent

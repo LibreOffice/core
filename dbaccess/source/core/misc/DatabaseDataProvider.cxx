@@ -59,7 +59,7 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
         context, static_cast< Implements >(
             IMPLEMENTS_PROPERTY_SET), uno::Sequence< OUString >()),
     m_aParameterManager( m_aMutex, context ),
-    m_aFilterManager( uno::Reference< lang::XMultiServiceFactory >(context->getServiceManager(),uno::UNO_QUERY) ),
+    m_aFilterManager(),
     m_xContext(context),
     m_CommandType(sdb::CommandType::COMMAND), // #i94114
     m_RowLimit(0),

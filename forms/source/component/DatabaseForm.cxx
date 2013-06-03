@@ -216,7 +216,7 @@ void OFormSubmitResetThread::processEvent(
 //------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODatabaseForm::Create( const Reference< XMultiServiceFactory >& _rxFactory )
 {
-    return *( new ODatabaseForm( _rxFactory ) );
+    return *( new ODatabaseForm( comphelper::getComponentContext(_rxFactory) ) );
 }
 
 //------------------------------------------------------------------------------
@@ -278,8 +278,8 @@ Any SAL_CALL ODatabaseForm::queryAggregation(const Type& _rType) throw(RuntimeEx
 
 DBG_NAME(ODatabaseForm);
 //------------------------------------------------------------------
-ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OFormComponents(_rxFactory)
+ODatabaseForm::ODatabaseForm(const Reference<XComponentContext>& _rxContext)
+    :OFormComponents(_rxContext)
     ,OPropertySetAggregationHelper(OComponentHelper::rBHelper)
     ,OPropertyChangeListener(m_aMutex)
     ,m_aLoadListeners(m_aMutex)
@@ -291,8 +291,8 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
     ,m_aPropertyBagHelper( *this )
     ,m_pAggregatePropertyMultiplexer(NULL)
     ,m_pGroupManager( NULL )
-    ,m_aParameterManager( m_aMutex, comphelper::getComponentContext(_rxFactory) )
-    ,m_aFilterManager( _rxFactory )
+    ,m_aParameterManager( m_aMutex, _rxContext )
+    ,m_aFilterManager()
     ,m_pLoadTimer(NULL)
     ,m_pThread(NULL)
     ,m_nResetsPending(0)
@@ -331,8 +331,8 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
     ,m_aPropertyBagHelper( *this )
     ,m_pAggregatePropertyMultiplexer( NULL )
     ,m_pGroupManager( NULL )
-    ,m_aParameterManager( m_aMutex, comphelper::getComponentContext(_cloneSource.m_xServiceFactory) )
-    ,m_aFilterManager( _cloneSource.m_xServiceFactory )
+    ,m_aParameterManager( m_aMutex, _cloneSource.m_xContext )
+    ,m_aFilterManager()
     ,m_pLoadTimer( NULL )
     ,m_pThread( NULL )
     ,m_nResetsPending( 0 )
@@ -418,7 +418,7 @@ void ODatabaseForm::impl_construct()
     // aggregate a row set
     increment(m_refCount);
     {
-        m_xAggregate = Reference< XAggregation >( m_xServiceFactory->createInstance( SRV_SDB_ROWSET ), UNO_QUERY_THROW );
+        m_xAggregate = Reference< XAggregation >( m_xContext->getServiceManager()->createInstanceWithContext(SRV_SDB_ROWSET, m_xContext), UNO_QUERY_THROW );
         m_xAggregateAsRowSet.set( m_xAggregate, UNO_QUERY_THROW );
         setAggregation( m_xAggregate );
     }
@@ -2227,7 +2227,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
     if (!xFrame.is())
         return;
 
-    Reference<XURLTransformer> xTransformer(URLTransformer::create(comphelper::getComponentContext(m_xServiceFactory)));
+    Reference<XURLTransformer> xTransformer(URLTransformer::create(m_xContext));
 
     // URL encoding
     if( eSubmitEncoding == FormSubmitEncoding_URL )
@@ -2839,7 +2839,7 @@ sal_Bool ODatabaseForm::implEnsureConnection()
         {
             Reference< XConnection >  xConnection = connectRowset(
                 Reference<XRowSet> (m_xAggregate, UNO_QUERY),
-                comphelper::getComponentContext(m_xServiceFactory),
+                m_xContext,
                 sal_True    // set a calculated connection as ActiveConnection
             );
             return xConnection.is();

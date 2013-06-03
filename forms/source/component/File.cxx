@@ -27,6 +27,7 @@
 #include <comphelper/container.hxx>
 #include <comphelper/basicio.hxx>
 #include <comphelper/guarding.hxx>
+#include <comphelper/processfactory.hxx>
 
 //.........................................................................
 namespace frm
@@ -47,7 +48,7 @@ using namespace ::com::sun::star::util;
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OFileControlModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OFileControlModel(_rxFactory));
+    return *(new OFileControlModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -84,7 +85,7 @@ StringSequence  OFileControlModel::getSupportedServiceNames() throw(RuntimeExcep
 //------------------------------------------------------------------
 DBG_NAME( OFileControlModel )
 //------------------------------------------------------------------
-OFileControlModel::OFileControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
+OFileControlModel::OFileControlModel(const Reference<XComponentContext>& _rxFactory)
                     :OControlModel(_rxFactory, VCL_CONTROLMODEL_FILECONTROL)
                     ,m_aResetListeners(m_aMutex)
 {
@@ -93,7 +94,7 @@ OFileControlModel::OFileControlModel(const Reference<XMultiServiceFactory>& _rxF
 }
 
 //------------------------------------------------------------------
-OFileControlModel::OFileControlModel( const OFileControlModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+OFileControlModel::OFileControlModel( const OFileControlModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory )
     ,m_aResetListeners( m_aMutex )
 {

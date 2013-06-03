@@ -42,7 +42,7 @@ namespace frm
     class CachedRowSet
     {
     public:
-        CachedRowSet( const ::comphelper::ComponentContext& _rContext );
+        CachedRowSet();
         ~CachedRowSet();
 
     public:

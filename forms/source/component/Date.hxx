@@ -109,7 +109,7 @@ protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
 public:
-    ODateControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    ODateControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
     DECLARE_UNO3_AGG_DEFAULTS(ODateControl, OBoundControl);
 
 // ::com::sun::star::lang::XServiceInfo

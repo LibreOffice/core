@@ -22,6 +22,7 @@
 #include "property.hrc"
 #include "property.hxx"
 #include <tools/debug.hxx>
+#include <comphelper/processfactory.hxx>
 
 //.........................................................................
 namespace frm
@@ -41,13 +42,13 @@ using namespace ::com::sun::star::util;
 //------------------------------------------------------------------------------
 InterfaceRef SAL_CALL OFixedTextModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
-    return *(new OFixedTextModel(_rxFactory));
+    return *(new OFixedTextModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------
 DBG_NAME( OFixedTextModel )
 //------------------------------------------------------------------
-OFixedTextModel::OFixedTextModel( const Reference<XMultiServiceFactory>& _rxFactory )
+OFixedTextModel::OFixedTextModel( const Reference<XComponentContext>& _rxFactory )
         :OControlModel(_rxFactory, VCL_CONTROLMODEL_FIXEDTEXT)
 
 {
@@ -56,7 +57,7 @@ OFixedTextModel::OFixedTextModel( const Reference<XMultiServiceFactory>& _rxFact
 }
 
 //------------------------------------------------------------------
-OFixedTextModel::OFixedTextModel( const OFixedTextModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+OFixedTextModel::OFixedTextModel( const OFixedTextModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory )
 
 {

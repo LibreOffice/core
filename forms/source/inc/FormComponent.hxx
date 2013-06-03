@@ -59,7 +59,6 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/propertybag.hxx>
 #include <comphelper/propmultiplex.hxx>
@@ -173,7 +172,8 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>
                                                 m_xAggregate;
 
-    ::comphelper::ComponentContext              m_aContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                                                m_xContext;
     WindowStateGuard                            m_aWindowStateGuard;
 
 public:
@@ -202,7 +202,7 @@ public:
             the <type>OControl</type> itself.
     */
     OControl(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rFactory,
         const OUString& _rAggregateService,
         const sal_Bool _bSetDelegator = sal_True
     );
@@ -295,7 +295,7 @@ protected:
 
 public:
     OBoundControl(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
         const OUString& _rAggregateService,
         const sal_Bool _bSetDelegator = sal_True
     );
@@ -347,7 +347,7 @@ class OControlModel :public ::cppu::OComponentHelper
 {
 
 protected:
-    ::comphelper::ComponentContext  m_aContext;
+    css::uno::Reference<css::uno::XComponentContext>  m_xContext;
 
     ::osl::Mutex                    m_aMutex;
     oslInterlockedCount             m_lockCount;
@@ -356,8 +356,8 @@ protected:
     OImplementationIdsRef           m_aHoldIdHelper;
     PropertyBagHelper               m_aPropertyBagHelper;
 
-    const ::comphelper::ComponentContext&
-        getContext() const { return m_aContext; }
+    const css::uno::Reference<css::uno::XComponentContext>&
+        getContext() const { return m_xContext; }
 
 // <properties>
     OUString                 m_aName;                    // name of the control
@@ -371,14 +371,14 @@ protected:
 
 protected:
     OControlModel(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory,   // factory to create the aggregate with
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rFactory,   // factory to create the aggregate with
         const OUString& _rUnoControlModelTypeName,                       // service name of te model to aggregate
         const OUString& rDefault = OUString(),                    // service name of the default control
         const sal_Bool _bSetDelegator = sal_True                                // set to sal_False if you want to call setDelegator later (after returning from this ctor)
     );
     OControlModel(
         const OControlModel* _pOriginal,                                        // the original object to clone
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory,   // factory to create the aggregate with
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rFactory,   // factory to create the aggregate with
         const sal_Bool _bCloneAggregate = sal_True,                             // should the aggregate of the original be cloned, too?
         const sal_Bool _bSetDelegator = sal_True                                // set to sal_False if you want to call setDelegator later (after returning from this ctor)
     );
@@ -535,13 +535,13 @@ public:
 #define DECLARE_DEFAULT_CLONE_CTOR( classname )  \
     classname( \
         const classname* _pOriginal, \
-        const   ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory \
+        const   ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory \
     ); \
 
 // all xtors for an inner class of the object hierarchy
 #define DECLARE_DEFAULT_XTOR( classname )   \
     classname( \
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, \
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory, \
         const OUString& _rUnoControlModelTypeName, \
         const OUString& _rDefault \
     ); \
@@ -551,7 +551,7 @@ public:
 // all xtors for an inner class of the object hierarchy which is *bound*
 #define DECLARE_DEFAULT_BOUND_XTOR( classname ) \
     classname( \
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, \
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory, \
         const OUString& _rUnoControlModelTypeName, \
         const OUString& _rDefault, \
         const sal_Bool _bSupportExternalBinding, \
@@ -563,11 +563,11 @@ public:
 // all xtors for a leas class of the object hierarchy
 #define DECLARE_DEFAULT_LEAF_XTOR( classname )  \
     classname( \
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory \
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory \
     ); \
     classname( \
         const classname* _pOriginal, \
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory \
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory \
     ); \
     DECLARE_DEFAULT_DTOR( classname )   \
 
@@ -579,7 +579,7 @@ public:
 #define IMPLEMENT_DEFAULT_CLONING( classname ) \
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL classname::createClone( ) throw (::com::sun::star::uno::RuntimeException) \
     { \
-        classname* pClone = new classname( this, getContext().getLegacyServiceFactory() ); \
+        classname* pClone = new classname( this, getContext() ); \
         pClone->clonedFrom( this ); \
         return pClone; \
     }
@@ -696,7 +696,7 @@ protected:
 protected:
 
     OBoundControlModel(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext,
                                                             // factory to create the aggregate with
         const OUString& _rUnoControlModelTypeName,   // service name of te model to aggregate
         const OUString& _rDefault,                   // service name of the default control
@@ -706,7 +706,7 @@ protected:
     );
     OBoundControlModel(
         const OBoundControlModel* _pOriginal,               // the original object to clone
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
                                                             // factory to create the aggregate with
     );
     virtual ~OBoundControlModel();

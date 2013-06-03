@@ -21,6 +21,7 @@
 #include "FormsCollection.hxx"
 #include "services.hxx"
 #include <comphelper/sequence.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/form/XForm.hpp>
 
@@ -39,7 +40,7 @@ DBG_NAME(OFormsCollection)
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OFormsCollection_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OFormsCollection(_rxFactory));
+    return *(new OFormsCollection( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -61,7 +62,7 @@ Sequence<Type> SAL_CALL OFormsCollection::getTypes() throw(RuntimeException)
 }
 
 //------------------------------------------------------------------
-OFormsCollection::OFormsCollection(const Reference<XMultiServiceFactory>& _rxFactory)
+OFormsCollection::OFormsCollection(const Reference<XComponentContext>& _rxFactory)
     :FormsCollectionComponentBase( m_aMutex )
     ,OInterfaceContainer( _rxFactory, m_aMutex, XForm::static_type() )
     ,OFormsCollection_BASE()

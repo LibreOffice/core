@@ -40,6 +40,7 @@
 
 #include <comphelper/numbers.hxx>
 #include <comphelper/basicio.hxx>
+#include <comphelper/processfactory.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -74,7 +75,7 @@ using namespace ::com::sun::star::form::binding;
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OComboBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
-    return (*new OComboBoxModel(_rxFactory));
+    return (*new OComboBoxModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -125,12 +126,12 @@ Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType) throw (Runtime
 //------------------------------------------------------------------
 DBG_NAME( OComboBoxModel )
 //------------------------------------------------------------------
-OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
+OComboBoxModel::OComboBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_SUN_CONTROL_COMBOBOX, sal_True, sal_True, sal_True )
                     // use the old control name for compytibility reasons
     ,OEntryListHelper( (OControlModel&)*this )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
-    ,m_aListRowSet( getContext() )
+    ,m_aListRowSet()
     ,m_eListSourceType(ListSourceType_TABLE)
     ,m_bEmptyIsNull(sal_True)
 {
@@ -141,11 +142,11 @@ OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory
 }
 
 //------------------------------------------------------------------
-OComboBoxModel::OComboBoxModel( const OComboBoxModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+OComboBoxModel::OComboBoxModel( const OComboBoxModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OBoundControlModel( _pOriginal, _rxFactory )
     ,OEntryListHelper( *_pOriginal, (OControlModel&)*this )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
-    ,m_aListRowSet( getContext() )
+    ,m_aListRowSet()
     ,m_aListSource( _pOriginal->m_aListSource )
     ,m_aDefaultText( _pOriginal->m_aDefaultText )
     ,m_eListSourceType( _pOriginal->m_eListSourceType )
@@ -628,7 +629,7 @@ void OComboBoxModel::loadData( bool _bForce )
                 if ( !xDataField.is() )
                     return;
 
-                ::dbtools::FormattedColumnValue aValueFormatter( getContext().getUNOContext(), xForm, xDataField );
+                ::dbtools::FormattedColumnValue aValueFormatter( getContext(), xForm, xDataField );
 
                 // Fill Lists
                 sal_Int16 i = 0;
@@ -684,7 +685,7 @@ void OComboBoxModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm
 {
     Reference<XPropertySet> xField = getField();
     if ( xField.is() )
-        m_pValueFormatter.reset( new ::dbtools::FormattedColumnValue( getContext().getUNOContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
+        m_pValueFormatter.reset( new ::dbtools::FormattedColumnValue( getContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
     getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= m_aDesignModeStringItems;
 
     // Only load data if a ListSource was supplied
@@ -875,12 +876,12 @@ void SAL_CALL OComboBoxModel::disposing( const EventObject& _rSource ) throw ( R
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OComboBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
-    return *(new OComboBoxControl(_rxFactory));
+    return *(new OComboBoxControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
-OComboBoxControl::OComboBoxControl(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OBoundControl(_rxFactory, VCL_CONTROL_COMBOBOX)
+OComboBoxControl::OComboBoxControl(const Reference<XComponentContext>& _rxContext)
+    :OBoundControl(_rxContext, VCL_CONTROL_COMBOBOX)
 {
 }
 

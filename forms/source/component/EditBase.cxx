@@ -48,7 +48,7 @@ const sal_uInt16 FILTERPROPOSAL  =  0x0004;
 
 DBG_NAME( OEditBaseModel )
 //------------------------------------------------------------------
-OEditBaseModel::OEditBaseModel( const Reference< XMultiServiceFactory >& _rxFactory, const OUString& rUnoControlModelName,
+OEditBaseModel::OEditBaseModel( const Reference< XComponentContext >& _rxFactory, const OUString& rUnoControlModelName,
         const OUString& rDefault, const sal_Bool _bSupportExternalBinding, const sal_Bool _bSupportsValidation )
     :OBoundControlModel( _rxFactory, rUnoControlModelName, rDefault, sal_True, _bSupportExternalBinding, _bSupportsValidation )
     ,m_nLastReadVersion(0)
@@ -59,7 +59,7 @@ OEditBaseModel::OEditBaseModel( const Reference< XMultiServiceFactory >& _rxFact
 }
 
 //------------------------------------------------------------------
-OEditBaseModel::OEditBaseModel( const OEditBaseModel* _pOriginal, const Reference< XMultiServiceFactory >& _rxFactory )
+OEditBaseModel::OEditBaseModel( const OEditBaseModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
      :OBoundControlModel( _pOriginal, _rxFactory )
      ,m_nLastReadVersion(0)
 {

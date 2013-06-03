@@ -29,7 +29,6 @@
 #include <com/sun/star/util/XCloneable.hpp>
 
 #include <comphelper/broadcasthelper.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>
@@ -60,7 +59,6 @@ protected:
     ::com::sun::star::uno::Any  m_aHidden;                  // column hidden?
 // [properties]
 
-    ::comphelper::ComponentContext  m_aContext;
     OUString                 m_aModelName;
 
 // [properties]
@@ -68,7 +66,7 @@ protected:
 // [properties]
 
 public:
-    OGridColumn(const ::comphelper::ComponentContext& _rContext, const OUString& _sModelName = OUString());
+    OGridColumn(const css::uno::Reference<css::uno::XComponentContext>& _rContext, const OUString& _sModelName = OUString());
     OGridColumn(const OGridColumn* _pOriginal );
     virtual ~OGridColumn();
 
@@ -125,7 +123,7 @@ class ClassName                                                                 
     ,public OAggregationArrayUsageHelper< ClassName >                                                       \
 {                                                                                                           \
 public:                                                                                                     \
-    ClassName(const ::comphelper::ComponentContext& _rContext );                                            \
+    ClassName(const css::uno::Reference<css::uno::XComponentContext>& _rContext );                                            \
     ClassName(const ClassName* _pCloneFrom);                                                                \
                                                                                                             \
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);  \
@@ -141,7 +139,7 @@ public:                                                                         
 
 
 #define IMPL_COLUMN(ClassName, Model, bAllowDropDown)                               \
-    ClassName::ClassName( const ::comphelper::ComponentContext& _rContext ) \
+    ClassName::ClassName( const css::uno::Reference<css::uno::XComponentContext>& _rContext ) \
     :OGridColumn(_rContext, Model) \
 { \
 } \

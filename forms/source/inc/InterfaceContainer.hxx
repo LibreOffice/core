@@ -101,7 +101,7 @@ protected:
 
     const ::com::sun::star::uno::Type       m_aElementType;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>     m_xServiceFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>     m_xContext;
 
 
     // EventManager
@@ -109,7 +109,7 @@ protected:
 
 public:
     OInterfaceContainer(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory,
         ::osl::Mutex& _rMutex,
         const ::com::sun::star::uno::Type& _rElementType);
 
@@ -292,7 +292,7 @@ protected:
     ::comphelper::InterfaceRef  m_xParent;
 
 public:
-    OFormComponents(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    OFormComponents(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
     OFormComponents( const OFormComponents& _cloneSource );
     virtual ~OFormComponents();
 

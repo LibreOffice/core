@@ -22,6 +22,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/syslocale.hxx>
+#include <comphelper/processfactory.hxx>
 
 //.........................................................................
 namespace frm
@@ -43,7 +44,7 @@ using namespace ::com::sun::star::util;
 // OCurrencyControl
 //==================================================================
 //------------------------------------------------------------------
-OCurrencyControl::OCurrencyControl(const Reference<XMultiServiceFactory>& _rxFactory)
+OCurrencyControl::OCurrencyControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_CURRENCYFIELD)
 {
 }
@@ -51,7 +52,7 @@ OCurrencyControl::OCurrencyControl(const Reference<XMultiServiceFactory>& _rxFac
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OCurrencyControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OCurrencyControl(_rxFactory));
+    return *(new OCurrencyControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -77,7 +78,7 @@ StringSequence SAL_CALL OCurrencyControl::getSupportedServiceNames() throw()
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OCurrencyModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OCurrencyModel(_rxFactory));
+    return *(new OCurrencyModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -134,7 +135,7 @@ void OCurrencyModel::implConstruct()
 //------------------------------------------------------------------
 DBG_NAME( OCurrencyModel )
 //------------------------------------------------------------------
-OCurrencyModel::OCurrencyModel(const Reference<XMultiServiceFactory>& _rxFactory)
+OCurrencyModel::OCurrencyModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_SUN_CONTROL_CURRENCYFIELD, sal_False, sal_True )
                                     // use the old control name for compytibility reasons
 {
@@ -147,7 +148,7 @@ OCurrencyModel::OCurrencyModel(const Reference<XMultiServiceFactory>& _rxFactory
 }
 
 //------------------------------------------------------------------
-OCurrencyModel::OCurrencyModel( const OCurrencyModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+OCurrencyModel::OCurrencyModel( const OCurrencyModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
 {
     DBG_CTOR( OCurrencyModel, NULL );

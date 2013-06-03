@@ -33,6 +33,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/factory.hxx>
 #include <rtl/string.hxx>
+#include <comphelper/processfactory.hxx>
 
 //.........................................................................
 namespace FORMS_MODULE_NAMESPACE
@@ -231,7 +232,7 @@ namespace FORMS_MODULE_NAMESPACE
         { return OUString( "com.sun.star.comp.forms."#classname ); } \
         \
         Reference< XInterface > SAL_CALL classname::Create( const Reference< XMultiServiceFactory >& _rxFactory ) \
-        { return static_cast< XServiceInfo* >( new classname( _rxFactory ) ); } \
+        { return static_cast< XServiceInfo* >( new classname( comphelper::getComponentContext(_rxFactory) ) ); } \
         \
 
     #define IMPLEMENT_SERVICE_REGISTRATION_1( classname, baseclass, service1 ) \

@@ -60,7 +60,7 @@ namespace frm
     //====================================================================
     DBG_NAME( ORichTextModel )
     //--------------------------------------------------------------------
-    ORichTextModel::ORichTextModel( const Reference< XMultiServiceFactory >& _rxFactory )
+    ORichTextModel::ORichTextModel( const Reference< XComponentContext >& _rxFactory )
         :OControlModel       ( _rxFactory, OUString() )
         ,FontControlModel    ( true                          )
         ,m_pEngine           ( RichTextEngine::Create()      )
@@ -93,7 +93,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    ORichTextModel::ORichTextModel( const ORichTextModel* _pOriginal, const Reference< XMultiServiceFactory >& _rxFactory )
+    ORichTextModel::ORichTextModel( const ORichTextModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
         :OControlModel       ( _pOriginal, _rxFactory, sal_False )
         ,FontControlModel    ( _pOriginal                        )
         ,m_pEngine           ( NULL                              )

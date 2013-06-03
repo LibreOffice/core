@@ -55,6 +55,7 @@
 #include <comphelper/container.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/mutex.hxx>
 #include <sal/macros.h>
@@ -123,9 +124,9 @@ namespace frm
     //= FormOperations
     //====================================================================
     //--------------------------------------------------------------------
-    FormOperations::FormOperations( const Reference< XMultiServiceFactory >& _rxContext )
+    FormOperations::FormOperations( const Reference< XComponentContext >& _rxContext )
         :FormOperations_Base( m_aMutex )
-        ,m_aContext( _rxContext )
+        ,m_xContext( _rxContext )
         ,m_bInitializedParser( false )
         ,m_bActiveControlModified( false )
         ,m_bConstructed( false )
@@ -157,7 +158,7 @@ namespace frm
     //--------------------------------------------------------------------
     Reference< XInterface > SAL_CALL FormOperations::Create(const Reference< XMultiServiceFactory >& _rxFactory )
     {
-        return *new FormOperations( _rxFactory );
+        return *new FormOperations( comphelper::getComponentContext(_rxFactory) );
     }
 
     //--------------------------------------------------------------------
@@ -1710,12 +1711,12 @@ namespace frm
             Reference< XExecutableDialog> xDialog;
             if ( _bFilter )
             {
-                xDialog = com::sun::star::sdb::FilterDialog::createWithQuery(m_aContext.getUNOContext(), m_xParser, m_xCursor,
+                xDialog = com::sun::star::sdb::FilterDialog::createWithQuery(m_xContext, m_xParser, m_xCursor,
                               Reference<com::sun::star::awt::XWindow>());
             }
             else
             {
-                xDialog = com::sun::star::sdb::OrderDialog::createWithQuery(m_aContext.getUNOContext(), m_xParser, m_xCursorProperties);
+                xDialog = com::sun::star::sdb::OrderDialog::createWithQuery(m_xContext, m_xParser, m_xCursorProperties);
             }
 
 

@@ -97,14 +97,14 @@ namespace frm
                 a new ONavigationBarPeer instance, which has been aquired once!
         */
         static ONavigationBarPeer* Create(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
             Window* _pParentWindow,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxModel
         );
 
     protected:
         ONavigationBarPeer(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
         );
         ~ONavigationBarPeer();
 

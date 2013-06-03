@@ -37,7 +37,7 @@ namespace frm
     //=
     //====================================================================
     //--------------------------------------------------------------------
-    OReferenceValueComponent::OReferenceValueComponent( const Reference< XMultiServiceFactory>& _rxFactory, const OUString& _rUnoControlModelTypeName, const OUString& _rDefault, sal_Bool _bSupportNoCheckRefValue )
+    OReferenceValueComponent::OReferenceValueComponent( const Reference< XComponentContext >& _rxFactory, const OUString& _rUnoControlModelTypeName, const OUString& _rDefault, sal_Bool _bSupportNoCheckRefValue )
         :OBoundControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, sal_False, sal_True, sal_True )
         ,m_eDefaultChecked( STATE_NOCHECK )
         ,m_bSupportSecondRefValue( _bSupportNoCheckRefValue )
@@ -45,7 +45,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    OReferenceValueComponent::OReferenceValueComponent( const OReferenceValueComponent* _pOriginal, const   Reference< XMultiServiceFactory>& _rxFactory )
+    OReferenceValueComponent::OReferenceValueComponent( const OReferenceValueComponent* _pOriginal, const Reference< XComponentContext>& _rxFactory )
         :OBoundControlModel( _pOriginal, _rxFactory )
     {
         m_sReferenceValue           = _pOriginal->m_sReferenceValue;

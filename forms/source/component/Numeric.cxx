@@ -19,6 +19,7 @@
 
 #include "Numeric.hxx"
 #include <tools/debug.hxx>
+#include <comphelper/processfactory.hxx>
 
 //.........................................................................
 namespace frm
@@ -42,7 +43,7 @@ using namespace ::com::sun::star::form::binding;
 //==================================================================
 
 //------------------------------------------------------------------
-ONumericControl::ONumericControl(const Reference<XMultiServiceFactory>& _rxFactory)
+ONumericControl::ONumericControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_NUMERICFIELD)
 {
 }
@@ -62,7 +63,7 @@ StringSequence ONumericControl::getSupportedServiceNames() throw()
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL ONumericControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new ONumericControl(_rxFactory));
+    return *(new ONumericControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -77,7 +78,7 @@ Sequence<Type> ONumericControl::_getTypes()
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL ONumericModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new ONumericModel(_rxFactory));
+    return *(new ONumericModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -89,7 +90,7 @@ Sequence<Type> ONumericModel::_getTypes()
 //------------------------------------------------------------------
 DBG_NAME( ONumericModel )
 //------------------------------------------------------------------
-ONumericModel::ONumericModel(const Reference<XMultiServiceFactory>& _rxFactory)
+ONumericModel::ONumericModel(const Reference<XComponentContext>& _rxFactory)
                 :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_NUMERICFIELD, FRM_SUN_CONTROL_NUMERICFIELD, sal_True, sal_True )
                                     // use the old control name for compytibility reasons
 {
@@ -100,7 +101,7 @@ ONumericModel::ONumericModel(const Reference<XMultiServiceFactory>& _rxFactory)
 }
 
 //------------------------------------------------------------------
-ONumericModel::ONumericModel( const ONumericModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+ONumericModel::ONumericModel( const ONumericModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
 {
     DBG_CTOR( ONumericModel, NULL );

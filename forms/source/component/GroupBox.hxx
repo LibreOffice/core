@@ -61,7 +61,7 @@ protected:
 class OGroupBoxControl : public OControl
 {
 public:
-    OGroupBoxControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    OGroupBoxControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
     IMPLEMENTATION_NAME(OGroupBoxControl);

@@ -148,7 +148,7 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
             OUString sServiceName;
             xProps->getPropertyValue( OUString("DefaultControl") ) >>= sServiceName;
 
-            Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xServiceFactory->createInstance( OUString("ooo.vba.VBAToOOEventDesc") ), UNO_QUERY_THROW );
+            Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xContext->getServiceManager()->createInstanceWithContext("ooo.vba.VBAToOOEventDesc", m_xContext), UNO_QUERY_THROW );
             Sequence< ScriptEventDescriptor > vbaEvents = xDescSupplier->getEventDescriptions( sServiceName , sCodeName );
 
             // register the vba script events
@@ -184,14 +184,14 @@ ElementDescription::~ElementDescription()
 //==================================================================
 //------------------------------------------------------------------
 OInterfaceContainer::OInterfaceContainer(
-                const Reference<XMultiServiceFactory>& _rxFactory,
+                const Reference<XComponentContext>& _rxContext,
                 ::osl::Mutex& _rMutex,
                 const Type& _rElementType)
     :OInterfaceContainer_BASE()
     ,m_rMutex(_rMutex)
     ,m_aContainerListeners(_rMutex)
     ,m_aElementType(_rElementType)
-    ,m_xServiceFactory(_rxFactory)
+    ,m_xContext(_rxContext)
 {
     impl_createEventAttacher_nothrow();
 }
@@ -202,7 +202,7 @@ OInterfaceContainer::OInterfaceContainer( ::osl::Mutex& _rMutex, const OInterfac
     ,m_rMutex( _rMutex )
     ,m_aContainerListeners( _rMutex )
     ,m_aElementType( _cloneSource.m_aElementType )
-    ,m_xServiceFactory( _cloneSource.m_xServiceFactory )
+    ,m_xContext( _cloneSource.m_xContext )
 {
     impl_createEventAttacher_nothrow();
 }
@@ -236,7 +236,7 @@ void OInterfaceContainer::impl_createEventAttacher_nothrow()
 {
     try
     {
-        m_xEventAttacher.set( ::comphelper::createEventAttacherManager( comphelper::getComponentContext(m_xServiceFactory) ), UNO_SET_THROW );
+        m_xEventAttacher.set( ::comphelper::createEventAttacherManager( m_xContext ), UNO_SET_THROW );
     }
     catch( const Exception& )
     {
@@ -510,9 +510,9 @@ void SAL_CALL OInterfaceContainer::write( const Reference< XObjectOutputStream >
 //------------------------------------------------------------------------------
 namespace
 {
-    Reference< XPersistObject > lcl_createPlaceHolder( const Reference< XMultiServiceFactory >& _rxORB )
+    Reference< XPersistObject > lcl_createPlaceHolder( const Reference< XComponentContext >& _rxORB )
     {
-        Reference< XPersistObject > xObject( _rxORB->createInstance( FRM_COMPONENT_HIDDENCONTROL ), UNO_QUERY );
+        Reference< XPersistObject > xObject( _rxORB->getServiceManager()->createInstanceWithContext(FRM_COMPONENT_HIDDENCONTROL, _rxORB), UNO_QUERY );
         DBG_ASSERT( xObject.is(), "lcl_createPlaceHolder: could not create a substitute for the unknown object!" );
         if ( xObject.is() )
         {
@@ -564,7 +564,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
             {
                 // the object could not be read
                 // create a object (so the readEvents below will assign the events to the right controls)
-                xObj = lcl_createPlaceHolder( m_xServiceFactory );
+                xObj = lcl_createPlaceHolder( m_xContext );
                 if ( !xObj.is() )
                     // couldn't handle it
                     throw;
@@ -596,7 +596,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                 {
                     OSL_FAIL( "OInterfaceContainerHelper::read: reading succeeded, but not inserting!" );
                     // create a placeholder
-                    xElement = xElement.query( lcl_createPlaceHolder( m_xServiceFactory ) );
+                    xElement = xElement.query( lcl_createPlaceHolder( m_xContext ) );
                     if ( !xElement.is() )
                         // couldn't handle it
                         throw;
@@ -612,7 +612,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
     {
         try
         {
-            m_xEventAttacher = ::comphelper::createEventAttacherManager( comphelper::getComponentContext(m_xServiceFactory) );
+            m_xEventAttacher = ::comphelper::createEventAttacherManager( m_xContext );
             OSL_ENSURE( m_xEventAttacher.is(), "OInterfaceContainer::read: could not create an event attacher manager!" );
         }
         catch( const Exception& )
@@ -1305,7 +1305,7 @@ Sequence<Type> SAL_CALL OFormComponents::getTypes() throw(RuntimeException)
 }
 
 //------------------------------------------------------------------------------
-OFormComponents::OFormComponents(const Reference<XMultiServiceFactory>& _rxFactory)
+OFormComponents::OFormComponents(const Reference<XComponentContext>& _rxFactory)
     :FormComponentsBase( m_aMutex )
     ,OInterfaceContainer( _rxFactory, m_aMutex, XFormComponent::static_type() )
     ,OFormComponents_BASE()

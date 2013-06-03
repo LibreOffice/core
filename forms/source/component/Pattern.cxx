@@ -18,6 +18,7 @@
  */
 
 #include "Pattern.hxx"
+#include "comphelper/processfactory.hxx"
 
 //.........................................................................
 namespace frm
@@ -28,6 +29,7 @@ namespace frm
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::XInterface;
@@ -42,7 +44,7 @@ namespace frm
 // OPatternControl
 //==================================================================
 //------------------------------------------------------------------
-OPatternControl::OPatternControl(const Reference<XMultiServiceFactory>& _rxFactory)
+OPatternControl::OPatternControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_PATTERNFIELD)
 {
 }
@@ -50,7 +52,7 @@ OPatternControl::OPatternControl(const Reference<XMultiServiceFactory>& _rxFacto
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OPatternControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OPatternControl(_rxFactory));
+    return *(new OPatternControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -76,7 +78,7 @@ StringSequence OPatternControl::getSupportedServiceNames() throw()
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OPatternModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OPatternModel(_rxFactory));
+    return *(new OPatternModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -88,7 +90,7 @@ Sequence<Type> OPatternModel::_getTypes()
 //------------------------------------------------------------------
 DBG_NAME( OPatternModel )
 //------------------------------------------------------------------
-OPatternModel::OPatternModel(const Reference<XMultiServiceFactory>& _rxFactory)
+OPatternModel::OPatternModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_PATTERNFIELD, FRM_SUN_CONTROL_PATTERNFIELD, sal_False, sal_False )
                                     // use the old control name for compytibility reasons
 {
@@ -99,7 +101,7 @@ OPatternModel::OPatternModel(const Reference<XMultiServiceFactory>& _rxFactory)
 }
 
 //------------------------------------------------------------------
-OPatternModel::OPatternModel( const OPatternModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+OPatternModel::OPatternModel( const OPatternModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
 {
     DBG_CTOR( OPatternModel, NULL );
@@ -189,7 +191,7 @@ void OPatternModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm 
     if ( !xField.is() )
         return;
 
-    m_pFormattedValue.reset( new ::dbtools::FormattedColumnValue( getContext().getUNOContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
+    m_pFormattedValue.reset( new ::dbtools::FormattedColumnValue( getContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
 }
 
 //------------------------------------------------------------------------------

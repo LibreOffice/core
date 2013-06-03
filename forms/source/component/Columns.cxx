@@ -200,11 +200,10 @@ Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeE
 
 DBG_NAME(OGridColumn);
 //------------------------------------------------------------------------------
-OGridColumn::OGridColumn( const comphelper::ComponentContext& _rContext, const OUString& _sModelName )
+OGridColumn::OGridColumn( const Reference<XComponentContext>& _rContext, const OUString& _sModelName )
     :OGridColumn_BASE(m_aMutex)
     ,OPropertySetAggregationHelper(OGridColumn_BASE::rBHelper)
     ,m_aHidden( makeAny( sal_False ) )
-    ,m_aContext( _rContext )
     ,m_aModelName(_sModelName)
 {
     DBG_CTOR(OGridColumn,NULL);
@@ -215,7 +214,7 @@ OGridColumn::OGridColumn( const comphelper::ComponentContext& _rContext, const O
         increment( m_refCount );
 
         {
-            m_xAggregate.set( m_aContext.createComponent( m_aModelName ), UNO_QUERY );
+            m_xAggregate.set( _rContext->getServiceManager()->createInstanceWithContext( m_aModelName, _rContext ), UNO_QUERY );
             setAggregation( m_xAggregate );
         }
 
@@ -233,7 +232,6 @@ OGridColumn::OGridColumn( const comphelper::ComponentContext& _rContext, const O
 OGridColumn::OGridColumn( const OGridColumn* _pOriginal )
     :OGridColumn_BASE( m_aMutex )
     ,OPropertySetAggregationHelper( OGridColumn_BASE::rBHelper )
-    ,m_aContext( _pOriginal->m_aContext )
 {
     DBG_CTOR(OGridColumn,NULL);
 

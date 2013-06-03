@@ -41,6 +41,7 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/container.hxx>
 #include <comphelper/numbers.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/listenernotification.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
@@ -133,7 +134,7 @@ namespace frm
     //------------------------------------------------------------------
     InterfaceRef SAL_CALL OListBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
     {
-        return *(new OListBoxModel(_rxFactory));
+        return *(new OListBoxModel( comphelper::getComponentContext(_rxFactory) ));
     }
 
     //------------------------------------------------------------------------------
@@ -154,12 +155,12 @@ namespace frm
 
     DBG_NAME(OListBoxModel);
     //------------------------------------------------------------------
-    OListBoxModel::OListBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
+    OListBoxModel::OListBoxModel(const Reference<XComponentContext>& _rxFactory)
         :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_LISTBOX, FRM_SUN_CONTROL_LISTBOX, sal_True, sal_True, sal_True )
         // use the old control name for compatibility reasons
         ,OEntryListHelper( (OControlModel&)*this )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
-        ,m_aListRowSet( getContext() )
+        ,m_aListRowSet()
         ,m_nNULLPos(-1)
         ,m_nBoundColumnType( DataType::SQLNULL )
     {
@@ -174,11 +175,11 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    OListBoxModel::OListBoxModel( const OListBoxModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
+    OListBoxModel::OListBoxModel( const OListBoxModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
         :OBoundControlModel( _pOriginal, _rxFactory )
         ,OEntryListHelper( *_pOriginal, (OControlModel&)*this )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
-        ,m_aListRowSet( getContext() )
+        ,m_aListRowSet()
         ,m_eListSourceType( _pOriginal->m_eListSourceType )
         ,m_aBoundColumn( _pOriginal->m_aBoundColumn )
         ,m_aListSourceValues( _pOriginal->m_aListSourceValues )
@@ -877,7 +878,7 @@ namespace frm
                     if ( !xDataField.is() )
                         return;
 
-                    ::dbtools::FormattedColumnValue aValueFormatter( getContext().getUNOContext(), m_xCursor, xDataField );
+                    ::dbtools::FormattedColumnValue aValueFormatter( getContext(), m_xCursor, xDataField );
 
                     // Get the field of BoundColumn of the ResultSet
                     m_nBoundColumnType = DataType::SQLNULL;
@@ -1709,7 +1710,7 @@ namespace frm
     //------------------------------------------------------------------
     InterfaceRef SAL_CALL OListBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
     {
-        return *(new OListBoxControl(_rxFactory));
+        return *(new OListBoxControl( comphelper::getComponentContext(_rxFactory) ));
     }
 
     //------------------------------------------------------------------------------
@@ -1736,7 +1737,7 @@ namespace frm
 
     DBG_NAME(OListBoxControl);
     //------------------------------------------------------------------------------
-    OListBoxControl::OListBoxControl(const Reference<XMultiServiceFactory>& _rxFactory)
+    OListBoxControl::OListBoxControl(const Reference<XComponentContext>& _rxFactory)
         :OBoundControl( _rxFactory, VCL_CONTROL_LISTBOX, sal_False )
         ,m_aChangeListeners( m_aMutex )
         ,m_aItemListeners( m_aMutex )

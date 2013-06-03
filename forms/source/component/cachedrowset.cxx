@@ -40,6 +40,7 @@ namespace frm
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::beans::XPropertySet;
@@ -58,16 +59,14 @@ namespace frm
     //====================================================================
     struct CachedRowSet_Data
     {
-        ::comphelper::ComponentContext  aContext;
         OUString                 sCommand;
         sal_Bool                        bEscapeProcessing;
         Reference< XConnection >        xConnection;
 
         bool                            bStatementDirty;
 
-        CachedRowSet_Data( const ::comphelper::ComponentContext& _rContext )
-            :aContext( _rContext )
-            ,sCommand()
+        CachedRowSet_Data()
+            :sCommand()
             ,bEscapeProcessing( sal_False )
             ,xConnection()
             ,bStatementDirty( true )
@@ -79,8 +78,8 @@ namespace frm
     //= CachedRowSet
     //====================================================================
     //--------------------------------------------------------------------
-    CachedRowSet::CachedRowSet( const ::comphelper::ComponentContext& _rContext )
-        :m_pData( new CachedRowSet_Data( _rContext ) )
+    CachedRowSet::CachedRowSet()
+        :m_pData( new CachedRowSet_Data )
     {
     }
 
@@ -176,7 +175,7 @@ namespace frm
     {
         try
         {
-            m_pData.reset( new CachedRowSet_Data( m_pData->aContext ) );
+            m_pData.reset( new CachedRowSet_Data );
         }
         catch( const Exception& )
         {

@@ -52,6 +52,7 @@
 #include <unotools/streamhelper.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/guarding.hxx>
+#include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/urihelper.hxx>
 
@@ -124,7 +125,7 @@ namespace
 //------------------------------------------------------------------------------
 InterfaceRef SAL_CALL OImageControlModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OImageControlModel(_rxFactory));
+    return *(new OImageControlModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -138,7 +139,7 @@ Sequence<Type> OImageControlModel::_getTypes()
 
 DBG_NAME(OImageControlModel)
 //------------------------------------------------------------------
-OImageControlModel::OImageControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
+OImageControlModel::OImageControlModel(const Reference<XComponentContext>& _rxFactory)
     :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_SUN_CONTROL_IMAGECONTROL, sal_False, sal_False, sal_False )
                     // use the old control name for compytibility reasons
     ,m_pImageProducer( NULL )
@@ -155,7 +156,7 @@ OImageControlModel::OImageControlModel(const Reference<XMultiServiceFactory>& _r
 }
 
 //------------------------------------------------------------------
-OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, const Reference< XMultiServiceFactory >& _rxFactory )
+OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
     :OBoundControlModel( _pOriginal, _rxFactory )
                 // use the old control name for compytibility reasons
     ,m_pImageProducer( NULL )
@@ -283,7 +284,7 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
                 m_xGraphicObject.clear();
             else
             {
-                m_xGraphicObject = GraphicObject::create( m_aContext.getUNOContext() );
+                m_xGraphicObject = GraphicObject::create( m_xContext );
                 m_xGraphicObject->setGraphic( xGraphic );
             }
 
@@ -420,7 +421,7 @@ sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL,
 
     if ( ::svt::GraphicAccess::isSupportedURL( _rURL ) )
     {
-        xImageStream = ::svt::GraphicAccess::getImageXStream( getContext().getUNOContext(), _rURL );
+        xImageStream = ::svt::GraphicAccess::getImageXStream( getContext(), _rURL );
     }
     else
     {
@@ -701,7 +702,7 @@ IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic )
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OImageControlControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
-    return *(new OImageControlControl(_rxFactory));
+    return *(new OImageControlControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //------------------------------------------------------------------------------
@@ -714,7 +715,7 @@ Sequence<Type> OImageControlControl::_getTypes()
 }
 
 //------------------------------------------------------------------------------
-OImageControlControl::OImageControlControl(const Reference<XMultiServiceFactory>& _rxFactory)
+OImageControlControl::OImageControlControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_IMAGECONTROL)
     ,m_aModifyListeners( m_aMutex )
 {
@@ -903,7 +904,7 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
     // is this a request for a context menu?
     if ( e.PopupTrigger )
     {
-        Reference< XPopupMenu > xMenu( awt::PopupMenu::create( m_aContext.getUNOContext() ) );
+        Reference< XPopupMenu > xMenu( awt::PopupMenu::create( m_xContext ) );
         DBG_ASSERT( xMenu.is(), "OImageControlControl::mousePressed: could not create a popup menu!" );
 
         Reference< XWindowPeer > xWindowPeer = getPeer();

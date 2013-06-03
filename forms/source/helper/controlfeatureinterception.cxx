@@ -34,7 +34,7 @@ namespace frm
     //= ControlFeatureInterception
     //====================================================================
     //--------------------------------------------------------------------
-    ControlFeatureInterception::ControlFeatureInterception( const Reference< XMultiServiceFactory >& _rxORB )
+    ControlFeatureInterception::ControlFeatureInterception( const Reference< XComponentContext >& _rxORB )
         :m_pUrlTransformer( new UrlTransformer( _rxORB ) )
     {
     }

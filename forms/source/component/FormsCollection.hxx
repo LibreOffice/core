@@ -52,7 +52,7 @@ class OFormsCollection
     ::comphelper::InterfaceRef  m_xParent;          // Parent
 
 public:
-    OFormsCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    OFormsCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
     OFormsCollection( const OFormsCollection& _cloneSource );
     virtual ~OFormsCollection();
 
