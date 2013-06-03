@@ -21,6 +21,9 @@ WARNINGS = YES
 WARN_IF_DOC_ERROR = YES
 WARN_FORMAT = "$file:$line: $text"
 
+# Do this only on Windows - the MSI has some ridiculous path name length
+# restrictions - but not other platforms because short names are pretty random
+SHORT_NAMES = %
 # for windows? actually should NOT need this - no case collision in files!
 # note this changes filenames (uppercase letters translated to "_lowercase")
 #CASE_SENSE_NAMES = NO

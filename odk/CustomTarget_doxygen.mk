@@ -81,6 +81,7 @@ $(call gb_CustomTarget_get_workdir,odk/docs)/idl/Doxyfile : \
 		-e 's!^PROJECT_NAME = %$$!PROJECT_NAME = $(PRODUCTNAME)!' \
 		-e 's!^QUIET = %$$!QUIET = $(if $(VERBOSE),NO,YES)!' \
 		-e 's!^STRIP_FROM_PATH = %$$!STRIP_FROM_PATH = $(call odk_cygwin_path,$(odk_idl_PREFIX))!' \
+		-e 's!^SHORT_NAMES = %$$!SHORT_NAMES = $(if $(filter WNT,$(OS)),YES,NO)!' \
 		$< > $@
 
 $(call gb_CustomTarget_get_workdir,odk/docs)/idl/doxygen.log : \

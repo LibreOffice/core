@@ -345,6 +345,8 @@ if (-d "$SdkDir") {
                 "xml/xpath",
                 "xsd" );
 
+    # Due to MSI limitations have to use SHORT_NAMES on windows so can't check
+    if ($OperatingSystem ne "windows") {
     foreach $i (@idl_dirlist)
     {
         if (!check_dir("docs/common/ref/com/sun/star/$i")) {
@@ -353,6 +355,7 @@ if (-d "$SdkDir") {
         } else {
         print "+";
         }
+    }
     }
     } else {
     $return++;
