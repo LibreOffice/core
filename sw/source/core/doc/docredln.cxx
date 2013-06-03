@@ -430,7 +430,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                         {
                             // own insert-over-insert redlines:
                             // just scrap the inside ones
-                            mpRedlineTbl->Remove( n );
+                            mpRedlineTbl->DeleteAndDestroy( n );
                             bDec = true;
                         }
                         else if( POS_OVERLAP_BEHIND == eCmpPos )
