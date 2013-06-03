@@ -751,7 +751,12 @@ namespace sw
                 SwRedlineData aData(pFltRedline->eType, pFltRedline->nAutorNo,
                         pFltRedline->aStamp, aEmptyStr, 0);
 
-                mrDoc.AppendRedline(new SwRedline(aData, aRegion), true);
+                SwRedline *const pNewRedline(new SwRedline(aData, aRegion));
+                // the point node may be deleted in AppendRedline, so park
+                // the PaM somewhere safe
+                aRegion.DeleteMark();
+                *aRegion.GetPoint() = SwPosition(SwNodeIndex(mrDoc.GetNodes()));
+                mrDoc.AppendRedline(pNewRedline, true);
                 mrDoc.SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_NONE | nsRedlineMode_t::REDLINE_SHOW_INSERT |
                      nsRedlineMode_t::REDLINE_SHOW_DELETE ));
             }
