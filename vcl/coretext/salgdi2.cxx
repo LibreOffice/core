@@ -54,11 +54,6 @@ SystemFontList::~SystemFontList( void )
 {}
 
 
-// ATSUI is deprecated in 10.6 (or already 10.5?)
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
-#pragma GCC diagnostic warning "-Wdeprecated-declarations"
-#endif
-
 // =======================================================================
 
 ImplMacTextStyle::ImplMacTextStyle( const FontSelectPattern& rReqFont )
@@ -377,22 +372,17 @@ sal_uLong AquaSalGraphics::GetKernPairs( sal_uLong, ImplKernPairData* )
 
 static bool AddTempFontDir( const char* pDir )
 {
-    FSRef aPathFSRef;
-    Boolean bIsDirectory = true;
-    OSStatus eStatus = FSPathMakeRef( reinterpret_cast<const UInt8*>(pDir), &aPathFSRef, &bIsDirectory );
-    DBG_ASSERTWARNING( (eStatus==noErr) && bIsDirectory, "vcl AddTempFontDir() with invalid directory name!" );
-    if( eStatus != noErr )
-        return false;
+    CFStringRef rDir = CFStringCreateWithCString(NULL, pDir, kCFStringEncodingUTF8);
+    CFURLRef rDirURL = CFURLCreateWithFileSystemPath(NULL, rDir, kCFURLPOSIXPathStyle, true);
 
-    // TODO: deactivate ATSFontContainerRef when closing app
-    ATSFontContainerRef aATSFontContainer;
+    CFErrorRef error;
+    bool success = CTFontManagerRegisterFontsForURL(rDirURL, kCTFontManagerScopeProcess, &error);
 
-    const ATSFontContext eContext = kATSFontContextLocal; // TODO: *Global???
-    eStatus = ::ATSFontActivateFromFileReference( &aPathFSRef,
-        eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
-        &aATSFontContainer );
-    if( eStatus != noErr )
+    if (!success)
+    {
+        CFRelease(error);
         return false;
+    }
 
     return true;
 }
@@ -454,26 +444,20 @@ bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
 {
     OUString aUSytemPath;
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
-
-    FSRef aNewRef;
-    Boolean bIsDirectory = true;
     OString aCFileName = OUStringToOString( aUSytemPath, RTL_TEXTENCODING_UTF8 );
-    OSStatus eStatus = FSPathMakeRef( (UInt8*)aCFileName.getStr(), &aNewRef, &bIsDirectory );
-    DBG_ASSERT( (eStatus==noErr) && !bIsDirectory, "vcl AddTempDevFont() with invalid fontfile name!" );
-    if( eStatus != noErr )
+
+    CFStringRef rDir = CFStringCreateWithCString(NULL, aCFileName.getStr(), kCFStringEncodingUTF8);
+    CFURLRef rDirURL = CFURLCreateWithFileSystemPath(NULL, rDir, kCFURLPOSIXPathStyle, true);
+
+    CFErrorRef error;
+    bool success = CTFontManagerRegisterFontsForURL(rDirURL, kCTFontManagerScopeProcess, &error);
+
+    if (!success)
+    {
+        CFRelease(error);
         return false;
+    }
 
-    ATSFontContainerRef oContainer;
-
-    const ATSFontContext eContext = kATSFontContextLocal; // TODO: *Global???
-    eStatus = ::ATSFontActivateFromFileReference( &aNewRef,
-        eContext, kATSFontFormatUnspecified, NULL, kATSOptionFlagsDefault,
-        &oContainer );
-    if( eStatus != noErr )
-        return false;
-
-    // TODO: ATSFontDeactivate( oContainer ) when fonts are no longer needed
-    // TODO: register new ImplMacFontdata in pFontList
     return true;
 }
 
