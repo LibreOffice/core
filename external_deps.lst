@@ -217,9 +217,9 @@ if (ENABLE_MEDIAWIKI == YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_PYTHON != YES)
-    MD5 = 62704ea0f125923208d84ff0568f7d50
-    name = Python-2.7.4.tar.bz2
-    URL1 = http://www.python.org/ftp/python/2.7.4/Python-2.7.4.tar.bz2
+    MD5 =  6334b666b7ff2038c761d7b27ba699c1
+    name = Python-2.7.5.tar.bz2
+    URL1 = http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tar.bz2
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_BOOST!=YES || (OS==SOLARIS && COM!=GCC))
