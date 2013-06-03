@@ -231,13 +231,14 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
     // don't have any attributes
     if (bHeader)
     {
-        nHeaderStartRow = rImport.GetTables().GetCurrentRow();
+        ScAddress aAddr = rImport.GetTables().GetCurrentCellPos();
+        nHeaderStartRow = aAddr.Row();
         ++nHeaderStartRow;
     }
     else if (bGroup)
     {
-        nGroupStartRow = rImport.GetTables().GetCurrentRow();
-        ++nGroupStartRow;
+        ScAddress aAddr = rImport.GetTables().GetCurrentCellPos();
+        nHeaderStartRow = aAddr.Row();
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
