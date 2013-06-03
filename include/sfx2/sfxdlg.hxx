@@ -58,6 +58,8 @@ namespace com { namespace sun { namespace star { namespace frame {
 class SfxAbstractDialog : virtual public VclAbstractDialog
 {
 public:
+    /** Get a set of items changed in the dialog.
+      */
     virtual const SfxItemSet*   GetOutputItemSet() const = 0;
     virtual void                SetText( const OUString& rStr ) = 0;
     virtual OUString            GetText() const = 0;
