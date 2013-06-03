@@ -21,6 +21,7 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
+#include "address.hxx"
 
 class ScXMLImport;
 
@@ -53,10 +54,8 @@ public:
 
 class ScXMLTableRowsContext : public SvXMLImportContext
 {
-    sal_Int32 nHeaderStartRow;
-    sal_Int32 nHeaderEndRow;
-    sal_Int32 nGroupStartRow;
-    sal_Int32 nGroupEndRow;
+    SCROW nHeaderStartRow;
+    SCROW nGroupStartRow;
     bool bHeader;
     bool bGroup;
     bool bGroupDisplay;

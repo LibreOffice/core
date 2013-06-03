@@ -221,9 +221,7 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
                                       const bool bTempHeader, const bool bTempGroup ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     nHeaderStartRow(0),
-    nHeaderEndRow(0),
     nGroupStartRow(0),
-    nGroupEndRow(0),
     bHeader(bTempHeader),
     bGroup(bTempGroup),
     bGroupDisplay(true)
@@ -302,7 +300,7 @@ void ScXMLTableRowsContext::EndElement()
     ScXMLImport& rXMLImport(GetScImport());
     if (bHeader)
     {
-        nHeaderEndRow = rXMLImport.GetTables().GetCurrentRow();
+        SCROW nHeaderEndRow = rXMLImport.GetTables().GetCurrentRow();
         if (nHeaderStartRow <= nHeaderEndRow)
         {
             uno::Reference <sheet::XPrintAreas> xPrintAreas (rXMLImport.GetTables().GetCurrentXSheet(), uno::UNO_QUERY);
@@ -327,7 +325,7 @@ void ScXMLTableRowsContext::EndElement()
     }
     else if (bGroup)
     {
-        nGroupEndRow = rXMLImport.GetTables().GetCurrentRow();
+        SCROW nGroupEndRow = rXMLImport.GetTables().GetCurrentRow();
         SCTAB nSheet(rXMLImport.GetTables().GetCurrentSheet());
         if (nGroupStartRow <= nGroupEndRow)
         {
