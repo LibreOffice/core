@@ -61,7 +61,6 @@
 #include <basic/basmgr.hxx>
 #include <sfx2/app.hxx>
 
-#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 

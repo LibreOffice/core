@@ -31,7 +31,6 @@
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/implementationreference.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

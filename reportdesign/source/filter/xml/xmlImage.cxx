@@ -30,7 +30,6 @@
 #include <tools/debug.hxx>
 #include <unotools/pathoptions.hxx>
 
-#include <comphelper/componentcontext.hxx>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 
 namespace rptxml

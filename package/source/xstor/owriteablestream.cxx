@@ -35,7 +35,6 @@
 #include <osl/diagnose.h>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 

@@ -30,8 +30,8 @@
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 

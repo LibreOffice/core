@@ -26,7 +26,6 @@
 #include <com/sun/star/logging/PlainTextFormatter.hpp>
 
 #include <tools/diagnose_ex.h>
-#include <comphelper/componentcontext.hxx>
 #include <rtl/tencinfo.h>
 
 //........................................................................

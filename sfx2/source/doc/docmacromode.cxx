@@ -29,7 +29,6 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/script/XLibraryQueryExecutable.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <framework/interaction.hxx>
 #include <osl/file.hxx>

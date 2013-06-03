@@ -24,7 +24,6 @@
 
 #include <com/sun/star/graphic/XGraphic.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

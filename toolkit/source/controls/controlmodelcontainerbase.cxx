@@ -44,7 +44,6 @@
 #include <vcl/outdev.hxx>
 #include <comphelper/types.hxx>
 
-#include <comphelper/componentcontext.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/tkresmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>

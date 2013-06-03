@@ -37,7 +37,6 @@
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/XItemList.hpp>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 

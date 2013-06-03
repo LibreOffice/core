@@ -39,7 +39,6 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase9.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 

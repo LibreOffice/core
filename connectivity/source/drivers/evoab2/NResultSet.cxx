@@ -34,7 +34,6 @@
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>

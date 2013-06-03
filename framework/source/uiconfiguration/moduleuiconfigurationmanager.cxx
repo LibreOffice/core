@@ -39,7 +39,6 @@
 
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 //_________________________________________________________________________________________________________________

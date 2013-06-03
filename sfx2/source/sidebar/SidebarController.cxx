@@ -40,7 +40,6 @@
 #include <tools/link.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>

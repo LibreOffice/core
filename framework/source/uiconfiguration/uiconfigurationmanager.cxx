@@ -40,7 +40,6 @@
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/ui/DocumentAcceleratorConfiguration.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 

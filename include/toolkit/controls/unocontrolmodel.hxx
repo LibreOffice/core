@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/weakagg.hxx>
 #include <osl/mutex.hxx>
 
@@ -37,7 +38,6 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase7.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <list>

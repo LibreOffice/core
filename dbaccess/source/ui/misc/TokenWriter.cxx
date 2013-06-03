@@ -24,7 +24,6 @@
 #include "RtfReader.hxx"
 #include "HtmlReader.hxx"
 #include "dbustrings.hrc"
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>

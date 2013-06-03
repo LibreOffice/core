@@ -31,7 +31,6 @@
 
 #include <sax/tools/converter.hxx>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include "tools/debug.hxx"

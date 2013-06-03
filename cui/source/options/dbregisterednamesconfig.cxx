@@ -23,7 +23,6 @@
 #include "svx/svxids.hrc"
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/eitem.hxx>

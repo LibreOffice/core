@@ -43,7 +43,6 @@
 // for introspection
 #include <toolkit/awt/vclxwindows.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 #include <vcl/wrkwin.hxx>

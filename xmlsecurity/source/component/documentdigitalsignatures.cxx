@@ -42,7 +42,6 @@
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <unotools/ucbhelper.hxx>
-#include <comphelper/componentcontext.hxx>
 #include "comphelper/documentconstants.hxx"
 
 #include "com/sun/star/lang/IllegalArgumentException.hpp"

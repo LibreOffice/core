@@ -48,7 +48,6 @@
 #include <statstr.hrc>
 #include <rtl/logfile.hxx>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/makesequence.hxx>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>

@@ -31,7 +31,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/extract.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <rtl/string.hxx>
 #if OSL_DEBUG_LEVEL > 0

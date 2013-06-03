@@ -59,7 +59,6 @@
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include <comphelper/componentcontext.hxx>
 
 #include <algorithm>
 #include <vector>

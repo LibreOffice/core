@@ -68,7 +68,6 @@
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/interaction.hxx>
 #include <framework/interaction.hxx>
 #include <unotools/streamhelper.hxx>

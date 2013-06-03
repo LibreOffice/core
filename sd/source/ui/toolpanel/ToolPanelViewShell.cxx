@@ -72,7 +72,6 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/confignode.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 

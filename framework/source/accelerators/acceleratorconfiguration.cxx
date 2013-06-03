@@ -48,7 +48,6 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <unotools/configpaths.hxx>
 #include <rtl/logfile.hxx>

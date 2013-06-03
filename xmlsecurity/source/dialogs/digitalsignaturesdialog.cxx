@@ -56,7 +56,6 @@
 
 #include <vcl/msgbox.hxx> // Until encrypted docs work...
 #include <unotools/configitem.hxx>
-#include <comphelper/componentcontext.hxx>
 
 
 /* HACK: disable some warnings for MS-C */

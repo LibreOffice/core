@@ -33,13 +33,13 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/stl_types.hxx>
 #include <tools/link.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <rtl/ref.hxx>
 
 class SdrPageWindow;

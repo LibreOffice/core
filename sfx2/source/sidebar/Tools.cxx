@@ -22,7 +22,6 @@
 
 #include "sfx2/imagemgr.hxx"
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <vcl/gradient.hxx>
 

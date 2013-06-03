@@ -25,7 +25,6 @@
 #include <com/sun/star/deployment/PackageInformationProvider.hpp>
 
 #include <ucbhelper/contentidentifier.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/providerhelper.hxx>
 #include <ucbhelper/content.hxx>

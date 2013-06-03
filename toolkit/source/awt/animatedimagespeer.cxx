@@ -29,7 +29,6 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>

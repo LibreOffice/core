@@ -22,7 +22,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <hintids.hxx>

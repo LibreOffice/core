@@ -20,7 +20,6 @@
 #include "sfx2/sidebar/Tools.hxx"
 
 #include <unotools/confignode.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/types.hxx>

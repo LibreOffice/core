@@ -35,7 +35,6 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <ucbhelper/content.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>

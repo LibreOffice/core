@@ -39,7 +39,6 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/ui/UIElementFactoryManager.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/processfactory.hxx>

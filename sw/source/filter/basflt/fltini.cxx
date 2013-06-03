@@ -53,7 +53,6 @@
 #include <swerror.h>
 #include <osl/module.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <rtl/uri.hxx>

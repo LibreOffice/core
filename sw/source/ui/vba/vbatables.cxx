@@ -26,7 +26,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
-#include <comphelper/componentcontext.hxx>
 
 using namespace ::ooo::vba;
 using namespace css;

@@ -33,7 +33,6 @@
 #include <com/sun/star/document/GraphicObjectResolver.hpp>
 #include "dlgcont.hxx"
 #include "sbmodule.hxx"
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <osl/mutex.hxx>

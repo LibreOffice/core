@@ -23,7 +23,6 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <unotools/sharedunocomponent.hxx>
 
 #include <memory>

@@ -23,7 +23,6 @@
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <sfx2/viewsh.hxx>
 #include <tools/diagnose_ex.h>
 

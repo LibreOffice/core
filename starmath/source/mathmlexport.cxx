@@ -52,7 +52,6 @@
 #include <unotools/saveopt.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemprop.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sax/tools/converter.hxx>

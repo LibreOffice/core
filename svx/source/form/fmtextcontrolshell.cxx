@@ -41,7 +41,6 @@
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <sfx2/app.hxx>

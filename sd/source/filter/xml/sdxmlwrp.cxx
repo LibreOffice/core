@@ -53,7 +53,6 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <unotools/saveopt.hxx>

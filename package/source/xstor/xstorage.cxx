@@ -46,7 +46,6 @@
 #include <rtl/instance.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 

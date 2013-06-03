@@ -28,7 +28,6 @@
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/awt/grid/XGridDataListener.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/implbase1.hxx>

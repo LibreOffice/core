@@ -39,7 +39,6 @@
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>

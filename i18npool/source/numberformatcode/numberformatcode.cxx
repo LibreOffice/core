@@ -22,7 +22,6 @@
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
 #include <com/sun/star/i18n/LocaleData.hpp>
-#include <comphelper/componentcontext.hxx>
 
 
 

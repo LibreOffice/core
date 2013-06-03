@@ -9,7 +9,6 @@
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>

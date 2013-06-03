@@ -23,7 +23,6 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <rtl/ustrbuf.hxx>
 
 //......................................................................................................................

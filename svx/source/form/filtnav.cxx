@@ -32,7 +32,6 @@
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>

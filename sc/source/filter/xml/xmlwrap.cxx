@@ -54,7 +54,6 @@
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
 #include <sfx2/DocumentMetadataAccess.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <svx/xmleohlp.hxx>
 #include <rtl/logfile.hxx>

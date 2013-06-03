@@ -21,7 +21,6 @@
 #include "TemplateScanner.hxx"
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/string.hxx>
 

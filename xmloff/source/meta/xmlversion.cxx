@@ -24,7 +24,6 @@
 #include <xmloff/xmlmetae.hxx>
 
 #include <xmloff/xmltoken.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

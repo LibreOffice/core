@@ -37,7 +37,6 @@
 
 #include <com/sun/star/util/XCloseable.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <svtools/asynclink.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

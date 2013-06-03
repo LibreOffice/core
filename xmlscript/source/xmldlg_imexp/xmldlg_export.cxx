@@ -57,7 +57,6 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/document/GraphicObjectResolver.hpp>
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;

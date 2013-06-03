@@ -29,7 +29,6 @@
 #include "UserAdminDlg.hrc"
 #include "UserAdminDlg.hxx"
 
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <cppuhelper/exc_hlp.hxx>

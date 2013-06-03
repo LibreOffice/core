@@ -32,7 +32,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <rtl/bootstrap.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>

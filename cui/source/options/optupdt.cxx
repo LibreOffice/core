@@ -23,7 +23,6 @@
 #include "optupdt.hxx"
 #include <dialmgr.hxx>
 #include <cuires.hrc>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

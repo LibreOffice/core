@@ -23,7 +23,6 @@
 #include <svtools/unoevent.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/streamwrap.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
