@@ -19,7 +19,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <unotest/bootstrapfixturebase.hxx>
 
-#include <unicode/uvernum.h>
+#include <unicode/uversion.h>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -236,6 +236,8 @@ void TestBreakIterator::testWordBoundaries()
     }
 
     //See https://bugs.freedesktop.org/show_bug.cgi?id=49629
+    //Note that the breakiterator test will fail on older icu versions
+    //(4.2.1) for the 200B (ZWSP) Zero Width Space testcase.
     sal_Unicode aBreakTests[] = { ' ', 1, 2, 3, 4, 5, 6, 7, 0x91, 0x92, 0x200B, 0xE8FF, 0xF8FF };
     for (int mode = i18n::WordType::ANY_WORD; mode <= i18n::WordType::WORD_COUNT; ++mode)
     {
