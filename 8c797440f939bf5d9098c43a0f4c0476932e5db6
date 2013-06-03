@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//71I\u003d",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 746,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-03T07:58:24Z",
+      "side": 1,
+      "message": "I smell some copy-pasta here, but that\u0027s not a blocker, can be cleaned up after the fact.",
+      "revId": "8c797440f939bf5d9098c43a0f4c0476932e5db6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
