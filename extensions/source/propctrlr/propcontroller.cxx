@@ -83,7 +83,7 @@ namespace pcr
     DBG_NAME(OPropertyBrowserController)
     //------------------------------------------------------------------------
     OPropertyBrowserController::OPropertyBrowserController( const Reference< XComponentContext >& _rxContext )
-            :m_aContext(_rxContext)
+            :m_xContext(_rxContext)
             ,m_aDisposeListeners( m_aMutex )
             ,m_aControlObservers( m_aMutex )
             ,m_pView(NULL)
@@ -708,7 +708,7 @@ namespace pcr
         DBG_ASSERT(!haveView(), "OPropertyBrowserController::Construct: already have a view!");
         DBG_ASSERT(_pParentWin, "OPropertyBrowserController::Construct: invalid parent window!");
 
-        m_pView = new OPropertyBrowserView(m_aContext.getLegacyServiceFactory(), _pParentWin);
+        m_pView = new OPropertyBrowserView(_pParentWin);
         m_pView->setPageActivationHandler(LINK(this, OPropertyBrowserController, OnPageActivation));
 
         // add as dispose listener for our view. The view is disposed by the frame we're plugged into,
@@ -1450,7 +1450,7 @@ namespace pcr
     //------------------------------------------------------------------------
     namespace
     {
-        Reference< XPropertyHandler > lcl_createHandler( const ComponentContext& _rContext, const Any& _rFactoryDescriptor )
+        Reference< XPropertyHandler > lcl_createHandler( const Reference<XComponentContext>& _rContext, const Any& _rFactoryDescriptor )
         {
             Reference< XPropertyHandler > xHandler;
 
@@ -1459,11 +1459,11 @@ namespace pcr
             Reference< XSingleComponentFactory > xComponentFac;
 
             if ( _rFactoryDescriptor >>= sServiceName )
-                _rContext.createComponent( sServiceName, xHandler );
+                xHandler.set( _rContext->getServiceManager()->createInstanceWithContext( sServiceName, _rContext ), UNO_QUERY );
             else if ( _rFactoryDescriptor >>= xServiceFac )
                 xHandler = xHandler.query( xServiceFac->createInstance() );
             else if ( _rFactoryDescriptor >>= xComponentFac )
-                xHandler = xHandler.query( xComponentFac->createInstanceWithContext( _rContext.getUNOContext() ) );
+                xHandler = xHandler.query( xComponentFac->createInstanceWithContext( _rContext ) );
             OSL_ENSURE(xHandler.is(),"lcl_createHandler: Can not create handler");
             return xHandler;
         }
@@ -1478,10 +1478,12 @@ namespace pcr
 
         // create a component context for the handlers, containing some information about where
         // they live
-        Reference< XComponentContext > xHandlerContext( m_aContext.getUNOContext() );
+        Reference< XComponentContext > xHandlerContext( m_xContext );
 
         // if our own creator did not pass a dialog parent window, use our own view for this
-        Reference< XWindow > xParentWindow( m_aContext.getContextValueByAsciiName( "DialogParentWindow" ), UNO_QUERY );
+        Reference< XWindow > xParentWindow;
+        Any any = m_xContext->getValueByName( "DialogParentWindow" );
+        any >>= xParentWindow;
         if ( !xParentWindow.is() )
         {
             ::cppu::ContextEntry_Init aHandlerContextInfo[] =
@@ -1490,7 +1492,7 @@ namespace pcr
             };
             xHandlerContext = ::cppu::createComponentContext(
                 aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),
-                m_aContext.getUNOContext() );
+                m_xContext );
         }
 
         Sequence< Any > aHandlerFactories;
@@ -1504,7 +1506,7 @@ namespace pcr
         {
             if ( _rObjects.size() == 1 )
             {   // we're inspecting only one object -> one handler
-                Reference< XPropertyHandler > xHandler( lcl_createHandler( m_aContext, *pHandlerFactory ) );
+                Reference< XPropertyHandler > xHandler( lcl_createHandler( m_xContext, *pHandlerFactory ) );
                 if ( xHandler.is() )
                 {
                     xHandler->inspect( _rObjects[0] );
@@ -1522,7 +1524,7 @@ namespace pcr
 
                 for ( ; pObject != pObjectEnd; ++pObject )
                 {
-                    *pHandler = lcl_createHandler( m_aContext, *pHandlerFactory );
+                    *pHandler = lcl_createHandler( m_xContext, *pHandlerFactory );
                     if ( pHandler->is() )
                     {
                         (*pHandler)->inspect( *pObject );

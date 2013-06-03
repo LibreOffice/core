@@ -495,7 +495,7 @@ namespace pcr
     //--------------------------------------------------------------------
     EventHandler::EventHandler( const Reference< XComponentContext >& _rxContext )
         :EventHandler_Base( m_aMutex )
-        ,m_aContext( _rxContext )
+        ,m_xContext( _rxContext )
         ,m_aPropertyListeners( m_aMutex )
         ,m_bEventsMapInitialized( false )
         ,m_bIsDialogElement( false )
@@ -637,9 +637,7 @@ namespace pcr
         else
             impl_setFormComponentScriptEvent_nothrow( aNewScriptEvent );
 
-        Reference< XModifiable > xDoc( m_aContext.getContextValueByAsciiName( "ContextDocument" ), UNO_QUERY );
-        if ( xDoc.is() )
-            xDoc->setModified( sal_True );
+        PropertyHandlerHelper::setContextDocumentModified( m_xContext );
 
         PropertyChangeEvent aEvent;
         aEvent.Source = m_xComponent;
@@ -697,7 +695,7 @@ namespace pcr
             try
             {
                 // parse
-                Reference< XUriReferenceFactory > xUriRefFac = UriReferenceFactory::create( m_aContext.getUNOContext() );
+                Reference< XUriReferenceFactory > xUriRefFac = UriReferenceFactory::create( m_xContext );
                 Reference< XVndSunStarScriptUrlReference > xScriptUri( xUriRefFac->parse( sScript ), UNO_QUERY_THROW );
 
                 OUStringBuffer aComposeBuffer;
@@ -919,7 +917,7 @@ namespace pcr
             return InteractiveSelectionResult_Cancelled;
 
         ::std::auto_ptr< VclAbstractDialog > pDialog( pFactory->CreateSvxMacroAssignDlg(
-            PropertyHandlerHelper::getDialogParentWindow( m_aContext ),
+            PropertyHandlerHelper::getDialogParentWindow( m_xContext ),
             impl_getContextFrame_nothrow(),
             m_bIsDialogElement,
             pEventHolder.get(),
@@ -988,7 +986,7 @@ namespace pcr
 
         try
         {
-            Reference< XModel > xContextDocument( m_aContext.getContextValueByAsciiName( "ContextDocument" ), UNO_QUERY_THROW );
+            Reference< XModel > xContextDocument( PropertyHandlerHelper::getContextDocument(m_xContext), UNO_QUERY_THROW );
             Reference< XController > xController( xContextDocument->getCurrentController(), UNO_SET_THROW );
             xContextFrame.set( xController->getFrame(), UNO_SET_THROW );
         }
@@ -1052,7 +1050,7 @@ namespace pcr
             // we use a set to avoid duplicates
             TypeBag aListeners;
 
-            Reference< XIntrospection > xIntrospection = Introspection::create( m_aContext.getUNOContext() );
+            Reference< XIntrospection > xIntrospection = Introspection::create( m_xContext );
 
             // --- model listeners
             lcl_addListenerTypesFor_throw(
@@ -1110,7 +1108,7 @@ namespace pcr
         if ( xComponentAsForm.is() )
         {
             Reference< XTabControllerModel > xComponentAsTCModel( m_xComponent, UNO_QUERY_THROW );
-            Reference< XFormController > xController = FormController::create( m_aContext.getUNOContext() );
+            Reference< XFormController > xController = FormController::create( m_xContext );
             xController->setModel( xComponentAsTCModel );
 
             xReturn = xController;
@@ -1120,7 +1118,7 @@ namespace pcr
             OUString sControlService;
             OSL_VERIFY( m_xComponent->getPropertyValue( PROPERTY_DEFAULTCONTROL ) >>= sControlService );
 
-            xReturn = m_aContext.createComponent( sControlService );
+            xReturn = m_xContext->getServiceManager()->createInstanceWithContext( sControlService, m_xContext );
         }
         return xReturn;
     }
@@ -1198,7 +1196,7 @@ namespace pcr
             xEventManager->revokeScriptEvents( nObjectIndex );
             xEventManager->registerScriptEvents( nObjectIndex, aEvents );
 
-            PropertyHandlerHelper::setContextDocumentModified( m_aContext );
+            PropertyHandlerHelper::setContextDocumentModified( m_xContext );
         }
         catch( const Exception& )
         {

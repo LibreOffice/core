@@ -28,7 +28,6 @@
 #include "browserview.hxx"
 #include "modulepcr.hxx"
 #include "propertyinfo.hxx"
-#include "pcrcomponentcontext.hxx"
 
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -106,7 +105,7 @@ namespace pcr
                                                                             InterfaceArray;
 
     protected:
-        ComponentContext                                                    m_aContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;

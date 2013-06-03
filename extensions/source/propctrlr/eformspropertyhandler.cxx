@@ -497,7 +497,7 @@ namespace pcr
         try
         {
             Reference< XExecutableDialog > xDialog;
-            m_aContext.createComponent( "com.sun.star.xforms.ui.dialogs.AddCondition", xDialog );
+            xDialog.set( m_xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.xforms.ui.dialogs.AddCondition", m_xContext ), UNO_QUERY );
             Reference< XPropertySet > xDialogProps( xDialog, UNO_QUERY_THROW );
 
             // the model for the dialog to work with

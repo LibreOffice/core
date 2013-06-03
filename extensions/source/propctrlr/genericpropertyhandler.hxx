@@ -23,7 +23,6 @@
 #include "propertyhandler.hxx"
 #include "pcrcommontypes.hxx"
 #include "pcrcommon.hxx"
-#include "pcrcomponentcontext.hxx"
 
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -61,7 +60,7 @@ namespace pcr
 
     private:
         /// the service factory for creating services
-        ComponentContext                                                                    m_aContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         /// need this to keep alive as long as m_xComponent lives
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >   m_xComponentIntrospectionAccess;
         /// the properties of the object we're handling

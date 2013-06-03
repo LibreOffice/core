@@ -41,8 +41,6 @@ namespace pcr
 {
 //........................................................................
 
-    class ComponentContext;
-
     //====================================================================
     //= PropertyHandlerHelper
     //====================================================================
@@ -166,8 +164,12 @@ namespace pcr
                 the component context which was used to create the component calling this method
         */
         static void setContextDocumentModified(
-                const ComponentContext& _rContext
+                const css::uno::Reference< css::uno::XComponentContext > & _rContext
             );
+
+        static css::uno::Reference< css::uno::XInterface > getContextDocument( const css::uno::Reference<css::uno::XComponentContext> & _rContext );
+
+        static css::uno::Reference< css::uno::XInterface > getContextDocument_throw( const css::uno::Reference<css::uno::XComponentContext> & _rContext ) throw (css::uno::RuntimeException);
 
         /** gets the window of the ObjectInspector in which an property handler lives
 
@@ -178,7 +180,7 @@ namespace pcr
             @param  _rContext
                 the component context which was used to create the component calling this method
         */
-        static Window* getDialogParentWindow( const ComponentContext& _rContext );
+        static Window* getDialogParentWindow( const css::uno::Reference< css::uno::XComponentContext > & _rContext );
 
 
         /** determines whether given PropertyAttributes require a to-be-created

@@ -60,7 +60,7 @@ namespace pcr
         :PropertyHandler_Base( m_aMutex )
         ,m_bSupportedPropertiesAreKnown( false )
         ,m_aPropertyListeners( m_aMutex )
-        ,m_aContext( _rxContext )
+        ,m_xContext( _rxContext )
         ,m_pInfoService  ( new OPropertyInfoService )
     {
         DBG_CTOR( PropertyHandler, NULL );
@@ -163,7 +163,7 @@ namespace pcr
         }
         else
             aPropertyValue = PropertyHandlerHelper::convertToPropertyValue(
-                m_aContext.getContext(),m_xTypeConverter, aProperty, _rControlValue );
+                m_xContext, m_xTypeConverter, aProperty, _rControlValue );
         return aPropertyValue;
     }
 
@@ -184,7 +184,7 @@ namespace pcr
         }
 
         return PropertyHandlerHelper::convertToControlValue(
-            m_aContext.getContext(),m_xTypeConverter, _rPropertyValue, _rControlValueType );
+            m_xContext, m_xTypeConverter, _rPropertyValue, _rControlValueType );
     }
 
     //--------------------------------------------------------------------
@@ -339,7 +339,7 @@ namespace pcr
     //------------------------------------------------------------------------
     Window* PropertyHandler::impl_getDefaultDialogParent_nothrow() const
     {
-        return PropertyHandlerHelper::getDialogParentWindow( m_aContext );
+        return PropertyHandlerHelper::getDialogParentWindow( m_xContext );
     }
 
     //------------------------------------------------------------------------
@@ -407,7 +407,7 @@ namespace pcr
             if ( !(sConfigurationLocation.isEmpty() || sConfigurationProperty.isEmpty()) )
             {
                 ::utl::OConfigurationTreeRoot aConfigTree( ::utl::OConfigurationTreeRoot::createWithComponentContext(
-                    m_aContext.getUNOContext(), sConfigurationLocation, -1, ::utl::OConfigurationTreeRoot::CM_READONLY ) );
+                    m_xContext, sConfigurationLocation, -1, ::utl::OConfigurationTreeRoot::CM_READONLY ) );
                 sal_Int32 nUnitAsInt = (sal_Int32)FUNIT_NONE;
                 aConfigTree.getNodeValue( sConfigurationProperty ) >>= nUnitAsInt;
 

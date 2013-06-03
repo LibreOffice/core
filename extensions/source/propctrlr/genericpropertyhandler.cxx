@@ -215,9 +215,9 @@ namespace pcr
                                     >   UrlClickHandler_Base;
     class UrlClickHandler : public UrlClickHandler_Base
     {
-        ComponentContext    m_aContext;
+        Reference<XComponentContext>    m_xContext;
     public:
-        UrlClickHandler( const ComponentContext& _rContext, const Reference< XHyperlinkControl >& _rxControl );
+        UrlClickHandler( const Reference<XComponentContext>& _rContext, const Reference< XHyperlinkControl >& _rxControl );
 
     protected:
         ~UrlClickHandler();
@@ -235,8 +235,8 @@ namespace pcr
     //--------------------------------------------------------------------
     DBG_NAME( UrlClickHandler )
     //--------------------------------------------------------------------
-    UrlClickHandler::UrlClickHandler( const ComponentContext& _rContext, const Reference< XHyperlinkControl >& _rxControl )
-        :m_aContext( _rContext )
+    UrlClickHandler::UrlClickHandler( const Reference<XComponentContext>& _rContext, const Reference< XHyperlinkControl >& _rxControl )
+        :m_xContext( _rContext )
     {
         if ( !_rxControl.is() )
             throw NullPointerException();
@@ -282,11 +282,11 @@ namespace pcr
     //--------------------------------------------------------------------
     void UrlClickHandler::impl_dispatch_throw( const OUString& _rURL )
     {
-        Reference< XURLTransformer > xTransformer( URLTransformer::create(m_aContext.getUNOContext()) );
+        Reference< XURLTransformer > xTransformer( URLTransformer::create(m_xContext) );
         URL aURL; aURL.Complete = OUString( ".uno:OpenHyperlink" );
         xTransformer->parseStrict( aURL );
 
-        Reference< XDesktop2 > xDispProv = Desktop::create( m_aContext.getUNOContext() );
+        Reference< XDesktop2 > xDispProv = Desktop::create( m_xContext );
         Reference< XDispatch > xDispatch( xDispProv->queryDispatch( aURL, OUString(), 0 ), UNO_QUERY_THROW );
 
         Sequence< PropertyValue > aDispatchArgs(1);
@@ -303,7 +303,7 @@ namespace pcr
     //--------------------------------------------------------------------
     GenericPropertyHandler::GenericPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :GenericPropertyHandler_Base( m_aMutex )
-        ,m_aContext( _rxContext )
+        ,m_xContext( _rxContext )
         ,m_aPropertyListeners( m_aMutex )
         ,m_bPropertyMapInitialized( false )
     {
@@ -376,7 +376,7 @@ namespace pcr
         m_xPropertyState.clear();
 
         // create an introspection adapter for the component
-        Reference< XIntrospection > xIntrospection = Introspection::create( m_aContext.getUNOContext() );
+        Reference< XIntrospection > xIntrospection = Introspection::create( m_xContext );
 
         Reference< XIntrospectionAccess > xIntrospectionAccess( xIntrospection->inspect( makeAny( _rxIntrospectee ) ) );
         if ( !xIntrospectionAccess.is() )
@@ -420,7 +420,7 @@ namespace pcr
     {
         ::rtl::Reference< IPropertyEnumRepresentation >& rConverter = m_aEnumConverters[ _rEnumType ];
         if ( !rConverter.is() )
-            rConverter = new EnumRepresentation( m_aContext.getUNOContext(), _rEnumType );
+            rConverter = new EnumRepresentation( m_xContext, _rEnumType );
         return rConverter;
     }
 
@@ -446,7 +446,7 @@ namespace pcr
             impl_getEnumConverter( pos->second.Type )->getValueFromDescription( sControlValue, aPropertyValue );
         }
         else
-            aPropertyValue = PropertyHandlerHelper::convertToPropertyValue( m_aContext.getContext(),m_xTypeConverter, pos->second, _rControlValue );
+            aPropertyValue = PropertyHandlerHelper::convertToPropertyValue( m_xContext, m_xTypeConverter, pos->second, _rControlValue );
 
         return aPropertyValue;
     }
@@ -471,7 +471,7 @@ namespace pcr
             aControlValue <<= impl_getEnumConverter( pos->second.Type )->getDescriptionForValue( _rPropertyValue );
         }
         else
-            aControlValue = PropertyHandlerHelper::convertToControlValue( m_aContext.getContext(),m_xTypeConverter, _rPropertyValue, _rControlValueType );
+            aControlValue = PropertyHandlerHelper::convertToControlValue( m_xContext, m_xTypeConverter, _rPropertyValue, _rControlValueType );
         return aControlValue;
     }
 
@@ -656,7 +656,7 @@ namespace pcr
                     PropertyControlType::HyperlinkField, PropertyHandlerHelper::requiresReadOnlyControl( pos->second.Attributes ) );
 
                 Reference< XHyperlinkControl > xControl( aDescriptor.Control, UNO_QUERY_THROW );
-                Reference< XActionListener > xEnsureDelete( new UrlClickHandler( m_aContext, xControl ) );
+                Reference< XActionListener > xEnsureDelete( new UrlClickHandler( m_xContext, xControl ) );
             }
         }
         break;

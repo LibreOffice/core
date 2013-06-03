@@ -77,7 +77,6 @@ $(eval $(call gb_Library_add_exception_objects,pcr,\
 	extensions/source/propctrlr/newdatatype \
 	extensions/source/propctrlr/objectinspectormodel \
 	extensions/source/propctrlr/pcrcommon \
-	extensions/source/propctrlr/pcrcomponentcontext \
 	extensions/source/propctrlr/pcrservices \
 	extensions/source/propctrlr/pcrunodialogs \
 	extensions/source/propctrlr/propcontroller \

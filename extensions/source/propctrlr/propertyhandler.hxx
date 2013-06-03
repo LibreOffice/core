@@ -20,7 +20,6 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYHANDLER_HXX
 #define EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYHANDLER_HXX
 
-#include "pcrcomponentcontext.hxx"
 #include "pcrcommon.hxx"
 #include "modulepcr.hxx"
 
@@ -87,7 +86,7 @@ namespace pcr
     protected:
         mutable ::osl::Mutex                                                            m_aMutex;
         /// the context in which the instance was created
-        ComponentContext                                                                m_aContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
         /// the component we're inspecting
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xComponent;
         /// info about our component's properties
@@ -271,7 +270,7 @@ namespace pcr
                     impl_getContextDocument_nothrow() const
         {
             return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >(
-                m_aContext.getContextValueByAsciiName( "ContextDocument" ), ::com::sun::star::uno::UNO_QUERY );
+                m_xContext->getValueByName( "ContextDocument" ), ::com::sun::star::uno::UNO_QUERY );
         }
 
         /** marks the context document as modified

@@ -20,7 +20,6 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_EVENTHANDLER_HXX
 #define EXTENSIONS_SOURCE_PROPCTRLR_EVENTHANDLER_HXX
 
-#include "pcrcomponentcontext.hxx"
 #include "pcrcommontypes.hxx"
 #include "pcrcommon.hxx"
 
@@ -29,6 +28,7 @@
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/listenernotification.hxx>
 
@@ -80,7 +80,7 @@ namespace pcr
         mutable ::osl::Mutex    m_aMutex;
 
         /// the context in which the instance was created
-        ComponentContext                                                            m_aContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  m_xContext;
         /// the properties of the object we're handling
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xComponent;
         /// our XPropertyChangeListener(s)

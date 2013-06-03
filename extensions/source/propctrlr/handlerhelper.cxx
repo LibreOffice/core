@@ -24,7 +24,6 @@
 #include "modulepcr.hxx"
 #include "enumrepresentation.hxx"
 #include "formmetadata.hxx"
-#include "pcrcomponentcontext.hxx"
 
 #include "com/sun/star/inspection/StringRepresentation.hpp"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -241,11 +240,11 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void PropertyHandlerHelper::setContextDocumentModified( const ComponentContext& _rContext )
+    void PropertyHandlerHelper::setContextDocumentModified( const Reference<XComponentContext> & _rContext )
     {
         try
         {
-            Reference< XModifiable > xDocumentModifiable( _rContext.getContextValueByAsciiName( "ContextDocument" ), UNO_QUERY_THROW );
+            Reference< XModifiable > xDocumentModifiable( getContextDocument_throw(_rContext), UNO_QUERY_THROW );
             xDocumentModifiable->setModified( sal_True );
         }
         catch( const Exception& )
@@ -254,13 +253,35 @@ namespace pcr
         }
     }
 
+    Reference< XInterface > PropertyHandlerHelper::getContextDocument( const Reference<XComponentContext> & _rContext )
+    {
+        Reference< XInterface > xI;
+        try
+        {
+            xI = getContextDocument_throw( _rContext );
+        }
+        catch( const Exception& )
+        {
+            OSL_FAIL( "PropertyHandler::getContextValueByName: caught an exception!" );
+        }
+        return xI;
+    }
+
+    Reference< XInterface > PropertyHandlerHelper::getContextDocument_throw( const Reference<XComponentContext> & _rContext ) throw (RuntimeException)
+    {
+        Reference< XInterface > xI;
+        Any aReturn = _rContext->getValueByName( "ContextDocument" );
+        aReturn >>= xI;
+        return xI;
+    }
+
     //--------------------------------------------------------------------
-    Window* PropertyHandlerHelper::getDialogParentWindow( const ComponentContext& _rContext )
+    Window* PropertyHandlerHelper::getDialogParentWindow( const Reference<XComponentContext>& _rContext )
     {
         Window* pInspectorWindow = NULL;
         try
         {
-            Reference< XWindow > xInspectorWindow( _rContext.getContextValueByAsciiName( "DialogParentWindow" ), UNO_QUERY_THROW );
+            Reference< XWindow > xInspectorWindow( _rContext->getValueByName( "DialogParentWindow" ), UNO_QUERY_THROW );
             pInspectorWindow = VCLUnoHelper::GetWindow( xInspectorWindow );
         }
         catch( const Exception& )

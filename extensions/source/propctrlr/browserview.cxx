@@ -37,10 +37,8 @@ namespace pcr
     //========================================================================
     DBG_NAME(OPropertyBrowserView)
     //------------------------------------------------------------------------
-    OPropertyBrowserView::OPropertyBrowserView( const Reference< XMultiServiceFactory >& _rxORB,
-                                 Window* _pParent, WinBits nBits)
+    OPropertyBrowserView::OPropertyBrowserView(Window* _pParent, WinBits nBits)
                   :Window(_pParent, nBits | WB_3DLOOK)
-                  ,m_xORB(_rxORB)
                   ,m_nActivePage(0)
     {
         DBG_CTOR(OPropertyBrowserView,NULL);
@@ -72,7 +70,6 @@ namespace pcr
             ::std::auto_ptr<Window> aTemp(m_pPropBox);
             m_pPropBox = NULL;
         }
-        m_xORB = NULL;
 
         DBG_DTOR(OPropertyBrowserView, NULL);
     }

@@ -21,7 +21,6 @@
 #define _EXTENSIONS_PROPCTRLR_BROWSERVIEW_HXX_
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/window.hxx>
 #include <tools/resid.hxx>
 #include <com/sun/star/awt/Size.hpp>
@@ -38,8 +37,6 @@ namespace pcr
     //========================================================================
     class OPropertyBrowserView : public Window
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
-
         OPropertyEditor*        m_pPropBox;
         sal_uInt16              m_nActivePage;
         Link                    m_aPageActivationHandler;
@@ -50,8 +47,7 @@ namespace pcr
         virtual long Notify( NotifyEvent& _rNEvt );
 
     public:
-        OPropertyBrowserView(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xORB,
-                        Window* pParent, WinBits nBits = 0);
+        OPropertyBrowserView( Window* pParent, WinBits nBits = 0);
 
         virtual ~OPropertyBrowserView();
 

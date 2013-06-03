@@ -296,7 +296,9 @@ namespace pcr
                 Reference< XGridColumnFactory > xCheckGrid( xCompChild->getParent(), UNO_QUERY );
                 if ( !xCheckGrid.is() )
                 {
-                    Reference< XMap > xControlMap( m_aContext.getContextValueByAsciiName( "ControlShapeAccess" ), UNO_QUERY_THROW );
+                    Reference< XMap > xControlMap;
+                    Any any = m_xContext->getValueByName( "ControlShapeAccess" );
+                    any >>= xControlMap;
                     m_xAssociatedShape.set( xControlMap->get( makeAny( xControlModel ) ), UNO_QUERY_THROW );
                     m_xShapeProperties.set( m_xAssociatedShape, UNO_QUERY_THROW );
                 }

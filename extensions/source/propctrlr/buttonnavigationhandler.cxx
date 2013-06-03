@@ -52,11 +52,9 @@ namespace pcr
     {
         DBG_CTOR( ButtonNavigationHandler, NULL );
 
-        m_aContext.createComponent(
-            OUString( "com.sun.star.form.inspection.FormComponentPropertyHandler" ),
-            m_xSlaveHandler );
-        if ( !m_xSlaveHandler.is() )
-            throw RuntimeException();
+        m_xSlaveHandler.set( m_xContext->getServiceManager()->createInstanceWithContext(
+            OUString( "com.sun.star.form.inspection.FormComponentPropertyHandler" ), m_xContext ),
+            UNO_QUERY_THROW);
     }
 
     //--------------------------------------------------------------------

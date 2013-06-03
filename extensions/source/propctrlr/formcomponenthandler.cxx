@@ -529,7 +529,7 @@ namespace pcr
 
             if ( !sControlValue.isEmpty() )
             {
-                Reference< XDatabaseContext > xDatabaseContext = sdb::DatabaseContext::create( m_aContext.getUNOContext() );
+                Reference< XDatabaseContext > xDatabaseContext = sdb::DatabaseContext::create( m_xContext );
                 if ( !xDatabaseContext->hasByName( sControlValue ) )
                 {
                     ::svt::OFileNotation aTransformer(sControlValue);
@@ -1361,7 +1361,7 @@ namespace pcr
 
                 ::std::vector< OUString > aListEntries;
 
-                Reference< XDatabaseContext > xDatabaseContext = sdb::DatabaseContext::create( m_aContext.getUNOContext() );
+                Reference< XDatabaseContext > xDatabaseContext = sdb::DatabaseContext::create( m_xContext );
                 Sequence< OUString > aDatasources = xDatabaseContext->getElementNames();
                 aListEntries.resize( aDatasources.getLength() );
                 ::std::copy( aDatasources.getConstArray(), aDatasources.getConstArray() + aDatasources.getLength(),
@@ -2379,7 +2379,7 @@ namespace pcr
     //------------------------------------------------------------------------
     void FormComponentPropertyHandler::impl_displaySQLError_nothrow( const ::dbtools::SQLExceptionInfo& _rErrorDescriptor ) const
     {
-        ::dbtools::showError( _rErrorDescriptor, VCLUnoHelper::GetInterface( impl_getDefaultDialogParent_nothrow() ), m_aContext.getUNOContext() );
+        ::dbtools::showError( _rErrorDescriptor, VCLUnoHelper::GetInterface( impl_getDefaultDialogParent_nothrow() ), m_xContext );
     }
 
     //------------------------------------------------------------------------
@@ -2387,7 +2387,9 @@ namespace pcr
     {
         if ( !m_xRowSetConnection.is() )
         {
-            uno::Reference<sdbc::XConnection> xConnection(m_aContext.getContextValueByAsciiName( "ActiveConnection" ),uno::UNO_QUERY);
+            uno::Reference<sdbc::XConnection> xConnection;
+            Any any = m_xContext->getValueByName( "ActiveConnection" );
+            any >>= xConnection;
             m_xRowSetConnection.reset(xConnection,::dbtools::SharedConnection::NoTakeOwnership);
         }
         if ( m_xRowSetConnection.is() )
@@ -2403,7 +2405,7 @@ namespace pcr
             if ( xRowSetProps.is() )
             {
                 WaitCursor aWaitCursor( impl_getDefaultDialogParent_nothrow() );
-                m_xRowSetConnection = ::dbtools::ensureRowSetConnection( xRowSet, m_aContext.getUNOContext(), false );
+                m_xRowSetConnection = ::dbtools::ensureRowSetConnection( xRowSet, m_xContext, false );
             }
         }
         catch ( const SQLException& ) { aError = SQLExceptionInfo( ::cppu::getCaughtException() ); }
@@ -2621,7 +2623,7 @@ namespace pcr
                 return false;
 
             // get a composer for the statement which the form is currently based on
-            Reference< XSingleSelectQueryComposer > xComposer( ::dbtools::getCurrentSettingsComposer( m_xComponent, m_aContext.getUNOContext() ) );
+            Reference< XSingleSelectQueryComposer > xComposer( ::dbtools::getCurrentSettingsComposer( m_xComponent, m_xContext ) );
             OSL_ENSURE( xComposer.is(), "FormComponentPropertyHandler::impl_dialogFilterOrSort_nothrow: could not obtain a composer!" );
             if ( !xComposer.is() )
                 return false;
@@ -2632,11 +2634,11 @@ namespace pcr
             Reference< XExecutableDialog > xDialog;
             if ( _bFilter)
             {
-                xDialog.set( sdb::FilterDialog::createDefault(m_aContext.getUNOContext()) );
+                xDialog.set( sdb::FilterDialog::createDefault(m_xContext) );
             }
             else
             {
-                xDialog.set( sdb::OrderDialog::createDefault(m_aContext.getUNOContext()) );
+                xDialog.set( sdb::OrderDialog::createDefault(m_xContext) );
             }
 
 
@@ -2677,7 +2679,7 @@ namespace pcr
             return false;
 
 
-        FormLinkDialog aDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, xMasterProp, m_aContext.getUNOContext() );
+        FormLinkDialog aDialog( impl_getDefaultDialogParent_nothrow(), m_xComponent, xMasterProp, m_xContext );
         _rClearBeforeDialog.clear();
         return ( RET_OK == aDialog.Execute() );
     }
@@ -2803,7 +2805,7 @@ namespace pcr
                 Graphic aGraphic;
                 aFileDlg.GetGraphic( aGraphic );
 
-                Reference< graphic::XGraphicObject > xGrfObj = graphic::GraphicObject::create( m_aContext.getUNOContext() );
+                Reference< graphic::XGraphicObject > xGrfObj = graphic::GraphicObject::create( m_xContext );
                 xGrfObj->setGraphic( aGraphic.GetXGraphic() );
 
 
@@ -2933,9 +2935,9 @@ namespace pcr
     //------------------------------------------------------------------------
     Reference< XControlContainer > FormComponentPropertyHandler::impl_getContextControlContainer_nothrow() const
     {
-        Reference< XControlContainer > xControlContext(
-            m_aContext.getContextValueByAsciiName( "ControlContext" ),
-            UNO_QUERY );
+        Reference< XControlContainer > xControlContext;
+        Any any = m_xContext->getValueByName( "ControlContext" );
+        any >>= xControlContext;
         return xControlContext;
     }
 
@@ -2949,7 +2951,7 @@ namespace pcr
             impl_getDefaultDialogParent_nothrow(),
             xTabControllerModel,
             impl_getContextControlContainer_nothrow(),
-            m_aContext.getUNOContext()
+            m_xContext
         );
         _rClearBeforeDialog.clear();
         return ( RET_OK == aDialog.Execute() );
@@ -3202,7 +3204,7 @@ namespace pcr
                 return false;
             }
 
-            m_xCommandDesigner.set( new SQLCommandDesigner( m_aContext.getUNOContext(), xCommandUI.get(), m_xRowSetConnection, LINK( this, FormComponentPropertyHandler, OnDesignerClosed ) ) );
+            m_xCommandDesigner.set( new SQLCommandDesigner( m_xContext, xCommandUI.get(), m_xRowSetConnection, LINK( this, FormComponentPropertyHandler, OnDesignerClosed ) ) );
 
             DBG_ASSERT( _rxInspectorUI.is(), "FormComponentPropertyHandler::OnDesignerClosed: no access to the property browser ui!" );
             if ( m_xCommandDesigner->isActive() && _rxInspectorUI.is() )
