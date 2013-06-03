@@ -574,11 +574,10 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
     if( !xChartType.is() )
         return aRet;
 
-    bool bStacked = false;
     bool bFound=false;
     bool bAmbiguous=false;
     StackMode eStackMode = DiagramHelper::getStackModeFromChartType( xChartType, bFound, bAmbiguous, 0 );
-    bStacked = bFound && (StackMode_Y_STACKED == eStackMode);
+    bool bStacked = bFound && (StackMode_Y_STACKED == eStackMode);
 
     OUString aChartTypeName = xChartType->getChartType();
     if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||
