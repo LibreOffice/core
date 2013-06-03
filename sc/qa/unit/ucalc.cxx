@@ -6943,31 +6943,39 @@ void Test::testFormulaGrouping()
         const char *pFormula[3];
         bool  bGroup[3];
     } aGroupTests[] = {
-        { { "=SUM(B1)",  "=SUM(C1)",    "" },            // single increments
-          { true,        true,          false } },
-        { { "=SUM(B1)",  "=SUM(D1)",    "=SUM(F1)" },    // tripple increments
-          { true,        true,          true } },
-        { { "=SUM(B1)",  "",            "=SUM(C1)" },    // a gap
-          { false,       false,         false } },
-        { { "=SUM(B1)",  "=SUM(C1;3)",  "=SUM(D1;3)" }, // similar foo
-          { false,       true,          true } },
+        { { "=B1", "=B2", "" }, // relative reference
+          { true, true, false } },
+        { { "=B1", "=B2", "=B3" },
+          { true, true, true } },
+        { { "=B1", "", "=B3" }, // a gap
+          { false, false, false } },
+        { { "=$B$1", "=$B$1", "" }, // absolute reference
+          { true, true, false } },
+        { { "=$Z$10", "=$Z$10", "=$Z$10" },
+          { true, true, true } },
+        { { "=C1+$Z$10", "=C2+$Z$10", "=C3+$Z$10" }, // mixture
+          { true, true, true } },
+        { { "=C1+$Z$11", "=C2+$Z$12", "=C3+$Z$12" }, // mixture
+          { false, true, true } },
+        { { "=SUM(B1)",  "", "=SUM(B3)" },    // a gap
+          { false, false, false } },
     };
 
     m_pDoc->InsertTab( 0, "sheet" );
 
-    for (unsigned i = 0; i < SAL_N_ELEMENTS( aGroupTests ); i++)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aGroupTests); ++i)
     {
-        for (unsigned j = 0; j < SAL_N_ELEMENTS( aGroupTests[0].pFormula ); j++)
+        for (size_t j = 0; j < SAL_N_ELEMENTS(aGroupTests[0].pFormula); ++j)
         {
             OUString aFormula = OUString::createFromAscii(aGroupTests[i].pFormula[j]);
-            m_pDoc->SetString(0, (SCROW)j, 0, aFormula);
+            m_pDoc->SetString(0, static_cast<SCROW>(j), 0, aFormula);
         }
         m_pDoc->RebuildFormulaGroups();
 
-        for (unsigned j = 0; j < SAL_N_ELEMENTS( aGroupTests[0].pFormula ); j++)
+        for (size_t j = 0; j < SAL_N_ELEMENTS(aGroupTests[0].pFormula); ++j)
         {
             ScRefCellValue aCell;
-            aCell.assign(*m_pDoc, ScAddress(0, (SCROW)j, 0));
+            aCell.assign(*m_pDoc, ScAddress(0, static_cast<SCROW>(j), 0));
             if (aCell.isEmpty())
             {
                 CPPUNIT_ASSERT_MESSAGE("invalid empty cell", !aGroupTests[i].bGroup[j]);
@@ -6980,9 +6988,9 @@ void Test::testFormulaGrouping()
 
             if( !!pCur->GetCellGroup().get() ^ aGroupTests[i].bGroup[j] )
             {
-                printf("expected group test %u at row %u to be %d but is %d\n",
-                       i, j, aGroupTests[i].bGroup[j], !!pCur->GetCellGroup().get());
-                CPPUNIT_ASSERT_MESSAGE("Failed", false);
+                cout << "expected group test " << i << " at row " << j << " to be "
+                    << aGroupTests[i].bGroup[j] << " but is " << !!pCur->GetCellGroup().get() << endl;
+                CPPUNIT_FAIL("Failed");
             }
         }
     }
