@@ -208,6 +208,23 @@ void ControllerItem::ResetFrame (void)
 
 
 
+::rtl::OUString ControllerItem::GetHelpText (void) const
+{
+    Help* pHelp = Application::GetHelp();
+    if (pHelp != NULL)
+    {
+        if (msCommandName.getLength() > 0)
+        {
+            const ::rtl::OUString sHelp (pHelp->GetHelpText(A2S(".uno:")+msCommandName, NULL));
+            return sHelp;
+        }
+    }
+    return ::rtl::OUString();
+}
+
+
+
+
 Image ControllerItem::GetIcon (void) const
 {
     return GetIcon(Application::GetSettings().GetStyleSettings().GetHighContrastMode());
@@ -228,6 +245,7 @@ Image ControllerItem::GetIcon (const bool bIsHighContrastMode) const
 void ControllerItem::SetupToolBoxItem (ToolBox& rToolBox, const sal_uInt16 nIndex)
 {
     rToolBox.SetQuickHelpText(nIndex, GetLabel());
+    rToolBox.SetHelpText(nIndex, GetHelpText());
     rToolBox.SetItemImage(nIndex, GetIcon());
 }
 
