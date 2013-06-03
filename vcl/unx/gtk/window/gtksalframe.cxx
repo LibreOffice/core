@@ -1013,9 +1013,17 @@ static void lcl_set_user_time( GtkWindow* i_pWindow, guint32 i_nTime )
         bGetSetUserTimeFn = false;
         p_gdk_x11_window_set_user_time = (setUserTimeFn)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_x11_window_set_user_time" );
     }
+    bool bSet = false;
     if( p_gdk_x11_window_set_user_time )
-        p_gdk_x11_window_set_user_time( widget_get_window(GTK_WIDGET(i_pWindow)), i_nTime );
-    else
+    {
+        GdkWindow* pWin = widget_get_window(GTK_WIDGET(i_pWindow));
+        if( pWin ) // only if the window is realized.
+        {
+            p_gdk_x11_window_set_user_time( pWin, i_nTime );
+            bSet = true;
+        }
+    }
+    if( !bSet )
     {
         Display* pDisplay = GetGtkSalData()->GetGtkDisplay()->GetDisplay();
         Atom nUserTime = XInternAtom( pDisplay, "_NET_WM_USER_TIME", True );
