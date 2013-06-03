@@ -40,6 +40,7 @@
 #include "docfunc.hxx"
 #include "markdata.hxx"
 #include "colorscale.hxx"
+#include "olinetab.hxx"
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -137,6 +138,7 @@ public:
     void testOptimalHeightReset();
 
     void testPrintRangeODS();
+    void testOutlineODS();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBasicCellContentODS);
@@ -201,6 +203,7 @@ public:
     CPPUNIT_TEST(testMiscRowHeights);
     CPPUNIT_TEST(testOptimalHeightReset);
     CPPUNIT_TEST(testPrintRangeODS);
+    CPPUNIT_TEST(testOutlineODS);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1939,6 +1942,59 @@ void ScFiltersTest::testPrintRangeODS()
     pRange = pDoc->GetRepeatRowRange(1);
     CPPUNIT_ASSERT(pRange);
     CPPUNIT_ASSERT_EQUAL(ScRange(0,2,0,0,4,0), *pRange);
+}
+
+void ScFiltersTest::testOutlineODS()
+{
+    ScDocShellRef xDocSh = loadDoc("outline.", ODS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    const ScOutlineTable* pTable = pDoc->GetOutlineTable(0);
+    CPPUNIT_ASSERT(pTable);
+
+    const ScOutlineArray* pArr = pTable->GetRowArray();
+    size_t nDepth = pArr->GetDepth();
+    CPPUNIT_ASSERT_EQUAL(size_t(4), nDepth);
+
+    for(size_t i = 0; i < nDepth; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pArr->GetCount(i));
+    }
+
+    struct OutlineData {
+        SCCOLROW nStart;
+        SCCOLROW nEnd;
+        bool bHidden;
+        bool bVisible;
+
+        size_t nDepth;
+        size_t nIndex;
+    };
+
+    OutlineData aRow[] =
+    {
+        { 1, 29, false, true, 0, 0 },
+        { 2, 26, false, true, 1, 0 },
+        { 4, 23, false, true, 2, 0 },
+        { 6, 20, true, true, 3, 0 }
+    };
+
+    for(size_t i = 0; i < SAL_N_ELEMENTS(aRow); ++i)
+    {
+
+        const ScOutlineEntry* pEntry = pArr->GetEntry(aRow[i].nDepth, aRow[i].nIndex);
+        SCCOLROW nStart = pEntry->GetStart();
+        CPPUNIT_ASSERT_EQUAL(aRow[i].nStart, nStart);
+
+        SCCOLROW nEnd = pEntry->GetEnd();
+        CPPUNIT_ASSERT_EQUAL(aRow[i].nEnd, nEnd);
+
+        bool bHidden = pEntry->IsHidden();
+        CPPUNIT_ASSERT_EQUAL(aRow[i].bHidden, bHidden);
+
+        bool bVisible = pEntry->IsVisible();
+        CPPUNIT_ASSERT_EQUAL(aRow[i].bVisible, bVisible);
+    }
 }
 
 ScFiltersTest::ScFiltersTest()

@@ -41,7 +41,7 @@ public:
     ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize, bool bNewHidden = false );
     ScOutlineEntry( const ScOutlineEntry& rEntry );
 
-    SCCOLROW GetStart() const;
+    SC_DLLPUBLIC SCCOLROW GetStart() const;
     SCSIZE GetSize() const;
     SC_DLLPUBLIC SCCOLROW GetEnd() const;
 
@@ -53,7 +53,7 @@ public:
     /**
      * @return true if the control is visible, false otherwise.
      */
-    bool IsVisible() const;
+    SC_DLLPUBLIC bool IsVisible() const;
 
     void                    Move( SCsCOLROW nDelta );
     void                    SetSize( SCSIZE nNewSize );
