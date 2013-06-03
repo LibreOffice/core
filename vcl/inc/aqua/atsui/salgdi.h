@@ -60,7 +60,6 @@ public:
 
     void                    ReadOs2Table() const;
     void                    ReadMacCmapEncoding() const;
-    bool                    HasCJKSupport() const;
 
 private:
     const ATSUFontID            mnFontId;
@@ -69,7 +68,6 @@ private:
     mutable bool                mbOs2Read;       // true if OS2-table related info is valid
     mutable bool                mbHasOs2Table;
     mutable bool                mbCmapEncodingRead; // true if cmap encoding of Mac font is read
-    mutable bool                mbHasCJKSupport; // #i78970# CJK fonts need extra leading
     mutable bool                mbFontCapabilitiesRead;
 };
 
