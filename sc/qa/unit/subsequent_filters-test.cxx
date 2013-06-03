@@ -1936,9 +1936,9 @@ void ScFiltersTest::testPrintRangeODS()
     CPPUNIT_ASSERT(pRange);
     CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,0,1,0), *pRange);
 
-    pRange = pDoc->GetRepeatRowRange(0);
+    pRange = pDoc->GetRepeatRowRange(1);
     CPPUNIT_ASSERT(pRange);
-    CPPUNIT_ASSERT_EQUAL(ScRange(0,2,1,0,4,1), *pRange);
+    CPPUNIT_ASSERT_EQUAL(ScRange(0,2,0,0,4,0), *pRange);
 }
 
 ScFiltersTest::ScFiltersTest()
