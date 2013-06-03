@@ -130,10 +130,10 @@
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="security">
+              <object class="GtkLabel" id="cmisprops">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Security</property>
+                <property name="label" translatable="yes">CMIS Properties</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -144,10 +144,10 @@
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="cmisprops">
+              <object class="GtkLabel" id="security">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">CMIS Properties</property>
+                <property name="label" translatable="yes">Security</property>
               </object>
               <packing>
                 <property name="position">4</property>
