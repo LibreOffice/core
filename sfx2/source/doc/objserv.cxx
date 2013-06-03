@@ -491,7 +491,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     aTitle = GetTitle();
                 }
 
-                SfxDocumentInfoItem aDocInfoItem( aURL, getDocProperties(),
+                Reference< XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY );
+                beans::PropertyValues aCmisProperties = xCmisDoc->getCmisPropertiesValues();
+
+                SfxDocumentInfoItem aDocInfoItem( aURL, getDocProperties(), aCmisProperties,
                     IsUseUserData() );
                 if ( !GetSlotState( SID_DOCTEMPLATE ) )
                     // templates not supported
@@ -516,10 +519,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         // user has done some changes to DocumentInfo
                         pDocInfoItem->UpdateDocumentInfo(getDocProperties());
                         SetUseUserData( ((const SfxDocumentInfoItem *)pDocInfoItem)->IsUseUserData() );
-
-                        // add data from dialog for possible recording purposes
+                        // add data from dialog for possible recording purpose
                         rReq.AppendItem( SfxDocumentInfoItem( GetTitle(),
-                            getDocProperties(), IsUseUserData() ) );
+                            getDocProperties(), aCmisProperties, IsUseUserData() ) );
                     }
 
                     rReq.Done();
@@ -921,7 +923,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 {
                     bool bShow = false;
                     Reference< XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY );
-                    beans::PropertyValues aCmisProperties = xCmisDoc->getCmisPropertiesValues( );
+                    beans::PropertyValues aCmisProperties = xCmisDoc->getCmisPropertiesValues();
 
                     if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
                     {
