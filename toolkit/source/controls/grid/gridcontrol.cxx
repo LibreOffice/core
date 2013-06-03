@@ -52,16 +52,16 @@ namespace toolkit
 //======================================================================================================================
 namespace
 {
-    Reference< XGridDataModel > lcl_getDefaultDataModel_throw( ::comphelper::ComponentContext const & i_context )
+    Reference< XGridDataModel > lcl_getDefaultDataModel_throw( const Reference<XComponentContext> & i_context )
     {
-        Reference< XMutableGridDataModel > const xDelegatorModel( DefaultGridDataModel::create( i_context.getUNOContext() ), UNO_QUERY_THROW );
-        Reference< XGridDataModel > const xDataModel( SortableGridDataModel::create( i_context.getUNOContext(), xDelegatorModel ), UNO_QUERY_THROW );
+        Reference< XMutableGridDataModel > const xDelegatorModel( DefaultGridDataModel::create( i_context ), UNO_QUERY_THROW );
+        Reference< XGridDataModel > const xDataModel( SortableGridDataModel::create( i_context, xDelegatorModel ), UNO_QUERY_THROW );
         return xDataModel;
     }
 
-    Reference< XGridColumnModel > lcl_getDefaultColumnModel_throw( ::comphelper::ComponentContext const & i_context )
+    Reference< XGridColumnModel > lcl_getDefaultColumnModel_throw( const Reference<XComponentContext> & i_context )
     {
-        Reference< XGridColumnModel > const xColumnModel( i_context.createComponent( "com.sun.star.awt.grid.DefaultGridColumnModel" ), UNO_QUERY_THROW );
+        Reference< XGridColumnModel > const xColumnModel( i_context->getServiceManager()->createInstanceWithContext( "com.sun.star.awt.grid.DefaultGridColumnModel", i_context ), UNO_QUERY_THROW );
         return xColumnModel;
     }
 }

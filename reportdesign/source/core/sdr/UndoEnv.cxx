@@ -42,7 +42,6 @@
 #include <svl/smplhint.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/stl_types.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <vcl/svapp.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svx/unoshape.hxx>
@@ -277,8 +276,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
                 {
                     if ( !m_pImpl->m_xIntrospection.is() )
                     {
-                        ::comphelper::ComponentContext aContext( m_pImpl->m_rModel.getController()->getORB() );
-                        m_pImpl->m_xIntrospection = Introspection::create( aContext.getUNOContext() );
+                        m_pImpl->m_xIntrospection = Introspection::create( m_pImpl->m_rModel.getController()->getORB() );
                     }
                     Reference< XIntrospectionAccess > xIntrospection(
                         m_pImpl->m_xIntrospection->inspect( makeAny( _rEvent.Source ) ),

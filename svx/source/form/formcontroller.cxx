@@ -100,7 +100,7 @@ using namespace ::connectivity::simple;
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
     FormController_NewInstance_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & _rxORB )
 {
-    return *( new ::svxform::FormController( _rxORB ) );
+    return *( new ::svxform::FormController( comphelper::getComponentContext(_rxORB) ) );
 }
 
 namespace svxform
@@ -547,11 +547,11 @@ IMPL_LINK( FormController, OnInvalidateFeatures, void*, /*_pNotInterestedInThisP
 
 DBG_NAME( FormController )
 //------------------------------------------------------------------
-FormController::FormController(const Reference< XMultiServiceFactory > & _rxORB )
+FormController::FormController(const Reference< css::uno::XComponentContext > & _rxORB )
                   :FormController_BASE( m_aMutex )
                   ,OPropertySetHelper( FormController_BASE::rBHelper )
-                  ,OSQLParserClient( comphelper::getComponentContext(_rxORB) )
-                  ,m_aContext( _rxORB )
+                  ,OSQLParserClient( _rxORB )
+                  ,m_xComponentContext( _rxORB )
                   ,m_aActivateListeners(m_aMutex)
                   ,m_aModifyListeners(m_aMutex)
                   ,m_aErrorListeners(m_aMutex)
@@ -587,7 +587,7 @@ FormController::FormController(const Reference< XMultiServiceFactory > & _rxORB 
 
     ::comphelper::increment(m_refCount);
     {
-        m_xTabController = TabController::create( m_aContext.getUNOContext() );
+        m_xTabController = TabController::create( m_xComponentContext );
         m_xAggregate = Reference< XAggregation >( m_xTabController, UNO_QUERY_THROW );
         m_xAggregate->setDelegator( *this );
     }
@@ -831,7 +831,7 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
             {
                 Reference< XDatabaseMetaData> xMetaData(xConnection->getMetaData());
                 Reference< XNumberFormatsSupplier> xFormatSupplier( aStaticTools.getNumberFormats( xConnection, sal_True ) );
-                Reference< XNumberFormatter> xFormatter( NumberFormatter::create(m_aContext.getUNOContext()), UNO_QUERY_THROW );
+                Reference< XNumberFormatter> xFormatter = NumberFormatter::create(m_xComponentContext);
                 xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
                 Reference< XColumnsSupplier> xSupplyCols(m_xModelAsIndex, UNO_QUERY);
@@ -1466,7 +1466,7 @@ void FormController::toggleAutoFields(sal_Bool bAutoFields)
                     {
                         OUString sServiceName;
                         OSL_VERIFY( xSet->getPropertyValue( FM_PROP_DEFAULTCONTROL ) >>= sServiceName );
-                        Reference< XControl > xNewControl( m_aContext.createComponent( sServiceName ), UNO_QUERY );
+                        Reference< XControl > xNewControl( m_xComponentContext->getServiceManager()->createInstanceWithContext( sServiceName, m_xComponentContext ), UNO_QUERY );
                         replaceControl( xControl, xNewControl );
                     }
                 }
@@ -1789,7 +1789,7 @@ void FormController::focusGained(const FocusEvent& e) throw( RuntimeException )
         return;
 
     // Control erhaelt Focus, dann eventuell in den sichtbaren Bereich
-    Reference< XFormControllerContext > xContext( m_xContext );
+    Reference< XFormControllerContext > xContext( m_xFormControllerContext );
     Reference< XControl > xCurrentControl( m_xCurrentControl );
     aGuard.clear();
     // <-- SYNCHRONIZED
@@ -1927,7 +1927,7 @@ void FormController::setModel(const Reference< XTabControllerModel > & Model) th
         if (m_xModelAsIndex.is())
         {
             // re-create m_xFormOperations
-            m_xFormOperations.set( FormOperations::createWithFormController( m_aContext.getUNOContext(), this ), UNO_SET_THROW );
+            m_xFormOperations = FormOperations::createWithFormController( m_xComponentContext, this );
             m_xFormOperations->setFeatureInvalidation( this );
 
             // adding load and ui interaction listeners
@@ -3061,7 +3061,7 @@ Reference< XFormControllerContext > SAL_CALL FormController::getContext() throw 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
-    return m_xContext;
+    return m_xFormControllerContext;
 }
 
 //------------------------------------------------------------------------------
@@ -3069,7 +3069,7 @@ void SAL_CALL FormController::setContext( const Reference< XFormControllerContex
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
-    m_xContext = _context;
+    m_xFormControllerContext = _context;
 }
 
 //------------------------------------------------------------------------------
@@ -3146,7 +3146,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         // need to parse criteria localized
         OStaticDataAccessTools aStaticTools;
         Reference< XNumberFormatsSupplier> xFormatSupplier( aStaticTools.getNumberFormats(xConnection, sal_True));
-        Reference< XNumberFormatter> xFormatter( NumberFormatter::create(m_aContext.getUNOContext()), UNO_QUERY_THROW );
+        Reference< XNumberFormatter> xFormatter = NumberFormatter::create(m_xComponentContext);
         xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
         Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
         const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetUILocaleDataWrapper() );
@@ -3298,7 +3298,7 @@ void FormController::startFiltering()
     // the control we have to activate after replacement
     Reference< XDatabaseMetaData >  xMetaData(xConnection->getMetaData());
     Reference< XNumberFormatsSupplier >  xFormatSupplier = aStaticTools.getNumberFormats(xConnection, sal_True);
-    Reference< XNumberFormatter >  xFormatter( NumberFormatter::create(m_aContext.getUNOContext()), UNO_QUERY_THROW );
+    Reference< XNumberFormatter >  xFormatter = NumberFormatter::create(m_xComponentContext);
     xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
     // structure for storing the field info
@@ -3372,7 +3372,7 @@ void FormController::startFiltering()
                 {
                     // create a filter control
                     Reference< XControl > xFilterControl = form::control::FilterControl::createWithFormat(
-                        m_aContext.getUNOContext(),
+                        m_xComponentContext,
                         VCLUnoHelper::GetInterface( getDialogParentWindow() ),
                         xFormatter,
                         xModel);
@@ -3466,7 +3466,7 @@ void FormController::stopFiltering()
                 {
                     OUString sServiceName;
                     OSL_VERIFY( xSet->getPropertyValue( FM_PROP_DEFAULTCONTROL ) >>= sServiceName );
-                    Reference< XControl > xNewControl( m_aContext.createComponent( sServiceName ), UNO_QUERY );
+                    Reference< XControl > xNewControl( m_xComponentContext->getServiceManager()->createInstanceWithContext( sServiceName, m_xComponentContext ), UNO_QUERY );
                     replaceControl( xControl, xNewControl );
                 }
             }
@@ -4256,8 +4256,7 @@ bool FormController::ensureInteractionHandler()
         return false;
     m_bAttemptedHandlerCreation = true;
 
-    m_xInteractionHandler.set( InteractionHandler::createWithParent(m_aContext.getUNOContext(), 0), UNO_QUERY );
-    OSL_ENSURE( m_xInteractionHandler.is(), "FormController::ensureInteractionHandler: could not create an interaction handler!" );
+    m_xInteractionHandler = InteractionHandler::createWithParent(m_xComponentContext, 0);
     return m_xInteractionHandler.is();
 }
 

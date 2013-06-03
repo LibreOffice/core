@@ -56,9 +56,8 @@ namespace toolkit
     //= DefaultGridColumnModel
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    DefaultGridColumnModel::DefaultGridColumnModel( const Reference< XComponentContext >& i_context )
+    DefaultGridColumnModel::DefaultGridColumnModel()
         :DefaultGridColumnModel_Base( m_aMutex )
-        ,m_aContext( i_context )
         ,m_aContainerListeners( m_aMutex )
         ,m_aColumns()
     {
@@ -68,7 +67,6 @@ namespace toolkit
     DefaultGridColumnModel::DefaultGridColumnModel( DefaultGridColumnModel const & i_copySource )
         :cppu::BaseMutex()
         ,DefaultGridColumnModel_Base( m_aMutex )
-        ,m_aContext( i_copySource.m_aContext )
         ,m_aContainerListeners( m_aMutex )
         ,m_aColumns()
     {
@@ -377,8 +375,8 @@ namespace toolkit
 //......................................................................................................................
 
 //----------------------------------------------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DefaultGridColumnModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rFactory)
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DefaultGridColumnModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
 {
-    return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::DefaultGridColumnModel( comphelper::getComponentContext(_rFactory) ) );
+    return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::DefaultGridColumnModel );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

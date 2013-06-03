@@ -52,8 +52,6 @@
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 
-#include <comphelper/componentcontext.hxx>
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -885,8 +883,9 @@ bool ImportContext::importImageURLProperty(
         {
             uno::Sequence< Any > aArgs( 1 );
             aArgs[ 0 ] <<= xDocStorage->getDocumentStorage();
-            ::comphelper::ComponentContext aContext( _pImport->getComponentContext() );
-            aContext.createComponentWithArguments( "com.sun.star.comp.Svx.GraphicImportHelper" , aArgs, xGraphicResolver );
+            xGraphicResolver.set(
+                _pImport->getComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext( "com.sun.star.comp.Svx.GraphicImportHelper" , aArgs, _pImport->getComponentContext() ),
+                UNO_QUERY );
             if ( xGraphicResolver.is() )
             {
                 OUString aTmp("vnd.sun.star.Package:");

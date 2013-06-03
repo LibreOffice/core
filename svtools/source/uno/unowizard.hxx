@@ -27,7 +27,6 @@
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
 
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/componentcontext.hxx>
 
 //......................................................................................................................
 namespace svt { namespace uno
@@ -95,7 +94,6 @@ namespace svt { namespace uno
         virtual void destroyDialog();
 
     private:
-        ::comphelper::ComponentContext                                                          m_aContext;
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_Int16 > >         m_aWizardSteps;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardController >    m_xController;
         OUString                                                                         m_sHelpURL;

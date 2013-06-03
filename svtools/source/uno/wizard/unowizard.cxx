@@ -91,7 +91,6 @@ namespace svt { namespace uno
     //------------------------------------------------------------------------------------------------------------------
     Wizard::Wizard( const Reference< XComponentContext >& _rxContext )
         :Wizard_Base( _rxContext )
-        ,m_aContext( _rxContext )
     {
     }
 

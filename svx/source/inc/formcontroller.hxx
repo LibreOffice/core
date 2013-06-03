@@ -68,7 +68,6 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 
 #include <comphelper/broadcasthelper.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/stl_types.hxx>
 #include <cppuhelper/propshlp.hxx>
@@ -145,11 +144,11 @@ namespace svxform
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>        m_xModelAsIndex;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager>  m_xModelAsManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>                m_xParent;
-        ::comphelper::ComponentContext                                                      m_aContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>         m_xComponentContext;
         // Composer used for checking filter conditions
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >       m_xComposer;
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >             m_xInteractionHandler;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormControllerContext > m_xContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormControllerContext > m_xFormControllerContext;
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> >   m_aControls;
         ::cppu::OInterfaceContainerHelper
@@ -210,7 +209,7 @@ namespace svxform
         Interceptors    m_aControlDispatchInterceptors;
 
     public:
-        FormController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & _rxORB );
+        FormController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _rxORB );
 
     protected:
         ~FormController();

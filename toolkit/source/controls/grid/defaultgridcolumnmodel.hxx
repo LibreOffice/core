@@ -27,7 +27,6 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase2.hxx>
-#include <comphelper/componentcontext.hxx>
 #include <vector>
 
 namespace toolkit
@@ -41,7 +40,7 @@ class DefaultGridColumnModel    :public ::cppu::BaseMutex
                                 ,public DefaultGridColumnModel_Base
 {
 public:
-    DefaultGridColumnModel( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
+    DefaultGridColumnModel();
     DefaultGridColumnModel( DefaultGridColumnModel const & i_copySource );
     virtual ~DefaultGridColumnModel();
 
@@ -72,7 +71,6 @@ public:
 private:
     typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > >   Columns;
 
-    ::comphelper::ComponentContext      m_aContext;
     ::cppu::OInterfaceContainerHelper   m_aContainerListeners;
     Columns                             m_aColumns;
 };
