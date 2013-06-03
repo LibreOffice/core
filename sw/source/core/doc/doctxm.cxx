@@ -858,9 +858,10 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         SwPosition aPos( aEndIdx, SwIndex( pFirstEmptyNd, 0 ));
         pDoc->CorrAbs( aSttIdx, aEndIdx, aPos, sal_True );
 
-        // delete all before
-        DelFlyInRange( aSttIdx, aEndIdx );
-        _DelBookmarks( aSttIdx, aEndIdx );
+        // delete flys in whole range including start node which requires
+        // giving the node before start node as Mark parameter, hence -1.
+        // (flys must be deleted because the anchor nodes are removed)
+        DelFlyInRange( SwNodeIndex(aSttIdx, -1), aEndIdx );
 
         pDoc->GetNodes().Delete( aSttIdx, aEndIdx.GetIndex() - aSttIdx.GetIndex() );
 
