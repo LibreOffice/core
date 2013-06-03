@@ -199,7 +199,9 @@ public:
     bool                CheckContext();
     CGContextRef        GetContext();
     void                UpdateWindow( NSRect& ); // delivered in NSView coordinates
+#if !defined(__LP64__) && !defined(NS_BUILD_32_LIKE_64)
     void                RefreshRect( const CGRect& );
+#endif
     void                RefreshRect( const NSRect& );
     void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
 
@@ -217,7 +219,7 @@ public:
     virtual void        drawRect( long nX, long nY, long nWidth, long nHeight );
     virtual void        drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry );
     virtual void        drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry );
-    virtual void        drawPolyPolygon( sal_uInt32 nPoly, const sal_uLong* pPoints, PCONSTSALPOINT* pPtAry );
+    virtual void        drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry );
     virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
     virtual sal_Bool    drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
     virtual sal_Bool    drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
@@ -398,10 +400,14 @@ private:
 
 // --- some trivial inlines
 
+#if !defined(__LP64__) && !defined(NS_BUILD_32_LIKE_64)
+
 inline void AquaSalGraphics::RefreshRect( const CGRect& rRect )
 {
     RefreshRect( rRect.origin.x, rRect.origin.y, rRect.size.width, rRect.size.height );
 }
+
+#endif
 
 inline void AquaSalGraphics::RefreshRect( const NSRect& rRect )
 {
