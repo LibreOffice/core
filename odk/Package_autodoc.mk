@@ -107,7 +107,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_autodoc,$(gb_Package_SDKDIRNAME)
 		com/sun/star/media \
 		com/sun/star/mozilla \
 		com/sun/star/office \
-		com/sun/star/oox \
 		com/sun/star/packages \
 		com/sun/star/packages/manifest \
 		com/sun/star/packages/zip \
