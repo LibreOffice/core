@@ -394,7 +394,7 @@ sal_Int32 ScRangeStringConverter::IndexOfDifferent(
     sal_Int32       nIndex      = nOffset;
     sal_Bool        bExitLoop   = false;
 
-    while( !bExitLoop && (nIndex < nLength) )
+    while( !bExitLoop && (nIndex >= 0 && nIndex < nLength) )
     {
         bExitLoop = (rString[ nIndex ] != cSearchChar);
         if( !bExitLoop )
