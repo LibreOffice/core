@@ -442,8 +442,6 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
     if( aDefault.Len() )
         aSearch = aDefault;
 
-    int nDefaultHeight = 12;
-
     Font aFont;
     aFont.SetPitch( PITCH_VARIABLE );
 
@@ -497,7 +495,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
 
     if ( aSearch.Len() )
     {
-        aFont.SetHeight( nDefaultHeight );
+        aFont.SetHeight( 12 ); // corresponds to nDefaultHeight
         aFont.SetWeight( WEIGHT_NORMAL );
         aFont.SetLanguage( eLang );
 
