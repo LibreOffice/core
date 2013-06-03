@@ -237,8 +237,8 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
     }
     else if (bGroup)
     {
-        ScAddress aAddr = rImport.GetTables().GetCurrentCellPos();
-        nHeaderStartRow = aAddr.Row();
+        nGroupStartRow = rImport.GetTables().GetCurrentRow();
+        ++nGroupStartRow;
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
