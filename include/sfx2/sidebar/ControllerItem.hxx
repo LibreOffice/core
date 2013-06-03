@@ -100,6 +100,11 @@ public:
     */
     ::rtl::OUString GetLabel (void) const;
 
+    /** Return the extended help text for the command.
+        Returns an empty string when the UNO command name is not available.
+    */
+    ::rtl::OUString GetHelpText (void) const;
+
     /** Return the icon for the command.
     */
     Image GetIcon (void) const;
