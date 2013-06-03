@@ -184,7 +184,7 @@ namespace xmloff
         }
 
         if ( m_sServiceName.isEmpty() )
-            determineDefaultServiceName();
+            m_sServiceName = determineDefaultServiceName();
 
         // create the object *now*. This allows setting properties in the various handleAttribute methods.
         // (Though currently not all code is migrated to this pattern, most attributes are still handled
