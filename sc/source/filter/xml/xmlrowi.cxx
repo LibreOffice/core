@@ -231,7 +231,8 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
     // don't have any attributes
     if (bHeader)
     {
-        nHeaderStartRow = rImport.GetTables().GetCurrentRow();
+        ScAddress aAddr = rImport.GetTables().GetCurrentCellPos();
+        nHeaderStartRow = aAddr.Row();
         ++nHeaderStartRow;
     }
     else if (bGroup)
