@@ -1552,7 +1552,7 @@ void lclGetBorderLine(
     rnXclLine = EXC_LINE_NONE;
     if( pLine )
     {
-        sal_uInt16 nOuterWidth = pLine->GetWidth();
+        sal_uInt16 nOuterWidth = pLine->GetOutWidth();
         sal_uInt16 nDistance = pLine->GetDistance();
         if( nDistance > 0 )
             rnXclLine = EXC_LINE_DOUBLE;
