@@ -94,7 +94,7 @@ static void lcl_sendPartialGETRequest( bool &bError,
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "bytes=0-0" ))));
 
     for ( std::vector< rtl::OUString >::const_iterator it = aHeaderNames.begin();
-            it != aHeaderNames.end(); it++ )
+            it != aHeaderNames.end(); ++it )
     {
         if ( it->equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Content-Length" ) ) )
         {
@@ -126,7 +126,7 @@ static void lcl_sendPartialGETRequest( bool &bError,
             rtl::OUString aAcceptRanges, aContentRange, aContentLength;
             std::vector< DAVPropertyValue > &aResponseProps = aResource.properties;
             for ( std::vector< DAVPropertyValue >::const_iterator it = aResponseProps.begin();
-                    it != aResponseProps.end(); it++ )
+                    it != aResponseProps.end(); ++it )
             {
                 if ( it->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Accept-Ranges" ) ) )
                     it->Value >>= aAcceptRanges;
@@ -160,7 +160,7 @@ static void lcl_sendPartialGETRequest( bool &bError,
                     if ( !aSize.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "*" )))
                     {
                         for ( std::vector< DAVPropertyValue >::iterator it = aResponseProps.begin();
-                                it != aResponseProps.end(); it++ )
+                                it != aResponseProps.end(); ++it )
                         {
                             if ( it->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Content-Length" ) ) )
                             {

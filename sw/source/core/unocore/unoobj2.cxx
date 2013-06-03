@@ -1877,7 +1877,7 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
             //get all frames that are bound at paragraph or at character
             SwPosFlyFrms aFlyFrms(rPaM.GetDoc()->GetAllFlyFmts(m_pImpl->GetCursor(), false, true));
 
-            for(SwPosFlyFrms::const_iterator aIter(aFlyFrms.begin()); aIter != aFlyFrms.end(); aIter++)
+            for(SwPosFlyFrms::const_iterator aIter(aFlyFrms.begin()); aIter != aFlyFrms.end(); ++aIter)
             {
                 SwFrmFmt *const pFrmFmt = const_cast<SwFrmFmt*>(&((*aIter)->GetFmt()));
 
