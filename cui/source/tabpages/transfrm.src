@@ -390,8 +390,9 @@ TabPage RID_SVXPAGE_ANGLE
         Repeat = TRUE ;
         Spin = TRUE ;
         Minimum = 0 ;
-        Maximum = 359 ;
-        SpinSize = 5 ;
+        Maximum = 35999 ;
+        DecimalDigits = 2 ;
+        SpinSize = 10 ;
     };
     FixedText FT_ANGLEPRESETS
     {

@@ -388,8 +388,10 @@ void DialControl::SetRotation( sal_Int32 nAngle )
     SetRotation( nAngle, false );
 }
 
-void DialControl::SetLinkedField( NumericField* pField )
+void DialControl::SetLinkedField( NumericField* pField, sal_Int32 nDecimalPlaces )
 {
+    mpImpl->mnLinkedFieldValueMultiplyer = 100 / pow(10, nDecimalPlaces);
+
     // remove modify handler from old linked field
     ImplSetFieldLink( Link() );
     // remember the new linked field
@@ -453,14 +455,15 @@ void DialControl::SetRotation( sal_Int32 nAngle, bool bBroadcast )
     bool bOldSel = mpImpl->mbNoRot;
     mpImpl->mbNoRot = false;
 
-    while( nAngle < 0 ) nAngle += 36000;
-    nAngle = (((nAngle + 50) / 100) * 100) % 36000;
+    while( nAngle < 0 )
+        nAngle += 36000;
+
     if( !bOldSel || (mpImpl->mnAngle != nAngle) )
     {
         mpImpl->mnAngle = nAngle;
         InvalidateControl();
         if( mpImpl->mpLinkField )
-            mpImpl->mpLinkField->SetValue( static_cast< long >( GetRotation() / 100 ) );
+            mpImpl->mpLinkField->SetValue( static_cast< long >( GetRotation() / mpImpl->mnLinkedFieldValueMultiplyer ) );
         if( bBroadcast )
             mpImpl->maModifyHdl.Call( this );
     }
@@ -493,6 +496,8 @@ void DialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
             nAngle = 36000 - nAngle;
         if( bInitial )  // round to entire 15 degrees
             nAngle = ((nAngle + 750) / 1500) * 1500;
+        // Round up to 1 degree
+        nAngle = (((nAngle + 50) / 100) * 100) % 36000;
         SetRotation( nAngle, true );
     }
 }
@@ -511,7 +516,7 @@ void DialControl::HandleEscapeEvent()
 IMPL_LINK( DialControl, LinkedFieldModifyHdl, NumericField*, pField )
 {
     if( pField )
-        SetRotation( static_cast< sal_Int32 >( pField->GetValue() * 100 ), false );
+        SetRotation( static_cast< sal_Int32 >( pField->GetValue() * mpImpl->mnLinkedFieldValueMultiplyer ), false );
     return 0;
 }
 

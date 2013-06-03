@@ -109,8 +109,13 @@ public:
     /** Sets the rotation to the passed value (in 1/100 degrees). */
     void                SetRotation( sal_Int32 nAngle );
 
-    /** Links the passed numeric edit field to the control (bi-directional). */
-    void                SetLinkedField( NumericField* pField );
+    /** Links the passed numeric edit field to the control (bi-directional).
+     *  nDecimalPlaces:
+     *     field value is usign given decimal places
+     *     default is 0 which means field values are in degrees,
+     *     2 means 100th of degree
+     */
+    void                SetLinkedField( NumericField* pField, sal_Int32 nDecimalPlaces = 0);
     /** Returns the linked numeric edit field, or 0. */
     NumericField*       GetLinkedField() const;
 
@@ -133,6 +138,7 @@ protected:
         ::boost::scoped_ptr<DialControlBmp>      mpBmpBuffered;
         Link                maModifyHdl;
         NumericField*       mpLinkField;
+        sal_Int32           mnLinkedFieldValueMultiplyer;
         Size                maWinSize;
         Font                maWinFont;
         sal_Int32           mnAngle;

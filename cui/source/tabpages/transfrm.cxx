@@ -235,7 +235,7 @@ SvxAngleTabPage::SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  )
     aCtlRect.SetAccessibleRelationMemberOf(&aFlPosition);
     aCtlAngle.SetAccessibleRelationLabeledBy(&aFtAnglePresets);
     aCtlAngle.SetAccessibleRelationMemberOf(&aFlAngle);
-    aCtlAngle.SetLinkedField( &maNfAngle );
+    aCtlAngle.SetLinkedField( &maNfAngle, 2 );
 }
 
 // -----------------------------------------------------------------------
