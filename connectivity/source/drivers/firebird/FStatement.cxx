@@ -59,6 +59,26 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 //------------------------------------------------------------------------------
+
+/*
+ *    Print the status, the SQLCODE, and exit.
+ *    Also, indicate which operation the error occured on.
+ */
+static int pr_error (long* status, char* operation)
+{
+    printf("[\n");
+    printf("PROBLEM ON \"%s\".\n", operation);
+
+    isc_print_status(status);
+
+    printf("SQLCODE:%d\n", isc_sqlcode(status));
+
+    printf("]\n");
+
+    return 1;
+}
+
+//------------------------------------------------------------------------------
 OStatement_Base::OStatement_Base(OConnection* _pConnection )
     : OStatement_BASE(m_aMutex),
     OPropertySetHelper(OStatement_BASE::rBHelper),
@@ -107,6 +127,11 @@ void OStatement_BASE2::disposing()
     {
         free(m_INsqlda);
     }
+
+    ISC_STATUS_ARRAY status;  // status vector
+    if (isc_dsql_free_statement(status, &m_STMTHandler, DSQL_drop))
+        if (pr_error(status, "fetch data"))
+            return;
 
     dispose_ChildImpl();
     OStatement_Base::disposing();
@@ -171,23 +196,6 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
     return sal_False;
 }
 // -------------------------------------------------------------------------
-
-/*
- *    Print the status, the SQLCODE, and exit.
- *    Also, indicate which operation the error occured on.
- */
-static int pr_error (long* status, char* operation)
-{
-    SAL_WARN("connectivity.firebird", "=> OStatement_Base static pr_error().");
-
-    isc_print_status(status);
-
-    SAL_WARN("connectivity.firebird", "=> OStatement_Base static pr_error(). "
-             "PROBLEM ON " << operation << ". "
-             "SQLCODE: " << isc_sqlcode(status) << ".");
-
-    return 1;
-}
 
 Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {

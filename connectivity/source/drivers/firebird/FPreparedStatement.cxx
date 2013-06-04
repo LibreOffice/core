@@ -354,25 +354,24 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     ISC_STATUS_ARRAY status; /* status vector */
-    if (NULL != m_INsqlda)
+    if (0 == m_TRANSHandler)
     {
-        if (isc_dsql_execute2(status, &m_TRANSHandler, &m_STMTHandler, 1, m_INsqlda, NULL))
-            if (pr_error(status, "execute2 query"))
+        isc_db_handle db = m_pConnection->getDBHandler();   // database handle
+        if (isc_start_transaction(status, &m_TRANSHandler, 1, &db, 0, NULL))
+            if (pr_error(status, "start transaction"))
                 return NULL;
     }
-    else
-    {
-        if (isc_dsql_execute(status, &m_TRANSHandler, &m_STMTHandler, 1, NULL))
-            if (pr_error(status, "execute query"))
-                return NULL;
-    }
+
+    if (isc_dsql_execute(status, &m_TRANSHandler, &m_STMTHandler, 1, m_INsqlda))
+        if (pr_error(status, "execute query"))
+            return NULL;
 
     Reference< OResultSet > pResult( new OResultSet( this) );
     //initializeResultSet( pResult.get() );
     Reference< XResultSet > xRS = pResult.get();
 
     if (isc_commit_transaction(status, &m_TRANSHandler))
-        if (pr_error(status, "start transaction"))
+        if (pr_error(status, "commit transaction"))
             return NULL;
 
     SAL_INFO("connectivity.firebird", "=> OPreparedStatement::executeQuery(). "

@@ -143,8 +143,8 @@ OResultSet::OResultSet(OStatement_Base* pStmt)
         if (pr_error(status, "fetch data"))
             return;
     }
-    if (isc_dsql_free_statement(status, &stmt, DSQL_drop))
-        if (pr_error(status, "fetch data"))
+    if (isc_dsql_free_statement(status, &stmt, DSQL_close))
+        if (pr_error(status, "free statement"))
             return;
 }
 // -------------------------------------------------------------------------

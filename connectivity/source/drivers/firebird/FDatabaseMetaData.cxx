@@ -61,6 +61,7 @@ namespace connectivity
 
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
 : m_pConnection(_pCon)
+, m_pGetTablesStm(NULL)
 , m_bUseCatalog(sal_True)
 {
     OSL_ENSURE(m_pConnection,"ODatabaseMetaData::ODatabaseMetaData: No connection set!");
@@ -865,25 +866,28 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
     Reference< XResultSet > xResultSet = pResultSet;
 
-    Reference< XPreparedStatement > statement = m_pConnection->prepareStatement(
+    if (!m_pGetTablesStm.is())
+    {
+        m_pGetTablesStm = m_pConnection->prepareStatement(
             "SELECT "
             "'schema' as schema, RDB$RELATION_NAME, RDB$SYSTEM_FLAG, RDB$RELATION_TYPE, 'description' as description " // avoid duplicates
             "FROM RDB$RELATIONS "
             "WHERE (RDB$RELATION_TYPE = 0 OR RDB$RELATION_TYPE = 1) "
             "AND 'schema' LIKE ? "
             "AND RDB$RELATION_NAME LIKE ? ");
+    }
 
     SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTables(). "
              "Setting query parameters.");
 
-    Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
+    Reference< XParameters > parameters( m_pGetTablesStm, UNO_QUERY_THROW );
     parameters->setString( 1 , schemaPattern );
     parameters->setString( 2 , tableNamePattern );
 
     SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTables(). "
              "About to execute the query.");
 
-    Reference< XResultSet > rs = statement->executeQuery();
+    Reference< XResultSet > rs = m_pGetTablesStm->executeQuery();
     Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     ODatabaseMetaDataResultSet::ORows aRows;
     int rows = 0;
