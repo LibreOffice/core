@@ -1656,6 +1656,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             if (bParaBeforeInserted)
             {
                 SwCursor aDelete(*aStartPam.GetPoint(), 0, false);
+                *aStartPam.GetPoint() = // park it because node is deleted
+                    SwPosition(GetDoc()->GetNodes().GetEndOfContent());
                 aDelete.MovePara(fnParaCurr, fnParaStart);
                 aDelete.SetMark();
                 aDelete.MovePara(fnParaCurr, fnParaEnd);
@@ -1664,6 +1666,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             if (bParaAfterInserted)
             {
                 SwCursor aDelete(*pEndPam->GetPoint(), 0, false);
+                *pEndPam->GetPoint() = // park it because node is deleted
+                    SwPosition(GetDoc()->GetNodes().GetEndOfContent());
                 aDelete.MovePara(fnParaCurr, fnParaStart);
                 aDelete.SetMark();
                 aDelete.MovePara(fnParaCurr, fnParaEnd);
