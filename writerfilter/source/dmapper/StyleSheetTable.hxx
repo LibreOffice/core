@@ -81,7 +81,7 @@ class StyleSheetTable :
 
 public:
     StyleSheetTable( DomainMapper& rDMapper,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument> xTextDocument );
+                        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument> xTextDocument, bool bIsNewDoc );
     virtual ~StyleSheetTable();
 
     void ApplyStyleSheets( FontTablePtr rFontTable );

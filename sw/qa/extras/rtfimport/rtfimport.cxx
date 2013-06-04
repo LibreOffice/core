@@ -157,6 +157,7 @@ public:
     void testN823675();
     void testFdo67498();
     void testFdo62977();
+    void testFdo62044();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -282,6 +283,7 @@ void Test::run()
         {"n823675.rtf", &Test::testN823675},
         {"fdo67498.rtf", &Test::testFdo67498},
         {"fdo62977.rtf", &Test::testFdo62977},
+        {"fdo62044.rtf", &Test::testFdo62044},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1314,6 +1316,18 @@ void Test::testFdo67498()
 {
     // Left margin of the default page style wasn't set (was 2000).
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(5954)), getProperty<sal_Int32>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "LeftMargin"));
+}
+
+void Test::testFdo62044()
+{
+    // The problem was that RTF import during copy&paste did not ignore existing paragraph styles.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+    paste("fdo62044-paste.rtf", xEnd);
+
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Heading 1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(xPropertySet, "CharHeight")); // Was 18, i.e. reset back to original value.
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
