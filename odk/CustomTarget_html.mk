@@ -11,7 +11,6 @@ $(eval $(call gb_CustomTarget_CustomTarget,odk/html))
 
 $(eval $(call gb_CustomTarget_register_targets,odk/html,\
 	docs/install.html \
-	docs/notsupported.html \
 	docs/tools.html \
 	examples/DevelopersGuide/examples.html \
 	examples/examples.html \

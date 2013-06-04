@@ -13,7 +13,6 @@ $(eval $(call gb_Package_set_outdir,odk_html,$(INSTDIR)))
 
 $(eval $(call gb_Package_add_files_with_dir,odk_html,$(gb_Package_SDKDIRNAME),\
 	docs/install.html \
-	docs/notsupported.html \
 	docs/tools.html \
 	examples/DevelopersGuide/examples.html \
 	examples/examples.html \

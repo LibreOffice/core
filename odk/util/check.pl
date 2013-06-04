@@ -87,7 +87,7 @@ if (-d "$SdkDir") {
     print "check packaging files: ";
     if (check_dir("docs")) {
     my @filelist = ( "install.html",
-             "notsupported.html","sdk_styles.css","tools.html",
+             "sdk_styles.css","tools.html",
              "images/arrow-1.gif", "images/arrow-3.gif",
              "images/odk-footer-logo.gif",
              "images/bg_table.png","images/bg_table2.png",
