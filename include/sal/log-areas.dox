@@ -244,6 +244,7 @@ certain functionality.
 @section ucb
 
 @li @c cmisucp
+@li @c ucb
 @li @c ucb.ucp
 @li @c ucb.ucp.gio
 @li @c ucb.ucp.webdav
