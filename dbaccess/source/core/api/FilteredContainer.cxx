@@ -305,12 +305,14 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
 
         try
         {
-            printf ("DEBUG !!! __ OFilteredContainer::construct __ getting metadata ... \n");
+            SAL_DEBUG("OFilteredContainer::construct(). "
+                      "Getting metadata ...");
 
             Reference< XConnection > xCon( m_xConnection, UNO_SET_THROW );
             m_xMetaData.set( xCon->getMetaData(), UNO_SET_THROW );
 
-            printf ("DEBUG !!! __ OFilteredContainer::construct __ metadata got \n");
+            SAL_DEBUG("OFilteredContainer::construct(). "
+                      "Metadata got.");
 
             // create a table table filter suitable for the XDatabaseMetaData::getTables call,
             // taking into account both the externally-provided table type filter, and any
@@ -319,7 +321,8 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
             OUString sInherentTableTypeRestriction( getTableTypeRestriction() );
             if ( !sInherentTableTypeRestriction.isEmpty() )
             {
-                printf ("DEBUG !!! __ OFilteredContainer::construct __  NOT InherentTableTypeRestriction \n");
+                SAL_DEBUG("OFilteredContainer::construct(). "
+                          "NOT InherentTableTypeRestriction.");
 
                 if ( _rTableTypeFilter.getLength() != 0 )
                 {
@@ -342,7 +345,8 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
             }
             else
             {
-                printf ("DEBUG !!! __ OFilteredContainer::construct __  InherentTableTypeRestriction \n");
+                SAL_DEBUG("OFilteredContainer::construct(). "
+                          "InherentTableTypeRestriction.");
 
                 // no container-inherent restriction for the table types
                 if ( _rTableTypeFilter.getLength() == 0 )
@@ -355,13 +359,15 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
                 }
             }
 
-            printf ("DEBUG !!! __ OFilteredContainer::construct __  getting tables ... \n");
+            SAL_DEBUG("OFilteredContainer::construct(). "
+                      "Getting tables ...");
 
             static const OUString sAll("%");
             Reference< XResultSet > xTables = m_xMetaData->getTables( Any(), sAll, sAll, aTableTypeFilter );
             Reference< XRow > xCurrentRow( xTables, UNO_QUERY_THROW );
 
-            printf ("DEBUG !!! __ OFilteredContainer::construct __  tables got \n");
+            SAL_DEBUG("OFilteredContainer::construct(). "
+                      "Tables got.");
 
             TableInfos aUnfilteredTables;
 
