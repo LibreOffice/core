@@ -31,25 +31,16 @@ ifeq ($(OS)$(COM),WNTMSC)
 # at least for MSVC 2008 it is necessary to clear MAKEFLAGS because
 # nmake is invoked
 $(call gb_ExternalProject_get_state_target,python3,build) :
-ifeq ($(VCVER),110)
-	$(call gb_ExternalProject_run,build,\
-	MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build \
-		/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
-		/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
-		/p:PlatformToolset=v110 /p:VisualStudioVersion=11.0 \
-	&& cd $(EXTERNAL_WORKDIR) \
-	&& ln -s PCbuild LO_lib \
-	,PCBuild)
-else ifeq ($(VCVER),100)
 	$(call gb_ExternalProject_run,build,\
 		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
-			/ToolsVersion:4.0 \
+			$(if $(filter 100,$(VCVER)), \
+				/ToolsVersion:4.0, \
+				/p:PlatformToolset=v110 /p:VisualStudioVersion=11.0) \
 		&& cd $(EXTERNAL_WORKDIR) \
 		&& ln -s PCbuild LO_lib \
 	,PCBuild)
-endif
 
 else
 
