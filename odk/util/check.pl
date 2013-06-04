@@ -221,147 +221,149 @@ if (-d "$SdkDir") {
 
     #check idl docu, it is only a first and simple check
     # improvement required
-    print "check idl docu: ";
-    if (check_dir("docs/idl/ref")) {
-    if (!check_file("docs/idl/ref/index.html")) {
-        print "\nERROR: \"docs/idl/ref/index.html\" is missing\n";
-        $return++;
-    }
-    if (!check_file("docs/idl/ref/classes.html")) {
-        print "\nERROR: \"docs/idl/ref/classes.html\" is missing\n";
-        $return++;
-    }
-    if (!check_file("docs/idl/ref/namespaces.html")) {
-        print "\nERROR: \"docs/idl/ref/namespaces.html\" is missing\n";
-        $return++;
-    }
-
-    my @idl_dirlist = ( "accessibility",
-                "animations",
-                "auth",
-                "awt",
-                "awt/tab",
-                "awt/tree",
-                "awt/grid",
-                "beans",
-                "bridge",
-                "bridge/oleautomation",
-                "chart",
-                "chart2",
-                "chart2/data",
-                "configuration",
-                "configuration/backend",
-                "configuration/backend/xml",
-                "configuration/bootstrap",
-                "connection",
-                "container",
-                "cui",
-                "datatransfer",
-                "datatransfer/clipboard",
-                "datatransfer/dnd",
-                "deployment",
-                "deployment/ui",
-                "document",
-                "drawing",
-                "drawing/framework",
-                "embed",
-                "form",
-                "form/binding",
-                "form/component",
-                "form/control",
-                "form/inspection",
-                "form/runtime",
-                "form/submission",
-                "form/validation",
-                "formula",
-                "frame",
-                "frame/status",
-                "gallery",
-                "geometry",
-                "graphic",
-                "i18n",
-                "image",
-                "inspection",
-                "io",
-                "java",
-                "lang",
-                "ldap",
-                "linguistic2",
-                "loader",
-                "logging",
-                "mail",
-                "media",
-                "mozilla",
-                "packages",
-                "packages/manifest",
-                "packages/zip",
-                "plugin",
-                "presentation",
-                "reflection",
-                "registry",
-                "rendering",
-                "report",
-                "report/inspection",
-                "resource",
-                "scanner",
-                "script",
-                "script/browse",
-                "script/provider",
-                "sdb",
-                "sdb/application",
-                "sdb/tools",
-                "sdbc",
-                "sdbcx",
-                "security",
-                "sheet",
-                "smarttags",
-                "style",
-                "svg",
-                "system",
-                "table",
-                "task",
-                "text",
-                "text/fieldmaster",
-                "text/textfield",
-                "text/textfield/docinfo",
-                "ucb",
-                "ui",
-                "ui/dialogs",
-                "uno",
-                "uri",
-                "util",
-                "view",
-                "xforms",
-                "xml",
-                "xml/crypto",
-                "xml/crypto/sax",
-                "xml/csax",
-                "xml/dom",
-                "xml/dom/events",
-                "xml/dom/views",
-                "xml/input",
-                "xml/sax",
-                "xml/wrapper",
-                "xml/xpath",
-                "xsd" );
-
-    # Due to MSI limitations have to use SHORT_NAMES on windows so can't check
-    if ($OperatingSystem ne "windows") {
-    foreach $i (@idl_dirlist)
-    {
-        $i =~ s/\//_1_1/g;
-        if (!check_file("docs/idl/ref/namespacecom_1_1sun_1_1star_1_1$i.html")) {
-        $return++;
-        print "\nERROR: \"docs/idl/ref/namespacecom_1_1sun_1_1star_1_1$i.html\" is missing\n";
-        } else {
-        print "+";
+    if ($ENV{'DOXYGEN'} ne '') {
+        print "check idl docu: ";
+        if (check_dir("docs/idl/ref")) {
+        if (!check_file("docs/idl/ref/index.html")) {
+            print "\nERROR: \"docs/idl/ref/index.html\" is missing\n";
+            $return++;
         }
+        if (!check_file("docs/idl/ref/classes.html")) {
+            print "\nERROR: \"docs/idl/ref/classes.html\" is missing\n";
+            $return++;
+        }
+        if (!check_file("docs/idl/ref/namespaces.html")) {
+            print "\nERROR: \"docs/idl/ref/namespaces.html\" is missing\n";
+            $return++;
+        }
+
+        my @idl_dirlist = ( "accessibility",
+                    "animations",
+                    "auth",
+                    "awt",
+                    "awt/tab",
+                    "awt/tree",
+                    "awt/grid",
+                    "beans",
+                    "bridge",
+                    "bridge/oleautomation",
+                    "chart",
+                    "chart2",
+                    "chart2/data",
+                    "configuration",
+                    "configuration/backend",
+                    "configuration/backend/xml",
+                    "configuration/bootstrap",
+                    "connection",
+                    "container",
+                    "cui",
+                    "datatransfer",
+                    "datatransfer/clipboard",
+                    "datatransfer/dnd",
+                    "deployment",
+                    "deployment/ui",
+                    "document",
+                    "drawing",
+                    "drawing/framework",
+                    "embed",
+                    "form",
+                    "form/binding",
+                    "form/component",
+                    "form/control",
+                    "form/inspection",
+                    "form/runtime",
+                    "form/submission",
+                    "form/validation",
+                    "formula",
+                    "frame",
+                    "frame/status",
+                    "gallery",
+                    "geometry",
+                    "graphic",
+                    "i18n",
+                    "image",
+                    "inspection",
+                    "io",
+                    "java",
+                    "lang",
+                    "ldap",
+                    "linguistic2",
+                    "loader",
+                    "logging",
+                    "mail",
+                    "media",
+                    "mozilla",
+                    "packages",
+                    "packages/manifest",
+                    "packages/zip",
+                    "plugin",
+                    "presentation",
+                    "reflection",
+                    "registry",
+                    "rendering",
+                    "report",
+                    "report/inspection",
+                    "resource",
+                    "scanner",
+                    "script",
+                    "script/browse",
+                    "script/provider",
+                    "sdb",
+                    "sdb/application",
+                    "sdb/tools",
+                    "sdbc",
+                    "sdbcx",
+                    "security",
+                    "sheet",
+                    "smarttags",
+                    "style",
+                    "svg",
+                    "system",
+                    "table",
+                    "task",
+                    "text",
+                    "text/fieldmaster",
+                    "text/textfield",
+                    "text/textfield/docinfo",
+                    "ucb",
+                    "ui",
+                    "ui/dialogs",
+                    "uno",
+                    "uri",
+                    "util",
+                    "view",
+                    "xforms",
+                    "xml",
+                    "xml/crypto",
+                    "xml/crypto/sax",
+                    "xml/csax",
+                    "xml/dom",
+                    "xml/dom/events",
+                    "xml/dom/views",
+                    "xml/input",
+                    "xml/sax",
+                    "xml/wrapper",
+                    "xml/xpath",
+                    "xsd" );
+
+        # Due to MSI limitations have to use SHORT_NAMES on windows so can't check
+        if ($OperatingSystem ne "windows") {
+        foreach $i (@idl_dirlist)
+        {
+            $i =~ s/\//_1_1/g;
+            if (!check_file("docs/idl/ref/namespacecom_1_1sun_1_1star_1_1$i.html")) {
+            $return++;
+            print "\nERROR: \"docs/idl/ref/namespacecom_1_1sun_1_1star_1_1$i.html\" is missing\n";
+            } else {
+            print "+";
+            }
+        }
+        }
+        } else {
+        $return++;
+        }
+        print "\n";
     }
-    }
-    } else {
-    $return++;
-    }
-    print "\n";
 
 } else {
     $return++;
