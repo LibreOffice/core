@@ -2466,7 +2466,7 @@ $(call gb_LinkTarget__use_python_headers,$(1))
 
 ifeq ($(OS),WNT)
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,python3)/$(if $(filter 90,$(VCVER)),PC/VS9.0,PCbuild)$(if $(filter X86_64,$(CPUNAME)),/amd64)/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(MSVC_USE_DEBUG_RUNTIME),_d).lib \
+	$(call gb_UnpackedTarball_get_dir,python3)/PCbuild$(if $(filter X86_64,$(CPUNAME)),/amd64)/python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(MSVC_USE_DEBUG_RUNTIME),_d).lib \
 )
 else ifeq ($(OS),MACOSX)
 $(call gb_LinkTarget_add_libs,$(1),\
