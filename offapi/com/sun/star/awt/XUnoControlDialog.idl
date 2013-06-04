@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module awt {
    This service actually implements a whole whack of interfaces. This is the just
    the subset that our code needs.
 
-   @since LibreOffice 4.1
+   @since LibreOffice 4.2
  */
 published interface XUnoControlDialog
 {
