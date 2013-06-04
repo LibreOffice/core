@@ -20,7 +20,7 @@
 @property (nonatomic, strong) NSString* mName;
 @property uint mPort;
 
-@property (nonatomic, weak) Server* mServer;
+@property (nonatomic, strong) Server* mServer;
 @property (nonatomic, weak) Receiver* mReceiver;
 @property (nonatomic, weak) CommunicationManager* mComManager;
 
@@ -51,6 +51,7 @@ NSString * const CHARSET = @"UTF-8";
 {
     self.mPin = @"";
     self.mName = server.serverName;
+    self.mServer = server;
     self.mComManager = manager;
     self.mReceiver = receiver;
     // hardcoded here to test the communication TODO
@@ -82,8 +83,8 @@ NSString * const CHARSET = @"UTF-8";
         [self.mOutputStream setDelegate:self];
         [self.mOutputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         [self.mOutputStream open];
+         NSLog(@"Connected");
     }
-    NSLog(@"Connected");
 }
 
 - (void) sendCommand:(NSString *)aCommand
@@ -99,6 +100,7 @@ NSString * const CHARSET = @"UTF-8";
     switch(eventCode) {
         case NSStreamEventHasBytesAvailable:
         {
+            NSLog(@"NSStreamEventHasBytesAvailable");
             if(!self.mData) {
                 self.mData = [NSMutableData data];
             }

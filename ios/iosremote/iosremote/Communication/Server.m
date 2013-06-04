@@ -12,11 +12,14 @@
 
 @end
 
+
+
 @implementation Server
 
 @synthesize protocol = _protocol;
 @synthesize serverName = _serverName;
 @synthesize serverAddress = _serverAddress;
+
 
 - (id)initWithProtocol:(Protocol_t)protocal
            atAddress:(NSString*) address
