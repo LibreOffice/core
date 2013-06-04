@@ -44,7 +44,9 @@ class GalApp : public Application
     bool mbInBuildTree;
     bool mbRelativeURLs;
 public:
-    GalApp() : mbInBuildTree( false ), mbRelativeURLs( false ) {}
+    GalApp() : mbInBuildTree( false ), mbRelativeURLs( false )
+    {
+    }
     virtual int Main();
 
 protected:
@@ -254,6 +256,7 @@ void GalApp::DeInit()
 
 void vclmain::createApplication()
 {
+    Application::EnableConsoleOnly();
     static GalApp aGalApp;
 }
 
