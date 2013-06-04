@@ -9,26 +9,13 @@
  
  dnl
  dnl Find programs
-@@ -671,7 +671,9 @@
+@@ -672,6 +674,26 @@
  	done
  	
  	for dir in $ac_nss_lib_dir ; do
--	    if test -f $dir/libnspr4.so -o -f $dir/libnspr4.dylib ; then
 +            case $host_os in
 +            cygwin* | mingw* | pw32*)
 +    	      if test -f $dir/libnspr4.$libext ; then
- 		dnl do not add -L/usr/lib because compiler does it anyway
-         	if test "z$dir" = "z/usr/lib" ; then
-             	    NSPR_LIBS="$NSPR_LIBS_LIST"
-@@ -685,6 +687,26 @@
- 		NSPR_LIBS_FOUND="yes"
- 		break
- 	    fi
-+              ;;
-+
-+            *)
-+
-+              if test -f $dir/libnspr4.so -o -f $dir/libnspr4.dylib ; then
 +		dnl do not add -L/usr/lib because compiler does it anyway
 +        	if test "z$dir" = "z/usr/lib" ; then
 +            	    NSPR_LIBS="$NSPR_LIBS_LIST"
@@ -43,11 +30,22 @@
 +		break
 +	    fi
 +              ;;
++
++            *)
++
+ 	    if test -f $dir/libnspr4.so -o -f $dir/libnspr4.dylib ; then
+ 		dnl do not add -L/usr/lib because compiler does it anyway
+         	if test "z$dir" = "z/usr/lib" ; then
+@@ -686,6 +708,8 @@
+ 		NSPR_LIBS_FOUND="yes"
+ 		break
+ 	    fi
++              ;;
 +            esac
  	done
      fi
  
-@@ -742,6 +764,25 @@
+@@ -743,6 +767,25 @@
          done
         
          for dir in $ac_nss_lib_dir ; do
@@ -73,7 +71,7 @@
              if test -f $dir/libnss3.so -o -f $dir/libnss3.dylib ; then
          	dnl do not add -L/usr/lib because compiler does it anyway
      		if test "z$dir" = "z/usr/lib" ; then
-@@ -756,6 +797,8 @@
+@@ -757,6 +800,8 @@
      		NSS_LIBS_FOUND="yes"
      		break
  	    fi
@@ -82,7 +80,7 @@
  	done
      fi
  
-@@ -926,7 +969,7 @@
+@@ -927,7 +972,7 @@
  dnl cannot detect __stdcall functions
  dnl    AC_CHECK_LIB(crypt32, CertOpenStore, ....
      LIBS_SAVE="$LIBS"
@@ -91,7 +89,7 @@
      AC_MSG_CHECKING(for mscrypto libraries)
      AC_LINK_IFELSE([
  	#include <windows.h>
-@@ -943,15 +986,7 @@
+@@ -944,15 +989,7 @@
      XMLSEC_NO_MSCRYPTO="0"
  
      MSCRYPTO_CFLAGS="$MSCRYPTO_CFLAGS -DXMLSEC_CRYPTO_MSCRYPTO=1"
@@ -136,7 +134,7 @@
 --- misc/xmlsec1-1.2.14/src/nss/keywrapers.c	2009-09-29 15:55:33.430875248 +0200
 +++ misc/build/xmlsec1-1.2.14/src/nss/keywrapers.c	2009-09-29 15:49:39.749963247 +0200
 @@ -1126,6 +1126,7 @@
-     NULL,					/* void* reserved1; */
+     NULL,                   /* void* reserved1; */
  };
  
 +#ifndef __MINGW32__
@@ -152,13 +150,13 @@
  #endif /* XMLSEC_NO_AES */
  
 @@ -1197,6 +1199,7 @@
-     NULL,					/* void* reserved1; */
+     NULL,                   /* void* reserved1; */
  };
  
 +#ifndef __MINGW32__
  /**
   * xmlSecNssTransformKWDes3GetKlass:
-  * 
+  *
 @@ -1208,6 +1211,7 @@
  xmlSecNssTransformKWDes3GetKlass(void) {
      return(&xmlSecNssKWDes3Klass);
