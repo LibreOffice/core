@@ -143,8 +143,6 @@ private:
     Image  maIndent3;
 
     Image  maIndHang;
-    Image  maParInc;
-    Image  maParDec;
 
     ImageList   maNumBImageList;
     ImageList   maNumBImageListH;
