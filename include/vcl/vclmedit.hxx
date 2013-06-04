@@ -81,6 +81,8 @@ public:
     virtual void    SetMaxTextLen( xub_StrLen nMaxLen = 0 );
     virtual xub_StrLen GetMaxTextLen() const;
 
+    void            SetMaxTextWidth( sal_uLong nMaxWidth );
+
     virtual void    SetSelection( const Selection& rSelection );
     virtual const Selection& GetSelection() const;
 

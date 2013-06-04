@@ -115,6 +115,8 @@ public:
     void        SetMaxTextLen( xub_StrLen nLen );
     xub_StrLen  GetMaxTextLen() const;
 
+    void        SetMaxTextWidth( sal_uLong nMaxWidth );
+
     sal_Bool        IsInsertMode() const;
 
     void        InsertText( const String& rStr );
@@ -398,6 +400,11 @@ String ImpVclMEdit::GetSelected() const
 String ImpVclMEdit::GetSelected( LineEnd aSeparator ) const
 {
     return mpTextWindow->GetTextView()->GetSelected( aSeparator );
+}
+
+void ImpVclMEdit::SetMaxTextWidth( sal_uLong nMaxWidth )
+{
+    mpTextWindow->GetTextEngine()->SetMaxTextWidth( nMaxWidth );
 }
 
 void ImpVclMEdit::Resize()
@@ -1111,6 +1118,11 @@ sal_Bool VclMultiLineEdit::IsReadOnly() const
 void VclMultiLineEdit::SetMaxTextLen( xub_StrLen nMaxLen )
 {
     pImpVclMEdit->SetMaxTextLen( nMaxLen );
+}
+
+void VclMultiLineEdit::SetMaxTextWidth( sal_uLong nMaxWidth )
+{
+    pImpVclMEdit->SetMaxTextWidth(nMaxWidth );
 }
 
 xub_StrLen VclMultiLineEdit::GetMaxTextLen() const
