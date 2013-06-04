@@ -38,6 +38,8 @@
 #ifndef SC_PVLAYDLG_HXX
 #define SC_PVLAYDLG_HXX
 
+#include <config_lgpl.h>
+
 #include <memory>
 #include <vector>
 

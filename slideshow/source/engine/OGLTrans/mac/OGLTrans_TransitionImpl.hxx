@@ -28,6 +28,8 @@
 #ifndef INCLUDED_OGLTRANS_TRANSITIONIMPL_HXX_
 #define INCLUDED_OGLTRANS_TRANSITIONIMPL_HXX_
 
+#include <config_lgpl.h>
+
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 

@@ -5,7 +5,7 @@
 #ifndef CONFIG_LGPL_H
 #define CONFIG_LGPL_H
 
-#define MPL_HAVE_SUBSET 0
+#include <config_mpl.h>
 
 #if MPL_HAVE_SUBSET
 #  error "Attempting to compile LGPL code into MPL subset"

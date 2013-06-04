@@ -357,11 +357,13 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/dbgui/csvtablebox \
 	sc/source/ui/dbgui/dbnamdlg \
 	sc/source/ui/dbgui/expftext \
-	sc/source/ui/dbgui/fieldwnd \
+	$(if $(filter TRUE,$(MPL_SUBSET)),, \
+	    sc/source/ui/dbgui/fieldwnd) \
 	sc/source/ui/dbgui/filtdlg \
 	sc/source/ui/dbgui/foptmgr \
 	sc/source/ui/dbgui/imoptdlg \
-	sc/source/ui/dbgui/pvlaydlg \
+	$(if $(filter TRUE,$(MPL_SUBSET)),, \
+	    sc/source/ui/dbgui/pvlaydlg) \
 	sc/source/ui/dbgui/sfiltdlg \
 	sc/source/ui/docshell/arealink \
 	sc/source/ui/docshell/autostyl \

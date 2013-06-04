@@ -9,8 +9,8 @@
 
 $(eval $(call gb_Module_Module,lpsolve))
 
+ifeq ($(ENABLE_LPSOLVE),TRUE)
 ifeq ($(SYSTEM_LPSOLVE),NO)
-ifneq ($(OS),IOS)
 $(eval $(call gb_Module_add_targets,lpsolve,\
 	UnpackedTarball_lpsolve \
 	ExternalPackage_lpsolve \

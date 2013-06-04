@@ -569,6 +569,12 @@ dragonfly*)
 linux-android*)
     build_gstreamer=no
     build_gstreamer_0_10=no
+    enable_lotuswordpro=no
+    enable_neon=no
+    enable_mpl_subset=yes
+    enable_opengl=no
+    enable_lpsolve=no
+    with_theme="tango"
     test_cups=no
     test_dbus=no
     test_fontconfig=no
@@ -695,6 +701,12 @@ AC_ARG_ENABLE(ext-wiki-publisher,
     AS_HELP_STRING([--enable-ext-wiki-publisher],
         [Enable the Wiki Publisher extension.])
 )
+
+AC_ARG_ENABLE(lpsolve,
+    AS_HELP_STRING([--disable-lpsolve],
+        [Disable compilation of the lp solve solver ])
+)
+
 ###############################################################################
 
 dnl ---------- *** ----------
@@ -6913,10 +6925,14 @@ AC_SUBST(WINEGCC)
 
 if test $_os = iOS; then
     enable_mpl_subset=yes
+    enable_opengl=no
+    enable_lotuswordpro=no
+    enable_lpsolve=no
     enable_postgresql_sdbc=no
     enable_lotuswordpro=no
     enable_neon=no
     enable_extension_integration=no
+    with_theme="tango"
     with_ppds=no
 fi
 
@@ -8773,8 +8789,18 @@ AC_SUBST(MYTHES_CFLAGS)
 AC_SUBST(MYTHES_LIBS)
 
 dnl ===================================================================
-dnl Checking for lpsolve
+dnl How should we build the linear programming solver ?
 dnl ===================================================================
+ENABLE_LPSOLVE=
+AC_MSG_CHECKING([whether to build with lpsolve])
+if test "$enable_lpsolve" != "no"; then
+    ENABLE_LPSOLVE=TRUE
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_LPSOLVE)
+
 AC_MSG_CHECKING([which lpsolve to use])
 if test "$with_system_lpsolve" = "yes"; then
     AC_MSG_RESULT([external])
@@ -11709,7 +11735,7 @@ if test "$enable_mpl_subset" = "yes"; then
    if test "$enable_lotuswordpro" = "yes"; then
         AC_MSG_ERROR([need to --disable-lotuswordpro - a Lotus Word Pro file format import filter.])
    fi
-   if test "$enable_neon" != "no"; then
+   if test "$enable_neon" != "no" -o "x$DISABLE_NEON" != "xTRUE"; then
         AC_MSG_ERROR([need to --disable-neon - webdav support.])
    fi
    if test "x$enable_ext_mariadb_connector" = "xyes"; then
@@ -11723,6 +11749,19 @@ if test "$enable_mpl_subset" = "yes"; then
    # cf. m4/libo_check_extension.m4
    if test "x$WITH_EXTRA_EXTENSIONS" != "x"; then
         AC_MSG_ERROR([need to disable extra extensions '$WITH_EXTRA_EXTENSIONS'])
+   fi
+   for theme in $WITH_THEMES; do
+        case $theme in
+            crystal|default|hicontrast|human|oxygen)
+                AC_MSG_ERROR([need to disable icon themes from '$WITH_THEMES': $theme present, use --with-theme=tango]) ;;
+            *) : ;;
+        esac
+   done
+   if test "$enable_opengl" != "no" -o "x$ENABLE_OPENGL" == "xTRUE"; then
+        AC_MSG_ERROR([need to --disable-opengl - GL transitions support.])
+   fi
+   if test "$enable_lpsolve" != "no" -o "x$ENABLE_LPSOLVE" == "xTRUE"; then
+        AC_MSG_ERROR([need to --disable-lpsolve - calc linear programming solver.])
    fi
 
    MPL_SUBSET="TRUE"
@@ -11854,6 +11893,7 @@ AC_CONFIG_HEADERS([config_host/config_features.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])
 AC_CONFIG_HEADERS([config_host/config_lgpl.h])
+AC_CONFIG_HEADERS([config_host/config_mpl.h])
 AC_CONFIG_HEADERS([config_host/config_kde4.h])
 AC_CONFIG_HEADERS([config_host/config_mingw.h])
 AC_CONFIG_HEADERS([config_host/config_oox.h])
