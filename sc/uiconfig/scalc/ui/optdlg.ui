@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkAdjustment" id="adjustment1">
-    <property name="lower">1</property>
-    <property name="upper">99</property>
-    <property name="value">1</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
   <object class="GtkBox" id="optCalcPrintPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -34,7 +27,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="suppressCB">
-                    <property name="label" translatable="yes">Suppress output of empty pages</property>
+                    <property name="label" translatable="yes">_Suppress output of empty pages</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -46,36 +39,6 @@
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <object class="GtkGrid" id="grid1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="column_spacing">6</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">4</property>
                   </packing>
                 </child>
               </object>
@@ -119,7 +82,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="printCB">
-                    <property name="label" translatable="yes">Print only selected sheets</property>
+                    <property name="label" translatable="yes">_Print only selected sheets</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -132,12 +95,6 @@
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
                 </child>
               </object>
             </child>
