@@ -65,12 +65,12 @@ ModuleManager::impl_getSupportedServiceNames() {
 css::uno::Reference< css::uno::XInterface > ModuleManager::impl_createInstance(
     css::uno::Reference< css::lang::XMultiServiceFactory > const & manager)
 {
-    return static_cast< cppu::OWeakObject * >(new ModuleManager(manager));
+    return static_cast< cppu::OWeakObject * >(new ModuleManager( comphelper::getComponentContext(manager) ));
 }
 
-ModuleManager::ModuleManager(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+ModuleManager::ModuleManager(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase(     )
-    , m_xSMGR       (xSMGR)
+    , m_xContext    (xContext)
 {
 }
 
@@ -175,7 +175,7 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -185,7 +185,7 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
     // flush changes (because an error occurred) we will read them later. If we use a different config access
     // we can close it without a flush ... and our read data wont be affected .-)
     css::uno::Reference< css::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
-                                                                        comphelper::getComponentContext(xSMGR),
+                                                                        xContext,
                                                                         OUString(CFGPATH_FACTORIES),
                                                                         ::comphelper::ConfigurationHelper::E_STANDARD);
     css::uno::Reference< css::container::XNameAccess >  xModules (xCfg, css::uno::UNO_QUERY_THROW);
@@ -316,7 +316,7 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConf
     ReadGuard aReadLock(m_aLock);
     if (m_xCFG.is())
         return m_xCFG;
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -324,7 +324,7 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConf
     try
     {
         xCfg = ::comphelper::ConfigurationHelper::openConfig(
-                    comphelper::getComponentContext(xSMGR),
+                    xContext,
                     OUString(CFGPATH_FACTORIES),
                     ::comphelper::ConfigurationHelper::E_READONLY);
     }

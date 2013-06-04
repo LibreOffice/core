@@ -34,7 +34,7 @@ namespace framework
 class StatusBarFactory :  public MenuBarFactory
 {
     public:
-        StatusBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        StatusBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
 
         //  XInterface, XTypeProvider, XServiceInfo
         DECLARE_XSERVICEINFO

@@ -45,7 +45,7 @@ namespace framework
                                                             ::com::sun::star::ui::XUIElementFactory>
     {
         public:
-            MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+            MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
             virtual ~MenuBarFactory();
 
             //  XInterface, XTypeProvider, XServiceInfo
@@ -63,9 +63,9 @@ namespace framework
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
         protected:
-            MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager,bool );
+            MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,bool );
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xContext;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >     m_xModuleManager;
     };
 }

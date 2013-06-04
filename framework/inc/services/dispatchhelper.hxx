@@ -58,7 +58,7 @@ class DispatchHelper : public ThreadHelpBase                      // must be the
 
         /** global uno service manager.
             Can be used to create own needed services. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /** used to wait for asynchronous listener callbacks. */
         ::osl::Condition m_aBlock;
@@ -75,8 +75,8 @@ class DispatchHelper : public ThreadHelpBase                      // must be the
         //---------------------------------------
         // ctor/dtor
 
-                 DispatchHelper( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
-        virtual ~DispatchHelper(                                                                     );
+                 DispatchHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        virtual ~DispatchHelper(                                                                    );
 
         //---------------------------------------
         // XInterface, XTypeProvider, XServiceInfo

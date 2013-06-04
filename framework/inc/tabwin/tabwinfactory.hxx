@@ -45,7 +45,7 @@ class TabWinFactory :  protected ThreadHelpBase                                 
                        public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XSingleComponentFactory, com::sun::star::lang::XServiceInfo>
 {
     public:
-        TabWinFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        TabWinFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
         virtual ~TabWinFactory();
 
         //  XInterface, XTypeProvider, XServiceInfo
@@ -56,7 +56,7 @@ class TabWinFactory :  protected ThreadHelpBase                                 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit2 >             m_xToolkit;
 };
 

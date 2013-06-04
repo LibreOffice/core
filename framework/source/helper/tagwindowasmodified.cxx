@@ -59,9 +59,8 @@ DEFINE_XTYPEPROVIDER_4(TagWindowAsModified        ,
                        css::lang::XEventListener  )
 
 //*****************************************************************************************************************
-TagWindowAsModified::TagWindowAsModified(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+TagWindowAsModified::TagWindowAsModified()
     : ThreadHelpBase          (&Application::GetSolarMutex())
-    , m_xSMGR                 (xSMGR                        )
 {
 }
 

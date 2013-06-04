@@ -64,7 +64,7 @@ namespace framework
             FWK_DECLARE_XTYPEPROVIDER
             DECLARE_XSERVICEINFO
 
-            ModuleUIConfigurationManagerSupplier( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager );
+            ModuleUIConfigurationManagerSupplier( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
             virtual ~ModuleUIConfigurationManagerSupplier();
 
             // XComponent
@@ -94,7 +94,7 @@ namespace framework
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >                   m_xUserCfgRootStorage;
             com::sun::star::uno::Reference< com::sun::star::embed::XTransactedObject >          m_xUserRootCommit;
             com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >          m_xModuleMgr;
-            com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >        m_xServiceManager;
+            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >            m_xContext;
             ::cppu::OMultiTypeInterfaceContainerHelper                                          m_aListenerContainer;   /// container for ALL Listener
    };
 }

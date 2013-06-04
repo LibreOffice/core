@@ -105,7 +105,7 @@ DEFINE_XTYPEPROVIDER_8                  (   PathSettings                        
                                             css::beans::XMultiPropertySet
                                         )
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   PathSettings                                            ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   PathSettings                                            ,
                                             ::cppu::OWeakObject                                     ,
                                             SERVICENAME_PATHSETTINGS                                ,
                                             IMPLEMENTATIONNAME_PATHSETTINGS
@@ -125,7 +125,7 @@ DEFINE_INIT_SERVICE                     (   PathSettings,
                                         )
 
 //-----------------------------------------------------------------------------
-PathSettings::PathSettings( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
+PathSettings::PathSettings( const css::uno::Reference< css::uno::XComponentContext >& xContext )
     //  Init baseclasses first
     //  Attention: Don't change order of initialization!
     //      ThreadHelpBase is a struct with a lock as member. We can't use a lock as direct member!
@@ -135,7 +135,7 @@ PathSettings::PathSettings( const css::uno::Reference< css::lang::XMultiServiceF
     ,   ::cppu::OPropertySetHelper(*(static_cast< ::cppu::OBroadcastHelper* >(this)))
     ,   ::cppu::OWeakObject()
     // Init member
-    ,   m_xSMGR    (xSMGR)
+    ,   m_xContext (xContext)
     ,   m_pPropHelp(0    )
     ,  m_bIgnoreEvents(sal_False)
 {
@@ -1083,7 +1083,7 @@ css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubsti
 {
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext >  xContext  = m_xContext;
     css::uno::Reference< css::util::XStringSubstitution >  xSubst = m_xSubstitution;
     aReadLock.unlock();
     // <- SAFE
@@ -1094,7 +1094,6 @@ css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubsti
         // We must replace all used variables inside readed path values.
         // In case we can't do so ... the whole office can't work really.
         // That's why it seams to be OK to throw a RuntimeException then.
-        css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getComponentContext(xSMGR) );
         xSubst = css::util::PathSubstitution::create(xContext);
 
         // SAFE ->
@@ -1113,7 +1112,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
 
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     css::uno::Reference< css::container::XNameAccess >     xCfg  = m_xCfgOld;
     aReadLock.unlock();
     // <- SAFE
@@ -1122,7 +1121,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld()
     {
         xCfg = css::uno::Reference< css::container::XNameAccess >(
                    ::comphelper::ConfigurationHelper::openConfig(
-                        comphelper::getComponentContext(xSMGR),
+                        xContext,
                         CFG_NODE_OLD,
                         ::comphelper::ConfigurationHelper::E_STANDARD), // not readonly! Sometimes we need write access there !!!
                    css::uno::UNO_QUERY_THROW);
@@ -1143,7 +1142,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
 
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     css::uno::Reference< css::container::XNameAccess >     xCfg  = m_xCfgNew;
     if (xCfg.is())
        return xCfg;
@@ -1154,7 +1153,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
     {
         xCfg = css::uno::Reference< css::container::XNameAccess >(
                    ::comphelper::ConfigurationHelper::openConfig(
-                        comphelper::getComponentContext(xSMGR),
+                        xContext,
                         CFG_NODE_NEW,
                         ::comphelper::ConfigurationHelper::E_STANDARD),
                    css::uno::UNO_QUERY_THROW);

@@ -33,7 +33,7 @@ namespace framework{
 //_______________________________________________
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XSERVICEINFO_MULTISERVICE(DispatchHelper                   ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2(DispatchHelper                   ,
                                  ::cppu::OWeakObject              ,
                                  "com.sun.star.frame.DispatchHelper",
                                  IMPLEMENTATIONNAME_DISPATCHHELPER)
@@ -46,10 +46,10 @@ DEFINE_INIT_SERVICE( DispatchHelper, {} )
 
     @param xSMGR    the global uno service manager, which can be used to create own needed services.
 */
-DispatchHelper::DispatchHelper( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
+DispatchHelper::DispatchHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext )
         :   ThreadHelpBase(     )
         // Init member
-        ,   m_xSMGR       (xSMGR)
+        ,   m_xContext    (xContext)
 {
 }
 
@@ -104,7 +104,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     // parse given URL
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)) );
+    css::uno::Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(m_xContext);
     aReadLock.unlock();
     /* } SAFE */
 

@@ -87,7 +87,7 @@ DEFINE_XTYPEPROVIDER_4                  (   ModuleUIConfigurationManagerSupplier
                                             ::com::sun::star::ui::XModuleUIConfigurationManagerSupplier
                                         )
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ModuleUIConfigurationManagerSupplier                    ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   ModuleUIConfigurationManagerSupplier                    ,
                                             ::cppu::OWeakObject                                     ,
                                             DECLARE_ASCII("com.sun.star.ui.ModuleUIConfigurationManagerSupplier" ),
                                             IMPLEMENTATIONNAME_MODULEUICONFIGURATIONMANAGERSUPPLIER
@@ -97,12 +97,12 @@ DEFINE_INIT_SERVICE                     (   ModuleUIConfigurationManagerSupplier
 
 
 
-ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( const Reference< XMultiServiceFactory >& xServiceManager ) :
+ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( const Reference< XComponentContext >& xContext ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
     , m_bDisposed( false )
 //TODO_AS    , m_bInit( false )
-    , m_xModuleMgr( ModuleManager::create( comphelper::getComponentContext(xServiceManager) ) )
-    , m_xServiceManager( xServiceManager )
+    , m_xModuleMgr( ModuleManager::create( xContext ) )
+    , m_xContext( xContext )
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier" );
@@ -224,7 +224,7 @@ throw ( NoSuchElementException, RuntimeException)
         aArg.Value <<= ModuleIdentifier;
         aArgs[1] <<= aArg;
 
-        pIter->second.set( m_xServiceManager->createInstanceWithArguments(SERVICENAME_MODULEUICONFIGURATIONMANAGER, aArgs ),UNO_QUERY );
+        pIter->second.set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(SERVICENAME_MODULEUICONFIGURATIONMANAGER, aArgs, m_xContext ),UNO_QUERY );
     }
 
     return pIter->second;

@@ -34,7 +34,7 @@ namespace framework
 class ToolBoxFactory :  public MenuBarFactory
 {
     public:
-        ToolBoxFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        ToolBoxFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
 
         //  XInterface, XTypeProvider, XServiceInfo
         DECLARE_XSERVICEINFO

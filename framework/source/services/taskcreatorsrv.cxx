@@ -62,7 +62,7 @@ DEFINE_XTYPEPROVIDER_3(TaskCreatorService              ,
                        css::lang::XSingleServiceFactory)
 
 //-----------------------------------------------
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE(TaskCreatorService                ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(TaskCreatorService                ,
                                        ::cppu::OWeakObject               ,
                                        "com.sun.star.frame.TaskCreator",
                                        IMPLEMENTATIONNAME_FWK_TASKCREATOR)
@@ -80,10 +80,10 @@ DEFINE_INIT_SERVICE(
                    )
 
 //-----------------------------------------------
-TaskCreatorService::TaskCreatorService(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+TaskCreatorService::TaskCreatorService(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase     (&Application::GetSolarMutex())
     , ::cppu::OWeakObject(                             )
-    , m_xSMGR            (xSMGR                        )
+    , m_xContext         (xContext                     )
 {
 }
 
@@ -116,12 +116,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     css::uno::Reference< css::awt::XWindow >  xContainerWindow              = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_CONTAINERWINDOW)              , css::uno::Reference< css::awt::XWindow >() );
     sal_Bool                                  bSupportPersistentWindowState = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE) , sal_False                                  );
     sal_Bool                                  bEnableTitleBarUpdate         = lArgs.getUnpackedValueOrDefault(OUString(ARGUMENT_ENABLE_TITLEBARUPDATE)        , sal_True                                   );
-
-    /* SAFE { */
-    ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
-    aReadLock.unlock();
-    /* } SAFE */
 
     // We use FrameName property to set it as API name of the new created frame later.
     // But those frame names must be different from the set of special target names as e.g. _blank, _self etcpp !
@@ -207,12 +201,12 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
 {
     // SAFE  ->
     ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE
 
     // get toolkit to create task container window
-    css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( comphelper::getComponentContext(xSMGR) );
+    css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( xContext );
 
     // Check if child frames can be created realy. We need at least a valid window at the parent frame ...
     css::uno::Reference< css::awt::XWindowPeer > xParentWindowPeer;
@@ -270,12 +264,12 @@ css::uno::Reference< css::frame::XFrame2 > TaskCreatorService::implts_createFram
 {
     // SAFE  ->
     ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE
 
     // create new frame.
-    css::uno::Reference< css::frame::XFrame2 > xNewFrame = css::frame::Frame::create( comphelper::getComponentContext(xSMGR) );
+    css::uno::Reference< css::frame::XFrame2 > xNewFrame = css::frame::Frame::create( xContext );
 
     // Set window on frame.
     // Do it before calling any other interface methods ...
@@ -303,7 +297,7 @@ void TaskCreatorService::implts_establishWindowStateListener( const css::uno::Re
 {
     // SAFE  ->
     ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE
 
@@ -311,7 +305,7 @@ void TaskCreatorService::implts_establishWindowStateListener( const css::uno::Re
     // We must create a special listener service and couple it with the new created task frame.
     // He will restore or save the window state of it ...
     // See used classes for further information too.
-    PersistentWindowState* pPersistentStateHandler = new PersistentWindowState( comphelper::getComponentContext(xSMGR));
+    PersistentWindowState* pPersistentStateHandler = new PersistentWindowState( xContext );
     css::uno::Reference< css::lang::XInitialization > xInit(static_cast< ::cppu::OWeakObject* >(pPersistentStateHandler), css::uno::UNO_QUERY_THROW);
 
     css::uno::Sequence< css::uno::Any > lInitData(1);
@@ -322,16 +316,10 @@ void TaskCreatorService::implts_establishWindowStateListener( const css::uno::Re
 //-----------------------------------------------
 void TaskCreatorService::implts_establishDocModifyListener( const css::uno::Reference< css::frame::XFrame2 >& xFrame )
 {
-    // SAFE  ->
-    ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
-    aReadLock.unlock();
-    // <- SAFE
-
     // Special feature: It's allowed for frames using a top level window only!
     // We must create a special listener service and couple it with the new created task frame.
     // It will tag the window as modified if the underlying model was modified ...
-    TagWindowAsModified* pTag = new TagWindowAsModified(xSMGR);
+    TagWindowAsModified* pTag = new TagWindowAsModified();
     css::uno::Reference< css::lang::XInitialization > xInit(static_cast< ::cppu::OWeakObject* >(pTag), css::uno::UNO_QUERY_THROW);
 
     css::uno::Sequence< css::uno::Any > lInitData(1);
@@ -344,11 +332,11 @@ void TaskCreatorService::implts_establishTitleBarUpdate( const css::uno::Referen
 {
     // SAFE  ->
     ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
     // <- SAFE
 
-    TitleBarUpdate* pHelper = new TitleBarUpdate (comphelper::getComponentContext(xSMGR));
+    TitleBarUpdate* pHelper = new TitleBarUpdate (xContext);
     css::uno::Reference< css::lang::XInitialization > xInit(static_cast< ::cppu::OWeakObject* >(pHelper), css::uno::UNO_QUERY_THROW);
 
     css::uno::Sequence< css::uno::Any > lInitData(1);

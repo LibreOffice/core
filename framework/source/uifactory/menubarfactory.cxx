@@ -54,7 +54,7 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   MenuBarFactory                                  ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   MenuBarFactory                                  ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_MENUBARFACTORY                      ,
                                             IMPLEMENTATIONNAME_MENUBARFACTORY
@@ -62,16 +62,16 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   MenuBarFactory                      
 
 DEFINE_INIT_SERVICE                     (   MenuBarFactory, {} )
 
-MenuBarFactory::MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
+MenuBarFactory::MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
     ThreadHelpBase()
-    , m_xServiceManager( xServiceManager )
-    , m_xModuleManager( ModuleManager::create( comphelper::getComponentContext(xServiceManager) ) )
+    , m_xContext( xContext )
+    , m_xModuleManager( ModuleManager::create( xContext ) )
 {
 }
-MenuBarFactory::MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager,bool ) :
+MenuBarFactory::MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,bool ) :
     ThreadHelpBase(&Application::GetSolarMutex())
-    , m_xServiceManager( xServiceManager )
-    , m_xModuleManager( ModuleManager::create( comphelper::getComponentContext(xServiceManager) ) )
+    , m_xContext( xContext )
+    , m_xModuleManager( ModuleManager::create( xContext ) )
 {
 }
 
@@ -87,11 +87,11 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
 {
     // SAFE
     ResetableGuard aLock( m_aLock );
-    MenuBarWrapper* pMenuBarWrapper = new MenuBarWrapper( comphelper::getComponentContext(m_xServiceManager) );
+    MenuBarWrapper* pMenuBarWrapper = new MenuBarWrapper( m_xContext );
     Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pMenuBarWrapper, UNO_QUERY );
     Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
     aLock.unlock();
-    CreateUIElement(ResourceURL,Args,"MenuOnly","private:resource/menubar/",xMenuBar,xModuleManager, comphelper::getComponentContext(m_xServiceManager));
+    CreateUIElement(ResourceURL, Args, "MenuOnly", "private:resource/menubar/", xMenuBar, xModuleManager, m_xContext);
     return xMenuBar;
 }
 void MenuBarFactory::CreateUIElement(const OUString& ResourceURL

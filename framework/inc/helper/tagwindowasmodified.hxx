@@ -65,9 +65,6 @@ class TagWindowAsModified :   // interfaces
 
     private:
 
-        /// may we need an uno service manager to create own services
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
-
         /// reference to the frame, where we listen for new loaded documents for updating our own xModel reference
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
 
@@ -84,7 +81,7 @@ class TagWindowAsModified :   // interfaces
 
         //____________________________
         // ctor/dtor
-                 TagWindowAsModified(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+                 TagWindowAsModified();
         virtual ~TagWindowAsModified(                                                                   );
 
         //____________________________

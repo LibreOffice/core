@@ -41,11 +41,11 @@ namespace framework
 {
 
 UIControllerFactory::UIControllerFactory(
-    const Reference< XMultiServiceFactory >& xServiceManager,
+    const Reference< XComponentContext >& xContext,
     const rtl::OUString &rConfigurationNode )
     : ThreadHelpBase()
     , m_bConfigRead( sal_False )
-    , m_xServiceManager( xServiceManager )
+    , m_xContext( xContext )
     , m_pConfigAccess()
 {
     rtl::OUStringBuffer aBuffer;
@@ -53,8 +53,7 @@ UIControllerFactory::UIControllerFactory(
         RTL_CONSTASCII_STRINGPARAM(
             "/org.openoffice.Office.UI.Controller/Registered/" ) );
     aBuffer.append( rConfigurationNode );
-    m_pConfigAccess = new ConfigurationAccess_ControllerFactory(
-        comphelper::getComponentContext(m_xServiceManager), aBuffer.makeStringAndClear() );
+    m_pConfigAccess = new ConfigurationAccess_ControllerFactory( m_xContext, aBuffer.makeStringAndClear() );
     m_pConfigAccess->acquire();
 }
 
@@ -83,7 +82,7 @@ throw (Exception, RuntimeException)
 
     OUString aServiceName = m_pConfigAccess->getServiceFromCommandModule( aServiceSpecifier, OUString() );
     if ( !aServiceName.isEmpty() )
-        return m_xServiceManager->createInstance( aServiceName );
+        return m_xContext->getServiceManager()->createInstanceWithContext( aServiceName, m_xContext );
     else
         return Reference< XInterface >();
     // SAFE
@@ -146,13 +145,13 @@ throw (Exception, RuntimeException)
         }
 
         OUString aServiceName = m_pConfigAccess->getServiceFromCommandModule( ServiceSpecifier, aPropName );
-        Reference< XMultiServiceFactory > xServiceManager( m_xServiceManager );
+        Reference< XComponentContext > xContext( m_xContext );
 
         aLock.unlock();
         // SAFE
 
         if ( !aServiceName.isEmpty() )
-            return xServiceManager->createInstanceWithArguments( aServiceName, aNewArgs );
+            return xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aServiceName, aNewArgs, xContext );
         else
             return Reference< XInterface >();
     }
@@ -219,7 +218,7 @@ throw (RuntimeException)
 }
 
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   PopupMenuControllerFactory                      ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   PopupMenuControllerFactory                      ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_POPUPMENUCONTROLLERFACTORY          ,
                                             IMPLEMENTATIONNAME_POPUPMENUCONTROLLERFACTORY
@@ -227,14 +226,14 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   PopupMenuControllerFactory          
 
 DEFINE_INIT_SERVICE                     (   PopupMenuControllerFactory, {} )
 
-PopupMenuControllerFactory::PopupMenuControllerFactory( const Reference< XMultiServiceFactory >& xServiceManager ) :
+PopupMenuControllerFactory::PopupMenuControllerFactory( const Reference< XComponentContext >& xContext ) :
     UIControllerFactory(
-        xServiceManager,
+        xContext,
         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PopupMenu" )) )
 {
 }
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ToolbarControllerFactory                     ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   ToolbarControllerFactory                     ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_TOOLBARCONTROLLERFACTORY            ,
                                             IMPLEMENTATIONNAME_TOOLBARCONTROLLERFACTORY
@@ -242,14 +241,14 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ToolbarControllerFactory            
 
 DEFINE_INIT_SERVICE                     (   ToolbarControllerFactory, {} )
 
-ToolbarControllerFactory::ToolbarControllerFactory( const Reference< XMultiServiceFactory >& xServiceManager ) :
+ToolbarControllerFactory::ToolbarControllerFactory( const Reference< XComponentContext >& xContext ) :
     UIControllerFactory(
-        xServiceManager,
+        xContext,
         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToolBar" )))
 {
 }
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   StatusbarControllerFactory                      ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   StatusbarControllerFactory                      ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_STATUSBARCONTROLLERFACTORY          ,
                                             IMPLEMENTATIONNAME_STATUSBARCONTROLLERFACTORY
@@ -257,9 +256,9 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   StatusbarControllerFactory          
 
 DEFINE_INIT_SERVICE                     (   StatusbarControllerFactory, {} )
 
-StatusbarControllerFactory::StatusbarControllerFactory( const Reference< XMultiServiceFactory >& xServiceManager ) :
+StatusbarControllerFactory::StatusbarControllerFactory( const Reference< XComponentContext >& xContext ) :
     UIControllerFactory(
-        xServiceManager,
+        xContext,
         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StatusBar" )) )
 {
 }

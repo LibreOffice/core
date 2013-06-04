@@ -98,14 +98,14 @@ class TaskCreatorService : public  css::lang::XTypeProvider
         /** @short  the global uno service manager.
             @descr  Must be used to create own needed services.
          */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     //___________________________________________
     // interface
 
     public:
 
-                 TaskCreatorService(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+                 TaskCreatorService(const css::uno::Reference< css::uno::XComponentContext >& xContext);
         virtual ~TaskCreatorService(                                                                   );
 
         // XInterface, XTypeProvider, XServiceInfo

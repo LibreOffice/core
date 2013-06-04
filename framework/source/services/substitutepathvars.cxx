@@ -554,7 +554,7 @@ void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
 //*****************************************************************************************************************
 //      XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  ( SubstitutePathVariables                     ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2( SubstitutePathVariables                     ,
                                           ::cppu::OWeakObject                         ,
                                           "com.sun.star.util.PathSubstitution",
                                           IMPLEMENTATIONNAME_SUBSTITUTEPATHVARIABLES    )
@@ -562,12 +562,12 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  ( SubstitutePathVariables               
 DEFINE_INIT_SERVICE                     (   SubstitutePathVariables, {} )
 
 
-SubstitutePathVariables::SubstitutePathVariables( const Reference< XMultiServiceFactory >& xServiceManager ) :
+SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentContext >& xContext ) :
     ThreadHelpBase(),
     m_aVarStart( SIGN_STARTVARIABLE ),
     m_aVarEnd( SIGN_ENDVARIABLE ),
     m_aImpl( LINK( this, SubstitutePathVariables, implts_ConfigurationNotify )),
-    m_xServiceManager( xServiceManager )
+    m_xContext( xContext )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "SubstitutePathVariables::SubstitutePathVariables" );
     int i;
@@ -684,7 +684,7 @@ OUString SubstitutePathVariables::GetWorkPath() const
     try
     {
         ::comphelper::ConfigurationHelper::readDirectKey(
-                            comphelper::getComponentContext(m_xServiceManager),
+                            m_xContext,
                             OUString("org.openoffice.Office.Paths"),
                             OUString("Paths/Work"),
                             OUString("WritePath"),
@@ -709,7 +709,7 @@ OUString SubstitutePathVariables::GetWorkVariableValue() const
     try
     {
         ::comphelper::ConfigurationHelper::readDirectKey(
-                            comphelper::getComponentContext(m_xServiceManager),
+                            m_xContext,
                             OUString("org.openoffice.Office.Paths"),
                             OUString("Variables"),
                             OUString("Work"),

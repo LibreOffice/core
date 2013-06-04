@@ -61,7 +61,7 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
                    public ::cppu::OWeakObject
 {
     public:
-        TabWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        TabWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
         virtual ~TabWindow();
 
         //  XInterface, XTypeProvider, XServiceInfo
@@ -166,7 +166,7 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
         sal_Int32                                                                        m_nNextTabID;
         OUString                                                                  m_aTitlePropName;
         OUString                                                                  m_aPosPropName;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindow >            m_xTopWindow;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >               m_xContainerWindow;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >               m_xTabControlWindow;

@@ -85,7 +85,7 @@ PRIVATE_DEFINE_XSERVICEINFO_BASE        (   TabWindow                           
 
 DEFINE_INIT_SERVICE                     (   TabWindow, {} )
 
-TabWindow::TabWindow( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) :
+TabWindow::TabWindow( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
     , ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex() )
     , ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
@@ -94,7 +94,7 @@ TabWindow::TabWindow( const css::uno::Reference< css::lang::XMultiServiceFactory
     , m_nNextTabID( 1 )
     , m_aTitlePropName( "Title" )
     , m_aPosPropName( "Position" )
-    , m_xServiceManager( xServiceManager )
+    , m_xContext( xContext )
     , m_aListenerContainer( m_aLock.getShareableOslMutex() )
 {
 }
@@ -282,7 +282,7 @@ throw (css::uno::Exception, css::uno::RuntimeException)
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ResetableGuard aLock( m_aLock );
     sal_Bool                                               bInitalized( m_bInitialized );
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR( m_xServiceManager );
+    css::uno::Reference< css::uno::XComponentContext >     xContext( m_xContext );
     aLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
@@ -293,11 +293,11 @@ throw (css::uno::Exception, css::uno::RuntimeException)
         css::uno::Reference< css::awt::XToolkit2 >  xToolkit;
         css::awt::WindowDescriptor                  aDescriptor;
 
-        if ( xSMGR.is() )
+        if ( xContext.is() )
         {
             try
             {
-                xToolkit = css::awt::Toolkit::create( comphelper::getComponentContext(xSMGR) );
+                xToolkit = css::awt::Toolkit::create( xContext );
             }
             catch ( const css::uno::RuntimeException& )
             {

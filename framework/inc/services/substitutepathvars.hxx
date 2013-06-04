@@ -223,7 +223,7 @@ class SubstitutePathVariables : private ThreadHelpBase, // Struct for right init
     friend class SubstitutePathVariables_Impl;
 
     public:
-        SubstitutePathVariables( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        SubstitutePathVariables( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
         virtual ~SubstitutePathVariables();
 
         //  XInterface, XTypeProvider, XServiceInfo
@@ -281,7 +281,7 @@ class SubstitutePathVariables : private ThreadHelpBase, // Struct for right init
             SubstitutePathVariables_Impl m_aImpl;                 // Implementation class that access the configuration
             ReSubstFixedVarOrderVector   m_aReSubstFixedVarOrder; // To speed up resubstitution fixed variables (order for lookup)
             ReSubstUserVarOrderVector    m_aReSubstUserVarOrder;  // To speed up resubstitution user variables
-            com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
+            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xContext;
 };
 
 }

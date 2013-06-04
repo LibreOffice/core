@@ -50,7 +50,7 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ToolBoxFactory                                  ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   ToolBoxFactory                                  ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_TOOLBARFACTORY                      ,
                                             IMPLEMENTATIONNAME_TOOLBARFACTORY
@@ -58,8 +58,8 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ToolBoxFactory                      
 
 DEFINE_INIT_SERVICE                     (   ToolBoxFactory, {} )
 
-ToolBoxFactory::ToolBoxFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    MenuBarFactory( xServiceManager,true )
+ToolBoxFactory::ToolBoxFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+    MenuBarFactory( xContext,true )
 {
 }
 
@@ -70,11 +70,11 @@ Reference< XUIElement > SAL_CALL ToolBoxFactory::createUIElement(
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
-    ToolBarWrapper* pWrapper = new ToolBarWrapper( comphelper::getComponentContext(m_xServiceManager) );
+    ToolBarWrapper* pWrapper = new ToolBarWrapper( m_xContext );
     Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pWrapper, UNO_QUERY );
     Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
     aLock.unlock();
-    CreateUIElement(ResourceURL,Args,"PopupMode","private:resource/toolbar/",xMenuBar,xModuleManager,comphelper::getComponentContext(m_xServiceManager));
+    CreateUIElement(ResourceURL, Args, "PopupMode", "private:resource/toolbar/", xMenuBar, xModuleManager, m_xContext);
     return xMenuBar;
 }
 

@@ -61,16 +61,16 @@ class UIControllerFactory :  protected ThreadHelpBase, // Struct for right inita
         virtual void SAL_CALL deregisterController( const OUString& aCommandURL, const OUString& aModuleName ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
-        UIControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager, const rtl::OUString &rUINode  );
+        UIControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext, const rtl::OUString &rUINode  );
         sal_Bool                                                                         m_bConfigRead;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xContext;
         ConfigurationAccess_ControllerFactory*                                           m_pConfigAccess;
 };
 
 class PopupMenuControllerFactory :  public UIControllerFactory
 {
     public:
-        PopupMenuControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        PopupMenuControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
 
         //  XInterface, XTypeProvider, XServiceInfo
         DECLARE_XSERVICEINFO
@@ -79,7 +79,7 @@ class PopupMenuControllerFactory :  public UIControllerFactory
 class ToolbarControllerFactory :  public UIControllerFactory
 {
     public:
-        ToolbarControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        ToolbarControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
 
         //  XInterface, XTypeProvider, XServiceInfo
         DECLARE_XSERVICEINFO
@@ -88,7 +88,7 @@ class ToolbarControllerFactory :  public UIControllerFactory
 class StatusbarControllerFactory :  public UIControllerFactory
 {
     public:
-        StatusbarControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        StatusbarControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
 
         //  XInterface, XTypeProvider, XServiceInfo
         DECLARE_XSERVICEINFO

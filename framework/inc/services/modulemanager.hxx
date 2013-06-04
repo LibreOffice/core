@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase3.hxx>
 
 namespace com { namespace sun { namespace star { namespace lang {
@@ -62,7 +63,7 @@ class ModuleManager:
         /** the global uno service manager.
             Must be used to create own needed services.
          */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         //---------------------------------------
         /** points to the underlying configuration.
@@ -93,7 +94,7 @@ class ModuleManager:
             css::uno::Reference< css::lang::XMultiServiceFactory > const &
                 manager);
 
-                 ModuleManager(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+                 ModuleManager(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
         virtual ~ModuleManager(                                                                   );
 

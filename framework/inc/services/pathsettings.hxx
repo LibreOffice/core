@@ -122,7 +122,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
     private:
 
         /** reference to factory, which has create this instance. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /** list of all path variables and her corresponding values. */
         PathSettings::PathHash m_lPaths;
@@ -156,7 +156,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
             Attention: It's neccessary for right function of this class, that the order of base
             classes is the right one. Because we transfer information from one base to another
             during this ctor runs! */
-        PathSettings(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        PathSettings(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
         /** free all used resources ... if it was not already done. */
         virtual ~PathSettings();

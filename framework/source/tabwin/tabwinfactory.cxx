@@ -46,7 +46,7 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   TabWinFactory                                   ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   TabWinFactory                                   ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_TABWINFACTORY                       ,
                                             IMPLEMENTATIONNAME_TABWINFACTORY
@@ -54,9 +54,9 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   TabWinFactory                       
 
 DEFINE_INIT_SERVICE                     (   TabWinFactory, {} )
 
-TabWinFactory::TabWinFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
+TabWinFactory::TabWinFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_xServiceManager( xServiceManager )
+    , m_xContext( xContext )
 {
 }
 
@@ -65,12 +65,12 @@ TabWinFactory::~TabWinFactory()
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL TabWinFactory::createInstanceWithContext(
-    const css::uno::Reference< css::uno::XComponentContext >& Context )
+    const css::uno::Reference< css::uno::XComponentContext >& xContext )
 throw ( css::uno::Exception, css::uno::RuntimeException )
 {
     css::uno::Sequence< css::uno::Any > aArgs;
 
-    return createInstanceWithArgumentsAndContext( aArgs, Context );
+    return createInstanceWithArgumentsAndContext( aArgs, xContext );
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL TabWinFactory::createInstanceWithArgumentsAndContext(
@@ -82,7 +82,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException )
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ResetableGuard aLock( m_aLock );
     css::uno::Reference< css::awt::XToolkit2 > xToolkit = m_xToolkit;
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR( m_xServiceManager );
+    css::uno::Reference< css::uno::XComponentContext > xContext( m_xContext );
     aLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
@@ -99,9 +99,9 @@ throw ( css::uno::Exception, css::uno::RuntimeException )
         }
     }
 
-    if ( !xToolkit.is() && xSMGR.is() )
+    if ( !xToolkit.is() && xContext.is() )
     {
-        xToolkit = css::awt::Toolkit::create( comphelper::getComponentContext(xSMGR) );
+        xToolkit = css::awt::Toolkit::create( xContext );
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         aLock.lock();
         m_xToolkit = xToolkit;
@@ -130,7 +130,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException )
 
     if ( xTopWindow.is() )
     {
-        TabWindow* pTabWindow = new TabWindow( xSMGR );
+        TabWindow* pTabWindow = new TabWindow( xContext );
 
         css::uno::Sequence< css::uno::Any > aArgs( 1 );
 
