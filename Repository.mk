@@ -210,6 +210,12 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 
 endif
 
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,BASE, \
+    abp \
+    dbp \
+    dbu \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,GRAPHICFILTER, \
     svgfilter \
     flash \
@@ -376,7 +382,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,WRITER, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-    abp \
     acc \
 	adabas \
 	adabasui \
@@ -395,8 +400,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     AppleRemote \
     avmediaQuickTime \
     calc \
-    dbp \
-    dbu \
 	filtertracer \
     log \
 	MacOSXSpell \

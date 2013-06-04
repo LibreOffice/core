@@ -18,6 +18,8 @@
 
 #include "macros.inc"
 
+#include "AutoInstallLibs/base"
+
 Module gid_Module_Prg_Base
     MOD_NAME_DESC(MODULE_PRG_BASE);
     ParentID = gid_Module_Prg;
@@ -33,11 +35,8 @@ Module gid_Module_Prg_Base_Bin
     Minimal = NO;
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Files = (
+    Files = (auto_Base_Lib_ALL
         gid_File_Share_Registry_Base_Xcd
-        ,gid_File_Lib_Abp
-        ,gid_File_Lib_Dbp
-        ,gid_File_Lib_Dbu
     );
 End
 
