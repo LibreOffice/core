@@ -76,7 +76,7 @@ OConnection::~OConnection()
 //-----------------------------------------------------------------------------
 void SAL_CALL OConnection::release() throw()
 {
-    printf("DEBUG !!! connectivity.firebird => OConnection::release() \n" );
+    SAL_INFO("connectivity.firebird", "=> OConnection::release().");
 
     relase_ChildImpl();
 }
@@ -88,21 +88,20 @@ void SAL_CALL OConnection::release() throw()
  */
 static int pr_error (long* status, char* operation)
 {
-    printf("[\n");
-    printf("PROBLEM ON \"%s\".\n", operation);
+    SAL_WARN("connectivity.firebird", "=> OConnection static pr_error().");
 
     isc_print_status(status);
 
-    printf("SQLCODE:%d\n", isc_sqlcode(status));
-
-    printf("]\n");
+    SAL_WARN("connectivity.firebird", "=> OConnection static pr_error(). "
+             "PROBLEM ON " << operation << ". "
+             "SQLCODE: " << isc_sqlcode(status) << ".");
 
     return 1;
 }
 
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
-    printf("DEBUG !!! connectivity.firebird => OConnection::construct() \n" );
+    SAL_INFO("connectivity.firebird", "=> OConnection::construct()." );
 
     osl_atomic_increment( &m_refCount );
 
@@ -123,7 +122,7 @@ IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.firebird.OConnect
 // --------------------------------------------------------------------------------
 Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
-    printf("DEBUG !!! connectivity.firebird => OConnection::createStatement got called \n");
+    SAL_INFO("connectivity.firebird", "=> OConnection::createStatement().");
 
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -137,8 +136,8 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
 {
-    printf("DEBUG !!! connectivity.firebird => OConnection::prepareStatement got called with sql: %s \n",
-           OUStringToOString(_sSql , RTL_TEXTENCODING_ASCII_US ).getStr());
+    SAL_INFO("connectivity.firebird", "=> OConnection::prepareStatement(). "
+             "Got called with sql: " << _sSql);
 
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -147,14 +146,16 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     if(m_aTypeInfo.empty())
         buildTypeInfo();
 
-    printf("DEBUG !!! connectivity.firebird => OConnection::prepareStatement Creating prepared statement. \n");
+    SAL_INFO("connectivity.firebird", "=> OConnection::prepareStatement(). "
+             "Creating prepared statement.");
 
     // create a statement
     // the statement can only be executed more than once
     Reference< XPreparedStatement > xReturn = new OPreparedStatement(this,m_aTypeInfo,_sSql);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
 
-    printf("DEBUG !!! connectivity.firebird => OConnection::prepareStatement Prepared Statement created. \n");
+    SAL_INFO("connectivity.firebird", "=> OConnection::prepareStatement(). "
+             "Prepared Statement created.");
 
     return xReturn;
 }
@@ -220,7 +221,7 @@ sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException
 // --------------------------------------------------------------------------------
 Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
-    printf ("DEBUG !!! connectivity.firebird => OConnection::getMetaData() \n");
+    SAL_INFO("connectivity.firebird", "=> OConnection::getMetaData().");
 
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -309,7 +310,7 @@ void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::contai
 // XCloseable
 void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
 {
-    printf("DEBUG !!! connectivity.firebird => OConnection::close() \n" );
+    SAL_INFO("connectivity.firebird", "=> OConnection::close().");
 
     // we just dispose us
     {
@@ -334,7 +335,7 @@ void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 //--------------------------------------------------------------------
 void OConnection::buildTypeInfo() throw( SQLException)
 {
-    printf("DEBUG !!! connectivity.firebird => OConnection::buildTypeInfo() got called \n");
+    SAL_INFO("connectivity.firebird", "=> OConnection::buildTypeInfo().");
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -373,19 +374,21 @@ void OConnection::buildTypeInfo() throw( SQLException)
         m_aTypeInfo.push_back(aInfo);
     }
 
-    printf("DEBUG !!! connectivity.firebird => OConnection::buildTypeInfo() type info built. \n");
+    SAL_INFO("connectivity.firebird", "=> OConnection::buildTypeInfo(). "
+             "Type info built.");
 
     // Close the result set/statement.
 
     Reference< XCloseable> xClose(xRs,UNO_QUERY);
     xClose->close();
 
-    printf("DEBUG !!! connectivity.firebird => OConnection::buildTypeInfo() closed. \n");
+    SAL_INFO("connectivity.firebird", "=> OConnection::buildTypeInfo(). "
+             "Closed.");
 }
 //------------------------------------------------------------------------------
 void OConnection::disposing()
 {
-    printf("DEBUG !!! connectivity.firebird => OConnection::disposing(). \n");
+    SAL_INFO("connectivity.firebird", "=> OConnection::disposing().");
 
     // we noticed that we should be destroied in near future so we have to dispose our statements
     ::osl::MutexGuard aGuard(m_aMutex);

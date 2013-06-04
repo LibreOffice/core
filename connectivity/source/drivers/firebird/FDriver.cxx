@@ -49,6 +49,7 @@ namespace connectivity
         //------------------------------------------------------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL FirebirdDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
         {
+            SAL_INFO("connectivity.firebird", "=> ODriver_BASE::FirebirdDriver_CreateInstance()" );
             return *(new FirebirdDriver());
         }
     }
@@ -120,6 +121,8 @@ Sequence< ::rtl::OUString > SAL_CALL FirebirdDriver::getSupportedServiceNames(  
 // --------------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL FirebirdDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
+    SAL_INFO("connectivity.firebird", "=> ODriver_BASE::connect(), URL: " << url );
+
     // create a new connection with the given properties and append it to our vector
     OConnection* pCon = new OConnection(this);
     Reference< XConnection > xCon = pCon;   // important here because otherwise the connection could be deleted inside (refcount goes -> 0)

@@ -790,7 +790,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
 {
-    printf("DEBUG !!! connectivity.firebird => ODatabaseMetaData::getTypeInfo got called \n");
+    SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTypeInfo().");
 
     // this returns an empty resultset where the column-names are already set
     // in special the metadata of the resultset already returns the right columns
@@ -858,9 +858,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     const Any& catalog, const ::rtl::OUString& schemaPattern,
     const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
 {
-    printf("DEBUG !!! connectivity.firebird => ODatabaseMetaData::getTables() got called with schemaPattern: %s and tableNamePattern: %s \n",
-           OUStringToOString( schemaPattern, RTL_TEXTENCODING_ASCII_US ).getStr(),
-           OUStringToOString( tableNamePattern, RTL_TEXTENCODING_ASCII_US ).getStr());
+    SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTables(). "
+             "Got called with schemaPattern: " << schemaPattern << " , "
+             "TableNamePattern: " << tableNamePattern);
 
     ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
     Reference< XResultSet > xResultSet = pResultSet;
@@ -873,13 +873,15 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             "AND 'schema' LIKE ? "
             "AND RDB$RELATION_NAME LIKE ? ");
 
-    printf("DEBUG !!! connectivity.firebird => ODatabaseMetaData::getTables() Setting query parameters. \n");
+    SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTables(). "
+             "Setting query parameters.");
 
     Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
     parameters->setString( 1 , schemaPattern );
     parameters->setString( 2 , tableNamePattern );
 
-    printf("DEBUG !!! connectivity.firebird => ODatabaseMetaData::getTables() About to execute the query. \n");
+    SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTables(). "
+             "About to execute the query.");
 
     Reference< XResultSet > rs = statement->executeQuery();
     Reference< XRow > xRow( rs, UNO_QUERY_THROW );
@@ -897,14 +899,17 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
         rows++;
         if (rows < 10)
-            printf("DEBUG !!! row %i : ", rows);
+            SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTables(). "
+                     "Row: " << rows);
         else
-            printf("DEBUG !!! row %i: ", rows);
-        printf("%s | ", OUStringToOString( schema, RTL_TEXTENCODING_UTF8 ).getStr());
-        printf("%s | ", OUStringToOString( aTableName, RTL_TEXTENCODING_UTF8 ).getStr());
-        printf("%i | ", systemFlag);
-        printf("%i | ", systemFlag);
-        printf("%s | \n", OUStringToOString( desc, RTL_TEXTENCODING_UTF8 ).getStr());
+            SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTables(). "
+                     "Row: " << rows);
+        SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTables(). "
+                 << schema << " | "
+                 << aTableName << " | "
+                 << systemFlag << " | "
+                 << systemFlag << " | "
+                 << OUStringToOString);
 
         OUString aTableType;
         if( 1 == systemFlag )

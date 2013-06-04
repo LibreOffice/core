@@ -60,14 +60,13 @@ using namespace com::sun::star::util;
  */
 static int pr_error (long* status, char* operation)
 {
-    printf("[\n");
-    printf("PROBLEM ON \"%s\".\n", operation);
+    SAL_WARN("connectivity.firebird", "=> OResultSet static pr_error().");
 
     isc_print_status(status);
 
-    printf("SQLCODE:%d\n", isc_sqlcode(status));
-
-    printf("]\n");
+    SAL_WARN("connectivity.firebird", "=> OResultSet static pr_error(). "
+             "PROBLEM ON " << operation << ". "
+             "SQLCODE: " << isc_sqlcode(status) << ".");
 
     return 1;
 }
@@ -109,6 +108,8 @@ OResultSet::OResultSet(OStatement_Base* pStmt)
     ,m_bWasNull(sal_True)
     ,m_row(-1)
 {
+    SAL_INFO("connectivity.firebird", "=> OResultSet::OResultSet().");
+
     isc_stmt_handle stmt = m_pStatement->getSTMTHandler();
     XSQLDA *sqlda = m_pStatement->getOUTsqlda();
     if (sqlda == NULL)
@@ -137,7 +138,8 @@ OResultSet::OResultSet(OStatement_Base* pStmt)
     }
     if (retcode != 100L)
     {
-        printf("DEBUG !!! retcode %i: ", retcode);
+        SAL_INFO("connectivity.firebird", "=> OResultSet::OResultSet(). "
+                 "Retcode: " << retcode);
         if (pr_error(status, "fetch data"))
             return;
     }
@@ -152,7 +154,7 @@ OResultSet::~OResultSet()
 // -------------------------------------------------------------------------
 void OResultSet::disposing(void)
 {
-    printf("DEBUG !!! connectivity.firebird => OResultSet::disposing() \n" );
+    SAL_INFO("connectivity.firebird", "=> OResultSet::disposing().");
 
     OPropertySetHelper::disposing();
 
@@ -464,7 +466,7 @@ void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 
 void SAL_CALL OResultSet::close(  ) throw(SQLException, RuntimeException)
 {
-    printf("DEBUG !!! connectivity.firebird => OResultSet::close() \n" );
+    SAL_INFO("connectivity.firebird", "=> OResultSet::close().");
 
     {
         ::osl::MutexGuard aGuard( m_aMutex );
