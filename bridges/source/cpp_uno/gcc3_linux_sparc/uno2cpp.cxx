@@ -70,9 +70,9 @@ void callVirtualMethod( void * pAdjustedThisPtr,
     // never called
     if (! pAdjustedThisPtr) CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something
 
-    volatile long o0 = 0, o1 = 0; // for register returns
-    volatile double f0d = 0;
-    volatile float f0f = 0;
+    long o0, o1; // for register returns
+    double f0d;
+    float f0f;
     volatile long long saveReg[7];
 
     __asm__ (
@@ -231,12 +231,15 @@ void callVirtualMethod( void * pAdjustedThisPtr,
         "ldd [%%l7], %%o4\n\t"
         "add %%l7, 8, %%l7\n\t"
         "ldd [%%l7], %%l6\n\t"
-        : :
-        "m"(o0),
-        "m"(o1),
-        "m"(f0d),
-        "m"(f0f),
+        :
+        "=m"(o0),
+        "=m"(o1),
+        "=m"(f0d),
+        "=m"(f0f),
+        :
         "r"(&saveReg[0])
+        :
+        "memory"
         );
     switch( eReturnType )
     {
