@@ -264,8 +264,14 @@ Reference< XNameContainer > VbaProject::createDialogLibrary()
 
 void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr )
 {
+    readVbaModules( rVbaPrjStrg );
+    importModulesAndForms(rVbaPrjStrg, rGraphicHelper, bDefaultColorBgr );
+}
+
+void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
+{
     StorageRef xVbaStrg = rVbaPrjStrg.openSubStorage( "VBA", false );
-    OSL_ENSURE( xVbaStrg.get(), "VbaProject::importVba - cannot open 'VBA' substorage" );
+    OSL_ENSURE( xVbaStrg.get(), "VbaProject::readVbaModules - cannot open 'VBA' substorage" );
     if( !xVbaStrg )
         return;
 
@@ -288,8 +294,6 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
     sal_uInt16 nModuleCount = 0;
     bool bExecutable = isImportVbaExecutable();
 
-    typedef RefMap< OUString, VbaModule > VbaModuleMap;
-    VbaModuleMap aModules, aModulesByStrm;
 
     sal_uInt16 nRecId = 0;
     StreamDataSequence aRecData;
@@ -304,7 +308,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             case VBA_ID_PROJECTCODEPAGE:
             {
                 OOX_ENSURE_RECORDSIZE( nRecSize == 2 );
-                OSL_ENSURE( aModules.empty(), "VbaProject::importVba - unexpected PROJECTCODEPAGE record" );
+                OSL_ENSURE( maModules.empty(), "VbaProject::importVba - unexpected PROJECTCODEPAGE record" );
                 rtl_TextEncoding eNewTextEnc = rtl_getTextEncodingFromWindowsCodePage( aRecStrm.readuInt16() );
                 OSL_ENSURE( eNewTextEnc != RTL_TEXTENCODING_DONTKNOW, "VbaProject::importVba - unknown text encoding" );
                 if( eNewTextEnc != RTL_TEXTENCODING_DONTKNOW )
@@ -321,26 +325,26 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             break;
             case VBA_ID_PROJECTMODULES:
                 OOX_ENSURE_RECORDSIZE( nRecSize == 2 );
-                OSL_ENSURE( aModules.empty(), "VbaProject::importVba - unexpected PROJECTMODULES record" );
+                OSL_ENSURE( maModules.empty(), "VbaProject::importVba - unexpected PROJECTMODULES record" );
                 aRecStrm >> nModuleCount;
             break;
             case VBA_ID_MODULENAME:
             {
                 OUString aName = aRecStrm.readCharArrayUC( nRecSize, eTextEnc );
                 OSL_ENSURE( !aName.isEmpty(), "VbaProject::importVba - invalid module name" );
-                OSL_ENSURE( !aModules.has( aName ), "VbaProject::importVba - multiple modules with the same name" );
-                VbaModuleMap::mapped_type& rxModule = aModules[ aName ];
+                OSL_ENSURE( !maModules.has( aName ), "VbaProject::importVba - multiple modules with the same name" );
+                VbaModuleMap::mapped_type& rxModule = maModules[ aName ];
                 rxModule.reset( new VbaModule( mxContext, mxDocModel, aName, eTextEnc, bExecutable ) );
                 // read all remaining records until the MODULEEND record
                 rxModule->importDirRecords( aDirStrm );
-                OSL_ENSURE( !aModulesByStrm.has( rxModule->getStreamName() ), "VbaProject::importVba - multiple modules with the same stream name" );
-                aModulesByStrm[ rxModule->getStreamName() ] = rxModule;
+                OSL_ENSURE( !maModulesByStrm.has( rxModule->getStreamName() ), "VbaProject::importVba - multiple modules with the same stream name" );
+                maModulesByStrm[ rxModule->getStreamName() ] = rxModule;
             }
             break;
 #undef OOX_ENSURE_RECORDSIZE
         }
     }
-    OSL_ENSURE( nModuleCount == aModules.size(), "VbaProject::importVba - invalid module count" );
+    OSL_ENSURE( nModuleCount == maModules.size(), "VbaProject::importVba - invalid module count" );
 
     /*  The directory does not contain the real type of the modules, it
         distinguishes only between 'procedural' and 'document' (the latter
@@ -397,34 +401,15 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
 
                 if( (nType != ModuleType::UNKNOWN) && !aValue.isEmpty() )
                 {
-                    OSL_ENSURE( aModules.has( aValue ), "VbaProject::importVba - module not found" );
-                    if( VbaModule* pModule = aModules.get( aValue ).get() )
+                    OSL_ENSURE( maModules.has( aValue ), "VbaProject::importVba - module not found" );
+                    if( VbaModule* pModule = maModules.get( aValue ).get() )
                         pModule->setType( nType );
                 }
             }
         }
     }
-
-    // create empty dummy modules
-    VbaModuleMap aDummyModules;
-    for( DummyModuleMap::iterator aIt = maDummyModules.begin(), aEnd = maDummyModules.end(); aIt != aEnd; ++aIt )
+    if( !maModules.empty() ) try
     {
-        OSL_ENSURE( !aModules.has( aIt->first ) && !aDummyModules.has( aIt->first ), "VbaProject::importVba - multiple modules with the same name" );
-        VbaModuleMap::mapped_type& rxModule = aDummyModules[ aIt->first ];
-        rxModule.reset( new VbaModule( mxContext, mxDocModel, aIt->first, eTextEnc, bExecutable ) );
-        rxModule->setType( aIt->second );
-    }
-
-    /*  Now it is time to load the source code. All modules will be inserted
-        into the Basic library of the document specified by the 'maPrjName'
-        member. Do not create the Basic library, if there are no modules
-        specified. */
-    if( !aModules.empty() || !aDummyModules.empty() ) try
-    {
-        // get the model factory and the basic library
-        Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
-        Reference< XNameContainer > xBasicLib( createBasicLibrary(), UNO_SET_THROW );
-
         /*  Set library container to VBA compatibility mode. This will create
             the VBA Globals object and store it in the Basic manager of the
             document. */
@@ -438,6 +423,40 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         catch(const Exception& )
         {
         }
+    }
+    catch(const Exception& )
+    {
+    }
+}
+
+void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr )
+{
+    StorageRef xVbaStrg = rVbaPrjStrg.openSubStorage( "VBA", false );
+    OSL_ENSURE( xVbaStrg.get(), "VbaProject::importModulesAndForms - cannot open 'VBA' substorage" );
+    if( !xVbaStrg )
+        return;
+    rtl_TextEncoding eTextEnc = RTL_TEXTENCODING_MS_1252;
+    bool bExecutable = isImportVbaExecutable();
+
+    // create empty dummy modules
+    VbaModuleMap aDummyModules;
+    for( DummyModuleMap::iterator aIt = maDummyModules.begin(), aEnd = maDummyModules.end(); aIt != aEnd; ++aIt )
+    {
+        OSL_ENSURE( !maModules.has( aIt->first ) && !aDummyModules.has( aIt->first ), "VbaProject::importVba - multiple modules with the same name" );
+        VbaModuleMap::mapped_type& rxModule = aDummyModules[ aIt->first ];
+        rxModule.reset( new VbaModule( mxContext, mxDocModel, aIt->first, eTextEnc, bExecutable ) );
+        rxModule->setType( aIt->second );
+    }
+
+    /*  Now it is time to load the source code. All modules will be inserted
+        into the Basic library of the document specified by the 'maPrjName'
+        member. Do not create the Basic library, if there are no modules
+        specified. */
+    if( !maModules.empty() || !aDummyModules.empty() ) try
+    {
+        // get the model factory and the basic library
+        Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
+        Reference< XNameContainer > xBasicLib( createBasicLibrary(), UNO_SET_THROW );
 
         // try to get access to document objects related to code modules
         Reference< XNameAccess > xDocObjectNA;
@@ -454,7 +473,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         {
             // #TODO cater for mxOleOverridesSink, like I used to before
             // call Basic source code import for each module, boost::[c]ref enforces pass-by-ref
-            aModules.forEachMem( &VbaModule::createAndImportModule,
+            maModules.forEachMem( &VbaModule::createAndImportModule,
                 ::boost::ref( *xVbaStrg ), ::boost::cref( xBasicLib ),
                 ::boost::cref( xDocObjectNA ) );
 
@@ -482,7 +501,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             if( xSubStrg.get() ) try
             {
                 // resolve module name from storage name (which equals the module stream name)
-                VbaModule* pModule = aModulesByStrm.get( *aIt ).get();
+                VbaModule* pModule = maModulesByStrm.get( *aIt ).get();
                 OSL_ENSURE( pModule && (pModule->getType() == ModuleType::FORM),
                     "VbaProject::importVba - form substorage without form module" );
                 OUString aModuleName;

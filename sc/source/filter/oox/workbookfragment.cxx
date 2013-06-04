@@ -51,6 +51,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Calc.hxx>
+#include "oox/ole/vbaproject.hxx"
 
 namespace oox {
 namespace xls {
@@ -299,6 +300,19 @@ void WorkbookFragment::finalizeImport()
     // create all defined names and database ranges
     getDefinedNames().finalizeImport();
     getTables().finalizeImport();
+    // open the VBA project storage
+    OUString aVbaFragmentPath = getFragmentPathFromFirstType( CREATE_MSOFFICE_RELATION_TYPE( "vbaProject" ) );
+    if( !aVbaFragmentPath.isEmpty() )
+    {
+        Reference< XInputStream > xInStrm = getBaseFilter().openInputStream( aVbaFragmentPath );
+        if( xInStrm.is() )
+        {
+            StorageRef xPrjStrg( new ::oox::ole::OleStorage( getBaseFilter().getComponentContext(), xInStrm, false ) );
+            setVbaProjectStorage( xPrjStrg );
+            getBaseFilter().getVbaProject().readVbaModules( *xPrjStrg );
+        }
+    }
+
     // load all worksheets
     for( SheetFragmentVector::iterator aIt = aSheetFragments.begin(), aEnd = aSheetFragments.end(); aIt != aEnd; ++aIt )
     {
@@ -316,15 +330,6 @@ void WorkbookFragment::finalizeImport()
         // delete fragment object and WorkbookGlobals object, will free all allocated sheet buffers
         aIt->second.clear();
         aIt->first.reset();
-    }
-
-    // open the VBA project storage
-    OUString aVbaFragmentPath = getFragmentPathFromFirstType( CREATE_MSOFFICE_RELATION_TYPE( "vbaProject" ) );
-    if( !aVbaFragmentPath.isEmpty() )
-    {
-        Reference< XInputStream > xInStrm = getBaseFilter().openInputStream( aVbaFragmentPath );
-        if( xInStrm.is() )
-            setVbaProjectStorage( StorageRef( new ::oox::ole::OleStorage( getBaseFilter().getComponentContext(), xInStrm, false ) ) );
     }
 
     // final conversions, e.g. calculation settings and view settings

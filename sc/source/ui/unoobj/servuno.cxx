@@ -618,7 +618,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             }
             break;
         case SC_SERVICE_VBACODENAMEPROVIDER:
-            if ( pDocShell && ooo::vba::isAlienExcelDoc( *pDocShell ) && isInVBAMode( *pDocShell ) )
+            if ( pDocShell && isInVBAMode( *pDocShell ) )
             {
                 OSL_TRACE("**** creating VBA Object provider");
                 xRet.set(static_cast<document::XCodeNameQuery*>(new ScVbaCodeNameProvider(*pDocShell)));

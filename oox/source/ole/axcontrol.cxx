@@ -2704,6 +2704,7 @@ EmbeddedForm::EmbeddedForm( const Reference< XModel >& rxDocModel,
 
 Reference< XControlModel > EmbeddedForm::convertAndInsert( const EmbeddedControl& rControl, sal_Int32& rnCtrlIndex )
 {
+    Reference< XControlModel > xRet;
     if( mxModelFactory.is() && rControl.hasModel() ) try
     {
         // create the UNO control model
@@ -2711,20 +2712,19 @@ Reference< XControlModel > EmbeddedForm::convertAndInsert( const EmbeddedControl
         Reference< XFormComponent > xFormComp( mxModelFactory->createInstance( aServiceName ), UNO_QUERY_THROW );
         Reference< XControlModel > xCtrlModel( xFormComp, UNO_QUERY_THROW );
 
+        // convert the control properties
+        if( rControl.convertProperties( xCtrlModel, maControlConv ) )
+            xRet = xCtrlModel;
         // insert the control into the form
         Reference< XIndexContainer > xFormIC( createXForm(), UNO_SET_THROW );
         rnCtrlIndex = xFormIC->getCount();
         xFormIC->insertByIndex( rnCtrlIndex, Any( xFormComp ) );
-
-        // convert the control properties
-        if( rControl.convertProperties( xCtrlModel, maControlConv ) )
-            return xCtrlModel;
     }
     catch (const Exception& e)
     {
         SAL_WARN("oox", "exception creating Control: " << e.Message);
     }
-    return Reference< XControlModel >();
+    return xRet;
 }
 
 Reference< XIndexContainer > EmbeddedForm::createXForm()
