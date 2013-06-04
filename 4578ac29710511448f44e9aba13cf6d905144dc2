@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7yY\u003d",
+        "filename": "linguistic/source/lngsvcmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2013-06-04T14:23:13Z",
+      "side": 1,
+      "message": "This looks wrong, OSL_ENSURE expects the value to be \u003d\u003d 1, but this warns if it is \u003c\u003d 1.",
+      "revId": "4578ac29710511448f44e9aba13cf6d905144dc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
