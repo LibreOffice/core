@@ -2936,6 +2936,125 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell *p
     return bInvariant ? EqualInvariant : EqualRelativeRef;
 }
 
+namespace {
+
+class GroupTokenConverter
+{
+    sc::FormulaGroupContext maCxt;
+    ScTokenArray& mrGroupTokens;
+    ScDocument& mrDoc;
+    ScFormulaCell& mrCell;
+public:
+    GroupTokenConverter(ScTokenArray& rGroupTokens, ScDocument& rDoc, ScFormulaCell& rCell) :
+        mrGroupTokens(rGroupTokens), mrDoc(rDoc), mrCell(rCell) {}
+
+    bool convert(ScTokenArray& rCode)
+    {
+        rCode.Reset();
+        for (const formula::FormulaToken* p = rCode.First(); p; p = rCode.Next())
+        {
+            // A reference can be either absolute or relative.  If it's absolute,
+            // convert it to a static value token.  If relative, convert it to a
+            // vector reference token.  Note: we only care about relative vs
+            // absolute reference state for row directions.
+
+            const ScToken* pToken = static_cast<const ScToken*>(p);
+            switch (pToken->GetType())
+            {
+                case svSingleRef:
+                {
+                    ScSingleRefData aRef = pToken->GetSingleRef();
+                    aRef.CalcAbsIfRel(mrCell.aPos);
+                    ScAddress aRefPos(aRef.nCol, aRef.nRow, aRef.nTab);
+                    if (aRef.IsRowRel())
+                    {
+                        // Fetch double array guarantees that the length of the
+                        // returned array equals or greater than the requested
+                        // length.
+
+                        // TODO: For now, it returns an array pointer only when
+                        // the entire array is in contiguous memory space.  Once
+                        // we finish cell storage rework, we'll support temporary
+                        // generation of a double array which is a combination of
+                        // multiple cell array segments.
+                        const double* pArray = mrDoc.FetchDoubleArray(maCxt, aRefPos, mrCell.GetCellGroup()->mnLength);
+                        if (!pArray)
+                            return false;
+
+                        formula::SingleVectorRefToken aTok(pArray, mrCell.GetCellGroup()->mnLength);
+                        mrGroupTokens.AddToken(aTok);
+                    }
+                    else
+                    {
+                        // Absolute row reference.
+                        formula::FormulaTokenRef pNewToken = mrDoc.ResolveStaticReference(aRefPos);
+                        if (!pNewToken)
+                            return false;
+
+                        mrGroupTokens.AddToken(*pNewToken);
+                    }
+                }
+                break;
+                case svDoubleRef:
+                {
+                    ScComplexRefData aRef = pToken->GetDoubleRef();
+                    aRef.CalcAbsIfRel(mrCell.aPos);
+                    if (aRef.Ref1.IsRowRel() || aRef.Ref2.IsRowRel())
+                    {
+                        // Row reference is relative.
+                        bool bAbsFirst = !aRef.Ref1.IsRowRel();
+                        bool bAbsLast = !aRef.Ref2.IsRowRel();
+                        ScAddress aRefPos(aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab);
+                        size_t nCols = aRef.Ref2.nCol - aRef.Ref1.nCol + 1;
+                        std::vector<const double*> aArrays;
+                        aArrays.reserve(nCols);
+                        SCROW nArrayLength = mrCell.GetCellGroup()->mnLength;
+                        SCROW nRefRowSize = aRef.Ref2.nRow - aRef.Ref1.nRow + 1;
+                        if (!bAbsLast)
+                        {
+                            // range end position is relative. Extend the array length.
+                            nArrayLength += nRefRowSize - 1;
+                        }
+
+                        for (SCCOL i = aRef.Ref1.nCol; i <= aRef.Ref2.nCol; ++i)
+                        {
+                            aRefPos.SetCol(i);
+                            const double* pArray = mrDoc.FetchDoubleArray(maCxt, aRefPos, nArrayLength);
+                            if (!pArray)
+                                return false;
+
+                            aArrays.push_back(pArray);
+                        }
+
+                        formula::DoubleVectorRefToken aTok(aArrays, nArrayLength, nRefRowSize, bAbsFirst, bAbsLast);
+                        mrGroupTokens.AddToken(aTok);
+                    }
+                    else
+                    {
+                        // Absolute row reference.
+                        ScRange aRefRange(
+                            aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab,
+                            aRef.Ref2.nCol, aRef.Ref2.nRow, aRef.Ref2.nTab);
+
+                        formula::FormulaTokenRef pNewToken = mrDoc.ResolveStaticReference(aRefRange);
+                        if (!pNewToken)
+                            return false;
+
+                        mrGroupTokens.AddToken(*pNewToken);
+                    }
+                }
+                break;
+                default:
+                    mrGroupTokens.AddToken(*pToken);
+            }
+        }
+
+        return true;
+    }
+};
+
+}
+
 bool ScFormulaCell::InterpretFormulaGroup()
 {
     // Re-build formulae groups if necessary - ideally this is done at
@@ -2964,104 +3083,9 @@ bool ScFormulaCell::InterpretFormulaGroup()
     sc::FormulaGroupContext aCxt;
 
     ScTokenArray aCode;
-    pCode->Reset();
-    for (const formula::FormulaToken* p = pCode->First(); p; p = pCode->Next())
-    {
-        // A reference can be either absolute or relative.  If it's absolute,
-        // convert it to a static value token.  If relative, convert it to a
-        // vector reference token.  Note: we only care about relative vs
-        // absolute reference state for row directions.
-
-        const ScToken* pToken = static_cast<const ScToken*>(p);
-        switch (pToken->GetType())
-        {
-            case svSingleRef:
-            {
-                ScSingleRefData aRef = pToken->GetSingleRef();
-                aRef.CalcAbsIfRel(aPos);
-                ScAddress aRefPos(aRef.nCol, aRef.nRow, aRef.nTab);
-                if (aRef.IsRowRel())
-                {
-                    // Fetch double array guarantees that the length of the
-                    // returned array equals or greater than the requested
-                    // length.
-
-                    // TODO: For now, it returns an array pointer only when
-                    // the entire array is in contiguous memory space.  Once
-                    // we finish cell storage rework, we'll support temporary
-                    // generation of a double array which is a combination of
-                    // multiple cell array segments.
-                    const double* pArray = pDocument->FetchDoubleArray(aCxt, aRefPos, xGroup->mnLength);
-                    if (!pArray)
-                        return false;
-
-                    formula::SingleVectorRefToken aTok(pArray, xGroup->mnLength);
-                    aCode.AddToken(aTok);
-                }
-                else
-                {
-                    // Absolute row reference.
-                    formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefPos);
-                    if (!pNewToken)
-                        return false;
-
-                    aCode.AddToken(*pNewToken);
-                }
-            }
-            break;
-            case svDoubleRef:
-            {
-                ScComplexRefData aRef = pToken->GetDoubleRef();
-                aRef.CalcAbsIfRel(aPos);
-                if (aRef.Ref1.IsRowRel() || aRef.Ref2.IsRowRel())
-                {
-                    // Row reference is relative.
-                    bool bAbsFirst = !aRef.Ref1.IsRowRel();
-                    bool bAbsLast = !aRef.Ref2.IsRowRel();
-                    ScAddress aRefPos(aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab);
-                    size_t nCols = aRef.Ref2.nCol - aRef.Ref1.nCol + 1;
-                    std::vector<const double*> aArrays;
-                    aArrays.reserve(nCols);
-                    SCROW nArrayLength = xGroup->mnLength;
-                    SCROW nRefRowSize = aRef.Ref2.nRow - aRef.Ref1.nRow + 1;
-                    if (!bAbsLast)
-                    {
-                        // range end position is relative. Extend the array length.
-                        nArrayLength += nRefRowSize - 1;
-                    }
-
-                    for (SCCOL i = aRef.Ref1.nCol; i <= aRef.Ref2.nCol; ++i)
-                    {
-                        aRefPos.SetCol(i);
-                        const double* pArray = pDocument->FetchDoubleArray(aCxt, aRefPos, nArrayLength);
-                        if (!pArray)
-                            return false;
-
-                        aArrays.push_back(pArray);
-                    }
-
-                    formula::DoubleVectorRefToken aTok(aArrays, nArrayLength, nRefRowSize, bAbsFirst, bAbsLast);
-                    aCode.AddToken(aTok);
-                }
-                else
-                {
-                    // Absolute row reference.
-                    ScRange aRefRange(
-                        aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab,
-                        aRef.Ref2.nCol, aRef.Ref2.nRow, aRef.Ref2.nTab);
-
-                    formula::FormulaTokenRef pNewToken = pDocument->ResolveStaticReference(aRefRange);
-                    if (!pNewToken)
-                        return false;
-
-                    aCode.AddToken(*pNewToken);
-                }
-            }
-            break;
-            default:
-                aCode.AddToken(*pToken);
-        }
-    }
+    GroupTokenConverter aConverter(aCode, *pDocument, *this);
+    if (!aConverter.convert(*pCode))
+        return false;
 
     sc::FormulaGroupInterpreter aInterpreter(*pDocument, aPos, xGroup, aCode);
     return aInterpreter.interpret();
