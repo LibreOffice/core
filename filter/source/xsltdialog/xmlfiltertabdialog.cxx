@@ -38,9 +38,9 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 
-XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const Reference< XMultiServiceFactory >& rxMSF, const filter_info_impl* pInfo ) :
+XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const Reference< XComponentContext >& rxContext, const filter_info_impl* pInfo ) :
     TabDialog( pParent, ResId( DLG_XML_FILTER_TABDIALOG, rResMgr ) ),
-    mxMSF( rxMSF ),
+    mxContext( rxContext ),
     mrResMgr( rResMgr ),
     maTabCtrl( this, ResId( 1, rResMgr ) ),
     maOKBtn( this ),
@@ -82,7 +82,7 @@ XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const 
         aCtrlSiz = aSiz;
     }
 
-    mpXSLTPage = new XMLFilterTabPageXSLT( &maTabCtrl, mrResMgr, mxMSF );
+    mpXSLTPage = new XMLFilterTabPageXSLT( &maTabCtrl, mrResMgr, mxContext );
     mpXSLTPage->SetInfo( mpNewInfo );
 
     maTabCtrl.SetTabPage( RID_XML_FILTER_TABPAGE_XSLT, mpXSLTPage );
@@ -133,7 +133,7 @@ bool XMLFilterTabDialog::onOk()
         {
             try
             {
-                Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( "com.sun.star.document.FilterFactory" ), UNO_QUERY );
+                Reference< XNameAccess > xFilterContainer( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.FilterFactory", mxContext ), UNO_QUERY );
                 if( xFilterContainer.is() )
                 {
                     if( xFilterContainer->hasByName( mpNewInfo->maFilterName ) )
@@ -165,7 +165,7 @@ bool XMLFilterTabDialog::onOk()
         {
             try
             {
-                Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( "com.sun.star.document.FilterFactory" ), UNO_QUERY );
+                Reference< XNameAccess > xFilterContainer( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.FilterFactory", mxContext ), UNO_QUERY );
                 if( xFilterContainer.is() )
                 {
                     Sequence< OUString > aFilterNames( xFilterContainer->getElementNames() );

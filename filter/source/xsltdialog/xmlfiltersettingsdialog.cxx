@@ -55,9 +55,9 @@ using namespace com::sun::star::util;
 using ::rtl::Uri;
 
 XMLFilterSettingsDialog::XMLFilterSettingsDialog(Window* pParent,
-    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF)
+    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext)
     : ModelessDialog(pParent, "XMLFilterSettingsDialog", "filter/ui/xmlfiltersettings.ui")
-    , mxMSF( rxMSF )
+    , mxContext( rxContext )
     , m_bIsClosable(true)
     , m_sTemplatePath("$(user)/template/")
     , m_sDocTypePrefix("doctype:")
@@ -89,11 +89,11 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog(Window* pParent,
 
     try
     {
-        mxFilterContainer = Reference< XNameContainer >::query( rxMSF->createInstance( "com.sun.star.document.FilterFactory" ) );
-        mxTypeDetection = Reference< XNameContainer >::query( rxMSF->createInstance( "com.sun.star.document.TypeDetection" ) );
-        mxExtendedTypeDetection = Reference< XNameContainer >::query( rxMSF->createInstance( "com.sun.star.document.ExtendedTypeDetectionFactory" ) );
+        mxFilterContainer = Reference< XNameContainer >::query( rxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.FilterFactory", rxContext ) );
+        mxTypeDetection = Reference< XNameContainer >::query( rxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.TypeDetection", rxContext ) );
+        mxExtendedTypeDetection = Reference< XNameContainer >::query( rxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.ExtendedTypeDetectionFactory", rxContext ) );
 
-        Reference< XConfigManager > xCfgMgr( mxMSF->createInstance( "com.sun.star.config.SpecialConfigManager" ), UNO_QUERY );
+        Reference< XConfigManager > xCfgMgr( rxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.config.SpecialConfigManager", rxContext ), UNO_QUERY );
         if( xCfgMgr.is() )
         {
             m_sTemplatePath = xCfgMgr->substituteVariables( m_sTemplatePath );
@@ -233,7 +233,7 @@ void XMLFilterSettingsDialog::onNew()
     aTempInfo.maDocumentService = "com.sun.star.text.TextDocument";
 
     // execute XML Filter Dialog
-    XMLFilterTabDialog aDlg( this, *getXSLTDialogResMgr(), mxMSF, &aTempInfo );
+    XMLFilterTabDialog aDlg( this, *getXSLTDialogResMgr(), mxContext, &aTempInfo );
     if ( aDlg.Execute() == RET_OK )
     {
         // insert the new filter
@@ -254,7 +254,7 @@ void XMLFilterSettingsDialog::onEdit()
         filter_info_impl* pOldInfo = (filter_info_impl*)pEntry->GetUserData();
 
         // execute XML Filter Dialog
-        XMLFilterTabDialog aDlg( this, *getXSLTDialogResMgr(), mxMSF, pOldInfo );
+        XMLFilterTabDialog aDlg( this, *getXSLTDialogResMgr(), mxContext, pOldInfo );
         if ( aDlg.Execute() == RET_OK )
         {
             filter_info_impl* pNewInfo = aDlg.getNewFilterInfo();
@@ -781,7 +781,7 @@ void XMLFilterSettingsDialog::onTest()
     {
         filter_info_impl* pInfo = (filter_info_impl*)pEntry->GetUserData();
 
-        XMLFilterTestDialog aDlg(this, mxMSF);
+        XMLFilterTestDialog aDlg(this, mxContext);
         aDlg.test( *pInfo );
     }
 }
@@ -910,7 +910,7 @@ void XMLFilterSettingsDialog::onSave()
 
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
-        XMLFilterJarHelper aJarHelper( mxMSF );
+        XMLFilterJarHelper aJarHelper( mxContext );
         aJarHelper.savePackage( aDlg.GetPath(), aFilters );
 
         INetURLObject aURL( aDlg.GetPath() );
@@ -958,7 +958,7 @@ void XMLFilterSettingsDialog::onOpen()
     {
         OUString aURL( aDlg.GetPath() );
 
-        XMLFilterJarHelper aJarHelper( mxMSF );
+        XMLFilterJarHelper aJarHelper( mxContext );
         aJarHelper.openPackage( aURL, aFilters );
 
         int nFilters = 0;

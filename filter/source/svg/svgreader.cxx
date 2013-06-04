@@ -1878,10 +1878,10 @@ static void dumpTree( const uno::Reference<xml::dom::XElement> xElem )
 #endif
 
 
-SVGReader::SVGReader(const uno::Reference<lang::XMultiServiceFactory>&     xServiceFactory,
+SVGReader::SVGReader(const uno::Reference<uno::XComponentContext>&     xContext,
                      const uno::Reference<io::XInputStream>&           xInputStream,
                      const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler) :
-    m_xServiceFactory( xServiceFactory ),
+    m_xContext( xContext ),
     m_xInputStream( xInputStream ),
     m_xDocumentHandler( xDocumentHandler )
 {
@@ -1889,7 +1889,7 @@ SVGReader::SVGReader(const uno::Reference<lang::XMultiServiceFactory>&     xServ
 
 sal_Bool SVGReader::parseAndConvert()
 {
-    uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(xml::dom::DocumentBuilder::create(comphelper::getComponentContext(m_xServiceFactory)));
+    uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder = xml::dom::DocumentBuilder::create(m_xContext);
 
     uno::Reference<xml::dom::XDocument> xDom(
         xDomBuilder->parse(m_xInputStream),

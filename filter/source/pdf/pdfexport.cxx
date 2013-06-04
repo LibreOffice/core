@@ -90,9 +90,9 @@ using namespace ::com::sun::star::graphic;
 PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
                       const Reference< task::XStatusIndicator >& rxStatusIndicator,
                       const Reference< task::XInteractionHandler >& rxIH,
-                      const Reference< lang::XMultiServiceFactory >& xFactory ) :
+                      const Reference< XComponentContext >& xContext ) :
     mxSrcDoc                    ( rxSrcDoc ),
-    mxMSF                       ( xFactory ),
+    mxContext                   ( xContext ),
     mxStatusIndicator           ( rxStatusIndicator ),
     mxIH                        ( rxIH ),
     mbUseTaggedPDF              ( sal_False ),
@@ -303,13 +303,13 @@ void PDFExportStreamDoc::write( const Reference< XOutputStream >& xStream )
     }
 }
 
-static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >& xFactory,
+static OUString getMimetypeForDocument( const Reference< XComponentContext >& xContext,
                                         const Reference< XComponent >& xDoc ) throw()
 {
     OUString aDocMimetype;
         // get document service name
     Reference< com::sun::star::frame::XStorable > xStore( xDoc, UNO_QUERY );
-    Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(comphelper::getComponentContext( xFactory )) );
+    Reference< frame::XModuleManager2 > xModuleManager = frame::ModuleManager::create(xContext);
     if( xStore.is() )
     {
         OUString aDocServiceName = xModuleManager->identify( Reference< XInterface >( xStore, uno::UNO_QUERY ) );
@@ -317,9 +317,8 @@ static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >&
         {
             // get the actual filter name
             OUString aFilterName;
-            Reference< lang::XMultiServiceFactory > xConfigProvider(
-                configuration::theDefaultProvider::get(
-                    comphelper::getComponentContext( xFactory ) ) );
+            Reference< lang::XMultiServiceFactory > xConfigProvider =
+                configuration::theDefaultProvider::get( xContext );
             uno::Sequence< uno::Any > aArgs( 1 );
             beans::NamedValue aPathProp;
             aPathProp.Name = "nodepath";
@@ -341,7 +340,7 @@ static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >&
                     // find the related type name
                     OUString aTypeName;
                     Reference< container::XNameAccess > xFilterFactory(
-                        xFactory->createInstance( "com.sun.star.document.FilterFactory" ),
+                        xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", xContext),
                         uno::UNO_QUERY );
 
                     Sequence< beans::PropertyValue > aFilterData;
@@ -354,7 +353,7 @@ static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >&
                     {
                         // find the mediatype
                         Reference< container::XNameAccess > xTypeDetection(
-                            xFactory->createInstance( "com.sun.star.document.TypeDetection" ),
+                            xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext),
                             UNO_QUERY );
 
                         Sequence< beans::PropertyValue > aTypeData;
@@ -801,7 +800,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             {
                 // export stream
                 // get mimetype
-                OUString aSrcMimetype = getMimetypeForDocument( mxMSF, mxSrcDoc );
+                OUString aSrcMimetype = getMimetypeForDocument( mxContext, mxSrcDoc );
                 pPDFWriter->AddStream( aSrcMimetype,
                                        new PDFExportStreamDoc( mxSrcDoc, aPreparedPermissionPassword ),
                                        false

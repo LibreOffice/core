@@ -63,7 +63,7 @@ class PDFFilter : public cppu::WeakImplHelper4 < XFilter,
 {
 private:
 
-    Reference< XMultiServiceFactory >   mxMSF;
+    Reference< XComponentContext >      mxContext;
     Reference< XComponent >             mxSrcDoc;
 
     sal_Bool                            implExport( const Sequence< PropertyValue >& rDescriptor );
@@ -87,7 +87,7 @@ protected:
 
 public:
 
-                PDFFilter( const Reference< XMultiServiceFactory >& rxMSF );
+                PDFFilter( const Reference< XComponentContext >& rxContext );
     virtual     ~PDFFilter();
 };
 

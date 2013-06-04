@@ -85,7 +85,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     }
 
     OUString sXMLImportService (  udImport  );
-    Reference < XParser > xSaxParser = Parser::create( comphelper::getComponentContext(mxMSF) );
+    Reference < XParser > xSaxParser = Parser::create( mxContext );
 
     Sequence< Any > aAnys(1);
     OUString aBaseURI;
@@ -111,7 +111,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     aAnys[0] <<= xInfoSet;
 
 
-    Reference < XDocumentHandler > xHandler( mxMSF->createInstanceWithArguments( sXMLImportService, aAnys ), UNO_QUERY );
+    Reference < XDocumentHandler > xHandler( mxContext->getServiceManager()->createInstanceWithArgumentsAndContext( sXMLImportService, aAnys, mxContext ), UNO_QUERY );
     if(! xHandler.is()) {
         OSL_FAIL("XMLReader::Read: %s Unable to create service instance xHandler\n" );
         return sal_False;
@@ -126,7 +126,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     //*********************
     // Creating a ConverterBridge instance
     //*********************
-    Reference< XInterface > xConvBridge(mxMSF->createInstance( udConvertClass ), UNO_QUERY);
+    Reference< XInterface > xConvBridge(mxContext->getServiceManager()->createInstanceWithContext(udConvertClass, mxContext), UNO_QUERY);
     if(! xConvBridge.is()){
         OSL_FAIL( "XMLReader::Read: %s service missing\n" );
         return sal_False;
@@ -160,8 +160,8 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
             //Load the Styles from the Template URL Supplied in the TypeDetection file
             if(msTemplateName.indexOf(OUString( "file:" ))==-1)
             {
-                Reference< XConfigManager >xCfgMgr ( mxMSF->createInstance(
-                    OUString( "com.sun.star.config.SpecialConfigManager" ) ), UNO_QUERY );
+                Reference< XConfigManager >xCfgMgr ( mxContext->getServiceManager()->createInstanceWithContext(
+                    "com.sun.star.config.SpecialConfigManager", mxContext ), UNO_QUERY );
                 OUString PathString(xCfgMgr->substituteVariables(OUString("$(progurl)")));
                 PathString = PathString.concat(OUString( "/" ));
                 msTemplateName=PathString.concat(msTemplateName);
@@ -223,7 +223,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
        xStatusIndicator->start(OUString( "Saving :" ),nProgressRange);
 
     // Set up converter bridge.
-    Reference< com::sun::star::xml::XExportFilter > xConverter(mxMSF->createInstance(udConvertClass ), UNO_QUERY);
+    Reference< com::sun::star::xml::XExportFilter > xConverter(mxContext->getServiceManager()->createInstanceWithContext( udConvertClass, mxContext ), UNO_QUERY);
     if(! xConverter.is()){
       OSL_FAIL( "xml export sub service missing" );
       return sal_False;
@@ -288,8 +288,8 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
             OUString( "BaseURI" ), makeAny( aBaseURI ));
         aAnys[1] <<= xInfoSet;
 
-        Reference< XExporter > xExporter( mxMSF->createInstanceWithArguments (
-                       udExport, aAnys ), UNO_QUERY_THROW );
+        Reference< XExporter > xExporter( mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                       udExport, aAnys, mxContext ), UNO_QUERY_THROW );
 
         // attach to source document
         xExporter->setSourceDocument( mxDoc );
@@ -398,7 +398,7 @@ Sequence< OUString > SAL_CALL XmlFilterAdaptor_getSupportedServiceNames(  )
 Reference< XInterface > SAL_CALL XmlFilterAdaptor_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new XmlFilterAdaptor( rSMgr );
+    return (cppu::OWeakObject*) new XmlFilterAdaptor( comphelper::getComponentContext(rSMgr) );
 }
 
 // XServiceInfo

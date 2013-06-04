@@ -86,7 +86,7 @@ class XMLFilterSettingsDialog : public ModelessDialog
 {
 public:
     XMLFilterSettingsDialog(Window* pParent,
-        const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF);
+        const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext);
 
     DECL_LINK(ClickHdl_Impl, PushButton * );
     DECL_LINK(SelectionChangedHdl_Impl, void * );
@@ -120,7 +120,7 @@ private:
 
 private:
 
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
     com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > mxFilterContainer;
     com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > mxTypeDetection;
     com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > mxExtendedTypeDetection;

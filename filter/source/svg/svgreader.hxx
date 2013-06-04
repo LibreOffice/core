@@ -24,12 +24,12 @@ namespace svgi
 
 class SVGReader
 {
-    const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >      m_xServiceFactory;
+    const ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >        m_xContext;
     const ::com::sun::star::uno::Reference< com::sun::star::io::XInputStream >              m_xInputStream;
     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >  m_xDocumentHandler;
 
 public:
-    FILTER_DLLPUBLIC SVGReader( const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>&           xServiceFactory,
+    FILTER_DLLPUBLIC SVGReader( const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>&  xContext,
                const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >&               xInputStream,
                const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler );
 

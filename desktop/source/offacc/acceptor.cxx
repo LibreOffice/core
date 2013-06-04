@@ -42,19 +42,17 @@ extern "C" void offacc_workerfunc (void * acc)
 
 Mutex Acceptor::m_aMutex;
 
-Acceptor::Acceptor( const Reference< XMultiServiceFactory >& rFactory )
+Acceptor::Acceptor( const Reference< XComponentContext >& rxContext )
     : m_thread(NULL)
+    , m_rContext(rxContext)
     , m_aAcceptString()
     , m_aConnectString()
     , m_aProtocol()
     , m_bInit(sal_False)
     , m_bDying(false)
 {
-    m_rSMgr = rFactory;
-    // get component context
-    m_rContext = comphelper::getComponentContext(m_rSMgr);
-    m_rAcceptor = Reference< XAcceptor > (m_rSMgr->createInstance(
-        OUString("com.sun.star.connection.Acceptor" )),
+    m_rAcceptor.set(
+        m_rContext->getServiceManager()->createInstanceWithContext("com.sun.star.connection.Acceptor", m_rContext),
         UNO_QUERY );
     m_rBridgeFactory = BridgeFactory::create(m_rContext);
 }
@@ -115,7 +113,7 @@ void SAL_CALL Acceptor::run()
 
             // create instanceprovider for this connection
             Reference< XInstanceProvider > rInstanceProvider(
-                (XInstanceProvider*)new AccInstanceProvider(m_rSMgr, rConnection));
+                (XInstanceProvider*)new AccInstanceProvider(m_rContext, rConnection));
             // create the bridge. The remote end will have a reference to this bridge
             // thus preventing the bridge from being disposed. When the remote end releases
             // the bridge, it will be destructed.
@@ -222,16 +220,16 @@ sal_Bool Acceptor::supportsService(OUString const & ServiceName)
 Reference< XInterface > Acceptor::impl_getInstance( const Reference< XMultiServiceFactory >& aFactory )
 {
     try {
-        return (XComponent*) new Acceptor( aFactory );
+        return (XComponent*) new Acceptor( comphelper::getComponentContext(aFactory) );
     } catch ( const Exception& ) {
         return (XComponent*) NULL;
     }
 }
 
 // InstanceProvider
-AccInstanceProvider::AccInstanceProvider(const Reference<XMultiServiceFactory>& aFactory, const Reference<XConnection>& rConnection)
+AccInstanceProvider::AccInstanceProvider(const Reference<XComponentContext>& rxContext, const Reference<XConnection>& rConnection)
 {
-    m_rSMgr = aFactory;
+    m_rContext = rxContext;
     m_rConnection = rConnection;
 }
 
@@ -247,23 +245,23 @@ Reference<XInterface> SAL_CALL AccInstanceProvider::getInstance (const OUString&
 
     if ( aName.compareToAscii( "StarOffice.ServiceManager" ) == 0)
     {
-        rInstance = Reference< XInterface >( m_rSMgr );
+        rInstance = Reference< XInterface >( m_rContext->getServiceManager() );
     }
     else if(aName.compareToAscii( "StarOffice.ComponentContext" ) == 0 )
     {
-        rInstance = comphelper::getComponentContext( m_rSMgr );
+        rInstance = m_rContext;
     }
     else if ( aName.compareToAscii("StarOffice.NamingService" ) == 0 )
     {
         Reference< XNamingService > rNamingService(
-            m_rSMgr->createInstance( OUString("com.sun.star.uno.NamingService" )),
+            m_rContext->getServiceManager()->createInstanceWithContext("com.sun.star.uno.NamingService", m_rContext),
             UNO_QUERY );
         if ( rNamingService.is() )
         {
             rNamingService->registerObject(
-                OUString("StarOffice.ServiceManager" ), m_rSMgr );
+                OUString("StarOffice.ServiceManager" ), m_rContext->getServiceManager() );
             rNamingService->registerObject(
-                OUString("StarOffice.ComponentContext" ), comphelper::getComponentContext( m_rSMgr ));
+                OUString("StarOffice.ComponentContext" ), m_rContext );
             rInstance = rNamingService;
         }
     }

@@ -32,8 +32,8 @@ using namespace css::system;
 // - PDFFilter -
 // -------------
 
-PDFFilter::PDFFilter( const Reference< XMultiServiceFactory > &rxMSF ) :
-    mxMSF( rxMSF )
+PDFFilter::PDFFilter( const Reference< XComponentContext > &rxContext ) :
+    mxContext( rxContext )
 {
 }
 
@@ -120,7 +120,7 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     }
     if( mxSrcDoc.is() && xOStm.is() )
     {
-        PDFExport       aExport( mxSrcDoc, xStatusIndicator, xIH, mxMSF );
+        PDFExport       aExport( mxSrcDoc, xStatusIndicator, xIH, mxContext );
         ::utl::TempFile aTempFile;
 
         aTempFile.EnableKillingFile();
@@ -247,7 +247,7 @@ Sequence< OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  ) throw (Runt
 
 Reference< XInterface > SAL_CALL PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
 {
-    return (cppu::OWeakObject*) new PDFFilter( rSMgr );
+    return (cppu::OWeakObject*) new PDFFilter( comphelper::getComponentContext(rSMgr) );
 }
 
 // -----------------------------------------------------------------------------

@@ -35,7 +35,7 @@ class XMLFilterTestDialog : public ModalDialog
 {
 public:
     XMLFilterTestDialog(Window* pParent,
-        const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF);
+        const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext);
     virtual ~XMLFilterTestDialog();
 
     void test( const filter_info_impl& rFilterInfo );
@@ -57,7 +57,7 @@ private:
     void doExport( com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComp );
 
 private:
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
     com::sun::star::uno::Reference< com::sun::star::document::XEventBroadcaster > mxGlobalBroadcaster;
     com::sun::star::uno::Reference< com::sun::star::document::XEventListener > mxGlobalEventListener;
     com::sun::star::uno::WeakReference< com::sun::star::lang::XComponent > mxLastFocusModel;

@@ -134,9 +134,9 @@ static bool checkComponent( Reference< XComponent >& rxComponent, const OUString
 }
 
 XMLFilterTestDialog::XMLFilterTestDialog(Window* pParent,
-    const Reference<XMultiServiceFactory>& rxMSF)
+    const Reference<XComponentContext>& rxContext)
     : ModalDialog(pParent, "TestXMLFilterDialog", "filter/ui/testxmlfilter.ui")
-    , mxMSF(rxMSF)
+    , mxContext(rxContext)
     , m_pFilterInfo(NULL)
 {
     get(m_pExport, "export");
@@ -166,7 +166,7 @@ XMLFilterTestDialog::XMLFilterTestDialog(Window* pParent,
 
     try
     {
-        mxGlobalBroadcaster = Reference < XEventBroadcaster >( GlobalEventBroadcaster::create(comphelper::getComponentContext(mxMSF)), UNO_QUERY_THROW );
+        mxGlobalBroadcaster = GlobalEventBroadcaster::create(mxContext);
         mxGlobalEventListener = new GlobalEventListenerImpl( this );
         mxGlobalBroadcaster->addEventListener( mxGlobalEventListener );
     }
@@ -295,8 +295,8 @@ void XMLFilterTestDialog::onExportBrowse()
             com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             0 );
 
-        Reference< XNameAccess > xFilterContainer( mxMSF->createInstance( OUString( "com.sun.star.document.FilterFactory" ) ), UNO_QUERY );
-        Reference< XNameAccess > xTypeDetection( mxMSF->createInstance( OUString( "com.sun.star.document.TypeDetection" ) ), UNO_QUERY );
+        Reference< XNameAccess > xFilterContainer( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.FilterFactory", mxContext ), UNO_QUERY );
+        Reference< XNameAccess > xTypeDetection( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.TypeDetection", mxContext ), UNO_QUERY );
         if( xFilterContainer.is() && xTypeDetection.is() )
         {
             Sequence< OUString > aFilterNames( xFilterContainer->getElementNames() );
@@ -400,8 +400,8 @@ void XMLFilterTestDialog::onExportBrowse()
         {
             m_sExportRecentFile = aDlg.GetPath();
 
-            Reference< XDesktop2 > xLoader = Desktop::create( comphelper::getComponentContext(mxMSF) );
-            Reference< XInteractionHandler2 > xInter( InteractionHandler::createWithParent(comphelper::getComponentContext(mxMSF), 0) );
+            Reference< XDesktop2 > xLoader = Desktop::create( mxContext );
+            Reference< XInteractionHandler2 > xInter = InteractionHandler::createWithParent(mxContext, 0);
             OUString aFrame( "_default" );
             Sequence< PropertyValue > aArguments(1);
             aArguments[0].Name = OUString( "InteractionHandler" );
@@ -463,7 +463,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                         aSourceData[i++].Value <<= m_pFilterInfo->maDocType;
                     }
 
-                Reference< XExportFilter > xExporter( mxMSF->createInstance( OUString( "com.sun.star.documentconversion.XSLTFilter" ) ), UNO_QUERY );
+                Reference< XExportFilter > xExporter( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.documentconversion.XSLTFilter", mxContext ), UNO_QUERY );
                 Reference< XDocumentHandler > xHandler( xExporter, UNO_QUERY );
                 if( xHandler.is() )
                 {
@@ -495,7 +495,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
     //              *pArgs++ <<= xInfoSet;
                     *pArgs   <<= xHandler;
 
-                    Reference< XFilter > xFilter( mxMSF->createInstanceWithArguments( pAppInfo->maXMLExporter, aArgs ), UNO_QUERY );
+                    Reference< XFilter > xFilter( mxContext->getServiceManager()->createInstanceWithArgumentsAndContext( pAppInfo->maXMLExporter, aArgs, mxContext ), UNO_QUERY );
                     if( xFilter.is() )
                     {
                         Reference< XExporter > xExporter2( xFilter, UNO_QUERY );
@@ -585,8 +585,8 @@ void XMLFilterTestDialog::import( const OUString& rURL )
 {
     try
     {
-        Reference< XDesktop2 > xLoader = Desktop::create( comphelper::getComponentContext(mxMSF) );
-        Reference< XInteractionHandler2 > xInter( InteractionHandler::createWithParent(comphelper::getComponentContext(mxMSF), 0) );
+        Reference< XDesktop2 > xLoader = Desktop::create( mxContext );
+        Reference< XInteractionHandler2 > xInter = InteractionHandler::createWithParent(mxContext, 0);
 
         OUString aFrame( "_default" );
         Sequence< PropertyValue > aArguments(2);
@@ -604,7 +604,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
             TempFile aTempFile(lead, &ext);
             OUString aTempFileURL( aTempFile.GetURL() );
 
-            Reference< XImportFilter > xImporter( mxMSF->createInstance( OUString( "com.sun.star.documentconversion.XSLTFilter" ) ), UNO_QUERY );
+            Reference< XImportFilter > xImporter( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.documentconversion.XSLTFilter", mxContext ), UNO_QUERY );
             if( xImporter.is() )
             {
                 osl::File aInputFile( rURL );
@@ -624,7 +624,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
                 aSourceData[i  ].Name = OUString( "Indent" );
                 aSourceData[i++].Value <<= (sal_Bool)sal_True;
 
-                Reference< XWriter > xWriter = Writer::create( comphelper::getComponentContext(mxMSF) );
+                Reference< XWriter > xWriter = Writer::create( mxContext );
 
                 File aOutputFile( aTempFileURL );
                 aOutputFile.open( osl_File_OpenFlag_Write );
@@ -678,7 +678,7 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
 
     try
     {
-        Reference< XDesktop2 > xDesktop = Desktop::create( comphelper::getComponentContext(mxMSF) );
+        Reference< XDesktop2 > xDesktop = Desktop::create( mxContext );
         Reference< XComponent > xTest( mxLastFocusModel );
         if( checkComponent( xTest, rServiceName ) )
         {

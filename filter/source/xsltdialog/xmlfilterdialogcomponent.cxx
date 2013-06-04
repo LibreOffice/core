@@ -67,7 +67,7 @@ class XMLFilterDialogComponent :    public XMLFilterDialogComponentBase,
                                     public XTerminateListener
 {
 public:
-    XMLFilterDialogComponent( const Reference< XMultiServiceFactory >& rxMSF );
+    XMLFilterDialogComponent( const Reference< XComponentContext >& rxContext );
     virtual ~XMLFilterDialogComponent();
 
 protected:
@@ -104,7 +104,7 @@ protected:
 
 private:
     com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxParent;  /// parent window
-    com::sun::star::uno::Reference< XMultiServiceFactory > mxMSF;
+    com::sun::star::uno::Reference< XComponentContext > mxContext;
 
     XMLFilterSettingsDialog* mpDialog;
 };
@@ -121,12 +121,12 @@ ResMgr* getXSLTDialogResMgr()
     return pXSLTResMgr;
 }
 
-XMLFilterDialogComponent::XMLFilterDialogComponent( const com::sun::star::uno::Reference< XMultiServiceFactory >& rxMSF ) :
+XMLFilterDialogComponent::XMLFilterDialogComponent( const com::sun::star::uno::Reference< XComponentContext >& rxContext ) :
     OComponentHelper( maMutex ),
-    mxMSF( rxMSF ),
+    mxContext( rxContext ),
     mpDialog( NULL )
 {
-    Reference< XDesktop2 > xDesktop = Desktop::create( comphelper::getComponentContext(mxMSF) );
+    Reference< XDesktop2 > xDesktop = Desktop::create( rxContext );
     Reference< XTerminateListener > xListener( this );
     xDesktop->addTerminateListener( xListener );
 }
@@ -218,7 +218,7 @@ sal_Bool SAL_CALL XMLFilterDialogComponent_supportsService( const OUString& Serv
 
 Reference< XInterface > SAL_CALL XMLFilterDialogComponent_createInstance( const Reference< XMultiServiceFactory > & rSMgr) throw ( Exception )
 {
-    return (OWeakObject*)new XMLFilterDialogComponent( rSMgr );
+    return (OWeakObject*)new XMLFilterDialogComponent( comphelper::getComponentContext(rSMgr) );
 }
 
 //-------------------------------------------------------------------------
@@ -359,7 +359,7 @@ sal_Int16 SAL_CALL XMLFilterDialogComponent::execute(  ) throw(RuntimeException)
             pParent = VCLUnoHelper::GetWindow(mxParent);
 
         Reference< XComponent > xComp( this );
-        mpDialog = new XMLFilterSettingsDialog(pParent, mxMSF);
+        mpDialog = new XMLFilterSettingsDialog(pParent, mxContext);
         mpDialog->Execute();
     }
     else if( !mpDialog->IsVisible() )

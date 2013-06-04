@@ -40,7 +40,7 @@ class PDFExport
 private:
 
     Reference< XComponent > mxSrcDoc;
-    Reference< lang::XMultiServiceFactory > mxMSF;
+    Reference< uno::XComponentContext > mxContext;
     Reference< task::XStatusIndicator > mxStatusIndicator;
     Reference< task::XInteractionHandler > mxIH;
 
@@ -116,7 +116,7 @@ public:
                             PDFExport( const Reference< XComponent >& rxSrcDoc,
                                        const Reference< task::XStatusIndicator >& xStatusIndicator,
                                       const Reference< task::XInteractionHandler >& xIH,
-                                       const Reference< lang::XMultiServiceFactory >& xFact );
+                                       const Reference< uno::XComponentContext >& xFact );
                             ~PDFExport();
 
     sal_Bool                ExportSelection( vcl::PDFWriter& rPDFWriter,

@@ -58,12 +58,12 @@ namespace filter {
                                                   XExportFilter, DocumentHandlerAdapter>
         {
         private:
-            Reference< XMultiServiceFactory > m_rServiceFactory;
+            Reference< XComponentContext > m_xContext;
 
         public:
 
-            OdfFlatXml(const Reference<XMultiServiceFactory> &r) :
-                m_rServiceFactory(r)
+            OdfFlatXml(const Reference<XComponentContext> &r) :
+                m_xContext(r)
             {
             }
 
@@ -122,7 +122,7 @@ OdfFlatXml::importer(
     if (!inputStream.is())
         return sal_False;
 
-    Reference<XParser> saxParser = Parser::create(comphelper::getComponentContext(m_rServiceFactory));
+    Reference<XParser> saxParser = Parser::create(m_xContext);
 
     InputSource inputSource;
     inputSource.sSystemId = url;
@@ -165,7 +165,7 @@ OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
 
     if (!getDelegate().is())
         {
-            Reference< XDocumentHandler > saxWriter( Writer::create(comphelper::getComponentContext(m_rServiceFactory)), UNO_QUERY_THROW );
+            Reference< XDocumentHandler > saxWriter = Writer::create(m_xContext);
             setDelegate(saxWriter);
         }
     // get data source interface ...
@@ -197,7 +197,7 @@ Sequence< OUString > OdfFlatXml::impl_getSupportedServiceNames()
 
 Reference< XInterface > SAL_CALL OdfFlatXml::impl_createInstance(const Reference< XMultiServiceFactory >& fact)
 {
-    return Reference<XInterface> ((OWeakObject *) new OdfFlatXml(fact));
+    return Reference<XInterface> ((OWeakObject *) new OdfFlatXml( comphelper::getComponentContext(fact) ));
 
 }
 

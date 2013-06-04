@@ -61,10 +61,10 @@ typedef std::vector< Node* > NodeVector;
 class TypeDetectionImporter : public cppu::WeakImplHelper1 < com::sun::star::xml::sax::XDocumentHandler >
 {
 public:
-    TypeDetectionImporter( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF );
+    TypeDetectionImporter();
     virtual ~TypeDetectionImporter( void );
 
-    static void doImport( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF, com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xOS, XMLFilterVector& rFilters );
+    static void doImport( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext, com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xOS, XMLFilterVector& rFilters );
 
     virtual void SAL_CALL startDocument(  )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
@@ -87,8 +87,6 @@ private:
     void fillFilterVector(  XMLFilterVector& rFilters );
     filter_info_impl* createFilterForNode( Node * pNode );
     Node* findTypeNode( const OUString& rType );
-
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
 
     std::stack< ImportState > maStack;
     PropertyMap maPropertyMap;

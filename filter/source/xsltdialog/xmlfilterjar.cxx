@@ -60,8 +60,8 @@ using namespace com::sun::star::io;
 
 using ::rtl::Uri;
 
-XMLFilterJarHelper::XMLFilterJarHelper( Reference< XMultiServiceFactory >& xMSF )
-: mxMSF( xMSF ),
+XMLFilterJarHelper::XMLFilterJarHelper( const Reference< XComponentContext >& rxContext )
+: mxContext( rxContext ),
     sVndSunStarPackage( "vnd.sun.star.Package:" ),
     sXSLTPath( "$(user)/xslt/" ),
     sTemplatePath( "$(user)/template/" ),
@@ -71,7 +71,7 @@ XMLFilterJarHelper::XMLFilterJarHelper( Reference< XMultiServiceFactory >& xMSF 
 {
     try
     {
-        Reference< XConfigManager > xCfgMgr( xMSF->createInstance(OUString( "com.sun.star.config.SpecialConfigManager" )), UNO_QUERY );
+        Reference< XConfigManager > xCfgMgr( rxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.config.SpecialConfigManager", rxContext ), UNO_QUERY );
         if( xCfgMgr.is() )
         {
             sProgPath = xCfgMgr->substituteVariables( sProgPath );
@@ -166,9 +166,9 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
         aArguments[ 1 ] <<= aArg;
 
         Reference< XHierarchicalNameAccess > xIfc(
-            mxMSF->createInstanceWithArguments(
-                OUString( "com.sun.star.packages.comp.ZipPackage" ),
-                aArguments ), UNO_QUERY );
+            mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                "com.sun.star.packages.comp.ZipPackage",
+                aArguments, mxContext ), UNO_QUERY );
 
         if( xIfc.is() )
         {
@@ -220,8 +220,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
                 /* osl::File::RC rc = */ aOutputFile.open( osl_File_OpenFlag_Write );
                 Reference< XOutputStream > xOS( new OSLOutputStreamWrapper( aOutputFile ) );
 
-                Reference<XComponentContext> xContext( comphelper::getComponentContext(mxMSF) );
-                TypeDetectionExporter aExporter( xContext );
+                TypeDetectionExporter aExporter( mxContext );
                 aExporter.doExport(xOS,rFilters);
             }
 
@@ -266,9 +265,9 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
         aArguments[ 1 ] <<= aArg;
 
         Reference< XHierarchicalNameAccess > xIfc(
-            mxMSF->createInstanceWithArguments(
-                OUString( "com.sun.star.packages.comp.ZipPackage" ),
-                aArguments ), UNO_QUERY );
+            mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                "com.sun.star.packages.comp.ZipPackage",
+                aArguments, mxContext ), UNO_QUERY );
 
         if( xIfc.is() )
         {
@@ -290,7 +289,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
                     Reference< XInputStream > xIS( xTypeDetection->getInputStream() );
 
                     XMLFilterVector aFilters;
-                    TypeDetectionImporter::doImport( mxMSF, xIS, aFilters );
+                    TypeDetectionImporter::doImport( mxContext, xIS, aFilters );
 
                     // copy all files used by the filters imported from the
                     // typedetection to office/user/xslt

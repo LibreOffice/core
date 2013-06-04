@@ -70,7 +70,7 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     uno::Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
     xImporter->setTargetDocument(mxDstDoc);
 
-    SVGReader aReader(uno::Reference<lang::XMultiServiceFactory>(mxContext->getServiceManager(), uno::UNO_QUERY_THROW), xInputStream, xInternalHandler);
+    SVGReader aReader(mxContext, xInputStream, xInternalHandler);
     return aReader.parseAndConvert();
 }
 

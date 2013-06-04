@@ -106,7 +106,7 @@ namespace XSLT
     private:
 
         // the UNO ServiceFactory
-        css::uno::Reference<XMultiServiceFactory> m_rServiceFactory;
+        css::uno::Reference<XComponentContext> m_xContext;
 
         // DocumentHandler interface of the css::xml::sax::Writer service
         css::uno::Reference<XOutputStream> m_rOutputStream;
@@ -129,7 +129,7 @@ namespace XSLT
     public:
 
         // ctor...
-        XSLTFilter(const css::uno::Reference<XMultiServiceFactory> &r);
+        XSLTFilter(const css::uno::Reference<XComponentContext> &r);
 
         ~XSLTFilter();
 
@@ -163,8 +163,8 @@ namespace XSLT
         endDocument() throw (SAXException, RuntimeException);
     };
 
-    XSLTFilter::XSLTFilter(const css::uno::Reference<XMultiServiceFactory> &r):
-m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
+    XSLTFilter::XSLTFilter(const css::uno::Reference<XComponentContext> &r):
+        m_xContext(r), m_bTerminated(sal_False), m_bError(sal_False)
     {
         m_cTransformed = osl_createCondition();
     }
@@ -185,10 +185,8 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         OUString sExpandedUrl;
         try
             {
-                css::uno::Reference<XComponentContext> xContext(
-                    comphelper::getComponentContext(m_rServiceFactory));
                 css::uno::Reference<XMacroExpander>
-                        xMacroExpander = theMacroExpander::get(xContext);
+                        xMacroExpander = theMacroExpander::get(m_xContext);
                 sExpandedUrl = xMacroExpander->expandMacros(sUrl);
                 sal_Int32 nPos = sExpandedUrl.indexOf( "vnd.sun.star.expand:" );
                 if (nPos != -1)
@@ -214,8 +212,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         {
             try
             {
-                xTransformer = xslt::XSLT2Transformer::create(
-                        comphelper::getComponentContext(m_rServiceFactory), rArgs);
+                xTransformer = xslt::XSLT2Transformer::create(m_xContext, rArgs);
             }
             catch (const Exception&)
             {
@@ -230,8 +227,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         // filter does not need it
         if (!xTransformer.is())
         {
-            xTransformer = xslt::XSLTTransformer::create(
-                    comphelper::getComponentContext(m_rServiceFactory), rArgs);
+            xTransformer = xslt::XSLTTransformer::create(m_xContext, rArgs);
         }
 
         return xTransformer;
@@ -269,9 +265,8 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
     XSLTFilter::rel2abs(const OUString& s)
     {
 
-        css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getComponentContext(m_rServiceFactory) );
         css::uno::Reference<XStringSubstitution>
-                subs(css::util::PathSubstitution::create(xContext));
+                subs(css::util::PathSubstitution::create(m_xContext));
         OUString aWorkingDir(subs->getSubstituteVariableValue(OUString( "$(progurl)")));
         INetURLObject aObj(aWorkingDir);
         aObj.setFinalSlash();
@@ -318,7 +313,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
 
         // create SAX parser that will read the document file
         // and provide events to xHandler passed to this call
-        css::uno::Reference<XParser> xSaxParser = Parser::create(comphelper::getComponentContext(m_rServiceFactory));
+        css::uno::Reference<XParser> xSaxParser = Parser::create(m_xContext);
 
         // create transformer
         Sequence<Any> args(3);
@@ -353,7 +348,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
 
                         // create pipe
                         css::uno::Reference<XOutputStream> pipeout(
-                                        Pipe::create(comphelper::getComponentContext(m_rServiceFactory)),
+                                        Pipe::create(m_xContext),
                                         UNO_QUERY);
                         css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
 
@@ -459,7 +454,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
             {
                 // get the document writer
                 setDelegate(css::uno::Reference<XExtendedDocumentHandler>(
-                                Writer::create(comphelper::getComponentContext(m_rServiceFactory)),
+                                Writer::create(m_xContext),
                                 UNO_QUERY_THROW));
             }
 
@@ -493,7 +488,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
 
                 // create pipe
                 css::uno::Reference<XOutputStream> pipeout(
-                                Pipe::create(comphelper::getComponentContext(m_rServiceFactory)),
+                                Pipe::create(m_xContext),
                                 UNO_QUERY);
                 css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
 
@@ -567,7 +562,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
     static css::uno::Reference<XInterface> SAL_CALL
     CreateFilterInstance(const css::uno::Reference<XMultiServiceFactory> &r)
     {
-        return css::uno::Reference<XInterface> ((OWeakObject *) new XSLTFilter(r));
+        return css::uno::Reference<XInterface> ((OWeakObject *) new XSLTFilter( comphelper::getComponentContext(r) ));
     }
 
 }

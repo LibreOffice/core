@@ -54,7 +54,6 @@ private:
 
     ::osl::Condition m_cEnable;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_rSMgr;
     css::uno::Reference< css::uno::XComponentContext >     m_rContext;
     css::uno::Reference< css::connection::XAcceptor >      m_rAcceptor;
     css::uno::Reference< css::bridge::XBridgeFactory2 >    m_rBridgeFactory;
@@ -67,7 +66,7 @@ private:
     bool m_bDying;
 
 public:
-    Acceptor( const css::uno::Reference< css::lang::XMultiServiceFactory >& aFactory );
+    Acceptor( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~Acceptor();
 
     void SAL_CALL run();
@@ -92,11 +91,11 @@ public:
 class AccInstanceProvider : public ::cppu::WeakImplHelper1<css::bridge::XInstanceProvider>
 {
 private:
-    css::uno::Reference<css::lang::XMultiServiceFactory> m_rSMgr;
+    css::uno::Reference<css::uno::XComponentContext> m_rContext;
     css::uno::Reference<css::connection::XConnection> m_rConnection;
 
 public:
-    AccInstanceProvider(const css::uno::Reference< css::lang::XMultiServiceFactory >& aFactory,
+    AccInstanceProvider(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                         const css::uno::Reference< css::connection::XConnection >& rConnection);
     virtual ~AccInstanceProvider();
 

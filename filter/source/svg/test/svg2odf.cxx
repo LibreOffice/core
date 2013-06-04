@@ -115,7 +115,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         return 1;
     }
 
-    svgi::SVGReader aReader(xFactory,
+    svgi::SVGReader aReader(xCtx,
                             uno::Reference<io::XInputStream>(
                                 new comphelper::OSLInputStreamWrapper(aInputFile)),
                             svgi::createSerializer(new OutputWrap(aDstURL)));

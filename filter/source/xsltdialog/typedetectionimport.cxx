@@ -35,9 +35,8 @@ using namespace com::sun::star;
 using namespace std;
 
 
-TypeDetectionImporter::TypeDetectionImporter( Reference< XMultiServiceFactory >& xMSF )
-:   mxMSF(xMSF),
-    sRootNode( "oor:component-data" ),
+TypeDetectionImporter::TypeDetectionImporter()
+:   sRootNode( "oor:component-data" ),
     sNode( "node" ),
     sName( "oor:name" ),
     sProp( "prop" ),
@@ -57,13 +56,13 @@ TypeDetectionImporter::~TypeDetectionImporter (void )
 {
 }
 
-void TypeDetectionImporter::doImport( Reference< XMultiServiceFactory >& xMSF, Reference< XInputStream > xIS, XMLFilterVector& rFilters )
+void TypeDetectionImporter::doImport( const Reference< XComponentContext >& rxContext, Reference< XInputStream > xIS, XMLFilterVector& rFilters )
 {
     try
     {
-        Reference< XParser > xParser = xml::sax::Parser::create( comphelper::getComponentContext(xMSF) );
+        Reference< XParser > xParser = xml::sax::Parser::create( rxContext );
 
-        TypeDetectionImporter* pImporter = new TypeDetectionImporter( xMSF );
+        TypeDetectionImporter* pImporter = new TypeDetectionImporter;
         Reference < XDocumentHandler > xDocHandler( pImporter );
         xParser->setDocumentHandler( xDocHandler );
 

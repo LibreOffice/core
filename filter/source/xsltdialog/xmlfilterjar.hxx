@@ -32,7 +32,7 @@ typedef std::vector< filter_info_impl* > XMLFilterVector;
 class XMLFilterJarHelper
 {
 public:
-    XMLFilterJarHelper( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF );
+    XMLFilterJarHelper( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
     bool savePackage( const OUString& rPackageURL, const XMLFilterVector& rFilters );
     void openPackage( const OUString& rPackageURL, XMLFilterVector& rFilters );
@@ -43,7 +43,7 @@ private:
     bool copyFile( com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess > xIfc, OUString& rURL, const OUString& rTargetURL );
     bool copyFiles( com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess > xIfc, filter_info_impl* pFilter );
 
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
 
     OUString sVndSunStarPackage;
     OUString sXSLTPath;

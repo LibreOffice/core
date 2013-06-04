@@ -26,6 +26,7 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase5.hxx>
 
 
@@ -41,26 +42,18 @@ enum FilterType
  * member calls */
 
 class XmlFilterAdaptor : public cppu::WeakImplHelper5
-
 <
-
     com::sun::star::document::XFilter,
-
     com::sun::star::document::XExporter,
-
     com::sun::star::document::XImporter,
-
     com::sun::star::lang::XInitialization,
-
     com::sun::star::lang::XServiceInfo
-
 >
-
 {
 
 protected:
 
-  ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
+  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
 
   ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxDoc;
 
@@ -73,20 +66,17 @@ protected:
     FilterType meType;
 
     sal_Bool SAL_CALL exportImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-
         throw (::com::sun::star::uno::RuntimeException);
 
     sal_Bool SAL_CALL importImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-
         throw (::com::sun::star::uno::RuntimeException);
 
 
 
 public:
 
-    XmlFilterAdaptor( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF)
-
-        : mxMSF( rxMSF ) {}
+    XmlFilterAdaptor( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext)
+        : mxContext( rxContext ) {}
 
     virtual ~XmlFilterAdaptor() {}
 
@@ -95,11 +85,9 @@ public:
     // XFilter
 
     virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
-
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL cancel(  )
-
         throw (::com::sun::star::uno::RuntimeException);
 
 
@@ -107,7 +95,6 @@ public:
     // XExporter
 
     virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
-
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
 
