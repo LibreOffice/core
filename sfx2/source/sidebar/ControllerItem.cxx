@@ -31,6 +31,7 @@
 #include "sfx2/sidebar/CommandInfoProvider.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/help.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
