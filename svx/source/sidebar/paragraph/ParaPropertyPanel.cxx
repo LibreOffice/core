@@ -34,8 +34,10 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/ControlFactory.hxx>
+#include <sfx2/sidebar/Tools.hxx>
 #include <svx/sidebar/PopupContainer.hxx>
 #include <sfx2/dispatch.hxx>
+//#include <sfx2/imagemgr.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -70,8 +72,6 @@ namespace svx {namespace sidebar {
 #define INDENT_DECREMENT       2
 #define INDENT_STEP            706
 #define UL_STEP                58
-#define UL_INCREMENT           1
-#define UL_DECREMENT           2
 
 #define NEGATIVE_MAX_VALUE              -9999
 #define BEGIN_VALUE            28
@@ -491,8 +491,18 @@ void ParaPropertyPanel::InitToolBoxSpacing()
     maTopDist->SetAccessibleName(maTopDist->GetQuickHelpText());
     maBottomDist->SetAccessibleName(maBottomDist->GetQuickHelpText());
 
-    maTbxUL_IncDec->SetItemImage(TOOLBOX_ITEM1, maParInc);
-    maTbxUL_IncDec->SetItemImage(TOOLBOX_ITEM2, maParDec);
+    // Use a form of image loading that can handle both .uno:<command>
+    // and private:graphirepository... syntax.  This is necessary to
+    // handle the workaround for accessing the images of commands
+    // ParaspaceIncrease and ParaspaceDecrease.
+    // See issue 122446 for more details.
+    maTbxUL_IncDec->SetItemImage(
+        BT_TBX_UL_INC,
+        sfx2::sidebar::Tools::GetImage(mpTbxUL_IncDec->GetItemCommand(BT_TBX_UL_INC), mxFrame));
+    maTbxUL_IncDec->SetItemImage(
+        BT_TBX_UL_DEC,
+        sfx2::sidebar::Tools::GetImage(mpTbxUL_IncDec->GetItemCommand(BT_TBX_UL_DEC), mxFrame));
+
     aLink = LINK( this, ParaPropertyPanel, ClickUL_IncDec_Hdl_Impl );
     maTbxUL_IncDec->SetSelectHdl(aLink);
     m_eULSpaceUnit = maULSpaceControl.GetCoreMetric();
@@ -984,7 +994,7 @@ IMPL_LINK(ParaPropertyPanel, ClickUL_IncDec_Hdl_Impl, ToolBox *, pControl)
 {
     switch (pControl->GetCurItemId())
         {
-        case UL_INCREMENT:
+            case BT_TBX_UL_INC:
              {
                  SvxULSpaceItem aMargin( SID_ATTR_PARA_ULSPACE );
 
@@ -1002,7 +1012,7 @@ IMPL_LINK(ParaPropertyPanel, ClickUL_IncDec_Hdl_Impl, ToolBox *, pControl)
                      SID_ATTR_PARA_ULSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
              }
              break;
-        case UL_DECREMENT:
+        case BT_TBX_UL_DEC:
             {
                  SvxULSpaceItem aMargin( SID_ATTR_PARA_ULSPACE );
 
@@ -1600,8 +1610,6 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
       maIndent2 (SVX_RES(IMG_INDENT2)),
       maIndent3 (SVX_RES(IMG_INDENT3)),
       maIndHang (SVX_RES(IMG_INDENT_HANG)),
-      maParInc (SVX_RES(IMG_PARA_INC)),
-      maParDec (SVX_RES(IMG_PARA_DEC)),
       maNumBImageList (SVX_RES(IL_NUM_BULLET)),
       maNumBImageListH (SVX_RES(ILH_NUM_BULLET)),
       maNumBImageListRTL (SVX_RES(IL_NUM_BULLET_RTL)),
