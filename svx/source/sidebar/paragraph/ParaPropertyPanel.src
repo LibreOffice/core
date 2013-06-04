@@ -419,12 +419,6 @@ Control RID_SIDEBAR_PARA_PANEL
         MaskColor = STD_MASKCOLOR ;
         SVX_PROPERTYPANEL_PARA_NUMBULLET_IDLIST
     };
-    ImageList ILH_NUM_BULLET
-    {
-        Prefix = "symphony/para_numbulleth";
-        MaskColor = STD_MASKCOLOR ;
-        SVX_PROPERTYPANEL_PARA_NUMBULLET_IDLIST
-    };
     //for sym2_7380
     ImageList IL_NUM_BULLET_RTL
     {
