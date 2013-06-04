@@ -348,8 +348,9 @@ sub create_zip_archive
     print_message("creating image archive ...") if $verbose;
     my $zip = Archive::Zip->new();
 
+    my $linktmp;
     if (keys %{$links_hash_ref}) {
-        my $linktmp = write_links($links_hash_ref);
+        $linktmp = write_links($links_hash_ref);
         my $member = $zip->addFile($linktmp->filename, "links.txt", COMPRESSION_DEFLATED);
         if (!$member) {
             print_error("failed to add links file: $!", 5);
@@ -481,8 +482,7 @@ sub read_links($$)
 sub write_links($)
 {
     my $links = shift;
-    my $tmp = File::Temp->new( TEMPLATE => "linksXXXXXXX",
-                               UNLINK => 0 );
+    my $tmp = File::Temp->new( TEMPLATE => "linksXXXXXXX" );
     $tmp || die "can't create tmp: $!";
     for my $missing (sort keys %{$links}) {
         my $line = $missing . " " . $links->{$missing} . "\n";
