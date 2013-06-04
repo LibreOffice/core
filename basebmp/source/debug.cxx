@@ -81,7 +81,7 @@ namespace basebmp
 
 #if OSL_DEBUG_LEVEL > 2
 
-    SAL_DLLPUBLIC_EXPORT void debugDump( const BitmapDeviceSharedPtr& rDevice,
+    void debugDump( const BitmapDeviceSharedPtr& rDevice,
                     std::ostream&                rOutputStream )
     {
         const basegfx::B2IVector aSize( rDevice->getSize() );

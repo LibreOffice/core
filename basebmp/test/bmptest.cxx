@@ -89,6 +89,22 @@ private:
             DrawMode_PAINT );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 32",
                                countPixel( rDevice, aCol ) == 32);
+
+        BitmapDeviceSharedPtr pClone = subsetBitmapDevice(
+            rBmp, aSourceRect );
+
+        // two overlapping areas within the same memory block, check
+        // if we clobber the mem or properly detect the case
+        const basegfx::B2IBox aSourceOverlap(0,0,6,10);
+        const basegfx::B2IBox aDestOverlap(3,0,9,10);
+        rBmp->drawBitmap(
+            pClone,
+            aSourceOverlap,
+            aDestOverlap,
+            DrawMode_PAINT );
+        CPPUNIT_ASSERT_MESSAGE("clobbertest - number of set pixel is not 50",
+                               countPixel( rBmp, aCol ) == 50);
+
     }
 
     void implTestBmpClip(const BitmapDeviceSharedPtr& rDevice,
