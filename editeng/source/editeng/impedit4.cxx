@@ -84,13 +84,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
-void Swapsal_uIt16s( sal_uInt16& rX, sal_uInt16& rY )
-{
-    sal_uInt16 n = rX;
-    rX = rY;
-    rY = n;
-}
-
 EditPaM ImpEditEngine::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     sal_Bool _bUpdate = GetUpdateMode();
@@ -2611,8 +2604,8 @@ sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
 
         ContentNode* pNode = aEditDoc.GetObject( nNode );
 
-        sal_uInt16 nStartPos = 0;
-        sal_uInt16 nEndPos = pNode->Len();
+        sal_Int32 nStartPos = 0;
+        sal_Int32 nEndPos = (sal_Int32)pNode->Len();
         if ( nNode == nStartNode )
         {
             if ( bBack )
@@ -2633,11 +2626,11 @@ sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
         bool bFound = false;
         if ( bBack )
         {
-            Swapsal_uIt16s( nStartPos, nEndPos );
-            bFound = aSearcher.SearchBkwrd( aParaStr, &nStartPos, &nEndPos);
+            {sal_Int32 nt = nStartPos; nStartPos = nEndPos; nEndPos = nt;}
+            bFound = aSearcher.SearchBackward( aParaStr, &nStartPos, &nEndPos);
         }
         else
-            bFound = aSearcher.SearchFrwrd( aParaStr, &nStartPos, &nEndPos);
+            bFound = aSearcher.SearchForward( aParaStr, &nStartPos, &nEndPos);
 
         if ( bFound )
         {

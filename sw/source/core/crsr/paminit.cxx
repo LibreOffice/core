@@ -28,7 +28,7 @@ static SwMoveFnCollection aFwrd = {
     /* fnSections   */  &GoEndSection,
     /* fnCmpOp      */  &SwPosition::operator<,
     /* fnGetHint    */  &GetFrwrdTxtHint,
-    /* fnSearch     */  &utl::TextSearch::SearchFrwrd,
+    /* fnSearch     */  &utl::TextSearch::SearchForward,
     /* fnSection    */  &SwNodes::GoStartOfSection
 };
 
@@ -39,7 +39,7 @@ static SwMoveFnCollection aBwrd = {
     /* fnSections   */  &GoStartSection,
     /* fnCmpOp      */  &SwPosition::operator>,
     /* fnGetHint    */  &GetBkwrdTxtHint,
-    /* fnSearch     */  &utl::TextSearch::SearchBkwrd,
+    /* fnSearch     */  &utl::TextSearch::SearchBackward,
     /* fnSection    */  &SwNodes::GoEndOfSection
 };
 

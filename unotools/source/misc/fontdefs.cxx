@@ -473,14 +473,14 @@ OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
     {
         // no token delimiter found => handle last token
         rIndex = -1;
-        nTokenLen = STRING_LEN;
 
         // optimize if the token string consists of just one token
         if( !nTokenStart )
             return rTokenStr;
+        nTokenLen = nStringLen - nTokenStart;
     }
 
-    return String( rTokenStr, nTokenStart, nTokenLen );
+    return OUString( rTokenStr.getStr() + nTokenStart, nTokenLen );
 }
 
 // =======================================================================

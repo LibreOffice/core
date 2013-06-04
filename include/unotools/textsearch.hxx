@@ -159,16 +159,9 @@ public:
                     search forward: start <= end
                     search backward: end <= start
     */
-    int SearchFrwrd( const String &rStr,
-                    xub_StrLen* pStart, xub_StrLen* pEnde,
-                    ::com::sun::star::util::SearchResult* pSrchResult = 0 );
     bool SearchForward( const OUString &rStr,
                         sal_Int32* pStart, sal_Int32* pEnd,
                         ::com::sun::star::util::SearchResult* pRes = 0 );
-    int SearchBkwrd( const String &rStr,
-                    xub_StrLen* pStart, xub_StrLen* pEnde,
-                    ::com::sun::star::util::SearchResult* pSrchResult = 0 );
-
     bool SearchBackward( const OUString &rStr,
                          sal_Int32* pStart, sal_Int32* pEnde,
                          ::com::sun::star::util::SearchResult* pSrchResult = 0 );
@@ -177,7 +170,7 @@ public:
                     const ::com::sun::star::lang::Locale& rLocale );
 
     /* replace back references in the replace string by the sub expressions from the search result */
-    void ReplaceBackReferences( String& rReplaceStr, const String &rStr, const ::com::sun::star::util::SearchResult& rResult );
+    void ReplaceBackReferences( OUString& rReplaceStr, const OUString &rStr, const ::com::sun::star::util::SearchResult& rResult );
 
 };
 

@@ -1040,9 +1040,9 @@ unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::R
                 sal_Int32 nIndex = 0;
                 while( nIndex != -1 )
                 {
-                    String aToken( pLine->getToken( 0, ',', nIndex ) );
+                    OUString aToken( pLine->getToken( 0, ',', nIndex ) );
                     for( int k = 0; k < 32; k++ )
-                        if( aToken.EqualsIgnoreCaseAscii( pAttribNames[k] ) )
+                        if( aToken.equalsIgnoreAsciiCaseAscii( pAttribNames[k] ) )
                         {
                             type |= 1 << k;
                             break;

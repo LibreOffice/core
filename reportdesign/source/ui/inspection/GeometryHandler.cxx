@@ -2088,9 +2088,9 @@ bool GeometryHandler::impl_isCounterFunction_throw(const OUString& _sQuotedFunct
             aSearchOptions.searchFlag = 0x00000100;
             aSearchOptions.searchString = m_aCounterFunction.m_sSearchString;
             utl::TextSearch aTextSearch(aSearchOptions);
-            xub_StrLen start = 0;
-            xub_StrLen end = sFormula.Len();
-            if ( aTextSearch.SearchFrwrd(sFormula,&start,&end) && start == 0 && end == sFormula.Len()) // counter function found
+            sal_Int32 start = 0;
+            sal_Int32 end = (sal_Int32)sFormula.Len();
+            if ( aTextSearch.SearchForward(sFormula, &start, &end) && start == 0 && end == (sal_Int32)sFormula.Len()) // counter function found
             {
                 const uno::Reference< report::XGroup > xGroup(aFind.first->second.second,uno::UNO_QUERY);
                 if ( xGroup.is() )

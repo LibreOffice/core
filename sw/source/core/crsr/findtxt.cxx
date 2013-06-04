@@ -479,10 +479,15 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
             pScriptIter->Next();
         }
 
+        sal_Int32 ns = (sal_Int32)nStart;
+        sal_Int32 ne = (sal_Int32)nEnd;
+
         if( nSearchScript == nCurrScript &&
-                (rSTxt.*fnMove->fnSearch)( sCleanStr, &nStart, &nEnd, 0 ) &&
-                !(bZeroMatch = (nStart == nEnd)))
+                (rSTxt.*fnMove->fnSearch)( sCleanStr, &ns, &ne, 0 ) &&
+                !(bZeroMatch = (ns == ne)))
         {
+            nStart = (sal_uInt16)ns;
+            nEnd = (sal_uInt16)ne;
             // set section correctly
             *GetPoint() = *pPam->GetPoint();
             SetMark();
@@ -669,7 +674,7 @@ String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
             SearchResult aResult;
             if( aSTxt.SearchForward( rStr, &nStart, &nEnd, &aResult ) )
             {
-                String aReplaceStr( rSearchOpt.replaceString );
+                OUString aReplaceStr( rSearchOpt.replaceString );
                 aSTxt.ReplaceBackReferences( aReplaceStr, rStr, aResult );
                 pRet = new String( aReplaceStr );
             }

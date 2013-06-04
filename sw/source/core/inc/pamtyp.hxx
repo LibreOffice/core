@@ -68,8 +68,8 @@ typedef void (*GoDoc)( SwPosition* );
 typedef void (*GoSection)( SwPosition* );
 typedef bool (SwPosition:: *CmpOp)( const SwPosition& ) const;
 typedef const SwTxtAttr* (*GetHint)( const SwpHints&, sal_uInt16&, xub_StrLen );
-typedef int (utl::TextSearch:: *SearchTxt)( const String&, xub_StrLen*,
-                    xub_StrLen*, ::com::sun::star::util::SearchResult* );
+typedef bool (utl::TextSearch:: *SearchTxt)( const OUString&, sal_Int32*,
+                    sal_Int32*, ::com::sun::star::util::SearchResult* );
 typedef void (SwNodes:: *MvSection)( SwNodeIndex * ) const;
 
 
