@@ -237,11 +237,11 @@ int TextSearch::SearchFrwrd( const String & rStr, xub_StrLen* pStart,
     return nRet;
 }
 
-sal_Bool TextSearch::SearchForward( const OUString &rStr,
-                    sal_Int32* pStart, sal_Int32* pEnd,
-                    ::com::sun::star::util::SearchResult* pRes)
+bool TextSearch::SearchForward( const OUString &rStr,
+                                sal_Int32* pStart, sal_Int32* pEnd,
+                                ::com::sun::star::util::SearchResult* pRes)
 {
-    sal_Bool nRet = sal_False;
+    bool nRet = false;
     try
     {
         if( xTextSearch.is() )
@@ -250,7 +250,7 @@ sal_Bool TextSearch::SearchForward( const OUString &rStr,
                                                     rStr, *pStart, *pEnd ));
             if( aRet.subRegExpressions > 0 )
             {
-                nRet = sal_True;
+                nRet = true;
                 // the XTextsearch returns in startOffset the higher position
                 // and the endposition is always exclusive.
                 // The caller of this function will have in startPos the
@@ -289,6 +289,36 @@ int TextSearch::SearchBkwrd( const String & rStr, xub_StrLen* pStart,
                 // lower pos. and end
                 *pEnde = (xub_StrLen)aRet.startOffset[ 0 ];
                 *pStart = (xub_StrLen)aRet.endOffset[ 0 ];
+                if( pRes )
+                    *pRes = aRet;
+            }
+        }
+    }
+    catch ( Exception& )
+    {
+        SAL_WARN( "unotools.i18n", "SearchBackward: Exception caught!" );
+    }
+    return nRet;
+}
+
+bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
+                                 sal_Int32* pEnde, SearchResult* pRes )
+{
+    bool nRet = false;
+    try
+    {
+        if( xTextSearch.is() )
+        {
+            SearchResult aRet( xTextSearch->searchBackward( rStr, *pStart, *pEnde ));
+            if( aRet.subRegExpressions )
+            {
+                nRet = true;
+                // the XTextsearch returns in startOffset the higher position
+                // and the endposition is always exclusive.
+                // The caller of this function will have in startPos the
+                // lower pos. and end
+                *pEnde = aRet.startOffset[ 0 ];
+                *pStart = aRet.endOffset[ 0 ];
                 if( pRes )
                     *pRes = aRet;
             }

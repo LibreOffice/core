@@ -194,10 +194,10 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
                 sal_Int32 k, m = aHead.getLength();
                 for (k = 0; k < m; k++)
                 {
-                    String aName( aHead[k].Name );
-                    String aValue( aHead[k].Value );
+                    OUString aName( aHead[k].Name );
+                    OUString aValue( aHead[k].Value );
 
-                    if (aName.CompareIgnoreCaseToAscii("Expires") == COMPARE_EQUAL)
+                    if (aName.compareToIgnoreAsciiCase("Expires") == 0 )
                     {
                         DateTime aExpires (0, 0);
                         if (INetRFC822Message::ParseDateField (aValue, aExpires))
@@ -917,8 +917,8 @@ static sal_Bool UCBOpenContentSync(
         return _UCBOpenContentSync(
             xLockBytes,xContent,rArg,xSink,xInteract,xProgress,xHandler);
 
-    if ( (aScheme.compareToAscii( "http" ) != COMPARE_EQUAL) ||
-         (aScheme.compareToAscii( "https" ) != COMPARE_EQUAL) )
+    if ( (aScheme.compareToAscii( "http" ) != 0 ) ||
+         (aScheme.compareToAscii( "https" ) != 0 ) )
         xLockBytes->SetStreamValid_Impl();
 
     Reference< XPropertiesChangeListener > xListener;
@@ -1154,7 +1154,7 @@ static sal_Bool _UCBOpenContentSync(
 
     // http protocol must be handled in a special way: during the opening process the input stream may change
     // only the last inputstream after notifying the document headers is valid
-    if ( aScheme.compareToAscii("http") != COMPARE_EQUAL )
+    if ( aScheme.compareToAscii("http") != 0 )
         xLockBytes->SetStreamValid_Impl();
 
     Reference< XPropertiesChangeListener > xListener = new UcbPropertiesChangeListener_Impl( xLockBytes );

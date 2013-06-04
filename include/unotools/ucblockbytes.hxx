@@ -94,8 +94,8 @@ class UNOTOOLS_DLLPUBLIC UcbLockBytes : public virtual SvLockBytes
     osl::Condition          m_aTerminated;
     osl::Mutex              m_aMutex;
 
-    String                  m_aContentType;
-    String                  m_aRealURL;
+    OUString                m_aContentType;
+    OUString                m_aRealURL;
     DateTime                m_aExpireDate;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >  m_xInputStream;
@@ -144,8 +144,8 @@ public:
                             { return m_nError; }
 
     // the following properties are available when and after the first DataAvailable callback has been executed
-    String                  GetContentType() const;
-    String                  GetRealURL() const;
+    OUString                GetContentType() const;
+    OUString                GetRealURL() const;
     DateTime                GetExpireDate() const;
 
     // calling this method delegates the responsibility to call closeinput to the caller!
@@ -183,8 +183,8 @@ public:
     void                    setDontClose_Impl()
                             { m_bDontClose = sal_True; }
 
-    void                    SetContentType_Impl( const String& rType ) { m_aContentType = rType; }
-    void                    SetRealURL_Impl( const String& rURL )  { m_aRealURL = rURL; }
+    void                    SetContentType_Impl( const OUString& rType ) { m_aContentType = rType; }
+    void                    SetRealURL_Impl( const OUString& rURL )  { m_aRealURL = rURL; }
     void                    SetExpireDate_Impl( const DateTime& rDateTime )  { m_aExpireDate = rDateTime; }
     void                    SetStreamValid_Impl();
 };

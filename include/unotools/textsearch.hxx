@@ -162,12 +162,16 @@ public:
     int SearchFrwrd( const String &rStr,
                     xub_StrLen* pStart, xub_StrLen* pEnde,
                     ::com::sun::star::util::SearchResult* pSrchResult = 0 );
-    sal_Bool SearchForward( const OUString &rStr,
-                    sal_Int32* pStart, sal_Int32* pEnd,
-                    ::com::sun::star::util::SearchResult* pRes = 0 );
+    bool SearchForward( const OUString &rStr,
+                        sal_Int32* pStart, sal_Int32* pEnd,
+                        ::com::sun::star::util::SearchResult* pRes = 0 );
     int SearchBkwrd( const String &rStr,
                     xub_StrLen* pStart, xub_StrLen* pEnde,
                     ::com::sun::star::util::SearchResult* pSrchResult = 0 );
+
+    bool SearchBackward( const OUString &rStr,
+                         sal_Int32* pStart, sal_Int32* pEnde,
+                         ::com::sun::star::util::SearchResult* pSrchResult = 0 );
 
     void SetLocale( const ::com::sun::star::util::SearchOptions& rOpt,
                     const ::com::sun::star::lang::Locale& rLocale );
