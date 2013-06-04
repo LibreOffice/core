@@ -41,6 +41,10 @@
 #include <unicode/uscript.h>
 #include <unicode/ubidi.h>
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#include <comphelper/processfactory.hxx>
+
 // =======================================================================
 // layout implementation for ServerFont
 // =======================================================================
@@ -90,22 +94,41 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     }
 }
 
+void ServerFontLayout::setNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos,
+    bool bRightToLeft)
+{
+    if (nCharPos < 0)
+        return;
+
+    using namespace ::com::sun::star;
+
+    if (!mxBreak.is())
+    {
+        uno::Reference< lang::XMultiServiceFactory > xFactory =
+            comphelper::getProcessServiceFactory();
+        mxBreak = uno::Reference< i18n::XBreakIterator >(xFactory->createInstance(
+            "com.sun.star.i18n.BreakIterator"), uno::UNO_QUERY);
+    }
+
+    LanguageTag aLangTag(rArgs.meLanguage);
+    lang::Locale aLocale(aLangTag.getLocale());
+
+    //if position nCharPos is missing in the font, grab the entire grapheme and
+    //mark all glyphs as missing so the whole thing is rendered with the same
+    //font
+    OUString aRun(rArgs.mpStr);
+    sal_Int32 nDone;
+    sal_Int32 nGraphemeStartPos =
+        mxBreak->previousCharacters(aRun, nCharPos, aLocale,
+            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+    sal_Int32 nGraphemeEndPos =
+        mxBreak->nextCharacters(aRun, nCharPos, aLocale,
+            i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+
+    rArgs.NeedFallback(nGraphemeStartPos, nGraphemeEndPos, bRightToLeft);
+}
+
 // =======================================================================
-
-static bool lcl_CharIsJoiner(sal_Unicode cChar)
-{
-    return ((cChar == 0x200C) || (cChar == 0x200D));
-}
-
-static bool needPreviousCode(sal_Unicode cChar)
-{
-    return lcl_CharIsJoiner(cChar) || U16_IS_LEAD(cChar);
-}
-
-static bool needNextCode(sal_Unicode cChar)
-{
-    return lcl_CharIsJoiner(cChar) || U16_IS_TRAIL(cChar);
-}
 
 std::ostream &operator <<(std::ostream& s, ServerFont* pFont)
 {
@@ -401,9 +424,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             // if needed request glyph fallback by updating LayoutArgs
             if (!nGlyphIndex)
             {
-                if (nCharPos >= 0)
-                    rArgs.NeedFallback(nCharPos, bRightToLeft);
-
+                rLayout.setNeedFallback(rArgs, nCharPos, bRightToLeft);
                 if (SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags)
                     continue;
             }
@@ -1006,15 +1027,7 @@ bool IcuLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             // if needed request glyph fallback by updating LayoutArgs
             if( !nGlyphIndex )
             {
-                if( nCharPos >= 0 )
-                {
-                    rArgs.NeedFallback( nCharPos, bRightToLeft );
-                    if ( (nCharPos > 0) && needPreviousCode(rArgs.mpStr[nCharPos-1]) )
-                        rArgs.NeedFallback( nCharPos-1, bRightToLeft );
-                    else if ( (nCharPos + 1 < nEndRunPos) && needNextCode(rArgs.mpStr[nCharPos+1]) )
-                        rArgs.NeedFallback( nCharPos+1, bRightToLeft );
-                }
-
+                rLayout.setNeedFallback(rArgs, nCharPos, bRightToLeft);
                 if( SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags )
                     continue;
             }

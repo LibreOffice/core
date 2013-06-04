@@ -37,6 +37,7 @@ class ImplFontOptions;
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 
 namespace basegfx { class B2DPolyPolygon; }
 
@@ -311,6 +312,7 @@ class VCL_DLLPUBLIC ServerFontLayout : public GenericSalLayout
 {
 private:
     ServerFont&     mrServerFont;
+    com::sun::star::uno::Reference<com::sun::star::i18n::XBreakIterator> mxBreak;
 
     // enforce proper copy semantic
     SAL_DLLPRIVATE  ServerFontLayout( const ServerFontLayout& );
@@ -323,6 +325,9 @@ public:
     virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    DrawText( SalGraphics& ) const;
+    void            setNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nIndex,
+                        bool bRightToLeft);
+
     ServerFont&     GetServerFont() const   { return mrServerFont; }
 };
 
