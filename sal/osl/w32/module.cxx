@@ -324,7 +324,7 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT4( void *pv, rtl_uString **p
             ZeroMemory( &ModuleInfo, sizeof(ModuleInfo) );
             ModuleInfo.SizeOfStruct = sizeof(ModuleInfo);
 
-            bSuccess = (sal_Bool)(!!lpfnSymGetModuleInfo( GetCurrentProcess(), (DWORD)pv, &ModuleInfo ));
+            bSuccess = (sal_Bool)(!!lpfnSymGetModuleInfo( GetCurrentProcess(), (DWORD_PTR)pv, &ModuleInfo ));
 
             if ( bSuccess )
             {
