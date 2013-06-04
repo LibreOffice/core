@@ -65,10 +65,10 @@ const sal_Int32 OOX_COLOR_FONTAUTO          = 0x7FFF;   /// Font auto color (sys
 // ----------------------------------------------------------------------------
 
 const sal_Int16 API_LINE_NONE               = 0;
-const sal_Int16 API_LINE_HAIR               = 2;
-const sal_Int16 API_LINE_THIN               = 35;
-const sal_Int16 API_LINE_MEDIUM             = 88;
-const sal_Int16 API_LINE_THICK              = 141;
+const sal_Int16 API_LINE_HAIR               = 1;
+const sal_Int16 API_LINE_THIN               = 1;
+const sal_Int16 API_LINE_MEDIUM             = 35;
+const sal_Int16 API_LINE_THICK              = 53;
 
 const sal_Int16 API_ESCAPE_NONE             = 0;        /// No escapement.
 const sal_Int16 API_ESCAPE_SUPERSCRIPT      = 101;      /// Superscript: raise characters automatically (magic value 101).
