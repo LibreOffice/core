@@ -2719,7 +2719,7 @@ reg_get_value()
 }
 
 
-if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
+if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([whether to build a 64-bit LibreOffice])
     if test "$enable_64_bit" = "" -o "$enable_64_bit" = "no"; then
         AC_MSG_RESULT([no])
@@ -2729,7 +2729,9 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
         WINDOWS_SDK_ARCH="x64"
         BITNESS_OVERRIDE=64
     fi
+fi
 
+if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
     AC_MSG_CHECKING([whether to use DirectX])
     if test "$enable_directx" = "yes" -o "$enable_directx" = ""; then
         ENABLE_DIRECTX="TRUE"
