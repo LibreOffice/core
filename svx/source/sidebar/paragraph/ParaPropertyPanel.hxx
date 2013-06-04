@@ -145,7 +145,6 @@ private:
     Image  maIndHang;
 
     ImageList   maNumBImageList;
-    ImageList   maNumBImageListH;
     ImageList   maNumBImageListRTL;
     Image       maImgBackColorHigh;
     Image       maImgBackColor;

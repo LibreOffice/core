@@ -57,7 +57,7 @@
 #define TBX_VERT_ALIGN      40
 #define TBX_NUM_BULLET      44
 #define IL_NUM_BULLET       45
-#define ILH_NUM_BULLET      46
+
 #define FT_BACK_COLOR       47
 #define TBX_BACK_COLOR      48
 #define TBI_BACK_COLOR      49
