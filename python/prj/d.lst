@@ -73,7 +73,7 @@ mkdir: %_DEST%\lib%_EXT%\python\python2.7\config
 ..\%__SRC%\misc\build\Python-2.7.5\Lib\multiprocessing\dummy\* %_DEST%\lib%_EXT%\python\multiprocessing\dummy\*
 ..\%__SRC%\misc\build\Python-2.7.5\Lib\unittest\* %_DEST%\lib%_EXT%\python\unittest\*
 ..\%__SRC%\misc\build\Python-2.7.5\Makefile %_DEST%\lib%_EXT%\python\python2.7\config\Makefile
-
+..\%__SRC%\misc\build\python-inst\lib\python2.7\_sysconfigdata.py %_DEST%\lib%_EXT%\python\_sysconfigdata.py
 ..\pyversion.mk %_DEST%\inc%_EXT%\pyversion.mk
 
 ..\%__SRC%\misc\build\Python-2.7.5\Include\* %_DEST%\inc%_EXT%\python\*
