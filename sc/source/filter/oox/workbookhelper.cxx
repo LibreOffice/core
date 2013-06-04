@@ -720,7 +720,7 @@ void WorkbookHelper::finalizeWorkbookImport()
         contains the workbook code name). */
     StorageRef xVbaPrjStrg = mrBookGlob.getVbaProjectStorage();
     if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
-        getBaseFilter().getVbaProject().importVbaProject( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
+        getBaseFilter().getVbaProject().importModulesAndForms( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
 }
 
 // document model -------------------------------------------------------------

@@ -25,6 +25,7 @@
 #include "oox/helper/refvector.hxx"
 #include "oox/helper/storagebase.hxx"
 #include "oox/dllapi.h"
+#include "oox/ole/vbamodule.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -126,7 +127,12 @@ public:
     bool                importVbaProject(
                             StorageBase& rVbaPrjStrg );
 
-    /** Registers a macro atatcher object. For details, see description of the
+    /** Reads vba module related information from the project streams */
+    void                readVbaModules( StorageBase& rVbaPrjStrg );
+    /** Imports (and creates) vba modules and user forms from the vba project records previously read.
+      Note: ( expects that readVbaModules was already called ) */
+    void                importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr = true );
+    /** Registers a macro attacher object. For details, see description of the
         VbaMacroAttacherBase class. */
     void                registerMacroAttacher( const VbaMacroAttacherRef& rxAttacher );
 
@@ -194,6 +200,9 @@ private:
     OUString     maPrjName;          ///< Name of the VBA project.
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                         mxOleOverridesSink;
+    typedef RefMap< rtl::OUString, VbaModule > VbaModuleMap;
+    VbaModuleMap maModules;
+    VbaModuleMap maModulesByStrm;
 };
 
 // ============================================================================
