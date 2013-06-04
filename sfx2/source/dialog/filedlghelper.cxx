@@ -1828,9 +1828,6 @@ void FileDialogHelper_Impl::addFilters( const String& rFactory,
 
     TSortedFilterList         aIter   (xResult);
 
-    // no matcher any longer used ...
-    mbDeleteMatcher = sal_False;
-
     // append the filters
     OUString sFirstFilter;
     if (OPEN == lcl_OpenOrSave(m_nDialogType))
