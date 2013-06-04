@@ -486,7 +486,8 @@ static DWORD GetCaseCorrectPathNameEx(
             else
                 bSkipThis = FALSE;
 
-            GetCaseCorrectPathNameEx( lpszPath, cchBuffer, nSkipLevels, bCheckExistence );
+            if ( !GetCaseCorrectPathNameEx( lpszPath, cchBuffer, nSkipLevels, bCheckExistence ) )
+                return 0;
 
             PathAddBackslash( lpszPath, cchBuffer );
 
