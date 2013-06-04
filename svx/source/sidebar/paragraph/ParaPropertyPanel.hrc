@@ -34,8 +34,6 @@
 #define MF_AFTER_INDENT                              4
 #define MF_FL_INDENT                                 6
 #define TBX_HORIZONTALALIGNMENT                      5
-#define IMG_PARA_INC                                 13
-#define IMG_PARA_DEC                                 14
 #define IMG_INDENT_HANG                              15
 #define FT_INDENT                                    16
 #define TBX_INDENT_INC_DEC                           17
