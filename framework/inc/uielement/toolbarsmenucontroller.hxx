@@ -51,7 +51,7 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            ToolbarsMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+            ToolbarsMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
             virtual ~ToolbarsMenuController();
 
             // XServiceInfo
@@ -90,6 +90,7 @@ namespace framework
             void addCommand( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const OUString& rCommandURL, const OUString& aLabel );
             sal_Bool isContextSensitiveToolbarNonVisible();
 
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >                m_xContext;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >                m_xPersistentWindowState;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >                m_xUICommandDescription;
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >   m_xModuleCfgMgr;

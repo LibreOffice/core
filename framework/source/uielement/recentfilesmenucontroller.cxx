@@ -64,7 +64,7 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
         }
 };
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   RecentFilesMenuController                   ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2      (   RecentFilesMenuController                   ,
                                             OWeakObject                                 ,
                                             SERVICENAME_POPUPMENUCONTROLLER             ,
                                             IMPLEMENTATIONNAME_RECENTFILESMENUCONTROLLER
@@ -72,8 +72,8 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   RecentFilesMenuController           
 
 DEFINE_INIT_SERVICE                     (   RecentFilesMenuController, {} )
 
-RecentFilesMenuController::RecentFilesMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    svt::PopupMenuControllerBase( xServiceManager ),
+RecentFilesMenuController::RecentFilesMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+    svt::PopupMenuControllerBase( xContext ),
     m_bDisabled( sal_False )
 {
 }
@@ -254,7 +254,6 @@ void SAL_CALL RecentFilesMenuController::disposing( const EventObject& ) throw (
     osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
-    m_xServiceManager.clear();
 
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));

@@ -67,7 +67,7 @@ using namespace com::sun::star::util;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   LanguageSelectionMenuController         ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2      (   LanguageSelectionMenuController         ,
                                             OWeakObject                             ,
                                             SERVICENAME_POPUPMENUCONTROLLER         ,
                                             IMPLEMENTATIONNAME_LANGUAGESELECTIONMENUCONTROLLER
@@ -75,10 +75,10 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   LanguageSelectionMenuController     
 
 DEFINE_INIT_SERVICE                     (   LanguageSelectionMenuController, {} )
 
-LanguageSelectionMenuController::LanguageSelectionMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    svt::PopupMenuControllerBase( xServiceManager ),
+LanguageSelectionMenuController::LanguageSelectionMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+    svt::PopupMenuControllerBase( xContext ),
     m_bShowMenu( sal_True ),
-    m_aLangGuessHelper( comphelper::getComponentContext(xServiceManager) )
+    m_aLangGuessHelper( xContext )
 {
 }
 
@@ -95,7 +95,6 @@ void SAL_CALL LanguageSelectionMenuController::disposing( const EventObject& ) t
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xLanguageDispatch.clear();
-    m_xServiceManager.clear();
 
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));

@@ -130,8 +130,8 @@ class Desktop   :   // interfaces
     public:
 
         //  constructor / destructor
-                 Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
-        virtual ~Desktop(                                                                        );
+                 Desktop( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        virtual ~Desktop(                                                                    );
 
         //  XInterface, XTypeProvider, XServiceInfo
         FWK_DECLARE_XINTERFACE
@@ -403,7 +403,7 @@ class Desktop   :   // interfaces
     #ifdef ENABLE_ASSERTIONS
     private:
 
-        static sal_Bool implcp_ctor                     ( const css::uno::Reference< css::lang::XMultiServiceFactory >&     xFactory         );
+        static sal_Bool implcp_ctor                     ( const css::uno::Reference< css::uno::XComponentContext >&         xFactory         );
         static sal_Bool implcp_addEventListener         ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
         static sal_Bool implcp_removeEventListener      ( const css::uno::Reference< css::lang::XEventListener >&           xListener        );
 
@@ -418,7 +418,7 @@ class Desktop   :   // interfaces
     //-------------------------------------------------------------------------------------------------------------
     private:
 
-        css::uno::Reference< css::lang::XMultiServiceFactory >          m_xFactory                  ;   /// reference to factory, which has create this instance
+        css::uno::Reference< css::uno::XComponentContext >              m_xContext                  ;   /// reference to factory, which has create this instance
         FrameContainer                                                  m_aChildTaskContainer       ;   /// array of child tasks (children of desktop are tasks; and tasks are also frames - But pure frames are not accepted!)
         ::cppu::OMultiTypeInterfaceContainerHelper                      m_aListenerContainer        ;   /// container for ALL Listener
         css::uno::Reference< css::frame::XFrames >                      m_xFramesHelper             ;   /// helper for XFrames, XIndexAccess, XElementAccess and implementation of a childcontainer!

@@ -56,7 +56,7 @@ const sal_uInt16 ALL_MENUITEM_ID = 1;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   HeaderMenuController                    ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2      (   HeaderMenuController                    ,
                                             OWeakObject                             ,
                                             SERVICENAME_POPUPMENUCONTROLLER         ,
                                             IMPLEMENTATIONNAME_HEADERMENUCONTROLLER
@@ -64,8 +64,8 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   HeaderMenuController                
 
 DEFINE_INIT_SERVICE                     (   HeaderMenuController, {} )
 
-HeaderMenuController::HeaderMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager,bool _bFooter ) :
-    svt::PopupMenuControllerBase( xServiceManager )
+HeaderMenuController::HeaderMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext, bool _bFooter ) :
+    svt::PopupMenuControllerBase( xContext )
     ,m_bFooter(_bFooter)
 {
 }
@@ -192,7 +192,6 @@ void SAL_CALL HeaderMenuController::disposing( const EventObject& ) throw ( Runt
     osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
-    m_xServiceManager.clear();
 
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));

@@ -38,7 +38,7 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            RecentFilesMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+            RecentFilesMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
             virtual ~RecentFilesMenuController();
 
             // XServiceInfo

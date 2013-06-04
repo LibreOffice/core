@@ -53,14 +53,14 @@ using namespace com::sun::star::container;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   FooterMenuController                    ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2      (   FooterMenuController                    ,
                                             OWeakObject                             ,
                                             SERVICENAME_POPUPMENUCONTROLLER         ,
                                             IMPLEMENTATIONNAME_FOOTERMENUCONTROLLER
                                         )
 
-FooterMenuController::FooterMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    HeaderMenuController( xServiceManager,true )
+FooterMenuController::FooterMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+    HeaderMenuController( xContext,true )
 {
 }
 

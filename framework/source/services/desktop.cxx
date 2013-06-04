@@ -117,7 +117,7 @@ DEFINE_XTYPEPROVIDER_16                 (   Desktop                             
                                             css::frame::XUntitledNumbers
                                         )
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   Desktop                                                 ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   Desktop                                                 ,
                                             ::cppu::OWeakObject                                     ,
                                             DECLARE_ASCII("com.sun.star.frame.Desktop"             ),
                                             IMPLEMENTATIONNAME_DESKTOP
@@ -143,7 +143,7 @@ DEFINE_INIT_SERVICE                     (   Desktop,
                                                 // Initialize a new dispatchhelper-object to handle dispatches.
                                                 // We use these helper as slave for our interceptor helper ... not directly!
                                                 // But he is event listener on THIS instance!
-                                                DispatchProvider* pDispatchHelper = new DispatchProvider( comphelper::getComponentContext(m_xFactory), this );
+                                                DispatchProvider* pDispatchHelper = new DispatchProvider( m_xContext, this );
                                                 css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY );
 
                                                 //-------------------------------------------------------------------------------------------------------------
@@ -195,7 +195,7 @@ DEFINE_INIT_SERVICE                     (   Desktop,
 
     @onerror    We throw an ASSERT in debug version or do nothing in relaese version.
 *//*-*************************************************************************************************************/
-Desktop::Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
+Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xContext )
         //  Init baseclasses first
         //  Attention: Don't change order of initialization!
         //      ThreadHelpBase is a struct with a lock as member. We can't use a lock as direct member!
@@ -209,7 +209,7 @@ Desktop::Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& 
         #ifdef ENABLE_ASSERTIONS
         ,   m_bIsTerminated         ( sal_False                                     )   // see dispose() for further information!
         #endif
-        ,   m_xFactory              ( xFactory                                      )
+        ,   m_xContext              ( xContext                                      )
         ,   m_aChildTaskContainer   (                                               )
         ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex()                )
         ,   m_xFramesHelper         (                                               )
@@ -230,7 +230,7 @@ Desktop::Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& 
 {
     // Safe impossible cases
     // We don't accept all incoming parameter.
-    LOG_ASSERT2( implcp_ctor( xFactory ), "Desktop::Desktop()", "Invalid parameter detected!")
+    LOG_ASSERT2( implcp_ctor( xContext ), "Desktop::Desktop()", "Invalid parameter detected!")
 }
 
 /*-************************************************************************************************************//**
@@ -643,11 +643,11 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
 
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xFactory;
+    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
 
     SAL_INFO( "fwk.desktop", "PERFORMANCE - Desktop::loadComponentFromURL()" );
-    return LoadEnv::loadComponentFromURL(xThis, comphelper::getComponentContext(xSMGR), sURL, sTargetFrameName, nSearchFlags, lArguments);
+    return LoadEnv::loadComponentFromURL(xThis, xContext, sURL, sTargetFrameName, nSearchFlags, lArguments);
 }
 
 /*-************************************************************************************************************//**
@@ -1038,7 +1038,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
     // get threadsafe some necessary member which are neccessary for following functionality
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory = m_xFactory;
+    css::uno::Reference< css::uno::XComponentContext> xContext = m_xContext;
     aReadLock.unlock();
     /* } SAFE */
 
@@ -1049,7 +1049,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
     //-----------------------------------------------------------------------------------------------------
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
-        TaskCreator aCreator( comphelper::getComponentContext(xFactory) );
+        TaskCreator aCreator( xContext );
         xTarget = aCreator.createTask(sTargetFrameName,sal_False);
     }
 
@@ -1147,7 +1147,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
             (nSearchFlags & css::frame::FrameSearchFlag::CREATE)
            )
         {
-            TaskCreator aCreator( comphelper::getComponentContext(xFactory) );
+            TaskCreator aCreator( xContext );
             xTarget = aCreator.createTask(sTargetFrameName,sal_False);
         }
     }
@@ -1218,7 +1218,7 @@ void SAL_CALL Desktop::dispose()
     m_xDispatchHelper.clear();
     m_xFramesHelper.clear();
     m_xLastFrame.clear();
-    m_xFactory.clear();
+    m_xContext.clear();
 
     m_xPipeTerminator.clear();
     m_xQuickLauncher.clear();
@@ -1982,11 +1982,11 @@ void Desktop::impl_sendNotifyTerminationEvent()
 
 //*****************************************************************************************************************
 //  We work with valid servicemanager only.
-sal_Bool Desktop::implcp_ctor( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
+sal_Bool Desktop::implcp_ctor( const css::uno::Reference< css::uno::XComponentContext >& xContext )
 {
     return(
-            ( &xFactory     ==  NULL        )   ||
-            ( xFactory.is() ==  sal_False   )
+            ( &xContext     ==  NULL        )   ||
+            ( xContext.is() ==  sal_False   )
           );
 }
 

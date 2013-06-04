@@ -51,7 +51,7 @@ using namespace com::sun::star::view;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   FontSizeMenuController                      ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2      (   FontSizeMenuController                      ,
                                             OWeakObject                                 ,
                                             SERVICENAME_POPUPMENUCONTROLLER             ,
                                             IMPLEMENTATIONNAME_FONTSIZEMENUCONTROLLER
@@ -59,8 +59,8 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   FontSizeMenuController              
 
 DEFINE_INIT_SERVICE                     (   FontSizeMenuController, {} )
 
-FontSizeMenuController::FontSizeMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    svt::PopupMenuControllerBase( xServiceManager ),
+FontSizeMenuController::FontSizeMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+    svt::PopupMenuControllerBase( xContext ),
     m_pHeightArray( 0 )
 {
 }

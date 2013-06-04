@@ -46,7 +46,7 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            HeaderMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager,bool _bFooter = sal_False );
+            HeaderMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext, bool _bFooter = sal_False );
             virtual ~HeaderMenuController();
 
             // XServiceInfo

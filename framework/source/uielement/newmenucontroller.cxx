@@ -62,7 +62,7 @@ static const char SFX_REFERER_USER[] = "private:user";
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   NewMenuController                           ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2      (   NewMenuController                           ,
                                             OWeakObject                                 ,
                                             SERVICENAME_POPUPMENUCONTROLLER             ,
                                             IMPLEMENTATIONNAME_NEWMENUCONTROLLER
@@ -204,7 +204,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
             if ( !xModuleAccelCfg.is() )
             {
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
-                    ModuleUIConfigurationManagerSupplier::create( comphelper::getComponentContext(m_xServiceManager) );
+                    ModuleUIConfigurationManagerSupplier::create( m_xContext );
                 Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
                 if ( xUICfgMgr.is() )
                 {
@@ -215,7 +215,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
 
             if ( !xGlobalAccelCfg.is() )
             {
-                xGlobalAccelCfg = GlobalAcceleratorConfiguration::create( comphelper::getComponentContext(m_xServiceManager) );
+                xGlobalAccelCfg = GlobalAcceleratorConfiguration::create( m_xContext );
                 m_xGlobalAcceleratorManager = xGlobalAccelCfg;
             }
         }
@@ -298,13 +298,14 @@ void NewMenuController::retrieveShortcutsFromConfiguration(
     }
 }
 
-NewMenuController::NewMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    svt::PopupMenuControllerBase( xServiceManager ),
+NewMenuController::NewMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+    svt::PopupMenuControllerBase( xContext ),
     m_bShowImages( sal_True ),
     m_bNewMenu( sal_False ),
     m_bModuleIdentified( sal_False ),
     m_bAcceleratorCfg( sal_False ),
-    m_aTargetFrame( "_default" )
+    m_aTargetFrame( "_default" ),
+    m_xContext( xContext )
 {
 }
 
@@ -326,7 +327,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
 
     if ( pVCLPopupMenu )
     {
-        MenuConfiguration aMenuCfg( comphelper::getComponentContext(m_xServiceManager) );
+        MenuConfiguration aMenuCfg( m_xContext );
         BmkMenu* pSubMenu( 0 );
 
         if ( m_bNewMenu )
@@ -374,7 +375,7 @@ void SAL_CALL NewMenuController::disposing( const EventObject& ) throw ( Runtime
     osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
-    m_xServiceManager.clear();
+    m_xContext.clear();
 
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));
@@ -392,13 +393,13 @@ void SAL_CALL NewMenuController::select( const css::awt::MenuEvent& rEvent ) thr
     Reference< css::awt::XPopupMenu > xPopupMenu;
     Reference< XDispatch >            xDispatch;
     Reference< XDispatchProvider >    xDispatchProvider;
-    Reference< XMultiServiceFactory > xServiceManager;
+    Reference< XComponentContext >    xContext;
     Reference< XURLTransformer >      xURLTransformer;
 
     osl::ClearableMutexGuard aLock( m_aMutex );
     xPopupMenu          = m_xPopupMenu;
     xDispatchProvider   = Reference< XDispatchProvider >( m_xFrame, UNO_QUERY );
-    xServiceManager     = m_xServiceManager;
+    xContext     = m_xContext;
     xURLTransformer     = m_xURLTransformer;
     aLock.clear();
 
@@ -475,7 +476,7 @@ void NewMenuController::impl_setPopupMenu()
         fillPopupMenu( m_xPopupMenu );
 
     // Identify module that we are attach to. It's our context that we need to know.
-    Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
+    Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
     try
     {
         m_aModuleIdentifier = xModuleManager->identify( m_xFrame );

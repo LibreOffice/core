@@ -85,7 +85,7 @@ class SessionListener :   // interfaces
 
         /** reference to the uno service manager, which created this service.
             It can be used to create own needed helper services. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         css::uno::Reference< css::frame::XSessionManagerClient > m_rSessionManager;
 
@@ -123,7 +123,7 @@ class SessionListener :   // interfaces
                     needed services.
          */
 
-        SessionListener( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
+        SessionListener( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
         virtual ~SessionListener();
 

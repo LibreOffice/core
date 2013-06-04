@@ -57,7 +57,7 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            NewMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+            NewMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
             virtual ~NewMenuController();
 
             // XServiceInfo
@@ -106,6 +106,7 @@ namespace framework
             OUString       m_aTargetFrame;
             OUString       m_aModuleIdentifier;
             OUString       m_aEmptyDocURL;
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xDocAcceleratorManager;
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xModuleAcceleratorManager;
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xGlobalAcceleratorManager;

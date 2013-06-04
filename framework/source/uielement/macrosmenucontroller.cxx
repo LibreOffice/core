@@ -51,7 +51,7 @@ using namespace ::com::sun::star::frame;
 namespace framework
 {
 class
-DEFINE_XSERVICEINFO_MULTISERVICE        (   MacrosMenuController                    ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2      (   MacrosMenuController                    ,
                                             OWeakObject                             ,
                                             SERVICENAME_POPUPMENUCONTROLLER         ,
                                             IMPLEMENTATIONNAME_MACROSMENUCONTROLLER
@@ -59,9 +59,9 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   MacrosMenuController                
 
 DEFINE_INIT_SERVICE                     (   MacrosMenuController, {} )
 
-MacrosMenuController::MacrosMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    svt::PopupMenuControllerBase( xServiceManager ),
-    m_xServiceManager( xServiceManager)
+MacrosMenuController::MacrosMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+    svt::PopupMenuControllerBase( xContext ),
+    m_xContext( xContext)
 {
 }
 
@@ -104,7 +104,7 @@ void SAL_CALL MacrosMenuController::disposing( const EventObject& ) throw ( Runt
     OSL_TRACE("disposing");
     m_xFrame.clear();
     m_xDispatch.clear();
-    m_xServiceManager.clear();
+    m_xContext.clear();
 
     if ( m_xPopupMenu.is() )
     {
@@ -160,7 +160,7 @@ IMPL_STATIC_LINK_NOINSTANCE( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo*
 String MacrosMenuController::RetrieveLabelFromCommand( const String& aCmdURL )
 {
     sal_Bool bModuleIdentified = !m_aModuleIdentifier.isEmpty();
-    return framework::RetrieveLabelFromCommand(aCmdURL, comphelper::getComponentContext(m_xServiceManager),m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,bModuleIdentified,"Label");
+    return framework::RetrieveLabelFromCommand(aCmdURL, m_xContext, m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,bModuleIdentified,"Label");
 }
 
 void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 startItemId )
@@ -170,7 +170,7 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
     const OUString providerKey("com.sun.star.script.provider.ScriptProviderFor");
     const OUString languageProviderName("com.sun.star.script.provider.LanguageScriptProvider");
     sal_uInt16 itemId = startItemId;
-    Reference< XContentEnumerationAccess > xEnumAccess = Reference< XContentEnumerationAccess >( m_xServiceManager, UNO_QUERY_THROW );
+    Reference< XContentEnumerationAccess > xEnumAccess = Reference< XContentEnumerationAccess >( m_xContext->getServiceManager(), UNO_QUERY_THROW );
     Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );
 
     while ( xEnum->hasMoreElements() )

@@ -27,7 +27,7 @@ namespace framework
     class FooterMenuController :  public HeaderMenuController
     {
         public:
-            FooterMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+            FooterMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
             virtual ~FooterMenuController();
 
             // XServiceInfo

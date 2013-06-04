@@ -33,6 +33,7 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <toolkit/awt/vclxmenu.hxx>
@@ -58,7 +59,7 @@ namespace svt
                                                   public PopupMenuControllerBaseType
     {
         public:
-            PopupMenuControllerBase( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+            PopupMenuControllerBase( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
             virtual ~PopupMenuControllerBase();
 
             // XServiceInfo
@@ -120,7 +121,6 @@ namespace svt
             OUString                                                                    m_aModuleName;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >           m_xDispatch;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >      m_xURLTransformer;
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >            m_xPopupMenu;
     };

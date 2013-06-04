@@ -47,7 +47,7 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            ControlMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+            ControlMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext );
             virtual ~ControlMenuController();
 
             // XServiceInfo

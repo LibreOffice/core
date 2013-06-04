@@ -60,14 +60,13 @@ struct PopupMenuControllerBaseDispatchInfo
         : mxDispatch( xDispatch ), maURL( rURL ), maArgs( rArgs ) {}
 };
 
-PopupMenuControllerBase::PopupMenuControllerBase( const Reference< XMultiServiceFactory >& xServiceManager ) :
+PopupMenuControllerBase::PopupMenuControllerBase( const Reference< XComponentContext >& xContext ) :
     ::comphelper::OBaseMutex(),
     PopupMenuControllerBaseType(m_aMutex),
-    m_bInitialized( false ),
-    m_xServiceManager( xServiceManager )
+    m_bInitialized( false )
 {
-    if ( m_xServiceManager.is() )
-        m_xURLTransformer.set( util::URLTransformer::create( ::comphelper::getComponentContext(m_xServiceManager) ) );
+    if ( xContext.is() )
+        m_xURLTransformer.set( util::URLTransformer::create( xContext ) );
 }
 
 PopupMenuControllerBase::~PopupMenuControllerBase()
@@ -104,7 +103,6 @@ void SAL_CALL PopupMenuControllerBase::disposing()
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xPopupMenu.clear();
-    m_xServiceManager.clear();
 }
 
 // XServiceInfo

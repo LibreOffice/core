@@ -128,7 +128,7 @@ struct ToolBarInfo
     OUString aToolBarUIName;
 };
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   ToolbarsMenuController                  ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ToolbarsMenuController                  ,
                                             OWeakObject                             ,
                                             SERVICENAME_POPUPMENUCONTROLLER         ,
                                             IMPLEMENTATIONNAME_TOOLBARSMENUCONTROLLER
@@ -136,13 +136,14 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   ToolbarsMenuController              
 
 DEFINE_INIT_SERVICE                     (   ToolbarsMenuController, {} )
 
-ToolbarsMenuController::ToolbarsMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    svt::PopupMenuControllerBase( xServiceManager ),
+ToolbarsMenuController::ToolbarsMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+    svt::PopupMenuControllerBase( xContext ),
+    m_xContext( xContext ),
     m_aPropUIName( "UIName" ),
     m_aPropResourceURL( "ResourceURL" ),
     m_bModuleIdentified( sal_False ),
     m_bResetActive( sal_False ),
-    m_aIntlWrapper( comphelper::getComponentContext(xServiceManager), Application::GetSettings().GetLanguageTag() )
+    m_aIntlWrapper( xContext, Application::GetSettings().GetLanguageTag() )
 {
 }
 
@@ -222,9 +223,9 @@ OUString ToolbarsMenuController::getUINameFromCommand( const OUString& rCommandU
     {
         try
         {
-            Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
+            Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
             m_aModuleIdentifier = xModuleManager->identify( m_xFrame );
-            Reference< XNameAccess > xNameAccess = frame::UICommandDescription::create( comphelper::getComponentContext(m_xServiceManager) );
+            Reference< XNameAccess > xNameAccess = frame::UICommandDescription::create( m_xContext );
             xNameAccess->getByName( m_aModuleIdentifier ) >>= m_xUICommandDescription;
         }
         catch ( const Exception& )
@@ -537,7 +538,7 @@ void SAL_CALL ToolbarsMenuController::disposing( const EventObject& ) throw ( Ru
     m_xDispatch.clear();
     m_xDocCfgMgr.clear();
     m_xModuleCfgMgr.clear();
-    m_xServiceManager.clear();
+    m_xContext.clear();
 
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));
@@ -597,14 +598,14 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
 void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
 {
     Reference< css::awt::XPopupMenu >   xPopupMenu;
-    Reference< XMultiServiceFactory >   xServiceManager;
+    Reference< XComponentContext >      xContext;
     Reference< XURLTransformer >        xURLTransformer;
     Reference< XFrame >                 xFrame;
     Reference< XNameAccess >            xPersistentWindowState;
 
     osl::ClearableMutexGuard aLock( m_aMutex );
     xPopupMenu             = m_xPopupMenu;
-    xServiceManager        = m_xServiceManager;
+    xContext               = m_xContext;
     xURLTransformer        = m_xURLTransformer;
     xFrame                 = m_xFrame;
     xPersistentWindowState = m_xPersistentWindowState;
@@ -822,8 +823,8 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
 
         if ( m_bInitialized )
         {
-            Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
-            Reference< XNameAccess > xPersistentWindowStateSupplier = ::com::sun::star::ui::WindowStateConfiguration::create( comphelper::getComponentContext(m_xServiceManager) );
+            Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
+            Reference< XNameAccess > xPersistentWindowStateSupplier = ::com::sun::star::ui::WindowStateConfiguration::create( m_xContext );
 
             // Retrieve persistent window state reference for our module
             OUString aModuleIdentifier;
@@ -833,7 +834,7 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
                 xPersistentWindowStateSupplier->getByName( aModuleIdentifier ) >>= m_xPersistentWindowState;
 
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier =
-                    ModuleUIConfigurationManagerSupplier::create( comphelper::getComponentContext(m_xServiceManager) );
+                    ModuleUIConfigurationManagerSupplier::create( m_xContext );
                 m_xModuleCfgMgr = xModuleCfgSupplier->getUIConfigurationManager( aModuleIdentifier );
 
                 Reference< XController > xController = m_xFrame->getController();

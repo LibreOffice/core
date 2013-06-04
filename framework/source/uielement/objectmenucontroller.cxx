@@ -48,7 +48,7 @@ using namespace com::sun::star::util;
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   ObjectMenuController                    ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2      (   ObjectMenuController                    ,
                                             OWeakObject                             ,
                                             SERVICENAME_POPUPMENUCONTROLLER         ,
                                             IMPLEMENTATIONNAME_OBJECTMENUCONTROLLER
@@ -56,8 +56,8 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   ObjectMenuController                
 
 DEFINE_INIT_SERVICE                     (   ObjectMenuController, {} )
 
-ObjectMenuController::ObjectMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    svt::PopupMenuControllerBase( xServiceManager )
+ObjectMenuController::ObjectMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+    svt::PopupMenuControllerBase( xContext )
 {
 }
 
@@ -106,7 +106,6 @@ void SAL_CALL ObjectMenuController::disposing( const EventObject& ) throw ( Runt
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xObjectUpdateDispatch.clear();
-    m_xServiceManager.clear();
 
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));

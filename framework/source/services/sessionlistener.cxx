@@ -87,7 +87,7 @@ DEFINE_XTYPEPROVIDER_5(
         css::frame::XStatusListener,
         css::lang::XServiceInfo)
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE(
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(
        SessionListener,
        cppu::OWeakObject,
        "com.sun.star.frame.SessionListener",
@@ -100,10 +100,10 @@ DEFINE_INIT_SERVICE(SessionListener,
                     }
                    )
 
-SessionListener::SessionListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
+SessionListener::SessionListener(const css::uno::Reference< css::uno::XComponentContext >& rxContext )
         : ThreadHelpBase      (&Application::GetSolarMutex())
         , OWeakObject         (                             )
-        , m_xSMGR             (xSMGR                        )
+        , m_xContext          (rxContext                    )
         , m_bRestored( sal_False )
         , m_bSessionStoreRequested( sal_False )
         , m_bAllowUserInteractionOnQuit( sal_False )
@@ -133,8 +133,8 @@ void SessionListener::StoreSession( sal_Bool bAsync )
         // on stop event m_rSessionManager->saveDone(this); in case of asynchronous call
         // in case of synchronous call the caller should do saveDone() call himself!
 
-        css::uno::Reference< XDispatch > xDispatch = css::frame::AutoRecovery::create( ::comphelper::getComponentContext(m_xSMGR) );
-        css::uno::Reference< XURLTransformer > xURLTransformer = URLTransformer::create( ::comphelper::getComponentContext(m_xSMGR) );
+        css::uno::Reference< XDispatch > xDispatch = css::frame::AutoRecovery::create( m_xContext );
+        css::uno::Reference< XURLTransformer > xURLTransformer = URLTransformer::create( m_xContext );
         URL aURL;
         aURL.Complete = OUString("vnd.sun.star.autorecovery:/doSessionSave");
         xURLTransformer->parseStrict(aURL);
@@ -165,8 +165,8 @@ void SessionListener::QuitSessionQuietly()
         // xd->dispatch("vnd.sun.star.autorecovery:/doSessionQuietQuit, async=false
         // it is done synchronously to avoid conflict with normal quit process
 
-        css::uno::Reference< XDispatch > xDispatch = css::frame::AutoRecovery::create( ::comphelper::getComponentContext(m_xSMGR) );
-        css::uno::Reference< XURLTransformer > xURLTransformer = URLTransformer::create( ::comphelper::getComponentContext(m_xSMGR) );
+        css::uno::Reference< XDispatch > xDispatch = css::frame::AutoRecovery::create( m_xContext );
+        css::uno::Reference< XURLTransformer > xURLTransformer = URLTransformer::create( m_xContext );
         URL aURL;
         aURL.Complete = OUString("vnd.sun.star.autorecovery:/doSessionQuietQuit");
         xURLTransformer->parseStrict(aURL);
@@ -210,7 +210,7 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
     }
     if (!m_rSessionManager.is())
         m_rSessionManager = css::uno::Reference< XSessionManagerClient >
-            (m_xSMGR->createInstance(aSMgr), UNO_QUERY);
+            (m_xContext->getServiceManager()->createInstanceWithContext(aSMgr, m_xContext), UNO_QUERY);
 
     if (m_rSessionManager.is())
     {
@@ -246,11 +246,11 @@ sal_Bool SAL_CALL SessionListener::doRestore()
     ResetableGuard aGuard(m_aLock);
     m_bRestored = sal_False;
     try {
-        css::uno::Reference< XDispatch > xDispatch = css::frame::AutoRecovery::create( ::comphelper::getComponentContext(m_xSMGR) );
+        css::uno::Reference< XDispatch > xDispatch = css::frame::AutoRecovery::create( m_xContext );
 
         URL aURL;
         aURL.Complete = OUString("vnd.sun.star.autorecovery:/doSessionRestore");
-        css::uno::Reference< XURLTransformer > xURLTransformer(URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
+        css::uno::Reference< XURLTransformer > xURLTransformer(URLTransformer::create(m_xContext));
         xURLTransformer->parseStrict(aURL);
         Sequence< PropertyValue > args;
         xDispatch->addStatusListener(this, aURL);
@@ -297,7 +297,7 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
             // first of all let the session be stored to be sure that we lose no information
             StoreSession( sal_False );
 
-            css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( comphelper::getComponentContext(m_xSMGR) );
+            css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
             // honestly: how many implementations of XDesktop will we ever have?
             // so casting this directly to the implementation
             Desktop* pDesktop(dynamic_cast<Desktop*>(xDesktop.get()));

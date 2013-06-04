@@ -56,7 +56,7 @@ static bool lcl_I18nCompareString(const OUString& rStr1, const OUString& rStr2)
 namespace framework
 {
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   FontMenuController                      ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2      (   FontMenuController                      ,
                                             OWeakObject                             ,
                                             SERVICENAME_POPUPMENUCONTROLLER         ,
                                             IMPLEMENTATIONNAME_FONTMENUCONTROLLER
@@ -64,8 +64,8 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   FontMenuController                  
 
 DEFINE_INIT_SERVICE                     (   FontMenuController, {} )
 
-FontMenuController::FontMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    svt::PopupMenuControllerBase( xServiceManager )
+FontMenuController::FontMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext ) :
+    svt::PopupMenuControllerBase( xContext )
 {
 }
 
@@ -123,7 +123,6 @@ void SAL_CALL FontMenuController::disposing( const EventObject& ) throw ( Runtim
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xFontListDispatch.clear();
-    m_xServiceManager.clear();
 
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(( OWeakObject *)this, UNO_QUERY ));
