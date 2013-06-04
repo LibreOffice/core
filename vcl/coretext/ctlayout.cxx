@@ -417,6 +417,12 @@ void CTLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
 bool CTLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
 {
     AquaSalGraphics& rAquaGraphics = static_cast<AquaSalGraphics&>(rGraphics);
+
+#ifdef IOS
+    if( !rAquaGraphics.CheckContext() )
+        return false;
+#endif
+
     CGRect aMacRect = CTLineGetImageBounds( mpCTLine, rAquaGraphics.mrContext );
     CGPoint aMacPos = CGContextGetTextPosition( rAquaGraphics.mrContext );
     aMacRect.origin.x -= aMacPos.x;
