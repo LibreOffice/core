@@ -301,6 +301,8 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     PangoRectangle row_height;
     pango_layout_set_markup (layout, "All Files", -1);
     pango_layout_get_pixel_extents (layout, NULL, &row_height);
+    g_object_unref (layout);
+
     g_object_get (cell, "ypad", &ypad, (char *)NULL);
     guint height = (row_height.height + 2*ypad) * 5;
     gtk_widget_set_size_request (m_pFilterView, -1, height);
