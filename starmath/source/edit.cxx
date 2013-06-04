@@ -403,6 +403,7 @@ IMPL_LINK_INLINE_END( SmEditWindow, MenuSelectHdl, Menu *, pMenu )
 
 void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
 {
+
     if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
     {
         bool bCallBase = true;
