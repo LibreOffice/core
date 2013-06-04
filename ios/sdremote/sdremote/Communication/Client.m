@@ -18,7 +18,7 @@
 
 @property (nonatomic, strong) NSString* mPin;
 @property (nonatomic, strong) NSString* mName;
-@property const int mPort;
+@property const uint mPort;
 
 @property (nonatomic, weak) Server* mServer;
 @property (nonatomic, weak) Receiver* mReceiver;
@@ -56,7 +56,7 @@ NSString * const CHARSET = @"UTF-8";
     return self;
 }
 
-- (void)streamOpenWithIp:(NSString *)ip withPortNumber:(int)portNumber
+- (void)streamOpenWithIp:(NSString *)ip withPortNumber:(uint)portNumber
 {
     CFReadStreamRef readStream;
     CFWriteStreamRef writeStream;
