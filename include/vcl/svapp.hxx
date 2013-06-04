@@ -308,8 +308,12 @@ public:
 
     static void                 EnableHeadlessMode( bool dialogsAreFatal );
     static sal_Bool             IsHeadlessModeEnabled();
+    /// check command line arguments for --headless
     static bool                 IsHeadlessModeRequested();
-        ///< check command line arguments for --headless
+    /// used to disable Mac specific app init that requires an app bundle
+    static void                 EnableConsoleOnly();
+    /// used to see if Mac specific app init has been disabled
+    static bool                 IsConsoleOnly();
 
     static void                 ShowNativeErrorBox(const String& sTitle  ,
                                                    const String& sMessage);

@@ -2244,7 +2244,7 @@ if test -n "${with_galleries}"; then
         AC_MSG_ERROR([unknown value --with-galleries=$with_galleries])
     fi
 else
-   if test $_os != iOS -a $_os != Android -a $_os != Darwin; then
+   if test $_os != iOS -a $_os != Android; then
         WITH_GALLERY_BUILD=YES
         AC_MSG_RESULT([internal src images for desktop])
    else

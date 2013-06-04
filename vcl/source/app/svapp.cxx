@@ -1769,6 +1769,19 @@ bool Application::IsHeadlessModeRequested()
     return false;
 }
 
+static bool bConsoleOnly = false;
+
+bool Application::IsConsoleOnly()
+{
+    return bConsoleOnly;
+}
+
+void Application::EnableConsoleOnly()
+{
+    bConsoleOnly = true;
+}
+
+
 // -----------------------------------------------------------------------
 
 void Application::ShowNativeErrorBox(const String& sTitle  ,

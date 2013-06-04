@@ -192,7 +192,7 @@ int SVMain()
     extern sal_Bool ImplSVMainHook( int* );
 
     int nRet;
-    if( ImplSVMainHook( &nRet ) )
+    if( !Application::IsConsoleOnly() && ImplSVMainHook( &nRet ) )
         return nRet;
     else
         return ImplSVMain();
