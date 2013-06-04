@@ -62,44 +62,43 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     if (! pAdjustedThisPtr) CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something
 #endif
 
-    volatile long edx = 0, eax = 0; // for register returns
+    long edx, eax; // for register returns
     void * stackptr;
     asm volatile (
-        "mov   %%esp, %6\n\t"
+        "mov   %%esp, %2\n\t"
         // preserve potential 128bit stack alignment
         "and   $0xfffffff0, %%esp\n\t"
-        "mov   %0, %%eax\n\t"
+        "mov   %3, %%eax\n\t"
         "lea   -4(,%%eax,4), %%eax\n\t"
         "and   $0xf, %%eax\n\t"
         "sub   $0xc, %%eax\n\t"
         "add   %%eax, %%esp\n\t"
         // copy values
-        "mov   %0, %%eax\n\t"
+        "mov   %3, %%eax\n\t"
         "mov   %%eax, %%edx\n\t"
         "dec   %%edx\n\t"
         "shl   $2, %%edx\n\t"
-        "add   %1, %%edx\n"
+        "add   %4, %%edx\n"
         "Lcopy:\n\t"
         "pushl 0(%%edx)\n\t"
         "sub   $4, %%edx\n\t"
         "dec   %%eax\n\t"
         "jne   Lcopy\n\t"
         // do the actual call
-        "mov   %2, %%edx\n\t"
+        "mov   %5, %%edx\n\t"
         "mov   0(%%edx), %%edx\n\t"
-        "mov   %3, %%eax\n\t"
+        "mov   %6, %%eax\n\t"
         "shl   $2, %%eax\n\t"
         "add   %%eax, %%edx\n\t"
         "mov   0(%%edx), %%edx\n\t"
         "call  *%%edx\n\t"
         // save return registers
-         "mov   %%eax, %4\n\t"
-         "mov   %%edx, %5\n\t"
+         "mov   %%eax, %0\n\t"
+         "mov   %%edx, %1\n\t"
         // cleanup stack
-        "mov   %6, %%esp\n\t"
-        :
-        : "m"(nStackLongs), "m"(pStackLongs), "m"(pAdjustedThisPtr),
-          "m"(nVtableIndex), "m"(eax), "m"(edx), "m"(stackptr)
+        "mov   %2, %%esp\n\t"
+        : "=m"(eax), "=m"(edx), "=m"(stackptr)
+        : "m"(nStackLongs), "m"(pStackLongs), "m"(pAdjustedThisPtr), "m"(nVtableIndex)
         : "eax", "ecx", "edx" );
     switch( pReturnTypeDescr->eTypeClass )
     {

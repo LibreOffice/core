@@ -67,11 +67,11 @@ void callVirtualMethod(
     // never called
     if (! pAdjustedThisPtr) CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something
 
-    volatile long edx = 0, eax = 0; // for register returns
-    void * stackptr = 0;
+    long edx, eax; // for register returns
+    void * stackptr;
     asm volatile (
-        "mov   %%esp, %6\n\t"
-        "mov   %0, %%eax\n\t"
+        "mov   %%esp, %2\n\t"
+        "mov   %3, %%eax\n\t"
         "mov   %%eax, %%edx\n\t"
                 // stack padding to keep stack aligned:
         "shl   $2, %%eax\n\t"
@@ -83,28 +83,27 @@ void callVirtualMethod(
         "mov   %%edx, %%eax\n\t"
         "dec   %%edx\n\t"
         "shl   $2, %%edx\n\t"
-        "add   %1, %%edx\n"
+        "add   %4, %%edx\n"
         "Lcopy:\n\t"
         "pushl 0(%%edx)\n\t"
         "sub   $4, %%edx\n\t"
         "dec   %%eax\n\t"
         "jne   Lcopy\n\t"
         // do the actual call
-        "mov   %2, %%edx\n\t"
+        "mov   %5, %%edx\n\t"
         "mov   0(%%edx), %%edx\n\t"
-        "mov   %3, %%eax\n\t"
+        "mov   %6, %%eax\n\t"
         "shl   $2, %%eax\n\t"
         "add   %%eax, %%edx\n\t"
         "mov   0(%%edx), %%edx\n\t"
         "call  *%%edx\n\t"
         // save return registers
-         "mov   %%eax, %4\n\t"
-         "mov   %%edx, %5\n\t"
+         "mov   %%eax, %0\n\t"
+         "mov   %%edx, %1\n\t"
         // cleanup stack
-        "mov   %6, %%esp\n\t"
-        :
-        : "m"(nStackLongs), "m"(pStackLongs), "m"(pAdjustedThisPtr),
-          "m"(nVtableIndex), "m"(eax), "m"(edx), "m"(stackptr)
+        "mov   %2, %%esp\n\t"
+        : "=m"(eax), "=m"(edx), "=m"(stackptr)
+        : "m"(nStackLongs), "m"(pStackLongs), "m"(pAdjustedThisPtr), "m"(nVtableIndex)
         : "eax", "edx" );
     switch( pReturnTypeDescr->eTypeClass )
     {

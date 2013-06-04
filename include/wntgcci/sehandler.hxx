@@ -58,7 +58,7 @@ public:
         m_ER.pHandlerClass = this;
         m_ER.hp = handler;
         asm("movl %%fs:0, %%eax\n\t"
-            "movl %%eax, %0": : "m" (m_ER.prev): "%eax" );
+            "movl %%eax, %0": "=m" (m_ER.prev): : "%eax" );
         asm("movl %0, %%eax\n\t"
             "movl %%eax, %%fs:0": : "r" (&m_ER): "%eax" );
     }
