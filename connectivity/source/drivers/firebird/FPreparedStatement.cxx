@@ -65,14 +65,13 @@ IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.firebird.PreparedS
  */
 static int pr_error (long* status, char* operation)
 {
-    printf("[\n");
-    printf("PROBLEM ON \"%s\".\n", operation);
+    SAL_WARN("connectivity.firebird", "=> OPreparedStatement static pr_error().");
 
     isc_print_status(status);
 
-    printf("SQLCODE:%d\n", isc_sqlcode(status));
-
-    printf("]\n");
+    SAL_WARN("connectivity.firebird", "=> OPreparedStatement static pr_error(). "
+             "PROBLEM ON " << operation << ". "
+             "SQLCODE: " << isc_sqlcode(status) << ".");
 
     return 1;
 }
@@ -85,6 +84,9 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInf
     ,m_sSqlStatement(sql)
     ,m_nNumParams(0)
 {
+    SAL_INFO("connectivity.firebird", "=> OPreparedStatement::OPreparedStatement_BASE(). "
+             "sql: " << sql);
+
     ISC_STATUS_ARRAY status;                           // status vector
     isc_db_handle db = _pConnection->getDBHandler();   // database handle
 
@@ -253,7 +255,7 @@ Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  ) thr
 
 void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException)
 {
-    printf("DEBUG !!! connectivity.firebird => OPreparedStatement::close() \n");
+    SAL_INFO("connectivity.firebird", "=> OPreparedStatement::close()");
 
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -297,18 +299,23 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
 
 void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
 {
+    SAL_INFO("connectivity.firebird", "=> OPreparedStatement::setString(). "
+             "parameterIndex: " << parameterIndex << " , "
+             "x: " << x);
+
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     if (NULL == m_INsqlda)
     {
-        printf ("DEBUG !!! OPreparedStatement::setString => The query has not input parameters \n.");
+        SAL_WARN("connectivity.firebird", "=> OPreparedStatement::setString(). "
+                 "The query has not input parameters.");
         return;
     }
 
     OString str = OUStringToOString(x , RTL_TEXTENCODING_UTF8 );
-    printf ("DEBUG !!! OPreparedStatement::setString => Setting parameter %i as: %s \n.",
-            parameterIndex, str.getStr());
+    SAL_INFO("connectivity.firebird", "=> OPreparedStatement::setString(). "
+             "Setting parameter as: " << str);
 
     XSQLVAR *var = m_INsqlda->sqlvar + (parameterIndex - 1);
 
@@ -340,9 +347,8 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQ
 
 Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLException, RuntimeException)
 {
-    char *sqlStr = strdup(OUStringToOString( m_sSqlStatement, RTL_TEXTENCODING_ASCII_US ).getStr());
-    printf("DEBUG !!! connectivity.firebird => OPreparedStatement::executeQuery() got called with sql: %s \n", sqlStr);
-    free(sqlStr);
+    SAL_INFO("connectivity.firebird", "=> OPreparedStatement::executeQuery(). "
+             "Got called with sql: " <<  m_sSqlStatement);
 
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -369,7 +375,8 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
         if (pr_error(status, "start transaction"))
             return NULL;
 
-    printf("DEBUG !!! connectivity.firebird => OPreparedStatement::executeQuery() Query executed.\n");
+    SAL_INFO("connectivity.firebird", "=> OPreparedStatement::executeQuery(). "
+             "Query executed.");
 
     return xRS;
 }

@@ -85,7 +85,7 @@ void OStatement_Base::disposeResultSet()
 //------------------------------------------------------------------------------
 void OStatement_BASE2::disposing()
 {
-    printf("DEBUG !!! connectivity.firebird => OStatement_BASE2::disposing() \n");
+    SAL_INFO("connectivity.firebird", "=> OStatement_BASE2::disposing().");
 
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -146,7 +146,7 @@ void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
 
 void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
 {
-    printf("DEBUG !!! connectivity.firebird => OStatement_Base::close() \n");
+    SAL_INFO("connectivity.firebird", "=> OStatement_Base::close().");
 
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -178,23 +178,24 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
  */
 static int pr_error (long* status, char* operation)
 {
-    printf("[\n");
-    printf("PROBLEM ON \"%s\".\n", operation);
+    SAL_WARN("connectivity.firebird", "=> OStatement_Base static pr_error().");
 
     isc_print_status(status);
 
-    printf("SQLCODE:%d\n", isc_sqlcode(status));
-
-    printf("]\n");
+    SAL_WARN("connectivity.firebird", "=> OStatement_Base static pr_error(). "
+             "PROBLEM ON " << operation << ". "
+             "SQLCODE: " << isc_sqlcode(status) << ".");
 
     return 1;
 }
 
 Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
+    SAL_INFO("connectivity.firebird", "=> OStatement_Base::executeQuery(). "
+             "Got called with sql: " << sql);
+
     char sqlStr[128];
     strcpy(sqlStr, OUStringToOString( sql, RTL_TEXTENCODING_ASCII_US ).getStr());
-    printf("DEBUG !!! connectivity.firebird => OStatement_Base::executeQuery() got called with sql: %s \n", sqlStr);
 
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -243,7 +244,8 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
 
     if (isc_commit_transaction (status, &trans))
         isc_print_status(status);
-    printf("DEBuG !!! connectivity.firebird => OStatement_Base::executeQuery() Changes committed.\n");
+    SAL_INFO("connectivity.firebird", "=> OStatement_Base::executeQuery(). "
+             "Changes committed.");
 
     m_xResultSet = xRS; // we nedd a reference to it for later use
     return xRS;
