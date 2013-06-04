@@ -56,10 +56,6 @@
 #define STR_COPYERR         9
 
 // TP_PRINT:
-#define FL_PAGES            1
-#define BTN_SKIPEMPTYPAGES  2
-#define FL_SHEETS           2
-#define BTN_SELECTEDSHEETS  4
 
 // TP_LCONTENT
 

@@ -98,6 +98,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/sortwarning \
 	sc/uiconfig/scalc/ui/textimportoptions \
 	sc/uiconfig/scalc/ui/textimportcsv \
+	sc/uiconfig/scalc/ui/optdlg \
 ))
 
 # vim: set noet sw=4 ts=4:

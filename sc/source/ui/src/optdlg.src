@@ -755,39 +755,4 @@ TabPage RID_SCPAGE_LAYOUT
     };
 };
 
-TabPage RID_SCPAGE_PRINT
-{
-    HelpId = HID_SCPAGE_PRINT ;
-    SVLook = TRUE ;
-    Hide = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-    FixedLine FL_PAGES
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Pages";
-    };
-    CheckBox BTN_SKIPEMPTYPAGES
-    {
-        HelpID = "sc:CheckBox:RID_SCPAGE_PRINT:BTN_SKIPEMPTYPAGES";
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text [ en-US ] = "~Suppress output of empty pages";
-    };
-    FixedLine FL_SHEETS
-    {
-        Pos = MAP_APPFONT ( 6 , 30 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Sheets";
-    };
-    CheckBox BTN_SELECTEDSHEETS
-    {
-        HelpID = "sc:CheckBox:RID_SCPAGE_PRINT:BTN_SELECTEDSHEETS";
-        Pos = MAP_APPFONT ( 12 , 41 ) ;
-        Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text [ en-US ] = "~Print only selected sheets";
-    };
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,14 +34,12 @@
 ScTpPrintOptions::ScTpPrintOptions( Window*           pParent,
                                     const SfxItemSet& rCoreAttrs )
     :   SfxTabPage      ( pParent,
-                          ScResId( RID_SCPAGE_PRINT ),
-                          rCoreAttrs ),
-        aPagesFL         ( this, ScResId( FL_PAGES ) ),
-        aSkipEmptyPagesCB( this, ScResId( BTN_SKIPEMPTYPAGES ) ),
-        aSheetsFL        ( this, ScResId( FL_SHEETS ) ),
-        aSelectedSheetsCB( this, ScResId( BTN_SELECTEDSHEETS ) )
+                          "optCalcPrintPage",
+                          "modules/scalc/ui/optdlg.ui",
+                          rCoreAttrs )
 {
-    FreeResource();
+    get( m_pSkipEmptyPagesCB , "suppressCB" );
+    get( m_pSelectedSheetsCB , "printCB" );
 }
 
 ScTpPrintOptions::~ScTpPrintOptions()
@@ -79,16 +77,16 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
     if ( SFX_ITEM_SET == rCoreSet.GetItemState( SID_PRINT_SELECTEDSHEET, false , &pItem ) )
     {
         sal_Bool bChecked = ( (const SfxBoolItem*)pItem )->GetValue();
-        aSelectedSheetsCB.Check( bChecked );
+        m_pSelectedSheetsCB->Check( bChecked );
     }
     else
     {
-        aSelectedSheetsCB.Check( !aOptions.GetAllSheets() );
+        m_pSelectedSheetsCB->Check( !aOptions.GetAllSheets() );
     }
 
-    aSkipEmptyPagesCB.Check( aOptions.GetSkipEmpty() );
-    aSkipEmptyPagesCB.SaveValue();
-    aSelectedSheetsCB.SaveValue();
+    m_pSkipEmptyPagesCB->Check( aOptions.GetSkipEmpty() );
+    m_pSkipEmptyPagesCB->SaveValue();
+    m_pSelectedSheetsCB->SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -97,18 +95,18 @@ sal_Bool ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     rCoreAttrs.ClearItem( SID_PRINT_SELECTEDSHEET );
 
-    bool bSkipEmptyChanged = ( aSkipEmptyPagesCB.GetSavedValue() != aSkipEmptyPagesCB.IsChecked() );
-    bool bSelectedSheetsChanged = ( aSelectedSheetsCB.GetSavedValue() != aSelectedSheetsCB.IsChecked() );
+    bool bSkipEmptyChanged = ( m_pSkipEmptyPagesCB->GetSavedValue() != m_pSkipEmptyPagesCB->IsChecked() );
+    bool bSelectedSheetsChanged = ( m_pSelectedSheetsCB->GetSavedValue() != m_pSelectedSheetsCB->IsChecked() );
 
     if ( bSkipEmptyChanged || bSelectedSheetsChanged )
     {
         ScPrintOptions aOpt;
-        aOpt.SetSkipEmpty( aSkipEmptyPagesCB.IsChecked() );
-        aOpt.SetAllSheets( !aSelectedSheetsCB.IsChecked() );
+        aOpt.SetSkipEmpty( m_pSkipEmptyPagesCB->IsChecked() );
+        aOpt.SetAllSheets( !m_pSelectedSheetsCB->IsChecked() );
         rCoreAttrs.Put( ScTpPrintItem( SID_SCPRINTOPTIONS, aOpt ) );
         if ( bSelectedSheetsChanged )
         {
-            rCoreAttrs.Put( SfxBoolItem( SID_PRINT_SELECTEDSHEET, aSelectedSheetsCB.IsChecked() ) );
+            rCoreAttrs.Put( SfxBoolItem( SID_PRINT_SELECTEDSHEET, m_pSelectedSheetsCB->IsChecked() ) );
         }
         return sal_True;
     }

@@ -27,10 +27,8 @@
 
 class ScTpPrintOptions : public SfxTabPage
 {
-    FixedLine       aPagesFL;
-    CheckBox        aSkipEmptyPagesCB;
-    FixedLine       aSheetsFL;
-    CheckBox        aSelectedSheetsCB;
+    CheckBox*       m_pSkipEmptyPagesCB;
+    CheckBox*       m_pSelectedSheetsCB;
 
             ScTpPrintOptions( Window* pParent, const SfxItemSet& rCoreSet );
             ~ScTpPrintOptions();
