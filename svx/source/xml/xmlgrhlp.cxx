@@ -269,7 +269,7 @@ void SAL_CALL SvXMLGraphicOutputStream::closeOutput()
         throw NotConnectedException() ;
 
     mxStmWrapper->closeOutput();
-    mxStmWrapper = Reference< XOutputStream >();
+    mxStmWrapper.clear();
 
     mbClosed = sal_True;
 }

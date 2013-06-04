@@ -95,7 +95,7 @@ void SAL_CALL AccessibleBrowseBox::disposing()
     m_pImpl->m_pTable           = NULL;
     m_pImpl->m_pColumnHeaderBar = NULL;
     m_pImpl->m_pRowHeaderBar    = NULL;
-    m_pImpl->m_aCreator         = Reference< XAccessible >();
+    m_pImpl->m_aCreator.clear();
 
     Reference< XAccessible >  xTable = m_pImpl->mxTable;
 

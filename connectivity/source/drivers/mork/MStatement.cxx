@@ -308,7 +308,7 @@ void OCommonStatement::clearCachedResultSet()
 
     Reference< XCloseable >( xResultSet, UNO_QUERY_THROW )->close();
 
-    m_xResultSet = Reference< XResultSet >();
+    m_xResultSet.clear();
 }
 
 // -------------------------------------------------------------------------

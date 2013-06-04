@@ -463,7 +463,7 @@ void OFactoryComponentHelper::dispose()
         // do not delete in the guard section
         MutexGuard aGuard( aMutex );
         x = xTheInstance;
-        xTheInstance = Reference<XInterface >();
+        xTheInstance.clear();
     }
     // if it is a component call dispose at the component
     Reference<XComponent > xComp( x, UNO_QUERY );

@@ -251,7 +251,7 @@ void SAL_CALL OMRCListenerMultiplexerHelper::disposing( const EventObject& /*aSo
 {
     MutexGuard aGuard( m_aMutex );
     // peer is disposed, clear the reference
-    m_xPeer = Reference< XWindow >();
+    m_xPeer.clear();
 }
 
 //____________________________________________________________________________________________________________

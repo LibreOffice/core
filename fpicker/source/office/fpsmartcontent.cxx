@@ -97,7 +97,7 @@ namespace svt
         // Don't free the memory here! It will be done by the next
         // call automaticly - releasing of the uno reference ...
         m_pOwnInteraction = NULL;
-        m_xOwnInteraction = Reference< XInteractionHandler >();
+        m_xOwnInteraction.clear();
 
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         Reference< XInteractionHandler > xGlobalInteractionHandler(

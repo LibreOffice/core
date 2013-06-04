@@ -66,7 +66,6 @@ void ShutdownServiceMgr( Reference< XMultiServiceFactory >& SrvMgr )
     // Dispose and clear factory
     xComponent->dispose();
     SrvMgr.clear();
-    SrvMgr = Reference< XMultiServiceFactory >();
 }
 
 //----------------------------------------------------------------

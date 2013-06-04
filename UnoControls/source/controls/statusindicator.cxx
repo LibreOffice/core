@@ -71,8 +71,8 @@ StatusIndicator::StatusIndicator( const Reference< XComponentContext >& rxContex
 StatusIndicator::~StatusIndicator()
 {
     // Release all references
-    m_xText         = Reference< XFixedText >();
-    m_xProgressBar  = Reference< XProgressBar >();
+    m_xText.clear();
+    m_xProgressBar.clear();
 }
 
 //____________________________________________________________________________________________________________

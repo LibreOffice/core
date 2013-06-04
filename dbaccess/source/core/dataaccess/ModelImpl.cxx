@@ -877,7 +877,7 @@ DocumentStorageAccess* ODatabaseModelImpl::getDocumentStorageAccess()
 
 void ODatabaseModelImpl::modelIsDisposing( const bool _wasInitialized, ResetModelAccess )
 {
-    m_xModel = Reference< XModel >();
+    m_xModel.clear();
 
     // Basic libraries and Dialog libraries are a model facet, though held at this impl class.
     // They automatically dispose themself when the model they belong to is being disposed.

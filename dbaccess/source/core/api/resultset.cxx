@@ -170,7 +170,7 @@ void OResultSet::disposing()
     m_xDelegatorRow = NULL;
     m_xDelegatorRowUpdate = NULL;
 
-    m_aStatement = Reference< XInterface >();
+    m_aStatement.clear();
 }
 
 // XCloseable

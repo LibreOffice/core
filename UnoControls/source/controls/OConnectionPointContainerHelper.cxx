@@ -115,7 +115,7 @@ Sequence< Type > SAL_CALL OConnectionPointContainerHelper::getConnectionPointTyp
 Reference< XConnectionPoint > SAL_CALL OConnectionPointContainerHelper::queryConnectionPoint( const Type& aType ) throw( RuntimeException )
 {
     // Set default return value, if method failed.
-    Reference< XConnectionPoint > xConnectionPoint = Reference< XConnectionPoint >();
+    Reference< XConnectionPoint > xConnectionPoint;
 
     // Get all elements of the container, which have the searched type.
     OInterfaceContainerHelper* pSpecialContainer = m_aMultiTypeContainer.getContainer( aType );

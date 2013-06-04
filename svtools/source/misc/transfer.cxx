@@ -518,7 +518,7 @@ void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >&,
             Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
             xDesktop->removeTerminateListener( mxTerminateListener );
 
-            mxTerminateListener = Reference< XTerminateListener >();
+            mxTerminateListener.clear();
         }
 
         ObjectReleased();
@@ -1535,7 +1535,7 @@ Reference< XTransferable > TransferableDataHelper::GetXTransferable() const
         }
         catch( const ::com::sun::star::uno::Exception& )
         {
-            xRet = Reference< XTransferable >();
+            xRet.clear();
         }
     }
 

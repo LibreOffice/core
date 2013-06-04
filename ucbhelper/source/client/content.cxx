@@ -583,7 +583,7 @@ Any Content::createCursorAny( const Sequence< OUString >& rPropertyNames,
                         : ( eMode == INCLUDE_DOCUMENTS_ONLY )
                             ? OpenMode::DOCUMENTS : OpenMode::ALL;
     aArg.Priority   = 0; // unused
-    aArg.Sink       = Reference< XInterface >(); // unused
+    aArg.Sink.clear(); // unused
     aArg.Properties = aProps;
 
     Command aCommand;

@@ -691,7 +691,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::disposing()
                 mnClientId =  0;
             }
 
-            mxParent = Reference< XAccessible >();
+            mxParent.clear();
         }
     }
 }
@@ -1098,7 +1098,7 @@ void SAL_CALL SvxRectCtlChildAccessibleContext::disposing()
             mnClientId =  0;
         }
 
-        mxParent = Reference< XAccessible >();
+        mxParent.clear();
 
         delete mpBoundingBox;
     }

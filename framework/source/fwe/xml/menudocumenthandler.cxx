@@ -295,7 +295,7 @@ void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
         if ( 0 == m_nElementDepth )
         {
             m_xReader->endDocument();
-            m_xReader = Reference< XDocumentHandler >();
+            m_xReader.clear();
             m_bMenuBarMode = sal_False;
             if ( !aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENUBAR )))
             {
@@ -443,7 +443,7 @@ void OReadMenuBarHandler::endElement( const OUString& aName )
         if ( 0 == m_nElementDepth )
         {
             m_xReader->endDocument();
-            m_xReader = Reference< XDocumentHandler >();
+            m_xReader.clear();
             m_bMenuMode = sal_False;
             if ( !aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENU )))
             {
@@ -529,7 +529,7 @@ void SAL_CALL OReadMenuHandler::endElement( const OUString& aName )
         if ( 0 == m_nElementDepth )
         {
             m_xReader->endDocument();
-            m_xReader = Reference< XDocumentHandler >();
+            m_xReader.clear();
             m_bMenuPopupMode = sal_False;
             if ( !aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENUPOPUP )))
             {
@@ -733,7 +733,7 @@ void SAL_CALL OReadMenuPopupHandler::endElement( const OUString& aName )
         if ( 0 == m_nElementDepth )
         {
             m_xReader->endDocument();
-            m_xReader = Reference< XDocumentHandler >();
+            m_xReader.clear();
             m_bMenuMode = sal_False;
             if ( !aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ELEMENT_MENU )))
             {

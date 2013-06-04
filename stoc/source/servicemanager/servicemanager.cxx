@@ -1465,8 +1465,8 @@ void ORegistryServiceManager::dispose()
     // dispose
     MutexGuard aGuard( m_mutex );
     // erase all members
-    m_xRegistry = Reference<XSimpleRegistry >();
-    m_xRootKey = Reference<XRegistryKey >();
+    m_xRegistry.clear();
+    m_xRootKey.clear();
 }
 
 /**

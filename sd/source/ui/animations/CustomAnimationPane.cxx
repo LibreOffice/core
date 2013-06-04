@@ -363,7 +363,7 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
             break;
 
         case tools::EventMultiplexerEvent::EID_DISPOSING:
-            mxView = Reference<XDrawView>();
+            mxView.clear();
             onSelectionChanged();
             onChangeCurrentPage();
             break;
@@ -1737,9 +1737,9 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             []bHasAnimateForm means the UI has changed, bAnimateForm is it value
 
             So if create a new textgroup animation, the following animation will never be run!
-            Since the ¡°Animate attached shape¡± is default checked.
+            Since the \A1\B0Animate attached shape\A1\B1 is default checked.
             And the bHasAnimateForm default is false, and if user uncheck it the value bAnimateForm will be false,
-            it same as the TextGroup¡¯s default value, also could not be run setAnimateForm.
+            it same as the TextGroup\A1\AFs default value, also could not be run setAnimateForm.
             if( bHasAnimateForm )
             {
             if( pTextGroup->getAnimateForm() != bAnimateForm )
@@ -1752,7 +1752,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             In setTextGrouping, there are three case:
             1.  Create new text effects for empty TextGroup
             2.  Remove all text effects of TextGroup (nTextGrouping == -1)
-            3.  Change all the text effects¡¯ start type
+            3.  Change all the text effects\A1\AF start type
 
             So here is the right logic:
             If set the animation from text to shape and remove text animation,

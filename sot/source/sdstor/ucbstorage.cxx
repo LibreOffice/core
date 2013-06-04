@@ -693,7 +693,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
 UCBStorageStream_Impl::~UCBStorageStream_Impl()
 {
     if( m_rSource.is() )
-        m_rSource = Reference< XInputStream >();
+        m_rSource.clear();
 
     if( m_pStream )
         delete m_pStream;
@@ -1222,7 +1222,7 @@ void UCBStorageStream_Impl::Free()
 #endif
 
     m_nRepresentMode = nonset;
-    m_rSource = Reference< XInputStream >();
+    m_rSource.clear();
     DELETEZ( m_pStream );
 }
 

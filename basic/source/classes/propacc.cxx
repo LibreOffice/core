@@ -92,7 +92,7 @@ SbPropertyValues::SbPropertyValues()
 
 SbPropertyValues::~SbPropertyValues()
 {
-    m_xInfo = Reference< XPropertySetInfo >();
+    m_xInfo.clear();
 }
 
 //----------------------------------------------------------------------------

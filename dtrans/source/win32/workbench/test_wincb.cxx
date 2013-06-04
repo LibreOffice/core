@@ -299,11 +299,11 @@ int SAL_CALL main( int nArgc, char* Argv[] )
     // flush the clipboard content
     Reference< XFlushableClipboard > rXFlushableClip( xClipboard, UNO_QUERY );
     rXFlushableClip->flushClipboard( );
-    rXFlushableClip = Reference< XFlushableClipboard >( );
+    rXFlushableClip.clear();
 
     xClipNotifier->removeClipboardListener( rXClipListener );
-    rXClipListener = Reference< XClipboardListener >( );
-    xClipNotifier  = Reference< XClipboardNotifier >( );
+    rXClipListener.clear();
+    xClipNotifier.clear();
 
     //--------------------------------------------------
     // shutdown the service manager
@@ -317,10 +317,9 @@ int SAL_CALL main( int nArgc, char* Argv[] )
 
     // Dispose and clear factory
     xComponent->dispose();
-    xComponent = Reference< XComponent >( );
+    xComponent.clear();
 
     g_xFactory.clear();
-    g_xFactory = Reference< XMultiServiceFactory >();
 
     CoUninitialize( );
 

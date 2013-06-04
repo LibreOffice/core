@@ -279,13 +279,13 @@ void SAL_CALL BaseControl::dispose() throw( RuntimeException )
     OComponentHelper::dispose();
 
     // release context and peer
-    m_xContext = Reference< XInterface >();
+    m_xContext.clear();
     impl_releasePeer();
 
     // release view
     if ( m_xGraphicsView.is() == sal_True )
     {
-        m_xGraphicsView = Reference< XGraphics >();
+        m_xGraphicsView.clear();
     }
 }
 
@@ -751,12 +751,12 @@ void SAL_CALL BaseControl::disposing( const EventObject& /*aSource*/ ) throw( Ru
     {
         removePaintListener( this );
         removeWindowListener( this );
-        m_xGraphicsPeer = Reference< XGraphics >();
+        m_xGraphicsPeer.clear();
     }
 
     if ( m_xGraphicsView.is() == sal_True )
     {
-        m_xGraphicsView = Reference< XGraphics >();
+        m_xGraphicsView.clear();
     }
 }
 
@@ -956,12 +956,12 @@ void BaseControl::impl_releasePeer()
         {
             removePaintListener( this );
             removeWindowListener( this );
-            m_xGraphicsPeer = Reference< XGraphics >();
+            m_xGraphicsPeer.clear();
         }
 
         m_xPeer->dispose();
-        m_xPeerWindow   = Reference< XWindow >();
-        m_xPeer         = Reference< XWindowPeer >();
+        m_xPeerWindow.clear();
+        m_xPeer.clear();
 
         if ( m_pMultiplexer != NULL )
         {

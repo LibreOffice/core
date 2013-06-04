@@ -1245,7 +1245,7 @@ void SAL_CALL NestedRegistryImpl::initialize( const Sequence< Any >& aArguments 
         aArguments[0] >>= m_localReg;
         aArguments[1] >>= m_defaultReg;
         if ( m_localReg == m_defaultReg )
-            m_defaultReg = Reference< XSimpleRegistry >();
+            m_defaultReg.clear();
     }
 }
 

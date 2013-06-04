@@ -652,7 +652,7 @@ namespace pcr
         _rElementNames.resize( 0 );
 
         if ( _bPrepentEmptyEntry )
-            rMapUINameToElement[ OUString() ] = Reference< XPropertySet >();
+            rMapUINameToElement[ OUString() ].clear();
 
         try
         {

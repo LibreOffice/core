@@ -170,8 +170,8 @@ void SAL_CALL FlushNotificationAdapter::impl_dispose( bool _bRevokeListener )
             xFlushable->removeFlushListener( this );
     }
 
-    m_aListener = Reference< XFlushListener >();
-    m_aBroadcaster = Reference< XFlushable >();
+    m_aListener.clear();
+    m_aBroadcaster.clear();
 }
 
 void SAL_CALL FlushNotificationAdapter::flushed( const EventObject& rEvent ) throw (RuntimeException)

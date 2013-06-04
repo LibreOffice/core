@@ -98,7 +98,7 @@ void OCommonStatement::disposeResultSet()
     Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
     if (xComp.is())
         xComp->dispose();
-    m_xResultSet = Reference< XResultSet>();
+    m_xResultSet.clear();
 }
 //------------------------------------------------------------------------------
 void OCommonStatement::disposing()

@@ -294,7 +294,7 @@ void OCommonStatement::clearCachedResultSet()
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    m_xResultSet = Reference< XResultSet >();
+    m_xResultSet.clear();
 }
 
 // -------------------------------------------------------------------------

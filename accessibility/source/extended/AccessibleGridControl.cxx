@@ -93,7 +93,7 @@ void SAL_CALL AccessibleGridControl::disposing()
     m_pImpl->m_pColumnHeaderBar = NULL;
     m_pImpl->m_pRowHeaderBar    = NULL;
     m_pImpl->m_pCell            = NULL;
-    m_pImpl->m_aCreator         = Reference< XAccessible >();
+    m_pImpl->m_aCreator.clear();
 
     Reference< XAccessible >  xTable = m_pImpl->m_xTable;
 

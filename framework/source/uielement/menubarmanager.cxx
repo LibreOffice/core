@@ -714,7 +714,7 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
 
             pMenuItemDisposing->xMenuItemDispatch->removeStatusListener(
                 static_cast< XStatusListener* >( this ), aTargetURL );
-            pMenuItemDisposing->xMenuItemDispatch = Reference< XDispatch >();
+            pMenuItemDisposing->xMenuItemDispatch.clear();
             if ( pMenuItemDisposing->xPopupMenu.is() )
             {
                 Reference< com::sun::star::lang::XEventListener > xEventListener( pMenuItemDisposing->xPopupMenuController, UNO_QUERY );

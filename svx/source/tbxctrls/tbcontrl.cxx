@@ -1835,7 +1835,7 @@ SvxStyleToolBoxControl::SvxStyleToolBoxControl(
     for ( sal_uInt16 i=0; i<MAX_FAMILIES; i++ )
     {
         pBoundItems[i] = 0;
-        m_xBoundItems[i] = Reference< XComponent >();
+        m_xBoundItems[i].clear();
         pFamilyState[i]  = NULL;
     }
 }

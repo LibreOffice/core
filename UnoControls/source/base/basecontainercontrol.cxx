@@ -395,7 +395,6 @@ Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString
     // Ready for multithreading
     MutexGuard  aGuard ( Mutex::getGlobalMutex() ) ;
 
-    Reference< XControl >   xRetControl = Reference< XControl > ();
     size_t                  nControls   = maControlInfoList.size();
 
     // Search for right control
@@ -484,7 +483,7 @@ void SAL_CALL BaseContainerControl::removeTabController ( const Reference< XTabC
         if ( m_xTabControllerList.getConstArray () [nCount] == rTabController )
         {
             // ... if is it found ... remove it from list.
-            m_xTabControllerList.getArray()[ nCount ] = Reference< XTabController >() ;
+            m_xTabControllerList.getArray()[ nCount ].clear();
             break ;
         }
     }

@@ -94,7 +94,7 @@ void OStatement_Base::disposeResultSet()
     Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
     if (xComp.is())
         xComp->dispose();
-    m_xResultSet = Reference< XResultSet>();
+    m_xResultSet.clear();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OStatement_Base::disposing(void)
@@ -232,7 +232,7 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
     }
     catch( const DisposedException& ) { }
 
-    m_xResultSet = Reference< XResultSet >();
+    m_xResultSet.clear();
 }
 //--------------------------------------------------------------------
 SQLLEN OStatement_Base::getRowCount () throw( SQLException)

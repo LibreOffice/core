@@ -609,7 +609,7 @@ IMPL_LINK(TableDesignPane,EventMultiplexerListener,
             break;
 
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
-            mxView = Reference<XDrawView>();
+            mxView.clear();
             onSelectionChanged();
             break;
 

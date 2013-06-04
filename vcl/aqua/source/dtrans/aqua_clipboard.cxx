@@ -247,10 +247,10 @@ void AquaClipboard::applicationDidBecomeActive(NSNotification*)
       // notification to the old clipboard owner as well as
       // ClipboardChanged notification to any clipboard listener
       Reference<XClipboardOwner> oldOwner(mXClipboardOwner);
-      mXClipboardOwner = Reference<XClipboardOwner>();
+      mXClipboardOwner.clear();
 
       Reference<XTransferable> oldContent(mXClipboardContent);
-      mXClipboardContent = Reference<XTransferable>();
+      mXClipboardContent.clear();
 
       aGuard.clear();
 

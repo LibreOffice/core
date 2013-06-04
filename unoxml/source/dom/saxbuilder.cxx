@@ -95,8 +95,8 @@ namespace DOM
     {
         ::osl::MutexGuard g(m_Mutex);
 
-        m_aDocument = Reference< XDocument >();
-        m_aFragment = Reference< XDocumentFragment >();
+        m_aDocument.clear();
+        m_aFragment.clear();
         while (!m_aNodeStack.empty()) m_aNodeStack.pop();
         while (!m_aNSStack.empty()) m_aNSStack.pop();
         m_aState = SAXDocumentBuilderState_READY;

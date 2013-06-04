@@ -2447,7 +2447,7 @@ Reference< XControl >  FormController::findControl(Sequence< Reference< XControl
                 if ( _bRemove )
                     ::comphelper::removeElementAt( _rControls, i );
                 else if ( _bOverWrite )
-                    *pControls = Reference< XControl >();
+                    pControls->clear();
                 return xControl;
             }
         }

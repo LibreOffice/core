@@ -347,7 +347,6 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
     // Dispose and clear factory
     xComponent->dispose();
     g_xFactory.clear();
-    g_xFactory = Reference< XMultiServiceFactory >();
 
     printf("Test successful\n");
 

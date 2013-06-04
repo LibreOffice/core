@@ -530,7 +530,7 @@ void SAL_CALL EventMultiplexer::Implementation::disposing (
     if (xConfigurationController.is()
         && rEventObject.Source == xConfigurationController)
     {
-        mxConfigurationControllerWeak = Reference<XConfigurationController>();
+        mxConfigurationControllerWeak.clear();
     }
 }
 

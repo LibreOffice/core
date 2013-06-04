@@ -247,7 +247,7 @@ void OConnectionPointHelper::impl_UnlockContainer()
 {
     // Free hard uno3-reference to container.
     // see also "impl_LockContainer()"
-    m_xLock = Reference< XInterface >();
+    m_xLock.clear();
 }
 
 }   // namespace unocontrols

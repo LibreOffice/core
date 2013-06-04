@@ -1390,7 +1390,7 @@ void ODatabaseDocument::clearObjectContainer( WeakReference< XNameAccess >& _rxC
     Reference< XChild > xChild( _rxContainer.get(),UNO_QUERY );
     if ( xChild.is() )
         xChild->setParent( NULL );
-    _rxContainer = Reference< XNameAccess >();
+    _rxContainer.clear();
 }
 
 Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODatabaseModelImpl::ObjectType _eType )

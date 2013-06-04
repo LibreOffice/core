@@ -942,7 +942,7 @@ IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
             break;
 
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
-            mxView = Reference<XDrawView>();
+            mxView.clear();
             onSelectionChanged();
             break;
 

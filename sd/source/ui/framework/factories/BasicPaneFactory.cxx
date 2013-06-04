@@ -143,7 +143,7 @@ void SAL_CALL BasicPaneFactory::disposing (void)
     {
         xCC->removeResourceFactoryForReference(this);
         xCC->removeConfigurationChangeListener(this);
-        mxConfigurationControllerWeak = Reference<XConfigurationController>();
+        mxConfigurationControllerWeak.clear();
     }
 
     for (PaneContainer::const_iterator iDescriptor = mpPaneContainer->begin();
@@ -398,7 +398,7 @@ void SAL_CALL BasicPaneFactory::disposing (
 {
     if (mxConfigurationControllerWeak == rEventObject.Source)
     {
-        mxConfigurationControllerWeak = Reference<XConfigurationController>();
+        mxConfigurationControllerWeak.clear();
     }
     else
     {

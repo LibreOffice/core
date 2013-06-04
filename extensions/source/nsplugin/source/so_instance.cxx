@@ -266,7 +266,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         }
 
         //free the input stream, it is hold by the m_xComponent
-        xInputStream = Reference<io::XInputStream>();
+        xInputStream.clear();
 
         debug_fprintf(NSP_LOG_APPEND, "load document success\n");
 
@@ -352,7 +352,7 @@ sal_Bool SoPluginInstance::SetWindow(NSP_HWND hParent, int x, int y, int w, int 
         if(!bRetval){
             // try to reload document again
             debug_fprintf(NSP_LOG_APPEND, "load document error, try to reload it once again\n");
-            mxRemoteMSF = Reference< XMultiServiceFactory >();
+            mxRemoteMSF.clear();
             m_bInit = sal_False;
             bRetval = LoadDocument(hParent);
             debug_fprintf(NSP_LOG_APPEND, "load document again, return %d\n", bRetval);
@@ -416,12 +416,12 @@ sal_Bool SoPluginInstance::Destroy(void)
         }
     }
 
-    m_xUnoWin = Reference< awt::XWindow >();
-    m_xComponent = Reference< XComponent >();
-    m_xFrame = Reference< frame::XFrame2 >();
-    m_xFrames = Reference< frame::XFrames >();
-    m_xDispatcher = Reference< frame::XDispatchHelper >();
-    m_xDispatchProvider = Reference< frame::XDispatchProvider >();
+    m_xUnoWin.clear();
+    m_xComponent.clear();
+    m_xFrame.clear();
+    m_xFrames.clear();
+    m_xDispatcher.clear();
+    m_xDispatchProvider.clear();
     return sal_True;
 }
 

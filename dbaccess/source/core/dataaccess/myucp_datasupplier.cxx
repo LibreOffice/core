@@ -356,7 +356,7 @@ void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( (size_t)nIndex < m_pImpl->m_aResults.size() )
-        m_pImpl->m_aResults[ nIndex ]->xRow = Reference< XRow >();
+        m_pImpl->m_aResults[ nIndex ]->xRow.clear();
 }
 
 void DataSupplier::close()

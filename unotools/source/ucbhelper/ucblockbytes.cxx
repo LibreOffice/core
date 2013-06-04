@@ -1297,7 +1297,7 @@ sal_Bool UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
     }
     else
     {
-        m_xOutputStream = Reference < XOutputStream >();
+        m_xOutputStream.clear();
         setInputStream_Impl( Reference < XInputStream >() );
     }
 

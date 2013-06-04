@@ -110,7 +110,7 @@ void OStatement_Base::disposeResultSet()
     Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
     if (xComp.is())
         xComp->dispose();
-    m_xResultSet = Reference< XResultSet>();
+    m_xResultSet.clear();
 }
 //------------------------------------------------------------------------------
 void OStatement_BASE2::disposing()
@@ -229,7 +229,7 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
     }
     catch( const DisposedException& ) { }
 
-    m_xResultSet = Reference< XResultSet>();
+    m_xResultSet.clear();
 }
 
 // -------------------------------------------------------------------------

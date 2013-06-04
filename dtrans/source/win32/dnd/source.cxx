@@ -372,7 +372,7 @@ unsigned __stdcall DndOleSTAFunc(LPVOID pParams)
 
         //--> TRA
         // clear the global transferable again
-        g_XTransferable = Reference< XTransferable >( );
+        g_XTransferable.clear();
         //<-- TRA
 
         OSL_ENSURE( hr != E_INVALIDARG, "IDataObject impl does not contain valid data");

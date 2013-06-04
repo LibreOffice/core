@@ -245,7 +245,7 @@ namespace accessibility
 
         m_pBrowseBox = NULL;
         m_xControlAccessible.clear();
-        m_aContext = Reference< XAccessibleContext >( );
+        m_aContext.clear();
         // NO dispose of the inner object there: it is the XAccessible of an window, and disposing
         // it would delete the respective VCL window
     }
