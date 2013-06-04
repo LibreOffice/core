@@ -43,8 +43,6 @@ STD_LIB_FILE( gid_File_Lib_Scfilt, scfilt)
 
 STD_LIB_FILE( gid_File_Lib_Scd, scd)
 
-STD_RES_FILE( gid_File_Res_Solver, solver)
-
 STD_RES_FILE( gid_File_Res_Analysis, analysis)
 
 STD_RES_FILE( gid_File_Res_Date, date)
@@ -70,9 +68,15 @@ File gid_File_Exe_Scalc
 End
 #endif
 
+#if defined(ENABLE_LPSOLVE)
+
+STD_RES_FILE( gid_File_Res_Solver, solver)
+
 #if ! defined (SYSTEM_LPSOLVE)
 File gid_File_Lib_Lpsolve
     PACKED_LIB_FILE_BODY;
     Name = SPECIAL_NAME(lpsolve55);
 End
+#endif
+
 #endif

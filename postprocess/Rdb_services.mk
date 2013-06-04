@@ -112,8 +112,10 @@ $(eval $(call gb_Rdb_add_components,services,\
 	xmlscript/util/xmlscript \
 	xmlsecurity/util/xmlsecurity \
 	xmlsecurity/util/xsec_fw \
-	$(if $(filter-out IOS,$(OS)), \
+	$(if $(ENABLE_LPSOLVE), \
 		sccomp/source/solver/solver \
+	) \
+	$(if $(filter-out IOS,$(OS)), \
 		writerfilter/util/writerfilter \
 		writerperfect/util/wpftwriter \
 		writerperfect/util/wpftdraw \

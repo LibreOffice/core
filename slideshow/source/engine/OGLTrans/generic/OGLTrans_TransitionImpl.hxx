@@ -28,6 +28,8 @@
 #ifndef INCLUDED_OGLTRANS_TRANSITIONIMPL_HXX_
 #define INCLUDED_OGLTRANS_TRANSITIONIMPL_HXX_
 
+#include <config_lgpl.h>
+
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 

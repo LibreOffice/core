@@ -48,7 +48,6 @@
 #include "filtdlg.hxx"
 #include "dbnamdlg.hxx"
 #include "reffact.hxx"
-#include "pvlaydlg.hxx"
 #include "validat.hxx"
 #include "scresid.hxx"
 

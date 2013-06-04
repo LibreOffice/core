@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Module_Module,sccomp))
 
-ifneq ($(OS),IOS)
+ifeq ($(ENABLE_LPSOLVE),TRUE)
 
 $(eval $(call gb_Module_add_targets,sccomp,\
 	AllLangResTarget_solver \

@@ -10,6 +10,7 @@
 $(eval $(call gb_InstallModule_InstallModule,scp2/calc))
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/calc,\
+	ENABLE_LPSOLVE \
 	SYSTEM_LPSOLVE \
 ))
 

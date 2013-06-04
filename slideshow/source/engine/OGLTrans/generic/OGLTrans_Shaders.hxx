@@ -29,6 +29,8 @@
 #ifndef INCLUDED_OGLTRANS_SHADERS_HXX_
 #define INCLUDED_OGLTRANS_SHADERS_HXX_
 
+#include <config_lgpl.h>
+
 #define GL_GLEXT_PROTOTYPES 1
 #include <GL/gl.h>
 #include <GL/glext.h>

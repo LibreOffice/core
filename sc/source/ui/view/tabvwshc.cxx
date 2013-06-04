@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_mpl.h>
+
 #include "scitems.hxx"
 #include <vcl/msgbox.hxx>
 #include <sfx2/childwin.hxx>
@@ -41,7 +43,9 @@
 #include "consdlg.hxx"
 #include "filtdlg.hxx"
 #include "dbnamdlg.hxx"
-#include "pvlaydlg.hxx"
+#if ! MPL_HAVE_SUBSET
+#  include "pvlaydlg.hxx"
+#endif
 #include "areasdlg.hxx"
 #include "rangeutl.hxx"
 #include "crnrdlg.hxx"
@@ -317,6 +321,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
         case SID_OPENDLG_PIVOTTABLE:
         {
+#if ! MPL_HAVE_SUBSET
             //  all settings must be in pDialogDPObject
 
             if( pDialogDPObject )
@@ -329,6 +334,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                 GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
                 pResult = new ScPivotLayoutDlg( pB, pCW, pParent, *pDialogDPObject, pObj == NULL);
             }
+#endif
         }
         break;
 
