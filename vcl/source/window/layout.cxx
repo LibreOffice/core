@@ -1783,6 +1783,7 @@ short MessageDialog::Execute()
         m_pPrimaryMessage->set_hexpand(true);
         m_pPrimaryMessage->SetText(m_sPrimaryString);
         m_pPrimaryMessage->Show(!m_sPrimaryString.isEmpty());
+        m_pPrimaryMessage->SetMaxTextWidth(m_pPrimaryMessage->approximate_char_width() * 60);
 
         m_pSecondaryMessage = new VclMultiLineEdit(m_pGrid, nWinStyle);
         m_pSecondaryMessage->SetPaintTransparent(true);
@@ -1792,6 +1793,7 @@ short MessageDialog::Execute()
         m_pSecondaryMessage->set_hexpand(true);
         m_pSecondaryMessage->SetText(m_sSecondaryString);
         m_pSecondaryMessage->Show(!m_sSecondaryString.isEmpty());
+        m_pSecondaryMessage->SetMaxTextWidth(m_pPrimaryMessage->approximate_char_width() * 80);
 
         m_pGrid->Show();
 
