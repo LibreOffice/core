@@ -231,13 +231,13 @@ bool createContentProviderData(
 //=========================================================================
 
 UniversalContentBroker::UniversalContentBroker(
-    const Reference< com::sun::star::lang::XMultiServiceFactory >& rXSMgr )
-: m_xSMgr( rXSMgr ),
+    const Reference< com::sun::star::uno::XComponentContext >& xContext )
+: m_xContext( xContext ),
   m_pDisposeEventListeners( NULL ),
   m_nInitCount( 0 ), //@@@ see initialize() method
   m_nCommandId( 0 )
 {
-    OSL_ENSURE( m_xSMgr.is(),
+    OSL_ENSURE( m_xContext.is(),
                 "UniversalContentBroker ctor: No service manager" );
 }
 
@@ -333,7 +333,7 @@ void SAL_CALL UniversalContentBroker::removeEventListener(
 //
 //=========================================================================
 
-XSERVICEINFO_IMPL_1( UniversalContentBroker,
+XSERVICEINFO_IMPL_1_CTX( UniversalContentBroker,
                      OUString( "com.sun.star.comp.ucb.UniversalContentBroker" ),
                      OUString( UCB_SERVICE_NAME ) );
 
@@ -598,7 +598,7 @@ Reference< XContentIdentifier > SAL_CALL
     }
 
     if ( !xIdentifier.is() )
-        xIdentifier = new ContentIdentifier( m_xSMgr, ContentId );
+        xIdentifier = new ContentIdentifier( ContentId );
 
     return xIdentifier;
 }
@@ -846,11 +846,11 @@ void UniversalContentBroker::prepareAndRegister(
                              &aProviderArguments))
         {
             registerAtUcb(this,
-                                      m_xSMgr,
-                                      aIt->ServiceName,
-                                          aProviderArguments,
-                                          aIt->URLTemplate,
-                                          0);
+                          m_xContext,
+                          aIt->ServiceName,
+                          aProviderArguments,
+                          aIt->URLTemplate,
+                          0);
 
         }
         else
@@ -864,7 +864,7 @@ bool UniversalContentBroker::getContentProviderData(
             const OUString & rKey2,
             ContentProviderDataList & rListToFill )
 {
-    if ( !m_xSMgr.is() || rKey1.isEmpty() || rKey2.isEmpty() )
+    if ( !m_xContext.is() || rKey1.isEmpty() || rKey2.isEmpty() )
     {
         OSL_FAIL( "UniversalContentBroker::getContentProviderData - Invalid argument!" );
         return false;
@@ -873,7 +873,7 @@ bool UniversalContentBroker::getContentProviderData(
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProv =
-                configuration::theDefaultProvider::get( comphelper::getComponentContext(m_xSMgr) );
+                configuration::theDefaultProvider::get( m_xContext );
 
         OUStringBuffer aFullPath;
         aFullPath.appendAscii( CONFIG_CONTENTPROVIDERS_KEY "/['" );

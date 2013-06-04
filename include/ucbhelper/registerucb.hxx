@@ -30,6 +30,7 @@
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
+    namespace uno { class XComponentContext; }
 } } }
 
 
@@ -108,8 +109,8 @@ UCBHELPER_DLLPUBLIC bool registerAtUcb(
             com::sun::star::ucb::XContentProviderManager > const &
         rManager,
     com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory > const &
-        rServiceFactory,
+            com::sun::star::uno::XComponentContext > const &
+        rxContext,
     OUString const & rName,
     OUString const & rArguments,
     OUString const & rTemplate,

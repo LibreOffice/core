@@ -54,13 +54,13 @@ class UcbStore :
                 public com::sun::star::lang::XInitialization
 {
     com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
+                com::sun::star::uno::XComponentContext > m_xContext;
     UcbStore_Impl* m_pImpl;
 
 public:
     UcbStore(
         const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rXSMgr );
+                com::sun::star::uno::XComponentContext >& xContext );
     virtual ~UcbStore();
 
     // XInterface
@@ -104,7 +104,7 @@ class PropertySetRegistry :
     friend class PersistentPropertySet;
 
     com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
+                com::sun::star::uno::XComponentContext > m_xContext;
     PropertySetRegistry_Impl* m_pImpl;
 
 private:
@@ -120,7 +120,7 @@ private:
 public:
     PropertySetRegistry(
         const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rXSMgr,
+                com::sun::star::uno::XComponentContext >& xContext,
                 const ::com::sun::star::uno::Sequence<
                                                 ::com::sun::star::uno::Any >& rInitArgs);
     virtual ~PropertySetRegistry();
@@ -187,7 +187,7 @@ class PersistentPropertySet :
                 public com::sun::star::beans::XPropertyAccess
 {
     com::sun::star::uno::Reference<
-            com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
+            com::sun::star::uno::XComponentContext > m_xContext;
     PersistentPropertySet_Impl* m_pImpl;
 
 private:
@@ -199,7 +199,7 @@ private:
 public:
     PersistentPropertySet(
         const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rXSMgr,
+                com::sun::star::uno::XComponentContext >& xContext,
         PropertySetRegistry& rCreator,
         const OUString& rKey );
     virtual ~PersistentPropertySet();

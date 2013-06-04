@@ -142,12 +142,12 @@ PropertySetMap_Impl;
 class PropertySetInfo_Impl :
         public OWeakObject, public XTypeProvider, public XPropertySetInfo
 {
-    Reference< XMultiServiceFactory > m_xSMgr;
+    Reference< XComponentContext >    m_xContext;
     Sequence< Property >*             m_pProps;
     PersistentPropertySet*            m_pOwner;
 
 public:
-    PropertySetInfo_Impl( const Reference< XMultiServiceFactory >& rxSMgr,
+    PropertySetInfo_Impl( const Reference< XComponentContext >& xContext,
                           PersistentPropertySet* pOwner );
     virtual ~PropertySetInfo_Impl();
 
@@ -192,8 +192,8 @@ struct UcbStore_Impl
 //=========================================================================
 //=========================================================================
 
-UcbStore::UcbStore( const Reference< XMultiServiceFactory >& rXSMgr )
-: m_xSMgr( rXSMgr ),
+UcbStore::UcbStore( const Reference< XComponentContext >& xContext )
+: m_xContext( xContext ),
   m_pImpl( new UcbStore_Impl() )
 {
 }
@@ -235,7 +235,7 @@ XTYPEPROVIDER_IMPL_4( UcbStore,
 //
 //=========================================================================
 
-XSERVICEINFO_IMPL_1( UcbStore,
+XSERVICEINFO_IMPL_1_CTX( UcbStore,
                      OUString( "com.sun.star.comp.ucb.UcbStore" ),
                      OUString( STORE_SERVICE_NAME ) );
 
@@ -265,7 +265,7 @@ UcbStore::createPropertySetRegistry( const OUString& )
     {
         osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
         if ( !m_pImpl->m_xTheRegistry.is() )
-            m_pImpl->m_xTheRegistry = new PropertySetRegistry( m_xSMgr, getInitArgs() );
+            m_pImpl->m_xTheRegistry = new PropertySetRegistry( m_xContext, getInitArgs() );
     }
 
     return m_pImpl->m_xTheRegistry;
@@ -327,9 +327,9 @@ struct PropertySetRegistry_Impl
 //=========================================================================
 
 PropertySetRegistry::PropertySetRegistry(
-                        const Reference< XMultiServiceFactory >& rXSMgr,
+                        const Reference< XComponentContext >& xContext,
                         const Sequence< Any > &rInitArgs )
-: m_xSMgr( rXSMgr ),
+: m_xContext( xContext ),
   m_pImpl( new PropertySetRegistry_Impl( rInitArgs ) )
 {
 }
@@ -412,7 +412,7 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
                     // Yep!
                     return Reference< XPersistentPropertySet >(
                                             new PersistentPropertySet(
-                                                    m_xSMgr, *this, key ) );
+                                                    m_xContext, *this, key ) );
                 }
                 else if ( create )
                 {
@@ -460,7 +460,7 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
 
                                 return Reference< XPersistentPropertySet >(
                                             new PersistentPropertySet(
-                                                    m_xSMgr, *this, key ) );
+                                                    m_xContext, *this, key ) );
                             }
                         }
                         catch (const IllegalArgumentException&)
@@ -1037,9 +1037,7 @@ Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
             {
                 try
                 {
-                    m_pImpl->m_xConfigProvider
-                        = theDefaultProvider::get(
-                            comphelper::getComponentContext( m_xSMgr ) );
+                    m_pImpl->m_xConfigProvider = theDefaultProvider::get( m_xContext );
                 }
                 catch (const Exception&)
                 {
@@ -1263,10 +1261,10 @@ struct PersistentPropertySet_Impl
 //=========================================================================
 
 PersistentPropertySet::PersistentPropertySet(
-                        const Reference< XMultiServiceFactory >& rXSMgr,
+                        const Reference< XComponentContext >& xContext,
                         PropertySetRegistry& rCreator,
                         const OUString& rKey )
-: m_xSMgr( rXSMgr ),
+: m_xContext( xContext ),
   m_pImpl( new PersistentPropertySet_Impl( rCreator, rKey ) )
 {
     // register at creator.
@@ -1401,7 +1399,7 @@ Reference< XPropertySetInfo > SAL_CALL
     PropertySetInfo_Impl*& rpInfo = m_pImpl->m_pInfo;
     if ( !rpInfo )
     {
-        rpInfo = new PropertySetInfo_Impl( m_xSMgr, this );
+        rpInfo = new PropertySetInfo_Impl( m_xContext, this );
         rpInfo->acquire();
     }
     return Reference< XPropertySetInfo >( rpInfo );
@@ -2361,9 +2359,9 @@ PropertySetRegistry& PersistentPropertySet::getPropertySetRegistry()
 //=========================================================================
 
 PropertySetInfo_Impl::PropertySetInfo_Impl(
-                        const Reference< XMultiServiceFactory >& rxSMgr,
+                        const Reference< XComponentContext >& xContext,
                         PersistentPropertySet* pOwner )
-: m_xSMgr( rxSMgr ),
+: m_xContext( xContext ),
   m_pProps( NULL ),
   m_pOwner( pOwner )
 {

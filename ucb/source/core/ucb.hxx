@@ -62,7 +62,7 @@ class UniversalContentBroker :
                 public com::sun::star::util::XChangesListener
 {
 public:
-    UniversalContentBroker( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rXSMgr );
+    UniversalContentBroker( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
     virtual ~UniversalContentBroker();
 
     // XInterface
@@ -198,7 +198,7 @@ private:
     void prepareAndRegister( const ucbhelper::ContentProviderDataList& rData);
 
     com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
+        com::sun::star::uno::XComponentContext > m_xContext;
 
     com::sun::star::uno::Reference<
         com::sun::star::util::XChangesNotifier > m_xNotifier;

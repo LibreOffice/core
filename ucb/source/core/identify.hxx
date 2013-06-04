@@ -35,8 +35,7 @@ class ContentIdentifier :
                   public com::sun::star::ucb::XContentIdentifier
 {
 public:
-    ContentIdentifier( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                       const OUString& ContentId );
+    ContentIdentifier( const OUString& ContentId );
     virtual ~ContentIdentifier();
 
     // XInterface
@@ -52,7 +51,6 @@ public:
         throw( com::sun::star::uno::RuntimeException );
 
 private:
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
     OUString m_aContentId;
     OUString m_aProviderScheme;
 };

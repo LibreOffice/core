@@ -51,7 +51,7 @@ public:
         , const com::sun::star::uno::Reference<
                         com::sun::star::ucb::XContentIdentifierMapping > & xContentMapping
         , const com::sun::star::uno::Reference<
-                        com::sun::star::lang::XMultiServiceFactory > & xSMgr );
+                        com::sun::star::uno::XComponentContext > & xContext );
 
     virtual ~CachedDynamicResultSet();
 
@@ -87,13 +87,13 @@ class CachedDynamicResultSetFactory
 {
 protected:
     com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >    m_xSMgr;
+        com::sun::star::uno::XComponentContext >    m_xContext;
 
 public:
 
     CachedDynamicResultSetFactory(
         const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory > & rSMgr);
+           com::sun::star::uno::XComponentContext > & xContext);
 
     virtual ~CachedDynamicResultSetFactory();
 

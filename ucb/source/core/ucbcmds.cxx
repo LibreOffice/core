@@ -76,19 +76,19 @@ namespace
 
 struct TransferCommandContext
 {
-    uno::Reference< lang::XMultiServiceFactory > xSMgr;
+    uno::Reference< uno::XComponentContext >     m_xContext;
     uno::Reference< ucb::XCommandProcessor >     xProcessor;
     uno::Reference< ucb::XCommandEnvironment >   xEnv;
     uno::Reference< ucb::XCommandEnvironment >   xOrigEnv;
     ucb::GlobalTransferCommandArgument2          aArg;
 
     TransferCommandContext(
-        const uno::Reference< lang::XMultiServiceFactory > & rxSMgr,
+        const uno::Reference< uno::XComponentContext > & xContext,
         const uno::Reference< ucb::XCommandProcessor > & rxProcessor,
         const uno::Reference< ucb::XCommandEnvironment > & rxEnv,
         const uno::Reference< ucb::XCommandEnvironment > & rxOrigEnv,
         const ucb::GlobalTransferCommandArgument2 & rArg )
-    : xSMgr( rxSMgr ), xProcessor( rxProcessor ), xEnv( rxEnv ),
+    : m_xContext( xContext ), xProcessor( rxProcessor ), xEnv( rxEnv ),
       xOrigEnv( rxOrigEnv ), aArg( rArg ) {}
 };
 
@@ -965,7 +965,7 @@ uno::Reference< io::XInputStream > getInputStream(
 
         try
         {
-            uno::Reference< io::XOutputStream > xOutputStream( io::Pipe::create(comphelper::getComponentContext(rContext.xSMgr)), uno::UNO_QUERY_THROW );
+            uno::Reference< io::XOutputStream > xOutputStream( io::Pipe::create(rContext.m_xContext), uno::UNO_QUERY_THROW );
 
             ucb::OpenCommandArgument2 aArg;
             aArg.Mode       = ucb::OpenMode::DOCUMENT;
@@ -1617,7 +1617,7 @@ void globalTransfer_(
                         rContext.aArg.MimeType );
 
                 TransferCommandContext aSubCtx(
-                        rContext.xSMgr,
+                        rContext.m_xContext,
                         rContext.xProcessor,
                         rContext.xEnv,
                         rContext.xOrigEnv,
@@ -1704,11 +1704,8 @@ void UniversalContentBroker::globalTransfer(
     uno::Reference< ucb::XCommandEnvironment > xLocalEnv;
     if (xEnv.is())
     {
-        uno::Reference< uno::XComponentContext > xCtx(
-            comphelper::getComponentContext( m_xSMgr ) );
-
-            xLocalEnv.set( ucb::CommandEnvironment::create(
-               xCtx,
+        xLocalEnv.set( ucb::CommandEnvironment::create(
+               m_xContext,
                new InteractionHandlerProxy( xEnv->getInteractionHandler() ),
                xEnv->getProgressHandler() ) );
     }
@@ -1994,7 +1991,7 @@ void UniversalContentBroker::globalTransfer(
     }
 
     TransferCommandContext aTransferCtx(
-        m_xSMgr, this, xLocalEnv, xEnv, rArg );
+        m_xContext, this, xLocalEnv, xEnv, rArg );
 
     if ( rArg.NewTitle.isEmpty() )
     {
@@ -2045,11 +2042,8 @@ uno::Any UniversalContentBroker::checkIn( const ucb::CheckinArgument& rArg,
     uno::Reference< ucb::XCommandEnvironment > xLocalEnv;
     if (xEnv.is())
     {
-        uno::Reference< uno::XComponentContext > xCtx(
-            comphelper::getComponentContext( m_xSMgr ) );
-
-            xLocalEnv.set( ucb::CommandEnvironment::create(
-               xCtx,
+        xLocalEnv.set( ucb::CommandEnvironment::create(
+               m_xContext,
                new InteractionHandlerProxy( xEnv->getInteractionHandler() ),
                xEnv->getProgressHandler() ) );
     }

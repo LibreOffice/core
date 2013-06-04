@@ -38,10 +38,8 @@ using namespace com::sun::star::ucb;
 //=========================================================================
 
 ContentIdentifier::ContentIdentifier(
-                        const Reference< XMultiServiceFactory >& rxSMgr,
                         const OUString& ContentId )
-: m_xSMgr( rxSMgr ),
-  m_aContentId( ContentId )
+: m_aContentId( ContentId )
 {
 }
 

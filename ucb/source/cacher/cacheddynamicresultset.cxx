@@ -33,8 +33,8 @@ using namespace com::sun::star::uno;
 CachedDynamicResultSet::CachedDynamicResultSet(
         Reference< XDynamicResultSet > xOrigin
         , const Reference< XContentIdentifierMapping > & xContentMapping
-        , const Reference< XMultiServiceFactory > & xSMgr )
-        : DynamicResultSetWrapper( xOrigin, comphelper::getComponentContext(xSMgr) )
+        , const Reference< XComponentContext > & xContext )
+        : DynamicResultSetWrapper( xOrigin, xContext )
         , m_xContentIdentifierMapping( xContentMapping )
 {
     impl_init();
@@ -133,9 +133,9 @@ void SAL_CALL CachedDynamicResultSet
 //--------------------------------------------------------------------------
 
 CachedDynamicResultSetFactory::CachedDynamicResultSetFactory(
-        const Reference< XMultiServiceFactory > & rSMgr )
+        const Reference< XComponentContext > & xContext )
 {
-    m_xSMgr = rSMgr;
+    m_xContext = xContext;
 }
 
 CachedDynamicResultSetFactory::~CachedDynamicResultSetFactory()
@@ -164,7 +164,7 @@ XTYPEPROVIDER_IMPL_3( CachedDynamicResultSetFactory,
 // CachedDynamicResultSetFactory XServiceInfo methods.
 //--------------------------------------------------------------------------
 
-XSERVICEINFO_IMPL_1( CachedDynamicResultSetFactory,
+XSERVICEINFO_IMPL_1_CTX( CachedDynamicResultSetFactory,
                          OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetFactory" ),
                          OUString( CACHED_DRS_FACTORY_NAME ) );
 
@@ -186,7 +186,7 @@ Reference< XDynamicResultSet > SAL_CALL CachedDynamicResultSetFactory
         throw( RuntimeException )
 {
     Reference< XDynamicResultSet > xRet;
-    xRet = new CachedDynamicResultSet( SourceStub, ContentIdentifierMapping, m_xSMgr );
+    xRet = new CachedDynamicResultSet( SourceStub, ContentIdentifierMapping, m_xContext );
     return xRet;
 }
 

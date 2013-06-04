@@ -42,14 +42,14 @@ namespace ucbhelper {
 bool
 registerAtUcb(
     uno::Reference< ucb::XContentProviderManager > const & rManager,
-    uno::Reference< lang::XMultiServiceFactory > const & rServiceFactory,
+    uno::Reference< uno::XComponentContext > const & rxContext,
     OUString const & rName,
     OUString const & rArguments,
     OUString const & rTemplate,
     ContentProviderRegistrationInfo * pInfo)
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(rServiceFactory.is(),
+    OSL_ENSURE(rxContext.is(),
                "ucb::registerAtUcb(): No service factory");
 
     bool bNoProxy = rArguments.startsWith("{noproxy}");
@@ -66,13 +66,7 @@ registerAtUcb(
         uno::Reference< ucb::XContentProviderFactory > xProxyFactory;
         try
         {
-            uno::Reference< beans::XPropertySet > xFactoryProperties( rServiceFactory, uno::UNO_QUERY_THROW );
-            uno::Reference< uno::XComponentContext > xContext = uno::Reference< uno::XComponentContext >(
-                xFactoryProperties->getPropertyValue( OUString( "DefaultContext" ) ),
-                uno::UNO_QUERY );
-            xProxyFactory
-                = uno::Reference< ucb::XContentProviderFactory >(
-                      ucb::ContentProviderProxyFactory::create( xContext ) );
+            xProxyFactory = ucb::ContentProviderProxyFactory::create( rxContext );
         }
         catch (uno::Exception const &) {}
         OSL_ENSURE(xProxyFactory.is(), "No ContentProviderProxyFactory");
@@ -85,7 +79,7 @@ registerAtUcb(
         try
         {
             xProvider = uno::Reference< ucb::XContentProvider >(
-                            rServiceFactory->createInstance(rName),
+                            rxContext->getServiceManager()->createInstanceWithContext(rName, rxContext),
                             uno::UNO_QUERY);
         }
         catch (uno::RuntimeException const &) { throw; }
