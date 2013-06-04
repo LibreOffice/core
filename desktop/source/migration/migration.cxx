@@ -647,12 +647,12 @@ strings_vr MigrationImpl::applyPatterns(const strings_v& vSet, const strings_v& 
         SearchParam param(*i_pat, SearchParam::SRCH_REGEXP);
         TextSearch ts(param, LANGUAGE_DONTKNOW);
         i_set = vSet.begin();
-        xub_StrLen start = 0;
-        xub_StrLen end = 0;
+        sal_Int32 start = 0;
+        sal_Int32 end = 0;
         while (i_set != vSet.end())
         {
-            end = (xub_StrLen)(i_set->getLength());
-            if (ts.SearchFrwrd(*i_set, &start, &end))
+            end = i_set->getLength();
+            if (ts.SearchForward(*i_set, &start, &end))
                 vrResult->push_back(*i_set);
             ++i_set;
         }

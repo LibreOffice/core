@@ -485,7 +485,7 @@ OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
 
 // =======================================================================
 
-static bool ImplIsFontToken( const OUString& rName, const String& rToken )
+static bool ImplIsFontToken( const OUString& rName, const OUString& rToken )
 {
     OUString      aTempName;
     sal_Int32  nIndex = 0;
@@ -502,7 +502,7 @@ static bool ImplIsFontToken( const OUString& rName, const String& rToken )
 
 // -----------------------------------------------------------------------
 
-static void ImplAppendFontToken( OUString& rName, const String& rNewToken )
+static void ImplAppendFontToken( OUString& rName, const OUString& rNewToken )
 {
     if ( !rName.isEmpty() )
     {
@@ -539,7 +539,7 @@ OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
     {
         for( int i = 0; i < 3; i++ )
         {
-            const ::std::vector< String >* pVector = NULL;
+            const ::std::vector< OUString >* pVector = NULL;
             switch( i )
             {
                 case 0:
@@ -557,7 +557,7 @@ OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
             }
             if( ! pVector )
                 continue;
-            for( ::std::vector< String >::const_iterator it = pVector->begin(); it != pVector->end(); ++it )
+            for( ::std::vector< OUString >::const_iterator it = pVector->begin(); it != pVector->end(); ++it )
                 if( ! ImplIsFontToken( rName, *it ) )
                 {
                     ImplAppendFontToken( aName, *it );
@@ -576,22 +576,22 @@ OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
 // -----------------------------------------------------------------------
 
 // TODO: use a more generic String hash
-int FontNameHash::operator()( const String& rStr ) const
+int FontNameHash::operator()( const OUString& rStr ) const
 {
     // this simple hash just has to be good enough for font names
     int nHash = 0;
-    const int nLen = rStr.Len();
-    const sal_Unicode* p = rStr.GetBuffer();
+    const int nLen = rStr.getLength();
+    const sal_Unicode* p = rStr.getStr();
     switch( nLen )
     {
-        default: nHash = (p[0]<<16) - (p[1]<<8) + p[2];
-                 nHash += nLen;
-                 p += nLen - 3;
-                 // fall through
-        case 3:  nHash += (p[2]<<16);   // fall through
-        case 2:  nHash += (p[1]<<8);    // fall through
-        case 1:  nHash += p[0];         // fall through
-        case 0:  break;
+    default: nHash = (p[0]<<16) - (p[1]<<8) + p[2];
+        nHash += nLen;
+        p += nLen - 3;
+        // fall through
+    case 3:  nHash += (p[2]<<16);   // fall through
+    case 2:  nHash += (p[1]<<8);    // fall through
+    case 1:  nHash += p[0];         // fall through
+    case 0:  break;
     };
 
     return nHash;

@@ -95,11 +95,10 @@ bool ComputedExpression::_checkExpression( const sal_Char* pExpression ) const
     aSearchOptions.searchString = String( pExpression, RTL_TEXTENCODING_ASCII_US );
     utl::TextSearch aTextSearch( aSearchOptions );
 
-    xub_StrLen nLength =
-        static_cast<xub_StrLen>( msExpression.getLength() );
-    xub_StrLen nStart = 0;
-    xub_StrLen nEnd = nLength;
-    int nSearch = aTextSearch.SearchFrwrd( msExpression, &nStart, &nEnd );
+    sal_Int32 nLength = msExpression.getLength();
+    sal_Int32 nStart = 0;
+    sal_Int32 nEnd = nLength;
+    int nSearch = aTextSearch.SearchForward( msExpression, &nStart, &nEnd );
 
     // our expression is static only if 1) we found our regexp, and 2)
     // the regexp goes from beginning to end.

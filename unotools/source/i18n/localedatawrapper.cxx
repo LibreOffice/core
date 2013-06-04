@@ -672,7 +672,7 @@ void LocaleDataWrapper::scanCurrFormatImpl( const OUString& rCode,
                         p = pStop;
                 break;
                 default:
-                    if (!nInSection && nSym == -1 && String(rCode).Equals( aCurrSymbol, (xub_StrLen)(p-pStr), aCurrSymbol.getLength()))
+                    if (!nInSection && nSym == -1 && rCode.compareTo( aCurrSymbol, (sal_Int32)(p-pStr)) == 0)
                     {   // currency symbol not surrounded by [$...]
                         nSym = p - pStr;
                         if (nBlank == -1 && pStr < p && *(p-1) == ' ')
@@ -1423,14 +1423,15 @@ OUString LocaleDataWrapper::getTime( const Time& rTime, sal_Bool bSec, sal_Bool 
 
 
 OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
-        sal_Int16 nDisplayDayOfWeek, sal_Bool bDayOfMonthWithLeadingZero,
-        sal_Int16 nDisplayMonth, sal_Bool bTwoDigitYear ) const
+                                         sal_Int16 nDisplayDayOfWeek,
+                                         sal_Bool bDayOfMonthWithLeadingZero,
+                                         sal_Int16 nDisplayMonth, sal_Bool bTwoDigitYear ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     using namespace ::com::sun::star::i18n;
     sal_Unicode     aBuf[20];
     sal_Unicode*    pBuf;
-    String aStr;
+    OUString aStr;
     sal_Int16 nVal;
     rCal.setGregorianDateTime( rDate );
     // day of week
@@ -1454,26 +1455,14 @@ OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCa
     // concatenate
     switch ( getLongDateFormat() )
     {
-        case DMY :
-            aStr += aDay;
-            aStr += getLongDateDaySep();
-            aStr += aMonth;
-            aStr += getLongDateMonthSep();
-            aStr += aYear;
+    case DMY :
+        aStr += aDay + getLongDateDaySep() + aMonth + getLongDateMonthSep() + aYear;
         break;
-        case MDY :
-            aStr += aMonth;
-            aStr += getLongDateMonthSep();
-            aStr += aDay;
-            aStr += getLongDateDaySep();
-            aStr += aYear;
+    case MDY :
+        aStr += aMonth + getLongDateMonthSep() + aDay + getLongDateDaySep() + aYear;
         break;
-        default:    // YMD
-            aStr += aYear;
-            aStr += getLongDateYearSep();
-            aStr += aMonth;
-            aStr += getLongDateMonthSep();
-            aStr += aDay;
+    default:    // YMD
+        aStr += aYear + getLongDateYearSep() + aMonth + getLongDateMonthSep() + aDay;
     }
     return aStr;
 }

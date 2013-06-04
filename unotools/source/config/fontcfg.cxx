@@ -649,12 +649,12 @@ static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
 
 // -----------------------------------------------------------------------
 
-static bool ImplKillLeading( String& rName, const char* const* ppStr )
+static bool ImplKillLeading( OUString& rName, const char* const* ppStr )
 {
     for(; *ppStr; ++ppStr )
     {
         const char*         pStr = *ppStr;
-        const sal_Unicode*  pNameStr = rName.GetBuffer();
+        const sal_Unicode*  pNameStr = rName.getStr();
         while ( (*pNameStr == (sal_Unicode)(unsigned char)*pStr) && *pStr )
         {
             pNameStr++;
@@ -662,19 +662,19 @@ static bool ImplKillLeading( String& rName, const char* const* ppStr )
         }
         if ( !*pStr )
         {
-            xub_StrLen nLen = sal::static_int_cast<xub_StrLen>(pNameStr - rName.GetBuffer());
-            rName.Erase( 0, nLen );
+            sal_Int32 nLen = sal_Int32(pNameStr - rName.getStr());
+            rName = rName.copy( nLen );
             return true;
         }
     }
 
     // special case for Baekmuk
     // TODO: allow non-ASCII KillLeading list
-    const sal_Unicode* pNameStr = rName.GetBuffer();
+    const sal_Unicode* pNameStr = rName.getStr();
     if( (pNameStr[0]==0xBC31) && (pNameStr[1]==0xBC35) )
     {
-        xub_StrLen nLen = (pNameStr[2]==0x0020) ? 3 : 2;
-        rName.Erase( 0, nLen );
+        sal_Int32 nLen = (pNameStr[2]==0x0020) ? 3 : 2;
+        rName = rName.copy( nLen );
         return true;
     }
 
@@ -683,13 +683,13 @@ static bool ImplKillLeading( String& rName, const char* const* ppStr )
 
 // -----------------------------------------------------------------------
 
-static xub_StrLen ImplIsTrailing( const String& rName, const char* pStr )
+static sal_Int32 ImplIsTrailing( const OUString& rName, const char* pStr )
 {
-    xub_StrLen nStrLen = static_cast<xub_StrLen>( strlen( pStr ) );
-    if( nStrLen >= rName.Len() )
+    sal_Int32 nStrLen = strlen( pStr );
+    if( nStrLen >= rName.getLength() )
         return 0;
 
-    const sal_Unicode* pEndName = rName.GetBuffer() + rName.Len();
+    const sal_Unicode* pEndName = rName.getStr() + rName.getLength();
     const sal_Unicode* pNameStr = pEndName - nStrLen;
     do if( *(pNameStr++) != *(pStr++) )
         return 0;
@@ -700,14 +700,14 @@ static xub_StrLen ImplIsTrailing( const String& rName, const char* pStr )
 
 // -----------------------------------------------------------------------
 
-static bool ImplKillTrailing( String& rName, const char* const* ppStr )
+static bool ImplKillTrailing( OUString& rName, const char* const* ppStr )
 {
     for(; *ppStr; ++ppStr )
     {
-        xub_StrLen nTrailLen = ImplIsTrailing( rName, *ppStr );
+        sal_Int32 nTrailLen = ImplIsTrailing( rName, *ppStr );
         if( nTrailLen )
         {
-            rName.Erase( rName.Len()-nTrailLen );
+            rName = rName.copy(0,  rName.getLength()-nTrailLen );
             return true;
         }
     }
@@ -717,11 +717,11 @@ static bool ImplKillTrailing( String& rName, const char* const* ppStr )
 
 // -----------------------------------------------------------------------
 
-static bool ImplKillTrailingWithExceptions( String& rName, const char* const* ppStr )
+static bool ImplKillTrailingWithExceptions( OUString& rName, const char* const* ppStr )
 {
     for(; *ppStr; ++ppStr )
     {
-        xub_StrLen nTrailLen = ImplIsTrailing( rName, *ppStr );
+        sal_Int32 nTrailLen = ImplIsTrailing( rName, *ppStr );
         if( nTrailLen )
         {
             // check string match against string exceptions
@@ -729,7 +729,7 @@ static bool ImplKillTrailingWithExceptions( String& rName, const char* const* pp
                 if( ImplIsTrailing( rName, *ppStr ) )
                     return false;
 
-            rName.Erase( rName.Len()-nTrailLen );
+            rName = rName.copy(0, rName.getLength()-nTrailLen );
             return true;
         }
         else
@@ -744,23 +744,25 @@ static bool ImplKillTrailingWithExceptions( String& rName, const char* const* pp
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplFindAndErase( String& rName, const char* pStr )
+static bool ImplFindAndErase( OUString& rName, const char* pStr )
 {
-    xub_StrLen nPos = rName.SearchAscii( pStr );
-    if ( nPos == STRING_NOTFOUND )
+    sal_Int32 nPos = rName.indexOfAsciiL( pStr, strlen(pStr) );
+    if ( nPos < 0)
         return sal_False;
 
     const char* pTempStr = pStr;
     while ( *pTempStr )
         pTempStr++;
-    rName.Erase( nPos, (xub_StrLen)(pTempStr-pStr) );
+    OUStringBuffer sBuff(rName);
+    sBuff.remove(nPos, (sal_Int32)(pTempStr - pStr));
+    rName = sBuff.makeStringAndClear();
     return sal_True;
 }
 
 // =======================================================================
 
-void FontSubstConfiguration::getMapName( const String& rOrgName, String& rShortName,
-    String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, sal_uLong& rType )
+void FontSubstConfiguration::getMapName( const OUString& rOrgName, OUString& rShortName,
+    OUString& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, sal_uLong& rType )
 {
     rShortName = rOrgName;
 
@@ -815,14 +817,16 @@ void FontSubstConfiguration::getMapName( const String& rOrgName, String& rShortN
 
     // Remove numbers
     // TODO: also remove localized and fullwidth digits
-    xub_StrLen i = 0;
-    while ( i < rFamilyName.Len() )
+    sal_Int32 i = 0;
+    OUStringBuffer sBuff(rFamilyName.getLength());
+    while ( i < rFamilyName.getLength() )
     {
-        sal_Unicode c = rFamilyName.GetChar( i );
-        if ( (c >= 0x0030) && (c <= 0x0039) )
-            rFamilyName.Erase( i, 1 );
-        else
-            i++;
+        sal_Unicode c = rFamilyName[i];
+        if (!( (c >= 0x0030) && (c <= 0x0039)) )
+        {
+            sBuff.append(c);
+        }
+        i++;
     }
 }
 
@@ -830,7 +834,7 @@ void FontSubstConfiguration::getMapName( const String& rOrgName, String& rShortN
 struct StrictStringSort : public ::std::binary_function< const FontNameAttr&, const FontNameAttr&, bool >
 {
     bool operator()( const FontNameAttr& rLeft, const FontNameAttr& rRight )
-    { return rLeft.Name.CompareTo( rRight.Name ) == COMPARE_LESS ; }
+    { return rLeft.Name.compareTo( rRight.Name ) < 0 ; }
 };
 
 static const char* const pAttribNames[] =
@@ -910,7 +914,7 @@ static const enum_convert pWidthNames[] =
 
 void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Reference< XNameAccess > xFont,
                                               const OUString& rType,
-                                              std::vector< String >& rSubstVector ) const
+                                              std::vector< OUString >& rSubstVector ) const
 {
     try
     {
@@ -1137,15 +1141,14 @@ void FontSubstConfiguration::readLocaleSubst( const com::sun::star::lang::Locale
     }
 }
 
-const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontName, const Locale& rLocale ) const
+const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontName, const Locale& rLocale ) const
 {
-    if( !rFontName.Len() )
+    if( rFontName.isEmpty() )
         return NULL;
 
     // search if a  (language dep.) replacement table for the given font exists
     // fallback is english
-    String aSearchFont( rFontName );
-    aSearchFont.ToLowerAscii();
+    OUString aSearchFont( rFontName.toAsciiLowerCase() );
     FontNameAttr aSearchAttr;
     aSearchAttr.Name = aSearchFont;
 
@@ -1172,8 +1175,8 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontNam
                 const FontNameAttr& rFoundAttr = *it;
                 // a search for "abcblack" may match with an entry for "abc"
                 // the reverse is not a good idea (e.g. #i112731# alba->albani)
-                if( rFoundAttr.Name.Len() <= aSearchFont.Len() )
-                    if( aSearchFont.CompareTo( rFoundAttr.Name, rFoundAttr.Name.Len() ) == COMPARE_EQUAL )
+                if( rFoundAttr.Name.getLength() <= aSearchFont.getLength() )
+                    if( aSearchFont.indexOf( rFoundAttr.Name ) >= 0 )
                         return &rFoundAttr;
             }
         }

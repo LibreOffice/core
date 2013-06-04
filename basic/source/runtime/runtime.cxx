@@ -1583,8 +1583,8 @@ void SbiRuntime::StepLIKE()
     }
     SbxVariable* pRes = new SbxVariable;
     utl::TextSearch aSearch(aSearchOpt);
-    sal_uInt16 nStart=0, nEnd=value.getLength();
-    int bRes = aSearch.SearchFrwrd(value, &nStart, &nEnd);
+    sal_Int32 nStart=0, nEnd=value.getLength();
+    int bRes = aSearch.SearchForward(value, &nStart, &nEnd);
     pRes->PutBool( bRes != 0 );
 
     PushVar( pRes );

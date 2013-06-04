@@ -664,10 +664,10 @@ String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
         {
             utl::TextSearch aSTxt( rSearchOpt );
             const String& rStr = static_cast<const SwTxtNode*>(pTxtNode)->GetTxt();
-            xub_StrLen nStart = pPam->Start()->nContent.GetIndex();
-            xub_StrLen nEnd = pPam->End()->nContent.GetIndex();
+            sal_Int32 nStart = (sal_Int32)pPam->Start()->nContent.GetIndex();
+            sal_Int32 nEnd = (sal_Int32)pPam->End()->nContent.GetIndex();
             SearchResult aResult;
-            if( aSTxt.SearchFrwrd( rStr, &nStart, &nEnd, &aResult ) )
+            if( aSTxt.SearchForward( rStr, &nStart, &nEnd, &aResult ) )
             {
                 String aReplaceStr( rSearchOpt.replaceString );
                 aSTxt.ReplaceBackReferences( aReplaceStr, rStr, aResult );

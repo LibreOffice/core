@@ -52,8 +52,8 @@ public:
     enum SearchType{ SRCH_NORMAL, SRCH_REGEXP, SRCH_LEVDIST };
 
 private:
-    String sSrchStr;            // the search string
-    String sReplaceStr;         // the replace string
+    OUString sSrchStr;            // the search string
+    OUString sReplaceStr;         // the replace string
 
     SearchType m_eSrchType;       // search normal/regular/LevDist
 
@@ -81,8 +81,8 @@ public:
 
     ~SearchParam();
 
-    const String&   GetSrchStr() const          { return sSrchStr; }
-    const String&   GetReplaceStr() const       { return sReplaceStr; }
+    const OUString&   GetSrchStr() const          { return sSrchStr; }
+    const OUString&   GetReplaceStr() const       { return sReplaceStr; }
     SearchType      GetSrchType() const         { return m_eSrchType; }
 
     int             IsCaseSensitive() const     { return m_bCaseSense; }
@@ -90,8 +90,8 @@ public:
     int             IsSrchWordOnly() const      { return m_bWordOnly; }
 
 
-    void SetSrchStr( const String& rStr )       { sSrchStr = rStr; }
-    void SetReplaceStr( const String& rStr )    { sReplaceStr = rStr; }
+    void SetSrchStr( const OUString& rStr )       { sSrchStr = rStr; }
+    void SetReplaceStr( const OUString& rStr )    { sReplaceStr = rStr; }
     void SetSrchType( SearchType eType )        { m_eSrchType = eType; }
 
     void SetCaseSensitive( int bFlag )          { m_bCaseSense = bFlag; }

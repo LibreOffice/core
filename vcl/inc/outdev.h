@@ -55,14 +55,14 @@ public:
                         ~ImplDevFontListData();
 
     const OUString&     GetFamilyName() const    { return maName; }
-    const String&       GetSearchName() const    { return maSearchName; }
+    const OUString&     GetSearchName() const    { return maSearchName; }
     const OUString&     GetAliasNames() const    { return maMapNames; }
     bool                IsScalable() const       { return mpFirst->IsScalable(); }
     int                 GetMinQuality() const    { return mnMinQuality; }
 
     bool                AddFontFace( PhysicalFontFace* );
     void                InitMatchData( const utl::FontSubstConfiguration&,
-                            const String& rSearchName );
+                                       const String& rSearchName );
     PhysicalFontFace*   FindBestFontFace( const FontSelectPattern& rFSD ) const;
 
     void                GetFontHeights( std::set<int>& rHeights ) const;
@@ -74,11 +74,11 @@ private:
 friend class ImplDevFontList; // TODO: remove soon
     PhysicalFontFace*   mpFirst;            // linked list of physical font faces
     OUString            maName;             // Fontname (original font family name)
-    String              maSearchName;       // normalized font family name
+    OUString            maSearchName;       // normalized font family name
     OUString            maMapNames;         // fontname aliases
     sal_uIntPtr         mnTypeFaces;        // Typeface Flags
     sal_uIntPtr         mnMatchType;        // MATCH - Type
-    String              maMatchFamilyName;  // MATCH - FamilyName
+    OUString            maMatchFamilyName;  // MATCH - FamilyName
     FontWeight          meMatchWeight;      // MATCH - Weight
     FontWidth           meMatchWidth;       // MATCH - Width
     FontFamily          meFamily;

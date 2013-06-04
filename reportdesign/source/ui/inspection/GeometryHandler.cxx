@@ -1871,15 +1871,15 @@ sal_Bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< 
         {
             aSearchOptions.searchString = aIter->m_sSearchString;
             utl::TextSearch aTextSearch(aSearchOptions);
-            xub_StrLen start = 0;
-            xub_StrLen end = sFormula.Len();
-            if ( aTextSearch.SearchFrwrd(sFormula,&start,&end) && start == 0 && end == sFormula.Len()) // default function found
+            sal_Int32 start = 0;
+            sal_Int32 end = (sal_Int32)sFormula.Len();
+            if ( aTextSearch.SearchForward(sFormula, &start, &end) && start == 0 && end == (sal_Int32)sFormula.Len()) // default function found
             {
                 aSearchOptions.searchString = OUString("\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]");
                 utl::TextSearch aDataSearch(aSearchOptions);
-                aDataSearch.SearchFrwrd(sFormula,&start,&end );
+                aDataSearch.SearchForward(sFormula, &start, &end );
                 ++start;
-                _rDataField = sFormula.Copy(start,end-start-1);
+                _rDataField = sFormula.Copy(start, end-start-1);
                 _rsDefaultFunctionName = aIter->m_sName;
                 break;
             }

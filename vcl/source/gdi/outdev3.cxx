@@ -1071,7 +1071,7 @@ bool ImplDevFontListData::AddFontFace( PhysicalFontFace* pNewData )
 void ImplDevFontListData::InitMatchData( const utl::FontSubstConfiguration& rFontSubst,
     const String& rSearchName )
 {
-    String aShortName;
+    OUString aShortName;
     // get font attributes from the decorated font name
     rFontSubst.getMapName( rSearchName, aShortName, maMatchFamilyName,
                             meMatchWeight, meMatchWidth, mnMatchType );
@@ -1092,12 +1092,13 @@ PhysicalFontFace* ImplDevFontListData::FindBestFontFace( const FontSelectPattern
         return mpFirst;
 
     // FontName+StyleName should map to FamilyName+StyleName
-    const String& rSearchName = rFSD.maTargetName;
+    const OUString& rSearchName = rFSD.maTargetName;
     const sal_Unicode* pTargetStyleName = NULL;
-    if( (rSearchName.Len() > maSearchName.Len())
-    &&   rSearchName.Equals( maSearchName, 0, maSearchName.Len() ) )
-        pTargetStyleName = rSearchName.GetBuffer() + maSearchName.Len() + 1;
-
+    if( (rSearchName.getLength() > maSearchName.getLength()) &&
+        rSearchName.compareTo( maSearchName, maSearchName.getLength() ) == 0 )
+    {
+        pTargetStyleName = rSearchName.getStr() + maSearchName.getLength() + 1;
+    }
     // TODO: linear search improve!
     PhysicalFontFace* pFontFace = mpFirst;
     PhysicalFontFace* pBestFontFace = pFontFace;
@@ -1483,7 +1484,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindBySubstFontAttr( const utl::FontNa
     ImplDevFontListData* pFoundData = NULL;
 
     // use the font substitutions suggested by the FontNameAttr to find the font
-    ::std::vector< String >::const_iterator it = rFontAttr.Substitutions.begin();
+    ::std::vector< OUString >::const_iterator it = rFontAttr.Substitutions.begin();
     for(; it != rFontAttr.Substitutions.end(); ++it )
     {
         OUString aSearchName( *it );
@@ -1734,9 +1735,9 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( sal_uLong nSearchTyp
 
         // test font name substrings
         // TODO: calculate name matching score using e.g. Levenstein distance
-        if( (rSearchFamilyName.getLength() >= 4) && (pData->maMatchFamilyName.Len() >= 4)
-        &&    ((rSearchFamilyName.indexOf( pData->maMatchFamilyName ) != -1)
-            || (pData->maMatchFamilyName.Search( rSearchFamilyName ) != STRING_NOTFOUND)) )
+        if( (rSearchFamilyName.getLength() >= 4) && (pData->maMatchFamilyName.getLength() >= 4)
+        &&    ((rSearchFamilyName.indexOf( pData->maMatchFamilyName ) >= 0)
+            || (pData->maMatchFamilyName.indexOf( rSearchFamilyName ) >= 0)) )
                     nTestMatch += 5000;
 
         // test SERIF attribute
@@ -2501,8 +2502,8 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         GetEnglishSearchFontName( aSearchName );
     }
 
-    String      aSearchShortName;
-    String      aSearchFamilyName;
+    OUString      aSearchShortName;
+    OUString      aSearchFamilyName;
     FontWeight  eSearchWeight   = rFSD.GetWeight();
     FontWidth   eSearchWidth    = rFSD.GetWidthType();
     sal_uLong   nSearchType     = 0;
@@ -2574,8 +2575,8 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         aSearchName = rFSD.maTargetName;
         GetEnglishSearchFontName( aSearchName );
 
-        String      aTempShortName;
-        String      aTempFamilyName;
+        OUString      aTempShortName;
+        OUString      aTempFamilyName;
         sal_uLong   nTempType   = 0;
         FontWeight  eTempWeight = rFSD.GetWeight();
         FontWidth   eTempWidth  = WIDTH_DONTKNOW;
