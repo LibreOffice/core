@@ -135,7 +135,7 @@ inline void SetWindowFont( HWND hWnd, HFONT hFont, BOOL bRedraw )
 
 inline HFONT GetWindowFont( HWND hWnd )
 {
-    return (HFONT)(UINT)SendMessage( hWnd, WM_GETFONT, 0, 0 );
+    return (HFONT) SendMessage( hWnd, WM_GETFONT, 0, 0 );
 }
 
 inline void SetClassCursor( HWND hWnd, HCURSOR hCursor )

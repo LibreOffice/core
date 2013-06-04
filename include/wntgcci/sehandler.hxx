@@ -7,8 +7,8 @@
 #ifndef _SEHANDLER_HXX
 #define _SEHANDLER_HXX
 
-#ifndef __MINGW32__
-#error This file should be included only in a MinGW compilation
+#if !defined( __MINGW32__ ) || defined ( _WIN64 )
+#error This file should be included only in a 32-bit MinGW compilation
 #endif
 
 #include <windows.h>

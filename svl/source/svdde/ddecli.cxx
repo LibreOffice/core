@@ -243,9 +243,9 @@ const String& DdeConnection::GetTopicName()
 
 // --- DdeConnection::GetConvId() ----------------------------------
 
-long DdeConnection::GetConvId()
+sal_IntPtr DdeConnection::GetConvId()
 {
-    return (long)pImp->hConv;
+    return (sal_IntPtr)pImp->hConv;
 }
 
 const std::vector<DdeConnection*>& DdeConnection::GetConnections()

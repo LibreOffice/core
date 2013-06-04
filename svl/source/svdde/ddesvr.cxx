@@ -45,12 +45,7 @@ class DdeItemImp : public std::vector<DdeItemImpData> {};
 
 // --- DdeInternat::SvrCallback() ----------------------------------
 
-#ifdef WNT
-HDDEDATA CALLBACK DdeInternal::SvrCallback(
-            WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
-            HDDEDATA hData, DWORD, DWORD )
-#else
-#if defined( ICC )
+#if defined( WNT ) || defined( ICC )
 HDDEDATA CALLBACK DdeInternal::SvrCallback(
             WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
             HDDEDATA hData, DWORD, DWORD )
@@ -58,7 +53,6 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
 HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
             WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
             HDDEDATA hData, DWORD, DWORD )
-#endif
 #endif
 {
     DdeServices&    rAll = DdeService::GetServices();
@@ -169,7 +163,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                 pTopic = FindTopic( *pService, hText1 );
                 if ( pTopic )
                 {
-                    pTopic->Connect( (long) hConv );
+                    pTopic->Connect( (sal_IntPtr) hConv );
                     pC = new Conversation;
                     pC->hConv = hConv;
                     pC->pTopic = pTopic;
@@ -195,7 +189,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
 found:
     if ( nCode == XTYP_DISCONNECT)
     {
-        pC->pTopic->_Disconnect( (long) hConv );
+        pC->pTopic->_Disconnect( (sal_IntPtr) hConv );
         for ( ConvList::iterator it = pService->pConv->begin();
               it != pService->pConv->end();
               ++it
@@ -227,7 +221,7 @@ found:
         pTopic->aItem = OUString();
 
     sal_Bool bRes = sal_False;
-    pInst->hCurConvSvr = (long)hConv;
+    pInst->hCurConvSvr = (sal_IntPtr)hConv;
     switch( nCode )
     {
         case XTYP_REQUEST:
@@ -324,14 +318,14 @@ found:
 
                 if (pItem)
                 {
-                    pItem->IncMonitor( (long)hConv );
+                    pItem->IncMonitor( (sal_IntPtr)hConv );
                     pInst->hCurConvSvr = 0;
                 }
             }
             return (HDDEDATA)sal_True;
 
         case XTYP_ADVSTOP:
-            pItem->DecMonitor( (long)hConv );
+            pItem->DecMonitor( (sal_IntPtr)hConv );
             if( !pItem->pImpData )
                 pTopic->StopAdviseLoop();
             pInst->hCurConvSvr = 0;

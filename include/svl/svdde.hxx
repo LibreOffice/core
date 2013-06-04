@@ -220,7 +220,7 @@ public:
                     ~DdeConnection();
 
     long            GetError();
-    long            GetConvId();
+    sal_IntPtr      GetConvId();
 
     static const std::vector<DdeConnection*>& GetConnections();
 

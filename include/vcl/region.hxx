@@ -39,7 +39,7 @@ struct ImplRegionInfo;
 enum RegionType { REGION_NULL, REGION_EMPTY, REGION_RECTANGLE, REGION_COMPLEX };
 enum RegionOverlapType { REGION_INSIDE, REGION_OVER, REGION_OUTSIDE };
 
-typedef long RegionHandle;
+typedef sal_IntPtr RegionHandle;
 
 // ----------
 // - Region -
