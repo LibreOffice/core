@@ -481,7 +481,7 @@ public:
     StyleSheetTablePtr GetStyleSheetTable()
     {
         if(!m_pStyleSheetTable)
-            m_pStyleSheetTable.reset(new StyleSheetTable( m_rDMapper, m_xTextDocument ));
+            m_pStyleSheetTable.reset(new StyleSheetTable( m_rDMapper, m_xTextDocument, m_bIsNewDoc ));
         return m_pStyleSheetTable;
     }
     ListsManager::Pointer GetListTable();

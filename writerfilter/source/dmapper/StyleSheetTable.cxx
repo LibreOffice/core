@@ -275,19 +275,21 @@ struct StyleSheetTable_Impl
     PropertyMapPtr                          m_pCurrentProps;
     StringPairMap_t                         m_aStyleNameMap;
     ListCharStylePropertyVector_t           m_aListCharStylePropertyVector;
+    bool                                    m_bIsNewDoc;
 
-    StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument);
+    StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument, bool bIsNewDoc);
 
     OUString HasListCharStyle( const PropertyValueVector_t& rCharProperties );
 };
 
 
-StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument ) :
+StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument, bool bIsNewDoc ) :
             m_rDMapper( rDMapper ),
             m_xTextDocument( xTextDocument ),
             m_pCurrentEntry(),
             m_pDefaultParaProps(new PropertyMap),
-            m_pDefaultCharProps(new PropertyMap)
+            m_pDefaultCharProps(new PropertyMap),
+            m_bIsNewDoc(bIsNewDoc)
 {
     //set font height default to 10pt
     uno::Any aVal = uno::makeAny( double(10.) );
@@ -342,10 +344,10 @@ OUString StyleSheetTable_Impl::HasListCharStyle( const PropertyValueVector_t& rP
 }
 
 
-StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument)
+StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument, bool bIsNewDoc)
 : LoggedProperties(dmapper_logger, "StyleSheetTable")
 , LoggedTable(dmapper_logger, "StyleSheetTable")
-, m_pImpl( new StyleSheetTable_Impl(rDMapper, xTextDocument) )
+, m_pImpl( new StyleSheetTable_Impl(rDMapper, xTextDocument, bIsNewDoc) )
 {
 }
 
@@ -722,7 +724,8 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                     uno::Reference< container::XNameContainer > xStyles = bParaStyle ? xParaStyles : xCharStyles;
                     uno::Reference< style::XStyle > xStyle;
                     OUString sConvertedStyleName = ConvertStyleName( pEntry->sStyleName );
-                    if(xStyles->hasByName( sConvertedStyleName ))
+                    // When pasting, don't update existing styles.
+                    if(xStyles->hasByName( sConvertedStyleName ) && m_pImpl->m_bIsNewDoc)
                         xStyles->getByName( sConvertedStyleName ) >>= xStyle;
                     else
                     {

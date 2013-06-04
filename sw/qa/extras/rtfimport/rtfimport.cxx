@@ -138,6 +138,7 @@ public:
     void testN818997();
     void testFdo64671();
     void testPageBackground();
+    void testFdo62044();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -265,6 +266,7 @@ void Test::run()
         {"n818997.rtf", &Test::testN818997},
         {"fdo64671.rtf", &Test::testFdo64671},
         {"page-background.rtf", &Test::testPageBackground},
+        {"fdo62044.rtf", &Test::testFdo62044},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1255,6 +1257,18 @@ void Test::testPageBackground()
     // The problem was that \background was ignored.
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
+}
+
+void Test::testFdo62044()
+{
+    // The problem was that RTF import during copy&paste did not ignore existing paragraph styles.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+    paste("fdo62044-paste.rtf", xEnd);
+
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Heading 1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(xPropertySet, "CharHeight")); // Was 18, i.e. reset back to original value.
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
