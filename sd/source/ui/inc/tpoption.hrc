@@ -19,29 +19,18 @@
 #define TP_OPTIONS_LAYOUT 596
 #define TP_OPTIONS_CONTENTS 597
 #define TP_OPTIONS_SNAP 598
-#define TP_OPTIONS_MISC 599
-#define FT_METRIC 2
-#define GRP_PROGRAMSTART 3
 #define GRP_DISPLAY 4
-#define GRP_SETTINGS  5
-#define GRP_TEXT 6
-#define FT_TABSTOP 7
-#define CBX_COPY 13
 #define CBX_RULER 14
 #define CBX_HELPLINES 1
 #define CBX_MOVE_OUTLINE 15
-#define CBX_MARKED_HIT_MOVES_ALWAYS 19
-#define CBX_CROOK_NO_CONTORTION 21
 #define CBX_HANDLES_BEZIER 2
 #define GRP_SNAP 1
 #define GRP_ORTHO 2
 #define FT_SNAP_AREA 1
 #define FT_BEZ_ANGLE 4
-#define LB_METRIC 1
 #define MTR_FLD_SNAP_AREA 1
 #define MTR_FLD_ANGLE 2
 #define MTR_FLD_BEZ_ANGLE 3
-#define MTR_FLD_TABSTOP 4
 #define CBX_ROTATE 8
 #define CBX_ORTHO 6
 #define CBX_BIGORTHO 7
@@ -50,29 +39,5 @@
 #define CBX_SNAP_BORDER 3
 #define CBX_SNAP_FRAME 4
 #define CBX_SNAP_POINTS 5
-#define CBX_START_WITH_TEMPLATE 6
-#define CBX_PICKTHROUGH 9
-#define CBX_QUICKEDIT 24
-#define CBX_MASTERPAGE_CACHE 25
 
-#define CBX_START_WITH_ACTUAL_PAGE 26
-#define GRP_START_WITH_ACTUAL_PAGE 8
-#define FT_COMPATIBILITY 27
-#define CB_MERGE_PARA_DIST 28
-
-#define CB_SCALE                    29
-#define FT_ORIGINAL                 30
-#define MTR_FLD_ORIGINAL_WIDTH      31
-#define FT_EQUIVALENT               32
-#define MTR_FLD_ORIGINAL_HEIGHT     33
-#define GRP_SCALE                   34
-#define FI_INFO_1                   35
-#define FI_INFO_2                   36
-#define FT_PAGEWIDTH                37
-#define FT_PAGEHEIGHT               38
-#define FT_SCALE                    39
-
-#define CB_USE_PRINTER_METRICS 40
-#define CBX_ENABLE_SDREMOTE 41
-#define CBX_ENABLE_PRESENTER_SCREEN 42
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

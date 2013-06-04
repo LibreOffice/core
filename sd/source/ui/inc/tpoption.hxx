@@ -76,50 +76,38 @@ class SdTpOptionsMisc : public SfxTabPage
  friend class SdModule;
 
 private:
-    FixedLine   aGrpText;
-    CheckBox    aCbxQuickEdit;
-    CheckBox    aCbxPickThrough;
+    CheckBox    *m_pCbxQuickEdit;
+    CheckBox    *m_pCbxPickThrough;
 
-    FixedLine   aGrpProgramStart;
-    CheckBox    aCbxStartWithTemplate;
+    CheckBox    *m_pCbxStartWithTemplate;
 
-    FixedLine   aGrpSettings;
-    CheckBox    aCbxMasterPageCache;
-    CheckBox    aCbxCopy;
-    CheckBox    aCbxMarkedHitMovesAlways;
-    CheckBox    aCbxCrookNoContortion;
+    CheckBox    *m_pCbxMasterPageCache;
+    CheckBox    *m_pCbxCopy;
+    CheckBox    *m_pCbxMarkedHitMovesAlways;
+    VclFrame    *m_pPresentationFrame;
 
-    FixedText   aTxtMetric;
-    ListBox     aLbMetric;
-    FixedText   aTxtTabstop;
-    MetricField aMtrFldTabstop;
+    ListBox     *m_pLbMetric;
+    MetricField *m_pMtrFldTabstop;
 
-    CheckBox    aCbxStartWithActualPage;
-    FixedLine   aGrpStartWithActualPage;
-    CheckBox    aCbxEnableSdremote;
-    CheckBox    aCbxEnablePresenterScreen;
-    FixedLine   aTxtCompatibility;
-    CheckBox    aCbxUsePrinterMetrics;
-    CheckBox    aCbxCompatibility;
+    CheckBox    *m_pCbxStartWithActualPage;
+    CheckBox    *m_pCbxEnableSdremote;
+    CheckBox    *m_pCbxEnablePresenterScreen;
+    CheckBox    *m_pCbxUsePrinterMetrics;
+    CheckBox    *m_pCbxCompatibility;
 
     //Scale
-    FixedLine       aGrpScale;
-    FixedText       aFtScale;
-    ComboBox        aCbScale;
-
-    FixedText       aFtOriginal;
-    FixedText       aFtEquivalent;
-
-    FixedText       aFtPageWidth;
-    FixedInfo       aFiInfo1;
-    MetricField     aMtrFldOriginalWidth;
-
-    FixedText       aFtPageHeight;
-    FixedInfo       aFiInfo2;
-    MetricField     aMtrFldOriginalHeight;
-
-    MetricField     aMtrFldInfo1;
-    MetricField     aMtrFldInfo2;
+    VclFrame    *m_pScaleFrame;
+    ComboBox    *m_pCbScale;
+    FixedText   *m_pNewDocLb;
+    FixedText   *m_pFiInfo1;
+    MetricField *m_pMtrFldOriginalWidth;
+    FixedText   *m_pWidthLb;
+    FixedText   *m_pHeightLb;
+    FixedText   *m_pFiInfo2;
+    MetricField *m_pMtrFldOriginalHeight;
+    CheckBox    *m_pCbxDistrot;
+    MetricField *m_pMtrFldInfo1;
+    MetricField *m_pMtrFldInfo2;
 
     sal_uInt32          nWidth;
     sal_uInt32          nHeight;

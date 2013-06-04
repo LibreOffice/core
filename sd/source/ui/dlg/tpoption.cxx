@@ -213,48 +213,35 @@ SfxTabPage* SdTpOptionsContents::Create( Window* pWindow,
 #define TOKEN (sal_Unicode(':'))
 
 SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  ) :
-        SfxTabPage          ( pParent, SdResId( TP_OPTIONS_MISC ), rInAttrs ),
-    aGrpText                    ( this, SdResId( GRP_TEXT ) ),
-    aCbxQuickEdit               ( this, SdResId( CBX_QUICKEDIT ) ),
-    aCbxPickThrough             ( this, SdResId( CBX_PICKTHROUGH ) ),
-
-    // At the moment, template & layout are not running synchronized
-    aGrpProgramStart            ( this, SdResId( GRP_PROGRAMSTART ) ),
-    aCbxStartWithTemplate       ( this, SdResId( CBX_START_WITH_TEMPLATE ) ),
-
-    aGrpSettings                ( this, SdResId( GRP_SETTINGS ) ),
-    aCbxMasterPageCache         ( this, SdResId( CBX_MASTERPAGE_CACHE ) ),
-    aCbxCopy                    ( this, SdResId( CBX_COPY ) ),
-    aCbxMarkedHitMovesAlways    ( this, SdResId( CBX_MARKED_HIT_MOVES_ALWAYS ) ),
-    aCbxCrookNoContortion       ( this, SdResId( CBX_CROOK_NO_CONTORTION ) ),
-
-    aTxtMetric                  ( this, SdResId( FT_METRIC ) ),
-    aLbMetric                   ( this, SdResId( LB_METRIC ) ),
-    aTxtTabstop                 ( this, SdResId( FT_TABSTOP ) ),
-    aMtrFldTabstop              ( this, SdResId( MTR_FLD_TABSTOP ) ),
-
-    aCbxStartWithActualPage     ( this, SdResId( CBX_START_WITH_ACTUAL_PAGE ) ),
-    aGrpStartWithActualPage     ( this, SdResId( GRP_START_WITH_ACTUAL_PAGE ) ),
-    aCbxEnableSdremote          ( this, SdResId( CBX_ENABLE_SDREMOTE ) ),
-    aCbxEnablePresenterScreen  ( this, SdResId( CBX_ENABLE_PRESENTER_SCREEN ) ),
-    aTxtCompatibility           ( this, SdResId( FT_COMPATIBILITY ) ),
-    aCbxUsePrinterMetrics       ( this, SdResId( CB_USE_PRINTER_METRICS ) ),
-    aCbxCompatibility           ( this, SdResId( CB_MERGE_PARA_DIST ) ),
-    aGrpScale                   ( this, SdResId( GRP_SCALE ) ),
-    aFtScale                    ( this, SdResId( FT_SCALE ) ),
-    aCbScale                    ( this, SdResId( CB_SCALE ) ),
-    aFtOriginal                 ( this, SdResId( FT_ORIGINAL ) ),
-    aFtEquivalent               ( this, SdResId( FT_EQUIVALENT ) ),
-    aFtPageWidth                ( this, SdResId( FT_PAGEWIDTH ) ),
-    aFiInfo1                    ( this, SdResId( FI_INFO_1 ) ),
-    aMtrFldOriginalWidth        ( this, SdResId( MTR_FLD_ORIGINAL_WIDTH ) ),
-    aFtPageHeight               ( this, SdResId( FT_PAGEHEIGHT ) ),
-    aFiInfo2                    ( this, SdResId( FI_INFO_2 ) ),
-    aMtrFldOriginalHeight       ( this, SdResId( MTR_FLD_ORIGINAL_HEIGHT ) ),
-    aMtrFldInfo1                ( this, WinBits( WB_HIDE ) ),
-    aMtrFldInfo2                ( this, WinBits( WB_HIDE ) )
+  SfxTabPage          ( pParent, "OptSavePage","modules/simpress/ui/optimpressgeneralpage.ui", rInAttrs )
 {
-    FreeResource();
+    get(m_pCbxQuickEdit , "qickedit");
+    get(m_pCbxPickThrough , "textselected");
+    get(m_pCbxStartWithTemplate,"startwithwizard");
+    get(m_pCbxMasterPageCache , "backgroundback");
+    get(m_pCbxCopy , "copywhenmove");
+    get(m_pCbxMarkedHitMovesAlways , "objalwymov");
+    get(m_pLbMetric , "units");
+    get(m_pCbxStartWithActualPage , "strtwithPag");
+    get(m_pCbxEnableSdremote , "enremotcont");
+    get(m_pCbxEnablePresenterScreen , "enprsntcons");
+    get(m_pCbxUsePrinterMetrics , "printermetrc");
+    get(m_pPresentationFrame , "presentationframe");
+    get(m_pScaleFrame , "scaleframe");
+    get(m_pCbScale , "scaleBox");
+    get(m_pMtrFldTabstop , "metericFields");
+    get(m_pMtrFldOriginalWidth , "metericWidthFields");
+    get(m_pMtrFldOriginalHeight , "metericHighteFields");
+    get(m_pMtrFldInfo1 , "metericInfo1Fields");
+    get(m_pMtrFldInfo2 , "metericInfo2Fields");
+    get(m_pCbxCompatibility ,"cbCompatibility" );
+    get(m_pFiInfo1 , "info1");
+    get(m_pFiInfo2 , "info2");
+    get(m_pNewDocLb , "newdoclbl");
+    get(m_pWidthLb , "widthlbl");
+    get(m_pHeightLb , "heightlbl");
+    get(m_pCbxDistrot , "distrotcb");
+
     SetExchangeSupport();
 
     // set metric
@@ -269,7 +256,11 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     else
         eFUnit = SfxModule::GetCurrentFieldUnit();
 
-    SetFieldUnit( aMtrFldTabstop, eFUnit );
+    SetFieldUnit( *m_pMtrFldTabstop , eFUnit );
+
+    // Impress is default mode, let' hide the entire scale frame etc.
+    m_pCbxDistrot->Hide();
+    m_pScaleFrame->Hide();
 
     // fill ListBox with metrics
     SvxStringArray aMetricArr( RID_SVXSTR_FIELDUNIT_TABLE );
@@ -279,25 +270,25 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     {
         String sMetric = aMetricArr.GetStringByPos( i );
         long nFieldUnit = aMetricArr.GetValue( i );
-        sal_uInt16 nPos = aLbMetric.InsertEntry( sMetric );
-        aLbMetric.SetEntryData( nPos, (void*)nFieldUnit );
+        sal_uInt16 nPos = m_pLbMetric->InsertEntry( sMetric );
+        m_pLbMetric->SetEntryData( nPos, (void*)nFieldUnit );
     }
-    aLbMetric.SetSelectHdl( LINK( this, SdTpOptionsMisc, SelectMetricHdl_Impl ) );
+    m_pLbMetric->SetSelectHdl( LINK( this, SdTpOptionsMisc, SelectMetricHdl_Impl ) );
 
-    SetFieldUnit( aMtrFldOriginalWidth, eFUnit );
-    SetFieldUnit( aMtrFldOriginalHeight, eFUnit );
-    aMtrFldOriginalWidth.SetLast( 999999999 );
-    aMtrFldOriginalWidth.SetMax( 999999999 );
-    aMtrFldOriginalHeight.SetLast( 999999999 );
-    aMtrFldOriginalHeight.SetMax( 999999999 );
+    SetFieldUnit( *m_pMtrFldOriginalWidth, eFUnit );
+    SetFieldUnit( *m_pMtrFldOriginalHeight, eFUnit );
+    m_pMtrFldOriginalWidth->SetLast( 999999999 );
+    m_pMtrFldOriginalWidth->SetMax( 999999999 );
+    m_pMtrFldOriginalHeight->SetLast( 999999999 );
+    m_pMtrFldOriginalHeight->SetMax( 999999999 );
 
     // temporary fields for info texts (for formatting/calculation)
-    aMtrFldInfo1.SetUnit( eFUnit );
-    aMtrFldInfo1.SetMax( 999999999 );
-    aMtrFldInfo1.SetDecimalDigits( 2 );
-    aMtrFldInfo2.SetUnit( eFUnit );
-    aMtrFldInfo2.SetMax( 999999999 );
-    aMtrFldInfo2.SetDecimalDigits( 2 );
+    m_pMtrFldInfo1->SetUnit( eFUnit );
+    m_pMtrFldInfo1->SetMax( 999999999 );
+    m_pMtrFldInfo1->SetDecimalDigits( 2 );
+    m_pMtrFldInfo2->SetUnit( eFUnit );
+    m_pMtrFldInfo2->SetMax( 999999999 );
+    m_pMtrFldInfo2->SetDecimalDigits( 2 );
 
     // determine PoolUnit
     SfxItemPool* pPool = rInAttrs.GetPool();
@@ -309,9 +300,9 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
         { 1, 2, 4, 5, 8, 10, 16, 20, 30, 40, 50, 100 };
 
     for( i = 0; i < TABLE_COUNT; i++ )
-        aCbScale.InsertEntry( GetScale( 1, aTable[i] ) );
+        m_pCbScale->InsertEntry( GetScale( 1, aTable[i] ) );
     for( i = 1; i < TABLE_COUNT; i++ )
-        aCbScale.InsertEntry( GetScale(  aTable[i], 1 ) );
+        m_pCbScale->InsertEntry( GetScale(  aTable[i], 1 ) );
 }
 
 // -----------------------------------------------------------------------
@@ -324,7 +315,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
 {
     // We have to call SaveValue again since it can happen that the value
     // has no effect on other TabPages
-    aLbMetric.SaveValue();
+    m_pLbMetric->SaveValue();
     // change metric if necessary (since TabPage is in the Dialog where
     // the metric is set)
     const SfxPoolItem* pAttr = NULL;
@@ -335,30 +326,30 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
 
         FieldUnit eFUnit = (FieldUnit)(long)pItem->GetValue();
 
-        if( eFUnit != aMtrFldOriginalWidth.GetUnit() )
+        if( eFUnit != m_pMtrFldOriginalWidth->GetUnit() )
         {
             // set metrics
-            sal_Int64 nVal = aMtrFldOriginalWidth.Denormalize( aMtrFldOriginalWidth.GetValue( FUNIT_TWIP ) );
-            SetFieldUnit( aMtrFldOriginalWidth, eFUnit, sal_True );
-            aMtrFldOriginalWidth.SetValue( aMtrFldOriginalWidth.Normalize( nVal ), FUNIT_TWIP );
+            sal_Int64 nVal = m_pMtrFldOriginalWidth->Denormalize( m_pMtrFldOriginalWidth->GetValue( FUNIT_TWIP ) );
+            SetFieldUnit( *m_pMtrFldOriginalWidth, eFUnit, sal_True );
+            m_pMtrFldOriginalWidth->SetValue( m_pMtrFldOriginalWidth->Normalize( nVal ), FUNIT_TWIP );
 
-            nVal = aMtrFldOriginalHeight.Denormalize( aMtrFldOriginalHeight.GetValue( FUNIT_TWIP ) );
-            SetFieldUnit( aMtrFldOriginalHeight, eFUnit, sal_True );
-            aMtrFldOriginalHeight.SetValue( aMtrFldOriginalHeight.Normalize( nVal ), FUNIT_TWIP );
+            nVal = m_pMtrFldOriginalHeight->Denormalize( m_pMtrFldOriginalHeight->GetValue( FUNIT_TWIP ) );
+            SetFieldUnit( *m_pMtrFldOriginalHeight, eFUnit, sal_True );
+            m_pMtrFldOriginalHeight->SetValue( m_pMtrFldOriginalHeight->Normalize( nVal ), FUNIT_TWIP );
 
 
             if( nWidth != 0 && nHeight != 0 )
             {
-                aMtrFldInfo1.SetUnit( eFUnit );
-                aMtrFldInfo2.SetUnit( eFUnit );
+                m_pMtrFldInfo1->SetUnit( eFUnit );
+                m_pMtrFldInfo2->SetUnit( eFUnit );
 
-                SetMetricValue( aMtrFldInfo1, nWidth, ePoolUnit );
-                aInfo1 = aMtrFldInfo1.GetText();
-                aFiInfo1.SetText( aInfo1 );
+                SetMetricValue( *m_pMtrFldInfo1, nWidth, ePoolUnit );
+                aInfo1 = m_pMtrFldInfo1->GetText();
+                m_pFiInfo1->SetText( aInfo1 );
 
-                SetMetricValue( aMtrFldInfo2, nHeight, ePoolUnit );
-                aInfo2 = aMtrFldInfo2.GetText();
-                aFiInfo2.SetText( aInfo2 );
+                SetMetricValue( *m_pMtrFldInfo2, nHeight, ePoolUnit );
+                aInfo2 = m_pMtrFldInfo2->GetText();
+                m_pFiInfo2->SetText( aInfo2 );
             }
         }
     }
@@ -370,7 +361,7 @@ int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
 {
     // check parser
     sal_Int32 nX, nY;
-    if( SetScale( aCbScale.GetText(), nX, nY ) )
+    if( SetScale( m_pCbScale->GetText(), nX, nY ) )
     {
         if( pActiveSet )
             FillItemSet( *pActiveSet );
@@ -394,34 +385,32 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
 {
     sal_Bool bModified = sal_False;
 
-    if( aCbxStartWithTemplate.GetSavedValue()   != aCbxStartWithTemplate.IsChecked() ||
-        aCbxMarkedHitMovesAlways.GetSavedValue()!= aCbxMarkedHitMovesAlways.IsChecked() ||
-        aCbxCrookNoContortion.GetSavedValue()   != aCbxCrookNoContortion.IsChecked() ||
-        aCbxQuickEdit.GetSavedValue()           != aCbxQuickEdit.IsChecked() ||
-        aCbxPickThrough.GetSavedValue()         != aCbxPickThrough.IsChecked() ||
-        aCbxMasterPageCache.GetSavedValue()     != aCbxMasterPageCache.IsChecked() ||
-        aCbxCopy.GetSavedValue()                != aCbxCopy.IsChecked() ||
-        aCbxStartWithActualPage.GetSavedValue() != aCbxStartWithActualPage.IsChecked() ||
-        aCbxEnableSdremote.GetSavedValue()      != aCbxEnableSdremote.IsChecked() ||
-        aCbxEnablePresenterScreen.GetSavedValue()!= aCbxEnablePresenterScreen.IsChecked() ||
-        aCbxCompatibility.GetSavedValue()       != aCbxCompatibility.IsChecked() ||
-        aCbxUsePrinterMetrics.GetSavedValue()   != aCbxUsePrinterMetrics.IsChecked() )
+    if( m_pCbxStartWithTemplate->GetSavedValue()   != m_pCbxStartWithTemplate->IsChecked() ||
+        m_pCbxMarkedHitMovesAlways->GetSavedValue()!= m_pCbxMarkedHitMovesAlways->IsChecked() ||
+        m_pCbxQuickEdit->GetSavedValue()           != m_pCbxQuickEdit->IsChecked() ||
+        m_pCbxPickThrough->GetSavedValue()         != m_pCbxPickThrough->IsChecked() ||
+        m_pCbxMasterPageCache->GetSavedValue()     != m_pCbxMasterPageCache->IsChecked() ||
+        m_pCbxCopy->GetSavedValue()                != m_pCbxCopy->IsChecked() ||
+        m_pCbxStartWithActualPage->GetSavedValue() != m_pCbxStartWithActualPage->IsChecked() ||
+        m_pCbxEnableSdremote->GetSavedValue()      != m_pCbxEnableSdremote->IsChecked() ||
+        m_pCbxEnablePresenterScreen->GetSavedValue()!= m_pCbxEnablePresenterScreen->IsChecked() ||
+        m_pCbxCompatibility->GetSavedValue()       != m_pCbxCompatibility->IsChecked() ||
+        m_pCbxUsePrinterMetrics->GetSavedValue()   != m_pCbxUsePrinterMetrics->IsChecked() )
     {
         SdOptionsMiscItem aOptsItem( ATTR_OPTIONS_MISC );
 
-        aOptsItem.GetOptionsMisc().SetStartWithTemplate( aCbxStartWithTemplate.IsChecked() );
-        aOptsItem.GetOptionsMisc().SetMarkedHitMovesAlways( aCbxMarkedHitMovesAlways.IsChecked() );
-        aOptsItem.GetOptionsMisc().SetCrookNoContortion( aCbxCrookNoContortion.IsChecked() );
-        aOptsItem.GetOptionsMisc().SetQuickEdit( aCbxQuickEdit.IsChecked() );
-        aOptsItem.GetOptionsMisc().SetPickThrough( aCbxPickThrough.IsChecked() );
-        aOptsItem.GetOptionsMisc().SetMasterPagePaintCaching( aCbxMasterPageCache.IsChecked() );
-        aOptsItem.GetOptionsMisc().SetDragWithCopy( aCbxCopy.IsChecked() );
-        aOptsItem.GetOptionsMisc().SetStartWithActualPage( aCbxStartWithActualPage.IsChecked() );
-        aOptsItem.GetOptionsMisc().SetEnableSdremote( aCbxEnableSdremote.IsChecked() );
-        aOptsItem.GetOptionsMisc().SetEnablePresenterScreen( aCbxEnablePresenterScreen.IsChecked() );
-        aOptsItem.GetOptionsMisc().SetSummationOfParagraphs( aCbxCompatibility.IsChecked() );
+        aOptsItem.GetOptionsMisc().SetStartWithTemplate( m_pCbxStartWithTemplate->IsChecked() );
+        aOptsItem.GetOptionsMisc().SetMarkedHitMovesAlways( m_pCbxMarkedHitMovesAlways->IsChecked() );
+        aOptsItem.GetOptionsMisc().SetQuickEdit( m_pCbxQuickEdit->IsChecked() );
+        aOptsItem.GetOptionsMisc().SetPickThrough( m_pCbxPickThrough->IsChecked() );
+        aOptsItem.GetOptionsMisc().SetMasterPagePaintCaching( m_pCbxMasterPageCache->IsChecked() );
+        aOptsItem.GetOptionsMisc().SetDragWithCopy( m_pCbxCopy->IsChecked() );
+        aOptsItem.GetOptionsMisc().SetStartWithActualPage( m_pCbxStartWithActualPage->IsChecked() );
+        aOptsItem.GetOptionsMisc().SetEnableSdremote( m_pCbxEnableSdremote->IsChecked() );
+        aOptsItem.GetOptionsMisc().SetEnablePresenterScreen( m_pCbxEnablePresenterScreen->IsChecked() );
+        aOptsItem.GetOptionsMisc().SetSummationOfParagraphs( m_pCbxCompatibility->IsChecked() );
         aOptsItem.GetOptionsMisc().SetPrinterIndependentLayout (
-            aCbxUsePrinterMetrics.IsChecked()
+            m_pCbxUsePrinterMetrics->IsChecked()
             ? ::com::sun::star::document::PrinterIndependentLayout::DISABLED
             : ::com::sun::star::document::PrinterIndependentLayout::ENABLED);
         rAttrs.Put( aOptsItem );
@@ -430,27 +419,27 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
     }
 
     // metric
-    const sal_uInt16 nMPos = aLbMetric.GetSelectEntryPos();
-    if ( nMPos != aLbMetric.GetSavedValue() )
+    const sal_uInt16 nMPos = m_pLbMetric->GetSelectEntryPos();
+    if ( nMPos != m_pLbMetric->GetSavedValue() )
     {
-        sal_uInt16 nFieldUnit = (sal_uInt16)(long)aLbMetric.GetEntryData( nMPos );
+        sal_uInt16 nFieldUnit = (sal_uInt16)(long)m_pLbMetric->GetEntryData( nMPos );
         rAttrs.Put( SfxUInt16Item( GetWhich( SID_ATTR_METRIC ),
                                      (sal_uInt16)nFieldUnit ) );
         bModified |= sal_True;
     }
 
     // tabulator space
-    if( aMtrFldTabstop.GetText() != aMtrFldTabstop.GetSavedValue() )
+    if( m_pMtrFldTabstop->GetText() != m_pMtrFldTabstop->GetSavedValue() )
     {
         sal_uInt16 nWh = GetWhich( SID_ATTR_DEFTABSTOP );
         SfxMapUnit eUnit = rAttrs.GetPool()->GetMetric( nWh );
-        SfxUInt16Item aDef( nWh,(sal_uInt16)GetCoreValue( aMtrFldTabstop, eUnit ) );
+        SfxUInt16Item aDef( nWh,(sal_uInt16)GetCoreValue( *m_pMtrFldTabstop, eUnit ) );
         rAttrs.Put( aDef );
         bModified |= sal_True;
     }
 
     sal_Int32 nX, nY;
-    if( SetScale( aCbScale.GetText(), nX, nY ) )
+    if( SetScale( m_pCbScale->GetText(), nX, nY ) )
     {
         rAttrs.Put( SfxInt32Item( ATTR_OPTIONS_SCALE_X, nX ) );
         rAttrs.Put( SfxInt32Item( ATTR_OPTIONS_SCALE_Y, nY ) );
@@ -468,45 +457,43 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     SdOptionsMiscItem aOptsItem( (const SdOptionsMiscItem&) rAttrs.
                         Get( ATTR_OPTIONS_MISC ) );
 
-    aCbxStartWithTemplate.Check( aOptsItem.GetOptionsMisc().IsStartWithTemplate() );
-    aCbxMarkedHitMovesAlways.Check( aOptsItem.GetOptionsMisc().IsMarkedHitMovesAlways() );
-    aCbxCrookNoContortion.Check( aOptsItem.GetOptionsMisc().IsCrookNoContortion() );
-    aCbxQuickEdit.Check( aOptsItem.GetOptionsMisc().IsQuickEdit() );
-    aCbxPickThrough.Check( aOptsItem.GetOptionsMisc().IsPickThrough() );
-    aCbxMasterPageCache.Check( aOptsItem.GetOptionsMisc().IsMasterPagePaintCaching() );
-    aCbxCopy.Check( aOptsItem.GetOptionsMisc().IsDragWithCopy() );
-    aCbxStartWithActualPage.Check( aOptsItem.GetOptionsMisc().IsStartWithActualPage() );
-    aCbxEnableSdremote.Check( aOptsItem.GetOptionsMisc().IsEnableSdremote() );
-    aCbxEnablePresenterScreen.Check( aOptsItem.GetOptionsMisc().IsEnablePresenterScreen() );
-    aCbxCompatibility.Check( aOptsItem.GetOptionsMisc().IsSummationOfParagraphs() );
-    aCbxUsePrinterMetrics.Check( aOptsItem.GetOptionsMisc().GetPrinterIndependentLayout()==1 );
-    aCbxStartWithTemplate.SaveValue();
-    aCbxMarkedHitMovesAlways.SaveValue();
-    aCbxCrookNoContortion.SaveValue();
-    aCbxQuickEdit.SaveValue();
-    aCbxPickThrough.SaveValue();
+    m_pCbxStartWithTemplate->Check( aOptsItem.GetOptionsMisc().IsStartWithTemplate() );
+    m_pCbxMarkedHitMovesAlways->Check( aOptsItem.GetOptionsMisc().IsMarkedHitMovesAlways() );
+    m_pCbxQuickEdit->Check( aOptsItem.GetOptionsMisc().IsQuickEdit() );
+    m_pCbxPickThrough->Check( aOptsItem.GetOptionsMisc().IsPickThrough() );
+    m_pCbxMasterPageCache->Check( aOptsItem.GetOptionsMisc().IsMasterPagePaintCaching() );
+    m_pCbxCopy->Check( aOptsItem.GetOptionsMisc().IsDragWithCopy() );
+    m_pCbxStartWithActualPage->Check( aOptsItem.GetOptionsMisc().IsStartWithActualPage() );
+    m_pCbxEnableSdremote->Check( aOptsItem.GetOptionsMisc().IsEnableSdremote() );
+    m_pCbxEnablePresenterScreen->Check( aOptsItem.GetOptionsMisc().IsEnablePresenterScreen() );
+    m_pCbxCompatibility->Check( aOptsItem.GetOptionsMisc().IsSummationOfParagraphs() );
+    m_pCbxUsePrinterMetrics->Check( aOptsItem.GetOptionsMisc().GetPrinterIndependentLayout()==1 );
+    m_pCbxStartWithTemplate->SaveValue();
+    m_pCbxMarkedHitMovesAlways->SaveValue();
+    m_pCbxQuickEdit->SaveValue();
+    m_pCbxPickThrough->SaveValue();
 
-    aCbxMasterPageCache.SaveValue();
-    aCbxCopy.SaveValue();
-    aCbxEnableSdremote.SaveValue();
-    aCbxEnablePresenterScreen.SaveValue();
-    aCbxCompatibility.SaveValue();
-    aCbxUsePrinterMetrics.SaveValue();
+    m_pCbxMasterPageCache->SaveValue();
+    m_pCbxCopy->SaveValue();
+    m_pCbxEnableSdremote->SaveValue();
+    m_pCbxEnablePresenterScreen->SaveValue();
+    m_pCbxCompatibility->SaveValue();
+    m_pCbxUsePrinterMetrics->SaveValue();
 
     // metric
     sal_uInt16 nWhich = GetWhich( SID_ATTR_METRIC );
-    aLbMetric.SetNoSelection();
+    m_pLbMetric->SetNoSelection();
 
     if ( rAttrs.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
     {
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rAttrs.Get( nWhich );
         long nFieldUnit = (long)rItem.GetValue();
 
-        for ( sal_uInt16 i = 0; i < aLbMetric.GetEntryCount(); ++i )
+        for ( sal_uInt16 i = 0; i < m_pLbMetric->GetEntryCount(); ++i )
         {
-            if ( (long)aLbMetric.GetEntryData( i ) == nFieldUnit )
+            if ( (long)m_pLbMetric->GetEntryData( i ) == nFieldUnit )
             {
-                aLbMetric.SelectEntryPos( i );
+                m_pLbMetric->SelectEntryPos( i );
                 break;
             }
         }
@@ -518,10 +505,10 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     {
         SfxMapUnit eUnit = rAttrs.GetPool()->GetMetric( nWhich );
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rAttrs.Get( nWhich );
-        SetMetricValue( aMtrFldTabstop, rItem.GetValue(), eUnit );
+        SetMetricValue( *m_pMtrFldTabstop, rItem.GetValue(), eUnit );
     }
-    aLbMetric.SaveValue();
-    aMtrFldTabstop.SaveValue();
+    m_pLbMetric->SaveValue();
+    m_pMtrFldTabstop->SaveValue();
     //Scale
     sal_Int32 nX = ( (const SfxInt32Item&) rAttrs.
                  Get( ATTR_OPTIONS_SCALE_X ) ).GetValue();
@@ -532,18 +519,14 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     nHeight = ( (const SfxUInt32Item&) rAttrs.
                     Get( ATTR_OPTIONS_SCALE_HEIGHT ) ).GetValue();
 
-    aCbScale.SetText( GetScale( nX, nY ) );
+    m_pCbScale->SetText( GetScale( nX, nY ) );
 
-    aFtOriginal.Hide();
-    aFtEquivalent.Hide();
-    aMtrFldOriginalWidth.Hide();
-    aMtrFldOriginalWidth.SetText( aInfo1 ); // empty
-    aMtrFldOriginalHeight.Hide();
-    aMtrFldOriginalHeight.SetText( aInfo2 ); //empty
-    aFtPageWidth.Hide();
-    aFtPageHeight.Hide();
-    aFiInfo1.Hide();
-    aFiInfo2.Hide();
+    m_pMtrFldOriginalWidth->Hide();
+    m_pMtrFldOriginalWidth->SetText( aInfo1 ); // empty
+    m_pMtrFldOriginalHeight->Hide();
+    m_pMtrFldOriginalHeight->SetText( aInfo2 ); //empty
+    m_pFiInfo1->Hide();
+    m_pFiInfo2->Hide();
 
     UpdateCompatibilityControls ();
 }
@@ -559,122 +542,51 @@ SfxTabPage* SdTpOptionsMisc::Create( Window* pWindow,
 
 IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl)
 {
-    sal_uInt16 nPos = aLbMetric.GetSelectEntryPos();
+    sal_uInt16 nPos = m_pLbMetric->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        FieldUnit eUnit = (FieldUnit)(long)aLbMetric.GetEntryData( nPos );
+        FieldUnit eUnit = (FieldUnit)(long)m_pLbMetric->GetEntryData( nPos );
         sal_Int64 nVal =
-            aMtrFldTabstop.Denormalize( aMtrFldTabstop.GetValue( FUNIT_TWIP ) );
-        SetFieldUnit( aMtrFldTabstop, eUnit );
-        aMtrFldTabstop.SetValue( aMtrFldTabstop.Normalize( nVal ), FUNIT_TWIP );
+            m_pMtrFldTabstop->Denormalize( m_pMtrFldTabstop->GetValue( FUNIT_TWIP ) );
+        SetFieldUnit( *m_pMtrFldTabstop, eUnit );
+        m_pMtrFldTabstop->SetValue( m_pMtrFldTabstop->Normalize( nVal ), FUNIT_TWIP );
     }
     return 0;
 }
 
 
-namespace {
-void lcl_MoveWin( Window& rWin, long nYDiff)
-{
-    Point aPos(rWin.GetPosPixel());
-    aPos.Y() += nYDiff;
-    rWin.SetPosPixel (aPos);
-}
-
-void lcl_MoveWin( Window& rWin, long nXdiff, long nYdiff)
-{
-    Point aPos(rWin.GetPosPixel());
-    aPos.X() += nXdiff;
-    aPos.Y() += nYdiff;
-    rWin.SetPosPixel(aPos);
-}
-}
-
 void SdTpOptionsMisc::SetImpressMode (void)
 {
-    long nDialogWidth = GetSizePixel().Width();
-    long nLineHeight = aCbxPickThrough.GetPosPixel().Y()
-        - aCbxQuickEdit.GetPosPixel().Y();
-
-    // Put both "Text objects" check boxes side by side.
-    lcl_MoveWin (aCbxPickThrough,
-        nDialogWidth/2 - aCbxPickThrough.GetPosPixel().X(),
-        -nLineHeight);
-
-    // Move the other controls up one line.
-    lcl_MoveWin (aGrpProgramStart, -nLineHeight);
-    lcl_MoveWin (aCbxStartWithTemplate, -nLineHeight);
-    lcl_MoveWin (aGrpSettings, -nLineHeight);
-    lcl_MoveWin (aCbxMasterPageCache, -nLineHeight);
-    lcl_MoveWin (aCbxCopy, -nLineHeight);
-    lcl_MoveWin (aCbxMarkedHitMovesAlways, -nLineHeight);
-    lcl_MoveWin (aCbxCrookNoContortion, -nLineHeight);
-    lcl_MoveWin (aTxtMetric, -nLineHeight);
-    lcl_MoveWin (aLbMetric, -nLineHeight);
-    lcl_MoveWin (aTxtTabstop, -nLineHeight);
-    lcl_MoveWin (aMtrFldTabstop, -nLineHeight);
-    lcl_MoveWin (aGrpStartWithActualPage, -nLineHeight);
-    lcl_MoveWin (aCbxStartWithActualPage, -nLineHeight);
-    lcl_MoveWin (aCbxEnableSdremote, -nLineHeight);
-    lcl_MoveWin (aCbxEnablePresenterScreen,
-        nDialogWidth/2 - aCbxEnablePresenterScreen.GetPosPixel().X(),
-        -nLineHeight);
-    lcl_MoveWin (aTxtCompatibility, -nLineHeight);
-
-    // Move the printer-independent-metrics check box up two lines to change
-    // places with spacing-between-paragraphs check box.
-    lcl_MoveWin (aCbxUsePrinterMetrics, -2*nLineHeight);
 #ifndef ENABLE_SDREMOTE_BLUETOOTH
-    aCbxEnableSdremote.Hide();
+    m_pCbxEnableSdremote->Hide();
 #endif
 }
 
 void    SdTpOptionsMisc::SetDrawMode()
 {
-    aCbxStartWithTemplate.Hide();
-    aGrpProgramStart.Hide();
-    aCbxStartWithActualPage.Hide();
-    aCbxEnableSdremote.Hide();
-    aCbxEnablePresenterScreen.Hide();
-    aCbxCompatibility.Hide();
-    aGrpStartWithActualPage.Hide();
-    aCbxCrookNoContortion.Show();
-
-    aGrpScale.Show();
-    aFtScale.Show();
-    aCbScale.Show();
-
-    aFtOriginal.Show();
-    aFtEquivalent.Show();
-
-    aFtPageWidth.Show();
-    aFiInfo1.Show();
-    aMtrFldOriginalWidth.Show();
-
-    aFtPageHeight.Show();
-    aFiInfo2.Show();
-    aMtrFldOriginalHeight.Show();
-
-    long nDiff = aGrpSettings.GetPosPixel().Y() - aGrpProgramStart.GetPosPixel().Y();
-    lcl_MoveWin( aGrpSettings, -nDiff );
-    lcl_MoveWin( aCbxMasterPageCache, -nDiff );
-    lcl_MoveWin( aCbxCopy, -nDiff );
-    lcl_MoveWin( aCbxMarkedHitMovesAlways, -nDiff );
-    lcl_MoveWin( aCbxCrookNoContortion, -nDiff );
-    nDiff -= aCbxCrookNoContortion.GetPosPixel().Y() - aCbxMarkedHitMovesAlways.GetPosPixel().Y();
-    lcl_MoveWin( aTxtMetric, -nDiff );
-    lcl_MoveWin( aLbMetric, -nDiff );
-    lcl_MoveWin( aTxtTabstop, -nDiff );
-    lcl_MoveWin( aMtrFldTabstop, -nDiff );
-
-    // Move the scale controls so that they are visually centered between the
-    // group controls above and below.
-    lcl_MoveWin (aFtScale, -17);
-    lcl_MoveWin (aCbScale, -17);
-
+    m_pScaleFrame->Show();
+    m_pCbxStartWithTemplate->Hide();
+    m_pCbxStartWithActualPage->Hide();
+    m_pCbxEnableSdremote->Hide();
+    m_pCbxEnablePresenterScreen->Hide();
+    m_pCbxCompatibility->Hide();
+    m_pNewDocLb->Hide();
+    m_pCbScale->Show();
+    m_pPresentationFrame->Hide();
+    m_pMtrFldInfo1->Hide();
+    m_pMtrFldInfo2->Hide();
+    m_pWidthLb->Hide();
+    m_pHeightLb->Hide();
+    m_pFiInfo1->Show();
+    m_pMtrFldOriginalWidth->Show();
+    m_pFiInfo2->Show();
+    m_pMtrFldOriginalHeight->Show();
+    m_pCbxDistrot->Show();
+    m_pCbxCompatibility->Hide();
     // Move the printer-independent-metrics check box in the place that the
     // spacing-between-paragraphs check box normally is in.
-    aCbxUsePrinterMetrics.SetPosPixel (aCbxCompatibility.GetPosPixel());
+    m_pCbxUsePrinterMetrics->SetPosPixel (m_pCbxCompatibility->GetPosPixel());
 }
 
 // -----------------------------------------------------------------------
@@ -758,9 +670,8 @@ void SdTpOptionsMisc::UpdateCompatibilityControls (void)
         // bIsEnabled and disable the controls.
     }
 
-    aTxtCompatibility.Enable (bIsEnabled);
-    aCbxCompatibility.Enable(bIsEnabled);
-    aCbxUsePrinterMetrics.Enable (bIsEnabled);
+    m_pCbxCompatibility->Enable(bIsEnabled);
+    m_pCbxUsePrinterMetrics->Enable (bIsEnabled);
 }
 
 void SdTpOptionsMisc::PageCreated (SfxAllItemSet aSet)
