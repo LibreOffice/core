@@ -75,7 +75,7 @@ bool SvpSalGraphics::drawAlphaRect( long /*nX*/, long /*nY*/, long /*nWidth*/, l
     return false;
 }
 
-#ifdef MACOSX
+#ifndef IOS
 
 SvpSalGraphics::SvpSalGraphics() :
     m_bUseLineColor( true ),
