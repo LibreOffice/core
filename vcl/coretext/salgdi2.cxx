@@ -806,7 +806,4 @@ SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
     return aSysFontData;
 }
 
-// -----------------------------------------------------------------------
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
