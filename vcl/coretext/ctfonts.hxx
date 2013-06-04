@@ -17,11 +17,10 @@
  */
 
 #include "coretext/salgdi2.h"
+#ifdef IOS
+#include "headless/svpgdi.hxx"
+#endif
 #include "sallayout.hxx"
-
-#include <ApplicationServices/ApplicationServices.h>
-
-// =======================================================================
 
 class CTTextStyle
 :   public ImplMacTextStyle

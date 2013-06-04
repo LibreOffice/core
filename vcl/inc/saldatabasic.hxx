@@ -27,7 +27,7 @@
 #include "vcl/dllapi.h"
 
 #ifdef IOS
-#include "coretext/salcoretextfontutils.hxx"
+#include "coretext/salgdi2.h"
 #endif
 
 namespace psp

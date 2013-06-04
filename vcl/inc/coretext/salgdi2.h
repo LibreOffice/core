@@ -25,14 +25,19 @@
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 
 #include "premac.h"
+#ifdef MACOSX
 #include <ApplicationServices/ApplicationServices.h>
+#include "aqua/aquavcltypes.h"
+#include "aqua/salframe.h"
+#else
+#include <CoreGraphics/CoreGraphics.h>
+#include <CoreText/CoreText.h>
+#endif
 #include "postmac.h"
 
-#include "aqua/aquavcltypes.h"
 #include <vcl/fontcapabilities.hxx>
 
 #include "outfont.hxx"
-#include "aqua/salframe.h"
 #include "salgdi.hxx"
 
 #include "quartz/salgdicommon.hxx"
@@ -123,6 +128,8 @@ public:
     virtual void    AnnounceFonts( ImplDevFontList& ) const = 0;
     virtual ImplMacFontData* GetFontDataFromId( sal_IntPtr nFontId ) const = 0;
 };
+
+#ifdef MACOSX
 
 // -------------------
 // - AquaSalGraphics -
@@ -411,6 +418,8 @@ inline void AquaSalGraphics::RefreshRect( const NSRect& rRect )
 {
     RefreshRect( rRect.origin.x, rRect.origin.y, rRect.size.width, rRect.size.height );
 }
+
+#endif
 
 #endif // _SV_SALGDI_H
 

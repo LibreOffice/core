@@ -27,13 +27,20 @@
 #include "sallayout.hxx"
 
 #ifdef IOS
-#include "coretext/salcoretextstyle.hxx"
+#include "coretext/salgdi2.h"
+#include <premac.h>
+#include <CoreGraphics/CoreGraphics.h>
+#include <postmac.h>
 #endif
 
 class ServerFont;
 
 #ifdef IOS
-#define QuartzSalGraphics SvpSalGraphics
+// To keep changes to the CoreText code shared with AOO to a minimum,
+// let's continue calling the SalGraphics subclass "AquaSalGraphics" even if it
+// is used by us also on iOS, where of course the term "Aqua" has no meaning at all.
+// (Note that even on OS X, using the term "Aqua" is a misunderstanding or obsolete.)
+#define SvpSalGraphics AquaSalGraphics
 #endif
 
 class SvpSalGraphics : public SalGraphics
@@ -76,12 +83,18 @@ private:
 protected:
 
 #ifdef IOS
-    friend class CoreTextLayout;
+    friend class CTLayout;
 
     CGContextRef                         mrContext;
-    CoreTextStyleInfo*                   m_style;
     double                               mfFakeDPIScale;
-    bool                                 mbNonAntialiasedText;
+
+    // Device Font settings
+    const ImplMacFontData*                  mpMacFontData;
+    ImplMacTextStyle*                       mpMacTextStyle;
+    RGBAColor                               maTextColor;
+    /// allows text to be rendered without antialiasing
+    bool                                    mbNonAntialiasedText;
+
 #endif
 
     virtual bool drawAlphaBitmap( const SalTwoRect&, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap );
@@ -204,6 +217,9 @@ public:
 #ifdef IOS
     bool CheckContext();
     CGContextRef GetContext();
+    bool GetRawFontData( const PhysicalFontFace* pFontData,
+                         std::vector<unsigned char>& rBuffer,
+                         bool* pJustCFF );
 #endif
 };
 
