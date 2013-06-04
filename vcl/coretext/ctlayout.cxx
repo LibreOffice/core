@@ -208,7 +208,7 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
 
     CGContextSetTextPosition( rAquaGraphics.mrContext, aTextPos.x, aTextPos.y );
     CTLineDraw( mpCTLine, rAquaGraphics.mrContext );
-
+#ifndef IOS
     // request an update of the changed window area
     if( rAquaGraphics.IsWindowGraphics() )
     {
@@ -216,7 +216,7 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
         const CGRect aRefreshRect = CGContextConvertRectToDeviceSpace( rAquaGraphics.mrContext, aInkRect );
         rAquaGraphics.RefreshRect( aRefreshRect );
     }
-
+#endif
     // restore the original graphic context transformations
     CGContextRestoreGState( rAquaGraphics.mrContext );
 }

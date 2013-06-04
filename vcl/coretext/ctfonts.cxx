@@ -23,8 +23,10 @@
 #include "outfont.hxx"
 #include "sallayout.hxx"
 
+#ifdef MACOSX
 #include "aqua/salinst.h"
 #include "aqua/saldata.hxx"
+#endif
 #include "coretext/salgdi2.h"
 #include "quartz/utils.h"
 #include "ctfonts.hxx"
@@ -307,7 +309,12 @@ int CTFontData::GetFontTable( const char pTagName[5], unsigned char* pResultBuf 
     // get the raw table length
     CTFontDescriptorRef pFontDesc = reinterpret_cast<CTFontDescriptorRef>( GetFontId());
     CTFontRef rCTFont = CTFontCreateWithFontDescriptor( pFontDesc, 0.0, NULL);
-    CFDataRef pDataRef = CTFontCopyTable( rCTFont, nTagCode, kCTFontTableOptionExcludeSynthetic);
+#ifdef MACOSX
+    const uint32_t opts( kCTFontTableOptionExcludeSynthetic );
+#else
+    const uint32_t opts( kCTFontTableOptionNoOptions );
+#endif
+    CFDataRef pDataRef = CTFontCopyTable( rCTFont, nTagCode, opts);
     CFRelease( rCTFont);
     if( !pDataRef)
         return 0;

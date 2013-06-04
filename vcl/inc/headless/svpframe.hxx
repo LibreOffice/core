@@ -27,6 +27,10 @@
 
 #include <list>
 
+#ifdef IOS
+#define SvpSalGraphics AquaSalGraphics
+#endif
+
 class SvpSalInstance;
 class SvpSalGraphics;
 

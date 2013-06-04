@@ -37,7 +37,16 @@
 #include "vcl/svapp.hxx"
 
 #include "coretext/salgdi2.h"
+
+#ifdef MACOSX
 #include "aqua/salframe.h"
+#endif
+
+#ifdef IOS
+#include "saldatabasic.hxx"
+#include <basebmp/scanlineformats.hxx>
+#endif
+
 #include "ctfonts.hxx"
 
 #include "fontsubset.hxx"
@@ -258,6 +267,7 @@ void ImplMacFontData::ReadMacCmapEncoding( void ) const
 // -----------------------------------------------------------------------
 
 AquaSalGraphics::AquaSalGraphics()
+#ifdef MACOSX
     : mpFrame( NULL )
     , mxLayer( NULL )
     , mrContext( NULL )
@@ -279,12 +289,19 @@ AquaSalGraphics::AquaSalGraphics()
     , mbPrinter( false )
     , mbVirDev( false )
     , mbWindow( false )
+#else
+    : mpMacFontData( NULL )
+    , mpMacTextStyle( NULL )
+    , maTextColor( COL_BLACK )
+    , mbNonAntialiasedText( false )
+#endif
 {}
 
 // -----------------------------------------------------------------------
 
 AquaSalGraphics::~AquaSalGraphics()
 {
+#ifdef MAXOSX
     CGPathRelease( mxClipPath );
     delete mpMacTextStyle;
 
@@ -300,6 +317,7 @@ AquaSalGraphics::~AquaSalGraphics()
         mrContext = NULL;
         // memory is freed automatically by maOwnContextMemory
     }
+#endif
 }
 
 // =======================================================================
@@ -806,4 +824,67 @@ SystemFontData AquaSalGraphics::GetSysFontData( int /* nFallbacklevel */ ) const
     return aSysFontData;
 }
 
+#ifdef IOS
+
+// Note that "SvpSalGraphics" is actually called AquaSalGraphics for iOS
+
+bool SvpSalGraphics::CheckContext()
+{
+    const basegfx::B2IVector size = m_aDevice->getSize();
+    const basegfx::B2IVector bufferSize = m_aDevice->getBufferSize();
+    const sal_Int32 scanlineStride = m_aDevice->getScanlineStride();
+    basebmp::RawMemorySharedArray pixelBuffer = m_aDevice->getBuffer();
+
+    SAL_INFO( "vcl.ios",
+              "CheckContext: device=" << m_aDevice.get() <<
+              " size=" << size.getX() << "x" << size.getY() <<
+              (m_aDevice->isTopDown() ? " top-down" : " bottom-up") <<
+              " stride=" << scanlineStride <<
+              " bufferSize=(" << bufferSize.getX() << "," << bufferSize.getY() << ")" );
+
+    switch( m_aDevice->getScanlineFormat() ) {
+    case basebmp::Format::EIGHT_BIT_PAL:
+        mrContext = CGBitmapContextCreate(pixelBuffer.get(),
+                                          bufferSize.getX(), bufferSize.getY(),
+                                          8, scanlineStride,
+                                          CGColorSpaceCreateDeviceGray(),
+                                          kCGImageAlphaNone);
+        break;
+    case basebmp::Format::THIRTYTWO_BIT_TC_MASK_RGBA:
+        mrContext = CGBitmapContextCreate(pixelBuffer.get(),
+                                          bufferSize.getX(), bufferSize.getY(),
+                                          8, scanlineStride,
+                                          CGColorSpaceCreateDeviceRGB(),
+                                          kCGImageAlphaNoneSkipLast);
+        break;
+    default:
+        SAL_INFO( "vcl.ios", "CheckContext: unsupported color format " << basebmp::Format::formatName( m_aDevice->getScanlineFormat() ) );
+    }
+
+    SAL_WARN_IF( mrContext == NULL, "vcl.ios", "CheckContext() failed" );
+
+    // Should we also clip the context? (Then we need to add a
+    // getBounds() function to BitmapDevice.)
+
+    if( mrContext != NULL && m_aDevice->isTopDown() )
+    {
+        CGContextTranslateCTM( mrContext, 0, bufferSize.getY() );
+        CGContextScaleCTM( mrContext, 1, -1 );
+    }
+
+    SAL_INFO( "vcl.ios", "CheckContext: context=" << mrContext );
+
+    return ( mrContext != NULL );
+}
+
+CGContextRef SvpSalGraphics::GetContext()
+{
+    if ( !mrContext )
+        CheckContext();
+
+    return mrContext;
+}
+
+#endif
+ 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -75,43 +75,27 @@ bool SvpSalGraphics::drawAlphaRect( long /*nX*/, long /*nY*/, long /*nWidth*/, l
     return false;
 }
 
+#ifdef MACOSX
+
 SvpSalGraphics::SvpSalGraphics() :
     m_bUseLineColor( true ),
     m_aLineColor( COL_BLACK ),
     m_bUseFillColor( false ),
     m_aFillColor( COL_WHITE ),
     m_aDrawMode( basebmp::DrawMode_PAINT ),
-#ifndef IOS
     m_aTextColor( COL_BLACK ),
     m_eTextFmt( basebmp::Format::EIGHT_BIT_GREY ),
-#endif
     m_bClipSetup( false )
 {
-#ifndef IOS
     for( int i = 0; i < MAX_FALLBACK; ++i )
         m_pServerFont[i] = NULL;
-#else
-    mrContext = nil;
-    mfFakeDPIScale = 1.0;
-    m_style = new CoreTextStyleInfo();
-#endif
 }
 
 SvpSalGraphics::~SvpSalGraphics()
 {
-#ifdef IOS
-    if(m_style)
-    {
-        delete m_style;
-        m_style = NULL;
-    }
-    if(mrContext)
-    {
-        CGContextRelease( mrContext );
-        mrContext = NULL;
-    }
-#endif
 }
+
+#endif
 
 void SvpSalGraphics::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
 {
