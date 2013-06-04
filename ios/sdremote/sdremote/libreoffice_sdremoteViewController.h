@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface libreoffice_sdremoteViewController : UIViewController
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *connect;
 
 @end
+

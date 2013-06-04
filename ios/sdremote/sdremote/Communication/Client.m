@@ -18,11 +18,13 @@
 
 @property (nonatomic, strong) NSString* mPin;
 @property (nonatomic, strong) NSString* mName;
-@property int mPort;
+@property const int mPort;
 
 @property (nonatomic, weak) Server* mServer;
 @property (nonatomic, weak) Receiver* mReceiver;
 @property (nonatomic, weak) CommunicationManager* mComManager;
+
+@property (nonatomic, retain) NSMutableData* mData;
 
 @end
 
@@ -36,6 +38,7 @@
 @synthesize mName = _mName;
 @synthesize mServer = _mServer;
 @synthesize mComManager = _mComManager;
+@synthesize mData = _mData;
 
 NSString * const CHARSET = @"UTF-8";
 
@@ -75,6 +78,30 @@ NSString * const CHARSET = @"UTF-8";
         [self.mOutputStream setDelegate:self];
         [self.mOutputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         [self.mOutputStream open];
+    }
+}
+
+- (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode {
+    
+    switch(eventCode) {
+        case NSStreamEventHasBytesAvailable:
+        {
+            if(!self.mData) {
+                self.mData = [NSMutableData data];
+            }
+            uint8_t buf[1024];
+            unsigned int len = 0;
+            len = [(NSInputStream *)stream read:buf maxLength:1024];
+            if(len) {
+                [self.mData appendBytes:(const void *)buf length:len];
+                // bytesRead is an instance variable of type NSNumber.
+                [bytesRead setIntValue:[bytesRead intValue]+len];
+            } else {
+                NSLog(@"no buffer!");
+            }
+            break;
+        }
+            
     }
 }
 
