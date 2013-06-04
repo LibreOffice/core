@@ -110,7 +110,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
     ISC_STATUS_ARRAY status;            /* status vector */
 
-    if (isc_attach_database(status, 0, "/home/javi/Firebird/test/new.fdb", &m_DBHandler, 0, NULL))
+    if (isc_attach_database(status, 0, "/var/tmp/libo-fb/new.fdb", &m_DBHandler, 0, NULL))
         if (pr_error(status, "attach database"))
             return;
 
