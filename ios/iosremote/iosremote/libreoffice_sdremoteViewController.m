@@ -7,6 +7,8 @@
 //
 
 #import "libreoffice_sdremoteViewController.h"
+#import "Server.h"
+#import "Client.h"
 
 @interface libreoffice_sdremoteViewController ()
 
@@ -26,4 +28,17 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+- (IBAction)connectToServer:(id)sender {
+    NSString * address = [self.ipAddressTextEdit text];
+    Server * server = [[Server alloc] initWithProtocol:NETWORK atAddress:address ofName:@"Server"];
+    Client * client = [[Client alloc] initWithServer:server managedBy:nil interpretedBy:nil];
+    [client connect];
+}
+
+
+- (void)viewDidUnload {
+    [self setIpAddressTextEdit:nil];
+    [super viewDidUnload];
+}
 @end

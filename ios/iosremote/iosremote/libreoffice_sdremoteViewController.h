@@ -10,4 +10,8 @@
 
 @interface libreoffice_sdremoteViewController : UIViewController
 
+- (IBAction)connectToServer:(id)sender;
+
+@property (weak, nonatomic) IBOutlet UITextField *ipAddressTextEdit;
+
 @end
