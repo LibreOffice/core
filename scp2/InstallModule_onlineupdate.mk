@@ -9,7 +9,7 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/onlineupdate))
 
-$(eval $(call gb_InstallModule_InstallModule_use_auto_install_libs,scp2/onlineupdate,onlineupdate))
+$(eval $(call gb_InstallModule_use_auto_install_libs,scp2/onlineupdate,onlineupdate))
 
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/onlineupdate,\
     scp2/source/onlineupdate/file_onlineupdate \
