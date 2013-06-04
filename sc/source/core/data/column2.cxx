@@ -1833,43 +1833,29 @@ const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& /*rCxt*/, SCR
     if (nRow1 > nRow2)
         return NULL;
 
-    ColDoubleEntry aBound;
-    aBound.mnStart = nRow1;
-    std::vector<ColDoubleEntry*>::const_iterator it =
-        std::lower_bound(maDoubles.begin(), maDoubles.end(), &aBound, ColDoubleEntry::LessByPtr());
-
-    if (it == maDoubles.end())
-        return NULL;
-
-    // There should never be an entry with empty double array. So we don't
-    // even bother checking for emptiness here.
-
-    const ColDoubleEntry& rEntry = **it;
-
-    if (rEntry.mnStart == nRow1)
+    std::vector<ColDoubleEntry*>::const_iterator it = maDoubles.begin(), itEnd = maDoubles.end();
+    size_t nOffset = 0;
+    for (; it != itEnd; ++it)
     {
-        SCROW nLastRow = rEntry.mnStart + rEntry.maData.size() - 1;
-        if (nLastRow < nRow2)
-            // Array is shorter than requested length.
-            return NULL;
-
-        return &rEntry.maData[0];
+        const ColDoubleEntry& rEntry = **it;
+        SCROW nRowStart = rEntry.mnStart;
+        SCROW nRowEnd = nRowStart + rEntry.maData.size() - 1;
+        if (nRowStart <= nRow1 && nRow2 <= nRowEnd)
+        {
+            // Found it.
+            nOffset = nRow1 - nRowStart;
+            break;
+        }
     }
 
-    OSL_ASSERT(nRow1 < rEntry.mnStart);
-
-    if (it == maDoubles.begin())
-        // This is the very first array entry.
+    if (it == itEnd)
+    {
+        // Array not found.
         return NULL;
+    }
 
-    --it; // Go to previous array so that rEntry.mnStart < nRow1.
-    OSL_ASSERT((**it).mnStart < nRow1);
-    SCROW nLastRow = rEntry.mnStart + rEntry.maData.size() - 1;
-    if (nLastRow < nRow2)
-        // Array is shorter than requested length.
-        return NULL;
-
-    return &rEntry.maData[nRow1 - rEntry.mnStart];
+    const ColDoubleEntry& rEntry = **it;
+    return &rEntry.maData[0] + nOffset;
 }
 
 ScRefCellValue ScColumn::GetRefCellValue( SCROW nRow )
