@@ -411,7 +411,10 @@ oslFileHandle FTPURL::open()
         CURLcode err = curl_easy_perform(curl);
 
         if(err == CURLE_OK)
-            osl_setFilePos( res, osl_Pos_Absolut, 0 );
+        {
+            oslFileError rc = osl_setFilePos( res, osl_Pos_Absolut, 0 );
+            SAL_WARN_IF(rc != osl_File_E_None, "ucb", "osl_setFilePos failed");
+        }
         else {
             osl_closeFile(res),res = 0;
             throw curl_exception(err);

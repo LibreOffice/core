@@ -28,7 +28,7 @@ using namespace com::sun::star::io;
 
 namespace ucbhelper
 {
-    FdInputStream:::FdInputStream:( oslFileHandle tmpfl )
+    FdInputStream::FdInputStream( oslFileHandle tmpfl )
         : m_tmpfl(tmpfl)
         , m_nLength( 0 )
     {
@@ -41,7 +41,8 @@ namespace ucbhelper
             sal_uInt64 nFileSize = 0;
             if ( osl_getFilePos( m_tmpfl, &nFileSize ) == osl_File_E_None )
                 m_nLength = nFileSize;
-            osl_setFilePos( m_tmpfl, osl_Pos_Absolut, 0 );
+            oslFileError rc = osl_setFilePos( m_tmpfl, osl_Pos_Absolut, 0 );
+            SAL_WARN_IF(rc != osl_File_E_None, "ucbhelper", "osl_setFilePos failed");
         }
     }
 
@@ -101,7 +102,8 @@ namespace ucbhelper
         if(!m_tmpfl)
             throw IOException();
 
-        osl_setFilePos( m_tmpfl, osl_Pos_Current, nBytesToSkip );
+        oslFileError rc = osl_setFilePos( m_tmpfl, osl_Pos_Current, nBytesToSkip );
+        SAL_WARN_IF(rc != osl_File_E_None, "ucbhelper", "osl_setFilePos failed");
     }
 
 
@@ -123,7 +125,7 @@ namespace ucbhelper
     {
         osl::MutexGuard aGuard(m_aMutex);
         if(m_tmpfl)
-            fclose(m_tmpfl),m_tmpfl = 0;
+            osl_closeFile(m_tmpfl),m_tmpfl = 0;
     }
 
 
@@ -137,7 +139,8 @@ namespace ucbhelper
         if(!m_tmpfl)
             throw IOException();
 
-        fseek(m_tmpfl,long(location),SEEK_SET);
+        oslFileError rc = osl_setFilePos( m_tmpfl, osl_Pos_Absolut, location );
+        SAL_WARN_IF(rc != osl_File_E_None, "ucbhelper", "osl_setFilePos failed");
     }
 
 
