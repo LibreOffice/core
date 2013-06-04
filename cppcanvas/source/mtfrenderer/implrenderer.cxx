@@ -1469,7 +1469,7 @@ namespace cppcanvas
                             // #120994# Do switch on/off LineColor, even when a overriding one is set
                             bool bSetting(static_cast<MetaLineColorAction*>(pCurrAct)->IsSetting());
 
-                            getState( rStates ).isLineColorSet = bSetting;
+                            rStates.getState().isLineColorSet = bSetting;
                         }
                         break;
 
@@ -1486,7 +1486,7 @@ namespace cppcanvas
                             // #120994# Do switch on/off FillColor, even when a overriding one is set
                             bool bSetting(static_cast<MetaFillColorAction*>(pCurrAct)->IsSetting());
 
-                            getState( rStates ).isFillColorSet = bSetting;
+                            rStates.getState().isFillColorSet = bSetting;
                         }
                         break;
 
