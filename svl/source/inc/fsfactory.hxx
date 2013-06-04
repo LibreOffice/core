@@ -22,18 +22,19 @@
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx>
 
 class FSStorageFactory : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XSingleServiceFactory,
                                                 ::com::sun::star::lang::XServiceInfo >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
 public:
-    FSStorageFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
-    : m_xFactory( xFactory )
+    FSStorageFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext )
+    : m_xContext( xContext )
     {
-        OSL_ENSURE( xFactory.is(), "No service manager is provided!\n" );
+        OSL_ENSURE( xContext.is(), "No service manager is provided!\n" );
     }
 
     static ::com::sun::star::uno::Sequence< OUString > SAL_CALL

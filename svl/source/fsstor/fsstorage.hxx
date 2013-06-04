@@ -51,7 +51,7 @@ public:
 
     FSStorage(  const ::ucbhelper::Content& aContent,
                 sal_Int32 nMode,
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory );
+                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext );
 
     virtual ~FSStorage();
 

@@ -47,11 +47,11 @@ class SvNumberFormatsSupplierServiceObject
 
 protected:
     SvNumberFormatter*  m_pOwnFormatter;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                         m_xORB;
 
 public:
-    SvNumberFormatsSupplierServiceObject(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+    SvNumberFormatsSupplierServiceObject(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
     ~SvNumberFormatsSupplierServiceObject();
 
     // XInterface

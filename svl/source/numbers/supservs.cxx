@@ -39,11 +39,11 @@ using namespace ::utl;
 //-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL SvNumberFormatsSupplierServiceObject_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
 {
-    return static_cast< ::cppu::OWeakObject* >(new SvNumberFormatsSupplierServiceObject(_rxFactory));
+    return static_cast< ::cppu::OWeakObject* >(new SvNumberFormatsSupplierServiceObject( comphelper::getComponentContext(_rxFactory) ));
 }
 
 //-------------------------------------------------------------------------
-SvNumberFormatsSupplierServiceObject::SvNumberFormatsSupplierServiceObject(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
+SvNumberFormatsSupplierServiceObject::SvNumberFormatsSupplierServiceObject(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB)
     :m_pOwnFormatter(NULL)
     ,m_xORB(_rxORB)
 {
@@ -111,7 +111,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
 #endif
     }
 
-    m_pOwnFormatter = new SvNumberFormatter( comphelper::getComponentContext(m_xORB), eNewFormatterLanguage);
+    m_pOwnFormatter = new SvNumberFormatter( m_xORB, eNewFormatterLanguage);
     m_pOwnFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
     SetNumberFormatter(m_pOwnFormatter);
 }

@@ -55,7 +55,7 @@ OUString SAL_CALL FSStorageFactory::impl_staticGetImplementationName()
 uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
-    return uno::Reference< uno::XInterface >( *new FSStorageFactory( xServiceManager ) );
+    return uno::Reference< uno::XInterface >( *new FSStorageFactory( comphelper::getComponentContext(xServiceManager) ) );
 }
 
 //-------------------------------------------------------------------------
@@ -78,7 +78,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
         static_cast< OWeakObject* >(
             new FSStorage(  aResultContent,
                             embed::ElementModes::READWRITE,
-                            m_xFactory ) ),
+                            m_xContext ) ),
         uno::UNO_QUERY );
 }
 
@@ -160,7 +160,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     return uno::Reference< uno::XInterface >(
         static_cast< OWeakObject* >( new FSStorage( aResultContent,
                                                     nStorageMode,
-                                                    m_xFactory ) ),
+                                                    m_xContext ) ),
         uno::UNO_QUERY );
 }
 

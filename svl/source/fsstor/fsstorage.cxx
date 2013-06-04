@@ -96,27 +96,27 @@ struct FSStorage_Impl
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
     ::cppu::OTypeCollection* m_pTypeCollection;
 
-    uno::Reference< lang::XMultiServiceFactory > m_xFactory;
+    uno::Reference< uno::XComponentContext > m_xContext;
 
 
-    FSStorage_Impl( const OUString& aURL, sal_Int32 nMode, uno::Reference< lang::XMultiServiceFactory > xFactory )
+    FSStorage_Impl( const OUString& aURL, sal_Int32 nMode, uno::Reference< uno::XComponentContext > xContext )
     : m_aURL( aURL )
     , m_pContent( NULL )
     , m_nMode( nMode )
     , m_pListenersContainer( NULL )
     , m_pTypeCollection( NULL )
-    , m_xFactory( xFactory )
+    , m_xContext( xContext )
     {
         OSL_ENSURE( !m_aURL.isEmpty(), "The URL must not be empty" );
     }
 
-    FSStorage_Impl( const ::ucbhelper::Content& aContent, sal_Int32 nMode, uno::Reference< lang::XMultiServiceFactory > xFactory )
+    FSStorage_Impl( const ::ucbhelper::Content& aContent, sal_Int32 nMode, uno::Reference< uno::XComponentContext > xContext )
     : m_aURL( aContent.getURL() )
     , m_pContent( new ::ucbhelper::Content( aContent ) )
     , m_nMode( nMode )
     , m_pListenersContainer( NULL )
     , m_pTypeCollection( NULL )
-    , m_xFactory( xFactory )
+    , m_xContext( xContext )
     {
         OSL_ENSURE( !m_aURL.isEmpty(), "The URL must not be empty" );
     }
@@ -143,11 +143,11 @@ FSStorage_Impl::~FSStorage_Impl()
 //-----------------------------------------------
 FSStorage::FSStorage( const ::ucbhelper::Content& aContent,
                     sal_Int32 nMode,
-                    uno::Reference< lang::XMultiServiceFactory > xFactory )
-: m_pImpl( new FSStorage_Impl( aContent, nMode, xFactory ) )
+                    uno::Reference< uno::XComponentContext > xContext )
+: m_pImpl( new FSStorage_Impl( aContent, nMode, xContext ) )
 {
     // TODO: use properties
-    if ( !xFactory.is() )
+    if ( !xContext.is() )
         throw uno::RuntimeException();
 
     GetContent();
@@ -473,8 +473,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
             if ( isLocalFile_Impl( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
                 uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
-                    ucb::SimpleFileAccess::create(
-                        comphelper::getComponentContext(m_pImpl->m_xFactory) ) );
+                    ucb::SimpleFileAccess::create( m_pImpl->m_xContext ) );
                 xResult = xSimpleFileAccess->openFileReadWrite( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) );
             }
             else
@@ -620,7 +619,7 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
         xResult = uno::Reference< embed::XStorage >(
                             static_cast< OWeakObject* >( new FSStorage( aResultContent,
                                                                         nStorageMode,
-                                                                        m_pImpl->m_xFactory ) ),
+                                                                        m_pImpl->m_xContext ) ),
                             uno::UNO_QUERY );
     }
     catch( embed::InvalidStorageException& )
@@ -682,9 +681,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::cloneStreamElement( const OUSt
         ::ucbhelper::Content aResultContent( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext() );
         uno::Reference< io::XInputStream > xInStream = aResultContent.openStream();
 
-        xTempResult = uno::Reference < io::XStream >(
-                    io::TempFile::create(comphelper::getComponentContext(m_pImpl->m_xFactory)),
-                    uno::UNO_QUERY_THROW );
+        xTempResult = io::TempFile::create(m_pImpl->m_xContext);
         uno::Reference < io::XOutputStream > xTempOut = xTempResult->getOutputStream();
         uno::Reference < io::XInputStream > xTempIn = xTempResult->getInputStream();
 
@@ -1463,8 +1460,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
             if ( isLocalFile_Impl( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
                 uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
-                    ucb::SimpleFileAccess::create(
-                        comphelper::getComponentContext(m_pImpl->m_xFactory) ) );
+                    ucb::SimpleFileAccess::create( m_pImpl->m_xContext ) );
                 uno::Reference< io::XStream > xStream =
                     xSimpleFileAccess->openFileReadWrite( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) );
 

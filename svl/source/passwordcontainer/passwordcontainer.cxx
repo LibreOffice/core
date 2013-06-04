@@ -444,7 +444,7 @@ PasswordContainer::~PasswordContainer()
     if( mComponent.is() )
     {
         mComponent->removeEventListener(this);
-        mComponent = Reference< XComponent >();
+        mComponent.clear();
     }
 }
 
@@ -463,7 +463,7 @@ void SAL_CALL PasswordContainer::disposing( const EventObject& ) throw(RuntimeEx
     if( mComponent.is() )
     {
         //mComponent->removeEventListener(this);
-        mComponent = Reference< XComponent >();
+        mComponent.clear();
     }
 }
 
