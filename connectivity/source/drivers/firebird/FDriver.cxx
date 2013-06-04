@@ -35,6 +35,9 @@
 
 #include "FDriver.hxx"
 #include "FConnection.hxx"
+#include "connectivity/dbexception.hxx"
+#include "resource/common_res.hrc"
+#include "resource/sharedresources.hxx"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -123,6 +126,13 @@ Reference< XConnection > SAL_CALL FirebirdDriver::connect( const ::rtl::OUString
 {
     SAL_INFO("connectivity.firebird", "=> ODriver_BASE::connect(), URL: " << url );
 
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (ODriver_BASE::rBHelper.bDisposed)
+       throw DisposedException();
+
+    if ( ! acceptsURL(url) )
+        return NULL;
+
     // create a new connection with the given properties and append it to our vector
     OConnection* pCon = new OConnection(this);
     Reference< XConnection > xCon = pCon;   // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
@@ -142,6 +152,13 @@ sal_Bool SAL_CALL FirebirdDriver::acceptsURL( const ::rtl::OUString& url )
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL FirebirdDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
+    if ( ! acceptsURL(url) )
+    {
+        ::connectivity::SharedResources aResources;
+        const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+        ::dbtools::throwGenericSQLException(sMessage ,*this);
+    } // if ( ! acceptsURL(url) )
+
     // if you have somthing special to say, return it here :-)
     return Sequence< DriverPropertyInfo >();
 }
