@@ -59,7 +59,6 @@ private:
     CTLineRef mpCTLine;
 
     int mnCharCount;        // ==mnEndCharPos-mnMinCharPos
-    int mnTrailingSpaces;
 
     // to prevent overflows
     // font requests get size limited by downscaling huge fonts
@@ -69,7 +68,6 @@ private:
     // cached details about the resulting layout
     // mutable members since these details are all lazy initialized
     mutable double  mfCachedWidth;          // cached value of resulting typographical width
-    mutable double  mfTrailingSpaceWidth;   // in Pixels
 
     // x-offset relative to layout origin
     // currently only used in RTL-layouts
@@ -83,10 +81,8 @@ CTLayout::CTLayout( const CTTextStyle* pTextStyle )
 ,   mpAttrString( NULL )
 ,   mpCTLine( NULL )
 ,   mnCharCount( 0 )
-,   mnTrailingSpaces( 0 )
 ,   mfFontScale( pTextStyle->mfFontScale )
 ,   mfCachedWidth( -1 )
-,   mfTrailingSpaceWidth( 0 )
 ,   mnBaseAdv( 0 )
 {
     CFRetain( mpTextStyle->GetStyleDict() );
@@ -127,11 +123,6 @@ bool CTLayout::LayoutText( ImplLayoutArgs& rArgs )
     mpCTLine = CTLineCreateWithAttributedString( mpAttrString );
     CFRelease( aCFText);
 
-    // get info about trailing whitespace to prepare for text justification in AdjustLayout()
-    mnTrailingSpaces = 0;
-    for( int i = mnEndCharPos; --i >= mnMinCharPos; ++mnTrailingSpaces )
-        if( !IsSpacingGlyph( rArgs.mpStr[i] | GF_ISCHAR ))
-            break;
     return true;
 }
 
@@ -142,17 +133,10 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     if( !mpCTLine)
         return;
 
-    // CoreText fills trailing space during justification so we have to
-    // take that into account when requesting CT to justify something
-    mfTrailingSpaceWidth = CTLineGetTrailingWhitespaceWidth( mpCTLine );
-    const int nTrailingSpaceWidth = rint( mfFontScale * mfTrailingSpaceWidth );
-
     int nOrigWidth = GetTextWidth();
-    nOrigWidth -= nTrailingSpaceWidth;
     int nPixelWidth = rArgs.mnLayoutWidth;
     if( nPixelWidth )
     {
-        nPixelWidth -= nTrailingSpaceWidth;
         if( nPixelWidth <= 0)
             return;
     }
@@ -160,13 +144,13 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     {
         // for now we are only interested in the layout width
         // TODO: use all mpDXArray elements for layouting
-        nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 - mnTrailingSpaces ];
+        nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
     }
 
     // in RTL-layouts trailing spaces are leftmost
     // TODO: use BiDi-algorithm to thoroughly check this assumption
     if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
-        mnBaseAdv = nTrailingSpaceWidth;
+        mnBaseAdv = rint( CTLineGetTrailingWhitespaceWidth( mpCTLine ) * mfFontScale );
 
     // return early if there is nothing to do
     if( nPixelWidth <= 0 )
@@ -189,7 +173,6 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     CFRelease( mpCTLine );
     mpCTLine = pNewCTLine;
     mfCachedWidth = -1; // TODO: can we set it directly to target width we requested? For now we re-measure
-    mfTrailingSpaceWidth = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -341,10 +324,9 @@ long CTLayout::GetTextWidth() const
 
     if( mfCachedWidth < 0.0 ) {
         mfCachedWidth = CTLineGetTypographicBounds( mpCTLine, NULL, NULL, NULL);
-        mfTrailingSpaceWidth = CTLineGetTrailingWhitespaceWidth( mpCTLine);
     }
 
-    const long nScaledWidth = lrint( mfFontScale * (mfCachedWidth + mfTrailingSpaceWidth));
+    const long nScaledWidth = lrint( mfFontScale * mfCachedWidth );
     return nScaledWidth;
 }
 
@@ -355,9 +337,6 @@ long CTLayout::FillDXArray( sal_Int32* pDXArray ) const
     // short circuit requests which don't need full details
     if( !pDXArray )
         return GetTextWidth();
-
-    // check assumptions
-    DBG_ASSERT( mfTrailingSpaceWidth==0.0, "CTLayout::FillDXArray() with fTSW!=0" );
 
     long nPixWidth = GetTextWidth();
     if( pDXArray ) {
