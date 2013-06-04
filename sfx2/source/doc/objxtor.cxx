@@ -294,6 +294,7 @@ SfxObjectShell::SfxObjectShell( const sal_uInt64 i_nCreationFlags )
     ,   pStyleSheetPool(0)
     ,   eCreateMode( ( i_nCreationFlags & SFXMODEL_EMBEDDED_OBJECT ) ? SFX_CREATE_MODE_EMBEDDED : SFX_CREATE_MODE_STANDARD )
     ,   bHasName( sal_False )
+    ,   bIsInGenerateThumbnail ( sal_False )
 {
     DBG_CTOR(SfxObjectShell, 0);
 
@@ -340,7 +341,8 @@ SfxObjectShell::SfxObjectShell
     pMedium(0),
     pStyleSheetPool(0),
     eCreateMode(eMode),
-    bHasName( sal_False )
+    bHasName( sal_False ),
+    bIsInGenerateThumbnail ( sal_False )
 {
     DBG_CTOR(SfxObjectShell, 0);
 }
