@@ -36,13 +36,10 @@ File gid_File_Exe_Odbcconfig
 End
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Abp, abp)
 STD_RES_FILE( gid_File_Res_Abp, abp)
 
-STD_LIB_FILE( gid_File_Lib_Dbp, dbp)
 STD_RES_FILE( gid_File_Res_Dbp, dbp)
 
-STD_LIB_FILE( gid_File_Lib_Dbu, dbu )
 STD_RES_FILE( gid_File_Res_Dbu, dbu)
 
 STD_RES_FILE( gid_File_Res_Cnr, cnr)
