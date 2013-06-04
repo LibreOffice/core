@@ -847,6 +847,41 @@ namespace
 #endif
     }
 
+    //returns true if the given code-point couldn't possibly be in rLangTag.
+    bool isImpossibleCodePointForLang(const LanguageTag &rLangTag, sal_uInt32 currentChar)
+    {
+        //a non-default script is set, lets believe it
+        if (rLangTag.hasScript())
+            return false;
+
+        int32_t script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
+        UScriptCode eScript = static_cast<UScriptCode>(script);
+        bool bIsImpossible = false;
+        OUString sLang = rLangTag.getLanguage();
+        switch (eScript)
+        {
+            case USCRIPT_TELUGU:
+                bIsImpossible = sLang != "te";
+                break;
+            case USCRIPT_BENGALI:
+                bIsImpossible = sLang != "bn" &&
+                    sLang != "as" && sLang != "mkb" &&
+                    sLang != "kfv" && sLang != "ccp" &&
+                    sLang != "tnv" && sLang != "ctg" &&
+                    sLang != "haj" && sLang != "ksy" &&
+                    sLang != "rkt" && sLang != "rjs" &&
+                    sLang != "rhg" && sLang != "syl" &&
+                    sLang != "kyv" && sLang != "zrg" &&
+                    sLang != "nhh";
+                break;
+            default:
+                break;
+        }
+        SAL_WARN_IF(bIsImpossible, "vcl", "Throwing away user set language of "
+            << sLang << " for finding a font for glyph fallback and autodetecting instead");
+        return bIsImpossible;
+    }
+
     LanguageTag getExemplerLangTagForCodePoint(sal_uInt32 currentChar)
     {
         int32_t script = u_getIntPropertyValue(currentChar, UCHAR_SCRIPT);
@@ -954,6 +989,10 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
             // also handle unicode surrogates
             const sal_uInt32 nCode = rMissingCodes.iterateCodePoints( &nStrIndex );
             FcCharSetAddChar( unicodes, nCode );
+            //if the codepoint is impossible for this lang tag, then clear it
+            //and autodetect something useful
+            if (!aLangAttrib.isEmpty() && isImpossibleCodePointForLang(aLangTag, nCode))
+                aLangAttrib = OString();
             //#i105784#/rhbz#527719  improve selection of fallback font
             if (aLangAttrib.isEmpty())
             {
