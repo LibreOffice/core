@@ -986,7 +986,8 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                     if( aPathSeq.getLength() == 1 )
                     {
                         OString sFileName = unicodetouri( aPathSeq[0] );
-                        if( g_file_test( g_filename_from_uri( sFileName.getStr(), NULL, NULL ), G_FILE_TEST_IS_REGULAR ) )
+                        gchar *gFileName = g_filename_from_uri ( sFileName.getStr(), NULL, NULL );
+                        if( g_file_test( gFileName, G_FILE_TEST_IS_REGULAR ) )
                         {
                             GtkWidget *dlg;
                             INetURLObject aFileObj( sFileName );
@@ -1033,6 +1034,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
 
                             gtk_widget_destroy( dlg );
                         }
+                        g_free (gFileName);
 
                         if( btn == GTK_RESPONSE_YES )
                             retVal = ExecutableDialogResults::OK;
