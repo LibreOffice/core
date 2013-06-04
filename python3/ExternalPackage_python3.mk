@@ -22,7 +22,7 @@ $(eval $(call gb_ExternalPackage_add_file,python3,$(gb_Package_PROGRAMDIRNAME)/p
 ifeq ($(MSVC_USE_DEBUG_RUNTIME),)
 $(eval $(call gb_ExternalPackage_add_file,python3,$(gb_Package_PROGRAMDIRNAME)/python$(PYTHON_VERSION_MAJOR).dll,LO_lib/$(python_arch_subdir)python$(PYTHON_VERSION_MAJOR).dll))
 endif
-$(eval $(call gb_ExternalPackage_add_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib/lib-dynload,\
+$(eval $(call gb_ExternalPackage_add_files,python3,$(gb_Package_PROGRAMDIRNAME)/python-core-$(PYTHON_VERSION)/lib,\
 	LO_lib/$(python_arch_subdir)_ctypes$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	LO_lib/$(python_arch_subdir)_ctypes_test$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	LO_lib/$(python_arch_subdir)_decimal$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
