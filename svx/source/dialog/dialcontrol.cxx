@@ -21,7 +21,7 @@
 #include "bmpmask.hrc"
 #include <svx/dialmgr.hxx>
 #include <tools/rcid.h>
-#include <math.h>
+#include <cmath>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
@@ -390,7 +390,7 @@ void DialControl::SetRotation( sal_Int32 nAngle )
 
 void DialControl::SetLinkedField( NumericField* pField, sal_Int32 nDecimalPlaces )
 {
-    mpImpl->mnLinkedFieldValueMultiplyer = 100 / pow(10, nDecimalPlaces);
+    mpImpl->mnLinkedFieldValueMultiplyer = 100 / std::pow(10.0, double(nDecimalPlaces));
 
     // remove modify handler from old linked field
     ImplSetFieldLink( Link() );
