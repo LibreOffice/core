@@ -17,26 +17,80 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <exception>
+#include <typeinfo>
+
+#include "rtl/alloc.h"
+#include "rtl/ustrbuf.hxx"
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include <uno/data.h>
 #include <sal/alloca.h>
 
-#include "bridges/cpp_uno/shared/bridge.hxx"
-#include "bridges/cpp_uno/shared/types.hxx"
+#include <bridges/cpp_uno/shared/bridge.hxx>
+#include <bridges/cpp_uno/shared/types.hxx>
 #include "bridges/cpp_uno/shared/unointerfaceproxy.hxx"
 #include "bridges/cpp_uno/shared/vtables.hxx"
 
+#include "abi.hxx"
 #include "callvirtualmethod.hxx"
 #include "share.hxx"
-#include "smallstruct.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
-namespace
-{
+// Macros for easier insertion of values to registers or stack
+// pSV - pointer to the source
+// nr - order of the value [will be increased if stored to register]
+// pFPR, pGPR - pointer to the registers
+// pDS - pointer to the stack [will be increased if stored here]
+
+// The value in %xmm register is already prepared to be retrieved as a float,
+// thus we treat float and double the same
+#define INSERT_FLOAT_DOUBLE( pSV, nr, pFPR, pDS ) \
+    if ( nr < x86_64::MAX_SSE_REGS ) \
+        pFPR[nr++] = *reinterpret_cast<double *>( pSV ); \
+    else \
+        *pDS++ = *reinterpret_cast<sal_uInt64 *>( pSV ); // verbatim!
+
+#define INSERT_INT64( pSV, nr, pGPR, pDS ) \
+    if ( nr < x86_64::MAX_GPR_REGS ) \
+        pGPR[nr++] = *reinterpret_cast<sal_uInt64 *>( pSV ); \
+    else \
+        *pDS++ = *reinterpret_cast<sal_uInt64 *>( pSV );
+
+#define INSERT_INT32( pSV, nr, pGPR, pDS ) \
+    if ( nr < x86_64::MAX_GPR_REGS ) \
+        pGPR[nr++] = *reinterpret_cast<sal_uInt32 *>( pSV ); \
+    else \
+        *pDS++ = *reinterpret_cast<sal_uInt32 *>( pSV );
+
+#define INSERT_INT16( pSV, nr, pGPR, pDS ) \
+    if ( nr < x86_64::MAX_GPR_REGS ) \
+        pGPR[nr++] = *reinterpret_cast<sal_uInt16 *>( pSV ); \
+    else \
+        *pDS++ = *reinterpret_cast<sal_uInt16 *>( pSV );
+
+#define INSERT_INT8( pSV, nr, pGPR, pDS ) \
+    if ( nr < x86_64::MAX_GPR_REGS ) \
+        pGPR[nr++] = *reinterpret_cast<sal_uInt8 *>( pSV ); \
+    else \
+        *pDS++ = *reinterpret_cast<sal_uInt8 *>( pSV );
+
+//==================================================================================================
+
+namespace {
+
+void appendCString(OUStringBuffer & buffer, char const * text) {
+    if (text != 0) {
+        buffer.append(
+            OStringToOUString(OString(text), RTL_TEXTENCODING_ISO_8859_1));
+            // use 8859-1 to avoid conversion failure
+    }
+}
+
+}
 
 static void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
@@ -45,66 +99,53 @@ static void cpp_call(
     sal_Int32 nParams, typelib_MethodParameter * pParams,
     void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc )
 {
-      // max space for: [complex ret ptr], values|ptr ...
-      char * pCppStack      =
-#ifdef BROKEN_ALLOCA
-          (char *)malloc( sizeof(sal_Int32) + ((nParams+2) * sizeof(sal_Int64)) );
-#else
-          (char *)alloca( sizeof(sal_Int32) + ((nParams+2) * sizeof(sal_Int64)) );
-#endif
-      char * pCppStackStart = pCppStack;
+    // Maxium space for [complex ret ptr], values | ptr ...
+    // (but will be used less - some of the values will be in pGPR and pFPR)
+      sal_uInt64 *pStack = (sal_uInt64 *)__builtin_alloca( (nParams + 3) * sizeof(sal_uInt64) );
+      sal_uInt64 *pStackStart = pStack;
 
-    // return
+    sal_uInt64 pGPR[x86_64::MAX_GPR_REGS];
+    sal_uInt32 nGPR = 0;
+
+    double pFPR[x86_64::MAX_SSE_REGS];
+    sal_uInt32 nFPR = 0;
+
+    // Return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
     OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
 
-    void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
+    void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion (see below)
 
-    if (pReturnTypeDescr)
+    bool bSimpleReturn = true;
+    if ( pReturnTypeDescr )
     {
-        if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
-        {
+        if ( x86_64::return_in_hidden_param( pReturnTypeRef ) )
+            bSimpleReturn = false;
+
+        if ( bSimpleReturn )
             pCppReturn = pUnoReturn; // direct way for simple types
-        }
         else
         {
             // complex return via ptr
-            pCppReturn
-                = (bridges::cpp_uno::shared::relatesToInterfaceType(
-                       pReturnTypeDescr )
-#ifdef BROKEN_ALLOCA
-                   ? malloc( pReturnTypeDescr->nSize )
-#else
-                   ? alloca( pReturnTypeDescr->nSize )
-#endif
-                   : pUnoReturn); // direct way
-            if (!bridges::cpp_uno::shared::isSmallStruct(pReturnTypeDescr)) {
-                *(void **)pCppStack = pCppReturn;
-                pCppStack += sizeof(void *);
-            }
+            pCppReturn = bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )?
+                         __builtin_alloca( pReturnTypeDescr->nSize ) : pUnoReturn;
+            INSERT_INT64( &pCppReturn, nGPR, pGPR, pStack );
         }
     }
-    // push this
-    void * pAdjustedThisPtr = reinterpret_cast< void ** >(pThis->getCppI())
-        + aVtableSlot.offset;
-    *(void**)pCppStack = pAdjustedThisPtr;
-    pCppStack += sizeof( void* );
 
-    // stack space
-    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
-    // args
-#ifdef BROKEN_ALLOCA
-    void ** pCppArgs  = (void **)malloc( 3 * sizeof(void *) * nParams );
-#else
-    void ** pCppArgs  = (void **)alloca( 3 * sizeof(void *) * nParams );
-#endif
-    // indizes of values this have to be converted (interface conversion cpp<=>uno)
+    // Push "this" pointer
+    void * pAdjustedThisPtr = reinterpret_cast< void ** >( pThis->getCppI() ) + aVtableSlot.offset;
+    INSERT_INT64( &pAdjustedThisPtr, nGPR, pGPR, pStack );
+
+    // Args
+    void ** pCppArgs = (void **)alloca( 3 * sizeof(void *) * nParams );
+    // Indizes of values this have to be converted (interface conversion cpp<=>uno)
     sal_Int32 * pTempIndizes = (sal_Int32 *)(pCppArgs + nParams);
-    // type descriptions for reconversions
+    // Type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pCppArgs + (2 * nParams));
 
-    sal_Int32 nTempIndizes   = 0;
+    sal_Int32 nTempIndizes = 0;
 
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
@@ -112,22 +153,39 @@ static void cpp_call(
         typelib_TypeDescription * pParamTypeDescr = 0;
         TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
 
-        if (!rParam.bOut
-            && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
+        if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
         {
-            uno_copyAndConvertData( pCppArgs[nPos] = pCppStack, pUnoArgs[nPos], pParamTypeDescr,
+            uno_copyAndConvertData( pCppArgs[nPos] = alloca( 8 ), pUnoArgs[nPos], pParamTypeDescr,
                                     pThis->getBridge()->getUno2Cpp() );
 
             switch (pParamTypeDescr->eTypeClass)
             {
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
+                INSERT_INT64( pCppArgs[nPos], nGPR, pGPR, pStack );
+                break;
+            case typelib_TypeClass_LONG:
+            case typelib_TypeClass_UNSIGNED_LONG:
+            case typelib_TypeClass_ENUM:
+                INSERT_INT32( pCppArgs[nPos], nGPR, pGPR, pStack );
+                break;
+            case typelib_TypeClass_SHORT:
+            case typelib_TypeClass_CHAR:
+            case typelib_TypeClass_UNSIGNED_SHORT:
+                INSERT_INT16( pCppArgs[nPos], nGPR, pGPR, pStack );
+                break;
+            case typelib_TypeClass_BOOLEAN:
+            case typelib_TypeClass_BYTE:
+                INSERT_INT8( pCppArgs[nPos], nGPR, pGPR, pStack );
+                break;
+            case typelib_TypeClass_FLOAT:
             case typelib_TypeClass_DOUBLE:
-                pCppStack += sizeof(sal_Int32); // extra long
+                INSERT_FLOAT_DOUBLE( pCppArgs[nPos], nFPR, pFPR, pStack );
                 break;
             default:
                 break;
             }
+
             // no longer needed
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
         }
@@ -137,28 +195,18 @@ static void cpp_call(
             {
                 // cpp out is constructed mem, uno out is not!
                 uno_constructData(
-#ifdef BROKEN_ALLOCA
-                    *(void **)pCppStack = pCppArgs[nPos] = malloc( pParamTypeDescr->nSize ),
-#else
-                    *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
-#endif
+                    pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                     pParamTypeDescr );
                 pTempIndizes[nTempIndizes] = nPos; // default constructed for cpp call
                 // will be released at reconversion
                 ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
             }
             // is in/inout
-            else if (bridges::cpp_uno::shared::relatesToInterfaceType(
-                         pParamTypeDescr ))
+            else if (bridges::cpp_uno::shared::relatesToInterfaceType( pParamTypeDescr ))
             {
                 uno_copyAndConvertData(
-#ifdef BROKEN_ALLOCA
-                    *(void **)pCppStack = pCppArgs[nPos] = malloc( pParamTypeDescr->nSize ),
-#else
-                    *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
-#endif
-                    pUnoArgs[nPos], pParamTypeDescr,
-                    pThis->getBridge()->getUno2Cpp() );
+                    pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
+                    pUnoArgs[nPos], pParamTypeDescr, pThis->getBridge()->getUno2Cpp() );
 
                 pTempIndizes[nTempIndizes] = nPos; // has to be reconverted
                 // will be released at reconversion
@@ -166,22 +214,40 @@ static void cpp_call(
             }
             else // direct way
             {
-                *(void **)pCppStack = pCppArgs[nPos] = pUnoArgs[nPos];
+                pCppArgs[nPos] = pUnoArgs[nPos];
                 // no longer needed
                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );
             }
+            INSERT_INT64( &(pCppArgs[nPos]), nGPR, pGPR, pStack );
         }
-        pCppStack += sizeof(sal_Int32); // standard parameter length
     }
 
     try
     {
-        OSL_ENSURE( !( (pCppStack - pCppStackStart ) & 3), "UNALIGNED STACK !!! (Please DO panic)" );
-        CPPU_CURRENT_NAMESPACE::callVirtualMethod(
-            pAdjustedThisPtr, aVtableSlot.index,
-            pCppReturn, pReturnTypeDescr,
-            (sal_Int32 *)pCppStackStart, (pCppStack - pCppStackStart) / sizeof(sal_Int32) );
-        // NO exception occurred...
+        try {
+            CPPU_CURRENT_NAMESPACE::callVirtualMethod(
+                pAdjustedThisPtr, aVtableSlot.index,
+                pCppReturn, pReturnTypeRef, bSimpleReturn,
+                pStackStart, ( pStack - pStackStart ),
+                pGPR, nGPR,
+                pFPR, nFPR );
+        } catch (const Exception &) {
+            throw;
+        } catch (const std::exception & e) {
+            OUStringBuffer buf;
+            buf.append("C++ code threw ");
+            appendCString(buf, typeid(e).name());
+            buf.append(": ");
+            appendCString(buf, e.what());
+            throw RuntimeException(
+                buf.makeStringAndClear(), Reference< XInterface >());
+        } catch (...) {
+            throw RuntimeException(
+                OUString(
+                        "C++ code threw unknown exception"),
+                Reference< XInterface >());
+        }
+
         *ppUnoExc = 0;
 
         // reconvert temporary params
@@ -206,9 +272,6 @@ static void cpp_call(
             }
             // destroy temp cpp param => cpp: every param was constructed
             uno_destructData( pCppArgs[nIndex], pParamTypeDescr, cpp_release );
-#ifdef BROKEN_ALLOCA
-            free( pCppArgs[nIndex] );
-#endif
 
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
         }
@@ -232,26 +295,14 @@ static void cpp_call(
             // destroy temp cpp param => cpp: every param was constructed
             uno_destructData( pCppArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], cpp_release );
             TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
-#ifdef BROKEN_ALLOCA
-            free( pCppArgs[nIndex] );
-#endif
         }
         // return type
         if (pReturnTypeDescr)
             TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
     }
-    if (pCppReturn && pUnoReturn != pCppReturn)
-    {
-#ifdef BROKEN_ALLOCA
-        free( pCppReturn );
-#endif
-    }
-#ifdef BROKEN_ALLOCA
-    free( pCppStackStart );
-#endif
 }
 
-}
+//==================================================================================================
 
 namespace bridges { namespace cpp_uno { namespace shared {
 
@@ -262,16 +313,25 @@ void unoInterfaceProxyDispatch(
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
         = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy * >(pUnoI);
+#if OSL_DEBUG_LEVEL > 0
+    typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
+#endif
 
     switch (pMemberDescr->eTypeClass)
     {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
     {
+#if OSL_DEBUG_LEVEL > 0
+        // determine vtable call index
+        sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
+        OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
+#endif
         VtableSlot aVtableSlot(
-            getVtableSlot(
-                reinterpret_cast<
+                getVtableSlot(
+                    reinterpret_cast<
                     typelib_InterfaceAttributeTypeDescription const * >(
                         pMemberDescr)));
+
         if (pReturn)
         {
             // dependent dispatch
@@ -298,7 +358,7 @@ void unoInterfaceProxyDispatch(
             // dependent dispatch
             aVtableSlot.index += 1; // get, then set method
             cpp_call(
-                pThis, aVtableSlot,
+                pThis, aVtableSlot, // get, then set method
                 pReturnTypeRef,
                 1, &aParam,
                 pReturn, pArgs, ppException );
@@ -310,11 +370,17 @@ void unoInterfaceProxyDispatch(
     }
     case typelib_TypeClass_INTERFACE_METHOD:
     {
+#if OSL_DEBUG_LEVEL > 0
+        // determine vtable call index
+        sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
+        OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
+#endif
         VtableSlot aVtableSlot(
-            getVtableSlot(
-                reinterpret_cast<
+                getVtableSlot(
+                    reinterpret_cast<
                     typelib_InterfaceMethodTypeDescription const * >(
                         pMemberDescr)));
+
         switch (aVtableSlot.index)
         {
             // standard calls
@@ -333,8 +399,8 @@ void unoInterfaceProxyDispatch(
             if (pTD)
             {
                 uno_Interface * pInterface = 0;
-                (*pThis->pBridge->getUnoEnv()->getRegisteredInterface)(
-                    pThis->pBridge->getUnoEnv(),
+                (*pThis->getBridge()->getUnoEnv()->getRegisteredInterface)(
+                    pThis->getBridge()->getUnoEnv(),
                     (void **)&pInterface, pThis->oid.pData, (typelib_InterfaceTypeDescription *)pTD );
 
                 if (pInterface)

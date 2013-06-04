@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_MINGW_INTEL_CALLVIRTUALMETHOD_HXX
-#define INCLUDED_BRIDGES_SOURCE_CPP_UNO_MINGW_INTEL_CALLVIRTUALMETHOD_HXX
+#ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_X86_64_CALLVIRTUALMETHOD_HXX
+#define INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_X86_64_CALLVIRTUALMETHOD_HXX
 
 #include "sal/config.h"
 
@@ -29,9 +29,10 @@
 namespace CPPU_CURRENT_NAMESPACE {
 
 void callVirtualMethod(
-    void * pAdjustedThisPtr, sal_Int32 nVtableIndex, void * pRegisterReturn,
-    typelib_TypeDescription const * returnType, sal_Int32 * pStackLongs,
-    sal_Int32 nStackLongs);
+    void * pThis, sal_uInt32 nVtableIndex, void * pRegisterReturn,
+    typelib_TypeDescriptionReference * pReturnTypeRef, bool bSimpleReturn,
+    sal_uInt64 *pStack, sal_uInt32 nStack, sal_uInt64 *pGPR, sal_uInt32 nGPR,
+    double * pFPR, sal_uInt32 nFPR);
 
 }
 

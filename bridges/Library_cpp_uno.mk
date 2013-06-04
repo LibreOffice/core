@@ -135,10 +135,9 @@ bridge_noopt_objects := except
 bridge_asm_objects := call
 else ifeq ($(OS)$(COM),WNTGCC)
 bridges_SELECTED_BRIDGE := mingw_x86-64
-#bridge_asm_objects := call
-bridge_noopt_objects := uno2cpp
-bridge_exception_objects := callvirtualmethod cpp2uno dllinit except smallstruct
-#bridge_exception_objects := cpp2uno dllinit except smallstruct
+bridge_asm_objects := call
+bridge_noncallexception_noopt_objects := callvirtualmethod
+bridge_exception_objects := abi cpp2uno except uno2cpp
 endif
 
 else ifeq ($(OS)$(CPU),SOLARISI)

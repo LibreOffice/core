@@ -16,264 +16,100 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-    .text
+	.text
+	.align 2
+.globl privateSnippetExecutor
+privateSnippetExecutor:
+.LFB3:
+	pushq	%rbp
+.LCFI0:
+	movq	%rsp, %rbp
+.LCFI1:
+	subq	$160, %rsp
+.LCFI2:
+	movq	%r10, -152(%rbp)		# Save (nVtableOffset << 32) + nFunctionIndex
 
-.globl _privateSnippetExecutorGeneral
-_privateSnippetExecutorGeneral:
-.LFBg:
-    movl    %esp,%ecx
-    pushl   %ebp              # proper stack frame needed for exception handling
-.LCFIg0:
-    movl    %esp,%ebp
-.LCFIg1:
-    subl    $0x4,%esp         # 32bit returnValue
-    pushl   %esp              # 32bit &returnValue
-    pushl   %ecx              # 32bit pCallStack
-    pushl   %edx              # 32bit nVtableOffset
-    pushl   %eax              # 32bit nFunctionIndex
-    call    _cpp_vtable_call
-    movl    16(%esp),%eax     # 32bit returnValue
-    leave
-    ret
-.LFEg:
-    .long   .-_privateSnippetExecutorGeneral
+	movq	%rdi, -112(%rbp)		# Save GP registers
+	movq	%rsi, -104(%rbp)
+	movq	%rdx, -96(%rbp)
+	movq	%rcx, -88(%rbp)
+	movq	%r8 , -80(%rbp)
+	movq	%r9 , -72(%rbp)
+	
+	movsd	%xmm0, -64(%rbp)		# Save FP registers
+	movsd	%xmm1, -56(%rbp)
+	movsd	%xmm2, -48(%rbp)
+	movsd	%xmm3, -40(%rbp)
+	movsd	%xmm4, -32(%rbp)
+	movsd	%xmm5, -24(%rbp)
+	movsd	%xmm6, -16(%rbp)
+	movsd	%xmm7, -8(%rbp)
 
-.globl _privateSnippetExecutorVoid
-_privateSnippetExecutorVoid:
-.LFBv:
-    movl    %esp,%ecx
-    pushl   %ebp              # proper stack frame needed for exception handling
-.LCFIv0:
-    movl    %esp,%ebp
-.LCFIv1:
-    pushl   $0                # 32bit null pointer (returnValue not used)
-    pushl   %ecx              # 32bit pCallStack
-    pushl   %edx              # 32bit nVtableOffset
-    pushl   %eax              # 32bit nFunctionIndex
-    call    _cpp_vtable_call
-    leave
-    ret
-.LFEv:
-    .long   .-_privateSnippetExecutorVoid
+	leaq	-144(%rbp), %r9			# 6th param: sal_uInt64 * pRegisterReturn
+	leaq	16(%rbp), %r8			# 5rd param: void ** ovrflw
+	leaq	-64(%rbp), %rcx			# 4th param: void ** fpreg
+	leaq	-112(%rbp), %rdx		# 3rd param: void ** gpreg
+	movl	-148(%rbp), %esi		# 2nd param: sal_int32 nVtableOffset
+	movl	-152(%rbp), %edi		# 1st param: sal_int32 nFunctionIndex
+	
+	call	cpp_vtable_call
 
-.globl _privateSnippetExecutorHyper
-_privateSnippetExecutorHyper:
-.LFBh:
-    movl    %esp,%ecx
-    pushl   %ebp              # proper stack frame needed for exception handling
-.LCFIh0:
-    movl    %esp,%ebp
-.LCFIh1:
-    subl    $0x8,%esp         # 64bit returnValue
-    pushl   %esp              # 32bit &returnValue
-    pushl   %ecx              # 32bit pCallStack
-    pushl   %edx              # 32bit nVtableOffset
-    pushl   %eax              # 32bit nFunctionIndex
-    call    _cpp_vtable_call
-    movl    16(%esp),%eax     # 64bit returnValue, lower half
-    movl    20(%esp),%edx     # 64bit returnValue, upper half
-    leave
-    ret
-.LFEh:
-    .long   .-_privateSnippetExecutorHyper
+	cmp	$10, %rax					# typelib_TypeClass_FLOAT
+	je	.Lfloat
+	cmp	$11, %rax					# typelib_TypeClass_DOUBLE
+	je	.Lfloat
 
-.globl _privateSnippetExecutorFloat
-_privateSnippetExecutorFloat:
-.LFBf:
-    movl    %esp,%ecx
-    pushl   %ebp              # proper stack frame needed for exception handling
-.LCFIf0:
-    movl    %esp,%ebp
-.LCFIf1:
-    subl    $0x4,%esp         # 32bit returnValue
-    pushl   %esp              # 32bit &returnValue
-    pushl   %ecx              # 32bit pCallStack
-    pushl   %edx              # 32bit nVtableOffset
-    pushl   %eax              # 32bit nFunctionIndex
-    call    _cpp_vtable_call
-    flds    16(%esp)          # 32bit returnValue
-    leave
-    ret
-.LFEf:
-    .long   .-_privateSnippetExecutorFloat
+	movq	-144(%rbp), %rax		# Return value (int case)
+	movq	-136(%rbp), %rdx		# Return value (int case)
+	movq	-144(%rbp), %xmm0		# Return value (int case)
+	movq	-136(%rbp), %xmm1		# Return value (int case)
+	jmp	.Lfinish
+.Lfloat:
+	movlpd	-144(%rbp), %xmm0		# Return value (float/double case)
 
-.globl _privateSnippetExecutorDouble
-_privateSnippetExecutorDouble:
-.LFBd:
-    movl    %esp,%ecx
-    pushl   %ebp              # proper stack frame needed for exception handling
-.LCFId0:
-    movl    %esp,%ebp
-.LCFId1:
-    subl    $0x8,%esp         # 64bit returnValue
-    pushl   %esp              # 32bit &returnValue
-    pushl   %ecx              # 32bit pCallStack
-    pushl   %edx              # 32bit nVtableOffset
-    pushl   %eax              # 32bit nFunctionIndex
-    call    _cpp_vtable_call
-    fldl    16(%esp)          # 64bit returnValue
-    leave
-    ret
-.LFEd:
-    .long   .-_privateSnippetExecutorDouble
-
-.globl _privateSnippetExecutorClass
-_privateSnippetExecutorClass:
-.LFBc:
-    movl    %esp,%ecx
-    pushl   %ebp              # proper stack frame needed for exception handling
-.LCFIc0:
-    movl    %esp,%ebp
-.LCFIc1:
-    subl    $0x4,%esp         # 32bit returnValue
-    pushl   %esp              # 32bit &returnValue
-    pushl   %ecx              # 32bit pCallStack
-    pushl   %edx              # 32bit nVtableOffset
-    pushl   %eax              # 32bit nFunctionIndex
-    call    _cpp_vtable_call
-    movl    16(%esp),%eax     # 32bit returnValue
-    leave
-    ret     $4
-.LFEc:
-    .long   .-_privateSnippetExecutorClass
-
-    .section .eh_frame,"dr"
+.Lfinish:
+	leave
+	ret
+.LFE3:
+	.long	.-privateSnippetExecutor
+	# see http://refspecs.linuxfoundation.org/LSB_3.0.0/LSB-Core-generic/LSB-Core-generic/ehframechpt.html
+	# for details of the .eh_frame, the "Common Information Entry" and "Frame Description Entry" formats
+	# and http://mentorembedded.github.io/cxx-abi/exceptions.pdf for more info
+	.section	.eh_frame,"a"
 .Lframe1:
-    .long   .LECIE1-.LSCIE1   # length
+	.long	.LECIE1-.LSCIE1
 .LSCIE1:
-    .long   0                 # CIE_ID
-    .byte   1                 # version
-    .string "zR"              # augmentation
-    .uleb128 1                # code_alignment_factor
-    .sleb128 -4               # data_alignment_factor
-    .byte   8                 # return_address_register
-    .uleb128 1                # augmentation size 1:
-    .byte   0x1B              #  FDE Encoding (pcrel sdata4)
-                              # initial_instructions:
-    .byte   0x0C              #  DW_CFA_def_cfa %esp, 4
-    .uleb128 4
-    .uleb128 4
-    .byte   0x88              #  DW_CFA_offset ret, 1
-    .uleb128 1
-    .align 4
+	.long	0x0
+	.byte	0x1
+	.string	"zR"
+	.uleb128 0x1
+	.sleb128 -8
+	.byte	0x10
+	.uleb128 0x1
+	.byte	0x1b
+	.byte	0xc
+	.uleb128 0x7
+	.uleb128 0x8
+	.byte	0x90
+	.uleb128 0x1
+	.align 8
 .LECIE1:
-.LSFDEg:
-    .long   .LEFDEg-.LASFDEg  # length
-.LASFDEg:
-    .long   .LASFDEg-.Lframe1 # CIE_pointer
-    .long   .LFBg-.           # initial_location
-    .long   .LFEg-.LFBg       # address_range
-    .uleb128 0                # augmentation size 0
-                              # instructions:
-    .byte   0x04              #  DW_CFA_advance_loc4
-    .long   .LCFIg0-.LFBg
-    .byte   0x0E              #  DW_CFA_def_cfa_offset 8
-    .uleb128 8
-    .byte   0x85              #  DW_CFA_offset %ebp, 2
-    .uleb128 2
-    .byte   0x04              #  DW_CFA_advance_loc4
-    .long   .LCFIg1-.LCFIg0
-    .byte   0x0D              #  DW_CFA_def_cfa_register %ebp
-    .uleb128 5
-    .align 4
-.LEFDEg:
-.LSFDEv:
-    .long   .LEFDEv-.LASFDEv  # length
-.LASFDEv:
-    .long   .LASFDEv-.Lframe1 # CIE_pointer
-    .long   .LFBv-.           # initial_location
-    .long   .LFEv-.LFBv       # address_range
-    .uleb128 0                # augmentation size 0
-                              # instructions:
-    .byte   0x04              #  DW_CFA_advance_loc4
-    .long   .LCFIv0-.LFBv
-    .byte   0x0E              #  DW_CFA_def_cfa_offset 8
-    .uleb128 8
-    .byte   0x85              #  DW_CFA_offset %ebp, 2
-    .uleb128 2
-    .byte   0x04              #  DW_CFA_advance_loc4
-    .long   .LCFIv1-.LCFIv0
-    .byte   0x0D              #  DW_CFA_def_cfa_register %ebp
-    .uleb128 5
-    .align 4
-.LEFDEv:
-.LSFDEh:
-    .long   .LEFDEh-.LASFDEh  # length
-.LASFDEh:
-    .long   .LASFDEh-.Lframe1 # CIE_pointer
-    .long   .LFBh-.           # initial_location
-    .long   .LFEh-.LFBh       # address_range
-    .uleb128 0                # augmentation size 0
-                              # instructions:
-    .byte   0x04              #  DW_CFA_advance_loc4
-    .long   .LCFIh0-.LFBh
-    .byte   0x0E              #  DW_CFA_def_cfa_offset 8
-    .uleb128 8
-    .byte   0x85              #  DW_CFA_offset %ebp, 2
-    .uleb128 2
-    .byte   0x04              #  DW_CFA_advance_loc4
-    .long   .LCFIh1-.LCFIh0
-    .byte   0x0D              #  DW_CFA_def_cfa_register %ebp
-    .uleb128 5
-    .align 4
-.LEFDEh:
-.LSFDEf:
-    .long   .LEFDEf-.LASFDEf  # length
-.LASFDEf:
-    .long   .LASFDEf-.Lframe1 # CIE_pointer
-    .long   .LFBf-.           # initial_location
-    .long   .LFEf-.LFBf       # address_range
-    .uleb128 0                # augmentation size 0
-                              # instructions:
-    .byte   0x04              #  DW_CFA_advance_loc4
-    .long   .LCFIf0-.LFBf
-    .byte   0x0E              #  DW_CFA_def_cfa_offset 8
-    .uleb128 8
-    .byte   0x85              #  DW_CFA_offset %ebp, 2
-    .uleb128 2
-    .byte   0x04              #  DW_CFA_advance_loc4
-    .long   .LCFIf1-.LCFIf0
-    .byte   0x0D              #  DW_CFA_def_cfa_register %ebp
-    .uleb128 5
-    .align 4
-.LEFDEf:
-.LSFDEd:
-    .long   .LEFDEd-.LASFDEd  # length
-.LASFDEd:
-    .long   .LASFDEd-.Lframe1 # CIE_pointer
-    .long   .LFBd-.           # initial_location
-    .long   .LFEd-.LFBd       # address_range
-    .uleb128 0                # augmentation size 0
-                              # instructions:
-    .byte   0x04              #  DW_CFA_advance_loc4
-    .long   .LCFId0-.LFBd
-    .byte   0x0E              #  DW_CFA_def_cfa_offset 8
-    .uleb128 8
-    .byte   0x85              #  DW_CFA_offset %ebp, 2
-    .uleb128 2
-    .byte   0x04              #  DW_CFA_advance_loc4
-    .long   .LCFId1-.LCFId0
-    .byte   0x0D              #  DW_CFA_def_cfa_register %ebp
-    .uleb128 5
-    .align 4
-.LEFDEd:
-.LSFDEc:
-    .long   .LEFDEc-.LASFDEc  # length
-.LASFDEc:
-    .long   .LASFDEc-.Lframe1 # CIE_pointer
-    .long   .LFBc-.           # initial_location
-    .long   .LFEc-.LFBc       # address_range
-    .uleb128 0                # augmentation size 0
-                              # instructions:
-    .byte   0x04              #  DW_CFA_advance_loc4
-    .long   .LCFIc0-.LFBc
-    .byte   0x0E              #  DW_CFA_def_cfa_offset 8
-    .uleb128 8
-    .byte   0x85              #  DW_CFA_offset %ebp, 2
-    .uleb128 2
-    .byte   0x04              #  DW_CFA_advance_loc4
-    .long   .LCFIc1-.LCFIc0
-    .byte   0x0D              #  DW_CFA_def_cfa_register %ebp
-    .uleb128 5
-    .align 4
-.LEFDEc:
+.LSFDE1:
+	.long	.LEFDE1-.LASFDE1
+.LASFDE1:
+	.long	.LASFDE1-.Lframe1
+	.long	.LFB3-.
+	.long	.LFE3-.LFB3
+	.uleb128 0x0
+	.byte	0x4
+	.long	.LCFI0-.LFB3
+	.byte	0xe
+	.uleb128 0x10
+	.byte	0x86
+	.uleb128 0x2
+	.byte	0x4
+	.long	.LCFI1-.LCFI0
+	.byte	0xd
+	.uleb128 0x6
+	.align 8
+.LEFDE1:
