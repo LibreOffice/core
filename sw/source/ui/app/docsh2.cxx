@@ -872,7 +872,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         const SfxFilter* pFlt = GetMedium()->GetFilter();
                         if(!pFlt || pFlt->GetUserData() != pHtmlFlt->GetUserData())
                         {
-                            QueryBox aQuery(&pViewFrm->GetWindow(), SW_RES(MSG_SAVEAS_HTML_QUERY));
+                            MessageDialog aQuery(&pViewFrm->GetWindow(),
+                                "SaveAsHTMLDialog", "modules/swriter/ui/saveashtmldialog.ui");
+
                             if(RET_YES == aQuery.Execute())
                                 bLocalHasName = sal_False;
                             else

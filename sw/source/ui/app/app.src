@@ -451,12 +451,6 @@ QueryBox MSG_SAVE_HTML_QUERY
     DEFBUTTON = WB_DEF_YES ;
     Message [ en-US ] = "Conversion into HTML format \nmay cause information loss. \nDo you want to save the document?" ;
 };
-QueryBox MSG_SAVEAS_HTML_QUERY
-{
-    BUTTONS = WB_YES_NO;
-    DEFBUTTON = WB_DEF_NO ;
-    Message [ en-US ] = "The source code can only be displayed if the document is saved in HTML format.\nWould you like to save the document as HTML?";
-};
 
 String STR_ABSTRACT_TITLE
 {

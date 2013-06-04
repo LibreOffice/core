@@ -34,7 +34,6 @@
 
 // For the interface because the RID_APP_BEGIN is now Desktop.
 #define RID_SW_NAME                     ( RC_APP_BEGIN + 8)
-#define MSG_SAVEAS_HTML_QUERY           ( RC_APP_BEGIN + 9)
 
 
 #define STR_UNBENANNT                   (RC_APP_BEGIN + 13)

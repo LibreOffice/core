@@ -106,6 +106,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/renameautotextdialog \
 	sw/uiconfig/swriter/ui/renameobjectdialog \
 	sw/uiconfig/swriter/ui/rowheight \
+	sw/uiconfig/swriter/ui/saveashtmldialog \
 	sw/uiconfig/swriter/ui/sortdialog \
 	sw/uiconfig/swriter/ui/splittable \
 	sw/uiconfig/swriter/ui/statisticsinfopage \
