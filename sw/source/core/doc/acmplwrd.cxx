@@ -265,7 +265,7 @@ bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
         std::pair<editeng::SortedAutoCompleteStrings::const_iterator, bool>
             aInsPair = m_WordList.insert(pNew);
 
-        m_LookupTree->insert( OUString(aNewWord) );
+        m_LookupTree->insert( OUString(aNewWord).copy(0, nWrdLen) );
 
         if (aInsPair.second)
         {
