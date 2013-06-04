@@ -680,7 +680,7 @@ namespace
                 destIterRange(begin,
                               acc,
                               rDstRect),
-                rSrcBitmap.get() == this );
+                isSharedBuffer(rSrcBitmap) );
             damaged( rDstRect );
         }
 
@@ -903,7 +903,7 @@ namespace
                                        Masks::clipmask_polarity,
                                        FastMask >::type(acc),
                               rDstRect),
-                rSrcBitmap.get() == this);
+                isSharedBuffer(rSrcBitmap));
             damaged( rDstRect );
         }
 
@@ -1145,6 +1145,11 @@ void BitmapDevice::setDamageTracker( const IBitmapDeviceDamageTrackerSharedPtr& 
 PaletteMemorySharedVector BitmapDevice::getPalette() const
 {
     return mpImpl->mpPalette;
+}
+
+bool BitmapDevice::isSharedBuffer( const BitmapDeviceSharedPtr& rOther ) const
+{
+    return rOther.get()->getBuffer().get() == getBuffer().get();
 }
 
 void BitmapDevice::clear( Color fillColor )
@@ -1507,7 +1512,7 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
         assertImagePoint(aDestPoint,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
-        if( rAlphaMask.get() == this )
+        if( isSharedBuffer(rAlphaMask) )
         {
             // src == dest, copy rAlphaMask beforehand
             // ---------------------------------------------------
@@ -1560,7 +1565,7 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
 
         if( isCompatibleClipMask( rClip ) )
         {
-            if( rAlphaMask.get() == this )
+            if( isSharedBuffer(rAlphaMask) )
             {
                 // src == dest, copy rAlphaMask beforehand
                 // ---------------------------------------------------

@@ -140,6 +140,9 @@ public:
      */
     PaletteMemorySharedVector getPalette() const;
 
+    /// Check if this and the other BitmapDevice share a buffer
+    bool isSharedBuffer( const BitmapDeviceSharedPtr& rOther ) const;
+
     /** Clear whole device with given color
 
         This method works like a fill with the given color value,
