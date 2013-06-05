@@ -498,10 +498,10 @@ void ParaPropertyPanel::InitToolBoxSpacing()
     // See issue 122446 for more details.
     maTbxUL_IncDec->SetItemImage(
         BT_TBX_UL_INC,
-        sfx2::sidebar::Tools::GetImage(mpTbxUL_IncDec->GetItemCommand(BT_TBX_UL_INC), mxFrame));
+        sfx2::sidebar::Tools::GetImage(maTbxUL_IncDec->GetItemCommand(BT_TBX_UL_INC), mxFrame));
     maTbxUL_IncDec->SetItemImage(
         BT_TBX_UL_DEC,
-        sfx2::sidebar::Tools::GetImage(mpTbxUL_IncDec->GetItemCommand(BT_TBX_UL_DEC), mxFrame));
+        sfx2::sidebar::Tools::GetImage(maTbxUL_IncDec->GetItemCommand(BT_TBX_UL_DEC), mxFrame));
 
     aLink = LINK( this, ParaPropertyPanel, ClickUL_IncDec_Hdl_Impl );
     maTbxUL_IncDec->SetSelectHdl(aLink);
