@@ -1701,8 +1701,14 @@ void Border::importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm )
     }
 }
 
-void Border::finalizeImport()
+void Border::finalizeImport( bool bRTL )
 {
+    if ( bRTL )
+    {
+        BorderLineModel aTmp = maModel.maLeft;
+        maModel.maLeft = maModel.maRight;
+        maModel.maRight = aTmp;
+    }
     maApiData.mbBorderUsed = maModel.maLeft.mbUsed || maModel.maRight.mbUsed || maModel.maTop.mbUsed || maModel.maBottom.mbUsed;
     maApiData.mbDiagUsed   = maModel.maDiagonal.mbUsed;
 
@@ -2579,13 +2585,22 @@ void Dxf::finalizeImport()
 {
     if( mxFont.get() )
         mxFont->finalizeImport();
+    bool bRTL = false;
     // number format already finalized by the number formats buffer
     if( mxAlignment.get() )
+    {
         mxAlignment->finalizeImport();
+        // how do we detect RTL when text dir is OOX_XF_CONTEXT? ( seems you
+        // would need access to the cell content, which we don't here )
+        if ( mxAlignment->getModel().mnTextDir == OOX_XF_TEXTDIR_RTL )
+            bRTL = true;
+    }
     if( mxProtection.get() )
         mxProtection->finalizeImport();
     if( mxBorder.get() )
-        mxBorder->finalizeImport();
+    {
+        mxBorder->finalizeImport( bRTL );
+    }
     if( mxFill.get() )
         mxFill->finalizeImport();
 }
@@ -3110,7 +3125,9 @@ void StylesBuffer::finalizeImport()
     // number formats
     maNumFmts.finalizeImport();
     // borders and fills
-    maBorders.forEachMem( &Border::finalizeImport );
+    // is there a document wide RTL setting that we
+    // would/could need to pass to finalizeImport here ?
+    maBorders.forEachMem( &Border::finalizeImport, false );
     maFills.forEachMem( &Fill::finalizeImport );
     // style XFs and cell XFs
     maStyleXfs.forEachMem( &Xf::finalizeImport );
