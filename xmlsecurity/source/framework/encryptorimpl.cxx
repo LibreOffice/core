@@ -32,7 +32,7 @@ namespace cssxw = com::sun::star::xml::wrapper;
 #define SERVICE_NAME "com.sun.star.xml.crypto.sax.Encryptor"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.EncryptorImpl"
 
-EncryptorImpl::EncryptorImpl(const Reference<XComponentContext> & xContext) : EncryptorImpl(xContext)
+EncryptorImpl::EncryptorImpl(const Reference<XComponentContext> & xContext) : EncryptorImpl_Base(xContext)
 {
     m_nReferenceId = -1;
 }
