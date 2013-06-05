@@ -21,25 +21,17 @@
 
 /** -- idl definition -- **/
 
-#ifndef __com_sun_star_xml_crypto_securityenvironment_idl_
-#define __com_sun_star_xml_crypto_securityenvironment_idl_
+#ifndef __com_sun_star_xml_crypto_SecurityEnvironment_idl_
+#define __com_sun_star_xml_crypto_SecurityEnvironment_idl_
 
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/uno/Exception.idl>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.idl>
-#include <com/sun/star/lang/XUnoTunnel.idl>
-#include <com/sun/star/lang/XInitialization.idl>
 
 module com { module sun { module star { module xml { module crypto {
 
 /**
  * Service of XSecurityEnvironment
  */
-service SecurityEnvironment {
-    interface com::sun::star::xml::crypto::XSecurityEnvironment ;
-    interface com::sun::star::lang::XInitialization ;
-    interface com::sun::star::lang::XUnoTunnel;
-} ;
+service SecurityEnvironment : XSecurityEnvironment;
 
 } ; } ; } ; } ; } ;
 

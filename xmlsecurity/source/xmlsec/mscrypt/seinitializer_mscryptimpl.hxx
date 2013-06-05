@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx>
 
 #include <libxml/tree.h>
@@ -51,10 +52,10 @@ class SEInitializer_MSCryptImpl : public cppu::WeakImplHelper2
  ******************************************************************************/
 {
 private:
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
 
 public:
-    SEInitializer_MSCryptImpl(const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > &rxMSF);
+    SEInitializer_MSCryptImpl(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > &rxContext);
     virtual ~SEInitializer_MSCryptImpl();
 
     /* XSEInitializer */

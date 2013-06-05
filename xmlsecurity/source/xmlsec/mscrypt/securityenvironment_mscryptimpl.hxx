@@ -31,14 +31,13 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
@@ -51,10 +50,9 @@
 #include "sal/types.h"
 
 
-class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper4<
+class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper3<
     ::com::sun::star::xml::crypto::XSecurityEnvironment ,
-    ::com::sun::star::lang::XInitialization ,
-    ::com::sun::star::lang::XServiceInfo ,
+    ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::lang::XUnoTunnel >
 {
     private :
@@ -128,11 +126,6 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper4<
         virtual OUString SAL_CALL getSecurityEnvironmentInformation(  )
             throw (::com::sun::star::uno::RuntimeException);
 
-
-        //Methods from XInitialization
-        virtual void SAL_CALL initialize(
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments
-        ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         //Methods from XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;

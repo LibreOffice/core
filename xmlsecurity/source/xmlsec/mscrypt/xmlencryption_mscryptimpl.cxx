@@ -318,11 +318,6 @@ XMLEncryption_MSCryptImpl :: decrypt(
     return aTemplate;
 }
 
-/* XInitialization */
-void SAL_CALL XMLEncryption_MSCryptImpl :: initialize( const Sequence< Any >& /*aArguments*/ ) throw( Exception, RuntimeException ) {
-    // TBD
-} ;
-
 /* XServiceInfo */
 OUString SAL_CALL XMLEncryption_MSCryptImpl :: getImplementationName() throw( RuntimeException ) {
     return impl_getImplementationName() ;

@@ -248,11 +248,6 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
     return aTemplate;
 }
 
-/* XInitialization */
-void SAL_CALL XMLSignature_MSCryptImpl :: initialize( const Sequence< Any >& /*aArguments*/ ) throw( Exception, RuntimeException ) {
-    // TBD
-} ;
-
 /* XServiceInfo */
 OUString SAL_CALL XMLSignature_MSCryptImpl :: getImplementationName() throw( RuntimeException ) {
     return impl_getImplementationName() ;
