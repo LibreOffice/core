@@ -588,6 +588,7 @@ namespace dbaui
     {
         if ( m_aCreationModeHandler.IsSet() )
             m_aCreationModeHandler.Call( this );
+        OnDatasourceTypeSelected(m_pDatasourceType);
         return 1L;
     }
 
