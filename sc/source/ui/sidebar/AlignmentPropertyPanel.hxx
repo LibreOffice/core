@@ -78,14 +78,6 @@ private:
     ::sfx2::sidebar::ControllerItem             maAngleControl;
     ::sfx2::sidebar::ControllerItem             maStackControl;
 
-    Image                                       maIMGAlignLeft;
-    Image                                       maIMGAlignCenter;
-    Image                                       maIMGAlignRight;
-    Image                                       maIMGAlignJust;
-    Image                                       maIMGAlignTop;
-    Image                                       maIMGAlignCenterV;
-    Image                                       maIMGAlignBottom;
-
     SvxCellHorJustify                           meHorAlignState;
     SvxCellVerJustify                           meVerAlignState;
 
