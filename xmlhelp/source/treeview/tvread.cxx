@@ -545,6 +545,11 @@ TVChildTarget::~TVChildTarget()
 
 void TVChildTarget::Check(TVDom* tvDom)
 {
+    if (tvDom->children.empty())
+    {
+        return;
+    }
+
         unsigned i = 0;
         bool h = false;
 
@@ -807,7 +812,8 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     }
 
     osl::Directory aDirectory( url );
-    osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_FileSize | osl_FileStatus_Mask_FileURL );
+    osl::FileStatus aFileStatus(
+            osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_FileURL );
     if( osl::Directory::E_None == aDirectory.open() )
     {
         int idx_ = 0;
@@ -831,18 +837,17 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
                 ( str[idx_ + 3] == 'e' || str[idx_ + 3] == 'E' )    &&
                 ( str[idx_ + 4] == 'e' || str[idx_ + 4] == 'E' ) )
               {
-                OSL_ENSURE( aFileStatus.isValid( osl_FileStatus_Mask_FileSize ),
-                            "invalid file size" );
-
                 OUString baseName = aFileName.copy(0,idx_).toAsciiLowerCase();
                 if(! showBasic && baseName.compareToAscii("sbasic") == 0 )
                   continue;
                 osl::File aFile( aFileUrl );
                 if( osl::FileBase::E_None == aFile.open( osl_File_OpenFlag_Read ) )
                 {
+                    // use the file size, not aFileStatus size, in case the
+                    // tree file is a symlink
                     sal_uInt64 nSize;
                     aFile.getSize( nSize );
-                    configData.vFileLen.push_back( aFileStatus.getFileSize() );
+                    configData.vFileLen.push_back( nSize );
                     configData.vFileURL.push_back( aFileUrl );
                     aFile.close();
                 }
