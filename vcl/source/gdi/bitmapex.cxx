@@ -1218,4 +1218,153 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
     }
 }
 
+// -----------------------------------------------------------------------------
+
+BitmapEx VCL_DLLPUBLIC createBlendFrame(
+    const Size& rSize,
+    sal_uInt8 nAlpha,
+    Color aColorTopLeft,
+    Color aColorBottomRight)
+{
+    const sal_uInt32 nW(rSize.Width());
+    const sal_uInt32 nH(rSize.Height());
+
+    if(nW || nH)
+    {
+        Color aColTopRight(aColorTopLeft);
+        Color aColBottomLeft(aColorTopLeft);
+        const sal_uInt32 nDE(nW + nH);
+
+        aColTopRight.Merge(aColorBottomRight, 255 - sal_uInt8((nW * 255) / nDE));
+        aColBottomLeft.Merge(aColorBottomRight, 255 - sal_uInt8((nH * 255) / nDE));
+
+        return createBlendFrame(rSize, nAlpha, aColorTopLeft, aColTopRight, aColorBottomRight, aColBottomLeft);
+    }
+
+    return BitmapEx();
+}
+
+BitmapEx VCL_DLLPUBLIC createBlendFrame(
+    const Size& rSize,
+    sal_uInt8 nAlpha,
+    Color aColorTopLeft,
+    Color aColorTopRight,
+    Color aColorBottomRight,
+    Color aColorBottomLeft)
+{
+    static Size aLastSize(0, 0);
+    static sal_uInt8 nLastAlpha(0);
+    static Color aLastColorTopLeft(COL_BLACK);
+    static Color aLastColorTopRight(COL_BLACK);
+    static Color aLastColorBottomRight(COL_BLACK);
+    static Color aLastColorBottomLeft(COL_BLACK);
+    static BitmapEx aLastResult;
+
+    if(aLastSize == rSize
+        && nLastAlpha == nAlpha
+        && aLastColorTopLeft == aLastColorTopLeft
+        && aLastColorTopRight == aLastColorTopRight
+        && aLastColorBottomRight == aLastColorBottomRight
+        && aLastColorBottomLeft == aLastColorBottomLeft)
+    {
+        return aLastResult;
+    }
+
+    aLastSize = rSize;
+    nLastAlpha = nAlpha;
+    aLastColorTopLeft = aLastColorTopLeft;
+    aLastColorTopRight = aLastColorTopRight;
+    aLastColorBottomRight = aLastColorBottomRight;
+    aLastColorBottomLeft = aLastColorBottomLeft;
+    aLastResult.Clear();
+
+    const long nW(rSize.Width());
+    const long nH(rSize.Height());
+
+    if(nW && nH)
+    {
+        sal_uInt8 aEraseTrans(0xff);
+        Bitmap aContent(rSize, 24);
+        AlphaMask aAlpha(rSize, &aEraseTrans);
+
+        aContent.Erase(COL_BLACK);
+
+        BitmapWriteAccess* pContent = aContent.AcquireWriteAccess();
+        BitmapWriteAccess* pAlpha = aAlpha.AcquireWriteAccess();
+
+        if(pContent && pAlpha)
+        {
+            long x(0);
+            long y(0);
+
+            // x == 0, y == 0
+            pContent->SetPixel(y, x, aColorTopLeft);
+            pAlpha->SetPixelIndex(y, x, nAlpha);
+
+            for(x = 1; x < nW - 1; x++) // y == 0
+            {
+                Color aMix(aColorTopLeft);
+
+                aMix.Merge(aColorTopRight, 255 - sal_uInt8((x * 255) / nW));
+                pContent->SetPixel(y, x, aMix);
+                pAlpha->SetPixelIndex(y, x, nAlpha);
+            }
+
+            // x == nW - 1, y == 0
+            pContent->SetPixel(y, x, aColorTopRight);
+            pAlpha->SetPixelIndex(y, x, nAlpha);
+
+            for(y = 1; y < nH - 1; y++) // x == 0 and nW - 1
+            {
+                Color aMixA(aColorTopLeft);
+                Color aMixB(aColorTopRight);
+
+                aMixA.Merge(aColorBottomLeft, 255 - sal_uInt8((y * 255) / nH));
+                pContent->SetPixel(y, 0, aMixA);
+                pAlpha->SetPixelIndex(y, 0, nAlpha);
+
+                aMixB.Merge(aColorBottomRight, 255 - sal_uInt8((y * 255) / nH));
+                pContent->SetPixel(y, nW - 1, aMixB);
+                pAlpha->SetPixelIndex(y, nW - 1, nAlpha);
+            }
+
+            x = 0; // x == 0, y == nH - 1
+            pContent->SetPixel(y, x, aColorBottomLeft);
+            pAlpha->SetPixelIndex(y, x, nAlpha);
+
+            for(x = 1; x < nW - 1; x++) // y == nH - 1
+            {
+                Color aMix(aColorBottomLeft);
+
+                aMix.Merge(aColorBottomRight, 255 - sal_uInt8(((x - 0)* 255) / nW));
+                pContent->SetPixel(y, x, aMix);
+                pAlpha->SetPixelIndex(y, x, nAlpha);
+            }
+
+            // x == nW - 1, y == nH - 1
+            pContent->SetPixel(y, x, aColorBottomRight);
+            pAlpha->SetPixelIndex(y, x, nAlpha);
+
+            aContent.ReleaseAccess(pContent);
+            aAlpha.ReleaseAccess(pAlpha);
+
+            aLastResult = BitmapEx(aContent, aAlpha);
+        }
+        else
+        {
+            if(pContent)
+            {
+                aContent.ReleaseAccess(pContent);
+            }
+
+            if(pAlpha)
+            {
+                aAlpha.ReleaseAccess(pAlpha);
+            }
+        }
+    }
+
+    return aLastResult;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

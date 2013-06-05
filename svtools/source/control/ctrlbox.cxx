@@ -307,16 +307,14 @@ void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
 
             if(nEdgeBlendingPercent)
             {
-                Bitmap aBitmap(rUDEvt.GetDevice()->GetBitmap(aRect.TopLeft(), aRect.GetSize()));
+                const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
+                const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
+                const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
+                const BitmapEx aBlendFrame(createBlendFrame(aRect.GetSize(), nAlpha, rTopLeft, rBottomRight));
 
-                if(!aBitmap.IsEmpty())
+                if(!aBlendFrame.IsEmpty())
                 {
-                    const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
-                    const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
-                    const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
-
-                    aBitmap.DrawBlendFrame(nAlpha, rTopLeft, rBottomRight);
-                    rUDEvt.GetDevice()->DrawBitmap(aRect.TopLeft(), aBitmap);
+                    rUDEvt.GetDevice()->DrawBitmapEx(aRect.TopLeft(), aBlendFrame);
                 }
             }
 

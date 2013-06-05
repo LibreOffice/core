@@ -341,16 +341,14 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem, Rectangle aRect )
 
         if(nEdgeBlendingPercent)
         {
-            Bitmap aBitmap(maVirDev.GetBitmap(aRect.TopLeft(), aRect.GetSize()));
+            const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
+            const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
+            const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
+            const BitmapEx aBlendFrame(createBlendFrame(aRect.GetSize(), nAlpha, rTopLeft, rBottomRight));
 
-            if(!aBitmap.IsEmpty())
+            if(!aBlendFrame.IsEmpty())
             {
-                const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
-                const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
-                const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
-
-                aBitmap.DrawBlendFrame(nAlpha, rTopLeft, rBottomRight);
-                maVirDev.DrawBitmap(aRect.TopLeft(), aBitmap);
+                maVirDev.DrawBitmapEx(aRect.TopLeft(), aBlendFrame);
             }
         }
     }
