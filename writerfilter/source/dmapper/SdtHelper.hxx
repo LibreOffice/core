@@ -44,6 +44,8 @@ namespace writerfilter {
             /// Date format, see com/sun/star/awt/UnoControlDateFieldModel.idl
             boost::optional<sal_Int16> m_oDateFormat;
 
+            bool m_bHasElements;
+
             /// Create and append the drawing::XControlShape, containing the various models.
             void createControlShape(com::sun::star::awt::Size aSize, com::sun::star::uno::Reference<com::sun::star::awt::XControlModel>);
         public:
@@ -53,6 +55,8 @@ namespace writerfilter {
             std::vector<OUString>& getDropDownItems();
             OUStringBuffer& getSdtTexts();
             boost::optional<sal_Int16>& getDateFormat();
+            /// If createControlShape() was ever called.
+            bool hasElements();
 
             /// Create drop-down control from w:sdt's w:dropDownList.
             void createDropDownControl();

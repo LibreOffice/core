@@ -143,11 +143,12 @@ DomainMapper::~DomainMapper()
                 xEnumeration->nextElement();
             }
         }
-        if( nIndexes )
+        if( nIndexes || m_pImpl->m_pSdtHelper->hasElements())
         {
             //index update has to wait until first view is created
             uno::Reference< document::XEventBroadcaster > xBroadcaster(xIndexesSupplier, uno::UNO_QUERY);
-            xBroadcaster->addEventListener(uno::Reference< document::XEventListener >(new ModelEventListener));
+            if (xBroadcaster.is())
+                xBroadcaster->addEventListener(uno::Reference< document::XEventListener >(new ModelEventListener(nIndexes, m_pImpl->m_pSdtHelper->hasElements())));
         }
 
 
