@@ -52,11 +52,9 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
     : Control(
         pParent,
             ScResId(RID_PROPERTYPANEL_SC_ALIGNMENT)),
-      mpTBHorizontalBackground(ControlFactory::CreateToolBoxBackground(this)),
       mpTBHorizontal(ControlFactory::CreateToolBox(
               mpTBHorizontalBackground.get(),
               ScResId(TBX_HORIZONTAL_ALIGNMENT))),
-      mpTBVerticalBackground(ControlFactory::CreateToolBoxBackground(this)),
       mpTBVertical(ControlFactory::CreateToolBox(
               mpTBVerticalBackground.get(),
               ScResId(TBX_VERTICAL_ALIGN))),

@@ -59,9 +59,7 @@ public:
 
 private:
     //ui controls
-    ::boost::scoped_ptr<Window>                 mpTBHorizontalBackground;
     ::boost::scoped_ptr< ToolBox >              mpTBHorizontal;
-    ::boost::scoped_ptr<Window>                 mpTBVerticalBackground;
     ::boost::scoped_ptr< ToolBox >              mpTBVertical;
     ::boost::scoped_ptr< FixedText >            mpFTLeftIndent;
     ::boost::scoped_ptr< MetricField >          mpMFLeftIndent;
