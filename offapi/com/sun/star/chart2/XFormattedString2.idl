@@ -35,6 +35,13 @@ module com { module sun { module star { module chart2 {
 */
 interface XFormattedString2
 {
+    /** Access to various character properties.
+
+        Supports the properties of the
+        com::sun::star::style::CharacterProperties service, and also optionally
+        those of the com::sun::star::style::CharacterPropertiesAsian and
+        com::sun::star::style::CharacterPropertiesComplex services.
+     */
     interface com::sun::star::beans::XPropertySet;
 
     interface com::sun::star::chart2::XFormattedString;
