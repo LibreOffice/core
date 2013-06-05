@@ -789,7 +789,7 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
             {
                 SfxStyleSheetBasePool* pSSPool = mpView->GetDocSh()->GetStyleSheetPool();
                 String aStyleName((SdResId(STR_LAYOUT_OUTLINE)));
-                aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
+                aStyleName.AppendAscii( " 1" );
                 SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
                 if( pFirstStyleSheet )
                     pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, sal_False, (const SfxPoolItem**)&pItem);

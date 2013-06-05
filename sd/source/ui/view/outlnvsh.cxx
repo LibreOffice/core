@@ -1378,7 +1378,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
         aPageStr = String(SdResId( STR_SD_PAGE ));
         aPageStr += sal_Unicode(' ');
         aPageStr += OUString::number( (sal_Int32)(nPos + 1) );   // sal_uLong -> sal_Int32
-        aPageStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " / " ));
+        aPageStr.AppendAscii( " / " );
         aPageStr += OUString::number( nPageCount );
 
         aLayoutStr = pPage->GetLayoutName();

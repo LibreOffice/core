@@ -821,59 +821,59 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     if( NULL == mpDoc )
         throw lang::DisposedException();
 
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DashTable") ) )
+    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.DashTable" ) )
     {
         if( !mxDashTable.is() )
             mxDashTable = SvxUnoDashTable_createInstance( mpDoc );
 
         return mxDashTable;
     }
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GradientTable") ) )
+    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.GradientTable" ) )
     {
         if( !mxGradientTable.is() )
             mxGradientTable = SvxUnoGradientTable_createInstance( mpDoc );
 
         return mxGradientTable;
     }
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.HatchTable") ) )
+    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.HatchTable" ) )
     {
         if( !mxHatchTable.is() )
             mxHatchTable = SvxUnoHatchTable_createInstance( mpDoc );
 
         return mxHatchTable;
     }
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.BitmapTable") ) )
+    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.BitmapTable" ) )
     {
         if( !mxBitmapTable.is() )
             mxBitmapTable = SvxUnoBitmapTable_createInstance( mpDoc );
 
         return mxBitmapTable;
     }
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TransparencyGradientTable") ) )
+    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.TransparencyGradientTable" ) )
     {
         if( !mxTransGradientTable.is() )
             mxTransGradientTable = SvxUnoTransGradientTable_createInstance( mpDoc );
 
         return mxTransGradientTable;
     }
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MarkerTable") ) )
+    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.MarkerTable" ) )
     {
         if( !mxMarkerTable.is() )
             mxMarkerTable = SvxUnoMarkerTable_createInstance( mpDoc );
 
         return mxMarkerTable;
     }
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.NumberingRules" ) ) )
+    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.text.NumberingRules" ) )
     {
         return uno::Reference< uno::XInterface >( SvxCreateNumRule( mpDoc ), uno::UNO_QUERY );
     }
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Background" ) ) )
+    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.Background" ) )
     {
         return uno::Reference< uno::XInterface >(
             static_cast<uno::XWeak*>(new SdUnoPageBackground( mpDoc )));
     }
 
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Defaults") ) )
+    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.Defaults" ) )
     {
         if( !mxDrawingPool.is() )
             mxDrawingPool = SdUnoCreatePool( mpDoc );
@@ -897,38 +897,38 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         return SvUnoImageMapPolygonObject_createInstance( ImplGetSupportedMacroItems() );
     }
 
-    if( ( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.Settings") ) ) ||
-        ( !mbImpressDoc && ( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DocumentSettings") ) ) ) ||
-        ( mbImpressDoc && ( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.DocumentSettings") ) ) ) )
+    if( ( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.document.Settings" ) ) ||
+        ( !mbImpressDoc && ( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.drawing.DocumentSettings" ) ) ) ||
+        ( mbImpressDoc && ( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.presentation.DocumentSettings" ) ) ) )
     {
         return sd::DocumentSettings_createInstance( this );
     }
 
-    if( ( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextField.DateTime") ) ) ||
-        ( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.textfield.DateTime") ) ) )
+    if( ( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.text.TextField.DateTime" ) ) ||
+        ( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.text.textfield.DateTime" ) ) )
     {
         return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::DATE );
     }
 
-    if( (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TextField.Header"))) ||
-        (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.textfield.Header"))) )
+    if( (0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.presentation.TextField.Header")) ||
+        (0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.presentation.textfield.Header")) )
     {
         return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::PRESENTATION_HEADER );
     }
 
-    if( (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TextField.Footer"))) ||
-        (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.textfield.Footer"))) )
+    if( (0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.presentation.TextField.Footer")) ||
+        (0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.presentation.textfield.Footer")) )
     {
         return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::PRESENTATION_FOOTER );
     }
 
-    if( (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TextField.DateTime"))) ||
-        (0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.textfield.DateTime"))) )
+    if( (0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.presentation.TextField.DateTime")) ||
+        (0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.presentation.textfield.DateTime")) )
     {
         return (::cppu::OWeakObject * )new SvxUnoTextField( text::textfield::Type::PRESENTATION_DATE_TIME );
     }
 
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.xml.NamespaceMap") ) )
+    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.xml.NamespaceMap" ) )
     {
         static sal_uInt16 aWhichIds[] = { SDRATTR_XMLATTRIBUTES, EE_CHAR_XMLATTRIBS, EE_PARA_XMLATTRIBS, 0 };
 
@@ -936,17 +936,17 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     }
 
     // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ExportGraphicObjectResolver") ) )
+    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.document.ExportGraphicObjectResolver" ) )
     {
         return (::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE );
     }
 
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ImportGraphicObjectResolver") ) )
+    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.document.ImportGraphicObjectResolver" ) )
     {
         return (::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_READ );
     }
 
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ExportEmbeddedObjectResolver") ) )
+    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.document.ExportEmbeddedObjectResolver" ) )
     {
         ::comphelper::IEmbeddedHelper *pPersist = mpDoc ? mpDoc->GetPersist() : NULL;
         if( NULL == pPersist )
@@ -955,7 +955,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         return (::cppu::OWeakObject * )new SvXMLEmbeddedObjectHelper( *pPersist, EMBEDDEDOBJECTHELPER_MODE_WRITE );
     }
 
-    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.ImportEmbeddedObjectResolver") ) )
+    if( 0 == aServiceSpecifier.reverseCompareTo( "com.sun.star.document.ImportEmbeddedObjectResolver" ) )
     {
         ::comphelper::IEmbeddedHelper *pPersist = mpDoc ? mpDoc->GetPersist() : NULL;
         if( NULL == pPersist )
@@ -1589,7 +1589,7 @@ void ImplPDFExportComments( uno::Reference< drawing::XDrawPage > xPage, vcl::PDF
 
             vcl::PDFNote aNote;
             String sTitle( xAnnotation->getAuthor() );
-            sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+            sTitle.AppendAscii( ", " );
             sTitle += aStr;
             aNote.Title = sTitle;
             aNote.Contents = xText->getString();
@@ -2705,7 +2705,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         } while( !bUnique );
 
         String aLayoutName( aPrefix );
-        aLayoutName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
+        aLayoutName.AppendAscii( SD_LT_SEPARATOR );
         aLayoutName += String(SdResId(STR_LAYOUT_OUTLINE));
 
         // create styles

@@ -141,7 +141,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
         }
-        else if( !aURL.Len() && lDescriptor[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FileName")) )
+        else if( !aURL.Len() && lDescriptor[nProperty].Name == "FileName" )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
