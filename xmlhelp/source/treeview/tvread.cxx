@@ -36,6 +36,7 @@
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/string.hxx>
+#include <unotools/pathoptions.hxx>
 
 namespace treeview {
 
@@ -492,9 +493,9 @@ TVChildTarget::TVChildTarget( const ConfigData& configData,TVDom* tvDom )
         Elements[i] = new TVRead( configData,tvDom->children[i] );
 }
 
-TVChildTarget::TVChildTarget( const Reference< XMultiServiceFactory >& xMSF )
+TVChildTarget::TVChildTarget( const Reference< XComponentContext >& xContext )
 {
-    ConfigData configData = init( xMSF );
+    ConfigData configData = init( xContext );
 
     if( configData.locale.isEmpty() || configData.system.isEmpty() )
         return;
@@ -710,10 +711,10 @@ TVChildTarget::hasByHierarchicalName( const OUString& aName )
 
 
 
-ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
+ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
 {
     ConfigData configData;
-    Reference< XMultiServiceFactory > sProvider( getConfiguration(comphelper::getComponentContext(xSMgr)) );
+    Reference< XMultiServiceFactory > sProvider( getConfiguration(xContext) );
 
     /**********************************************************************/
     /*                       reading Office.Common                        */
@@ -729,7 +730,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
       instPath = OUString( "$(instpath)/help" );
 
     // replace anything like $(instpath);
-    subst( xSMgr,instPath );
+    subst( instPath );
 
     /**********************************************************************/
     /*                       reading setup                                */
@@ -743,7 +744,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
 
     try
     {
-        Reference< lang::XMultiServiceFactory > xConfigProvider = theDefaultProvider::get( comphelper::getComponentContext(xSMgr) );
+        Reference< lang::XMultiServiceFactory > xConfigProvider = theDefaultProvider::get( xContext );
 
         uno::Sequence < uno::Any > lParams(1);
         beans::PropertyValue                       aParam ;
@@ -978,29 +979,10 @@ TVChildTarget::getBooleanKey(const Reference<
 }
 
 
-void TVChildTarget::subst( const Reference< XMultiServiceFactory >& m_xSMgr,
-                           OUString& instpath ) const
+void TVChildTarget::subst( OUString& instpath ) const
 {
-    Reference< XConfigManager >  xCfgMgr;
-    if( m_xSMgr.is() )
-    {
-        try
-        {
-            xCfgMgr =
-                Reference< XConfigManager >(
-                    m_xSMgr->createInstance( OUString( "com.sun.star.config.SpecialConfigManager" ) ),
-                    UNO_QUERY );
-        }
-        catch( const com::sun::star::uno::Exception& )
-        {
-            OSL_ENSURE( xCfgMgr.is()," cant instantiate the special config manager " );
-        }
-    }
-
-    OSL_ENSURE( xCfgMgr.is(), "specialconfigmanager not found\n" );
-
-    if( xCfgMgr.is() )
-        instpath = xCfgMgr->substituteVariables( instpath );
+    SvtPathOptions aOptions;
+    instpath = aOptions.SubstituteVariable( instpath );
 }
 
 

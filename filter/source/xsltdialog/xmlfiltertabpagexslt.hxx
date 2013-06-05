@@ -33,7 +33,7 @@ class filter_info_impl;
 class XMLFilterTabPageXSLT : public TabPage
 {
 public:
-    XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
+    XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr );
     virtual ~XMLFilterTabPageXSLT();
 
     bool FillInfo( filter_info_impl* pInfo );

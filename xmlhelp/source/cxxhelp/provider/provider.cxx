@@ -38,6 +38,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/pathoptions.hxx>
 #include <rtl/bootstrap.hxx>
 
 #include "databases.hxx"
@@ -442,27 +443,8 @@ ContentProvider::getBooleanKey(
 
 void ContentProvider::subst( OUString& instpath ) const
 {
-    uno::Reference< frame::XConfigManager > xCfgMgr;
-    if( m_xContext.is() )
-    {
-        try
-        {
-            xCfgMgr =
-                uno::Reference< frame::XConfigManager >(
-                    m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.config.SpecialConfigManager", m_xContext),
-                    uno::UNO_QUERY );
-        }
-        catch( const uno::Exception&)
-        {
-            OSL_ENSURE( xCfgMgr.is(),
-                        "cant instantiate the special config manager " );
-        }
-    }
-
-    OSL_ENSURE( xCfgMgr.is(), "specialconfigmanager not found\n" );
-
-    if( xCfgMgr.is() )
-        instpath = xCfgMgr->substituteVariables( instpath );
+    SvtPathOptions aOptions;
+    instpath = aOptions.SubstituteVariable( instpath );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

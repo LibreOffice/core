@@ -27,6 +27,7 @@
 #include <tools/urlobj.hxx>
 #include <svtools/headbar.hxx>
 #include <unotools/streamwrap.hxx>
+#include <unotools/pathoptions.hxx>
 #include <osl/file.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -93,11 +94,8 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog(Window* pParent,
         mxTypeDetection = Reference< XNameContainer >::query( rxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.TypeDetection", rxContext ) );
         mxExtendedTypeDetection = Reference< XNameContainer >::query( rxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.ExtendedTypeDetectionFactory", rxContext ) );
 
-        Reference< XConfigManager > xCfgMgr( rxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.config.SpecialConfigManager", rxContext ), UNO_QUERY );
-        if( xCfgMgr.is() )
-        {
-            m_sTemplatePath = xCfgMgr->substituteVariables( m_sTemplatePath );
-        }
+        SvtPathOptions aOptions;
+        m_sTemplatePath = aOptions.SubstituteVariable( m_sTemplatePath );
     }
     catch(const Exception&)
     {

@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <comphelper/processfactory.hxx>
 #include "tvfactory.hxx"
 #include "tvread.hxx"
 
@@ -34,8 +35,8 @@ using namespace com::sun::star::container;
 
 
 
-TVFactory::TVFactory( const uno::Reference< XMultiServiceFactory >& xMSF )
-    : m_xMSF( xMSF )
+TVFactory::TVFactory( const uno::Reference< XComponentContext >& xContext )
+    : m_xContext( xContext )
 {
 }
 
@@ -157,7 +158,7 @@ TVFactory::createInstanceWithArguments(
 
     if( ! m_xHDS.is() )
     {
-        cppu::OWeakObject* p = new TVChildTarget( m_xMSF );
+        cppu::OWeakObject* p = new TVChildTarget( m_xContext );
         m_xHDS = Reference< XInterface >( p );
     }
 
@@ -241,7 +242,7 @@ Reference< XInterface > SAL_CALL
 TVFactory::CreateInstance(
     const Reference< XMultiServiceFactory >& xMultiServiceFactory )
 {
-    XServiceInfo* xP = (XServiceInfo*) new TVFactory( xMultiServiceFactory );
+    XServiceInfo* xP = (XServiceInfo*) new TVFactory( comphelper::getComponentContext(xMultiServiceFactory) );
     return Reference< XInterface >::query( xP );
 }
 

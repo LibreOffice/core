@@ -82,7 +82,7 @@ XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const 
         aCtrlSiz = aSiz;
     }
 
-    mpXSLTPage = new XMLFilterTabPageXSLT( &maTabCtrl, mrResMgr, mxContext );
+    mpXSLTPage = new XMLFilterTabPageXSLT( &maTabCtrl, mrResMgr );
     mpXSLTPage->SetInfo( mpNewInfo );
 
     maTabCtrl.SetTabPage( RID_XML_FILTER_TABPAGE_XSLT, mpXSLTPage );

@@ -32,12 +32,13 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/oslfile2streamwrap.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <osl/file.hxx>
+#include <unotools/pathoptions.hxx>
 #include <unotools/streamwrap.hxx>
-#include <tools/stream.hxx>
-#include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <svl/urihelper.hxx>
-#include <osl/file.hxx>
+#include <tools/stream.hxx>
+#include <tools/urlobj.hxx>
 
 #include <rtl/uri.hxx>
 
@@ -65,23 +66,13 @@ XMLFilterJarHelper::XMLFilterJarHelper( const Reference< XComponentContext >& rx
     sVndSunStarPackage( "vnd.sun.star.Package:" ),
     sXSLTPath( "$(user)/xslt/" ),
     sTemplatePath( "$(user)/template/" ),
-    sSpecialConfigManager( "com.sun.star.config.SpecialConfigManager" ),
     sPump( "com.sun.star.io.Pump" ),
     sProgPath( "$(prog)/" )
 {
-    try
-    {
-        Reference< XConfigManager > xCfgMgr( rxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.config.SpecialConfigManager", rxContext ), UNO_QUERY );
-        if( xCfgMgr.is() )
-        {
-            sProgPath = xCfgMgr->substituteVariables( sProgPath );
-            sXSLTPath = xCfgMgr->substituteVariables( sXSLTPath );
-            sTemplatePath = xCfgMgr->substituteVariables( sTemplatePath );
-        }
-    }
-    catch(const Exception&)
-    {
-    }
+    SvtPathOptions aOptions;
+    sProgPath = aOptions.SubstituteVariable( sProgPath );
+    sXSLTPath = aOptions.SubstituteVariable( sXSLTPath );
+    sTemplatePath = aOptions.SubstituteVariable( sTemplatePath );
 }
 
 static OUString encodeZipUri( const OUString& rURI )

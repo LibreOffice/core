@@ -252,7 +252,7 @@ namespace treeview {
 
         TVChildTarget( const ConfigData& configData,TVDom* tvDom );
 
-        TVChildTarget( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF );
+        TVChildTarget( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
 
         ~TVChildTarget();
 
@@ -287,7 +287,7 @@ namespace treeview {
         std::vector< rtl::Reference< TVRead > >   Elements;
 
         ConfigData init(
-            const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF );
+            const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
         getConfiguration(
@@ -306,9 +306,7 @@ namespace treeview {
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
                     const char* key) const;
 
-      void subst(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xMSgr,
-            OUString& instpath ) const;
+      void subst( OUString& instpath ) const;
 
     bool SearchAndInsert(TVDom* p, TVDom* tvDom);
 

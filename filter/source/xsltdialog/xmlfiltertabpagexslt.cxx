@@ -22,6 +22,7 @@
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <sfx2/filedlghelper.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <unotools/pathoptions.hxx>
 #include <osl/file.hxx>
 #include <svl/urihelper.hxx>
 
@@ -35,7 +36,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
-XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, const css::uno::Reference< XComponentContext >& rxContext ) :
+XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr ) :
     TabPage( pParent, ResId( RID_XML_FILTER_TABPAGE_XSLT, rResMgr ) ),
 
     maFTDocType( this, ResId( FT_XML_DOCTYPE, rResMgr ) ),
@@ -64,16 +65,8 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, co
 {
     FreeResource();
 
-    try
-    {
-        css::uno::Reference< XConfigManager > xCfgMgr( rxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.config.SpecialConfigManager", rxContext ), UNO_QUERY );
-        if( xCfgMgr.is() )
-            sInstPath = xCfgMgr->substituteVariables( sInstPath );
-    }
-    catch(const Exception&)
-    {
-        OSL_FAIL( "XMLFilterTabPageXSLT::XMLFilterTabPageXSLT exception catched!" );
-    }
+    SvtPathOptions aOptions;
+    sInstPath = aOptions.SubstituteVariable( sInstPath );
 
     maPBExprotXSLT.SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
     maPBImportXSLT.SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );

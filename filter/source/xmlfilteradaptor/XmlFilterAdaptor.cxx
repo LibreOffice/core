@@ -49,6 +49,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <unotools/pathoptions.hxx>
 
 using namespace comphelper;
 using namespace com::sun::star::uno;
@@ -160,9 +161,8 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
             //Load the Styles from the Template URL Supplied in the TypeDetection file
             if(msTemplateName.indexOf(OUString( "file:" ))==-1)
             {
-                Reference< XConfigManager >xCfgMgr ( mxContext->getServiceManager()->createInstanceWithContext(
-                    "com.sun.star.config.SpecialConfigManager", mxContext ), UNO_QUERY );
-                OUString PathString(xCfgMgr->substituteVariables(OUString("$(progurl)")));
+                SvtPathOptions aOptions;
+                OUString PathString = aOptions.SubstituteVariable(OUString("$(progurl)"));
                 PathString = PathString.concat(OUString( "/" ));
                 msTemplateName=PathString.concat(msTemplateName);
             }

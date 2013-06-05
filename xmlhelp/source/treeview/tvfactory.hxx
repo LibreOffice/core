@@ -41,7 +41,7 @@ namespace treeview {
     {
     public:
 
-        TVFactory( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF );
+        TVFactory( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
 
         ~TVFactory();
 
@@ -120,7 +120,7 @@ namespace treeview {
     private:
 
         // Members
-        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >  m_xMSF;
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >      m_xContext;
         com::sun::star::uno::Reference< com::sun::star::uno::XInterface >             m_xHDS;
     };
 

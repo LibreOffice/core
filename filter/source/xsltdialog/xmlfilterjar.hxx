@@ -48,7 +48,6 @@ private:
     OUString sVndSunStarPackage;
     OUString sXSLTPath;
     OUString sTemplatePath;
-    OUString sSpecialConfigManager;
     OUString sPump;
     OUString sProgPath;
 };
