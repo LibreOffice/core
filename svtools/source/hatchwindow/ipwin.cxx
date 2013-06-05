@@ -210,31 +210,50 @@ Point SvResizeHelper::GetTrackPosPixel( const Rectangle & rRect ) const
     Point aBR = aOuter.BottomRight();
     Point aTR = aOuter.TopRight();
     Point aBL = aOuter.BottomLeft();
+    bool bRTL = Application::GetSettings().GetLayoutRTL();
     switch( nGrab )
     {
         case 0:
+            // FIXME: disable it for RTL because it's wrong calculations
+            if( bRTL )
+                break;
             aPos = aRect.TopLeft() - aOuter.TopLeft();
             break;
         case 1:
             aPos.Y() =  aRect.Top() - aOuter.Top();
             break;
         case 2:
+            // FIXME: disable it for RTL because it's wrong calculations
+            if( bRTL )
+                break;
             aPos =  aRect.TopRight() - aTR;
             break;
         case 3:
-            aPos.X() = aRect.Right() - aTR.X();
+            if( bRTL )
+                aPos.X() = aRect.Left() - aTR.X();
+            else
+                aPos.X() = aRect.Right() - aTR.X();
             break;
         case 4:
+            // FIXME: disable it for RTL because it's wrong calculations
+            if( bRTL )
+                break;
             aPos =  aRect.BottomRight() - aBR;
             break;
         case 5:
             aPos.Y() = aRect.Bottom() - aBR.Y();
             break;
         case 6:
+            // FIXME: disable it for RTL because it's wrong calculations
+            if( bRTL )
+                break;
             aPos =  aRect.BottomLeft() - aBL;
             break;
         case 7:
-            aPos.X() = aRect.Left() - aOuter.Left();
+            if( bRTL )
+                aPos.X() = aRect.Right() + aOuter.Right() - aOuter.TopRight().X();
+            else
+                aPos.X() = aRect.Left() - aOuter.Left();
             break;
         case 8:
             aPos = aRect.TopLeft() - aOuter.TopLeft();
@@ -256,38 +275,63 @@ Rectangle SvResizeHelper::GetTrackRectPixel( const Point & rTrackPos ) const
         Point aDiff = rTrackPos - aSelPos;
         aTrackRect = aOuter;
         Point aBR = aOuter.BottomRight();
+        bool bRTL = Application::GetSettings().GetLayoutRTL();
         switch( nGrab )
         {
             case 0:
                 aTrackRect.Top() += aDiff.Y();
-                aTrackRect.Left() += aDiff.X();
+                // ugly solution for resizing OLE objects in RTL
+                if( bRTL )
+                    aTrackRect.Right() = aBR.X() - aDiff.X();
+                else
+                    aTrackRect.Left() += aDiff.X();
                 break;
             case 1:
                 aTrackRect.Top() += aDiff.Y();
                 break;
             case 2:
                 aTrackRect.Top() += aDiff.Y();
-                aTrackRect.Right() = aBR.X() + aDiff.X();
+                // ugly solution for resizing OLE objects in RTL
+                if( bRTL )
+                    aTrackRect.Left() -= aDiff.X();
+                else
+                    aTrackRect.Right() = aBR.X() + aDiff.X();
                 break;
             case 3:
-                aTrackRect.Right() = aBR.X() + aDiff.X();
+                // ugly solution for resizing OLE objects in RTL
+                if( bRTL )
+                    aTrackRect.Left() -= aDiff.X();
+                else
+                    aTrackRect.Right() = aBR.X() + aDiff.X();
                 break;
             case 4:
                 aTrackRect.Bottom() = aBR.Y() + aDiff.Y();
-                aTrackRect.Right() = aBR.X() + aDiff.X();
+                // ugly solution for resizing OLE objects in RTL
+                if( bRTL )
+                    aTrackRect.Left() -= aDiff.X();
+                else
+                    aTrackRect.Right() = aBR.X() + aDiff.X();
                 break;
             case 5:
                 aTrackRect.Bottom() = aBR.Y() + aDiff.Y();
                 break;
             case 6:
                 aTrackRect.Bottom() = aBR.Y() + aDiff.Y();
-                aTrackRect.Left() += aDiff.X();
+                // ugly solution for resizing OLE objects in RTL
+                if( bRTL )
+                    aTrackRect.Right() = aBR.X() - aDiff.X();
+                else
+                    aTrackRect.Left() += aDiff.X();
                 break;
             case 7:
-                aTrackRect.Left() += aDiff.X();
+                // ugly solution for resizing OLE objects in RTL
+                if( bRTL )
+                    aTrackRect.Right() = aBR.X() - aDiff.X();
+                else
+                    aTrackRect.Left() += aDiff.X();
                 break;
             case 8:
-                if( Application::GetSettings().GetLayoutRTL() )
+                if( bRTL )
                     aDiff.X() = -aDiff.X(); // workaround for move in RTL mode
                 aTrackRect.SetPos( aTrackRect.TopLeft() + aDiff );
                 break;
