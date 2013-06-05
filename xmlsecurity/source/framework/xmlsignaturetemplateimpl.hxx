@@ -23,22 +23,20 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 
 #include <vector>
 
-class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper3<
+class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper2<
     ::com::sun::star::xml::crypto::XXMLSignatureTemplate ,
-    ::com::sun::star::lang::XInitialization ,
     ::com::sun::star::lang::XServiceInfo >
 {
     private :
@@ -82,11 +80,6 @@ class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper3<
         virtual ::com::sun::star::xml::crypto::SecurityOperationStatus
             SAL_CALL getStatus(  )
             throw (::com::sun::star::uno::RuntimeException);
-
-        //Methods from XInitialization
-        virtual void SAL_CALL initialize(
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments
-        ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         //Methods from XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;

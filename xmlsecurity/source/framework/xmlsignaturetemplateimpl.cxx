@@ -104,11 +104,6 @@ void SAL_CALL XMLSignatureTemplateImpl::setStatus(
     return m_nStatus;
 }
 
-/* XInitialization */
-void SAL_CALL XMLSignatureTemplateImpl :: initialize( const Sequence< Any >& /*aArguments*/ ) throw( Exception, RuntimeException ) {
-    // TBD
-} ;
-
 /* XServiceInfo */
 OUString SAL_CALL XMLSignatureTemplateImpl :: getImplementationName() throw( RuntimeException ) {
     return impl_getImplementationName() ;
