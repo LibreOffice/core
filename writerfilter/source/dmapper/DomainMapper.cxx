@@ -3343,8 +3343,9 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     break;
     case NS_ooxml::LN_CT_SdtDate_dateFormat:
     {
-        if (sStringValue == "M/d/yyyy")
-            // See com/sun/star/awt/UnoControlDateFieldModel.idl, DateFormat; sadly there are no constants for this.
+        // See com/sun/star/awt/UnoControlDateFieldModel.idl, DateFormat; sadly there are no constants for this.
+        if (sStringValue == "M/d/yyyy" || sStringValue == "M.d.yyyy")
+            // Approximate with MM.dd.yyy
             m_pImpl->m_pSdtHelper->getDateFormat().reset(8);
         else
         {
