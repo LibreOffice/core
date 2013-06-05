@@ -70,6 +70,8 @@ public:
 
     SFX_DECL_CHILDWINDOW_WITHID( ToolPanelChildWindow );
 
+    static void RegisterChildWindowIfEnabled (sal_Bool bVisible=sal_False, SfxModule *pMod=NULL, sal_uInt16 nFlags=0);
+
     // ::sfx2::ITaskPaneToolPanelAccess
     virtual void ActivateToolPanel( const OUString& i_rPanelURL );
 };

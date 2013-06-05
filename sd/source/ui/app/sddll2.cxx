@@ -126,7 +126,7 @@ void SdDLL::RegisterControllers()
     ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);
     ::sd::LeftPaneImpressChildWindow::RegisterChildWindow(0, pMod);
     ::sd::LeftPaneDrawChildWindow::RegisterChildWindow(0, pMod);
-    ::sd::ToolPanelChildWindow::RegisterChildWindow(0, pMod);
+    ::sd::ToolPanelChildWindow::RegisterChildWindowIfEnabled(0, pMod);
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindowIfEnabled(0, pMod);
 
     SvxFillToolBoxControl::RegisterControl(0, pMod);

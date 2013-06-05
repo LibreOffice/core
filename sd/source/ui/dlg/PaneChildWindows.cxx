@@ -215,6 +215,14 @@ void ToolPanelChildWindow::ActivateToolPanel( const OUString& i_rPanelURL )
     }
 }
 
+void ToolPanelChildWindow::RegisterChildWindowIfEnabled (sal_Bool bVisible,
+                                                         SfxModule *pMod,
+                                                         sal_uInt16 nFlags)
+{
+    if ( ! SfxViewFrame::IsSidebarEnabled() )
+        RegisterChildWindow( bVisible, pMod, nFlags );
+}
+
 } // end of namespace ::sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

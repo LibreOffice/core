@@ -3418,20 +3418,25 @@ bool SfxViewFrame::IsSidebarEnabled()
         }
 
         // rip out the services from framework/ for good measure
-        if( !bEnabled )
+        try
         {
-            try
+            uno::Reference< ui::XUIElementFactoryManager > xUIElementFactory = ui::UIElementFactoryManager::create( xContext );
+            if( !bEnabled )
             {
-                uno::Reference< ui::XUIElementFactoryManager > xUIElementFactory = ui::UIElementFactoryManager::create( xContext );
                 xUIElementFactory->deregisterFactory( "toolpanel", "ScPanelFactory", "" );
                 xUIElementFactory->deregisterFactory( "toolpanel", "SwPanelFactory", "" );
                 xUIElementFactory->deregisterFactory( "toolpanel", "SvxPanelFactory", "" );
                 xUIElementFactory->deregisterFactory( "toolpanel", "SdPanelFactory", "" );
             }
-            catch ( const uno::Exception &e )
+            else
             {
-                SAL_WARN( "sfx2.view", "Exception de-registering sidebar factories " << e.Message );
+                xUIElementFactory->deregisterFactory( "toolpanel", "DrawingFramework",
+                                                      "com.sun.star.presentation.PresentationDocument" );
             }
+        }
+        catch ( const uno::Exception &e )
+        {
+            SAL_WARN( "sfx2.view", "Exception de-registering sidebar factories " << e.Message );
         }
     }
 
