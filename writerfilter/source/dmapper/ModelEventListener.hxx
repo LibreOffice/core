@@ -30,8 +30,10 @@ namespace dmapper{
 class WRITERFILTER_DLLPRIVATE ModelEventListener :
     public cppu::WeakImplHelper1< ::com::sun::star::document::XEventListener >
 {
+    bool m_bIndexes;
+    bool m_bControls;
 public:
-    ModelEventListener();
+    ModelEventListener(bool bIndexes, bool bControls);
     ~ModelEventListener();
 
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException);

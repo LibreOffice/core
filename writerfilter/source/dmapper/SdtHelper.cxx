@@ -111,6 +111,7 @@ void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControl
 
     uno::Reference<text::XTextContent> xTextContent(xControlShape, uno::UNO_QUERY);
     m_rDM_Impl.appendTextContent(xTextContent, uno::Sequence< beans::PropertyValue >());
+    m_bHasElements = true;
 }
 
 std::vector<OUString>& SdtHelper::getDropDownItems()
@@ -126,6 +127,11 @@ OUStringBuffer& SdtHelper::getSdtTexts()
 boost::optional<sal_Int16>& SdtHelper::getDateFormat()
 {
     return m_oDateFormat;
+}
+
+bool SdtHelper::hasElements()
+{
+    return m_bHasElements;
 }
 
 } // namespace dmapper
