@@ -21,6 +21,17 @@
 This source file manages all plugin actions. It is not necessary to modify this
 file when adding new actions.
 */
+
+namespace
+{
+
+bool isPrefix( const string& prefix, const string& full)
+    {
+    return full.compare(0, prefix.size(), prefix) == 0;
+    }
+
+}
+
 namespace loplugin
 {
 
@@ -193,7 +204,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
             ; // ok
         else // scope is module
             {
-            if( strncmp( modifyFile.c_str(), ( SRCDIR "/" + scope + "/" ).c_str(), ( SRCDIR "/" + scope + "/" ).size()) != 0 )
+            if( !( isPrefix( SRCDIR "/" + scope + "/", modifyFile ) || isPrefix( SRCDIR "/include/" + scope + "/", modifyFile ) ) )
                 continue;
             }
         // Warn only now, so that files not in scope do not cause warnings.
