@@ -78,12 +78,6 @@ void SAL_CALL XMLEncryptionTemplateImpl::setStatus(
     return m_nStatus;
 }
 
-/* XInitialization */
-void SAL_CALL XMLEncryptionTemplateImpl :: initialize( const Sequence< Any >& /*aArguments*/ )
-    throw( Exception, RuntimeException ) {
-    // TBD
-} ;
-
 /* XServiceInfo */
 OUString SAL_CALL XMLEncryptionTemplateImpl :: getImplementationName() throw( RuntimeException ) {
     return impl_getImplementationName() ;
