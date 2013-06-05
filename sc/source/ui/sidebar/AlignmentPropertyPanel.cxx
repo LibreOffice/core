@@ -206,30 +206,30 @@ IMPL_LINK( AlignmentPropertyPanel, ClickStackHdl, void *, EMPTYARG )
 
 IMPL_LINK(AlignmentPropertyPanel, TbxHorAlignSelectHdl, ToolBox*, pToolBox)
 {
-    sal_uInt16 nId = pToolBox->GetCurItemId();
+    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
 
-    if(nId == ID_SUBSTLEFT)
+    if(aCommand == UNO_ALIGNLEFT)
     {
         if(meHorAlignState != SVX_HOR_JUSTIFY_LEFT)
             meHorAlignState = SVX_HOR_JUSTIFY_LEFT;
         else
             meHorAlignState = SVX_HOR_JUSTIFY_STANDARD;
     }
-    else if( nId == ID_SUBSTCENTER )
+    else if(aCommand == UNO_ALIGNHORIZONTALCENTER )
     {
         if(meHorAlignState != SVX_HOR_JUSTIFY_CENTER)
             meHorAlignState = SVX_HOR_JUSTIFY_CENTER;
         else
             meHorAlignState = SVX_HOR_JUSTIFY_STANDARD;
     }
-    else if( nId == ID_SUBSTRIGHT )
+    else if(aCommand == UNO_ALIGNRIGHT )
     {
         if(meHorAlignState != SVX_HOR_JUSTIFY_RIGHT)
             meHorAlignState = SVX_HOR_JUSTIFY_RIGHT;
         else
             meHorAlignState = SVX_HOR_JUSTIFY_STANDARD;
     }
-    else if( nId == ID_SUBSTJUSTIFY )
+    else if(aCommand == UNO_ALIGNBLOCK )
     {
         if(meHorAlignState != SVX_HOR_JUSTIFY_BLOCK)
             meHorAlignState = SVX_HOR_JUSTIFY_BLOCK;
@@ -246,24 +246,23 @@ IMPL_LINK(AlignmentPropertyPanel, TbxHorAlignSelectHdl, ToolBox*, pToolBox)
 
 IMPL_LINK(AlignmentPropertyPanel, TbxVerAlignSelectHdl, ToolBox*, pToolBox)
 {
-    sal_uInt16 nId = pToolBox->GetCurItemId();
+    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
 
-    //Bold
-    if(nId == IID_VERT_TOP)
+    if(aCommand == UNO_ALIGNTOP)
     {
         if(meVerAlignState != SVX_VER_JUSTIFY_TOP)
             meVerAlignState = SVX_VER_JUSTIFY_TOP;
         else
             meVerAlignState = SVX_VER_JUSTIFY_STANDARD;
     }
-    else if( nId == IID_VERT_CENTER )
+    else if(aCommand == UNO_ALIGNVCENTER)
     {
         if(meVerAlignState != SVX_VER_JUSTIFY_CENTER)
             meVerAlignState = SVX_VER_JUSTIFY_CENTER;
         else
             meVerAlignState = SVX_VER_JUSTIFY_STANDARD;
     }
-    else if( nId == IID_VERT_BOTTOM )
+    else if(aCommand == UNO_ALIGNBOTTOM)
     {
         if(meVerAlignState != SVX_VER_JUSTIFY_BOTTOM)
             meVerAlignState = SVX_VER_JUSTIFY_BOTTOM;
@@ -552,10 +551,15 @@ void AlignmentPropertyPanel::FormatDegrees(double& dTmp)
 
 void AlignmentPropertyPanel::UpdateHorAlign()
 {
-    mpTBHorizontal->SetItemState(ID_SUBSTLEFT,  STATE_NOCHECK);
-    mpTBHorizontal->SetItemState(ID_SUBSTCENTER,    STATE_NOCHECK);
-    mpTBHorizontal->SetItemState(ID_SUBSTRIGHT, STATE_NOCHECK);
-    mpTBHorizontal->SetItemState(ID_SUBSTJUSTIFY,STATE_NOCHECK);
+    const sal_uInt16 nIdLeft = mpTBHorizontal->GetItemId(UNO_ALIGNLEFT);
+    const sal_uInt16 nIdCenter = mpTBHorizontal->GetItemId(UNO_ALIGNHORIZONTALCENTER);
+    const sal_uInt16 nIdRight = mpTBHorizontal->GetItemId(UNO_ALIGNRIGHT);
+    const sal_uInt16 nIdBlock = mpTBHorizontal->GetItemId(UNO_ALIGNBLOCK);
+
+    mpTBHorizontal->SetItemState(nIdLeft, STATE_NOCHECK);
+    mpTBHorizontal->SetItemState(nIdCenter, STATE_NOCHECK);
+    mpTBHorizontal->SetItemState(nIdRight, STATE_NOCHECK);
+    mpTBHorizontal->SetItemState(nIdBlock, STATE_NOCHECK);
     mpFTLeftIndent->Disable();
     mpMFLeftIndent->Disable();
     if(meHorAlignState==SVX_HOR_JUSTIFY_REPEAT)
@@ -584,13 +588,13 @@ void AlignmentPropertyPanel::UpdateHorAlign()
     switch(meHorAlignState)
     {
     case SVX_HOR_JUSTIFY_LEFT:
-        mpTBHorizontal->SetItemState(ID_SUBSTLEFT,  STATE_CHECK);
+        mpTBHorizontal->SetItemState(nIdLeft, STATE_CHECK);
         mpFTLeftIndent->Enable();
         mpMFLeftIndent->Enable();
         break;
-    case SVX_HOR_JUSTIFY_CENTER:mpTBHorizontal->SetItemState(ID_SUBSTCENTER,    STATE_CHECK);break;
-    case SVX_HOR_JUSTIFY_RIGHT: mpTBHorizontal->SetItemState(ID_SUBSTRIGHT, STATE_CHECK);break;
-    case SVX_HOR_JUSTIFY_BLOCK: mpTBHorizontal->SetItemState(ID_SUBSTJUSTIFY,STATE_CHECK);break;
+    case SVX_HOR_JUSTIFY_CENTER:mpTBHorizontal->SetItemState(nIdCenter, STATE_CHECK);break;
+    case SVX_HOR_JUSTIFY_RIGHT: mpTBHorizontal->SetItemState(nIdRight, STATE_CHECK);break;
+    case SVX_HOR_JUSTIFY_BLOCK: mpTBHorizontal->SetItemState(nIdBlock, STATE_CHECK);break;
     default:;
     }
 }
@@ -599,15 +603,19 @@ void AlignmentPropertyPanel::UpdateHorAlign()
 
 void AlignmentPropertyPanel::UpdateVerAlign()
 {
-    mpTBVertical->SetItemState(IID_VERT_TOP,        STATE_NOCHECK);
-    mpTBVertical->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
-    mpTBVertical->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
+    const sal_uInt16 nIdTop = mpTBVertical->GetItemId(UNO_ALIGNTOP);
+    const sal_uInt16 nIdVCenter = mpTBVertical->GetItemId(UNO_ALIGNVCENTER);
+    const sal_uInt16 nIdBottom = mpTBVertical->GetItemId(UNO_ALIGNBOTTOM);
+
+    mpTBVertical->SetItemState(nIdTop, STATE_NOCHECK);
+    mpTBVertical->SetItemState(nIdVCenter, STATE_NOCHECK);
+    mpTBVertical->SetItemState(nIdBottom, STATE_NOCHECK);
 
     switch(meVerAlignState)
     {
-    case SVX_VER_JUSTIFY_TOP:   mpTBVertical->SetItemState(IID_VERT_TOP,        STATE_CHECK);break;
-    case SVX_VER_JUSTIFY_CENTER:mpTBVertical->SetItemState(IID_VERT_CENTER, STATE_CHECK);break;
-    case SVX_VER_JUSTIFY_BOTTOM:    mpTBVertical->SetItemState(IID_VERT_BOTTOM, STATE_CHECK);break;
+    case SVX_VER_JUSTIFY_TOP:   mpTBVertical->SetItemState(nIdTop, STATE_CHECK);break;
+    case SVX_VER_JUSTIFY_CENTER:mpTBVertical->SetItemState(nIdVCenter, STATE_CHECK);break;
+    case SVX_VER_JUSTIFY_BOTTOM:mpTBVertical->SetItemState(nIdBottom, STATE_CHECK);break;
     default:;
     }
 }
