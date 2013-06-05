@@ -241,6 +241,17 @@ Reference< chart2::data::XLabeledDataSequence2 > lcl_createAndAddSequenceToSerie
     return xLabeledSeq;
 }
 
+XMLPropStyleContext* lcl_GetStyleContext(
+                        const SvXMLStylesContext* pStylesCtxt,
+                        const SvXMLStyleContext*& rpStyle,
+                        OUString& rStyleName )
+{
+    rpStyle = pStylesCtxt->FindStyleChildContext( SchXMLImportHelper::GetChartFamilyID(), rStyleName );
+    XMLPropStyleContext* pPropStyleContext =
+                    const_cast< XMLPropStyleContext* >(dynamic_cast< const XMLPropStyleContext* >( rpStyle ));
+    return pPropStyleContext;
+}
+
 } // anonymous namespace
 
 // ================================================================================
@@ -850,58 +861,63 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
                                 SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles,
                                 const SvXMLStylesContext* pStylesCtxt,
                                 const SvXMLStyleContext*& rpStyle,
-                                OUString& rCurrStyleName )
+                                OUString& rCurrentStyleName )
 {
     std::list< RegressionStyle >::iterator iStyle;
 
     // iterate over regession etc
-    for( iStyle = rSeriesDefaultsAndStyles.maRegressionStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maRegressionStyleList.end(); ++iStyle )
+    for( iStyle = rSeriesDefaultsAndStyles.maRegressionStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maRegressionStyleList.end(); iStyle++ )
     {
         try
         {
-            if( !(iStyle->msStyleName).isEmpty() )
+            OUString aServiceName;
+            XMLPropStyleContext* pPropStyleContext;
+
+            if (!rCurrentStyleName.isEmpty())
             {
-                if( !rCurrStyleName.equals( iStyle->msStyleName ) )
+                XMLPropStyleContext* pCurrent = lcl_GetStyleContext(pStylesCtxt, rpStyle, rCurrentStyleName);
+                if( pCurrent )
                 {
-                    rCurrStyleName = iStyle->msStyleName;
-                    rpStyle = pStylesCtxt->FindStyleChildContext(
-                        SchXMLImportHelper::GetChartFamilyID(), rCurrStyleName );
-                }
-
-                XMLPropStyleContext* pPropStyleContext =
-                    const_cast< XMLPropStyleContext* >(
-                        dynamic_cast< const XMLPropStyleContext* >( rpStyle ));
-
-                if( pPropStyleContext )
-                {
+                    pPropStyleContext = pCurrent;
                     uno::Any aAny = SchXMLTools::getPropertyFromContext("RegressionType", pPropStyleContext, pStylesCtxt);
-
                     if ( aAny.hasValue() )
                     {
-                        OUString aServiceName;
                         aAny >>= aServiceName;
-
-                        if( !aServiceName.isEmpty() )
-                        {
-                            Reference< lang::XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
-                            Reference< chart2::XRegressionCurve > xRegCurve( xMSF->createInstance( aServiceName ), uno::UNO_QUERY_THROW );
-                            if( xRegCurve.is())
-                            {
-                                Reference< beans::XPropertySet > xCurveProperties( xRegCurve, uno::UNO_QUERY );
-                                pPropStyleContext->FillPropertySet( xCurveProperties );
-
-                                xRegCurve->setEquationProperties( iStyle->m_xEquationProperties );
-                            }
-
-                            Reference< chart2::XRegressionCurveContainer > xRegCurveCont( iStyle->m_xSeries, uno::UNO_QUERY_THROW );
-                            xRegCurveCont->addRegressionCurve( xRegCurve );
-
-                        }
                     }
                 }
             }
+
+            if (!iStyle->msStyleName.isEmpty())
+            {
+                XMLPropStyleContext* pCurrent = lcl_GetStyleContext(pStylesCtxt, rpStyle, iStyle->msStyleName);
+                if( pCurrent )
+                {
+                    pPropStyleContext = pCurrent;
+                    uno::Any aAny = SchXMLTools::getPropertyFromContext("RegressionType", pPropStyleContext, pStylesCtxt);
+                    if ( aAny.hasValue() )
+                    {
+                        aAny >>= aServiceName;
+                    }
+                }
+            }
+
+            if( !aServiceName.isEmpty() )
+            {
+                Reference< lang::XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
+                Reference< chart2::XRegressionCurve > xRegCurve( xMSF->createInstance( aServiceName ), uno::UNO_QUERY_THROW );
+                if( xRegCurve.is())
+                {
+                    Reference< beans::XPropertySet > xCurveProperties( xRegCurve, uno::UNO_QUERY );
+                    pPropStyleContext->FillPropertySet( xCurveProperties );
+
+                    xRegCurve->setEquationProperties( iStyle->m_xEquationProperties );
+                }
+
+                Reference< chart2::XRegressionCurveContainer > xRegCurveCont( iStyle->m_xSeries, uno::UNO_QUERY_THROW );
+                xRegCurveCont->addRegressionCurve( xRegCurve );
+            }
         }
-        catch( const uno::Exception & rEx )
+        catch( const uno::Exception& rEx )
         {
             SAL_INFO("xmloff.chart", "Exception caught during setting styles to series: " << rEx.Message );
         }

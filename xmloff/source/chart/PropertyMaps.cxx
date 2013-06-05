@@ -35,7 +35,6 @@
 #include "XMLTextOrientationHdl.hxx"
 #include "XMLSymbolTypePropertyHdl.hxx"
 #include "XMLAxisPositionPropertyHdl.hxx"
-#include "XMLRegressionTypePropertyHdl.hxx"
 
 #include <xmloff/EnumPropertyHdl.hxx>
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
@@ -116,10 +115,6 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 // here we have a constant rather than an enum
                 pHdl = new XMLErrorBarStylePropertyHdl( aXMLChartErrorBarStyleEnumMap,
                                                ::getCppuType((const sal_Int32*)0) );
-                break;
-
-            case XML_SCH_TYPE_REGRESSION_TYPE:
-                pHdl = new XMLRegressionTypePropertyHdl( );
                 break;
 
             case XML_SCH_TYPE_ERROR_INDICATOR_LOWER:
@@ -467,6 +462,24 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                     sValueBuffer.append(convertRange(aRangeStr, mxChartDoc));
                 }
                 break;
+            case XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE:
+                {
+                    OUString aServiceName;
+                    rProperty.maValue >>= aServiceName;
+                    if      (aServiceName == OUString("com.sun.star.chart2.LinearRegressionCurve"))
+                        sValueBuffer.append( GetXMLToken( XML_LINEAR ));
+                    else if (aServiceName == OUString("com.sun.star.chart2.LogarithmicRegressionCurve"))
+                        sValueBuffer.append( GetXMLToken( XML_LOGARITHMIC ));
+                    else if (aServiceName == OUString("com.sun.star.chart2.ExponentialRegressionCurve"))
+                        sValueBuffer.append( GetXMLToken( XML_EXPONENTIAL ));
+                    else if (aServiceName == OUString("com.sun.star.chart2.PotentialRegressionCurve"))
+                        sValueBuffer.append( GetXMLToken( XML_POWER ));
+                    else if (aServiceName == OUString("com.sun.star.chart2.PolynomialRegressionCurve"))
+                        sValueBuffer.append( GetXMLToken( XML_POLYNOMIAL ));
+                    else if (aServiceName == OUString("com.sun.star.chart2.MovingAverageRegressionCurve"))
+                        sValueBuffer.append( GetXMLToken( XML_MOVING_AVERAGE ));
+                }
+                break;
 
             default:
                 bHandled = sal_False;
@@ -625,6 +638,23 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
                 rProperty.maValue <<= mrImport.ResolveGraphicObjectURL( rValue, sal_False );
                 break;
+
+            case XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE:
+            {
+                if      (IsXMLToken( rValue, XML_LINEAR ))
+                    rProperty.maValue <<= OUString("com.sun.star.chart2.LinearRegressionCurve");
+                else if (IsXMLToken( rValue, XML_LOGARITHMIC))
+                    rProperty.maValue <<= OUString("com.sun.star.chart2.LogarithmicRegressionCurve");
+                else if (IsXMLToken( rValue, XML_EXPONENTIAL))
+                    rProperty.maValue <<= OUString("com.sun.star.chart2.ExponentialRegressionCurve");
+                else if (IsXMLToken( rValue, XML_POWER))
+                    rProperty.maValue <<= OUString("com.sun.star.chart2.PotentialRegressionCurve");
+                else if (IsXMLToken( rValue, XML_POLYNOMIAL))
+                    rProperty.maValue <<= OUString("com.sun.star.chart2.PolynomialRegressionCurve");
+                else if (IsXMLToken( rValue, XML_MOVING_AVERAGE))
+                    rProperty.maValue <<= OUString("com.sun.star.chart2.MovingAverageRegressionCurve");
+            }
+            break;
 
             default:
                 bRet = sal_False;

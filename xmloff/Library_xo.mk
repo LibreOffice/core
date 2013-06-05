@@ -81,7 +81,6 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/chart/XMLErrorBarStylePropertyHdl \
     xmloff/source/chart/XMLErrorIndicatorPropertyHdl \
     xmloff/source/chart/XMLLabelSeparatorContext \
-    xmloff/source/chart/XMLRegressionTypePropertyHdl \
     xmloff/source/chart/XMLSymbolImageContext \
     xmloff/source/chart/XMLSymbolTypePropertyHdl \
     xmloff/source/chart/XMLTextOrientationHdl \

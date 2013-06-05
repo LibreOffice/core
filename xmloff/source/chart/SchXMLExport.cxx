@@ -2917,96 +2917,128 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
 
     std::vector< XMLPropertyState > aPropertyStates;
     std::vector< XMLPropertyState > aEquationPropertyStates;
-    Reference< beans::XPropertySet > xStatProp;
-    try
-    {
-        Any aPropAny( xSeriesProp->getPropertyValue(
-                          OUString(  "DataRegressionProperties" )));
-        aPropAny >>= xStatProp;
-    }
-    catch( const uno::Exception & rEx )
-    {
-        SAL_INFO("xmloff.chart", "Exception caught during Export of series - optional DataRegressionProperties not available: " << rEx.Message );
-    }
 
-    if( xStatProp.is() )
+    Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer( xSeries, uno::UNO_QUERY );
+    if( xRegressionCurveContainer.is() )
     {
-        Reference< chart2::XRegressionCurve > xRegCurve( SchXMLTools::getRegressionCurve( xSeries ));
-        Reference< beans::XPropertySet > xEquationProperties;
-        if( xRegCurve.is())
-            xEquationProperties.set( xRegCurve->getEquationProperties());
+        Sequence< Reference< chart2::XRegressionCurve > > aRegCurveSeq = xRegressionCurveContainer->getRegressionCurves();
 
-        bool bShowEquation = false;
-        bool bShowRSquared = false;
-        bool bExportEquation = false;
-        aPropertyStates = mxExpPropMapper->Filter( xStatProp );
-        if( xEquationProperties.is())
+        const Reference< chart2::XRegressionCurve >* pBeg = aRegCurveSeq.getConstArray();
+        const Reference< chart2::XRegressionCurve >* pEnd = pBeg + aRegCurveSeq.getLength();
+        const Reference< chart2::XRegressionCurve >* pIt;
+
+        for( pIt = pBeg; pIt != pEnd; pIt++ )
         {
-            xEquationProperties->getPropertyValue("ShowEquation")
-                >>= bShowEquation;
-            xEquationProperties->getPropertyValue("ShowCorrelationCoefficient")
-                >>= bShowRSquared;
-            bExportEquation = ( bShowEquation || bShowRSquared );
-            const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
-            if( nCurrentVersion < SvtSaveOptions::ODFVER_012 )
-                bExportEquation=false;
-            if( bExportEquation )
+            Reference< chart2::XRegressionCurve > xRegCurve = *pIt;
+            if (!xRegCurve.is())
+                continue;
+
+            bool bShowEquation = false;
+            bool bShowRSquared = false;
+            bool bExportEquation = false;
+
+            Reference< beans::XPropertySet > xProperties( xRegCurve , uno::UNO_QUERY );
+
+            OUString aService;
+
+            Reference< lang::XServiceName > xServiceName( xProperties, uno::UNO_QUERY );
+            if( !xServiceName.is() )
+                continue;
+            aService = xServiceName->getServiceName();
+
+            aPropertyStates = mxExpPropMapper->Filter( xProperties );
+
+            // Add service name (which is regression type)
+            sal_Int32 nIndex = GetPropertySetMapper()->FindEntryIndex(XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE);
+            XMLPropertyState property(nIndex,  uno::makeAny(aService));
+            aPropertyStates.push_back(property);
+
+            Reference< beans::XPropertySet > xEquationProperties;
+            if( xRegCurve.is())
             {
-                // number format
-                sal_Int32 nNumberFormat = 0;
-                if( ( xEquationProperties->getPropertyValue(
-                          OUString(  "NumberFormat" )) >>= nNumberFormat ) &&
-                    nNumberFormat != -1 )
-                {
-                    mrExport.addDataStyle( nNumberFormat );
-                }
-                aEquationPropertyStates = mxExpPropMapper->Filter( xEquationProperties );
+                xEquationProperties.set( xRegCurve->getEquationProperties() );
             }
-        }
 
-        if( !aPropertyStates.empty() || bExportEquation )
-        {
-            // write element
-            if( bExportContent )
+            if( xEquationProperties.is())
             {
-                // add style name attribute
-                if( !aPropertyStates.empty())
-                    AddAutoStyleAttribute( aPropertyStates );
-                SvXMLElementExport aRegressionExport( mrExport, XML_NAMESPACE_CHART, XML_REGRESSION_CURVE, sal_True, sal_True );
+                xEquationProperties->getPropertyValue( OUString("ShowEquation")) >>= bShowEquation;
+                xEquationProperties->getPropertyValue( OUString("ShowCorrelationCoefficient")) >>= bShowRSquared;
+
+                bExportEquation = ( bShowEquation || bShowRSquared );
+                const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
+                if( nCurrentVersion < SvtSaveOptions::ODFVER_012 )
+                {
+                    bExportEquation=false;
+                }
                 if( bExportEquation )
                 {
-                    // default is true
-                    if( !bShowEquation )
-                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DISPLAY_EQUATION, XML_FALSE );
-                    // default is false
-                    if( bShowRSquared )
-                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DISPLAY_R_SQUARE, XML_TRUE );
-
-                    // export position
-                    chart2::RelativePosition aRelativePosition;
-                    if( xEquationProperties->getPropertyValue(
-                            OUString( "RelativePosition")) >>= aRelativePosition )
+                    // number format
+                    sal_Int32 nNumberFormat = 0;
+                    if( (xEquationProperties->getPropertyValue(OUString("NumberFormat")) >>= nNumberFormat ) &&
+                        nNumberFormat != -1 )
                     {
-                        double fX = aRelativePosition.Primary * rPageSize.Width;
-                        double fY = aRelativePosition.Secondary * rPageSize.Height;
-                        awt::Point aPos;
-                        aPos.X = static_cast< sal_Int32 >( ::rtl::math::round( fX ));
-                        aPos.Y = static_cast< sal_Int32 >( ::rtl::math::round( fY ));
-                        addPosition( aPos );
+                        mrExport.addDataStyle( nNumberFormat );
                     }
-
-                    if( !aEquationPropertyStates.empty())
-                        AddAutoStyleAttribute( aEquationPropertyStates );
-
-                    SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_EQUATION, sal_True, sal_True );
+                    aEquationPropertyStates = mxExpPropMapper->Filter( xEquationProperties );
                 }
             }
-            else    // autostyles
+
+            if( !aPropertyStates.empty() || bExportEquation )
             {
-                if( !aPropertyStates.empty())
-                    CollectAutoStyle( aPropertyStates );
-                if( bExportEquation && !aEquationPropertyStates.empty())
-                    CollectAutoStyle( aEquationPropertyStates );
+                // write element
+                if( bExportContent )
+                {
+                    // add style name attribute
+                    if( !aPropertyStates.empty())
+                    {
+                        AddAutoStyleAttribute( aPropertyStates );
+                    }
+
+                    SvXMLElementExport aRegressionExport( mrExport, XML_NAMESPACE_CHART, XML_REGRESSION_CURVE, sal_True, sal_True );
+                    if( bExportEquation )
+                    {
+                        // default is true
+                        if( !bShowEquation )
+                        {
+                            mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DISPLAY_EQUATION, XML_FALSE );
+                        }
+                        // default is false
+                        if( bShowRSquared )
+                        {
+                            mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DISPLAY_R_SQUARE, XML_TRUE );
+                        }
+
+                        // export position
+                        chart2::RelativePosition aRelativePosition;
+                        if( xEquationProperties->getPropertyValue(OUString( "RelativePosition")) >>= aRelativePosition )
+                        {
+                            double fX = aRelativePosition.Primary * rPageSize.Width;
+                            double fY = aRelativePosition.Secondary * rPageSize.Height;
+                            awt::Point aPos;
+                            aPos.X = static_cast< sal_Int32 >( ::rtl::math::round( fX ));
+                            aPos.Y = static_cast< sal_Int32 >( ::rtl::math::round( fY ));
+                            addPosition( aPos );
+                        }
+
+                        if( !aEquationPropertyStates.empty())
+                        {
+                            AddAutoStyleAttribute( aEquationPropertyStates );
+                        }
+
+                        SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_EQUATION, sal_True, sal_True );
+                    }
+                }
+                else    // autostyles
+                {
+                    if( !aPropertyStates.empty())
+                    {
+                        CollectAutoStyle( aPropertyStates );
+                    }
+                    if( bExportEquation && !aEquationPropertyStates.empty())
+                    {
+                        CollectAutoStyle( aEquationPropertyStates );
+                    }
+                }
             }
         }
     }

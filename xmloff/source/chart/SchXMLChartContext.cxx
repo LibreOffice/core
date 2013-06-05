@@ -882,14 +882,18 @@ void SchXMLChartContext::EndElement()
             //don't set series styles for donut charts
             if( !bSpecialHandlingForDonutChart )
             {
-                SchXMLSeries2Context::setStylesToSeries( maSeriesDefaultsAndStyles
-                                                         , pStylesCtxt, pStyle, sCurrStyleName, mrImportHelper, GetImport(), mbIsStockChart, maLSequencesPerIndex );
+                SchXMLSeries2Context::setStylesToSeries(
+                                        maSeriesDefaultsAndStyles, pStylesCtxt, pStyle,
+                                        sCurrStyleName, mrImportHelper, GetImport(),
+                                        mbIsStockChart, maLSequencesPerIndex );
                 // ... then set attributes for statistics (after their existence was set in the series)
-                SchXMLSeries2Context::setStylesToStatisticsObjects( maSeriesDefaultsAndStyles
-                            , pStylesCtxt, pStyle, sCurrStyleName );
+                SchXMLSeries2Context::setStylesToStatisticsObjects(
+                                        maSeriesDefaultsAndStyles, pStylesCtxt,
+                                        pStyle, sCurrStyleName );
 
-                SchXMLSeries2Context::setStylesToRegressionCurves( maSeriesDefaultsAndStyles
-                            , pStylesCtxt, pStyle, sCurrStyleName );
+                SchXMLSeries2Context::setStylesToRegressionCurves(
+                                        maSeriesDefaultsAndStyles, pStylesCtxt,
+                                        pStyle, sCurrStyleName );
             }
         }
 
