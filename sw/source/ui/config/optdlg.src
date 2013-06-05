@@ -1039,7 +1039,7 @@ TabPage TP_COMPARISON_OPT
     CheckBox CB_RSID
     {
         Pos = MAP_APPFONT ( 12 , 69 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
         Text [ en-US ] = "Use ~RSID";
         TabStop = TRUE ;
         Group = TRUE ;
@@ -1047,7 +1047,7 @@ TabPage TP_COMPARISON_OPT
     CheckBox CB_IGNORE
     {
         Pos = MAP_APPFONT ( 12 , 82 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
         Text [ en-US ] = "Ignore ~pieces of length";
     };
     NumericField NF_LEN
