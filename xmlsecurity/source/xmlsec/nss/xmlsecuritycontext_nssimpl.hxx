@@ -47,12 +47,10 @@ class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper3<
         //::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment ;
         std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > > m_vSecurityEnvironments;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
-
         sal_Int32 m_nDefaultEnvIndex;
 
     public :
-        XMLSecurityContext_NssImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
+        XMLSecurityContext_NssImpl() ;
         virtual ~XMLSecurityContext_NssImpl() ;
 
         //Methods from XXMLSecurityContext

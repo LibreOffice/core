@@ -54,7 +54,7 @@
 class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper4<
     ::com::sun::star::xml::crypto::XSecurityEnvironment ,
     ::com::sun::star::lang::XInitialization ,
-    ::com::sun::star::lang::XServiceInfo ,
+    ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::lang::XUnoTunnel >
 {
     private :

@@ -34,9 +34,8 @@ using ::com::sun::star::lang::XSingleServiceFactory ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 
-XMLSecurityContext_MSCryptImpl :: XMLSecurityContext_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory )
+XMLSecurityContext_MSCryptImpl :: XMLSecurityContext_MSCryptImpl()
     ://m_pKeysMngr( NULL ) ,
-     m_xServiceManager( aFactory ),
      m_xSecurityEnvironment( NULL )
 {
     //Init xmlsec library
@@ -156,8 +155,8 @@ OUString XMLSecurityContext_MSCryptImpl :: impl_getImplementationName() throw( R
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL XMLSecurityContext_MSCryptImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
-    return Reference< XInterface >( *new XMLSecurityContext_MSCryptImpl( aServiceManager ) ) ;
+Reference< XInterface > SAL_CALL XMLSecurityContext_MSCryptImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& ) throw( RuntimeException ) {
+    return Reference< XInterface >( *new XMLSecurityContext_MSCryptImpl ) ;
 }
 
 Reference< XSingleServiceFactory > XMLSecurityContext_MSCryptImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {

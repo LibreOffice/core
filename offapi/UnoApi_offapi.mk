@@ -451,8 +451,10 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xforms,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/crypto,\
 	NSSInitializer \
+	SecurityEnvironment \
 	SEInitializer \
 	XMLEncryptionTemplate \
+	XMLSecurityContext \
 	XMLSignatureTemplate \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/dom,\
@@ -1583,9 +1585,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml,\
 	XMLImportFilter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/crypto,\
-	SecurityEnvironment \
 	XMLEncryption \
-	XMLSecurityContext \
 	XMLSignature \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/xml/crypto/sax,\
