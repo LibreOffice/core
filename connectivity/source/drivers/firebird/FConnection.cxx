@@ -127,6 +127,13 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
+    // the pre
+    if(m_aTypeInfo.empty())
+        buildTypeInfo();
+
+    SAL_INFO("connectivity.firebird", "=> OConnection::createStatement(). "
+             "Creating statement.");
+
     // create a statement
     // the statement can only be executed once
     Reference< XStatement > xReturn = new OStatement(this);
