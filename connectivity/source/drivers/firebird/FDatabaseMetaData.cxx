@@ -896,7 +896,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     Reference< XResultSet > rs = statement->executeQuery(query.getStr());
     Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     ODatabaseMetaDataResultSet::ORows aRows;
-    int rows = 0;
+    sal_Int32 rows = 0;
     while( rs->next() )
     {
         ODatabaseMetaDataResultSet::ORow aRow(3);
@@ -908,15 +908,29 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         OUString desc  = xRow->getString( 5 );
 
         rows++;
-         if (rows < 10)
-            printf("DEBUG !!! row %i : ", rows);
-         else
-            printf("DEBUG !!! row %i: ", rows);
-        printf("%s | ", OUStringToOString( schema, RTL_TEXTENCODING_UTF8 ).getStr());
-        printf("%s | ", OUStringToOString( aTableName, RTL_TEXTENCODING_UTF8 ).getStr());
-        printf("%i | ", systemFlag);
-        printf("%i | ", systemFlag);
-        printf("%s | \n", OUStringToOString( desc, RTL_TEXTENCODING_UTF8 ).getStr());
+        if (rows < 10)
+        {
+            if ( 1 == rows )
+                SAL_DEBUG("COLUMNS | "
+                          "schema | "
+                          "TABLENAME                                                                                     | "
+                          "SF| "
+                          "TT| "
+                          "desc        |");
+            SAL_DEBUG("Row " << OUString::number(0).concat(OUString::number(rows)) << ": | "
+                      << schema << " | "
+                      << aTableName << " | "
+                      << systemFlag << " | "
+                      << tableType << " | "
+                      << desc << " |");
+        }
+        else
+            SAL_DEBUG("Row " << rows << ": | "
+                      << schema << " | "
+                      << aTableName << " | "
+                      << systemFlag << " | "
+                      << tableType << " | "
+                      << desc << " |");
 
         OUString aTableType;
         if( 1 == systemFlag )
