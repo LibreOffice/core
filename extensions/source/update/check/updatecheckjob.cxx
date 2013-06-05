@@ -131,11 +131,17 @@ void SAL_CALL InitUpdateCheckJobThread::run()
             return;
     }
 
-    rtl::Reference< UpdateCheck > aController( UpdateCheck::get() );
-    aController->initialize( m_xParameters, m_xContext );
+    try {
+        rtl::Reference< UpdateCheck > aController( UpdateCheck::get() );
+        aController->initialize( m_xParameters, m_xContext );
 
-    if ( m_bShowDialog )
-        aController->showDialog( true );
+        if ( m_bShowDialog )
+            aController->showDialog( true );
+    } catch (const uno::Exception &e) {
+        // fdo#64962 - don't bring the app down on some unexpected exception.
+        OSL_TRACE( "Caught init update exception: %s\n thread terminated.\n",
+            OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
+    }
 }
 
 void InitUpdateCheckJobThread::setTerminating() {
