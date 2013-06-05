@@ -4,8 +4,8 @@ MSPUB_MD5SUM := 1120705cd0f0d9bd5506360bf57b6c2e
 export MSPUB_TARBALL := libmspub-0.0.6.tar.bz2
 MWAW_MD5SUM := 2090daf6e8a27b52e8c5f26c915bd7c5
 export MWAW_TARBALL := libmwaw-0.1.9.tar.bz2
-VISIO_MD5SUM := 4e9a029d8390a1707eb49a1a918797ff
-export VISIO_TARBALL := libvisio-0.0.27.tar.bz2
+VISIO_MD5SUM := 05574c2ec54dd0c29d75cacdf9419f44
+export VISIO_TARBALL := libvisio-0.0.28.tar.bz2
 
 export AFMS_TARBALL := 1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz
 export APACHE_COMMONS_CODEC_TARBALL := 2e482c7567908d334785ce7d69ddfff7-commons-codec-1.6-src.tar.gz
