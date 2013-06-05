@@ -30,6 +30,7 @@
 
 #if OSL_DEBUG_LEVEL > 0
 #include <iostream>
+#include <set>
 #endif
 
 using ::comphelper::SequenceAsVector;
@@ -123,6 +124,25 @@ namespace sax_fastparser {
             writeBytes(mxFastTokenHandler->getUTF8Identifier(nElement));
     }
 
+#ifdef DBG_UTIL
+    OString SAL_CALL FastSaxSerializer::getId( ::sal_Int32 nElement )
+    {
+        if (HAS_NAMESPACE(nElement)) {
+            Sequence<sal_Int8> const ns(
+                mxFastTokenHandler->getUTF8Identifier(NAMESPACE(nElement)));
+            Sequence<sal_Int8> const name(
+                mxFastTokenHandler->getUTF8Identifier(TOKEN(nElement)));
+            return OString(reinterpret_cast<sal_Char const*>(ns.getConstArray()), ns.getLength())
+                 + OString(reinterpret_cast<sal_Char const*>(maColon.getConstArray()), maColon.getLength())
+                 + OString(reinterpret_cast<sal_Char const*>(name.getConstArray()), name.getLength());
+        } else {
+            Sequence<sal_Int8> const name(
+                mxFastTokenHandler->getUTF8Identifier(nElement));
+            return OString(reinterpret_cast<sal_Char const*>(name.getConstArray()), name.getLength());
+        }
+    }
+#endif
+
     void SAL_CALL FastSaxSerializer::startFastElement( ::sal_Int32 Element, const Reference< XFastAttributeList >& Attribs )
         throw (SAXException, RuntimeException)
     {
@@ -131,6 +151,10 @@ namespace sax_fastparser {
 
         if ( !maMarkStack.empty() )
             maMarkStack.top()->setCurrentElement( Element );
+
+#ifdef DBG_UTIL
+        m_DebugStartedElements.push(Element);
+#endif
 
         writeBytes(toUnoSequence(maOpeningBracket));
 
@@ -145,6 +169,13 @@ namespace sax_fastparser {
     {
         if (!mxOutputStream.is())
             return;
+
+#ifdef DBG_UTIL
+        assert(!m_DebugStartedElements.empty());
+        // Well-formedness constraint: Element Type Match
+        assert(Element == m_DebugStartedElements.top());
+        m_DebugStartedElements.pop();
+#endif
 
         writeBytes(toUnoSequence(maOpeningBracketAndSlash));
 
@@ -193,6 +224,9 @@ namespace sax_fastparser {
     }
     void FastSaxSerializer::writeFastAttributeList( const Reference< XFastAttributeList >& Attribs )
     {
+#ifdef DBG_UTIL
+        ::std::set<OUString> DebugAttributes;
+#endif
         Sequence< Attribute > aAttrSeq = Attribs->getUnknownAttributes();
         const Attribute *pAttr = aAttrSeq.getConstArray();
         sal_Int32 nAttrLength = aAttrSeq.getLength();
@@ -200,7 +234,13 @@ namespace sax_fastparser {
         {
             writeBytes(toUnoSequence(maSpace));
 
-            write(pAttr[i].Name);
+            OUString const& rAttrName(pAttr[i].Name);
+#ifdef DBG_UTIL
+            // Well-formedness constraint: Unique Att Spec
+            assert(DebugAttributes.find(rAttrName) == DebugAttributes.end());
+            DebugAttributes.insert(rAttrName);
+#endif
+            write(rAttrName);
             writeBytes(toUnoSequence(maEqualSignAndQuote));
             write(escapeXml(pAttr[i].Value));
             writeBytes(toUnoSequence(maQuote));
@@ -215,6 +255,14 @@ namespace sax_fastparser {
 
             sal_Int32 nToken = pFastAttr[j].Token;
             writeId(nToken);
+
+#ifdef DBG_UTIL
+            // Well-formedness constraint: Unique Att Spec
+            OUString const name(OStringToOUString(getId(nToken),
+                                                  RTL_TEXTENCODING_UTF8));
+            assert(DebugAttributes.find(name) == DebugAttributes.end());
+            DebugAttributes.insert(name);
+#endif
 
             writeBytes(toUnoSequence(maEqualSignAndQuote));
 

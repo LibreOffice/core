@@ -111,6 +111,7 @@ public:
 
     // C++ helpers
     void SAL_CALL writeId( ::sal_Int32 Element );
+    OString SAL_CALL getId( ::sal_Int32 Element );
 
     static OUString escapeXml( const OUString& s );
 
@@ -206,6 +207,10 @@ private:
 
     ::std::stack< boost::shared_ptr< ForMerge > > maMarkStack;
     ::std::stack< boost::shared_ptr< ForMerge > > maSavedMarkStack;
+
+#ifdef DBG_UTIL
+    ::std::stack<sal_Int32> m_DebugStartedElements;
+#endif
 
     void writeFastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs );
     void write( const OUString& s );
