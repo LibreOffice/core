@@ -4606,6 +4606,9 @@ IMPL_LINK( SvxToolbarConfigPage, SelectToolbar, ListBox *, pBox )
 
         SvTreeListEntry* pNewLBEntry = InsertEntryIntoUI( pEntry );
 
+        if(pEntry->IsSeparator())
+            aContentsListBox->SetCheckButtonInvis( pNewLBEntry );
+
         if (pEntry->IsBinding())
         {
             aContentsListBox->SetCheckButtonState( pNewLBEntry,
