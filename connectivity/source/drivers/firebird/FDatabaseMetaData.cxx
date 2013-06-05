@@ -61,7 +61,6 @@ namespace connectivity
 
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
 : m_pConnection(_pCon)
-, m_pGetTablesStm(NULL)
 , m_bUseCatalog(sal_True)
 {
     OSL_ENSURE(m_pConnection,"ODatabaseMetaData::ODatabaseMetaData: No connection set!");
@@ -865,29 +864,36 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
     ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
     Reference< XResultSet > xResultSet = pResultSet;
+    Reference< XStatement > statement = m_pConnection->createStatement();
 
-    if (!m_pGetTablesStm.is())
-    {
-        m_pGetTablesStm = m_pConnection->prepareStatement(
+    static const OUString wld("%");
+    OUString query(
             "SELECT "
             "'schema' as schema, RDB$RELATION_NAME, RDB$SYSTEM_FLAG, RDB$RELATION_TYPE, 'description' as description " // avoid duplicates
             "FROM RDB$RELATIONS "
-            "WHERE (RDB$RELATION_TYPE = 0 OR RDB$RELATION_TYPE = 1) "
-            "AND 'schema' LIKE ? "
-            "AND RDB$RELATION_NAME LIKE ? ");
+            "WHERE (RDB$RELATION_TYPE = 0 OR RDB$RELATION_TYPE = 1) ");
+
+    if (!schemaPattern.isEmpty())
+    {
+        if (schemaPattern.match(wld))
+            query += "AND 'schema' LIKE '%' ";
+        else
+            query += "AND 'schema' = '%' ";
+        query = query.replaceAll(wld, schemaPattern);
     }
-
-    SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTables(). "
-             "Setting query parameters.");
-
-    Reference< XParameters > parameters( m_pGetTablesStm, UNO_QUERY_THROW );
-    parameters->setString( 1 , schemaPattern );
-    parameters->setString( 2 , tableNamePattern );
+    if (!tableNamePattern.isEmpty())
+    {
+        if (tableNamePattern.match(wld))
+            query += "AND RDB$RELATION_NAME LIKE '%' ";
+        else
+            query += "AND RDB$RELATION_NAME = '%' ";
+        query = query.replaceAll(wld, tableNamePattern);
+    }
 
     SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTables(). "
              "About to execute the query.");
 
-    Reference< XResultSet > rs = m_pGetTablesStm->executeQuery();
+    Reference< XResultSet > rs = statement->executeQuery(query.getStr());
     Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     ODatabaseMetaDataResultSet::ORows aRows;
     int rows = 0;
@@ -902,18 +908,15 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         OUString desc  = xRow->getString( 5 );
 
         rows++;
-        if (rows < 10)
-            SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTables(). "
-                     "Row: " << rows);
-        else
-            SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTables(). "
-                     "Row: " << rows);
-        SAL_INFO("connectivity.firebird", "=> ODatabaseMetaData::getTables(). "
-                 << schema << " | "
-                 << aTableName << " | "
-                 << systemFlag << " | "
-                 << systemFlag << " | "
-                 << OUStringToOString);
+         if (rows < 10)
+            printf("DEBUG !!! row %i : ", rows);
+         else
+            printf("DEBUG !!! row %i: ", rows);
+        printf("%s | ", OUStringToOString( schema, RTL_TEXTENCODING_UTF8 ).getStr());
+        printf("%s | ", OUStringToOString( aTableName, RTL_TEXTENCODING_UTF8 ).getStr());
+        printf("%i | ", systemFlag);
+        printf("%i | ", systemFlag);
+        printf("%s | \n", OUStringToOString( desc, RTL_TEXTENCODING_UTF8 ).getStr());
 
         OUString aTableType;
         if( 1 == systemFlag )
