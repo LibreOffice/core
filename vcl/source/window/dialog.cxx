@@ -478,8 +478,6 @@ Dialog::Dialog( WindowType nType )
     ImplInitDialogData();
 }
 
-#define RELPATH_SHARE_LAYER OUString("soffice.cfg")
-
 OUString VclBuilderContainer::getUIRootDir()
 {
     /*to-do, check if user config has an override before using shared one, etc*/
@@ -494,12 +492,10 @@ OUString VclBuilderContainer::getUIRootDir()
         sShareLayer = sShareLayer.copy(0, nPos);
 
     // Note: May be an user uses URLs without a final slash! Check it ...
-    nPos = sShareLayer.lastIndexOf('/');
-    if (nPos != sShareLayer.getLength()-1)
+    if (!sShareLayer.endsWith("/"))
         sShareLayer += "/";
 
-    sShareLayer += RELPATH_SHARE_LAYER; // folder
-    sShareLayer += "/";
+    sShareLayer += "soffice.cfg/";
     /*to-do, can we merge all this foo with existing soffice.cfg finding code, etc*/
     return sShareLayer;
 }
