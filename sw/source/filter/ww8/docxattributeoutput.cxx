@@ -1506,7 +1506,46 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
     pSerializer->singleElementNS( XML_w, elementToken, xAttrs );
 }
 
-static void impl_pageBorders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, sal_Int32 tag, bool bUseStartEnd = false, bool bWriteTag = true, const SvxBoxItem* pDefaultBorders = 0)
+static OutputBorderOptions lcl_getTableDefaultBorderOptions(bool bEcma)
+{
+    OutputBorderOptions rOptions;
+
+    rOptions.tag = XML_tblBorders;
+    rOptions.bUseStartEnd = !bEcma;
+    rOptions.bWriteTag = true;
+    rOptions.bWriteInsideHV = true;
+    rOptions.bWriteDistance = false;
+
+    return rOptions;
+}
+
+static OutputBorderOptions lcl_getTableCellBorderOptions(bool bEcma)
+{
+    OutputBorderOptions rOptions;
+
+    rOptions.tag = XML_tcBorders;
+    rOptions.bUseStartEnd = !bEcma;
+    rOptions.bWriteTag = true;
+    rOptions.bWriteInsideHV = true;
+    rOptions.bWriteDistance = false;
+
+    return rOptions;
+}
+
+static OutputBorderOptions lcl_getBoxBorderOptions()
+{
+    OutputBorderOptions rOptions;
+
+    rOptions.tag = XML_pBdr;
+    rOptions.bUseStartEnd = false;
+    rOptions.bWriteTag = false;
+    rOptions.bWriteInsideHV = false;
+    rOptions.bWriteDistance = true;
+
+    return rOptions;
+}
+
+static void impl_borders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, const OutputBorderOptions& rOptions)
 {
     static const sal_uInt16 aBorders[] =
     {
@@ -1516,9 +1555,9 @@ static void impl_pageBorders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, s
     const sal_Int32 aXmlElements[] =
     {
         XML_top,
-        bUseStartEnd ? XML_start : XML_left,
+        rOptions.bUseStartEnd ? XML_start : XML_left,
         XML_bottom,
-        bUseStartEnd ? XML_end : XML_right
+        rOptions.bUseStartEnd ? XML_end : XML_right
     };
     bool tagWritten = false;
     const sal_uInt16* pBrd = aBorders;
@@ -1526,23 +1565,28 @@ static void impl_pageBorders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, s
     {
         const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
 
-        if (!tagWritten && bWriteTag) {
-            pSerializer->startElementNS( XML_w, tag, FSEND );
+        if (!tagWritten && rOptions.bWriteTag) {
+            pSerializer->startElementNS( XML_w, rOptions.tag, FSEND );
             tagWritten = true;
         }
 
-        impl_borderLine( pSerializer, aXmlElements[i], pLn, 0 );
+        sal_uInt16 nDist = 0;
+        if (rOptions.bWriteDistance)
+        {
+            nDist = rBox.GetDistance( *pBrd );
+        }
+        impl_borderLine( pSerializer, aXmlElements[i], pLn, nDist );
 
         // When exporting default borders, we need to export these 2 attr
-        if ( pDefaultBorders == 0 ) {
+        if ( rOptions.bWriteInsideHV) {
             if ( i == 2 )
                 impl_borderLine( pSerializer, XML_insideH, pLn, 0 );
             else if ( i == 3 )
                 impl_borderLine( pSerializer, XML_insideV, pLn, 0 );
         }
     }
-    if (tagWritten && bWriteTag) {
-        pSerializer->endElementNS( XML_w, tag );
+    if (tagWritten && rOptions.bWriteTag) {
+        pSerializer->endElementNS( XML_w, rOptions.tag );
     }
 }
 
@@ -1643,7 +1687,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     const SvxBoxItem& rDefaultBox = (*tableFirstCells.rbegin())->getTableBox( )->GetFrmFmt( )->GetBox( );
     {
         // The cell borders
-        impl_pageBorders( m_pSerializer, rBox, XML_tcBorders, !bEcma, true, &rDefaultBox );
+        impl_borders( m_pSerializer, rBox, lcl_getTableCellBorderOptions(bEcma) );
     }
 
     TableBackgrounds( pTableTextNodeInfoInner );
@@ -1893,7 +1937,7 @@ void DocxAttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Point
     bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
 
     // the defaults of the table are taken from the top-left cell
-    impl_pageBorders( m_pSerializer, pFrmFmt->GetBox( ), XML_tblBorders, !bEcma, true );
+    impl_borders( m_pSerializer, pFrmFmt->GetBox( ), lcl_getTableDefaultBorderOptions(bEcma) );
 }
 
 void DocxAttributeOutput::TableDefaultCellMargins( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
@@ -4739,7 +4783,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         m_pSerializer->startElementNS( XML_w, XML_pBdr, FSEND );
     }
 
-    impl_pageBorders( m_pSerializer, rBox, XML_pBdr, false, false );
+    impl_borders( m_pSerializer, rBox, lcl_getBoxBorderOptions() );
 
     if ( m_bOpenedSectPr )
     {

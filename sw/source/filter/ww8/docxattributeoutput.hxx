@@ -61,6 +61,27 @@ enum DocxColBreakStatus
     COLBRK_WRITE
 };
 
+/**
+ * A structure that holds information about the options selected
+ * when outputting a border to DOCX.
+ *
+ * There are 3 functions that initialize this structure:
+ * - lcl_getTableDefaultBorderOptions - retrieves the options for when outputting table default borders
+ * - lcl_getTableCellBorderOptions    - retrieves the options for when outputting table cell borders
+ * - lcl_getBoxBorderOptions          - retrieves the options for when outputting box borders
+ *
+ */
+struct OutputBorderOptions
+{
+    sal_Int32    tag;
+    bool         bUseStartEnd;
+    bool         bWriteTag;
+    bool         bWriteInsideHV;
+    bool         bWriteDistance;
+
+    OutputBorderOptions() : tag(0), bUseStartEnd(false), bWriteTag(true), bWriteInsideHV(false), bWriteDistance(false) {}
+};
+
 /// The class that has handlers for various resource types when exporting as DOCX.
 class DocxAttributeOutput : public AttributeOutputBase, public oox::vml::VMLTextExport
 {
