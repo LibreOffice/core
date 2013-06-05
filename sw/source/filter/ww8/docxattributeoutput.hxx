@@ -61,6 +61,17 @@ enum DocxColBreakStatus
     COLBRK_WRITE
 };
 
+struct OutputBorderOptions
+{
+    sal_Int32    tag;
+    bool         bUseStartEnd;
+    bool         bWriteTag;
+    bool         bWriteInsideHV;
+    bool         bWriteDistance;
+
+    OutputBorderOptions() : tag(0), bUseStartEnd(false), bWriteTag(true), bWriteInsideHV(false), bWriteDistance(false) {}
+};
+
 /// The class that has handlers for various resource types when exporting as DOCX.
 class DocxAttributeOutput : public AttributeOutputBase, public oox::vml::VMLTextExport
 {
