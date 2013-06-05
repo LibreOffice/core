@@ -1015,6 +1015,28 @@ libmspub
 
    See MPL Version 1.1 below
 
+libmwaw
+
+   The following software may be included in this product: libmwaw. Use of
+   any of this software is governed by the terms of the license below:
+
+   LGPL v2.1+ / MPL 2
+
+   See LGPL Version 2.1 below
+
+   See MPL Version 2 below
+
+libodfgen
+
+   The following software may be included in this product: libodfgen. Use
+   of any of this software is governed by the terms of the license below:
+
+   LGPL v2.1+ / MPL 2
+
+   See LGPL Version 2.1 below
+
+   See MPL Version 2 below
+
 liborcus
 
    The following software may be included in this product: liborcus. Use
@@ -1148,11 +1170,11 @@ libvisio
    The following software may be included in this product: libvisio. Use
    of any of this software is governed by the terms of the license below:
 
-   MPL 1.1 / LGPL v2+ / GPL v2+
+   MPL 1.1+ / LGPL v2.1+ / GPL v2+
 
    See GPL Version 2 below
 
-   See LGPL Version 2 below
+   See LGPL Version 2.1 below
 
    See MPL Version 1.1 below
 
@@ -1161,21 +1183,33 @@ libwpd
    The following software may be included in this product: libwpd. Use of
    any of this software is governed by the terms of the license below:
 
+   LGPL v2.1+ / MPL 2
+
    See LGPL Version 2.1 below
+
+   See MPL Version 2 below
 
 libwpg
 
    The following software may be included in this product: libwpg. Use of
    any of this software is governed by the terms of the license below:
 
+   LGPL v2.1+ / MPL 2
+
    See LGPL Version 2.1 below
+
+   See MPL Version 2 below
 
 libwps
 
    The following software may be included in this product: libwps. Use of
    any of this software is governed by the terms of the license below:
 
+   LGPL v2.1+ / MPL 2
+
    See LGPL Version 2.1 below
+
+   See MPL Version 2 below
 
 libxml2
 
@@ -2043,7 +2077,8 @@ Rasqal RDF Query Library
    the license below:
 
    Copyright (C) 2000-2008 David Beckett
-   Copyright (C) 2000-2005 University of Bristol. All Rights Reserved.
+   Copyright (C) 2000-2005 University of Bristol. All Rights
+   Reserved.
 
    All the licenses below are alternatives and if you select one license,
    that one alone applies.
@@ -2059,7 +2094,8 @@ Redland RDF Application Framework
    terms of the license below:
 
    Copyright (C) 2000-2008 David Beckett
-   Copyright (C) 2000-2005 University of Bristol. All Rights Reserved.
+   Copyright (C) 2000-2005 University of Bristol. All Rights
+   Reserved.
 
    All the licenses below are alternatives and if you select one license,
    that one alone applies.
@@ -2647,16 +2683,6 @@ Convert Text to Number
 
    See LGPL Version 3 below
 
-Diagram
-
-   The following software may be included in this product: Diagram. Use of
-   any of this software is governed by the terms of the license below:
-
-   Copyright © Tibor Hornyák and OxygenOffice Professional Team -
-   http://ooop.sf.net/
-
-   See LGPL Version 3 below
-
 OpenOffice.org2GoogleDocs - export & import to Google Docs, Zoho, WebDAV
 
    The following software may be included in this product:
@@ -2686,16 +2712,6 @@ LanguageTool Grammar Checker
 
    See LGPL Version 3 below
 
-Lightproof Grammar Checker
-
-   The following software may be included in this product: Lightproof
-   Grammar Checker. Use of any of this software is governed by the terms
-   of the license below:
-
-   2009-2010 (c) László Németh, license: GNU LGPL
-
-   See LGPL Version 3 below
-
 Numbertext
 
    The following software may be included in this product: Numbertext. Use
@@ -2721,15 +2737,14 @@ Numbertext
 
    See LGPL Version 3 below
 
-OpenOffice.org Blogger – Metaweblog support
+SmART Gallery (Diagram)
 
-   The following software may be included in this product: OpenOffice.org
-   Blogger. Use of any of this software is governed by the terms of the
+   The following software may be included in this product: SmART Gallery
+   (Diagram). Use of any of this software is governed by the terms of the
    license below:
 
-   Copyright © Caolán McNamara (2009) caolanm@redhat.com
-
-   Licensed under LGPLv3 or later.
+   Copyright © Tibor Hornyák and OxygenOffice Professional Team -
+   http://ooop.sf.net/
 
    See LGPL Version 3 below
 
@@ -3567,7 +3582,7 @@ Dutch
 
    1. Name: Dutch word list for spell checking - OpenTaal
 
-   2. Version of words list: 2.00G; version of spell checking: 2.00G.
+   2. Version of words list: 2.10G; version of spell checking: 2.10G.
 
    3. Requirements: Hunspell 1.2.8 and higher
 
@@ -4103,6 +4118,20 @@ English (USA)
    associated documentation shall at all times remain with Princeton
    University and LICENSEE agrees to preserve same.
 
+  English sentence checker for LibreOffice
+
+   The following software may be included in this product: English
+   sentence checker. Use of any of this software is governed by the terms
+   of the license below:
+
+   2011-2012 (c) László Németh, license: MPL 1.1 / GPLv3+ / LGPLv3+
+
+   See GPL Version 3 below
+
+   See LGPL Version 3 below
+
+   See MPL Version 1.1 below
+
 Estonian
 
   Spelling dictionary
@@ -4362,6 +4391,46 @@ Hungarian
    Copyright (C) 2009, László Németh
 
    See GPL Version 2 below
+
+  Hungarian sentence checker for LibreOffice
+
+   The following software may be included in this product: Hungarian
+   sentence checker. Use of any of this software is governed by the terms
+   of the license below:
+
+   2009-2012 (c) László Németh, license: MPL 1.1 / GPLv3+ / LGPLv3+
+
+   See GPL Version 3 below
+
+   See LGPL Version 3 below
+
+   See MPL Version 1.1 below
+
+Icelandic
+
+  Spelling dictionary and thesaurus
+
+   The wordlist was developed by Orðabók Háskólans in cooperation with
+   Reiknistofnun Háskóla Íslands in the early nineties and was released
+   into the public domain. Further modifications to the wordlist are also
+   released into the public domain.
+   The thesaurus and words in the spell checker with additional
+   morphological information are from the Icelandic Wiktionary Project,
+   http://is.wiktionary.org. Works released by the Wiktionary project are
+   under the Creative Commons Attribution-ShareAlike 3.0 Unported license.
+   You are free:
+   to Share — to copy, distribute and transmit the work
+   to Remix — to adapt the work
+   to make commercial use of the work
+   Under the following conditions:
+   Attribution — You must attribute the work in the manner specified by
+   the author or licensor (but not in any way that suggests that they
+   endorse you or your use of the work).
+   Share Alike — If you alter, transform, or build upon this work, you may
+   distribute the resulting work only under the same or similar license to
+   this one.
+
+   See CC-BY-SA 3.0 below
 
 Italian
 
@@ -4626,11 +4695,11 @@ Polish
 
    See LGPL Version 2.1 below
 
-Portoguise
+Portuguese
 
   Spelling dictionary
 
-   The following software may be included in this product: Portoguise
+   The following software may be included in this product: Portuguese
    spelling dictionary. Use of any of this software is governed by the
    terms of the license below:
 
@@ -4682,7 +4751,7 @@ Portoguise
 
   Hyphenation patterns
 
-   The following software may be included in this product: Portoguise
+   The following software may be included in this product: Portuguese
    hyphenation patterns. Use of any of this software is governed by the
    terms of the license below:
 
@@ -4695,17 +4764,17 @@ Portoguise
 
   Thesaurus
 
-   The following software may be included in this product: Portoguise
+   The following software may be included in this product: Portuguese
    thesaurus. Use of any of this software is governed by the terms of the
    license below:
 
    See GPL Version 2 below
 
-Portoguise (Brazilian)
+Portuguese (Brazilian)
 
   Spelling dictionary
 
-   The following software may be included in this product: Portoguise
+   The following software may be included in this product: Portuguese
    (Brazilian) spelling dictionary. Use of any of this software is
    governed by the terms of the license below:
 
@@ -4723,7 +4792,7 @@ Portoguise (Brazilian)
 
   Hyphenation patterns
 
-   The following software may be included in this product: Portoguise
+   The following software may be included in this product: Portuguese
    (Brazilian) hyphenation patterns. Use of any of this software is
    governed by the terms of the license below:
 
@@ -4738,6 +4807,22 @@ Portoguise (Brazilian)
    <raimundomoura@openoffice.org>
 
    See LGPL Version 2.1 below
+
+  Portuguese Brasilian sentence checker for LibreOffice
+
+   The following software may be included in this product: Portuguese
+   (Brazilian) hyphenation patterns. Use of any of this software is
+   governed by the terms of the license below:
+
+   MPL 1.1 / GPLv3+ / LGPLv3+
+
+   2013 © Raimundo Santos Moura
+
+   See GPL Version 3 below
+
+   See LGPL Version 3 below
+
+   See MPL Version 1.1 below
 
 Romanian
 
@@ -4833,6 +4918,15 @@ Russian
 
    Origin: Абрамовъ, Н. Словарь русскихъ синонимовъ и сходныхъ по смыслу
    выраженiй. Изд. 3-е, доп., Пг., 1911
+
+  Russian grammar checker
+
+   The following software may be included in this product: Russian grammar
+   checker. Use of any of this software is governed by the terms of the
+   license below:
+
+   2009, 2011, 2012 (c) Yakov Reztsov <yr at myooo dot ru>, license: MPL
+   1.1 / GPL / LGPL
 
 Scottish Gaelic
 
