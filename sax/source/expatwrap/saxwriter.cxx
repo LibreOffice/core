@@ -16,7 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #include <string.h>
+
+#include <stack>
+#include <set>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
@@ -72,6 +76,12 @@ enum SaxInvalidCharacterError
 
 class SaxWriterHelper
 {
+#ifdef DBG_UTIL
+public:
+    ::std::stack<OUString> m_DebugStartedElements;
+#endif
+
+private:
     Reference< XOutputStream >  m_out;
     Sequence < sal_Int8 >       m_Sequence;
     sal_Int8*                   mp_Sequence;
@@ -79,7 +89,6 @@ class SaxWriterHelper
     sal_Int32                   nLastLineFeedPos; // is negative after writing a sequence
     sal_uInt32                  nCurrentPos;
     sal_Bool                    m_bStartElementFinished;
-
 
     inline sal_uInt32 writeSequence() throw( SAXException );
 
@@ -541,6 +550,12 @@ inline void SaxWriterHelper::startDocument() throw( SAXException )
 inline SaxInvalidCharacterError SaxWriterHelper::startElement(const OUString& rName, const Reference< XAttributeList >& xAttribs) throw( SAXException )
 {
     FinishStartElement();
+
+#ifdef DBG_UTIL
+    m_DebugStartedElements.push(rName);
+    ::std::set<OUString> DebugAttributes;
+#endif
+
     mp_Sequence[nCurrentPos] = '<';
     nCurrentPos++;
     if (nCurrentPos == SEQUENCESIZE)
@@ -558,7 +573,13 @@ inline SaxInvalidCharacterError SaxWriterHelper::startElement(const OUString& rN
         if (nCurrentPos == SEQUENCESIZE)
             nCurrentPos = writeSequence();
 
-        if (!writeString(xAttribs->getNameByIndex( i ), sal_False, sal_False))
+        OUString const& rAttrName(xAttribs->getNameByIndex(i));
+#ifdef DBG_UTIL
+        // Well-formedness constraint: Unique Att Spec
+        assert(DebugAttributes.find(rAttrName) == DebugAttributes.end());
+        DebugAttributes.insert(rAttrName);
+#endif
+        if (!writeString(rAttrName, sal_False, sal_False))
             eRet = SAX_ERROR;
 
         mp_Sequence[nCurrentPos] = '=';
@@ -608,6 +629,7 @@ inline sal_Bool SaxWriterHelper::FinishEmptyElement() throw( SAXException )
 inline sal_Bool SaxWriterHelper::endElement(const OUString& rName) throw( SAXException )
 {
     FinishStartElement();
+
     mp_Sequence[nCurrentPos] = '<';
     nCurrentPos++;
     if (nCurrentPos == SEQUENCESIZE)
@@ -1159,6 +1181,14 @@ void SAXWriter::endElement(const OUString& aName)   throw (SAXException, Runtime
         throw SAXException();
     }
     sal_Bool bRet(sal_True);
+
+    // check here because Helper's endElement is not always called
+#ifdef DBG_UTIL
+    assert(!mp_SaxWriterHelper->m_DebugStartedElements.empty());
+    // Well-formedness constraint: Element Type Match
+    assert(aName == mp_SaxWriterHelper->m_DebugStartedElements.top());
+    mp_SaxWriterHelper->m_DebugStartedElements.pop();
+#endif
 
     if( mp_SaxWriterHelper->FinishEmptyElement() )
         m_bForceLineBreak = sal_False;
