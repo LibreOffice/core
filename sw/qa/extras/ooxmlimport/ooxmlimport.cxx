@@ -29,6 +29,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -49,6 +50,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/view/XFormLayerAccess.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
 
@@ -121,6 +123,7 @@ public:
     void testPageBackground();
     void testWatermark();
     void testPageBorderShadow();
+    void testN820509();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -194,6 +197,7 @@ void Test::run()
         {"page-background.docx", &Test::testPageBackground},
         {"watermark.docx", &Test::testWatermark},
         {"page-border-shadow.docx", &Test::testPageBorderShadow},
+        {"n820509.docx", &Test::testN820509},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1224,6 +1228,22 @@ void Test::testPageBorderShadow()
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
     // w:sz="48" is in eights of a point, 1 pt is 20 twips.
     CPPUNIT_ASSERT_EQUAL(sal_Int16(TWIP_TO_MM100(48/8*20)), aShadow.ShadowWidth);
+}
+
+void Test::testN820509()
+{
+    // Design mode was enabled.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XFormLayerAccess> xFormLayerAccess(xModel->getCurrentController(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(false, bool(xFormLayerAccess->isFormDesignMode()));
+
+    // M.d.yyyy date format was unhandled.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<drawing::XControlShape> xControlShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(8), getProperty<sal_Int16>(xPropertySet, "DateFormat"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
