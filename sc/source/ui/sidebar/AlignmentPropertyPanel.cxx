@@ -36,6 +36,14 @@ using namespace css;
 using namespace cssu;
 using ::sfx2::sidebar::ControlFactory;
 
+const char UNO_ALIGNBLOCK[]            = ".uno:AlignBlock";
+const char UNO_ALIGNBOTTOM[]           = ".uno:AlignBottom";
+const char UNO_ALIGNLEFT[]             = ".uno:AlignLeft";
+const char UNO_ALIGNHORIZONTALCENTER[] = ".uno:AlignHorizontalCenter";
+const char UNO_ALIGNRIGHT[]            = ".uno:AlignRight";
+const char UNO_ALIGNTOP[]              = ".uno:AlignTop";
+const char UNO_ALIGNVCENTER[]          = ".uno:AlignVCenter";
+
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
 //////////////////////////////////////////////////////////////////////////////

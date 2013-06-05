@@ -29,12 +29,10 @@
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Left-align</property>
                     <property name="valign">start</property>
                     <property name="use_action_appearance">False</property>
-                    <property name="action_name">.uno:Bold</property>
+                    <property name="action_name">.uno:AlignLeft</property>
                     <property name="use_underline">True</property>
-                    <property name="stock_id">gtk-justify-left</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -46,11 +44,9 @@
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Center-align</property>
                     <property name="use_action_appearance">False</property>
-                    <property name="action_name">.uno:Italic</property>
+                    <property name="action_name">.uno:AlignHorizontalCenter</property>
                     <property name="use_underline">True</property>
-                    <property name="stock_id">gtk-justify-center</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -62,11 +58,9 @@
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Right-align</property>
                     <property name="use_action_appearance">False</property>
-                    <property name="action_name">.uno:Underline</property>
+                    <property name="action_name">.uno:AlignRight</property>
                     <property name="use_underline">True</property>
-                    <property name="stock_id">gtk-justify-right</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -78,11 +72,9 @@
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Justify</property>
                     <property name="use_action_appearance">False</property>
-                    <property name="action_name">.uno:Strikeout</property>
+                    <property name="action_name">.uno:AlignBlock</property>
                     <property name="use_underline">True</property>
-                    <property name="stock_id">gtk-justify-fill</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -110,6 +102,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_action_appearance">False</property>
+                    <property name="action_name">.uno:AlignTop</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -123,6 +116,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_action_appearance">False</property>
+                    <property name="action_name">.uno:AlignVCenter</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -136,6 +130,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_action_appearance">False</property>
+                    <property name="action_name">.uno:AlignBottom</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
