@@ -62,12 +62,16 @@ OConnection::OConnection(FirebirdDriver*    _pDriver)
                          m_bUseCatalog(sal_False),
                          m_bUseOldDateFormat(sal_False)
 {
+    SAL_INFO("connectivity.firebird", "=> OConnection::OConnection().");
+
     m_pDriver->acquire();
     m_DBHandler = NULL;
 }
 //-----------------------------------------------------------------------------
 OConnection::~OConnection()
 {
+    SAL_INFO("connectivity.firebird", "=> OConnection::~OConnection().");
+
     if(!isClosed())
         close();
     m_pDriver->release();
@@ -101,7 +105,7 @@ static int pr_error (long* status, char* operation)
 
 void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
-    SAL_INFO("connectivity.firebird", "=> OConnection::construct()." );
+    SAL_INFO("connectivity.firebird", "=> OConnection::construct().");
 
     osl_atomic_increment( &m_refCount );
 
@@ -169,6 +173,9 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
 // --------------------------------------------------------------------------------
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
 {
+    SAL_INFO("connectivity.firebird", "=> OConnection::prepareCall(). "
+             "_sSql: " << _sSql);
+
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
