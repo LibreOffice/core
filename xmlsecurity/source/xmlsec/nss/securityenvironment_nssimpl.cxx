@@ -118,7 +118,7 @@ char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
     return NULL;
 }
 
-SecurityEnvironment_NssImpl :: SecurityEnvironment_NssImpl( const Reference< XMultiServiceFactory >& ) :
+SecurityEnvironment_NssImpl :: SecurityEnvironment_NssImpl() :
 m_pHandler( NULL ) , m_tSymKeyList() , m_tPubKeyList() , m_tPriKeyList() {
 
     PK11_SetPasswordFunc( GetPasswordFunction ) ;
@@ -194,8 +194,8 @@ OUString SecurityEnvironment_NssImpl :: impl_getImplementationName() throw( Runt
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL SecurityEnvironment_NssImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
-    return Reference< XInterface >( *new SecurityEnvironment_NssImpl( aServiceManager ) ) ;
+Reference< XInterface > SAL_CALL SecurityEnvironment_NssImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& ) throw( RuntimeException ) {
+    return Reference< XInterface >( *new SecurityEnvironment_NssImpl ) ;
 }
 
 Reference< XSingleServiceFactory > SecurityEnvironment_NssImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {

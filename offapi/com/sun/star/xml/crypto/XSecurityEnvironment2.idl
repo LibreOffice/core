@@ -21,17 +21,23 @@
 
 /** -- idl definition -- **/
 
-#ifndef __com_sun_star_xml_crypto_XMLSecurityContext_idl_
-#define __com_sun_star_xml_crypto_XMLSecurityContext_idl_
+#ifndef __com_sun_star_xml_crypto_XSecurityEnvironment2_idl_
+#define __com_sun_star_xml_crypto_XSecurityEnvironment2_idl_
 
-#include <com/sun/star/xml/crypto/XXMLSecurityContext.idl>
+#include <com/sun/star/xml/crypto/XSecurityEnvironment.idl>
+#include <com/sun/star/lang/XUnoTunnel.idl>
 
 module com { module sun { module star { module xml { module crypto {
 
 /**
- * Service of XMLSecurityContext
+    Unified interface for the SecurityEnvironment service.
+
+    @since LibreOffice 4.2
  */
-service XMLSecurityContext : XXMLSecurityContext;
+interface XSecurityEnvironment2 {
+    interface com::sun::star::xml::crypto::XSecurityEnvironment;
+    interface com::sun::star::lang::XUnoTunnel;
+} ;
 
 } ; } ; } ; } ; } ;
 
