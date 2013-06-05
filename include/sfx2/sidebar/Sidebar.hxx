@@ -16,49 +16,42 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef SFX_SIDEBAR_HXX
-#define SFX_SIDEBAR_HXX
+
+#ifndef SFX_SIDEBAR_SIDEBAR_HXX
+#define SFX_SIDEBAR_SIDEBAR_HXX
 
 #include "sfx2/dllapi.h"
-#include <vcl/window.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
-
 
 namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
 
+
 namespace sfx2 { namespace sidebar {
 
-
-/** SFX-less version of a module dependent task pane, filled with tool panels as specified in the respective
-    module's configuration
+/** Accept requests for switching to certain panels or decks.
 */
 class SFX2_DLLPUBLIC Sidebar
-    : public Window
 {
 public:
-        /** creates a new instance
-            @param i_rParentWindow
-                the parent window
-            @param i_rDocumentFrame
-                the frame to which the task pane belongs. Will be passed to any custom tool panels created
-                via an XUIElementFactory. Also, it is used to determine the module which the task pane is
-                responsible for, thus controlling which tool panels are actually available.
-        */
-    Sidebar(
-        Window& rParentWindow,
-        const cssu::Reference<css::frame::XFrame>& rxDocumentFrame);
+    /** Switch to the deck that contains the specified panel and make
+        sure that the panel is visible (expanded and scrolled into the
+        visible area.)
+        Note that most of the work is done asynchronously and that
+        this function probably returns before the requested panel is visible.
+    */
+    static void ShowPanel (
+        const ::rtl::OUString& rsPanelId,
+        const cssu::Reference<css::frame::XFrame>& rxFrame);
 
-
-    virtual ~Sidebar (void);
-
-protected:
-    virtual void Resize (void);
-    virtual void GetFocus (void);
-
-private:
+    /** Switch to the specified deck.
+        Note that most of the work is done asynchronously and that
+        this function probably returns before the requested deck is visible.
+    */
+    static void ShowDeck (
+        const ::rtl::OUString& rsDeckId,
+        const cssu::Reference<css::frame::XFrame>& rxFrame);
 };
-
 
 } } // end of namespace sfx2::sidebar
 

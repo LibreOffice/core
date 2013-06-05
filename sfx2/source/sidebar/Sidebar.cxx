@@ -16,9 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "precompiled_sfx2.hxx"
 
-#include "Sidebar.hxx"
+#include "sfx2/sidebar/Sidebar.hxx"
+#include "SidebarController.hxx"
 #include "ResourceManager.hxx"
 
 using namespace css;
@@ -26,54 +26,38 @@ using namespace cssu;
 
 namespace sfx2 { namespace sidebar {
 
-Sidebar::Sidebar(
-    Window& rParentWindow,
-    const Reference<frame::XFrame>& rxDocumentFrame)
-    : Window(&rParentWindow, WB_DIALOGCONTROL)
+
+void Sidebar::ShowPanel (
+    const ::rtl::OUString& rsPanelId,
+    const Reference<frame::XFrame>& rxFrame)
 {
-    ContentPanelManager::Instance();
-}
-
-
-
-
-Sidebar::~Sidebar (void)
-{
-}
-
-
-
-
-void Sidebar::Resize (void)
-{
-    Window::Resize();
-    //    m_pImpl->OnResize();
-}
-
-
-
-
-void Sidebar::GetFocus (void)
-{
-    Window::GetFocus();
-    //    m_pImpl->OnGetFocus();
-}
-
-
-
-
-void Sidebar::DataChanged (const DataChangedEvent& rDataChangedEvent)
-{
-    if  (rDataChangedEvent.GetType() == DATACHANGED_SETTINGS
-        &&  (rDataChangedEvent.GetFlags() & SETTINGS_STYLE)!= 0)
+    SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);
+    const PanelDescriptor* pPanelDescriptor = ResourceManager::Instance().GetPanelDescriptor(rsPanelId);
+    if (pController!=NULL && pPanelDescriptor != NULL)
     {
-        Invalidate();
+        // This should be a lot more sophisticated:
+        // - Make the deck switching asynchronous
+        // - Make sure that the panel is visible and expanded after
+        // the switch.
+        // - Make sure to use a context that really shows the panel
+        //
+        // All that is not necessary for the current use cases so lets
+        // keep it simple for the time being.
+        pController->RequestSwitchToDeck(pPanelDescriptor->msDeckId);
     }
-    else
-        Window::DataChanged(rDataChangedEvent);
 }
 
 
+
+
+void Sidebar::ShowDeck (
+    const ::rtl::OUString& rsDeckId,
+    const Reference<frame::XFrame>& rxFrame)
+{
+    SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);
+    if (pController != NULL)
+        pController->RequestSwitchToDeck(rsDeckId);
+}
 
 } } // end of namespace sfx2::sidebar
 

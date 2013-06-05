@@ -538,7 +538,6 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
         if ( pFrmItem )
             xTargetFrame = pFrmItem->GetFrame();
 
-        bool bMakeLayoutVisible = false;
         SfxViewFrame* pViewFrame = NULL;
 
         SdOptions* pOpt = GetSdOptions(DOCUMENT_TYPE_IMPRESS);
@@ -562,7 +561,6 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
             {
                 //create an empty document
                 pFrame = CreateEmptyDocument( DOCUMENT_TYPE_IMPRESS, xTargetFrame );
-                bMakeLayoutVisible = true;
             }
         }
         else
@@ -714,23 +712,10 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 
                             // clear UNDO stack after autopilot
                             pDocShell->ClearUndoBuffer();
-
-                            bMakeLayoutVisible = true;
                         }
                     }
                     pOpt->SetStartWithTemplate(bStartWithTemplate);
                 }
-            }
-        }
-
-        if (bMakeLayoutVisible && pViewFrame!=NULL)
-        {
-            // Make the layout menu visible in the tool pane.
-            ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase(pViewFrame);
-            if (pBase != NULL)
-            {
-                FrameworkHelper::Instance(*pBase)->RequestSidebarPanel(
-                    FrameworkHelper::msLayoutTaskPanelURL);
             }
         }
     }

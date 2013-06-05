@@ -49,6 +49,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 #include <svl/style.hxx>
 
 #include "framework/FrameworkHelper.hxx"
@@ -195,10 +196,11 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         }
         else
         {
-            // Make the slide transition panel visible (expand it) in the
-            // tool pane.
-            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestSidebarPanel(
-                framework::FrameworkHelper::msTableDesignPanelURL);
+            // Make the table design panel visible (expand it) in the
+            // sidebar.
+            ::sfx2::sidebar::Sidebar::ShowPanel(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImpressTableDesignPanel")),
+                GetViewFrame()->GetFrame().GetFrameInterface());
         }
 
         Cancel();

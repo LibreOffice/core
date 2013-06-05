@@ -23,6 +23,15 @@
 
 namespace sfx2 { namespace sidebar {
 
+AsynchronousCall::AsynchronousCall (void)
+    : maAction(),
+      mnCallId(0)
+{
+}
+
+
+
+
 AsynchronousCall::AsynchronousCall (const Action& rAction)
     : maAction(rAction),
       mnCallId(0)

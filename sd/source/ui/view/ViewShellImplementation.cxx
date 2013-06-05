@@ -46,6 +46,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/imapdlg.hxx>
 #include <vcl/msgbox.hxx>
@@ -125,27 +126,9 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         {
 
             // Make the layout menu visible in the tool pane.
-            SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, sal_True);
-            SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX, sidebar::PID_LAYOUT);
-            SfxViewFrame* pFrame = mrViewShell.GetViewFrame();
-            if (pFrame!=NULL && pFrame->GetDispatcher()!=NULL)
-            {
-                pFrame->GetDispatcher()->Execute (
-                    SID_SHOW_TOOL_PANEL,
-                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-                    &aMakeToolPaneVisible,
-                    &aPanelId,
-                    NULL);
-            }
-            else
-            {
-                DBG_ASSERT(pFrame!=NULL && pFrame->GetDispatcher()!=NULL,
-                    "ViewShell::Implementation::ProcessModifyPageSlot(): can not get dispatcher");
-            }
-
-            // We have activated a non-modal control in the task pane.
-            // Because it does not return anything we can not do anything
-            // more right now and have to exit here.
+            sfx2::sidebar::Sidebar::ShowPanel(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImpressLayoutsPanel")),
+                mrViewShell.GetViewFrame()->GetFrame().GetFrameInterface());
             break;
         }
         else if (pArgs->Count() == 4)

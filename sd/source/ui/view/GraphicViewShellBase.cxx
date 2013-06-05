@@ -89,7 +89,6 @@ void GraphicViewShellBase::Execute (SfxRequest& rRequest)
         case SID_OUTLINEMODE:
         case SID_NOTESMODE:
         case SID_HANDOUTMODE:
-        case SID_SHOW_TOOL_PANEL:
             // Prevent some Impress-only slots from being executed.
             rRequest.Cancel();
             break;

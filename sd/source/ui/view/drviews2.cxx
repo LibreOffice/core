@@ -165,6 +165,12 @@
 #include "stlpool.hxx"
 #include "undolayer.hxx"
 #include "unmodpg.hxx"
+#include <sfx2/sidebar/Sidebar.hxx>
+
+namespace {
+    const char CustomAnimationPanelId[] = "CustomAnimationPanel";
+    const char SlideTransitionPanelId[] = "SlideTransitionPanel";
+}
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -2689,10 +2695,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_CUSTOM_ANIMATION_PANEL:
         {
-            // Make the slide transition panel visible (expand it) in the
-            // tool pane.
-            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestSidebarPanel(
-                framework::FrameworkHelper::msCustomAnimationTaskPanelURL);
+            // Make the slide transition panel visible in the sidebar.
+            ::sfx2::sidebar::Sidebar::ShowPanel(
+                CustomAnimationPanelId,
+                GetViewFrame()->GetFrame().GetFrameInterface());
 
             Cancel();
             rReq.Done ();
@@ -2701,10 +2707,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_SLIDE_TRANSITIONS_PANEL:
         {
-            // Make the slide transition panel visible (expand it) in the
-            // tool pane.
-            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestSidebarPanel(
-                framework::FrameworkHelper::msSlideTransitionTaskPanelURL);
+            // Make the slide transition panel visible in the sidebar.
+            ::sfx2::sidebar::Sidebar::ShowPanel(
+                SlideTransitionPanelId,
+                GetViewFrame()->GetFrame().GetFrameInterface());
 
             Cancel();
             rReq.Done ();

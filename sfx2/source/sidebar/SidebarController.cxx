@@ -75,6 +75,8 @@ namespace
 
 namespace sfx2 { namespace sidebar {
 
+SidebarController::SidebarControllerContainer SidebarController::maSidebarControllerContainer;
+
 namespace {
     enum MenuId
     {
@@ -111,6 +113,7 @@ SidebarController::SidebarController (
       msCurrentDeckTitle(),
       maPropertyChangeForwarder(::boost::bind(&SidebarController::BroadcastPropertyChange, this)),
       maContextChangeUpdate(::boost::bind(&SidebarController::UpdateConfigurations, this)),
+      maAsynchronousDeckSwitch(),
       mbIsDeckRequestedOpen(),
       mbIsDeckOpen(),
       mbCanDeckBeOpened(true),
@@ -153,6 +156,12 @@ SidebarController::SidebarController (
         mxReadOnlyModeDispatch->addStatusListener(this, aURL);
 
     SwitchToDeck(A2S("default"));
+
+    WeakReference<SidebarController> xWeakController (this);
+    maSidebarControllerContainer.insert(
+        SidebarControllerContainer::value_type(
+            rxFrame,
+            xWeakController));
 }
 
 
@@ -165,8 +174,29 @@ SidebarController::~SidebarController (void)
 
 
 
+SidebarController* SidebarController::GetSidebarControllerForFrame (
+    const cssu::Reference<css::frame::XFrame>& rxFrame)
+{
+    SidebarControllerContainer::iterator iEntry (maSidebarControllerContainer.find(rxFrame));
+    if (iEntry == maSidebarControllerContainer.end())
+        return NULL;
+
+    cssu::Reference<XInterface> xController (iEntry->second.get());
+    if ( ! xController.is())
+        return NULL;
+
+    return dynamic_cast<SidebarController*>(xController.get());
+}
+
+
+
+
 void SAL_CALL SidebarController::disposing (void)
 {
+    SidebarControllerContainer::iterator iEntry (maSidebarControllerContainer.find(mxFrame));
+    if (iEntry != maSidebarControllerContainer.end())
+        maSidebarControllerContainer.erase(iEntry);
+
     maFocusManager.Clear();
 
     cssu::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
@@ -204,6 +234,7 @@ void SAL_CALL SidebarController::disposing (void)
         static_cast<css::beans::XPropertyChangeListener*>(this));
 
     maContextChangeUpdate.CancelRequest();
+    maAsynchronousDeckSwitch.CancelRequest();
 }
 
 
@@ -219,7 +250,10 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
         rEvent.ApplicationName,
         rEvent.ContextName);
     if (maRequestedContext != maCurrentContext)
+    {
+        maAsynchronousDeckSwitch.CancelRequest();
         maContextChangeUpdate.RequestCall();
+    }
 }
 
 
@@ -262,6 +296,7 @@ void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEv
         if ( ! mbIsDocumentReadOnly)
             msCurrentDeckId = gsDefaultDeckId;
         mnRequestedForceFlags |= SwitchFlag_ForceSwitch;
+        maAsynchronousDeckSwitch.CancelRequest();
         maContextChangeUpdate.RequestCall();
     }
 }
@@ -440,16 +475,6 @@ void SidebarController::UpdateConfigurations (void)
         SwitchToDeck(
             *ResourceManager::Instance().GetDeckDescriptor(sNewDeckId),
             maCurrentContext);
-
-#ifdef DEBUG
-        // Show the context name in the deck title bar.
-        if (mpCurrentDeck)
-        {
-            DeckTitleBar* pTitleBar = mpCurrentDeck->GetTitleBar();
-            if (pTitleBar != NULL)
-                pTitleBar->SetTitle(msCurrentDeckTitle+A2S(" (")+maCurrentContext.msContext+A2S(")"));
-        }
-#endif
     }
 }
 
@@ -461,6 +486,18 @@ void SidebarController::OpenThenSwitchToDeck (
 {
     RequestOpenDeck();
     SwitchToDeck(rsDeckId);
+    mpTabBar->Invalidate();
+}
+
+
+
+
+void SidebarController::RequestSwitchToDeck (
+    const ::rtl::OUString& rsDeckId)
+{
+    maContextChangeUpdate.CancelRequest();
+    maAsynchronousDeckSwitch.RequestCall(
+        ::boost::bind(&SidebarController::OpenThenSwitchToDeck, this, rsDeckId));
 }
 
 
@@ -544,9 +581,17 @@ void SidebarController::SwitchToDeck (
                 mpParentWindow,
                 ::boost::bind(&SidebarController::RequestCloseDeck, this)));
         msCurrentDeckTitle = rDeckDescriptor.msTitle;
+
     }
     if ( ! mpCurrentDeck)
         return;
+
+#ifdef DEBUG
+    // Show the context name in the deck title bar.
+    DeckTitleBar* pTitleBar = mpCurrentDeck->GetTitleBar();
+    if (pTitleBar != NULL)
+        pTitleBar->SetTitle(rDeckDescriptor.msTitle+A2S(" (")+maCurrentContext.msContext+A2S(")"));
+#endif
 
     // Update the panel list.
     const sal_Int32 nNewPanelCount (aPanelContextDescriptors.size());
@@ -749,6 +794,7 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent*, pEvent)
                 UpdateTitleBarIcons();
                 mpParentWindow->Invalidate();
                 mnRequestedForceFlags |= SwitchFlag_ForceNewDeck | SwitchFlag_ForceNewPanels;
+                maAsynchronousDeckSwitch.CancelRequest();
                 maContextChangeUpdate.RequestCall();
                 break;
 

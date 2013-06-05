@@ -182,7 +182,6 @@ public:
     void GetSlotState (SfxItemSet& rSet);
 
     void ProcessRestoreEditingViewSlot (void);
-    void ProcessTaskPaneSlot (SfxRequest& rRequest);
 
 private:
     ViewShellBase& mrBase;
@@ -702,10 +701,6 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
 
         case SID_WIN_FULLSCREEN:
             // The full screen mode is not supported.  Ignore the request.
-            break;
-
-        case SID_SHOW_TOOL_PANEL:
-            mpImpl->ProcessTaskPaneSlot(rRequest);
             break;
 
         case SID_RESTORE_EDITING_VIEW:
@@ -1470,43 +1465,6 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
 
 }
 
-
-
-
-void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
-{
-    // Set the visibility state of the toolpanel and one of its top
-    // level panels.
-    sidebar::PanelId nPanelId (sidebar::PID_UNKNOWN);
-    bool bPanelIdGiven = false;
-
-    // Extract the given arguments.
-    const SfxItemSet* pArgs = rRequest.GetArgs();
-    if (pArgs)
-    {
-        if (pArgs->Count() == 2)
-        {
-            SFX_REQUEST_ARG (rRequest, pPanelId, SfxUInt32Item,
-                ID_VAL_PANEL_INDEX, sal_False);
-            if (pPanelId != NULL)
-            {
-                nPanelId = static_cast<sidebar::PanelId>(pPanelId->GetValue());
-                bPanelIdGiven = true;
-            }
-        }
-    }
-
-    // Ignore the request for some combinations of panels and view
-    // shell types.
-    if (bPanelIdGiven
-        && ! (nPanelId==sidebar::PID_LAYOUT
-            && mrBase.GetMainViewShell()!=0
-            && mrBase.GetMainViewShell()->GetShellType()==ViewShell::ST_OUTLINE))
-    {
-        framework::FrameworkHelper::Instance(mrBase)->RequestSidebarPanel(
-            framework::FrameworkHelper::msLayoutTaskPanelURL);
-    }
-}
 
 
 } // end of namespace sd

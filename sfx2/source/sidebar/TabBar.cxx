@@ -220,9 +220,15 @@ void TabBar::Layout (void)
 
 void TabBar::HighlightDeck (const ::rtl::OUString& rsDeckId)
 {
-    Item* pItem = GetItemForId(rsDeckId);
-    if (pItem != NULL)
-        pItem->mpButton->Check();
+    for (ItemContainer::iterator iItem(maItems.begin()),iEnd(maItems.end());
+         iItem!=iEnd;
+         ++iItem)
+    {
+        if (iItem->msDeckId.equals(rsDeckId))
+            iItem->mpButton->Check(sal_True);
+        else
+            iItem->mpButton->Check(sal_False);
+    }
 }
 
 

@@ -599,54 +599,6 @@ Reference<XResourceId> FrameworkHelper::RequestView (
 
 
 
-Reference<XResourceId> FrameworkHelper::RequestSidebarPanel (
-    const OUString& rsTaskPanelURL,
-    const bool bEnsureTaskPaneIsVisible)
-{
-    try
-    {
-        if (mxConfigurationController.is())
-        {
-            // Check the existence of the task pane.
-            if ( ! bEnsureTaskPaneIsVisible)
-            {
-                Reference<XConfiguration> xConfiguration (
-                    mxConfigurationController->getCurrentConfiguration());
-                if (xConfiguration.is())
-                    if ( ! xConfiguration->hasResource(
-                            CreateResourceId(msSidebarViewURL, msSidebarPaneURL)))
-                    {
-                        // Task pane is not active.  Do not force it.
-                        return NULL;
-                    }
-            }
-
-            // Create the resource id from URLs for the sidebar pane
-            // and view and the requested panel.
-            mxConfigurationController->requestResourceActivation(
-                CreateResourceId(msSidebarPaneURL),
-                ResourceActivationMode_ADD);
-            mxConfigurationController->requestResourceActivation(
-                CreateResourceId(msSidebarViewURL, msSidebarPaneURL),
-                ResourceActivationMode_REPLACE);
-            Reference<XResourceId> xPanelId (CreateResourceId(rsTaskPanelURL, msSidebarViewURL, msSidebarPaneURL));
-            mxConfigurationController->requestResourceActivation(
-                xPanelId,
-                ResourceActivationMode_REPLACE);
-
-            return xPanelId;
-        }
-    }
-    catch (lang::DisposedException&)
-    {
-        Dispose();
-    }
-    catch (RuntimeException&)
-    {}
-
-    return NULL;
-}
-
 ViewShell::ShellType FrameworkHelper::GetViewId (const OUString& rsViewURL)
 {
     if (mpViewURLMap->empty())

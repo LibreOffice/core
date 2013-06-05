@@ -7228,31 +7228,6 @@ SfxBoolItem SlideSorterMultiPaneGUI SID_SLIDE_SORTER_MULTI_PANE_GUI
     GroupId = GID_MODIFY;
 ]
 
-SfxVoidItem TaskPaneShowPanel SID_SHOW_TOOL_PANEL (
-    SfxBoolItem IsPanelVisible ID_VAL_ISVISIBLE,
-    SfxUInt32Item PanelId ID_VAL_PANEL_INDEX)
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
-]
-//--------------------------------------------------------------------------
 SfxVoidItem PhotoAlbumDialog SID_PHOTOALBUM
 ()
 [

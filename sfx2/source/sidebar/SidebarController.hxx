@@ -39,6 +39,9 @@
 #include <boost/optional.hpp>
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/weakref.hxx>
+#include <comphelper/stl_types.hxx>
+
 
 namespace css = ::com::sun::star;
 namespace cssu = ::com::sun::star::uno;
@@ -77,6 +80,15 @@ public:
         const cssu::Reference<css::frame::XFrame>& rxFrame);
     virtual ~SidebarController (void);
 
+    /** Return the SidebarController object that is associated with
+        the given XFrame.
+        @return
+            When there is no SidebarController object for the given
+            XFrame then <NULL/> is returned.
+    */
+    static SidebarController* GetSidebarControllerForFrame (
+        const cssu::Reference<css::frame::XFrame>& rxFrame);
+
     // ui::XContextChangeEventListener
     virtual void SAL_CALL notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
         throw(cssu::RuntimeException);
@@ -110,7 +122,7 @@ public:
     const static sal_Int32 SwitchFlag_ForceNewDeck = 0x02;
     const static sal_Int32 SwitchFlag_ForceNewPanels = 0x02;
 
-    void SwitchToDeck (
+    void RequestSwitchToDeck (
         const ::rtl::OUString& rsDeckId);
     void OpenThenSwitchToDeck (
         const ::rtl::OUString& rsDeckId);
@@ -126,6 +138,12 @@ public:
     FocusManager& GetFocusManager (void);
 
 private:
+    typedef ::std::map<
+        const cssu::Reference<css::frame::XFrame>,
+        cssu::WeakReference<SidebarController>
+    > SidebarControllerContainer;
+    static SidebarControllerContainer maSidebarControllerContainer;
+
     ::boost::scoped_ptr<Deck> mpCurrentDeck;
     SidebarDockingWindow* mpParentWindow;
     ::boost::scoped_ptr<TabBar> mpTabBar;
@@ -138,6 +156,7 @@ private:
     ::rtl::OUString msCurrentDeckTitle;
     AsynchronousCall maPropertyChangeForwarder;
     AsynchronousCall maContextChangeUpdate;
+    AsynchronousCall maAsynchronousDeckSwitch;
 
     /** Two flags control whether the deck is displayed or if only the
         tab bar remains visible.
@@ -184,6 +203,8 @@ private:
         ::Window* pParentWindow,
         const bool bIsInitiallyExpanded,
         const Context& rContext);
+    void SwitchToDeck (
+        const ::rtl::OUString& rsDeckId);
     void SwitchToDeck (
         const DeckDescriptor& rDeckDescriptor,
         const Context& rContext);

@@ -32,6 +32,7 @@ class AsynchronousCall
 public:
     typedef ::boost::function<void(void)> Action;
 
+    AsynchronousCall (void);
     AsynchronousCall (const Action& rAction);
     ~AsynchronousCall (void);
 
