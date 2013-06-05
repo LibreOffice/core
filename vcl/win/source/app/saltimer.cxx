@@ -22,9 +22,10 @@
 #include <win/saltimer.h>
 #include <win/salinst.h>
 
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
 #include <sehandler.hxx>
 #endif
+
 
 // =======================================================================
 
@@ -93,7 +94,7 @@ void WinSalTimer::Stop()
 
 void CALLBACK SalTimerProc( HWND, UINT, UINT_PTR nId, DWORD )
 {
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     jmp_buf jmpbuf;
     __SEHandler han;
     if (__builtin_setjmp(jmpbuf) == 0)
@@ -135,7 +136,7 @@ void CALLBACK SalTimerProc( HWND, UINT, UINT_PTR nId, DWORD )
                 ImplSalStartTimer( 10, TRUE );
         }
     }
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     han.Reset();
 #else
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))

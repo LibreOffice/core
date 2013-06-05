@@ -49,11 +49,11 @@
 
 #include <malloc.h>
 
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
 #include <sehandler.hxx>
 #endif
 
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
 #define CATCH_DRIVER_EX_BEGIN                                               \
     jmp_buf jmpbuf;                                                         \
     __SEHandler han;                                                        \

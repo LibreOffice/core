@@ -506,7 +506,7 @@ NPP_New(NPMIMEType pluginType,
     This->fWindow = (NPWindow*)NPN_MemAlloc(sizeof(NPWindow));
     memset(This->fWindow, 0, sizeof (NPWindow));
     This->fMode = mode;
-  #endif //end of WNT
+#endif //end of WNT
     PLUGIN_MSG msg;
     memset((char*)&msg, 0, sizeof(PLUGIN_MSG));
     msg.msg_id = SO_NEW_INSTANCE;
@@ -823,7 +823,7 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
     sprintf(msg.url, "file://%s", localPathNew);
 #endif //end of UNIX
 #ifdef WNT
-    msg.wnd_id =(int)(This->fhWnd);
+    msg.wnd_id =(plugin_Int32)(This->fhWnd);
     sprintf(msg.url, "file:///%s", localPathNew);
     DosToUnixPath(msg.url);
 #endif //endof WNT

@@ -30,7 +30,7 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
 #include <sehandler.hxx>
 #endif
 
@@ -195,7 +195,7 @@ OUString SAL_CALL cptostr( sal_uInt32 codepage )
 
 void SAL_CALL DeleteTargetDevice( DVTARGETDEVICE* ptd )
 {
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     jmp_buf jmpbuf;
     __SEHandler han;
     if (__builtin_setjmp(jmpbuf) == 0)
@@ -207,7 +207,7 @@ void SAL_CALL DeleteTargetDevice( DVTARGETDEVICE* ptd )
 #endif
         CoTaskMemFree( ptd );
     }
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     else
 #else
     __except( EXCEPTION_EXECUTE_HANDLER )
@@ -215,7 +215,7 @@ void SAL_CALL DeleteTargetDevice( DVTARGETDEVICE* ptd )
     {
         OSL_FAIL( "Error DeleteTargetDevice" );
     }
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     han.Reset();
 #endif
 }
@@ -244,7 +244,7 @@ DVTARGETDEVICE* SAL_CALL CopyTargetDevice( DVTARGETDEVICE* ptdSrc )
 {
     DVTARGETDEVICE* ptdDest = NULL;
 
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     jmp_buf jmpbuf;
     __SEHandler han;
     if (__builtin_setjmp(jmpbuf) == 0)
@@ -260,7 +260,7 @@ DVTARGETDEVICE* SAL_CALL CopyTargetDevice( DVTARGETDEVICE* ptdSrc )
             memcpy( ptdDest, ptdSrc, static_cast< size_t >( ptdSrc->tdSize ) );
         }
     }
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     han.Reset();
 #else
     __except( EXCEPTION_EXECUTE_HANDLER )
@@ -302,7 +302,7 @@ sal_Bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
 {
     sal_Bool bRet = sal_False;
 
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     jmp_buf jmpbuf;
     __SEHandler han;
     if (__builtin_setjmp(jmpbuf) == 0)
@@ -328,7 +328,7 @@ sal_Bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
         bRet = sal_True;
         }
     }
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     else
 #else
     __except( EXCEPTION_EXECUTE_HANDLER )
@@ -336,7 +336,7 @@ sal_Bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
     {
         OSL_FAIL( "Error CopyFormatEtc" );
     }
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     han.Reset();
 #endif
 
@@ -355,7 +355,7 @@ sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLhs, const FORMATETC*
 {
     sal_Int32 nMatch = FORMATETC_EXACT_MATCH;
 
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     jmp_buf jmpbuf;
     __SEHandler han;
     if (__builtin_setjmp(jmpbuf) == 0)
@@ -402,7 +402,7 @@ sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLhs, const FORMATETC*
             }
         }
     }
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     else
 #else
     __except( EXCEPTION_EXECUTE_HANDLER )
@@ -411,7 +411,7 @@ sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLhs, const FORMATETC*
         OSL_FAIL( "Error CompareFormatEtc" );
         nMatch = FORMATETC_NO_MATCH;
     }
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     han.Reset();
 #endif
 
@@ -427,7 +427,7 @@ sal_Bool SAL_CALL CompareTargetDevice( DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* 
 {
     sal_Bool bRet = sal_False;
 
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     jmp_buf jmpbuf;
     __SEHandler han;
     if (__builtin_setjmp(jmpbuf) == 0)
@@ -451,7 +451,7 @@ sal_Bool SAL_CALL CompareTargetDevice( DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* 
         if ( memcmp( ptdLeft, ptdRight, ptdLeft->tdSize ) == 0 )
             bRet = sal_True;
     }
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     else
 #else
     __except( EXCEPTION_EXECUTE_HANDLER )
@@ -460,7 +460,7 @@ sal_Bool SAL_CALL CompareTargetDevice( DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* 
         OSL_FAIL( "Error CompareTargetDevice" );
         bRet = sal_False;
     }
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     han.Reset();
 #endif
 

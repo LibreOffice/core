@@ -86,7 +86,7 @@ using ::std::max;
 
 #include <time.h>
 
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
 #include <sehandler.hxx>
 #endif
 
@@ -6059,7 +6059,7 @@ LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
 {
     int bDef = TRUE;
     LRESULT nRet = 0;
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     jmp_buf jmpbuf;
     __SEHandler han;
     if (__builtin_setjmp(jmpbuf) == 0)
@@ -6071,7 +6071,7 @@ LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
 #endif
         nRet = SalFrameWndProc( hWnd, nMsg, wParam, lParam, bDef );
     }
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     han.Reset();
 #else
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))

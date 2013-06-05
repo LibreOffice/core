@@ -3831,19 +3831,21 @@ mingw*)
             RTL_ARCH=X86_84
             PLATFORMID=windows_x86_64
             OUTPATH=wntgccx$COMEX
+            SOLARINC="$SOLARINC -I$SRC_ROOT/include/wntgccx"
         else
             CPU=I
             CPUNAME=INTEL
             RTL_ARCH=x86
             PLATFORMID=windows_x86
             OUTPATH=wntgcci$COMEX
+            SOLARINC="$SOLARINC -I$SRC_ROOT/include/wntgcci"
         fi
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    SOLARINC="$SOLARINC -I$SRC_ROOT/include/wntgcci"
+    
     SOLARLIB="-L${SOLARVER}/${OUTPATH}${PROEXT}/lib"
     ;;
 

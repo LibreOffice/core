@@ -39,7 +39,11 @@ enum msg_type
     SO_PRINT         // 6
 };
 
+#ifdef _WIN64
+#define plugin_Int32 unsigned __int64
+#else
 #define plugin_Int32 unsigned long int
+#endif
 
 typedef struct _PLUGIN_MSG {
     plugin_Int32 msg_id;
