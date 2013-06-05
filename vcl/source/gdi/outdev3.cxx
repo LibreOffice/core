@@ -6654,48 +6654,29 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
     {
         if( (nStyle & TEXT_DRAW_CENTERELLIPSIS) == TEXT_DRAW_CENTERELLIPSIS )
         {
-            sal_Int32 nOrigWidth = _rLayout.GetTextWidth( aStr, 0, aStr.getLength() );
-            if ( nOrigWidth <= nMaxWidth )
-                return aStr;
-            sal_Int32 nEraseStart = aStr.getLength()/2;
-            sal_Int32 nEraseEnd = nEraseStart;
-            sal_Int32 nEraseChars = nEraseEnd - nEraseStart;
-            sal_Int32 nEllipsisWidth = _rLayout.GetTextWidth( "...", 0, 3 );
-            bool bRemoveForward = true;
-            while( nEraseChars < aStr.getLength() &&
-                   nOrigWidth - _rLayout.GetTextWidth( aStr, nEraseStart, nEraseEnd ) > nMaxWidth - nEllipsisWidth)
+            OUStringBuffer aTmpStr( aStr );
+            sal_Int32 nEraseChars = 4;
+            while( nEraseChars < aStr.getLength() && _rLayout.GetTextWidth( aTmpStr.toString(), 0, aTmpStr.getLength() ) > nMaxWidth )
             {
-                if (bRemoveForward)
-                    ++nEraseEnd;
-                else
-                    --nEraseStart;
-                bRemoveForward = !bRemoveForward;
-                nEraseChars = nEraseEnd - nEraseStart +1;
+                aTmpStr = OUStringBuffer(aStr);
+                sal_Int32 i = (aTmpStr.getLength() - nEraseChars)/2;
+                aTmpStr.remove(i, nEraseChars++);
+                aTmpStr.insert(i, "...");
             }
-            OUStringBuffer aTmpStr(aStr);
-            aTmpStr.remove(nEraseStart, nEraseChars);
-            aTmpStr.insert(nEraseStart, "...");
             aStr = aTmpStr.makeStringAndClear();
         }
         else if ( nStyle & TEXT_DRAW_ENDELLIPSIS )
         {
-            OUString aTmpStr = aStr.replaceAt( nIndex, aStr.getLength()-nIndex, "" );
-
+            aStr = aStr.copy(0, nIndex);
             if ( nIndex > 1 )
             {
-                sal_Int32 nTmpStrWidth = _rLayout.GetTextWidth( aTmpStr, 0, aTmpStr.getLength() );
-                if ( nTmpStrWidth <= nMaxWidth )
-                    return aStr;
-
-                sal_Int32 nEllipsisWidth = _rLayout.GetTextWidth( "...", 0, 3 );
-                sal_Int32 nEraseStart = aTmpStr.getLength();
-                while ( nEraseStart > 0 &&
-                        nTmpStrWidth -
-                        (_rLayout.GetTextWidth( aTmpStr, 0, nEraseStart-1 ) > nMaxWidth - nEllipsisWidth) )
+                aStr += "...";
+                while ( !aStr.isEmpty() && (_rLayout.GetTextWidth( aStr, 0, aStr.getLength() ) > nMaxWidth) )
                 {
-                    --nEraseStart;
+                    if ( (nIndex > 1) || (nIndex == aStr.getLength()) )
+                        nIndex--;
+                    aStr = aStr.replaceAt( nIndex, 1, "");
                 }
-                aStr = aTmpStr.replaceAt( nEraseStart, aTmpStr.getLength()-nEraseStart, "...");
             }
 
             if ( aStr.isEmpty() && (nStyle & TEXT_DRAW_CLIP) )
