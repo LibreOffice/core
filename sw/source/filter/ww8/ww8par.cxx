@@ -3848,10 +3848,10 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
 
     SetPage(rPage, rFmt, rSection, bIgnoreCols);
 
-    if (rSection.maSep.pgbApplyTo & 1)
-        mrReader.SetPageBorder(rPage.GetFirst(), rSection);
-    if (rSection.maSep.pgbApplyTo & 2)
+    if (!(rSection.maSep.pgbApplyTo & 1))
         mrReader.SetPageBorder(rFmt, rSection);
+    if (!(rSection.maSep.pgbApplyTo & 2))
+        mrReader.SetPageBorder(rPage.GetFirst(), rSection);
 
     mrReader.SetDocumentGrid(rFmt, rSection);
 }
