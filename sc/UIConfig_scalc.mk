@@ -91,6 +91,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/sharedocumentdlg \
 	sc/uiconfig/scalc/ui/sharedfooterdialog \
 	sc/uiconfig/scalc/ui/sharedheaderdialog \
+	sc/uiconfig/scalc/ui/sidebaralignment \
 	sc/uiconfig/scalc/ui/solverdlg \
 	sc/uiconfig/scalc/ui/sortcriteriapage \
 	sc/uiconfig/scalc/ui/sortkey \
