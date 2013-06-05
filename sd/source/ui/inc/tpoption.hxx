@@ -79,6 +79,7 @@ private:
     CheckBox    *m_pCbxQuickEdit;
     CheckBox    *m_pCbxPickThrough;
 
+    VclFrame    *m_pNewDocumentFrame;
     CheckBox    *m_pCbxStartWithTemplate;
 
     CheckBox    *m_pCbxMasterPageCache;

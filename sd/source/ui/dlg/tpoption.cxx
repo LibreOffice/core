@@ -217,6 +217,7 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
 {
     get(m_pCbxQuickEdit , "qickedit");
     get(m_pCbxPickThrough , "textselected");
+    get(m_pNewDocumentFrame, "newdocumentframe");
     get(m_pCbxStartWithTemplate,"startwithwizard");
     get(m_pCbxMasterPageCache , "backgroundback");
     get(m_pCbxCopy , "copywhenmove");
@@ -225,15 +226,15 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     get(m_pCbxStartWithActualPage , "strtwithPag");
     get(m_pCbxEnableSdremote , "enremotcont");
     get(m_pCbxEnablePresenterScreen , "enprsntcons");
-    get(m_pCbxUsePrinterMetrics , "printermetrc");
+    get(m_pCbxUsePrinterMetrics , "printermetrics");
     get(m_pPresentationFrame , "presentationframe");
     get(m_pScaleFrame , "scaleframe");
     get(m_pCbScale , "scaleBox");
-    get(m_pMtrFldTabstop , "metericFields");
-    get(m_pMtrFldOriginalWidth , "metericWidthFields");
-    get(m_pMtrFldOriginalHeight , "metericHighteFields");
-    get(m_pMtrFldInfo1 , "metericInfo1Fields");
-    get(m_pMtrFldInfo2 , "metericInfo2Fields");
+    get(m_pMtrFldTabstop , "metricFields");
+    get(m_pMtrFldOriginalWidth , "metricWidthFields");
+    get(m_pMtrFldOriginalHeight , "metricHeightFields");
+    get(m_pMtrFldInfo1 , "metricInfo1Fields");
+    get(m_pMtrFldInfo2 , "metricInfo2Fields");
     get(m_pCbxCompatibility ,"cbCompatibility" );
     get(m_pFiInfo1 , "info1");
     get(m_pFiInfo2 , "info2");
@@ -566,7 +567,7 @@ void SdTpOptionsMisc::SetImpressMode (void)
 void    SdTpOptionsMisc::SetDrawMode()
 {
     m_pScaleFrame->Show();
-    m_pCbxStartWithTemplate->Hide();
+    m_pNewDocumentFrame->Hide();
     m_pCbxStartWithActualPage->Hide();
     m_pCbxEnableSdremote->Hide();
     m_pCbxEnablePresenterScreen->Hide();
