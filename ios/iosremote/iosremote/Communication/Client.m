@@ -1,10 +1,11 @@
+// -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 //
-//  Client.m
-//  sdremote
+// This file is part of the LibreOffice project.
 //
-//  Created by Liu Siqi on 6/3/13.
-//  Copyright (c) 2013 libreoffice. All rights reserved.
-//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 
 #import "Client.h"
 #import "Server.h"
@@ -20,7 +21,7 @@
 @property (nonatomic, strong) NSString* mName;
 @property uint mPort;
 
-@property (nonatomic, strong) Server* mServer;
+@property (nonatomic, weak) Server* mServer;
 @property (nonatomic, weak) Receiver* mReceiver;
 @property (nonatomic, weak) CommunicationManager* mComManager;
 
@@ -49,8 +50,9 @@ NSString * const CHARSET = @"UTF-8";
             managedBy:(CommunicationManager*)manager
         interpretedBy:(Receiver*)receiver
 {
-    self.mPin = @"";
-    self.mName = server.serverName;
+    self.mPin = [NSString stringWithFormat:@"%04d", arc4random() % 9999];
+    NSLog(@"mPin: %@", self.mPin);
+    self.mName = [[UIDevice currentDevice] name];
     self.mServer = server;
     self.mComManager = manager;
     self.mReceiver = receiver;
@@ -83,12 +85,20 @@ NSString * const CHARSET = @"UTF-8";
         [self.mOutputStream setDelegate:self];
         [self.mOutputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         [self.mOutputStream open];
-         NSLog(@"Connected");
+    
+//        NSLog(@"Stream opened %@ %@", @"iPad", self.mPin);
+        
+        NSArray *temp = [[NSArray alloc]initWithObjects:@"LO_SERVER_CLIENT_PAIR\n", self.mName, @"\n", self.mPin, @"\n\n", nil];
+        
+        NSString *command = [temp componentsJoinedByString:@""];
+        
+        [self sendCommand:command];
     }
 }
 
 - (void) sendCommand:(NSString *)aCommand
 {
+    NSLog(@"Sending command %@", aCommand);
     // UTF-8 as speficied in specification
     NSData * data = [aCommand dataUsingEncoding:NSUTF8StringEncoding];
     
@@ -98,6 +108,12 @@ NSString * const CHARSET = @"UTF-8";
 - (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode {
     
     switch(eventCode) {
+        case NSStreamEventOpenCompleted:
+            NSLog(@"Connection established");
+            break;
+        case NSStreamEventErrorOccurred:
+            NSLog(@"Connection error occured");
+            break;
         case NSStreamEventHasBytesAvailable:
         {
             NSLog(@"NSStreamEventHasBytesAvailable");
