@@ -19,7 +19,7 @@
 
 
 #include "signatureengine.hxx"
-#include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
+#include <com/sun/star/xml/crypto/XMLSignatureTemplate.hpp>
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -28,8 +28,6 @@ namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxw = com::sun::star::xml::wrapper;
-
-#define SIGNATURE_TEMPLATE "com.sun.star.xml.crypto.XMLSignatureTemplate"
 
 SignatureEngine::SignatureEngine( const Reference<XComponentContext> & xContext)
     : m_xContext(xContext), m_nTotalReferenceNumber(-1)
@@ -114,11 +112,8 @@ void SignatureEngine::tryToPerform( )
 {
     if (checkReady())
     {
-        const OUString ouSignatureTemplate ( SIGNATURE_TEMPLATE );
         cssu::Reference < cssxc::XXMLSignatureTemplate >
-            xSignatureTemplate( m_xContext->getServiceManager()->createInstanceWithContext( ouSignatureTemplate, m_xContext ), cssu::UNO_QUERY );
-
-        OSL_ASSERT( xSignatureTemplate.is() );
+            xSignatureTemplate = cssxc::XMLSignatureTemplate::create( m_xContext );
 
         cssu::Reference< cssxw::XXMLElementWrapper >
             xXMLElement = m_xSAXEventKeeper->getElement( m_nIdOfTemplateEC );

@@ -24,20 +24,14 @@
 #ifndef __com_sun_star_xml_crypto_xmlsignaturetemplate_idl_
 #define __com_sun_star_xml_crypto_xmlsignaturetemplate_idl_
 
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/uno/Exception.idl>
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.idl>
-#include <com/sun/star/lang/XInitialization.idl>
 
 module com { module sun { module star { module xml { module crypto {
 
 /**
  * Service of XMLSignatureTemplate
  */
-service XMLSignatureTemplate {
-    interface com::sun::star::xml::crypto::XXMLSignatureTemplate ;
-    interface com::sun::star::lang::XInitialization ;
-} ;
+service XMLSignatureTemplate : com::sun::star::xml::crypto::XXMLSignatureTemplate ;
 
 } ; } ; } ; } ; } ;
 
