@@ -513,7 +513,7 @@ public:
     void                importDxfBorder( sal_Int32 nElement, SequenceInputStream& rStrm );
 
     /** Final processing after import of all style settings. */
-    void                finalizeImport();
+    void                finalizeImport( bool bRTL );
 
     /** Returns the border model structure. */
     inline const BorderModel& getModel() const { return maModel; }
