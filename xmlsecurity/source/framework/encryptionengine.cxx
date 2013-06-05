@@ -19,15 +19,13 @@
 
 
 #include "encryptionengine.hxx"
-#include <com/sun/star/xml/crypto/XXMLEncryptionTemplate.hpp>
+#include <com/sun/star/xml/crypto/XMLEncryptionTemplate.hpp>
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 using namespace com::sun::star::uno;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxw = com::sun::star::xml::wrapper;
-
-#define ENCRYPTION_TEMPLATE "com.sun.star.xml.crypto.XMLEncryptionTemplate"
 
 EncryptionEngine::EncryptionEngine( const Reference<XComponentContext> & xContext)
         :m_xContext(xContext), m_nIdOfBlocker(-1)
@@ -112,11 +110,8 @@ void EncryptionEngine::tryToPerform( )
 {
     if (checkReady())
     {
-        const OUString sEncryptionTemplate ( ENCRYPTION_TEMPLATE );
-        Reference < cssxc::XXMLEncryptionTemplate > xEncryptionTemplate(
-            m_xContext->getServiceManager()->createInstanceWithContext( sEncryptionTemplate, m_xContext ), UNO_QUERY );
-
-        OSL_ASSERT( xEncryptionTemplate.is() );
+        Reference < cssxc::XXMLEncryptionTemplate > xEncryptionTemplate =
+            cssxc::XMLEncryptionTemplate::create( m_xContext );
 
         Reference< cssxw::XXMLElementWrapper > xXMLElement
             = m_xSAXEventKeeper->getElement( m_nIdOfTemplateEC );
