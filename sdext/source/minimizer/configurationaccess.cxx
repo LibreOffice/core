@@ -147,8 +147,8 @@ sal_Bool OptimizerSettings::operator==( const OptimizerSettings& rOptimizerSetti
 }
 
 
-ConfigurationAccess::ConfigurationAccess( const Reference< uno::XComponentContext >& rxMSF, OptimizerSettings* pDefaultSettings ) :
-    mxMSF( rxMSF )
+ConfigurationAccess::ConfigurationAccess( const Reference< uno::XComponentContext >& rxContext, OptimizerSettings* pDefaultSettings ) :
+    mxContext( rxContext )
 {
     LoadStrings();
     maSettings.push_back( pDefaultSettings ?
@@ -174,7 +174,7 @@ OUString ConfigurationAccess::getPath( const PPPOptimizerTokenEnum eToken )
         if ( aPath.match( sProtocol, 0 ) )
         {
             OUString aTmp( aPath.copy( 20 ) );
-            Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(mxMSF);
+            Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(mxContext);
             aPath = xExpander->expandMacros( aTmp );
         }
     }
@@ -317,7 +317,7 @@ Reference< XInterface > ConfigurationAccess::OpenConfiguration( bool bReadOnly )
     Reference< XInterface > xRoot;
     try
     {
-        Reference< lang::XMultiServiceFactory > xProvider = configuration::theDefaultProvider::get( mxMSF );
+        Reference< lang::XMultiServiceFactory > xProvider = configuration::theDefaultProvider::get( mxContext );
         Sequence< Any > aCreationArguments( 2 );
         aCreationArguments[0] = makeAny( PropertyValue(
             OUString( "nodepath" ), 0,

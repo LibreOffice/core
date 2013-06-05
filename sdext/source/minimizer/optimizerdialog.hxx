@@ -62,7 +62,7 @@ class OptimizerDialog : public UnoDialog, public ConfigurationAccess
 {
 public :
 
-    OptimizerDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF, com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame,
+    OptimizerDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext, com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame,
         com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > rxStatusDispatcher );
     ~OptimizerDialog();
 
@@ -73,7 +73,7 @@ public :
     sal_Bool                mbIsReadonly;
 
 private :
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
     com::sun::star::uno::Reference< com::sun::star::frame::XFrame >         mxFrame;
 
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface >       mxRoadmapControl;
@@ -125,7 +125,7 @@ public :
     OUString GetSelectedString( PPPOptimizerTokenEnum eListBox );
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >& GetStatusDispatcher() { return mxStatusDispatcher; };
     com::sun::star::uno::Reference< com::sun::star::frame::XFrame>& GetFrame() { return mxFrame; };
-    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& GetComponentContext() { return mxMSF; };
+    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& GetComponentContext() { return mxContext; };
 };
 
 // -----------------------------------------------------------------------------

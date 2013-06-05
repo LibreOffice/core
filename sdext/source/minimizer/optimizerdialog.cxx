@@ -204,12 +204,12 @@ void OptimizerDialog::UpdateConfiguration()
 
 // -----------------------------------------------------------------------------
 
-OptimizerDialog::OptimizerDialog( const Reference< XComponentContext > &rxMSF, Reference< XFrame >& rxFrame, Reference< XDispatch > rxStatusDispatcher ) :
-    UnoDialog( rxMSF, rxFrame ),
-    ConfigurationAccess( rxMSF, NULL ),
+OptimizerDialog::OptimizerDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame, Reference< XDispatch > rxStatusDispatcher ) :
+    UnoDialog( rxContext, rxFrame ),
+    ConfigurationAccess( rxContext, NULL ),
     mnCurrentStep( 0 ),
     mnTabIndex( 0 ),
-    mxMSF( rxMSF ),
+    mxContext( rxContext ),
     mxFrame( rxFrame ),
     mxItemListener( new ItemListener( *this ) ),
     mxActionListener( new ActionListener( *this ) ),
@@ -522,7 +522,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             if ( nInt16 )
             {
                 OUString aSaveAsURL;
-                FileOpenDialog aFileOpenDialog( ((UnoDialog&)mrOptimizerDialog).mxMSF );
+                FileOpenDialog aFileOpenDialog( mrOptimizerDialog.GetComponentContext() );
 
                 // generating default file name
                 Reference< XStorable > xStorable( mrOptimizerDialog.mxController->getModel(), UNO_QUERY );

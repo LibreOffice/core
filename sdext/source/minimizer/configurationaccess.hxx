@@ -118,7 +118,7 @@ class ConfigurationAccess
         std::vector< OptimizerSettings > maSettings;
         std::vector< OptimizerSettings > maInitialSettings;
 
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxMSF;
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
 
         void LoadStrings();
         void LoadConfiguration();

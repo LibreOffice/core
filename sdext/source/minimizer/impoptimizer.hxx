@@ -38,7 +38,7 @@ class ImpOptimizer : public OptimizationStats
 {
 private:
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    mxContext;
     com::sun::star::uno::Reference< com::sun::star::frame::XModel >             mxModel;
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >          mxStatusDispatcher;
 

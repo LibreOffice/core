@@ -46,7 +46,7 @@ class InformationDialog : public UnoDialog, public ConfigurationAccess
 {
 public :
 
-    InformationDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF,
+    InformationDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext,
             com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame, const OUString& rSaveAsURL,
                 sal_Bool& bOpenNewDocument, const sal_Int64& nSourceSize, const sal_Int64& nDestSize, const sal_Int64& nApproxDest );
     ~InformationDialog();
@@ -55,7 +55,7 @@ public :
 
 private :
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
     com::sun::star::uno::Reference< com::sun::star::frame::XFrame >         mxFrame;
     com::sun::star::uno::Reference< com::sun::star::io::XStream >           mxTempFile;
 
@@ -72,7 +72,7 @@ private :
 public :
 
     com::sun::star::uno::Reference< com::sun::star::frame::XFrame>& GetFrame() { return mxFrame; };
-    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& GetComponentContext() { return mxMSF; };
+    const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& GetComponentContext() { return mxContext; };
 };
 
 class OKActionListener : public ::cppu::WeakImplHelper1< com::sun::star::awt::XActionListener >

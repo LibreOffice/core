@@ -266,7 +266,7 @@ void InformationDialog::InitDialog()
     OUString aTitle;
     if ( !maSaveAsURL.isEmpty() )
     {
-        Reference< XURLTransformer > xURLTransformer( URLTransformer::create(mxMSF) );
+        Reference< XURLTransformer > xURLTransformer( URLTransformer::create(mxContext) );
         util::URL aURL, aPresentationURL;
         aURL.Complete = maSaveAsURL;
         xURLTransformer->parseSmart( aURL, OUString() );
@@ -313,10 +313,10 @@ void InformationDialog::InitDialog()
 
 // -----------------------------------------------------------------------------
 
-InformationDialog::InformationDialog( const Reference< XComponentContext > &rxMSF, Reference< XFrame >& rxFrame, const OUString& rSaveAsURL, sal_Bool& rbOpenNewDocument, const sal_Int64& rSourceSize, const sal_Int64& rDestSize, const sal_Int64& rApproxSize ) :
-    UnoDialog( rxMSF, rxFrame ),
-    ConfigurationAccess( rxMSF, NULL ),
-    mxMSF( rxMSF ),
+InformationDialog::InformationDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame, const OUString& rSaveAsURL, sal_Bool& rbOpenNewDocument, const sal_Int64& rSourceSize, const sal_Int64& rDestSize, const sal_Int64& rApproxSize ) :
+    UnoDialog( rxContext, rxFrame ),
+    ConfigurationAccess( rxContext, NULL ),
+    mxContext( rxContext ),
     mxFrame( rxFrame ),
     mxActionListener( new OKActionListener( *this ) ),
     mnSourceSize( rSourceSize ),

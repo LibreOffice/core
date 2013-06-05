@@ -37,8 +37,8 @@ using namespace ::com::sun::star::beans;
 // - PPPOptimizer -
 // ----------------
 
-PPPOptimizer::PPPOptimizer( const Reference< XComponentContext > &rxMSF ) :
-    mxMSF( rxMSF )
+PPPOptimizer::PPPOptimizer( const Reference< XComponentContext > &xContext ) :
+    mxContext( xContext )
 {
 }
 
@@ -133,7 +133,7 @@ void SAL_CALL PPPOptimizer::dispatch( const URL& rURL, const Sequence< PropertyV
             {
                 try
                 {
-                    ImpOptimizer aOptimizer( mxMSF, xModel );
+                    ImpOptimizer aOptimizer( mxContext, xModel );
                     aOptimizer.Optimize( lArguments );
                 }
                 catch( Exception& )

@@ -748,7 +748,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
     sal_Int32 nImageResolution( GetConfigProperty( TK_ImageResolution, (sal_Int32)0 ) );
     GraphicSettings aGraphicSettings( bJPEGCompression, nJPEGQuality, GetConfigProperty( TK_RemoveCropArea, sal_False ),
                                         nImageResolution, GetConfigProperty( TK_EmbedLinkedGraphics, sal_True ) );
-    GraphicCollector::CountGraphics( mxMSF, mxController->getModel(), aGraphicSettings, nGraphics );
+    GraphicCollector::CountGraphics( mxContext, mxController->getModel(), aGraphicSettings, nGraphics );
     if ( nGraphics > 1 )
     {
         OUString aStr( getString( STR_OPTIMIZE_IMAGES ) );

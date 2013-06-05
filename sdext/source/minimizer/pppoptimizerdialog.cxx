@@ -35,8 +35,8 @@ using namespace ::com::sun::star::beans;
 // - PPPOptimizerDialog -
 // ----------------------
 
-PPPOptimizerDialog::PPPOptimizerDialog( const Reference< XComponentContext > &rxMSF ) :
-    mxMSF( rxMSF ),
+PPPOptimizerDialog::PPPOptimizerDialog( const Reference< XComponentContext > &xContext ) :
+    mxContext( xContext ),
     mpOptimizerDialog( NULL )
 {
 }
@@ -130,7 +130,7 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
             {
                 sal_Int64 nFileSizeSource = 0;
                 sal_Int64 nFileSizeDest = 0;
-                mpOptimizerDialog = new OptimizerDialog( mxMSF, mxFrame, this );
+                mpOptimizerDialog = new OptimizerDialog( mxContext, mxFrame, this );
                 mpOptimizerDialog->execute();
 
                 const Any* pVal( mpOptimizerDialog->maStats.GetStatusValue( TK_FileSizeSource ) );

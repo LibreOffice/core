@@ -45,7 +45,7 @@ class PPPOptimizerDialog : public   ::cppu::WeakImplHelper4<
                                     com::sun::star::frame::XDispatchProvider,
                                     com::sun::star::frame::XDispatch >
 {
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
     com::sun::star::uno::Reference< com::sun::star::frame::XFrame > mxFrame;
     com::sun::star::uno::Reference< com::sun::star::frame::XController > mxController;
 
@@ -53,7 +53,7 @@ class PPPOptimizerDialog : public   ::cppu::WeakImplHelper4<
 
 public:
 
-    PPPOptimizerDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF );
+    PPPOptimizerDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
     virtual ~PPPOptimizerDialog();
 
     // XInitialization

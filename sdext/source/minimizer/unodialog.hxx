@@ -107,7 +107,7 @@ public :
     void enableControl( const OUString& rControlName );
     void disableControl( const OUString& rControlName );
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >        mxMSF;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >        mxContext;
     com::sun::star::uno::Reference< com::sun::star::frame::XController >            mxController;
     com::sun::star::uno::Reference< com::sun::star::awt::XReschedule >              mxReschedule;
 

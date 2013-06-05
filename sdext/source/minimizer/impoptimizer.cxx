@@ -255,7 +255,7 @@ void ImpCompressGraphic( Reference< XGraphicProvider >& rxGraphicProvider, const
     }
 }
 
-Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& rxMSF,
+Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& rxContext,
     const Reference< XGraphic >& xGraphic, const awt::Size& aLogicalSize, const text::GraphicCrop& aGraphicCropLogic,
         const GraphicSettings& rGraphicSettings )
 {
@@ -290,7 +290,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                         // cropping has to be removed from SourceSizePixel
                         if ( aGraphicCropLogic.Left || aGraphicCropLogic.Top || aGraphicCropLogic.Right || aGraphicCropLogic.Bottom )
                         {
-                            const awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxMSF, xGraphic ) );
+                            const awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxContext, xGraphic ) );
 
                             if ( bRemoveCropArea )
                                 bNeedsOptimizing = sal_True;
@@ -339,9 +339,9 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                             }
                             if ( bNeedsOptimizing && aDestSizePixel.Width && aDestSizePixel.Height )
                             {
-                                Reference< XStream > xTempFile( io::TempFile::create(rxMSF), UNO_QUERY_THROW );
+                                Reference< XStream > xTempFile( io::TempFile::create(rxContext), UNO_QUERY_THROW );
                                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
-                                Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create( rxMSF ) );
+                                Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create( rxContext ) );
 
                                 ImpCompressGraphic( xGraphicProvider, xGraphic, xOutputStream, aDestMimeType, aLogicalSize, rGraphicSettings.mnJPEGQuality, rGraphicSettings.mnImageResolution, bRemoveCropArea, aGraphicCropLogic );
                                 Reference< XInputStream > xInputStream( xTempFile->getInputStream() );
@@ -359,9 +359,9 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
             else // this is a metafile
             {
                 OUString aDestMimeType( aSourceMimeType );
-                Reference< XStream > xTempFile( io::TempFile::create(rxMSF), UNO_QUERY_THROW );
+                Reference< XStream > xTempFile( io::TempFile::create(rxContext), UNO_QUERY_THROW );
                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
-                Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create( rxMSF ) );
+                Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create( rxContext ) );
                 ImpCompressGraphic( xGraphicProvider, xGraphic, xOutputStream, aDestMimeType, aLogicalSize, rGraphicSettings.mnJPEGQuality, rGraphicSettings.mnImageResolution, sal_False, aGraphicCropLogic );
                 Reference< XInputStream > xInputStream( xTempFile->getInputStream() );
                 Reference< XSeekable > xSeekable( xInputStream, UNO_QUERY_THROW );
@@ -379,7 +379,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
     return xNewGraphic;
 }
 
-void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentContext >& rxMSF, const GraphicSettings& rGraphicSettings,
+void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentContext >& rxContext, const GraphicSettings& rGraphicSettings,
     std::vector< GraphicCollector::GraphicEntity >& rGraphicList )
 {
     try
@@ -414,8 +414,8 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
                 if ( xGraphic.is() )
                 {
                     Reference< XPropertySet > xNewGraphicPropertySet( xGraphic, UNO_QUERY_THROW );
-                    awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxMSF, xGraphic ) );
-                    Reference< XGraphic > xNewGraphic( ImpCompressGraphic( rxMSF, xGraphic, aGraphicIter->maLogicalSize, aGraphicIter->maGraphicCropLogic, aGraphicSettings ) );
+                    awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxContext, xGraphic ) );
+                    Reference< XGraphic > xNewGraphic( ImpCompressGraphic( rxContext, xGraphic, aGraphicIter->maLogicalSize, aGraphicIter->maGraphicCropLogic, aGraphicSettings ) );
                     if ( xNewGraphic.is() )
                     {
                         // applying graphic to each user
@@ -435,7 +435,7 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
                                     text::GraphicCrop aGraphicCropLogic( 0, 0, 0, 0 );
                                     if ( !aGraphicSettings.mbRemoveCropArea )
                                     {
-                                        awt::Size aNewSize( GraphicCollector::GetOriginalSize( rxMSF, xNewGraphic ) );
+                                        awt::Size aNewSize( GraphicCollector::GetOriginalSize( rxContext, xNewGraphic ) );
                                         aGraphicCropLogic.Left = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Left * ((double)aNewSize.Width / (double)aSize100thMM.Width));
                                         aGraphicCropLogic.Top = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Top * ((double)aNewSize.Height / (double)aSize100thMM.Height));
                                         aGraphicCropLogic.Right = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Right * ((double)aNewSize.Width / (double)aSize100thMM.Width));
@@ -486,8 +486,8 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
 // - ImpOptimizer -
 // ----------------
 
-ImpOptimizer::ImpOptimizer( const Reference< XComponentContext >& rxMSF, const Reference< XModel >& rxModel ) :
-    mxMSF                       ( rxMSF ),
+ImpOptimizer::ImpOptimizer( const Reference< XComponentContext >& rxContext, const Reference< XModel >& rxModel ) :
+    mxContext                   ( rxContext ),
     mxModel                     ( rxModel ),
     mbJPEGCompression           ( sal_False ),
     mnJPEGQuality               ( 90 ),
@@ -569,8 +569,8 @@ sal_Bool ImpOptimizer::Optimize()
 
         std::vector< GraphicCollector::GraphicEntity > aGraphicList;
         GraphicSettings aGraphicSettings( mbJPEGCompression, mnJPEGQuality, mbRemoveCropArea, mnImageResolution, mbEmbedLinkedGraphics );
-        GraphicCollector::CollectGraphics( mxMSF, mxModel, aGraphicSettings, aGraphicList );
-        CompressGraphics( *this, mxMSF, aGraphicSettings, aGraphicList );
+        GraphicCollector::CollectGraphics( mxContext, mxModel, aGraphicSettings, aGraphicList );
+        CompressGraphics( *this, mxContext, aGraphicSettings, aGraphicList );
     }
     SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 100 ) ) );
     DispatchStatus();
@@ -681,7 +681,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
                 SetStatusValue( TK_Status, Any( TKGet( STR_DUPLICATING_PRESENTATION ) ) );
                 DispatchStatus();
 
-                Reference< XDesktop2 > xDesktop = Desktop::create( mxMSF );
+                Reference< XDesktop2 > xDesktop = Desktop::create( mxContext );
                 xSelf = xDesktop->findFrame( TKGet( TK__blank ), FrameSearchFlag::CREATE );
                 Reference< XComponentLoader > xComponentLoader( xSelf, UNO_QUERY );
 
@@ -706,7 +706,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             if ( xFrame.is() )
             {
                 const OUString sSlot( "slot:27115"  );
-                DispatchURL( mxMSF, sSlot, xFrame );
+                DispatchURL( mxContext, sSlot, xFrame );
             }
         }
 
@@ -721,7 +721,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
 
         if ( mxInformationDialog.is() )
         {
-            InformationDialog aInformationDialog( mxMSF, mxInformationDialog, maSaveAsURL, mbOpenNewDocument, nSourceSize, nDestSize, nEstimatedFileSize );
+            InformationDialog aInformationDialog( mxContext, mxInformationDialog, maSaveAsURL, mbOpenNewDocument, nSourceSize, nDestSize, nEstimatedFileSize );
             aInformationDialog.execute();
             SetStatusValue( TK_OpenNewDocument, Any( mbOpenNewDocument ) );
             DispatchStatus();

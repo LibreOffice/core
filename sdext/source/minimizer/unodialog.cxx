@@ -45,10 +45,10 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::script;
 
 UnoDialog::UnoDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame ) :
-    mxMSF( rxContext ),
+    mxContext( rxContext ),
     mxController( rxFrame->getController() ),
-    mxDialogModel( mxMSF->getServiceManager()->createInstanceWithContext( OUString(
-        "com.sun.star.awt.UnoControlDialogModel" ), mxMSF ), UNO_QUERY_THROW ),
+    mxDialogModel( mxContext->getServiceManager()->createInstanceWithContext( OUString(
+        "com.sun.star.awt.UnoControlDialogModel" ), mxContext ), UNO_QUERY_THROW ),
     mxDialogModelMultiPropertySet( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelPropertySet( mxDialogModel, UNO_QUERY_THROW ),
     mxDialogModelMSF( mxDialogModel, UNO_QUERY_THROW ),
@@ -95,7 +95,7 @@ Reference< XWindowPeer > UnoDialog::createWindowPeer( Reference< XWindowPeer > x
     throw ( Exception )
 {
     mxDialog->setVisible( sal_False );
-    Reference< XToolkit > xToolkit( Toolkit::create( mxMSF ), UNO_QUERY_THROW  );
+    Reference< XToolkit > xToolkit( Toolkit::create( mxContext ), UNO_QUERY_THROW  );
     if ( !xParentPeer.is() )
         xParentPeer = xToolkit->getDesktopWindow();
     mxReschedule = Reference< XReschedule >( xToolkit, UNO_QUERY );
