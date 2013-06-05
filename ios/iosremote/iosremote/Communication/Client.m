@@ -50,7 +50,7 @@ NSString * const CHARSET = @"UTF-8";
             managedBy:(CommunicationManager*)manager
         interpretedBy:(Receiver*)receiver
 {
-    self.mPin = [NSString stringWithFormat:@"%04d", arc4random() % 9999];
+    self.mPin = [self getPin];
     NSLog(@"mPin: %@", self.mPin);
     self.mName = [[UIDevice currentDevice] name];
     self.mServer = server;
@@ -60,6 +60,12 @@ NSString * const CHARSET = @"UTF-8";
     self.mPort = 1599;
     
     return self;
+}
+
+- (NSString *) getPin
+{
+    
+    NSString* newPin = [NSString stringWithFormat:@"%04d", arc4random() % 9999];
 }
 
 - (void)streamOpenWithIp:(NSString *)ip withPortNumber:(uint)portNumber
