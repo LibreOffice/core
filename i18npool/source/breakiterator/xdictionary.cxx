@@ -281,8 +281,8 @@ WordBreakCache& xdictionary::getCache(const sal_Unicode *text, Boundary& wordBou
 
     if (rCache.size == 0 || len > rCache.size) {
         if (rCache.size != 0) {
-            delete rCache.contents;
-            delete rCache.wordboundary;
+            delete [] rCache.contents;
+            delete [] rCache.wordboundary;
             rCache.size = len;
         }
         else
