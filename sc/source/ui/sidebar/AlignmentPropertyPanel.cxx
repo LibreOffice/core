@@ -159,12 +159,12 @@ void AlignmentPropertyPanel::Initialize()
     mpMtrAngle->InsertValue(315, FUNIT_CUSTOM);
     mpMtrAngle->SetDropDownLineCount(mpMtrAngle->GetEntryCount());
 
-    mpTBHorizontal->SetAccessibleRelationLabeledBy(mpTBHorizontal.get());
-    mpTBVertical->SetAccessibleRelationLabeledBy(mpTBVertical.get());
-    mpMFLeftIndent->SetAccessibleRelationLabeledBy(mpFTLeftIndent.get());
-    mpMtrAngle->SetAccessibleRelationLabeledBy(mpFtRotate.get());
+    mpTBHorizontal->SetAccessibleRelationLabeledBy(mpTBHorizontal);
+    mpTBVertical->SetAccessibleRelationLabeledBy(mpTBVertical);
+    mpMFLeftIndent->SetAccessibleRelationLabeledBy(mpFTLeftIndent);
+    mpMtrAngle->SetAccessibleRelationLabeledBy(mpFtRotate);
 #ifdef HAS_IA2
-    mpMtrAngle->SetMpSubEditAccLableBy(mpFtRotate.get());
+    mpMtrAngle->SetMpSubEditAccLableBy(mpFtRotate);
 #endif
 }
 

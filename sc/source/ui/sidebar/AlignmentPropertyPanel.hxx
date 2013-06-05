@@ -59,16 +59,16 @@ public:
 
 private:
     //ui controls
-    ::boost::scoped_ptr< ToolBox >              mpTBHorizontal;
-    ::boost::scoped_ptr< ToolBox >              mpTBVertical;
-    ::boost::scoped_ptr< FixedText >            mpFTLeftIndent;
-    ::boost::scoped_ptr< MetricField >          mpMFLeftIndent;
-    ::boost::scoped_ptr< CheckBox >             mpCBXWrapText;
-    ::boost::scoped_ptr< CheckBox >             mpCBXMergeCell;
-    ::boost::scoped_ptr< FixedText >            mpFtRotate;
-    ::boost::scoped_ptr< svx::sidebar::SidebarDialControl > mpCtrlDial;
-    ::boost::scoped_ptr< MetricBox >            mpMtrAngle;
-    ::boost::scoped_ptr< CheckBox >             mpCbStacked;
+    ToolBox*                                    mpTBHorizontal;
+    ToolBox*                                    mpTBVertical;
+    FixedText*                                  mpFTLeftIndent;
+    MetricField*                                mpMFLeftIndent;
+    CheckBox*                                   mpCBXWrapText;
+    CheckBox*                                   mpCBXMergeCell;
+    FixedText*                                  mpFtRotate;
+    svx::sidebar::SidebarDialControl*           mpCtrlDial;
+    MetricBox*                                  mpMtrAngle;
+    CheckBox*                                   mpCbStacked;
 
     ::sfx2::sidebar::ControllerItem             maAlignHorControl;
     ::sfx2::sidebar::ControllerItem             maAlignVerControl;
