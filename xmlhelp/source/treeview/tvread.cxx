@@ -40,7 +40,6 @@
 
 namespace treeview {
 
-
     class TVDom
     {
         friend class TVChildTarget;
@@ -61,7 +60,6 @@ namespace treeview {
                 delete children[i];
         }
 
-
         TVDom* newChild()
         {
             children.push_back( new TVDom( this ) );
@@ -74,7 +72,6 @@ namespace treeview {
             p->parent = this;
             return children.back();
         }
-
 
         TVDom* getParent() const
         {
@@ -94,7 +91,6 @@ namespace treeview {
         bool isLeaf() const { return kind == TVDom::tree_leaf; }
         void setKind( Kind ind ) { kind = ind; }
         Kind getKind( ) const { return kind; }
-
 
         void setApplication( const char* appl )
         {
@@ -170,7 +166,6 @@ namespace treeview {
 }
 
 
-
 using namespace treeview;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -236,8 +231,6 @@ void SAL_CALL ConfigData::replaceName( OUString& oustring ) const
 }
 
 
-
-
 //////////////////////////////////////////////////////////////////////////
 // XInterface
 //////////////////////////////////////////////////////////////////////////
@@ -251,7 +244,6 @@ TVBase::acquire(
   OWeakObject::acquire();
 }
 
-
 void SAL_CALL
 TVBase::release(
               void )
@@ -259,7 +251,6 @@ TVBase::release(
 {
   OWeakObject::release();
 }
-
 
 Any SAL_CALL
 TVBase::queryInterface(
@@ -276,7 +267,6 @@ TVBase::queryInterface(
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 // XTypeProvider methods.
@@ -288,13 +278,7 @@ XTYPEPROVIDER_IMPL_5( TVBase,
                       XChangesNotifier,
                       XComponent );
 
-
-
-
-
-
 // TVRead
-
 
 TVRead::TVRead( const ConfigData& configData,TVDom* tvDom )
 {
@@ -314,16 +298,9 @@ TVRead::TVRead( const ConfigData& configData,TVDom* tvDom )
         Children = new TVChildTarget( configData,tvDom );
 }
 
-
-
 TVRead::~TVRead()
 {
 }
-
-
-
-
-
 
 // XNameAccess
 
@@ -353,9 +330,6 @@ TVRead::getByName( const OUString& aName )
     throw NoSuchElementException();
 }
 
-
-
-
 Sequence< OUString > SAL_CALL
 TVRead::getElementNames( )
     throw( RuntimeException )
@@ -369,8 +343,6 @@ TVRead::getElementNames( )
     return seq;
 }
 
-
-
 sal_Bool SAL_CALL
 TVRead::hasByName( const OUString& aName )
     throw( RuntimeException )
@@ -382,7 +354,6 @@ TVRead::hasByName( const OUString& aName )
 
     return false;
 }
-
 
 // XHierarchicalNameAccess
 
@@ -401,9 +372,6 @@ TVRead::getByHierarchicalName( const OUString& aName )
     return getByName( name );
 }
 
-
-
-
 sal_Bool SAL_CALL
 TVRead::hasByHierarchicalName( const OUString& aName )
     throw( RuntimeException )
@@ -418,16 +386,11 @@ TVRead::hasByHierarchicalName( const OUString& aName )
     return hasByName( name );
 }
 
-
-
 /**************************************************************************/
 /*                                                                        */
 /*                      TVChildTarget                                     */
 /*                                                                        */
 /**************************************************************************/
-
-
-
 
 extern "C" void start_handler(void *userData,
                    const XML_Char *name,
@@ -466,7 +429,6 @@ extern "C" void start_handler(void *userData,
     }
 }
 
-
 extern "C" void end_handler(void *userData,
                  const XML_Char *name )
 {
@@ -475,7 +437,6 @@ extern "C" void end_handler(void *userData,
     TVDom **tvDom = static_cast< TVDom** >( userData );
     *tvDom = (*tvDom)->getParent();
 }
-
 
 extern "C" void data_handler( void *userData,
                    const XML_Char *s,
@@ -538,7 +499,6 @@ TVChildTarget::TVChildTarget( const Reference< XComponentContext >& xContext )
     for( unsigned i = 0; i < Elements.size(); ++i )
         Elements[i] = new TVRead( configData,tvDom.children[i] );
 }
-
 
 TVChildTarget::~TVChildTarget()
 {
@@ -635,9 +595,6 @@ TVChildTarget::getByName( const OUString& aName )
     return aAny;
 }
 
-
-
-
 Sequence< OUString > SAL_CALL
 TVChildTarget::getElementNames( )
     throw( RuntimeException )
@@ -648,8 +605,6 @@ TVChildTarget::getElementNames( )
 
     return seq;
 }
-
-
 
 sal_Bool SAL_CALL
 TVChildTarget::hasByName( const OUString& aName )
@@ -662,8 +617,6 @@ TVChildTarget::hasByName( const OUString& aName )
 
     return true;
 }
-
-
 
 // XHierarchicalNameAccess
 
@@ -689,8 +642,6 @@ TVChildTarget::getByHierarchicalName( const OUString& aName )
         return getByName( name );
 }
 
-
-
 sal_Bool SAL_CALL
 TVChildTarget::hasByHierarchicalName( const OUString& aName )
     throw( RuntimeException )
@@ -710,11 +661,6 @@ TVChildTarget::hasByHierarchicalName( const OUString& aName )
     else
         return hasByName( name );
 }
-
-
-
-
-
 
 ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
 {
@@ -878,14 +824,6 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
     return configData;
 }
 
-
-
-
-
-
-
-
-
 Reference< XMultiServiceFactory >
 TVChildTarget::getConfiguration(const Reference< XComponentContext >& rxContext) const
 {
@@ -904,8 +842,6 @@ TVChildTarget::getConfiguration(const Reference< XComponentContext >& rxContext)
 
     return xProvider;
 }
-
-
 
 Reference< XHierarchicalNameAccess >
 TVChildTarget::getHierAccess( const Reference< XMultiServiceFactory >& sProvider,
@@ -936,8 +872,6 @@ TVChildTarget::getHierAccess( const Reference< XMultiServiceFactory >& sProvider
     return xHierAccess;
 }
 
-
-
 OUString
 TVChildTarget::getKey( const Reference< XHierarchicalNameAccess >& xHierAccess,
                        const char* key ) const
@@ -958,7 +892,6 @@ TVChildTarget::getKey( const Reference< XHierarchicalNameAccess >& xHierAccess,
     }
     return instPath;
 }
-
 
 sal_Bool
 TVChildTarget::getBooleanKey(const Reference<
@@ -989,7 +922,6 @@ void TVChildTarget::subst( OUString& instpath ) const
     SvtPathOptions aOptions;
     instpath = aOptions.SubstituteVariable( instpath );
 }
-
 
 //===================================================================
 // class ExtensionIteratorBase
@@ -1204,7 +1136,6 @@ void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUS
     }
 }
 
-
 //===================================================================
 // class TreeFileIterator
 
@@ -1325,7 +1256,5 @@ OUString TreeFileIterator::implGetTreeFileFromPackage
 
     return aRetFile;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
