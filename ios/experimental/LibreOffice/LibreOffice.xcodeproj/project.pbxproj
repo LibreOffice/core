@@ -18,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BE02DE57175F2E2A00ED4032 /* guess.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = guess.cxx; path = ../../../../sw/source/core/text/guess.cxx; sourceTree = "<group>"; };
 		BE08805B16FDB784000CED5C /* View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View.h; sourceTree = "<group>"; };
 		BE08805C16FDB784000CED5C /* View.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View.m; sourceTree = "<group>"; };
 		BE2F0A0A17077A040060FE0D /* typedescriptionprovider.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = typedescriptionprovider.cxx; path = ../../../../cppuhelper/source/typedescriptionprovider.cxx; sourceTree = "<group>"; };
@@ -270,6 +271,7 @@
 			isa = PBXGroup;
 			children = (
 				BECB749617181C92001BEB85 /* crsrsh.cxx */,
+				BE02DE57175F2E2A00ED4032 /* guess.cxx */,
 				BECB749917185F48001BEB85 /* view.cxx */,
 				BECB749A17185F48001BEB85 /* view0.cxx */,
 				BECB749B17185F48001BEB85 /* view1.cxx */,
