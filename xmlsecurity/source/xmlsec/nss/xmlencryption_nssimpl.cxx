@@ -306,11 +306,6 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
     return aTemplate;
 }
 
-/* XInitialization */
-void SAL_CALL XMLEncryption_NssImpl :: initialize( const Sequence< Any >& /*aArguments*/ ) throw( Exception, RuntimeException ) {
-    // TBD
-} ;
-
 /* XServiceInfo */
 OUString SAL_CALL XMLEncryption_NssImpl :: getImplementationName() throw( RuntimeException ) {
     return impl_getImplementationName() ;

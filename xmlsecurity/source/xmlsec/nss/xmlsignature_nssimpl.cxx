@@ -271,11 +271,6 @@ SAL_CALL XMLSignature_NssImpl :: validate(
     return aTemplate;
 }
 
-/* XInitialization */
-void SAL_CALL XMLSignature_NssImpl :: initialize( const Sequence< Any >& /*aArguments*/ ) throw( Exception, RuntimeException ) {
-    // TBD
-} ;
-
 /* XServiceInfo */
 OUString SAL_CALL XMLSignature_NssImpl :: getImplementationName() throw( RuntimeException ) {
     return impl_getImplementationName() ;

@@ -174,11 +174,6 @@ SecurityEnvironment_MSCryptImpl :: ~SecurityEnvironment_MSCryptImpl() {
 
 }
 
-/* XInitialization */
-void SAL_CALL SecurityEnvironment_MSCryptImpl :: initialize( const Sequence< Any >& /*aArguments*/ ) throw( Exception, RuntimeException ) {
-    //TODO
-} ;
-
 /* XServiceInfo */
 OUString SAL_CALL SecurityEnvironment_MSCryptImpl :: getImplementationName() throw( RuntimeException ) {
     return impl_getImplementationName() ;

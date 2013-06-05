@@ -34,9 +34,8 @@ using ::com::sun::star::lang::XSingleServiceFactory ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 
-XMLSecurityContext_NssImpl :: XMLSecurityContext_NssImpl( const Reference< XMultiServiceFactory >& aFactory )
+XMLSecurityContext_NssImpl :: XMLSecurityContext_NssImpl()
     ://i39448 : m_pKeysMngr( NULL ) ,
-    m_xServiceManager( aFactory ) ,
     m_nDefaultEnvIndex(-1)
     //m_xSecurityEnvironment( NULL )
 {
@@ -130,11 +129,6 @@ void SAL_CALL XMLSecurityContext_NssImpl::setDefaultSecurityEnvironmentIndex( sa
 //i39448 : old methods deleted
 
 
-/* XInitialization */
-void SAL_CALL XMLSecurityContext_NssImpl :: initialize( const Sequence< Any >& /*aArguments*/ ) throw( Exception, RuntimeException ) {
-    // TBD
-} ;
-
 /* XServiceInfo */
 OUString SAL_CALL XMLSecurityContext_NssImpl :: getImplementationName() throw( RuntimeException ) {
     return impl_getImplementationName() ;
@@ -169,8 +163,8 @@ OUString XMLSecurityContext_NssImpl :: impl_getImplementationName() throw( Runti
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL XMLSecurityContext_NssImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
-    return Reference< XInterface >( *new XMLSecurityContext_NssImpl( aServiceManager ) ) ;
+Reference< XInterface > SAL_CALL XMLSecurityContext_NssImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& ) throw( RuntimeException ) {
+    return Reference< XInterface >( *new XMLSecurityContext_NssImpl ) ;
 }
 
 Reference< XSingleServiceFactory > XMLSecurityContext_NssImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {

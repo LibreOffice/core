@@ -23,14 +23,13 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
@@ -46,10 +45,9 @@
 
 #include "xmlsecurity/xmlsec-wrapper.h"
 
-class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper4<
+class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper3<
     ::com::sun::star::xml::crypto::XSecurityEnvironment ,
-    ::com::sun::star::lang::XInitialization ,
-    ::com::sun::star::lang::XServiceInfo ,
+    ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::lang::XUnoTunnel >
 {
 private :
@@ -66,15 +64,10 @@ private :
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
 
     public :
-        SecurityEnvironment_NssImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
-        virtual ~SecurityEnvironment_NssImpl() ;
+        SecurityEnvironment_NssImpl();
+        virtual ~SecurityEnvironment_NssImpl();
 
         //Methods from XSecurityEnvironment
-
-        //Methods from XInitialization
-        virtual void SAL_CALL initialize(
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments
-        ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         //Methods from XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;
@@ -113,7 +106,7 @@ private :
 
         static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
 
-        //Native mehtods
+        //Native methods
         virtual CERTCertDBHandle* getCertDb() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         virtual void setCertDb( CERTCertDBHandle* aCertDb ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
@@ -141,7 +134,7 @@ private :
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL createCertificateFromAscii( const OUString& asciiCertificate ) throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
 
 
-        //Native mehtods
+        //Native methods
         virtual xmlSecKeysMngrPtr createKeysManager() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
         virtual void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 

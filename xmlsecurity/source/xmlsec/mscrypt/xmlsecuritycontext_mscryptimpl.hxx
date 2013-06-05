@@ -23,32 +23,29 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 
 
-class XMLSecurityContext_MSCryptImpl : public ::cppu::WeakImplHelper3<
+class XMLSecurityContext_MSCryptImpl : public ::cppu::WeakImplHelper2<
     ::com::sun::star::xml::crypto::XXMLSecurityContext ,
-    ::com::sun::star::lang::XInitialization ,
     ::com::sun::star::lang::XServiceInfo >
 {
     private :
         //xmlSecKeysMngrPtr m_pKeysMngr ;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment ;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
 
     public :
-        XMLSecurityContext_MSCryptImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
-        virtual ~XMLSecurityContext_MSCryptImpl() ;
+        XMLSecurityContext_MSCryptImpl();
+        virtual ~XMLSecurityContext_MSCryptImpl();
 
         //Methods from XXMLSecurityContext
         virtual sal_Int32 SAL_CALL addSecurityEnvironment(
@@ -74,11 +71,6 @@ class XMLSecurityContext_MSCryptImpl : public ::cppu::WeakImplHelper3<
         virtual void SAL_CALL setDefaultSecurityEnvironmentIndex( sal_Int32 nDefaultEnvIndex )
             throw (::com::sun::star::uno::RuntimeException);
 
-
-        //Methods from XInitialization
-        virtual void SAL_CALL initialize(
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments
-        ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         //Methods from XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;

@@ -33,6 +33,8 @@
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/logfile.hxx>
+#include <com/sun/star/xml/crypto/SecurityEnvironment.hpp>
+#include <com/sun/star/xml/crypto/XMLSecurityContext.hpp>
 
 #include "seinitializer_nssimpl.hxx"
 #include "securityenvironment_nssimpl.hxx"
@@ -51,9 +53,6 @@ namespace cssxc = css::xml::crypto;
 using namespace com::sun::star;
 
 #define SE_SERVICE_NAME "com.sun.star.xml.crypto.SEInitializer"
-#define IMPLEMENTATION_NAME "com.sun.star.xml.security.bridge.xmlsec.SEInitializer_NssImpl"
-#define SECURITY_ENVIRONMENT "com.sun.star.xml.crypto.SecurityEnvironment"
-#define SECURITY_CONTEXT "com.sun.star.xml.crypto.XMLSecurityContext"
 
 SEInitializer_NssImpl::SEInitializer_NssImpl( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
 {
@@ -79,19 +78,13 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     try
     {
         /* Build XML Security Context */
-        const OUString sSecyrutyContext ( SECURITY_CONTEXT );
-        uno::Reference< cssxc::XXMLSecurityContext > xSecCtx( m_xContext->getServiceManager()->createInstanceWithContext(sSecyrutyContext, m_xContext), uno::UNO_QUERY );
-        if( !xSecCtx.is() )
-            return NULL;
+        uno::Reference< cssxc::XXMLSecurityContext > xSecCtx = cssxc::XMLSecurityContext::create( m_xContext );
 
-        const OUString sSecyrutyEnvironment ( SECURITY_ENVIRONMENT );
-        uno::Reference< cssxc::XSecurityEnvironment > xSecEnv( m_xContext->getServiceManager()->createInstanceWithContext(sSecyrutyEnvironment, m_xContext), uno::UNO_QUERY );
-        uno::Reference< cssl::XUnoTunnel > xEnvTunnel( xSecEnv , uno::UNO_QUERY ) ;
-        if( !xEnvTunnel.is() )
-            return NULL;
+        uno::Reference< cssxc::XSecurityEnvironment > xSecEnv = cssxc::SecurityEnvironment::create( m_xContext );
+        uno::Reference< lang::XUnoTunnel > xSecEnvTunnel(xSecEnv, uno::UNO_QUERY_THROW);
         SecurityEnvironment_NssImpl* pSecEnv = reinterpret_cast<SecurityEnvironment_NssImpl*>(
             sal::static_int_cast<sal_uIntPtr>(
-                xEnvTunnel->getSomething(SecurityEnvironment_NssImpl::getUnoTunnelId() ))) ;
+                xSecEnvTunnel->getSomething(SecurityEnvironment_NssImpl::getUnoTunnelId() ))) ;
         pSecEnv->setCertDb(pCertHandle);
 
         sal_Int32 n = xSecCtx->addSecurityEnvironment(xSecEnv);
@@ -122,8 +115,7 @@ void SAL_CALL SEInitializer_NssImpl::freeSecurityContext( const uno::Reference< 
 OUString SEInitializer_NssImpl_getImplementationName ()
     throw (uno::RuntimeException)
 {
-
-    return OUString ( IMPLEMENTATION_NAME );
+    return OUString ("com.sun.star.xml.security.bridge.xmlsec.SEInitializer_NssImpl" );
 }
 
 sal_Bool SAL_CALL SEInitializer_NssImpl_supportsService( const OUString& ServiceName )

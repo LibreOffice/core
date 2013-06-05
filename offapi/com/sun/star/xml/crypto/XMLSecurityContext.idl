@@ -21,23 +21,17 @@
 
 /** -- idl definition -- **/
 
-#ifndef __com_sun_star_xml_crypto_xmlsecuritycontext_idl_
-#define __com_sun_star_xml_crypto_xmlsecuritycontext_idl_
+#ifndef __com_sun_star_xml_crypto_XMLSecurityContext_idl_
+#define __com_sun_star_xml_crypto_XMLSecurityContext_idl_
 
-#include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/uno/Exception.idl>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.idl>
-#include <com/sun/star/lang/XInitialization.idl>
 
 module com { module sun { module star { module xml { module crypto {
 
 /**
  * Service of XMLSecurityContext
  */
-service XMLSecurityContext {
-    interface com::sun::star::xml::crypto::XXMLSecurityContext ;
-    interface com::sun::star::lang::XInitialization ;
-} ;
+service XMLSecurityContext : XXMLSecurityContext;
 
 } ; } ; } ; } ; } ;
 
