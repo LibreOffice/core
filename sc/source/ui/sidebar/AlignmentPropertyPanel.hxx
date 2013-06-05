@@ -20,6 +20,7 @@
 
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/fixed.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <editeng/svxenum.hxx>
@@ -33,7 +34,7 @@ namespace svx { namespace sidebar { class SidebarDialControl; }}
 namespace sc { namespace sidebar {
 
 class AlignmentPropertyPanel
-:   public Control,
+:   public PanelLayout,
     public ::sfx2::sidebar::IContextChangeReceiver,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {

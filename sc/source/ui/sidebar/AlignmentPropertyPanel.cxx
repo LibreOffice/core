@@ -57,23 +57,7 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
     Window* pParent,
     const cssu::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-    : Control(
-        pParent,
-            ScResId(RID_PROPERTYPANEL_SC_ALIGNMENT)),
-      mpTBHorizontal(ControlFactory::CreateToolBox(
-              mpTBHorizontalBackground.get(),
-              ScResId(TBX_HORIZONTAL_ALIGNMENT))),
-      mpTBVertical(ControlFactory::CreateToolBox(
-              mpTBVerticalBackground.get(),
-              ScResId(TBX_VERTICAL_ALIGN))),
-      mpFTLeftIndent(new FixedText(this, ScResId(FT_LEFT_INDENT))),
-      mpMFLeftIndent(new MetricField(this, ScResId(MF_LEFT_INDENT))),
-      mpCBXWrapText(new CheckBox(this, ScResId(CBX_WRAP))),
-      mpCBXMergeCell(new CheckBox(this, ScResId(CBX_MERGE))),
-      mpFtRotate(new FixedText(this, ScResId(FT_ORIENT))),
-      mpCtrlDial(new svx::sidebar::SidebarDialControl(this, ScResId(DIAL_CONTROL))), // , true)),
-      mpMtrAngle(new MetricBox(this, ScResId(CBOX_ANGLE))),
-      mpCbStacked(new CheckBox(this, ScResId(CBX_VERT))),
+    : PanelLayout(pParent, "AlignmentPropertyPanel", "modules/scalc/ui/sidebaralignment.ui", rxFrame),
       maAlignHorControl(SID_H_ALIGNCELL, *pBindings, *this),
       maAlignVerControl(SID_V_ALIGNCELL, *pBindings, *this),
       maLeftIndentControl(SID_ATTR_ALIGN_INDENT, *pBindings, *this),
@@ -88,8 +72,18 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
       maContext(),
       mpBindings(pBindings)
 {
+    get(mpTBHorizontal, "horizontalalignment");
+    get(mpTBVertical, "verticalalignment");
+    get(mpFTLeftIndent, "leftindentlabel");
+    get(mpMFLeftIndent, "leftindent");
+    get(mpCBXWrapText, "wraptext");
+    get(mpCBXMergeCell, "mergecells");
+    get(mpFtRotate, "orientationlabel");
+    get(mpCtrlDial, "orientationcontrol");
+    get(mpMtrAngle, "orientationdegrees");
+    get(mpCbStacked, "verticallystacked");
+
     Initialize();
-    FreeResource();
 
     mpFTLeftIndent->SetBackground(Wallpaper());
     mpFtRotate->SetBackground(Wallpaper());
