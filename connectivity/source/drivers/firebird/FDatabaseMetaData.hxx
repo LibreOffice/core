@@ -53,7 +53,6 @@ namespace connectivity
         class ODatabaseMetaData : public ODatabaseMetaData_BASE
         {
             OConnection*    m_pConnection;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > m_pGetTablesStm;
             sal_Bool        m_bUseCatalog;
         public:
 
