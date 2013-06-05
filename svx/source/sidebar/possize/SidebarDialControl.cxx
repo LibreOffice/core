@@ -22,6 +22,20 @@
 
 namespace svx { namespace sidebar {
 
+SidebarDialControl::SidebarDialControl (Window* pParent, WinBits nBits)
+    : svx::DialControl(pParent, nBits)
+{
+    mpImpl->mpBmpEnabled.reset(new SidebarDialControlBmp(*this));
+    mpImpl->mpBmpDisabled.reset(new SidebarDialControlBmp(*this));
+    mpImpl->mpBmpBuffered.reset(new SidebarDialControlBmp(*this));
+    Init(GetOutputSizePixel());
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSidebarDialControl(Window *pParent)
+{
+    return new SidebarDialControl(pParent, WB_TABSTOP);
+}
+
 SidebarDialControl::SidebarDialControl (
     Window* pParent,
     const ResId& rResId)
