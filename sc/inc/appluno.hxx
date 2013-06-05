@@ -22,12 +22,14 @@
 
 #include <svl/itemprop.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XRecentFunctions.hpp>
 #include <com/sun/star/sheet/XFunctionDescriptions.hpp>
 #include <com/sun/star/sheet/XGlobalSheetSettings.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <rtl/ustring.hxx>
 
@@ -47,8 +49,9 @@ com::sun::star::uno::Reference<com::sun::star::uno::XInterface> SAL_CALL
             com::sun::star::lang::XMultiServiceFactory>& rSMgr );
 
 
-class ScSpreadsheetSettings : public cppu::WeakImplHelper2<
+class ScSpreadsheetSettings : public cppu::WeakImplHelper3<
                                         com::sun::star::sheet::XGlobalSheetSettings,
+                                        com::sun::star::beans::XPropertySet,
                                         com::sun::star::lang::XServiceInfo>
 {
 private:

@@ -20,7 +20,7 @@
 #ifndef __com_sun_star_sheet_XGlobalSheetSettings_idl__
 #define __com_sun_star_sheet_XGlobalSheetSettings_idl__
 
-#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/uno/XInterface.idl>
 
 
 module com {  module sun {  module star {  module sheet {
@@ -31,13 +31,6 @@ module com {  module sun {  module star {  module sheet {
  */
 published interface XGlobalSheetSettings
 {
-
-//! service com::sun::star::beans::PropertySet;
-    /** provides access to the properties.
-     */
-    interface com::sun::star::beans::XPropertySet;
-
-
     /** specifies whether the cursor is moved after entering into cells.
      */
     [attribute] boolean MoveSelection;
