@@ -102,6 +102,8 @@ namespace connectivity
             virtual void SAL_CALL getFastPropertyValue(
                                                                 ::com::sun::star::uno::Any& rValue,
                                                                 sal_Int32 nHandle) const;
+            virtual void SAL_CALL prepareQuery( const ::rtl::OUString& sql )  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
             virtual ~OStatement_Base();
 
         public:

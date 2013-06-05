@@ -86,8 +86,24 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     m_pConnection(_pConnection)
 {
     m_pConnection->acquire();
-    m_OUTsqlda = NULL;
-    m_INsqlda = NULL;
+
+    ISC_STATUS_ARRAY status;                            // status vector
+    isc_db_handle db = m_pConnection->getDBHandler();   // database handle
+
+    // enabling the XSQLDA to accommodate up to 10 select-list items (DEFAULT)
+    m_OUTsqlda = (XSQLDA *)malloc(XSQLDA_LENGTH(10));
+    m_OUTsqlda->version = SQLDA_VERSION1;
+    m_OUTsqlda->sqln = 10;
+
+    // enabling the XSQLDA to accommodate up to 10 parameter items (DEFAULT)
+    m_INsqlda = (XSQLDA *)malloc(XSQLDA_LENGTH(10));
+    m_INsqlda->version = SQLDA_VERSION1;
+    m_INsqlda->sqln = 10;
+
+    m_STMTHandler = NULL;          // Set handle to NULL before allocation.
+    if (isc_dsql_allocate_statement(status, &db, &m_STMTHandler))
+        if (pr_error(status, "allocate statement"))
+            return;
 }
 //-----------------------------------------------------------------------------
 OStatement_Base::~OStatement_Base()
@@ -195,6 +211,119 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
     // returns true when a resultset is available
     return sal_False;
 }
+
+void SAL_CALL OStatement_Base::prepareQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+{
+    ISC_STATUS_ARRAY status;                            // status vector
+    isc_db_handle db = m_pConnection->getDBHandler();   // database handle
+
+    m_TRANSHandler = 0L; // transaction handle
+    if (isc_start_transaction(status, &m_TRANSHandler, 1, &db, 0, NULL))
+        if (pr_error(status, "start transaction"))
+            return;
+
+    // sets the statement handle (stmt) to refer to the parsed format.
+    char *sqlStr = strdup(OUStringToOString( sql, RTL_TEXTENCODING_UTF8 ).getStr());
+    if (isc_dsql_prepare(status, &m_TRANSHandler, &m_STMTHandler, 0, sqlStr, 1, m_OUTsqlda))
+        if (pr_error(status, "prepare statement"))
+            return;
+    free(sqlStr);
+
+    // fill the input XSQLDA with information about the parameters
+    if (isc_dsql_describe_bind(status, &m_STMTHandler, 1, m_INsqlda))
+        if (pr_error(status, "bind statement"))
+            return;
+
+    XSQLVAR *var = NULL;
+    int i, dtype;
+
+    // determine if the input descriptor can accommodate the number of parameters
+    // contained in the statement.
+    if (0 == m_INsqlda->sqld)
+    {
+        free(m_INsqlda);
+        m_INsqlda = NULL;
+    }
+    else
+    {
+        if (m_INsqlda->sqld > m_INsqlda->sqln)
+        {
+            int n = m_INsqlda->sqld;
+            free(m_INsqlda);
+            m_INsqlda = (XSQLDA *)malloc(XSQLDA_LENGTH(n));
+            m_INsqlda->sqln = n;
+            m_INsqlda->version = SQLDA_VERSION1;
+            if (isc_dsql_describe_bind(status, &m_STMTHandler, 1, m_INsqlda))
+                if (pr_error(status, "bind statement 2"))
+                    return;
+        }
+    }
+
+    // fill the output XSQLDA with information about the select-list items.
+    if (isc_dsql_describe(status, &m_STMTHandler, 1, m_OUTsqlda))
+        if (pr_error(status, "describe statement"))
+            return;
+
+    // determine if the output descriptor can accommodate the number of select-list
+    // items specified in the statement.
+    if (m_OUTsqlda->sqld > m_OUTsqlda->sqln)
+    {
+        int n = m_OUTsqlda->sqld;
+        free(m_OUTsqlda);
+        m_OUTsqlda = (XSQLDA *)malloc(XSQLDA_LENGTH(n));
+        m_OUTsqlda->sqln = n;
+        m_OUTsqlda->version = SQLDA_VERSION1;
+        if (isc_dsql_describe(status, &m_STMTHandler, 1, m_OUTsqlda))
+            if (pr_error(status, "describe statement 2"))
+                return;
+    }
+
+    // Process each XSQLVAR parameter structure in the output XSQLDA
+    for (i=0, var = m_OUTsqlda->sqlvar; i < m_OUTsqlda->sqld; i++, var++)
+    {
+        dtype = (var->sqltype & ~1); /* drop flag bit for now */
+        switch(dtype) {
+        case SQL_VARYING:
+            var->sqltype = SQL_TEXT;
+            var->sqldata = (char *)malloc(sizeof(char)*var->sqllen + 2);
+            break;
+        case SQL_TEXT:
+            var->sqldata = (char *)malloc(sizeof(char)*var->sqllen);
+            break;
+        case SQL_LONG:
+            var->sqldata = (char *)malloc(sizeof(long));
+            break;
+        case SQL_SHORT:
+            var->sqldata = (char *)malloc(sizeof(char)*var->sqllen);
+            break;
+        case SQL_FLOAT:
+            var->sqldata = (char *)malloc(sizeof(double));
+            break;
+        case SQL_DOUBLE:
+            var->sqldata = (char *)malloc(sizeof(double));
+            break;
+        case SQL_D_FLOAT:
+            var->sqldata = (char *)malloc(sizeof(double));
+            break;
+        case SQL_TIMESTAMP:
+            var->sqldata = (char *)malloc(sizeof(time_t));
+            break;
+        case SQL_INT64:
+            var->sqldata = (char *)malloc(sizeof(int));
+            break;
+            /* process remaining types */
+        default:
+            OSL_ASSERT( false );
+            break;
+        }
+        if (var->sqltype & 1)
+        {
+            /* allocate variable to hold NULL status */
+            var->sqlind = (short *)malloc(sizeof(short));
+        }
+    }
+}
+
 // -------------------------------------------------------------------------
 
 Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
@@ -202,60 +331,30 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
     SAL_INFO("connectivity.firebird", "=> OStatement_Base::executeQuery(). "
              "Got called with sql: " << sql);
 
-    char sqlStr[128];
-    strcpy(sqlStr, OUStringToOString( sql, RTL_TEXTENCODING_ASCII_US ).getStr());
-
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    Reference< XResultSet > xRS = NULL;
-    // create a resultset as result of executing the sql statement
-    // you have to here something :-)
+    ISC_STATUS_ARRAY status;                            // status vector
 
-    ISC_STATUS_ARRAY status;               /* status vector */
-    isc_db_handle    db = NULL;         /* database handle */
-    isc_tr_handle    trans = NULL;         /* transaction handle */
-    isc_stmt_handle  stmt = NULL;          /* prepared statement handle */
-    XSQLDA *         sel_sqlda;
-    int              CURRENLEN = 10;
-    char             orig_name[CURRENLEN + 1];
+    prepareQuery(sql);
 
-    if (isc_attach_database(status, 0, "new.fdb", &db, 0, NULL))
-        if (pr_error(status, "attach database"))
-            return xRS;
-
-    if (isc_start_transaction(status, &trans, 1, &db, 0, NULL))
-        if (pr_error(status, "start transaction"))
-            return xRS;
-
-    sel_sqlda = (XSQLDA *) malloc(XSQLDA_LENGTH(1));
-    sel_sqlda->sqln = 1;
-    sel_sqlda->version = 1;
-
-    if (isc_dsql_allocate_statement(status, &db, &stmt))
-        if (pr_error(status, "allocate statement"))
-            return xRS;
-    if (isc_dsql_prepare(status, &trans, &stmt, 0, sqlStr, 1, sel_sqlda))
-        if (pr_error(status, "prepare statement"))
-            return xRS;
-
-    sel_sqlda->sqlvar[0].sqldata = orig_name;
-    sel_sqlda->sqlvar[0].sqltype = SQL_TEXT;
-    sel_sqlda->sqlvar[0].sqllen = CURRENLEN;
-
-    if (isc_dsql_execute(status, &trans, &stmt, 1, NULL))
+    if (isc_dsql_execute(status, &m_TRANSHandler, &m_STMTHandler, 1, m_INsqlda))
         if (pr_error(status, "execute query"))
-            return xRS;
-    if (isc_dsql_fetch(status, &stmt, 1, sel_sqlda))
-        if (pr_error(status, "fetch data"))
-            return xRS;
+            return NULL;
 
-    if (isc_commit_transaction (status, &trans))
-        isc_print_status(status);
-    SAL_INFO("connectivity.firebird", "=> OStatement_Base::executeQuery(). "
-             "Changes committed.");
+    Reference< OResultSet > pResult( new OResultSet( this) );
+    //initializeResultSet( pResult.get() );
+    Reference< XResultSet > xRS = pResult.get();
 
-    m_xResultSet = xRS; // we nedd a reference to it for later use
+    if (isc_commit_transaction(status, &m_TRANSHandler))
+        if (pr_error(status, "commit transaction"))
+            return NULL;
+
+    SAL_INFO("connectivity.firebird", "=> OStatement::executeQuery(). "
+             "Query executed.");
+
+    close();
+
     return xRS;
 }
 
