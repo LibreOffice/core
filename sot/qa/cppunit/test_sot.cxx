@@ -27,7 +27,7 @@ namespace
         SotTest() {}
 
         bool checkStream( const SotStorageRef &xObjStor,
-                          const String &rStreamName,
+                          const OUString &rStreamName,
                           sal_uLong nSize );
         bool checkStorage( const SotStorageRef &xObjStor );
 
@@ -43,7 +43,7 @@ namespace
     };
 
     bool SotTest::checkStream( const SotStorageRef &xObjStor,
-                               const String &rStreamName,
+                               const OUString &rStreamName,
                                sal_uLong nSize )
     {
         unsigned char *pData = (unsigned char*)malloc( nSize );

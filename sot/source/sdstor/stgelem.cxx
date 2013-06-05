@@ -114,9 +114,9 @@ void StgHeader::Init()
         SetFATPage( i, STG_FREE );
 }
 
-sal_Bool StgHeader::Load( StgIo& rIo )
+bool StgHeader::Load( StgIo& rIo )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     if ( rIo.GetStrm() )
     {
         SvStream& r = *rIo.GetStrm();
@@ -127,7 +127,7 @@ sal_Bool StgHeader::Load( StgIo& rIo )
     return bResult;
 }
 
-sal_Bool StgHeader::Load( SvStream& r )
+bool StgHeader::Load( SvStream& r )
 {
     r.Seek( 0L );
     r.Read( cSignature, 8 );
@@ -151,10 +151,10 @@ sal_Bool StgHeader::Load( SvStream& r )
     return ( r.GetErrorCode() == ERRCODE_NONE && Check() );
 }
 
-sal_Bool StgHeader::Store( StgIo& rIo )
+bool StgHeader::Store( StgIo& rIo )
 {
     if( !bDirty )
-        return sal_True;
+        return true;
     SvStream& r = *rIo.GetStrm();
     r.Seek( 0L );
     r.Write( cSignature, 8 );
@@ -175,7 +175,7 @@ sal_Bool StgHeader::Store( StgIo& rIo )
     for( short i = 0; i < cFATPagesInHeader; i++ )
         r << nMasterFAT[ i ];
     bDirty = !rIo.Good();
-    return sal_Bool( !bDirty );
+    return bool( !bDirty );
 }
 
 static bool lcl_wontoverflow(short shift)
@@ -192,9 +192,9 @@ static bool isKnownSpecial(sal_Int32 nLocation)
 }
 
 // Perform thorough checks also on unknown variables
-sal_Bool StgHeader::Check()
+bool StgHeader::Check()
 {
-    return sal_Bool( memcmp( cSignature, cStgSignature, 8 ) == 0
+    return bool( memcmp( cSignature, cStgSignature, 8 ) == 0
             && (short) ( nVersion >> 16 ) == 3 )
             && nPageSize == 9
             && lcl_wontoverflow(nPageSize)
@@ -220,44 +220,44 @@ void StgHeader::SetFATPage( short n, sal_Int32 nb )
     if( n >= 0 && n < cFATPagesInHeader )
     {
         if( nMasterFAT[ n ] != nb )
-            bDirty = sal_True, nMasterFAT[ n ] = nb;
+            bDirty = true, nMasterFAT[ n ] = nb;
     }
 }
 
 void StgHeader::SetTOCStart( sal_Int32 n )
 {
-    if( n != nTOCstrm ) bDirty = sal_True, nTOCstrm = n;
+    if( n != nTOCstrm ) bDirty = true, nTOCstrm = n;
 }
 
 void StgHeader::SetDataFATStart( sal_Int32 n )
 {
-    if( n != nDataFAT ) bDirty = sal_True, nDataFAT = n;
+    if( n != nDataFAT ) bDirty = true, nDataFAT = n;
 }
 
 void StgHeader::SetDataFATSize( sal_Int32 n )
 {
-    if( n != nDataFATSize ) bDirty = sal_True, nDataFATSize = n;
+    if( n != nDataFATSize ) bDirty = true, nDataFATSize = n;
 }
 
 void StgHeader::SetFATSize( sal_Int32 n )
 {
-    if( n != nFATSize ) bDirty = sal_True, nFATSize = n;
+    if( n != nFATSize ) bDirty = true, nFATSize = n;
 }
 
 void StgHeader::SetFATChain( sal_Int32 n )
 {
     if( n != nMasterChain )
-        bDirty = sal_True, nMasterChain = n;
+        bDirty = true, nMasterChain = n;
 }
 
 void StgHeader::SetMasters( sal_Int32 n )
 {
-    if( n != nMaster ) bDirty = sal_True, nMaster = n;
+    if( n != nMaster ) bDirty = true, nMaster = n;
 }
 
 ///////////////////////////// class StgEntry /////////////////////////////
 
-sal_Bool StgEntry::Init()
+bool StgEntry::Init()
 {
     memset( nName, 0, sizeof( nName ) );
     nNameLen = 0;
@@ -278,29 +278,31 @@ sal_Bool StgEntry::Init()
     SetLeaf( STG_RIGHT, STG_FREE );
     SetLeaf( STG_CHILD, STG_FREE );
     SetLeaf( STG_DATA,  STG_EOF );
-    return sal_True;
+    return true;
 }
 
-static String ToUpperUnicode( const String & rStr )
+static OUString ToUpperUnicode( const OUString & rStr )
 {
     // I don't know the locale, so en_US is hopefully fine
     static CharClass aCC( LanguageTag( com::sun::star::lang::Locale( "en", "US", "" )) );
     return aCC.uppercase( rStr );
 }
 
-sal_Bool StgEntry::SetName( const String& rName )
+bool StgEntry::SetName( const OUString& rName )
 {
     // I don't know the locale, so en_US is hopefully fine
     aName = ToUpperUnicode( rName );
-    aName.Erase( nMaxLegalStr );
-
+    if(aName.getLength() >= nMaxLegalStr)
+    {
+        aName = aName.copy(0, nMaxLegalStr );
+    }
     int i;
-    for( i = 0; i < aName.Len() && i < 32; i++ )
-        nName[ i ] = rName.GetChar( sal_uInt16( i ));
+    for( i = 0; i < aName.getLength() && i < 32; i++ )
+        nName[ i ] = rName[ i ];
     while( i < 32 )
         nName[ i++ ] = 0;
-    nNameLen = ( aName.Len() + 1 ) << 1;
-    return sal_True;
+    nNameLen = ( aName.getLength() + 1 ) << 1;
+    return true;
 }
 
 sal_Int32 StgEntry::GetLeaf( StgEntryRef eRef ) const
@@ -332,7 +334,7 @@ void StgEntry::SetClassId( const ClsId& r )
     memcpy( &aClsId, &r, sizeof( ClsId ) );
 }
 
-void StgEntry::GetName( String& rName ) const
+void StgEntry::GetName( OUString& rName ) const
 {
     sal_uInt16 n = nNameLen;
     if( n )
@@ -351,7 +353,7 @@ short StgEntry::Compare( const StgEntry& r ) const
     */
     sal_Int32 nRes = r.nNameLen - nNameLen;
     if( !nRes )
-        nRes = r.aName.CompareTo( aName );
+        nRes = r.aName.compareTo( aName );
     return (short)nRes;
     //return aName.CompareTo( r.aName );
 }
@@ -359,10 +361,10 @@ short StgEntry::Compare( const StgEntry& r ) const
 // These load/store operations are a bit more complicated,
 // since they have to copy their contents into a packed structure.
 
-sal_Bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
+bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
 {
     if ( nBufSize < 128 )
-        return sal_False;
+        return false;
 
     SvMemoryStream r( (sal_Char*) pFrom, nBufSize, STREAM_READ );
     for( short i = 0; i < 32; i++ )
@@ -388,21 +390,23 @@ sal_Bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
         n = ( n >> 1 ) - 1;
 
     if (n > nMaxLegalStr)
-        return sal_False;
+        return false;
 
     if ((cType != STG_STORAGE) && ((nSize < 0) || (nPage1 < 0 && !isKnownSpecial(nPage1))))
     {
         // the size makes no sense for the substorage
         // TODO/LATER: actually the size should be an unsigned value, but in this case it would mean a stream of more than 2Gb
-        return sal_False;
+        return false;
     }
 
     aName = OUString( nName, n );
     // I don't know the locale, so en_US is hopefully fine
     aName = ToUpperUnicode( aName );
-    aName.Erase( nMaxLegalStr );
-
-    return sal_True;
+    if(aName.getLength() >= nMaxLegalStr)
+    {
+        aName = aName.copy(0, nMaxLegalStr );
+    }
+    return true;
 }
 
 void StgEntry::Store( void* pTo )

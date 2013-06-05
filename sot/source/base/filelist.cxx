@@ -54,7 +54,7 @@ void FileList::ClearAll( void )
 FileList& FileList::operator=( const FileList& rFileList )
 {
     for ( size_t i = 0, n = rFileList.aStrList.size(); i < n; ++i )
-        aStrList.push_back( new String( *rFileList.aStrList[ i ] ) );
+        aStrList.push_back( new OUString( *rFileList.aStrList[ i ] ) );
     return *this;
 }
 
@@ -106,12 +106,12 @@ SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
 {
     rFileList.ClearAll();
 
-    String aStr;
+    OUString aStr;
     sal_uInt16 c;
 
     while (!rIStm.IsEof())
     {
-        aStr.Erase();
+        aStr="";
 
         // read first character of filepath; c==0 > reach end of stream
         rIStm >> c;
@@ -121,7 +121,7 @@ SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
         // read string till c==0
         while (c && !rIStm.IsEof())
         {
-            aStr += (sal_Unicode)c;
+            aStr += OUString((sal_Unicode)c);
             rIStm >> c;
         }
 
@@ -137,14 +137,14 @@ SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
 |*
 \******************************************************************************/
 
-void FileList::AppendFile( const String& rStr )
+void FileList::AppendFile( const OUString& rStr )
 {
-    aStrList.push_back( new String( rStr ) );
+    aStrList.push_back( new OUString( rStr ) );
 }
 
-String FileList::GetFile( size_t i ) const
+OUString FileList::GetFile( size_t i ) const
 {
-    String aStr;
+    OUString aStr;
     if( i < aStrList.size() )
         aStr = *aStrList[ i ];
     return aStr;

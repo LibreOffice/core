@@ -36,7 +36,7 @@ StgIo::StgIo() : StgCache()
     pDataFAT  = NULL;
     pDataStrm = NULL;
     pFAT      = NULL;
-    bCopied   = sal_False;
+    bCopied   = false;
 }
 
 StgIo::~StgIo()
@@ -49,7 +49,7 @@ StgIo::~StgIo()
 
 // Load the header. Do not set an error code if the header is invalid.
 
-sal_Bool StgIo::Load()
+bool StgIo::Load()
 {
     if( pStrm )
     {
@@ -58,17 +58,17 @@ sal_Bool StgIo::Load()
             if( aHdr.Check() )
                 SetupStreams();
             else
-                return sal_False;
+                return false;
         }
         else
-            return sal_False;
+            return false;
     }
     return Good();
 }
 
 // Set up an initial, empty storage
 
-sal_Bool StgIo::Init()
+bool StgIo::Init()
 {
     aHdr.Init();
     SetupStreams();
@@ -114,7 +114,7 @@ short StgIo::GetDataPageSize()
 
 // Commit everything
 
-sal_Bool StgIo::CommitAll()
+bool StgIo::CommitAll()
 {
     // Store the data (all streams and the TOC)
     if( pTOC && pTOC->Store() && pDataFAT )
@@ -132,19 +132,19 @@ sal_Bool StgIo::CommitAll()
 #ifdef DBG_UTIL
                 if( n==0 ) ValidateFATs();
 #endif
-                return sal_Bool( n == 0 );
+                return n == 0;
             }
         }
     }
     SetError( SVSTREAM_WRITE_ERROR );
-    return sal_False;
+    return false;
 }
 
 
 class EasyFat
 {
     sal_Int32 *pFat;
-    sal_Bool  *pFree;
+    bool  *pFree;
     sal_Int32 nPages;
     sal_Int32 nPageSize;
 
@@ -161,7 +161,7 @@ public:
     }
 
     sal_uLong Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect );
-    sal_Bool HasUnrefChains();
+    bool HasUnrefChains();
 };
 
 EasyFat::EasyFat( StgIo& rIo, StgStrm* pFatStream, sal_Int32 nPSize )
@@ -169,7 +169,7 @@ EasyFat::EasyFat( StgIo& rIo, StgStrm* pFatStream, sal_Int32 nPSize )
     nPages = pFatStream->GetSize() >> 2;
     nPageSize = nPSize;
     pFat = new sal_Int32[ nPages ];
-    pFree = new sal_Bool[ nPages ];
+    pFree = new bool[ nPages ];
 
     rtl::Reference< StgPage > pPage;
     sal_Int32 nFatPageSize = (1 << rIo.aHdr.GetPageSize()) - 2;
@@ -180,22 +180,22 @@ EasyFat::EasyFat( StgIo& rIo, StgStrm* pFatStream, sal_Int32 nPSize )
         {
             pFatStream->Pos2Page( nPage << 2 );
             sal_Int32 nPhysPage = pFatStream->GetPage();
-            pPage = rIo.Get( nPhysPage, sal_True );
+            pPage = rIo.Get( nPhysPage, true );
         }
 
         pFat[ nPage ] = rIo.GetFromPage( pPage, short( nPage % nFatPageSize ) );
-        pFree[ nPage ] = sal_True;
+        pFree[ nPage ] = true;
     }
 }
 
-sal_Bool EasyFat::HasUnrefChains()
+bool EasyFat::HasUnrefChains()
 {
     for( sal_Int32 nPage = 0; nPage < nPages; nPage++ )
     {
         if( pFree[ nPage ] && pFat[ nPage ] != -1 )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 sal_uLong EasyFat::Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect )
@@ -208,7 +208,7 @@ sal_uLong EasyFat::Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect )
     {
         if( nCurPage < 0 || nCurPage >= nPages )
             return FAT_OUTOFBOUNDS;
-        pFree[ nCurPage ] = sal_False;
+        pFree[ nCurPage ] = false;
         nCurPage = pFat[ nCurPage ];
         //Stream zu lang
         if( nCurPage != nExpect && nCount == 1 )
@@ -242,7 +242,7 @@ class Validator
 public:
 
     Validator( StgIo &rIo );
-    sal_Bool IsError() { return nError != 0; }
+    bool IsError() { return nError != 0; }
 };
 
 Validator::Validator( StgIo &rIoP )
@@ -269,7 +269,7 @@ sal_uLong Validator::ValidateMasterFATs()
 
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
-        if( ( nErr = aFat.Mark(rIo.pFAT->GetPage( short(i), sal_False ), aFat.GetPageSize(), -3 )) != FAT_OK )
+        if( ( nErr = aFat.Mark(rIo.pFAT->GetPage( short(i), false ), aFat.GetPageSize(), -3 )) != FAT_OK )
             return nErr;
     }
     if( rIo.aHdr.GetMasters() )
@@ -360,7 +360,7 @@ sal_uLong StgIo::ValidateFATs()
     if( bFile )
     {
         Validator *pV = new Validator( *this );
-        sal_Bool bRet1 = !pV->IsError(), bRet2 = sal_True ;
+        bool bRet1 = !pV->IsError(), bRet2 = true ;
         delete pV;
 
         SvFileStream *pFileStrm = ( SvFileStream *) GetStrm();
@@ -387,7 +387,7 @@ sal_uLong StgIo::ValidateFATs()
             aArg.aFile = pFileStrm->GetFileName();
             aArg.nErr = nErr;
             ErrorLink::get().Call( &aArg );
-            bCopied = sal_True;
+            bCopied = true;
         }
 //      DBG_ASSERT( nErr == FAT_OK ,"Storage kaputt");
         return nErr;

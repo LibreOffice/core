@@ -27,7 +27,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <cppuhelper/implbase1.hxx>
-
+#include <tools/string.hxx>
 #include <sot/exchange.hxx>
 
 namespace framework

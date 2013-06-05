@@ -28,16 +28,16 @@ class StgDirEntry;
 class SvStorageInfo
 {
 friend class SvStorage;
-    String          aName;
+    OUString        aName;
     SvGlobalName    aClassName;
     sal_uLong       nSize;
-    sal_Bool        bStream:1,
+    bool            bStream:1,
                     bStorage:1;
 
                             SvStorageInfo(){}; // Fuer SvStorage
 public:
                             SvStorageInfo( const StgDirEntry& );
-                            SvStorageInfo( const String& rName, sal_uLong nSz, sal_Bool bIsStorage )
+                            SvStorageInfo( const OUString& rName, sal_uLong nSz, bool bIsStorage )
                                 : aName( rName )
                                 , nSize( nSz )
                                 , bStream( !bIsStorage )
@@ -45,9 +45,9 @@ public:
                             {}
 
     const SvGlobalName &    GetClassName() const { return aClassName; }
-    const String &          GetName() const { return aName; }
-    sal_Bool                    IsStream() const { return bStream; }
-    sal_Bool                    IsStorage() const { return bStorage; }
+    const OUString &        GetName() const { return aName; }
+    bool                    IsStream() const { return bStream; }
+    bool                    IsStorage() const { return bStorage; }
     sal_uLong                   GetSize() const { return nSize;      }
 };
 

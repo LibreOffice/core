@@ -76,7 +76,7 @@ SotData_Impl * SOTDATA()
 TYPEINIT0(SotFactory);
 
 SotFactory::SotFactory( const SvGlobalName & rName,
-                      const String & rClassName,
+                      const OUString & rClassName,
                       CreateInstanceType pCreateFuncP )
     : SvGlobalName  ( rName )
     , nSuperCount   ( 0 )
@@ -200,7 +200,7 @@ void * SotFactory::CreateInstance( SotObject ** ppObj ) const
 |*
 |*    Beschreibung
 *************************************************************************/
-sal_Bool SotFactory::Is( const SotFactory * pSuperCl ) const
+bool SotFactory::Is( const SotFactory * pSuperCl ) const
 {
     if( this == pSuperCl )
         return sal_True;

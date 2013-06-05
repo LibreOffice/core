@@ -145,7 +145,7 @@ public:
 
 class StgTmpStrm : public SvMemoryStream
 {
-    String aName;
+    OUString aName;
     SvFileStream* pStrm;
     using SvMemoryStream::GetData;
     virtual sal_uLong GetData( void* pData, sal_uLong nSize );

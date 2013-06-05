@@ -24,7 +24,7 @@
 #include "sot/sotdllapi.h"
 
 #include <vector>
-typedef ::std::vector< String* > FileStringList;
+typedef ::std::vector< OUString* > FileStringList;
 
 class SOT_DLLPUBLIC FileList : public SvDataCopyStream
 {
@@ -54,8 +54,8 @@ public:
     SOT_DLLPUBLIC friend SvStream&  operator>>( SvStream& rIStm, FileList& rFileList );
 
     // Liste fuellen/abfragen
-    void AppendFile( const String& rStr );
-    String GetFile( size_t i ) const;
+    void AppendFile( const OUString& rStr );
+    OUString GetFile( size_t i ) const;
     size_t Count( void ) const;
 
 };

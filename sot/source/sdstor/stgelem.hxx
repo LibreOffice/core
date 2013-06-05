@@ -29,7 +29,6 @@
 
 class StgIo;
 class SvStream;
-class String;
 
 SvStream& operator>>( SvStream&, ClsId& );
 SvStream& operator<<( SvStream&, const ClsId& );
@@ -59,10 +58,10 @@ public:
     StgHeader();
 
     void  Init();                       // initialize the header
-    sal_Bool  Load( StgIo& );
-    sal_Bool  Load( SvStream& );
-    sal_Bool  Store( StgIo& );
-    sal_Bool  Check();                      // check the signature and version
+    bool  Load( StgIo& );
+    bool  Load( SvStream& );
+    bool  Store( StgIo& );
+    bool  Check();                      // check the signature and version
     short GetByteOrder() const          { return nByteOrder; }
     sal_Int32 GetTOCStart() const           { return nTOCstrm; }
     void  SetTOCStart( sal_Int32 n );
@@ -124,14 +123,14 @@ class StgEntry {                        // directory enty
     sal_Int32   nPage1;                     // 74 starting block (either direct or translated)
     sal_Int32   nSize;                      // 78 file size
     sal_Int32   nUnknown;                   // 7C unknown
-    String  aName;                      // Name as Compare String (ascii, upper)
+    OUString    aName;                      // Name as Compare String (ascii, upper)
 public:
-    sal_Bool    Init();                     // initialize the data
-    sal_Bool    SetName( const String& );   // store a name (ASCII, up to 32 chars)
-    void    GetName( String& rName ) const;
+    bool    Init();                     // initialize the data
+    bool    SetName( const OUString& );   // store a name (ASCII, up to 32 chars)
+    void    GetName( OUString& rName ) const;
                                         // fill in the name
     short   Compare( const StgEntry& ) const;   // compare two entries
-    sal_Bool    Load( const void* pBuffer, sal_uInt32 nBufSize );
+    bool    Load( const void* pBuffer, sal_uInt32 nBufSize );
     void    Store( void* );
     StgEntryType GetType() const        { return (StgEntryType) cType;  }
     sal_Int32   GetStartPage() const        { return nPage1; }

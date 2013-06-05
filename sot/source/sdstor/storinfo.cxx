@@ -66,10 +66,10 @@ sal_uLong ReadClipboardFormat( SvStream & rStm )
 void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat )
 {
     // determine the clipboard format string
-    String aCbFmt;
+    OUString aCbFmt;
     if( nFormat > FORMAT_GDIMETAFILE )
         aCbFmt = SotExchange::GetFormatName( nFormat );
-    if( aCbFmt.Len() )
+    if( !aCbFmt.isEmpty() )
     {
         OString aAsciiCbFmt(OUStringToOString(aCbFmt,
             RTL_TEXTENCODING_ASCII_US));

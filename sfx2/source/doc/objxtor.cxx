@@ -441,7 +441,7 @@ void SfxObjectShell::ViewAssigned()
 //--------------------------------------------------------------------
 // closes the Object and all its views
 
-sal_Bool SfxObjectShell::Close()
+bool SfxObjectShell::Close()
 {
     {DBG_CHKTHIS(SfxObjectShell, 0);}
     SfxObjectShellRef aRef(this);

@@ -103,11 +103,11 @@ public:
     bool         Store();
     void*        GetEntry( sal_Int32 n, bool=false );// get an entry
     StgDirEntry* GetRoot() { return pRoot; }
-    StgDirEntry* Find( StgDirEntry&, const String& );
-    StgDirEntry* Create( StgDirEntry&, const String&, StgEntryType );
-    bool         Remove( StgDirEntry&, const String& );
-    bool         Rename( StgDirEntry&, const String&, const String& );
-    bool         Move( StgDirEntry&, StgDirEntry&, const String& );
+    StgDirEntry* Find( StgDirEntry&, const OUString& );
+    StgDirEntry* Create( StgDirEntry&, const OUString&, StgEntryType );
+    bool         Remove( StgDirEntry&, const OUString& );
+    bool         Rename( StgDirEntry&, const OUString&, const OUString& );
+    bool         Move( StgDirEntry&, StgDirEntry&, const OUString& );
 };
 
 class StgIterator : public StgAvlIterator

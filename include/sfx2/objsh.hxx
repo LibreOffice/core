@@ -212,7 +212,7 @@ protected:
     virtual                     ~SfxObjectShell();
 
     virtual void                ModifyChanged();
-    virtual sal_Bool            Close();
+    virtual bool                Close();
 
     /** declares the document to have capabilities to contain basic/dialog libraries
     */
