@@ -860,19 +860,27 @@ namespace
         OUString sLang = rLangTag.getLanguage();
         switch (eScript)
         {
-            case USCRIPT_TELUGU:
-                bIsImpossible = sLang != "te";
+            //http://en.wiktionary.org/wiki/Category:Oriya_script_languages
+            case USCRIPT_ORIYA:
+                bIsImpossible =
+                    sLang != "or" &&
+                    sLang != "kxv";
                 break;
+            //http://en.wiktionary.org/wiki/Category:Telugu_script_languages
+            case USCRIPT_TELUGU:
+                bIsImpossible =
+                    sLang != "te" &&
+                    sLang != "gon" &&
+                    sLang != "kfc";
+                break;
+            //http://en.wiktionary.org/wiki/Category:Bengali_script_languages
             case USCRIPT_BENGALI:
-                bIsImpossible = sLang != "bn" &&
-                    sLang != "as" && sLang != "mkb" &&
-                    sLang != "kfv" && sLang != "ccp" &&
-                    sLang != "tnv" && sLang != "ctg" &&
-                    sLang != "haj" && sLang != "ksy" &&
-                    sLang != "rkt" && sLang != "rjs" &&
-                    sLang != "rhg" && sLang != "syl" &&
-                    sLang != "kyv" && sLang != "zrg" &&
-                    sLang != "nhh";
+                bIsImpossible =
+                    sLang != "bn" &&
+                    sLang != "as" &&
+                    sLang != "bpy" &&
+                    sLang != "ctg" &&
+                    sLang != "sa";
                 break;
             default:
                 break;
