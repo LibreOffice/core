@@ -18,6 +18,8 @@
 #include <swmodeltestbase.hxx>
 #include <bordertest.hxx>
 
+#define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+
 class Test : public SwModelTestBase
 {
 public:
@@ -32,6 +34,7 @@ public:
     void testI120158();
     void testN816603();
     void testN816593();
+    void testPageBorder();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -57,6 +60,7 @@ void Test::run()
         {"i120158.doc", &Test::testI120158},
         {"n816603.doc", &Test::testN816603},
         {"n816593.doc", &Test::testN816593},
+        {"page-border.doc", &Test::testPageBorder},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -269,6 +273,13 @@ void Test::testN816593()
     // Make sure that even if we import the two tables as non-floating, we
     // still consider them different, and not merge them.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+}
+
+void Test::testPageBorder()
+{
+    // Page border was missing (LineWidth was 0), due to wrong interpretation of pgbApplyTo.
+    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "TopBorder");
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(TWIP_TO_MM100(6 * 20)), aBorder.LineWidth);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
