@@ -47,7 +47,9 @@ using namespace ::com::sun::star;
 
 
 
-ModelEventListener::ModelEventListener()
+ModelEventListener::ModelEventListener(bool bIndexes, bool bControls)
+    : m_bIndexes(bIndexes),
+    m_bControls(bControls)
 {
 }
 
@@ -59,7 +61,7 @@ ModelEventListener::~ModelEventListener()
 
 void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) throw (uno::RuntimeException)
 {
-    if ( rEvent.EventName == "OnFocus" )
+    if ( rEvent.EventName == "OnFocus" && m_bIndexes)
     {
         try
         {
@@ -110,6 +112,10 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
         {
             SAL_WARN("writerfilter", "exception while updating indexes: " << rEx.Message);
         }
+    }
+
+    if ( rEvent.EventName == "OnFocus" && m_bControls)
+    {
 
         // Form design mode is enabled by default in Writer, not in Word.
         uno::Reference<frame::XModel> xModel(rEvent.Source, uno::UNO_QUERY);
