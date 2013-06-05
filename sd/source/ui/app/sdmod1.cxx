@@ -746,17 +746,6 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                 }
             }
         }
-
-        if (bMakeLayoutVisible && pViewFrame!=NULL)
-        {
-            // Make the layout menu visible in the tool pane.
-            ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase(pViewFrame);
-            if (pBase != NULL)
-            {
-                FrameworkHelper::Instance(*pBase)->RequestSidebarPanel(
-                    FrameworkHelper::msLayoutTaskPanelURL);
-            }
-        }
     }
 
     return pFrame;

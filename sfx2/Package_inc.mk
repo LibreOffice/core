@@ -139,6 +139,7 @@ $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/EnumContext.hxx,sfx2
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/IContextChangeReceiver.hxx,sfx2/sidebar/IContextChangeReceiver.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/ILayoutableWindow.hxx,sfx2/sidebar/ILayoutableWindow.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/ResourceDefinitions.hrc,sfx2/sidebar/ResourceDefinitions.hrc))
+$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/Sidebar.hxx,sfx2/sidebar/Sidebar.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/SidebarChildWindow.hxx,sfx2/sidebar/SidebarChildWindow.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/SidebarPanelBase.hxx,sfx2/sidebar/SidebarPanelBase.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/sidebar/SidebarToolBox.hxx,sfx2/sidebar/SidebarToolBox.hxx))

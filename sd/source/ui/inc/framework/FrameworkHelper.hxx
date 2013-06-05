@@ -229,25 +229,6 @@ public:
         const ::rtl::OUString& rsResourceURL,
         const ::rtl::OUString& rsAnchorURL);
 
-    /** Request the activation of the specified panel in the
-        sidebar.
-        @param rsSidebarPanelURL
-            The panel that is to be activated.
-        @param bEnsurePaneIsVisible
-            When this is <TRUE/> then the sidebar pane is activated when not
-            yet active.
-            When this flag is <FALSE/> then the requested panel
-            is activated only when the task pane is already active.  When it
-            is not active then this call is silently ignored.
-        @return
-            The resource id of the requested sidebar panel is returned.  With that
-            the caller can, for example, call RunOnResourceActivation() to
-            do some initialization after the requested view becomes active.
-    */
-    cssu::Reference<cssdf::XResourceId> RequestSidebarPanel (
-        const ::rtl::OUString& rsSidebarPanelURL,
-        const bool bEnsureTaskPaneIsVisible = true);
-
     /** Request the deactivation of the specified resource.
     */
     void RequestResourceDeactivation (
