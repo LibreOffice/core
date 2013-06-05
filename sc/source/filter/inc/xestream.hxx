@@ -313,6 +313,7 @@ public:
 
     sax_fastparser::FSHelperPtr     GetStreamForPath( const OUString& rPath );
 
+    // FIXME: if written through this cannot be checked for well-formedness
     sax_fastparser::FSHelperPtr&    WriteAttributes( sal_Int32 nAttribute, const char* value, FSEND_t )
         { return WriteAttributesInternal( nAttribute, value, FSEND_internal ); }
     sax_fastparser::FSHelperPtr&    WriteAttributes( sal_Int32 nAttribute, const OString& value, FSEND_t )

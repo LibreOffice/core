@@ -61,12 +61,11 @@ private:
 class XclExpXmlElementRecord : public XclExpRecordBase
 {
 public:
-                        XclExpXmlElementRecord( sal_Int32 nElement, void (*pAttributes)( XclExpXmlStream& rStrm) = NULL );
+    explicit            XclExpXmlElementRecord(sal_Int32 nElement);
     virtual             ~XclExpXmlElementRecord();
 
 protected:
     sal_Int32           mnElement;
-    void                (*mpAttributes)( XclExpXmlStream& rStrm );
 };
 
 // ----------------------------------------------------------------------------
@@ -74,11 +73,11 @@ protected:
 class XclExpXmlStartElementRecord : public XclExpXmlElementRecord
 {
 public:
-                        XclExpXmlStartElementRecord( sal_Int32 nElement, void (*pAttributes)( XclExpXmlStream& rStrm) = NULL );
+    explicit            XclExpXmlStartElementRecord(sal_Int32 nElement);
     virtual             ~XclExpXmlStartElementRecord();
 
     /** Starts the element nElement */
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
 // ----------------------------------------------------------------------------
@@ -86,11 +85,11 @@ public:
 class XclExpXmlEndElementRecord : public XclExpXmlElementRecord
 {
 public:
-                        XclExpXmlEndElementRecord( sal_Int32 nElement );
+    explicit            XclExpXmlEndElementRecord(sal_Int32 nElement);
     virtual             ~XclExpXmlEndElementRecord();
 
     /** Ends the element nElement */
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
 // ----------------------------------------------------------------------------
@@ -98,11 +97,11 @@ public:
 class XclExpXmlStartSingleElementRecord : public XclExpXmlElementRecord
 {
 public:
-                        XclExpXmlStartSingleElementRecord( sal_Int32 nElement, void (*pAttributes)( XclExpXmlStream& rStrm) = NULL );
+    explicit            XclExpXmlStartSingleElementRecord(sal_Int32 nElement);
     virtual             ~XclExpXmlStartSingleElementRecord();
 
     /** Starts the single element nElement */
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
 // ----------------------------------------------------------------------------
@@ -114,7 +113,7 @@ public:
     virtual             ~XclExpXmlEndSingleElementRecord();
 
     /** Ends the single element nElement */
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 };
 
 // ----------------------------------------------------------------------------

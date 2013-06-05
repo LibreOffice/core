@@ -332,17 +332,26 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
         maData.maVerPageBreaks.push_back(*itr);
 }
 
-static void lcl_WriteHeaderFooter( XclExpXmlStream& rStrm )
+class XclExpXmlStartHeaderFooterElementRecord : public XclExpXmlElementRecord
+{
+public:
+    explicit XclExpXmlStartHeaderFooterElementRecord(sal_Int32 const nElement)
+         : XclExpXmlElementRecord(nElement) {}
+
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+};
+
+void XclExpXmlStartHeaderFooterElementRecord::SaveXml(XclExpXmlStream& rStrm)
 {
     // OOXTODO: we currently only emit oddHeader/oddFooter elements, and
     //          do not support the first/even/odd page distinction.
-    rStrm.WriteAttributes(
+    sax_fastparser::FSHelperPtr& rStream = rStrm.GetCurrentStream();
+    rStream->startElement( mnElement,
             // OOXTODO: XML_alignWithMargins,
             XML_differentFirst,     "false",    // OOXTODO
             XML_differentOddEven,   "false",    // OOXTODO
             // OOXTODO: XML_scaleWithDoc
             FSEND );
-    rStrm.GetCurrentStream()->write( ">" );
 }
 
 void XclExpPageSettings::Save( XclExpStream& rStrm )
@@ -388,7 +397,7 @@ void XclExpPageSettings::SaveXml( XclExpXmlStream& rStrm )
 
     XclExpSetup( maData ).SaveXml( rStrm );
 
-    XclExpXmlStartElementRecord( XML_headerFooter, lcl_WriteHeaderFooter ).SaveXml( rStrm );
+    XclExpXmlStartHeaderFooterElementRecord(XML_headerFooter).SaveXml(rStrm);
     XclExpHeaderFooter( EXC_ID_HEADER, maData.maHeader ).SaveXml( rStrm );
     XclExpHeaderFooter( EXC_ID_FOOTER, maData.maFooter ).SaveXml( rStrm );
     XclExpXmlEndElementRecord( XML_headerFooter ).SaveXml( rStrm );

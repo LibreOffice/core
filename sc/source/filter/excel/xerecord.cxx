@@ -57,8 +57,8 @@ void XclExpDelegatingRecord::SaveXml( XclExpXmlStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpXmlElementRecord::XclExpXmlElementRecord( sal_Int32 nElement, void (*pAttributes)( XclExpXmlStream& rStrm) )
-    : mnElement( nElement ), mpAttributes( pAttributes )
+XclExpXmlElementRecord::XclExpXmlElementRecord(sal_Int32 const nElement)
+    : mnElement( nElement )
 {
 }
 
@@ -68,8 +68,8 @@ XclExpXmlElementRecord::~XclExpXmlElementRecord()
 
 // ----------------------------------------------------------------------------
 
-XclExpXmlStartElementRecord::XclExpXmlStartElementRecord( sal_Int32 nElement, void (*pAttributes)( XclExpXmlStream& rStrm) )
-    : XclExpXmlElementRecord( nElement, pAttributes )
+XclExpXmlStartElementRecord::XclExpXmlStartElementRecord(sal_Int32 const nElement)
+    : XclExpXmlElementRecord(nElement)
 {
 }
 
@@ -80,15 +80,9 @@ XclExpXmlStartElementRecord::~XclExpXmlStartElementRecord()
 void XclExpXmlStartElementRecord::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rStream = rStrm.GetCurrentStream();
-    if( ! mpAttributes )
-    {
-        rStream->startElement( mnElement, FSEND );
-    }
-    else
-    {
-        rStream->write( "<" )->writeId( mnElement );
-        (*mpAttributes)( rStrm );
-    }
+    // TODO: no generic way to add attributes here, but it appears to
+    // not be needed yet
+    rStream->startElement( mnElement, FSEND );
 }
 
 // ----------------------------------------------------------------------------
@@ -109,8 +103,9 @@ void XclExpXmlEndElementRecord::SaveXml( XclExpXmlStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpXmlStartSingleElementRecord::XclExpXmlStartSingleElementRecord( sal_Int32 nElement, void (*pAttributes)( XclExpXmlStream& rStrm) )
-    : XclExpXmlElementRecord( nElement, pAttributes )
+XclExpXmlStartSingleElementRecord::XclExpXmlStartSingleElementRecord(
+            sal_Int32 const nElement)
+    : XclExpXmlElementRecord( nElement )
 {
 }
 
@@ -122,8 +117,6 @@ void XclExpXmlStartSingleElementRecord::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rStream = rStrm.GetCurrentStream();
     rStream->write( "<" )->writeId( mnElement );
-    if( mpAttributes )
-        (*mpAttributes)( rStrm );
 }
 
 // ----------------------------------------------------------------------------
