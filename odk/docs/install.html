@@ -19,10 +19,8 @@
 <html>
 <head>
   <title>LibreOffice %PRODUCT_RELEASE% SDK - Installation Guide</title>
-  <link rel="stylesheet" type="text/css" href="sdk_styles.css">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="author" content="J&uuml;rgen Schmidt">
-  <meta name="created" content="2004-12-14">
+  <link rel="stylesheet" type="text/css" href="sdk_styles.css"/>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 </head>
     <body>
         <div id="BgContainer">
@@ -40,16 +38,16 @@
                         <h1>
                             Installation Guide
                         </h1>
-<table class="table1" cellpadding=0>
+<table class="table1" cellpadding="0">
   <tr>
-    <td colspan="3"><img  class="nothing10" src="images/nada.gif"></td>
+    <td colspan="3"><img  class="nothing10" src="images/nada.gif"/></td>
   </tr>
   <tr>
-    <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
+    <td class="content1"><img class="nothing8" src="images/nada.gif"/></td>
     <td>
       <table class="table2">
 	    <tr>
-		  <td colspan="3"><img class="nothing1" src="images/nada.gif"></td>
+		  <td colspan="3"><img class="nothing1" src="images/nada.gif"/></td>
         </tr>
 		<tr>
           <td>
@@ -65,26 +63,25 @@
 		  </td>
 		  </tr>
 		  <tr valign="top">
-          <td><b>LibreOffice %PRODUCT_RELEASE% installation</td>
+          <td><b>LibreOffice %PRODUCT_RELEASE% installation</b></td>
           <td class="content80">The SDK works on top of an existing office
 		  installation and uses the same libraries as the office installation.</td>
-          </tr>
 		  </tr>
 		  <tr valign="middle">
-            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"></td>
+            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"/></td>
           </tr>
 		  <tr valign="top">
-          <td><b>JDK (1.5 or higher)<b></td>
+          <td><b>JDK (1.5 or higher)</b></td>
           <td class="content80">
 		  <p>A JDK is necessary for developing Java components or applications. An appropriate Java SDK can be found on <a target="_blank" href="http://java.sun.com/products" title="link to the Java SDK download page (online)">http://java.sun.com/products</a>.</p>
 		  <p>Recommendation is to use Java 6 excepting for Mac OS because initially Mac OS supported a 64bit version of Java 6 only.</p>
 		  <p><b>Note</b>: The Java compiler is <b><u>optional</u></b>!</p></td>
           </tr>
 		  <tr valign="middle">
-            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"></td>
+            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"/></td>
           </tr>
 		  <tr valign="top">
-          <td><b>C++ compiler<b></td>
+          <td><b>C++ compiler</b></td>
           <td class="content80">A C++ compiler is necessary for developing C++
 		  components or applications. UNO depends on a compiler dependent language
 		  binding, so that we use the appropriate compiler where a language binding
@@ -103,62 +100,62 @@
 		  <td class="cell80">Microsoft C++ Compiler, Microsoft Visual Studio 2008 or the Express version (cl, version 15.00.21022)</td>
 		  </tr>
 		  </table>
-		  <p><b>Note</b>: The C++ compiler is <b><u>optional</u></b>! If you use the Express edition you have to ensure that the <a href="http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF&displaylang=en">Microsoft Visual Studio 2008 Redistributable Package</a> is also installed. You can download this package from Microsoft directly.</a></p></td>
+		  <p><b>Note</b>: The C++ compiler is <b><u>optional</u></b>! If you use the Express edition you have to ensure that the <a href="http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF&amp;displaylang=en">Microsoft Visual Studio 2008 Redistributable Package</a> is also installed. You can download this package from Microsoft directly.</p></td>
           </tr>
 		  <tr valign="middle">
-            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"></td>
+            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"/></td>
           </tr>
 		  <tr valign="top">
-          <td><b>Microsoft .NET Framework SDK version 1.0 or higher<b></td>
+          <td><b>Microsoft .NET Framework SDK version 1.0 or higher</b></td>
           <td class="content80">The SDK is required for building CLI applications.
-		  That is, programs written in languages, such as C# or VB.NET.<br>
+		  That is, programs written in languages, such as C# or VB.NET.<br/>
 		  <p><b>Note</b>: The .NET Framework is <b><u>optional</u></b>!</p></td>
           </tr>
 		  <tr valign="middle">
-            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"></td>
+            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"/></td>
           </tr>
 		  <tr valign="top">
-          <td><b>GNU make (3.79.1 or higher)<b></td>
+          <td><b>GNU make (3.79.1 or higher)</b></td>
           <td class="content80">
 		  <p>GNU make is used to build the examples of the SDK. GNU make is available from <a target="_blank" href="http://www.gnu.org" title="link to www.gnu.org (online)">http://www.gnu.org</a>. It can be ftped via <a target="_blank" href="ftp://ftp.gnu.org/gnu/make" title="link to gnumake on www.gnu.org (online)">ftp://ftp.gnu.org/gnu/make</a></p>
 		  <p><b>Note</b>: Windows user can find an executable of gnu make under <a target="_blank" href="http://www.mingw.org/wiki/Getting_Started" title="link to the MinGW Getting Started wiki (online)">http://www.mingw.org/wiki/Getting_Started</a> (see the mingw32-make link under &quot;Manual Installation&quot;). Do not use the Cygwin make, because it does not
-		  work well. On Solaris gnu make can be found often under <b><i>/usr/sfw/bin/gmake</i></b>, but keep in mind that you have to use <b>'gmake'</b> then. Or you can find gnu make also under <a target="_blank" href="http://www.sunfreeware.com/" title="link to www.sunfreeware.com (online)">http://www.sunfreeware.com/</a>.</td>
+		  work well. On Solaris gnu make can be found often under <b><i>/usr/sfw/bin/gmake</i></b>, but keep in mind that you have to use <b>'gmake'</b> then. Or you can find gnu make also under <a target="_blank" href="http://www.sunfreeware.com/" title="link to www.sunfreeware.com (online)">http://www.sunfreeware.com/</a>.</p></td>
           </tr>
 		  <tr valign="middle">
-            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"></td>
+            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"/></td>
           </tr>
 		  <tr valign="top">
-          <td><b>zip tool (2.3 or higher)<b></td>
+          <td><b>zip tool (2.3 or higher)</b></td>
           <td class="content80">The zip tool is used to create UNO packages. zip is
-		  a new requirement to make the SDK independent of a Java SDK.<br>
+		  a new requirement to make the SDK independent of a Java SDK.<br/>
 		  If you do not have these already, you can download them from <a target="_blank" href="http://www.info-zip.org" title="link to www.ubfi-zip.org (online)">http://www.info-zip.org</a>. Note: The cygwin zip.exe does not work for the build under
 		  the 4NT shell. You have to use the native w32 version.</td>
           </tr>
 		  <tr valign="middle">
-            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"></td>
+            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"/></td>
           </tr>
 		  <tr valign="middle">
           <td colspan="2">
 		  <p>The SDK provides an implicit configuration mechanism, which
 		  configures the SDK build environment to your personal needs the first
 		  time you use the SDK environment. This configuration step creates one
-		  new setsdkenv_XXX script in the user's home directory:</P>
+		  new setsdkenv_XXX script in the user's home directory:</p>
 		  <ul>
-		    <li><b>$HOME/$OO_SDK_NAME/setsdkenv_unix.sh</b>&nbsp;&nbsp;-> for Unix
-            <li><b>C:\Documents and Settings\&lt;username&gt;\Application Data\%OO_SDK_NAME%\setsdkenv_windows.bat</b></a>&nbsp;&nbsp;-> for Windows2000/XP or later
+		    <li><b>$HOME/$OO_SDK_NAME/setsdkenv_unix.sh</b>&nbsp;&nbsp;-&gt; for Unix</li>
+            <li><b>C:\Documents and Settings\&lt;username&gt;\Application Data\%OO_SDK_NAME%\setsdkenv_windows.bat</b>&nbsp;&nbsp;-&gt; for Windows2000/XP or later</li>
           </ul>
 		  <p>The automatically started configure script (Unix and Windows2000/XP)
 		  requests relevant information and directories (SDK, LibreOffice, GNU make,
 		  Java, C++), in order to prepare a working SDK environment. After completing the
 		  configure script once, the newly created script is always used to set the
 		  necessary environment variables for using the SDK and the required
-		  tools.</P>
+		  tools.</p>
 		  <p>On UNIX operating systems, the configure script uses Perl. LINUX systems should have
 		  installed a working Perl version, and on Solaris you can find a working
 		  Perl version under <a target="_blank" href="http://www.sunfreeware.com/" title="link to www.sunfreeware.com (online)">http://www.sunfreeware.com/</a> if
 		  necessary. On Windows, the configure script uses Windows Script and
 		  a JScipt. If you have problems with Windows Script, you can download a
-		  newer version of <a href ="http://www.microsoft.com/downloads/details.aspx?FamilyId=C717D943-7E4B-4622-86EB-95A22B832CAA&displaylang=en" link"link to the download page for the Windows Script">Windows Script</a>.
+		  newer version of <a href="http://www.microsoft.com/downloads/details.aspx?FamilyId=C717D943-7E4B-4622-86EB-95A22B832CAA&amp;displaylang=en" title="link to the download page for the Windows Script">Windows Script</a>.
           </p>
           <p>On other versions of Windows, use the batch
 		  file template <b>&lt;OO_SDK_HOME&gt;\setsdkenv_windows.template</b>,
@@ -174,8 +171,8 @@
           and OO_SDK_URE_HOME must be set. The other should be either unset or
           set to an empty value.</td>
 		  </tr>
-          <tr><a name="oosdkname"/>
-          <td class="cell20"><b>OO_SDK_NAME</b></td>
+          <tr>
+          <td class="cell20"><a name="oosdkname"/><b>OO_SDK_NAME</b></td>
           <td class="cell80">The configuration uses the
 		  directory name of the SDK, but you can use another name as well.
 		  It is important that the name does not contain spaces, because of a limitation
@@ -214,7 +211,7 @@
 		  <td class="cell80">Path to the C# compiler and VB.NET compiler (on
 		  Windows, this directory can be found under the system directory (e.g.
 		  c:\WINXP\Microsoft.NET\Framework\v1.0.3705). The compilers are
-		  <b>optional</b> and only necessary for building the CLI examples.<br>
+		  <b>optional</b> and only necessary for building the CLI examples.<br/>
 		  <b>Note: Windows only!</b></td>
 		  </tr>
 		  <tr>
@@ -250,7 +247,7 @@
 		  </td>
           </tr>
 		  <tr valign="middle">
-            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"></td>
+            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"/></td>
           </tr>
 		  <tr>
 		  <td colspan="2">
@@ -293,7 +290,7 @@
               $OO_SDK_URE_JAVA_DIR/ridl.jar;
               $OO_SDK_URE_JAVA_DIR/unoloader.jar;
               [$OO_SDK_URE_JAVA_DIR/unoil.jar;]
-              $CLASSPATH</i><br>
+              $CLASSPATH</i><br/>
           <p>The classpath will be set or extended to the necessary jar files of
 		  the specified office installation. (<i>unoil.jar</i> is only included
           when OFFICE_HOME is set.)</p>
@@ -301,7 +298,7 @@
 		  </tr>
 		  <tr valign="top">
 		  <td class="cell20">OFFICE_PROGRAM_PATH</td>
-		  <td class="cell80">=<i>$OFFICE_HOME/program</i><br>
+		  <td class="cell80">=<i>$OFFICE_HOME/program</i><br/>
 		  <p>This variable is used to find, for example, the office type library and
 		  the UNO package deployment tool. This variable is only relevant when
           OFFICE_HOME is set.</p>
@@ -309,7 +306,7 @@
 		  </tr>
 		  <tr valign="top">
 		  <td class="cell20">UNO_PATH</td>
-		  <td class="cell80">=<i>$OFFICE_PROGRAM_PATH</i><br>
+		  <td class="cell80">=<i>$OFFICE_PROGRAM_PATH</i><br/>
           <p>This variable is used to ensure that the new C++ UNO bootstrap
 		  mechanism uses the configured office installation of the SDK. Normally
 		  the bootstrap mechanism finds the default office installation for the
@@ -325,7 +322,7 @@
 		  <table class="table4">
 		  <tr valign="top">
 		  <td class="cell20">LD_LIBRARY_PATH</td>
-		  <td class="cell80">=<i>$OO_SDK_URE_LIB_DIR: $OO_SDK_HOME/(solsparc|solintel)/lib: $LD_LIBRARY_PATH</i><br>
+		  <td class="cell80">=<i>$OO_SDK_URE_LIB_DIR: $OO_SDK_HOME/(solsparc|solintel)/lib: $LD_LIBRARY_PATH</i><br/>
 		  <p>The LD_LIBRARY_PATH will be set or will be extended by the office/URE
 		  library path, the platform dependent lib directory for several additional
 		  libraries.</p>
@@ -333,7 +330,7 @@
 		  </tr>
 		  <tr valign="top">
 		  <td class="cell20">PATH</td>
-		  <td class="cell80">=<i>$OO_SDK_HOME/(solsparc|solintel)/bin:$OO_SDK_MAKE_HOME: $OO_SDK_ZIP_HOME: [$OO_SDK_CPP_HOME:] [$OO_SDK_JAVA_HOME/bin:] $OO_SDK_URE_BIN_DIR: $PATH</i></b><br>
+		  <td class="cell80">=<i>$OO_SDK_HOME/(solsparc|solintel)/bin:$OO_SDK_MAKE_HOME: $OO_SDK_ZIP_HOME: [$OO_SDK_CPP_HOME:] [$OO_SDK_JAVA_HOME/bin:] $OO_SDK_URE_BIN_DIR: $PATH</i><br/>
           <p>The PATH variable will be extended by the paths for the SDK development
 		  tools, the compiler, the JDK, GNU make, the zip tool and the
 		  OO_SDK_URE_BIN_DIR, where the compiler or the JDK are
@@ -351,7 +348,7 @@
 		  <table class="table4">
 		  <tr valign="top">
 		  <td class="cell20">LD_LIBRARY_PATH</td>
-		  <td class="cell80">=<i>$OO_SDK_URE_LIB_DIR: $SDK_HOME/linux/lib: $LD_LIBRARY_PATH</i><br>
+		  <td class="cell80">=<i>$OO_SDK_URE_LIB_DIR: $SDK_HOME/linux/lib: $LD_LIBRARY_PATH</i><br/>
 		  <p>The LD_LIBRARY_PATH will be set or will be extended by the office/URE
 		  library path, the platform dependent lib directory for some additional
 		  libraries.</p>
@@ -359,7 +356,7 @@
 		  </tr>
 		  <tr valign="top">
 		  <td class="cell20">PATH</td>
-		  <td class="cell80">=<i>$OO_SDK_HOME/linux/bin:$OO_SDK_MAKE_HOME: $OO_SDK_ZIP_HOME: [$OO_SDK_CPP_HOME:] [$OO_SDK_JAVA_HOME/bin:] $OO_SDK_URE_BIN_DIR: $PATH</i><br>
+		  <td class="cell80">=<i>$OO_SDK_HOME/linux/bin:$OO_SDK_MAKE_HOME: $OO_SDK_ZIP_HOME: [$OO_SDK_CPP_HOME:] [$OO_SDK_JAVA_HOME/bin:] $OO_SDK_URE_BIN_DIR: $PATH</i><br/>
 		  <p>The PATH variable will be extended by the paths for the SDK development
 		  tools, the compiler, the JDK, GNU make, the zip tool and the
 		  OO_SDK_URE_BIN_DIR, where the compiler and the JDK are
@@ -377,7 +374,7 @@
 		  <table class="table4">
 		  <tr valign="top">
 		  <td class="cell20">PATH</td>
-		  <td class="cell80">=<i>%OO_SDK_HOME%\windows\bin; %OO_SDK_MAKE_HOME%; %OO_SDK_ZIP_HOME%; [%OO_SDK_CLI_HOME%;] [%OO_SDK_CPP_HOME%;] [%OO_SDK_JAVA_HOME%\bin;] %OO_SDK_URE_BIN_DIR%; %PATH%</i><br>
+		  <td class="cell80">=<i>%OO_SDK_HOME%\windows\bin; %OO_SDK_MAKE_HOME%; %OO_SDK_ZIP_HOME%; [%OO_SDK_CLI_HOME%;] [%OO_SDK_CPP_HOME%;] [%OO_SDK_JAVA_HOME%\bin;] %OO_SDK_URE_BIN_DIR%; %PATH%</i><br/>
 		  <p>The PATH variable will be extended by the paths for the SDK development
 		  tools, the compiler, the JDK, GNU make, the zip tool and the
 		  OO_SDK_URE_BIN_DIR.</p>
@@ -385,7 +382,7 @@
 		  </tr>
 		  <tr valign="top">
 		  <td class="cell20">LIB</td>
-		  <td class="cell80">=<i>%OO_SDK_HOME%\windows\lib; %LIB%</i><br>
+		  <td class="cell80">=<i>%OO_SDK_HOME%\windows\lib; %LIB%</i><br/>
 		  <p>The LIB variable will be extended by the path to the import libraries
 		  that are necessary for Windows.</p>
 		  </td>
@@ -411,11 +408,11 @@
                     <div id="FooterText">
                         <p>
                             Copyright © 2000, 2013 LibreOffice contributors and/or their affiliates. All rights reserved.
-                            <br>
+                            <br/>
                             LibreOffice was created by The Document Foundation,
                             based on Apache OpenOffice, which is Copyright 2011
                             The Apache Software Foundation.
-                            <br>
+                            <br/>
                             The Document Foundation acknowledges all community members, please find more info <a href="http://www.libreoffice.org/about-us/credits/" target="_blank">at our website</a>.
                         </p>
                         <p>
@@ -428,6 +425,7 @@
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </body>
 </html>
