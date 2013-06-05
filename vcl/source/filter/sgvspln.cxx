@@ -130,7 +130,7 @@ short basis()             /* BASIS maschinenunabhaengig bestimmen     */
 
 /*----------------------   MODUL TRIDIAGONAL  ------------------------*/
 
-sal_uInt16 TriDiagGS(sal_Bool rep, sal_uInt16 n, double* lower,
+sal_uInt16 TriDiagGS(bool rep, sal_uInt16 n, double* lower,
                  double* diag, double* upper, double* b)
                                               /************************/
                                               /* GAUSS-Verfahren fuer */
@@ -173,12 +173,12 @@ sal_uInt16 TriDiagGS(sal_Bool rep, sal_uInt16 n, double* lower,
 /*      diag     Hauptdiagonale                double diag[n]         */
 /*      upper    obere Nebendiagonale          double upper[n]        */
 /*                                                                    */
-/*               bei rep != 0 enthalten lower, diag und upper die     */
+/*               bei rep = true enthalten lower, diag und upper die   */
 /*               Dreieckzerlegung der Ausgangsmatrix.                 */
 /*                                                                    */
 /*      b        rechte Seite des Systems      double b[n]            */
-/*      rep      = 0  erstmaliger Aufruf       sal_Bool rep               */
-/*               !=0  wiederholter Aufruf                             */
+/*      rep      = false  erstmaliger Aufruf   bool rep               */
+/*               = true  wiederholter Aufruf                          */
 /*                    fuer gleiche Matrix,                            */
 /*                    aber verschiedenes b.                           */
 /*                                                                    */
@@ -187,11 +187,11 @@ sal_uInt16 TriDiagGS(sal_Bool rep, sal_uInt16 n, double* lower,
 /*      b        Loesungsvektor des Systems;   double b[n]            */
 /*               die urspruengliche rechte Seite wird ueberspeichert  */
 /*                                                                    */
-/*      lower    ) enthalten bei rep = 0 die Zerlegung der Matrix;    */
+/*      lower    ) enthalten bei rep = false die Zerlegung der Matrix;*/
 /*      diag     ) die urspruenglichen Werte von lower u. diag werden */
 /*      upper    ) ueberschrieben                                     */
 /*                                                                    */
-/*   Die Determinante der Matrix ist bei rep = 0 durch                */
+/*   Die Determinante der Matrix ist bei rep = false durch            */
 /*      det A = diag[0] * ... * diag[n-1] bestimmt.                   */
 /*                                                                    */
 /*   Rueckgabewert:                                                   */
@@ -218,9 +218,9 @@ sal_uInt16 TriDiagGS(sal_Bool rep, sal_uInt16 n, double* lower,
 
  if ( n < 2 ) return(1);                    /*  n mindestens 2        */
 
-                                            /*  Wenn rep = 0 ist,     */
+                                            /*  Wenn rep = false ist, */
                                             /*  Dreieckzerlegung der  */
- if (rep == 0)                              /*  Matrix u. det be-     */
+ if (!rep)                                  /*  Matrix u. det be-     */
    {                                        /*  stimmen               */
      for (i = 1; i < n; i++)
        { if ( fabs(diag[i-1]) < MACH_EPS )  /*  Wenn ein diag[i] = 0  */
@@ -262,7 +262,7 @@ sal_uInt16 TriDiagGS(sal_Bool rep, sal_uInt16 n, double* lower,
 /*----------------  MODUL ZYKLISCH TRIDIAGONAL  ----------------------*/
 
 
-sal_uInt16 ZyklTriDiagGS(sal_Bool rep, sal_uInt16 n, double* lower, double* diag,
+sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
                      double* upper, double* lowrow, double* ricol, double* b)
                                         /******************************/
                                         /* Systeme mit zyklisch tri-  */
@@ -308,8 +308,8 @@ sal_uInt16 ZyklTriDiagGS(sal_Bool rep, sal_uInt16 n, double* lower, double* diag
 /*      diag     Hauptdiagonale                double diag[n]         */
 /*      upper    obere Nebendiagonale          double upper[n]        */
 /*      b        rechte Seite des Systems      double b[n]            */
-/*      rep      = 0  erstmaliger Aufruf       sal_Bool rep               */
-/*               !=0  wiederholter Aufruf                             */
+/*      rep      = false  erstmaliger Aufruf   bool rep               */
+/*               = true  wiederholter Aufruf                          */
 /*                    fuer gleiche Matrix,                            */
 /*                    aber verschiedenes b.                           */
 /*                                                                    */
@@ -318,13 +318,13 @@ sal_uInt16 ZyklTriDiagGS(sal_Bool rep, sal_uInt16 n, double* lower, double* diag
 /*      b        Loesungsvektor des Systems,   double b[n]            */
 /*               die urspruengliche rechte Seite wird ueberspeichert  */
 /*                                                                    */
-/*      lower    ) enthalten bei rep = 0 die Zerlegung der Matrix;    */
+/*      lower    ) enthalten bei rep = false die Zerlegung der Matrix;*/
 /*      diag     ) die urspruenglichen Werte von lower u. diag werden */
 /*      upper    ) ueberschrieben                                     */
 /*      lowrow   )                             double lowrow[n-2]     */
 /*      ricol    )                             double ricol[n-2]      */
 /*                                                                    */
-/*   Die Determinante der Matrix ist bei rep = 0 durch                */
+/*   Die Determinante der Matrix ist bei rep = false durch            */
 /*      det A = diag[0] * ... * diag[n-1]     bestimmt.               */
 /*                                                                    */
 /*   Rueckgabewert:                                                   */
@@ -350,7 +350,7 @@ sal_uInt16 ZyklTriDiagGS(sal_Bool rep, sal_uInt16 n, double* lower, double* diag
 
  if ( n < 3 ) return(1);
 
- if (rep == 0)                              /*  Wenn rep = 0 ist,     */
+ if (!rep)                                  /*  Wenn rep = false ist, */
    {                                        /*  Zerlegung der         */
      lower[0] = upper[n-1] = 0.0;           /*  Matrix berechnen.     */
 
@@ -382,7 +382,7 @@ sal_uInt16 ZyklTriDiagGS(sal_Bool rep, sal_uInt16 n, double* lower, double* diag
      diag[n-1] += temp - lower[n-1] * upper[n-2];
 
      if ( fabs(diag[n-1]) < MACH_EPS ) return(2);
-   }  /* end if ( rep == 0 ) */
+   }
 
  b[0] /= diag[0];                          /* Vorwaertselemination    */
  for (i = 1; i < n-1; i++)
@@ -474,7 +474,7 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
     if (n==2) {
         c[1]=a[0]/d[0];
     } else {
-        error=TriDiagGS(sal_False,n-1,b,d,c,a);
+        error=TriDiagGS(false,n-1,b,d,c,a);
         if (error!=0) { delete[] a; delete[] h; return error+2; }
         for (i=0;i<n-1;i++) c[i+1]=a[i];
     }
@@ -564,7 +564,7 @@ sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
         lowrow[0]=hr;
         ricol[0]=hr;
         a[nm1]=3.0*((y[1]-y[0])/hr-(y[n]-y[nm1])/hl);
-        Error=ZyklTriDiagGS(sal_False,n,b,d,c,lowrow,ricol,a);
+        Error=ZyklTriDiagGS(false,n,b,d,c,lowrow,ricol,a);
         if ( Error != 0 )
         {
             delete[] a;
@@ -602,7 +602,7 @@ sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
 sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
                   double Marg01, double Marg02,
                   double MargN1, double MargN2,
-                  sal_Bool CondT, double* T,
+                  bool CondT, double* T,
                   double* bx, double* cx, double* dx,
                   double* by, double* cy, double* dy)
 {
@@ -614,7 +614,7 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
 
     if (n<2) return 1;
     if ((MargCond & ~3) && (MargCond != 4)) return 2; // ungueltige Randbedingung
-    if (CondT==sal_False) {
+    if (!CondT) {
         T[0]=0.0;
         for (i=0;i<n;i++) {
             deltX=x[i+1]-x[i]; deltY=y[i+1]-y[i];
@@ -676,14 +676,14 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
 |*                      Polygons werden als Stuetzstellen angenommen.
 |*                      n liefert die Anzahl der Teilpolynome.
 |*                      Ist die Berechnung fehlerfrei verlaufen, so
-|*                      liefert die Funktion sal_True. Nur in diesem Fall
+|*                      liefert die Funktion true. Nur in diesem Fall
 |*                      ist Speicher fuer die Koeffizientenarrays
 |*                      allokiert, der dann spaeter vom Aufrufer mittels
 |*                      delete freizugeben ist.
 |*
 *************************************************************************/
 
-sal_Bool CalcSpline(Polygon& rPoly, sal_Bool Periodic, sal_uInt16& n,
+bool CalcSpline(Polygon& rPoly, bool Periodic, sal_uInt16& n,
                 double*& ax, double*& ay, double*& bx, double*& by,
                 double*& cx, double*& cy, double*& dx, double*& dy, double*& T)
 {
@@ -731,12 +731,12 @@ sal_Bool CalcSpline(Polygon& rPoly, sal_Bool Periodic, sal_uInt16& n,
     MargN2=0.0;
     if (n>0) n--; // n Korregieren (Anzahl der Teilpolynome)
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( ( Marg == 3 && n >= 3 ) || ( Marg == 2 && n >= 2 ) )
     {
-        bRet = ParaSpline(n,ax,ay,Marg,Marg01,Marg01,MargN1,MargN2,sal_False,T,bx,cx,dx,by,cy,dy) == 0;
+        bRet = ParaSpline(n,ax,ay,Marg,Marg01,Marg01,MargN1,MargN2,false,T,bx,cx,dx,by,cy,dy) == 0;
     }
-    if ( bRet == sal_False )
+    if ( !bRet )
     {
         delete[] ax;
         delete[] ay;
@@ -760,7 +760,7 @@ sal_Bool CalcSpline(Polygon& rPoly, sal_Bool Periodic, sal_uInt16& n,
 |*    Beschreibung      Konvertiert einen parametrichen kubischen
 |*                      Polynomspline Spline (natuerlich oder periodisch)
 |*                      in ein angenaehertes Polygon.
-|*                      Die Funktion liefert sal_False, wenn ein Fehler bei
+|*                      Die Funktion liefert false, wenn ein Fehler bei
 |*                      der Koeffizientenberechnung aufgetreten ist oder
 |*                      das Polygon zu gross wird (>PolyMax=16380). Im 1.
 |*                      Fall hat das Polygon 0, im 2. Fall PolyMax Punkte.
@@ -768,7 +768,7 @@ sal_Bool CalcSpline(Polygon& rPoly, sal_Bool Periodic, sal_uInt16& n,
 |*                      auf +/-32000 begrenzt.
 |*
 *************************************************************************/
-sal_Bool Spline2Poly(Polygon& rSpln, sal_Bool Periodic, Polygon& rPoly)
+bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly)
 {
     short  MinKoord=-32000; // zur Vermeidung
     short  MaxKoord=32000;  // von Ueberlaeufen
@@ -786,10 +786,10 @@ sal_Bool Spline2Poly(Polygon& rSpln, sal_Bool Periodic, Polygon& rPoly)
     double  Step;        // Schrittweite fuer t
     double  dt1,dt2,dt3; // Delta t, y, ^3
     double  t;
-    sal_Bool    bEnde;       // Teilpolynom zu Ende?
+    bool    bEnde;       // Teilpolynom zu Ende?
     sal_uInt16  n;           // Anzahl der zu zeichnenden Teilpolynome
     sal_uInt16  i;           // aktuelles Teilpolynom
-    sal_Bool    bOk;         // noch alles ok?
+    bool    bOk;         // noch alles ok?
     sal_uInt16  PolyMax=16380;// Maximale Anzahl von Polygonpunkten
     long    x,y;
 
@@ -802,7 +802,7 @@ sal_Bool Spline2Poly(Polygon& rSpln, sal_Bool Periodic, Polygon& rPoly)
         i=0;
         while (i<n) {       // n Teilpolynome malen
             t=tv[i]+Step;
-            bEnde=sal_False;
+            bEnde=false;
             while (!bEnde) {  // ein Teilpolynom interpolieren
                 bEnde=t>=tv[i+1];
                 if (bEnde) t=tv[i+1];
@@ -815,7 +815,7 @@ sal_Bool Spline2Poly(Polygon& rSpln, sal_Bool Periodic, Polygon& rPoly)
                     rPoly.SetSize(rPoly.GetSize()+1);
                     rPoly.SetPoint(Point(short(x),short(y)),rPoly.GetSize()-1);
                 } else {
-                    bOk=sal_False; // Fehler: Polygon wird zu gross
+                    bOk=false; // Fehler: Polygon wird zu gross
                 }
                 t=t+Step;
             } // Ende von Teilpolynom
@@ -833,7 +833,7 @@ sal_Bool Spline2Poly(Polygon& rSpln, sal_Bool Periodic, Polygon& rPoly)
         return bOk;
     } // Ende von if (bOk)
     rPoly.SetSize(0);
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

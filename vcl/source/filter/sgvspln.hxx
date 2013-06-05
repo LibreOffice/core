@@ -30,14 +30,14 @@
 |*                      Polygons werden als Sttzstellen angenommen.
 |*                      n liefert die Anzahl der Teilpolynome.
 |*                      Ist die Berechnung fehlerfrei verlaufen, so
-|*                      liefert die Funktion sal_True. Nur in diesem Fall
+|*                      liefert die Funktion true. Nur in diesem Fall
 |*                      ist Speicher fr die Koeffizientenarrays
 |*                      allokiert, der dann sp„ter vom Aufrufer mittels
 |*                      delete freizugeben ist.
 |*
 *************************************************************************/
 
-sal_Bool CalcSpline(Polygon& rPoly, sal_Bool Periodic, sal_uInt16& n,
+bool CalcSpline(Polygon& rPoly, bool Periodic, sal_uInt16& n,
                 double*& ax, double*& ay, double*& bx, double*& by,
                 double*& cx, double*& cy, double*& dx, double*& dy, double*& T);
 
@@ -48,7 +48,7 @@ sal_Bool CalcSpline(Polygon& rPoly, sal_Bool Periodic, sal_uInt16& n,
 |*    Beschreibung      Konvertiert einen parametrichen kubischen
 |*                      Polynomspline Spline (natrlich oder periodisch)
 |*                      in ein angen„hertes Polygon.
-|*                      Die Funktion liefert sal_False, wenn ein Fehler bei
+|*                      Die Funktion liefert false, wenn ein Fehler bei
 |*                      der Koeffizientenberechnung aufgetreten ist oder
 |*                      das Polygon zu gro?wird (>PolyMax=16380). Im 1.
 |*                      Fall hat das Polygon 0, im 2. Fall PolyMax Punkte.
@@ -56,7 +56,7 @@ sal_Bool CalcSpline(Polygon& rPoly, sal_Bool Periodic, sal_uInt16& n,
 |*                      auf +/-32000 begrenzt.
 |*
 *************************************************************************/
-sal_Bool Spline2Poly(Polygon& rSpln, sal_Bool Periodic, Polygon& rPoly);
+bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly);
 
 #endif //_SGVSPLN_HXX
 
