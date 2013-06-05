@@ -255,7 +255,7 @@ sal_Bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< ::com::s
     // An XML import service: what we push sax messages to..
     OUString sXMLImportService ( "com.sun.star.comp.Writer.XMLImporter" );
 
-    uno::Reference< XDocumentHandler > xInternalHandler( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
+    uno::Reference< XDocumentHandler > xInternalHandler( mxContext->getServiceManager()->createInstanceWithContext( sXMLImportService, mxContext ), UNO_QUERY );
     uno::Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
     if (xImporter.is())
         xImporter->setTargetDocument(mxDoc);
@@ -307,7 +307,7 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
     {
         try
         {
-            ::ucbhelper::Content aContent(sURL, xEnv, comphelper::getComponentContext(mxMSF));
+            ::ucbhelper::Content aContent(sURL, xEnv, mxContext);
             xInputStream = aContent.openStream();
         }
         catch ( Exception& )
@@ -377,7 +377,7 @@ Sequence< OUString > SAL_CALL LotusWordProImportFilter_getSupportedServiceNames(
 uno::Reference< XInterface > SAL_CALL LotusWordProImportFilter_createInstance( const uno::Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    return (cppu::OWeakObject*) new LotusWordProImportFilter( rSMgr );
+    return (cppu::OWeakObject*) new LotusWordProImportFilter( comphelper::getComponentContext(rSMgr) );
 }
 
 // XServiceInfo

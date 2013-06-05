@@ -28,8 +28,7 @@
 // - PDFInteractionHandler -
 // -------------
 
-PDFInteractionHandler::PDFInteractionHandler( const Reference< XMultiServiceFactory > &rxMSF ) :
-    mxMSF( rxMSF )
+PDFInteractionHandler::PDFInteractionHandler()
 {
 }
 
@@ -98,9 +97,9 @@ Sequence< OUString > SAL_CALL PDFInteractionHandler_getSupportedServiceNames(  )
 
 // -----------------------------------------------------------------------------
 
-Reference< XInterface > SAL_CALL PDFInteractionHandler_createInstance( const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
+Reference< XInterface > SAL_CALL PDFInteractionHandler_createInstance( const Reference< XMultiServiceFactory > & ) throw( Exception )
 {
-    return (cppu::OWeakObject*) new PDFInteractionHandler( rSMgr );
+    return (cppu::OWeakObject*) new PDFInteractionHandler;
 }
 
 // -----------------------------------------------------------------------------

@@ -37,10 +37,6 @@ using namespace ::com::sun::star::lang;
 class PDFInteractionHandler : public cppu::WeakImplHelper2 < task::XInteractionHandler2,
                                                              XServiceInfo >
 {
-private:
-
-    Reference< XMultiServiceFactory >   mxMSF;
-
 protected:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
@@ -54,7 +50,7 @@ protected:
     virtual sal_Bool SAL_CALL handleInteractionRequest( const Reference< task::XInteractionRequest >& ) throw(RuntimeException);
 public:
 
-                PDFInteractionHandler( const Reference< XMultiServiceFactory >& rxMSF );
+                PDFInteractionHandler();
     virtual     ~PDFInteractionHandler();
 };
 

@@ -50,7 +50,7 @@ private:
 
 protected:
     // oo.org declares
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxDoc;
     OUString msFilterName;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > mxHandler;
@@ -61,8 +61,8 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
 public:
-    LotusWordProImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF)
-        : mxMSF( rxMSF ) {}
+    LotusWordProImportFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
+        : mxContext( rxContext ) {}
     virtual ~LotusWordProImportFilter() {}
 
     // XFilter
