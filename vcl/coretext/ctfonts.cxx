@@ -258,8 +258,10 @@ bool CTTextStyle::GetGlyphOutline( sal_GlyphId nGlyphId, basegfx::B2DPolyPolygon
 
 void CTTextStyle::SetTextColor( const RGBAColor& rColor )
 {
-    CGColorRef pCGColor = CGColorCreateGenericRGB( rColor.GetRed(),
-        rColor.GetGreen(), rColor.GetBlue(), rColor.GetAlpha() );
+    CGFloat aColor[] = { rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue(), rColor.GetAlpha() };
+    CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
+    CGColorRef pCGColor = CGColorCreate( cs, aColor );
+    CGColorSpaceRelease( cs );
     CFDictionarySetValue( mpStyleDict, kCTForegroundColorAttributeName, pCGColor );
     CFRelease( pCGColor);
 }
