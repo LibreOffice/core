@@ -154,7 +154,7 @@ void ViewClipboard::AssignMasterPage (
 
     // We have to remove the layout suffix from the layout name which is
     // appended again by SetMasterPage() to the given name.  Don't ask.
-    String sLayoutSuffix (RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR));
+    String sLayoutSuffix (SD_LT_SEPARATOR);
     sLayoutSuffix.Append (SdResId(STR_LAYOUT_OUTLINE));
     sal_uInt16 nLength = sLayoutSuffix.Len();
     String sLayoutName (pMasterPage->GetLayoutName());

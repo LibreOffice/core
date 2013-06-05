@@ -555,9 +555,9 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
             SvtSysLocale                aSysLocale;
             const LocaleDataWrapper&    aLocaleData = aSysLocale.GetLocaleData();
 
-            aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " ( " ));
+            aText.AppendAscii( " ( " );
             aText += aLocaleData.getDuration( Time( 0, 0, mnPauseTimeout ) );
-            aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " )" ));
+            aText.AppendAscii( " )" );
             aVDev.DrawText( Point( aOffset.Width(), 0 ), aText );
             DrawOutDev( Point( aOutOrg.X(), aOffset.Height() ), aVDevSize, Point(), aVDevSize, aVDev );
             bDrawn = true;

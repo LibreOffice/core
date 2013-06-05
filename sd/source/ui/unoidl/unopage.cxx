@@ -401,7 +401,7 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
         return NULL;
 
     String aType( xShape->getShapeType() );
-    const String aPrefix( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.") );
+    const String aPrefix( "com.sun.star.presentation." );
     if( aType.CompareTo( aPrefix, aPrefix.Len() ) != 0 )
     {
         SdrObject* pObj = SvxFmDrawPage::_CreateSdrObject( xShape );
@@ -2166,7 +2166,7 @@ OUString getPageApiNameFromUiName( const String& rUIName )
 
     if( rUIName.Equals( aDefPageName, 0, aDefPageName.Len() ) )
     {
-        aApiName = OUString( RTL_CONSTASCII_USTRINGPARAM( sEmptyPageName ) );
+        aApiName = OUString( sEmptyPageName );
         aApiName += rUIName.Copy( aDefPageName.Len() );
     }
     else
@@ -2184,7 +2184,7 @@ OUString SdDrawPage::getPageApiNameFromUiName( const String& rUIName )
 
 String getUiNameFromPageApiNameImpl( const OUString& rApiName )
 {
-    const String aDefPageName(RTL_CONSTASCII_USTRINGPARAM( sEmptyPageName ));
+    const String aDefPageName( sEmptyPageName );
     if( rApiName.compareTo( aDefPageName, aDefPageName.Len() ) == 0 )
     {
         OUString aNumber( rApiName.copy( sizeof( sEmptyPageName ) - 1 ) );
@@ -2933,7 +2933,7 @@ void SdMasterPage::setBackground( const Any& rValue )
             if(pSSPool)
             {
                 String aLayoutName( static_cast< SdPage* >( SvxFmDrawPage::mpPage )->GetLayoutName() );
-                aLayoutName.Erase(aLayoutName.Search(String(RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR)))+4);
+                aLayoutName.Erase(aLayoutName.Search(String(SD_LT_SEPARATOR))+4);
                 aLayoutName += String(SdResId(STR_LAYOUT_BACKGROUND));
                 SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SD_STYLE_FAMILY_MASTERPAGE );
 
@@ -2977,7 +2977,7 @@ void SdMasterPage::getBackground( Any& rValue ) throw()
             if(pSSPool)
             {
                 String aLayoutName( static_cast< SdPage* >(SvxFmDrawPage::mpPage)->GetLayoutName() );
-                aLayoutName.Erase( aLayoutName.Search(String(RTL_CONSTASCII_USTRINGPARAM(SD_LT_SEPARATOR)))+4);
+                aLayoutName.Erase( aLayoutName.Search(String(SD_LT_SEPARATOR))+4);
                 aLayoutName += String(SdResId(STR_LAYOUT_BACKGROUND));
                 SfxStyleSheetBase* pStyleSheet = pSSPool->Find( aLayoutName, SD_STYLE_FAMILY_MASTERPAGE );
 
@@ -3069,7 +3069,7 @@ OUString SAL_CALL SdMasterPage::getName(  )
     if(SvxFmDrawPage::mpPage)
     {
         String aLayoutName( GetPage()->GetLayoutName() );
-        aLayoutName = aLayoutName.Erase(aLayoutName.Search( String( RTL_CONSTASCII_USTRINGPARAM((SD_LT_SEPARATOR)))));
+        aLayoutName = aLayoutName.Erase(aLayoutName.Search( String(SD_LT_SEPARATOR)));
 
         return aLayoutName;
     }

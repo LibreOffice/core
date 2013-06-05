@@ -190,7 +190,7 @@ RenameLayoutTemplateUndoAction::RenameLayoutTemplateUndoAction( SdDrawDocument* 
 void RenameLayoutTemplateUndoAction::Undo()
 {
     String aLayoutName( maNewName );
-    aLayoutName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
+    aLayoutName.AppendAscii( SD_LT_SEPARATOR );
     aLayoutName.Append( String(SdResId(STR_LAYOUT_OUTLINE))) ;
 
     mpDoc->RenameLayoutTemplate( aLayoutName, maOldName );
@@ -199,7 +199,7 @@ void RenameLayoutTemplateUndoAction::Undo()
 void RenameLayoutTemplateUndoAction::Redo()
 {
     String aLayoutName( maOldName );
-    aLayoutName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
+    aLayoutName.AppendAscii( SD_LT_SEPARATOR );
     aLayoutName.Append( String(SdResId(STR_LAYOUT_OUTLINE))) ;
 
     mpDoc->RenameLayoutTemplate( aLayoutName, maNewName );

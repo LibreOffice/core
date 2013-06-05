@@ -547,7 +547,7 @@ void DrawView::DeleteMarked()
     if( pUndoManager )
     {
         String aUndo( SVX_RES(STR_EditDelete) );
-        String aSearchString(RTL_CONSTASCII_USTRINGPARAM("%1"));
+        String aSearchString("%1");
         aUndo.SearchAndReplace(aSearchString, GetDescriptionOfMarkedObjects());
         pUndoManager->EnterListAction(aUndo, aUndo);
     }
