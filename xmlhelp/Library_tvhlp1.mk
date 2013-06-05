@@ -23,7 +23,6 @@ $(eval $(call gb_Library_use_libraries,tvhlp1,\
 	cppu \
 	cppuhelper \
 	sal \
-	tl \
 	utl \
 	i18nlangtag \
 ))

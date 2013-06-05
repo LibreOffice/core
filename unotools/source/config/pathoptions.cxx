@@ -815,25 +815,23 @@ void SvtPathOptions::SetWorkPath( const String& rPath )
 
 // -----------------------------------------------------------------------
 
-String SvtPathOptions::SubstituteVariable( const String& rVar ) const
+OUString SvtPathOptions::SubstituteVariable( const OUString& rVar ) const
 {
-    String aRet = pImp->SubstVar( rVar );
-    return aRet;
+    return pImp->SubstVar( rVar );
 }
 
 // -----------------------------------------------------------------------
 
-String SvtPathOptions::ExpandMacros( const String& rPath ) const
+OUString SvtPathOptions::ExpandMacros( const OUString& rPath ) const
 {
     return pImp->ExpandMacros( rPath );
 }
 
 // -----------------------------------------------------------------------
 
-String SvtPathOptions::UseVariable( const String& rPath ) const
+OUString SvtPathOptions::UseVariable( const OUString& rPath ) const
 {
-    String aRet = pImp->UsePathVariables( rPath );
-    return aRet;
+    return pImp->UsePathVariables( rPath );
 }
 
 // -----------------------------------------------------------------------

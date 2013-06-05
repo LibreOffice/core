@@ -117,9 +117,9 @@ public:
     void            SetUserConfigPath( const String& rPath );
     void            SetWorkPath( const String& rPath );
 
-    String          SubstituteVariable( const String& rVar ) const;
-    String          ExpandMacros( const String& rPath ) const;
-    String          UseVariable( const String& rVar ) const;
+    OUString        SubstituteVariable( const OUString& rVar ) const;
+    OUString        ExpandMacros( const OUString& rPath ) const;
+    OUString        UseVariable( const OUString& rVar ) const;
     sal_Bool        SearchFile( String& rIniFile, Paths ePath = PATH_USERCONFIG );
     const LanguageTag& GetLanguageTag() const;
     sal_Bool        IsReadonly() const;
