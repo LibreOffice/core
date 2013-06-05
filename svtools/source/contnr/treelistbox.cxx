@@ -2012,6 +2012,17 @@ void SvTreeListBox::SetCheckButtonState( SvTreeListEntry* pEntry, SvButtonState 
     }
 }
 
+void SvTreeListBox::SetCheckButtonInvisible( SvTreeListEntry* pEntry)
+{
+    DBG_CHKTHIS(SvTreeListBox,0);
+    if( nTreeFlags & TREEFLAG_CHKBTN )
+    {
+        SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
+        pItem->SetStateInvisible();
+        InvalidateEntry( pEntry );
+    }
+}
+
 SvButtonState SvTreeListBox::GetCheckButtonState( SvTreeListEntry* pEntry ) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);

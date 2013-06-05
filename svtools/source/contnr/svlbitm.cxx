@@ -318,6 +318,7 @@ SvLBoxButton::SvLBoxButton( SvTreeListEntry* pEntry, SvLBoxButtonKind eTheKind,
     nItemFlags = 0;
     SetStateUnchecked();
     pData = pBData;
+    isVis = true;
 }
 
 SvLBoxButton::SvLBoxButton() : SvLBoxItem()
@@ -389,11 +390,12 @@ void SvLBoxButton::Paint(
         else if ( IsStateTristate() )
             aControlValue.setTristateVal( BUTTONVALUE_MIXED );
 
-        bNativeOK = rDev.DrawNativeControl( eCtrlType, PART_ENTIRE_CONTROL,
+        if( isVis)
+            bNativeOK = rDev.DrawNativeControl( eCtrlType, PART_ENTIRE_CONTROL,
                                 aCtrlRegion, nState, aControlValue, OUString() );
     }
 
-    if( !bNativeOK)
+    if( !bNativeOK && isVis )
         rDev.DrawImage( rPos, pData->aBmps[nIndex + nBaseOffs] ,nStyle);
 }
 
@@ -457,6 +459,11 @@ void SvLBoxButton::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
 bool SvLBoxButton::CheckModification() const
 {
     return eKind == SvLBoxButtonKind_enabledCheckbox;
+}
+
+void SvLBoxButton::SetStateInvisible()
+{
+    isVis = false;
 }
 
 // ***************************************************************
