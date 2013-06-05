@@ -99,17 +99,9 @@ AlignmentPropertyPanel::~AlignmentPropertyPanel()
 
 void AlignmentPropertyPanel::Initialize()
 {
-    Size aTbxSize( mpTBHorizontal->CalcWindowSizePixel() );
-    mpTBHorizontal->SetOutputSizePixel( aTbxSize );
-    mpTBHorizontal->SetBackground(Wallpaper());
-    mpTBHorizontal->SetPaintTransparent(true);
     Link aLink = LINK(this, AlignmentPropertyPanel, TbxHorAlignSelectHdl);
     mpTBHorizontal->SetSelectHdl ( aLink );
 
-    Size aTbxSize2( mpTBVertical->CalcWindowSizePixel() );
-    mpTBVertical->SetOutputSizePixel( aTbxSize2 );
-    mpTBVertical->SetBackground(Wallpaper());
-    mpTBVertical->SetPaintTransparent(true);
     aLink = LINK(this, AlignmentPropertyPanel, TbxVerAlignSelectHdl);
     mpTBVertical->SetSelectHdl ( aLink );
 
