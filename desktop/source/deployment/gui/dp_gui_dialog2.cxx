@@ -148,6 +148,8 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
 
+    virtual Size    GetOptimalSize() const;
+
     virtual void    RecalcAll();
     virtual void    selectEntry( const long nPos );
     //-----------------
@@ -162,6 +164,11 @@ ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl(Window* pParent)
     , m_pRemoveBtn(NULL)
     , m_pParent(NULL)
 {
+}
+
+Size ExtBoxWithBtns_Impl::GetOptimalSize() const
+{
+    return LogicToPixel(Size(250, 150), MapMode(MAP_APPFONT));
 }
 
 //------------------------------------------------------------------------------
