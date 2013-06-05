@@ -133,6 +133,7 @@ public:
 
 class SVT_DLLPUBLIC SvLBoxButton : public SvLBoxItem
 {
+    bool    isVis;
     SvLBoxButtonData*   pData;
     SvLBoxButtonKind eKind;
     sal_uInt16 nItemFlags;
@@ -166,6 +167,7 @@ public:
     void            SetStateUnchecked();
     void            SetStateTristate();
     void            SetStateHilighted( sal_Bool bHilight );
+    void            SetStateInvisible();
 
     SvLBoxButtonKind GetKind() const { return eKind; }
 
