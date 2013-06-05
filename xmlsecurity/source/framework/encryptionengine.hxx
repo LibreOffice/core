@@ -50,6 +50,10 @@ class EncryptionEngine : public cppu::ImplInheritanceHelper1
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
+private:
+    com::sun::star::uno::Reference<
+        com::sun::star::uno::XComponentContext > m_xContext;
+
 protected:
     /*
      * the Encryption bridge component, which performs encrypt and decrypt
@@ -64,7 +68,7 @@ protected:
     sal_Int32 m_nIdOfBlocker;
 
 protected:
-    EncryptionEngine( );
+    EncryptionEngine( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & xContext );
     virtual ~EncryptionEngine(){};
 
     virtual void tryToPerform( )

@@ -30,6 +30,7 @@
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 #include <com/sun/star/xml/crypto/XUriBinding.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase2.hxx>
 
@@ -56,6 +57,9 @@ class SignatureEngine : public cppu::ImplInheritanceHelper2
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
+private:
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xContext;
+
 protected:
 
     /*
@@ -87,7 +91,7 @@ protected:
         com::sun::star::io::XInputStream > > m_vXInputStreams;
 
 protected:
-    SignatureEngine( );
+    SignatureEngine( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & xContext);
     virtual ~SignatureEngine() {};
 
     virtual void tryToPerform( )

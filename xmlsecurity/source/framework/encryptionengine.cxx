@@ -23,14 +23,14 @@
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-namespace cssu = com::sun::star::uno;
+using namespace com::sun::star::uno;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxw = com::sun::star::xml::wrapper;
 
 #define ENCRYPTION_TEMPLATE "com.sun.star.xml.crypto.XMLEncryptionTemplate"
 
-EncryptionEngine::EncryptionEngine( )
-        :m_nIdOfBlocker(-1)
+EncryptionEngine::EncryptionEngine( const Reference<XComponentContext> & xContext)
+        :m_xContext(xContext), m_nIdOfBlocker(-1)
 {
 }
 
@@ -82,7 +82,7 @@ bool EncryptionEngine::checkReady() const
 }
 
 void EncryptionEngine::tryToPerform( )
-        throw (cssu::Exception, cssu::RuntimeException)
+        throw (Exception, RuntimeException)
 /****** EncryptionEngine/tryToPerform ****************************************
  *
  *   NAME
@@ -113,12 +113,12 @@ void EncryptionEngine::tryToPerform( )
     if (checkReady())
     {
         const OUString sEncryptionTemplate ( ENCRYPTION_TEMPLATE );
-        cssu::Reference < cssxc::XXMLEncryptionTemplate > xEncryptionTemplate(
-            mxMSF->createInstance( sEncryptionTemplate ), cssu::UNO_QUERY );
+        Reference < cssxc::XXMLEncryptionTemplate > xEncryptionTemplate(
+            m_xContext->getServiceManager()->createInstanceWithContext( sEncryptionTemplate, m_xContext ), UNO_QUERY );
 
         OSL_ASSERT( xEncryptionTemplate.is() );
 
-        cssu::Reference< cssxw::XXMLElementWrapper > xXMLElement
+        Reference< cssxw::XXMLElementWrapper > xXMLElement
             = m_xSAXEventKeeper->getElement( m_nIdOfTemplateEC );
 
         xEncryptionTemplate->setTemplate(xXMLElement);
@@ -162,12 +162,12 @@ void EncryptionEngine::clearUp( ) const
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    cssu::Reference < cssxc::sax::XReferenceResolvedBroadcaster >
-        xReferenceResolvedBroadcaster( m_xSAXEventKeeper, cssu::UNO_QUERY );
+    Reference < cssxc::sax::XReferenceResolvedBroadcaster >
+        xReferenceResolvedBroadcaster( m_xSAXEventKeeper, UNO_QUERY );
 
     xReferenceResolvedBroadcaster->removeReferenceResolvedListener(
         m_nIdOfTemplateEC,
-        (const cssu::Reference < cssxc::sax::XReferenceResolvedListener >)((SecurityEngine *)this));
+        (const Reference < cssxc::sax::XReferenceResolvedListener >)((SecurityEngine *)this));
 
     m_xSAXEventKeeper->removeElementCollector(m_nIdOfTemplateEC);
 

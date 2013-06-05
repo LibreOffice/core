@@ -30,14 +30,16 @@
 
 #include "encryptionengine.hxx"
 
-class EncryptorImpl : public cppu::ImplInheritanceHelper4
+typedef cppu::ImplInheritanceHelper4
 <
     EncryptionEngine,
     com::sun::star::xml::crypto::sax::XEncryptionResultBroadcaster,
     com::sun::star::xml::crypto::sax::XReferenceCollector,
     com::sun::star::lang::XInitialization,
     com::sun::star::lang::XServiceInfo
->
+> EncryptorImpl_Base;
+
+class EncryptorImpl : public EncryptorImpl_Base
 /****** EncryptorImpl.hxx/CLASS EncryptorImpl *********************************
  *
  *   NAME
@@ -70,8 +72,7 @@ private:
         throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
 
 public:
-    explicit EncryptorImpl( const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >& rxMSF);
+    explicit EncryptorImpl(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & xContext);
     virtual ~EncryptorImpl();
 
     /* XEncryptionResultBroadcaster */

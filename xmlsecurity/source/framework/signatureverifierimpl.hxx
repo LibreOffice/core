@@ -25,17 +25,20 @@
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase3.hxx>
 
 #include "signatureengine.hxx"
 
-class SignatureVerifierImpl : public cppu::ImplInheritanceHelper3
+typedef cppu::ImplInheritanceHelper3
 <
     SignatureEngine,
     com::sun::star::xml::crypto::sax::XSignatureVerifyResultBroadcaster,
     com::sun::star::lang::XInitialization,
     com::sun::star::lang::XServiceInfo
->
+> SignatureVerifierImpl_Base;
+
+class SignatureVerifierImpl : public SignatureVerifierImpl_Base
 /****** SignatureVerifier.hxx/CLASS SignatureVerifierImpl *********************
  *
  *   NAME
@@ -64,7 +67,7 @@ private:
 
 public:
     explicit SignatureVerifierImpl( const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >& rxMSF);
+        com::sun::star::uno::XComponentContext >& rxContext);
     virtual ~SignatureVerifierImpl();
 
     /* XSignatureVerifyResultBroadcaster */

@@ -19,6 +19,7 @@ $(eval $(call gb_Library_set_include,xsec_fw,\
 $(eval $(call gb_Library_use_sdk_api,xsec_fw))
 
 $(eval $(call gb_Library_use_libraries,xsec_fw,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \

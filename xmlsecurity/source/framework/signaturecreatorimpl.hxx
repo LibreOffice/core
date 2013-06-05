@@ -30,14 +30,16 @@
 
 #include "signatureengine.hxx"
 
-class SignatureCreatorImpl : public cppu::ImplInheritanceHelper4
+typedef cppu::ImplInheritanceHelper4
 <
     SignatureEngine,
     com::sun::star::xml::crypto::sax::XBlockerMonitor,
     com::sun::star::xml::crypto::sax::XSignatureCreationResultBroadcaster,
     com::sun::star::lang::XInitialization,
     com::sun::star::lang::XServiceInfo
->
+> SignatureCreatorImpl_Base;
+
+class SignatureCreatorImpl : public SignatureCreatorImpl_Base
 /****** SignatureCreatorImpl.hxx/CLASS SignatureCreatorImpl *******************
  *
  *   NAME
@@ -71,8 +73,7 @@ private:
         throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
 
 public:
-    explicit SignatureCreatorImpl( const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >& rxMSF);
+    explicit SignatureCreatorImpl( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & xContext );
     virtual ~SignatureCreatorImpl();
 
     /* XBlockerMonitor */

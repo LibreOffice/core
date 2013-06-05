@@ -29,13 +29,14 @@
 
 #include "encryptionengine.hxx"
 
-class DecryptorImpl : public cppu::ImplInheritanceHelper3
+typedef cppu::ImplInheritanceHelper3
 <
     EncryptionEngine,
     com::sun::star::xml::crypto::sax::XDecryptionResultBroadcaster,
     com::sun::star::lang::XInitialization,
     com::sun::star::lang::XServiceInfo
->
+> DecryptorImpl_Base;
+class DecryptorImpl : public DecryptorImpl_Base
 /****** DecryptorImpl.hxx/CLASS DecryptorImpl *********************************
  *
  *   NAME
@@ -63,8 +64,7 @@ private:
         throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
 
 public:
-    explicit DecryptorImpl( const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >& rxMSF);
+    explicit DecryptorImpl(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & xContext);
     virtual ~DecryptorImpl();
 
     /* XDecryptionResultBroadcaster */

@@ -24,9 +24,8 @@
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
 
-SecurityEngine::SecurityEngine( const cssu::Reference< cssl::XMultiServiceFactory >& rxMSF )
-    :mxMSF( rxMSF ),
-     m_nIdOfTemplateEC(-1),
+SecurityEngine::SecurityEngine()
+    :m_nIdOfTemplateEC(-1),
      m_nNumOfResolvedReferences(0),
      m_nIdOfKeyEC(-1),
      m_bMissionDone(false),

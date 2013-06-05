@@ -22,7 +22,9 @@
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/processfactory.hxx>
 
+using namespace com::sun::star::uno;
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
@@ -31,10 +33,9 @@ namespace cssxw = com::sun::star::xml::wrapper;
 #define SERVICE_NAME "com.sun.star.xml.crypto.sax.SignatureCreator"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.SignatureCreatorImpl"
 
-SignatureCreatorImpl::SignatureCreatorImpl( const cssu::Reference< cssl::XMultiServiceFactory >& rxMSF )
-    :m_nIdOfBlocker(-1)
+SignatureCreatorImpl::SignatureCreatorImpl( const Reference<XComponentContext> & xContext )
+    : SignatureCreatorImpl_Base(xContext), m_nIdOfBlocker(-1)
 {
-    mxMSF = rxMSF;
 }
 
 SignatureCreatorImpl::~SignatureCreatorImpl( )
@@ -247,10 +248,10 @@ cssu::Sequence< OUString > SAL_CALL SignatureCreatorImpl_getSupportedServiceName
 #undef SERVICE_NAME
 
 cssu::Reference< cssu::XInterface > SAL_CALL SignatureCreatorImpl_createInstance(
-    const cssu::Reference< cssl::XMultiServiceFactory >& rSMgr)
+    const cssu::Reference< cssl::XMultiServiceFactory >& xMSF )
     throw( cssu::Exception )
 {
-    return (cppu::OWeakObject*) new SignatureCreatorImpl( rSMgr );
+    return (cppu::OWeakObject*) new SignatureCreatorImpl( comphelper::getComponentContext( xMSF ) );
 }
 
 /* XServiceInfo */

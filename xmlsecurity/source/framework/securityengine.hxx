@@ -50,8 +50,6 @@ class SecurityEngine : public cppu::WeakImplHelper3
  ******************************************************************************/
 {
 protected:
-    com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory > mxMSF;
 
     /*
      * A SAXEventKeeper internally maintians all resources that a security
@@ -106,8 +104,7 @@ protected:
         m_xResultListener;
 
 protected:
-    explicit SecurityEngine( const com::sun::star::uno::Reference<
-        com::sun::star::lang::XMultiServiceFactory >& rxMSF = NULL );
+    explicit SecurityEngine();
     virtual ~SecurityEngine() {};
 
     /*

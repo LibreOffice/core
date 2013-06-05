@@ -22,6 +22,7 @@
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/processfactory.hxx>
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
@@ -30,9 +31,9 @@ namespace cssxc = com::sun::star::xml::crypto;
 #define SERVICE_NAME "com.sun.star.xml.crypto.sax.SignatureVerifier"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.framework.SignatureVerifierImpl"
 
-SignatureVerifierImpl::SignatureVerifierImpl( const cssu::Reference< cssl::XMultiServiceFactory >& rxMSF)
+SignatureVerifierImpl::SignatureVerifierImpl( const cssu::Reference< css::uno::XComponentContext >& xContext)
+  : SignatureVerifierImpl_Base(xContext)
 {
-    mxMSF = rxMSF;
 }
 
 SignatureVerifierImpl::~SignatureVerifierImpl()
@@ -196,7 +197,7 @@ cssu::Reference< cssu::XInterface > SAL_CALL SignatureVerifierImpl_createInstanc
     const cssu::Reference< cssl::XMultiServiceFactory >& rSMgr)
     throw( cssu::Exception )
 {
-    return (cppu::OWeakObject*) new SignatureVerifierImpl(rSMgr);
+    return (cppu::OWeakObject*) new SignatureVerifierImpl( comphelper::getComponentContext(rSMgr) );
 }
 
 /* XServiceInfo */
