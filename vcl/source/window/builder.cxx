@@ -678,6 +678,20 @@ namespace
         return pWindow;
     }
 
+    OString extractUnit(const OString& sPattern)
+    {
+        OString sUnit(sPattern);
+        for (sal_Int32 i = 0; i < sPattern.getLength(); ++i)
+        {
+            if (sPattern[i] != '.' && sPattern[i] != ',' && sPattern[i] != '0')
+            {
+                sUnit = sPattern.copy(i);
+                break;
+            }
+        }
+        return sUnit;
+    }
+
     FieldUnit detectMetricUnit(OString sUnit)
     {
         FieldUnit eUnit = FUNIT_NONE;
@@ -708,10 +722,8 @@ namespace
             eUnit = FUNIT_LINE;
         else if (sUnit == "%")
             eUnit = FUNIT_PERCENT;
-
-        // if lack of unit is not intentional
-        if (sUnit != "0")
-            assert(eUnit != FUNIT_NONE); //unknown unit
+        else if (sUnit != "0")
+            eUnit = FUNIT_CUSTOM;
 
         return eUnit;
     }
@@ -1045,16 +1057,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     {
         OString sAdjustment = extractAdjustment(rMap);
         OString sPattern = extractCustomProperty(rMap);
-        OString sUnit = sPattern;
-
-        for (sal_Int32 i = 0; i < sPattern.getLength(); ++i)
-        {
-            if (sPattern[i] != '.' && sPattern[i] != ',' && sPattern[i] != '0')
-            {
-                sUnit = sPattern.copy(i);
-                break;
-            }
-        }
+        OString sUnit = extractUnit(sPattern);
 
         WinBits nBits = WB_LEFT|WB_BORDER|WB_3DLOOK;
         if (!id.endsWith("-nospin"))
@@ -1089,6 +1092,8 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
                 SAL_INFO("vcl.layout", "making metric field for " << name.getStr() << " " << sUnit.getStr());
                 MetricField *pField = new MetricField(pParent, nBits);
                 pField->SetUnit(eUnit);
+                if (eUnit == FUNIT_CUSTOM)
+                    pField->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
                 pWindow = pField;
             }
         }
@@ -1097,8 +1102,21 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         pWindow = new FixedHyperlink(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK|WB_NOLABEL);
     else if ((name == "GtkComboBox") || (name == "GtkComboBoxText") || (name == "VclComboBoxText"))
     {
+        OString sPattern = extractCustomProperty(rMap);
         extractModel(id, rMap);
-        if (extractEntry(rMap))
+
+        if (!sPattern.isEmpty())
+        {
+            OString sUnit = extractUnit(sPattern);
+            FieldUnit eUnit = detectMetricUnit(sUnit);
+            SAL_INFO("vcl.layout", "making metric box for " << name.getStr() << " " << sUnit.getStr());
+            MetricBox *pBox = new MetricBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
+            pBox->SetUnit(eUnit);
+            if (eUnit == FUNIT_CUSTOM)
+                pBox->SetCustomUnitText(OStringToOUString(sUnit, RTL_TEXTENCODING_UTF8));
+            pWindow = pBox;
+        }
+        else if (extractEntry(rMap))
         {
             ComboBox* pComboBox = new ComboBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
             pComboBox->EnableAutoSize(true);
