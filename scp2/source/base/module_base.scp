@@ -37,8 +37,32 @@ Module gid_Module_Prg_Base_Bin
     Styles = (HIDDEN_ROOT);
     Files = (auto_base_ALL,
         gid_File_Share_Registry_Base_Xcd
+/* This should be conditional, but the condition is not working!! */
+/* #if defined ENABLE_FIREBIRD_SDBC */
+        ,gid_File_Lib_FirebirdSdbc
+        ,gid_File_FirebirdSdbc_Rdb
+        ,gid_File_FirebirdSdbc_Xcd
+/* #endif */
     );
 End
+
+/* This could be moved to a std location */
+STD_LIB_FILE(gid_File_Lib_FirebirdSdbc, firebird-sdbc)
+
+File gid_File_FirebirdSdbc_Rdb
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program_Services;
+    Name = "firebird-sdbc.rdb";
+    Styles = (PACKED);
+End
+
+File gid_File_FirebirdSdbc_Xcd
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Registry;
+    Name = "firebirdsdbc.xcd";
+    Styles = (PACKED);
+End
+
 
 Module gid_Module_Brand_Prg_Base
     PackageInfo = "packinfo_brand.txt";
