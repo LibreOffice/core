@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <rtl/tencinfo.h>
 #include <vcl/embeddedfontshelper.hxx>
+#include <unotools/fontdefs.hxx>
 
 #include "dmapperLoggers.hxx"
 
@@ -100,13 +101,20 @@ void FontTable::lcl_attribute(Id Name, Value & val)
         case NS_ooxml::LN_CT_Charset_val:
             // w:characterSet has higher priority, set only if that one is not set
             if( m_pImpl->pCurrentEntry->nTextEncoding == RTL_TEXTENCODING_DONTKNOW )
+            {
                 m_pImpl->pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromWindowsCharset( nIntValue );
+                if( IsStarSymbol( m_pImpl->pCurrentEntry->sFontName ))
+                    m_pImpl->pCurrentEntry->nTextEncoding = RTL_TEXTENCODING_SYMBOL;
+            }
         break;
         case NS_ooxml::LN_CT_Charset_characterSet:
         {
             OString tmp;
             sValue.convertToString( &tmp, RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
             m_pImpl->pCurrentEntry->nTextEncoding = rtl_getTextEncodingFromMimeCharset( tmp.getStr() );
+            // Older LO versions used to write incorrect character set for OpenSymbol, fix.
+            if( IsStarSymbol( m_pImpl->pCurrentEntry->sFontName ))
+                m_pImpl->pCurrentEntry->nTextEncoding = RTL_TEXTENCODING_SYMBOL;
         break;
         }
         default:

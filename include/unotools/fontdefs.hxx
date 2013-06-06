@@ -97,6 +97,7 @@ UNOTOOLS_DLLPUBLIC void GetEnglishSearchFontName( OUString& rName );
 
     @return true if this is Star|Open Symbol
 */
+// FIXME It's quite possible that code using this should instead check for RTL_TEXTENCODING_SYMBOL.
 UNOTOOLS_DLLPUBLIC bool IsStarSymbol(const OUString &rFontName);
 
 #endif
