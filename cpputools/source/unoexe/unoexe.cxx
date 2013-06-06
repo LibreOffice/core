@@ -43,7 +43,7 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/connection/XAcceptor.hpp>
+#include <com/sun/star/connection/Acceptor.hpp>
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 #include <com/sun/star/bridge/XBridge.hpp>
@@ -547,10 +547,7 @@ SAL_IMPLEMENT_MAIN()
             OUString aConnectDescr( aUnoUrl.getToken( 0, ';', nIndex ).copy( 4 ) ); // uno:CONNECTDESCR;iiop;InstanceName
             OUString aInstanceName( aUnoUrl.getToken( 1, ';', nIndex ) );
 
-            Reference< XAcceptor > xAcceptor;
-            createInstance(
-                xAcceptor, xContext,
-                OUString("com.sun.star.connection.Acceptor") );
+            Reference< XAcceptor > xAcceptor = Acceptor::create(xContext);
 
             // init params
             Sequence< Any > aInitParams( aParams.getLength() );

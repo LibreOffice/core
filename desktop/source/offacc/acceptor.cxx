@@ -20,6 +20,7 @@
 
 #include "acceptor.hxx"
 #include <com/sun/star/bridge/BridgeFactory.hpp>
+#include <com/sun/star/connection/Acceptor.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
@@ -51,9 +52,7 @@ Acceptor::Acceptor( const Reference< XComponentContext >& rxContext )
     , m_bInit(sal_False)
     , m_bDying(false)
 {
-    m_rAcceptor.set(
-        m_rContext->getServiceManager()->createInstanceWithContext("com.sun.star.connection.Acceptor", m_rContext),
-        UNO_QUERY );
+    m_rAcceptor = css::connection::Acceptor::create(m_rContext);
     m_rBridgeFactory = BridgeFactory::create(m_rContext);
 }
 
@@ -286,11 +285,11 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL offacc_component_getFactory(const sal_Char 
         Reference< XMultiServiceFactory >  xServiceManager(
             reinterpret_cast< XMultiServiceFactory* >(pServiceManager));
 
-        if (Acceptor::impl_getImplementationName().equalsAscii( pImplementationName ) )
+        if (desktop::Acceptor::impl_getImplementationName().equalsAscii( pImplementationName ) )
         {
             xFactory = Reference< XSingleServiceFactory >( cppu::createSingleFactory(
-                xServiceManager, Acceptor::impl_getImplementationName(),
-                Acceptor::impl_getInstance, Acceptor::impl_getSupportedServiceNames()) );
+                xServiceManager, desktop::Acceptor::impl_getImplementationName(),
+                desktop::Acceptor::impl_getInstance, desktop::Acceptor::impl_getSupportedServiceNames()) );
         }
 
         // Factory is valid - service was found.
