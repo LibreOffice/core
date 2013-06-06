@@ -28,10 +28,7 @@
 /** If you do not want to implement the XGridColumnModel yourself, use this service.
     @since OOo 3.3
  */
-service DefaultGridColumnModel
-{
-    interface com::sun::star::awt::grid::XGridColumnModel;
-};
+service DefaultGridColumnModel : com::sun::star::awt::grid::XGridColumnModel;
 
 
 }; }; }; };};

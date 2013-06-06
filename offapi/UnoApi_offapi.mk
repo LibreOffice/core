@@ -64,6 +64,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt,\
 	UnoControlDialogModelProvider \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/grid,\
+	DefaultGridColumnModel \
 	DefaultGridDataModel \
 	SortableGridDataModel \
 ))
@@ -579,7 +580,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt,\
 	UnoControlTimeFieldModel \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt/grid,\
-	DefaultGridColumnModel \
 	GridColumn \
 	UnoControlGrid \
 	UnoControlGridModel \

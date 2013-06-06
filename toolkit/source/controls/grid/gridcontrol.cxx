@@ -27,7 +27,7 @@
 #include <com/sun/star/awt/grid/XMutableGridDataModel.hpp>
 #include <com/sun/star/awt/grid/DefaultGridDataModel.hpp>
 #include <com/sun/star/awt/grid/SortableGridDataModel.hpp>
-#include <com/sun/star/awt/grid/XGridColumnModel.hpp>
+#include <com/sun/star/awt/grid/DefaultGridColumnModel.hpp>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <toolkit/helper/property.hxx>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
@@ -61,7 +61,7 @@ namespace
 
     Reference< XGridColumnModel > lcl_getDefaultColumnModel_throw( const Reference<XComponentContext> & i_context )
     {
-        Reference< XGridColumnModel > const xColumnModel( i_context->getServiceManager()->createInstanceWithContext( "com.sun.star.awt.grid.DefaultGridColumnModel", i_context ), UNO_QUERY_THROW );
+        Reference< XGridColumnModel > const xColumnModel = DefaultGridColumnModel::create( i_context );
         return xColumnModel;
     }
 }
