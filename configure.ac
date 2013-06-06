@@ -6966,7 +6966,7 @@ dnl ===================================================================
 if test "$enable_odk" = no; then
     unset DOXYGEN
 else
-    if test "$with_doxygen" = no -o `hostname 2>/dev/null` = "tpa10"; then
+    if test "$with_doxygen" = no; then
         AC_MSG_CHECKING([for doxygen])
         unset DOXYGEN
         AC_MSG_RESULT([no])
