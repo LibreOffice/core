@@ -1792,10 +1792,10 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
     {
         sal_uInt32 nFormatKey;
         sal_Bool bTextFormat = sal_False;
-        double nValue = 0.0;
 
         try
         {
+            double nValue = 0.0;
             bTextFormat = isTextFormat(_pFieldDescr,nFormatKey);
             if ( _pFieldDescr->GetControlDefault() >>= sDefault )
             {
