@@ -22,6 +22,7 @@
 #include "formmetadata.hxx"
 #include "pushbuttonnavigation.hxx"
 
+#include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
 #include <tools/debug.hxx>
 
 //------------------------------------------------------------------------
@@ -52,9 +53,7 @@ namespace pcr
     {
         DBG_CTOR( ButtonNavigationHandler, NULL );
 
-        m_xSlaveHandler.set( m_xContext->getServiceManager()->createInstanceWithContext(
-            OUString( "com.sun.star.form.inspection.FormComponentPropertyHandler" ), m_xContext ),
-            UNO_QUERY_THROW);
+        m_xSlaveHandler = css::form::inspection::FormComponentPropertyHandler::create( m_xContext );
     }
 
     //--------------------------------------------------------------------

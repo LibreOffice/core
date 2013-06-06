@@ -31,10 +31,7 @@ module com {  module sun {  module star {  module form { module inspection {
     @see com::sun::star::inspection::XPropertyHandler
     @see com::sun::star::form::FormComponents
 */
-service FormComponentPropertyHandler
-{
-    interface com::sun::star::inspection::XPropertyHandler;
-};
+service FormComponentPropertyHandler : com::sun::star::inspection::XPropertyHandler;
 
 
 }; }; }; }; };

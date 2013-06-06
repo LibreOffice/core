@@ -25,6 +25,7 @@
 #include "uistrings.hrc"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/syslocale.hxx>
+#include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
@@ -63,8 +64,8 @@ DataProviderHandler::DataProviderHandler(uno::Reference< uno::XComponentContext 
 {
     try
     {
-        m_xFormComponentHandler.set(m_xContext->getServiceManager()->createInstanceWithContext(OUString("com.sun.star.form.inspection.FormComponentPropertyHandler"),m_xContext),uno::UNO_QUERY_THROW);
-        m_xTypeConverter.set(script::Converter::create(m_xContext));
+        m_xFormComponentHandler = form::inspection::FormComponentPropertyHandler::create(m_xContext);
+        m_xTypeConverter = script::Converter::create(m_xContext);
 
     }catch(const uno::Exception &)
     {

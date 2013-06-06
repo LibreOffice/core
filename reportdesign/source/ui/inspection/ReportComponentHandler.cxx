@@ -23,6 +23,7 @@
 #include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/syslocale.hxx>
+#include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XSection.hpp>
@@ -45,7 +46,7 @@ ReportComponentHandler::ReportComponentHandler(uno::Reference< uno::XComponentCo
 {
     try
     {
-        m_xFormComponentHandler.set(m_xContext->getServiceManager()->createInstanceWithContext(OUString("com.sun.star.form.inspection.FormComponentPropertyHandler"),m_xContext),uno::UNO_QUERY_THROW);
+        m_xFormComponentHandler = form::inspection::FormComponentPropertyHandler::create(m_xContext);
 
     }catch(const uno::Exception &)
     {

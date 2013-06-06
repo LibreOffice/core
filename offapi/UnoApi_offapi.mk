@@ -181,6 +181,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/contr
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/inspection,\
 	DefaultFormComponentInspectorModel \
+	FormComponentPropertyHandler \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/form/runtime,\
 	FormController \
@@ -924,7 +925,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/form/in
 	CellBindingPropertyHandler \
 	EditPropertyHandler \
 	EventHandler \
-	FormComponentPropertyHandler \
 	SubmissionPropertyHandler \
 	XMLFormsPropertyHandler \
 	XSDValidationPropertyHandler \

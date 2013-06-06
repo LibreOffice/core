@@ -34,6 +34,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/StringListResource.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include "com/sun/star/form/inspection/FormComponentPropertyHandler.hpp"
 #include "com/sun/star/inspection/StringRepresentation.hpp"
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
@@ -238,9 +239,8 @@ GeometryHandler::GeometryHandler(uno::Reference< uno::XComponentContext > const 
     DBG_CTOR(rpt_GeometryHandler,NULL);
     try
     {
-        const uno::Reference< lang::XMultiComponentFactory > xFac = m_xContext->getServiceManager();
-        m_xFormComponentHandler.set(xFac->createInstanceWithContext(OUString("com.sun.star.form.inspection.FormComponentPropertyHandler"),m_xContext),uno::UNO_QUERY_THROW);
-        m_xTypeConverter.set(script::Converter::create(context));
+        m_xFormComponentHandler = form::inspection::FormComponentPropertyHandler::create(m_xContext);
+        m_xTypeConverter = script::Converter::create(context);
         loadDefaultFunctions();
     }
     catch(const uno::Exception&)
