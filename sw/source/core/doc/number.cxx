@@ -1278,6 +1278,7 @@ namespace numfunc
         mpFont = new Font( msFontname, aEmptyStr, Size( 0, 14 ) );
         mpFont->SetWeight( meFontWeight );
         mpFont->SetItalic( meFontItalic );
+        mpFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );
     }
 
     void SwDefBulletConfig::Notify( const uno::Sequence<OUString>& )
