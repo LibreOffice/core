@@ -212,28 +212,29 @@ void Test::testUnoTextFields()
 class TestAutoCorrDoc : public SvxAutoCorrDoc
 {
 public:
-    TestAutoCorrDoc(const OUString &rText, LanguageType eLang)
-        : m_sText(rText)
+    /// just like the real thing, this dummy modifies the rText parameter :(
+    TestAutoCorrDoc(OUString &rText, LanguageType eLang)
+        : m_rText(rText)
         , m_eLang(eLang)
     {
     }
-    OUString getResult() const
+    OUString const& getResult() const
     {
-        return m_sText.toString();
+        return m_rText;
     }
 private:
-    OUStringBuffer m_sText;
+    OUString & m_rText;
     LanguageType m_eLang;
     virtual sal_Bool Delete( xub_StrLen nStt, xub_StrLen nEnd )
     {
         //fprintf(stderr, "TestAutoCorrDoc::Delete\n");
-        m_sText.remove(nStt, nEnd-nStt);
+        m_rText = m_rText.replaceAt(nStt, nEnd-nStt, "");
         return true;
     }
     virtual sal_Bool Insert( xub_StrLen nPos, const String& rTxt )
     {
         //fprintf(stderr, "TestAutoCorrDoc::Insert\n");
-        m_sText.insert(nPos, rTxt);
+        m_rText = m_rText.replaceAt(nPos, 0, rTxt);
         return true;
     }
     virtual sal_Bool Replace( xub_StrLen nPos, const String& rTxt )
@@ -244,8 +245,7 @@ private:
     virtual sal_Bool ReplaceRange( xub_StrLen nPos, xub_StrLen nLen, const String& rTxt )
     {
         //fprintf(stderr, "TestAutoCorrDoc::ReplaceRange %d %d %s\n", nPos, nLen, OUStringToOString(rTxt, RTL_TEXTENCODING_UTF8).getStr());
-        m_sText.remove(nPos, nLen);
-        m_sText.insert(nPos, rTxt);
+        m_rText = m_rText.replaceAt(nPos, nLen, rTxt);
         return true;
     }
     virtual sal_Bool SetAttr( xub_StrLen, xub_StrLen, sal_uInt16, SfxPoolItem& )
@@ -269,14 +269,14 @@ private:
     {
         //fprintf(stderr, "TestAutoCorrDoc::ChgAutoCorrWord\n");
 
-        if (m_sText.isEmpty())
+        if (m_rText.isEmpty())
             return false;
 
-        const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList(m_sText.toString(), rSttPos, nEndPos, *this, m_eLang);
+        const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList(
+                m_rText, rSttPos, nEndPos, *this, m_eLang);
         if (pFnd && pFnd->IsTextOnly())
         {
-            m_sText.remove(rSttPos, nEndPos);
-            m_sText.insert(rSttPos, pFnd->GetLong());
+            m_rText = m_rText.replaceAt(rSttPos, nEndPos, pFnd->GetLong());
             if( ppPara )
                 *ppPara = NULL;//&pCurNode->GetString();
             return true;
@@ -301,7 +301,7 @@ void Test::testAutocorrect()
         OUString sExpected("Test-Test ");
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.AutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
 
         CPPUNIT_ASSERT_MESSAGE("autocorrect", aFoo.getResult() == sExpected);
     }
@@ -312,10 +312,25 @@ void Test::testAutocorrect()
         OUString sExpected("Test/Test ");
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
-        aAutoCorrect.AutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
+        aAutoCorrect.DoAutoCorrect(aFoo, sInput, sInput.getLength(), cNextChar, true);
 
         CPPUNIT_ASSERT_MESSAGE("autocorrect", aFoo.getResult() == sExpected);
     }
+
+    {
+        // test auto-bolding with '*'
+        OUString sInput("*foo");
+        sal_Unicode cNextChar('*');
+        OUString sExpected("foo");
+
+        TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
+        aAutoCorrect.DoAutoCorrect(aFoo,
+            reinterpret_cast<String const&>(sInput),
+            sInput.getLength(), cNextChar, true);
+
+        CPPUNIT_ASSERT_EQUAL(sExpected, aFoo.getResult());
+    }
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

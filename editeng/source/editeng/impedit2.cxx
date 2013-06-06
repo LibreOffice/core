@@ -2493,8 +2493,10 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
         ContentNode* pNode = aSel.Max().GetNode();
         sal_uInt16 nIndex = aSel.Max().GetIndex();
         EdtAutoCorrDoc aAuto(pEditEngine, pNode, nIndex, c);
-        pAutoCorrect->AutoCorrect(
-            aAuto, pNode->GetString(), nIndex, c, !bOverwrite, pFrameWin );
+        // FIXME: this _must_ be called with reference to the actual node text!
+        String const& rNodeString(pNode->GetString());
+        pAutoCorrect->DoAutoCorrect(
+            aAuto, rNodeString, nIndex, c, !bOverwrite, pFrameWin );
         aSel.Max().SetIndex( aAuto.GetCursor() );
 
         // #i78661 since the SvxAutoCorrect object used here is
