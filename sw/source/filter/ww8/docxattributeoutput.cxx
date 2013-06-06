@@ -564,6 +564,8 @@ void DocxAttributeOutput::EndRun()
             // Unknown fields sould be removed too
             if ( !pIt->bClose || ( pIt->eType == ww::eUNKNOWN ) )
             {
+                if (pIt->pField)
+                    delete pIt->pField;
                 pIt = m_Fields.erase( pIt );
                 continue;
             }
@@ -598,6 +600,8 @@ void DocxAttributeOutput::EndRun()
 
             // Remove the field if no end needs to be written
             if ( !pIt->bClose ) {
+                if (pIt->pField)
+                    delete pIt->pField;
                 pIt = m_Fields.erase( pIt );
                 continue;
             }
@@ -646,6 +650,8 @@ void DocxAttributeOutput::EndRun()
     while ( m_Fields.begin() != m_Fields.end() )
     {
         EndField_Impl( m_Fields.front( ) );
+        if (m_Fields.front().pField)
+            delete m_Fields.front().pField;
         m_Fields.erase( m_Fields.begin( ) );
     }
 
@@ -3921,7 +3927,8 @@ void DocxAttributeOutput::WriteExpand( const SwField* pFld )
 void DocxAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField eType, const String& rFldCmd, sal_uInt8 nMode )
 {
     struct FieldInfos infos;
-    infos.pField = pFld;
+    if (pFld)
+        infos.pField = pFld->CopyField();
     infos.sCmd = rFldCmd;
     infos.eType = eType;
     infos.bClose = WRITEFIELD_CLOSE & nMode;
