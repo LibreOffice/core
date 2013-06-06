@@ -209,8 +209,33 @@ void SAL_CALL OStatement::clearBatch(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
+    static const sal_Unicode pattern('"');
+    static const sal_Unicode empty(' ');
+    OUString query = sql.replace(pattern, empty);
+
+    SAL_INFO("connectivity.firebird", "=> OStatement_Base::executeQuery(). "
+             "Got called with sql: " << query);
+
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
+    ISC_STATUS_ARRAY status;                            // status vector
+    isc_db_handle db = m_pConnection->getDBHandler();   // database handle
+
+    m_TRANSHandler = 0L; // transaction handle
+    if (isc_start_transaction(status, &m_TRANSHandler, 1, &db, 0, NULL))
+        if (pr_error(status, "start transaction"))
+            return sal_False;
+
+    char *sqlStr = strdup(OUStringToOString( query, RTL_TEXTENCODING_UTF8 ).getStr());
+    if (isc_dsql_execute_immediate(status, &db, &m_TRANSHandler, 0, sqlStr, 1, NULL))
+        if (pr_error(status, "create table"))
+            return sal_False;
+    free(sqlStr);
+
+    if (isc_commit_transaction(status, &m_TRANSHandler))
+        if (pr_error(status, "commit transaction"))
+            return NULL;
 
     // returns true when a resultset is available
     return sal_False;
