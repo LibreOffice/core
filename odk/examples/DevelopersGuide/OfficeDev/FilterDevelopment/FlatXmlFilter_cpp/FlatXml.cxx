@@ -178,7 +178,7 @@ sal_Bool XFlatXml::importer(
     catch( Exception &exc)
     {
         // something went wrong
-        OSL_FAIL(exc.Message);
+        OSL_FAIL(rtl::OUStringToOString(exc.Message,RTL_TEXTENCODING_UTF8).getStr());
         return sal_False;
     }
 
