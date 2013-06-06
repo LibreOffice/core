@@ -56,7 +56,7 @@ static bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
                         return nS1 < nS2;
                 }
 
-                return (long)&rHt1 < (long)&rHt2;
+                return (sal_IntPtr)&rHt1 < (sal_IntPtr)&rHt2;
             }
             // order is important! for requirements see hintids.hxx
             return ( nWhich1 > nWhich2 );
@@ -91,7 +91,7 @@ static bool lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
                         return nS1 > nS2;
                 }
 
-                return (long)&rHt1 > (long)&rHt2;
+                return (sal_IntPtr)&rHt1 > (sal_IntPtr)&rHt2;
             }
             // order is important! for requirements see hintids.hxx
             return ( nWhich1 < nWhich2 );

@@ -2460,13 +2460,13 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
         for( ; p->pName; ++p, ++i )
         {
             // set the name
-            const SwPropNameLen& rPropNm = GetPropName( (sal_uInt16)(long)p->pName );
+            const SwPropNameLen& rPropNm = GetPropName( (sal_uInt16)(sal_IntPtr)p->pName );
             p->pName = rPropNm.pName;
             p->nNameLen = rPropNm.nNameLen;
             // get the cppu type from the comphelper
-            CppuTypes nTyp = (CppuTypes) (long) p->pType;
+            CppuTypes nTyp = (CppuTypes) (sal_IntPtr) p->pType;
             GenerateCppuType( nTyp, p->pType );
-            OSL_ENSURE( nTyp != (CppuTypes) (long) p->pType, "unknown type" );
+            OSL_ENSURE( nTyp != (CppuTypes) (sal_IntPtr) p->pType, "unknown type" );
         }
     }
     return aMapEntriesArr[nPropertyId];

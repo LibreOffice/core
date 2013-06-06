@@ -1025,7 +1025,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
         }
     }
 
-    return (long)pRet;
+    return (sal_IntPtr)pRet;
 }
 
 /// delete all QuickDraw-Bitmaps in the specified document

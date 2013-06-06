@@ -2969,7 +2969,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         }
         sal_uInt16 nPos, nVal = ((SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR)).GetValue();
         for( nPos = aTextFlowLB.GetEntryCount(); nPos; )
-            if( (sal_uInt16)(long)aTextFlowLB.GetEntryData( --nPos ) == nVal )
+            if( (sal_uInt16)(sal_IntPtr)aTextFlowLB.GetEntryData( --nPos ) == nVal )
                 break;
         aTextFlowLB.SelectEntryPos( nPos );
         aTextFlowLB.SaveValue();
@@ -3011,7 +3011,7 @@ sal_Bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
         sal_uInt16 nPos = aTextFlowLB.GetSelectEntryPos();
         if( nPos != aTextFlowLB.GetSavedValue() )
         {
-            nPos = (sal_uInt16)(long)aTextFlowLB.GetEntryData( nPos );
+            nPos = (sal_uInt16)(sal_IntPtr)aTextFlowLB.GetEntryData( nPos );
             bRet |= 0 != rSet.Put( SvxFrameDirectionItem(
                                     (SvxFrameDirection)nPos, RES_FRAMEDIR ));
         }

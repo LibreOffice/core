@@ -29,6 +29,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,clucene,\
 	clucene/patches/clucene-nullptr.patch \
 	clucene/patches/clucene-warnings.patch \
 	clucene/patches/clucene-aix.patch \
+	clucene/patches/clucene-git1-win64.patch \
 ))
 
 ifneq ($(OS),WNT)

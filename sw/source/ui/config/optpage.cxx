@@ -138,15 +138,15 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
                 if ( eFUnit != FUNIT_LINE )
                 {
                    sal_uInt16 nPos = m_pMetricLB->InsertEntry( sMetric );
-                   m_pMetricLB->SetEntryData( nPos, (void*)(long)eFUnit );
+                   m_pMetricLB->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
                    m_pHMetric->InsertEntry( sMetric );
-                   m_pHMetric->SetEntryData( nPos, (void*)(long)eFUnit );
+                   m_pHMetric->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
                 }
                 // a vertical ruler has not the 'character' unit
                 if ( eFUnit != FUNIT_CHAR )
                 {
                    sal_uInt16 nPos = m_pVMetric->InsertEntry( sMetric );
-                   m_pVMetric->SetEntryData( nPos, (void*)(long)eFUnit );
+                   m_pVMetric->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
                 }
             }
             default:;//prevent warning
@@ -243,7 +243,7 @@ sal_Bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     if ( nMPos != m_pMetricLB->GetSavedValue() )
     {
         // Double-Cast for VA3.0
-        sal_uInt16 nFieldUnit = (sal_uInt16)(long)m_pMetricLB->GetEntryData( nMPos );
+        sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (sal_uInt16)nFieldUnit ) );
         bRet = sal_True;
     }
@@ -252,7 +252,7 @@ sal_Bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     if ( nMPos != m_pHMetric->GetSavedValue() || nMPos != nGlobalMetricPos )
     {
         // Double-Cast for VA3.0
-        sal_uInt16 nFieldUnit = (sal_uInt16)(long)m_pHMetric->GetEntryData( nMPos );
+        sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pHMetric->GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( FN_HSCROLL_METRIC, (sal_uInt16)nFieldUnit ) );
         bRet = sal_True;
     }
@@ -260,7 +260,7 @@ sal_Bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     if ( nMPos != m_pVMetric->GetSavedValue() || nMPos != nGlobalMetricPos )
     {
         // Double-Cast for VA3.0
-        sal_uInt16 nFieldUnit = (sal_uInt16)(long)m_pVMetric->GetEntryData( nMPos );
+        sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pVMetric->GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( FN_VSCROLL_METRIC, (sal_uInt16)nFieldUnit ) );
         bRet = sal_True;
     }

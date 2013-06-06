@@ -223,7 +223,7 @@ bool ScDocument::IsChart( const SdrObject* pObject )
 
 IMPL_LINK_INLINE_START( ScDocument, GetUserDefinedColor, sal_uInt16 *, pColorIndex )
 {
-    return (long) &((GetColorList()->GetColor(*pColorIndex))->GetColor());
+    return (sal_IntPtr) &((GetColorList()->GetColor(*pColorIndex))->GetColor());
 }
 IMPL_LINK_INLINE_END( ScDocument, GetUserDefinedColor, sal_uInt16 *, pColorIndex )
 

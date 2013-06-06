@@ -537,7 +537,7 @@ void EventList::Clear()
 }
 
 //--------------------------------------------------------------------------
-void EventList::AddEvent( long nType, long nPos, long nCount )
+void EventList::AddEvent( sal_IntPtr nType, sal_IntPtr nPos, sal_IntPtr nCount )
 {
     ListAction *pAction = new ListAction;
     pAction->Position = nPos;

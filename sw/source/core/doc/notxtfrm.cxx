@@ -902,7 +902,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                             "pOut should not be a virtual device" );
 
                     pGrfNd->StartGraphicAnimation(pOut, aAlignedGrfArea.Pos(),
-                                        aAlignedGrfArea.SSize(), long(this),
+                                        aAlignedGrfArea.SSize(), sal_IntPtr(this),
                                         0, GRFMGR_DRAW_STANDARD, pVout );
                 }
                 else
@@ -1095,7 +1095,7 @@ void SwNoTxtFrm::StopAnimation( OutputDevice* pOut ) const
 
     if( pGrfNd && pGrfNd->IsAnimated() )
     {
-        const_cast< SwGrfNode* >(pGrfNd)->StopGraphicAnimation( pOut, long(this) );
+        const_cast< SwGrfNode* >(pGrfNd)->StopGraphicAnimation( pOut, sal_IntPtr(this) );
     }
 }
 

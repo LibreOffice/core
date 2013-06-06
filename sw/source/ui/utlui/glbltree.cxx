@@ -528,7 +528,7 @@ DragDropMode SwGlobalTree::NotifyStartDrag( TransferDataContainer& ,
     return SV_DRAGDROP_CTRL_MOVE;
 }
 
-long     SwGlobalTree::GetTabPos( SvTreeListEntry*, SvLBoxTab* pTab)
+sal_IntPtr SwGlobalTree::GetTabPos( SvTreeListEntry*, SvLBoxTab* pTab)
 {
     return pTab->GetPos() - GLBL_TABPOS_SUB;
 }

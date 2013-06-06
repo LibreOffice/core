@@ -189,7 +189,7 @@ public:
     DECL_LINK( ContentDoubleClickHdl, void * );
     DECL_LINK( TimerUpdate, void * );
 
-    virtual long    GetTabPos( SvTreeListEntry*, SvLBoxTab* );
+    virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* );
     virtual void    RequestingChildren( SvTreeListEntry* pParent );
     virtual void    GetFocus();
     virtual void    KeyInput(const KeyEvent& rKEvt);
@@ -261,7 +261,7 @@ protected:
 
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
-    virtual long    GetTabPos( SvTreeListEntry*, SvLBoxTab* );
+    virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* );
     virtual sal_Bool    NotifyMoving(   SvTreeListEntry*  pTarget,
                                     SvTreeListEntry*  pEntry,
                                     SvTreeListEntry*& rpNewParent,

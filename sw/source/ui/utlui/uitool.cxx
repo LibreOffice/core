@@ -612,7 +612,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
                 nPos = InsertStringSorted(pBase->GetName(), rToFill, bHasOffset );
             else
                 nPos = rToFill.InsertEntry(pBase->GetName());
-            long nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( pBase->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+            sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( pBase->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             rToFill.SetEntryData( nPos, (void*) (nPoolId));
         }
         pBase = pPool->Next();
@@ -632,7 +632,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bo
                 nPos = InsertStringSorted(rName, rToFill, bHasOffset );
             else
                 nPos = rToFill.InsertEntry(rName);
-            long nPoolId = USHRT_MAX;
+            sal_IntPtr nPoolId = USHRT_MAX;
             rToFill.SetEntryData( nPos, (void*) (nPoolId));
         }
     }

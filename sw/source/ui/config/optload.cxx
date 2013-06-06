@@ -110,7 +110,7 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
             {
                 // use only these metrics
                 sal_uInt16 nPos = aMetricLB.InsertEntry( sMetric );
-                aMetricLB.SetEntryData( nPos, (void*)(long)eFUnit );
+                aMetricLB.SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
             }
             default:; //prevent warning
         }
@@ -184,7 +184,7 @@ sal_Bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     if ( nMPos != aMetricLB.GetSavedValue() )
     {
         // Double-Cast for VA3.0
-        sal_uInt16 nFieldUnit = (sal_uInt16)(long)aMetricLB.GetEntryData( nMPos );
+        sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)aMetricLB.GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (sal_uInt16)nFieldUnit ) );
         bRet = sal_True;
     }
@@ -320,7 +320,7 @@ IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl)
     if(nMPos != USHRT_MAX)
     {
         // Double-Cast for VA3.0
-        FieldUnit eFieldUnit = (FieldUnit)(long)aMetricLB.GetEntryData( nMPos );
+        FieldUnit eFieldUnit = (FieldUnit)(sal_IntPtr)aMetricLB.GetEntryData( nMPos );
         sal_Bool bModified = aTabMF.IsModified();
         long nVal = bModified ?
             sal::static_int_cast<sal_Int32, sal_Int64 >( aTabMF.Denormalize( aTabMF.GetValue( FUNIT_TWIP ) )) :

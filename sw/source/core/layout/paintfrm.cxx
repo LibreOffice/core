@@ -3794,8 +3794,8 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
                 else if ( bTableHack &&
                           pFly->Frm().Top() >= pFly->GetAnchorFrm()->Frm().Top() &&
                           pFly->Frm().Top() < pFly->GetAnchorFrm()->Frm().Bottom() &&
-                          long(pSh->GetOut()) ==
-                          long(pSh->getIDocumentDeviceAccess()->getPrinter( false ) ) )
+                          sal_IntPtr(pSh->GetOut()) ==
+                          sal_IntPtr(pSh->getIDocumentDeviceAccess()->getPrinter( false ) ) )
                 {
                     pAnch = pFly->AnchorFrm();
                 }
@@ -3812,7 +3812,7 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
             {
                 if ( !pAnch->GetValidPosFlag() )
                     pAnch = 0;
-                else if ( long(pSh->GetOut()) == long(pSh->getIDocumentDeviceAccess()->getPrinter( false )))
+                else if ( sal_IntPtr(pSh->GetOut()) == sal_IntPtr(pSh->getIDocumentDeviceAccess()->getPrinter( false )))
                 {
                     //HACK: we have to omit some of the objects for printing,
                     //otherwise they would be printed twice.

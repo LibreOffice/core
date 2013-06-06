@@ -704,7 +704,7 @@ public:
                                 sal_uInt16 nTabFlagMask=0xffff );
     virtual Rectangle GetFocusRect( SvTreeListEntry*, long nLine );
     // Respects indentation
-    virtual long    GetTabPos( SvTreeListEntry*, SvLBoxTab* );
+    virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* );
     void            InvalidateEntry( SvTreeListEntry* );
     SvLBoxItem*     GetItem( SvTreeListEntry*, long nX, SvLBoxTab** ppTab);
     SvLBoxItem*     GetItem( SvTreeListEntry*, long nX );

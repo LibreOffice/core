@@ -58,16 +58,16 @@ typedef boost::ptr_vector<SwAuthEntry> SwAuthDataArr;
 
 class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
 {
-    SwDoc*          m_pDoc;
-    SwAuthDataArr   m_DataArr;
-    std::vector<long> m_SequArr;
-    SortKeyArr      m_SortKeyArr;
-    sal_Unicode     m_cPrefix;
-    sal_Unicode     m_cSuffix;
-    sal_Bool            m_bIsSequence :1;
-    sal_Bool            m_bSortByDocument :1;
-    LanguageType    m_eLanguage;
-    String          m_sSortAlgorithm;
+    SwDoc*                  m_pDoc;
+    SwAuthDataArr           m_DataArr;
+    std::vector<sal_IntPtr> m_SequArr;
+    SortKeyArr              m_SortKeyArr;
+    sal_Unicode             m_cPrefix;
+    sal_Unicode             m_cSuffix;
+    sal_Bool                m_bIsSequence :1;
+    sal_Bool                m_bSortByDocument :1;
+    LanguageType            m_eLanguage;
+    String                  m_sSortAlgorithm;
 
 protected:
 virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
@@ -81,29 +81,29 @@ public:
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
 
-    inline void     SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
-    SwDoc*          GetDoc(){ return m_pDoc; }
-    void                RemoveField(long nHandle);
-    long                AddField(const String& rFieldContents);
-    sal_Bool                AddField(long nHandle);
+    inline void         SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
+    SwDoc*              GetDoc(){ return m_pDoc; }
+    void                RemoveField(sal_IntPtr nHandle);
+    sal_IntPtr          AddField(const String& rFieldContents);
+    sal_Bool            AddField(sal_IntPtr nHandle);
     void                DelSequenceArray()
                         {
                             m_SequArr.clear();
                         }
 
-    const SwAuthEntry*  GetEntryByHandle(long nHandle) const;
+    const SwAuthEntry*  GetEntryByHandle(sal_IntPtr nHandle) const;
 
     void                GetAllEntryIdentifiers( std::vector<String>& rToFill )const;
     const SwAuthEntry*  GetEntryByIdentifier(const String& rIdentifier)const;
 
     bool                ChangeEntryContent(const SwAuthEntry* pNewEntry);
     // import interface
-    sal_uInt16              AppendField(const SwAuthEntry& rInsert);
-    long                GetHandle(sal_uInt16 nPos);
+    sal_uInt16          AppendField(const SwAuthEntry& rInsert);
+    sal_IntPtr          GetHandle(sal_uInt16 nPos);
 
-    sal_uInt16              GetSequencePos(long nHandle);
+    sal_uInt16          GetSequencePos(sal_IntPtr nHandle);
 
-    sal_Bool                IsSequence() const      {return m_bIsSequence;}
+    sal_Bool            IsSequence() const      {return m_bIsSequence;}
     void                SetSequence(sal_Bool bSet)
                             {
                                 DelSequenceArray();
@@ -118,14 +118,14 @@ public:
     sal_Unicode         GetPrefix() const { return m_cPrefix;}
     sal_Unicode         GetSuffix() const { return m_cSuffix;}
 
-    sal_Bool                IsSortByDocument() const {return m_bSortByDocument;}
+    sal_Bool            IsSortByDocument() const {return m_bSortByDocument;}
     void                SetSortByDocument(sal_Bool bSet)
                             {
                                 DelSequenceArray();
                                 m_bSortByDocument = bSet;
                             }
 
-    sal_uInt16              GetSortKeyCount() const ;
+    sal_uInt16          GetSortKeyCount() const ;
     const SwTOXSortKey* GetSortKey(sal_uInt16 nIdx) const ;
     void                SetSortKeys(sal_uInt16 nKeyCount, SwTOXSortKey nKeys[]);
 
@@ -143,15 +143,15 @@ public:
 
 class SwAuthorityField : public SwField
 {
-    long            m_nHandle;
-    mutable long    m_nTempSequencePos;
+    sal_IntPtr          m_nHandle;
+    mutable sal_IntPtr  m_nTempSequencePos;
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
 
 public:
     SwAuthorityField(SwAuthorityFieldType* pType, const String& rFieldContents);
-    SwAuthorityField(SwAuthorityFieldType* pType, long nHandle);
+    SwAuthorityField(SwAuthorityFieldType* pType, sal_IntPtr nHandle);
     ~SwAuthorityField();
 
     const String&       GetFieldText(ToxAuthorityField eField) const;
@@ -162,7 +162,7 @@ public:
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
 
-    long                GetHandle() const       { return m_nHandle; }
+    sal_IntPtr          GetHandle() const       { return m_nHandle; }
 
     virtual String GetDescription() const;
 };

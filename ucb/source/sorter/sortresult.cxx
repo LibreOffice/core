@@ -78,10 +78,10 @@ struct SortInfo
 struct SortListData
 {
     sal_Bool    mbModified;
-    long        mnCurPos;
-    long        mnOldPos;
+    sal_IntPtr  mnCurPos;
+    sal_IntPtr  mnOldPos;
 
-                SortListData( long nPos, sal_Bool bModified = sal_False );
+    SortListData( sal_IntPtr nPos, sal_Bool bModified = sal_False );
 };
 
 //============================================================================
@@ -1015,9 +1015,9 @@ void SAL_CALL SortedResultSet::removeVetoableChangeListener(
 //--------------------------------------------------------------------------
 // private methods
 //--------------------------------------------------------------------------
-long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
+sal_IntPtr SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
                                    Reference < XResultSet > xResultTwo,
-                                   long nIndexOne, long nIndexTwo,
+                                   sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo,
                                    SortInfo* pSortInfo )
 
     throw( SQLException, RuntimeException )
@@ -1025,8 +1025,8 @@ long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
     Reference < XRow > xRowOne = Reference< XRow >::query( xResultOne );
     Reference < XRow > xRowTwo = Reference< XRow >::query( xResultTwo );
 
-    long nCompare = 0;
-    long nColumn = pSortInfo->mnColumn;
+    sal_IntPtr nCompare = 0;
+    sal_IntPtr nColumn = pSortInfo->mnColumn;
 
     switch ( pSortInfo->mnType )
     {
@@ -1230,12 +1230,12 @@ long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
 }
 
 //--------------------------------------------------------------------------
-long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
+sal_IntPtr SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
                                    Reference < XResultSet > xResultTwo,
-                                   long nIndexOne, long nIndexTwo )
+                                   sal_IntPtr nIndexOne, sal_IntPtr nIndexTwo )
     throw( SQLException, RuntimeException )
 {
-    long        nCompare = 0;
+    sal_IntPtr  nCompare = 0;
     SortInfo*   pInfo = mpSortInfo;
 
     while ( !nCompare && pInfo )
@@ -1272,12 +1272,12 @@ long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
 }
 
 //--------------------------------------------------------------------------
-long SortedResultSet::Compare( SortListData *pOne,
+sal_IntPtr SortedResultSet::Compare( SortListData *pOne,
                                SortListData *pTwo )
     throw( SQLException, RuntimeException )
 {
-    long nIndexOne;
-    long nIndexTwo;
+    sal_IntPtr nIndexOne;
+    sal_IntPtr nIndexTwo;
 
     Reference < XResultSet > xResultOne;
     Reference < XResultSet > xResultTwo;
@@ -1304,23 +1304,23 @@ long SortedResultSet::Compare( SortListData *pOne,
         nIndexTwo = pTwo->mnCurPos;
     }
 
-    long nCompare;
+    sal_IntPtr nCompare;
     nCompare = CompareImpl( xResultOne, xResultTwo,
                             nIndexOne, nIndexTwo );
     return nCompare;
 }
 
 //--------------------------------------------------------------------------
-long SortedResultSet::FindPos( SortListData *pEntry,
-                               long _nStart, long _nEnd )
+sal_IntPtr SortedResultSet::FindPos( SortListData *pEntry,
+                               sal_IntPtr _nStart, sal_IntPtr _nEnd )
     throw( SQLException, RuntimeException )
 {
     if ( _nStart > _nEnd )
         return _nStart + 1;
 
-    long nStart = _nStart;
-    long nEnd   = _nEnd;
-    long nMid = 0, nCompare = 0;
+    sal_IntPtr nStart = _nStart;
+    sal_IntPtr nEnd   = _nEnd;
+    sal_IntPtr nMid = 0, nCompare = 0;
 
     SortListData    *pMid;
 
@@ -1331,7 +1331,7 @@ long SortedResultSet::FindPos( SortListData *pEntry,
         nCompare = Compare( pEntry, pMid );
 
         if ( !nCompare )
-            nCompare = ((long) pEntry ) - ( (long) pMid );
+            nCompare = ((sal_IntPtr) pEntry ) - ( (sal_IntPtr) pMid );
 
         if ( nCompare < 0 ) // pEntry < pMid
             nEnd = nMid - 1;
@@ -1394,7 +1394,7 @@ void SortedResultSet::CopyData( SortedResultSet *pSource )
     const SortedEntryList *pSrcS2O = pSource->GetS2OList();
     const SimpleList      *pSrcO2S = pSource->GetO2SList();
 
-    long i, nCount;
+    sal_IntPtr i, nCount;
 
     maS2O.Clear();
     maO2S.Clear();
@@ -1431,7 +1431,7 @@ void SortedResultSet::Initialize(
     SortListData *pData = new SortListData( 0 );
     maS2O.Insert( pData, 0 );
 
-    long nIndex = 1;
+    sal_IntPtr nIndex = 1;
 
     // now fetch all the elements from the original result set,
     // get there new position in the sorted result set and insert
@@ -1440,7 +1440,7 @@ void SortedResultSet::Initialize(
         while ( mxOriginal->absolute( nIndex ) )
         {
             pData       = new SortListData( nIndex );
-            long nPos   = FindPos( pData, 1, nIndex-1 );
+            sal_IntPtr nPos   = FindPos( pData, 1, nIndex-1 );
 
             maS2O.Insert( pData, nPos );
 
@@ -1470,7 +1470,7 @@ void SortedResultSet::Initialize(
 }
 
 //--------------------------------------------------------------------------
-void SortedResultSet::CheckProperties( long nOldCount, sal_Bool bWasFinal )
+void SortedResultSet::CheckProperties( sal_IntPtr nOldCount, sal_Bool bWasFinal )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
@@ -1510,11 +1510,11 @@ void SortedResultSet::CheckProperties( long nOldCount, sal_Bool bWasFinal )
 }
 
 //-------------------------------------------------------------------------
-void SortedResultSet::InsertNew( long nPos, long nCount )
+void SortedResultSet::InsertNew( sal_IntPtr nPos, sal_IntPtr nCount )
 {
     // for all entries in the msS20-list, which are >= nPos, increase by nCount
     SortListData    *pData;
-    long            i, nEnd;
+    sal_IntPtr      i, nEnd;
 
     nEnd = maS2O.Count();
     for ( i=1; i<=nEnd; i++ )
@@ -1541,10 +1541,10 @@ void SortedResultSet::InsertNew( long nPos, long nCount )
 }
 
 //-------------------------------------------------------------------------
-void SortedResultSet::Remove( long nPos, long nCount, EventList *pEvents )
+void SortedResultSet::Remove( sal_IntPtr nPos, sal_IntPtr nCount, EventList *pEvents )
 {
     sal_uInt32  i, j;
-    long        nOldLastSort;
+    sal_IntPtr        nOldLastSort;
 
     // correct mnLastSort first
     nOldLastSort = mnLastSort;
@@ -1560,12 +1560,12 @@ void SortedResultSet::Remove( long nPos, long nCount, EventList *pEvents )
     // in the original2sorted list
     for ( i=0; i < (sal_uInt32) nCount; i++ )
     {
-        long nSortPos = (long) maO2S.GetObject( nPos );
+        sal_IntPtr nSortPos = (sal_IntPtr) maO2S.GetObject( nPos );
         maO2S.Remove( (sal_uInt32) nPos );
 
         for ( j=1; j<=maO2S.Count(); j++ )
         {
-            long nVal = (long) maO2S.GetObject( j );
+            sal_IntPtr nVal = (sal_IntPtr) maO2S.GetObject( j );
             if ( nVal > nSortPos )
             {
                 --nVal;
@@ -1595,17 +1595,17 @@ void SortedResultSet::Remove( long nPos, long nCount, EventList *pEvents )
 }
 
 //-------------------------------------------------------------------------
-void SortedResultSet::Move( long nPos, long nCount, long nOffset )
+void SortedResultSet::Move( sal_IntPtr nPos, sal_IntPtr nCount, sal_IntPtr nOffset )
 {
     if ( !nOffset )
         return;
 
-    long i, nSortPos, nTo;
+    sal_IntPtr i, nSortPos, nTo;
     SortListData *pData;
 
     for ( i=0; i<nCount; i++ )
     {
-        nSortPos = (long) maO2S.GetObject( nPos+i );
+        nSortPos = (sal_IntPtr) maO2S.GetObject( nPos+i );
         pData = maS2O.GetData( nSortPos );
         pData->mnCurPos += nOffset;
     }
@@ -1614,50 +1614,50 @@ void SortedResultSet::Move( long nPos, long nCount, long nOffset )
     {
         for ( i=nPos+nOffset; i<nPos; i++ )
         {
-            nSortPos = (long) maO2S.GetObject( i );
+            nSortPos = (sal_IntPtr) maO2S.GetObject( i );
             pData = maS2O.GetData( nSortPos );
             pData->mnCurPos += nCount;
         }
     }
     else
     {
-        long nStart = nPos + nCount;
-        long nEnd = nStart + nOffset;
+        sal_IntPtr nStart = nPos + nCount;
+        sal_IntPtr nEnd = nStart + nOffset;
         for ( i=nStart; i<nEnd; i++ )
         {
-            nSortPos = (long) maO2S.GetObject( i );
+            nSortPos = (sal_IntPtr) maO2S.GetObject( i );
             pData = maS2O.GetData( nSortPos );
             pData->mnCurPos -= nCount;
         }
     }
 
     // remember the to be moved entries
-    long *pTmpArr = new long[ nCount ];
+    sal_IntPtr *pTmpArr = new sal_IntPtr[ nCount ];
     for ( i=0; i<nCount; i++ )
-        pTmpArr[i] = (long)maO2S.GetObject( (sal_uInt32)( nPos+i ) );
+        pTmpArr[i] = (sal_IntPtr)maO2S.GetObject( (sal_uInt32)( nPos+i ) );
 
     // now move the entries, which are in the way
     if ( nOffset < 0 )
     {
         // be carefully here, because nOffset is negative here, so an
         // addition is a subtraction
-        long nFrom = nPos - 1;
+        sal_IntPtr nFrom = nPos - 1;
         nTo = nPos + nCount - 1;
 
         // same for i here
         for ( i=0; i>nOffset; i-- )
         {
-            long nVal = (long) maO2S.GetObject( (sal_uInt32)( nFrom+i ) );
+            sal_IntPtr nVal = (sal_IntPtr) maO2S.GetObject( (sal_uInt32)( nFrom+i ) );
             maO2S.Replace( (void*) nVal, (sal_uInt32)( nTo+i ) );
         }
 
     }
     else
     {
-        long nStart = nPos + nCount;
+        sal_IntPtr nStart = nPos + nCount;
         for ( i=0; i<nOffset; i++ )
         {
-            long nVal = (long) maO2S.GetObject( (sal_uInt32)( nStart+i ) );
+            sal_IntPtr nVal = (sal_IntPtr) maO2S.GetObject( (sal_uInt32)( nStart+i ) );
             maO2S.Replace( (void*) nVal, (sal_uInt32)( nPos+i ) );
         }
     }
@@ -1693,7 +1693,7 @@ void SortedResultSet::BuildSortInfo(
     OUString    aPropName;
     SortInfo    *pInfo;
 
-    for ( long i=xSortInfo.getLength(); i > 0; )
+    for ( sal_IntPtr i=xSortInfo.getLength(); i > 0; )
     {
         --i;
         nColumn = pSortInfo[ i ].ColumnIndex;
@@ -1724,11 +1724,11 @@ void SortedResultSet::BuildSortInfo(
 }
 
 //-------------------------------------------------------------------------
-void SortedResultSet::SetChanged( long nPos, long nCount )
+void SortedResultSet::SetChanged( sal_IntPtr nPos, sal_IntPtr nCount )
 {
-    for ( long i=0; i<nCount; i++ )
+    for ( sal_IntPtr i=0; i<nCount; i++ )
     {
-        long nSortPos = (long) maO2S.GetObject( nPos );
+        sal_IntPtr nSortPos = (sal_IntPtr) maO2S.GetObject( nPos );
         if ( nSortPos < mnLastSort )
         {
             SortListData *pData = maS2O.GetData( nSortPos );
@@ -1746,8 +1746,8 @@ void SortedResultSet::SetChanged( long nPos, long nCount )
 void SortedResultSet::ResortModified( EventList* pList )
 {
     sal_uInt32 i, j;
-    long nCompare, nCurPos, nNewPos;
-    long nStart, nEnd, nOffset, nVal;
+    sal_IntPtr nCompare, nCurPos, nNewPos;
+    sal_IntPtr nStart, nEnd, nOffset, nVal;
     SortListData *pData;
     ListAction *pAction;
 
@@ -1760,7 +1760,7 @@ void SortedResultSet::ResortModified( EventList* pList )
             pData->mbModified = sal_False;
             if ( nCompare != 0 )
             {
-                nCurPos = (long) maO2S.GetObject( (sal_uInt32) pData->mnCurPos );
+                nCurPos = (sal_IntPtr) maO2S.GetObject( (sal_uInt32) pData->mnCurPos );
                 if ( nCompare < 0 )
                 {
                     nNewPos = FindPos( pData, 1, nCurPos-1 );
@@ -1783,7 +1783,7 @@ void SortedResultSet::ResortModified( EventList* pList )
                     maS2O.Insert( pData, nNewPos );
                         for ( j=1; j<maO2S.Count(); j++ )
                     {
-                        nVal = (long) maO2S.GetObject( (sal_uInt32)( j ) );
+                        nVal = (sal_IntPtr) maO2S.GetObject( (sal_uInt32)( j ) );
                         if ( ( nStart <= nVal ) && ( nVal <= nEnd ) )
                         {
                             nVal += nOffset;
@@ -1816,11 +1816,11 @@ void SortedResultSet::ResortModified( EventList* pList )
 //-------------------------------------------------------------------------
 void SortedResultSet::ResortNew( EventList* pList )
 {
-    long            i, j, nNewPos, nVal;
+    sal_IntPtr            i, j, nNewPos, nVal;
     SortListData    *pData;
 
     try {
-        for ( i = mnLastSort; i<(long)maS2O.Count(); i++ )
+        for ( i = mnLastSort; i<(sal_IntPtr)maS2O.Count(); i++ )
         {
             pData = (SortListData*) maModList.GetObject( i );
             nNewPos = FindPos( pData, 1, mnLastSort );
@@ -1829,9 +1829,9 @@ void SortedResultSet::ResortNew( EventList* pList )
                 maS2O.Remove( (sal_uInt32) i );
                 maS2O.Insert( pData, nNewPos );
                 // maO2S liste korigieren
-                for ( j=1; j<(long)maO2S.Count(); j++ )
+                for ( j=1; j<(sal_IntPtr)maO2S.Count(); j++ )
                 {
-                    nVal = (long) maO2S.GetObject( (sal_uInt32)( j ) );
+                    nVal = (sal_IntPtr) maO2S.GetObject( (sal_uInt32)( j ) );
                     if ( nVal >= nNewPos )
                         maO2S.Replace( (void*) (nVal+1), (sal_uInt32)( j ) );
                 }
@@ -1852,7 +1852,7 @@ void SortedResultSet::ResortNew( EventList* pList )
 // SortListData
 //
 //-------------------------------------------------------------------------
-SortListData::SortListData( long nPos, sal_Bool bModified )
+SortListData::SortListData( sal_IntPtr nPos, sal_Bool bModified )
 {
     mbModified = bModified;
     mnCurPos = nPos;
@@ -1873,20 +1873,20 @@ void SortedEntryList::Clear()
 }
 
 //-------------------------------------------------------------------------
-void SortedEntryList::Insert( SortListData *pEntry, long nPos )
+void SortedEntryList::Insert( SortListData *pEntry, sal_IntPtr nPos )
 {
-    if ( nPos < (long) maData.size() )
+    if ( nPos < (sal_IntPtr) maData.size() )
         maData.insert( maData.begin() + nPos, pEntry );
     else
         maData.push_back( pEntry );
 }
 
 //-------------------------------------------------------------------------
-SortListData* SortedEntryList::Remove( long nPos )
+SortListData* SortedEntryList::Remove( sal_IntPtr nPos )
 {
     SortListData *pData;
 
-    if ( nPos < (long) maData.size() )
+    if ( nPos < (sal_IntPtr) maData.size() )
     {
         pData = maData[ nPos ];
         maData.erase( maData.begin() + nPos );
@@ -1898,11 +1898,11 @@ SortListData* SortedEntryList::Remove( long nPos )
 }
 
 //-------------------------------------------------------------------------
-SortListData* SortedEntryList::GetData( long nPos )
+SortListData* SortedEntryList::GetData( sal_IntPtr nPos )
 {
     SortListData *pData;
 
-    if ( nPos < (long) maData.size() )
+    if ( nPos < (sal_IntPtr) maData.size() )
         pData = maData[ nPos ];
     else
         pData = NULL;
@@ -1911,11 +1911,11 @@ SortListData* SortedEntryList::GetData( long nPos )
 }
 
 //-------------------------------------------------------------------------
-long SortedEntryList::operator [] ( long nPos ) const
+sal_IntPtr SortedEntryList::operator [] ( sal_IntPtr nPos ) const
 {
     SortListData *pData;
 
-    if ( nPos < (long) maData.size() )
+    if ( nPos < (sal_IntPtr) maData.size() )
         pData = maData[ nPos ];
     else
         pData = NULL;

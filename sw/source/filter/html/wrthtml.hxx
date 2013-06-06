@@ -248,13 +248,13 @@ struct SwHTMLFmtInfo
     friend bool operator==( const SwHTMLFmtInfo& rInfo1,
                             const SwHTMLFmtInfo& rInfo2 )
     {
-        return (long)rInfo1.pFmt == (long)rInfo2.pFmt;
+        return (sal_IntPtr)rInfo1.pFmt == (sal_IntPtr)rInfo2.pFmt;
     }
 
     friend bool operator<( const SwHTMLFmtInfo& rInfo1,
                             const SwHTMLFmtInfo& rInfo2 )
     {
-        return (long)rInfo1.pFmt < (long)rInfo2.pFmt;
+        return (sal_IntPtr)rInfo1.pFmt < (sal_IntPtr)rInfo2.pFmt;
     }
 
 };

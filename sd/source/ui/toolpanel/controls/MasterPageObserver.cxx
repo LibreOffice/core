@@ -80,7 +80,7 @@ private:
 
     struct DrawDocHash {
         size_t operator()(SdDrawDocument* argument) const
-        { return reinterpret_cast<unsigned long>(argument); }
+        { return reinterpret_cast<sal_uIntPtr>(argument); }
     };
     typedef ::boost::unordered_map<SdDrawDocument*,
                             MasterPageObserver::MasterPageNameSet,

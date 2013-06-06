@@ -1111,7 +1111,7 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
 
 // Indentation for outlines (and sections)
 
-long    SwContentTree::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
+sal_IntPtr SwContentTree::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
 {
     sal_uInt16 nLevel = 0;
     if(lcl_IsContent(pEntry))
@@ -3030,7 +3030,7 @@ NaviContentBookmark::NaviContentBookmark( const String &rUrl,
                     const SwDocShell* pDocSh ) :
     aUrl( rUrl ),
     aDescr(rDesc),
-    nDocSh((long)pDocSh),
+    nDocSh((sal_IntPtr)pDocSh),
     nDefDrag( nDragType )
 {
 }

@@ -424,7 +424,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
             {
                 // nur diese Metriken benutzen
                 sal_uInt16 nPos = aUnitLB.InsertEntry( sMetric );
-                aUnitLB.SetEntryData( nPos, (void*)(long)eFUnit );
+                aUnitLB.SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
             }
             break;
             default:
@@ -457,7 +457,7 @@ sal_Bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
     const sal_uInt16 nMPos = aUnitLB.GetSelectEntryPos();
     if ( nMPos != aUnitLB.GetSavedValue() )
     {
-        sal_uInt16 nFieldUnit = (sal_uInt16)(long)aUnitLB.GetEntryData( nMPos );
+        sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)aUnitLB.GetEntryData( nMPos );
         rCoreSet.Put( SfxUInt16Item( SID_ATTR_METRIC,
                                      (sal_uInt16)nFieldUnit ) );
         bRet = sal_True;
@@ -553,7 +553,7 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet& rCoreSet )
 
         for ( sal_uInt16 i = 0; i < aUnitLB.GetEntryCount(); ++i )
         {
-            if ( (FieldUnit)(long)aUnitLB.GetEntryData( i ) == eFieldUnit )
+            if ( (FieldUnit)(sal_IntPtr)aUnitLB.GetEntryData( i ) == eFieldUnit )
             {
                 aUnitLB.SelectEntryPos( i );
                 break;
@@ -651,7 +651,7 @@ IMPL_LINK_NOARG(ScTpLayoutOptions, MetricHdl)
     const sal_uInt16 nMPos = aUnitLB.GetSelectEntryPos();
     if(nMPos != USHRT_MAX)
     {
-        FieldUnit eFieldUnit = (FieldUnit)(long)aUnitLB.GetEntryData( nMPos );
+        FieldUnit eFieldUnit = (FieldUnit)(sal_IntPtr)aUnitLB.GetEntryData( nMPos );
         sal_Int64 nVal =
             aTabMF.Denormalize( aTabMF.GetValue( FUNIT_TWIP ) );
         ::SetFieldUnit( aTabMF, eFieldUnit );

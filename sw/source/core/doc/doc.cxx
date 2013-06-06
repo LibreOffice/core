@@ -1934,7 +1934,7 @@ void SwDoc::SetModified()
     // give the old and new modified state to the link
     //  Bit 0:  -> old state
     //  Bit 1:  -> new state
-    long nCall = mbModified ? 3 : 2;
+    sal_IntPtr nCall = mbModified ? 3 : 2;
     mbModified = sal_True;
     mpDocStat->bModified = sal_True;
     if( maOle2Link.IsSet() )
@@ -1953,7 +1953,7 @@ void SwDoc::ResetModified()
     // give the old and new modified state to the link
     //  Bit 0:  -> old state
     //  Bit 1:  -> new state
-    long nCall = mbModified ? 1 : 0;
+    sal_IntPtr nCall = mbModified ? 1 : 0;
     mbModified = sal_False;
     GetIDocumentUndoRedo().SetUndoNoModifiedPosition();
     if( nCall && maOle2Link.IsSet() )

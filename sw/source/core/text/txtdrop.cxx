@@ -751,7 +751,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
         nTmpIdx = 0;
 
         while( nTmpIdx < DROP_CACHE_SIZE &&
-            ( aTxt[ nTmpIdx ] != aStr || aMagicNo[ nTmpIdx ] != long(pFntNo) ||
+            ( aTxt[ nTmpIdx ] != aStr || aMagicNo[ nTmpIdx ] != sal_IntPtr(pFntNo) ||
             aWishedHeight[ nTmpIdx ] != pDrop->GetDropHeight() ) )
             ++nTmpIdx;
     }
@@ -785,7 +785,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
         if ( bUseCache )
         {
             // save keys for cache
-            aMagicNo[ nTmpIdx ] = long(pFntNo);
+            aMagicNo[ nTmpIdx ] = sal_IntPtr(pFntNo);
             aTxt[ nTmpIdx ] = aStr;
             aWishedHeight[ nTmpIdx ] = KSHORT(nWishedHeight);
             // save initial scaling factor

@@ -578,16 +578,16 @@ public:
         SvTreeListBox(pWin, rResId), pHeaderBar(0){}
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual long    GetTabPos( SvTreeListEntry*, SvLBoxTab* );
+    virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* );
     void            SetHeaderBar(const HeaderBar* pHB) {pHeaderBar = pHB;}
 };
 
-long  SwIndexTreeLB::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
+sal_IntPtr SwIndexTreeLB::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
 {
-    long nData = (long)pEntry->GetUserData();
+    sal_IntPtr nData = (sal_IntPtr)pEntry->GetUserData();
     if(nData != USHRT_MAX)
     {
-        long  nPos = pHeaderBar->GetItemRect( static_cast< sal_uInt16 >(101 + nData) ).TopLeft().X();
+        sal_IntPtr  nPos = pHeaderBar->GetItemRect( static_cast< sal_uInt16 >(101 + nData) ).TopLeft().X();
         nData = nPos;
     }
     else
@@ -603,7 +603,7 @@ void    SwIndexTreeLB::KeyInput( const KeyEvent& rKEvt )
     sal_Bool bChanged = sal_False;
     if(pEntry)
     {
-        long nLevel = (long)pEntry->GetUserData();
+        sal_IntPtr nLevel = (sal_IntPtr)pEntry->GetUserData();
         if(aCode.GetCode() == KEY_ADD )
         {
             if(nLevel < MAXLEVEL - 1)
@@ -786,7 +786,7 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
     SvTreeListEntry* pEntry = rTLB.First();
     while(pEntry)
     {
-        long nLevel = (long)pEntry->GetUserData();
+        sal_IntPtr nLevel = (sal_IntPtr)pEntry->GetUserData();
         if(nLevel != USHRT_MAX)
         {
             String sName(rTLB.GetEntryText(pEntry));
@@ -814,7 +814,7 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, PushButton*, pBtn)
     SvTreeListEntry* pEntry = aHeaderTree.GetTreeListBox().FirstSelected();
     if(pEntry)
     {
-        long nLevel = (long)pEntry->GetUserData();
+        sal_IntPtr nLevel = (sal_IntPtr)pEntry->GetUserData();
         if(bLeft)
         {
             if(!nLevel)
@@ -1019,7 +1019,7 @@ void SwTOXSelectTabPage::SelectType(TOXTypes eSet)
 {
     CurTOXType eCurType (eSet, 0);
 
-    long nData = lcl_TOXTypesToUserData(eCurType);
+    sal_IntPtr nData = lcl_TOXTypesToUserData(eCurType);
     aTypeLB.SelectEntryPos(aTypeLB.GetEntryPos((void*)nData));
     aTypeFT.Enable(sal_False);
     aTypeLB.Enable(sal_False);
@@ -1131,7 +1131,7 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
         long nOLEData = rDesc.GetOLEOptions();
         for(sal_uInt16 nFromObj = 0; nFromObj < aFromObjCLB.GetEntryCount(); nFromObj++)
         {
-            long nData = (long)aFromObjCLB.GetEntryData(nFromObj);
+            sal_IntPtr nData = (sal_IntPtr)aFromObjCLB.GetEntryData(nFromObj);
             aFromObjCLB.CheckEntryPos(nFromObj, 0 != (nData & nOLEData));
         }
     }
@@ -1230,7 +1230,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
             {
                 if(aFromObjCLB.IsChecked(i))
                 {
-                    long nData = (long)aFromObjCLB.GetEntryData(i);
+                    sal_IntPtr nData = (sal_IntPtr)aFromObjCLB.GetEntryData(i);
                     nOLEData |= nData;
                 }
             }
@@ -1279,7 +1279,7 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet& )
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
     SwWrtShell& rSh = pTOXDlg->GetWrtShell();
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
-    long nData = lcl_TOXTypesToUserData(aCurType);
+    sal_IntPtr nData = lcl_TOXTypesToUserData(aCurType);
     aTypeLB.SelectEntryPos(aTypeLB.GetEntryPos((void*)nData));
 
     sAutoMarkURL = INetURLObject::decode( rSh.GetTOIAutoMarkURL(),
@@ -1316,7 +1316,7 @@ int SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
         _pSet->Put(SfxUInt16Item(FN_PARAM_TOX_TYPE,
-            (sal_uInt16)(long)aTypeLB.GetEntryData( aTypeLB.GetSelectEntryPos() )));
+            (sal_uInt16)(sal_IntPtr)aTypeLB.GetEntryData( aTypeLB.GetSelectEntryPos() )));
     FillTOXDescription();
     return LEAVE_PAGE;
 }
@@ -2641,7 +2641,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
 IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
 {
     String sEntry = pBox->GetSelectEntry();
-    sal_uInt16 nId = (sal_uInt16)(long)pBox->GetEntryData(pBox->GetSelectEntryPos());
+    sal_uInt16 nId = (sal_uInt16)(sal_IntPtr)pBox->GetEntryData(pBox->GetSelectEntryPos());
     aEditStylePB.Enable(sEntry != sNoCharStyle);
     if(sEntry == sNoCharStyle)
         sEntry.Erase();

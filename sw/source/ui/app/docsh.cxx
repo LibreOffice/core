@@ -1044,7 +1044,7 @@ IMPL_LINK( SwDocShell, Ole2ModifiedHdl, void *, p )
     // the Status is handed over from Doc (see doc.cxx)
     //  Bit 0:  -> old state
     //  Bit 1:  -> new state
-    long nStatus = (long)p;
+    sal_IntPtr nStatus = (sal_IntPtr)p;
     if( IsEnableSetModified() )
         SetModified( (nStatus & 2) ? sal_True : sal_False );
     return 0;

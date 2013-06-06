@@ -44,8 +44,7 @@ gb_RCDEFS := \
 	-DWIN32 \
 	-DWIN64
 
-gb_RCFLAGS := \
-	 -V
+gb_RCFLAGS :=
 
 gb_CFLAGS += \
 	$(gb_CFLAGS_COMMON) \

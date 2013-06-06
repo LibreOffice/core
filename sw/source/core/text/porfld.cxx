@@ -968,7 +968,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
         bDraw = !rInf.GetOpt().IsGraphic();
         if( !nId )
         {
-            SetId( long( rInf.GetTxtFrm() ) );
+            SetId( sal_IntPtr( rInf.GetTxtFrm() ) );
             rInf.GetTxtFrm()->SetAnimation();
         }
         if( aTmp.IsOver( rInf.GetPaintRect() ) && !bDraw )

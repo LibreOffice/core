@@ -3328,16 +3328,16 @@ Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLine )
 }
 
 
-long SvTreeListBox::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
+sal_IntPtr SvTreeListBox::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     DBG_ASSERT(pTab,"No Tab");
-    long nPos = pTab->GetPos();
+    sal_IntPtr nPos = pTab->GetPos();
     if( pTab->IsDynamic() )
     {
         sal_uInt16 nDepth = pModel->GetDepth( pEntry );
         nDepth = nDepth * (sal_uInt16)nIndent;
-        nPos += (long)nDepth;
+        nPos += (sal_IntPtr)nDepth;
     }
     return nPos;
 }

@@ -82,7 +82,7 @@ SwFieldType*    SwAuthorityFieldType::Copy()  const
     return new SwAuthorityFieldType(m_pDoc);
 }
 
-void    SwAuthorityFieldType::RemoveField(long nHandle)
+void    SwAuthorityFieldType::RemoveField(sal_IntPtr nHandle)
 {
 #if OSL_DEBUG_LEVEL > 0
     bool bRemoved = false;
@@ -90,7 +90,7 @@ void    SwAuthorityFieldType::RemoveField(long nHandle)
     for(sal_uInt16 j = 0; j < m_DataArr.size(); j++)
     {
         SwAuthEntry* pTemp = &m_DataArr[j];
-        long nRet = (long)(void*)pTemp;
+        sal_IntPtr nRet = (sal_IntPtr)(void*)pTemp;
         if(nRet == nHandle)
         {
 #if OSL_DEBUG_LEVEL > 0
@@ -111,9 +111,9 @@ void    SwAuthorityFieldType::RemoveField(long nHandle)
 #endif
 }
 
-long    SwAuthorityFieldType::AddField(const String& rFieldContents)
+sal_IntPtr SwAuthorityFieldType::AddField(const String& rFieldContents)
 {
-    long nRet = 0;
+    sal_IntPtr nRet = 0;
     SwAuthEntry* pEntry = new SwAuthEntry;
     for( sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i )
         pEntry->SetAuthorField( (ToxAuthorityField)i,
@@ -125,14 +125,14 @@ long    SwAuthorityFieldType::AddField(const String& rFieldContents)
         if(*pTemp == *pEntry)
         {
             DELETEZ(pEntry);
-            nRet = (long)(void*)pTemp;
+            nRet = (sal_IntPtr)(void*)pTemp;
             pTemp->AddRef();
         }
     }
     //if it is a new Entry - insert
     if(pEntry)
     {
-        nRet = (long)(void*)pEntry;
+        nRet = (sal_IntPtr)(void*)pEntry;
         pEntry->AddRef();
         m_DataArr.push_back(pEntry);
         //re-generate positions of the fields
@@ -141,13 +141,13 @@ long    SwAuthorityFieldType::AddField(const String& rFieldContents)
     return nRet;
 }
 
-sal_Bool SwAuthorityFieldType::AddField(long nHandle)
+sal_Bool SwAuthorityFieldType::AddField(sal_IntPtr nHandle)
 {
     sal_Bool bRet = sal_False;
     for( sal_uInt16 j = 0; j < m_DataArr.size(); j++ )
     {
         SwAuthEntry* pTemp = &m_DataArr[j];
-        long nTmp = (long)(void*)pTemp;
+        sal_IntPtr nTmp = (sal_IntPtr)(void*)pTemp;
         if( nTmp == nHandle )
         {
             bRet = sal_True;
@@ -157,17 +157,17 @@ sal_Bool SwAuthorityFieldType::AddField(long nHandle)
             break;
         }
     }
-    OSL_ENSURE(bRet, "::AddField(long) failed");
+    OSL_ENSURE(bRet, "::AddField(sal_IntPtr) failed");
     return bRet;
 }
 
-const SwAuthEntry*  SwAuthorityFieldType::GetEntryByHandle(long nHandle) const
+const SwAuthEntry*  SwAuthorityFieldType::GetEntryByHandle(sal_IntPtr nHandle) const
 {
     const SwAuthEntry* pRet = 0;
     for(sal_uInt16 j = 0; j < m_DataArr.size(); j++)
     {
         const SwAuthEntry* pTemp = &m_DataArr[j];
-        long nTmp = (long)(void*)pTemp;
+        sal_IntPtr nTmp = (sal_IntPtr)(void*)pTemp;
         if( nTmp == nHandle )
         {
             pRet = pTemp;
@@ -246,18 +246,18 @@ sal_uInt16  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
     return nRet;
 }
 
-long    SwAuthorityFieldType::GetHandle(sal_uInt16 nPos)
+sal_IntPtr SwAuthorityFieldType::GetHandle(sal_uInt16 nPos)
 {
-    long nRet = 0;
+    sal_IntPtr nRet = 0;
     if( nPos < m_DataArr.size() )
     {
         SwAuthEntry* pTemp = &m_DataArr[nPos];
-        nRet = (long)(void*)pTemp;
+        nRet = (sal_IntPtr)(void*)pTemp;
     }
     return nRet;
 }
 
-sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
+sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
 {
     //find the field in a sorted array of handles,
 #if OSL_DEBUG_LEVEL > 0
@@ -527,7 +527,7 @@ SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,
 }
 
 SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,
-                                                long nSetHandle )
+                                                sal_IntPtr nSetHandle )
     : SwField( pInitType ),
     m_nHandle( nSetHandle ),
     m_nTempSequencePos( -1 )

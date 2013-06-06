@@ -96,7 +96,7 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
     ResStringArray& rNames = aNames.GetNames();
     for(sal_uInt16 i = 0; i < rNames.Count(); i++)
     {
-        long nValue = rNames.GetValue(i);
+        sal_IntPtr nValue = rNames.GetValue(i);
         bool bInsert = true;
         sal_uInt16 nPos = LISTBOX_APPEND;
         switch(nValue)
