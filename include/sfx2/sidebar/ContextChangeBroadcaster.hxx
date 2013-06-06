@@ -42,7 +42,6 @@ public:
 
 private:
     rtl::OUString msContextName;
-    bool mbIsContextActive;
 
     void BroadcastContextChange (
         const cssu::Reference<css::frame::XFrame>& rxFrame,

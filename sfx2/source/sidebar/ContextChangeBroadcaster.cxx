@@ -31,8 +31,7 @@ namespace sfx2 { namespace sidebar {
 
 
 ContextChangeBroadcaster::ContextChangeBroadcaster (void)
-    : msContextName(),
-      mbIsContextActive(false)
+    : msContextName()
 {
 }
 
@@ -47,8 +46,6 @@ ContextChangeBroadcaster::~ContextChangeBroadcaster (void)
 
 void ContextChangeBroadcaster::Initialize (const ::rtl::OUString& rsContextName)
 {
-    OSL_ASSERT( ! mbIsContextActive);
-
     msContextName = rsContextName;
 }
 
