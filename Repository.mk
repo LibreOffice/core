@@ -227,6 +227,12 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,TDE, \
     $(if $(ENABLE_TDE),tdebe1) \
 ))
 
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,IMPRESS, \
+    animcore \
+    placeware \
+    PresenterScreen \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ONLINEUPDATE, \
     updatecheckui \
     updchk \
@@ -388,7 +394,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	ado \
     agg \
     analysis \
-    animcore \
     $(if $(filter $(OS),ANDROID),, \
 		basebmp \
     ) \
@@ -406,7 +411,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     mork \
     mozab2 \
     mozabdrv \
-    placeware \
     pricing \
     protocolhandler \
     rpt \
@@ -604,7 +608,6 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-    PresenterScreen \
     basprov \
     cairocanvas \
     canvasfactory \
