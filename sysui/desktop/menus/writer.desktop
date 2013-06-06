@@ -31,6 +31,7 @@ X-GIO-NoFuse=true
 Keywords=Text;Letter;Fax;Document;OpenDocument Text;Microsoft Word;Microsoft Works;Lotus WordPro;OpenOffice Writer;CV;odt;doc;docx;rtf;
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
+StartupWMClass=libreoffice-writer
 [X-New Shortcut Group]
 UnityQuicklist=New Document
 Exec=libreoffice --writer %%FILE%%

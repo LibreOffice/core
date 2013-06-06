@@ -31,6 +31,7 @@ X-GIO-NoFuse=true
 Keywords=Slideshow;Slides;OpenDocument Presentation;Microsoft PowerPoint;Microsoft Works;OpenOffice Impress;odp;ppt;pptx;
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
+StartupWMClass=libreoffice-impress
 [X-New Shortcut Group]
 UnityQuicklist=New Presentation
 Exec=libreoffice --impress %%FILE%%
