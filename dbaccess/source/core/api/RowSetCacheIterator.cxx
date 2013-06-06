@@ -118,7 +118,6 @@ sal_Bool ORowSetCacheIterator::isNull() const
     sal_Bool bRet = !m_pCache || !m_pRowSet || m_aIter == m_pCache->m_aCacheIterators.end();
     if ( !bRet )
     {
-        ORowSetCacheIterator_Helper aHelper = m_aIter->second;
         bRet = ( m_pRowSet->isInsertRow()
             ?
             m_aIter->second.aIterator == m_pCache->m_pInsertMatrix->end()
