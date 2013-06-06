@@ -396,7 +396,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
             return false;
         }
         return e.hasMoreElements();
-        }
+    }
 
     /**
      * Return the path to the "com.sun.reportdesigner" extension
