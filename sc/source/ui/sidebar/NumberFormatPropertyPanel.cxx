@@ -20,7 +20,6 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <NumberFormatPropertyPanel.hxx>
-#include <NumberFormatPropertyPanel.hrc>
 #include "sc.hrc"
 #include "scresid.hxx"
 #include <sfx2/bindings.hxx>
@@ -37,6 +36,12 @@ using namespace css;
 using namespace cssu;
 using ::sfx2::sidebar::Theme;
 
+const char UNO_NUMERICFIELD[]         = ".uno:NumericField";
+const char UNO_NUMBERFORMATPERCENT[]  = ".uno:NumberFormatPercent";
+const char UNO_NUMBERFORMATCURRENCY[] = ".uno:NumberFormatCurrency";
+const char UNO_NUMBERFORMATDATE[]     = ".uno:NumberFormatDate";
+const char UNO_INSERTFIXEDTEXT[]      = ".uno:InsertFixedText";
+
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
 //////////////////////////////////////////////////////////////////////////////
@@ -50,19 +55,7 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     Window* pParent,
     const cssu::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-:   Control(
-        pParent,
-        ScResId(RID_PROPERTYPANEL_SC_NUMBERFORMAT)),
-    mpFtCategory(new FixedText(this, ScResId(FT_CATEGORY))),
-    mpLbCategory(new ListBox(this, ScResId(LB_CATEGORY))),
-    mpTBCategoryBackground(sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this)),
-    mpTBCategory(sfx2::sidebar::ControlFactory::CreateToolBox(mpTBCategoryBackground.get(), ScResId(TBX_CATEGORY))),
-    mpFtDecimals(new FixedText(this, ScResId(FT_DECIMALS))),
-    mpEdDecimals(new NumericField(this, ScResId(ED_DECIMALS))),
-    mpFtLeadZeroes(new FixedText(this, ScResId(FT_LEADZEROES))),
-    mpEdLeadZeroes(new NumericField(this, ScResId(ED_LEADZEROES))),
-    mpBtnNegRed(new CheckBox(this, ScResId(BTN_NEGRED))),
-    mpBtnThousand(new CheckBox(this, ScResId(BTN_THOUSAND))),
+  : PanelLayout(pParent,"NumberFormatPropertyPanel", "modules/scalc/ui/sidebarnumberformat.ui", rxFrame),
     maNumFormatControl(SID_NUMBER_TYPE_FORMAT, *pBindings, *this),
 
     // Caution! SID_NUMBER_FORMAT is reworked in symphony code, may be needed (!) If
@@ -74,17 +67,20 @@ NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     maContext(),
     mpBindings(pBindings)
 {
+    get(mpLbCategory,   "category");
+    get(mpTBCategory,   "numberformat");
+    get(mpEdDecimals,   "decimalplaces");
+    get(mpEdLeadZeroes, "leadingzeroes");
+    get(mpBtnNegRed,    "negativenumbersred");
+    get(mpBtnThousand,  "thousandseperator");
+
     Initialize();
-    FreeResource();
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 NumberFormatPropertyPanel::~NumberFormatPropertyPanel()
 {
-    // Destroy the toolboxes, then their background windows.
-    mpTBCategory.reset();
-    mpTBCategoryBackground.reset();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -97,28 +93,6 @@ void NumberFormatPropertyPanel::Initialize()
     mpLbCategory->SetAccessibleName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Category")));     //wj acc
     mpLbCategory->SetDropDownLineCount(mpLbCategory->GetEntryCount());
 
-    // Note that we use icons from UNO commands that are not in every case the commands
-    // that are really dispatched.  They just look right.
-    mpTBCategory->SetItemImage(
-        ID_NUMBER,
-        GetImage(mxFrame, A2S(".uno:NumericField"), sal_False));
-    mpTBCategory->SetItemImage(
-        ID_PERCENT,
-        GetImage(mxFrame, A2S(".uno:NumberFormatPercent"), sal_False));
-    mpTBCategory->SetItemImage(
-        ID_CURRENCY,
-        GetImage(mxFrame, A2S(".uno:NumberFormatCurrency"), sal_False));
-    mpTBCategory->SetItemImage(
-        ID_DATE,
-        GetImage(mxFrame, A2S(".uno:NumberFormatDate"), sal_False));
-    mpTBCategory->SetItemImage(
-        ID_TEXT,
-        GetImage(mxFrame, A2S(".uno:InsertFixedText"), sal_False));
-
-    Size aTbxSize( mpTBCategory->CalcWindowSizePixel() );
-    mpTBCategory->SetOutputSizePixel( aTbxSize );
-    mpTBCategory->SetBackground(Wallpaper());
-    mpTBCategory->SetPaintTransparent(true);
     aLink = LINK(this, NumberFormatPropertyPanel, NumFormatHdl);
     mpTBCategory->SetSelectHdl ( aLink );
 
@@ -131,38 +105,27 @@ void NumberFormatPropertyPanel::Initialize()
     mpBtnNegRed->SetClickHdl( aLink );
     mpBtnThousand->SetClickHdl( aLink );
 
-    mpLbCategory->SetAccessibleRelationLabeledBy(mpFtCategory.get());
-    mpTBCategory->SetAccessibleRelationLabeledBy(mpTBCategory.get());
-    mpEdDecimals->SetAccessibleRelationLabeledBy(mpFtDecimals.get());
-    mpEdLeadZeroes->SetAccessibleRelationLabeledBy(mpFtLeadZeroes.get());
+    mpTBCategory->SetAccessibleRelationLabeledBy(mpTBCategory);
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 IMPL_LINK( NumberFormatPropertyPanel, NumFormatHdl, ToolBox*, pBox )
 {
-    sal_uInt16 nVal = pBox->GetCurItemId();
+    const OUString aCommand(pBox->GetItemCommand(pBox->GetCurItemId()));
     sal_uInt16 nId = 0;
-    switch(nVal)
-    {
-    case ID_NUMBER:
+
+    if(aCommand == UNO_NUMERICFIELD)
         nId = 1;
-        break;
-    case ID_PERCENT:
+    else if(aCommand == UNO_NUMBERFORMATPERCENT)
         nId = 2;
-        break;
-    case ID_CURRENCY:
+    else if(aCommand == UNO_NUMBERFORMATCURRENCY)
         nId = 3;
-        break;
-    case ID_DATE:
+    else if(aCommand == UNO_NUMBERFORMATDATE)
         nId = 4;
-        break;
-    case ID_TEXT:
+    else if(aCommand == UNO_INSERTFIXEDTEXT)
         nId = 9;
-        break;
-    default:
-        ;
-    }
+
     if( nId != mnCategorySelected )
     {
         SfxUInt16Item aItem( SID_NUMBER_TYPE_FORMAT,  nId );
