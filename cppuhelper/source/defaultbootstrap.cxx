@@ -590,12 +590,12 @@ class ServiceManager:
     private osl::Mutex, public ServiceManagerBase, private boost::noncopyable
 {
 public:
-    explicit ServiceManager(rtl::OUString const & rdbUris):
-        ServiceManagerBase(*static_cast< osl::Mutex * >(this))
-    { readRdbs(rdbUris); }
+    ServiceManager(): ServiceManagerBase(*static_cast< osl::Mutex * >(this)) {}
 
     using ServiceManagerBase::acquire;
     using ServiceManagerBase::release;
+
+    void init(rtl::OUString const & rdbUris) { readRdbs(rdbUris); }
 
     void setContext(
         css::uno::Reference< css::uno::XComponentContext > const & context)
@@ -1996,7 +1996,8 @@ css::uno::Reference< css::uno::XComponentContext > bootstrapComponentContext(
     css::uno::Reference< css::registry::XSimpleRegistry > const & typeRegistry,
     rtl::OUString const & serviceUris, rtl::Bootstrap const & bootstrap)
 {
-    rtl::Reference< ServiceManager > smgr(new ServiceManager(serviceUris));
+    rtl::Reference< ServiceManager > smgr(new ServiceManager);
+    smgr->init(serviceUris);
     cppu::ContextEntry_Init entry;
     std::vector< cppu::ContextEntry_Init > context_values;
     context_values.push_back(
