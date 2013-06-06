@@ -60,7 +60,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/options/opthtml.src \
     cui/source/options/optinet2.src \
     cui/source/options/optjava.src \
-    cui/source/options/optjsearch.src \
     cui/source/options/optlingu.src \
     cui/source/options/optpath.src \
     cui/source/options/optsave.src \

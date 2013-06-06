@@ -32,27 +32,26 @@ class SfxItemSet;
 class SvxJSearchOptionsPage : public SfxTabPage
 {
 private:
-    FixedLine   aTreatAsEqual;
-    CheckBox    aMatchCase;
-    CheckBox    aMatchFullHalfWidth;
-    CheckBox    aMatchHiraganaKatakana;
-    CheckBox    aMatchContractions;
-    CheckBox    aMatchMinusDashChoon;
-    CheckBox    aMatchRepeatCharMarks;
-    CheckBox    aMatchVariantFormKanji;
-    CheckBox    aMatchOldKanaForms;
-    CheckBox    aMatchDiziDuzu;
-    CheckBox    aMatchBavaHafa;
-    CheckBox    aMatchTsithichiDhizi;
-    CheckBox    aMatchHyuiyuByuvyu;
-    CheckBox    aMatchSesheZeje;
-    CheckBox    aMatchIaiya;
-    CheckBox    aMatchKiku;
-    CheckBox    aMatchProlongedSoundMark;
-    FixedLine   aIgnore;
-    CheckBox    aIgnorePunctuation;
-    CheckBox    aIgnoreWhitespace;
-    CheckBox    aIgnoreMiddleDot;
+    CheckBox*   m_pMatchCase;
+    CheckBox*   m_pMatchFullHalfWidth;
+    CheckBox*   m_pMatchHiraganaKatakana;
+    CheckBox*   m_pMatchContractions;
+    CheckBox*   m_pMatchMinusDashChoon;
+    CheckBox*   m_pMatchRepeatCharMarks;
+    CheckBox*   m_pMatchVariantFormKanji;
+    CheckBox*   m_pMatchOldKanaForms;
+    CheckBox*   m_pMatchDiziDuzu;
+    CheckBox*   m_pMatchBavaHafa;
+    CheckBox*   m_pMatchTsithichiDhizi;
+    CheckBox*   m_pMatchHyuiyuByuvyu;
+    CheckBox*   m_pMatchSesheZeje;
+    CheckBox*   m_pMatchIaiya;
+    CheckBox*   m_pMatchKiku;
+    CheckBox*   m_pMatchProlongedSoundMark;
+
+    CheckBox*   m_pIgnorePunctuation;
+    CheckBox*   m_pIgnoreWhitespace;
+    CheckBox*   m_pIgnoreMiddleDot;
 
     sal_Int32       nTransliterationFlags;
     sal_Bool        bSaveOptions;
