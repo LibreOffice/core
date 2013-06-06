@@ -269,6 +269,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         {
             // create a frame wrapper for myself
             m_xFrame = frame::Frame::create( comphelper::getProcessComponentContext() );
+            m_xFrame->initialize( VCLUnoHelper::GetInterface ( pBeamerWin ) );
         }
         catch (const Exception&)
         {
