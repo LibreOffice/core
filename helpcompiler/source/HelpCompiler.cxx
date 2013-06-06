@@ -46,12 +46,11 @@ HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_input
     resEmbStylesheet(in_resEmbStylesheet), bExtensionMode( in_bExtensionMode )
 {
     xmlKeepBlanksDefaultValue = 0;
-    char* guitmp = getenv("GUI");
-    if (guitmp)
+    char* os = getenv("OS");
+    if (os)
     {
-        gui = (strcmp(guitmp, "UNX") ? gui : "UNIX");
-        gui = (strcmp(guitmp, "MAC") ? gui : "MAC");
-        gui = (strcmp(guitmp, "WNT") ? gui : "WIN");
+        gui = (strcmp(os, "WNT") ? "UNIX" : "WIN");
+        gui = (strcmp(os, "MACOSX") ? gui : "MAC");
     }
 }
 

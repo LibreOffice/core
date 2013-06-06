@@ -58,7 +58,6 @@ $(readlicense_oo_README_PATTERN) : \
 		$(call gb_ExternalExecutable_get_command,xsltproc) --nonet --novalid -o $@.out \
 			--stringparam com1 $(COM) \
 			--stringparam cp1 $(CPUNAME) \
-			--stringparam gui1 $(GUI) \
 			--stringparam lang1 $(word 2,$(subst _, ,$(basename $(notdir $@)))) \
 			--stringparam os1 $(OS) \
 			--stringparam type text \
