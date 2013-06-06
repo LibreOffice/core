@@ -134,7 +134,7 @@ static void lcl_InvalidateZoomSlots(SfxBindings& rBindings)
     rBindings.Invalidate( aInval );
 }
 
-// erstmal der Zoom-Dialog
+// At first the zoom dialog
 class SwPreViewZoomDlg : public SvxStandardDialog
 {
     NumericField* m_pRowEdit;
@@ -178,8 +178,8 @@ SwPagePreViewWin::SwPagePreViewWin( Window *pParent, SwPagePreView& rPView )
     SetMapMode( MapMode(MAP_TWIP) );
 
     const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(sal_False);
-    mnRow = pUsrPref->GetPagePrevRow();     // 1 Zeile
-    mnCol = pUsrPref->GetPagePrevCol();     // 1 Spalte
+    mnRow = pUsrPref->GetPagePrevRow();     // 1 row
+    mnCol = pUsrPref->GetPagePrevCol();     // 1 column
     mnSttPage = USHRT_MAX;
 }
 
@@ -193,9 +193,9 @@ void  SwPagePreViewWin::Paint( const Rectangle& rRect )
     if( !mpViewShell || !mpViewShell->GetLayout() )
         return;
 
-    if( USHRT_MAX == mnSttPage )        // wurde noch nie berechnet ? (Init-Phase!)
+    if( USHRT_MAX == mnSttPage )        // was never calculated ? (Init-Phase!)
     {
-        // das ist die Size, auf die ich mich immer beziehe
+        // This is the size to which I always relate.
         if( !maPxWinSize.Height() || !maPxWinSize.Width() )
             maPxWinSize = GetOutputSizePixel();
 
@@ -237,12 +237,12 @@ void SwPagePreViewWin::CalcWish( sal_uInt8 nNewRow, sal_uInt8 nNewCol )
     SetPagePreview(mnRow, mnCol);
     maScale = GetMapMode().GetScaleX();
 
-    // falls an der Spaltigkeit gedreht wurde, so muss der Sonderfall
-    // Einspaltig beachtet und ggfs. der Scrollbar korrigiert werden
+    // If changes have taken place at the columns, the special case "single column"
+    // must be considered and corrected if necessary.
     if( (1 == nOldCol) ^ (1 == mnCol) )
         mrView.ScrollDocSzChg();
 
-    // Sortierung muss eingehalten werden!!
+    // Order must be maintained!
     // additional invalidate page status.
     static sal_uInt16 aInval[] =
     {
@@ -261,12 +261,10 @@ void SwPagePreViewWin::CalcWish( sal_uInt8 nNewRow, sal_uInt8 nNewCol )
     mrView.ScrollViewSzChg();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:, mnSttPage is Absolute
- --------------------------------------------------------------------*/
+// mnSttPage is Absolute
 int SwPagePreViewWin::MovePage( int eMoveMode )
 {
-    // soviele Seiten hoch
+    // number of pages up
     sal_uInt16 nPages = mnRow * mnCol;
     sal_uInt16 nNewSttPage = mnSttPage;
     sal_uInt16 nPageCount = mrView.GetPageCount();
@@ -367,7 +365,7 @@ int SwPagePreViewWin::MovePage( int eMoveMode )
 
 void SwPagePreViewWin::SetWinSize( const Size& rNewSize )
 {
-    // die Size wollen wir aber immer in Pixel-Einheiten haben
+    // We always want the size as pixel units.
     maPxWinSize = LogicToPixel( rNewSize );
 
     if( USHRT_MAX == mnSttPage )
@@ -521,9 +519,8 @@ void SwPagePreViewWin::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-/******************************************************************************
- *  Beschreibung: Userprefs bzw Viewoptions setzen
- ******************************************************************************/
+// Set user prefs or view options
+
 void SwPagePreViewWin::SetPagePreview( sal_uInt8 nRow, sal_uInt8 nCol )
 {
     SwMasterUsrPref *pOpt = (SwMasterUsrPref *)SW_MOD()->GetUsrPref(sal_False);
@@ -534,7 +531,7 @@ void SwPagePreViewWin::SetPagePreview( sal_uInt8 nRow, sal_uInt8 nCol )
         pOpt->SetPagePrevCol( nCol );
         pOpt->SetModified();
 
-        //Scrollbar updaten!
+        // Update scrollbar!
         mrView.ScrollViewSzChg();
     }
 }
@@ -575,12 +572,12 @@ void SwPagePreViewWin::DataChanged( const DataChangedEvent& rDCEvt )
     switch( rDCEvt.GetType() )
     {
     case DATACHANGED_SETTINGS:
-        // ScrollBars neu anordnen bzw. Resize ausloesen, da sich
-        // ScrollBar-Groesse geaendert haben kann. Dazu muss dann im
-        // Resize-Handler aber auch die Groesse der ScrollBars aus
-        // den Settings abgefragt werden.
+        // Rearrange the scrollbars or trigger resize, because the
+        // size of the scrollbars may have be changed. Also the
+        // size of the scrollbars has to be retrieved from the settings
+        // out of the resize handler.
         if( rDCEvt.GetFlags() & SETTINGS_STYLE )
-            mrView.InvalidateBorder();              //Scrollbarbreiten
+            mrView.InvalidateBorder();              // Scrollbar widths
         // zoom has to be disabled if Accessibility support is switched on
         lcl_InvalidateZoomSlots(mrView.GetViewFrame()->GetBindings());
         break;
@@ -589,7 +586,7 @@ void SwPagePreViewWin::DataChanged( const DataChangedEvent& rDCEvt )
     case DATACHANGED_DISPLAY:
     case DATACHANGED_FONTS:
     case DATACHANGED_FONTSUBSTITUTION:
-        mrView.GetDocShell()->UpdateFontList(); //Fontwechsel
+        mrView.GetDocShell()->UpdateFontList(); // Font change
         if ( mpViewShell->GetWin() )
             mpViewShell->GetWin()->Invalidate();
         break;
@@ -672,7 +669,7 @@ void SwPagePreView::_ExecPgUpAndPgDown( const bool  _bPgUp,
         _pReq->Done();
 }
 
-// dann mal alles fuer die SwPagePreView
+// Then all for the SwPagePreView
 void  SwPagePreView::Execute( SfxRequest &rReq )
 {
     int eMvMode;
@@ -888,7 +885,7 @@ MOVEPAGE:
         case FN_PRINT_PAGEPREVIEW:
         {
             const SwPagePreViewPrtData* pPPVPD = aViewWin.GetViewShell()->GetDoc()->GetPreViewPrtData();
-            // die Sache mit der Orientation
+            // The thing with the orientation
             if(pPPVPD)
             {
                 SfxPrinter* pPrinter = GetPrinter( sal_True );
@@ -1029,7 +1026,7 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
         }
         break;
         case FN_SHOW_MULTIPLE_PAGES:
-        //should never be disabled
+        // should never be disabled
         break;
         case FN_SHOW_BOOKVIEW:
         {
@@ -1044,7 +1041,7 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
             break;
 
         case FN_PRINT_PAGEPREVIEW:
-            // hat den gleichen Status wie das normale Drucken
+            // has the same status like the normal printing
             {
                 const SfxPoolItem* pItem;
                 SfxItemSet aSet( *rSet.GetPool(), SID_PRINTDOC, SID_PRINTDOC );
@@ -1093,9 +1090,9 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
 
     bNormalPrint = sal_True;
 
-    // Die DocSize erfragen und verarbeiten. Ueber die Handler konnte
-    // die Shell nicht gefunden werden, weil die Shell innerhalb CTOR-Phase
-    // nicht in der SFX-Verwaltung bekannt ist.
+    // Check and process the DocSize. The shell could not be found via
+    // the handler, because the shell is unknown to the SFX management
+    // within the CTOR phase.
 
     if( !pPrefs )
         pPrefs = SW_MOD()->GetUsrPref(sal_False);
@@ -1103,9 +1100,9 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
     mbHScrollbarEnabled = pPrefs->IsViewHScrollBar();
     mbVScrollbarEnabled = pPrefs->IsViewVScrollBar();
 
-    // die Felder aktualisieren
-    // ACHTUNG: hochcasten auf die EditShell, um die SS zu nutzen.
-    //          In den Methoden wird auf die akt. Shell abgefragt!
+    // Update the fields
+    // ATTENTION: Do cast the EditShell up, to use the SS.
+    //            At the methodes the current shell will be queried!
     SwEditShell* pESh = (SwEditShell*)GetViewShell();
     sal_Bool bIsModified = pESh->IsModified();
 
@@ -1170,7 +1167,7 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     SfxObjectShell* pObjShell = pViewFrame->GetObjectShell();
     if ( !pOldSh )
     {
-        //Gibt es schon eine Sicht auf das Dokument?
+        // Exists already a view on the document?
         SfxViewFrame *pF = SfxViewFrame::GetFirst( pObjShell );
         if ( pF == pViewFrame )
             pF = SfxViewFrame::GetNext( *pF, pObjShell );
@@ -1194,7 +1191,7 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
             pVS = GetDocShell()->GetWrtShell();
         if( pVS )
         {
-            // setze die akt. Seite als die erste
+            // Set the current page as the first.
             sal_uInt16 nPhysPg, nVirtPg;
             ((SwCrsrShell*)pVS)->GetPageNum( nPhysPg, nVirtPg, sal_True, sal_False );
             if( 1 != aViewWin.GetCol() && 1 == nPhysPg )
@@ -1245,7 +1242,7 @@ int SwPagePreView::_CreateScrollbar( sal_Bool bHori )
     Window *pMDI = &GetViewFrame()->GetWindow();
     SwScrollbar** ppScrollbar = bHori ? &pHScrollbar : &pVScrollbar;
 
-    OSL_ENSURE( !*ppScrollbar, "vorher abpruefen!" );
+    OSL_ENSURE( !*ppScrollbar, "check beforehand!" );
 
     if( !bHori )
     {
@@ -1275,9 +1272,8 @@ int SwPagePreView::_CreateScrollbar( sal_Bool bHori )
     return 1;
 }
 
-/*
- * Button-Handler
- */
+// Button-Handler
+
 IMPL_LINK_INLINE_START( SwPagePreView, BtnPage, Button *, pButton )
 {
     // use new helper method to perform page up
@@ -1297,7 +1293,7 @@ int SwPagePreView::ChgPage( int eMvMode, int bUpdateScrollbar )
 
     if( bChg )
     {
-        // Statusleiste updaten
+        // Update statusbar
         OUString aStr = sPageStr + aViewWin.GetStatusStr( mnPageCount );
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
 
@@ -1317,7 +1313,7 @@ int SwPagePreView::ChgPage( int eMvMode, int bUpdateScrollbar )
     return bChg;
 }
 
-// ab hier alles aus der SwView uebernommen
+// From here, everything was taken from the SwView.
 void SwPagePreView::CalcAndSetBorderPixel( SvBorder &rToFill, sal_Bool /*bInner*/ )
 {
     const StyleSettings &rSet = aViewWin.GetSettings().GetStyleSettings();
@@ -1341,8 +1337,8 @@ void  SwPagePreView::InnerResizePixel( const Point &rOfst, const Size &rSize )
                     *pVScrollbar, *pHScrollbar, pPageUpBtn, pPageDownBtn, 0,
                     *pScrollFill );
 
-    //EditWin niemals einstellen!
-    //VisArea niemals einstellen!
+    // Never set EditWin !
+    // Never set VisArea !
 }
 
 void SwPagePreView::OuterResizePixel( const Point &rOfst, const Size &rSize )
@@ -1350,14 +1346,15 @@ void SwPagePreView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     SvBorder aBorder;
     CalcAndSetBorderPixel( aBorder, sal_False );
 
-    //EditWin niemals einstellen!
+    // Never set EditWin !
 
     Size aTmpSize( aViewWin.GetOutputSizePixel() );
     Point aBottomRight( aViewWin.PixelToLogic( Point( aTmpSize.Width(), aTmpSize.Height() ) ) );
     SetVisArea( Rectangle( Point(), aBottomRight ) );
 
-    //Aufruf der DocSzChgd-Methode der Scrollbars ist noetig, da vom maximalen
-    //Scrollrange immer die halbe Hoehe der VisArea abgezogen wird.
+    // Call of the DocSzChgd-Methode of the scrollbars is necessary,
+    // because from the maximum scoll range half the height of the
+    // VisArea is always deducted.
     if ( pVScrollbar && aTmpSize.Width() > 0 && aTmpSize.Height() > 0 )
     {
         ScrollDocSzChg();
@@ -1378,7 +1375,7 @@ void SwPagePreView::SetVisArea( const Rectangle &rRect, sal_Bool bUpdateScrollba
 
     if(aLR == aVisArea)
         return;
-        // keine negative Position, keine neg. Groesse
+        // No negative position, no negative size
 
     if(aLR.Top() < 0)
     {
@@ -1394,23 +1391,23 @@ void SwPagePreView::SetVisArea( const Rectangle &rRect, sal_Bool bUpdateScrollba
     if(aLR.Right() < 0) aLR.Right() = 0;
     if(aLR.Bottom() < 0) aLR.Bottom() = 0;
     if(aLR == aVisArea ||
-        // Leeres Rechteck nicht beachten
+        // Ignore empty rectangle
         ( 0 == aLR.Bottom() - aLR.Top() && 0 == aLR.Right() - aLR.Left() ) )
         return;
 
     if( aLR.Left() > aLR.Right() || aLR.Top() > aLR.Bottom() )
         return;
 
-    //Bevor die Daten veraendert werden ggf. ein Update rufen. Dadurch wird
-    //sichergestellt, da? anliegende Paints korrekt in Dokumentkoordinaten
-    //umgerechnet werden.
-    //Vorsichtshalber tun wir das nur wenn an der Shell eine Action laeuft,
-    //denn dann wir nicht wirklich gepaintet sondern die Rechtecke werden
-    //lediglich (in Dokumentkoordinaten) vorgemerkt.
+    // Before the data can be changed call an update if necessary.
+    // Thereby ensured, that adjacent paints are correctly converted into
+    // document coordinates.
+    // As a precaution, we do this only when at the shell runs an action,
+    // because then we do not really paint but the rectangles are just
+    // bookmarked (in document coordinates).
     if( GetViewShell()->ActionPend() )
         aViewWin.Update();
 
-    // setze am View-Win die aktuelle Size
+    // Set at View-Win the current size
     aVisArea = aLR;
     aViewWin.SetWinSize( aLR.GetSize() );
     ChgPage( SwPagePreViewWin::MV_NEWWINSIZE, bUpdateScrollbar );
@@ -1427,7 +1424,7 @@ IMPL_LINK( SwPagePreView, ScrollHdl, SwScrollbar *, pScrollbar )
         Help::IsQuickHelpEnabled() &&
         GetViewShell()->PagePreviewLayout()->DoesPreviewLayoutRowsFitIntoWindow())
     {
-        // wieviele Seiten scrollen ??
+        // Scroll how many pages??
         String sStateStr(sPageStr);
         sal_uInt16 nThmbPos = (sal_uInt16)pScrollbar->GetThumbPos();
         if( 1 == aViewWin.GetCol() || !nThmbPos )
@@ -1465,7 +1462,7 @@ IMPL_LINK( SwPagePreView, EndScrollHdl, SwScrollbar *, pScrollbar )
             Help::ShowQuickHelp(pScrollbar, Rectangle(), aEmptyStr, 0);
         if ( GetViewShell()->PagePreviewLayout()->DoesPreviewLayoutRowsFitIntoWindow() )
         {
-            // wieviele Seiten scrollen ??
+            // Scroll how many pages ??
             sal_uInt16 nThmbPos = (sal_uInt16)pScrollbar->GetThumbPos();
             // adjust to new preview functionality
             if( nThmbPos != aViewWin.SelectedPage() )
@@ -1666,7 +1663,7 @@ void SwPagePreView::ScrollDocSzChg()
     ScrollViewSzChg();
 }
 
-// alles zum Thema Drucken
+// All about printing
 SfxPrinter*  SwPagePreView::GetPrinter( sal_Bool bCreate )
 {
     return aViewWin.GetViewShell()->getIDocumentDeviceAccess()->getPrinter( bCreate );

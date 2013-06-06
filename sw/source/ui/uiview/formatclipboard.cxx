@@ -50,7 +50,7 @@
 #include <paratr.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtrowsplt.hxx>
-#include <swundo.hxx>           // fuer die UndoIds
+#include <swundo.hxx>           // for the UndoIds
 #include <boost/shared_ptr.hpp>
 
 
