@@ -20,6 +20,7 @@
 
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 #include <boost/scoped_ptr.hpp>
 
 class FixedText;
@@ -29,7 +30,7 @@ class NumericField;
 namespace sc { namespace sidebar {
 
 class NumberFormatPropertyPanel
-:   public Control,
+:   public PanelLayout,
     public ::sfx2::sidebar::IContextChangeReceiver,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
@@ -56,16 +57,12 @@ public:
 
 private:
     //ui controls
-    ::boost::scoped_ptr< FixedText >        mpFtCategory;
-    ::boost::scoped_ptr< ListBox >          mpLbCategory;
-    ::boost::scoped_ptr< Window >           mpTBCategoryBackground;
-    ::boost::scoped_ptr< ToolBox >          mpTBCategory;
-    ::boost::scoped_ptr< FixedText >        mpFtDecimals;
-    ::boost::scoped_ptr< NumericField >     mpEdDecimals;
-    ::boost::scoped_ptr< FixedText >        mpFtLeadZeroes;
-    ::boost::scoped_ptr< NumericField >     mpEdLeadZeroes;
-    ::boost::scoped_ptr< CheckBox >         mpBtnNegRed;
-    ::boost::scoped_ptr< CheckBox >         mpBtnThousand;
+    ListBox*                                mpLbCategory;
+    ToolBox*                                mpTBCategory;
+    NumericField*                           mpEdDecimals;
+    NumericField*                           mpEdLeadZeroes;
+    CheckBox*                               mpBtnNegRed;
+    CheckBox*                               mpBtnThousand;
 
     ::sfx2::sidebar::ControllerItem         maNumFormatControl;
     ::sfx2::sidebar::ControllerItem         maFormatControl;
