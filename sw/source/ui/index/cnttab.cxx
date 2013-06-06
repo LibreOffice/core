@@ -140,6 +140,7 @@ struct AutoMarkEntry
 typedef boost::ptr_vector<AutoMarkEntry> AutoMarkEntryArr;
 
 typedef ::svt::EditBrowseBox SwEntryBrowseBox_Base;
+
 class SwEntryBrowseBox : public SwEntryBrowseBox_Base
 {
     Edit                    aCellEdit;
@@ -173,25 +174,25 @@ protected:
     virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol);
     virtual sal_Bool                SaveModified();
 
+    std::vector<long>               GetOptimalColWidths() const;
+
 public:
-                    SwEntryBrowseBox(Window* pParent, const ResId& rId,
-                               BrowserMode nMode = 0 );
+    SwEntryBrowseBox(Window* pParent, VclBuilderContainer* pBuilder);
     void    ReadEntries(SvStream& rInStr);
     void    WriteEntries(SvStream& rOutStr);
 
     sal_Bool                        IsModified()const;
 
     virtual String GetCellText( long nRow, sal_uInt16 nColumn ) const;
+    virtual void Resize();
+    virtual Size GetOptimalSize() const;
 };
 
 class SwAutoMarkDlg_Impl : public ModalDialog
 {
-    OKButton            aOKPB;
-    CancelButton        aCancelPB;
-    HelpButton          aHelpPB;
+    OKButton*           m_pOKPB;
 
-    SwEntryBrowseBox    aEntriesBB;
-    FixedLine           aEntriesFL;
+    SwEntryBrowseBox*   m_pEntriesBB;
 
     String              sAutoMarkURL;
     const String        sAutoMarkType;
@@ -3879,9 +3880,8 @@ void SwTOXStylesTabPage::Modify()
 #define ITEM_WORDONLY       7
 
 
-SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, const ResId& rId,
-                                                       BrowserMode nMode ) :
-            SwEntryBrowseBox_Base( pParent, rId, nMode,
+SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, VclBuilderContainer* pBuilder)
+    : SwEntryBrowseBox_Base( pParent, EBBF_NONE, WB_TABSTOP | WB_BORDER,
                            BROWSER_KEEPSELECTION |
                            BROWSER_COLUMNSELECTION |
                            BROWSER_MULTISELECTION |
@@ -3889,22 +3889,21 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, const ResId& rId,
                            BROWSER_HLINESFULL |
                            BROWSER_VLINESFULL |
                            BROWSER_AUTO_VSCROLL|
-                           BROWSER_HIDECURSOR   ),
-            aCellEdit(&GetDataWindow(), 0),
-            aCellCheckBox(&GetDataWindow()),
-
-            sSearch(        ResId(ST_SEARCH, *rId.GetResMgr()         )),
-            sAlternative(   ResId(ST_ALTERNATIVE, *rId.GetResMgr()  )),
-            sPrimKey(       ResId(ST_PRIMKEY, *rId.GetResMgr()      )),
-            sSecKey(        ResId(ST_SECKEY, *rId.GetResMgr()           )),
-            sComment(       ResId(ST_COMMENT, *rId.GetResMgr()      )),
-            sCaseSensitive( ResId(ST_CASESENSITIVE, *rId.GetResMgr()    )),
-            sWordOnly(      ResId(ST_WORDONLY, *rId.GetResMgr()     )),
-            sYes(           ResId(ST_TRUE, *rId.GetResMgr()             )),
-            sNo(            ResId(ST_FALSE, *rId.GetResMgr()            )),
-            bModified(false)
+                           BROWSER_HIDECURSOR   )
+    , aCellEdit(&GetDataWindow(), 0)
+    , aCellCheckBox(&GetDataWindow())
+    , bModified(false)
 {
-    FreeResource();
+    sSearch = pBuilder->get<Window>("searchterm")->GetText();
+    sAlternative = pBuilder->get<Window>("alternative")->GetText();
+    sPrimKey = pBuilder->get<Window>("key1")->GetText();
+    sSecKey = pBuilder->get<Window>("key2")->GetText();
+    sComment = pBuilder->get<Window>("comment")->GetText();
+    sCaseSensitive = pBuilder->get<Window>("casesensitive")->GetText();
+    sWordOnly = pBuilder->get<Window>("wordonly")->GetText();
+    sYes = pBuilder->get<Window>("yes")->GetText();
+    sNo = pBuilder->get<Window>("no")->GetText();
+
     aCellCheckBox.GetBox().EnableTriState(sal_False);
     xController = new ::svt::EditCellController(&aCellEdit);
     xCheckController = new ::svt::CheckBoxCellController(&aCellCheckBox);
@@ -3937,6 +3936,63 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, const ResId& rId,
         InsertDataColumn( i, *aTitles[i - 1], nWidth,
                           HIB_STDSTYLE, HEADERBAR_APPEND );
 
+}
+
+void SwEntryBrowseBox::Resize()
+{
+    SwEntryBrowseBox_Base::Resize();
+
+    Dialog *pDlg = GetParentDialog();
+    if (pDlg && pDlg->isCalculatingInitialLayoutSize())
+    {
+        long nWidth = GetSizePixel().Width();
+        std::vector<long> aWidths = GetOptimalColWidths();
+        long nNaturalWidth(::std::accumulate(aWidths.begin(), aWidths.end(), 0));
+        long nExcess = ((nWidth - nNaturalWidth) / aWidths.size()) - 1;
+
+        for (size_t i = 0; i < aWidths.size(); ++i)
+            SetColumnWidth(i+1, aWidths[i] + nExcess);
+    }
+}
+
+std::vector<long> SwEntryBrowseBox::GetOptimalColWidths() const
+{
+    std::vector<long> aWidths;
+
+    long nStandardColMinWidth = approximate_char_width() * 16;
+    long nYesNoWidth = approximate_char_width() * 5;
+    nYesNoWidth = std::max(nYesNoWidth, GetTextWidth(sYes));
+    nYesNoWidth = std::max(nYesNoWidth, GetTextWidth(sNo));
+    for (sal_uInt16 i = 1; i < 6; i++)
+    {
+        OUString sTitle = GetColumnTitle(i);
+        long nColWidth = std::max(nStandardColMinWidth, GetTextWidth(sTitle));
+        nColWidth += 12;
+        aWidths.push_back(nColWidth);
+    }
+
+    for (sal_uInt16 i = 6; i < 8; i++)
+    {
+        OUString sTitle = GetColumnTitle(i);
+        long nColWidth = std::max(nYesNoWidth, GetTextWidth(sTitle));
+        nColWidth += 12;
+        aWidths.push_back(nColWidth);
+    }
+
+    return aWidths;
+}
+
+Size SwEntryBrowseBox::GetOptimalSize() const
+{
+    Size aSize = LogicToPixel(Size(276 , 175), MapMode(MAP_APPFONT));
+
+    std::vector<long> aWidths = GetOptimalColWidths();
+
+    long nWidth(::std::accumulate(aWidths.begin(), aWidths.end(), 0));
+
+    aSize.Width() = std::max(aSize.Width(), nWidth);
+
+    return aSize;
 }
 
 sal_Bool    SwEntryBrowseBox::SeekRow( long nRow )
@@ -4150,19 +4206,18 @@ sal_Bool SwEntryBrowseBox::IsModified()const
 }
 
 SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkURL,
-        const String& rAutoMarkType, bool bCreate) :
-    ModalDialog(pParent, SW_RES(DLG_CREATE_AUTOMARK)),
-    aOKPB(      this, SW_RES(PB_OK      )),
-    aCancelPB(  this, SW_RES(PB_CANCEL  )),
-    aHelpPB(    this, SW_RES(PB_HELP        )),
-    aEntriesBB( this, SW_RES(BB_ENTRIES )),
-    aEntriesFL( this, SW_RES(FL_ENTRIES  )),
-    sAutoMarkURL(rAutoMarkURL),
-    sAutoMarkType(rAutoMarkType),
-    bCreateMode(bCreate)
+        const String& rAutoMarkType, bool bCreate)
+    : ModalDialog(pParent, "CreateAutomarkDialog",
+        "modules/swriter/ui/createautomarkdialog.ui")
+    , sAutoMarkURL(rAutoMarkURL)
+    , sAutoMarkType(rAutoMarkType)
+    , bCreateMode(bCreate)
 {
-    FreeResource();
-    aOKPB.SetClickHdl(LINK(this, SwAutoMarkDlg_Impl, OkHdl));
+    get(m_pOKPB, "ok");
+    m_pEntriesBB = new SwEntryBrowseBox(get<VclContainer>("area"), this);
+    m_pEntriesBB->set_expand(true);
+    m_pEntriesBB->Show();
+    m_pOKPB->SetClickHdl(LINK(this, SwAutoMarkDlg_Impl, OkHdl));
 
     String sTitle = GetText();
     sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM(": "));
@@ -4170,12 +4225,12 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkU
     SetText(sTitle);
     bool bError = false;
     if( bCreateMode )
-        aEntriesBB.RowInserted(0, 1, sal_True);
+        m_pEntriesBB->RowInserted(0, 1, sal_True);
     else
     {
         SfxMedium aMed( sAutoMarkURL, STREAM_STD_READ );
         if( aMed.GetInStream() && !aMed.GetInStream()->GetError() )
-            aEntriesBB.ReadEntries( *aMed.GetInStream() );
+            m_pEntriesBB->ReadEntries( *aMed.GetInStream() );
         else
             bError = true;
     }
@@ -4186,12 +4241,13 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkU
 
 SwAutoMarkDlg_Impl::~SwAutoMarkDlg_Impl()
 {
+    delete m_pEntriesBB;
 }
 
 IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl)
 {
     bool bError = false;
-    if(aEntriesBB.IsModified() || bCreateMode)
+    if(m_pEntriesBB->IsModified() || bCreateMode)
     {
         SfxMedium aMed( sAutoMarkURL,
                         bCreateMode ? STREAM_WRITE
@@ -4200,7 +4256,7 @@ IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl)
         pStrm->SetStreamCharSet( RTL_TEXTENCODING_MS_1253 );
         if( !pStrm->GetError() )
         {
-            aEntriesBB.WriteEntries( *pStrm );
+            m_pEntriesBB->WriteEntries( *pStrm );
             aMed.Commit();
         }
         else

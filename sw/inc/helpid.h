@@ -410,7 +410,6 @@
 #define HID_AUTH_FIELD_ISBN                                     "SW_HID_AUTH_FIELD_ISBN"
 
 #define HID_INSERT_INDEX_ENTRY_LEVEL_LB                         "SW_HID_INSERT_INDEX_ENTRY_LEVEL_LB"
-#define HID_DLG_CREATE_AUTOMARK                                 "SW_HID_DLG_CREATE_AUTOMARK"
 #define HID_BUSINESS_CARD_CONTENT                               "SW_HID_BUSINESS_CARD_CONTENT"
 #define HID_SAVE_LABEL_DLG                                      "SW_HID_SAVE_LABEL_DLG"
 #define HID_BUSINESS_FMT_PAGE                                   "SW_HID_BUSINESS_FMT_PAGE"

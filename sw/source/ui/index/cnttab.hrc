@@ -203,21 +203,6 @@
 #define CB_SHOWEXAMPLE      14
 
 
-// AutoMark dialog
-#define BB_ENTRIES          1
-#define FL_ENTRIES          2
-
-#define ST_SEARCH           10
-#define ST_ALTERNATIVE      11
-#define ST_PRIMKEY          12
-#define ST_SECKEY           13
-#define ST_COMMENT          14
-#define ST_CASESENSITIVE    15
-#define ST_WORDONLY         16
-#define ST_TRUE             17
-#define ST_FALSE            18
-
-
 //ButtonMenu
 #define MN_AUTOMARK_OPEN    1
 #define MN_AUTOMARK_NEW     2
