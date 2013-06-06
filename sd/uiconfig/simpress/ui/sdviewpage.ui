@@ -19,9 +19,10 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
             <child>
               <object class="GtkCheckButton" id="ruler">
-                <property name="label" translatable="yes">Rulers _visible</property>
+                <property name="label" translatable="yes">_Rulers visible</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -69,7 +70,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="moveoutline">
-                <property name="label" translatable="yes">Co_ntour of each individual object</property>
+                <property name="label" translatable="yes">_Contour of each individual object</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
