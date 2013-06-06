@@ -24,6 +24,7 @@
 #include "refreshtimer.hxx"
 #include "address.hxx"
 #include "global.hxx"
+#include "dbdataformatting.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
@@ -42,6 +43,7 @@ private:
     boost::scoped_ptr<ScQueryParam> mpQueryParam;
     boost::scoped_ptr<ScSubTotalParam> mpSubTotal;
     boost::scoped_ptr<ScImportParam> mpImportParam;
+    boost::scoped_ptr<ScDBDataFormatting> mpTableFormatData;
 
     // DBParam
     const OUString aName;
@@ -122,6 +124,11 @@ public:
 
     void        GetImportParam(ScImportParam& rImportParam) const;
     void        SetImportParam(const ScImportParam& rImportParam);
+
+    //The getter and setter methods for mpTableFormatData will be called
+    //From the alternating coloring dialog hence SC_DLLPUBLIC.
+    SC_DLLPUBLIC void        SetTableFormatting( const ScDBDataFormatting& rTableFormatData );
+    SC_DLLPUBLIC void        GetTableFormatting( ScDBDataFormatting& rTableFormatData ) const;
 
     bool        IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
     bool        IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;

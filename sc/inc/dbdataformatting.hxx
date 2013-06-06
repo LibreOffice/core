@@ -23,7 +23,6 @@
 
 class ScDBDataFormatting
 {
-    private:
         OUString maFirstRowStripeStyle;
         OUString maSecondRowStripeStyle;
         OUString maFirstColStripeStyle;
@@ -31,7 +30,8 @@ class ScDBDataFormatting
         bool bBandedRows;
         bool bBandedColumns;
     public:
-        ScDBDataFormatting(const OUString& rFirstRowStripeStyle, const OUString& rSecondRowStripeStyle, const OUString& rFirstColStripeStyle, const OUString& rSecondColStripeStyle);
+        ScDBDataFormatting(const OUString& rFirstRowStripeStyle, const OUString& rSecondRowStripeStyle, const OUString& rFirstColStripeStyle, const OUString& rSecondColStripeStyle, bool bBRows, bool bBCols);
+        ScDBDataFormatting( const ScDBDataFormatting& rTableFormatData );
         void SetBandedRows( bool bBRows );
         bool GetBandedRows();
         void SetBandedColumns( bool bBCols );
