@@ -32,7 +32,6 @@
 #include <sfx2/sidebar/Tools.hxx>
 #include <svx/sidebar/PopupContainer.hxx>
 #include <sfx2/dispatch.hxx>
-//#include <sfx2/imagemgr.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -133,119 +132,119 @@ void ParaPropertyPanel::HandleContextChange (
     switch (maContext.GetCombinedContext_DI())
     {
         case CombinedEnumContext(Application_Calc, Context_DrawText):
-            maTBxVertAlign->Show();
-            maTBxVertAlignBackground->Show();
-            maTBxBackColor->Hide();
-            maTBxBackColorBackground->Hide();
-            maTBxNumBullet->Hide();
-            maTBxNumBulletBackground->Hide();
+            mpTBxVertAlign->Show();
+            mpTBxVertAlignBackground->Show();
+            mpTBxBackColor->Hide();
+            mpTBxBackColorBackground->Hide();
+            mpTBxNumBullet->Hide();
+            mpTBxNumBulletBackground->Hide();
             ReSize(false);
-            maTbxIndent_IncDec->Show();
-            maTbxIndent_IncDecBackground->Show();
-            maTbxProDemote->Hide();
-            maTbxProDemoteBackground->Hide();
+            mpTbxIndent_IncDec->Show();
+            mpTbxIndent_IncDecBackground->Show();
+            mpTbxProDemote->Hide();
+            mpTbxProDemoteBackground->Hide();
             break;
 
         case CombinedEnumContext(Application_DrawImpress, Context_Draw):
         case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
         case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
-            maTBxVertAlign->Hide();
-            maTBxVertAlignBackground->Hide();
-            maTBxBackColor->Hide();
-            maTBxBackColorBackground->Hide();
-            maTBxNumBullet->Show();
-            maTBxNumBulletBackground->Show();
+            mpTBxVertAlign->Hide();
+            mpTBxVertAlignBackground->Hide();
+            mpTBxBackColor->Hide();
+            mpTBxBackColorBackground->Hide();
+            mpTBxNumBullet->Show();
+            mpTBxNumBulletBackground->Show();
             ReSize(true);
-            maTbxIndent_IncDec->Hide();
-            maTbxIndent_IncDecBackground->Hide();
-            maTbxProDemote->Show();
-            maTbxProDemoteBackground->Show();
+            mpTbxIndent_IncDec->Hide();
+            mpTbxIndent_IncDecBackground->Hide();
+            mpTbxProDemote->Show();
+            mpTbxProDemoteBackground->Show();
             break;
 
         case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
-            maTBxVertAlign->Show();
-            maTBxVertAlignBackground->Show();
-            maTBxBackColor->Hide();
-            maTBxBackColorBackground->Hide();
-            maTBxNumBullet->Show();
-            maTBxNumBulletBackground->Show();
+            mpTBxVertAlign->Show();
+            mpTBxVertAlignBackground->Show();
+            mpTBxBackColor->Hide();
+            mpTBxBackColorBackground->Hide();
+            mpTBxNumBullet->Show();
+            mpTBxNumBulletBackground->Show();
             ReSize(true);
-            maTbxIndent_IncDec->Hide();
-            maTbxIndent_IncDecBackground->Hide();
-            maTbxProDemote->Show();
-            maTbxProDemoteBackground->Show();
+            mpTbxIndent_IncDec->Hide();
+            mpTbxIndent_IncDecBackground->Hide();
+            mpTbxProDemote->Show();
+            mpTbxProDemoteBackground->Show();
             break;
 
         case CombinedEnumContext(Application_DrawImpress, Context_Table):
-            maTBxVertAlign->Show();
-            maTBxVertAlignBackground->Show();
-            maTBxBackColor->Hide();
-            maTBxBackColorBackground->Hide();
-            maTBxNumBullet->Show();
-            maTBxNumBulletBackground->Show();
+            mpTBxVertAlign->Show();
+            mpTBxVertAlignBackground->Show();
+            mpTBxBackColor->Hide();
+            mpTBxBackColorBackground->Hide();
+            mpTBxNumBullet->Show();
+            mpTBxNumBulletBackground->Show();
             ReSize(true);
-            maTbxIndent_IncDec->Hide();
-            maTbxIndent_IncDecBackground->Hide();
-            maTbxProDemote->Show();
-            maTbxProDemoteBackground->Show();
+            mpTbxIndent_IncDec->Hide();
+            mpTbxIndent_IncDecBackground->Hide();
+            mpTbxProDemote->Show();
+            mpTbxProDemoteBackground->Show();
             break;
 
         case CombinedEnumContext(Application_WriterVariants, Context_Default):
         case CombinedEnumContext(Application_WriterVariants, Context_Text):
-            maTBxVertAlign->Hide();
-            maTBxVertAlignBackground->Hide();
-            maTBxBackColor->Show();
-            maTBxBackColorBackground->Show();
-            maTBxNumBullet->Show();
+            mpTBxVertAlign->Hide();
+            mpTBxVertAlignBackground->Hide();
+            mpTBxBackColor->Show();
+            mpTBxBackColorBackground->Show();
+            mpTBxNumBullet->Show();
 
-            maTBxNumBulletBackground->Show();
+            mpTBxNumBulletBackground->Show();
             ReSize(true);
-            maTbxIndent_IncDec->Show();
-            maTbxIndent_IncDecBackground->Show();
-            maTbxProDemote->Hide();
-            maTbxProDemoteBackground->Hide();
+            mpTbxIndent_IncDec->Show();
+            mpTbxIndent_IncDecBackground->Show();
+            mpTbxProDemote->Hide();
+            mpTbxProDemoteBackground->Hide();
             break;
 
         case CombinedEnumContext(Application_WriterVariants, Context_Table):
-            maTBxVertAlign->Show();
-            maTBxVertAlignBackground->Show();
-            maTBxBackColor->Show();
-            maTBxBackColorBackground->Show();
-            maTBxNumBullet->Show();
-            maTBxNumBulletBackground->Show();
+            mpTBxVertAlign->Show();
+            mpTBxVertAlignBackground->Show();
+            mpTBxBackColor->Show();
+            mpTBxBackColorBackground->Show();
+            mpTBxNumBullet->Show();
+            mpTBxNumBulletBackground->Show();
             ReSize(true);
-            maTbxIndent_IncDec->Show();
-            maTbxIndent_IncDecBackground->Show();
-            maTbxProDemote->Hide();
-            maTbxProDemoteBackground->Hide();
+            mpTbxIndent_IncDec->Show();
+            mpTbxIndent_IncDecBackground->Show();
+            mpTbxProDemote->Hide();
+            mpTbxProDemoteBackground->Hide();
             break;
 
         case CombinedEnumContext(Application_WriterVariants, Context_DrawText):
-            maTBxVertAlign->Show();
-            maTBxVertAlignBackground->Show();
-            maTBxBackColor->Hide();
-            maTBxBackColorBackground->Hide();
-            maTBxNumBullet->Hide();
-            maTBxNumBulletBackground->Hide();
+            mpTBxVertAlign->Show();
+            mpTBxVertAlignBackground->Show();
+            mpTBxBackColor->Hide();
+            mpTBxBackColorBackground->Hide();
+            mpTBxNumBullet->Hide();
+            mpTBxNumBulletBackground->Hide();
             ReSize(false);
-            maTbxIndent_IncDec->Show();
-            maTbxIndent_IncDecBackground->Show();
-            maTbxProDemote->Hide();
-            maTbxProDemoteBackground->Hide();
+            mpTbxIndent_IncDec->Show();
+            mpTbxIndent_IncDecBackground->Show();
+            mpTbxProDemote->Hide();
+            mpTbxProDemoteBackground->Hide();
             break;
 
         case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
-            maTBxVertAlign->Hide();
-            maTBxVertAlignBackground->Hide();
-            maTBxBackColor->Hide();
-            maTBxBackColorBackground->Hide();
-            maTBxNumBullet->Hide();
-            maTBxNumBulletBackground->Hide();
+            mpTBxVertAlign->Hide();
+            mpTBxVertAlignBackground->Hide();
+            mpTBxBackColor->Hide();
+            mpTBxBackColorBackground->Hide();
+            mpTBxNumBullet->Hide();
+            mpTBxNumBulletBackground->Hide();
             ReSize(false);
-            maTbxIndent_IncDec->Show();
-            maTbxIndent_IncDecBackground->Show();
-            maTbxProDemote->Hide();
-            maTbxProDemoteBackground->Hide();
+            mpTbxIndent_IncDec->Show();
+            mpTbxIndent_IncDecBackground->Show();
+            mpTbxProDemote->Hide();
+            mpTbxProDemoteBackground->Hide();
             break;
 
         case CombinedEnumContext(Application_Calc, Context_EditCell):
@@ -294,19 +293,19 @@ void ParaPropertyPanel::ReSize(bool bSize)
     if(bSize)
     {
         //Paragraph spacing
-        maFTUL->SetPosPixel(POS_FT_PARA_SPACE);
-        maTbxUL_IncDec->SetPosPixel(POS_TBX_PARA_SPACE_INC_DEC);
-        maTopDist->SetPosPixel(POS_MBX_TOP_DIST);
-        maBottomDist->SetPosPixel(POS_MBX_BOT_DIST);
+        mpFTUL->SetPosPixel(POS_FT_PARA_SPACE);
+        mpTbxUL_IncDec->SetPosPixel(POS_TBX_PARA_SPACE_INC_DEC);
+        mpTopDist->SetPosPixel(POS_MBX_TOP_DIST);
+        mpBottomDist->SetPosPixel(POS_MBX_BOT_DIST);
         //Indent
-        maFTIndent->SetPosPixel(POS_FT_PARA_INDENT);
-        maTbxIndent_IncDec->SetPosPixel(POS_TBX_PARA_INDENT_INC_DEC);
-        maTbxProDemote->SetPosPixel(POS_TBX_PARA_INDENT_INC_DEC);
-        maLeftIndent->SetPosPixel(POS_MBX_LEFT_DIST);
-        maRightIndent->SetPosPixel(POS_MBX_RIGHT_DIST);
-        maFLineIndent->SetPosPixel(POS_MBX_FLINE_DIST);
+        mpFTIndent->SetPosPixel(POS_FT_PARA_INDENT);
+        mpTbxIndent_IncDec->SetPosPixel(POS_TBX_PARA_INDENT_INC_DEC);
+        mpTbxProDemote->SetPosPixel(POS_TBX_PARA_INDENT_INC_DEC);
+        mpLeftIndent->SetPosPixel(POS_MBX_LEFT_DIST);
+        mpRightIndent->SetPosPixel(POS_MBX_RIGHT_DIST);
+        mpFLineIndent->SetPosPixel(POS_MBX_FLINE_DIST);
         //Line spacing
-        maLineSPTbx->SetPosPixel(TBX_LINE_SPACE);
+        mpLineSPTbx->SetPosPixel(TBX_LINE_SPACE);
         //image
         maFISpace1.SetPosPixel(POS_IMG_SPACE1);
         maFISpace2.SetPosPixel(POS_IMG_SPACE2);
@@ -321,19 +320,19 @@ void ParaPropertyPanel::ReSize(bool bSize)
     else
     {
         //Paragraph spacing
-        maFTUL->SetPosPixel(POS_FT_PARA_SPACE2);
-        maTbxUL_IncDec->SetPosPixel(POS_TBX_PARA_SPACE_INC_DEC2);
-        maTopDist->SetPosPixel(POS_MBX_TOP_DIST2);
-        maBottomDist->SetPosPixel(POS_MBX_BOT_DIST2);
+        mpFTUL->SetPosPixel(POS_FT_PARA_SPACE2);
+        mpTbxUL_IncDec->SetPosPixel(POS_TBX_PARA_SPACE_INC_DEC2);
+        mpTopDist->SetPosPixel(POS_MBX_TOP_DIST2);
+        mpBottomDist->SetPosPixel(POS_MBX_BOT_DIST2);
         //Indent
-        maFTIndent->SetPosPixel(POS_FT_PARA_INDENT2);
-        maTbxIndent_IncDec->SetPosPixel(POS_TBX_PARA_INDENT_INC_DEC2);
-        maTbxProDemote->SetPosPixel(POS_TBX_PARA_INDENT_INC_DEC2);
-        maLeftIndent->SetPosPixel(POS_MBX_LEFT_DIST2);
-        maRightIndent->SetPosPixel(POS_MBX_RIGHT_DIST2);
-        maFLineIndent->SetPosPixel(POS_MBX_FLINE_DIST2);
+        mpFTIndent->SetPosPixel(POS_FT_PARA_INDENT2);
+        mpTbxIndent_IncDec->SetPosPixel(POS_TBX_PARA_INDENT_INC_DEC2);
+        mpTbxProDemote->SetPosPixel(POS_TBX_PARA_INDENT_INC_DEC2);
+        mpLeftIndent->SetPosPixel(POS_MBX_LEFT_DIST2);
+        mpRightIndent->SetPosPixel(POS_MBX_RIGHT_DIST2);
+        mpFLineIndent->SetPosPixel(POS_MBX_FLINE_DIST2);
         //Line spacing
-        maLineSPTbx->SetPosPixel(TBX_LINE_SPACE2);
+        mpLineSPTbx->SetPosPixel(TBX_LINE_SPACE2);
         //image
         maFISpace1.SetPosPixel(POS_IMG_SPACE12);
         maFISpace2.SetPosPixel(POS_IMG_SPACE22);
@@ -370,140 +369,140 @@ void ParaPropertyPanel::EndNumberingPopupMode (void)
 
 void ParaPropertyPanel::InitToolBoxAlign()
 {
-    maAlignToolBox->SetItemImage(TOOLBOX_ITEM1, maLeftAlignControl.GetIcon());
-    maAlignToolBox->SetItemImage(TOOLBOX_ITEM2, maCenterAlignControl.GetIcon());
-    maAlignToolBox->SetItemImage(TOOLBOX_ITEM3, maRightAlignControl.GetIcon());
-    maAlignToolBox->SetItemImage(TOOLBOX_ITEM4, maJustifyAlignControl.GetIcon());
+    mpAlignToolBox->SetItemImage(TOOLBOX_ITEM1, maLeftAlignControl.GetIcon());
+    mpAlignToolBox->SetItemImage(TOOLBOX_ITEM2, maCenterAlignControl.GetIcon());
+    mpAlignToolBox->SetItemImage(TOOLBOX_ITEM3, maRightAlignControl.GetIcon());
+    mpAlignToolBox->SetItemImage(TOOLBOX_ITEM4, maJustifyAlignControl.GetIcon());
 
     Link aLink = LINK( this, ParaPropertyPanel, AlignStyleModifyHdl_Impl );
-    maAlignToolBox->SetSelectHdl( aLink );
-    Size aTbxSize (maAlignToolBox->CalcWindowSizePixel());
-    maAlignToolBox->SetOutputSizePixel( aTbxSize );
+    mpAlignToolBox->SetSelectHdl( aLink );
+    Size aTbxSize (mpAlignToolBox->CalcWindowSizePixel());
+    mpAlignToolBox->SetOutputSizePixel( aTbxSize );
 }
 
 void ParaPropertyPanel::InitToolBoxVertAlign()
 {
-    maTBxVertAlign->SetItemImage(IID_VERT_TOP, maVertTop.GetIcon());
-    maTBxVertAlign->SetItemImage(IID_VERT_CENTER, maVertCenter.GetIcon());
-    maTBxVertAlign->SetItemImage(IID_VERT_BOTTOM, maVertBottom.GetIcon());
-    maTBxVertAlign->SetSelectHdl(LINK(this,ParaPropertyPanel,VertTbxSelectHandler));
-    Size aTbxSize (maTBxVertAlign->CalcWindowSizePixel());
-    maTBxVertAlign->SetOutputSizePixel( aTbxSize );
+    mpTBxVertAlign->SetItemImage(IID_VERT_TOP, maVertTop.GetIcon());
+    mpTBxVertAlign->SetItemImage(IID_VERT_CENTER, maVertCenter.GetIcon());
+    mpTBxVertAlign->SetItemImage(IID_VERT_BOTTOM, maVertBottom.GetIcon());
+    mpTBxVertAlign->SetSelectHdl(LINK(this,ParaPropertyPanel,VertTbxSelectHandler));
+    Size aTbxSize (mpTBxVertAlign->CalcWindowSizePixel());
+    mpTBxVertAlign->SetOutputSizePixel( aTbxSize );
 }
 
 
 void ParaPropertyPanel::InitToolBoxIndent()
 {
     Link aLink = LINK( this, ParaPropertyPanel, ModifyIndentHdl_Impl );
-    maLeftIndent->SetModifyHdl( aLink );
-    maRightIndent->SetModifyHdl( aLink );
-    maFLineIndent->SetModifyHdl( aLink );
+    mpLeftIndent->SetModifyHdl( aLink );
+    mpRightIndent->SetModifyHdl( aLink );
+    mpFLineIndent->SetModifyHdl( aLink );
 
-    maLeftIndent->SetAccessibleName(maLeftIndent->GetQuickHelpText());
-    maRightIndent->SetAccessibleName(maRightIndent->GetQuickHelpText());
-    maFLineIndent->SetAccessibleName(maFLineIndent->GetQuickHelpText());
+    mpLeftIndent->SetAccessibleName(mpLeftIndent->GetQuickHelpText());
+    mpRightIndent->SetAccessibleName(mpRightIndent->GetQuickHelpText());
+    mpFLineIndent->SetAccessibleName(mpFLineIndent->GetQuickHelpText());
 
     if( Application::GetSettings().GetLayoutRTL())
     {
-        maTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM1, maIncIndentControl.GetIcon());
-        maTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM2, maDecIndentControl.GetIcon());
+        mpTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM1, maIncIndentControl.GetIcon());
+        mpTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM2, maDecIndentControl.GetIcon());
     }
     else
     {
-        maTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM1, maIncIndentControl.GetIcon());
-        maTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM2, maDecIndentControl.GetIcon());
+        mpTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM1, maIncIndentControl.GetIcon());
+        mpTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM2, maDecIndentControl.GetIcon());
     }
-    maTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM3,maIndHang);
+    mpTbxIndent_IncDec->SetItemImage(TOOLBOX_ITEM3,maIndHang);
     aLink = LINK( this, ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl );
-    maTbxIndent_IncDec->SetSelectHdl(aLink);
+    mpTbxIndent_IncDec->SetSelectHdl(aLink);
     m_eLRSpaceUnit = maLRSpaceControl.GetCoreMetric();
-    Size aTbxSize = maTbxIndent_IncDec->CalcWindowSizePixel();
-    maTbxIndent_IncDec->SetOutputSizePixel( aTbxSize );
+    Size aTbxSize = mpTbxIndent_IncDec->CalcWindowSizePixel();
+    mpTbxIndent_IncDec->SetOutputSizePixel( aTbxSize );
 
     if( Application::GetSettings().GetLayoutRTL())
     {
-        maTbxProDemote->SetItemImage(TOOLBOX_ITEM1, maOutLineLeftControl.GetIcon());
-        maTbxProDemote->SetItemImage(TOOLBOX_ITEM2, maOutLineRightControl.GetIcon());
+        mpTbxProDemote->SetItemImage(TOOLBOX_ITEM1, maOutLineLeftControl.GetIcon());
+        mpTbxProDemote->SetItemImage(TOOLBOX_ITEM2, maOutLineRightControl.GetIcon());
     }
     else
     {
-        maTbxProDemote->SetItemImage(TOOLBOX_ITEM1, maOutLineLeftControl.GetIcon());
-        maTbxProDemote->SetItemImage(TOOLBOX_ITEM2, maOutLineRightControl.GetIcon());
+        mpTbxProDemote->SetItemImage(TOOLBOX_ITEM1, maOutLineLeftControl.GetIcon());
+        mpTbxProDemote->SetItemImage(TOOLBOX_ITEM2, maOutLineRightControl.GetIcon());
     }
-    maTbxProDemote->SetItemImage(TOOLBOX_ITEM3,maIndHang);
+    mpTbxProDemote->SetItemImage(TOOLBOX_ITEM3,maIndHang);
     aLink = LINK( this, ParaPropertyPanel, ClickProDemote_Hdl_Impl );
-    maTbxProDemote->SetSelectHdl(aLink);
+    mpTbxProDemote->SetSelectHdl(aLink);
     m_eLRSpaceUnit = maLRSpaceControl.GetCoreMetric();
-    aTbxSize = maTbxProDemote->CalcWindowSizePixel();
-    maTbxProDemote->SetOutputSizePixel( aTbxSize );
+    aTbxSize = mpTbxProDemote->CalcWindowSizePixel();
+    mpTbxProDemote->SetOutputSizePixel( aTbxSize );
 }
 
 void ParaPropertyPanel::InitToolBoxBGColor()
 {
-    mpColorUpdater.reset(new ::svx::ToolboxButtonColorUpdater(SID_BACKGROUND_COLOR, TBI_BACK_COLOR, maTBxBackColor.get(), TBX_UPDATER_MODE_CHAR_COLOR_NEW ));
+    mpColorUpdater.reset(new ::svx::ToolboxButtonColorUpdater(SID_BACKGROUND_COLOR, TBI_BACK_COLOR, mpTBxBackColor.get(), TBX_UPDATER_MODE_CHAR_COLOR_NEW ));
 
-    maTBxBackColor->SetItemImage(TBI_BACK_COLOR, GetDisplayBackground().GetColor().IsDark()? maImgBackColorHigh : maImgBackColor);
-    maTBxBackColor->SetItemBits( TBI_BACK_COLOR, maTBxBackColor->GetItemBits( TBI_BACK_COLOR ) | TIB_DROPDOWNONLY );
+    mpTBxBackColor->SetItemImage(TBI_BACK_COLOR, GetDisplayBackground().GetColor().IsDark()? maImgBackColorHigh : maImgBackColor);
+    mpTBxBackColor->SetItemBits( TBI_BACK_COLOR, mpTBxBackColor->GetItemBits( TBI_BACK_COLOR ) | TIB_DROPDOWNONLY );
 
     Link aLink = LINK(this, ParaPropertyPanel, ToolBoxBackColorDDHandler);
-    maTBxBackColor->SetDropdownClickHdl ( aLink );
-    maTBxBackColor->SetSelectHdl ( aLink );
-    Size aTbxSize (maTBxBackColor->CalcWindowSizePixel());
-    maTBxBackColor->SetOutputSizePixel( aTbxSize );
+    mpTBxBackColor->SetDropdownClickHdl ( aLink );
+    mpTBxBackColor->SetSelectHdl ( aLink );
+    Size aTbxSize (mpTBxBackColor->CalcWindowSizePixel());
+    mpTBxBackColor->SetOutputSizePixel( aTbxSize );
 }
 
 void ParaPropertyPanel::InitToolBoxBulletsNumbering()
 {
-    maTBxNumBullet->SetItemImage(IID_BULLET, maBulletOnOff.GetIcon());
-    maTBxNumBullet->SetItemImage(IID_NUMBER, maNumberOnOff.GetIcon());
+    mpTBxNumBullet->SetItemImage(IID_BULLET, maBulletOnOff.GetIcon());
+    mpTBxNumBullet->SetItemImage(IID_NUMBER, maNumberOnOff.GetIcon());
 
-    maTBxNumBullet->SetDropdownClickHdl(LINK(this,ParaPropertyPanel,NumBTbxDDHandler));
-    maTBxNumBullet->SetSelectHdl(LINK(this,ParaPropertyPanel,NumBTbxSelectHandler));
-    Size aTbxSize (maTBxNumBullet->CalcWindowSizePixel());
-    maTBxNumBullet->SetOutputSizePixel( aTbxSize );
+    mpTBxNumBullet->SetDropdownClickHdl(LINK(this,ParaPropertyPanel,NumBTbxDDHandler));
+    mpTBxNumBullet->SetSelectHdl(LINK(this,ParaPropertyPanel,NumBTbxSelectHandler));
+    Size aTbxSize (mpTBxNumBullet->CalcWindowSizePixel());
+    mpTBxNumBullet->SetOutputSizePixel( aTbxSize );
 }
 void ParaPropertyPanel::InitToolBoxSpacing()
 {
     Link aLink = LINK( this, ParaPropertyPanel, ULSpaceHdl_Impl );
-    maTopDist->SetModifyHdl(aLink);
-    maBottomDist->SetModifyHdl( aLink );
+    mpTopDist->SetModifyHdl(aLink);
+    mpBottomDist->SetModifyHdl( aLink );
 
-    maTopDist->SetAccessibleName(maTopDist->GetQuickHelpText());
-    maBottomDist->SetAccessibleName(maBottomDist->GetQuickHelpText());
+    mpTopDist->SetAccessibleName(mpTopDist->GetQuickHelpText());
+    mpBottomDist->SetAccessibleName(mpBottomDist->GetQuickHelpText());
 
     // Use a form of image loading that can handle both .uno:<command>
     // and private:graphirepository... syntax.  This is necessary to
     // handle the workaround for accessing the images of commands
     // ParaspaceIncrease and ParaspaceDecrease.
     // See issue 122446 for more details.
-    maTbxUL_IncDec->SetItemImage(
+    mpTbxUL_IncDec->SetItemImage(
         BT_TBX_UL_INC,
-        sfx2::sidebar::Tools::GetImage(maTbxUL_IncDec->GetItemCommand(BT_TBX_UL_INC), mxFrame));
-    maTbxUL_IncDec->SetItemImage(
+        sfx2::sidebar::Tools::GetImage(mpTbxUL_IncDec->GetItemCommand(BT_TBX_UL_INC), mxFrame));
+    mpTbxUL_IncDec->SetItemImage(
         BT_TBX_UL_DEC,
-        sfx2::sidebar::Tools::GetImage(maTbxUL_IncDec->GetItemCommand(BT_TBX_UL_DEC), mxFrame));
+        sfx2::sidebar::Tools::GetImage(mpTbxUL_IncDec->GetItemCommand(BT_TBX_UL_DEC), mxFrame));
 
     aLink = LINK( this, ParaPropertyPanel, ClickUL_IncDec_Hdl_Impl );
-    maTbxUL_IncDec->SetSelectHdl(aLink);
+    mpTbxUL_IncDec->SetSelectHdl(aLink);
     m_eULSpaceUnit = maULSpaceControl.GetCoreMetric();
-    Size aTbxSize = maTbxUL_IncDec->CalcWindowSizePixel();
-    maTbxUL_IncDec->SetOutputSizePixel( aTbxSize );
+    Size aTbxSize = mpTbxUL_IncDec->CalcWindowSizePixel();
+    mpTbxUL_IncDec->SetOutputSizePixel( aTbxSize );
 }
 void ParaPropertyPanel::InitToolBoxLineSpacing()
 {
     Link aLink = LINK( this, ParaPropertyPanel, ClickLineSPDropDownHdl_Impl );
-    maLineSPTbx->SetDropdownClickHdl( aLink );
-    maLineSPTbx->SetSelectHdl( aLink );     //support keyinput "ENTER"
-    maLineSPTbx->SetItemBits( TOOLBOX_ITEM1, maLineSPTbx->GetItemBits( TOOLBOX_ITEM1 ) | TIB_DROPDOWNONLY );
-    maLineSPTbx->SetItemImage(TOOLBOX_ITEM1,maSpace3);
-    Size aTbxSize = maLineSPTbx->CalcWindowSizePixel();
-    maLineSPTbx->SetOutputSizePixel( aTbxSize );
+    mpLineSPTbx->SetDropdownClickHdl( aLink );
+    mpLineSPTbx->SetSelectHdl( aLink );     //support keyinput "ENTER"
+    mpLineSPTbx->SetItemBits( TOOLBOX_ITEM1, mpLineSPTbx->GetItemBits( TOOLBOX_ITEM1 ) | TIB_DROPDOWNONLY );
+    mpLineSPTbx->SetItemImage(TOOLBOX_ITEM1,maSpace3);
+    Size aTbxSize = mpLineSPTbx->CalcWindowSizePixel();
+    mpLineSPTbx->SetOutputSizePixel( aTbxSize );
 }
 
 void ParaPropertyPanel::initial()
 {
-    maFTUL->SetBackground(Wallpaper());
-    maFTIndent->SetBackground(Wallpaper());
+    mpFTUL->SetBackground(Wallpaper());
+    mpFTIndent->SetBackground(Wallpaper());
     maFISpace1.SetBackground(Wallpaper());
     maFISpace2.SetBackground(Wallpaper());
     maFIndent1.SetBackground(Wallpaper());
@@ -531,21 +530,21 @@ void ParaPropertyPanel::initial()
     InitToolBoxLineSpacing();
 
 #ifdef HAS_IA2
-    maAlignToolBox->SetAccRelationLabeledBy(&maAlignToolBox);
-    maTBxVertAlign->SetMpSubEditAccLableBy(&maTBxVertAlign);
-    maTBxNumBullet->SetAccRelationLabeledBy(&maTBxNumBullet);
-    maTBxBackColor->SetMpSubEditAccLableBy(&maTBxBackColor);
-    maFTUL->SetAccRelationLabeledBy(&maFTUL);
-    maTbxUL_IncDec->SetAccRelationLabeledBy(&maTbxUL_IncDec);
-    maTopDist->SetAccRelationLabeledBy(&maTopDist);
-    maBottomDist->SetAccRelationLabeledBy(&maBottomDist);
-    maLineSPTbx->SetAccRelationLabeledBy(&maLineSPTbx);
-    maFTIndent->SetAccRelationLabeledBy(&maFTIndent);
-    maTbxIndent_IncDec->SetAccRelationLabeledBy(&maTbxIndent_IncDec);
-    maTbxProDemote->SetAccRelationLabeledBy(&maTbxProDemote);
-    maLeftIndent->SetAccRelationLabeledBy(&maLeftIndent);
-    maRightIndent->SetAccRelationLabeledBy(&maRightIndent);
-    maFLineIndent->SetAccRelationLabeledBy(&maFLineIndent);
+    mpAlignToolBox->SetAccRelationLabeledBy(&mpAlignToolBox);
+    mpTBxVertAlign->SetMpSubEditAccLableBy(&mpTBxVertAlign);
+    mpTBxNumBullet->SetAccRelationLabeledBy(&mpTBxNumBullet);
+    mpTBxBackColor->SetMpSubEditAccLableBy(&mpTBxBackColor);
+    mpFTUL->SetAccRelationLabeledBy(&mpFTUL);
+    mpTbxUL_IncDec->SetAccRelationLabeledBy(&mpTbxUL_IncDec);
+    mpTopDist->SetAccRelationLabeledBy(&mpTopDist);
+    mpBottomDist->SetAccRelationLabeledBy(&mpBottomDist);
+    mpLineSPTbx->SetAccRelationLabeledBy(&mpLineSPTbx);
+    mpFTIndent->SetAccRelationLabeledBy(&mpFTIndent);
+    mpTbxIndent_IncDec->SetAccRelationLabeledBy(&mpTbxIndent_IncDec);
+    mpTbxProDemote->SetAccRelationLabeledBy(&mpTbxProDemote);
+    mpLeftIndent->SetAccRelationLabeledBy(&mpLeftIndent);
+    mpRightIndent->SetAccRelationLabeledBy(&mpRightIndent);
+    mpFLineIndent->SetAccRelationLabeledBy(&mpFLineIndent);
     mpColorUpdater->SetAccRelationLabeledBy(&mpColorUpdater);
 #endif
 }
@@ -622,23 +621,23 @@ IMPL_LINK(ParaPropertyPanel, VertTbxSelectHandler, ToolBox*, pToolBox)
     if (nId == 1)
     {
         nSID = SID_TABLE_VERT_NONE;
-        maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_CHECK);
-        maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
-        maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
+        mpTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_CHECK);
+        mpTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
+        mpTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
     }
     else if (nId == 2)
     {
         nSID = SID_TABLE_VERT_CENTER;
-        maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
-        maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_CHECK);
-        maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
+        mpTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
+        mpTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_CHECK);
+        mpTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
     }
     else if (nId == 3)
     {
         nSID = SID_TABLE_VERT_BOTTOM;
-        maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
-        maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
-        maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_CHECK);
+        mpTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
+        mpTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
+        mpTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_CHECK);
     }
     SfxBoolItem aBoolItem(nSID, sal_True);
     GetBindings()->GetDispatcher()->Execute(nSID, SFX_CALLMODE_RECORD, &aBoolItem, 0L);
@@ -650,18 +649,18 @@ void ParaPropertyPanel::VertStateChanged(sal_uInt16 nSID, SfxItemState eState, c
 {
     if (eState < SFX_ITEM_DONTCARE)
     {
-        maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
-        maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
-        maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
-        maTBxVertAlign->EnableItem(IID_VERT_TOP, sal_False);
-        maTBxVertAlign->EnableItem(IID_VERT_CENTER, sal_False);
-        maTBxVertAlign->EnableItem(IID_VERT_BOTTOM, sal_False);
+        mpTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
+        mpTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
+        mpTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
+        mpTBxVertAlign->EnableItem(IID_VERT_TOP, sal_False);
+        mpTBxVertAlign->EnableItem(IID_VERT_CENTER, sal_False);
+        mpTBxVertAlign->EnableItem(IID_VERT_BOTTOM, sal_False);
     }
     else
     {
-        maTBxVertAlign->EnableItem(IID_VERT_TOP, sal_True);
-        maTBxVertAlign->EnableItem(IID_VERT_CENTER, sal_True);
-        maTBxVertAlign->EnableItem(IID_VERT_BOTTOM, sal_True);
+        mpTBxVertAlign->EnableItem(IID_VERT_TOP, sal_True);
+        mpTBxVertAlign->EnableItem(IID_VERT_CENTER, sal_True);
+        mpTBxVertAlign->EnableItem(IID_VERT_BOTTOM, sal_True);
         if ( (eState >= SFX_ITEM_DEFAULT) && (pState->ISA(SfxBoolItem)))
         {
             const SfxBoolItem* pItem= (const SfxBoolItem*)pState;
@@ -671,44 +670,44 @@ void ParaPropertyPanel::VertStateChanged(sal_uInt16 nSID, SfxItemState eState, c
             {
                 if (nSID == SID_TABLE_VERT_NONE)
                 {
-                    maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_CHECK);
-                    maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
-                    maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
+                    mpTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_CHECK);
+                    mpTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
+                    mpTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
                 }
                 else if (nSID == SID_TABLE_VERT_CENTER)
                 {
-                    maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
-                    maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_CHECK);
-                    maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
+                    mpTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
+                    mpTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_CHECK);
+                    mpTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
                 }
                 else if (nSID == SID_TABLE_VERT_BOTTOM)
                 {
-                    maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
-                    maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
-                    maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_CHECK);
+                    mpTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
+                    mpTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
+                    mpTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_CHECK);
                 }
             }
             else
             {
                 if (nSID == SID_TABLE_VERT_NONE)
                 {
-                    maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
+                    mpTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
                 }
                 else if (nSID == SID_TABLE_VERT_CENTER)
                 {
-                    maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
+                    mpTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
                 }
                 else if (nSID == SID_TABLE_VERT_BOTTOM)
                 {
-                    maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
+                    mpTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
                 }
             }
         }
         else
         {
-            maTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
-            maTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
-            maTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
+            mpTBxVertAlign->SetItemState(IID_VERT_TOP, STATE_NOCHECK);
+            mpTBxVertAlign->SetItemState(IID_VERT_CENTER, STATE_NOCHECK);
+            mpTBxVertAlign->SetItemState(IID_VERT_BOTTOM, STATE_NOCHECK);
         }
     }
 }
@@ -821,9 +820,9 @@ IMPL_LINK( ParaPropertyPanel, AlignStyleModifyHdl_Impl, ToolBox*, pBox )
 IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl)
 {
     SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
-    aMargin.SetTxtLeft( (const long)GetCoreValue( *maLeftIndent.get(), m_eLRSpaceUnit ) );
-    aMargin.SetRight( (const long)GetCoreValue( *maRightIndent.get(), m_eLRSpaceUnit ) );
-    aMargin.SetTxtFirstLineOfst( (const short)GetCoreValue( *maFLineIndent.get(), m_eLRSpaceUnit ) );
+    aMargin.SetTxtLeft( (const long)GetCoreValue( *mpLeftIndent.get(), m_eLRSpaceUnit ) );
+    aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent.get(), m_eLRSpaceUnit ) );
+    aMargin.SetTxtFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent.get(), m_eLRSpaceUnit ) );
 
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_PARA_LRSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
@@ -855,8 +854,8 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
                     sal_Int64 nVal = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
                     nVal = OutputDevice::LogicToLogic( (long)nVal, MAP_100TH_MM, (MapUnit)m_eLRSpaceUnit );
                     aMargin.SetTxtLeft( (const long)nVal );
-                    aMargin.SetRight( (const long)GetCoreValue( *maRightIndent.get(), m_eLRSpaceUnit ) );
-                    aMargin.SetTxtFirstLineOfst( (const short)GetCoreValue( *maFLineIndent.get(), m_eLRSpaceUnit ) );
+                    aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent.get(), m_eLRSpaceUnit ) );
+                    aMargin.SetTxtFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent.get(), m_eLRSpaceUnit ) );
 
                     GetBindings()->GetDispatcher()->Execute(
                         SID_ATTR_PARA_LRSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
@@ -890,8 +889,8 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
                     nVal = OutputDevice::LogicToLogic( (long)nVal, MAP_100TH_MM, (MapUnit)m_eLRSpaceUnit );
 
                     aMargin.SetTxtLeft( (const long)nVal );
-                    aMargin.SetRight( (const long)GetCoreValue( *maRightIndent.get(), m_eLRSpaceUnit ) );
-                    aMargin.SetTxtFirstLineOfst( (const short)GetCoreValue( *maFLineIndent.get(), m_eLRSpaceUnit ) );
+                    aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent.get(), m_eLRSpaceUnit ) );
+                    aMargin.SetTxtFirstLineOfst( (const short)GetCoreValue( *mpFLineIndent.get(), m_eLRSpaceUnit ) );
 
                     GetBindings()->GetDispatcher()->Execute(
                         SID_ATTR_PARA_LRSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
@@ -902,9 +901,9 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
     case ID_HANGING_INDENT:
         {
             SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
-            aMargin.SetTxtLeft( (const long)GetCoreValue( *maLeftIndent.get(), m_eLRSpaceUnit ) + (const short)GetCoreValue( *maFLineIndent.get(), m_eLRSpaceUnit ) );
-            aMargin.SetRight( (const long)GetCoreValue( *maRightIndent.get(), m_eLRSpaceUnit ) );
-            aMargin.SetTxtFirstLineOfst( ((const short)GetCoreValue( *maFLineIndent.get(), m_eLRSpaceUnit ))*(-1) );
+            aMargin.SetTxtLeft( (const long)GetCoreValue( *mpLeftIndent.get(), m_eLRSpaceUnit ) + (const short)GetCoreValue( *mpFLineIndent.get(), m_eLRSpaceUnit ) );
+            aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent.get(), m_eLRSpaceUnit ) );
+            aMargin.SetTxtFirstLineOfst( ((const short)GetCoreValue( *mpFLineIndent.get(), m_eLRSpaceUnit ))*(-1) );
 
             GetBindings()->GetDispatcher()->Execute(
                 SID_ATTR_PARA_LRSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
@@ -931,9 +930,9 @@ IMPL_LINK(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl)
         case SD_HANGING_INDENT:
         {
             SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
-            aMargin.SetTxtLeft( (const long)GetCoreValue( *maLeftIndent.get(), m_eLRSpaceUnit ) + (const short)GetCoreValue( *maFLineIndent.get(), m_eLRSpaceUnit ) );
-            aMargin.SetRight( (const long)GetCoreValue( *maRightIndent.get(), m_eLRSpaceUnit ) );
-            aMargin.SetTxtFirstLineOfst( ((const short)GetCoreValue( *maFLineIndent.get(), m_eLRSpaceUnit ))*(-1) );
+            aMargin.SetTxtLeft( (const long)GetCoreValue( *mpLeftIndent.get(), m_eLRSpaceUnit ) + (const short)GetCoreValue( *mpFLineIndent.get(), m_eLRSpaceUnit ) );
+            aMargin.SetRight( (const long)GetCoreValue( *mpRightIndent.get(), m_eLRSpaceUnit ) );
+            aMargin.SetTxtFirstLineOfst( ((const short)GetCoreValue( *mpFLineIndent.get(), m_eLRSpaceUnit ))*(-1) );
 
             GetBindings()->GetDispatcher()->Execute( SID_ATTR_PARA_LRSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
         }
@@ -962,8 +961,8 @@ IMPL_LINK( ParaPropertyPanel, ClickLineSPDropDownHdl_Impl, ToolBox*, pBox )
 IMPL_LINK_NOARG( ParaPropertyPanel, ULSpaceHdl_Impl)
 {
     SvxULSpaceItem aMargin( SID_ATTR_PARA_ULSPACE );
-    aMargin.SetUpper( (sal_uInt16)GetCoreValue( *maTopDist.get(), m_eULSpaceUnit ) );
-    aMargin.SetLower( (sal_uInt16)GetCoreValue( *maBottomDist.get(), m_eULSpaceUnit ) );
+    aMargin.SetUpper( (sal_uInt16)GetCoreValue( *mpTopDist, m_eULSpaceUnit ) );
+    aMargin.SetLower( (sal_uInt16)GetCoreValue( *mpBottomDist, m_eULSpaceUnit ) );
 
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_PARA_ULSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
@@ -1039,11 +1038,11 @@ void ParaPropertyPanel::NotifyItemUpdate(
             m_eMetricUnit = GetCurrentUnit(eState,pState);
             if( m_eMetricUnit!=m_last_eMetricUnit )
             {
-                SetFieldUnit( *maLeftIndent.get(), m_eMetricUnit );
-                SetFieldUnit( *maRightIndent.get(), m_eMetricUnit );
-                SetFieldUnit( *maFLineIndent.get(), m_eMetricUnit );
-                SetFieldUnit( *maTopDist.get(), m_eMetricUnit );
-                SetFieldUnit( *maBottomDist.get(), m_eMetricUnit );
+                SetFieldUnit( *mpLeftIndent, m_eMetricUnit );
+                SetFieldUnit( *mpRightIndent, m_eMetricUnit );
+                SetFieldUnit( *mpFLineIndent, m_eMetricUnit );
+                SetFieldUnit( *mpTopDist, m_eMetricUnit );
+                SetFieldUnit( *mpBottomDist, m_eMetricUnit );
             }
             m_last_eMetricUnit = m_eMetricUnit;
         }
@@ -1115,52 +1114,52 @@ void ParaPropertyPanel::StateChangedAlignmentImpl( sal_uInt16 nSID, SfxItemState
             {
                 if(IsChecked)
                 {
-                    maAlignToolBox->SetItemState(BT_SUBSTLEFT,STATE_CHECK);
-                    maAlignToolBox->SetItemState(BT_SUBSTCENTER,STATE_NOCHECK);
-                    maAlignToolBox->SetItemState(BT_SUBSTRIGHT,STATE_NOCHECK);
-                    maAlignToolBox->SetItemState(BT_SUBSTJUSTIFY,STATE_NOCHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTLEFT,STATE_CHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTCENTER,STATE_NOCHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTRIGHT,STATE_NOCHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTJUSTIFY,STATE_NOCHECK);
                 }
                 else
-                    maAlignToolBox->SetItemState(BT_SUBSTLEFT,STATE_NOCHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTLEFT,STATE_NOCHECK);
             }
             break;
         case SID_ATTR_PARA_ADJUST_CENTER:
             {
                 if(IsChecked)
                 {
-                    maAlignToolBox->SetItemState(BT_SUBSTCENTER,STATE_CHECK);
-                    maAlignToolBox->SetItemState(BT_SUBSTLEFT,STATE_NOCHECK);
-                    maAlignToolBox->SetItemState(BT_SUBSTRIGHT,STATE_NOCHECK);
-                    maAlignToolBox->SetItemState(BT_SUBSTJUSTIFY,STATE_NOCHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTCENTER,STATE_CHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTLEFT,STATE_NOCHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTRIGHT,STATE_NOCHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTJUSTIFY,STATE_NOCHECK);
                 }
                 else
-                    maAlignToolBox->SetItemState(BT_SUBSTCENTER,STATE_NOCHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTCENTER,STATE_NOCHECK);
             }
             break;
         case SID_ATTR_PARA_ADJUST_RIGHT:
             {
                 if(IsChecked)
                 {
-                    maAlignToolBox->SetItemState(BT_SUBSTRIGHT,STATE_CHECK);
-                    maAlignToolBox->SetItemState(BT_SUBSTLEFT,STATE_NOCHECK);
-                    maAlignToolBox->SetItemState(BT_SUBSTCENTER,STATE_NOCHECK);
-                    maAlignToolBox->SetItemState(BT_SUBSTJUSTIFY,STATE_NOCHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTRIGHT,STATE_CHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTLEFT,STATE_NOCHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTCENTER,STATE_NOCHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTJUSTIFY,STATE_NOCHECK);
                 }
                 else
-                    maAlignToolBox->SetItemState(BT_SUBSTRIGHT,STATE_NOCHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTRIGHT,STATE_NOCHECK);
             }
             break;
         case SID_ATTR_PARA_ADJUST_BLOCK:
             {
                 if(IsChecked)
                 {
-                    maAlignToolBox->SetItemState(BT_SUBSTJUSTIFY,STATE_CHECK);
-                    maAlignToolBox->SetItemState(BT_SUBSTLEFT,STATE_NOCHECK);
-                    maAlignToolBox->SetItemState(BT_SUBSTCENTER,STATE_NOCHECK);
-                    maAlignToolBox->SetItemState(BT_SUBSTRIGHT,STATE_NOCHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTJUSTIFY,STATE_CHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTLEFT,STATE_NOCHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTCENTER,STATE_NOCHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTRIGHT,STATE_NOCHECK);
                 }
                 else
-                    maAlignToolBox->SetItemState(BT_SUBSTJUSTIFY,STATE_NOCHECK);
+                    mpAlignToolBox->SetItemState(BT_SUBSTJUSTIFY,STATE_NOCHECK);
             }
             break;
         }
@@ -1173,16 +1172,16 @@ void ParaPropertyPanel::StateChangedAlignmentImpl( sal_uInt16 nSID, SfxItemState
         switch (nSID)
         {
         case SID_ATTR_PARA_ADJUST_LEFT:
-            maAlignToolBox->SetItemState(BT_SUBSTLEFT,STATE_NOCHECK);
+            mpAlignToolBox->SetItemState(BT_SUBSTLEFT,STATE_NOCHECK);
             break;
         case SID_ATTR_PARA_ADJUST_CENTER:
-            maAlignToolBox->SetItemState(BT_SUBSTCENTER,STATE_NOCHECK);
+            mpAlignToolBox->SetItemState(BT_SUBSTCENTER,STATE_NOCHECK);
             break;
         case SID_ATTR_PARA_ADJUST_RIGHT:
-            maAlignToolBox->SetItemState(BT_SUBSTRIGHT,STATE_NOCHECK);
+            mpAlignToolBox->SetItemState(BT_SUBSTRIGHT,STATE_NOCHECK);
             break;
         case SID_ATTR_PARA_ADJUST_BLOCK:
-            maAlignToolBox->SetItemState(BT_SUBSTJUSTIFY,STATE_NOCHECK);
+            mpAlignToolBox->SetItemState(BT_SUBSTJUSTIFY,STATE_NOCHECK);
             break;
         }
     }
@@ -1197,11 +1196,11 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
     case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
     case CombinedEnumContext(Application_Calc, Context_DrawText):
         {
-            maLeftIndent->SetMin( DEFAULT_VALUE );
-            maRightIndent->SetMin( DEFAULT_VALUE );
-            maFLineIndent->SetMin( DEFAULT_VALUE );
-            maTbxIndent_IncDec->Show();
-            maTbxProDemote->Hide();
+            mpLeftIndent->SetMin( DEFAULT_VALUE );
+            mpRightIndent->SetMin( DEFAULT_VALUE );
+            mpFLineIndent->SetMin( DEFAULT_VALUE );
+            mpTbxIndent_IncDec->Show();
+            mpTbxProDemote->Hide();
         }
         break;
     case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
@@ -1210,22 +1209,22 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
     case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
     case CombinedEnumContext(Application_DrawImpress, Context_Table):
         {
-            maLeftIndent->SetMin( DEFAULT_VALUE );
-            maRightIndent->SetMin( DEFAULT_VALUE );
-            maFLineIndent->SetMin( DEFAULT_VALUE );
-            maTbxIndent_IncDec->Hide();
-            maTbxProDemote->Show();
+            mpLeftIndent->SetMin( DEFAULT_VALUE );
+            mpRightIndent->SetMin( DEFAULT_VALUE );
+            mpFLineIndent->SetMin( DEFAULT_VALUE );
+            mpTbxIndent_IncDec->Hide();
+            mpTbxProDemote->Show();
         }
         break;
     case CombinedEnumContext(Application_WriterVariants, Context_Default):
     case CombinedEnumContext(Application_WriterVariants, Context_Text):
     case CombinedEnumContext(Application_WriterVariants, Context_Table):
         {
-            maLeftIndent->SetMin( NEGA_MAXVALUE, FUNIT_100TH_MM );
-            maRightIndent->SetMin( NEGA_MAXVALUE, FUNIT_100TH_MM );
-            maFLineIndent->SetMin( NEGA_MAXVALUE, FUNIT_100TH_MM );
-            maTbxIndent_IncDec->Show();
-            maTbxProDemote->Hide();
+            mpLeftIndent->SetMin( NEGA_MAXVALUE, FUNIT_100TH_MM );
+            mpRightIndent->SetMin( NEGA_MAXVALUE, FUNIT_100TH_MM );
+            mpFLineIndent->SetMin( NEGA_MAXVALUE, FUNIT_100TH_MM );
+            mpTbxIndent_IncDec->Show();
+            mpTbxProDemote->Hide();
         }
         break;
     }
@@ -1246,23 +1245,23 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         aTxtFirstLineOfst = OutputDevice::LogicToLogic( aTxtFirstLineOfst, MAP_100TH_MM, (MapUnit)(SFX_MAPUNIT_TWIP) );
 
         long nVal = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
-        nVal = (long)maLeftIndent->Normalize( (long)nVal );
-        maLeftIndent->SetValue( nVal, FUNIT_100TH_MM );
+        nVal = (long)mpLeftIndent->Normalize( (long)nVal );
+        mpLeftIndent->SetValue( nVal, FUNIT_100TH_MM );
 
         if ( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Text)
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Default)
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Table))
         {
-            maFLineIndent->SetMin( nVal*(-1), FUNIT_100TH_MM );
+            mpFLineIndent->SetMin( nVal*(-1), FUNIT_100TH_MM );
         }
 
         long nrVal = OutputDevice::LogicToLogic( aTxtRight, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
-        nrVal = (long)maRightIndent->Normalize( (long)nrVal );
-        maRightIndent->SetValue( nrVal, FUNIT_100TH_MM );
+        nrVal = (long)mpRightIndent->Normalize( (long)nrVal );
+        mpRightIndent->SetValue( nrVal, FUNIT_100TH_MM );
 
         long nfVal = OutputDevice::LogicToLogic( aTxtFirstLineOfst, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
-        nfVal = (long)maFLineIndent->Normalize( (long)nfVal );
-        maFLineIndent->SetValue( nfVal, FUNIT_100TH_MM );
+        nfVal = (long)mpFLineIndent->Normalize( (long)nfVal );
+        mpFLineIndent->SetValue( nfVal, FUNIT_100TH_MM );
 
         switch (maContext.GetCombinedContext_DI())
         {
@@ -1272,9 +1271,9 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         case CombinedEnumContext(Application_WriterVariants, Context_Table):
         case CombinedEnumContext(Application_WriterVariants, Context_Annotation):
             {
-                maLeftIndent->SetMax( MAX_SW - nrVal, FUNIT_100TH_MM );
-                maRightIndent->SetMax( MAX_SW - nVal, FUNIT_100TH_MM );
-                maFLineIndent->SetMax( MAX_SW - nVal - nrVal, FUNIT_100TH_MM );
+                mpLeftIndent->SetMax( MAX_SW - nrVal, FUNIT_100TH_MM );
+                mpRightIndent->SetMax( MAX_SW - nVal, FUNIT_100TH_MM );
+                mpFLineIndent->SetMax( MAX_SW - nVal - nrVal, FUNIT_100TH_MM );
             }
             break;
         case CombinedEnumContext(Application_DrawImpress, Context_DrawText):
@@ -1283,52 +1282,52 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
         case CombinedEnumContext(Application_DrawImpress, Context_TextObject):
         case CombinedEnumContext(Application_DrawImpress, Context_Graphic):
             {
-                maLeftIndent->SetMax( MAX_SC_SD - nrVal, FUNIT_100TH_MM );
-                maRightIndent->SetMax( MAX_SC_SD - nVal, FUNIT_100TH_MM );
-                maFLineIndent->SetMax( MAX_SC_SD - nVal - nrVal, FUNIT_100TH_MM );
+                mpLeftIndent->SetMax( MAX_SC_SD - nrVal, FUNIT_100TH_MM );
+                mpRightIndent->SetMax( MAX_SC_SD - nVal, FUNIT_100TH_MM );
+                mpFLineIndent->SetMax( MAX_SC_SD - nVal - nrVal, FUNIT_100TH_MM );
             }
         }
 
-        maTbxIndent_IncDec->Enable();
-        maTbxIndent_IncDec->EnableItem(ID_HANGING_INDENT, sal_True);
+        mpTbxIndent_IncDec->Enable();
+        mpTbxIndent_IncDec->EnableItem(ID_HANGING_INDENT, sal_True);
         if ( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Text)
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Default)
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Table) )
         {
-            maTbxIndent_IncDec->EnableItem(BT_TBX_INDENT_INC, sal_True);
-            maTbxIndent_IncDec->EnableItem(BT_TBX_INDENT_DEC, sal_True);
+            mpTbxIndent_IncDec->EnableItem(BT_TBX_INDENT_INC, sal_True);
+            mpTbxIndent_IncDec->EnableItem(BT_TBX_INDENT_DEC, sal_True);
         }
 
-        maTbxProDemote->EnableItem(SD_HANGING_INDENT, sal_True);
+        mpTbxProDemote->EnableItem(SD_HANGING_INDENT, sal_True);
     }
     else if( eState == SFX_ITEM_DISABLED )
     {
-        maLeftIndent-> Disable();
-        maRightIndent->Disable();
-        maFLineIndent->Disable();
-        maTbxIndent_IncDec->Disable();
+        mpLeftIndent-> Disable();
+        mpRightIndent->Disable();
+        mpFLineIndent->Disable();
+        mpTbxIndent_IncDec->Disable();
         if( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Text)  &&
             maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Default) &&
             maContext.GetCombinedContext_DI() !=  CombinedEnumContext(Application_WriterVariants, Context_Table) )
-            maTbxIndent_IncDec->Disable();
+            mpTbxIndent_IncDec->Disable();
         else
-            maTbxIndent_IncDec->EnableItem(ID_HANGING_INDENT, sal_False);
+            mpTbxIndent_IncDec->EnableItem(ID_HANGING_INDENT, sal_False);
 
         //      maTbxProDemote->Disable();
-        maTbxProDemote->EnableItem(SD_HANGING_INDENT, sal_False);
+        mpTbxProDemote->EnableItem(SD_HANGING_INDENT, sal_False);
     }
     else
     {
-        maLeftIndent->SetEmptyFieldValue();
-        maRightIndent->SetEmptyFieldValue();
-        maFLineIndent->SetEmptyFieldValue();
+        mpLeftIndent->SetEmptyFieldValue();
+        mpRightIndent->SetEmptyFieldValue();
+        mpFLineIndent->SetEmptyFieldValue();
         if( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Text)  &&
             maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Default) &&
             maContext.GetCombinedContext_DI() !=  CombinedEnumContext(Application_WriterVariants, Context_Table) )
-            maTbxIndent_IncDec->Disable();
+            mpTbxIndent_IncDec->Disable();
         else
-            maTbxIndent_IncDec->EnableItem(ID_HANGING_INDENT, sal_False);
-        maTbxProDemote->EnableItem(SD_HANGING_INDENT, sal_False);
+            mpTbxIndent_IncDec->EnableItem(ID_HANGING_INDENT, sal_False);
+        mpTbxProDemote->EnableItem(SD_HANGING_INDENT, sal_False);
     }
 }
 
@@ -1346,8 +1345,8 @@ void ParaPropertyPanel::StateChangedLnSPImpl( sal_uInt16 /*nSID*/, SfxItemState 
 
 void ParaPropertyPanel::StateChangedULImpl( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
-    maTopDist->SetMax( maTopDist->Normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
-    maBottomDist->SetMax( maBottomDist->Normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
+    mpTopDist->SetMax( mpTopDist->Normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
+    mpBottomDist->SetMax( mpBottomDist->Normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
 
     if( pState && eState >= SFX_ITEM_AVAILABLE )
     {
@@ -1362,25 +1361,25 @@ void ParaPropertyPanel::StateChangedULImpl( sal_uInt16 /*nSID*/, SfxItemState eS
         maLower = OutputDevice::LogicToLogic( maLower, MAP_100TH_MM, (MapUnit)(SFX_MAPUNIT_TWIP) );
 
         sal_Int64 nVal = OutputDevice::LogicToLogic( maUpper, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
-        nVal = maTopDist->Normalize( nVal );
-        maTopDist->SetValue( nVal, FUNIT_100TH_MM );
+        nVal = mpTopDist->Normalize( nVal );
+        mpTopDist->SetValue( nVal, FUNIT_100TH_MM );
 
         nVal = OutputDevice::LogicToLogic( maLower, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
-        nVal = maBottomDist->Normalize( nVal );
-        maBottomDist->SetValue( nVal, FUNIT_100TH_MM );
-        maTbxUL_IncDec->Enable();
+        nVal = mpBottomDist->Normalize( nVal );
+        mpBottomDist->SetValue( nVal, FUNIT_100TH_MM );
+        mpTbxUL_IncDec->Enable();
     }
     else if(eState == SFX_ITEM_DISABLED )
     {
-        maTopDist->Disable();
-        maBottomDist->Disable();
-        maTbxUL_IncDec->Disable();
+        mpTopDist->Disable();
+        mpBottomDist->Disable();
+        mpTbxUL_IncDec->Disable();
     }
     else
     {
-        maTopDist->SetEmptyFieldValue();
-        maBottomDist->SetEmptyFieldValue();
-        maTbxUL_IncDec->Disable();
+        mpTopDist->SetEmptyFieldValue();
+        mpBottomDist->SetEmptyFieldValue();
+        mpTbxUL_IncDec->Disable();
     }
 }
 
@@ -1401,14 +1400,14 @@ void ParaPropertyPanel::StateChangeOutLineImpl( sal_uInt16 nSID, SfxItemState eS
             mbOutLineRight = 0;
     }
     if(mbOutLineLeft)
-        maTbxProDemote->EnableItem(BT_TBX_INDENT_DEMOTE, sal_True);
+        mpTbxProDemote->EnableItem(BT_TBX_INDENT_DEMOTE, sal_True);
     else
-        maTbxProDemote->EnableItem(BT_TBX_INDENT_DEMOTE, sal_False);
+        mpTbxProDemote->EnableItem(BT_TBX_INDENT_DEMOTE, sal_False);
 
     if(mbOutLineRight)
-        maTbxProDemote->EnableItem(BT_TBX_INDENT_PROMOTE, sal_True);
+        mpTbxProDemote->EnableItem(BT_TBX_INDENT_PROMOTE, sal_True);
     else
-        maTbxProDemote->EnableItem(BT_TBX_INDENT_PROMOTE, sal_False);
+        mpTbxProDemote->EnableItem(BT_TBX_INDENT_PROMOTE, sal_False);
 
 }
 
@@ -1421,7 +1420,7 @@ void ParaPropertyPanel::StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eSt
     {
         // Writer's text shell is the only one which provides reasonable states for Slots SID_INC_INDENT and SID_DEC_INDENT
         // - namely SFX_ITEM_UNKNOWN and SFX_ITEM_DISABLED
-        maTbxIndent_IncDec->EnableItem(
+        mpTbxIndent_IncDec->EnableItem(
             nSID == SID_INC_INDENT ? BT_TBX_INDENT_INC : BT_TBX_INDENT_DEC,
             ( pState && eState == SFX_ITEM_UNKNOWN ) ? sal_True : sal_False );
     }
@@ -1437,13 +1436,13 @@ void ParaPropertyPanel::StateChangeBulletNumImpl( sal_uInt16 nSID, SfxItemState 
         const sal_Bool aBool = (sal_Bool)pItem->GetValue();
         if (nSID==FN_NUM_NUMBERING_ON)
         {
-            maTBxNumBullet->SetItemState(
+            mpTBxNumBullet->SetItemState(
                 IID_NUMBER,
                 aBool ? STATE_CHECK : STATE_NOCHECK );
         }
         else if (nSID==FN_NUM_BULLET_ON)
         {
-            maTBxNumBullet->SetItemState(
+            mpTBxNumBullet->SetItemState(
                 IID_BULLET,
                 aBool ? STATE_CHECK : STATE_NOCHECK );
         }
@@ -1550,33 +1549,30 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
     SfxBindings* pBindings,
     const cssu::Reference<css::ui::XSidebar>& rxSidebar)
     : Control(pParent, SVX_RES(RID_SIDEBAR_PARA_PANEL)),
-      maAlignToolBoxBackground(ControlFactory::CreateToolBoxBackground(this)),
-      maAlignToolBox (ControlFactory::CreateToolBox(maAlignToolBoxBackground.get(),SVX_RES(TBX_HORIZONTALALIGNMENT))),
-      maTBxVertAlignBackground(ControlFactory::CreateToolBoxBackground(this)),
-      maTBxVertAlign (ControlFactory::CreateToolBox(maTBxVertAlignBackground.get(),SVX_RES(TBX_VERT_ALIGN))),
-      maTBxNumBulletBackground(ControlFactory::CreateToolBoxBackground(this)),
-      maTBxNumBullet (ControlFactory::CreateToolBox(maTBxNumBulletBackground.get(),SVX_RES(TBX_NUM_BULLET))),
-      maTBxBackColorBackground(ControlFactory::CreateToolBoxBackground(this)),
-      maTBxBackColor (ControlFactory::CreateToolBox(maTBxBackColorBackground.get(),SVX_RES(TBX_BACK_COLOR))),
-      maFTUL (new FixedText(this, SVX_RES(FT_SPACING))),
-      maTbxUL_IncDecBackground(ControlFactory::CreateToolBoxBackground(this)),
-      maTbxUL_IncDec (ControlFactory::CreateToolBox(maTbxUL_IncDecBackground.get(),SVX_RES(TBX_UL_INC_DEC))),
-      maFTIndent (new FixedText(this, SVX_RES(FT_INDENT))),
-      maTbxIndent_IncDecBackground(ControlFactory::CreateToolBoxBackground(this)),
-      maTbxIndent_IncDec (ControlFactory::CreateToolBox(maTbxIndent_IncDecBackground.get(),SVX_RES(TBX_INDENT_INC_DEC))),
+      mpAlignToolBoxBackground(ControlFactory::CreateToolBoxBackground(this)),
+      mpAlignToolBox (ControlFactory::CreateToolBox(mpAlignToolBoxBackground.get(),SVX_RES(TBX_HORIZONTALALIGNMENT))),
+      mpTBxVertAlignBackground(ControlFactory::CreateToolBoxBackground(this)),
+      mpTBxVertAlign (ControlFactory::CreateToolBox(mpTBxVertAlignBackground.get(),SVX_RES(TBX_VERT_ALIGN))),
+      mpTBxNumBulletBackground(ControlFactory::CreateToolBoxBackground(this)),
+      mpTBxNumBullet (ControlFactory::CreateToolBox(mpTBxNumBulletBackground.get(),SVX_RES(TBX_NUM_BULLET))),
+      mpTBxBackColorBackground(ControlFactory::CreateToolBoxBackground(this)),
+      mpTBxBackColor (ControlFactory::CreateToolBox(mpTBxBackColorBackground.get(),SVX_RES(TBX_BACK_COLOR))),
+      mpFTUL (new FixedText(this, SVX_RES(FT_SPACING))),
+      mpTbxUL_IncDecBackground(ControlFactory::CreateToolBoxBackground(this)),
+      mpTbxUL_IncDec (ControlFactory::CreateToolBox(mpTbxUL_IncDecBackground.get(),SVX_RES(TBX_UL_INC_DEC))),
+      mpTopDist (new SvxRelativeField(this, SVX_RES(MF_ABOVE_PARASPACING))),
+      mpBottomDist (new SvxRelativeField(this, SVX_RES(MF_BELOW_PARASPACING))),
+      mpLineSPTbxBackground(ControlFactory::CreateToolBoxBackground(this)),
+      mpLineSPTbx (ControlFactory::CreateToolBox(mpLineSPTbxBackground.get(),SVX_RES(TBX_LINESP))),
+      mpFTIndent (new FixedText(this, SVX_RES(FT_INDENT))),
+      mpTbxIndent_IncDecBackground(ControlFactory::CreateToolBoxBackground(this)),
+      mpTbxIndent_IncDec (ControlFactory::CreateToolBox(mpTbxIndent_IncDecBackground.get(),SVX_RES(TBX_INDENT_INC_DEC))),
+      mpTbxProDemoteBackground(ControlFactory::CreateToolBoxBackground(this)),
+      mpTbxProDemote (ControlFactory::CreateToolBox(mpTbxProDemoteBackground.get(),SVX_RES(TBX_INDENT_PRO_DEMOTE))),
+      mpLeftIndent (new SvxRelativeField(this, SVX_RES(MF_BEFORE_INDENT))),
+      mpRightIndent (new SvxRelativeField(this, SVX_RES(MF_AFTER_INDENT))),
+      mpFLineIndent (new SvxRelativeField(this, SVX_RES(MF_FL_INDENT))),
 
-      maTopDist (new SvxRelativeField(this, SVX_RES(MF_ABOVE_PARASPACING))),
-      maLeftIndent (new SvxRelativeField(this, SVX_RES(MF_BEFORE_INDENT))),
-
-      maBottomDist (new SvxRelativeField(this, SVX_RES(MF_BELOW_PARASPACING))),
-      maRightIndent (new SvxRelativeField(this, SVX_RES(MF_AFTER_INDENT))),
-
-      maLineSPTbxBackground(ControlFactory::CreateToolBoxBackground(this)),
-      maLineSPTbx (ControlFactory::CreateToolBox(maLineSPTbxBackground.get(),SVX_RES(TBX_LINESP))),
-      maFLineIndent (new SvxRelativeField(this, SVX_RES(MF_FL_INDENT))),
-
-      maTbxProDemoteBackground(ControlFactory::CreateToolBoxBackground(this)),
-      maTbxProDemote (ControlFactory::CreateToolBox(maTbxProDemoteBackground.get(),SVX_RES(TBX_INDENT_PRO_DEMOTE))),
       mpColorUpdater (),
       maFISpace1 ( this, SVX_RES( FI_SPACE1)),
       maFISpace2 ( this, SVX_RES( FI_SPACE2)),
