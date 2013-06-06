@@ -2170,7 +2170,7 @@ void GtkSalFrame::updateWMClass()
     if( IS_WIDGET_REALIZED( m_pWindow ) )
     {
         XClassHint* pClass = XAllocClassHint();
-        OString aResName = SalGenericSystem::getFrameResName( m_nExtStyle );
+        OString aResName = SalGenericSystem::getFrameResName();
         pClass->res_name  = const_cast<char*>(aResName.getStr());
         pClass->res_class = const_cast<char*>(pResClass);
         XSetClassHint( display,

@@ -29,6 +29,7 @@
 #include <rtl/bootstrap.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
+#include <unotools/configmgr.hxx>
 
 #include "vcl/unohelp.hxx"
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -179,7 +180,8 @@ const char* SalGenericSystem::getFrameResName()
                 aResName.append( pEnv );
         }
         if( !aResName.getLength() )
-            aResName.append( "VCLSalFrame" );
+            aResName.append( OUStringToOString( utl::ConfigManager::getProductName().toAsciiLowerCase(),
+                osl_getThreadTextEncoding()));
     }
     return aResName.getStr();
 }
@@ -198,19 +200,9 @@ const char* SalGenericSystem::getFrameClassName()
         if( !aProduct.isEmpty() )
             aClassName.append( OUStringToOString( aProduct, osl_getThreadTextEncoding() ) );
         else
-            aClassName.append( "VCLSalFrame" );
+            aClassName.append( OUStringToOString( utl::ConfigManager::getProductName(), osl_getThreadTextEncoding()));
     }
     return aClassName.getStr();
-}
-
-OString SalGenericSystem::getFrameResName( SalExtStyle nStyle )
-{
-    OStringBuffer aBuf( 64 );
-    aBuf.append( getFrameResName() );
-    if( (nStyle & SAL_FRAME_EXT_STYLE_DOCUMENT) )
-        aBuf.append( ".DocumentWindow" );
-
-    return aBuf.makeStringAndClear();
 }
 
 #endif

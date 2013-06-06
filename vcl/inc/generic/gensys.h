@@ -47,7 +47,6 @@ class VCL_DLLPUBLIC SalGenericSystem : public SalSystem
     // Simple helpers for X11 WM_CLASS hints
     static const char *getFrameResName();
     static const char *getFrameClassName();
-    static OString getFrameResName( SalExtStyle nStyle );
 #endif
 };
 
