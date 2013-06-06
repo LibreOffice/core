@@ -56,9 +56,6 @@ using namespace cssu;
 using ::sfx2::sidebar::Theme;
 using ::sfx2::sidebar::ControlFactory;
 
-#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
-
-
 namespace svx {namespace sidebar {
 #define DEFAULT_VALUE          0
 #define TOOLBOX_ITEM1          1
