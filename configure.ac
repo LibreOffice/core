@@ -769,7 +769,7 @@ AC_ARG_ENABLE(odk,
 
 AC_ARG_ENABLE(mpl-subset,
     AS_HELP_STRING([--enable-mpl-subset],
-        [Don't compile any pieces which are not MPL or more liberrally licensed])
+        [Don't compile any pieces which are not MPL or more liberally licensed])
 )
 
 AC_ARG_ENABLE(evolution2,
