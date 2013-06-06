@@ -76,7 +76,7 @@ endef
 define gb_Gallery__command_ulf
 $(call gb_Output_announce,$(2),$(true),ULF,1)
 MERGEINPUT=`$(gb_MKTEMP)` && \
-echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(GALLERY_BASEDIR))).po) > $${MERGEINPUT} && \
+echo $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/extras/source/gallery/share.po) > $${MERGEINPUT} && \
 $(call gb_Helper_abbreviate_dirs,\
 	$(call gb_Executable_get_command,ulfex) -i $(GALLERY_ULFFILE) -o $(1) -m $${MERGEINPUT} -l all) && \
 rm -rf $${MERGEINPUT}
