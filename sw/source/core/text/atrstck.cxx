@@ -111,7 +111,7 @@ const sal_uInt8 StackPos[ static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
     34, // RES_CHRATR_HIDDEN,                    // 37
     35, // RES_CHRATR_OVERLINE,                  // 38
      0, // RES_CHRATR_RSID,                      // 39
-     0, // RES_DUMMY1,                           // 40
+     0, // RES_CHRATR_DUMMY1,                    // 40
     36, // RES_TXTATR_REFMARK,                   // 41
     37, // RES_TXTATR_TOXMARK,                   // 42
     38, // RES_TXTATR_META,                      // 43
