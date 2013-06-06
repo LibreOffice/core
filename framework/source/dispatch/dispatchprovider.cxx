@@ -318,7 +318,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     }
 
     //-----------------------------------------------------------------------------------------------------
-    // I.IV) "_helpagent"
+    // I.IV) "_beamer"
     //  Special sub frame of a top frame only. Search or create it. ... OK it's currently a little bit HACKI.
     //  Only the sfx (means the controller) can create it it.
     //-----------------------------------------------------------------------------------------------------
