@@ -2903,8 +2903,8 @@ SdrObject* XclImpPictureObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const
     // avoid a 'blank' shape that can result from a failed control import
     if ( !xSdrObj && IsOcxControl() && maGraphic.GetType() == GRAPHIC_NONE )
     {
-        Graphic aReplacement( SdrOle2Obj::GetEmtyOLEReplacementBitmap() );
-        const_cast< XclImpPictureObj* >( this )->maGraphic = aReplacement;
+        const_cast< XclImpPictureObj* >( this )->maGraphic =
+                SdrOle2Obj::GetEmptyOLEReplacementGraphic();
     }
     // no OLE - create a plain picture from IMGDATA record data
     if( !xSdrObj && (maGraphic.GetType() != GRAPHIC_NONE) )

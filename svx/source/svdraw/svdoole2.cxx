@@ -1338,7 +1338,7 @@ SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText, bool /* bUseHC
 
         // bitmap fill
         pClone->SetMergedItem(XFillStyleItem(XFILL_BITMAP));
-        pClone->SetMergedItem(XFillBitmapItem(String(), Graphic(GetEmtyOLEReplacementBitmap())));
+        pClone->SetMergedItem(XFillBitmapItem(String(), GetEmptyOLEReplacementGraphic()));
         pClone->SetMergedItem(XFillBmpTileItem(false));
         pClone->SetMergedItem(XFillBmpStretchItem(false));
 
@@ -2208,9 +2208,9 @@ sal_Bool SdrOle2Obj::AddOwnLightClient()
 
 //////////////////////////////////////////////////////////////////////////////
 
-Bitmap SdrOle2Obj::GetEmtyOLEReplacementBitmap()
+Graphic SdrOle2Obj::GetEmptyOLEReplacementGraphic()
 {
-    return Bitmap(ResId(BMP_SVXOLEOBJ, *ImpGetResMgr()));
+    return Graphic(BitmapEx(ResId(BMP_SVXOLEOBJ, *ImpGetResMgr())));
 }
 
 //////////////////////////////////////////////////////////////////////////////

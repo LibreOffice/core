@@ -55,8 +55,7 @@ namespace drawinglayer
             if(GRAPHIC_NONE == aGraphic.GetType())
             {
                 // no source, use fallback resource emty OLE graphic
-                const Bitmap aEmptyOLEBitmap(SdrOle2Obj::GetEmtyOLEReplacementBitmap());
-                aGraphic = Graphic(aEmptyOLEBitmap);
+                aGraphic = SdrOle2Obj::GetEmptyOLEReplacementGraphic();
                 bScaleContent = true;
             }
 

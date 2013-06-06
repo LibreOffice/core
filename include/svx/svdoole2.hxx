@@ -181,8 +181,8 @@ public:
     sal_Bool CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize );
     sal_Bool AddOwnLightClient();
 
-    // handy to get the empty replacement bitmap without accessing all the old stuff
-    static Bitmap GetEmtyOLEReplacementBitmap();
+    // handy to get the empty replacement graphic without accessing all the old stuff
+    static Graphic GetEmptyOLEReplacementGraphic();
 
     void SetWindow(const com::sun::star::uno::Reference < com::sun::star::awt::XWindow >& _xWindow);
 
