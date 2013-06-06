@@ -687,9 +687,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 SFX_REQUEST_ARG( rReq, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
                 OUString aFilterName = pFilterNameItem ? OUString( pFilterNameItem->GetValue() )
                                                               : OUString();
-                const SfxFilter* pFilt = GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
-
-                OSL_ENSURE( nId == SID_SAVEDOC || pFilt, "The filter can not be zero since it was used for storing!\n" );
 
                 // the StoreAsURL/StoreToURL method have called this method with false
                 // so it has to be restored to true here since it is a call from GUI
