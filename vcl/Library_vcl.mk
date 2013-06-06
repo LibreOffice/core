@@ -40,7 +40,7 @@ $(eval $(call gb_Library_use_custom_headers,vcl,vcl/generic/fontmanager))
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
-	$(if $(filter WNTGCC,$(OS)$(COM)),-I$(SRCDIR)/external/wine/include) \
+	$(if $(filter WNTGCC,$(OS)$(COM)),-I$(MINGW_SYSROOT)/include/gdiplus) \
 ))
 
 $(eval $(call gb_Library_add_defs,vcl,\

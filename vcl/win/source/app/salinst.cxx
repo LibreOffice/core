@@ -57,10 +57,23 @@
 #pragma warning( disable: 4917 )
 #endif
 
+#ifdef __MINGW32__
+#ifdef GetObject
+#undef GetObject
+#endif
+#define GetObject GetObjectA
+#endif
+
 #include <gdiplus.h>
 #include <gdiplusenums.h>
 #include <gdipluscolor.h>
 #include <shlobj.h>
+
+#ifdef __MINGW32__
+#ifdef GetObject
+#undef GetObject
+#endif
+#endif
 
 #if defined _MSC_VER
 #pragma warning(pop)
