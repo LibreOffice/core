@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7uM\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1509,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-06T06:57:56Z",
+      "side": 1,
+      "message": "In general the codebase uses the lcl_ prefix for local static functions, please use that convention here as well. (Seems this file also uses the impl_ prefix for that purpose, any of that is fine.) Or possibly lcl_getTableDefaultBorderOptions() would be even easier to read. Same for the other two functions.",
+      "revId": "e09468bc01ce9221a60f129f4393daad56e8633c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7uQ\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-06T06:57:56Z",
+      "side": 1,
+      "message": "Could you please add at least a one-liner mission statement for the new class? See https://wiki.documentfoundation.org/Development/Doxygen",
+      "revId": "e09468bc01ce9221a60f129f4393daad56e8633c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
