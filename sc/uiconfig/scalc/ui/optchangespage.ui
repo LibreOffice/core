@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
+  <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkBox" id="OptChangesPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -33,11 +33,10 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Chan_ges</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">changeslb</property>
+                    <property name="mnemonic_widget">changes</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -50,11 +49,10 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Deletions</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">deletionslb</property>
+                    <property name="mnemonic_widget">deletions</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -67,11 +65,10 @@
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Insertions</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">insertionslb</property>
+                    <property name="mnemonic_widget">insertions</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -84,11 +81,10 @@
                   <object class="GtkLabel" id="label5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Moved entries</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">entrieslb</property>
+                    <property name="mnemonic_widget">entries</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
