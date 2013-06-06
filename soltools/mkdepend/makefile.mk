@@ -59,12 +59,7 @@ APP1OBJS=$(OBJFILES)
 APP1RPATH=NONE
 
 .IF "$(COM)"=="MSC"
-.IF "$(dbgutil)"==""
 APP1STDLIBS+=msvcprt.lib
-.ELSE
-APP1STDLIBS+=msvcprtd.lib
-CDEFS+=-D_DEBUG
-.ENDIF                        # "$(DBG_UTIL)"==""
 .ENDIF                        # "$(COM)"=="MSC"
 
 .IF "$(OS)"=="SOLARIS"

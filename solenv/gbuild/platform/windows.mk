@@ -484,7 +484,7 @@ ifeq ($(USE_SYSTEM_STL),YES)
 ifeq ($(gb_PRODUCT),$(true))
 gb_Library_STLEXT := msvcprt.lib
 else
-gb_Library_STLEXT := msvcprtd.lib
+gb_Library_STLEXT := msvcprt.lib
 endif
 else
 ifeq ($(gb_PRODUCT),$(true))

@@ -285,13 +285,13 @@ LINKFLAGSOPT=
 UWINAPILIB*=uwinapi.lib
 .IF "$(DYNAMIC_CRT)"!=""
 .IF "$(USE_STLP_DEBUG)" != ""
-LIBCMT=msvcrtd.lib
+LIBCMT=msvcrt.lib
 .ELSE  # "$(USE_STLP_DEBUG)" != ""
 LIBCMT=msvcrt.lib
 .ENDIF # "$(USE_STLP_DEBUG)" != ""
 .ELSE # "$(DYNAMIC_CRT)"!=""
 .IF "$(USE_STLP_DEBUG)" != ""
-LIBCMT=libcmtd.lib
+LIBCMT=libcmt.lib
 CDEFS+=-D_DEBUG
 .ELSE  # "$(USE_STLP_DEBUG)" != ""
 LIBCMT=libcmt.lib
@@ -312,13 +312,13 @@ STDSHLCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 .IF "$(USE_SYSTEM_STL)" == "YES"
 .IF "$(DYNAMIC_CRT)"!=""
 .IF "$(USE_STLP_DEBUG)" != ""
-LIBCMT+= msvcprtd.lib
+LIBCMT+= msvcprt.lib
 .ELSE
 LIBCMT+= msvcprt.lib
 .ENDIF
 .ELSE # "$(DYNAMIC_CRT)"==""
 .IF "$(USE_STLP_DEBUG)" != ""
-LIBCMT+= libcpmtd.lib
+LIBCMT+= libcpmt.lib
 .ELSE
 LIBCMT+= libcpmt.lib
 .ENDIF "$(USE_STLP_DEBUG)" == ""
