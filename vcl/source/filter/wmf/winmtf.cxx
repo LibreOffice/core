@@ -268,16 +268,16 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
 #ifdef WIN_MTF_ASSERT
 void WinMtfAssertHandler( const sal_Char* pAction, sal_uInt32 nFlags )
 {
-    static sal_Bool     bOnlyOnce;
+    static bool     bOnlyOnce;
     static sal_Int32    nAssertCount;
 
     if ( nFlags & WIN_MTF_ASSERT_INIT )
         nAssertCount = 0;
     if ( nFlags & WIN_MTF_ASSERT_ONCE )
-       bOnlyOnce = sal_True;
+       bOnlyOnce = true;
     if ( nFlags & WIN_MTF_ASSERT_MIFE )
     {
-        if ( ( nAssertCount == 0 ) || ( bOnlyOnce == sal_False ) )
+        if ( ( nAssertCount == 0 ) || !bOnlyOnce )
         {
             OStringBuffer aText("WMF/EMF Import: ");
             if (pAction)
@@ -1469,10 +1469,10 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
         mpGDIMetaFile->AddAction( new MetaLayoutModeAction( mnTextLayoutMode ) );
     }
     SetGfxMode( nGfxMode );
-    sal_Bool bChangeFont = sal_False;
+    bool bChangeFont = false;
     if ( mnLatestTextAlign != mnTextAlign )
     {
-        bChangeFont = sal_True;
+        bChangeFont = true;
         mnLatestTextAlign = mnTextAlign;
         TextAlign eTextAlign;
         if ( ( mnTextAlign & TA_BASELINE) == TA_BASELINE )
@@ -1485,24 +1485,24 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
     }
     if ( maLatestTextColor != maTextColor )
     {
-        bChangeFont = sal_True;
+        bChangeFont = true;
         maLatestTextColor = maTextColor;
         mpGDIMetaFile->AddAction( new MetaTextColorAction( maTextColor ) );
     }
-    sal_Bool bChangeFillColor = sal_False;
+    bool bChangeFillColor = false;
     if ( maLatestBkColor != maBkColor )
     {
-        bChangeFillColor = sal_True;
+        bChangeFillColor = true;
         maLatestBkColor = maBkColor;
     }
     if ( mnLatestBkMode != mnBkMode )
     {
-        bChangeFillColor = sal_True;
+        bChangeFillColor = true;
         mnLatestBkMode = mnBkMode;
     }
     if ( bChangeFillColor )
     {
-        bChangeFont = sal_True;
+        bChangeFont = true;
         mpGDIMetaFile->AddAction( new MetaTextFillColorAction( maFont.GetFillColor(), !maFont.IsTransparent() ) );
     }
     Font aTmp( maFont );
@@ -1708,7 +1708,7 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
             }
             else
             {
-                sal_Bool bDrawn = sal_False;
+                bool bDrawn = false;
 
                 if ( i == nObjectStartIndex )   // optimizing, sometimes it is possible to create just one transparent bitmap
                 {
@@ -1729,7 +1729,7 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
                                 Bitmap aMask( pSave->aBmp ); aMask.Invert();
                                 BitmapEx aBmpEx( pSave2->aBmp, aMask );
                                 ImplDrawBitmap( aPos, aSize, aBmpEx );
-                                bDrawn = sal_True;
+                                bDrawn = true;
                                 i++;
                             }
                             // #i20085# This is just the other way
@@ -1740,7 +1740,7 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
                                 Bitmap aMask( pSave->aBmp );
                                 BitmapEx aBmpEx( pSave2->aBmp, aMask );
                                 ImplDrawBitmap( aPos, aSize, aBmpEx );
-                                bDrawn = sal_True;
+                                bDrawn = true;
                                 i++;
                             }
                         }

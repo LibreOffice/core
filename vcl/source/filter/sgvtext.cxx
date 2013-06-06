@@ -1184,7 +1184,7 @@ SgfFontLst::SgfFontLst()
     Last=NULL;
     LastID=0;
     LastLn=NULL;
-    Tried=sal_False;
+    Tried=false;
 }
 
 SgfFontLst::~SgfFontLst()
@@ -1204,7 +1204,7 @@ void SgfFontLst::RausList()
     }
     pList=NULL;
     Last=NULL;
-    Tried=sal_False;
+    Tried=false;
     LastID=0;
     LastLn=NULL;
 }
@@ -1216,7 +1216,7 @@ void SgfFontLst::ReadList()
 {
     if (!Tried)
     {
-        Tried=sal_True;
+        Tried=true;
         LastID=0;
         LastLn=NULL;
         SgfFontOne* P,P1;

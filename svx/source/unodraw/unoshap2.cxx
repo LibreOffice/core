@@ -1626,7 +1626,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
         {
             SvMemoryStream aDestStrm( 65535, 65535 );
 
-            ConvertGDIMetaFileToWMF( rGraphic.GetGDIMetaFile(), aDestStrm, NULL, sal_False );
+            ConvertGDIMetaFileToWMF( rGraphic.GetGDIMetaFile(), aDestStrm, NULL, false );
             const uno::Sequence<sal_Int8> aSeq(
                 static_cast< const sal_Int8* >(aDestStrm.GetData()),
                 aDestStrm.GetEndOfData());

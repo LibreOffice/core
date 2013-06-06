@@ -337,7 +337,7 @@ public:
     SgfFontOne* Last;   // Listenende
     sal_uInt32      LastID; // f�r schnelleren Zugriff bei Wiederholungen
     SgfFontOne* LastLn; // f�r schnelleren Zugriff bei Wiederholungen
-    sal_Bool        Tried;
+    bool        Tried;
                 SgfFontLst();
                 ~SgfFontLst();
     void AssignFN(const String& rFName);

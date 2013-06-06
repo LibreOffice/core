@@ -697,14 +697,14 @@ void EMFWriter::ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly )
             ImplWritePolygonRecord( rPolyPoly[ 0 ], sal_True );
         else
         {
-            sal_Bool    bHasFlags = sal_False;
+            bool    bHasFlags = false;
             sal_uInt32  nTotalPoints = 0;
 
             for( i = 0; i < nPolyCount; i++ )
             {
                 nTotalPoints += rPolyPoly[ i ].GetSize();
                 if ( rPolyPoly[ i ].HasFlags() )
-                    bHasFlags = sal_True;
+                    bHasFlags = true;
             }
             if( nTotalPoints )
             {

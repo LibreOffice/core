@@ -420,9 +420,9 @@ void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_In
 /* if return value is true, then a complete unicode string and also a polygon replacement has been written,
     so there is no more action necessary
 */
-sal_Bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String& rUniStr, const sal_Int32* pDXAry )
+bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String& rUniStr, const sal_Int32* pDXAry )
 {
-    sal_Bool bEscapeUsed = sal_False;
+    bool bEscapeUsed = false;
 
     sal_uInt32 i, nStringLen = rUniStr.Len();
     if ( nStringLen )
@@ -510,7 +510,7 @@ sal_Bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String&
                     }
                     aSrcFillColor = aOldFillColor;
                     aSrcLineColor = aOldLineColor;
-                    bEscapeUsed = sal_True;
+                    bEscapeUsed = true;
                 }
             }
         }
@@ -686,10 +686,10 @@ void WMFWriter::WMFRecord_SelectObject(sal_uInt16 nObjectHandle)
 }
 
 
-void WMFWriter::WMFRecord_SetBkMode(sal_Bool bTransparent)
+void WMFWriter::WMFRecord_SetBkMode(bool bTransparent)
 {
     WriteRecordHeader(0x00000004,W_META_SETBKMODE);
-    if (bTransparent==sal_True) *pWMF << (sal_uInt16)W_TRANSPARENT;
+    if (bTransparent) *pWMF << (sal_uInt16)W_TRANSPARENT;
     else                    *pWMF << (sal_uInt16)W_OPAQUE;
 }
 
@@ -849,19 +849,19 @@ sal_uInt16 WMFWriter::AllocHandle()
     sal_uInt16 i;
 
     for (i=0; i<MAXOBJECTHANDLES; i++) {
-        if (bHandleAllocated[i]==sal_False) {
-            bHandleAllocated[i]=sal_True;
+        if (!bHandleAllocated[i]) {
+            bHandleAllocated[i]=true;
             return i;
         }
     }
-    bStatus=sal_False;
+    bStatus=false;
     return 0xffff;
 }
 
 
 void WMFWriter::FreeHandle(sal_uInt16 nObjectHandle)
 {
-    if (nObjectHandle<MAXOBJECTHANDLES) bHandleAllocated[nObjectHandle]=sal_False;
+    if (nObjectHandle<MAXOBJECTHANDLES) bHandleAllocated[nObjectHandle]=false;
 }
 
 
@@ -929,7 +929,7 @@ void WMFWriter::SetLineAndFillAttr()
         CreateSelectDeleteBrush( aDstFillColor );
     }
     if ( bDstIsClipping != bSrcIsClipping ||
-        (bSrcIsClipping==sal_True && aDstClipRegion!=aSrcClipRegion)) {
+        (bSrcIsClipping && aDstClipRegion!=aSrcClipRegion)) {
         bDstIsClipping=bSrcIsClipping;
         aDstClipRegion=aSrcClipRegion;
     }
@@ -1642,9 +1642,9 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
           MayCallback();
 
           if (pWMF->GetError())
-            bStatus=sal_False;
+            bStatus=false;
 
-          if(bStatus==sal_False)
+          if(!bStatus)
             break;
         }
     }
@@ -1652,7 +1652,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
 // ------------------------------------------------------------------------
 
-void WMFWriter::WriteHeader( const GDIMetaFile &, sal_Bool bPlaceable )
+void WMFWriter::WriteHeader( const GDIMetaFile &, bool bPlaceable )
 {
     if( bPlaceable )
     {
@@ -1708,13 +1708,13 @@ void WMFWriter::UpdateHeader()
 
 // ------------------------------------------------------------------------
 
-sal_Bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
-                            FilterConfigItem* pFConfigItem, sal_Bool bPlaceable )
+bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
+                            FilterConfigItem* pFConfigItem, bool bPlaceable )
 {
     WMFWriterAttrStackMember * pAt;
 
-    bEmbedEMF = sal_True;
-    bStatus=sal_True;
+    bEmbedEMF = true;
+    bStatus=true;
     pConvert = 0;
     pVirDev = new VirtualDevice;
 
@@ -1762,7 +1762,7 @@ sal_Bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     pAttrStack=NULL;
 
     for (sal_uInt16 i=0; i<MAXOBJECTHANDLES; i++)
-        bHandleAllocated[i]=sal_False;
+        bHandleAllocated[i]=false;
 
     nDstPenHandle=0xffff;
     nDstFontHandle=0xffff;
@@ -1781,7 +1781,7 @@ sal_Bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
         WriteEmbeddedEMF( rMTF );
     WMFRecord_SetWindowOrg(Point(0,0));
     WMFRecord_SetWindowExt(rMTF.GetPrefSize());
-    WMFRecord_SetBkMode( sal_True );
+    WMFRecord_SetBkMode( true );
 
     eDstROP2 = eSrcRasterOp = ROP_OVERPAINT;
     WMFRecord_SetROP2(eDstROP2);
@@ -1794,7 +1794,7 @@ sal_Bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     CreateSelectDeleteBrush( aDstFillColor );
 
     aDstClipRegion = aSrcClipRegion = Region();
-    bDstIsClipping = bSrcIsClipping = sal_False;
+    bDstIsClipping = bSrcIsClipping = false;
 
     Font aFont;
     aFont.SetCharSet( GetExtendedTextEncoding( RTL_TEXTENCODING_MS_1252 ) );

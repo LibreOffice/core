@@ -706,7 +706,7 @@ uno::Any SvxShape::GetBitmap( sal_Bool bMetaFile /* = sal_False */ ) const throw
     if( bMetaFile )
     {
         SvMemoryStream aDestStrm( 65535, 65535 );
-        ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, sal_False );
+        ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, false );
         const uno::Sequence<sal_Int8> aSeq(
             static_cast< const sal_Int8* >(aDestStrm.GetData()),
             aDestStrm.GetEndOfData());
@@ -2945,7 +2945,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
                     // #119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
                     GDIMetaFile aMtf(pObj->GetGraphic()->GetGDIMetaFile());
                     SvMemoryStream aDestStrm( 65535, 65535 );
-                    ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, sal_False );
+                    ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, false );
                     const uno::Sequence<sal_Int8> aSeq(
                         static_cast< const sal_Int8* >(aDestStrm.GetData()),
                         aDestStrm.GetEndOfData());

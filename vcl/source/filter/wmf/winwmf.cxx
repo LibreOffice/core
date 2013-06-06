@@ -503,7 +503,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                     sal_uInt32  nMaxStreamPos = nRecordPos + ( nRecordSize << 1 );
                     sal_Int32   nDxArySize =  nMaxStreamPos - pWMF->Tell();
                     sal_Int32   nDxAryEntries = nDxArySize >> 1;
-                    sal_Bool    bUseDXAry = sal_False;
+                    bool        bUseDXAry = false;
 
                     if ( ( ( nDxAryEntries % nOriginalTextLen ) == 0 ) && ( nNewTextLen <= nOriginalTextLen ) )
                     {
@@ -534,7 +534,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                             pDXAry[ i ] = nDx;
                         }
                         if ( i == nNewTextLen )
-                            bUseDXAry = sal_True;
+                            bUseDXAry = true;
                     }
                     if ( pDXAry && bUseDXAry )
                         pOut->DrawText( aPosition, aText, pDXAry );

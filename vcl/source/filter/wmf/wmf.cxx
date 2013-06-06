@@ -84,8 +84,8 @@ sal_Bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigI
 
 // -----------------------------------------------------------------------------
 
-sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
-                              FilterConfigItem* pConfigItem, sal_Bool bPlaceable)
+bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
+                              FilterConfigItem* pConfigItem, bool bPlaceable)
 {
     WMFWriter aWMFWriter;
     return aWMFWriter.WriteWMF( rMTF, rTargetStream, pConfigItem, bPlaceable );
@@ -102,9 +102,9 @@ sal_Bool ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetSt
 
 // -----------------------------------------------------------------------------
 
-sal_Bool WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF )
+bool WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF )
 {
-    return WMFWriter().WriteWMF( rMTF, rStream, NULL, sal_False );
+    return WMFWriter().WriteWMF( rMTF, rStream, NULL, false );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

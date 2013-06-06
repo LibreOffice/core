@@ -416,7 +416,7 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
                         SvMemoryStream  aDstStm( 65535, 65535 );
 
                         // taking wmf without file header
-                        if ( ConvertGDIMetaFileToWMF( aMtf, aDstStm, NULL, sal_False ) )
+                        if ( ConvertGDIMetaFileToWMF( aMtf, aDstStm, NULL, false ) )
                         {
                             maAny <<= ( aSeq = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aDstStm.GetData() ),
                                                                      aDstStm.Seek( STREAM_SEEK_TO_END ) ) );

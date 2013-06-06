@@ -202,9 +202,9 @@ SvStream& operator>>( SvStream& rIn, XForm& rXForm )
     return rIn;
 }
 
-static sal_Bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rSt, sal_uInt32 nLen )
+static bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rSt, sal_uInt32 nLen )
 {
-    sal_Bool bOk = sal_False;
+    bool bOk = false;
     if ( nLen )
     {
         sal_uInt32 nHdSize, nType, nCount, nRgnSize, i;
@@ -229,7 +229,7 @@ static sal_Bool ImplReadRegion( PolyPolygon& rPolyPoly, SvStream& rSt, sal_uInt3
                 rPolyPoly.GetUnion( aPolyPolyOr1, aPolyPolyOr2 );
                 rPolyPoly = aPolyPolyOr2;
             }
-            bOk = sal_True;
+            bOk = true;
         }
     }
     return bOk;
@@ -456,7 +456,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
     sal_Bool    bFlag(sal_False), bStatus = ReadHeader();
     sal_Bool    bHaveDC = false;
 
-    static sal_Bool bEnableEMFPlus = ( getenv( "EMF_PLUS_DISABLE" ) == NULL );
+    static bool bEnableEMFPlus = ( getenv( "EMF_PLUS_DISABLE" ) == NULL );
 
     while( bStatus && nRecordCount-- && pWMF->good())
     {

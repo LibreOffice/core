@@ -59,7 +59,7 @@ class WMFWriter
 {
 private:
 
-    sal_Bool            bStatus;
+    bool            bStatus;
 
     sal_uLong                   nLastPercent; // Mit welcher Zahl pCallback zuletzt aufgerufen wurde.
     FilterConfigItem*       pFilterConfigItem;
@@ -86,7 +86,7 @@ private:
     FontAlign eSrcTextAlign;
     Font      aSrcFont;
     MapMode   aSrcMapMode;
-    sal_Bool      bSrcIsClipping;
+    bool      bSrcIsClipping;
     Region    aSrcClipRegion;
     WMFWriterAttrStackMember * pAttrStack;
 
@@ -103,9 +103,9 @@ private:
 
     sal_uInt32    eDstHorTextAlign;
 
-    sal_Bool      bDstIsClipping; // ???: derzeit unberuecksichtigt
+    bool      bDstIsClipping; // ???: derzeit unberuecksichtigt
     Region    aDstClipRegion; // ???: derzeit unberuecksichtigt
-    sal_Bool bHandleAllocated[MAXOBJECTHANDLES];             // Welche Handles vergeben sind
+    bool bHandleAllocated[MAXOBJECTHANDLES];             // Welche Handles vergeben sind
     sal_uInt16 nDstPenHandle,nDstFontHandle,nDstBrushHandle; // Welche Handles die jeweiligen
                                                          // Selected-Objects besitzen
                                                          // 0xffff = keines:
@@ -118,7 +118,7 @@ private:
     sal_uLong nWrittenBitmaps;  // Anzahl der bereits geschriebenen Bitmaps
     sal_uLong nActBitmapPercent; // Wieviel Prozent die naechste Bitmap schon geschrieben ist.
 
-    sal_Bool bEmbedEMF; // optionally embedd EMF data into WMF
+    bool bEmbedEMF; // optionally embedd EMF data into WMF
 
     void MayCallback();
         // Berechnet anhand der obigen 5 Parameter eine Prozentzahl
@@ -154,7 +154,7 @@ private:
     void WMFRecord_DeleteObject(sal_uInt16 nObjectHandle);
     void WMFRecord_Ellipse(const Rectangle & rRect);
     void WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_Int8* pData );
-    sal_Bool WMFRecord_Escape_Unicode( const Point& rPoint, const String& rStr, const sal_Int32 * pDXAry );
+    bool WMFRecord_Escape_Unicode( const Point& rPoint, const String& rStr, const sal_Int32 * pDXAry );
     void WMFRecord_ExtTextOut(const Point & rPoint, const String & rString, const sal_Int32 * pDXAry);
 
     void TrueExtTextOut(const Point & rPoint, const String & rString,
@@ -171,7 +171,7 @@ private:
     void WMFRecord_RoundRect(const Rectangle & rRect, long nHorzRound, long nVertRound);
     void WMFRecord_SaveDC();
     void WMFRecord_SelectObject(sal_uInt16 nObjectHandle);
-    void WMFRecord_SetBkMode(sal_Bool bTransparent);
+    void WMFRecord_SetBkMode(bool bTransparent);
     void WMFRecord_SetStretchBltMode();
     void WMFRecord_SetPixel(const Point & rPoint, const Color & rColor);
     void WMFRecord_SetROP2(RasterOp eROP);
@@ -196,7 +196,7 @@ private:
     void HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void WriteRecords(const GDIMetaFile & rMTF);
 
-    void WriteHeader(const GDIMetaFile & rMTF, sal_Bool bPlaceable);
+    void WriteHeader(const GDIMetaFile & rMTF, bool bPlaceable);
     void UpdateHeader();
 
     void WriteEmbeddedEMF( const GDIMetaFile& rMTF );
@@ -212,7 +212,7 @@ public:
 
     WMFWriter() {}
 
-    sal_Bool WriteWMF(const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pFilterConfigItem, sal_Bool bPlaceable=sal_True);
+    bool WriteWMF(const GDIMetaFile & rMTF, SvStream & rTargetStream, FilterConfigItem* pFilterConfigItem, bool bPlaceable=true);
 };
 
 #endif

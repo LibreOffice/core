@@ -1090,7 +1090,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                         pMetaFile->SetPrefSize( aSize );
 
                         SvMemoryStream aDestStrm( 65535, 65535 );
-                        ConvertGDIMetaFileToWMF( *pMetaFile, aDestStrm, NULL, sal_False );
+                        ConvertGDIMetaFileToWMF( *pMetaFile, aDestStrm, NULL, false );
                         Sequence<sal_Int8> aSeq( (sal_Int8*)aDestStrm.GetData(), aDestStrm.Tell() );
                         aAny <<= aSeq;
                     }
