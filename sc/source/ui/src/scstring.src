@@ -849,4 +849,9 @@ String SCSTR_ROW_LABEL
     Text [ en-US ] = "Range contains ~row labels" ;
 };
 
+String SCSTR_AUTHOR
+{
+    Text [ en-US ] = "By author" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

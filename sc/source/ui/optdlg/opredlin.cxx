@@ -43,31 +43,24 @@
 #include "globstr.hrc"
 
 #include "opredlin.hxx"
-#include "opredlin.hrc"
 
 //------------------------------------------------------------------
 
 ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
-    : SfxTabPage(pParent, ScResId(RID_SCPAGE_OPREDLINE), rSet),
-    aContentFT      ( this, ScResId(FT_CONTENT  )),
-    aContentColorLB ( this, ScResId(CLB_CONTENT )),
-    aRemoveFT       ( this, ScResId(FT_REMOVE   )),
-    aRemoveColorLB  ( this, ScResId(CLB_REMOVE  )),
-    aInsertFT       ( this, ScResId(FT_INSERT   )),
-    aInsertColorLB  ( this, ScResId(CLB_INSERT  )),
-    aMoveFT         ( this, ScResId(FT_MOVE     )),
-    aMoveColorLB    ( this, ScResId(CLB_MOVE    )),
-    aChangedGB      ( this, ScResId(GB_COLORCHGS)),
-    aAuthorStr      (ScResId(STR_AUTHOR))
+    : SfxTabPage(pParent,"OptChangesPage", "modules/scalc/ui/optchangespage.ui", rSet),
+    aAuthorStr      (ScResId(SCSTR_AUTHOR))
 {
-    FreeResource();
+    get(m_pContentColorLB, "changes");
+    get(m_pRemoveColorLB, "deletions");
+    get(m_pInsertColorLB, "entries");
+    get(m_pMoveColorLB, "insertions");
 
     Link aLk = LINK(this, ScRedlineOptionsTabPage, ColorHdl);
-    aContentColorLB.SetSelectHdl( aLk );
-    aMoveColorLB.SetSelectHdl( aLk );
-    aInsertColorLB.SetSelectHdl( aLk );
-    aRemoveColorLB.SetSelectHdl( aLk );
+    m_pContentColorLB->SetSelectHdl( aLk );
+    m_pMoveColorLB->SetSelectHdl( aLk );
+    m_pInsertColorLB->SetSelectHdl( aLk );
+    m_pRemoveColorLB->SetSelectHdl( aLk );
 }
 
 ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
@@ -86,44 +79,44 @@ sal_Bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
     sal_uLong nNew=0;
     sal_uInt16 nPos=0;
 
-    nPos = aContentColorLB.GetSelectEntryPos();
+    nPos = m_pContentColorLB->GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
         if (nPos!=0)
-            nNew= aContentColorLB.GetEntryColor(nPos).GetColor();
+            nNew= m_pContentColorLB->GetEntryColor(nPos).GetColor();
         else
             nNew= COL_TRANSPARENT;
 
         aAppOptions.SetTrackContentColor(nNew);
 
     }
-    nPos = aMoveColorLB.GetSelectEntryPos();
+    nPos = m_pMoveColorLB->GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
         if (nPos!=0)
-            nNew= aMoveColorLB.GetEntryColor(nPos).GetColor();
+            nNew= m_pMoveColorLB->GetEntryColor(nPos).GetColor();
         else
             nNew= COL_TRANSPARENT;
 
         aAppOptions.SetTrackMoveColor(nNew);
 
     }
-    nPos = aInsertColorLB.GetSelectEntryPos();
+    nPos = m_pInsertColorLB->GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
         if (nPos!=0)
-            nNew= aInsertColorLB.GetEntryColor(nPos).GetColor();
+            nNew= m_pInsertColorLB->GetEntryColor(nPos).GetColor();
         else
             nNew= COL_TRANSPARENT;
 
         aAppOptions.SetTrackInsertColor(nNew);
 
     }
-    nPos = aRemoveColorLB.GetSelectEntryPos();
+    nPos = m_pRemoveColorLB->GetSelectEntryPos();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
         if (nPos!=0)
-            nNew= aRemoveColorLB.GetEntryColor(nPos).GetColor();
+            nNew= m_pRemoveColorLB->GetEntryColor(nPos).GetColor();
         else
             nNew= COL_TRANSPARENT;
 
@@ -144,15 +137,15 @@ sal_Bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
 
 void ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
 {
-    aContentColorLB.InsertEntry(aAuthorStr);
-    aMoveColorLB.InsertEntry(aAuthorStr);
-    aInsertColorLB.InsertEntry(aAuthorStr);
-    aRemoveColorLB.InsertEntry(aAuthorStr);
+    m_pContentColorLB->InsertEntry(aAuthorStr);
+    m_pMoveColorLB->InsertEntry(aAuthorStr);
+    m_pInsertColorLB->InsertEntry(aAuthorStr);
+    m_pRemoveColorLB->InsertEntry(aAuthorStr);
 
-    aContentColorLB.SetUpdateMode( false);
-    aMoveColorLB.SetUpdateMode( false);
-    aInsertColorLB.SetUpdateMode( false);
-    aRemoveColorLB.SetUpdateMode( false);
+    m_pContentColorLB->SetUpdateMode( false);
+    m_pMoveColorLB->SetUpdateMode( false);
+    m_pInsertColorLB->SetUpdateMode( false);
+    m_pRemoveColorLB->SetUpdateMode( false);
 
     XColorListRef xColorLst = XColorList::GetStdColorList();
     for( sal_uInt16 i = 0; i < xColorLst->Count(); ++i )
@@ -161,44 +154,44 @@ void ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
         Color aColor = pEntry->GetColor();
         String sName = pEntry->GetName();
 
-        aContentColorLB.InsertEntry( aColor, sName );
-        aMoveColorLB.InsertEntry( aColor, sName );
-        aInsertColorLB.InsertEntry( aColor, sName );
-        aRemoveColorLB.InsertEntry( aColor, sName );
+        m_pContentColorLB->InsertEntry( aColor, sName );
+        m_pMoveColorLB->InsertEntry( aColor, sName );
+        m_pInsertColorLB->InsertEntry( aColor, sName );
+        m_pRemoveColorLB->InsertEntry( aColor, sName );
     }
-    aContentColorLB.SetUpdateMode( sal_True );
-    aMoveColorLB.SetUpdateMode( sal_True );
-    aInsertColorLB.SetUpdateMode( sal_True );
-    aRemoveColorLB.SetUpdateMode( sal_True );
+    m_pContentColorLB->SetUpdateMode( sal_True );
+    m_pMoveColorLB->SetUpdateMode( sal_True );
+    m_pInsertColorLB->SetUpdateMode( sal_True );
+    m_pRemoveColorLB->SetUpdateMode( sal_True );
 
 
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
 
     sal_uLong nColor = aAppOptions.GetTrackContentColor();
     if (nColor == COL_TRANSPARENT)
-        aContentColorLB.SelectEntryPos(0);
+        m_pContentColorLB->SelectEntryPos(0);
     else
-        aContentColorLB.SelectEntry(Color(nColor));
+        m_pContentColorLB->SelectEntry(Color(nColor));
 
     nColor = aAppOptions.GetTrackMoveColor();
     if (nColor == COL_TRANSPARENT)
-        aMoveColorLB.SelectEntryPos(0);
+        m_pMoveColorLB->SelectEntryPos(0);
     else
-        aMoveColorLB.SelectEntry(Color(nColor));
+        m_pMoveColorLB->SelectEntry(Color(nColor));
 
 
     nColor = aAppOptions.GetTrackInsertColor();
     if (nColor == COL_TRANSPARENT)
-        aInsertColorLB.SelectEntryPos(0);
+        m_pInsertColorLB->SelectEntryPos(0);
     else
-        aInsertColorLB.SelectEntry(Color(nColor));
+        m_pInsertColorLB->SelectEntry(Color(nColor));
 
 
     nColor = aAppOptions.GetTrackDeleteColor();
     if (nColor == COL_TRANSPARENT)
-        aRemoveColorLB.SelectEntryPos(0);
+        m_pRemoveColorLB->SelectEntryPos(0);
     else
-        aRemoveColorLB.SelectEntry(Color(nColor));
+        m_pRemoveColorLB->SelectEntry(Color(nColor));
 
 }
 

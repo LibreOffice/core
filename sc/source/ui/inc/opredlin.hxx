@@ -36,15 +36,10 @@
 
 class ScRedlineOptionsTabPage : public SfxTabPage
 {
-    FixedText           aContentFT;
-    ColorListBox        aContentColorLB;
-    FixedText           aRemoveFT;
-    ColorListBox        aRemoveColorLB;
-    FixedText           aInsertFT;
-    ColorListBox        aInsertColorLB;
-    FixedText           aMoveFT;
-    ColorListBox        aMoveColorLB;
-    FixedLine           aChangedGB;
+    ColorListBox*       m_pContentColorLB;
+    ColorListBox*       m_pRemoveColorLB;
+    ColorListBox*       m_pInsertColorLB;
+    ColorListBox*       m_pMoveColorLB;
     String              aAuthorStr;
     DECL_LINK(ColorHdl, void *);
 

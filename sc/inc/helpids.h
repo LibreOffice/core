@@ -109,7 +109,6 @@
 #define HID_COLROWNAMERANGES                                    "SC_HID_COLROWNAMERANGES"
 
 #define HID_FUNCTION_BOX                                        "SC_HID_FUNCTION_BOX"
-#define HID_SCPAGE_OPREDLINE                                    "SC_HID_SCPAGE_OPREDLINE"
 #define HID_SC_REDLIN_CTR                                       "SC_HID_SC_REDLIN_CTR"
 
 // Hilfe IDs fuer Objekt- und Werkzeugleisten (max.10) -----------------------
