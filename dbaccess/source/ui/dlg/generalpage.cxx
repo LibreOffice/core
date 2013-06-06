@@ -328,8 +328,8 @@ namespace dbaui
     IMPL_LINK( OGeneralPage, OnDatasourceTypeSelected, ListBox*, _pBox )
     {
         // get the type from the entry data
-        sal_Int16 nSelected = _pBox->GetSelectEntryPos();
-        if (nSelected < 0 || nSelected >= m_aURLPrefixes.size() )
+        sal_uInt16 nSelected = _pBox->GetSelectEntryPos();
+        if (nSelected >= m_aURLPrefixes.size() )
         {
             SAL_WARN("dbaui.OGeneralPage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectEntryPos(): " << ((nSelected < 0) ? "negative" : "no corresponding URL prefix") );
             return 0L;
