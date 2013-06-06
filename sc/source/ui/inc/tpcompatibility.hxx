@@ -30,9 +30,7 @@ private:
     virtual ~ScTpCompatOptions();
 
 private:
-    FixedLine maFlKeyBindings;
-    FixedText maFtKeyBindings;
-    ListBox   maLbKeyBindings;
+    ListBox*   m_pLbKeyBindings;
 };
 
 #endif

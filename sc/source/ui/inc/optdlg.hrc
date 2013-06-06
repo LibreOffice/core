@@ -147,9 +147,5 @@
 #define FT_ODF_RECALC             99
 #define LB_ODF_RECALC            100
 
-// TP_COMPATIBILITY
-#define FL_KEY_BINDINGS       1
-#define FT_KEY_BINDINGS       2
-#define LB_KEY_BINDINGS       3
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -189,44 +189,6 @@ TabPage RID_SCPAGE_FORMULA
     };
 };
 
-TabPage RID_SCPAGE_COMPATIBILITY
-{
-    HelpId = HID_SCPAGE_COMPATIBILITY ;
-    SVLook = TRUE ;
-    Hide = TRUE ;
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( TP_WIDTH , TP_HEIGHT ) ;
-
-    FixedLine FL_KEY_BINDINGS
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Key bindings";
-    };
-
-    FixedText FT_KEY_BINDINGS
-    {
-        Pos = MAP_APPFONT ( 12, 16 ) ;
-        Size = MAP_APPFONT ( 165, 24 ) ;
-        Wordbreak = TRUE;
-        Text [ en-US ] = "Select desired ~key binding type. Changing the key binding type may overwrite some of the existing key bindings." ;
-    };
-
-    ListBox LB_KEY_BINDINGS
-    {
-        HelpID = "sc:ListBox:RID_SCPAGE_COMPATIBILITY:LB_KEY_BINDINGS";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 179, 20 ) ;
-        Size = MAP_APPFONT ( 75, 46 ) ;
-        DropDown = TRUE ;
-        StringList [ en-US ] =
-        {
-            < "Default" ; Default ; > ;
-            < "OpenOffice.org legacy" ; Default ; > ;
-        };
-    };
-};
-
 TabPage RID_SCPAGE_USERLISTS
 {
     HelpId = HID_SCPAGE_USERLISTS ;

@@ -16,12 +16,9 @@
 #include "appoptio.hxx"
 
 ScTpCompatOptions::ScTpCompatOptions(Window *pParent, const SfxItemSet &rCoreAttrs) :
-    SfxTabPage(pParent, ScResId(RID_SCPAGE_COMPATIBILITY), rCoreAttrs),
-    maFlKeyBindings(this, ScResId(FL_KEY_BINDINGS)),
-    maFtKeyBindings(this, ScResId(FT_KEY_BINDINGS)),
-    maLbKeyBindings(this, ScResId(LB_KEY_BINDINGS))
+    SfxTabPage(pParent, "OptCompatibilityPage","modules/scalc/ui/optcompatibilitypage.ui", rCoreAttrs)
 {
-    FreeResource();
+    get(m_pLbKeyBindings,"keybindings");
 }
 
 ScTpCompatOptions::~ScTpCompatOptions()
@@ -36,11 +33,11 @@ SfxTabPage* ScTpCompatOptions::Create(Window *pParent, const SfxItemSet &rCoreAt
 sal_Bool ScTpCompatOptions::FillItemSet(SfxItemSet &rCoreAttrs)
 {
     bool bRet = false;
-    if (maLbKeyBindings.GetSavedValue() != maLbKeyBindings.GetSelectEntryPos())
+    if (m_pLbKeyBindings->GetSavedValue() != m_pLbKeyBindings->GetSelectEntryPos())
     {
         rCoreAttrs.Put(
             SfxUInt16Item(
-                SID_SC_OPT_KEY_BINDING_COMPAT, maLbKeyBindings.GetSelectEntryPos()));
+                SID_SC_OPT_KEY_BINDING_COMPAT, m_pLbKeyBindings->GetSelectEntryPos()));
         bRet = true;
     }
     return bRet;
@@ -58,17 +55,17 @@ void ScTpCompatOptions::Reset(const SfxItemSet &rCoreAttrs)
         switch (eKeyB)
         {
             case ScOptionsUtil::KEY_DEFAULT:
-                maLbKeyBindings.SelectEntryPos(0);
+                m_pLbKeyBindings->SelectEntryPos(0);
             break;
             case ScOptionsUtil::KEY_OOO_LEGACY:
-                maLbKeyBindings.SelectEntryPos(1);
+                m_pLbKeyBindings->SelectEntryPos(1);
             break;
             default:
                 ;
         }
     }
 
-    maLbKeyBindings.SaveValue();
+    m_pLbKeyBindings->SaveValue();
 }
 
 int ScTpCompatOptions::DeactivatePage(SfxItemSet* /*pSet*/)
