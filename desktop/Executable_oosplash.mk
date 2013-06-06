@@ -35,15 +35,13 @@ $(eval $(call gb_Executable_add_libs,oosplash,\
 
 endif
 
-ifneq ($(GUIBASE),headless)
+ifneq ($(ENABLE_HEADLESS),TRUE)
+
 ifneq ($(OS),WNT)
 $(eval $(call gb_Executable_add_libs,oosplash,\
     -lX11 \
 ))
 endif
-endif
-
-ifneq ($(ENABLE_HEADLESS),TRUE)
 
 $(eval $(call gb_Executable_add_defs,oosplash,\
     -DENABLE_QUICKSTART_LIBPNG \

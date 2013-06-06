@@ -3966,7 +3966,7 @@ if test "$enable_headless" = "yes"; then
     if test "$GUIBASE" != "unx"; then
         AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice with --enable-headless])
     fi
-    GUIBASE=headless
+    GUIBASE=not-used
 fi
 
 INPATH="${OUTPATH}${PROEXT}"

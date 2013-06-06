@@ -128,7 +128,7 @@ $(eval $(call gb_Library_add_cxxflags,tk,\
     $(gb_OBJCXXFLAGS)))
 endif
 
-ifneq ($(GUIBASE),headless)
+ifeq (,$(ENABLE_HEADLESS))
 ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
 $(eval $(call gb_Library_add_libs,tk,\
     -lX11 \

@@ -27,7 +27,7 @@ else ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.android))
 else ifeq ($(OS),IOS)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.ios))
-else ifeq ($(GUIBASE),headless)
+else ifeq ($(ENABLE_HEADLESS),TRUE)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.headless))
 else
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
@@ -324,12 +324,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ))
 
 # handle X11 platforms, which have additional files and possibly system graphite
-ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/generic/glyphs/graphite_serverfont \
-))
-endif
-ifeq ($(GUIBASE),headless)
+ifneq (,$(or $(filter unx,$(GUIBASE)),$(ENABLE_HEADLESS)))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/generic/glyphs/graphite_serverfont \
 ))
@@ -538,7 +533,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 endif
 
-ifeq ($(GUIBASE),headless)
+ifeq ($(ENABLE_HEADLESS),TRUE)
 $(eval $(call gb_Library_add_defs,vcl,\
     -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
     -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \

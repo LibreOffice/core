@@ -145,7 +145,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 			accessibility/bridge/org/openoffice/accessibility/java_uno_accessbridge \
 		) \
 	) \
-	$(if $(filter headless,$(GUIBASE)), \
+	$(if $(ENABLE_HEADLESS), \
 		vcl/vcl.headless \
 	) \
 	$(if $(filter-out WNT,$(OS)), \
@@ -295,7 +295,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	) \
 	$(if $(filter-out MACOSX WNT,$(OS)), \
 		desktop/unx/splash/splash \
-		$(if $(filter-out headless,$(GUIBASE)), \
+		$(if $(ENABLE_HEADLESS),, \
 			shell/source/backends/desktopbe/desktopbe1 \
 			vcl/vcl.unx \
 		) \
