@@ -85,7 +85,7 @@ public:
      If there is no suiteable mapping available NULL will
      be returned.
   */
-  NSString* openOfficeToSystemFlavor(const com::sun::star::datatransfer::DataFlavor& oooDataFlavor) const;
+  NSString* openOfficeToSystemFlavor(const com::sun::star::datatransfer::DataFlavor& oooDataFlavor, bool& rbInternal) const;
 
   /* Select the best available image data type
      If there is no suiteable mapping available NULL will
@@ -131,8 +131,6 @@ private:
   /* Determines if the provided Mime content type is valid.
    */
   bool isValidMimeContentType(const rtl::OUString& contentType) const;
-
-  NSString* internalOpenOfficeToSystemFlavor(const com::sun::star::datatransfer::DataFlavor& oooDataFlavor) const;
 
 private:
   ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;

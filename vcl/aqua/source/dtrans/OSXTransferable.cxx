@@ -84,10 +84,11 @@ Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& aFlavor )
                                        static_cast<XTransferable*>(this));
     }
 
+  bool bInternal(false);
   NSString* sysFormat =
       (aFlavor.MimeType.compareToAscii( "image/png", 9 ) == 0)
       ? mDataFlavorMapper->openOfficeImageToSystemFlavor( mPasteboard )
-      : mDataFlavorMapper->openOfficeToSystemFlavor(aFlavor);
+      : mDataFlavorMapper->openOfficeToSystemFlavor(aFlavor, bInternal);
   DataProviderPtr_t dp;
 
   if ([sysFormat caseInsensitiveCompare: NSFilenamesPboardType] == NSOrderedSame)
