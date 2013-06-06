@@ -4831,6 +4831,7 @@ find_winsdk()
 
 find_msms()
 {
+AC_MSG_NOTICE([checking msms ======================================================])
     for ver in 10.0 11.0; do
         reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
         if test -n "$regvalue"; then
@@ -4847,10 +4848,15 @@ find_msms()
     msmdir=`cygpath -d "$msmdir"`
     msmdir=`cygpath -u "$msmdir"`
     if test -z "$msmdir"; then
-        AC_MSG_ERROR([Merge modules not found])
+        if test "$ENABLE_RELEASE_BUILD" = "FALSE" ; then
+            AC_MSG_WARN([Merge modules not found in $msmdir])
+            msmdir=""
+        else
+            AC_MSG_ERROR([Merge modules not found in $msmdir])
+        fi
+    else
+        msms="Microsoft_VC${VCVER}_CRT_x86.msm"
     fi
-
-    msms="Microsoft_VC${VCVER}_CRT_x86.msm"
 }
 
 find_msvc_x64_dlls()
@@ -6052,6 +6058,7 @@ if test $_os = "WINNT" -a "$WITH_MINGW" != yes; then
     MERGE_MODULES="$msms"
     SCPDEFS="$SCPDEFS -DWITH_VC${VCVER}_REDIST"
 fi
+
 AC_SUBST(MSVC_DLL_PATH)
 AC_SUBST(MSVC_DLLS)
 AC_SUBST(MSVC_DEBUG_DLL_PATH)
