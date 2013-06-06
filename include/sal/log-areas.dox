@@ -345,6 +345,7 @@ certain functionality.
 
 @li @c dbaccess
 @li @c dbaccess.ui
+@li @c dbaccess.OGeneralPage
 
 @section svx
 
