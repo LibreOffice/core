@@ -49,7 +49,6 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     $(if $(filter TRUE,$(SOLAR_JAVA)), \
         svtools/source/java/javaerror.src) \
     svtools/source/misc/ehdl.src \
-    svtools/source/misc/helpagent.src \
     svtools/source/misc/imagemgr.src \
     svtools/source/misc/langtab.src \
     svtools/source/misc/svtools.src \

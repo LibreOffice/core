@@ -65,7 +65,6 @@ public:
 
     virtual sal_Bool    Start( const OUString& rHelpId, const Window* pWindow );
     virtual sal_Bool    SearchKeyword( const OUString& rKeyWord );
-    virtual void        OpenHelpAgent( const OString& rHelpId );
     virtual OUString    GetHelpText( const OUString& aHelpURL, const Window* pWindow );
 
     static void         EnableContextHelp();

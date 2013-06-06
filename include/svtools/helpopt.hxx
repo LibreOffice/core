@@ -42,17 +42,8 @@ public:
     void            SetHelpTips( sal_Bool b );
     sal_Bool        IsHelpTips() const;
 
-    void            SetHelpAgentAutoStartMode( sal_Bool b );
-    sal_Bool        IsHelpAgentAutoStartMode() const;
-    void            SetHelpAgentTimeoutPeriod( sal_Int32 _nSeconds );
-    sal_Int32       GetHelpAgentTimeoutPeriod( ) const;
-
     const String&   GetHelpStyleSheet()const;
     void            SetHelpStyleSheet(const String& rStyleSheet);
-
-    /** resets the help agent's ignore counter for all URL's
-    */
-    void            resetAgentIgnoreURLCounter();
 
     void            SetWelcomeScreen( sal_Bool b );
     sal_Bool        IsWelcomeScreen() const;

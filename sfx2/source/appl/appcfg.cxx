@@ -270,16 +270,6 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                                aHelpOptions.IsHelpTips() ) ) )
                         bRet = sal_True;
                     break;
-                case SID_ATTR_AUTOHELPAGENT :
-                    if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_ATTR_AUTOHELPAGENT ),
-                               aHelpOptions.IsHelpAgentAutoStartMode() ) ) )
-                        bRet = sal_True;
-                    break;
-                case SID_HELPAGENT_TIMEOUT :
-                    if ( rSet.Put( SfxInt32Item( rPool.GetWhich( SID_HELPAGENT_TIMEOUT ),
-                                                 aHelpOptions.GetHelpAgentTimeoutPeriod() ) ) )
-                        bRet = sal_True;
-                    break;
                 case SID_ATTR_WELCOMESCREEN :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_ATTR_WELCOMESCREEN ),
                                aHelpOptions.IsWelcomeScreen() ) ) )
@@ -636,20 +626,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aHelpOptions.SetHelpTips(((const SfxBoolItem *)pItem)->GetValue());
-    }
-
-    // AutoHelpAgent
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOHELPAGENT ), sal_True, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        aHelpOptions.SetHelpAgentAutoStartMode( ((const SfxBoolItem *)pItem)->GetValue() );
-    }
-
-    // help agent timeout
-    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_HELPAGENT_TIMEOUT ), sal_True, &pItem ) )
-    {
-        DBG_ASSERT(pItem->ISA(SfxInt32Item), "Int32Item expected");
-        aHelpOptions.SetHelpAgentTimeoutPeriod( ( (const SfxInt32Item*)pItem )->GetValue() );
     }
 
     // WelcomeScreen

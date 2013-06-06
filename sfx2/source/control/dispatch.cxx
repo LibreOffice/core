@@ -239,16 +239,6 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
             sal_Bool *pOldInCallAliveFlag = pImp->pInCallAliveFlag;
             pImp->pInCallAliveFlag = &bThisDispatcherAlive;
 
-            SfxViewFrame* pView = GetFrame();
-            if ( !pView )
-                pView = SfxViewFrame::Current();
-            if ( pView )
-            {
-                OString aCmd(".uno:");
-                aCmd += rSlot.GetUnoName();
-                SfxHelp::OpenHelpAgent( &pView->GetFrame(), aCmd );
-            }
-
             SfxExecFunc pFunc = rSlot.GetExecFnc();
             rShell.CallExec( pFunc, rReq );
 

@@ -112,7 +112,6 @@ protected:
     // Is not deleted in Sfx!
     virtual const SfxItemSet*   GetRefreshedSet();
     virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
-    virtual long                Notify( NotifyEvent& rNEvt );
 
     VclButtonBox*   m_pActionArea;
     SfxItemSet*     pExampleSet;

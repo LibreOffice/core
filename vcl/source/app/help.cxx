@@ -58,10 +58,6 @@ Help::~Help()
 
 // -----------------------------------------------------------------------
 
-void Help::OpenHelpAgent( const OString& )
-{
-}
-
 // -----------------------------------------------------------------------
 
 sal_Bool Help::Start( const OUString&, const Window* )

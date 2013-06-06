@@ -45,7 +45,6 @@ $(eval $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
 	org/openoffice/Office/ProtocolHandler.xcu \
 	org/openoffice/Office/Security.xcu \
 	org/openoffice/Office/Scripting.xcu \
-	org/openoffice/Office/SFX.xcu \
 	org/openoffice/Office/Views.xcu \
 	org/openoffice/Office/Paths.xcu \
 	org/openoffice/Office/Histories.xcu \
@@ -139,7 +138,6 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	org/openoffice/Office/Accelerators.xcu \
 	org/openoffice/Office/Addons.xcu \
 	org/openoffice/Office/Common.xcu \
-	org/openoffice/Office/SFX.xcu \
 	org/openoffice/Office/DataAccess.xcu \
 	org/openoffice/Office/PresenterScreen.xcu \
 	org/openoffice/Office/TableWizard.xcu \

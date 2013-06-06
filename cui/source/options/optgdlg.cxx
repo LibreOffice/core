@@ -185,8 +185,6 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet)
 {
     get(m_pToolTipsCB, "tooltips");
     get(m_pExtHelpCB, "exthelp");
-    get(m_pHelpAgentCB, "helpagent");
-    get(m_pHelpAgentResetBtn, "resethelpagent");
     if (!lcl_HasSystemFilePicker())
         get<VclContainer>("filedlgframe")->Hide();
 #if !defined(MACOSX) && ! ENABLE_GTK
@@ -219,8 +217,6 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet)
 
     aLink = LINK( this, OfaMiscTabPage, HelpCheckHdl_Impl );
     m_pToolTipsCB->SetClickHdl( aLink );
-    m_pHelpAgentCB->SetClickHdl( aLink );
-    m_pHelpAgentResetBtn->SetClickHdl( LINK( this, OfaMiscTabPage, HelpAgentResetHdl_Impl ) );
 }
 
 // -----------------------------------------------------------------------
@@ -249,9 +245,6 @@ sal_Bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
     bChecked = ( m_pExtHelpCB->IsChecked() && m_pToolTipsCB->IsChecked() );
     if ( bChecked != m_pExtHelpCB->GetSavedValue() )
         aHelpOptions.SetExtendedHelp( bChecked );
-    bChecked = m_pHelpAgentCB->IsChecked();
-    if ( bChecked != m_pHelpAgentCB->GetSavedValue() )
-        aHelpOptions.SetHelpAgentAutoStartMode( bChecked );
 
     if ( m_pFileDlgCB->IsChecked() != m_pFileDlgCB->GetSavedValue() )
     {
@@ -300,12 +293,9 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
     SvtHelpOptions aHelpOptions;
     m_pToolTipsCB->Check( aHelpOptions.IsHelpTips() );
     m_pExtHelpCB->Check( aHelpOptions.IsHelpTips() && aHelpOptions.IsExtendedHelp() );
-    m_pHelpAgentCB->Check( aHelpOptions.IsHelpAgentAutoStartMode() );
 
     m_pToolTipsCB->SaveValue();
     m_pExtHelpCB->SaveValue();
-    m_pHelpAgentCB->SaveValue();
-    HelpCheckHdl_Impl(m_pHelpAgentCB);
 
     SvtMiscOptions aMiscOpt;
     m_pFileDlgCB->Check( !aMiscOpt.UseSystemFileDialog() );
@@ -372,21 +362,11 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
 IMPL_LINK_NOARG(OfaMiscTabPage, HelpCheckHdl_Impl)
 {
     m_pExtHelpCB->Enable( m_pToolTipsCB->IsChecked() );
-    m_pHelpAgentResetBtn->Enable( m_pHelpAgentCB->IsChecked() );
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_NOARG(OfaMiscTabPage, HelpAgentResetHdl_Impl)
-{
-    SvtHelpOptions().resetAgentIgnoreURLCounter();
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-// -------------------------------------------------------------------
 class CanvasSettings
 {
 public:

@@ -1081,7 +1081,6 @@ void SwView::Execute(SfxRequest &rReq)
             if(bQuery)
             {
                 SfxViewFrame* pTmpFrame = GetViewFrame();
-                SfxHelp::OpenHelpAgent( &pTmpFrame->GetFrame(), HID_MAIL_MERGE_SELECT );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
                 AbstractMailMergeCreateFromDlg* pDlg = pFact->CreateMailMergeCreateFromDlg( DLG_MERGE_CREATE,

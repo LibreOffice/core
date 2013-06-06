@@ -1625,27 +1625,4 @@ void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )
     }
 }
 
-long SfxTabDialog::Notify( NotifyEvent& rNEvt )
-{
-    if ( rNEvt.GetType() == EVENT_GETFOCUS )
-    {
-        SfxViewFrame* pViewFrame = GetViewFrame() ? GetViewFrame() : SfxViewFrame::Current();
-        if ( pViewFrame )
-        {
-            Window* pWindow = rNEvt.GetWindow();
-            OString sHelpId;
-            while ( sHelpId.isEmpty() && pWindow )
-            {
-                sHelpId = pWindow->GetHelpId();
-                pWindow = pWindow->GetParent();
-            }
-
-            if ( !sHelpId.isEmpty() )
-                SfxHelp::OpenHelpAgent( &pViewFrame->GetFrame(), sHelpId );
-        }
-    }
-
-    return TabDialog::Notify( rNEvt );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

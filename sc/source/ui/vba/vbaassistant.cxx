@@ -54,15 +54,11 @@ void SAL_CALL ScVbaAssistant::setVisible( sal_Bool bVisible ) throw (uno::Runtim
 
 sal_Bool SAL_CALL ScVbaAssistant::getOn() throw (uno::RuntimeException)
 {
-    if( SvtHelpOptions().IsHelpAgentAutoStartMode() )
-        return sal_True;
-    else
-        return false;
+    return false;
 }
 
 void SAL_CALL ScVbaAssistant::setOn( sal_Bool bOn ) throw (uno::RuntimeException)
 {
-    SvtHelpOptions().SetHelpAgentAutoStartMode( bOn );
     setVisible( bOn );
 }
 
