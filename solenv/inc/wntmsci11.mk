@@ -292,7 +292,6 @@ LIBCMT=msvcrt.lib
 .ELSE # "$(DYNAMIC_CRT)"!=""
 .IF "$(USE_STLP_DEBUG)" != ""
 LIBCMT=libcmt.lib
-CDEFS+=-D_DEBUG
 .ELSE  # "$(USE_STLP_DEBUG)" != ""
 LIBCMT=libcmt.lib
 .ENDIF # "$(USE_STLP_DEBUG)" != ""
