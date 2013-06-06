@@ -2971,9 +2971,9 @@ $(call gb_Executable_add_runtime_dependencies,$(1),\
 	$(call gb_Configuration_get_target,registry) \
 	$(call gb_Configuration_get_target,fcfg_langpack) \
 	$(call gb_Library_get_target,$(gb_CPPU_ENV)_uno) \
-	$(if $(filter-out MACOSX WNT,$(OS_FOR_BUILD)), \
+	$(if $(filter-out MACOSX WNT,$(OS_FOR_BUILD)),$(if $(ENABLE_HEADLESS),, \
 		$(call gb_Library_get_target,vclplug_svp) \
-	) \
+	)) \
 	$(call gb_Package_get_target_for_build,cppuhelper_unorc) \
 	$(call gb_Rdb_get_outdir_target_for_build,ure/services) \
 	$(call gb_UnoApi_get_target,offapi) \
