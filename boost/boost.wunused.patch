@@ -8,6 +8,16 @@
     return false;
  #else // BOOST_HAS_FPCLASSIFY
     return (BOOST_FPCLASSIFY_PREFIX fpclassify(t) == (int)FP_NAN);
+--- foo/foo/foo/boost/multi_array/base.hpp
++++ foo/foo/foo/boost/multi_array/base.hpp
+@@ -501,6 +501,7 @@
+       // the "far side" of the range (the top if stride is positive, the bottom
+       // if stride is negative).
+       index bound_adjustment = stride < 0 ? 1 : 0;
++      (void) bound_adjustment;
+       BOOST_ASSERT(((index_bases[n] - bound_adjustment) <= finish) &&
+         (finish <= (index_bases[n] + index(extents[n]) - bound_adjustment)));
+ #endif // BOOST_DISABLE_ASSERTS
 --- foo/foo/foo/boost/unordered/detail/table.hpp
 +++ foo/foo/foo/boost/unordered/detail/table.hpp
 @@ -458,6 +458,7 @@
