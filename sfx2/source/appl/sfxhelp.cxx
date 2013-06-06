@@ -96,8 +96,6 @@ void NoHelpErrorBox::RequestHelp( const HelpEvent& )
     // do nothing, because no help available
 }
 
-#define STARTERLIST 0
-
 static bool impl_hasHelpInstalled( const OUString &rLang );
 
 /// Return the locale we prefer for displaying help
@@ -200,114 +198,11 @@ sal_Bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
     return bRet;
 }
 
-class SfxHelpOptions_Impl : public utl::ConfigItem
-{
-private:
-    std::set < OString > m_aIds;
-
-public:
-    SfxHelpOptions_Impl();
-    ~SfxHelpOptions_Impl();
-
-    bool HasId( const OString& rId ) { return m_aIds.size() ? m_aIds.find( rId ) != m_aIds.end() : false; }
-    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
-    virtual void Commit();
-};
-
-static Sequence< OUString > GetPropertyNames()
-{
-    Sequence< OUString > aNames( 1 );
-    OUString* pNames = aNames.getArray();
-    pNames[0] = OUString( "HelpAgentStarterList" );
-
-    return aNames;
-}
-
-SfxHelpOptions_Impl::SfxHelpOptions_Impl()
-    : ConfigItem( OUString("Office.SFX/Help") )
-{
-    Sequence< OUString > aNames = GetPropertyNames();
-    Sequence< Any > aValues = GetProperties( aNames );
-    EnableNotification( aNames );
-    const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
-    if ( aValues.getLength() == aNames.getLength() )
-    {
-        for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
-        {
-            DBG_ASSERT( pValues[nProp].hasValue(), "property value missing" );
-            if ( pValues[nProp].hasValue() )
-            {
-                switch ( nProp )
-                {
-                    case STARTERLIST :
-                    {
-                        OUString aCodedList;
-                        if ( pValues[nProp] >>= aCodedList )
-                        {
-                            OString aTmp(
-                                OUStringToOString(
-                                    aCodedList, RTL_TEXTENCODING_UTF8));
-                            sal_Int32 nIndex = 0;
-                            do
-                            {
-                                OString aToken = aTmp.getToken( 0, ',', nIndex );
-                                if ( !aToken.isEmpty() )
-                                    m_aIds.insert( aToken );
-                            }
-                            while ( nIndex >= 0 );
-                        }
-                        else {
-                            SAL_WARN( "sfx2.appl", "Wrong property type!" );
-                        }
-
-                        break;
-                    }
-
-                    default:
-                        SAL_WARN( "sfx2.appl", "Wrong property!" );
-                        break;
-                }
-            }
-        }
-    }
-}
-
-SfxHelpOptions_Impl::~SfxHelpOptions_Impl()
-{
-}
-
-
-void SfxHelpOptions_Impl::Notify( const com::sun::star::uno::Sequence< OUString >& )
-{
-}
-
-void SfxHelpOptions_Impl::Commit()
-{
-}
-
 class SfxHelp_Impl
 {
-private:
-    SfxHelpOptions_Impl* m_pOpt; // the options
-
 public:
-    SfxHelp_Impl();
-    ~SfxHelp_Impl();
-
-    SfxHelpOptions_Impl*    GetOptions();
-    static OUString         GetHelpText( const OUString& aCommandURL, const OUString& rModule );
+    static OUString GetHelpText( const OUString& aCommandURL, const OUString& rModule );
 };
-
-SfxHelp_Impl::SfxHelp_Impl() :
-    m_pOpt ( NULL )
-{
-}
-
-SfxHelp_Impl::~SfxHelp_Impl()
-{
-    delete m_pOpt;
-}
 
 OUString SfxHelp_Impl::GetHelpText( const OUString& aCommandURL, const OUString& rModule )
 {
@@ -320,14 +215,6 @@ OUString SfxHelp_Impl::GetHelpText( const OUString& aCommandURL, const OUString&
     aHelpURL.insert( nIndex, "&Active=true" );
     // load help string
     return SfxContentHelper::GetActiveHelpString( aHelpURL.makeStringAndClear() );
-}
-
-SfxHelpOptions_Impl* SfxHelp_Impl::GetOptions()
-{
-    // create if not exists
-    if ( !m_pOpt )
-        m_pOpt = new SfxHelpOptions_Impl;
-    return m_pOpt;
 }
 
 SfxHelp::SfxHelp() :
@@ -581,7 +468,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
 OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const Window* pWindow )
 {
     OUString sModuleName = GetHelpModuleName_Impl();
-    OUString sHelpText = pImp->GetHelpText( aCommandURL, sModuleName );
+    OUString sHelpText = SfxHelp_Impl::GetHelpText( aCommandURL, sModuleName );
 
     OString aNewHelpId;
 
@@ -592,7 +479,7 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const Window* pWindo
         while ( pParent )
         {
             aNewHelpId = pParent->GetHelpId();
-            sHelpText = pImp->GetHelpText( OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8), sModuleName );
+            sHelpText = SfxHelp_Impl::GetHelpText( OStringToOUString(aNewHelpId, RTL_TEXTENCODING_UTF8), sModuleName );
             if (!sHelpText.isEmpty())
                 pParent = NULL;
             else
@@ -791,49 +678,6 @@ OUString SfxHelp::CreateHelpURL(const OUString& aCommandURL, const OUString& rMo
 {
     SfxHelp* pHelp = static_cast< SfxHelp* >(Application::GetHelp());
     return pHelp ? pHelp->CreateHelpURL_Impl( aCommandURL, rModuleName ) : OUString();
-}
-
-void SfxHelp::OpenHelpAgent( SfxFrame*, const OString& sHelpId )
-{
-    SfxHelp* pHelp = (static_cast< SfxHelp* >(Application::GetHelp()) );
-    if ( pHelp )
-        pHelp->OpenHelpAgent( sHelpId );
-}
-
-void SfxHelp::OpenHelpAgent( const OString& sHelpId )
-{
-    if ( SvtHelpOptions().IsHelpAgentAutoStartMode() )
-    {
-            SfxHelpOptions_Impl *pOpt = pImp->GetOptions();
-            if ( !pOpt->HasId( sHelpId ) )
-                return;
-
-            try
-            {
-                URL aURL;
-                aURL.Complete = CreateHelpURL_Impl( OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8), GetHelpModuleName_Impl() );
-                Reference< XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
-                xTrans->parseStrict(aURL);
-
-                Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
-                Reference < XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
-
-                Reference< XDispatchProvider > xDispProv( xCurrentFrame, UNO_QUERY );
-                Reference< XDispatch > xHelpDispatch;
-                if ( xDispProv.is() )
-                    xHelpDispatch = xDispProv->queryDispatch(
-                        aURL, OUString("_helpagent"),
-                        FrameSearchFlag::PARENT | FrameSearchFlag::SELF );
-
-                DBG_ASSERT( xHelpDispatch.is(), "OpenHelpAgent: could not get a dispatcher!" );
-                if ( xHelpDispatch.is() )
-                    xHelpDispatch->dispatch( aURL, Sequence< PropertyValue >() );
-            }
-            catch (const Exception&)
-            {
-                SAL_WARN( "sfx2.appl", "OpenHelpAgent: caught an exception while executing the dispatch!" );
-            }
-    }
 }
 
 OUString SfxHelp::GetDefaultHelpModule()

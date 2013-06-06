@@ -44,7 +44,6 @@ officecfg_XCSFILES := \
     Office/ProtocolHandler \
     Office/Recovery \
     Office/ReportDesign \
-    Office/SFX \
     Office/Scripting \
     Office/Security \
     Office/Substitution \

@@ -40,7 +40,6 @@ private:
     SAL_DLLPRIVATE sal_Bool Start_Impl( const OUString& rURL, const Window* pWindow, const OUString& rKeyword );
     SAL_DLLPRIVATE virtual sal_Bool SearchKeyword( const OUString& rKeyWord );
     SAL_DLLPRIVATE virtual sal_Bool Start( const OUString& rURL, const Window* pWindow );
-    SAL_DLLPRIVATE virtual void OpenHelpAgent( const OString& sHelpId );
     SAL_DLLPRIVATE OUString GetHelpModuleName_Impl();
     SAL_DLLPRIVATE OUString CreateHelpURL_Impl( const OUString& aCommandURL, const OUString& rModuleName );
 
@@ -54,8 +53,6 @@ public:
     virtual OUString        GetHelpText( const OUString&, const Window* pWindow );
 
     static OUString         CreateHelpURL( const OUString& aCommandURL, const OUString& rModuleName );
-    using Help::OpenHelpAgent;
-    static void             OpenHelpAgent( SfxFrame* pFrame, const OString& sHelpId );
     static OUString         GetDefaultHelpModule();
     static OUString         GetCurrentModuleIdentifier();
 };

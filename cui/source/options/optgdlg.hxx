@@ -37,8 +37,6 @@ class OfaMiscTabPage : public SfxTabPage
 private:
     CheckBox*     m_pToolTipsCB;
     CheckBox*     m_pExtHelpCB;
-    CheckBox*     m_pHelpAgentCB;
-    PushButton*   m_pHelpAgentResetBtn;
 
     FixedImage*   m_pFileDlgROImage;
     CheckBox*     m_pFileDlgCB;
@@ -57,7 +55,6 @@ private:
     DECL_LINK( TwoFigureHdl, NumericField* );
     DECL_LINK( TwoFigureConfigHdl, NumericField* );
     DECL_LINK(HelpCheckHdl_Impl, void *);
-    DECL_LINK(HelpAgentResetHdl_Impl, void *);
 #ifdef WNT
     DECL_LINK( OnFileDlgToggled, void* );
 #endif

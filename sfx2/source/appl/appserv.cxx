@@ -528,20 +528,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        case SID_HELP_PI:
-        {
-            SvtHelpOptions aHelpOpt;
-            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELP_PI, sal_False);
-            sal_Bool bOn = pOnItem
-                            ? ((SfxBoolItem*)pOnItem)->GetValue()
-                            : !aHelpOpt.IsHelpAgentAutoStartMode();
-            aHelpOpt.SetHelpAgentAutoStartMode( bOn );
-            Invalidate(SID_HELP_PI);
-            bDone = true;
-            break;
-        }
-
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_ABOUT:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
@@ -764,11 +750,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                 case SID_HELPBALLOONS:
                 {
                     rSet.Put( SfxBoolItem( SID_HELPBALLOONS, Help::IsBalloonHelpEnabled() ) );
-                }
-                break;
-                case SID_HELP_PI:
-                {
-                    rSet.Put( SfxBoolItem( SID_HELP_PI, SvtHelpOptions().IsHelpAgentAutoStartMode() ) );
                 }
                 break;
 

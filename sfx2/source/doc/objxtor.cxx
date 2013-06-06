@@ -622,13 +622,6 @@ sal_uInt16 SfxObjectShell::PrepareClose
         // Ask if to save
         short nRet = RET_YES;
         {
-            //initiate help agent to inform about "print modifies the document"
-            SvtPrintWarningOptions aPrintOptions;
-            if (aPrintOptions.IsModifyDocumentOnPrintingAllowed() &&
-                HasName() && getDocProperties()->getPrintDate().Month > 0)
-            {
-                SfxHelp::OpenHelpAgent( &pFirst->GetFrame(), HID_CLOSE_WARNING );
-            }
             const Reference< XTitle > xTitle( *pImp->pBaseModel.get(), UNO_QUERY_THROW );
             const OUString     sTitle = xTitle->getTitle ();
             nRet = ExecuteQuerySaveDocument(&pFrame->GetWindow(),sTitle);

@@ -166,7 +166,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCS)/Office/Paths.xcs \
 	$(postprocess_XCS)/Office/ProtocolHandler.xcs \
 	$(postprocess_XCS)/Office/Recovery.xcs \
-	$(postprocess_XCS)/Office/SFX.xcs \
 	$(postprocess_XCS)/Office/Scripting.xcs \
 	$(postprocess_XCS)/Office/Security.xcs \
 	$(postprocess_XCS)/Office/Substitution.xcs \
@@ -237,7 +236,6 @@ postprocess_FILES_main := \
 	$(postprocess_XCU)/Office/Math.xcu \
 	$(postprocess_XCU)/Office/Paths.xcu \
 	$(postprocess_XCU)/Office/ProtocolHandler.xcu \
-	$(postprocess_XCU)/Office/SFX.xcu \
 	$(postprocess_XCU)/Office/Scripting.xcu \
 	$(postprocess_XCU)/Office/Security.xcu \
 	$(postprocess_XCU)/Office/TableWizard.xcu \

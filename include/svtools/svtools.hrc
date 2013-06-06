@@ -263,8 +263,6 @@
 //.............................................................................
 // bitmaps
 
-#define BMP_HELP_AGENT_IMAGE            (RID_SVTOOLS_BITMAP_START +   1)
-#define BMP_HELP_AGENT_CLOSER           (RID_SVTOOLS_BITMAP_START +   2)
 #define BMP_PLUGIN                      (RID_SVTOOLS_BITMAP_START +   3)
 #define BMP_LIST_ADD                    (RID_SVTOOLS_BITMAP_START +   4)
 

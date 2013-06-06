@@ -1782,17 +1782,6 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
         else if (pMgr != NULL)
             pMgr->Activate_Impl();
 
-        Window* pWindow = rEvt.GetWindow();
-        OString sHelpId;
-        while ( sHelpId.isEmpty() && pWindow )
-        {
-            sHelpId = pWindow->GetHelpId();
-            pWindow = pWindow->GetParent();
-        }
-
-        if ( !sHelpId.isEmpty() )
-            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), sHelpId );
-
         // In VCL Notify goes first to the window itself, also call the
         // base class, otherwise the parent learns nothing
         // if ( rEvt.GetWindow() == this )  PB: #i74693# not necessary any longer

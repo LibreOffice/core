@@ -2854,33 +2854,6 @@ SfxVoidItem HelpDownload SID_HELP_DOWNLOAD
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem HelperDialog SID_HELP_PI
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_APPLICATION;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem HelpIndex SID_HELPINDEX
 ()
 [

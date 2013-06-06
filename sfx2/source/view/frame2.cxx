@@ -114,18 +114,6 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
             pView->MakeActive_Impl( sal_False );
         }
 
-        // TODO/LATER: do we still need this code?
-        Window* pWindow = rNEvt.GetWindow();
-        OString sHelpId;
-        while ( sHelpId.isEmpty() && pWindow )
-        {
-            sHelpId = pWindow->GetHelpId();
-            pWindow = pWindow->GetParent();
-        }
-
-        if ( !sHelpId.isEmpty() )
-            SfxHelp::OpenHelpAgent( pFrame, sHelpId );
-
         // if focus was on an external window, the clipboard content might have been changed
         pView->GetBindings().Invalidate( SID_PASTE );
         pView->GetBindings().Invalidate( SID_PASTE_SPECIAL );

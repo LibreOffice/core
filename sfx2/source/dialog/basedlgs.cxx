@@ -367,16 +367,6 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
     {
         pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
         pImp->pMgr->Activate_Impl();
-        Window* pWindow = rEvt.GetWindow();
-        OString sHelpId;
-        while ( sHelpId.isEmpty() && pWindow )
-        {
-            sHelpId = pWindow->GetHelpId();
-            pWindow = pWindow->GetParent();
-        }
-
-        if ( !sHelpId.isEmpty() )
-            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), sHelpId );
     }
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS && !HasChildPathFocus() )
     {
@@ -465,16 +455,6 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
     {
         pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
         pImp->pMgr->Activate_Impl();
-        Window* pWindow = rEvt.GetWindow();
-        OString sHelpId;
-        while ( sHelpId.isEmpty() && pWindow )
-        {
-            sHelpId = pWindow->GetHelpId();
-            pWindow = pWindow->GetParent();
-        }
-
-        if ( !sHelpId.isEmpty() )
-            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), sHelpId );
     }
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS )
     {

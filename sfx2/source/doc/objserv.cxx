@@ -558,7 +558,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // at the end of the method
             aModelGuard.Init_Impl( uno::Reference< util::XCloseable >( GetModel(), uno::UNO_QUERY ) );
 
-            sal_Bool bDialogUsed = sal_False;
             sal_uInt32 nErrorCode = ERRCODE_NONE;
 
             // by default versions should be preserved always except in case of an explicit
@@ -662,7 +661,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 if ( QueryHiddenInformation( bIsPDFExport ? WhenCreatingPDF : WhenSaving, NULL ) == RET_YES )
                 {
-                    bDialogUsed = aHelper.GUIStoreModel( GetModel(),
+                    aHelper.GUIStoreModel( GetModel(),
                                                          OUString::createFromAscii( pSlot->GetUnoName() ),
                                                          aDispatchArgs,
                                                          bPreselectPassword,
@@ -691,15 +690,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 const SfxFilter* pFilt = GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
 
                 OSL_ENSURE( nId == SID_SAVEDOC || pFilt, "The filter can not be zero since it was used for storing!\n" );
-                if  (   bDialogUsed && pFilt
-                    &&  pFilt->IsOwnFormat()
-                    &&  pFilt->UsesStorage()
-                    &&  pFilt->GetVersion() >= SOFFICE_FILEFORMAT_60 )
-                {
-                    SfxViewFrame* pDocViewFrame = SfxViewFrame::GetFirst( this );
-                    if ( pDocViewFrame )
-                        SfxHelp::OpenHelpAgent( &pDocViewFrame->GetFrame(), HID_DID_SAVE_PACKED_XML );
-                }
 
                 // the StoreAsURL/StoreToURL method have called this method with false
                 // so it has to be restored to true here since it is a call from GUI
