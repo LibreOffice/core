@@ -6,7 +6,6 @@
   	
   <!-- inputvariable declaration -->
 	<xsl:param name="os1"/>
-	<xsl:param name="gui1"/>
 	<xsl:param name="cp1"/>
 	<xsl:param name="com1"/>
 	<xsl:param name="lang1"/>

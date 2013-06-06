@@ -3436,7 +3436,7 @@ AC_SUBST(x_OBJCXXFLAGS)
 AC_SUBST(x_LDFLAGS)
 
 #
-# determine CPU, CPUNAME, GUI, GUIBASE, ...
+# determine CPU, CPUNAME, GUIBASE, ...
 #
 LIB64="lib"
 SOLARINC=
@@ -3447,7 +3447,6 @@ aix*)
     COM=GCC
     CPU=P
     CPUNAME=POWERPC
-    GUI=UNX
     GUIBASE=unx
     OS=AIX
     RTL_OS=AIX
@@ -3460,7 +3459,6 @@ aix*)
 
 cygwin*)
     COM=MSC
-    GUI=WNT
     GUIBASE=not-used
     OS=WNT
     RTL_OS=Windows
@@ -3494,7 +3492,6 @@ cygwin*)
 
 darwin*)
     COM=GCC
-    GUI=UNX
     GUIBASE=not-used
     OS=MACOSX
     RTL_OS=MacOSX
@@ -3544,7 +3541,6 @@ darwin*)
 
 dragonfly*)
     COM=GCC
-    GUI=UNX
     GUIBASE=unx
     OS=DRAGONFLY
     RTL_OS=DragonFly
@@ -3573,7 +3569,6 @@ dragonfly*)
 
 freebsd*)
     COM=GCC
-    GUI=UNX
     GUIBASE=unx
     RTL_OS=FreeBSD
     OS=FREEBSD
@@ -3603,7 +3598,6 @@ freebsd*)
 
 kfreebsd*)
     COM=GCC
-    GUI=UNX
     GUIBASE=unx
     OS=LINUX
     RTL_OS=kFreeBSD
@@ -3635,7 +3629,6 @@ kfreebsd*)
 
 linux-gnu*)
     COM=GCC
-    GUI=UNX
     GUIBASE=unx
     OS=LINUX
     RTL_OS=Linux
@@ -3779,7 +3772,6 @@ linux-gnu*)
 
 linux-android*)
     COM=GCC
-    GUI=UNX
     GUIBASE=not-used
     OS=ANDROID
     RTL_OS=Android
@@ -3817,7 +3809,6 @@ linux-android*)
 
 mingw*)
     COM=GCC
-    GUI=WNT
     GUIBASE=not-used
     OS=WNT
     RTL_OS=Windows
@@ -3852,7 +3843,6 @@ mingw*)
 *netbsd*)
 
     COM=GCC
-    GUI=UNX
     GUIBASE=unx
     OS=NETBSD
     RTL_OS=NetBSD
@@ -3893,7 +3883,6 @@ mingw*)
 
 openbsd*)
     COM=GCC
-    GUI=UNX
     GUIBASE=unx
     OS=OPENBSD
     RTL_OS=OpenBSD
@@ -3926,7 +3915,6 @@ openbsd*)
 solaris*)
 
     COM=GCC
-    GUI=UNX
     GUIBASE=unx
     OS=SOLARIS
     RTL_OS=Solaris
@@ -3992,7 +3980,6 @@ AC_SUBST(CPUNAME)
 AC_SUBST(RTL_OS)
 AC_SUBST(RTL_ARCH)
 AC_SUBST(EPM_FLAGS)
-AC_SUBST(GUI)
 AC_SUBST(GUIBASE)
 AC_SUBST(INPATH)
 AC_SUBST([INSTDIR])
@@ -4108,7 +4095,7 @@ if test "$cross_compiling" = "yes"; then
     cp configure CONF-FOR-BUILD
     test -d config_build && cp -p config_build/*.h CONF-FOR-BUILD/config_host
     (
-    unset COM GUI GUIBASE OS CPU CPUNAME
+    unset COM GUIBASE OS CPU CPUNAME
     unset CC CXX SYSBASE CFLAGS
     unset AR NM OBJDUMP PKG_CONFIG RANLIB STRIP
     unset CPPUNIT_CFLAGS CPPUNIT_LIBS

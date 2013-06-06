@@ -266,7 +266,6 @@ sub check_system_environment
 
     my @environmentvariables = qw(
         SOLARVERSION
-        GUI
         WORK_STAMP
         OUTPATH
         LOCAL_OUT
