@@ -59,7 +59,9 @@ $(call gb_Output_announce,$(2),$(true),GAL,1)
 $(call gb_Helper_abbreviate_dirs,\
 	rm -f $(call gb_Gallery_get_workdir,$(2))/* && \
 	$(call gb_Helper_print_on_error,\
-		$(if $(filter-out MACOSX WNT,$(OS_FOR_BUILD)),SAL_USE_VCLPLUGIN=svp) \
+		$(if $(filter-out MACOSX WNT,$(OS_FOR_BUILD)),$(if $(ENABLE_HEADLESS),, \
+			SAL_USE_VCLPLUGIN=svp \
+		)) \
 		$(call gb_Executable_get_command,$(gb_GENGAL),$(ICECREAM_RUN)) \
 			$(call gb_Gallery__make_env_args) \
 			--build-tree \
