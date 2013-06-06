@@ -588,7 +588,7 @@ public:
     inline void SetFixSize( sal_Bool bNew ) { mbFixSize = bNew; }
 
     // check all pages (starting from the given) and correct them if needed
-    static void CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields = sal_True, SwPageFrm** ppPrev = 0);
+    static void CheckPageDescs( SwPageFrm *pStart, sal_Bool bNotifyFields = sal_True );
 
     // might return 0, with and without const
     SwFrm               *GetNext()  { return mpNext; }

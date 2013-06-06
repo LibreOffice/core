@@ -562,7 +562,7 @@ void SwLayAction::InternalAction()
             SwPageFrm *pTmp = pPage->GetPrev() ?
                                         (SwPageFrm*)pPage->GetPrev() : pPage;
             SetCheckPages( sal_True );
-            SwFrm::CheckPageDescs( pPage, sal_True, &pTmp );
+            SwFrm::CheckPageDescs( pPage );
             SetCheckPages( sal_False );
             nCheckPageNum = USHRT_MAX;
             pPage = pTmp;
