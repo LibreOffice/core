@@ -494,10 +494,9 @@ SalDisplay::initScreen( SalX11Screen nXScreen ) const
                          );
 
         OString aExec(OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
-        const char* argv[2];
-        argv[0] = "/bin/sh";
-        argv[1] = aExec.getStr();
-        XSetCommand( pDisp_, pSD->m_aRefWindow, const_cast<char**>(argv), 2 );
+        const char* argv[1];
+        argv[0] = aExec.getStr();
+        XSetCommand( pDisp_, pSD->m_aRefWindow, const_cast<char**>(argv), 1 );
         XSelectInput( pDisp_, pSD->m_aRefWindow, PropertyChangeMask );
 
         // - - - - - - - - - - GCs - - - - - - - - - - - - - - - - -
