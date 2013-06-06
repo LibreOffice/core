@@ -213,6 +213,7 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
 
     if( 0x4949 != aTiffHeader->byteOrder || 0x002A != aTiffHeader->tagAlign )
     {
+        delete[] aExifData;
         return false;
     }
 
@@ -231,6 +232,7 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
         rStream.Write(aExifData, aLength);
     }
 
+    delete[] aExifData;
     return true;
 }
 
