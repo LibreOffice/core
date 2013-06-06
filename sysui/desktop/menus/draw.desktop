@@ -31,6 +31,7 @@ X-GIO-NoFuse=true
 Keywords=Vector;Schema;Diagram;Layout;OpenDocument Graphics;Microsoft Publisher;Corel Draw;cdr;odg;svg;
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
+StartupWMClass=libreoffice-draw
 [X-New Shortcut Group]
 UnityQuicklist=New Drawing
 Exec=libreoffice --draw %%FILE%%
