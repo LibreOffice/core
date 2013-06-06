@@ -1206,7 +1206,8 @@ String SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
     return sRet;
 }
 
-sal_uLong SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
+sal_uLong
+SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                                     xub_StrLen nInsPos, sal_Unicode cChar,
                                     sal_Bool bInsert, Window* pFrameWin )
 {

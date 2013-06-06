@@ -308,8 +308,10 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Bool bInsert,
     SwTxtNode* pTNd = pCrsr->GetNode()->GetTxtNode();
 
     SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCrsr, cChar );
-    rACorr.AutoCorrect( aSwAutoCorrDoc,
-                    pTNd->GetTxt(), pCrsr->GetPoint()->nContent.GetIndex(),
+    // FIXME: this _must_ be called with reference to the actual node text!
+    String const& rNodeText(reinterpret_cast<String const&>(pTNd->GetTxt()));
+    rACorr.DoAutoCorrect( aSwAutoCorrDoc,
+                    rNodeText, pCrsr->GetPoint()->nContent.GetIndex(),
                     cChar, bInsert, GetWin() );
     if( cChar )
         SaveTblBoxCntnt( pCrsr->GetPoint() );
