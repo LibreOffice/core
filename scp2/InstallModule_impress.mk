@@ -9,6 +9,8 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/impress))
 
+$(eval $(call gb_InstallModule_use_auto_install_libs,scp2/impress,impress))
+
 $(eval $(call gb_InstallModule_define_if_set,scp2/impress,\
 	ENABLE_OPENGL \
 ))

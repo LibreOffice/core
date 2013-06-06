@@ -18,18 +18,6 @@
 
 #include "macros.inc"
 
-File gid_File_Lib_Placeware
-    Name = LIBNAME(placeware);
-    PACKED_LIB_FILE_BODY;
-End
-
-File gid_File_Lib_Animcore
-	Name = LIBNAME(animcore);
-	PACKED_LIB_FILE_BODY;
-End
-
-STD_LIB_FILE( gid_File_Lib_PresenterScreen, PresenterScreen )
-
 File gid_File_Share_Registry_Impress_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);

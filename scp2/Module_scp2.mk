@@ -14,6 +14,7 @@ $(eval $(call gb_Module_add_targets,scp2,\
 	AutoInstallLibs_onlineupdate \
 	AutoInstallLibs_graphicfilter \
 	AutoInstallLibs_tde \
+	AutoInstallLibs_impress \
 	AutoInstallLibs_gnome \
 	AutoInstallLibs_kde \
 	AutoInstallLibs_math \
