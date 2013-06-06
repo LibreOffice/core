@@ -3646,7 +3646,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
             std::vector< std::pair< sal_Int32, sal_Int32 > > aRows;
 
             awt::Point aPosition( MapPoint( rXShape->getPosition() ) );
-            sal_uInt32 nPosition = aPosition.X;
+            sal_Int32 nPosition = aPosition.X;
             for ( sal_Int32 x = 0; x < nColumnCount; x++ )
             {
                 uno::Reference< beans::XPropertySet > xPropSet( xColumns->getByIndex( x ), uno::UNO_QUERY_THROW );
