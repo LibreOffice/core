@@ -247,6 +247,13 @@ sub setglobalvariables
     if ( $installer::globals::compiler =~ /wnt(msc|gcc)i/ )
     {
         $installer::globals::iswindowsbuild = 1;
+        $installer::globals::iswin64build = 0;
+    }
+
+    if ( $installer::globals::compiler =~ /wnt(msc|gcc)x/ )
+    {
+        $installer::globals::iswindowsbuild = 1;
+        $installer::globals::iswin64build = 1;
     }
 
     if ( $installer::globals::compiler =~ /unxso[lg][siux]/ )

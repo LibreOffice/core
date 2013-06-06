@@ -1296,7 +1296,7 @@ sub run {
             # 1. copy all files that need to be stripped locally
             # 2. strip all these files
 
-            if ( $installer::globals::compiler =~ /wntgcci/ )
+            if ( $installer::globals::compiler =~ /wntgcci/  || $installer::globals::compiler =~ /wntgccx/ )
             {
                 installer::windows::strip::strip_binaries($filesinproductlanguageresolvedarrayref, $languagestringref);
             }

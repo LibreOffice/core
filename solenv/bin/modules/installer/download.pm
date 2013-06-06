@@ -405,7 +405,14 @@ sub get_download_architecture
     }
     elsif ( $installer::globals::iswindowsbuild )
     {
-        $arch = "x86";
+        if ( $installer::globals::iswin64build )
+        {
+            $arch = "x64";
+        }
+        else
+        {
+            $arch = "x86";
+        }
     }
     elsif ( $installer::globals::compiler =~ /^unxmacxi/ )
     {

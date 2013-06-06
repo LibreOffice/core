@@ -46,6 +46,7 @@ BEGIN
     $languages_defined_in_productlist = 0;
     $setupscript_defined_in_productlist = 0;
     $iswindowsbuild = 0;
+    $iswin64build = 0;
     $islinuxbuild = 0;
     $isrpmbuild = 0;
     $isdebbuild = 0;

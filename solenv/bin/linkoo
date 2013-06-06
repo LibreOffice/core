@@ -110,11 +110,11 @@ File::Spec->file_name_is_absolute($OOO_BUILD) || die "linkoo requires absolute p
 
 $SOLARVER = "$OOO_BUILD/solver";
 
-if ($TARGET =~ /^wntgcci/ || $TARGET =~ /^wntmsci[0-9]+/) {
+if ($TARGET =~ /^wntgcci/ || $TARGET =~ /^wntgccx/ || $TARGET =~ /^wntmsci[0-9]+/|| $TARGET =~ /^wntmscx[0-9]+/) {
     $windows = 1;
 }
 
-if ($TARGET =~ /^wntmsci[0-9]+/) {
+if ($TARGET =~ /^wntmsci[0-9]+/ || $TARGET =~ /^wntmscx[0-9]+/) {
     # wntgcci means are cross-compiling & can symlink, so copy only on real
     # Windows
     $copy = 1;
