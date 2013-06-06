@@ -8363,8 +8363,8 @@ uno::Reference< XDragSource > Window::GetDragSource()
 #if defined WNT
                     aDragSourceSN = OUString("com.sun.star.datatransfer.dnd.OleDragSource");
                     aDropTargetSN = OUString("com.sun.star.datatransfer.dnd.OleDropTarget");
-                    aDragSourceAL[ 1 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
-                    aDropTargetAL[ 0 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
+                    aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->hWnd) ) );
+                    aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->hWnd) ) );
 #elif defined MACOSX
             /* FIXME: Mac OS X specific dnd interface does not exist! *
              * Using Windows based dnd as a temporary solution        */

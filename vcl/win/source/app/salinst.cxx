@@ -797,7 +797,7 @@ LRESULT CALLBACK SalComWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 {
     int bDef = TRUE;
     LRESULT nRet = 0;
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     jmp_buf jmpbuf;
     __SEHandler han;
     if (__builtin_setjmp(jmpbuf) == 0)
@@ -809,7 +809,7 @@ LRESULT CALLBACK SalComWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 #endif
         nRet = SalComWndProc( hWnd, nMsg, wParam, lParam, bDef );
     }
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     han.Reset();
 #else
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
@@ -828,7 +828,7 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 {
     int bDef = TRUE;
     LRESULT nRet = 0;
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     jmp_buf jmpbuf;
     __SEHandler han;
     if (__builtin_setjmp(jmpbuf) == 0)
@@ -840,7 +840,7 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 #endif
         nRet = SalComWndProc( hWnd, nMsg, wParam, lParam, bDef );
     }
-#ifdef __MINGW32__
+#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     han.Reset();
 #else
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
@@ -1072,7 +1072,7 @@ SalSession* WinSalInstance::CreateSalSession()
     return NULL;
 }
 
-#ifndef __MINGW32__
+#if !defined ( __MINGW32__ ) || defined ( _WIN64 )
 // -----------------------------------------------------------------------
 int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POINTERS pExceptionInfo)
 {

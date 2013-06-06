@@ -22,7 +22,7 @@
 #include <win/saltimer.h>
 #include <win/salinst.h>
 
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
+#if defined ( __MINGW32__ )
 #include <sehandler.hxx>
 #endif
 
