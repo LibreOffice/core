@@ -349,7 +349,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             bUseOurTabStops, bNoExtLeading, bUseLineSpacing,
             bAddTableSpacing, bUseObjPos, bUseOurTextWrapping,
             bConsiderWrappingStyle, bExpandWordSpace );
-        m_aFormattingLB.SetEntryData( nPos, (void*)(long)nOptions );
+        m_aFormattingLB.SetEntryData( nPos, (void*)(sal_IntPtr)nOptions );
     }
 
     m_aFormattingLB.SetDropDownLineCount( m_aFormattingLB.GetEntryCount() );

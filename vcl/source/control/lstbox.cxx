@@ -198,7 +198,7 @@ void ListBox::ImplLoadRes( const ResId& rResId )
     {
         sal_uInt16 nPos = InsertEntry( ReadStringRes(), LISTBOX_APPEND );
 
-        long nId = ReadLongRes();
+        sal_IntPtr nId = ReadLongRes();
         if( nId )
             SetEntryData( nPos, (void *)nId ); // ID as UserData
     }
