@@ -189,10 +189,6 @@ Bitmap BMP_PLUGIN
 {
     File = "plugin.png" ;
 };
-Bitmap BMP_OLEOBJ
-{
-    File = "oleobj.png" ;
-};
 Menu MB_PLUGIN
 {
     ItemList =

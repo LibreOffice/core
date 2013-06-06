@@ -25,7 +25,6 @@
 #define STR_UNKNOWN_SOURCE                      32027
 
 #define BMP_PLUGIN                      32000
-#define BMP_OLEOBJ                      32001
 #define MB_PLUGIN                       32000
 #define MI_PLUGIN                       32000
 #define MI_PLUGIN_DEACTIVATE            1

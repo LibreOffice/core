@@ -41,7 +41,6 @@
 #include "stlsheet.hxx"
 
 #include <svx/svdoutl.hxx>
-#undef BMP_OLEOBJ
 #include <svx/svdstr.hrc>
 #include <svx/dialmgr.hxx>
 
