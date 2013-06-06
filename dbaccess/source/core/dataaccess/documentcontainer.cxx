@@ -488,10 +488,9 @@ namespace
 {
     sal_Bool lcl_queryContent(const OUString& _sName,Reference< XNameContainer >& _xNameContainer,Any& _rRet,OUString& _sSimpleName)
     {
-        sal_Bool bRet = sal_False;
         sal_Int32 nIndex = 0;
         OUString sName = _sName.getToken(0,'/',nIndex);
-        bRet = _xNameContainer->hasByName(sName);
+        sal_Bool bRet = _xNameContainer->hasByName(sName);
         if ( bRet )
         {
             _rRet = _xNameContainer->getByName(_sSimpleName = sName);
