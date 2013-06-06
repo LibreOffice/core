@@ -329,6 +329,11 @@ namespace dbaui
     {
         // get the type from the entry data
         sal_Int16 nSelected = _pBox->GetSelectEntryPos();
+        if (nSelected < 0)
+        {
+            SAL_WARN("dbaui.OGeneralPage", "out-of-range value got from the DataSource selection's ListBox.");
+            return 0L;
+        }
         const OUString sURLPrefix = m_aURLPrefixes[ nSelected ];
 
         setParentTitle( sURLPrefix );
