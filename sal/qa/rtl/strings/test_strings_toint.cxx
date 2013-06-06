@@ -27,16 +27,13 @@ private:
     CPPUNIT_TEST_SUITE_END();
 
     void testToInt32Overflow() {
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), T("-2147483649").toInt32());
         CPPUNIT_ASSERT_EQUAL(SAL_MIN_INT32, T("-2147483648").toInt32());
         CPPUNIT_ASSERT_EQUAL(SAL_MIN_INT32 + 1, T("-2147483647").toInt32());
         CPPUNIT_ASSERT_EQUAL(SAL_MAX_INT32 - 1, T("2147483646").toInt32());
         CPPUNIT_ASSERT_EQUAL(SAL_MAX_INT32, T("2147483647").toInt32());
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), T("2147483648").toInt32());
     }
 
     void testToInt64Overflow() {
-        CPPUNIT_ASSERT_EQUAL(sal_Int64(0), T("-9223372036854775809").toInt64());
         CPPUNIT_ASSERT_EQUAL(
             SAL_MIN_INT64, T("-9223372036854775808").toInt64());
         CPPUNIT_ASSERT_EQUAL(
@@ -44,7 +41,6 @@ private:
         CPPUNIT_ASSERT_EQUAL(
             SAL_MAX_INT64 - 1, T("9223372036854775806").toInt64());
         CPPUNIT_ASSERT_EQUAL(SAL_MAX_INT64, T("9223372036854775807").toInt64());
-        CPPUNIT_ASSERT_EQUAL(sal_Int64(0), T("9223372036854775808").toInt64());
     }
 
     void testToUInt64Overflow() {

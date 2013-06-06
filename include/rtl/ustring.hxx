@@ -1799,8 +1799,7 @@ public:
 
       @param    radix       the radix (between 2 and 36)
       @return   the int32 represented from this string.
-                0 if this string represents no number or one of too large
-                magnitude.
+                0 if this string represents no number.
     */
     sal_Int32 toInt32( sal_Int16 radix = 10 ) const SAL_THROW(())
     {
@@ -1814,8 +1813,7 @@ public:
 
       @param    radix       the radix (between 2 and 36)
       @return   the int64 represented from this string.
-                0 if this string represents no number or one of too large
-                magnitude.
+                0 if this string represents no number.
     */
     sal_Int64 toInt64( sal_Int16 radix = 10 ) const SAL_THROW(())
     {

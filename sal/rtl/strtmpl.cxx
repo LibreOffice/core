@@ -941,35 +941,11 @@ namespace {
             bNeg = sal_False;
         }
 
-        T nDiv;
-        sal_Int16 nMod;
-        if ( bNeg )
-        {
-            nDiv = std::numeric_limits<T>::min() / nRadix;
-            nMod = std::numeric_limits<T>::min() % nRadix;
-            // Cater for C++03 implementations that round the quotient down
-            // instead of truncating towards zero as mandated by C++11:
-            if ( nMod > 0 )
-            {
-                --nDiv;
-                nMod -= nRadix;
-            }
-            nDiv = -nDiv;
-            nMod = -nMod;
-        }
-        else
-        {
-            nDiv = std::numeric_limits<T>::max() / nRadix;
-            nMod = std::numeric_limits<T>::max() % nRadix;
-        }
-
         while ( *pStr )
         {
             nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
             if ( nDigit < 0 )
                 break;
-            if( ( nMod < nDigit ? nDiv-1 : nDiv ) < n )
-                return 0;
 
             n *= nRadix;
             n += nDigit;
