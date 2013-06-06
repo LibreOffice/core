@@ -43,7 +43,6 @@
 #include "dllmgr.hxx"
 
 using namespace css;
-using namespace css::uno;
 
 /* Open issues:
 
@@ -495,8 +494,8 @@ SbError call(
     sal_Int32 (*proc_i)(double d, ...) = (sal_Int32 (*)(double, ...)) proc.proc;
     double (*proc_d)(double d, ...) = (double (*)(double, ...)) proc.proc;
 
-    sal_Int64 iRetVal;
-    double dRetVal;
+    sal_Int64 iRetVal = 0;
+    double dRetVal = 0.0;
 
     switch (result.GetType()) {
     case SbxEMPTY:
@@ -712,7 +711,7 @@ OUString fullDllName(OUString const & name) {
 
 struct SbiDllMgr::Impl: private boost::noncopyable {
 private:
-    typedef std::map< OUString, Reference< Dll > > Dlls;
+    typedef std::map< OUString, ::rtl::Reference< Dll > > Dlls;
 
 public:
     Dll * getDll(OUString const & name);

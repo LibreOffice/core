@@ -253,7 +253,7 @@ sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
 
     if ( aODFVersionLB->GetSelectEntryPos() != aODFVersionLB->GetSavedValue() )
     {
-        long nVersion = long( aODFVersionLB->GetEntryData( aODFVersionLB->GetSelectEntryPos() ) );
+        sal_IntPtr nVersion = sal_IntPtr( aODFVersionLB->GetEntryData( aODFVersionLB->GetSelectEntryPos() ) );
         aSaveOpt.SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion( nVersion ) );
     }
 
@@ -408,7 +408,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
             {
                 for(sal_uInt16 n = 0; n < aDocTypeLB->GetEntryCount(); n++)
                 {
-                    long nData = (long) aDocTypeLB->GetEntryData(n);
+                    sal_IntPtr nData = (sal_IntPtr) aDocTypeLB->GetEntryData(n);
                     OUString sCommand;
                     sCommand = "matchByDocumentService=%1:iflags=" +
                                OUString::number(SFX_FILTER_IMPORT|SFX_FILTER_EXPORT) +
@@ -489,7 +489,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
 
     aRelativeInetCB->Check( aSaveOpt.IsSaveRelINet() );
 
-    void* pDefaultVersion = (void*)long( aSaveOpt.GetODFDefaultVersion() );
+    void* pDefaultVersion = (void*)sal_IntPtr( aSaveOpt.GetODFDefaultVersion() );
     aODFVersionLB->SelectEntryPos( aODFVersionLB->GetEntryPos( pDefaultVersion ) );
 
     AutoClickHdl_Impl( aAutoSaveCB );
@@ -554,9 +554,9 @@ IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
 {
     sal_uInt16 nCurPos = aDocTypeLB->GetSelectEntryPos();
 
-    long nData = -1;
+    sal_IntPtr nData = -1;
     if(nCurPos < APP_COUNT)
-        nData = (long) aDocTypeLB->GetEntryData(nCurPos);
+        nData = (sal_IntPtr) aDocTypeLB->GetEntryData(nCurPos);
 
     if ( nData >= 0 && nData < APP_COUNT )
     {
@@ -616,7 +616,7 @@ IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
 
 IMPL_LINK_NOARG(SfxSaveTabPage, ODFVersionHdl_Impl)
 {
-    long nVersion = long( aODFVersionLB->GetEntryData( aODFVersionLB->GetSelectEntryPos() ) );
+    sal_IntPtr nVersion = sal_IntPtr( aODFVersionLB->GetEntryData( aODFVersionLB->GetSelectEntryPos() ) );
     bool bShown = SvtSaveOptions::ODFDefaultVersion( nVersion ) != SvtSaveOptions::ODFVER_LATEST;
     if ( bShown )
     {

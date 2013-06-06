@@ -1383,7 +1383,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
             pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
     }
 
-    return (long)(void*) pRet;
+    return (sal_IntPtr)(void*) pRet;
 }
 
 void SdrGrafObj::SetGrafAnimationAllowed(bool bNew)

@@ -484,7 +484,7 @@ bool SvTreeListBox::IsEntryMnemonicsEnabled() const
 IMPL_LINK_INLINE_START( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    return (long)(CloneEntry((SvTreeListEntry*)pEntry));
+    return (sal_IntPtr)(CloneEntry((SvTreeListEntry*)pEntry));
 }
 IMPL_LINK_INLINE_END( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry )
 

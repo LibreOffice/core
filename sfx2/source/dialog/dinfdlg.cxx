@@ -1409,7 +1409,7 @@ CustomPropertiesWindow::~CustomPropertiesWindow()
 
 IMPL_LINK( CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox*, pBox )
 {
-    sal_Int64 nType = sal_Int64( (long)pBox->GetEntryData( pBox->GetSelectEntryPos() ) );
+    sal_Int64 nType = sal_Int64( (sal_IntPtr)pBox->GetEntryData( pBox->GetSelectEntryPos() ) );
     CustomPropertyLine* pLine = pBox->GetLine();
     pLine->m_aValueEdit.Show( (CUSTOM_TYPE_TEXT == nType) || (CUSTOM_TYPE_NUMBER  == nType) );
     pLine->m_aDateField.Show( (CUSTOM_TYPE_DATE == nType) || (CUSTOM_TYPE_DATETIME  == nType) );
@@ -1509,7 +1509,7 @@ bool CustomPropertiesWindow::IsLineValid( CustomPropertyLine* pLine ) const
     bool bIsValid = true;
     pLine->m_bTypeLostFocus = false;
     sal_Int64 nType = sal_Int64(
-        (long)pLine->m_aTypeBox.GetEntryData( pLine->m_aTypeBox.GetSelectEntryPos() ) );
+        (sal_IntPtr)pLine->m_aTypeBox.GetEntryData( pLine->m_aTypeBox.GetSelectEntryPos() ) );
     String sValue = pLine->m_aValueEdit.GetText();
     if ( sValue.Len() == 0 )
         return true;
@@ -1846,7 +1846,7 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
         {
             aPropertiesSeq[i].Name = sPropertyName;
             sal_Int64 nType = sal_Int64(
-                (long)pLine->m_aTypeBox.GetEntryData( pLine->m_aTypeBox.GetSelectEntryPos() ) );
+                (sal_IntPtr)pLine->m_aTypeBox.GetEntryData( pLine->m_aTypeBox.GetSelectEntryPos() ) );
             if ( CUSTOM_TYPE_NUMBER == nType )
             {
                 double nValue = 0;

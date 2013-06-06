@@ -123,7 +123,7 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text
             pMyItem->text = text;
             pMyItem->iconId = iconId;
             pMyItem->module = module;
-            mi.dwItemData = (DWORD) pMyItem;
+            mi.dwItemData = (DWORD_PTR) pMyItem;
         }
         else
         {

@@ -238,7 +238,7 @@ void SAL_CALL CDIBPreview::onPaint(HWND hWnd, HDC hDC)
              (pbmfh->bfType == ('B' | ('M' << 8))) )
         {
             pbmi  = reinterpret_cast<BITMAPINFO*>((pbmfh + 1));
-            pBits = reinterpret_cast<sal_uInt8*>(((DWORD)pbmfh) + pbmfh->bfOffBits);
+            pBits = reinterpret_cast<sal_uInt8*>(((DWORD_PTR)pbmfh) + pbmfh->bfOffBits);
 
             cxDib =      pbmi->bmiHeader.biWidth;
             cyDib = abs (pbmi->bmiHeader.biHeight);

@@ -77,7 +77,7 @@ IMPL_XTYPEPROVIDER_END
 #if (defined WNT)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32 )
             {
-                 aRet <<= (sal_Int32)pSysData->hWnd;
+                 aRet <<= (sal_IntPtr)pSysData->hWnd;
             }
 #elif (defined MACOSX)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )

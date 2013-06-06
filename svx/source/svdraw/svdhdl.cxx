@@ -1694,7 +1694,7 @@ static bool ImpSdrHdlListSorter(SdrHdl* const& lhs, SdrHdl* const& rhs)
                 if (nNum1==nNum2)
                 {
                     if (eKind1==eKind2)
-                        return (long)lhs<(long)rhs; // Hack, to always get to the same sorting
+                        return (sal_IntPtr)lhs<(sal_IntPtr)rhs; // Hack, to always get to the same sorting
                     return (sal_uInt16)eKind1<(sal_uInt16)eKind2;
                 }
                 else
@@ -1702,12 +1702,12 @@ static bool ImpSdrHdlListSorter(SdrHdl* const& lhs, SdrHdl* const& rhs)
             }
             else
             {
-                return (long)pObj1<(long)pObj2;
+                return (sal_IntPtr)pObj1<(sal_IntPtr)pObj2;
             }
         }
         else
         {
-            return (long)pPV1<(long)pPV2;
+            return (sal_IntPtr)pPV1<(sal_IntPtr)pPV2;
         }
     }
     else

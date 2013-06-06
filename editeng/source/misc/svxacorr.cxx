@@ -820,7 +820,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
             if( lcl_IsInAsciiArr( sImplWordChars, *pStr ) &&
                 pWordStt - 1 == pStr &&
                 // Installation at beginning of paragraph. Replaced < by <= (#i38971#)
-                (long)(pStart + 1) <= (long)pStr &&
+                (sal_IntPtr)(pStart + 1) <= (sal_IntPtr)pStr &&
                 rCC.isLetter(
                     aText,
                     sal::static_int_cast< xub_StrLen >( pStr-1 - pStart ) ) )

@@ -236,8 +236,8 @@ long PluginComm_Impl::doIt()
                 ? (*_NPPfuncs.write)(
                     (NPP)m_aArgs[0],
                     (NPStream*)m_aArgs[1],
-                    (int32_t)m_aArgs[2],
-                    (int32_t)m_aArgs[3],
+                    (sal_IntPtr)m_aArgs[2],
+                    (sal_IntPtr)m_aArgs[3],
                     m_aArgs[4] )
                 : 0);
         break;
@@ -254,7 +254,7 @@ long PluginComm_Impl::doIt()
         nRet = (_NPPfuncs.getvalue
                 ? (*_NPPfuncs.getvalue)(
                     (NPP)m_aArgs[0],
-                    (NPPVariable)(int)m_aArgs[1],
+                    (NPPVariable)(sal_IntPtr)m_aArgs[1],
                     m_aArgs[2] )
                 : NPERR_GENERIC_ERROR);
         break;
@@ -263,7 +263,7 @@ long PluginComm_Impl::doIt()
         nRet = (_NPPfuncs.setvalue
                 ? (*_NPPfuncs.setvalue)(
                     (NPP)m_aArgs[0],
-                    (NPNVariable)(int)m_aArgs[1],
+                    (NPNVariable)(sal_IntPtr)m_aArgs[1],
                     m_aArgs[2] )
                 : NPERR_GENERIC_ERROR);
         break;

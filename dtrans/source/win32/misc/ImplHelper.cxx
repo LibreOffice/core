@@ -30,11 +30,12 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-#include <sehandler.hxx>
-#endif
 
 #include <vector>
+
+#if defined ( __MINGW32__ )
+#include <sehandler.hxx>
+#endif
 
 #define FORMATETC_EXACT_MATCH    1
 #define FORMATETC_PARTIAL_MATCH -1

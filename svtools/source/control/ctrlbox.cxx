@@ -1849,7 +1849,7 @@ void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
             for( sal_uLong i = 0; i < nCount; i++ )
             {
                 String  aSizeName = aFontSizeNames.GetIndexName( i );
-                long    nSize = aFontSizeNames.GetIndexSize( i );
+                sal_IntPtr  nSize = aFontSizeNames.GetIndexSize( i );
                 ComboBox::InsertEntry( aSizeName, nPos );
                 ComboBox::SetEntryData( nPos, (void*)(-nSize) ); // mark as special
                 nPos++;
@@ -2020,7 +2020,7 @@ sal_Int64 FontSizeBox::GetValue( sal_uInt16 nPos, FieldUnit eOutUnit ) const
 {
     if ( !bRelative )
     {
-        sal_Int64 nComboVal = static_cast<sal_Int64>(reinterpret_cast<long>(ComboBox::GetEntryData( nPos )));
+        sal_Int64 nComboVal = static_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(ComboBox::GetEntryData( nPos )));
         if ( nComboVal < 0 )     // marked as special?
         {
             return MetricField::ConvertValue( -nComboVal, mnBaseValue, GetDecimalDigits(),

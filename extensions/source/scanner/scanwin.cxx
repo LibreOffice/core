@@ -423,7 +423,7 @@ void ImpTwain::ImplFallback( ULONG nEvent )
 
 IMPL_LINK( ImpTwain, ImplFallbackHdl, void*, pData )
 {
-    const ULONG nEvent = (ULONG) pData;
+    const sal_uIntPtr nEvent = (sal_uIntPtr) pData;
     bool        bFallback = true;
 
     switch( nCurState )
@@ -710,7 +710,7 @@ bool Twain::PerformTransfer( ScannerManager& rMgr, const uno::Reference< lang::X
 
 IMPL_LINK( Twain, ImpNotifyHdl, ImpTwain*, nEvent )
 {
-    switch( (ULONG)(void*) nEvent )
+    switch( (sal_uIntPtr)(void*) nEvent )
     {
         case( TWAIN_EVENT_SCANNING ):
             meState = TWAIN_STATE_SCANNING;
@@ -770,7 +770,7 @@ void ScannerManager::ReleaseData()
 {
     if( mpData )
     {
-        GlobalFree( (HGLOBAL)(long) mpData );
+        GlobalFree( (HGLOBAL)(sal_IntPtr) mpData );
         mpData = NULL;
     }
 }
@@ -778,7 +778,7 @@ void ScannerManager::ReleaseData()
 awt::Size ScannerManager::getSize() throw()
 {
     awt::Size   aRet;
-    HGLOBAL     hDIB = (HGLOBAL)(long) mpData;
+    HGLOBAL     hDIB = (HGLOBAL)(sal_IntPtr) mpData;
 
     if( hDIB )
     {
@@ -806,7 +806,7 @@ uno::Sequence< sal_Int8 > ScannerManager::getDIB() throw()
 
     if( mpData )
     {
-        HGLOBAL             hDIB = (HGLOBAL)(long) mpData;
+        HGLOBAL             hDIB = (HGLOBAL)(sal_IntPtr) mpData;
         const sal_uInt32    nDIBSize = GlobalSize( hDIB );
         BITMAPINFOHEADER*   pBIH = (BITMAPINFOHEADER*) GlobalLock( hDIB );
 

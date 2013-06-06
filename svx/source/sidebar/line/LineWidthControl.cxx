@@ -277,7 +277,7 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
         sal_uInt16 iPos = maVSWidth.GetSelectItemId();
         if(iPos >= 1 && iPos <= 8)
         {
-            long nVal = LogicToLogic((long)(unsigned long)maVSWidth.GetItemData( iPos ) , MAP_POINT, (MapUnit)meMapUnit);
+            sal_IntPtr nVal = LogicToLogic((sal_IntPtr)maVSWidth.GetItemData( iPos ) , MAP_POINT, (MapUnit)meMapUnit);
             nVal = maMFWidth.Denormalize(nVal);
             XLineWidthItem aWidthItem( nVal );
             mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aWidthItem, 0L);

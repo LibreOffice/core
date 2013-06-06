@@ -123,7 +123,7 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet )
         eLastDialogLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
 
     LanguageType nSelectLang = LANGUAGE_UNDETERMINED;
-    nPos = m_pLanguageLB->GetEntryPos( (void*)(long) eLastDialogLanguage );
+    nPos = m_pLanguageLB->GetEntryPos( (void*)(sal_IntPtr) eLastDialogLanguage );
     if (LISTBOX_ENTRY_NOTFOUND != nPos)
         nSelectLang = eLastDialogLanguage;
     m_pLanguageLB->SelectLanguage( nSelectLang );
@@ -162,7 +162,7 @@ IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox*, pBox)
 {
     sal_uInt16 nPos = pBox->GetSelectEntryPos();
     void* pVoid = pBox->GetEntryData(nPos);
-    LanguageType eNewLang = (LanguageType)(long)pVoid;
+    LanguageType eNewLang = (LanguageType)(sal_IntPtr)pVoid;
     // save old settings and fill anew
     if(eNewLang != eLastDialogLanguage)
     {

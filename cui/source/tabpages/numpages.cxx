@@ -1363,14 +1363,14 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
     //one must be enabled
     if(!pActNum->IsFeatureSupported(NUM_ENABLE_LINKED_BMP))
     {
-        long nData = SVX_NUM_BITMAP|LINK_TOKEN;
+        sal_IntPtr nData = SVX_NUM_BITMAP|LINK_TOKEN;
         sal_uInt16 nPos = m_pFmtLB->GetEntryPos((void*)nData);
         if(LISTBOX_ENTRY_NOTFOUND != nPos)
             m_pFmtLB->RemoveEntry(nPos);
     }
     else if(!pActNum->IsFeatureSupported(NUM_ENABLE_EMBEDDED_BMP))
     {
-        long nData = SVX_NUM_BITMAP;
+        sal_IntPtr nData = SVX_NUM_BITMAP;
         sal_uInt16 nPos = m_pFmtLB->GetEntryPos((void*)nData);
         if(LISTBOX_ENTRY_NOTFOUND != nPos)
             m_pFmtLB->RemoveEntry(nPos);

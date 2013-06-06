@@ -128,7 +128,7 @@ CFileOpenDialog::CFileOpenDialog(
     }
 
     // set a pointer to myself as ofn parameter
-    m_ofn.lCustData = reinterpret_cast<long>(this);
+    m_ofn.lCustData = reinterpret_cast<sal_IntPtr>(this);
 }
 
 //------------------------------------------------------------------------
