@@ -55,11 +55,8 @@ $(eval $(call gb_Library_add_exception_objects,pl,\
 	extensions/source/plugin/win/winmgr \
 	extensions/source/plugin/win/sysplug \
 ))
-endif # GUI=WNT
 
-ifneq ($(OS),WNT)
-
-ifeq ($(OS),MACOSX)
+else ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Library_add_objcxxobjects,pl,\
 	extensions/source/plugin/aqua/macmgr \
@@ -72,7 +69,7 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,pl,\
     CoreFoundation \
 ))
 
-else # OS!=MACOSX
+else
 
 ifeq ($(ENABLE_GTK),TRUE)
 $(eval $(call gb_Library_add_defs,pl,\
@@ -96,9 +93,7 @@ $(eval $(call gb_Library_add_libs,pl,\
 	-lX11 \
 ))
 
-endif # OS=MACOSX
-
-endif # GUI=UNX
+endif
 
 $(eval $(call gb_Library_use_libraries,pl,\
 	tk \

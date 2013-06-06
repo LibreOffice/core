@@ -45,9 +45,7 @@ $(eval $(call gb_Library_add_defs,npsoplugin,\
 ))
 endif
 
-endif # GUI=UNX
-
-ifeq ($(OS),WNT)
+else ifeq ($(OS),WNT)
 
 $(eval $(call gb_Library_use_static_libraries,npsoplugin,\
 	ooopathutils \
@@ -95,7 +93,7 @@ endif
 
 $(eval $(call gb_Library_set_nativeres,npsoplugin,npsoplugin/npsoplugin))
 
-endif # GUI=WNT
+endif
 
 $(eval $(call gb_Library_add_exception_objects,npsoplugin,\
 	extensions/source/nsplugin/source/npshell \
