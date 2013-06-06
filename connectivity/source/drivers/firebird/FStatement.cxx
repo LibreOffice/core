@@ -94,11 +94,13 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     m_OUTsqlda = (XSQLDA *)malloc(XSQLDA_LENGTH(10));
     m_OUTsqlda->version = SQLDA_VERSION1;
     m_OUTsqlda->sqln = 10;
+    m_OUTsqlda->sqld = 0;
 
     // enabling the XSQLDA to accommodate up to 10 parameter items (DEFAULT)
     m_INsqlda = (XSQLDA *)malloc(XSQLDA_LENGTH(10));
     m_INsqlda->version = SQLDA_VERSION1;
     m_INsqlda->sqln = 10;
+    m_INsqlda->sqld = 0;
 
     m_STMTHandler = NULL;          // Set handle to NULL before allocation.
     if (isc_dsql_allocate_statement(status, &db, &m_STMTHandler))
@@ -131,17 +133,19 @@ void OStatement_BASE2::disposing()
         m_pConnection->release();
     m_pConnection = NULL;
 
-    if (m_OUTsqlda)
+    if (NULL != m_OUTsqlda)
     {
         int i;
         XSQLVAR *var;
         for (i=0, var = m_OUTsqlda->sqlvar; i < m_OUTsqlda->sqld; i++, var++)
             free(var->sqldata);
         free(m_OUTsqlda);
+        m_OUTsqlda = NULL;
     }
-    if (m_INsqlda)
+    if (NULL != m_INsqlda)
     {
         free(m_INsqlda);
+        m_INsqlda = NULL;
     }
 
     ISC_STATUS_ARRAY status;  // status vector
