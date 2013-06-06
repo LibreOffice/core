@@ -125,6 +125,9 @@ OOXMLDocument * OOXMLParserState::getDocument() const
 
 void OOXMLParserState::setXNoteId(const sal_Int32 nId)
 {
+    SAL_WARN_IF(!mpDocument, "writerfilter", "no document to set note id on");
+    if (!mpDocument)
+        return;
     mpDocument->setXNoteId(nId);
 }
 
