@@ -51,11 +51,10 @@ public:
 class SdTpOptionsContents : public SfxTabPage
 {
 private:
-    FixedLine    aGrpDisplay;
-    CheckBox    aCbxRuler;
-    CheckBox    aCbxDragStripes;
-    CheckBox    aCbxHandlesBezier;
-    CheckBox    aCbxMoveOutline;
+    CheckBox*    m_pCbxRuler;
+    CheckBox*    m_pCbxDragStripes;
+    CheckBox*    m_pCbxHandlesBezier;
+    CheckBox*    m_pCbxMoveOutline;
 
 
 public:

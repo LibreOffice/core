@@ -44,7 +44,6 @@
 #define HID_SD_BTN_HANDOUT                                      "SD_HID_SD_BTN_HANDOUT"
 #define HID_SD_WIN_DOCUMENT                                     "SD_HID_SD_WIN_DOCUMENT"
 #define HID_SD_OPTIONS_LAYOUT                                   "SD_HID_SD_OPTIONS_LAYOUT"
-#define HID_SD_OPTIONS_CONTENTS                                 "SD_HID_SD_OPTIONS_CONTENTS"
 #define HID_SD_EFFECT_PREVIEW                                   "SD_HID_SD_EFFECT_PREVIEW"
 #define HID_SD_CTL_NEWFOIL                                      "SD_HID_SD_CTL_NEWFOIL"
 #define HID_SD_NAVIGATOR_TLB                                    "SD_HID_SD_NAVIGATOR_TLB"

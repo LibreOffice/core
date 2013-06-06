@@ -135,14 +135,12 @@ SfxTabPage* SdTpOptionsSnap::Create( Window* pWindow,
 \************************************************************************/
 
 SdTpOptionsContents::SdTpOptionsContents( Window* pParent, const SfxItemSet& rInAttrs  ) :
-        SfxTabPage          ( pParent, SdResId( TP_OPTIONS_CONTENTS ), rInAttrs ),
-        aGrpDisplay         ( this, SdResId( GRP_DISPLAY ) ),
-        aCbxRuler           ( this, SdResId( CBX_RULER ) ),
-        aCbxDragStripes     ( this, SdResId( CBX_HELPLINES ) ),
-        aCbxHandlesBezier   ( this, SdResId( CBX_HANDLES_BEZIER ) ),
-        aCbxMoveOutline     ( this, SdResId( CBX_MOVE_OUTLINE ) )
+    SfxTabPage ( pParent, "SdViewPage", "modules/simpress/ui/sdviewpage.ui", rInAttrs )
 {
-    FreeResource();
+    get( m_pCbxRuler, "ruler");
+    get( m_pCbxDragStripes, "dragstripes");
+    get( m_pCbxHandlesBezier, "handlesbezier");
+    get( m_pCbxMoveOutline, "moveoutline");
 }
 
 // -----------------------------------------------------------------------
@@ -157,17 +155,17 @@ sal_Bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
 {
     sal_Bool bModified = sal_False;
 
-    if( aCbxRuler.GetSavedValue()           != aCbxRuler.IsChecked() ||
-        aCbxMoveOutline.GetSavedValue()     != aCbxMoveOutline.IsChecked() ||
-        aCbxDragStripes.GetSavedValue()     != aCbxDragStripes.IsChecked() ||
-        aCbxHandlesBezier.GetSavedValue()   != aCbxHandlesBezier.IsChecked() )
+    if( m_pCbxRuler->GetSavedValue()           != m_pCbxRuler->IsChecked() ||
+        m_pCbxMoveOutline->GetSavedValue()     != m_pCbxMoveOutline->IsChecked() ||
+        m_pCbxDragStripes->GetSavedValue()     != m_pCbxDragStripes->IsChecked() ||
+        m_pCbxHandlesBezier->GetSavedValue()   != m_pCbxHandlesBezier->IsChecked() )
     {
         SdOptionsLayoutItem aOptsItem( ATTR_OPTIONS_LAYOUT );
 
-        aOptsItem.GetOptionsLayout().SetRulerVisible( aCbxRuler.IsChecked() );
-        aOptsItem.GetOptionsLayout().SetMoveOutline( aCbxMoveOutline.IsChecked() );
-        aOptsItem.GetOptionsLayout().SetDragStripes( aCbxDragStripes.IsChecked() );
-        aOptsItem.GetOptionsLayout().SetHandlesBezier( aCbxHandlesBezier.IsChecked() );
+        aOptsItem.GetOptionsLayout().SetRulerVisible( m_pCbxRuler->IsChecked() );
+        aOptsItem.GetOptionsLayout().SetMoveOutline( m_pCbxMoveOutline->IsChecked() );
+        aOptsItem.GetOptionsLayout().SetDragStripes( m_pCbxDragStripes->IsChecked() );
+        aOptsItem.GetOptionsLayout().SetHandlesBezier( m_pCbxHandlesBezier->IsChecked() );
 
         rAttrs.Put( aOptsItem );
         bModified = sal_True;
@@ -185,15 +183,15 @@ void SdTpOptionsContents::Reset( const SfxItemSet& rAttrs )
     SdOptionsLayoutItem aLayoutItem( (const SdOptionsLayoutItem&) rAttrs.
                         Get( ATTR_OPTIONS_LAYOUT ) );
 
-    aCbxRuler.Check( aLayoutItem.GetOptionsLayout().IsRulerVisible() );
-    aCbxMoveOutline.Check( aLayoutItem.GetOptionsLayout().IsMoveOutline() );
-    aCbxDragStripes.Check( aLayoutItem.GetOptionsLayout().IsDragStripes() );
-    aCbxHandlesBezier.Check( aLayoutItem.GetOptionsLayout().IsHandlesBezier() );
+    m_pCbxRuler->Check( aLayoutItem.GetOptionsLayout().IsRulerVisible() );
+    m_pCbxMoveOutline->Check( aLayoutItem.GetOptionsLayout().IsMoveOutline() );
+    m_pCbxDragStripes->Check( aLayoutItem.GetOptionsLayout().IsDragStripes() );
+    m_pCbxHandlesBezier->Check( aLayoutItem.GetOptionsLayout().IsHandlesBezier() );
 
-    aCbxRuler.SaveValue();
-    aCbxMoveOutline.SaveValue();
-    aCbxDragStripes.SaveValue();
-    aCbxHandlesBezier.SaveValue();
+    m_pCbxRuler->SaveValue();
+    m_pCbxMoveOutline->SaveValue();
+    m_pCbxDragStripes->SaveValue();
+    m_pCbxHandlesBezier->SaveValue();
 }
 
 // -----------------------------------------------------------------------
