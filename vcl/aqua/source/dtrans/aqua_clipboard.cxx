@@ -326,10 +326,11 @@ void SAL_CALL AquaClipboard::flushClipboard()
     {
           Sequence<DataFlavor> flavorList = mXClipboardContent->getTransferDataFlavors();
         sal_uInt32 nFlavors = flavorList.getLength();
+        bool bInternal(false);
 
         for (sal_uInt32 i = 0; i < nFlavors; i++)
         {
-            NSString* sysType = mpDataFlavorMapper->openOfficeToSystemFlavor(flavorList[i]);
+            NSString* sysType = mpDataFlavorMapper->openOfficeToSystemFlavor(flavorList[i], bInternal);
 
             if (sysType != NULL)
             {
