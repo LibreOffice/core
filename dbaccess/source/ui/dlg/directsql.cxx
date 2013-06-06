@@ -240,9 +240,9 @@ DBG_NAME(DirectSQLDialog)
                         // initialise the output line for each row
                         String out = OUString("");
                         // work along the columns until that are none left
-                        int i = 1;
                         try
                         {
+                            int i = 1;
                             for (;;)
                             {
                                 // be dumb, treat everything as a string
