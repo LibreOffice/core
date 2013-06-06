@@ -1317,6 +1317,9 @@ void OOXMLFastContextHandlerProperties::lcl_endFastElement
     {
         if (isForwardEvents())
         {
+            SAL_WARN_IF(!mpStream, "writerfilter", "no stream to set properties on");
+            if (!mpStream)
+                return;
             mpStream->props(mpPropertySet);
         }
     }
