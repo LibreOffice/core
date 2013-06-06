@@ -407,6 +407,17 @@ void ScDBData::SetImportParam(const ScImportParam& rImportParam)
     mpImportParam.reset(new ScImportParam(rImportParam));
 }
 
+//Methods to get and set ScDBDataFormatting instance
+void ScDBData::SetTableFormatting( const ScDBDataFormatting& rTableFormatData )
+{
+    mpTableFormatData.reset( new ScDBDataFormatting( rTableFormatData ) );
+}
+
+void ScDBData::GetTableFormatting( ScDBDataFormatting& rTableFormatData ) const
+{
+    rTableFormatData = *mpTableFormatData;
+}
+
 bool ScDBData::IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const
 {
     if (nTab == nTable)

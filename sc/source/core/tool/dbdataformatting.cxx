@@ -20,11 +20,23 @@
 #include "dbdataformatting.hxx"
 #include "rtl/ustring.hxx"
 
-ScDBDataFormatting::ScDBDataFormatting(const OUString& rFirstRowStripeStyle, const OUString& rSecondRowStripeStyle, const OUString& rFirstColStripeStyle, const OUString& rSecondColStripeStyle) :
-maFirstRowStripeStyle    ( rFirstRowStripeStyle),
-maSecondRowStripeStyle   ( rSecondRowStripeStyle ),
-maFirstColStripeStyle    ( rFirstColStripeStyle ),
-maSecondColStripeStyle   ( rSecondColStripeStyle )
+ScDBDataFormatting::ScDBDataFormatting(const OUString& rFirstRowStripeStyle, const OUString& rSecondRowStripeStyle, const OUString& rFirstColStripeStyle, const OUString& rSecondColStripeStyle, bool bBRows, bool bBCols) :
+    maFirstRowStripeStyle   ( rFirstRowStripeStyle),
+    maSecondRowStripeStyle  ( rSecondRowStripeStyle ),
+    maFirstColStripeStyle   ( rFirstColStripeStyle ),
+    maSecondColStripeStyle  ( rSecondColStripeStyle ),
+    bBandedRows             ( bBRows ),
+    bBandedColumns          ( bBCols )
+{
+}
+
+ScDBDataFormatting::ScDBDataFormatting( const ScDBDataFormatting& rTableFormatData ):
+    maFirstRowStripeStyle   ( rTableFormatData.maFirstRowStripeStyle ),
+    maSecondRowStripeStyle  ( rTableFormatData.maSecondRowStripeStyle ),
+    maFirstColStripeStyle   ( rTableFormatData.maFirstColStripeStyle ),
+    maSecondColStripeStyle  ( rTableFormatData.maSecondColStripeStyle ),
+    bBandedRows             ( rTableFormatData.bBandedRows ),
+    bBandedColumns          ( rTableFormatData.bBandedColumns )
 {
 }
 
