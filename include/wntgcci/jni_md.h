@@ -27,7 +27,7 @@
 #define JNICALL   __stdcall
 
 typedef long jint;
-typedef long jlong;
+typedef __int64 jlong;
 typedef char jbyte;
 
 #endif /* JNI_MD_H_INCLUDED */
