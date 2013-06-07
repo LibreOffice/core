@@ -430,7 +430,7 @@ $(call gb_Extension_get_rootdir,$(1))/help/$(2).done : \
 	$$(call gb_Output_announce,$(1) $(2),$(true),XHC,3)
 	$$(call gb_Helper_abbreviate_dirs, \
         mkdir -p $$(basename $$@) && \
-        $(gb_Extension_HELPLINKERCOMMAND) -mod help \
+        $$(gb_Extension_HELPLINKERCOMMAND) -mod help \
             -extlangsrc $(call gb_Extension_get_workdir,$(1))/help/$(2) \
             -sty $(OUTDIR_FOR_BUILD)/bin/embed.xsl \
             -extlangdest $$(basename $$@) \
@@ -438,9 +438,9 @@ $(call gb_Extension_get_rootdir,$(1))/help/$(2).done : \
             -idxcontent $(OUTDIR_FOR_BUILD)/bin/idxcontent.xsl \
             $$(HELPFILES) && \
         (cd $(call gb_Extension_get_workdir,$(1))/help/$(2) && \
-            $(gb_Extension_ZIPCOMMAND) -r $$(basename $$@)/help.jar \
+            $$(gb_Extension_ZIPCOMMAND) -r $$(basename $$@)/help.jar \
             $$(HELPFILES)) && \
-        $(gb_Extension_HELPINDEXERCOMMAND) -lang $(2) -mod help \
+        $$(gb_Extension_HELPINDEXERCOMMAND) -lang $(2) -mod help \
             -dir $$(basename $$@) && \
             rm -fr $$(basename $$@)/caption $$(basename $$@)/content && \
         touch $$@)
