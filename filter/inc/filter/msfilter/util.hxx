@@ -33,6 +33,7 @@
 #include <tools/datetime.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include "filter/msfilter/msfilterdllapi.h"
+#include <com/sun/star/awt/Size.hpp>
 
 namespace msfilter {
 namespace util {
@@ -87,6 +88,20 @@ enum TextCategory
   as a proposed resolution.
 */
 MSFILTER_DLLPUBLIC TextCategory categorizeCodePoint(sal_uInt32 codePoint, const rtl::OUString &rBcp47LanguageTag);
+
+/** Paper size in 1/100 millimeters. */
+struct MSFILTER_DLLPUBLIC ApiPaperSize
+{
+    sal_Int32           mnWidth;
+    sal_Int32           mnHeight;
+};
+
+class MSFILTER_DLLPUBLIC PaperSizeConv
+{
+public:
+    static sal_Int32 getMSPaperSizeIndex( const com::sun::star::awt::Size& rSize );
+    static const ApiPaperSize& getApiSizeForMSPaperSizeIndex( sal_Int32 nMSOPaperIndex );
+};
 
 }
 }
