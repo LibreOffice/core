@@ -537,7 +537,13 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
             for ( ; i < nfbconfigs; i++)
             {
                 visinfo = glXGetVisualFromFBConfig (GLWin.dpy, fbconfigs[i]);
-                if( !visinfo || visinfo->visualid != vi->visualid )
+                if( !visinfo )
+                    continue;
+
+                unx::VisualID visualid = visinfo->visualid;
+                XFree ( visinfo );
+
+                if ( visualid != vi->visualid )
                     continue;
 
                 glXGetFBConfigAttrib (GLWin.dpy, fbconfigs[i], GLX_DRAWABLE_TYPE, &value);
@@ -565,11 +571,14 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
                 /* TODO: handle non Y inverted cases */
                 break;
             }
+            if (vi != firstVisual)
+                XFree (vi);
 
             if( i != nfbconfigs ) {
                 vi = glXGetVisualFromFBConfig( GLWin.dpy, fbconfigs[i] );
                 mbHasTFPVisual = true;
                 pChildSysData = lcl_createSystemWindow( vi, pPWindow, &pWindow );
+                XFree ( vi );
                 SAL_INFO("slideshow.opengl", "found visual suitable for texture_from_pixmap");
             } else if( firstVisual && pAttributeTable[1] == NULL ) {
                 vi = firstVisual;
@@ -577,8 +586,10 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
                 pChildSysData = lcl_createSystemWindow( vi, pPWindow, &pWindow );
                 SAL_INFO("slideshow.opengl", "did not find visual suitable for texture_from_pixmap, using " << vi->visualid);
             }
+            XFree ( fbconfigs );
 #else
             pChildSysData = lcl_createSystemWindow( vi, pPWindow, &pWindow );
+            XFree ( vi );
 #endif
             if ( pChildSysData )
                 break;
@@ -586,6 +597,12 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
 
         ++pAttributeTable;
     }
+
+#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
+    if ( firstVisual )
+        XFree (firstVisual);
+#endif
+
 #endif
 
 #if defined( _WIN32 )
