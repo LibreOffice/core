@@ -24,7 +24,7 @@
 
 #define JNIEXPORT __declspec (dllexport)
 #define JNIIMPORT __declspec (dllimport)
-#define JNICALL   __stdcall
+#define JNICALL
 
 typedef long jint;
 typedef __int64 jlong;

@@ -25,7 +25,6 @@
 #pragma warning(pop)
 #endif
 
-#include <windows.h>
 #define JAWT_GetAWT hidden_JAWT_GetAWT
 #include "jawt.h"
 #undef JAWT_GetAWT
@@ -51,7 +50,7 @@ typedef struct jawt_Win32DrawingSurfaceInfo {
     HPALETTE hpalette;
 } JAWT_Win32DrawingSurfaceInfo;
 
-extern __declspec(dllimport) unsigned char __stdcall JAWT_GetAWT(JNIEnv *, JAWT *);
+JNIIMPORT unsigned char JNICALL JAWT_GetAWT(JNIEnv *, JAWT *);
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
@@ -157,7 +156,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
         SetProp( hWnd, OLD_PROC_KEY, (HANDLE)hFuncPtr );
     }
 
-    return ((jlong)(LONG)hWnd);
+    return ((jlong)hWnd);
 }
 
 

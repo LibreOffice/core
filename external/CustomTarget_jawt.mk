@@ -14,10 +14,17 @@ $(eval $(call gb_CustomTarget_register_targets,external/jawt,\
 	libjawt.dll.a \
 ))
 
+ifeq ($(OS)$(CPU),WNTX)
+$(call gb_CustomTarget_get_workdir,external/jawt)/jawt.def:
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	echo EXPORTS > $@
+	echo "JAWT_GetAWT" >> $@
+else
 $(call gb_CustomTarget_get_workdir,external/jawt)/jawt.def:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	echo EXPORTS > $@
 	echo "JAWT_GetAWT@8" >> $@
+endif
 
 $(call gb_CustomTarget_get_workdir,external/jawt)/libjawt.dll.a: $(call gb_CustomTarget_get_workdir,external/jawt)/jawt.def
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),DLT,1)
