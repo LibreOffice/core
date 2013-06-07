@@ -537,7 +537,13 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
             for ( ; i < nfbconfigs; i++)
             {
                 visinfo = glXGetVisualFromFBConfig (GLWin.dpy, fbconfigs[i]);
-                if( !visinfo || visinfo->visualid != vi->visualid )
+                if( !visinfo )
+                    continue;
+
+                unx::VisualID visualid = visinfo->visualid;
+                XFree ( visinfo );
+
+                if ( visualid != vi->visualid )
                     continue;
 
                 glXGetFBConfigAttrib (GLWin.dpy, fbconfigs[i], GLX_DRAWABLE_TYPE, &value);
@@ -577,6 +583,7 @@ bool OGLTransitionerImpl::createWindow( Window* pPWindow )
                 pChildSysData = lcl_createSystemWindow( vi, pPWindow, &pWindow );
                 SAL_INFO("slideshow.opengl", "did not find visual suitable for texture_from_pixmap, using " << vi->visualid);
             }
+            XFree ( fbconfigs );
 #else
             pChildSysData = lcl_createSystemWindow( vi, pPWindow, &pWindow );
 #endif
