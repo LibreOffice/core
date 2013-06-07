@@ -21,7 +21,6 @@
 
 #include "svl/svldllapi.h"
 #include <tools/solar.h>
-#include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/hint.hxx>
@@ -86,7 +85,7 @@ public:
             return sal_False;
     }
 
-    sal_Bool QueryUrl (const String &rUrl)
+    sal_Bool QueryUrl (const OUString &rUrl)
     {
         INetProtocol eProto =
             INetURLObject::CompareProtocolScheme (rUrl);
@@ -104,7 +103,7 @@ public:
             PutUrl_Impl (rUrl);
     }
 
-    void PutUrl (const String &rUrl)
+    void PutUrl (const OUString &rUrl)
     {
         INetProtocol eProto =
             INetURLObject::CompareProtocolScheme (rUrl);

@@ -131,7 +131,7 @@ SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, sal_uInt16 nVersion )
     for( short i = 0; i < nMacro; ++i )
     {
         sal_uInt16 nCurKey, eType = STARBASIC;
-        String aLibName, aMacName;
+        OUString aLibName, aMacName;
         rStrm >> nCurKey;
         aLibName = SfxPoolItem::readByteString(rStrm);
         aMacName = SfxPoolItem::readByteString(rStrm);

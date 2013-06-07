@@ -137,7 +137,7 @@ void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, ComboBox
 
     if (pSrchItem)
     {
-        std::vector<String> aLst = pSrchItem->GetList();
+        std::vector<OUString> aLst = pSrchItem->GetList();
 
         for ( sal_uInt16 i = 0; i < aLst.size(); ++i )
         {
@@ -150,7 +150,7 @@ void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, ComboBox
 void StrArrToList_Impl( sal_uInt16 nId, const std::vector<OUString>& rStrLst )
 {
     DBG_ASSERT( !rStrLst.empty(), "check in advance");
-    std::vector<String> aLst;
+    std::vector<OUString> aLst;
 
     for (std::vector<OUString>::const_iterator i = rStrLst.begin(); i != rStrLst.end(); ++i)
         aLst.push_back(String(*i));
@@ -922,7 +922,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         bool bSetSearch = ( ( nModifyFlag & MODIFY_SEARCH ) == 0 );
         bool bSetReplace = ( ( nModifyFlag & MODIFY_REPLACE ) == 0 );
 
-        if ( pSearchItem->GetSearchString().Len() && bSetSearch )
+        if ( !pSearchItem->GetSearchString().isEmpty() && bSetSearch )
             m_pSearchLB->SetText( pSearchItem->GetSearchString() );
         else if (!aSearchStrings.empty())
         {

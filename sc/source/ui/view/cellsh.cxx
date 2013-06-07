@@ -762,7 +762,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_SELECT_SCENARIO:
                 {
-                    std::vector<String> aList;
+                    std::vector<OUString> aList;
                     Color   aDummyCol;
 
                     if ( !pDoc->IsScenario(nTab) )

@@ -1097,7 +1097,7 @@ void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
         if(nCount)
         {
             // prepare list
-            ::std::vector< String > aStringList;
+            ::std::vector< OUString > aStringList;
 
             for (sal_uInt16 a = 0; a < nCount; ++a)
             {
@@ -1126,7 +1126,7 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
         if(nCount)
         {
             // prepare list
-            ::std::vector< String > aStringList;
+            ::std::vector< OUString > aStringList;
             sal_uInt16 a;
 
             for( a = 0; a < nCount; a++)

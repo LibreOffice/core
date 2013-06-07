@@ -366,7 +366,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_SECUREURLS))
                         {
                             ::com::sun::star::uno::Sequence< OUString > seqURLs = aSecurityOptions.GetSecureURLs();
-                            std::vector<String> aList;
+                            std::vector<OUString> aList;
                             sal_uInt32 nCount = seqURLs.getLength();
                             sal_uInt32 nURL;
                             for( nURL=0; nURL<nCount; ++nURL )
@@ -757,7 +757,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_SECURE_URL, sal_True, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxStringListItem), "StringListItem expected");
-        const std::vector<String> &aList = ((SfxStringListItem*)pItem)->GetList();
+        const std::vector<OUString> &aList = ((SfxStringListItem*)pItem)->GetList();
         sal_uInt32 nCount = aList.size();
         ::com::sun::star::uno::Sequence< OUString > seqURLs(nCount);
         for( sal_uInt32 nPosition=0;nPosition<nCount;++nPosition)

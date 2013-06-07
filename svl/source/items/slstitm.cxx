@@ -36,7 +36,7 @@ class SfxImpStringList
 {
 public:
     sal_uInt16  nRefCount;
-    std::vector<String> aList;
+    std::vector<OUString> aList;
 
             SfxImpStringList() { nRefCount = 1; }
             ~SfxImpStringList();
@@ -59,7 +59,7 @@ SfxStringListItem::SfxStringListItem() :
 
 //------------------------------------------------------------------------
 
-SfxStringListItem::SfxStringListItem( sal_uInt16 which, const std::vector<String>* pList ) :
+SfxStringListItem::SfxStringListItem( sal_uInt16 which, const std::vector<OUString>* pList ) :
     SfxPoolItem( which ),
     pImp(NULL)
 {
@@ -90,7 +90,7 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, SvStream& rStream ) :
     if (pImp)
     {
         long   i;
-        String  aStr;
+        OUString  aStr;
         for( i=0; i < nEntryCount; i++ )
         {
             aStr = readByteString(rStream);
@@ -128,7 +128,7 @@ SfxStringListItem::~SfxStringListItem()
 
 //------------------------------------------------------------------------
 
-std::vector<String>& SfxStringListItem::GetList()
+std::vector<OUString>& SfxStringListItem::GetList()
 {
     if( !pImp )
         pImp = new SfxImpStringList;
@@ -136,7 +136,7 @@ std::vector<String>& SfxStringListItem::GetList()
     return pImp->aList;
 }
 
-const std::vector<String>& SfxStringListItem::GetList () const
+const std::vector<OUString>& SfxStringListItem::GetList () const
 {
     return (const_cast< SfxStringListItem * >(this))->GetList();
 }
@@ -212,7 +212,7 @@ SvStream& SfxStringListItem::Store( SvStream & rStream, sal_uInt16 ) const
 
 //------------------------------------------------------------------------
 
-void SfxStringListItem::SetString( const XubString& rStr )
+void SfxStringListItem::SetString( const OUString& rStr )
 {
     DBG_ASSERT(GetRefCount()==0,"SetString:RefCount!=0");
 
@@ -222,46 +222,48 @@ void SfxStringListItem::SetString( const XubString& rStr )
         pImp->nRefCount--;
     pImp = new SfxImpStringList;
 
-    xub_StrLen nStart = 0;
-    xub_StrLen nDelimPos;
-    XubString aStr(convertLineEnd(rStr, LINEEND_CR));
-    do
+    sal_Int32 nStart = 0;
+    sal_Int32 nDelimPos;
+    OUString aStr(convertLineEnd(rStr, LINEEND_CR));
+    for(;;)
     {
-        nDelimPos = aStr.Search( '\r', nStart );
-        xub_StrLen nLen;
-        if ( nDelimPos == STRING_NOTFOUND )
-            nLen = 0xffff;
+        nDelimPos = aStr.indexOf( '\r', nStart );
+        if ( nDelimPos  < 0)
+        {
+            pImp->aList.push_back(aStr.copy(nStart));
+            break;
+        }
         else
-            nLen = nDelimPos - nStart;
-
+        {
+            pImp->aList.push_back(aStr.copy(nStart, nDelimPos - nStart));
+        }
         // String gehoert der Liste
-        pImp->aList.push_back(aStr.Copy(nStart, nLen));
 
-        nStart += nLen + 1 ;    // delimiter ueberspringen
-    } while( nDelimPos != STRING_NOTFOUND );
+        nStart = nDelimPos + 1;
+    }
 
     // Kein Leerstring am Ende
-    if (!pImp->aList.empty() && !(pImp->aList.rbegin())->Len())
+    if (!pImp->aList.empty() && (pImp->aList.rbegin())->isEmpty())
         pImp->aList.pop_back();
 }
 
 //------------------------------------------------------------------------
 
-XubString SfxStringListItem::GetString()
+OUString SfxStringListItem::GetString()
 {
-    XubString aStr;
+    OUString aStr;
     if ( pImp )
     {
         DBG_ASSERT(pImp->nRefCount!=0xffff,"ImpList not valid");
 
-        std::vector<String>::iterator iter;
+        std::vector<OUString>::iterator iter;
         for (iter = pImp->aList.begin();;)
         {
             aStr += *iter;
             ++iter;
 
             if (iter != pImp->aList.end())
-                aStr += '\r';
+                aStr += "\r";
             else
                 break;
         }
@@ -285,7 +287,7 @@ void SfxStringListItem::SetStringList( const com::sun::star::uno::Sequence< OUSt
     {
         // String gehoert der Liste
         for ( sal_Int32 n = 0; n < rList.getLength(); n++ )
-            pImp->aList.push_back(XubString(rList[n]));
+            pImp->aList.push_back(OUString(rList[n]));
     }
 }
 

@@ -28,8 +28,8 @@
 //============================================================================
 class SfxFontItem: public SfxPoolItem
 {
-    XubString m_aName;
-    XubString m_aStyleName;
+    OUString m_aName;
+    OUString m_aStyleName;
     Size m_aSize;
     Color m_aColor;
     Color m_aFillColor;
@@ -68,8 +68,8 @@ public:
     sal_Bool hasColor() const { return m_bHasColor; }
     sal_Bool hasFillColor() const { return m_bHasFillColor; }
 
-    const XubString & getName() const { return m_aName; }
-    const XubString & getStyleName() const { return m_aStyleName; }
+    const OUString & getName() const { return m_aName; }
+    const OUString & getStyleName() const { return m_aStyleName; }
 
     const Size & getSize() const { return m_aSize; }
     const Color & getColor() const { return m_aColor; }
@@ -92,8 +92,8 @@ public:
     sal_Bool getShadow() const { return m_bShadow; }
     sal_Bool getKerning() const { return m_bKerning; }
 
-    inline void setFont(sal_Int16 nTheFamily, const XubString & rTheName,
-                        const XubString & rTheStyleName, sal_Int16 nThePitch,
+    inline void setFont(sal_Int16 nTheFamily, const OUString & rTheName,
+                        const OUString & rTheStyleName, sal_Int16 nThePitch,
                         rtl_TextEncoding nTheCharSet);
     inline void setWeight(sal_Int16 nTheWeight);
     inline void setItalic(sal_Int16 nTheItalic);
@@ -129,8 +129,8 @@ inline SfxFontItem::SfxFontItem(sal_uInt16 which):
 {}
 
 inline void SfxFontItem::setFont(sal_Int16 nTheFamily,
-                                 const XubString & rTheName,
-                                 const XubString & rTheStyleName,
+                                 const OUString & rTheName,
+                                 const OUString & rTheStyleName,
                                  sal_Int16 nThePitch,
                                  rtl_TextEncoding nTheCharSet)
 {

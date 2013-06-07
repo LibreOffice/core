@@ -2652,7 +2652,7 @@ void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
         {
             int nSel = rSh.GetSelectionType();
             SfxStringListItem aLst( nWhich );
-            std::vector<String> &rLst = aLst.GetList();
+            std::vector<OUString> &rLst = aLst.GetList();
             nParagraphPos = nGraphicPos = nOlePos = nFramePos = nTablePos =
             nTableRowPos  = nTableCellPos = nPagePos =
             nHeaderPos    = nFooterPos = 0;
