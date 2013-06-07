@@ -38,7 +38,7 @@ PATH=$sd_prog${PATH+:$PATH}
 export PATH
 
 # Set LD_LIBRARY_PATH so that "import pyuno" finds libpyuno.so:
-LD_LIBRARY_PATH=$sd_prog/../basis-link/program:$sd_prog/../basis-link/ure-link/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+LD_LIBRARY_PATH=$sd_prog:${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH
 
 # Set UNO_PATH so that "officehelper.bootstrap()" can find soffice executable:
@@ -50,10 +50,10 @@ export UNO_PATH
 : ${URE_BOOTSTRAP=vnd.sun.star.pathname:$sd_prog/fundamentalrc}
 export URE_BOOTSTRAP
 
-PYTHONPATH=$sd_prog/../basis-link/program:$sd_prog/../basis-link/program/python-core-%%PYVERSION%%/lib:$sd_prog/../basis-link/program/python-core-%%PYVERSION%%/lib/lib-dynload:$sd_prog/../basis-link/program/python-core-%%PYVERSION%%/lib/lib-tk:$sd_prog/../basis-link/program/python-core-%%PYVERSION%%/lib/site-packages${PYTHONPATH+:$PYTHONPATH}
+PYTHONPATH=$sd_prog:$sd_prog/python-core-%%PYVERSION%%/lib:$sd_prog/python-core-%%PYVERSION%%/lib/lib-dynload:$sd_prog/python-core-%%PYVERSION%%/lib/lib-tk:$sd_prog/python-core-%%PYVERSION%%/lib/site-packages${PYTHONPATH+:$PYTHONPATH}
 export PYTHONPATH
-PYTHONHOME=$sd_prog/../basis-link/program/python-core-%%PYVERSION%%
+PYTHONHOME=$sd_prog/python-core-%%PYVERSION%%
 export PYTHONHOME
 
 # execute binary
-exec "$sd_prog/../basis-link/program/python.bin" "$@"
+exec "$sd_prog/python.bin" "$@"
