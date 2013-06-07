@@ -26,12 +26,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbapagesetupbase.hxx>
+#include <ooo/vba/excel/XlPaperSize.hpp>
 
 typedef cppu::ImplInheritanceHelper1< VbaPageSetupBase, ov::excel::XPageSetup > ScVbaPageSetup_BASE;
 
 class ScVbaPageSetup :  public ScVbaPageSetup_BASE
 {
     css::uno::Reference< css::sheet::XSpreadsheet > mxSheet;
+    bool mbIsLandscape;
 public:
     ScVbaPageSetup( const css::uno::Reference< ov::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
@@ -81,6 +83,8 @@ public:
     virtual void SAL_CALL setPrintTitleRows( const ::rtl::OUString& _printtitlerows ) throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getPrintTitleColumns() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPrintTitleColumns( const ::rtl::OUString& _printtitlecolumns ) throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getPaperSize() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setPaperSize( sal_Int32 papersize ) throw (css::uno::RuntimeException);
     // XHelperInterface
     virtual OUString getServiceImplName();
     virtual css::uno::Sequence<OUString> getServiceNames();
