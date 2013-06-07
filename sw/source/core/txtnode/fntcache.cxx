@@ -379,6 +379,23 @@ sal_uInt16 SwFntObj::GetFontLeading( const ViewShell *pSh, const OutputDevice& r
             bSymbol = RTL_TEXTENCODING_SYMBOL == aMet.GetCharSet();
             GuessLeading( *pSh, aMet );
             nExtLeading = static_cast<sal_uInt16>(aMet.GetExtLeading());
+            /* HACK: There is something wrong with Writer's bullet rendering, causing lines
+               with bullets to be higher than they should be. I think this is because
+               Writer uses font's external leading incorrect, as the vertical distance
+               added to every line instead of only a distance between multiple lines,
+               which means a single bullet has external leading added even though it
+               shouldn't, but frankly this is just an educated guess rather than understanding
+               Writer's layout (heh).
+               Symbol font in some documents is 'StarSymbol; Arial Unicode MS', and Windows
+               machines often do not have StarSymbol, falling back to Arial Unicode MS, which
+               has unusually high external leading. So just reset external leading for fonts
+               which are used to bullets, as those should not be used on multiple lines anyway,
+               so in correct rendering external leading should be irrelevant anyway.
+               Interestingly enough, bSymbol is false for 'StarSymbol; Arial Unicode MS', so
+               also check explicitly.
+            */
+            if( bSymbol || IsStarSymbol( pPrtFont->GetName()))
+                nExtLeading = 0;
         }
 
         const IDocumentSettingAccess& rIDSA = *pSh->getIDocumentSettingAccess();
