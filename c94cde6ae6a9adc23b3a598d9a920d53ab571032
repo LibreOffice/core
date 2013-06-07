@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7pA\u003d",
+        "filename": "helpcompiler/source/HelpCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-06-07T13:58:25Z",
+      "side": 1,
+      "message": "MAC (Mac OS X) is not the same as UNIX (Linux) in the help. We need to use the target OS here.",
+      "revId": "c94cde6ae6a9adc23b3a598d9a920d53ab571032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
