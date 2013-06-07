@@ -160,7 +160,7 @@ namespace cppcanvas
                 if (pPointTypes)
                     for (int i = 0; i < nPoints; i ++) {
                         s >> pPointTypes [i];
-                        SAL_INFO ("cppcanvas.emf", "EMF+\tpoint type: " << pPointTypes [i]);
+                        SAL_INFO ("cppcanvas.emf", "EMF+\tpoint type: " << (int)pPointTypes [i]);
                     }
 
                 aPolygon.clear ();
