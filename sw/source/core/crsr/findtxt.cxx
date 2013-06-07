@@ -214,15 +214,15 @@ xub_StrLen GetPostIt(xub_StrLen aCount,const SwpHints *pHts)
     return aIndex;
 }
 
-sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes , utl::TextSearch& rSTxt,
-                    SwMoveFn fnMove, const SwPaM * pRegion,
-                    sal_Bool bInReadOnly )
+bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::TextSearch& rSTxt,
+                  SwMoveFn fnMove, const SwPaM * pRegion,
+                  bool bInReadOnly )
 {
     if( rSearchOpt.searchString.isEmpty() )
-        return sal_False;
+        return false;
 
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
-    sal_Bool bSrchForward = fnMove == fnMoveForward;
+    const bool bSrchForward = fnMove == fnMoveForward;
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
     SwIndex& rCntntIdx = pPam->GetPoint()->nContent;
 
@@ -235,7 +235,7 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
         if( !(*fnMove->fnNds)( &rNdIdx, sal_False ))
         {
             delete pPam;
-            return sal_False;
+            return false;
         }
         SwCntntNode *pNd = rNdIdx.GetNode().GetCntntNode();
         xub_StrLen nTmpPos = bSrchForward ? 0 : pNd->Len();
@@ -243,18 +243,18 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
     }
 
     // If bFound is true then the string was found and is between nStart and nEnd
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     // start position in text or initial position
     sal_Bool bFirst = sal_True;
     SwCntntNode * pNode;
 
     xub_StrLen nStart, nEnd, nTxtLen;
 
-    sal_Bool bRegSearch = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
-    sal_Bool bChkEmptyPara = bRegSearch && 2 == rSearchOpt.searchString.getLength() &&
+    const bool bRegSearch = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
+    const bool bChkEmptyPara = bRegSearch && 2 == rSearchOpt.searchString.getLength() &&
                         ( !rSearchOpt.searchString.compareToAscii( "^$" ) ||
                           !rSearchOpt.searchString.compareToAscii( "$^" ) );
-    sal_Bool bChkParaEnd = bRegSearch && 1 == rSearchOpt.searchString.getLength() &&
+    const bool bChkParaEnd = bRegSearch && 1 == rSearchOpt.searchString.getLength() &&
                       !rSearchOpt.searchString.compareToAscii( "$" );
 
     // LanguageType eLastLang = 0;
@@ -404,8 +404,8 @@ sal_uInt8 SwPaM::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNotes 
 }
 
 bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
-                      SwMoveFn fnMove, sal_Bool bSrchForward, sal_Bool bRegSearch,
-                      sal_Bool bChkEmptyPara, sal_Bool bChkParaEnd,
+                      SwMoveFn fnMove, bool bSrchForward, bool bRegSearch,
+                      bool bChkEmptyPara, bool bChkParaEnd,
                       xub_StrLen &nStart, xub_StrLen &nEnd, xub_StrLen nTxtLen,
                       SwNode* pNode, SwPaM* pPam)
 {
@@ -514,7 +514,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
             // if backward search, switch point and mark
             if( !bSrchForward )
                 Exchange();
-            bFound = sal_True;
+            bFound = true;
             break;
         }
         nStart = nEnd;
@@ -574,8 +574,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
     if( bInReadOnly && bReplace )
         bInReadOnly = sal_False;
 
-    sal_Bool bFnd = (sal_Bool)pCrsr->Find( rSearchOpt, bSearchInNotes, aSTxt, fnMove, pRegion, bInReadOnly );
-
+    const bool bFnd = pCrsr->Find( rSearchOpt, bSearchInNotes, aSTxt, fnMove, pRegion, bInReadOnly );
 
     if( bFnd && bReplace ) // replace string
     {

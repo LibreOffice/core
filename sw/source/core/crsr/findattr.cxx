@@ -855,8 +855,8 @@ static int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, sal_B
 }
 
 
-sal_Bool SwPaM::Find( const SfxPoolItem& rAttr, sal_Bool bValue, SwMoveFn fnMove,
-                    const SwPaM *pRegion, sal_Bool bInReadOnly )
+bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
+                  const SwPaM *pRegion, bool bInReadOnly )
 {
     // determine which attribute is searched:
     sal_uInt16 nWhich = rAttr.Which();
@@ -864,9 +864,9 @@ sal_Bool SwPaM::Find( const SfxPoolItem& rAttr, sal_Bool bValue, SwMoveFn fnMove
 
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
 
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     sal_Bool bFirst = sal_True;
-    sal_Bool bSrchForward = fnMove == fnMoveForward;
+    const bool bSrchForward = fnMove == fnMoveForward;
     SwCntntNode * pNode;
     const SfxPoolItem* pItem;
     SwpFmts aFmtArr;
@@ -879,7 +879,7 @@ sal_Bool SwPaM::Find( const SfxPoolItem& rAttr, sal_Bool bValue, SwMoveFn fnMove
         if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, sal_False ))
         {
             delete pPam;
-            return sal_False;
+            return false;
         }
         SwCntntNode *pNd = pPam->GetCntntNode();
         xub_StrLen nTmpPos = bSrchForward ? 0 : pNd->Len();
@@ -900,7 +900,7 @@ sal_Bool SwPaM::Find( const SfxPoolItem& rAttr, sal_Bool bValue, SwMoveFn fnMove
                 SetMark();
                 *GetPoint() = *pPam->GetPoint();
                 *GetMark() = *pPam->GetMark();
-                bFound = sal_True;
+                bFound = true;
                 break;
             }
             else if (isTXTATR(nWhich))
@@ -925,7 +925,7 @@ sal_Bool SwPaM::Find( const SfxPoolItem& rAttr, sal_Bool bValue, SwMoveFn fnMove
             *GetPoint() = *pPam->GetPoint();
             SetMark();
             pNode->MakeEndIndex( &GetPoint()->nContent );
-            bFound = sal_True;
+            bFound = true;
             break;
         }
     }
@@ -941,14 +941,14 @@ sal_Bool SwPaM::Find( const SfxPoolItem& rAttr, sal_Bool bValue, SwMoveFn fnMove
 
 typedef int (*FnSearchAttr)( const SwTxtNode&, SwAttrCheckArr&, SwPaM& );
 
-sal_Bool SwPaM::Find( const SfxItemSet& rSet, sal_Bool bNoColls, SwMoveFn fnMove,
-                    const SwPaM *pRegion, sal_Bool bInReadOnly, sal_Bool bMoveFirst )
+bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFn fnMove,
+                  const SwPaM *pRegion, bool bInReadOnly, bool bMoveFirst )
 {
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
 
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     sal_Bool bFirst = sal_True;
-    sal_Bool bSrchForward = fnMove == fnMoveForward;
+    const bool bSrchForward = fnMove == fnMoveForward;
     SwCntntNode * pNode;
     SwpFmts aFmtArr;
 
@@ -971,7 +971,7 @@ sal_Bool SwPaM::Find( const SfxItemSet& rSet, sal_Bool bNoColls, SwMoveFn fnMove
         if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, sal_False ))
         {
             delete pPam;
-            return sal_False;
+            return false;
         }
         SwCntntNode *pNd = pPam->GetCntntNode();
         xub_StrLen nTmpPos = bSrchForward ? 0 : pNd->Len();
@@ -994,7 +994,7 @@ sal_Bool SwPaM::Find( const SfxItemSet& rSet, sal_Bool bNoColls, SwMoveFn fnMove
                 SetMark();
                 *GetPoint() = *pPam->GetPoint();
                 *GetMark() = *pPam->GetMark();
-                bFound = sal_True;
+                bFound = true;
                 break;
             }
             continue; // text attribute
@@ -1020,7 +1020,7 @@ sal_Bool SwPaM::Find( const SfxItemSet& rSet, sal_Bool bNoColls, SwMoveFn fnMove
             *GetPoint() = *pPam->GetPoint();
             SetMark();
             pNode->MakeEndIndex( &GetPoint()->nContent );
-            bFound = sal_True;
+            bFound = true;
             break;
         }
     }

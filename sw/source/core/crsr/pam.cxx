@@ -45,7 +45,7 @@
 #include <xmloff/odffields.hxx>
 
 // for the dump "MSC-" compiler
-inline xub_StrLen GetSttOrEnd( sal_Bool bCondition, const SwCntntNode& rNd )
+inline xub_StrLen GetSttOrEnd( bool bCondition, const SwCntntNode& rNd )
 {
     return bCondition ? 0 : rNd.Len();
 }

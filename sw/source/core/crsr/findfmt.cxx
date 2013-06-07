@@ -21,10 +21,10 @@
 #include <pamtyp.hxx>
 
 
-sal_Bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
-                        const SwPaM *pRegion, sal_Bool bInReadOnly  )
+bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
+                  const SwPaM *pRegion, bool bInReadOnly  )
 {
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     const bool bSrchForward = (fnMove == fnMoveForward);
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
 
@@ -36,7 +36,7 @@ sal_Bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
         if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, sal_False ))
         {
             delete pPam;
-            return sal_False;
+            return false;
         }
         SwCntntNode *pNd = pPam->GetPoint()->nNode.GetNode().GetCntntNode();
         xub_StrLen nTmpPos = bSrchForward ? 0 : pNd->Len();
@@ -45,10 +45,9 @@ sal_Bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
 
     sal_Bool bFirst = sal_True;
     SwCntntNode* pNode;
-    while( !bFound &&
-            0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly )))
+    while( 0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly )))
     {
-        if( 0 != ( bFound = (pNode->GetFmtColl() == &rFmt) ))
+        if ( pNode->GetFmtColl() == &rFmt )
         {
             // if a FormatCollection is found then it is definitely a SwCntntNode
 
@@ -63,6 +62,8 @@ sal_Bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
             // if backward search, switch point and mark
             if( !bSrchForward )
                 Exchange();
+
+            bFound = true;
             break;
         }
     }

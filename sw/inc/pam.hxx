@@ -186,24 +186,24 @@ public:
                     SwGoInDoc fnGo = fnGoCntnt );
 
     /// Search.
-    sal_uInt8 Find( const com::sun::star::util::SearchOptions& rSearchOpt,
-                sal_Bool bSearchInNotes,
+    bool Find(  const com::sun::star::util::SearchOptions& rSearchOpt,
+                bool bSearchInNotes,
                 utl::TextSearch& rSTxt,
                 SwMoveFn fnMove = fnMoveForward,
-                const SwPaM *pPam =0, sal_Bool bInReadOnly = sal_False);
-    sal_Bool Find(  const SwFmt& rFmt,
+                const SwPaM *pPam =0, bool bInReadOnly = false);
+    bool Find(  const SwFmt& rFmt,
                 SwMoveFn fnMove = fnMoveForward,
-                const SwPaM *pPam =0, sal_Bool bInReadOnly = sal_False);
-    sal_Bool Find(  const SfxPoolItem& rAttr, sal_Bool bValue = sal_True,
+                const SwPaM *pPam =0, bool bInReadOnly = false);
+    bool Find(  const SfxPoolItem& rAttr, bool bValue = true,
                 SwMoveFn fnMove = fnMoveForward,
-                const SwPaM *pPam =0, sal_Bool bInReadOnly = sal_False );
-    sal_Bool Find(  const SfxItemSet& rAttr, sal_Bool bNoColls,
+                const SwPaM *pPam =0, bool bInReadOnly = false );
+    bool Find(  const SfxItemSet& rAttr, bool bNoColls,
                 SwMoveFn fnMove,
-                const SwPaM *pPam, sal_Bool bInReadOnly, sal_Bool bMoveFirst );
+                const SwPaM *pPam, bool bInReadOnly, bool bMoveFirst );
 
     bool DoSearch( const com::sun::star::util::SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
-                    SwMoveFn fnMove, sal_Bool bSrchForward, sal_Bool bRegSearch, sal_Bool bChkEmptyPara, sal_Bool bChkParaEnd,
-                    xub_StrLen &nStart, xub_StrLen &nEnde,xub_StrLen nTxtLen,SwNode* pNode, SwPaM* pPam);
+                   SwMoveFn fnMove, bool bSrchForward, bool bRegSearch, bool bChkEmptyPara, bool bChkParaEnd,
+                   xub_StrLen &nStart, xub_StrLen &nEnde,xub_StrLen nTxtLen,SwNode* pNode, SwPaM* pPam);
 
     inline bool IsInFrontOfLabel() const        { return m_bIsInFrontOfLabel; }
     inline void _SetInFrontOfLabel( bool bNew ) { m_bIsInFrontOfLabel = bNew; }
