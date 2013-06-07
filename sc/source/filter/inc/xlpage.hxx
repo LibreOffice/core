@@ -23,6 +23,7 @@
 #include <tools/gen.hxx>
 #include <boost/noncopyable.hpp>
 #include "xltools.hxx"
+#include "scdllapi.h"
 
 // Constants and Enumerations =================================================
 
@@ -91,7 +92,7 @@ const sal_uInt16 EXC_PAPERSIZE_USER         = 0xFFFF;
 class SvxBrushItem;
 
 /** Contains all page (print) settings for a single sheet. */
-struct XclPageData : private boost::noncopyable
+struct SC_DLLPUBLIC XclPageData : private boost::noncopyable
 {
     typedef ::std::auto_ptr< SvxBrushItem > SvxBrushItemPtr;
 
