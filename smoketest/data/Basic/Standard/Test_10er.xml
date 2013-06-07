@@ -173,7 +173,7 @@ DIM nStrPos as Long
     CompatibilityMode(true)
     nStrPos = InStrRev (sDocURL, &quot;/&quot; )
     CompatibilityMode(false)
-    sExtensionURL = Left (sDocURL, nStrPos)
+    sExtensionURL = Left (sDocURL, nStrPos) + &quot;../Extension/&quot; + cExtensionFileName
 
     GlobalTestLog = OpenLogDat (sLogFileName)
     call WriteTestSequence

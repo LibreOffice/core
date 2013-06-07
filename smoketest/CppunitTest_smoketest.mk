@@ -42,13 +42,18 @@ $(eval $(call gb_CppunitTest_add_arguments,smoketest,\
 	-env:arg-soffice=$(smoketest_SOFFICE) \
 	-env:arg-user=$(WORKDIR)/CustomTarget/smoketest \
 	-env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
-	-env:arg-testarg.smoketest.doc=$(OUTDIR)/bin/smoketestdoc.sxw \
+	-env:arg-testarg.smoketest.doc=$(WORKDIR)/Zip/smoketestdoc.sxw \
 ))
 
-$(call gb_CppunitTest_get_target,smoketest): clean_CustomTarget_smoketest
+$(call gb_CppunitTest_get_target,smoketest): \
+	clean_CustomTarget_smoketest \
+	$(WORKDIR)/Zip/smoketestdoc.sxw
 
 clean_CustomTarget_smoketest:
 	rm -rf $(WORKDIR)/CustomTarget/smoketest
 	mkdir -p $(WORKDIR)/CustomTarget/smoketest
+
+$(WORKDIR)/Zip/smoketestdoc.sxw: $(call gb_Zip_get_target,smoketestdoc)
+	cp $< $@
 
 # vim: set noet sw=4 ts=4:

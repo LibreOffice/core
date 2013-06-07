@@ -64,7 +64,7 @@ Sub TestExtensions
     &apos;XExtensionManager only affect the user installation. To modify the share installation one would pass &quot;share&quot;.
 
     Dim props() as Object
-    ext_mgr.addExtension(sExtensionURL + cExtensionFileName, props, &quot;user&quot;, obj_null, cmdEnv)
+    ext_mgr.addExtension(sExtensionURL, props, &quot;user&quot;, obj_null, cmdEnv)
 
     &apos;Check if the extension has been added by creating a service which is contained in the extension.
     oTestExtension = createUnoService(cUnoSmoketestTestExtension)
