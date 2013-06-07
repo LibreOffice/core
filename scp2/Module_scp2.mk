@@ -11,6 +11,7 @@ $(eval $(call gb_Module_Module,scp2))
 
 $(eval $(call gb_Module_add_targets,scp2,\
 	AutoInstallLibs_base \
+	AutoInstallLibs_canvas \
 	AutoInstallLibs_onlineupdate \
 	AutoInstallLibs_graphicfilter \
 	AutoInstallLibs_tde \

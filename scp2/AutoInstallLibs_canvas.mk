@@ -7,8 +7,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_InstallModule_InstallModule,scp2/canvas))
+$(eval $(call gb_AutoInstallLibs_AutoInstallLibs,canvas,CANVAS,LIBO_LIB_FILE,auto_Canvas_Lib))
 
-$(eval $(call gb_InstallModule_use_auto_install_libs,scp2/canvas,canvas))
-
-# vim: set shiftwidth=4 tabstop=4 noexpandtab:
+# vim: set noet sw=4 ts=4:

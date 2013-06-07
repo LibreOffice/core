@@ -216,6 +216,18 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,BASE, \
     dbu \
 ))
 
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,CANVAS, \
+    $(if $(filter TRUE,$(ENABLE_CAIRO_CANVAS)),cairocanvas) \
+    canvasfactory \
+    mtfrenderer \
+    simplecanvas \
+    vclcanvas \
+    $(if $(filter TRUE,$(ENABLE_DIRECTX)),
+        directx9canvas \
+        gdipluscanvas \
+    )
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,GRAPHICFILTER, \
     svgfilter \
     flash \
@@ -609,16 +621,12 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     basprov \
-    cairocanvas \
-    canvasfactory \
     cmdmail \
-    directx9canvas \
     dlgprov \
     expwrap \
     fastsax \
     fpicker \
     fps_office \
-    gdipluscanvas \
     hatchwindowfactory \
     i18nsearch \
     ldapbe2 \
@@ -626,14 +634,12 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     migrationoo2 \
     migrationoo3 \
     msforms \
-    mtfrenderer \
     OGLTrans \
     passwordcontainer \
     pdfimport \
     postgresql-sdbc \
     postgresql-sdbc-impl \
     pythonloader \
-    simplecanvas \
     slideshow \
     stringresource \
     syssh \
@@ -644,7 +650,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     vbaevents \
     vbaobj \
     vbaswobj \
-    vclcanvas \
     $(if $(filter $(OS),MACOSX), \
         fps_aqua \
     ) \
