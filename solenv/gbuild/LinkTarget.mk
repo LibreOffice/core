@@ -59,11 +59,9 @@ gb_LinkTarget__get_ldflags=$(if $(LDFLAGS),$(LDFLAGS),$(call gb_LinkTarget__get_
 #                                                          LinkTarget/headers
 # LinkTarget/dep              joined dep file              AsmObject/dep CObject/dep CxxObject/dep GenCObject/dep GenCxxObject/dep ObjCObject/dep ObjCxxObject/dep
 #                                                          | LinkTarget/headers
-# LinkTarget/headers          all headers available        LinkTarget/external_headers
-#                              including own generated     own generated headers
+# LinkTarget/headers          all headers available
+#                             including own generated
 # PCH                         precompiled headers          LinkTarget/headers
-# LinkTarget/external_headers all external headers avail.  header files of linked libs
-#
 # CObject                     plain c compile              | LinkTarget/headers
 # CxxObject                   c++ compile                  | LinkTarget/headers PCH
 # GenCObject                  plain c compile from         | LinkTarget/headers
@@ -391,7 +389,6 @@ $(call gb_LinkTarget_get_clean_target,%) :
 		$(call gb_LinkTarget_get_target,$*) \
 		$(call gb_LinkTarget_get_dep_target,$*) \
 		$(call gb_LinkTarget_get_headers_target,$*) \
-		$(call gb_LinkTarget_get_external_headers_target,$*) \
 		$(call gb_LinkTarget_get_objects_list,$*) \
 		$(call gb_LinkTarget_get_target,$*).exports \
 		$(DLLTARGET) \
@@ -466,7 +463,7 @@ endif
 # old build.pl/dmake system. Once all is migrated, gbuild should error out
 # when is is told to depend on a linktarget it does not know about and not
 # only warn.
-define gb_LinkTarget__get_external_headers_check
+define gb_LinkTarget__get_headers_check
 ifneq ($$(SELF),$$*)
 $$(eval $$(call gb_Output_info,LinkTarget $$* not defined: Assuming headers to be there!,ALL))
 endif
@@ -474,23 +471,16 @@ $$@ : COMMAND := $$(call gb_Helper_abbreviate_dirs, mkdir -p $$(dir $$@) && touc
 
 endef
 
-$(call gb_LinkTarget_get_external_headers_target,%) :
-	$(eval $(gb_LinkTarget__get_external_headers_check))
+$(call gb_LinkTarget_get_headers_target,%) :
+	$(eval $(gb_LinkTarget__get_headers_check))
 	$(COMMAND)
 
-$(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_headers_target,%)
-	$(call gb_Helper_abbreviate_dirs,\
-		mkdir -p $(dir $@) && touch $@)
-
 # Explanation of some of the targets:
-# - gb_LinkTarget_get_external_headers_target is the targets that guarantees all
-#   headers from linked against libraries are in OUTDIR.
 # - gb_LinkTarget_get_headers_target is the target that guarantees all headers
 #   from the linked against the libraries and the linktargets own headers
 #   (including generated headers) are in the OUTDIR.
 # - gb_LinkTarget_get_target links the objects into a file in WORKDIR.
-# gb_LinkTarget_get_target depends on gb_LinkTarget_get_headers_target which in
-# turn depends gb_LinkTarget_get_external_headers_target.
+# gb_LinkTarget_get_target depends on gb_LinkTarget_get_headers_target.
 # gb_LinkTarget_get_target depends additionally on the objects, which in turn
 # depend build-order only on the gb_LinkTarget_get_headers_target. The build
 # order-only dependency ensures all headers to be there for compiling and
@@ -521,7 +511,7 @@ $(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_h
 # variables have a T_ prefix.
 define gb_LinkTarget_LinkTarget
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS :=
-$(call gb_LinkTarget_get_external_headers_target,$(1)) : SELF := $(1)
+$(call gb_LinkTarget_get_headers_target,$(1)) : SELF := $(1)
 $(call gb_LinkTarget_get_target,$(1)) : DLLTARGET :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : COBJECTS :=
@@ -758,7 +748,7 @@ $(call gb_LinkTarget_get_target,$(1)) : LIBS := $$(filter-out $$(gb_STDLIBS),$$(
 endef
 
 define gb_LinkTarget__use_api
-$(call gb_LinkTarget_get_external_headers_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_target,$(2))
+$(call gb_LinkTarget_get_headers_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_target,$(2))
 $(call gb_LinkTarget__add_include,$(1),$(call gb_UnoApiHeadersTarget_get_dir,$(2)))
 
 endef
@@ -778,7 +768,7 @@ $(call gb_LinkTarget__use_api,$(1),offapi)
 endef
 
 define gb_LinkTarget__use_internal_api_one
-$(call gb_LinkTarget_get_external_headers_target,$(1)) :| \
+$(call gb_LinkTarget_get_headers_target,$(1)) :| \
 	$(call gb_UnoApiHeadersTarget_get_$(3)target,$(2))
 $(call gb_LinkTarget__add_include,$(1),$(call gb_UnoApiHeadersTarget_get_$(3)dir,$(2)))
 
@@ -845,7 +835,7 @@ $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS += $(3)
 # for faster incremental builds when the ABI is unchanged
 $(call gb_LinkTarget_get_target,$(1)) : \
 	$(foreach lib,$(3),$(call gb_Library_get_exports_target,$(lib)))
-$(call gb_LinkTarget_get_external_headers_target,$(1)) : \
+$(call gb_LinkTarget_get_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_Library_get_headers_target,$(lib)))
 
 endef
@@ -910,7 +900,7 @@ define gb_LinkTarget_use_static_libraries
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS += $$(if $$(filter-out StaticLibrary,$$(TARGETTYPE)),$(2))
 
 $(call gb_LinkTarget_get_target,$(1)) : $(foreach lib,$(2),$(call gb_StaticLibrary_get_target,$(lib)))
-$(call gb_LinkTarget_get_external_headers_target,$(1)) : \
+$(call gb_LinkTarget_get_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_StaticLibrary_get_headers_target,$(lib)))
 
 endef
@@ -1125,7 +1115,7 @@ $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Librar
 $$(eval $$(call gb_Output_error,Cannot import objects library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
 endif
 $(call gb_LinkTarget__use_linktarget_objects,$(1),$(foreach lib,$(2),$(call gb_Library_get_linktargetname,$(lib))))
-$(call gb_LinkTarget_get_external_headers_target,$(1)) : \
+$(call gb_LinkTarget_get_headers_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_Library_get_headers_target,$(lib)))
 
 endef
@@ -1245,19 +1235,13 @@ $(foreach aux,$(2),$(call gb_LinkTarget_add_auxtarget,$(1),$(aux)))
 
 endef
 
-define gb_LinkTarget__add_internal_headers
-$(call gb_LinkTarget_get_headers_target,$(1)) : $(2)
-$(2) :|	$(call gb_LinkTarget_get_external_headers_target,$(1))
-
-endef
-
 define gb_LinkTarget_add_custom_headers
 $$(call gb_Output_error,\
  gb_LinkTarget_add_custom_headers: use gb_LinkTarget_use_custom_headers instead.)
 endef
 
 define gb_LinkTarget__use_custom_headers
-$(call gb_LinkTarget_get_external_headers_target,$(1)) :| \
+$(call gb_LinkTarget_get_headers_target,$(1)) :| \
 	$(call gb_CustomTarget_get_target,$(2))
 $(call gb_LinkTarget__add_include,$(1),$(call gb_CustomTarget_get_workdir,$(2)))
 
@@ -1275,7 +1259,7 @@ endef
 
 # add SDI (svidl) headers
 define gb_LinkTarget_add_sdi_headers
-$(call gb_LinkTarget__add_internal_headers,$(1),$(foreach sdi,$(2),$(call gb_SdiTarget_get_target,$(sdi))))
+$(call gb_LinkTarget_get_headers_target,$(1)) : $(foreach sdi,$(2),$(call gb_SdiTarget_get_target,$(sdi)))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach sdi,$(2),$(call gb_SdiTarget_get_clean_target,$(sdi)))
 
 endef
@@ -1328,14 +1312,9 @@ $$(call gb_Output_error,\
  gb_LinkTarget_add_precompiled_header: use gb_LinkTarget_set_precompiled_header instead.)
 endef
 
-define gb_LinkTarget_add_external_headers
-$$(call gb_Output_error,\
- gb_LinkTarget_add_external_headers: use gb_LinkTarget_use_package instead.)
-endef
-
 # use a header package, possibly from another module (i.e. via OUTDIR)
 define gb_LinkTarget_use_package
-$(call gb_LinkTarget_get_external_headers_target,$(1)) :| \
+$(call gb_LinkTarget_get_headers_target,$(1)) :| \
 	$(call gb_Package_get_target,$(strip $(2)))
 
 endef
@@ -1346,14 +1325,14 @@ endef
 
 # Use sources from unpacked tarball of an external project
 define gb_LinkTarget_use_unpacked
-$(call gb_LinkTarget_get_external_headers_target,$(1)) :| $(call gb_UnpackedTarball_get_final_target,$(2))
+$(call gb_LinkTarget_get_headers_target,$(1)) :| $(call gb_UnpackedTarball_get_final_target,$(2))
 
 endef
 
 # Use artifacts from ExternalProject (i. e. configure) of an external project
 # example in expat: StaticLibrary depends on ExternalProject outcome
 define gb_LinkTarget_use_external_project
-$(call gb_LinkTarget_get_external_headers_target,$(1)) :| $(call gb_ExternalProject_get_target,$(2))
+$(call gb_LinkTarget_get_headers_target,$(1)) :| $(call gb_ExternalProject_get_target,$(2))
 
 endef
 
@@ -1364,7 +1343,7 @@ endef
 #
 # gb_LinkTarget_use_headers linktarget other-linktarget(s)
 define gb_LinkTarget_use_headers
-$(call gb_LinkTarget_get_external_headers_target,$(1)) :\
+$(call gb_LinkTarget_get_headers_target,$(1)) :\
     $(foreach linktarget,$(2),$(call gb_LinkTarget_get_headers_target,$(linktarget)))
 
 endef

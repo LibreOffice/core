@@ -55,7 +55,7 @@ endef
 define gb_CliNativeLibraryTarget_wrap_library
 $(call gb_CliNativeLibraryTarget_get_target,$(1)) : CLI_NATIVE_LIBRARY := $(call gb_CliNativeLibraryTarget__get_library,$(2))
 $(call gb_CliNativeLibraryTarget_get_target,$(1)) : $(call gb_Library_get_target,$(2))
-$(call gb_Library_get_external_headers_target,$(2)) : $(call gb_CliNativeLibraryTarget_get_external_target,$(1))
+$(call gb_Library_get_headers_target,$(2)) : $(call gb_CliNativeLibraryTarget_get_external_target,$(1))
 
 endef
 

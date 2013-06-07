@@ -247,7 +247,6 @@ $(eval $(foreach method,\
 	use_externals \
 	add_custom_headers \
 	use_custom_headers \
-	add_external_headers \
 	use_package \
 	use_packages \
 	use_unpacked \

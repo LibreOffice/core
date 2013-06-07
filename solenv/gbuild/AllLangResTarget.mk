@@ -233,7 +233,7 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 endif
 
-$(call gb_SrsTarget_get_external_headers_target,%) :
+$(call gb_SrsTarget_get_headers_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 	    mkdir -p $(dir $@) && touch $@)
 
@@ -285,7 +285,7 @@ $(call gb_SrsTarget_get_dep_target,$(1)) : $(call gb_SrsPartTarget_get_dep_targe
 endif
 $(call gb_SrsPartTarget_SrsPartTarget,$(2),$(3))
 $(call gb_SrsTarget_get_target,$(1)) : $(call gb_SrsPartTarget_get_target,$(2))
-$(call gb_SrsPartTarget_get_target,$(2)) :| $(call gb_SrsTarget_get_external_headers_target,$(1))
+$(call gb_SrsPartTarget_get_target,$(2)) :| $(call gb_SrsTarget_get_headers_target,$(1))
 $(call gb_SrsPartTarget_get_target,$(2)) :| $(call gb_SrsTemplateTarget_get_target,$(1))
 $(call gb_SrsTarget_get_clean_target,$(1)) : PARTS += $(2)
 $(call gb_SrsTarget_get_target,$(1)) : PARTS += $(2)
@@ -333,21 +333,11 @@ $(foreach template,$(2),$(call gb_SrsTarget_add_template,$(1),$(template)))
 
 endef
 
-define gb_SrsTarget_use_package
-$(call gb_SrsTarget_get_external_headers_target,$(1)) : $(call gb_Package_get_target,$(2))
-
-endef
-
-define gb_SrsTarget_use_packages
-$(foreach package,$(2),$(call gb_SrsTarget_use_package,$(1),$(package)))
-
-endef
-
 # Use templates built by another SrsTarget.
 #
 # gb_SrsTarget_use_srstarget srs other-srs
 define gb_SrsTarget_use_srstarget
-$(call gb_SrsTarget_get_external_headers_target,$(1)) : $(call gb_SrsTemplateTarget_get_target,$(2))
+$(call gb_SrsTarget_get_headers_target,$(1)) : $(call gb_SrsTemplateTarget_get_target,$(2))
 
 endef
 

@@ -39,7 +39,7 @@ $(eval $(call gb_Library_add_exception_objects,cli_uno,\
     cli_ure/source/uno_bridge/cli_uno \
 ))
 
-$(call gb_Library_get_external_headers_target,cli_uno) :| \
+$(call gb_Library_get_headers_target,cli_uno) :| \
 	$(call gb_CliLibrary_get_target,cli_ure) \
 	$(call gb_CliUnoApi_get_target,cli_uretypes)
 

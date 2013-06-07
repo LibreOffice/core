@@ -92,7 +92,6 @@ gb_DescriptionTranslateTarget_get_target = $(WORKDIR)/DescriptionTranslateTarget
 gb_Dictionary_get_target = $(WORKDIR)/Dictionary/$(1).done
 gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
 gb_GenCxxObject_get_target = $(WORKDIR)/GenCxxObject/$(1).o
-gb_Executable_get_external_headers_target = $(WORKDIR)/ExternalHeaders/Executable/$(1)
 gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
 gb_Executable_get_runtime_target = $(WORKDIR_FOR_BUILD)/Executable/$(1).run
 gb_Extension_get_target = $(WORKDIR)/Extension/$(1).oxt
@@ -137,7 +136,6 @@ gb_JunitTest_get_classsetname = JunitTest/$(1)
 gb_JunitTest_get_target = $(WORKDIR)/JunitTest/$(1)/done
 gb_JunitTest_get_userdir = $(WORKDIR)/JunitTest/$(1)/user
 gb_PythonTest_get_target = $(WORKDIR)/PythonTest/$(1)/done
-gb_LinkTarget_get_external_headers_target = $(WORKDIR)/ExternalHeaders/$(1)
 gb_LinkTarget_get_headers_target = $(WORKDIR)/Headers/$(1)
 gb_LinkTarget_get_target = $(WORKDIR)/LinkTarget/$(1)
 gb_LinkTarget_get_objects_list = $(WORKDIR)/LinkTarget/$(1).objectlist
@@ -173,7 +171,7 @@ gb_ScpTemplateTarget_get_target = $(abspath $(WORKDIR)/ScpTemplateTarget/$(dir $
 gb_SdiTarget_get_target = $(WORKDIR)/SdiTarget/$(1)
 gb_SrsPartMergeTarget_get_target = $(WORKDIR)/SrsPartMergeTarget/$(1)
 gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
-gb_SrsTarget_get_external_headers_target = $(WORKDIR)/ExternalHeaders/SrsTarget/$(1)
+gb_SrsTarget_get_headers_target = $(WORKDIR)/SrsTarget/$(1).headers
 gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
 gb_SrsTemplatePartTarget_get_target = $(WORKDIR)/SrsTemplatePartTarget/$(firstword $(subst /, ,$(1)))/$(subst _tmpl,,$(notdir $(1)))
 gb_SrsTemplateTarget_get_include_dir = $(WORKDIR)/SrsTemplatePartTarget/$(firstword $(subst /, ,$(1)))
@@ -226,16 +224,8 @@ gb_Zip_get_target = $(WORKDIR)/Zip/$(1).zip
 
 gb_Library__get_final_target = $(WORKDIR)/Dummy/$(1)
 
-define gb_Library_get_external_headers_target
-$(patsubst $(1):%,$(WORKDIR)/ExternalHeaders/Library/%,$(filter $(1):%,$(gb_Library_FILENAMES)))
-endef
-
 define gb_Library_get_headers_target
 $(patsubst $(1):%,$(WORKDIR)/Headers/Library/%,$(filter $(1):%,$(gb_Library_FILENAMES)))
-endef
-
-define gb_StaticLibrary_get_external_headers_target
-$(WORKDIR)/ExternalHeaders/StaticLibrary/$(call gb_StaticLibrary_get_filename,$(1))
 endef
 
 define gb_StaticLibrary_get_headers_target
