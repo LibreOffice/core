@@ -15,6 +15,7 @@
 #include <tools/color.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include "filter/msfilter/msfilterdllapi.h"
+#include <com/sun/star/awt/Size.hpp>
 
 namespace msfilter {
 namespace util {
@@ -73,6 +74,20 @@ MSFILTER_DLLPUBLIC TextCategory categorizeCodePoint(sal_uInt32 codePoint, const 
 /// Converts tools Color to HTML color (without leading hashmark).
 MSFILTER_DLLPUBLIC OString ConvertColor( const Color &rColor );
 
+
+/** Paper size in 1/100 millimeters. */
+struct MSFILTER_DLLPUBLIC ApiPaperSize
+{
+    sal_Int32           mnWidth;
+    sal_Int32           mnHeight;
+};
+
+class MSFILTER_DLLPUBLIC PaperSizeConv
+{
+public:
+    static sal_Int32 getMSPaperSizeIndex( const com::sun::star::awt::Size& rSize );
+    static const ApiPaperSize& getApiSizeForMSPaperSizeIndex( sal_Int32 nMSOPaperIndex );
+};
 }
 }
 
