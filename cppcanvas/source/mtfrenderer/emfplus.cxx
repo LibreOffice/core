@@ -1342,18 +1342,19 @@ namespace cppcanvas
                             B2DPoint mappedCenter (Map (dx + dw/2, dy + dh/2));
                             B2DSize mappedSize( MapSize (dw/2, dh/2));
 
-                            double endAngle = startAngle + sweepAngle;
+                            float endAngle = startAngle + sweepAngle;
+                            startAngle = fmod (startAngle, M_PI*2);
+                            if (startAngle < 0)
+                                startAngle += M_PI*2;
+                            endAngle = fmod (endAngle, M_PI*2);
                             if (endAngle < 0)
                                 endAngle += M_PI*2;
-                            endAngle = fmod (endAngle, M_PI*2);
 
-                            if (sweepAngle < 0) {
-                                double tmp = startAngle;
-                                startAngle = endAngle;
-                                endAngle = tmp;
-                            }
+                            if (sweepAngle < 0)
+                                std::swap (endAngle, startAngle);
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ angles: " << startAngle << "," << sweepAngle << "  ---> " << startAngle << "," << endAngle);
+                            SAL_INFO("cppcanvas.emf", "EMF+ adjusted angles: start " <<
+                                     (360.0*startAngle/M_PI) << ", end: " << (360.0*endAngle/M_PI));
 
                             B2DPolygon polygon = tools::createPolygonFromEllipseSegment (mappedCenter, mappedSize.getX (), mappedSize.getY (), startAngle, endAngle);
                             polygon.append (mappedCenter);
