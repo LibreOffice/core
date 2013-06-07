@@ -1764,6 +1764,7 @@ namespace cppcanvas
                                                                                                                                                         mappedPoint.getX() + mappedSize.getX(),
                                                                                                                                                         mappedPoint.getY() + mappedSize.getY() ) ) ) );
 
+                        polyPolygon.transform(rState.mapModeTransform);
                         updateClipping (polyPolygon, rFactoryParms, combineMode == 1);
 
                         break;
