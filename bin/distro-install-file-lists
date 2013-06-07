@@ -80,6 +80,7 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         gid_Module_Root_Files_[0-9] \
         gid_Module_Root_Hack \
         gid_Module_Oo_Linguistic \
+        gid_Module_Root_Extension_Dictionary_* \
         gid_Module_Root_Ure_Hidden ; do
         merge_flists $module $FILELISTSDIR/common_list.txt
     done
@@ -100,6 +101,9 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         merge_flists gid_Module_Brand_Prg_Math    $FILELISTSDIR/math_list.txt
         merge_flists gid_Module_Brand_Prg_Impress $FILELISTSDIR/impress_list.txt
         merge_flists gid_Module_Brand_Prg_Wrt     $FILELISTSDIR/writer_list.txt
+        merge_flists gid_Module_Reportbuilder     $FILELISTSDIR/base_list.txt
+        merge_flists gid_Module_Pdfimport         $FILELISTSDIR/draw_list.txt
+
         # FIXME: small; low dependencies; why optional module?
         merge_flists gid_Module_Optional_OGLTrans $FILELISTSDIR/impress_list.txt
     else
@@ -115,6 +119,8 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         merge_flists gid_Module_Brand_Prg_Math    $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Brand_Prg_Impress $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Brand_Prg_Wrt     $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Reportbuilder     $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Pdfimport         $FILELISTSDIR/common_list.txt
         # FIXME: small; low dependencies; why optional module?
         merge_flists gid_Module_Optional_OGLTrans $FILELISTSDIR/common_list.txt
     fi
@@ -133,26 +139,26 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
             merge_flists gid_Module_Optional_Grfflt            $FILELISTSDIR/draw_list.txt
             merge_flists gid_Module_Optional_Headless          $FILELISTSDIR/common_list.txt
             merge_flists gid_Module_Optional_Pymailmerge       $FILELISTSDIR/pyuno_list.txt
-            merge_flists gid_Module_Optional_Pyuno             $FILELISTSDIR/pyuno_list.txt
-            merge_flists gid_Module_Optional_Extensions_Script_Provider_For_Python $FILELISTSDIR/pyuno_list.txt
+            merge_flists gid_Module_Pyuno                      $FILELISTSDIR/pyuno_list.txt
+            merge_flists gid_Module_Script_Provider_For_Python $FILELISTSDIR/pyuno_list.txt
             merge_flists gid_Module_Optional_Pyuno_LibreLogo   $FILELISTSDIR/pyuno_list.txt
             merge_flists gid_Module_Optional_Xsltfiltersamples $FILELISTSDIR/common_list.txt
         else
             merge_flists gid_Module_Optional_Grfflt            $FILELISTSDIR/common_list.txt
             merge_flists gid_Module_Optional_Headless          $FILELISTSDIR/common_list.txt
             merge_flists gid_Module_Optional_Pymailmerge       $FILELISTSDIR/mailmerge_list.txt
-            merge_flists gid_Module_Optional_Pyuno             $FILELISTSDIR/pyuno_list.txt
+            merge_flists gid_Module_Pyuno                      $FILELISTSDIR/pyuno_list.txt
             merge_flists gid_Module_Optional_Pyuno_LibreLogo   $FILELISTSDIR/pyuno_list.txt
-            merge_flists gid_Module_Optional_Extensions_Script_Provider_For_Python $FILELISTSDIR/pyuno_list.txt
+            merge_flists gid_Module_Script_Provider_For_Python $FILELISTSDIR/pyuno_list.txt
             merge_flists gid_Module_Optional_Xsltfiltersamples $FILELISTSDIR/filters_list.txt
         fi
     else
         merge_flists gid_Module_Optional_Grfflt            $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Optional_Headless          $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Optional_Pymailmerge       $FILELISTSDIR/common_list.txt
-        merge_flists gid_Module_Optional_Pyuno             $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Pyuno                      $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Optional_Pyuno_LibreLogo   $FILELISTSDIR/common_list.txt
-        merge_flists gid_Module_Optional_Extensions_Script_Provider_For_Python $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Script_Provider_For_Python $FILELISTSDIR/common_list.txt
         merge_flists gid_Module_Optional_Xsltfiltersamples $FILELISTSDIR/common_list.txt
     fi
 
@@ -413,7 +419,7 @@ else
     create_package_directory gid_Module_Brand_Prg_Wrt               pkg/libreoffice-writer
     create_package_directory gid_Module_Brand_Prg_Impress           pkg/libreoffice-impress
     create_package_directory gid_Module_Brand_Prg_Base              pkg/libreoffice-base
-    create_package_directory gid_Module_Optional_Pyuno              pkg/python-uno
+    create_package_directory gid_Module_Pyuno                       pkg/python-uno
     create_package_directory gid_Module_Optional_Gnome              pkg/libreoffice-gnome
     create_package_directory gid_Module_Optional_Tde                pkg/libreoffice-tde
     create_package_directory gid_Module_Optional_Kde                pkg/libreoffice-kde
