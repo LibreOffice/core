@@ -29,6 +29,10 @@ namespace sd
     class ShapeList : public sdr::ObjectUser
     {
     public:
+        /** const_iterator guarantee only that the list itself is not
+           altered. The objects referenced by the list are still mutable. */
+        typedef std::list< SdrObject* >::const_iterator const_iterator;
+
         ShapeList();
         virtual ~ShapeList();
 
@@ -48,26 +52,17 @@ namespace sd
         /** @return true if given shape is part of this list */
         bool hasShape( SdrObject& rObject ) const;
 
-        /** returns the shape the internal iterator points to, or 0 if
-         * the list end is reached. moves the internal iterator to the
-         * next shape. */
-        SdrObject* getNextShape();
+        /** @return const_iterator pointing to the first element */
+        const_iterator cbegin() const;
 
-        /** Sets the internal iterator to the shape at given index. */
-        void seekShape( sal_uInt32 nIndex );
-
-        /**
-        */
-        bool hasMore() const;
-
-        const std::list< SdrObject* >& getList() const { return maShapeList; }
+        /** @return const_iterator pointing to the list termination element */
+        const_iterator cend() const;
 
     private:
         virtual void ObjectInDestruction(const SdrObject& rObject);
 
         typedef std::list< SdrObject* > ListImpl;
         ListImpl maShapeList;
-        ListImpl::iterator maIter;
     };
 }
 
