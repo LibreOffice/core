@@ -38,7 +38,9 @@ Module gid_Module_Reportbuilder
         gid_File_Lib_Rptui,
         gid_File_Lib_Rptxml,
         gid_File_Jar_Reportbuilder,
-        gid_File_Xcd_Reportbuilder);
+        gid_File_Jar_Reportbuilderwizard,
+        gid_File_Xcd_Reportbuilder,
+        gid_Filelist_ReportbuilderTemplates);
 End
 
 Directory gid_Dir_Share_Reportbuilder
@@ -47,6 +49,7 @@ Directory gid_Dir_Share_Reportbuilder
 End
 
 STD_JAR_FILE( gid_File_Jar_Reportbuilder, reportbuilder )
+STD_JAR_FILE( gid_File_Jar_Reportbuilderwizard, reportbuilderwizard )
 
 #if !defined SYSTEM_APACHE_COMMONS
 STD_JAR_FILE(gid_File_Jar_CommonsLogging, commons-logging-1.1.1)
@@ -72,6 +75,13 @@ File gid_File_Xcd_Reportbuilder
     Dir = gid_Brand_Dir_Share_Registry;
     Name = "reportbuilder.xcd";
     Styles = (PACKED);
+End
+
+File gid_Filelist_ReportbuilderTemplates
+    TXT_FILE_BODY;
+    Dir = FILELIST_DIR;
+    Name = "reportbuilder-templates.filelist";
+    Styles = (FILELIST);
 End
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

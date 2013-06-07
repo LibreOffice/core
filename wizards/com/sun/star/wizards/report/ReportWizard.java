@@ -24,7 +24,6 @@ import com.sun.star.awt.XTextListener;
 import com.sun.star.beans.PropertyValue;
 
 import com.sun.star.container.XContentEnumerationAccess;
-import com.sun.star.deployment.XPackageInformationProvider;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.logging.XLogger;
@@ -52,9 +51,6 @@ import com.sun.star.wizards.ui.TitlesComponent;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
 import java.lang.reflect.Method;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Map;
 
 public class ReportWizard extends DatabaseObjectWizard implements XTextListener
@@ -398,19 +394,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         return e.hasMoreElements();
     }
 
-    /**
-     * Return the path to the "com.sun.reportdesigner" extension
-     * @param _xMSF
-     * @return
-     */
-    public static String getPathToExtension(XMultiServiceFactory _xMSF)
-    {
-        // Get the path to the extension and try to add the path to the class loader
-        final XComponentContext xComponentContext = Helper.getComponentContext(_xMSF);
-        final Object aSingleton = xComponentContext.getValueByName("/singletons/com.sun.star.deployment.PackageInformationProvider");
-        XPackageInformationProvider xProvider = UnoRuntime.queryInterface(XPackageInformationProvider.class, aSingleton);
-        return xProvider.getPackageLocation("com.sun.reportdesigner");
-    }
     private static XLogger m_xLogger;
 
     private static void initializeLogger(XMultiServiceFactory _xMSF)
@@ -438,19 +421,16 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
 
         if (isReportBuilderInstalled())
         {
-            // Get the path to the extension and try to add the path to the class loader
-            String sLocation = getPathToExtension(xMSF);
-            // TODO: Umlaut in filename!
-            if (sLocation.length() > 0)
+            Class<?> a = null;
+            try
+            {
+                a = Class.forName("com.sun.star.wizards.reportbuilder.ReportBuilderImplementation");
+            }
+            catch (ClassNotFoundException e) {}
+            if (a != null)
             {
                 try
                 {
-                    URI aLocationURI = URI.create(sLocation + "/" + "reportbuilderwizard.jar");
-
-                    URL[] aURLs = new URL[1];
-                    aURLs[0] = aLocationURI.toURL();
-                    URLClassLoader aClassLoader = new URLClassLoader(aURLs, this.getClass().getClassLoader());
-                    Class<?> a = aClassLoader.loadClass("com.sun.star.wizards.reportbuilder.ReportBuilderImplementation");
                     Method aMethod = a.getMethod("create", new Class[]
                             {
                                 XMultiServiceFactory.class
@@ -460,8 +440,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
                 }
                 catch (Exception e)
                 {
-                    // Maybe problems in URI create() if a wrong char is used like '[' ']', ...
-                    System.out.println("There could be a problem with the path '" + sLocation + "'");
+                    e.printStackTrace();
                 }
             }
         }

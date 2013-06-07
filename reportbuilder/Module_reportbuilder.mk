@@ -12,6 +12,7 @@ $(eval $(call gb_Module_Module,reportbuilder))
 ifeq ($(ENABLE_REPORTBUILDER),TRUE)
 $(eval $(call gb_Module_add_targets,reportbuilder,\
 	Jar_reportbuilder \
+	Package_reportbuilder-templates \
 ))
 endif
 
