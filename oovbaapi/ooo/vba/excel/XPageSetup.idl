@@ -53,6 +53,7 @@ interface XPageSetup : com::sun::star::uno::XInterface
     [attribute] boolean PrintGridlines;
     [attribute] string PrintTitleRows;
     [attribute] string PrintTitleColumns;
+    [attribute] long PaperSize;
 
 };
 
