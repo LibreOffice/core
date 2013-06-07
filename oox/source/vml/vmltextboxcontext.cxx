@@ -187,6 +187,10 @@ TextBoxContext::TextBoxContext( ContextHandler2Helper& rParent, TextBox& rTextBo
         if( ConversionHelper::separatePair( aName, aValue, sStyle.getToken( 0, ';', nIndex ), ':' ) )
         {
             if( aName == "layout-flow" )      rTextBox.maLayoutFlow = aValue;
+            else if (aName == "mso-fit-shape-to-text")
+                rTextBox.mrTypeModel.mbAutoHeight = true;
+            else
+                SAL_WARN("oox", "unhandled style property: " << aName);
         }
     }
 }

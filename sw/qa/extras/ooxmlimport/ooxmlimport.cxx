@@ -118,6 +118,7 @@ public:
     void testWatermark();
     void testPageBorderShadow();
     void testN820509();
+    void testN820788();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -203,6 +204,7 @@ void Test::run()
         {"watermark.docx", &Test::testWatermark},
         {"page-border-shadow.docx", &Test::testPageBorderShadow},
         {"n820509.docx", &Test::testN820509},
+        {"n820788.docx", &Test::testN820788},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1443,6 +1445,16 @@ void Test::testN820509()
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(8), getProperty<sal_Int16>(xPropertySet, "DateFormat"));
+}
+
+void Test::testN820788()
+{
+    // The problem was that AutoSize was not enabled for the text frame.
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    // This was text::SizeType::FIX.
+    CPPUNIT_ASSERT_EQUAL(text::SizeType::MIN, getProperty<sal_Int16>(xFrame, "SizeType"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
