@@ -3017,6 +3017,9 @@ int SelectionManager::getXdndVersion( XLIB_Window aWindow, XLIB_Window& rProxy )
             break;
         }
     }
+    if ( pProperties )
+        XFree (pProperties);
+
     XLIB_Window aAwareWindow = rProxy != None ? rProxy : aWindow;
 
     XGetWindowProperty( m_pDisplay, aAwareWindow, m_nXdndAware, 0, 1, False, XA_ATOM,
