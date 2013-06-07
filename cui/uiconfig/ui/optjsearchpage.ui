@@ -8,6 +8,7 @@
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
+    <property name="spacing">12</property>
     <child>
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
