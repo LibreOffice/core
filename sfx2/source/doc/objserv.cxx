@@ -684,10 +684,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                      NULL );
                 rReq.SetArgs( aResultParams );
 
-                SFX_REQUEST_ARG( rReq, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
-                OUString aFilterName = pFilterNameItem ? OUString( pFilterNameItem->GetValue() )
-                                                              : OUString();
-
                 // the StoreAsURL/StoreToURL method have called this method with false
                 // so it has to be restored to true here since it is a call from GUI
                 GetMedium()->SetUpdatePickList( sal_True );
