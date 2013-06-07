@@ -102,7 +102,7 @@ using ::com::sun::star::util::SearchOptions;
 
 #define SRC_SEARCHOPTIONS (0xFFFF & ~(SEARCH_OPTIONS_FORMAT|SEARCH_OPTIONS_FAMILIES|SEARCH_OPTIONS_SEARCH_ALL))
 
-// Druckraender -> wie Basic - Ide
+// Printing margins -> like Basic - Ide
 #define LMARGPRN        1700
 #define RMARGPRN         900
 #define TMARGPRN        2000
@@ -143,7 +143,7 @@ static void lcl_PrintHeader( OutputDevice &rOutDev, sal_uInt16 nPages, sal_uInt1
 
     long nFontHeight = rOutDev.GetTextHeight();
 
-    // 1.Border => Strich, 2+3 Border = Freiraum.
+    // 1.Border => Line, 2+3 Border = Space.
     long nYTop = TMARGPRN-3*nBorder-nFontHeight;
 
     long nXLeft = nLeftMargin-nBorder;
@@ -202,14 +202,14 @@ static void lcl_ConvertTabsToSpaces( String& rLine )
         {
             if ( rLine.GetChar(nPos) == '\t' )
             {
-                // Nicht 4 Blanks, sondern an 4er TabPos:
+                // Not 4 blanks, but on 4th TabPos:
                 OUStringBuffer aBlanker;
                 comphelper::string::padToLength(aBlanker, ( 4 - ( nPos % 4 ) ), ' ');
                 rLine.Erase( nPos, 1 );
                 rLine.Insert(aBlanker.makeStringAndClear(), nPos);
                 nMax = rLine.Len();
             }
-            nPos++; // Nicht optimal, falls Tab, aber auch nicht verkehrt...
+            nPos++; // Not optimally, if tab, but not wrong...
         }
     }
 }
@@ -227,7 +227,7 @@ SwSrcView::SwSrcView(SfxViewFrame* pViewFrame, SfxViewShell*) :
 SwSrcView::~SwSrcView()
 {
     SwDocShell* pDocShell = GetDocShell();
-    OSL_ENSURE(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?");
+    OSL_ENSURE(PTR_CAST(SwWebDocShell, pDocShell), "Why no WebDocShell?");
     const TextSelection&  rSel = aEditWin.GetTextView()->GetSelection();
     ((SwWebDocShell*)pDocShell)->SetSourcePara( static_cast< sal_uInt16 >( rSel.GetStart().GetPara() ) );
 
@@ -256,8 +256,8 @@ void SwSrcView::Init()
     SetName(OUString("Source"));
     SetWindow( &aEditWin );
     SwDocShell* pDocShell = GetDocShell();
-    // wird das Doc noch geladen, dann muss die DocShell das Load
-    // anwerfen, wenn das Laden abgeschlossen ist
+    // If the doc is still loading, then the DocShell must fire up
+    // the Load if the loading is completed.
     if(!pDocShell->IsLoading())
         Load(pDocShell);
     else
@@ -364,7 +364,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             const SfxItemSet* pTmpArgs = rReq.GetArgs();
 
             sal_uInt16 nWhich = pTmpArgs->GetWhichByPos( 0 );
-            OSL_ENSURE( nWhich, "Wich fuer SearchItem ?" );
+            OSL_ENSURE( nWhich, "Which for SearchItem ?" );
             const SfxPoolItem& rItem = pTmpArgs->Get( nWhich );
             SetSearchItem( (const SvxSearchItem&)rItem);
             StartSearchAndReplace( (const SvxSearchItem&)rItem, sal_False, rReq.IsAPI() );
@@ -679,7 +679,7 @@ sal_Int32 SwSrcView::PrintSource(
     if (!pOutDev || nPage <= 0)
         return 0;
 
-    //! this a lgorithm for printing the n-th page is very poor since it
+    //! This logarithm for printing the n-th page is very poor since it
     //! needs to go over the text of all previous pages to get to the correct one.
     //! But since HTML source code is expected to be just a small number of pages
     //! even this poor algorithm should be enough...
@@ -704,7 +704,7 @@ sal_Int32 SwSrcView::PrintSource(
     aPaperSz.Width() -= (LMARGPRN + RMARGPRN);
     aPaperSz.Height() -= (TMARGPRN + BMARGPRN);
 
-    // nLinepPage stimmt nicht, wenn Zeilen umgebrochen werden muessen...
+    // nLinepPage is not true, if lines have to be wrapped...
     sal_uInt16 nLinespPage = (sal_uInt16) (aPaperSz.Height() / nLineHeight);
     sal_uInt16 nCharspLine = (sal_uInt16) (aPaperSz.Width()  / pOutDev->GetTextWidth(OUString('X')));
     sal_uInt16 nParas = static_cast< sal_uInt16 >( pTextEngine->GetParagraphCount() );
@@ -712,7 +712,7 @@ sal_Int32 SwSrcView::PrintSource(
     sal_uInt16 nPages = (sal_uInt16) (nParas / nLinespPage + 1 );
     sal_uInt16 nCurPage = 1;
 
-    // Header drucken...
+    // Print header...
     if (!bCalcNumPagesOnly && nPage == nCurPage)
         lcl_PrintHeader( *pOutDev, nPages, nCurPage, aTitle );
     const Point aStartPos( LMARGPRN, TMARGPRN );
@@ -757,7 +757,7 @@ void SwSrcView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             )
        )
     {
-        // Broadcast kommt nur einmal!
+        // Broadcast only comes once!
         const SwDocShell* pDocSh = GetDocShell();
         const sal_Bool bReadonly = pDocSh->IsReadOnly();
         aEditWin.SetReadonly(bReadonly);
@@ -849,10 +849,10 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     eLoadEncoding = eDestEnc;
 
     if(bDocModified)
-        pDocShell->SetModified();// das Flag wird zwischendurch zurueckgesetzt
-    // AutoLoad abschalten
+        pDocShell->SetModified();// The flag will be reset in between times.
+    // Disable AutoLoad
     pDocShell->SetAutoLoad(INetURLObject(), 0, sal_False);
-    OSL_ENSURE(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?");
+    OSL_ENSURE(PTR_CAST(SwWebDocShell, pDocShell), "Why no WebDocShell?");
     sal_uInt16 nLine = ((SwWebDocShell*)pDocShell)->GetSourcePara();
     aEditWin.SetStartLine(nLine);
     aEditWin.GetTextEngine()->ResetUndo();

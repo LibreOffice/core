@@ -21,12 +21,12 @@
 
 #include "rcid.hrc"
 
-// BTN -------------------------------------------------------------------
+// BTN
 
 #define BTN_PAGEDOWN        (RC_VIEW_BEGIN)
 #define BTN_PAGEUP          (RC_VIEW_BEGIN + 1)
 
-// STR -------------------------------------------------------------------
+// STR
 
 #define STR_NUM_LEVEL               (RC_VIEW_BEGIN + 3)
 #define STR_NUM_OUTLINE             (RC_VIEW_BEGIN + 4)
@@ -58,18 +58,18 @@
 #define STR_TEXTOPTIONS             (RC_VIEW_BEGIN + 33)
 
 #define STR_SAVEACOPY_SRC           (RC_VIEW_BEGIN + 34)
-// MSG -------------------------------------------------------------------
+// MSG
 
 #define MSG_ERR_INSERT_GLOS (RC_VIEW_BEGIN)
 
 #define MSG_ERR_NO_FAX      (RC_VIEW_BEGIN + 5)
 #define MSG_ERR_SRCSTREAM   (RC_VIEW_BEGIN + 6)
 
-// DLG -------------------------------------------------------------------
+// DLG
 
 #define DLG_SPECIAL_FORCED              (RC_VIEW_BEGIN)
 
-// Ueberlaufpruefung -----------------------------------------------------
+// Overflow checking
 
 #define VIEW_ACT_END        STR_EDIT_FOOTNOTE
 

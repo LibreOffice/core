@@ -41,14 +41,13 @@ SwOleClient::SwOleClient( SwView *pView, SwEditWin *pWin, const svt::EmbeddedObj
 
 void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
 {
-    //Der Server moechte die Clientgrosse verandern.
-    //Wir stecken die Wunschgroesse in die Core. Die Attribute des Rahmens
-    //werden auf den Wunschwert eingestellt. Dieser Wert wird also auch an
-    //den InPlaceClient weitergegeben.
-    //Die Core aktzeptiert bzw. formatiert die eingestellten Werte nicht
-    //zwangslaeufig. Wenn der Ole-Frm formatiert wurde wird das CalcAndSetScale()
-    //der WrtShell gerufen. Dort wird ggf. die Scalierung des SwOleClient
-    //eingestellt.
+    // The server wants to change the client size.
+    // We put the desired size in the core. The attributes of the frame
+    // are set to the desired value. This value will be passed on to the
+    // InPlaceClient.
+    // The core accepts or formats the adjusted values ​​not necessarily.
+    // If the Ole-Frm is formatted, then the CalcAndSetScale() of the WrtShell
+    // will be called. There the scaling of the SwOleClient is set if necessary.
 
     SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
 
@@ -101,16 +100,17 @@ void SwOleClient::ViewChanged()
     {
         // the iconified object seems not to need such a scaling handling
         // since the replacement image and the size a completely controlled by the container
-        // TODO/LATER: when the icon exchange is implemented the scaling handling might be required again here
+        // TODO/LATER: when the icon exchange is implemented the scaling handling
+        //             might be required again here
         return;
     }
 
     SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
 
-    //Einstellen der Groesse des Objektes in der Core. Die Scalierung muss
-    //beruecksichtigt werden. Rueckwirkung auf das Objekt werden von
-    //CalcAndSetScale() der WrtShell beruecksichtig, wenn die Groesse/Pos des
-    //Rahmens in der Core sich veraendert.
+    // Adjust the size of the object in the core. The Scaling must
+    // be considered. Repercussions on the object are considered by
+    // CalcAndSetScale() of the WrtShell if the size / position of
+    // the frame in the core changes.
 
     // TODO/LEAN: getMapUnit can switch object to running state
     awt::Size aSz;
@@ -130,8 +130,8 @@ void SwOleClient::ViewChanged()
 
     Size aVisSize( aSz.Width, aSz.Height );
 
-    // solange keine vernuenftige Size vom Object kommt,
-    // kann nichts skaliert werden
+    // As long as from the object comes no reasonable size
+    // nothing can be scaled.
     if( !aVisSize.Width() || !aVisSize.Height() )
         return;
 
@@ -146,7 +146,7 @@ void SwOleClient::ViewChanged()
     aVisSize.Height()= Fraction( aVisSize.Height() ) * GetScaleHeight();
 
     SwRect aRect( Point( LONG_MIN, LONG_MIN ), aVisSize );
-    rSh.LockView( sal_True );   //Scrollen im EndAction verhindern
+    rSh.LockView( sal_True );   // Prevent scrolling in the EndAction
     rSh.StartAllAction();
     rSh.RequestObjectResize( aRect, GetObject() );
     rSh.EndAllAction();
