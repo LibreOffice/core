@@ -109,10 +109,12 @@ $(if $(2),gb_ExternalExecutable_$(1)_EXECUTABLE := $(2))
 
 endef
 
+# FIXME need to subst in some more $$ in gb_Helper_set_ld_path here - ugly
+# but other uses (gb_CppunitTest_CPPTESTPRECOMMAND) require less $$ - ugly
 define gb_ExternalExecutable__set_internal
 gb_ExternalExecutable_$(1)_EXECUTABLE := $(2)
 gb_ExternalExecutable_$(1)_DEPENDENCIES := $(2)
-gb_ExternalExecutable_$(1)_PRECOMMAND := $(gb_Helper_set_ld_path)
+gb_ExternalExecutable_$(1)_PRECOMMAND := $(subst $$,$$$$,$(gb_Helper_set_ld_path))
 
 endef
 
