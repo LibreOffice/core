@@ -1589,7 +1589,7 @@ void DbgOutf( const sal_Char*, ... ) {}
 
 #if OSL_DEBUG_LEVEL > 0
 
-TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunction)
+TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunction, const char* fileAndLineNo)
 {
         OString sMessage( "caught an exception!" );
         sMessage += "\nin function:";
@@ -1628,7 +1628,10 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any & caught, const c
             }
         }
         sMessage += "\n";
-        OSL_ENSURE( false, sMessage.getStr() );
+
+        SAL_DETAIL_LOG_FORMAT(
+            SAL_DETAIL_ENABLE_LOG_WARN, SAL_DETAIL_LOG_LEVEL_WARN,
+            "legacy.osl", fileAndLineNo, "%s", sMessage.getStr());
 }
 
 #endif  // OSL_DEBUG_LEVEL
