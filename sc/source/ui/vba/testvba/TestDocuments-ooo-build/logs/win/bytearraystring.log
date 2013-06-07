@@ -1,8 +1,0 @@
-Test run started : 08/10/2008 12:54:46
-BEGIN Bytearray To String
- TEST START : Test the conversion between bytearray and string
-  ITEM Assertion OK :  The number of byte is:6
-  ITEM Assertion OK : the return string is: abc
- TEST OK : Test the conversion between bytearray and string
-END  Bytearray To String
-Test run finished : 08/10/2008 12:54:46

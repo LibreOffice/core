@@ -1,9 +1,0 @@
-Test run started : 01/24/2008 01:24:50 PM
-BEGIN DateSerial
- TEST START : Test DateSerial function
-  ITEM Assertion OK : the return date is: 06/15/1999
-  ITEM Assertion OK : the return date is: 06/15/1999
-  ITEM Assertion OK : the return date is: 06/15/1999
- TEST OK : Test DateSerial function
-END  DateSerial
-Test run finished : 01/24/2008 01:24:50 PM
