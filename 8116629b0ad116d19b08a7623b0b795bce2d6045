@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7oM\u003d",
+        "filename": "rsc/source/rscpp/cpp3.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000270
+      },
+      "writtenOn": "2013-06-07T18:38:26Z",
+      "side": 1,
+      "message": "without a \";\" as separator between the directories.",
+      "revId": "8116629b0ad116d19b08a7623b0b795bce2d6045",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7oI\u003d",
+        "filename": "sc/source/ui/docshell/docsh8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1000270
+      },
+      "writtenOn": "2013-06-07T18:38:26Z",
+      "side": 1,
+      "message": "FieldName[,Type[,Width[,Prec]]]",
+      "revId": "8116629b0ad116d19b08a7623b0b795bce2d6045",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7oA\u003d",
+        "filename": "sc/source/ui/docshell/docsh8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1000270
+      },
+      "writtenOn": "2013-06-07T18:38:26Z",
+      "side": 1,
+      "message": ":-)",
+      "revId": "8116629b0ad116d19b08a7623b0b795bce2d6045",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7n8\u003d",
+        "filename": "sc/source/ui/miscdlgs/mtrindlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000270
+      },
+      "writtenOn": "2013-06-07T18:38:26Z",
+      "side": 1,
+      "message": "at first cutting off the positions after the decimal point - not that good...",
+      "revId": "8116629b0ad116d19b08a7623b0b795bce2d6045",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7n4\u003d",
+        "filename": "sc/source/ui/miscdlgs/mtrindlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000270
+      },
+      "writtenOn": "2013-06-07T18:38:26Z",
+      "side": 1,
+      "message": "You can delete these ascii graphics. :-)",
+      "revId": "8116629b0ad116d19b08a7623b0b795bce2d6045",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
