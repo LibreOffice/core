@@ -1769,6 +1769,9 @@ void FileDialogHelper_Impl::setFilter( const OUString& rFilter )
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::createMatcher( const String& rFactory )
 {
+    if (mbDeleteMatcher)
+        delete mpMatcher;
+
     mpMatcher = new SfxFilterMatcher( SfxObjectShell::GetServiceNameFromFactory(rFactory) );
     mbDeleteMatcher = sal_True;
 }
@@ -1782,6 +1785,9 @@ void FileDialogHelper_Impl::addFilters( const String& rFactory,
 
     if ( ! xFltMgr.is() )
         return;
+
+    if (mbDeleteMatcher)
+        delete mpMatcher;
 
     // we still need a matcher to convert UI names to filter names
     if ( !rFactory.Len() )
