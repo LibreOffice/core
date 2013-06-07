@@ -348,7 +348,7 @@ $(call gb_Extension_get_workdir,$(1))/help/$(5)/$(3) : \
 			$(if $(filter-out en-US,$(5)), \
 				MERGEINPUT=`$(gb_MKTEMP)` && \
 				echo $$(POFILE) > $$$${MERGEINPUT} && \
-				$(gb_Extension_HELPEXCOMMAND) -i $$< -o $$@ -l $(5) \
+				$$(gb_Extension_HELPEXCOMMAND) -i $$< -o $$@ -l $(5) \
 					-m $$$${MERGEINPUT} && \
 				rm -rf $$$${MERGEINPUT} \
 				, \
