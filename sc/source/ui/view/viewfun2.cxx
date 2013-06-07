@@ -1655,12 +1655,15 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                                         aUndoStr, pUndoDoc.release(), pSearchItem ) );
             }
 
-            rMark.ResetMark();
-            for (size_t i = 0, n = aMatchedRanges.size(); i < n; ++i)
+            if (nCommand == SVX_SEARCHCMD_FIND_ALL || nCommand == SVX_SEARCHCMD_REPLACE_ALL)
             {
-                const ScRange& r = *aMatchedRanges[i];
-                if (r.aStart.Tab() == nTab)
-                    rMark.SetMultiMarkArea(r);
+                rMark.ResetMark();
+                for (size_t i = 0, n = aMatchedRanges.size(); i < n; ++i)
+                {
+                    const ScRange& r = *aMatchedRanges[i];
+                    if (r.aStart.Tab() == nTab)
+                        rMark.SetMultiMarkArea(r);
+                }
             }
 
             break;                  // break 'while (TRUE)'
