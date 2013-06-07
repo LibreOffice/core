@@ -139,7 +139,7 @@ static void ImplPrnDlgAddResString( XubString& rStr, sal_uInt16 nResId )
 
 // -----------------------------------------------------------------------
 
-XubString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
+OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
 {
     XubString   aStr;
     sal_uLong       nStatus = rInfo.GetStatus();

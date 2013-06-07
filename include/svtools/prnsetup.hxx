@@ -86,7 +86,7 @@ Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
                                   Printer* pPrinter, Printer* pTempPrinter );
 Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinter );
 void ImplPrnDlgUpdateQueueInfo( ListBox* pBox, QueueInfo& rInfo );
-XubString ImplPrnDlgGetStatusText( const QueueInfo& rInfo );
+OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo );
 
 #endif // _SV_PRNSETUP_HXX_
 

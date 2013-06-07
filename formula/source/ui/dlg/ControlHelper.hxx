@@ -31,13 +31,13 @@ class ValWnd : public Window
 public:
             ValWnd( Window* pParent, const ResId& rId );
 
-    void    SetValue( const String& rStrVal );
+    void    SetValue( const OUString& rStrVal );
 
 protected:
     virtual void    Paint( const Rectangle& rRect );
 
 private:
-    String      aStrValue;
+    OUString    aStrValue;
     Rectangle   aRectOut;
 };
 
@@ -142,15 +142,15 @@ public:
                                 ArgEdit*        pedArg,
                                 RefButton*  prefBtn);
 
-    void        SetArgName(const String &aArg);
-    String      GetArgName();
+    void        SetArgName(const OUString &aArg);
+    OUString    GetArgName();
     void        SetArgNameFont(const Font&);
 
-    void        SetArgVal(const String &aVal);
-    String      GetArgVal();
+    void        SetArgVal(const OUString &aVal);
+    OUString    GetArgVal();
 
-    void        SetArgSelection (const Selection& rSel );
-    void        ReplaceSelOfArg (const String& rStr );
+    void        SetArgSelection (const Selection& rSel);
+    void        ReplaceSelOfArg (const OUString& rStr);
 
     ArgEdit*    GetArgEdPtr() {return pEdArg;}
 

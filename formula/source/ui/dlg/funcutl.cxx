@@ -72,7 +72,7 @@ void ValWnd::Paint( const Rectangle& )
 
 //----------------------------------------------------------------------------
 
-void ValWnd::SetValue( const String& rStrVal )
+void ValWnd::SetValue( const OUString& rStrVal )
 {
     if ( aStrValue != rStrVal )
     {
@@ -265,7 +265,7 @@ void ArgInput::InitArgInput(FixedText*      pftArg,
 #*  Output:     ---
 #*
 #************************************************************************/
-void ArgInput::SetArgName(const String &aArg)
+void ArgInput::SetArgName(const OUString &aArg)
 {
     if(pFtArg !=NULL) pFtArg->SetText(aArg );
 }
@@ -283,7 +283,7 @@ void ArgInput::SetArgName(const String &aArg)
 #*  Output:     ---
 #*
 #************************************************************************/
-String ArgInput::GetArgName()
+OUString ArgInput::GetArgName()
 {
     String aPrivArgName;
     if(pFtArg !=NULL)
@@ -342,11 +342,11 @@ void ArgInput::SetArgSelection  (const Selection& rSel )
 #*  Output:     ---
 #*
 #************************************************************************/
-void ArgInput::SetArgVal(const String &aVal)
+void ArgInput::SetArgVal(const OUString &rVal)
 {
     if(pEdArg !=NULL)
     {
-        pEdArg ->SetRefString(aVal );
+        pEdArg ->SetRefString(rVal);
     }
 }
 
@@ -363,9 +363,9 @@ void ArgInput::SetArgVal(const String &aVal)
 #*  Output:     String
 #*
 #************************************************************************/
-String ArgInput::GetArgVal()
+OUString ArgInput::GetArgVal()
 {
-    String aResult;
+    OUString aResult;
     if(pEdArg!=NULL)
     {
         aResult=pEdArg->GetText();
@@ -877,7 +877,7 @@ RefEdit::~RefEdit()
     aTimer.Stop();
 }
 
-void RefEdit::SetRefString( const XubString& rStr )
+void RefEdit::SetRefString( const OUString& rStr )
 {
     Edit::SetText( rStr );
 }

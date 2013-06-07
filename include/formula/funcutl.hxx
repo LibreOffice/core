@@ -50,7 +50,7 @@ public:
                             WinBits nStyle = WB_BORDER );
     virtual             ~RefEdit();
 
-    void                SetRefString( const XubString& rStr );
+    void                SetRefString( const OUString& rStr );
 
     /**
      * Flag reference valid or invalid, which in turn changes the visual
