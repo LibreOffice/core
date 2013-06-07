@@ -885,8 +885,11 @@ namespace
             default:
                 break;
         }
-        SAL_WARN_IF(bIsImpossible, "vcl", "Throwing away user set language of "
-            << sLang << " for finding a font for glyph fallback and autodetecting instead");
+        SAL_WARN_IF(bIsImpossible, "vcl", "In glyph fallback throwing away the language property of "
+            << sLang << " because the detected script for '0x"
+            << OUString::number(currentChar, 16)
+            << "' is " << uscript_getName(eScript)
+            << " and that language doesn't make sense. Autodetecting instead.");
         return bIsImpossible;
     }
 
