@@ -58,7 +58,7 @@ fi
 
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
 if [ -x "$sd_prog/../basis-link/ure-link/bin/javaldx" ] ; then
-    my_path=`"$sd_prog/../basis-link/ure-link/bin/javaldx" $BOOTSTRAPVARS $JVMFWKPARAMS \
+    my_path=`"$sd_prog/javaldx" $BOOTSTRAPVARS $JVMFWKPARAMS \
         "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"`
     if [ -n "$my_path" ] ; then
         LD_LIBRARY_PATH=$my_path${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
