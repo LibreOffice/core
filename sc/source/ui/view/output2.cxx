@@ -1335,7 +1335,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
         // (for automatic line break: only if not formatting for printer, as in ScColumn::GetNeededSize)
 
         if ( eType==OUTTYPE_WINDOW &&
-             ( static_cast<const ScMergeFlagAttr&>(rPattern.GetItem(ATTR_MERGE_FLAG)).GetValue() & SC_MF_AUTO ) &&
+             ( static_cast<const ScMergeFlagAttr&>(rPattern.GetItem(ATTR_MERGE_FLAG)).GetValue() & (SC_MF_AUTO|SC_MF_BUTTON|SC_MF_BUTTON_POPUP) ) &&
              ( !bBreak || mpRefDevice == pFmtDevice ) )
         {
             // filter drop-down width is now independent from row height
