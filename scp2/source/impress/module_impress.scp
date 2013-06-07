@@ -18,6 +18,8 @@
 
 #include "macros.inc"
 
+#include "AutoInstallLibs/impress"
+
 Module gid_Module_Prg_Impress
     MOD_NAME_DESC ( MODULE_PRG_IMPRESS );
     ParentID = gid_Module_Prg;
