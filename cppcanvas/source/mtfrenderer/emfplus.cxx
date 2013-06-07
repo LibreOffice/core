@@ -1817,6 +1817,7 @@ namespace cppcanvas
                             ::basegfx::B2DPolyPolygon polyPolygon( ::basegfx::B2DPolygon( ::basegfx::tools::createPolygonFromRect( ::basegfx::B2DRectangle( mappedPoint.getX(), mappedPoint.getY(),
                                                                                                                                                             mappedPoint.getX() + mappedSize.getX(),
                                                                                                                                                             mappedPoint.getY() + mappedSize.getY() ) ) ) );
+                            polyPolygon.transform(rState.mapModeTransform);
 
                             updateClipping (polyPolygon, rFactoryParms, combineMode == 1);
 
