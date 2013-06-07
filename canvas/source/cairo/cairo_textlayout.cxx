@@ -572,6 +572,7 @@ namespace cairocanvas
 
             cairo_restore( pSCairo.get() );
             cairo_font_face_destroy(font_face);
+            cairo_font_options_destroy(options);
         }
         return true;
     }
