@@ -90,6 +90,23 @@ ListBox SFX_LB_PROPERTY_TYPE
         < "Yes or no"   ; CUSTOM_TYPE_BOOLEAN ; > ;
     };
 };
+ListBox SFX_LB_CMIS_PROPERTY_TYPE
+{
+    Pos = MAP_APPFONT ( 63 , 2 ) ;
+    Size = MAP_APPFONT ( 60 , 80 ) ;
+    DropDown = TRUE;
+    Border = TRUE;
+    CurPos = 0;
+    StringList [ en-US ] =
+    {
+        < "Text"        ; CMIS_TYPE_STRING ; > ;
+        < "DateTime"    ; CMIS_TYPE_DATETIME ; > ;
+        < "Integer"     ; CMIS_TYPE_NUMBER ; > ;
+        < "Decimal"     ; CMIS_TYPE_NUMBER ; > ;
+        < "Boolean"     ; CMIS_TYPE_BOOLEAN ; > ;
+    };
+};
+
 Edit SFX_ED_PROPERTY_VALUE
 {
     Border = TRUE ;

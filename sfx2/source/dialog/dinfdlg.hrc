@@ -31,6 +31,12 @@
 #define CUSTOM_TYPE_DURATION    5
 #define CUSTOM_TYPE_DATETIME    6
 
+#define CMIS_TYPE_ANY         0
+#define CMIS_TYPE_STRING      1
+#define CMIS_TYPE_NUMBER      2
+#define CMIS_TYPE_DATETIME    3
+#define CMIS_TYPE_BOOLEAN     4
+
 // defines ---------------------------------------------------------------
 
 #define RB_PROPERTY_YES     100

@@ -588,14 +588,12 @@ public:
 
 struct CmisPropertyLine
 {
-    ComboBox                      m_aNameBox;
+    SelectableFixedText           m_aNameBox;
     CmisPropertiesTypeBox         m_aTypeBox;
     CmisPropertiesEdit            m_aValueEdit;
     CmisPropertiesDateField       m_aDateField;
     CmisPropertiesTimeField       m_aTimeField;
-    CmisPropertiesEditButton      m_aEditButton;
     CmisPropertiesYesNoButton     m_aYesNoButton;
-
     Point                           m_aDatePos;
     Point                           m_aTimePos;
     Size                            m_aDateTimeSize;
@@ -611,12 +609,11 @@ struct CmisPropertyLine
 class CmisPropertiesWindow : public Window
 {
 private:
-    ComboBox                            m_aNameBox;
+    SelectableFixedText                 m_aNameBox;
     ListBox                             m_aTypeBox;
     Edit                                m_aValueEdit;
     DateField                           m_aDateField;
     TimeField                           m_aTimeField;
-    PushButton                          m_aEditButton;
     CmisPropertiesYesNoButton           m_aYesNoButton;
 
     sal_Int32                           m_nLineHeight;
