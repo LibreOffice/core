@@ -9,6 +9,34 @@
 
 #import <Foundation/Foundation.h>
 
+#define MSG_SLIDESHOW_STARTED @"SLIDESHOW_STARTED"
+#define MSG_SLIDE_CHANGED @"SLIDE_CHANGED"
+#define MSG_SLIDE_PREVIEW @"SLIDE_PREVIEW"
+#define MSG_SLIDE_NOTES @"SLIDE_NOTES"
+
+#define MSG_SERVERLIST_CHANGED @"SERVERLIST_CHANGED"
+#define MSG_PAIRING_STARTED @"PAIRING_STARTED"
+#define MSG_PAIRING_SUCCESSFUL @"PAIRING_SUCCESSFUL"
+
+/**
+ * Notify the UI that the service has connected to a server AND a slideshow
+ * is running.
+ * In this case the PresentationActivity should be started.
+ */
+#define STATUS_CONNECTED_SLIDESHOW_RUNNING @"STATUS_CONNECTED_SLIDESHOW_RUNNING"
+/**
+ * Notify the UI that the service has connected to a server AND no slideshow
+ * is running.
+ * In this case the StartPresentationActivity should be started.
+ */
+#define STATUS_CONNECTED_NOSLIDESHOW @"STATUS_CONNECTED_NOSLIDESHOW"
+
+#define STATUS_PAIRING_PINVALIDATION @"STATUS_PAIRING_PINVALIDATION"
+
+#define STATUS_CONNECTION_FAILED @"STATUS_CONNECTION_FAILED"
+
+
+
 @interface CommunicationManager : NSObject
 
 @end

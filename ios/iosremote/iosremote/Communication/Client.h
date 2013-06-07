@@ -9,15 +9,19 @@
 #import <Foundation/Foundation.h>
 #import "Server.h"
 #import "CommunicationManager.h"
-#import "Receiver.h"
+#import "CommandInterpreter.h"
 
 @interface Client : NSObject
+
+@property BOOL mReady;
+@property (nonatomic, strong) NSNumber* mPin;
+@property (nonatomic, strong) NSString* mName;
 
 -(void) connect;
 
 - (id) initWithServer:(Server*)server
             managedBy:(CommunicationManager*)manager
-        interpretedBy:(Receiver*)receiver;
+        interpretedBy:(CommandInterpreter*)receiver;
 
 -(void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode;
 

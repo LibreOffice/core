@@ -42,11 +42,18 @@
     self.server = [[Server alloc] initWithProtocol:NETWORK atAddress:address ofName:@"Server"];
     self.client = [[Client alloc] initWithServer:self.server managedBy:nil interpretedBy:nil];
     [self.client connect];
+    
+    if([self.client mReady])
+    {
+        [self.pinLabel setText:[NSString stringWithFormat:@"%@", self.client.mPin]];
+    }
 }
 
 
 - (void)viewDidUnload {
     [self setIpAddressTextEdit:nil];
+    [self setPinLabel:nil];
+    [self setPinLabel:nil];
     [super viewDidUnload];
 }
 @end

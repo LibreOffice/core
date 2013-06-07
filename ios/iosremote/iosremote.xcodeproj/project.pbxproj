@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		57B7625D17621E42007703F6 /* SlideShow.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B7625C17621E42007703F6 /* SlideShow.m */; };
 		57C6E3F3175E06E800E8BC5F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6E3F2175E06E800E8BC5F /* UIKit.framework */; };
 		57C6E3F5175E06E800E8BC5F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6E3F4175E06E800E8BC5F /* Foundation.framework */; };
 		57C6E3F7175E06E800E8BC5F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6E3F6175E06E800E8BC5F /* CoreGraphics.framework */; };
@@ -21,11 +22,15 @@
 		57C6E412175E06E800E8BC5F /* libreoffice_sdremoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E411175E06E800E8BC5F /* libreoffice_sdremoteViewController.m */; };
 		57C6E42E175E076900E8BC5F /* Client.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E427175E076900E8BC5F /* Client.m */; };
 		57C6E42F175E076900E8BC5F /* CommunicationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E429175E076900E8BC5F /* CommunicationManager.m */; };
-		57C6E430175E076900E8BC5F /* Receiver.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E42B175E076900E8BC5F /* Receiver.m */; };
+		57C6E430175E076900E8BC5F /* CommandInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E42B175E076900E8BC5F /* CommandInterpreter.m */; };
 		57C6E431175E076900E8BC5F /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = 57C6E42D175E076900E8BC5F /* Server.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		57B7625B17621E42007703F6 /* SlideShow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideShow.h; sourceTree = "<group>"; };
+		57B7625C17621E42007703F6 /* SlideShow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideShow.m; sourceTree = "<group>"; };
+		57B7625E1762368F007703F6 /* Base64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Base64.h; path = ../Base64.h; sourceTree = "<group>"; };
+		57B7625F1762368F007703F6 /* Base64.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Base64.m; path = ../Base64.m; sourceTree = "<group>"; };
 		57C6E3EF175E06E800E8BC5F /* iosremote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosremote.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57C6E3F2175E06E800E8BC5F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		57C6E3F4175E06E800E8BC5F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -47,8 +52,8 @@
 		57C6E427175E076900E8BC5F /* Client.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Client.m; sourceTree = "<group>"; };
 		57C6E428175E076900E8BC5F /* CommunicationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommunicationManager.h; sourceTree = "<group>"; };
 		57C6E429175E076900E8BC5F /* CommunicationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommunicationManager.m; sourceTree = "<group>"; };
-		57C6E42A175E076900E8BC5F /* Receiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Receiver.h; sourceTree = "<group>"; };
-		57C6E42B175E076900E8BC5F /* Receiver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Receiver.m; sourceTree = "<group>"; };
+		57C6E42A175E076900E8BC5F /* CommandInterpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandInterpreter.h; sourceTree = "<group>"; };
+		57C6E42B175E076900E8BC5F /* CommandInterpreter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandInterpreter.m; sourceTree = "<group>"; };
 		57C6E42C175E076900E8BC5F /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
 		57C6E42D175E076900E8BC5F /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -126,14 +131,18 @@
 		57C6E425175E076900E8BC5F /* Communication */ = {
 			isa = PBXGroup;
 			children = (
+				57B7625E1762368F007703F6 /* Base64.h */,
+				57B7625F1762368F007703F6 /* Base64.m */,
 				57C6E426175E076900E8BC5F /* Client.h */,
 				57C6E427175E076900E8BC5F /* Client.m */,
 				57C6E428175E076900E8BC5F /* CommunicationManager.h */,
 				57C6E429175E076900E8BC5F /* CommunicationManager.m */,
-				57C6E42A175E076900E8BC5F /* Receiver.h */,
-				57C6E42B175E076900E8BC5F /* Receiver.m */,
+				57C6E42A175E076900E8BC5F /* CommandInterpreter.h */,
+				57C6E42B175E076900E8BC5F /* CommandInterpreter.m */,
 				57C6E42C175E076900E8BC5F /* Server.h */,
 				57C6E42D175E076900E8BC5F /* Server.m */,
+				57B7625B17621E42007703F6 /* SlideShow.h */,
+				57B7625C17621E42007703F6 /* SlideShow.m */,
 			);
 			name = Communication;
 			path = iosremote/Communication;
@@ -212,8 +221,9 @@
 				57C6E412175E06E800E8BC5F /* libreoffice_sdremoteViewController.m in Sources */,
 				57C6E42E175E076900E8BC5F /* Client.m in Sources */,
 				57C6E42F175E076900E8BC5F /* CommunicationManager.m in Sources */,
-				57C6E430175E076900E8BC5F /* Receiver.m in Sources */,
+				57C6E430175E076900E8BC5F /* CommandInterpreter.m in Sources */,
 				57C6E431175E076900E8BC5F /* Server.m in Sources */,
+				57B7625D17621E42007703F6 /* SlideShow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

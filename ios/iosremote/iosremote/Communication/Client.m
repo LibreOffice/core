@@ -9,7 +9,7 @@
 
 #import "Client.h"
 #import "Server.h"
-#import "Receiver.h"
+#import "CommandInterpreter.h"
 #import "CommunicationManager.h"
 
 @interface Client() <NSStreamDelegate>
@@ -17,17 +17,11 @@
 @property (nonatomic, strong) NSInputStream* mInputStream;
 @property (nonatomic, strong) NSOutputStream* mOutputStream;
 
-@property (nonatomic, strong) NSString* mPin;
-@property (nonatomic, strong) NSString* mName;
 @property uint mPort;
 
 @property (nonatomic, weak) Server* mServer;
-@property (nonatomic, weak) Receiver* mReceiver;
+@property (nonatomic, weak) CommandInterpreter* mReceiver;
 @property (nonatomic, weak) CommunicationManager* mComManager;
-
-@property (nonatomic, retain) NSMutableData* mData;
-
-@property BOOL mReady;
 
 @end
 
@@ -41,31 +35,44 @@
 @synthesize mName = _mName;
 @synthesize mServer = _mServer;
 @synthesize mComManager = _mComManager;
-@synthesize mData = _mData;
 @synthesize mReady = _mReady;
 
 NSString * const CHARSET = @"UTF-8";
 
 - (id) initWithServer:(Server*)server
             managedBy:(CommunicationManager*)manager
-        interpretedBy:(Receiver*)receiver
+        interpretedBy:(CommandInterpreter*)receiver
 {
-    self.mPin = [self getPin];
-    NSLog(@"mPin: %@", self.mPin);
-    self.mName = [[UIDevice currentDevice] name];
-    self.mServer = server;
-    self.mComManager = manager;
-    self.mReceiver = receiver;
-    // hardcoded here to test the communication TODO
-    self.mPort = 1599;
-    
+    self = [self init];
+    if (self)
+    {
+        self.mReady = NO;
+        self.mName = [[UIDevice currentDevice] name];
+        self.mPin = [NSNumber numberWithInteger:[self getPin]];
+        self.mServer = server;
+        self.mComManager = manager;
+        self.mReceiver = receiver;
+        self.mPort = 1599;
+    }
     return self;
 }
 
-- (NSString *) getPin
+- (NSInteger) getPin
 {
+    // Look up if there is already a pin code for this client.
+    NSUserDefaults * userDefaluts = [NSUserDefaults standardUserDefaults];
     
-    NSString* newPin = [NSString stringWithFormat:@"%04d", arc4random() % 9999];
+    if(!userDefaluts)
+        NSLog(@"userDefaults nil");
+    NSInteger newPin = [userDefaluts integerForKey:self.mName];
+    
+    // If not, generate one.
+    if (!newPin) {
+        newPin = arc4random() % 9999;
+        [userDefaluts setInteger:newPin forKey:self.mName];
+    }
+    
+    return newPin;
 }
 
 - (void)streamOpenWithIp:(NSString *)ip withPortNumber:(uint)portNumber
@@ -91,8 +98,8 @@ NSString * const CHARSET = @"UTF-8";
         [self.mOutputStream setDelegate:self];
         [self.mOutputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         [self.mOutputStream open];
-    
-//        NSLog(@"Stream opened %@ %@", @"iPad", self.mPin);
+        
+        //        NSLog(@"Stream opened %@ %@", @"iPad", self.mPin);
         
         NSArray *temp = [[NSArray alloc]initWithObjects:@"LO_SERVER_CLIENT_PAIR\n", self.mName, @"\n", self.mPin, @"\n\n", nil];
         
@@ -116,21 +123,23 @@ NSString * const CHARSET = @"UTF-8";
     switch(eventCode) {
         case NSStreamEventOpenCompleted:
             NSLog(@"Connection established");
+            self.mReady = YES;
             break;
         case NSStreamEventErrorOccurred:
             NSLog(@"Connection error occured");
             break;
         case NSStreamEventHasBytesAvailable:
         {
+            NSMutableData* data;
             NSLog(@"NSStreamEventHasBytesAvailable");
-            if(!self.mData) {
-                self.mData = [NSMutableData data];
+            if(!data) {
+                data = [NSMutableData data];
             }
             uint8_t buf[1024];
             unsigned int len = 0;
             len = [(NSInputStream *)stream read:buf maxLength:1024];
             if(len) {
-                [self.mData appendBytes:(const void *)buf length:len];
+                [data appendBytes:(const void *)buf length:len];
                 int bytesRead = 0;
                 // bytesRead is an instance variable of type NSNumber.
                 bytesRead += len;
@@ -138,17 +147,17 @@ NSString * const CHARSET = @"UTF-8";
                 NSLog(@"No data but received event for whatever reasons!");
             }
             
-            NSString *str = [[NSString alloc] initWithData:self.mData
+            NSString *str = [[NSString alloc] initWithData:data
                                                   encoding:NSUTF8StringEncoding];
             NSLog(@"Data Received: %@", str);
             
-            self.mData = nil;
+            data = nil;
         } break;
         default:
         {
-        
+            
         }
-    
+            
     }
 }
 

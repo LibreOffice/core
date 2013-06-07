@@ -7,8 +7,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
-#import "Receiver.h"
+#import <Foundation/Foundation.h>
+#import "SlideShow.h"
 
-@implementation Receiver
+@interface CommandInterpreter : NSObject
+
+@property (nonatomic, strong) SlideShow* mSlideShow;
+
+- (void) parse:(NSArray *)cmd;
 
 @end
