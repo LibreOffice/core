@@ -320,7 +320,7 @@ bool RTFDocumentImpl::isSubstream() const
 
 void RTFDocumentImpl::finishSubstream()
 {
-    checkUnicode();
+    checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     // At the end of a footnote stream, we need to emit a run break when importing from Word.
     // We can't do so unconditionally, as Writer already writes a \par at the end of the footnote.
     if (m_bNeedCr)
@@ -881,7 +881,7 @@ int RTFDocumentImpl::resolveChars(char ch)
     }
 
     if (m_aStates.top().nInternalState != INTERNAL_HEX)
-        checkUnicode(false, true);
+        checkUnicode(/*bUnicode =*/ false, /*bHex =*/ true);
 
     OStringBuffer aBuf;
 
@@ -895,7 +895,7 @@ int RTFDocumentImpl::resolveChars(char ch)
             {
                 if (!bUnicodeChecked)
                 {
-                    checkUnicode(true, false);
+                    checkUnicode(/*bUnicode =*/ true, /*bHex =*/ false);
                     bUnicodeChecked = true;
                 }
                 aBuf.append(ch);
@@ -1214,7 +1214,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer)
 
 int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 {
-    checkUnicode();
+    checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     setNeedSect();
     RTFSkipDestination aSkip(*this);
     switch (nKeyword)
@@ -1690,7 +1690,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 {
     if (nKeyword != RTF_HEXCHAR)
-        checkUnicode();
+        checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     setNeedSect();
     RTFSkipDestination aSkip(*this);
 
@@ -1968,7 +1968,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 
 int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
-    checkUnicode();
+    checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     setNeedSect();
     RTFSkipDestination aSkip(*this);
     int nParam = -1;
@@ -2677,7 +2677,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 
 int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
-    checkUnicode(nKeyword != RTF_U, true);
+    checkUnicode(/*bUnicode =*/ nKeyword != RTF_U, /*bHex =*/ true);
     setNeedSect();
     RTFSkipDestination aSkip(*this);
     int nSprm = 0;
@@ -3579,7 +3579,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 
 int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
 {
-    checkUnicode();
+    checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     setNeedSect();
     RTFSkipDestination aSkip(*this);
     int nSprm = -1;
@@ -3680,7 +3680,7 @@ int RTFDocumentImpl::pushState()
 {
     //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before push: " << m_pTokenizer->getGroup());
 
-    checkUnicode();
+    checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     m_nGroupStartPos = Strm().Tell();
 
     if (m_aStates.empty())
@@ -3779,7 +3779,7 @@ int RTFDocumentImpl::popState()
     //SAL_INFO("writerfilter", OSL_THIS_FUNC << " before pop: m_pTokenizer->getGroup() " << m_pTokenizer->getGroup() <<
     //                         ", dest state: " << m_aStates.top().nDestinationState);
 
-    checkUnicode();
+    checkUnicode(/*bUnicode =*/ true, /*bHex =*/ true);
     RTFParserState aState(m_aStates.top());
     m_bWasInFrame = aState.aFrame.inFrame();
 

@@ -490,7 +490,7 @@ namespace writerfilter {
                 void sectBreak(bool bFinal);
                 void replayBuffer(RTFBuffer_t& rBuffer);
                 /// If we have some unicode or hex characters to send.
-                void checkUnicode(bool bUnicode = true, bool bHex = true);
+                void checkUnicode(bool bUnicode, bool bHex);
                 /// If we need a final section break at the end of the document.
                 void setNeedSect(bool bNeedSect = true);
 
