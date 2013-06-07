@@ -41,10 +41,8 @@ SwScrollbar::SwScrollbar( Window *pWin, sal_Bool bHoriz ) :
 
  SwScrollbar::~SwScrollbar() {}
 
-/*------------------------------------------------------------------------
- Beschreibung:  wird nach einer Aenderung der Dokumentgroesse gerufen, um den
-                Range des Scrollbars neu einzustellen.
-------------------------------------------------------------------------*/
+// Will be called after a change of the document size
+// to refresh the range of the scrollbars.
 
 void SwScrollbar::DocSzChgd( const Size &rSize )
 {
@@ -55,11 +53,7 @@ void SwScrollbar::DocSzChgd( const Size &rSize )
     SetPageSize( nVisSize * 77 / 100 );
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  wird nach einer Veraenderung des sichtbaren Ausschnittes
-                gerufen.
-------------------------------------------------------------------------*/
-
+// Will be called after a change of the visible view section.
 
 void SwScrollbar::ViewPortChgd( const Rectangle &rRect )
 {
@@ -104,11 +98,11 @@ void SwScrollbar::SetAuto(sal_Bool bSet)
     {
         bAuto = bSet;
 
-        // automatisch versteckt - dann anzeigen
+        // hide autmatically - automatisch versteckt - then show
         if(!bAuto && bVisible && !ScrollBar::IsVisible())
             ExtendedShow(sal_True);
         else if(bAuto)
-            AutoShow(); // oder automatisch verstecken
+            AutoShow(); // or hide automatically
     }
 }
 

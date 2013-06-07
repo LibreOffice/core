@@ -118,9 +118,7 @@ extern bool bNoInterrupt;       // in mainwn.cxx
 #define SWVIEWFLAGS ( SFX_VIEW_CAN_PRINT|               \
                       SFX_VIEW_HAS_PRINTOPTIONS)
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Statics
- --------------------------------------------------------------------*/
+// Statics
 
 int bDocSzUpdated = 1;
 
@@ -168,10 +166,8 @@ void SwView::ImpSetVerb( int nSelType )
     }
 }
 
-/*--------------------------------------------------------------------
-    Description:
-    called by the SwEditWin when it gets the focus
- --------------------------------------------------------------------*/
+// Called by the SwEditWin when it gets the focus.
+
 void SwView::GotFocus() const
 {
     // if we got the focus, and the form shell *is* on the top of the dispatcher
@@ -203,12 +199,9 @@ void SwView::GotFocus() const
     }
 }
 
-/*--------------------------------------------------------------------
-    Description:
-    called by the FormShell when a form control is focused. This is
-    a request to put the form shell on the top of the dispatcher
-    stack
- --------------------------------------------------------------------*/
+// called by the FormShell when a form control is focused. This is
+// a request to put the form shell on the top of the dispatcher stack
+
 IMPL_LINK_NOARG(SwView, FormControlActivated)
 {
     // if a form control has been activated, and the form shell is not on the top
@@ -231,20 +224,19 @@ IMPL_LINK_NOARG(SwView, FormControlActivated)
 
 void SwView::SelectShell()
 {
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-//      Achtung: SelectShell fuer die WebView mitpflegen
-//
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+// Attention: Maintain the SelectShell for the WebView additionally
+
 
           if(m_bInDtor)
         return;
-    // Entscheidung, ob UpdateTable gerufen werden muss
+    // Decision if the UpdateTable has to be called
     sal_Bool bUpdateTable = sal_False;
     const SwFrmFmt* pCurTableFmt = m_pWrtShell->GetTableFmt();
     if(pCurTableFmt && pCurTableFmt != m_pLastTableFormat)
     {
-        bUpdateTable = sal_True; // kann erst spaeter ausgefuehrt werden
+        bUpdateTable = sal_True; // can only be executed later
     }
     m_pLastTableFormat = pCurTableFmt;
 
@@ -260,7 +252,7 @@ void SwView::SelectShell()
         GetViewFrame()->GetBindings().InvalidateAll( sal_False );
         if ( m_nSelectionType & nsSelectionType::SEL_OLE ||
              m_nSelectionType & nsSelectionType::SEL_GRF )
-            //Fuer Grafiken und OLE kann sich natuerlich das Verb aendern!
+            // For graphs and OLE the verb can be modified of course!
             ImpSetVerb( nNewSelectionType );
     }
     else
@@ -271,9 +263,8 @@ void SwView::SelectShell()
 
         if ( m_pShell )
         {
-            rDispatcher.Flush();        // alle gecachten Shells wirklich loeschen
-
-            //Zur alten Selektion merken welche Toolbar sichtbar war
+            rDispatcher.Flush();        // Really erase all cached shells
+            //Remember to the old selection which toolbar was visible
             sal_uInt16 nId = static_cast< sal_uInt16 >( rDispatcher.GetObjectBarId( SFX_OBJECTBAR_OBJECT ));
             if ( nId )
                 pBarCfg->SetTopToolbar( m_nSelectionType, nId );
@@ -439,10 +430,9 @@ void SwView::SelectShell()
             GetEditWin().SetInputContext( aCntxt );
         }
 
-        //Zur neuen Selektion die Toolbar aktivieren, die auch beim letzten Mal
-        //aktiviert war
-        //Vorher muss ein Flush() sein, betrifft aber lt. MBA nicht das UI und ist
-        //kein Performance-Problem
+        // Activate the toolbar to the new selection which also was active last time.
+        // Before a flush () must be, but does not affect the UI according to MBA and
+        // is not a performance problem.
         // TODO/LATER: maybe now the Flush() command is superfluous?!
         rDispatcher.Flush();
 
@@ -455,7 +445,7 @@ void SwView::SelectShell()
             m_pFormShell->SetView(PTR_CAST(FmFormView, pDView));
 
     }
-    //Guenstiger Zeitpunkt fuer die Kommunikation mit OLE-Objekten?
+    // Opportune time for the communication with OLE objects?
     if ( GetDocShell()->GetDoc()->IsOLEPrtNotifyPending() )
         GetDocShell()->GetDoc()->PrtOLENotify( sal_False );
 
@@ -466,11 +456,11 @@ void SwView::SelectShell()
     GetViewImpl()->GetUNOObject_Impl()->NotifySelChanged();
 }
 
-//Zusammenspiel: AttrChangedNotify() und TimeoutHdl.
-//Falls noch Actions offen sind keine Aktualisierung, da der
-//Cursor auf der Core-Seite im Wald stehen kann.
-//Da wir aber keine Stati mehr liefern koennen und wollen locken wir
-//stattdessen den Dispatcher.
+// Interaction: AttrChangedNotify() and TimeoutHdl.
+// No Update if actions are still open, since the cursor on the core side
+// can be somewhere in no man's land.
+// But since we can no longer supply status and we want instead lock
+// the dispatcher.
 
 extern "C"
 {
@@ -485,8 +475,7 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify)
      if ( GetEditWin().IsChainMode() )
         GetEditWin().SetChainMode( sal_False );
 
-    //Opt: Nicht wenn PaintLocked. Beim Unlock wird dafuer nocheinmal ein
-    //Notify ausgeloest.
+    //Opt: Not if PaintLocked. During unlock a notify will be once more triggered.
     if( !m_pWrtShell->IsPaintLocked() && !bNoInterrupt &&
         GetDocShell()->IsReadOnly() )
         _CheckReadonlyState();
@@ -563,11 +552,11 @@ IMPL_LINK_NOARG(SwView, TimeoutHdl)
 void SwView::_CheckReadonlyState()
 {
     SfxDispatcher &rDis = GetDispatcher();
-    //Um erkennen zu koennen ob bereits disabled ist!
+    // To be able to recognize if it is already disabled!
     SfxItemState eStateRO, eStateProtAll;
     const SfxPoolItem *pItem;
-    // von einem nur uns bekannten Slot den Status abfragen.
-    // Ansonsten kennen andere den Slot; wie z.B. die BasidIde
+    // Query the status from a slot which is only known to us.
+    // Otherwise the slot is known from other; like the BasidIde
     eStateRO = rDis.QueryState( FN_INSERT_BOOKMARK, pItem );
     eStateProtAll = rDis.QueryState( FN_EDIT_REGION, pItem );
     sal_Bool bChgd = sal_False;
@@ -661,10 +650,10 @@ void SwView::_CheckReadonlySelection()
     if( (SW_DISABLE_ON_PROTECTED_CURSOR & nDisableFlags ) !=
         (SW_DISABLE_ON_PROTECTED_CURSOR & rDis.GetDisableFlags() ) )
     {
-        // zusaetzlich am Window den InputContext umsetzen, damit in
-        // japanischen / chinesischen Versionen die externe Eingabe
-        // ab-/angeschaltet wird. Das aber nur wenn auch die richtige
-        // Shell auf dem Stack steht.
+        // Additionally move at the Window the InputContext, so that
+        // in japanese / chinese versions the external input will be
+        // turned on or off. This but only if the correct shell is on
+        // the stack.
         switch( m_pViewImpl->GetShellMode() )
         {
         case SHELL_MODE_TEXT:
@@ -672,12 +661,12 @@ void SwView::_CheckReadonlySelection()
         case SHELL_MODE_TABLE_TEXT:
         case SHELL_MODE_TABLE_LIST_TEXT:
             {
-// temporaere Loesung!!! Sollte bei jeder Cursorbewegung
-//          den Font von der akt. Einfuegeposition setzen, also ausserhalb
-//          dieses if's. Aber TH wertet den Font zur Zeit nicht aus und
-//          das besorgen erscheint mir hier zu teuer zu sein.
-//          Ausserdem haben wir keinen Font, sondern nur Attribute aus denen
-//          die Textformatierung dann den richtigen Font zusammen baut.
+// Temporary solution!!! Should set the font of the current insertion point
+//         at each cursor movement, so outside of this "if". But TH does not
+//         evaluates the font at this time and the "purchase" appears to me
+//         as too expensive.
+//         Moreover, we don't have a font, but only attributes from which the
+//         text formatting and the correct font will be build together.
 
                 InputContext aCntxt( GetEditWin().GetInputContext() );
                 aCntxt.SetOptions( SW_DISABLE_ON_PROTECTED_CURSOR & nDisableFlags
@@ -830,7 +819,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         else
             aUsrPref.setBrowseMode( rDoc.get(IDocumentSettingAccess::BROWSE_MODE) );
 
-        //Fuer den BrowseMode wollen wir keinen Factor uebernehmen.
+        //For the BrowseMode we do not assume a factor.
         if( aUsrPref.getBrowseMode() && aUsrPref.GetZoomType() != SVX_ZOOM_PERCENT )
         {
             aUsrPref.SetZoomType( SVX_ZOOM_PERCENT );
@@ -881,8 +870,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     // isn't reset, if document is already modified.
     const bool bIsDocModified = m_pWrtShell->GetDoc()->IsModified();
 
-    // damit unter anderem das HRuler im
-    //              ReadonlyFall nicht angezeigt wird
+    // Thus among other things, the HRuler is not displayed in the read-only case.
     aUsrPref.SetReadonly( m_pWrtShell->GetViewOptions()->IsReadonly() );
 
     // no margin for OLE!
@@ -892,9 +880,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     m_pWrtShell->SetBrowseBorder( aBrwsBorder );
 
-    // Im CTOR duerfen keine Shell wechsel erfolgen, die muessen ueber
-    // den Timer "zwischen gespeichert" werden. Sonst raeumt der SFX
-    // sie wieder vom Stack!
+    // In CTOR no shell changes may take place, which must be temporarily stored
+    // with the timer. Otherwise, the SFX removes them from the stack!
     bool bOld = bNoInterrupt;
     bNoInterrupt = true;
 
@@ -925,18 +912,18 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         m_pHRuler->SetCharWidth( 371 );  // default character width
         m_pVRuler->SetLineHeight( 551 );  // default line height
 
-    // DocShell setzen
+    // Set DocShell
     pDocSh->SetView( this );
     SW_MOD()->SetView( this );
 
     m_pPostItMgr = new SwPostItMgr(this);
 
-    // Die DocSize erfragen und verarbeiten. Ueber die Handler konnte
-    // die Shell nicht gefunden werden, weil die Shell innerhalb CTOR-Phase
-    // nicht in der SFX-Verwaltung bekannt ist.
+    // Check and process the DocSize. Via the handler, the shell could not
+    // be found, because the shell is not known in the SFX management
+    // within the CTOR phase.
     DocSzChgd( m_pWrtShell->GetDocSize() );
 
-        // AttrChangedNotify Link setzen
+        // Set AttrChangedNotify link
     m_pWrtShell->SetChgLnk(LINK(this, SwView, AttrChangedNotify));
 
     if( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED &&
@@ -981,22 +968,22 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         m_pWrtShell->GetDoc()->SetUpdateExpFldStat( sal_False );
     }
 
-    // ggfs. alle Verzeichnisse updaten:
+    // Update all tables if necessary:
     if( m_pWrtShell->GetDoc()->IsUpdateTOX() )
     {
         SfxRequest aSfxRequest( FN_UPDATE_TOX, SFX_CALLMODE_SLOT, GetPool() );
         Execute( aSfxRequest );
-        m_pWrtShell->GetDoc()->SetUpdateTOX( sal_False );     // wieder zurueck setzen
+        m_pWrtShell->GetDoc()->SetUpdateTOX( sal_False );     // reset again
         m_pWrtShell->SttEndDoc(sal_True);
     }
 
-    // kein ResetModified, wenn es schone eine View auf dieses Doc gibt
+    // No ResetModified, if there is already a view to this doc.
     SfxViewFrame* pVFrame = GetViewFrame();
     SfxViewFrame* pFirst = SfxViewFrame::GetFirst(pDocSh);
-    // zur Zeit(360) wird die View erst nach dem Ctor eingetragen
-    // der folgende Ausdruck funktioniert auch, wenn sich das aendert
-    // wenn per Undo nicht mehr die Modifizierung aufhebar ist,
-    //              so setze das Modified NICHT zurueck.
+    // Currently(360) the view is registered firstly after the CTOR,
+    // the following expression is also working if this changes.
+    // If the modification cannot be canceled by undo, then do NOT set
+    // the modify back.
     // no reset of modified state, if document
     // was already modified.
     if (!m_pWrtShell->GetDoc()->GetIDocumentUndoRedo().IsUndoNoResetModified() &&
@@ -1008,7 +995,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     bNoInterrupt = bOld;
 
-    // wird ein GlobalDoc neu angelegt, soll auch der Navigator erzeugt werden
+    // If a new GlobalDoc will be created, the navigator will also be generated.
     if( pDocSh->IsA(SwGlobalDocShell::StaticType()) &&
         !pVFrame->GetChildWindow( SID_NAVIGATOR ))
     {
@@ -1079,7 +1066,7 @@ SwView::~SwView()
     EndListening(*GetDocShell());
     delete m_pScrollFill;
     delete m_pWrtShell;
-    m_pWrtShell = 0;      // Auf 0 setzen, damit folgende DToren nicht drauf zugreifen
+    m_pWrtShell = 0;      // Set to 0, so that it is not accessable by the following dtors cannot.
     m_pShell = 0;
     delete m_pHScrollbar;
     delete m_pVScrollbar;
@@ -1101,14 +1088,13 @@ SwDocShell* SwView::GetDocShell()
     return PTR_CAST(SwDocShell, pDocShell);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   CursorPos merken
- --------------------------------------------------------------------*/
+// Remember CursorPos
+
 void SwView::WriteUserData( String &rUserData, sal_Bool bBrowse )
 {
-    //Das Browse-Flag wird vom Sfx durchgereicht, wenn Dokumente gebrowsed
-    //werden (nicht zu verwechseln mit dem BrowseMode).
-    //Die dann gespeicherten Daten sind nicht persistent!!
+    // The browse flag will be passed from Sfx when documents are browsed
+    // (not to be confused with the BrowseMode).
+    // Then that stored data are not persistent!
 
     const SwRect& rRect = m_pWrtShell->GetCharRect();
     const Rectangle& rVis = GetVisArea();
@@ -1133,9 +1119,8 @@ void SwView::WriteUserData( String &rUserData, sal_Bool bBrowse )
     rUserData += FRMTYPE_NONE == m_pWrtShell->GetSelFrmType() ? '0' : '1';
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: CursorPos setzen
- --------------------------------------------------------------------*/
+// Set CursorPos
+
 static bool lcl_IsOwnDocument( SwView& rView )
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -1153,8 +1138,8 @@ static bool lcl_IsOwnDocument( SwView& rView )
 void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
 {
     if ( comphelper::string::getTokenCount(rUserData, ';') > 1 &&
-        //Fuer Dokumente ohne Layout nur im OnlineLayout oder beim
-        //Forward/Backward
+        // For document without layout only in the onlinelayout or
+        // while forward/backward
          (!m_pWrtShell->IsNewLayout() || m_pWrtShell->GetViewOptions()->getBrowseMode() || bBrowse) )
     {
         bool bIsOwnDocument = lcl_IsOwnDocument( *this );
@@ -1163,8 +1148,8 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
 
         sal_Int32 nPos = 0;
 
-        // Nein, es ist *keine* gute Idee GetToken gleich im Point-Konstr.
-        // aufzurufen, denn welcher Parameter wird zuerst ausgewertet?
+        // No it is *no* good idea to call GetToken within Point-Konstr. immediately,
+        // because which parameter is evaluated first?
         long nX = rUserData.GetToken( 0, ';', nPos ).ToInt32(),
              nY = rUserData.GetToken( 0, ';', nPos ).ToInt32();
         Point aCrsrPos( nX, nY );
@@ -1583,8 +1568,8 @@ ErrCode SwView::DoVerb( long nVerb )
     return ERRCODE_NONE;
 }
 
-/*   only return sal_True for a text selection
-*/
+//   only return sal_True for a text selection
+
 sal_Bool SwView::HasSelection( sal_Bool  bText ) const
 {
     return bText ? GetWrtShell().SwCrsrShell::HasSelection()
@@ -1636,7 +1621,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
             case SFX_HINT_MODECHANGED:
                 {
-                    // Modalmodus-Umschaltung?
+                    // Modal mode change-over?
                     sal_Bool bModal = GetDocShell()->IsInModalMode();
                     m_pHRuler->SetActive( !bModal );
                     m_pVRuler->SetActive( !bModal );
@@ -1659,7 +1644,8 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     else
                         KillTab();
                     bool bReadonly = GetDocShell()->IsReadOnly();
-                    // if document is to be opened in alive-mode then this has to be regarded while switching from readonly-mode to edit-mode
+                    // if document is to be opened in alive-mode then this has to be
+                    // regarded while switching from readonly-mode to edit-mode
                     if( !bReadonly )
                     {
                         SwDrawDocument * pDrawDoc = 0;
@@ -1827,9 +1813,8 @@ void SwView::NotifyDBChanged()
     GetViewImpl()->GetUNOObject_Impl()->NotifyDBChanged();
 }
 
-/*--------------------------------------------------------------------
-    Printing
- --------------------------------------------------------------------*/
+// Printing
+
 SfxObjectShellLock SwView::CreateTmpSelectionDoc()
 {
     SwXTextView *const pImpl = GetViewImpl()->GetUNOObject_Impl();
