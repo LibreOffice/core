@@ -42,7 +42,7 @@
     #include <typeinfo>
     #include <tools/toolsdllapi.h>
 
-    TOOLS_DLLPUBLIC void DbgUnhandledException(const ::com::sun::star::uno::Any& caughtException, const char* currentFunction);
+    TOOLS_DLLPUBLIC void DbgUnhandledException(const ::com::sun::star::uno::Any& caughtException, const char* currentFunction, const char* fileAndLineNo);
 
     /** reports a caught UNO exception via OSL diagnostics
 
@@ -50,7 +50,7 @@
         handling is not correct ....
     */
     #define DBG_UNHANDLED_EXCEPTION()   \
-        DbgUnhandledException( ::cppu::getCaughtException(), BOOST_CURRENT_FUNCTION);
+        DbgUnhandledException( ::cppu::getCaughtException(), BOOST_CURRENT_FUNCTION, SAL_DETAIL_WHERE);
 
 #else   // OSL_DEBUG_LEVEL
     #define DBG_UNHANDLED_EXCEPTION()
