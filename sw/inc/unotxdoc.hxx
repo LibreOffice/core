@@ -440,6 +440,8 @@ public:
     SwXDrawPage*                GetDrawPage();
     SwDocShell*                 GetDocShell() {return pDocShell;}
 
+    // #121125# react on ViewShell change
+    void ReactOnViewShellChange();
 
     void * SAL_CALL operator new( size_t ) throw();
     void SAL_CALL operator delete( void * ) throw();

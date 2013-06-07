@@ -1125,12 +1125,32 @@ SfxStyleSheetBasePool*  SwDocShell::GetStyleSheetPool()
 }
 
 
+#include <unotxdoc.hxx>
+
 void SwDocShell::SetView(SwView* pVw)
 {
-    if ( 0 != (pView = pVw) )
+    bool bChanged(false);
+
+    if(0 != (pView = pVw))
+    {
         pWrtShell = &pView->GetWrtShell();
+        bChanged = true;
+    }
     else
+    {
         pWrtShell = 0;
+        bChanged = true;
+    }
+
+    if(bChanged)
+    {
+        // #121125# SwXTextDocument may hold references to the ViewShell, so inform
+        // it about changes to allow to react on it. This happens e.g. when printing
+        // and/or PDF export (SwViewOptionAdjust_Impl holds a reference to the view
+        // and needs to be destroyed)
+        uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
+        ((SwXTextDocument*)xDoc.get())->ReactOnViewShellChange();
+    }
 }
 
 

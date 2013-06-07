@@ -3504,6 +3504,23 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     return aLanguages;
 }
 
+// #121125# react on ViewShell change; a reference to the ViewShell is
+// held in SwViewOptionAdjust_Impl, thus needs to be cleaned up
+void SwXTextDocument::ReactOnViewShellChange()
+{
+    if(m_pRenderData)
+    {
+        delete m_pRenderData;
+        m_pRenderData = NULL;
+    }
+
+    if(m_pPrintUIOptions)
+    {
+        delete m_pPrintUIOptions;
+        m_pPrintUIOptions = NULL;
+    }
+}
+
 /* -----------------25.10.99 11:06-------------------
 
  --------------------------------------------------*/
