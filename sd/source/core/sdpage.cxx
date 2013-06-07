@@ -1548,7 +1548,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate 
 
     if((meAutoLayout == AUTOLAYOUT_NONE && maPresentationShapeList.isEmpty()) || mbMaster)
     {
-        // MasterPage or no layout and no presentation shapes available, noting to do
+        // MasterPage or no layout and no presentation shapes available, nothing to do
         return;
     }
 

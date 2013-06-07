@@ -378,7 +378,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             OSL_ENSURE(xFact.is(),"OTableController::doSaveDoc: No XDataDescriptorFactory available!");
             xTable = xFact->createDataDescriptor();
             OSL_ENSURE(xTable.is(),"OTableController::doSaveDoc: Create query failed!");
-            // to set the name is only allowed when the wuery is new
+            // to set the name is only allowed when the query is new
             xTable->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
             xTable->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
             xTable->setPropertyValue(PROPERTY_NAME,makeAny(m_sName));

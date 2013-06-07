@@ -23,7 +23,7 @@ import com.sun.star.inspection.XPropertyControlFactory;
 import com.sun.star.inspection.XPropertyHandler;
 
 /**
- * This implementation of <CODE>PropertyHandler</CODE> do currently nothig.
+ * This implementation of <CODE>PropertyHandler</CODE> does currently nothing.
  * All methods are implemented, but not filled with content.
  * @see com.sun.star.inspection.XPropertyHandler
  */
