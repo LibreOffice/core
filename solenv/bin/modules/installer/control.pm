@@ -347,6 +347,9 @@ sub check_logfile
         $compareline =~ s/Error\.ulf//g;    # removing all occurences of "Error.ulf"
         $compareline =~ s/Error\.idl//g;    # removing all occurences of "Error.idl"
         $compareline =~ s/Error\.html//g;   # removing all occurences of "Error.html"
+        # Ugly workaround for (boost) headers
+        $compareline =~ s/error\.hpp//g;    # removing all occurences of "error.hpp"
+        $compareline =~ s/error\.ipp//g;    # removing all occurences of "error.ipp"
 
         if ( $compareline =~ /\bError\b/i )
         {
