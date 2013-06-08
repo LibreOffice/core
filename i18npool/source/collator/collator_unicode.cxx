@@ -155,7 +155,8 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             if ( rLocale.Language == "ca" ) {
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_ca_charset;
-            } else if ( rLocale.Language == "dz" ) {
+            } else if ( rLocale.Language == "dz" || rLocale.Language == "bo" ) {
+                // 'bo' Tibetan uses the same collation rules as 'dz' Dzongkha
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_dz_charset;
             } else if ( rLocale.Language == "hu" ) {
