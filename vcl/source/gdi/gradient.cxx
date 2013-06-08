@@ -194,20 +194,15 @@ void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Poin
 
     if( GetStyle() == GradientStyle_LINEAR || GetStyle() == GradientStyle_AXIAL )
     {
-        aRect.Left()--;
-        aRect.Top()--;
-        aRect.Right()++;
-        aRect.Bottom()++;
-
         const double    fAngle = nAngle * F_PI1800;
         const double    fWidth = aRect.GetWidth();
         const double    fHeight = aRect.GetHeight();
-        double          fDX = fWidth  * fabs( cos( fAngle ) ) + fHeight * fabs( sin( fAngle ) );
-        double          fDY = fHeight * fabs( cos( fAngle ) ) + fWidth  * fabs( sin( fAngle ) );
-
-        fDX = ( fDX - fWidth  ) * 0.5 + 0.5;
-        fDY = ( fDY - fHeight ) * 0.5 + 0.5;
-
+        double  fDX     = fWidth  * fabs( cos( fAngle ) ) +
+                          fHeight * fabs( sin( fAngle ) );
+        double  fDY     = fHeight * fabs( cos( fAngle ) ) +
+                          fWidth  * fabs( sin( fAngle ) );
+                fDX     = (fDX - fWidth)  * 0.5 + 0.5;
+                fDY     = (fDY - fHeight) * 0.5 + 0.5;
         aRect.Left()   -= (long) fDX;
         aRect.Right()  += (long) fDX;
         aRect.Top()    -= (long) fDY;
