@@ -1374,71 +1374,18 @@ void    ImpPDFTabSecurityPage::ImplPDFASecurityControl( sal_Bool bEnableSecurity
 // -----------------------------------------------------------------------------
 ImpPDFTabLinksPage::ImpPDFTabLinksPage( Window* pParent,
                                               const SfxItemSet& rCoreSet ) :
-    SfxTabPage( pParent, PDFFilterResId( RID_PDF_TAB_LINKS ), rCoreSet ),
+    SfxTabPage( pParent, "PdfLinksPage","filter/ui/pdflinkspage.ui",rCoreSet ),
 
-    maCbExprtBmkrToNmDst( this, PDFFilterResId( CB_EXP_BMRK_TO_DEST ) ),
-    maCbOOoToPDFTargets( this,  PDFFilterResId( CB_CNV_OOO_DOCTOPDF ) ),
-     maCbExportRelativeFsysLinks( this, PDFFilterResId( CB_ENAB_RELLINKFSYS ) ),
-
-    maFlDefaultTitle( this,  PDFFilterResId( FL_DEFAULT_LINK_ACTION ) ),
-    maRbOpnLnksDefault( this, PDFFilterResId( CB_VIEW_PDF_DEFAULT ) ),
     mbOpnLnksDefaultUserState( sal_False ),
-    maRbOpnLnksLaunch( this, PDFFilterResId( CB_VIEW_PDF_APPLICATION ) ),
     mbOpnLnksLaunchUserState( sal_False ),
-    maRbOpnLnksBrowser( this,  PDFFilterResId( CB_VIEW_PDF_BROWSER ) ),
     mbOpnLnksBrowserUserState( sal_False )
 {
-    FreeResource();
-
-    // pb: #i91991# checkboxes only double-spaced if necessary
-    long nDelta = 0;
-    Size aSize = maCbExprtBmkrToNmDst.GetSizePixel();
-    Size aMinSize = maCbExprtBmkrToNmDst.CalcMinimumSize();
-    long nLineHeight =
-        maCbExprtBmkrToNmDst.LogicToPixel( Size( 10, 10 ), MAP_APPFONT ).Height();
-    if ( aSize.Width() > aMinSize.Width() )
-    {
-        Size aNewSize( aSize.Width(), nLineHeight );
-        nDelta += ( aSize.Height() - nLineHeight );
-        maCbExprtBmkrToNmDst.SetSizePixel( aNewSize );
-        Point aNewPos = maCbOOoToPDFTargets.GetPosPixel();
-        aNewPos.Y() -= nDelta;
-        maCbOOoToPDFTargets.SetPosPixel( aNewPos );
-    }
-
-    aSize = maCbOOoToPDFTargets.GetSizePixel();
-    aMinSize = maCbOOoToPDFTargets.CalcMinimumSize();
-    if ( aSize.Width() > aMinSize.Width() )
-    {
-        Size aNewSize( aSize.Width(), nLineHeight );
-        nDelta += ( aSize.Height() - nLineHeight );
-        maCbOOoToPDFTargets.SetSizePixel( aNewSize );
-        Point aNewPos = maCbExportRelativeFsysLinks.GetPosPixel();
-        aNewPos.Y() -= nDelta;
-        maCbExportRelativeFsysLinks.SetPosPixel( aNewPos );
-    }
-
-    aSize = maCbExportRelativeFsysLinks.GetSizePixel();
-    aMinSize = maCbExportRelativeFsysLinks.CalcMinimumSize();
-    if ( aSize.Width() > aMinSize.Width() )
-    {
-        Size aNewSize( aSize.Width(), nLineHeight );
-        nDelta += ( aSize.Height() - nLineHeight );
-        maCbExportRelativeFsysLinks.SetSizePixel( aNewSize );
-    }
-
-    if ( nDelta > 0 )
-    {
-        Window* pWins[] =
-            { &maFlDefaultTitle, &maRbOpnLnksDefault, &maRbOpnLnksLaunch, &maRbOpnLnksBrowser, NULL };
-        Window** pCurrent = pWins;
-        while ( *pCurrent )
-        {
-            Point aNewPos = (*pCurrent)->GetPosPixel();
-            aNewPos.Y() -= nDelta;
-            (*pCurrent++)->SetPosPixel( aNewPos );
-        }
-    }
+    get(m_pCbExprtBmkrToNmDst,"export");
+    get(m_pCbOOoToPDFTargets ,"convert");
+    get(m_pCbExportRelativeFsysLinks ,"exporturl");
+    get(m_pRbOpnLnksDefault ,"default");
+    get(m_pRbOpnLnksLaunch ,"openpdf");
+    get(m_pRbOpnLnksBrowser ,"openinternet");
 }
 
 // -----------------------------------------------------------------------------
@@ -1456,7 +1403,7 @@ SfxTabPage*  ImpPDFTabLinksPage::Create( Window* pParent,
 // -----------------------------------------------------------------------------
 void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 {
-    paParent->mbExportRelativeFsysLinks = maCbExportRelativeFsysLinks.IsChecked();
+    paParent->mbExportRelativeFsysLinks = m_pCbExportRelativeFsysLinks->IsChecked();
 
     sal_Bool bIsPDFASel =  sal_False;
     if( paParent && paParent->GetTabPage( RID_PDF_TAB_GENER ) )
@@ -1466,9 +1413,9 @@ void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
     if( !bIsPDFASel )
     {
 // ...get the control states
-        mbOpnLnksDefaultUserState = maRbOpnLnksDefault.IsChecked();
-        mbOpnLnksLaunchUserState =  maRbOpnLnksLaunch.IsChecked();
-        mbOpnLnksBrowserUserState = maRbOpnLnksBrowser.IsChecked();
+        mbOpnLnksDefaultUserState = m_pRbOpnLnksDefault->IsChecked();
+        mbOpnLnksLaunchUserState =  m_pRbOpnLnksLaunch->IsChecked();
+        mbOpnLnksBrowserUserState = m_pRbOpnLnksBrowser->IsChecked();
     }
 // the control states, or the saved is used
 // to form the stored selection
@@ -1478,33 +1425,33 @@ void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
     else if( mbOpnLnksLaunchUserState )
         paParent->mnViewPDFMode = 1;
 
-    paParent->mbConvertOOoTargets = maCbOOoToPDFTargets.IsChecked();
-    paParent->mbExportBmkToPDFDestination = maCbExprtBmkrToNmDst.IsChecked();
+    paParent->mbConvertOOoTargets = m_pCbOOoToPDFTargets->IsChecked();
+    paParent->mbExportBmkToPDFDestination = m_pCbExprtBmkrToNmDst->IsChecked();
 }
 
 // -----------------------------------------------------------------------------
 void ImpPDFTabLinksPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
 {
-    maCbOOoToPDFTargets.Check( paParent->mbConvertOOoTargets );
-    maCbExprtBmkrToNmDst.Check( paParent->mbExportBmkToPDFDestination );
+    m_pCbOOoToPDFTargets->Check( paParent->mbConvertOOoTargets );
+    m_pCbExprtBmkrToNmDst->Check( paParent->mbExportBmkToPDFDestination );
 
-    maRbOpnLnksDefault.SetClickHdl( LINK( this, ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl ) );
-    maRbOpnLnksBrowser.SetClickHdl( LINK( this, ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl ) );
+    m_pRbOpnLnksDefault->SetClickHdl( LINK( this, ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl ) );
+    m_pRbOpnLnksBrowser->SetClickHdl( LINK( this, ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl ) );
 
-    maCbExportRelativeFsysLinks.Check( paParent->mbExportRelativeFsysLinks );
+    m_pCbExportRelativeFsysLinks->Check( paParent->mbExportRelativeFsysLinks );
     switch( paParent->mnViewPDFMode )
     {
     default:
     case 0:
-        maRbOpnLnksDefault.Check();
+        m_pRbOpnLnksDefault->Check();
         mbOpnLnksDefaultUserState = sal_True;
         break;
     case 1:
-        maRbOpnLnksLaunch.Check();
+        m_pRbOpnLnksLaunch->Check();
         mbOpnLnksLaunchUserState = sal_True;
         break;
     case 2:
-        maRbOpnLnksBrowser.Check();
+        m_pRbOpnLnksBrowser->Check();
         mbOpnLnksBrowserUserState = sal_True;
         break;
     }
@@ -1526,21 +1473,21 @@ void ImpPDFTabLinksPage::ImplPDFALinkControl( sal_Bool bEnableLaunch )
 // set the value and position of link type selection
     if( bEnableLaunch )
     {
-        maRbOpnLnksLaunch.Enable();
+        m_pRbOpnLnksLaunch->Enable();
 //restore user state with no PDF/A-1 selected
-        maRbOpnLnksDefault.Check( mbOpnLnksDefaultUserState );
-        maRbOpnLnksLaunch.Check( mbOpnLnksLaunchUserState );
-        maRbOpnLnksBrowser.Check( mbOpnLnksBrowserUserState );
+        m_pRbOpnLnksDefault->Check( mbOpnLnksDefaultUserState );
+        m_pRbOpnLnksLaunch->Check( mbOpnLnksLaunchUserState );
+        m_pRbOpnLnksBrowser->Check( mbOpnLnksBrowserUserState );
     }
     else
     {
 //save user state with no PDF/A-1 selected
-        mbOpnLnksDefaultUserState = maRbOpnLnksDefault.IsChecked();
-        mbOpnLnksLaunchUserState = maRbOpnLnksLaunch.IsChecked();
-        mbOpnLnksBrowserUserState = maRbOpnLnksBrowser.IsChecked();
-        maRbOpnLnksLaunch.Enable( sal_False );
+        mbOpnLnksDefaultUserState = m_pRbOpnLnksDefault->IsChecked();
+        mbOpnLnksLaunchUserState = m_pRbOpnLnksLaunch->IsChecked();
+        mbOpnLnksBrowserUserState = m_pRbOpnLnksBrowser->IsChecked();
+        m_pRbOpnLnksLaunch->Enable( sal_False );
         if( mbOpnLnksLaunchUserState )
-            maRbOpnLnksBrowser.Check();
+            m_pRbOpnLnksBrowser->Check();
     }
 }
 
@@ -1549,9 +1496,9 @@ void ImpPDFTabLinksPage::ImplPDFALinkControl( sal_Bool bEnableLaunch )
 // when PDF/A-1 was requested
 IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl)
 {
-    mbOpnLnksDefaultUserState = maRbOpnLnksDefault.IsChecked();
-    mbOpnLnksLaunchUserState = maRbOpnLnksLaunch.IsChecked();
-    mbOpnLnksBrowserUserState = maRbOpnLnksBrowser.IsChecked();
+    mbOpnLnksDefaultUserState = m_pRbOpnLnksDefault->IsChecked();
+    mbOpnLnksLaunchUserState = m_pRbOpnLnksLaunch->IsChecked();
+    mbOpnLnksBrowserUserState = m_pRbOpnLnksBrowser->IsChecked();
     return 0;
 }
 
@@ -1560,9 +1507,9 @@ IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl)
 // when PDF/A-1 was requested
 IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl)
 {
-    mbOpnLnksDefaultUserState = maRbOpnLnksDefault.IsChecked();
-    mbOpnLnksLaunchUserState = maRbOpnLnksLaunch.IsChecked();
-    mbOpnLnksBrowserUserState = maRbOpnLnksBrowser.IsChecked();
+    mbOpnLnksDefaultUserState = m_pRbOpnLnksDefault->IsChecked();
+    mbOpnLnksLaunchUserState = m_pRbOpnLnksLaunch->IsChecked();
+    mbOpnLnksBrowserUserState = m_pRbOpnLnksBrowser->IsChecked();
     return 0;
 }
 

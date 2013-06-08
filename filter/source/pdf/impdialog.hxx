@@ -398,16 +398,15 @@ public:
 //class to implement the relative link stuff
 class ImpPDFTabLinksPage : public SfxTabPage
 {
-    CheckBox                    maCbExprtBmkrToNmDst;
-    CheckBox                    maCbOOoToPDFTargets;
-    CheckBox                    maCbExportRelativeFsysLinks;
+    CheckBox*                   m_pCbExprtBmkrToNmDst;
+    CheckBox*                   m_pCbOOoToPDFTargets;
+    CheckBox*                   m_pCbExportRelativeFsysLinks;
 
-    FixedLine                   maFlDefaultTitle;
-    RadioButton                 maRbOpnLnksDefault;
+    RadioButton*                m_pRbOpnLnksDefault;
     sal_Bool                    mbOpnLnksDefaultUserState;
-    RadioButton                 maRbOpnLnksLaunch;
+    RadioButton*                m_pRbOpnLnksLaunch;
     sal_Bool                    mbOpnLnksLaunchUserState;
-    RadioButton                 maRbOpnLnksBrowser;
+    RadioButton*                m_pRbOpnLnksBrowser;
     sal_Bool                    mbOpnLnksBrowserUserState;
 
     DECL_LINK( ClickRbOpnLnksDefaultHdl, void* );

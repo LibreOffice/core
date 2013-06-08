@@ -165,17 +165,6 @@
 #define CB_ENDAB_COPY           143
 #define CB_ENAB_ACCESS          144
 
-//---> i56629 controls for link management
-#define CB_ENAB_RELLINKFSYS     150
-
-#define FL_DEFAULT_LINK_ACTION  151
-#define CB_VIEW_PDF_DEFAULT     152
-#define CB_VIEW_PDF_BROWSER     153
-#define CB_VIEW_PDF_APPLICATION 154
-
-#define CB_CNV_OOO_DOCTOPDF     155
-#define CB_EXP_BMRK_TO_DEST     156
-
 #define FL_GENERAL_VERTICAL  157
 #define FL_INITVIEW_VERTICAL 158
 #define FL_VPREFER_VERTICAL  158
