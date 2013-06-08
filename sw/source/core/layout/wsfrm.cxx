@@ -92,7 +92,7 @@ SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     mbInfFtn ( sal_False ),
     mbInfSct ( sal_False )
 {
-    OSL_ENSURE( pMod, "No frame format passed." );
+    OSL_ENSURE( pMod, "No frame format given." );
     mbInvalidR2L = mbInvalidVert = 1;
     //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
     mbDerivedR2L = mbDerivedVert = mbRightToLeft = mbVertical = mbReverse = mbVertLR = 0;
@@ -362,14 +362,10 @@ void SwFrm::Prepare( const PrepareHint, const void *, sal_Bool )
     /* Do nothing */
 }
 
-/*************************************************************************
-|*
-|*    SwFrm::InvalidatePage()
-|*    Description:      Invalidates the page in which the Frm is placed
-|*      currently. The page is invalidated depending on the type (Layout,
-|*      Cntnt, FlyFrm)
-|*
-|*************************************************************************/
+/**
+ * Invalidates the page in which the Frm is currently placed.
+ * The page is invalidated depending on the type (Layout, Cntnt, FlyFrm)
+ */
 void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
 {
     if ( !pPage )
@@ -407,9 +403,7 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
         {
             if ( pRoot->IsTurboAllowed() )
             {
-                // JP 21.09.95: it can still be a TurboAction if the
-                // ContentFrame wants to register a second time.
-                //  RIGHT????
+                // If a ContentFrame wants to register for a second time, make it a TurboAction.
                 if ( !pRoot->GetTurbo() || this == pRoot->GetTurbo() )
                     pRoot->SetTurbo( (const SwCntntFrm*)this );
                 else
@@ -556,15 +550,11 @@ Size SwFrm::ChgSize( const Size& aNewSize )
     return maFrm.SSize();
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::InsertBefore()
-|*
-|*  Description         SwFrm is inserted into an existing structure.
-|*                      Insertion is done below the parent and either before
-|*                      pBehind or at the end of the chain if pBehind is empty.
-|*
-|*************************************************************************/
+/** Insert SwFrm into existing structure.
+ *
+ * Insertion is done below the parent either before pBehind or
+ * at the end of the chain if pBehind is empty.
+ */
 void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
 {
     OSL_ENSURE( pParent, "No parent for insert." );
@@ -595,16 +585,11 @@ void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::InsertBehind()
-|*
-|*  Description         SwFrm is inserted in an existing structure.
-|*                      Insertion is done below the parent and either behind
-|*                      pBefore or at the beginning of the chain if pBefore is
-|*                      empty.
-|*
-|*************************************************************************/
+/** Insert SwFrm into existing structure.
+ *
+ * Insertion is done below the parent either after pBehind or
+ * at the beginning of the chain if pBehind is empty.
+ */
 void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
 {
     OSL_ENSURE( pParent, "No Parent for Insert." );
@@ -630,27 +615,19 @@ void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::InsertGroup()
-|*
-|*  Description         A chain of SwFrms gets inserted in an existing structure
-|*
-|*  Until now this is used to insert a SectionFrame (which may have some
-|*  siblings) into an existing structure.
-|*
-|*  If the third parameter is NULL, this method is (besides handling the
-|*  siblings) equal to SwFrm::InsertBefore(..)
-|*
-|*  If the third parameter is passed, the following happens:
-|*  - this becomes mpNext of pParent
-|*  - pSct becomes mpNext of the last one in the this-chain
-|*  - pBehind is reconnected from pParent to pSct
-|*  The purpose is: a SectionFrm (this) won't become a child of another
-|*  SectionFrm (pParent), but pParent gets split into two siblings
-|*  (pParent+pSect) and this is inserted between.
-|*
-|*************************************************************************/
+/** Insert a chain of SwFrms into an existing struction
+ *
+ * Currently, this method is used to insert a SectionFrame (which may have some siblings) into an
+ * existing structure. If the third parameter is NULL, this method is (besides handling the
+ * siblings) equal to SwFrm::InsertBefore(..).
+ *
+ * If the third parameter is passed, the following happens:
+ *  - this becomes mpNext of pParent
+ *  - pSct becomes mpNext of the last one in the this-chain
+ *  - pBehind is reconnected from pParent to pSct
+ * The purpose is: a SectionFrm (this) won't become a child of another SectionFrm (pParent), but
+ * pParent gets split into two siblings (pParent+pSect) and this is inserted between.
+ */
 void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
 {
     OSL_ENSURE( pParent, "No parent for insert." );
@@ -1325,30 +1302,26 @@ SwTwips SwFrm::Shrink( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     return 0L;
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::AdjustNeighbourhood()
-|*
-|*  Description         A Frm needs "normalization" if it is directly placed
-|*       below a footnote boss (page/column) and its size changed.
-|*       There's always a frame which takes the maximum possible space (the
-|*       frame which contains the Body.Text) and zero or more frames which
-|*       only take the space needed (header/footer area, footnote container).
-|*       If one of these frames changes, the body-text-frame has to grow or
-|*       shrink accordingly, even tough it's fixed.
-|*       !! Is it possible to do this in a generic way and not restrict it to
-|*       the page and a distinct frame which takes the maximum space (controlled
-|*       using the FrmSize attribute)? Problems: What if multiple frames taking
-|*       the maximum space are placed next to each other?
-|*       How is the maximum space calculated?
-|*       How small can those frames become?
-|*
-|*       In any case, only a certain amount of space is allowed, so we
-|*       never go below a minimum value for the height of the body.
-|*
-|*  Parameter: nDiff is the value around which the space has to be allocated
-|*
-|*************************************************************************/
+/** Adjust surrounding neighbourhood after insertion
+ *
+ * A Frm needs "normalization" if it is directly placed below a footnote boss (page/column) and its
+ * size changes. There is always a frame that takes the maximum possible space (the frame that
+ * contains the Body text) and zero or more frames which only take the space needed (header/footer
+ * area, footnote container). If one of these frames changes, the body-text-frame has to grow or
+ * shrink accordingly, even tough it's fixed.
+ *
+ * !! Is it possible to do this in a generic way and not restrict it to the page and a distinct
+ * frame which takes the maximum space (controlled using the FrmSize attribute)?
+ * Problems:
+ *   - What if multiple frames taking the maximum space are placed next to each other?
+ *   - How is the maximum space calculated?
+ *   - How small can those frames become?
+ *
+ * In any case, only a certain amount of space is allowed, so we never go below a minimum value for
+ * the height of the body.
+ *
+ * @param nDiff the value around which the space has to be allocated
+ */
 SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
 {
     PROTOCOL_ENTER( this, PROT_ADJUSTN, 0, &nDiff );
@@ -1642,29 +1615,13 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
     return (nBrowseAdd + nReal + nAdd);
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::ImplInvalidateSize(), ImplInvalidatePrt(), ImplInvalidatePos(),
-|*         ImplInvalidateLineNum()
-|*
-|*************************************************************************/
-/** method to perform additional actions on an invalidation
-
-    OD 2004-05-19 #i28701#
-
-    @author OD
-*/
+/** method to perform additional actions on an invalidation (2004-05-19 #i28701#) */
 void SwFrm::_ActionOnInvalidation( const InvalidationType )
 {
     // default behaviour is to perform no additional action
 }
 
-/** method to determine, if an invalidation is allowed.
-
-    OD 2004-05-19 #i28701#
-
-    @author OD
-*/
+/** method to determine, if an invalidation is allowed (2004-05-19 #i28701#) */
 bool SwFrm::_InvalidationAllowed( const InvalidationType ) const
 {
     // default behaviour is to allow invalidation
@@ -2681,17 +2638,13 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     }
     return nReal;
 }
-/*************************************************************************
-|*
-|*  SwLayoutFrm::ChgLowersProp()
-|*
-|*  Description          Changes the size of the directly subsidiary Frm's
-|*      which have a fixed size, proportionally to the size change of the
-|*      PrtArea of the Frm's.
-|*      The variable Frms are also proportionally adapted; they will
-|*      grow/shrink again by themselves.
-|*
-|*************************************************************************/
+
+/**
+ * Changes the size of the directly subsidiary Frm's that have a fixed size, proportionally to the
+ * size change of the PrtArea of the Frm's.
+ *
+ * The variable Frms are also proportionally adapted; they will grow/shrink again by themselves.
+ */
 void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
 {
     // no change of lower properties for root frame or if no lower exists.
@@ -3081,14 +3034,10 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
     }
 }
 
-/*************************************************************************
-|*
-|*  SwLayoutFrm::Format()
-|*
-|*  Description:        "Formats" the Frame; Frm and PrtArea.
-|*                      The Fixsize is not set here.
-|*
-|*************************************************************************/
+/** "Formats" the Frame; Frm and PrtArea.
+ *
+ * The Fixsize is not set here.
+ */
 void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
 {
     OSL_ENSURE( pAttrs, "LayoutFrm::Format, pAttrs ist 0." );
@@ -3273,9 +3222,8 @@ long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, sal_Bool ) const
     return nRet;
 }
 
-/*************************************************************************
-|*  Local helpers for SwLayoutFrm::FormatWidthCols()
-|*************************************************************************/
+// Local helpers for SwLayoutFrm::FormatWidthCols()
+
 static long lcl_CalcMinColDiff( SwLayoutFrm *pLayFrm )
 {
     long nDiff = 0, nFirstDiff = 0;
@@ -3866,14 +3814,10 @@ void SwRootFrm::InvalidateAllCntnt( sal_uInt8 nInv )
     }
 }
 
-/** method to invalidate/re-calculate the position of all floating
-    screen objects (Writer fly frames and drawing objects), which are
-    anchored to paragraph or to character.
-
-    OD 2004-03-16 #i11860#
-
-    @author OD
-*/
+/**
+ * Invalidate/re-calculate the position of all floating screen objects (Writer fly frames and
+ * drawing objects), that are anchored to paragraph or to character. (2004-03-16 #i11860#)
+ */
 void SwRootFrm::InvalidateAllObjPos()
 {
     const SwPageFrm* pPageFrm = static_cast<const SwPageFrm*>(Lower());

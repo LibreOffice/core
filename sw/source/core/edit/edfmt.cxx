@@ -150,7 +150,7 @@ SwTxtFmtColl* SwEditShell::GetTxtCollFromPool( sal_uInt16 nId )
 }
 
 
-    // return the demanded automatic format - base-class !
+/// return the requested automatic format - base-class !
 SwFmt* SwEditShell::GetFmtFromPool( sal_uInt16 nId )
 {
     return GetDoc()->GetFmtFromPool( nId );

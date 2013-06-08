@@ -103,9 +103,8 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts
         GetDoc()->SplitNode( *pPos, false );
     }
 
-    /* If called from a shell the adjust item is propagated
-        from pPos to the new content nodes in the table.
-     */
+    // If called from a shell the adjust item is propagated
+    // from pPos to the new content nodes in the table.
     const SwTable *pTable = GetDoc()->InsertTable( rInsTblOpts, *pPos,
                                                    nRows, nCols,
                                                    eAdj, pTAFmt,

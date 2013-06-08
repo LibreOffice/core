@@ -491,7 +491,7 @@ sal_uInt16 SwEditShell::GetRefMarks( std::vector<OUString>* pStrings ) const
 
 String SwEditShell::GetDropTxt( const sal_uInt16 nChars ) const
 {
-    /**
+    /*
      * pb: made changes for #i74939#
      *
      * always return a string even though there is a selection
@@ -806,14 +806,14 @@ void SwEditShell::SetNumberingRestart()
 {
     StartAllAction();
     Push();
-    //iterate over all text contents - body, frames, header, footer, footnote text
+    // iterate over all text contents - body, frames, header, footer, footnote text
     SwPaM* pCrsr = GetCrsr();
     for(sal_uInt16 i = 0; i < 2; i++)
     {
         if(!i)
-            MakeFindRange(DOCPOS_START, DOCPOS_END, pCrsr); //body content
+            MakeFindRange(DOCPOS_START, DOCPOS_END, pCrsr); // body content
         else
-            MakeFindRange(DOCPOS_OTHERSTART, DOCPOS_OTHEREND, pCrsr); //extra content
+            MakeFindRange(DOCPOS_OTHERSTART, DOCPOS_OTHEREND, pCrsr); // extra content
         SwPosition* pSttPos = pCrsr->Start(), *pEndPos = pCrsr->End();
         sal_uLong nCurrNd = pSttPos->nNode.GetIndex();
         sal_uLong nEndNd = pEndPos->nNode.GetIndex();
@@ -821,7 +821,7 @@ void SwEditShell::SetNumberingRestart()
         {
             SwCntntFrm* pCntFrm;
             bool bGoOn = true;
-            //iterate over all paragraphs
+            // iterate over all paragraphs
             while( bGoOn )
             {
                 SwNode* pNd = GetDoc()->GetNodes()[ nCurrNd ];
@@ -830,13 +830,13 @@ void SwEditShell::SetNumberingRestart()
                 case ND_TEXTNODE:
                     if( 0 != ( pCntFrm = ((SwTxtNode*)pNd)->getLayoutFrm( GetLayout() )) )
                     {
-                        //jump over hidden frames - ignore protection!
+                        // skip hidden frames - ignore protection!
                         if( !((SwTxtFrm*)pCntFrm)->IsHiddenNow() )
                         {
-                            //if the node is numbered and the starting value of the numbering equals the
-                            //start value of the numbering rule then set this value as hard starting value
+                            // if the node is numbered and the starting value of the numbering equals the
+                            // start value of the numbering rule then set this value as hard starting value
 
-                            //get the node num
+                            // get the node num
                             // OD 2005-11-09
                             SwTxtNode* pTxtNd( static_cast<SwTxtNode*>(pNd) );
                             SwNumRule* pNumRule( pTxtNd->GetNumRule() );
@@ -848,7 +848,7 @@ void SwEditShell::SetNumberingRestart()
                                  pTxtNd->GetNum()->GetNumber() ==
                                     pNumRule->Get( static_cast<sal_uInt16>(pTxtNd->GetActualListLevel()) ).GetStart() )
                             {
-                                //now set a the start value as attribute
+                                // now set a the start value as attribute
                                 SwPosition aCurrentNode(*pNd);
                                 GetDoc()->SetNumRuleStart( aCurrentNode, sal_True );
                             }
@@ -856,7 +856,7 @@ void SwEditShell::SetNumberingRestart()
                     }
                     break;
                 case ND_SECTIONNODE:
-                    // jump over hidden sections  - ignore protection!
+                    // skip hidden sections  - ignore protection!
                     if(((SwSectionNode*)pNd)->GetSection().IsHidden() )
                         nCurrNd = pNd->EndOfSectionIndex();
                     break;

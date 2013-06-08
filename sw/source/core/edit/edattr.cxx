@@ -47,7 +47,7 @@
 
 #include <algorithm>
 
-/**
+/*
  * hard Formatting (Attributes)
  */
 
@@ -327,7 +327,7 @@ bool SwEditShell::HasFtns( bool bEndNotes ) const
 }
 
 
-    // Give a List of all footnotes and their beginning texts
+/// Give a List of all footnotes and their beginning texts
 sal_uInt16 SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
 {
     rList.Clear();
@@ -368,7 +368,7 @@ sal_uInt16 SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
 }
 
 
-// Adjust left margin via object bar (similar to adjustment of numerations).
+/// Adjust left margin via object bar (similar to adjustment of numerations).
 bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
 {
     bool bRet = true;
@@ -525,7 +525,7 @@ static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
 }
 
 
-// returns the scripttpye of the selection
+/// returns the script type of the selection
 sal_uInt16 SwEditShell::GetScriptType() const
 {
     sal_uInt16 nRet = 0;
