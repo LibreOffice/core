@@ -381,6 +381,7 @@ public:
     VclBuilderContainer();
     virtual ~VclBuilderContainer();
     static OUString getUIRootDir();
+    bool hasBuilder() const { return m_pUIBuilder != NULL; }
     template <typename T> T* get(T*& ret, OString sID)
     {
         return m_pUIBuilder->get<T>(ret, sID);

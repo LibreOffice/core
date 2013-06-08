@@ -646,7 +646,7 @@ namespace
             pChild = pChild->GetWindow(WINDOW_NEXT))
         {
             VclBuilderContainer *pPeer = dynamic_cast<VclBuilderContainer*>(pChild);
-            if (pPeer != pPage)
+            if (pPeer != pPage && pPeer->hasBuilder())
             {
                 Window *pOtherGrid = pPeer->get<Window>("maingrid");
                 Window *pOurGrid = pPage->get<Window>("maingrid");
