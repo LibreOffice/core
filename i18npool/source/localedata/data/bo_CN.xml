@@ -20,12 +20,12 @@
 <Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.0" >
   <LC_INFO>
     <Language>
-      <LangID>dz</LangID>
-      <DefaultName>Dzongkha</DefaultName>
+      <LangID>bo</LangID>
+      <DefaultName>Tibetan</DefaultName>
     </Language>
     <Country>
-      <CountryID>BT</CountryID>
-      <DefaultName>Bhutan</DefaultName>
+      <CountryID>CN</CountryID>
+      <DefaultName>China</DefaultName>
     </Country>
   </LC_INFO>
   <LC_CTYPE unoid="generic">
@@ -49,9 +49,9 @@
     </Markers>
     <TimeAM>སྔ་ཆ</TimeAM>
     <TimePM>ཕྱི་ཆ</TimePM>
-    <MeasurementSystem>UK</MeasurementSystem>
+    <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$Nu-851]">
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$￥-451]">
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>[NatNum1]YY-MM-DD</FormatCode>
     </FormatElement>
@@ -178,40 +178,23 @@
     <FormatElement msgid="FixedFormatskey11" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="63">
       <FormatCode>#,###.00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-      <FormatCode>[NatNum1][CURRENCY]#,##0;[NatNum1]-[CURRENCY]#,##0</FormatCode>
-    </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-      <FormatCode>[NatNum1][CURRENCY]#,##0.00;[NatNum1]-[CURRENCY]#,##0.00</FormatCode>
-    </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
-      <FormatCode>[NatNum1][CURRENCY]#,##0;[NatNum1][RED]-[CURRENCY]#,##0</FormatCode>
-    </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
-      <FormatCode>[NatNum1][CURRENCY]#,##0.00;[NatNum1][RED]-[CURRENCY]#,##0.00</FormatCode>
-    </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
-      <FormatCode>[NatNum1]#,##0.00 CCC</FormatCode>
-    </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-      <FormatCode>[NatNum1][CURRENCY]#,##0.--;[NatNum1][RED]-[CURRENCY]#,##0.--</FormatCode>
-    </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey7" default="false" type="short" usage="CURRENCY"  formatindex="50">
+    <!-- Currency formats. taken from zh_CN.xml. -->
+    <FormatElement msgid="CurrencyFormatskey1" default="true" type="medium" usage="CURRENCY" formatindex="12">
       <FormatCode>[CURRENCY]#,##0;-[CURRENCY]#,##0</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey8" default="false" type="medium" usage="CURRENCY"  formatindex="51">
+    <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
       <FormatCode>[CURRENCY]#,##0.00;-[CURRENCY]#,##0.00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey9" default="false" type="medium" usage="CURRENCY"  formatindex="52">
+    <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
       <FormatCode>[CURRENCY]#,##0;[RED]-[CURRENCY]#,##0</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey10" default="false" type="medium" usage="CURRENCY"  formatindex="53">
+    <FormatElement msgid="CurrencyFormatskey4" default="true" type="long" usage="CURRENCY" formatindex="15">
       <FormatCode>[CURRENCY]#,##0.00;[RED]-[CURRENCY]#,##0.00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey11" default="false" type="medium" usage="CURRENCY"  formatindex="54">
+    <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
       <FormatCode>#,##0.00 CCC</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey12" default="false" type="medium" usage="CURRENCY"  formatindex="55">
+    <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
       <FormatCode>[CURRENCY]#,##0.--;[RED]-[CURRENCY]#,##0.--</FormatCode>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
@@ -256,38 +239,38 @@
       <DaysOfWeek>
         <Day>
           <DayID>sun</DayID>
+          <DefaultAbbrvName>ཉི་</DefaultAbbrvName>
+          <DefaultFullName>གཟའ་ཉི་མ་</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
           <DefaultAbbrvName>ཟླ་</DefaultAbbrvName>
           <DefaultFullName>གཟའ་ཟླ་བ་</DefaultFullName>
         </Day>
         <Day>
-          <DayID>mon</DayID>
+          <DayID>tue</DayID>
           <DefaultAbbrvName>མིར་</DefaultAbbrvName>
           <DefaultFullName>གཟའ་མིག་དམར་</DefaultFullName>
         </Day>
         <Day>
-          <DayID>tue</DayID>
+          <DayID>wed</DayID>
           <DefaultAbbrvName>ལྷག་</DefaultAbbrvName>
           <DefaultFullName>གཟའ་ལྷག་པ་</DefaultFullName>
         </Day>
         <Day>
-          <DayID>wed</DayID>
+          <DayID>thu</DayID>
           <DefaultAbbrvName>ཕུར་</DefaultAbbrvName>
           <DefaultFullName>གཟའ་ཕུར་བུ་</DefaultFullName>
         </Day>
         <Day>
-          <DayID>thu</DayID>
+          <DayID>fri</DayID>
           <DefaultAbbrvName>སངས་</DefaultAbbrvName>
           <DefaultFullName>གཟའ་པ་སངས་</DefaultFullName>
         </Day>
         <Day>
-          <DayID>fri</DayID>
+          <DayID>sat</DayID>
           <DefaultAbbrvName>སྤེན་</DefaultAbbrvName>
           <DefaultFullName>གཟའ་སྤེན་པ་</DefaultFullName>
-        </Day>
-        <Day>
-          <DayID>sat</DayID>
-          <DefaultAbbrvName>ཉི་</DefaultAbbrvName>
-          <DefaultFullName>གཟའ་ཉི་མ་</DefaultFullName>
         </Day>
       </DaysOfWeek>
       <MonthsOfYear>
@@ -370,10 +353,10 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>BTN</CurrencyID>
-      <CurrencySymbol>Nu</CurrencySymbol>
-      <BankSymbol>BTN</BankSymbol>
-      <CurrencyName>Ngultrum</CurrencyName>
+      <CurrencyID>CNY</CurrencyID>
+      <CurrencySymbol>￥</CurrencySymbol>
+      <BankSymbol>CNY</BankSymbol>
+      <CurrencyName>人民币</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
   </LC_CURRENCY>
