@@ -45,6 +45,12 @@
 using namespace css;
 using namespace cssu;
 
+const char UNO_BACKGROUNDCOLOR[] = ".uno:BackgroundColor";
+const char UNO_SETBORDERSTYLE[] = ".uno:SetBorderStyle";
+const char UNO_LINESTYLE[] = ".uno:LineStyle";
+const char UNO_FRAMELINECOLOR[] = ".uno:FrameLineColor";
+const char UNO_TOGGLESHEETGRID[] = ".uno:ToggleSheetGrid";
+
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
 //////////////////////////////////////////////////////////////////////////////
@@ -149,28 +155,7 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     Window* pParent,
     const cssu::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
-:   Control(
-        pParent,
-        ScResId(RID_PROPERTYPANEL_SC_APPEAR)),
-
-    mpFTFillColor(new FixedText(this, ScResId(FT_BK_COLOR))),
-    mpTBFillColorBackground(sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this)),
-    mpTBFillColor(sfx2::sidebar::ControlFactory::CreateToolBox(mpTBFillColorBackground.get(), ScResId(TB_BK_COLOR))),
-    mpFillColorUpdater(new ::svx::ToolboxButtonColorUpdater(SID_ATTR_BRUSH, TBI_BK_COLOR, mpTBFillColor.get(), TBX_UPDATER_MODE_CHAR_COLOR_NEW)),
-
-    mpFTCellBorder(new FixedText(this, ScResId(FT_BORDER))),
-    mpTBCellBorderBackground(sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this)),
-    mpTBCellBorder(sfx2::sidebar::ControlFactory::CreateToolBox(mpTBCellBorderBackground.get(), ScResId(TB_APP_BORDER))),
-    mpCellBorderUpdater(new CellBorderUpdater(TBI_BORDER, *mpTBCellBorder)),
-
-    mpTBLineStyleBackground(sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this)),
-    mpTBLineStyle(sfx2::sidebar::ControlFactory::CreateToolBox(mpTBLineStyleBackground.get(), ScResId(TB_BORDER_LINE_STYLE))),
-
-    mpTBLineColorBackground(sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this)),
-    mpTBLineColor(sfx2::sidebar::ControlFactory::CreateToolBox(mpTBLineColorBackground.get(), ScResId(TB_BORDER_LINE_COLOR))),
-    mpLineColorUpdater(new ::svx::ToolboxButtonColorUpdater(SID_FRAME_LINECOLOR, TBI_LINE_COLOR, mpTBLineColor.get(), TBX_UPDATER_MODE_CHAR_COLOR_NEW)),
-
-    mpCBXShowGrid(new CheckBox(this, ScResId(CBX_SHOW_GRID))),
+:   PanelLayout(pParent, "CellAppearancePropertyPanel", "modules/scalc/ui/sidebarcellappearance.ui", rxFrame),
 
     maBackColorControl(SID_BACKGROUND_COLOR, *pBindings, *this),
     maLineColorControl(SID_FRAME_LINECOLOR, *pBindings, *this),
@@ -181,9 +166,7 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     maBorderTLBRControl(SID_ATTR_BORDER_DIAG_TLBR, *pBindings, *this),
     maBorderBLTRControl(SID_ATTR_BORDER_DIAG_BLTR, *pBindings, *this),
 
-    maIMGBKColor(ScResId(IMG_BK_COLOR)),
     maIMGCellBorder(ScResId(IMG_CELL_BORDER)),
-    maIMGLineColor(ScResId(IMG_LINE_COLOR)),
     maIMGLineStyle1(ScResId(IMG_LINE_STYLE1)),
     maIMGLineStyle2(ScResId(IMG_LINE_STYLE2)),
     maIMGLineStyle3(ScResId(IMG_LINE_STYLE3)),
@@ -230,71 +213,57 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     maContext(),
     mpBindings(pBindings)
 {
+    get(mpTBFillColor,  "cellbackgroundcolor");
+    get(mpTBCellBorder, "cellbordertype");
+    get(mpTBLineStyle,  "borderlinestyle");
+    get(mpTBLineColor,  "borderlinecolor");
+    get(mpCBXShowGrid,  "cellgridlines");
+
+    mpFillColorUpdater.reset( new ::svx::ToolboxButtonColorUpdater(SID_ATTR_BRUSH,
+        mpTBFillColor->GetItemId( UNO_BACKGROUNDCOLOR ),
+        mpTBFillColor, TBX_UPDATER_MODE_CHAR_COLOR_NEW) );
+    mpLineColorUpdater.reset( new ::svx::ToolboxButtonColorUpdater(SID_FRAME_LINECOLOR,
+        mpTBLineColor->GetItemId( UNO_FRAMELINECOLOR ),
+        mpTBLineColor, TBX_UPDATER_MODE_CHAR_COLOR_NEW) );
+    mpCellBorderUpdater.reset( new CellBorderUpdater(
+        mpTBCellBorder->GetItemId( UNO_SETBORDERSTYLE ), *mpTBCellBorder) );
+
     Initialize();
-    FreeResource();
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 CellAppearancePropertyPanel::~CellAppearancePropertyPanel()
 {
-    // Destroy the toolboxes, then their background windows.
-    mpTBFillColor.reset();
-    mpTBCellBorder.reset();
-    mpTBLineStyle.reset();
-    mpTBLineColor.reset();
-
-    mpTBFillColorBackground.reset();
-    mpTBCellBorderBackground.reset();
-    mpTBLineStyleBackground.reset();
-    mpTBLineColorBackground.reset();
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 void CellAppearancePropertyPanel::Initialize()
 {
-    mpTBFillColor->SetItemImage(TBI_BK_COLOR, maIMGBKColor);
-    mpTBFillColor->SetItemBits( TBI_BK_COLOR, mpTBFillColor->GetItemBits( TBI_BK_COLOR ) | TIB_DROPDOWNONLY );
-    mpTBFillColor->SetQuickHelpText(TBI_BK_COLOR,String(ScResId(STR_QH_BK_COLOR))); //Add
-    Size aTbxSize1( mpTBFillColor->CalcWindowSizePixel() );
-    mpTBFillColor->SetOutputSizePixel( aTbxSize1 );
-    mpTBFillColor->SetBackground(Wallpaper());
-    mpTBFillColor->SetPaintTransparent(true);
+    const sal_uInt16 nIdBkColor = mpTBFillColor->GetItemId( UNO_BACKGROUNDCOLOR );
+    mpTBFillColor->SetItemBits( nIdBkColor, mpTBFillColor->GetItemBits( nIdBkColor ) | TIB_DROPDOWNONLY );
     Link aLink = LINK(this, CellAppearancePropertyPanel, TbxBKColorSelectHdl);
     mpTBFillColor->SetDropdownClickHdl ( aLink );
     mpTBFillColor->SetSelectHdl ( aLink );
 
-    mpTBCellBorder->SetItemImage(TBI_BORDER, maIMGCellBorder);
-    mpTBCellBorder->SetItemBits( TBI_BORDER, mpTBCellBorder->GetItemBits( TBI_BORDER ) | TIB_DROPDOWNONLY );
-    mpTBCellBorder->SetQuickHelpText(TBI_BORDER,String(ScResId(STR_QH_BORDER)));    //Add
-    Size aTbxSize2( mpTBCellBorder->CalcWindowSizePixel() );
-    mpTBCellBorder->SetOutputSizePixel( aTbxSize2 );
-    mpTBCellBorder->SetBackground(Wallpaper());
-    mpTBCellBorder->SetPaintTransparent(true);
+    const sal_uInt16 nIdBorderType  = mpTBCellBorder->GetItemId( UNO_SETBORDERSTYLE );
+    mpTBCellBorder->SetItemImage( nIdBorderType, maIMGCellBorder );
+    mpTBCellBorder->SetItemBits( nIdBorderType, mpTBCellBorder->GetItemBits( nIdBorderType ) | TIB_DROPDOWNONLY );
     aLink = LINK(this, CellAppearancePropertyPanel, TbxCellBorderSelectHdl);
     mpTBCellBorder->SetDropdownClickHdl ( aLink );
     mpTBCellBorder->SetSelectHdl ( aLink );
 
-    mpTBLineStyle->SetItemImage(TBI_LINE_STYLE, maIMGLineStyle1);
-    mpTBLineStyle->SetItemBits( TBI_LINE_STYLE, mpTBLineStyle->GetItemBits( TBI_LINE_STYLE ) | TIB_DROPDOWNONLY );
-    mpTBLineStyle->SetQuickHelpText(TBI_LINE_STYLE,String(ScResId(STR_QH_BORDER_LINE_STYLE)));  //Add
-    Size aTbxSize3( mpTBLineStyle->CalcWindowSizePixel() );
-    mpTBLineStyle->SetOutputSizePixel( aTbxSize3 );
-    mpTBLineStyle->SetBackground(Wallpaper());
-    mpTBLineStyle->SetPaintTransparent(true);
+    const sal_uInt16 nIdBorderLineStyle = mpTBLineStyle->GetItemId( UNO_LINESTYLE );
+    mpTBLineStyle->SetItemImage( nIdBorderLineStyle, maIMGLineStyle1 );
+    mpTBLineStyle->SetItemBits( nIdBorderLineStyle, mpTBLineStyle->GetItemBits( nIdBorderLineStyle ) | TIB_DROPDOWNONLY );
     aLink = LINK(this, CellAppearancePropertyPanel, TbxLineStyleSelectHdl);
     mpTBLineStyle->SetDropdownClickHdl ( aLink );
     mpTBLineStyle->SetSelectHdl ( aLink );
     mpTBLineStyle->Disable();
 
-    mpTBLineColor->SetItemImage(TBI_LINE_COLOR, maIMGLineColor);
-    mpTBLineColor->SetItemBits( TBI_LINE_COLOR, mpTBLineColor->GetItemBits( TBI_LINE_COLOR ) | TIB_DROPDOWNONLY );
-    mpTBLineColor->SetQuickHelpText(TBI_LINE_COLOR,String(ScResId(STR_QH_BORDER_LINE_COLOR)));  //Add
-    Size aTbxSize4( mpTBLineColor->CalcWindowSizePixel() );
-    mpTBLineColor->SetOutputSizePixel( aTbxSize4 );
-    mpTBLineColor->SetBackground(Wallpaper());
-    mpTBLineColor->SetPaintTransparent(true);
+    const sal_uInt16 nIdBorderLinecolor = mpTBLineColor->GetItemId( UNO_FRAMELINECOLOR );
+    mpTBLineColor->SetItemBits( nIdBorderLinecolor, mpTBLineColor->GetItemBits( nIdBorderLinecolor ) | TIB_DROPDOWNONLY );
     aLink = LINK(this, CellAppearancePropertyPanel, TbxLineColorSelectHdl);
     mpTBLineColor->SetDropdownClickHdl ( aLink );
     mpTBLineColor->SetSelectHdl ( aLink );
@@ -303,18 +272,17 @@ void CellAppearancePropertyPanel::Initialize()
     aLink = LINK(this, CellAppearancePropertyPanel, CBOXGridShowClkHdl);
     mpCBXShowGrid->SetClickHdl ( aLink );
 
-    mpTBFillColor->SetAccessibleRelationLabeledBy(mpFTFillColor.get());
-    mpTBLineColor->SetAccessibleRelationLabeledBy(mpTBLineColor.get());
-    mpTBCellBorder->SetAccessibleRelationLabeledBy(mpFTCellBorder.get());
-    mpTBLineStyle->SetAccessibleRelationLabeledBy(mpTBLineStyle.get());
+    mpTBLineColor->SetAccessibleRelationLabeledBy(mpTBLineColor);
+    mpTBLineStyle->SetAccessibleRelationLabeledBy(mpTBLineStyle);
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 IMPL_LINK(CellAppearancePropertyPanel, TbxBKColorSelectHdl, ToolBox*, pToolBox)
 {
-    sal_uInt16 nId = pToolBox->GetCurItemId();
-    if(nId == TBI_BK_COLOR)
+    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
+
+    if(aCommand == UNO_BACKGROUNDCOLOR)
     {
         maFillColorPopup.Show(*pToolBox);
         maFillColorPopup.SetCurrentColor(maBackColor, mbBackColorAvailable);
@@ -326,8 +294,9 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxBKColorSelectHdl, ToolBox*, pToolBox)
 
 IMPL_LINK(CellAppearancePropertyPanel, TbxLineColorSelectHdl, ToolBox*, pToolBox)
 {
-    sal_uInt16 nId = pToolBox->GetCurItemId();
-    if(nId == TBI_LINE_COLOR)
+    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
+
+    if(aCommand == UNO_FRAMELINECOLOR)
     {
         maLineColorPopup.Show(*pToolBox);
         maLineColorPopup.SetCurrentColor(maLineColor, mbLineColorAvailable);
@@ -339,9 +308,9 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxLineColorSelectHdl, ToolBox*, pToolBox
 
 IMPL_LINK(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBox)
 {
-    sal_uInt16 nId = pToolBox->GetCurItemId();
+    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
 
-    if(nId == TBI_BORDER)
+    if(aCommand == UNO_SETBORDERSTYLE)
     {
         // create popup on demand
         if(!mpCellBorderStylePopup.get())
@@ -364,8 +333,9 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBo
 
 IMPL_LINK(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pToolBox)
 {
-    sal_uInt16 nId = pToolBox->GetCurItemId();
-    if(nId == TBI_LINE_STYLE)
+    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
+
+    if(aCommand == UNO_LINESTYLE)
     {
         // create popup on demand
         if(!mpCellLineStylePopup.get())
@@ -732,30 +702,30 @@ SfxBindings* CellAppearancePropertyPanel::GetBindings()
 
 void CellAppearancePropertyPanel::SetStyleIcon()
 {
+    const sal_uInt16 nIdBorderLineStyle = mpTBLineStyle->GetItemId( UNO_LINESTYLE );
+
     //FIXME: update for new line border possibilities
     if(mnOut == DEF_LINE_WIDTH_0 && mnIn == 0 && mnDis == 0)    //1
-        mpTBLineStyle->SetItemImage(TBI_LINE_STYLE, maIMGLineStyle1);
+        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle1);
     else if(mnOut == DEF_LINE_WIDTH_2 && mnIn == 0 && mnDis == 0) //2
-        mpTBLineStyle->SetItemImage(TBI_LINE_STYLE, maIMGLineStyle2);
+        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle2);
     else if(mnOut == DEF_LINE_WIDTH_3 && mnIn == 0 && mnDis == 0) //3
-        mpTBLineStyle->SetItemImage(TBI_LINE_STYLE, maIMGLineStyle3);
+        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle3);
     else if(mnOut == DEF_LINE_WIDTH_4 && mnIn == 0 && mnDis == 0) //4
-        mpTBLineStyle->SetItemImage(TBI_LINE_STYLE, maIMGLineStyle4);
+        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle4);
     else if(mnOut == DEF_LINE_WIDTH_0 && mnIn == DEF_LINE_WIDTH_0 && mnDis == DEF_LINE_WIDTH_1) //5
-        mpTBLineStyle->SetItemImage(TBI_LINE_STYLE, maIMGLineStyle5);
+        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle5);
     else if(mnOut == DEF_LINE_WIDTH_0 && mnIn == DEF_LINE_WIDTH_0 && mnDis == DEF_LINE_WIDTH_2) //6
-        mpTBLineStyle->SetItemImage(TBI_LINE_STYLE, maIMGLineStyle6);
+        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle6);
     else if(mnOut == DEF_LINE_WIDTH_1 && mnIn == DEF_LINE_WIDTH_2 && mnDis == DEF_LINE_WIDTH_1) //7
-        mpTBLineStyle->SetItemImage(TBI_LINE_STYLE, maIMGLineStyle7);
+        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle7);
     else if(mnOut == DEF_LINE_WIDTH_2 && mnIn == DEF_LINE_WIDTH_0 && mnDis == DEF_LINE_WIDTH_2) //8
-        mpTBLineStyle->SetItemImage(TBI_LINE_STYLE, maIMGLineStyle8);
+        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle8);
     else if(mnOut == DEF_LINE_WIDTH_2 && mnIn == DEF_LINE_WIDTH_2 && mnDis == DEF_LINE_WIDTH_2) //9
-        mpTBLineStyle->SetItemImage(TBI_LINE_STYLE, maIMGLineStyle9);
+        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle9);
     else
-        mpTBLineStyle->SetItemImage(TBI_LINE_STYLE, maIMGLineStyle1);
+        mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle1);
 }
-
-//////////////////////////////////////////////////////////////////////////////
 
 void CellAppearancePropertyPanel::UpdateControlState()
 {

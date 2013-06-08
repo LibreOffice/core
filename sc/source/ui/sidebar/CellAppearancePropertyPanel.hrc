@@ -15,42 +15,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#define FT_BK_COLOR     1
-#define TB_BK_COLOR     2
-#define TBI_BK_COLOR    3
-#define FT_BORDER       4
-#define TB_APP_BORDER       5
-#define TBI_BORDER      6
-#define TB_BORDER_LINE_STYLE    7
-#define TBI_LINE_STYLE          8
-#define TB_BORDER_LINE_COLOR    9
-#define TBI_LINE_COLOR          10
-#define CBX_SHOW_GRID           11
-
-#define STR_QH_BK_COLOR         12
-#define STR_QH_BORDER           13
-#define STR_QH_BORDER_LINE_STYLE        14
-#define STR_QH_BORDER_LINE_COLOR        15
-
-#define IMG_BK_COLOR    21
-#define IMG_CELL_BORDER 22
-#define IMG_LINE_COLOR  23
-#define IMG_LINE_STYLE1         25
-#define IMG_LINE_STYLE2         26
-#define IMG_LINE_STYLE3         27
-#define IMG_LINE_STYLE4         28
-#define IMG_LINE_STYLE5         29
-#define IMG_LINE_STYLE6         30
-#define IMG_LINE_STYLE7         31
-#define IMG_LINE_STYLE8         32
-#define IMG_LINE_STYLE9         33
 
 //BACK_COLOR PAGE
-#define VS_BACK_COLOR   1
 #define STR_AUTOMATICE  2
-
-//LINE COLOR PAGE
-#define VS_LINE_COLOR   1
 
 //line style page
 #define VS_STYLE        1

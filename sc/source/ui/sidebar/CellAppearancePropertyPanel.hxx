@@ -20,6 +20,7 @@
 
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <svx/sidebar/ColorPopup.hxx>
 
@@ -37,7 +38,7 @@ class CheckBox;
 namespace sc { namespace sidebar {
 
 class CellAppearancePropertyPanel
-:   public Control,
+:   public PanelLayout,
     public ::sfx2::sidebar::IContextChangeReceiver,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
@@ -67,24 +68,15 @@ public:
 
 private:
     //ui controls
-    ::boost::scoped_ptr< FixedText >        mpFTFillColor;
-    ::boost::scoped_ptr< Window >           mpTBFillColorBackground;
-    ::boost::scoped_ptr< ToolBox >          mpTBFillColor;
+
+    ToolBox*                                mpTBFillColor;
+    ToolBox*                                mpTBCellBorder;
+    ToolBox*                                mpTBLineStyle;
+    ToolBox*                                mpTBLineColor;
     ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > mpFillColorUpdater;
-
-    ::boost::scoped_ptr< FixedText >        mpFTCellBorder;
-    ::boost::scoped_ptr< Window >           mpTBCellBorderBackground;
-    ::boost::scoped_ptr< ToolBox >          mpTBCellBorder;
-    ::boost::scoped_ptr< CellBorderUpdater > mpCellBorderUpdater;
-
-    ::boost::scoped_ptr< Window >           mpTBLineStyleBackground;
-    ::boost::scoped_ptr< ToolBox >          mpTBLineStyle;
-
-    ::boost::scoped_ptr< Window >           mpTBLineColorBackground;
-    ::boost::scoped_ptr< ToolBox >          mpTBLineColor;
     ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > mpLineColorUpdater;
-
-    ::boost::scoped_ptr< CheckBox >         mpCBXShowGrid;
+    ::boost::scoped_ptr< CellBorderUpdater > mpCellBorderUpdater;
+    CheckBox*                               mpCBXShowGrid;
 
     ::sfx2::sidebar::ControllerItem         maBackColorControl;
     ::sfx2::sidebar::ControllerItem         maLineColorControl;
@@ -96,9 +88,7 @@ private:
     ::sfx2::sidebar::ControllerItem         maBorderBLTRControl;
 
     // images
-    Image                                   maIMGBKColor;
     Image                                   maIMGCellBorder;
-    Image                                   maIMGLineColor;
     Image                                   maIMGLineStyle1;
     Image                                   maIMGLineStyle2;
     Image                                   maIMGLineStyle3;

@@ -98,6 +98,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/sharedheaderdialog \
 	sc/uiconfig/scalc/ui/sidebaralignment \
 	sc/uiconfig/scalc/ui/sidebarnumberformat \
+	sc/uiconfig/scalc/ui/sidebarcellappearance \
 	sc/uiconfig/scalc/ui/solverdlg \
 	sc/uiconfig/scalc/ui/sortcriteriapage \
 	sc/uiconfig/scalc/ui/sortkey \

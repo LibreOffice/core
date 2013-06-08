@@ -31,181 +31,47 @@
 #define POPUPPANEL_MARGIN_SMALL_PIXEL   8
 
 //////////////////////////////////////////////////////////////////////////////
-// the basic propertypanel
 
-Control RID_PROPERTYPANEL_SC_APPEAR
+Image IMG_CELL_BORDER
 {
-    OutputSize = TRUE;
-    DialogControl = TRUE;
-    Border = FALSE;
-
-    Size = MAP_APPFONT( PROPERTYPAGE_WIDTH,  SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT * 2 +  TEXT_CONTROL_SPACING_VERTICAL * 2 + TOOLBOX_HEIGHT  + CONTROL_SPACING_VERTICAL * 2 +  TOOLBOX_HEIGHT_2 + CBOX_HEIGHT + SECTIONPAGE_MARGIN_VERTICAL_BOT - 2);
-    HelpID = HID_PROPERTYPANEL_SC_CELL_SECTION ;
-    Text [ en-US ] = "Cell Appearance";
-
-    FixedText FT_BK_COLOR
-    {
-        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL, SECTIONPAGE_MARGIN_VERTICAL_TOP );
-        Size = MAP_APPFONT ( PROPERTYPAGE_WIDTH - SECTIONPAGE_MARGIN_HORIZONTAL * 2 , TEXT_HEIGHT) ;
-        Text [ en-US ] = "~Cell background:";
-    };
-    ToolBox TB_BK_COLOR
-    {
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT (SECTIONPAGE_MARGIN_HORIZONTAL, SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL) ;
-        Size = MAP_APPFONT (TOOLBOX_WIDTH ,TOOLBOX_HEIGHT ) ;
-        TabStop = TRUE ;
-        HelpID = HID_PROPERTYPANEL_SC_TBX_BKCOLOR ;
-        Text [ en-US ] = "Cell Background";
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = TBI_BK_COLOR ;
-                DropDown = TRUE ;
-                Text [ en-US ] = "Cell background" ;
-                HelpID = HID_PROPERTYPANEL_SC_TBI_BKCOLOR;
-            };
-        };
-    };
-    String STR_QH_BK_COLOR
-    {
-        Text [ en-US ] = "Select the background color of the selected cells." ;
-    };
-    FixedText FT_BORDER
-    {
-        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL, SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT +  TEXT_CONTROL_SPACING_VERTICAL + TOOLBOX_HEIGHT  + CONTROL_SPACING_VERTICAL);
-        Size = MAP_APPFONT (  PROPERTYPAGE_WIDTH - SECTIONPAGE_MARGIN_HORIZONTAL * 2 , TEXT_HEIGHT) ;
-        Text [ en-US ] = "Cell ~border:";
-    };
-    ToolBox TB_APP_BORDER
-    {
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT (SECTIONPAGE_MARGIN_HORIZONTAL, SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT * 2 +  TEXT_CONTROL_SPACING_VERTICAL * 2 + TOOLBOX_HEIGHT  + CONTROL_SPACING_VERTICAL) ;
-        Size = MAP_APPFONT (TOOLBOX_WIDTH_2 ,TOOLBOX_HEIGHT_2 ) ;
-        TabStop = TRUE ;
-        HelpID = HID_PROPERTYPANEL_SC_TBX_BORDER ;
-        Text [ en-US ] = "Cell Border";
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = TBI_BORDER ;
-                DropDown = TRUE ;
-                Text [ en-US ] = "Cell border" ;
-                HelpID = HID_PROPERTYPANEL_SC_TBI_BORDER;
-            };
-        };
-    };
-    String STR_QH_BORDER
-    {
-        Text [ en-US ] = "Specify the borders of the selected cells." ;
-    };
-    ToolBox TB_BORDER_LINE_STYLE
-    {
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT (SECTIONPAGE_MARGIN_HORIZONTAL + TOOLBOX_WIDTH_2 + 3, SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT * 2 +  TEXT_CONTROL_SPACING_VERTICAL * 2 + TOOLBOX_HEIGHT  + CONTROL_SPACING_VERTICAL ) ;
-        Size = MAP_APPFONT (TOOLBOX_WIDTH ,TOOLBOX_HEIGHT) ;
-        TabStop = TRUE ;
-        HelpID = HID_PROPERTYPANEL_SC_TBX_STYLE ;
-        Text [ en-US ] = "Line Style";
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = TBI_LINE_STYLE ;
-                DropDown = TRUE ;
-                Text [ en-US ] = "Line style" ;
-                HelpID = HID_PROPERTYPANEL_SC_TBI_STYLE;
-            };
-        };
-    };
-    String STR_QH_BORDER_LINE_STYLE
-    {
-        Text [ en-US ] = "Select the line style of the borders." ;
-    };
-    ToolBox TB_BORDER_LINE_COLOR
-    {
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT (SECTIONPAGE_MARGIN_HORIZONTAL + TOOLBOX_WIDTH_2 + 3, SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT * 2 +  TEXT_CONTROL_SPACING_VERTICAL * 2 + TOOLBOX_HEIGHT * 2  + CONTROL_SPACING_VERTICAL + 3) ;
-        Size = MAP_APPFONT (TOOLBOX_WIDTH ,TOOLBOX_HEIGHT ) ;
-        TabStop = TRUE ;
-        HelpID = HID_PROPERTYPANEL_SC_TBX_LINECOLOR ;
-        Text [ en-US ] = "Line Color";
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = TBI_LINE_COLOR ;
-                DropDown = TRUE ;
-                Text [ en-US ] = "Line color" ;
-                HelpID = HID_PROPERTYPANEL_SC_TBI_LINECOLOR;
-            };
-        };
-    };
-    String STR_QH_BORDER_LINE_COLOR
-    {
-        Text [ en-US ] = "Select the line color of the borders." ;
-    };
-    CheckBox CBX_SHOW_GRID
-    {
-        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL , SECTIONPAGE_MARGIN_VERTICAL_TOP + TEXT_HEIGHT * 2 +  TEXT_CONTROL_SPACING_VERTICAL * 2  +  TOOLBOX_HEIGHT + CONTROL_SPACING_VERTICAL * 2 +  TOOLBOX_HEIGHT_2 + 2) ;
-        Size = MAP_APPFONT ( 90 , CBOX_HEIGHT ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "Show cell ~grid lines" ;
-        QuickHelpText [ en-US ] = "Show the grid lines of the cells in the entire spreadsheet.";
-        HelpID = HID_PROPERTYPANEL_SC_CBOX_SHOWGRID;
-    };
-
-    Image IMG_BK_COLOR
-    {
-        ImageBitmap = Bitmap{File = "sidebar/fill_color.png";};
-    };
-    Image IMG_CELL_BORDER
-    {
-        ImageBitmap = Bitmap{File = "sidebar/CellBorder.png";};
-        //MaskColor = STD_MASKCOLOR ;
-    };
-    Image IMG_LINE_COLOR
-    {
-        ImageBitmap = Bitmap{File = "sidebar/Line_color.png";};
-    };
-    Image IMG_LINE_STYLE1
-    {
-        ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_005.png";};
-    };
-    Image IMG_LINE_STYLE2
-    {
-        ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_250.png";};
-    };
-    Image IMG_LINE_STYLE3
-    {
-        ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_400.png";};
-    };
-    Image IMG_LINE_STYLE4
-    {
-        ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_500.png";};
-    };
-    Image IMG_LINE_STYLE5
-    {
-        ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_110.png";};
-    };
-    Image IMG_LINE_STYLE6
-    {
-        ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_260.png";};
-    };
-    Image IMG_LINE_STYLE7
-    {
-        ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_450.png";};
-    };
-    Image IMG_LINE_STYLE8
-    {
-        ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_505.png";};
-    };
-    Image IMG_LINE_STYLE9
-    {
-        ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_750.png";};
-    };
+    ImageBitmap = Bitmap{File = "sidebar/CellBorder.png";};
+    //MaskColor = STD_MASKCOLOR ;
+};
+Image IMG_LINE_STYLE1
+{
+    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_005.png";};
+};
+Image IMG_LINE_STYLE2
+{
+    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_250.png";};
+};
+Image IMG_LINE_STYLE3
+{
+    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_400.png";};
+};
+Image IMG_LINE_STYLE4
+{
+    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_500.png";};
+};
+Image IMG_LINE_STYLE5
+{
+    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_110.png";};
+};
+Image IMG_LINE_STYLE6
+{
+    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_260.png";};
+};
+Image IMG_LINE_STYLE7
+{
+    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_450.png";};
+};
+Image IMG_LINE_STYLE8
+{
+    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_505.png";};
+};
+Image IMG_LINE_STYLE9
+{
+    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_750.png";};
 };
 
 //////////////////////////////////////////////////////////////////////////////
