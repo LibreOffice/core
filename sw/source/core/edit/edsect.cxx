@@ -309,7 +309,6 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
     const SwNode* pReturn = NULL;
 
     // the current position
-    //    const SwPosition* pCurrentPos = GetCrsr()->GetPoint();
     OSL_ENSURE( pCurrentPos != NULL, "Strange, we have no position!" );
     const SwNode& rCurrentNode = pCurrentPos->nNode.GetNode();
 

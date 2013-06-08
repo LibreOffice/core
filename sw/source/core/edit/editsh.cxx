@@ -1008,8 +1008,7 @@ String SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, sal_Bool bInsText 
 void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
 {
     const SwPosition& rPos = *GetCrsr()->GetPoint();
-    SwExtTextInput* pInput = GetDoc()->GetExtTextInput( rPos.nNode.GetNode()
-                                                /*, rPos.nContent.GetIndex()*/ );
+    SwExtTextInput* pInput = GetDoc()->GetExtTextInput( rPos.nNode.GetNode() );
     if( pInput )
     {
         StartAllAction();

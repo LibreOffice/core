@@ -955,7 +955,6 @@ bool SwEditShell::GetGrammarCorrection(
             uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( mpDoc->GetGCIterator() );
             if (xGCIterator.is())
             {
-//                LanguageType eActLang = (LanguageType)pNode->GetLang( nBegin, nLen );
                 uno::Reference< lang::XComponent > xDoc( mpDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
 
                 // Expand the string:

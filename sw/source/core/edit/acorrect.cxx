@@ -210,7 +210,6 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
                 pDoc->Overwrite( *pPam, rTxt );
         }
 
-//      pDoc->SetRedlineMode_intern( eOld );
         if( bUndoIdInitialized )
         {
             bUndoIdInitialized = true;
