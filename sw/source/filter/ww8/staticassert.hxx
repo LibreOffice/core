@@ -40,7 +40,7 @@ namespace ww
 }
 
     /*
-    Similiar to assert, StaticAssert is only in operation when NDEBUG is not
+    Similar to assert, StaticAssert is only in operation when NDEBUG is not
     defined. It will test its first argument at compile time and on failure
     report the error message of the second argument, which must be a valid c++
     classname. i.e. no spaces, punctuation or reserved keywords.

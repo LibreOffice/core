@@ -2197,7 +2197,7 @@ void WW8TabDesc::CalcDefaults()
         if (pR->nWwCols)
         {
             /*
-            Similiar to graphics and other elements word does not totally
+            Similar to graphics and other elements word does not totally
             factor the width of the border into its calculations of size, we
             do so we must adjust out widths and other dimensions to fit.  It
             appears that what occurs is that the last cell's right margin if
