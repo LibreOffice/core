@@ -676,6 +676,7 @@ private:
     Menu*           pMenu;
     PopupMenu*      pActivePopup;
     sal_uInt16          nHighlightedItem;
+    sal_uInt16          nRolloveredItem;
     sal_uLong           nSaveFocusId;
     sal_Bool            mbAutoPopup;
     sal_Bool            bIgnoreFirstMove;
@@ -5152,6 +5153,7 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
     pActivePopup = NULL;
     nSaveFocusId = 0;
     nHighlightedItem = ITEMPOS_INVALID;
+    nRolloveredItem = ITEMPOS_INVALID;
     mbAutoPopup = sal_True;
     nSaveFocusId = 0;
     bIgnoreFirstMove = sal_True;
@@ -5416,11 +5418,29 @@ void MenuBarWindow::MouseMove( const MouseEvent& rMEvt )
     if ( rMEvt.IsSynthetic() || rMEvt.IsEnterWindow() )
         return;
 
-    if ( rMEvt.IsLeaveWindow() && !pActivePopup )
+    if ( rMEvt.IsLeaveWindow() )
     {
-        ChangeHighlightItem( ITEMPOS_INVALID, sal_False );
+        if ( nRolloveredItem != ITEMPOS_INVALID && nRolloveredItem != nHighlightedItem )
+            HighlightItem( nRolloveredItem, sal_False );
+
+        nRolloveredItem = ITEMPOS_INVALID;
         return;
     }
+
+    sal_uInt16 nEntry = ImplFindEntry( rMEvt.GetPosPixel() );
+    if ( nHighlightedItem == ITEMPOS_INVALID )
+    {
+        if ( nRolloveredItem != nEntry  )
+        {
+            if ( nRolloveredItem != ITEMPOS_INVALID )
+                HighlightItem( nRolloveredItem, sal_False );
+
+            nRolloveredItem = nEntry;
+            HighlightItem( nRolloveredItem, sal_True );
+        }
+        return;
+    }
+    nRolloveredItem = nEntry;
 
     if( bIgnoreFirstMove )
     {
@@ -5428,15 +5448,9 @@ void MenuBarWindow::MouseMove( const MouseEvent& rMEvt )
         return;
     }
 
-    sal_uInt16 nEntry = ImplFindEntry( rMEvt.GetPosPixel() );
     if ( ( nEntry != ITEMPOS_INVALID )
        && ( nEntry != nHighlightedItem ) )
-    {
-        if ( ! pActivePopup )
-            mbAutoPopup = sal_False;
-
         ChangeHighlightItem( nEntry, sal_False );
-    }
 }
 
 void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, sal_Bool bSelectEntry, sal_Bool bAllowRestoreFocus, sal_Bool bDefaultToDocument)
@@ -5505,13 +5519,19 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, sal_Bool bSelectEntry, sa
 
     if ( nHighlightedItem != ITEMPOS_INVALID )
     {
-        HighlightItem( nHighlightedItem, sal_False );
+        if ( nHighlightedItem != nRolloveredItem )
+            HighlightItem( nHighlightedItem, sal_False );
+
         pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, nHighlightedItem );
     }
 
     nHighlightedItem = (sal_uInt16)n;
     DBG_ASSERT( ( nHighlightedItem == ITEMPOS_INVALID ) || pMenu->ImplIsVisible( nHighlightedItem ), "ChangeHighlightItem: Not visible!" );
-    HighlightItem( nHighlightedItem, sal_True );
+    if ( nHighlightedItem != ITEMPOS_INVALID )
+        HighlightItem( nHighlightedItem, sal_True );
+    else if ( nRolloveredItem != ITEMPOS_INVALID )
+        HighlightItem( nRolloveredItem, sal_True );
+
     pMenu->ImplCallHighlight( nHighlightedItem );
 
     if( mbAutoPopup )
@@ -5540,7 +5560,7 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
                 Rectangle aRect = Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), GetOutputSizePixel().Height()-2 ) );
                 Push( PUSH_CLIPREGION );
                 IntersectClipRegion( aRect );
-                bool bRollover = bHighlight && ( !pActivePopup && !mbAutoPopup );
+                bool bRollover = bHighlight && nPos != nHighlightedItem;
                 if ( bHighlight )
                 {
                     if( IsNativeControlSupported( CTRL_MENUBAR, PART_MENU_ITEM ) &&
