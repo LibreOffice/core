@@ -241,7 +241,7 @@ Reference< chart2::data::XLabeledDataSequence2 > lcl_createAndAddSequenceToSerie
     return xLabeledSeq;
 }
 
-XMLPropStyleContext* lcl_GetStyleContext(
+XMLPropStyleContext* lcl_GetStylePropContext(
                         const SvXMLStylesContext* pStylesCtxt,
                         const SvXMLStyleContext*& rpStyle,
                         OUString& rStyleName )
@@ -875,7 +875,7 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
 
             if (!rCurrentStyleName.isEmpty())
             {
-                XMLPropStyleContext* pCurrent = lcl_GetStyleContext(pStylesCtxt, rpStyle, rCurrentStyleName);
+                XMLPropStyleContext* pCurrent = lcl_GetStylePropContext(pStylesCtxt, rpStyle, rCurrentStyleName);
                 if( pCurrent )
                 {
                     pPropStyleContext = pCurrent;
@@ -889,7 +889,7 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
 
             if (!iStyle->msStyleName.isEmpty())
             {
-                XMLPropStyleContext* pCurrent = lcl_GetStyleContext(pStylesCtxt, rpStyle, iStyle->msStyleName);
+                XMLPropStyleContext* pCurrent = lcl_GetStylePropContext(pStylesCtxt, rpStyle, iStyle->msStyleName);
                 if( pCurrent )
                 {
                     pPropStyleContext = pCurrent;

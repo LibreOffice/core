@@ -2933,17 +2933,19 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
             if (!xRegCurve.is())
                 continue;
 
-            bool bShowEquation = false;
-            bool bShowRSquared = false;
-            bool bExportEquation = false;
-
             Reference< beans::XPropertySet > xProperties( xRegCurve , uno::UNO_QUERY );
-
-            OUString aService;
+            if( !xProperties.is() )
+                continue;
 
             Reference< lang::XServiceName > xServiceName( xProperties, uno::UNO_QUERY );
             if( !xServiceName.is() )
                 continue;
+
+            bool bShowEquation = false;
+            bool bShowRSquared = false;
+            bool bExportEquation = false;
+
+            OUString aService;
             aService = xServiceName->getServiceName();
 
             aPropertyStates = mxExpPropMapper->Filter( xProperties );
@@ -2954,11 +2956,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
             aPropertyStates.push_back(property);
 
             Reference< beans::XPropertySet > xEquationProperties;
-            if( xRegCurve.is())
-            {
-                xEquationProperties.set( xRegCurve->getEquationProperties() );
-            }
-
+            xEquationProperties.set( xRegCurve->getEquationProperties() );
             if( xEquationProperties.is())
             {
                 xEquationProperties->getPropertyValue( OUString("ShowEquation")) >>= bShowEquation;
@@ -2997,16 +2995,8 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
                     SvXMLElementExport aRegressionExport( mrExport, XML_NAMESPACE_CHART, XML_REGRESSION_CURVE, sal_True, sal_True );
                     if( bExportEquation )
                     {
-                        // default is true
-                        if( !bShowEquation )
-                        {
-                            mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DISPLAY_EQUATION, XML_FALSE );
-                        }
-                        // default is false
-                        if( bShowRSquared )
-                        {
-                            mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DISPLAY_R_SQUARE, XML_TRUE );
-                        }
+                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DISPLAY_EQUATION, (bShowEquation ? XML_TRUE : XML_FALSE) );
+                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DISPLAY_R_SQUARE, (bShowRSquared ? XML_TRUE : XML_FALSE) );
 
                         // export position
                         chart2::RelativePosition aRelativePosition;
