@@ -33,6 +33,7 @@ Keywords=Equation;OpenDocument Formula;Formula;odf;
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
 StartupWMClass=libreoffice-math
+X-KDE-Protocols=file,http,smb,ftp,webdav
 [X-New Shortcut Group]
 UnityQuicklist=New Formula
 Exec=libreoffice --math %%FILE%%

@@ -30,3 +30,4 @@ Comment=The office productivity suite compatible to the open and standardized OD
 StartupNotify=true
 X-GIO-NoFuse=true
 StartupWMClass=libreoffice-startcenter
+X-KDE-Protocols=file,http,smb,ftp,webdav

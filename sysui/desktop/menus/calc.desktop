@@ -32,6 +32,7 @@ Keywords=Accounting;Stats;OpenDocument Spreadsheet;Chart;Microsoft Excel;Microso
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
 StartupWMClass=libreoffice-calc
+X-KDE-Protocols=file,http,smb,ftp,webdav
 [X-New Shortcut Group]
 UnityQuicklist=New Spreadsheet
 Exec=libreoffice --calc %%FILE%%
