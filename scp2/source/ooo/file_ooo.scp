@@ -511,6 +511,7 @@ File gid_File_Share_Registry_Ctl_Xcd
     Styles = (PACKED,MAKE_LANG_SPECIFIC);
     Dir = gid_Brand_Dir_Share_Registry;
     Name (ar) = "ctl.xcd";
+    Name (bo) = "ctl.xcd";
     Name (dz) = "ctl.xcd";
     Name (fa) = "ctl.xcd";
     Name (gu) = "ctl.xcd";

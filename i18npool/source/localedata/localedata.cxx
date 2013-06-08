@@ -280,6 +280,8 @@ static const struct {
     { "xku_CG", lcl_DATA_OTHERS },
     { "yom_CG", lcl_DATA_OTHERS },
     { "sid_ET", lcl_DATA_OTHERS }
+    { "bo_CN",  lcl_DATA_OTHERS },
+    { "bo_IN",  lcl_DATA_OTHERS },
 };
 
 #else
