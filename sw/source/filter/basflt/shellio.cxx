@@ -830,9 +830,12 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
             else
             {
                 pPam = new SwPaM( *pPam );
-                pPam->Move( fnMoveBackward, fnGoDoc );
-                pPam->SetMark();
-                pPam->Move( fnMoveForward, fnGoDoc );
+                if (pPam)
+                {
+                    pPam->Move( fnMoveBackward, fnGoDoc );
+                    pPam->SetMark();
+                    pPam->Move( fnMoveForward, fnGoDoc );
+                }
             }
         }
         // pPam ist immer noch der akt. Cursor !!
@@ -842,16 +845,19 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
         // keine Shell oder alles schreiben -> eigenen Pam erzeugen
         SwDoc* pOutDoc = pDoc ? pDoc : &rDoc;
         pPam = new SwPaM( pOutDoc->GetNodes().GetEndOfContent() );
-        if( pOutDoc->IsClipBoard() )
+        if (pPam)
         {
-            pPam->Move( fnMoveBackward, fnGoDoc );
-            pPam->SetMark();
-            pPam->Move( fnMoveForward, fnGoDoc );
-        }
-        else
-        {
-            pPam->SetMark();
-            pPam->Move( fnMoveBackward, fnGoDoc );
+            if( pOutDoc->IsClipBoard() )
+            {
+                pPam->Move( fnMoveBackward, fnGoDoc );
+                pPam->SetMark();
+                pPam->Move( fnMoveForward, fnGoDoc );
+            }
+            else
+            {
+                pPam->SetMark();
+                pPam->Move( fnMoveBackward, fnGoDoc );
+            }
         }
     }
 
