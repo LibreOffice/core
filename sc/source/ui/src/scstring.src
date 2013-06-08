@@ -849,4 +849,21 @@ String SCSTR_ROW_LABEL
     Text [ en-US ] = "Range contains ~row labels" ;
 };
 
+String SCSTR_NOFILLCOLOR
+{
+    Text [ en-US ] = "No Color" ;
+};
+
+String SCSTR_FILLCOLOR
+{
+    Text [ en-US ] = "Fill Color" ;
+};
+
+String SCSTR_LINECOLOR
+{
+    Text [ en-US ] = "Line Color" ;
+};
+
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
