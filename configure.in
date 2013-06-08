@@ -3532,7 +3532,7 @@ if test "$enable_epm" = "yes"; then
          BUILD_TYPE="$BUILD_TYPE EPM"
       else
          if test "$EPM" = "no" ; then
-	    AC_MSG_ERROR([no. Install ESP Package Manager (http://www.msweet.org/projects.php?Z2) and/or specify the path to the right epm (--with-epm). Or specify an Url to an epm-3.7 source package (--with-epm-url)])
+	    AC_MSG_ERROR([no. Install ESP Package Manager (http://www.msweet.org/projects.php?Z2) and/or specify the path to the right epm (--with-epm). Or specify an URL to an epm-3.7 source package (--with-epm-url); run configure with the --help option for a list of possible URLs.])
 	 else
 	    # Gentoo has some epm which is something different...
             AC_MSG_CHECKING([whether the found epm is the right epm])
