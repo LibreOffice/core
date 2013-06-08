@@ -84,6 +84,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/printeroptions \
 	sc/uiconfig/scalc/ui/protectsheetdlg \
 	sc/uiconfig/scalc/ui/sheetprintpage \
+	sc/uiconfig/scalc/ui/sidebarcellappearance \
 	sc/uiconfig/scalc/ui/rightfooterdialog \
 	sc/uiconfig/scalc/ui/rightheaderdialog \
 	sc/uiconfig/scalc/ui/selectrange \
