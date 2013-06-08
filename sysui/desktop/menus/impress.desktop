@@ -32,6 +32,7 @@ Keywords=Slideshow;Slides;OpenDocument Presentation;Microsoft PowerPoint;Microso
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
 StartupWMClass=libreoffice-impress
+X-KDE-Protocols=file,http,smb,ftp,webdav
 [X-New Shortcut Group]
 UnityQuicklist=New Presentation
 Exec=libreoffice --impress %%FILE%%
