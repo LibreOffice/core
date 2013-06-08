@@ -81,7 +81,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                 pService = *aI;
                 if ( !hText2 || ( *pService->pName == hText2 ) )
                 {
-                    String sTopics( pService->Topics() );
+                    OUString sTopics( pService->Topics() );
                     if( sTopics.Len() )
                     {
                         if( hText1 )
@@ -113,11 +113,11 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                 pService = *aI;
                 if ( !hText2 || (*pService->pName == hText2 ) )
                 {
-                    String sTopics( pService->Topics() );
+                    OUString sTopics( pService->Topics() );
                     sal_Int32 n = 0;
                     while( -1 != n )
                     {
-                        OUString s( sTopics.GetToken( 0, '\t', n ));
+                        OUString s( sTopics.getToken( 0, '\t', n ));
                         s = comphelper::string::remove(s, '\n');
                         s = comphelper::string::remove(s, '\r');
                         if( !hText1 || s == reinterpret_cast<const sal_Unicode*>(chTopicBuf) )
@@ -227,7 +227,7 @@ found:
         case XTYP_REQUEST:
         case XTYP_ADVREQ:
             {
-            String aRes;          // darf erst am Ende freigegeben werden!!
+            OUString aRes;          // darf erst am Ende freigegeben werden!!
             if ( pTopic->IsSystemTopic() )
             {
                 if ( pTopic->aItem == reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_TOPICS) )
@@ -337,7 +337,7 @@ found:
                 aExec.pImp->hData = hData;
                 aExec.pImp->nFmt  = DdeData::GetInternalFormat( nCbType );
                 aExec.Lock();
-                String aName;
+                OUString aName;
 
                 aName = (const sal_Unicode *)aExec.pImp->pData;
 
@@ -435,7 +435,7 @@ DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
 
 // --- DdeService::DdeService() ------------------------------------
 
-DdeService::DdeService( const String& rService )
+DdeService::DdeService( const OUString& rService )
 {
     DdeInstData* pInst = ImpGetInstData();
     if( !pInst )
@@ -690,7 +690,7 @@ void DdeTopic::RemoveItem( const DdeItem& r )
 
 // --- DdeTopic::NotifyClient() ------------------------------------
 
-void DdeTopic::NotifyClient( const String& rItem )
+void DdeTopic::NotifyClient( const OUString& rItem )
 {
     std::vector<DdeItem*>::iterator iter;
     DdeInstData* pInst = ImpGetInstData();
@@ -752,7 +752,7 @@ sal_Bool DdeTopic::Put( const DdeData* r )
 
 // --- DdeTopic::Execute() -----------------------------------------
 
-sal_Bool DdeTopic::Execute( const String* r )
+sal_Bool DdeTopic::Execute( const OUString* r )
 {
     if ( aExecLink.IsSet() )
         return (sal_Bool)aExecLink.Call( (void*)r );
@@ -797,7 +797,7 @@ DdeItem::DdeItem( const sal_Unicode* p )
 
 // --- DdeItem::DdeItem() ------------------------------------------
 
-DdeItem::DdeItem( const String& r)
+DdeItem::DdeItem( const OUString& r)
 {
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
@@ -925,7 +925,7 @@ DdeGetPutItem::DdeGetPutItem( const sal_Unicode* p )
 
 // --- DdeGetPutItem::DdeGetPutItem() ------------------------------
 
-DdeGetPutItem::DdeGetPutItem( const String& rStr )
+DdeGetPutItem::DdeGetPutItem( const OUString& rStr )
     : DdeItem( rStr )
 {
     nType = DDEGETPUTITEM;
@@ -963,9 +963,9 @@ void DdeGetPutItem::AdviseLoop( sal_Bool )
 
 // --- DdeService::SysItems() --------------------------------------
 
-String DdeService::SysItems()
+OUString DdeService::SysItems()
 {
-    String s;
+    OUString s;
     std::vector<DdeTopic*>::iterator iter;
     std::vector<DdeItem*>::iterator iterItem;
     for ( iter = aTopics.begin(); iter != aTopics.end(); ++iter )
@@ -988,16 +988,16 @@ String DdeService::SysItems()
 
 // --- DdeService::Topics() ----------------------------------------
 
-String DdeService::Topics()
+OUString DdeService::Topics()
 {
-    String      s;
+    OUString      s;
     std::vector<DdeTopic*>::iterator iter;
     short       n = 0;
 
     for ( iter = aTopics.begin(); iter != aTopics.end(); ++iter, n++ )
     {
         if ( n )
-            s += '\t';
+            s += "\t";
         s += (*iter)->GetName();
     }
     s += OUString("\r\n");
@@ -1007,9 +1007,9 @@ String DdeService::Topics()
 
 // --- DdeService::Formats() ---------------------------------------
 
-String DdeService::Formats()
+OUString DdeService::Formats()
 {
-    String      s;
+    OUString      s;
     long        f;
     short       n = 0;
 
@@ -1022,10 +1022,10 @@ String DdeService::Formats()
         switch( (sal_uInt16)f )
         {
             case CF_TEXT:
-                s += OUString("TEXT");
+                s += "TEXT";
                 break;
             case CF_BITMAP:
-                s += OUString("BITMAP");
+                s += "BITMAP";
                 break;
             default:
                 {
@@ -1044,7 +1044,7 @@ String DdeService::Formats()
 
 // --- DdeService::Status() ----------------------------------------
 
-String DdeService::Status()
+OUString DdeService::Status()
 {
     return IsBusy() ? OUString("Busy\r\n") : OUString("Ready\r\n");
 }
@@ -1058,9 +1058,9 @@ sal_Bool DdeService::IsBusy()
 
 // --- DdeService::GetHelp() ----------------------------------------
 
-String DdeService::GetHelp()
+OUString DdeService::GetHelp()
 {
-    return String();
+    return OUString();
 }
 
 sal_Bool DdeTopic::MakeItem( const OUString& )
@@ -1073,12 +1073,12 @@ sal_Bool DdeService::MakeTopic( const OUString& )
     return sal_False;
 }
 
-String DdeService::SysTopicGet( const String& )
+OUString DdeService::SysTopicGet( const OUString& )
 {
-    return String();
+    return OUString();
 }
 
-sal_Bool DdeService::SysTopicExecute( const String* )
+sal_Bool DdeService::SysTopicExecute( const OUString* )
 {
     return sal_False;
 }

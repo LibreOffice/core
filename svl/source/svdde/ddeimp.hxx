@@ -23,7 +23,6 @@
 #include <windows.h>
 #include <ddeml.h>
 
-#include <tools/string.hxx>
 #include <tools/shl.hxx>
 #include <boost/noncopyable.hpp>
 #include <svl/svdde.hxx>

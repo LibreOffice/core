@@ -228,7 +228,7 @@ namespace svl { namespace undo { namespace impl
 
     //--------------------------------------------------------------------
     typedef void ( SfxUndoListener::*UndoListenerVoidMethod )();
-    typedef void ( SfxUndoListener::*UndoListenerStringMethod )( const String& );
+    typedef void ( SfxUndoListener::*UndoListenerStringMethod )( const OUString& );
 
     //--------------------------------------------------------------------
     struct SVL_DLLPRIVATE NotifyUndoListener : public ::std::unary_function< SfxUndoListener*, void >
@@ -247,7 +247,7 @@ namespace svl { namespace undo { namespace impl
         {
         }
 
-        NotifyUndoListener( UndoListenerStringMethod i_notificationMethod, const String& i_actionComment )
+        NotifyUndoListener( UndoListenerStringMethod i_notificationMethod, const OUString& i_actionComment )
             :m_notificationMethod( NULL )
             ,m_altNotificationMethod( i_notificationMethod )
             ,m_sActionComment( i_actionComment )
@@ -275,7 +275,7 @@ namespace svl { namespace undo { namespace impl
     private:
         UndoListenerVoidMethod      m_notificationMethod;
         UndoListenerStringMethod    m_altNotificationMethod;
-        String                      m_sActionComment;
+        OUString                      m_sActionComment;
     };
 
     //--------------------------------------------------------------------
@@ -328,7 +328,7 @@ namespace svl { namespace undo { namespace impl
             m_notifiers.push_back( NotifyUndoListener( i_notificationMethod ) );
         }
 
-        void    scheduleNotification( UndoListenerStringMethod i_notificationMethod, const String& i_actionComment )
+        void    scheduleNotification( UndoListenerStringMethod i_notificationMethod, const OUString& i_actionComment )
         {
             m_notifiers.push_back( NotifyUndoListener( i_notificationMethod, i_actionComment ) );
         }
@@ -784,7 +784,7 @@ sal_Bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
     }
 
     SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[ --m_pData->pActUndoArray->nCurUndoAction ].pAction;
-    const String sActionComment = pAction->GetComment();
+    const OUString sActionComment = pAction->GetComment();
     try
     {
         // clear the guard/mutex before calling into the SfxUndoAction - this can be an extension-implemented UNO component
@@ -884,7 +884,7 @@ sal_Bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
     }
 
     SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->nCurUndoAction++ ].pAction;
-    const String sActionComment = pAction->GetComment();
+    const OUString sActionComment = pAction->GetComment();
     try
     {
         // clear the guard/mutex before calling into the SfxUndoAction - this can be a extension-implemented UNO component

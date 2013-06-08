@@ -143,7 +143,7 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
 
 // --- DdeConnection::DdeConnection() ------------------------------
 
-DdeConnection::DdeConnection( const String& rService, const String& rTopic )
+DdeConnection::DdeConnection( const OUString& rService, const OUString& rTopic )
 {
     pImp = new DdeImp;
     pImp->nStatus  = DMLERR_NO_ERROR;
@@ -169,7 +169,7 @@ DdeConnection::DdeConnection( const String& rService, const String& rTopic )
 
     if ( pImp->nStatus == DMLERR_NO_ERROR )
     {
-        pImp->hConv = DdeConnect( pInst->hDdeInstCli,*pService,*pTopic, NULL);
+        pImp->hConv = DdeConnect( pInst->hDdeInstCli, *pService, *pTopic, NULL);
         if( !pImp->hConv )
             pImp->nStatus = DdeGetLastError( pInst->hDdeInstCli );
     }
@@ -229,16 +229,16 @@ sal_Bool DdeConnection::IsConnected()
 
 // --- DdeConnection::GetServiceName() -----------------------------
 
-const String& DdeConnection::GetServiceName()
+const OUString& DdeConnection::GetServiceName()
 {
-    return (const String&)*pService;
+    return (const OUString&)*pService;
 }
 
 // --- DdeConnection::GetTopicName() -------------------------------
 
-const String& DdeConnection::GetTopicName()
+const OUString& DdeConnection::GetTopicName()
 {
-    return (const String&)*pTopic;
+    return (const OUString&)*pTopic;
 }
 
 // --- DdeConnection::GetConvId() ----------------------------------
@@ -257,7 +257,7 @@ const std::vector<DdeConnection*>& DdeConnection::GetConnections()
 
 // --- DdeTransaction::DdeTransaction() ----------------------------
 
-DdeTransaction::DdeTransaction( DdeConnection& d, const String& rItemName,
+DdeTransaction::DdeTransaction( DdeConnection& d, const OUString& rItemName,
                                 long n ) :
                     rDde( d )
 {
@@ -368,7 +368,7 @@ void DdeTransaction::Done( sal_Bool bDataValid )
 
 // --- DdeLink::DdeLink() ------------------------------------------
 
-DdeLink::DdeLink( DdeConnection& d, const String& aItemName, long n ) :
+DdeLink::DdeLink( DdeConnection& d, const OUString& aItemName, long n ) :
             DdeTransaction (d, aItemName, n)
 {
 }
@@ -390,7 +390,7 @@ void DdeLink::Notify()
 
 // --- DdeRequest::DdeRequest() ------------------------------------
 
-DdeRequest::DdeRequest( DdeConnection& d, const String& i, long n ) :
+DdeRequest::DdeRequest( DdeConnection& d, const OUString& i, long n ) :
                 DdeTransaction( d, i, n )
 {
     nType = XTYP_REQUEST;
@@ -398,7 +398,7 @@ DdeRequest::DdeRequest( DdeConnection& d, const String& i, long n ) :
 
 // --- DdeWarmLink::DdeWarmLink() ----------------------------------
 
-DdeWarmLink::DdeWarmLink( DdeConnection& d, const String& i, long n ) :
+DdeWarmLink::DdeWarmLink( DdeConnection& d, const OUString& i, long n ) :
                 DdeLink( d, i, n )
 {
     nType = XTYP_ADVSTART | XTYPF_NODATA;
@@ -406,7 +406,7 @@ DdeWarmLink::DdeWarmLink( DdeConnection& d, const String& i, long n ) :
 
 // --- DdeHotLink::DdeHotLink() ------------------------------------
 
-DdeHotLink::DdeHotLink( DdeConnection& d, const String& i, long n ) :
+DdeHotLink::DdeHotLink( DdeConnection& d, const OUString& i, long n ) :
                 DdeLink( d, i, n )
 {
     nType = XTYP_ADVSTART;
@@ -414,7 +414,7 @@ DdeHotLink::DdeHotLink( DdeConnection& d, const String& i, long n ) :
 
 // --- DdePoke::DdePoke() ------------------------------------------
 
-DdePoke::DdePoke( DdeConnection& d, const String& i, const char* p,
+DdePoke::DdePoke( DdeConnection& d, const OUString& i, const char* p,
                   long l, sal_uLong f, long n ) :
             DdeTransaction( d, i, n )
 {
@@ -424,7 +424,7 @@ DdePoke::DdePoke( DdeConnection& d, const String& i, const char* p,
 
 // --- DdePoke::DdePoke() ------------------------------------------
 
-DdePoke::DdePoke( DdeConnection& d, const String& i, const String& rData,
+DdePoke::DdePoke( DdeConnection& d, const OUString& i, const OUString& rData,
                   long n ) :
             DdeTransaction( d, i, n )
 {
@@ -434,7 +434,7 @@ DdePoke::DdePoke( DdeConnection& d, const String& i, const String& rData,
 
 // --- DdePoke::DdePoke() ------------------------------------------
 
-DdePoke::DdePoke( DdeConnection& d, const String& i, const DdeData& rData,
+DdePoke::DdePoke( DdeConnection& d, const OUString& i, const DdeData& rData,
                   long n ) :
             DdeTransaction( d, i, n )
 {
@@ -444,8 +444,8 @@ DdePoke::DdePoke( DdeConnection& d, const String& i, const DdeData& rData,
 
 // --- DdeExecute::DdeExecute() ------------------------------------
 
-DdeExecute::DdeExecute( DdeConnection& d, const String& rData, long n ) :
-                DdeTransaction( d, String(), n )
+DdeExecute::DdeExecute( DdeConnection& d, const OUString& rData, long n ) :
+                DdeTransaction( d, OUString(), n )
 {
     aDdeData = DdeData( (void*)rData.GetBuffer(), sizeof(sal_Unicode) * (rData.Len() + 1), CF_TEXT );
     nType = XTYP_EXECUTE;

@@ -194,14 +194,14 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
 class SAL_NO_VTABLE SfxUndoListener
 {
 public:
-    virtual void actionUndone( const String& i_actionComment ) = 0;
-    virtual void actionRedone( const String& i_actionComment ) = 0;
-    virtual void undoActionAdded( const String& i_actionComment ) = 0;
+    virtual void actionUndone( const OUString& i_actionComment ) = 0;
+    virtual void actionRedone( const OUString& i_actionComment ) = 0;
+    virtual void undoActionAdded( const OUString& i_actionComment ) = 0;
     virtual void cleared() = 0;
     virtual void clearedRedo() = 0;
     virtual void resetAll() = 0;
-    virtual void listActionEntered( const String& i_comment ) = 0;
-    virtual void listActionLeft( const String& i_comment ) = 0;
+    virtual void listActionEntered( const OUString& i_comment ) = 0;
+    virtual void listActionLeft( const OUString& i_comment ) = 0;
     virtual void listActionLeftAndMerged() = 0;
     virtual void listActionCancelled() = 0;
     virtual void undoManagerDying() = 0;

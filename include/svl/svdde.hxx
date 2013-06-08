@@ -67,7 +67,7 @@ class SVL_DLLPUBLIC DdeData
 public:
                     DdeData();
                     DdeData( SAL_UNUSED_PARAMETER const void*, SAL_UNUSED_PARAMETER long, SAL_UNUSED_PARAMETER sal_uLong = FORMAT_STRING );
-                    DdeData( SAL_UNUSED_PARAMETER const String& );
+                    DdeData( SAL_UNUSED_PARAMETER const OUString& );
                     DdeData( const DdeData& );
                     ~DdeData();
 
@@ -102,7 +102,7 @@ protected:
     Link            aDone;
     bool            bBusy;
 
-                    DdeTransaction( DdeConnection&, SAL_UNUSED_PARAMETER const String&, SAL_UNUSED_PARAMETER long = 0 );
+                    DdeTransaction( DdeConnection&, SAL_UNUSED_PARAMETER const OUString&, SAL_UNUSED_PARAMETER long = 0 );
 
 public:
     virtual        ~DdeTransaction();
@@ -141,7 +141,7 @@ class SVL_DLLPUBLIC DdeLink : public DdeTransaction
     Link            aNotify;
 
 public:
-                    DdeLink( DdeConnection&, const String&, long = 0 );
+                    DdeLink( DdeConnection&, const OUString&, long = 0 );
     virtual        ~DdeLink();
 
     void            SetNotifyHdl( const Link& rLink ) { aNotify = rLink; }
@@ -156,7 +156,7 @@ public:
 class SVL_DLLPUBLIC DdeWarmLink : public DdeLink
 {
 public:
-            DdeWarmLink( DdeConnection&, const String&, long = 0 );
+            DdeWarmLink( DdeConnection&, const OUString&, long = 0 );
 };
 
 // --------------
@@ -166,7 +166,7 @@ public:
 class SVL_DLLPUBLIC DdeHotLink : public DdeLink
 {
 public:
-            DdeHotLink( DdeConnection&, const String&, long = 0 );
+            DdeHotLink( DdeConnection&, const OUString&, long = 0 );
 };
 
 // --------------
@@ -176,7 +176,7 @@ public:
 class SVL_DLLPUBLIC DdeRequest : public DdeTransaction
 {
 public:
-            DdeRequest( DdeConnection&, const String&, long = 0 );
+            DdeRequest( DdeConnection&, const OUString&, long = 0 );
 };
 
 // -----------
@@ -186,10 +186,10 @@ public:
 class SVL_DLLPUBLIC DdePoke : public DdeTransaction
 {
 public:
-            DdePoke( DdeConnection&, const String&, const char*, long,
+            DdePoke( DdeConnection&, const OUString&, const char*, long,
                      sal_uLong = FORMAT_STRING, long = 0 );
-            DdePoke( DdeConnection&, const String&, SAL_UNUSED_PARAMETER const DdeData&, long = 0 );
-            DdePoke( DdeConnection&, const String&, const String&, long = 0 );
+            DdePoke( DdeConnection&, const OUString&, SAL_UNUSED_PARAMETER const DdeData&, long = 0 );
+            DdePoke( DdeConnection&, const OUString&, const OUString&, long = 0 );
 };
 
 // --------------
@@ -199,7 +199,7 @@ public:
 class SVL_DLLPUBLIC DdeExecute : public DdeTransaction
 {
 public:
-            DdeExecute( DdeConnection&, const String&, long = 0 );
+            DdeExecute( DdeConnection&, const OUString&, long = 0 );
 };
 
 // -----------------
@@ -216,7 +216,7 @@ class SVL_DLLPUBLIC DdeConnection
     DdeImp*         pImp;
 
 public:
-                    DdeConnection( SAL_UNUSED_PARAMETER const String&, SAL_UNUSED_PARAMETER const String& );
+                    DdeConnection( SAL_UNUSED_PARAMETER const OUString&, SAL_UNUSED_PARAMETER const OUString& );
                     ~DdeConnection();
 
     long            GetError();
@@ -226,8 +226,8 @@ public:
 
     sal_Bool            IsConnected();
 
-    const String&   GetServiceName();
-    const String&   GetTopicName();
+    const OUString&   GetServiceName();
+    const OUString&   GetTopicName();
 
 private:
                             DdeConnection( const DdeConnection& );
@@ -254,7 +254,7 @@ protected:
 
 public:
                     DdeItem( const sal_Unicode* );
-                    DdeItem( SAL_UNUSED_PARAMETER const String& );
+                    DdeItem( SAL_UNUSED_PARAMETER const OUString& );
                     DdeItem( const DdeItem& );
                     virtual ~DdeItem();
 
@@ -271,7 +271,7 @@ class SVL_DLLPUBLIC DdeGetPutItem : public DdeItem
 {
 public:
                     DdeGetPutItem( const sal_Unicode* p );
-                    DdeGetPutItem( const String& rStr );
+                    DdeGetPutItem( const OUString& rStr );
                     DdeGetPutItem( const DdeItem& rItem );
 
     virtual DdeData* Get( sal_uLong );
@@ -292,7 +292,7 @@ public:
     virtual void    Disconnect( sal_IntPtr );
     virtual DdeData* Get( sal_uLong );
     virtual sal_Bool    Put( const DdeData* );
-    virtual sal_Bool    Execute( const String* );
+    virtual sal_Bool    Execute( const OUString* );
         // evt. ein neues anlegen; return 0 -> es konnte nicht angelegt werden
     virtual sal_Bool MakeItem( const OUString& rItem );
 
@@ -334,7 +334,7 @@ public:
     void            SetExecuteHdl( const Link& rLink ) { aExecLink = rLink; }
     const Link&     GetExecuteHdl() const { return aExecLink; }
 
-    void            NotifyClient( const String& );
+    void            NotifyClient( const OUString& );
     sal_Bool            IsSystemTopic();
 
     void            InsertItem( DdeItem* );     // fuer eigene Ableitungen!
@@ -358,17 +358,17 @@ class SVL_DLLPUBLIC DdeService
 
 public:
     virtual sal_Bool    IsBusy();
-    virtual String  GetHelp();
+    virtual OUString  GetHelp();
         // evt. ein neues anlegen; return 0 -> es konnte nicht angelegt werden
     virtual sal_Bool    MakeTopic( const OUString& rItem );
 
 protected:
-    virtual String  Topics();
-    virtual String  Formats();
-    virtual String  SysItems();
-    virtual String  Status();
-    virtual String  SysTopicGet( const String& );
-    virtual sal_Bool    SysTopicExecute( const String* );
+    virtual OUString  Topics();
+    virtual OUString  Formats();
+    virtual OUString  SysItems();
+    virtual OUString  Status();
+    virtual OUString  SysTopicGet( const OUString& );
+    virtual sal_Bool    SysTopicExecute( const OUString* );
 
     const DdeTopic* GetSysTopic() const { return pSysTopic; }
 private:
@@ -382,7 +382,7 @@ private:
     SVL_DLLPRIVATE sal_Bool            HasCbFormat( sal_uInt16 );
 
 public:
-                    DdeService( SAL_UNUSED_PARAMETER const String& );
+                    DdeService( SAL_UNUSED_PARAMETER const OUString& );
     virtual        ~DdeService();
 
     const OUString GetName() const;
