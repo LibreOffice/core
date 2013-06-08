@@ -31,12 +31,7 @@
 #include <swundo.hxx>
 #include <SwRewriter.hxx>
 
-/********************************************************
- * Ctor/Dtor
- ********************************************************/
-// verkleideter Copy-Constructor
-
-
+// masqueraded copy constructor
 SwEditShell::SwEditShell( SwEditShell& rEdSH, Window *pWindow )
     : SwCrsrShell( rEdSH, pWindow )
 {
@@ -145,15 +140,12 @@ void SwEditShell::CalcLayout()
     EndAllAction();
 }
 
-/******************************************************************************
- *                      Inhaltsform bestimmen, holen
- ******************************************************************************/
-// OPT: wird fuer jedes Attribut gerufen?
-
-
+/** Get the content type of a shell
+ *
+ * @todo Is this called for every attribute?
+ */
 sal_uInt16 SwEditShell::GetCntType() const
 {
-    // nur noch am SPoint ist der Inhalt interessant
     sal_uInt16 nRet = 0;
     if( IsTableMode() )
         nRet = CNT_TXT;
@@ -192,10 +184,7 @@ sal_Bool SwEditShell::HasOtherCnt() const
     return sal_False;
 }
 
-/******************************************************************************
- *              Zugriffsfunktionen fuer Filename-Behandlung
- ******************************************************************************/
-
+// access controll functions for file name handling
 
 SwActContext::SwActContext(SwEditShell *pShell)
     : pSh(pShell)
@@ -222,16 +211,13 @@ SwMvContext::~SwMvContext()
     pSh->EndCrsrMove();
 }
 
-
-SwFrmFmt *SwEditShell::GetTableFmt()    // OPT: schnellster Test auf Tabelle?
+SwFrmFmt *SwEditShell::GetTableFmt() // fastest test on a table
 {
     const SwTableNode* pTblNd = IsCrsrInTbl();
     return pTblNd ? (SwFrmFmt*)pTblNd->GetTable().GetFrmFmt() : 0;
 }
 
-// OPT: wieso 3x beim neuen Dokument
-
-
+// TODO: Why is this called 3x for a new document?
 sal_uInt16 SwEditShell::GetTOXTypeCount(TOXTypes eTyp) const
 {
     return mpDoc->GetTOXTypeCount(eTyp);
@@ -266,19 +252,23 @@ void SwEditShell::DelAllUndoObj()
     GetDoc()->GetIDocumentUndoRedo().DelAllUndoObj();
 }
 
-// Zusammenfassen von Kontinuierlichen Insert/Delete/Overwrite von
-// Charaktern. Default ist sdbcx::Group-Undo.
+// Combine continuous calls of Insert/Delete/Overwrite on characters. Default: sdbcx::Group-Undo.
 
-// setzt Undoklammerung auf, liefert nUndoId der Klammerung
-
-
+/** open undo container
+ *
+ * @return nUndoId ID of the container
+ */
 SwUndoId SwEditShell::StartUndo( SwUndoId eUndoId,
                                    const SwRewriter *pRewriter )
 { return GetDoc()->GetIDocumentUndoRedo().StartUndo( eUndoId, pRewriter ); }
 
-// schliesst Klammerung der nUndoId, nicht vom UI benutzt
-
-
+/** close undo container
+ *
+ * not used by UI
+ *
+ * @param eUndoId   ID of the undo container
+ * @param pRewriter ?
+*/
 SwUndoId SwEditShell::EndUndo(SwUndoId eUndoId,
                                 const SwRewriter *pRewriter)
 { return GetDoc()->GetIDocumentUndoRedo().EndUndo(eUndoId, pRewriter); }
@@ -294,9 +284,7 @@ bool     SwEditShell::GetFirstRedoInfo(OUString *const o_pStr) const
 SwUndoId SwEditShell::GetRepeatInfo(OUString *const o_pStr) const
 { return GetDoc()->GetIDocumentUndoRedo().GetRepeatInfo(o_pStr); }
 
-
-
-// AutoKorrektur - JP 27.01.94
+/** Auto correction */
 void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Bool bInsert,
                                 sal_Unicode cChar )
 {

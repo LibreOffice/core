@@ -112,14 +112,11 @@ SwPaM& SwPamRanges::SetPam( sal_uInt16 nArrPos, SwPaM& rPam )
     return rPam;
 }
 
-
-
-// Numerierung Outline Regelwerk
-
+// Rule book for outline numbering
 
 void SwEditShell::SetOutlineNumRule(const SwNumRule& rRule)
 {
-    StartAllAction();       // Klammern fuers Updaten !!
+    StartAllAction();       // bracketing for updating!
     GetDoc()->SetOutlineNumRule(rRule);
     EndAllAction();
 }
@@ -130,18 +127,17 @@ const SwNumRule* SwEditShell::GetOutlineNumRule() const
     return GetDoc()->GetOutlineNumRule();
 }
 
-// setzt, wenn noch keine Numerierung, sonst wird geaendert
-// arbeitet mit alten und neuen Regeln, nur Differenzen aktualisieren
+// Set if there is no numbering yet, else update.
+// Works with old and new rules. Update only differences.
 
-// Absaetze ohne Numerierung, aber mit Einzuegen
-
+// paragraphs without numbering, with indentations
 bool SwEditShell::NoNum()
 {
     bool bRet = true;
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr )         // Multiple selection?
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
@@ -156,7 +152,7 @@ bool SwEditShell::NoNum()
     EndAllAction();
     return bRet;
 }
-// Loeschen, Splitten der Aufzaehlungsliste
+
 sal_Bool SwEditShell::SelectionHasNumber() const
 {
     sal_Bool bResult = HasNumber();
@@ -281,12 +277,13 @@ sal_Bool SwEditShell::HasBullet() const
 }
 // <- #i29560#
 
+/// delete, split list
 void SwEditShell::DelNumRules()
 {
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr ) // multi-selection?
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
@@ -300,28 +297,24 @@ void SwEditShell::DelNumRules()
     else
         GetDoc()->DelNumRules( *pCrsr );
 
-    // rufe das AttrChangeNotify auf der UI-Seite. Sollte eigentlich
-    // ueberfluessig sein, aber VB hatte darueber eine Bugrep.
+    // Call AttrChangeNotify on the UI-side. Should actually be redundant but there was a bug once.
     CallChgLnk();
 
-    // cursor can not be anymore in front of a label,
-    // because numbering/bullet is deleted.
+    // Cursor cannot be in front of a label anymore, because numbering/bullet is deleted.
     SetInFrontOfLabel( false );
 
     GetDoc()->SetModified();
     EndAllAction();
 }
 
-// Hoch-/Runterstufen
-
-
+// up- & downgrading
 bool SwEditShell::NumUpDown( bool bDown )
 {
     StartAllAction();
 
     bool bRet = true;
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() == pCrsr )         // keine Mehrfachselektion ?
+    if( pCrsr->GetNext() == pCrsr )         // no multiple selection ?
         bRet = GetDoc()->NumUpDown( *pCrsr, bDown );
     else
     {
@@ -431,7 +424,7 @@ bool SwEditShell::MoveParagraph( long nOffset )
     SwPaM *pCrsr = GetCrsr();
     if( !pCrsr->HasMark() )
     {
-        // sorge dafuer, das Bound1 und Bound2 im gleichen Node stehen
+        // Ensures that Bound1 and Bound2 are in the same Node
         pCrsr->SetMark();
         pCrsr->DeleteMark();
     }
@@ -471,7 +464,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
 {
     StartAllAction();
 
-    // auf alle Selektionen ??
+    // On all selections?
     SwPaM* pCrsr = GetCrsr();
     SwPaM aCrsr( *pCrsr->Start() );
     aCrsr.SetMark();
@@ -486,11 +479,11 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
     {
         if( bUpperLower )
         {
-            // ueber die naechste Nummerierung
+            // on top of the next numbering
             long nOffset = 0;
             const SwNode* pNd;
 
-            if( bUpperLeft )        // verschiebe nach oben
+            if( bUpperLeft ) // move up
             {
                 SwPosition aPos( *aCrsr.GetMark() );
                 if( GetDoc()->GotoPrevNum( aPos, false ) )
@@ -507,7 +500,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                         nOffset = nIdx - nStt;
                 }
             }
-            else                    // verschiebe nach unten
+            else             // move down
             {
                 const SwNumRule* pOrig = aCrsr.GetNode(sal_False)->GetTxtNode()->GetNumRule();
                 if( aCrsr.GetNode()->IsTxtNode() &&
@@ -566,7 +559,7 @@ bool SwEditShell::OutlineUpDown( short nOffset )
 
     bool bRet = true;
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() == pCrsr )         // keine Mehrfachselektion ?
+    if( pCrsr->GetNext() == pCrsr ) // no multi selection?
         bRet = GetDoc()->OutlineUpDown( *pCrsr, nOffset );
     else
     {
@@ -683,7 +676,7 @@ bool SwEditShell::NumOrNoNum( sal_Bool bNumOn, bool bChkStart )
 
 sal_Bool SwEditShell::IsNoNum( sal_Bool bChkStart ) const
 {
-    // ein Backspace im Absatz ohne Nummer wird zum Delete
+    // a Backspace in the paragraph without number becomes a Delete
     sal_Bool bResult = sal_False;
     SwPaM* pCrsr = GetCrsr();
 
@@ -703,7 +696,7 @@ sal_Bool SwEditShell::IsNoNum( sal_Bool bChkStart ) const
 
 sal_uInt8 SwEditShell::GetNumLevel() const
 {
-    // gebe die akt. Ebene zurueck, auf der sich der Point vom Cursor befindet
+    // return current level where the point of the cursor is
     sal_uInt8 nLevel = MAXLEVEL;        //end,zhaojianwei
 
     SwPaM* pCrsr = GetCrsr();
@@ -741,7 +734,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr )         // multiple selection ?
     {
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
@@ -790,7 +783,7 @@ void SwEditShell::SetNumRuleStart( sal_Bool bFlag, SwPaM* pPaM )
 {
     StartAllAction();
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr )         // multiple selection ?
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
@@ -820,7 +813,7 @@ void SwEditShell::SetNodeNumStart( sal_uInt16 nStt, SwPaM* pPaM )
     StartAllAction();
 
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
+    if( pCrsr->GetNext() != pCrsr )         // multiple selection ?
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );

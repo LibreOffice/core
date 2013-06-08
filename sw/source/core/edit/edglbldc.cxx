@@ -25,7 +25,7 @@
 #include <ndtxt.hxx>
 #include <docary.hxx>
 #include <swwait.hxx>
-#include <swundo.hxx>       // fuer die UndoIds
+#include <swundo.hxx> // for UndoIds
 #include <section.hxx>
 #include <doctxm.hxx>
 #include <edglbldc.hxx>
@@ -58,7 +58,7 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
         return 0;
 
-    // dann alle gelinkten Bereiche auf der obersten Ebene
+    // then all linked areas on the topmost level
     SwDoc* pMyDoc = GetDoc();
     const SwSectionFmts& rSectFmts = pMyDoc->GetSections();
     sal_uInt16 n;
@@ -73,7 +73,7 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
             {
             case TOX_HEADER_SECTION:    break;      // ignore
             case TOX_CONTENT_SECTION:
-                OSL_ENSURE( pSect->ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
+                OSL_ENSURE( pSect->ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
                 pNew = new SwGlblDocContent( (SwTOXBaseSection*)pSect );
                 break;
 
@@ -86,14 +86,14 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
         }
     }
 
-    // und als letztes die Dummies (sonstiger Text) einfuegen
+    // and finally add the dummies (other text)
     SwNode* pNd;
     sal_uLong nSttIdx = pMyDoc->GetNodes().GetEndOfExtras().GetIndex() + 2;
     for( n = 0; n < rArr.size(); ++n )
     {
         const SwGlblDocContent& rNew = *rArr[ n ];
-        // suche von StartPos bis rNew.DocPos nach einem Content Node.
-        // Existiert dieser, so muss ein DummyEintrag eingefuegt werden.
+        // Search from StartPos until rNew.DocPos for a content node.
+        // If one exists then a dummy entry is needed.
         for( ; nSttIdx < rNew.GetDocPos(); ++nSttIdx )
             if( ( pNd = pMyDoc->GetNodes()[ nSttIdx ])->IsCntntNode()
                 || pNd->IsSectionNode() || pNd->IsTableNode() )
@@ -102,16 +102,16 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
                 if( !rArr.insert( pNew ).second )
                     delete pNew;
                 else
-                    ++n;        // auf die naechste Position
+                    ++n; // to the next position
                 break;
             }
 
-        // StartPosition aufs Ende setzen
+        // set StartPosition to the end
         nSttIdx = pMyDoc->GetNodes()[ rNew.GetDocPos() ]->EndOfSectionIndex();
         ++nSttIdx;
     }
 
-    // sollte man das Ende auch noch setzen??
+    // Should the end also be set?
     if( !rArr.empty() )
     {
         sal_uLong nNdEnd = pMyDoc->GetNodes().GetEndOfContent().GetIndex();
@@ -259,7 +259,7 @@ sal_Bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
     sal_uLong nDelIdx = rDelPos.GetDocPos();
     if( 1 == rArr.size() )
     {
-        // ein Node muss aber da bleiben!
+        // we need at least one node!
         rPos.nNode = nDelIdx - 1;
         rPos.nContent.Assign( 0, 0 );
 

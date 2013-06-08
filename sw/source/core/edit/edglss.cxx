@@ -28,16 +28,12 @@
 #include <editsh.hxx>
 #include <edimp.hxx>
 #include <frmfmt.hxx>
-#include <swundo.hxx>       // fuer die UndoIds
+#include <swundo.hxx>       // for UndoIds
 #include <ndtxt.hxx>
-#include <swtable.hxx>      // fuers kopieren von Tabellen
+#include <swtable.hxx>      // for table copying
 #include <shellio.hxx>      // SwTextBlocks
 #include <acorrect.hxx>
 #include <swerror.h>        // SwTextBlocks
-
-/******************************************************************************
- *              jetzt mit einem verkappten Reader/Writer/Dokument
- ******************************************************************************/
 
 void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const String& rStr )
 {
@@ -46,13 +42,7 @@ void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const String& rStr )
     EndAllAction();
 }
 
-
-/******************************************************************************
- *              aktuelle Selektion zum Textbaustein machen und ins
- *          Textbausteindokument einfuegen, einschliesslich Vorlagen
- ******************************************************************************/
-
-
+/// convert current selection into text block and add to the text block document, incl. templates
 sal_uInt16 SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const String& rName, const String& rShortName,
                                     sal_Bool bSaveRelFile, const String* pOnlyTxt )
 {
@@ -124,7 +114,7 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
             pCrsr->GetPoint()->nContent.Assign( pCntntNd, 0 );
         pCrsr->SetMark();
 
-        // dann bis zum Ende vom Nodes Array
+        // then until the end of the Node array
         pCrsr->GetPoint()->nNode = pMyDoc->GetNodes().GetEndOfContent().GetIndex()-1;
         pCntntNd = pCrsr->GetCntntNode();
         if( pCntntNd )
@@ -163,14 +153,10 @@ sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
     return nRet;
 }
 
-/******************************************************************************
- *                  kopiere alle Selectionen und das Doc
- ******************************************************************************/
-
-
+/// copy all selections and the doc
 sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 {
-    OSL_ENSURE( pInsDoc, "kein Ins.Dokument"  );
+    OSL_ENSURE( pInsDoc, "no Ins.Document"  );
 
     SwNodes& rNds = pInsDoc->GetNodes();
 
@@ -178,7 +164,7 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
     SwCntntNode * pNd = aIdx.GetNode().GetCntntNode();
     SwPosition aPos( aIdx, SwIndex( pNd, pNd->Len() ));
 
-    // soll der Index auf Anfang returnt werden ?
+    // Should the index be reset to start?
     if( pSttNd )
     {
         *pSttNd = aPos.nNode;
@@ -192,18 +178,17 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 
     if( IsTableMode() )
     {
-        // kopiere Teile aus einer Tabelle: lege eine Tabelle mit der Breite
-        // von der Originalen an und kopiere die selectierten Boxen.
-        // Die Groessen werden prozentual korrigiert.
+        // Copy parts of a table: create a table with the width of the original one and copy the
+        // selected boxes. The sizes are corrected on a percentage basis.
 
-        // lasse ueber das Layout die Boxen suchen
+        // search boxes using the layout
         SwTableNode* pTblNd;
         SwSelBoxes aBoxes;
         GetTblSel( *this, aBoxes );
         if( !aBoxes.empty() && 0 != (pTblNd = (SwTableNode*)aBoxes[0]
             ->GetSttNd()->FindTableNode() ))
         {
-            // teste ob der TabellenName kopiert werden kann
+            // check if the table name can be copied
             sal_Bool bCpyTblNm = aBoxes.size() == pTblNd->GetTable().GetTabSortBoxes().size();
             if( bCpyTblNm )
             {
@@ -255,23 +240,20 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
     if( !pInsDoc->IsExpFldsLocked() )
         pInsDoc->UpdateExpFlds(NULL, true);
 
-    // die gemerkte Node-Position wieder auf den richtigen Node
+    // set the saved Node position back to the correct Node
     if( bRet && pSttNd )
         ++(*pSttNd);
-
 
     return bRet;
 }
 
-/*------------------------------------------------------------------------
- Beschreibung:  Text innerhalb der Selektion erfragen
- Returnwert:    liefert sal_False, wenn der selektierte Bereich
-                zu gross ist, um in den Stringpuffer kopiert zu werden.
-------------------------------------------------------------------------*/
-
+/** Get text in a Selection
+ *
+ * @return sal_False if the selected area is too big for being copied into the string buffer
+ */
 sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
 {
-    GetCrsr();  // ggfs. alle Cursor erzeugen lassen
+    GetCrsr();  // creates all cursors if needed
     if( IsSelOnePara() )
     {
         rBuf = GetSelTxt();
@@ -304,7 +286,7 @@ sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
         SwReaderWriter::GetWriter( OUString(FILTER_TEXT), String(), xWrt );
         if( xWrt.Is() )
         {
-                // Selektierte Bereiche in ein ASCII Dokument schreiben
+            // write selected areas into a ASCII document
             SwWriter aWriter( aStream, *this);
             xWrt->SetShowProgress( sal_False );
 

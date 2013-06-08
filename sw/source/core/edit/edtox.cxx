@@ -54,10 +54,7 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-/*--------------------------------------------------------------------
-     Beschreibung: Verzeichnismarkierung ins Dokument einfuegen/loeschen
- --------------------------------------------------------------------*/
-
+// Add/delete listing markers to a document
 
 void SwEditShell::Insert(const SwTOXMark& rMark)
 {
@@ -94,11 +91,7 @@ void SwEditShell::DeleteTOXMark( SwTOXMark* pMark )
     EndAllAction();
 }
 
-
-/*--------------------------------------------------------------------
-     Beschreibung: Alle Verzeichnismarkierungen am SPoint zusammensuchen
- --------------------------------------------------------------------*/
-
+/// Collect all listing markers
 sal_uInt16 SwEditShell::GetCurTOXMarks(SwTOXMarks& rMarks) const
 {
     return GetDoc()->GetCurTOXMark( *GetCrsr()->Start(), rMarks );
@@ -133,10 +126,7 @@ void    SwEditShell::SetDefaultTOXBase(const SwTOXBase& rBase)
     GetDoc()->SetDefaultTOXBase(rBase);
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung: Verzeichnis einfuegen, und Inhalt erzeugen
- --------------------------------------------------------------------*/
-
+/// Insert listing and create content
 void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 {
     SET_CURR_SHELL( this );
@@ -146,36 +136,33 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
     ::StartProgress( STR_STATSTR_TOX_INSERT, 0, 0, pDocSh );
     ::SetProgressText( STR_STATSTR_TOX_INSERT, pDocSh );
 
-    // Einfuegen des Verzeichnisses
+    // Insert listing
     const SwTOXBaseSection* pTOX = mpDoc->InsertTableOf(
                                         *GetCrsr()->GetPoint(), rTOX, pSet, true );
-    OSL_ENSURE(pTOX, "Kein aktuelles Verzeichnis");
+    OSL_ENSURE(pTOX, "No current TOx");
 
-    // Formatierung anstossen
+    // start formatting
     CalcLayout();
 
-    // Seitennummern eintragen
+    // insert page numbering
     ((SwTOXBaseSection*)pTOX)->UpdatePageNum();
 
     pTOX->SetPosAtStartEnd( *GetCrsr()->GetPoint() );
 
-    // Fix fuer leere Verzeichnisse
+    // Fix for empty listing
     InvalidateWindows( maVisArea );
     ::EndProgress( pDocSh );
     EndAllAction();
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung: Verzeichnisinhalt erneuern
- --------------------------------------------------------------------*/
-
+/// update tables of content
 sal_Bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 {
     sal_Bool bRet = sal_False;
 
-    OSL_ENSURE( rTOX.ISA( SwTOXBaseSection ),  "keine TOXBaseSection!" );
+    OSL_ENSURE( rTOX.ISA( SwTOXBaseSection ),  "no TOXBaseSection!" );
     SwTOXBaseSection* pTOX = (SwTOXBaseSection*)&rTOX;
-    OSL_ENSURE(pTOX, "Keine aktuelles Verzeichnis");
+    OSL_ENSURE(pTOX, "no current listing");
     const SwSectionNode* pSectNd;
     if( pTOX && 0 != ( pSectNd = pTOX->GetFmt()->GetSectionNode() ) )
     {
@@ -191,17 +178,17 @@ sal_Bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pS
 
         pMyDoc->GetIDocumentUndoRedo().StartUndo(UNDO_TOXCHANGE, NULL);
 
-        // Verzeichnisrumpf erzeugen
+        // create listing stub
         pTOX->Update(pSet);
 
-        // Cursor korrigieren
+        // correct Cursor
         if( bInIndex )
             pTOX->SetPosAtStartEnd( *GetCrsr()->GetPoint() );
 
-        // Formatierung anstossen
+        // start formatting
         CalcLayout();
 
-        // Seitennummern eintragen
+        // insert page numbering
         pTOX->UpdatePageNum();
 
         pMyDoc->GetIDocumentUndoRedo().EndUndo(UNDO_TOXCHANGE, NULL);
@@ -212,11 +199,7 @@ sal_Bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pS
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung: Aktuelles Verzeichnis vor oder in dem der Cursor
-                                   steht
- --------------------------------------------------------------------*/
-
+/// Get current listing before or at the Cursor
 const SwTOXBase* SwEditShell::GetCurTOX() const
 {
     return GetDoc()->GetCurTOX( *GetCrsr()->GetPoint() );
@@ -227,18 +210,14 @@ bool SwEditShell::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
     return GetDoc()->DeleteTOX( (SwTOXBase&)rTOXBase, bDelNodes );
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung: Typen der Verzeichnisse verwalten
- --------------------------------------------------------------------*/
+// manage types of listings
 
 const SwTOXType* SwEditShell::GetTOXType(TOXTypes eTyp, sal_uInt16 nId) const
 {
     return mpDoc->GetTOXType(eTyp, nId);
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung: Schluessel fuer Stichwortverzeichnisse verwalten
- --------------------------------------------------------------------*/
+// manage keys for the alphabetical index
 
 sal_uInt16 SwEditShell::GetTOIKeys( SwTOIKeyType eTyp, std::vector<String>& rArr ) const
 {
@@ -271,15 +250,14 @@ const SwTOXBase* SwEditShell::GetTOX( sal_uInt16 nPos ) const
             pSect->GetFmt()->GetSectionNode() &&
             nCnt++ == nPos )
         {
-            OSL_ENSURE( pSect->ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
+            OSL_ENSURE( pSect->ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
             return (SwTOXBaseSection*)pSect;
         }
     }
     return 0;
 }
 
-
-    // nach einlesen einer Datei alle Verzeichnisse updaten
+/** Update of all listings after reading-in a file */
 void SwEditShell::SetUpdateTOX( sal_Bool bFlag )
 {
     GetDoc()->SetUpdateTOX( bFlag );
