@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
@@ -63,10 +62,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
-/*************************************************************************
- *                     class SwLinguIter
- *************************************************************************/
-
 class SwLinguIter
 {
     SwEditShell *pSh;
@@ -101,10 +96,6 @@ public:
     void _End(bool bRestoreSelection = true);
 };
 
-/*************************************************************************
- *                     class SwSpellIter
- *************************************************************************/
-
 // #i18881# to be able to identify the postions of the changed words
 // the content positions of each portion need to be saved
 struct SpellContentPosition
@@ -112,7 +103,9 @@ struct SpellContentPosition
     sal_uInt16 nLeft;
     sal_uInt16 nRight;
 };
+
 typedef std::vector<SpellContentPosition>  SpellContentPositions;
+
 class SwSpellIter : public SwLinguIter
 {
     uno::Reference< XSpellChecker1 >    xSpeller;
@@ -159,10 +152,6 @@ public:
     uno::Any    Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 };
 
-/*************************************************************************
- *                     class SwHyphIter
- *************************************************************************/
-
 class SwHyphIter : public SwLinguIter
 {
     sal_Bool bOldIdle;
@@ -192,21 +181,11 @@ static SwHyphIter*  pHyphIter = 0;
 const SwTxtNode *pLinguNode;
       SwTxtFrm  *pLinguFrm;
 
-/*************************************************************************
- *                      SwLinguIter::SwLinguIter
- *************************************************************************/
-
 SwLinguIter::SwLinguIter()
     : pSh( 0 ), pStart( 0 ), pEnd( 0 ), pCurr( 0 ), pCurrX( 0 )
 {
     // TODO missing: ensurance of re-entrance, OSL_ENSURE( etc.
 }
-
-/*************************************************************************
- *                      SwLinguIter::Start
- *************************************************************************/
-
-
 
 void SwLinguIter::_Start( SwEditShell *pShell, SwDocPositions eStart,
                             SwDocPositions eEnd )
@@ -269,12 +248,6 @@ void SwLinguIter::_Start( SwEditShell *pShell, SwDocPositions eStart,
     pLinguNode = 0;
 }
 
-/*************************************************************************
- *                      SwLinguIter::End
- *************************************************************************/
-
-
-
 void SwLinguIter::_End(bool bRestoreSelection)
 {
     if( !pSh )
@@ -296,12 +269,6 @@ void SwLinguIter::_End(bool bRestoreSelection)
 
     pSh = 0;
 }
-
-/*************************************************************************
- *               virtual SwSpellIter::Start()
- *************************************************************************/
-
-
 
 void SwSpellIter::Start( SwEditShell *pShell, SwDocPositions eStart,
                         SwDocPositions eEnd )
@@ -373,12 +340,6 @@ uno::Any SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
     return aSpellRet;
 }
 
-/*************************************************************************
- *               virtual SwConvIter::Start()
- *************************************************************************/
-
-
-
 void SwConvIter::Start( SwEditShell *pShell, SwDocPositions eStart,
                         SwDocPositions eEnd )
 {
@@ -386,10 +347,6 @@ void SwConvIter::Start( SwEditShell *pShell, SwDocPositions eStart,
         return;
     _Start( pShell, eStart, eEnd );
 }
-
-/*************************************************************************
- *                   SwConvIter::Continue
- *************************************************************************/
 
 uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 {
@@ -450,12 +407,6 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
     return makeAny( aConvText );
 }
 
-
-/*************************************************************************
- *                   SwHyphIter
- *************************************************************************/
-
-
 sal_Bool SwHyphIter::IsAuto()
 {
     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
@@ -463,7 +414,6 @@ sal_Bool SwHyphIter::IsAuto()
                                 OUString(UPN_IS_HYPH_AUTO) ).getValue()
                       : sal_False;
 }
-
 
 void SwHyphIter::ShowSelection()
 {
@@ -476,12 +426,6 @@ void SwHyphIter::ShowSelection()
         pMySh->EndAction();
     }
 }
-
-/*************************************************************************
- *               virtual SwHyphIter::Start()
- *************************************************************************/
-
-
 
 void SwHyphIter::Start( SwEditShell *pShell, SwDocPositions eStart, SwDocPositions eEnd )
 {
@@ -506,10 +450,6 @@ void SwHyphIter::End()
     ((SwViewOption*)GetSh()->GetViewOptions())->SetIdle( bOldIdle );
     _End();
 }
-
-/*************************************************************************
- *                   SwHyphIter::Continue
- *************************************************************************/
 
 uno::Any SwHyphIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 {
@@ -581,10 +521,6 @@ void SwHyphIter::Ignore()
     pCrsr->SetMark();
 }
 
-/*************************************************************************
- *                        SwHyphIter::DelSoftHyph
- *************************************************************************/
-
 void SwHyphIter::DelSoftHyph( SwPaM &rPam )
 {
     const SwPosition* pStt = rPam.Start();
@@ -593,11 +529,6 @@ void SwHyphIter::DelSoftHyph( SwPaM &rPam )
     SwTxtNode *pNode = pStt->nNode.GetNode().GetTxtNode();
     pNode->DelSoftHyph( nStart, nEnd );
 }
-
-/*************************************************************************
- *                  SwHyphIter::InsertSoftHyph
- *************************************************************************/
-
 
 void SwHyphIter::InsertSoftHyph( const xub_StrLen nHyphPos )
 {
@@ -654,27 +585,15 @@ bool SwEditShell::HasLastSentenceGotGrammarChecked() const
     return bTextWasGrammarChecked;
 }
 
-/*************************************************************************
- *                      SwEditShell::HasConvIter
- *************************************************************************/
-
 sal_Bool SwEditShell::HasConvIter() const
 {
     return 0 != pConvIter;
 }
 
-/*************************************************************************
- *                      SwEditShell::HasHyphIter
- *************************************************************************/
-
 sal_Bool SwEditShell::HasHyphIter() const
 {
     return 0 != pHyphIter;
 }
-
-/*************************************************************************
- *                      SwEditShell::SetFindRange
- *************************************************************************/
 
 void SwEditShell::SetLinguRange( SwDocPositions eStart, SwDocPositions eEnd )
 {
@@ -683,10 +602,6 @@ void SwEditShell::SetLinguRange( SwDocPositions eStart, SwDocPositions eEnd )
     if( *pCrsr->GetPoint() > *pCrsr->GetMark() )
         pCrsr->Exchange();
 }
-
-/*************************************************************************
- *                  SwEditShell::SpellStart
- *************************************************************************/
 
 void SwEditShell::SpellStart(
         SwDocPositions eStart, SwDocPositions eEnd, SwDocPositions eCurr,
@@ -726,10 +641,6 @@ void SwEditShell::SpellStart(
     if (pConvArgs && pConvIter)
         pConvIter->Start( this, eStart, eEnd );
 }
-
-/*************************************************************************
- *                  SwEditShell::SpellEnd
- *************************************************************************/
 
 void SwEditShell::SpellEnd( SwConversionArgs *pConvArgs, bool bRestoreSelection )
 {
@@ -794,9 +705,6 @@ uno::Any SwEditShell::SpellContinue(
     }
     return aRes;
 }
-/*************************************************************************
- *                  SwEditShell::HyphStart
- *************************************************************************/
 
 /* Interactive Hyphenation (BP 10.03.93)
  *
@@ -821,9 +729,6 @@ uno::Any SwEditShell::SpellContinue(
  * 4) HyphEnd
  *    - Restore old cursor, EndAction
  */
-
-
-
 void SwEditShell::HyphStart( SwDocPositions eStart, SwDocPositions eEnd )
 {
     // do not hyphenate if interactive hyphenationg is active elsewhere
@@ -1018,8 +923,6 @@ uno::Reference< XSpellAlternatives >
     return xSpellAlt;
 }
 
-
-
 bool SwEditShell::GetGrammarCorrection(
     linguistic2::ProofreadingResult /*out*/ &rResult, // the complete result
     sal_Int32 /*out*/ &rErrorPosInText,               // offset of error position in string that was grammar checked...
@@ -1193,7 +1096,6 @@ void SwEditShell::MoveContinuationPosToEndOfCheckedSentence()
         pSpellIter->ContinueAfterThisSentence();
     }
 }
-
 
 void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions, bool bRecheck)
 {
@@ -1836,6 +1738,5 @@ void SwEditShell::IgnoreGrammarErrorAt( SwPaM& rErrorPosition )
         nStart = 0;
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

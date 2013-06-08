@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <ctype.h>
 #include <hintids.hxx>
 
@@ -67,8 +66,6 @@
 
 using namespace ::com::sun::star;
 
-//-------------------------------------------------------------------
-
 //JP 16.12.99: definition:
 //      from pos cPosEnDash to cPosEmDash all chars changed to endashes,
 //      from pos cPosEmDash to cPosEnd    all chars changed to emdashes
@@ -79,7 +76,6 @@ const int cnPosEnDash = 2, cnPosEmDash = 4, cnPosEnd = 5;
 
 const sal_Unicode cStarSymbolEnDash = 0x2013;
 const sal_Unicode cStarSymbolEmDash = 0x2014;
-
 
 SvxSwAutoFmtFlags* SwEditShell::pAutoFmtFlags = 0;
 
@@ -138,7 +134,6 @@ class SwAutoFormat
     bool bEmptyLine : 1;
     bool bMoreLines : 1;
 
-
     // ------------- private methods -----------------------------
     void _GetCharClass( LanguageType eLang );
     CharClass& GetCharClass( LanguageType eLang ) const
@@ -150,7 +145,6 @@ class SwAutoFormat
         }
         return *pCharClass;
     }
-
 
     bool IsSpace( const sal_Unicode c ) const
         { return (' ' == c || '\t' == c || 0x0a == c|| 0x3000 == c /* Jap. space */); }
@@ -379,13 +373,11 @@ const SwTxtNode* SwAutoFormat::GetNextNode() const
     return pDoc->GetNodes()[ aNdIdx.GetIndex() + 1 ]->GetTxtNode();
 }
 
-
 sal_Bool SwAutoFormat::IsOneLine( const SwTxtNode& rNd ) const
 {
     SwTxtFrmInfo aFInfo( GetFrm( rNd ) );
     return aFInfo.IsOneLine();
 }
-
 
 sal_Bool SwAutoFormat::IsFastFullLine( const SwTxtNode& rNd ) const
 {
@@ -397,7 +389,6 @@ sal_Bool SwAutoFormat::IsFastFullLine( const SwTxtNode& rNd ) const
     }
     return bRet;
 }
-
 
 sal_Bool SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
 {
@@ -422,7 +413,6 @@ sal_Bool SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
     // 1.) / 1. / 1.1.1 / (1). / (1) / ....
     return USHRT_MAX != GetDigitLevel( rNd, nBlnks );
 }
-
 
 sal_Bool SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd ) const
 {
@@ -451,7 +441,6 @@ sal_Bool SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd ) const
     return sal_False;
 }
 
-
 sal_uInt16 SwAutoFormat::CalcLevel( const SwTxtNode& rNd, sal_uInt16 *pDigitLvl ) const
 {
     sal_uInt16 nLvl = 0, nBlnk = 0;
@@ -470,7 +459,6 @@ sal_uInt16 SwAutoFormat::CalcLevel( const SwTxtNode& rNd, sal_uInt16 *pDigitLvl 
         }
         ++nLvl;
     }
-
 
     for (xub_StrLen n = 0, nEnd = rTxt.getLength(); n < nEnd; ++n)
     {
@@ -491,8 +479,6 @@ sal_uInt16 SwAutoFormat::CalcLevel( const SwTxtNode& rNd, sal_uInt16 *pDigitLvl 
     return nLvl;
 }
 
-
-
 xub_StrLen SwAutoFormat::GetBigIndent( xub_StrLen& rAktSpacePos ) const
 {
     SwTxtFrmInfo aFInfo( GetFrm( *pAktTxtNd ) );
@@ -509,7 +495,6 @@ xub_StrLen SwAutoFormat::GetBigIndent( xub_StrLen& rAktSpacePos ) const
 
     return aFInfo.GetBigIndent( rAktSpacePos, pNxtFrm );
 }
-
 
 sal_Bool SwAutoFormat::IsNoAlphaLine( const SwTxtNode& rNd ) const
 {
@@ -531,8 +516,6 @@ sal_Bool SwAutoFormat::IsNoAlphaLine( const SwTxtNode& rNd ) const
     nLen = ( nLen * 3 ) / 4;            // long overflow, if the strlen > sal_uInt16
     return xub_StrLen(nLen) < (rStr.Len() - nANChar - nBlnk);
 }
-
-
 
 bool SwAutoFormat::DoUnderline()
 {
@@ -614,7 +597,6 @@ bool SwAutoFormat::DoUnderline()
     return 2 < nCnt;
 }
 
-
 bool SwAutoFormat::DoTable()
 {
     if( !aFlags.bCreateTable || !aFlags.bAFmtByInput ||
@@ -694,7 +676,6 @@ bool SwAutoFormat::DoTable()
     return 1 < aPosArr.size();
 }
 
-
 String& SwAutoFormat::DelLeadingBlanks( String& rStr ) const
 {
     xub_StrLen nL;
@@ -706,7 +687,6 @@ String& SwAutoFormat::DelLeadingBlanks( String& rStr ) const
         rStr.Erase( 0, n );
     return rStr;
 }
-
 
 String& SwAutoFormat::DelTrailingBlanks( String& rStr ) const
 {
@@ -721,7 +701,6 @@ String& SwAutoFormat::DelTrailingBlanks( String& rStr ) const
     return rStr;
 }
 
-
 xub_StrLen SwAutoFormat::GetLeadingBlanks( const String& rStr ) const
 {
     xub_StrLen nL;
@@ -731,7 +710,6 @@ xub_StrLen SwAutoFormat::GetLeadingBlanks( const String& rStr ) const
         ;
     return n;
 }
-
 
 xub_StrLen SwAutoFormat::GetTrailingBlanks( const String& rStr ) const
 {
@@ -743,7 +721,6 @@ xub_StrLen SwAutoFormat::GetTrailingBlanks( const String& rStr ) const
         ;
     return ++n;
 }
-
 
 bool SwAutoFormat::IsFirstCharCapital( const SwTxtNode& rNd ) const
 {
@@ -760,7 +737,6 @@ bool SwAutoFormat::IsFirstCharCapital( const SwTxtNode& rNd ) const
         }
     return false;
 }
-
 
 sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
         String* pPreFix, String* pPostFix, String* pNumTypes ) const
@@ -1001,7 +977,6 @@ CHECK_ROMAN_5:
     return nDigitLvl;       // 0 .. 9 (MAXLEVEL - 1)
 }
 
-
 void SwAutoFormat::SetColl( sal_uInt16 nId, bool bHdLineOrText )
 {
     aDelPam.DeleteMark();
@@ -1035,7 +1010,6 @@ void SwAutoFormat::SetColl( sal_uInt16 nId, bool bHdLineOrText )
     pDoc->SetTxtFmtCollByAutoFmt( *aDelPam.GetPoint(), nId, &aSet );
 }
 
-
 bool SwAutoFormat::HasSelBlanks( SwPaM& rPam ) const
 {
     // Is there a Blank at the beginning or end?
@@ -1060,7 +1034,6 @@ bool SwAutoFormat::HasSelBlanks( SwPaM& rPam ) const
     return true;
 }
 
-
 bool SwAutoFormat::HasBreakAttr( const SwTxtNode& rTxtNd ) const
 {
     const SfxItemSet* pSet = rTxtNd.GetpSwAttrSet();
@@ -1079,7 +1052,6 @@ bool SwAutoFormat::HasBreakAttr( const SwTxtNode& rTxtNd ) const
     return false;
 }
 
-
 /// Is there a dot at the end?
 bool SwAutoFormat::IsSentenceAtEnd( const SwTxtNode& rTxtNd ) const
 {
@@ -1092,7 +1064,6 @@ bool SwAutoFormat::IsSentenceAtEnd( const SwTxtNode& rTxtNd ) const
         ;
     return '.' == rStr.GetChar( n );
 }
-
 
 /// Delete beginning and/or end in a node
 void SwAutoFormat::DeleteAktPara( bool bStart, bool bEnd )
@@ -1186,7 +1157,6 @@ bool SwAutoFormat::DeleteAktNxtPara( const String& rNxtPara )
     return !bHasBlnks;
 }
 
-
 void SwAutoFormat::DelEmptyLine( bool bTstNextPara )
 {
     SetRedlineTxt( STR_AUTOFMTREDL_DEL_EMPTY_PARA );
@@ -1226,7 +1196,6 @@ void SwAutoFormat::DelEmptyLine( bool bTstNextPara )
     ClearRedlineTxt();
 }
 
-
 void SwAutoFormat::DelMoreLinesBlanks( bool bWithLineBreaks )
 {
     if( aFlags.bAFmtByInput
@@ -1263,7 +1232,6 @@ void SwAutoFormat::DelMoreLinesBlanks( bool bWithLineBreaks )
     }
 }
 
-
 // delete the previous paragraph
 void SwAutoFormat::DelPrevPara()
 {
@@ -1282,7 +1250,6 @@ void SwAutoFormat::DelPrevPara()
     }
     aDelPam.DeleteMark();
 }
-
 
 void SwAutoFormat::BuildIndent()
 {
@@ -1322,7 +1289,6 @@ void SwAutoFormat::BuildIndent()
     AutoCorrect();
 }
 
-
 void SwAutoFormat::BuildTextIndent()
 {
     SetRedlineTxt( STR_AUTOFMTREDL_SET_TMPL_TEXT_INDENT);
@@ -1361,7 +1327,6 @@ void SwAutoFormat::BuildTextIndent()
     AutoCorrect();
 }
 
-
 void SwAutoFormat::BuildText()
 {
     SetRedlineTxt( STR_AUTOFMTREDL_SET_TMPL_TEXT );
@@ -1398,7 +1363,6 @@ void SwAutoFormat::BuildText()
     DeleteAktPara( true, true );
     AutoCorrect();
 }
-
 
 void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 {
@@ -1712,7 +1676,6 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
     AutoCorrect( nAutoCorrPos );
 }
 
-
 void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
 {
     SetRedlineTxt( STR_AUTOFMTREDL_SET_TMPL_NEG_INDENT );
@@ -1798,7 +1761,6 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
     AutoCorrect();
 }
 
-
 void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
 {
     if( aFlags.bWithRedlining )
@@ -1831,7 +1793,6 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
         AutoCorrect();
     }
 }
-
 
 /// Start autocorrection for the current TextNode
 void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
@@ -2128,7 +2089,6 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
     } while (nPos < pTxt->getLength());
     ClearRedlineTxt();
 }
-
 
 SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                             SwNodeIndex* pSttNd, SwNodeIndex* pEndNd )
@@ -2615,7 +2575,6 @@ void SwEditShell::AutoFormat( const SvxSwAutoFmtFlags* pAFlags )
 
     delete pWait;
 }
-
 
 void SwEditShell::AutoFmtBySplitNode()
 {

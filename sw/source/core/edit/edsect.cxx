@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <editsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -55,7 +54,6 @@ SwEditShell::InsertSection(
     return pRet;
 }
 
-
 sal_Bool SwEditShell::IsInsRegionAvailable() const
 {
     if( IsTableMode() )
@@ -69,7 +67,6 @@ sal_Bool SwEditShell::IsInsRegionAvailable() const
     return sal_True;
 }
 
-
 const SwSection* SwEditShell::GetCurrSection() const
 {
     if( IsTableMode() )
@@ -82,7 +79,6 @@ const SwSection* SwEditShell::GetCurrSection() const
  *
  * In footnotes it may not be the area within the footnote.
  */
-
 const SwSection* SwEditShell::GetAnySection( sal_Bool bOutOfTab, const Point* pPt ) const
 {
     SwFrm *pFrm;
@@ -117,7 +113,6 @@ sal_uInt16 SwEditShell::GetSectionFmtCount() const
 {
     return GetDoc()->GetSections().size();
 }
-
 
 sal_Bool SwEditShell::IsAnySectionInDoc( sal_Bool bChkReadOnly, sal_Bool bChkHidden, sal_Bool bChkTOX ) const
 {
@@ -155,7 +150,6 @@ const SwSectionFmt& SwEditShell::GetSectionFmt( sal_uInt16 nFmt ) const
     return *GetDoc()->GetSections()[ nFmt ];
 }
 
-
 void SwEditShell::DelSectionFmt( sal_uInt16 nFmt )
 {
     StartAllAction();
@@ -164,7 +158,6 @@ void SwEditShell::DelSectionFmt( sal_uInt16 nFmt )
     CallChgLnk();
     EndAllAction();
 }
-
 
 void SwEditShell::UpdateSection(sal_uInt16 const nSect,
         SwSectionData & rNewData, SfxItemSet const*const pAttr)
@@ -320,7 +313,6 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
     OSL_ENSURE( pCurrentPos != NULL, "Strange, we have no position!" );
     const SwNode& rCurrentNode = pCurrentPos->nNode.GetNode();
 
-
     // find innermost section or table.  At the end of this scope,
     // pInntermostNode contain the section/table before/after which we should
     // insert our empty paragraph, or it will be NULL if none is found.
@@ -391,13 +383,11 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
             pReturn = pInnermostNode;
     }
 
-
     OSL_ENSURE( ( pReturn == NULL ) || pReturn->IsStartNode() ||
                                        pReturn->IsEndNode(),
                 "SpecialInsertNode failed" );
     return pReturn;
 }
-
 
 /** a node can be special-inserted (alt-Enter) whenever lcl_SpecialInsertNode
     finds a suitable position

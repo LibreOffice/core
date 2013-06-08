@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svdview.hxx>
 
 #include <editsh.hxx>
@@ -34,7 +33,6 @@
 #include <docsh.hxx>
 #include <pagefrm.hxx>
 
-
 /** helper function to select all objects in an SdrMarkList;
  * implementation: see below */
 static void lcl_SelectSdrMarkList( SwEditShell* pShell,
@@ -42,7 +40,6 @@ static void lcl_SelectSdrMarkList( SwEditShell* pShell,
 
 bool SwEditShell::CursorsLocked() const
 {
-
     return GetDoc()->GetDocShell()->GetModel()->hasControllersLocked();
 }
 
@@ -201,7 +198,6 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
     return bRet;
 }
 
-
 bool SwEditShell::Repeat(sal_uInt16 const nCount)
 {
     SET_CURR_SHELL( this );
@@ -222,7 +218,6 @@ bool SwEditShell::Repeat(sal_uInt16 const nCount)
     EndAllAction();
     return bRet;
 }
-
 
 static void lcl_SelectSdrMarkList( SwEditShell* pShell,
                             const SdrMarkList* pSdrMarkList )

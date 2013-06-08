@@ -96,7 +96,6 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
     rPam.DeleteMark();
 }
 
-
 long SwEditShell::Delete()
 {
     SET_CURR_SHELL( this );
@@ -330,7 +329,5 @@ sal_Bool SwEditShell::DelFullPara()
     }
     return bRet;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

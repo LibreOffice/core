@@ -26,7 +26,6 @@
 #include "edimp.hxx"
 #include "frmtool.hxx"
 
-
 sal_uInt16 SwEditShell::GetRedlineMode() const
 {
     return GetDoc()->GetRedlineMode();
@@ -135,7 +134,5 @@ sal_uInt16 SwEditShell::FindRedlineOfData( const SwRedlineData& rData ) const
             return i;
     return USHRT_MAX;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -273,8 +273,6 @@ SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
     return NULL;
 }
 
-
-
 sal_Bool SwEditShell::GetCurFtn( SwFmtFtn* pFillFtn )
 {
     // The cursor must be positioned on the current footnotes anchor:
@@ -295,7 +293,6 @@ sal_Bool SwEditShell::GetCurFtn( SwFmtFtn* pFillFtn )
     return 0 != pFtn;
 }
 
-
 bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
 {
     bool bChgd = false;
@@ -313,7 +310,6 @@ bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
     return bChgd;
 }
 
-
 bool SwEditShell::HasFtns( bool bEndNotes ) const
 {
     const SwFtnIdxs &rIdxs = mpDoc->GetFtnIdxs();
@@ -325,7 +321,6 @@ bool SwEditShell::HasFtns( bool bEndNotes ) const
     }
     return false;
 }
-
 
 /// Give a List of all footnotes and their beginning texts
 sal_uInt16 SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
@@ -366,7 +361,6 @@ sal_uInt16 SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
 
     return rList.Count();
 }
-
 
 /// Adjust left margin via object bar (similar to adjustment of numerations).
 bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
@@ -438,7 +432,6 @@ void SwEditShell::MoveLeftMargin( bool bRight, bool bModulus )
     EndUndo( UNDO_END );
     EndAllAction();
 }
-
 
 static inline sal_uInt16 lcl_SetScriptFlags( sal_uInt16 nType )
 {
@@ -523,7 +516,6 @@ static bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
 
     return bRet;
 }
-
 
 /// returns the script type of the selection
 sal_uInt16 SwEditShell::GetScriptType() const
@@ -638,7 +630,6 @@ sal_uInt16 SwEditShell::GetScriptType() const
         nRet = SvtLanguageOptions::GetScriptTypeOfLanguage( LANGUAGE_SYSTEM );
     return nRet;
 }
-
 
 sal_uInt16 SwEditShell::GetCurLang() const
 {

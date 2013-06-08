@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <editsh.hxx>
 #include <doc.hxx>      // for aNodes
 #include <IDocumentUndoRedo.hxx>
@@ -26,12 +25,9 @@
 #include <swundo.hxx>   // for the UndoIds
 #include <ndtxt.hxx>    // fot Get-/ChgFmt Set-/GetAttrXXX
 
-
-
 /*
  * hard formatting (Attribute)
  */
-
 
 void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
 {
@@ -57,8 +53,6 @@ void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
     CallChgLnk();
     EndAllAction();
 }
-
-
 
 void SwEditShell::GCAttr()
 {
@@ -100,9 +94,7 @@ void SwEditShell::SetDefault( const SfxPoolItem& rFmtHint )
 const SfxPoolItem& SwEditShell::GetDefault( sal_uInt16 nFmtHint ) const
 {
     return GetDoc()->GetDefault( nFmtHint );
-
 }
-
 
 void SwEditShell::SetAttr( const SfxPoolItem& rHint, sal_uInt16 nFlags )
 {
@@ -132,7 +124,6 @@ void SwEditShell::SetAttr( const SfxPoolItem& rHint, sal_uInt16 nFlags )
     }
     EndAllAction();
 }
-
 
 void SwEditShell::SetAttr( const SfxItemSet& rSet, sal_uInt16 nFlags, SwPaM* pPaM )
 {
@@ -165,8 +156,5 @@ void SwEditShell::SetAttr( const SfxItemSet& rSet, sal_uInt16 nFlags, SwPaM* pPa
     }
     EndAllAction();
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

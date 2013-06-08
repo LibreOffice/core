@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <editsh.hxx>
@@ -29,7 +28,6 @@
 #include <section.hxx>
 #include <doctxm.hxx>
 #include <edglbldc.hxx>
-
 
 sal_Bool SwEditShell::IsGlobalDoc() const
 {

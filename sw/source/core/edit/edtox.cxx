@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
@@ -78,8 +77,6 @@ void SwEditShell::Insert(const SwTOXMark& rMark)
     FOREACHPAM_END()
     EndAllAction();
 }
-
-
 
 void SwEditShell::DeleteTOXMark( SwTOXMark* pMark )
 {
@@ -224,7 +221,6 @@ sal_uInt16 SwEditShell::GetTOIKeys( SwTOIKeyType eTyp, std::vector<String>& rArr
     return GetDoc()->GetTOIKeys( eTyp, rArr );
 }
 
-
 sal_uInt16 SwEditShell::GetTOXCount() const
 {
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
@@ -238,7 +234,6 @@ sal_uInt16 SwEditShell::GetTOXCount() const
     }
     return nRet;
 }
-
 
 const SwTOXBase* SwEditShell::GetTOX( sal_uInt16 nPos ) const
 {
@@ -262,7 +257,6 @@ void SwEditShell::SetUpdateTOX( sal_Bool bFlag )
 {
     GetDoc()->SetUpdateTOX( bFlag );
 }
-
 
 sal_Bool SwEditShell::IsUpdateTOX() const
 {
@@ -313,9 +307,7 @@ void SwEditShell::ApplyAutoMark()
         Push();
         rtl_TextEncoding eChrSet = ::osl_getThreadTextEncoding();
 
-        //
         // SearchOptions to be used in loop below
-        //
         bool bCaseSensitive = true;
         bool bWordOnly      = false;
         bool bSrchInSel     = false;
@@ -425,7 +417,5 @@ void SwEditShell::ApplyAutoMark()
     DoUndo(bDoesUndo);
     EndAllAction();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
