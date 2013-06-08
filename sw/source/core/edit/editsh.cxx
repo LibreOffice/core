@@ -711,7 +711,7 @@ sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
                     rArr.push_back( pNew );
                 }
             }
-    }
+        }
     }
     return rArr.size();
 }

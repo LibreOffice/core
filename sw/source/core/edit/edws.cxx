@@ -228,8 +228,7 @@ SwUndoId SwEditShell::StartUndo( SwUndoId eUndoId,
  * @param eUndoId   ID of the undo container
  * @param pRewriter ?
 */
-SwUndoId SwEditShell::EndUndo(SwUndoId eUndoId,
-                                const SwRewriter *pRewriter)
+SwUndoId SwEditShell::EndUndo(SwUndoId eUndoId, const SwRewriter *pRewriter)
 { return GetDoc()->GetIDocumentUndoRedo().EndUndo(eUndoId, pRewriter); }
 
 bool     SwEditShell::GetLastUndoInfo(OUString *const o_pStr,

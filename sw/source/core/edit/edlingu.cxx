@@ -900,7 +900,8 @@ uno::Reference< XSpellAlternatives >
                 // don't determine the rectangle in the current line
                 xub_StrLen nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
                 // take one less than the line end - otherwise the next line would be calculated
-                xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd: (nBegin + nLen - nLeft - nRight);
+                xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd
+                                        ? nLineEnd : (nBegin + nLen - nLeft - nRight);
                 Push();
                 pCrsr->DeleteMark();
                 SwIndex& rContent = GetCrsr()->GetPoint()->nContent;
@@ -1025,7 +1026,8 @@ bool SwEditShell::GetGrammarCorrection(
                 // don't determine the rectangle in the current line
                 xub_StrLen nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
                 // take one less than the line end - otherwise the next line would be calculated
-                xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd: (nBegin + nLen - nLeft - nRight);
+                xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd
+                                        ? nLineEnd : (nBegin + nLen - nLeft - nRight);
                 Push();
                 pCrsr->DeleteMark();
                 SwIndex& rContent = GetCrsr()->GetPoint()->nContent;
@@ -1072,8 +1074,7 @@ void SwEditShell::PutSpellingToSentenceStart()
     pSpellIter->ToSentenceStart();
 }
 
-static sal_uInt32 lcl_CountRedlines(
-                            const ::svx::SpellPortions& rLastPortions)
+static sal_uInt32 lcl_CountRedlines(const ::svx::SpellPortions& rLastPortions)
 {
     sal_uInt32 nRet = 0;
     SpellPortions::const_iterator aIter = rLastPortions.begin();
@@ -1385,8 +1386,8 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
             pCrsr->SetMark();
             --GetCrsrCnt();
         }
-    }
-    while ( bGoOn );
+    } while ( bGoOn );
+
     if(xSpellRet.is() || bGrammarErrorFound)
     {
         // an error has been found

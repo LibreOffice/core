@@ -69,7 +69,8 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
             SwGlblDocContent* pNew;
             switch( pSect->GetType() )
             {
-            case TOX_HEADER_SECTION:    break;      // ignore
+            case TOX_HEADER_SECTION:
+                break;      // ignore
             case TOX_CONTENT_SECTION:
                 OSL_ENSURE( pSect->ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
                 pNew = new SwGlblDocContent( (SwTOXBaseSection*)pSect );
