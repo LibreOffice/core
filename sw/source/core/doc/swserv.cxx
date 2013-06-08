@@ -78,17 +78,12 @@ sal_Bool SwServerObject::GetData( uno::Any & rData,
 
         case SECTION_SERVER:
             pPam = new SwPaM( SwPosition( *CNTNT_TYPE.pSectNd ) );
-            if (!pPam)
-            {
-                break;
-            }
             pPam->Move( fnMoveForward );
             pPam->SetMark();
             pPam->GetPoint()->nNode = *CNTNT_TYPE.pSectNd->EndOfSectionNode();
             pPam->Move( fnMoveBackward );
             break;
-        case NONE_SERVER:
-            break;
+        case NONE_SERVER: break;
         }
 
         if( pPam )
