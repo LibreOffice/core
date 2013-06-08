@@ -88,7 +88,7 @@ public class Status extends SimpleStatus {
 
     /**
      * This is a factory method for creating a Status representing that the
-     * result of the activity was excluded. It alwas has FAILED state.
+     * result of the activity was excluded. It always has FAILED state.
      */
     public static Status excluded() {
         return new Status( EXCLUDED, false );

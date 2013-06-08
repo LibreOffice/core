@@ -1972,7 +1972,7 @@ void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, sal_Bool bEnable
     SfxChildWin_Impl *pCW=NULL;
     SfxWorkWindow *pWork = pParent;
 
-    // Get the top parent, child windows are alwas registered at the
+    // Get the top parent, child windows are always registered at the
     // task of the WorkWindow for example the frame or on AppWorkWindow
     while ( pWork && pWork->pParent )
         pWork = pWork->pParent;
@@ -2162,7 +2162,7 @@ sal_Bool SfxWorkWindow::IsFloating( sal_uInt16 nId )
     SfxChildWin_Impl *pCW=NULL;
     SfxWorkWindow *pWork = pParent;
 
-    // Get the top parent, child windows are alwas registered at the
+    // Get the top parent, child windows are always registered at the
     // task of the WorkWindow for example the frame or on AppWorkWindow
     while ( pWork && pWork->pParent )
         pWork = pWork->pParent;
@@ -2246,7 +2246,7 @@ void SfxWorkWindow::SetChildWindow_Impl(sal_uInt16 nId, sal_Bool bOn, sal_Bool b
     SfxChildWin_Impl *pCW=NULL;
     SfxWorkWindow *pWork = pParent;
 
-    // Get the top parent, child windows are alwas registered at the
+    // Get the top parent, child windows are always registered at the
     // task of the WorkWindow for example the frame or on AppWorkWindow
     while ( pWork && pWork->pParent )
         pWork = pWork->pParent;
