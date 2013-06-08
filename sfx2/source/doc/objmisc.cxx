@@ -1627,7 +1627,7 @@ void SfxHeaderAttributes_Impl::SetAttributes()
 void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
 {
     String aValue = rKV.GetValue();
-    if( rKV.GetKey().CompareIgnoreCaseToAscii( "refresh" ) == COMPARE_EQUAL && rKV.GetValue().Len() )
+    if( rKV.GetKey().startsWithIgnoreAsciiCase( "refresh" ) && !rKV.GetValue().isEmpty() )
     {
         sal_uInt32 nTime = aValue.GetToken(  0, ';' ).ToInt32() ;
         String aURL = comphelper::string::strip(aValue.GetToken( 1, ';' ), ' ');
@@ -1649,7 +1649,7 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
             // ignore
         }
     }
-    else if( rKV.GetKey().CompareIgnoreCaseToAscii( "expires" ) == COMPARE_EQUAL )
+    else if( rKV.GetKey().startsWithIgnoreAsciiCase( "expires" ))
     {
         DateTime aDateTime( DateTime::EMPTY );
         if( INetRFC822Message::ParseDateField( rKV.GetValue(), aDateTime ) )

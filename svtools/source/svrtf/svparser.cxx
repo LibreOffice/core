@@ -27,12 +27,12 @@
 // Struktur, um sich die akt. Daten zumerken
 struct SvParser_Impl
 {
-    String          aToken;             // gescanntes Token
-    sal_uLong           nFilePos;           // akt. Position im Stream
-    sal_uLong           nlLineNr;           // akt. Zeilen Nummer
-    sal_uLong           nlLinePos;          // akt. Spalten Nummer
+    OUString        aToken;             // gescanntes Token
+    sal_uLong       nFilePos;           // akt. Position im Stream
+    sal_uLong       nlLineNr;           // akt. Zeilen Nummer
+    sal_uLong       nlLinePos;          // akt. Spalten Nummer
     long            nTokenValue;        // zusaetzlicher Wert (RTF)
-    sal_Bool            bTokenHasValue;     // indicates whether nTokenValue is valid
+    sal_Bool        bTokenHasValue;     // indicates whether nTokenValue is valid
     int             nToken;             // akt. Token
     sal_Unicode     nNextCh;            // akt. Zeichen
 
@@ -382,7 +382,7 @@ int SvParser::GetNextToken()
 
     if( !nTokenStackPos )
     {
-        aToken.Erase();     // Token-Buffer loeschen
+        aToken = "";     // Token-Buffer loeschen
         nTokenValue = -1;   // Kennzeichen fuer kein Value gelesen
         bTokenHasValue = false;
 

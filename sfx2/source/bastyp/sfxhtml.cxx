@@ -274,10 +274,10 @@ void SfxHTMLParser::GetScriptType_Impl( SvKeyValueIterator *pHTTPHeader )
         for( sal_Bool bCont = pHTTPHeader->GetFirst( aKV ); bCont;
              bCont = pHTTPHeader->GetNext( aKV ) )
         {
-            if( aKV.GetKey().EqualsIgnoreCaseAscii(
+            if( aKV.GetKey().equalsIgnoreAsciiCase(
                                     OOO_STRING_SVTOOLS_HTML_META_content_script_type ) )
             {
-                if( aKV.GetValue().Len() )
+                if( !aKV.GetValue().isEmpty() )
                 {
                     String aTmp( aKV.GetValue() );
                     if( aTmp.EqualsIgnoreCaseAscii( sHTML_MIME_text, 0, 5 ) )

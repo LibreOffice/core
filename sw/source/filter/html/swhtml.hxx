@@ -352,20 +352,20 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     friend class _CellSaveStruct;
     friend class _CaptionSaveStruct;
 
-    String      aPathToFile;
-    String      sBaseURL;
-    String      sSaveBaseURL;
-    String      aBasicLib;
-    String      aBasicModule;
-    String      aScriptSource;  // Inhalt des aktuellen Script-Blocks
-    String      aScriptType;    // Type des gelesenen Scripts (StarBasic/VB/JAVA)
-    String      aScriptURL;     // URL eines Scripts
-    String      aStyleSource;   // Inhalt des aktuellen Style-Sheets
-    String      aContents;      // Text des akteullen Marquee, Feldes etc.
-    String      sTitle;
-    String      aUnknownToken;  // ein gestartetes unbekanntes Token
-    String      aBulletGrfs[MAXLEVEL];
-    String      sJmpMark;
+    OUString    aPathToFile;
+    OUString    sBaseURL;
+    OUString    sSaveBaseURL;
+    OUString    aBasicLib;
+    OUString    aBasicModule;
+    OUString    aScriptSource;  // Inhalt des aktuellen Script-Blocks
+    OUString    aScriptType;    // Type des gelesenen Scripts (StarBasic/VB/JAVA)
+    OUString    aScriptURL;     // URL eines Scripts
+    OUString    aStyleSource;   // Inhalt des aktuellen Style-Sheets
+    OUString    aContents;      // Text des akteullen Marquee, Feldes etc.
+    OUString    sTitle;
+    OUString    aUnknownToken;  // ein gestartetes unbekanntes Token
+    OUString    aBulletGrfs[MAXLEVEL];
+    OUString    sJmpMark;
 
     std::vector<sal_uInt16>   aBaseFontStack; // Stack fuer <BASEFONT>
                                 // Bit 0-2: Fontgroesse (1-7)

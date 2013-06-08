@@ -174,7 +174,7 @@ void EditHTMLParser::NextToken( int nToken )
     }
     break;
     case HTML_RAWDATA:
-        if (IsReadStyle() && aToken.Len())
+        if (IsReadStyle() && !aToken.isEmpty())
         {
             // Each token represents a single line.
             maStyleSource.append(aToken);
@@ -715,17 +715,15 @@ void EditHTMLParser::StartPara( bool bReal )
             const HTMLOption& aOption = aOptions[i];
             switch( aOption.GetToken() )
             {
-                case HTML_O_ALIGN:
-                {
-                    if ( aOption.GetString().CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_right ) == COMPARE_EQUAL )
-                        eAdjust = SVX_ADJUST_RIGHT;
-                    else if ( aOption.GetString().CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_middle ) == COMPARE_EQUAL )
-                        eAdjust = SVX_ADJUST_CENTER;
-                    else if ( aOption.GetString().CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_center ) == COMPARE_EQUAL )
-                        eAdjust = SVX_ADJUST_CENTER;
-                    else
-                        eAdjust = SVX_ADJUST_LEFT;
-                }
+            case HTML_O_ALIGN:
+                if ( aOption.GetString().startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_right ))
+                    eAdjust = SVX_ADJUST_RIGHT;
+                else if ( aOption.GetString().startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_middle ))
+                    eAdjust = SVX_ADJUST_CENTER;
+                else if ( aOption.GetString().startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_center ))
+                    eAdjust = SVX_ADJUST_CENTER;
+                else
+                    eAdjust = SVX_ADJUST_LEFT;
                 break;
             }
         }

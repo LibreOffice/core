@@ -1716,10 +1716,10 @@ void SwHTMLParser::EndStyle()
 {
     bIgnoreRawData = sal_False;
 
-    if( aStyleSource.Len() )
+    if( !aStyleSource.isEmpty() )
     {
         pCSS1Parser->ParseStyleSheet( aStyleSource );
-        aStyleSource.Erase();
+        aStyleSource = "";
     }
 }
 

@@ -48,7 +48,7 @@ class SVT_DLLPUBLIC SvParser : public SvRefBase
 
 protected:
     SvStream&       rInput;
-    String          aToken;             // gescanntes Token
+    OUString        aToken;             // gescanntes Token
     sal_uLong           nlLineNr;           // akt. Zeilen Nummer
     sal_uLong           nlLinePos;          // akt. Spalten Nummer
 
@@ -79,7 +79,7 @@ protected:
 
     struct TokenStackType
     {
-        String  sToken;
+        OUString  sToken;
         long    nTokenValue;
         sal_Bool    bTokenHasValue;
         int     nTokenId;
@@ -207,8 +207,8 @@ class SvKeyValue
 {
     /** Representation.
     */
-    String m_aKey;
-    String m_aValue;
+    OUString m_aKey;
+    OUString m_aValue;
 
 public:
     /** Construction.
@@ -216,7 +216,7 @@ public:
     SvKeyValue (void)
     {}
 
-    SvKeyValue (const String &rKey, const String &rValue)
+    SvKeyValue (const OUString &rKey, const OUString &rValue)
         : m_aKey (rKey), m_aValue (rValue)
     {}
 
@@ -235,11 +235,11 @@ public:
 
     /** Operation.
     */
-    const String& GetKey   (void) const { return m_aKey; }
-    const String& GetValue (void) const { return m_aValue; }
+    const OUString& GetKey   (void) const { return m_aKey; }
+    const OUString& GetValue (void) const { return m_aValue; }
 
-    void SetKey   (const String &rKey  ) { m_aKey = rKey; }
-    void SetValue (const String &rValue) { m_aValue = rValue; }
+    void SetKey   (const OUString &rKey  ) { m_aKey = rKey; }
+    void SetValue (const OUString &rValue) { m_aValue = rValue; }
 };
 
 /*========================================================================

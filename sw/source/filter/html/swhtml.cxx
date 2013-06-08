@@ -370,19 +370,19 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
         if( pMed )
         {
             sJmpMark = pMed->GetURLObject().GetMark();
-            if( sJmpMark.Len() )
+            if( !sJmpMark.isEmpty() )
             {
                 eJumpTo = JUMPTO_MARK;
                 xub_StrLen nLastPos, nPos = 0;
-                while( STRING_NOTFOUND != ( nLastPos =
-                        sJmpMark.Search( cMarkSeparator, nPos + 1 )) )
+                while(( nLastPos =
+                        sJmpMark.indexOf( cMarkSeparator, nPos + 1 )) >= 0 )
                     nPos = nLastPos;
 
                 String sCmp;
                 if (nPos)
                 {
                     sCmp = comphelper::string::remove(
-                        sJmpMark.Copy(nPos + 1), ' ');
+                        sJmpMark.copy(nPos + 1), ' ');
                 }
 
                 if( sCmp.Len() )
@@ -405,8 +405,8 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
                 else
                     nPos = STRING_LEN;
 
-                sJmpMark.Erase( nPos );
-                if( !sJmpMark.Len() )
+                sJmpMark = sJmpMark.copy(0, nPos );
+                if( sJmpMark.isEmpty() )
                     eJumpTo = JUMPTO_NONE;
             }
         }
@@ -640,7 +640,7 @@ void SwHTMLParser::Continue( int nToken )
     {
         // noch die letzten Attribute setzen
         {
-            if( aScriptSource.Len() )
+            if( !aScriptSource.isEmpty() )
             {
                 SwScriptFieldType *pType =
                     (SwScriptFieldType*)pDoc->GetSysFldType( RES_SCRIPTFLD );
@@ -989,7 +989,7 @@ void SwHTMLParser::NextToken( int nToken )
             switch( nToken )
             {
             case HTML_TITLE_OFF:
-                if( IsNewDoc() && sTitle.Len() )
+                if( IsNewDoc() && !sTitle.isEmpty() )
                 {
                     if( pDoc->GetDocShell() ) {
                         uno::Reference<document::XDocumentPropertiesSupplier>
@@ -1006,15 +1006,15 @@ void SwHTMLParser::NextToken( int nToken )
                     }
                 }
                 bInTitle = sal_False;
-                sTitle.Erase();
+                sTitle = "";
                 break;
 
             case HTML_NONBREAKSPACE:
-                sTitle += ' ';
+                sTitle += " ";
                 break;
 
             case HTML_SOFTHYPH:
-                sTitle += '-';
+                sTitle += "-";
                 break;
 
             case HTML_TEXTTOKEN:
@@ -1022,16 +1022,16 @@ void SwHTMLParser::NextToken( int nToken )
                 break;
 
             default:
-                sTitle += '<';
+                sTitle += "<";
                 if( (HTML_TOKEN_ONOFF & nToken) && (1 & nToken) )
-                    sTitle += '/';
+                    sTitle += "/";
                 sTitle += sSaveToken;
-                if( aToken.Len() )
+                if( !aToken.isEmpty() )
                 {
-                    sTitle += ' ';
+                    sTitle += " ";
                     sTitle += aToken;
                 }
-                sTitle += '>';
+                sTitle += ">";
                 break;
             }
 
@@ -1072,7 +1072,7 @@ void SwHTMLParser::NextToken( int nToken )
             case HTML_NOEMBED_OFF:
                 aContents = convertLineEnd(aContents, GetSystemLineEnd());
                 InsertComment( aContents, OOO_STRING_SVTOOLS_HTML_noembed );
-                aContents.Erase();
+                aContents = "";
                 bCallNextToken = sal_False;
                 bInNoEmbed = sal_False;
                 break;
@@ -1213,11 +1213,11 @@ void SwHTMLParser::NextToken( int nToken )
             }
             return;
         }
-        else if( aUnknownToken.Len() )
+        else if( !aUnknownToken.isEmpty() )
         {
             // Paste content of unknown tags.
             // (but surely if we are not in the header section) fdo#36080 fdo#34666
-            if (aToken.Len() > 0 && !IsInHeader() )
+            if (!aToken.isEmpty() && !IsInHeader() )
             {
                 if( !bDocInitalized )
                     DocumentDetected();
@@ -1237,18 +1237,18 @@ void SwHTMLParser::NextToken( int nToken )
             switch( nToken )
             {
             case HTML_UNKNOWNCONTROL_OFF:
-                if( aUnknownToken.CompareTo(sSaveToken) != COMPARE_EQUAL )
+                if( !aUnknownToken.startsWith(sSaveToken))
                     return;
             case HTML_FRAMESET_ON:
             case HTML_HEAD_OFF:
             case HTML_BODY_ON:
             case HTML_IMAGE:        // Don't know why Netscape acts this way.
-                aUnknownToken.Erase();
+                aUnknownToken = "";
                 break;
             case HTML_TEXTTOKEN:
                 return;
             default:
-                aUnknownToken.Erase();
+                aUnknownToken = "";
                 break;
             }
         }
@@ -1257,10 +1257,10 @@ void SwHTMLParser::NextToken( int nToken )
     switch( nToken )
     {
     case HTML_BODY_ON:
-        if( aStyleSource.Len() )
+        if( !aStyleSource.isEmpty() )
         {
             pCSS1Parser->ParseStyleSheet( aStyleSource );
-            aStyleSource.Erase();
+            aStyleSource = "";
         }
         if( IsNewDoc() )
         {
@@ -1378,8 +1378,8 @@ void SwHTMLParser::NextToken( int nToken )
             }
             else if( IsReadStyle() )
             {
-                if( aStyleSource.Len() )
-                    aStyleSource += '\n';
+                if( !aStyleSource.isEmpty() )
+                    aStyleSource += "\n";
                 aStyleSource += aToken;
             }
         }
@@ -1450,7 +1450,7 @@ void SwHTMLParser::NextToken( int nToken )
 
     case HTML_TEXTTOKEN:
         // insert string without spanning attributes at the end.
-        if( aToken.Len() && ' '==aToken.GetChar(0) && !IsReadPRE() )
+        if( !aToken.isEmpty() && ' '==aToken[0] && !IsReadPRE() )
         {
             xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
             if( nPos )
@@ -1459,19 +1459,19 @@ void SwHTMLParser::NextToken( int nToken )
                     pPam->GetPoint()->nNode.GetNode().GetTxtNode()->GetTxt();
                 sal_Unicode cLast = rText.GetChar(--nPos);
                 if( ' ' == cLast || '\x0a' == cLast)
-                    aToken.Erase(0,1);
+                    aToken = aToken.copy(1);
             }
             else
-                aToken.Erase(0,1);
+                aToken = aToken.copy(1);
 
-            if( !aToken.Len() )
+            if( aToken.isEmpty() )
             {
                 bUpperSpace = bUpperSpaceSave;
                 break;
             }
         }
 
-        if( aToken.Len() )
+        if( !aToken.isEmpty() )
         {
             if( !bDocInitalized )
                 DocumentDetected();
@@ -1885,10 +1885,10 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_HEAD_OFF:
-        if( aStyleSource.Len() )
+        if( !aStyleSource.isEmpty() )
         {
             pCSS1Parser->ParseStyleSheet( aStyleSource );
-            aStyleSource.Erase();
+            aStyleSource = "";
         }
         break;
 
@@ -1944,15 +1944,15 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_COMMENT:
-        if( ( aToken.Len() > 5 ) && ( ! bIgnoreHTMLComments ) )
+        if( ( aToken.getLength() > 5 ) && ( ! bIgnoreHTMLComments ) )
         {
             // insert as Post-It
             // If there are no space characters right behind
             // the <!-- and on front of the -->, leave the comment untouched.
-            if( ' ' == aToken.GetChar( 3 ) &&
-                ' ' == aToken.GetChar( aToken.Len()-3 ) )
+            if( ' ' == aToken[ 3 ] &&
+                ' ' == aToken[ aToken.getLength()-3 ] )
             {
-                String aComment( aToken.Copy( 3, aToken.Len()-5 ) );
+                String aComment( aToken.copy( 3, aToken.getLength()-5 ) );
                 InsertComment(comphelper::string::strip(aComment, ' '));
             }
             else
@@ -2010,9 +2010,9 @@ void SwHTMLParser::NextToken( int nToken )
         // does not start with a '!'.
         // (but judging from the code, also if does not start with a '%')
         // (and also if we're not somewhere we consider PRE)
-        if( IsInHeader() && !IsReadPRE() && !aUnknownToken.Len() &&
-            sSaveToken.Len() && '!' != sSaveToken.GetChar(0) &&
-            '%' != sSaveToken.GetChar(0) )
+        if( IsInHeader() && !IsReadPRE() && aUnknownToken.isEmpty() &&
+            !sSaveToken.isEmpty() && '!' != sSaveToken[0] &&
+            '%' != sSaveToken[0] )
             aUnknownToken = sSaveToken;
         // no break
 
@@ -2030,7 +2030,7 @@ void SwHTMLParser::NextToken( int nToken )
         if( (HTML_TOKEN_ONOFF & nToken) != 0 && (1 & nToken) != 0 )
             aComment += '/';
         aComment += sSaveToken;
-        if( aToken.Len() )
+        if( !aToken.isEmpty() )
         {
             UnescapeToken();
             (aComment += ' ') += aToken;
@@ -3673,11 +3673,11 @@ void SwHTMLParser::NewFontAttr( int nToken )
         switch( rOption.GetToken() )
         {
         case HTML_O_SIZE:
-            if( HTML_FONT_ON==nToken && rOption.GetString().Len() )
+            if( HTML_FONT_ON==nToken && !rOption.GetString().isEmpty() )
             {
                 sal_Int32 nSSize;
-                if( '+' == rOption.GetString().GetChar(0) ||
-                    '-' == rOption.GetString().GetChar(0) )
+                if( '+' == rOption.GetString()[0] ||
+                    '-' == rOption.GetString()[0] )
                     nSSize = nBaseSize + rOption.GetSNumber();
                 else
                     nSSize = (sal_Int32)rOption.GetNumber();
@@ -4874,12 +4874,12 @@ void SwHTMLParser::InsertSpacer()
             break;
         case HTML_O_WIDTH:
             // erstmal nur als Pixelwerte merken!
-            bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            bPrcWidth = (rOption.GetString().indexOf('%') >= 0);
             aSize.Width() = (long)rOption.GetNumber();
             break;
         case HTML_O_HEIGHT:
             // erstmal nur als Pixelwerte merken!
-            bPrcHeight = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            bPrcHeight = (rOption.GetString().indexOf('%') >= 0);
             aSize.Height() = (long)rOption.GetNumber();
             break;
         case HTML_O_SIZE:
@@ -5257,7 +5257,7 @@ void SwHTMLParser::InsertHorzRule()
             nSize = (sal_uInt16)rOption.GetNumber();
             break;
         case HTML_O_WIDTH:
-            bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            bPrcWidth = (rOption.GetString().indexOf('%') >= 0);
             nWidth = (sal_uInt16)rOption.GetNumber();
             if( bPrcWidth && nWidth>=100 )
             {

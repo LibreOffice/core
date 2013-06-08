@@ -246,7 +246,7 @@ protected:
     virtual void InsertPara() = 0;
 
 
-    String& DelCharAtEnd( String& rStr, const sal_Unicode cDel );
+    OUString& DelCharAtEnd( OUString& rStr, const sal_Unicode cDel );
 
     // is called for each token that is recognized in CallParser
     virtual void NextToken( int nToken );

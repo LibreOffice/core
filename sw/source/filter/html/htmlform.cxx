@@ -2240,7 +2240,7 @@ void SwHTMLParser::InsertTextAreaText( sal_uInt16 nToken )
     default:
         rText += '<';
         rText += sSaveToken;
-        if( aToken.Len() )
+        if( !aToken.isEmpty() )
         {
             rText += ' ';
             rText += aToken;
@@ -2617,13 +2617,13 @@ void SwHTMLParser::InsertSelectText()
     {
         String& rText = pFormImpl->GetStringList().back();
 
-        if( aToken.Len() && ' '==aToken.GetChar( 0 ) )
+        if( !aToken.isEmpty() && ' '==aToken[ 0 ] )
         {
             xub_StrLen nLen = rText.Len();
             if( !nLen || ' '==rText.GetChar( nLen-1 ))
-                aToken.Erase( 0, 1 );
+                aToken = aToken.copy(1);
         }
-        if( aToken.Len() )
+        if( !aToken.isEmpty() )
             rText += aToken;
     }
 }

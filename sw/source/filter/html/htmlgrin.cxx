@@ -309,7 +309,8 @@ void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
 void SwHTMLParser::InsertImage()
 {
     // und jetzt auswerten
-    String sGrfNm, sAltNm, aId, aClass, aStyle, aMap, sHTMLGrfName;
+    OUString sGrfNm;
+    OUString sAltNm, aId, aClass, aStyle, aMap, sHTMLGrfName;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     long nWidth=0, nHeight=0;
@@ -358,14 +359,14 @@ void SwHTMLParser::InsertImage()
             case HTML_O_WIDTH:
                 // erstmal nur als Pixelwerte merken!
                 nWidth = rOption.GetNumber();
-                bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+                bPrcWidth = (rOption.GetString().indexOf('%') >= 0);
                 if( bPrcWidth && nWidth>100 )
                     nWidth = 100;
                 break;
             case HTML_O_HEIGHT:
                 // erstmal nur als Pixelwerte merken!
                 nHeight = rOption.GetNumber();
-                bPrcHeight = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+                bPrcHeight = (rOption.GetString().indexOf('%') >= 0);
                 if( bPrcHeight && nHeight>100 )
                     nHeight = 100;
                 break;
@@ -425,7 +426,7 @@ IMAGE_SETEVENT:
         }
     }
 
-    if( !sGrfNm.Len() )
+    if( sGrfNm.isEmpty() )
         return;
 
     // Wenn wir in einer Numerierung stehen und der Absatz noch leer und
@@ -433,7 +434,7 @@ IMAGE_SETEVENT:
     // einer Bullet-Liste
     if( !pPam->GetPoint()->nContent.GetIndex() &&
         GetNumInfo().GetDepth() > 0 && GetNumInfo().GetDepth() <= MAXLEVEL &&
-        aBulletGrfs[GetNumInfo().GetDepth()-1].Len() &&
+        !aBulletGrfs[GetNumInfo().GetDepth()-1].isEmpty() &&
         aBulletGrfs[GetNumInfo().GetDepth()-1]==sGrfNm )
     {
         SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
@@ -626,16 +627,16 @@ IMAGE_SETEVENT:
 
     // Image-Map setzen
     aMap = comphelper::string::stripEnd(aMap, ' ');
-    if( aMap.Len() )
+    if( !aMap.isEmpty() )
     {
         // Da wir nur lokale Image-Maps kennen nehmen wireinfach alles
         // hinter dem # als Namen
-        xub_StrLen nPos = aMap.Search( '#' );
+        sal_Int32 nPos = aMap.indexOf( '#' );
         String aName;
-        if ( STRING_NOTFOUND==nPos )
+        if ( nPos < 0 )
             aName = aMap ;
         else
-            aName = aMap.Copy(nPos+1);
+            aName = aMap.copy(nPos+1);
 
         ImageMap *pImgMap = FindImageMap( aName );
         if( pImgMap )
@@ -699,7 +700,7 @@ IMAGE_SETEVENT:
     SwGrfNode *pGrfNd = pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
                                   ->GetIndex()+1 ]->GetGrfNode();
 
-    if( sHTMLGrfName.Len() )
+    if( !sHTMLGrfName.isEmpty() )
     {
         pFlyFmt->SetName( sHTMLGrfName );
 
@@ -711,7 +712,7 @@ IMAGE_SETEVENT:
         }
     }
 
-    if( sAltNm.Len() )
+    if( !sAltNm.isEmpty() )
         pGrfNd->SetTitle( sAltNm );
 
     if( bSetTwipSize )
@@ -784,7 +785,7 @@ IMAGE_SETEVENT:
     // Ggf. Frames anlegen und Auto-gebundenen Rahmen registrieren
     RegisterFlyFrm( pFlyFmt );
 
-    if( aId.Len() )
+    if( !aId.isEmpty() )
         InsertBookmark( aId );
 }
 

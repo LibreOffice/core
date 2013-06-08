@@ -163,7 +163,8 @@ void SwHTMLParser::NewNumBulList( int nToken )
     }
 
     // und es ggf. durch die Optionen veraendern
-    String aId, aStyle, aClass, aBulletSrc, aLang, aDir;
+    String aId, aStyle, aClass, aLang, aDir;
+    OUString aBulletSrc;
     sal_Int16 eVertOri = text::VertOrientation::NONE;
     sal_uInt16 nWidth=USHRT_MAX, nHeight=USHRT_MAX;
     const HTMLOptions& rHTMLOptions = GetOptions();
@@ -176,13 +177,13 @@ void SwHTMLParser::NewNumBulList( int nToken )
             aId = rOption.GetString();
             break;
         case HTML_O_TYPE:
-            if( bNewNumFmt && rOption.GetString().Len() )
+            if( bNewNumFmt && !rOption.GetString().isEmpty() )
             {
                 switch( nToken )
                 {
                 case HTML_ORDERLIST_ON:
                     bChangeNumFmt = sal_True;
-                    switch( rOption.GetString().GetChar(0) )
+                    switch( rOption.GetString()[0] )
                     {
                     case 'A':   aNumFmt.SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER); break;
                     case 'a':   aNumFmt.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER); break;
@@ -248,7 +249,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
         }
     }
 
-    if( aBulletSrc.Len() )
+    if( !aBulletSrc.isEmpty() )
     {
         // Eine Bullet-Liste mit Grafiken
         aNumFmt.SetNumberingType(SVX_NUM_BITMAP);
@@ -279,8 +280,9 @@ void SwHTMLParser::NewNumBulList( int nToken )
         bChangeNumFmt = sal_True;
     }
     else
-        aBulletGrfs[nLevel].Erase();
-
+    {
+        aBulletGrfs[nLevel] = "";
+    }
     // den aktuellen Absatz erst einmal nicht numerieren
     {
         sal_uInt8 nLvl = nLevel;

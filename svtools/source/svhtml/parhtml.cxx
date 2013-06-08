@@ -98,11 +98,16 @@ sal_uInt16 HTMLOption::GetEnum( const HTMLOptionEnum *pOptEnums, sal_uInt16 nDfl
     sal_uInt16 nValue = nDflt;
 
     while( pOptEnums->pName )
-        if( aValue.EqualsIgnoreCaseAscii( pOptEnums->pName ) )
+    {
+        if( aValue.equalsIgnoreAsciiCaseAscii( pOptEnums->pName ) )
+        {
             break;
+        }
         else
+        {
             pOptEnums++;
-
+        }
+    }
     if( pOptEnums->pName )
         nValue = pOptEnums->nValue;
 
@@ -113,21 +118,20 @@ bool HTMLOption::GetEnum( sal_uInt16 &rEnum, const HTMLOptionEnum *pOptEnums ) c
 {
     while( pOptEnums->pName )
     {
-        if( aValue.EqualsIgnoreCaseAscii( pOptEnums->pName ) )
+        if( aValue.equalsIgnoreAsciiCaseAscii( pOptEnums->pName ) )
             break;
         else
             pOptEnums++;
     }
 
-    const sal_Char *pName = pOptEnums->pName;
-    if( pName )
+    if( pOptEnums->pName )
         rEnum = pOptEnums->nValue;
 
-    return (pName != 0);
+    return (pOptEnums->pName != 0);
 }
 
-HTMLOption::HTMLOption( sal_uInt16 nTok, const String& rToken,
-                        const String& rValue )
+HTMLOption::HTMLOption( sal_uInt16 nTok, const OUString& rToken,
+                        const OUString& rValue )
     : aValue(rValue)
     , aToken(rToken)
     , nToken( nTok )
@@ -168,9 +172,9 @@ void HTMLOption::GetNumbers( std::vector<sal_uInt32> &rNumbers, bool bSpaceDelim
         // numerals in the string.
         bool bInNum = false;
         sal_uLong nNum = 0;
-        for( xub_StrLen i=0; i<aValue.Len(); i++ )
+        for( sal_Int32 i=0; i<aValue.getLength(); i++ )
         {
-            register sal_Unicode c = aValue.GetChar( i );
+            register sal_Unicode c = aValue[ i ];
             if( c>='0' && c<='9' )
             {
                 nNum *= 10;
@@ -194,29 +198,29 @@ void HTMLOption::GetNumbers( std::vector<sal_uInt32> &rNumbers, bool bSpaceDelim
         // Check whether numbers are separated by ',' and
         // insert 0 if necessary
         xub_StrLen nPos = 0;
-        while( nPos < aValue.Len() )
+        while( nPos < aValue.getLength() )
         {
             register sal_Unicode c;
-            while( nPos < aValue.Len() &&
-                   ((c=aValue.GetChar(nPos)) == ' ' || c == '\t' ||
+            while( nPos < aValue.getLength() &&
+                   ((c=aValue[nPos]) == ' ' || c == '\t' ||
                    c == '\n' || c== '\r' ) )
                 nPos++;
 
-            if( nPos==aValue.Len() )
+            if( nPos==aValue.getLength() )
                 rNumbers.push_back(0);
             else
             {
-                xub_StrLen nEnd = aValue.Search( (sal_Unicode)',', nPos );
-                if( STRING_NOTFOUND==nEnd )
+                xub_StrLen nEnd = aValue.indexOf( (sal_Unicode)',', nPos );
+                if( nEnd < 0 )
                 {
-                    sal_Int32 nTmp = aValue.Copy(nPos).ToInt32();
+                    sal_Int32 nTmp = aValue.copy(nPos).toInt32();
                     rNumbers.push_back( nTmp >= 0 ? (sal_uInt32)nTmp : 0 );
-                    nPos = aValue.Len();
+                    nPos = aValue.getLength();
                 }
                 else
                 {
                     sal_Int32 nTmp =
-                        aValue.Copy(nPos,nEnd-nPos).ToInt32();
+                        aValue.copy(nPos,nEnd-nPos).toInt32();
                     rNumbers.push_back( nTmp >= 0 ? (sal_uInt32)nTmp : 0 );
                     nPos = nEnd+1;
                 }
@@ -230,27 +234,27 @@ void HTMLOption::GetColor( Color& rColor ) const
     DBG_ASSERT( (nToken>=HTML_OPTION_COLOR_START && nToken<HTML_OPTION_COLOR_END) || nToken==HTML_O_SIZE,
         "GetColor: Option is not a color." );
 
-    String aTmp( aValue );
-    aTmp.ToUpperAscii();
+    OUString aTmp( aValue.toAsciiUpperCase());
+
     sal_uInt32 nColor = SAL_MAX_UINT32;
-    if( '#'!=aTmp.GetChar( 0 ) )
+    if( '#'!=aTmp[ 0 ] )
         nColor = GetHTMLColor( aTmp );
 
     if( SAL_MAX_UINT32 == nColor )
     {
         nColor = 0;
-        xub_StrLen nPos = 0;
+        sal_Int32 nPos = 0;
         for( sal_uInt32 i=0; i<6; i++ )
         {
             // Whatever Netscape does to get color values,
             // at maximum three characters < '0' are ignored.
-            register sal_Unicode c = nPos<aTmp.Len() ? aTmp.GetChar( nPos++ )
+            register sal_Unicode c = nPos<aTmp.getLength() ? aTmp[ nPos++ ]
                                                      : '0';
             if( c < '0' )
             {
-                c = nPos<aTmp.Len() ? aTmp.GetChar(nPos++) : '0';
+                c = nPos<aTmp.getLength() ? aTmp[nPos++] : '0';
                 if( c < '0' )
-                    c = nPos<aTmp.Len() ? aTmp.GetChar(nPos++) : '0';
+                    c = nPos<aTmp.getLength() ? aTmp[nPos++] : '0';
             }
             nColor *= 16;
             if( c >= '0' && c <= '9' )
@@ -579,11 +583,10 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                             else
                             {
                                 // If not scanning a tag return token
-                                aToken +=
-                                    String( sTmpBuffer.makeStringAndClear() );
+                                aToken += sTmpBuffer.makeStringAndClear();
                                 if( cChar )
                                 {
-                                    if( aToken.Len() )
+                                    if( !aToken.isEmpty() )
                                     {
                                         // restart with character
                                         nNextCh = '&';
@@ -602,21 +605,22 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                                     // Hack: _GetNextChar shall not read the
                                     // next character
                                     if( ';' != nNextCh )
-                                        aToken += ' ';
+                                        aToken += " ";
                                     if( 1U == cChar )
                                         return HTML_NONBREAKSPACE;
                                     if( 2U == cChar )
                                         return HTML_SOFTHYPH;
                                 }
-                                aToken += (sal_Unicode)'&';
-                                aToken +=
-                                    String(sEntityBuffer.makeStringAndClear());
+                                aToken += "&";
+                                aToken += sEntityBuffer.makeStringAndClear();
                                 break;
                             }
                         }
                     }
                     else
+                    {
                         nNextCh = 0U;
+                    }
                 }
                 // &{...};-JavaScript-Macros are not supported any longer.
                 else if( IsParserWorking() )
@@ -637,7 +641,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                     // options.
                     sTmpBuffer.append( (sal_Unicode)'\\' );
                     if( MAX_LEN == sTmpBuffer.getLength() )
-                        aToken += String(sTmpBuffer.makeStringAndClear());
+                        aToken += sTmpBuffer.makeStringAndClear();
                 }
                 if( IsParserWorking() )
                 {
@@ -648,7 +652,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 {
                     // Restart with '&', the remainder is returned as
                     // text token.
-                    if( aToken.Len() || sTmpBuffer.getLength() )
+                    if( !aToken.isEmpty() || sTmpBuffer.getLength() )
                     {
                         // _GetNextChar() returns the previous text and
                         // during the next execution a new character is read.
@@ -675,7 +679,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 // Innerhalb von Tags kennzeichnen
                 sTmpBuffer.append( (sal_Unicode)'\\' );
                 if( MAX_LEN == sTmpBuffer.getLength() )
-                    aToken += String(sTmpBuffer.makeStringAndClear());
+                    aToken += sTmpBuffer.makeStringAndClear();
             }
             sTmpBuffer.append( (sal_Unicode)'\\' );
             break;
@@ -766,10 +770,10 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                     if( sal_Unicode(EOF) == (nNextCh = GetNextChar()) &&
                         rInput.IsEof() )
                     {
-                        if( aToken.Len() || sTmpBuffer.getLength() > 1L )
+                        if( !aToken.isEmpty() || sTmpBuffer.getLength() > 1L )
                         {
                             // Have seen s.th. aside from blanks?
-                            aToken += String(sTmpBuffer.makeStringAndClear());
+                            aToken += sTmpBuffer.makeStringAndClear();
                             return HTML_TEXTTOKEN;
                         }
                         else
@@ -787,17 +791,20 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
         default:
             bEqSignFound = false;
             if( (nNextCh==cBreak && !cQuote) ||
-                (sal_uLong(aToken.Len()) + MAX_LEN) > sal_uLong(STRING_MAXLEN & ~1 ))
+                (sal_uLong(aToken.getLength()) + MAX_LEN) > sal_uLong(STRING_MAXLEN & ~1 ))
+            {
                 bContinue = false;
+            }
             else
             {
-                do {
+                do
+                {
                     // All remaining characters make their way into the text.
                     sTmpBuffer.append( nNextCh );
                     if( MAX_LEN == sTmpBuffer.getLength() )
                     {
-                        aToken += String(sTmpBuffer.makeStringAndClear());
-                        if( (sal_uLong(aToken.Len()) + MAX_LEN) >
+                        aToken += sTmpBuffer.makeStringAndClear();
+                        if( (sal_uLong(aToken.getLength()) + MAX_LEN) >
                                 sal_uLong(STRING_MAXLEN & ~1 ) )
                         {
                             nNextCh = GetNextChar();
@@ -805,27 +812,28 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                         }
                     }
                     if( ( sal_Unicode(EOF) == (nNextCh = GetNextChar()) &&
-                          rInput.IsEof() ) ||
-                        !IsParserWorking() )
+                          rInput.IsEof() ) || !IsParserWorking() )
                     {
                         if( sTmpBuffer.getLength() )
-                            aToken += String(sTmpBuffer.makeStringAndClear());
+                            aToken += sTmpBuffer.makeStringAndClear();
                         return HTML_TEXTTOKEN;
                     }
-                } while( HTML_ISALPHA( nNextCh ) || HTML_ISDIGIT( nNextCh ) );
+                }
+                while( HTML_ISALPHA( nNextCh ) || HTML_ISDIGIT( nNextCh ) );
+
                 bNextCh = false;
             }
         }
 
         if( MAX_LEN == sTmpBuffer.getLength() )
-            aToken += String(sTmpBuffer.makeStringAndClear());
+            aToken += sTmpBuffer.makeStringAndClear();
 
         if( bContinue && bNextCh )
             nNextCh = GetNextChar();
     }
 
     if( sTmpBuffer.getLength() )
-        aToken += String(sTmpBuffer.makeStringAndClear());
+        aToken += sTmpBuffer.makeStringAndClear();
 
     return HTML_TEXTTOKEN;
 }
@@ -840,7 +848,7 @@ int HTMLParser::_GetNextRawToken()
         // thus we don't have to search it again.
         bReadScript = false;
         bReadStyle = false;
-        aEndToken.Erase();
+        aEndToken = "";
         bEndTokenFound = false;
 
         return 0;
@@ -860,7 +868,7 @@ int HTMLParser::_GetNextRawToken()
                 // Maybe we've reached the end.
 
                 // Save what we have read previously...
-                aToken += String(sTmpBuffer.makeStringAndClear());
+                aToken += sTmpBuffer.makeStringAndClear();
 
                 // and remember position in stream.
                 sal_uLong nStreamPos = rInput.Tell();
@@ -891,7 +899,7 @@ int HTMLParser::_GetNextRawToken()
                 String aTok( sTmpBuffer.toString() );
                 aTok.ToUpperAscii();
                 bool bDone = false;
-                if( bReadScript || aEndToken.Len() )
+                if( bReadScript || !aEndToken.isEmpty() )
                 {
                     if( !bReadComment )
                     {
@@ -938,13 +946,13 @@ int HTMLParser::_GetNextRawToken()
                     bContinue = false;
 
                     // nToken==0 means, _GetNextToken continues to read
-                    if( !aToken.Len() && (bReadStyle || bReadScript) )
+                    if( aToken.isEmpty() && (bReadStyle || bReadScript) )
                     {
                         // Immediately close environment (or context?)
                         // and parse the end token
                         bReadScript = false;
                         bReadStyle = false;
-                        aEndToken.Erase();
+                        aEndToken = "";
                         nToken = 0;
                     }
                     else
@@ -967,9 +975,9 @@ int HTMLParser::_GetNextRawToken()
                 else
                 {
                     // remember "</" , everything else we find in the buffer
-                    aToken += (sal_Unicode)'<';
+                    aToken += "<";
                     if( bOffState )
-                        aToken += (sal_Unicode)'/';
+                        aToken += "/";
 
                     bNextCh = false;
                 }
@@ -986,7 +994,7 @@ int HTMLParser::_GetNextRawToken()
                     bTwoMinus = true;
 
                     if( MAX_LEN == sTmpBuffer.getLength() )
-                        aToken += String(sTmpBuffer.makeStringAndClear());
+                        aToken += sTmpBuffer.makeStringAndClear();
                     sTmpBuffer.append( nNextCh );
                     nNextCh = GetNextChar();
                 }
@@ -1016,7 +1024,7 @@ int HTMLParser::_GetNextRawToken()
             if( rInput.IsEof() )
             {
                 bContinue = false;
-                if( aToken.Len() || sTmpBuffer.getLength() )
+                if( !aToken.isEmpty() || sTmpBuffer.getLength() )
                 {
                     bEndTokenFound = true;
                 }
@@ -1024,7 +1032,7 @@ int HTMLParser::_GetNextRawToken()
                 {
                     bReadScript = false;
                     bReadStyle = false;
-                    aEndToken.Erase();
+                    aEndToken = "";
                     nToken = 0;
                 }
                 break;
@@ -1038,7 +1046,7 @@ int HTMLParser::_GetNextRawToken()
 
         if( (!bContinue && sTmpBuffer.getLength() > 0L) ||
             MAX_LEN == sTmpBuffer.getLength() )
-            aToken += String(sTmpBuffer.makeStringAndClear());
+            aToken += sTmpBuffer.makeStringAndClear();
 
         if( bContinue && bNextCh )
             nNextCh = GetNextChar();
@@ -1056,14 +1064,14 @@ int HTMLParser::_GetNextRawToken()
 int HTMLParser::_GetNextToken()
 {
     int nRet = 0;
-    sSaveToken.Erase();
+    sSaveToken = "";
 
     if (mnPendingOffToken)
     {
         // HTML_<TOKEN>_OFF generated for HTML_<TOKEN>_ON
         nRet = mnPendingOffToken;
         mnPendingOffToken = 0;
-        aToken.Erase();
+        aToken = "";
         return nRet;
     }
 
@@ -1085,7 +1093,7 @@ int HTMLParser::_GetNextToken()
         bReadNextChar = false;
     }
 
-    if( bReadScript || bReadStyle || aEndToken.Len() )
+    if( bReadScript || bReadStyle || !aEndToken.isEmpty() )
     {
         nRet = _GetNextRawToken();
         if( nRet || !IsParserWorking() )
@@ -1114,13 +1122,13 @@ int HTMLParser::_GetNextToken()
                     do {
                         sTmpBuffer.append( nNextCh );
                         if( MAX_LEN == sTmpBuffer.getLength() )
-                            aToken += String(sTmpBuffer.makeStringAndClear());
+                            aToken += sTmpBuffer.makeStringAndClear();
                         nNextCh = GetNextChar();
                     } while( '>' != nNextCh && '/' != nNextCh && !HTML_ISSPACE( nNextCh ) &&
                              IsParserWorking() && !rInput.IsEof() );
 
                     if( sTmpBuffer.getLength() )
-                        aToken += String(sTmpBuffer.makeStringAndClear());
+                        aToken += sTmpBuffer.makeStringAndClear();
 
                     // Skip blanks
                     while( HTML_ISSPACE( nNextCh ) && IsParserWorking() )
@@ -1135,7 +1143,7 @@ int HTMLParser::_GetNextToken()
 
                     // Search token in table:
                     sSaveToken = aToken;
-                    aToken.ToUpperAscii();
+                    aToken = aToken.toAsciiUpperCase();
                     if( 0 == (nRet = GetHTMLToken( aToken )) )
                         // Unknown control
                         nRet = HTML_UNKNOWNCONTROL_ON;
@@ -1162,11 +1170,11 @@ int HTMLParser::_GetNextToken()
                         //      and append a blank.
                         aToken = sSaveToken;
                         if( '>'!=nNextCh )
-                            aToken += (sal_Unicode)' ';
+                            aToken += " ";
                         sal_uLong nCStreamPos = 0;
                         sal_uLong nCLineNr = 0;
                         sal_uLong nCLinePos = 0;
-                        xub_StrLen nCStrLen = 0;
+                        sal_Int32 nCStrLen = 0;
 
                         bool bDone = false;
                         // Read until closing -->. If not found restart at first >
@@ -1177,18 +1185,17 @@ int HTMLParser::_GetNextToken()
                                 if( !nCStreamPos )
                                 {
                                     nCStreamPos = rInput.Tell();
-                                    nCStrLen = aToken.Len();
+                                    nCStrLen = aToken.getLength();
                                     nCLineNr = GetLineNr();
                                     nCLinePos = GetLinePos();
                                 }
-                                bDone = aToken.Len() >= 2 &&
-                                        aToken.Copy(aToken.Len()-2,2).
-                                                        EqualsAscii( "--" );
+                                bDone = (aToken.getLength() >= 2) &&
+                                    (aToken.copy(aToken.getLength() - 2,2) == "--");
                                 if( !bDone )
-                                aToken += nNextCh;
+                                    aToken += OUString(nNextCh);
                             }
                             else
-                                aToken += nNextCh;
+                                aToken += OUString(nNextCh);
                             if( !bDone )
                                 nNextCh = GetNextChar();
                         }
@@ -1198,14 +1205,14 @@ int HTMLParser::_GetNextToken()
                             SetLineNr( nCLineNr );
                             SetLinePos( nCLinePos );
                             ClearTxtConvContext();
-                            aToken.Erase( nCStrLen );
+                            aToken = aToken.copy(0, nCStrLen);
                             nNextCh = '>';
                         }
                     }
                     else
                     {
                         // TokenString not needed anymore
-                        aToken.Erase();
+                        aToken = "";
                     }
 
                     // Read until closing '>'
@@ -1217,11 +1224,11 @@ int HTMLParser::_GetNextToken()
                         // generate pending HTML_<TOKEN>_OFF for HTML_<TOKEN>_ON
                         // Do not convert this to a single HTML_<TOKEN>_OFF
                         // which lead to fdo#56772.
-                        if ((HTML_TOKEN_ONOFF & nRet) && (aToken.Len() >= 1) &&
-                                ('/' == aToken.GetChar(aToken.Len()-1)))
+                        if ((HTML_TOKEN_ONOFF & nRet) && (aToken.getLength() >= 1) &&
+                                ('/' == aToken[aToken.getLength()-1]))
                         {
                             mnPendingOffToken = nRet + 1;       // HTML_<TOKEN>_ON -> HTML_<TOKEN>_OFF
-                            aToken.Erase( aToken.Len()-1, 1);   // remove trailing '/'
+                            aToken = aToken.copy(0, aToken.getLength()-1);   // remove trailing '/'
                         }
                         if( sal_Unicode(EOF) == nNextCh && rInput.IsEof() )
                         {
@@ -1232,7 +1239,7 @@ int HTMLParser::_GetNextToken()
                             SetLinePos( nLinePos );
                             ClearTxtConvContext();
 
-                            aToken = '<';
+                            aToken = "<";
                             nRet = HTML_TEXTTOKEN;
                             nNextCh = GetNextChar();
                             bNextCh = false;
@@ -1257,15 +1264,17 @@ int HTMLParser::_GetNextToken()
                             SetLinePos( nLinePos );
                             ClearTxtConvContext();
 
-                            aToken = '<';
+                            aToken = "<";
                             nRet = HTML_TEXTTOKEN;
                             nNextCh = GetNextChar();
                             bNextCh = false;
                             break;
                         }
                         if( SVPAR_PENDING == eState )
+                        {
                             bReadNextChar = bReadNextCharSave;
-                        aToken.Erase();
+                        }
+                        aToken = "";
                     }
                     else if( '%' == nNextCh )
                     {
@@ -1278,11 +1287,11 @@ int HTMLParser::_GetNextToken()
                         // Read until closing %>. If not found restart at first >.
                         while( !bDone && !rInput.IsEof() && IsParserWorking() )
                         {
-                            bDone = '>'==nNextCh && aToken.Len() >= 1 &&
-                                    '%' == aToken.GetChar( aToken.Len()-1 );
+                            bDone = '>'==nNextCh && aToken.getLength() >= 1 &&
+                                    '%' == aToken[ aToken.getLength()-1] ;
                             if( !bDone )
                             {
-                                aToken += nNextCh;
+                                aToken += OUString(nNextCh);
                                 nNextCh = GetNextChar();
                             }
                         }
@@ -1292,19 +1301,19 @@ int HTMLParser::_GetNextToken()
                             SetLineNr( nCLineNr );
                             SetLinePos( nCLinePos );
                             ClearTxtConvContext();
-                            aToken.AssignAscii( "<%", 2 );
+                            aToken =  "<%";
                             nRet = HTML_TEXTTOKEN;
                             break;
                         }
                         if( IsParserWorking() )
                         {
                             sSaveToken = aToken;
-                            aToken.Erase();
+                            aToken = "";
                         }
                     }
                     else
                     {
-                        aToken = '<';
+                        aToken = "<";
                         nRet = HTML_TEXTTOKEN;
                         bNextCh = false;
                         break;
@@ -1395,7 +1404,7 @@ int HTMLParser::_GetNextToken()
 scan_text:
             // "normal" text to come
             nRet = ScanText();
-            bNextCh = 0 == aToken.Len();
+            bNextCh = 0 == aToken.getLength();
 
             // the text should be processed
             if( !bNextCh && eState == SVPAR_PENDING )
@@ -1427,16 +1436,16 @@ scan_text:
 
 void HTMLParser::UnescapeToken()
 {
-    xub_StrLen nPos=0;
+    sal_Int32 nPos=0;
 
     bool bEscape = false;
-    while( nPos < aToken.Len() )
+    while( nPos < aToken.getLength() )
     {
         bool bOldEscape = bEscape;
         bEscape = false;
-        if( '\\'==aToken.GetChar(nPos) && !bOldEscape )
+        if( '\\'==aToken[nPos] && !bOldEscape )
         {
-            aToken.Erase( nPos, 1 );
+            aToken = aToken.copy(0, nPos) + aToken.copy(nPos + 1);
             bEscape = true;
         }
         else
@@ -1448,34 +1457,35 @@ void HTMLParser::UnescapeToken()
 
 const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
 {
+    OUString sToken(aToken);
+
     // If the options for the current token have already been returned,
     // return them once again.
     if (!maOptions.empty())
         return maOptions;
 
-    xub_StrLen nPos = 0;
-    while( nPos < aToken.Len() )
+    sal_Int32 nPos = 0;
+    while( nPos < sToken.getLength() )
     {
         // A letter? Option beginning here.
-        if( HTML_ISALPHA( aToken.GetChar(nPos) ) )
+        if( HTML_ISALPHA( sToken[nPos] ) )
         {
             int nToken;
-            String aValue;
-            xub_StrLen nStt = nPos;
+            OUString aValue;
+            sal_Int32 nStt = nPos;
             sal_Unicode cChar = 0;
 
             // Actually only certain characters allowed.
             // Netscape only looks for "=" and white space (c.f.
             // Mozilla: PA_FetchRequestedNameValues in lipparse/pa_mdl.c)
-            while( nPos < aToken.Len() && '=' != (cChar=aToken.GetChar(nPos)) &&
+            while( nPos < sToken.getLength() && '=' != (cChar=sToken[nPos]) &&
                    HTML_ISPRINTABLE(cChar) && !HTML_ISSPACE(cChar) )
                 nPos++;
 
-            String sName( aToken.Copy( nStt, nPos-nStt ) );
+            OUString sName( sToken.copy( nStt, nPos-nStt ) );
 
             // PlugIns require original token name. Convert to upper case only for searching.
-            String sNameUpperCase( sName );
-            sNameUpperCase.ToUpperAscii();
+            OUString sNameUpperCase( sName.toAsciiUpperCase() );
 
             nToken = GetHTMLOption( sNameUpperCase ); // Name is ready
             DBG_ASSERTWARNING( nToken!=HTML_O_UNKNOWN,
@@ -1484,24 +1494,25 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
                                nToken >= HTML_OPTION_SCRIPT_END) &&
                               (!pNoConvertToken || nToken != *pNoConvertToken);
 
-            while( nPos < aToken.Len() &&
-                   ( !HTML_ISPRINTABLE( (cChar=aToken.GetChar(nPos)) ) ||
+            while( nPos < sToken.getLength() &&
+                   ( !HTML_ISPRINTABLE( (cChar=sToken[nPos]) ) ||
                      HTML_ISSPACE(cChar) ) )
                 nPos++;
 
             // Option with value?
-            if( nPos!=aToken.Len() && '='==cChar )
+            if( nPos!=sToken.getLength() && '='==cChar )
             {
                 nPos++;
 
-                while( nPos < aToken.Len() &&
-                        ( !HTML_ISPRINTABLE( (cChar=aToken.GetChar(nPos)) ) ||
+                while( nPos < sToken.getLength() &&
+                        ( !HTML_ISPRINTABLE( (cChar=sToken[nPos]) ) ||
                           ' '==cChar || '\t'==cChar || '\r'==cChar || '\n'==cChar ) )
-                    nPos++;
-
-                if( nPos != aToken.Len() )
                 {
-                    xub_StrLen nLen = 0;
+                    nPos++;
+                }
+                if( nPos != sToken.getLength() )
+                {
+                    sal_Int32 nLen = 0;
                     nStt = nPos;
                     if( ('"'==cChar) || ('\'')==cChar )
                     {
@@ -1509,17 +1520,24 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
                         nPos++; nStt++;
                         bool bDone = false;
                         bool bEscape = false;
-                        while( nPos < aToken.Len() && !bDone )
+                        while( nPos < sToken.getLength() && !bDone )
                         {
                             bool bOldEscape = bEscape;
                             bEscape = false;
-                            cChar = aToken.GetChar(nPos);
+                            cChar = sToken[nPos];
                             switch( cChar )
                             {
                             case '\r':
                             case '\n':
                                 if( bStripCRLF )
-                                    ((String &)aToken).Erase( nPos, 1 );
+                                {
+                                    OUString aTemp(sToken.copy(0, nPos));
+                                    if(sToken.getLength() > nPos)
+                                    {
+                                        aTemp += sToken.copy(nPos + 1);
+                                    }
+                                    sToken = aTemp;
+                                }
                                 else
                                     nPos++, nLen++;
                                 break;
@@ -1530,7 +1548,12 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
                                 }
                                 else
                                 {
-                                    ((String &)aToken).Erase( nPos, 1 );
+                                    OUString aTemp = sToken.copy(0, nPos);
+                                    if(sToken.getLength() > nPos)
+                                    {
+                                        aTemp = sToken.copy(nPos + 1);
+                                    }
+                                    sToken = aTemp;
                                     bEscape = true;
                                 }
                                 break;
@@ -1545,7 +1568,7 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
                                 break;
                             }
                         }
-                        if( nPos!=aToken.Len() )
+                        if( nPos!=sToken.getLength() )
                             nPos++;
                     }
                     else
@@ -1553,11 +1576,11 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
                         // More liberal than the standard: allow all printable characters
                         bool bEscape = false;
                         bool bDone = false;
-                        while( nPos < aToken.Len() && !bDone )
+                        while( nPos < sToken.getLength() && !bDone )
                         {
                             bool bOldEscape = bEscape;
                             bEscape = false;
-                            sal_Unicode c = aToken.GetChar(nPos);
+                            sal_Unicode c = sToken[nPos];
                             switch( c )
                             {
                             case ' ':
@@ -1579,7 +1602,12 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
                                 }
                                 else
                                 {
-                                    ((String &)aToken).Erase( nPos, 1 );
+                                    OUString aTemp = sToken.copy(0, nPos);
+                                    if(sToken.getLength() > nPos)
+                                    {
+                                        aTemp = sToken.copy(nPos + 1);
+                                    }
+                                    sToken = aTemp;
                                     bEscape = true;
                                 }
                                 break;
@@ -1595,7 +1623,9 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
                     }
 
                     if( nLen )
-                        aValue = aToken.Copy( nStt, nLen );
+                    {
+                        aValue = sToken.copy( nStt, nLen );
+                    }
                 }
             }
 
@@ -1637,8 +1667,8 @@ int HTMLParser::FilterPRE( int nToken )
     case HTML_TABCHAR:
         {
             sal_Int32 nSpaces = (8 - (nPre_LinePos % 8));
-            DBG_ASSERT( !aToken.Len(), "Why is the token not empty?" );
-            if (aToken.Len() < nSpaces)
+            DBG_ASSERT( aToken.isEmpty(), "Why is the token not empty?" );
+            if (aToken.getLength() < nSpaces)
             {
                 using comphelper::string::padToLength;
                 OUStringBuffer aBuf(aToken);
@@ -1650,7 +1680,7 @@ int HTMLParser::FilterPRE( int nToken )
         break;
     // Keep those
     case HTML_TEXTTOKEN:
-        nPre_LinePos += aToken.Len();
+        nPre_LinePos += aToken.getLength();
         break;
 
     case HTML_SELECT_ON:
@@ -1817,20 +1847,23 @@ int HTMLParser::FilterXMP( int nToken )
         {
             if( (HTML_TOKEN_ONOFF & nToken) && (1 & nToken) )
             {
-                sSaveToken.Insert( '<', 0 );
-                sSaveToken.Insert( '/', 1 );
+                sSaveToken = "</" + sSaveToken;
             }
             else
-                sSaveToken.Insert( '<', 0 );
-            if( aToken.Len() )
+            {
+                sSaveToken = "<" + sSaveToken;
+            }
+            if( aToken.getLength() )
             {
                 UnescapeToken();
-                sSaveToken += (sal_Unicode)' ';
-                aToken.Insert( sSaveToken, 0 );
+                sSaveToken += " ";
+                aToken = sSaveToken + aToken;
             }
             else
+            {
                 aToken = sSaveToken;
-            aToken += (sal_Unicode)'>';
+            }
+            aToken += ">";
             nToken = HTML_TEXTTOKEN;
         }
         break;
@@ -1978,69 +2011,69 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
     return false;
 }
 
-bool HTMLParser::InternalImgToPrivateURL( String& rURL )
+bool HTMLParser::InternalImgToPrivateURL( OUString& rURL )
 {
-    if( rURL.Len() < 19 || 'i' != rURL.GetChar(0) ||
-        rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_internal_gopher, 9 ) != COMPARE_EQUAL )
+    if( rURL.getLength() < 19 || 'i' != rURL[0] ||
+        !rURL.startsWith( OOO_STRING_SVTOOLS_HTML_internal_gopher))
+    {
         return false;
+    }
 
     bool bFound = false;
 
-    if( rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_internal_gopher,16) == COMPARE_EQUAL )
+    if( rURL.startsWith( OOO_STRING_SVTOOLS_HTML_internal_gopher))
     {
-        String aName( rURL.Copy(16) );
-        switch( aName.GetChar(0) )
+        OUString aName( rURL.copy(16) );
+        switch( aName[0] )
         {
         case 'b':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_binary );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_binary;
             break;
         case 'i':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_image ) ||
-                     aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_index );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_image ||
+                     aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_index;
             break;
         case 'm':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_menu ) ||
-                     aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_movie );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_menu ||
+                     aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_movie;
             break;
         case 's':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_sound );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_sound;
             break;
         case 't':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_telnet ) ||
-                     aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_text );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_telnet ||
+                     aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_text;
             break;
         case 'u':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_unknown );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_GOPHER_unknown;
             break;
         }
     }
-    else if( rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_internal_icon,14) == COMPARE_EQUAL )
+    else if( rURL.startsWith( OOO_STRING_SVTOOLS_HTML_internal_icon))
     {
-        String aName( rURL.Copy(14) );
-        switch( aName.GetChar(0) )
+        OUString aName( rURL.copy(14) );
+        switch( aName[0] )
         {
         case 'b':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_baddata );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_ICON_baddata;
             break;
         case 'd':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_delayed );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_ICON_delayed;
             break;
         case 'e':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_embed );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_ICON_embed;
             break;
         case 'i':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_insecure );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_ICON_insecure;
             break;
         case 'n':
-            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_notfound );
+            bFound = aName == OOO_STRING_SVTOOLS_HTML_INT_ICON_notfound;
             break;
         }
     }
     if( bFound )
     {
-        String sTmp ( rURL );
-        rURL.AssignAscii( OOO_STRING_SVTOOLS_HTML_private_image );
-        rURL.Append( sTmp );
+        rURL = OUString( OOO_STRING_SVTOOLS_HTML_private_image ) + rURL;
     }
 
     return bFound;
@@ -2259,7 +2292,7 @@ bool HTMLParser::ParseMetaOptions(
     return bRet;
 }
 
-rtl_TextEncoding HTMLParser::GetEncodingByMIME( const String& rMime )
+rtl_TextEncoding HTMLParser::GetEncodingByMIME( const OUString& rMime )
 {
     OUString sType;
     OUString sSubType;
@@ -2285,9 +2318,9 @@ rtl_TextEncoding HTMLParser::GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPH
         for( bool bCont = pHTTPHeader->GetFirst( aKV ); bCont;
              bCont = pHTTPHeader->GetNext( aKV ) )
         {
-            if( aKV.GetKey().EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_content_type ) )
+            if( aKV.GetKey().equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_META_content_type ) )
             {
-                if( aKV.GetValue().Len() )
+                if( !aKV.GetValue().isEmpty() )
                 {
                     eRet = HTMLParser::GetEncodingByMIME( aKV.GetValue() );
                 }

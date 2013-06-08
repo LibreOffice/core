@@ -261,7 +261,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 {
 
     OSL_ENSURE( !pMarquee, "Marquee in Marquee???" );
-    aContents.Erase();
+    aContents = "";
 
     String aId, aStyle, aClass;
 
@@ -312,7 +312,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
             case HTML_O_LOOP:
                 if( rOption.GetString().
-                        EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_LOOP_infinite) )
+                        equalsIgnoreAsciiCase(OOO_STRING_SVTOOLS_HTML_LOOP_infinite) )
                 {
                     nCount = 0;
                 }
@@ -334,7 +334,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
             case HTML_O_WIDTH:
                 // erstmal nur als Pixelwerte merken!
                 nWidth = rOption.GetNumber();
-                bPrcWidth = rOption.GetString().Search('%') != STRING_NOTFOUND;
+                bPrcWidth = rOption.GetString().indexOf('%') >= 0;
                 if( bPrcWidth && nWidth>100 )
                     nWidth = 100;
                 break;
@@ -342,7 +342,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
             case HTML_O_HEIGHT:
                 // erstmal nur als Pixelwerte merken!
                 nHeight = rOption.GetNumber();
-                if( rOption.GetString().Search('%') != STRING_NOTFOUND )
+                if( rOption.GetString().indexOf('%') >= 0)
                     nHeight = 0;
                 break;
 
@@ -572,7 +572,7 @@ void SwHTMLParser::EndMarquee()
         ((SdrTextObj*)pMarquee)->FitFrameToTextSize();
     }
 
-    aContents.Erase();
+    aContents = "";
     pMarquee = 0;
 }
 
