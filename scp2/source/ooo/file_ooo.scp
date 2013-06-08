@@ -512,6 +512,7 @@ File gid_File_Share_Registry_Ctl_Xcd
     Dir = gid_Brand_Dir_Share_Registry;
     Name (ar) = "ctl.xcd";
     Name (dz) = "ctl.xcd";
+    Name (bo) = "ctl.xcd";
     Name (fa) = "ctl.xcd";
     Name (gu) = "ctl.xcd";
     Name (he) = "ctl.xcd";

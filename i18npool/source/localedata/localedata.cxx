@@ -207,6 +207,8 @@ static const struct {
     { "rw_RW",  lcl_DATA_OTHERS },
     { "eo",     lcl_DATA_OTHERS },
     { "dz_BT",  lcl_DATA_OTHERS },
+    { "bo_CN",  lcl_DATA_OTHERS },
+    { "bo_IN",  lcl_DATA_OTHERS },
     { "ne_NP",  lcl_DATA_OTHERS },
     { "zu_ZA",  lcl_DATA_OTHERS },
     { "nso_ZA", lcl_DATA_OTHERS },

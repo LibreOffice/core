@@ -217,7 +217,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Swahili (Tanzania)" ; LANGUAGE_USER_SWAHILI_TANZANIA ; > ;
         < "Lao" ; LANGUAGE_LAO ; > ;
         < "Irish" ; LANGUAGE_GAELIC_IRELAND ; > ;
-        < "Tibetan (PR China)" ; LANGUAGE_TIBETAN ; > ;
+        < "Tibetan" ; LANGUAGE_TIBETAN ; > ;
         < "Georgian" ; LANGUAGE_GEORGIAN ; > ;
         < "Frisian" ; LANGUAGE_FRISIAN_NETHERLANDS ; > ;
         < "Tswana (South Africa)" ; LANGUAGE_TSWANA ; > ;
