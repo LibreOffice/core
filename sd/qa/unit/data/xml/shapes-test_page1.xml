@@ -1556,7 +1556,7 @@
    <PropertyValue name="ViewBox">
     <ViewBox x="0" y="0" width="14810" height="25050"/>
    </PropertyValue>
-   <PropertyValue name="Type" value="non-primitive" handle="0" propertyState="DIRECT_VALUE"/>
+   <PropertyValue name="Type" value="NonPrimitive" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Path">
     <Path>
      <PropertyValue name="Coordinates">
