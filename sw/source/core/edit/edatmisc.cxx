@@ -28,7 +28,7 @@
 
 
 
-/**
+/*
  * hard formatting (Attribute)
  */
 
@@ -87,9 +87,7 @@ void SwEditShell::GCAttr()
     FOREACHPAM_END()
 }
 
-// Set the attribute as new default attribute in the document.
-
-
+/// Set the attribute as new default attribute in the document.
 void SwEditShell::SetDefault( const SfxPoolItem& rFmtHint )
 {
     // 7502: Action-Parenthesis
@@ -98,8 +96,7 @@ void SwEditShell::SetDefault( const SfxPoolItem& rFmtHint )
     EndAllAction();
 }
 
-// Inquire the Default Attribut in this document.
-
+/// request the default attribute in this document.
 const SfxPoolItem& SwEditShell::GetDefault( sal_uInt16 nFmtHint ) const
 {
     return GetDoc()->GetDefault( nFmtHint );

@@ -178,8 +178,7 @@ sal_Bool SwEditShell::SelectionHasNumber() const
                     {
                         bResult = pTxtNd->HasNumber();
 
-                        // --> OD 2005-10-26 #b6340308#
-                        // special case: outline numbered, not counted paragraph
+                        // #b6340308# special case: outline numbered, not counted paragraph
                         if ( bResult &&
                             pTxtNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
                             !pTxtNd->IsCountedInList() )
@@ -189,7 +188,6 @@ sal_Bool SwEditShell::SelectionHasNumber() const
                         if (bResult==sal_False) {
                             break;
                         }
-                        // <--
                     }
                 }
             }
@@ -199,7 +197,8 @@ sal_Bool SwEditShell::SelectionHasNumber() const
 
     return bResult;
 }
-//Sym3_879 add a new function to determine number on/off status
+
+// add a new function to determine number on/off status
 sal_Bool SwEditShell::SelectionHasBullet() const
 {
     sal_Bool bResult = HasBullet();

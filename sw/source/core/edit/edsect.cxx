@@ -78,10 +78,9 @@ const SwSection* SwEditShell::GetCurrSection() const
     return GetDoc()->GetCurrSection( *GetCrsr()->GetPoint() );
 }
 
-/**
- * SwEditShell::GetAnySection delivers the responsible area
- * of the columns, in footnotes it may not be the
- * area within the footnote.
+/** Deliver the responsible area of the columns.
+ *
+ * In footnotes it may not be the area within the footnote.
  */
 
 const SwSection* SwEditShell::GetAnySection( sal_Bool bOutOfTab, const Point* pPt ) const
@@ -254,9 +253,10 @@ void SwEditShell::_SetSectionAttr( SwSectionFmt& rSectFmt,
     EndAllAction();
 }
 
-// search inside the cursor selection for full selected sections.
-// if any part of section in the selection return 0.
-// if more than one in the selection return the count
+/** Search inside the cursor selection for full selected sections.
+ *
+ * @return If any part of section in the selection return 0, if more than one return the count.
+ */
 sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
 {
     sal_uInt16 nRet = 0;
@@ -298,8 +298,8 @@ sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
 }
 
 
-/**
- * Find the suitable node for a special insert (alt-enter).
+/** Find the suitable node for a special insert (alt-enter).
+ *
  * This should enable inserting text before/after sections and tables.
  *
  * A node is found if:
@@ -407,8 +407,7 @@ bool SwEditShell::CanSpecialInsert() const
     return NULL != lcl_SpecialInsertNode( GetCrsr()->GetPoint() );
 }
 
-
-/** check whether a node cen be special-inserted (alt-Enter), and do so. Return
+/** check whether a node can be special-inserted (alt-Enter), and do so. Return
     whether insertion was possible.
  */
 bool SwEditShell::DoSpecialInsert()

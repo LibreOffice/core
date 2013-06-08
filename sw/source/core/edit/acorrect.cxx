@@ -271,13 +271,14 @@ sal_Bool SwAutoCorrDoc::SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const Str
     return sal_True;
 }
 
-    // Return the text of a previous paragraph
-    // This must not be empty!
-    // Does this not exists or there are only blankness, then return 0
-    // The Flag specifies:
-    // sal_True: that, before the normal insert position
-    //sal_False: that, in which the corrected word was inserted.
-    //              (Doesn't need to be the same paragraph!!!!)
+/** Return the text of a previous paragraph
+ *
+ * This must not be empty!
+ *
+ * @param bAtNormalPos If <true> before the normal insert position; if <false> in which the
+ *                     corrected word was inserted. (Doesn't need to be the same paragraph!)
+ * @return text or 0, if previous paragraph does not exists or there are only blankness
+ */
 const String* SwAutoCorrDoc::GetPrevPara( sal_Bool bAtNormalPos )
 {
     const String* pStr = 0;

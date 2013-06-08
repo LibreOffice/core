@@ -122,8 +122,10 @@ void SwEditShell::UpdateRedlineAttr()
     }
 }
 
-    // Search the Redline of this data and return the Pos of the Array
-    // return USHRT_MAX if not present
+/** Search the Redline of the data given
+ *
+ * @return Returns the Pos of the Array, or USHRT_MAX if not present
+ */
 sal_uInt16 SwEditShell::FindRedlineOfData( const SwRedlineData& rData ) const
 {
     const SwRedlineTbl& rTbl = GetDoc()->GetRedlineTbl();

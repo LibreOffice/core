@@ -47,7 +47,7 @@
 #include <pam.hxx>
 #include <edimp.hxx>
 #include <fesh.hxx>
-#include <swundo.hxx>       // for the UndoId's
+#include <swundo.hxx>       // for the UndoIds
 #include <poolfmt.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
@@ -99,7 +99,7 @@ class SwAutoFormat
     SwTxtNode* pAktTxtNd;       // the current TextNode
     SwTxtFrm* pAktTxtFrm;       // frame of the current TextNode
     CharClass* pCharClass;      // Character classification
-    sal_uLong nEndNdIdx;            // for the percentage-display
+    sal_uLong nEndNdIdx;        // for the percentage-display
     LanguageType eCharClassLang;
 
     sal_uInt16 nLastHeadLvl, nLastCalcHeadLvl;
@@ -182,7 +182,7 @@ class SwAutoFormat
     sal_uInt16 GetDigitLevel( const SwTxtNode& rTxtNd, xub_StrLen& rPos,
                             String* pPreFix = 0, String* pPostFix = 0,
                             String* pNumTypes = 0 ) const;
-        // get the FORMATED TextFrame
+    /// get the FORMATED TextFrame
     SwTxtFrm* GetFrm( const SwTxtNode& rTxtNd ) const;
 
     void BuildIndent();
@@ -196,15 +196,15 @@ class SwAutoFormat
     bool HasBreakAttr( const SwTxtNode& ) const;
     void DeleteSel( SwPaM& rPam );
     bool DeleteAktNxtPara( const String& rNxtPara );
-    // delete in the node start and/or end
+    /// delete in the node start and/or end
     void DeleteAktPara( bool bStart = true, bool nEnd = true );
     void DelEmptyLine( bool bTstNextPara = true );
-        // when using multiline paragraphs delete the "left" and/or
-        // "right" margins
+    /// when using multiline paragraphs delete the "left" and/or
+    /// "right" margins
     void DelMoreLinesBlanks( bool bWithLineBreaks = false );
-        // delete the previous paragraph
+    /// delete the previous paragraph
     void DelPrevPara();
-        // execute AutoCorrect on current TextNode
+    /// execute AutoCorrect on current TextNode
     void AutoCorrect( xub_StrLen nSttPos = 0 );
 
     bool CanJoin( const SwTxtNode* pTxtNd ) const
@@ -218,7 +218,7 @@ class SwAutoFormat
              !HasBreakAttr( *pTxtNd );
     }
 
-    // is a dot at the end ??
+    /// is a dot at the end ??
     bool IsSentenceAtEnd( const SwTxtNode& rTxtNd ) const;
 
     bool DoUnderline();
@@ -281,7 +281,7 @@ void SwAutoFormat::_SetRedlineTxt( sal_uInt16 nActionId )
         case STR_AUTOFMTREDL_SET_NUMBULET:
         case STR_AUTOFMTREDL_DEL_MORELINES:
 
-        // AutoCorrect-Actions
+        // AutoCorrect actions
         case STR_AUTOFMTREDL_USE_REPLACE:
         case STR_AUTOFMTREDL_CPTL_STT_WORD:
         case STR_AUTOFMTREDL_CPTL_STT_SENT:
@@ -308,7 +308,7 @@ String SwAutoFormat::GoNextPara()
 {
     SwNode* pNewNd = 0;
     do {
-        //has to be checed twice before and after incrementation
+        // has to be checked twice before and after incrementation
         if( aNdIdx.GetIndex() >= aEndNdIdx.GetIndex() )
         {
             bEnde = true;
@@ -772,7 +772,7 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
 
     sal_uInt16 nStart = 0;
     sal_uInt8 nDigitLvl = 0, nDigitCnt = 0;
-    //count number of parenthesis to assure a sensible order is found
+    // count number of parenthesis to assure a sensible order is found
     sal_uInt16 nOpeningParentheses = 0;
     sal_uInt16 nClosingParentheses = 0;
 
@@ -823,7 +823,7 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
             // Roman numbers are "mdclxvi". Since we want to start numbering with c or d more often,
             // convert first to characters and later to roman numbers if needed.
 #ifdef WITH_ALPHANUM_AS_NUMFMT
-            //detection of 'c' and 'd' a ROMAN numbering should not be done here
+            // detection of 'c' and 'd' a ROMAN numbering should not be done here
             if( 256 > cLow  &&( (eScan & (LOWER_ROMAN|UPPER_ROMAN))
                                     ? strchr( "mdclxvi", cLow )
                                     : strchr( "mlxvi", cLow ) ))
