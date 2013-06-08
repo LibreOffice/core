@@ -939,6 +939,9 @@
 
 #define SCSTR_FIELDSEP_TAB      (STR_START + 412)
 #define SCSTR_FIELDSEP_SPACE    (STR_START + 413)
+#define SCSTR_FILLCOLOR         (STR_START + 414)
+#define SCSTR_NOFILLCOLOR       (STR_START + 415)
+#define SCSTR_LINECOLOR         (STR_START + 416)
 
 #define STR_END                 (SCSTR_FIELDSEP_SPACE)
 
