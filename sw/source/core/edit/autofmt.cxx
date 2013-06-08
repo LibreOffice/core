@@ -2311,7 +2311,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 }
                 else
                 {
-                    bNxtEmpty = false; // true;
+                    bNxtEmpty = false;
                     bNxtAlpha = sal_False;
                     nNxtLevel = 0;
                 }
