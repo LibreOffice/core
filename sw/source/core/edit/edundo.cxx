@@ -106,24 +106,21 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
 
     StartAllAction();
     {
-        // eigentlich muesste ja nur der aktuelle Cursor berarbeitet
-        // werden, d.H. falls ein Ring besteht, diesen temporaer aufheben,
-        // damit nicht bei Einfuge-Operationen innerhalb von Undo
-        // an allen Bereichen eingefuegt wird.
+        // Actually it should be enough to just work on the current Cursor, i.e. if there is a cycle
+        // cancel the latter temporarily, so that an insert during Undo is not done in all areas.
         KillPams();
-        SetMark();          // Bound1 und Bound2 in den gleichen Node
+        SetMark();          // Bound1 and Bound2 in the same Node
         ClearMark();
 
-        // JP 02.04.98: Cursor merken - beim Auto-Format/-Korrektur
-        //              soll dieser wieder an die Position
+        // Keep Cursor - so that we're able to set it at
+        // the same position for autoformat or autocorrection
         SwUndoId nLastUndoId(UNDO_EMPTY);
         GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(0, & nLastUndoId);
         bool bRestoreCrsr = 1 == nCount && (UNDO_AUTOFORMAT == nLastUndoId ||
                                            UNDO_AUTOCORRECT == nLastUndoId );
         Push();
 
-        //JP 18.09.97: gesicherten TabellenBoxPtr zerstoeren, eine autom.
-        //          Erkennung darf nur noch fuer die neue "Box" erfolgen!
+        // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!
         ClearTblBoxCntnt();
 
         RedlineMode_t eOld = GetDoc()->GetRedlineMode();
@@ -149,7 +146,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
         GetDoc()->SetRedlineMode( eOld );
         GetDoc()->CompressRedlines();
 
-        // autom. Erkennung  fuer die neue "Box"
+        // automatic detection of the new "Box"
         SaveTblBoxCntnt();
     }
     EndAllAction();
@@ -169,16 +166,13 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
     StartAllAction();
 
     {
-        // eigentlich muesste ja nur der aktuelle Cursor berarbeitet
-        // werden, d.H. falls ein Ring besteht, diesen temporaer aufheben,
-        // damit nicht bei Einfuge-Operationen innerhalb von Undo
-        // an allen Bereichen eingefuegt wird.
+        // Actually it should be enough to just work on the current Cursor, i.e. if there is a cycle
+        // cancel the latter temporarily, so that an insert during Undo is not done in all areas.
         KillPams();
-        SetMark();          // Bound1 und Bound2 in den gleichen Node
+        SetMark();          // Bound1 and Bound2 in the same Node
         ClearMark();
 
-        //JP 18.09.97: gesicherten TabellenBoxPtr zerstoeren, eine autom.
-        //          Erkennung darf nur noch fuer die neue "Box" erfolgen!
+        // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!
         ClearTblBoxCntnt();
 
         RedlineMode_t eOld = GetDoc()->GetRedlineMode();
@@ -198,7 +192,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
         GetDoc()->SetRedlineMode( eOld );
         GetDoc()->CompressRedlines();
 
-        // autom. Erkennung  fuer die neue "Box"
+        // automatic detection of the new "Box"
         SaveTblBoxCntnt();
     }
 

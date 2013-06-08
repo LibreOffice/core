@@ -36,11 +36,7 @@
 #include <switerator.hxx>
 #include <fieldhint.hxx>
 
-/*--------------------------------------------------------------------
-    Beschreibung: Feldtypen zu einer ResId zaehlen
-                  wenn 0 alle zaehlen
- --------------------------------------------------------------------*/
-
+/// count field types with a ResId, if 0 count all
 sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, sal_Bool bUsed ) const
 {
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
@@ -62,10 +58,10 @@ sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, sal_Bool bUsed ) cons
         }
     }
 
-    // Alle Typen mit gleicher ResId
+    // all types with the same ResId
     sal_uInt16 nIdx  = 0;
     for(sal_uInt16 i = 0; i < nSize; ++i)
-    {   // Gleiche ResId -> Index erhoehen
+    {   // same ResId -> increment index
         SwFieldType& rFldType = *((*pFldTypes)[i]);
         if(rFldType.Which() == nResId)
             nIdx++;
@@ -73,10 +69,7 @@ sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, sal_Bool bUsed ) cons
     return nIdx;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Feldtypen zu einer ResId finden
-                  wenn 0 alle finden
- --------------------------------------------------------------------*/
+/// get field types with a ResId, if 0 get all
 SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, sal_Bool bUsed ) const
 {
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
@@ -104,7 +97,7 @@ SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, sal_Boo
 
     sal_uInt16 nIdx = 0;
     for(sal_uInt16 i = 0; i < nSize; ++i)
-    {   // Gleiche ResId -> Index erhoehen
+    {   // same ResId -> increment index
         SwFieldType* pFldType = (*pFldTypes)[i];
         if(pFldType->Which() == nResId)
         {
@@ -119,17 +112,13 @@ SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, sal_Boo
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Den ersten Typen mit ResId und Namen finden
- --------------------------------------------------------------------*/
+/// get first type with given ResId and name
 SwFieldType* SwEditShell::GetFldType(sal_uInt16 nResId, const String& rName) const
 {
     return GetDoc()->GetFldType( nResId, rName, false );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Feldtypen loeschen
- --------------------------------------------------------------------*/
+/// delete field type
 void SwEditShell::RemoveFldType(sal_uInt16 nFld, sal_uInt16 nResId)
 {
     if( USHRT_MAX == nResId )
@@ -151,9 +140,7 @@ void SwEditShell::RemoveFldType(sal_uInt16 nFld, sal_uInt16 nResId)
         }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: FieldType ueber Name loeschen
- --------------------------------------------------------------------*/
+/// delete field type based on its name
 void SwEditShell::RemoveFldType(sal_uInt16 nResId, const String& rStr)
 {
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
@@ -164,7 +151,7 @@ void SwEditShell::RemoveFldType(sal_uInt16 nResId, const String& rStr)
 
     for(sal_uInt16 i = 0; i < nSize; ++i)
     {
-        // Gleiche ResId -> Index erhoehen
+        // same ResId -> increment index
         SwFieldType* pFldType = (*pFldTypes)[i];
         if( pFldType->Which() == nResId )
         {
@@ -202,14 +189,7 @@ void SwEditShell::FieldToText( SwFieldType* pType )
     EndUndo( UNDO_DELETE );
 }
 
-/*************************************************************************
-|*
-|*                  SwEditShell::Insert( SwField )
-|*
-|*    Beschreibung  an der Cursorposition ein Feld einfuegen
-|*    Quelle:       vgl. SwEditShell::Insert( String )
-|*
-*************************************************************************/
+/// add a field at the cursor position
 void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
 {
     SET_CURR_SHELL( this );
@@ -220,24 +200,16 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
         ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
         : nsSetAttrMode::SETATTR_DEFAULT;
 
-    FOREACHPAM_START(this)                      // fuer jeden PaM
+    FOREACHPAM_START(this) // for each PaM
         bool bSuccess(GetDoc()->InsertPoolItem(*PCURCRSR, aFld, nInsertFlags));
         OSL_ENSURE( bSuccess, "Doc->Insert(Field) failed");
         (void) bSuccess;
-    FOREACHPAM_END()                      // fuer jeden PaM
+    FOREACHPAM_END()
 
     EndAllAction();
 }
 
-/*************************************************************************
-|*
-|*                  SwEditShell::GetCurFld()
-|*
-|*    Beschreibung  Stehen die PaMs auf Feldern ?
-|*    Quelle:       edtfrm.cxx:
-|*
-*************************************************************************/
-
+/// Are the PaMs positioned on fields?
 inline SwTxtFld *GetDocTxtFld( const SwPosition* pPos )
 {
     SwTxtNode * const pNode = pPos->nNode.GetNode().GetTxtNode();
@@ -249,8 +221,7 @@ inline SwTxtFld *GetDocTxtFld( const SwPosition* pPos )
 
 SwField* SwEditShell::GetCurFld() const
 {
-    // Wenn es keine Selektionen gibt, gilt der Wert der aktuellen
-    // Cursor-Position.
+    // If there are no selections so take the value of the current cursor position.
 
     SwPaM* pCrsr = GetCrsr();
     SwTxtFld *pTxtFld = GetDocTxtFld( pCrsr->Start() );
@@ -266,7 +237,7 @@ SwField* SwEditShell::GetCurFld() const
          pCrsr->Start()->nContent.GetIndex()) <= 1)
     {
         pCurFld = (SwField*)pTxtFld->GetFld().GetFld();
-        // TabellenFormel ? wandel internen in externen Namen um
+        // Table formula? Convert internal into external name:
         if( RES_TABLEFLD == pCurFld->GetTyp()->Which() )
         {
             const SwTableNode* pTblNd = IsCrsrInTbl();
@@ -281,17 +252,10 @@ SwField* SwEditShell::GetCurFld() const
 }
 
 
-/*************************************************************************
-|*
-|*                  SwEditShell::UpdateFlds()
-|*
-|*    Beschreibung  Stehen die PaMs auf Feldern ?
-|*
-*************************************************************************/
+/// Are the PaMs positioned on fields?
 static SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
 {
-    // suche das Feld ueber seine Addresse. Muss fuer InputFelder in
-    // geschuetzten Feldern erfolgen
+    // Search field via its address. For input fields this needs to be done in protected fields.
     SwTxtFld* pTFld = 0;
     if( RES_INPUTFLD == rFld.Which() || ( RES_SETEXPFLD == rFld.Which() &&
         ((SwSetExpField&)rFld).GetInputFlag() ) )
@@ -317,8 +281,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
     StartAllAction();
     {
 
-        // Wenn es keine Selektionen gibt, gilt der Wert der aktuellen
-        // Cursor-Position.
+        // // If there are no selections so take the value of the current cursor position.
         SwMsgPoolItem* pMsgHnt = 0;
         SwRefMarkFldUpdate aRefMkHt( GetOut() );
         sal_uInt16 nFldWhich = rFld.GetTyp()->Which();
@@ -340,36 +303,34 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                 GetDoc()->UpdateFld(pTxtFld, rFld, pMsgHnt, sal_True);
         }
 
-        // bOkay (statt return wg. EndAllAction) wird false,
-        // 1) wenn nur ein Pam mehr als ein Feld enthaelt oder
-        // 2) bei gemischten Feldtypen
+        // bOkay (instead of return because of EndAllAction) becomes false,
+        // 1) if only one PaM has more than one field or
+        // 2) if there are mixed field types
         bool bOkay = true;
         sal_Bool bTblSelBreak = sal_False;
 
-        SwMsgPoolItem aHint( RES_TXTATR_FIELD );  // Such-Hint
-        FOREACHPAM_START(this)                      // fuer jeden PaM
-            if( PCURCRSR->HasMark() && bOkay )      // ... mit Selektion
+        SwMsgPoolItem aHint( RES_TXTATR_FIELD );  // Search-Hint
+        FOREACHPAM_START(this)                    // for each PaM
+            if( PCURCRSR->HasMark() && bOkay )    // ... with selection
             {
-                // Kopie des PaM
+                // copy of the PaM
                 SwPaM aCurPam( *PCURCRSR->GetMark(), *PCURCRSR->GetPoint() );
                 SwPaM aPam( *PCURCRSR->GetPoint() );
 
                 SwPosition *pCurStt = aCurPam.Start(), *pCurEnd =
                     aCurPam.End();
                 /*
-                 * Fuer den Fall, dass zwei aneinanderliegende Felder in einem
-                 * PaM liegen, hangelt sich aPam portionsweise bis zum Ende.
-                 * aCurPam wird dabei nach jeder Schleifenrunde verkuerzt.
-                 * Wenn aCurPam vollstaendig durchsucht wurde, ist Start = End
-                 * und die Schleife terminiert.
+                 * In case that there are two contiguous fields in a PaM, the aPam goes step by step
+                 * to the end. aCurPam is reduced in each loop. If aCurPam was searched completely,
+                 * the loop terminates because Start = End.
                  */
 
-                // Suche nach SwTxtFld ...
+                // Search for SwTxtFld ...
                 while(  bOkay
                      && pCurStt->nContent != pCurEnd->nContent
                      && aPam.Find( aHint, sal_False, fnMoveForward, &aCurPam ) )
                 {
-                    //  wenn nur ein Pam mehr als ein Feld enthaelt ...
+                    // if only one PaM has more than one field  ...
                     if( aPam.Start()->nContent != pCurStt->nContent )
                         bOkay = false;
 
@@ -378,7 +339,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                         pFmtFld = (SwFmtFld*)&pTxtFld->GetFld();
                         SwField *pCurFld = pFmtFld->GetFld();
 
-                        // bei gemischten Feldtypen
+                        // if there are mixed field types
                         if( pCurFld->GetTyp()->Which() !=
                             rFld.GetTyp()->Which() )
                             bOkay = false;
@@ -386,24 +347,19 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                         bTblSelBreak = GetDoc()->UpdateFld(pTxtFld, rFld,
                                                            pMsgHnt, sal_False);
                     }
-                    // Der Suchbereich wird um den gefundenen Bereich
-                    // verkuerzt.
+                    // The search area is reduced by the found area:
                     pCurStt->nContent++;
                 }
             }
 
-            if( bTblSelBreak )      // wenn Tabellen Selektion und Tabellen-
-                break;              // Formel aktualisiert wurde -> beenden
+            if( bTblSelBreak ) // If table section and table formula are updated -> finish
+                break;
 
-        FOREACHPAM_END()                      // fuer jeden PaM
+        FOREACHPAM_END()
     }
     GetDoc()->SetModified();
     EndAllAction();
 }
-
-/*--------------------------------------------------
- Liefert den logischen fuer die Datenbank zurueck
- --------------------------------------------------*/
 
 SwDBData SwEditShell::GetDBData() const
 {
@@ -432,16 +388,14 @@ void SwEditShell::ChangeDBFields( const std::vector<String>& rOldNames,
     GetDoc()->ChangeDBFields( rOldNames, rNewName );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:  Alle Expression-Felder erneuern
- --------------------------------------------------------------------*/
+/// Update all expression fields
 void SwEditShell::UpdateExpFlds(sal_Bool bCloseDB)
 {
     SET_CURR_SHELL( this );
     StartAllAction();
     GetDoc()->UpdateExpFlds(NULL, true);
     if (bCloseDB)
-        GetDoc()->GetNewDBMgr()->CloseAll();    // Alle Datenbankverbindungen dichtmachen
+        GetDoc()->GetNewDBMgr()->CloseAll(); // close all database connections
     EndAllAction();
 }
 
@@ -450,9 +404,7 @@ SwNewDBMgr* SwEditShell::GetNewDBMgr() const
     return GetDoc()->GetNewDBMgr();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Feldtypen einfuegen
- --------------------------------------------------------------------*/
+/// insert field type
 SwFieldType* SwEditShell::InsertFldType(const SwFieldType& rFldType)
 {
     return GetDoc()->InsertFldType(rFldType);

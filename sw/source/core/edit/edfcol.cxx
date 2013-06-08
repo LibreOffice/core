@@ -107,12 +107,11 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, sal_Bool bReset)
     const SfxItemSet* pSet = pCnt->GetpSwAttrSet();
     if( pSet )
     {
-        // JP 05.10.98: falls eines der Attribute Break/PageDesc/NumRule(auto)
-        //      im ItemSet steht, so entferne die VORM setzen an der Collection.
-        //      Ansonst wird zu viel gemacht oder falsche gemacht (NumRules!)
+        // JP 05.10.98: Special treatment if one of the attribues Break/PageDesc/NumRule(auto) is
+        //      in the ItemSet. Otherwise there will be too much or wrong processing (NumRules!)
         //      Bug 57568
 
-        // AutoNumRules NICHT in die Vorlagen uebernehmen
+        // Do NOT copy AutoNumRules into the template
         const SfxPoolItem* pItem;
         const SwNumRule* pRule = 0;
         if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, sal_False ) ||

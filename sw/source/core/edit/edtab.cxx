@@ -155,13 +155,12 @@ sal_Bool SwEditShell::TableToText( sal_Unicode cCh )
 
     StartAllAction();
 
-    // verschiebe den akt. Cursor aus dem Tabellen Bereich
-    // angemeldet ist
+    // move current Cursor out of the listing area
     SwNodeIndex aTabIdx( *pTblNd );
     pCrsr->DeleteMark();
     pCrsr->GetPoint()->nNode = *pTblNd->EndOfSectionNode();
     pCrsr->GetPoint()->nContent.Assign( 0, 0 );
-    // SPoint und Mark aus dem Bereich verschieben !!!
+    // move sPoint and Mark out of the area!
     pCrsr->SetMark();
     pCrsr->DeleteMark();
 
@@ -190,7 +189,7 @@ sal_Bool SwEditShell::IsTextToTableAvailable() const
         {
             bOnlyText = sal_True;
 
-            // pruefe ob in der Selection eine Tabelle liegt
+            // check if selection is in listing
             sal_uLong nStt = PCURCRSR->GetMark()->nNode.GetIndex(),
                   nEnd = PCURCRSR->GetPoint()->nNode.GetIndex();
             if( nStt > nEnd )   { sal_uLong n = nStt; nStt = nEnd; nEnd = n; }
@@ -242,9 +241,7 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTblOpts,
     EndAllAction();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Tabellenfelder einer Tabelle updaten
- --------------------------------------------------------------------*/
+/** update fields of a listing */
 void SwEditShell::UpdateTable()
 {
     const SwTableNode* pTblNd = IsCrsrInTbl();
@@ -264,7 +261,8 @@ void SwEditShell::UpdateTable()
     }
 }
 
-    // Change Modus erfragen/setzen
+// get/set Change Mode
+
 TblChgMode SwEditShell::GetTblChgMode() const
 {
     TblChgMode eMode;
@@ -280,7 +278,6 @@ void SwEditShell::SetTblChgMode( TblChgMode eMode )
 {
     const SwTableNode* pTblNd = IsCrsrInTbl();
 
-    // Keine Arme keine Kekse
     if( pTblNd )
     {
         ((SwTable&)pTblNd->GetTable()).SetTblChgMode( eMode );
@@ -318,7 +315,7 @@ sal_Bool SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
         const SwTableBoxFmt* pTblFmt = (SwTableBoxFmt*)pSelBox->GetFrmFmt();
         if( !n )
         {
-            // Formeln in die externe Darstellung bringen!
+            // Convert formulae into external presentation
             const SwTable& rTbl = pSelBox->GetSttNd()->FindTableNode()->GetTable();
 
             SwTableFmlUpdate aTblUpdate( (SwTable*)&rTbl );
@@ -354,7 +351,7 @@ void SwEditShell::SetTblBoxFormulaAttrs( const SfxItemSet& rSet )
         } while( false );
     }
 
-    // beim setzen einer Formel keine Ueberpruefung mehr vornehmen!
+    // When setting a formula, do not check further!
     if( SFX_ITEM_SET == rSet.GetItemState( RES_BOXATR_FORMULA ))
         ClearTblBoxCntnt();
 
@@ -482,13 +479,13 @@ sal_Bool SwEditShell::CanMergeTable( sal_Bool bWithPrev, sal_Bool* pChkNxtPrv ) 
                 bNew == pChkNd->GetTable().IsNewModel() &&
                 // Consider table in table case
                 pChkNd->EndOfSectionIndex() == pTblNd->GetIndex() - 1 )
-                *pChkNxtPrv = sal_True, bRet = sal_True;        // mit Prev ist moeglich
+                *pChkNxtPrv = sal_True, bRet = sal_True;        // using Prev is possible
             else
             {
                 pChkNd = rNds[ pTblNd->EndOfSectionIndex() + 1 ]->GetTableNode();
                 if( pChkNd && !pChkNd->GetTable().ISA( SwDDETable ) &&
                     bNew == pChkNd->GetTable().IsNewModel() )
-                    *pChkNxtPrv = sal_False, bRet = sal_True;       // mit Next ist moeglich
+                    *pChkNxtPrv = sal_False, bRet = sal_True;   // using Next is possible
             }
         }
         else
@@ -512,7 +509,7 @@ sal_Bool SwEditShell::CanMergeTable( sal_Bool bWithPrev, sal_Bool* pChkNxtPrv ) 
     return bRet;
 }
 
-        // setze das InsertDB als Tabelle Undo auf:
+/** create InsertDB as table Undo */
 void SwEditShell::AppendUndoForInsertFromDB( sal_Bool bIsTable )
 {
     GetDoc()->AppendUndoForInsertFromDB( *GetCrsr(), bIsTable );

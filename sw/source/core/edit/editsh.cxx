@@ -37,11 +37,11 @@
 #include <frame.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
-#include <ndtxt.hxx>            // fuer SwTxtNode
+#include <ndtxt.hxx>   // for SwTxtNode
 #include <grfatr.hxx>
 #include <flyfrm.hxx>
 #include <swtable.hxx>
-#include <swundo.hxx>           // UNDO_START, UNDO_END
+#include <swundo.hxx>  // UNDO_START, UNDO_END
 #include <calc.hxx>
 #include <edimp.hxx>
 #include <ndgrf.hxx>
@@ -200,7 +200,7 @@ long SwEditShell::SplitNode( sal_Bool bAutoFormat, sal_Bool bCheckTableStart )
     GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
     FOREACHPAM_START(this)
-        // eine Tabellen Zelle wird jetzt zu einer normalen Textzelle!
+        // Here, a table cell becomes a normal text cell.
         GetDoc()->ClearBoxNumAttrs( PCURCRSR->GetPoint()->nNode );
         GetDoc()->SplitNode( *PCURCRSR->GetPoint(), bCheckTableStart );
     FOREACHPAM_END()
@@ -235,12 +235,7 @@ sal_Bool SwEditShell::AppendTxtNode()
     return bRet;
 }
 
-/******************************************************************************
- *        liefert einen Pointer auf einen SwGrfNode; dieser wird von
- *              GetGraphic() und GetGraphicSize() verwendet.
- ******************************************************************************/
-
-
+// the returned SwGrfNode pointer is used in GetGraphic() and GetGraphicSize()
 SwGrfNode * SwEditShell::_GetGrfNode() const
 {
     SwGrfNode *pGrfNode = 0;
@@ -251,12 +246,9 @@ SwGrfNode * SwEditShell::_GetGrfNode() const
 
     return pGrfNode;
 }
-/******************************************************************************
- *      liefert Pointer auf eine Graphic, wenn CurCrsr->GetPoint() auf
- *           einen SwGrfNode zeigt (und GetMark nicht gesetzt ist
- *                   oder auf die gleiche Graphic zeigt)
- ******************************************************************************/
 
+// returns a Graphic pointer if CurCrsr->GetPoint() points to a SwGrfNode and
+// GetMark is not set or points to the same Graphic
 const Graphic* SwEditShell::GetGraphic( sal_Bool bWait ) const
 {
     SwGrfNode* pGrfNode = _GetGrfNode();
@@ -311,12 +303,8 @@ sal_uInt16 SwEditShell::GetGraphicType() const
     return static_cast<sal_uInt16>(pGrfNode ? pGrfNode->GetGrfObj().GetType() : GRAPHIC_NONE);
 }
 
-/******************************************************************************
- *      liefert die Groesse der Graphic, wenn CurCrsr->GetPoint() auf
- *          einen SwGrfNode zeigt (und GetMark nicht gesetzt ist
- *                  oder auf die gleiche Graphic zeigt)
- ******************************************************************************/
-
+// returns the size of a graphic in <rSz> if CurCrsr->GetPoint() points to a SwGrfNode and
+// GetMark is not set or points to the same graphic
 sal_Bool SwEditShell::GetGrfSize(Size& rSz) const
 {
     SwNoTxtNode* pNoTxtNd;
@@ -331,11 +319,8 @@ sal_Bool SwEditShell::GetGrfSize(Size& rSz) const
     return sal_False;
 
 }
-/******************************************************************************
- *      erneutes Einlesen, falls Graphic nicht Ok ist. Die
- *      aktuelle wird durch die neue ersetzt.
- ******************************************************************************/
 
+/// Read again if graphic is not OK and replace old one
 void SwEditShell::ReRead( const String& rGrfName, const String& rFltName,
                     const Graphic* pGraphic, const GraphicObject* pGrfObj )
 {
@@ -344,18 +329,12 @@ void SwEditShell::ReRead( const String& rGrfName, const String& rFltName,
     EndAllAction();
 }
 
-
-/******************************************************************************
- *  liefert den Namen und den FilterNamen einer Graphic, wenn der Cursor
- *  auf einer Graphic steht
- *  Ist ein String-Ptr != 0 dann returne den entsp. Namen
- ******************************************************************************/
-
-
+/// Returns the name and the filter name of a graphic if the pointer is on a graphic.
+/// If a String-pointer is != 0 then return corresponding name.
 void SwEditShell::GetGrfNms( String* pGrfName, String* pFltName,
                             const SwFlyFrmFmt* pFmt ) const
 {
-    OSL_ENSURE( pGrfName || pFltName, "was wird denn nun erfragt?" );
+    OSL_ENSURE( pGrfName || pFltName, "No parameters" );
     if( pFmt )
         GetDoc()->GetGrfNms( *pFmt, pGrfName, pFltName );
     else
@@ -402,24 +381,22 @@ void SwEditShell::ClearAutomaticContour()
     }
 }
 
-/******************************************************************************
- *      liefert Pointer auf ein SvInPlaceObjectRef, wenn CurCrsr->GetPoint() auf
- *          einen SwOLENode zeigt (und GetMark nicht gesetzt ist
- *                  oder auf das gleiche SvInPlaceObjectRef zeigt)
- *      besorgt den Pointer vom Doc wenn das Objekt per Namen gesucht werden
- *      soll
- ******************************************************************************/
-
+/** Get OLE object at pointer.
+ *
+ * Returns a pointer to a SvInPlaceObjectRef if CurCrsr->GetPoint() points to a SwOLENode and
+ * GetMark is not set or points to the same object reference. Gets this pointer from the Doc
+ * if the object should be searched by name.
+ */
 svt::EmbeddedObjectRef& SwEditShell::GetOLEObject() const
 {
-    OSL_ENSURE(  CNT_OLE == GetCntType(), "GetOLEObj: kein OLENode." );
+    OSL_ENSURE(  CNT_OLE == GetCntType(), "GetOLEObj: no OLENode." );
     OSL_ENSURE( !GetCrsr()->HasMark() ||
             (GetCrsr()->HasMark() &&
                 GetCrsr()->GetPoint()->nNode == GetCrsr()->GetMark()->nNode),
-            "GetOLEObj: kein OLENode." );
+            "GetOLEObj: no OLENode." );
 
     SwOLENode *pOLENode = GetCrsr()->GetNode()->GetOLENode();
-    OSL_ENSURE( pOLENode, "GetOLEObj: kein OLENode." );
+    OSL_ENSURE( pOLENode, "GetOLEObj: no OLENode." );
     SwOLEObj& rOObj = pOLENode->GetOLEObj();
     return rOObj.GetObject();
 }
@@ -456,18 +433,13 @@ void SwEditShell::UpdateCharts( const String &rName )
     GetDoc()->UpdateCharts( rName );
 }
 
-
-/******************************************************************************
- *      Aenderung des Tabellennamens
- ******************************************************************************/
-
+/// change table name
 void SwEditShell::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
 {
     GetDoc()->SetTableName( rTblFmt, rNewName );
 }
 
-// erfragen des akt. Wortes
-
+/// request current word
 String SwEditShell::GetCurWord()
 {
     const SwPaM& rPaM = *GetCrsr();
@@ -500,14 +472,13 @@ const SwDocStat& SwEditShell::GetUpdatedDocStat()
 
 // OPT: eddocinl.cxx
 
-
-    // returne zum Namen die im Doc gesetzte Referenz
+/// get the reference of a given name in the Doc
 const SwFmtRefMark* SwEditShell::GetRefMark( const String& rName ) const
 {
     return GetDoc()->GetRefMark( rName );
 }
 
-    // returne die Namen aller im Doc gesetzten Referenzen
+/// get the names of all references in a Doc
 sal_uInt16 SwEditShell::GetRefMarks( std::vector<OUString>* pStrings ) const
 {
     return GetDoc()->GetRefMarks( pStrings );
@@ -586,9 +557,9 @@ void SwEditShell::ReplaceDropTxt( const String &rStr, SwPaM* pPaM )
 
 String SwEditShell::Calculate()
 {
-    String  aFormel;                    // die entgueltige Formel
+    String  aFormel;                    // the final formula
     SwPaM   *pPaMLast = (SwPaM*)GetCrsr()->GetNext(),
-            *pPaM = pPaMLast;           // die Pointer auf Cursor
+            *pPaM = pPaMLast;           // cursor pointers
     SwCalc  aCalc( *GetDoc() );
     const CharClass& rCC = GetAppCharClass();
 
@@ -659,8 +630,7 @@ sfx2::LinkManager& SwEditShell::GetLinkManager()
 
 void *SwEditShell::GetIMapInventor() const
 {
-    //Als eindeutige Identifikation sollte der Node, auf dem der Crsr steht
-    //genuegen.
+    // The node on which the cursor points should be sufficient as a unique identifier
     return (void*)GetCrsr()->GetNode();
 }
 
@@ -668,7 +638,7 @@ void *SwEditShell::GetIMapInventor() const
 // remove default parameter, because method is always called this default value
 Graphic SwEditShell::GetIMapGraphic() const
 {
-    //Liefert immer eine Graphic, wenn der Crsr in einem Fly steht.
+    // returns always a graphic if the cursor is in a Fly
     SET_CURR_SHELL( (ViewShell*)this );
     Graphic aRet;
     SwPaM* pCrsr = GetCrsr();
@@ -705,7 +675,7 @@ Graphic SwEditShell::GetIMapGraphic() const
 
 sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, sal_Bool bKeepSelection )
 {
-    // URL und Hinweistext (direkt oder via Selektion) notwendig
+    // URL and hint text (directly or via selection) necessary
     if( !rFmt.GetValue().Len() ||   ( !rStr.Len() && !HasSelection() ) )
         return sal_False;
     StartAllAction();
@@ -717,7 +687,7 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, s
         SwPaM* pCrsr = GetCrsr();
         if( pCrsr->HasMark() && *pCrsr->GetPoint() != *pCrsr->GetMark() )
         {
-            // Selection vorhanden, MehrfachSelektion?
+            // Selection existent, multi selection?
             bool bDelTxt = true;
             if( pCrsr->GetNext() == pCrsr )
             {
@@ -726,7 +696,7 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, s
                 if( sTxt == rStr )
                     bDelTxt = bInsTxt = false;
             }
-            else if( rFmt.GetValue() == rStr )      // Name und URL gleich?
+            else if( rFmt.GetValue() == rStr ) // Are Name and URL equal?
                 bDelTxt = bInsTxt = false;
 
             if( bDelTxt )
@@ -790,9 +760,8 @@ sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
     return rArr.size();
 }
 
-
-    // ist der Cursor in eine INetAttribut, dann wird das komplett
-    // geloescht; inclusive des Hinweistextes (wird beim Drag&Drop gebraucht)
+/// If the cursor is in a INetAttribute then it will be deleted completely (incl. hint text, the
+/// latter is needed for drag & drop)
 sal_Bool SwEditShell::DelINetAttrWithText()
 {
     sal_Bool bRet = SelectTxtAttr( RES_TXTATR_INETFMT, sal_False );
@@ -802,7 +771,7 @@ sal_Bool SwEditShell::DelINetAttrWithText()
 }
 
 
-// setzen an den Textzeichenattributen das DontExpand-Flag
+/// Set the DontExpand flag at the text character attributes
 bool SwEditShell::DontExpandFmt()
 {
     bool bRet = false;
@@ -922,7 +891,7 @@ sal_uInt16 SwEditShell::GetLineCount( sal_Bool bActPos )
     if( !bActPos )
         aStart = 0;
     else if( rPtIdx > ( nTmpPos = GetDoc()->GetNodes().GetEndOfExtras().GetIndex()) )
-        // BodyBereich => Start ist EndOfIcons + 1
+        // BodyArea => Start is EndOfIcons + 1
         aStart = nTmpPos + 1;
     else
     {
@@ -1033,9 +1002,7 @@ void SwEditShell::SetLinkUpdMode( sal_uInt16 nMode )
     getIDocumentSettingAccess()->setLinkUpdateMode( nMode );
 }
 
-
-// Schnittstelle fuer die TextInputDaten - ( fuer die Texteingabe
-// von japanischen/chinesischen Zeichen)
+// Interface for TextInputData - (for text input of japanese/chinese characters)
 SwExtTextInput* SwEditShell::CreateExtTextInput(LanguageType eInputLanguage)
 {
     SwExtTextInput* pRet = GetDoc()->CreateExtTextInput( *GetCrsr() );
@@ -1094,11 +1061,11 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
 
         if( !rData.IsOnlyCursorChanged() )
             pInput->SetInputData( rData );
-        // Cursor positionieren:
+        // position cursor
         const SwPosition& rStt = *pInput->Start();
         xub_StrLen nNewCrsrPos = rStt.nContent.GetIndex() + rData.GetCursorPos();
 
-        // zwar unschoen aber was hilfts
+        // ugly but works
         ShowCrsr();
         long nDiff = nNewCrsrPos - rPos.nContent.GetIndex();
         if( 0 > nDiff )
