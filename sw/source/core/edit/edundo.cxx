@@ -43,8 +43,7 @@ bool SwEditShell::CursorsLocked() const
     return GetDoc()->GetDocShell()->GetModel()->hasControllersLocked();
 }
 
-void
-SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
+void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
 {
     // do nothing if somebody has locked controllers!
     if (CursorsLocked())

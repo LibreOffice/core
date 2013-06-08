@@ -443,8 +443,7 @@ void SwEditShell::GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower 
     aCrsr.SetMark();
     if( pCrsr->HasMark() )
         *aCrsr.GetPoint() = *pCrsr->End();
-    GetDoc()->GotoNextNum( *aCrsr.GetPoint(), false,
-                            &rUpper, &rLower );
+    GetDoc()->GotoNextNum( *aCrsr.GetPoint(), false, &rUpper, &rLower );
 }
 
 bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
