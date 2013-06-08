@@ -164,7 +164,6 @@ void SwEditShell::RemoveFldType(sal_uInt16 nResId, const String& rStr)
     }
 }
 
-
 void SwEditShell::FieldToText( SwFieldType* pType )
 {
     if( !pType->GetDepends() )
@@ -251,7 +250,6 @@ SwField* SwEditShell::GetCurFld() const
     return pCurFld;
 }
 
-
 /// Are the PaMs positioned on fields?
 static SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
 {
@@ -280,7 +278,6 @@ void SwEditShell::UpdateFlds( SwField &rFld )
     SET_CURR_SHELL( this );
     StartAllAction();
     {
-
         // // If there are no selections so take the value of the current cursor position.
         SwMsgPoolItem* pMsgHnt = 0;
         SwRefMarkFldUpdate aRefMkHt( GetOut() );
@@ -419,7 +416,6 @@ void SwEditShell::UnlockExpFlds()
 {
     GetDoc()->UnlockExpFlds();
 }
-
 
 void SwEditShell::SetFldUpdateFlags( SwFldUpdateFlags eFlags )
 {

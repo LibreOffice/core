@@ -28,24 +28,15 @@
 #include "ndtxt.hxx"    // for GetXXXFmt
 #include "hints.hxx"
 
-/*************************************
- * Formate
- *************************************/
-// Char
-// OPT: inline
-
-
 sal_uInt16 SwEditShell::GetCharFmtCount() const
 {
     return GetDoc()->GetCharFmts()->size();
 }
 
-
 SwCharFmt& SwEditShell::GetCharFmt(sal_uInt16 nFmt) const
 {
     return *((*(GetDoc()->GetCharFmts()))[nFmt]);
 }
-
 
 SwCharFmt* SwEditShell::GetCurCharFmt() const
 {
@@ -60,12 +51,10 @@ SwCharFmt* SwEditShell::GetCurCharFmt() const
     return pFmt;
 }
 
-
 void SwEditShell::FillByEx(SwCharFmt* pCharFmt, sal_Bool bReset)
 {
     if ( bReset )
     {
-        // #i73790# - method renamed
         pCharFmt->ResetAllFmtAttr();
     }
 
@@ -114,7 +103,6 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, sal_Bool bReset)
         pCharFmt->SetFmtAttr( *pCNd->GetpSwAttrSet() );
 }
 
-// Frm
 sal_uInt16 SwEditShell::GetTblFrmFmtCount(bool bUsed) const
 {
     return GetDoc()->GetTblFrmFmtCount(bUsed);
@@ -130,7 +118,6 @@ String SwEditShell::GetUniqueTblName() const
     return GetDoc()->GetUniqueTblName();
 }
 
-
 SwCharFmt* SwEditShell::MakeCharFmt( const String& rName,
                                     SwCharFmt* pDerivedFrom )
 {
@@ -140,15 +127,10 @@ SwCharFmt* SwEditShell::MakeCharFmt( const String& rName,
     return GetDoc()->MakeCharFmt( rName, pDerivedFrom );
 }
 
-//----------------------------------
-// inlines in product
-
-
 SwTxtFmtColl* SwEditShell::GetTxtCollFromPool( sal_uInt16 nId )
 {
     return GetDoc()->GetTxtCollFromPool( nId );
 }
-
 
 /// return the requested automatic format - base-class !
 SwFmt* SwEditShell::GetFmtFromPool( sal_uInt16 nId )
@@ -156,12 +138,10 @@ SwFmt* SwEditShell::GetFmtFromPool( sal_uInt16 nId )
     return GetDoc()->GetFmtFromPool( nId );
 }
 
-
 SwPageDesc* SwEditShell::GetPageDescFromPool( sal_uInt16 nId )
 {
     return GetDoc()->GetPageDescFromPool( nId );
 }
-
 
 bool SwEditShell::IsUsed( const SwModify& rModify ) const
 {

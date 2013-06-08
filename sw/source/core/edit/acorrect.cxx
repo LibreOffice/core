@@ -37,7 +37,6 @@
 
 using namespace ::com::sun::star;
 
-
 class _PaMIntoCrsrShellRing
 {
     SwCrsrShell& rSh;
@@ -62,12 +61,14 @@ _PaMIntoCrsrShellRing::_PaMIntoCrsrShellRing( SwCrsrShell& rCSh,
     rDelPam.MoveRingTo( pShCrsr );
     rCrsr.MoveRingTo( pShCrsr );
 }
+
 _PaMIntoCrsrShellRing::~_PaMIntoCrsrShellRing()
 {
     // and take out the Pam again:
     RemoveFromRing( rDelPam, pPrevDelPam );
     RemoveFromRing( rCrsr, pPrevCrsr );
 }
+
 void _PaMIntoCrsrShellRing::RemoveFromRing( SwPaM& rPam, Ring* pPrev )
 {
     Ring *p, *pNext = (Ring*)&rPam;
@@ -78,7 +79,6 @@ void _PaMIntoCrsrShellRing::RemoveFromRing( SwPaM& rPam, Ring* pPrev )
     } while( p != pPrev );
 }
 
-
 SwAutoCorrDoc::SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam,
                                 sal_Unicode cIns )
     : rEditSh( rEditShell ), rCrsr( rPam ), pIdx( 0 )
@@ -86,7 +86,6 @@ SwAutoCorrDoc::SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam,
     , bUndoIdInitialized( cIns ? false : true )
 {
 }
-
 
 SwAutoCorrDoc::~SwAutoCorrDoc()
 {
@@ -124,7 +123,6 @@ sal_Bool SwAutoCorrDoc::Delete( xub_StrLen nStt, xub_StrLen nEnd )
     return sal_True;
 }
 
-
 sal_Bool SwAutoCorrDoc::Insert( xub_StrLen nPos, const String& rTxt )
 {
     SwPaM aPam( rCrsr.GetPoint()->nNode.GetNode(), nPos );
@@ -141,11 +139,11 @@ sal_Bool SwAutoCorrDoc::Insert( xub_StrLen nPos, const String& rTxt )
     return sal_True;
 }
 
-
 sal_Bool SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
 {
     return ReplaceRange( nPos, rTxt.Len(), rTxt );
 }
+
 sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength, const String& rTxt )
 {
     SwPaM* pPam = &rCrsr;
@@ -230,8 +228,6 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( xub_StrLen nPos, xub_StrLen nSourceLength,
     return sal_True;
 }
 
-
-
 sal_Bool SwAutoCorrDoc::SetAttr( xub_StrLen nStt, xub_StrLen nEnd, sal_uInt16 nSlotId,
                                         SfxPoolItem& rItem )
 {
@@ -254,8 +250,6 @@ sal_Bool SwAutoCorrDoc::SetAttr( xub_StrLen nStt, xub_StrLen nEnd, sal_uInt16 nS
     }
     return 0 != nWhich;
 }
-
-
 
 sal_Bool SwAutoCorrDoc::SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const String& rURL )
 {
@@ -301,7 +295,6 @@ const String* SwAutoCorrDoc::GetPrevPara( sal_Bool bAtNormalPos )
         bUndoIdInitialized = true;
     return pStr;
 }
-
 
 sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
                                             SvxAutoCorrect& rACorrect,
@@ -361,7 +354,6 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
                     pIdx = new SwNodeIndex( rCrsr.GetPoint()->nNode, -1 );
                 }
 
-                //
                 SwDoc* pAutoDoc = aTBlks.GetDoc();
                 SwNodeIndex aSttIdx( pAutoDoc->GetNodes().GetEndOfExtras(), 1 );
                 SwCntntNode* pCntntNd = pAutoDoc->GetNodes().GoNext( &aSttIdx );
@@ -453,7 +445,6 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
     }
 }
 
-
 sal_Bool SwAutoCorrExceptWord::CheckDelChar( const SwPosition& rPos )
 {
     sal_Bool bRet = sal_False;
@@ -527,6 +518,5 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

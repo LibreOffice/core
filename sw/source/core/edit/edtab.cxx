@@ -21,7 +21,6 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 
-
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <editeng/boxitem.hxx>
@@ -88,6 +87,7 @@ sal_Bool ConvertTableToText( const SwTableNode *pConstTableNode, sal_Unicode cCh
     return pTableNode->GetDoc()->TableToText( pTableNode, cCh );
 }
 //End for bug #i119954#
+
 const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts,
                                          sal_uInt16 nRows, sal_uInt16 nCols,
                                          sal_Int16 eAdj,

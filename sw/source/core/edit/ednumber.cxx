@@ -27,7 +27,6 @@
 #include <swundo.hxx>
 #include <numrule.hxx>
 
-
 SwPamRanges::SwPamRanges( const SwPaM& rRing )
 {
     const SwPaM* pTmp = &rRing;
@@ -35,7 +34,6 @@ SwPamRanges::SwPamRanges( const SwPaM& rRing )
         Insert( pTmp->GetMark()->nNode, pTmp->GetPoint()->nNode );
     } while( &rRing != ( pTmp = (const SwPaM*)pTmp->GetNext() ));
 }
-
 
 void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
 {
@@ -98,8 +96,6 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
     _SwPamRanges::insert( aRg );
 }
 
-
-
 SwPaM& SwPamRanges::SetPam( sal_uInt16 nArrPos, SwPaM& rPam )
 {
     OSL_ASSERT( nArrPos < Count() );
@@ -120,7 +116,6 @@ void SwEditShell::SetOutlineNumRule(const SwNumRule& rRule)
     GetDoc()->SetOutlineNumRule(rRule);
     EndAllAction();
 }
-
 
 const SwNumRule* SwEditShell::GetOutlineNumRule() const
 {
@@ -231,11 +226,11 @@ sal_Bool SwEditShell::SelectionHasBullet() const
                 }
             }
         }
-
     }
 
     return bResult;
 }
+
 // -> #i29560#
 sal_Bool SwEditShell::HasNumber() const
 {
@@ -335,6 +330,7 @@ bool SwEditShell::NumUpDown( bool bDown )
     EndAllAction();
     return bRet;
 }
+
 // -> #i23726#
 bool SwEditShell::IsFirstOfNumRule() const
 {
@@ -356,10 +352,7 @@ bool SwEditShell::IsFirstOfNumRule(const SwPaM & rPaM) const
 }
 // <- #i23726#
 
-// -> #i23725#
-// #i90078#
-// Remove unused default parameter <nLevel> and <bRelative>.
-// Adjust method name and parameter name
+// -> #i23725#, #i90078#
 void SwEditShell::ChangeIndentOfAllListLevels( short nDiff )
 {
     StartAllAction();
@@ -380,7 +373,6 @@ void SwEditShell::ChangeIndentOfAllListLevels( short nDiff )
 }
 
 // #i90078#
-// Adjust method name
 void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
 {
     StartAllAction();
@@ -391,8 +383,6 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
     {
         SwPaM aPaM(rPos);
         SwTxtNode * pTxtNode = aPaM.GetNode()->GetTxtNode();
-
-        // #i90078#
 
         SwNumRule aRule(*pCurNumRule);
 
@@ -435,7 +425,6 @@ bool SwEditShell::MoveParagraph( long nOffset )
     return bRet;
 }
 
-//#outline level add by zhaojianwei
 int SwEditShell::GetCurrentParaOutlineLevel( ) const
 {
     int nLevel = 0;
@@ -446,7 +435,6 @@ int SwEditShell::GetCurrentParaOutlineLevel( ) const
         nLevel = pTxtNd->GetAttrOutlineLevel();
     return nLevel;
 }
-//<-end,zhaojianwei
 
 void SwEditShell::GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower )
 {
@@ -575,7 +563,6 @@ bool SwEditShell::OutlineUpDown( short nOffset )
     return bRet;
 }
 
-
 bool SwEditShell::MoveOutlinePara( short nOffset )
 {
     StartAllAction();
@@ -658,7 +645,6 @@ sal_Bool SwEditShell::IsOutlineCopyable( sal_uInt16 nIdx ) const
     return lcl_IsOutlineMoveAndCopyable( GetDoc(), nIdx, true );
 }
 
-
 bool SwEditShell::NumOrNoNum( sal_Bool bNumOn, bool bChkStart )
 {
     bool bRet = false;
@@ -696,7 +682,7 @@ sal_Bool SwEditShell::IsNoNum( sal_Bool bChkStart ) const
 sal_uInt8 SwEditShell::GetNumLevel() const
 {
     // return current level where the point of the cursor is
-    sal_uInt8 nLevel = MAXLEVEL;        //end,zhaojianwei
+    sal_uInt8 nLevel = MAXLEVEL;
 
     SwPaM* pCrsr = GetCrsr();
     const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();

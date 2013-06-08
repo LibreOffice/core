@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <vcl/cmdevt.hxx>
 #include <unotools/charclass.hxx>
@@ -61,12 +60,6 @@
 
 using namespace com::sun::star;
 
-
-/******************************************************************************
- *                      void SwEditShell::Insert(char c)
- ******************************************************************************/
-
-
 void SwEditShell::Insert( sal_Unicode c, sal_Bool bOnlyCurrCrsr )
 {
     StartAllAction();
@@ -84,12 +77,6 @@ void SwEditShell::Insert( sal_Unicode c, sal_Bool bOnlyCurrCrsr )
 
     EndAllAction();
 }
-
-
-/******************************************************************************
- *                void SwEditShell::Insert(const String &rStr)
- ******************************************************************************/
-
 
 void SwEditShell::Insert2(const String &rStr, const bool bForceExpandHints )
 {
@@ -170,12 +157,6 @@ void SwEditShell::Insert2(const String &rStr, const bool bForceExpandHints )
     EndAllAction();
 }
 
-
-/******************************************************************************
- *              void SwEditShell::Overwrite(const String &rStr)
- ******************************************************************************/
-
-
 void SwEditShell::Overwrite(const String &rStr)
 {
     StartAllAction();
@@ -188,11 +169,6 @@ void SwEditShell::Overwrite(const String &rStr)
     FOREACHPAM_END()
     EndAllAction();
 }
-
-
-/******************************************************************************
- *                      long SwEditShell::SplitNode()
- ******************************************************************************/
 
 long SwEditShell::SplitNode( sal_Bool bAutoFormat, sal_Bool bCheckTableStart )
 {
@@ -345,13 +321,11 @@ void SwEditShell::GetGrfNms( String* pGrfName, String* pFltName,
     }
 }
 
-
 const PolyPolygon *SwEditShell::GetGraphicPolygon() const
 {
     SwNoTxtNode *pNd = GetCrsr()->GetNode()->GetNoTxtNode();
     return pNd->HasContour();
 }
-
 
 void SwEditShell::SetGraphicPolygon( const PolyPolygon *pPoly )
 {
@@ -401,7 +375,6 @@ svt::EmbeddedObjectRef& SwEditShell::GetOLEObject() const
     return rOObj.GetObject();
 }
 
-
 sal_Bool SwEditShell::HasOLEObj( const String &rName ) const
 {
     SwStartNode *pStNd;
@@ -419,7 +392,6 @@ sal_Bool SwEditShell::HasOLEObj( const String &rName ) const
     }
     return sal_False;
 }
-
 
 void SwEditShell::SetChartName( const String &rName )
 {
@@ -450,11 +422,6 @@ String SwEditShell::GetCurWord()
     return aString;
 }
 
-/****************************************************************************
- *           void SwEditShell::UpdateDocStat()
- ****************************************************************************/
-
-
 void SwEditShell::UpdateDocStat( )
 {
     StartAllAction();
@@ -483,11 +450,6 @@ sal_uInt16 SwEditShell::GetRefMarks( std::vector<OUString>* pStrings ) const
 {
     return GetDoc()->GetRefMarks( pStrings );
 }
-
-/******************************************************************************
- *          DropCap-SS
- ******************************************************************************/
-
 
 String SwEditShell::GetDropTxt( const sal_uInt16 nChars ) const
 {
@@ -553,7 +515,6 @@ void SwEditShell::ReplaceDropTxt( const String &rStr, SwPaM* pPaM )
         EndAllAction();
     }
 }
-
 
 String SwEditShell::Calculate()
 {
@@ -621,12 +582,10 @@ String SwEditShell::Calculate()
     return aCalc.GetStrResult( aCalc.Calculate(aFormel) );
 }
 
-
 sfx2::LinkManager& SwEditShell::GetLinkManager()
 {
     return mpDoc->GetLinkManager();
 }
-
 
 void *SwEditShell::GetIMapInventor() const
 {
@@ -635,7 +594,6 @@ void *SwEditShell::GetIMapInventor() const
 }
 
 // #i73788#
-// remove default parameter, because method is always called this default value
 Graphic SwEditShell::GetIMapGraphic() const
 {
     // returns always a graphic if the cursor is in a Fly
@@ -671,7 +629,6 @@ Graphic SwEditShell::GetIMapGraphic() const
     }
     return aRet;
 }
-
 
 sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, sal_Bool bKeepSelection )
 {
@@ -726,7 +683,6 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, s
     EndAllAction();
     return sal_True;
 }
-
 
 sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
 {
@@ -795,6 +751,7 @@ sal_Bool SwEditShell::RemoveInvisibleContent()
     EndAllAction();
     return bRet;
 }
+
 bool SwEditShell::ConvertFieldsToText()
 {
     StartAllAction();
@@ -802,6 +759,7 @@ bool SwEditShell::ConvertFieldsToText()
     EndAllAction();
     return bRet;
 }
+
 void SwEditShell::SetNumberingRestart()
 {
     StartAllAction();
@@ -871,7 +829,6 @@ void SwEditShell::SetNumberingRestart()
             }
         }
     }
-
 
     Pop(sal_False);
     EndAllAction();
@@ -949,7 +906,6 @@ long SwEditShell::MergeDoc( const SwDoc& rDoc )
     EndAllAction();
     return nRet;
 }
-
 
 const SwFtnInfo& SwEditShell::GetFtnInfo() const
 {
@@ -1122,6 +1078,5 @@ void SwEditShell::ApplyViewOptions( const SwViewOption &rOpt )
     ViewShell::ApplyViewOptions( rOpt );
     SwEditShell::EndAction();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

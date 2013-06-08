@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/window.hxx>
 
 #include <editsh.hxx>
@@ -37,42 +36,25 @@ SwEditShell::SwEditShell( SwEditShell& rEdSH, Window *pWindow )
 {
 }
 
-// ctor/dtor
-
-
 SwEditShell::SwEditShell( SwDoc& rDoc, Window *pWindow, const SwViewOption *pOptions )
     : SwCrsrShell( rDoc, pWindow, pOptions )
 {
     GetDoc()->GetIDocumentUndoRedo().DoUndo(true);
 }
 
-
 SwEditShell::~SwEditShell() // USED
 {
 }
-
-/******************************************************************************
- *                  sal_Bool SwEditShell::IsModified() const
- ******************************************************************************/
-
 
 sal_Bool SwEditShell::IsModified() const
 {
     return GetDoc()->IsModified();
 }
-/******************************************************************************
- *                    void SwEditShell::SetModified()
- ******************************************************************************/
-
 
 void SwEditShell::SetModified()
 {
     GetDoc()->SetModified();
 }
-/******************************************************************************
- *                   void SwEditShell::ResetModified()
- ******************************************************************************/
-
 
 void SwEditShell::ResetModified()
 {
@@ -85,11 +67,6 @@ void SwEditShell::SetUndoNoResetModified()
     GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
 }
 
-/******************************************************************************
- *                 void SwEditShell::StartAllAction()
- ******************************************************************************/
-
-
 void SwEditShell::StartAllAction()
 {
     ViewShell *pSh = this;
@@ -101,10 +78,6 @@ void SwEditShell::StartAllAction()
         pSh = (ViewShell *)pSh->GetNext();
     } while(pSh != this);
 }
-/******************************************************************************
- *                  void SwEditShell::EndAllAction()
- ******************************************************************************/
-
 
 void SwEditShell::EndAllAction()
 {
@@ -117,11 +90,6 @@ void SwEditShell::EndAllAction()
         pSh = (ViewShell *)pSh->GetNext();
     } while(pSh != this);
 }
-
-/******************************************************************************
- *                  void SwEditShell::CalcLayout()
- ******************************************************************************/
-
 
 void SwEditShell::CalcLayout()
 {
@@ -161,9 +129,6 @@ sal_uInt16 SwEditShell::GetCntType() const
     return nRet;
 }
 
-//------------------------------------------------------------------------------
-
-
 sal_Bool SwEditShell::HasOtherCnt() const
 
 {
@@ -192,19 +157,16 @@ SwActContext::SwActContext(SwEditShell *pShell)
     pSh->StartAction();
 }
 
-
 SwActContext::~SwActContext()
 {
     pSh->EndAction();
 }
-
 
 SwMvContext::SwMvContext(SwEditShell *pShell)
     : pSh(pShell)
 {
     pSh->SttCrsrMove();
 }
-
 
 SwMvContext::~SwMvContext()
 {
@@ -223,13 +185,10 @@ sal_uInt16 SwEditShell::GetTOXTypeCount(TOXTypes eTyp) const
     return mpDoc->GetTOXTypeCount(eTyp);
 }
 
-
 void SwEditShell::InsertTOXType(const SwTOXType& rTyp)
 {
     mpDoc->InsertTOXType(rTyp);
 }
-
-
 
 void SwEditShell::DoUndo( sal_Bool bOn )
 { GetDoc()->GetIDocumentUndoRedo().DoUndo( bOn ); }
@@ -273,7 +232,6 @@ SwUndoId SwEditShell::EndUndo(SwUndoId eUndoId,
                                 const SwRewriter *pRewriter)
 { return GetDoc()->GetIDocumentUndoRedo().EndUndo(eUndoId, pRewriter); }
 
-
 bool     SwEditShell::GetLastUndoInfo(OUString *const o_pStr,
                                       SwUndoId *const o_pId) const
 { return GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(o_pStr, o_pId); }
@@ -306,12 +264,10 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Bool bInsert,
     EndAllAction();
 }
 
-
 void SwEditShell::SetNewDoc(sal_Bool bNew)
 {
     GetDoc()->SetNewDoc(bNew);
 }
-
 
 sal_Bool SwEditShell::GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, String& rWord )
 {
@@ -336,7 +292,5 @@ SwAutoCompleteWord& SwEditShell::GetAutoCompleteWords()
 {
     return SwDoc::GetAutoCompleteWords();
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

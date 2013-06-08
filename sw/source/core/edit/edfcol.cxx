@@ -32,23 +32,15 @@
 #include <swundo.hxx>
 #include <docary.hxx>
 
-/*************************************
- * FormatColl
- *************************************/
-// TXT
-
-
 SwTxtFmtColl& SwEditShell::GetDfltTxtFmtColl() const
 {
     return *((SwTxtFmtColl*) (GetDoc()->GetDfltTxtFmtColl()));
 }
 
-
 sal_uInt16 SwEditShell::GetTxtFmtCollCount() const
 {
     return GetDoc()->GetTxtFmtColls()->size();
 }
-
 
 SwTxtFmtColl& SwEditShell::GetTxtFmtColl( sal_uInt16 nFmtColl) const
 {
@@ -78,7 +70,6 @@ void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
     EndAllAction();
 }
 
-
 SwTxtFmtColl* SwEditShell::MakeTxtFmtColl(const String& rFmtCollName,
         SwTxtFmtColl* pParent)
 {
@@ -93,12 +84,10 @@ SwTxtFmtColl* SwEditShell::MakeTxtFmtColl(const String& rFmtCollName,
 
 }
 
-
 void SwEditShell::FillByEx(SwTxtFmtColl* pColl, sal_Bool bReset)
 {
     if( bReset )
     {
-        // #i73790# - method renamed
         pColl->ResetAllFmtAttr();
     }
 
@@ -139,8 +128,5 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, sal_Bool bReset)
             GetDoc()->ChgFmt(*pColl, *pSet );
     }
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

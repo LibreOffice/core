@@ -79,5 +79,4 @@ sal_Bool SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
     return sal_True;
 }
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
