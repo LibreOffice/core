@@ -924,7 +924,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     // the manipulated range.
     // If there's no content anymore, set it to the StartNode (that's
     // always there).
-    sal_Bool bNullCntnt = !aSavePam.Move( fnMoveBackward, fnGoCntnt );
+    const bool bNullCntnt = !aSavePam.Move( fnMoveBackward, fnGoCntnt );
     if( bNullCntnt )
     {
         aSavePam.GetPoint()->nNode--;
@@ -2168,7 +2168,7 @@ bool SwDoc::ReplaceRange( SwPaM& rPam, const String& rStr,
     ::std::vector<xub_StrLen> Breaks;
 
     SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
-    aPam.Normalize(sal_False);
+    aPam.Normalize(false);
     if (aPam.GetPoint()->nNode != aPam.GetMark()->nNode)
     {
         aPam.Move(fnMoveBackward);

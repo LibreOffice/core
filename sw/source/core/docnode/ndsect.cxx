@@ -131,13 +131,13 @@ static void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSectionData& rSectionData,
 {
     SwNodeIndex aIdx( rStt );
     if( !rNds.GoPrevSection( &aIdx, sal_True, sal_False ) ||
-        !CheckNodesRange( rStt, aIdx, sal_True ) ||
+        !CheckNodesRange( rStt, aIdx, true ) ||
         // #i21457#
         !lcl_IsInSameTblBox( rNds, rStt, true ))
     {
         aIdx = rEnd;
         if( !rNds.GoNextSection( &aIdx, sal_True, sal_False ) ||
-            !CheckNodesRange( rEnd, aIdx, sal_True ) ||
+            !CheckNodesRange( rEnd, aIdx, true ) ||
             // #i21457#
             !lcl_IsInSameTblBox( rNds, rEnd, false ))
         {
@@ -1206,13 +1206,13 @@ void SwSectionNode::DelFrms()
     {
         SwNodeIndex aIdx( *this );
         if( !rNds.GoPrevSection( &aIdx, sal_True, sal_False ) ||
-            !CheckNodesRange( *this, aIdx, sal_True ) ||
+            !CheckNodesRange( *this, aIdx, true ) ||
             // #i21457#
             !lcl_IsInSameTblBox( rNds, *this, true ))
         {
             aIdx = *EndOfSectionNode();
             if( !rNds.GoNextSection( &aIdx, sal_True, sal_False ) ||
-                !CheckNodesRange( *EndOfSectionNode(), aIdx, sal_True ) ||
+                !CheckNodesRange( *EndOfSectionNode(), aIdx, true ) ||
                 // #i21457#
                 !lcl_IsInSameTblBox( rNds, *EndOfSectionNode(), false ))
             {

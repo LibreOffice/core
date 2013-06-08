@@ -1307,12 +1307,12 @@ sal_Bool SwXTextViewCursor::jumpToStartOfPage(void) throw( uno::RuntimeException
 sal_Int16 SwXTextViewCursor::getPage(void) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    short nRet = 0;
+    sal_Int16 nRet = 0;
     if(m_pView)
     {
         SwWrtShell& rSh = m_pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
-        nRet = (short)pShellCrsr->GetPageNum( sal_True, 0 );
+        nRet = static_cast<sal_Int16>(pShellCrsr->GetPageNum( true, 0 ));
     }
     else
         throw uno::RuntimeException();

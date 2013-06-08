@@ -1135,7 +1135,7 @@ void SaveBookmark::SetInDoc(
     }
 
     if(!aPam.HasMark()
-        || CheckNodesRange(aPam.GetPoint()->nNode, aPam.GetMark()->nNode, sal_True))
+        || CheckNodesRange(aPam.GetPoint()->nNode, aPam.GetMark()->nNode, true))
     {
         ::sw::mark::IBookmark* const pBookmark = dynamic_cast< ::sw::mark::IBookmark* >(pDoc->getIDocumentMarkAccess()->makeMark(aPam, m_aName, m_eOrigBkmType));
         if(pBookmark)

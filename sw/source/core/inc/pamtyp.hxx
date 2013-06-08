@@ -21,7 +21,6 @@
 #define _PAMTYP_HXX
 
 #include <unotools/textsearch.hxx>
-#include <pam.hxx>
 #include <node.hxx>
 #include <tools/string.hxx>
 
@@ -36,13 +35,13 @@ void GoStartDoc( SwPosition*);
 void GoEndDoc( SwPosition*);
 void GoStartSection( SwPosition*);
 void GoEndSection( SwPosition*);
-sal_Bool GoInDoc( SwPaM&, SwMoveFn);
-sal_Bool GoInSection( SwPaM&, SwMoveFn);
-sal_Bool GoInNode( SwPaM&, SwMoveFn);
-sal_Bool GoInCntnt( SwPaM&, SwMoveFn);
-sal_Bool GoInCntntCells( SwPaM&, SwMoveFn);
-sal_Bool GoInCntntSkipHidden( SwPaM&, SwMoveFn);
-sal_Bool GoInCntntCellsSkipHidden( SwPaM&, SwMoveFn);
+bool GoInDoc( SwPaM&, SwMoveFn);
+bool GoInSection( SwPaM&, SwMoveFn);
+bool GoInNode( SwPaM&, SwMoveFn);
+bool GoInCntnt( SwPaM&, SwMoveFn);
+bool GoInCntntCells( SwPaM&, SwMoveFn);
+bool GoInCntntSkipHidden( SwPaM&, SwMoveFn);
+bool GoInCntntCellsSkipHidden( SwPaM&, SwMoveFn);
 const SwTxtAttr* GetFrwrdTxtHint( const SwpHints&, sal_uInt16&, xub_StrLen );
 const SwTxtAttr* GetBkwrdTxtHint( const SwpHints&, sal_uInt16&, xub_StrLen );
 

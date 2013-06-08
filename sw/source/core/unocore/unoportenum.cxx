@@ -785,7 +785,7 @@ lcl_ExportHints(
                                 xParent, pUnoCrsr, *pAttr, false);
                         if (bIsPoint) // consume CH_TXTATR!
                         {
-                            pUnoCrsr->Normalize(sal_False);
+                            pUnoCrsr->Normalize(false);
                             pUnoCrsr->DeleteMark();
                             xRef = xTmp;
                         }
@@ -1091,7 +1091,7 @@ lcl_CreatePortions(
     {
         if (pUnoCrsr->HasMark())
         {
-            pUnoCrsr->Normalize(sal_False);
+            pUnoCrsr->Normalize(false);
             pUnoCrsr->DeleteMark();
         }
 

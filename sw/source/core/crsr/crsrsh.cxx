@@ -700,7 +700,7 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
     else
     {
         // SSelection over not allowed sections or if in header/footer -> different
-        if( !CheckNodesRange( aPos.nNode, pCrsr->GetMark()->nNode, sal_True )
+        if( !CheckNodesRange( aPos.nNode, pCrsr->GetMark()->nNode, true )
             || ( pFrm && !pFrm->Frm().IsInside( pCrsr->GetMkPos() ) ))
             return bRet;
 

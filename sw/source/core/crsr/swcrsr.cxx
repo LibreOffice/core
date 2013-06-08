@@ -200,7 +200,7 @@ bool SwTableCursor::IsSelOvrCheck(int eFlags)
         && HasMark() )
     {
         SwNodeIndex aOldPos( rNds, GetSavePos()->nNode );
-        if( !CheckNodesRange( aOldPos, GetPoint()->nNode, sal_True ))
+        if( !CheckNodesRange( aOldPos, GetPoint()->nNode, true ))
         {
             GetPoint()->nNode = aOldPos;
             GetPoint()->nContent.Assign( GetCntntNode(), GetSavePos()->nCntnt );
@@ -256,8 +256,8 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
             }
 
             int bIsValidPos = 0 != pCNd;
-            sal_Bool bValidNodesRange = bIsValidPos &&
-                                    ::CheckNodesRange( rPtIdx, aIdx, sal_True );
+            const bool bValidNodesRange = bIsValidPos &&
+                                    ::CheckNodesRange( rPtIdx, aIdx, true );
             if( !bValidNodesRange )
             {
                 rPtIdx = pSavePos->nNode;
@@ -385,7 +385,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
         return sal_False;
 
     // check for invalid sections
-    if( !::CheckNodesRange( GetMark()->nNode, GetPoint()->nNode, sal_True ))
+    if( !::CheckNodesRange( GetMark()->nNode, GetPoint()->nNode, true ))
     {
         DeleteMark();
         RestoreSavePos();
@@ -454,7 +454,7 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
                 // we permit these
                 if( pMyNd->IsCntntNode() &&
                     ::CheckNodesRange( GetMark()->nNode,
-                                       GetPoint()->nNode, sal_True ))
+                                       GetPoint()->nNode, true ))
                 {
                     // table in table
                     const SwTableNode* pOuterTableNd = pMyNd->FindTableNode();
@@ -1604,8 +1604,7 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
     {
         SwNodeIndex aOldNodeIdx( GetPoint()->nNode );
 
-        bool bSuccess = Move( fnMove, fnGo );
-        if ( !bSuccess )
+        if ( !Move( fnMove, fnGo ) )
             break;
 
         // If we were located inside a covered cell but our position has been
@@ -1643,8 +1642,7 @@ sal_Bool SwCursor::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                         GetPoint()->nContent.Assign( pCntntNode, nTmpPos );
 
                         // Redo the move:
-                        bSuccess = Move( fnMove, fnGo );
-                        if ( !bSuccess )
+                        if ( !Move( fnMove, fnGo ) )
                             break;
                     }
                 }
@@ -1779,8 +1777,7 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
         }
 
         // It is allowed to move footnotes in other footnotes but not sections
-        const sal_Bool bChkRange = pFrm->IsInFtn() && !HasMark()
-                                    ? sal_False : sal_True;
+        const bool bChkRange = pFrm->IsInFtn() && !HasMark();
         const SwPosition aOldPos( *GetPoint() );
         sal_Bool bInReadOnly = IsReadOnlyAvailable();
 

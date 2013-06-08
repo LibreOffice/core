@@ -3825,7 +3825,7 @@ bool SwDoc::IsInRedlines(const SwNode & rNode) const
     SwPaM aPam(SwPosition(*rEndOfRedlines.StartOfSectionNode()),
                SwPosition(rEndOfRedlines));
 
-    return aPam.ContainsPosition(aPos) ? true : false;
+    return aPam.ContainsPosition(aPos);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

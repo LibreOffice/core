@@ -647,7 +647,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
     else if ( bIgnoreRedlines ||
          !CheckNodesRange( aPaM.GetPoint()->nNode,
                            aPaM.GetMark()->nNode,
-                           sal_True ) )
+                           true ) )
     {
         // ignore redline (e.g. file loaded in insert mode):
         // delete 'deleted' redlines and forget about the whole thing

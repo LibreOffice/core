@@ -1917,7 +1917,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     // n.b.: toxmarks must have either alternative text or an extent
     if (bMark && rMark.GetAlternativeText().Len())
     {
-        rPam.Normalize(sal_True);
+        rPam.Normalize(true);
         rPam.DeleteMark();
         bMark = false;
     }

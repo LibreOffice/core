@@ -1935,7 +1935,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                 /* aInsPos points to the non-content node. Move it to
                    the previous content node. */
                 SwPaM aInsPam(aInsPos);
-                sal_Bool bMoved = aInsPam.Move(fnMoveBackward);
+                const bool bMoved = aInsPam.Move(fnMoveBackward);
                 OSL_ENSURE(bMoved, "No content node found!");
 
                 if (bMoved)

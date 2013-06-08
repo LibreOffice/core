@@ -807,7 +807,7 @@ void SwFEShell::Insert( const String& rGrfName, const String& rFltName,
                     if( !pAnchor->GetPageNum() )
                     {
                         pAnchor->SetPageNum( pCursor->GetPageNum(
-                                sal_True, &pCursor->GetPtPos() ) );
+                                true, &pCursor->GetPtPos() ) );
                     }
                     break;
                 default :

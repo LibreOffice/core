@@ -139,7 +139,7 @@ typedef SwMoveFnCollection* SwMoveFn;
 SW_DLLPUBLIC extern SwMoveFn fnMoveForward; ///< SwPam::Move()/Find() default argument.
 SW_DLLPUBLIC extern SwMoveFn fnMoveBackward;
 
-typedef sal_Bool (*SwGoInDoc)( SwPaM& rPam, SwMoveFn fnMove );
+typedef bool (*SwGoInDoc)( SwPaM& rPam, SwMoveFn fnMove );
 SW_DLLPUBLIC extern SwGoInDoc fnGoDoc;
 extern SwGoInDoc fnGoSection;
 SW_DLLPUBLIC extern SwGoInDoc fnGoNode;
@@ -182,8 +182,8 @@ public:
     SwPaM& operator=( const SwPaM & );
 
     /// Movement of cursor.
-    sal_Bool Move( SwMoveFn fnMove = fnMoveForward,
-                    SwGoInDoc fnGo = fnGoCntnt );
+    bool Move( SwMoveFn fnMove = fnMoveForward,
+                SwGoInDoc fnGo = fnGoCntnt );
 
     /// Search.
     bool Find(  const com::sun::star::util::SearchOptions& rSearchOpt,
@@ -271,10 +271,10 @@ public:
     /**
        Normalizes PaM, i.e. sort point and mark.
 
-       @param bPointFirst sal_True: If the point is behind the mark then swap.
-                          sal_False: If the mark is behind the point then swap.
+       @param bPointFirst true: If the point is behind the mark then swap.
+                          false: If the mark is behind the point then swap.
     */
-    SwPaM & Normalize(sal_Bool bPointFirst = sal_True);
+    SwPaM & Normalize(bool bPointFirst = true);
 
     /// @return the document (SwDoc) at which the PaM is registered
     SwDoc* GetDoc() const   { return m_pPoint->nNode.GetNode().GetDoc(); }
@@ -285,14 +285,16 @@ public:
                             { return bOne ? m_Bound1 : m_Bound2; }
 
     /// Get number of page which contains cursor.
-    sal_uInt16 GetPageNum( sal_Bool bAtPoint = sal_True, const Point* pLayPos = 0 );
+    sal_uInt16 GetPageNum( bool bAtPoint = true, const Point* pLayPos = 0 );
 
     /** Is in something protected (readonly) or selection contains
        something protected. */
     bool HasReadonlySel( bool bFormView, bool bAnnotationMode = false ) const;
 
-    sal_Bool ContainsPosition(const SwPosition & rPos)
-    { return *Start() <= rPos && rPos <= *End(); }
+    bool ContainsPosition(const SwPosition & rPos)
+    {
+        return *Start() <= rPos && rPos <= *End();
+    }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwPaM);
 
@@ -301,8 +303,8 @@ public:
 };
 
 
-sal_Bool CheckNodesRange( const SwNodeIndex&, const SwNodeIndex&, sal_Bool );
-sal_Bool GoInCntnt( SwPaM & rPam, SwMoveFn fnMove );
+bool CheckNodesRange( const SwNodeIndex&, const SwNodeIndex&, bool bChkSection );
+bool GoInCntnt( SwPaM & rPam, SwMoveFn fnMove );
 
 
 #endif  // _PAM_HXX

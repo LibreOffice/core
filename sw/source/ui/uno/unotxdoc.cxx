@@ -176,7 +176,7 @@ static SwPrintUIOptions * lcl_GetPrintUIOptions(
     if (pSh)
     {
         SwPaM* pShellCrsr = pSh->GetCrsr();
-        nCurrentPage = pShellCrsr->GetPageNum(sal_True, 0);
+        nCurrentPage = pShellCrsr->GetPageNum(true, 0);
     }
     else if (!bSwSrcView)
     {

@@ -42,9 +42,6 @@
 #include <docsh.hxx>
 #include <svl/smplhint.hxx>
 
-extern sal_Bool CheckNodesRange( const SwNodeIndex& rStt,
-                            const SwNodeIndex& rEnd, sal_Bool bChkSection );
-
 typedef std::vector<SwStartNode*> SwSttNdPtrs;
 
 
@@ -2230,7 +2227,7 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
 
                 // suche nach vorne/hinten nach einem Content Node
             else if( 0 != ( pFrmNd = GoPrevSection( &aIdx, sal_True, sal_False )) &&
-                    ::CheckNodesRange( aIdx, rFrmIdx, sal_True ) &&
+                    ::CheckNodesRange( aIdx, rFrmIdx, true ) &&
                     // nach vorne nie aus der Tabelle hinaus!
                     pFrmNd->FindTableNode() == pTableNd &&
                     // Bug 37652: nach hinten nie aus der Tabellenzelle hinaus!
@@ -2252,7 +2249,7 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                 // JP 19.09.93: aber nie die Section dafuer verlassen !!
                 if( ( pEnd && ( pFrmNd = &aIdx.GetNode())->IsCntntNode() ) ||
                     ( 0 != ( pFrmNd = GoNextSection( &aIdx, sal_True, sal_False )) &&
-                    ::CheckNodesRange( aIdx, rFrmIdx, sal_True ) &&
+                    ::CheckNodesRange( aIdx, rFrmIdx, true ) &&
                     ( pFrmNd->FindTableNode() == pTableNd &&
                         // Bug 37652: nach hinten nie aus der Tabellenzelle hinaus!
                         (!pFrmNd->FindTableNode() || pFrmNd->FindTableBoxStartNode()

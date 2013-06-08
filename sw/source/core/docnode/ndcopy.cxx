@@ -884,7 +884,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     // Move the PaM one node back from the insert position, so that
     // the position doesn't get moved
     pCopyPam->SetMark();
-    sal_Bool bCanMoveBack = pCopyPam->Move(fnMoveBackward, fnGoCntnt);
+    bool bCanMoveBack = pCopyPam->Move(fnMoveBackward, fnGoCntnt);
     // If the position was shifted from more than one node, an end node has been skipped
     bool bAfterTable = false;
     if ((rPos.nNode.GetIndex() - pCopyPam->GetPoint()->nNode.GetIndex()) > 1)

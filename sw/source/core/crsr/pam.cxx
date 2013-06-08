@@ -212,14 +212,14 @@ static CHKSECTION lcl_TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, const SwNode
 }
 
 
-static sal_Bool lcl_ChkOneRange( CHKSECTION eSec, sal_Bool bChkSections,
+static bool lcl_ChkOneRange( CHKSECTION eSec, bool bChkSections,
                     const SwNode& rBaseEnd, sal_uLong nStt, sal_uLong nEnd )
 {
     if( eSec != Chk_Both )
-        return sal_False;
+        return false;
 
     if( !bChkSections )
-        return sal_True;
+        return true;
 
     // search the surrounding section
     const SwNodes& rNds = rBaseEnd.GetNodes();
@@ -228,11 +228,11 @@ static sal_Bool lcl_ChkOneRange( CHKSECTION eSec, sal_Bool bChkSections,
         pNd = pNd->StartOfSectionNode();
 
     if( pNd == rNds[ nEnd ]->StartOfSectionNode() )
-        return sal_True; // same StartNode, same section
+        return true; // same StartNode, same section
 
     // already on a base node => error
     if( !pNd->StartOfSectionIndex() )
-        return sal_False;
+        return false;
 
     while( ( pTmp = pNd->StartOfSectionNode())->EndOfSectionNode() !=
             &rBaseEnd )
@@ -240,17 +240,18 @@ static sal_Bool lcl_ChkOneRange( CHKSECTION eSec, sal_Bool bChkSections,
 
     sal_uLong nSttIdx = pNd->GetIndex(), nEndIdx = pNd->EndOfSectionIndex();
     return nSttIdx <= nStt && nStt <= nEndIdx &&
-           nSttIdx <= nEnd && nEnd <= nEndIdx ? sal_True : sal_False;
+           nSttIdx <= nEnd && nEnd <= nEndIdx;
 }
 
 
-sal_Bool CheckNodesRange( const SwNodeIndex& rStt,
-                        const SwNodeIndex& rEnd, sal_Bool bChkSection )
+bool CheckNodesRange( const SwNodeIndex& rStt,
+                      const SwNodeIndex& rEnd, bool bChkSection )
 {
     const SwNodes& rNds = rStt.GetNodes();
     sal_uLong nStt = rStt.GetIndex(), nEnd = rEnd.GetIndex();
     CHKSECTION eSec = lcl_TstIdx( nStt, nEnd, rNds.GetEndOfContent() );
-    if( Chk_None != eSec ) return eSec == Chk_Both ? sal_True : sal_False;
+    if( Chk_None != eSec )
+        return eSec == Chk_Both;
 
     eSec = lcl_TstIdx( nStt, nEnd, rNds.GetEndOfAutotext() );
     if( Chk_None != eSec )
@@ -272,7 +273,7 @@ sal_Bool CheckNodesRange( const SwNodeIndex& rStt,
         return lcl_ChkOneRange( eSec, bChkSection,
                             rNds.GetEndOfRedlines(), nStt, nEnd );
 
-    return sal_False; // somewhere in between => error
+    return false; // somewhere in between => error
 }
 
 
@@ -299,7 +300,7 @@ SwCntntNode* GoNextNds( SwNodeIndex* pIdx, sal_Bool bChk )
     if( pNd )
     {
         if( bChk && 1 != aIdx.GetIndex() - pIdx->GetIndex() &&
-            !CheckNodesRange( *pIdx, aIdx, sal_True ) )
+            !CheckNodesRange( *pIdx, aIdx, true ) )
                 pNd = 0;
         else
             *pIdx = aIdx;
@@ -315,7 +316,7 @@ SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, sal_Bool bChk )
     if( pNd )
     {
         if( bChk && 1 != pIdx->GetIndex() - aIdx.GetIndex() &&
-            !CheckNodesRange( *pIdx, aIdx, sal_True ) )
+            !CheckNodesRange( *pIdx, aIdx, true ) )
                 pNd = 0;
         else
             *pIdx = aIdx;
@@ -494,9 +495,9 @@ void SwPaM::Exchange()
 #endif
 
 /// movement of cursor
-sal_Bool SwPaM::Move( SwMoveFn fnMove, SwGoInDoc fnGo )
+bool SwPaM::Move( SwMoveFn fnMove, SwGoInDoc fnGo )
 {
-    sal_Bool bRet = (*fnGo)( *this, fnMove );
+    const bool bRet = (*fnGo)( *this, fnMove );
 
     m_bIsInFrontOfLabel = false;
 
@@ -537,7 +538,7 @@ SwPaM* SwPaM::MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg )
     return pPam;
 }
 
-SwPaM & SwPaM::Normalize(sal_Bool bPointFirst)
+SwPaM & SwPaM::Normalize(bool bPointFirst)
 {
     if (HasMark())
         if ( ( bPointFirst && *m_pPoint > *m_pMark) ||
@@ -550,7 +551,7 @@ SwPaM & SwPaM::Normalize(sal_Bool bPointFirst)
 }
 
 /// return page number at cursor (for reader and page bound frames)
-sal_uInt16 SwPaM::GetPageNum( sal_Bool bAtPoint, const Point* pLayPos )
+sal_uInt16 SwPaM::GetPageNum( bool bAtPoint, const Point* pLayPos )
 {
     const SwCntntFrm* pCFrm;
     const SwPageFrm *pPg;
@@ -592,7 +593,7 @@ static const SwFrm* lcl_FindEditInReadonlyFrm( const SwFrm& rFrm )
 /// is in protected section or selection surrounds something protected
 bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
 {
-    bool bRet = sal_False;
+    bool bRet = false;
     Point aTmpPt;
     const SwCntntNode *pNd;
     const SwCntntFrm *pFrm;
@@ -608,13 +609,13 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
 
     if( pFrm && ( pFrm->IsProtected() ||
                   ( bFormView && 0 == ( pSttEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
-        bRet = sal_True;
+        bRet = true;
     else if( pNd )
     {
         const SwSectionNode* pSNd = pNd->GetSectionNode();
         if( pSNd && ( pSNd->GetSection().IsProtectFlag() ||
                       (bFormView && !pSNd->GetSection().IsEditInReadonlyFlag()) ) )
-            bRet = sal_True;
+            bRet = true;
     }
 
     if( !bRet && HasMark() && GetPoint()->nNode != GetMark()->nNode )
@@ -626,13 +627,13 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
 
         if( pFrm && ( pFrm->IsProtected() ||
                   ( bFormView && 0 == ( pEndEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
-            bRet = sal_True;
+            bRet = true;
         else if( pNd )
         {
             const SwSectionNode* pSNd = pNd->GetSectionNode();
             if( pSNd && ( pSNd->GetSection().IsProtectFlag() ||
                           (bFormView && !pSNd->GetSection().IsEditInReadonlyFlag()) ) )
-                bRet = sal_True;
+                bRet = true;
         }
 
         if ( !bRet && bFormView )
@@ -640,7 +641,7 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
            // Check if start and end frame are inside the _same_
            // edit-in-readonly-environment. Otherwise we better return 'true'
            if ( pSttEIRFrm != pEndEIRFrm )
-                bRet = sal_True;
+                bRet = true;
         }
 
         // protected section in selection
@@ -672,7 +673,7 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
                         if( nSttIdx <= nIdx && nEndIdx >= nIdx &&
                             rCntnt.GetCntntIdx()->GetNode().GetNodes().IsDocNodes() )
                         {
-                            bRet = sal_True;
+                            bRet = true;
                             break;
                         }
                     }
@@ -713,7 +714,7 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
     {
         // Unhandled fieldmarks case shouldn't be edited manually to avoid breaking anything
         if ( ( pA == pB ) && bUnhandledMark )
-            bRet = sal_True;
+            bRet = true;
         // Allow editing of commented ranges.
         else if (!bCommentrangeMark)
         {
@@ -877,59 +878,59 @@ void GoEndSection( SwPosition * pPos )
 
 
 
-sal_Bool GoInDoc( SwPaM & rPam, SwMoveFn fnMove )
+bool GoInDoc( SwPaM & rPam, SwMoveFn fnMove )
 {
     (*fnMove->fnDoc)( rPam.GetPoint() );
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool GoInSection( SwPaM & rPam, SwMoveFn fnMove )
+bool GoInSection( SwPaM & rPam, SwMoveFn fnMove )
 {
     (*fnMove->fnSections)( (SwPosition*)rPam.GetPoint() );
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool GoInNode( SwPaM & rPam, SwMoveFn fnMove )
+bool GoInNode( SwPaM & rPam, SwMoveFn fnMove )
 {
     SwCntntNode *pNd = (*fnMove->fnNds)( &rPam.GetPoint()->nNode, sal_True );
     if( pNd )
         rPam.GetPoint()->nContent.Assign( pNd,
                         ::GetSttOrEnd( fnMove == fnMoveForward, *pNd ) );
-    return 0 != pNd;
+    return pNd;
 }
 
 
-sal_Bool GoInCntnt( SwPaM & rPam, SwMoveFn fnMove )
+bool GoInCntnt( SwPaM & rPam, SwMoveFn fnMove )
 {
     if( (*fnMove->fnNd)( &rPam.GetPoint()->nNode.GetNode(),
                         &rPam.GetPoint()->nContent, CRSR_SKIP_CHARS ))
-        return sal_True;
+        return true;
     return GoInNode( rPam, fnMove );
 }
 
-sal_Bool GoInCntntCells( SwPaM & rPam, SwMoveFn fnMove )
+bool GoInCntntCells( SwPaM & rPam, SwMoveFn fnMove )
 {
     if( (*fnMove->fnNd)( &rPam.GetPoint()->nNode.GetNode(),
                          &rPam.GetPoint()->nContent, CRSR_SKIP_CELLS ))
-        return sal_True;
+        return true;
     return GoInNode( rPam, fnMove );
 }
 
-sal_Bool GoInCntntSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
+bool GoInCntntSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
 {
     if( (*fnMove->fnNd)( &rPam.GetPoint()->nNode.GetNode(),
                         &rPam.GetPoint()->nContent, CRSR_SKIP_CHARS | CRSR_SKIP_HIDDEN ) )
-        return sal_True;
+        return true;
     return GoInNode( rPam, fnMove );
 }
 
-sal_Bool GoInCntntCellsSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
+bool GoInCntntCellsSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
 {
     if( (*fnMove->fnNd)( &rPam.GetPoint()->nNode.GetNode(),
                          &rPam.GetPoint()->nContent, CRSR_SKIP_CELLS | CRSR_SKIP_HIDDEN ) )
-        return sal_True;
+        return true;
     return GoInNode( rPam, fnMove );
 }
 
