@@ -1866,7 +1866,7 @@ if test "$DMAKE" = "no"; then
        AC_MSG_RESULT([dmake will be downloaded and compiled in bootstrap])
        DMAKE=
     else
-       AC_MSG_ERROR([no URL for dmake source code specified, either.])
+       AC_MSG_ERROR([no URL for dmake source code specified, either. Use --with-dmake-url to supply an URL; run configure with the --help option for a list of possible URLs.])
        BUILD_DMAKE=YES
     fi
 else
