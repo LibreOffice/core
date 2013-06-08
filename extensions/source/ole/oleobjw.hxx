@@ -172,7 +172,7 @@ protected:
     void getAttributeInfo(const OUString& sName, TypeDescription& attributeInfo);
     // used by get MethodInfo
     TypeDescription  getInterfaceMemberDescOfCurrentCall(const OUString& sName);
-    /** Returns alway a valid ITypeInfo interface or throws a BridgeRuntimeError.
+    /** Returns always a valid ITypeInfo interface or throws a BridgeRuntimeError.
         The returned interface does not need to be AddRef'ed as long as it is locally
         used. The interface is kept in the instance of this class.
      */
