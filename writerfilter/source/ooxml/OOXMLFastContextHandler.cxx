@@ -1161,8 +1161,13 @@ void OOXMLFastContextHandler::resolveFooter
 // Add the data pointed to by the reference as another property.
 void OOXMLFastContextHandler::resolveData(const OUString & rId)
 {
+    OOXMLDocument * objDocument = getDocument();
+    SAL_WARN_IF(!objDocument, "writerfilter", "no document to resolveData");
+    if (!objDocument)
+        return;
+
     uno::Reference<io::XInputStream> xInputStream
-        (mpParserState->getDocument()->getInputStreamForId(rId));
+        (objDocument->getInputStreamForId(rId));
 
     OOXMLValue::Pointer_t aValue(new OOXMLInputStreamValue(xInputStream));
 
