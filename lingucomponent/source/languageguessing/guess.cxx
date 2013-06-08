@@ -29,6 +29,15 @@
 #include <altstrfunc.hxx>
 #include <guess.hxx>
 
+/* Old textcat.h versions defined bad spelled constants. */
+#ifndef TEXTCAT_RESULT_UNKNOWN_STR
+#define TEXTCAT_RESULT_UNKNOWN_STR _TEXTCAT_RESULT_UNKOWN
+#endif
+
+#ifndef TEXTCAT_RESULT_SHORT_STR
+#define TEXTCAT_RESULT_SHORT_STR _TEXTCAT_RESULT_SHORT
+#endif
+
 using namespace std;
 
 Guess::Guess()
@@ -53,20 +62,9 @@ Guess::Guess(const char * guess_str)
     string enc;
 
     //if the guess is not like "UNKNOWN" or "SHORT", go into the brackets
-//     if(strncmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_UNKNOWN, strlen(_TEXTCAT_RESULT_UNKNOWN)) != 0
-//        &&
-//        strncmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_SHORT, strlen(_TEXTCAT_RESULT_SHORT)) != 0)
-//     {
-// FIXME just a temporary check until new version with renamed macros deployed
-#if EXTTEXTCAT_VERSION_MAJOR > 3 || (EXTTEXTCAT_VERSION_MAJOR == 3 && (EXTTEXTCAT_VERSION_MINOR > 4 || (EXTTEXTCAT_VERSION_MINOR == 4 && (EXTTEXTCAT_VERSION_MICRO >= 1))))
         if(strcmp((const char*)(guess_str + 1), TEXTCAT_RESULT_UNKNOWN_STR) != 0
            &&
            strcmp((const char*)(guess_str + 1), TEXTCAT_RESULT_SHORT_STR) != 0)
-#else
-        if(strcmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_UNKOWN) != 0
-           &&
-           strcmp((const char*)(guess_str + 1), _TEXTCAT_RESULT_SHORT) != 0)
-#endif
         {
 
         int current_pointer = 0;
