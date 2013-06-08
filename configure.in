@@ -3789,7 +3789,8 @@ if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
          AC_MSG_ERROR([for rebuilding unowinreg.dll you need the mingw32 C++ compiler.
          Specify mingw32 g++ executable name with --with-mingwin.
          Or use prebuilt one from http://tools.openoffice.org/unowinreg_prebuild/680/ and
-         put it into external/unowinreg])
+         put it into external/unowinreg using your browser or a command equivalent to:
+         wget -O external/unowinreg/unowinreg.dll http://www.openoffice.org/tools/unowinreg_prebuild/680/unowinreg.dll])
       fi
       if echo "$WITH_MINGWIN" | $EGREP -q "/"; then
          if ! test -x "$WITH_MINGWIN"; then MINGWCXX=false; else MINGWCXX=`basename $WITH_MINGWIN`; fi
