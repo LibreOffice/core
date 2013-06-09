@@ -1482,7 +1482,6 @@ namespace xmloff { namespace token {
         XML_REGION_RIGHT,
         XML_REGISTER_TRUE,
         XML_REGISTER_TRUTH_REF_STYLE_NAME,
-        XML_REGRESSION_TYPE,
         XML_REJECTED,
         XML_REJECTING_CHANGE_ID,
         XML_REJECTION,
@@ -2151,6 +2150,16 @@ namespace xmloff { namespace token {
         XML_MARKED_INVALID,
 
         XML_REGRESSION_CURVE,
+        XML_REGRESSION_TYPE,
+        XML_REGRESSION_EXTRAPOLATE_FORWARD,
+        XML_REGRESSION_EXTRAPOLATE_BACKWARD,
+        XML_REGRESSION_MAX_DEGREE,
+        XML_REGRESSION_MIN_DEGREE,
+        XML_REGRESSION_MOVING_TYPE,
+        XML_REGRESSION_PERIOD,
+        XML_REGRESSION_FORCE_INTERCEPT,
+        XML_REGRESSION_INTERCEPT_VALUE,
+
         XML_ERROR_INDICATOR,
 
         XML_TABLE_TYPE,
@@ -3193,6 +3202,7 @@ namespace xmloff { namespace token {
         XML_VERTICAL_BAR,
 
         XML_ERROR_STANDARD_WEIGHT, // errorbar standard deviation error weight
+
         XML_TOKEN_END
     };
 

@@ -905,6 +905,8 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
             {
                 Reference< lang::XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
                 Reference< chart2::XRegressionCurve > xRegCurve( xMSF->createInstance( aServiceName ), uno::UNO_QUERY_THROW );
+                Reference< chart2::XRegressionCurveContainer > xRegCurveCont( iStyle->m_xSeries, uno::UNO_QUERY_THROW );
+
                 if( xRegCurve.is())
                 {
                     Reference< beans::XPropertySet > xCurveProperties( xRegCurve, uno::UNO_QUERY );
@@ -913,7 +915,6 @@ void SchXMLSeries2Context::setStylesToRegressionCurves(
                     xRegCurve->setEquationProperties( iStyle->m_xEquationProperties );
                 }
 
-                Reference< chart2::XRegressionCurveContainer > xRegCurveCont( iStyle->m_xSeries, uno::UNO_QUERY_THROW );
                 xRegCurveCont->addRegressionCurve( xRegCurve );
             }
         }

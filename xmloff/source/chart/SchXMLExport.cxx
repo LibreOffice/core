@@ -227,12 +227,10 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram > & xDiagram,
         sal_Bool bExportContent );
+
     void exportRegressionCurve(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XDataSeries > & xSeries,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & xSeriesProp,
-        const ::com::sun::star::awt::Size & rPageSize,
+        const com::sun::star::uno::Reference<com::sun::star::chart2::XDataSeries>& xSeries,
+        const com::sun::star::awt::Size& rPageSize,
         sal_Bool bExportContent );
 
     void exportErrorBar (
@@ -2887,7 +2885,7 @@ void SchXMLExportHelper_Impl::exportSeries(
                     if( xPropSet.is() &&
                         mxExpPropMapper.is() )
                     {
-                        exportRegressionCurve( aSeriesSeq[nSeriesIdx], xPropSet, rPageSize, bExportContent );
+                        exportRegressionCurve( aSeriesSeq[nSeriesIdx], rPageSize, bExportContent );
                     }
 
                     exportErrorBar( xPropSet,false, bExportContent );   // X ErrorBar
@@ -2909,7 +2907,6 @@ void SchXMLExportHelper_Impl::exportSeries(
 
 void SchXMLExportHelper_Impl::exportRegressionCurve(
     const Reference< chart2::XDataSeries >& xSeries,
-    const Reference< beans::XPropertySet >& xSeriesProp,
     const awt::Size& rPageSize,
     sal_Bool bExportContent )
 {

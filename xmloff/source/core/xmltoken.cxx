@@ -1488,7 +1488,6 @@ namespace xmloff { namespace token {
         TOKEN( "region-right",                    XML_REGION_RIGHT ),
         TOKEN( "register-true",                   XML_REGISTER_TRUE ),
         TOKEN( "register-truth-ref-style-name",       XML_REGISTER_TRUTH_REF_STYLE_NAME ),
-        TOKEN( "regression-type",                 XML_REGRESSION_TYPE ),
         TOKEN( "rejected",                        XML_REJECTED ),
         TOKEN( "rejecting-change-id",             XML_REJECTING_CHANGE_ID ),
         TOKEN( "rejection",                       XML_REJECTION ),
@@ -2159,7 +2158,19 @@ namespace xmloff { namespace token {
 
         TOKEN( "marked-invalid",                  XML_MARKED_INVALID ),
 
+        // Regression curve & properties
         TOKEN( "regression-curve",                XML_REGRESSION_CURVE ),
+        TOKEN( "regression-type",                 XML_REGRESSION_TYPE ),
+        // Extended regression curve properties - ODF 1.2 extended
+        TOKEN( "regression-extrapolate-forward",  XML_REGRESSION_EXTRAPOLATE_FORWARD ),
+        TOKEN( "regression-extrapolate-backward", XML_REGRESSION_EXTRAPOLATE_BACKWARD ),
+        TOKEN( "regression-max-degree",           XML_REGRESSION_MAX_DEGREE ),
+        TOKEN( "regression-min-degree",           XML_REGRESSION_MIN_DEGREE ),
+        TOKEN( "regression-moving-type",          XML_REGRESSION_MOVING_TYPE ),
+        TOKEN( "regression-period",               XML_REGRESSION_PERIOD ),
+        TOKEN( "regression-force-intercept",      XML_REGRESSION_FORCE_INTERCEPT ),
+        TOKEN( "regression-intercept-value",      XML_REGRESSION_INTERCEPT_VALUE ),
+
         TOKEN( "error-indicator",                 XML_ERROR_INDICATOR ),
 
         TOKEN( "table-type",                      XML_TABLE_TYPE ),
