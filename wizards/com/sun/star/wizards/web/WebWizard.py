@@ -17,6 +17,7 @@
 #
 import traceback
 
+from ..common.Desktop import Desktop
 from .WWD_Events import WWD_Events
 
 # The last class in the WebWizard Dialog class hirarchy.
