@@ -26,41 +26,34 @@
 
 #include "groupdlg.hxx"
 #include "scresid.hxx"
-#include "miscdlgs.hrc"
 
 
 //==================================================================
 
 ScGroupDlg::ScGroupDlg( Window* pParent,
-                        sal_uInt16  nResId,
                         sal_Bool    bUngroup,
                         sal_Bool    bRows ) :
-    ModalDialog     ( pParent, ScResId( nResId ) ),
-    //
-    aFlFrame        ( this, ScResId( FL_FRAME ) ),
-    aBtnRows        ( this, ScResId( BTN_GROUP_ROWS ) ),
-    aBtnCols        ( this, ScResId( BTN_GROUP_COLS ) ),
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) )
+    ModalDialog     ( pParent, "GroupDialog", "modules/scalc/ui/groupdialog.ui")
 {
-    aFlFrame.SetText( String( ScResId(bUngroup ? STR_UNGROUP : STR_GROUP) ) );
+    get(m_pBtnRows, "rows");
+    get(m_pBtnCols, "cols");
+    get(m_pFtLabel, bUngroup ? "deactivateLabel" : "includeLabel");
+
+    m_pFtLabel->Show();
 
     if ( bRows )
-        aBtnRows.Check();
+        m_pBtnRows->Check();
     else
-        aBtnCols.Check();
+        m_pBtnCols->Check();
 
-    //-------------
-    FreeResource();
-    aBtnRows.GrabFocus();
+    m_pBtnRows->GrabFocus();
 }
 
 //------------------------------------------------------------------------
 
 sal_Bool ScGroupDlg::GetColsChecked() const
 {
-    return aBtnCols.IsChecked();
+    return m_pBtnCols->IsChecked();
 }
 
 //------------------------------------------------------------------------
