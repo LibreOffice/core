@@ -2094,7 +2094,7 @@ bool ScImportExport::Doc2HTML( SvStream& rStrm, const String& rBaseURL )
 {
     // CharSet is ignored in ScExportHTML, read from Load/Save HTML options
     ScFormatFilter::Get().ScExportHTML( rStrm, rBaseURL, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW, bAll,
-        aStreamPath, aNonConvertibleChars );
+                                        aStreamPath, aNonConvertibleChars );
     return rStrm.GetError() == SVSTREAM_OK;
 }
 
@@ -2233,7 +2233,7 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScAddress&, const CharSet, sal_uInt32 ) RETURN_ERROR
     virtual FltError ScExportDif( SvStream&, ScDocument*, const ScRange&, const CharSet, sal_uInt32 ) RETURN_ERROR
     virtual FltError ScExportHTML( SvStream&, const String&, ScDocument*, const ScRange&, const CharSet, bool,
-                  const String&, String& ) RETURN_ERROR
+                                   const String&, OUStringBuffer& ) RETURN_ERROR
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange&, const CharSet ) RETURN_ERROR
 
     virtual ScOrcusFilters* GetOrcusFilters() { return NULL; }

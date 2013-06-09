@@ -2392,10 +2392,10 @@ sal_Bool ScDocShell::ConvertTo( SfxMedium &rMed )
             ScImportExport aImExport( &aDocument );
             aImExport.SetStreamPath( rMed.GetName() );
             bRet = aImExport.ExportStream( *pStream, rMed.GetBaseURL( true ), SOT_FORMATSTR_ID_HTML );
-            if ( bRet && aImExport.GetNonConvertibleChars().Len() )
+            if ( bRet && !aImExport.GetNonConvertibleChars().isEmpty() )
                 SetError( *new StringErrorInfo(
                     SCWARN_EXPORT_NONCONVERTIBLE_CHARS,
-                    aImExport.GetNonConvertibleChars(),
+                    aImExport.GetNonConvertibleChars().toString(),
                     ERRCODE_BUTTON_OK | ERRCODE_MSG_INFO ), OUString( OSL_LOG_PREFIX ) );
         }
     }

@@ -81,10 +81,10 @@ const sal_uInt32 HTML_FRMOPTS_IMG_CONTROL_CSS1 =
 
 
 static void lcl_html_outEvents( SvStream& rStrm,
-                         const uno::Reference< form::XFormComponent > rFormComp,
-                         sal_Bool bCfgStarBasic,
-                         rtl_TextEncoding eDestEnc,
-                           String *pNonConvertableChars )
+                                const uno::Reference< form::XFormComponent > rFormComp,
+                                sal_Bool bCfgStarBasic,
+                                rtl_TextEncoding eDestEnc,
+                                OUStringBuffer* pNonConvertableChars )
 {
     uno::Reference< container::XChild > xChild( rFormComp, uno::UNO_QUERY );
     uno::Reference< uno::XInterface > xParentIfc = xChild->getParent();

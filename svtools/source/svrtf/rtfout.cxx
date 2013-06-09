@@ -19,7 +19,6 @@
 
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
-#include <tools/string.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svtools/rtfkeywd.hxx>
@@ -156,12 +155,14 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
     return rStream;
 }
 
-SvStream& RTFOutFuncs::Out_String( SvStream& rStream, const String& rStr,
-    rtl_TextEncoding eDestEnc, sal_Bool bWriteHelpFile)
+SvStream& RTFOutFuncs::Out_String( SvStream& rStream, const OUString& rStr,
+                                   rtl_TextEncoding eDestEnc, sal_Bool bWriteHelpFile)
 {
     int nUCMode = 1;
-    for (xub_StrLen n = 0; n < rStr.Len(); ++n)
-        Out_Char(rStream, rStr.GetChar(n), &nUCMode, eDestEnc, bWriteHelpFile);
+    for (sal_Int32 n = 0; n < rStr.getLength(); ++n)
+    {
+        Out_Char(rStream, rStr[n], &nUCMode, eDestEnc, bWriteHelpFile);
+    }
     if (nUCMode != 1)
       rStream << "\\uc1"<< " "; // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
     return rStream;

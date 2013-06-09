@@ -829,7 +829,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         OutHTML_INetFmt( rWrt, *pINetFmt, sal_False );
     }
 
-    String aGrfNm( rGrfName );
+    OUString aGrfNm( rGrfName );
     if( !HTMLOutFuncs::PrivateURLToInternalImg(aGrfNm) )
         aGrfNm = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), aGrfNm);
 
@@ -1258,7 +1258,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
     if( pLink )
     {
         sOut.append(' ');
-        String s( *pLink );
+        OUString s( *pLink );
         if( !HTMLOutFuncs::PrivateURLToInternalImg(s) )
             s = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), s);
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_src).

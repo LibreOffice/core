@@ -65,8 +65,8 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
                                   const sal_Char *pIndent,
                                   const String& rName,
                                   const String& rContent, sal_Bool bHTTPEquiv,
-                                     rtl_TextEncoding eDestEnc,
-                                  String *pNonConvertableChars  )
+                                  rtl_TextEncoding eDestEnc,
+                                  OUStringBuffer *pNonConvertableChars)
 {
     rStrm << sNewLine;
     if( pIndent )
@@ -86,13 +86,12 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
 }
 
 void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
-        const uno::Reference<document::XDocumentProperties> & i_xDocProps,
-        const sal_Char *pIndent,
-        rtl_TextEncoding eDestEnc,
-        String *pNonConvertableChars    )
+                                      const uno::Reference<document::XDocumentProperties> & i_xDocProps,
+                                      const sal_Char *pIndent,
+                                      rtl_TextEncoding eDestEnc,
+                                      OUStringBuffer *pNonConvertableChars)
 {
-    const sal_Char *pCharSet =
-                rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
+    const sal_Char *pCharSet = rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
 
     if( pCharSet )
     {
@@ -248,7 +247,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
 
 void SfxFrameHTMLWriter::Out_FrameDescriptor(
     SvStream& rOut, const String& rBaseURL, const uno::Reference < beans::XPropertySet >& xSet,
-    rtl_TextEncoding eDestEnc, String *pNonConvertableChars )
+    rtl_TextEncoding eDestEnc, OUStringBuffer* pNonConvertableChars )
 {
     try
     {

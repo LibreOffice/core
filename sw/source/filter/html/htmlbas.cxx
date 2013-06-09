@@ -271,7 +271,7 @@ void SwHTMLWriter::OutBasic()
     for( sal_uInt16 i=0; i<pBasicMan->GetLibCount(); i++ )
     {
         StarBASIC *pBasic = pBasicMan->GetLib( i  );
-        const String& rLibName = pBasic->GetName();
+        const OUString& rLibName = pBasic->GetName();
 
         SbxArray *pModules = pBasic->GetModules();
         for( sal_uInt16 j=0; j<pModules->Count(); j++ )
@@ -298,7 +298,7 @@ void SwHTMLWriter::OutBasic()
                     << "\">";
             }
 
-            const String& rModName = pModule->GetName();
+            const OUString& rModName = pModule->GetName();
             Strm() << SwHTMLWriter::sNewLine;   // nicht einruecken!
             HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource(),
                                      sLang, eType, aEmptyStr,

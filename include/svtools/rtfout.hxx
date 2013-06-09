@@ -25,7 +25,6 @@
 
 #include <rtl/textenc.h>
 
-class String;
 class SvStream;
 
 class SVT_DLLPUBLIC RTFOutFuncs
@@ -41,10 +40,10 @@ public:
                     int *pUCMode,
                     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                     sal_Bool bWriteHelpFile = sal_False );
-    static SvStream& Out_String( SvStream&, const String&,
+    static SvStream& Out_String( SvStream&, const OUString&,
                     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                     sal_Bool bWriteHelpFile = sal_False );
-    static SvStream& Out_Fontname( SvStream&, const String&,
+    static SvStream& Out_Fontname( SvStream&, const OUString&,
                     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                     sal_Bool bWriteHelpFile = sal_False );
 
