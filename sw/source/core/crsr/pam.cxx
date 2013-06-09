@@ -1059,9 +1059,9 @@ sal_Bool GoPrevSection( SwPaM & rPam, SwMoveFn fnMove )
     return sal_True;
 }
 
-String SwPaM::GetTxt() const
+OUString SwPaM::GetTxt() const
 {
-    String aResult;
+    OUString aResult;
 
     SwNodeIndex aNodeIndex = Start()->nNode;
 
@@ -1082,7 +1082,7 @@ String SwPaM::GetTxt() const
 
         if (pTxtNode != NULL)
         {
-            const String & aTmpStr = pTxtNode->GetTxt();
+            const OUString aTmpStr = pTxtNode->GetTxt();
 
             if (aNodeIndex == Start()->nNode)
             {
@@ -1090,13 +1090,13 @@ String SwPaM::GetTxt() const
                 if (End()->nNode == aNodeIndex)
                     nEnd = End()->nContent.GetIndex();
                 else
-                    nEnd = aTmpStr.Len();
+                    nEnd = aTmpStr.getLength();
 
-                aResult += aTmpStr.Copy(Start()->nContent.GetIndex(),
+                aResult += aTmpStr.copy(Start()->nContent.GetIndex(),
                                         nEnd - Start()->nContent.GetIndex()) ;
             }
             else if (aNodeIndex == End()->nNode)
-                aResult += aTmpStr.Copy(0, End()->nContent.GetIndex());
+                aResult += aTmpStr.copy(0, End()->nContent.GetIndex());
             else
                 aResult += aTmpStr;
         }

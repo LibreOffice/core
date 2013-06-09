@@ -298,7 +298,7 @@ public:
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwPaM);
 
-    String GetTxt() const;
+    OUString GetTxt() const;
     void InvalidatePaM();
 };
 

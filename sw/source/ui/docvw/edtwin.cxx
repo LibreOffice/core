@@ -860,16 +860,16 @@ void SwEditWin::FlushInBuffer()
             if (!rSh.GetCrsr()->HasMark())
                 rSh.GetCrsr()->SetMark();
             rSh.GetCrsr()->GetMark()->nContent = 0;
-            String aLeftText( rSh.GetCrsr()->GetTxt() );
+            OUString aLeftText( rSh.GetCrsr()->GetTxt() );
 
             SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
 
             xub_StrLen nExpandSelection = 0;
-            if (aLeftText.Len() > 0)
+            if (aLeftText.getLength() > 0)
             {
                 sal_Unicode cChar = '\0';
 
-                xub_StrLen nTmpPos = aLeftText.Len();
+                sal_Int32 nTmpPos = aLeftText.getLength();
                 sal_Int16 nCheckMode = rCTLOptions.IsCTLSequenceCheckingRestricted() ?
                         i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
 
@@ -880,7 +880,7 @@ void SwEditWin::FlushInBuffer()
                     for (xub_StrLen k = 0;  k < m_aInBuffer.Len();  ++k)
                     {
                         cChar = m_aInBuffer.GetChar(k);
-                        const xub_StrLen nPrevPos = static_cast<xub_StrLen>(xISC->correctInputSequence( aNewText, nTmpPos - 1, cChar, nCheckMode ));
+                        const sal_Int32 nPrevPos =xISC->correctInputSequence( aNewText, nTmpPos - 1, cChar, nCheckMode );
 
                         // valid sequence or sequence could be corrected:
                         if (nPrevPos != aNewText.getLength())
@@ -903,7 +903,7 @@ void SwEditWin::FlushInBuffer()
                     if (aChgText.Len())
                     {
                         m_aInBuffer = aChgText;
-                        nExpandSelection = aLeftText.Len() - static_cast< xub_StrLen >(nChgPos);
+                        nExpandSelection = static_cast< xub_StrLen >(aLeftText.getLength() - nChgPos);
                     }
                     else
                         m_aInBuffer.Erase();
