@@ -72,6 +72,7 @@ public:
     void testI120928();
     void testFdo64826();
     void testPageBackground();
+    void testFdo65265();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -121,6 +122,7 @@ void Test::run()
         {"i120928.docx", &Test::testI120928},
         {"fdo64826.docx", &Test::testFdo64826},
         {"page-background.docx", &Test::testPageBackground},
+        {"fdo65265.docx", &Test::testFdo65265},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -686,6 +688,16 @@ void Test::testPageBackground()
     // 'Document Background' wasn't exported.
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
+}
+
+void Test::testFdo65265()
+{
+    // Redline (tracked changes) of text formatting were not exported
+    uno::Reference<text::XTextRange> xParagraph1 = getParagraph(1);
+    uno::Reference<text::XTextRange> xParagraph2 = getParagraph(2);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Format"), getProperty<OUString>(getRun(xParagraph1, 3), "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Format"), getProperty<OUString>(getRun(xParagraph2, 2), "RedlineType"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
