@@ -257,6 +257,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
 	$(if $(DISABLE_SCRIPTING),,basctl) \
     basegfx \
     bib \
+    $(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \
+    canvasfactory \
     canvastools \
     chartcore \
     chartcontroller \
@@ -272,6 +274,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     deploymentmisc \
     $(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
     $(if $(filter unx,$(GUIBASE)),desktop_detector) \
+    $(if $(ENABLE_DIRECTX),directx9canvas) \
     drawinglayer \
     editeng \
     egi \
@@ -298,6 +301,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     fwk \
     fwl \
 	fwm \
+    $(if $(ENABLE_DIRECTX),gdipluscanvas) \
     guesslang \
     $(if $(filter DESKTOP,$(BUILD_TYPE)),helplinker) \
     i18npool \
@@ -322,6 +326,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     lnth \
     $(if $(MERGELIBS),merged) \
     msfilter \
+    mtfrenderer \
     mysql \
     odbc \
     odbcbase \
@@ -339,6 +344,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     sdfilt \
     sdui \
     sfx \
+    simplecanvas \
     sot \
     $(if $(ENABLE_HEADLESS),,spl) \
     svgio \
@@ -359,6 +365,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     utl \
     uui \
     vcl \
+    vclcanvas \
     $(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))),vclplug_gen) \
     xmlscript \
     xmlfa \
@@ -602,16 +609,12 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     basprov \
-    cairocanvas \
-    canvasfactory \
     cmdmail \
-    directx9canvas \
     dlgprov \
     expwrap \
     fastsax \
     fpicker \
     fps_office \
-    gdipluscanvas \
     hatchwindowfactory \
     i18nsearch \
     ldapbe2 \
@@ -619,14 +622,12 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     migrationoo2 \
     migrationoo3 \
     msforms \
-    mtfrenderer \
     OGLTrans \
     passwordcontainer \
     pdfimport \
     postgresql-sdbc \
     postgresql-sdbc-impl \
     pythonloader \
-    simplecanvas \
     slideshow \
     stringresource \
     syssh \
@@ -637,7 +638,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     vbaevents \
     vbaobj \
     vbaswobj \
-    vclcanvas \
     $(if $(filter $(OS),MACOSX), \
         fps_aqua \
     ) \
