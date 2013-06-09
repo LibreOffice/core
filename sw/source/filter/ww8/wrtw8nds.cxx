@@ -1957,6 +1957,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             // #i51277# do this before writing flys at end of paragraph
             AttrOutput().StartRunProperties();
             aAttrIter.OutAttr( nAktPos );
+            if (pRedlineData)
+                AttrOutput().Redline(pRedlineData);
             AttrOutput().EndRunProperties( pRedlineData );
         }
 

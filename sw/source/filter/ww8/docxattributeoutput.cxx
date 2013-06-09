@@ -1323,9 +1323,57 @@ void DocxAttributeOutput::FieldVanish( const String& rTxt, ww::eField eType )
     WriteField_Impl( NULL, eType, rTxt, WRITEFIELD_ALL );
 }
 
-void DocxAttributeOutput::Redline( const SwRedlineData* /*pRedline*/ )
+void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::Redline( const SwRedlineData* pRedline )" );
+    if ( !pRedline )
+        return;
+
+    OString aId( OString::valueOf( sal_Int32(pRedline->GetSeqNo()) ) );
+    const String &rAuthor( SW_MOD()->GetRedlineAuthor( pRedline->GetAuthor() ) );
+    OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
+    OString aDate( msfilter::util::DateTimeToOString( pRedline->GetTimeStamp() ) );
+
+    OUString strVal;
+    OString strOVal;
+
+    switch( pRedline->GetType() )
+    {
+    case nsRedlineType_t::REDLINE_INSERT:
+        break;
+
+    case nsRedlineType_t::REDLINE_DELETE:
+        break;
+
+    case nsRedlineType_t::REDLINE_FORMAT:
+        m_pSerializer->startElementNS( XML_w, XML_rPrChange,
+                FSNS( XML_w, XML_id ), aId.getStr(),
+                FSNS( XML_w, XML_author ), aAuthor.getStr(),
+                FSNS( XML_w, XML_date ), aDate.getStr(),
+                FSEND );
+
+        if ( m_pCharLangAttrList )
+        {
+            if (m_pCharLangAttrList->hasAttribute(FSNS(XML_w, XML_val)))
+            {
+                m_pSerializer->mark();
+                m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+                strVal = m_pCharLangAttrList->getValue(FSNS(XML_w, XML_val));
+                strOVal = OUStringToOString(strVal, RTL_TEXTENCODING_UTF8);
+                m_pSerializer->startElementNS(XML_w, XML_lang,
+                    FSNS(XML_w, XML_val), strOVal.getStr(),
+                    FSEND);
+                m_pSerializer->endElementNS(XML_w, XML_lang);
+                m_pSerializer->endElementNS( XML_w, XML_rPr );
+                m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
+            }
+        }
+
+        m_pSerializer->endElementNS( XML_w, XML_rPrChange );
+        break;
+    default:
+        OSL_ENSURE(!this, "Unhandled redline type for export");
+        break;
+    }
 }
 
 void DocxAttributeOutput::StartRedline()
