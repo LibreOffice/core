@@ -920,7 +920,7 @@ void SwDocTest::testTransliterate()
     m_pDoc->InsertString(aPaM, OUString("foobar"));
     aPaM.SetMark();
     aPaM.GetPoint()->nContent = 0;
-    CPPUNIT_ASSERT_EQUAL(String("foobar"), aPaM.GetTxt());
+    CPPUNIT_ASSERT_EQUAL(OUString("foobar"), aPaM.GetTxt());
 
     CPPUNIT_ASSERT_EQUAL(OUString("FOOBAR"),
             translitTest(*m_pDoc, aPaM,
