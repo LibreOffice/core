@@ -1049,8 +1049,12 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
     m_pSerializer->mergeTopMarks();
 }
 
-void DocxAttributeOutput::EndRunProperties( const SwRedlineData* /*pRedlineData*/ )
+void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
 {
+    // Call the 'Redline' function. This will add redline (change-tracking) information that regards to run properties.
+    // This includes changes like 'Bold', 'Underline', 'Strikethrough' etc.
+    Redline( pRedlineData );
+
     WriteCollectedRunProperties();
 
     m_pSerializer->endElementNS( XML_w, XML_rPr );
@@ -1329,11 +1333,65 @@ void DocxAttributeOutput::FieldVanish( const String& rTxt, ww::eField eType )
     WriteField_Impl( NULL, eType, rTxt, WRITEFIELD_ALL );
 }
 
-void DocxAttributeOutput::Redline( const SwRedlineData* /*pRedline*/ )
+// The difference between 'Redline' and 'StartRedline'+'EndRedline' is that:
+// 'Redline' is used for tracked changes of formatting information of a run like Bold, Underline. (the '<w:rPrChange>' is inside the 'run' node)
+// 'StartRedline' is used to output tracked changes of run insertion and deletion (the run is inside the '<w:ins>' node)
+void DocxAttributeOutput::Redline( const SwRedlineData* pRedline)
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::Redline( const SwRedlineData* pRedline )" );
+    if ( !pRedline )
+        return;
+
+    OString aId( OString::valueOf( sal_Int32(pRedline->GetSeqNo()) ) );
+    const String &rAuthor( SW_MOD()->GetRedlineAuthor( pRedline->GetAuthor() ) );
+    OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
+    OString aDate( msfilter::util::DateTimeToOString( pRedline->GetTimeStamp() ) );
+
+    OUString sVal;
+    OString sOVal;
+
+    switch( pRedline->GetType() )
+    {
+    case nsRedlineType_t::REDLINE_INSERT:
+        break;
+
+    case nsRedlineType_t::REDLINE_DELETE:
+        break;
+
+    case nsRedlineType_t::REDLINE_FORMAT:
+        m_pSerializer->startElementNS( XML_w, XML_rPrChange,
+                FSNS( XML_w, XML_id ), aId.getStr(),
+                FSNS( XML_w, XML_author ), aAuthor.getStr(),
+                FSNS( XML_w, XML_date ), aDate.getStr(),
+                FSEND );
+
+        if ( m_pCharLangAttrList )
+        {
+            if (m_pCharLangAttrList->hasAttribute(FSNS(XML_w, XML_val)))
+            {
+                m_pSerializer->mark();
+                m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+                sVal = m_pCharLangAttrList->getValue(FSNS(XML_w, XML_val));
+                sOVal = OUStringToOString(sVal, RTL_TEXTENCODING_UTF8);
+                m_pSerializer->startElementNS(XML_w, XML_lang,
+                    FSNS(XML_w, XML_val), sOVal.getStr(),
+                    FSEND);
+                m_pSerializer->endElementNS(XML_w, XML_lang);
+                m_pSerializer->endElementNS( XML_w, XML_rPr );
+                m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
+            }
+        }
+
+        m_pSerializer->endElementNS( XML_w, XML_rPrChange );
+        break;
+    default:
+        SAL_WARN("sw.ww8", "Unhandled redline type for export " << pRedline->GetType());
+        break;
+    }
 }
 
+// The difference between 'Redline' and 'StartRedline'+'EndRedline' is that:
+// 'Redline' is used for tracked changes of formatting information of a run like Bold, Underline. (the '<w:rPrChange>' is inside the 'run' node)
+// 'StartRedline' is used to output tracked changes of run insertion and deletion (the run is inside the '<w:ins>' node)
 void DocxAttributeOutput::StartRedline()
 {
     if ( !m_pRedlineData )
