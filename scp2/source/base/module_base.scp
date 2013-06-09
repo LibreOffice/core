@@ -35,7 +35,7 @@ Module gid_Module_Prg_Base_Bin
     Minimal = NO;
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Files = (auto_Base_Lib_ALL
+    Files = (auto_base_ALL
         gid_File_Share_Registry_Base_Xcd
     );
 End

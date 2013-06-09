@@ -109,7 +109,6 @@ endef
 define gb_Helper_init_registries
 gb_Executable_VALIDGROUPS := UREBIN SDK OOO NONE
 gb_Library_VALIDGROUPS := OOOLIBS PLAINLIBS_NONE PLAINLIBS_URE PLAINLIBS_OOO RTVERLIBS UNOLIBS_URE UNOVERLIBS EXTENSIONLIBS
-gb_Library_VALIDINSTALLMODULES := BASE ONLINEUPDATE GRAPHICFILTER GNOME TDE IMPRESS KDE MATH OOO URE WRITER
 gb_Jar_VALIDGROUPS := URE OOO OXT NONE
 
 $$(foreach group,$$(gb_Executable_VALIDGROUPS),$$(eval gb_Executable_$$(group) :=))
@@ -148,6 +147,13 @@ gb_Executable_$(1) += $(2)
 
 endef
 
+define gb_Helper_register_executables_for_install
+$(call gb_Helper_register_executables,$(1),$(3))
+
+gb_Executable_MODULE_$(2) += $(3)
+
+endef
+
 define gb_Helper_register_libraries
 ifeq ($$(filter $(1),$$(gb_Library_VALIDGROUPS)),)
 $$(eval $$(call gb_Output_error,$(1) is not a valid group for libraries. Valid groups are: $$(gb_Library_VALIDGROUPS)))
@@ -166,9 +172,6 @@ endef
 # the first argument is the group, which sets rpaths etc.
 # the second argument is the install module, which describes in which distro package/msi a lib should show up
 define gb_Helper_register_libraries_for_install
-ifeq ($$(filter $(2),$$(gb_Library_VALIDINSTALLMODULES)),)
-$$(eval $$(call gb_Output_error,$(2) is not a valid install module for libraries. Valid groups are: $$(gb_Library_VALIDINSTALLMODULES)))
-endif
 $(call gb_Helper_register_libraries,$(1),$(3))
 
 gb_Library_MODULE_$(2) += $(filter-out $(gb_MERGEDLIBS) $(gb_URELIBS),$(3))

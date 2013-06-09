@@ -22,7 +22,7 @@ $(eval $(call gb_Module_add_targets,jvmfwk,\
     Package_jreproperties \
 ))
 
-ifneq ($(OS),MACOSX)
+ifneq (,$(filter-out MACOSX WNT,$(OS)))
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,jvmfwk,\
     Executable_javaldx \

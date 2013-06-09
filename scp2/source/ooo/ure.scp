@@ -84,32 +84,6 @@ Shortcut gid_Shortcut_Exe_Uno
 End
 #endif
 
-File gid_File_Exe_Regmerge
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
-    Name = EXENAME(regmerge);
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "881BCC1D-BA4A-4527-9C7D-D89157C2D03B";
-End
-
-File gid_File_Exe_Regview
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
-    Name = EXENAME(regview);
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "DAB09DCD-8491-4DC8-B153-2BA81A830AC2";
-End
-
-#if !defined MACOSX && !defined WNT && defined SOLAR_JAVA
-File gid_File_Exe_Javaldx
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
-    Name = EXENAME(javaldx);
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "291B5981-3E41-40E2-9C3F-115A7DF1C6A1";
-End
-#endif
-
 // Private Executables:
 
 #if !defined WNT
@@ -643,13 +617,11 @@ Module gid_Module_Root_Ure_Hidden
             gid_Dir_Ure_Share,
             gid_Dir_Ure_Java,
             gid_Dir_Ure_Misc);
-    Files = (gid_File_ThirdpartylicensereadmeHtml_Ure,
+    Files = (auto_ure_ALL
+            gid_File_ThirdpartylicensereadmeHtml_Ure,
             gid_File_Readme_Ure,
             gid_File_License_Ure,
             gid_File_Exe_Uno,
-            gid_File_Exe_Regmerge,
-            gid_File_Exe_Regview,
-            gid_File_Exe_Javaldx,
             gid_File_Exe_StartupSh,
             gid_File_Exe_UnoBin,
             gid_File_Dl_Cli_Uno,
@@ -684,7 +656,6 @@ Module gid_Module_Root_Ure_Hidden
             gid_Unixlink_File_Dl_Store,
             gid_Unixlink_File_Dl_Jvmaccess,
             gid_Unixlink_File_Dl_Jvmfwk,
-            auto_Ure_Private_Lib_ALL
             gid_File_Dl_JrepropertiesClass,
             gid_File_Dl_Profile_Jvmfwk3rc,
             gid_File_Dl_Jpipe,

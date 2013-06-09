@@ -27,7 +27,7 @@ Module gid_Module_Optional_Onlineupdate
     ParentID = gid_Module_Optional;
     Default = YES;
     Styles = ();
-    Files = (auto_Onlineupdate_Lib_ALL
+    Files = (auto_onlineupdate_ALL
              gid_File_Bin_UnpackUpdate,
              gid_File_Share_Registry_Onlineupdate_Xcd);
 End

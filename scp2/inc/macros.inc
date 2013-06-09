@@ -445,6 +445,14 @@ End
         Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID); \
     End
 
+#define URE_EXECUTABLE(id,name) \
+    File id \
+        BIN_FILE_BODY; \
+        Dir = gid_Dir_Ure_Bin; \
+        Name = name; \
+        Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID); \
+    End
+
 #define GALLERY_NAME(id) \
 
 #define GALLERY_FILELIST(id) \

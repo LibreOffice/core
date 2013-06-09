@@ -151,22 +151,15 @@ endif
 
 endif
 
-ifneq ($(OS),IOS)
-
-$(eval $(call gb_Helper_register_executables,UREBIN,\
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+$(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	regmerge \
 	regview \
+	$(if $(and $(SOLAR_JAVA),$(filter-out MACOSX WNT,$(OS))),javaldx) \
+))
+$(eval $(call gb_Helper_register_executables,UREBIN,\
 	uno \
 ))
-
-endif
-
-ifneq ($(OS),MACOSX)
-
-$(eval $(call gb_Helper_register_executables,UREBIN,\
-	javaldx \
-))
-
 endif
 
 ifeq ($(ENABLE_NPAPI_FROM_BROWSER),YES)
@@ -203,35 +196,35 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 
 endif
 
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,BASE, \
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,base, \
     abp \
     dbp \
     dbu \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,GRAPHICFILTER, \
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,graphicfilter, \
     svgfilter \
     flash \
     wpftdraw \
     graphicfilter \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,TDE, \
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,tde, \
     $(if $(ENABLE_TDE),tdebe1) \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,IMPRESS, \
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,impress, \
     animcore \
     placeware \
     PresenterScreen \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ONLINEUPDATE, \
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,onlineupdate, \
     updatecheckui \
     updchk \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,GNOME, \
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,gnome, \
     $(if $(ENABLE_EVOAB2),evoab) \
     $(if $(ENABLE_GTK),vclplug_gtk) \
     $(if $(ENABLE_GTK3),vclplug_gtk3) \
@@ -242,17 +235,17 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,GNOME, \
     $(if $(ENABLE_GNOMEVFS),ucpgvfs1) \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,KDE, \
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,kde, \
     $(if $(ENABLE_KDE),kdebe1) \
     $(if $(ENABLE_KDE4),kde4be1) \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,MATH, \
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,math, \
     sm \
     smd \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	avmedia \
 	$(if $(DISABLE_SCRIPTING),,basctl) \
     basegfx \
@@ -376,7 +369,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,OOO, \
     xsltfilter \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,WRITER, \
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,writer, \
 	hwp \
 	$(if $(ENABLE_LWP),lwpft) \
 	msword \
@@ -458,7 +451,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
     unotest \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,URE, \
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 	affine_uno \
 	$(if $(SOLAR_JAVA),java_uno) \
 	$(if $(SOLAR_JAVA),juh) \
@@ -477,7 +470,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,URE, \
 	$(if $(filter MSC,$(COM)),$(if $(filter INTEL,$(CPUNAME)),msci,mscx),gcc3)_uno \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,UNOLIBS_URE,URE, \
+$(eval $(call gb_Helper_register_libraries_for_install,UNOLIBS_URE,ure, \
 	acceptor \
 	binaryurp \
 	bootstrap \
@@ -505,7 +498,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 	$(if $(filter WNT,$(OS)),jpipx) \
 ))
 
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,OOO, \
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	comphelper \
 	deployment \
 	fileacc \
