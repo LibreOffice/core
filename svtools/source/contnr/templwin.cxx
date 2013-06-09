@@ -544,7 +544,7 @@ void SvtFileViewWindow_Impl::OpenFolder( const String& rURL )
     aNewFolderLink.Call( this );
 }
 
-sal_Bool SvtFileViewWindow_Impl::HasPreviousLevel( String& rURL ) const
+sal_Bool SvtFileViewWindow_Impl::HasPreviousLevel( OUString& rURL ) const
 {
     INetURLObject aViewObj( aFileView.GetViewURL() );
     INetURLObject aRootObj( aCurrentRootURL );
@@ -1025,7 +1025,7 @@ void SvtTemplateWindow::DoAction( sal_uInt16 nAction )
 
         case TI_DOCTEMPLATE_PREV :
         {
-            String aURL;
+            OUString aURL;
             if ( pFileWin->HasPreviousLevel( aURL ) )
                 pFileWin->OpenFolder( aURL );
             break;
