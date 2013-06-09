@@ -1457,7 +1457,7 @@ void ScColumn::CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& r
         itDataEnd = sc::custom_celltextattr_block::end(*itBlk->data);
         std::advance(itData, nOffsetInBlock);
 
-        if (nBlockStart <= nRowPos && nRowPos <= nBlockEnd)
+        if (nBlockStart <= nRowPos && nRowPos < nBlockEnd)
         {
             // This block contains the end row. Only copy partially.
             size_t nOffset = nRowPos - nBlockStart + 1;
