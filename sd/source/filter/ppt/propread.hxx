@@ -100,7 +100,7 @@
 
 // ------------------------------------------------------------------------
 
-typedef std::map<String,sal_uInt32> Dictionary;
+typedef std::map<OUString,sal_uInt32> Dictionary;
 
 struct PropEntry
 {

@@ -282,7 +282,7 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
             aStream >> nId >> nSize;
             if ( nSize )
             {
-                String aString;
+                OUString aString;
                 nPos = aStream.Tell();
                 try
                 {
@@ -305,7 +305,7 @@ sal_Bool Section::GetDictionary( Dictionary& rDict )
                 {
                     OSL_FAIL( "sd Section::GetDictionary bad alloc" );
                 }
-                if ( !aString.Len() )
+                if ( aString.isEmpty() )
                     break;
                 rDict.insert( std::make_pair(aString,nId) );
             }
