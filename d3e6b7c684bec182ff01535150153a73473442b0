@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7l8\u003d",
+        "filename": "sw/source/ui/docvw/edtwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-06-09T19:06:33Z",
+      "side": 1,
+      "message": "This should be !aLeftText.isEmpty()",
+      "revId": "d3e6b7c684bec182ff01535150153a73473442b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
