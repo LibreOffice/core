@@ -385,7 +385,6 @@ public:
                                                             int nId) = 0;
 
     virtual AbstractScGroupDlg * CreateAbstractScGroupDlg( Window* pParent, //add for ScGroupDlg
-                                                            sal_uInt16  nResId,
                                                             int nId,
                                                             sal_Bool    bUnGroup = false,
                                                             sal_Bool    bRows    = sal_True  ) = 0;

@@ -31,7 +31,6 @@ class ScGroupDlg : public ModalDialog
 {
 public:
             ScGroupDlg( Window* pParent,
-                        sal_uInt16  nResId,
                         sal_Bool    bUnGroup = false,
                         sal_Bool    bRows    = sal_True  );
             ~ScGroupDlg();
@@ -39,12 +38,9 @@ public:
     sal_Bool GetColsChecked() const;
 
 private:
-    FixedLine       aFlFrame;
-    RadioButton     aBtnRows;
-    RadioButton     aBtnCols;
-    OKButton        aBtnOk;
-    CancelButton    aBtnCancel;
-    HelpButton      aBtnHelp;
+    FixedText* m_pFtLabel;
+    RadioButton* m_pBtnRows;
+    RadioButton* m_pBtnCols;
 };
 
 
