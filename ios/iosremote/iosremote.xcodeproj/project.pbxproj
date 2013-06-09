@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		57B152991764703500EECC67 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B152981764703500EECC67 /* Base64.m */; };
 		57B1529C1764714900EECC67 /* slideShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B1529B1764714900EECC67 /* slideShowViewController.m */; };
+		57B1529F176486C300EECC67 /* CommandTransmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B1529E176486C300EECC67 /* CommandTransmitter.m */; };
 		57B7625D17621E42007703F6 /* SlideShow.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B7625C17621E42007703F6 /* SlideShow.m */; };
 		57C6E3F3175E06E800E8BC5F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6E3F2175E06E800E8BC5F /* UIKit.framework */; };
 		57C6E3F5175E06E800E8BC5F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6E3F4175E06E800E8BC5F /* Foundation.framework */; };
@@ -33,6 +34,8 @@
 		57B152981764703500EECC67 /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Base64.m; path = iosremote/Base64.m; sourceTree = "<group>"; };
 		57B1529A1764714900EECC67 /* slideShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slideShowViewController.h; sourceTree = "<group>"; };
 		57B1529B1764714900EECC67 /* slideShowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = slideShowViewController.m; sourceTree = "<group>"; };
+		57B1529D176486C300EECC67 /* CommandTransmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandTransmitter.h; sourceTree = "<group>"; };
+		57B1529E176486C300EECC67 /* CommandTransmitter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandTransmitter.m; sourceTree = "<group>"; };
 		57B7625B17621E42007703F6 /* SlideShow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideShow.h; sourceTree = "<group>"; };
 		57B7625C17621E42007703F6 /* SlideShow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideShow.m; sourceTree = "<group>"; };
 		57C6E3EF175E06E800E8BC5F /* iosremote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosremote.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -149,6 +152,8 @@
 				57C6E42D175E076900E8BC5F /* Server.m */,
 				57B7625B17621E42007703F6 /* SlideShow.h */,
 				57B7625C17621E42007703F6 /* SlideShow.m */,
+				57B1529D176486C300EECC67 /* CommandTransmitter.h */,
+				57B1529E176486C300EECC67 /* CommandTransmitter.m */,
 			);
 			name = Communication;
 			path = iosremote/Communication;
@@ -232,6 +237,7 @@
 				57B7625D17621E42007703F6 /* SlideShow.m in Sources */,
 				57B152991764703500EECC67 /* Base64.m in Sources */,
 				57B1529C1764714900EECC67 /* slideShowViewController.m in Sources */,
+				57B1529F176486C300EECC67 /* CommandTransmitter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

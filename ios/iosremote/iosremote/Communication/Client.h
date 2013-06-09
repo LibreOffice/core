@@ -23,6 +23,8 @@
             managedBy:(CommunicationManager*)manager
         interpretedBy:(CommandInterpreter*)receiver;
 
+- (void) sendCommand:(NSString *)aCommand;
+
 -(void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode;
 
 @end

@@ -41,7 +41,6 @@
         NSLog(@"Interpreter: slideshow_started");
         uint slideLength = [[command objectAtIndex:1] integerValue];
         uint currentSlide = [[command objectAtIndex:2] integerValue];
-        NSLog(@"Interpreter: with slideLength %u, currentSlide %u", slideLength, currentSlide);
         self.slideShow = [[SlideShow alloc] init];
         
         [self.slideShow setSize:slideLength];

@@ -9,6 +9,11 @@
 
 #import "CommunicationManager.h"
 
+@interface CommunicationManager()
+
+
+@end
+
 @implementation CommunicationManager
 
 @end
