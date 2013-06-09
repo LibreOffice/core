@@ -414,9 +414,9 @@ sal_Bool Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, Bitma
     sal_uInt32      nRMask = 0;
     sal_uInt32      nGMask = 0;
     sal_uInt32      nBMask = 0;
-    sal_Bool        bNative;
-    sal_Bool        bTCMask = ( rHeader.nBitCount == 16 ) || ( rHeader.nBitCount == 32 );
-    sal_Bool        bRLE = ( RLE_8 == rHeader.nCompression && rHeader.nBitCount == 8 ) ||
+    bool            bNative;
+    bool            bTCMask = ( rHeader.nBitCount == 16 ) || ( rHeader.nBitCount == 32 );
+    bool            bRLE = ( RLE_8 == rHeader.nCompression && rHeader.nBitCount == 8 ) ||
                        ( RLE_4 == rHeader.nCompression && rHeader.nBitCount == 4 );
 
     // Is native format?
@@ -430,7 +430,7 @@ sal_Bool Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, Bitma
         break;
 
         default:
-            bNative = sal_False;
+            bNative = false;
         break;
     }
     // Read data
@@ -913,7 +913,7 @@ sal_Bool Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
         const sal_uInt16 nBitCount( sal::static_int_cast<sal_uInt16>(rAcc.GetBitCount()) );
         const sal_uLong  nAlignedWidth = AlignedWidth4Bytes( rAcc.Width() *
                                                          discretizeBitcount(nBitCount));
-        sal_Bool         bNative = sal_False;
+        bool bNative = false;
 
         switch( rAcc.GetScanlineFormat() )
         {
@@ -923,7 +923,7 @@ sal_Bool Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
             case( BMP_FORMAT_24BIT_TC_BGR ):
             {
                 if( rAcc.IsBottomUp() && ( rAcc.GetScanlineSize() == nAlignedWidth ) )
-                    bNative = sal_True;
+                    bNative = true;
             }
             break;
 
@@ -1056,7 +1056,7 @@ void Bitmap::ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
     sal_uLong       nRunByte;
     sal_uLong       nX = 0UL;
     sal_uInt8       cTmp;
-    sal_Bool        bEndDecoding = sal_False;
+    bool            bEndDecoding = false;
 
     do
     {
@@ -1112,7 +1112,7 @@ void Bitmap::ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
                 nX = 0UL;
             }
             else if( nRunByte == 1 )
-                bEndDecoding = sal_True;
+                bEndDecoding = true;
             else
             {
                 nX += *pRLE++;
@@ -1161,7 +1161,7 @@ sal_Bool Bitmap::ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool
     sal_uInt8*      pTmp;
     sal_uInt8       cPix;
     sal_uInt8       cLast;
-    sal_Bool        bFound;
+    bool            bFound;
 
     for ( long nY = nHeight - 1L; nY >= 0L; nY-- )
     {
@@ -1190,14 +1190,14 @@ sal_Bool Bitmap::ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool
             {
                 cLast = cPix;
                 nSaveIndex = nX - 1UL;
-                bFound = sal_False;
+                bFound = false;
 
                 while( ( nX < nWidth ) && ( nCount < 256L )
                     && ( cPix = rAcc.GetPixelIndex( nY, nX ) ) != cLast )
                 {
                     nX++; nCount++;
                     cLast = cPix;
-                    bFound = sal_True;
+                    bFound = true;
                 }
 
                 if ( bFound )

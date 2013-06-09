@@ -480,7 +480,7 @@ sal_Bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
     {
         const BitmapPalette&    rPal = GetGreyPalette( nGreys );
         sal_uLong                   nShift = ( ( nGreys == 16 ) ? 4UL : 0UL );
-        sal_Bool                    bPalDiffers = !pReadAcc->HasPalette() || ( rPal.GetEntryCount() != pReadAcc->GetPaletteEntryCount() );
+        bool                    bPalDiffers = !pReadAcc->HasPalette() || ( rPal.GetEntryCount() != pReadAcc->GetPaletteEntryCount() );
 
         if( !bPalDiffers )
             bPalDiffers = ( (BitmapPalette&) rPal != pReadAcc->GetPalette() );
@@ -685,7 +685,7 @@ sal_Bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
             long            nX, nY;
             long            nYTmp = 0L;
             sal_uInt8           cIndex;
-            sal_Bool            bQ1 = sal_True;
+            bool            bQ1 = true;
 
             if( pExtColor )
             {
@@ -740,7 +740,7 @@ sal_Bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
 
                 // Refill/copy row buffer
                 pQLine1 = pQLine2;
-                pQLine2 = ( bQ1 = !bQ1 ) != sal_False ? pErrQuad2 : pErrQuad1;
+                pQLine2 = ( bQ1 = !bQ1 ) ? pErrQuad2 : pErrQuad1;
 
                 if( nYTmp < nHeight )
                 {
@@ -2723,7 +2723,7 @@ sal_Bool Bitmap::ImplDitherFloyd16()
         ImpErrorQuad*   pQLine2 = 0;
         long            nX, nY;
         long            nYTmp = 0L;
-        sal_Bool            bQ1 = sal_True;
+        bool            bQ1 = true;
 
         for( nY = 0L; nY < std::min( nHeight, 2L ); nY++, nYTmp++ )
             for( nX = 0L, pQLine2 = !nY ? pErrQuad1 : pErrQuad2; nX < nWidth; nX++ )
@@ -2761,7 +2761,7 @@ sal_Bool Bitmap::ImplDitherFloyd16()
 
             // Refill/copy row buffer
             pQLine1 = pQLine2;
-            pQLine2 = ( bQ1 = !bQ1 ) != sal_False ? pErrQuad2 : pErrQuad1;
+            pQLine2 = ( bQ1 = !bQ1 ) ? pErrQuad2 : pErrQuad1;
 
             if( nYTmp < nHeight )
                 for( nX = 0L; nX < nWidth; nX++ )
@@ -3313,7 +3313,7 @@ sal_Bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
 
             // calculate gamma value
             fGamma = ( fGamma <= 0.0 || fGamma > 10.0 ) ? 1.0 : ( 1.0 / fGamma );
-            const sal_Bool bGamma = ( fGamma != 1.0 );
+            const bool bGamma = ( fGamma != 1.0 );
 
             // create mapping table
             for( nX = 0L; nX < 256L; nX++ )

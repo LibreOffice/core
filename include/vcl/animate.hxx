@@ -68,7 +68,7 @@ struct VCL_DLLPUBLIC AnimationBitmap
                     bUserInput  ( sal_False )
                 {}
 
-    sal_Bool    operator==( const AnimationBitmap& rAnimBmp ) const
+    bool    operator==( const AnimationBitmap& rAnimBmp ) const
                 {
                     return( rAnimBmp.aBmpEx == aBmpEx &&
                             rAnimBmp.aPosPix == aPosPix &&
@@ -78,7 +78,7 @@ struct VCL_DLLPUBLIC AnimationBitmap
                             rAnimBmp.bUserInput == bUserInput );
                 }
 
-    sal_Bool    operator!=( const AnimationBitmap& rAnimBmp ) const
+    bool    operator!=( const AnimationBitmap& rAnimBmp ) const
                 { return !( *this == rAnimBmp ); }
 
     sal_Bool    IsEqual( const AnimationBitmap& rAnimBmp ) const
@@ -159,8 +159,8 @@ public:
                             ~Animation();
 
     Animation&              operator=( const Animation& rAnimation );
-    sal_Bool                operator==( const Animation& rAnimation ) const;
-    sal_Bool                operator!=( const Animation& rAnimation ) const
+    bool                operator==( const Animation& rAnimation ) const;
+    bool                operator!=( const Animation& rAnimation ) const
                             { return !(*this==rAnimation); }
 
     void                    Clear();

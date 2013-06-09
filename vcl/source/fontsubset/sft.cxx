@@ -1033,7 +1033,7 @@ static void GetNames(TrueTypeFont *t)
 
     sal_uInt16 n = GetUInt16(table, 2, 1);
     int i, r;
-    sal_Bool bPSNameOK = sal_True;
+    bool bPSNameOK = true;
 
     /* #129743# simple sanity check for name table entry count */
     if( nTableSize <= n * 12 + 6 )
@@ -1115,16 +1115,16 @@ static void GetNames(TrueTypeFont *t)
     /* check psname */
     for( i = 0; t->psname[i] != 0 && bPSNameOK; i++ )
         if( t->psname[ i ] < 33 || (t->psname[ i ] & 0x80) )
-            bPSNameOK = sal_False;
-    if( bPSNameOK == sal_False )
+            bPSNameOK = false;
+    if( !bPSNameOK )
     {
-        sal_Bool bReplace = sal_True;
+        bool bReplace = true;
         /* check if family is a suitable replacement */
         if( t->ufamily && t->family )
         {
             for( i = 0; t->ufamily[ i ] != 0 && bReplace; i++ )
                 if( t->ufamily[ i ] < 33 || t->ufamily[ i ] > 127 )
-                    bReplace = sal_False;
+                    bReplace = false;
             if( bReplace )
             {
                 free( t->psname );

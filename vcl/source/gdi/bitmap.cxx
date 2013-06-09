@@ -449,7 +449,7 @@ sal_Bool Bitmap::Erase( const Color& rFillColor )
     {
         const sal_uLong nFormat = pWriteAcc->GetScanlineFormat();
         sal_uInt8       cIndex = 0;
-        sal_Bool        bFast = sal_False;
+        bool            bFast = false;
 
         switch( nFormat )
         {
@@ -458,7 +458,7 @@ sal_Bool Bitmap::Erase( const Color& rFillColor )
             {
                 cIndex = (sal_uInt8) pWriteAcc->GetBestPaletteIndex( rFillColor );
                 cIndex = ( cIndex ? 255 : 0 );
-                bFast = sal_True;
+                bFast = true;
             }
             break;
 
@@ -467,14 +467,14 @@ sal_Bool Bitmap::Erase( const Color& rFillColor )
             {
                 cIndex = (sal_uInt8) pWriteAcc->GetBestPaletteIndex( rFillColor );
                 cIndex = cIndex | ( cIndex << 4 );
-                bFast = sal_True;
+                bFast = true;
             }
             break;
 
             case( BMP_FORMAT_8BIT_PAL ):
             {
                 cIndex = (sal_uInt8) pWriteAcc->GetBestPaletteIndex( rFillColor );
-                bFast = sal_True;
+                bFast = true;
             }
             break;
 
@@ -485,15 +485,15 @@ sal_Bool Bitmap::Erase( const Color& rFillColor )
                     ( rFillColor.GetRed() == rFillColor.GetBlue() ) )
                 {
                     cIndex = rFillColor.GetRed();
-                    bFast = sal_True;
+                    bFast = true;
                 }
                 else
-                    bFast = sal_False;
+                    bFast = false;
             }
             break;
 
             default:
-                bFast = sal_False;
+                bFast = false;
             break;
         }
 
@@ -553,8 +553,8 @@ sal_Bool Bitmap::Invert()
 
 sal_Bool Bitmap::Mirror( sal_uLong nMirrorFlags )
 {
-    sal_Bool bHorz = ( ( nMirrorFlags & BMP_MIRROR_HORZ ) == BMP_MIRROR_HORZ );
-    sal_Bool bVert = ( ( nMirrorFlags & BMP_MIRROR_VERT ) == BMP_MIRROR_VERT );
+    bool bHorz = ( ( nMirrorFlags & BMP_MIRROR_HORZ ) == BMP_MIRROR_HORZ );
+    bool bVert = ( ( nMirrorFlags & BMP_MIRROR_VERT ) == BMP_MIRROR_VERT );
     sal_Bool bRet = sal_False;
 
     if( bHorz && !bVert )
@@ -880,19 +880,19 @@ sal_Bool Bitmap::CopyPixel( const Rectangle& rRectDst,
                     {
                         const long      nSrcCount = pDstAcc->GetPaletteEntryCount();
                         const long      nDstCount = 1 << nDstBitCount;
-                        sal_Bool            bFound;
+                        bool            bFound;
 
                         for( long i = 0L; ( i < nSrcCount ) && ( nNextIndex < nSrcCount ); i++ )
                         {
                             const BitmapColor& rSrcCol = pSrcAcc->GetPaletteColor( (sal_uInt16) i );
 
-                            bFound = sal_False;
+                            bFound = false;
 
                             for( long j = 0L; j < nDstCount; j++ )
                             {
                                 if( rSrcCol == pDstAcc->GetPaletteColor( (sal_uInt16) j ) )
                                 {
-                                    bFound = sal_True;
+                                    bFound = true;
                                     break;
                                 }
                             }

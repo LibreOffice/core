@@ -126,10 +126,10 @@ Animation& Animation::operator=( const Animation& rAnimation )
     return *this;
 }
 
-sal_Bool Animation::operator==( const Animation& rAnimation ) const
+bool Animation::operator==( const Animation& rAnimation ) const
 {
     const size_t nCount = maList.size();
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if(  rAnimation.maList.size() == nCount
       && rAnimation.maBitmapEx    == maBitmapEx
@@ -137,13 +137,13 @@ sal_Bool Animation::operator==( const Animation& rAnimation ) const
       && rAnimation.meCycleMode   == meCycleMode
       )
     {
-        bRet = sal_True;
+        bRet = true;
 
         for( size_t n = 0; n < nCount; n++ )
         {
             if( ( *maList[ n ] ) != ( *rAnimation.maList[ n ] ) )
             {
-                bRet = sal_False;
+                bRet = false;
                 break;
             }
         }
@@ -366,7 +366,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
     if( nAnimCount )
     {
         ImplAnimView*   pView;
-        sal_Bool        bGlobalPause = sal_True;
+        bool        bGlobalPause = true;
 
         if( maNotifyLink.IsSet() )
         {
@@ -413,7 +413,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
                 else
                 {
                     if( !pView->ImplIsPause() )
-                        bGlobalPause = sal_False;
+                        bGlobalPause = false;
 
                     pView->ImplSetMarked( sal_False );
                     i++;
@@ -421,7 +421,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
             }
         }
         else
-            bGlobalPause = sal_False;
+            bGlobalPause = false;
 
         if( maViewList.empty() )
             Stop();
@@ -746,7 +746,7 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
     sal_uLong   nStmPos = rIStm.Tell();
     sal_uInt32  nAnimMagic1, nAnimMagic2;
     sal_uInt16  nOldFormat = rIStm.GetNumberFormatInt();
-    sal_Bool    bReadAnimations = sal_False;
+    bool    bReadAnimations = false;
 
     rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nStmPos = rIStm.Tell();
@@ -757,7 +757,7 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
     // If the BitmapEx at the beginning have already been read (by Graphic)
     // we can start reading the AnimationBitmaps right away
     if( ( nAnimMagic1 == 0x5344414e ) && ( nAnimMagic2 == 0x494d4931 ) && !rIStm.GetError() )
-        bReadAnimations = sal_True;
+        bReadAnimations = true;
     // Else, we try reading the Bitmap(-Ex)
     else
     {
@@ -767,7 +767,7 @@ SvStream& operator>>( SvStream& rIStm, Animation& rAnimation )
         rIStm >> nAnimMagic1 >> nAnimMagic2;
 
         if( ( nAnimMagic1 == 0x5344414e ) && ( nAnimMagic2 == 0x494d4931 ) && !rIStm.GetError() )
-            bReadAnimations = sal_True;
+            bReadAnimations = true;
         else
             rIStm.Seek( nStmPos );
     }
