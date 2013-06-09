@@ -16,6 +16,9 @@
 // For debug use, will use a manager to manage server and client instead
 @property (nonatomic, strong) Server* server;
 @property (nonatomic, strong) Client* client;
+@property (nonatomic, strong) CommandInterpreter * interpreter;
+@property (nonatomic, weak) NSNotificationCenter* center;
+@property (nonatomic, strong) id slideShowPreviewStartObserver;
 
 @end
 
@@ -23,11 +26,22 @@
 
 @synthesize server = _server;
 @synthesize client = _client;
+@synthesize center = _center;
+@synthesize interpreter = _interpreter;
+@synthesize slideShowPreviewStartObserver = _slideShowPreviewStartObserver;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    self.center = [NSNotificationCenter defaultCenter];
+    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
+    self.slideShowPreviewStartObserver = [self.center addObserverForName:STATUS_CONNECTED_SLIDESHOW_RUNNING object:nil
+                                                     queue:mainQueue usingBlock:^(NSNotification *note) {
+                                                         NSLog(@"Received performSegue!");
+                                                         [self performSegueWithIdentifier:@"slidesPreview" sender:self];
+                                                     }];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -39,13 +53,14 @@
 
 - (IBAction)connectToServer:(id)sender {
     NSString * address = [self.ipAddressTextEdit text];
+    self.interpreter = [[CommandInterpreter alloc] init];
     self.server = [[Server alloc] initWithProtocol:NETWORK atAddress:address ofName:@"Server"];
-    self.client = [[Client alloc] initWithServer:self.server managedBy:nil interpretedBy:nil];
+    self.client = [[Client alloc] initWithServer:self.server managedBy:nil interpretedBy:self.interpreter];
     [self.client connect];
     
-    if([self.client mReady])
+    if([self.client ready])
     {
-        [self.pinLabel setText:[NSString stringWithFormat:@"%@", self.client.mPin]];
+        [self.pinLabel setText:[NSString stringWithFormat:@"%@", self.client.pin]];
     }
 }
 

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		57B152991764703500EECC67 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B152981764703500EECC67 /* Base64.m */; };
+		57B1529C1764714900EECC67 /* slideShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B1529B1764714900EECC67 /* slideShowViewController.m */; };
 		57B7625D17621E42007703F6 /* SlideShow.m in Sources */ = {isa = PBXBuildFile; fileRef = 57B7625C17621E42007703F6 /* SlideShow.m */; };
 		57C6E3F3175E06E800E8BC5F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6E3F2175E06E800E8BC5F /* UIKit.framework */; };
 		57C6E3F5175E06E800E8BC5F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C6E3F4175E06E800E8BC5F /* Foundation.framework */; };
@@ -27,10 +29,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		57B152971764703500EECC67 /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Base64.h; path = iosremote/Base64.h; sourceTree = "<group>"; };
+		57B152981764703500EECC67 /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Base64.m; path = iosremote/Base64.m; sourceTree = "<group>"; };
+		57B1529A1764714900EECC67 /* slideShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = slideShowViewController.h; sourceTree = "<group>"; };
+		57B1529B1764714900EECC67 /* slideShowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = slideShowViewController.m; sourceTree = "<group>"; };
 		57B7625B17621E42007703F6 /* SlideShow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlideShow.h; sourceTree = "<group>"; };
 		57B7625C17621E42007703F6 /* SlideShow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlideShow.m; sourceTree = "<group>"; };
-		57B7625E1762368F007703F6 /* Base64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Base64.h; path = ../Base64.h; sourceTree = "<group>"; };
-		57B7625F1762368F007703F6 /* Base64.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = Base64.m; path = ../Base64.m; sourceTree = "<group>"; };
 		57C6E3EF175E06E800E8BC5F /* iosremote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosremote.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57C6E3F2175E06E800E8BC5F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		57C6E3F4175E06E800E8BC5F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -75,6 +79,8 @@
 		57C6E3E6175E06E800E8BC5F = {
 			isa = PBXGroup;
 			children = (
+				57B152971764703500EECC67 /* Base64.h */,
+				57B152981764703500EECC67 /* Base64.m */,
 				57C6E425175E076900E8BC5F /* Communication */,
 				57C6E3F8175E06E800E8BC5F /* iosremote */,
 				57C6E3F1175E06E800E8BC5F /* Frameworks */,
@@ -110,6 +116,8 @@
 				57C6E410175E06E800E8BC5F /* libreoffice_sdremoteViewController.h */,
 				57C6E411175E06E800E8BC5F /* libreoffice_sdremoteViewController.m */,
 				57C6E3F9175E06E800E8BC5F /* Supporting Files */,
+				57B1529A1764714900EECC67 /* slideShowViewController.h */,
+				57B1529B1764714900EECC67 /* slideShowViewController.m */,
 			);
 			path = iosremote;
 			sourceTree = "<group>";
@@ -131,8 +139,6 @@
 		57C6E425175E076900E8BC5F /* Communication */ = {
 			isa = PBXGroup;
 			children = (
-				57B7625E1762368F007703F6 /* Base64.h */,
-				57B7625F1762368F007703F6 /* Base64.m */,
 				57C6E426175E076900E8BC5F /* Client.h */,
 				57C6E427175E076900E8BC5F /* Client.m */,
 				57C6E428175E076900E8BC5F /* CommunicationManager.h */,
@@ -224,6 +230,8 @@
 				57C6E430175E076900E8BC5F /* CommandInterpreter.m in Sources */,
 				57C6E431175E076900E8BC5F /* Server.m in Sources */,
 				57B7625D17621E42007703F6 /* SlideShow.m in Sources */,
+				57B152991764703500EECC67 /* Base64.m in Sources */,
+				57B1529C1764714900EECC67 /* slideShowViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

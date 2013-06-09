@@ -13,9 +13,9 @@
 
 @interface Client : NSObject
 
-@property BOOL mReady;
-@property (nonatomic, strong) NSNumber* mPin;
-@property (nonatomic, strong) NSString* mName;
+@property BOOL ready;
+@property (nonatomic, strong) NSNumber* pin;
+@property (nonatomic, strong) NSString* name;
 
 -(void) connect;
 

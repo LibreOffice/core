@@ -1,20 +1,20 @@
+// -*- Mode: ObjC; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 //
-//  SlideShow.h
-//  iosremote
+// This file is part of the LibreOffice project.
 //
-//  Created by Liu Siqi on 6/7/13.
-//  Copyright (c) 2013 libreoffice. All rights reserved.
-//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 
 #import <Foundation/Foundation.h>
 
 @interface SlideShow : NSObject
 
-@property (nonatomic, strong) NSArray* mSlides;
-@property (nonatomic, strong) NSNumber* mCurrentSlide;
+@property uint size;
+@property uint currentSlide;
 
-- (NSUInteger) size;
-- (void) setCurrentSlide:(NSUInteger)number;
-- (void) setLength:(NSUInteger)number;
+- (void) putImage: (NSString *)img AtIndex: (uint) index;
+- (void) putNotes: (NSString *)notes AtIndex: (uint) index;
 
 @end

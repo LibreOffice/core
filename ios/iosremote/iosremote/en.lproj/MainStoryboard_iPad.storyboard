@@ -12,7 +12,7 @@
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="172.25.19.11" borderStyle="roundedRect" minimumFontSize="17" id="9w1-Ym-HcF">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="192.168.1.97" borderStyle="roundedRect" minimumFontSize="17" id="9w1-Ym-HcF">
                                 <rect key="frame" x="234" y="402" width="301" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -38,6 +38,7 @@
                     <connections>
                         <outlet property="ipAddressTextEdit" destination="9w1-Ym-HcF" id="hab-JH-3Lf"/>
                         <outlet property="pinLabel" destination="Cg3-f5-zuM" id="HaU-jr-8oJ"/>
+                        <segue destination="zdX-BL-bmY" kind="push" identifier="slidesPreview" id="9Yb-di-Q6v"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3" sceneMemberID="firstResponder"/>
@@ -61,6 +62,31 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sOJ-6b-jVh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="721" y="-301"/>
+        </scene>
+        <!--Slide Show View Controller-->
+        <scene sceneID="wDH-NE-E5t">
+            <objects>
+                <viewController id="zdX-BL-bmY" customClass="slideShowViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Tkv-NW-1bl">
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="T6z-xu-j8h">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="uc0-p3-wnG"/>
+                    <connections>
+                        <outlet property="image" destination="T6z-xu-j8h" id="o1L-LM-TbP"/>
+                        <outlet property="view" destination="T6z-xu-j8h" id="YKN-ib-gU3"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Dqn-Ae-ABD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2616" y="-293"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

@@ -18,10 +18,16 @@
 
 @implementation CommandInterpreter
 
-@synthesize mSlideShow = _mSlideShow;
+@synthesize slideShow = _slideShow;
+
+- (SlideShow*) slideshow{
+    if (!self.slideShow)
+        self.slideShow = [[SlideShow alloc] init];
+    return self.slideShow;
+}
 
 - (BOOL) isSlideRunning {
-    return [self.mSlideShow size] > 0;
+    return [self.slideShow size] > 0;
 }
 
 // Received a set of instructions from server.
@@ -32,45 +38,50 @@
     NSString *instruction = [command objectAtIndex:0];
     
     if([instruction isEqualToString:@"slideshow_started"]){
-        unsigned int slideLength = [[command objectAtIndex:1] unsignedIntValue];
-        unsigned int currentSlide = [[command objectAtIndex:2] unsignedIntValue];
+        NSLog(@"Interpreter: slideshow_started");
+        uint slideLength = [[command objectAtIndex:1] integerValue];
+        uint currentSlide = [[command objectAtIndex:2] integerValue];
+        NSLog(@"Interpreter: with slideLength %u, currentSlide %u", slideLength, currentSlide);
+        self.slideShow = [[SlideShow alloc] init];
         
-        [self.mSlideShow setLength:slideLength];
-        [self.mSlideShow setCurrentSlide:currentSlide];
+        [self.slideShow setSize:slideLength];
+        [self.slideShow setCurrentSlide:currentSlide];
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_CONNECTED_NOSLIDESHOW
+        [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_CONNECTED_SLIDESHOW_RUNNING
                           object:nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_CHANGED object:self.mSlideShow.mCurrentSlide];
+        [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_CHANGED object:[NSNumber numberWithUnsignedInt:currentSlide]];
         
     } else if ([instruction isEqualToString:@"slideshow_finished"]){
-        self.mSlideShow = [SlideShow init];
+        NSLog(@"Interpreter: slideshow_started");
+        self.slideShow = [[SlideShow alloc] init];
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_CONNECTED_NOSLIDESHOW object:nil];
     } else {
-        if (self.mSlideShow == nil)
+        if (self.slideShow == nil)
             return;
         if ([instruction isEqualToString:@"slide_updated"]) {
-            unsigned int newSlideNumber = [[command objectAtIndex:1] unsignedIntValue];
-            [self.mSlideShow setCurrentSlide:newSlideNumber];
+            NSLog(@"Interpreter: slide_updated");
+            uint newSlideNumber = [[command objectAtIndex:1] integerValue];
+            [self.slideShow setCurrentSlide:newSlideNumber];
             
             [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_CHANGED object:nil];
             
         } else if ([instruction isEqualToString:@"slide_preview"]){
-            unsigned int slideNumber = [[command objectAtIndex:1] unsignedIntValue];
+            NSLog(@"Interpreter: slide_preview");
+            uint slideNumber = [[command objectAtIndex:1] integerValue];
             NSString * imageData = [command objectAtIndex:2];
-            [Base64 initialize];
-            NSData* data = [Base64 decode:imageData];
-            UIImage* img = [UIImage imageWithData:data];
-            [self.mSlideShow putImage:img
+            
+            [self.slideShow putImage:imageData
                               AtIndex:slideNumber];
             [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_PREVIEW object:[NSNumber numberWithUnsignedInt:slideNumber]];
         } else if ([instruction isEqualToString:@"slide_notes"]){
-            unsigned int slideNumber = [[command objectAtIndex:1] unsignedIntValue];
+            NSLog(@"Interpreter: slide_notes");
+            uint slideNumber = [[command objectAtIndex:1] integerValue];
             NSString *notes;
             for (int i = 2; i<command.count; ++i) {
                 [notes stringByAppendingString:[command objectAtIndex:i]];
             }
             
-            [self.mSlideShow putNotes:notes
+            [self.slideShow putNotes:notes
                               AtIndex:slideNumber];
             [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_NOTES object: [NSNumber numberWithUnsignedInt:slideNumber]];
         }

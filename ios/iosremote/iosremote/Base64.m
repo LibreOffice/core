@@ -46,8 +46,8 @@ static char decodingTable[128];
         output[index + 3] = (i + 2) < length ? encodingTable[(value >> 0)  & 0x3F] : '=';
     }
 	
-    return [[[NSString alloc] initWithData:data
-                                  encoding:NSASCIIStringEncoding] autorelease];
+    return [[NSString alloc] initWithData:data
+                                  encoding:NSASCIIStringEncoding];
 }
 
 
