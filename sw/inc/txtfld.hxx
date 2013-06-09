@@ -21,7 +21,6 @@
 
 #include <txatbase.hxx>
 #include <tools/string.hxx>
-#include <pam.hxx>
 
 class SwTxtNode;
 

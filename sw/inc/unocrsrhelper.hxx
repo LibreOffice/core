@@ -35,7 +35,6 @@ class SfxItemPropertySet;
 struct SfxItemPropertySimpleEntry;
 class SdrObject;
 class SwTxtNode;
-class SwPaM;
 class SwCursor;
 class SwUnoCrsr;
 class SwUnoTableCrsr;
