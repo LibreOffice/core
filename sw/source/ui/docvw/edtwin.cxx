@@ -861,26 +861,25 @@ void SwEditWin::FlushInBuffer()
             if (!rSh.GetCrsr()->HasMark())
                 rSh.GetCrsr()->SetMark();
             rSh.GetCrsr()->GetMark()->nContent = 0;
-            OUString aLeftText( rSh.GetCrsr()->GetTxt() );
+
+            const OUString aOldText( rSh.GetCrsr()->GetTxt() );
+            const sal_Int32 nOldLen = aOldText.getLength();
 
             SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
 
             xub_StrLen nExpandSelection = 0;
-            if (aLeftText.getLength() > 0)
+            if (nOldLen > 0)
             {
-                sal_Unicode cChar = '\0';
-
-                sal_Int32 nTmpPos = aLeftText.getLength();
+                sal_Int32 nTmpPos = nOldLen;
                 sal_Int16 nCheckMode = rCTLOptions.IsCTLSequenceCheckingRestricted() ?
                         i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
 
-                OUString aOldText( aLeftText );
                 OUString aNewText( aOldText );
                 if (rCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
                 {
                     for (xub_StrLen k = 0;  k < m_aInBuffer.Len();  ++k)
                     {
-                        cChar = m_aInBuffer.GetChar(k);
+                        const sal_Unicode cChar = m_aInBuffer.GetChar(k);
                         const sal_Int32 nPrevPos =xISC->correctInputSequence( aNewText, nTmpPos - 1, cChar, nCheckMode );
 
                         // valid sequence or sequence could be corrected:
@@ -889,7 +888,6 @@ void SwEditWin::FlushInBuffer()
                     }
 
                     // find position of first character that has changed
-                    sal_Int32 nOldLen = aOldText.getLength();
                     sal_Int32 nNewLen = aNewText.getLength();
                     const sal_Unicode *pOldTxt = aOldText.getStr();
                     const sal_Unicode *pNewTxt = aNewText.getStr();
@@ -898,13 +896,11 @@ void SwEditWin::FlushInBuffer()
                             pOldTxt[nChgPos] == pNewTxt[nChgPos] )
                         ++nChgPos;
 
-                    xub_StrLen nChgLen = static_cast< xub_StrLen >(nNewLen - nChgPos);
-                    String aChgText( aNewText.copy( static_cast< xub_StrLen >(nChgPos), nChgLen ) );
-
-                    if (aChgText.Len())
+                    const sal_Int32 nChgLen = nNewLen - nChgPos;
+                    if (nChgLen)
                     {
-                        m_aInBuffer = aChgText;
-                        nExpandSelection = static_cast< xub_StrLen >(aLeftText.getLength() - nChgPos);
+                        m_aInBuffer = aNewText.copy( nChgPos, nChgLen );
+                        nExpandSelection = static_cast< xub_StrLen >(nOldLen - nChgPos);
                     }
                     else
                         m_aInBuffer.Erase();
@@ -913,7 +909,7 @@ void SwEditWin::FlushInBuffer()
                 {
                     for (xub_StrLen k = 0;  k < m_aInBuffer.Len();  ++k)
                     {
-                        cChar = m_aInBuffer.GetChar(k);
+                        const sal_Unicode cChar = m_aInBuffer.GetChar(k);
                         if (xISC->checkInputSequence( aNewText, nTmpPos - 1, cChar, nCheckMode ))
                         {
                             // character can be inserted:
