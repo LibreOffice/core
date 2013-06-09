@@ -19,7 +19,6 @@ import traceback
 import uno
 import time
 
-#from common.Desktop import Desktop
 from .WWD_Startup import WWD_Startup
 from .WWD_General import WWD_General
 from .WebWizardConst import *

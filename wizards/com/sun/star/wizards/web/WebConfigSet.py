@@ -147,7 +147,10 @@ class WebConfigSet(ConfigGroup):
         return self.childrenList[i]
 
     def getElement(self, o):
-        return self.childrenMap[o]
+        try:
+            return self.childrenMap[o]
+        except KeyError:
+            return None
 
     def getSize(self):
         return len(self.childrenList)
