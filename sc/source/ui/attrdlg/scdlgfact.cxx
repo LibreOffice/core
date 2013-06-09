@@ -856,7 +856,6 @@ AbstractScFillSeriesDlg* ScAbstractDialogFactory_Impl::CreateScFillSeriesDlg( Wi
 
 
 AbstractScGroupDlg* ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg( Window* pParent,
-                                                            sal_uInt16  nResId,
                                                             int nId,
                                                             sal_Bool    bUnGroup ,
                                                             sal_Bool    bRows   )
@@ -866,7 +865,7 @@ AbstractScGroupDlg* ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg( Wind
     {
         case RID_SCDLG_GRP_KILL :
         case RID_SCDLG_GRP_MAKE :
-            pDlg = new ScGroupDlg( pParent, nResId,bUnGroup, bRows);
+            pDlg = new ScGroupDlg( pParent, bUnGroup, bRows);
             break;
         default:
             break;

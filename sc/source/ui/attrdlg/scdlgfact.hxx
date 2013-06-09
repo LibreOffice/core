@@ -452,7 +452,6 @@ public:
                                                             sal_uInt16          nPossDir,
                                                             int nId);
     virtual AbstractScGroupDlg * CreateAbstractScGroupDlg( Window* pParent, //add for ScGroupDlg
-                                                            sal_uInt16  nResId,
                                                             int nId,
                                                             sal_Bool    bUnGroup = false,
                                                             sal_Bool    bRows    = sal_True  );
