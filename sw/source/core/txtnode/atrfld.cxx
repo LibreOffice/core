@@ -24,6 +24,7 @@
 #include <docufld.hxx>
 #include <doc.hxx>
 
+#include "pam.hxx"
 #include "reffld.hxx"
 #include "ddefld.hxx"
 #include "usrfld.hxx"

@@ -38,8 +38,6 @@
 
 
 class SwDoc;
-struct SwPosition;
-class SwPaM;
 class SwUnoCrsr;
 class SwFrmFmt;
 

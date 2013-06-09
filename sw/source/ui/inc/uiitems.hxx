@@ -23,10 +23,10 @@
 #include "swdllapi.h"
 #include "cmdid.h"
 #include "pagedesc.hxx"
-#include "pam.hxx"
 
 class SwNumRule;
 class IntlWrapper;
+class SwPaM;
 
 /*--------------------------------------------------------------------
     Description: container for FootNote
