@@ -963,7 +963,7 @@ DockingWindow RID_ELEMENTSDOCKINGWINDOW
         VScroll = TRUE ;
     };
 
-    Text [ en-US ] = "Symbols" ;
+    Text [ en-US ] = "Elements Dock" ;
 };
 
 
