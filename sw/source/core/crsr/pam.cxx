@@ -1066,42 +1066,44 @@ OUString SwPaM::GetTxt() const
     SwNodeIndex aNodeIndex = Start()->nNode;
 
     // The first node can be already the end node.
-    // A first end node must be handled, too. Therefore do-while and no
-    // incrementing of aNodeIndex in the first pass.
-    bool bFirst = true;
-    do
+    // Use a "forever" loop with an exit condition in the middle
+    // of its body, in order to correctly handle all cases.
+    bool bIsStartNode = true;
+    for (;;)
     {
-        if (! bFirst)
-        {
-            ++aNodeIndex;
-        }
-
-        bFirst = false;
-
+        const bool bIsEndNode = aNodeIndex == End()->nNode;
         SwTxtNode * pTxtNode = aNodeIndex.GetNode().GetTxtNode();
 
         if (pTxtNode != NULL)
         {
             const OUString aTmpStr = pTxtNode->GetTxt();
 
-            if (aNodeIndex == Start()->nNode)
+            if (bIsStartNode || bIsEndNode)
             {
-                xub_StrLen nEnd;
-                if (End()->nNode == aNodeIndex)
-                    nEnd = End()->nContent.GetIndex();
-                else
-                    nEnd = aTmpStr.getLength();
+                // Handle corner cases of start/end node(s)
+                const sal_Int32 nStart = bIsStartNode
+                    ? static_cast<sal_Int32>(Start()->nContent.GetIndex())
+                    : 0;
+                const sal_Int32 nEnd = bIsEndNode
+                    ? static_cast<sal_Int32>(End()->nContent.GetIndex())
+                    : aTmpStr.getLength();
 
-                aResult += aTmpStr.copy(Start()->nContent.GetIndex(),
-                                        nEnd - Start()->nContent.GetIndex()) ;
+                aResult += aTmpStr.copy(nStart, nEnd-nStart);
             }
-            else if (aNodeIndex == End()->nNode)
-                aResult += aTmpStr.copy(0, End()->nContent.GetIndex());
             else
+            {
                 aResult += aTmpStr;
+            }
         }
+
+        if (bIsEndNode)
+        {
+            break;
+        }
+
+        ++aNodeIndex;
+        bIsStartNode = false;
     }
-    while (aNodeIndex != End()->nNode);
 
     return aResult;
 }
