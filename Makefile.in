@@ -100,7 +100,7 @@ $(eval $(call gbuild_modules_rules,$(gbuild_modules)))
 gbuild_TARGETS := AllLangHelp \
 	AllLangPackage \
 	AllLangResTarget \
-	AutoInstallLibs \
+	AutoInstall \
 	CliLibrary \
 	CliNativeLibrary \
 	CliUnoApiTarget \

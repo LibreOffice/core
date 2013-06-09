@@ -17,7 +17,7 @@
  */
 
 #include "macros.inc"
-#include "AutoInstallLibs/ooo"
+#include "AutoInstall/ooo"
 
 #ifdef AIX
 #ifndef SYSTEM_CURL

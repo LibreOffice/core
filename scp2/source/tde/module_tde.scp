@@ -11,7 +11,7 @@
 
 #include "macros.inc"
 
-#include "AutoInstallLibs/tde"
+#include "AutoInstall/tde"
 
 Module gid_Module_Optional_Tde
     ParentID = gid_Module_Optional;

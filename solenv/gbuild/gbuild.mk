@@ -336,7 +336,7 @@ include $(foreach class, \
 	InstallModuleTarget \
 	InstallModule \
 	InstallScript \
-	AutoInstallLibs \
+	AutoInstall \
 	PackageSet \
 	GeneratedPackage \
 ,$(GBUILDDIR)/$(class).mk)

@@ -63,7 +63,7 @@ endef
 
 # workdir target patterns
 
-gb_AutoInstallLibs_get_target = $(WORKDIR)/AutoInstallLibs/$(1)
+gb_AutoInstall_get_target = $(WORKDIR)/AutoInstall/$(1)
 gb_AllLangHelp_get_target = $(WORKDIR)/AllLangHelp/$(1)
 gb_AllLangPackage_get_target = $(WORKDIR)/AllLangPackage/$(1)
 gb_AllLangResTarget_get_target = $(WORKDIR)/AllLangRes/$(1)
@@ -233,7 +233,7 @@ $(WORKDIR)/Headers/StaticLibrary/$(call gb_StaticLibrary_get_filename,$(1))
 endef
 
 $(eval $(call gb_Helper_make_clean_targets,\
-	AutoInstallLibs \
+	AutoInstall \
 	AllLangHelp \
 	AllLangPackage \
 	AllLangResTarget \

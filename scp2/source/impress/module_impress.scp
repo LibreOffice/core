@@ -18,7 +18,7 @@
 
 #include "macros.inc"
 
-#include "AutoInstallLibs/impress"
+#include "AutoInstall/impress"
 
 Module gid_Module_Prg_Impress
     MOD_NAME_DESC ( MODULE_PRG_IMPRESS );

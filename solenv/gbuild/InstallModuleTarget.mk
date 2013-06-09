@@ -256,7 +256,7 @@ $(call gb_InstallModuleTarget_add_defs,$(1),\
 endef
 
 define gb_InstallModuleTarget_use_auto_install_libs
-$(call gb_InstallModuleTarget_get_external_target,$(1)) : $(call gb_AutoInstallLibs_get_target,$(2))
+$(call gb_InstallModuleTarget_get_external_target,$(1)) : $(call gb_AutoInstall_get_target,$(2))
 
 endef
 

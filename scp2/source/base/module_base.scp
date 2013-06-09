@@ -18,7 +18,7 @@
 
 #include "macros.inc"
 
-#include "AutoInstallLibs/base"
+#include "AutoInstall/base"
 
 Module gid_Module_Prg_Base
     MOD_NAME_DESC(MODULE_PRG_BASE);

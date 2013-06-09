@@ -18,7 +18,7 @@
 
 #include "macros.inc"
 
-#include "AutoInstallLibs/math"
+#include "AutoInstall/math"
 
 Module gid_Module_Prg_Math
     MOD_NAME_DESC ( MODULE_PRG_MATH );

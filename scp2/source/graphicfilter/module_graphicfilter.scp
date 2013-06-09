@@ -18,7 +18,7 @@
 
 #include "macros.inc"
 
-#include "AutoInstallLibs/graphicfilter"
+#include "AutoInstall/graphicfilter"
 
 Module gid_Module_Optional_Grfflt
     PackageInfo = "packinfo_office.txt";

@@ -18,7 +18,7 @@
 
 #include "macros.inc"
 
-#include "AutoInstallLibs/writer"
+#include "AutoInstall/writer"
 
 Module gid_Module_Prg_Wrt
     MOD_NAME_DESC(MODULE_PRG_WRT);
