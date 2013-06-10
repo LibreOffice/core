@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 
@@ -31,7 +30,6 @@
 #include <editsh.hxx>
 #include <dpage.hxx>
 #include <unofldmid.h>
-
 
 using namespace ::com::sun::star;
 
@@ -338,7 +336,5 @@ bool SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     return true;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

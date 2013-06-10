@@ -42,7 +42,6 @@
 
 const sal_Unicode cRelTrenner = ',';
 const sal_Unicode cRelKennung = '';        // CTRL-R
-
 const sal_uInt16 cMAXSTACKSIZE = 50;
 
 static const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox );
@@ -212,7 +211,6 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
             if( pNumFmtr->IsNumberFormat( sTxt, nFmtIndex, aNum ))
                 nRet = aNum;
         }
-
         // ?? otherwise it is an error
     } while( false );
 
@@ -228,7 +226,6 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
 
     return nRet;
 }
-
 
 // structure needed for calculation of tables
 
@@ -280,7 +277,6 @@ sal_Bool SwTblCalcPara::CalcWithStackOverflow()
     aStackOverFlows.clear();
     return !rCalc.IsCalcError();
 }
-
 
 SwTableFormula::SwTableFormula( const String& rFormel )
     : sFormel( rFormel )
@@ -416,7 +412,6 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTbl, String& rNewStr,
     // get label for the box
     rNewStr += rFirstBox.GetChar( rFirstBox.Len() - 1 );
 }
-
 
 void SwTableFormula::BoxNmsToRelNm( const SwTable& rTbl, String& rNewStr,
                     String& rFirstBox, String* pLastBox, void* pPara ) const
@@ -579,7 +574,6 @@ void SwTableFormula::ToRelBoxNm( const SwTable* pTbl )
     sFormel = ScanString( fnFormel, *pTbl, (void*)pNd );
     eNmType = REL_NAME;
 }
-
 
 String SwTableFormula::ScanString( FnScanFormel fnFormel, const SwTable& rTbl,
                                     void* pPara ) const
@@ -1002,7 +996,6 @@ bool SwTableFormula::HasValidBoxes() const
     return bRet;
 }
 
-
 sal_uInt16 SwTableFormula::GetLnPosInTbl( const SwTable& rTbl, const SwTableBox* pBox )
 {
     sal_uInt16 nRet = USHRT_MAX;
@@ -1060,7 +1053,6 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, String& rNewStr,
             }
             else
                 (rNewStr += sTblNm ) += '.';     // keep table name
-
         }
     }
     if( pTblNmBox == pLastBox )
@@ -1175,6 +1167,5 @@ void SwTableFormula::ToSplitMergeBoxNm( SwTableFmlUpdate& rTblUpd )
     sFormel = ScanString( &SwTableFormula::_SplitMergeBoxNm, *pTbl, (void*)&rTblUpd );
     eNmType = INTRNL_NAME;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

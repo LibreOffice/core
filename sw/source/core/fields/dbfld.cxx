@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <float.h>
 #include <sfx2/app.hxx>
 #include <svl/zforlist.hxx>
@@ -69,11 +68,10 @@ SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const String& rNam, const SwDBData&
     }
     sName += GetColumnName();
 }
-//------------------------------------------------------------------------------
+
 SwDBFieldType::~SwDBFieldType()
 {
 }
-//------------------------------------------------------------------------------
 
 SwFieldType* SwDBFieldType::Copy() const
 {
@@ -81,13 +79,10 @@ SwFieldType* SwDBFieldType::Copy() const
     return pTmp;
 }
 
-//------------------------------------------------------------------------------
 const OUString& SwDBFieldType::GetName() const
 {
     return sName;
 }
-
-//------------------------------------------------------------------------------
 
 void SwDBFieldType::ReleaseRef()
 {
@@ -184,15 +179,11 @@ SwDBField::SwDBField(SwDBFieldType* pTyp, sal_uLong nFmt)
     InitContent();
 }
 
-//------------------------------------------------------------------------------
-
 SwDBField::~SwDBField()
 {
     if (GetTyp())
         ((SwDBFieldType*)GetTyp())->ReleaseRef();
 }
-
-//------------------------------------------------------------------------------
 
 void SwDBField::InitContent()
 {
@@ -203,8 +194,6 @@ void SwDBField::InitContent()
             .append('>').makeStringAndClear();
     }
 }
-
-//------------------------------------------------------------------------------
 
 void SwDBField::InitContent(const String& rExpansion)
 {
@@ -225,8 +214,6 @@ void SwDBField::InitContent(const String& rExpansion)
     SetExpansion( rExpansion );
 }
 
-//------------------------------------------------------------------------------
-
 String SwDBField::Expand() const
 {
     String sRet;
@@ -235,8 +222,6 @@ String SwDBField::Expand() const
         sRet = lcl_DBTrennConv(aContent);
     return sRet;
 }
-
-//------------------------------------------------------------------------------
 
 SwField* SwDBField::Copy() const
 {
@@ -267,8 +252,6 @@ String SwDBField::GetFieldName() const
     }
     return lcl_DBTrennConv(sContent);
 }
-
-//------------------------------------------------------------------------------
 
 void SwDBField::ChgValue( double d, bool bVal )
 {
@@ -395,7 +378,6 @@ bool SwDBField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         OSL_FAIL("illegal property");
     }
     return true;
-
 }
 
 bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
@@ -466,8 +448,6 @@ SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, s
 {
 }
 
-//------------------------------------------------------------------------------
-
 SwDBData SwDBNameInfField::GetDBData(SwDoc* pDoc)
 {
     SwDBData aRet;
@@ -482,8 +462,6 @@ void SwDBNameInfField::SetDBData(const SwDBData & rDBData)
 {
     aDBData = rDBData;
 }
-
-//------------------------------------------------------------------------------
 
 String SwDBNameInfField::GetFieldName() const
 {
@@ -572,8 +550,6 @@ SwDBNextSetFieldType::SwDBNextSetFieldType()
 {
 }
 
-//------------------------------------------------------------------------------
-
 SwFieldType* SwDBNextSetFieldType::Copy() const
 {
     SwDBNextSetFieldType* pTmp = new SwDBNextSetFieldType();
@@ -589,14 +565,10 @@ SwDBNextSetField::SwDBNextSetField(SwDBNextSetFieldType* pTyp,
     SwDBNameInfField(pTyp, rDBData), aCond(rCond), bCondValid(true)
 {}
 
-//------------------------------------------------------------------------------
-
 String SwDBNextSetField::Expand() const
 {
     return aEmptyStr;
 }
-
-//------------------------------------------------------------------------------
 
 SwField* SwDBNextSetField::Copy() const
 {
@@ -606,7 +578,6 @@ SwField* SwDBNextSetField::Copy() const
     pTmp->bCondValid = bCondValid;
     return pTmp;
 }
-//------------------------------------------------------------------------------
 
 void SwDBNextSetField::Evaluate(SwDoc* pDoc)
 {
@@ -665,8 +636,6 @@ SwDBNumSetFieldType::SwDBNumSetFieldType() :
 {
 }
 
-//------------------------------------------------------------------------------
-
 SwFieldType* SwDBNumSetFieldType::Copy() const
 {
     SwDBNumSetFieldType* pTmp = new SwDBNumSetFieldType();
@@ -685,14 +654,10 @@ SwDBNumSetField::SwDBNumSetField(SwDBNumSetFieldType* pTyp,
     bCondValid(true)
 {}
 
-//------------------------------------------------------------------------------
-
 String SwDBNumSetField::Expand() const
 {
     return aEmptyStr;
 }
-
-//------------------------------------------------------------------------------
 
 SwField* SwDBNumSetField::Copy() const
 {
@@ -784,7 +749,6 @@ SwDBNameFieldType::SwDBNameFieldType(SwDoc* pDocument)
 {
     pDoc = pDocument;
 }
-//------------------------------------------------------------------------------
 
 String SwDBNameFieldType::Expand(sal_uLong ) const
 {
@@ -794,7 +758,6 @@ String SwDBNameFieldType::Expand(sal_uLong ) const
     sRet += (String)aData.sCommand;
     return sRet;
 }
-//------------------------------------------------------------------------------
 
 SwFieldType* SwDBNameFieldType::Copy() const
 {
@@ -802,15 +765,11 @@ SwFieldType* SwDBNameFieldType::Copy() const
     return pTmp;
 }
 
-//------------------------------------------------------------------------------
-
 // name of the connected database
 
 SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFmt)
     : SwDBNameInfField(pTyp, rDBData, nFmt)
 {}
-
-//------------------------------------------------------------------------------
 
 String SwDBNameField::Expand() const
 {
@@ -819,8 +778,6 @@ String SwDBNameField::Expand() const
         sRet = ((SwDBNameFieldType*)GetTyp())->Expand(GetFormat());
     return sRet;
 }
-
-//------------------------------------------------------------------------------
 
 SwField* SwDBNameField::Copy() const
 {
@@ -848,15 +805,11 @@ SwDBSetNumberFieldType::SwDBSetNumberFieldType()
 {
 }
 
-//------------------------------------------------------------------------------
-
 SwFieldType* SwDBSetNumberFieldType::Copy() const
 {
     SwDBSetNumberFieldType *pTmp = new SwDBSetNumberFieldType;
     return pTmp;
 }
-
-//------------------------------------------------------------------------------
 
 // set-number of the connected database
 
@@ -866,8 +819,6 @@ SwDBSetNumberField::SwDBSetNumberField(SwDBSetNumberFieldType* pTyp,
     : SwDBNameInfField(pTyp, rDBData, nFmt), nNumber(0)
 {}
 
-//------------------------------------------------------------------------------
-
 String SwDBSetNumberField::Expand() const
 {
     if(0 !=(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE) || nNumber == 0)
@@ -875,8 +826,6 @@ String SwDBSetNumberField::Expand() const
     else
         return FormatNumber((sal_uInt16)nNumber, GetFormat());
 }
-
-//------------------------------------------------------------------------------
 
 void SwDBSetNumberField::Evaluate(SwDoc* pDoc)
 {
@@ -888,9 +837,6 @@ void SwDBSetNumberField::Evaluate(SwDoc* pDoc)
         return;
     nNumber = pMgr->GetSelectedRecordId();
 }
-
-
-//------------------------------------------------------------------------------
 
 SwField* SwDBSetNumberField::Copy() const
 {
@@ -942,6 +888,5 @@ bool SwDBSetNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     return bRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

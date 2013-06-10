@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <hintids.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/charclass.hxx>
@@ -58,7 +57,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 
-//-----------------------------------------------------------------------------
 static sal_Int16 lcl_SubTypeToAPI(sal_uInt16 nSubType)
 {
         sal_Int16 nRet = 0;
@@ -79,7 +77,7 @@ static sal_Int16 lcl_SubTypeToAPI(sal_uInt16 nSubType)
         }
         return nRet;
 }
-//-----------------------------------------------------------------------------
+
 static sal_Int32 lcl_APIToSubType(const uno::Any& rAny)
 {
         sal_Int16 nVal = 0;
@@ -97,8 +95,6 @@ static sal_Int32 lcl_APIToSubType(const uno::Any& rAny)
         }
         return nSet;
 }
-
-//-----------------------------------------------------------------------------
 
 void ReplacePoint( String& rTmpName, bool bWithCommandType )
 {
@@ -588,7 +584,6 @@ sal_uInt16 SwSetExpFieldType::GetSeqFldList( SwSeqFldList& rList )
 
     return rList.Count();
 }
-
 
 void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
 {
@@ -1244,7 +1239,5 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     return true;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

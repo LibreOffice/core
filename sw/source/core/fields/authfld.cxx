@@ -44,14 +44,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-
 SwAuthEntry::SwAuthEntry(const SwAuthEntry& rCopy)
     : nRefCount(0)
 {
     for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
         aAuthFields[i] = rCopy.aAuthFields[i];
 }
-// --------------------------------------------------------
+
 sal_Bool    SwAuthEntry::operator==(const SwAuthEntry& rComp)
 {
     for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
@@ -59,7 +58,7 @@ sal_Bool    SwAuthEntry::operator==(const SwAuthEntry& rComp)
             return sal_False;
     return sal_True;
 }
-// --------------------------------------------------------
+
 SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
     : SwFieldType( RES_AUTHORITY ),
     m_pDoc(pDoc),
@@ -223,9 +222,7 @@ bool SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
     return bChanged;
 }
 
-/*-------------------------------------------------------------------------
-  appends a new entry (if new) and returns the array position
-  -----------------------------------------------------------------------*/
+/// appends a new entry (if new) and returns the array position
 sal_uInt16  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
 {
     sal_uInt16 nRet = 0;
@@ -656,7 +653,7 @@ static sal_Int16 lcl_Find(const OUString& rFieldName)
             return i;
     return -1;
 }
-//----------------------------------------------------------------------------
+
 bool    SwAuthorityField::PutValue( const Any& rAny, sal_uInt16 /*nWhichId*/ )
 {
     if(!GetTyp() || !((SwAuthorityFieldType*)GetTyp())->GetEntryByHandle(m_nHandle))

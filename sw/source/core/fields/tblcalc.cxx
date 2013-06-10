@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <switerator.hxx>
 #include <cntfrm.hxx>
 #include <doc.hxx>
@@ -31,18 +30,14 @@
 
 using namespace ::com::sun::star;
 
-
 SwTblFieldType::SwTblFieldType(SwDoc* pDocPtr)
     : SwValueFieldType( pDocPtr, RES_TABLEFLD )
 {}
-
 
 SwFieldType* SwTblFieldType::Copy() const
 {
     return new SwTblFieldType(GetDoc());
 }
-
-
 
 void SwTblField::CalcField( SwTblCalcPara& rCalcPara )
 {
@@ -56,8 +51,6 @@ void SwTblField::CalcField( SwTblCalcPara& rCalcPara )
     ChgValid( !rCalcPara.IsStackOverFlow() ); // is the value again valid?
 }
 
-
-
 SwTblField::SwTblField( SwTblFieldType* pInitType, const String& rFormel,
                         sal_uInt16 nType, sal_uLong nFmt )
     : SwValueField( pInitType, nFmt ), SwTableFormula( rFormel ),
@@ -65,7 +58,6 @@ SwTblField::SwTblField( SwTblFieldType* pInitType, const String& rFormel,
 {
     sExpand = OUString('0');
 }
-
 
 SwField* SwTblField::Copy() const
 {
@@ -77,7 +69,6 @@ SwField* SwTblField::Copy() const
     pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
     return pTmp;
 }
-
 
 String SwTblField::GetFieldName() const
 {
@@ -158,7 +149,6 @@ OUString SwTblField::GetPar2() const
 {
     return SwTableFormula::GetFormula();
 }
-
 
 void SwTblField::SetPar2(const OUString& rStr)
 {

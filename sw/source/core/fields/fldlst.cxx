@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "switerator.hxx"
 #include "editsh.hxx"
 #include "doc.hxx"
@@ -199,6 +198,5 @@ void SwInputFieldList::RemoveUnselectedFlds()
     delete pSrtLst;
     pSrtLst = pNewLst;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

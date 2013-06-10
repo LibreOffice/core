@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <comphelper/string.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <doc.hxx>
@@ -53,7 +52,6 @@ public:
     virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, xub_StrLen nStt = 0,
                             xub_StrLen nEnd = STRING_NOTFOUND ) const;
 };
-
 
 ::sfx2::SvBaseLink::UpdateResult SwIntrnlRefLink::DataChanged( const String& rMimeType,
                                 const uno::Any & rValue )

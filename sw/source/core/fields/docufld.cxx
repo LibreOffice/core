@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <textapi.hxx>
 
 #include <hintids.hxx>
@@ -1043,7 +1042,6 @@ SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const 
     aContent = rValue;
 }
 
-
 template<class T>
 static double lcl_TimeToDouble( const T& rTime )
 {
@@ -1560,8 +1558,6 @@ bool SwHiddenTxtField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-//------------------------------------------------------------------------------
-
 String SwHiddenTxtField::GetColumnName(const String& rName)
 {
     sal_uInt16 nPos = rName.Search(DB_DELIM);
@@ -1574,8 +1570,6 @@ String SwHiddenTxtField::GetColumnName(const String& rName)
     }
     return rName;
 }
-
-//------------------------------------------------------------------------------
 
 String SwHiddenTxtField::GetDBName(const String& rName, SwDoc *pDoc)
 {
@@ -1695,7 +1689,6 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
 {
 }
 
-
 SwPostItField::~SwPostItField()
 {
     if ( m_pTextObject )
@@ -1739,7 +1732,6 @@ String SwPostItField::GetDescription() const
 {
     return SW_RES(STR_NOTE);
 }
-
 
 SwField* SwPostItField::Copy() const
 {
@@ -2056,7 +2048,6 @@ bool SwExtUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     return true;
 }
-//-------------------------------------------------------------------------
 
 // field type for relative page numbers
 

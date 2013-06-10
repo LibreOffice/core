@@ -72,7 +72,6 @@ void SwScriptField::SetPar2( const OUString& rStr )
     sCode = rStr;
 }
 
-
 OUString SwScriptField::GetPar2() const
 {
     return sCode;

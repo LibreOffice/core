@@ -36,7 +36,6 @@ SwChapterFieldType::SwChapterFieldType()
 {
 }
 
-
 SwFieldType* SwChapterFieldType::Copy() const
 {
     return new SwChapterFieldType();
@@ -47,7 +46,6 @@ SwFieldType* SwChapterFieldType::Copy() const
 SwChapterField::SwChapterField(SwChapterFieldType* pTyp, sal_uInt32 nFmt)
     : SwField(pTyp, nFmt), nLevel( 0 )
 {}
-
 
 String SwChapterField::Expand() const
 {
@@ -67,7 +65,6 @@ String SwChapterField::Expand() const
     }
     return sStr;
 }
-
 
 SwField* SwChapterField::Copy() const
 {

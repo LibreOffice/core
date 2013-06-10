@@ -90,7 +90,6 @@ static void lcl_GetLayTree( const SwFrm* pFrm, std::vector<const SwFrm*>& rArr )
     }
 }
 
-
 bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
                     const SwTxtNode& rBehindNd, sal_uInt16 nSttPos )
 {
@@ -243,6 +242,7 @@ const SwTxtNode* SwGetRefField::GetReferencedTxtNode() const
     sal_uInt16 nDummy = USHRT_MAX;
     return SwGetRefFieldType::FindAnchor( pDoc, sSetRefName, nSubType, nSeqNo, &nDummy );
 }
+
 // #i85090#
 String SwGetRefField::GetExpandedTxtOfReferencedTxtNode() const
 {
@@ -256,7 +256,6 @@ String SwGetRefField::Expand() const
 {
     return sTxt;
 }
-
 
 String SwGetRefField::GetFieldName() const
 {
@@ -587,7 +586,6 @@ void SwGetRefField::SetPar1( const OUString& rName )
     sSetRefName = rName;
 }
 
-
 OUString SwGetRefField::GetPar2() const
 {
     return Expand();
@@ -774,12 +772,10 @@ SwGetRefFieldType::SwGetRefFieldType( SwDoc* pDc )
     : SwFieldType( RES_GETREFFLD ), pDoc( pDc )
 {}
 
-
 SwFieldType* SwGetRefFieldType::Copy() const
 {
     return new SwGetRefFieldType( pDoc );
 }
-
 
 void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
@@ -916,7 +912,6 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
 
     return pTxtNd;
 }
-
 
 struct _RefIdsMap
 {
@@ -1077,7 +1072,6 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
         AddId( nSeqNo, nSeqNo );
     }
 }
-
 
 void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
 {

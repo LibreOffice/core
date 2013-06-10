@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <float.h>
 #include <rtl/math.hxx>
 #include <svl/zforlist.hxx>
@@ -114,8 +113,6 @@ std::vector<String>* SwFieldType::pFldNames = 0;
     /* RES_DROPDOWN         */      TYP_DROPDOWN
     };
         // ????? TYP_USRINPFLD,
-
-
 
 const String& SwFieldType::GetTypeStr(sal_uInt16 nTypeId)
 {
@@ -282,6 +279,7 @@ bool  SwField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
     }
     return true;
 }
+
 bool SwField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
 {
     switch( nWhichId )

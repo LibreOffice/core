@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <comphelper/string.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
@@ -180,6 +179,5 @@ sal_Bool SwDDETable::NoDDETable()
 
     return sal_True;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
