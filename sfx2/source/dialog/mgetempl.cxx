@@ -191,7 +191,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
                  pTupel->nFlags != SFXSTYLEBIT_ALL )
             {
                 m_pFilterLb->InsertEntry( pTupel->aName, nIdx );
-                m_pFilterLb->SetEntryData(nIdx, (void*)(long)i);
+                m_pFilterLb->SetEntryData(nIdx, (void*)(sal_IntPtr)i);
 
                 if ( ( pTupel->nFlags & nMask ) == nMask )
                     nStyleFilterIdx = nIdx;
