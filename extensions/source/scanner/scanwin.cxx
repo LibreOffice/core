@@ -87,7 +87,7 @@ class ImpTwain : public ::cppu::WeakImplHelper1< util::XCloseListener >
     Link                                        aNotifyLink;
     DSMENTRYPROC                                pDSM;
     osl::Module*                                pMod;
-    ULONG                                       nCurState;
+    ULONG_PTR                                   nCurState;
     HWND                                        hTwainWnd;
     HHOOK                                       hTwainHook;
     bool                                        mbCloseFrameOnExit;
@@ -98,7 +98,7 @@ class ImpTwain : public ::cppu::WeakImplHelper1< util::XCloseListener >
     void                                        ImplOpenSource();
     bool                                        ImplEnableSource();
     void                                        ImplXfer();
-    void                                        ImplFallback( ULONG nEvent );
+    void                                        ImplFallback( ULONG_PTR nEvent );
     void                                        ImplSendCloseEvent();
     void                                        ImplDeregisterCloseListener();
     void                                        ImplRegisterCloseListener();
@@ -332,7 +332,7 @@ bool ImpTwain::ImplHandleMsg( void* pMsg )
         {
             case MSG_XFERREADY:
             {
-                ULONG nEvent = TWAIN_EVENT_QUIT;
+                ULONG_PTR nEvent = TWAIN_EVENT_QUIT;
 
                 if( 5 == nCurState )
                 {
@@ -392,19 +392,19 @@ void ImpTwain::ImplXfer()
                     if( ( nXRes != -1 ) && ( nYRes != - 1 ) && ( nWidth != - 1 ) && ( nHeight != - 1 ) )
                     {
                         // set resolution of bitmap
-                        BITMAPINFOHEADER*   pBIH = (BITMAPINFOHEADER*) GlobalLock( (HGLOBAL) hDIB );
+                        BITMAPINFOHEADER*   pBIH = (BITMAPINFOHEADER*) GlobalLock( (HGLOBAL) (sal_IntPtr) hDIB );
                         static const double fFactor = 100.0 / 2.54;
 
                         pBIH->biXPelsPerMeter = FRound( fFactor * nXRes );
                         pBIH->biYPelsPerMeter = FRound( fFactor * nYRes );
 
-                        GlobalUnlock( (HGLOBAL) hDIB );
+                        GlobalUnlock( (HGLOBAL) (sal_IntPtr) hDIB );
                     }
 
-                    mrMgr.SetData( (void*)(long) hDIB );
+                    mrMgr.SetData( (void*) (sal_IntPtr) hDIB );
                 }
                 else
-                    GlobalFree( (HGLOBAL) hDIB );
+                    GlobalFree( (HGLOBAL) (sal_IntPtr) hDIB );
 
                 nCurState = 7;
             }
@@ -416,7 +416,7 @@ void ImpTwain::ImplXfer()
     }
 }
 
-void ImpTwain::ImplFallback( ULONG nEvent )
+void ImpTwain::ImplFallback( ULONG_PTR nEvent )
 {
     Application::PostUserEvent( LINK( this, ImpTwain, ImplFallbackHdl ), (void*) nEvent );
 }

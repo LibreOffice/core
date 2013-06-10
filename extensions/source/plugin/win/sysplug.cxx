@@ -389,8 +389,8 @@ int32_t PluginComm_Impl::NPP_Write( NPP instance, NPStream* stream, int32_t offs
     m_eCall = eNPP_Write;
     m_aArgs[0] = (void*)instance;
     m_aArgs[1] = (void*)stream;
-    m_aArgs[2] = (void*)offset;
-    m_aArgs[3] = (void*)len;
+    m_aArgs[2] = (void*)(sal_IntPtr)offset;
+    m_aArgs[3] = (void*)(sal_IntPtr)len;
     m_aArgs[4] = buffer;
     return (NPError)execute();
 }
