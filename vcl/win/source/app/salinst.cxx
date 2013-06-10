@@ -972,7 +972,7 @@ void SalTimer::Start( sal_uLong nMS )
 SalFrame* WinSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, sal_uLong nSalFrameStyle )
 {
     // to switch to Main-Thread
-    return (SalFrame*)ImplSendMessage( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)pSystemParentData->hWnd );
+    return (SalFrame*)(sal_IntPtr)ImplSendMessage( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)pSystemParentData->hWnd );
 }
 
 // -----------------------------------------------------------------------
@@ -985,7 +985,7 @@ SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameSty
         hWndParent = static_cast<WinSalFrame*>(pParent)->mhWnd;
     else
         hWndParent = 0;
-    return (SalFrame*)ImplSendMessage( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)hWndParent );
+    return (SalFrame*)(sal_IntPtr)ImplSendMessage( mhComWnd, SAL_MSG_CREATEFRAME, nSalFrameStyle, (LPARAM)hWndParent );
 }
 
 // -----------------------------------------------------------------------
@@ -1002,7 +1002,7 @@ SalObject* WinSalInstance::CreateObject( SalFrame* pParent,
                                          sal_Bool /*bShow*/ )
 {
     // to switch to Main-Thread
-    return (SalObject*)ImplSendMessage( mhComWnd, SAL_MSG_CREATEOBJECT, 0, (LPARAM)static_cast<WinSalFrame*>(pParent) );
+    return (SalObject*)(sal_IntPtr)ImplSendMessage( mhComWnd, SAL_MSG_CREATEOBJECT, 0, (LPARAM)static_cast<WinSalFrame*>(pParent) );
 }
 
 // -----------------------------------------------------------------------

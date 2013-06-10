@@ -1012,7 +1012,7 @@ SalGraphics* WinSalFrame::GetGraphics()
             mpGraphics2->mbScreen    = TRUE;
         }
 
-        HDC hDC = (HDC)ImplSendMessage( pSalData->mpFirstInstance->mhComWnd,
+        HDC hDC = (HDC)(sal_IntPtr)ImplSendMessage( pSalData->mpFirstInstance->mhComWnd,
                                         SAL_MSG_GETDC,
                                         (WPARAM)mhWnd, 0 );
         if ( hDC )
@@ -1564,7 +1564,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, sal_Bool
     // create a new hwnd with the same styles
     HWND hWndParent = hNewParentWnd;
     // forward to main thread
-    HWND hWnd = (HWND) ImplSendMessage( pSalData->mpFirstInstance->mhComWnd,
+    HWND hWnd = (HWND) (sal_IntPtr) ImplSendMessage( pSalData->mpFirstInstance->mhComWnd,
                                         bAsChild ? SAL_MSG_RECREATECHILDHWND : SAL_MSG_RECREATEHWND,
                                         (WPARAM) hWndParent, (LPARAM)pThis->mhWnd );
 
@@ -1581,7 +1581,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, sal_Bool
             if( bNeedCacheDC )
             {
                 // re-create cached DC
-                HDC hDC = (HDC)ImplSendMessage( pSalData->mpFirstInstance->mhComWnd,
+                HDC hDC = (HDC)(sal_IntPtr)ImplSendMessage( pSalData->mpFirstInstance->mhComWnd,
                                                 SAL_MSG_GETDC,
                                                 (WPARAM) hWnd, 0 );
                 if ( hDC )

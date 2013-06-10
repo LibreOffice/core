@@ -2239,7 +2239,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     aInfo.mnPreferedCharSet = DEFAULT_CHARSET;
     DWORD nCP = GetACP();
     CHARSETINFO aCharSetInfo;
-    if ( TranslateCharsetInfo( (DWORD*)nCP, &aCharSetInfo, TCI_SRCCODEPAGE ) )
+    if ( TranslateCharsetInfo( (DWORD*)(sal_IntPtr)nCP, &aCharSetInfo, TCI_SRCCODEPAGE ) )
         aInfo.mnPreferedCharSet = aCharSetInfo.ciCharset;
 
     LOGFONTW aLogFont;
