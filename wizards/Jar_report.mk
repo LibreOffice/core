@@ -30,6 +30,8 @@ $(eval $(call gb_Jar_use_jars,report,\
 
 $(eval $(call gb_Jar_set_manifest,report,$(SRCDIR)/wizards/com/sun/star/wizards/report/MANIFEST.MF))
 
+$(eval $(call gb_Jar_add_manifest_classpath,report,reportbuilderwizard.jar))
+
 $(eval $(call gb_Jar_set_packageroot,report,com))
 
 $(eval $(call gb_Jar_add_sourcefiles,report,\
