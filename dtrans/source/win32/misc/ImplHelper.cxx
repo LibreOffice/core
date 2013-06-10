@@ -63,7 +63,7 @@ sal_uInt32 SAL_CALL getWinCPFromMimeCharset( const OUString& charset )
         rtl_TextEncoding txtEnc =
             rtl_getTextEncodingFromMimeCharset( osCharset.getStr( ) );
 
-        sal_uInt32 winChrs = rtl_getBestWindowsCharsetFromTextEncoding( txtEnc );
+        sal_uIntPtr winChrs = rtl_getBestWindowsCharsetFromTextEncoding( txtEnc );
 
         CHARSETINFO chrsInf;
         sal_Bool bRet = TranslateCharsetInfo( (DWORD*)winChrs, &chrsInf, TCI_SRCCHARSET ) ?
