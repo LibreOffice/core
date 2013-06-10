@@ -235,8 +235,6 @@ STD_LIB_FILE( gid_File_Lib_Dlgprov, dlgprov )
 
 STD_LIB_FILE( gid_File_Lib_Stringresource, stringresource )
 
-STD_LIB_FILE(gid_File_Lib_Vbaobj, vbaobj)
-
 STD_LIB_FILE(gid_File_Lib_Vbaswobj, vbaswobj)
 
 STD_LIB_FILE(gid_File_Lib_Vbamsforms, msforms)

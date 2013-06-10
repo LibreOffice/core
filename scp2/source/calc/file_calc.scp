@@ -18,30 +18,12 @@
 
 #include "macros.inc"
 
-STD_LIB_FILE( gid_File_Lib_Solver, solver)
-
-STD_LIB_FILE( gid_File_Lib_Analysis, analysis)
-
-STD_LIB_FILE( gid_File_Lib_Pricing, pricing)
-
 File gid_File_Share_Registry_Calc_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Share_Registry;
     Name = "calc.xcd";
 End
-
-STD_LIB_FILE( gid_File_Lib_Calc, calc)
-
-STD_LIB_FILE( gid_File_Lib_Date, date)
-
-STD_LIB_FILE( gid_File_Lib_Sc, sc)
-
-STD_LIB_FILE( gid_File_Lib_Scui, scui)
-
-STD_LIB_FILE( gid_File_Lib_Scfilt, scfilt)
-
-STD_LIB_FILE( gid_File_Lib_Scd, scd)
 
 STD_RES_FILE( gid_File_Res_Analysis, analysis)
 

@@ -18,6 +18,8 @@
 
 #include "macros.inc"
 
+#include "AutoInstall/calc"
+
 Module gid_Module_Prg_Calc
     MOD_NAME_DESC ( MODULE_PRG_CALC );
     ParentID = gid_Module_Prg;
@@ -33,10 +35,9 @@ Module gid_Module_Prg_Calc_Bin
     Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
-    Files = (gid_File_Share_Registry_Calc_Xcd,gid_File_Lib_Calc,gid_File_Lib_Sc,gid_File_Lib_Scui,gid_File_Lib_Scfilt,gid_File_Lib_Scd,gid_File_Extra_Urldesktop_Calc,gid_File_Extra_Urlnew_Calc,gid_File_Extra_Urlstart_Calc,gid_File_Extra_Urltasks_Calc,gid_File_Oo_Office_Filter_Calc_Pkg,
-    gid_File_Lib_Solver,gid_File_Lib_Lpsolve,
-    gid_File_Lib_Vbaobj,
-    gid_File_Tmp_Userinstall_Calc_Inf);
+    Files = (auto_calc_ALL
+    gid_File_Share_Registry_Calc_Xcd,
+    gid_File_Lib_Lpsolve);
 End
 
 Module gid_Module_Prg_Calc_Addins
@@ -45,7 +46,7 @@ Module gid_Module_Prg_Calc_Addins
     ParentID = gid_Module_Prg_Calc_Bin;
     Sortkey = "700";
     Default = YES;
-    Files = (gid_File_Lib_Date,gid_File_Zip_Addin,gid_File_Lib_Rot,gid_File_Lib_Dfa,gid_File_Lib_Analysis,gid_File_Lib_Pricing);
+    Files = (gid_File_Zip_Addin,gid_File_Lib_Rot);
 End
 
 Module gid_Module_Brand_Prg_Calc
