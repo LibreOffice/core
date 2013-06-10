@@ -7143,6 +7143,7 @@ if test "$with_system_clucene" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_CLUCENE=YES
     PKG_CHECK_MODULES(CLUCENE, libclucene-core)
+    CLUCENE_CFLAGS=$(printf '%s' "$CLUCENE_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
     save_CPPFLAGS=$CPPFLAGS
@@ -7254,6 +7255,7 @@ if test  "$test_freetype" = "yes"; then
     # 9.4.3 is 2.1.5; the first FreeType release to provide a freetype2.pc file
     # XXX: replace this with a real minimum required version
     PKG_CHECK_MODULES( FREETYPE, freetype2 >= 9.4.3 )
+    FREETYPE_CFLAGS=$(printf '%s' "$FREETYPE_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     SYSTEM_FREETYPE=YES
 fi
 AC_SUBST(FREETYPE_CFLAGS)
@@ -7299,7 +7301,9 @@ if test "$with_system_libxml" = "yes"; then
         LIBEXSLT_LIBS="-lexslt $LIBXSLT_LIBS"
     else
         PKG_CHECK_MODULES(LIBXSLT, libxslt)
+        LIBXSLT_CFLAGS=$(printf '%s' "$LIBXSLT_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
         PKG_CHECK_MODULES(LIBEXSLT, libexslt)
+        LIBEXSLT_CFLAGS=$(printf '%s' "$LIBEXSLT_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     fi
 
     dnl Check for xsltproc
@@ -7356,6 +7360,7 @@ if test "$with_system_libxml" = "yes"; then
         LIBXML_LIBS="-L$usr/lib -lxml2 -liconv"
     else
         PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.0)
+        LIBXML_CFLAGS=$(printf '%s' "$LIBXML_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     fi
 
     dnl Check for xmllint
@@ -7941,7 +7946,7 @@ if test "$with_system_curl" = "yes"; then
             AC_MSG_ERROR([install the libcurl development package])
         fi
         CURL_LIBS=`$CURLCONFIG --libs`
-        CURL_CFLAGS=`$CURLCONFIG --cflags`
+        CURL_CFLAGS=$("$CURLCONFIG" --cflags | sed -e "s/-I/${ISYSTEM?}/g")
         curl_version=`$CURLCONFIG --version | $SED -e 's/^libcurl //'`
     fi
 
@@ -8224,7 +8229,7 @@ if test "$with_system_npapi_headers" = "yes"; then
         ])
     CFLAGS=$save_CFLAGS
     AC_LANG_POP([C])
-    NPAPI_HEADERS_CFLAGS="`echo $NPAPI_HEADERS_CFLAGS | sed -e \"s/-I/${ISYSTEM}/g\"`"
+    NPAPI_HEADERS_CFLAGS=$(printf '%s' "$NPAPI_HEADERS_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 else
     AC_MSG_RESULT([internal])
         dnl ...but will not be built/used unless ENABLE_NPAPI_FROM_BROWSER or
@@ -8495,6 +8500,7 @@ AC_MSG_CHECKING([whether to use Xrender])
 if test "$WANT_X11" = "yes" -a  "$test_xrender" = "yes"; then
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES(XRENDER, xrender)
+    XRENDER_CFLAGS=$(printf '%s' "$XRENDER_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     AC_CHECK_LIB([Xrender], [XRenderQueryVersion], [:],
       [AC_MSG_ERROR(libXrender not found or functional)], [])
     AC_MSG_CHECKING([which Xrender headers to use])
@@ -8532,6 +8538,7 @@ if test "$WANT_X11" = "yes" -a "$test_randr" = "yes" -a \( "$enable_randr" = "ye
             XRANDR_LIBS="-lXrandr "
             ENABLE_RANDR="TRUE"
         fi
+        XRANDR_CFLAGS=$(printf '%s' "$XRANDR_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     fi
 else
     ENABLE_RANDR=""
@@ -8717,7 +8724,7 @@ if test "$with_system_hunspell" = "yes"; then
     fi
     AC_LANG_POP([C++])
     libo_MINGW_CHECK_DLL([libhunspell-1.3])
-    HUNSPELL_CFLAGS="`echo $HUNSPELL_CFLAGS | sed -e \"s/-I/${ISYSTEM}/g\"`"
+    HUNSPELL_CFLAGS=$(printf '%s' "$HUNSPELL_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HUNSPELL=NO
@@ -8784,6 +8791,7 @@ if test "$with_system_mythes" = "yes"; then
     fi
     AC_LANG_POP([C++])
     libo_MINGW_CHECK_DLL([libmythes-1.2])
+    MYTHES_CFLAGS=$(printf '%s' "$MYTHES_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 else
     AC_MSG_RESULT([internal])
     SYSTEM_MYTHES=NO
@@ -9209,6 +9217,7 @@ if test "x$enable_gtk3" = "xyes"; then
     else
         AC_MSG_ERROR([gtk3 libraries of the correct versions, not found])
     fi
+    GTK3_CFLAGS=$(printf '%s' "$GTK3_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 fi
 AC_SUBST(GTK3_LIBS)
 AC_SUBST(GTK3_CFLAGS)
@@ -9279,6 +9288,7 @@ if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$_os" != "iOS" -a "$enable_g
     ENABLE_GCONF="TRUE"
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES( GCONF, gconf-2.0 gobject-2.0 )
+    GCONF_CFLAGS=$(printf '%s' "$GCONF_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 else
     AC_MSG_RESULT([no])
 fi
@@ -9296,6 +9306,7 @@ if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gnome_vfs" = "yes" -
     ENABLE_GNOMEVFS="TRUE"
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES( GNOMEVFS, gnome-vfs-2.0 >= 2.6.0 )
+    GNOMEVFS_CFLAGS=$(printf '%s' "$GNOMEVFS_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     AC_DEFINE(ENABLE_GNOME_VFS)
 else
     AC_MSG_RESULT([no])
@@ -9320,6 +9331,7 @@ if test "$test_dbus" = "yes"; then
     ENABLE_DBUS="TRUE"
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= 0.70)
+    DBUS_CFLAGS=$(printf '%s' "$DBUS_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 else
     AC_MSG_RESULT([no])
 fi
@@ -9410,8 +9422,10 @@ if test  "$test_gtk" = "yes"; then
 
     if test "$ENABLE_GTK" = "TRUE"; then
         PKG_CHECK_MODULES(GTK, gtk+-2.0 >= 2.4 gdk-pixbuf-xlib-2.0 >= 2.2 ,,AC_MSG_ERROR([requirements to build the gtk-plugin not met. Use --disable-gtk or install the missing packages]))
+        GTK_CFLAGS=$(printf '%s' "$GTK_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
         PKG_CHECK_MODULES(GTHREAD, gthread-2.0,,AC_MSG_ERROR([requirements to build the gtk-plugin not met. Use --disable-gtk or install the missing packages]))
         BUILD_TYPE="$BUILD_TYPE GTK"
+        GTHREAD_CFLAGS=$(printf '%s' "$GTK_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 
     AC_MSG_CHECKING([whether to enable the systray quickstarter])
         if test "x$enable_systray" = "xyes"; then
@@ -9427,6 +9441,7 @@ if test  "$test_gtk" = "yes"; then
         PKG_CHECK_MODULES([GTK_PRINT], [gtk+-unix-print-2.0 >= 2.10.0],
                           [ENABLE_GTK_PRINT="TRUE"],
                           [ENABLE_GTK_PRINT=""])
+        GTK_PRINT_CFLAGS=$(printf '%s' "$GTK_PRINT_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 
         AC_MSG_CHECKING([whether to enable GIO support])
         if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gio" = "yes"; then
@@ -9438,6 +9453,7 @@ if test  "$test_gtk" = "yes"; then
                               [ENABLE_GIO="TRUE"], [ENABLE_GIO=""])
             if test "$ENABLE_GIO" = "TRUE"; then
                 AC_DEFINE(ENABLE_GIO)
+                GIO_CFLAGS=$(printf '%s' "$GIO_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
             fi
         else
             AC_MSG_RESULT([no])
@@ -9471,6 +9487,7 @@ if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_telepathy" = "yes"; 
     AC_DEFINE(ENABLE_TELEPATHY)
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES( TELEPATHY, telepathy-glib >= 0.18.0 glib-2.0 gobject-2.0 gthread-2.0 gio-2.0 gtk+-2.0 >= 2.4 )
+    TELEPATHY_CFLAGS=$(printf '%s' "$TELEPATHY_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 else
     AC_MSG_RESULT([no])
 fi
@@ -9523,7 +9540,7 @@ if test "$build_gstreamer" = "yes"; then
         ENABLE_GSTREAMER="TRUE"
         AC_MSG_RESULT([yes])
         PKG_CHECK_MODULES( GSTREAMER, gstreamer-1.0 gstreamer-plugins-base-1.0 gstreamer-video-1.0 )
-        GSTREAMER_CFLAGS="`echo $GSTREAMER_CFLAGS | sed -e \"s/-I/${ISYSTEM}/g\"`"
+        GSTREAMER_CFLAGS=$(printf '%s' "$GSTREAMER_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     else
         AC_MSG_RESULT([no])
     fi
@@ -9543,7 +9560,7 @@ if test "$build_gstreamer_0_10" = "yes"; then
         PKG_CHECK_MODULES( [GSTREAMER_0_10], [gstreamer-0.10 gstreamer-plugins-base-0.10 gstreamer-interfaces-0.10],, [
             PKG_CHECK_MODULES(  [GSTREAMER_0_10], [gstreamer-0.10 gstreamer-plugins-base-0.10] )
         ])
-        GSTREAMER_0_10_CFLAGS="`echo $GSTREAMER_0_10_CFLAGS | sed -e \"s/-I/${ISYSTEM}/g\"`"
+        GSTREAMER_0_10_CFLAGS=$(printf '%s' "$GSTREAMER_0_10_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     else
         AC_MSG_RESULT([no])
     fi
@@ -9663,6 +9680,7 @@ if test "$_os" != Android -a "$_os" != iOS -a "$ENABLE_PDFIMPORT" != FALSE; then
       CPPFLAGS=$save_CPPFLAGS
       AC_LANG_POP([C++])
       libo_MINGW_CHECK_DLL([libpoppler])
+      POPPLER_CFLAGS=$(printf '%s' "$POPPLER_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
   else
       AC_MSG_RESULT([internal])
       SYSTEM_POPPLER=NO
@@ -10486,6 +10504,7 @@ int main(int argc, char **argv) {
         [
         KDE_HAVE_GLIB=1
         AC_DEFINE(KDE_HAVE_GLIB,1)
+        KDE_GLIB_CFLAGS=$(printf '%s' "$KDE_GLIB_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
         ],
         AC_MSG_WARN([[No Glib found, KDE4 support will not integrate with Qt's Glib event loop support]]))
 fi
@@ -10516,6 +10535,7 @@ AC_MSG_CHECKING([whether to enable evolution 2 support])
 if test "$enable_evolution2" = "yes" -o "$enable_evolution2" = "TRUE"; then
     AC_MSG_RESULT([yes])
     PKG_CHECK_MODULES(GOBJECT, gobject-2.0)
+    GOBJECT_CFLAGS=$(printf '%s' "$GOBJECT_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     ENABLE_EVOAB2="TRUE"
 else
     ENABLE_EVOAB2=""
@@ -10952,6 +10972,7 @@ if test "$test_cairo" = "yes"; then
         AC_MSG_RESULT([yes])
 
         PKG_CHECK_MODULES( CAIRO, cairo >= 1.0.2 )
+        CAIRO_CFLAGS=$(printf '%s' "$CAIRO_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 
         if test "$test_xrender" = "yes"; then
             if test "$with_system_xextensions_headers" != "no"; then
@@ -10999,6 +11020,7 @@ if test "$enable_liblangtag" = "yes" -o \( "$enable_liblangtag" = "" -a $_os != 
         SYSTEM_LIBLANGTAG=YES
         AC_MSG_RESULT([yes])
         PKG_CHECK_MODULES( LIBLANGTAG, liblangtag >= 0.4.0)
+        LIBLANGTAG_CFLAGS=$(printf '%s' "$LIBLANGTAG_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
         libo_MINGW_CHECK_DLL([liblangtag])
     else
         SYSTEM_LIBLANGTAG=NO

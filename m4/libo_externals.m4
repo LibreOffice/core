@@ -16,6 +16,7 @@ if test "$with_system_$1" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_$2=YES
     PKG_CHECK_MODULES([$2], [$3])
+    $2_CFLAGS=$(printf '%s' "${$2_CFLAGS}" | sed -e "s/-I/${ISYSTEM?}/g")
 else
     AC_MSG_RESULT([internal])
     SYSTEM_$2=NO
