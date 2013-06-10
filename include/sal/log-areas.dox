@@ -172,6 +172,7 @@ certain functionality.
 
 @section Math
 
+@li @c starmath
 @li @c starmath.rtf
 @li @c starmath.ooxml - OOXML import/export
 @li @c starmath.wordbase
