@@ -348,6 +348,10 @@ void SwFrm::dumpInfosAsXml( xmlTextWriterPtr writer )
     xmlTextWriterEndElement( writer );
 }
 
+// Hack: somehow conversion from "..." to va_list does
+// bomb on two string litterals in the format.
+static const char* TMP_FORMAT = "%" SAL_PRIuUINTPTR;
+
 void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
 {
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
@@ -365,7 +369,7 @@ void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
     {
         SwTxtFrm *pTxtFrm = ( SwTxtFrm * ) this;
         SwTxtNode *pTxtNode = pTxtFrm->GetTxtNode();
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), "%lu", pTxtNode->GetIndex() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), TMP_FORMAT, pTxtNode->GetIndex() );
     }
     if (IsHeaderFrm() || IsFooterFrm())
     {

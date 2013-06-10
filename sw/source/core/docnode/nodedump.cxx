@@ -93,6 +93,10 @@ void WriterHelper::writeFormatAttribute( const char* attribute, const char* form
     va_end( va );
 }
 
+// Hack: somehow conversion from "..." to va_list does
+// bomb on two string litterals in the format.
+static const char* TMP_FORMAT = "%" SAL_PRIuUINTPTR;
+
 }
 
 void SwDoc::dumpAsXml( xmlTextWriterPtr w )
@@ -117,9 +121,9 @@ void MarkManager::dumpAsXml( xmlTextWriterPtr w )
     {
         pMark_t pMark = *it;
         writer.startElement("fieldmark");
-        writer.writeFormatAttribute("startNode", "%lu", pMark->GetMarkStart().nNode.GetIndex());
+        writer.writeFormatAttribute("startNode", TMP_FORMAT, pMark->GetMarkStart().nNode.GetIndex());
         writer.writeFormatAttribute("startOffset", "%d", pMark->GetMarkStart().nContent.GetIndex());
-        writer.writeFormatAttribute("endNode", "%lu", pMark->GetMarkEnd().nNode.GetIndex());
+        writer.writeFormatAttribute("endNode", TMP_FORMAT, pMark->GetMarkEnd().nNode.GetIndex());
         writer.writeFormatAttribute("endOffset", "%d", pMark->GetMarkEnd().nContent.GetIndex());
         OString txt8 = OUStringToOString(pMark->GetName(), RTL_TEXTENCODING_UTF8);
         writer.writeFormatAttribute("name", "%s", BAD_CAST( txt8.getStr()));
@@ -206,7 +210,7 @@ void SwNode::dumpAsXml( xmlTextWriterPtr w )
     }
     writer.startElement( name );
     writer.writeFormatAttribute( "ptr", "%p", this );
-    writer.writeFormatAttribute( "index", "%lu", GetIndex() );
+    writer.writeFormatAttribute( "index", TMP_FORMAT, GetIndex() );
     writer.endElement();
     if( GetNodeType() == ND_ENDNODE )
         writer.endElement(); // end start node
@@ -239,7 +243,7 @@ void SwStartNode::dumpAsXml( xmlTextWriterPtr w )
     }
     writer.startElement( name );
     writer.writeFormatAttribute( "ptr", "%p", this );
-    writer.writeFormatAttribute( "index", "%lu", GetIndex() );
+    writer.writeFormatAttribute( "index", TMP_FORMAT, GetIndex() );
     // writer.endElement(); - it is a start node, so don't end, will make xml better nested
 }
 
@@ -248,7 +252,7 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
     WriterHelper writer( w );
     writer.startElement( "text" );
     writer.writeFormatAttribute( "ptr", "%p", this );
-    writer.writeFormatAttribute( "index", "%lu", GetIndex() );
+    writer.writeFormatAttribute( "index", TMP_FORMAT, GetIndex() );
     OUString txt = GetTxt();
     for( int i = 0; i < 32; ++i )
         txt = txt.replace( i, '*' );
