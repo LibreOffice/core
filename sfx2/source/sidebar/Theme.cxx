@@ -363,10 +363,7 @@ void Theme::UpdateTheme (void)
             Any(A2S("private:graphicrepository/sfx2/res/closedoc.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_CloseIndicator],
-            Any(
-                mbIsHighContrastMode
-                    ? A2S("private:graphicrepository/res/commandimagelist/lch_decrementlevel.png")
-                    : A2S("private:graphicrepository/res/commandimagelist/lc_decrementlevel.png")));
+            Any(A2S("private:graphicrepository/cmd/lc_decrementlevel.png")));
         setPropertyValue(
             maPropertyIdToNameMap[Image_ToolBoxItemSeparator],
             Any(
