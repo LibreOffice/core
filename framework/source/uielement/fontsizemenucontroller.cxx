@@ -159,8 +159,8 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         if ( m_pHeightArray )
             delete m_pHeightArray;
 
-        const long* pTempAry;
-        const long* pAry = pFontList->GetSizeAry( aFntInfo );
+        const sal_IntPtr* pTempAry;
+        const sal_IntPtr* pAry = pFontList->GetSizeAry( aFntInfo );
         sal_uInt16 nSizeCount = 0;
         while ( pAry[nSizeCount] )
             nSizeCount++;
