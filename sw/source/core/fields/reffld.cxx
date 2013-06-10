@@ -72,13 +72,13 @@ static void lcl_GetLayTree( const SwFrm* pFrm, std::vector<const SwFrm*>& rArr )
 {
     while( pFrm )
     {
-        if( pFrm->IsBodyFrm() )     // soll uns nicht weiter interessieren
+        if( pFrm->IsBodyFrm() ) // unspectacular
             pFrm = pFrm->GetUpper();
         else
         {
             rArr.push_back( pFrm );
 
-            // bei der Seite ist schluss
+            // this is the last page
             if( pFrm->IsPageFrm() )
                 break;
 
@@ -113,7 +113,7 @@ bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
     sal_Bool bVert = sal_False;
     sal_Bool bR2L = sal_False;
 
-    // solange bis ein Frame ungleich ist ?
+    // Loop as long as a frame does not equal?
     while( nRefCnt && nCnt && aRefArr[ nRefCnt ] == aArr[ nCnt ] )
     {
         const SwFrm* pTmpFrm = aArr[ nCnt ];
@@ -122,7 +122,7 @@ bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
         --nCnt, --nRefCnt;
     }
 
-    // sollte einer der Counter ueberlaeufen?
+    // If a counter overflows?
     if( aRefArr[ nRefCnt ] == aArr[ nCnt ] )
     {
         if( nCnt )
@@ -134,14 +134,14 @@ bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
     const SwFrm* pRefFrm = aRefArr[ nRefCnt ];
     const SwFrm* pFldFrm = aArr[ nCnt ];
 
-    // unterschiedliche Frames, dann ueberpruefe deren Y-/X-Position
+    // different frames, check their Y-/X-position
     bool bRefIsLower = false;
     if( ( FRM_COLUMN | FRM_CELL ) & pFldFrm->GetType() ||
         ( FRM_COLUMN | FRM_CELL ) & pRefFrm->GetType() )
     {
         if( pFldFrm->GetType() == pRefFrm->GetType() )
         {
-            // hier ist die X-Pos wichtiger!
+            // here, the X-pos is more important
             if( bVert )
             {
                 if( bR2L )
@@ -169,7 +169,7 @@ bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
             pRefFrm = aRefArr[ nRefCnt - 1 ];
     }
 
-    if( pRefFrm )               // als Flag missbrauchen
+    if( pRefFrm ) // misuse as flag
     {
         if( bVert )
         {
@@ -194,11 +194,7 @@ bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
     return bRefIsLower;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Referenzen holen
- --------------------------------------------------------------------*/
-
-
+/// get references
 SwGetRefField::SwGetRefField( SwGetRefFieldType* pFldType,
                               const String& rSetRef, sal_uInt16 nSubTyp,
                               sal_uInt16 nSeqenceNo, sal_uLong nFmt )
@@ -579,17 +575,13 @@ SwField* SwGetRefField::Copy() const
     return pFld;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: ReferenzName holen
- --------------------------------------------------------------------*/
-
-
+/// get reference name
 const OUString& SwGetRefField::GetPar1() const
 {
     return sSetRefName;
 }
 
-
+/// set reference name
 void SwGetRefField::SetPar1( const OUString& rName )
 {
     sSetRefName = rName;
@@ -791,13 +783,13 @@ SwFieldType* SwGetRefFieldType::Copy() const
 
 void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    // Update auf alle GetReferenz-Felder
+    // update to all GetReference fields
     if( !pNew && !pOld )
     {
         SwIterator<SwFmtFld,SwFieldType> aIter( *this );
         for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
         {
-            // nur die GetRef-Felder Updaten
+            // update only the GetRef fields
             //JP 3.4.2001: Task 71231 - we need the correct language
             SwGetRefField* pGRef = (SwGetRefField*)pFld->GetFld();
             const SwTxtFld* pTFld;
@@ -813,7 +805,7 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
             pGRef->UpdateField( pFld->GetTxtFld() );
         }
     }
-    // weiter an die Text-Felder, diese "Expandieren" den Text
+    // forward to text fields, they "expand" the text
     NotifyClients( pOld, pNew );
 }
 
@@ -821,7 +813,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo,
                                         sal_uInt16* pStt, sal_uInt16* pEnd )
 {
-    OSL_ENSURE( pStt, "warum wird keine StartPos abgefragt?" );
+    OSL_ENSURE( pStt, "Why did noone check the StartPos?" );
 
     SwTxtNode* pTxtNd = 0;
     switch( nSubType )
@@ -1091,9 +1083,8 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
 {
     if( &rDestDoc != pDoc )
     {
-        // dann gibt es im DestDoc RefFelder, also muessen im SourceDoc
-        // alle RefFelder auf einduetige Ids in beiden Docs umgestellt
-        // werden.
+        // then there are RefFields in the DescDox - so all RefFields in the SourceDoc
+        // need to be converted to have unique IDs for both documents
         _RefIdsMap aFntMap( aEmptyStr );
         _RefIdsMaps aFldMap;
 

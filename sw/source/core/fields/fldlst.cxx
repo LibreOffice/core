@@ -30,22 +30,18 @@
 #include "docfld.hxx"
 #include "ndtxt.hxx"
 
-
-/*--------------------------------------------------------------------
-    Beschreibung: Sortieren der Input-Eintraege
- --------------------------------------------------------------------*/
+// sort input values
 
 SwInputFieldList::SwInputFieldList( SwEditShell* pShell, sal_Bool bBuildTmpLst )
     : pSh(pShell)
 {
-    // Hier die Liste aller Eingabefelder sortiert erstellen
+    // create sorted list of all  input fields
     pSrtLst = new _SetGetExpFlds();
 
     const SwFldTypes& rFldTypes = *pSh->GetDoc()->GetFldTypes();
     const sal_uInt16 nSize = rFldTypes.size();
 
-    // Alle Typen abklappern
-
+    // iterate over all types
     for(sal_uInt16 i=0; i < nSize; ++i)
     {
         SwFieldType* pFldType = (SwFieldType*)rFldTypes[ i ];
@@ -58,8 +54,7 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, sal_Bool bBuildTmpLst )
             {
                 const SwTxtFld* pTxtFld = pFld->GetTxtFld();
 
-                //  nur InputFields und interaktive SetExpFlds bearbeiten
-                //  and DropDown fields
+                // only process InputFields, interactive SetExpFlds and DropDown fields
                 if( !pTxtFld || ( RES_SETEXPFLD == nType &&
                     !((SwSetExpField*)pFld->GetFld())->GetInputFlag()))
                     continue;
@@ -88,42 +83,33 @@ SwInputFieldList::~SwInputFieldList()
     delete pSrtLst;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Felder aus der Liste in sortierter Reihenfolge
- --------------------------------------------------------------------*/
-
 sal_uInt16 SwInputFieldList::Count() const
 {
     return pSrtLst->size();
 }
 
-
+// get field from list in sorted order
 SwField* SwInputFieldList::GetField(sal_uInt16 nId)
 {
     const SwTxtFld* pTxtFld = (*pSrtLst)[ nId ]->GetFld();
-    OSL_ENSURE( pTxtFld, "kein TextFld" );
+    OSL_ENSURE( pTxtFld, "no TextFld" );
     return (SwField*)pTxtFld->GetFld().GetFld();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Cursor sichern
- --------------------------------------------------------------------*/
-
+/// save cursor
 void SwInputFieldList::PushCrsr()
 {
     pSh->Push();
     pSh->ClearMark();
 }
 
+/// get cursor
 void SwInputFieldList::PopCrsr()
 {
     pSh->Pop(sal_False);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Position eines Feldes ansteuern
- --------------------------------------------------------------------*/
-
+/// go to position of a field
 void SwInputFieldList::GotoFieldPos(sal_uInt16 nId)
 {
     pSh->StartAllAction();
@@ -131,16 +117,19 @@ void SwInputFieldList::GotoFieldPos(sal_uInt16 nId)
     pSh->EndAllAction();
 }
 
-    // vergleiche TmpLst mit akt Feldern. Alle neue kommen in die SortLst
-    // damit sie geupdatet werden koennen. Returnt die Anzahl.
-    // (Fuer Textbausteine: nur seine Input-Felder aktualisieren)
+/** Compare TmpLst with current fields.
+ *
+ * All new ones are added to SortList so that they can be updated.
+ * For text blocks: update only input fields.
+ *
+ * @return count
+ */
 sal_uInt16 SwInputFieldList::BuildSortLst()
 {
     const SwFldTypes& rFldTypes = *pSh->GetDoc()->GetFldTypes();
     sal_uInt16 nSize = rFldTypes.size();
 
-    // Alle Typen abklappern
-
+    // iterate over all types
     for( sal_uInt16 i = 0; i < nSize; ++i )
     {
         SwFieldType* pFldType = (SwFieldType*)rFldTypes[ i ];
@@ -153,7 +142,7 @@ sal_uInt16 SwInputFieldList::BuildSortLst()
             {
                 const SwTxtFld* pTxtFld = pFld->GetTxtFld();
 
-                //  nur InputFields und interaktive SetExpFlds bearbeiten
+                //  process only InputFields and interactive SetExpFlds
                 if( !pTxtFld || ( RES_SETEXPFLD == nType &&
                     !((SwSetExpField*)pFld->GetFld())->GetInputFlag()))
                     continue;
@@ -161,8 +150,7 @@ sal_uInt16 SwInputFieldList::BuildSortLst()
                 const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
                 if( rTxtNode.GetNodes().IsDocNodes() )
                 {
-                    // nicht in der TempListe vorhanden, also in die SortListe
-                    // aufnehemen
+                    // not in TempList, thus add to SortList
                     std::set<const SwTxtFld*>::iterator it = aTmpLst.find( pTxtFld );
                     if( aTmpLst.end() == it )
                     {
@@ -177,15 +165,12 @@ sal_uInt16 SwInputFieldList::BuildSortLst()
         }
     }
 
-    // die Pointer werden nicht mehr gebraucht
+    // the pointers are not needed anymore
     aTmpLst.clear();
     return pSrtLst->size();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Alle Felder auáerhalb von Selektionen aus Liste entfernen
- --------------------------------------------------------------------*/
-
+/// remove all fields outside of any selections from list
 void SwInputFieldList::RemoveUnselectedFlds()
 {
     _SetGetExpFlds* pNewLst = new _SetGetExpFlds();
@@ -201,7 +186,7 @@ void SwInputFieldList::RemoveUnselectedFlds()
 
             if (aPos >= *PCURCRSR->Start() && aPos < *PCURCRSR->End())
             {
-                // Feld innerhalb der Selektion
+                // field in selection
                 pNewLst->insert( (*pSrtLst)[i] );
                 pSrtLst->erase(i);
             }

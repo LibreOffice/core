@@ -20,19 +20,16 @@
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <doc.hxx>
 #include <frame.hxx>        // SwChapterFieldType::ChangeExpansion()
-#include <pam.hxx>          // fuer GetBodyTxtNode
+#include <pam.hxx>          // for GetBodyTxtNode
 #include <ndtxt.hxx>
 #include <chpfld.hxx>
-#include <expfld.hxx>       // fuer GetBodyTxtNode
+#include <expfld.hxx>       // for GetBodyTxtNode
 #include <unofldmid.h>
 #include <numrule.hxx>
 
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------------------------
-    Beschreibung: SwChapterFieldType
- --------------------------------------------------------------------*/
-
+// SwChapterFieldType
 
 SwChapterFieldType::SwChapterFieldType()
     : SwFieldType( RES_CHAPTERFLD )
@@ -45,11 +42,7 @@ SwFieldType* SwChapterFieldType::Copy() const
     return new SwChapterFieldType();
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung: Kapittelfeld
- --------------------------------------------------------------------*/
-
+// chapter field
 
 SwChapterField::SwChapterField(SwChapterFieldType* pTyp, sal_uInt32 nFmt)
     : SwField(pTyp, nFmt), nLevel( 0 )
@@ -94,7 +87,7 @@ void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
                                       const SwCntntNode* pCntntNode,
                                       sal_Bool bSrchNum )
 {
-    OSL_ENSURE( pFrm, "in welchem Frame stehe ich denn?" );
+    OSL_ENSURE( pFrm, "In which frame am I?" );
     SwDoc* pDoc = (SwDoc*)pCntntNode->GetDoc();
 
     const SwTxtNode* pTxtNode = dynamic_cast<const SwTxtNode*>(pCntntNode);
@@ -175,7 +168,7 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
             } while( true );
         }
 
-        // nur die Nummer besorgen, ohne Pre-/Post-fixstrings
+        // get the number without Pre-/Post-fixstrings
 
         if ( pTxtNd->IsOutline() )
         {

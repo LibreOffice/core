@@ -36,10 +36,6 @@ using namespace ::com::sun::star;
 
 #define DDE_TXT_ENCODING    osl_getThreadTextEncoding()
 
-/*--------------------------------------------------------------------
-    Beschreibung: Globale Variablen
- --------------------------------------------------------------------*/
-
 class SwIntrnlRefLink : public SwBaseLink
 {
     SwDDEFieldType& rFldType;
@@ -72,7 +68,7 @@ public:
             String sStr( (sal_Char*)aSeq.getConstArray(), static_cast<xub_StrLen>(aSeq.getLength()),
                                DDE_TXT_ENCODING  );
 
-            // CR-LF am Ende entfernen, ist ueberfluessig!
+            // remove not needed CR-LF at the end
             xub_StrLen n = sStr.Len();
             while( n && 0 == sStr.GetChar( n-1 ) )
                 --n;
@@ -86,35 +82,34 @@ public:
                 sStr.Erase( n );
 
             rFldType.SetExpansion( sStr );
-            // erst Expansion setzen! (sonst wird das Flag geloescht!)
+            // set Expansion first! (otherwise this flag will be deleted)
             rFldType.SetCRLFDelFlag( bDel );
         }
         break;
 
-    // weitere Formate ...
+    // other formats
     default:
         return SUCCESS;
     }
 
-    OSL_ENSURE( rFldType.GetDoc(), "Kein pDoc" );
+    OSL_ENSURE( rFldType.GetDoc(), "no pDoc" );
 
-    // keine Abhaengigen mehr?
+    // no dependencies left?
     if( rFldType.GetDepends() && !rFldType.IsModifyLocked() && !ChkNoDataFlag() )
     {
         ViewShell* pSh;
         SwEditShell* pESh = rFldType.GetDoc()->GetEditShell( &pSh );
 
-        // dann suchen wir uns mal alle Felder. Wird kein gueltiges
-        // gefunden, dann Disconnecten wir uns!
+        // Search for fields. If no valid found, disconnect.
         SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
         int bCallModify = sal_False;
         rFldType.LockModify();
 
         SwClientIter aIter( rFldType );     // TODO
         SwClient * pLast = aIter.GoStart();
-        if( pLast )     // konnte zum Anfang gesprungen werden ??
+        if( pLast )     // Could we jump to beginning?
             do {
-                // eine DDE-Tabelle oder ein DDE-FeldAttribut im Text
+                // a DDE table or a DDE field attribute in the text
                 if( !pLast->IsA( TYPE( SwFmtFld ) ) ||
                     ((SwFmtFld*)pLast)->GetTxtFld() )
                 {
@@ -151,7 +146,7 @@ void SwIntrnlRefLink::Closed()
 {
     if( rFldType.GetDoc() && !rFldType.GetDoc()->IsInDtor() )
     {
-        // Advise verabschiedet sich, alle Felder in Text umwandeln ?
+        // advise goes, convert all fields into text?
         ViewShell* pSh;
         SwEditShell* pESh = rFldType.GetDoc()->GetEditShell( &pSh );
         if( pESh )
@@ -172,13 +167,13 @@ void SwIntrnlRefLink::Closed()
 
 const SwNode* SwIntrnlRefLink::GetAnchor() const
 {
-    // hier sollte irgend ein Anchor aus dem normalen Nodes-Array reichen
+    // here, any anchor of the normal NodesArray should be sufficient
     const SwNode* pNd = 0;
     SwClientIter aIter( rFldType );     // TODO
     SwClient * pLast = aIter.GoStart();
-    if( pLast )     // konnte zum Anfang gesprungen werden ??
+    if( pLast )     // Could we jump to beginning?
         do {
-            // eine DDE-Tabelle oder ein DDE-FeldAttribut im Text
+            // a DDE table or a DDE field attribute in the text
             if( !pLast->IsA( TYPE( SwFmtFld ) ))
             {
                 SwDepend* pDep = (SwDepend*)pLast;
@@ -199,13 +194,13 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
 sal_Bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                                 xub_StrLen nStt, xub_StrLen nEnd ) const
 {
-    // hier sollte irgend ein Anchor aus dem normalen Nodes-Array reichen
+    // here, any anchor of the normal NodesArray should be sufficient
     SwNodes* pNds = &rFldType.GetDoc()->GetNodes();
     SwClientIter aIter( rFldType );         // TODO
     SwClient * pLast = aIter.GoStart();
-    if( pLast )     // konnte zum Anfang gesprungen werden ??
+    if( pLast )     // Could we jump to beginning?
         do {
-            // eine DDE-Tabelle oder ein DDE-FeldAttribut im Text
+            // a DDE table or a DDE field attribute in the text
             if( !pLast->IsA( TYPE( SwFmtFld ) ))
             {
                 SwDepend* pDep = (SwDepend*)pLast;
@@ -288,7 +283,7 @@ void SwDDEFieldType::SetDoc( SwDoc* pNewDoc )
 
     if( pDoc && refLink.Is() )
     {
-        OSL_ENSURE( !nRefCnt, "wie kommen die Referenzen rueber?" );
+        OSL_ENSURE( !nRefCnt, "How do we get the references?" );
         pDoc->GetLinkManager().Remove( refLink );
     }
 
@@ -406,24 +401,19 @@ SwField* SwDDEField::Copy() const
     return new SwDDEField((SwDDEFieldType*)GetTyp());
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Parameter des Typen erfragen
-                  Name
- --------------------------------------------------------------------*/
+/// get field type name
 const OUString& SwDDEField::GetPar1() const
 {
     return ((const SwDDEFieldType*)GetTyp())->GetName();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Parameter des Typen erfragen
-                  Commando
- --------------------------------------------------------------------*/
+/// get field type command
 OUString SwDDEField::GetPar2() const
 {
     return ((const SwDDEFieldType*)GetTyp())->GetCmd();
 }
 
+/// set field type command
 void SwDDEField::SetPar2(const OUString& rStr)
 {
     ((SwDDEFieldType*)GetTyp())->SetCmd(rStr);

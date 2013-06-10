@@ -50,7 +50,7 @@ using namespace nsSwDocInfoSubType;
 static sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFmt,
                                 const SvNumberFormatter& rFormatter )
 {
-    if( nLng == LANGUAGE_NONE ) // wegen Bug #60010
+    if( nLng == LANGUAGE_NONE ) // Bug #60010
         nLng = LANGUAGE_SYSTEM;
     else if( nLng == ::GetAppLanguage() )
         switch( rFormatter.GetIndexTableOffset( nFmt ))
@@ -66,11 +66,9 @@ static sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFmt,
     return nLng;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Globals
- --------------------------------------------------------------------*/
-// Array der Feldname
+// Globals
 
+/// field names
 std::vector<String>* SwFieldType::pFldNames = 0;
 
     sal_uInt16 aTypeTab[] = {
@@ -80,19 +78,19 @@ std::vector<String>* SwFieldType::pFldNames = 0;
     /* RES_DBNAMEFLD        */      TYP_DBNAMEFLD,
     /* RES_DATEFLD          */      TYP_DATEFLD,
     /* RES_TIMEFLD          */      TYP_TIMEFLD,
-    /* RES_PAGENUMBERFLD    */      TYP_PAGENUMBERFLD,  // dynamisch
+    /* RES_PAGENUMBERFLD    */      TYP_PAGENUMBERFLD,  // dynamic
     /* RES_AUTHORFLD        */      TYP_AUTHORFLD,
     /* RES_CHAPTERFLD       */      TYP_CHAPTERFLD,
     /* RES_DOCSTATFLD       */      TYP_DOCSTATFLD,
-    /* RES_GETEXPFLD        */      TYP_GETFLD,         // dynamisch
-    /* RES_SETEXPFLD        */      TYP_SETFLD,         // dynamisch
+    /* RES_GETEXPFLD        */      TYP_GETFLD,         // dynamic
+    /* RES_SETEXPFLD        */      TYP_SETFLD,         // dynamic
     /* RES_GETREFFLD        */      TYP_GETREFFLD,
     /* RES_HIDDENTXTFLD     */      TYP_HIDDENTXTFLD,
     /* RES_POSTITFLD        */      TYP_POSTITFLD,
     /* RES_FIXDATEFLD       */      TYP_FIXDATEFLD,
     /* RES_FIXTIMEFLD       */      TYP_FIXTIMEFLD,
-    /* RES_REGFLD           */      0,                  // alt
-    /* RES_VARREGFLD        */      0,                  // alt
+    /* RES_REGFLD           */      0,                  // old (no change since 2000)
+    /* RES_VARREGFLD        */      0,                  // old (no change since 2000)
     /* RES_SETREFFLD        */      TYP_SETREFFLD,
     /* RES_INPUTFLD         */      TYP_INPUTFLD,
     /* RES_MACROFLD         */      TYP_MACROFLD,
@@ -110,7 +108,7 @@ std::vector<String>* SwFieldType::pFldNames = 0;
     /* RES_INTERNETFLD      */      TYP_INTERNETFLD,
     /* RES_JUMPEDITFLD      */      TYP_JUMPEDITFLD,
     /* RES_SCRIPTFLD        */      TYP_SCRIPTFLD,
-    /* RES_DATETIMEFLD      */      0,                  // dynamisch
+    /* RES_DATETIMEFLD      */      0,                  // dynamic
     /* RES_AUTHORITY        */      TYP_AUTHORITY,
     /* RES_COMBINED_CHARS   */      TYP_COMBINED_CHARS,
     /* RES_DROPDOWN         */      TYP_DROPDOWN
@@ -130,11 +128,7 @@ const String& SwFieldType::GetTypeStr(sal_uInt16 nTypeId)
         return aEmptyStr;
 }
 
-/*---------------------------------------------------
- Jedes Feld referenziert einen Feldtypen, der fuer
- jedes Dokument einmalig ist.
- --------------------------------------------------*/
-
+// each field refences a field type that is unique for each document
 SwFieldType::SwFieldType( sal_uInt16 nWhichId )
     : SwModify(0),
     nWhich( nWhichId )
@@ -155,12 +149,8 @@ bool SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
     return false;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Basisklasse aller Felder
-                    Felder referenzieren einen Feldtyp
-                    Felder sind n-mal vorhanden, Feldtypen nur einmal
- --------------------------------------------------------------------*/
-
+// Base class for all fields.
+// A field (multiple can exist) references a field type (can exists only once)
 SwField::SwField(SwFieldType* pTyp, sal_uInt32 nFmt, sal_uInt16 nLng) :
     nLang(nLng),
     bIsAutomaticLanguage(sal_True),
@@ -174,9 +164,7 @@ SwField::~SwField()
 {
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Statt Umweg ueber den Typ
- --------------------------------------------------------------------*/
+// instead of indirectly via the type
 
 #ifdef DBG_UTIL
 sal_uInt16 SwField::Which() const
@@ -231,11 +219,7 @@ sal_uInt16 SwField::GetTypeId() const
     return nRet;
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung: liefert den Namen oder den Inhalt
- --------------------------------------------------------------------*/
-
+/// get name or content
 String SwField::GetFieldName() const
 {
     sal_uInt16 nTypeId = GetTypeId();
@@ -252,10 +236,6 @@ String SwField::GetFieldName() const
     }
     return sRet;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung: Parameter setzen auslesen
- --------------------------------------------------------------------*/
 
 const OUString& SwField::GetPar1() const
 {
@@ -319,24 +299,24 @@ bool SwField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
     return true;
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:   neuen Typ setzen
-                    (wird fuer das Kopieren zwischen Dokumenten benutzt)
-                    muss immer vom gleichen Typ sein.
- --------------------------------------------------------------------*/
-
+/** Set a new type
+ *
+ * This is needed/used for copying between documents.
+ * Needs to be always of the same type.
+ * @param pNewType The new type.
+ * @return The old type.
+ */
 SwFieldType* SwField::ChgTyp( SwFieldType* pNewType )
 {
     OSL_ENSURE( pNewType && pNewType->Which() == pType->Which(),
-            "kein Typ oder ungleiche Typen" );
+            "no or different type" );
 
     SwFieldType* pOld = pType;
     pType = pNewType;
     return pOld;
 }
 
-    // hat das Feld eine Action auf dem ClickHandler ? (z.B. INetFelder,..)
+/// Does the field have an action on a ClickHandler? (E.g. INetFields,...)
 sal_Bool SwField::HasClickHdl() const
 {
     sal_Bool bRet = sal_False;
@@ -416,25 +396,18 @@ SwField * SwField::CopyField() const
     return pNew;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Numerierung expandieren
- --------------------------------------------------------------------*/
-
+/// expand numbering
 String FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat)
 {
     if(SVX_NUM_PAGEDESC == nFormat)
         return  OUString::number( nNum );
     SvxNumberType aNumber;
 
-    OSL_ENSURE(nFormat != SVX_NUM_NUMBER_NONE, "Falsches Nummern-Format" );
+    OSL_ENSURE(nFormat != SVX_NUM_NUMBER_NONE, "wrong number format" );
 
     aNumber.SetNumberingType((sal_Int16)nFormat);
     return aNumber.GetNumStr(nNum);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung: CTOR SwValueFieldType
- --------------------------------------------------------------------*/
 
 SwValueFieldType::SwValueFieldType( SwDoc* pDocPtr, sal_uInt16 nWhichId )
     : SwFieldType(nWhichId),
@@ -450,21 +423,18 @@ SwValueFieldType::SwValueFieldType( const SwValueFieldType& rTyp )
 {
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Wert formatiert als String zurueckgeben
- --------------------------------------------------------------------*/
-
+/// return value formatted as string
 String SwValueFieldType::ExpandValue( const double& rVal,
                                         sal_uInt32 nFmt, sal_uInt16 nLng) const
 {
-    if (rVal >= DBL_MAX)        // FehlerString fuer Calculator
+    if (rVal >= DBL_MAX) // error string for calculator
         return ViewShell::GetShellRes()->aCalc_Error;
 
     OUString sExpand;
     SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
     Color* pCol = 0;
 
-    // wegen Bug #60010
+    // Bug #60010
     sal_uInt16 nFmtLng = ::lcl_GetLanguageOfFormat( nLng, nFmt, *pFormatter );
 
     if( nFmt < SV_COUNTRY_LANGUAGE_OFFSET && LANGUAGE_SYSTEM != nFmtLng )
@@ -481,7 +451,7 @@ String SwValueFieldType::ExpandValue( const double& rVal,
 
             if (nNewFormat == nFmt)
             {
-                // Warscheinlich benutzerdefiniertes Format
+                // probably user-defined format
                 OUString sFmt(pEntry->GetFormatstring());
 
                 pFormatter->PutandConvertEntry(sFmt, nDummy, nType, nFmt,
@@ -490,7 +460,7 @@ String SwValueFieldType::ExpandValue( const double& rVal,
             else
                 nFmt = nNewFormat;
         }
-        OSL_ENSURE(pEntry, "Unbekanntes Zahlenformat!");
+        OSL_ENSURE(pEntry, "unknown number format!");
     }
 
     if( pFormatter->IsTextFormat( nFmt ) )
@@ -522,18 +492,14 @@ void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
 {
     SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
 
-    // wegen Bug #60010
-    if( nLng == LANGUAGE_NONE ) // wegen Bug #60010
+    // Bug #60010
+    if( nLng == LANGUAGE_NONE )
         nLng = LANGUAGE_SYSTEM;
 
-    pFormatter->ChangeIntl( nLng ); // Separator in der richtigen Sprache besorgen
+    pFormatter->ChangeIntl( nLng ); // get separator in the correct language
     rValue = ::rtl::math::doubleToUString( rVal, rtl_math_StringFormat_F, 12,
                                     pFormatter->GetDecSep(), true );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung: CTOR SwValueField
- --------------------------------------------------------------------*/
 
 SwValueField::SwValueField( SwValueFieldType* pFldType, sal_uInt32 nFmt,
                             sal_uInt16 nLng, const double fVal )
@@ -551,12 +517,14 @@ SwValueField::SwValueField( const SwValueField& rFld )
 SwValueField::~SwValueField()
 {
 }
-/*--------------------------------------------------------------------
-    Beschreibung:   neuen Typ setzen
-                    (wird fuer das Kopieren zwischen Dokumenten benutzt)
-                    muss immer vom gleichen Typ sein.
- --------------------------------------------------------------------*/
 
+/** Set a new type
+ *
+ * This is needed/used for copying between documents.
+ * Needs to be always of the same type.
+ * @param pNewType The new type.
+ * @return The old type.
+ */
 SwFieldType* SwValueField::ChgTyp( SwFieldType* pNewType )
 {
     SwDoc* pNewDoc = ((SwValueFieldType *)pNewType)->GetDoc();
@@ -574,10 +542,7 @@ SwFieldType* SwValueField::ChgTyp( SwFieldType* pNewType )
     return SwField::ChgTyp(pNewType);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Format in Office-Sprache ermitteln
- --------------------------------------------------------------------*/
-
+/// get format in office language
 sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFmt)
 {
     const SvNumberformat* pEntry = pFormatter->GetEntry(nFmt);
@@ -590,7 +555,7 @@ sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt
 
         if (nNewFormat == nFmt)
         {
-            // Warscheinlich benutzerdefiniertes Format
+            // probably user-defined format
             short nType = NUMBERFORMAT_DEFINED;
             sal_Int32 nDummy;
 
@@ -608,17 +573,14 @@ sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt
     return nFmt;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Sprache im Format anpassen
- --------------------------------------------------------------------*/
-
+/// set language of the format
 void SwValueField::SetLanguage( sal_uInt16 nLng )
 {
     if( IsAutomaticLanguage() &&
             ((SwValueFieldType *)GetTyp())->UseFormat() &&
         GetFormat() != SAL_MAX_UINT32 )
     {
-        // wegen Bug #60010
+        // Bug #60010
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
         sal_uInt16 nFmtLng = ::lcl_GetLanguageOfFormat( nLng, GetFormat(),
                                                     *pFormatter );
@@ -636,7 +598,7 @@ void SwValueField::SetLanguage( sal_uInt16 nLng )
 
                 if( nNewFormat == GetFormat() )
                 {
-                    // Warscheinlich benutzerdefiniertes Format
+                    // probably user-defined format
                     short nType = NUMBERFORMAT_DEFINED;
                     sal_Int32 nDummy;
                     OUString sFmt( pEntry->GetFormatstring() );
@@ -647,7 +609,7 @@ void SwValueField::SetLanguage( sal_uInt16 nLng )
                 }
                 SetFormat( nNewFormat );
             }
-            OSL_ENSURE(pEntry, "Unbekanntes Zahlenformat!");
+            OSL_ENSURE(pEntry, "unknown number format!");
         }
     }
 
@@ -663,10 +625,6 @@ void SwValueField::SetValue( const double& rVal )
 {
     fValue = rVal;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung: SwFormulaField
- --------------------------------------------------------------------*/
 
 SwFormulaField::SwFormulaField( SwValueFieldType* pFldType, sal_uInt32 nFmt, const double fVal)
     : SwValueField(pFldType, nFmt, LANGUAGE_SYSTEM, fVal)

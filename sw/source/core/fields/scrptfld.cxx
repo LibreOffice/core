@@ -23,9 +23,6 @@
 #include <tools/resid.hxx>
 
 using namespace ::com::sun::star;
-/*--------------------------------------------------------------------
-    Beschreibung: ScriptField
- --------------------------------------------------------------------*/
 
 SwScriptFieldType::SwScriptFieldType( SwDoc* pD )
     : SwFieldType( RES_SCRIPTFLD ), pDoc( pD )
@@ -35,11 +32,6 @@ SwFieldType* SwScriptFieldType::Copy() const
 {
     return new SwScriptFieldType( pDoc );
 }
-
-
-/*--------------------------------------------------------------------
-    Beschreibung: SwScriptField
- --------------------------------------------------------------------*/
 
 SwScriptField::SwScriptField( SwScriptFieldType* pInitType,
                                 const String& rType, const String& rCode,
@@ -63,10 +55,7 @@ SwField* SwScriptField::Copy() const
     return new SwScriptField( (SwScriptFieldType*)GetTyp(), sType, sCode, bCodeURL );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Type setzen
- --------------------------------------------------------------------*/
-
+/// set type
 void SwScriptField::SetPar1( const OUString& rStr )
 {
     sType = rStr;
@@ -77,10 +66,7 @@ const OUString& SwScriptField::GetPar1() const
     return sType;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Code setzen
- --------------------------------------------------------------------*/
-
+/// set code
 void SwScriptField::SetPar2( const OUString& rStr )
 {
     sCode = rStr;

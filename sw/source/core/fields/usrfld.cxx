@@ -35,9 +35,7 @@
 
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------------------------
-    Beschreibung: Benutzerfelder
- --------------------------------------------------------------------*/
+// Userfields
 
 SwUserField::SwUserField(SwUserFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFmt)
     : SwValueField(pTyp, nFmt),
@@ -81,19 +79,13 @@ void SwUserField::SetValue( const double& rVal )
     ((SwUserFieldType*)GetTyp())->SetValue(rVal);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Name
- --------------------------------------------------------------------*/
-
+/// Get name
 const OUString& SwUserField::GetPar1() const
 {
     return ((const SwUserFieldType*)GetTyp())->GetName();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Content
- --------------------------------------------------------------------*/
-
+/// Get content
 OUString SwUserField::GetPar2() const
 {
     return ((SwUserFieldType*)GetTyp())->GetContent(GetFormat());
@@ -169,10 +161,6 @@ bool SwUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Benutzerfeldtypen
- --------------------------------------------------------------------*/
-
 SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const String& aNam )
     : SwValueFieldType( pDocPtr, RES_USERFLD ),
     nValue( 0 ),
@@ -182,7 +170,7 @@ SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const String& aNam )
     aName = aNam;
 
     if (nType & nsSwGetSetExpType::GSE_STRING)
-        EnableFormat(sal_False);    // Numberformatter nicht einsetzen
+        EnableFormat(sal_False);    // Do not use a Numberformatter
 }
 
 String SwUserFieldType::Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 nLng)
@@ -194,7 +182,7 @@ String SwUserFieldType::Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 
         aStr = ExpandValue(nValue, nFmt, nLng);
     }
     else
-        EnableFormat(sal_False);    // Numberformatter nicht einsetzen
+        EnableFormat(sal_False);    // Do not use a Numberformatter
 
     return aStr;
 }
@@ -222,7 +210,7 @@ void SwUserFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         ChgValid( sal_False );
 
     NotifyClients( pOld, pNew );
-    // und ggfs. am UserFeld haengende InputFelder updaten!
+    // update input fields that might be connected to the user field
     GetDoc()->GetSysFldType( RES_INPUTFLD )->UpdateFlds();
 }
 
@@ -324,10 +312,9 @@ bool SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             rAny >>= fVal;
             nValue = fVal;
 
-            // Folgende Zeile ist eigentlich falsch, da die Sprache unbekannt ist
-            // (haengt am Feld) und aContent daher auch eigentlich ans Feld gehoeren
-            // muesste. Jedes Feld kann eine andere Sprache, aber den gleichen Inhalt
-            // haben, nur die Formatierung ist unterschiedlich.
+            // The following line is in fact wrong, since the language is unknown (is part of the
+            // field) and, thus, aContent should also belong to the field. Each field can have a
+            // differnt language, but the same content with just different formatting.
             DoubleToString(aContent, nValue, (sal_uInt16)LANGUAGE_SYSTEM);
         }
         break;

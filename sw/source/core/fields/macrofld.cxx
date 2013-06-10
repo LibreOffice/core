@@ -27,12 +27,7 @@
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
 
-
 using namespace ::com::sun::star;
-
-/*--------------------------------------------------------------------
-    Beschreibung: MacroFeldtypen
- --------------------------------------------------------------------*/
 
 SwMacroFieldType::SwMacroFieldType(SwDoc* pDocument)
     : SwFieldType( RES_MACROFLD ),
@@ -46,9 +41,6 @@ SwFieldType* SwMacroFieldType::Copy() const
     return pType;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Das Macrofeld selbst
- --------------------------------------------------------------------*/
 
 SwMacroField::SwMacroField(SwMacroFieldType* pInitType,
                            const String& rLibAndName, const String& rTxt) :
@@ -58,7 +50,7 @@ SwMacroField::SwMacroField(SwMacroFieldType* pInitType,
 }
 
 String SwMacroField::Expand() const
-{   // Button malen anstatt von
+{
     return aText ;
 }
 
@@ -93,7 +85,7 @@ String SwMacroField::GetLibName() const
         return aMacro.copy(0, nPos);
     }
 
-    OSL_FAIL("Kein Macroname vorhanden");
+    OSL_FAIL("No MacroName");
     return aEmptyStr;
 }
 
@@ -116,7 +108,7 @@ String SwMacroField::GetMacroName() const
         }
     }
 
-    OSL_FAIL("Kein Macroname vorhanden");
+    OSL_FAIL("No MacroName");
     return aEmptyStr;
 }
 
@@ -132,30 +124,26 @@ SvxMacro SwMacroField::GetSvxMacro() const
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: LibName und MacroName
- --------------------------------------------------------------------*/
-
+/// LibName and MacroName
 void SwMacroField::SetPar1(const OUString& rStr)
 {
     aMacro = rStr;
     bIsScriptURL = isScriptURL(aMacro);
 }
 
+/// Get macro
 const OUString& SwMacroField::GetPar1() const
 {
     return aMacro;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Macrotext
- --------------------------------------------------------------------*/
-
+/// set macro text
 void SwMacroField::SetPar2(const OUString& rStr)
 {
     aText = rStr;
 }
 
+/// get macro text
 OUString SwMacroField::GetPar2() const
 {
     return aText;

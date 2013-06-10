@@ -100,9 +100,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace nsSwDocInfoSubType;
 
-/*--------------------------------------------------------------------
-    Beschreibung: SwPageNumberFieldType
- --------------------------------------------------------------------*/
+// SwPageNumberFieldType
 
 SwPageNumberFieldType::SwPageNumberFieldType()
     : SwFieldType( RES_PAGENUMBERFLD ),
@@ -137,10 +135,6 @@ SwFieldType* SwPageNumberFieldType::Copy() const
     return pTmp;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Verschiedene Expandierung
- --------------------------------------------------------------------*/
-
 void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
                                             sal_Bool bVirt,
                                             const sal_Int16* pNumFmt )
@@ -151,8 +145,7 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
     bVirtuell = false;
     if( bVirt )
     {
-        // dann muss das Flag ueberprueft werden, denn das Layout setzt
-        // es NIE zurueck
+        // check the flag since the layout NEVER sets it back
         const SfxItemPool &rPool = pDoc->GetAttrPool();
         const SwFmtPageDesc *pDesc;
         sal_uInt32 nMaxItems = rPool.GetItemCount2( RES_PAGEDESC );
@@ -176,9 +169,7 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: SwPageNumberField
- --------------------------------------------------------------------*/
+// SwPageNumberField
 
 SwPageNumberField::SwPageNumberField(SwPageNumberFieldType* pTyp,
           sal_uInt16 nSub, sal_uInt32 nFmt, short nOff,
@@ -325,9 +316,7 @@ bool SwPageNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     return bRet;
 }
-/*--------------------------------------------------------------------
-    Beschreibung: SwAuthorFieldType
- --------------------------------------------------------------------*/
+// SwAuthorFieldType
 
 SwAuthorFieldType::SwAuthorFieldType()
     : SwFieldType( RES_AUTHORFLD )
@@ -350,9 +339,7 @@ SwFieldType* SwAuthorFieldType::Copy() const
     return new SwAuthorFieldType;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: SwAuthorField
- --------------------------------------------------------------------*/
+// SwAuthorField
 
 SwAuthorField::SwAuthorField(SwAuthorFieldType* pTyp, sal_uInt32 nFmt)
     : SwField(pTyp, nFmt)
@@ -427,9 +414,7 @@ bool SwAuthorField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: SwFileNameFieldType
- --------------------------------------------------------------------*/
+// SwFileNameFieldType
 
 SwFileNameFieldType::SwFileNameFieldType(SwDoc *pDocument)
     : SwFieldType( RES_FILENAMEFLD )
@@ -491,9 +476,8 @@ SwFieldType* SwFileNameFieldType::Copy() const
     SwFieldType *pTmp = new SwFileNameFieldType(pDoc);
     return pTmp;
 }
-/*--------------------------------------------------------------------
-    Beschreibung: SwFileNameField
- --------------------------------------------------------------------*/
+
+// SwFileNameField
 
 SwFileNameField::SwFileNameField(SwFileNameFieldType* pTyp, sal_uInt32 nFmt)
     : SwField(pTyp, nFmt)
@@ -605,9 +589,8 @@ bool SwFileNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     return true;
 }
-/*--------------------------------------------------------------------
-    Beschreibung: SwTemplNameFieldType
- --------------------------------------------------------------------*/
+
+// SwTemplNameFieldType
 
 SwTemplNameFieldType::SwTemplNameFieldType(SwDoc *pDocument)
     : SwFieldType( RES_TEMPLNAMEFLD )
@@ -669,9 +652,7 @@ SwFieldType* SwTemplNameFieldType::Copy() const
     SwFieldType *pTmp = new SwTemplNameFieldType(pDoc);
     return pTmp;
 }
-/*--------------------------------------------------------------------
-    Beschreibung: SwTemplNameField
- --------------------------------------------------------------------*/
+// SwTemplNameField
 
 SwTemplNameField::SwTemplNameField(SwTemplNameFieldType* pTyp, sal_uInt32 nFmt)
     : SwField(pTyp, nFmt)
@@ -752,9 +733,8 @@ bool SwTemplNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     return true;
 }
-/*--------------------------------------------------------------------
-    Beschreibung: SwDocStatFieldType
- --------------------------------------------------------------------*/
+
+// SwDocStatFieldType
 
 SwDocStatFieldType::SwDocStatFieldType(SwDoc* pDocument)
     : SwFieldType( RES_DOCSTATFLD ), nNumberingType( SVX_NUM_ARABIC )
@@ -799,12 +779,11 @@ SwFieldType* SwDocStatFieldType::Copy() const
     return pTmp;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: SwDocStatFieldType
-                  Aus historischen Gruenden steht in nFormat der
-                  SubType
- --------------------------------------------------------------------*/
-
+/**
+ * @param pTyp
+ * @param nSub SubType
+ * @param nFmt
+ */
 SwDocStatField::SwDocStatField(SwDocStatFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFmt)
     : SwField(pTyp, nFmt),
     nSubType(nSub)
@@ -877,9 +856,7 @@ bool SwDocStatField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: DokumentinfoFields
- --------------------------------------------------------------------*/
+// Document info field type
 
 SwDocInfoFieldType::SwDocInfoFieldType(SwDoc* pDc)
     : SwValueFieldType( pDc, RES_DOCINFOFLD )
@@ -1049,6 +1026,8 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
 
     return aStr;
 }
+
+// document info field
 
 SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const String& rName, sal_uInt32 nFmt) :
     SwValueField(pTyp, nFmt), nSubType(nSub)
@@ -1305,9 +1284,7 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: SwHiddenTxtFieldType by JP
- --------------------------------------------------------------------*/
+// SwHiddenTxtFieldType
 
 SwHiddenTxtFieldType::SwHiddenTxtFieldType( sal_Bool bSetHidden )
     : SwFieldType( RES_HIDDENTXTFLD ), bHidden( bSetHidden )
@@ -1324,7 +1301,7 @@ void SwHiddenTxtFieldType::SetHiddenFlag( sal_Bool bSetHidden )
     if( bHidden != bSetHidden )
     {
         bHidden = bSetHidden;
-        UpdateFlds();       // alle HiddenText benachrichtigen
+        UpdateFlds();       // notify all HiddenTexts
     }
 }
 
@@ -1369,8 +1346,8 @@ SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
 
 String SwHiddenTxtField::Expand() const
 {
-    // Type: !Hidden  -> immer anzeigen
-    //        Hide    -> Werte die Bedingung aus
+    // Type: !Hidden  -> show always
+    //        Hide    -> evaluate condition
 
     if( TYP_CONDTXTFLD == nSubType )
     {
@@ -1387,10 +1364,7 @@ String SwHiddenTxtField::Expand() const
     return aFALSETxt;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Aktuellen Field-Value holen und cachen
- --------------------------------------------------------------------*/
-
+/// get current field value and cache it
 void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
 {
     OSL_ENSURE(pDoc, "Wo ist das Dokument Seniore");
@@ -1407,13 +1381,9 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
         else
             sTmpName = aFALSETxt;
 
-// Datenbankausdruecke muessen sich von
-//              einfachem Text unterscheiden. also wird der einfache Text
-//              bevorzugt in Anfuehrungszeichen gesetzt.
-//              Sind diese vorhanden werden umschliessende entfernt.
-//              Wenn nicht, dann wird auf die Tauglichkeit als Datenbankname
-//              geprueft. Nur wenn zwei oder mehr Punkte vorhanden sind und kein
-//              Anfuehrungszeichen enthalten ist, gehen wir von einer DB aus.
+        // Database expressions need to be differnt from normal text. Therefore, normal text is set
+        // in quotes. If the latter exist they will be removed. If not, check if potential DB name.
+        // Only if there are two or more dots and no quotes, we assume a database.
         if(sTmpName.Len() > 1 && sTmpName.GetChar(0) == '\"' &&
             sTmpName.GetChar((sTmpName.Len() - 1))== '\"')
         {
@@ -1425,7 +1395,7 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
         {
             ::ReplacePoint(sTmpName);
             if(sTmpName.GetChar(0) == '[' && sTmpName.GetChar(sTmpName.Len()-1) == ']')
-            {   // Eckige Klammern entfernen
+            {   // remove brackets
                 sTmpName.Erase(0, 1);
                 sTmpName.Erase(sTmpName.Len()-1, 1);
             }
@@ -1482,11 +1452,7 @@ SwField* SwHiddenTxtField::Copy() const
     return pFld;
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung: Bedingung setzen
- --------------------------------------------------------------------*/
-
+/// set condition
 void SwHiddenTxtField::SetPar1(const OUString& rStr)
 {
     aCond = rStr;
@@ -1498,10 +1464,7 @@ const OUString& SwHiddenTxtField::GetPar1() const
     return aCond;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: True/False Text
- --------------------------------------------------------------------*/
-
+/// set True/False text
 void SwHiddenTxtField::SetPar2(const OUString& rStr)
 {
     if (nSubType == TYP_CONDTXTFLD)
@@ -1519,6 +1482,7 @@ void SwHiddenTxtField::SetPar2(const OUString& rStr)
         aTRUETxt = rStr;
 }
 
+/// get True/False text
 OUString SwHiddenTxtField::GetPar2() const
 {
     String aRet(aTRUETxt);
@@ -1630,9 +1594,7 @@ String SwHiddenTxtField::GetDBName(const String& rName, SwDoc *pDoc)
     return sRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Der Feldtyp fuer Zeilenhoehe 0
- --------------------------------------------------------------------*/
+// field type for line height 0
 
 SwHiddenParaFieldType::SwHiddenParaFieldType()
     : SwFieldType( RES_HIDDENPARAFLD )
@@ -1645,9 +1607,7 @@ SwFieldType* SwHiddenParaFieldType::Copy() const
     return pTyp;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Das Feld Zeilenhoehe 0
- --------------------------------------------------------------------*/
+// field for line height 0
 
 SwHiddenParaField::SwHiddenParaField(SwHiddenParaFieldType* pTyp, const String& rStr)
     : SwField(pTyp), aCond(rStr)
@@ -1705,10 +1665,7 @@ bool SwHiddenParaField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Bedingung setzen
- --------------------------------------------------------------------*/
-
+/// set condition
 void SwHiddenParaField::SetPar1(const OUString& rStr)
 {
     aCond = rStr;
@@ -1719,9 +1676,7 @@ const OUString& SwHiddenParaField::GetPar1() const
     return aCond;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: PostIt
- --------------------------------------------------------------------*/
+// PostIt field type
 
 SwPostItFieldType::SwPostItFieldType(SwDoc *pDoc)
     : SwFieldType( RES_POSTITFLD ),mpDoc(pDoc)
@@ -1732,10 +1687,7 @@ SwFieldType* SwPostItFieldType::Copy() const
     return new SwPostItFieldType(mpDoc);
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung: SwPostItFieldType
- --------------------------------------------------------------------*/
+// PostIt field
 
 SwPostItField::SwPostItField( SwPostItFieldType* pT,
         const String& rAuthor, const String& rTxt, const String& rInitials, const String& rName, const DateTime& rDateTime )
@@ -1797,29 +1749,26 @@ SwField* SwPostItField::Copy() const
         pRet->SetTextObject( new OutlinerParaObject(*mpText) );
     return pRet;
 }
-/*--------------------------------------------------------------------
-    Beschreibung: Author setzen
- --------------------------------------------------------------------*/
 
+/// set author
 void SwPostItField::SetPar1(const OUString& rStr)
 {
     sAuthor = rStr;
 }
 
+/// get author
 const OUString& SwPostItField::GetPar1() const
 {
     return sAuthor;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Text fuers PostIt setzen
- --------------------------------------------------------------------*/
-
+/// set the PostIt's text
 void SwPostItField::SetPar2(const OUString& rStr)
 {
     sTxt = rStr;
 }
 
+/// get the PostIt's text
 OUString SwPostItField::GetPar2() const
 {
         return sTxt;
@@ -1973,9 +1922,8 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     return true;
 }
-/*--------------------------------------------------------------------
-    Beschreibung: DokumentinfoFields
- --------------------------------------------------------------------*/
+
+// extended user information field type
 
 SwExtUserFieldType::SwExtUserFieldType()
     : SwFieldType( RES_EXTUSERFLD )
@@ -2021,6 +1969,8 @@ String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 ) const
     }
     return aRet;
 }
+
+// extended user information field
 
 SwExtUserField::SwExtUserField(SwExtUserFieldType* pTyp, sal_uInt16 nSubTyp, sal_uInt32 nFmt) :
     SwField(pTyp, nFmt), nType(nSubTyp)
@@ -2108,9 +2058,7 @@ bool SwExtUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 }
 //-------------------------------------------------------------------------
 
-/*--------------------------------------------------------------------
-    Beschreibung: Relatives Seitennummern - Feld
- --------------------------------------------------------------------*/
+// field type for relative page numbers
 
 SwRefPageSetFieldType::SwRefPageSetFieldType()
     : SwFieldType( RES_REFPAGESETFLD )
@@ -2122,14 +2070,12 @@ SwFieldType* SwRefPageSetFieldType::Copy() const
     return new SwRefPageSetFieldType;
 }
 
-// ueberlagert, weil es nichts zum Updaten gibt!
+// overridden since there is nothing to update
 void SwRefPageSetFieldType::Modify( const SfxPoolItem*, const SfxPoolItem * )
 {
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Relative Seitennummerierung
- --------------------------------------------------------------------*/
+// field for relative page numbers
 
 SwRefPageSetField::SwRefPageSetField( SwRefPageSetFieldType* pTyp,
                     short nOff, sal_Bool bFlag )
@@ -2188,9 +2134,8 @@ bool SwRefPageSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     return true;
 }
-/*--------------------------------------------------------------------
-    Beschreibung: relatives Seitennummern - Abfrage Feld
- --------------------------------------------------------------------*/
+
+// relative page numbers - query field
 
 SwRefPageGetFieldType::SwRefPageGetFieldType( SwDoc* pDc )
     : SwFieldType( RES_REFPAGEGETFLD ), pDoc( pDc ), nNumberingType( SVX_NUM_ARABIC )
@@ -2206,22 +2151,22 @@ SwFieldType* SwRefPageGetFieldType::Copy() const
 
 void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    // Update auf alle GetReferenz-Felder
+    // update all GetReference fields
     if( !pNew && !pOld && GetDepends() )
     {
-        // sammel erstmal alle SetPageRefFelder ein.
+        // first collect all SetPageRefFields
         _SetGetExpFlds aTmpLst;
         if( MakeSetList( aTmpLst ) )
         {
             SwIterator<SwFmtFld,SwFieldType> aIter( *this );
             for ( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
-                    // nur die GetRef-Felder Updaten
+                    // update only the GetRef fields
                     if( pFmtFld->GetTxtFld() )
                         UpdateField( pFmtFld->GetTxtFld(), aTmpLst );
         }
     }
 
-    // weiter an die Text-Felder, diese "Expandieren" den Text
+    // forward to text fields, they "expand" the text
     NotifyClients( pOld, pNew );
 }
 
@@ -2230,13 +2175,13 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
     SwIterator<SwFmtFld,SwFieldType> aIter(*pDoc->GetSysFldType( RES_REFPAGESETFLD));
     for ( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
     {
-            // nur die GetRef-Felder Updaten
+            // update only the GetRef fields
             const SwTxtFld* pTFld = pFmtFld->GetTxtFld();
             if( pTFld )
             {
                 const SwTxtNode& rTxtNd = pTFld->GetTxtNode();
 
-                // immer den ersten !! (in Tab-Headline, Kopf-/Fuss )
+                // Always the first! (in Tab-Headline, header/footer )
                 Point aPt;
                 const SwCntntFrm* pFrm = rTxtNd.getLayoutFrm( rTxtNd.GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
 
@@ -2248,13 +2193,13 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
                     // Check if pFrm is not yet connected to the layout.
                     !pFrm->FindPageFrm() )
                 {
-                    // einen sdbcx::Index fuers bestimmen vom TextNode anlegen
+                    //  create index for determination of the TextNode
                     SwNodeIndex aIdx( rTxtNd );
                     pNew = new _SetGetExpFld( aIdx, pTFld );
                 }
                 else
                 {
-                    // einen sdbcx::Index fuers bestimmen vom TextNode anlegen
+                    //  create index for determination of the TextNode
                     SwPosition aPos( pDoc->GetNodes().GetEndOfPostIts() );
                     bool const bResult = GetBodyTxtNode( *pDoc, aPos, *pFrm );
                     OSL_ENSURE(bResult, "where is the Field?");
@@ -2277,7 +2222,7 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
     SwRefPageGetField* pGetFld = (SwRefPageGetField*)pTxtFld->GetFld().GetFld();
     pGetFld->SetText( aEmptyStr );
 
-    // dann suche mal das richtige RefPageSet-Field
+    // then search the correct RefPageSet field
     SwTxtNode* pTxtNode = (SwTxtNode*)&pTxtFld->GetTxtNode();
     if( pTxtNode->StartOfSectionIndex() >
         pDoc->GetNodes().GetEndOfExtras().GetIndex() )
@@ -2295,7 +2240,7 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
                         (SwRefPageSetField*)pRefTxtFld->GetFld().GetFld();
             if( pSetFld->IsOn() )
             {
-                // dann bestimme mal den entsp. Offset
+                // determine the correct offset
                 Point aPt;
                 const SwCntntFrm* pFrm = pTxtNode->getLayoutFrm( pTxtNode->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
                 const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().getLayoutFrm( pRefTxtFld->GetTxtNode().GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
@@ -2315,13 +2260,11 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
             }
         }
     }
-    // dann die Formatierung anstossen
+    // start formatting
     ((SwFmtFld&)pTxtFld->GetFld()).ModifyNotification( 0, 0 );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Relative Seitennummerierung Abfragen
- --------------------------------------------------------------------*/
+// queries for relative page numbering
 
 SwRefPageGetField::SwRefPageGetField( SwRefPageGetFieldType* pTyp,
                                     sal_uInt32 nFmt )
@@ -2345,7 +2288,7 @@ SwField* SwRefPageGetField::Copy() const
 void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
                                         const SwTxtFld* pFld )
 {
-    // nur Felder in Footer, Header, FootNote, Flys
+    // only fields in Footer, Header, FootNote, Flys
     SwTxtNode* pTxtNode = (SwTxtNode*)&pFld->GetTxtNode();
     SwRefPageGetFieldType* pGetType = (SwRefPageGetFieldType*)GetTyp();
     SwDoc* pDoc = pGetType->GetDoc();
@@ -2355,21 +2298,19 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
 
     sTxt.Erase();
 
-    OSL_ENSURE( !pFrm->IsInDocBody(), "Flag ist nicht richtig, Frame steht im DocBody" );
+    OSL_ENSURE( !pFrm->IsInDocBody(), "Flag incorrect, frame is in DocBody" );
 
-    // sammel erstmal alle SetPageRefFelder ein.
+    // collect all SetPageRefFields
     _SetGetExpFlds aTmpLst;
     if( !pGetType->MakeSetList( aTmpLst ) )
         return ;
 
-    // einen sdbcx::Index fuers bestimmen vom TextNode anlegen
+    //  create index for determination of the TextNode
     SwPosition aPos( SwNodeIndex( pDoc->GetNodes() ) );
     pTxtNode = (SwTxtNode*) GetBodyTxtNode( *pDoc, aPos, *pFrm );
 
-    // Wenn kein Layout vorhanden, kommt es in Kopf und Fusszeilen dazu
-    // das ChangeExpansion uebers Layout-Formatieren aufgerufen wird
-    // aber kein TxtNode vorhanden ist
-    //
+    // If no layout exists, ChangeExpansion is called for header and
+    // footer lines via layout formatting without existing TxtNode.
     if(!pTxtNode)
         return;
 
@@ -2378,7 +2319,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
     _SetGetExpFlds::const_iterator itLast = aTmpLst.lower_bound( &aEndFld );
 
     if( itLast == aTmpLst.begin() )
-        return;        // es gibt kein entsprechendes Set - Feld vor mir
+        return;        // there is no corresponding set-field in front
     --itLast;
 
     const SwTxtFld* pRefTxtFld = (*itLast)->GetFld();
@@ -2388,7 +2329,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
     const SwCntntFrm* pRefFrm = pRefTxtFld ? pRefTxtFld->GetTxtNode().getLayoutFrm( pFrm->getRootFrm(), &aPt, 0, sal_False ) : 0;
     if( pSetFld->IsOn() && pRefFrm )
     {
-        // dann bestimme mal den entsp. Offset
+        // determine the correct offset
         const SwPageFrm* pPgFrm = pFrm->FindPageFrm();
         sal_uInt16 nDiff = pPgFrm->GetPhyPageNum() -
                             pRefFrm->FindPageFrm()->GetPhyPageNum() + 1;
@@ -2445,9 +2386,7 @@ bool SwRefPageGetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Feld zum Anspringen und Editieren
- --------------------------------------------------------------------*/
+// field type to jump to and edit
 
 SwJumpEditFieldType::SwJumpEditFieldType( SwDoc* pD )
     : SwFieldType( RES_JUMPEDITFLD ), pDoc( pD ), aDep( this, 0 )
@@ -2463,9 +2402,9 @@ SwCharFmt* SwJumpEditFieldType::GetCharFmt()
 {
     SwCharFmt* pFmt = pDoc->GetCharFmtFromPool( RES_POOLCHR_JUMPEDIT );
 
-    // noch nicht registriert ?
+    // not registered yet?
     if( !aDep.GetRegisteredIn() )
-        pFmt->Add( &aDep );     // anmelden
+        pFmt->Add( &aDep );     // register
 
     return pFmt;
 }
@@ -2488,25 +2427,25 @@ SwField* SwJumpEditField::Copy() const
                                 sTxt, sHelp );
 }
 
-// Platzhalter-Text
-
+/// get place holder text
 const OUString& SwJumpEditField::GetPar1() const
 {
     return sTxt;
 }
 
+/// set place holder text
 void SwJumpEditField::SetPar1(const OUString& rStr)
 {
     sTxt = rStr;
 }
 
-// HinweisText
-
+/// get hint text
 OUString SwJumpEditField::GetPar2() const
 {
     return sHelp;
 }
 
+/// set hint text
 void SwJumpEditField::SetPar2(const OUString& rStr)
 {
     sHelp = rStr;
@@ -2576,10 +2515,7 @@ bool SwJumpEditField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung: Combined Character Fieldtype / Field
- --------------------------------------------------------------------*/
+// combined character field type
 
 SwCombinedCharFieldType::SwCombinedCharFieldType()
     : SwFieldType( RES_COMBINED_CHARS )
@@ -2591,7 +2527,7 @@ SwFieldType* SwCombinedCharFieldType::Copy() const
     return new SwCombinedCharFieldType;
 }
 
-/* --------------------------------------------------------------------*/
+// combined character field
 
 SwCombinedCharField::SwCombinedCharField( SwCombinedCharFieldType* pFTyp,
                                             const String& rChars )

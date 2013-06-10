@@ -27,9 +27,6 @@
 #include <unofldmid.h>
 
 using namespace ::com::sun::star;
-/*--------------------------------------------------
-    Beschreibung: Datum/Zeit-Typ
- ---------------------------------------------------*/
 
 SwDateTimeFieldType::SwDateTimeFieldType(SwDoc* pInitDoc)
     : SwValueFieldType( pInitDoc, RES_DATETIMEFLD )
@@ -40,10 +37,6 @@ SwFieldType* SwDateTimeFieldType::Copy() const
     SwDateTimeFieldType *pTmp = new SwDateTimeFieldType(GetDoc());
     return pTmp;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung: Datum/Zeit-Feld
- --------------------------------------------------------------------*/
 
 SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub, sal_uLong nFmt, sal_uInt16 nLng)
     : SwValueField(pInitType, nFmt, nLng, 0.0),

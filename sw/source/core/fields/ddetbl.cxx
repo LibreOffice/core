@@ -25,7 +25,7 @@
 #include <ndtxt.hxx>
 #include <swtable.hxx>
 #include <swddetbl.hxx>
-#include <ddefld.hxx>           // fuer den FieldType
+#include <ddefld.hxx> // for FieldType
 #include <ndindex.hxx>
 #include <fldupde.hxx>
 #include <swtblfmt.hxx>
@@ -33,18 +33,17 @@
 
 TYPEINIT1( SwDDETable, SwTable );
 
-    // Constructor movet alle Lines/Boxen aus der SwTable zu sich.
-    // Die SwTable ist danach Leer und muss geloescht werden.
-SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
-                        sal_Bool bUpdate )
+/// Ctor moves all lines/boxes from a SwTable into itself.
+/// Afterwards the SwTable is empty and must be deleted.
+SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType, sal_Bool bUpdate )
     : SwTable( rTable ), aDepend( this, pDDEType )
 {
-    // Kopiere/move die Daten der Tabelle
+    // copy the table data
     m_TabSortContentBoxes.insert(rTable.GetTabSortBoxes());
     rTable.GetTabSortBoxes().clear();
 
     aLines.insert( aLines.begin(),
-                   rTable.GetTabLines().begin(), rTable.GetTabLines().end() ); // move die Lines
+                   rTable.GetTabLines().begin(), rTable.GetTabLines().end() ); // move lines
     rTable.GetTabLines().clear();
 
     if( !aLines.empty() )
@@ -59,7 +58,6 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
             pDDEType->IncRefCnt();
 //          aDepend.UnlockModify();
 
-            // Setzen der Werte in die einzelnen Boxen
             // update box content only if update flag is set (false in import)
             if (bUpdate)
                 ChangeContent();
@@ -75,7 +73,7 @@ SwDDETable::~SwDDETable()
         GetTabSortBoxes()[0]->GetSttNd()->GetNodes().IsDocNodes() )
         pFldTyp->DecRefCnt();
 
-    // sind wir der letzte Abhaengige vom "geloeschten Feld" dann loesche dieses
+    // If it is the last dependant of the "deleted field" than delete it finally
     if( pFldTyp->IsDeleted() && pFldTyp->IsLastDepend() )
     {
         pFldTyp->Remove( &aDepend );
@@ -101,16 +99,16 @@ void SwDDETable::SwClientNotify( const SwModify&, const SfxHint& rHint )
 
 void SwDDETable::ChangeContent()
 {
-    OSL_ENSURE( GetFrmFmt(), "Kein FrameFormat" );
+    OSL_ENSURE( GetFrmFmt(), "No FrameFormat" );
 
-    // Stehen wir im richtigen NodesArray (Wegen UNDO)
+    // Is this the correct NodesArray? (because of UNDO)
     if( aLines.empty() )
         return;
-    OSL_ENSURE( !GetTabSortBoxes().empty(), "Tabelle ohne Inhalt?" );
+    OSL_ENSURE( !GetTabSortBoxes().empty(), "Table without content?" );
     if( !GetTabSortBoxes()[0]->GetSttNd()->GetNodes().IsDocNodes() )
         return;
 
-    // zugriff auf den DDEFldType
+    // access to DDEFldType
     SwDDEFieldType* pDDEType = (SwDDEFieldType*)aDepend.GetRegisteredIn();
 
     String aExpand = comphelper::string::remove(pDDEType->GetExpansion(), '\r');
@@ -122,10 +120,10 @@ void SwDDETable::ChangeContent()
         for( sal_uInt16 i = 0; i < pLine->GetTabBoxes().size(); ++i )
         {
             SwTableBox* pBox = pLine->GetTabBoxes()[ i ];
-            OSL_ENSURE( pBox->GetSttIdx(), "keine InhaltsBox" );
+            OSL_ENSURE( pBox->GetSttIdx(), "no content box" );
             SwNodeIndex aNdIdx( *pBox->GetSttNd(), 1 );
             SwTxtNode* pTxtNode = aNdIdx.GetNode().GetTxtNode();
-            OSL_ENSURE( pTxtNode, "Kein Node" );
+            OSL_ENSURE( pTxtNode, "No Node" );
             SwIndex aCntIdx( pTxtNode, 0 );
             pTxtNode->EraseText( aCntIdx );
             pTxtNode->InsertText( aLine.GetToken( i, '\t' ), aCntIdx );
@@ -150,35 +148,35 @@ SwDDEFieldType* SwDDETable::GetDDEFldType()
 
 sal_Bool SwDDETable::NoDDETable()
 {
-    // suche den TabellenNode
-    OSL_ENSURE( GetFrmFmt(), "Kein FrameFormat" );
+    // search table node
+    OSL_ENSURE( GetFrmFmt(), "No FrameFormat" );
     SwDoc* pDoc = GetFrmFmt()->GetDoc();
 
-    // Stehen wir im richtigen NodesArray (Wegen UNDO)
+    // Is this the correct NodesArray? (because of UNDO)
     if( aLines.empty() )
         return sal_False;
-    OSL_ENSURE( !GetTabSortBoxes().empty(), "Tabelle ohne Inhalt?" );
+    OSL_ENSURE( !GetTabSortBoxes().empty(), "Table without content?" );
     SwNode* pNd = (SwNode*)GetTabSortBoxes()[0]->GetSttNd();
     if( !pNd->GetNodes().IsDocNodes() )
         return sal_False;
 
     SwTableNode* pTblNd = pNd->FindTableNode();
-    OSL_ENSURE( pTblNd, "wo steht denn die Tabelle ?");
+    OSL_ENSURE( pTblNd, "Where is the table?");
 
     SwTable* pNewTbl = new SwTable( *this );
 
-    // Kopiere/move die Daten der Tabelle
-    pNewTbl->GetTabSortBoxes().insert( GetTabSortBoxes() ); // move die Inh. Boxen
+    // copy the table data
+    pNewTbl->GetTabSortBoxes().insert( GetTabSortBoxes() ); // move content boxes
     GetTabSortBoxes().clear();
 
     pNewTbl->GetTabLines().insert( pNewTbl->GetTabLines().begin(),
-                                   GetTabLines().begin(), GetTabLines().end() ); // move die Lines
+                                   GetTabLines().begin(), GetTabLines().end() ); // move lines
     GetTabLines().clear();
 
     if( pDoc->GetCurrentViewShell() )   //swmod 071108//swmod 071225
         ((SwDDEFieldType*)aDepend.GetRegisteredIn())->DecRefCnt();
 
-    pTblNd->SetNewTable( pNewTbl );       // setze die Tabelle
+    pTblNd->SetNewTable( pNewTbl );       // replace table
 
     return sal_True;
 }

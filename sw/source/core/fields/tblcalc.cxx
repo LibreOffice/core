@@ -21,12 +21,12 @@
 #include <switerator.hxx>
 #include <cntfrm.hxx>
 #include <doc.hxx>
-#include <pam.hxx>      // fuer GetBodyTxtNode
+#include <pam.hxx>      // for GetBodyTxtNode
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <expfld.hxx>
-#include <docfld.hxx>   // fuer _SetGetExpFld
+#include <docfld.hxx>   // for _SetGetExpFld
 #include <unofldmid.h>
 
 using namespace ::com::sun::star;
@@ -46,14 +46,14 @@ SwFieldType* SwTblFieldType::Copy() const
 
 void SwTblField::CalcField( SwTblCalcPara& rCalcPara )
 {
-    if( rCalcPara.rCalc.IsCalcError() )     // ist schon Fehler gesetzt ?
+    if( rCalcPara.rCalc.IsCalcError() ) // stop if there is already an error set
         return;
 
-    // erzeuge aus den BoxNamen die Pointer
+    // create pointers from box name
     BoxNmToPtr( rCalcPara.pTbl );
     String sFml( MakeFormula( rCalcPara ));
     SetValue( rCalcPara.rCalc.Calculate( sFml ).GetDouble() );
-    ChgValid( !rCalcPara.IsStackOverFlow() );       // ist der Wert wieder gueltig?
+    ChgValid( !rCalcPara.IsStackOverFlow() ); // is the value again valid?
 }
 
 
@@ -87,7 +87,7 @@ String SwTblField::GetFieldName() const
     return aStr;
 }
 
-// suche den TextNode, in dem das Feld steht
+/// search TextNode containing this field
 const SwNode* SwTblField::GetNodeOfFormula() const
 {
     if( !GetTyp()->GetDepends() )
@@ -153,11 +153,6 @@ void SwTblField::SetValue( const double& rVal )
     SwValueField::SetValue(rVal);
     sExpand = ((SwValueFieldType*)GetTyp())->ExpandValue(rVal, GetFormat(), GetLanguage());
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung: Parameter setzen
- --------------------------------------------------------------------*/
-
 
 OUString SwTblField::GetPar2() const
 {

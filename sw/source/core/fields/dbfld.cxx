@@ -43,10 +43,7 @@
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------------------------
-    Beschreibung: Datenbanktrenner durch Punkte fuer Anzeige ersetzen
- --------------------------------------------------------------------*/
-
+/// replace database separator by dots for display
 static String lcl_DBTrennConv(const String& aContent)
 {
     String sTmp(aContent);
@@ -57,9 +54,7 @@ static String lcl_DBTrennConv(const String& aContent)
     return sTmp;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: DatenbankFeldTyp
- --------------------------------------------------------------------*/
+// database field type
 
 SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const String& rNam, const SwDBData& rDBData ) :
     SwValueFieldType( pDocPtr, RES_DBFLD ),
@@ -96,7 +91,7 @@ const OUString& SwDBFieldType::GetName() const
 
 void SwDBFieldType::ReleaseRef()
 {
-    OSL_ENSURE(nRefCnt > 0, "RefCount kleiner 0!");
+    OSL_ENSURE(nRefCnt > 0, "RefCount < 0!");
 
     if (--nRefCnt <= 0)
     {
@@ -153,7 +148,7 @@ bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
                 SwFmtFld* pFld = aIter.First();
                 while(pFld)
                 {
-                    // Feld im Undo?
+                    // field in Undo?
                     SwTxtFld *pTxtFld = pFld->GetTxtFld();
                     if(pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
                     {
@@ -174,9 +169,8 @@ bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     return true;
 }
-/*--------------------------------------------------------------------
-    Beschreibung: SwDBField
- --------------------------------------------------------------------*/
+
+// database field
 
 SwDBField::SwDBField(SwDBFieldType* pTyp, sal_uLong nFmt)
     :   SwValueField(pTyp, nFmt),
@@ -295,15 +289,12 @@ SwFieldType* SwDBField::ChgTyp( SwFieldType* pNewType )
     return pOld;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Aktuellen Field-Value holen und chachen
- --------------------------------------------------------------------*/
-
+/// get current field value and cache it
 void SwDBField::Evaluate()
 {
     SwNewDBMgr* pMgr = GetDoc()->GetNewDBMgr();
 
-    // erstmal loeschen
+    // first delete
     bValidValue = false;
     double nValue = DBL_MAX;
     const SwDBData& aTmpData = GetDBData();
@@ -313,7 +304,7 @@ void SwDBField::Evaluate()
 
     sal_uInt32 nFmt;
 
-    // Passenden Spaltennamen suchen
+    // search corresponding column name
     String aColNm( ((SwDBFieldType*)GetTyp())->GetColumnName() );
 
     SvNumberFormatter* pDocFormatter = GetDoc()->GetNumberFormatter();
@@ -348,21 +339,18 @@ void SwDBField::Evaluate()
 
             SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
             if (nFmt && nFmt != SAL_MAX_UINT32 && !pFormatter->IsTextFormat(nFmt))
-                bValidValue = true; // Wegen Bug #60339 nicht mehr bei allen Strings
+                bValidValue = true; // because of bug #60339 not for all strings
         }
         else
         {
-            // Bei Strings sal_True wenn Laenge > 0 sonst sal_False
+            // if string length > 0 then true, else false
             SetValue(aContent.isEmpty() ? 0 : 1);
         }
     }
     bInitialized = true;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Namen erfragen
- --------------------------------------------------------------------*/
-
+/// get name
 const OUString& SwDBField::GetPar1() const
 {
     return ((const SwDBFieldType*)GetTyp())->GetName();
@@ -469,9 +457,7 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Basisklasse fuer alle weiteren Datenbankfelder
- --------------------------------------------------------------------*/
+// base class for all further database fields
 
 SwDBNameInfField::SwDBNameInfField(SwFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFmt) :
     SwField(pTyp, nFmt),
@@ -579,9 +565,7 @@ void SwDBNameInfField::SetSubType(sal_uInt16 nType)
     nSubType = nType;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: NaechsterDatensatz
- --------------------------------------------------------------------*/
+// next dataset
 
 SwDBNextSetFieldType::SwDBNextSetFieldType()
     : SwFieldType( RES_DBNEXTSETFLD )
@@ -595,9 +579,8 @@ SwFieldType* SwDBNextSetFieldType::Copy() const
     SwDBNextSetFieldType* pTmp = new SwDBNextSetFieldType();
     return pTmp;
 }
-/*--------------------------------------------------------------------
-    Beschreibung: SwDBSetField
- --------------------------------------------------------------------*/
+
+// SwDBSetField
 
 SwDBNextSetField::SwDBNextSetField(SwDBNextSetFieldType* pTyp,
                                    const String& rCond,
@@ -635,15 +618,13 @@ void SwDBNextSetField::Evaluate(SwDoc* pDoc)
     pMgr->ToNextRecord(rData.sDataSource, rData.sCommand);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Bedingung
- --------------------------------------------------------------------*/
-
+/// get condition
 const OUString& SwDBNextSetField::GetPar1() const
 {
     return aCond;
 }
 
+/// set condition
 void SwDBNextSetField::SetPar1(const OUString& rStr)
 {
     aCond = rStr;
@@ -677,9 +658,7 @@ bool SwDBNextSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Datensatz mit bestimmter ID
- --------------------------------------------------------------------*/
+// dataset with certain ID
 
 SwDBNumSetFieldType::SwDBNumSetFieldType() :
     SwFieldType( RES_DBNUMSETFLD )
@@ -694,9 +673,7 @@ SwFieldType* SwDBNumSetFieldType::Copy() const
     return pTmp;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: SwDBSetField
- --------------------------------------------------------------------*/
+// SwDBNumSetField
 
 SwDBNumSetField::SwDBNumSetField(SwDBNumSetFieldType* pTyp,
                                  const String& rCond,
@@ -738,29 +715,25 @@ void SwDBNumSetField::Evaluate(SwDoc* pDoc)
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: LogDBName
- --------------------------------------------------------------------*/
-
+/// get LogDBName
 const OUString& SwDBNumSetField::GetPar1() const
 {
     return aCond;
 }
 
+/// set LogDBName
 void SwDBNumSetField::SetPar1(const OUString& rStr)
 {
     aCond = rStr;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Bedingung
- --------------------------------------------------------------------*/
-
+/// get condition
 OUString SwDBNumSetField::GetPar2() const
 {
     return aPar2;
 }
 
+/// set condition
 void SwDBNumSetField::SetPar2(const OUString& rStr)
 {
     aPar2 = rStr;
@@ -804,9 +777,7 @@ bool    SwDBNumSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: SwDBNameFieldType
- --------------------------------------------------------------------*/
+// SwDBNameFieldType
 
 SwDBNameFieldType::SwDBNameFieldType(SwDoc* pDocument)
     : SwFieldType( RES_DBNAMEFLD )
@@ -833,9 +804,7 @@ SwFieldType* SwDBNameFieldType::Copy() const
 
 //------------------------------------------------------------------------------
 
-/*--------------------------------------------------------------------
-    Beschreibung: Name der angedockten DB
- --------------------------------------------------------------------*/
+// name of the connected database
 
 SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData, sal_uLong nFmt)
     : SwDBNameInfField(pTyp, rDBData, nFmt)
@@ -871,9 +840,8 @@ bool SwDBNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     return SwDBNameInfField::PutValue(rAny, nWhichId );
 }
-/*--------------------------------------------------------------------
-    Beschreibung: SwDBNameFieldType
- --------------------------------------------------------------------*/
+
+// SwDBSetNumberFieldType
 
 SwDBSetNumberFieldType::SwDBSetNumberFieldType()
     : SwFieldType( RES_DBSETNUMBERFLD )
@@ -890,9 +858,7 @@ SwFieldType* SwDBSetNumberFieldType::Copy() const
 
 //------------------------------------------------------------------------------
 
-/*--------------------------------------------------------------------
-    Beschreibung: SetNumber der angedockten DB
- --------------------------------------------------------------------*/
+// set-number of the connected database
 
 SwDBSetNumberField::SwDBSetNumberField(SwDBSetNumberFieldType* pTyp,
                                        const SwDBData& rDBData,
