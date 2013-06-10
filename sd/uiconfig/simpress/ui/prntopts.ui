@@ -447,7 +447,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="grayscalerb">
-                        <property name="label" translatable="yes">Gra_yScale</property>
+                        <property name="label" translatable="yes">Gra_yscale</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
