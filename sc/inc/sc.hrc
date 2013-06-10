@@ -830,6 +830,7 @@
 #define SCSTR_ORIENTATION_BOTTOMTOP (STR_START + 111)
 #define SCSTR_ORIENTATION_STANDARD  (STR_START + 112)
 #define SCSTR_AUTHOR                (STR_START + 113)
+#define SCSTR_UNIT                  (STR_START + 114)
 
 // accessibility
 

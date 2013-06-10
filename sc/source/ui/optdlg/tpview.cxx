@@ -375,38 +375,32 @@ IMPL_LINK( ScTpContentOptions, GridHdl, ListBox*, pLb )
 
 ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
                                         const SfxItemSet&   rArgSet ) :
-    SfxTabPage(pParent, ScResId( RID_SCPAGE_LAYOUT ), rArgSet),
-    aUnitGB( this,          ScResId(GB_UNIT           )),
-    aUnitFT( this,          ScResId(FT_UNIT           )),
-    aUnitLB( this,          ScResId(LB_UNIT           )),
-    aTabFT( this,           ScResId( FT_TAB           )),
-    aTabMF( this,           ScResId( MF_TAB           )),
-    aSeparatorFL( this,     ScResId( FL_SEPARATOR         )),
-    aLinkGB     (this, ScResId(GB_LINK  )),
-    aLinkFT(this, ScResId(FT_UPDATE_LINKS )),
-    aAlwaysRB   (this, ScResId(RB_ALWAYS    )),
-    aRequestRB  (this, ScResId(RB_REQUEST   )),
-    aNeverRB    (this, ScResId(RB_NEVER )),
-
-    aOptionsGB( this,       ScResId( GB_OPTIONS   )),
-    aAlignCB  ( this,       ScResId( CB_ALIGN       )),
-    aAlignLB  ( this,       ScResId( LB_ALIGN       )),
-    aEditModeCB( this,      ScResId( CB_EDITMODE    )),
-    aFormatCB( this,        ScResId( CB_FORMAT  )),
-    aExpRefCB( this,        ScResId( CB_EXPREF    )),
-    aMarkHdrCB( this,       ScResId( CB_MARKHDR   )),
-    aTextFmtCB( this,       ScResId( CB_TEXTFMT   )),
-    aReplWarnCB( this,      ScResId( CB_REPLWARN  )),
-    aUnitArr(               ScResId(ST_UNIT           )),
+    SfxTabPage( pParent, "ScGeneralPage",
+                "modules/scalc/ui/scgeneralpage.ui", rArgSet),
+    aUnitArr(               ScResId(SCSTR_UNIT           )),
     pDoc(NULL)
 {
-    FreeResource();
-    aSeparatorFL.SetStyle( aSeparatorFL.GetStyle() | WB_VERT );
+    get( m_pUnitLB, "unitlb");
+    get( m_pTabMF, "tabmf");
+
+    get( m_pAlwaysRB, "alwaysrb");
+    get( m_pRequestRB, "requestrb");
+    get( m_pNeverRB, "neverrb");
+
+    get( m_pAlignCB, "aligncb");
+    get( m_pAlignLB, "alignlb");
+    get( m_pEditModeCB, "editmodecb");
+    get( m_pFormatCB, "formatcb");
+    get( m_pExpRefCB, "exprefcb");
+    get( m_pMarkHdrCB, "markhdrcb");
+    get( m_pTextFmtCB, "textfmtcb");
+    get( m_pReplWarnCB, "replwarncb");
+
     SetExchangeSupport();
 
-    aUnitLB.    SetSelectHdl( LINK( this, ScTpLayoutOptions, MetricHdl ) );
+    m_pUnitLB->SetSelectHdl( LINK( this, ScTpLayoutOptions, MetricHdl ) );
 
-    aAlignCB.SetClickHdl(LINK(this, ScTpLayoutOptions, AlignHdl));
+    m_pAlignCB->SetClickHdl(LINK(this, ScTpLayoutOptions, AlignHdl));
 
 
     for ( sal_uInt16 i = 0; i < aUnitArr.Count(); ++i )
@@ -423,8 +417,8 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
             case FUNIT_INCH:
             {
                 // nur diese Metriken benutzen
-                sal_uInt16 nPos = aUnitLB.InsertEntry( sMetric );
-                aUnitLB.SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
+                sal_uInt16 nPos = m_pUnitLB->InsertEntry( sMetric );
+                m_pUnitLB->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
             }
             break;
             default:
@@ -454,35 +448,35 @@ SfxTabPage* ScTpLayoutOptions::Create( Window*          pParent,
 sal_Bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
 {
     sal_Bool bRet = sal_True;
-    const sal_uInt16 nMPos = aUnitLB.GetSelectEntryPos();
-    if ( nMPos != aUnitLB.GetSavedValue() )
+    const sal_uInt16 nMPos = m_pUnitLB->GetSelectEntryPos();
+    if ( nMPos != m_pUnitLB->GetSavedValue() )
     {
-        sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)aUnitLB.GetEntryData( nMPos );
+        sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pUnitLB->GetEntryData( nMPos );
         rCoreSet.Put( SfxUInt16Item( SID_ATTR_METRIC,
                                      (sal_uInt16)nFieldUnit ) );
         bRet = sal_True;
     }
 
-    if(aTabMF.GetText() != aTabMF.GetSavedValue())
+    if(m_pTabMF->GetText() != m_pTabMF->GetSavedValue())
     {
         rCoreSet.Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
-                    sal::static_int_cast<sal_uInt16>( aTabMF.Denormalize(aTabMF.GetValue(FUNIT_TWIP)) )));
+                    sal::static_int_cast<sal_uInt16>( m_pTabMF->Denormalize(m_pTabMF->GetValue(FUNIT_TWIP)) )));
         bRet = sal_True;
     }
 
     ScLkUpdMode nSet=LM_ALWAYS;
 
-    if(aRequestRB.IsChecked())
+    if(m_pRequestRB->IsChecked())
     {
         nSet=LM_ON_DEMAND;
     }
-    else if(aNeverRB.IsChecked())
+    else if(m_pNeverRB->IsChecked())
     {
         nSet=LM_NEVER;
     }
 
-    if(aRequestRB.IsChecked() != aRequestRB.GetSavedValue() ||
-            aNeverRB.IsChecked() != aNeverRB.GetSavedValue() )
+    if(m_pRequestRB->IsChecked() != m_pRequestRB->GetSavedValue() ||
+            m_pNeverRB->IsChecked() != m_pNeverRB->GetSavedValue() )
     {
         if(pDoc)
             pDoc->SetLinkMode(nSet);
@@ -491,52 +485,52 @@ sal_Bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
         SC_MOD()->SetAppOptions(aAppOptions);
         bRet = sal_True;
     }
-    if(aAlignCB.GetSavedValue() != aAlignCB.IsChecked())
+    if(m_pAlignCB->GetSavedValue() != m_pAlignCB->IsChecked())
     {
-        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_SELECTION, aAlignCB.IsChecked()));
+        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_SELECTION, m_pAlignCB->IsChecked()));
         bRet = sal_True;
     }
 
-    if(aAlignLB.GetSavedValue() != aAlignLB.GetSelectEntryPos())
+    if(m_pAlignLB->GetSavedValue() != m_pAlignLB->GetSelectEntryPos())
     {
-        rCoreSet.Put(SfxUInt16Item(SID_SC_INPUT_SELECTIONPOS, aAlignLB.GetSelectEntryPos()));
+        rCoreSet.Put(SfxUInt16Item(SID_SC_INPUT_SELECTIONPOS, m_pAlignLB->GetSelectEntryPos()));
         bRet = sal_True;
     }
 
-    if(aEditModeCB.GetSavedValue() != aEditModeCB.IsChecked())
+    if(m_pEditModeCB->GetSavedValue() != m_pEditModeCB->IsChecked())
     {
-        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_EDITMODE, aEditModeCB.IsChecked()));
+        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_EDITMODE, m_pEditModeCB->IsChecked()));
         bRet = sal_True;
     }
 
-    if(aFormatCB.GetSavedValue() != aFormatCB.IsChecked())
+    if(m_pFormatCB->GetSavedValue() != m_pFormatCB->IsChecked())
     {
-        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_FMT_EXPAND, aFormatCB.IsChecked()));
+        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_FMT_EXPAND, m_pFormatCB->IsChecked()));
         bRet = sal_True;
     }
 
 
-    if(aExpRefCB.GetSavedValue() != aExpRefCB.IsChecked())
+    if(m_pExpRefCB->GetSavedValue() != m_pExpRefCB->IsChecked())
     {
-        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_REF_EXPAND, aExpRefCB.IsChecked()));
+        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_REF_EXPAND, m_pExpRefCB->IsChecked()));
         bRet = sal_True;
     }
 
-    if(aMarkHdrCB.GetSavedValue() != aMarkHdrCB.IsChecked())
+    if(m_pMarkHdrCB->GetSavedValue() != m_pMarkHdrCB->IsChecked())
     {
-        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_MARK_HEADER, aMarkHdrCB.IsChecked()));
+        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_MARK_HEADER, m_pMarkHdrCB->IsChecked()));
         bRet = sal_True;
     }
 
-    if(aTextFmtCB.GetSavedValue() != aTextFmtCB.IsChecked())
+    if(m_pTextFmtCB->GetSavedValue() != m_pTextFmtCB->IsChecked())
     {
-        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_TEXTWYSIWYG, aTextFmtCB.IsChecked()));
+        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_TEXTWYSIWYG, m_pTextFmtCB->IsChecked()));
         bRet = sal_True;
     }
 
-    if( aReplWarnCB.GetSavedValue() != aReplWarnCB.IsChecked() )
+    if( m_pReplWarnCB->GetSavedValue() != m_pReplWarnCB->IsChecked() )
     {
-        rCoreSet.Put( SfxBoolItem( SID_SC_INPUT_REPLCELLSWARN, aReplWarnCB.IsChecked() ) );
+        rCoreSet.Put( SfxBoolItem( SID_SC_INPUT_REPLCELLSWARN, m_pReplWarnCB->IsChecked() ) );
         bRet = sal_True;
     }
 
@@ -545,31 +539,31 @@ sal_Bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
 
 void    ScTpLayoutOptions::Reset( const SfxItemSet& rCoreSet )
 {
-    aUnitLB.SetNoSelection();
+    m_pUnitLB->SetNoSelection();
     if ( rCoreSet.GetItemState( SID_ATTR_METRIC ) >= SFX_ITEM_AVAILABLE )
     {
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rCoreSet.Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();
 
-        for ( sal_uInt16 i = 0; i < aUnitLB.GetEntryCount(); ++i )
+        for ( sal_uInt16 i = 0; i < m_pUnitLB->GetEntryCount(); ++i )
         {
-            if ( (FieldUnit)(sal_IntPtr)aUnitLB.GetEntryData( i ) == eFieldUnit )
+            if ( (FieldUnit)(sal_IntPtr)m_pUnitLB->GetEntryData( i ) == eFieldUnit )
             {
-                aUnitLB.SelectEntryPos( i );
+                m_pUnitLB->SelectEntryPos( i );
                 break;
             }
         }
-        ::SetFieldUnit(aTabMF, eFieldUnit);
+        ::SetFieldUnit(*m_pTabMF, eFieldUnit);
     }
-    aUnitLB.SaveValue();
+    m_pUnitLB->SaveValue();
 
     const SfxPoolItem* pItem;
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem))
-        aTabMF.SetValue(aTabMF.Normalize(((SfxUInt16Item*)pItem)->GetValue()), FUNIT_TWIP);
-    aTabMF.SaveValue();
+        m_pTabMF->SetValue(m_pTabMF->Normalize(((SfxUInt16Item*)pItem)->GetValue()), FUNIT_TWIP);
+    m_pTabMF->SaveValue();
 
-    aUnitLB         .SaveValue();
-    aTabMF          .SaveValue();
+    m_pUnitLB       ->SaveValue();
+    m_pTabMF        ->SaveValue();
 
     ScLkUpdMode nSet=LM_UNKNOWN;
 
@@ -586,53 +580,53 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet& rCoreSet )
 
     switch(nSet)
     {
-        case LM_ALWAYS:     aAlwaysRB.  Check();    break;
-        case LM_NEVER:      aNeverRB.   Check();    break;
-        case LM_ON_DEMAND:  aRequestRB. Check();    break;
+        case LM_ALWAYS:     m_pAlwaysRB->  Check();    break;
+        case LM_NEVER:      m_pNeverRB->   Check();    break;
+        case LM_ON_DEMAND:  m_pRequestRB-> Check();    break;
         default:
         {
             // added to avoid warnings
         }
     }
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_INPUT_SELECTION, false, &pItem))
-        aAlignCB.Check(((const SfxBoolItem*)pItem)->GetValue());
+        m_pAlignCB->Check(((const SfxBoolItem*)pItem)->GetValue());
 
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_INPUT_SELECTIONPOS, false, &pItem))
-        aAlignLB.SelectEntryPos(((const SfxUInt16Item*)pItem)->GetValue());
+        m_pAlignLB->SelectEntryPos(((const SfxUInt16Item*)pItem)->GetValue());
 
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_INPUT_EDITMODE, false, &pItem))
-        aEditModeCB.Check(((const SfxBoolItem*)pItem)->GetValue());
+        m_pEditModeCB->Check(((const SfxBoolItem*)pItem)->GetValue());
 
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_INPUT_FMT_EXPAND, false, &pItem))
-        aFormatCB.Check(((const SfxBoolItem*)pItem)->GetValue());
+        m_pFormatCB->Check(((const SfxBoolItem*)pItem)->GetValue());
 
 
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_INPUT_REF_EXPAND, false, &pItem))
-        aExpRefCB.Check(((const SfxBoolItem*)pItem)->GetValue());
+        m_pExpRefCB->Check(((const SfxBoolItem*)pItem)->GetValue());
 
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_INPUT_MARK_HEADER, false, &pItem))
-        aMarkHdrCB.Check(((const SfxBoolItem*)pItem)->GetValue());
+        m_pMarkHdrCB->Check(((const SfxBoolItem*)pItem)->GetValue());
 
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_INPUT_TEXTWYSIWYG, false, &pItem))
-        aTextFmtCB.Check(((const SfxBoolItem*)pItem)->GetValue());
+        m_pTextFmtCB->Check(((const SfxBoolItem*)pItem)->GetValue());
 
     if( SFX_ITEM_SET == rCoreSet.GetItemState( SID_SC_INPUT_REPLCELLSWARN, false, &pItem ) )
-        aReplWarnCB.Check( ( (const SfxBoolItem*)pItem)->GetValue() );
+        m_pReplWarnCB->Check( ( (const SfxBoolItem*)pItem)->GetValue() );
 
-    aAlignCB    .SaveValue();
-    aAlignLB    .SaveValue();
-    aEditModeCB .SaveValue();
-    aFormatCB   .SaveValue();
+    m_pAlignCB    ->SaveValue();
+    m_pAlignLB    ->SaveValue();
+    m_pEditModeCB ->SaveValue();
+    m_pFormatCB   ->SaveValue();
 
-    aExpRefCB   .SaveValue();
-    aMarkHdrCB  .SaveValue();
-    aTextFmtCB  .SaveValue();
-    aReplWarnCB .SaveValue();
-    AlignHdl(&aAlignCB);
+    m_pExpRefCB   ->SaveValue();
+    m_pMarkHdrCB  ->SaveValue();
+    m_pTextFmtCB  ->SaveValue();
+    m_pReplWarnCB ->SaveValue();
+    AlignHdl(m_pAlignCB);
 
-    aAlwaysRB.SaveValue();
-    aNeverRB.SaveValue();
-    aRequestRB.SaveValue();
+    m_pAlwaysRB->SaveValue();
+    m_pNeverRB->SaveValue();
+    m_pRequestRB->SaveValue();
 }
 
 void    ScTpLayoutOptions::ActivatePage( const SfxItemSet& /* rCoreSet */ )
@@ -648,14 +642,14 @@ int ScTpLayoutOptions::DeactivatePage( SfxItemSet* pSetP )
 
 IMPL_LINK_NOARG(ScTpLayoutOptions, MetricHdl)
 {
-    const sal_uInt16 nMPos = aUnitLB.GetSelectEntryPos();
+    const sal_uInt16 nMPos = m_pUnitLB->GetSelectEntryPos();
     if(nMPos != USHRT_MAX)
     {
-        FieldUnit eFieldUnit = (FieldUnit)(sal_IntPtr)aUnitLB.GetEntryData( nMPos );
+        FieldUnit eFieldUnit = (FieldUnit)(sal_IntPtr)m_pUnitLB->GetEntryData( nMPos );
         sal_Int64 nVal =
-            aTabMF.Denormalize( aTabMF.GetValue( FUNIT_TWIP ) );
-        ::SetFieldUnit( aTabMF, eFieldUnit );
-        aTabMF.SetValue( aTabMF.Normalize( nVal ), FUNIT_TWIP );
+            m_pTabMF->Denormalize( m_pTabMF->GetValue( FUNIT_TWIP ) );
+        ::SetFieldUnit( *m_pTabMF, eFieldUnit );
+        m_pTabMF->SetValue( m_pTabMF->Normalize( nVal ), FUNIT_TWIP );
     }
 
     return 0;
@@ -663,7 +657,7 @@ IMPL_LINK_NOARG(ScTpLayoutOptions, MetricHdl)
 
 IMPL_LINK( ScTpLayoutOptions, AlignHdl, CheckBox*, pBox )
 {
-    aAlignLB.Enable(pBox->IsChecked());
+    m_pAlignLB->Enable(pBox->IsChecked());
     return 0;
 }
 

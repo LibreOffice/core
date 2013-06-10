@@ -77,16 +77,11 @@
 #define CB_SYNCZOOM         35
 
 // TP_LAYOUT
-#define GB_LINK                 1
-#define RB_ALWAYS               2
-#define RB_REQUEST              3
-#define RB_NEVER                4
 #define CB_DOCONLY              5
 #define CB_MERGE_PARA_DIST      6
 #define GB_COMPAT               7
 #define CB_AUTO_UPDATE_FIELDS   8
 #define CB_AUTO_UPDATE_CHARTS   9
-#define FT_UPDATE_LINKS         10
 
 #define GB_WINDOW       50
 #define CB_ROWCOLHEADER 51
@@ -98,30 +93,14 @@
 #define FT_COLOR        58
 #define LB_COLOR        59
 #define CB_GUIDELINE    60
-#define GB_UNIT         61
-#define LB_UNIT         62
-#define ST_UNIT         63
-#define MF_TAB          65
 #define CB_PAGEBREAKS   66
-#define FT_TAB          69
-#define FT_UNIT         70
 #define FL_SEPARATOR1   71
 #define FL_SEPARATOR2   72
-#define FL_SEPARATOR    73
 #define FT_GRID         74
 #define LB_GRID         75
 
 // TP_INPUT
-#define GB_OPTIONS      70
-#define CB_ALIGN        71
-#define LB_ALIGN        72
-#define CB_EDITMODE     73
-#define CB_FORMAT       74
 #define CB_RFIND        75
-#define CB_EXPREF       76
-#define CB_MARKHDR      77
-#define CB_TEXTFMT      78
-#define CB_REPLWARN     79
 
 
 // TP_FORMULA

@@ -68,7 +68,6 @@
 #define HID_SCPAGE_SUBT_GROUP3                                  "SC_HID_SCPAGE_SUBT_GROUP3"
 
 #define HID_SCPAGE_CONTENT                                      "SC_HID_SCPAGE_CONTENT"
-#define HID_SCPAGE_LAYOUT                                       "SC_HID_SCPAGE_LAYOUT"
 
 #define HID_SC_NAVIGATOR                                        "SC_HID_SC_NAVIGATOR"
 

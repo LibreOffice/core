@@ -854,4 +854,19 @@ String SCSTR_AUTHOR
     Text [ en-US ] = "By author" ;
 };
 
+StringArray SCSTR_UNIT
+{
+    ItemList [ en-US ] =
+    {
+        < "Millimeter" ; FUNIT_MM ; > ;
+        < "Centimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Inch" ; FUNIT_INCH ; > ;
+        < "Foot" ; FUNIT_FOOT ; > ;
+        < "Miles" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Point" ; FUNIT_POINT ; > ;
+    };
+};
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -103,28 +103,21 @@ public:
 class ScDocument;
 class ScTpLayoutOptions : public SfxTabPage
 {
-    FixedLine       aUnitGB;
-    FixedText       aUnitFT;
-    ListBox         aUnitLB;
-    FixedText       aTabFT;
-    MetricField     aTabMF;
+    ListBox*        m_pUnitLB;
+    MetricField*    m_pTabMF;
 
-    FixedLine       aSeparatorFL;
-    FixedLine       aLinkGB;
-    FixedText       aLinkFT;
-    RadioButton     aAlwaysRB;
-    RadioButton     aRequestRB;
-    RadioButton     aNeverRB;
+    RadioButton*    m_pAlwaysRB;
+    RadioButton*    m_pRequestRB;
+    RadioButton*    m_pNeverRB;
 
-    FixedLine       aOptionsGB;
-    CheckBox        aAlignCB;
-    ListBox         aAlignLB;
-    CheckBox        aEditModeCB;
-    CheckBox        aFormatCB;
-    CheckBox        aExpRefCB;
-    CheckBox        aMarkHdrCB;
-    CheckBox        aTextFmtCB;
-    CheckBox        aReplWarnCB;
+    CheckBox*       m_pAlignCB;
+    ListBox*        m_pAlignLB;
+    CheckBox*       m_pEditModeCB;
+    CheckBox*       m_pFormatCB;
+    CheckBox*       m_pExpRefCB;
+    CheckBox*       m_pMarkHdrCB;
+    CheckBox*       m_pTextFmtCB;
+    CheckBox*       m_pReplWarnCB;
 
     SvxStringArray  aUnitArr;
 
