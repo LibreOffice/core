@@ -66,10 +66,8 @@ void OOXMLDocumentImpl::resolveFastSubStream(Stream & rStreamHandler,
     {
         uno::Reference<uno::XComponentContext> xContext(mpStream->getContext());
         OOXMLFastDocumentHandler * pDocHandler =
-            new OOXMLFastDocumentHandler(xContext);
-        pDocHandler->setStream(&rStreamHandler);
-        pDocHandler->setDocument(this);
-        pDocHandler->setXNoteId(mnXNoteId);
+            new OOXMLFastDocumentHandler(
+                xContext, &rStreamHandler, this, mnXNoteId );
 
         uno::Reference < xml::sax::XFastDocumentHandler > xDocumentHandler
             (pDocHandler);
@@ -317,10 +315,8 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         uno::Reference<uno::XComponentContext> xContext(mpStream->getContext());
 
         OOXMLFastDocumentHandler * pDocHandler =
-            new OOXMLFastDocumentHandler(xContext);
-        pDocHandler->setStream(&rStream);
-        pDocHandler->setDocument(this);
-        pDocHandler->setXNoteId(mnXNoteId);
+            new OOXMLFastDocumentHandler(
+                xContext, &rStream, this, mnXNoteId );
         pDocHandler->setIsSubstream( mbIsSubstream );
         uno::Reference < xml::sax::XFastDocumentHandler > xDocumentHandler
             (pDocHandler);
