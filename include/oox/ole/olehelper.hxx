@@ -39,6 +39,8 @@
 #include "oox/dllapi.h"
 #include "sot/storage.hxx"
 
+class SvGlobalName;
+
 namespace oox {
     class BinaryInputStream;
     class BinaryOutputStream;
@@ -122,6 +124,7 @@ public:
         representation (in uppercase characters).
      */
     static OUString importGuid( BinaryInputStream& rInStrm );
+    static void exportGuid( BinaryOutputStream& rOutStrm, const SvGlobalName& rId );
 
     /** Imports an OLE StdFont font structure from the current position of the
         passed binary stream.
@@ -175,6 +178,7 @@ public:
     sal_Bool ReadOCXCtlsStream(SotStorageStreamRef& rSrc1, ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
                                    sal_Int32 nPos, sal_Int32 nSize );
     static sal_Bool WriteOCXStream( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, SotStorageRef &rSrc1, const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > &rControlModel, const com::sun::star::awt::Size& rSize,OUString &rName);
+    static sal_Bool WriteOCXExcelKludgeStream( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStrm, const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > &rControlModel, const com::sun::star::awt::Size& rSize,OUString &rName);
 
 #ifdef SvxMSConvertOCXControlsRemoved
     const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > & GetShapes();

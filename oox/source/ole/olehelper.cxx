@@ -284,6 +284,22 @@ sal_uInt32 OleHelper::encodeOleColor( sal_Int32 nRgbColor )
     return OLE_COLORTYPE_BGR | lclSwapRedBlue( static_cast< sal_uInt32 >( nRgbColor & 0xFFFFFF ) );
 }
 
+void OleHelper::exportGuid( BinaryOutputStream& rOStr, const SvGlobalName& rId )
+{
+    const sal_uInt8* pBytes = rId.GetBytes();
+    sal_uInt32 a;
+    memcpy(&a, pBytes, sizeof(sal_uInt32));
+    rOStr<< a;
+
+    sal_uInt16 b;
+    memcpy(&b, pBytes+4, sizeof(sal_uInt16));
+    rOStr << b;
+
+    memcpy(&b, pBytes+6, sizeof(sal_uInt16));
+    rOStr << b;
+
+    rOStr.writeArray( (sal_Char *)&pBytes[ 8 ], 8 );
+}
 OUString OleHelper::importGuid( BinaryInputStream& rInStrm )
 {
     OUStringBuffer aBuffer;
@@ -567,6 +583,21 @@ sal_Bool MSConvertOCXControls::ReadOCXStorage( SotStorageRef& xOleStg,
         }
     }
     return  sal_False;
+}
+
+sal_Bool MSConvertOCXControls::WriteOCXExcelKludgeStream( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStrm, const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > &rxControlModel, const com::sun::star::awt::Size& rSize,OUString &rName )
+{
+    OleFormCtrlExportHelper exportHelper( comphelper::getProcessComponentContext(), rxModel, rxControlModel );
+    if ( !exportHelper.isValid() )
+        return sal_False;
+    rName = exportHelper.getTypeName();
+    SvGlobalName aName;
+    OUString sId = exportHelper.getGUID();
+    aName.MakeId(sId);
+    BinaryXOutputStream xOut( xOutStrm, false );
+    OleHelper::exportGuid( xOut, aName );
+    exportHelper.exportControl( xOutStrm, rSize );
+    return sal_True;
 }
 
 sal_Bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxModel, SotStorageRef &xOleStg,

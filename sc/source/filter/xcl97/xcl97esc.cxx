@@ -52,6 +52,9 @@
 #include "xehelper.hxx"
 #include "xechart.hxx"
 #include "xcl97esc.hxx"
+#include <unotools/streamwrap.hxx>
+#include <oox/ole/olehelper.hxx>
+#include <sfx2/objsh.hxx>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Exception;
@@ -68,6 +71,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::form::XForm;
 using ::com::sun::star::form::XFormComponent;
 using ::com::sun::star::form::XFormsSupplier;
+using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::script::ScriptEventDescriptor;
 using ::com::sun::star::script::XEventAttacherManager;
 
@@ -410,9 +414,6 @@ void XclEscherEx::EndDocument()
     mpOutStrm->Seek( 0 );
 }
 
-//delete for exporting OCX
-//#if EXC_EXP_OCX_CTRL
-
 XclExpOcxControlObj* XclEscherEx::CreateOCXCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
 {
     ::std::auto_ptr< XclExpOcxControlObj > xOcxCtrl;
@@ -425,23 +426,23 @@ XclExpOcxControlObj* XclEscherEx::CreateOCXCtrlObj( Reference< XShape > xShape, 
             mxCtlsStrm = OpenStream( EXC_STREAM_CTLS );
         if( mxCtlsStrm.Is() )
         {
-            String aClassName;
+            OUString aClassName;
             sal_uInt32 nStrmStart = static_cast< sal_uInt32 >( mxCtlsStrm->Tell() );
 
             // writes from xCtrlModel into mxCtlsStrm, raw class name returned in aClassName
-            if( SvxMSConvertOCXControls::WriteOCXExcelKludgeStream( mxCtlsStrm, xCtrlModel, xShape->getSize(), aClassName ) )
+            Reference< XOutputStream > xOut( new utl::OSeekableOutputStreamWrapper( *mxCtlsStrm ) );
+            Reference< com::sun::star::frame::XModel > xModel( GetDocShell() ? GetDocShell()->GetModel() : NULL );
+            if( xModel.is() && xOut.is() && oox::ole::MSConvertOCXControls::WriteOCXExcelKludgeStream( xModel, xOut, xCtrlModel, xShape->getSize(), aClassName ) )
             {
                 sal_uInt32 nStrmSize = static_cast< sal_uInt32 >( mxCtlsStrm->Tell() - nStrmStart );
                 // adjust the class name to "Forms.***.1"
-                aClassName.InsertAscii( "Forms.", 0 ).AppendAscii( ".1" );
+                aClassName = "Forms." + aClassName +  ".1";
                 xOcxCtrl.reset( new XclExpOcxControlObj( mrObjMgr, xShape, pChildAnchor, aClassName, nStrmStart, nStrmSize ) );
             }
         }
     }
     return xOcxCtrl.release();
 }
-
-//#else
 
 XclExpTbxControlObj* XclEscherEx::CreateTBXCtrlObj( Reference< XShape > xShape, const Rectangle* pChildAnchor )
 {
@@ -510,8 +511,6 @@ void XclEscherEx::ConvertTbxMacro( XclExpTbxControlObj& rTbxCtrlObj, Reference< 
     {
     }
 }
-
-//#endif
 
 void XclEscherEx::DeleteCurrAppData()
 {
