@@ -16,6 +16,24 @@
       "revId": "d3e6b7c684bec182ff01535150153a73473442b0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7jw\u003d",
+        "filename": "sw/source/ui/docvw/edtwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 868,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-06-10T08:19:40Z",
+      "side": 1,
+      "message": "Good catch!\nThis is covered (honestly, by chance) in patch\n\nhttps://gerrit.libreoffice.org/#/c/4214/\n\nthus it would be great if this could be pushed \"as is\". If the aforementioned patch could not be applied, then I will fix this with a dedicated one.",
+      "parentUuid": "AAAAXH//7l8\u003d",
+      "revId": "d3e6b7c684bec182ff01535150153a73473442b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
