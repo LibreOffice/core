@@ -39,10 +39,28 @@ using namespace ::com::sun::star;
 using namespace ::std;
 
 
-OOXMLFastDocumentHandler::OOXMLFastDocumentHandler
-(uno::Reference< uno::XComponentContext > const & context)
-: m_xContext(context)
-{}
+OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(
+    uno::Reference< uno::XComponentContext > const & context,
+    Stream* pStream,
+    OOXMLDocument* pDocument,
+    const ::rtl::OUString& rXNoteId )
+    : m_xContext(context)
+    , mpStream( pStream )
+#ifdef DEBUG_ELEMENT
+    , mpTmpStream()
+#endif
+    , mpDocument( pDocument )
+    , msXNoteId( rXNoteId )
+    , mpContextHandler()
+{
+#ifdef DEBUG_PROTOCOL
+    if ( pStream )
+    {
+        mpTmpStream.reset( new StreamProtocol( pStream, debug_logger ) );
+        mpStream = mpTmpStream.get();
+    }
+#endif
+}
 
 // ::com::sun::star::xml::sax::XFastContextHandler:
 void SAL_CALL OOXMLFastDocumentHandler::startFastElement
@@ -145,6 +163,13 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
          << endl;
 #endif
 
+    if ( mpStream == 0 && mpDocument == 0 )
+    {
+        // document handler has been created as unknown child - see <OOXMLFastDocumentHandler::createUnknownChildContext(..)>
+        // --> do not provide a child context
+        return NULL;
+    }
+
     return OOXMLFactory::getInstance()->createFastChildContextFromStart(getContextHandler().get(), Element);
 }
 
@@ -171,13 +196,12 @@ Name
 #endif
 
     return uno::Reference< xml::sax::XFastContextHandler >
-        (new OOXMLFastDocumentHandler(m_xContext));
+        ( new OOXMLFastDocumentHandler( m_xContext, 0, 0, ::rtl::OUString() ) );
 }
 
 void SAL_CALL OOXMLFastDocumentHandler::characters(const ::rtl::OUString & /*aChars*/)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    // TODO: Insert your implementation for "characters" here.
 }
 
 // ::com::sun::star::xml::sax::XFastDocumentHandler:
@@ -195,32 +219,14 @@ void SAL_CALL OOXMLFastDocumentHandler::setDocumentLocator
 (const uno::Reference< xml::sax::XLocator > & /*xLocator*/)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    // TODO: Insert your implementation for "setDocumentLocator" here.
-}
-
-void OOXMLFastDocumentHandler::setStream(Stream * pStream)
-{
-#ifdef DEBUG_PROTOCOL
-    mpTmpStream.reset(new StreamProtocol(pStream, debug_logger));
-    mpStream = mpTmpStream.get();
-#else
-    mpStream = pStream;
-#endif
-}
-
-void OOXMLFastDocumentHandler::setDocument(OOXMLDocument * pDocument)
-{
-    mpDocument = pDocument;
-}
-
-void OOXMLFastDocumentHandler::setXNoteId(const ::rtl::OUString & rXNoteId)
-{
-    msXNoteId = rXNoteId;
 }
 
 void OOXMLFastDocumentHandler::setIsSubstream( bool bSubstream )
 {
-    getContextHandler( )->getParserState( )->setInSectionGroup( bSubstream );
+    if ( mpStream != 0 && mpDocument != 0 )
+    {
+        getContextHandler( )->getParserState( )->setInSectionGroup( bSubstream );
+    }
 }
 
 }}
