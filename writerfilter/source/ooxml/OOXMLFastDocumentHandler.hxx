@@ -40,8 +40,11 @@ class OOXMLFastDocumentHandler:
         xml::sax::XFastDocumentHandler>
 {
 public:
-    OOXMLFastDocumentHandler
-    (uno::Reference< uno::XComponentContext > const & context);
+    OOXMLFastDocumentHandler(
+        uno::Reference< uno::XComponentContext > const & context,
+        Stream* pStream,
+        OOXMLDocument* pDocument,
+        sal_Int32 nXNoteId );
     virtual ~OOXMLFastDocumentHandler() {}
 
     // ::com::sun::star::xml::sax::XFastDocumentHandler:
@@ -82,10 +85,6 @@ public:
         throw (uno::RuntimeException, xml::sax::SAXException);
     virtual void SAL_CALL characters(const OUString & aChars)
         throw (uno::RuntimeException, xml::sax::SAXException);
-
-    void setStream(Stream * pStream);
-    void setDocument(OOXMLDocument * pDocument);
-    void setXNoteId(const sal_Int32 nXNoteId);
 
     void setIsSubstream( bool bSubstream );
 
