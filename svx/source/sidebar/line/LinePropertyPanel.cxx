@@ -618,10 +618,12 @@ void LinePropertyPanel::NotifyItemUpdate(
             if(bDisabled)
             {
                 mpLBEdgeStyle->Disable();
+                mpFTEdgeStyle->Disable();
             }
             else
             {
                 mpLBEdgeStyle->Enable();
+                mpFTEdgeStyle->Enable();
             }
 
             if(eState >= SFX_ITEM_DEFAULT)
@@ -676,9 +678,11 @@ void LinePropertyPanel::NotifyItemUpdate(
             if(bDisabled)
             {
                 mpLBCapStyle->Disable();
+                mpFTCapStyle->Disable();
             }
             else
             {
+                mpLBCapStyle->Enable();
                 mpLBCapStyle->Enable();
             }
 
@@ -1093,6 +1097,7 @@ void LinePropertyPanel::SelectLineStyle()
     if( !mpStyleItem.get() || !mpDashItem.get() )
     {
         mpLBStyle->SetNoSelection();
+        mpLBStyle->Disable();
         return;
     }
 
@@ -1138,6 +1143,7 @@ void LinePropertyPanel::SelectEndStyle(bool bStart)
         if( !mpStartItem.get() )
         {
             mpLBStart->SetNoSelection();
+            mpLBStart->Disable();
             return;
         }
 
@@ -1166,6 +1172,7 @@ void LinePropertyPanel::SelectEndStyle(bool bStart)
         if( !mpEndItem.get() )
         {
             mpLBEnd->SetNoSelection();
+            mpLBEnd->Disable();
             return;
         }
 
