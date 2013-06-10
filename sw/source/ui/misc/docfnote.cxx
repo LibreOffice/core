@@ -37,18 +37,17 @@
 #include <frmui.hrc>
 #include <SwStyleNameMapper.hxx>
 
-SwFootNoteOptionDlg::SwFootNoteOptionDlg( Window *pParent, SwWrtShell &rS ) :
-    SfxTabDialog( pParent, SW_RES(DLG_DOC_FOOTNOTE) ),
-    rSh( rS )
+SwFootNoteOptionDlg::SwFootNoteOptionDlg(Window *pParent, SwWrtShell &rS)
+    : SfxTabDialog(pParent, "FootEndnoteDialog", "modules/swriter/ui/footendnotedialog.ui")
+    , rSh( rS )
 {
-    FreeResource();
     RemoveResetButton();
 
     aOldOkHdl = GetOKButton().GetClickHdl();
     GetOKButton().SetClickHdl( LINK( this, SwFootNoteOptionDlg, OkHdl ) );
 
-    AddTabPage( TP_FOOTNOTEOPTION, SwFootNoteOptionPage::Create, 0 );
-    AddTabPage( TP_ENDNOTEOPTION,  SwEndNoteOptionPage::Create, 0 );
+    m_nFootNoteId = AddTabPage( "footnotes", SwFootNoteOptionPage::Create, 0 );
+    m_nEndNoteId = AddTabPage( "endnotes",  SwEndNoteOptionPage::Create, 0 );
 }
 
 void SwFootNoteOptionDlg::PageCreated( sal_uInt16 /*nId*/, SfxTabPage &rPage )
@@ -56,17 +55,13 @@ void SwFootNoteOptionDlg::PageCreated( sal_uInt16 /*nId*/, SfxTabPage &rPage )
     ((SwEndNoteOptionPage&)rPage).SetShell( rSh );
 }
 
-SwFootNoteOptionDlg::~SwFootNoteOptionDlg()
-{
-}
-
 IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn )
 {
     SfxItemSet aDummySet(rSh.GetAttrPool(), 1, 1 );
-    SfxTabPage *pPage = GetTabPage( TP_FOOTNOTEOPTION );
+    SfxTabPage *pPage = GetTabPage( m_nFootNoteId );
     if ( pPage )
         pPage->FillItemSet( aDummySet );
-    pPage = GetTabPage( TP_ENDNOTEOPTION  );
+    pPage = GetTabPage( m_nEndNoteId );
     if ( pPage )
         pPage->FillItemSet( aDummySet );
     aOldOkHdl.Call( pBtn );

@@ -759,22 +759,10 @@ AbstractSwInsertDBColAutoPilot* SwAbstractDialogFactory_Impl::CreateSwInsertDBCo
     return 0;
 }
 
-SfxAbstractTabDialog *  SwAbstractDialogFactory_Impl::CreateSwFootNoteOptionDlg( Window *pParent, SwWrtShell &rSh,int nResId)
+SfxAbstractTabDialog *  SwAbstractDialogFactory_Impl::CreateSwFootNoteOptionDlg(Window *pParent, SwWrtShell &rSh)
 {
-    SfxTabDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_DOC_FOOTNOTE :
-            pDlg = new SwFootNoteOptionDlg( pParent, rSh );
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
-    return 0;
+    SfxTabDialog* pDlg = new SwFootNoteOptionDlg( pParent, rSh );
+    return new AbstractTabDialog_Impl( pDlg );
 }
 
 //add for DropDownFieldDialog

@@ -28,13 +28,15 @@ class SwFootNoteOptionDlg :public SfxTabDialog
     SwWrtShell &rSh;
     Link aOldOkHdl;
 
+    sal_uInt16 m_nFootNoteId;
+    sal_uInt16 m_nEndNoteId;
+
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
     DECL_LINK( OkHdl, Button * );
 
 public:
     SwFootNoteOptionDlg(Window *pParent, SwWrtShell &rSh );
-    ~SwFootNoteOptionDlg();
 };
 
 #endif

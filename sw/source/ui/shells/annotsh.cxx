@@ -409,7 +409,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( rView.GetWindow(), rView.GetWrtShell(), DLG_DOC_FOOTNOTE );
+            VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg(rView.GetWindow(), rView.GetWrtShell());
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
