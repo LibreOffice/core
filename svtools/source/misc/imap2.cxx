@@ -60,18 +60,18 @@ void IMapObject::AppendNCSACoords(OStringBuffer& rBuf, const Point& rPoint100) c
     rBuf.append(' ');
 }
 
-void IMapObject::AppendCERNURL(OStringBuffer& rBuf, const String& rBaseURL) const
+void IMapObject::AppendCERNURL(OStringBuffer& rBuf, const OUString& rBaseURL) const
 {
     rBuf.append(OUStringToOString(URIHelper::simpleNormalizedMakeRelative(rBaseURL, aURL), osl_getThreadTextEncoding()));
 }
 
-void IMapObject::AppendNCSAURL(OStringBuffer& rBuf, const String& rBaseURL) const
+void IMapObject::AppendNCSAURL(OStringBuffer& rBuf, const OUString& rBaseURL) const
 {
     rBuf.append(OUStringToOString(URIHelper::simpleNormalizedMakeRelative(rBaseURL, aURL), osl_getThreadTextEncoding()));
     rBuf.append(' ');
 }
 
-void IMapRectangleObject::WriteCERN( SvStream& rOStm, const String& rBaseURL ) const
+void IMapRectangleObject::WriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const
 {
     OStringBuffer aStrBuf(RTL_CONSTASCII_STRINGPARAM("rectangle "));
 
@@ -82,7 +82,7 @@ void IMapRectangleObject::WriteCERN( SvStream& rOStm, const String& rBaseURL ) c
     rOStm.WriteLine(aStrBuf.makeStringAndClear());
 }
 
-void IMapRectangleObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL ) const
+void IMapRectangleObject::WriteNCSA( SvStream& rOStm, const OUString& rBaseURL ) const
 {
     OStringBuffer aStrBuf(RTL_CONSTASCII_STRINGPARAM("rect "));
 
@@ -93,7 +93,7 @@ void IMapRectangleObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL ) c
     rOStm.WriteLine(aStrBuf.makeStringAndClear());
 }
 
-void IMapCircleObject::WriteCERN( SvStream& rOStm, const String& rBaseURL ) const
+void IMapCircleObject::WriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const
 {
     OStringBuffer aStrBuf(RTL_CONSTASCII_STRINGPARAM("circle "));
 
@@ -105,7 +105,7 @@ void IMapCircleObject::WriteCERN( SvStream& rOStm, const String& rBaseURL ) cons
     rOStm.WriteLine(aStrBuf.makeStringAndClear());
 }
 
-void IMapCircleObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL ) const
+void IMapCircleObject::WriteNCSA( SvStream& rOStm, const OUString& rBaseURL ) const
 {
     OStringBuffer aStrBuf(RTL_CONSTASCII_STRINGPARAM("circle "));
 
@@ -116,7 +116,7 @@ void IMapCircleObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL ) cons
     rOStm.WriteLine(aStrBuf.makeStringAndClear());
 }
 
-void IMapPolygonObject::WriteCERN( SvStream& rOStm, const String& rBaseURL  ) const
+void IMapPolygonObject::WriteCERN( SvStream& rOStm, const OUString& rBaseURL  ) const
 {
     OStringBuffer aStrBuf(RTL_CONSTASCII_STRINGPARAM("polygon "));
     const sal_uInt16 nCount = aPoly.GetSize();
@@ -129,7 +129,7 @@ void IMapPolygonObject::WriteCERN( SvStream& rOStm, const String& rBaseURL  ) co
     rOStm.WriteLine(aStrBuf.makeStringAndClear());
 }
 
-void IMapPolygonObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL  ) const
+void IMapPolygonObject::WriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) const
 {
     OStringBuffer aStrBuf(RTL_CONSTASCII_STRINGPARAM("poly "));
     const sal_uInt16 nCount = std::min( aPoly.GetSize(), (sal_uInt16) 100 );
@@ -142,7 +142,7 @@ void IMapPolygonObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL  ) co
     rOStm.WriteLine(aStrBuf.makeStringAndClear());
 }
 
-void ImageMap::Write( SvStream& rOStm, sal_uLong nFormat, const String& rBaseURL ) const
+void ImageMap::Write( SvStream& rOStm, sal_uLong nFormat, const OUString& rBaseURL ) const
 {
     switch( nFormat )
     {
@@ -155,7 +155,7 @@ void ImageMap::Write( SvStream& rOStm, sal_uLong nFormat, const String& rBaseURL
     }
 }
 
-void ImageMap::ImpWriteCERN( SvStream& rOStm, const String& rBaseURL ) const
+void ImageMap::ImpWriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const
 {
     IMapObject* pObj;
     size_t      nCount = maList.size();
@@ -184,7 +184,7 @@ void ImageMap::ImpWriteCERN( SvStream& rOStm, const String& rBaseURL ) const
     }
 }
 
-void ImageMap::ImpWriteNCSA( SvStream& rOStm, const String& rBaseURL  ) const
+void ImageMap::ImpWriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) const
 {
     IMapObject* pObj;
     size_t      nCount = maList.size();
@@ -213,7 +213,7 @@ void ImageMap::ImpWriteNCSA( SvStream& rOStm, const String& rBaseURL  ) const
     }
 }
 
-sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat, const String& rBaseURL  )
+sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat, const OUString& rBaseURL  )
 {
     sal_uLong nRet = IMAP_ERR_FORMAT;
 
@@ -236,7 +236,7 @@ sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat, const String& rBas
     return nRet;
 }
 
-sal_uLong ImageMap::ImpReadCERN( SvStream& rIStm, const String& rBaseURL )
+sal_uLong ImageMap::ImpReadCERN( SvStream& rIStm, const OUString& rBaseURL )
 {
     // alten Inhalt loeschen
     ClearImageMap();
@@ -248,7 +248,7 @@ sal_uLong ImageMap::ImpReadCERN( SvStream& rIStm, const String& rBaseURL )
     return IMAP_ERR_OK;
 }
 
-void ImageMap::ImpReadCERNLine( const OString& rLine, const String& rBaseURL  )
+void ImageMap::ImpReadCERNLine( const OString& rLine, const OUString& rBaseURL  )
 {
     OString aStr = comphelper::string::stripStart(rLine, ' ');
     aStr = comphelper::string::stripStart(aStr, '\t');
@@ -273,19 +273,19 @@ void ImageMap::ImpReadCERNLine( const OString& rLine, const String& rBaseURL  )
         {
             const Point     aTopLeft( ImpReadCERNCoords( &pStr ) );
             const Point     aBottomRight( ImpReadCERNCoords( &pStr ) );
-            const String    aURL( ImpReadCERNURL( &pStr, rBaseURL ) );
+            const OUString    aURL( ImpReadCERNURL( &pStr, rBaseURL ) );
             const Rectangle aRect( aTopLeft, aBottomRight );
 
-            IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, String(), String(), String(), String() );
+            IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, OUString(), OUString(), OUString(), OUString() );
             maList.push_back( pObj );
         }
         else if ( ( aToken == "circle" ) || ( aToken == "circ" ) )
         {
             const Point     aCenter( ImpReadCERNCoords( &pStr ) );
             const long      nRadius = ImpReadCERNRadius( &pStr );
-            const String    aURL( ImpReadCERNURL( &pStr, rBaseURL ) );
+            const OUString    aURL( ImpReadCERNURL( &pStr, rBaseURL ) );
 
-            IMapCircleObject* pObj = new IMapCircleObject( aCenter, nRadius, aURL, String(), String(), String(), String() );
+            IMapCircleObject* pObj = new IMapCircleObject( aCenter, nRadius, aURL, OUString(), OUString(), OUString(), OUString() );
             maList.push_back( pObj );
         }
         else if ( ( aToken == "polygon" ) || ( aToken == "poly" ) )
@@ -293,14 +293,14 @@ void ImageMap::ImpReadCERNLine( const OString& rLine, const String& rBaseURL  )
             const sal_uInt16 nCount = comphelper::string::getTokenCount(aStr,
                 '(') - 1;
             Polygon         aPoly( nCount );
-            String          aURL;
+            OUString          aURL;
 
             for ( sal_uInt16 i = 0; i < nCount; i++ )
                 aPoly[ i ] = ImpReadCERNCoords( &pStr );
 
             aURL = ImpReadCERNURL( &pStr, rBaseURL );
 
-            IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, String(), String(), String(), String() );
+            IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, OUString(), OUString(), OUString(), OUString() );
             maList.push_back( pObj );
         }
     }
@@ -308,8 +308,8 @@ void ImageMap::ImpReadCERNLine( const OString& rLine, const String& rBaseURL  )
 
 Point ImageMap::ImpReadCERNCoords( const char** ppStr )
 {
-    String  aStrX;
-    String  aStrY;
+    OUStringBuffer  aStrX;
+    OUStringBuffer  aStrY;
     Point   aPt;
     char    cChar = *(*ppStr)++;
 
@@ -320,7 +320,7 @@ Point ImageMap::ImpReadCERNCoords( const char** ppStr )
     {
         while( NOTEOL( cChar ) && ( cChar >= '0' ) && ( cChar <= '9' ) )
         {
-            aStrX += cChar;
+            aStrX.append(cChar);
             cChar = *(*ppStr)++;
         }
 
@@ -331,7 +331,7 @@ Point ImageMap::ImpReadCERNCoords( const char** ppStr )
 
             while( NOTEOL( cChar ) && ( cChar >= '0' ) && ( cChar <= '9' ) )
             {
-                aStrY += cChar;
+                aStrY.append(cChar);
                 cChar = *(*ppStr)++;
             }
 
@@ -339,7 +339,7 @@ Point ImageMap::ImpReadCERNCoords( const char** ppStr )
                 while( NOTEOL( cChar ) && ( cChar != ')' ) )
                     cChar = *(*ppStr)++;
 
-            aPt = Point( aStrX.ToInt32(), aStrY.ToInt32() );
+            aPt = Point( aStrX.toString().toInt32(), aStrY.toString().toInt32() );
         }
     }
 
@@ -348,7 +348,7 @@ Point ImageMap::ImpReadCERNCoords( const char** ppStr )
 
 long ImageMap::ImpReadCERNRadius( const char** ppStr )
 {
-    String  aStr;
+    OUStringBuffer  aStr;
     char    cChar = *(*ppStr)++;
 
     while( NOTEOL( cChar ) && ( ( cChar < '0' ) || ( cChar > '9' ) ) )
@@ -358,15 +358,15 @@ long ImageMap::ImpReadCERNRadius( const char** ppStr )
     {
         while( NOTEOL( cChar ) && ( cChar >= '0' ) && ( cChar <= '9' ) )
         {
-            aStr += cChar;
+            aStr.append(cChar);
             cChar = *(*ppStr)++;
         }
     }
 
-    return aStr.ToInt32();
+    return aStr.toString().toInt32();
 }
 
-String ImageMap::ImpReadCERNURL( const char** ppStr, const String& rBaseURL )
+OUString ImageMap::ImpReadCERNURL( const char** ppStr, const OUString& rBaseURL )
 {
     OUString aStr(OUString::createFromAscii(*ppStr));
 
@@ -378,7 +378,7 @@ String ImageMap::ImpReadCERNURL( const char** ppStr, const String& rBaseURL )
     return INetURLObject::GetAbsURL( rBaseURL, aStr );
 }
 
-sal_uLong ImageMap::ImpReadNCSA( SvStream& rIStm, const String& rBaseURL )
+sal_uLong ImageMap::ImpReadNCSA( SvStream& rIStm, const OUString& rBaseURL )
 {
     // alten Inhalt loeschen
     ClearImageMap();
@@ -390,7 +390,7 @@ sal_uLong ImageMap::ImpReadNCSA( SvStream& rIStm, const String& rBaseURL )
     return IMAP_ERR_OK;
 }
 
-void ImageMap::ImpReadNCSALine( const OString& rLine, const String& rBaseURL )
+void ImageMap::ImpReadNCSALine( const OString& rLine, const OUString& rBaseURL )
 {
     OString aStr = comphelper::string::stripStart(rLine, ' ');
     aStr = comphelper::string::stripStart(aStr, '\t');
@@ -413,44 +413,44 @@ void ImageMap::ImpReadNCSALine( const OString& rLine, const String& rBaseURL )
     {
         if ( aToken == "rect" )
         {
-            const String    aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
+            const OUString    aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
             const Point     aTopLeft( ImpReadNCSACoords( &pStr ) );
             const Point     aBottomRight( ImpReadNCSACoords( &pStr ) );
             const Rectangle aRect( aTopLeft, aBottomRight );
 
-            IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, String(), String(), String(), String() );
+            IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, OUString(), OUString(), OUString(), OUString() );
             maList.push_back( pObj );
         }
         else if ( aToken == "circle" )
         {
-            const String    aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
+            const OUString    aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
             const Point     aCenter( ImpReadNCSACoords( &pStr ) );
             const Point     aDX( aCenter - ImpReadNCSACoords( &pStr ) );
             long            nRadius = (long) sqrt( (double) aDX.X() * aDX.X() +
                                                    (double) aDX.Y() * aDX.Y() );
 
-            IMapCircleObject* pObj = new IMapCircleObject( aCenter, nRadius, aURL, String(), String(), String(), String() );
+            IMapCircleObject* pObj = new IMapCircleObject( aCenter, nRadius, aURL, OUString(), OUString(), OUString(), OUString() );
             maList.push_back( pObj );
         }
         else if ( aToken == "poly" )
         {
             const sal_uInt16 nCount = comphelper::string::getTokenCount(aStr,
                 ',') - 1;
-            const String    aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
+            const OUString    aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
             Polygon         aPoly( nCount );
 
             for ( sal_uInt16 i = 0; i < nCount; i++ )
                 aPoly[ i ] = ImpReadNCSACoords( &pStr );
 
-            IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, String(), String(), String(), String() );
+            IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, OUString(), OUString(), OUString(), OUString() );
             maList.push_back( pObj );
         }
     }
 }
 
-String ImageMap::ImpReadNCSAURL( const char** ppStr, const String& rBaseURL )
+OUString ImageMap::ImpReadNCSAURL( const char** ppStr, const OUString& rBaseURL )
 {
-    String  aStr;
+    OUStringBuffer  aStr;
     char    cChar = *(*ppStr)++;
 
     while( NOTEOL( cChar ) && ( ( cChar == ' ' ) || ( cChar == '\t' ) ) )
@@ -460,18 +460,18 @@ String ImageMap::ImpReadNCSAURL( const char** ppStr, const String& rBaseURL )
     {
         while( NOTEOL( cChar ) && ( cChar != ' ' ) && ( cChar != '\t' ) )
         {
-            aStr += cChar;
+            aStr.append(cChar);
             cChar = *(*ppStr)++;
         }
     }
 
-    return INetURLObject::GetAbsURL( rBaseURL, aStr );
+    return INetURLObject::GetAbsURL( rBaseURL, aStr.makeStringAndClear() );
 }
 
 Point ImageMap::ImpReadNCSACoords( const char** ppStr )
 {
-    String  aStrX;
-    String  aStrY;
+    OUStringBuffer  aStrX;
+    OUStringBuffer  aStrY;
     Point   aPt;
     char    cChar = *(*ppStr)++;
 
@@ -482,7 +482,7 @@ Point ImageMap::ImpReadNCSACoords( const char** ppStr )
     {
         while( NOTEOL( cChar ) && ( cChar >= '0' ) && ( cChar <= '9' ) )
         {
-            aStrX += cChar;
+            aStrX.append(cChar);
             cChar = *(*ppStr)++;
         }
 
@@ -493,11 +493,10 @@ Point ImageMap::ImpReadNCSACoords( const char** ppStr )
 
             while( NOTEOL( cChar ) && ( cChar >= '0' ) && ( cChar <= '9' ) )
             {
-                aStrY += cChar;
+                aStrY.append(cChar);
                 cChar = *(*ppStr)++;
             }
-
-            aPt = Point( aStrX.ToInt32(), aStrY.ToInt32() );
+            aPt = Point( aStrX.toString().toInt32(), aStrY.toString().toInt32() );
         }
     }
 

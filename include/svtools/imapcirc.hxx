@@ -42,11 +42,11 @@ public:
 
                         IMapCircleObject() {};
                         IMapCircleObject( const Point& rCenter, sal_uLong nRad,
-                                          const String& rURL,
-                                          const String& rAltText,
-                                          const String& rDesc,
-                                          const String& rTarget,
-                                          const String& rName,
+                                          const OUString& rURL,
+                                          const OUString& rAltText,
+                                          const OUString& rDesc,
+                                          const OUString& rTarget,
+                                          const OUString& rName,
                                           sal_Bool bActive = sal_True,
                                           sal_Bool bPixelCoords = sal_True );
     virtual             ~IMapCircleObject() {};
@@ -66,8 +66,8 @@ public:
     sal_Bool                IsEqual( const IMapCircleObject& rEqObj );
 
     // Im-/Export
-    void                WriteCERN( SvStream& rOStm, const String& rBaseURL  ) const;
-    void                WriteNCSA( SvStream& rOStm, const String& rBaseURL  ) const;
+    void                WriteCERN( SvStream& rOStm, const OUString& rBaseURL  ) const;
+    void                WriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) const;
 };
 
 #endif

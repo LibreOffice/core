@@ -62,8 +62,8 @@ extern "C" {
 SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, Window* pParent, WinBits nWinBits )
 {
     Window* pWindow = NULL;
-    String aServiceName( pDescriptor->WindowServiceName );
-    if ( aServiceName.EqualsIgnoreCaseAscii( "MultiLineEdit" ) )
+    OUString aServiceName( pDescriptor->WindowServiceName );
+    if ( aServiceName.equalsIgnoreAsciiCaseAscii( "MultiLineEdit" ) )
     {
         if ( pParent )
         {
@@ -77,7 +77,7 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
             return NULL;
         }
     }
-    else if ( aServiceName.EqualsIgnoreCaseAscii( "FileControl" ) )
+    else if ( aServiceName.equalsIgnoreAsciiCaseAscii( "FileControl" ) )
     {
         if ( pParent )
         {
@@ -90,22 +90,22 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
             return NULL;
         }
     }
-    else if (aServiceName.EqualsIgnoreCaseAscii("FormattedField") )
+    else if (aServiceName.equalsIgnoreAsciiCaseAscii("FormattedField") )
     {
         pWindow = new FormattedField( pParent, nWinBits );
         *ppNewComp = new SVTXFormattedField;
     }
-    else if (aServiceName.EqualsIgnoreCaseAscii("NumericField") )
+    else if (aServiceName.equalsIgnoreAsciiCaseAscii("NumericField") )
     {
         pWindow = new DoubleNumericField( pParent, nWinBits );
         *ppNewComp = new SVTXNumericField;
     }
-    else if (aServiceName.EqualsIgnoreCaseAscii("LongCurrencyField") )
+    else if (aServiceName.equalsIgnoreAsciiCaseAscii("LongCurrencyField") )
     {
         pWindow = new DoubleCurrencyField( pParent, nWinBits );
         *ppNewComp = new SVTXCurrencyField;
     }
-    else if (aServiceName.EqualsIgnoreCaseAscii("datefield") )
+    else if (aServiceName.equalsIgnoreAsciiCaseAscii("datefield") )
     {
         pWindow = new CalendarField( pParent, nWinBits);
         static_cast<CalendarField*>(pWindow)->EnableToday();
@@ -114,12 +114,12 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
         *ppNewComp = new SVTXDateField;
         ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(DateField*)pWindow );
     }
-    else if (aServiceName.EqualsIgnoreCaseAscii("roadmap") )
+    else if (aServiceName.equalsIgnoreAsciiCaseAscii("roadmap") )
     {
         pWindow = new ::svt::ORoadmap( pParent, WB_TABSTOP );
         *ppNewComp = new SVTXRoadmap;
     }
-    else if ( aServiceName.EqualsIgnoreCaseAscii( "ProgressBar" ) )
+    else if ( aServiceName.equalsIgnoreAsciiCaseAscii( "ProgressBar" ) )
     {
         if ( pParent )
         {
@@ -132,13 +132,13 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
             return NULL;
         }
     }
-    else if ( aServiceName.EqualsIgnoreCaseAscii( "Tree" ) )
+    else if ( aServiceName.equalsIgnoreAsciiCaseAscii( "Tree" ) )
     {
         TreeControlPeer* pPeer = new TreeControlPeer;
         *ppNewComp = pPeer;
         pWindow = pPeer->createVclControl( pParent, nWinBits );
     }
-    else if ( aServiceName.EqualsIgnoreCaseAscii( "FixedHyperlink" ) )
+    else if ( aServiceName.equalsIgnoreAsciiCaseAscii( "FixedHyperlink" ) )
     {
         if ( pParent )
         {
@@ -151,7 +151,7 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
             return NULL;
         }
     }
-    else if ( aServiceName.EqualsIgnoreCaseAscii( "Grid" ) )
+    else if ( aServiceName.equalsIgnoreAsciiCaseAscii( "Grid" ) )
     {
         if ( pParent )
         {
@@ -1051,16 +1051,16 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
                 Color* pDum;
                 double d = 0.0;
                 rValue >>= d;
-                String sConverted;
+                OUString sConverted;
                 pFormatter->GetOutputString(d, 0, sConverted, &pDum);
-                aReturn <<= OUString( sConverted );
+                aReturn <<= sConverted;
             }
             break;
         case ::com::sun::star::uno::TypeClass_STRING:
         {
             OUString aStr;
             rValue >>= aStr;
-            String sValue = aStr;
+            OUString sValue = aStr;
             if (pField->TreatingAsNumber())
             {
                 SvNumberFormatter* pFormatter = pField->GetFormatter();
@@ -1278,11 +1278,10 @@ void SVTXFormattedField::SetValue(const ::com::sun::star::uno::Any& rValue)
 
             OUString sText;
             rValue >>= sText;
-            String aStr( sText );
             if (!pField->TreatingAsNumber())
-                pField->SetTextFormatted(aStr);
+                pField->SetTextFormatted(sText);
             else
-                pField->SetTextValue(aStr);
+                pField->SetTextValue(sText);
         }
     }
 //  NotifyTextListeners();
@@ -1569,7 +1568,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const ::com::sun::s
 
             case BASEPROPERTY_ACTIVATED:
             {
-                   sal_Bool b = false;
+                sal_Bool b = false;
                 Value >>= b;
                 pField->SetRoadmapInteractive( b);
             }
@@ -1577,7 +1576,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const ::com::sun::s
 
             case BASEPROPERTY_CURRENTITEMID:
             {
-                   sal_Int32 nId = 0;
+                sal_Int32 nId = 0;
                 Value >>= nId;
                 pField->SelectRoadmapItemByID( (RoadmapTypes::ItemId)nId );
             }
@@ -1585,7 +1584,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const ::com::sun::s
 
             case BASEPROPERTY_TEXT:
             {
-                   OUString aStr;
+                OUString aStr;
                 Value >>= aStr;
                 pField->SetText( aStr );
                 pField->Invalidate();

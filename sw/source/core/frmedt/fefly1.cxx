@@ -1571,11 +1571,11 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
             if ( rURL.GetMap() )
             {
                 IMapObject *pObject = pFly->GetFmt()->GetIMapObject( rPt, pFly );
-                if ( pObject && pObject->GetURL().Len() )
+                if ( pObject && !pObject->GetURL().isEmpty() )
                 {
                     if( pURL )
                         *pURL = pObject->GetURL();
-                    if ( bSetTargetFrameName && pObject->GetTarget().Len() )
+                    if ( bSetTargetFrameName && !pObject->GetTarget().isEmpty() )
                     {
                         bSetTargetFrameName = false;
                         *pTargetFrameName = pObject->GetTarget();

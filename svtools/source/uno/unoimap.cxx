@@ -264,11 +264,11 @@ SvUnoImageMapObject::~SvUnoImageMapObject() throw()
 
 IMapObject* SvUnoImageMapObject::createIMapObject() const
 {
-    const String aURL( maURL );
-    const String aAltText( maAltText );
-    const String aDesc( maDesc );
-    const String aTarget( maTarget );
-    const String aName( maName );
+    const OUString aURL( maURL );
+    const OUString aAltText( maAltText );
+    const OUString aDesc( maDesc );
+    const OUString aTarget( maTarget );
+    const OUString aName( maName );
 
     IMapObject* pNewIMapObject;
 

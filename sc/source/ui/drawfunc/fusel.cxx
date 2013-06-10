@@ -239,7 +239,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         const IMapObject* pIMapObj =
                                 ScDrawLayer::GetHitIMapObject( aVEvt.pObj, aMDPos, *pWindow );
-                        if ( pIMapObj && pIMapObj->GetURL().Len() )
+                        if ( pIMapObj && !pIMapObj->GetURL().isEmpty() )
                         {
                             sURL = pIMapObj->GetURL();
                             sTarget = pIMapObj->GetTarget();
