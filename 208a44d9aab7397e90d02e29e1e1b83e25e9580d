@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7iw\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1336,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-10T10:17:49Z",
+      "side": 1,
+      "message": "Please don\u0027t use an \u0027str\u0027 prefix, that\u0027s uncommon in this codebase. We use \u0027a\u0027 for any instance, in some cases \u0027s\u0027 is used for strings. Any of that is fine instead.",
+      "revId": "208a44d9aab7397e90d02e29e1e1b83e25e9580d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7is\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1347,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-10T10:17:49Z",
+      "side": 1,
+      "message": "Hmm, DocxAttributeOutput::StartRedline() already has a todo for handling nsRedlineType_t::REDLINE_FORMAT, any reason you didn\u0027t add support for it there?",
+      "revId": "208a44d9aab7397e90d02e29e1e1b83e25e9580d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7io\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1374,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-10T10:17:49Z",
+      "side": 1,
+      "message": "I guess this assert will be unnecessary if you move code to DocxAttributeOutput::StartRedline(), but in general, please use SAL_WARN() in new code, if you want to assert \"false\".",
+      "revId": "208a44d9aab7397e90d02e29e1e1b83e25e9580d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7ik\u003d",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1961,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-10T10:17:49Z",
+      "side": 1,
+      "message": "I hope this will be unnecessary with the DocxAttributeOutput::StartRedline() move as well.",
+      "revId": "208a44d9aab7397e90d02e29e1e1b83e25e9580d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
