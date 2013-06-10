@@ -23,6 +23,7 @@
 #include <svtools/inetimg.hxx>
 
 #define TOKEN_SEPARATOR '\001'
+#define STR_TOKEN_SEPARATOR "\001"
 
 sal_Bool INetImage::Write( SvStream& rOStm, sal_uLong nFormat ) const
 {
@@ -31,17 +32,14 @@ sal_Bool INetImage::Write( SvStream& rOStm, sal_uLong nFormat ) const
     {
     case SOT_FORMATSTR_ID_INET_IMAGE:
         {
-            String sString;
-            (sString += aImageURL ) += TOKEN_SEPARATOR;
-            (sString += aTargetURL ) += TOKEN_SEPARATOR;
-            (sString += aTargetFrame ) += TOKEN_SEPARATOR;
-            (sString += aAlternateText ) += TOKEN_SEPARATOR;
-            sString += OUString::number( aSizePixel.Width() );
-            sString += TOKEN_SEPARATOR;
-            sString += OUString::number( aSizePixel.Height() );
+            OUString sString = aImageURL + STR_TOKEN_SEPARATOR +
+                aTargetURL + STR_TOKEN_SEPARATOR +
+                aTargetFrame + STR_TOKEN_SEPARATOR +
+                aAlternateText + STR_TOKEN_SEPARATOR +
+                OUString::number( aSizePixel.Width() ) + STR_TOKEN_SEPARATOR +
+                OUString::number( aSizePixel.Height() );
 
-            OString sOut(OUStringToOString(sString,
-                RTL_TEXTENCODING_UTF8));
+            OString sOut(OUStringToOString(sString, RTL_TEXTENCODING_UTF8));
 
             rOStm.Write(sOut.getStr(), sOut.getLength());
             static const sal_Char aEndChar[2] = { 0 };
@@ -63,17 +61,17 @@ sal_Bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
     {
     case SOT_FORMATSTR_ID_INET_IMAGE:
         {
-            String sINetImg = read_zeroTerminated_uInt8s_ToOUString(rIStm, RTL_TEXTENCODING_UTF8);
+            OUString sINetImg = read_zeroTerminated_uInt8s_ToOUString(rIStm, RTL_TEXTENCODING_UTF8);
             sal_Int32 nStart = 0;
-            aImageURL = sINetImg.GetToken( 0, TOKEN_SEPARATOR, nStart );
-            aTargetURL = sINetImg.GetToken( 0, TOKEN_SEPARATOR, nStart );
-            aTargetFrame = sINetImg.GetToken( 0, TOKEN_SEPARATOR, nStart );
-            aAlternateText = sINetImg.GetToken( 0, TOKEN_SEPARATOR, nStart );
-            aSizePixel.Width() = sINetImg.GetToken( 0, TOKEN_SEPARATOR,
-                                                    nStart ).ToInt32();
-            aSizePixel.Height() = sINetImg.GetToken( 0, TOKEN_SEPARATOR,
-                                                    nStart ).ToInt32();
-            bRet = 0 != sINetImg.Len();
+            aImageURL = sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
+            aTargetURL = sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
+            aTargetFrame = sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
+            aAlternateText = sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
+            aSizePixel.Width() = sINetImg.getToken( 0, TOKEN_SEPARATOR,
+                                                    nStart ).toInt32();
+            aSizePixel.Height() = sINetImg.getToken( 0, TOKEN_SEPARATOR,
+                                                    nStart ).toInt32();
+            bRet = !sINetImg.isEmpty();
         }
         break;
 
@@ -115,17 +113,19 @@ sal_Bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
                 rIStm.Seek( nFilePos + nAltOffset );
                 aAlternateText = read_zeroTerminated_uInt8s_ToOUString(rIStm, eSysCSet);
             }
-            else if( aAlternateText.Len() )
-                aAlternateText.Erase();
-
+            else if( !aAlternateText.isEmpty() )
+            {
+                aAlternateText = "";
+            }
             if( nAnchorOffset )
             {
                 rIStm.Seek( nFilePos + nAnchorOffset );
                 aTargetURL = read_zeroTerminated_uInt8s_ToOUString(rIStm, eSysCSet);
             }
-            else if( aTargetURL.Len() )
-                aTargetURL.Erase();
-
+            else if( !aTargetURL.isEmpty() )
+            {
+                aTargetURL = "";
+            }
             bRet = 0 == rIStm.GetError();
         }
         break;
