@@ -18,7 +18,7 @@
 #
 
 gb_COMPILERDEFAULTOPTFLAGS := -Os
-gb_CPUDEFS := -D_M_AMD64
+gb_CPUDEFS := -D_M_AMD64 -D_M_X64
 gb_TMPDIR:=$(if $(TMPDIR),$(TMPDIR),/tmp)
 
 # please make generic modifications to either of these
