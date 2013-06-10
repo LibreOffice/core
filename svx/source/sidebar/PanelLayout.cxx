@@ -13,6 +13,7 @@
 PanelLayout::PanelLayout(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame)
     : Control(pParent)
 {
+    SetStyle(GetStyle() | WB_DIALOGCONTROL);
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame);
 }
 
