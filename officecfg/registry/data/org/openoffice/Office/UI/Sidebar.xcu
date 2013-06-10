@@ -323,7 +323,6 @@
             DrawImpress,    TextObject, hidden  ;
             DrawImpress,    OLE,        hidden  ;
             WriterVariants, Draw,       visible ;
-            WriterVariants, OLE,        hidden, .uno:FrameDialog ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -358,7 +357,6 @@
             DrawImpress,    TextObject, hidden  ;
             DrawImpress,    OLE,        hidden  ;
             WriterVariants, Draw,       visible ;
-            WriterVariants, OLE,        hidden, .uno:FrameDialog ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
