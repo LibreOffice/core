@@ -119,7 +119,7 @@ public:
     sal_uInt16          nRefCount;
     std::vector<DdeConnection*> aConnections;
     // Server
-    long            hCurConvSvr;
+    sal_IntPtr      hCurConvSvr;
     DWORD           hDdeInstSvr;
     short           nInstanceSvr;
     DdeServices*    pServicesSvr;

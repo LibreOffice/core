@@ -707,21 +707,21 @@ void DdeTopic::NotifyClient( const String& rItem )
 
 // --- DdeTopic::Connect() -----------------------------------------
 
-void DdeTopic::Connect( long nId )
+void DdeTopic::Connect( sal_IntPtr nId )
 {
     aConnectLink.Call( (void*)nId );
 }
 
 // --- DdeTopic::Disconnect() --------------------------------------
 
-void DdeTopic::Disconnect( long nId )
+void DdeTopic::Disconnect( sal_IntPtr nId )
 {
     aDisconnectLink.Call( (void*)nId );
 }
 
 // --- DdeTopic::_Disconnect() --------------------------------------
 
-void DdeTopic::_Disconnect( long nId )
+void DdeTopic::_Disconnect( sal_IntPtr nId )
 {
     std::vector<DdeItem*>::iterator iter;
     for (iter = aItems.begin(); iter != aItems.end(); ++iter)
@@ -732,7 +732,7 @@ void DdeTopic::_Disconnect( long nId )
 
 // --- DdeTopic::Get() ---------------------------------------------
 
-DdeData* DdeTopic::Get( sal_uLong nFmt )
+DdeData* DdeTopic::Get( sal_uIntPtr nFmt )
 {
     if ( aGetLink.IsSet() )
         return (DdeData*)aGetLink.Call( (void*)nFmt );

@@ -1348,7 +1348,7 @@ bool EditView::ChangeFontSize( bool bGrow, SfxItemSet& rSet, const FontList* pFo
         nHeight = OutputDevice::LogicToLogic( nHeight * 10, (MapUnit)eUnit, MAP_POINT );
 
         FontInfo aFontInfo = pFontList->Get( pFontItem->GetFamilyName(), pFontItem->GetStyleName() );
-        const long* pAry = pFontList->GetSizeAry( aFontInfo );
+        const sal_IntPtr* pAry = pFontList->GetSizeAry( aFontInfo );
 
         if( bGrow )
         {

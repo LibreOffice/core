@@ -96,8 +96,8 @@ protected:
     DdeData         aDdeData;
     DdeString*      pName;
     short           nType;
-    long            nId;
-    long            nTime;
+    sal_IntPtr      nId;
+    sal_IntPtr      nTime;
     Link            aData;
     Link            aDone;
     bool            bBusy;
@@ -285,11 +285,11 @@ public:
 
 class SVL_DLLPUBLIC DdeTopic
 {
-    SVL_DLLPRIVATE void _Disconnect( long );
+    SVL_DLLPRIVATE void _Disconnect( sal_IntPtr );
 
 public:
-    virtual void    Connect( long );
-    virtual void    Disconnect( long );
+    virtual void    Connect( sal_IntPtr );
+    virtual void    Disconnect( sal_IntPtr );
     virtual DdeData* Get( sal_uLong );
     virtual sal_Bool    Put( const DdeData* );
     virtual sal_Bool    Execute( const String* );

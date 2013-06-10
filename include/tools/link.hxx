@@ -94,7 +94,7 @@ public:
                 Link();
                 Link( void* pLinkHdl, PSTUB pMemFunc );
 
-    long        Call( void* pCaller ) const;
+    sal_IntPtr      Call( void* pCaller ) const;
 
     sal_Bool        IsSet() const;
     sal_Bool        operator !() const;
@@ -118,7 +118,7 @@ inline Link::Link( void* pLinkHdl, PSTUB pMemFunc )
     pFunc = pMemFunc;
 }
 
-inline long Link::Call(void *pCaller) const
+inline sal_IntPtr Link::Call(void *pCaller) const
 {
     return pFunc ? (*pFunc)(pInst, pCaller) : 0;
 }
