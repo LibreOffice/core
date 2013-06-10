@@ -656,6 +656,7 @@ void AreaPropertyPanel::ImpUpdateTransparencies()
             else if(nValue <= 100)
             {
                 mpLBTransType->Enable();
+                mpTrspTextFT->Enable();
                 mpLBTransType->SelectEntryPos(1);
                 mpBTNGradient->Hide();
                 mpMTRTransparent->Show();
@@ -678,6 +679,7 @@ void AreaPropertyPanel::ImpUpdateTransparencies()
                 Image* pImage = 0;
 
                 mpLBTransType->Enable();
+                mpTrspTextFT->Enable();
                 mpMTRTransparent->Hide();
                 mpBTNGradient->Enable();
                 mpBTNGradient->Show();
@@ -735,6 +737,7 @@ void AreaPropertyPanel::ImpUpdateTransparencies()
         if(bZeroValue)
         {
             mpLBTransType->Enable();
+            mpTrspTextFT->Enable();
             mpLBTransType->SelectEntryPos(0);
             mpBTNGradient->Hide();
             mpMTRTransparent->Enable();
@@ -746,6 +749,8 @@ void AreaPropertyPanel::ImpUpdateTransparencies()
     {
         // no transparency at all
         mpLBTransType->SetNoSelection();
+        mpLBTransType->Disable();
+        mpTrspTextFT->Disable();
         mpMTRTransparent->Disable();
         mpMTRTransparent->Show();
         mpBTNGradient->Disable();
@@ -828,6 +833,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
             if(bDisabled)
             {
                 mpLbFillType->Disable();
+                mpColorTextFT->Disable();
                 mpLbFillType->SetNoSelection();
                 mpLbFillAttr->Show();
                 mpLbFillAttr->Disable();
@@ -845,6 +851,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
                 {
                     mpStyleItem.reset(dynamic_cast< XFillStyleItem* >(pItem->Clone()));
                     mpLbFillType->Enable();
+                    mpColorTextFT->Enable();
                     XFillStyle eXFS = (XFillStyle)mpStyleItem->GetValue();
                     meLastXFS = eXFS;
                     mpLbFillType->SelectEntryPos(sal::static_int_cast< sal_uInt16 >(eXFS));
