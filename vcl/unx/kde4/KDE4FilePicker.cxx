@@ -218,48 +218,11 @@ OUString SAL_CALL KDE4FilePicker::getDisplayDirectory()
 uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getFiles()
     throw( uno::RuntimeException )
 {
-    QStringList rawFiles = _dialog->selectedFiles();
-    QStringList files;
-
-    // Workaround for the double click selection KDE4 bug
-    // kde file picker returns the file and directories for selectedFiles()
-    // when a file is double clicked
-    // make a true list of files
-    const QString dir = KUrl(rawFiles[0]).directory();
-
-    bool singleFile = true;
-    if (rawFiles.size() > 1)
-    {
-        singleFile = false;
-        //for multi file sequences, oo expects the first param to be the directory
-        //can't treat all cases like multi file because in some instances (inserting image)
-        //oo WANTS only one entry in the final list
-        files.append(dir);
-    }
-
-    for (sal_uInt16 i = 0; i < rawFiles.size(); ++i)
-    {
-        // if the raw file is not the base directory (see above kde bug)
-        // we add the file to list of avail files
-        if ((dir + "/") != ( rawFiles[i]))
-        {
-            QString filename = KUrl(rawFiles[i]).fileName();
-
-            if (singleFile)
-                filename.prepend(dir + "/");
-            files.append(filename);
-        }
-    }
-
-    // add all files and leading directory to outgoing OO sequence
-    uno::Sequence< OUString > seq(files.size());
-    for (int i = 0; i < files.size(); ++i)
-    {
-        OUString aFile(toOUString(files[i])), aURL;
-        osl_getFileURLFromSystemPath(aFile.pData, &aURL.pData );
-        seq[i] = aURL;
-    }
-
+    KUrl::List urls = _dialog->selectedUrls();
+    uno::Sequence< OUString > seq( urls.size());
+    int i = 0;
+    foreach( const KUrl& url, urls )
+        seq[ i++ ]= toOUString( url.url());
     return seq;
 }
 
