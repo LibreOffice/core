@@ -66,6 +66,7 @@
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
         <property name="invisible_char">●</property>
+        <property name="width_chars">20</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -80,6 +81,7 @@
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
         <property name="invisible_char">●</property>
+        <property name="width_chars">30</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
