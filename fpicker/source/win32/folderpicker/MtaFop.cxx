@@ -815,7 +815,7 @@ void SAL_CALL CMtaFolderPicker::UnregisterStaRequestWindowClass( )
     if ( 0 == s_StaRequestWndRegisterCount )
     {
         UnregisterClass(
-            (LPCTSTR)MAKELONG( s_ClassAtom, 0 ), m_hInstance );
+            (LPCTSTR)(DWORD_PTR)MAKELONG( s_ClassAtom, 0 ), m_hInstance );
 
         s_ClassAtom = 0;
     }

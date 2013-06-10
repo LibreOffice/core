@@ -280,7 +280,7 @@ CFilePreview::~CFilePreview( )
 {
     // unregister preview window class
     sal_Bool bRet = UnregisterClass(
-        (LPCTSTR)MAKELONG( m_atomPrevWndClass, 0 ),
+        (LPCTSTR)(DWORD_PTR)MAKELONG( m_atomPrevWndClass, 0 ),
         m_hInstance );
     OSL_POSTCOND( bRet, "Unregister preview window class failed" );
 }

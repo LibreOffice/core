@@ -585,7 +585,7 @@ void SAL_CALL CHelpPopupWindow::UnregisterWindowClass( )
     if ( 0 == s_RegisterWndClassCount )
     {
         if ( !UnregisterClass(
-                 (LPCTSTR)MAKELONG( s_ClassAtom, 0 ), m_hInstance ) )
+                 (LPCTSTR)(DWORD_PTR)MAKELONG( s_ClassAtom, 0 ), m_hInstance ) )
         {
             OSL_FAIL( "unregister window class failed" );
         }

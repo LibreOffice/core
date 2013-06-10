@@ -48,12 +48,6 @@ namespace /* private */
 
 #define PREVIEWWND_CLASS_NAME TEXT("DIBPreviewWnd###")
 
-// means 3 pixel left and 3 pixel right
-#define HORZ_BODER_SPACE    6
-
-// means 3 pixel top and 3 pixel bottom
-#define VERT_BORDER_SPACE   6
-
 //---------------------------------------------------
 // static member initialization
 //---------------------------------------------------
@@ -445,7 +439,7 @@ void SAL_CALL CDIBPreview::UnregisterDibPreviewWindowClass()
 
     if (0 == s_RegisterDibPreviewWndCount)
     {
-        UnregisterClass((LPCTSTR)MAKELONG(s_ClassAtom,0),m_Instance);
+        UnregisterClass((LPCTSTR)(DWORD_PTR)MAKELONG(s_ClassAtom,0),m_Instance);
         s_ClassAtom = 0;
     }
 }
