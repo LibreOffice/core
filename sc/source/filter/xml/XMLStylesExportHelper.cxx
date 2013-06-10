@@ -1278,8 +1278,8 @@ sal_Int32 ScRowStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32
     StylesType& r = aTables[nTable];
     if (!r.is_tree_valid())
         r.build_tree();
-    sal_Int32 nStyle;
-    sal_Int32 nStart, nEnd;
+    sal_Int32 nStyle(0);
+    sal_Int32 nStart(0), nEnd(0);
     if (r.search_tree(nField, nStyle, &nStart, &nEnd).second)
     {
         // Cache this value for better performance.
