@@ -51,7 +51,7 @@ inline bool IsValidHandle(HANDLE handle)
 
 #else   /* __cplusplus */
 
-#define IsValidHandle(Handle)   ((DWORD)(Handle) + 1 > 1)
+#define IsValidHandle(Handle)   ((DWORD_PTR)(Handle) + 1 > 1)
 
 #endif  /* __cplusplus */
 
