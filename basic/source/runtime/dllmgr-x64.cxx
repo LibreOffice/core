@@ -550,6 +550,9 @@ SbError call(
                    *(sal_uInt64 *)&stack[17*8],
                    *(sal_uInt64 *)&stack[18*8],
                    *(sal_uInt64 *)&stack[19*8]);
+        break;
+    default:
+        break;
     }
 
     switch (result.GetType()) {
