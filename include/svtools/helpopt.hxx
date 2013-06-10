@@ -19,10 +19,10 @@
 #ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
 #define INCLUDED_SVTOOLS_HELPOPT_HXX
 
+#include <rtl/ustring.hxx>
 #include "svtools/svtdllapi.h"
 
 #include <list>
-#include <tools/string.hxx>
 #include <unotools/options.hxx>
 
 typedef std::list< sal_Int32 > IdList;
@@ -42,13 +42,13 @@ public:
     void            SetHelpTips( sal_Bool b );
     sal_Bool        IsHelpTips() const;
 
-    const String&   GetHelpStyleSheet()const;
-    void            SetHelpStyleSheet(const String& rStyleSheet);
+    const OUString& GetHelpStyleSheet()const;
+    void            SetHelpStyleSheet(const OUString& rStyleSheet);
 
     void            SetWelcomeScreen( sal_Bool b );
     sal_Bool        IsWelcomeScreen() const;
 
-    String          GetSystem() const;
+    OUString        GetSystem() const;
 };
 
 #endif
