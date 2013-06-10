@@ -259,7 +259,7 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_4 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Automatic";
+        Text [ en-US ] = "AutoSize";
     };
     FixedText FT_HEIGHT
     {
