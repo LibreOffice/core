@@ -21,7 +21,7 @@ $(call gb_CustomTarget_get_workdir,i18npool/localedata)/localedata_$(1).cxx : \
 		| $(call gb_Executable_get_runtime_dependencies,saxparser)
 	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),$(true),SAX,1)
 	$$(call gb_Helper_abbreviate_dirs, \
-		$(call gb_Helper_execute,saxparser) $(1) $$< $$@.tmp \
+		$$(call gb_Helper_execute,saxparser) $(1) $$< $$@.tmp \
 			-env:LO_LIB_DIR=$(call gb_Helper_make_url,$(gb_Helper_OUTDIR_FOR_BUILDLIBDIR)) \
 			-env:URE_MORE_SERVICES=$(call gb_Helper_make_url,$(call gb_Rdb_get_outdir_target_for_build,saxparser)) \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null 2>&1) && \
