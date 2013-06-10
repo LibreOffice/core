@@ -4,13 +4,14 @@
   <object class="GtkBox" id="prntopts">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="border_width">6</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">6</property>
+    <property name="spacing">12</property>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="spacing">6</property>
+        <property name="spacing">12</property>
         <property name="homogeneous">True</property>
         <child>
           <object class="GtkFrame" id="contentframe">
@@ -218,7 +219,7 @@
       <object class="GtkBox" id="prntandpgoptbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="spacing">6</property>
+        <property name="spacing">12</property>
         <property name="homogeneous">True</property>
         <child>
           <object class="GtkFrame" id="printframe">
@@ -371,7 +372,6 @@
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">tilepgrb</property>
                       </object>
@@ -390,7 +390,6 @@
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">brouchrb</property>
                       </object>
@@ -403,13 +402,12 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="brouchrb">
-                        <property name="label" translatable="yes">B_rouchure</property>
+                        <property name="label" translatable="yes">B_rochure</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">pagedefaultrb</property>
                       </object>
@@ -441,8 +439,8 @@
                       <object class="GtkBox" id="box4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">50</property>
-                        <property name="spacing">6</property>
+                        <property name="margin_left">24</property>
+                        <property name="spacing">12</property>
                         <child>
                           <object class="GtkCheckButton" id="frontcb">
                             <property name="label" translatable="yes">Fr_ont</property>
