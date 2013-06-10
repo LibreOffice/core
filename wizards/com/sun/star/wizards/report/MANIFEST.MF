@@ -1,3 +1,2 @@
-Class-Path: reportbuilderwizard.jar
 RegistrationClassName: com.sun.star.wizards.report.CallReportWizard
 UNO-Type-Path: 
