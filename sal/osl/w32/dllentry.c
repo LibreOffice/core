@@ -98,7 +98,7 @@ __do_global_dtors (void)
 void
 __do_global_ctors (void)
 {
-  unsigned long nptrs = (unsigned long) __CTOR_LIST__[0];
+  sal_uIntPtr nptrs = (sal_uIntPtr) __CTOR_LIST__[0];
   unsigned i;
 
   /*
@@ -106,7 +106,7 @@ __do_global_ctors (void)
    * is terminated with a null entry. Otherwise the first entry was
    * the number of pointers in the list.
    */
-  if (nptrs == (unsigned long)-1)
+  if (nptrs == (sal_uIntPtr)-1)
     {
       for (nptrs = 0; __CTOR_LIST__[nptrs + 1] != 0; nptrs++)
     ;
@@ -264,7 +264,7 @@ static DWORD GetParentProcessId()
 
 static DWORD WINAPI ParentMonitorThreadProc( LPVOID lpParam )
 {
-    DWORD   dwParentProcessId = (DWORD)lpParam;
+    DWORD_PTR dwParentProcessId = (DWORD_PTR)lpParam;
 
     HANDLE  hParentProcess = OpenProcess( SYNCHRONIZE, FALSE, dwParentProcessId );
     if ( IsValidHandle( hParentProcess ) )
@@ -300,7 +300,7 @@ BOOL WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
             {
                 DWORD   dwThreadId = 0;
 
-                DWORD   dwParentProcessId = (DWORD)atol( szBuffer );
+                DWORD_PTR   dwParentProcessId = (DWORD_PTR)atol( szBuffer );
 
                 if ( dwParentProcessId && GetParentProcessId() == dwParentProcessId )
                 {

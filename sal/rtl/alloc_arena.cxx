@@ -721,7 +721,7 @@ rtl_arena_activate (
             for (i = 1; i <= n; i++)
             {
                 size = i * arena->m_quantum;
-                (void) snprintf (namebuf, sizeof(namebuf), "%s_%lu", arena->m_name, size);
+                (void) snprintf (namebuf, sizeof(namebuf), "%s_%" SAL_PRIuUINTPTR, arena->m_name, size);
                 arena->m_qcache_ptr[i - 1] = rtl_cache_create(namebuf, size, 0, NULL, NULL, NULL, NULL, arena, RTL_CACHE_FLAG_QUANTUMCACHE);
             }
         }

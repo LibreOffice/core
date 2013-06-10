@@ -210,7 +210,7 @@ void rtl_memory_init()
         for (i = 0; i < n; i++)
         {
             char name[RTL_CACHE_NAME_LENGTH + 1];
-            (void) snprintf (name, sizeof(name), "rtl_alloc_%lu", g_alloc_sizes[i]);
+            (void) snprintf (name, sizeof(name), "rtl_alloc_%" SAL_PRIuUINTPTR, g_alloc_sizes[i]);
             g_alloc_caches[i] = rtl_cache_create (name, g_alloc_sizes[i], 0, NULL, NULL, NULL, NULL, NULL, 0);
         }
 
