@@ -157,9 +157,15 @@ $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	regview \
 	$(if $(and $(SOLAR_JAVA),$(filter-out MACOSX WNT,$(OS))),javaldx) \
 ))
+
+endif
+
+ifneq ($(OS),MACOSX)
+
 $(eval $(call gb_Helper_register_executables,UREBIN,\
 	uno \
 ))
+
 endif
 
 ifeq ($(ENABLE_NPAPI_FROM_BROWSER),YES)
@@ -200,6 +206,19 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,base, \
     abp \
     dbp \
     dbu \
+))
+
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,calc, \
+    analysis \
+    calc \
+    date \
+    pricing \
+    sc \
+    scd \
+    scfilt \
+    scui \
+    solver \
+    vbaobj \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,graphicfilter, \
