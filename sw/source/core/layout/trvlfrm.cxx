@@ -258,13 +258,28 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             }
         }
 
+        SwCntntNode* pTextNd = aTextPos.nNode.GetNode( ).GetCntntNode( );
+        bool bConsiderBackground = true;
+        // If the text position is a clickable field, then that should have priority.
+        if (pTextNd && pTextNd->IsTxtNode())
+        {
+            SwTxtNode* pTxtNd = pTextNd->GetTxtNode();
+            SwTxtAttr* pTxtAttr = pTxtNd->GetTxtAttrForCharAt(aTextPos.nContent.GetIndex(), RES_TXTATR_FIELD);
+            if (pTxtAttr)
+            {
+                const SwField* pField = pTxtAttr->GetFld().GetFld();
+                if (pField->IsClickable())
+                    bConsiderBackground = false;
+            }
+        }
+
         // Check objects in the background if nothing else matched
         if ( GetSortedObjs() )
         {
             bBackRet = lcl_GetCrsrOfst_Objects( this, true, &aBackPos, rPoint, pCMS );
         }
 
-        if ( ( bTestBackground && bBackRet ) || !bTextRet )
+        if ( ( bConsiderBackground && bTestBackground && bBackRet ) || !bTextRet )
         {
             bRet = bBackRet;
             (*pPos) = aBackPos;
@@ -280,10 +295,8 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
              * text and brackground object, then we compute the distance between both
              * would-be positions and the click point. The shortest distance wins.
              */
-            SwCntntNode* pTextNd = aTextPos.nNode.GetNode( ).GetCntntNode( );
             double nTextDistance = 0;
             bool bValidTextDistance = false;
-            bool bConsiderBackground = true;
             if ( pTextNd )
             {
                 SwCntntFrm* pTextFrm = pTextNd->getLayoutFrm( getRootFrm( ) );
@@ -292,19 +305,6 @@ sal_Bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 
                 nTextDistance = lcl_getDistance( rTextRect, rPoint );
                 bValidTextDistance = true;
-
-                // If the text position is a clickable field, then that should have priority.
-                if (pTextNd->IsTxtNode())
-                {
-                    SwTxtNode* pTxtNd = pTextNd->GetTxtNode();
-                    SwTxtAttr* pTxtAttr = pTxtNd->GetTxtAttrForCharAt(aTextPos.nContent.GetIndex(), RES_TXTATR_FIELD);
-                    if (pTxtAttr)
-                    {
-                        const SwField* pField = pTxtAttr->GetFld().GetFld();
-                        if (pField->IsClickable())
-                            bConsiderBackground = false;
-                    }
-                }
             }
 
             double nBackDistance = 0;
