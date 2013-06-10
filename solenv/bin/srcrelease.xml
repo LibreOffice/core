@@ -25,7 +25,8 @@
   <property name="getrevision.script" value="${env.SOLARENV}/bin/getrevision.pl"/>
 
   <property name="out.dir" value="."/>
-  <property name="aoo.name" value="aoo"/>
+  <property name="aoo.name" value="apache-openoffice"/>
+  <property name="aoo.short.name" value="aoo"/>
   <property name="aoo.ver" value="4.0.0"/>
 
   <property name="excludes.list" value="configure, moz/zipped/*.zip, **/.svn **/.gitignore, **/.git, warn, set_soenv, solver/**, makefile.mk, config.log, config.parms, config.status, bootstrap, autom4te.cache/**, MacOSXX86Env.*, external/unowinreg/unowinreg.dll" />
@@ -41,8 +42,9 @@
   </target>
 
   <target name="declarenames" depends="getrevision">
-    <property name="release.dir.name" value="${aoo.name}-${aoo.ver}"/>
-    <property name="release.file.name" value="${release.dir.name}-r${scm.revision}-src"/>
+    <property name="release.dir.name" value="${aoo.short.name}-${aoo.ver}"/>
+    <property name="release.name" value="${aoo.name}-${aoo.ver}"/>
+    <property name="release.file.name" value="${release.name}-r${scm.revision}-src"/>
     <property name="release.zip" value="${out.dir}/${release.file.name}.zip"/>
     <property name="release.tar" value="${out.dir}/${release.file.name}.tar"/>
     <property name="release.tar.gz" value="${out.dir}/${release.file.name}.tar.gz"/>
