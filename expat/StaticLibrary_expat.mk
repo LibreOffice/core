@@ -45,7 +45,6 @@ endif
 # suppress warning spam
 $(eval $(call gb_StaticLibrary_add_cflags,expat,\
 	-w \
-	$(if $(filter GCC,$(COM)),-fvisibility=default) \
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,expat,\
