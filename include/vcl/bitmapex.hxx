@@ -25,6 +25,12 @@
 #include <vcl/alpha.hxx>
 #include <tools/color.hxx>
 
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com { namespace sun { namespace star { namespace rendering {
+    class XBitmapCanvas;
+} } } }
+
 // -------------------
 // - TransparentType -
 // -------------------
@@ -382,6 +388,11 @@ public:
     friend VCL_DLLPUBLIC SvStream&  operator<<( SvStream& rOStm, const BitmapEx& rBitmapEx );
     friend VCL_DLLPUBLIC SvStream&  operator>>( SvStream& rIStm, BitmapEx& rBitmapEx );
     static BitmapEx AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize);
+
+    /// populate from a canvas implementation
+    bool Create( const ::com::sun::star::uno::Reference<
+                 ::com::sun::star::rendering::XBitmapCanvas > &xBitmapCanvas,
+                 const Size &rSize );
 };
 
 #endif // _SV_BITMAPEX_HXX

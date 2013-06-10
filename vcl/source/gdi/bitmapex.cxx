@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <ctype.h>
 
 #include <rtl/crc.h>
@@ -38,6 +37,13 @@
 
 #include <image.h>
 #include <impimagetree.hxx>
+
+// BitmapEx::Create
+#include <salbmp.hxx>
+#include <salinst.hxx>
+#include <svdata.hxx>
+#include <com/sun/star/beans/XFastPropertySet.hpp>
+using namespace ::com::sun::star;
 
 BitmapEx::BitmapEx() :
         eTransparent( TRANSPARENT_NONE ),
@@ -871,6 +877,76 @@ SvStream& operator>>( SvStream& rIStm, BitmapEx& rBitmapEx )
     }
 
     return rIStm;
+}
+
+// Shift alpha transparent pixels between cppcanvas/ implementations
+// and vcl in a generally grotesque and under-performing fashion
+bool BitmapEx::Create( const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::rendering::XBitmapCanvas > &xBitmapCanvas,
+                       const Size &rSize )
+{
+    SetEmpty();
+    Size aSize( rSize );
+
+    uno::Reference< beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, uno::UNO_QUERY );
+    if( xFastPropertySet.get() )
+    {
+        // 0 means get BitmapEx
+        uno::Any aAny = xFastPropertySet->getFastPropertyValue( 0 );
+        BitmapEx* pBitmapEx = (BitmapEx*) *reinterpret_cast<const sal_Int64*>(aAny.getValue());
+        if( pBitmapEx )
+        {
+            *this = *pBitmapEx;
+            delete pBitmapEx;
+            return true;
+        }
+    }
+
+    SalBitmap* pSalBmp, *pSalMask;
+
+    pSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
+    pSalMask = ImplGetSVData()->mpDefInst->CreateSalBitmap();
+
+    if( pSalBmp->Create( xBitmapCanvas, aSize ) )
+    {
+#ifdef CLAMP_BITDEPTH_PARANOIA
+        // did we get alpha mixed up in the bitmap itself
+        // eg. Cairo Canvas ... yes performance of this is awful.
+        if( pSalBmp->GetBitCount() > 24 )
+        {
+            // Format convert the pixels with generic code
+            Bitmap aSrcPixels( pSalBmp );
+            aBitmap = Bitmap( rSize, 24 );
+            BitmapReadAccess aSrcRead( aSrcPixels );
+            BitmapWriteAccess aDestWrite( aBitmap );
+            aDestWrite.CopyBuffer( aSrcRead );
+        }
+        else
+#endif
+            aBitmap = Bitmap( pSalBmp );
+
+        aBitmapSize = rSize;
+        if ( pSalMask->Create( xBitmapCanvas, aSize, true ) )
+        {
+            aMask = Bitmap( pSalMask );
+            bAlpha = sal_True;
+            aBitmapSize = rSize;
+            eTransparent = !aMask ? TRANSPARENT_NONE : TRANSPARENT_BITMAP;
+
+            return true;
+        }
+        else
+        {
+            bAlpha = sal_False;
+            eTransparent = TRANSPARENT_NONE;
+            return true;
+        }
+    }
+
+    delete pSalBmp;
+    delete pSalMask;
+
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

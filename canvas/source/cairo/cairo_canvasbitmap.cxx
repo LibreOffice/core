@@ -23,6 +23,9 @@
 
 #include "cairo_canvasbitmap.hxx"
 
+#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapex.hxx>
+
 #ifdef CAIRO_HAS_XLIB_SURFACE
 # include "cairo_xlib_cairo.hxx"
 #elif defined CAIRO_HAS_QUARTZ_SURFACE
@@ -144,7 +147,67 @@ namespace cairocanvas
         {
             case 0:
             {
-                aRV = uno::Any( reinterpret_cast<sal_Int64>( (BitmapEx*) NULL ) );
+                aRV = uno::Any( reinterpret_cast<sal_Int64>( (BitmapEx *) NULL ) );
+                if ( !mbHasAlpha )
+                    break;
+
+                ::Size aSize( maSize.getX(), maSize.getY() );
+                // FIXME: if we could teach VCL/ about cairo handles, life could
+                // be significantly better here perhaps.
+                cairo_surface_t *pPixels;
+                pPixels = cairo_image_surface_create( CAIRO_FORMAT_ARGB32,
+                                                      aSize.Width(), aSize.Height() );
+                cairo_t *pCairo = cairo_create( pPixels );
+                if( !pPixels || !pCairo )
+                    break;
+
+                // suck ourselves from the X server to this buffer so then we can fiddle with
+                // Alpha to turn it into the ultra-lame vcl required format and then push it
+                // all back again later at vast expense [ urgh ]
+                cairo_set_source_surface( pCairo, getSurface()->getCairoSurface().get(), 0, 0 );
+                cairo_set_operator( pCairo, CAIRO_OPERATOR_SOURCE );
+                cairo_paint( pCairo );
+
+                ::Bitmap aRGB( aSize, 24 );
+                ::AlphaMask aMask( aSize );
+
+                BitmapWriteAccess *pRGBWrite( aRGB.AcquireWriteAccess() );
+                BitmapWriteAccess *pMaskWrite( aMask.AcquireWriteAccess() );
+
+                unsigned char *pSrc = cairo_image_surface_get_data( pPixels );
+                unsigned int nStride = cairo_image_surface_get_stride( pPixels );
+                for( unsigned long y = 0; y < (unsigned long) aSize.Height(); y++ )
+                {
+                    sal_uInt32 *pPix = (sal_uInt32 *)(pSrc + nStride * y);
+                    for( unsigned long x = 0; x < (unsigned long) aSize.Width(); x++ )
+                    {
+                        sal_uInt8 nAlpha = (*pPix >> 24);
+                        sal_uInt8 nR = (*pPix >> 16) & 0xff;
+                        sal_uInt8 nG = (*pPix >> 8) & 0xff;
+                        sal_uInt8 nB = *pPix & 0xff;
+                        if( nAlpha != 0 && nAlpha != 255 )
+                        {
+//                            fprintf (stderr, "From A(0x%.2x) 0x%.2x 0x%.2x 0x%.2x -> ",
+//                                     nAlpha, nR, nG, nB );
+                            // Cairo uses pre-multiplied alpha - we do not => re-multiply
+                            nR = (sal_uInt8) MinMax( ((sal_uInt32)nR * 255) / nAlpha, 0, 255 );
+                            nG = (sal_uInt8) MinMax( ((sal_uInt32)nG * 255) / nAlpha, 0, 255 );
+                            nB = (sal_uInt8) MinMax( ((sal_uInt32)nB * 255) / nAlpha, 0, 255 );
+//                            fprintf (stderr, "0x%.2x 0x%.2x 0x%.2x\n", nR, nG, nB );
+                        }
+                        pRGBWrite->SetPixel( y, x, BitmapColor( nR, nG, nB ) );
+                        pMaskWrite->SetPixelIndex( y, x, 255 - nAlpha );
+                        pPix++;
+                    }
+                }
+                aMask.ReleaseAccess( pMaskWrite );
+                aRGB.ReleaseAccess( pRGBWrite );
+
+                ::BitmapEx *pBitmapEx = new ::BitmapEx( aRGB, aMask );
+
+                cairo_surface_destroy( pPixels );
+
+                aRV = uno::Any( reinterpret_cast<sal_Int64>( pBitmapEx ) );
                 break;
             }
             case 1:
@@ -179,71 +242,9 @@ namespace cairocanvas
             }
             case 2:
             {
-#ifdef CAIRO_HAS_XLIB_SURFACE
-                uno::Sequence< uno::Any > args( 3 );
-                SurfaceSharedPtr pAlphaSurface = mpSurfaceProvider->createSurface( maSize, CAIRO_CONTENT_COLOR );
-                CairoSharedPtr   pAlphaCairo = pAlphaSurface->getCairo();
-                X11Surface* pXlibSurface=dynamic_cast<X11Surface*>(pAlphaSurface.get());
-                OSL_ASSERT(pXlibSurface);
-
-                // create RGB image (levels of gray) of alpha channel of original picture
-                cairo_set_source_rgba( pAlphaCairo.get(), 1, 1, 1, 1 );
-                cairo_set_operator( pAlphaCairo.get(), CAIRO_OPERATOR_SOURCE );
-                cairo_paint( pAlphaCairo.get() );
-                cairo_set_source_surface( pAlphaCairo.get(), mpBufferSurface->getCairoSurface().get(), 0, 0 );
-                cairo_set_operator( pAlphaCairo.get(), CAIRO_OPERATOR_XOR );
-                cairo_paint( pAlphaCairo.get() );
-                pAlphaCairo.reset();
-
-                X11PixmapSharedPtr pPixmap = pXlibSurface->getPixmap();
-                args[0] = uno::Any( true );
-                args[1] = ::com::sun::star::uno::Any( pPixmap->mhDrawable );
-                args[2] = ::com::sun::star::uno::Any( sal_Int32( pXlibSurface->getDepth () ) );
-                pPixmap->clear(); // caller takes ownership of pixmap
-
-                // return pixmap and alphachannel pixmap - it will be used in BitmapEx
-                aRV = uno::Any( args );
-#elif defined CAIRO_HAS_QUARTZ_SURFACE
-                SurfaceSharedPtr pAlphaSurface = mpSurfaceProvider->createSurface( maSize, CAIRO_CONTENT_COLOR );
-                CairoSharedPtr   pAlphaCairo = pAlphaSurface->getCairo();
-                QuartzSurface* pQuartzSurface=dynamic_cast<QuartzSurface*>(pAlphaSurface.get());
-                OSL_ASSERT(pQuartzSurface);
-
-                // create RGB image (levels of gray) of alpha channel of original picture
-                cairo_set_source_rgba( pAlphaCairo.get(), 1, 1, 1, 1 );
-                cairo_set_operator( pAlphaCairo.get(), CAIRO_OPERATOR_SOURCE );
-                cairo_paint( pAlphaCairo.get() );
-                cairo_set_source_surface( pAlphaCairo.get(), mpBufferSurface->getCairoSurface().get(), 0, 0 );
-                cairo_set_operator( pAlphaCairo.get(), CAIRO_OPERATOR_XOR );
-                cairo_paint( pAlphaCairo.get() );
-                pAlphaCairo.reset();
-
-                uno::Sequence< uno::Any > args( 1 );
-                args[0] = uno::Any( sal_IntPtr (pQuartzSurface->getCGContext()) );
-                // return ??? and alphachannel ??? - it will be used in BitmapEx
-                aRV = uno::Any( args );
-#elif defined CAIRO_HAS_WIN32_SURFACE
-                SurfaceSharedPtr pAlphaSurface = mpSurfaceProvider->createSurface( maSize, CAIRO_CONTENT_COLOR );
-                CairoSharedPtr   pAlphaCairo = pAlphaSurface->getCairo();
-
-                // create RGB image (levels of gray) of alpha channel of original picture
-                cairo_set_source_rgba( pAlphaCairo.get(), 1, 1, 1, 1 );
-                cairo_set_operator( pAlphaCairo.get(), CAIRO_OPERATOR_SOURCE );
-                cairo_paint( pAlphaCairo.get() );
-                cairo_set_source_surface( pAlphaCairo.get(), mpBufferSurface->getCairoSurface().get(), 0, 0 );
-                cairo_set_operator( pAlphaCairo.get(), CAIRO_OPERATOR_XOR );
-                cairo_paint( pAlphaCairo.get() );
-                pAlphaCairo.reset();
-
-                // cant seem to retrieve HBITMAP from cairo. copy content then
-                uno::Sequence< uno::Any > args( 1 );
-                args[1] = uno::Any( sal_Int64(surface2HBitmap(pAlphaSurface,maSize)) );
-
-                aRV = uno::Any( args );
-                // caller frees the bitmap
-#else
-# error Please define fast prop retrieval for your platform!
-#endif
+                // Always return nothing - for the RGB surface support.
+                // Alpha code paths go via the above case 0.
+                aRV = uno::Any();
                 break;
             }
         }
