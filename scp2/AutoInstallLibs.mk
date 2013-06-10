@@ -10,6 +10,7 @@
 $(eval $(call gb_AutoInstallLibs_AutoInstallLibs))
 
 $(eval $(call gb_AutoInstallLibs_add_category,base,BASE,LIBO_LIB_FILE,auto_Base_Lib))
+$(eval $(call gb_AutoInstallLibs_add_category,calc,CALC,LIBO_LIB_FILE,auto_Calc_Lib))
 $(eval $(call gb_AutoInstallLibs_add_category,gnome,GNOME,LIBO_LIB_FILE,auto_Gnome_Lib))
 $(eval $(call gb_AutoInstallLibs_add_category,graphicfilter,GRAPHICFILTER,LIBO_LIB_FILE,auto_Graphicfilter_Lib))
 $(eval $(call gb_AutoInstallLibs_add_category,impress,IMPRESS,LIBO_LIB_FILE,auto_Impress_Lib))

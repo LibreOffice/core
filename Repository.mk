@@ -209,6 +209,19 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,BASE, \
     dbu \
 ))
 
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,CALC, \
+    analysis \
+    calc \
+    date \
+    pricing \
+    sc \
+    scd \
+    scfilt \
+    scui \
+    solver \
+    vbaobj \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,GRAPHICFILTER, \
     svgfilter \
     flash \
@@ -393,35 +406,26 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	adabasui \
 	ado \
     agg \
-    analysis \
     $(if $(filter $(OS),ANDROID),, \
 		basebmp \
     ) \
     communi \
-    date \
     oox \
 	ooxml \
     sdbc \
     AppleRemote \
     avmediaQuickTime \
-    calc \
 	filtertracer \
     log \
 	MacOSXSpell \
     mork \
     mozab2 \
     mozabdrv \
-    pricing \
     protocolhandler \
     rpt \
     rptui \
     rptxml \
-    sc \
-    scd \
-    scfilt \
-    scui \
     simplecm \
-    solver \
     spa \
     spell \
     sts \
@@ -636,7 +640,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     ucptdoc1 \
     updatefeed \
     vbaevents \
-    vbaobj \
     vbaswobj \
     $(if $(filter $(OS),MACOSX), \
         fps_aqua \
