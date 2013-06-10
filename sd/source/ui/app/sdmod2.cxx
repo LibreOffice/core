@@ -66,7 +66,6 @@
 #include "sdpage.hxx"
 #include "sdxfer.hxx"
 #include "sdabstdlg.hxx"
-#include "prntopts.hrc"
 #include <svl/intitem.hxx>
 
 /** retrieves the page that is currently painted. This will only be the master page

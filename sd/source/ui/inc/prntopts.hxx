@@ -32,34 +32,25 @@ class SdPrintOptions : public SfxTabPage
  friend class SdModule;
 
 private:
-    FixedLine           aGrpPrint;
-    CheckBox            aCbxDraw;
-    CheckBox            aCbxNotes;
-    CheckBox            aCbxHandout;
-    CheckBox            aCbxOutline;
-
-    FixedLine           aSeparator1FL;
-    FixedLine           aGrpOutput;
-    RadioButton         aRbtColor;
-    RadioButton         aRbtGrayscale;
-    RadioButton         aRbtBlackWhite;
-
-    FixedLine           aGrpPrintExt;
-    CheckBox            aCbxPagename;
-    CheckBox            aCbxDate;
-    CheckBox            aCbxTime;
-    CheckBox            aCbxHiddenPages;
-
-    FixedLine           aSeparator2FL;
-    FixedLine           aGrpPageoptions;
-    RadioButton         aRbtDefault;
-    RadioButton         aRbtPagesize;
-    RadioButton         aRbtPagetile;
-    RadioButton         aRbtBooklet;
-    CheckBox            aCbxFront;
-    CheckBox            aCbxBack;
-
-    CheckBox            aCbxPaperbin;
+    VclFrame            *m_pFrmContent;
+    CheckBox            *m_pCbxDraw;
+    CheckBox            *m_pCbxNotes;
+    CheckBox            *m_pCbxHandout;
+    CheckBox            *m_pCbxOutline;
+    RadioButton         *m_pRbtColor;
+    RadioButton         *m_pRbtGrayscale;
+    RadioButton         *m_pRbtBlackWhite;
+    CheckBox            *m_pCbxPagename;
+    CheckBox            *m_pCbxDate;
+    CheckBox            *m_pCbxTime;
+    CheckBox            *m_pCbxHiddenPages;
+    RadioButton         *m_pRbtDefault;
+    RadioButton         *m_pRbtPagesize;
+    RadioButton         *m_pRbtPagetile;
+    RadioButton         *m_pRbtBooklet;
+    CheckBox            *m_pCbxFront;
+    CheckBox            *m_pCbxBack;
+    CheckBox            *m_pCbxPaperbin;
 
     const SfxItemSet&   rOutAttrs;
 

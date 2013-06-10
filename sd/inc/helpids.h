@@ -23,7 +23,6 @@
 #define HID_SDDRAWVIEWSHELL                                     "SD_HID_SDDRAWVIEWSHELL"
 #define HID_SDGRAPHICVIEWSHELL                                  "SD_HID_SDGRAPHICVIEWSHELL"
 #define HID_SDOUTLINEVIEWSHELL                                  "SD_HID_SDOUTLINEVIEWSHELL"
-#define HID_SD_PRINT_OPTIONS                                    "SD_HID_SD_PRINT_OPTIONS"
 #define HID_SD_OPTIONS_SNAP                                     "SD_HID_SD_OPTIONS_SNAP"
 #define HID_SD_AUTOPILOT_PAGE1                                  "SD_HID_SD_AUTOPILOT_PAGE1"
 #define HID_SD_AUTOPILOT_PAGE2                                  "SD_HID_SD_AUTOPILOT_PAGE2"
