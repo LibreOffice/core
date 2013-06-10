@@ -17,15 +17,6 @@
  */
 #include "PropertyPanel.hrc"
 
-#define FT_ORIENTATION          1
-#define TB_ORIENTATION          2
-#define FT_MARGIN               3
-#define TB_MARGIN               4
-#define FT_SIZE                 5
-#define TB_SIZE                 6
-#define FT_COLUMN               7
-#define TB_COLUMN               8
-#define TBI_MARGIN              9
 #define IMG_PORTRAIT            10
 #define IMG_LANDSCAPE           11
 #define STR_PORTRAIT            12
@@ -38,13 +29,11 @@
 #define MF_SWRIGHT_MARGIN       19
 #define MF_SWTOP_MARGIN         20
 #define MF_SWBOTTOM_MARGIN      21
-#define TBI_SIZE                22
 #define VS_SIZE                 23
 #define STR_LCVALUE             24
 #define FT_CUSTOM               25
 #define FLD_WIDTH_HEIGHT        26
 
-#define TBI_ORIENTATION         28
 #define VS_ORIENTATION          29
 #define IMG_PAGE_PORTRAIT       30
 #define IMG_PAGE_LANDSCAPE      31
@@ -64,7 +53,6 @@
 #define FT_BOTTOM               45
 #define FT_INNER                46
 #define FT_OUTER                47
-#define TBI_COLUMN              48
 #define VS_COLUMN               49
 #define MBOX_WIDTH              50
 #define IMG_ONE                 51
@@ -135,10 +123,6 @@
 #define FLD_TOP_MARGIN          115
 #define FLD_BOTTOM_MARGIN       116
 
-#define STR_QHELP_TB_ORIENTATION    117
-#define STR_QHELP_TB_MARGIN         118
-#define STR_QHELP_TB_SIZE           119
-#define STR_QHELP_TB_COLUMN         120
 #define IMG_CUSTOM_DIS          121
 //
 #define STR_MARGIN_TOOLTIP_LEFT             122

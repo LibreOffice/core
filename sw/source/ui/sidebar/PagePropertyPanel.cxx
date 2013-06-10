@@ -49,6 +49,11 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
+const char UNO_ORIENTATION[] = ".uno:Orientation";
+const char UNO_MARGIN[]      = ".uno:Margin";
+const char UNO_SIZE[]        = ".uno:Size";
+const char UNO_COLUMN[]      = ".uno:Column";
+
 #define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
 namespace {
@@ -98,21 +103,9 @@ PagePropertyPanel::PagePropertyPanel(
             Window* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>& rxFrame,
             SfxBindings* pBindings)
-    : Control(pParent, SW_RES(RID_PROPERTYPANEL_SWPAGE))
+    : PanelLayout(pParent, "PagePropertyPanel", "modules/swriter/ui/sidebarpage.ui", rxFrame)
     , mpBindings(pBindings)
-    // visible controls
-    , maFtOrientation( this, SW_RES(FT_ORIENTATION) )
-    , mpToolBoxOrientationBackground( ::sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this) )
-    , mpToolBoxOrientation( ::sfx2::sidebar::ControlFactory::CreateToolBox( mpToolBoxOrientationBackground.get(), SW_RES(TB_ORIENTATION)) )
-    , maFtMargin( this, SW_RES(FT_MARGIN) )
-    , mpToolBoxMarginBackground( ::sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this) )
-    , mpToolBoxMargin( ::sfx2::sidebar::ControlFactory::CreateToolBox( mpToolBoxMarginBackground.get(), SW_RES(TB_MARGIN)) )
-    , maFtSize( this, SW_RES(FT_SIZE) )
-    , mpToolBoxSizeBackground( ::sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this) )
-    , mpToolBoxSize( ::sfx2::sidebar::ControlFactory::CreateToolBox( mpToolBoxSizeBackground.get(), SW_RES(TB_SIZE)) )
-    , maFtColumn( this, SW_RES(FT_COLUMN) )
-    , mpToolBoxColumnBackground( ::sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this) )
-    , mpToolBoxColumn( ::sfx2::sidebar::ControlFactory::CreateToolBox( mpToolBoxColumnBackground.get(), SW_RES(TB_COLUMN)) )
+
     // image resources
     , maImgSize                 (NULL)
     , maImgSize_L                   (NULL)
@@ -158,7 +151,6 @@ PagePropertyPanel::PagePropertyPanel(
     , mImgLeft_L                    (SW_RES(IMG_PAGE_COLUMN_LEFT_L))
     , mImgRight_L                   (SW_RES(IMG_PAGE_COLUMN_RIGHT_L))
     , mImgColumnNone_L          (SW_RES(IMG_PAGE_COLUMN_NONE_L))
-
     , mpPageItem( new SvxPageItem(SID_ATTR_PAGE) )
     , mpPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) )
     , mpPageULMarginItem( new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ) )
@@ -193,68 +185,46 @@ PagePropertyPanel::PagePropertyPanel(
 
     , mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify( false )
 {
+    // visible controls
+    get(mpToolBoxOrientation, "orientation");
+    get(mpToolBoxMargin, "margin");
+    get(mpToolBoxSize, "size");
+    get(mpToolBoxColumn, "column");
+
     Initialize();
     mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify = true;
-    FreeResource();
 }
 
 PagePropertyPanel::~PagePropertyPanel()
 {
     delete[] maImgSize;
     delete[] maImgSize_L;
-
-    // destroy the toolbox windows.
-    mpToolBoxOrientation.reset();
-    mpToolBoxMargin.reset();
-    mpToolBoxSize.reset();
-    mpToolBoxColumn.reset();
-
-    // destroy the background windows of the toolboxes.
-    mpToolBoxOrientationBackground.reset();
-    mpToolBoxMarginBackground.reset();
-    mpToolBoxSizeBackground.reset();
-    mpToolBoxColumnBackground.reset();
 }
 
 void PagePropertyPanel::Initialize()
 {
-    maFtOrientation.SetBackground(Wallpaper());
-    maFtMargin.SetBackground(Wallpaper());
-    maFtSize.SetBackground(Wallpaper());
-    maFtColumn.SetBackground(Wallpaper());
-
     // popup for page orientation
+    const sal_uInt16 nIdOrientation = mpToolBoxOrientation->GetItemId(UNO_ORIENTATION);
     Link aLink = LINK( this, PagePropertyPanel, ClickOrientationHdl );
     mpToolBoxOrientation->SetDropdownClickHdl( aLink );
     mpToolBoxOrientation->SetSelectHdl( aLink );
-    mpToolBoxOrientation->SetItemImage( TBI_ORIENTATION, mImgPortrait);
-    mpToolBoxOrientation->SetItemBits( TBI_ORIENTATION, mpToolBoxOrientation->GetItemBits( TBI_ORIENTATION ) | TIB_DROPDOWNONLY );
-    mpToolBoxOrientation->SetQuickHelpText(TBI_ORIENTATION,String(SW_RES(STR_QHELP_TB_ORIENTATION)));
-    mpToolBoxOrientation->SetOutputSizePixel( mpToolBoxOrientation->CalcWindowSizePixel() );
-    mpToolBoxOrientation->SetBackground( Wallpaper() );
-    mpToolBoxOrientation->SetPaintTransparent( sal_True );
+    mpToolBoxOrientation->SetItemImage( nIdOrientation, mImgPortrait);
+    mpToolBoxOrientation->SetItemBits( nIdOrientation, mpToolBoxOrientation->GetItemBits( nIdOrientation ) | TIB_DROPDOWNONLY );
 
     // popup for page margins
+    const sal_uInt16 nIdMargin = mpToolBoxMargin->GetItemId(UNO_MARGIN);
     aLink = LINK( this, PagePropertyPanel, ClickMarginHdl );
     mpToolBoxMargin->SetDropdownClickHdl( aLink );
     mpToolBoxMargin->SetSelectHdl( aLink );
-    mpToolBoxMargin->SetItemImage(TBI_MARGIN, mImgNormal);
-    mpToolBoxMargin->SetItemBits( TBI_MARGIN, mpToolBoxMargin->GetItemBits( TBI_MARGIN ) | TIB_DROPDOWNONLY );
-    mpToolBoxMargin->SetQuickHelpText(TBI_MARGIN,String(SW_RES(STR_QHELP_TB_MARGIN)));
-    mpToolBoxMargin->SetOutputSizePixel( mpToolBoxMargin->CalcWindowSizePixel() );
-    mpToolBoxMargin->SetBackground(Wallpaper());
-    mpToolBoxMargin->SetPaintTransparent( sal_True );
+    mpToolBoxMargin->SetItemImage(nIdMargin, mImgNormal);
+    mpToolBoxMargin->SetItemBits( nIdMargin, mpToolBoxMargin->GetItemBits( nIdMargin ) | TIB_DROPDOWNONLY );
 
     // popup for page size
+    const sal_uInt16 nIdSize = mpToolBoxSize->GetItemId(UNO_SIZE);
     aLink = LINK( this, PagePropertyPanel, ClickSizeHdl );
     mpToolBoxSize->SetDropdownClickHdl( aLink );
     mpToolBoxSize->SetSelectHdl( aLink );
-    mpToolBoxSize->SetItemImage(TBI_SIZE, mImgLetter);
-    mpToolBoxSize->SetItemBits( TBI_SIZE, mpToolBoxSize->GetItemBits( TBI_SIZE ) | TIB_DROPDOWNONLY );
-    mpToolBoxSize->SetQuickHelpText(TBI_SIZE,String(SW_RES(STR_QHELP_TB_SIZE)));
-    mpToolBoxSize->SetOutputSizePixel( mpToolBoxSize->CalcWindowSizePixel() );
-    mpToolBoxSize->SetBackground(Wallpaper());
-    mpToolBoxSize->SetPaintTransparent( sal_True );
+    mpToolBoxSize->SetItemImage(nIdSize, mImgLetter);
     maImgSize = new Image[8];
     maImgSize[0] = mImgA3;
     maImgSize[1] = mImgA4;
@@ -273,17 +243,15 @@ void PagePropertyPanel::Initialize()
     maImgSize_L[5] = mImgC5_L;
     maImgSize_L[6] = mImgLetter_L;
     maImgSize_L[7] = mImgLegal_L;
+    mpToolBoxSize->SetItemBits( nIdSize, mpToolBoxSize->GetItemBits( nIdSize ) | TIB_DROPDOWNONLY );
 
     // popup for page column property
+    const sal_uInt16 nIdColumn = mpToolBoxColumn->GetItemId(UNO_COLUMN);
     aLink = LINK( this, PagePropertyPanel, ClickColumnHdl );
     mpToolBoxColumn->SetDropdownClickHdl( aLink );
     mpToolBoxColumn->SetSelectHdl( aLink );
-    mpToolBoxColumn->SetItemImage(TBI_COLUMN, mImgColumn1);
-    mpToolBoxColumn->SetItemBits( TBI_COLUMN, mpToolBoxColumn->GetItemBits( TBI_COLUMN ) | TIB_DROPDOWNONLY );
-    mpToolBoxColumn->SetQuickHelpText(TBI_COLUMN,String(SW_RES(STR_QHELP_TB_COLUMN)));
-    mpToolBoxColumn->SetOutputSizePixel( mpToolBoxColumn->CalcWindowSizePixel() );
-    mpToolBoxColumn->SetBackground(Wallpaper());
-    mpToolBoxColumn->SetPaintTransparent( sal_True );
+    mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumn1);
+    mpToolBoxColumn->SetItemBits( nIdColumn, mpToolBoxColumn->GetItemBits( nIdColumn ) | TIB_DROPDOWNONLY );
 
     meFUnit = GetModuleFieldUnit();
     meUnit  = m_aSwPagePgSizeControl.GetCoreMetric();
@@ -375,8 +343,6 @@ void PagePropertyPanel::ClosePageOrientationPopup()
 }
 
 
-
-
 ::svx::sidebar::PopupControl* PagePropertyPanel::CreatePageMarginControl( ::svx::sidebar::PopupContainer* pParent )
 {
     return new PageMarginControl(
@@ -400,6 +366,7 @@ void PagePropertyPanel::ExecuteMarginLRChange(
     mpPageLRMarginItem->SetRight( nPageRightMargin );
     GetBindings()->GetDispatcher()->Execute( SID_ATTR_PAGE_LRSPACE, SFX_CALLMODE_RECORD, mpPageLRMarginItem.get(),  0L );
 }
+
 
 void PagePropertyPanel::ExecuteMarginULChange(
     const long nPageTopMargin,
@@ -430,8 +397,6 @@ void PagePropertyPanel::ClosePageMarginPopup()
 {
     maMarginPopup.Hide();
 }
-
-
 
 
 ::svx::sidebar::PopupControl* PagePropertyPanel::CreatePageSizeControl( ::svx::sidebar::PopupContainer* pParent )
@@ -505,8 +470,6 @@ void PagePropertyPanel::ClosePageColumnPopup()
 }
 
 
-
-
 void PagePropertyPanel::NotifyItemUpdate(
     const sal_uInt16 nSId,
     const SfxItemState eState,
@@ -549,20 +512,21 @@ void PagePropertyPanel::NotifyItemUpdate(
         if ( eState >= SFX_ITEM_AVAILABLE &&
              pState && pState->ISA(SvxPageItem) )
         {
+            const sal_uInt16 nIdOrientation = mpToolBoxOrientation->GetItemId(UNO_ORIENTATION);
             mpPageItem.reset( static_cast<SvxPageItem*>(pState->Clone()) );
             if ( mpPageItem->IsLandscape() )
             {
-                mpToolBoxOrientation->SetItemImage(TBI_ORIENTATION, mImgLandscape);
+                mpToolBoxOrientation->SetItemImage(nIdOrientation, mImgLandscape);
             }
             else
             {
-                mpToolBoxOrientation->SetItemImage(TBI_ORIENTATION, mImgPortrait);
+                mpToolBoxOrientation->SetItemImage(nIdOrientation, mImgPortrait);
             }
             ChangeMarginImage();
             ChangeSizeImage();
             ChangeColumnImage( mpPageColumnTypeItem->GetValue() );
         }
-        break;
+         break;
 
     case SID_ATTR_PAGE_SIZE:
         if ( mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify )
@@ -626,37 +590,38 @@ void PagePropertyPanel::ChangeMarginImage()
     }
 
     const long cTolerance = 5;
+    const sal_uInt16 nIdMargin = mpToolBoxMargin->GetItemId(UNO_MARGIN);
 
     if( abs(mpPageLRMarginItem->GetLeft() - SWPAGE_NARROW_VALUE) <= cTolerance &&
         abs(mpPageLRMarginItem->GetRight() - SWPAGE_NARROW_VALUE) <= cTolerance &&
         abs(mpPageULMarginItem->GetUpper() - SWPAGE_NARROW_VALUE) <= cTolerance &&
         abs(mpPageULMarginItem->GetLower() - SWPAGE_NARROW_VALUE) <= cTolerance &&
         mpPageItem->GetPageUsage() != SVX_PAGE_MIRROR )
-        mpToolBoxMargin->SetItemImage( TBI_MARGIN, mpPageItem->IsLandscape() ? mImgNarrow_L : mImgNarrow );
+        mpToolBoxMargin->SetItemImage( nIdMargin, mpPageItem->IsLandscape() ? mImgNarrow_L : mImgNarrow );
 
     else if( abs(mpPageLRMarginItem->GetLeft() - SWPAGE_NORMAL_VALUE) <= cTolerance &&
         abs(mpPageLRMarginItem->GetRight() - SWPAGE_NORMAL_VALUE) <= cTolerance &&
         abs(mpPageULMarginItem->GetUpper() - SWPAGE_NORMAL_VALUE) <= cTolerance &&
         abs(mpPageULMarginItem->GetLower() - SWPAGE_NORMAL_VALUE) <= cTolerance &&
         mpPageItem->GetPageUsage() != SVX_PAGE_MIRROR )
-        mpToolBoxMargin->SetItemImage(TBI_MARGIN, mpPageItem->IsLandscape() ? mImgNormal_L : mImgNormal );
+        mpToolBoxMargin->SetItemImage( nIdMargin, mpPageItem->IsLandscape() ? mImgNormal_L : mImgNormal );
 
     else if( abs(mpPageLRMarginItem->GetLeft() - SWPAGE_WIDE_VALUE2) <= cTolerance &&
         abs(mpPageLRMarginItem->GetRight() - SWPAGE_WIDE_VALUE2) <= cTolerance &&
         abs(mpPageULMarginItem->GetUpper() - SWPAGE_WIDE_VALUE1) <= cTolerance &&
         abs(mpPageULMarginItem->GetLower() - SWPAGE_WIDE_VALUE1) <= cTolerance &&
         mpPageItem->GetPageUsage() != SVX_PAGE_MIRROR )
-        mpToolBoxMargin->SetItemImage(TBI_MARGIN, mpPageItem->IsLandscape() ? mImgWide_L : mImgWide );
+        mpToolBoxMargin->SetItemImage( nIdMargin, mpPageItem->IsLandscape() ? mImgWide_L : mImgWide );
 
     else if( abs(mpPageLRMarginItem->GetLeft() - SWPAGE_WIDE_VALUE3) <= cTolerance &&
         abs(mpPageLRMarginItem->GetRight() - SWPAGE_WIDE_VALUE1) <= cTolerance &&
         abs(mpPageULMarginItem->GetUpper() - SWPAGE_WIDE_VALUE1) <= cTolerance &&
         abs(mpPageULMarginItem->GetLower() - SWPAGE_WIDE_VALUE1) <= cTolerance &&
         mpPageItem->GetPageUsage() == SVX_PAGE_MIRROR )
-        mpToolBoxMargin->SetItemImage(TBI_MARGIN, mpPageItem->IsLandscape() ? mImgMirrored_L : mImgMirrored );
+        mpToolBoxMargin->SetItemImage( nIdMargin, mpPageItem->IsLandscape() ? mImgMirrored_L : mImgMirrored );
 
     else
-        mpToolBoxMargin->SetItemImage(TBI_MARGIN, mpPageItem->IsLandscape() ? mImgMarginCustom_L : mImgMarginCustom );
+        mpToolBoxMargin->SetItemImage( nIdMargin, mpPageItem->IsLandscape() ? mImgMarginCustom_L : mImgMarginCustom );
 }
 
 
@@ -709,14 +674,16 @@ void PagePropertyPanel::ChangeSizeImage()
         break;
     }
 
+    const sal_uInt16 nIdSize = mpToolBoxSize->GetItemId(UNO_SIZE);
+
     if ( nImageIdx == 0 )
     {
-        mpToolBoxSize->SetItemImage( TBI_SIZE,
+        mpToolBoxSize->SetItemImage( nIdSize,
                                      ( mpPageItem->IsLandscape() ? mImgSizeNone_L : mImgSizeNone  ) );
     }
     else
     {
-        mpToolBoxSize->SetItemImage( TBI_SIZE,
+        mpToolBoxSize->SetItemImage( nIdSize,
                                      ( mpPageItem->IsLandscape() ? maImgSize_L[nImageIdx-1] : maImgSize[nImageIdx-1] ) );
     }
 }
@@ -729,27 +696,28 @@ void PagePropertyPanel::ChangeColumnImage( const sal_uInt16 nColumnType )
         return;
     }
 
+    const sal_uInt16 nIdColumn = mpToolBoxColumn->GetItemId(UNO_COLUMN);
     if ( !mpPageItem->IsLandscape() )
     {
         switch( nColumnType )
         {
         case 1:
-            mpToolBoxColumn->SetItemImage(TBI_COLUMN, mImgColumn1);
+            mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumn1);
             break;
         case 2:
-            mpToolBoxColumn->SetItemImage(TBI_COLUMN, mImgColumn2);
+            mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumn2);
             break;
         case 3:
-            mpToolBoxColumn->SetItemImage(TBI_COLUMN, mImgColumn3);
+            mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumn3);
             break;
         case 4:
-            mpToolBoxColumn->SetItemImage(TBI_COLUMN, mImgLeft);
+            mpToolBoxColumn->SetItemImage(nIdColumn, mImgLeft);
             break;
         case 5:
-            mpToolBoxColumn->SetItemImage(TBI_COLUMN, mImgRight);
+            mpToolBoxColumn->SetItemImage(nIdColumn, mImgRight);
             break;
         default:
-            mpToolBoxColumn->SetItemImage(TBI_COLUMN, mImgColumnNone);
+            mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumnNone);
         }
     }
     else
@@ -757,22 +725,22 @@ void PagePropertyPanel::ChangeColumnImage( const sal_uInt16 nColumnType )
         switch( nColumnType )
         {
         case 1:
-            mpToolBoxColumn->SetItemImage(TBI_COLUMN, mImgColumn1_L);
+            mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumn1_L);
             break;
         case 2:
-            mpToolBoxColumn->SetItemImage(TBI_COLUMN, mImgColumn2_L);
+            mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumn2_L);
             break;
         case 3:
-            mpToolBoxColumn->SetItemImage(TBI_COLUMN, mImgColumn3_L);
+            mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumn3_L);
             break;
         case 4:
-            mpToolBoxColumn->SetItemImage(TBI_COLUMN, mImgLeft_L);
+            mpToolBoxColumn->SetItemImage(nIdColumn, mImgLeft_L);
             break;
         case 5:
-            mpToolBoxColumn->SetItemImage(TBI_COLUMN, mImgRight_L);
+            mpToolBoxColumn->SetItemImage(nIdColumn, mImgRight_L);
             break;
         default:
-            mpToolBoxColumn->SetItemImage(TBI_COLUMN, mImgColumnNone_L);
+            mpToolBoxColumn->SetItemImage(nIdColumn, mImgColumnNone_L);
         }
     }
 }
