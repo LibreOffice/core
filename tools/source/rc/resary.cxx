@@ -49,7 +49,7 @@ ResStringArray::~ResStringArray()
 {
 }
 
-sal_uInt32 ResStringArray::FindIndex( long nValue ) const
+sal_uInt32 ResStringArray::FindIndex( sal_IntPtr nValue ) const
 {
     const sal_uInt32 nItems = m_aStrings.size();
     for ( sal_uInt32 i = 0; i < nItems; i++ )

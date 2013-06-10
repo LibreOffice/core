@@ -33,7 +33,7 @@ private:
     struct ImplResStringItem
     {
         OUString m_aStr;
-        long        m_nValue;
+        sal_IntPtr m_nValue;
 
         ImplResStringItem( const OUString& rStr, long nValue = 0 ) :
         m_aStr( rStr ),
@@ -47,13 +47,13 @@ public:
     ResStringArray( const ResId& rResId );
     ~ResStringArray();
 
-    const OUString GetString( sal_uInt32 nIndex ) const
+    const OUString      GetString( sal_uInt32 nIndex ) const
     { return (nIndex < m_aStrings.size()) ? m_aStrings[nIndex].m_aStr : OUString(); }
-    long                GetValue( sal_uInt32 nIndex ) const
+    sal_IntPtr          GetValue( sal_uInt32 nIndex ) const
     { return (nIndex < m_aStrings.size()) ? m_aStrings[nIndex].m_nValue : -1; }
     sal_uInt32          Count() const { return sal_uInt32(m_aStrings.size()); }
 
-    sal_uInt32          FindIndex( long nValue ) const;
+    sal_uInt32          FindIndex( sal_IntPtr nValue ) const;
 };
 
 #endif
