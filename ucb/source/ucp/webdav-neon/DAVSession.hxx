@@ -211,7 +211,7 @@ private:
     oslInterlockedCount m_nRefCount;
 
     friend class DAVSessionFactory;
-#if defined WNT && _MSC_VER < 1310
+#if defined ( _MSC_VER ) && _MSC_VER < 1310
     friend struct std::auto_ptr< DAVSession >;
     // work around compiler bug...
 #else // WNT
