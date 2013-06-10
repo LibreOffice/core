@@ -29,9 +29,7 @@
 #include "vcl/svapp.hxx"
 
 #ifdef WNT
-#define GradientStyle_RECT BLA_GradientStyle_RECT
 #include <windows.h>
-#undef GradientStyle_RECT
 #endif
 
 using css::uno::Reference;
