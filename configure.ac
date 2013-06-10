@@ -11903,10 +11903,6 @@ else
         fi
         ;;
     esac
-
-    pathmunge "$SRC_ROOT/solenv/$OUTPATH/bin" "before"
-    pathmunge "$SRC_ROOT/solenv/bin" "before"
-    pathmunge "." "before"
 fi
 
 AC_SUBST(LO_PATH)
