@@ -90,7 +90,7 @@ BOOL registerWindowClass( HINSTANCE _hAppInstance )
     wcx.lpszClassName = L"ODBCConfigMainClass"; // name of window class
     wcx.hIconSm = NULL;                         // small class icon
 
-    return ( NULL != RegisterClassEx( &wcx ) );
+    return ( !!RegisterClassEx( &wcx ) );
 }
 
 /// initializes the application instances
