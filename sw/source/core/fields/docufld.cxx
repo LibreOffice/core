@@ -1061,11 +1061,13 @@ String SwDocInfoField::Expand() const
 {
     if ( ( nSubType & 0xFF ) == DI_CUSTOM )
     {
-         // custom properties currently need special treatment
-         // we don't have a secure way to detect "real" custom properties in Word  Import of text fields
-        // so we treat *every* unknown property as a custom property, even the "built-in" section in Word's document summary information stream
-        // as these properties have not been inserted when the document summary information was imported, we do it here
-        // this approach is still a lot better than the old one to import such fields as "user fields" and simple text
+        // custom properties currently need special treatment
+        // We don't have a secure way to detect "real" custom properties in Word import of text
+        // fields, so we treat *every* unknown property as a custom property, even the "built-in"
+        // section in Word's document summary information stream as these properties have not been
+        // inserted when the document summary information was imported, we do it here.
+        // This approach is still a lot better than the old one to import such fields as
+        // "user fields" and simple text
         SwDocShell* pDocShell = GetDoc()->GetDocShell();
         if( !pDocShell )
             return aContent;
@@ -1763,7 +1765,7 @@ void SwPostItField::SetPar2(const OUString& rStr)
 /// get the PostIt's text
 OUString SwPostItField::GetPar2() const
 {
-        return sTxt;
+    return sTxt;
 }
 
 const OUString& SwPostItField::GetInitials() const

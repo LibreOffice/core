@@ -70,7 +70,7 @@ String SwDropDownField::Expand() const
         if ( aIt != aValues.end())
             sSelect = *aIt;
     }
-    //if still no list value is available a default text of 10 spaces is to be set
+    // if still no list value is available a default text of 10 spaces is to be set
     if(!sSelect.Len())
         sSelect.AppendAscii ( RTL_CONSTASCII_STRINGPARAM ("          "));
     return sSelect;

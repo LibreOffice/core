@@ -184,8 +184,6 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
                 {
                     const_cast<SwTxtNode*>(pTxtNode)->MakeStartIndex(
                             &rPos.nContent );
-// oder doch besser das Ende vom (Anker-)TextNode nehmen ??
-//                  ((SwTxtNode*)pTxtNode)->MakeEndIndex( &rPos.nContent );
                 }
 
                 // do not break yet, might be as well in Header/Footer/Footnote/Fly
@@ -852,12 +850,14 @@ void SwGetExpField::SetValue( const double& rAny )
     sExpand = ((SwValueFieldType*)GetTyp())->ExpandValue( rAny, GetFormat(),
                                                             GetLanguage());
 }
-/* --------------------------------------------------
-    Description: Find the index of the reference text
-    following the current field
-    nHint: search starting position after the current
-    field (or 0 if default)
- --------------------------------------------------*/
+
+/** Find the index of the reference text following the current field
+ *
+ * @param rFmt
+ * @param rDoc
+ * @param nHint search starting position after the current field (or 0 if default)
+ * @return
+ */
 xub_StrLen SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc, unsigned nHint)
 {
     //

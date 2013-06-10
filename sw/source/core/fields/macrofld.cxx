@@ -197,7 +197,7 @@ bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-// create an internally used macro name from the library and macro name parts
+/// create an internally used macro name from the library and macro name parts
 void SwMacroField::CreateMacroString(
     OUString& rMacro,
     const String& rMacroName,

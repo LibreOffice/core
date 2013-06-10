@@ -742,7 +742,7 @@ void SwGetRefField::ConvertProgrammaticToUIName()
     {
         SwDoc* pDoc = ((SwGetRefFieldType*)GetTyp())->GetDoc();
         const String& rPar1 = GetPar1();
-        //don't convert when the name points to an existing field type
+        // don't convert when the name points to an existing field type
         if(!pDoc->GetFldType(RES_SETEXPFLD, rPar1, false))
         {
             sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );

@@ -50,12 +50,7 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType, sal_Bool bUpd
         const SwNode& rNd = *GetTabSortBoxes()[0]->GetSttNd();
         if( rNd.GetNodes().IsDocNodes() )
         {
-            // mba: swclient refactoring - this code shouldn't have done anything!
-            // the ModifyLock Flag is evaluated in SwModify only, though it was accessible via SwClient
-            // This has been fixed now
-//          aDepend.LockModify();
             pDDEType->IncRefCnt();
-//          aDepend.UnlockModify();
 
             // update box content only if update flag is set (false in import)
             if (bUpdate)

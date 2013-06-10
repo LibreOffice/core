@@ -128,7 +128,8 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
         for( xub_StrLen i = 0; i < sTitle.Len(); ++i )
             if( ' ' > sTitle.GetChar( i ) )
                 sTitle.Erase( i--, 1 );
-    }else
+    }
+    else
     {
     //End
     SwDoc* pDoc = (SwDoc*)rTxtNd.GetDoc();

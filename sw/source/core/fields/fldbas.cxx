@@ -112,7 +112,6 @@ std::vector<String>* SwFieldType::pFldNames = 0;
     /* RES_COMBINED_CHARS   */      TYP_COMBINED_CHARS,
     /* RES_DROPDOWN         */      TYP_DROPDOWN
     };
-        // ????? TYP_USRINPFLD,
 
 const String& SwFieldType::GetTypeStr(sal_uInt16 nTypeId)
 {
