@@ -3843,6 +3843,7 @@ int RTFDocumentImpl::popState()
             }
             break;
         case DESTINATION_LEVELNUMBERS:
+            if (aState.aTableSprms.find(NS_ooxml::LN_CT_Lvl_lvlText))
             {
                 RTFSprms& rAttributes = aState.aTableSprms.find(NS_ooxml::LN_CT_Lvl_lvlText)->getAttributes();
                 RTFValue::Pointer_t pValue = rAttributes.find(NS_ooxml::LN_CT_LevelText_val);
