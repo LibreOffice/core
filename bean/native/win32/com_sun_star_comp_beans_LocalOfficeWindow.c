@@ -111,7 +111,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
     JAWT_DrawingSurfaceInfo* dsi;
     JAWT_Win32DrawingSurfaceInfo* dsi_win;
     HWND hWnd;
-    LONG hFuncPtr;
+    LONG_PTR hFuncPtr;
 
     /* Get the AWT */
     awt.version = JAWT_VERSION_1_3;
