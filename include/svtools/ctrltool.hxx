@@ -121,7 +121,7 @@ FontList::GetStyleName()
 
 --------------------------------------------------------------------------
 
-const long* FontList::GetSizeAry( const FontInfo& rInfo ) const;
+const sal_IntPtr* FontList::GetSizeAry( const FontInfo& rInfo ) const;
 
 Diese Methode liefert zum uebergebenen Font die vorhandenen Groessen.
 Falls es sich dabei um einen skalierbaren Font handelt, werden Standard-
@@ -158,7 +158,7 @@ private:
     OUString                maBoldItalic;
     OUString                maBlack;
     OUString                maBlackItalic;
-    long*                   mpSizeAry;
+    sal_IntPtr*             mpSizeAry;
     OutputDevice*           mpDev;
     OutputDevice*           mpDev2;
     boost::ptr_vector<ImplFontListNameInfo> maEntries;
@@ -203,8 +203,8 @@ public:
     sal_Handle              GetNextFontInfo( sal_Handle hFontInfo ) const;
     const FontInfo&         GetFontInfo( sal_Handle hFontInfo ) const;
 
-    const long*             GetSizeAry( const FontInfo& rInfo ) const;
-    static const long*      GetStdSizeAry();
+    const sal_IntPtr*       GetSizeAry( const FontInfo& rInfo ) const;
+    static const sal_IntPtr* GetStdSizeAry();
 
 private:
                             FontList( const FontList& );

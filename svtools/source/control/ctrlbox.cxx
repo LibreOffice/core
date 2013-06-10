@@ -1809,8 +1809,8 @@ void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
         return;
 
     // query font sizes
-    const long* pTempAry;
-    const long* pAry = 0;
+    const sal_IntPtr* pTempAry;
+    const sal_IntPtr* pAry = 0;
 
     if( pInfo )
     {

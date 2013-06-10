@@ -167,8 +167,8 @@ void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
     if ( mpHeightAry )
         delete[] mpHeightAry;
 
-    const long* pTempAry;
-    const long* pAry = pList->GetSizeAry( rInfo );
+    const sal_IntPtr* pTempAry;
+    const sal_IntPtr* pAry = pList->GetSizeAry( rInfo );
     sal_uInt16 nSizeCount = 0;
     while ( pAry[nSizeCount] )
         nSizeCount++;

@@ -33,7 +33,7 @@
 // =======================================================================
 
 // Standard Fontgroessen fuer scalierbare Fonts
-static const long aStdSizeAry[] =
+static const sal_IntPtr aStdSizeAry[] =
 {
      60,
      70,
@@ -770,7 +770,7 @@ const FontInfo& FontList::GetFontInfo( sal_Handle hFontInfo ) const
 
 // -----------------------------------------------------------------------
 
-const long* FontList::GetSizeAry( const FontInfo& rInfo ) const
+const sal_IntPtr* FontList::GetSizeAry( const FontInfo& rInfo ) const
 {
     // Size-Array vorher loeschen
     if ( mpSizeAry )
@@ -802,7 +802,7 @@ const long* FontList::GetSizeAry( const FontInfo& rInfo ) const
     sal_uInt16  i;
     sal_uInt16  nRealCount = 0;
     long    nOldHeight = 0;
-    ((FontList*)this)->mpSizeAry = new long[nDevSizeCount+1];
+    ((FontList*)this)->mpSizeAry = new sal_IntPtr[nDevSizeCount+1];
     for ( i = 0; i < nDevSizeCount; i++ )
     {
         Size aSize = pDevice->GetDevFontSize( rInfo, i );
@@ -821,7 +821,7 @@ const long* FontList::GetSizeAry( const FontInfo& rInfo ) const
 
 // -----------------------------------------------------------------------
 
-const long* FontList::GetStdSizeAry()
+const sal_IntPtr* FontList::GetStdSizeAry()
 {
     return aStdSizeAry;
 }
