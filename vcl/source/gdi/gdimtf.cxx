@@ -487,35 +487,16 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
                         xMtfFastPropertySet->setFastPropertyValue( 0, uno::Any( reinterpret_cast<sal_Int64>( this ) ) );
 
                     xMtfRenderer->draw( rDestSize.Width(), rDestSize.Height() );
+                }
 
-                    uno::Reference< beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, uno::UNO_QUERY );
-                    if( xFastPropertySet.get() )
-                    {
-                        // 0 means get BitmapEx
-                        uno::Any aAny = xFastPropertySet->getFastPropertyValue( 0 );
-                        BitmapEx* pBitmapEx = (BitmapEx*) *reinterpret_cast<const sal_Int64*>(aAny.getValue());
-                        if( pBitmapEx ) {
-                            pOut->DrawBitmapEx( rPos, rLogicDestSize, *pBitmapEx );
-                            delete pBitmapEx;
-                            return true;
-                        }
-                    }
-
-                    SalBitmap* pSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-                    SalBitmap* pSalMask = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-
-                    if( pSalBmp->Create( xBitmapCanvas, aSize ) && pSalMask->Create( xBitmapCanvas, aSize, true ) )
-                    {
-                        Bitmap aBitmap( pSalBmp );
-                        Bitmap aMask( pSalMask );
-                        AlphaMask aAlphaMask( aMask );
-                        BitmapEx aBitmapEx( aBitmap, aAlphaMask );
+                BitmapEx aBitmapEx;
+                if( aBitmapEx.Create( xBitmapCanvas, aSize ) )
+                {
+                    if ( pOut->GetMapMode() == MAP_PIXEL )
                         pOut->DrawBitmapEx( rPos, aBitmapEx );
-                        return true;
-                    }
-
-                    delete pSalBmp;
-                    delete pSalMask;
+                    else
+                        pOut->DrawBitmapEx( rPos, rLogicDestSize, aBitmapEx );
+                    return true;
                 }
             }
         }
