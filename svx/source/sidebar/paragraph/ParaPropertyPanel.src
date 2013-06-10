@@ -199,7 +199,7 @@ Control RID_SIDEBAR_PARA_PANEL
                 defined for Draw/Impress.  It has to be defined in
                 GenericCommancs.xcu to be recognized. See issue 122446 for more details.
                 */
-                Command = "private:graphicrepository/res/commandimagelist/sc_paraspaceincrease.png";
+                Command = "private:graphicrepository/cmd/sc_paraspaceincrease.png";
             };
             ToolBoxItem
             {
@@ -209,7 +209,7 @@ Control RID_SIDEBAR_PARA_PANEL
                 /** See above or issue 122446 why the following line is not
                     Command = ".uno:ParaspaceDecrease";
                 */
-                Command = "private:graphicrepository/res/commandimagelist/sc_paraspacedecrease.png";
+                Command = "private:graphicrepository/cmd/sc_paraspacedecrease.png";
             };
         };
     };
