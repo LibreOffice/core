@@ -183,7 +183,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         if (GetLastError() != ERROR_ENVVAR_NOT_FOUND) {
             exit(EXIT_FAILURE);
         }
-        orig = L"";
+        orig = (wchar_t *)L"";
     } else {
         orig = new wchar_t[n];
         if (orig == NULL ||
@@ -208,7 +208,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         if (GetLastError() != ERROR_ENVVAR_NOT_FOUND) {
             exit(EXIT_FAILURE);
         }
-        orig = L"";
+        orig = (wchar_t *)L"";
     } else {
         orig = new wchar_t[n];
         if (orig == NULL ||
