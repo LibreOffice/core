@@ -182,7 +182,7 @@ inline BigInt::operator int() const
 
 inline BigInt::operator sal_uInt16() const
 {
-    if ( !bIsBig && nVal >= 0 && nVal <= USHRT_MAX )
+    if ( !bIsBig && nVal >= 0 && nVal <= (long)USHRT_MAX )
         return (sal_uInt16)nVal;
     else
         return 0;
