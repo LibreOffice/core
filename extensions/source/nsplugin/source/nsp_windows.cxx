@@ -27,28 +27,19 @@
  ************************************************************************/
 
 
-#ifdef WNT
-#ifdef _MSC_VER
-    #pragma warning (push,1)
-    #pragma warning (disable:4668)
-#endif
-    #include <windows.h>
-#ifdef _MSC_VER
-    #pragma warning (pop)
-#endif
-#endif
+#include "nsp_windows.hxx"
 
-int NSP_ResetWinStyl(long hParent)
+int NSP_ResetWinStyl(LONG_PTR hParent)
 {
     int ret = 0;
 #ifdef WNT
-    LONG dOldStyl = GetWindowLong( (HWND)hParent, GWL_STYLE);
+    LONG_PTR dOldStyl = GetWindowLongPtr( (HWND)hParent, GWL_STYLE);
     ret = dOldStyl;
 
     if(ret != 0)
     {
-        LONG dNewStyl = dOldStyl|WS_CLIPCHILDREN;
-        if(0 == SetWindowLong((HWND)hParent, GWL_STYLE, dNewStyl))
+        LONG_PTR dNewStyl = dOldStyl|WS_CLIPCHILDREN;
+        if(0 == SetWindowLongPtr((HWND)hParent, GWL_STYLE, dNewStyl))
             ret = 0;
     }
 #endif
@@ -56,11 +47,11 @@ int NSP_ResetWinStyl(long hParent)
 
 }
 
-int NSP_RestoreWinStyl(long hParent, long dOldStyle)
+int NSP_RestoreWinStyl(LONG_PTR hParent, LONG_PTR dOldStyle)
 {
     int ret = 0;
 #ifdef WNT
-    ret = SetWindowLong((HWND)hParent, GWL_STYLE, dOldStyle);
+    ret = SetWindowLongPtr((HWND)hParent, GWL_STYLE, dOldStyle);
 #endif
     return ret;
 }

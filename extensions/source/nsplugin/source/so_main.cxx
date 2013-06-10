@@ -449,8 +449,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     iPipe[1] = atoi(argv[2]);
 
     // fd_pipe[0]: read, fd_pipe[0]: write
-    fd_pipe[0] = (NSP_PIPE_FD) iPipe[0] ;
-    fd_pipe[1] = (NSP_PIPE_FD) iPipe[1] ;
+    fd_pipe[0] = (NSP_PIPE_FD) (sal_IntPtr) iPipe[0] ;
+    fd_pipe[1] = (NSP_PIPE_FD) (sal_IntPtr) iPipe[1] ;
     NSP_Close_Pipe(fd_pipe[1]);
 
     if(iPipe[0] < 0)

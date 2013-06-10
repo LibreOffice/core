@@ -28,10 +28,23 @@
 
 #ifndef __NSP_WINDOWS_HXX__
 #define __NSP_WINDOWS_HXX__
+#ifdef WNT
+#ifdef _MSC_VER
+    #pragma warning (push,1)
+    #pragma warning (disable:4668)
+#endif
+    #include <windows.h>
+#ifdef _MSC_VER
+    #pragma warning (pop)
+#endif
+#else
+#ifndef LONG_PTR
+    #define LONG_PTR long
+#endif
+#endif
 
-
-int NSP_ResetWinStyl(long hParent);
-int NSP_RestoreWinStyl(long hParent, long dOldStyle);
+int NSP_ResetWinStyl(LONG_PTR hParent);
+int NSP_RestoreWinStyl(LONG_PTR hParent, LONG_PTR dOldStyle);
 
 #endif
 
