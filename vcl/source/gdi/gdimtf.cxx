@@ -440,16 +440,22 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
                 }
 
                 SalBitmap* pSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-                pSalBmp->SetHasAlpha( true );
-
-                if( pSalBmp->Create( xBitmapCanvas, aSize ) )
+                SalBitmap* pSalMask = ImplGetSVData()->mpDefInst->CreateSalBitmap();
+                if( pSalBmp->Create( xBitmapCanvas, aSize ) && pSalMask->Create( xBitmapCanvas, aSize, true ) )
                 {
                     Bitmap aBitmap( pSalBmp );
-                    pOut->DrawBitmap( rPos, aBitmap );
+                    Bitmap aMask( pSalMask );
+                    AlphaMask aAlphaMask( aMask );
+                    BitmapEx aBitmapEx( aBitmap, aAlphaMask );
+                    if ( pOut->GetMapMode() == MAP_PIXEL )
+                        pOut->DrawBitmapEx( rPos, aBitmapEx );
+                    else
+                        pOut->DrawBitmapEx( rPos, rLogicDestSize, aBitmapEx );
                     return true;
                 }
 
                 delete pSalBmp;
+                delete pSalMask;
             }
         }
     }
