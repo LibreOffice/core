@@ -178,6 +178,7 @@ certain functionality.
 
 @section package
 
+@li @c package
 @li @c package.xstor
 
 @section sdext
