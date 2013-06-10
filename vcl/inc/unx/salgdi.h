@@ -324,11 +324,6 @@ public:
                                              const SalBitmap& rSourceBitmap,
                                              const SalBitmap& rAlphaBitmap );
 
-    bool                    drawAlphaBitmapOpt( const SalTwoRect&,
-                                                const SalBitmap& rSourceBitmap,
-                                                const SalBitmap& rAlphaBitmap,
-                                                bool bUseAlphaBitmap = true );
-
     virtual bool            drawAlphaRect( long nX, long nY, long nWidth,
                                            long nHeight, sal_uInt8 nTransparency );
 
