@@ -112,7 +112,7 @@ namespace basegfx
 
         if(!fTools::equalZero(fLenNow))
         {
-            const double fOne(10.0);
+            const double fOne(1.0);
 
             if(!fTools::equal(fOne, fLenNow))
             {
