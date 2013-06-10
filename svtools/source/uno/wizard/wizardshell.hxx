@@ -58,7 +58,7 @@ namespace svt { namespace uno
         virtual TabPage*    createPage( WizardState i_nState );
         virtual void        enterState( WizardState i_nState );
         virtual sal_Bool    leaveState( WizardState i_nState );
-        virtual String      getStateDisplayName( WizardState i_nState ) const;
+        virtual OUString    getStateDisplayName( WizardState i_nState ) const;
         virtual bool        canAdvance() const;
         virtual sal_Bool    onFinish();
         virtual IWizardPageController*

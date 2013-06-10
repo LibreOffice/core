@@ -203,7 +203,7 @@ protected:
             this is worth an assertion in a non-product build, and then an empty string is
             returned.
         */
-        virtual String  getStateDisplayName( WizardState _nState ) const;
+        virtual OUString  getStateDisplayName( WizardState _nState ) const;
 
         /** creates a page for a given state
 

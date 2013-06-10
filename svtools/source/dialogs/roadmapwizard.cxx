@@ -581,9 +581,9 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    String RoadmapWizard::getStateDisplayName( WizardState _nState ) const
+    OUString RoadmapWizard::getStateDisplayName( WizardState _nState ) const
     {
-        String sDisplayName;
+        OUString sDisplayName;
 
         StateDescriptions::const_iterator pos = m_pImpl->aStateDescriptors.find( _nState );
         OSL_ENSURE( pos != m_pImpl->aStateDescriptors.end(),

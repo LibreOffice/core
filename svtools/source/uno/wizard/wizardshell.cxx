@@ -216,7 +216,7 @@ namespace svt { namespace uno
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    String WizardShell::getStateDisplayName( WizardState i_nState ) const
+    OUString WizardShell::getStateDisplayName( WizardState i_nState ) const
     {
         try
         {

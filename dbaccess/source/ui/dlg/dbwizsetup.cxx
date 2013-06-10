@@ -218,7 +218,7 @@ void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _n
     ::svt::RoadmapWizard::declarePath( _nPathId, aPath );
 }
 
-String ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
+OUString ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
 {
     String sRoadmapItem;
     switch( _nState )
@@ -281,7 +281,7 @@ String ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ) const
         default:
             break;
     }
-    return sRoadmapItem;
+    return OUString(sRoadmapItem);
 }
 
 //-------------------------------------------------------------------------
