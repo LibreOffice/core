@@ -272,7 +272,7 @@ DBG_NAME(OConnectionHelper)
                 OUString sOldDataSource=getURLNoPrefix();
                 OUString sNewDataSource;
                 HWND hWnd = GetParent()->GetSystemData()->hWnd;
-                sNewDataSource = getAdoDatalink((long)hWnd,sOldDataSource);
+                sNewDataSource = getAdoDatalink((LONG_PTR)hWnd,sOldDataSource);
                 if ( !sNewDataSource.isEmpty() )
                 {
                     setURLNoPrefix(sNewDataSource);

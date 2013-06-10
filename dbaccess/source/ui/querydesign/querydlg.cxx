@@ -146,7 +146,7 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
         const sal_uInt16 nCount = m_pJoinControl->aLB_JoinType.GetEntryCount();
         for (sal_uInt16 i = 0; i < nCount; ++i)
         {
-            const long nJoinTyp = reinterpret_cast<long>(m_pJoinControl->aLB_JoinType.GetEntryData(i));
+            const sal_IntPtr nJoinTyp = reinterpret_cast<sal_IntPtr>(m_pJoinControl->aLB_JoinType.GetEntryData(i));
             if ( !bSupportFullJoin && nJoinTyp == ID_FULL_JOIN )
                 m_pJoinControl->aLB_JoinType.RemoveEntry(i);
             else if ( !bSupportOuterJoin && (nJoinTyp == ID_LEFT_JOIN || nJoinTyp == ID_RIGHT_JOIN) )
@@ -184,7 +184,7 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
     const EJoinType eOldJoinType = eJoinType;
     sal_uInt16 nResId = 0;
     const sal_uInt16 nPos = m_pJoinControl->aLB_JoinType.GetSelectEntryPos();
-    const long nJoinType = reinterpret_cast<long>(m_pJoinControl->aLB_JoinType.GetEntryData(nPos));
+    const sal_IntPtr nJoinType = reinterpret_cast<sal_IntPtr>(m_pJoinControl->aLB_JoinType.GetEntryData(nPos));
     sal_Bool bAddHint = sal_True;
     switch ( nJoinType )
     {
@@ -324,7 +324,7 @@ void DlgQryJoin::setJoinType(EJoinType _eNewJoinType)
     eJoinType = _eNewJoinType;
     m_pJoinControl->m_aCBNatural.Enable(eJoinType != CROSS_JOIN);
 
-    long nJoinType = 0;
+    sal_IntPtr nJoinType = 0;
     switch ( eJoinType )
     {
         default:
@@ -348,7 +348,7 @@ void DlgQryJoin::setJoinType(EJoinType _eNewJoinType)
     const sal_uInt16 nCount = m_pJoinControl->aLB_JoinType.GetEntryCount();
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
-        if ( nJoinType == reinterpret_cast<long>(m_pJoinControl->aLB_JoinType.GetEntryData(i)) )
+        if ( nJoinType == reinterpret_cast<sal_IntPtr>(m_pJoinControl->aLB_JoinType.GetEntryData(i)) )
         {
             m_pJoinControl->aLB_JoinType.SelectEntryPos(i);
             break;
