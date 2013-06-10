@@ -446,46 +446,22 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
                 }
 
                 SalBitmap* pSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-#if defined(UNX) && !defined(ANDROID) && !defined(IOS) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
-                X11SalBitmap* X11Bmp = static_cast< X11SalBitmap* >( pSalBmp );
+                SalBitmap* pSalMask = ImplGetSVData()->mpDefInst->CreateSalBitmap();
+                if( pSalBmp->Create( xBitmapCanvas, aSize ) && pSalMask->Create( xBitmapCanvas, aSize, true ) )
+                {
+                    Bitmap aBitmap( pSalBmp );
+                    Bitmap aMask( pSalMask );
+                    AlphaMask aAlphaMask( aMask );
+                    BitmapEx aBitmapEx( aBitmap, aAlphaMask );
+                    if ( pOut->GetMapMode() == MAP_PIXEL )
+                        pOut->DrawBitmapEx( rPos, aBitmapEx );
+                    else
+                        pOut->DrawBitmapEx( rPos, rLogicDestSize, aBitmapEx );
+                    return true;
+                }
 
-                // for pdf export metafile recording, don't break
-                // other code's assumption that Bitmap with alpha
-                // channel comes as BitmapEx
-                if( !pOut->GetExtOutDevData() )
-                {
-                    X11Bmp->SetHasAlpha( true );
-                    if( X11Bmp->Create( xBitmapCanvas, aSize ) )
-                    {
-                        Bitmap aBitmap( X11Bmp );
-                        if ( pOut->GetMapMode() == MAP_PIXEL )
-                            pOut->DrawBitmap( rPos, aBitmap );
-                        else
-                            pOut->DrawBitmap( rPos, rLogicDestSize, aBitmap );
-                        return true;
-                    }
-                }
-                else
-#endif
-                {
-                    // for Windows and Mac, exclusively use this code
-                    // path. The inline alpha on X11 is a hack.
-                    SalBitmap* pSalMask = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-                    if( pSalBmp->Create( xBitmapCanvas, aSize ) && pSalMask->Create( xBitmapCanvas, aSize, true ) )
-                    {
-                        Bitmap aBitmap( pSalBmp );
-                        Bitmap aMask( pSalMask );
-                        AlphaMask aAlphaMask( aMask );
-                        BitmapEx aBitmapEx( aBitmap, aAlphaMask );
-                        if ( pOut->GetMapMode() == MAP_PIXEL )
-                            pOut->DrawBitmapEx( rPos, aBitmapEx );
-                        else
-                            pOut->DrawBitmapEx( rPos, rLogicDestSize, aBitmapEx );
-                        return true;
-                    }
-                    delete pSalMask;
-                }
                 delete pSalBmp;
+                delete pSalMask;
             }
         }
     }
