@@ -218,6 +218,7 @@ public:
     WW8PLCFspecial( SvStream* pSt, long nFilePos, long nPLCF,
         long nStruct, long nStartPos = -1 );
     ~WW8PLCFspecial() { delete[] pPLCF_PosArray; }
+    bool IsValid();
     long GetIdx() const { return nIdx; }
     void SetIdx( long nI ) { nIdx = nI; }
     long GetIMax() const { return nIMax; }
@@ -301,6 +302,9 @@ public:
         WW8_CP nStartPos, sal_Int32 nPN, sal_Int32 ncpN );
 
     ~WW8PLCF(){ delete[] pPLCF_PosArray; }
+
+    bool IsValid();
+
     sal_Int32 GetIdx() const { return nIdx; }
     void SetIdx( sal_Int32 nI ) { nIdx = nI; }
     sal_Int32 GetIMax() const { return nIMax; }
@@ -327,6 +331,7 @@ friend class WW8PLCFpcd_Iter;
 public:
     WW8PLCFpcd( SvStream* pSt, long nFilePos, long nPLCF, long nStruct );
     ~WW8PLCFpcd(){ delete[] pPLCF_PosArray; }
+    bool IsValid();
 };
 
 /* mehrere WW8PLCFpcd_Iter koennen auf die gleiche WW8PLCFpcd zeigen !!!  */
@@ -572,6 +577,7 @@ public:
     WW8PLCFx_Fc_FKP( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt,
         const WW8Fib& rFib, ePLCFT ePl, WW8_FC nStartFcL );
     virtual ~WW8PLCFx_Fc_FKP();
+    bool HasValidPLCF();
     virtual sal_uLong GetIdx() const;
     virtual void SetIdx( sal_uLong nIdx );
     virtual bool SeekPos(WW8_FC nFcPos);
@@ -635,6 +641,7 @@ public:
     WW8PLCFx_SEPX( SvStream* pSt, SvStream* pTblxySt, const WW8Fib& rFib,
         WW8_CP nStartCp );
     virtual ~WW8PLCFx_SEPX();
+    bool HasValidPLCF();
     virtual sal_uLong GetIdx() const;
     virtual void SetIdx( sal_uLong nIdx );
     long GetIMax() const { return ( pPLCF ) ? pPLCF->GetIMax() : 0; }
@@ -664,6 +671,7 @@ public:
     WW8PLCFx_SubDoc(SvStream* pSt, ww::WordVersion eVersion, WW8_CP nStartCp,
     long nFcRef, long nLenRef, long nFcTxt, long nLenTxt, long nStruc = 0);
     virtual ~WW8PLCFx_SubDoc();
+    bool HasValidPLCF();
     virtual sal_uLong GetIdx() const;
     virtual void SetIdx( sal_uLong nIdx );
     virtual bool SeekPos(WW8_CP nCpPos);
@@ -694,6 +702,7 @@ private:
 public:
     WW8PLCFx_FLD(SvStream* pSt, const WW8Fib& rMyFib, short nType);
     virtual ~WW8PLCFx_FLD();
+    bool HasValidPLCF();
     virtual sal_uLong GetIdx() const;
     virtual void SetIdx( sal_uLong nIdx );
     virtual bool SeekPos(WW8_CP nCpPos);
@@ -724,6 +733,7 @@ private:
 public:
     WW8PLCFx_Book(SvStream* pTblSt,const WW8Fib& rFib);
     virtual ~WW8PLCFx_Book();
+    bool HasValidPLCF();
     long GetIMax() const { return nIMax; }
     virtual sal_uLong GetIdx() const;
     virtual void SetIdx( sal_uLong nI );
@@ -951,6 +961,7 @@ private:
     WW8PLCFpcd_Iter*    pPieceIter; // fuer FastSave ( Iterator dazu )
     WW8PLCFx_PCD*       pPLCFx_PCD;     // dito
     WW8PLCFx_PCDAttrs*  pPLCFx_PCDAttrs;
+
     sal_uInt8**              pPieceGrpprls;  // Attribute an Piece-Table
     sal_uInt16              nPieceGrpprls;  // Anzahl davon
 
@@ -960,6 +971,9 @@ public:
     WW8ScannerBase( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt,
         const WW8Fib* pWwF );
     ~WW8ScannerBase();
+
+    bool IsValid(); // all WW8PLCF... valid?
+
     bool AreThereFootnotes() const { return pFtnPLCF->Count() > 0; };
     bool AreThereEndnotes()  const { return pEdnPLCF->Count() > 0; };
 

@@ -4444,6 +4444,11 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
     pSBase = new WW8ScannerBase(pStrm,pTableStream,pDataStream,pWwFib);
 
+    if ( !pSBase->IsValid() )
+    {
+        return ERR_SWG_READ_ERROR;
+    }
+
     static const SvxExtNumType eNumTA[16] =
     {
         SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
@@ -4519,23 +4524,25 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     if (pGloss)
     {
         WW8PLCF aPlc(pTableStream, pWwFib->fcPlcfglsy, pWwFib->lcbPlcfglsy, 0);
-
-        WW8_CP nStart, nEnd;
-        void* pDummy;
-
-        for (int i=0;i<pGloss->GetNoStrings();i++,aPlc++)
+        if ( aPlc.IsValid() )
         {
-            SwNodeIndex aIdx( rDoc.GetNodes().GetEndOfContent());
-            SwTxtFmtColl* pColl =
-                rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD,
-                false);
-            SwStartNode *pNode =
-                rDoc.GetNodes().MakeTextSection(aIdx,
-                SwNormalStartNode,pColl);
-            pPaM->GetPoint()->nNode = pNode->GetIndex()+1;
-            pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(),0);
-            aPlc.Get( nStart, nEnd, pDummy );
-            ReadText(nStart,nEnd-nStart-1,MAN_MAINTEXT);
+            WW8_CP nStart, nEnd;
+            void* pDummy;
+
+            for (int i=0; i<pGloss->GetNoStrings(); i++,aPlc++)
+            {
+                SwNodeIndex aIdx( rDoc.GetNodes().GetEndOfContent());
+                SwTxtFmtColl* pColl =
+                    rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD,
+                    false);
+                SwStartNode *pNode =
+                    rDoc.GetNodes().MakeTextSection(aIdx,
+                    SwNormalStartNode,pColl);
+                pPaM->GetPoint()->nNode = pNode->GetIndex()+1;
+                pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(),0);
+                aPlc.Get( nStart, nEnd, pDummy );
+                ReadText(nStart,nEnd-nStart-1,MAN_MAINTEXT);
+            }
         }
     }
     else //ordinary case

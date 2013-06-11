@@ -933,6 +933,28 @@ const sal_uInt8* WW8SprmIter::FindSprm(sal_uInt16 nId)
     return 0;                                   // SPRM _not_ found
 }
 
+namespace {
+    bool IsPLCFPosArrayValid(
+        const sal_Int32* pPLCFPosArray,
+        const sal_Int32 nMaxIndex )
+    {
+        bool bIsValid = true;
+
+        WW8_CP nValue = 0;
+        for ( sal_Int32 i = 0; i <= nMaxIndex; ++i )
+        {
+            if ( pPLCFPosArray[i] < nValue )
+            {
+                bIsValid = false;
+                break;
+            }
+            nValue = pPLCFPosArray[i];
+        }
+
+        return bIsValid;
+    }
+}
+
 //-----------------------------------------
 //      temporaerer Test
 //-----------------------------------------
@@ -1695,9 +1717,36 @@ void WW8ScannerBase::DeletePieceTable()
 
 WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
     SvStream* pDataSt, const WW8Fib* pWwFib )
-    : pWw8Fib(pWwFib), pMainFdoa(0), pHdFtFdoa(0), pMainTxbx(0),
-    pMainTxbxBkd(0), pHdFtTxbx(0), pHdFtTxbxBkd(0), pMagicTables(0),
-    pSubdocs(0), pExtendedAtrds(0), pPieceGrpprls(0)
+    : pWw8Fib(pWwFib)
+    , pChpPLCF( 0 )
+    , pPapPLCF( 0 )
+    , pSepPLCF( 0 )
+    , pFtnPLCF( 0 )
+    , pEdnPLCF( 0 )
+    , pAndPLCF( 0 )
+    , pFldPLCF( 0 )
+    , pFldHdFtPLCF( 0 )
+    , pFldTxbxPLCF( 0 )
+    , pFldTxbxHdFtPLCF( 0 )
+    , pFldFtnPLCF( 0 )
+    , pFldEdnPLCF( 0 )
+    , pFldAndPLCF( 0 )
+    , pMainFdoa(0)
+    , pHdFtFdoa(0)
+    , pMainTxbx(0)
+    , pMainTxbxBkd(0)
+    , pHdFtTxbx(0)
+    , pHdFtTxbxBkd(0)
+    , pMagicTables(0)
+    , pSubdocs(0)
+    , pExtendedAtrds(0)
+    , pBook( 0 )
+    , pPiecePLCF( 0 )
+    , pPieceIter( 0 )
+    , pPLCFx_PCD( 0 )
+    , pPLCFx_PCDAttrs( 0 )
+    , pPieceGrpprls(0)
+    , nPieceGrpprls( 0 )
 {
     pPiecePLCF = OpenPieceTable( pTblSt, pWw8Fib );             // Complex
     if( pPiecePLCF )
@@ -1800,14 +1849,14 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
                 pSubdocs = new WW8PLCFspecial( pTblSt,
                     pWwFib->fcPlcfwkb, pWwFib->lcbPlcfwkb, 12);
             }
-        // Extended ATRD
+            // Extended ATRD
             if (pWwFib->fcAtrdExtra && pWwFib->lcbAtrdExtra)
             {
                 pExtendedAtrds = new sal_uInt8[pWwFib->lcbAtrdExtra];
-        long nOldPos = pTblSt->Tell();
-        pTblSt->Seek(pWwFib->fcAtrdExtra);
-        pTblSt->Read(pExtendedAtrds, pWwFib->lcbAtrdExtra);
-            pTblSt->Seek(nOldPos);
+                long nOldPos = pTblSt->Tell();
+                pTblSt->Seek(pWwFib->fcAtrdExtra);
+                pTblSt->Read(pExtendedAtrds, pWwFib->lcbAtrdExtra);
+                pTblSt->Seek(nOldPos);
             }
 
             break;
@@ -1832,6 +1881,32 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
     }
 
     pBook = new WW8PLCFx_Book(pTblSt, *pWwFib);
+}
+
+bool WW8ScannerBase::IsValid()
+{
+    return ( pPiecePLCF == 0 || pPiecePLCF->IsValid() )
+           && pChpPLCF->HasValidPLCF()
+           && pPapPLCF->HasValidPLCF()
+           && pSepPLCF->HasValidPLCF()
+           && pFtnPLCF->HasValidPLCF()
+           && pEdnPLCF->HasValidPLCF()
+           && pAndPLCF->HasValidPLCF()
+           && pFldPLCF->HasValidPLCF()
+           && pFldHdFtPLCF->HasValidPLCF()
+           && pFldFtnPLCF->HasValidPLCF()
+           && pFldEdnPLCF->HasValidPLCF()
+           && pFldAndPLCF->HasValidPLCF()
+           && pFldTxbxPLCF->HasValidPLCF()
+           && pFldTxbxHdFtPLCF->HasValidPLCF()
+           && ( pMainFdoa == 0 || pMainFdoa->IsValid() )
+           && ( pHdFtFdoa == 0 || pHdFtFdoa->IsValid() )
+           && ( pMainTxbxBkd == 0 || pMainTxbxBkd->IsValid() )
+           && ( pHdFtTxbxBkd == 0 || pHdFtTxbxBkd->IsValid() )
+           && ( pMagicTables == 0 || pMagicTables->IsValid() )
+           && ( pSubdocs == 0 || pSubdocs->IsValid() )
+           && ( pHdFtTxbx == 0 || pHdFtTxbx->IsValid() )
+           && pBook->HasValidPLCF();
 }
 
 WW8ScannerBase::~WW8ScannerBase()
@@ -2151,6 +2226,11 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, long nFilePos, long nPLCF,
     pSt->Seek( nOldPos );
 }
 
+bool WW8PLCFspecial::IsValid()
+{
+    return IsPLCFPosArrayValid( pPLCF_PosArray, nIMax );
+}
+
 // WW8PLCFspecial::SeekPos() stellt den WW8PLCFspecial auf die Stelle nPos, wobei auch noch der
 // Eintrag benutzt wird, der vor nPos beginnt und bis hinter nPos reicht.
 // geeignet fuer normale Attribute. Allerdings wird der Attributanfang nicht
@@ -2245,8 +2325,17 @@ bool WW8PLCFspecial::GetData(long nInIdx, WW8_CP& rPos, void*& rpValue) const
 
 // Ctor fuer *andere* als Fkps
 // Bei nStartPos < 0 wird das erste Element des PLCFs genommen
-WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
-    WW8_CP nStartPos ) : pPLCF_PosArray(0), nIdx(0), nStru(nStruct)
+WW8PLCF::WW8PLCF(
+    SvStream* pSt,
+    WW8_FC nFilePos,
+    sal_Int32 nPLCF,
+    int nStruct,
+    WW8_CP nStartPos )
+    : pPLCF_PosArray( 0 )
+    , pPLCF_Contents( 0 )
+    , nIMax( 0 )
+    , nIdx( 0 )
+    , nStru( nStruct )
 {
     ASSERT( nPLCF, "WW8PLCF: nPLCF ist Null!" );
 
@@ -2276,6 +2365,12 @@ WW8PLCF::WW8PLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
 
     if( nStartPos >= 0 )
         SeekPos( nStartPos );
+}
+
+bool WW8PLCF::IsValid()
+{
+    return pPLCF_PosArray == 0
+           || IsPLCFPosArrayValid( pPLCF_PosArray, nIMax );
 }
 
 void WW8PLCF::ReadPLCF( SvStream* pSt, WW8_FC nFilePos, sal_Int32 nPLCF )
@@ -2467,6 +2562,11 @@ WW8PLCFpcd::WW8PLCFpcd( SvStream* pSt, long nFilePos, long nPLCF, long nStruct )
     pPLCF_Contents = (sal_uInt8*)&pPLCF_PosArray[nIMax + 1];
 
     pSt->Seek( nOldPos );
+}
+
+bool WW8PLCFpcd::IsValid()
+{
+    return IsPLCFPosArrayValid( pPLCF_PosArray, nIMax );
 }
 
 // Bei nStartPos < 0 wird das erste Element des PLCFs genommen
@@ -2968,6 +3068,11 @@ WW8PLCFx_Fc_FKP::~WW8PLCFx_Fc_FKP()
     delete pPCDAttrs;
 }
 
+bool WW8PLCFx_Fc_FKP::HasValidPLCF()
+{
+    return pPLCF == 0 || pPLCF->IsValid();
+}
+
 sal_uLong WW8PLCFx_Fc_FKP::GetIdx() const
 {
     sal_uLong u = pPLCF->GetIdx() << 8;
@@ -3431,10 +3536,16 @@ WW8PLCFx& WW8PLCFx_Cp_FKP::operator ++( int )
 //-----------------------------------------
 //-----------------------------------------
 
-WW8PLCFx_SEPX::WW8PLCFx_SEPX(SvStream* pSt, SvStream* pTblSt,
-    const WW8Fib& rFib, WW8_CP nStartCp)
-    : WW8PLCFx(rFib.GetFIBVersion(), true), maSprmParser(rFib.GetFIBVersion()),
-    pStrm(pSt), nArrMax(256), nSprmSiz(0)
+WW8PLCFx_SEPX::WW8PLCFx_SEPX(
+    SvStream* pSt,
+    SvStream* pTblSt,
+    const WW8Fib& rFib,
+    WW8_CP nStartCp)
+    : WW8PLCFx(rFib.GetFIBVersion(), true)
+    , maSprmParser(rFib.GetFIBVersion())
+    , pStrm(pSt)
+    , nArrMax(256)
+    , nSprmSiz(0)
 {
     pPLCF =   rFib.lcbPlcfsed
             ? new WW8PLCF(pTblSt, rFib.fcPlcfsed, rFib.lcbPlcfsed,
@@ -3448,6 +3559,11 @@ WW8PLCFx_SEPX::~WW8PLCFx_SEPX()
 {
     delete pPLCF;
     delete[] pSprms;
+}
+
+bool WW8PLCFx_SEPX::HasValidPLCF()
+{
+    return pPLCF == 0 || pPLCF->IsValid();
 }
 
 sal_uLong WW8PLCFx_SEPX::GetIdx() const
@@ -3610,10 +3726,18 @@ const sal_uInt8* WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const
 }
 
 //-----------------------------------------
-WW8PLCFx_SubDoc::WW8PLCFx_SubDoc(SvStream* pSt, ww::WordVersion eVersion,
-    WW8_CP nStartCp, long nFcRef, long nLenRef, long nFcTxt, long nLenTxt,
+WW8PLCFx_SubDoc::WW8PLCFx_SubDoc(
+    SvStream* pSt,
+    ww::WordVersion eVersion,
+    WW8_CP nStartCp,
+    long nFcRef,
+    long nLenRef,
+    long nFcTxt,
+    long nLenTxt,
     long nStruct)
-    : WW8PLCFx(eVersion, true), pRef(0), pTxt(0)
+    : WW8PLCFx(eVersion, true)
+    , pRef(0)
+    , pTxt(0)
 {
     if( nLenRef && nLenTxt )
     {
@@ -3626,6 +3750,12 @@ WW8PLCFx_SubDoc::~WW8PLCFx_SubDoc()
 {
     delete pRef;
     delete pTxt;
+}
+
+bool WW8PLCFx_SubDoc::HasValidPLCF()
+{
+    return ( pRef == 0 || pRef->IsValid() )
+           && ( pTxt == 0 || pTxt->IsValid() );
 }
 
 sal_uLong WW8PLCFx_SubDoc::GetIdx() const
@@ -3751,6 +3881,11 @@ WW8PLCFx_FLD::WW8PLCFx_FLD( SvStream* pSt, const WW8Fib& rMyFib, short nType)
 WW8PLCFx_FLD::~WW8PLCFx_FLD()
 {
     delete pPLCF;
+}
+
+bool WW8PLCFx_FLD::HasValidPLCF()
+{
+    return pPLCF == 0 || pPLCF->IsValid();
 }
 
 sal_uLong WW8PLCFx_FLD::GetIdx() const
@@ -4034,6 +4169,12 @@ WW8PLCFx_Book::~WW8PLCFx_Book()
     delete[] pStatus;
     delete pBook[1];
     delete pBook[0];
+}
+
+bool WW8PLCFx_Book::HasValidPLCF()
+{
+    return ( pBook[0] == 0 || pBook[0]->IsValid() )
+           && ( pBook[1] == 0 || pBook[1]->IsValid() );
 }
 
 sal_uLong WW8PLCFx_Book::GetIdx() const
