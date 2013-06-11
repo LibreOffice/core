@@ -60,7 +60,8 @@ void BinaryXOutputStream::close()
     if( mxOutStrm.is() ) try
     {
         mxOutStrm->flush();
-        mxOutStrm->closeOutput();
+        if ( mbAutoClose )
+            mxOutStrm->closeOutput();
     }
     catch( Exception& )
     {
