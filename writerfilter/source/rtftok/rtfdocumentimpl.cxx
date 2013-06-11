@@ -4591,7 +4591,7 @@ int RTFDocumentImpl::popState()
 
     if (aState.pCurrentBuffer == &m_aSuperBuffer)
     {
-        OSL_ASSERT(m_aStates.top().pCurrentBuffer == 0);
+        OSL_ASSERT(!m_aStates.empty() && m_aStates.top().pCurrentBuffer == 0);
 
         if (!m_bHasFootnote)
             replayBuffer(m_aSuperBuffer);
