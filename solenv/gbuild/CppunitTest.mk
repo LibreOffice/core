@@ -51,7 +51,7 @@ gb_CppunitTest_CPPTESTCOMMAND := $(call gb_Executable_get_target_for_build,cppun
 gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filename,$(1))
 
 define gb_CppunitTest__make_args
---headless \
+$(HEADLESS) \
 "-env:BRAND_BASE_DIR=$(call gb_Helper_make_url,$(OUTDIR)/unittest/install)" \
 $(if $(URE),\
     $(if $(strip $(CONFIGURATION_LAYERS)),\
@@ -127,6 +127,7 @@ $(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES :=
 $(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES :=
 $(call gb_CppunitTest_get_target,$(1)) : DBGSV_ERROR_OUT := shell
 $(call gb_CppunitTest_get_target,$(1)) : SAL_DIAGNOSE_ABORT :=
+$(call gb_CppunitTest_get_target,$(1)) : HEADLESS := --headless
 $$(eval $$(call gb_Module_register_target,$(call gb_CppunitTest_get_target,$(1)),$(call gb_CppunitTest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),CppunitTest)
 
@@ -282,6 +283,11 @@ endef
 define gb_CppunitTest_use_configuration
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Configuration_get_target,registry)
 $(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(gb_Configuration_registry))
+
+endef
+
+define gb_CppunitTest_unset_headless
+$(call gb_CppunitTest_get_target,$(1)) : HEADLESS=
 
 endef
 
