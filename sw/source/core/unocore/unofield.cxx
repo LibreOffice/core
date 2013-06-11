@@ -456,7 +456,9 @@ throw (uno::RuntimeException)
     return OUString("SwXFieldMaster");
 }
 
-sal_Bool SwXFieldMaster::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SAL_CALL
+SwXFieldMaster::supportsService(const OUString& rServiceName)
+throw (uno::RuntimeException)
 {
     sal_Bool bRet = sal_False;
     if(rServiceName.equalsAsciiL(
@@ -485,7 +487,8 @@ sal_Bool SwXFieldMaster::supportsService(const OUString& rServiceName) throw( un
     return bRet;
 }
 
-uno::Sequence< OUString > SwXFieldMaster::getSupportedServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL
+SwXFieldMaster::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -617,54 +620,50 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         {
             throw lang::IllegalArgumentException();
         }
-        else
-        {
-            switch (m_pImpl->m_nResTypeId)
-            {
-                case RES_USERFLD :
-                {
-                    SwUserFieldType aType(m_pImpl->m_pDoc, sTypeName);
-                    pType2 = m_pImpl->m_pDoc->InsertFldType(aType);
-                    static_cast<SwUserFieldType*>(pType2)->SetContent(m_pImpl->m_sParam1);
-                    static_cast<SwUserFieldType*>(pType2)->SetValue(m_pImpl->m_fParam1);
-                    static_cast<SwUserFieldType*>(pType2)->SetType(m_pImpl->m_bParam1 ? nsSwGetSetExpType::GSE_EXPR : nsSwGetSetExpType::GSE_STRING);
-                }
-                break;
-                case RES_DDEFLD :
-                {
-                    SwDDEFieldType aType(sTypeName, m_pImpl->m_sParam1,
-                        sal::static_int_cast< sal_uInt16 >((m_pImpl->m_bParam1)
-                            ? sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL));
-                    pType2 = m_pImpl->m_pDoc->InsertFldType(aType);
-                }
-                break;
-                case RES_SETEXPFLD :
-                {
-                    SwSetExpFieldType aType(m_pImpl->m_pDoc, sTypeName);
-                    if (m_pImpl->m_sParam1.Len())
-                        aType.SetDelimiter(OUString(m_pImpl->m_sParam1.GetChar(0)));
-                    if (m_pImpl->m_nParam1 > -1 && m_pImpl->m_nParam1 < MAXLEVEL)
-                        aType.SetOutlineLvl(m_pImpl->m_nParam1);
-                    pType2 = m_pImpl->m_pDoc->InsertFldType(aType);
-                }
-                break;
-                case RES_DBFLD :
-                {
-                    ::GetString( rValue, m_pImpl->m_sParam3 );
-                    pType = GetFldType();
-                }
-                break;
-            }
-            if(pType2)
-            {
-                pType2->Add(m_pImpl.get());
-                m_pImpl->m_bIsDescriptor = false;
-            }
-            else
-                throw uno::RuntimeException();
-        }
 
-        OSL_ENSURE(pType2, "kein FieldType gefunden!" );
+        switch (m_pImpl->m_nResTypeId)
+        {
+            case RES_USERFLD :
+            {
+                SwUserFieldType aType(m_pImpl->m_pDoc, sTypeName);
+                pType2 = m_pImpl->m_pDoc->InsertFldType(aType);
+                static_cast<SwUserFieldType*>(pType2)->SetContent(m_pImpl->m_sParam1);
+                static_cast<SwUserFieldType*>(pType2)->SetValue(m_pImpl->m_fParam1);
+                static_cast<SwUserFieldType*>(pType2)->SetType(m_pImpl->m_bParam1
+                    ? nsSwGetSetExpType::GSE_EXPR : nsSwGetSetExpType::GSE_STRING);
+            }
+            break;
+            case RES_DDEFLD :
+            {
+                SwDDEFieldType aType(sTypeName, m_pImpl->m_sParam1,
+                    sal::static_int_cast< sal_uInt16 >((m_pImpl->m_bParam1)
+                        ? sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL));
+                pType2 = m_pImpl->m_pDoc->InsertFldType(aType);
+            }
+            break;
+            case RES_SETEXPFLD :
+            {
+                SwSetExpFieldType aType(m_pImpl->m_pDoc, sTypeName);
+                if (m_pImpl->m_sParam1.Len())
+                    aType.SetDelimiter(OUString(m_pImpl->m_sParam1.GetChar(0)));
+                if (m_pImpl->m_nParam1 > -1 && m_pImpl->m_nParam1 < MAXLEVEL)
+                    aType.SetOutlineLvl(m_pImpl->m_nParam1);
+                pType2 = m_pImpl->m_pDoc->InsertFldType(aType);
+            }
+            break;
+            case RES_DBFLD :
+            {
+                ::GetString( rValue, m_pImpl->m_sParam3 );
+                pType = GetFldType();
+            }
+            break;
+        }
+        if (!pType2)
+        {
+            throw uno::RuntimeException("no field type found!", *this);
+        }
+        pType2->Add(m_pImpl.get());
+        m_pImpl->m_bIsDescriptor = false;
     }
     else
     {
@@ -819,33 +818,34 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         {
             //TODO: Properties fuer die uebrigen Feldtypen einbauen
             sal_uInt16 nMId = GetFieldTypeMId( rPropertyName, *pType );
-            if( USHRT_MAX != nMId )
+            if (USHRT_MAX == nMId)
             {
-                pType->QueryValue( aRet, nMId );
-
-                if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
-                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
-                {
-                    OUString aDataSource;
-                    aRet >>= aDataSource;
-                    aRet <<= OUString();
-
-                    OUString *pStr = 0;     // only one of this properties will return
-                                            // a non-empty string.
-                    INetURLObject aObj;
-                    aObj.SetURL( aDataSource );
-                    bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
-                    if (bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
-                        pStr = &aDataSource;        // DataBaseURL
-                    else if (!bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
-                        pStr = &aDataSource;        // DataBaseName
-
-                    if (pStr)
-                        aRet <<= *pStr;
-                }
+                throw beans::UnknownPropertyException(
+                        "Unknown property: " + rPropertyName,
+                        static_cast<cppu::OWeakObject *>(this));
             }
-            else
-                throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            pType->QueryValue( aRet, nMId );
+
+            if (rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
+                rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
+            {
+                OUString aDataSource;
+                aRet >>= aDataSource;
+                aRet <<= OUString();
+
+                OUString *pStr = 0;     // only one of this properties will return
+                                        // a non-empty string.
+                INetURLObject aObj;
+                aObj.SetURL( aDataSource );
+                bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+                if (bIsURL && rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
+                    pStr = &aDataSource;        // DataBaseURL
+                else if (!bIsURL && rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
+                    pStr = &aDataSource;        // DataBaseName
+
+                if (pStr)
+                    aRet <<= *pStr;
+            }
         }
         else
         {
@@ -949,38 +949,35 @@ throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     SwFieldType *const pFldType = GetFldType(true);
-    if(pFldType)
-    {
-        sal_uInt16 nTypeIdx = USHRT_MAX;
-        const SwFldTypes* pTypes = m_pImpl->m_pDoc->GetFldTypes();
-        for( sal_uInt16 i = 0; i < pTypes->size(); i++ )
-        {
-            if((*pTypes)[i] == pFldType)
-                nTypeIdx = i;
-        }
-
-        // zuerst alle Felder loeschen
-        SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
-        SwFmtFld* pFld = aIter.First();
-        while(pFld)
-        {
-            // Feld im Undo?
-            SwTxtFld *pTxtFld = pFld->GetTxtFld();
-            if(pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
-            {
-                SwTxtNode& rTxtNode = (SwTxtNode&)*pTxtFld->GetpTxtNode();
-                SwPaM aPam(rTxtNode, *pTxtFld->GetStart());
-                aPam.SetMark();
-                aPam.Move();
-                m_pImpl->m_pDoc->DeleteAndJoin(aPam);
-            }
-            pFld = aIter.Next();
-        }
-        // dann den FieldType loeschen
-        m_pImpl->m_pDoc->RemoveFldType(nTypeIdx);
-    }
-    else
+    if (!pFldType)
         throw uno::RuntimeException();
+    sal_uInt16 nTypeIdx = USHRT_MAX;
+    const SwFldTypes* pTypes = m_pImpl->m_pDoc->GetFldTypes();
+    for( sal_uInt16 i = 0; i < pTypes->size(); i++ )
+    {
+        if((*pTypes)[i] == pFldType)
+            nTypeIdx = i;
+    }
+
+    // zuerst alle Felder loeschen
+    SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
+    SwFmtFld* pFld = aIter.First();
+    while(pFld)
+    {
+        // Feld im Undo?
+        SwTxtFld *pTxtFld = pFld->GetTxtFld();
+        if(pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
+        {
+            SwTxtNode& rTxtNode = (SwTxtNode&)*pTxtFld->GetpTxtNode();
+            SwPaM aPam(rTxtNode, *pTxtFld->GetStart());
+            aPam.SetMark();
+            aPam.Move();
+            m_pImpl->m_pDoc->DeleteAndJoin(aPam);
+        }
+        pFld = aIter.Next();
+    }
+    // dann den FieldType loeschen
+    m_pImpl->m_pDoc->RemoveFldType(nTypeIdx);
 }
 
 void SAL_CALL SwXFieldMaster::addEventListener(
