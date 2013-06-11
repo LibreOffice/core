@@ -4306,13 +4306,18 @@ void ImpEditEngine::ImplInitDigitMode( OutputDevice* pOutDev, String* pString, x
 
 void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_uInt16 nPara, sal_uInt16 nIndex )
 {
+    sal_Bool bCTL = sal_False;
     sal_Bool bR2L = sal_False;
     if ( nIndex == 0xFFFF )
     {
+        bCTL = HasScriptType( nPara, i18n::ScriptType::COMPLEX );
         bR2L = IsRightToLeft( nPara );
     }
     else
     {
+        ContentNode* pNode = GetEditDoc().GetObject( nPara );
+        short nScriptType = GetScriptType( EditPaM( pNode, nIndex+1 ) );
+        bCTL = nScriptType == i18n::ScriptType::COMPLEX;
         // this change was discussed in issue 37190
         bR2L = GetRightToLeft( nPara, nIndex + 1) % 2 ? sal_True : sal_False;
         // it also works for issue 55927
@@ -4321,18 +4326,21 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_uInt16 nPara,
     sal_uLong nLayoutMode = pOutDev->GetLayoutMode();
 
     // We always use the left postion for DrawText()
-    // Let VCL do CTL checking
-    nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_COMPLEX_DISABLED);
+    nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL);
 
-    if ( !bR2L )
+    if ( !bCTL && !bR2L)
     {
         // No CTL/Bidi checking neccessary
         nLayoutMode |= ( TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
     }
     else
     {
-        //Use BIDI_STRONG, Stop VCL to perform ubidi algo on text.
-        nLayoutMode |= TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT | TEXT_LAYOUT_BIDI_STRONG;
+        // CTL/Bidi checking neccessary
+        // Don't use BIDI_STRONG, VCL must do some checks.
+        nLayoutMode &= ~( TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
+
+        if ( bR2L )
+            nLayoutMode |= TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_TEXTORIGIN_LEFT;
     }
 
     pOutDev->SetLayoutMode( nLayoutMode );
