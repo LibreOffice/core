@@ -193,8 +193,6 @@ INCLUDETOPDIRLIST= \
 
 .IF "$(GUI)"=="WNT"
 INCLUDETOPDIRLIST += $(INCOUT)/systools
-.ELSE
-INCLUDETOPDIRLIST += $(INCOUT)/boost
 .ENDIF
 
 INCLUDEDIRLIST:={$(subst,/,/ $(shell @$(FIND) $(INCLUDETOPDIRLIST) -type d -print))}

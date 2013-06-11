@@ -63,6 +63,11 @@ OO_SDK_CC_55_OR_HIGHER=@OO_SDK_CC_55_OR_HIGHER@
 # Example: OO_SDK_JAVA_HOME=/usr/jdk/jdk1.6.0_10
 OO_SDK_JAVA_HOME=@OO_SDK_JAVA_HOME@
 
+# Directory of Boost (optional, C++ only)
+# Example: OO_SDK_BOOST_HOME=/opt/local/boost_1_48_0
+OO_SDK_BOOST_HOME=@OO_SDK_BOOST_HOME@
+export OO_SDK_BOOST_HOME
+
 # Special output directory
 # Example: OO_SDK_OUTPUT_DIR=$HOME
 OO_SDK_OUTPUT_DIR=@OO_SDK_OUTPUT_DIR@
@@ -82,10 +87,9 @@ fi
 export OO_SDK_HOME
 
 # Check installation path for the office.
-if [ -z "${OFFICE_HOME}" ] && [ -z "${OO_SDK_URE_HOME}" ]
+if [ -z "${OFFICE_HOME}" ]
 then
-    echo 'Error: Please set either the environment variable OFFICE_HOME or the'
-    echo 'environment variable OO_SDK_URE_HOME.'
+    echo 'Error: Please set either the environment variable OFFICE_HOME.'
     exit 0
 fi
 
@@ -118,13 +122,13 @@ then
     export UNO_PATH
 fi
 
-OO_SDK_URE_BIN_DIR=${OFFICE_PROGRAM_PATH}
-OO_SDK_URE_LIB_DIR=${OFFICE_PROGRAM_PATH}
-OO_SDK_URE_JAVA_DIR=${OFFICE_PROGRAM_PATH}/classes
+OO_SDK_OFFICE_BIN_DIR=${OFFICE_PROGRAM_PATH}
+OO_SDK_OFFICE_LIB_DIR=${OFFICE_PROGRAM_PATH}
+OO_SDK_OFFICE_JAVA_DIR=${OFFICE_PROGRAM_PATH}/classes
 
-export OO_SDK_URE_BIN_DIR
-export OO_SDK_URE_LIB_DIR
-export OO_SDK_URE_JAVA_DIR
+export OO_SDK_OFFICE_BIN_DIR
+export OO_SDK_OFFICE_LIB_DIR
+export OO_SDK_OFFICE_JAVA_DIR
 
 OO_SDK_OUT=$OO_SDK_HOME
 # Prepare appropriate output directory.
@@ -151,7 +155,7 @@ case ${sdk_platform} in
     soext=so
     exampleout=SOLARISexample.out
     stldebug=_debug
-    LD_LIBRARY_PATH=${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
+    LD_LIBRARY_PATH=${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_OFFICE_LIB_DIR}:.:${LD_LIBRARY_PATH}
     export LD_LIBRARY_PATH
     ;;
 
@@ -169,7 +173,7 @@ case ${sdk_platform} in
     exampleout=MACOSXexample.out
     platform=MacOSX
     stldebug=_stldebug
-    DYLD_LIBRARY_PATH=/usr/lib:${OO_SDK_OUT}/${directoryname}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${DYLD_LIBRARY_PATH}
+    DYLD_LIBRARY_PATH=/usr/lib:${OO_SDK_OUT}/${directoryname}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_OFFICE_LIB_DIR}:.:${DYLD_LIBRARY_PATH}
     export DYLD_LIBRARY_PATH
     ;;
 
@@ -187,7 +191,7 @@ case ${sdk_platform} in
     exampleout=LINUXexample.out
     platform=Linux
     stldebug=_stldebug
-    LD_LIBRARY_PATH=${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
+    LD_LIBRARY_PATH=${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_OFFICE_LIB_DIR}:.:${LD_LIBRARY_PATH}
     export LD_LIBRARY_PATH
     ;;
 
@@ -205,7 +209,7 @@ case ${sdk_platform} in
     exampleout=FREEBSDexample.out
     platform=FreeBSD
     stldebug=_stldebug
-    LD_LIBRARY_PATH=${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
+    LD_LIBRARY_PATH=${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_OFFICE_LIB_DIR}:.:${LD_LIBRARY_PATH}
     export LD_LIBRARY_PATH
 
     if [ -e "/sbin/sysctl" ]
@@ -234,10 +238,10 @@ case ${sdk_platform} in
 esac
 
 # Add directory of the SDK tools to the path.
-PATH=${OO_SDK_HOME}/bin:${OO_SDK_OUT}/${exampleout}/bin:${OO_SDK_URE_BIN_DIR}:${OFFICE_PROGRAM_PATH}:.:${PATH}
+PATH=${OO_SDK_HOME}/bin:${OO_SDK_OUT}/${exampleout}/bin:${OFFICE_PROGRAM_PATH}:.:${PATH}
 
 # Set the classpath
-CLASSPATH=${OO_SDK_URE_JAVA_DIR}/juh.jar:${OO_SDK_URE_JAVA_DIR}/jurt.jar:${OO_SDK_URE_JAVA_DIR}/ridl.jar:${OO_SDK_URE_JAVA_DIR}/unoloader.jar:${OO_SDK_URE_JAVA_DIR}/unoil.jar:${CLASSPATH}
+CLASSPATH=${OO_SDK_OFFICE_JAVA_DIR}/juh.jar:${OO_SDK_OFFICE_JAVA_DIR}/jurt.jar:${OO_SDK_OFFICE_JAVA_DIR}/ridl.jar:${OO_SDK_OFFICE_JAVA_DIR}/unoloader.jar:${OO_SDK_OFFICE_JAVA_DIR}/unoil.jar:${CLASSPATH}
 export CLASSPATH
 
 
@@ -294,12 +298,6 @@ fi
 
 export PATH
 
-if [ -r "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${stldebug}.${soext}" ]
-then
-    STLDEBUG=${stldebug}
-    export STLDEBUG
-fi
-
 if [ "${platform}" = "MacOSX" ]
 then
 #    For URE, prepare symbolic links for libraries:
@@ -313,31 +311,21 @@ then
 	"${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}" \
 	"${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
 
-    if [ -L "${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}" ]
-    then
-	rm -rf "${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}"
-    fi
-
 #    prepare links 
     if [ "${OFFICE_HOME}" ]
     then
 	mkdir -p "${OO_SDK_OUT}/${directoryname}/lib"
-	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_cppu.${soext}.3" \
+	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_cppu.${soext}.3" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppu.${soext}"
-	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_cppuhelper${comid}.${soext}.3" \
+	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_cppuhelper${comid}.${soext}.3" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppuhelper${comid}.${soext}"
-	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_sal.${soext}.3" \
+	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_sal.${soext}.3" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_sal.${soext}"
-	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_salhelper${comid}.${soext}.3" \
+	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_salhelper${comid}.${soext}.3" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}"
-	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_purpenvhelper${comid}.${soext}.3" \
+	ln -s "${OO_SDK_OFFICE_LIB_DIR}/libuno_purpenvhelper${comid}.${soext}.3" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
 
-	if [ -r "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${STLDEBUG}.${soext}" ]
-	then
-	    ln -s "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${STLDEBUG}.${soext}" \
-		"${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}"
-	fi
     fi
 fi 
 
@@ -356,6 +344,7 @@ echo " * cat = $OO_SDK_CAT_HOME"
 echo " * sed = $OO_SDK_SED_HOME"
 echo " * C++ Compiler = $OO_SDK_CPP_HOME"
 echo " * Java = $OO_SDK_JAVA_HOME"
+echo " * Boost = $OO_SDK_BOOST_HOME"
 echo " * SDK Output directory = $OO_SDK_OUT"
 echo " * Auto deployment = $SDK_AUTO_DEPLOYMENT"
 echo " *"

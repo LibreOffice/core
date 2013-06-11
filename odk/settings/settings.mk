@@ -134,10 +134,6 @@ endif
 
 LINK_JAVA_LIBS=/LIBPATH:"$(OO_SDK_JAVA_HOME)/lib"
 
-#ifneq "$(OFFICE_PROGRAM_PATH)" ""
-#URE_MISC=$(OFFICE_PROGRAM_PATH)\misc
-#endif
-
 # use this for release version
 #EXE_LINK_FLAGS=/MAP /OPT:NOREF /SUBSYSTEM:CONSOLE /BASE:0x1100000
 #LIBRARY_LINK_FLAGS=/NODEFAULTLIB /DLL
@@ -240,17 +236,13 @@ endif
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 EXE_LINK_FLAGS=-w -mt -z combreloc -PIC -temp=/tmp -norunpath -Bdirect -z defs
-LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)"
+LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_OFFICE_LIB_DIR)"
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 
 ifeq "$(PROCTYPE)" "sparc64"
 CC_FLAGS+=-m64
 LIBRARY_LINK_FLAGS+=-m64
 EXE_LINK_FLAGS+=-m64
-endif
-
-ifneq "$(OFFICE_PROGRAM_PATH)" ""
-URE_MISC=$(OFFICE_PROGRAM_PATH)/share/misc
 endif
 
 endif
@@ -380,12 +372,8 @@ COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 #EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs -Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs -Wl,--no-whole-archive
-LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)"
+LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_OFFICE_LIB_DIR)"
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
-
-ifneq "$(OFFICE_PROGRAM_PATH)" ""
-URE_MISC=$(OFFICE_PROGRAM_PATH)/share/misc
-endif
 
 endif
 
@@ -464,12 +452,12 @@ SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
 
-SALDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_sal.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libuno_sal.dylib'
-CPPUDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppu.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libuno_cppu.dylib'
-CPPUHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppuhelper'$(COMID).dylib.3:$(OO_SDK_URE_LIB_DIR)/libuno_cppuhelper$(COMID).dylib'
-SALHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3:'$(OO_SDK_URE_LIB_DIR)/libuno_salhelper$(COMID).dylib'
-REGDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libreg.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libreg.dylib'
-STOREDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libstore.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libstore.dylib'
+SALDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_sal.dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libuno_sal.dylib'
+CPPUDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppu.dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libuno_cppu.dylib'
+CPPUHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppuhelper'$(COMID).dylib.3:$(OO_SDK_OFFICE_LIB_DIR)/libuno_cppuhelper$(COMID).dylib'
+SALHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libuno_salhelper$(COMID).dylib'
+REGDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libreg.dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libreg.dylib'
+STOREDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libstore.dylib.3:'$(OO_SDK_OFFICE_LIB_DIR)/libstore.dylib'
 
 INSTALL_NAME_URELIBS=install_name_tool -change @__________________________________________________URELIB/libuno_sal.dylib.3 @executable_path/libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 @executable_path/libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 @executable_path/libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 @executable_path/libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 @executable_path/libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 @executable_path/libstore.dylib.3
 
@@ -505,13 +493,9 @@ LIBRARY_LINK_FLAGS=-dynamiclib -single_module -Wl,-multiply_defined,suppress $(G
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 EXE_LINK_FLAGS=$(GCC_ARCH_OPTION) -Wl,-multiply_defined,suppress
-LINK_LIBS=-L$(OUT)/lib -L$(OO_SDK_OUT)/$(PLATFORM)/lib -L"$(OO_SDK_URE_LIB_DIR)"
+LINK_LIBS=-L$(OUT)/lib -L$(OO_SDK_OUT)/$(PLATFORM)/lib -L"$(OO_SDK_OFFICE_LIB_DIR)"
 LINK_JAVA_LIBS=-framework JavaVM
 #LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/Libraries"
-
-ifneq "$(OFFICE_PROGRAM_PATH)" ""
-URE_MISC=$(OFFICE_PROGRAM_PATH)/share/misc
-endif
 
 endif
 
@@ -625,15 +609,15 @@ COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
 
 EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined 
 #EXE_LINK_FLAGS+=-Wl,-export-dynamic -Wl,-z,defs
-LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)" $(PTHREAD_LIBS)
+LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_OFFICE_LIB_DIR)" $(PTHREAD_LIBS)
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
-
-#ifneq "$(OFFICE_PROGRAM_PATH)" ""
-#URE_MISC=$(OFFICE_PROGRAM_PATH)/share/misc
-#endif
 
 endif
 
+# add additional boost specific settings
+ifneq "$(OO_SDK_BOOST_HOME)" ""
+STL_INCLUDES+= -I"$(OO_SDK_BOOST_HOME)"
+endif
 
 # Add OSL_DEBUG_LEVEL to compiler the flags (for OSL_TRACE et. al.)
 ifeq "$(DEBUG)" "yes"

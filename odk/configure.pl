@@ -94,6 +94,10 @@ if ( $main::operatingSystem =~ m/darwin/ )
 $main::OO_SDK_JAVA_HOME_SUGGESTION = searchprog("javac");
 $main::javaVersion = "1.5.0_01";
 
+$main::OO_SDK_BOOST_HOME_SUGGESTION = "";
+$main::boostVersion = "1.48.0";
+$main::skipBoostDir = 0;
+
 $main::SDK_AUTO_DEPLOYMENT = "";
 $main::SDK_AUTO_DEPLOYMENT_SUGGESTION = "YES";
 
@@ -490,6 +494,34 @@ while ( (!$main::correctVersion) &&
     }
 }
 
+# prepare boost directory (optional)
+while ( (!$main::skipBoostDir) &&
+        ((! -d "$main::OO_SDK_BOOST_HOME" ) ||
+         ((-d "$main::OO_SDK_BOOST_HOME") && (! -e "$main::OO_SDK_BOOST_HOME/boost/tr1/unordered_map.hpp"))) )
+{
+
+    print " Enter boost directory [$main::OO_SDK_BOOST_HOME_SUGGESTION]: ";
+    $main::OO_SDK_BOOST_HOME = readStdIn();
+    chop($main::OO_SDK_BOOST_HOME);
+    if ( $main::OO_SDK_BOOST_HOME eq "" )
+    {
+        $main::OO_SDK_BOOST_HOME = $main::OO_SDK_BOOST_HOME_SUGGESTION;
+    }
+    if ( (! -d "$main::OO_SDK_BOOST_HOME") ||
+         ((-d "$main::OO_SDK_BOOST_HOME") && (! -e "$main::OO_SDK_BOOST_HOME/boost/tr1/unordered_map.hpp")) )
+    {
+        print " Error: boost couldn't be find or verified, please specify a boost directory.\n";
+        if ( skipChoice("optional output directory") == 1 )
+        {
+            $main::skipBoostDir = 1;
+        }
+        $main::OO_SDK_BOOST_HOME = "";
+    } else
+    {
+        # the boost directory is optional
+        $main::skipBoostDir = 1;
+    }
+}
 
 # prepare output directory (optional)
 while ( (!$main::skipOutputDir) &&
@@ -744,7 +776,6 @@ sub prepareScriptFile()
         $_ =~ s#\@OO_SDK_NAME\@#$main::OO_SDK_NAME#go;
         $_ =~ s#\@OO_SDK_HOME\@#$main::OO_SDK_HOME#go;
         $_ =~ s#\@OFFICE_HOME\@#$main::OFFICE_HOME#go;
-#       $_ =~ s#\@OFFICE_BASE_HOME\@#$main::OFFICE_BASE_HOME#go;
         $_ =~ s#\@OO_SDK_MAKE_HOME\@#$main::OO_SDK_MAKE_HOME#go;
         $_ =~ s#\@OO_SDK_ZIP_HOME\@#$main::OO_SDK_ZIP_HOME#go;
         $_ =~ s#\@OO_SDK_CAT_HOME\@#$main::OO_SDK_CAT_HOME#go;
@@ -752,6 +783,7 @@ sub prepareScriptFile()
         $_ =~ s#\@OO_SDK_CPP_HOME\@#$main::OO_SDK_CPP_HOME#go;
         $_ =~ s#\@OO_SDK_CC_55_OR_HIGHER\@#$main::OO_SDK_CC_55_OR_HIGHER#go;
         $_ =~ s#\@OO_SDK_JAVA_HOME\@#$main::OO_SDK_JAVA_HOME#go;
+        $_ =~ s#\@OO_SDK_BOOST_HOME\@#$main::OO_SDK_BOOST_HOME#go;
         $_ =~ s#\@SDK_AUTO_DEPLOYMENT\@#$main::SDK_AUTO_DEPLOYMENT#go;
         $_ =~ s#\@OO_SDK_OUTPUT_DIR\@#$main::OO_SDK_OUTPUT_DIR#go;
 

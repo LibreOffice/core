@@ -150,6 +150,13 @@
 		  <tr valign="middle"> 
             <td colspan="2"><img class="line" src="images/sdk_line-1.gif"></td>
           </tr>
+          <td><b>Boost (<b>Unix only</b> and optional)<b></td>
+          <td class="content80">The boost library is used today on Unix systems as replacement for the stlport library. The stlport library is removed and replaced by either the compiler stl (on Windows) or the boost stl on all Unix based systems. We are planning to switch to the compiler stl completely as soon as possible. The boost headers/library are <b>optional</b> and for C++ development only if stl containers are used.
+          <p><b>Download:</b> <a target="_blank" href="http://sourceforge.net/projects/boost/files/boost/1.48.0/boost_1_48_0.tar.bz2/download" title="link to boost version 1.48.0 (online)">http://sourceforge.net/projects/boost/files/boost/1.48.0/boost_1_48_0.tar.bz2/download</a>.</p>
+          </td>
+		  <tr valign="middle"> 
+            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"></td>
+          </tr>
 		  <tr> 
 		    <td><img class="nothing10" src="images/nada.gif"></td>
 			<td align="right">
@@ -188,10 +195,8 @@
 		  <tr valign="top">
 		  <td class="cell20"><b>OFFICE_HOME</b></td>
 		  <td class="cell80">Path to an existing Apache OpenOffice 
-		  base installation, e.g. &quot;/opt/openoffice3&quot;. Be sure 
-		  that it is not a user installation only. Exactly one of OFFICE_HOME
-          and OO_SDK_URE_HOME must be set. The other should be either unset or
-          set to an empty value.</td>
+		  installation, e.g. &quot;/opt/openoffice4&quot;. Be sure 
+		  that it is not a user installation only.</td>
 		  </tr>
           <tr><a name="oosdkname"/>
           <td class="cell20"><b>OO_SDK_NAME</b></td>
@@ -201,13 +206,6 @@
 		  of gnu make which cannot handle spaces correctly. This name is, for 
 		  example, used to create an output directory in the users home directory 
 		  for any generated output when you use the SDK build environment.</td>
-          </tr>
-          <tr>
-          <td class="cell20"><b>OO_SDK_URE_HOME</b></td>
-          <td class="cell80">Path to an existing UNO Runtime Environment
-          installation, e.g. &quot;/opt/openoffice/ure&quot;. Exactly one of
-          OFFICE_HOME and OO_SDK_URE_HOME must be set. The other should be
-          either unset or set to an empty value.</td>
           </tr>
 		  <tr>
 		  <td class="cell20"><b>OO_SDK_HOME</b></td>
@@ -251,6 +249,10 @@
           <tr>
           <td class="cell20"><b>OO_SDK_SED_HOME</b></td>
           <td class="cell80">Path to the 'sed' tool.</td>
+          </tr>
+          <tr>
+          <td class="cell20"><b>OO_SDK_BOOST_HOME</b></td>
+          <td class="cell80">Path to a boost installation, this is optional for C++ and Unix only.</td>
           </tr>
 		  <tr>
 		  <td class="cell20"><b>OO_SDK_OUTPUT_DIR</b></td>
@@ -299,46 +301,36 @@
           <td class="cell80">See description <a href="#oosdkname" title="link to the description of the environment variable OO_SDK_NAME">above</a>.</td>
           </tr>
           <tr valign="top">
-          <td class="cell20">OO_SDK_URE_BIN_DIR</td>
-          <td class="cell80">The path within the chosen office or URE
-          installation where binary executables are located (e.g.,
-          <i>$OFFICE_HOME/program</i> for an office installation, or
-          <i>$OO_SDK_URE_HOME/bin</i> for a Unix URE installation).</td>
+          <td class="cell20">OO_SDK_OFFICE_BIN_DIR</td>
+          <td class="cell80">The path to the program directory in the office installation (e.g. <i>$OFFICE_HOME/program</i>).</td>
           </tr>
           <tr valign="top">
-          <td class="cell20">OO_SDK_URE_LIB_DIR</td>
-          <td class="cell80">The path within the chosen office or URE
-          installation where dynamic libraries are located (e.g.,
-          <i>$OFFICE_HOME/program</i> for an office installation, or
-          <i>$OO_SDK_URE_HOME/lib</i> for a Unix URE installation).</td>
+          <td class="cell20">OO_SDK_OFFICE_LIB_DIR</td>
+          <td class="cell80">The path to the office program directory in the office installtion (e.g. <i>$OFFICE_HOME/program</i>).</td>
           </tr>
           <tr valign="top">
-          <td class="cell20">OO_SDK_URE_JAVA_DIR</td>
-          <td class="cell80">The path within the chosen office or URE
-          installation where Java JARs are located (e.g.,
-          <i>$OFFICE_HOME/program/classes</i> for an office installation, or
-          <i>$OO_SDK_URE_HOME/share/java</i> for a Unix URE installation).</td>
+          <td class="cell20">OO_SDK_OFFICE_JAVA_DIR</td>
+          <td class="cell80">The path to the classes direcgtory in the office program directory where Java JARs are located (e.g. 
+          <i>$OFFICE_HOME/program/classes</i>).</td>
           </tr>
 		  <tr valign="top">
 		  <td class="cell20">CLASSPATH</td>
 		  <td class="cell80">
-          =<i>$OO_SDK_URE_JAVA_DIR/juh.jar;
-              $OO_SDK_URE_JAVA_DIR/jurt.jar;
-              $OO_SDK_URE_JAVA_DIR/ridl.jar;
-              $OO_SDK_URE_JAVA_DIR/unoloader.jar;
-              [$OO_SDK_URE_JAVA_DIR/unoil.jar;]
+          =<i>$OO_SDK_OFFICE_JAVA_DIR/juh.jar;
+              $OO_SDK_OFFICE_JAVA_DIR/jurt.jar;
+              $OO_SDK_OFFICE_JAVA_DIR/ridl.jar;
+              $OO_SDK_OFFICE_JAVA_DIR/unoloader.jar;
+              [$OO_SDK_OFFICE_JAVA_DIR/unoil.jar;]
               $CLASSPATH</i><br>
           <p>The classpath will be set or extended to the necessary jar files of 
-		  the specified office installation. (<i>unoil.jar</i> is only included
-          when OFFICE_HOME is set.)</p>
+		  the specified office installation.</p>
 		  </td>
 		  </tr>
 		  <tr valign="top">
 		  <td class="cell20">OFFICE_PROGRAM_PATH</td>
 		  <td class="cell80">=<i>$OFFICE_HOME/program</i><br>
 		  <p>This variable is used to find, for example, the office type library and 
-		  the UNO package deployment tool. This variable is only relevant when
-          OFFICE_HOME is set.</p>
+		  the UNO package deployment tool.</p>
 		  </td>
 		  </tr>
 		  <tr valign="top">
@@ -349,8 +341,7 @@
 		  the bootstrap mechanism finds the default office installation for the
 		  user on the system. This variable is optional but is set from the scripts
 		  to ensure a homogeneous environment. Especially useful during development
-		  where you might have more than one office installation installed. This
-          variable is only relevant when OFFICE_HOME is set.</p>
+		  where you might have more than one office installation installed.</p>
 		  </td>
 		  </tr>
 		  </table>
@@ -359,25 +350,25 @@
 		  <table class="table4">
 		  <tr valign="top">
 		  <td class="cell20">LD_LIBRARY_PATH</td>
-		  <td class="cell80">=<i>$OO_SDK_URE_LIB_DIR: $OO_SDK_HOME/(solsparc|solintel)/lib: $LD_LIBRARY_PATH</i><br>
-		  <p>The LD_LIBRARY_PATH will be set or will be extended by the office/URE
+		  <td class="cell80">=<i>$OO_SDK_OFFICE_LIB_DIR: $OO_SDK_HOME/(solsparc|solintel)/lib: $LD_LIBRARY_PATH</i><br>
+		  <p>The LD_LIBRARY_PATH will be set or will be extended by the office
 		  library path, the platform dependent lib directory for several additional 
 		  libraries.</p>
 		  </td>
 		  </tr>
 		  <tr valign="top">
 		  <td class="cell20">PATH</td>
-		  <td class="cell80">=<i>$OO_SDK_HOME/(solsparc|solintel)/bin:$OO_SDK_MAKE_HOME: $OO_SDK_ZIP_HOME: [$OO_SDK_CPP_HOME:] [$OO_SDK_JAVA_HOME/bin:] $OO_SDK_URE_BIN_DIR: $PATH</i></b><br>
+		  <td class="cell80">=<i>$OO_SDK_HOME/(solsparc|solintel)/bin:$OO_SDK_MAKE_HOME: $OO_SDK_ZIP_HOME: [$OO_SDK_CPP_HOME:] [$OO_SDK_JAVA_HOME/bin:] $OO_SDK_OFFICE_BIN_DIR: $PATH</i></b><br>
           <p>The PATH variable will be extended by the paths for the SDK development
 		  tools, the compiler, the JDK, GNU make, the zip tool and the 
-		  OO_SDK_URE_BIN_DIR, where the compiler or the JDK are 
+		  OO_SDK_OFFICE_BIN_DIR, where the compiler or the JDK are 
 		  optional.</p>
 		  </td>
 		  </tr>
           <tr>
-          <td colspan="2" class="cell80">When OO_SDK_URE_HOME is set, the script
+          <td colspan="2" class="cell80"Based OFFICE_HOME, the script
           additionally creates symbolic links to the public dynamic libraries of
-          the URE in <i>$OO_SDK_HOME/(solsparc|solintel)/lib</i>, which are
+          the office UNO runtime in <i>$OO_SDK_HOME/(solsparc|solintel)/lib</i>, which are
           needed for linking.</td>
           </tr>
 		  </table>
@@ -385,25 +376,25 @@
 		  <table class="table4">
 		  <tr valign="top">
 		  <td class="cell20">LD_LIBRARY_PATH</td>
-		  <td class="cell80">=<i>$OO_SDK_URE_LIB_DIR: $SDK_HOME/linux/lib: $LD_LIBRARY_PATH</i><br>
-		  <p>The LD_LIBRARY_PATH will be set or will be extended by the office/URE
+		  <td class="cell80">=<i>$OO_SDK_OFFICE_LIB_DIR: $SDK_HOME/linux/lib: $LD_LIBRARY_PATH</i><br>
+		  <p>The LD_LIBRARY_PATH will be set or will be extended by the office
 		  library path, the platform dependent lib directory for some additional 
 		  libraries.</p>
 		  </td>
 		  </tr>
 		  <tr valign="top">
 		  <td class="cell20">PATH</td>
-		  <td class="cell80">=<i>$OO_SDK_HOME/linux/bin:$OO_SDK_MAKE_HOME: $OO_SDK_ZIP_HOME: [$OO_SDK_CPP_HOME:] [$OO_SDK_JAVA_HOME/bin:] $OO_SDK_URE_BIN_DIR: $PATH</i><br>
+		  <td class="cell80">=<i>$OO_SDK_HOME/linux/bin:$OO_SDK_MAKE_HOME: $OO_SDK_ZIP_HOME: [$OO_SDK_CPP_HOME:] [$OO_SDK_JAVA_HOME/bin:] $OO_SDK_OFFICE_BIN_DIR: $PATH</i><br>
 		  <p>The PATH variable will be extended by the paths for the SDK development
 		  tools, the compiler, the JDK, GNU make, the zip tool and the 
-		  OO_SDK_URE_BIN_DIR, where the compiler and the JDK are 
+		  OO_SDK_OFFICE_BIN_DIR, where the compiler and the JDK are 
 		  optional.</p>
 		  </td>
 		  </tr>
           <tr>
-          <td colspan="2" class="cell80">When OO_SDK_URE_HOME is set, the script
+          <td colspan="2" class="cell80">Based on OFFICE_HOME, the script
           additionally creates symbolic links to the public dynamic libraries of
-          the URE in <i>$OO_SDK_HOME/linux/lib</i>, which are needed for
+          the office UNO runtime in <i>$OO_SDK_HOME/linux/lib</i>, which are needed for
           linking.</td>
           </tr>
 		  </table>
@@ -411,10 +402,10 @@
 		  <table class="table4">
 		  <tr valign="top">
 		  <td class="cell20">PATH</td>
-		  <td class="cell80">=<i>%OO_SDK_HOME%\windows\bin; %OO_SDK_MAKE_HOME%; %OO_SDK_ZIP_HOME%; [%OO_SDK_CLI_HOME%;] [%OO_SDK_CPP_HOME%;] [%OO_SDK_JAVA_HOME%\bin;] %OO_SDK_URE_BIN_DIR%; %PATH%</i><br>
+		  <td class="cell80">=<i>%OO_SDK_HOME%\windows\bin; %OO_SDK_MAKE_HOME%; %OO_SDK_ZIP_HOME%; [%OO_SDK_CLI_HOME%;] [%OO_SDK_CPP_HOME%;] [%OO_SDK_JAVA_HOME%\bin;] %OO_SDK_OFFICE_BIN_DIR%; %PATH%</i><br>
 		  <p>The PATH variable will be extended by the paths for the SDK development
 		  tools, the compiler, the JDK, GNU make, the zip tool and the 
-		  OO_SDK_URE_BIN_DIR.</p>
+		  OO_SDK_OFFICE_BIN_DIR.</p>
 		  </td>
 		  </tr>
 		  <tr valign="top">
