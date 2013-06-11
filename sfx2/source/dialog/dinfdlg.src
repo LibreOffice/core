@@ -90,22 +90,6 @@ ListBox SFX_LB_PROPERTY_TYPE
         < "Yes or no"   ; CUSTOM_TYPE_BOOLEAN ; > ;
     };
 };
-ListBox SFX_LB_CMIS_PROPERTY_TYPE
-{
-    Pos = MAP_APPFONT ( 63 , 2 ) ;
-    Size = MAP_APPFONT ( 60 , 80 ) ;
-    DropDown = TRUE;
-    Border = TRUE;
-    CurPos = 0;
-    StringList [ en-US ] =
-    {
-        < "Text"        ; CMIS_TYPE_STRING ; > ;
-        < "DateTime"    ; CMIS_TYPE_DATETIME ; > ;
-        < "Integer"     ; CMIS_TYPE_NUMBER ; > ;
-        < "Decimal"     ; CMIS_TYPE_NUMBER ; > ;
-        < "Boolean"     ; CMIS_TYPE_BOOLEAN ; > ;
-    };
-};
 
 Edit SFX_ED_PROPERTY_VALUE
 {
@@ -379,9 +363,73 @@ ModalDialog RID_EDIT_DURATIONS
         SpinSize = 1 ;
         Value = 0 ;
     };
+};
 
+FixedText SFX_CMIS_PROPERTY_NAME
+{
+    Pos = MAP_APPFONT ( 0 , 2 ) ;
+    Size = MAP_APPFONT ( 41 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+    Left = TRUE ;
+};
 
+FixedText SFX_CMIS_PROPERTY_TYPE
+{
+    Pos = MAP_APPFONT ( 40 , 2 ) ;
+    Size = MAP_APPFONT ( 40 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+    Left = TRUE ;
+};
 
+Edit SFX_CMIS_ED_PROPERTY_VALUE
+{
+    Border = TRUE ;
+    Pos = MAP_APPFONT ( 127 , 2 ) ;
+    Size = MAP_APPFONT ( 61 , RSC_CD_TEXTBOX_HEIGHT ) ;
+    TabStop = TRUE ;
+    Left = TRUE ;
+};
+
+DateField SFX_CMIS_FLD_DATE
+{
+    Border = TRUE ;
+    Pos = MAP_APPFONT ( 127 , 2 ) ;
+    Size = MAP_APPFONT ( 29 , RSC_CD_TEXTBOX_HEIGHT ) ;
+    TabStop = TRUE ;
+    Left = TRUE ;
+    Spin = TRUE;
+};
+
+TimeField SFX_CMIS_FLD_TIME
+{
+    Border = TRUE ;
+    Pos = MAP_APPFONT ( 159 , 2 ) ;
+    Size = MAP_APPFONT ( 29 , RSC_CD_TEXTBOX_HEIGHT ) ;
+    TabStop = TRUE ;
+    Left = TRUE ;
+    Spin = TRUE;
+};
+
+Control SFX_CMIS_WIN_PROPERTY_YESNO
+{
+    HelpId = HID_CTRL_CUSTOMPROPS_YES_NO;
+    OutputSize = TRUE ;
+    Pos = MAP_APPFONT ( 127 , 2 ) ;
+    Size = MAP_APPFONT ( 61 , RSC_CD_TEXTBOX_HEIGHT ) ;
+    Border = TRUE ;
+    DialogControl = TRUE ;
+    RadioButton RB_PROPERTY_YES
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( 1 , 1 ) ;
+        Size = MAP_APPFONT( 28 , RSC_CD_RADIOBUTTON_HEIGHT ) ;
+        Text [ en-US ] = "Yes" ;
+    };
+    RadioButton RB_PROPERTY_NO
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( 32 , 1 ) ;
+        Size = MAP_APPFONT( 29 , RSC_CD_RADIOBUTTON_HEIGHT ) ;
+        Text [ en-US ] = "No" ;
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

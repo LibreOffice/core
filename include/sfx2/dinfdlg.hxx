@@ -519,19 +519,6 @@ public:
     inline CmisPropertyLine*      GetLine() const { return m_pLine; }
 };
 
-class CmisPropertiesTypeBox : public ListBox
-{
-private:
-    CmisPropertyLine*             m_pLine;
-
-public:
-    inline CmisPropertiesTypeBox(
-        Window* pParent, const ResId& rResId, CmisPropertyLine* pLine ) :
-            ListBox( pParent, rResId ), m_pLine( pLine ) {}
-
-    inline CmisPropertyLine*      GetLine() const { return m_pLine; }
-};
-
 class CmisPropertiesDateField : public DateField
 {
 private:
@@ -588,20 +575,17 @@ public:
 
 struct CmisPropertyLine
 {
-    SelectableFixedText           m_aNameBox;
-    CmisPropertiesTypeBox         m_aTypeBox;
+    FixedText                     m_aName;
+    FixedText                     m_aType;
     CmisPropertiesEdit            m_aValueEdit;
     CmisPropertiesDateField       m_aDateField;
     CmisPropertiesTimeField       m_aTimeField;
     CmisPropertiesYesNoButton     m_aYesNoButton;
-    Point                           m_aDatePos;
-    Point                           m_aTimePos;
-    Size                            m_aDateTimeSize;
-    bool                            m_bTypeLostFocus;
-
+    Point                         m_aDatePos;
+    Point                         m_aTimePos;
+    Size                          m_aDateTimeSize;
+    bool                          m_bTypeLostFocus;
     CmisPropertyLine( Window* pParent );
-
-    void    SetRemoved();
 };
 
 // class CmisPropertiesWindow ------------------------------------------
@@ -609,8 +593,8 @@ struct CmisPropertyLine
 class CmisPropertiesWindow : public Window
 {
 private:
-    SelectableFixedText                 m_aNameBox;
-    ListBox                             m_aTypeBox;
+    FixedText                           m_aName;
+    FixedText                           m_aType;
     Edit                                m_aValueEdit;
     DateField                           m_aDateField;
     TimeField                           m_aTimeField;
@@ -625,9 +609,7 @@ private:
     Timer                               m_aEditLoseFocusTimer;
     Timer                               m_aBoxLoseFocusTimer;
 
-    DECL_LINK( TypeHdl, CmisPropertiesTypeBox* );
     DECL_LINK( EditLoseFocusHdl, CmisPropertiesEdit* );
-    DECL_LINK( BoxLoseFocusHdl, CmisPropertiesTypeBox* );
 
     bool        IsLineValid( CmisPropertyLine* pLine ) const;
     void        ValidateLine( CmisPropertyLine* pLine, bool bIsFromTypeBox );
@@ -640,7 +622,7 @@ public:
     ~CmisPropertiesWindow();
 
     void                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
-    sal_uInt16              GetVisibleLineCount() const;
+    sal_uInt16          GetLineCount() const;
     inline sal_Int32    GetLineHeight() const { return m_nLineHeight; }
     void                AddLine( const OUString& sName, com::sun::star::uno::Any& rAny );
     bool                AreAllLinesValid() const;
@@ -691,7 +673,7 @@ private:
 protected:
     SfxCmisPropertiesPage( Window* pParent, const SfxItemSet& );
 
-    virtual sal_Bool        FillItemSet( SfxItemSet& );
+    virtual sal_Bool    FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
 

@@ -49,7 +49,14 @@
 #define SFX_FLD_TIME                        (RID_SFX_SFXLOCAL_START +  11)
 #define SFX_FLD_DURATION                    (RID_SFX_SFXLOCAL_START +  12)
 #define SFX_ST_DURATION_FORMAT              (RID_SFX_SFXLOCAL_START +  13)
-#define SFX_LB_CMIS_PROPERTY_TYPE           (RID_SFX_SFXLOCAL_START +  14)
+
+#define SFX_CMIS_PROPERTY_NAME              (RID_SFX_SFXLOCAL_START +  14)
+#define SFX_CMIS_ED_PROPERTY_VALUE          (RID_SFX_SFXLOCAL_START +  15)
+#define SFX_CMIS_PROPERTY_TYPE              (RID_SFX_SFXLOCAL_START +  16)
+#define SFX_CMIS_WIN_PROPERTY_YESNO         (RID_SFX_SFXLOCAL_START +  17)
+#define SFX_CMIS_QB_WRONG_TYPE              (RID_SFX_SFXLOCAL_START +  18)
+#define SFX_CMIS_FLD_DATE                   (RID_SFX_SFXLOCAL_START +  19)
+#define SFX_CMIS_FLD_TIME                   (RID_SFX_SFXLOCAL_START +  20)
 
 // Images ----------------------------------------------------------------
 
