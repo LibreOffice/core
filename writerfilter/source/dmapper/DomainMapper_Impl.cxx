@@ -1377,7 +1377,10 @@ void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
                     uno::makeAny(sal_True) );
             // if a left header is available then header are not shared
             bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
-            if( bLeft && m_pSettingsTable->GetEvenAndOddHeaders())
+
+            // If the 'Different Even & Odd Pages' flag is turned on - do not ignore it
+            // Even if the 'Even' header is blank - the flag should be imported (so it would look in LO like in Word)
+            if( m_pSettingsTable->GetEvenAndOddHeaders())
                 xPageStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_IS_SHARED), uno::makeAny( false ));
 
             //set the interface
@@ -1419,7 +1422,10 @@ void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
                     uno::makeAny(sal_True) );
             // if a left header is available then footer is not shared
             bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
-            if( bLeft && m_pSettingsTable->GetEvenAndOddHeaders())
+
+            // If the 'Different Even & Odd Pages' flag is turned on - do not ignore it
+            // Even if the 'Even' footer is blank - the flag should be imported (so it would look in LO like in Word)
+            if( m_pSettingsTable->GetEvenAndOddHeaders())
                 xPageStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_IS_SHARED), uno::makeAny( false ));
             //set the interface
             uno::Reference< text::XText > xFooterText;
