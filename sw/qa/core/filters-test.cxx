@@ -112,6 +112,11 @@ void SwFiltersTest::testCVEs()
             getURLFromSrc("/sw/qa/core/data/ooxml/"),
             OUString(),
             SFX_FILTER_STARONEFILTER);
+
+    testDir(OUString("Rich Text Format"),
+            getURLFromSrc("/sw/qa/core/data/rtf/"),
+            OUString(),
+            SFX_FILTER_STARONEFILTER);
 }
 
 void SwFiltersTest::setUp()

@@ -1,0 +1,3 @@
+Put RTF crash-test files here only in case the crash is in Writer core. If the
+crash is in the RTF import itself, use the writerfilter RTF testsuite instead,
+that's faster.

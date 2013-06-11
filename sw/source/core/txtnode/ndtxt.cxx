@@ -1067,7 +1067,7 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
     const int nNewLevel = pNewColl && pNewColl->IsAssignedToListLevelOfOutlineStyle() ?
                      pNewColl->GetAssignedOutlineStyleLevel() : MAXLEVEL;
 
-    if ( MAXLEVEL != nNewLevel )
+    if ( MAXLEVEL != nNewLevel && -1 != nNewLevel )
     {
         SetAttrListLevel(nNewLevel);
     }
