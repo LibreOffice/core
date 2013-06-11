@@ -585,6 +585,13 @@ SvxSecurityTabPage::SvxSecurityTabPage(Window* pParent, const SfxItemSet& rSet)
 {
     get(m_pSecurityOptionsPB, "options");
     get(m_pSavePasswordsCB, "savepassword");
+
+    //fdo#65595, we height-for-width support here, but for now we can
+    //bodge it
+    Size aSize(m_pSavePasswordsCB->CalcMinimumSize(56*approximate_char_width()));
+    m_pSavePasswordsCB->set_width_request(aSize.Width());
+    m_pSavePasswordsCB->set_height_request(aSize.Height());
+
     get(m_pShowConnectionsPB, "connections");
     get(m_pMasterPasswordCB, "usemasterpassword");
     get(m_pMasterPasswordFT, "masterpasswordtext");
