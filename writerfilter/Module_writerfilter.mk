@@ -14,7 +14,7 @@ $(eval $(call gb_Module_add_targets,writerfilter,\
     Library_writerfilter \
 ))
 
-$(eval $(call gb_Module_add_check_targets,writerfilter,\
+$(eval $(call gb_Module_add_slowcheck_targets,writerfilter,\
     CppunitTest_writerfilter_rtftok \
 ))
 
