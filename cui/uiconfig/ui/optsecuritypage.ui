@@ -109,7 +109,7 @@
                     <property name="hexpand">True</property>
                     <property name="row_spacing">12</property>
                     <child>
-                      <object class="GtkCheckButton" id="savepassword">
+                      <object class="GtkCheckButton" id="savepassword:wrap">
                         <property name="label" translatable="yes">Persistently _save passwords for web connections</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
