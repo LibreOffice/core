@@ -31,6 +31,9 @@ public:
     SidebarDialControl (Window* pParent, const ResId& rResId);
     virtual ~SidebarDialControl (void);
 
+    virtual Size GetOptimalSize() const;
+    virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags = WINDOW_POSSIZE_ALL);
+
     virtual void MouseButtonDown (const MouseEvent& rMEvt);
 
 protected:
