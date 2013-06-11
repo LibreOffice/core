@@ -209,9 +209,9 @@ public:
     inline void     Set( long nY, long nX, sal_uInt8 cVal );
     inline sal_uInt8        Get( long nY, long nX ) const;
 
-    inline sal_Bool     IsFree( long nY, long nX ) const;
-    inline sal_Bool     IsCont( long nY, long nX ) const;
-    inline sal_Bool     IsDone( long nY, long nX ) const;
+    inline bool     IsFree( long nY, long nX ) const;
+    inline bool     IsCont( long nY, long nX ) const;
+    inline bool     IsDone( long nY, long nX ) const;
 
 };
 
@@ -247,17 +247,17 @@ inline sal_uInt8    ImplVectMap::Get( long nY, long nX ) const
     return sal::static_int_cast<sal_uInt8>( ( ( mpScan[ nY ][ nX >> 2 ] ) >> ( 6 - ( ( nX & 3 ) << 1 ) ) ) & 3 );
 }
 
-inline sal_Bool ImplVectMap::IsFree( long nY, long nX ) const
+inline bool ImplVectMap::IsFree( long nY, long nX ) const
 {
     return( VECT_FREE_INDEX == Get( nY, nX ) );
 }
 
-inline sal_Bool ImplVectMap::IsCont( long nY, long nX ) const
+inline bool ImplVectMap::IsCont( long nY, long nX ) const
 {
     return( VECT_CONT_INDEX == Get( nY, nX ) );
 }
 
-inline sal_Bool ImplVectMap::IsDone( long nY, long nX ) const
+inline bool ImplVectMap::IsDone( long nY, long nX ) const
 {
     return( VECT_DONE_INDEX == Get( nY, nX ) );
 }
@@ -356,7 +356,7 @@ void ImplChain::ImplEndAdd( sal_uLong nFlag )
                 const ChainMove&        rMove = aImplMove[ cMove ];
                 const ChainMove&        rMoveInner = aImplMoveInner[ cMove ];
 //              Point&                  rPt = aArr[ nPolyPos ];
-                sal_Bool                    bDone = sal_True;
+                bool                    bDone = true;
 
                 nLastX += rMove.nDX;
                 nLastY += rMove.nDY;
@@ -414,7 +414,7 @@ void ImplChain::ImplEndAdd( sal_uLong nFlag )
                         aArr[ nPolyPos++ ].Y() = nLastY - 1;
                     }
                     else
-                        bDone = sal_False;
+                        bDone = false;
                 }
                 else if( cMove == 7 && cNextMove == 0 )
                 {
@@ -433,7 +433,7 @@ void ImplChain::ImplEndAdd( sal_uLong nFlag )
                     aArr[ nPolyPos++ ].Y() = nLastY;
                 }
                 else
-                    bDone = sal_False;
+                    bDone = false;
 
                 if( !bDone )
                 {
@@ -463,7 +463,7 @@ void ImplChain::ImplEndAdd( sal_uLong nFlag )
                 const ChainMove&        rMove = aImplMove[ cMove ];
                 const ChainMove&        rMoveOuter = aImplMoveOuter[ cMove ];
 //              Point&                  rPt = aArr[ nPolyPos ];
-                sal_Bool                    bDone = sal_True;
+                bool                    bDone = true;
 
                 nLastX += rMove.nDX;
                 nLastY += rMove.nDY;
@@ -521,7 +521,7 @@ void ImplChain::ImplEndAdd( sal_uLong nFlag )
                         aArr[ nPolyPos++ ].Y() = nLastY - 1;
                     }
                     else
-                        bDone = sal_False;
+                        bDone = false;
                 }
                 else if( cMove == 7 && cNextMove == 3 )
                 {
@@ -540,7 +540,7 @@ void ImplChain::ImplEndAdd( sal_uLong nFlag )
                     aArr[ nPolyPos++ ].Y() = nLastY + 1;
                 }
                 else
-                    bDone = sal_False;
+                    bDone = false;
 
                 if( !bDone )
                 {
@@ -970,7 +970,7 @@ void ImplVectorizer::ImplCalculate( ImplVectMap* pMap, PolyPolygon& rPolyPoly, s
     for( long nY = 0L; nY < nHeight; nY++ )
     {
         long    nX = 0L;
-        sal_Bool    bInner = sal_True;
+        bool    bInner = true;
 
         while( nX < nWidth )
         {

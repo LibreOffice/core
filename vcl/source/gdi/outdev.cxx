@@ -244,7 +244,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPo
     PCONSTSALPOINT*     pPointAryAry;
     const sal_uInt8**       pFlagAryAry;
     sal_uInt16              i = 0, j = 0, last = 0;
-    sal_Bool                bHaveBezier = sal_False;
+    bool                bHaveBezier = false;
     if ( nPoly > OUTDEV_POLYPOLY_STACKBUF )
     {
         pPointAry       = new sal_uInt32[nPoly];
@@ -269,7 +269,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPo
             last            = i;
 
             if( pFlagAryAry[j] )
-                bHaveBezier = sal_True;
+                bHaveBezier = true;
 
             ++j;
         }

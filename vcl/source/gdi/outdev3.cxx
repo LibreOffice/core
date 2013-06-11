@@ -3414,7 +3414,7 @@ static void ImplDrawWavePixel( long nOriginX, long nOriginY,
                                short nOrientation,
                                SalGraphics* pGraphics,
                                OutputDevice* pOutDev,
-                               sal_Bool bDrawPixAsRect,
+                               bool bDrawPixAsRect,
 
                                long nPixWidth, long nPixHeight )
 {
@@ -3471,7 +3471,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
         long    i;
         long    nPixWidth;
         long    nPixHeight;
-        sal_Bool    bDrawPixAsRect;
+        bool    bDrawPixAsRect;
         // On printers that ouput pixel via DrawRect()
         if ( (GetOutDevType() == OUTDEV_PRINTER) || (nLineWidth > 1) )
         {
@@ -3482,7 +3482,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
             }
             mpGraphics->SetFillColor( ImplColorToSal( rColor ) );
             mbInitFillColor = sal_True;
-            bDrawPixAsRect  = sal_True;
+            bDrawPixAsRect  = true;
             nPixWidth       = nLineWidth;
             nPixHeight      = ((nLineWidth*mnDPIX)+(mnDPIY/2))/mnDPIY;
         }
@@ -3492,7 +3492,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
             mbInitLineColor = sal_True;
             nPixWidth       = 1;
             nPixHeight      = 1;
-            bDrawPixAsRect  = sal_False;
+            bDrawPixAsRect  = false;
         }
 
         if ( !nDiffY )
@@ -4013,9 +4013,9 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
     Color           aStrikeoutColor = GetTextColor();
     Color           aUnderlineColor = GetTextLineColor();
     Color           aOverlineColor  = GetOverlineColor();
-    sal_Bool            bStrikeoutDone = sal_False;
-    sal_Bool            bUnderlineDone = sal_False;
-    sal_Bool            bOverlineDone  = sal_False;
+    bool            bStrikeoutDone = false;
+    bool            bUnderlineDone = false;
+    bool            bOverlineDone  = false;
 
     if ( IsRTLEnabled() )
     {
@@ -4038,7 +4038,7 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
          (eUnderline == UNDERLINE_BOLDWAVE) )
     {
         ImplDrawWaveTextLine( nX, nY, nDistX, 0, nWidth, eUnderline, aUnderlineColor, bUnderlineAbove );
-        bUnderlineDone = sal_True;
+        bUnderlineDone = true;
     }
     if ( (eOverline == UNDERLINE_SMALLWAVE) ||
          (eOverline == UNDERLINE_WAVE) ||
@@ -4046,14 +4046,14 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
          (eOverline == UNDERLINE_BOLDWAVE) )
     {
         ImplDrawWaveTextLine( nX, nY, nDistX, 0, nWidth, eOverline, aOverlineColor, sal_True );
-        bOverlineDone = sal_True;
+        bOverlineDone = true;
     }
 
     if ( (eStrikeout == STRIKEOUT_SLASH) ||
          (eStrikeout == STRIKEOUT_X) )
     {
         ImplDrawStrikeoutChar( nX, nY, nDistX, 0, nWidth, eStrikeout, aStrikeoutColor );
-        bStrikeoutDone = sal_True;
+        bStrikeoutDone = true;
     }
 
     if ( !bUnderlineDone )
@@ -6171,7 +6171,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
 {
     Color aOldTextColor;
     Color aOldTextFillColor;
-    sal_Bool  bRestoreFillColor = false;
+    bool  bRestoreFillColor = false;
     if ( (nStyle & TEXT_DRAW_DISABLE) && ! pVector )
     {
         sal_Bool  bHighContrastBlack = sal_False;
@@ -6195,7 +6195,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         aOldTextColor = rTargetDevice.GetTextColor();
         if ( rTargetDevice.IsTextFillColor() )
         {
-            bRestoreFillColor = sal_True;
+            bRestoreFillColor = true;
             aOldTextFillColor = rTargetDevice.GetTextFillColor();
         }
         if( bHighContrastBlack )
@@ -6556,7 +6556,7 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
         }
         if ( pInfo )
         {
-            sal_Bool bMaxWidth = nMaxWidth == 0;
+            bool bMaxWidth = nMaxWidth == 0;
             pInfo->mnMaxWidth = 0;
             for ( i = 0; i < nLines; i++ )
             {
@@ -6624,16 +6624,16 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
     return aRect;
 }
 
-static sal_Bool ImplIsCharIn( sal_Unicode c, const sal_Char* pStr )
+static bool ImplIsCharIn( sal_Unicode c, const sal_Char* pStr )
 {
     while ( *pStr )
     {
         if ( *pStr == c )
-            return sal_True;
+            return true;
         pStr++;
     }
 
-    return sal_False;
+    return false;
 }
 
 OUString OutputDevice::GetEllipsisString( const OUString& rOrigStr, long nMaxWidth,
@@ -6812,7 +6812,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
                     --nLen;
                 DBG_ASSERT( nMnemonicPos < (nIndex+nLen), "Mnemonic underline marker after last character" );
             }
-            sal_Bool bInvalidPos = sal_False;
+            bool bInvalidPos = false;
 
             if( nMnemonicPos >= nLen )
             {
@@ -6820,7 +6820,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
                 // may occur in BiDi-Strings: the '~' is sometimes found behind the last char
                 // due to some strange BiDi text editors
                 // -> place the underline behind the string to indicate a failure
-                bInvalidPos = sal_True;
+                bInvalidPos = true;
                 nMnemonicPos = nLen-1;
             }
 
@@ -6845,7 +6845,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
     {
         Color aOldTextColor;
         Color aOldTextFillColor;
-        sal_Bool  bRestoreFillColor;
+        bool  bRestoreFillColor;
         sal_Bool  bHighContrastBlack = sal_False;
         sal_Bool  bHighContrastWhite = sal_False;
         const StyleSettings& rStyleSettings( GetSettings().GetStyleSettings() );
@@ -6863,11 +6863,11 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
         aOldTextColor = GetTextColor();
         if ( IsTextFillColor() )
         {
-            bRestoreFillColor = sal_True;
+            bRestoreFillColor = true;
             aOldTextFillColor = GetTextFillColor();
         }
         else
-            bRestoreFillColor = sal_False;
+            bRestoreFillColor = false;
 
         if( bHighContrastBlack )
             SetTextColor( COL_GREEN );

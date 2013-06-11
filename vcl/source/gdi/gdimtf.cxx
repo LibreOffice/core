@@ -1236,7 +1236,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                     }
                     else
                     {
-                        sal_Bool bPathStroke = (pCommentAct->GetComment() == "XPATHSTROKE_SEQ_BEGIN");
+                        bool bPathStroke = (pCommentAct->GetComment() == "XPATHSTROKE_SEQ_BEGIN");
                         if ( bPathStroke || pCommentAct->GetComment() == "XPATHFILL_SEQ_BEGIN" )
                         {
                             if ( pCommentAct->GetDataSize() )
@@ -2255,7 +2255,7 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
 
         // calculate gamma value
         fGamma = ( fGamma <= 0.0 || fGamma > 10.0 ) ? 1.0 : ( 1.0 / fGamma );
-        const sal_Bool bGamma = ( fGamma != 1.0 );
+        const bool bGamma = ( fGamma != 1.0 );
 
         // create mapping table
         for( long nX = 0L; nX < 256L; nX++ )

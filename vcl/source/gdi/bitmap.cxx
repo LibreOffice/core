@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <algorithm>
 #include <rtl/crc.h>
 #include <tools/stream.hxx>
 #include <tools/poly.hxx>
@@ -1355,14 +1355,14 @@ sal_Bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
                 }
                 else
                 {
-                    sal_Bool* pFlags = new sal_Bool[ nMaxColors ];
+                    bool* pFlags = new bool[ nMaxColors ];
 
-                    // Set all entries to 0
-                    memset( pFlags, 0, nMaxColors );
+                    // Set all entries to false
+                    std::fill( pFlags, pFlags+nMaxColors, false );
 
                     for( long nY = 0L; nY < nHeight; nY++ )
                         for( long nX = 0L; nX < nWidth; nX++ )
-                            pFlags[ pAcc->GetPixelIndex( nY, nX ) ] = sal_True;
+                            pFlags[ pAcc->GetPixelIndex( nY, nX ) ] = true;
 
                     for( sal_uInt16 i = 0UL; i < nMaxColors; i++ )
                     {

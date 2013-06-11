@@ -471,7 +471,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     ::std::stack< LineInfo* > aLIStack;
     VirtualDevice       aFontVDev;
     rtl_TextEncoding    eActualCharSet = osl_getThreadTextEncoding();
-    sal_Bool                bFatLine = sal_False;
+    bool                bFatLine = false;
 
     // TODO: fix reindentation below if you can accept being blamed by the SCM
         MapMode     aMapMode;

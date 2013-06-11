@@ -344,7 +344,7 @@ ImpSwap::ImpSwap( sal_uInt8* pData, sal_uLong nDataSize ) :
             if( pOStm )
             {
                 pOStm->Write( pData, mnDataSize );
-                sal_Bool bError = ( ERRCODE_NONE != pOStm->GetError() );
+                bool bError = ( ERRCODE_NONE != pOStm->GetError() );
                 delete pOStm;
 
                 if( bError )
@@ -374,11 +374,11 @@ sal_uInt8* ImpSwap::GetData() const
         {
             pData = new sal_uInt8[ mnDataSize ];
             pIStm->Read( pData, mnDataSize );
-            sal_Bool bError = ( ERRCODE_NONE != pIStm->GetError() );
+            bool bError = ( ERRCODE_NONE != pIStm->GetError() );
             sal_Size nActReadSize = pIStm->Tell();
             if (nActReadSize != mnDataSize)
             {
-                bError = sal_True;
+                bError = true;
             }
             delete pIStm;
 

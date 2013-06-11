@@ -143,7 +143,7 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
                 const long  nDYX = ( nDY - nDX ) << 1;
                 const long  nDY2 = nDY << 1;
                 long        nD = nDY2 - nDX;
-                sal_Bool        bPos = nY1 < nY2;
+                bool        bPos = nY1 < nY2;
 
                 for ( nX = nX1, nY = nY1; nX <= nX2; nX++ )
                 {
@@ -182,7 +182,7 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
                 const long  nDYX = ( nDX - nDY ) << 1;
                 const long  nDY2 = nDX << 1;
                 long        nD = nDY2 - nDY;
-                sal_Bool        bPos = nX1 < nX2;
+                bool        bPos = nX1 < nX2;
 
                 for ( nX = nX1, nY = nY1; nY <= nY2; nY++ )
                 {

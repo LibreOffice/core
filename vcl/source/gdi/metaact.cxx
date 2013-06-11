@@ -4014,7 +4014,7 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
     {
         if ( mnDataSize && mpData )
         {
-            sal_Bool bPathStroke = (maComment == "XPATHSTROKE_SEQ_BEGIN");
+            bool bPathStroke = (maComment == "XPATHSTROKE_SEQ_BEGIN");
             if ( bPathStroke || maComment == "XPATHFILL_SEQ_BEGIN" )
             {
                 SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, STREAM_READ );
@@ -4057,7 +4057,7 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
     {
         if ( mnDataSize && mpData )
         {
-            sal_Bool bPathStroke = (maComment == "XPATHSTROKE_SEQ_BEGIN");
+            bool bPathStroke = (maComment == "XPATHSTROKE_SEQ_BEGIN");
             if ( bPathStroke || maComment == "XPATHFILL_SEQ_BEGIN" )
             {
                 SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, STREAM_READ );
