@@ -35,7 +35,6 @@
     NSData* data = [NSData dataWithBase64String:img];
     UIImage* image = [UIImage imageWithData:data];
     [self.imagesArray insertObject:image atIndex:index];
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"IMAGE_READY" object:nil];
 }
 

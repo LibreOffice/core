@@ -10,7 +10,7 @@
 
 typedef enum protocol {NETWORK} Protocol_t;
 
-@interface Server : NSObject
+@interface Server : NSObject <NSCoding>
 
 @property (nonatomic) Protocol_t protocol;
 @property (nonatomic, strong) NSString* serverName;

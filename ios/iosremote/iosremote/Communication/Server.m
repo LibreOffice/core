@@ -16,9 +16,26 @@
 
 @implementation Server
 
+
 @synthesize protocol = _protocol;
 @synthesize serverName = _serverName;
 @synthesize serverAddress = _serverAddress;
+
+
+- (void)encodeWithCoder:(NSCoder *)coder;
+{
+    [coder encodeObject:self.serverName forKey:@"name"];
+    [coder encodeObject:self.serverAddress forKey:@"address"];
+    [coder encodeInteger:self.protocol forKey:@"protocol"];
+}
+
+- (id)initWithCoder:(NSCoder *)coder;
+{
+    self = [self initWithProtocol:[coder decodeIntegerForKey:@"protocol"]
+                        atAddress:[coder decodeObjectForKey:@"address"]
+                           ofName:[coder decodeObjectForKey:@"name"]];
+    return self;
+}
 
 
 - (id)initWithProtocol:(Protocol_t)protocal
