@@ -2815,7 +2815,7 @@ uno::Reference< container::XEnumeration >  SwXTextFieldTypes::createEnumeration(
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    return new SwXFieldEnumeration(GetDoc());
+    return new SwXFieldEnumeration(*GetDoc());
 }
 
 uno::Type  SwXTextFieldTypes::getElementType(void) throw( uno::RuntimeException )
@@ -2866,17 +2866,43 @@ throw (uno::RuntimeException)
 /******************************************************************
  * SwXFieldEnumeration
  ******************************************************************/
-OUString SwXFieldEnumeration::getImplementationName(void) throw( uno::RuntimeException )
+
+class SwXFieldEnumeration::Impl
+    : public SwClient
+{
+
+public:
+    SwDoc * m_pDoc;
+
+    uno::Sequence< uno::Reference<text::XTextField> > m_Items;
+    sal_Int32       m_nNextIndex;  ///< index of next element to be returned
+
+    Impl(SwDoc & rDoc)
+        : SwClient(rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD))
+        , m_pDoc(& rDoc)
+        , m_nNextIndex(0)
+    { }
+
+protected:
+    // SwClient
+    virtual void Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew);
+};
+
+OUString SAL_CALL
+SwXFieldEnumeration::getImplementationName() throw (uno::RuntimeException)
 {
     return OUString("SwXFieldEnumeration");
 }
 
-sal_Bool SwXFieldEnumeration::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SAL_CALL
+SwXFieldEnumeration::supportsService(const OUString& rServiceName)
+throw (uno::RuntimeException)
 {
     return rServiceName == "com.sun.star.text.FieldEnumeration";
 }
 
-uno::Sequence< OUString > SwXFieldEnumeration::getSupportedServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL
+SwXFieldEnumeration::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     uno::Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
@@ -2884,19 +2910,16 @@ uno::Sequence< OUString > SwXFieldEnumeration::getSupportedServiceNames(void) th
     return aRet;
 }
 
-SwXFieldEnumeration::SwXFieldEnumeration(SwDoc* pDc) :
-    nNextIndex(0),
-    pDoc(pDc)
+SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
+    : m_pImpl(new Impl(rDoc))
 {
-    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
-
     // build sequence
     sal_Int32 nSize = 32;
-    aItems.realloc( nSize );
-    uno::Reference< text::XTextField > *pItems = aItems.getArray();
+    m_pImpl->m_Items.realloc( nSize );
+    uno::Reference< text::XTextField > *pItems = m_pImpl->m_Items.getArray();
     sal_Int32 nFillPos = 0;
     //
-    const SwFldTypes* pFldTypes = pDoc->GetFldTypes();
+    const SwFldTypes* pFldTypes = m_pImpl->m_pDoc->GetFldTypes();
     sal_uInt16 nCount = pFldTypes->size();
     for(sal_uInt16 nType = 0;  nType < nCount;  ++nType)
     {
@@ -2911,21 +2934,21 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc* pDc) :
             bool bSkip = !pTxtFld ||
                          !pTxtFld->GetpTxtNode()->GetNodes().IsDocNodes();
             if (!bSkip)
-                pItems[ nFillPos++ ] =
-                    SwXTextField::CreateXTextField(*pDoc, *pCurFldFmt);
+                pItems[ nFillPos++ ] = SwXTextField::CreateXTextField(
+                        *m_pImpl->m_pDoc, *pCurFldFmt);
             pCurFldFmt = aIter.Next();
 
             // enlarge sequence if necessary
-            if (aItems.getLength() == nFillPos)
+            if (m_pImpl->m_Items.getLength() == nFillPos)
             {
-                aItems.realloc( 2 * aItems.getLength() );
-                pItems = aItems.getArray();
+                m_pImpl->m_Items.realloc( 2 * m_pImpl->m_Items.getLength() );
+                pItems = m_pImpl->m_Items.getArray();
             }
         }
     }
     // now handle meta-fields, which are not SwFields
     const ::std::vector< uno::Reference<text::XTextField> > MetaFields(
-           pDc->GetMetaFieldManager().getMetaFields() );
+           m_pImpl->m_pDoc->GetMetaFieldManager().getMetaFields() );
     for (size_t i = 0; i < MetaFields.size(); ++i)
     {
         pItems[ nFillPos ] = MetaFields[i];
@@ -2933,51 +2956,55 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc* pDc) :
 
         //FIXME UGLY
         // enlarge sequence if necessary
-        if (aItems.getLength() == nFillPos)
+        if (m_pImpl->m_Items.getLength() == nFillPos)
         {
-            aItems.realloc( 2 * aItems.getLength() );
-            pItems = aItems.getArray();
+            m_pImpl->m_Items.realloc( 2 * m_pImpl->m_Items.getLength() );
+            pItems = m_pImpl->m_Items.getArray();
         }
     }
     // resize sequence to actual used size
-    aItems.realloc( nFillPos );
+    m_pImpl->m_Items.realloc( nFillPos );
 }
 
 SwXFieldEnumeration::~SwXFieldEnumeration()
 {
-
 }
 
-sal_Bool SwXFieldEnumeration::hasMoreElements(void)
-    throw( uno::RuntimeException )
-{
-    SolarMutexGuard aGuard;
-    return nNextIndex < aItems.getLength();
-}
-
-uno::Any SwXFieldEnumeration::nextElement(void)
-    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
+sal_Bool SAL_CALL SwXFieldEnumeration::hasMoreElements()
+throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    if (!(nNextIndex < aItems.getLength()))
+    return m_pImpl->m_nNextIndex < m_pImpl->m_Items.getLength();
+}
+
+uno::Any SAL_CALL SwXFieldEnumeration::nextElement()
+throw (container::NoSuchElementException, lang::WrappedTargetException,
+        uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+
+    if (!(m_pImpl->m_nNextIndex < m_pImpl->m_Items.getLength()))
         throw container::NoSuchElementException();
 
 #if OSL_DEBUG_LEVEL > 1
-    uno::Reference< text::XTextField > *pItems = aItems.getArray();
+    uno::Reference< text::XTextField > *pItems = m_pImpl->m_Items.getArray();
     (void)pItems;
 #endif
-    uno::Reference< text::XTextField >  &rxFld = aItems.getArray()[ nNextIndex++ ];
-    uno::Any aRet(&rxFld, ::getCppuType(static_cast<const uno::Reference<text::XTextField>*>(0)));
+    uno::Reference< text::XTextField >  &rxFld =
+        m_pImpl->m_Items.getArray()[ m_pImpl->m_nNextIndex++ ];
+    uno::Any aRet;
+    aRet <<= rxFld;
     rxFld = 0;  // free memory for item that is not longer used
     return aRet;
 }
 
-void SwXFieldEnumeration::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXFieldEnumeration::Impl::Modify(
+        SfxPoolItem const*const pOld, SfxPoolItem const*const pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
-        pDoc = 0;
+        m_pDoc = 0;
 }
 
 String& GetString( const uno::Any& rAny, String& rStr )

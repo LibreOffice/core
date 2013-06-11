@@ -30,9 +30,6 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
 
-#include <tools/string.hxx>
-
-#include <calbck.hxx>
 #include <unobaseclass.hxx>
 
 
@@ -291,35 +288,44 @@ public:
 
 };
 
-class SwXFieldEnumeration : public cppu::WeakImplHelper2
-<
-    ::com::sun::star::container::XEnumeration,
-    ::com::sun::star::lang::XServiceInfo
->,
-    public SwClient
+typedef ::cppu::WeakImplHelper2
+<   ::com::sun::star::container::XEnumeration
+,   ::com::sun::star::lang::XServiceInfo
+> SwXFieldEnumeration_Base;
+
+class SwXFieldEnumeration
+    : public SwXFieldEnumeration_Base
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField > > aItems;
-    sal_Int32       nNextIndex;     // index of next element to be returned
 
-    SwDoc* pDoc;
+private:
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
 
-protected:
     virtual ~SwXFieldEnumeration();
-    //SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
-    SwXFieldEnumeration(SwDoc* pDoc);
+    explicit SwXFieldEnumeration(SwDoc & rDoc);
 
-    //XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Any SAL_CALL nextElement(void) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService(
+            const OUString& rServiceName)
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+        getSupportedServiceNames()
+        throw (::com::sun::star::uno::RuntimeException);
 
-    //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+    // XEnumeration
+    virtual sal_Bool SAL_CALL hasMoreElements()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL nextElement()
+        throw (::com::sun::star::container::NoSuchElementException,
+               ::com::sun::star::lang::WrappedTargetException,
+               ::com::sun::star::uno::RuntimeException);
 
 };
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
