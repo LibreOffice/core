@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//7fc\u003d",
+        "filename": "i18npool/source/localedata/data/bo_CN.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000439
+      },
+      "writtenOn": "2013-06-11T12:53:43Z",
+      "side": 1,
+      "message": "Well, basically, it\u0027s the same as dz_BT, with the following exceptions:\n - weekdays are shifted of one (it\u0027s actually a unique oddity of the bhutanese calendar in which weekdays are shifted)\n - currency is the currency of the country",
+      "parentUuid": "AAAAXH//7gE\u003d",
+      "revId": "67876eae35d7bba122fb5865857512a178a27a72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//7gA\u003d",
         "filename": "i18npool/source/localedata/data/bo_CN.xml",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2013-06-11T11:40:33Z",
       "side": 1,
       "message": "To make the replaceFrom/replaceTo actually work there would need to be [CURRENCY] instead of [$￥-804], but if we have explicit format codes here the replaceFrom/replaceTo are not needed to be be used and instead [$￥-451] should be used here.",
+      "revId": "67876eae35d7bba122fb5865857512a178a27a72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7fY\u003d",
+        "filename": "i18npool/source/localedata/data/bo_CN.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000439
+      },
+      "writtenOn": "2013-06-11T12:53:43Z",
+      "side": 1,
+      "message": "Ok, my bad, sorry!\n\nHow should I proceed to fix it? Can I modify this patch, should I propose a new one, or do you modify it?",
+      "parentUuid": "AAAAXH//7gA\u003d",
       "revId": "67876eae35d7bba122fb5865857512a178a27a72",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//7fU\u003d",
+        "filename": "i18npool/source/localedata/data/bo_CN.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000439
+      },
+      "writtenOn": "2013-06-11T12:53:43Z",
+      "side": 1,
+      "message": "yes, should be fixed in dz_BT too...",
+      "parentUuid": "AAAAXH//7gI\u003d",
+      "revId": "67876eae35d7bba122fb5865857512a178a27a72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//7f4\u003d",
         "filename": "i18npool/source/localedata/data/bo_IN.xml",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2013-06-11T11:40:33Z",
       "side": 1,
       "message": "The replaceTo will need to use the newly to be created LangID value.\n\nSame as for bo_CN, are the codes verbatim copied from dz_BT in which case only a ref\u003d\"dz_BT\" would be needed? Or aren\u0027t some needed to be adapted to IN country conventions?",
+      "revId": "67876eae35d7bba122fb5865857512a178a27a72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7fQ\u003d",
+        "filename": "i18npool/source/localedata/data/bo_IN.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000439
+      },
+      "writtenOn": "2013-06-11T12:53:43Z",
+      "side": 1,
+      "message": "This is the same as bo_CN, but with the indian currency.",
+      "parentUuid": "AAAAXH//7f4\u003d",
       "revId": "67876eae35d7bba122fb5865857512a178a27a72",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
