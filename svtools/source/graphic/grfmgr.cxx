@@ -81,8 +81,8 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicMan
     SvDataCopyStream(),
     maGraphic   ( rGraphicObj.GetGraphic() ),
     maAttr      ( rGraphicObj.maAttr ),
-    mpLink      ( rGraphicObj.mpLink ? ( new String( *rGraphicObj.mpLink ) ) : NULL ),
-    mpUserData  ( rGraphicObj.mpUserData ? ( new String( *rGraphicObj.mpUserData ) ) : NULL )
+    mpLink      ( rGraphicObj.mpLink ? ( new OUString( *rGraphicObj.mpLink ) ) : NULL ),
+    mpUserData  ( rGraphicObj.mpUserData ? ( new OUString( *rGraphicObj.mpUserData ) ) : NULL )
 {
     ImplConstruct();
     ImplAssignGraphicData();
@@ -330,8 +330,8 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
 
         maGraphic = rGraphicObj.GetGraphic();
         maAttr = rGraphicObj.maAttr;
-        mpLink = rGraphicObj.mpLink ? new String( *rGraphicObj.mpLink ) : NULL;
-        mpUserData = rGraphicObj.mpUserData ? new String( *rGraphicObj.mpUserData ) : NULL;
+        mpLink = rGraphicObj.mpLink ? new OUString( *rGraphicObj.mpLink ) : NULL;
+        mpUserData = rGraphicObj.mpUserData ? new OUString( *rGraphicObj.mpUserData ) : NULL;
         ImplAssignGraphicData();
         mbAutoSwapped = sal_False;
         mpMgr = rGraphicObj.mpMgr;
@@ -396,12 +396,12 @@ void GraphicObject::SetLink()
         delete mpLink, mpLink = NULL;
 }
 
-void GraphicObject::SetLink( const String& rLink )
+void GraphicObject::SetLink( const OUString& rLink )
 {
-    delete mpLink, mpLink = new String( rLink );
+    delete mpLink, mpLink = new OUString( rLink );
 }
 
-String GraphicObject::GetLink() const
+OUString GraphicObject::GetLink() const
 {
     if( mpLink )
         return *mpLink;
@@ -415,12 +415,12 @@ void GraphicObject::SetUserData()
         delete mpUserData, mpUserData = NULL;
 }
 
-void GraphicObject::SetUserData( const String& rUserData )
+void GraphicObject::SetUserData( const OUString& rUserData )
 {
-    delete mpUserData, mpUserData = new String( rUserData );
+    delete mpUserData, mpUserData = new OUString( rUserData );
 }
 
-String GraphicObject::GetUserData() const
+OUString GraphicObject::GetUserData() const
 {
     if( mpUserData )
         return *mpUserData;
@@ -753,10 +753,10 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
         mpSwapOutTimer->Start();
 }
 
-void GraphicObject::SetGraphic( const Graphic& rGraphic, const String& rLink )
+void GraphicObject::SetGraphic( const Graphic& rGraphic, const OUString& rLink )
 {
     SetGraphic( rGraphic );
-    mpLink = new String( rLink );
+    mpLink = new OUString( rLink );
 }
 
 Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMode& rDestMap, const GraphicAttr& rAttr ) const

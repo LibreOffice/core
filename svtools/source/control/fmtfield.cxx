@@ -451,7 +451,7 @@ void FormattedField::SetTextFormatted(const OUString& rStr)
 }
 
 //------------------------------------------------------------------------------
-String FormattedField::GetTextValue() const
+OUString FormattedField::GetTextValue() const
 {
     if (m_bValueDirty)
     {

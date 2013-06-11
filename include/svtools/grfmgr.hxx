@@ -169,9 +169,9 @@ private:
     sal_uLong               mnSizeBytes;
     GraphicType             meType;
     GraphicManager*         mpMgr;
-    String*                 mpLink;
+    OUString*               mpLink;
     Link*                   mpSwapStreamHdl;
-    String*                 mpUserData;
+    OUString*               mpUserData;
     Timer*                  mpSwapOutTimer;
     GrfSimpleCacheObj*      mpSimpleCache;
     sal_uLong               mnAnimationLoopCount;
@@ -343,7 +343,7 @@ public:
 
     const Graphic&          GetGraphic() const;
     void                    SetGraphic( const Graphic& rGraphic, const GraphicObject* pCopyObj = 0);
-    void                    SetGraphic( const Graphic& rGraphic, const String& rLink );
+    void                    SetGraphic( const Graphic& rGraphic, const OUString& rLink );
 
     /** Get graphic transformed according to given attributes
 
@@ -380,15 +380,15 @@ public:
     void                    SetAttr( const GraphicAttr& rAttr );
     const GraphicAttr&      GetAttr() const { return maAttr; }
 
-    sal_Bool                HasLink() const { return( mpLink != NULL && mpLink->Len() > 0 ); }
+    sal_Bool                HasLink() const { return( mpLink != NULL && !mpLink->isEmpty()); }
     void                    SetLink();
-    void                    SetLink( const String& rLink );
-    String                  GetLink() const;
+    void                    SetLink( const OUString& rLink );
+    OUString                GetLink() const;
 
-    sal_Bool                HasUserData() const { return( mpUserData != NULL && mpUserData->Len() > 0 ); }
+    sal_Bool                HasUserData() const { return( mpUserData != NULL && !mpUserData->isEmpty() ); }
     void                    SetUserData();
-    void                    SetUserData( const String& rUserData );
-    String                  GetUserData() const;
+    void                    SetUserData( const OUString& rUserData );
+    OUString                GetUserData() const;
 
     OString            GetUniqueID() const;
 
