@@ -2817,12 +2817,6 @@ Bitmap SIP_SA_CROP_MARKERS
     File = "cropmarkers.png";
 };
 
-// DialControl bitmaps
-Bitmap IMG_DIALCONTROL
-{
-    File = "rotation.png";
-};
-
 String STR_ObjNameSingulFONTWORK
 {
     Text [ en-US ] = "font work" ;
