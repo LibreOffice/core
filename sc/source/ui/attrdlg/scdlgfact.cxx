@@ -852,33 +852,13 @@ AbstractScFillSeriesDlg* ScAbstractDialogFactory_Impl::CreateScFillSeriesDlg( Wi
     return 0;
 }
 
-
-
-
 AbstractScGroupDlg* ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg( Window* pParent,
-                                                            int nId,
-                                                            sal_Bool    bUnGroup ,
-                                                            sal_Bool    bRows   )
+                                                            bool bUnGroup,
+                                                            bool bRows )
 {
-    ScGroupDlg * pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_GRP_KILL :
-        case RID_SCDLG_GRP_MAKE :
-            pDlg = new ScGroupDlg( pParent, bUnGroup, bRows);
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractScGroupDlg_Impl( pDlg );
-    return 0;
+    ScGroupDlg * pDlg = new ScGroupDlg( pParent, bUnGroup, bRows);
+    return new AbstractScGroupDlg_Impl( pDlg );
 }
-
-
-
-
 
 AbstractScInsertCellDlg * ScAbstractDialogFactory_Impl::CreateScInsertCellDlg( Window* pParent,
                                                                 int nId,

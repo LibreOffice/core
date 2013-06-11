@@ -30,15 +30,12 @@
 class ScGroupDlg : public ModalDialog
 {
 public:
-            ScGroupDlg( Window* pParent,
-                        sal_Bool    bUnGroup = false,
-                        sal_Bool    bRows    = sal_True  );
-            ~ScGroupDlg();
+    ScGroupDlg(Window* pParent, bool bUnGroup = false, bool bRows = true);
+    ~ScGroupDlg();
 
-    sal_Bool GetColsChecked() const;
+    bool GetColsChecked() const;
 
 private:
-    FixedText* m_pFtLabel;
     RadioButton* m_pBtnRows;
     RadioButton* m_pBtnCols;
 };

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkDialog" id="GroupDialog">
+  <object class="GtkDialog" id="UngroupDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Group</property>
+    <property name="title" translatable="yes">Ungroup</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -134,7 +134,7 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Include</property>
+                <property name="label" translatable="yes">Deactivate for</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

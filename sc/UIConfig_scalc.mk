@@ -84,6 +84,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/optchangespage \
 	sc/uiconfig/scalc/ui/optcompatibilitypage \
 	sc/uiconfig/scalc/ui/optdefaultpage \
+	sc/uiconfig/scalc/ui/optdlg \
 	sc/uiconfig/scalc/ui/printeroptions \
 	sc/uiconfig/scalc/ui/protectsheetdlg \
 	sc/uiconfig/scalc/ui/scgeneralpage \
@@ -103,7 +104,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/sortwarning \
 	sc/uiconfig/scalc/ui/textimportoptions \
 	sc/uiconfig/scalc/ui/textimportcsv \
-	sc/uiconfig/scalc/ui/optdlg \
+	sc/uiconfig/scalc/ui/ungroupdialog \
 ))
 
 # vim: set noet sw=4 ts=4:

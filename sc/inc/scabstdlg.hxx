@@ -385,9 +385,8 @@ public:
                                                             int nId) = 0;
 
     virtual AbstractScGroupDlg * CreateAbstractScGroupDlg( Window* pParent, //add for ScGroupDlg
-                                                            int nId,
-                                                            sal_Bool    bUnGroup = false,
-                                                            sal_Bool    bRows    = sal_True  ) = 0;
+                                                            bool bUnGroup = false,
+                                                            bool bRows    = true ) = 0;
 
     virtual AbstractScInsertCellDlg * CreateScInsertCellDlg( Window* pParent, //add for ScInsertCellDlg
                                                                 int nId,

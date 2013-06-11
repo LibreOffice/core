@@ -30,16 +30,17 @@
 
 //==================================================================
 
-ScGroupDlg::ScGroupDlg( Window* pParent,
-                        sal_Bool    bUngroup,
-                        sal_Bool    bRows ) :
-    ModalDialog     ( pParent, "GroupDialog", "modules/scalc/ui/groupdialog.ui")
+ScGroupDlg::ScGroupDlg(Window* pParent, bool bUngroup, bool bRows)
+    : ModalDialog(pParent,
+        bUngroup ?
+            OString("UngroupDialog") :
+            OString("GroupDialog"),
+        bUngroup ?
+            OUString("modules/scalc/ui/ungroupdialog.ui") :
+            OUString("modules/scalc/ui/groupdialog.ui"))
 {
     get(m_pBtnRows, "rows");
     get(m_pBtnCols, "cols");
-    get(m_pFtLabel, bUngroup ? "deactivateLabel" : "includeLabel");
-
-    m_pFtLabel->Show();
 
     if ( bRows )
         m_pBtnRows->Check();
@@ -51,7 +52,7 @@ ScGroupDlg::ScGroupDlg( Window* pParent,
 
 //------------------------------------------------------------------------
 
-sal_Bool ScGroupDlg::GetColsChecked() const
+bool ScGroupDlg::GetColsChecked() const
 {
     return m_pBtnCols->IsChecked();
 }
