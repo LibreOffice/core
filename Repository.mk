@@ -214,8 +214,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,math, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
+	acc \
 	avmedia \
 	$(if $(DISABLE_SCRIPTING),,basctl) \
+	$(if $(DISABLE_SCRIPTING),,basprov) \
 	basegfx \
 	bib \
 	$(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \
@@ -235,6 +237,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
 	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
+	$(if $(DISABLE_SCRIPTING),,dlgprov) \
 	$(if $(ENABLE_DIRECTX),directx9canvas) \
 	drawinglayer \
 	editeng \
@@ -250,9 +253,13 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	eti \
 	evtatt \
 	exp \
+	expwrap \
+	fastsax \
 	flat \
 	file \
 	filterconfig \
+	fpicker \
+	fps_office \
 	for \
 	forui \
 	frm \
@@ -266,6 +273,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	guesslang \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),helplinker) \
 	i18npool \
+	i18nsearch \
+	hatchwindowfactory \
 	hyphen \
 	icd \
 	icg \
@@ -282,19 +291,24 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(SOLAR_JAVA),jdbc) \
 	$(if $(ENABLE_KAB),kab1) \
 	$(if $(ENABLE_KAB),kabdrv1) \
+	ldapbe2 \
 	localebe1 \
+	log \
 	lng \
 	lnth \
 	$(if $(MERGELIBS),merged) \
 	msfilter \
+	$(if $(DISABLE_SCRIPTING),,msforms) \
 	mtfrenderer \
 	mysql \
 	odbc \
 	odbcbase \
 	odfflatxml \
 	offacc \
+	passwordcontainer \
 	pcr \
 	pdffilter \
+	$(if $(DISABLE_SCRIPTING),,protocolhandler) \
 	res \
 	sax \
 	sb \
@@ -306,14 +320,18 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	sdui \
 	sfx \
 	simplecanvas \
+	slideshow \
 	sot \
+	spell \
 	$(if $(ENABLE_HEADLESS),,spl) \
+	$(if $(DISABLE_SCRIPTING),,stringresource) \
 	svgio \
 	svl \
 	svt \
 	svx \
 	svxcore \
 	sw \
+	syssh \
 	$(if $(ENABLE_TDEAB),tdeab1) \
 	$(if $(ENABLE_TDEAB),tdeabdrv1) \
 	textconversiondlgs \
@@ -325,6 +343,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	unoxml \
 	utl \
 	uui \
+	$(if $(DISABLE_SCRIPTING),,vbaevents) \
+	$(if $(DISABLE_SCRIPTING),,vbahelper) \
 	vcl \
 	vclcanvas \
 	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))),vclplug_gen) \
@@ -344,12 +364,12 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,writer, \
 	swd \
 	swui \
 	t602filter \
+	$(if $(DISABLE_SCRIPTING),,vbaswobj) \
 	wpftwriter \
 	writerfilter \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-	acc \
 	adabas \
 	adabasui \
 	ado \
@@ -364,21 +384,17 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	AppleRemote \
 	avmediaQuickTime \
 	filtertracer \
-	log \
 	MacOSXSpell \
 	mork \
 	mozab2 \
 	mozabdrv \
-	protocolhandler \
 	rpt \
 	rptui \
 	rptxml \
 	simplecm \
 	spa \
-	spell \
 	sts \
 	textfd \
-	$(if $(DISABLE_SCRIPTING),,vbahelper) \
 	vclplug_tde \
 	vclplug_kde \
 	vclplug_kde4 \
@@ -458,14 +474,23 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
+	cached1 \
 	comphelper \
 	deployment \
 	fileacc \
+	$(if $(SOLAR_JAVA),hsqldb) \
 	i18nlangtag \
 	i18nutil \
+	localedata_en \
+	localedata_es \
+	localedata_euro \
+	localedata_others \
 	mcnttype \
 	package2 \
+	$(if $(DISABLE_SCRIPTING),,scriptframe) \
+	sdbc2 \
 	sofficeapp \
+	tvhlp1 \
 	ucb1 \
 	ucbhelper \
 	ucpfile1 \
@@ -476,7 +501,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	avmediagst_0_10 \
 	avmediawin \
 	bluez_bluetooth \
-	cached1 \
 	collator_data \
 	dbpool2 \
 	deploymentgui \
@@ -484,14 +508,9 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	dict_zh \
 	embobj \
 	emboleobj \
-	hsqldb \
 	index_data \
 	java_uno_accessbridge \
 	libreoffice \
-	localedata_en \
-	localedata_es \
-	localedata_euro \
-	localedata_others \
 	macab1 \
 	macabdrv1 \
 	mozbootstrap \
@@ -499,11 +518,8 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	pyuno \
 	pyuno_wrapper \
 	recentfile \
-	scriptframe \
-	sdbc2 \
 	srtrs1 \
 	textconv_dict \
-	tvhlp1 \
 	ucpdav1 \
 	ucpftp1 \
 	ucpchelp1 \
@@ -560,35 +576,19 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-	basprov \
 	cmdmail \
-	dlgprov \
-	expwrap \
-	fastsax \
-	fpicker \
-	fps_office \
-	hatchwindowfactory \
-	i18nsearch \
-	ldapbe2 \
 	macbe1 \
 	migrationoo2 \
 	migrationoo3 \
-	msforms \
 	OGLTrans \
-	passwordcontainer \
 	pdfimport \
 	postgresql-sdbc \
 	postgresql-sdbc-impl \
 	pythonloader \
-	slideshow \
-	stringresource \
-	syssh \
 	ucpcmis1 \
 	ucpext \
 	ucptdoc1 \
 	updatefeed \
-	vbaevents \
-	vbaswobj \
 	$(if $(filter $(OS),MACOSX), \
 		fps_aqua \
 	) \

@@ -39,42 +39,6 @@ End
 STD_LIB_FILE( gid_File_Lib_Ado, ado)
 #endif
 
-#ifndef DISABLE_SCRIPTING
-
-STD_LIB_FILE( gid_File_Lib_Sf_Prothdlr, protocolhandler )
-
-STD_LIB_FILE( gid_File_Lib_Basprov, basprov )
-
-STD_LIB_FILE(gid_File_Lib_Vbaevent, vbaevents)
-
-File gid_File_Lib_Scriptframe
-    LIB_FILE_BODY;
-  #ifdef UNX
-    #ifdef MACOSX
-       Name = "libscriptframe.dylib";
-    #else
-       Name = "libscriptframe.so";
-    #endif
-  #else
-    Name = "scriptframe.dll";
-  #endif
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED);
-End
-
-#endif
-
-File gid_File_Lib_Cached1
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libcached1,UNXSUFFIX));
-  #else
-    Name = "cached1.dll";
-  #endif
-End
-
 #ifndef SYSTEM_CLUCENE
 File gid_File_Lib_CLucene
     LIB_FILE_BODY;
@@ -87,8 +51,6 @@ File gid_File_Lib_CLucene
   #endif
 End
 #endif
-
-STD_LIB_FILE( gid_File_Lib_Ldapbe2, ldapbe2 )
 
 #if defined _MSC_VER
 
@@ -229,29 +191,6 @@ File gid_File_Lib_Textconv_Dict
     Styles = (PACKED);
 End
 
-#ifndef DISABLE_SCRIPTING
-
-STD_LIB_FILE( gid_File_Lib_Dlgprov, dlgprov )
-
-STD_LIB_FILE( gid_File_Lib_Stringresource, stringresource )
-
-STD_LIB_FILE(gid_File_Lib_Vbaswobj, vbaswobj)
-
-STD_LIB_FILE(gid_File_Lib_Vbamsforms, msforms)
-
-File gid_File_Lib_Vbahelper
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT3(libvbahelper,DLLPOSTFIX,UNXSUFFIX));
-  #else
-    Name = STRING(CONCAT3(vbahelper,DLLPOSTFIX,.dll));
-  #endif
-End
-
-#endif
-
 #ifdef WNT
 
 File gid_File_Lib_Dnd
@@ -363,9 +302,6 @@ End
 #endif
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Fps_Office, fps_office )
-STD_LIB_FILE( gid_File_Lib_Fpicker, fpicker )
-
 #ifndef SYSTEM_LCMS2
 
 File gid_File_Lib_Lcms2
@@ -440,10 +376,6 @@ End
 
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Hatchwindowfactory, hatchwindowfactory )
-
-STD_LIB_FILE( gid_File_Lib_I18nsearch, i18nsearch )
-
 #ifndef SYSTEM_ICU
 
 File gid_File_Lib_Icudata
@@ -508,20 +440,6 @@ End
 
 #endif
 
-#ifdef SOLAR_JAVA
-File gid_File_Lib_Hsqldb_2
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libhsqldb,UNXSUFFIX));
-  #else
-    Name = "hsqldb.dll";
-  #endif
-End
-
-#endif
-
 #if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
 File gid_File_Lib_sn_tools
@@ -532,50 +450,6 @@ File gid_File_Lib_sn_tools
 End
 
 #endif
-
-File gid_File_Lib_Localedata_En
-    LIB_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT2(liblocaledata_en,UNXSUFFIX));
-  #else
-    Name = "localedata_en.dll";
-  #endif
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED);
-End
-
-File gid_File_Lib_Localedata_Es
-    LIB_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT2(liblocaledata_es,UNXSUFFIX));
-  #else
-    Name = "localedata_es.dll";
-  #endif
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED);
-End
-
-File gid_File_Lib_Localedata_Euro
-    LIB_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT2(liblocaledata_euro,UNXSUFFIX));
-  #else
-    Name = "localedata_euro.dll";
-  #endif
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED);
-End
-
-File gid_File_Lib_Localedata_Others
-    LIB_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT2(liblocaledata_others,UNXSUFFIX));
-  #else
-    Name = "localedata_others.dll";
-  #endif
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED);
-End
 
 #if defined(WNT)
 
@@ -602,8 +476,6 @@ SPECIAL_LIB_FILE(gid_File_Lib_Mozbootstrap,mozbootstrap)
 
 #endif
 
-// STD_LIB_FILE( gid_File_Lib_Ofa , ofa)
-
 #ifdef SOLAR_JAVA
 #ifndef MACOSX
 
@@ -624,10 +496,6 @@ End
 #if defined(WNT) && !defined(DISABLE_ATL)
 STD_LIB_FILE( gid_File_Lib_Ole, oleautobridge )
 #endif
-
-STD_LIB_FILE( gid_File_Lib_Passwordcontainer, passwordcontainer )
-
-STD_LIB_FILE( gid_File_Lib_Log, log)
 
 SPECIAL_LIB_FILE(gid_File_Lib_DeploymentGui,deploymentgui)
 
@@ -724,24 +592,7 @@ End
 
 #endif /* WNT && HAVE_WINDOWS_SDK */
 
-STD_LIB_FILE( gid_File_Lib_Expwrap_Uno, expwrap )
-
-STD_LIB_FILE( gid_File_Lib_Fastsax_Uno, fastsax )
-
 STD_LIB_FILE( gid_File_Lib_Oox , oox)
-
-STD_LIB_FILE( gid_File_Lib_Slideshow, slideshow )
-
-File gid_File_Lib_Sdbc_2
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libsdbc2,UNXSUFFIX));
-  #else
-    Name = "sdbc2.dll";
-  #endif
-End
 
 #if defined(WNT) && defined(HAVE_WINDOWS_SDK)
 
@@ -769,13 +620,6 @@ End
 
 #endif
 
-File gid_File_Lib_Spell
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Name = LIBNAME(spell);
-    Dir = SCP2_OOO_BIN_DIR;
-End
-
 #if defined UNX && !defined MACOSX && !defined LIBO_HEADLESS
 STD_LIB_FILE( gid_File_Lib_Spl_Unx, spl_unx)
 #endif
@@ -791,7 +635,6 @@ File gid_File_Lib_Sysdtrans
 End
 #endif
 
-STD_LIB_FILE( gid_File_Lib_Syssh, syssh )
 
 #ifdef WNT
 STD_LIB_FILE( gid_File_Lib_Wininetbe, wininetbe1 )
@@ -800,19 +643,6 @@ STD_LIB_FILE( gid_File_Lib_Wininetbe, wininetbe1 )
 #ifdef MACOSX
 STD_LIB_FILE( gid_File_Lib_Macbe, macbe1 )
 #endif
-
-STD_LIB_FILE( gid_File_Lib_Acc, acc )
-
-File gid_File_Lib_Tvhlp1
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libtvhlp1,UNXSUFFIX));
-  #else
-    Name = "tvhlp1.dll";
-  #endif
-End
 
 File gid_File_Lib_Ucpchelp1
     LIB_FILE_BODY;
