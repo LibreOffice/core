@@ -387,17 +387,50 @@ static sal_uInt16 lcl_GetPropertyMapOfService( sal_uInt16 nServiceId )
  ******************************************************************/
 
 class SwXFieldMaster::Impl
+    : public SwClient
 {
 private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    SwXFieldMaster & m_rThis;
 
 public:
     ::cppu::OInterfaceContainerHelper m_EventListeners;
 
-    Impl() : m_EventListeners(m_Mutex) { }
-};
+    SwDoc*          m_pDoc;
 
-TYPEINIT1(SwXFieldMaster, SwClient);
+    bool            m_bIsDescriptor;
+
+    sal_uInt16      m_nResTypeId;
+
+    String          m_sParam1;  // Content / Database / NumberingSeparator
+    String          m_sParam2;  // -    /DataTablename
+    String          m_sParam3;  // -    /DataFieldName
+    String          m_sParam4;
+    String          m_sParam5;  // -    /DataBaseURL
+    String          m_sParam6;  // -    /DataBaseResource
+    double          m_fParam1;  // Value / -
+    sal_Int8        m_nParam1;  // ChapterNumberingLevel
+    sal_Bool        m_bParam1;  // IsExpression
+    sal_Int32       m_nParam2;
+
+    Impl(SwXFieldMaster & rThis, SwModify *const pModify,
+            SwDoc & rDoc, sal_uInt16 const nResId, bool const bIsDescriptor)
+        : SwClient(pModify)
+        , m_rThis(rThis)
+        , m_EventListeners(m_Mutex)
+        , m_pDoc(& rDoc)
+        , m_bIsDescriptor(bIsDescriptor)
+        , m_nResTypeId(nResId)
+        , m_fParam1(0.0)
+        , m_nParam1(-1)
+        , m_bParam1(sal_False)
+        , m_nParam2(0)
+    { }
+
+protected:
+    // SwClient
+    virtual void Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew);
+};
 
 namespace
 {
@@ -409,19 +442,16 @@ const uno::Sequence< sal_Int8 > & SwXFieldMaster::getUnoTunnelId()
     return theSwXFieldMasterUnoTunnelId::get().getSeq();
 }
 
-sal_Int64 SAL_CALL SwXFieldMaster::getSomething( const uno::Sequence< sal_Int8 >& rId )
-    throw(uno::RuntimeException)
+sal_Int64 SAL_CALL
+SwXFieldMaster::getSomething(const uno::Sequence< sal_Int8 >& rId)
+throw (uno::RuntimeException)
 {
-    if( rId.getLength() == 16
-        && 0 == memcmp( getUnoTunnelId().getConstArray(),
-                                        rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
-    }
-    return 0;
+    return ::sw::UnoTunnelImpl<SwXFieldMaster>(rId, this);
 }
 
-OUString SwXFieldMaster::getImplementationName(void) throw( uno::RuntimeException )
+OUString SAL_CALL
+SwXFieldMaster::getImplementationName()
+throw (uno::RuntimeException)
 {
     return OUString("SwXFieldMaster");
 }
@@ -435,7 +465,7 @@ sal_Bool SwXFieldMaster::supportsService(const OUString& rServiceName) throw( un
     else
     {
         const sal_Char* pEntry;
-        switch( nResTypeId )
+        switch (m_pImpl->m_nResTypeId)
         {
         case RES_USERFLD:   pEntry = "User";            break;
         case RES_DBFLD:     pEntry = "Database";        break;
@@ -462,7 +492,7 @@ uno::Sequence< OUString > SwXFieldMaster::getSupportedServiceNames(void) throw( 
     pArray[0] = "com.sun.star.text.TextFieldMaster";
 
     const sal_Char* pEntry1;
-    switch( nResTypeId )
+    switch (m_pImpl->m_nResTypeId)
     {
     case RES_USERFLD:   pEntry1 = "User";           break;
     case RES_DBFLD:     pEntry1 = "Database";       break;
@@ -480,56 +510,54 @@ uno::Sequence< OUString > SwXFieldMaster::getSupportedServiceNames(void) throw( 
     return aRet;
 }
 
-SwXFieldMaster::SwXFieldMaster(SwDoc* pDoc, sal_uInt16 nResId)
-    : m_pImpl(new Impl)
-    ,
-    nResTypeId(nResId),
-    m_pDoc(pDoc),
-    m_bIsDescriptor(sal_True),
-    fParam1(0.),
-    nParam1(-1),
-    bParam1(sal_False),
-    nParam2(0)
+SwXFieldMaster::SwXFieldMaster(SwDoc *const pDoc, sal_uInt16 const nResId)
+    : m_pImpl(new Impl(*this, pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD),
+                *pDoc, nResId, true))
 {
-    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
-SwXFieldMaster::SwXFieldMaster(SwFieldType& rType, SwDoc* pDoc)
-    : SwClient(&rType)
-    , m_pImpl(new Impl)
-    ,
-    nResTypeId(rType.Which()),
-    m_pDoc(pDoc),
-    m_bIsDescriptor(sal_False),
-    fParam1(0.),
-    nParam1(-1),
-    bParam1(sal_False)
+SwXFieldMaster::SwXFieldMaster(SwFieldType& rType, SwDoc & rDoc)
+    : m_pImpl(new Impl(*this, &rType, rDoc, rType.Which(), false))
 {
-
 }
 
 SwXFieldMaster::~SwXFieldMaster()
 {
-
 }
 
-uno::Reference< beans::XPropertySetInfo >  SwXFieldMaster::getPropertySetInfo(void)
-                                            throw( uno::RuntimeException )
+uno::Reference<beans::XPropertySet>
+SwXFieldMaster::CreateXFieldMaster(SwDoc & rDoc, SwFieldType & rType)
+{
+    // re-use existing SwXFieldMaster
+    uno::Reference<beans::XPropertySet> xFM(rType.GetXObject());
+    if (!xFM.is())
+    {
+        SwXFieldMaster *const pFM(new SwXFieldMaster(rType, rDoc));
+        xFM.set(pFM);
+        rType.SetXObject(xFM);
+    }
+    return xFM;
+}
+
+uno::Reference<beans::XPropertySetInfo> SAL_CALL
+SwXFieldMaster::getPropertySetInfo()
+throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     uno::Reference< beans::XPropertySetInfo >  aRef =
                         aSwMapProvider.GetPropertySet(
-                                lcl_GetPropMapIdForFieldType( nResTypeId ) )->getPropertySetInfo();
+            lcl_GetPropMapIdForFieldType(m_pImpl->m_nResTypeId))->getPropertySetInfo();
     return aRef;
 }
 
-void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
-                                    const uno::Any& rValue)
-    throw( beans::UnknownPropertyException, beans::PropertyVetoException,
-            lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SwXFieldMaster::setPropertyValue(
+        const OUString& rPropertyName, const uno::Any& rValue)
+throw (beans::UnknownPropertyException, beans::PropertyVetoException,
+       lang::IllegalArgumentException, lang::WrappedTargetException,
+       uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    SwFieldType* pType = GetFldType(sal_True);
+    SwFieldType* pType = GetFldType(true);
     if(pType)
     {
         bool bSetValue = true;
@@ -568,13 +596,14 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
                 throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         }
     }
-    else if(!pType && m_pDoc &&
-        ( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NAME))) )
+    else if (!pType && m_pImpl->m_pDoc &&
+        (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NAME))))
     {
         OUString uTmp;
         rValue >>= uTmp;
         String sTypeName(uTmp);
-        SwFieldType* pType2 = m_pDoc->GetFldType(nResTypeId, sTypeName, sal_False);
+        SwFieldType * pType2 = m_pImpl->m_pDoc->GetFldType(
+                m_pImpl->m_nResTypeId, sTypeName, sal_False);
 
         String sTable(SW_RES(STR_POOLCOLL_LABEL_TABLE));
         String sDrawing(SW_RES(STR_POOLCOLL_LABEL_DRAWING));
@@ -582,7 +611,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
         String sIllustration(SW_RES(STR_POOLCOLL_LABEL_ABB));
 
         if(pType2 ||
-            (RES_SETEXPFLD == nResTypeId &&
+            (RES_SETEXPFLD == m_pImpl->m_nResTypeId &&
             ( sTypeName == sTable || sTypeName == sDrawing ||
               sTypeName == sFrame || sTypeName == sIllustration )))
         {
@@ -590,45 +619,46 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
         }
         else
         {
-            switch(nResTypeId)
+            switch (m_pImpl->m_nResTypeId)
             {
                 case RES_USERFLD :
                 {
-                    SwUserFieldType aType(m_pDoc, sTypeName);
-                    pType2 = m_pDoc->InsertFldType(aType);
-                    ((SwUserFieldType*)pType2)->SetContent(sParam1);
-                    ((SwUserFieldType*)pType2)->SetValue(fParam1);
-                    ((SwUserFieldType*)pType2)->SetType(bParam1 ? nsSwGetSetExpType::GSE_EXPR : nsSwGetSetExpType::GSE_STRING);
+                    SwUserFieldType aType(m_pImpl->m_pDoc, sTypeName);
+                    pType2 = m_pImpl->m_pDoc->InsertFldType(aType);
+                    static_cast<SwUserFieldType*>(pType2)->SetContent(m_pImpl->m_sParam1);
+                    static_cast<SwUserFieldType*>(pType2)->SetValue(m_pImpl->m_fParam1);
+                    static_cast<SwUserFieldType*>(pType2)->SetType(m_pImpl->m_bParam1 ? nsSwGetSetExpType::GSE_EXPR : nsSwGetSetExpType::GSE_STRING);
                 }
                 break;
                 case RES_DDEFLD :
                 {
-                    SwDDEFieldType aType(sTypeName, sParam1,
-                        sal::static_int_cast< sal_uInt16 >(bParam1 ? sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL));
-                    pType2 = m_pDoc->InsertFldType(aType);
+                    SwDDEFieldType aType(sTypeName, m_pImpl->m_sParam1,
+                        sal::static_int_cast< sal_uInt16 >((m_pImpl->m_bParam1)
+                            ? sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL));
+                    pType2 = m_pImpl->m_pDoc->InsertFldType(aType);
                 }
                 break;
                 case RES_SETEXPFLD :
                 {
-                    SwSetExpFieldType aType(m_pDoc, sTypeName);
-                    if(sParam1.Len())
-                        aType.SetDelimiter(OUString(sParam1.GetChar(0)));
-                    if(nParam1 > -1 && nParam1 < MAXLEVEL)
-                        aType.SetOutlineLvl(nParam1);
-                    pType2 = m_pDoc->InsertFldType(aType);
+                    SwSetExpFieldType aType(m_pImpl->m_pDoc, sTypeName);
+                    if (m_pImpl->m_sParam1.Len())
+                        aType.SetDelimiter(OUString(m_pImpl->m_sParam1.GetChar(0)));
+                    if (m_pImpl->m_nParam1 > -1 && m_pImpl->m_nParam1 < MAXLEVEL)
+                        aType.SetOutlineLvl(m_pImpl->m_nParam1);
+                    pType2 = m_pImpl->m_pDoc->InsertFldType(aType);
                 }
                 break;
                 case RES_DBFLD :
                 {
-                    ::GetString( rValue, sParam3 );
+                    ::GetString( rValue, m_pImpl->m_sParam3 );
                     pType = GetFldType();
                 }
                 break;
             }
             if(pType2)
             {
-                pType2->Add(this);
-                m_bIsDescriptor = sal_False;
+                pType2->Add(m_pImpl.get());
+                m_pImpl->m_bIsDescriptor = false;
             }
             else
                 throw uno::RuntimeException();
@@ -638,46 +668,48 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
     }
     else
     {
-        switch( nResTypeId )
+        switch (m_pImpl->m_nResTypeId)
         {
         case RES_USERFLD:
             if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CONTENT)))
-                ::GetString( rValue, sParam1 );
+                ::GetString( rValue, m_pImpl->m_sParam1 );
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_VALUE )))
             {
                 if(rValue.getValueType() != ::getCppuType(static_cast<const double*>(0)))
                     throw lang::IllegalArgumentException();
-                fParam1 = *(double*)rValue.getValue();
+                rValue >>= m_pImpl->m_fParam1;
             }
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_EXPRESSION )))
             {
                 if(rValue.getValueType() != ::getBooleanCppuType())
                     throw lang::IllegalArgumentException();
-                bParam1 = *(sal_Bool*)rValue.getValue();
+                rValue >>= m_pImpl->m_bParam1;
             }
 
             break;
         case RES_DBFLD:
             if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
-                ::GetString( rValue, sParam1 );
+                ::GetString( rValue, m_pImpl->m_sParam1 );
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME)))
-                ::GetString( rValue, sParam2 );
+                ::GetString( rValue, m_pImpl->m_sParam2 );
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME)))
-                ::GetString( rValue, sParam3 );
+                ::GetString( rValue, m_pImpl->m_sParam3 );
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE)))
-                rValue >>= nParam2;
+                rValue >>= m_pImpl->m_nParam2;
             if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
-                ::GetString( rValue, sParam5 );
+                ::GetString( rValue, m_pImpl->m_sParam5 );
 
-            if((sParam1.Len() || sParam5.Len())
-                    && sParam2.Len() && sParam3.Len())
+            if (  (m_pImpl->m_sParam1.Len() || m_pImpl->m_sParam5.Len())
+                && m_pImpl->m_sParam2.Len() && m_pImpl->m_sParam3.Len())
+            {
                 GetFldType();
+            }
             break;
         case  RES_SETEXPFLD:
             if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_SEPARATOR)))
-                ::GetString( rValue, sParam1 );
+                ::GetString( rValue, m_pImpl->m_sParam1 );
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAPTER_NUMBERING_LEVEL)))
-                rValue >>= nParam1;
+                rValue >>= m_pImpl->m_nParam1;
             break;
         case RES_DDEFLD:
             {
@@ -688,15 +720,18 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
                 if(nPart  < 3 )
                 {
                     String sTmp;
-                    if(!sParam1.Len())
-                        (sParam1 = sfx2::cTokenSeparator)
+                    if (!m_pImpl->m_sParam1.Len())
+                    {
+                        (m_pImpl->m_sParam1 = sfx2::cTokenSeparator)
                                 += sfx2::cTokenSeparator;
-
-                    sParam1.SetToken( nPart, sfx2::cTokenSeparator,
+                    }
+                    m_pImpl->m_sParam1.SetToken( nPart, sfx2::cTokenSeparator,
                                 ::GetString( rValue, sTmp ));
                 }
                 else if(3 == nPart)
-                    bParam1 = *(sal_Bool*)rValue.getValue();
+                {
+                    rValue >>= m_pImpl->m_bParam1;
+                }
             }
             break;
         default:
@@ -705,42 +740,44 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
     }
 }
 
-SwFieldType* SwXFieldMaster::GetFldType(sal_Bool bDontCreate) const
+SwFieldType* SwXFieldMaster::GetFldType(bool const bDontCreate) const
 {
-    if(!bDontCreate && RES_DBFLD == nResTypeId && m_bIsDescriptor && m_pDoc)
+    if (!bDontCreate && RES_DBFLD == m_pImpl->m_nResTypeId
+        && m_pImpl->m_bIsDescriptor && m_pImpl->m_pDoc)
     {
         SwDBData aData;
 
         // set DataSource
         svx::ODataAccessDescriptor aAcc;
-        if( sParam1.Len() > 0 )
-            aAcc[ svx::daDataSource ]       <<= OUString(sParam1); // DataBaseName
-        else if( sParam5.Len() > 0 )
-            aAcc[ svx::daDatabaseLocation]  <<= OUString(sParam5); // DataBaseURL
+        if (m_pImpl->m_sParam1.Len() > 0)
+            aAcc[svx::daDataSource]        <<= OUString(m_pImpl->m_sParam1); // DataBaseName
+        else if (m_pImpl->m_sParam5.Len() > 0)
+            aAcc[svx::daDatabaseLocation]  <<= OUString(m_pImpl->m_sParam5); // DataBaseURL
         aData.sDataSource = aAcc.getDataSource();
 
-        aData.sCommand = sParam2;
-        aData.nCommandType = nParam2;
-        SwDBFieldType aType(m_pDoc, sParam3,  aData);
-        SwFieldType* pType = m_pDoc->InsertFldType(aType);
-        SwXFieldMaster* pThis = ((SwXFieldMaster*)this);
-        pType->Add(pThis);
-        pThis->m_bIsDescriptor = sal_False;
+        aData.sCommand = m_pImpl->m_sParam2;
+        aData.nCommandType = m_pImpl->m_nParam2;
+        SwDBFieldType aType(m_pImpl->m_pDoc, m_pImpl->m_sParam3, aData);
+        SwFieldType *const pType = m_pImpl->m_pDoc->InsertFldType(aType);
+        pType->Add(m_pImpl.get());
+        const_cast<SwXFieldMaster*>(this)->m_pImpl->m_bIsDescriptor = false;
     }
-    if(m_bIsDescriptor)
+    if (m_pImpl->m_bIsDescriptor)
         return 0;
     else
-        return (SwFieldType*)GetRegisteredIn();
+        return static_cast<SwFieldType*>(const_cast<SwModify*>(m_pImpl->GetRegisteredIn()));
 }
 
 typedef std::vector<SwFmtFld*> SwDependentFields;
 
-uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
-        throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+uno::Any SAL_CALL
+SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+        uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    SwFieldType* pType = GetFldType(sal_True);
+    SwFieldType* pType = GetFldType(true);
     if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_INSTANCE_NAME)) )
     {
         String sName;
@@ -752,7 +789,7 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
     {
         if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NAME) ))
         {
-            aRet <<= SwXFieldMaster::GetProgrammaticName(*pType, *GetDoc());
+            aRet <<= SwXFieldMaster::GetProgrammaticName(*pType, *m_pImpl->m_pDoc);
         }
         else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS)) )
         {
@@ -772,7 +809,7 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
             for(sal_uInt16 i = 0; i < aFldArr.size(); i++)
             {
                 pFld = aFldArr[i];
-                SwXTextField * pInsert = SwXTextField::CreateSwXTextField(*GetDoc(), *pFld);
+                SwXTextField * pInsert = SwXTextField::CreateSwXTextField(*m_pImpl->m_pDoc, *pFld);
 
                 pRetSeq[i] = uno::Reference<text::XDependentTextField>(pInsert);
             }
@@ -813,13 +850,13 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
         else
         {
             if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE)) )
-                aRet <<= nParam2;
+                aRet <<= m_pImpl->m_nParam2;
         }
     }
     else
     {
         if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE)) )
-            aRet <<= nParam2;
+            aRet <<= m_pImpl->m_nParam2;
         else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS)) )
         {
             uno::Sequence<uno::Reference <text::XDependentTextField> > aRetSeq(0);
@@ -829,15 +866,15 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
         {
             const String* pStr = 0;
             String sStr;
-            switch ( nResTypeId )
+            switch (m_pImpl->m_nResTypeId)
             {
             case RES_USERFLD:
                 if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CONTENT)) )
-                    pStr = &sParam1;
+                    pStr = &m_pImpl->m_sParam1;
                 else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_VALUE )))
-                    aRet <<= fParam1;
+                    aRet <<= m_pImpl->m_fParam1;
                 else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_EXPRESSION )))
-                    aRet.setValue(&bParam1, ::getBooleanCppuType());
+                    aRet.setValue(&m_pImpl->m_bParam1, ::getBooleanCppuType());
                 break;
             case RES_DBFLD:
                 if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
@@ -846,23 +883,23 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
                     pStr = 0;   // only one of this properties will return
                                 // a non-empty string.
                     INetURLObject aObj;
-                    aObj.SetURL( sParam5 );  // SetSmartURL
+                    aObj.SetURL(m_pImpl->m_sParam5); // SetSmartURL
                     bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
                     if (bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
-                        pStr = &sParam5;        // DataBaseURL
+                        pStr = &m_pImpl->m_sParam5; // DataBaseURL
                     else if ( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
-                        pStr = &sParam1;            // DataBaseName
+                        pStr = &m_pImpl->m_sParam1; // DataBaseName
                 }
                 else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME)))
-                    pStr = &sParam2;
+                    pStr = &m_pImpl->m_sParam2;
                 else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME)))
-                    pStr = &sParam3;
+                    pStr = &m_pImpl->m_sParam3;
                 break;
             case RES_SETEXPFLD:
                 if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_SEPARATOR)))
-                    pStr = &sParam1;
+                    pStr = &m_pImpl->m_sParam1;
                 else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAPTER_NUMBERING_LEVEL)))
-                    aRet <<= nParam1;
+                    aRet <<= m_pImpl->m_nParam1;
                 break;
             case RES_DDEFLD:
                 {
@@ -871,9 +908,9 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
                             rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_ELEMENT))  ? 2 :
                             rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
                     if(nPart  < 3 )
-                        pStr = &(sStr = sParam1.GetToken(nPart, sfx2::cTokenSeparator));
+                        pStr = &(sStr = m_pImpl->m_sParam1.GetToken(nPart, sfx2::cTokenSeparator));
                     else if(3 == nPart)
-                        aRet.setValue(&bParam1, ::getBooleanCppuType());
+                        aRet.setValue(&m_pImpl->m_bParam1, ::getBooleanCppuType());
                 }
                 break;
             default:
@@ -907,14 +944,15 @@ void SwXFieldMaster::removeVetoableChangeListener(const OUString& /*PropertyName
     OSL_FAIL("not implemented");
 }
 
-void SwXFieldMaster::dispose(void)          throw( uno::RuntimeException )
+void SAL_CALL SwXFieldMaster::dispose()
+throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    SwFieldType* pFldType = GetFldType(sal_True);
+    SwFieldType *const pFldType = GetFldType(true);
     if(pFldType)
     {
         sal_uInt16 nTypeIdx = USHRT_MAX;
-        const SwFldTypes* pTypes = GetDoc()->GetFldTypes();
+        const SwFldTypes* pTypes = m_pImpl->m_pDoc->GetFldTypes();
         for( sal_uInt16 i = 0; i < pTypes->size(); i++ )
         {
             if((*pTypes)[i] == pFldType)
@@ -934,12 +972,12 @@ void SwXFieldMaster::dispose(void)          throw( uno::RuntimeException )
                 SwPaM aPam(rTxtNode, *pTxtFld->GetStart());
                 aPam.SetMark();
                 aPam.Move();
-                GetDoc()->DeleteAndJoin(aPam);
+                m_pImpl->m_pDoc->DeleteAndJoin(aPam);
             }
             pFld = aIter.Next();
         }
         // dann den FieldType loeschen
-        GetDoc()->RemoveFldType(nTypeIdx);
+        m_pImpl->m_pDoc->RemoveFldType(nTypeIdx);
     }
     else
         throw uno::RuntimeException();
@@ -961,16 +999,18 @@ throw (uno::RuntimeException)
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
-void SwXFieldMaster::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXFieldMaster::Impl::Modify(
+        SfxPoolItem const*const pOld, SfxPoolItem const*const pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
     {
         m_pDoc = 0;
-        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
-        m_pImpl->m_EventListeners.disposeAndClear(ev);
+        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
+        m_EventListeners.disposeAndClear(ev);
     }
 }
+
 OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc)
 {
     OUString sRet(rType.GetName());
@@ -1201,11 +1241,9 @@ uno::Reference< beans::XPropertySet >  SwXTextField::getTextFieldMaster(void) th
         pType = pFmtFld->GetFld()->GetTyp();
     }
 
-    SwXFieldMaster* pMaster = SwIterator<SwXFieldMaster,SwFieldType>::FirstElement( *pType );
-    if(!pMaster)
-        pMaster = new SwXFieldMaster(*pType, GetDoc());
-
-    return pMaster;
+    uno::Reference<beans::XPropertySet> const xRet(
+            SwXFieldMaster::CreateXFieldMaster(*GetDoc(), *pType));
+    return xRet;
 }
 
 OUString SwXTextField::getPresentation(sal_Bool bShowCommand) throw( uno::RuntimeException )
@@ -2035,7 +2073,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         case FIELD_PROP_DOUBLE:
             if(rValue.getValueType() != ::getCppuType(static_cast<const double*>(0)))
                 throw lang::IllegalArgumentException();
-            m_pProps->fDouble = *(double*)rValue.getValue();
+            rValue >>= m_pProps->fDouble;
             break;
 
         case FIELD_PROP_DATE_TIME :
@@ -2521,12 +2559,10 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
     SwFieldType* pType = GetDoc()->GetFldType(nResId, sName, sal_True);
     if(!pType)
         throw container::NoSuchElementException();
-    SwXFieldMaster* pMaster = SwIterator<SwXFieldMaster,SwFieldType>::FirstElement( *pType );
-    if(!pMaster)
-        pMaster = new SwXFieldMaster(*pType, GetDoc());
-    uno::Reference< beans::XPropertySet >  aRef = pMaster;
-    uno::Any aRet(&aRef, ::getCppuType( static_cast<const uno::Reference<beans::XPropertySet>* >(0)));
-    return aRet;
+
+    uno::Reference<beans::XPropertySet> const xRet(
+            SwXFieldMaster::CreateXFieldMaster(*GetDoc(), *pType));
+    return uno::makeAny(xRet);
 }
 
 sal_Bool SwXTextFieldMasters::getInstanceName(

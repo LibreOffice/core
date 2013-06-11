@@ -796,14 +796,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                 SwAuthorityFieldType aType(pDoc);
                 pType = pDoc->InsertFldType(aType);
             }
-            else
-            {
-                SwXFieldMaster* pMaster = SwIterator<SwXFieldMaster,SwFieldType>::FirstElement( *pType );
-                if(pMaster)
-                    xRet = (cppu::OWeakObject*)pMaster;
-            }
-            if(!xRet.is())
-                xRet =  (cppu::OWeakObject*)new SwXFieldMaster(*pType, pDoc);
+            xRet = SwXFieldMaster::CreateXFieldMaster(*pDoc, *pType);
         }
         break;
         case SW_SERVICE_PARAGRAPH :

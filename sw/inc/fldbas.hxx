@@ -23,7 +23,9 @@
 #include <tools/string.hxx>
 #include "swdllapi.h"
 #include <calbck.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <vector>
 
 class SwDoc;
@@ -229,6 +231,9 @@ String  FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat);
 
 class SW_DLLPUBLIC SwFieldType : public SwModify
 {
+    ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::beans::XPropertySet> m_wXFieldMaster;
+
     sal_uInt16 nWhich;
 
     friend void _FinitUI();     ///< In order to delete pointer!
@@ -241,6 +246,13 @@ protected:
     explicit SwFieldType( sal_uInt16 nWhichId );
 
 public:
+
+    SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::beans::XPropertySet> const& GetXObject() const
+            { return m_wXFieldMaster; }
+    SW_DLLPRIVATE void SetXObject(::com::sun::star::uno::Reference<
+                    ::com::sun::star::beans::XPropertySet> const& xFieldMaster)
+            { m_wXFieldMaster = xFieldMaster; }
 
     static  const String&   GetTypeStr( sal_uInt16 nTypeId );
 
