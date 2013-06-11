@@ -1474,50 +1474,22 @@ namespace cppcanvas
                             EMFPPath path (points, true);
                             path.Read (rMF, flags, *this);
 
-
                             EMFPPlusFillPolygon (path.GetPolygon (*this), rFactoryParms, rState, rCanvas, flags & 0x8000, brushIndexOrColor);
 
                             break;
                         }
                     case EmfPlusRecordTypeDrawLines:
                         {
-                            sal_uInt32 index = flags & 0xff;
                             sal_uInt32 points;
 
                             rMF >> points;
 
-                            SAL_INFO("cppcanvas.emf", "EMF+ DrawLines in slot: " << index << " points: " << points);
+                            SAL_INFO("cppcanvas.emf", "EMF+ DrawLines in slot: " << (flags && 0xff) << " points: " << points);
 
                             EMFPPath path (points, true);
                             path.Read (rMF, flags, *this);
 
-                            EMFPPen* pen = (EMFPPen*) aObjects [index];
-
-                            rState.isFillColorSet = false;
-                            rState.isLineColorSet = true;
-                            rState.lineColor = ::vcl::unotools::colorToDoubleSequence (pen->GetColor (),
-                                                                                       rCanvas->getUNOCanvas ()->getDevice()->getDeviceColorSpace() );
-                            ::basegfx::B2DPolyPolygon& polygon (path.GetPolygon (*this));
-
-                            polygon.transform( rState.mapModeTransform );
-
-                            rendering::StrokeAttributes aStrokeAttributes;
-
-                            pen->SetStrokeAttributes (aStrokeAttributes, *this, rState);
-
-                            ActionSharedPtr pPolyAction(
-                                internal::PolyPolyActionFactory::createPolyPolyAction(
-                                    polygon, rFactoryParms.mrCanvas, rState, aStrokeAttributes ) );
-
-                            if( pPolyAction )
-                            {
-                                maActions.push_back(
-                                    MtfAction(
-                                        pPolyAction,
-                                        rFactoryParms.mrCurrActionIndex ) );
-
-                                rFactoryParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
-                            }
+                            EMFPPlusDrawPolygon (path.GetPolygon (*this), rFactoryParms, rState, rCanvas, flags);
 
                             break;
                         }
