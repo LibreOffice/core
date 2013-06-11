@@ -836,7 +836,7 @@ namespace cppcanvas
 
         void ImplRenderer::MapToDevice (double& x, double& y)
         {
-            // TODO: other untis
+            // TODO: other units
             x = 100*nMmX*x/nPixX;
             y = 100*nMmY*y/nPixY;
         }
@@ -1764,9 +1764,9 @@ namespace cppcanvas
                         rMF >> transform;
                         aWorldTransform.Set (transform);
                         SAL_INFO("cppcanvas.emf",
-                                "EMF+\tm11: " << aWorldTransform.eM11 << "m12: " << aWorldTransform.eM12 <<
-                                "EMF+\tm21: " << aWorldTransform.eM21 << "m22: " << aWorldTransform.eM22 <<
-                                "EMF+\tdx: "  << aWorldTransform.eDx  << "dy: "  << aWorldTransform.eDy);
+                                "EMF+\tm11: " << aWorldTransform.eM11 << "\tm12: " << aWorldTransform.eM12 <<
+                                "\tm21: " << aWorldTransform.eM21 << "\tm22: " << aWorldTransform.eM22 <<
+                                "\tdx: "  << aWorldTransform.eDx  << "\tdy: "  << aWorldTransform.eDy);
                         break;
                     }
                     case EmfPlusRecordTypeResetWorldTransform:
