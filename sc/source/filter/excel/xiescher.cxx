@@ -486,7 +486,7 @@ SdrObject* XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffConv, con
                 Reference< XPropertySet > xPropSet(xCtrlModel,UNO_QUERY);
                 const static rtl::OUString sPropertyName = rtl::OUString::createFromAscii("ControlTypeinMSO");
 
-                enum ControlType { eCreateFromOffice = 0, eCreateFromMSTBXControl, eCreateFromMSOCXControl };
+                enum { eCreateFromOffice = 0, eCreateFromMSTBXControl, eCreateFromMSOCXControl };
 
                 if( mnObjType == 7 || (mnObjType < 25 && mnObjType > 10) )//TBX
                 {
