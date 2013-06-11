@@ -358,7 +358,7 @@ lcl_ExportFieldMark(
             Reference<XTextField> xField;
             const SwFmtFld* pField = SwPostItField::GetByName(pDoc, pFieldmark->GetName());
             if (pField)
-                xField = SwXTextField::CreateSwXTextField(*pDoc, *pField);
+                xField = SwXTextField::CreateXTextField(*pDoc, *pField);
             pPortion->SetTextField(xField);
         }
     }
@@ -723,8 +723,8 @@ lcl_ExportHints(
                         SwXTextPortion* pPortion;
                         xRef = pPortion = new SwXTextPortion(
                                 pUnoCrsr, xParent, PORTION_FIELD);
-                        Reference<XTextField> xField =
-                            SwXTextField::CreateSwXTextField(*pDoc, pAttr->GetFld());
+                        Reference<XTextField> const xField =
+                            SwXTextField::CreateXTextField(*pDoc, pAttr->GetFld());
                         pPortion->SetTextField(xField);
 
                         // If this is a postit field and it has a fieldmark

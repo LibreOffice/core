@@ -16,10 +16,15 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _FMTFLD_HXX
-#define _FMTFLD_HXX
+
+#ifndef SW_FMTFLD_HXX
+#define SW_FMTFLD_HXX
 
 #include <list>
+
+#include <com/sun/star/text/XTextField.hpp>
+
+#include <cppuhelper/weakref.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/smplhint.hxx>
@@ -37,6 +42,9 @@ class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient, public SfxBro
 {
     friend class SwTxtFld;
     friend void _InitCore();
+
+    ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::text::XTextField> m_wXTextField;
 
     SwField *pField;
     SwTxtFld* pTxtAttr;
@@ -86,6 +94,13 @@ public:
     void RegisterToFieldType( SwFieldType& );
     sal_Bool IsFldInDoc() const;
     sal_Bool IsProtect() const;
+
+    SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::text::XTextField> const& GetXTextField() const
+            { return m_wXTextField; }
+    SW_DLLPRIVATE void SetXTextField(::com::sun::star::uno::Reference<
+                    ::com::sun::star::text::XTextField> const& xTextField)
+            { m_wXTextField = xTextField; }
 };
 
 class SW_DLLPUBLIC SwFmtFldHint : public SfxHint

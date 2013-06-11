@@ -636,7 +636,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             case RES_DDEFLD :
             {
                 SwDDEFieldType aType(sTypeName, m_pImpl->m_sParam1,
-                    sal::static_int_cast< sal_uInt16 >((m_pImpl->m_bParam1)
+                    sal::static_int_cast<sal_uInt16>((m_pImpl->m_bParam1)
                         ? sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL));
                 pType2 = m_pImpl->m_pDoc->InsertFldType(aType);
             }
@@ -808,9 +808,11 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             for(sal_uInt16 i = 0; i < aFldArr.size(); i++)
             {
                 pFld = aFldArr[i];
-                SwXTextField * pInsert = SwXTextField::CreateSwXTextField(*m_pImpl->m_pDoc, *pFld);
+                uno::Reference<text::XTextField> const xField =
+                    SwXTextField::CreateXTextField(*m_pImpl->m_pDoc, *pFld);
 
-                pRetSeq[i] = uno::Reference<text::XDependentTextField>(pInsert);
+                pRetSeq[i] = uno::Reference<text::XDependentTextField>(xField,
+                        uno::UNO_QUERY);
             }
             aRet <<= aRetSeq;
         }
@@ -1047,36 +1049,32 @@ OUString SwXFieldMaster::LocalizeFormula(
     return rFormula;
 }
 
-SwXTextField* SwXTextField::CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt)
-{
-    SwIterator<SwXTextField,SwFieldType> aIter(*rFmt.GetFld()->GetTyp());
-    SwXTextField * pField = 0;
-    SwXTextField * pTemp = aIter.First();
-    while (pTemp)
-    {
-        if (pTemp->GetFldFmt() == &rFmt)
-        {
-            pField = pTemp;
-            break;
-        }
-        pTemp = aIter.Next();
-    }
-    return pField ? pField : new SwXTextField( rFmt, &rDoc );
-}
+/******************************************************************
+ * SwXTextField
+ ******************************************************************/
 
-sal_uInt16 SwXTextField::GetServiceId()
+uno::Reference<text::XTextField>
+SwXTextField::CreateXTextField(SwDoc & rDoc, SwFmtFld const& rFmt)
 {
-    return m_nServiceId;
+    // re-use existing SwXTextField
+    uno::Reference<text::XTextField> xField(rFmt.GetXTextField());
+    if (!xField.is())
+    {
+        SwXTextField *const pField(new SwXTextField(rFmt, rDoc));
+        xField.set(pField);
+        const_cast<SwFmtFld &>(rFmt).SetXTextField(xField);
+    }
+    return xField;
 }
 
 struct SwFieldProperties_Impl
 {
-    String      sPar1;
-    String      sPar2;
-    String      sPar3;
-    String      sPar4;
-    String      sPar5;
-    String      sPar6;
+    OUString    sPar1;
+    OUString    sPar2;
+    OUString    sPar3;
+    OUString    sPar4;
+    OUString    sPar5;
+    OUString    sPar6;
     Date            aDate;
     double          fDouble;
     uno::Sequence<beans::PropertyValue> aPropSeq;
@@ -1117,17 +1115,60 @@ struct SwFieldProperties_Impl
 };
 
 class SwXTextField::Impl
+    : public SwClient
 {
 private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    SwXTextField & m_rThis;
 
 public:
     ::cppu::OInterfaceContainerHelper m_EventListeners;
 
-    Impl() : m_EventListeners(m_Mutex) { }
-};
+    SwFmtFld const*     m_pFmtFld;
+    SwDoc *             m_pDoc;
+    SwTextAPIObject *   m_pTextObject;
 
-TYPEINIT1(SwXTextField, SwClient);
+    bool                m_bIsDescriptor;
+    // required to access field master of not yet inserted fields
+    SwClient            m_FieldTypeClient;
+    bool                m_bCallUpdate;
+    sal_uInt16          m_nServiceId;
+    OUString            m_sTypeName;
+    boost::scoped_ptr<SwFieldProperties_Impl> m_pProps;
+
+    Impl(SwXTextField & rThis, SwDoc *const pDoc, SwFmtFld const*const pFmt,
+            sal_uInt16 const nServiceId)
+        : SwClient((pFmt) ? pDoc->GetUnoCallBack() : 0)
+        , m_rThis(rThis)
+        , m_EventListeners(m_Mutex)
+        , m_pFmtFld(pFmt)
+        , m_pDoc(pDoc)
+        , m_pTextObject(0)
+        , m_bIsDescriptor(pFmt == 0)
+        , m_bCallUpdate(false)
+        , m_nServiceId((pFmt)
+                ? lcl_GetServiceForField(*pFmt->GetFld())
+                : nServiceId)
+        , m_pProps((pFmt) ? 0 : new SwFieldProperties_Impl)
+    { }
+
+    ~Impl()
+    {
+        if (m_pTextObject)
+        {
+            m_pTextObject->DisposeEditSource();
+            m_pTextObject->release();
+        }
+    }
+
+    void Invalidate();
+
+    const SwField*      GetField() const;
+
+protected:
+    // SwClient
+    virtual void Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew);
+};
 
 namespace
 {
@@ -1139,72 +1180,49 @@ const uno::Sequence< sal_Int8 > & SwXTextField::getUnoTunnelId()
     return theSwXTextFieldUnoTunnelId::get().getSeq();
 }
 
-sal_Int64 SAL_CALL SwXTextField::getSomething( const uno::Sequence< sal_Int8 >& rId )
-    throw(uno::RuntimeException)
+sal_Int64 SAL_CALL
+SwXTextField::getSomething(const uno::Sequence< sal_Int8 >& rId)
+throw (uno::RuntimeException)
 {
-    if( rId.getLength() == 16
-        && 0 == memcmp( getUnoTunnelId().getConstArray(),
-                                        rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
-    }
-    return 0;
+    return ::sw::UnoTunnelImpl<SwXTextField>(rId, this);
 }
 
 SwXTextField::SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc)
-    : m_pImpl(new Impl)
-    ,
-    pFmtFld(0),
-    m_pDoc(pDoc),
-    m_pTextObject(0),
-    m_bIsDescriptor(nServiceId != USHRT_MAX),
-    m_bCallUpdate(sal_False),
-    m_nServiceId(nServiceId),
-    m_pProps(new SwFieldProperties_Impl)
+    : m_pImpl(new Impl(*this, pDoc, 0, nServiceId))
 {
     //Set visible as default!
     if(SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId ||
             SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM == nServiceId ||
             SW_SERVICE_FIELDTYPE_DATABASE == nServiceId ||
             SW_SERVICE_FIELDTYPE_DATABASE_NAME == nServiceId  )
-        m_pProps->bBool2 = sal_True;
+        m_pImpl->m_pProps->bBool2 = sal_True;
     else if(SW_SERVICE_FIELDTYPE_TABLE_FORMULA == nServiceId)
-        m_pProps->bBool1 = sal_True;
+        m_pImpl->m_pProps->bBool1 = sal_True;
     if(SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId)
-        m_pProps->nUSHORT2 = USHRT_MAX;
-
+        m_pImpl->m_pProps->nUSHORT2 = USHRT_MAX;
 }
 
-SwXTextField::SwXTextField(const SwFmtFld& rFmt, SwDoc* pDc)
-    : m_pImpl(new Impl)
-    ,
-    pFmtFld(&rFmt),
-    m_pDoc(pDc),
-    m_pTextObject(0),
-    m_bIsDescriptor(sal_False),
-    m_bCallUpdate(sal_False),
-    m_nServiceId( lcl_GetServiceForField( *pFmtFld->GetFld() ) ),
-    m_pProps(0)
+SwXTextField::SwXTextField(const SwFmtFld& rFmt, SwDoc & rDoc)
+    : m_pImpl(new Impl(*this, &rDoc, &rFmt, USHRT_MAX))
 {
-    pDc->GetUnoCallBack()->Add(this);
 }
 
 SwXTextField::~SwXTextField()
 {
-    if ( m_pTextObject )
-    {
-        m_pTextObject->DisposeEditSource();
-        m_pTextObject->release();
-    }
-
-    delete m_pProps;
 }
 
-void SwXTextField::attachTextFieldMaster(const uno::Reference< beans::XPropertySet > & xFieldMaster)
-                    throw( lang::IllegalArgumentException, uno::RuntimeException )
+sal_uInt16 SwXTextField::GetServiceId() const
+{
+    return m_pImpl->m_nServiceId;
+}
+
+void SAL_CALL SwXTextField::attachTextFieldMaster(
+        const uno::Reference< beans::XPropertySet > & xFieldMaster)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if(!m_bIsDescriptor)
+
+    if (!m_pImpl->m_bIsDescriptor)
         throw uno::RuntimeException();
     uno::Reference< lang::XUnoTunnel > xMasterTunnel(xFieldMaster, uno::UNO_QUERY);
     if (!xMasterTunnel.is())
@@ -1213,41 +1231,43 @@ void SwXTextField::attachTextFieldMaster(const uno::Reference< beans::XPropertyS
             sal::static_int_cast< sal_IntPtr >( xMasterTunnel->getSomething( SwXFieldMaster::getUnoTunnelId()) ));
 
     SwFieldType* pFieldType = pMaster ? pMaster->GetFldType() : 0;
-    if(pFieldType && pFieldType->Which() == lcl_ServiceIdToResId(m_nServiceId))
+    if(pFieldType && pFieldType->Which() == lcl_ServiceIdToResId(m_pImpl->m_nServiceId))
     {
-        m_sTypeName = pFieldType->GetName();
-        pFieldType->Add( &m_aFieldTypeClient );
+        m_pImpl->m_sTypeName = pFieldType->GetName();
+        pFieldType->Add( &m_pImpl->m_FieldTypeClient );
     }
     else
         throw lang::IllegalArgumentException();
-
 }
 
-uno::Reference< beans::XPropertySet >  SwXTextField::getTextFieldMaster(void) throw( uno::RuntimeException )
+uno::Reference< beans::XPropertySet > SAL_CALL
+SwXTextField::getTextFieldMaster() throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     SwFieldType* pType = 0;
-    if( m_bIsDescriptor && m_aFieldTypeClient.GetRegisteredIn() )
+    if (m_pImpl->m_bIsDescriptor && m_pImpl->m_FieldTypeClient.GetRegisteredIn())
     {
-        pType = (SwFieldType*)m_aFieldTypeClient.GetRegisteredIn();
+        pType = static_cast<SwFieldType*>(const_cast<SwModify*>(
+                    m_pImpl->m_FieldTypeClient.GetRegisteredIn()));
     }
     else
     {
-        if(!GetRegisteredIn())
+        if (!m_pImpl->GetRegisteredIn())
             throw uno::RuntimeException();
-        pType = pFmtFld->GetFld()->GetTyp();
+        pType = m_pImpl->m_pFmtFld->GetFld()->GetTyp();
     }
 
     uno::Reference<beans::XPropertySet> const xRet(
-            SwXFieldMaster::CreateXFieldMaster(*GetDoc(), *pType));
+            SwXFieldMaster::CreateXFieldMaster(*m_pImpl->m_pDoc, *pType));
     return xRet;
 }
 
-OUString SwXTextField::getPresentation(sal_Bool bShowCommand) throw( uno::RuntimeException )
+OUString SAL_CALL SwXTextField::getPresentation(sal_Bool bShowCommand)
+throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    SwField const*const pField = GetField();
+    SwField const*const pField = m_pImpl->GetField();
     if (!pField)
     {
         throw uno::RuntimeException();
@@ -1258,12 +1278,12 @@ OUString SwXTextField::getPresentation(sal_Bool bShowCommand) throw( uno::Runtim
     return ret;
 }
 
-void SwXTextField::attachToRange(
+void SAL_CALL SwXTextField::attach(
         const uno::Reference< text::XTextRange > & xTextRange)
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if(!m_bIsDescriptor)
+    if (!m_pImpl->m_bIsDescriptor)
         throw uno::RuntimeException();
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = 0;
@@ -1278,34 +1298,37 @@ void SwXTextField::attachToRange(
 
     SwDoc* pDoc = pRange ? (SwDoc*)pRange->GetDoc() : pCursor ? (SwDoc*)pCursor->GetDoc() : 0;
     //wurde ein FieldMaster attached, dann ist das Dokument schon festgelegt!
-    if(pDoc && (!m_pDoc || m_pDoc == pDoc))
+    if (pDoc && (!m_pImpl->m_pDoc || m_pImpl->m_pDoc == pDoc))
     {
         SwUnoInternalPaM aPam(*pDoc);
         //das muss jetzt sal_True liefern
         ::sw::XTextRangeToSwPaM(aPam, xTextRange);
         SwField* pFld = 0;
-        switch(m_nServiceId)
+        switch (m_pImpl->m_nServiceId)
         {
             case SW_SERVICE_FIELDTYPE_ANNOTATION:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_POSTITFLD);
 
                 DateTime aDateTime( DateTime::EMPTY );
-                if (m_pProps->pDateTime)
+                if (m_pImpl->m_pProps->pDateTime)
                 {
-                    aDateTime.SetYear(m_pProps->pDateTime->Year);
-                    aDateTime.SetMonth(m_pProps->pDateTime->Month);
-                    aDateTime.SetDay(m_pProps->pDateTime->Day);
-                    aDateTime.SetHour(m_pProps->pDateTime->Hours);
-                    aDateTime.SetMin(m_pProps->pDateTime->Minutes);
-                    aDateTime.SetSec(m_pProps->pDateTime->Seconds);
+                    aDateTime.SetYear(m_pImpl->m_pProps->pDateTime->Year);
+                    aDateTime.SetMonth(m_pImpl->m_pProps->pDateTime->Month);
+                    aDateTime.SetDay(m_pImpl->m_pProps->pDateTime->Day);
+                    aDateTime.SetHour(m_pImpl->m_pProps->pDateTime->Hours);
+                    aDateTime.SetMin(m_pImpl->m_pProps->pDateTime->Minutes);
+                    aDateTime.SetSec(m_pImpl->m_pProps->pDateTime->Seconds);
                 }
                 pFld = new SwPostItField((SwPostItFieldType*)pFldType,
-                        m_pProps->sPar1, m_pProps->sPar2, m_pProps->sPar3, m_pProps->sPar4, aDateTime);
-                if ( m_pTextObject )
+                        m_pImpl->m_pProps->sPar1, m_pImpl->m_pProps->sPar2,
+                        m_pImpl->m_pProps->sPar3, m_pImpl->m_pProps->sPar4,
+                        aDateTime);
+                if (m_pImpl->m_pTextObject)
                 {
-                    ((SwPostItField*)pFld)->SetTextObject( m_pTextObject->CreateText() );
-                      ((SwPostItField*)pFld)->SetPar2(m_pTextObject->GetText());
+                    SwPostItField *const pP(static_cast<SwPostItField *>(pFld));
+                    pP->SetTextObject(m_pImpl->m_pTextObject->CreateText());
+                    pP->SetPar2(m_pImpl->m_pTextObject->GetText());
                 }
             }
             break;
@@ -1313,42 +1336,49 @@ void SwXTextField::attachToRange(
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_SCRIPTFLD);
                 pFld = new SwScriptField((SwScriptFieldType*)pFldType,
-                        m_pProps->sPar1, m_pProps->sPar2,
-                        m_pProps->bBool1);
+                        m_pImpl->m_pProps->sPar1, m_pImpl->m_pProps->sPar2,
+                        m_pImpl->m_pProps->bBool1);
             }
             break;
             case SW_SERVICE_FIELDTYPE_DATETIME:
             {
                 sal_uInt16 nSub = 0;
-                if(m_pProps->bBool1)
+                if (m_pImpl->m_pProps->bBool1)
                     nSub |= FIXEDFLD;
-                if(m_pProps->bBool2)
+                if (m_pImpl->m_pProps->bBool2)
                     nSub |= DATEFLD;
                 else
                     nSub |= TIMEFLD;
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_DATETIMEFLD);
-                pFld = new SwDateTimeField((SwDateTimeFieldType*)pFldType,
-                nSub, m_pProps->nFormat);
-                if(m_pProps->fDouble > 0.)
-                    ((SwDateTimeField*)pFld)->SetValue( m_pProps->fDouble );
-                if(m_pProps->pDateTime)
+                SwDateTimeField *const pDTField = new SwDateTimeField(
+                        static_cast<SwDateTimeFieldType*>(pFldType),
+                            nSub, m_pImpl->m_pProps->nFormat);
+                pFld = pDTField;
+                if (m_pImpl->m_pProps->fDouble > 0.)
                 {
-                    uno::Any aVal; aVal <<= *m_pProps->pDateTime;
+                    pDTField->SetValue(m_pImpl->m_pProps->fDouble);
+                }
+                if (m_pImpl->m_pProps->pDateTime)
+                {
+                    uno::Any aVal; aVal <<= *m_pImpl->m_pProps->pDateTime;
                     pFld->PutValue( aVal, FIELD_PROP_DATE_TIME );
                 }
-                ((SwDateTimeField*)pFld)->SetOffset(m_pProps->nSubType);
+                pDTField->SetOffset(m_pImpl->m_pProps->nSubType);
             }
             break;
             case SW_SERVICE_FIELDTYPE_FILE_NAME:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_FILENAMEFLD);
-                sal_Int32 nFormat = m_pProps->nFormat;
-                if(m_pProps->bBool2)
+                sal_Int32 nFormat = m_pImpl->m_pProps->nFormat;
+                if (m_pImpl->m_pProps->bBool2)
                     nFormat |= FF_FIXED;
-                pFld = new SwFileNameField((SwFileNameFieldType*)pFldType, nFormat);
-                if(m_pProps->sPar3.Len())
-                    ((SwFileNameField*)pFld)->SetExpansion(m_pProps->sPar3);
-                uno::Any aFormat(&m_pProps->nFormat, ::getCppuType(&m_pProps->nFormat));
+                SwFileNameField *const pFNField = new SwFileNameField(
+                        static_cast<SwFileNameFieldType*>(pFldType), nFormat);
+                pFld = pFNField;
+                if (!m_pImpl->m_pProps->sPar3.isEmpty())
+                    pFNField->SetExpansion(m_pImpl->m_pProps->sPar3);
+                uno::Any aFormat;
+                aFormat <<= m_pImpl->m_pProps->nFormat;
                 pFld->PutValue( aFormat, FIELD_PROP_FORMAT );
             }
             break;
@@ -1356,68 +1386,81 @@ void SwXTextField::attachToRange(
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_TEMPLNAMEFLD);
                 pFld = new SwTemplNameField((SwTemplNameFieldType*)pFldType,
-                                                    m_pProps->nFormat);
-                uno::Any aFormat(&m_pProps->nFormat, ::getCppuType(&m_pProps->nFormat));
+                                            m_pImpl->m_pProps->nFormat);
+                uno::Any aFormat;
+                aFormat <<= m_pImpl->m_pProps->nFormat;
                 pFld->PutValue(aFormat, FIELD_PROP_FORMAT);
             }
             break;
             case SW_SERVICE_FIELDTYPE_CHAPTER:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_CHAPTERFLD);
-                pFld = new SwChapterField((SwChapterFieldType*)pFldType, m_pProps->nUSHORT1);
-                ((SwChapterField*)pFld)->SetLevel(m_pProps->nByte1);
-                uno::Any aVal; aVal <<= (sal_Int16)m_pProps->nUSHORT1;
+                SwChapterField *const pChapterField = new SwChapterField(
+                        static_cast<SwChapterFieldType*>(pFldType),
+                        m_pImpl->m_pProps->nUSHORT1);
+                pFld = pChapterField;
+                pChapterField->SetLevel(m_pImpl->m_pProps->nByte1);
+                uno::Any aVal;
+                aVal <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT1);
                 pFld->PutValue(aVal, FIELD_PROP_USHORT1 );
             }
             break;
             case SW_SERVICE_FIELDTYPE_AUTHOR:
             {
-                long nFormat = m_pProps->bBool1 ? AF_NAME : AF_SHORTCUT;
-                if(m_pProps->bBool2)
+                long nFormat = m_pImpl->m_pProps->bBool1 ? AF_NAME : AF_SHORTCUT;
+                if (m_pImpl->m_pProps->bBool2)
                     nFormat |= AF_FIXED;
 
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_AUTHORFLD);
-                pFld = new SwAuthorField((SwAuthorFieldType*)pFldType, nFormat);
-                ((SwAuthorField*)pFld)->SetExpansion(m_pProps->sPar1);
+                SwAuthorField *const pAuthorField = new SwAuthorField(
+                        static_cast<SwAuthorFieldType*>(pFldType), nFormat);
+                pFld = pAuthorField;
+                pAuthorField->SetExpansion(m_pImpl->m_pProps->sPar1);
             }
             break;
             case SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT:
             case SW_SERVICE_FIELDTYPE_HIDDEN_TEXT:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_HIDDENTXTFLD);
-                pFld = new SwHiddenTxtField(((SwHiddenTxtFieldType*)pFldType),
-                        m_pProps->sPar1,
-                        m_pProps->sPar2, m_pProps->sPar3,
-                        static_cast< sal_uInt16 >(SW_SERVICE_FIELDTYPE_HIDDEN_TEXT == m_nServiceId ?
+                SwHiddenTxtField *const pHTField = new SwHiddenTxtField(
+                        static_cast<SwHiddenTxtFieldType*>(pFldType),
+                        m_pImpl->m_pProps->sPar1,
+                        m_pImpl->m_pProps->sPar2, m_pImpl->m_pProps->sPar3,
+                        static_cast<sal_uInt16>(SW_SERVICE_FIELDTYPE_HIDDEN_TEXT == m_pImpl->m_nServiceId ?
                              TYP_HIDDENTXTFLD : TYP_CONDTXTFLD));
-                ((SwHiddenTxtField*)pFld)->SetValue(m_pProps->bBool1);
-                uno::Any aVal; aVal <<= (OUString)m_pProps->sPar4;
+                pFld = pHTField;
+                pHTField->SetValue(m_pImpl->m_pProps->bBool1);
+                uno::Any aVal;
+                aVal <<= m_pImpl->m_pProps->sPar4;
                 pFld->PutValue(aVal, FIELD_PROP_PAR4 );
             }
             break;
             case SW_SERVICE_FIELDTYPE_HIDDEN_PARA:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_HIDDENPARAFLD);
-                pFld = new SwHiddenParaField((SwHiddenParaFieldType*)pFldType,
-                                                m_pProps->sPar1);
-                ((SwHiddenParaField*)pFld)->SetHidden(m_pProps->bBool1);
+                SwHiddenParaField *const pHPField = new SwHiddenParaField(
+                        static_cast<SwHiddenParaFieldType*>(pFldType),
+                        m_pImpl->m_pProps->sPar1);
+                pFld = pHPField;
+                pHPField->SetHidden(m_pImpl->m_pProps->bBool1);
             }
             break;
             case SW_SERVICE_FIELDTYPE_GET_REFERENCE:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_GETREFFLD);
                 pFld = new SwGetRefField((SwGetRefFieldType*)pFldType,
-                            m_pProps->sPar1,
+                            m_pImpl->m_pProps->sPar1,
                             0,
                             0,
                             0);
-                if(m_pProps->sPar3.Len())
-                    ((SwGetRefField*)pFld)->SetExpand(m_pProps->sPar3);
-                uno::Any aVal; aVal <<=(sal_Int16)m_pProps->nUSHORT1;
+                if (!m_pImpl->m_pProps->sPar3.isEmpty())
+                    static_cast<SwGetRefField*>(pFld)->SetExpand(m_pImpl->m_pProps->sPar3);
+                uno::Any aVal;
+                aVal <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT1);
                 pFld->PutValue(aVal, FIELD_PROP_USHORT1 );
-                aVal <<=(sal_Int16)m_pProps->nUSHORT2;
+                aVal <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT2);
                 pFld->PutValue(aVal, FIELD_PROP_USHORT2 );
-                aVal <<=(sal_Int16)m_pProps->nSHORT1;
+                aVal <<= m_pImpl->m_pProps->nSHORT1;
                 pFld->PutValue(aVal, FIELD_PROP_SHORT1 );
             }
             break;
@@ -1425,7 +1468,8 @@ void SwXTextField::attachToRange(
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_JUMPEDITFLD);
                 pFld = new SwJumpEditField((SwJumpEditFieldType*)pFldType,
-                        m_pProps->nUSHORT1, m_pProps->sPar2, m_pProps->sPar1);
+                        m_pImpl->m_pProps->nUSHORT1, m_pImpl->m_pProps->sPar2,
+                        m_pImpl->m_pProps->sPar1);
             }
             break;
             case SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR     :
@@ -1445,13 +1489,13 @@ void SwXTextField::attachToRange(
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_DOCINFOFLD);
                 sal_uInt16 nSubType = aDocInfoSubTypeFromService[
-                        m_nServiceId - SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR];
-                if( SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME == m_nServiceId ||
-                    SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME == m_nServiceId ||
-                    SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME == m_nServiceId ||
-                    SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME == m_nServiceId )
+                        m_pImpl->m_nServiceId - SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR];
+                if (SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME == m_pImpl->m_nServiceId ||
+                    SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME == m_pImpl->m_nServiceId ||
+                    SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME == m_pImpl->m_nServiceId ||
+                    SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME == m_pImpl->m_nServiceId)
                 {
-                    if(m_pProps->bBool2) //IsDate
+                    if (m_pImpl->m_pProps->bBool2) //IsDate
                     {
                         nSubType &= 0xf0ff;
                         nSubType |= DI_SUB_DATE;
@@ -1462,71 +1506,85 @@ void SwXTextField::attachToRange(
                         nSubType |= DI_SUB_TIME;
                     }
                 }
-                if(m_pProps->bBool1)
+                if (m_pImpl->m_pProps->bBool1)
                     nSubType |= DI_SUB_FIXED;
-                pFld = new SwDocInfoField((SwDocInfoFieldType*)pFldType, nSubType, m_pProps->sPar4, m_pProps->nFormat);
-                if(m_pProps->sPar3.Len())
-                    ((SwDocInfoField*)pFld)->SetExpansion(m_pProps->sPar3);
+                pFld = new SwDocInfoField(
+                        static_cast<SwDocInfoFieldType*>(pFldType), nSubType,
+                        m_pImpl->m_pProps->sPar4, m_pImpl->m_pProps->nFormat);
+                if (!m_pImpl->m_pProps->sPar3.isEmpty())
+                    static_cast<SwDocInfoField*>(pFld)->SetExpansion(m_pImpl->m_pProps->sPar3);
             }
             break;
             case SW_SERVICE_FIELDTYPE_USER_EXT:
             {
                 sal_Int32 nFormat = 0;
-                if(m_pProps->bBool1)
+                if (m_pImpl->m_pProps->bBool1)
                     nFormat = AF_FIXED;
 
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_EXTUSERFLD);
-                pFld = new SwExtUserField((SwExtUserFieldType*)pFldType, m_pProps->nUSHORT1, nFormat);
-                ((SwExtUserField*)pFld)->SetExpansion(m_pProps->sPar1);
+                SwExtUserField *const pEUField = new SwExtUserField(
+                    static_cast<SwExtUserFieldType*>(pFldType),
+                    m_pImpl->m_pProps->nUSHORT1, nFormat);
+                pFld = pEUField;
+                pEUField->SetExpansion(m_pImpl->m_pProps->sPar1);
             }
             break;
             case SW_SERVICE_FIELDTYPE_USER:
             {
-                SwFieldType* pFldType = pDoc->GetFldType(RES_USERFLD, m_sTypeName, sal_True);
+                SwFieldType* pFldType =
+                    pDoc->GetFldType(RES_USERFLD, m_pImpl->m_sTypeName, true);
                 if(!pFldType)
                     throw uno::RuntimeException();
-                sal_uInt16 nUserSubType = m_pProps->bBool1 ? nsSwExtendedSubType::SUB_INVISIBLE : 0;
-                if(m_pProps->bBool2)
+                sal_uInt16 nUserSubType = (m_pImpl->m_pProps->bBool1)
+                    ? nsSwExtendedSubType::SUB_INVISIBLE : 0;
+                if (m_pImpl->m_pProps->bBool2)
                     nUserSubType |= nsSwExtendedSubType::SUB_CMD;
-                if(m_pProps->bFormatIsDefault &&
+                if (m_pImpl->m_pProps->bFormatIsDefault &&
                     nsSwGetSetExpType::GSE_STRING == ((SwUserFieldType*)pFldType)->GetType())
-                        m_pProps->nFormat = -1;
+                {
+                    m_pImpl->m_pProps->nFormat = -1;
+                }
                 pFld = new SwUserField((SwUserFieldType*)pFldType,
                                     nUserSubType,
-                                    m_pProps->nFormat);
+                                    m_pImpl->m_pProps->nFormat);
             }
             break;
             case SW_SERVICE_FIELDTYPE_REF_PAGE_SET:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_REFPAGESETFLD);
                 pFld = new SwRefPageSetField( (SwRefPageSetFieldType*)pFldType,
-                                    m_pProps->nUSHORT1,
-                                    m_pProps->bBool1 );
+                                    m_pImpl->m_pProps->nUSHORT1,
+                                    m_pImpl->m_pProps->bBool1 );
             }
             break;
             case SW_SERVICE_FIELDTYPE_REF_PAGE_GET:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_REFPAGEGETFLD);
-                pFld = new SwRefPageGetField( (SwRefPageGetFieldType*)pFldType,
-                                                m_pProps->nUSHORT1 );
-                ((SwRefPageGetField*)pFld)->SetText(m_pProps->sPar1);
+                SwRefPageGetField *const pRGField = new SwRefPageGetField(
+                        static_cast<SwRefPageGetFieldType*>(pFldType),
+                        m_pImpl->m_pProps->nUSHORT1 );
+                pFld = pRGField;
+                pRGField->SetText(m_pImpl->m_pProps->sPar1);
             }
             break;
             case SW_SERVICE_FIELDTYPE_PAGE_NUM:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_PAGENUMBERFLD);
-                pFld = new SwPageNumberField((SwPageNumberFieldType*)pFldType,
-                                                PG_RANDOM,
-                                                m_pProps->nFormat,
-                                                m_pProps->nUSHORT1);
-                ((SwPageNumberField*)pFld)->SetUserString(m_pProps->sPar1);
-                uno::Any aVal; aVal <<= m_pProps->nSubType;
+                SwPageNumberField *const pPNField = new SwPageNumberField(
+                    static_cast<SwPageNumberFieldType*>(pFldType), PG_RANDOM,
+                    m_pImpl->m_pProps->nFormat,
+                    m_pImpl->m_pProps->nUSHORT1);
+                pFld = pPNField;
+                pPNField->SetUserString(m_pImpl->m_pProps->sPar1);
+                uno::Any aVal;
+                aVal <<= m_pImpl->m_pProps->nSubType;
                 pFld->PutValue( aVal, FIELD_PROP_SUBTYPE );
             }
             break;
             case SW_SERVICE_FIELDTYPE_DDE:
             {
-                SwFieldType* pFldType = pDoc->GetFldType(RES_DDEFLD, m_sTypeName, sal_True);
+                SwFieldType* pFldType =
+                    pDoc->GetFldType(RES_DDEFLD, m_pImpl->m_sTypeName, true);
                 if(!pFldType)
                     throw uno::RuntimeException();
                 pFld = new SwDDEField( (SwDDEFieldType*)pFldType );
@@ -1536,12 +1594,12 @@ void SwXTextField::attachToRange(
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_DBNAMEFLD);
                 SwDBData aData;
-                aData.sDataSource = m_pProps->sPar1;
-                aData.sCommand = m_pProps->sPar2;
-                aData.nCommandType = m_pProps->nSHORT1;
+                aData.sDataSource = m_pImpl->m_pProps->sPar1;
+                aData.sCommand = m_pImpl->m_pProps->sPar2;
+                aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
                 pFld = new SwDBNameField((SwDBNameFieldType*)pFldType, aData);
                 sal_uInt16  nSubType = pFld->GetSubType();
-                if(m_pProps->bBool2)
+                if (m_pImpl->m_pProps->bBool2)
                     nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
                 else
                     nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
@@ -1551,41 +1609,42 @@ void SwXTextField::attachToRange(
             case SW_SERVICE_FIELDTYPE_DATABASE_NEXT_SET:
             {
                 SwDBData aData;
-                aData.sDataSource = m_pProps->sPar1;
-                aData.sCommand = m_pProps->sPar2;
-                aData.nCommandType = m_pProps->nSHORT1;
+                aData.sDataSource = m_pImpl->m_pProps->sPar1;
+                aData.sCommand = m_pImpl->m_pProps->sPar2;
+                aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_DBNEXTSETFLD);
                 pFld = new SwDBNextSetField((SwDBNextSetFieldType*)pFldType,
-                        m_pProps->sPar3, aEmptyStr,
+                        m_pImpl->m_pProps->sPar3, aEmptyStr,
                         aData);
             }
             break;
             case SW_SERVICE_FIELDTYPE_DATABASE_NUM_SET:
             {
                 SwDBData aData;
-                aData.sDataSource = m_pProps->sPar1;
-                aData.sCommand = m_pProps->sPar2;
-                aData.nCommandType = m_pProps->nSHORT1;
+                aData.sDataSource = m_pImpl->m_pProps->sPar1;
+                aData.sCommand = m_pImpl->m_pProps->sPar2;
+                aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
                 pFld = new SwDBNumSetField( (SwDBNumSetFieldType*)
                     pDoc->GetSysFldType(RES_DBNUMSETFLD),
-                    m_pProps->sPar3,
-                    OUString::number(m_pProps->nFormat),
+                    m_pImpl->m_pProps->sPar3,
+                    OUString::number(m_pImpl->m_pProps->nFormat),
                     aData );
             }
             break;
             case SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM:
             {
                 SwDBData aData;
-                aData.sDataSource = m_pProps->sPar1;
-                aData.sCommand = m_pProps->sPar2;
-                aData.nCommandType = m_pProps->nSHORT1;
-                pFld = new SwDBSetNumberField((SwDBSetNumberFieldType*)
-                        pDoc->GetSysFldType(RES_DBSETNUMBERFLD),
-                        aData,
-                        m_pProps->nUSHORT1);
-                ((SwDBSetNumberField*)pFld)->SetSetNumber(m_pProps->nFormat);
+                aData.sDataSource = m_pImpl->m_pProps->sPar1;
+                aData.sCommand = m_pImpl->m_pProps->sPar2;
+                aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
+                SwDBSetNumberField *const pDBSNField =
+                    new SwDBSetNumberField(static_cast<SwDBSetNumberFieldType*>(
+                            pDoc->GetSysFldType(RES_DBSETNUMBERFLD)), aData,
+                        m_pImpl->m_pProps->nUSHORT1);
+                pFld = pDBSNField;
+                pDBSNField->SetSetNumber(m_pImpl->m_pProps->nFormat);
                 sal_uInt16  nSubType = pFld->GetSubType();
-                if(m_pProps->bBool2)
+                if (m_pImpl->m_pProps->bBool2)
                     nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
                 else
                     nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
@@ -1594,13 +1653,15 @@ void SwXTextField::attachToRange(
             break;
             case SW_SERVICE_FIELDTYPE_DATABASE:
             {
-                SwFieldType* pFldType = pDoc->GetFldType(RES_DBFLD, m_sTypeName, sal_False);
+                SwFieldType* pFldType =
+                    pDoc->GetFldType(RES_DBFLD, m_pImpl->m_sTypeName, false);
                 if(!pFldType)
                     throw uno::RuntimeException();
-                pFld = new SwDBField((SwDBFieldType*)pFldType, m_pProps->nFormat);
-                ((SwDBField*)pFld)->InitContent(m_pProps->sPar1);
+                pFld = new SwDBField(static_cast<SwDBFieldType*>(pFldType),
+                        m_pImpl->m_pProps->nFormat);
+                ((SwDBField*)pFld)->InitContent(m_pImpl->m_pProps->sPar1);
                 sal_uInt16  nSubType = pFld->GetSubType();
-                if(m_pProps->bBool2)
+                if (m_pImpl->m_pProps->bBool2)
                     nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
                 else
                     nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
@@ -1609,40 +1670,45 @@ void SwXTextField::attachToRange(
             break;
             case SW_SERVICE_FIELDTYPE_SET_EXP:
             {
-                SwFieldType* pFldType = pDoc->GetFldType(RES_SETEXPFLD, m_sTypeName, sal_True);
+                SwFieldType* pFldType =
+                    pDoc->GetFldType(RES_SETEXPFLD, m_pImpl->m_sTypeName, true);
                 if(!pFldType)
                     throw uno::RuntimeException();
                 // detect the field type's sub type and set an appropriate number format
-                if(m_pProps->bFormatIsDefault &&
+                if (m_pImpl->m_pProps->bFormatIsDefault &&
                     nsSwGetSetExpType::GSE_STRING == ((SwSetExpFieldType*)pFldType)->GetType())
-                        m_pProps->nFormat = -1;
-                pFld = new SwSetExpField((SwSetExpFieldType*)pFldType,
-                    m_pProps->sPar2,
-                    m_pProps->nUSHORT2 != USHRT_MAX ?  //#i79471# the field can have a number format or a number_ing_ format
-                    m_pProps->nUSHORT2 : m_pProps->nFormat);
+                {
+                    m_pImpl->m_pProps->nFormat = -1;
+                }
+                SwSetExpField *const pSEField = new SwSetExpField(
+                    static_cast<SwSetExpFieldType*>(pFldType),
+                    m_pImpl->m_pProps->sPar2,
+                    m_pImpl->m_pProps->nUSHORT2 != USHRT_MAX ?  //#i79471# the field can have a number format or a number_ing_ format
+                    m_pImpl->m_pProps->nUSHORT2 : m_pImpl->m_pProps->nFormat);
+                pFld = pSEField;
 
                 sal_uInt16  nSubType = pFld->GetSubType();
-                if(m_pProps->bBool2)
+                if (m_pImpl->m_pProps->bBool2)
                     nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
                 else
                     nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
-                if(m_pProps->bBool3)
+                if (m_pImpl->m_pProps->bBool3)
                     nSubType |= nsSwExtendedSubType::SUB_CMD;
                 else
                     nSubType &= ~nsSwExtendedSubType::SUB_CMD;
                 pFld->SetSubType(nSubType);
-                ((SwSetExpField*)pFld)->SetSeqNumber( m_pProps->nUSHORT1 );
-                ((SwSetExpField*)pFld)->SetInputFlag(m_pProps->bBool1);
-                ((SwSetExpField*)pFld)->SetPromptText(m_pProps->sPar3);
-                if(m_pProps->sPar4.Len())
-                    ((SwSetExpField*)pFld)->ChgExpStr(m_pProps->sPar4);
+                pSEField->SetSeqNumber(m_pImpl->m_pProps->nUSHORT1);
+                pSEField->SetInputFlag(m_pImpl->m_pProps->bBool1);
+                pSEField->SetPromptText(m_pImpl->m_pProps->sPar3);
+                if (!m_pImpl->m_pProps->sPar4.isEmpty())
+                    pSEField->ChgExpStr(m_pImpl->m_pProps->sPar4);
 
             }
             break;
             case SW_SERVICE_FIELDTYPE_GET_EXP:
             {
                 sal_uInt16 nSubType;
-                switch(m_pProps->nSubType)
+                switch (m_pImpl->m_pProps->nSubType)
                 {
                     case text::SetVariableType::STRING: nSubType = nsSwGetSetExpType::GSE_STRING;   break;
                     case text::SetVariableType::VAR:        nSubType = nsSwGetSetExpType::GSE_EXPR;  break;
@@ -1653,7 +1719,8 @@ void SwXTextField::attachToRange(
                         nSubType = nsSwGetSetExpType::GSE_EXPR;
                 }
                 //make sure the SubType matches the field type
-                SwFieldType* pSetExpFld = pDoc->GetFldType(RES_SETEXPFLD, m_pProps->sPar1, sal_False);
+                SwFieldType* pSetExpFld = pDoc->GetFldType(
+                        RES_SETEXPFLD, m_pImpl->m_pProps->sPar1, sal_False);
                 bool bSetGetExpFieldUninitialized = false;
                 if( pSetExpFld )
                 {
@@ -1664,34 +1731,41 @@ void SwXTextField::attachToRange(
                 else
                     bSetGetExpFieldUninitialized = true; // #i82544#
 
-                if(m_pProps->bBool2)
+                if (m_pImpl->m_pProps->bBool2)
                     nSubType |= nsSwExtendedSubType::SUB_CMD;
                 else
                     nSubType &= ~nsSwExtendedSubType::SUB_CMD;
-                pFld = new SwGetExpField((SwGetExpFieldType*)
-                        pDoc->GetSysFldType(RES_GETEXPFLD),
-                        m_pProps->sPar1, nSubType, m_pProps->nFormat);
+                SwGetExpField *const pGEField = new SwGetExpField(
+                        static_cast<SwGetExpFieldType*>(
+                            pDoc->GetSysFldType(RES_GETEXPFLD)),
+                        m_pImpl->m_pProps->sPar1, nSubType,
+                        m_pImpl->m_pProps->nFormat);
+                pFld = pGEField;
                 //TODO: SubType auswerten!
-                if(m_pProps->sPar4.Len())
-                    ((SwGetExpField*)pFld)->ChgExpStr(m_pProps->sPar4);
+                if (!m_pImpl->m_pProps->sPar4.isEmpty())
+                    pGEField->ChgExpStr(m_pImpl->m_pProps->sPar4);
                 // #i82544#
                 if( bSetGetExpFieldUninitialized )
-                    ((SwGetExpField*)pFld)->SetLateInitialization();
+                    pGEField->SetLateInitialization();
             }
             break;
             case SW_SERVICE_FIELDTYPE_INPUT_USER:
             case SW_SERVICE_FIELDTYPE_INPUT:
             {
-                SwFieldType* pFldType = pDoc->GetFldType(RES_INPUTFLD, m_sTypeName, sal_True);
+                SwFieldType* pFldType =
+                    pDoc->GetFldType(RES_INPUTFLD, m_pImpl->m_sTypeName, true);
                 if(!pFldType)
                     throw uno::RuntimeException();
-                sal_uInt16 nInpSubType = sal::static_int_cast< sal_uInt16 >(SW_SERVICE_FIELDTYPE_INPUT_USER == m_nServiceId ? INP_USR : INP_TXT);
+                sal_uInt16 nInpSubType =
+                    sal::static_int_cast<sal_uInt16>(
+                        SW_SERVICE_FIELDTYPE_INPUT_USER == m_pImpl->m_nServiceId
+                            ? INP_USR : INP_TXT);
                 SwInputField * pTxtField =
                     new SwInputField((SwInputFieldType*)pFldType,
-                                     m_pProps->sPar1, m_pProps->sPar2,
+                         m_pImpl->m_pProps->sPar1, m_pImpl->m_pProps->sPar2,
                                      nInpSubType);
-                pTxtField->SetHelp(m_pProps->sPar3);
-                pTxtField->SetToolTip(m_pProps->sPar4);
+                pTxtField->SetHelp(m_pImpl->m_pProps->sPar3);
+                pTxtField->SetToolTip(m_pImpl->m_pProps->sPar4);
 
                 pFld = pTxtField;
             }
@@ -1702,17 +1776,17 @@ void SwXTextField::attachToRange(
                 OUString aName;
 
                 // support for Scripting Framework macros
-                if (m_pProps->sPar4.Len() != 0)
+                if (!m_pImpl->m_pProps->sPar4.isEmpty())
                 {
-                    aName = m_pProps->sPar4;
+                    aName = m_pImpl->m_pProps->sPar4;
                 }
                 else
                 {
-                    SwMacroField::CreateMacroString(
-                        aName, m_pProps->sPar1, m_pProps->sPar3 );
+                    SwMacroField::CreateMacroString(aName,
+                        m_pImpl->m_pProps->sPar1, m_pImpl->m_pProps->sPar3);
                 }
                 pFld = new SwMacroField((SwMacroFieldType*)pFldType, aName,
-                                        m_pProps->sPar2);
+                                        m_pImpl->m_pProps->sPar2);
             }
             break;
             case SW_SERVICE_FIELDTYPE_PAGE_COUNT            :
@@ -1724,7 +1798,7 @@ void SwXTextField::attachToRange(
             case SW_SERVICE_FIELDTYPE_EMBEDDED_OBJECT_COUNT :
             {
                 sal_uInt16 nSubType = DS_PAGE;
-                switch(m_nServiceId)
+                switch(m_pImpl->m_nServiceId)
                 {
 //                  case SW_SERVICE_FIELDTYPE_PAGE_COUNT            : break;
                     case SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT       : nSubType = DS_PARA;break;
@@ -1735,7 +1809,9 @@ void SwXTextField::attachToRange(
                     case SW_SERVICE_FIELDTYPE_EMBEDDED_OBJECT_COUNT : nSubType = DS_OLE;break;
                 }
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_DOCSTATFLD);
-                pFld = new SwDocStatField((SwDocStatFieldType*)pFldType, nSubType, m_pProps->nUSHORT2);
+                pFld = new SwDocStatField(
+                        static_cast<SwDocStatFieldType*>(pFldType),
+                        nSubType, m_pImpl->m_pProps->nUSHORT2);
             }
             break;
             case SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY:
@@ -1744,9 +1820,10 @@ void SwXTextField::attachToRange(
                 pFld = new SwAuthorityField(static_cast<SwAuthorityFieldType*>(
                             pDoc->InsertFldType(type)),
                         aEmptyStr );
-                if(m_pProps->aPropSeq.getLength())
+                if (m_pImpl->m_pProps->aPropSeq.getLength())
                 {
-                    uno::Any aVal; aVal <<= m_pProps->aPropSeq;
+                    uno::Any aVal;
+                    aVal <<= m_pImpl->m_pProps->aPropSeq;
                     pFld->PutValue( aVal, FIELD_PROP_PROP_SEQ );
                 }
             }
@@ -1755,50 +1832,56 @@ void SwXTextField::attachToRange(
                 // create field
                 pFld = new SwCombinedCharField( (SwCombinedCharFieldType*)
                             pDoc->GetSysFldType(RES_COMBINED_CHARS),
-                            m_pProps->sPar1);
+                            m_pImpl->m_pProps->sPar1);
                 break;
             case SW_SERVICE_FIELDTYPE_DROPDOWN:
-                pFld = new SwDropDownField
-                    ((SwDropDownFieldType *)
-                     pDoc->GetSysFldType(RES_DROPDOWN));
+            {
+                SwDropDownField *const pDDField = new SwDropDownField(
+                    static_cast<SwDropDownFieldType *>(
+                        pDoc->GetSysFldType(RES_DROPDOWN)));
+                pFld = pDDField;
 
-                ((SwDropDownField *) pFld)->SetItems(m_pProps->aStrings);
-                ((SwDropDownField *) pFld)->SetSelectedItem(m_pProps->sPar1);
-                ((SwDropDownField *) pFld)->SetName(m_pProps->sPar2);
-                ((SwDropDownField *) pFld)->SetHelp(m_pProps->sPar3);
-                ((SwDropDownField *) pFld)->SetToolTip(m_pProps->sPar4);
-                break;
+                pDDField->SetItems(m_pImpl->m_pProps->aStrings);
+                pDDField->SetSelectedItem(m_pImpl->m_pProps->sPar1);
+                pDDField->SetName(m_pImpl->m_pProps->sPar2);
+                pDDField->SetHelp(m_pImpl->m_pProps->sPar3);
+                pDDField->SetToolTip(m_pImpl->m_pProps->sPar4);
+            }
+            break;
 
             case SW_SERVICE_FIELDTYPE_TABLE_FORMULA :
             {
 
                 // create field
                 sal_uInt16 nType = nsSwGetSetExpType::GSE_FORMULA;
-                if(m_pProps->bBool1)
+                if (m_pImpl->m_pProps->bBool1)
                 {
                     nType |= nsSwExtendedSubType::SUB_CMD;
-                    if(m_pProps->bFormatIsDefault)
-                        m_pProps->nFormat = -1;
+                    if (m_pImpl->m_pProps->bFormatIsDefault)
+                        m_pImpl->m_pProps->nFormat = -1;
                 }
                 pFld = new SwTblField( (SwTblFieldType*)
                     pDoc->GetSysFldType(RES_TABLEFLD),
-                    m_pProps->sPar2,
+                    m_pImpl->m_pProps->sPar2,
                     nType,
-                    m_pProps->nFormat);
-               ((SwTblField*)pFld)->ChgExpStr(m_pProps->sPar1);
+                    m_pImpl->m_pProps->nFormat);
+               ((SwTblField*)pFld)->ChgExpStr(m_pImpl->m_pProps->sPar1);
             }
             break;
             default: OSL_FAIL("was ist das fuer ein Typ?");
         }
         if(pFld)
         {
-            pFld->SetAutomaticLanguage(!m_pProps->bBool4);
+            pFld->SetAutomaticLanguage(!m_pImpl->m_pProps->bBool4);
             SwFmtFld aFmt( *pFld );
 
             UnoActionContext aCont(pDoc);
             SwTxtAttr* pTxtAttr = 0;
-            if(aPam.HasMark() && m_nServiceId != SW_SERVICE_FIELDTYPE_ANNOTATION)
+            if (aPam.HasMark() &&
+                m_pImpl->m_nServiceId != SW_SERVICE_FIELDTYPE_ANNOTATION)
+            {
                 pDoc->DeleteAndJoin(aPam);
+            }
 
             SwXTextCursor const*const pTextCursor(
                     dynamic_cast<SwXTextCursor*>(pCursor));
@@ -1808,7 +1891,8 @@ void SwXTextField::attachToRange(
                 ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
                 : nsSetAttrMode::SETATTR_DEFAULT;
 
-            if (*aPam.GetPoint() != *aPam.GetMark() && m_nServiceId == SW_SERVICE_FIELDTYPE_ANNOTATION)
+            if (*aPam.GetPoint() != *aPam.GetMark() &&
+                m_pImpl->m_nServiceId == SW_SERVICE_FIELDTYPE_ANNOTATION)
             {
                 IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
                 sw::mark::IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
@@ -1837,39 +1921,36 @@ void SwXTextField::attachToRange(
             if(pTxtAttr)
             {
                 const SwFmtFld& rFld = pTxtAttr->GetFld();
-                pFmtFld = &rFld;
+                m_pImpl->m_pFmtFld = &rFld;
             }
         }
         delete pFld;
 
-        m_pDoc = pDoc;
-        m_pDoc->GetUnoCallBack()->Add(this);
-        m_bIsDescriptor = sal_False;
-        if(m_aFieldTypeClient.GetRegisteredIn())
-            const_cast<SwModify*>(m_aFieldTypeClient.GetRegisteredIn())->Remove(&m_aFieldTypeClient);
-        DELETEZ(m_pProps);
-        if(m_bCallUpdate)
+        m_pImpl->m_pDoc = pDoc;
+        m_pImpl->m_pDoc->GetUnoCallBack()->Add(m_pImpl.get());
+        m_pImpl->m_bIsDescriptor = false;
+        if (m_pImpl->m_FieldTypeClient.GetRegisteredIn())
+        {
+            const_cast<SwModify*>(m_pImpl->m_FieldTypeClient.GetRegisteredIn())
+                ->Remove(&m_pImpl->m_FieldTypeClient);
+        }
+        m_pImpl->m_pProps.reset();
+        if (m_pImpl->m_bCallUpdate)
             update();
     }
     else
         throw lang::IllegalArgumentException();
 }
 
-void SwXTextField::attach(const uno::Reference< text::XTextRange > & xTextRange)
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
-{
-    SolarMutexGuard aGuard;
-    attachToRange( xTextRange );
-}
-
-uno::Reference< text::XTextRange >  SwXTextField::getAnchor(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextRange > SAL_CALL
+SwXTextField::getAnchor() throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     uno::Reference< text::XTextRange >   aRef;
-    SwField* pField = (SwField*)GetField();
+    SwField const*const pField = m_pImpl->GetField();
     if(pField)
     {
-        const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
+        const SwTxtFld* pTxtFld = m_pImpl->m_pFmtFld->GetTxtFld();
         if(!pTxtFld)
             throw uno::RuntimeException();
         const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
@@ -1877,32 +1958,32 @@ uno::Reference< text::XTextRange >  SwXTextField::getAnchor(void) throw( uno::Ru
         SwPaM aPam(rTxtNode, *pTxtFld->GetStart() + 1, rTxtNode, *pTxtFld->GetStart());
 
         aRef = SwXTextRange::CreateXTextRange(
-                *m_pDoc, *aPam.GetPoint(), aPam.GetMark());
+                *m_pImpl->m_pDoc, *aPam.GetPoint(), aPam.GetMark());
     }
     return aRef;
 
 }
 
-void SwXTextField::dispose(void) throw( uno::RuntimeException )
+void SAL_CALL SwXTextField::dispose() throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    SwField* pField = (SwField*)GetField();
+    SwField const*const pField = m_pImpl->GetField();
     if(pField)
     {
-        UnoActionContext aContext(GetDoc());
-        const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
+        UnoActionContext aContext(m_pImpl->m_pDoc);
+        const SwTxtFld* pTxtFld = m_pImpl->m_pFmtFld->GetTxtFld();
         SwTxtNode& rTxtNode = (SwTxtNode&)*pTxtFld->GetpTxtNode();
         SwPaM aPam(rTxtNode, *pTxtFld->GetStart());
         aPam.SetMark();
         aPam.Move();
-        GetDoc()->DeleteAndJoin(aPam);
+        m_pImpl->m_pDoc->DeleteAndJoin(aPam);
     }
 
-    if ( m_pTextObject )
+    if (m_pImpl->m_pTextObject)
     {
-        m_pTextObject->DisposeEditSource();
-        m_pTextObject->release();
-        m_pTextObject = 0;
+        m_pImpl->m_pTextObject->DisposeEditSource();
+        m_pImpl->m_pTextObject->release();
+        m_pImpl->m_pTextObject = 0;
     }
 }
 
@@ -1922,16 +2003,17 @@ throw (uno::RuntimeException)
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
-uno::Reference< beans::XPropertySetInfo >  SwXTextField::getPropertySetInfo(void)
-        throw( uno::RuntimeException )
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+SwXTextField::getPropertySetInfo()
+throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     //kein static
     uno::Reference< beans::XPropertySetInfo >  aRef;
-    if(m_nServiceId != USHRT_MAX)
+    if (m_pImpl->m_nServiceId != USHRT_MAX)
     {
         const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(
-                        lcl_GetPropertyMapOfService( m_nServiceId ));
+                        lcl_GetPropertyMapOfService(m_pImpl->m_nServiceId));
         uno::Reference< beans::XPropertySetInfo >  xInfo = pPropSet->getPropertySetInfo();
         // extend PropertySetInfo!
         const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
@@ -1944,14 +2026,17 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextField::getPropertySetInfo(void
     return aRef;
 }
 
-void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::Any& rValue)
-    throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
-        lang::WrappedTargetException, uno::RuntimeException )
+void SAL_CALL
+SwXTextField::setPropertyValue(
+        const OUString& rPropertyName, const uno::Any& rValue)
+throw (beans::UnknownPropertyException, beans::PropertyVetoException,
+    lang::IllegalArgumentException, lang::WrappedTargetException,
+    uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    SwField* pField = (SwField*)GetField();
+    SwField const*const pField = m_pImpl->GetField();
     const SfxItemPropertySet* _pPropSet = aSwMapProvider.GetPropertySet(
-                                lcl_GetPropertyMapOfService( m_nServiceId));
+                lcl_GetPropertyMapOfService(m_pImpl->m_nServiceId));
     const SfxItemPropertySimpleEntry*   pEntry = _pPropSet->getPropertyMap().getByName(rPropertyName);
 
     if (!pEntry)
@@ -1975,9 +2060,9 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         }
         else
         {
-            SwDoc * pDoc = GetDoc();
+            SwDoc * pDoc = m_pImpl->m_pDoc;
             assert(pDoc);
-            const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
+            const SwTxtFld* pTxtFld = m_pImpl->m_pFmtFld->GetTxtFld();
             if(!pTxtFld)
                 throw uno::RuntimeException();
             SwPosition aPosition( pTxtFld->GetTxtNode() );
@@ -1986,63 +2071,62 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         }
 
         //#i100374# notify SwPostIt about new field content
-        if (RES_POSTITFLD== nWhich && pFmtFld)
+        if (RES_POSTITFLD == nWhich && m_pImpl->m_pFmtFld)
         {
-            const_cast<SwFmtFld*>(pFmtFld)->Broadcast(
+            const_cast<SwFmtFld*>(m_pImpl->m_pFmtFld)->Broadcast(
                     SwFmtFldHint( 0, SWFMTFLD_CHANGED ));
         }
 
         // fdo#42073 notify SwTxtFld about changes of the expanded string
-        if (pFmtFld->GetTxtFld())
+        if (m_pImpl->m_pFmtFld->GetTxtFld())
         {
-            pFmtFld->GetTxtFld()->Expand();
+            m_pImpl->m_pFmtFld->GetTxtFld()->Expand();
         }
 
         //#i100374# changing a document field should set the modify flag
-        SwDoc* pDoc = GetDoc();
+        SwDoc* pDoc = m_pImpl->m_pDoc;
         if (pDoc)
             pDoc->SetModified();
 
     }
-    else if(m_pProps)
+    else if (m_pImpl->m_pProps)
     {
-        String* pStr = 0;
         sal_Bool* pBool = 0;
         switch(pEntry->nWID)
         {
         case FIELD_PROP_PAR1:
-            pStr = &m_pProps->sPar1;
+            rValue >>= m_pImpl->m_pProps->sPar1;
             break;
         case FIELD_PROP_PAR2:
-            pStr = &m_pProps->sPar2;
+            rValue >>= m_pImpl->m_pProps->sPar2;
             break;
         case FIELD_PROP_PAR3:
-            pStr = &m_pProps->sPar3;
+            rValue >>= m_pImpl->m_pProps->sPar3;
             break;
         case FIELD_PROP_PAR4:
-            pStr = &m_pProps->sPar4;
+            rValue >>= m_pImpl->m_pProps->sPar4;
             break;
         case FIELD_PROP_FORMAT:
-            rValue >>= m_pProps->nFormat;
-            m_pProps->bFormatIsDefault = false;
+            rValue >>= m_pImpl->m_pProps->nFormat;
+            m_pImpl->m_pProps->bFormatIsDefault = false;
             break;
         case FIELD_PROP_SUBTYPE:
-            m_pProps->nSubType = SWUnoHelper::GetEnumAsInt32( rValue );
+            m_pImpl->m_pProps->nSubType = SWUnoHelper::GetEnumAsInt32(rValue);
             break;
         case FIELD_PROP_BYTE1 :
-            rValue >>= m_pProps->nByte1;
+            rValue >>= m_pImpl->m_pProps->nByte1;
             break;
         case FIELD_PROP_BOOL1 :
-            pBool = &m_pProps->bBool1;
+            pBool = &m_pImpl->m_pProps->bBool1;
             break;
         case FIELD_PROP_BOOL2 :
-            pBool = &m_pProps->bBool2;
+            pBool = &m_pImpl->m_pProps->bBool2;
             break;
         case FIELD_PROP_BOOL3 :
-            pBool = &m_pProps->bBool3;
+            pBool = &m_pImpl->m_pProps->bBool3;
             break;
         case FIELD_PROP_BOOL4:
-            pBool = &m_pProps->bBool4;
+            pBool = &m_pImpl->m_pProps->bBool4;
         break;
         case FIELD_PROP_DATE :
         {
@@ -2050,7 +2134,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
                 throw lang::IllegalArgumentException();
 
             util::Date aTemp = *(const util::Date*)rValue.getValue();
-            m_pProps->aDate = Date(aTemp.Day, aTemp.Month, aTemp.Year);
+            m_pImpl->m_pProps->aDate = Date(aTemp.Day, aTemp.Month, aTemp.Year);
         }
         break;
         case FIELD_PROP_USHORT1:
@@ -2059,35 +2143,33 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
                  sal_Int16 nVal = 0;
                 rValue >>= nVal;
                 if( FIELD_PROP_USHORT1 == pEntry->nWID)
-                    m_pProps->nUSHORT1 = nVal;
+                    m_pImpl->m_pProps->nUSHORT1 = nVal;
                 else
-                    m_pProps->nUSHORT2 = nVal;
+                    m_pImpl->m_pProps->nUSHORT2 = nVal;
             }
             break;
         case FIELD_PROP_SHORT1:
-            rValue >>= m_pProps->nSHORT1;
+            rValue >>= m_pImpl->m_pProps->nSHORT1;
             break;
         case FIELD_PROP_DOUBLE:
             if(rValue.getValueType() != ::getCppuType(static_cast<const double*>(0)))
                 throw lang::IllegalArgumentException();
-            rValue >>= m_pProps->fDouble;
+            rValue >>= m_pImpl->m_pProps->fDouble;
             break;
 
         case FIELD_PROP_DATE_TIME :
-            if(!m_pProps->pDateTime)
-                m_pProps->pDateTime = new util::DateTime;
-            rValue >>= (*m_pProps->pDateTime);
+            if (!m_pImpl->m_pProps->pDateTime)
+                m_pImpl->m_pProps->pDateTime = new util::DateTime;
+            rValue >>= (*m_pImpl->m_pProps->pDateTime);
             break;
         case FIELD_PROP_PROP_SEQ:
-            rValue >>= m_pProps->aPropSeq;
+            rValue >>= m_pImpl->m_pProps->aPropSeq;
             break;
         case FIELD_PROP_STRINGS:
-            rValue >>= m_pProps->aStrings;
+            rValue >>= m_pImpl->m_pProps->aStrings;
             break;
         }
-        if( pStr )
-            ::GetString( rValue, *pStr );
-        else if( pBool )
+        if (pBool)
         {
             if( rValue.getValueType() == getCppuBooleanType() )
                 *pBool = *(sal_Bool*)rValue.getValue();
@@ -2099,14 +2181,15 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         throw uno::RuntimeException();
 }
 
-uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+    uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    const SwField* pField = GetField();
+    SwField const*const pField = m_pImpl->GetField();
     const SfxItemPropertySet* _pPropSet = aSwMapProvider.GetPropertySet(
-                                lcl_GetPropertyMapOfService( m_nServiceId));
+                lcl_GetPropertyMapOfService(m_pImpl->m_nServiceId));
     const SfxItemPropertySimpleEntry*   pEntry = _pPropSet->getPropertyMap().getByName(rPropertyName);
     if(!pEntry )
     {
@@ -2145,7 +2228,7 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
                 // in order to have the information about fields
                 // correctly evaluated the document needs a layout
                 // (has to be already formatted)
-                SwDoc *pDoc = GetDoc();
+                SwDoc *pDoc = m_pImpl->m_pDoc;
                 ViewShell *pViewShell = 0;
                 SwEditShell *pEditShell = pDoc ? pDoc->GetEditShell( &pViewShell ) : 0;
                 if (pEditShell)
@@ -2156,8 +2239,10 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
                     throw uno::RuntimeException();
 
                 // get text node for the text field
-                const SwFmtFld *pFldFmt = GetFldFmt();
-                const SwTxtFld* pTxtFld = pFldFmt ? pFmtFld->GetTxtFld() : 0;
+                const SwFmtFld *pFldFmt =
+                    (m_pImpl->GetField()) ? m_pImpl->m_pFmtFld : 0;
+                const SwTxtFld* pTxtFld = (pFldFmt)
+                    ? m_pImpl->m_pFmtFld->GetTxtFld() : 0;
                 if(!pTxtFld)
                     throw uno::RuntimeException();
                 const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
@@ -2198,80 +2283,81 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
             else
                 pField->QueryValue( aRet, pEntry->nWID );
         }
-        else if( m_pProps )     // currently just a descriptor...
+        else if (m_pImpl->m_pProps)     // currently just a descriptor...
         {
             switch(pEntry->nWID)
             {
             case FIELD_PROP_TEXT:
                 {
-                    if (!m_pTextObject)
+                    if (!m_pImpl->m_pTextObject)
                     {
-                        SwTextAPIEditSource* pObj = new SwTextAPIEditSource( m_pDoc );
-                        m_pTextObject = new SwTextAPIObject( pObj );
-                        m_pTextObject->acquire();
+                        SwTextAPIEditSource* pObj =
+                            new SwTextAPIEditSource(m_pImpl->m_pDoc);
+                        m_pImpl->m_pTextObject = new SwTextAPIObject( pObj );
+                        m_pImpl->m_pTextObject->acquire();
                     }
 
-                    uno::Reference < text::XText > xText( m_pTextObject  );
+                    uno::Reference<text::XText> xText(m_pImpl->m_pTextObject);
                     aRet <<= xText;
                     break;
                 }
             case FIELD_PROP_PAR1:
-                aRet <<= OUString(m_pProps->sPar1);
+                aRet <<= m_pImpl->m_pProps->sPar1;
                 break;
             case FIELD_PROP_PAR2:
-                aRet <<= OUString(m_pProps->sPar2);
+                aRet <<= m_pImpl->m_pProps->sPar2;
                 break;
             case FIELD_PROP_PAR3:
-                aRet <<= OUString(m_pProps->sPar3);
+                aRet <<= m_pImpl->m_pProps->sPar3;
                 break;
             case FIELD_PROP_PAR4:
-                aRet <<= OUString(m_pProps->sPar4);
+                aRet <<= m_pImpl->m_pProps->sPar4;
                 break;
             case FIELD_PROP_FORMAT:
-                aRet <<= m_pProps->nFormat;
+                aRet <<= m_pImpl->m_pProps->nFormat;
                 break;
             case FIELD_PROP_SUBTYPE:
-                aRet <<= m_pProps->nSubType;
+                aRet <<= m_pImpl->m_pProps->nSubType;
                 break;
             case FIELD_PROP_BYTE1 :
-                aRet <<= m_pProps->nByte1;
+                aRet <<= m_pImpl->m_pProps->nByte1;
                 break;
             case FIELD_PROP_BOOL1 :
-                aRet.setValue(&m_pProps->bBool1, ::getCppuBooleanType());
+                aRet.setValue(&m_pImpl->m_pProps->bBool1, ::getCppuBooleanType());
                 break;
             case FIELD_PROP_BOOL2 :
-                aRet.setValue(&m_pProps->bBool2, ::getCppuBooleanType());
+                aRet.setValue(&m_pImpl->m_pProps->bBool2, ::getCppuBooleanType());
                 break;
             case FIELD_PROP_BOOL3 :
-                aRet.setValue(&m_pProps->bBool3, ::getCppuBooleanType());
+                aRet.setValue(&m_pImpl->m_pProps->bBool3, ::getCppuBooleanType());
                 break;
             case FIELD_PROP_BOOL4 :
-                aRet.setValue(&m_pProps->bBool4, ::getCppuBooleanType());
+                aRet.setValue(&m_pImpl->m_pProps->bBool4, ::getCppuBooleanType());
                 break;
             case FIELD_PROP_DATE :
-                aRet.setValue(&m_pProps->aDate, ::getCppuType(static_cast<const util::Date*>(0)));
+                aRet.setValue(&m_pImpl->m_pProps->aDate, ::getCppuType(static_cast<const util::Date*>(0)));
                 break;
             case FIELD_PROP_USHORT1:
-                aRet <<= (sal_Int16)m_pProps->nUSHORT1;
+                aRet <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT1);
                 break;
             case FIELD_PROP_USHORT2:
-                aRet <<= (sal_Int16)m_pProps->nUSHORT2;
+                aRet <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT2);
                 break;
             case FIELD_PROP_SHORT1:
-                aRet <<= m_pProps->nSHORT1;
+                aRet <<= m_pImpl->m_pProps->nSHORT1;
                 break;
             case FIELD_PROP_DOUBLE:
-                aRet <<= m_pProps->fDouble;
+                aRet <<= m_pImpl->m_pProps->fDouble;
                 break;
             case FIELD_PROP_DATE_TIME :
-                if(m_pProps->pDateTime)
-                    aRet <<= (*m_pProps->pDateTime);
+                if (m_pImpl->m_pProps->pDateTime)
+                    aRet <<= (*m_pImpl->m_pProps->pDateTime);
                 break;
             case FIELD_PROP_PROP_SEQ:
-                aRet <<= m_pProps->aPropSeq;
+                aRet <<= m_pImpl->m_pProps->aPropSeq;
                 break;
             case FIELD_PROP_STRINGS:
-                aRet <<= m_pProps->aStrings;
+                aRet <<= m_pImpl->m_pProps->aStrings;
                 break;
             case FIELD_PROP_IS_FIELD_USED:
             case FIELD_PROP_IS_FIELD_DISPLAYED:
@@ -2305,11 +2391,11 @@ void SwXTextField::removeVetoableChangeListener(const OUString& /*PropertyName*/
     OSL_FAIL("not implemented");
 }
 
-void SwXTextField::update(  ) throw (uno::RuntimeException)
+void SAL_CALL SwXTextField::update() throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    const SwField* pFld = GetField();
-    if(pFld)
+    SwField const*const pFld = m_pImpl->GetField();
+    if (pFld)
     {
         switch(pFld->Which())
         {
@@ -2354,13 +2440,14 @@ void SwXTextField::update(  ) throw (uno::RuntimeException)
             break;
         }
         // Text formatting has to be triggered.
-        const_cast<SwFmtFld*>(pFmtFld)->ModifyNotification( 0, 0 );
+        const_cast<SwFmtFld*>(m_pImpl->m_pFmtFld)->ModifyNotification(0, 0);
     }
     else
-        m_bCallUpdate = sal_True;
+        m_pImpl->m_bCallUpdate = true;
 }
 
-OUString SwXTextField::getImplementationName(void) throw( uno::RuntimeException )
+OUString SAL_CALL SwXTextField::getImplementationName()
+throw (uno::RuntimeException)
 {
     return OUString("SwXTextField");
 }
@@ -2381,9 +2468,11 @@ static OUString OldNameToNewName_Impl( const OUString &rOld )
     return sServiceNameCC;
 }
 
-sal_Bool SwXTextField::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SAL_CALL SwXTextField::supportsService(const OUString& rServiceName)
+throw (uno::RuntimeException)
 {
-    OUString sServiceName = SwXServiceProvider::GetProviderName(m_nServiceId);
+    OUString sServiceName =
+        SwXServiceProvider::GetProviderName(m_pImpl->m_nServiceId);
 
     // case-corected version of service-name (see #i67811)
     // (need to supply both because of compatibility to older versions)
@@ -2394,9 +2483,11 @@ sal_Bool SwXTextField::supportsService(const OUString& rServiceName) throw( uno:
                 RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextContent"));
 }
 
-uno::Sequence< OUString > SwXTextField::getSupportedServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SwXTextField::getSupportedServiceNames()
+throw (uno::RuntimeException)
 {
-    OUString sServiceName = SwXServiceProvider::GetProviderName(m_nServiceId);
+    OUString sServiceName =
+        SwXServiceProvider::GetProviderName(m_pImpl->m_nServiceId);
 
     // case-corected version of service-name (see #i67811)
     // (need to supply both because of compatibility to older versions)
@@ -2412,20 +2503,20 @@ uno::Sequence< OUString > SwXTextField::getSupportedServiceNames(void) throw( un
     return aRet;
 }
 
-void SwXTextField::Invalidate()
+void SwXTextField::Impl::Invalidate()
 {
     if (GetRegisteredIn())
     {
-        ((SwModify*)GetRegisteredIn())->Remove(this);
-        pFmtFld = 0;
+        GetRegisteredInNonConst()->Remove(this);
+        m_pFmtFld = 0;
         m_pDoc = 0;
-        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
-        m_pImpl->m_EventListeners.disposeAndClear(ev);
+        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
+        m_EventListeners.disposeAndClear(ev);
     }
 }
 
-
-void SwXTextField::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
+void SwXTextField::Impl::Modify(
+        SfxPoolItem const*const pOld, SfxPoolItem const*const pNew)
 {
     switch( pOld ? pOld->Which() : 0 )
     {
@@ -2442,16 +2533,16 @@ void SwXTextField::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
             Invalidate();
         break;
     case RES_FIELD_DELETED:
-        if( (void*)pFmtFld == ((SwPtrMsgPoolItem *)pOld)->pObject )
+        if ((void*)m_pFmtFld == ((SwPtrMsgPoolItem *)pOld)->pObject)
             Invalidate();
         break;
     }
 }
 
-const SwField*  SwXTextField::GetField() const
+const SwField*  SwXTextField::Impl::GetField() const
 {
-    if(GetRegisteredIn() && pFmtFld)
-        return  pFmtFld->GetFld();
+    if (GetRegisteredIn() && m_pFmtFld)
+        return m_pFmtFld->GetFld();
     return 0;
 }
 
@@ -2826,7 +2917,8 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc* pDc) :
             bool bSkip = !pTxtFld ||
                          !pTxtFld->GetpTxtNode()->GetNodes().IsDocNodes();
             if (!bSkip)
-                pItems[ nFillPos++ ] = new SwXTextField(*pCurFldFmt, pDoc);
+                pItems[ nFillPos++ ] =
+                    SwXTextField::CreateXTextField(*pDoc, *pCurFldFmt);
             pCurFldFmt = aIter.Next();
 
             // enlarge sequence if necessary
