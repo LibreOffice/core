@@ -24,4 +24,11 @@ $(eval $(call gb_Module_add_targets,cppcanvas,\
 	Library_mtfrenderer \
 ))
 
+# FIXME: should generalize these ...
+ifeq ($(ENABLE_CAIRO_CANVAS),TRUE)
+$(eval $(call gb_Module_add_check_targets,cppcanvas,\
+    CppunitTest_cppcanvas_test \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
