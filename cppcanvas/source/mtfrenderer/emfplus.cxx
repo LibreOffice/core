@@ -1618,11 +1618,13 @@ namespace cppcanvas
                                 double cellSize = setFont (flags & 0xff, rFactoryParms, rState);
                                 rState.textColor = COLOR( brushId );
 
+                                ::basegfx::B2DPoint point( Map( lx + 0.15*cellSize, ly + cellSize ) );
+
                                 ActionSharedPtr pTextAction(
                                     TextActionFactory::createTextAction(
                                                                         // position is just rough guess for now
                                                                         // we should calculate it exactly from layoutRect or font
-                                        ::vcl::unotools::pointFromB2DPoint ( Map( lx + 0.15*cellSize, ly + cellSize ) ),
+                                        ::vcl::unotools::pointFromB2DPoint ( point ),
                                         ::Size(),
                                         ::Color(),
                                         ::Size(),
@@ -1863,9 +1865,11 @@ namespace cppcanvas
                             if( flags & 0x8000 )
                                 rState.textColor = COLOR( brushIndexOrColor );
 
+                            ::basegfx::B2DPoint point( Map( charsPosX[0], charsPosY[0] ) );
+
                             ActionSharedPtr pTextAction(
                                     TextActionFactory::createTextAction(
-                                        ::vcl::unotools::pointFromB2DPoint ( Map( charsPosX[0], charsPosY[0] ) ),
+                                        ::vcl::unotools::pointFromB2DPoint ( point ),
                                         ::Size(),
                                         ::Color(),
                                         ::Size(),
