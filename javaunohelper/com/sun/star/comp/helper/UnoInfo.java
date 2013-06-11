@@ -90,7 +90,8 @@ public final class UnoInfo {
         String[] jarFileNames = new String[] {
             "jurt.jar",
             "ridl.jar",
-            "juh.jar" };
+            "juh.jar",
+            "unoil.jar" };
 
         return getURLs( jarFileNames );
     }
