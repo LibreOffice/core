@@ -780,8 +780,8 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
 
     // now get back the layouted text size from outliner
-    const Size aOutlinerTextSiz(rOutliner.GetPaperSize());
-    const basegfx::B2DVector aOutlinerScale(aOutlinerTextSiz.Width(), aOutlinerTextSiz.Height());
+    const Size aOutlinerTextSize(rOutliner.GetPaperSize());
+    const basegfx::B2DVector aOutlinerScale(aOutlinerTextSize.Width(), aOutlinerTextSize.Height());
     basegfx::B2DVector aAdjustTranslate(0.0, 0.0);
 
     // correct horizontal translation using the now known text size
@@ -962,8 +962,8 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
     rOutliner.SetControlWord(nOriginalControlWord);
 
     // now get back the layouted text size from outliner
-    const Size aOutlinerTextSiz(rOutliner.GetPaperSize());
-    const basegfx::B2DVector aOutlinerScale(aOutlinerTextSiz.Width(), aOutlinerTextSiz.Height());
+    const Size aOutlinerTextSize(rOutliner.GetPaperSize());
+    const basegfx::B2DVector aOutlinerScale(aOutlinerTextSize.Width(), aOutlinerTextSize.Height());
     basegfx::B2DVector aAdjustTranslate(0.0, 0.0);
 
     // For draw objects containing text correct hor/ver alignment if text is bigger
@@ -1095,10 +1095,10 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
 
     // now get back the laid out text size from outliner
-    const Size aOutlinerTextSiz(rOutliner.CalcTextSize());
+    const Size aOutlinerTextSize(rOutliner.CalcTextSize());
     const basegfx::B2DVector aOutlinerScale(
-        basegfx::fTools::equalZero(aOutlinerTextSiz.Width()) ? 1.0 : aOutlinerTextSiz.Width(),
-        basegfx::fTools::equalZero(aOutlinerTextSiz.Height()) ? 1.0 : aOutlinerTextSiz.Height());
+        basegfx::fTools::equalZero(aOutlinerTextSize.Width()) ? 1.0 : aOutlinerTextSize.Width(),
+        basegfx::fTools::equalZero(aOutlinerTextSize.Height()) ? 1.0 : aOutlinerTextSize.Height());
 
     // prepare matrices to apply to newly created primitives
     basegfx::B2DHomMatrix aNewTransformA;
