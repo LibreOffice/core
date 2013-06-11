@@ -72,6 +72,7 @@ public:
     void testI120928();
     void testFdo64826();
     void testPageBackground();
+    void testFdo65655();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -121,6 +122,7 @@ void Test::run()
         {"i120928.docx", &Test::testI120928},
         {"fdo64826.docx", &Test::testFdo64826},
         {"page-background.docx", &Test::testPageBackground},
+        {"fdo65655.docx", &Test::testFdo65655},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -686,6 +688,20 @@ void Test::testPageBackground()
     // 'Document Background' wasn't exported.
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
+}
+
+void Test::testFdo65655()
+{
+    // The problem was that the DOCX had a non-blank odd footer and a blank even footer
+    // The 'Different Odd & Even Pages' was turned on
+    // However - LO assumed that because the 'even' footer is blank - it should ignore the 'Different Odd & Even Pages' flag
+    // So it did not import it and did not export it
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    sal_Bool bValue = false;
+    xPropertySet->getPropertyValue("HeaderIsShared") >>= bValue;
+    CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
+    xPropertySet->getPropertyValue("FooterIsShared") >>= bValue;
+    CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

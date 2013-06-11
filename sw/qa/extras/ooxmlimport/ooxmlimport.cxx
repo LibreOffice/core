@@ -117,6 +117,7 @@ public:
     void testWatermark();
     void testPageBorderShadow();
     void testN816593();
+    void testFdo65655();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -202,6 +203,7 @@ void Test::run()
         {"watermark.docx", &Test::testWatermark},
         {"page-border-shadow.docx", &Test::testPageBorderShadow},
         {"n816593.docx", &Test::testN816593},
+        {"fdo65655.docx", &Test::testFdo65655},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1439,6 +1441,19 @@ void Test::testN816593()
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
+}
+
+void Test::testFdo65655()
+{
+    // The problem was that the DOCX had a non-blank odd footer and a blank even footer
+    // The 'Different Odd & Even Pages' was turned on
+    // However - LO assumed that because the 'even' footer is blank - it should ignore the 'Different Odd & Even Pages' flag
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    sal_Bool bValue = false;
+    xPropertySet->getPropertyValue("HeaderIsShared") >>= bValue;
+    CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
+    xPropertySet->getPropertyValue("FooterIsShared") >>= bValue;
+    CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
