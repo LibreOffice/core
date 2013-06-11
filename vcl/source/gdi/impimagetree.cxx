@@ -301,8 +301,6 @@ bool ImplImageTree::find(
     if (!m_path.second.is()) {
         try {
             m_path.second = css::packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), m_path.first + ".zip");
-        } catch (css::uno::RuntimeException &) {
-            throw;
         } catch (const css::uno::Exception & e) {
             SAL_INFO("vcl", "ImplImageTree::find exception "
                 << e.Message << " for " << m_path.first);
@@ -343,10 +341,6 @@ void ImplImageTree::loadImageLinks()
         try
         {
             m_path.second = css::packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), m_path.first + ".zip");
-        }
-        catch (css::uno::RuntimeException &)
-        {
-            throw;
         }
         catch (const css::uno::Exception & e)
         {
