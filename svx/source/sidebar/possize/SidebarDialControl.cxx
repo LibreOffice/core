@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -40,9 +41,6 @@ SidebarDialControl::SidebarDialControl (
     Init(GetOutputSizePixel());
 }
 
-
-
-
 SidebarDialControl::~SidebarDialControl (void)
 {
 }
@@ -50,12 +48,6 @@ SidebarDialControl::~SidebarDialControl (void)
 Size SidebarDialControl::GetOptimalSize() const
 {
     return LogicToPixel(Size(10, 10), MAP_APPFONT);
-}
-
-void SidebarDialControl::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
-{
-    long nMax = std::max(nWidth, nHeight);
-    DialControl::setPosSizePixel(nX, nY, nMax, nMax, nFlags);
 }
 
 void SidebarDialControl::MouseButtonDown( const MouseEvent& rMEvt )
@@ -68,9 +60,6 @@ void SidebarDialControl::MouseButtonDown( const MouseEvent& rMEvt )
         HandleMouseEvent( rMEvt.GetPosPixel(), true );
     }
 }
-
-
-
 
 void SidebarDialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
 {
@@ -94,4 +83,4 @@ void SidebarDialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
 
 } } // end of namespace svx::sidebar
 
-// eof
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
