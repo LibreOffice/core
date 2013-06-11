@@ -31,6 +31,7 @@
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtlsplt.hxx>
+#include <fmtfollowtextflow.hxx>
 
 #include <svtools/htmlcfg.hxx>
 #include <fmtrowsplt.hxx>
@@ -1237,6 +1238,7 @@ SwTableTabDlg::SwTableTabDlg(Window* pParent, SfxItemPool&,
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
     AddTabPage("table", &SwFormatTablePage::Create, 0);
+    AddTabPage("position", &SwTablePositionPage::Create, 0);
     m_nTextFlowId = AddTabPage("textflow", &SwTextFlowPage::Create, 0);
     AddTabPage("columns", &SwTableColumnPage::Create, 0);
     m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BACKGROUND), 0);
@@ -1797,6 +1799,155 @@ void SwTextFlowPage::DisablePageBreak()
     m_pPageNoNF->Disable();
 }
 
+SfxTabPage* SwTablePositionPage::Create( Window* pParent, const SfxItemSet& rAttrSet)
+{
+    return new SwTablePositionPage( pParent, rAttrSet );
+}
 
+SwTablePositionPage::SwTablePositionPage( Window* pParent, const SfxItemSet& rAttrSet )
+    : SfxTabPage(pParent, "TablePositionPage",
+        "modules/swriter/ui/tablepositionpage.ui", rAttrSet)
+{
+    get(m_pNoWrapBtn, "wrapNoneBtn");
+    get(m_pWrapAroundBtn, "wrapAroundBtn");
+    get(m_pPositionFrame, "PositionFrame");
+    get(m_pHorizontalDLB, "HorizontalPositionLB");
+    get(m_pAtHorzPosFT, "AtHorzPosFT");
+    get(m_pAtHorzPosED, "HorizontalOffsetMF");
+    get(m_pHoriRelationFT, "HorzRelationFT");
+    get(m_pHoriRelationLB, "HorizontalRelationLB");
+    get(m_pMirrorPagesCB, "MirrorPagesCB");
+    get(m_pVerticalDLB, "VerticalPositionLB");
+    get(m_pAtVertPosFT, "AtVertPosFT");
+    get(m_pAtVertPosED, "VerticalOffsetMF");
+    get(m_pVertRelationFT, "VertRelationFT");
+    get(m_pVertRelationLB, "VerticalRelationLB");
+    get(m_pFollowTextFlowCB, "FollowTextCB");
+
+    Link aLk = LINK(this, SwTablePositionPage, WrapHdl);
+    m_pNoWrapBtn->SetClickHdl(aLk);
+    m_pWrapAroundBtn->SetClickHdl(aLk);
+
+    WrapHdl(m_pNoWrapBtn);
+
+    PosHdl(m_pHorizontalDLB);
+    PosHdl(m_pVerticalDLB);
+
+    m_pHorizontalDLB->SetSelectHdl(LINK(this, SwTablePositionPage, PosHdl));
+    m_pVerticalDLB->SetSelectHdl(LINK(this, SwTablePositionPage, PosHdl));
+
+    m_pMirrorPagesCB->SetClickHdl(LINK(this, SwTablePositionPage, MirrorHdl));
+}
+
+SwTablePositionPage::~SwTablePositionPage( )
+{
+}
+
+sal_Bool SwTablePositionPage::FillItemSet( SfxItemSet& rSet )
+{
+    sal_Bool bRet = sal_True;
+
+    if (m_pPositionFrame->IsEnabled())
+    {
+        const SfxItemSet& rOldSet = GetItemSet();
+        SwFmtHoriOrient aHoriOrient( (const SwFmtHoriOrient&) rOldSet.Get(RES_HORI_ORIENT) );
+        aHoriOrient.SetPosToggle(m_pMirrorPagesCB->IsChecked());
+
+        static sal_uInt16 aHorzValues[] =
+        {
+            text::HoriOrientation::LEFT,
+            text::HoriOrientation::RIGHT,
+            text::HoriOrientation::CENTER,
+            text::HoriOrientation::NONE
+        };
+        aHoriOrient.SetHoriOrient(aHorzValues[m_pHorizontalDLB->GetSelectEntryPos()]);
+
+        static sal_uInt16 aHorzRelValues[] =
+        {
+            text::RelOrientation::FRAME,
+            text::RelOrientation::PRINT_AREA,
+            text::RelOrientation::FRAME_LEFT,
+            text::RelOrientation::FRAME_RIGHT,
+            text::RelOrientation::PAGE_LEFT,
+            text::RelOrientation::PAGE_RIGHT
+        };
+        aHoriOrient.SetRelationOrient(aHorzRelValues[m_pHoriRelationLB->GetSelectEntryPos()]);
+        SwTwips nX = static_cast< SwTwips >(m_pAtHorzPosED->Denormalize(m_pAtHorzPosED->GetValue(FUNIT_TWIP)));
+        aHoriOrient.SetPos(nX);
+        bRet |= 0 != rSet.Put( aHoriOrient );
+
+        SwFmtVertOrient aVertOrient( (const SwFmtVertOrient&) rOldSet.Get(RES_VERT_ORIENT) );
+        static sal_uInt16 aVertValues[] =
+        {
+            text::VertOrientation::TOP,
+            text::VertOrientation::BOTTOM,
+            text::VertOrientation::CENTER,
+            text::VertOrientation::NONE
+        };
+        aVertOrient.SetVertOrient(aVertValues[m_pVerticalDLB->GetSelectEntryPos()]);
+
+        static sal_uInt16 aVertRelValues[] =
+        {
+            text::RelOrientation::FRAME,
+            text::RelOrientation::PRINT_AREA,
+            text::RelOrientation::PAGE_FRAME,
+            text::RelOrientation::PAGE_PRINT_AREA
+        };
+        aVertOrient.SetRelationOrient(aVertRelValues[m_pVertRelationLB->GetSelectEntryPos()]);
+        SwTwips nY = static_cast< SwTwips >(m_pAtVertPosED->Denormalize(m_pAtVertPosED->GetValue(FUNIT_TWIP)));
+        aVertOrient.SetPos(nY);
+        bRet |= 0 != rSet.Put( aVertOrient );
+
+        if(m_pFollowTextFlowCB->IsChecked() != m_pFollowTextFlowCB->GetSavedValue())
+        {
+            bRet |= 0 != rSet.Put(SwFmtFollowTextFlow(m_pFollowTextFlowCB->IsChecked()));
+        }
+    }
+
+    return bRet;
+}
+
+void SwTablePositionPage::Reset( const SfxItemSet& rSet )
+{
+    // TODO Implement me
+    FieldUnit aMetric = ::GetDfltMetric(false);
+    SetMetric(*m_pAtHorzPosED, aMetric);
+    SetMetric(*m_pAtVertPosED, aMetric);
+}
+
+IMPL_LINK( SwTablePositionPage, WrapHdl, RadioButton *, pBtn )
+{
+    bool bNoWrap = m_pNoWrapBtn == pBtn;
+    m_pPositionFrame->Enable( !bNoWrap );
+
+    PosHdl(m_pHorizontalDLB);
+    PosHdl(m_pVerticalDLB);
+
+    return 0;
+}
+
+IMPL_LINK( SwTablePositionPage, PosHdl, ListBox *, pLB )
+{
+    bool bVertical = pLB == m_pVerticalDLB;
+    bool bLastSelected = pLB->GetSelectEntryPos( ) == (pLB->GetEntryCount() - 1);
+
+    if ( !bVertical )
+    {
+        m_pAtHorzPosFT->Enable( bLastSelected );
+        m_pAtHorzPosED->Enable( bLastSelected );
+    }
+    else
+    {
+        m_pAtVertPosFT->Enable( bLastSelected );
+        m_pAtVertPosED->Enable( bLastSelected );
+    }
+    return 0;
+}
+
+IMPL_LINK( SwTablePositionPage, MirrorHdl, CheckBox*, pCB )
+{
+    // TODO Handle the Left/Right <-> Inside/Outside string changes
+    return 0;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

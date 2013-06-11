@@ -193,6 +193,38 @@ public:
     void                DisablePageBreak();
 };
 
+class SwTablePositionPage : public SfxTabPage
+{
+    RadioButton*     m_pNoWrapBtn;
+    RadioButton*     m_pWrapAroundBtn;
+
+    VclFrame*        m_pPositionFrame;
+    ListBox*         m_pHorizontalDLB;
+    FixedText*       m_pAtHorzPosFT;
+    MetricField*     m_pAtHorzPosED;
+    FixedText*       m_pHoriRelationFT;
+    ListBox*         m_pHoriRelationLB;
+    CheckBox*        m_pMirrorPagesCB;
+    ListBox*         m_pVerticalDLB;
+    FixedText*       m_pAtVertPosFT;
+    MetricField*     m_pAtVertPosED;
+    FixedText*       m_pVertRelationFT;
+    ListBox*         m_pVertRelationLB;
+    CheckBox*        m_pFollowTextFlowCB;
+
+    SwTablePositionPage( Window* pParent, const SfxItemSet& rAttrSet );
+    ~SwTablePositionPage( );
+
+    DECL_LINK( WrapHdl, RadioButton* );
+    DECL_LINK( PosHdl, ListBox* );
+    DECL_LINK( MirrorHdl, CheckBox* );
+
+public:
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
+    virtual sal_Bool    FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
