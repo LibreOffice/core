@@ -297,6 +297,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	lng \
 	lnth \
 	$(if $(MERGELIBS),merged) \
+	migrationoo2 \
+	migrationoo3 \
 	msfilter \
 	$(if $(DISABLE_SCRIPTING),,msforms) \
 	mtfrenderer \
@@ -334,12 +336,17 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(ENABLE_TDEAB),tdeab1) \
 	$(if $(ENABLE_TDEAB),tdeabdrv1) \
 	textconversiondlgs \
+	textfd \
 	tk \
 	tl \
 	$(if $(ENABLE_TELEPATHY),tubes) \
 	ucpexpand1 \
+	ucpext \
+	ucpcmis1 \
+	ucptdoc1 \
 	unordf \
 	unoxml \
+	updatefeed \
 	utl \
 	uui \
 	$(if $(DISABLE_SCRIPTING),,vbaevents) \
@@ -394,7 +401,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	spa \
 	spell \
 	sts \
-	textfd \
 	vclplug_tde \
 	vclplug_kde \
 	vclplug_kde4 \
@@ -474,13 +480,22 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
+	$(if $(ENABLE_GSTREAMER),avmediagst) \
+	$(if $(ENABLE_GSTREAMER_0_10),avmediagst_0_10) \
 	cached1 \
+	collator_data \
 	comphelper \
+	dbpool2 \
 	deployment \
+	deploymentgui \
+	dict_ja \
+	dict_zh \
+	embobj \
 	fileacc \
 	$(if $(SOLAR_JAVA),hsqldb) \
 	i18nlangtag \
 	i18nutil \
+	index_data \
 	localedata_en \
 	localedata_es \
 	localedata_euro \
@@ -490,25 +505,25 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(if $(DISABLE_SCRIPTING),,scriptframe) \
 	sdbc2 \
 	sofficeapp \
+	srtrs1 \
+	textconv_dict \
 	tvhlp1 \
 	ucb1 \
 	ucbhelper \
 	ucpfile1 \
+	ucpftp1 \
+	ucpchelp1 \
+	ucphier1 \
+	ucppkg1 \
+	unopkgapp \
+	xmlsecurity \
+	xsec_fw \
 	xstor \
 ))
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	avmediagst \
-	avmediagst_0_10 \
 	avmediawin \
 	bluez_bluetooth \
-	collator_data \
-	dbpool2 \
-	deploymentgui \
-	dict_ja \
-	dict_zh \
-	embobj \
 	emboleobj \
-	index_data \
 	java_uno_accessbridge \
 	libreoffice \
 	macab1 \
@@ -518,16 +533,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	pyuno \
 	pyuno_wrapper \
 	recentfile \
-	srtrs1 \
-	textconv_dict \
 	ucpdav1 \
-	ucpftp1 \
-	ucpchelp1 \
-	ucphier1 \
-	ucppkg1 \
-	unopkgapp \
-	xmlsecurity \
-	xsec_fw \
 	xsec_xmlsec \
 	$(if $(filter $(OS),ANDROID), \
 		lo-bootstrap \
@@ -578,17 +584,11 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	cmdmail \
 	macbe1 \
-	migrationoo2 \
-	migrationoo3 \
 	OGLTrans \
 	pdfimport \
 	postgresql-sdbc \
 	postgresql-sdbc-impl \
 	pythonloader \
-	ucpcmis1 \
-	ucpext \
-	ucptdoc1 \
-	updatefeed \
 	$(if $(filter $(OS),MACOSX), \
 		fps_aqua \
 	) \
