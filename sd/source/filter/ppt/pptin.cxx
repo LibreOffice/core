@@ -334,7 +334,7 @@ sal_Bool ImplSdPPTImport::Import()
                                         aString = OUString();
                                     else
                                     {
-                                        std::vector<String>::const_iterator pIter =
+                                        std::vector<OUString>::const_iterator pIter =
                                                 std::find(maSlideNameList.begin(),maSlideNameList.end(),aString);
 
                                         if (pIter != maSlideNameList.end())
@@ -449,8 +449,8 @@ sal_Bool ImplSdPPTImport::Import()
                                             {   // second pass, searching for a SlideName
                                                 for ( nToken = 0; nToken < nTokenCount; nToken++ )
                                                 {
-                                                    String aToken( aString.getToken( nToken, (sal_Unicode)',' ) );
-                                                    std::vector<String>::const_iterator pIter =
+                                                    OUString aToken( aString.getToken( nToken, (sal_Unicode)',' ) );
+                                                    std::vector<OUString>::const_iterator pIter =
                                                             std::find(maSlideNameList.begin(),maSlideNameList.end(),aToken);
 
                                                     if (pIter != maSlideNameList.end())
@@ -482,9 +482,7 @@ sal_Bool ImplSdPPTImport::Import()
                                                     pHyperlink->aConvSubString = maSlideNameList[ nPageNumber ];
                                                 if ( pHyperlink->aConvSubString.isEmpty() )
                                                 {
-                                                    pHyperlink->aConvSubString = OUString( SdResId( STR_PAGE ) );
-                                                    pHyperlink->aConvSubString += " ";
-                                                    pHyperlink->aConvSubString += ( mpDoc->CreatePageNumValue( (sal_uInt16)nPageNumber + 1 ) );
+                                                    pHyperlink->aConvSubString = OUString( SdResId( STR_PAGE ) ) + " " + ( mpDoc->CreatePageNumValue( (sal_uInt16)nPageNumber + 1 ) );
                                                 }
                                             }
                                         }
@@ -1177,10 +1175,10 @@ sal_Bool ImplSdPPTImport::Import()
     for ( i = 0; ( i < nSlideCount) && ( i < maSlideNameList.size() ); i++ )
     {
         SdPage* pPage = mpDoc->GetSdPage( i, PK_STANDARD );
-        String &aName = maSlideNameList[ i ];
+        OUString &aName = maSlideNameList[ i ];
         if ( pPage )
         {
-            if ( aName.Len() )
+            if ( !aName.isEmpty() )
                 pPage->SetName( aName );
             else
                 aName = pPage->GetName();
