@@ -16,6 +16,24 @@
       "revId": "7245f68c536f614c1e0988e6369863126e6ddc0c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7hQ\u003d",
+        "filename": "sd/source/filter/ppt/pptin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-06-11T07:49:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXH//7hg\u003d",
+      "revId": "7245f68c536f614c1e0988e6369863126e6ddc0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
