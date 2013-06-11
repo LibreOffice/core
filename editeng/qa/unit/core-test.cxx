@@ -324,8 +324,9 @@ void Test::testAutocorrect()
         OUString sExpected("foo");
 
         TestAutoCorrDoc aFoo(sInput, LANGUAGE_ENGLISH_US);
+        String const& rInput2(reinterpret_cast<String const&>(aFoo.getResult()));
         aAutoCorrect.DoAutoCorrect(aFoo,
-            reinterpret_cast<String const&>(sInput),
+            rInput2,
             sInput.getLength(), cNextChar, true);
 
         CPPUNIT_ASSERT_EQUAL(sExpected, aFoo.getResult());
