@@ -2526,7 +2526,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
     }
     if ( eTextAnchorType != text::TextContentAnchorType_AS_CHARACTER )
     {
-        // determine current x-postion
+        // determine current x-position
         OUString aHoriPosPropStr("HoriOrientPosition");
         uno::Any aHoriPos( getPropertyValue( aHoriPosPropStr ) );
         sal_Int32 dCurrX = 0;
@@ -2556,7 +2556,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
 
     // handle y-position
     {
-        // determine current y-postion
+        // determine current y-position
         OUString aVertPosPropStr("VertOrientPosition");
         uno::Any aVertPos( getPropertyValue( aVertPosPropStr ) );
         sal_Int32 dCurrY = 0;
