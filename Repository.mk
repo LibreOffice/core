@@ -216,6 +216,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,math, \
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	acc \
 	avmedia \
+	$(if $(ENABLE_GSTREAMER),avmediagst) \
+	$(if $(ENABLE_GSTREAMER_0_10),avmediagst_0_10) \
 	$(if $(DISABLE_SCRIPTING),,basctl) \
 	$(if $(DISABLE_SCRIPTING),,basprov) \
 	basegfx \
@@ -227,23 +229,29 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	chartcore \
 	chartcontroller \
 	cppcanvas \
+	collator_data \
 	configmgr \
 	ctl \
 	cui \
 	dba \
 	dbase \
 	dbmm \
+	dbpool2 \
 	$(if $(DISABLE_DBCONNECTIVITY),,dbtools) \
 	dbaxml \
+	deploymentgui \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
 	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
 	$(if $(DISABLE_SCRIPTING),,dlgprov) \
+	dict_ja \
+	dict_zh \
 	$(if $(ENABLE_DIRECTX),directx9canvas) \
 	drawinglayer \
 	editeng \
 	egi \
 	eme \
+	embobj \
 	$(if $(filter WNT,$(OS)),$(if $(DISABLE_ATL),,emser)) \
 	epb \
 	epg \
@@ -275,6 +283,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),helplinker) \
 	i18npool \
 	i18nsearch \
+	index_data \
 	hatchwindowfactory \
 	$(if $(SOLAR_JAVA),hsqldb) \
 	hyphen \
@@ -303,6 +312,8 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	lng \
 	lnth \
 	$(if $(MERGELIBS),merged) \
+	migrationoo2 \
+	migrationoo3 \
 	msfilter \
 	$(if $(DISABLE_SCRIPTING),,msforms) \
 	mtfrenderer \
@@ -332,6 +343,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	sot \
 	spell \
 	$(if $(ENABLE_HEADLESS),,spl) \
+	srtrs1 \
 	$(if $(DISABLE_SCRIPTING),,stringresource) \
 	svgio \
 	svl \
@@ -342,14 +354,25 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	syssh \
 	$(if $(ENABLE_TDEAB),tdeab1) \
 	$(if $(ENABLE_TDEAB),tdeabdrv1) \
+	textconv_dict \
 	textconversiondlgs \
+	textfd \
 	tk \
 	tl \
 	$(if $(ENABLE_TELEPATHY),tubes) \
 	tvhlp1 \
 	ucpexpand1 \
+	ucpext \
+	ucpchelp1 \
+	ucpcmis1 \
+	ucptdoc1 \
+	ucpftp1 \
+	ucphier1 \
+	ucppkg1 \
+	unopkgapp \
 	unordf \
 	unoxml \
+	updatefeed \
 	utl \
 	uui \
 	$(if $(DISABLE_SCRIPTING),,vbaevents) \
@@ -357,9 +380,11 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	vcl \
 	vclcanvas \
 	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))),vclplug_gen) \
+	xsec_fw \
 	xmlscript \
 	xmlfa \
 	xmlfd \
+	xmlsecurity \
 	xo \
 	xof \
 	xsltdlg \
@@ -403,7 +428,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	simplecm \
 	spa \
 	sts \
-	textfd \
 	vclplug_tde \
 	vclplug_kde \
 	vclplug_kde4 \
@@ -497,18 +521,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	xstor \
 ))
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	avmediagst \
-	avmediagst_0_10 \
 	avmediawin \
 	bluez_bluetooth \
-	collator_data \
-	dbpool2 \
-	deploymentgui \
-	dict_ja \
-	dict_zh \
-	embobj \
 	emboleobj \
-	index_data \
 	java_uno_accessbridge \
 	libreoffice \
 	macab1 \
@@ -518,16 +533,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	pyuno \
 	pyuno_wrapper \
 	recentfile \
-	srtrs1 \
-	textconv_dict \
 	ucpdav1 \
-	ucpftp1 \
-	ucpchelp1 \
-	ucphier1 \
-	ucppkg1 \
-	unopkgapp \
-	xmlsecurity \
-	xsec_fw \
 	xsec_xmlsec \
 	$(if $(filter $(OS),ANDROID), \
 		lo-bootstrap \
@@ -578,17 +584,11 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	cmdmail \
 	macbe1 \
-	migrationoo2 \
-	migrationoo3 \
 	OGLTrans \
 	pdfimport \
 	postgresql-sdbc \
 	postgresql-sdbc-impl \
 	pythonloader \
-	ucpcmis1 \
-	ucpext \
-	ucptdoc1 \
-	updatefeed \
 	$(if $(filter $(OS),MACOSX), \
 		fps_aqua \
 	) \
