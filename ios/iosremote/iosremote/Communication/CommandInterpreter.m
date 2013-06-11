@@ -73,13 +73,11 @@
                               AtIndex:slideNumber];
             [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_PREVIEW object:[NSNumber numberWithUnsignedInt:slideNumber]];
         } else if ([instruction isEqualToString:@"slide_notes"]){
-            NSLog(@"Interpreter: slide_notes");
             uint slideNumber = [[command objectAtIndex:1] integerValue];
-            NSString *notes;
+            NSMutableString *notes = [[NSMutableString alloc] init];
             for (int i = 2; i<command.count; ++i) {
-                [notes stringByAppendingString:[command objectAtIndex:i]];
+                [notes appendString:[command objectAtIndex:i]];
             }
-            
             [self.slideShow putNotes:notes
                               AtIndex:slideNumber];
             [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_NOTES object: [NSNumber numberWithUnsignedInt:slideNumber]];

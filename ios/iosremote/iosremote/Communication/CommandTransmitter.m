@@ -62,11 +62,11 @@
  */
 - (void) blankScreenWithColor:(UIColor*)color
 {
-    CGColorRef colorRef = color.CGColor;
-    NSString *colorString = [CIColor colorWithCGColor:colorRef].stringRepresentation;
+//    CGColorRef colorRef = color.CGColor;
+//    NSString *colorString = [CIColor colorWithCGColor:colorRef].stringRepresentation;
     
     // Need new server-end interface, since this is a platform dependent representation
-    [self.client sendCommand:[NSString stringWithFormat:@"presentation_blank_screen\n%@\n\n", colorString]];
+//    [self.client sendCommand:[NSString stringWithFormat:@"presentation_blank_screen\n%@\n\n", colorString]];
 }
 
 - (void) resume

@@ -24,21 +24,36 @@
 
 - (SlideShow *) init{
     self = [super init];
+    self.imagesArray = [[NSMutableArray alloc] init];
+    self.notesArray = [[NSMutableArray alloc] init];
     _size = 0;
     _currentSlide = 0;
     return self;
 }
 
 - (void) putImage: (NSString *)img AtIndex: (uint) index{
-    [Base64 initialize];
-    NSData* data = [Base64 decode:img];
+    NSData* data = [NSData dataWithBase64String:img];
     UIImage* image = [UIImage imageWithData:data];
     [self.imagesArray insertObject:image atIndex:index];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"IMAGE_READY" object:nil];
 }
 
 - (void) putNotes: (NSString *)notes AtIndex: (uint) index{
     [self.notesArray insertObject:notes atIndex:index];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"NOTE_READY" object:nil];
 }
+
+- (UIImage *) getImageAtIndex: (uint) index
+{
+    return [self.imagesArray objectAtIndex:index];
+}
+
+- (NSString *) getNotesAtIndex: (uint) index
+{
+    return [self.notesArray objectAtIndex:index];
+}
+
 
 
 @end

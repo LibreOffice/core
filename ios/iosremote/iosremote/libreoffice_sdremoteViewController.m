@@ -10,6 +10,7 @@
 #import "libreoffice_sdremoteViewController.h"
 #import "Server.h"
 #import "Client.h"
+#import "slideShowViewController.h"
 
 @interface libreoffice_sdremoteViewController ()
 
@@ -39,9 +40,16 @@
     self.slideShowPreviewStartObserver = [self.center addObserverForName:STATUS_CONNECTED_SLIDESHOW_RUNNING object:nil
                                                      queue:mainQueue usingBlock:^(NSNotification *note) {
                                                          NSLog(@"Received performSegue!");
-                                                         [self performSegueWithIdentifier:@"slidesPreview" sender:self];
+                                                         [self performSegueWithIdentifier:@"slidesPreviewSegue" sender:self];
                                                      }];
 
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"slidesPreviewSegue"]) {
+        slideShowViewController *destViewController = segue.destinationViewController;
+        destViewController.slideshow = [self.interpreter slideShow];
+    }
 }
 
 - (void)didReceiveMemoryWarning

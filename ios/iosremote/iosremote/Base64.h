@@ -1,29 +1,16 @@
-//
-//  Base64.h
-//  CryptTest
-//
-//  Created by Kiichi Takeuchi on 4/20/10.
-//  Copyright 2010 ObjectGraph LLC. All rights reserved.
-// 
-// Original Source Code is donated by Cyrus
-// Public Domain License
-// http://www.cocoadev.com/index.pl?BaseSixtyFour
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 
 #import <Foundation/Foundation.h>
 
 
-@interface Base64 : NSObject {
+@interface NSData (Base64)
 
-}
-
-+ (void) initialize;
-
-+ (NSString*) encode:(const uint8_t*) input length:(NSInteger) length;
-
-+ (NSString*) encode:(NSData*) rawBytes;
-
-+ (NSData*) decode:(const char*) string length:(NSInteger) inputLength;
-
-+ (NSData*) decode:(NSString*) string;
++(id)dataWithBase64String:(NSString *)base64String;
 
 @end

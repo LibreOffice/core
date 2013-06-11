@@ -36,7 +36,18 @@
 #define STATUS_CONNECTION_FAILED @"STATUS_CONNECTION_FAILED"
 
 
+typedef enum ConnectionState : NSInteger ConnectionState;
+
+enum ConnectionState : NSInteger {
+    DISCONNECTED,
+    SEARCHING,
+    CONNECTING,
+    CONNECTED
+};
+
 
 @interface CommunicationManager : NSObject
+
+@property ConnectionState state;
 
 @end

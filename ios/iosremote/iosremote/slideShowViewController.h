@@ -7,9 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SlideShow.h"
 
 @interface slideShowViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UIImageView *image;
+@property (weak, nonatomic) IBOutlet UIWebView *lecturer_notes;
+
+@property (nonatomic, strong) SlideShow *slideshow;
+@property (nonatomic, strong) id slideShowImageReadyObserver;
+@property (nonatomic, strong) id slideShowNoteReadyObserver;
 
 @end
