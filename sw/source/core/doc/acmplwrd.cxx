@@ -221,13 +221,11 @@ SwAutoCompleteWord::SwAutoCompleteWord( sal_uInt16 nWords, sal_uInt16 nMWrdLen )
     nMinWrdLen( nMWrdLen ),
     bLockWordLst( sal_False )
 {
-    m_LookupTree = new LatinLookupTree(OUString("default"));
 }
 
 SwAutoCompleteWord::~SwAutoCompleteWord()
 {
     m_WordList.DeleteAndDestroyAll(); // so the assertion below works
-    delete m_LookupTree;
     delete pImpl;
 #if OSL_DEBUG_LEVEL > 0
     sal_uLong nStrings = SwAutoCompleteString::GetElementCount();
@@ -265,7 +263,7 @@ bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
         std::pair<editeng::SortedAutoCompleteStrings::const_iterator, bool>
             aInsPair = m_WordList.insert(pNew);
 
-        m_LookupTree->insert( OUString(aNewWord).copy(0, nWrdLen) );
+        m_LookupTree.insert( OUString(aNewWord).copy(0, nWrdLen) );
 
         if (aInsPair.second)
         {
@@ -355,15 +353,19 @@ bool SwAutoCompleteWord::GetWordsMatching(String aMatch, std::vector<String>& aW
 {
     OUString aStringRoot = OUString( aMatch );
 
-    m_LookupTree->gotoNode( aStringRoot );
-    OUString aAutocompleteWord = m_LookupTree->suggestAutoCompletion();
-    if (aAutocompleteWord.isEmpty())
+    std::vector<OUString> suggestions;
+    m_LookupTree.findSuggestions(aStringRoot, suggestions);
+
+    if (suggestions.empty())
     {
         return false;
     }
 
-    OUString aCompleteWord = aStringRoot + aAutocompleteWord;
-    aWords.push_back( String(aCompleteWord) );
+    for (size_t i = 0; i < suggestions.size(); i++)
+    {
+        aWords.push_back( String(suggestions[i]) );
+    }
+
     return true;
 }
 

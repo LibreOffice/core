@@ -149,5 +149,6 @@ $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/Node.hxx,editeng/Node.
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/TreeHead.hxx,editeng/TreeHead.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/LatinLookupTree.hxx,editeng/LatinLookupTree.hxx))
 $(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/LatinTreeNode.hxx,editeng/LatinTreeNode.hxx))
+$(eval $(call gb_Package_add_file,editeng_inc,inc/editeng/Trie.hxx,editeng/Trie.hxx))
 
 # vim: set noet sw=4 ts=4:
