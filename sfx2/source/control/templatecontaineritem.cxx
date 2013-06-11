@@ -12,8 +12,8 @@
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <drawinglayer/attribute/fillbitmapattribute.hxx>
-#include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
+#include <drawinglayer/attribute/fillgraphicattribute.hxx>
+#include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
@@ -21,6 +21,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <vcl/button.hxx>
+#include <vcl/graph.hxx>
 
 using namespace basegfx;
 using namespace basegfx::tools;
@@ -138,11 +139,12 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
 
             aSeq[nCount++] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
                                                 B2DPolyPolygon(aBounds), Color(COL_WHITE).getBColor()));
-            aSeq[nCount++] = Primitive2DReference( new FillBitmapPrimitive2D(
+            aSeq[nCount++] = Primitive2DReference( new FillGraphicPrimitive2D(
                                                 createScaleTranslateB2DHomMatrix(1.0,1.0,fPosX,fPosY),
-                                                FillBitmapAttribute(*pImage,
-                                                                    B2DPoint(0.0,0.0),
-                                                                    B2DVector(aImageSize.Width(),aImageSize.Height()),
+                                                FillGraphicAttribute(Graphic(*pImage),
+                                                                    B2DRange(
+                                                                        B2DPoint(0.0,0.0),
+                                                                        B2DPoint(aImageSize.Width(),aImageSize.Height())),
                                                                     false)
                                                 ));
 

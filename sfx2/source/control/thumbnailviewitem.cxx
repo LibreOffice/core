@@ -26,14 +26,15 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <drawinglayer/attribute/fillbitmapattribute.hxx>
-#include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
+#include <drawinglayer/attribute/fillgraphicattribute.hxx>
+#include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <vcl/button.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/texteng.hxx>
 
@@ -258,11 +259,12 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
     Point aPos = maPrev1Pos;
     Size aImageSize = maPreview1.GetSizePixel();
 
-    aSeq[nPrimitive++] = Primitive2DReference( new FillBitmapPrimitive2D(
+    aSeq[nPrimitive++] = Primitive2DReference( new FillGraphicPrimitive2D(
                                         createTranslateB2DHomMatrix(aPos.X(),aPos.Y()),
-                                        FillBitmapAttribute(maPreview1,
-                                                            B2DPoint(0,0),
-                                                            B2DVector(aImageSize.Width(),aImageSize.Height()),
+                                        FillGraphicAttribute(Graphic(maPreview1),
+                                                            B2DRange(
+                                                                B2DPoint(0,0),
+                                                                B2DPoint(aImageSize.Width(),aImageSize.Height())),
                                                             false)
                                         ));
 

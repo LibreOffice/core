@@ -11,14 +11,15 @@
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <drawinglayer/attribute/fillbitmapattribute.hxx>
-#include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
+#include <drawinglayer/attribute/fillgraphicattribute.hxx>
+#include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <vcl/button.hxx>
+#include <vcl/graph.hxx>
 
 #define SUBTITLE_SCALE_FACTOR 0.85
 
@@ -96,11 +97,12 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
     aSeq[1] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
                                         B2DPolyPolygon(aBounds), Color(COL_WHITE).getBColor()));
 
-    aSeq[2] = Primitive2DReference( new FillBitmapPrimitive2D(
+    aSeq[2] = Primitive2DReference( new FillGraphicPrimitive2D(
                                         createTranslateB2DHomMatrix(maPrev1Pos.X(),maPrev1Pos.Y()),
-                                        FillBitmapAttribute(maPreview1,
-                                                            B2DPoint(0,0),
-                                                            B2DVector(aImageSize.Width(),aImageSize.Height()),
+                                        FillGraphicAttribute(Graphic(maPreview1),
+                                                            B2DRange(
+                                                                B2DPoint(0,0),
+                                                                B2DPoint(aImageSize.Width(),aImageSize.Height())),
                                                             false)
                                         ));
 
