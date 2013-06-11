@@ -984,7 +984,7 @@ OGroupsSortingDialog::OGroupsSortingDialog( Window* _pParent
     for (size_t i = 0; i < sizeof (pControlsLst) / sizeof (pControlsLst[0]); ++i)
     {
         pControls[i]->Show(sal_True);
-        String sText = pControls[i]->GetText();
+        OUString sText = pControls[i]->GetText();
         if ( aMnemonicGenerator.CreateMnemonic(sText) )
             pControls[i]->SetText(sText);
         sal_Int32 nTextWidth = GetTextWidth(sText);

@@ -868,7 +868,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
         {
             sal_uInt16 nItemId = pMenu->GetItemId( nPos );
             if (( pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR ) &&
-                ( pMenu->GetItemText( nItemId ).Len() == 0 ))
+                ( pMenu->GetItemText( nItemId ).isEmpty()))
             {
                 String aCommand = pMenu->GetItemCommand( nItemId );
                 if ( aCommand.Len() > 0 ) {
@@ -1280,7 +1280,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         }
 
         if (( pMenu->IsMenuBar() || bAccessibilityEnabled ) &&
-            ( pMenu->GetItemText( nItemId ).Len() == 0 ))
+            ( pMenu->GetItemText( nItemId ).isEmpty() ))
         {
             if ( !aItemCommand.isEmpty() )
                 pMenu->SetItemText( nItemId, RetrieveLabelFromCommand( aItemCommand ));
@@ -1300,7 +1300,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         {
             // Retrieve module identifier from Help Command entry
             OUString aModuleIdentifier( rModuleIdentifier );
-            if ( pMenu->GetHelpCommand( nItemId ).Len() > 0 )
+            if ( !pMenu->GetHelpCommand( nItemId ).isEmpty() )
             {
                 aModuleIdentifier = pMenu->GetHelpCommand( nItemId );
                 pMenu->SetHelpCommand( nItemId, aEmpty );

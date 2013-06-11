@@ -6221,9 +6221,9 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
 
     long        nTextHeight     = rTargetDevice.GetTextHeight();
     TextAlign   eAlign          = rTargetDevice.GetTextAlign();
-    xub_StrLen  nMnemonicPos    = STRING_NOTFOUND;
+    sal_Int32  nMnemonicPos    = -1;
 
-    String aStr = rOrigStr;
+    OUString aStr = rOrigStr;
     if ( nStyle & TEXT_DRAW_MNEMONIC )
         aStr = GetNonMnemonicString( aStr, nMnemonicPos );
 
@@ -6255,7 +6255,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                     nFormatLines = nLines-1;
 
                     pLineInfo = aMultiLineInfo.GetLine( nFormatLines );
-                    aLastLine = convertLineEnd(aStr.Copy(pLineInfo->GetIndex()), LINEEND_LF);
+                    aLastLine = convertLineEnd(aStr.copy(pLineInfo->GetIndex()), LINEEND_LF);
                     // Replace all LineFeeds with Spaces
                     xub_StrLen nLastLineLen = aLastLine.Len();
                     for ( i = 0; i < nLastLineLen; i++ )
@@ -6355,7 +6355,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                 aStr = ImplGetEllipsisString( rTargetDevice, aStr, nWidth, nStyle, _rLayout );
                 nStyle &= ~(TEXT_DRAW_CENTER | TEXT_DRAW_RIGHT);
                 nStyle |= TEXT_DRAW_LEFT;
-                nTextWidth = _rLayout.GetTextWidth( aStr, 0, aStr.Len() );
+                nTextWidth = _rLayout.GetTextWidth( aStr, 0, aStr.getLength() );
             }
         }
         else
@@ -6386,8 +6386,8 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
         long nMnemonicWidth = 0;
         if ( nMnemonicPos != STRING_NOTFOUND )
         {
-            sal_Int32* pCaretXArray = (sal_Int32*) alloca( 2 * sizeof(sal_Int32) * aStr.Len() );
-            /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray, 0, aStr.Len() );
+            sal_Int32* pCaretXArray = (sal_Int32*) alloca( 2 * sizeof(sal_Int32) * aStr.getLength() );
+            /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray, 0, aStr.getLength() );
             long lc_x1 = pCaretXArray[2*(nMnemonicPos)];
             long lc_x2 = pCaretXArray[2*(nMnemonicPos)+1];
             nMnemonicWidth = rTargetDevice.ImplLogicWidthToDevicePixel( ::abs((int)(lc_x1 - lc_x2)) );
@@ -6794,8 +6794,8 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
     if( (sal_uLong)nIndex+nLen >= rStr.Len() )
         nLen = rStr.Len() - nIndex;
 
-    XubString   aStr = rStr;
-    xub_StrLen  nMnemonicPos = STRING_NOTFOUND;
+    OUString   aStr = rStr;
+    sal_Int32  nMnemonicPos = -1;
 
     long        nMnemonicX = 0;
     long        nMnemonicY = 0;
@@ -6909,15 +6909,19 @@ long OutputDevice::GetCtrlTextWidth( const String& rStr,
 
     if ( nStyle & TEXT_DRAW_MNEMONIC )
     {
-        xub_StrLen  nMnemonicPos;
-        XubString   aStr = GetNonMnemonicString( rStr, nMnemonicPos );
-        if ( nMnemonicPos != STRING_NOTFOUND )
+        sal_Int32 nMnemonicPos;
+        OUString   aStr = GetNonMnemonicString( rStr, nMnemonicPos );
+        if ( nMnemonicPos >= 0 )
         {
-            if ( nMnemonicPos < nIndex )
-                nIndex--;
-            else if ( (nLen < STRING_LEN) &&
-                      (nMnemonicPos >= nIndex) && (nMnemonicPos < (sal_uLong)(nIndex+nLen)) )
-                nLen--;
+            if ( nMnemonicPos < (sal_Int32)nIndex )
+            {
+                nIndex -= 1;
+            }
+            else if ( (nLen >= 0) &&
+                      (nMnemonicPos >= nIndex) && (nMnemonicPos < (nIndex+nLen)) )
+            {
+                nLen -= 1;
+            }
         }
         return GetTextWidth( aStr, nIndex, nLen );
     }
@@ -6925,27 +6929,27 @@ long OutputDevice::GetCtrlTextWidth( const String& rStr,
         return GetTextWidth( rStr, nIndex, nLen );
 }
 
-String OutputDevice::GetNonMnemonicString( const String& rStr, xub_StrLen& rMnemonicPos )
+OUString OutputDevice::GetNonMnemonicString( const OUString& rStr, sal_Int32& rMnemonicPos )
 {
-    String   aStr    = rStr;
-    xub_StrLen  nLen    = aStr.Len();
-    xub_StrLen  i       = 0;
+    OUStringBuffer   aStr(rStr);
+    sal_Int32  nLen    = aStr.getLength();
+    sal_Int32  i = 0;
 
-    rMnemonicPos = STRING_NOTFOUND;
+    rMnemonicPos = -1;
     while ( i < nLen )
     {
-        if ( aStr.GetChar( i ) == '~' )
+        if ( aStr[ i ] == '~' )
         {
-            if ( aStr.GetChar( i+1 ) != '~' )
+            if ( aStr[ i+1 ] != '~' )
             {
-                if ( rMnemonicPos == STRING_NOTFOUND )
+                if ( rMnemonicPos == -1 )
                     rMnemonicPos = i;
-                aStr.Erase( i, 1 );
+                aStr.remove( i, 1 );
                 nLen--;
             }
             else
             {
-                aStr.Erase( i, 1 );
+                aStr.remove( i, 1 );
                 nLen--;
                 i++;
             }
@@ -6954,7 +6958,7 @@ String OutputDevice::GetNonMnemonicString( const String& rStr, xub_StrLen& rMnem
             i++;
     }
 
-    return aStr;
+    return aStr.makeStringAndClear();
 }
 
 int OutputDevice::GetDevFontCount() const

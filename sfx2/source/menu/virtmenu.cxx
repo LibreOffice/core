@@ -724,7 +724,7 @@ void SfxVirtualMenu::BindControllers()
             i != rCtrlArr.end(); ++i)
     {
         sal_uInt16 nSlotId = i->GetId();
-        if ( !pSVMenu->GetItemCommand(nSlotId).Len() )
+        if ( pSVMenu->GetItemCommand(nSlotId).isEmpty() )
         {
             i->ReBind();
         }
@@ -995,7 +995,7 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
         return sal_True;
     }
 
-    if ( pMenu->GetItemCommand( nSlotId ).Len() )
+    if ( !pMenu->GetItemCommand( nSlotId ).isEmpty() )
         pBindings->ExecuteCommand_Impl( pMenu->GetItemCommand( nSlotId ) );
     else
         pBindings->Execute( nSlotId );

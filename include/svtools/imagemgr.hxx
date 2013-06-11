@@ -22,9 +22,9 @@
 
 #include "svtools/svtdllapi.h"
 #include "sal/types.h"
+#include <rtl/ustring.hxx>
 
 class Image;
-class String;
 class INetURLObject;
 
 namespace svtools {
@@ -61,7 +61,7 @@ struct VolumeInfo
 class SvFileInformationManager
 {
 private:
-    SVT_DLLPRIVATE static String    GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder );
+    SVT_DLLPRIVATE static OUString    GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder );
 
 public:
     SVT_DLLPUBLIC static Image  GetImage( const INetURLObject& rURL, sal_Bool bBig = sal_False );
@@ -69,9 +69,9 @@ public:
     SVT_DLLPUBLIC static Image  GetImageNoDefault( const INetURLObject& rURL, sal_Bool bBig = sal_False );
     SVT_DLLPUBLIC static Image  GetFolderImage( const svtools::VolumeInfo& rInfo, sal_Bool bBig = sal_False );
 
-    SVT_DLLPUBLIC static String GetDescription( const INetURLObject& rObject );
-    SVT_DLLPUBLIC static String GetFileDescription( const INetURLObject& rObject );
-    SVT_DLLPUBLIC static String GetFolderDescription( const svtools::VolumeInfo& rInfo );
+    SVT_DLLPUBLIC static OUString GetDescription( const INetURLObject& rObject );
+    SVT_DLLPUBLIC static OUString GetFileDescription( const INetURLObject& rObject );
+    SVT_DLLPUBLIC static OUString GetFolderDescription( const svtools::VolumeInfo& rInfo );
 };
 
 #endif

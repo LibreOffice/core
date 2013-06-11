@@ -594,7 +594,7 @@ void BackingWindow::layoutButton(
     // setup text
     i_rBtn.SetFont( maTextFont );
     i_rBtn.SetControlFont( maTextFont );
-    String aText( i_rStr.Len() ? i_rStr : SvFileInformationManager::GetDescription( INetURLObject( aURL ) ) );
+    OUString aText( i_rStr.Len() ? OUString(i_rStr) : SvFileInformationManager::GetDescription( INetURLObject( aURL ) ) );
     i_rMnemns.CreateMnemonic( aText );
     i_rBtn.SetText( aText );
 

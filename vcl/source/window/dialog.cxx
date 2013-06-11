@@ -221,7 +221,7 @@ void ImplWindowAutoMnemonic( Window* pWindow )
         pChild = pGetChild->ImplGetWindow();
         if ( ImplIsMnemonicCtrl( pChild ) )
         {
-            XubString aText = pChild->GetText();
+            OUString aText = pChild->GetText();
             if ( aMnemonicGenerator.CreateMnemonic( aText ) )
                 pChild->SetText( aText );
         }

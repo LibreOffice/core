@@ -8100,9 +8100,9 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, sa
     Point       aPos            = rRect.TopLeft();
 
     long        nTextHeight     = m_pReferenceDevice->GetTextHeight();
-    xub_StrLen  nMnemonicPos    = STRING_NOTFOUND;
+    sal_Int32  nMnemonicPos    = -1;
 
-    String aStr = rOrigStr;
+    OUString aStr = rOrigStr;
     if ( nStyle & TEXT_DRAW_MNEMONIC )
         aStr = m_pReferenceDevice->GetNonMnemonicString( aStr, nMnemonicPos );
 
@@ -8132,7 +8132,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, sa
                     nFormatLines = nLines-1;
 
                     pLineInfo = aMultiLineInfo.GetLine( nFormatLines );
-                    aLastLine = convertLineEnd(aStr.Copy(pLineInfo->GetIndex()), LINEEND_LF);
+                    aLastLine = convertLineEnd(aStr.copy(pLineInfo->GetIndex()), LINEEND_LF);
                     // replace line feed by space
                     aLastLine = aLastLine.replace('\n', ' ');
                     aLastLine = m_pReferenceDevice->GetEllipsisString( aLastLine, nWidth, nStyle );

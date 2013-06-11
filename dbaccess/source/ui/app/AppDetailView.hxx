@@ -91,7 +91,7 @@ namespace dbaui
     {
         OUString sUNOCommand;
         sal_uInt16          nHelpID;
-        String          sTitle;
+        OUString          sTitle;
         bool            bHideWhenDisabled;
             // TODO: we should be consistent in the task pane and the menus/toolbars:
             // If an entry is disabled in the latter, it should also be disabled in the former.
