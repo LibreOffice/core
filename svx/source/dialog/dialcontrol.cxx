@@ -248,8 +248,11 @@ void DialControl::DialControl_Impl::Init( const Size& rWinSize, const Font& rWin
 
 void DialControl::DialControl_Impl::SetSize( const Size& rWinSize )
 {
-    // "(x - 1) | 1" creates odd value <= x, to have a well-defined center pixel position
-    maWinSize = Size( (rWinSize.Width() - 1) | 1, (rWinSize.Height() - 1) | 1 );
+    // make the control squared, and adjusted so that we have a well-defined
+    // center ["(x - 1) | 1" creates odd value <= x]
+    long nMin = (std::min(rWinSize.Width(), rWinSize.Height()) - 1) | 1;
+
+    maWinSize = Size( nMin, nMin );
 
     mnCenterX = maWinSize.Width() / 2;
     mnCenterY = maWinSize.Height() / 2;
