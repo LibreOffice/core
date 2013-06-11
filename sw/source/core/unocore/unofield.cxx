@@ -402,12 +402,12 @@ public:
 
     sal_uInt16      m_nResTypeId;
 
-    String          m_sParam1;  // Content / Database / NumberingSeparator
-    String          m_sParam2;  // -    /DataTablename
-    String          m_sParam3;  // -    /DataFieldName
-    String          m_sParam4;
-    String          m_sParam5;  // -    /DataBaseURL
-    String          m_sParam6;  // -    /DataBaseResource
+    OUString        m_sParam1;  // Content / Database / NumberingSeparator
+    OUString        m_sParam2;  // -    /DataTablename
+    OUString        m_sParam3;  // -    /DataFieldName
+    OUString        m_sParam4;
+    OUString        m_sParam5;  // -    /DataBaseURL
+    OUString        m_sParam6;  // -    /DataBaseResource
     double          m_fParam1;  // Value / -
     sal_Int8        m_nParam1;  // ChapterNumberingLevel
     sal_Bool        m_bParam1;  // IsExpression
@@ -644,8 +644,8 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             case RES_SETEXPFLD :
             {
                 SwSetExpFieldType aType(m_pImpl->m_pDoc, sTypeName);
-                if (m_pImpl->m_sParam1.Len())
-                    aType.SetDelimiter(OUString(m_pImpl->m_sParam1.GetChar(0)));
+                if (!m_pImpl->m_sParam1.isEmpty())
+                    aType.SetDelimiter(OUString(m_pImpl->m_sParam1[0]));
                 if (m_pImpl->m_nParam1 > -1 && m_pImpl->m_nParam1 < MAXLEVEL)
                     aType.SetOutlineLvl(m_pImpl->m_nParam1);
                 pType2 = m_pImpl->m_pDoc->InsertFldType(aType);
@@ -653,7 +653,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             break;
             case RES_DBFLD :
             {
-                ::GetString( rValue, m_pImpl->m_sParam3 );
+                rValue >>= m_pImpl->m_sParam3;
                 pType = GetFldType();
             }
             break;
@@ -671,7 +671,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         {
         case RES_USERFLD:
             if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CONTENT)))
-                ::GetString( rValue, m_pImpl->m_sParam1 );
+                rValue >>= m_pImpl->m_sParam1;
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_VALUE )))
             {
                 if(rValue.getValueType() != ::getCppuType(static_cast<const double*>(0)))
@@ -688,25 +688,27 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             break;
         case RES_DBFLD:
             if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
-                ::GetString( rValue, m_pImpl->m_sParam1 );
+                rValue >>= m_pImpl->m_sParam1;
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME)))
-                ::GetString( rValue, m_pImpl->m_sParam2 );
+                rValue >>= m_pImpl->m_sParam2;
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME)))
-                ::GetString( rValue, m_pImpl->m_sParam3 );
+                rValue >>= m_pImpl->m_sParam3;
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE)))
                 rValue >>= m_pImpl->m_nParam2;
             if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
-                ::GetString( rValue, m_pImpl->m_sParam5 );
+                rValue >>= m_pImpl->m_sParam5;
 
-            if (  (m_pImpl->m_sParam1.Len() || m_pImpl->m_sParam5.Len())
-                && m_pImpl->m_sParam2.Len() && m_pImpl->m_sParam3.Len())
+            if (  (   !m_pImpl->m_sParam1.isEmpty()
+                   || !m_pImpl->m_sParam5.isEmpty())
+                && !m_pImpl->m_sParam2.isEmpty()
+                && !m_pImpl->m_sParam3.isEmpty())
             {
                 GetFldType();
             }
             break;
         case  RES_SETEXPFLD:
             if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_SEPARATOR)))
-                ::GetString( rValue, m_pImpl->m_sParam1 );
+                rValue >>= m_pImpl->m_sParam1;
             else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAPTER_NUMBERING_LEVEL)))
                 rValue >>= m_pImpl->m_nParam1;
             break;
@@ -718,14 +720,29 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                         rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
                 if(nPart  < 3 )
                 {
-                    String sTmp;
-                    if (!m_pImpl->m_sParam1.Len())
+                    if (m_pImpl->m_sParam1.isEmpty())
                     {
-                        (m_pImpl->m_sParam1 = sfx2::cTokenSeparator)
-                                += sfx2::cTokenSeparator;
+                        m_pImpl->m_sParam1 = OUString(sfx2::cTokenSeparator)
+                                + OUString(sfx2::cTokenSeparator);
                     }
-                    m_pImpl->m_sParam1.SetToken( nPart, sfx2::cTokenSeparator,
-                                ::GetString( rValue, sTmp ));
+                    OUString sTmp;
+                    rValue >>= sTmp;
+                    sal_Int32 nIndex(0);
+                    sal_Int32 nStart(0);
+                    while (nIndex < m_pImpl->m_sParam1.getLength())
+                    {
+                        if (m_pImpl->m_sParam1[nIndex] == sfx2::cTokenSeparator)
+                        {
+                            if (0 == nPart)
+                                break;
+                            nStart = nIndex + 1;
+                            --nPart;
+                        }
+                        ++nIndex;
+                    }
+                    assert(0 == nPart);
+                    m_pImpl->m_sParam1 = m_pImpl->m_sParam1.replaceAt(
+                            nStart, nIndex - nStart, sTmp);
                 }
                 else if(3 == nPart)
                 {
@@ -748,10 +765,10 @@ SwFieldType* SwXFieldMaster::GetFldType(bool const bDontCreate) const
 
         // set DataSource
         svx::ODataAccessDescriptor aAcc;
-        if (m_pImpl->m_sParam1.Len() > 0)
-            aAcc[svx::daDataSource]        <<= OUString(m_pImpl->m_sParam1); // DataBaseName
-        else if (m_pImpl->m_sParam5.Len() > 0)
-            aAcc[svx::daDatabaseLocation]  <<= OUString(m_pImpl->m_sParam5); // DataBaseURL
+        if (!m_pImpl->m_sParam1.isEmpty())
+            aAcc[svx::daDataSource]        <<= m_pImpl->m_sParam1; // DataBaseName
+        else if (!m_pImpl->m_sParam5.isEmpty())
+            aAcc[svx::daDatabaseLocation]  <<= m_pImpl->m_sParam5; // DataBaseURL
         aData.sDataSource = aAcc.getDataSource();
 
         aData.sCommand = m_pImpl->m_sParam2;
@@ -866,13 +883,11 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         }
         else
         {
-            const String* pStr = 0;
-            String sStr;
             switch (m_pImpl->m_nResTypeId)
             {
             case RES_USERFLD:
                 if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CONTENT)) )
-                    pStr = &m_pImpl->m_sParam1;
+                    aRet <<= m_pImpl->m_sParam1;
                 else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_VALUE )))
                     aRet <<= m_pImpl->m_fParam1;
                 else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_EXPRESSION )))
@@ -882,24 +897,23 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
                    rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
                 {
-                    pStr = 0;   // only one of this properties will return
-                                // a non-empty string.
+                     // only one of these properties returns a non-empty string.
                     INetURLObject aObj;
                     aObj.SetURL(m_pImpl->m_sParam5); // SetSmartURL
                     bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
                     if (bIsURL && rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_URL)))
-                        pStr = &m_pImpl->m_sParam5; // DataBaseURL
+                        aRet <<= m_pImpl->m_sParam5; // DataBaseURL
                     else if ( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
-                        pStr = &m_pImpl->m_sParam1; // DataBaseName
+                        aRet <<= m_pImpl->m_sParam1; // DataBaseName
                 }
                 else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME)))
-                    pStr = &m_pImpl->m_sParam2;
+                    aRet <<= m_pImpl->m_sParam2;
                 else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME)))
-                    pStr = &m_pImpl->m_sParam3;
+                    aRet <<= m_pImpl->m_sParam3;
                 break;
             case RES_SETEXPFLD:
                 if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_SEPARATOR)))
-                    pStr = &m_pImpl->m_sParam1;
+                    aRet <<= m_pImpl->m_sParam1;
                 else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CHAPTER_NUMBERING_LEVEL)))
                     aRet <<= m_pImpl->m_nParam1;
                 break;
@@ -910,7 +924,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                             rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DDE_COMMAND_ELEMENT))  ? 2 :
                             rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE)) ? 3 : USHRT_MAX;
                     if(nPart  < 3 )
-                        pStr = &(sStr = m_pImpl->m_sParam1.GetToken(nPart, sfx2::cTokenSeparator));
+                        aRet <<= m_pImpl->m_sParam1.getToken(nPart, sfx2::cTokenSeparator);
                     else if(3 == nPart)
                         aRet.setValue(&m_pImpl->m_bParam1, ::getBooleanCppuType());
                 }
@@ -918,9 +932,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             default:
                 throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             }
-
-            if( pStr )
-                aRet <<= OUString( *pStr );
         }
     }
     return aRet;
