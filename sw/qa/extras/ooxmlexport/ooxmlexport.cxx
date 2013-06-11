@@ -78,6 +78,7 @@ public:
     void testCp1000015();
     void testFdo70812();
     void testBnc837302();
+    void testFdo65655();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -140,6 +141,7 @@ void Test::run()
         {"cp1000015.odt", &Test::testCp1000015},
         {"fdo70812.docx", &Test::testFdo70812},
         {"bnc837302.docx", &Test::testBnc837302},
+        {"fdo65655.docx", &Test::testFdo65655},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -811,6 +813,20 @@ void Test::testBnc837302()
     }
     catch (const beans::UnknownPropertyException&) {}
     CPPUNIT_ASSERT_EQUAL(OUString(), aProperty);
+}
+
+void Test::testFdo65655()
+{
+    // The problem was that the DOCX had a non-blank odd footer and a blank even footer
+    // The 'Different Odd & Even Pages' was turned on
+    // However - LO assumed that because the 'even' footer is blank - it should ignore the 'Different Odd & Even Pages' flag
+    // So it did not import it and did not export it
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    sal_Bool bValue = false;
+    xPropertySet->getPropertyValue("HeaderIsShared") >>= bValue;
+    CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
+    xPropertySet->getPropertyValue("FooterIsShared") >>= bValue;
+    CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
