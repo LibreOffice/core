@@ -73,11 +73,6 @@ class SchXMLTableHelper
 private:
     static void GetCellAddress( const OUString& rStr, sal_Int32& rCol, sal_Int32& rRow );
     static sal_Bool GetCellRangeAddress( const OUString& rStr, SchNumericCellRangeAddress& rResult );
-    static void PutTableContentIntoSequence(
-        const SchXMLTable& rTable,
-        SchNumericCellRangeAddress& rAddress,
-        sal_Int32 nSeriesIndex,
-        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< double > >& aSequence );
     static void AdjustMax( const SchNumericCellRangeAddress& rAddr,
                            sal_Int32& nRows, sal_Int32& nColumns );
 
