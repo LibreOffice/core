@@ -291,6 +291,7 @@ MergeDataFile::MergeDataFile(
     bool bFirstLang = true;
     while( !aInputStream.eof() )
     {
+        bool bSkipCurrentPOFile = false;
         const OString sFileName( lcl_NormalizeFilename(rFile) );
         const bool bReadAll = sFileName.isEmpty();
         const OString sPoFileName(sPoFile.data(), sPoFile.length());
@@ -318,10 +319,11 @@ MergeDataFile::MergeDataFile(
         {
             if( !lcl_ReadPoChecked(aNextPo, aPoInput, sPoFileName) )
             {
-                return;
+                bSkipCurrentPOFile = true;
+                break;
             }
         } while( !aPoInput.eof() && aNextPo.getSourceFile() != sFileName && !bReadAll );
-        while( !aPoInput.eof() && (aNextPo.getSourceFile() == sFileName || bReadAll ))
+        while( !aPoInput.eof() && (aNextPo.getSourceFile() == sFileName || bReadAll ) && !bSkipCurrentPOFile )
         {
             PoEntry aActPo( aNextPo );
 
@@ -356,7 +358,8 @@ MergeDataFile::MergeDataFile(
                 }
                 if( !lcl_ReadPoChecked(aNextPo, aPoInput, sPoFileName) )
                 {
-                    return;
+                    bSkipCurrentPOFile = true;
+                    break;
                 }
             } while( !aPoInput.eof() &&
                 ( bInSameComp = PoEntry::IsInSameComp(aActPo, aNextPo) ) );
