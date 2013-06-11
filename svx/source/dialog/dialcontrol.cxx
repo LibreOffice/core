@@ -72,23 +72,37 @@ void DialControlBmp::DrawBackground( const Size& rSize, bool bEnabled )
 
 void DialControlBmp::DrawElements( const String& rText, sal_Int32 nAngle )
 {
-    // *** rotated text ***
-
-    Font aFont( GetFont() );
-    aFont.SetColor( GetTextColor() );
-    aFont.SetOrientation( static_cast< short >( (nAngle + 5) / 10 ) );  // Font uses 1/10 degrees
-    aFont.SetWeight( WEIGHT_BOLD );
-    SetFont( aFont );
-
     double fAngle = nAngle * F_PI180 / 100.0;
     double fSin = sin( fAngle );
     double fCos = cos( fAngle );
     double fWidth = GetTextWidth( rText ) / 2.0;
     double fHeight = GetTextHeight() / 2.0;
-    long nX = static_cast< long >( mnCenterX - fWidth * fCos - fHeight * fSin );
-    long nY = static_cast< long >( mnCenterY + fWidth * fSin - fHeight * fCos );
-    Rectangle aRect( nX, nY, 2 * mnCenterX - nX, 2 * mnCenterY - nY );
-    DrawText( aRect, rText, mbEnabled ? 0 : TEXT_DRAW_DISABLE );
+
+    if ( rText.Len() > 0 )
+    {
+        // rotated text
+        Font aFont( GetFont() );
+        aFont.SetColor( GetTextColor() );
+        aFont.SetOrientation( static_cast< short >( (nAngle + 5) / 10 ) );  // Font uses 1/10 degrees
+        aFont.SetWeight( WEIGHT_BOLD );
+        SetFont( aFont );
+
+        long nX = static_cast< long >( mnCenterX - fWidth * fCos - fHeight * fSin );
+        long nY = static_cast< long >( mnCenterY + fWidth * fSin - fHeight * fCos );
+        Rectangle aRect( nX, nY, 2 * mnCenterX - nX, 2 * mnCenterY - nY );
+        DrawText( aRect, rText, mbEnabled ? 0 : TEXT_DRAW_DISABLE );
+    }
+    else
+    {
+        // only a line
+        const sal_Int32 nDx (fCos * (maRect.GetWidth()-4) / 2);
+        const sal_Int32 nDy (-fSin * (maRect.GetHeight()-4) / 2);
+        Point pt1( maRect.Center() );
+        Point pt2( pt1.X() + nDx, pt1.Y() + nDy);
+
+        SetLineColor( GetTextColor() );
+        DrawLine( pt1, pt2 );
+    }
 
     // *** drag button ***
 
@@ -96,8 +110,8 @@ void DialControlBmp::DrawElements( const String& rText, sal_Int32 nAngle )
     SetLineColor( GetButtonLineColor() );
     SetFillColor( GetButtonFillColor( bMain ) );
 
-    nX = mnCenterX - static_cast< long >( (DIAL_OUTER_WIDTH / 2 - mnCenterX) * fCos );
-    nY = mnCenterY - static_cast< long >( (mnCenterY - DIAL_OUTER_WIDTH / 2) * fSin );
+    long nX = mnCenterX - static_cast< long >( (DIAL_OUTER_WIDTH / 2 - mnCenterX) * fCos );
+    long nY = mnCenterY - static_cast< long >( (mnCenterY - DIAL_OUTER_WIDTH / 2) * fSin );
     long nSize = bMain ? (DIAL_OUTER_WIDTH / 4) : (DIAL_OUTER_WIDTH / 2 - 1);
     DrawEllipse( Rectangle( nX - nSize, nY - nSize, nX + nSize, nY + nSize ) );
 }

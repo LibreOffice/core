@@ -16,7 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <svx/sidebar/SidebarDialControl.hxx>
-#include "SidebarDialControlBmp.hxx"
 
 #include <vcl/svapp.hxx>
 
@@ -25,9 +24,6 @@ namespace svx { namespace sidebar {
 SidebarDialControl::SidebarDialControl (Window* pParent, WinBits nBits)
     : svx::DialControl(pParent, nBits)
 {
-    mpImpl->mpBmpEnabled.reset(new SidebarDialControlBmp(*this));
-    mpImpl->mpBmpDisabled.reset(new SidebarDialControlBmp(*this));
-    mpImpl->mpBmpBuffered.reset(new SidebarDialControlBmp(*this));
     Init(GetOutputSizePixel());
 }
 
@@ -41,9 +37,6 @@ SidebarDialControl::SidebarDialControl (
     const ResId& rResId)
     : svx::DialControl(pParent, rResId)
 {
-    mpImpl->mpBmpEnabled.reset(new SidebarDialControlBmp(*this));
-    mpImpl->mpBmpDisabled.reset(new SidebarDialControlBmp(*this));
-    mpImpl->mpBmpBuffered.reset(new SidebarDialControlBmp(*this));
     Init(GetOutputSizePixel());
 }
 
