@@ -179,12 +179,22 @@ int main( int argc, char *argv[] )
 
         value = getenv( ENVVARNAME );
 
+        // workaround for finding wrong libsqlite3.dylib in the office installation
+        // For MacOS > 10.6 nss uses the system lib -> unresolved symbol _sqlite3_wal_checkpoint
+#ifdef MACOSX
+        size = strlen( ENVVARNAME ) + strlen( "=/usr/lib:" ) + strlen( libpath ) + 1;
+#else
         size = strlen( ENVVARNAME ) + strlen( "=" ) + strlen( libpath ) + 1;
+#endif
         if ( value != NULL )
             size += strlen( PATHSEPARATOR ) + strlen( value );
         envstr = (char*) malloc( size );
         strcpy( envstr, ENVVARNAME );
+#ifdef MACOSX
+        strcat( envstr, "=/usr/lib:" );
+#else
         strcat( envstr, "=" );
+#endif
         strcat( envstr, libpath );
         if ( freeLibpath != 0 )
         {
@@ -199,7 +209,7 @@ int main( int argc, char *argv[] )
     }
     else
     {
-        fprintf( stderr, "Warning: no UNO installation found!\n" );
+        fprintf( stderr, "Warning: no office installation found!\n" );
         fflush( stderr );
     }
 
