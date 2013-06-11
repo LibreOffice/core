@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7hg\u003d",
+        "filename": "sd/source/filter/ppt/pptin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-11T07:25:37Z",
+      "side": 1,
+      "message": "Are you sure it\u0027s safe not to use a reference here? The old code uses String\u0026 here, then in the else branch, even uses \u0027aName \u003d\u0027, so maSlideNameList[ i ] is updated. After your change, this is no longer the case. I would use an OUString\u0026 here instead.",
+      "revId": "7245f68c536f614c1e0988e6369863126e6ddc0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
