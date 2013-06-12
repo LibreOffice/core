@@ -48,6 +48,7 @@ enum ConnectionState : NSInteger {
     CONNECTED
 };
 
+dispatch_queue_t backgroundQueue;
 
 @interface CommunicationManager : NSObject
 

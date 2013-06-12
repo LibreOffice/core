@@ -49,6 +49,7 @@
     if ([segue.identifier isEqualToString:@"slidesPreviewSegue"]) {
         slideShowViewController *destViewController = segue.destinationViewController;
         destViewController.slideshow = [self.interpreter slideShow];
+        [destViewController.slideshow setDelegate:destViewController];
     }
 }
 
@@ -66,7 +67,7 @@
     self.client = [[Client alloc] initWithServer:self.server managedBy:nil interpretedBy:self.interpreter];
     [self.client connect];
     
-    if([self.client ready])
+    if([self.client connected])
     {
         [self.pinLabel setText:[NSString stringWithFormat:@"%@", self.client.pin]];
     }

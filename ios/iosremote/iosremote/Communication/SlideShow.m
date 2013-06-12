@@ -9,6 +9,7 @@
 
 #import "SlideShow.h"
 #import "Base64.h"
+#import "slideShowViewController.h"
 
 @interface SlideShow()
 
@@ -21,6 +22,7 @@
 
 @synthesize size = _size;
 @synthesize currentSlide = _currentSlide;
+@synthesize delegate = _delegate;
 
 - (SlideShow *) init{
     self = [super init];
@@ -35,12 +37,14 @@
     NSData* data = [NSData dataWithBase64String:img];
     UIImage* image = [UIImage imageWithData:data];
     [self.imagesArray insertObject:image atIndex:index];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"IMAGE_READY" object:nil];
+    slideShowViewController* vc = [self delegate];
+    [[vc image] setImage:image];
 }
 
 - (void) putNotes: (NSString *)notes AtIndex: (uint) index{
     [self.notesArray insertObject:notes atIndex:index];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"NOTE_READY" object:nil];
+    slideShowViewController* vc = [self delegate];
+    [[vc lecturer_notes] loadHTMLString:notes baseURL:nil];
 }
 
 - (UIImage *) getImageAtIndex: (uint) index

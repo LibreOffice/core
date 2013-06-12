@@ -21,13 +21,12 @@
 
 @property uint mPort;
 
-@property (nonatomic, weak) Server* server;
 @property (nonatomic, weak) CommandInterpreter* receiver;
 @property (nonatomic, weak) CommunicationManager* comManager;
 
 @end
 
-
+NSCondition *connected;
 
 @implementation Client
 
@@ -37,7 +36,7 @@
 @synthesize name = _mName;
 @synthesize server = _mServer;
 @synthesize comManager = _mComManager;
-@synthesize ready = _mReady;
+@synthesize connected = _mReady;
 @synthesize receiver = _receiver;
 
 - (id) initWithServer:(Server*)server
@@ -47,7 +46,8 @@
     self = [self init];
     if (self)
     {
-        self.ready = NO;
+        connected = [NSCondition new];
+        self.connected = NO;
         self.name = [[UIDevice currentDevice] name];
         self.pin = [NSNumber numberWithInteger:[self getPin]];
         self.server = server;
@@ -99,14 +99,6 @@
         [self.outputStream setDelegate:self];
         [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         [self.outputStream open];
-        
-        //        NSLog(@"Stream opened %@ %@", @"iPad", self.mPin);
-        
-        NSArray *temp = [[NSArray alloc]initWithObjects:@"LO_SERVER_CLIENT_PAIR\n", self.name, @"\n", self.pin, @"\n\n", nil];
-        
-        NSString *command = [temp componentsJoinedByString:@""];
-        
-        [self sendCommand:command];
     }
 }
 
@@ -122,12 +114,22 @@
 - (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode {
     
     switch(eventCode) {
-        case NSStreamEventOpenCompleted:
+        case NSStreamEventOpenCompleted:{
             NSLog(@"Connection established");
-            self.ready = YES;
+            [connected lock];
+            NSArray *temp = [[NSArray alloc]initWithObjects:@"LO_SERVER_CLIENT_PAIR\n", self.name, @"\n", self.pin, @"\n\n", nil];
+            NSString *command = [temp componentsJoinedByString:@""];
+            [self sendCommand:command];
+            self.connected = YES;
+            [connected signal];
+            [connected unlock];
+            }
+            
             break;
-        case NSStreamEventErrorOccurred:
+        case NSStreamEventErrorOccurred:{
             NSLog(@"Connection error occured");
+            [self disconnect];
+            }
             break;
         case NSStreamEventHasBytesAvailable:
         {
@@ -153,7 +155,6 @@
             }
             
             NSArray *commands = [str componentsSeparatedByString:@"\n"];
-//            NSLog(@"Data Received: %@", commands);
             
             [self.receiver parse:commands];
             data = nil;
@@ -167,10 +168,29 @@
     }
 }
 
+- (void) disconnect
+{
+    if(self.inputStream == nil && self.outputStream == nil)
+        return;
+    [self.inputStream close];
+    [self.outputStream close];
+    self.inputStream = nil;
+    self.outputStream = nil;
+    self.connected = NO;
+}
 
-- (void) connect
+- (BOOL) connect
 {
     [self streamOpenWithIp:self.server.serverAddress withPortNumber:self.mPort];
+    [connected lock];
+    if([connected waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:5]]){
+        [connected unlock];
+        return YES;
+    } else {
+        [self disconnect];
+        [connected unlock];
+        return NO;
+    }
 }
 
 

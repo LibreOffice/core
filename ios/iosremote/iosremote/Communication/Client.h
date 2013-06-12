@@ -13,11 +13,13 @@
 
 @interface Client : NSObject
 
-@property BOOL ready;
+@property BOOL connected;
 @property (nonatomic, strong) NSNumber* pin;
 @property (nonatomic, strong) NSString* name;
+@property (nonatomic, weak) Server* server;
 
--(void) connect;
+- (BOOL) connect;
+- (void) disconnect;
 
 - (id) initWithServer:(Server*)server
             managedBy:(CommunicationManager*)manager

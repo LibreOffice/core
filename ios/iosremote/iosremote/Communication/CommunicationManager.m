@@ -12,11 +12,13 @@
 #import "Server.h"
 #import "CommandTransmitter.h"
 #import "CommandInterpreter.h"
+#import <dispatch/dispatch.h>
 
 @interface CommunicationManager()
 
 @property (nonatomic, strong) Client* client;
 @property (nonatomic, strong) CommandInterpreter* interpreter;
+@property (nonatomic, strong) CommandTransmitter* transmitter;
 @property (atomic, strong) NSMutableArray* servers;
 
 @end
@@ -27,7 +29,10 @@
 @synthesize client = _client;
 @synthesize state = _state;
 @synthesize interpreter = _interpreter;
+@synthesize transmitter = _transmitter;
 @synthesize servers = _servers;
+
+NSLock *connectionLock;
 
 + (CommunicationManager *)sharedComManager
 {
@@ -46,13 +51,15 @@
 {
     self = [super init];
     self.state = DISCONNECTED;
+    connectionLock = [NSLock new];
+    backgroundQueue = dispatch_queue_create("org.libreoffice.iosremote", NULL);
     return self;
 }
 
 - (id) initWithExistingServers
 {
     self = [self init];
-
+    
     NSUserDefaults * userDefaluts = [NSUserDefaults standardUserDefaults];
     
     if(!userDefaluts)
@@ -67,6 +74,39 @@
         else
             self.servers = [[NSMutableArray alloc] init];
     }
+}
+
+- (void) connectToServer:(Server*)server
+{
+    dispatch_async(backgroundQueue, ^(void) {
+        if ([connectionLock tryLock]) {
+            self.state = CONNECTING;
+            [self.client disconnect];
+            // initialise it with a given server
+            self.client = [[Client alloc]initWithServer:server managedBy:self interpretedBy:self.interpreter];
+            if([self.client connect]){
+                self.state = CONNECTED;
+                self.transmitter = [[CommandTransmitter alloc] initWithClient:self.client];
+            }
+            else{
+                // streams closing is handled by client itself in case of connection failure
+                self.state = DISCONNECTED;
+            }
+            [connectionLock unlock];
+        }
+        else
+            // Already a threading working on that ... and that thread will unlock in 5 seconds anyway, so just return for now. 
+            return;
+    });
+}
+
+- (NSNumber *) getPairingPin{
+    return [self.client pin];
+}
+
+- (NSString *) getPairingDeviceName
+{
+    return [self.client name];
 }
 
 + (id)allocWithZone:(NSZone *)zone

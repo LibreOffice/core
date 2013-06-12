@@ -8,11 +8,13 @@
 
 
 #import <Foundation/Foundation.h>
+#import "slideShowViewController.h"
 
 @interface SlideShow : NSObject
 
 @property uint size;
 @property uint currentSlide;
+@property (nonatomic, weak) id delegate;
 
 - (void) putImage: (NSString *)img AtIndex: (uint) index;
 - (void) putNotes: (NSString *)notes AtIndex: (uint) index;
