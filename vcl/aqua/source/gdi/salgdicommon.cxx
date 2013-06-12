@@ -1464,7 +1464,7 @@ bool AquaSalGraphics::setClipRegion( const Region& i_rClip )
 
                 if(nH)
                 {
-                    CGRect aRect = {{ aRectIter->Left(), aRectIter->Top() }, { nW, nH }};
+                    CGRect aRect = {{ (CGFloat) aRectIter->Left(), (CGFloat) aRectIter->Top() }, { (CGFloat) nW, (CGFloat) nH }};
                     CGPathAddRect( mxClipPath, NULL, aRect );
                 }
             }
