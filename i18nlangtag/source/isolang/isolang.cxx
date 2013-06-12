@@ -305,6 +305,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_SWAHILI_TANZANIA,       "sw", "TZ" },
     { LANGUAGE_TAJIK,                       "tg", "TJ" },
     { LANGUAGE_TIBETAN,                     "bo", "CN" },   // CN politically correct?
+    { LANGUAGE_USER_TIBETAN_INDIA,          "bo", "IN" },
     { LANGUAGE_DZONGKHA,                    "dz", "BT" },
     { LANGUAGE_TURKMEN,                     "tk", "TM" },
     { LANGUAGE_WELSH,                       "cy", "GB" },

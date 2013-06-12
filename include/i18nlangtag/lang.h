@@ -556,6 +556,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_SIDAMA                0x0685
 #define LANGUAGE_USER_NKO                   0x0686
 #define LANGUAGE_USER_UDMURT                0x0687
+#define LANGUAGE_USER_TIBETAN_INDIA         0x8051  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_TIBETAN)) */
 
 #define LANGUAGE_USER_PRIV_JOKER            0xFFEB  /* privateuse "*" (sic! bad! nasty!), primary 0x3eb, sub 0x3f */
 #define LANGUAGE_USER_PRIV_COMMENT          0xFFEC  /* privateuse "x-comment", primary 0x3ec, sub 0x3f */

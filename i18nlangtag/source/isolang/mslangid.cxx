@@ -382,6 +382,7 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         case LANGUAGE_THAI:
         case LANGUAGE_TIBETAN:
         case LANGUAGE_DZONGKHA:
+        case LANGUAGE_USER_TIBETAN_INDIA:
         case LANGUAGE_URDU:
         case LANGUAGE_URDU_PAKISTAN:
         case LANGUAGE_URDU_INDIA:

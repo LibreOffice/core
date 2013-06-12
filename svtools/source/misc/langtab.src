@@ -362,6 +362,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Yombe (Congo)" ; LANGUAGE_USER_YOMBE_CONGO ; > ;
         < "N'ko" ; LANGUAGE_USER_NKO ; > ;
         < "Udmurt" ; LANGUAGE_USER_UDMURT ; > ;
+        < "Tibetan (India)" ; LANGUAGE_USER_TIBETAN_INDIA ; > ;
     };
 };
 
