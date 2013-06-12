@@ -940,7 +940,6 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
     rTo.mnDescent = 0;
     rTo.mnExtLeading = 0;
     rTo.mnSlant = 0;
-    rTo.mnIntLeading = (rTo.mnAscent + rTo.mnDescent) - ((maFaceFT->units_per_EM + 32) >> 6);
     rTo.mnWidth = mnWidth;
 
     // Calculating ascender and descender:
@@ -993,6 +992,8 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
             rTo.mnExtLeading = ((rMetrics.height + 32) >> 6) - (rTo.mnAscent + rTo.mnDescent);
         }
     }
+
+    rTo.mnIntLeading = (rTo.mnAscent + rTo.mnDescent) - ((maFaceFT->units_per_EM + 32) >> 6);
 
     if( pOS2 && (pOS2->version != 0xFFFF) )
     {
