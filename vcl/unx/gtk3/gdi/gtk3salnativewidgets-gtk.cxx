@@ -1450,8 +1450,7 @@ void GtkSalGraphics::getStyleContext(GtkStyleContext** style, GtkWidget* widget)
 GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     : SvpSalGraphics(),
       mpFrame( pFrame ),
-      mpWindow( pWindow ),
-      m_aClipRegion(true)
+      mpWindow( pWindow )
 {
     if(style_loaded)
         return;
@@ -1575,7 +1574,9 @@ void GtkSalGraphics::copyArea( long nDestX, long nDestY,
     // get clip region and translate it in the opposite direction & intersect ...
     cairo_region_t *clip_region;
 
-    if( m_aClipRegion.GetRectCount() <= 0)
+    RectangleVector rects;
+    m_aClipRegion.GetRegionRectangles(rects);
+    if (rects.empty())
     {
         basegfx::B2IVector aSize = GetSize();
         cairo_rectangle_int_t aCairoSize = { 0, 0, aSize.getX(), aSize.getY() };
@@ -1584,15 +1585,12 @@ void GtkSalGraphics::copyArea( long nDestX, long nDestY,
     else
     {
         clip_region = cairo_region_create();
-        Rectangle aClipRect;
-        RegionHandle aHnd = m_aClipRegion.BeginEnumRects();
-        while( m_aClipRegion.GetNextEnumRect( aHnd, aClipRect ) )
+        for (RectangleVector::iterator i(rects.begin()); i != rects.end(); ++i)
         {
-            cairo_rectangle_int_t aRect = { (int)aClipRect.Left(), (int)aClipRect.Top(),
-                                            (int)aClipRect.GetWidth(), (int)aClipRect.GetHeight() };
+            cairo_rectangle_int_t aRect = { (int)i->Left(), (int)i->Top(),
+                                            (int)i->GetWidth(), (int)i->GetHeight() };
             cairo_region_union_rectangle( clip_region, &aRect );
         }
-        m_aClipRegion.EndEnumRects (aHnd);
     }
     print_cairo_region( clip_region, "pristine clip region" );
     cairo_region_translate( clip_region, - (nDestX - nSrcX), - (nDestY - nSrcY) );
