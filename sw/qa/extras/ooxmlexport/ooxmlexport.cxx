@@ -75,6 +75,8 @@ public:
     void testPageGraphicBackground();
     void testFdo65265();
     void testFdo65655();
+    void testFdo64238_a();
+    void testFdo64238_b();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -127,6 +129,8 @@ void Test::run()
         {"page-graphic-background.odt", &Test::testPageGraphicBackground},
         {"fdo65265.docx", &Test::testFdo65265},
         {"fdo65655.docx", &Test::testFdo65655},
+        {"fdo64238_a.docx", &Test::testFdo64238_a},
+        {"fdo64238_b.docx", &Test::testFdo64238_b},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -725,6 +729,46 @@ void Test::testFdo65655()
     CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
     xPropertySet->getPropertyValue("FooterIsShared") >>= bValue;
     CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
+}
+
+void Test::testFdo64238_a()
+{
+    // The problem was that when 'Show Only Odd Footer' was marked in Word and the Even footer *was filled*
+    // then LO would still import the Even footer and concatenate it to to the odd footer.
+    // This case specifically is for :
+    // 'Blank Odd Footer' with 'Non-Blank Even Footer' when 'Show Only Odd Footer' is marked in Word
+    // In this case the imported footer in LO was supposed to be blank, but instead was the 'even' footer
+    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "FooterText");
+    uno::Reference< text::XTextRange > xFooterParagraph = getParagraphOfText( 1, xFooterText );
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xFooterParagraph, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    int numOfRuns = 0;
+    while (xRunEnum->hasMoreElements())
+    {
+        uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+        numOfRuns++;
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), numOfRuns);
+}
+
+void Test::testFdo64238_b()
+{
+    // The problem was that when 'Show Only Odd Footer' was marked in Word and the Even footer *was filled*
+    // then LO would still import the Even footer and concatenate it to to the odd footer.
+    // This case specifically is for :
+    // 'Non-Blank Odd Footer' with 'Non-Blank Even Footer' when 'Show Only Odd Footer' is marked in Word
+    // In this case the imported footer in LO was supposed to be just the odd footer, but instead was the 'odd' and 'even' footers concatenated
+    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName(DEFAULT_STYLE), "FooterText");
+    uno::Reference< text::XTextRange > xFooterParagraph = getParagraphOfText( 1, xFooterText );
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xFooterParagraph, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    int numOfRuns = 0;
+    while (xRunEnum->hasMoreElements())
+    {
+        uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+        numOfRuns++;
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), numOfRuns);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

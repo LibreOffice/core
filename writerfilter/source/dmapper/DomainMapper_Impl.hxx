@@ -344,6 +344,7 @@ private:
     bool                            m_bInStyleSheetImport; //in import of fonts, styles, lists or lfos
     bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos
     bool                            m_bInHeaderFooterImport;
+    bool                            m_bDiscardHeaderFooter;
 
     bool                            m_bLineNumberingSet;
     bool                            m_bIsInFootnoteProperties;
