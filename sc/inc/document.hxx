@@ -435,6 +435,9 @@ private:
     bool                mbChangeReadOnlyEnabled;    // allow changes in read-only document (for API import filters)
     bool                mbStreamValidLocked;
 
+    // #118840# Have a flag to know that this ScDocument is used temporary
+    bool                mbIsTemporary : 1;
+
     sal_Int16           mnNamedRangesLockCount;
 
 public:
@@ -611,6 +614,10 @@ public:
     void            SetStreamValid( SCTAB nTab, sal_Bool bSet, sal_Bool bIgnoreLock = sal_False );
     void            LockStreamValid( bool bLock );
     bool            IsStreamValidLocked() const                         { return mbStreamValidLocked; }
+
+    // #118840# Have a flag to know that this ScDocument is used temporary
+    bool IsTemporary() const { return mbIsTemporary; }
+
     SC_DLLPUBLIC sal_Bool        IsPendingRowHeights( SCTAB nTab ) const;
     SC_DLLPUBLIC void            SetPendingRowHeights( SCTAB nTab, sal_Bool bSet );
     SC_DLLPUBLIC void           SetLayoutRTL( SCTAB nTab, sal_Bool bRTL );

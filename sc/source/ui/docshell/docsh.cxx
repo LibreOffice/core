@@ -2589,6 +2589,13 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags )
     bIsInplace = (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
     //  wird zurueckgesetzt, wenn nicht inplace
 
+    // #118840# set flag at ScDocument that it is used temporary (e.g. inplace
+    // for transporting a chart over the clipboard)
+    if(bIsInplace)
+    {
+        aDocument.mbIsTemporary = true;
+    }
+
     pDocFunc = new ScDocFunc(*this);
 
     //  SetBaseModel needs exception handling

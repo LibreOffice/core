@@ -2176,7 +2176,16 @@ rtl::OUString SAL_CALL ScChart2DataProvider::convertRangeFromXML( const rtl::OUS
     }
 
     OUString aRet;
-    ScRangeStringConverter::GetStringFromXMLRangeString(aRet, sXMLRange, m_pDocument);
+
+    // #118840# Only interpret range string when the ScDocument is not just used
+    // temporary (e.g. for transporting a chart over the clipboard). In that case, the local
+    // cell data would be invalid; despite the fact that a 'Sheet1' exists (just because
+    // it's the default)
+    if(!m_pDocument->IsTemporary())
+    {
+        ScRangeStringConverter::GetStringFromXMLRangeString(aRet, sXMLRange, m_pDocument);
+    }
+
     return aRet;
 }
 
