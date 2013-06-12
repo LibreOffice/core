@@ -172,7 +172,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
         throw lang::DisposedException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
     if ( m_pZipFile )
-        throw uno::Exception(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() ); // initialization is allowed only one time
+        throw uno::RuntimeException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() ); // initialization is allowed only one time
 
     if ( !aArguments.getLength() )
         throw lang::IllegalArgumentException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >(), 1 );
