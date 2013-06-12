@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//7dg\u003d",
+        "filename": "i18npool/source/localedata/data/bo_IN.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000439
+      },
+      "writtenOn": "2013-06-12T07:30:05Z",
+      "side": 1,
+      "message": "Hmm, what is this misterious newly to be created LangID value? I\u0027ve put 452 but I\u0027m not sure...",
+      "parentUuid": "AAAAXH//7f4\u003d",
+      "revId": "67876eae35d7bba122fb5865857512a178a27a72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//7fw\u003d",
         "filename": "i18npool/source/localedata/data/bo_IN.xml",
         "patchSetId": 1
