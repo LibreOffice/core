@@ -72,6 +72,7 @@ public:
     void testI120928();
     void testFdo64826();
     void testPageBackground();
+    void testPageGraphicBackground();
     void testFdo65265();
     void testFdo65655();
 
@@ -123,6 +124,7 @@ void Test::run()
         {"i120928.docx", &Test::testI120928},
         {"fdo64826.docx", &Test::testFdo64826},
         {"page-background.docx", &Test::testPageBackground},
+        {"page-graphic-background.odt", &Test::testPageGraphicBackground},
         {"fdo65265.docx", &Test::testFdo65265},
         {"fdo65655.docx", &Test::testFdo65655},
     };
@@ -690,6 +692,15 @@ void Test::testPageBackground()
     // 'Document Background' wasn't exported.
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x92D050), getProperty<sal_Int32>(xPageStyle, "BackColor"));
+}
+
+void Test::testPageGraphicBackground()
+{
+    // No idea how the graphic background should be exported (seems there is no
+    // way to do a non-tiling export to OOXML), but at least the background
+    // color shouldn't be black.
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xPageStyle, "BackColor"));
 }
 
 void Test::testFdo65265()

@@ -746,7 +746,8 @@ boost::optional<const SvxBrushItem*> DocxExport::getBackground()
     {
         // The 'color' is set for the first page style - take it and use it as the background color of the entire DOCX
         const SvxBrushItem* pBrush = (const SvxBrushItem*)pItem;
-        oRet.reset(pBrush);
+        if (pBrush->GetColor().GetColor() != COL_AUTO)
+            oRet.reset(pBrush);
     }
     return oRet;
 }
