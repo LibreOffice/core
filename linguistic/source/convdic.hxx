@@ -108,11 +108,11 @@ protected:
     void    Save();
 
 public:
-    ConvDic( const String &rName,
+    ConvDic( const OUString &rName,
              sal_Int16 nLanguage,
              sal_Int16 nConversionType,
-             sal_Bool bBiDirectional,
-             const String &rMainURL);
+             bool bBiDirectional,
+             const OUString &rMainURL);
     virtual ~ConvDic();
 
     // XConversionDictionary

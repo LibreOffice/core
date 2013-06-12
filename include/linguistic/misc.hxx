@@ -35,7 +35,6 @@
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <unotools/pathoptions.hxx>
 #include <i18nlangtag/lang.h>
-#include <tools/string.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/thread.h>
 #include <osl/mutex.hxx>
@@ -117,10 +116,10 @@ LNG_DLLPUBLIC bool LinguIsUnspecified( LanguageType nLanguage );
 
 // checks if file pointed to by rURL is readonly
 // and may also check return if such a file exists or not
-sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist = 0 );
+bool    IsReadOnly( const OUString &rURL, bool *pbExist = 0 );
 
 // checks if a file with the given URL exists
-sal_Bool    FileExists( const String &rURL );
+bool    FileExists( const OUString &rURL );
 
 
 OUString     GetDictionaryWriteablePath();
@@ -128,7 +127,7 @@ OUString     GetDictionaryWriteablePath();
 
 /// @returns an URL for a new and writable dictionary rDicName.
 ///     The URL will point to the path given by 'GetDictionaryWriteablePath'
-LNG_DLLPUBLIC String  GetWritableDictionaryURL( const String &rDicName );
+LNG_DLLPUBLIC OUString  GetWritableDictionaryURL( const OUString &rDicName );
 
 LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( const OUString &rTxt, sal_Int32 nPos );
 
@@ -139,14 +138,14 @@ LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( const OUString &rTxt, sal_Int32 nPo
                     ::com::sun::star::linguistic2::XHyphenatedWord > &rxHyphWord );
 
 
-LNG_DLLPUBLIC sal_Bool        IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
+LNG_DLLPUBLIC bool        IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, sal_Int16 nLanguage );
 
-inline sal_Bool        IsUpper( const String &rText, sal_Int16 nLanguage )     { return IsUpper( rText, 0, rText.Len(), nLanguage ); }
+inline bool        IsUpper( const OUString &rText, sal_Int16 nLanguage )     { return IsUpper( rText, 0, rText.getLength(), nLanguage ); }
 LNG_DLLPUBLIC CapType SAL_CALL capitalType(const OUString&, CharClass *);
 
-String      ToLower( const String &rText, sal_Int16 nLanguage );
-LNG_DLLPUBLIC sal_Bool      HasDigits( const OUString &rText );
-LNG_DLLPUBLIC sal_Bool      IsNumeric( const String &rText );
+OUString      ToLower( const OUString &rText, sal_Int16 nLanguage );
+LNG_DLLPUBLIC bool      HasDigits( const OUString &rText );
+LNG_DLLPUBLIC bool      IsNumeric( const OUString &rText );
 
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > GetOneInstanceService( const char *pServiceName );
@@ -155,11 +154,11 @@ LNG_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::X
 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary > GetIgnoreAllList();
 
 
-sal_Bool IsUseDicList( const ::com::sun::star::beans::PropertyValues &rProperties,
+bool IsUseDicList( const ::com::sun::star::beans::PropertyValues &rProperties,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > &rxPropSet );
 
-sal_Bool IsIgnoreControlChars( const ::com::sun::star::beans::PropertyValues &rProperties,
+bool IsIgnoreControlChars( const ::com::sun::star::beans::PropertyValues &rProperties,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > &rxPropSet );
 
@@ -168,15 +167,15 @@ sal_Bool IsIgnoreControlChars( const ::com::sun::star::beans::PropertyValues &rP
         SearchDicList(
             const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList >& rDicList,
             const OUString& rWord, sal_Int16 nLanguage,
-            sal_Bool bSearchPosDics, sal_Bool bSearchSpellEntry );
+            bool bSearchPosDics, bool bSearchSpellEntry );
 
 LNG_DLLPUBLIC sal_uInt8 AddEntryToDic(
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary >  &rxDic,
-    const OUString &rWord, sal_Bool bIsNeg,
+    const OUString &rWord, bool bIsNeg,
     const OUString &rRplcTxt, sal_Int16 nRplcLang,
-    sal_Bool bStripDot = sal_True );
+    bool bStripDot = true );
 
-LNG_DLLPUBLIC sal_Bool SaveDictionaries( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList > &xDicList );
+LNG_DLLPUBLIC bool SaveDictionaries( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList > &xDicList );
 
 // AppExitLstnr:
 // virtual base class that calls it AtExit function when the application

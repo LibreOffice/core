@@ -41,10 +41,10 @@ namespace linguistic
 {
 
 
-sal_Bool FileExists( const String &rMainURL )
+bool FileExists( const OUString &rMainURL )
 {
-    sal_Bool bExists = sal_False;
-    if (rMainURL.Len())
+    bool bExists = sal_False;
+    if (!rMainURL.isEmpty())
     {
         try
         {
@@ -134,7 +134,7 @@ uno::Sequence< OUString > GetDictionaryPaths( sal_Int16 nPathFlags )
     return GetMultiPaths_Impl( "Dictionary", nPathFlags );
 }
 
-String  GetWritableDictionaryURL( const String &rDicName )
+OUString GetWritableDictionaryURL( const OUString &rDicName )
 {
     // new user writable dictionaries should be created in the 'writable' path
     String aDirName( GetDictionaryWriteablePath() );

@@ -206,7 +206,7 @@ public:
     : DdeTopic( "TRIGGER" )
     {}
 
-    virtual sal_Bool Execute( const String* );
+    virtual sal_Bool Execute( const OUString* );
 };
 
 class SfxDdeDocTopic_Impl : public DdeTopic
@@ -222,7 +222,7 @@ public:
 
     virtual DdeData* Get( sal_uIntPtr );
     virtual sal_Bool Put( const DdeData* );
-    virtual sal_Bool Execute( const String* );
+    virtual sal_Bool Execute( const OUString* );
     virtual sal_Bool StartAdviseLoop();
     virtual sal_Bool MakeItem( const OUString& rItem );
 };
@@ -622,7 +622,7 @@ DdeService* SfxApplication::GetDdeService()
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxDdeTriggerTopic_Impl::Execute( const String* )
+sal_Bool SfxDdeTriggerTopic_Impl::Execute( const OUString* )
 {
     return sal_True;
 }
@@ -659,7 +659,7 @@ sal_Bool SfxDdeDocTopic_Impl::Put( const DdeData* pData )
     return bRet;
 }
 
-sal_Bool SfxDdeDocTopic_Impl::Execute( const String* pStr )
+sal_Bool SfxDdeDocTopic_Impl::Execute( const OUString* pStr )
 {
     long nRet = pStr ? pSh->DdeExecute( *pStr ) : 0;
     return 0 != nRet;

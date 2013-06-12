@@ -18,7 +18,6 @@
  */
 
 #include <sal/macros.h>
-#include <tools/string.hxx>
 #include <tools/debug.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/lngmisc.hxx>
@@ -200,7 +199,7 @@ sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 )
  }
 
 
-sal_Bool IsUseDicList( const PropertyValues &rProperties,
+bool IsUseDicList( const PropertyValues &rProperties,
         const uno::Reference< XPropertySet > &rxProp )
 {
     sal_Bool bRes = sal_True;
@@ -224,12 +223,12 @@ sal_Bool IsUseDicList( const PropertyValues &rProperties,
             xFast->getFastPropertyValue( UPH_IS_USE_DICTIONARY_LIST ) >>= bRes;
     }
 
-    return bRes;
+    return bRes ? true : false;
 }
 
 
-sal_Bool IsIgnoreControlChars( const PropertyValues &rProperties,
-        const uno::Reference< XPropertySet > &rxProp )
+bool IsIgnoreControlChars( const PropertyValues &rProperties,
+                           const uno::Reference< XPropertySet > &rxProp )
 {
     sal_Bool bRes = sal_True;
 
@@ -256,7 +255,7 @@ sal_Bool IsIgnoreControlChars( const PropertyValues &rProperties,
 }
 
 
-static sal_Bool lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry )
+static bool lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry )
 {
     sal_Bool bRes = sal_False;
     if (xEntry.is())
@@ -266,14 +265,14 @@ static sal_Bool lcl_HasHyphInfo( const uno::Reference<XDictionaryEntry> &xEntry 
         sal_Int32 nIdx = xEntry->getDictionaryWord().indexOf( '=' );
         bRes = nIdx != -1  &&  nIdx != 0;
     }
-    return bRes;
+    return bRes ? true: false;
 }
 
 
 uno::Reference< XDictionaryEntry > SearchDicList(
         const uno::Reference< XSearchableDictionaryList > &xDicList,
         const OUString &rWord, sal_Int16 nLanguage,
-        sal_Bool bSearchPosDics, sal_Bool bSearchSpellEntry )
+        bool bSearchPosDics, bool bSearchSpellEntry )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -319,12 +318,12 @@ uno::Reference< XDictionaryEntry > SearchDicList(
 }
 
 
-sal_Bool SaveDictionaries( const uno::Reference< XSearchableDictionaryList > &xDicList )
+bool SaveDictionaries( const uno::Reference< XSearchableDictionaryList > &xDicList )
 {
     if (!xDicList.is())
-        return sal_True;
+        return true;
 
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     Sequence< uno::Reference< XDictionary >  > aDics( xDicList->getDictionaries() );
     const uno::Reference< XDictionary >  *pDic = aDics.getConstArray();
@@ -342,7 +341,7 @@ sal_Bool SaveDictionaries( const uno::Reference< XSearchableDictionaryList > &xD
         }
         catch(uno::Exception &)
         {
-            bRet = sal_False;
+            bRet = false;
         }
     }
 
@@ -352,9 +351,9 @@ sal_Bool SaveDictionaries( const uno::Reference< XSearchableDictionaryList > &xD
 
 sal_uInt8 AddEntryToDic(
         uno::Reference< XDictionary >  &rxDic,
-        const OUString &rWord, sal_Bool bIsNeg,
+        const OUString &rWord, bool bIsNeg,
         const OUString &rRplcTxt, sal_Int16 /* nRplcLang */,
-        sal_Bool bStripDot )
+        bool bStripDot )
 {
     if (!rxDic.is())
         return DIC_ERR_NOT_EXISTS;
@@ -408,12 +407,12 @@ uno::Sequence< sal_Int16 >
 }
 
 
-sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist )
+bool IsReadOnly( const OUString &rURL, bool *pbExist )
 {
-    sal_Bool bRes = sal_False;
-    sal_Bool bExists = sal_False;
+    bool bRes = false;
+    bool bExists = false;
 
-    if (rURL.Len() > 0)
+    if (!rURL.isEmpty())
     {
         try
         {
@@ -423,13 +422,15 @@ sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist )
             bExists = aContent.isDocument();
             if (bExists)
             {
+                sal_Bool bResStream;
                 Any aAny( aContent.getPropertyValue( "IsReadOnly" ) );
-                aAny >>= bRes;
+                aAny >>= bResStream;
+                bRes = bResStream ? true : false;
             }
         }
         catch (Exception &)
         {
-            bRes = sal_True;
+            bRes = true;
         }
     }
 
@@ -609,7 +610,7 @@ osl::Mutex & lcl_GetCharClassMutex()
 }
 
 
-sal_Bool IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage )
+bool IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, sal_Int16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
@@ -625,7 +626,7 @@ CapType SAL_CALL capitalType(const OUString& aTerm, CharClass * pCC)
         sal_Int32 tlen = aTerm.getLength();
         if ((pCC) && (tlen))
         {
-            String aStr(aTerm);
+            OUString aStr(aTerm);
             sal_Int32 nc = 0;
             for (sal_uInt16 tindex = 0; tindex < tlen;  tindex++)
             {
@@ -647,7 +648,7 @@ CapType SAL_CALL capitalType(const OUString& aTerm, CharClass * pCC)
 }
 
 
-String ToLower( const String &rText, sal_Int16 nLanguage )
+OUString ToLower( const OUString &rText, sal_Int16 nLanguage )
 {
     MutexGuard  aGuard( lcl_GetCharClassMutex() );
 
@@ -696,7 +697,7 @@ static const sal_uInt32 the_aDigitZeroes [] =
     0x0001D7CE  //1D7FF   ; Decimal # Nd  [50] MATHEMATICAL BOLD DIGIT ZERO..MATHEMATICAL MONOSPACE DIGIT NINE
 };
 
-sal_Bool HasDigits( const OUString &rText )
+bool HasDigits( const OUString &rText )
 {
     static const int nNumDigitZeroes = sizeof(the_aDigitZeroes) / sizeof(the_aDigitZeroes[0]);
     const sal_Int32 nLen = rText.getLength();
@@ -711,27 +712,27 @@ sal_Bool HasDigits( const OUString &rText )
             if (nDigitZero > nCodePoint)
                 break;
             if (/*nDigitZero <= nCodePoint &&*/ nCodePoint <= nDigitZero + 9)
-                return sal_True;
+                return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool IsNumeric( const String &rText )
+bool IsNumeric( const OUString &rText )
 {
-    sal_Bool bRes = sal_False;
-    xub_StrLen nLen = rText.Len();
+    bool bRes = false;
+    sal_Int32 nLen = rText.getLength();
     if (nLen)
     {
-        bRes = sal_True;
-        xub_StrLen i = 0;
+        bRes = true;
+        sal_Int32 i = 0;
         while (i < nLen)
         {
-            sal_Unicode cChar = rText.GetChar( i++ );
+            sal_Unicode cChar = rText[ i++ ];
             if ( !((sal_Unicode)'0' <= cChar  &&  cChar <= (sal_Unicode)'9') )
             {
-                bRes = sal_False;
+                bRes = false;
                 break;
             }
         }

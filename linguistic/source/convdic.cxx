@@ -163,12 +163,11 @@ sal_Bool IsConvDic( const String &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvTy
 
 
 
-ConvDic::ConvDic(
-        const String &rName,
-        sal_Int16 nLang,
-        sal_Int16 nConvType,
-             sal_Bool bBiDirectional,
-        const String &rMainURL) :
+ConvDic::ConvDic( const OUString &rName,
+                  sal_Int16 nLang,
+                  sal_Int16 nConvType,
+                  bool bBiDirectional,
+                  const OUString &rMainURL) :
     aFlushListeners( GetLinguMutex() )
 {
     aName           = rName;
@@ -182,20 +181,20 @@ ConvDic::ConvDic(
         pConvPropType = std::auto_ptr< PropTypeMap >( new PropTypeMap );
 
     nMaxLeftCharCount = nMaxRightCharCount = 0;
-    bMaxCharCountIsValid = sal_True;
+    bMaxCharCountIsValid = true;
 
-    bNeedEntries = sal_True;
-    bIsModified  = bIsActive = sal_False;
-    bIsReadonly = sal_False;
+    bNeedEntries = true;
+    bIsModified  = bIsActive = false;
+    bIsReadonly = false;
 
-    if( rMainURL.Len() > 0 )
+    if( !rMainURL.isEmpty() )
     {
-        sal_Bool bExists = sal_False;
+        bool bExists = false;
         bIsReadonly = IsReadOnly( rMainURL, &bExists );
 
         if( !bExists )  // new empty dictionary
         {
-            bNeedEntries = sal_False;
+            bNeedEntries = false;
             //! create physical representation of an **empty** dictionary
             //! that could be found by the dictionary-list implementation
             // (Note: empty dictionaries are not just empty files!)
@@ -205,7 +204,7 @@ ConvDic::ConvDic(
     }
     else
     {
-        bNeedEntries = sal_False;
+        bNeedEntries = false;
     }
 }
 
