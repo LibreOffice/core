@@ -620,6 +620,13 @@ End
 
 #endif
 
+File gid_File_Lib_Spell
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Name = LIBNAME(spell);
+    Dir = SCP2_OOO_BIN_DIR;
+End
+
 #if defined UNX && !defined MACOSX && !defined LIBO_HEADLESS
 STD_LIB_FILE( gid_File_Lib_Spl_Unx, spl_unx)
 #endif

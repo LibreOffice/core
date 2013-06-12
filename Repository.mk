@@ -322,7 +322,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	simplecanvas \
 	slideshow \
 	sot \
-	spell \
 	$(if $(ENABLE_HEADLESS),,spl) \
 	$(if $(DISABLE_SCRIPTING),,stringresource) \
 	svgio \
@@ -393,6 +392,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	rptxml \
 	simplecm \
 	spa \
+	spell \
 	sts \
 	textfd \
 	vclplug_tde \
