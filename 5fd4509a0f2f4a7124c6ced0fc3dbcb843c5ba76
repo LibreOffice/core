@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAXH//7cE\u003d",
+        "filename": "i18npool/source/localedata/data/bo_CN.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-06-12T11:01:36Z",
+      "side": 1,
+      "message": "Actually replace the [$￥-804] with [CURRENCY] to make replaceFrom/replaceTo work.",
+      "revId": "5fd4509a0f2f4a7124c6ced0fc3dbcb843c5ba76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7cI\u003d",
+        "filename": "i18npool/source/localedata/data/bo_CN.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-06-12T11:01:36Z",
+      "side": 1,
+      "message": "The DaysOfWeek definitions must start with Sunday, this gives an error during build.",
+      "revId": "5fd4509a0f2f4a7124c6ced0fc3dbcb843c5ba76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//7cY\u003d",
         "filename": "i18npool/source/localedata/data/bo_IN.xml",
         "patchSetId": 3
@@ -13,6 +47,40 @@
       "writtenOn": "2013-06-12T10:08:11Z",
       "side": 1,
       "message": "Hum? 452? That would be Welsh in United Kingdom [cy-GB] ;-)\n\nThe correct number is now 8051 as added with http://cgit.freedesktop.org/libreoffice/core/commit/?id\u003dad3105a2933aff80b8fd471d32c0846440a508c5",
+      "revId": "5fd4509a0f2f4a7124c6ced0fc3dbcb843c5ba76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7cQ\u003d",
+        "filename": "i18npool/source/localedata/data/bo_IN.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-06-12T11:01:36Z",
+      "side": 1,
+      "message": "The DaysOfWeek definitions must start with Sunday, this gives an error during build.",
+      "revId": "5fd4509a0f2f4a7124c6ced0fc3dbcb843c5ba76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7cM\u003d",
+        "filename": "i18npool/source/localedata/data/bo_IN.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-06-12T11:01:36Z",
+      "side": 1,
+      "message": "The entire legacy entry is not needed in a new locale.",
       "revId": "5fd4509a0f2f4a7124c6ced0fc3dbcb843c5ba76",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
