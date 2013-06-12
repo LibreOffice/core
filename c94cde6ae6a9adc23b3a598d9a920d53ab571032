@@ -16,6 +16,24 @@
       "revId": "c94cde6ae6a9adc23b3a598d9a920d53ab571032",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7a4\u003d",
+        "filename": "helpcompiler/source/HelpCompiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000035
+      },
+      "writtenOn": "2013-06-12T21:13:28Z",
+      "side": 1,
+      "message": "Well, I\u0027ve done this because GUI had only values WNT and UNX.. no MAC\n\nAnyway, in new patch I added MAC for OS\u003dMACOSX case.",
+      "parentUuid": "AAAAXH//7pA\u003d",
+      "revId": "c94cde6ae6a9adc23b3a598d9a920d53ab571032",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
