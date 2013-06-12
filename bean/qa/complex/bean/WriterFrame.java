@@ -167,7 +167,7 @@ class WriterFrame extends java.awt.Frame
             || client.width != unoWin.width
             || client.height != unoWin.height)
         {
-            System.out.println("\nPosition of client are of Java frame does not match the postion" +
+            System.out.println("\nPosition of client are of Java frame does not match the position" +
                                "of the UNO window. These are the values of Java frame, followed by" +
                                "the UNO window: ");
             System.out.println(client);
