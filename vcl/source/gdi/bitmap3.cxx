@@ -2395,39 +2395,43 @@ sal_Bool Bitmap::ImplScaleConvolution(
     {
         const sal_uInt32 nInBetweenSizeHorFirst(nHeight * nNewWidth);
         const sal_uInt32 nInBetweenSizeVerFirst(nNewHeight * nWidth);
+        Bitmap aSource(*this);
 
-        Bitmap aInterm;
         if(nInBetweenSizeHorFirst < nInBetweenSizeVerFirst)
         {
             if(bScaleHor)
             {
-                bResult = ImplScaleConvolutionHor(*this, aInterm, fScaleX, aKernel);
+                bResult = ImplScaleConvolutionHor(aSource, aResult, fScaleX, aKernel);
             }
-            else
-                aInterm = *this;
 
             if(bResult && bScaleVer)
             {
-                bResult = ImplScaleConvolutionVer(aInterm, aResult, fScaleY, aKernel);
+                if(bScaleHor)
+                {
+                    // copy partial result, independent of color depth
+                    aSource = aResult;
+                }
+
+                bResult = ImplScaleConvolutionVer(aSource, aResult, fScaleY, aKernel);
             }
-            else
-                aResult = aInterm;
         }
         else
         {
             if(bScaleVer)
             {
-                bResult = ImplScaleConvolutionVer(*this, aInterm, fScaleY, aKernel);
+                bResult = ImplScaleConvolutionVer(aSource, aResult, fScaleY, aKernel);
             }
-            else
-                aInterm = *this;
 
             if(bResult && bScaleHor)
             {
-                bResult = ImplScaleConvolutionHor(aInterm, aResult, fScaleX, aKernel);
+                if(bScaleVer)
+                {
+                    // copy partial result, independent of color depth
+                    aSource = aResult;
+                }
+
+                bResult = ImplScaleConvolutionHor(aSource, aResult, fScaleX, aKernel);
             }
-            else
-                aResult = aInterm;
         }
     }
 
