@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7cY\u003d",
+        "filename": "i18npool/source/localedata/data/bo_IN.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-06-12T10:08:11Z",
+      "side": 1,
+      "message": "Hum? 452? That would be Welsh in United Kingdom [cy-GB] ;-)\n\nThe correct number is now 8051 as added with http://cgit.freedesktop.org/libreoffice/core/commit/?id\u003dad3105a2933aff80b8fd471d32c0846440a508c5",
+      "revId": "5fd4509a0f2f4a7124c6ced0fc3dbcb843c5ba76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7cc\u003d",
+        "filename": "i18npool/source/localedata/localedata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-06-12T10:08:11Z",
+      "side": 1,
+      "message": "A comma is missing after this entry, this should not even compile..",
+      "revId": "5fd4509a0f2f4a7124c6ced0fc3dbcb843c5ba76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7cg\u003d",
+        "filename": "svtools/source/misc/langtab.src",
+        "patchSetId": 3
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-06-12T10:08:11Z",
+      "side": 1,
+      "message": "Change in this file is not needed, it is covered by http://cgit.freedesktop.org/libreoffice/core/commit/?id\u003dad3105a2933aff80b8fd471d32c0846440a508c5\n\nActually this change here would add a duplicate entry for LANGUAGE_TIBETAN which is wrong.",
+      "revId": "5fd4509a0f2f4a7124c6ced0fc3dbcb843c5ba76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
