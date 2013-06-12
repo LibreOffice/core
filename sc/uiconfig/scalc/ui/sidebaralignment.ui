@@ -26,11 +26,9 @@
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="substleft">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="valign">start</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="action_name">.uno:AlignLeft</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -41,10 +39,8 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="substcenter">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="action_name">.uno:AlignHorizontalCenter</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -55,10 +51,8 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="substright">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="action_name">.uno:AlignRight</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -69,10 +63,8 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="substjustify">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="action_name">.uno:AlignBlock</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -97,11 +89,9 @@
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="verttop">
-                    <property name="use_action_appearance">False</property>
                     <property name="width_request">30</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="action_name">.uno:AlignTop</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -112,10 +102,8 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="vertcenter">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="action_name">.uno:AlignVCenter</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -126,10 +114,8 @@
                 </child>
                 <child>
                   <object class="GtkToolButton" id="vertbottom">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="action_name">.uno:AlignBottom</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -171,6 +157,7 @@
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Left _indent:</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">leftindent:0pt</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -210,7 +197,6 @@
                 <child>
                   <object class="GtkCheckButton" id="mergecells">
                     <property name="label" translatable="yes">Merge Cells</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -218,7 +204,6 @@
                     <property name="tooltip_markup" translatable="yes">Joins the selected cells into one.</property>
                     <property name="tooltip_text" translatable="yes">Joins the selected cells into one.</property>
                     <property name="halign">start</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="image_position">right</property>
                     <property name="draw_indicator">True</property>
@@ -232,7 +217,6 @@
                 <child>
                   <object class="GtkCheckButton" id="wraptext">
                     <property name="label" translatable="yes">Wrap text</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -240,7 +224,6 @@
                     <property name="tooltip_markup" translatable="yes">Wrap texts automatically.</property>
                     <property name="tooltip_text" translatable="yes">Wrap texts automatically.</property>
                     <property name="halign">start</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -272,6 +255,7 @@
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Text _orientation:</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">orientationcontrol</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -308,14 +292,12 @@
                 <child>
                   <object class="GtkCheckButton" id="verticallystacked">
                     <property name="label" translatable="yes">Vertically Stacked</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup" translatable="yes">Aligns text vertically.</property>
                     <property name="tooltip_text" translatable="yes">Aligns text vertically.</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="xalign">0</property>
                     <property name="image_position">bottom</property>
                     <property name="draw_indicator">True</property>

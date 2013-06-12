@@ -24,6 +24,7 @@
                 <property name="margin_right">122</property>
                 <property name="label" translatable="yes">_Category:</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">category</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -154,6 +155,7 @@
                 <property name="margin_right">2</property>
                 <property name="label" translatable="yes">_Decimal places:</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">decimalplaces</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -169,6 +171,7 @@
                 <property name="margin_left">51</property>
                 <property name="label" translatable="yes">Leading _zeroes:</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">leadingzeroes</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
