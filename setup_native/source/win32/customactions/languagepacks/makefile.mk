@@ -46,6 +46,10 @@ CDEFS+=-Dnot_used_define_to_disable_pch
 
 .IF "$(GUI)"=="WNT"
 
+.IF "$(USE_SYSTEM_STL)" != "YES" && "$(PRODUCT)" = ""
+CDEFS+=-D_DEBUG
+.ENDIF
+
 UWINAPILIB=
 
 SLOFILES =	$(SLO)$/lngpckinsthelper.obj \

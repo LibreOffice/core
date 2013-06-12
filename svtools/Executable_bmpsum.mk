@@ -41,6 +41,15 @@ $(eval $(call gb_Executable_add_linked_libs,bmpsum,\
     $(gb_STDLIBS) \
 ))
 
+ifneq ($(USE_SYSTEM_STL),YES)
+ifeq ($(PRODUCT),)
+ $(eval $(call gb_Executable_set_cxxflags,bmpsum,\
+        $$(CXXFLAGS) \
+        -D_DEBUG \
+))
+endif
+endif
+
 $(eval $(call gb_Executable_add_exception_objects,bmpsum,\
     svtools/bmpmaker/bmpsum \
 ))

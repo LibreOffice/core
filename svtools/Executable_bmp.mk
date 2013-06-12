@@ -44,6 +44,15 @@ $(eval $(call gb_Executable_add_linked_libs,bmp,\
     $(gb_STDLIBS) \
 ))
 
+ifneq ($(USE_SYSTEM_STL),YES)
+ifeq ($(PRODUCT),)
+ $(eval $(call gb_Executable_set_cxxflags,bmp,\
+        $$(CXXFLAGS) \
+        -D_DEBUG \
+))
+endif
+endif
+
 $(eval $(call gb_Executable_add_exception_objects,bmp,\
     svtools/bmpmaker/bmp \
     svtools/bmpmaker/bmpcore \

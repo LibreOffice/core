@@ -25,6 +25,15 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,ooopathutils))
 
 $(eval $(call gb_StaticLibrary_add_package_headers,ooopathutils,tools_inc))
 
+ifneq ($(USE_SYSTEM_STL),YES)
+ifeq ($(PRODUCT),)
+$(eval $(call gb_StaticLibrary_set_defs,ooopathutils,\
+	$$(DEFS) \
+	-D_DEBUG \
+))
+endif
+endif
+
 $(eval $(call gb_StaticLibrary_add_exception_objects,ooopathutils,\
 	tools/source/misc/pathutils \
 ))
