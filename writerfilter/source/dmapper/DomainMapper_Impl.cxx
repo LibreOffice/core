@@ -175,6 +175,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bInStyleSheetImport( false ),
         m_bInAnyTableImport( false ),
         m_bInHeaderFooterImport( false ),
+        m_bDiscardHeaderFooter( false ),
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( true ),
         m_bIsCustomFtnMark( false ),
@@ -1174,10 +1175,15 @@ util::DateTime lcl_DateStringToDateTime( const OUString& rDateTime )
 
     return aDateTime;
 }
+
 void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapPtr pPropertyMap )
 {
+    if (m_bDiscardHeaderFooter)
+        return;
+
     if (m_aTextAppendStack.empty())
         return;
+
     if( pPropertyMap == m_pTopContext && !deferredCharacterProperties.empty())
         processDeferredCharacterProperties();
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
@@ -1370,21 +1376,28 @@ void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
             return;
         try
         {
-            PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-            //switch on header use
-            xPageStyle->setPropertyValue(
-                    rPropNameSupplier.GetName(PROP_HEADER_IS_ON),
-                    uno::makeAny(sal_True) );
-            // if a left header is available then header are not shared
             bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
-            if( bLeft && m_pSettingsTable->GetEvenAndOddHeaders())
-                xPageStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_IS_SHARED), uno::makeAny( false ));
+            if ((!bLeft && !m_pSettingsTable->GetEvenAndOddHeaders()) || (m_pSettingsTable->GetEvenAndOddHeaders()))
+            {
+                PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+                //switch on header use
+                xPageStyle->setPropertyValue(
+                        rPropNameSupplier.GetName(PROP_HEADER_IS_ON),
+                        uno::makeAny(sal_True) );
+                // if a left header is available then header are not shared
+                if( bLeft && m_pSettingsTable->GetEvenAndOddHeaders())
+                    xPageStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_HEADER_IS_SHARED), uno::makeAny( false ));
 
-            //set the interface
-            uno::Reference< text::XText > xHeaderText;
-            xPageStyle->getPropertyValue(rPropNameSupplier.GetName( bLeft ? PROP_HEADER_TEXT_LEFT : PROP_HEADER_TEXT) ) >>= xHeaderText;
-            m_aTextAppendStack.push( TextAppendContext(uno::Reference< text::XTextAppend >( xHeaderText, uno::UNO_QUERY_THROW),
-                        m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xHeaderText->getStart())));
+                //set the interface
+                uno::Reference< text::XText > xHeaderText;
+                xPageStyle->getPropertyValue(rPropNameSupplier.GetName( bLeft ? PROP_HEADER_TEXT_LEFT : PROP_HEADER_TEXT) ) >>= xHeaderText;
+                m_aTextAppendStack.push( TextAppendContext(uno::Reference< text::XTextAppend >( xHeaderText, uno::UNO_QUERY_THROW),
+                            m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xHeaderText->getStart())));
+            }
+            else
+            {
+                m_bDiscardHeaderFooter = true;
+            }
         }
         catch( const uno::Exception& )
         {
@@ -1412,20 +1425,28 @@ void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
             return;
         try
         {
-            PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-            //switch on footer use
-            xPageStyle->setPropertyValue(
-                    rPropNameSupplier.GetName(PROP_FOOTER_IS_ON),
-                    uno::makeAny(sal_True) );
-            // if a left header is available then footer is not shared
             bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
-            if( bLeft && m_pSettingsTable->GetEvenAndOddHeaders())
-                xPageStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_IS_SHARED), uno::makeAny( false ));
-            //set the interface
-            uno::Reference< text::XText > xFooterText;
-            xPageStyle->getPropertyValue(rPropNameSupplier.GetName( bLeft ? PROP_FOOTER_TEXT_LEFT : PROP_FOOTER_TEXT) ) >>= xFooterText;
-            m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xFooterText, uno::UNO_QUERY_THROW ),
-                        m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xFooterText->getStart())));
+            if ((!bLeft && !m_pSettingsTable->GetEvenAndOddHeaders()) || (m_pSettingsTable->GetEvenAndOddHeaders()))
+            {
+                PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+                //switch on footer use
+                xPageStyle->setPropertyValue(
+                        rPropNameSupplier.GetName(PROP_FOOTER_IS_ON),
+                        uno::makeAny(sal_True) );
+                // if a left header is available then footer is not shared
+                bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
+                if( bLeft && m_pSettingsTable->GetEvenAndOddHeaders())
+                    xPageStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_FOOTER_IS_SHARED), uno::makeAny( false ));
+                //set the interface
+                uno::Reference< text::XText > xFooterText;
+                xPageStyle->getPropertyValue(rPropNameSupplier.GetName( bLeft ? PROP_FOOTER_TEXT_LEFT : PROP_FOOTER_TEXT) ) >>= xFooterText;
+                m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xFooterText, uno::UNO_QUERY_THROW ),
+                            m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : m_xBodyText->createTextCursorByRange(xFooterText->getStart())));
+            }
+            else
+            {
+                m_bDiscardHeaderFooter = true;
+            }
         }
         catch( const uno::Exception& )
         {
@@ -1440,7 +1461,13 @@ void DomainMapper_Impl::PopPageHeaderFooter()
     //this has to be removed
     RemoveLastParagraph( );
     if (!m_aTextAppendStack.empty())
-        m_aTextAppendStack.pop();
+    {
+        if (!m_bDiscardHeaderFooter)
+        {
+            m_aTextAppendStack.pop();
+        }
+        m_bDiscardHeaderFooter = false;
+    }
     m_bInHeaderFooterImport = false;
 }
 
