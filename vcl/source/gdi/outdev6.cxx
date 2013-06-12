@@ -791,9 +791,9 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
     GDIMetaFile*            pOldMetaFile = mpMetaFile;
     const WallpaperStyle    eStyle = rWallpaper.GetStyle();
     const sal_Bool              bOldMap = mbMap;
-    sal_Bool                    bDrawn = sal_False;
-    sal_Bool                    bDrawGradientBackground = sal_False;
-    sal_Bool                    bDrawColorBackground = sal_False;
+    bool                    bDrawn = false;
+    bool                    bDrawGradientBackground = false;
+    bool                    bDrawColorBackground = false;
 
     if( pCached )
         aBmpEx = *pCached;
@@ -808,7 +808,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
     if( bTransparent )
     {
         if( rWallpaper.IsGradient() )
-            bDrawGradientBackground = sal_True;
+            bDrawGradientBackground = true;
         else
         {
             if( !pCached && !rWallpaper.GetColor().GetTransparency() )
@@ -820,15 +820,15 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
                 aBmpEx = aVDev.GetBitmap( Point(), aVDev.GetOutputSizePixel() );
             }
 
-            bDrawColorBackground = sal_True;
+            bDrawColorBackground = true;
         }
     }
     else if( eStyle != WALLPAPER_TILE && eStyle != WALLPAPER_SCALE )
     {
         if( rWallpaper.IsGradient() )
-            bDrawGradientBackground = sal_True;
+            bDrawGradientBackground = true;
         else
-            bDrawColorBackground = sal_True;
+            bDrawColorBackground = true;
     }
 
     // background of bitmap?
@@ -837,7 +837,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
     else if( bDrawColorBackground && bTransparent )
     {
         ImplDrawColorWallpaper( nX, nY, nWidth, nHeight, rWallpaper );
-        bDrawColorBackground = sal_False;
+        bDrawColorBackground = false;
     }
 
     // calc pos and size
@@ -954,7 +954,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
                 for( long nBmpX = nStartX; nBmpX <= nRight; nBmpX += nBmpWidth )
                     DrawBitmapEx( Point( nBmpX, nBmpY ), aBmpEx );
 
-            bDrawn = sal_True;
+            bDrawn = true;
         }
         break;
     }
@@ -1030,7 +1030,7 @@ void OutputDevice::ImplDrawGradientWallpaper( long nX, long nY,
     Rectangle       aBound;
     GDIMetaFile*    pOldMetaFile = mpMetaFile;
     const sal_Bool      bOldMap = mbMap;
-    sal_Bool            bNeedGradient = sal_True;
+    bool            bNeedGradient = true;
 
         aBound = Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
 
@@ -1052,7 +1052,7 @@ void OutputDevice::ImplDrawGradientWallpaper( long nX, long nY,
             if( mnOutOffX+nWidth > gradientWidth )
                 ImplDrawColorWallpaper(  nX, nY, nWidth, nHeight, rWallpaper.GetGradient().GetEndColor() );
             if( mnOutOffX > gradientWidth )
-                bNeedGradient = sal_False;
+                bNeedGradient = false;
             else
                 aBound = Rectangle( Point( -mnOutOffX, nY ), Size( gradientWidth, nHeight ) );
         }

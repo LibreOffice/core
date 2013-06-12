@@ -55,7 +55,7 @@ namespace vcl
         };
         const std::vector< ChunkData >& GetChunks() const;
 
-        void SetIgnoreGammaChunk( sal_Bool b );
+        void SetIgnoreGammaChunk( bool b );
     };
 }
 

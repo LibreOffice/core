@@ -151,9 +151,9 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 if( nDepth > 1 )
                     aBitmapEx.Convert( eConv );
             }
-            sal_Bool bUseJPGCompression = !i_rContext.m_bOnlyLosslessCompression;
+            bool bUseJPGCompression = !i_rContext.m_bOnlyLosslessCompression;
             if ( ( aSizePixel.Width() < 32 ) || ( aSizePixel.Height() < 32 ) )
-                bUseJPGCompression = sal_False;
+                bUseJPGCompression = false;
 
             SvMemoryStream  aStrm;
             Bitmap          aMask;
@@ -206,7 +206,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                     xOut->flush();
                     if ( xSeekable->getLength() > nZippedFileSize )
                     {
-                        bUseJPGCompression = sal_False;
+                        bUseJPGCompression = false;
                     }
                     else
                     {
@@ -229,7 +229,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 }
                 catch( uno::Exception& )
                 {
-                    bUseJPGCompression = sal_False;
+                    bUseJPGCompression = false;
                 }
             }
             if ( bUseJPGCompression )
@@ -518,7 +518,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     if( pA->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_BEGIN"))
                     {
                         const MetaGradientExAction* pGradAction = NULL;
-                        sal_Bool                    bDone = sal_False;
+                        bool                        bDone = false;
 
                         while( !bDone && ( ++i < nCount ) )
                         {
@@ -529,7 +529,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                             else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
                                      ( ( (const MetaCommentAction*) pAction )->GetComment().equalsIgnoreAsciiCase("XGRAD_SEQ_END")) )
                             {
-                                bDone = sal_True;
+                                bDone = true;
                             }
                         }
 
@@ -548,7 +548,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                         if ( pData )
                         {
                             SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
-                            sal_Bool        bSkipSequence = sal_False;
+                            bool            bSkipSequence = false;
                             OString sSeqEnd;
 
                             if( pA->GetComment() == "XPATHSTROKE_SEQ_BEGIN" )
@@ -570,11 +570,11 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 aStroke.getEndArrow( aEndArrow );
                                 aStroke.getDashArray( aDashArray );
 
-                                bSkipSequence = sal_True;
+                                bSkipSequence = true;
                                 if ( aStartArrow.Count() || aEndArrow.Count() )
-                                    bSkipSequence = sal_False;
+                                    bSkipSequence = false;
                                 if ( aDashArray.size() && ( fStrokeWidth != 0.0 ) && ( fTransparency == 0.0 ) )
-                                    bSkipSequence = sal_False;
+                                    bSkipSequence = false;
                                 if ( bSkipSequence )
                                 {
                                     PDFWriter::ExtLineInfo aInfo;
@@ -650,11 +650,11 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                         PolyPolygon aPath;
                                         aFill.getPath( aPath );
 
-                                        bSkipSequence = sal_True;
+                                        bSkipSequence = true;
                                         m_rOuterFace.DrawPolyPolygon( aPath );
                                     }
                                     else if ( fTransparency == 1.0 )
-                                        bSkipSequence = sal_True;
+                                        bSkipSequence = true;
                                 }
 /* #i81548# removing optimization for fill textures, because most of the texture settings are not
    exported properly. In OpenOffice 3.1 the drawing layer will support graphic primitives, then it
@@ -735,7 +735,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                     aFill.getPath( aPath );
                                     m_rOuterFace.DrawPolyPolygon( aPath, nPattern, aFill.getFillRule() == SvtGraphicFill::fillEvenOdd );
 
-                                    bSkipSequence = sal_True;
+                                    bSkipSequence = true;
                                 }
 */
                             }
@@ -1133,7 +1133,7 @@ EncHashTransporter* EncHashTransporter::getEncHashTransporter( const uno::Refere
     return pResult;
 }
 
-sal_Bool PDFWriterImpl::checkEncryptionBufferSize( register sal_Int32 newSize )
+bool PDFWriterImpl::checkEncryptionBufferSize( register sal_Int32 newSize )
 {
     if( m_nEncryptionBufferSize < newSize )
     {

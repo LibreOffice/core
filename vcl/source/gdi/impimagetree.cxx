@@ -106,7 +106,7 @@ static void loadImageFromStream(
     if (rPath.endsWith(".png"))
     {
         vcl::PNGReader aPNGReader( *pStream );
-        aPNGReader.SetIgnoreGammaChunk( sal_True );
+        aPNGReader.SetIgnoreGammaChunk( true );
         rBitmap = aPNGReader.Read();
     } else {
         *pStream >> rBitmap;

@@ -2163,11 +2163,11 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
     }
     else
     {
-        sal_Bool  buffOK = sal_True;
+        bool  buffOK = true;
         if( m_bEncryptThisStream )
         {
 /* implement the encryption part of the PDF spec encryption algorithm 3.1 */
-            if( ( buffOK = checkEncryptionBufferSize( static_cast<sal_Int32>(nBytes) ) ) != sal_False )
+            if( ( buffOK = checkEncryptionBufferSize( static_cast<sal_Int32>(nBytes) ) ) )
                 rtl_cipher_encodeARCFOUR( m_aCipher,
                                           (sal_uInt8*)pBuffer, static_cast<sal_Size>(nBytes),
                                           m_pEncryptionBuffer, static_cast<sal_Size>(nBytes) );
@@ -4587,7 +4587,7 @@ we check in the following sequence:
             sal_Int32   nSetGoToRMode = 0;
             sal_Bool    bTargetHasPDFExtension = sal_False;
             INetProtocol eTargetProtocol = aTargetURL.GetProtocol();
-            sal_Bool    bIsUNCPath = sal_False;
+            bool    bIsUNCPath = false;
 // check if the protocol is a known one, or if there is no protocol at all (on target only)
 // if there is no protocol, make the target relative to the current document directory
 // getting the needed URL information from the current document path
@@ -4595,7 +4595,7 @@ we check in the following sequence:
             {
                 if( rLink.m_aURL.getLength() > 4 && rLink.m_aURL.startsWith("\\\\\\\\"))
                 {
-                    bIsUNCPath = sal_True;
+                    bIsUNCPath = true;
                 }
                 else
                 {

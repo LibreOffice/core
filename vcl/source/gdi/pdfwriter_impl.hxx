@@ -802,7 +802,7 @@ i12626
     sal_Int32                               m_nRC4KeyLength; // key length, 16 or 10, to be input to the algorith 3.1
 
     /* set to true if the following stream must be encrypted, used inside writeBuffer() */
-    sal_Bool                                m_bEncryptThisStream;
+    bool                                    m_bEncryptThisStream;
 
     /* the numerical value of the access permissions, according to PDF spec, must be signed */
     sal_Int32                               m_nAccessPermissions;
@@ -816,7 +816,7 @@ i12626
     sal_Int32                               m_nEncryptionBufferSize;
 
     /* check and reallocate the buffer for encryption */
-    sal_Bool checkEncryptionBufferSize( register sal_Int32 newSize );
+    bool checkEncryptionBufferSize( register sal_Int32 newSize );
     /* this function implements part of the PDF spec algorithm 3.1 in encryption, the rest (the actual encryption) is in PDFWriterImpl::writeBuffer */
     void checkAndEnableStreamEncryption( register sal_Int32 nObject );
 
@@ -1015,7 +1015,7 @@ i12626
     void drawEmphasisMark(  long nX, long nY, const PolyPolygon& rPolyPoly, sal_Bool bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
 
     /* true if PDF/A-1a or PDF/A-1b is output */
-    sal_Bool        m_bIsPDF_A1;
+    bool            m_bIsPDF_A1;
     PDFWriter&      m_rOuterFace;
 
     /*

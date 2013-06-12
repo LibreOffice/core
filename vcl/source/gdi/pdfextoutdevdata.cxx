@@ -299,9 +299,9 @@ struct SAL_DLLPRIVATE PageSyncData
                                                     mControls;
     GlobalSyncData*                                 mpGlobalData;
 
-    sal_Bool                                        mbGroupIgnoreGDIMtfActions;
+    bool                                        mbGroupIgnoreGDIMtfActions;
 
-    PageSyncData( GlobalSyncData* pGlobal ) : mbGroupIgnoreGDIMtfActions ( sal_False ) { mpGlobalData = pGlobal; }
+    PageSyncData( GlobalSyncData* pGlobal ) : mbGroupIgnoreGDIMtfActions ( false ) { mpGlobalData = pGlobal; }
 
     void PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDataSync::Action eAct );
     sal_Bool PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const PDFExtOutDevData& rOutDevData );
@@ -393,7 +393,7 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
             {
                 /* first determining if this BeginGroup is starting a GfxLink,
                    by searching for a EndGroup or a EndGroupGfxLink */
-                mbGroupIgnoreGDIMtfActions = sal_False;
+                mbGroupIgnoreGDIMtfActions = false;
                 std::deque< PDFExtOutDevDataSync >::iterator aBeg = mActions.begin();
                 std::deque< PDFExtOutDevDataSync >::iterator aEnd = mActions.end();
                 while ( aBeg != aEnd )
@@ -409,7 +409,7 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
                             Graphic& rGraphic = mGraphics.front();
                             if ( rGraphic.IsLink() && rGraphic.GetLink().GetType() == GFX_LINK_TYPE_NATIVE_JPG )
                             {
-                                mbGroupIgnoreGDIMtfActions = sal_True;
+                                mbGroupIgnoreGDIMtfActions = true;
                             }
                         }
                         break;
@@ -420,7 +420,7 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
             break;
             case PDFExtOutDevDataSync::EndGroup :
             {
-                mbGroupIgnoreGDIMtfActions = sal_False;
+                mbGroupIgnoreGDIMtfActions = false;
             }
             break;
             case PDFExtOutDevDataSync::EndGroupGfxLink :
@@ -437,7 +437,7 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
 
                 if ( mbGroupIgnoreGDIMtfActions )
                 {
-                    sal_Bool bClippingNeeded = ( aOutputRect != aVisibleOutputRect ) && !aVisibleOutputRect.IsEmpty();
+                    bool bClippingNeeded = ( aOutputRect != aVisibleOutputRect ) && !aVisibleOutputRect.IsEmpty();
 
                     GfxLink   aGfxLink( aGraphic.GetLink() );
                     if ( aGfxLink.GetType() == GFX_LINK_TYPE_NATIVE_JPG )
@@ -463,7 +463,7 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
                         if ( bClippingNeeded )
                             rWriter.Pop();
                     }
-                    mbGroupIgnoreGDIMtfActions = sal_False;
+                    mbGroupIgnoreGDIMtfActions = false;
                 }
             }
             break;

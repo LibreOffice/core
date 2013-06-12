@@ -740,7 +740,7 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    sal_Bool bRelMap = (rNewMapMode.GetMapUnit() == MAP_RELATIVE);
+    bool bRelMap = (rNewMapMode.GetMapUnit() == MAP_RELATIVE);
 
     if ( mpMetaFile )
     {
