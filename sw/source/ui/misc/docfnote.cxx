@@ -157,8 +157,8 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
         // art
     m_pNumViewBox->SelectNumberingType( pInf->aFmt.GetNumberingType());
     m_pOffsetFld->SetValue(pInf->nFtnOffset + 1);
-    m_pPrefixED->SetText(pInf->GetPrefix());
-    m_pSuffixED->SetText(pInf->GetSuffix());
+    m_pPrefixED->SetText(pInf->GetPrefix().replaceAll("\t", "\\t")); // fdo#65666
+    m_pSuffixED->SetText(pInf->GetSuffix().replaceAll("\t", "\\t"));
 
     const SwCharFmt* pCharFmt = pInf->GetCharFmt(
                         *pSh->GetView().GetDocShell()->GetDoc());
@@ -363,8 +363,8 @@ sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
 
     pInf->nFtnOffset = static_cast< sal_uInt16 >(m_pOffsetFld->GetValue() -1);
     pInf->aFmt.SetNumberingType(m_pNumViewBox->GetSelectedNumberingType() );
-    pInf->SetPrefix(m_pPrefixED->GetText());
-    pInf->SetSuffix(m_pSuffixED->GetText());
+    pInf->SetPrefix(m_pPrefixED->GetText().replaceAll("\\t", "\t"));
+    pInf->SetSuffix(m_pSuffixED->GetText().replaceAll("\\t", "\t"));
 
     pInf->SetCharFmt( lcl_GetCharFormat( pSh,
                         m_pFtnCharTextTemplBox->GetSelectEntry() ) );
