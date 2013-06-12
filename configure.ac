@@ -2399,6 +2399,8 @@ dnl Check / find MacOSX SDK and compiler, version checks
 dnl ===================================================================
 if test "$_os" = "Darwin"; then
 
+    xcode_developer=`xcoce-select -print-path`
+
     if test "$enable_64_bit" = "" -o "$enable_64_bit" = "no"; then
         bitness=-m32
     else
@@ -2684,7 +2686,7 @@ if test $_os = iOS; then
 
     pref_sdk_ver=6.1
     for I in 6.1 6.0; do
-        t=/Applications/Xcode.app/Contents/Developer/Platforms/$platform.platform/Developer/SDKs/$platform$I.sdk
+        t=$xcode_developer/Platforms/$platform.platform/Developer/SDKs/$platform$I.sdk
         if test -d $t; then
             sysroot=$t
             break
@@ -2692,13 +2694,13 @@ if test $_os = iOS; then
     done
 
     if test -z "$sysroot"; then
-        AC_MSG_ERROR([Could not find iOS SDK, expected something like /Applications/Xcode.app/Contents/Developer/Platforms/$platform.platform/Developer/SDKs/${platform}${pref_sdk_ver}])
+        AC_MSG_ERROR([Could not find iOS SDK, expected something like $xcode_developer/Platforms/$platform.platform/Developer/SDKs/${platform}${pref_sdk_ver}])
     fi
 
     AC_MSG_RESULT($sysroot)
 
-    CXX="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch $arch -isysroot $sysroot $versionmin"
-    CC="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch $arch -isysroot $sysroot $versionmin"
+    CXX="$xcode_developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch $arch -isysroot $sysroot $versionmin"
+    CC="$xcode_developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch $arch -isysroot $sysroot $versionmin"
 fi
 
 AC_MSG_CHECKING([whether to treat the installation as read-only])
