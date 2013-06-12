@@ -63,6 +63,7 @@
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #i15222#
@@ -2455,9 +2456,10 @@ void SdrCropViewHdl::CreateB2dIAObject()
     aCropped.transform(aBackToUnit);
 
     // prepare crop PolyPolygon
-    basegfx::B2DPolyPolygon aCropPolyPolygon(
+    basegfx::B2DPolygon aGraphicOutlinePolygon(
         basegfx::tools::createPolygonFromRect(
             aCropped));
+    basegfx::B2DPolyPolygon aCropPolyPolygon(aGraphicOutlinePolygon);
 
     // current range is unit range
     basegfx::B2DRange aOverlap(0.0, 0.0, 1.0, 1.0);
@@ -2473,6 +2475,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
 
     // transform to object coordinates to prepare for clip
     aCropPolyPolygon.transform(maObjectTransform);
+    aGraphicOutlinePolygon.transform(maObjectTransform);
 
     // create cropped transformation
     basegfx::B2DHomMatrix aCroppedTransform;
@@ -2492,11 +2495,24 @@ void SdrCropViewHdl::CreateB2dIAObject()
             aCroppedTransform,
             maGraphic));
 
+    // prepare outline polygon for whole graphic
+    const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+    const basegfx::BColor aHilightColor(aSvtOptionsDrawinglayer.getHilightColor().getBColor());
+    const drawinglayer::primitive2d::Primitive2DReference aGraphicOutline(
+        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+        aGraphicOutlinePolygon,
+        aHilightColor));
+
+    // combine these
+    drawinglayer::primitive2d::Primitive2DSequence aCombination(2);
+    aCombination[0] = aGraphic;
+    aCombination[1] = aGraphicOutline;
+
     // embed to MaskPrimitive2D
     const drawinglayer::primitive2d::Primitive2DReference aMaskedGraphic(
         new drawinglayer::primitive2d::MaskPrimitive2D(
             aCropPolyPolygon,
-            drawinglayer::primitive2d::Primitive2DSequence(&aGraphic, 1)));
+            aCombination));
 
     // embed to UnifiedTransparencePrimitive2D
     const drawinglayer::primitive2d::Primitive2DReference aTransparenceMaskedGraphic(
