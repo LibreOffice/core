@@ -4689,7 +4689,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl *pDocumentImpl)
     aTableCellsAttributes(),
     aTabAttributes(),
     aCurrentColor(),
-    nCurrentEncoding(0),
+    nCurrentEncoding(rtl_getTextEncodingFromWindowsCharset(0)),
     nUc(1),
     nCharsToSkip(0),
     nBinaryToRead(0),
