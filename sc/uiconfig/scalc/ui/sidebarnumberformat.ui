@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkGrid" id="SidebarTextPanel">
+  <object class="GtkGrid" id="NumberFormatPropertyPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="row_homogeneous">True</property>

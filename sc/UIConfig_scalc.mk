@@ -87,12 +87,12 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/optdlg \
 	sc/uiconfig/scalc/ui/printeroptions \
 	sc/uiconfig/scalc/ui/protectsheetdlg \
-	sc/uiconfig/scalc/ui/scgeneralpage \
-	sc/uiconfig/scalc/ui/sheetprintpage \
 	sc/uiconfig/scalc/ui/rightfooterdialog \
 	sc/uiconfig/scalc/ui/rightheaderdialog \
+	sc/uiconfig/scalc/ui/scgeneralpage \
 	sc/uiconfig/scalc/ui/selectrange \
 	sc/uiconfig/scalc/ui/selectsource \
+	sc/uiconfig/scalc/ui/sheetprintpage \
 	sc/uiconfig/scalc/ui/sharedocumentdlg \
 	sc/uiconfig/scalc/ui/sharedfooterdialog \
 	sc/uiconfig/scalc/ui/sharedheaderdialog \
