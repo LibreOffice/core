@@ -33,6 +33,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
+#include <QObject>
 #include <QString>
 #include <QHash>
 
@@ -52,8 +53,10 @@ typedef ::cppu::WeakComponentImplHelper5
 > KDE4FilePicker_Base;
 
 class KDE4FilePicker
-    : public KDE4FilePicker_Base
+    : public QObject
+    , public KDE4FilePicker_Base
 {
+    Q_OBJECT
 protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener > m_xListener;
@@ -76,6 +79,8 @@ protected:
 
     //layout for extra custom controls
     QLayout* _layout;
+
+    bool allowRemoteUrls;
 
 public:
     KDE4FilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
@@ -159,6 +164,9 @@ private:
 
     //add a custom control widget to the file dialog
     void addCustomControl(sal_Int16 controlId);
+
+private Q_SLOTS:
+    void checkProtocol();
 
 };
 

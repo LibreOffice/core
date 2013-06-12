@@ -45,6 +45,10 @@
 #include <kwindowsystem.h>
 #include <kapplication.h>
 #include <kfilefiltercombo.h>
+#include <kfilewidget.h>
+#include <kdiroperator.h>
+#include <kservicetypetrader.h>
+#include <kmessagebox.h>
 
 #include <qclipboard.h>
 #include <QWidget>
@@ -61,6 +65,17 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+
+// The dialog should check whether LO also supports the protocol
+// provided by KIO, and KFileWidget::dirOperator() is only 4.3+ .
+// Moreover it's only in this somewhat internal KFileWidget class,
+// which may not necessarily be what KFileDialog::fileWidget() returns,
+// but that's hopefully not a problem in practice.
+#if KDE_VERSION_MAJOR == 4 && KDE_VERSION_MINOR >= 2
+#define ALLOW_REMOTE_URLS 1
+#else
+#define ALLOW_REMOTE_URLS 0
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 // helper functions
@@ -102,13 +117,24 @@ QString toQString(const OUString& s)
 KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
     : KDE4FilePicker_Base(_helperMutex)
     , _resMgr( ResMgr::CreateResMgr("fps_office") )
+    , allowRemoteUrls( false )
 {
     _extraControls = new QWidget();
     _layout = new QGridLayout(_extraControls);
 
     _dialog = new KFileDialog(KUrl("~"), QString(""), 0, _extraControls);
-    _dialog->setMode(KFile::File | KFile::LocalOnly);
+#if ALLOW_REMOTE_URLS
+    if( KFileWidget* fileWidget = dynamic_cast< KFileWidget* >( _dialog->fileWidget()))
+    {
+        allowRemoteUrls = true;
+        // Use finishedLoading signal rather than e.g. urlEntered, because if there's a problem
+        // such as the URL being mistyped, there's no way to prevent two message boxes about it,
+        // one from us and one from KDE code.
+        connect( fileWidget->dirOperator(), SIGNAL( finishedLoading()), SLOT( checkProtocol()));
+    }
+#endif
 
+    setMultiSelectionMode( false );
     //default mode
     _dialog->setOperationMode(KFileDialog::Opening);
 }
@@ -188,10 +214,20 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
 void SAL_CALL KDE4FilePicker::setMultiSelectionMode( sal_Bool multiSelect )
     throw( uno::RuntimeException )
 {
-    if (multiSelect)
-        _dialog->setMode(KFile::Files | KFile::LocalOnly);
+    if( allowRemoteUrls )
+    {
+        if (multiSelect)
+            _dialog->setMode(KFile::Files);
+        else
+            _dialog->setMode(KFile::File);
+    }
     else
-        _dialog->setMode(KFile::File | KFile::LocalOnly);
+    {
+        if (multiSelect)
+            _dialog->setMode(KFile::Files | KFile::LocalOnly);
+        else
+            _dialog->setMode(KFile::File | KFile::LocalOnly);
+    }
 }
 
 void SAL_CALL KDE4FilePicker::setDefaultName( const OUString &name )
@@ -687,5 +723,20 @@ uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getSupportedServiceNames()
 {
     return FilePicker_getSupportedServiceNames();
 }
+
+void KDE4FilePicker::checkProtocol()
+{
+    // There's no libreoffice.desktop :(, so find a matching one.
+    KService::List services = KServiceTypeTrader::self()->query( "Application", "Exec =~ 'libreoffice %U'" );
+    QStringList protocols;
+    if( !services.isEmpty())
+        protocols = services[ 0 ]->property( "X-KDE-Protocols" ).toStringList();
+    if( protocols.isEmpty()) // incorrect (developer?) installation ?
+        protocols << "file" << "http";
+    if( !protocols.contains( _dialog->baseUrl().protocol()) && !protocols.contains( "KIO" ))
+        KMessageBox::error( _dialog, KIO::buildErrorString( KIO::ERR_UNSUPPORTED_PROTOCOL, _dialog->baseUrl().protocol()));
+}
+
+#include "KDE4FilePicker.moc"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

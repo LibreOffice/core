@@ -10,10 +10,11 @@
 $(eval $(call gb_CustomTarget_CustomTarget,vcl/unx/kde4))
 
 $(call gb_CustomTarget_get_target,vcl/unx/kde4) : \
-	$(call gb_CustomTarget_get_workdir,vcl/unx/kde4)/KDEXLib.moc
+	$(call gb_CustomTarget_get_workdir,vcl/unx/kde4)/KDEXLib.moc \
+	$(call gb_CustomTarget_get_workdir,vcl/unx/kde4)/KDE4FilePicker.moc
 
-$(call gb_CustomTarget_get_workdir,vcl/unx/kde4)/KDEXLib.moc : \
-		$(SRCDIR)/vcl/unx/kde4/KDEXLib.hxx \
+$(call gb_CustomTarget_get_workdir,vcl/unx/kde4)/%.moc : \
+		$(SRCDIR)/vcl/unx/kde4/%.hxx \
 		| $(call gb_CustomTarget_get_workdir,vcl/unx/kde4)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MOC,1)
 	$(MOC4) $< -o $@
