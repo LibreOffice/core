@@ -1496,23 +1496,27 @@ bool AxMorphDataModelBase::importBinaryModel( BinaryInputStream& rInStrm )
 void AxMorphDataModelBase::exportBinaryModel( BinaryOutputStream& rOutStrm )
 {
     AxBinaryPropertyWriter aWriter( rOutStrm, true );
-    aWriter.writeIntProperty< sal_uInt32 >( mnFlags );
+    if ( mnFlags != AX_MORPHDATA_DEFFLAGS )
+        aWriter.writeIntProperty< sal_uInt32 >( mnFlags );
+    else
+        aWriter.skipProperty(); //mnFlags
     aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
     aWriter.writeIntProperty< sal_uInt32 >( mnTextColor );
-    if ( ( mnDisplayStyle == AX_DISPLAYSTYLE_LISTBOX ) || ( mnDisplayStyle == AX_DISPLAYSTYLE_COMBOBOX ) )
+
+    // only write if different from default
+    if ( ( ( mnDisplayStyle == AX_DISPLAYSTYLE_TEXT ) || ( mnDisplayStyle == AX_DISPLAYSTYLE_COMBOBOX ) ) && mnMaxLength != 0 )
         aWriter.writeIntProperty< sal_Int32 >( mnMaxLength );
     else
         aWriter.skipProperty(); //mnMaxLength
-    if ( ( mnDisplayStyle == AX_DISPLAYSTYLE_LISTBOX ) || ( mnDisplayStyle == AX_DISPLAYSTYLE_TEXT ) )
-    {
+    if ( ( ( mnDisplayStyle == AX_DISPLAYSTYLE_COMBOBOX ) || ( mnDisplayStyle == AX_DISPLAYSTYLE_LISTBOX ) || ( mnDisplayStyle == AX_DISPLAYSTYLE_TEXT ) ) && mnBorderStyle != AX_BORDERSTYLE_NONE )
         aWriter.writeIntProperty< sal_uInt8 >( mnBorderStyle );
-        aWriter.writeIntProperty< sal_uInt8 >( mnScrollBars );
-    }
     else
-    {
         aWriter.skipProperty(); //mnBorderStyle
+
+    if ( ( mnDisplayStyle == AX_DISPLAYSTYLE_LISTBOX || mnDisplayStyle == AX_DISPLAYSTYLE_TEXT ) && mnScrollBars != AX_SCROLLBAR_NONE )
+        aWriter.writeIntProperty< sal_uInt8 >( mnScrollBars );
+    else
         aWriter.skipProperty(); //mnScrollBars
-    }
     aWriter.writeIntProperty< sal_uInt8 >( mnDisplayStyle );
     aWriter.skipProperty(); // mouse pointer
     aWriter.writePairProperty( maSize );
@@ -1531,7 +1535,7 @@ void AxMorphDataModelBase::exportBinaryModel( BinaryOutputStream& rOutStrm )
     aWriter.skipProperty(); // mnShowDropButton );
     aWriter.skipProperty();
     aWriter.skipProperty(); // drop down style
-    if ( mnDisplayStyle == AX_DISPLAYSTYLE_LISTBOX )
+    if ( mnDisplayStyle == AX_DISPLAYSTYLE_LISTBOX && mnMultiSelect != AX_SELCTION_SINGLE )
         aWriter.writeIntProperty< sal_uInt8 >( mnMultiSelect );
     // although CheckBox, ListBox, OptionButton, ToggleButton are also supported
     // they can only have the fileformat default
@@ -1544,11 +1548,14 @@ void AxMorphDataModelBase::exportBinaryModel( BinaryOutputStream& rOutStrm )
     else
         aWriter.skipProperty(); // mnCaption
     aWriter.skipProperty(); // mnPicturePos );
-    if ( ( mnDisplayStyle == AX_DISPLAYSTYLE_COMBOBOX ) || ( mnDisplayStyle == AX_DISPLAYSTYLE_LISTBOX ) || ( mnDisplayStyle == AX_DISPLAYSTYLE_TEXT ) )
-        aWriter.writeIntProperty< sal_uInt32 >( mnBorderColor );
+    if ( ( mnDisplayStyle == AX_DISPLAYSTYLE_COMBOBOX || mnDisplayStyle == AX_DISPLAYSTYLE_LISTBOX ||  mnDisplayStyle == AX_DISPLAYSTYLE_TEXT ) && mnBorderColor != AX_SYSCOLOR_WINDOWFRAME )
+       aWriter.writeIntProperty< sal_uInt32 >( mnBorderColor );
     else
         aWriter.skipProperty(); // mnBorderColor
-    aWriter.writeIntProperty< sal_uInt32 >( mnSpecialEffect );
+    if (  mnSpecialEffect != AX_SPECIALEFFECT_SUNKEN  )
+        aWriter.writeIntProperty< sal_uInt32 >( mnSpecialEffect );
+    else
+        aWriter.skipProperty(); //mnSpecialEffect
     aWriter.skipProperty(); // mouse icon
     aWriter.skipProperty(); // maPictureData
     aWriter.skipProperty(); // accelerator
@@ -1964,6 +1971,7 @@ void AxListBoxModel::exportCompObj( BinaryOutputStream& rOutStream )
 AxComboBoxModel::AxComboBoxModel()
 {
     mnDisplayStyle = AX_DISPLAYSTYLE_COMBOBOX;
+    mnFlags = 0x2c80481b;
 }
 
 ApiControlType AxComboBoxModel::getControlType() const
