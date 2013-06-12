@@ -1073,6 +1073,27 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_ustr_toBoolean(
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_toInt32(
         const sal_Unicode * str, sal_Int16 radix ) SAL_THROW_EXTERN_C();
 
+/** Interpret a string as an unsigned integer.
+
+    This function cannot be used for language-specific conversion.  The string
+    must be null-terminated.
+
+    @param str
+    a null-terminated string.
+
+    @param radix
+    the radix.  Must be between RTL_USTR_MIN_RADIX (2) and RTL_USTR_MAX_RADIX
+    (36), inclusive.
+
+    @return
+    the unsigned integer value represented by the string, or 0 if the string
+    does not represent an unsigned integer.
+
+    @since LibreOffice 4.2
+ */
+SAL_DLLPUBLIC sal_uInt32 SAL_CALL rtl_ustr_toUInt32(
+        const sal_Unicode * str, sal_Int16 radix ) SAL_THROW_EXTERN_C();
+
 /** Interpret a string as a long integer.
 
     This function cannot be used for language-specific conversion.  The string

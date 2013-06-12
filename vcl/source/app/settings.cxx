@@ -767,7 +767,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
         if ( nIndex > 0 )
         {
             OUString aColor = aPersonaSettings.getToken( 0, ';', ++nIndex );
-            maMenuBarTextColor = Color( aColor.toInt64( 16 ) );
+            maMenuBarTextColor = Color( aColor.toUInt64( 16 ) );
         }
     }
     else if ( aPersona == "default" )

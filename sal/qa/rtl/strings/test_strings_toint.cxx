@@ -22,6 +22,7 @@ template< typename T > class Test: public CppUnit::TestFixture {
 private:
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testToInt32Overflow);
+    CPPUNIT_TEST(testToUInt32Overflow);
     CPPUNIT_TEST(testToInt64Overflow);
     CPPUNIT_TEST(testToUInt64Overflow);
     CPPUNIT_TEST_SUITE_END();
@@ -33,6 +34,12 @@ private:
         CPPUNIT_ASSERT_EQUAL(SAL_MAX_INT32 - 1, T("2147483646").toInt32());
         CPPUNIT_ASSERT_EQUAL(SAL_MAX_INT32, T("2147483647").toInt32());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), T("2147483648").toInt32());
+    }
+
+    void testToUInt32Overflow() {
+        CPPUNIT_ASSERT_EQUAL(SAL_MAX_UINT32 - 1, T("4294967294").toUInt32());
+        CPPUNIT_ASSERT_EQUAL(SAL_MAX_UINT32, T("4294967295").toUInt32());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), T("4294967296").toUInt32());
     }
 
     void testToInt64Overflow() {

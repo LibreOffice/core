@@ -33,6 +33,10 @@
 #include "boost/optional.hpp"
 #include <string.h>
 
+// For backwards compatibility, the nFeatures and nRequirements flag words are
+// read/written as potentially signed hexadecimal numbers (though that has no
+// practical relevance given that each has only one flag with value 0x01
+// defined).
 
 using namespace osl;
 namespace jfw

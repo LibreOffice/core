@@ -678,14 +678,14 @@ sal_uInt32 VmlDrawing::convertControlTextColor( const OUString& rTextColor ) con
     {
         // RGB colors in the format '#RRGGBB'
         if( rTextColor.getLength() == 7 )
-            return OleHelper::encodeOleColor( rTextColor.copy( 1 ).toInt32( 16 ) );
+            return OleHelper::encodeOleColor( rTextColor.copy( 1 ).toUInt32( 16 ) );
 
         // RGB colors in the format '#RGB'
         if( rTextColor.getLength() == 4 )
         {
-            sal_Int32 nR = rTextColor.copy( 1, 1 ).toInt32( 16 ) * 0x11;
-            sal_Int32 nG = rTextColor.copy( 2, 1 ).toInt32( 16 ) * 0x11;
-            sal_Int32 nB = rTextColor.copy( 3, 1 ).toInt32( 16 ) * 0x11;
+            sal_Int32 nR = rTextColor.copy( 1, 1 ).toUInt32( 16 ) * 0x11;
+            sal_Int32 nG = rTextColor.copy( 2, 1 ).toUInt32( 16 ) * 0x11;
+            sal_Int32 nB = rTextColor.copy( 3, 1 ).toUInt32( 16 ) * 0x11;
             return OleHelper::encodeOleColor( (nR << 16) | (nG << 8) | nB );
         }
 

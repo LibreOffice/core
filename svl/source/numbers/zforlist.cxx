@@ -3527,6 +3527,9 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( bool & bFoundBank,
     LanguageType eExtLang;
     if ( nExtLen )
     {
+        // rExtension should be a 16-bit hex value max FFFF which may contain a
+        // leading "-" separator (that is not a minus sign, but toInt32 can be
+        // used to parse it, with post-processing as necessary):
         sal_Int32 nExtLang = rExtension.toInt32( 16 );
         if ( !nExtLang )
         {

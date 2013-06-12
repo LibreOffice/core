@@ -999,42 +999,57 @@ sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
 }
 
 /* ----------------------------------------------------------------------- */
+namespace {
+    template <typename T> static inline T IMPL_RTL_STRNAME( toUInt )( const IMPL_RTL_STRCODE* pStr,
+                                                                      sal_Int16 nRadix )
+    {
+        BOOST_STATIC_ASSERT(!std::numeric_limits<T>::is_signed);
+        sal_Int16   nDigit;
+        T           n = 0;
+
+        if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
+            nRadix = 10;
+
+        /* Skip whitespaces */
+        while ( *pStr && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
+            ++pStr;
+
+        // skip optional explicit sign
+        if ( *pStr == '+' )
+            ++pStr;
+
+        T nDiv = std::numeric_limits<T>::max() / nRadix;
+        sal_Int16 nMod = std::numeric_limits<T>::max() % nRadix;
+        while ( *pStr )
+        {
+            nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
+            if ( nDigit < 0 )
+                break;
+            if( ( nMod < nDigit ? nDiv-1 : nDiv ) < n )
+                return 0;
+
+            n *= nRadix;
+            n += nDigit;
+
+            ++pStr;
+        }
+
+        return n;
+    }
+}
+
+sal_uInt32 SAL_CALL IMPL_RTL_STRNAME( toUInt32 )( const IMPL_RTL_STRCODE* pStr,
+                                                  sal_Int16 nRadix )
+    SAL_THROW_EXTERN_C()
+{
+    return IMPL_RTL_STRNAME( toUInt )<sal_uInt32>(pStr, nRadix);
+}
 
 sal_uInt64 SAL_CALL IMPL_RTL_STRNAME( toUInt64 )( const IMPL_RTL_STRCODE* pStr,
                                                   sal_Int16 nRadix )
     SAL_THROW_EXTERN_C()
 {
-    sal_Int16   nDigit;
-    sal_uInt64  n = 0;
-
-    if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
-        nRadix = 10;
-
-    /* Skip whitespaces */
-    while ( *pStr && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
-        ++pStr;
-
-    // skip optional explicit sign
-    if ( *pStr == '+' )
-        ++pStr;
-
-    const sal_uInt64 nDiv = SAL_MAX_UINT64/nRadix;
-    const sal_Int16 nMod = SAL_MAX_UINT64%nRadix;
-    while ( *pStr )
-    {
-        nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
-        if ( nDigit < 0 )
-            break;
-        if( ( nMod < nDigit ? nDiv-1 : nDiv ) < n )
-            return 0;
-
-        n *= nRadix;
-        n += nDigit;
-
-        ++pStr;
-    }
-
-    return n;
+    return IMPL_RTL_STRNAME( toUInt )<sal_uInt64>(pStr, nRadix);
 }
 
 /* ======================================================================= */

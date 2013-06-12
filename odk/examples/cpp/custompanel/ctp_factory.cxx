@@ -73,7 +73,7 @@ namespace sd { namespace colortoolpanel
             throw NoSuchElementException( i_rResourceURL, *this );
 
         const OUString sColor( i_rResourceURL.copy( i_rResourceURL.lastIndexOf( '/' ) + 1 ) );
-        const sal_Int32 nPanelColor = sColor.toInt32( 16 );
+        const sal_Int32 nPanelColor = static_cast< sal_Int32 >( sColor.toUInt32( 16 ) );
 
         // retrieve the parent window
         Reference< XWindow > xParentWindow;

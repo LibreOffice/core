@@ -813,7 +813,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
             if( sShapeType.getLength() > 4 &&
                 sShapeType.match( "col-" ))
             {
-                nColorData = sShapeType.copy( 4 ).toInt32( 16 );
+                nColorData = sShapeType.copy( 4 ).toUInt32( 16 );
             }
         }
         break;

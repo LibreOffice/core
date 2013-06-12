@@ -45,7 +45,7 @@ inline sal_Int32 toInt32( OUString const & rStr ) SAL_THROW(())
 {
     sal_Int32 nVal;
     if (rStr.getLength() > 2 && rStr[ 0 ] == '0' && rStr[ 1 ] == 'x')
-        nVal = rStr.copy( 2 ).toInt32( 16 );
+        nVal = rStr.copy( 2 ).toUInt32( 16 );
     else
         nVal = rStr.toInt32();
     return nVal;

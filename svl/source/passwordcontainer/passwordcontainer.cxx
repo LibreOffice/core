@@ -118,7 +118,7 @@ static vector< OUString > getInfoFromInd( OUString aInd )
                     aNum += OUString::valueOf( (sal_Unicode) pLine[i] );
                 }
 
-                newItem += OUString::valueOf( (sal_Unicode) aNum.toInt32( 16 ) );
+                newItem += OUString::valueOf( (sal_Unicode) aNum.toUInt32( 16 ) );
                 pLine += 3;
             }
 
@@ -482,7 +482,7 @@ vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, co
 
             unsigned char code[RTL_DIGEST_LENGTH_MD5];
             for( int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ind++ )
-                code[ ind ] = (char)(aMasterPasswd.copy( ind*2, 2 ).toInt32(16));
+                code[ ind ] = (char)(aMasterPasswd.copy( ind*2, 2 ).toUInt32(16));
 
             rtlCipherError result = rtl_cipher_init (
                     aDecoder, rtl_Cipher_DirectionDecode,
@@ -536,7 +536,7 @@ OUString PasswordContainer::EncodePasswords( vector< OUString > lines, const OUS
 
             unsigned char code[RTL_DIGEST_LENGTH_MD5];
             for( int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ind++ )
-                code[ ind ] = (char)(aMasterPasswd.copy( ind*2, 2 ).toInt32(16));
+                code[ ind ] = (char)(aMasterPasswd.copy( ind*2, 2 ).toUInt32(16));
 
             rtlCipherError result = rtl_cipher_init (
                     aEncoder, rtl_Cipher_DirectionEncode,

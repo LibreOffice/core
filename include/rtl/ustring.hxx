@@ -1799,6 +1799,23 @@ public:
     }
 
     /**
+      Returns the uint32 value from this string.
+
+      This function can't be used for language specific conversion.
+
+      @param    radix       the radix (between 2 and 36)
+      @return   the uint32 represented from this string.
+                0 if this string represents no number or one of too large
+                magnitude.
+
+      @since LibreOffice 4.2
+    */
+    sal_uInt32 toUInt32( sal_Int16 radix = 10 ) const SAL_THROW(())
+    {
+        return rtl_ustr_toUInt32( pData->buffer, radix );
+    }
+
+    /**
       Returns the int64 value from this string.
 
       This function can't be used for language specific conversion.

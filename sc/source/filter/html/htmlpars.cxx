@@ -2191,7 +2191,7 @@ OUString decodeNumberFormat(const OUString& rFmt)
                 // Hex-encoded character found. Decode it back into its
                 // original character. An example of number format with
                 // hex-encoded chars: "\0022$\0022\#\,\#\#0\.00"
-                sal_Int32 nVal = OUString(p1, nDigitCount).toInt32(16);
+                sal_uInt32 nVal = OUString(p1, nDigitCount).toUInt32(16);
                 aBuf.append(static_cast<sal_Unicode>(nVal));
             }
         }

@@ -233,7 +233,7 @@ throw(  SAXException, RuntimeException )
                                     if ( aColor.getStr()[0] == '#' )
                                     {
                                         // the color value is given as #rrggbb and used the hexadecimal system!!
-                                        sal_uInt32 nColor = aColor.copy( 1 ).toInt32( 16 );
+                                        sal_uInt32 nColor = aColor.copy( 1 ).toUInt32( 16 );
 
                                         m_pImages->aMaskColor = Color( COLORDATA_RGB( nColor ) );
                                     }

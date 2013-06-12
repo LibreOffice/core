@@ -3028,7 +3028,7 @@ bool X11SalFrame::endUnicodeSequence()
     {
         // cut the "u"
         OUString aNumbers( rSeq.copy( 1 ) );
-        sal_Int32 nValue = aNumbers.toInt32( 16 );
+        sal_uInt32 nValue = aNumbers.toUInt32( 16 );
         if( nValue >= 32 )
         {
             sal_uInt16 nTextAttr = EXTTEXTINPUT_ATTR_UNDERLINE;

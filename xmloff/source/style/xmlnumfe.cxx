@@ -400,8 +400,11 @@ void SvXMLNumFmtExport::WriteCurrencyElement_Impl( const OUString& rString,
 
     if ( !rExt.isEmpty() )
     {
-        sal_Int32 nLang = rExt.toInt32(16);     // hex
-        if ( nLang < 0 )                        // extension string may contain "-" separator
+        // rExt should be a 16-bit hex value max FFFF which may contain a
+        // leading "-" separator (that is not a minus sign, but toInt32 can be
+        // used to parse it, with post-processing as necessary):
+        sal_Int32 nLang = rExt.toInt32(16);
+        if ( nLang < 0 )
             nLang = -nLang;
         AddLanguageAttr_Impl( nLang );          // adds to pAttrList
     }

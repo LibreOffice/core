@@ -205,16 +205,16 @@ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
     // RGB colors in the format '#RRGGBB'
     if( (aColorName.getLength() == 7) && (aColorName[ 0 ] == '#') )
     {
-        aDmlColor.setSrgbClr( aColorName.copy( 1 ).toInt32( 16 ) );
+        aDmlColor.setSrgbClr( aColorName.copy( 1 ).toUInt32( 16 ) );
         return aDmlColor;
     }
 
     // RGB colors in the format '#RGB'
     if( (aColorName.getLength() == 4) && (aColorName[ 0 ] == '#') )
     {
-        sal_Int32 nR = aColorName.copy( 1, 1 ).toInt32( 16 ) * 0x11;
-        sal_Int32 nG = aColorName.copy( 2, 1 ).toInt32( 16 ) * 0x11;
-        sal_Int32 nB = aColorName.copy( 3, 1 ).toInt32( 16 ) * 0x11;
+        sal_Int32 nR = aColorName.copy( 1, 1 ).toUInt32( 16 ) * 0x11;
+        sal_Int32 nG = aColorName.copy( 2, 1 ).toUInt32( 16 ) * 0x11;
+        sal_Int32 nB = aColorName.copy( 3, 1 ).toUInt32( 16 ) * 0x11;
         aDmlColor.setSrgbClr( (nR << 16) | (nG << 8) | nB );
         return aDmlColor;
     }

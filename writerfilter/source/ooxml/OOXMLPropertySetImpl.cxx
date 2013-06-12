@@ -636,7 +636,7 @@ OOXMLHexValue::OOXMLHexValue(sal_uInt32 nValue)
 
 OOXMLHexValue::OOXMLHexValue(const OUString & rValue)
 {
-    mnValue = static_cast<sal_uInt32>(rValue.toInt32(16));
+    mnValue = rValue.toUInt32(16);
 }
 
 OOXMLHexValue::~OOXMLHexValue()

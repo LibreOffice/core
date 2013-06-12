@@ -107,7 +107,11 @@ sal_Int64 AttributeConversion::decodeHyper( const OUString& rValue )
 
 sal_Int32 AttributeConversion::decodeIntegerHex( const OUString& rValue )
 {
-    return rValue.toInt32( 16 );
+    // It looks like all Office Open XML attributes containing hexadecimal
+    // values are based on xsd:hexBinary and so use an unsigned representation:
+    return static_cast< sal_Int32 >(rValue.toUInt32( 16 ));
+        //TODO: Change this function to return sal_uInt32 and get rid of the
+        // cast, but that will have a ripple effect
 }
 
 // ============================================================================

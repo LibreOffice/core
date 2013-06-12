@@ -2790,7 +2790,7 @@ std::list< sal_Unicode >  PrintFontManager::getUnicodeFromAdobeName( const OStri
     {
         if( rName.getLength() == 7 && rName.indexOf( "uni" ) == 0 )
         {
-            sal_Unicode aCode = (sal_Unicode)rName.copy( 3 ).toInt32( 16 );
+            sal_Unicode aCode = (sal_Unicode)rName.copy( 3 ).toUInt32( 16 );
             aRet.push_back( aCode );
         }
     }

@@ -85,9 +85,10 @@ bool parseValue(xmlreader::Span const & text, sal_Int16 * value) {
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
             text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
             RTL_CONSTASCII_LENGTH("0X")) == 0 ?
-        OString(
-            text.begin + RTL_CONSTASCII_LENGTH("0X"),
-            text.length - RTL_CONSTASCII_LENGTH("0X")).toInt32(16) :
+        static_cast< sal_Int32 >(
+            OString(
+                text.begin + RTL_CONSTASCII_LENGTH("0X"),
+                text.length - RTL_CONSTASCII_LENGTH("0X")).toUInt32(16)) :
         OString(text.begin, text.length).toInt32();
         //TODO: check valid lexical representation
     if (n >= SAL_MIN_INT16 && n <= SAL_MAX_INT16) {
@@ -104,9 +105,10 @@ bool parseValue(xmlreader::Span const & text, sal_Int32 * value) {
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
             text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
             RTL_CONSTASCII_LENGTH("0X")) == 0 ?
-        OString(
-            text.begin + RTL_CONSTASCII_LENGTH("0X"),
-            text.length - RTL_CONSTASCII_LENGTH("0X")).toInt32(16) :
+        static_cast< sal_Int32 >(
+            OString(
+                text.begin + RTL_CONSTASCII_LENGTH("0X"),
+                text.length - RTL_CONSTASCII_LENGTH("0X")).toUInt32(16)) :
         OString(text.begin, text.length).toInt32();
         //TODO: check valid lexical representation
     return true;
@@ -119,9 +121,10 @@ bool parseValue(xmlreader::Span const & text, sal_Int64 * value) {
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
             text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
             RTL_CONSTASCII_LENGTH("0X")) == 0 ?
-        OString(
-            text.begin + RTL_CONSTASCII_LENGTH("0X"),
-            text.length - RTL_CONSTASCII_LENGTH("0X")).toInt64(16) :
+        static_cast< sal_Int64 >(
+            OString(
+                text.begin + RTL_CONSTASCII_LENGTH("0X"),
+                text.length - RTL_CONSTASCII_LENGTH("0X")).toUInt64(16)) :
         OString(text.begin, text.length).toInt64();
         //TODO: check valid lexical representation
     return true;

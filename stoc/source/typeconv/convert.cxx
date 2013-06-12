@@ -143,7 +143,7 @@ static sal_Bool getNumericValue( double & rfVal, const OUString & rStr )
             }
 
             OUString aHexRest( trim.copy( nX+1 ) );
-            sal_Int64 nRet = aHexRest.toInt64( 16 );
+            sal_uInt64 nRet = aHexRest.toUInt64( 16 );
 
             if (nRet == 0)
             {
@@ -223,7 +223,7 @@ static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
             }
 
             OUString aHexRest( trim.copy( nX+1 ) );
-            sal_Int64 nRet = aHexRest.toInt64( 16 );
+            sal_uInt64 nRet = aHexRest.toUInt64( 16 );
 
             if (nRet == 0)
             {
@@ -234,7 +234,7 @@ static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
                 }
             }
 
-            rnVal = (bNeg ? -nRet : nRet);
+            rnVal = (bNeg ? -static_cast<sal_Int64>(nRet) : nRet);
             return sal_True;
         }
         return sal_False;

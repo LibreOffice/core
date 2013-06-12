@@ -1422,7 +1422,7 @@ LocaleData::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(Runti
                         case 0: level[j].sPrefix             = tmp;             break;
                         case 1: level[j].nNumType            = sal::static_int_cast<sal_Int16>(tmp.toInt32()); break;
                         case 2: level[j].sSuffix             = tmp;             break;
-                        case 3: level[j].cBulletChar         = sal::static_int_cast<sal_Unicode>(tmp.toInt32(16)); break; // base 16
+                        case 3: level[j].cBulletChar         = sal::static_int_cast<sal_Unicode>(tmp.toUInt32(16)); break; // base 16
                         case 4: level[j].sBulletFontName     = U2C( tmp );      break;
                         case 5: level[j].nParentNumbering    = sal::static_int_cast<sal_Int16>(tmp.toInt32()); break;
                         case 6: level[j].nLeftMargin         = tmp.toInt32();   break;
