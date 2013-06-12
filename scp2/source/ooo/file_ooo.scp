@@ -631,6 +631,7 @@ UI_FILELIST_ALL_LANG(spa, UIConfig/spa, filelist)
 #endif
 UI_FILELIST_ALL_LANG(svt, UIConfig/svt, filelist)
 UI_FILELIST_ALL_LANG(svx, UIConfig/svx, filelist)
+UI_FILELIST_ALL_LANG(swriter, UIConfig/modules/swriter, filelist)
 #ifdef ENABLE_TELEPATHY
 UI_FILELIST_ALL_LANG(tubes, UIConfig/tubes, filelist)
 #endif
