@@ -20,7 +20,7 @@
 #define _WLDCRD_HXX
 
 #include "tools/toolsdllapi.h"
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
 #include <osl/thread.h>
 
 class TOOLS_DLLPUBLIC WildCard

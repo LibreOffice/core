@@ -23,9 +23,10 @@
 #define _EINF_HXX
 
 #include <limits.h>
+#include <rtl/ustring.hxx>
+#include <tools/lineend.hxx>
 #include <tools/rtti.hxx>
 #include <tools/errcode.hxx>
-#include <tools/string.hxx>
 #include "tools/toolsdllapi.h"
 
 class EDcr_Impl;

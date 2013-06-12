@@ -24,6 +24,7 @@
 #include <rtl/tencinfo.h>
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
+#include <osl/thread.h>
 #include <vector>
 
 using namespace osl;

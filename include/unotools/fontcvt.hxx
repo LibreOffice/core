@@ -21,7 +21,8 @@
 #define _UNOTOOLS_FONTCVT_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <tools/string.hxx>
+#include <rtl/ustring.hxx>
+#include <tools/solar.h>
 
 // ------------------
 // - FontToSubsFont -

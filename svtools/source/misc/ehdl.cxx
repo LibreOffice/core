@@ -81,12 +81,12 @@ static sal_uInt16 aWndFunc(
             break;
     }
 
-    String aErr(SvtResId(STR_ERR_HDLMESS).toString());
-    String aAction(rAction);
-    if ( aAction.Len() )
+    OUString aErr(SvtResId(STR_ERR_HDLMESS).toString());
+    OUString aAction(rAction);
+    if ( !aAction.isEmpty() )
         aAction += OUString(":\n");
-    aErr.SearchAndReplace(OUString("$(ACTION)"), aAction);
-    aErr.SearchAndReplace(OUString("$(ERROR)"), rErr);
+    aErr = aErr.replaceFirst(OUString("$(ACTION)"), aAction);
+    aErr = aErr.replaceFirst(OUString("$(ERROR)"), rErr);
 
     MessBox* pBox;
     switch ( nFlags & 0xf000 )
@@ -211,7 +211,7 @@ sal_Bool SfxErrorHandler::CreateString(
 
 //-------------------------------------------------------------------------
 
-class ResString: public String
+class ResString: public OUString
 
 /*  [Beschreibung]
 
@@ -224,14 +224,14 @@ class ResString: public String
     sal_uInt16 nFlags;
   public:
     sal_uInt16 GetFlags() const {return nFlags;}
-    const String & GetString() const {return *this;}
+    const OUString & GetString() const {return *this;}
     ResString( ResId &rId);
 };
 
 //-------------------------------------------------------------------------
 
 ResString::ResString(ResId & rId):
-    String(rId.SetAutoRelease(sal_False).toString()),
+    OUString(rId.SetAutoRelease(sal_False).toString()),
     nFlags(0)
 {
     ResMgr * pResMgr = rId.GetResMgr();
@@ -266,7 +266,7 @@ struct ErrorResource_Impl : private Resource
 };
 
 
-sal_Bool SfxErrorHandler::GetClassString(sal_uLong lClassId, String &rStr) const
+sal_Bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) const
 
 /*  [Beschreibung]
 
@@ -358,10 +358,10 @@ sal_Bool SfxErrorHandler::GetErrorString(
 
     if( bRet )
     {
-        String aErrStr;
+        OUString aErrStr;
         GetClassString(lErrId & ERRCODE_CLASS_MASK,
                        aErrStr);
-        if(aErrStr.Len())
+        if(!aErrStr.isEmpty())
             aErrStr += OUString(".\n");
         rStr = rStr.replaceAll(OUString("$(CLASS)"),aErrStr);
     }
@@ -382,7 +382,7 @@ SfxErrorContext::SfxErrorContext(
 //-------------------------------------------------------------------------
 
 SfxErrorContext::SfxErrorContext(
-    sal_uInt16 nCtxIdP, const String &aArg1P, Window *pWindow,
+    sal_uInt16 nCtxIdP, const OUString &aArg1P, Window *pWindow,
     sal_uInt16 nResIdP, ResMgr *pMgrP)
 :   ErrorContext(pWindow), nCtxId(nCtxIdP), nResId(nResIdP), pMgr(pMgrP),
     aArg1(aArg1P)

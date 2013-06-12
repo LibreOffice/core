@@ -25,6 +25,7 @@
 #include <tools/contnr.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
+#include <osl/thread.h>
 #include <comphelper/string.hxx>
 
 #include <stdio.h>

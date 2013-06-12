@@ -21,7 +21,7 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
-#include <tools/string.hxx>
+#include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
