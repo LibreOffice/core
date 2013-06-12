@@ -2233,7 +2233,13 @@ void WinMtfOutput::PassEMFPlusHeaderInfo()
     EMFP_DEBUG(printf ("\t\t\tadd EMF_PLUS header info\n"));
 
     SvMemoryStream mem;
+    sal_Int32 nDevLeft, nDevRight, nDevTop, nDevBottom;
     sal_Int32 nLeft, nRight, nTop, nBottom;
+
+    nDevLeft = mrclBounds.Left();
+    nDevRight = mrclBounds.Right();
+    nDevTop = mrclBounds.Top();
+    nDevBottom = mrclBounds.Bottom();
 
     nLeft = mrclFrame.Left();
     nTop = mrclFrame.Top();
@@ -2241,6 +2247,7 @@ void WinMtfOutput::PassEMFPlusHeaderInfo()
     nBottom = mrclFrame.Bottom();
 
     // emf header info
+    mem << nDevLeft << nDevTop << nDevRight << nDevBottom;
     mem << nLeft << nTop << nRight << nBottom;
     mem << mnPixX << mnPixY << mnMillX << mnMillY;
 

@@ -1867,6 +1867,8 @@ namespace cppcanvas
 
                             SvMemoryStream rMF ((void*) pAct->GetData (), pAct->GetDataSize (), STREAM_READ);
 
+                            rMF >> nBoundsLeft >> nBoundsTop >> nBoundsRight >> nBoundsBottom;
+                            SAL_INFO ("cppcanvas.emf", "EMF+ picture bounds: " << nBoundsLeft << "," << nBoundsTop << " - " << nBoundsRight << "," << nBoundsBottom);
                             rMF >> nFrameLeft >> nFrameTop >> nFrameRight >> nFrameBottom;
                             SAL_INFO ("cppcanvas.emf", "EMF+ picture frame: " << nFrameLeft << "," << nFrameTop << " - " << nFrameRight << "," << nFrameBottom);
                             rMF >> nPixX >> nPixY >> nMmX >> nMmY;
