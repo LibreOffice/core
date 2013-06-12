@@ -535,7 +535,7 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
                 rAxModel.mnSpecialEffect = pClientData->mbNo3D ? AX_SPECIALEFFECT_FLAT : AX_SPECIALEFFECT_SUNKEN;
                 rAxModel.mnVerticalAlign = pClientData->mnTextVAlign;
                 bool bTriState = (pClientData->mnChecked != ::oox::vml::VML_CLIENTDATA_UNCHECKED) && (pClientData->mnChecked != ::oox::vml::VML_CLIENTDATA_CHECKED);
-                rAxModel.mnMultiSelect = bTriState ? AX_SELCTION_MULTI : AX_SELCTION_SINGLE;
+                rAxModel.mnMultiSelect = bTriState ? AX_SELECTION_MULTI : AX_SELECTION_SINGLE;
             }
             break;
 
@@ -558,9 +558,9 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
                 rAxModel.mnSpecialEffect = pClientData->mbNo3D2 ? AX_SPECIALEFFECT_FLAT : AX_SPECIALEFFECT_SUNKEN;
                 switch( pClientData->mnSelType )
                 {
-                    case XML_Single:    rAxModel.mnMultiSelect = AX_SELCTION_SINGLE;    break;
-                    case XML_Multi:     rAxModel.mnMultiSelect = AX_SELCTION_MULTI;     break;
-                    case XML_Extend:    rAxModel.mnMultiSelect = AX_SELCTION_EXTENDED;  break;
+                    case XML_Single:    rAxModel.mnMultiSelect = AX_SELECTION_SINGLE;    break;
+                    case XML_Multi:     rAxModel.mnMultiSelect = AX_SELECTION_MULTI;     break;
+                    case XML_Extend:    rAxModel.mnMultiSelect = AX_SELECTION_EXTENDED;  break;
                 }
             }
             break;

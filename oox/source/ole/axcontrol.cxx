@@ -541,7 +541,7 @@ void ControlConverter::convertAxState( PropertyMap& rPropMap,
 
     // tristate
     if( bSupportsTriState )
-        rPropMap.setProperty( PROP_TriState, nMultiSelect == AX_SELCTION_MULTI );
+        rPropMap.setProperty( PROP_TriState, nMultiSelect == AX_SELECTION_MULTI );
 }
 
 void ControlConverter::convertToAxState( PropertySet& rPropSet,
@@ -564,7 +564,7 @@ void ControlConverter::convertToAxState( PropertySet& rPropSet,
 
     // tristate
     if( bSupportsTriState && rPropSet.getProperty( bTmp, PROP_TriState ) )
-        nMultiSelect = AX_SELCTION_MULTI;
+        nMultiSelect = AX_SELECTION_MULTI;
 }
 
 void ControlConverter::convertAxOrientation( PropertyMap& rPropMap,
@@ -1408,7 +1408,7 @@ AxMorphDataModelBase::AxMorphDataModelBase() :
     mnBorderStyle( AX_BORDERSTYLE_NONE ),
     mnSpecialEffect( AX_SPECIALEFFECT_SUNKEN ),
     mnDisplayStyle( AX_DISPLAYSTYLE_TEXT ),
-    mnMultiSelect( AX_SELCTION_SINGLE ),
+    mnMultiSelect( AX_SELECTION_SINGLE ),
     mnScrollBars( AX_SCROLLBAR_NONE ),
     mnMatchEntry( AX_MATCHENTRY_NONE ),
     mnShowDropButton( AX_SHOWDROPBUTTON_NEVER ),
@@ -1535,7 +1535,7 @@ void AxMorphDataModelBase::exportBinaryModel( BinaryOutputStream& rOutStrm )
     aWriter.skipProperty(); // mnShowDropButton );
     aWriter.skipProperty();
     aWriter.skipProperty(); // drop down style
-    if ( mnDisplayStyle == AX_DISPLAYSTYLE_LISTBOX && mnMultiSelect != AX_SELCTION_SINGLE )
+    if ( mnDisplayStyle == AX_DISPLAYSTYLE_LISTBOX && mnMultiSelect != AX_SELECTION_SINGLE )
         aWriter.writeIntProperty< sal_uInt8 >( mnMultiSelect );
     // although CheckBox, ListBox, OptionButton, ToggleButton are also supported
     // they can only have the fileformat default
@@ -1924,7 +1924,7 @@ ApiControlType AxListBoxModel::getControlType() const
 
 void AxListBoxModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
 {
-    bool bMultiSelect = (mnMultiSelect == AX_SELCTION_MULTI) || (mnMultiSelect == AX_SELCTION_EXTENDED);
+    bool bMultiSelect = (mnMultiSelect == AX_SELECTION_MULTI) || (mnMultiSelect == AX_SELECTION_EXTENDED);
     rPropMap.setProperty( PROP_MultiSelection, bMultiSelect );
     rPropMap.setProperty( PROP_Dropdown, false );
     rConv.convertAxBackground( rPropMap, mnBackColor, mnFlags, API_TRANSPARENCY_VOID );

@@ -129,9 +129,9 @@ const sal_Int32 AX_DISPLAYSTYLE_OPTBUTTON   = 5;
 const sal_Int32 AX_DISPLAYSTYLE_TOGGLE      = 6;
 const sal_Int32 AX_DISPLAYSTYLE_DROPDOWN    = 7;
 
-const sal_Int32 AX_SELCTION_SINGLE          = 0;
-const sal_Int32 AX_SELCTION_MULTI           = 1;
-const sal_Int32 AX_SELCTION_EXTENDED        = 2;
+const sal_Int32 AX_SELECTION_SINGLE         = 0;
+const sal_Int32 AX_SELECTION_MULTI          = 1;
+const sal_Int32 AX_SELECTION_EXTENDED       = 2;
 
 const sal_Int32 AX_SHOWDROPBUTTON_NEVER     = 0;
 const sal_Int32 AX_SHOWDROPBUTTON_FOCUS     = 1;
