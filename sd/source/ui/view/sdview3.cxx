@@ -1394,7 +1394,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
     }
     else if( CHECK_FORMAT_TRANS( FORMAT_FILE ) )
     {
-        String aDropFile;
+        OUString aDropFile;
 
         if( aDataHelper.GetString( FORMAT_FILE, aDropFile ) )
         {

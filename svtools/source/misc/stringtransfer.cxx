@@ -78,7 +78,7 @@ namespace svt
         {
             if (SOT_FORMAT_STRING == aSearch->mnSotId)
             {
-                String sContent;
+                OUString sContent;
                 sal_Bool bSuccess = aClipboardData.GetString( SOT_FORMAT_STRING, sContent );
                 _rContent = sContent;
                 return bSuccess;

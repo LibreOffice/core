@@ -1141,7 +1141,7 @@ IMPL_LINK(SwNavigationPI, DoneLink, SfxPoolItem *, pItem)
 
 String SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
 {
-    String sFileName;
+    OUString sFileName;
     sal_uLong nFmt;
     if( rData.HasFormat( nFmt = FORMAT_FILE_LIST ))
     {
@@ -1163,7 +1163,7 @@ String SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
         rData.GetINetBookmark( nFmt, aBkmk );
         sFileName = aBkmk.GetURL();
     }
-    if( sFileName.Len() )
+    if( !sFileName.isEmpty() )
     {
         sFileName = INetURLObject( sFileName ).GetMainURL( INetURLObject::NO_DECODE );
     }

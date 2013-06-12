@@ -346,14 +346,14 @@ namespace svx
         if (!nRecognizedFormat)
             return sal_False;
 
-        String sFieldDescription;
+        OUString sFieldDescription;
         const_cast<TransferableDataHelper&>(_rData).GetString(nRecognizedFormat, sFieldDescription);
 
         const sal_Unicode cSeparator = sal_Unicode(11);
-        _rDatasource    = sFieldDescription.GetToken(0, cSeparator);
-        _rCommand       = sFieldDescription.GetToken(1, cSeparator);
-        _nCommandType   = sFieldDescription.GetToken(2, cSeparator).ToInt32();
-        _rFieldName     = sFieldDescription.GetToken(3, cSeparator);
+        _rDatasource    = sFieldDescription.getToken(0, cSeparator);
+        _rCommand       = sFieldDescription.getToken(1, cSeparator);
+        _nCommandType   = sFieldDescription.getToken(2, cSeparator).toInt32();
+        _rFieldName     = sFieldDescription.getToken(3, cSeparator);
 
         return sal_True;
     }

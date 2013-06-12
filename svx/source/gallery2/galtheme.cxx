@@ -1223,11 +1223,11 @@ sal_Bool GalleryTheme::InsertTransferable( const uno::Reference< datatransfer::X
                 aDataHelper.GetFileList( SOT_FORMAT_FILE_LIST, aFileList );
             else
             {
-                String aFile;
+                OUString aFile;
 
                 aDataHelper.GetString( FORMAT_FILE, aFile );
 
-                if( aFile.Len() )
+                if( !aFile.isEmpty() )
                     aFileList.AppendFile( aFile );
             }
 

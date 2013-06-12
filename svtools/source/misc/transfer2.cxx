@@ -547,9 +547,9 @@ void TransferDataContainer::CopyGraphic( const Graphic& rGrf )
 
 // -----------------------------------------------------------------------------
 
-void TransferDataContainer::CopyString( sal_uInt16 nFmt, const String& rStr )
+void TransferDataContainer::CopyString( sal_uInt16 nFmt, const OUString& rStr )
 {
-    if( rStr.Len() )
+    if( !rStr.isEmpty() )
     {
         TDataCntnrEntry_Impl aEntry;
         aEntry.nId = nFmt;
@@ -562,7 +562,7 @@ void TransferDataContainer::CopyString( sal_uInt16 nFmt, const String& rStr )
 
 // -----------------------------------------------------------------------------
 
-void TransferDataContainer::CopyString( const String& rStr )
+void TransferDataContainer::CopyString( const OUString& rStr )
 {
     CopyString( SOT_FORMAT_STRING, rStr );
 }

@@ -1595,30 +1595,6 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TransferableDataHelper::GetString( SotFormatStringId nFormat, String& rStr )
-{
-    OUString aOUString;
-    sal_Bool        bRet = GetString( nFormat, aOUString );
-
-    rStr = aOUString;
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, String& rStr )
-{
-    OUString aOUString;
-    sal_Bool        bRet = GetString( rFlavor, aOUString );
-
-    rStr = aOUString;
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
 sal_Bool TransferableDataHelper::GetString( SotFormatStringId nFormat, OUString& rStr )
 {
     DataFlavor aFlavor;
@@ -1875,7 +1851,7 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
         case( SOT_FORMATSTR_ID_SOLK ):
         case( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ):
         {
-            String aString;
+            OUString aString;
             if( GetString( rFlavor, aString ) )
             {
                 if( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR == nFormat )
@@ -1885,32 +1861,32 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
                 }
                 else
                 {
-                    String      aURL, aDesc;
-                    sal_uInt16  nStart = aString.Search( '@' ), nLen = (sal_uInt16) aString.ToInt32();
+                    OUString      aURL, aDesc;
+                    sal_Int32  nStart = aString.indexOf( '@' ), nLen = aString.toInt32();
 
-                    if( !nLen && aString.GetChar( 0 ) != '0' )
+                    if( !nLen && aString[ 0 ] != '0' )
                     {
                         DBG_WARNING( "SOLK: 1. len=0" );
                     }
-                    if( nStart == STRING_NOTFOUND || nLen > aString.Len() - nStart - 3 )
+                    if( nStart < 0 || nLen > aString.getLength() - nStart - 3 )
                     {
                         DBG_WARNING( "SOLK: 1. illegal start or wrong len" );
                     }
-                    aURL = aString.Copy( nStart + 1, nLen );
+                    aURL = aString.copy( nStart + 1, nLen );
 
-                    aString.Erase( 0, nStart + 1 + nLen );
-                    nStart = aString.Search( '@' );
-                    nLen = (sal_uInt16) aString.ToInt32();
+                    aString = aString.copy( nStart + 1 + nLen );
+                    nStart = aString.indexOf( '@' );
+                    nLen = aString.toInt32();
 
-                    if( !nLen && aString.GetChar( 0 ) != '0' )
+                    if( !nLen && aString[ 0 ] != '0' )
                     {
                         DBG_WARNING( "SOLK: 2. len=0" );
                     }
-                    if( nStart == STRING_NOTFOUND || nLen > aString.Len() - nStart - 1 )
+                    if( nStart < 0 || nLen > aString.getLength() - nStart - 1 )
                     {
                         DBG_WARNING( "SOLK: 2. illegal start or wrong len" );
                     }
-                    aDesc = aString.Copy( nStart+1, nLen );
+                    aDesc = aString.copy( nStart+1, nLen );
 
                     rBmk = INetBookmark( aURL, aDesc );
                     bRet = sal_True;

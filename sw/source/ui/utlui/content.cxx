@@ -3048,15 +3048,15 @@ void NaviContentBookmark::Copy( TransferDataContainer& rData ) const
 
 sal_Bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
 {
-    String sStr;
+    OUString sStr;
     sal_Bool bRet = rData.GetString( SOT_FORMATSTR_ID_SONLK, sStr );
     if( bRet )
     {
         sal_Int32 nPos = 0;
-        aUrl    = sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos );
-        aDescr  = sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos );
-        nDefDrag= (sal_uInt16)sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos ).ToInt32();
-        nDocSh  = sStr.GetToken(0, NAVI_BOOKMARK_DELIM, nPos ).ToInt32();
+        aUrl    = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos );
+        aDescr  = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos );
+        nDefDrag= (sal_uInt16)sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos ).toInt32();
+        nDocSh  = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos ).toInt32();
     }
     return bRet;
 }
