@@ -75,7 +75,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
     if ( mbSelected || mbHover )
         aFillColor = pAttrs->aHighlightColor;
 
-    aSeq[0] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonColorPrimitive2D(
                                                B2DPolyPolygon(Polygon(maDrawArea,5,5).getB2DPolygon()),
                                                aFillColor));
 
