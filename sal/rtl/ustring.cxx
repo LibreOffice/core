@@ -44,6 +44,7 @@
 
 #include "rtl/math.h"
 #include "rtl/tencinfo.h"
+#include "rtl/ustring.hxx"
 
 /* ======================================================================= */
 
@@ -74,6 +75,13 @@ static void internRelease (rtl_uString *pThis);
 /* Include String/UString template code */
 
 #include "strtmpl.cxx"
+
+rtl::OUString& SAL_CALL rtl_ustr_get_empty(void)
+{
+    static rtl::OUString aEmpty;
+    return aEmpty;
+}
+
 
 sal_Int32 rtl_ustr_indexOfAscii_WithLength(
     sal_Unicode const * str, sal_Int32 len,

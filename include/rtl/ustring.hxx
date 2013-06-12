@@ -55,6 +55,13 @@
 namespace rtl
 {
 
+class OUString;
+}
+SAL_DLLPUBLIC rtl::OUString& SAL_CALL rtl_ustr_get_empty(void);
+
+namespace rtl
+{
+
 #ifdef RTL_STRING_UNITTEST
 #undef rtl
 #endif
@@ -2231,6 +2238,11 @@ public:
         rtl_uString* pNew = 0;
         rtl_uString_newFromAscii( &pNew, value );
         return OUString( pNew, SAL_NO_ACQUIRE );
+    }
+
+    static OUString& getEmptyOUString(void)
+    {
+        return rtl_ustr_get_empty();
     }
 };
 
