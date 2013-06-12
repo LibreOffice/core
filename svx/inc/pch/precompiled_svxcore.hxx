@@ -308,7 +308,6 @@
 #include <drawinglayer/attribute/materialattribute3d.hxx>
 #include <drawinglayer/attribute/sdrallattribute3d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
-#include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
