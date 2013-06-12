@@ -59,7 +59,6 @@ OConnection::OConnection(ODriver*   _pDriver) throw(SQLException, RuntimeExcepti
     osl_atomic_increment( &m_refCount );
 
     IClassFactory2* pIUnknown   = NULL;
-    IUnknown        *pOuter     = NULL;
     HRESULT         hr;
     hr = CoGetClassObject( ADOS::CLSID_ADOCONNECTION_21,
                           CLSCTX_INPROC_SERVER,
@@ -70,6 +69,7 @@ OConnection::OConnection(ODriver*   _pDriver) throw(SQLException, RuntimeExcepti
     if( !FAILED( hr ) )
     {
         ADOConnection *pCon         = NULL;
+        IUnknown *pOuter     = NULL;
         hr = pIUnknown->CreateInstanceLic(  pOuter,
                                             NULL,
                                             ADOS::IID_ADOCONNECTION_21,
