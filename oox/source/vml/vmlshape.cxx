@@ -189,11 +189,18 @@ awt::Rectangle ShapeType::getAbsRectangle() const
 
 awt::Rectangle ShapeType::getRelRectangle() const
 {
+    sal_Int32 nWidth = maTypeModel.maWidth.toInt32();
+    if ( nWidth == 0 )
+        nWidth = 1;
+
+    sal_Int32 nHeight = maTypeModel.maHeight.toInt32();
+    if ( nHeight == 0 )
+        nHeight = 1;
+
     return awt::Rectangle(
         maTypeModel.maLeft.toInt32(),
         maTypeModel.maTop.toInt32(),
-        maTypeModel.maWidth.toInt32(),
-        maTypeModel.maHeight.toInt32() );
+        nWidth, nHeight );
 }
 
 // ============================================================================
