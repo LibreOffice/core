@@ -120,6 +120,9 @@
     <glade-widget-class title="Caption Preview" name="swuilo-SwCaptionPreview"
                         generic-name="Caption Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Drop Caps Preview" name="swuilo-SwDropCapsPict"
+                        generic-name="Drop Caps Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Extension List" name="deploymentgui-ExtBoxWithBtns"
                         generic-name="Extensions List" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

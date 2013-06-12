@@ -53,28 +53,29 @@ class SwDropCapsPict;
 class SwDropCapsPage : public SfxTabPage
 {
 friend class SwDropCapsPict;
+    // TODO: Work in progress
+    VclGrid*         m_pSwDropCapsGrid;
+    //FixedLine       aSettingsFL;
+    CheckBox*        m_pDropCapsBox;
+    CheckBox*        m_pWholeWordCB;
+    //FixedText       aSwitchText;
+    NumericField*    m_pDropCapsField;
+    //FixedText       aLinesText;
+    NumericField*    m_pLinesField;
+    //FixedText       aDistanceText;
+    MetricField*     m_pDistanceField;
 
-    FixedLine       aSettingsFL;
-    CheckBox        aDropCapsBox;
-    CheckBox        aWholeWordCB;
-    FixedText       aSwitchText;
-    NumericField    aDropCapsField;
-    FixedText       aLinesText;
-    NumericField    aLinesField;
-    FixedText       aDistanceText;
-    MetricField     aDistanceField;
+    VclFrame*        m_pContentFL;
+    FixedText*       m_pTextText;
+    Edit*            m_pTextEdit;
+    //FixedText       aTemplateText;
+    ListBox*         m_pTemplateBox;
 
-    FixedLine       aContentFL;
-    FixedText       aTextText;
-    Edit            aTextEdit;
-    FixedText       aTemplateText;
-    ListBox         aTemplateBox;
+    SwDropCapsPict*  m_pPict;
 
-    SwDropCapsPict  *pPict;
-
-    sal_Bool            bModified;
-    sal_Bool            bFormat;
-    sal_Bool            bHtmlMode;
+    sal_Bool          bModified;
+    sal_Bool          bFormat;
+    sal_Bool          bHtmlMode;
 
     SwWrtShell &rSh;
 
@@ -101,6 +102,9 @@ public:
     virtual void Reset      (const SfxItemSet &rSet);
 
     void    SetFormat(sal_Bool bSet){bFormat = bSet;}
+protected:
+    void aSwitchText(sal_Bool bChecked);
+    //void SW_RES(int arg1);
 };
 
 #endif
