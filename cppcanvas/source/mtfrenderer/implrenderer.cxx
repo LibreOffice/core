@@ -1873,9 +1873,6 @@ namespace cppcanvas
                             SAL_INFO ("cppcanvas.emf", "EMF+ picture frame: " << nFrameLeft << "," << nFrameTop << " - " << nFrameRight << "," << nFrameBottom);
                             rMF >> nPixX >> nPixY >> nMmX >> nMmY;
                             SAL_INFO ("cppcanvas.emf", "EMF+ ref device pixel size: " << nPixX << "x" << nPixY << " mm size: " << nMmX << "x" << nMmY);
-
-                            rMF >> aBaseTransform;
-                            //aWorldTransform.Set (aBaseTransform);
                         }
                     }
                     break;

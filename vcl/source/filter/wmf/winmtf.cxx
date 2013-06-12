@@ -2251,15 +2251,6 @@ void WinMtfOutput::PassEMFPlusHeaderInfo()
     mem << nLeft << nTop << nRight << nBottom;
     mem << mnPixX << mnPixY << mnMillX << mnMillY;
 
-    float one, zero;
-
-    one = 1;
-    zero = 0;
-
-    // add transformation matrix to be used in vcl's metaact.cxx for
-    // rotate and scale operations
-    mem << one << zero << zero << one << zero << zero;
-
     // need to flush the stream, otherwise GetEndOfData will return 0
     // on windows where the function parameters are probably resolved in reverse order
     mem.Flush();

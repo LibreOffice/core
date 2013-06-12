@@ -286,7 +286,6 @@ static float GetSwapFloat( SvStream& rSt )
             ActionVector maActions;
 
             /* EMF+ */
-            XForm           aBaseTransform;
             XForm           aWorldTransform;
             EMFPObject*     aObjects [256];
             float           fPageScale;
