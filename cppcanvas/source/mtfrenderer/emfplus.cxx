@@ -1328,10 +1328,10 @@ namespace cppcanvas
                             B2DSize mappedSize( MapSize (dw/2, dh/2));
 
                             float endAngle = startAngle + sweepAngle;
-                            startAngle = fmodf(startAngle, M_PI*2);
+                            startAngle = fmodf(startAngle, static_cast<float>(M_PI*2));
                             if (startAngle < 0)
                                 startAngle += static_cast<float>(M_PI*2);
-                            endAngle = fmodf(endAngle, M_PI*2);
+                            endAngle = fmodf(endAngle, static_cast<float>(M_PI*2));
                             if (endAngle < 0)
                                 endAngle += static_cast<float>(M_PI*2);
 
