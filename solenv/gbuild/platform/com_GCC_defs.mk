@@ -124,7 +124,7 @@ gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 
 # optimization level
 gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
-gb_COMPILERNOOPTFLAGS := -O0
+gb_COMPILERNOOPTFLAGS := -O0 -fstrict-aliasing -fstrict-overflow
 
 # Clang does not know -ggdb2 or some other options
 ifeq ($(HAVE_GCC_GGDB2),TRUE)
