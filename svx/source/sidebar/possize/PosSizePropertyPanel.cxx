@@ -716,6 +716,11 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     else
         mbAdjustEnabled = false;
 
+    // Pool unit and dialog unit may have changed, make sure that we
+    // have the current values.
+    mePoolUnit = maTransfWidthControl.GetCoreMetric();
+    meDlgUnit = GetModuleFieldUnit();
+
     switch (nSID)
     {
         case SID_ATTR_TRANSFORM_WIDTH:
@@ -728,6 +733,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                     long mlOldWidth1 = pWidthItem->GetValue();
 
                     mlOldWidth1 = Fraction( mlOldWidth1 ) / maUIScale;
+                    SetFieldUnit( *mpMtrWidth, meDlgUnit, true );
                     SetMetricValue( *mpMtrWidth, mlOldWidth1, mePoolUnit );
                     mlOldWidth = mlOldWidth1;
                     break;
@@ -747,6 +753,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                     long mlOldHeight1 = pHeightItem->GetValue();
 
                     mlOldHeight1 = Fraction( mlOldHeight1 ) / maUIScale;
+                    SetFieldUnit( *mpMtrHeight, meDlgUnit, true );
                     SetMetricValue( *mpMtrHeight, mlOldHeight1, mePoolUnit );
                     mlOldHeight = mlOldHeight1;
                     break;
@@ -765,6 +772,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 {
                     long nTmp = pItem->GetValue();
                     nTmp = Fraction( nTmp ) / maUIScale;
+                    SetFieldUnit( *mpMtrPosX, meDlgUnit, true );
                     SetMetricValue( *mpMtrPosX, nTmp, mePoolUnit );
                     break;
                 }
@@ -782,6 +790,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                 {
                     long nTmp = pItem->GetValue();
                     nTmp = Fraction( nTmp ) / maUIScale;
+                    SetFieldUnit( *mpMtrPosY, meDlgUnit, true );
                     SetMetricValue( *mpMtrPosY, nTmp, mePoolUnit );
                     break;
                 }
