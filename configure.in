@@ -5679,6 +5679,9 @@ dnl Check if this is the right SDK.
     elif echo $PSDK_HOME | grep "v6.0" >/dev/null 2>/dev/null; then
         AC_MSG_RESULT([Found Windows SDK 6.0 ($PSDK_HOME)])
         WINDOWS_VISTA_PSDK=TRUE
+    elif echo $PSDK_HOME | grep "v7.0" >/dev/null 2>/dev/null; then
+        AC_MSG_RESULT([Found Windows SDK 7.0 ($PSDK_HOME)])
+        WINDOWS_VISTA_PSDK=TRUE
     else
         AC_MSG_RESULT([Found Legacy Windows Platform SDK ($PSDK_HOME)])
     fi
