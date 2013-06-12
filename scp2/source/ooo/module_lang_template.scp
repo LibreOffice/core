@@ -40,6 +40,7 @@ Module gid_Module_Langpack_Basis_Template
 #endif
              gid_File_Share_Config_Sofficecfg_uiconfig_svt_Lang,
              gid_File_Share_Config_Sofficecfg_uiconfig_svx_Lang,
+             gid_File_Share_Config_Sofficecfg_uiconfig_swriter_Lang,
 #ifdef ENABLE_TELEPATHY
              gid_File_Share_Config_Sofficecfg_uiconfig_tubes_Lang,
 #endif
