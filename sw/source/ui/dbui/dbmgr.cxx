@@ -1299,7 +1299,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     {
                         if( pPrintOptions[nOption].Name == "CopyCount" || pPrintOptions[nOption].Name == "FileName"
                             || pPrintOptions[nOption].Name == "Collate" || pPrintOptions[nOption].Name == "Pages"
-                            || pPrintOptions[nOption].Name == "Wait" )
+                            || pPrintOptions[nOption].Name == "Wait" || pPrintOptions[nOption].Name == "PrinterName" )
                         {
                             // add an option
                             aOptions.realloc( nIndex + 1 );
