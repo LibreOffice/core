@@ -391,10 +391,8 @@ RightsEnum OAdoGroup::Map2Right(sal_Int32 _eNum)
 // -------------------------------------------------------------------------
 void WpADOIndex::Create()
 {
-    HRESULT         hr = -1;
-
     _ADOIndex* pIndex = NULL;
-    hr = CoCreateInstance(ADOS::CLSID_ADOINDEX_25,
+    HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOINDEX_25,
                           NULL,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOINDEX_25,
@@ -421,9 +419,8 @@ void OAdoIndex::fillPropertyValues()
 // -----------------------------------------------------------------------------
 void WpADOKey::Create()
 {
-    HRESULT         hr = -1;
     _ADOKey* pKey = NULL;
-    hr = CoCreateInstance(ADOS::CLSID_ADOKEY_25,
+    HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOKEY_25,
                           NULL,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOKEY_25,
@@ -531,9 +528,8 @@ KeyTypeEnum OAdoKey::Map2KeyRule(const sal_Int32& _eNum)
 // -----------------------------------------------------------------------------
 void WpADOTable::Create()
 {
-    HRESULT         hr = -1;
     _ADOTable* pTable = NULL;
-    hr = CoCreateInstance(ADOS::CLSID_ADOTABLE_25,
+    HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOTABLE_25,
                           NULL,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOTABLE_25,
@@ -578,9 +574,8 @@ void OAdoTable::fillPropertyValues()
 // -----------------------------------------------------------------------------
 void WpADOUser::Create()
 {
-    HRESULT         hr = -1;
     _ADOUser* pUser = NULL;
-    hr = CoCreateInstance(ADOS::CLSID_ADOUSER_25,
+    HRESULT hr = CoCreateInstance(ADOS::CLSID_ADOUSER_25,
                           NULL,
                           CLSCTX_INPROC_SERVER,
                           ADOS::IID_ADOUSER_25,
