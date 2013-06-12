@@ -68,8 +68,7 @@ class RtlReferencePrinter(object):
     def to_string(self):
         pointee = self.val['m_pBody']
         if pointee:
-            val = pointee.dereference()
-            return '%s to %s' % (self.typename, str(val))
+            return '%s to %s' % (self.typename, str(pointee))
         else:
             return "empty %s" % self.typename
 
