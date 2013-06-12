@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//7dc\u003d",
+        "filename": "i18npool/Library_localedata_others.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000439
+      },
+      "writtenOn": "2013-06-12T07:29:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXH//7eA\u003d",
+      "revId": "f755ad72970ee018f8d11af8f607db493712ae2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//7d8\u003d",
         "filename": "i18npool/source/collator/data/bo_charset.txt",
         "patchSetId": 2
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//7dY\u003d",
+        "filename": "i18npool/source/localedata/localedata.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000439
+      },
+      "writtenOn": "2013-06-12T07:29:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAXH//7d4\u003d",
+      "revId": "f755ad72970ee018f8d11af8f607db493712ae2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//7d0\u003d",
         "filename": "scp2/source/ooo/file_ooo.scp",
         "patchSetId": 2
@@ -64,6 +100,24 @@
       "writtenOn": "2013-06-11T17:56:48Z",
       "side": 1,
       "message": "Please maintain alphabetical order.",
+      "revId": "f755ad72970ee018f8d11af8f607db493712ae2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7dk\u003d",
+        "filename": "scp2/source/ooo/file_ooo.scp",
+        "patchSetId": 2
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1000439
+      },
+      "writtenOn": "2013-06-12T07:29:58Z",
+      "side": 1,
+      "message": "Should I add bo-IN and bo-CN or just bo is ok?",
+      "parentUuid": "AAAAXH//7d0\u003d",
       "revId": "f755ad72970ee018f8d11af8f607db493712ae2f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
