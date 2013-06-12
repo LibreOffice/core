@@ -94,10 +94,10 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
     aBounds.append(B2DPoint(fPosX,fPosY+fHeight));
     aBounds.setClosed(true);
 
-    aSeq[1] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+    aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonColorPrimitive2D(
                                         B2DPolyPolygon(aBounds), Color(COL_WHITE).getBColor()));
 
-    aSeq[2] = Primitive2DReference( new FillGraphicPrimitive2D(
+    aSeq[2] = drawinglayer::primitive2d::Primitive2DReference( new FillGraphicPrimitive2D(
                                         createTranslateB2DHomMatrix(maPrev1Pos.X(),maPrev1Pos.Y()),
                                         FillGraphicAttribute(Graphic(maPreview1),
                                                             B2DRange(
@@ -107,7 +107,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
                                         ));
 
     // draw thumbnail borders
-    aSeq[3] = Primitive2DReference(createBorderLine(aBounds));
+    aSeq[3] = drawinglayer::primitive2d::Primitive2DReference(createBorderLine(aBounds));
 
     addTextPrimitives(maTitle, pAttrs, maTextPos, aSeq);
 

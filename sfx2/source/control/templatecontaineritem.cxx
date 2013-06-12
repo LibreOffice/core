@@ -65,18 +65,18 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
         nSeqSize += 3;
 
     BColor aFillColor = pAttrs->aFillColor;
-    Primitive2DSequence aSeq(nSeqSize);
+    drawinglayer::primitive2d::Primitive2DSequence aSeq(nSeqSize);
 
     // Draw background
     if ( mbSelected || mbHover )
         aFillColor = pAttrs->aHighlightColor;
 
-    aSeq[nCount++] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+    aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonColorPrimitive2D(
                                                B2DPolyPolygon(Polygon(maDrawArea,5,5).getB2DPolygon()),
                                                aFillColor));
 
     // Create rounded rectangle border
-    aSeq[nCount++] = Primitive2DReference( new PolygonStrokePrimitive2D(
+    aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference( new PolygonStrokePrimitive2D(
                                               Polygon(maThumbnailArea,5,5).getB2DPolygon(),
                                               LineAttribute(BColor(0.8, 0.8, 0.8), 2.0)));
 
@@ -137,9 +137,9 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
             aBounds.append(B2DPoint(fPosX,fPosY+fHeight));
             aBounds.setClosed(true);
 
-            aSeq[nCount++] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+            aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonColorPrimitive2D(
                                                 B2DPolyPolygon(aBounds), Color(COL_WHITE).getBColor()));
-            aSeq[nCount++] = Primitive2DReference( new FillGraphicPrimitive2D(
+            aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference( new FillGraphicPrimitive2D(
                                                 createScaleTranslateB2DHomMatrix(1.0,1.0,fPosX,fPosY),
                                                 FillGraphicAttribute(Graphic(*pImage),
                                                                     B2DRange(
@@ -149,7 +149,7 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
                                                 ));
 
             // draw thumbnail borders
-            aSeq[nCount++] = Primitive2DReference(createBorderLine(aBounds));
+            aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference(createBorderLine(aBounds));
         }
     }
 
