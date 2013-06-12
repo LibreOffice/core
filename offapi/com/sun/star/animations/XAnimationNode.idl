@@ -224,7 +224,7 @@ interface XAnimationNode : ::com::sun::star::container::XChild
 
     /** defines the auto reverse settings for this element.
 
-        #AutoRevers is
+        #AutoReverse is
             <ul>
             <li>`FALSE` if the animation is played normal.</li>
             <li>`TRUE` if the animation is played forwards and then backwards. This doubles the duration</li>
