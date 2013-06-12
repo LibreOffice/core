@@ -1289,21 +1289,22 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     // printing should be done synchronously otherwise the document
                     // might already become invalid during the process
                     uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
-                    const sal_Int32 nOpts = aOptions.getLength();
-                    aOptions.realloc( nOpts + 1 );
-                    aOptions[ nOpts ].Name = OUString("Wait");
-                    aOptions[ nOpts ].Value <<= sal_True ;
+
+                    aOptions.realloc( 1 );
+                    aOptions[ 0 ].Name = OUString("Wait");
+                    aOptions[ 0 ].Value <<= sal_True ;
                     // move print options
                     const beans::PropertyValue* pPrintOptions = rMergeDescriptor.aPrintOptions.getConstArray();
-                    for( sal_Int32 nOption = 0; nOption < rMergeDescriptor.aPrintOptions.getLength(); ++nOption)
+                    for( sal_Int32 nOption = 0, nIndex = 1 ; nOption < rMergeDescriptor.aPrintOptions.getLength(); ++nOption)
                     {
                         if( pPrintOptions[nOption].Name == "CopyCount" || pPrintOptions[nOption].Name == "FileName"
                             || pPrintOptions[nOption].Name == "Collate" || pPrintOptions[nOption].Name == "Pages"
                             || pPrintOptions[nOption].Name == "Wait" )
                         {
-                            aOptions.realloc( nOpts + 1 );
-                            aOptions[ nOpts ].Name = pPrintOptions[nOption].Name;
-                            aOptions[ nOpts ].Value = pPrintOptions[nOption].Value ;
+                            // add an option
+                            aOptions.realloc( nIndex + 1 );
+                            aOptions[ nIndex ].Name = pPrintOptions[nOption].Name;
+                            aOptions[ nIndex++ ].Value = pPrintOptions[nOption].Value ;
                         }
                     }
 
