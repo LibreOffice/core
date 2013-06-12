@@ -988,6 +988,10 @@ void SfxViewShell::UIDeactivated( SfxInPlaceClient* /*pClient*/ )
     // uno::Reference < frame::XFramesSupplier > xParentFrame( xOwnFrame->getCreator(), uno::UNO_QUERY );
     // if ( xParentFrame.is() )
     //     xParentFrame->setActiveFrame( uno::Reference < frame::XFrame >() );
+
+    // Make sure that slot servers are initialized or updated after
+    // an OLE object is deactivated.
+    pFrame->GetBindings().InvalidateAll(sal_True);
 }
 
 //--------------------------------------------------------------------
