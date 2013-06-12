@@ -69,7 +69,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
     BColor aFillColor = pAttrs->aFillColor;
 
     int nCount = maSubTitle.isEmpty() ? 5 : 6;
-    Primitive2DSequence aSeq(nCount);
+    drawinglayer::primitive2d::Primitive2DSequence aSeq(nCount);
 
     // Draw background
     if ( mbSelected || mbHover )
