@@ -142,16 +142,6 @@ else
 gb_LINKEROPTFLAGS := -Wl,-O1
 endif
 
-gb_DEBUG_CFLAGS := -ggdb2 -finline-limit=0 -fno-inline -fno-default-inline
-
-ifneq ($(gb_DEBUGLEVEL),0)
-gb_COMPILEROPTFLAGS :=
-else
-gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
-endif
-
-gb_COMPILERNOOPTFLAGS := -O0
-
 # LinkTarget class
 
 define gb_LinkTarget__get_rpath_for_layer

@@ -137,14 +137,6 @@ else
 gb_LINKEROPTFLAGS := -Wl,-O1
 endif
 
-ifneq ($(gb_DEBUGLEVEL),0)
-gb_COMPILEROPTFLAGS :=
-else
-gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
-endif
-
-gb_COMPILERNOOPTFLAGS := -O0
-
 ifeq ($(gb_SYMBOL),$(true))
 gb_LINKERSTRIPDEBUGFLAGS :=
 else

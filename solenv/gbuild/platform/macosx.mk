@@ -84,10 +84,6 @@ gb_OBJCFLAGS := -x objective-c -fobjc-exceptions
 gb_LinkTarget_LDFLAGS := \
 	$(SOLARLIB) \
 
-gb_DEBUG_CFLAGS := -g
-gb_COMPILEROPTFLAGS := -O2
-gb_COMPILERNOOPTFLAGS := -O0
-
 # LinkTarget class
 
 define gb_LinkTarget__get_rpath_for_layer
