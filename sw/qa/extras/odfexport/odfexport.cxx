@@ -141,7 +141,7 @@ void Test::testFdo60769()
         uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
         OUString aType =  getProperty<OUString>(xPropertySet, "TextPortionType");
         // Second paragraph: no field start
-        CPPUNIT_ASSERT(aType == "Text" || aType == "TextFieldEnd" || aType == "TextFieldEnd");
+        CPPUNIT_ASSERT(aType == "Text" || aType == "TextFieldEnd");
     }
 }
 
