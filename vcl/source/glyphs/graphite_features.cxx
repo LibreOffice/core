@@ -207,7 +207,7 @@ bool GrFeatureParser::isCharId(const OString & id, size_t offset, size_t length)
     for (size_t i = 0; i < length; i++)
     {
         if (i > 0 && id[offset+i] == '\0') continue;
-        if ((id[offset+i] < 0x20) || (id[offset+i] < 0))
+        if (id[offset+i] < 0x20 || static_cast<signed char>(id[offset+i]) < 0)
             return false;
         if (i==0 && (id[offset+i] < 0x41))
             return false;
