@@ -257,16 +257,16 @@ String RID_XSUCCEEDSEQUIVY   { Text = "<?> succsim <?> " ; };
 String RID_XNOTPRECEDESY     { Text = "<?> nprec <?> " ; };
 String RID_XNOTSUCCEEDSY     { Text = "<?> nsucc <?> " ; };
 
-String RID_CATERGORY_UNARY_BINARY_OPERATORS { Text = "Unary/Binary Operators" ; };
-String RID_CATERGORY_RELATIONS              { Text = "Relations" ; };
-String RID_CATERGORY_SET_OPERATIONS         { Text = "Set Operations" ; };
-String RID_CATERGORY_FUNCTIONS              { Text = "Functions" ; };
-String RID_CATERGORY_OPERATORS              { Text = "Operators" ; };
-String RID_CATERGORY_ATTRIBUTES             { Text = "Attributes" ; };
-String RID_CATERGORY_BRACKETS               { Text = "Brackets" ; };
-String RID_CATERGORY_FORMATS                { Text = "Formats" ; };
-String RID_CATERGORY_OTHERS                 { Text = "Others" ; };
-String RID_CATERGORY_EXAMPLES               { Text = "Examples" ; };
+String RID_CATEGORY_UNARY_BINARY_OPERATORS { Text = "Unary/Binary Operators" ; };
+String RID_CATEGORY_RELATIONS              { Text = "Relations" ; };
+String RID_CATEGORY_SET_OPERATIONS         { Text = "Set Operations" ; };
+String RID_CATEGORY_FUNCTIONS              { Text = "Functions" ; };
+String RID_CATEGORY_OPERATORS              { Text = "Operators" ; };
+String RID_CATEGORY_ATTRIBUTES             { Text = "Attributes" ; };
+String RID_CATEGORY_BRACKETS               { Text = "Brackets" ; };
+String RID_CATEGORY_FORMATS                { Text = "Formats" ; };
+String RID_CATEGORY_OTHERS                 { Text = "Others" ; };
+String RID_CATEGORY_EXAMPLES               { Text = "Examples" ; };
 
 //////////////////////////////////////////
 
