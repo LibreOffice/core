@@ -5459,9 +5459,8 @@ fi
 AC_SUBST(HAVE_THREADSAFE_STATICS)
 
 dnl ===================================================================
-dnl visibility and C++11 features
+dnl visibility and other gcc features
 dnl ===================================================================
-CXXFLAGS_CXX11=
 if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([whether $CC supports -fvisibility=hidden])
     save_CFLAGS=$CFLAGS
@@ -5550,7 +5549,18 @@ if test "$GCC" = "yes"; then
             AC_MSG_RESULT([yes])
         ], [AC_MSG_RESULT([no])])
     CFLAGS=$save_CFLAGS
+fi
 
+AC_SUBST(HAVE_GCC_NO_LONG_DOUBLE)
+AC_SUBST(HAVE_GCC_AVX)
+AC_SUBST(HAVE_GCC_BUILTIN_ATOMIC)
+
+dnl ===================================================================
+dnl C++11
+dnl ===================================================================
+
+CXXFLAGS_CXX11=
+if test "$GCC" = "yes"; then
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #if __GNUC__ == 4 && __GNUC_MINOR__ == 7 && (__GNUC_PATCHLEVEL__ == 0 || __GNUC_PATCHLEVEL__ == 1)
 #else
@@ -5618,9 +5628,6 @@ fi
 
 AC_SUBST(CXXFLAGS_CXX11)
 AC_SUBST(HAVE_CXX0X)
-AC_SUBST(HAVE_GCC_NO_LONG_DOUBLE)
-AC_SUBST(HAVE_GCC_AVX)
-AC_SUBST(HAVE_GCC_BUILTIN_ATOMIC)
 
 dnl ==================================
 dnl Check for C++11 "= delete" support
