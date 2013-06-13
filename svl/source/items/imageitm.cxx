@@ -25,7 +25,7 @@ TYPEINIT1( SfxImageItem, SfxInt16Item );
 
 struct SfxImageItem_Impl
 {
-    String  aURL;
+    OUString aURL;
     long    nAngle;
     bool    bMirrored;
     int     operator == ( const SfxImageItem_Impl& rOther ) const

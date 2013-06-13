@@ -3310,7 +3310,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt )
 
 
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
-                                 sal_uInt16 nMode, const String *pGrfName )
+                                 sal_uInt16 nMode, const String *pGrfName_ )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -3323,7 +3323,17 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     // Erstmal ein par Werte holen
 //  const Brush &rBrush = ((const SvxBrushItem &)rHt).GetBrush();
     const Color & rColor = ((const SvxBrushItem &)rHt).GetColor();
-    const String *pLink = pGrfName ? pGrfName
+
+    // Temporary, for String to OUString conversion
+    OUString GrfName;
+    OUString *pGrfName = 0;
+    if (pGrfName_)
+    {
+        GrfName = *pGrfName_;
+        pGrfName = &GrfName;
+    }
+
+    const OUString *pLink = pGrfName ? pGrfName
                             : ((const SvxBrushItem &)rHt).GetGraphicLink();
     SvxGraphicPosition ePos = ((const SvxBrushItem &)rHt).GetGraphicPos();
 
@@ -3332,7 +3342,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
         // Fuer Seitenvorlagen wurde der Grafik-Name uebergeben. Es wird
         // nur ein Attribut ausgegeben, wenn die Grafik nicht gekachelt ist.
         OSL_ENSURE( pLink, "Wo ist der Grafik-Name der Seitenvorlage?" );
-        if( !pLink || !pLink->Len() || GPOS_TILED==ePos )
+        if( !pLink || pLink->isEmpty() || GPOS_TILED==ePos )
             return rWrt;
     }
 
@@ -3349,6 +3359,8 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
 
     // und jetzt eine Grafik
     String sGrfNm;
+    // Temporary for String to OUString conversion
+    OUString sGrfNm_;
 
     if( !pLink )
     {
@@ -3365,10 +3377,10 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
                         XOUTBMP_USE_NATIVE_IF_POSSIBLE );
             if( !nErr )     // fehlerhaft, da ist nichts auszugeben
             {
-                sGrfNm = URIHelper::SmartRel2Abs(
+                sGrfNm_ = URIHelper::SmartRel2Abs(
                     INetURLObject(rWrt.GetBaseURL()), sGrfNm,
                     URIHelper::GetMaybeFileHdl() );
-                pLink = &sGrfNm;
+                pLink = &sGrfNm_;
             }
             else
             {
@@ -3380,7 +3392,8 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     {
         sGrfNm = *pLink;
         rWrt.CopyLocalFileToINet( sGrfNm );
-        pLink = &sGrfNm;
+        sGrfNm_ = sGrfNm;
+        pLink = &sGrfNm_;
     }
 
     // In Tabellen wird nur dann etwas exportiert, wenn eine Grafik

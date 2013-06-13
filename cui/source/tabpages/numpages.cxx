@@ -3524,7 +3524,7 @@ void SvxNumOptionsTabPage::PageCreated(SfxAllItemSet aSet)
     if (pListItem)
     {
         ListBox& myCharFmtLB = GetCharFmtListBox();
-        const std::vector<String> &aList = (pListItem)->GetList();
+        const std::vector<OUString> &aList = pListItem->GetList();
         sal_uInt32 nCount = aList.size();;
         for(sal_uInt32 i = 0; i < nCount; i++)
             myCharFmtLB.InsertEntry(aList[i]);

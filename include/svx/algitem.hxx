@@ -51,7 +51,7 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual sal_uInt16          GetValueCount() const;
-    virtual String          GetValueText( sal_uInt16 nVal ) const;
+    virtual OUString        GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const;
 

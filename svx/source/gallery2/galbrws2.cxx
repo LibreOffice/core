@@ -96,7 +96,7 @@ void GalleryBackgroundPopup::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 
         if ( ( pStrLstItem = PTR_CAST( SfxStringListItem, pItem ) ) != NULL )
         {
-            const std::vector<String> &aList = pStrLstItem->GetList();
+            const std::vector<OUString> &aList = pStrLstItem->GetList();
 
             for ( sal_uIntPtr i = 0, nCount = aList.size(); i < nCount; i++ )
                 InsertItem( (sal_uInt16) i + 1, aList[i]);

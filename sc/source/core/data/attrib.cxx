@@ -125,15 +125,14 @@ ScMergeAttr::~ScMergeAttr()
 
 //------------------------------------------------------------------------
 
-String ScMergeAttr::GetValueText() const
+OUString ScMergeAttr::GetValueText() const
 {
-    OUStringBuffer aString;
-    aString.append('(');
-    aString.append(static_cast<sal_Int32>(nColMerge));
-    aString.append(',');
-    aString.append(static_cast<sal_Int32>(nRowMerge));
-    aString.append(')');
-    return aString.makeStringAndClear();
+    OUString aRet = "("
+        + OUString::number(static_cast<sal_Int32>(nColMerge))
+        + ","
+        + OUString::number(static_cast<sal_Int32>(nRowMerge))
+        + ")";
+    return aRet;
 }
 
 //------------------------------------------------------------------------
@@ -308,19 +307,17 @@ bool ScProtectionAttr::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 //------------------------------------------------------------------------
 
-String ScProtectionAttr::GetValueText() const
+OUString ScProtectionAttr::GetValueText() const
 {
-    String aValue;
-    String aStrYes ( ScGlobal::GetRscString(STR_YES) );
-    String aStrNo  ( ScGlobal::GetRscString(STR_NO) );
-    sal_Unicode cDelim = ',';
-
-    aValue  = '(';
-    aValue += (bProtection  ? aStrYes : aStrNo);    aValue += cDelim;
-    aValue += (bHideFormula ? aStrYes : aStrNo);    aValue += cDelim;
-    aValue += (bHideCell    ? aStrYes : aStrNo);    aValue += cDelim;
-    aValue += (bHidePrint   ? aStrYes : aStrNo);
-    aValue += ')';
+    OUString aValue  = "("
+        + ScGlobal::GetRscString(bProtection  ? STR_YES : STR_NO)
+        + ","
+        + ScGlobal::GetRscString(bHideFormula  ? STR_YES : STR_NO)
+        + ","
+        + ScGlobal::GetRscString(bHideCell  ? STR_YES : STR_NO)
+        + ","
+        + ScGlobal::GetRscString(bHidePrint  ? STR_YES : STR_NO)
+        + ")";
 
     return aValue;
 }
@@ -336,11 +333,6 @@ SfxItemPresentation ScProtectionAttr::GetPresentation
         const IntlWrapper* /* pIntl */
     ) const
 {
-    OUString aStrYes  ( ScGlobal::GetRscString(STR_YES) );
-    OUString aStrNo   ( ScGlobal::GetRscString(STR_NO) );
-    OUString aStrSep(": ");
-    OUString aStrDelim( ", ");
-
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -352,14 +344,21 @@ SfxItemPresentation ScProtectionAttr::GetPresentation
             break;
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText  = ScGlobal::GetRscString(STR_PROTECTION) + aStrSep +
-                     (bProtection ? aStrYes : aStrNo)       + aStrDelim +
-                     ScGlobal::GetRscString(STR_FORMULAS)   + aStrSep +
-                     (!bHideFormula ? aStrYes : aStrNo)     + aStrDelim +
-                     ScGlobal::GetRscString(STR_HIDE)       + aStrSep +
-                     (bHideCell ? aStrYes : aStrNo)         + aStrDelim +
-                     ScGlobal::GetRscString(STR_PRINT)      + aStrSep +
-                     (!bHidePrint ? aStrYes : aStrNo);
+            rText  = ScGlobal::GetRscString(STR_PROTECTION)
+                + ": "
+                + ScGlobal::GetRscString(bProtection ? STR_YES : STR_NO)
+                + ", "
+                + ScGlobal::GetRscString(STR_FORMULAS)
+                + ": "
+                + ScGlobal::GetRscString(!bHideFormula ? STR_YES : STR_NO)
+                + ", "
+                + ScGlobal::GetRscString(STR_HIDE)
+                + ": "
+                + ScGlobal::GetRscString(bHideCell ? STR_YES : STR_NO)
+                + ", "
+                + ScGlobal::GetRscString(STR_PRINT)
+                + ": "
+                + ScGlobal::GetRscString(!bHidePrint ? STR_YES : STR_NO);
             break;
 
         default:
@@ -714,7 +713,7 @@ bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */ )
 
 //------------------------------------------------------------------------
 
-String ScPageHFItem::GetValueText() const
+OUString ScPageHFItem::GetValueText() const
 {
     return OUString("ScPageHFItem");
 }
@@ -994,7 +993,7 @@ SfxItemPresentation ScViewObjectModeItem::GetPresentation
 
 //------------------------------------------------------------------------
 
-String ScViewObjectModeItem::GetValueText( sal_uInt16 nVal ) const
+OUString ScViewObjectModeItem::GetValueText( sal_uInt16 nVal ) const
 {
     OSL_ENSURE( nVal <= VOBJ_MODE_HIDE, "enum overflow!" );
 
@@ -1065,7 +1064,7 @@ ScDoubleItem::ScDoubleItem( const ScDoubleItem& rItem )
 
 //------------------------------------------------------------------------
 
-String ScDoubleItem::GetValueText() const
+OUString ScDoubleItem::GetValueText() const
 {
     return OUString("ScDoubleItem");
 }

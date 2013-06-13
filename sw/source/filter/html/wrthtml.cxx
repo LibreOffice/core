@@ -1131,7 +1131,9 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
     if( !bGraphic )
         return;
 
-    const String *pLink = pBrushItem->GetGraphicLink();
+    const OUString *pLink = pBrushItem->GetGraphicLink();
+    // Temporary for String to OUString conversion
+    OUString rEmbGrfNm_;
 
     // embeddete Grafik -> WriteEmbedded schreiben
     if( !pLink )
@@ -1148,10 +1150,10 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
                     XOUTBMP_USE_NATIVE_IF_POSSIBLE );
             if( !nErr )     // fehlerhaft, da ist nichts auszugeben
             {
-                rEmbGrfNm = URIHelper::SmartRel2Abs(
+                rEmbGrfNm_ = URIHelper::SmartRel2Abs(
                     INetURLObject( GetBaseURL() ), rEmbGrfNm,
                     URIHelper::GetMaybeFileHdl() );
-                pLink = &rEmbGrfNm;
+                pLink = &rEmbGrfNm_;
             }
             else
             {
@@ -1165,7 +1167,8 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
         if( bCfgCpyLinkedGrfs )
         {
             CopyLocalFileToINet( rEmbGrfNm  );
-            pLink = &rEmbGrfNm;
+            rEmbGrfNm_ = rEmbGrfNm;
+            pLink = &rEmbGrfNm_;
         }
     }
 

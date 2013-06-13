@@ -63,7 +63,7 @@ public:
     explicit            ScScenarioListBox( ScScenarioWindow& rParent );
     virtual             ~ScScenarioListBox();
 
-    void                UpdateEntries( const std::vector<String> &aNewEntryList );
+    void                UpdateEntries( const std::vector<OUString> &aNewEntryList );
 
 protected:
     virtual void        Select();

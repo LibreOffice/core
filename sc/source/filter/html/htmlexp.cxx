@@ -566,8 +566,11 @@ void ScHTMLExport::WriteBody()
 
     if ( bAll && GPOS_NONE != pBrushItem->GetGraphicPos() )
     {
-        const String* pLink = pBrushItem->GetGraphicLink();
+        const OUString* pLink = pBrushItem->GetGraphicLink();
         String aGrfNm;
+
+        // Temporary for String to OUString conversion
+        OUString aGrfNm_;
 
         // embeddete Grafik -> via WriteGraphic schreiben
         if( !pLink )
@@ -586,7 +589,8 @@ void ScHTMLExport::WriteBody()
                             aGrfNm, URIHelper::GetMaybeFileHdl(), true, false);
                     if ( HasCId() )
                         MakeCIdURL( aGrfNm );
-                    pLink = &aGrfNm;
+                    aGrfNm_ = aGrfNm;
+                    pLink = &aGrfNm_;
                 }
             }
         }
@@ -603,7 +607,8 @@ void ScHTMLExport::WriteBody()
                 aGrfNm = URIHelper::SmartRel2Abs(
                         INetURLObject(aBaseURL),
                         aGrfNm, URIHelper::GetMaybeFileHdl(), true, false);
-            pLink = &aGrfNm;
+            aGrfNm_ = aGrfNm;
+            pLink = &aGrfNm_;
         }
         if( pLink )
         {

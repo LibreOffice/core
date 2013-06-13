@@ -1205,7 +1205,10 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
     // Wenn es ein BrushItem gibt, muss die Grafiknoch exportiert werden
-    const String *pLink = 0;
+    const OUString *pLink = 0;
+    // Temporary for String to OUString conversion
+    OUString rGrfName_;
+
     if( pBrush )
     {
         pLink = pBrush->GetGraphicLink();
@@ -1225,10 +1228,10 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
                          XOUTBMP_USE_NATIVE_IF_POSSIBLE));
                 if( !nErr )
                 {
-                    rGrfName = URIHelper::SmartRel2Abs(
+                    rGrfName_ = URIHelper::SmartRel2Abs(
                         INetURLObject( rWrt.GetBaseURL() ), rGrfName,
                         URIHelper::GetMaybeFileHdl() );
-                    pLink = &rGrfName;
+                    pLink = &rGrfName_;
                 }
                 else
                 {
@@ -1242,13 +1245,14 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
             if( rHTMLWrt.bCfgCpyLinkedGrfs )
             {
                 rHTMLWrt.CopyLocalFileToINet( rGrfName );
-                pLink = &rGrfName;
+                rGrfName_ = rGrfName;
+                pLink = &rGrfName_;
             }
         }
     }
     else
     {
-        pLink = &rGrfName;
+        pLink = &rGrfName_;
     }
 
     OStringBuffer sOut;

@@ -64,7 +64,7 @@ public:
     sal_Unicode&  GetFill() { return cFill; }
     sal_Unicode   GetFill() const { return cFill; }
 
-    String          GetValueString() const;
+    OUString      GetValueString() const;
 
     // the "old" operator==()
     sal_Bool            IsEqual( const SvxTabStop& rTS ) const

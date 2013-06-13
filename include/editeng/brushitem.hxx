@@ -49,8 +49,8 @@ class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
 {
     Color               aColor;
     SvxBrushItem_Impl*  pImpl;
-    String*             pStrLink;
-    String*             pStrFilter;
+    OUString*           pStrLink;
+    OUString*           pStrFilter;
     SvxGraphicPosition  eGraphicPos;
     sal_Bool                bLoadAgain;
 
@@ -70,7 +70,7 @@ public:
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
     SvxBrushItem( const GraphicObject& rGraphicObj,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
-    SvxBrushItem( const String& rLink, const String& rFilter,
+    SvxBrushItem( const OUString& rLink, const OUString& rFilter,
                   SvxGraphicPosition ePos, sal_uInt16 nWhich );
     SvxBrushItem( const SvxBrushItem& );
     SvxBrushItem( const CntWallpaperItem&, sal_uInt16 nWhich );
@@ -105,14 +105,14 @@ public:
 
     const Graphic*          GetGraphic() const;
     const GraphicObject*    GetGraphicObject() const;
-    const String*           GetGraphicLink() const      { return pStrLink; }
-    const String*           GetGraphicFilter() const    { return pStrFilter; }
+    const OUString*         GetGraphicLink() const      { return pStrLink; }
+    const OUString*         GetGraphicFilter() const    { return pStrFilter; }
 
     void                SetGraphicPos( SvxGraphicPosition eNew );
     void                SetGraphic( const Graphic& rNew );
     void                SetGraphicObject( const GraphicObject& rNewObj );
-    void                SetGraphicLink( const String& rNew );
-    void                SetGraphicFilter( const String& rNew );
+    void                SetGraphicLink( const OUString& rNew );
+    void                SetGraphicFilter( const OUString& rNew );
 
     SvxBrushItem&       operator=( const SvxBrushItem& rItem);
 

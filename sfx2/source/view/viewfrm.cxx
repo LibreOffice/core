@@ -1623,9 +1623,9 @@ int SfxViewFrameItem::operator==( const SfxPoolItem &rItem ) const
 }
 
 //--------------------------------------------------------------------
-String SfxViewFrameItem::GetValueText() const
+OUString SfxViewFrameItem::GetValueText() const
 {
-    return String();
+    return OUString();
 }
 
 //--------------------------------------------------------------------
