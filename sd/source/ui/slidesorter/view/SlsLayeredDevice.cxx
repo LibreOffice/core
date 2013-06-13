@@ -88,7 +88,7 @@ void ForAllRectangles (const Region& rRegion, ::boost::function<void(const Recta
     }
     else
     {
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
         {
             aFunction(*aRectIter);
         }

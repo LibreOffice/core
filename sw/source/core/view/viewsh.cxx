@@ -1731,7 +1731,7 @@ void ViewShell::Paint(const Rectangle &rRect)
             RectangleVector aRectangles;
             aRegion.GetRegionRectangles(aRectangles);
 
-            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
             {
                 Imp()->AddPaintRect(*aRectIter);
             }

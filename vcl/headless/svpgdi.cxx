@@ -167,7 +167,7 @@ void SvpSalGraphics::ensureClip()
     RectangleVector aRectangles;
     m_aClipRegion.GetRegionRectangles(aRectangles);
 
-    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
     {
         const long nW(aRectIter->GetWidth());
         if(nW)
@@ -224,7 +224,7 @@ bool SvpSalGraphics::isClippedSetup( const basegfx::B2IBox &aRange, SvpSalGraphi
     Rectangle aHitRect;
     RectangleVector aRectangles;
     m_aClipRegion.GetRegionRectangles(aRectangles);
-    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
     {
         if( aRectIter->IsOver( aRect ) )
         {

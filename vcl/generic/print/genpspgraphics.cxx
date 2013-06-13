@@ -325,7 +325,7 @@ bool GenPspGraphics::setClipRegion( const Region& i_rClip )
     i_rClip.GetRegionRectangles(aRectangles);
     m_pPrinterGfx->BeginSetClipRegion(aRectangles.size());
 
-    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
     {
         const long nW(aRectIter->GetWidth());
 

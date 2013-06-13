@@ -1652,7 +1652,7 @@ void PSWriter::ImplSetClipRegion( Region& rClipRegion )
         RectangleVector aRectangles;
         rClipRegion.GetRegionRectangles(aRectangles);
 
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
         {
             double nX1(aRectIter->Left());
             double nY1(aRectIter->Top());
@@ -1781,7 +1781,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
             aRegion.GetRegionRectangles(aRectangles);
             const long nMoveVertical(nHeightLeft - nHeightOrg);
 
-            for(RectangleVector::iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+            for(RectangleVector::iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
             {
                 aRectIter->Move(0, nMoveVertical);
 

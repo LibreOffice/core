@@ -148,7 +148,7 @@ void VCLXRegion::xOrRegion( const ::com::sun::star::uno::Reference< ::com::sun::
     ::com::sun::star::uno::Sequence< ::com::sun::star::awt::Rectangle > aRects(aRectangles.size());
     sal_uInt32 a(0);
 
-    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
     {
         aRects.getArray()[a++] = AWTRectangle(*aRectIter);
     }

@@ -29,7 +29,7 @@ TrieNode::TrieNode(sal_Unicode aCharacter) :
 TrieNode::~TrieNode()
 {
     vector<TrieNode*>::iterator iNode;
-    for(iNode = mChildren.begin(); iNode != mChildren.end(); iNode++)
+    for(iNode = mChildren.begin(); iNode != mChildren.end(); ++iNode)
     {
         delete *iNode;
     }
@@ -68,7 +68,7 @@ TrieNode* TrieNode::findChild(sal_Unicode aInputCharacter)
 
     vector<TrieNode*>::iterator iNode;
 
-    for(iNode = mChildren.begin(); iNode != mChildren.end(); iNode++)
+    for(iNode = mChildren.begin(); iNode != mChildren.end(); ++iNode)
     {
         TrieNode* pCurrent = *iNode;
         if ( pCurrent->mCharacter == aInputCharacter )
@@ -96,7 +96,7 @@ void TrieNode::collectSuggestions(OUString sPath, vector<OUString>& rSuggestionL
 
     // traverse nodes for other characters
     vector<TrieNode*>::iterator iNode;
-    for(iNode = mChildren.begin(); iNode != mChildren.end(); iNode++)
+    for(iNode = mChildren.begin(); iNode != mChildren.end(); ++iNode)
     {
         TrieNode* pCurrent = *iNode;
         if (pCurrent != NULL)

@@ -69,7 +69,7 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const Region& rExpandedRegion)
     RectangleVector aRectangles;
     aRegionPixel.GetRegionRectangles(aRectangles);
 
-    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
     {
         // for each rectangle, copy the area
         const Point aTopLeft(aRectIter->TopLeft());

@@ -120,7 +120,7 @@ namespace sdr
             RectangleVector aRectangles;
             rRegionPixel.GetRegionRectangles(aRectangles);
 
-            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
             {
 #ifdef DBG_UTIL
                 // #i72754# possible graphical region test only with non-pro
@@ -215,7 +215,7 @@ namespace sdr
             RectangleVector aRectangles;
             aRegion.GetRegionRectangles(aRectangles);
 
-            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
             {
                 // for each rectangle, save the area
                 const Point aTopLeft(aRectIter->TopLeft());

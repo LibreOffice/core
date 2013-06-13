@@ -626,7 +626,7 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::c
                     pWindow->SetLineColor(COL_LIGHTGREEN);
                     pWindow->SetFillColor();
 
-                    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+                    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
                     {
                         pWindow->DrawRect(*aRectIter);
                     }
