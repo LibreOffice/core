@@ -1754,6 +1754,16 @@ AC_ARG_WITH(windows-sdk,
     ],
 ,)
 
+AC_ARG_WITH(opencl-sdk,
+    AS_HELP_STRING([--with-opencl-sdk],
+        [If you have the AMD HSA / opencl SDK installed (cf.
+         http://developer.amd.com/tools-and-sdks/heterogeneous-computing/amd-accelerated-parallel-processing-app-sdk/downloads/ )
+         Pass the absolute path to where that SDK is unpacked.])
+    [
+                          Usage:     --with-opencl-sdk=/opt/AMDAPP
+    ],
+,)
+
 AC_ARG_WITH(lang,
     AS_HELP_STRING([--with-lang],
         [Use this option to build LibreOffice with additional language support.
@@ -9732,6 +9742,30 @@ fi
 
 AC_SUBST(SYSTEM_MESA_HEADERS)
 AC_SUBST(ENABLE_OPENGL)
+
+dnl =================================================
+dnl Check whether the OpenCL libraries are available
+dnl =================================================
+
+OPENCL_LIBS=
+OPENCL_CFLAGS=
+ENABLE_OPENCL=
+AC_MSG_CHECKING([opencl sdk])
+if test "z$with_opencl_sdk" = "z"; then
+       AC_MSG_RESULT([no])
+else
+       if test -d $with_opencl_sdk/include; then
+               ENABLE_OPENCL=TRUE
+               OPENCL_CFLAGS="-I $with_opencl_sdk/include"
+               OPENCL_LIBS="-L $with_opencl_sdk/lib/x86 -lOpenCL"
+               AC_MSG_RESULT([found at path $with_opencl_sdk])
+       else
+               AC_MSG_ERROR([no headers found found at $with_opencl_sdk/include ])
+       fi
+fi
+AC_SUBST(OPENCL_CFLAGS)
+AC_SUBST(OPENCL_LIBS)
+AC_SUBST(ENABLE_OPENCL)
 
 # presenter minimizer extension?
 AC_MSG_CHECKING([whether to build the Presentation Minimizer extension])
