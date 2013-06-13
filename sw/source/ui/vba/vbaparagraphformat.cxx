@@ -302,14 +302,13 @@ void SAL_CALL SwVbaParagraphFormat::setTabStops( const uno::Any& /*_tabstops*/ )
 
 uno::Any SAL_CALL SwVbaParagraphFormat::getWidowControl() throw (uno::RuntimeException)
 {
-    sal_Bool bWidow = sal_False;
     sal_Int8 nWidow = 0;
     mxParaProps->getPropertyValue( OUString("ParaWidows") ) >>= nWidow;
     sal_Int8 nOrphan = 0;
     mxParaProps->getPropertyValue( OUString("ParaOrphans") ) >>= nOrphan;
     // if the amount of single lines on one page > 1 and the same of start and end of the paragraph,
     // true is retured.
-    bWidow = ( nWidow > 1 && nOrphan == nWidow );
+    sal_Bool bWidow = ( nWidow > 1 && nOrphan == nWidow );
     return uno::makeAny( bWidow );
 }
 

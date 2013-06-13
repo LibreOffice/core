@@ -436,9 +436,8 @@ SwSpellPopup::SwSpellPopup(
 
     // get keyboard language
     String aKeyboardLang;
-    LanguageType nLang = LANGUAGE_DONTKNOW;
     SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
-    nLang = rEditWin.GetInputLanguage();
+    LanguageType nLang = rEditWin.GetInputLanguage();
     if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
         aKeyboardLang = aLanguageTable.GetString( nLang );
 
@@ -591,9 +590,8 @@ aInfo16( SW_RES(IMG_INFO_16) )
 
     // get keyboard language
     String aKeyboardLang;
-    LanguageType nLang = LANGUAGE_DONTKNOW;
     SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
-    nLang = rEditWin.GetInputLanguage();
+    LanguageType nLang = rEditWin.GetInputLanguage();
     if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
         aKeyboardLang = aLanguageTable.GetString( nLang );
 

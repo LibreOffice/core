@@ -1581,12 +1581,11 @@ throw (uno::RuntimeException)
 
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    sal_Bool bRet = sal_False;
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     // if we're at the para start then we wont move
     // but bRet is also true if GoSentence failed but
     // the start of the sentence is reached
-    bRet = SwUnoCursorHelper::IsStartOfPara(rUnoCursor)
+    sal_Bool bRet = SwUnoCursorHelper::IsStartOfPara(rUnoCursor)
         || rUnoCursor.GoSentence(SwCursor::START_SENT)
         || SwUnoCursorHelper::IsStartOfPara(rUnoCursor);
     if (CURSOR_META == m_pImpl->m_eType)
@@ -1605,13 +1604,12 @@ SwXTextCursor::gotoEndOfSentence(sal_Bool Expand) throw (uno::RuntimeException)
 
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    sal_Bool bRet = sal_False;
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     // bRet is true if GoSentence() succeeded or if the
     // MovePara() succeeded while the end of the para is
     // not reached already
     sal_Bool bAlreadyParaEnd = SwUnoCursorHelper::IsEndOfPara(rUnoCursor);
-    bRet = !bAlreadyParaEnd
+    sal_Bool bRet = !bAlreadyParaEnd
             &&  (rUnoCursor.GoSentence(SwCursor::END_SENT)
                  || rUnoCursor.MovePara(fnParaCurr, fnParaEnd));
     if (CURSOR_META == m_pImpl->m_eType)

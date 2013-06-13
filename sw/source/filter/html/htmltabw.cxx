@@ -171,11 +171,10 @@ sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableLine& rLine,
     OSL_ENSURE( bTop || bBottom || bLeft || bRight,
             "HasTabBackground: darf nicht aufgerufen werden" );
 
-    sal_Bool bRet = sal_False;
     const SvxBrushItem& rBrushItem = rLine.GetFrmFmt()->GetBackground();
     /// The table line has a background, if its background color is not "no fill"/
     /// "auto fill" or it has a background graphic.
-    bRet = rBrushItem.GetColor() != COL_TRANSPARENT ||
+    sal_Bool bRet = rBrushItem.GetColor() != COL_TRANSPARENT ||
            rBrushItem.GetGraphicLink() || rBrushItem.GetGraphic();
 
     if( !bRet )
