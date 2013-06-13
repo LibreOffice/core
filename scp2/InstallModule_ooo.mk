@@ -23,8 +23,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_CAIRO_CANVAS \
 	ENABLE_DIRECTX \
 	ENABLE_EVOAB2 \
-	ENABLE_GSTREAMER \
-	ENABLE_GSTREAMER_0_10 \
 	ENABLE_GTK \
 	ENABLE_GTK3 \
 	ENABLE_KAB \
@@ -38,7 +36,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_OPENGL \
 	ENABLE_TDE \
 	ENABLE_TDEAB \
-	MERGELIBS \
 	SYSTEM_APACHE_COMMONS \
 	SYSTEM_BOOST \
 	SYSTEM_CAIRO \
