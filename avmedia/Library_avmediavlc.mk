@@ -39,6 +39,8 @@ $(eval $(call gb_Library_use_libraries,avmediavlc,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,avmediavlc,\
+	avmedia/source/vlc/vlcmanager \
+	avmedia/source/vlc/vlcplayer \
 	avmedia/source/vlc/vlcuno \
 ))
 
