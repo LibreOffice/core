@@ -2748,11 +2748,9 @@ void SAL_CALL LayoutManager::windowShown( const lang::EventObject& aEvent ) thro
     Reference< XInterface > xIfac( xContainerWindow, UNO_QUERY );
     if ( xIfac == aEvent.Source )
     {
-        bool bSetVisible = false;
-
         WriteGuard aWriteLock( m_aLock );
         m_bParentWindowVisible = true;
-        bSetVisible = ( m_bParentWindowVisible != bParentWindowVisible );
+        bool bSetVisible = ( m_bParentWindowVisible != bParentWindowVisible );
         aWriteLock.unlock();
 
         if ( bSetVisible )
@@ -2770,11 +2768,9 @@ void SAL_CALL LayoutManager::windowHidden( const lang::EventObject& aEvent ) thr
     Reference< XInterface > xIfac( xContainerWindow, UNO_QUERY );
     if ( xIfac == aEvent.Source )
     {
-        bool bSetInvisible = false;
-
         WriteGuard aWriteLock( m_aLock );
         m_bParentWindowVisible = false;
-        bSetInvisible = ( m_bParentWindowVisible != bParentWindowVisible );
+        bool bSetInvisible = ( m_bParentWindowVisible != bParentWindowVisible );
         aWriteLock.unlock();
 
         if ( bSetInvisible )
