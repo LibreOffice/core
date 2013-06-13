@@ -376,8 +376,12 @@ sal_Bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
 
     pInf->nFtnOffset = static_cast< sal_uInt16 >(m_pOffsetFld->GetValue() -1);
     pInf->aFmt.SetNumberingType(m_pNumViewBox->GetSelectedNumberingType() );
-    pInf->SetPrefix(m_pPrefixED->GetText().replaceAll("\\t", "\t"));
-    pInf->SetSuffix(m_pSuffixED->GetText().replaceAll("\\t", "\t"));
+    String aPrefix(m_pPrefixED->GetText());
+    aPrefix.SearchAndReplaceAllAscii("\\t", '\t');
+    pInf->SetPrefix(aPrefix);
+    String aSuffix(m_pSuffixED->GetText());
+    aSuffix.SearchAndReplaceAllAscii("\\t", '\t');
+    pInf->SetSuffix(aSuffix);
 
     pInf->SetCharFmt( lcl_GetCharFormat( pSh,
                         m_pFtnCharTextTemplBox->GetSelectEntry() ) );
