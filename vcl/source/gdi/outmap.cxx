@@ -1175,7 +1175,7 @@ Region OutputDevice::LogicToPixel( const Region& rLogicRegion ) const
         const RectangleVector& rRectangles(aRectangles); // needed to make the '!=' work
 
         // make reverse run to fill new region bottom-up, this will speed it up due to the used data structuring
-        for(RectangleVector::const_reverse_iterator aRectIter(rRectangles.rbegin()); aRectIter != rRectangles.rend(); aRectIter++)
+        for(RectangleVector::const_reverse_iterator aRectIter(rRectangles.rbegin()); aRectIter != rRectangles.rend(); ++aRectIter)
         {
             aRegion.Union(LogicToPixel(*aRectIter));
         }
@@ -1386,7 +1386,7 @@ Region OutputDevice::LogicToPixel( const Region& rLogicRegion, const MapMode& rM
         const RectangleVector& rRectangles(aRectangles); // needed to make the '!=' work
 
         // make reverse run to fill new region bottom-up, this will speed it up due to the used data structuring
-        for(RectangleVector::const_reverse_iterator aRectIter(rRectangles.rbegin()); aRectIter != rRectangles.rend(); aRectIter++)
+        for(RectangleVector::const_reverse_iterator aRectIter(rRectangles.rbegin()); aRectIter != rRectangles.rend(); ++aRectIter)
         {
             aRegion.Union(LogicToPixel(*aRectIter, rMapMode));
         }
@@ -1558,7 +1558,7 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion ) const
         const RectangleVector& rRectangles(aRectangles); // needed to make the '!=' work
 
         // make reverse run to fill new region bottom-up, this will speed it up due to the used data structuring
-        for(RectangleVector::const_reverse_iterator aRectIter(rRectangles.rbegin()); aRectIter != rRectangles.rend(); aRectIter++)
+        for(RectangleVector::const_reverse_iterator aRectIter(rRectangles.rbegin()); aRectIter != rRectangles.rend(); ++aRectIter)
         {
             aRegion.Union(PixelToLogic(*aRectIter));
         }
@@ -1773,7 +1773,7 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& r
         const RectangleVector& rRectangles(aRectangles); // needed to make the '!=' work
 
         // make reverse run to fill new region bottom-up, this will speed it up due to the used data structuring
-        for(RectangleVector::const_reverse_iterator aRectIter(rRectangles.rbegin()); aRectIter != rRectangles.rend(); aRectIter++)
+        for(RectangleVector::const_reverse_iterator aRectIter(rRectangles.rbegin()); aRectIter != rRectangles.rend(); ++aRectIter)
         {
             aRegion.Union(PixelToLogic(*aRectIter, rMapMode));
         }

@@ -902,7 +902,7 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
         RECT* pNextClipRect         = (RECT*)(&(mpClipRgnData->Buffer));
         bool bFirstClipRect         = true;
 
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
         {
             const long nW(aRectIter->GetWidth());
             const long nH(aRectIter->GetHeight());

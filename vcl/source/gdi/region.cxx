@@ -298,7 +298,7 @@ PolyPolygon Region::ImplCreatePolyPolygonFromRegionBand() const
         RectangleVector aRectangles;
         GetRegionRectangles(aRectangles);
 
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
         {
             aRetval.Insert(Polygon(*aRectIter));
         }

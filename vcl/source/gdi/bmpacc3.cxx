@@ -262,7 +262,7 @@ void BitmapWriteAccess::FillPolygon( const Polygon& rPoly )
             RectangleVector aRectangles;
             aRegion.GetRegionRectangles(aRectangles);
 
-            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
             {
                 for(long nY = aRectIter->Top(), nEndY = aRectIter->Bottom(); nY <= nEndY; nY++)
                 {
@@ -323,7 +323,7 @@ void BitmapWriteAccess::FillPolyPolygon( const PolyPolygon& rPolyPoly )
             RectangleVector aRectangles;
             aRegion.GetRegionRectangles(aRectangles);
 
-            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
             {
                 for(long nY = aRectIter->Top(), nEndY = aRectIter->Bottom(); nY <= nEndY; nY++)
                 {

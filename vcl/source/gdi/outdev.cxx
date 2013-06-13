@@ -533,7 +533,7 @@ void    OutputDevice::ImplReMirror( Region &rRegion ) const
     rRegion.GetRegionRectangles(aRectangles);
     Region aMirroredRegion;
 
-    for(RectangleVector::iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+    for(RectangleVector::iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
     {
         ImplReMirror(*aRectIter);
         aMirroredRegion.Union(*aRectIter);

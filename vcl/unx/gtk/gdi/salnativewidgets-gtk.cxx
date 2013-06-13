@@ -831,7 +831,7 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
         RectangleVector aRectangles;
         aClipRegion.GetRegionRectangles(aRectangles);
 
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
         {
             if(aRectIter->IsEmpty())
             {

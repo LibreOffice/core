@@ -1837,7 +1837,7 @@ sal_Bool Window::ImplSysObjClip( const Region* pOldRegion )
                     aRegion.GetRegionRectangles(aRectangles);
                     mpWindowImpl->mpSysObj->BeginSetClipRegion(aRectangles.size());
 
-                    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+                    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
                     {
                         mpWindowImpl->mpSysObj->UnionClipRegion(
                             aRectIter->Left(),
@@ -5948,7 +5948,7 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
                 mpWindowImpl->maWinRegion.GetRegionRectangles(aRectangles);
                 mpWindowImpl->mpFrame->BeginSetClipRegion(aRectangles.size());
 
-                for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+                for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
                 {
                     mpWindowImpl->mpFrame->UnionClipRegion(
                         aRectIter->Left(),

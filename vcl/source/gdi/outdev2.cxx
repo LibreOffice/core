@@ -1963,7 +1963,7 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
         RectangleVector aRectangles;
         aWorkRgn.GetRegionRectangles(aRectangles);
 
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
         {
             const Point aMapPt(pMapX[aRectIter->Left()], pMapY[aRectIter->Top()]);
             const Size aMapSz(
@@ -2069,7 +2069,7 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
         RectangleVector aRectangles;
         aWorkRgn.GetRegionRectangles(aRectangles);
 
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
         {
             const Point aMapPt(pMapX[aRectIter->Left()], pMapY[aRectIter->Top()]);
             const Size aMapSz(

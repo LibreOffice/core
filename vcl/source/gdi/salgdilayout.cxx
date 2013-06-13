@@ -246,7 +246,7 @@ void SalGraphics::mirror( Region& rRgn, const OutputDevice *pOutDev, bool bBack 
         rRgn.GetRegionRectangles(aRectangles);
         rRgn.SetEmpty();
 
-        for(RectangleVector::iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+        for(RectangleVector::iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
         {
             mirror(*aRectIter, pOutDev, bBack);
             rRgn.Union(*aRectIter);

@@ -561,7 +561,7 @@ bool X11SalGraphics::setClipRegion( const Region& i_rClip )
     RectangleVector aRectangles;
     i_rClip.GetRegionRectangles(aRectangles);
 
-    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
     {
         const long nW(aRectIter->GetWidth());
 
