@@ -21,9 +21,9 @@
 
 #include <vcl/sysdata.hxx>
 #include <basegfx/range/b2ibox.hxx>
+#include <basebmp/bitmapdevice.hxx>
 
 #include <salframe.hxx>
-#include "svpelement.hxx"
 
 #include <list>
 
@@ -34,7 +34,7 @@
 class SvpSalInstance;
 class SvpSalGraphics;
 
-class SvpSalFrame : public SalFrame, public SvpElement
+class SvpSalFrame : public SalFrame
 {
     SvpSalInstance*                     m_pInstance;
     SvpSalFrame*                        m_pParent;       // pointer to parent frame
@@ -69,8 +69,9 @@ public:
     void PostPaint(bool bImmediate) const;
     void AllocateFrame();
 
-    // SvpElement
-    virtual const basebmp::BitmapDeviceSharedPtr& getDevice() const { return m_aFrame; }
+#if defined IOS || defined ANDROID
+    const basebmp::BitmapDeviceSharedPtr& getDevice() const { return m_aFrame; }
+#endif
 
     // SalFrame
     virtual SalGraphics*        GetGraphics();

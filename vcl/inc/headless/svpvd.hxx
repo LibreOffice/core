@@ -21,7 +21,6 @@
 #define _SVP_SVPVD_HXX
 
 #include <salvd.hxx>
-#include "svpelement.hxx"
 
 #include <list>
 
@@ -31,18 +30,15 @@
 
 class SvpSalGraphics;
 
-class SvpSalVirtualDevice : public SalVirtualDevice, public SvpElement
+class SvpSalVirtualDevice : public SalVirtualDevice
 {
     sal_uInt16                          m_nBitCount;
     basebmp::BitmapDeviceSharedPtr      m_aDevice;
     std::list< SvpSalGraphics* >        m_aGraphics;
 
 public:
-    SvpSalVirtualDevice( sal_uInt16 nBitCount ) : SvpElement(), m_nBitCount(nBitCount) {}
+    SvpSalVirtualDevice( sal_uInt16 nBitCount ) : m_nBitCount(nBitCount) {}
     virtual ~SvpSalVirtualDevice();
-
-    // SvpElement
-    virtual const basebmp::BitmapDeviceSharedPtr& getDevice() const { return m_aDevice; }
 
     // SalVirtualDevice
     virtual SalGraphics*    GetGraphics();

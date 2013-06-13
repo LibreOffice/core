@@ -20,10 +20,15 @@
 #ifndef SVP_SVBMP_HXX
 #define SVP_SVBMP_HXX
 
-#include <salbmp.hxx>
-#include "svpelement.hxx"
+#include "sal/config.h"
 
-class SvpSalBitmap : public SalBitmap, public SvpElement
+#include "basebmp/bitmapdevice.hxx"
+
+#include <salbmp.hxx>
+
+#define SVP_DEFAULT_BITMAP_FORMAT basebmp::Format::TWENTYFOUR_BIT_TC_MASK
+
+class SvpSalBitmap : public SalBitmap
 {
     basebmp::BitmapDeviceSharedPtr     m_aBitmap;
 public:
@@ -32,9 +37,6 @@ public:
 
     const basebmp::BitmapDeviceSharedPtr& getBitmap() const { return m_aBitmap; }
     void setBitmap( const basebmp::BitmapDeviceSharedPtr& rSrc ) { m_aBitmap = rSrc; }
-
-    // SvpElement
-    virtual const basebmp::BitmapDeviceSharedPtr& getDevice() const { return m_aBitmap; }
 
     // SalBitmap
     virtual bool            Create( const Size& rSize,
@@ -56,6 +58,7 @@ public:
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
     virtual bool            GetSystemData( BitmapSystemData& rData );
 
+    static sal_uInt32 getBitCountFromScanlineFormat( sal_Int32 nFormat );
 };
 
 #endif

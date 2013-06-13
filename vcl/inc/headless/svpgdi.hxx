@@ -104,7 +104,6 @@ public:
     SvpSalGraphics();
     virtual ~SvpSalGraphics();
 
-    const basebmp::BitmapDeviceSharedPtr& getDevice() const { return m_aDevice; }
     void setDevice( basebmp::BitmapDeviceSharedPtr& rDevice );
 
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );

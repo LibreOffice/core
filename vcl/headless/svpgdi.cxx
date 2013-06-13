@@ -131,7 +131,7 @@ void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 
 sal_uInt16 SvpSalGraphics::GetBitCount() const
 {
-    return SvpElement::getBitCountFromScanlineFormat( m_aDevice->getScanlineFormat() );
+    return SvpSalBitmap::getBitCountFromScanlineFormat( m_aDevice->getScanlineFormat() );
 }
 
 long SvpSalGraphics::GetGraphicsWidth() const

@@ -349,5 +349,45 @@ bool SvpSalBitmap::GetSystemData( BitmapSystemData& )
     return false;
 }
 
+sal_uInt32 SvpSalBitmap::getBitCountFromScanlineFormat( sal_Int32 nFormat )
+{
+    sal_uInt32 nBitCount = 1;
+    switch( nFormat )
+    {
+        case Format::ONE_BIT_MSB_GREY:
+        case Format::ONE_BIT_LSB_GREY:
+        case Format::ONE_BIT_MSB_PAL:
+        case Format::ONE_BIT_LSB_PAL:
+            nBitCount = 1;
+            break;
+        case Format::FOUR_BIT_MSB_GREY:
+        case Format::FOUR_BIT_LSB_GREY:
+        case Format::FOUR_BIT_MSB_PAL:
+        case Format::FOUR_BIT_LSB_PAL:
+            nBitCount = 4;
+            break;
+        case Format::EIGHT_BIT_PAL:
+        case Format::EIGHT_BIT_GREY:
+            nBitCount = 8;
+            break;
+        case Format::SIXTEEN_BIT_LSB_TC_MASK:
+        case Format::SIXTEEN_BIT_MSB_TC_MASK:
+            nBitCount = 16;
+            break;
+        case Format::TWENTYFOUR_BIT_TC_MASK:
+            nBitCount = 24;
+            break;
+        case Format::THIRTYTWO_BIT_TC_MASK_BGRA:
+        case Format::THIRTYTWO_BIT_TC_MASK_ARGB:
+        case Format::THIRTYTWO_BIT_TC_MASK_ABGR:
+        case Format::THIRTYTWO_BIT_TC_MASK_RGBA:
+            nBitCount = 32;
+            break;
+        default:
+        OSL_FAIL( "unsupported basebmp format" );
+        break;
+    }
+    return nBitCount;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -496,7 +496,6 @@ vcl_generic_code= \
 vcl_headless_code= \
     vcl/headless/svpbmp \
     vcl/headless/svpdummies \
-    vcl/headless/svpelement \
     vcl/headless/svpframe \
     vcl/headless/svpgdi \
     vcl/headless/svpinst \

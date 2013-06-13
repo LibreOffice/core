@@ -22,7 +22,6 @@ $(eval $(call gb_StaticLibrary_use_api,headless,\
 $(eval $(call gb_StaticLibrary_add_exception_objects,headless,\
 	vcl/headless/svpbmp \
 	vcl/headless/svpdummies \
-	vcl/headless/svpelement \
 	vcl/headless/svpframe \
 	vcl/headless/svpprn \
 	vcl/headless/svptext \
