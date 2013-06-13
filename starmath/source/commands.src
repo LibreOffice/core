@@ -257,16 +257,46 @@ String RID_XSUCCEEDSEQUIVY   { Text = "<?> succsim <?> " ; };
 String RID_XNOTPRECEDESY     { Text = "<?> nprec <?> " ; };
 String RID_XNOTSUCCEEDSY     { Text = "<?> nsucc <?> " ; };
 
-String RID_CATEGORY_UNARY_BINARY_OPERATORS { Text [ en-US ] = "Unary/Binary Operators" ; };
-String RID_CATEGORY_RELATIONS              { Text [ en-US ] = "Relations" ; };
-String RID_CATEGORY_SET_OPERATIONS         { Text [ en-US ] = "Set Operations" ; };
-String RID_CATEGORY_FUNCTIONS              { Text [ en-US ] = "Functions" ; };
-String RID_CATEGORY_OPERATORS              { Text [ en-US ] = "Operators" ; };
-String RID_CATEGORY_ATTRIBUTES             { Text [ en-US ] = "Attributes" ; };
-String RID_CATEGORY_BRACKETS               { Text [ en-US ] = "Brackets" ; };
-String RID_CATEGORY_FORMATS                { Text [ en-US ] = "Formats" ; };
-String RID_CATEGORY_OTHERS                 { Text [ en-US ] = "Others" ; };
-String RID_CATEGORY_EXAMPLES               { Text [ en-US ] = "Examples" ; };
+String RID_CATEGORY_UNARY_BINARY_OPERATORS
+{
+    Text [ en-US ] = "Unary/Binary Operators" ;
+};
+String RID_CATEGORY_RELATIONS
+{
+    Text [ en-US ] = "Relations" ;
+};
+String RID_CATEGORY_SET_OPERATIONS
+{
+    Text [ en-US ] = "Set Operations" ;
+};
+String RID_CATEGORY_FUNCTIONS
+{
+    Text [ en-US ] = "Functions" ;
+};
+String RID_CATEGORY_OPERATORS
+{
+    Text [ en-US ] = "Operators" ;
+};
+String RID_CATEGORY_ATTRIBUTES
+{
+    Text [ en-US ] = "Attributes" ;
+};
+String RID_CATEGORY_BRACKETS
+{
+    Text [ en-US ] = "Brackets" ;
+};
+String RID_CATEGORY_FORMATS
+{
+    Text [ en-US ] = "Formats" ;
+};
+String RID_CATEGORY_OTHERS
+{
+    Text [ en-US ] = "Others" ;
+};
+String RID_CATEGORY_EXAMPLES
+{
+    Text [ en-US ] = "Examples" ;
+};
 
 //////////////////////////////////////////
 
