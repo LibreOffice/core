@@ -48,6 +48,7 @@ PageObjectLayouter::PageObjectLayouter (
       maPreviewBoundingBox(),
       maTransitionEffectBoundingBox(),
       maTransitionEffectIcon(IconCache::Instance().GetIcon(BMP_FADE_EFFECT_INDICATOR)),
+      maCustomAnimationEffectIcon(IconCache::Instance().GetIcon(BMP_CUSTOM_ANIMATION_INDICATOR)),
       mpPageNumberFont(Theme::GetFont(Theme::Font_PageNumber, *rpWindow))
 {
     const Size aPageNumberAreaSize (GetPageNumberAreaSize(nPageCount));
@@ -270,6 +271,11 @@ Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
 Image PageObjectLayouter::GetTransitionEffectIcon (void) const
 {
     return maTransitionEffectIcon;
+}
+
+Image PageObjectLayouter::GetCustomAnimationEffectIcon (void) const
+{
+    return maCustomAnimationEffectIcon;
 }
 
 

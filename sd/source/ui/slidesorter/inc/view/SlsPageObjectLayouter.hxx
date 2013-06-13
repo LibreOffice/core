@@ -109,6 +109,7 @@ public:
         const CoordinateSystem eCoordinateSystem);
 
     Image GetTransitionEffectIcon (void) const;
+    Image GetCustomAnimationEffectIcon (void) const;
 
 private:
     SharedSdWindow mpWindow;
@@ -119,6 +120,7 @@ private:
     Rectangle maPreviewBoundingBox;
     Rectangle maTransitionEffectBoundingBox;
     const Image maTransitionEffectIcon;
+    const Image maCustomAnimationEffectIcon;
     const ::boost::shared_ptr<Font> mpPageNumberFont;
 
     Size GetPageNumberAreaSize (const int nPageCount);
