@@ -5608,7 +5608,7 @@ size_t j = sizeof(sal_n_array_size(thingb));
 return !(i != 0 && j != 0);
 ]])
         ],[
-            HAVE_CXX0X=TRUE
+            HAVE_CXX11=TRUE
             if test "$CPP_LIBRARY" = LIBCPP -a $_os = Darwin; then
                 : Already set CXX to contain -std=c++11
             else
@@ -5619,7 +5619,7 @@ return !(i != 0 && j != 0);
         AC_LANG_POP([C++])
         CXXFLAGS=$save_CXXFLAGS
     fi
-    if test "$HAVE_CXX0X" = "TRUE"; then
+    if test "$HAVE_CXX11" = "TRUE"; then
         AC_MSG_RESULT([yes ($CXXFLAGS_CXX11)])
     else
         AC_MSG_RESULT([no])
@@ -5627,14 +5627,14 @@ return !(i != 0 && j != 0);
 fi
 
 AC_SUBST(CXXFLAGS_CXX11)
-AC_SUBST(HAVE_CXX0X)
+AC_SUBST(HAVE_CXX11)
 
 dnl ==================================
 dnl Check for C++11 "= delete" support
 dnl ==================================
 
 AC_MSG_CHECKING([whether $CXX supports C++11 = delete syntax])
-if test "$HAVE_CXX0X" = "TRUE"; then
+if test "$HAVE_CXX11" = "TRUE"; then
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
     AC_LANG_PUSH([C++])
@@ -5662,7 +5662,7 @@ dnl Check for C++11 "override" support
 dnl ==================================
 
 AC_MSG_CHECKING([whether $CXX supports C++11 "override" syntax])
-if test "$HAVE_CXX0X" = "TRUE"; then
+if test "$HAVE_CXX11" = "TRUE"; then
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
     AC_LANG_PUSH([C++])
@@ -5695,7 +5695,7 @@ dnl Check for C++11 "final" support
 dnl ==================================
 
 AC_MSG_CHECKING([whether $CXX supports C++11 "final" syntax])
-if test "$HAVE_CXX0X" = "TRUE"; then
+if test "$HAVE_CXX11" = "TRUE"; then
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
     AC_LANG_PUSH([C++])
@@ -8035,7 +8035,7 @@ dnl ===================================================================
 dnl Determine which hash container mdds shall use
 dnl ===================================================================
 AC_MSG_CHECKING([which hash container mdds shall use])
-if test "x$HAVE_CXX0X" = "xTRUE" -a "x$SYSTEM_MDDS" = "xYES"; then
+if test "x$HAVE_CXX11" = "xTRUE" -a "x$SYSTEM_MDDS" = "xYES"; then
     MDDS_CPPFLAGS=$CXXFLAGS_CXX11
     AC_MSG_RESULT([std::unordered_map])
 else

@@ -56,7 +56,7 @@ gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)
 endif
 
-ifeq ($(HAVE_CXX0X),TRUE)
+ifeq ($(HAVE_CXX11),TRUE)
 gb_CXXFLAGS += -std=gnu++0x
 endif
 

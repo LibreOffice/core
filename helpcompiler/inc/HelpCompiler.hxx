@@ -20,8 +20,10 @@
 #ifndef HELPCOMPILER_HXX
 #define HELPCOMPILER_HXX
 
+#include <config_global.h>
+
 #include <string>
-#ifndef HAVE_CXX0X
+#if !HAVE_CXX11
 #define BOOST_NO_0X_HDR_TYPEINDEX
 #endif
 #include <boost/unordered_map.hpp>

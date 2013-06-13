@@ -24,7 +24,9 @@
 #include <functional>
 #include <typeinfo>
 
-#ifndef HAVE_CXX0X
+#include <config_global.h>
+
+#if !HAVE_CXX11
 #define BOOST_NO_0X_HDR_TYPEINDEX
 #endif
 #include "boost/unordered_set.hpp"

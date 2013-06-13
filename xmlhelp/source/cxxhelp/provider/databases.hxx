@@ -20,9 +20,11 @@
 #ifndef _DATABASES_HXX_
 #define _DATABASES_HXX_
 
+#include <config_global.h>
+
 #include <set>
 #include <vector>
-#ifndef HAVE_CXX0X
+#if !HAVE_CXX11
 #define BOOST_NO_0X_HDR_TYPEINDEX
 #endif
 #include <boost/unordered_map.hpp>

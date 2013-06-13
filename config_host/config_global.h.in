@@ -12,6 +12,8 @@ Any change in this header will cause a rebuild of almost everything.
 #ifndef CONFIG_GLOBAL_H
 #define CONFIG_GLOBAL_H
 
+/* Prefer using a feature-specific check such as HAVE_CXX11_DELETE to the generic HAVE_CXX11. */
+#define HAVE_CXX11 0
 #define HAVE_CXX11_DELETE 0
 #define HAVE_CXX11_OVERRIDE 0
 #define HAVE_CXX11_FINAL 0

@@ -86,7 +86,7 @@ gb_CFLAGS += -fno-strict-aliasing
 gb_CXXFLAGS += -fno-strict-aliasing
 endif
 
-ifeq ($(HAVE_CXX0X),TRUE)
+ifeq ($(HAVE_CXX11),TRUE)
 #Currently, as well as for its own merits, c++11/c++0x mode allows use to use
 #a template for SAL_N_ELEMENTS to detect at compiler time its misuse
 gb_CXXFLAGS += -std=c++0x
