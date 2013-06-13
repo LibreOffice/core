@@ -35,8 +35,11 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>
 #include <boost/scoped_ptr.hpp>
+#include "CustomAnimationEffect.hxx"
 
 using namespace ::drawinglayer::primitive2d;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing;
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -70,7 +73,6 @@ PageObjectPainter::PageObjectPainter (
 
 
 
-
 PageObjectPainter::~PageObjectPainter (void)
 {
 }
@@ -93,7 +95,7 @@ void PageObjectPainter::PaintPageObject (
         PaintPreview(rDevice, rpDescriptor);
         PaintPageNumber(rDevice, rpDescriptor);
         PaintTransitionEffect(rDevice, rpDescriptor);
-
+        PaintCustomAnimationEffect(rDevice, rpDescriptor);
         rDevice.SetAntialiasing(nSavedAntialiasingMode);
     }
 }
@@ -352,13 +354,40 @@ void PageObjectPainter::PaintTransitionEffect (
             PageObjectLayouter::ModelCoordinateSystem));
 
         rDevice.DrawBitmapEx(
-            aBox.TopLeft(),
+            aBox.TopRight(),
             mpPageObjectLayouter->GetTransitionEffectIcon().GetBitmapEx());
     }
 }
 
 
+void PageObjectPainter::PaintCustomAnimationEffect (
+    OutputDevice& rDevice,
+    const model::SharedPageDescriptor& rpDescriptor) const
+{
+    SdPage* pPage = rpDescriptor->GetPage();
+    boost::shared_ptr< MainSequence > aMainSequence = pPage->getMainSequence();
+    ShapeList aShapeList;
+    aShapeList = pPage->GetPresentationShapeList();
+    const std::list< SdrObject* >& aList = aShapeList.getList();
+    std::list< SdrObject* >::const_iterator it = aList.begin();
+    while (it!=aList.end())
+    {
+      Reference<XShape> xShape( const_cast<SdrObject*>(*it)->getUnoShape(), UNO_QUERY );
+      if ( aMainSequence->hasEffect(xShape) )
+      {
+        const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
+            rpDescriptor,
+            PageObjectLayouter::CustomAnimationEffectIndicator,
+            PageObjectLayouter::ModelCoordinateSystem));
 
+        rDevice.DrawBitmapEx(
+            aBox.TopRight(),
+            mpPageObjectLayouter->GetCustomAnimationEffectIcon().GetBitmapEx());
+            break;
+      }
+      it++;
+    };
+}
 
 Bitmap& PageObjectPainter::GetBackgroundForState (
     const model::SharedPageDescriptor& rpDescriptor,
