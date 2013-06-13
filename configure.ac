@@ -5564,22 +5564,28 @@ HAVE_CXX11=
 if test "$GCC" = "yes"; then
     CXXFLAGS_CXX11=
     AC_MSG_CHECKING([whether $CXX supports C++11])
-    for flag in -std=gnu++11 -std=gnu++0x -std=c++11 -std=c++0x ; do
-        save_CXXFLAGS=$CXXFLAGS
-        CXXFLAGS="$CXXFLAGS $flag -Werror"
-        AC_LANG_PUSH([C++])
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[void f() {}]])],[CXXFLAGS_CXX11=$flag])
-        AC_LANG_POP([C++])
-        CXXFLAGS=$save_CXXFLAGS
-        if test -n "$CXXFLAGS_CXX11"; then
-            HAVE_CXX11=TRUE
-            break
-        fi
-    done
-    if test "$HAVE_CXX11" = TRUE; then
-        AC_MSG_RESULT([yes ($CXXFLAGS_CXX11)])
+    if test "$CPP_LIBRARY" = LIBCPP -a $_os = Darwin; then
+        : Already set CXX to contain -std=c++11
+        HAVE_CXX11=TRUE
+        AC_MSG_RESULT(yes)
     else
-        AC_MSG_RESULT(no)
+        for flag in -std=gnu++11 -std=gnu++0x -std=c++11 -std=c++0x ; do
+            save_CXXFLAGS=$CXXFLAGS
+            CXXFLAGS="$CXXFLAGS $flag -Werror"
+            AC_LANG_PUSH([C++])
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[void f() {}]])],[CXXFLAGS_CXX11=$flag])
+            AC_LANG_POP([C++])
+            CXXFLAGS=$save_CXXFLAGS
+            if test -n "$CXXFLAGS_CXX11"; then
+                HAVE_CXX11=TRUE
+                break
+            fi
+        done
+        if test "$HAVE_CXX11" = TRUE; then
+            AC_MSG_RESULT([yes ($CXXFLAGS_CXX11)])
+        else
+            AC_MSG_RESULT(no)
+        fi
     fi
 
     if test "$HAVE_CXX11" = TRUE; then
@@ -5684,9 +5690,13 @@ return !(i != 0 && j != 0);
         CXXFLAGS=$save_CXXFLAGS
     fi
 
-    if test "$HAVE_CXX11" != "TRUE" -a -n "$CXXFLAGS_CXX11"; then
-        AC_MSG_NOTICE([Disabling C++11 support])
-        CXXFLAGS_CXX11=
+    if test "$HAVE_CXX11" != "TRUE"; then
+        if test -n "$CXXFLAGS_CXX11"; then
+            AC_MSG_NOTICE([Disabling C++11 support])
+            CXXFLAGS_CXX11=
+        elif test "$CPP_LIBRARY" = LIBCPP -a $_os = Darwin; then
+            AC_MSG_ERROR([Selected libc++ but C++11 support broken])
+        fi
     fi
 fi
 
