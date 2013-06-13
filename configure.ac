@@ -5647,8 +5647,31 @@ return !(i != 0 && j != 0);
     // (__float128)
 ]])
         ],[ AC_MSG_RESULT(yes) ],
-        [ AC_MSG_RESULT(no)
-          HAVE_CXX11=
+        [
+            AC_MSG_RESULT(no)
+            # The only reason why libstdc++ headers fail with Clang in C++11 mode is because
+            # they use the __float128 type that Clang doesn't know (libstdc++ checks whether
+            # __float128 is available during its build, but it's usually built using GCC,
+            # and so c++config.h hardcodes __float128 being supported). As the only place
+            # where __float128 is actually used is in a template specialization,
+            # -D__float128=void will avoid the problem there while still causing a problem
+            # if somebody actually uses the type.
+            AC_MSG_CHECKING([whether -D__float128=void workaround helps])
+            CXXFLAGS="$CXXFLAGS -D__float128=void"
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <vector>
+    // some Clang fail when compiling against GCC 4.7 headers with -std=gnu++0x
+    // (__float128)
+]])
+            ],
+            [
+             AC_MSG_RESULT(yes)
+             CXXFLAGS_CXX11="$CXXFLAGS_CXX11 -D__float128=void"
+            ],
+            [
+             AC_MSG_RESULT(no)
+             HAVE_CXX11=
+            ])
         ])
 
         AC_LANG_POP([C++])
