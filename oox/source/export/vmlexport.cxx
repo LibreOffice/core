@@ -718,6 +718,13 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     bAlreadyWritten[ESCHER_Prop_gtextUNICODE] = true;
                 }
                 break;
+            case ESCHER_Prop_Rotation:
+                {
+                    // The higher half of the variable contains the angle.
+                    m_pShapeStyle->append(";rotation:").append(double(it->nPropValue >> 16));
+                    bAlreadyWritten[ESCHER_Prop_Rotation] = true;
+                }
+                break;
             default:
 #if OSL_DEBUG_LEVEL > 0
                 fprintf( stderr, "TODO VMLExport::Commit(), unimplemented id: %d, value: %" SAL_PRIuUINT32 ", data: [%" SAL_PRIuUINT32 ", %p]\n",
