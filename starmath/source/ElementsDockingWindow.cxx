@@ -364,34 +364,34 @@ void SmElementsControl::build()
 
     switch(maCurrentSetId)
     {
-        case RID_CATERGORY_UNARY_BINARY_OPERATORS:
+        case RID_CATEGORY_UNARY_BINARY_OPERATORS:
             addElements(aUnaryBinaryOperatorsList, sizeof(aUnaryBinaryOperatorsList) / sizeof(sal_uInt16));
         break;
-        case RID_CATERGORY_RELATIONS:
+        case RID_CATEGORY_RELATIONS:
             addElements(aRelationsList, sizeof(aRelationsList) / sizeof(sal_uInt16));
         break;
-        case RID_CATERGORY_SET_OPERATIONS:
+        case RID_CATEGORY_SET_OPERATIONS:
             addElements(aSetOperations, sizeof(aSetOperations) / sizeof(sal_uInt16));
         break;
-        case RID_CATERGORY_FUNCTIONS:
+        case RID_CATEGORY_FUNCTIONS:
             addElements(aFunctions, sizeof(aFunctions) / sizeof(sal_uInt16));
         break;
-        case RID_CATERGORY_OPERATORS:
+        case RID_CATEGORY_OPERATORS:
             addElements(aOperators, sizeof(aOperators) / sizeof(sal_uInt16));
         break;
-        case RID_CATERGORY_ATTRIBUTES:
+        case RID_CATEGORY_ATTRIBUTES:
             addElements(aAttributes, sizeof(aAttributes) / sizeof(sal_uInt16));
         break;
-        case RID_CATERGORY_BRACKETS:
+        case RID_CATEGORY_BRACKETS:
             addElements(aBrackets, sizeof(aBrackets) / sizeof(sal_uInt16));
         break;
-        case RID_CATERGORY_FORMATS:
+        case RID_CATEGORY_FORMATS:
             addElements(aFormats, sizeof(aFormats) / sizeof(sal_uInt16));
         break;
-        case RID_CATERGORY_OTHERS:
+        case RID_CATEGORY_OTHERS:
             addElements(aOthers, sizeof(aOthers) / sizeof(sal_uInt16));
         break;
-        case RID_CATERGORY_EXAMPLES:
+        case RID_CATEGORY_EXAMPLES:
         {
             OUString aEquation = OUString("C=%pi cdot d = 2 cdot %pi cdot r");
             addElement(aEquation, aEquation);
@@ -412,16 +412,16 @@ void SmElementsControl::build()
 //*******************
 
 const sal_uInt16 SmElementsDockingWindow::aCategories[] = {
-    RID_CATERGORY_UNARY_BINARY_OPERATORS,
-    RID_CATERGORY_RELATIONS,
-    RID_CATERGORY_SET_OPERATIONS,
-    RID_CATERGORY_FUNCTIONS,
-    RID_CATERGORY_OPERATORS,
-    RID_CATERGORY_ATTRIBUTES,
-    RID_CATERGORY_BRACKETS,
-    RID_CATERGORY_FORMATS,
-    RID_CATERGORY_OTHERS,
-    RID_CATERGORY_EXAMPLES
+    RID_CATEGORY_UNARY_BINARY_OPERATORS,
+    RID_CATEGORY_RELATIONS,
+    RID_CATEGORY_SET_OPERATIONS,
+    RID_CATEGORY_FUNCTIONS,
+    RID_CATEGORY_OPERATORS,
+    RID_CATEGORY_ATTRIBUTES,
+    RID_CATEGORY_BRACKETS,
+    RID_CATEGORY_FORMATS,
+    RID_CATEGORY_OTHERS,
+    RID_CATEGORY_EXAMPLES
 };
 
 SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, SfxChildWindow* pChildWindow, Window* pParent) :
@@ -446,8 +446,8 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
     maElementsControl.SetTextColor( Color( COL_BLACK ) );
     maElementsControl.SetSelectHdl(LINK(this, SmElementsDockingWindow, SelectClickHdl));
 
-    maElementListBox.SelectEntry(OUString(SmResId(RID_CATERGORY_UNARY_BINARY_OPERATORS)));
-    maElementsControl.setElementSetId(RID_CATERGORY_UNARY_BINARY_OPERATORS);
+    maElementListBox.SelectEntry(OUString(SmResId(RID_CATEGORY_UNARY_BINARY_OPERATORS)));
+    maElementsControl.setElementSetId(RID_CATEGORY_UNARY_BINARY_OPERATORS);
 }
 
 SmElementsDockingWindow::~SmElementsDockingWindow ()
