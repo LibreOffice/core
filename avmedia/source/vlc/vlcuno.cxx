@@ -18,6 +18,7 @@
  */
 
 #include "vlccommon.hxx"
+#include "vlcmanager.hxx"
 
 using namespace ::com::sun::star;
 
@@ -28,7 +29,7 @@ static uno::Reference< uno::XInterface > SAL_CALL create_MediaPlayer( const uno:
 {
     fprintf (stderr, "create VLC Media player !\n");
     (void) rxFact;
-    return uno::Reference< uno::XInterface >(); // *new ::avmedia::vlc::Manager( rxFact ) );
+    return uno::Reference< uno::XInterface >(*new ::avmedia::vlc::Manager( rxFact ) );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediavlc_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
