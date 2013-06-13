@@ -1208,14 +1208,6 @@ static void ImplSalShow( HWND hWnd, sal_Bool bVisible, sal_Bool bNoActivate )
             pFrame->mnShowState = SW_SHOWNOACTIVATE;
         else
             pFrame->mnShowState = SW_SHOW;
-        // hide toolbar for W98
-        if ( pFrame->mbPresentation )
-        {
-            HWND hWndParent = ::GetParent( hWnd );
-            if ( hWndParent )
-                SetForegroundWindow( hWndParent );
-            SetForegroundWindow( hWnd );
-        }
 
         pFrame->mbInShow = FALSE;
         pFrame->updateScreenNumber();
