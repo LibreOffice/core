@@ -36,7 +36,7 @@ bool operator<( const TypeDescription& rLeft, const TypeDescription& rRight) {
 	assert( rLeft.is() && rRight.is());
 	const typelib_TypeDescription& rA = *rLeft.get();
 	const typelib_TypeDescription& rB = *rRight.get();
-	if( rA.eTypeClass != rA.eTypeClass)
+        if( rA.eTypeClass != rB.eTypeClass)
 		return (rA.eTypeClass < rB.eTypeClass);
 	const sal_Int32 nCmp = rtl_ustr_compare_WithLength(
 			rA.pTypeName->buffer, rA.pTypeName->length,
