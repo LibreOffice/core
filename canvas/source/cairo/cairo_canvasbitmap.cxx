@@ -172,39 +172,46 @@ namespace cairocanvas
                 ::AlphaMask aMask( aSize );
 
                 BitmapWriteAccess *pRGBWrite( aRGB.AcquireWriteAccess() );
-                BitmapWriteAccess *pMaskWrite( aMask.AcquireWriteAccess() );
-
-                unsigned char *pSrc = cairo_image_surface_get_data( pPixels );
-                unsigned int nStride = cairo_image_surface_get_stride( pPixels );
-                for( unsigned long y = 0; y < (unsigned long) aSize.Height(); y++ )
+                if( pRGBWrite )
                 {
-                    sal_uInt32 *pPix = (sal_uInt32 *)(pSrc + nStride * y);
-                    for( unsigned long x = 0; x < (unsigned long) aSize.Width(); x++ )
+                    BitmapWriteAccess *pMaskWrite( aMask.AcquireWriteAccess() );
+                    if( pMaskWrite )
                     {
-                        sal_uInt8 nAlpha = (*pPix >> 24);
-                        sal_uInt8 nR = (*pPix >> 16) & 0xff;
-                        sal_uInt8 nG = (*pPix >> 8) & 0xff;
-                        sal_uInt8 nB = *pPix & 0xff;
-                        if( nAlpha != 0 && nAlpha != 255 )
+                        cairo_surface_flush(pPixels);
+                        unsigned char *pSrc = cairo_image_surface_get_data( pPixels );
+                        unsigned int nStride = cairo_image_surface_get_stride( pPixels );
+                        for( unsigned long y = 0; y < (unsigned long) aSize.Height(); y++ )
                         {
-//                            fprintf (stderr, "From A(0x%.2x) 0x%.2x 0x%.2x 0x%.2x -> ",
-//                                     nAlpha, nR, nG, nB );
-                            // Cairo uses pre-multiplied alpha - we do not => re-multiply
-                            nR = (sal_uInt8) MinMax( ((sal_uInt32)nR * 255) / nAlpha, 0, 255 );
-                            nG = (sal_uInt8) MinMax( ((sal_uInt32)nG * 255) / nAlpha, 0, 255 );
-                            nB = (sal_uInt8) MinMax( ((sal_uInt32)nB * 255) / nAlpha, 0, 255 );
-//                            fprintf (stderr, "0x%.2x 0x%.2x 0x%.2x\n", nR, nG, nB );
+                            sal_uInt32 *pPix = (sal_uInt32 *)(pSrc + nStride * y);
+                            for( unsigned long x = 0; x < (unsigned long) aSize.Width(); x++ )
+                            {
+                                sal_uInt8 nAlpha = (*pPix >> 24);
+                                sal_uInt8 nR = (*pPix >> 16) & 0xff;
+                                sal_uInt8 nG = (*pPix >> 8) & 0xff;
+                                sal_uInt8 nB = *pPix & 0xff;
+                                if( nAlpha != 0 && nAlpha != 255 )
+                                {
+                                    // Cairo uses pre-multiplied alpha - we do not => re-multiply
+                                    nR = (sal_uInt8) MinMax( ((sal_uInt32)nR * 255) / nAlpha, 0, 255 );
+                                    nG = (sal_uInt8) MinMax( ((sal_uInt32)nG * 255) / nAlpha, 0, 255 );
+                                    nB = (sal_uInt8) MinMax( ((sal_uInt32)nB * 255) / nAlpha, 0, 255 );
+                                }
+                                pRGBWrite->SetPixel( y, x, BitmapColor( nR, nG, nB ) );
+                                pMaskWrite->SetPixelIndex( y, x, 255 - nAlpha );
+                                pPix++;
+                            }
                         }
-                        pRGBWrite->SetPixel( y, x, BitmapColor( nR, nG, nB ) );
-                        pMaskWrite->SetPixelIndex( y, x, 255 - nAlpha );
-                        pPix++;
+                        aMask.ReleaseAccess( pMaskWrite );
                     }
+                    aRGB.ReleaseAccess( pRGBWrite );
                 }
-                aMask.ReleaseAccess( pMaskWrite );
-                aRGB.ReleaseAccess( pRGBWrite );
 
+                // ignore potential errors above. will get caller a
+                // uniformely white bitmap, but not that there would
+                // be error handling in calling code ...
                 ::BitmapEx *pBitmapEx = new ::BitmapEx( aRGB, aMask );
 
+                cairo_destroy( pCairo );
                 cairo_surface_destroy( pPixels );
 
                 aRV = uno::Any( reinterpret_cast<sal_Int64>( pBitmapEx ) );
