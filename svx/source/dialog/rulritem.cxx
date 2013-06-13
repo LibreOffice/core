@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/string.hxx>
-
 #include <svx/dialogs.hrc>
 #include "svx/rulritem.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -45,9 +43,9 @@ int SvxLongLRSpaceItem::operator==( const SfxPoolItem& rCmp) const
 
 //------------------------------------------------------------------------
 
-String SvxLongLRSpaceItem::GetValueText() const
+OUString SvxLongLRSpaceItem::GetValueText() const
 {
-    return String();
+    return OUString();
 }
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
@@ -174,9 +172,9 @@ int SvxLongULSpaceItem::operator==( const SfxPoolItem& rCmp) const
 
 //------------------------------------------------------------------------
 
-String SvxLongULSpaceItem::GetValueText() const
+OUString SvxLongULSpaceItem::GetValueText() const
 {
-    return String();
+    return OUString();
 }
 
 bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -366,9 +364,9 @@ bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
 
 //------------------------------------------------------------------------
 
-String SvxPagePosSizeItem::GetValueText() const
+OUString SvxPagePosSizeItem::GetValueText() const
 {
-    return String();
+    return OUString();
 }
 
 //------------------------------------------------------------------------
@@ -440,9 +438,9 @@ int SvxColumnItem::operator==(const SfxPoolItem& rCmp) const
 
 //------------------------------------------------------------------------
 
-String SvxColumnItem::GetValueText() const
+OUString SvxColumnItem::GetValueText() const
 {
-    return String();
+    return OUString();
 }
 
 //------------------------------------------------------------------------
@@ -595,9 +593,9 @@ int SvxObjectItem::operator==( const SfxPoolItem& rCmp ) const
 
 //------------------------------------------------------------------------
 
-String SvxObjectItem::GetValueText() const
+OUString SvxObjectItem::GetValueText() const
 {
-    return String();
+    return OUString();
 }
 
 //------------------------------------------------------------------------

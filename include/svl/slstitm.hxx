@@ -37,18 +37,18 @@ public:
     TYPEINFO();
 
     SfxStringListItem();
-    SfxStringListItem( sal_uInt16 nWhich, const std::vector<String> *pList=NULL );
+    SfxStringListItem( sal_uInt16 nWhich, const std::vector<OUString> *pList=NULL );
     SfxStringListItem( sal_uInt16 nWhich, SvStream& rStream );
     SfxStringListItem( const SfxStringListItem& rItem );
     ~SfxStringListItem();
 
-    std::vector<String>&    GetList();
+    std::vector<OUString>&       GetList();
 
-    const std::vector<String>& GetList() const;
+    const std::vector<OUString>& GetList() const;
 
     // String-Separator: \n
-    virtual void            SetString( const XubString& );
-    virtual XubString       GetString();
+    virtual void            SetString( const OUString& );
+    virtual OUString        GetString();
 
     void                    SetStringList( const com::sun::star::uno::Sequence< OUString >& rList );
     void                    GetStringList( com::sun::star::uno::Sequence< OUString >& rList ) const;

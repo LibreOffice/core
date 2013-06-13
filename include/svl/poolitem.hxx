@@ -27,7 +27,6 @@
 #include <limits.h>
 #include <tools/solar.h>
 #include <tools/debug.hxx>
-#include <tools/string.hxx>
 #include <svl/hint.hxx>
 
 typedef long SfxArgumentError;
@@ -226,9 +225,7 @@ public:
         @param rStream  Some (input) stream.  Its Stream/TargetCharSets must
         be set to correct values!
 
-        @param rString  On success, returns the reconstructed Unicode string.
-
-        @return  True if the string was successfully read and reconstructed.
+        @return  On success, returns the reconstructed Unicode string.
      */
     static OUString readByteString(SvStream & rStream);
 

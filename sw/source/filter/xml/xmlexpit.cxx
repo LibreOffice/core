@@ -989,7 +989,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                     if( pBrush->GetGraphicPos() != GPOS_NONE &&
                         pBrush->GetGraphicFilter() )
                     {
-                        aOut.append( pBrush->GetGraphicFilter()->GetBuffer() );
+                        aOut.append( *pBrush->GetGraphicFilter() );
                         bOk = true;
                     }
                     break;

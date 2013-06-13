@@ -587,10 +587,9 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
                     }
                     if( nCount )
                     {
-                        String sList;
+                        OUString sList;
                         for( sal_uInt16 n = 0; n < nCount; ++n )
-                            ( sList += (pUndoManager->*fnGetComment)( n, ::svl::IUndoManager::TopLevel ) )
-                                    += '\n';
+                            sList += (pUndoManager->*fnGetComment)( n, ::svl::IUndoManager::TopLevel ) + "\n";
 
                         SfxStringListItem aItem( nWhich );
                         aItem.SetString( sList );

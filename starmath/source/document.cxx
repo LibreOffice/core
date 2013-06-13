@@ -1302,10 +1302,9 @@ void SmDocShell::GetState(SfxItemSet &rSet)
                     }
                     if( nCount )
                     {
-                        String sList;
+                        OUString sList;
                         for( sal_uInt16 n = 0; n < nCount; ++n )
-                            ( sList += (pTmpUndoMgr->*fnGetComment)( n, ::svl::IUndoManager::TopLevel ) )
-                                    += '\n';
+                            sList += (pTmpUndoMgr->*fnGetComment)( n, ::svl::IUndoManager::TopLevel ) + "\n";
 
                         SfxStringListItem aItem( nWh );
                         aItem.SetString( sList );

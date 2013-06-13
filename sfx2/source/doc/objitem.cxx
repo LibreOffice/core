@@ -36,9 +36,9 @@ int SfxObjectShellItem::operator==( const SfxPoolItem &rItem ) const
 
 //--------------------------------------------------------------------
 
-String SfxObjectShellItem::GetValueText() const
+OUString SfxObjectShellItem::GetValueText() const
 {
-    return String();
+    return OUString();
 }
 
 //--------------------------------------------------------------------

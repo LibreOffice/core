@@ -44,7 +44,7 @@ class ScInputStatusItem : public SfxPoolItem
     ScAddress           aCursorPos;
     ScAddress           aStartPos;
     ScAddress           aEndPos;
-    String              aString;
+    OUString            aString;
     EditTextObject*     pEditData;
 
 public:
@@ -54,12 +54,12 @@ public:
                                                const ScAddress& rCurPos,
                                                const ScAddress& rStartPos,
                                                const ScAddress& rEndPos,
-                                               const String& rString,
+                                               const OUString& rString,
                                                const EditTextObject* pData );
                             ScInputStatusItem( const ScInputStatusItem& rItem );
                             ~ScInputStatusItem();
 
-    virtual String          GetValueText() const;
+    virtual OUString        GetValueText() const;
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
@@ -75,7 +75,7 @@ public:
     SCCOL                   GetEndCol() const   { return aEndPos.Col(); }
     SCROW                   GetEndRow() const   { return aEndPos.Row(); }
 
-    const String&           GetString() const   { return aString; }
+    const OUString&         GetString() const   { return aString; }
     const EditTextObject*   GetEditData() const { return pEditData; }
 };
 
@@ -152,7 +152,7 @@ public:
                             ScSortItem( const ScSortItem& rItem );
                             ~ScSortItem();
 
-    virtual String          GetValueText() const;
+    virtual OUString        GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberUd ) const;
@@ -179,7 +179,7 @@ public:
                             ScQueryItem( const ScQueryItem& rItem );
                             ~ScQueryItem();
 
-    virtual String          GetValueText() const;
+    virtual OUString        GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
@@ -210,7 +210,7 @@ public:
                 ScSubTotalItem( const ScSubTotalItem&   rItem );
                 ~ScSubTotalItem();
 
-    virtual String          GetValueText() const;
+    virtual OUString        GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberUd ) const;
@@ -233,7 +233,7 @@ public:
                 ScUserListItem( const ScUserListItem& rItem );
                 ~ScUserListItem();
 
-    virtual String          GetValueText() const;
+    virtual OUString        GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
@@ -255,7 +255,7 @@ public:
                 ScConsolidateItem( const ScConsolidateItem& rItem );
                 ~ScConsolidateItem();
 
-    virtual String          GetValueText() const;
+    virtual OUString        GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
@@ -276,7 +276,7 @@ public:
                 ScPivotItem( const ScPivotItem& rItem );
                 ~ScPivotItem();
 
-    virtual String          GetValueText() const;
+    virtual OUString        GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
@@ -301,7 +301,7 @@ public:
                 ScSolveItem( const ScSolveItem& rItem );
                 ~ScSolveItem();
 
-    virtual String          GetValueText() const;
+    virtual OUString        GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
@@ -322,7 +322,7 @@ public:
                 ScTabOpItem( const ScTabOpItem& rItem );
                 ~ScTabOpItem();
 
-    virtual String          GetValueText() const;
+    virtual OUString        GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 

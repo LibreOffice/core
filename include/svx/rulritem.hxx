@@ -35,7 +35,7 @@ class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual String           GetValueText() const;
+    virtual OUString         GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -69,7 +69,7 @@ class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual String           GetValueText() const;
+    virtual OUString         GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -102,7 +102,7 @@ protected:
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual String           GetValueText() const;
+    virtual OUString         GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -179,7 +179,7 @@ class SVX_DLLPUBLIC SvxColumnItem : public SfxPoolItem
 protected:
     virtual int              operator==( const SfxPoolItem& ) const;
 
-    virtual String           GetValueText() const;
+    virtual OUString         GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -241,7 +241,7 @@ private:
 protected:
     virtual int              operator==( const SfxPoolItem& ) const;
 
-    virtual String           GetValueText() const;
+    virtual OUString         GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

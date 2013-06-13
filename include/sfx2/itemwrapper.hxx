@@ -154,7 +154,7 @@ typedef ValueItemWrapper< SfxInt16Item,  sal_Int16 >         Int16ItemWrapper;
 typedef ValueItemWrapper< SfxUInt16Item, sal_uInt16 >        UInt16ItemWrapper;
 typedef ValueItemWrapper< SfxInt32Item,  sal_Int32 >         Int32ItemWrapper;
 typedef ValueItemWrapper< SfxUInt32Item, sal_uInt32 >        UInt32ItemWrapper;
-typedef ValueItemWrapper< SfxStringItem, const String& > StringItemWrapper;
+typedef ValueItemWrapper< SfxStringItem, const OUString& >   StringItemWrapper;
 
 // ============================================================================
 

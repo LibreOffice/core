@@ -118,7 +118,7 @@ class SvxPageDescPage : public SfxTabPage
     FixedText*           m_pRegisterFT;
     ListBox*             m_pRegisterLB;
 
-    String              sStandardRegister;
+    OUString             sStandardRegister;
 
     FixedText*           m_pInsideLbl;
     FixedText*           m_pOutsideLbl;
@@ -193,7 +193,7 @@ public:
     void                SetPaperFormatRanges( Paper eStart, Paper eEnd )
                             { ePaperStart = eStart, ePaperEnd = eEnd; }
 
-    void                SetCollectionList(const std::vector<String> &aList);
+    void                SetCollectionList(const std::vector<OUString> &aList);
     virtual void        PageCreated (SfxAllItemSet aSet);
 };
 

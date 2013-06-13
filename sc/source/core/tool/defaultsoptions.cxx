@@ -83,7 +83,7 @@ ScTpDefaultsItem::~ScTpDefaultsItem()
 {
 }
 
-String ScTpDefaultsItem::GetValueText() const
+OUString ScTpDefaultsItem::GetValueText() const
 {
     return OUString("ScTpDefaultsItem");
 }

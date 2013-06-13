@@ -61,7 +61,7 @@ public:
                 ScMergeAttr( const ScMergeAttr& );
                 ~ScMergeAttr();
 
-    virtual String              GetValueText() const;
+    virtual OUString        GetValueText() const;
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
@@ -118,7 +118,7 @@ public:
                             ScProtectionAttr( const ScProtectionAttr& );
                             ~ScProtectionAttr();
 
-    virtual String              GetValueText() const;
+    virtual OUString            GetValueText() const;
     virtual SfxItemPresentation GetPresentation(
                                     SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -265,7 +265,7 @@ public:
                 ScPageHFItem( const ScPageHFItem& rItem );
                 ~ScPageHFItem();
 
-    virtual String          GetValueText() const;
+    virtual OUString        GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
@@ -300,7 +300,7 @@ public:
                 ~ScViewObjectModeItem();
 
     virtual sal_uInt16              GetValueCount() const;
-    virtual String              GetValueText( sal_uInt16 nVal ) const;
+    virtual OUString            GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*        Create(SvStream &, sal_uInt16) const;
     virtual sal_uInt16              GetVersion( sal_uInt16 nFileVersion ) const;
@@ -322,7 +322,7 @@ public:
                 ScDoubleItem( const ScDoubleItem& rItem );
                 ~ScDoubleItem();
 
-    virtual String          GetValueText() const;
+    virtual OUString        GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 

@@ -476,7 +476,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         case TP_PAGE_STD:
             if(0 == (nHtmlMode & HTMLMODE_ON ))
             {
-                std::vector<String> aList;
+                std::vector<OUString> aList;
                 String aNew;
                 SwStyleNameMapper::FillUIName( RES_POOLCOLL_TEXT, aNew );
                 aList.push_back( aNew );
@@ -526,7 +526,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
             ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
 
-            std::vector<String> aList;
+            std::vector<OUString> aList;
             for(sal_uInt16 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
                  aList.push_back( rCharFmtLB.GetEntry(j) );
 

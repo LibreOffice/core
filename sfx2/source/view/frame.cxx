@@ -541,9 +541,9 @@ int SfxFrameItem::operator==( const SfxPoolItem &rItem ) const
 
 //--------------------------------------------------------------------
 
-String SfxFrameItem::GetValueText() const
+OUString SfxFrameItem::GetValueText() const
 {
-    return String();
+    return OUString();
 }
 
 SfxPoolItem* SfxFrameItem::Clone( SfxItemPool *) const

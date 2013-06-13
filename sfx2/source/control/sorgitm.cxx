@@ -69,7 +69,7 @@ int SfxScriptOrganizerItem::operator==( const SfxPoolItem& rItem) const
 
 bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-    String aValue;
+    OUString aValue;
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -82,7 +82,7 @@ bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uIn
                return false;
      }
 
-    rVal <<= OUString( aValue );
+    rVal <<= aValue;
 
     return true;
 }

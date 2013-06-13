@@ -1567,12 +1567,11 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
                         fnGetComment = &::svl::IUndoManager::GetRedoActionComment;
                     }
 
-                    String sList;
+                    OUString sList;
                     if( nCount )
                     {
                         for( sal_uInt16 n = 0; n < nCount; ++n )
-                            ( sList += (pUndoManager->*fnGetComment)( n, ::svl::IUndoManager::TopLevel ) )
-                                    += '\n';
+                            sList += (pUndoManager->*fnGetComment)( n, ::svl::IUndoManager::TopLevel ) + "\n";
                     }
 
                     SfxStringListItem aItem( nWhich );

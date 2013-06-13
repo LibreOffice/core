@@ -173,7 +173,7 @@ ScTpFormulaItem::~ScTpFormulaItem()
 {
 }
 
-String ScTpFormulaItem::GetValueText() const
+OUString ScTpFormulaItem::GetValueText() const
 {
     return OUString("ScTpFormulaItem");
 }

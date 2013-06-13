@@ -37,7 +37,7 @@ SvxPostItAuthorItem::SvxPostItAuthorItem( sal_uInt16 _nWhich )
 
 // -----------------------------------------------------------------------
 
-SvxPostItAuthorItem::SvxPostItAuthorItem( const XubString& rAuthor,
+SvxPostItAuthorItem::SvxPostItAuthorItem( const OUString& rAuthor,
                                           sal_uInt16 _nWhich ) :
     SfxStringItem( _nWhich, rAuthor )
 {
@@ -85,7 +85,7 @@ SvxPostItDateItem::SvxPostItDateItem( sal_uInt16 _nWhich )
 
 // -----------------------------------------------------------------------
 
-SvxPostItDateItem::SvxPostItDateItem( const XubString& rDate, sal_uInt16 _nWhich ) :
+SvxPostItDateItem::SvxPostItDateItem( const OUString& rDate, sal_uInt16 _nWhich ) :
 
     SfxStringItem( _nWhich, rDate )
 {
@@ -133,7 +133,7 @@ SvxPostItTextItem::SvxPostItTextItem( sal_uInt16 _nWhich )
 
 // -----------------------------------------------------------------------
 
-SvxPostItTextItem::SvxPostItTextItem( const XubString& rText, sal_uInt16 _nWhich ) :
+SvxPostItTextItem::SvxPostItTextItem( const OUString& rText, sal_uInt16 _nWhich ) :
 
     SfxStringItem( _nWhich, rText )
 {
