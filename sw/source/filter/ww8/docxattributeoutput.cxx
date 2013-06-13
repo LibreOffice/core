@@ -4872,7 +4872,12 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
             OString sColor("#" + msfilter::util::ConvertColor(pTop->GetColor()));
             m_pFlyAttrList->add(XML_strokecolor, sColor);
 
-            double const fConverted(editeng::ConvertBorderWidthToWord(pTop->GetBorderLineStyle(), pTop->GetWidth()));
+            double fConverted = 0;
+            if (pTop->GetBorderLineStyle() != com::sun::star::table::BorderLineStyle::NONE)
+            {
+                fConverted = editeng::ConvertBorderWidthToWord(pTop->GetBorderLineStyle(), pTop->GetWidth());
+            }
+
             sal_Int32 nWidth = sal_Int32(fConverted / 20);
             m_pFlyAttrList->add(XML_strokeweight, OString::valueOf(nWidth) + "pt");
         }

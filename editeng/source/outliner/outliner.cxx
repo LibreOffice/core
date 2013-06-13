@@ -1335,6 +1335,7 @@ Outliner::Outliner( SfxItemPool* pPool, sal_uInt16 nMode )
     bBlockInsCallback   = sal_False;
 
     nMaxDepth           = 9;
+    mStripRec = Rectangle();
 
     pParaList = new ParagraphList;
     pParaList->SetVisibleStateChangedHdl( LINK( this, Outliner, ParaVisibleStateChangedHdl ) );
@@ -1784,6 +1785,7 @@ void Outliner::StripPortions()
 {
     DBG_CHKTHIS(Outliner,0);
     bStrippingPortions = sal_True;
+    pEditEngine->SetStripArea(GetStripArea());
     pEditEngine->StripPortions();
     bStrippingPortions = sal_False;
 }

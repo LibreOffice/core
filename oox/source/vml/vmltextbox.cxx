@@ -91,6 +91,7 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
             aPropertyValue.Value = uno::makeAny(double(rFont.monSize.get()) / 2.);
             aPropVec.push_back(aPropertyValue);
         }
+
         if (rParagraph.moParaAdjust.has())
         {
             style::ParagraphAdjust eAdjust = style::ParagraphAdjust_LEFT;
@@ -109,6 +110,14 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
             aPropertyValue.Value = uno::makeAny(rFont.moColor.get().toUInt32(16));
             aPropVec.push_back(aPropertyValue);
         }
+
+        if (rFont.moName.has())
+        {
+            aPropertyValue.Name = "CharFontName";
+            aPropertyValue.Value = uno::makeAny(rFont.moName.get());
+            aPropVec.push_back(aPropertyValue);
+        }
+
         uno::Sequence<beans::PropertyValue> aPropSeq(aPropVec.size());
         beans::PropertyValue* pValues = aPropSeq.getArray();
         for (std::vector<beans::PropertyValue>::iterator i = aPropVec.begin(); i != aPropVec.end(); ++i)
