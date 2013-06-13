@@ -140,7 +140,7 @@ ScTpCalcItem::~ScTpCalcItem()
 
 //------------------------------------------------------------------------
 
-String ScTpCalcItem::GetValueText() const
+OUString ScTpCalcItem::GetValueText() const
 {
     return OUString("ScTpCalcItem");
 }

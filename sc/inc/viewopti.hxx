@@ -120,7 +120,7 @@ public:
                 ScTpViewItem( const ScTpViewItem&  rItem );
                 ~ScTpViewItem();
 
-    virtual String          GetValueText() const;
+    virtual OUString        GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 

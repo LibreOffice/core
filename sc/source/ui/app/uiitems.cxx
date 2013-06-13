@@ -49,7 +49,7 @@ ScInputStatusItem::ScInputStatusItem( sal_uInt16 nWhichP,
                                       const ScAddress& rCurPos,
                                       const ScAddress& rStartPos,
                                       const ScAddress& rEndPos,
-                                      const String& rString,
+                                      const OUString& rString,
                                       const EditTextObject* pData )
     :   SfxPoolItem ( nWhichP ),
         aCursorPos  ( rCurPos ),
@@ -75,7 +75,7 @@ ScInputStatusItem::~ScInputStatusItem()
     delete pEditData;
 }
 
-String ScInputStatusItem::GetValueText() const
+OUString ScInputStatusItem::GetValueText() const
 {
     return OUString("InputStatus");
 }
@@ -183,7 +183,7 @@ ScSortItem::~ScSortItem()
 
 //------------------------------------------------------------------------
 
-String ScSortItem::GetValueText() const
+OUString ScSortItem::GetValueText() const
 {
     return OUString("SortItem");
 }
@@ -290,7 +290,7 @@ bool ScQueryItem::GetAdvancedQuerySource(ScRange& rSource) const
 
 //------------------------------------------------------------------------
 
-String ScQueryItem::GetValueText() const
+OUString ScQueryItem::GetValueText() const
 {
     return OUString("QueryItem");
 }
@@ -354,7 +354,7 @@ ScSubTotalItem::~ScSubTotalItem()
 
 //------------------------------------------------------------------------
 
-String ScSubTotalItem::GetValueText() const
+OUString ScSubTotalItem::GetValueText() const
 {
     return OUString("SubTotalItem");
 }
@@ -415,7 +415,7 @@ ScUserListItem::~ScUserListItem()
 
 //------------------------------------------------------------------------
 
-String ScUserListItem::GetValueText() const
+OUString ScUserListItem::GetValueText() const
 {
     return OUString("ScUserListItem");
 }
@@ -481,7 +481,7 @@ ScConsolidateItem::~ScConsolidateItem()
 
 //------------------------------------------------------------------------
 
-String ScConsolidateItem::GetValueText() const
+OUString ScConsolidateItem::GetValueText() const
 {
     return OUString("ScConsolidateItem");
 }
@@ -542,7 +542,7 @@ ScPivotItem::~ScPivotItem()
 
 //------------------------------------------------------------------------
 
-String ScPivotItem::GetValueText() const
+OUString ScPivotItem::GetValueText() const
 {
     return OUString("ScPivotItem");
 }
@@ -595,7 +595,7 @@ ScSolveItem::~ScSolveItem()
 
 //------------------------------------------------------------------------
 
-String ScSolveItem::GetValueText() const
+OUString ScSolveItem::GetValueText() const
 {
     return OUString("ScSolveItem");
 }
@@ -645,7 +645,7 @@ ScTabOpItem::~ScTabOpItem()
 
 //------------------------------------------------------------------------
 
-String ScTabOpItem::GetValueText() const
+OUString ScTabOpItem::GetValueText() const
 {
     return OUString("ScTabOpItem");
 }

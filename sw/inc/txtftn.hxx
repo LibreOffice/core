@@ -20,6 +20,7 @@
 #define _TXTFTN_HXX
 
 #include <txatbase.hxx>
+#include <tools/string.hxx>
 
 class SwNodeIndex;
 class SwTxtNode;

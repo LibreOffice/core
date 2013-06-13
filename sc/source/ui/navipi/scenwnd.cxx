@@ -48,7 +48,7 @@ ScScenarioListBox::~ScScenarioListBox()
 {
 }
 
-void ScScenarioListBox::UpdateEntries( const std::vector<String> &aNewEntryList )
+void ScScenarioListBox::UpdateEntries( const std::vector<OUString> &aNewEntryList )
 {
     Clear();
     maEntries.clear();
@@ -71,7 +71,7 @@ void ScScenarioListBox::UpdateEntries( const std::vector<String> &aNewEntryList 
             OSL_ENSURE( aNewEntryList.size() % 3 == 0, "ScScenarioListBox::UpdateEntries - wrong list size" );
             SetUpdateMode( false );
 
-            std::vector<String>::const_iterator iter;
+            std::vector<OUString>::const_iterator iter;
             for (iter = aNewEntryList.begin(); iter != aNewEntryList.end(); ++iter)
             {
                 ScenarioEntry aEntry;
@@ -85,7 +85,7 @@ void ScScenarioListBox::UpdateEntries( const std::vector<String> &aNewEntryList 
 
                 // third entry of a triple is the protection ("0" = not protected, "1" = protected)
                 ++iter;
-                aEntry.mbProtected = (iter->Len() > 0) && (iter->GetChar( 0 ) != '0');
+                aEntry.mbProtected = !(*iter).isEmpty() && (*iter)[0] != '0';
 
                 maEntries.push_back( aEntry );
                 InsertEntry( aEntry.maName, LISTBOX_APPEND );

@@ -44,7 +44,7 @@ public:
                 ~SvxRotateModeItem();
 
     virtual sal_uInt16              GetValueCount() const;
-    virtual String              GetValueText( sal_uInt16 nVal ) const;
+    virtual OUString            GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*        Create(SvStream &, sal_uInt16) const;
     virtual sal_uInt16              GetVersion( sal_uInt16 nFileVersion ) const;

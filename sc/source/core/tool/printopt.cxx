@@ -91,7 +91,7 @@ ScTpPrintItem::~ScTpPrintItem()
 {
 }
 
-String ScTpPrintItem::GetValueText() const
+OUString ScTpPrintItem::GetValueText() const
 {
     return OUString("ScTpPrintItem");
 }

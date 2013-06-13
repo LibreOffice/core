@@ -26,7 +26,7 @@
 class SfxScriptOrganizerItem : public SfxStringItem
 {
 private:
-    String                  aLanguage;
+    OUString aLanguage;
 
 public:
     TYPEINFO();
@@ -38,7 +38,7 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual bool          QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual bool          PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
-    String  getLanguage() { return aLanguage; };
+    OUString  getLanguage() { return aLanguage; };
 };
 
 #endif

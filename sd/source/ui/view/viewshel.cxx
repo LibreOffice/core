@@ -1097,12 +1097,12 @@ void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
         if(nCount)
         {
             // prepare list
-            ::std::vector< String > aStringList;
+            std::vector<OUString> aStringList;
 
             for (sal_uInt16 a = 0; a < nCount; ++a)
             {
                 // generate one String in list per undo step
-                aStringList.push_back( String(pUndoManager->GetUndoActionComment(a)) );
+                aStringList.push_back( pUndoManager->GetUndoActionComment(a) );
             }
 
             // set item
@@ -1126,13 +1126,13 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
         if(nCount)
         {
             // prepare list
-            ::std::vector< String > aStringList;
+            ::std::vector< OUString > aStringList;
             sal_uInt16 a;
 
             for( a = 0; a < nCount; a++)
             {
                 // generate one String in list per undo step
-                aStringList.push_back( String(pUndoManager->GetRedoActionComment(a)) );
+                aStringList.push_back( pUndoManager->GetRedoActionComment(a) );
             }
 
             // set item

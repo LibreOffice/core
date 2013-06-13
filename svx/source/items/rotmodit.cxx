@@ -88,9 +88,9 @@ SfxItemPresentation SvxRotateModeItem::GetPresentation(
     return ePres;
 }
 
-String SvxRotateModeItem::GetValueText( sal_uInt16 nVal ) const
+OUString SvxRotateModeItem::GetValueText( sal_uInt16 nVal ) const
 {
-    String aText;
+    OUString aText;
 
     switch ( nVal )
     {
@@ -98,7 +98,7 @@ String SvxRotateModeItem::GetValueText( sal_uInt16 nVal ) const
         case SVX_ROTATE_MODE_TOP:
         case SVX_ROTATE_MODE_CENTER:
         case SVX_ROTATE_MODE_BOTTOM:
-            aText.AppendAscii("...");
+            aText = OUString("...");
             break;
         default:
             OSL_FAIL("SvxRotateModeItem: falscher enum");

@@ -859,27 +859,19 @@ void SvxTabStop::fillDecimal() const
 }
 // -----------------------------------------------------------------------
 
-XubString SvxTabStop::GetValueString() const
+OUString SvxTabStop::GetValueString() const
 {
-    XubString aStr;
-
-    aStr += sal_Unicode( '(' );
-    aStr += OUString::number(nTabPos);
-    aStr += cpDelim;
-    aStr += EE_RESSTR(RID_SVXITEMS_TAB_ADJUST_BEGIN + (sal_uInt16)eAdjustment);
-
-    aStr += cpDelim;
-    aStr += sal_Unicode('[');
-    aStr += EE_RESSTR(RID_SVXITEMS_TAB_DECIMAL_CHAR);
-    aStr += GetDecimal();
-    aStr += sal_Unicode(']');
-    aStr += cpDelim;
-    aStr += cpDelim;
-    aStr += sal_Unicode('[');
-    aStr += EE_RESSTR(RID_SVXITEMS_TAB_FILL_CHAR);
-    aStr += cFill;
-    aStr += sal_Unicode(']');
-    aStr += sal_Unicode(')');
+    OUString aStr = "("
+        + OUString::number(nTabPos)
+        + ", "
+        + EE_RESSTR(RID_SVXITEMS_TAB_ADJUST_BEGIN + (sal_uInt16)eAdjustment)
+        + ", ["
+        + EE_RESSTR(RID_SVXITEMS_TAB_DECIMAL_CHAR)
+        + OUString(GetDecimal())
+        + "], , ["
+        + EE_RESSTR(RID_SVXITEMS_TAB_FILL_CHAR)
+        + OUString(cFill)
+        + "])";
 
     return aStr;
 }

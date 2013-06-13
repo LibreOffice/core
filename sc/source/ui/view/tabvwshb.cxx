@@ -560,13 +560,13 @@ void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
                     SfxStringListItem aStrLst( nWhich );
                     if ( pUndoManager )
                     {
-                        std::vector<String> &aList = aStrLst.GetList();
+                        std::vector<OUString> &aList = aStrLst.GetList();
                         sal_Bool bIsUndo = ( nWhich == SID_GETUNDOSTRINGS );
                         size_t nCount = bIsUndo ? pUndoManager->GetUndoActionCount() : pUndoManager->GetRedoActionCount();
                         for (size_t i=0; i<nCount; ++i)
                         {
-                            aList.push_back( OUString( bIsUndo ? pUndoManager->GetUndoActionComment(i) :
-                                                       pUndoManager->GetRedoActionComment(i) ) );
+                            aList.push_back( bIsUndo ? pUndoManager->GetUndoActionComment(i) :
+                                                       pUndoManager->GetRedoActionComment(i) );
                         }
                     }
                     rSet.Put( aStrLst );

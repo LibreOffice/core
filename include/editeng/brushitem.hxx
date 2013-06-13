@@ -29,6 +29,7 @@
 class Graphic;
 class GraphicObject;
 class CntWallpaperItem;
+class String;
 
 #define BRUSH_GRAPHIC_VERSION   ((sal_uInt16)0x0001)
 

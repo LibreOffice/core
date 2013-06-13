@@ -307,7 +307,7 @@ public:
                             {}
 
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual String          GetValueText() const;
+    virtual OUString        GetValueText() const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
     SfxViewFrame*           GetFrame() const

@@ -1562,7 +1562,7 @@ IMPL_LINK_NOARG_INLINE_END(SvxPageDescPage, CenterHdl_Impl)
 
 // -----------------------------------------------------------------------
 
-void SvxPageDescPage::SetCollectionList(const std::vector<String> &aList)
+void SvxPageDescPage::SetCollectionList(const std::vector<OUString> &aList)
 {
     OSL_ENSURE(!aList.empty(), "Empty string list");
 

@@ -762,7 +762,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_SELECT_SCENARIO:
                 {
-                    std::vector<String> aList;
+                    std::vector<OUString> aList;
                     Color   aDummyCol;
 
                     if ( !pDoc->IsScenario(nTab) )
@@ -770,7 +770,6 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                         OUString aStr;
                         sal_uInt16 nFlags;
                         SCTAB nScTab = nTab + 1;
-                        String aProtect;
                         bool bSheetProtected = pDoc->IsTabProtected(nTab);
 
                         while ( pDoc->IsScenario(nScTab) )
@@ -780,8 +779,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                             pDoc->GetScenarioData( nScTab, aStr, aDummyCol, nFlags );
                             aList.push_back(aStr);
                             // Protection is sal_True if both Sheet and Scenario are protected
-                            aProtect = (bSheetProtected && (nFlags & SC_SCENARIO_PROTECT)) ? '1' : '0';
-                            aList.push_back(aProtect);
+                            aList.push_back((bSheetProtected && (nFlags & SC_SCENARIO_PROTECT)) ? OUString("1") : OUString("0"));
                             ++nScTab;
                         }
                     }

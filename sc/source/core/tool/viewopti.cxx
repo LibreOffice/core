@@ -247,7 +247,7 @@ ScTpViewItem::~ScTpViewItem()
 
 //------------------------------------------------------------------------
 
-String ScTpViewItem::GetValueText() const
+OUString ScTpViewItem::GetValueText() const
 {
     return OUString("ScTpViewItem");
 }

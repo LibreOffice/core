@@ -42,8 +42,8 @@ class SdAttrLayerName : public SfxStringItem
 {
 public:
     SdAttrLayerName() :
-        SfxStringItem( ATTR_LAYER_NAME, String( RTL_CONSTASCII_USTRINGPARAM( "neue Ebene" ))) {}
-    SdAttrLayerName( const String& aStr ) :
+        SfxStringItem( ATTR_LAYER_NAME, OUString("neue Ebene") ) {}
+    SdAttrLayerName( const OUString& aStr ) :
         SfxStringItem( ATTR_LAYER_NAME, aStr ) {}
 };
 
@@ -53,7 +53,7 @@ class SdAttrLayerTitle : public SfxStringItem
 {
 public:
     SdAttrLayerTitle() : SfxStringItem( ATTR_LAYER_TITLE, OUString()) {}
-    SdAttrLayerTitle( const String& aStr ) : SfxStringItem( ATTR_LAYER_TITLE, aStr ) {}
+    SdAttrLayerTitle( const OUString& aStr ) : SfxStringItem( ATTR_LAYER_TITLE, aStr ) {}
 };
 
 //------------------------------------------------------------------
@@ -62,7 +62,7 @@ class SdAttrLayerDesc : public SfxStringItem
 {
 public:
     SdAttrLayerDesc() : SfxStringItem( ATTR_LAYER_DESC, OUString()) {}
-    SdAttrLayerDesc( const String& aStr ) : SfxStringItem( ATTR_LAYER_DESC, aStr ) {}
+    SdAttrLayerDesc( const OUString& aStr ) : SfxStringItem( ATTR_LAYER_DESC, aStr ) {}
 };
 
 //------------------------------------------------------------------

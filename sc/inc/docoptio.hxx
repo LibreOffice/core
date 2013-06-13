@@ -153,7 +153,7 @@ public:
                 ScTpCalcItem( const ScTpCalcItem& rItem );
                 ~ScTpCalcItem();
 
-    virtual String          GetValueText() const;
+    virtual OUString        GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 

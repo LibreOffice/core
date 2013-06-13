@@ -282,9 +282,9 @@ void SvxUndoRedoControl::StateChanged(
         {
             SfxStringListItem &rItem = *(SfxStringListItem *)pState;
 
-            const std::vector<String> &aLst = rItem.GetList();
+            const std::vector<OUString> &aLst = rItem.GetList();
             for( long nI = 0, nEnd = aLst.size(); nI < nEnd; ++nI )
-                aUndoRedoList.push_back( OUString( aLst[nI] ));
+                aUndoRedoList.push_back( aLst[nI] );
         }
     }
 }

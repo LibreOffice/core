@@ -37,7 +37,7 @@ public:
 
     SvxPostItAuthorItem( sal_uInt16 nWhich  );
 
-    SvxPostItAuthorItem( const String& rAuthor, sal_uInt16 nWhich  );
+    SvxPostItAuthorItem( const OUString& rAuthor, sal_uInt16 nWhich  );
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -68,7 +68,7 @@ public:
 
     SvxPostItDateItem( sal_uInt16 nWhich  );
 
-    SvxPostItDateItem( const String& rDate, sal_uInt16 nWhich  );
+    SvxPostItDateItem( const OUString& rDate, sal_uInt16 nWhich  );
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -99,7 +99,7 @@ public:
 
     SvxPostItTextItem( sal_uInt16 nWhich  );
 
-    SvxPostItTextItem( const String& rText, sal_uInt16 nWhich  );
+    SvxPostItTextItem( const OUString& rText, sal_uInt16 nWhich  );
     // "pure virtual methods" from SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
