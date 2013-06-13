@@ -23,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,hsqldb,\
 	hsqldb/patches/i103528.patch \
 	hsqldb/patches/i104901.patch \
 	hsqldb/patches/fdo36824.patch \
+	hsqldb/patches/limit_as_table_alias.patch \
 	$(if $(filter YES,$(HSQLDB_USE_JDBC_4_1)),\
 		hsqldb/patches/jdbc-4.1.patch \
 	) \
