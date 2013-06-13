@@ -33,3 +33,17 @@ index 7c2a8e6..e7014cb 100644
              contentLength = it->second->getLongs( ).front( );
          return contentLength;
      }
+diff --git src/libcmis/ws-relatedmultipart.cxx src/libcmis/ws-relatedmultipart.cxx
+index ef91b4d..3a990e7 100644
+--- src/libcmis/ws-relatedmultipart.cxx
++++ src/libcmis/ws-relatedmultipart.cxx
+@@ -93,6 +93,8 @@ RelatedMultipart::RelatedMultipart( const string& body, const string& contentTyp
+             if ( value[0] == '"' && value[value.length() - 1] == '"' )
+                 value = value.substr( 1, value.length( ) - 2 );
+ 
++            name = libcmis::trim( name );
++
+             if ( name == "start" )
+             {
+                 m_startId = value;
+-- 
