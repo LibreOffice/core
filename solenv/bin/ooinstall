@@ -86,8 +86,8 @@ if (defined $ENV{DESTDIR} &&
 
 $msi='';
 if ($is_windows) {
-    $msi = "-msitemplate $ENV{SRC_ROOT}/instsetoo_native/$ENV{INPATH}/misc/openoffice/msi_templates " .
-           "-msilanguage $ENV{SRC_ROOT}/instsetoo_native/$ENV{INPATH}/misc/win_ulffiles";
+    $msi = "-msitemplate $ENV{SRC_ROOT}/workdir/$ENV{INPATH}/CustomTarget/instsetoo_native/install/msi_templates " .
+           "-msilanguage $ENV{SRC_ROOT}/workdir/$ENV{INPATH}/CustomTarget/instsetoo_native/install/win_ulffiles";
 }
 
 # FIXME: a better solution would be to fix installer to deal with broken symlinks
