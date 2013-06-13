@@ -35,8 +35,10 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>
 #include <boost/scoped_ptr.hpp>
+#include "CustomAnimationEffect.hxx"
 
 using namespace ::drawinglayer::primitive2d;
+
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -70,7 +72,6 @@ PageObjectPainter::PageObjectPainter (
 
 
 
-
 PageObjectPainter::~PageObjectPainter (void)
 {
 }
@@ -93,7 +94,7 @@ void PageObjectPainter::PaintPageObject (
         PaintPreview(rDevice, rpDescriptor);
         PaintPageNumber(rDevice, rpDescriptor);
         PaintTransitionEffect(rDevice, rpDescriptor);
-
+        PaintCustomAnimationEffect(rDevice, rpDescriptor);
         rDevice.SetAntialiasing(nSavedAntialiasingMode);
     }
 }
@@ -352,13 +353,30 @@ void PageObjectPainter::PaintTransitionEffect (
             PageObjectLayouter::ModelCoordinateSystem));
 
         rDevice.DrawBitmapEx(
-            aBox.TopLeft(),
+            aBox.TopCenter(),
             mpPageObjectLayouter->GetTransitionEffectIcon().GetBitmapEx());
     }
 }
 
-
-
+void PageObjectPainter::PaintCustomAnimationEffect (
+    OutputDevice& rDevice,
+    const model::SharedPageDescriptor& rpDescriptor) const
+{
+    SdPage* pPage = rpDescriptor->GetPage();
+    boost::shared_ptr< MainSequence > aMainSequence = pPage->getMainSequence();
+    EffectSequence::iterator aIter = aMainSequence->getBegin();
+    EffectSequence::iterator aEnd = aMainSequence->getEnd();
+    if ( aIter != aEnd )
+    {
+        const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
+            rpDescriptor,
+            PageObjectLayouter::CustomAnimationEffectIndicator,
+            PageObjectLayouter::ModelCoordinateSystem));
+        rDevice.DrawBitmapEx(
+            aBox.TopCenter(),
+            mpPageObjectLayouter->GetCustomAnimationEffectIcon().GetBitmapEx());
+    }
+}
 
 Bitmap& PageObjectPainter::GetBackgroundForState (
     const model::SharedPageDescriptor& rpDescriptor,
