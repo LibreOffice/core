@@ -100,6 +100,9 @@ private:
     void PaintTransitionEffect (
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
+    void PaintCustomAnimationEffect (
+        OutputDevice& rDevice,
+        const model::SharedPageDescriptor& rpDescriptor) const;
     void PaintBorder (
         OutputDevice& rDevice,
         const Theme::GradientColorType eColorType,

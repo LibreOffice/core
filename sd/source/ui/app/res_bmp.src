@@ -338,6 +338,11 @@ Bitmap BMP_FADE_EFFECT_INDICATOR
     File = "fade_effect_indicator.bmp";
 };
 
+Bitmap BMP_CUSTOM_ANIMATION_INDICATOR
+{
+    File = "click_16.bmp";
+};
+
 Bitmap BMP_COMMENTS_INDICATOR
 {
     File = "comments_indicator.bmp";
