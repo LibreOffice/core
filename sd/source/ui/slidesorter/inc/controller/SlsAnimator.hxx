@@ -86,6 +86,7 @@ public:
     */
     void RemoveAnimation (const AnimationId nAnimationId);
 
+
     /** A typical use case for this method is the temporary shutdown of the
         slidesorter when the slide sorter bar is put into a cache due to a
         change of the edit mode.

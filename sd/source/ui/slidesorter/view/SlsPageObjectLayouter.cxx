@@ -48,6 +48,7 @@ PageObjectLayouter::PageObjectLayouter (
       maPreviewBoundingBox(),
       maTransitionEffectBoundingBox(),
       maTransitionEffectIcon(IconCache::Instance().GetIcon(BMP_FADE_EFFECT_INDICATOR)),
+      maCustomAnimationEffectIcon(IconCache::Instance().GetIcon(BMP_CUSTOM_ANIMATION_INDICATOR)),
       mpPageNumberFont(Theme::GetFont(Theme::Font_PageNumber, *rpWindow))
 {
     const Size aPageNumberAreaSize (GetPageNumberAreaSize(nPageCount));
@@ -81,8 +82,13 @@ PageObjectLayouter::PageObjectLayouter (
     const Size aIconSize (maTransitionEffectIcon.GetSizePixel());
     maTransitionEffectBoundingBox = Rectangle(
         Point(
-            (maPreviewBoundingBox.Left() - aIconSize.Width()) / 2,
+            (maPreviewBoundingBox.Left() - 2*aIconSize.Width()) / 2,
             maPreviewBoundingBox.Bottom() - aIconSize.Height()),
+        aIconSize);
+    maCustomAnimationEffectBoundingBox = Rectangle(
+        Point(
+            (maPreviewBoundingBox.Left() - 2*aIconSize.Width()) / 2,
+            maPreviewBoundingBox.Bottom() - 2*aIconSize.Height()),
         aIconSize);
 }
 
@@ -207,6 +213,9 @@ Rectangle PageObjectLayouter::GetBoundingBox (
         case TransitionEffectIndicator:
             aBoundingBox = maTransitionEffectBoundingBox;
             break;
+        case CustomAnimationEffectIndicator:
+            aBoundingBox = maCustomAnimationEffectBoundingBox;
+            break;
     }
 
     // Adapt coordinates to the requested coordinate system.
@@ -270,6 +279,11 @@ Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
 Image PageObjectLayouter::GetTransitionEffectIcon (void) const
 {
     return maTransitionEffectIcon;
+}
+
+Image PageObjectLayouter::GetCustomAnimationEffectIcon (void) const
+{
+    return maCustomAnimationEffectIcon;
 }
 
 

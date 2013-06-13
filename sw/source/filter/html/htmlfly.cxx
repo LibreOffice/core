@@ -38,7 +38,10 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/brushitem.hxx>
-
+/////<-------------------
+  #include <sax/tools/converter.hxx>
+  #include <vcl/cvtgrf.hxx>
+/////------------------->
 
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
@@ -1141,6 +1144,25 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         append(RTL_CONSTASCII_STRINGPARAM("=\""));
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
     HTMLOutFuncs::Out_String( rWrt.Strm(), aGrfNm, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << '\"';
+
+////////////<<<-----------------------------------------
+    Graphic aGraphic( ((SwFrmFmt &)rFrmFmt).MakeGraphic() );
+    const GfxLink aGfxLink( ( (Graphic&) aGraphic ).GetLink() );
+    sal_uLong aExt;
+    switch( aGfxLink.GetType() )
+    {
+        case( GFX_LINK_TYPE_NATIVE_GIF ): aExt = 0x38464947; break;
+        case( GFX_LINK_TYPE_NATIVE_JPG ): aExt = 0xffd8ff00; break;
+        case( GFX_LINK_TYPE_NATIVE_PNG ): aExt = 0x0d0a1a0a; break;
+        default:break;
+    }
+    GraphicConverter* aGraphicConverter;
+    sal_uLong nErr;
+    SvStream aOStm;
+    nErr = aGraphicConverter->Export(aOStm,aGraphic,aExt);
+    OUStringBuffer aStrBuffer;
+    //::sax::Converter::encodeBase64(aStrBuffer, aOStm);
+////////////----------------------------------------->>>
 
     // Events
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRMMACRO, sal_True, &pItem ))
