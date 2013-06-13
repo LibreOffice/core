@@ -296,6 +296,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	log \
 	lng \
 	lnth \
+	$(if $(filter $(OS),MACOSX),macbe1) \
 	$(if $(MERGELIBS),merged) \
 	migrationoo2 \
 	migrationoo3 \
@@ -378,7 +379,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,writer, \
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	adabas \
 	adabasui \
-	ado \
 	agg \
 	$(if $(filter $(OS),ANDROID),, \
 		basebmp \
@@ -387,10 +387,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	oox \
 	ooxml \
 	sdbc \
-	AppleRemote \
 	avmediaQuickTime \
 	filtertracer \
-	MacOSXSpell \
 	mork \
 	mozab2 \
 	mozabdrv \
@@ -519,9 +517,20 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	xmlsecurity \
 	xsec_fw \
 	xstor \
+	$(if $(filter $(OS),WNT), \
+  	        ado \
+	        $(if $(ENABLE_DIRECTX),avmediawin) \
+	        $(if $(DISABLE_ATL),,oleautobridge) \
+		smplmail \
+		wininetbe1 \
+	) \
+	$(if $(filter $(OS),MACOSX), \
+	        AppleRemote \
+		fps_aqua \
+    	        MacOSXSpell \
+	) \
 ))
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	avmediawin \
 	bluez_bluetooth \
 	emboleobj \
 	java_uno_accessbridge \
@@ -583,20 +592,11 @@ $(eval $(call gb_Helper_register_libraries,RTVERLIBS, \
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	cmdmail \
-	macbe1 \
 	OGLTrans \
 	pdfimport \
 	postgresql-sdbc \
 	postgresql-sdbc-impl \
 	pythonloader \
-	$(if $(filter $(OS),MACOSX), \
-		fps_aqua \
-	) \
-	$(if $(filter $(OS),WNT), \
-		oleautobridge \
-		smplmail \
-		wininetbe1 \
-	) \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \

@@ -35,10 +35,6 @@ File gid_File_Lib_Accessbridge
 End
 #endif
 
-#if defined(WNT)
-STD_LIB_FILE( gid_File_Lib_Ado, ado)
-#endif
-
 #ifndef SYSTEM_CLUCENE
 File gid_File_Lib_CLucene
     LIB_FILE_BODY;
@@ -215,15 +211,6 @@ End
 #endif
 
 #ifdef MACOSX
-STD_LIB_FILE( gid_File_Lib_Fps_Aqua, fps_aqua )
-
-File gid_File_Lib_MacOSXSpell
-	LIB_FILE_BODY;
-	Styles = (PACKED);
-	Name = LIBNAME(MacOSXSpell);
-	Dir = SCP2_OOO_BIN_DIR;
-End
-
 #ifndef X86_64
 File gid_File_Lib_avmediaQuickTime
 	LIB_FILE_BODY;
@@ -425,10 +412,6 @@ End
 #endif
 #endif
 
-#if defined(WNT) && !defined(DISABLE_ATL)
-STD_LIB_FILE( gid_File_Lib_Ole, oleautobridge )
-#endif
-
 #if defined ENABLE_NPAPI_FROM_BROWSER
 STD_LIB_FILE( gid_File_Lib_Pl , pl)
 #endif
@@ -458,15 +441,6 @@ File gid_File_Lib_Vclplug_Kde4
     Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
-#endif
-
-#if defined(MACOSX)
-File gid_File_Lib_AppleRemote
-    Name = LIBNAME(AppleRemote);
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-End
 #endif
 
 #if defined(MACOSX)
@@ -535,10 +509,6 @@ End
 
 #endif
 
-#ifdef WNT
-STD_LIB_FILE( gid_File_Lib_Smplmail, smplmail )
-#endif
-
 #if defined(UNX) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
 
 File gid_File_Lib_Spa
@@ -568,15 +538,6 @@ File gid_File_Lib_Sysdtrans
     Dir = SCP2_OOO_BIN_DIR;
     Name = "sysdtrans.dll";
 End
-#endif
-
-
-#ifdef WNT
-STD_LIB_FILE( gid_File_Lib_Wininetbe, wininetbe1 )
-#endif
-
-#ifdef MACOSX
-STD_LIB_FILE( gid_File_Lib_Macbe, macbe1 )
 #endif
 
 #ifndef DISABLE_NEON
@@ -655,12 +616,6 @@ File gid_File_Lib_eXslt
    #endif
   #endif
 End
-#endif
-
-#if defined WNT
-#ifdef ENABLE_DIRECTX
-SPECIAL_LIB_FILE( gid_File_Lib_AVMediaWin, avmediawin )
-#endif
 #endif
 
 #ifdef WNT
