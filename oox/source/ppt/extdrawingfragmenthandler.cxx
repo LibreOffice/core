@@ -23,7 +23,7 @@ ExtDrawingFragmentHandler::ExtDrawingFragmentHandler( XmlFilterBase& rFilter,
         oox::drawingml::ShapePtr        pGroupShapePtr,
         oox::drawingml::ShapePtr        pShapePtr)
     throw( )
-    : FragmentHandler( rFilter, rFragmentPath ),
+    : FragmentHandler2( rFilter, rFragmentPath ),
      mpSlidePersistPtr (pSlidePersistPtr ),
      meShapeLocation( eShapeLocation ),
      mpMasterShapePtr( pMasterShapePtr ),

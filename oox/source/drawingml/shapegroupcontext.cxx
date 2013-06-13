@@ -40,8 +40,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-ShapeGroupContext::ShapeGroupContext( ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pGroupShapePtr )
-: ContextHandler( rParent )
+ShapeGroupContext::ShapeGroupContext( ContextHandler2Helper& rParent, ShapePtr pMasterShapePtr, ShapePtr pGroupShapePtr )
+: ContextHandler2( rParent )
 , mpGroupShapePtr( pGroupShapePtr )
 , mpMasterShapePtr( pMasterShapePtr )
 {

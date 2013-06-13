@@ -14,7 +14,7 @@ using namespace com::sun::star;
 namespace oox { namespace shape {
 
 ShapeDrawingFragmentHandler::ShapeDrawingFragmentHandler(oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, oox::drawingml::ShapePtr pGroupShapePtr ) throw()
-        : FragmentHandler(rFilter, rFragmentPath),
+        : FragmentHandler2(rFilter, rFragmentPath),
         mpGroupShapePtr(pGroupShapePtr)
 {
 }

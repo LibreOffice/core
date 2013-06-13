@@ -20,16 +20,16 @@
 #ifndef OOX_DRAWINGML_CONSTRAINTLISTCONTEXT_HXX
 #define OOX_DRAWINGML_CONSTRAINTLISTCONTEXT_HXX
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 #include "diagramlayoutatoms.hxx"
 #include "diagram.hxx"
 
 namespace oox { namespace drawingml {
 
-class ConstraintListContext : public ::oox::core::ContextHandler
+class ConstraintListContext : public ::oox::core::ContextHandler2
 {
 public:
-    ConstraintListContext( ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, const LayoutAtomPtr &pNode );
+    ConstraintListContext( ContextHandler2Helper& rParent, const AttributeList& rAttributes, const LayoutAtomPtr &pNode );
     virtual ~ConstraintListContext();
 
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);

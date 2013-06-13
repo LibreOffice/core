@@ -47,7 +47,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace ppt {
 
 // CT_Shape
-PPTGraphicShapeContext::PPTGraphicShapeContext( ContextHandler& rParent, const SlidePersistPtr pSlidePersistPtr, oox::drawingml::ShapePtr pMasterShapePtr, oox::drawingml::ShapePtr pShapePtr )
+PPTGraphicShapeContext::PPTGraphicShapeContext( ContextHandler2Helper& rParent, const SlidePersistPtr pSlidePersistPtr, oox::drawingml::ShapePtr pMasterShapePtr, oox::drawingml::ShapePtr pShapePtr )
 : oox::drawingml::GraphicShapeContext( rParent, pMasterShapePtr, pShapePtr )
 , mpSlidePersistPtr( pSlidePersistPtr )
 {

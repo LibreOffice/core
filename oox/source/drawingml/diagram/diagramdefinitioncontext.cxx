@@ -29,21 +29,21 @@ namespace oox { namespace drawingml {
 
 
 // CT_DiagramDefinition
-DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler& rParent,
-                                                    const Reference< XFastAttributeList >& xAttributes,
+DiagramDefinitionContext::DiagramDefinitionContext( ContextHandler2Helper& rParent,
+                                                    const AttributeList& rAttributes,
                                                     const DiagramLayoutPtr &pLayout )
-    : ContextHandler( rParent )
+    : ContextHandler2( rParent )
     , mpLayout( pLayout )
 {
     OSL_TRACE( "OOX: DiagramDefinitionContext::DiagramDefinitionContext()" );
-    mpLayout->setDefStyle( xAttributes->getOptionalValue( XML_defStyle ) );
-    OUString sValue = xAttributes->getOptionalValue( XML_minVer );
+    mpLayout->setDefStyle( rAttributes.getString( XML_defStyle ).get() );
+    OUString sValue = rAttributes.getString( XML_minVer ).get();
     if( sValue.isEmpty() )
     {
         sValue = "http://schemas.openxmlformats.org/drawingml/2006/diagram";
     }
     mpLayout->setMinVer( sValue );
-    mpLayout->setUniqueId( xAttributes->getOptionalValue( XML_uniqueId ) );
+    mpLayout->setUniqueId( rAttributes.getString( XML_uniqueId ).get() );
 }
 
 
@@ -81,7 +81,7 @@ DiagramDefinitionContext::createFastChildContext( ::sal_Int32 aElement,
         pNode->setChildOrder( xAttribs->getOptionalValueToken( XML_chOrder, XML_b ) );
         pNode->setMoveWith( xAttribs->getOptionalValue( XML_moveWith ) );
         pNode->setStyleLabel( xAttribs->getOptionalValue( XML_styleLbl ) );
-        xRet.set( new LayoutNodeContext( *this, xAttribs, pNode ) );
+        xRet.set( new LayoutNodeContext( *this, AttributeList( xAttribs ), pNode ) );
         break;
     }
      case DGM_TOKEN( clrData ):

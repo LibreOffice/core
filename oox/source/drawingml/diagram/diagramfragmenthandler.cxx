@@ -79,7 +79,7 @@ DiagramLayoutFragmentHandler::DiagramLayoutFragmentHandler( XmlFilterBase& rFilt
                                                         const OUString& rFragmentPath,
                                                         const DiagramLayoutPtr pDataPtr )
     throw( )
-    : FragmentHandler( rFilter, rFragmentPath )
+    : FragmentHandler2( rFilter, rFragmentPath )
     , mpDataPtr( pDataPtr )
 {
 }
@@ -106,7 +106,7 @@ DiagramLayoutFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
     switch( aElement )
     {
     case DGM_TOKEN( layoutDef ):
-        xRet.set( new DiagramDefinitionContext( *this, xAttribs, mpDataPtr ) );
+        xRet.set( new DiagramDefinitionContext( *this, AttributeList( xAttribs ), mpDataPtr ) );
         break;
     default:
         break;

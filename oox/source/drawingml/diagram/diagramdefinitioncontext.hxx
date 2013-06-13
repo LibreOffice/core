@@ -20,15 +20,15 @@
 #ifndef OOX_DRAWINGML_DIAGRAMDEFINITIONCONTEXT_HXX
 #define OOX_DRAWINGML_DIAGRAMDEFINITIONCONTEXT_HXX
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 #include "diagram.hxx"
 
 namespace oox { namespace drawingml {
 
-class DiagramDefinitionContext : public ::oox::core::ContextHandler
+class DiagramDefinitionContext : public ::oox::core::ContextHandler2
 {
 public:
-    DiagramDefinitionContext( ::oox::core::ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, const DiagramLayoutPtr &pLayout );
+    DiagramDefinitionContext( ::oox::core::ContextHandler2Helper& rParent, const ::oox::AttributeList& rAttributes, const DiagramLayoutPtr &pLayout );
     virtual ~DiagramDefinitionContext();
 
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);

@@ -36,27 +36,26 @@ class IfContext
     : public LayoutNodeContext
 {
 public:
-    IfContext( ContextHandler& rParent,
-               const Reference< XFastAttributeList >& xAttribs,
+    IfContext( ContextHandler2Helper& rParent,
+               const AttributeList& rAttribs,
                const ConditionAtomPtr& pAtom )
-        : LayoutNodeContext( rParent, xAttribs, pAtom )
+        : LayoutNodeContext( rParent, rAttribs, pAtom )
     {}
 };
 
 
 
 class AlgorithmContext
-    : public ContextHandler
+    : public ContextHandler2
 {
 public:
-    AlgorithmContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, const AlgAtomPtr & pNode )
-        : ContextHandler( rParent )
+    AlgorithmContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, const AlgAtomPtr & pNode )
+        : ContextHandler2( rParent )
         , mnRevision( 0 )
         , mpNode( pNode )
         {
-            AttributeList aAttribs( xAttribs );
-            mnRevision = aAttribs.getInteger( XML_rev, 0 );
-            pNode->setType(xAttribs->getOptionalValueToken(XML_type, 0));
+            mnRevision = rAttribs.getInteger( XML_rev, 0 );
+            pNode->setType(rAttribs.getToken(XML_type, 0));
         }
 
     virtual Reference< XFastContextHandler > SAL_CALL
@@ -94,14 +93,14 @@ private:
 
 
 class ChooseContext
-    : public ContextHandler
+    : public ContextHandler2
 {
 public:
-    ChooseContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, const LayoutAtomPtr & pNode )
-        : ContextHandler( rParent )
+    ChooseContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, const LayoutAtomPtr & pNode )
+        : ContextHandler2( rParent )
         , mpNode( pNode )
         {
-            msName = xAttribs->getOptionalValue( XML_name );
+            msName = rAttribs.getString( XML_name ).get();
         }
 
     virtual Reference< XFastContextHandler > SAL_CALL
@@ -118,7 +117,7 @@ public:
                 // CT_When
                 mpConditionNode.reset( new ConditionAtom(xAttribs) );
                 mpNode->addChild( mpConditionNode );
-                xRet.set( new IfContext( *this, xAttribs, mpConditionNode ) );
+                xRet.set( new IfContext( *this, AttributeList( xAttribs ), mpConditionNode ) );
                 break;
             }
             case DGM_TOKEN( else ):
@@ -126,7 +125,7 @@ public:
                 if( mpConditionNode )
                 {
                     mpConditionNode->readElseBranch();
-                    xRet.set( new IfContext( *this, xAttribs, mpConditionNode ) );
+                    xRet.set( new IfContext( *this, AttributeList( xAttribs ), mpConditionNode ) );
                     mpConditionNode.reset();
                 }
                 else
@@ -156,22 +155,22 @@ class ForEachContext
     : public LayoutNodeContext
 {
 public:
-    ForEachContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, const ForEachAtomPtr& pAtom )
-        : LayoutNodeContext( rParent, xAttribs, pAtom )
+    ForEachContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, const ForEachAtomPtr& pAtom )
+        : LayoutNodeContext( rParent, rAttribs, pAtom )
         {
-            xAttribs->getOptionalValue( XML_ref );
-            pAtom->iterator().loadFromXAttr( xAttribs );
+            rAttribs.getString( XML_ref );
+            pAtom->iterator().loadFromXAttr( rAttribs.getFastAttributeList() );
         }
 };
 
 
 // CT_LayoutVariablePropertySet
 class LayoutVariablePropertySetContext
-    : public ContextHandler
+    : public ContextHandler2
 {
 public:
-    LayoutVariablePropertySetContext( ContextHandler& rParent, LayoutNode::VarMap & aVar )
-        : ContextHandler( rParent )
+    LayoutVariablePropertySetContext( ContextHandler2Helper& rParent, LayoutNode::VarMap & aVar )
+        : ContextHandler2( rParent )
         , mVariables( aVar )
         {
         }
@@ -201,14 +200,14 @@ private:
 
 
 // CT_LayoutNode
-LayoutNodeContext::LayoutNodeContext( ContextHandler& rParent,
-                                      const Reference< XFastAttributeList >& xAttribs,
+LayoutNodeContext::LayoutNodeContext( ContextHandler2Helper& rParent,
+                                      const AttributeList& rAttribs,
                                       const LayoutAtomPtr& pAtom )
-    : ContextHandler( rParent )
+    : ContextHandler2( rParent )
     , mpNode( pAtom )
 {
     OSL_ENSURE( pAtom, "Node must NOT be NULL" );
-    mpNode->setName( xAttribs->getOptionalValue( XML_name ) );
+    mpNode->setName( rAttribs.getString( XML_name ).get() );
 }
 
 
@@ -281,7 +280,7 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
         pNode->setChildOrder( xAttribs->getOptionalValueToken( XML_chOrder, XML_b ) );
         pNode->setMoveWith( xAttribs->getOptionalValue( XML_moveWith ) );
         pNode->setStyleLabel( xAttribs->getOptionalValue( XML_styleLbl ) );
-        xRet.set( new LayoutNodeContext( *this, xAttribs, pNode ) );
+        xRet.set( new LayoutNodeContext( *this, AttributeList( xAttribs ), pNode ) );
         break;
     }
     case DGM_TOKEN( shape ):
@@ -319,7 +318,7 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
         // CT_Algorithm
         AlgAtomPtr pAtom( new AlgAtom );
         mpNode->addChild( pAtom );
-        xRet.set( new AlgorithmContext( *this, xAttribs, pAtom ) );
+        xRet.set( new AlgorithmContext( *this, AttributeList( xAttribs ), pAtom ) );
         break;
     }
     case DGM_TOKEN( choose ):
@@ -327,7 +326,7 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
         // CT_Choose
         LayoutAtomPtr pAtom( new ChooseAtom );
         mpNode->addChild( pAtom );
-        xRet.set( new ChooseContext( *this, xAttribs, pAtom ) );
+        xRet.set( new ChooseContext( *this, AttributeList( xAttribs ), pAtom ) );
          break;
     }
     case DGM_TOKEN( forEach ):
@@ -335,12 +334,12 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
         // CT_ForEach
         ForEachAtomPtr pAtom( new ForEachAtom(xAttribs) );
         mpNode->addChild( pAtom );
-        xRet.set( new ForEachContext( *this, xAttribs, pAtom ) );
+        xRet.set( new ForEachContext( *this, AttributeList( xAttribs ), pAtom ) );
         break;
     }
     case DGM_TOKEN( constrLst ):
         // CT_Constraints
-        xRet.set( new ConstraintListContext( *this, xAttribs, mpNode ) );
+        xRet.set( new ConstraintListContext( *this, AttributeList( xAttribs ), mpNode ) );
         break;
     case DGM_TOKEN( presOf ):
     {

@@ -29,7 +29,7 @@ namespace oox { namespace drawingml {
 class OOX_DLLPUBLIC ConnectorShapeContext : public ShapeContext
 {
 public:
-    ConnectorShapeContext( ::oox::core::ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pGroupShapePtr );
+    ConnectorShapeContext( ::oox::core::ContextHandler2Helper& rParent, ShapePtr pMasterShapePtr, ShapePtr pGroupShapePtr );
     virtual ~ConnectorShapeContext();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 };
