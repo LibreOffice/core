@@ -67,7 +67,10 @@ public:
         Name,
         // Indicator whether or not there is a slide transition associated
         // with this slide.
-        TransitionEffectIndicator
+        TransitionEffectIndicator,
+        // Indicator whether or not there is a custom animation associated
+        // with this slide.
+        CustomAnimationEffectIndicator
     };
     /** Two coordinate systems are supported.  They differ only in
         translation not in scale.  Both relate to pixel values in the window.
@@ -109,6 +112,7 @@ public:
         const CoordinateSystem eCoordinateSystem);
 
     Image GetTransitionEffectIcon (void) const;
+    Image GetCustomAnimationEffectIcon (void) const;
 
 private:
     SharedSdWindow mpWindow;
@@ -118,7 +122,9 @@ private:
     Rectangle maPageNumberAreaBoundingBox;
     Rectangle maPreviewBoundingBox;
     Rectangle maTransitionEffectBoundingBox;
+    Rectangle maCustomAnimationEffectBoundingBox;
     const Image maTransitionEffectIcon;
+    const Image maCustomAnimationEffectIcon;
     const ::boost::shared_ptr<Font> mpPageNumberFont;
 
     Size GetPageNumberAreaSize (const int nPageCount);

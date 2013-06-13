@@ -71,6 +71,8 @@ public:
         const OutputDevice* pReferenceDevice) const;
 
 private:
+    const SlideSorter& mrSlideSorter;
+    model::SlideSorterModel& mrModel;
     const Layouter& mrLayouter;
     ::boost::shared_ptr<PageObjectLayouter> mpPageObjectLayouter;
     ::boost::shared_ptr<cache::PageCache> mpCache;
@@ -98,6 +100,9 @@ private:
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
     void PaintTransitionEffect (
+        OutputDevice& rDevice,
+        const model::SharedPageDescriptor& rpDescriptor) const;
+    void PaintCustomAnimationEffect (
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
     void PaintBorder (
