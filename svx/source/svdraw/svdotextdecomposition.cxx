@@ -1053,6 +1053,8 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
         aClipRange.expand(basegfx::B2DTuple(aAnchorTextSize.Width(), aAnchorTextSize.Height()) - aAdjOffset);
     }
 
+    rOutliner.SetStripArea(GetGeoRect());
+
     // now break up text primitives.
     impTextBreakupHandler aConverter(rOutliner);
     aConverter.decomposeBlockTextPrimitive(aNewTransformA, aNewTransformB, aClipRange);

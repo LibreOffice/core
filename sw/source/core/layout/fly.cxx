@@ -453,9 +453,12 @@ void SwFlyFrm::InitDrawObj( sal_Bool bNotify )
     SdrLayerID nHeavenId = pIDDMA->GetHeavenId();
     SdrLayerID nHellId = pIDDMA->GetHellId();
     // OD 2004-03-22 #i26791#
+    // At sw/source/core/basetyp/init.cxx:564, sw/source/core/unocore/unoframe.cxx:394,
+    // In case in document there has no opaque item, default set value. So a value will always exist.
+    // In case there is no opaque item, set layer to HellId.
     GetVirtDrawObj()->SetLayer( GetFmt()->GetOpaque().GetValue()
-                                ? nHeavenId
-                                : nHellId );
+                                ? nHellId
+                                : nHeavenId );
     if ( bNotify )
         NotifyDrawObj();
 }

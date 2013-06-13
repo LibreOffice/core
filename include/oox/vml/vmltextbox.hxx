@@ -59,8 +59,9 @@ struct TextPortionModel
 {
     TextFontModel       maFont;
     OUString     maText;
+    OUString     maJc;
 
-    explicit            TextPortionModel( const TextFontModel& rFont, const OUString& rText );
+    explicit            TextPortionModel( const TextFontModel& rFont, const OUString& rText, const OUString& rJc );
 };
 
 // ============================================================================
@@ -73,6 +74,12 @@ public:
 
     /** Appends a new text portion to the textbox. */
     void                appendPortion( const TextFontModel& rFont, const OUString& rText );
+
+    /** Appends LINE_BREAK to last text portion . */
+    void                appendLineBreak();
+
+    /** Set TextPortionModel`s justify. */
+    void                setJustify(const OUString& rText);
 
     /** Returns the current number of text portions. */
     inline size_t       getPortionCount() const { return maPortions.size(); }
@@ -92,6 +99,7 @@ private:
     typedef ::std::vector< TextPortionModel > PortionVector;
 
     PortionVector       maPortions;
+    OUString            maJc;
 };
 
 // ============================================================================

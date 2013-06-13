@@ -129,6 +129,7 @@ public:
 
 private:
     ImpEditEngine*  pImpEditEngine;
+    Rectangle*      mpStripRec;
 
                     EDITENG_DLLPRIVATE EditEngine( const EditEngine& );
     EDITENG_DLLPRIVATE EditEngine&      operator=( const EditEngine& );
@@ -579,6 +580,9 @@ public:
 
     bool Undo(EditView* pView);
     bool Redo(EditView* pView);
+
+    virtual void        SetStripArea( const Rectangle& rRect );
+    virtual void        GetStripArea( Rectangle& rRect );
 };
 
 #endif // _MyEDITENG_HXX
