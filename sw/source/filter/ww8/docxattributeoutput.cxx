@@ -2731,7 +2731,11 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                     m_pSerializer->startElementNS( XML_w, XML_pict,
                             FSEND );
 
-                    m_rExport.VMLExporter().AddSdrObject( *pSdrObj );
+                    // See WinwordAnchoring::SetAnchoring(), these are not part of the SdrObject, have to be passed around manually.
+                    const SwFrmFmt& rFrmFmt = rFrame.GetFrmFmt();
+                    SwFmtHoriOrient rHoriOri = rFrmFmt.GetHoriOrient();
+                    SwFmtVertOrient rVertOri = rFrmFmt.GetVertOrient();
+                    m_rExport.VMLExporter().AddSdrObject( *pSdrObj, rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(), rHoriOri.GetRelationOrient(), rVertOri.GetRelationOrient() );
 
                     m_pSerializer->endElementNS( XML_w, XML_pict );
 

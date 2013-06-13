@@ -29,16 +29,25 @@
 #include <vcl/cvtgrf.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
+
 #include <cstdio>
 
 
 using namespace sax_fastparser;
 using namespace oox::vml;
+using namespace com::sun::star;
 
 VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* pTextExport )
     : EscherEx( EscherExGlobalRef(new EscherExGlobal(0)), 0 )
     , m_pSerializer( pSerializer )
     , m_pTextExport( pTextExport )
+    , m_eHOri( 0 )
+    , m_eVOri( 0 )
+    , m_eHRel( 0 )
+    , m_eVRel( 0 )
     , m_pSdrObject( 0 )
     , m_pShapeAttrList( NULL )
     , m_nShapeType( ESCHER_ShpInst_Nil )
@@ -854,6 +863,77 @@ sal_Int32 VMLExport::StartShape()
             break;
     }
 
+    // anchoring
+    switch (m_eHOri)
+    {
+        case text::HoriOrientation::LEFT:
+            m_pShapeStyle->append(";mso-position-horizontal:left");
+            break;
+        case text::HoriOrientation::CENTER:
+            m_pShapeStyle->append(";mso-position-horizontal:center");
+            break;
+        case text::HoriOrientation::RIGHT:
+            m_pShapeStyle->append(";mso-position-horizontal:right");
+            break;
+        case text::HoriOrientation::INSIDE:
+            m_pShapeStyle->append(";mso-position-horizontal:inside");
+            break;
+        case text::HoriOrientation::OUTSIDE:
+            m_pShapeStyle->append(";mso-position-horizontal:outside");
+            break;
+        default:
+        case text::HoriOrientation::NONE:
+            break;
+    }
+    switch (m_eHRel)
+    {
+        case text::RelOrientation::PAGE_PRINT_AREA:
+            m_pShapeStyle->append(";mso-position-horizontal-relative:margin");
+            break;
+        case text::RelOrientation::PAGE_FRAME:
+        case text::RelOrientation::PAGE_LEFT:
+        case text::RelOrientation::PAGE_RIGHT:
+            m_pShapeStyle->append(";mso-position-horizontal-relative:page");
+            break;
+        case text::RelOrientation::CHAR:
+            m_pShapeStyle->append(";mso-position-horizontal-relative:char");
+            break;
+        default:
+            break;
+    }
+
+    switch (m_eVOri)
+    {
+        case text::VertOrientation::TOP:
+        case text::VertOrientation::LINE_TOP:
+        case text::VertOrientation::CHAR_TOP:
+            m_pShapeStyle->append(";mso-position-vertical:top");
+            break;
+        case text::VertOrientation::CENTER:
+        case text::VertOrientation::LINE_CENTER:
+            m_pShapeStyle->append(";mso-position-vertical:center");
+            break;
+        case text::VertOrientation::BOTTOM:
+        case text::VertOrientation::LINE_BOTTOM:
+        case text::VertOrientation::CHAR_BOTTOM:
+            m_pShapeStyle->append(";mso-position-vertical:bottom");
+            break;
+        default:
+        case text::VertOrientation::NONE:
+            break;
+    }
+    switch (m_eVRel)
+    {
+        case text::RelOrientation::PAGE_PRINT_AREA:
+            m_pShapeStyle->append(";mso-position-vertical-relative:margin");
+            break;
+        case text::RelOrientation::PAGE_FRAME:
+            m_pShapeStyle->append(";mso-position-vertical-relative:page");
+            break;
+        default:
+            break;
+    }
+
     // add style
     m_pShapeAttrList->add( XML_style, m_pShapeStyle->makeStringAndClear() );
 
@@ -913,9 +993,13 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
     }
 }
 
-sal_uInt32 VMLExport::AddSdrObject( const SdrObject& rObj )
+sal_uInt32 VMLExport::AddSdrObject( const SdrObject& rObj, const sal_Int16 eHOri, const sal_Int16 eVOri, const sal_Int16 eHRel, const sal_Int16 eVRel )
 {
     m_pSdrObject = &rObj;
+    m_eHOri = eHOri;
+    m_eVOri = eVOri;
+    m_eHRel = eHRel;
+    m_eVRel = eVRel;
     return EscherEx::AddSdrObject(rObj);
 }
 

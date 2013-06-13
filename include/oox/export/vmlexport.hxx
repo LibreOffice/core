@@ -50,6 +50,9 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     /// Parent exporter, used for text callback.
     VMLTextExport* m_pTextExport;
 
+    /// Anchoring.
+    sal_Int16 m_eHOri, m_eVOri, m_eHRel, m_eVRel;
+
     /// The object we're exporting.
     const SdrObject* m_pSdrObject;
 
@@ -80,7 +83,7 @@ public:
     /// Export the sdr object as VML.
     ///
     /// Call this when you need to export the object as VML.
-    sal_uInt32 AddSdrObject( const SdrObject& rObj );
+    sal_uInt32 AddSdrObject( const SdrObject& rObj, const sal_Int16 eHOri = -1, const sal_Int16 eVOri = -1, const sal_Int16 eHRel = -1, const sal_Int16 eVRel = -1 );
 
 protected:
     /// Add an attribute to the generated <v:shape/> element.
