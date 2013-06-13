@@ -5584,16 +5584,22 @@ if test "$GCC" = "yes"; then
 
     if test "$HAVE_CXX11" = TRUE; then
         AC_MSG_CHECKING([whether using C++11 causes libstdc++ 4.7.0/4.7.1 ABI breakage])
-        # This should check libstdc++ version, not gcc, but clang has incidentally C++11 support
-        # disabled in this case by the __float128 case below.
+        AC_LANG_PUSH([C++])
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-#if __GNUC__ == 4 && __GNUC_MINOR__ == 7 && (__GNUC_PATCHLEVEL__ == 0 || __GNUC_PATCHLEVEL__ == 1)
-abi broken
+#include <list>
+#if !defined(__GLIBCXX__)
+/* ok */
+#elif __GLIBCXX__ < 20111004
+/* before breakage */
+#elif __GLIBCXX__ > 20120703
+/* after breakage */
 #else
+abi broken
 #endif
             ]])], [AC_MSG_RESULT(no, ok)],
             [AC_MSG_RESULT(yes, disabling C++11)
              HAVE_CXX11=])
+        AC_LANG_POP([C++])
     fi
 
     if test "$HAVE_CXX11" = TRUE; then
@@ -5643,7 +5649,7 @@ return !(i != 0 && j != 0);
 
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <vector>
-    // some Clang fail when compiling against GCC 4.7 headers with -std=gnu++0x
+    // some Clang fail when compiling against libstdc++ headers with -std=gnu++0x
     // (__float128)
 ]])
         ],[ AC_MSG_RESULT(yes) ],
@@ -5660,7 +5666,7 @@ return !(i != 0 && j != 0);
             CXXFLAGS="$CXXFLAGS -D__float128=void"
             AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <vector>
-    // some Clang fail when compiling against GCC 4.7 headers with -std=gnu++0x
+    // some Clang fail when compiling against libstdc++ headers with -std=gnu++0x
     // (__float128)
 ]])
             ],
