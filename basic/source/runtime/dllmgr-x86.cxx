@@ -669,7 +669,7 @@ OUString fullDllName(OUString const & name) {
 
 struct SbiDllMgr::Impl: private boost::noncopyable {
 private:
-    typedef std::map< OUString, Reference< Dll > > Dlls;
+    typedef std::map< OUString, rtl::Reference< Dll > > Dlls;
 
 public:
     Dll * getDll(OUString const & name);
