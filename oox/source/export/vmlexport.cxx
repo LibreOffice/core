@@ -27,6 +27,7 @@
 #include <tools/stream.hxx>
 #include <svx/svdotext.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <filter/msfilter/msdffimp.hxx>
 
 #include <cstdio>
 
@@ -688,6 +689,26 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     }
                 }
                 break;
+            case ESCHER_Prop_gtextUNICODE:
+                {
+                    SvMemoryStream aStream;
+                    aStream.Write(it->pBuf, it->nPropSize);
+                    aStream.Seek(0);
+                    OUString aTextPathString = SvxMSDffManager::MSDFFReadZString(aStream, it->nPropSize, true);
+
+                    m_pSerializer->singleElementNS( XML_v, XML_path,
+                            XML_textpathok, "t",
+                            FSEND );
+
+                    m_pSerializer->singleElementNS( XML_v, XML_textpath,
+                            XML_on, "t",
+                            XML_fitshape, "t",
+                            XML_string, OUStringToOString(aTextPathString, RTL_TEXTENCODING_UTF8),
+                            FSEND );
+
+                    bAlreadyWritten[ESCHER_Prop_gtextUNICODE] = true;
+                }
+                break;
             default:
 #if OSL_DEBUG_LEVEL > 0
                 fprintf( stderr, "TODO VMLExport::Commit(), unimplemented id: %d, value: %" SAL_PRIuUINT32 ", data: [%" SAL_PRIuUINT32 ", %p]\n",
@@ -851,7 +872,7 @@ sal_Int32 VMLExport::StartShape()
 
     // now check if we have some text and we have a text exporter registered
     const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, m_pSdrObject);
-    if (pTxtObj && m_pTextExport)
+    if (pTxtObj && m_pTextExport && m_nShapeType != ESCHER_ShpInst_TextPlainText)
     {
         const OutlinerParaObject* pParaObj = 0;
         bool bOwnParaObj = false;
