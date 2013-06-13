@@ -633,6 +633,8 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 
     sal_uLong               nDummy;
 
+    Rectangle               mStripRec;
+
     DECL_LINK(              ParaVisibleStateChangedHdl, Paragraph* );
     DECL_LINK(              BeginMovingParagraphsHdl, void* );
     DECL_LINK(              EndMovingParagraphsHdl, MoveParagraphsInfo* );
@@ -1040,6 +1042,9 @@ public:
 
     // convenient method to determine the bullets/numbering status for all paragraphs
     sal_Int32 GetBulletsNumberingStatus() const;
+
+    void        SetStripArea( const Rectangle& rRect ) { mStripRec = rRect; }
+    Rectangle   GetStripArea() const { return mStripRec; };
 };
 
 #endif

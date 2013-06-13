@@ -66,6 +66,7 @@ struct TextPortionModel
     TextParagraphModel  maParagraph;
     TextFontModel       maFont;
     OUString     maText;
+    OUString     maJc;
 
     explicit            TextPortionModel( const TextParagraphModel& rParagraph, const TextFontModel& rFont, const OUString& rText );
 };
@@ -99,6 +100,7 @@ private:
     typedef ::std::vector< TextPortionModel > PortionVector;
 
     PortionVector       maPortions;
+    OUString            maJc;
 };
 
 // ============================================================================

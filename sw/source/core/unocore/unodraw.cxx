@@ -2754,8 +2754,8 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape ) throw (uno::Ru
                     if( FmFormInventor != pObj->GetObjInventor())
                     {
                         pObj->SetLayer( pSwShape->pImpl->GetOpaque()
-                                        ? pDoc->GetInvisibleHeavenId()
-                                        : pDoc->GetInvisibleHellId() );
+                                        ? pDoc->GetInvisibleHellId()
+                                        : pDoc->GetInvisibleHeavenId() );
                     }
                     else
                     {

@@ -132,6 +132,15 @@ void TextPortionContext::onStartElement(const AttributeList& rAttribs)
         case OOX_TOKEN(doc, color):
             maFont.moColor = rAttribs.getString( OOX_TOKEN(doc, val) );
         break;
+        case OOX_TOKEN(doc, rFonts):
+            maFont.moName = rAttribs.getString( OOX_TOKEN(doc, ascii) );
+        break;
+        case OOX_TOKEN(doc, u):
+            maFont.monUnderline = rAttribs.getInteger( OOX_TOKEN(doc, val) );
+        break;
+        case OOX_TOKEN(doc, i):
+            maFont.mobItalic = true;
+        break;
     }
 }
 

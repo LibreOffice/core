@@ -1434,6 +1434,40 @@ static basegfx::B2DPolygon CreateArc( const Rectangle& rRect, const Point& rStar
         }
     }
 
+
+    // In LO, arc and rect relationship is:
+    // -----------------------------------
+    // |                                 |
+    // |                                 |
+    // |                                 |
+    // |                                 |
+    // ||                                |
+    // |||                               |
+    // |  ||                             |
+    // |    |||                          |
+    // |       ||||                      |
+    // |           ||||                  |
+    // -----------------------------------
+    // But in docx, arc and rect relationship is:
+    // ------------------
+    // ||               |
+    // |||              |
+    // |  ||            |
+    // |    |||         |
+    // |       ||||     |
+    // |           |||| |
+    // ------------------
+    // That is, using an equal rect size, drawing is not equal
+    // and LibreOffice draws it in half size. So, this is why
+    // we need to make the arc twice rect size.
+    aRect.Left() -= aRect.GetWidth();
+    aRect.Bottom() += aRect.GetHeight();
+    aStart.X() -= (aRect.Right() - aStart.X());
+    aStart.Y() += (aStart.Y() - aRect.Top());
+    aEnd.X() -= (aRect.Right() - aEnd.X());
+    aEnd.Y() += (aEnd.Y() - aRect.Top());
+
+
     Polygon aTempPoly( aRect, aStart, aEnd, POLY_ARC, bFullCircle );
     basegfx::B2DPolygon aRetval;
 

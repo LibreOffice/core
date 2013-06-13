@@ -1336,6 +1336,9 @@ Outliner::Outliner( SfxItemPool* pPool, sal_uInt16 nMode )
 
     nMaxDepth           = 9;
 
+    // Textbox's clipping rect
+    mStripRec = Rectangle();
+
     pParaList = new ParagraphList;
     pParaList->SetVisibleStateChangedHdl( LINK( this, Outliner, ParaVisibleStateChangedHdl ) );
     Paragraph* pPara = new Paragraph( 0 );
@@ -1784,6 +1787,10 @@ void Outliner::StripPortions()
 {
     DBG_CHKTHIS(Outliner,0);
     bStrippingPortions = sal_True;
+
+    // Set TextBox's clipping rect
+    pEditEngine->SetStripArea(GetStripArea());
+
     pEditEngine->StripPortions();
     bStrippingPortions = sal_False;
 }

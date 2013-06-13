@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#include <tools/gen.hxx>
 
 #include <rsc/rscsfx.hxx>
 #include <editeng/editdata.hxx>
@@ -129,6 +130,7 @@ public:
 
 private:
     ImpEditEngine*  pImpEditEngine;
+    Rectangle       mpStripRec;
 
                     EDITENG_DLLPRIVATE EditEngine( const EditEngine& );
     EDITENG_DLLPRIVATE EditEngine&      operator=( const EditEngine& );
@@ -579,6 +581,9 @@ public:
 
     bool Undo(EditView* pView);
     bool Redo(EditView* pView);
+
+    virtual void        SetStripArea( const Rectangle& rRect );
+    virtual void        GetStripArea( Rectangle& rRect );
 };
 
 #endif // _MyEDITENG_HXX
