@@ -2596,11 +2596,14 @@ struct LinesState
     LinesState(SvxBoxItem& rBoxItem_, SvxBoxInfoItem& rBoxInfoItem_)
         : rBoxItem(rBoxItem_)
         , rBoxInfoItem(rBoxInfoItem_)
+        , bDistanceIndeterminate(false)
     {
         std::fill_n(aBorderSet, 4, false);
         std::fill_n(aInnerLineSet, 2, false);
         std::fill_n(aBorderIndeterminate, 4, false);
         std::fill_n(aInnerLineIndeterminate, 2, false);
+        std::fill_n(aDistanceSet, 4, false);
+        std::fill_n(aDistance, 4, 0);
     }
 
     SvxBoxItem& rBoxItem;
@@ -2609,6 +2612,9 @@ struct LinesState
     bool aInnerLineSet[2];
     bool aBorderIndeterminate[4];
     bool aInnerLineIndeterminate[2];
+    bool aDistanceSet[4];
+    sal_uInt16 aDistance[4];
+    bool bDistanceIndeterminate;
 };
 
 class BoxItemWrapper
@@ -2694,6 +2700,21 @@ void lcl_MergeBorderOrInnerLine(
     }
 }
 
+void lcl_MergeDistance(
+        LinesState& rLinesState, const sal_uInt16 nIndex, const sal_uInt16 nDistance)
+{
+    if (rLinesState.aDistanceSet[nIndex])
+    {
+        if (!rLinesState.bDistanceIndeterminate)
+            rLinesState.bDistanceIndeterminate = nDistance != rLinesState.aDistance[nIndex];
+    }
+    else
+    {
+        rLinesState.aDistance[nIndex] = nDistance;
+        rLinesState.aDistanceSet[nIndex] = true;
+    }
+}
+
 void lcl_MergeCommonBorderAttr(LinesState& rLinesState, const SvxBoxItem& rCellBoxItem, const sal_Int32 nCellFlags)
 {
     if( (nCellFlags & (CELL_BEFORE|CELL_AFTER|CELL_UPPER|CELL_LOWER)) != 0 )
@@ -2714,6 +2735,9 @@ void lcl_MergeCommonBorderAttr(LinesState& rLinesState, const SvxBoxItem& rCellB
             else if( nCellFlags & CELL_AFTER )
                 lcl_MergeBorderLine(rLinesState, rCellBoxItem.GetLeft(), BOX_LINE_RIGHT, VALID_RIGHT);
         }
+
+        // NOTE: inner distances for cells outside the selected range
+        // are not relevant -> we ignore them.
     }
     else
     {
@@ -2723,6 +2747,11 @@ void lcl_MergeCommonBorderAttr(LinesState& rLinesState, const SvxBoxItem& rCellB
         lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetBottom(), BOX_LINE_BOTTOM, VALID_BOTTOM, nCellFlags & CELL_BOTTOM);
         lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetLeft(), BOX_LINE_LEFT, VALID_LEFT, nCellFlags & CELL_LEFT);
         lcl_MergeBorderOrInnerLine(rLinesState, rCellBoxItem.GetRight(), BOX_LINE_RIGHT, VALID_RIGHT, nCellFlags & CELL_RIGHT);
+
+        lcl_MergeDistance(rLinesState, BOX_LINE_TOP, rCellBoxItem.GetDistance(BOX_LINE_TOP));
+        lcl_MergeDistance(rLinesState, BOX_LINE_BOTTOM, rCellBoxItem.GetDistance(BOX_LINE_BOTTOM));
+        lcl_MergeDistance(rLinesState, BOX_LINE_LEFT, rCellBoxItem.GetDistance(BOX_LINE_LEFT));
+        lcl_MergeDistance(rLinesState, BOX_LINE_RIGHT, rCellBoxItem.GetDistance(BOX_LINE_RIGHT));
     }
 }
 
@@ -2794,6 +2823,19 @@ void SvxTableController::FillCommonBorderAttrFromSelectedCells( SvxBoxItem& rBox
                 aLinesState.rBoxInfoItem.SetValid(VALID_HORI);
             if (!aLinesState.aInnerLineIndeterminate[BOXINFO_LINE_VERT])
                 aLinesState.rBoxInfoItem.SetValid(VALID_VERT);
+
+            if (!aLinesState.bDistanceIndeterminate)
+            {
+                if (aLinesState.aDistanceSet[BOX_LINE_TOP])
+                    aLinesState.rBoxItem.SetDistance(aLinesState.aDistance[BOX_LINE_TOP], BOX_LINE_TOP);
+                if (aLinesState.aDistanceSet[BOX_LINE_BOTTOM])
+                    aLinesState.rBoxItem.SetDistance(aLinesState.aDistance[BOX_LINE_BOTTOM], BOX_LINE_BOTTOM);
+                if (aLinesState.aDistanceSet[BOX_LINE_LEFT])
+                    aLinesState.rBoxItem.SetDistance(aLinesState.aDistance[BOX_LINE_LEFT], BOX_LINE_LEFT);
+                if (aLinesState.aDistanceSet[BOX_LINE_RIGHT])
+                    aLinesState.rBoxItem.SetDistance(aLinesState.aDistance[BOX_LINE_RIGHT], BOX_LINE_RIGHT);
+                aLinesState.rBoxInfoItem.SetValid(VALID_DISTANCE);
+            }
         }
     }
 }
