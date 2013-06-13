@@ -6785,7 +6785,9 @@ AC_MSG_CHECKING([whether to enable EPM for packing])
 if test "$enable_epm" = "yes"; then
     AC_MSG_RESULT([yes])
     if test "$_os" != "WINNT"; then
-        if test -n "$with_epm"; then
+        if test $_os = Darwin; then
+            EPM=internal
+        elif test -n "$with_epm"; then
             EPM=$with_epm
         else
             AC_PATH_PROG(EPM, epm, no)
@@ -6806,17 +6808,6 @@ if test "$enable_epm" = "yes"; then
             if test "`echo $EPM_VERSION | cut -d'.' -f1`" -gt "3" || \
                test "`echo $EPM_VERSION | cut -d'.' -f1`" -eq "3" -a "`echo $EPM_VERSION | cut -d'.' -f2`" -ge "7"; then
                 AC_MSG_RESULT([OK, >= 3.7])
-                if test "$_os" = "Darwin"; then
-                    AC_MSG_CHECKING([which PackageMaker EPM thinks to use])
-                    _pm=`strings $EPM | grep PackageMaker | cut -d" " -f1`
-                    if test "$_pm" = "/Developer/Applications/PackageMaker.app/Contents/MacOS/PackageMaker"; then
-                        AC_MSG_ERROR([$_pm; PackageMaker expected in wrong path. Either patch your epm with the right path (/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker) or use internal patched epm (--with-epm=internal)])
-                    elif test "$_pm" = "/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker"; then
-                        AC_MSG_RESULT([$_pm, ok])
-                    else # we never should get here, but go safe
-                        AC_MSG_ERROR([$_pm; PackageMaker expected in unknown path. Either patch your epm with the right path (/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker) or use internal patched epm (--with-epm=internal)])
-                    fi
-                fi
             else
                 AC_MSG_RESULT([too old. epm >= 3.7 is required.])
                 echo "EPM will be built."
