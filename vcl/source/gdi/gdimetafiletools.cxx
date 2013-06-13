@@ -1083,7 +1083,6 @@ bool VCL_DLLPUBLIC usesClipActions(const GDIMetaFile& rSource)
             case META_MOVECLIPREGION_ACTION :
             {
                 return true;
-                break;
             }
 
             default: break;
