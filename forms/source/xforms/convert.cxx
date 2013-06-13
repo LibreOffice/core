@@ -276,11 +276,9 @@ namespace
     // ------------------------------------------------------------------------
     UNODate lcl_toUNODate( const OUString& rString )
     {
-        bool bWellformed = true;
-
         UNODate aDate( 1, 1, 1900 );
 
-        bWellformed = ISO8601parseDate(rString, aDate);
+        bool bWellformed = ISO8601parseDate(rString, aDate);
 
         // sanity checks
         if ( ( aDate.Year > 9999 ) || ( aDate.Month < 1 ) || ( aDate.Month > 12 ) || ( aDate.Day < 1 ) || ( aDate.Day > 31 ) )
@@ -340,11 +338,9 @@ namespace
     // ------------------------------------------------------------------------
     UNOTime lcl_toUNOTime( const OUString& rString )
     {
-        bool bWellformed = true;
-
         UNOTime aTime( 0, 0, 0, 0 );
 
-        bWellformed = ISO8601parseTime(rString, aTime);
+        bool bWellformed = ISO8601parseTime(rString, aTime);
 
         // sanity checks
         // note that Seconds == 60 denotes leap seconds. Normally, they're not allowed everywhere,
