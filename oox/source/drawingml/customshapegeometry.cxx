@@ -406,9 +406,8 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                     n = rValue[ 1 ];
             }
             if ( ( n >= '0' ) && ( n <= '9' ) )
-            {
-                // seems to be a ST_Coordinate - convert EMUs to 1/100th mm
-                aRet.Value = Any( GetCoordinate( rValue ) );
+            {   // seems to be a ST_Coordinate
+                aRet.Value = Any( (sal_Int32)(rValue.toInt32() ) );
                 aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
             }
             else
