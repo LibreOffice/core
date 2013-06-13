@@ -140,9 +140,6 @@ Animator::AnimationId Animator::AddAnimation (
     return pAnimation->mnAnimationId;
 }
 
-
-
-
 void Animator::RemoveAnimation (const Animator::AnimationId nId)
 {
     OSL_ASSERT( ! mbIsDisposed);

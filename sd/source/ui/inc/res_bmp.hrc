@@ -44,6 +44,7 @@
 // additional effects
 
 #define BMP_FADE_EFFECT_INDICATOR           RID_SD_START+331
+#define BMP_CUSTOM_ANIMATION_INDICATOR      RID_SD_START+332
 
 #define BMP_COMMENTS_INDICATOR              RID_SD_START+338
 
