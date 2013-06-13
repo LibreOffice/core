@@ -144,6 +144,7 @@ XFParaStyle& XFParaStyle::operator=(const XFParaStyle& other)
         m_strParentStyleName = other.m_strParentStyleName;
         m_nFlag = other.m_nFlag;
         m_eAlignType = other.m_eAlignType;
+        m_eLastLineAlign = other.m_eLastLineAlign;
         m_fTextIndent = other.m_fTextIndent;
         m_bNumberLines = other.m_bNumberLines;
         m_nLineNumberRestart = other.m_nLineNumberRestart;
