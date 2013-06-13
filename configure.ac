@@ -5560,30 +5560,50 @@ dnl C++11
 dnl ===================================================================
 
 CXXFLAGS_CXX11=
+HAVE_CXX11=
 if test "$GCC" = "yes"; then
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-#if __GNUC__ == 4 && __GNUC_MINOR__ == 7 && (__GNUC_PATCHLEVEL__ == 0 || __GNUC_PATCHLEVEL__ == 1)
-#else
-abi ok
-#endif
-]])],[HAVE_BROKEN_ABI=TRUE],[HAVE_BROKEN_ABI=FALSE])
-
-    AC_MSG_CHECKING([whether $CXX supports C++11 without Language Defect 757])
-    # This should check libstdc++ version, not gcc, but clang has incidentally C++11 support
-    # disabled in this case by the __float128 case below.
-    if test "$HAVE_BROKEN_ABI" = "TRUE"; then
-        AC_MSG_NOTICE([Not using -std=gnu++0x on $CXX version 4.7.0/4.7.1 due to libstdc++ ABI breakage.])
-    else
+    CXXFLAGS_CXX11=
+    AC_MSG_CHECKING([whether $CXX supports C++11])
+    for flag in -std=gnu++11 -std=gnu++0x -std=c++11 -std=c++0x ; do
         save_CXXFLAGS=$CXXFLAGS
-        CXXFLAGS="$CXXFLAGS -std=gnu++0x"
+        CXXFLAGS="$CXXFLAGS $flag -Werror"
+        AC_LANG_PUSH([C++])
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[void f() {}]])],[CXXFLAGS_CXX11=$flag])
+        AC_LANG_POP([C++])
+        CXXFLAGS=$save_CXXFLAGS
+        if test -n "$CXXFLAGS_CXX11"; then
+            HAVE_CXX11=TRUE
+            break
+        fi
+    done
+    if test "$HAVE_CXX11" = TRUE; then
+        AC_MSG_RESULT([yes ($CXXFLAGS_CXX11)])
+    else
+        AC_MSG_RESULT(no)
+    fi
+
+    if test "$HAVE_CXX11" = TRUE; then
+        AC_MSG_CHECKING([whether using C++11 causes libstdc++ 4.7.0/4.7.1 ABI breakage])
+        # This should check libstdc++ version, not gcc, but clang has incidentally C++11 support
+        # disabled in this case by the __float128 case below.
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#if __GNUC__ == 4 && __GNUC_MINOR__ == 7 && (__GNUC_PATCHLEVEL__ == 0 || __GNUC_PATCHLEVEL__ == 1)
+abi broken
+#else
+#endif
+            ]])], [AC_MSG_RESULT(no, ok)],
+            [AC_MSG_RESULT(yes, disabling C++11)
+             HAVE_CXX11=])
+    fi
+
+    if test "$HAVE_CXX11" = TRUE; then
+        AC_MSG_CHECKING([whether $CXX supports C++11 without Language Defect 757])
+        save_CXXFLAGS=$CXXFLAGS
+        CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
         AC_LANG_PUSH([C++])
 
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <stddef.h>
-
-#include <vector>
-    // some Clang fail when compiling against GCC 4.7 headers with -std=gnu++0x
-    // (__float128)
 
 template <typename T, size_t S> char (&sal_n_array_size( T(&)[S] ))[S];
 
@@ -5607,22 +5627,37 @@ size_t i = sizeof(sal_n_array_size(thinga));
 size_t j = sizeof(sal_n_array_size(thingb));
 return !(i != 0 && j != 0);
 ]])
-        ],[
-            HAVE_CXX11=TRUE
-            if test "$CPP_LIBRARY" = LIBCPP -a $_os = Darwin; then
-                : Already set CXX to contain -std=c++11
-            else
-                CXXFLAGS_CXX11=-std=gnu++0x
-            fi
-        ],[])
+        ], [ AC_MSG_RESULT(yes) ],
+        [ AC_MSG_RESULT(no)
+          HAVE_CXX11=
+        ])
+        AC_LANG_POP([C++])
+        CXXFLAGS=$save_CXXFLAGS
+    fi
+
+    if test "$HAVE_CXX11" = TRUE; then
+        AC_MSG_CHECKING([whether $CXX supports C++11 without __float128 compile error])
+        save_CXXFLAGS=$CXXFLAGS
+        CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+        AC_LANG_PUSH([C++])
+
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <vector>
+    // some Clang fail when compiling against GCC 4.7 headers with -std=gnu++0x
+    // (__float128)
+]])
+        ],[ AC_MSG_RESULT(yes) ],
+        [ AC_MSG_RESULT(no)
+          HAVE_CXX11=
+        ])
 
         AC_LANG_POP([C++])
         CXXFLAGS=$save_CXXFLAGS
     fi
-    if test "$HAVE_CXX11" = "TRUE"; then
-        AC_MSG_RESULT([yes ($CXXFLAGS_CXX11)])
-    else
-        AC_MSG_RESULT([no])
+
+    if test "$HAVE_CXX11" != "TRUE" -a -n "$CXXFLAGS_CXX11"; then
+        AC_MSG_NOTICE([Disabling C++11 support])
+        CXXFLAGS_CXX11=
     fi
 fi
 
@@ -5633,8 +5668,8 @@ dnl ==================================
 dnl Check for C++11 "= delete" support
 dnl ==================================
 
-AC_MSG_CHECKING([whether $CXX supports C++11 = delete syntax])
 if test "$HAVE_CXX11" = "TRUE"; then
+    AC_MSG_CHECKING([whether $CXX supports C++11 = delete syntax])
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
     AC_LANG_PUSH([C++])
@@ -5653,16 +5688,14 @@ struct A
     else
         AC_MSG_RESULT([no])
     fi
-else
-    AC_MSG_RESULT([no])
 fi
 
 dnl ==================================
 dnl Check for C++11 "override" support
 dnl ==================================
 
-AC_MSG_CHECKING([whether $CXX supports C++11 "override" syntax])
 if test "$HAVE_CXX11" = "TRUE"; then
+    AC_MSG_CHECKING([whether $CXX supports C++11 "override" syntax])
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
     AC_LANG_PUSH([C++])
@@ -5686,16 +5719,14 @@ struct B : A
     else
         AC_MSG_RESULT([no])
     fi
-else
-    AC_MSG_RESULT([no])
 fi
 
 dnl ==================================
 dnl Check for C++11 "final" support
 dnl ==================================
 
-AC_MSG_CHECKING([whether $CXX supports C++11 "final" syntax])
 if test "$HAVE_CXX11" = "TRUE"; then
+    AC_MSG_CHECKING([whether $CXX supports C++11 "final" syntax])
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
     AC_LANG_PUSH([C++])
@@ -5755,30 +5786,30 @@ struct D : C
     else
         AC_MSG_RESULT([no])
     fi
-else
-    AC_MSG_RESULT([no])
 fi
 
 dnl ===================================================================
 dnl Check for C++11 perfect forwarding support
 dnl ===================================================================
-AC_MSG_CHECKING([whether $CXX supports C++11 perfect forwarding])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-AC_LANG_PUSH([C++])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+if test "$HAVE_CXX11" = "TRUE"; then
+    AC_MSG_CHECKING([whether $CXX supports C++11 perfect forwarding])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
         #include <utility>
         template<typename T, typename... Args> T * f(Args &&... v) {
             return new T(std::forward<Args>(v)...);
         }
-    ]], [[
+        ]], [[
         f<int>(0);
-    ]])], [perfect_forwarding=yes], [perfect_forwarding=no])
-AC_LANG_POP([C++])
-CXXFLAGS=$save_CXXFLAGS
-AC_MSG_RESULT([$perfect_forwarding])
-if test "$perfect_forwarding" = yes; then
-    AC_DEFINE([HAVE_CXX11_PERFECT_FORWARDING])
+        ]])], [perfect_forwarding=yes], [perfect_forwarding=no])
+    AC_LANG_POP([C++])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_MSG_RESULT([$perfect_forwarding])
+    if test "$perfect_forwarding" = yes; then
+        AC_DEFINE([HAVE_CXX11_PERFECT_FORWARDING])
+    fi
 fi
 
 dnl ===================================================================
