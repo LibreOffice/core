@@ -1434,6 +1434,14 @@ static basegfx::B2DPolygon CreateArc( const Rectangle& rRect, const Point& rStar
         }
     }
 
+    // Make twice - this is wrong.
+    aRect.Left() -= aRect.GetWidth();
+    aRect.Bottom() += aRect.GetHeight();
+    aStart.X() -= (aRect.Right() - aStart.X());
+    aStart.Y() += (aStart.Y() - aRect.Top());
+    aEnd.X() -= (aRect.Right() - aEnd.X());
+    aEnd.Y() += (aEnd.Y() - aRect.Top());
+
     Polygon aTempPoly( aRect, aStart, aEnd, POLY_ARC, bFullCircle );
     basegfx::B2DPolygon aRetval;
 

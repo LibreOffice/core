@@ -49,6 +49,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflbmtit.hxx>
+#include <svx/xflclit.hxx>
 #include <svx/svdundo.hxx>
 #include "svdfmtf.hxx"
 #include <svx/sdgcpitm.hxx>
@@ -977,7 +978,8 @@ void SdrGrafObj::SetPage( SdrPage* pNewPage )
         }
         else
         {
-            SetMergedItem(XFillStyleItem(XFILL_NONE));
+            SetMergedItem(XFillColorItem(String(), Color( COL_WHITE )));
+            SetMergedItem(XFillStyleItem(XFILL_SOLID));
             SetMergedItem(XLineStyleItem(XLINE_NONE));
         }
     }

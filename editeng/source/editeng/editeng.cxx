@@ -102,6 +102,7 @@ EditEngine::EditEngine( SfxItemPool* pItemPool )
 {
     DBG_CTOR( EditEngine, 0 );
     pImpEditEngine = new ImpEditEngine( this, pItemPool );
+    mpStripRec = new Rectangle();
 }
 
 EditEngine::~EditEngine()
@@ -1879,12 +1880,29 @@ void EditEngine::StripPortions()
 {
     DBG_CHKTHIS( EditEngine, 0 );
     VirtualDevice aTmpDev;
-    Rectangle aBigRect( Point( 0, 0 ), Size( 0x7FFFFFFF, 0x7FFFFFFF ) );
-    if ( IsVertical() )
+
+    // Set Clipping area. From svdotextdecomposition.cxx, set this clipping rect.
+    // this rect is outside group rect, so calc all paragraph's height.
+    // If it is larger than rect - remove the last paragraph's height.
+    Rectangle aBigRect;
+
+    GetStripArea(aBigRect);
+    sal_uInt32 rectHeight = aBigRect.GetHeight();
+
+    sal_uInt16 nParaNum = GetParagraphCount();
+    sal_uInt32 nHeight = 0;
+    sal_uInt32 nLastHeight = 0;
+    for(int i = 0; i < nParaNum; i ++)
     {
-        aBigRect.Right() = 0;
-        aBigRect.Left() = -0x7FFFFFFF;
+        nLastHeight = GetTextHeight( i );
+        nHeight += nLastHeight;
+        if (nHeight >= rectHeight)
+            break;
     }
+
+    aBigRect.Top() = 0;
+    aBigRect.Bottom() = (rectHeight - nLastHeight);
+
     pImpEditEngine->Paint( &aTmpDev, aBigRect, Point(), sal_True );
 }
 
@@ -2936,11 +2954,21 @@ EditPaM EditEngine::InsertLineBreak(const EditSelection& rEditSelection)
     return pImpEditEngine->InsertLineBreak(rEditSelection);
 }
 
+void EditEngine::SetStripArea( const Rectangle& rRect )
+{
+    (*mpStripRec) = rRect;
+}
+
+void EditEngine::GetStripArea( Rectangle& rRect )
+{
+    rRect = (*mpStripRec);
+}
+
+
 EFieldInfo::EFieldInfo()
 {
     pFieldItem = NULL;
 }
-
 
 EFieldInfo::EFieldInfo( const SvxFieldItem& rFieldItem, sal_Int32 nPara, sal_uInt16 nPos ) : aPosition( nPara, nPos )
 {

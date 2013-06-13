@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/text/ControlCharacter.hpp>
 
 namespace oox {
 namespace vml {
@@ -34,9 +35,10 @@ TextFontModel::TextFontModel()
 {
 }
 
-TextPortionModel::TextPortionModel( const TextFontModel& rFont, const OUString& rText ) :
+TextPortionModel::TextPortionModel( const TextFontModel& rFont, const OUString& rText, const OUString& rJc ) :
     maFont( rFont ),
-    maText( rText )
+    maText( rText ),
+    maJc( rJc )
 {
 }
 
@@ -52,7 +54,20 @@ TextBox::TextBox(ShapeTypeModel& rTypeModel)
 
 void TextBox::appendPortion( const TextFontModel& rFont, const OUString& rText )
 {
-    maPortions.push_back( TextPortionModel( rFont, rText ) );
+    maPortions.push_back( TextPortionModel( rFont, rText, maJc ) );
+}
+
+void TextBox::appendLineBreak()
+{
+    if (getPortionCount() <= 0)
+        return;
+
+    maPortions.push_back( TextPortionModel( maPortions.back().maFont, OUString("\x0A"), maJc ) );
+}
+
+void TextBox::setJustify(const OUString& rText)
+{
+    maJc = rText;
 }
 
 const TextFontModel* TextBox::getFirstFont() const
@@ -88,6 +103,29 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
             aPropertyValue.Value = uno::makeAny(double(rFont.monSize.get()) / 2.);
             aPropVec.push_back(aPropertyValue);
         }
+
+        if (rFont.moName.has())
+        {
+            aPropertyValue.Name = "CharFontName";
+            aPropertyValue.Value = uno::makeAny(rFont.moName.get());
+            aPropVec.push_back(aPropertyValue);
+        }
+        if (!aIt->maJc.isEmpty())
+        {
+            sal_Int16 adj = 0; // left - SVX_ADJUST_LEFT
+            if (aIt->maJc == "right") // - SVX_ADJUST_RIGHT
+                adj = 1;
+            else if (aIt->maJc == "block") // - SVX_ADJUST_BLOCK
+                adj = 2;
+            else if (aIt->maJc == "center") // - SVX_ADJUST_CENTER
+                adj = 3;
+            else if (aIt->maJc == "blockline") // - SVX_ADJUST_BLOCKLINE
+                adj = 4;
+            aPropertyValue.Name = "ParaAdjust";
+            aPropertyValue.Value = uno::makeAny(adj);
+            aPropVec.push_back(aPropertyValue);
+        }
+
         uno::Sequence<beans::PropertyValue> aPropSeq(aPropVec.size());
         beans::PropertyValue* pValues = aPropSeq.getArray();
         for (std::vector<beans::PropertyValue>::iterator i = aPropVec.begin(); i != aPropVec.end(); ++i)

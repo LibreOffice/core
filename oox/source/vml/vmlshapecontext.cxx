@@ -246,9 +246,23 @@ ContextHandlerRef ShapeContextBase::createShapeContext( ContextHandler2Helper& r
             return new GroupShapeContext( rParent, rShapes.createShape< GroupShape >(), rAttribs );
         case VML_TOKEN( shape ):
             if (rAttribs.hasAttribute(XML_path))
-                return new ShapeContext( rParent, rShapes.createShape< BezierShape >(), rAttribs );
-            else
-                return new ShapeContext( rParent, rShapes.createShape< ComplexShape >(), rAttribs );
+            {
+                bool bBezier = false;
+                const OUString path = rAttribs.getXString( XML_path, OUString() );
+                for ( sal_Int32 i = 0; i < path.getLength(); i++ )
+                {
+                    if (path[i] == 'c')
+                    {
+                        bBezier = true;
+                        break;
+                    }
+                }
+                if (bBezier)
+                {
+                    return new ShapeContext( rParent, rShapes.createShape< BezierShape >(), rAttribs );
+                }
+            }
+            return new ShapeContext( rParent, rShapes.createShape< ComplexShape >(), rAttribs );
         case VML_TOKEN( rect ):
             return new RectangleShapeContext( rParent, rAttribs, rShapes.createShape< RectangleShape >() );
         case VML_TOKEN( roundrect ):

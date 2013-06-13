@@ -125,6 +125,15 @@ void TextPortionContext::onStartElement(const AttributeList& rAttribs)
         case OOX_TOKEN(doc, sz):
             maFont.monSize = rAttribs.getInteger( OOX_TOKEN(doc, val) );
         break;
+        case OOX_TOKEN(doc, rFonts):
+            maFont.moName = rAttribs.getString( OOX_TOKEN(doc, ascii) );
+        break;
+        case OOX_TOKEN(doc, u):
+            maFont.monUnderline = rAttribs.getInteger( OOX_TOKEN(doc, val) );
+        break;
+        case OOX_TOKEN(doc, i):
+            maFont.mobItalic = true;
+        break;
     }
 }
 
@@ -203,10 +212,22 @@ ContextHandlerRef TextBoxContext::onCreateContext( sal_Int32 nElement, const Att
             if( nElement == XML_font ) return new TextPortionContext( *this, mrTextBox, TextFontModel(), nElement, rAttribs );
         break;
         case OOX_TOKEN(doc, txbxContent):
-            if (nElement == OOX_TOKEN(doc, p)) return this;
+            if (nElement == OOX_TOKEN(doc, p))
+            {
+                if (mrTextBox.getPortionCount() > 0)
+                    mrTextBox.appendLineBreak();
+                mrTextBox.setJustify(OUString(""));
+
+                return this;
+            }
         break;
         case OOX_TOKEN(doc, p):
             if (nElement == OOX_TOKEN(doc, r)) return new TextPortionContext( *this, mrTextBox, TextFontModel(), nElement, rAttribs );
+            if (nElement == OOX_TOKEN(doc, pPr)) return this;
+        break;
+        case OOX_TOKEN(doc, pPr):
+            if (nElement == OOX_TOKEN(doc, jc))
+                mrTextBox.setJustify(rAttribs.getString( OOX_TOKEN(doc, val) ).get());
         break;
     }
     return 0;
