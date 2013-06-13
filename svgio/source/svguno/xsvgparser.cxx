@@ -151,9 +151,9 @@ namespace svgio
                     // be processable from all our processors
                     xParser->parseStream(myInputSource);
                 }
-                catch(uno::Exception&)
+                catch(const uno::Exception& e)
                 {
-                    OSL_ENSURE(false, "Parse error (!)");
+                    SAL_WARN( "svg", "Parse error! : " << e.Message);
                 }
 
                 // decompose to primitives

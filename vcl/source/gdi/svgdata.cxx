@@ -82,9 +82,9 @@ BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
                 }
             }
         }
-        catch(const uno::Exception&)
+        catch(const uno::Exception& e)
         {
-            OSL_ENSURE(sal_False, "Got no graphic::XPrimitive2DRenderer (!)" );
+            SAL_WARN( "vcl", "Got no graphic::XPrimitive2DRenderer! : " << e.Message);
         }
     }
 
