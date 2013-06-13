@@ -57,6 +57,7 @@ long LimitBoxImpl::Notify( NotifyEvent& rNEvt )
     {
         case EVENT_LOSEFOCUS:
         {
+            nHandled = LimitBox::Notify( rNEvt );
             uno::Sequence< beans::PropertyValue > aArgs( 1 );
             aArgs[0].Name  = OUString( "DBLimit.Value" );
             aArgs[0].Value = uno::makeAny( GetValue() );

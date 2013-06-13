@@ -85,7 +85,7 @@ void LimitBox::ReformatAll()
     {
         RemoveEntry( 0 );
         NumericBox::ReformatAll();
-        InsertEntry( ALL_STRING, 0);
+        InsertValue( ALL_INT, 0);
     }
     else
     {
@@ -101,8 +101,7 @@ Size LimitBox::GetOptimalSize() const
 ///Initialize entries
 void LimitBox::LoadDefaultLimits()
 {
-    SetValue( ALL_INT );
-    InsertEntry( ALL_STRING );
+    InsertValue( ALL_INT );
 
     const unsigned nSize =
         sizeof(global::aDefLimitAry)/sizeof(global::aDefLimitAry[0]);
