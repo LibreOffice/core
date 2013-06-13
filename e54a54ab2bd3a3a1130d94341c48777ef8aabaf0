@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7ZA\u003d",
+        "filename": "sd/source/ui/slidesorter/inc/view/SlsPageObjectPainter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-06-13T20:29:23Z",
+      "side": 1,
+      "message": "PaintCustomAnimationEffect !",
+      "revId": "e54a54ab2bd3a3a1130d94341c48777ef8aabaf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
