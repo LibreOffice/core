@@ -95,7 +95,7 @@ ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
 {
     if (! mxGraphicShapeContext.is())
     {
-        FragmentHandlerRef rFragmentHandler
+        ContextHandler2Helper *rFragmentHandler
             (new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
         ShapePtr pMasterShape;
 
@@ -139,7 +139,7 @@ ShapeContextHandler::getDiagramShapeContext()
 {
     if (!mxDiagramShapeContext.is())
     {
-        FragmentHandlerRef rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+        ContextHandler2Helper *rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
         mpShape.reset(new Shape());
         mxDiagramShapeContext.set(new DiagramGraphicDataContext(*rFragmentHandler, mpShape));
     }

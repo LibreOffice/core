@@ -10,7 +10,6 @@
 #ifndef OOX_PPT_EXTDRAWINGFRAGMENTHANDLER
 #define OOX_PPT_EXTDRAWINGFRAGMENTHANDLER
 
-#include "oox/core/fragmenthandler.hxx"
 #include "oox/core/fragmenthandler2.hxx"
 #include "oox/drawingml/shapegroupcontext.hxx"
 #include "oox/ppt/slidepersist.hxx"
@@ -20,7 +19,7 @@
 namespace oox { namespace ppt {
 
 
-class ExtDrawingFragmentHandler : public ::oox::core::FragmentHandler
+class ExtDrawingFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
     ExtDrawingFragmentHandler( oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath,

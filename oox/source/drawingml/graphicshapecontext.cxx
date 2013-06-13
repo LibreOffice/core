@@ -52,7 +52,7 @@ namespace drawingml {
 // ============================================================================
 // CT_Picture
 
-GraphicShapeContext::GraphicShapeContext( ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr )
+GraphicShapeContext::GraphicShapeContext( ContextHandler2Helper& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr )
 : ShapeContext( rParent, pMasterShapePtr, pShapePtr )
 {
 }
@@ -108,7 +108,7 @@ Reference< XFastContextHandler > GraphicShapeContext::createFastChildContext( sa
 // ============================================================================
 // CT_GraphicalObjectFrameContext
 
-GraphicalObjectFrameContext::GraphicalObjectFrameContext( ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr, bool bEmbedShapesInChart ) :
+GraphicalObjectFrameContext::GraphicalObjectFrameContext( ContextHandler2Helper& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr, bool bEmbedShapesInChart ) :
     ShapeContext( rParent, pMasterShapePtr, pShapePtr ),
     mbEmbedShapesInChart( bEmbedShapesInChart )
 {
@@ -157,7 +157,7 @@ Reference< XFastContextHandler > GraphicalObjectFrameContext::createFastChildCon
 
 // ============================================================================
 
-OleObjectGraphicDataContext::OleObjectGraphicDataContext( ContextHandler& rParent, ShapePtr xShape ) :
+OleObjectGraphicDataContext::OleObjectGraphicDataContext( ContextHandler2Helper& rParent, ShapePtr xShape ) :
     ShapeContext( rParent, ShapePtr(), xShape ),
     mrOleObjectInfo( xShape->setOleObjectType() )
 {
@@ -222,7 +222,7 @@ Reference< XFastContextHandler > OleObjectGraphicDataContext::createFastChildCon
 
 // ============================================================================
 
-DiagramGraphicDataContext::DiagramGraphicDataContext( ContextHandler& rParent, ShapePtr pShapePtr )
+DiagramGraphicDataContext::DiagramGraphicDataContext( ContextHandler2Helper& rParent, ShapePtr pShapePtr )
 : ShapeContext( rParent, ShapePtr(), pShapePtr )
 {
     pShapePtr->setDiagramType();
@@ -272,7 +272,7 @@ Reference< XFastContextHandler > DiagramGraphicDataContext::createFastChildConte
 
 // ============================================================================
 
-ChartGraphicDataContext::ChartGraphicDataContext( ContextHandler& rParent, const ShapePtr& rxShape, bool bEmbedShapes ) :
+ChartGraphicDataContext::ChartGraphicDataContext( ContextHandler2Helper& rParent, const ShapePtr& rxShape, bool bEmbedShapes ) :
     ShapeContext( rParent, ShapePtr(), rxShape ),
     mrChartShapeInfo( rxShape->setChartType( bEmbedShapes ) )
 {

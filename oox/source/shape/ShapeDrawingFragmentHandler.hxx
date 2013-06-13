@@ -10,13 +10,13 @@
 #ifndef OOX_SHAPE_DRAWINGFRAGMENTHANDLER
 #define OOX_SHAPE_DRAWINGFRAGMENTHANDLER
 
-#include "oox/core/fragmenthandler.hxx"
+#include "oox/core/fragmenthandler2.hxx"
 #include "oox/drawingml/shapegroupcontext.hxx"
 
 namespace oox { namespace shape {
 
 /// Generic (i.e. not specific to PPTX) handler for the prerendered diagram parsing.
-class ShapeDrawingFragmentHandler : public oox::core::FragmentHandler
+class ShapeDrawingFragmentHandler : public oox::core::FragmentHandler2
 {
 public:
     ShapeDrawingFragmentHandler( oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, oox::drawingml::ShapePtr pGroupShapePtr ) throw();

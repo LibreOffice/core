@@ -27,10 +27,10 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace drawingml {
 
 // CT_ConstraintLists
-ConstraintListContext::ConstraintListContext( ContextHandler& rParent,
-                                              const Reference< XFastAttributeList >&,
+ConstraintListContext::ConstraintListContext( ContextHandler2Helper& rParent,
+                                              const AttributeList&,
                                               const LayoutAtomPtr &pNode )
-    : ContextHandler( rParent )
+    : ContextHandler2( rParent )
     , mpNode( pNode )
 {
     OSL_ENSURE( pNode, "Node must NOT be NULL" );

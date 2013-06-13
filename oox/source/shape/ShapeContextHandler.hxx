@@ -26,20 +26,20 @@
 #include "oox/drawingml/graphicshapecontext.hxx"
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/theme.hxx"
-#include "oox/core/fragmenthandler.hxx"
+#include "oox/core/fragmenthandler2.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "ShapeFilterBase.hxx"
 
 namespace oox { namespace shape {
 
-class ShapeFragmentHandler : public core::FragmentHandler
+class ShapeFragmentHandler : public core::FragmentHandler2
 {
 public:
     typedef boost::shared_ptr<ShapeFragmentHandler> Pointer_t;
 
     explicit ShapeFragmentHandler(core::XmlFilterBase& rFilter,
                                   const OUString& rFragmentPath )
-    : FragmentHandler(rFilter, rFragmentPath)
+    : FragmentHandler2(rFilter, rFragmentPath)
     {
     }
 };

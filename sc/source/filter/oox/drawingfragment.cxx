@@ -122,14 +122,14 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
 
 // ============================================================================
 
-GroupShapeContext::GroupShapeContext( ContextHandler& rParent,
+GroupShapeContext::GroupShapeContext( ContextHandler2Helper& rParent,
         const WorksheetHelper& rHelper, const ShapePtr& rxParentShape, const ShapePtr& rxShape ) :
     ShapeGroupContext( rParent, rxParentShape, rxShape ),
     WorksheetHelper( rHelper )
 {
 }
 
-/*static*/ ContextHandlerRef GroupShapeContext::createShapeContext( ContextHandler& rParent,
+/*static*/ ContextHandlerRef GroupShapeContext::createShapeContext( ContextHandler2Helper& rParent,
         const WorksheetHelper& rHelper, sal_Int32 nElement, const AttributeList& rAttribs,
         const ShapePtr& rxParentShape, ShapePtr* pxShape )
 {

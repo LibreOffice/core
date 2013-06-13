@@ -43,7 +43,7 @@ private:
 
 
 
-class DiagramLayoutFragmentHandler : public ::oox::core::FragmentHandler
+class DiagramLayoutFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
     DiagramLayoutFragmentHandler( oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, const DiagramLayoutPtr pDataPtr ) throw();

@@ -22,17 +22,17 @@
 
 #include <com/sun/star/drawing/XShapes.hpp>
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/shapepropertiescontext.hxx"
 #include "oox/dllapi.h"
 
 namespace oox { namespace drawingml {
 
-class OOX_DLLPUBLIC ShapeContext : public ::oox::core::ContextHandler
+class OOX_DLLPUBLIC ShapeContext : public ::oox::core::ContextHandler2
 {
 public:
-    ShapeContext( ::oox::core::ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr );
+    ShapeContext( ::oox::core::ContextHandler2Helper& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr );
     virtual ~ShapeContext();
 
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
