@@ -140,7 +140,7 @@ $(call gb_UIImageListTarget_get_target,%) : $(gb_UIImageListTarget_DEPS) $(gb_UI
 
 .PHONY : $(call gb_UIImageListTarget_get_clean_target,%)
 $(call gb_UIImageListTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$(2),$(false),UIL,1)
+	$(call gb_Output_announce,$*,$(false),UIL,1)
 	rm -f $(call gb_UIImageListTarget_get_target,$*)
 
 # Extract list of images referenced in a .ui file.
