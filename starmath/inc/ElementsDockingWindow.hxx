@@ -88,6 +88,7 @@ class SmElementsControl : public Control
 
     SmElementList maElementList;
     Size          maMaxElementDimensions;
+    bool          mbVerticalMode;
 
     void addElement(OUString aElementVisual, OUString aElementSource);
 
@@ -101,6 +102,8 @@ public:
     SmElementsControl(Window *pParent, const ResId& rResId);
 
     void setElementSetId(sal_uInt16 aSetId);
+
+    void setVerticalMode(bool bVertical);
 
     void SetSelectHdl(const Link& rLink)   { aSelectHdlLink = rLink; }
 };
@@ -124,6 +127,8 @@ public:
                              SfxChildWindow* pChildWindow,
                              Window* pParent );
     ~SmElementsDockingWindow();
+
+    virtual void EndDocking( const Rectangle& rReactangle, sal_Bool bFloatMode);
 };
 
 class SmElementsDockingWindowWrapper : public SfxChildWindow

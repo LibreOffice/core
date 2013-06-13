@@ -172,9 +172,15 @@ const sal_uInt16 SmElementsControl::aOthers[] =
 SmElementsControl::SmElementsControl(Window *pParent, const ResId& rResId) :
     Control(pParent, rResId),
     mpDocShell(new SmDocShell(SFXOBJECTSHELL_STD_NORMAL)),
-    mpCurrentElement(NULL)
+    mpCurrentElement(NULL),
+    mbVerticalMode(true)
 {
     maFormat.SetBaseSize(PixelToLogic(Size(0, 24)));
+}
+
+void SmElementsControl::setVerticalMode(bool bVerticalMode)
+{
+    mbVerticalMode = bVerticalMode;
 }
 
 void SmElementsControl::Paint(const Rectangle&)
@@ -192,42 +198,77 @@ void SmElementsControl::Paint(const Rectangle&)
     sal_Int32 x = 0;
     sal_Int32 y = 0;
 
-    sal_Int32 perLine = GetOutputSizePixel().Width() / boxX;
+    sal_Int32 perLine = 0;
+
+    if (mbVerticalMode)
+        perLine = GetOutputSizePixel().Height() / boxY;
+    else
+        perLine = GetOutputSizePixel().Width()  / boxX;
 
     if(perLine <= 0) {
         perLine = 1;
     }
 
-    boxX = GetOutputSizePixel().Width() / perLine;
+    if (mbVerticalMode)
+        boxY = GetOutputSizePixel().Height() / perLine;
+    else
+        boxX = GetOutputSizePixel().Width() / perLine;
 
     for (sal_uInt16 i = 0; i < maElementList.size() ; i++)
     {
         SmElement* element = maElementList[i].get();
         if (element->isSeparator())
         {
-            x = 0;
-            y += boxY;
-            Rectangle aSelectionRectangle(
-                x+5, y+5-1,
-                GetOutputSizePixel().Width() - 5, y+5+1);
+            if (mbVerticalMode)
+            {
+                x += boxX;
+                y = 0;
 
-            DrawRect(PixelToLogic(aSelectionRectangle));
-            y += 10;
+                Rectangle aSelectionRectangle(
+                    x+5-1, y+5,
+                    x+5+1, GetOutputSizePixel().Height() - 5);
+
+                DrawRect(PixelToLogic(aSelectionRectangle));
+                x += 10;
+            }
+            else
+            {
+                x = 0;
+                y += boxY;
+
+                Rectangle aSelectionRectangle(
+                    x+5,                              y+5-1,
+                    GetOutputSizePixel().Width() - 5, y+5+1);
+
+                DrawRect(PixelToLogic(aSelectionRectangle));
+                y += 10;
+            }
         }
         else
         {
             Size aSizePixel = LogicToPixel(Size(element->getNode()->GetWidth(), element->getNode()->GetHeight()));
-            if ( x + boxX > GetOutputSizePixel().Width())
+            if(mbVerticalMode)
             {
-                x = 0;
-                y += boxY;
+                if ( y + boxY > GetOutputSizePixel().Height())
+                {
+                    x += boxX;
+                    y = 0;
+                }
+            }
+            else
+            {
+                if ( x + boxX > GetOutputSizePixel().Width())
+                {
+                    x = 0;
+                    y += boxY;
+                }
             }
 
             if (mpCurrentElement == element)
             {
                 Push();
-                SetFillColor( Color(230,230,230) );
-                SetLineColor( Color(230,230,230) );
+                SetFillColor( Color(230, 230, 230) );
+                SetLineColor( Color(230, 230, 230) );
 
                 DrawRect(PixelToLogic(Rectangle(x+2, y+2, x+boxX-2, y+boxY-2)));
                 Pop();
@@ -239,10 +280,13 @@ void SmElementsControl::Paint(const Rectangle&)
             element->mBoxLocation = Point(x,y);
             element->mBoxSize     = Size(boxX, boxY);
 
-            x += boxX;
+            if(mbVerticalMode)
+                y += boxY;
+            else
+                x += boxX;
         }
-
     }
+
     Pop();
 }
 
@@ -448,10 +492,19 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
 
     maElementListBox.SelectEntry(OUString(SmResId(RID_CATEGORY_UNARY_BINARY_OPERATORS)));
     maElementsControl.setElementSetId(RID_CATEGORY_UNARY_BINARY_OPERATORS);
+
+    Invalidate();
 }
 
 SmElementsDockingWindow::~SmElementsDockingWindow ()
 {
+}
+
+void SmElementsDockingWindow::EndDocking( const Rectangle& rReactangle, sal_Bool bFloatMode)
+{
+    SfxDockingWindow::EndDocking(rReactangle, bFloatMode);
+    bool bVertical = ( GetAlignment() == SFX_ALIGN_TOP || GetAlignment() == SFX_ALIGN_BOTTOM );
+    maElementsControl.setVerticalMode(bVertical);
 }
 
 IMPL_LINK( SmElementsDockingWindow, SelectClickHdl, SmElement*, pElement)
@@ -490,6 +543,9 @@ SmViewShell* SmElementsDockingWindow::GetView()
 
 void SmElementsDockingWindow::Resize()
 {
+    bool bVertical = ( GetAlignment() == SFX_ALIGN_TOP || GetAlignment() == SFX_ALIGN_BOTTOM );
+    maElementsControl.setVerticalMode(bVertical);
+
     sal_uInt32 aWidth  = GetOutputSizePixel().Width();
     sal_uInt32 aHeight = GetOutputSizePixel().Height();
 
@@ -524,6 +580,5 @@ SmElementsDockingWindowWrapper::SmElementsDockingWindowWrapper(
 SmElementsDockingWindowWrapper::~SmElementsDockingWindowWrapper()
 {
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
