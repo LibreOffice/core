@@ -56,6 +56,7 @@ namespace svt
     SmartContent::SmartContent( const OUString& _rInitialURL )
         :m_pContent( NULL )
         ,m_eState( NOT_BOUND )
+        ,m_pOwnInteraction( NULL )
     {
         bindTo( _rInitialURL );
     }
