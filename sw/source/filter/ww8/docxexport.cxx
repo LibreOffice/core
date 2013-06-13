@@ -599,12 +599,14 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
 
     // switch the serializer to redirect the output to word/styles.xml
     m_pAttrOutput->SetSerializer( pFS );
+    m_pVMLExport->SetFS( pFS );
 
     // do the work
     WriteHeaderFooterText( rFmt, bHeader );
 
     // switch the serializer back
     m_pAttrOutput->SetSerializer( m_pDocumentFS );
+    m_pVMLExport->SetFS( m_pDocumentFS );
 
     // close the tag
     sal_Int32 nReference;

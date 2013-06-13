@@ -75,6 +75,8 @@ public:
     ::sax_fastparser::FSHelperPtr
                         GetFS() { return m_pSerializer; }
 
+    void SetFS(::sax_fastparser::FSHelperPtr pSerializer);
+
     /// Export the sdr object as VML.
     ///
     /// Call this when you need to export the object as VML.

@@ -49,6 +49,11 @@ VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* 
     memset( m_pShapeTypeWritten, 0, ESCHER_ShpInst_COUNT * sizeof( bool ) );
 }
 
+void VMLExport::SetFS( ::sax_fastparser::FSHelperPtr pSerializer )
+{
+    m_pSerializer = pSerializer;
+}
+
 VMLExport::~VMLExport()
 {
     delete mpOutStrm, mpOutStrm = NULL;
