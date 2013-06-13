@@ -977,14 +977,8 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, sal_Bool bWeb )
     SwWrtShell &rSh = rView.GetWrtShell();
     SwRect aTmp = rSh.GetFlyRect();
     if( aTmp.HasArea() &&
-        // --> FME 2005-01-13 #i40348#
-        // IsSelObjProtected() seems to be the correct condition, not
-        // !HasReadonlySel(), otherwise frame is not moveable if content is
-        // protected.
-        !rSh.IsSelObjProtected( FLYPROTECT_POS|FLYPROTECT_SIZE ) )
-        // <--
+        !rSh.IsSelObjProtected( FLYPROTECT_POS ) )
     {
-        // OD 18.09.2003 #i18732# - add item <RES_FOLLOW_TEXT_FLOW>
         SfxItemSet aSet(rSh.GetAttrPool(),
                         RES_FRM_SIZE, RES_FRM_SIZE,
                         RES_VERT_ORIENT, RES_ANCHOR,
