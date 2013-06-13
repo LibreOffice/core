@@ -78,6 +78,10 @@
 [ language=ru ]
     a63512bc487d7378bbe2e44f59d5ef45 http://sourceforge.net/projects/aoo-extensions/files/3233/2/dict_ru_RU-0.3.6.oxt/download "dict_ru_RU-0.3.6.oxt"
 
+# Slovak dictionary.
+[ language=sk ]
+    5a7cec122a215c9f6a906ecb8ad46ee6 http://sourceforge.net/projects/aoo-extensions/files/1143/11/dict-sk.oxt/download "dict-sk.oxt"
+
 # Slovenian dictionary.
 [ language=sl ]
     cfc3e4da22a3bb9f3f5fa7ae443f6407 http://sourceforge.net/projects/aoo-extensions/files/3280/5/pack-sl.oxt "pack-sl.oxt"
