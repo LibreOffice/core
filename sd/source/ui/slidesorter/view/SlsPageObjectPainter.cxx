@@ -70,7 +70,6 @@ PageObjectPainter::PageObjectPainter (
 
 
 
-
 PageObjectPainter::~PageObjectPainter (void)
 {
 }
@@ -93,7 +92,7 @@ void PageObjectPainter::PaintPageObject (
         PaintPreview(rDevice, rpDescriptor);
         PaintPageNumber(rDevice, rpDescriptor);
         PaintTransitionEffect(rDevice, rpDescriptor);
-
+        PaintCostumAnnimationEffect(rDevice, rpDescriptor);
         rDevice.SetAntialiasing(nSavedAntialiasingMode);
     }
 }
@@ -358,7 +357,33 @@ void PageObjectPainter::PaintTransitionEffect (
 }
 
 
+void PageObjectPainter::PaintCostumAnnimationEffect (
+    OutputDevice& rDevice,
+    const model::SharedPageDescriptor& rpDescriptor) const
+{
+    SdPage* pPage = rpDescriptor->GetPage();
+    boost::shared_ptr< MainSequence > aMainSequence = pPage->getMainSequence();
+    aMainSequence.get();
+    ShapeList aShapeList;
+    aShapeList = pPage->GetPresentationShapeList();
+    const std::list< SdrObject* >& aList = aShapeList.getList();
+    std::list< SdrObject* >::const_iterator it = aList.begin();
+    while (it!=aList.end())
+    {
+      it++;
+    };
+    /*if ( aMainSequence )
+    {
+      const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
+            rpDescriptor,
+            PageObjectLayouter::TransitionEffectIndicator,
+            PageObjectLayouter::ModelCoordinateSystem));
 
+        rDevice.DrawBitmapEx(
+            aBox.TopRight(),
+            mpPageObjectLayouter->GetTransitionEffectIcon().GetBitmapEx());
+    }*/
+}
 
 Bitmap& PageObjectPainter::GetBackgroundForState (
     const model::SharedPageDescriptor& rpDescriptor,
