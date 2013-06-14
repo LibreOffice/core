@@ -796,7 +796,7 @@ HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, sal_uInt16 nBits, const 
     if( nColors )
     {
         // copy the palette entries if any
-        const sal_uInt16 nMinCount = std::min( nColors, rPal.GetEntryCount() );
+        const sal_uInt16 nMinCount = min( nColors, rPal.GetEntryCount() );
         if( nMinCount )
             memcpy( pBI->bmiColors, rPal.ImplGetColorBuffer(), nMinCount * sizeof(RGBQUAD) );
     }
@@ -964,7 +964,7 @@ void WinSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
                 PBITMAPINFO     pBI = (PBITMAPINFO) GlobalLock( mhDIB );
                 const sal_uInt16    nCount = pBuffer->maPalette.GetEntryCount();
                 const sal_uInt16    nDIBColorCount = ImplGetDIBColorCount( mhDIB );
-                memcpy( pBI->bmiColors, pBuffer->maPalette.ImplGetColorBuffer(), std::min( nDIBColorCount, nCount ) * sizeof( RGBQUAD ) );
+                memcpy( pBI->bmiColors, pBuffer->maPalette.ImplGetColorBuffer(), min( nDIBColorCount, nCount ) * sizeof( RGBQUAD ) );
                 GlobalUnlock( mhDIB );
             }
 
