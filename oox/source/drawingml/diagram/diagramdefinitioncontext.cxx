@@ -52,59 +52,44 @@ DiagramDefinitionContext::~DiagramDefinitionContext()
     mpLayout->getNode()->dump(0);
 }
 
-void SAL_CALL DiagramDefinitionContext::endFastElement( ::sal_Int32 )
-    throw (SAXException, RuntimeException)
+ContextHandlerRef
+DiagramDefinitionContext::onCreateContext( ::sal_Int32 aElement,
+                                           const AttributeList& rAttribs )
 {
-
-}
-
-
-Reference< XFastContextHandler > SAL_CALL
-DiagramDefinitionContext::createFastChildContext( ::sal_Int32 aElement,
-                                                  const Reference< XFastAttributeList >& xAttribs )
-    throw (SAXException, RuntimeException)
-{
-    Reference< XFastContextHandler > xRet;
-
     switch( aElement )
     {
     case DGM_TOKEN( title ):
-        mpLayout->setTitle( xAttribs->getOptionalValue( XML_val ) );
+        mpLayout->setTitle( rAttribs.getString( XML_val ).get() );
         break;
     case DGM_TOKEN( desc ):
-        mpLayout->setDesc( xAttribs->getOptionalValue( XML_val ) );
+        mpLayout->setDesc( rAttribs.getString( XML_val ).get() );
         break;
     case DGM_TOKEN( layoutNode ):
     {
         LayoutNodePtr pNode( new LayoutNode() );
         mpLayout->getNode() = pNode;
-        pNode->setChildOrder( xAttribs->getOptionalValueToken( XML_chOrder, XML_b ) );
-        pNode->setMoveWith( xAttribs->getOptionalValue( XML_moveWith ) );
-        pNode->setStyleLabel( xAttribs->getOptionalValue( XML_styleLbl ) );
-        xRet.set( new LayoutNodeContext( *this, AttributeList( xAttribs ), pNode ) );
-        break;
+        pNode->setChildOrder( rAttribs.getToken( XML_chOrder, XML_b ) );
+        pNode->setMoveWith( rAttribs.getString( XML_moveWith ).get() );
+        pNode->setStyleLabel( rAttribs.getString( XML_styleLbl ).get() );
+        return new LayoutNodeContext( *this, rAttribs, pNode );
     }
      case DGM_TOKEN( clrData ):
         // TODO, does not matter for the UI. skip.
-        return xRet;
+        return 0;
     case DGM_TOKEN( sampData ):
         mpLayout->getSampData().reset( new DiagramData );
-        xRet.set( new DataModelContext( *this, mpLayout->getSampData() ) );
-        break;
+        return new DataModelContext( *this, mpLayout->getSampData() );
     case DGM_TOKEN( styleData ):
         mpLayout->getStyleData().reset( new DiagramData );
-        xRet.set( new DataModelContext( *this, mpLayout->getStyleData() ) );
-        break;
+        return new DataModelContext( *this, mpLayout->getStyleData() );
     case DGM_TOKEN( cat ):
     case DGM_TOKEN( catLst ):
         // TODO, does not matter for the UI
     default:
         break;
     }
-    if( !xRet.is() )
-        xRet.set(this);
 
-    return xRet;
+    return this;
 }
 
 

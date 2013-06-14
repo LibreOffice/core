@@ -62,14 +62,8 @@ ShapePtr ShapeContext::getShape()
     return mpShapePtr;
 }
 
-void ShapeContext::endFastElement( sal_Int32 /* aElementToken */ ) throw( SAXException, RuntimeException )
+ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-}
-
-Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
-{
-    Reference< XFastContextHandler > xRet;
-
     switch( getBaseToken( aElementToken ) )
     {
     // nvSpPr CT_ShapeNonVisual begin
@@ -77,53 +71,42 @@ Reference< XFastContextHandler > ShapeContext::createFastChildContext( sal_Int32
 //      break;
     case XML_cNvPr:
     {
-        AttributeList aAttribs( xAttribs );
-        mpShapePtr->setHidden( aAttribs.getBool( XML_hidden, false ) );
-        mpShapePtr->setId( xAttribs->getOptionalValue( XML_id ) );
-        mpShapePtr->setName( xAttribs->getOptionalValue( XML_name ) );
+        mpShapePtr->setHidden( rAttribs.getBool( XML_hidden, false ) );
+        mpShapePtr->setId( rAttribs.getString( XML_id ).get() );
+        mpShapePtr->setName( rAttribs.getString( XML_name ).get() );
         break;
     }
     case XML_hlinkMouseOver:
     case XML_hlinkClick:
-        xRet = new HyperLinkContext( *this, xAttribs,  getShape()->getShapeProperties() );
+        return new HyperLinkContext( *this, rAttribs.getFastAttributeList(),  getShape()->getShapeProperties() );
         break;
     case XML_ph:
-        mpShapePtr->setSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
-        if( xAttribs->hasAttribute( XML_idx ) )
-            mpShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+        mpShapePtr->setSubType( rAttribs.getToken( XML_type, XML_obj ) );
+        if( rAttribs.hasAttribute( XML_idx ) )
+            mpShapePtr->setSubTypeIndex( rAttribs.getString( XML_idx ).get().toInt32() );
         break;
     // nvSpPr CT_ShapeNonVisual end
 
     case XML_spPr:
-        xRet = new ShapePropertiesContext( *this, *mpShapePtr );
-        break;
+        return new ShapePropertiesContext( *this, *mpShapePtr );
 
     case XML_style:
-        xRet = new ShapeStyleContext( *this, *mpShapePtr );
-        break;
+        return new ShapeStyleContext( *this, *mpShapePtr );
 
     case XML_txBody:
     {
         TextBodyPtr xTextBody( new TextBody );
         mpShapePtr->setTextBody( xTextBody );
-        xRet = new TextBodyContext( *this, *xTextBody );
-        break;
+        return new TextBodyContext( *this, *xTextBody );
     }
     case XML_txXfrm:
     {
-        AttributeList aAttribs( xAttribs );
-        mpShapePtr->getTextBody()->getTextProperties().moRotation = aAttribs.getInteger( XML_rot );
+        mpShapePtr->getTextBody()->getTextProperties().moRotation = rAttribs.getInteger( XML_rot );
         break;
     }
     }
 
-    if( !xRet.is() )
-    {
-        uno::Reference<XFastContextHandler> xTmp(this);
-        xRet.set( xTmp );
-    }
-
-    return xRet;
+    return this;
 }
 
 

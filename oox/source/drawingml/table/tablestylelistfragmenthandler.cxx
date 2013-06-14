@@ -43,25 +43,20 @@ TableStyleListFragmentHandler::~TableStyleListFragmentHandler()
 }
 
 // CT_TableStyleList
-Reference< XFastContextHandler > TableStyleListFragmentHandler::createFastChildContext(
-    sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
-        throw ( SAXException, RuntimeException )
+ContextHandlerRef TableStyleListFragmentHandler::onCreateContext(
+    sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
         case A_TOKEN( tblStyleLst ):    // CT_TableStyleList
-            mrTableStyleList.getDefaultStyleId() = xAttribs->getOptionalValue( XML_def );
+            mrTableStyleList.getDefaultStyleId() = rAttribs.getString( XML_def ).get();
             break;
         case A_TOKEN( tblStyle ):       // CT_TableStyle
             std::vector< TableStyle >& rTableStyles = mrTableStyleList.getTableStyles();
             rTableStyles.resize( rTableStyles.size() + 1 );
-            xRet = new TableStyleContext( *this, xAttribs, rTableStyles.back() );
-            break;
+            return new TableStyleContext( *this, rAttribs.getFastAttributeList(), rTableStyles.back() );
     }
-    if ( !xRet.is() )
-        xRet = getFastContextHandler();
-    return xRet;
+    return this;
 }
 
 // ============================================================================

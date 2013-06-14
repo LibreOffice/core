@@ -58,32 +58,25 @@ public:
             pNode->setType(rAttribs.getToken(XML_type, 0));
         }
 
-    virtual Reference< XFastContextHandler > SAL_CALL
-    createFastChildContext( ::sal_Int32 aElement,
-                            const Reference< XFastAttributeList >& xAttribs )
-        throw (SAXException, RuntimeException)
+    virtual ContextHandlerRef
+    onCreateContext( ::sal_Int32 aElement,
+                     const AttributeList& rAttribs ) SAL_OVERRIDE
         {
-            Reference< XFastContextHandler > xRet;
-
             switch( aElement )
             {
                 case DGM_TOKEN( param ):
                 {
-                    AttributeList aAttribs( xAttribs );
-                    const sal_Int32 nValTok=aAttribs.getToken( XML_val, 0 );
+                    const sal_Int32 nValTok = rAttribs.getToken( XML_val, 0 );
                     mpNode->addParam(
-                        aAttribs.getToken( XML_type, 0 ),
-                        nValTok>0 ? nValTok : aAttribs.getInteger( XML_val, 0 ) );
+                        rAttribs.getToken( XML_type, 0 ),
+                        nValTok>0 ? nValTok : rAttribs.getInteger( XML_val, 0 ) );
                     break;
                 }
                 default:
                     break;
             }
 
-            if( !xRet.is() )
-                xRet.set(this);
-
-            return xRet;
+            return this;
         }
 
 private:
@@ -103,30 +96,27 @@ public:
             msName = rAttribs.getString( XML_name ).get();
         }
 
-    virtual Reference< XFastContextHandler > SAL_CALL
-    createFastChildContext( ::sal_Int32 aElement,
-                            const Reference< XFastAttributeList >& xAttribs )
-        throw (SAXException, RuntimeException)
+    virtual ContextHandlerRef
+    onCreateContext( ::sal_Int32 aElement,
+                     const AttributeList& rAttribs ) SAL_OVERRIDE
         {
-            Reference< XFastContextHandler > xRet;
-
             switch( aElement )
             {
             case DGM_TOKEN( if ):
             {
                 // CT_When
-                mpConditionNode.reset( new ConditionAtom(xAttribs) );
+                mpConditionNode.reset( new ConditionAtom(rAttribs.getFastAttributeList()) );
                 mpNode->addChild( mpConditionNode );
-                xRet.set( new IfContext( *this, AttributeList( xAttribs ), mpConditionNode ) );
-                break;
+                return new IfContext( *this, rAttribs, mpConditionNode );
             }
             case DGM_TOKEN( else ):
                 // CT_Otherwise
                 if( mpConditionNode )
                 {
                     mpConditionNode->readElseBranch();
-                    xRet.set( new IfContext( *this, AttributeList( xAttribs ), mpConditionNode ) );
+                    ContextHandlerRef xRet = new IfContext( *this, rAttribs, mpConditionNode );
                     mpConditionNode.reset();
+                    return xRet;
                 }
                 else
                 {
@@ -137,10 +127,7 @@ public:
                 break;
             }
 
-            if( !xRet.is() )
-                xRet.set(this);
-
-            return xRet;
+            return this;
         }
 private:
     OUString msName;
@@ -179,20 +166,16 @@ public:
         {
         }
 
-    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs )
+    virtual ContextHandlerRef onCreateContext( ::sal_Int32 aElement, const AttributeList& rAttribs )
         throw (SAXException, RuntimeException)
         {
-            Reference< XFastContextHandler > xRet;
-
             sal_Int32 nIdx =  LayoutNodeContext::tagToVarIdx( getBaseToken( aElement ) );
             if( nIdx != -1 )
             {
-                mVariables[ nIdx ] = makeAny( xAttribs->getOptionalValue( XML_val ) );
+                mVariables[ nIdx ] = makeAny( rAttribs.getString( XML_val ).get() );
             }
-            if( !xRet.is() )
-                xRet.set(this);
 
-            return xRet;
+            return this;
         }
 private:
     LayoutNode::VarMap & mVariables;
@@ -213,12 +196,6 @@ LayoutNodeContext::LayoutNodeContext( ContextHandler2Helper& rParent,
 
 LayoutNodeContext::~LayoutNodeContext()
 {
-}
-
-void SAL_CALL LayoutNodeContext::endFastElement( ::sal_Int32 )
-    throw (SAXException, RuntimeException)
-{
-
 }
 
 /** convert the XML tag to a variable index in the array
@@ -264,24 +241,20 @@ sal_Int32 LayoutNodeContext::tagToVarIdx( sal_Int32 aTag )
 }
 
 
-Reference< XFastContextHandler > SAL_CALL
-LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
-                                                  const Reference< XFastAttributeList >& xAttribs )
-    throw (SAXException, RuntimeException)
+ContextHandlerRef
+LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
+                                    const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
-
     switch( aElement )
     {
     case DGM_TOKEN( layoutNode ):
     {
         LayoutNodePtr pNode( new LayoutNode() );
         mpNode->addChild( pNode );
-        pNode->setChildOrder( xAttribs->getOptionalValueToken( XML_chOrder, XML_b ) );
-        pNode->setMoveWith( xAttribs->getOptionalValue( XML_moveWith ) );
-        pNode->setStyleLabel( xAttribs->getOptionalValue( XML_styleLbl ) );
-        xRet.set( new LayoutNodeContext( *this, AttributeList( xAttribs ), pNode ) );
-        break;
+        pNode->setChildOrder( rAttribs.getToken( XML_chOrder, XML_b ) );
+        pNode->setMoveWith( rAttribs.getString( XML_moveWith ).get() );
+        pNode->setStyleLabel( rAttribs.getString( XML_styleLbl ).get() );
+        return new LayoutNodeContext( *this, rAttribs, pNode );
     }
     case DGM_TOKEN( shape ):
     {
@@ -290,10 +263,10 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
         {
             ShapePtr pShape;
 
-            if( xAttribs->hasAttribute( XML_type ) )
+            if( rAttribs.hasAttribute( XML_type ) )
             {
                 pShape.reset( new Shape("com.sun.star.drawing.CustomShape") );
-                const sal_Int32 nType(xAttribs->getOptionalValueToken( XML_type, XML_obj ));
+                const sal_Int32 nType(rAttribs.getToken( XML_type, XML_obj ));
                 pShape->setSubType( nType );
                 pShape->getCustomShapeProperties()->setShapePresetType( nType );
             }
@@ -303,7 +276,7 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
             }
 
             pNode->setShape( pShape );
-            xRet.set( new ShapeContext( *this, ShapePtr(), pShape ) );
+            return new ShapeContext( *this, ShapePtr(), pShape );
         }
         else
         {
@@ -312,45 +285,41 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
         break;
     }
     case DGM_TOKEN( extLst ):
-        return xRet;
+        return 0;
     case DGM_TOKEN( alg ):
     {
         // CT_Algorithm
         AlgAtomPtr pAtom( new AlgAtom );
         mpNode->addChild( pAtom );
-        xRet.set( new AlgorithmContext( *this, AttributeList( xAttribs ), pAtom ) );
-        break;
+        return new AlgorithmContext( *this, rAttribs, pAtom );
     }
     case DGM_TOKEN( choose ):
     {
         // CT_Choose
         LayoutAtomPtr pAtom( new ChooseAtom );
         mpNode->addChild( pAtom );
-        xRet.set( new ChooseContext( *this, AttributeList( xAttribs ), pAtom ) );
-         break;
+        return new ChooseContext( *this, rAttribs, pAtom );
     }
     case DGM_TOKEN( forEach ):
     {
         // CT_ForEach
-        ForEachAtomPtr pAtom( new ForEachAtom(xAttribs) );
+        ForEachAtomPtr pAtom( new ForEachAtom(rAttribs.getFastAttributeList()) );
         mpNode->addChild( pAtom );
-        xRet.set( new ForEachContext( *this, AttributeList( xAttribs ), pAtom ) );
-        break;
+        return new ForEachContext( *this, rAttribs, pAtom );
     }
     case DGM_TOKEN( constrLst ):
         // CT_Constraints
-        xRet.set( new ConstraintListContext( *this, AttributeList( xAttribs ), mpNode ) );
-        break;
+        return new ConstraintListContext( *this, rAttribs, mpNode );
     case DGM_TOKEN( presOf ):
     {
         // CT_PresentationOf
         // TODO
-        xAttribs->getOptionalValue( XML_axis );
-        xAttribs->getOptionalValue( XML_cnt );
-        xAttribs->getOptionalValue( XML_hideLastTrans );
-        xAttribs->getOptionalValue( XML_ptType );
-        xAttribs->getOptionalValue( XML_st );
-        xAttribs->getOptionalValue( XML_step );
+        rAttribs.getString( XML_axis );
+        rAttribs.getString( XML_cnt );
+        rAttribs.getString( XML_hideLastTrans );
+        rAttribs.getString( XML_ptType );
+        rAttribs.getString( XML_st );
+        rAttribs.getString( XML_step );
         break;
     }
     case DGM_TOKEN( ruleLst ):
@@ -362,7 +331,7 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
         LayoutNodePtr pNode( boost::dynamic_pointer_cast< LayoutNode >( mpNode ) );
         if( pNode )
         {
-            xRet.set( new LayoutVariablePropertySetContext( *this, pNode->variables() ) );
+            return new LayoutVariablePropertySetContext( *this, pNode->variables() );
         }
         else
         {
@@ -373,10 +342,8 @@ LayoutNodeContext::createFastChildContext( ::sal_Int32 aElement,
     default:
         break;
     }
-    if( !xRet.is() )
-        xRet.set(this);
 
-    return xRet;
+    return this;
 }
 
 

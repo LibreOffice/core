@@ -27,23 +27,17 @@ void SAL_CALL ShapeDrawingFragmentHandler::endDocument() throw (xml::sax::SAXExc
 {
 }
 
-uno::Reference<xml::sax::XFastContextHandler> SAL_CALL ShapeDrawingFragmentHandler::createFastChildContext(sal_Int32 Element, const uno::Reference<xml::sax::XFastAttributeList>& /*Attribs*/ ) throw (xml::sax::SAXException, uno::RuntimeException)
+::oox::core::ContextHandlerRef ShapeDrawingFragmentHandler::onCreateContext(sal_Int32 Element, const AttributeList& /*Attribs*/ )
 {
-    uno::Reference< XFastContextHandler > xRet;
-
     switch( Element )
     {
         case DSP_TOKEN( spTree ):
-            xRet.set( new oox::drawingml::ShapeGroupContext(*this, oox::drawingml::ShapePtr((oox::drawingml::Shape*)0), mpGroupShapePtr));
-            break;
+            return new oox::drawingml::ShapeGroupContext(*this, oox::drawingml::ShapePtr((oox::drawingml::Shape*)0), mpGroupShapePtr);
         default:
             break;
     }
 
-    if( !xRet.is() )
-        xRet = getFastContextHandler();
-
-    return xRet;
+    return this;
 }
 
 } }

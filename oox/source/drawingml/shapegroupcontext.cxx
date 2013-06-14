@@ -53,63 +53,49 @@ ShapeGroupContext::~ShapeGroupContext()
         mpMasterShapePtr->addChild( mpGroupShapePtr );
 }
 
-Reference< XFastContextHandler > ShapeGroupContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef ShapeGroupContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
-
     switch( getBaseToken( aElementToken ) )
     {
     case XML_cNvPr:
     {
-        AttributeList aAttribs( xAttribs );
-        mpGroupShapePtr->setHidden( aAttribs.getBool( XML_hidden, false ) );
-        mpGroupShapePtr->setId( xAttribs->getOptionalValue( XML_id ) );
-        mpGroupShapePtr->setName( xAttribs->getOptionalValue( XML_name ) );
+        mpGroupShapePtr->setHidden( rAttribs.getBool( XML_hidden, false ) );
+        mpGroupShapePtr->setId( rAttribs.getString( XML_id ).get() );
+        mpGroupShapePtr->setName( rAttribs.getString( XML_name ).get() );
         break;
     }
     case XML_ph:
-        mpGroupShapePtr->setSubType( xAttribs->getOptionalValueToken( XML_type, FastToken::DONTKNOW ) );
-        if( xAttribs->hasAttribute( XML_idx ) )
-            mpGroupShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+        mpGroupShapePtr->setSubType( rAttribs.getToken( XML_type, FastToken::DONTKNOW ) );
+        if( rAttribs.hasAttribute( XML_idx ) )
+            mpGroupShapePtr->setSubTypeIndex( rAttribs.getString( XML_idx ).get().toInt32() );
         break;
     // nvSpPr CT_ShapeNonVisual end
 
     case XML_grpSpPr:
-        xRet = new ShapePropertiesContext( *this, *mpGroupShapePtr );
-        break;
+        return new ShapePropertiesContext( *this, *mpGroupShapePtr );
     case XML_spPr:
-        xRet = new ShapePropertiesContext( *this, *mpGroupShapePtr );
-        break;
+        return new ShapePropertiesContext( *this, *mpGroupShapePtr );
 /*
     case XML_style:
-        xRet = new ShapeStyleContext( getParser() );
-        break;
+        return new ShapeStyleContext( getParser() );
 */
     case XML_cxnSp:         // connector shape
         {
             ShapePtr pShape(new Shape("com.sun.star.drawing.ConnectorShape"));
             pShape->setLockedCanvas(mpGroupShapePtr->getLockedCanvas());
-            xRet.set( new ConnectorShapeContext( *this, mpGroupShapePtr, pShape ) );
+            return new ConnectorShapeContext( *this, mpGroupShapePtr, pShape );
         }
-        break;
     case XML_grpSp:         // group shape
-        xRet.set( new ShapeGroupContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GroupShape" ) ) ) );
-        break;
+        return new ShapeGroupContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GroupShape" ) ) );
     case XML_sp:            // shape
-        xRet.set( new ShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.CustomShape" ) ) ) );
-        break;
+        return new ShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.CustomShape" ) ) );
     case XML_pic:           // CT_Picture
-        xRet.set( new GraphicShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ) ) );
-        break;
+        return new GraphicShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ) );
     case XML_graphicFrame:  // CT_GraphicalObjectFrame
-        xRet.set( new GraphicalObjectFrameContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ), true ) );
-        break;
+        return new GraphicalObjectFrameContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ), true );
     }
-    if( !xRet.is() )
-        xRet.set( this );
 
-
-    return xRet;
+    return this;
 }
 
 } }
