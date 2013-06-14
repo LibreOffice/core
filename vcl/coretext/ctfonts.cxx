@@ -33,22 +33,6 @@
 
 // =======================================================================
 
-// CoreText specific physically available font face
-class CTFontData
-:   public ImplMacFontData
-{
-public:
-    explicit                CTFontData( const ImplDevFontAttributes&, sal_IntPtr nFontId );
-    virtual                 ~CTFontData( void );
-    virtual PhysicalFontFace*   Clone( void ) const;
-
-    virtual ImplMacTextStyle*   CreateMacTextStyle( const FontSelectPattern& ) const;
-    virtual ImplFontEntry*      CreateFontInstance( /*const*/ FontSelectPattern& ) const;
-    virtual int                 GetFontTable( const char pTagName[5], unsigned char* ) const;
-};
-
-// =======================================================================
-
 class CTFontList
 :   public SystemFontList
 {
@@ -327,10 +311,8 @@ int CTFontData::GetFontTable( const char pTagName[5], unsigned char* pResultBuf 
 
 // =======================================================================
 
-static void CTFontEnumCallBack( const void* pValue, void* pContext )
+ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool* bFontEnabled )
 {
-    CTFontDescriptorRef pFD = static_cast<CTFontDescriptorRef>(pValue);
-
     // all CoreText fonts are device fonts that can rotate just fine
     ImplDevFontAttributes rDFA;
     rDFA.mbOrientation = true;
@@ -358,9 +340,12 @@ static void CTFontEnumCallBack( const void* pValue, void* pContext )
     rDFA.SetStyleName( GetOUString( pStyleName ) );
 
     // get font-enabled status
-    int bFontEnabled = FALSE;
-    CFNumberRef pFontEnabled = (CFNumberRef)CTFontDescriptorCopyAttribute( pFD, kCTFontEnabledAttribute );
-    CFNumberGetValue( pFontEnabled, kCFNumberIntType, &bFontEnabled );
+    if( bFontEnabled ) {
+        int bEnabled = FALSE;
+        CFNumberRef pEnabled = (CFNumberRef)CTFontDescriptorCopyAttribute( pFD, kCTFontEnabledAttribute );
+        CFNumberGetValue( pEnabled, kCFNumberIntType, &bEnabled );
+        *bFontEnabled = bEnabled;
+    }
 
     // get font attributes
     CFDictionaryRef pAttrDict = (CFDictionaryRef)CTFontDescriptorCopyAttribute( pFD, kCTFontTraitsAttribute );
@@ -418,6 +403,16 @@ static void CTFontEnumCallBack( const void* pValue, void* pContext )
 
     // TODO? also use the HEAD table if available to get more attributes
 //  CFDataRef CTFontCopyTable( CTFontRef, kCTFontTableHead, /*kCTFontTableOptionNoOptions*/kCTFontTableOptionExcludeSynthetic );
+
+    return rDFA;
+}
+
+static void CTFontEnumCallBack( const void* pValue, void* pContext )
+{
+    CTFontDescriptorRef pFD = static_cast<CTFontDescriptorRef>(pValue);
+
+    bool bFontEnabled;
+    ImplDevFontAttributes rDFA = DevFontFromCTFontDescriptor( pFD, &bFontEnabled );
 
     if( bFontEnabled)
     {
