@@ -734,6 +734,13 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     bAlreadyWritten[ESCHER_Prop_Rotation] = true;
                 }
                 break;
+            case ESCHER_Prop_fNoLineDrawDash:
+                {
+                    // See DffPropertyReader::ApplyLineAttributes().
+                    impl_AddBool( m_pShapeAttrList, XML_stroked, it->nPropValue & 8 );
+                    bAlreadyWritten[ESCHER_Prop_fNoLineDrawDash] = true;
+                }
+                break;
             default:
 #if OSL_DEBUG_LEVEL > 0
                 fprintf( stderr, "TODO VMLExport::Commit(), unimplemented id: %d, value: %" SAL_PRIuUINT32 ", data: [%" SAL_PRIuUINT32 ", %p]\n",
