@@ -866,13 +866,6 @@ bool SalLayout::IsSpacingGlyph( sal_GlyphId nGlyph ) const
     return bRet;
 }
 
-// -----------------------------------------------------------------------
-
-const PhysicalFontFace* SalLayout::GetFallbackFontData( sal_GlyphId /*nGlyphId*/ ) const
-{
-    return NULL;
-}
-
 // =======================================================================
 
 GenericSalLayout::GenericSalLayout()
@@ -1353,7 +1346,8 @@ int GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor
 // -----------------------------------------------------------------------
 
 int GenericSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
-    int& nStart, sal_Int32* pGlyphAdvAry, int* pCharPosAry ) const
+    int& nStart, sal_Int32* pGlyphAdvAry, int* pCharPosAry,
+    const PhysicalFontFace** /*pFallbackFonts*/ ) const
 {
     GlyphVector::const_iterator pG = m_GlyphItems.begin();
     GlyphVector::const_iterator pGEnd = m_GlyphItems.end();
@@ -1964,14 +1958,6 @@ void MultiSalLayout::InitFont() const
 
 // -----------------------------------------------------------------------
 
-const PhysicalFontFace* MultiSalLayout::GetFallbackFontData( sal_GlyphId nGlyphId ) const
-{
-    int nFallbackLevel = (nGlyphId & GF_FONTMASK) >> GF_FONTSHIFT;
-    return mpFallbackFonts[ nFallbackLevel ];
-}
-
-// -----------------------------------------------------------------------
-
 void MultiSalLayout::DrawText( SalGraphics& rGraphics ) const
 {
     for( int i = mnLevel; --i >= 0; )
@@ -2103,7 +2089,8 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray )
 // -----------------------------------------------------------------------
 
 int MultiSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
-    int& nStart, sal_Int32* pGlyphAdvAry, int* pCharPosAry ) const
+    int& nStart, sal_Int32* pGlyphAdvAry, int* pCharPosAry,
+    const PhysicalFontFace** pFallbackFonts ) const
 {
     // for multi-level fallback only single glyphs should be used
     if( mnLevel > 1 && nLen > 1 )
@@ -2133,6 +2120,10 @@ int MultiSalLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& r
                     pGlyphAdvAry[i] = w;
                 }
                 pGlyphIdxAry[ i ] |= nFontTag;
+                if( pFallbackFonts )
+                {
+                    pFallbackFonts[ i ] =  mpFallbackFonts[ nLevel ];
+                }
             }
             rPos += maDrawBase;
             rPos += maDrawOffset;
