@@ -201,6 +201,17 @@ define gb_Helper_execute
 $(call gb_Executable_get_command,$(firstword $(1))) $(wordlist 2,$(words $(1)),$(1))
 endef
 
+# define gb_Helper_install class instance-name target-to-install
+define gb_Helper_install
+ifneq (,$(call gb_$(1)_get_install_target,$(2)))
+$(call gb_$(1)_get_target,$(2)) :| $(call gb_$(1)_get_install_target,$(2))
+$(call gb_$(1)_get_install_target,$(2)) : $(3) \
+	| $(dir $(call gb_$(1)_get_install_target,$(2))).dir
+$(call gb_Deliver_add_deliverable,$(call gb_$(1)_get_install_target,$(2)),$(3),$(2))
+endif
+
+endef
+
 # gb_Helper_OUTDIRLIBDIR is set by the platform to the path the dynamic linker need to use
 # for libraries from the OUTDIR
 
