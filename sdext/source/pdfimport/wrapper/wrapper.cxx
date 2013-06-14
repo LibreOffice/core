@@ -169,10 +169,11 @@ class Parser
     void                 readLink();
     void                 readMaskedImage();
     void                 readSoftMaskedImage();
-    int          parseFontCheckForString( const sal_Unicode* pCopy, const char* str, sal_Int32& nLen,
-                    FontAttributes& aResult, bool bItalic, bool bBold);
-    int          parseFontRemoveSuffix( const sal_Unicode* pCopy, const char* s, sal_Int32& nLen);
-
+    sal_Int32 parseFontCheckForString(const sal_Unicode* pCopy, sal_Int32 nCopyLen,
+                                      const char* pAttrib, sal_Int32 nAttribLen,
+                                      FontAttributes& rResult, bool bItalic, bool bBold);
+    sal_Int32 parseFontRemoveSuffix(const sal_Unicode* pCopy, sal_Int32 nCopyLen,
+                              const char* pAttrib, sal_Int32 nAttribLen);
 
 public:
     Parser( const ContentSinkSharedPtr&                   rSink,
@@ -459,41 +460,40 @@ rendering::ARGBColor Parser::readColor()
     return aRes;
 }
 
-int Parser::parseFontCheckForString( const sal_Unicode* pCopy, const char* s, sal_Int32& nLen,
-        FontAttributes& aResult, bool bItalic, bool bBold)
+sal_Int32 Parser::parseFontCheckForString(
+    const sal_Unicode* pCopy, sal_Int32 nCopyLen,
+    const char* pAttrib, sal_Int32 nAttribLen,
+    FontAttributes& rResult, bool bItalic, bool bBold)
 {
-    int l = strlen(s);
-    if (nLen < l)
+    if (nCopyLen < nAttribLen)
         return 0;
-    for (int i = 0; i < l; i++)
-        if (tolower(pCopy[i]) != s[i]
-            && toupper(pCopy[i]) != s[i])
+    for (sal_Int32 i = 0; i < nAttribLen; ++i)
+        if (tolower(pCopy[i]) != pAttrib[i]
+            && toupper(pCopy[i]) != pAttrib[i])
             return 0;
-    aResult.isItalic = bItalic;
-    aResult.isBold = bBold;
-        nLen -= l;
-        pCopy += l;
-    return l;
+    rResult.isItalic = bItalic;
+    rResult.isBold = bBold;
+    return nAttribLen;
 }
 
-int Parser::parseFontRemoveSuffix( const sal_Unicode* pCopy, const char* s, sal_Int32& nLen)
+sal_Int32 Parser::parseFontRemoveSuffix(
+    const sal_Unicode* pCopy, sal_Int32 nCopyLen,
+    const char* pAttrib, sal_Int32 nAttribLen)
 {
-    int l = strlen(s);
-    if (nLen < l)
+    if (nCopyLen < nAttribLen)
         return 0;
-    for (int i = 0; i < l; i++)
-        if ( pCopy[nLen - l + i] != s[i] )
+    for (sal_Int32 i = 0; i < nAttribLen; ++i)
+        if ( pCopy[nCopyLen - nAttribLen + i] != pAttrib[i] )
             return 0;
-    nLen -= l;
-    return l;
+    return nAttribLen;
 }
 
-void Parser::parseFontFamilyName( FontAttributes& aResult )
+void Parser::parseFontFamilyName( FontAttributes& rResult )
 {
-    OUStringBuffer aNewFamilyName( aResult.familyName.getLength() );
+    OUStringBuffer aNewFamilyName( rResult.familyName.getLength() );
 
-    const sal_Unicode* pCopy = aResult.familyName.getStr();
-    sal_Int32 nLen = aResult.familyName.getLength();
+    const sal_Unicode* pCopy = rResult.familyName.getStr();
+    sal_Int32 nLen = rResult.familyName.getLength();
     // parse out truetype subsets (e.g. BAAAAA+Thorndale)
     if( nLen > 8 && pCopy[6] == sal_Unicode('+') )
     {
@@ -503,17 +503,63 @@ void Parser::parseFontFamilyName( FontAttributes& aResult )
 
     while( nLen )
     {
-    if (parseFontRemoveSuffix( pCopy, "PSMT", nLen)) {}
-    else if (parseFontRemoveSuffix( pCopy, "MT", nLen)) {}
+        if (parseFontRemoveSuffix(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("PSMT")))
+        {
+            nLen -= RTL_CONSTASCII_LENGTH("PSMT");
+        }
+        else if (parseFontRemoveSuffix(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("MT")))
+        {
+            nLen -= RTL_CONSTASCII_LENGTH("MT");
+        }
 
-    if (parseFontCheckForString( pCopy, "Italic", nLen, aResult, true, false)) {}
-    else if (parseFontCheckForString( pCopy, "-Bold", nLen, aResult, false, true)) {}
-    else if (parseFontCheckForString( pCopy, "Bold", nLen, aResult, false, true)) {}
-    else if (parseFontCheckForString( pCopy, "-Roman", nLen, aResult, false, false)) {}
-    else if (parseFontCheckForString( pCopy, "-LightOblique", nLen, aResult, true, false)) {}
-    else if (parseFontCheckForString( pCopy, "-BoldOblique", nLen, aResult, true, true)) {}
-    else if (parseFontCheckForString( pCopy, "-Light", nLen, aResult, false, false)) {}
-    else if (parseFontCheckForString( pCopy, "-Reg", nLen, aResult, false, false)) {}
+        if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("Italic"), rResult, true, false))
+        {
+            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("Italic");
+            nLen -= nAttribLen;
+            pCopy += nAttribLen;
+        }
+        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Bold"), rResult, false, true))
+        {
+            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-Bold");
+            nLen -= nAttribLen;
+            pCopy += nAttribLen;
+        }
+        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("Bold"), rResult, false, true))
+        {
+            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("Bold");
+            nLen -= nAttribLen;
+            pCopy += nAttribLen;
+        }
+        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Roman"), rResult, false, false))
+        {
+            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-Roman");
+            nLen -= nAttribLen;
+            pCopy += nAttribLen;
+        }
+        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-LightOblique"), rResult, true, false))
+        {
+            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-LightOblique");
+            nLen -= nAttribLen;
+            pCopy += nAttribLen;
+        }
+        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-BoldOblique"), rResult, true, true))
+        {
+            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-BoldOblique");
+            nLen -= nAttribLen;
+            pCopy += nAttribLen;
+        }
+        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Light"), rResult, false, false))
+        {
+            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-Light");
+            nLen -= nAttribLen;
+            pCopy += nAttribLen;
+        }
+        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Reg"), rResult, false, false))
+        {
+            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-Reg");
+            nLen -= nAttribLen;
+            pCopy += nAttribLen;
+        }
         else
         {
             if( *pCopy != '-' )
@@ -522,7 +568,7 @@ void Parser::parseFontFamilyName( FontAttributes& aResult )
             nLen--;
         }
     }
-    aResult.familyName = aNewFamilyName.makeStringAndClear();
+    rResult.familyName = aNewFamilyName.makeStringAndClear();
 }
 
 void Parser::readFont()
