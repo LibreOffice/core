@@ -584,7 +584,7 @@ void SAL_CALL CWinFileOpenImpl::InitControlLabel(HWND hWnd)
 // Our approach is to align all static text controls with the
 // static text control "File name" of the FileOpen dialog,
 // all checkboxes and all list/comboboxes will be left aligned with
-// the standard combobox edt1 (defined in MS platform sdk dlgs.h)
+// the standard combobox cmb13 (defined in MS platform sdk dlgs.h)
 // and all push buttons will be left aligned with the standard
 // "OK" button
 //-----------------------------------------------------------------
@@ -689,8 +689,6 @@ void CWinFileOpenImpl::EnlargeStdControlLabels() const
     HWND hFilterBoxLabel = GetDlgItem(m_hwndFileOpenDlg, stc2);
     HWND hFileNameBoxLabel = GetDlgItem(m_hwndFileOpenDlg, stc3);
     HWND hFileNameBox = GetDlgItem(m_hwndFileOpenDlg, cmb13);
-    if (!hFileNameBox)
-        hFileNameBox = GetDlgItem(m_hwndFileOpenDlg, edt1); // under Win98 it is edt1 instead of cmb13
 
     HWND hFilterBox = GetDlgItem(m_hwndFileOpenDlg, cmb1);
     HWND hOkButton = GetDlgItem(m_hwndFileOpenDlg, IDOK);
@@ -985,15 +983,11 @@ void SAL_CALL CWinFileOpenImpl::InitialSetDefaultName()
     // open dialog (reason: see above setDefaultName)
     if (m_bInitialSelChanged && m_defaultName.getLength())
     {
-        sal_Int32 edt1Id = edt1;
-
-        // under W2k the there is a combobox instead
+        // from W2k there is a combobox instead
         // of an edit field for the file name edit field
-        // the control id of this box is cmb13 and not
-        // edt1 as before so we must use this id
-        edt1Id = cmb13;
-
-        HWND hwndEdt1 = GetDlgItem(m_hwndFileOpenDlg, edt1Id);
+        // So the control id of this box is cmb13 and not
+        // edt1 as before
+        HWND hwndEdt1 = GetDlgItem(m_hwndFileOpenDlg, cmb13);
         SetWindowText(hwndEdt1, reinterpret_cast<LPCTSTR>(m_defaultName.getStr()));
     }
 
