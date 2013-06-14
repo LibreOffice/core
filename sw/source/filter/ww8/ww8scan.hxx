@@ -1496,7 +1496,12 @@ public:
     sal_uInt8    nDataStart;
     //-------------------------
     sal_uInt16  fFacingPages : 1;   // 1 when facing pages should be printed
-    sal_uInt16  fWidowControl : 1;  // 1 when widow control is in effect. 0 when widow control disabled.
+
+    sal_uInt16  fWidowControl : 1;  //a: orig 97 docs say
+                                    //    1 when widow control is in effect. 0 when widow control disabled.
+                                    //b: MS-DOC: Word Binary File Format (.doc) Structure Specification 2008 says
+                                    //    B - unused1 (1 bit): Undefined and MUST be ignored.
+
     sal_uInt16  fPMHMainDoc : 1;    // 1 when doc is a main doc for Print Merge Helper, 0 when not; default=0
     sal_uInt16  grfSuppression : 2; // 0 Default line suppression storage; 0= form letter line suppression; 1= no line suppression; default=0
     sal_uInt16  fpc : 2;            // 1 footnote position code: 0 as endnotes, 1 at bottom of page, 2 immediately beneath text
