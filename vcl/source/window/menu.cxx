@@ -136,11 +136,14 @@ struct MenuItemData
     SalMenuItem*    pSalMenuItem;           // access to native menu
 
                     MenuItemData() :
-                        pSalMenuItem ( NULL )
+                        pSubMenu(NULL), pAutoSubMenu(NULL), nItemImageAngle(0), pSalMenuItem ( NULL )
                     {}
                     MenuItemData( const XubString& rStr, const Image& rImage ) :
+                        pSubMenu(NULL),
+                        pAutoSubMenu(NULL),
                         aText( rStr ),
                         aImage( rImage ),
+                        nItemImageAngle(0),
                         pSalMenuItem ( NULL )
                     {}
                     ~MenuItemData();
