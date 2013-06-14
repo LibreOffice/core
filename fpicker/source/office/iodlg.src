@@ -120,6 +120,9 @@ ModalDialog DLG_FPICKER_EXPLORERFILE
         Pos = MAP_APPFONT ( 59 , 117 ) ;
         Size = MAP_APPFONT ( 159 , 12 ) ;
         Border = TRUE ;
+        DropDown = TRUE ;
+        AutoSize = TRUE ;
+        AutoHScroll = TRUE ;
     };
     FixedText FT_EXPLORERFILE_SHARED_LISTBOX
     {
