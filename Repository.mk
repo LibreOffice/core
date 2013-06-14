@@ -25,7 +25,10 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	concat-deps \
 	cpp \
 	cppunit/cppunittester \
-	$(call gb_Helper_optional,CRASHREP,crashrep) \
+	$(if $(filter MSC,$(COM)), \
+		gcc-wrapper \
+		g++-wrapper \
+	) \
 	gencoll_rule \
 	genconv_dict \
 	gendict \
@@ -54,23 +57,20 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	stringex \
 	transex3 \
 	treex \
-	$(if $(filter UCPP,$(BUILD_TYPE)),ucpp) \
 	uiex \
 	ulfex \
-	$(call gb_Helper_optional,ODK,unoapploader) \
-	xpdfimport \
 	xrmex \
 ))
 
 $(eval $(call gb_Helper_register_executables,SDK, \
-	idlc \
-	$(if $(filter-out IOS,$(OS)), \
-		climaker \
-		cppumaker \
-		javamaker \
-		regcompare \
-		uno-skeletonmaker \
-	) \
+	$(if $(filter MSC,$(COM)),climaker) \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),cppumaker) \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),idlc) \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),javamaker) \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),regcompare) \
+	$(if $(filter UCPP,$(BUILD_TYPE)),ucpp) \
+	$(if $(filter ODK,$(BUILD_TYPE)),unoapploader) \
+	$(if $(filter ODK,$(BUILD_TYPE)),uno-skeletonmaker) \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
@@ -78,9 +78,9 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 ))
 
 $(eval $(call gb_Helper_register_executables,OOO, \
+	$(call gb_Helper_optional,CRASHREP,crashrep) \
 	gnome-open-url.bin \
 	$(if $(filter YES,$(ENABLE_NPAPI_INTO_BROWSER)),nsplugin) \
-	$(if $(filter MACOSX,$(OS)),officeloader) \
 	$(if $(filter-out ANDROID IOS MACOSX WNT,$(OS)),oosplash) \
 	$(if $(filter YES,$(ENABLE_NPAPI_FROM_BROWSER)),pluginapp.bin) \
 	$(if $(filter-out WNT,$(OS)),soffice.bin) \
@@ -94,14 +94,10 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	) \
 	ui-previewer \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg.bin) \
+	xpdfimport \
 	$(if $(filter WNT,$(OS)), \
 		crashrep_com \
-		gcc-wrapper \
-		g++-wrapper \
-		guiloader \
-		guistdio \
 		odbcconfig \
-		officeloader \
 		pyuno/python \
 		quickstart \
 		sbase \
@@ -118,7 +114,6 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 		unopkg \
 		unopkg_bin \
 		unopkg_com \
-		unopkgio \
 	) \
 ))
 

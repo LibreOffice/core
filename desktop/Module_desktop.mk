@@ -98,10 +98,6 @@ $(eval $(call gb_Module_add_targets,desktop,\
 
 else ifeq ($(OS),MACOSX)
 
-$(eval $(call gb_Module_add_targets,desktop,\
-    Executable_officeloader \
-))
-
 else ifeq ($(OS),ANDROID)
 
 else ifeq ($(OS),IOS)
