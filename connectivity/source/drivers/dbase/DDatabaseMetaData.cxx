@@ -33,7 +33,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity::dbase;
@@ -48,7 +47,7 @@ using namespace ::com::sun::star::lang;
 
 ODbaseDatabaseMetaData::ODbaseDatabaseMetaData(::connectivity::file::OConnection* _pCon)    :ODatabaseMetaData(_pCon)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::ODbaseDatabaseMetaData" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::ODbaseDatabaseMetaData" );
 }
 // -------------------------------------------------------------------------
 ODbaseDatabaseMetaData::~ODbaseDatabaseMetaData()
@@ -57,7 +56,7 @@ ODbaseDatabaseMetaData::~ODbaseDatabaseMetaData()
 // -------------------------------------------------------------------------
 Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::impl_getTypeInfo_throw" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::impl_getTypeInfo_throw" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
@@ -159,7 +158,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern,
         const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::getColumns" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::getColumns" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
 
@@ -250,7 +249,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     const Any& /*catalog*/, const OUString& /*schema*/, const OUString& table,
         sal_Bool unique, sal_Bool /*approximate*/ ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::getIndexInfo" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::getIndexInfo" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
         Reference< XTablesSupplier > xTables = m_pConnection->createCatalog();
@@ -325,56 +324,56 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
 // -------------------------------------------------------------------------
 OUString SAL_CALL ODbaseDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::getURL" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::getURL" );
     ::osl::MutexGuard aGuard( m_aMutex );
     return OUString("sdbc:dbase:") + m_pConnection->getURL();
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::getMaxBinaryLiteralLength" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::getMaxBinaryLiteralLength" );
     return STRING_MAXLEN;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::getMaxCharLiteralLength" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::getMaxCharLiteralLength" );
     return 254;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::getMaxColumnNameLength" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::getMaxColumnNameLength" );
     return 10;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::getMaxColumnsInIndex" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::getMaxColumnsInIndex" );
     return 1;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::getMaxColumnsInTable" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::getMaxColumnsInTable" );
     return 128;
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::supportsAlterTableWithAddColumn" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::supportsAlterTableWithAddColumn" );
     return sal_True;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::supportsAlterTableWithDropColumn" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::supportsAlterTableWithDropColumn" );
     return sal_False;
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::isReadOnly" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::isReadOnly" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
     sal_Bool bReadOnly = sal_False;
@@ -387,13 +386,13 @@ sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  ) throw(SQLException, Run
 // -----------------------------------------------------------------------------
 sal_Bool ODbaseDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw" );
     return sal_True;
 }
 // -----------------------------------------------------------------------------
 sal_Bool ODbaseDatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseDatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw" );
     return sal_True;
 }
 // -----------------------------------------------------------------------------

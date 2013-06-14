@@ -42,6 +42,7 @@ certain functionality.
 
 @li @c canvas
 @li @c canvas.cairo
+@li @c canvas.directx
 @li @c canvas.vcl
 
 @section chart2
@@ -54,6 +55,7 @@ certain functionality.
 @li @c connectivity.evoab2
 @li @c connectivity.cpool
 @li @c connectivity.commontools
+@li @c connectivity.drivers
 @li @c connectivity.mork
 @li @c connectivity.flat
 @li @c connectivity.parse

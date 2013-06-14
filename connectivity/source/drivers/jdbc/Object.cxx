@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include "java/LocalRef.hxx"
 #include "resource/jdbc_log.hrc"
-#include <rtl/logfile.hxx>
+
 #include <comphelper/logging.hxx>
 
 #include <memory>

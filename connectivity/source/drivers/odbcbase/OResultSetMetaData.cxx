@@ -19,7 +19,6 @@
 
 #include "odbc/OResultSetMetaData.hxx"
 #include "odbc/OTools.hxx"
-#include <rtl/logfile.hxx>
 
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;
@@ -164,7 +163,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, Ru
 {
     if(m_nColCount != -1)
         return m_nColCount;
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSetMetaData::getColumnCount" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::getColumnCount" );
     sal_Int16 nNumResultCols=0;
     OTools::ThrowException(m_pConnection,N3SQLNumResultCols(m_aStatementHandle,&nNumResultCols),m_aStatementHandle,SQL_HANDLE_STMT,*this);
     return m_nColCount = nNumResultCols;
@@ -200,19 +199,19 @@ OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 column ) throw(S
 // -------------------------------------------------------------------------
 OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSetMetaData::getColumnTypeName" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::getColumnTypeName" );
     return getCharColAttrib(column,SQL_DESC_TYPE_NAME);
 }
 // -------------------------------------------------------------------------
 OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSetMetaData::getColumnLabel" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::getColumnLabel" );
     return getCharColAttrib(column,SQL_DESC_LABEL);
 }
 // -------------------------------------------------------------------------
 OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSetMetaData::getColumnServiceName" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::getColumnServiceName" );
     return OUString();
 }
 // -------------------------------------------------------------------------
@@ -232,13 +231,13 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(
 
 sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSetMetaData::isSigned" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::isSigned" );
     return getNumColAttrib(column,SQL_DESC_UNSIGNED) == SQL_FALSE;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSetMetaData::getPrecision" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::getPrecision" );
     sal_Int32 nType = 0;
     try
     {
@@ -254,7 +253,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQ
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSetMetaData::getScale" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::getScale" );
     sal_Int32 nType = 0;
     try
     {
@@ -271,35 +270,35 @@ sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(::com:
 
 sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSetMetaData::isNullable" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::isNullable" );
     return getNumColAttrib(column,SQL_DESC_NULLABLE);
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSetMetaData::isSearchable" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::isSearchable" );
     return getNumColAttrib(column,SQL_DESC_SEARCHABLE) != SQL_PRED_NONE;
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSetMetaData::isReadOnly" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::isReadOnly" );
     return getNumColAttrib(column,SQL_DESC_UPDATABLE) == SQL_ATTR_READONLY;
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSetMetaData::isDefinitelyWritable" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::isDefinitelyWritable" );
     return getNumColAttrib(column,SQL_DESC_UPDATABLE) == SQL_ATTR_WRITE;
 ;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSetMetaData::isWritable" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::isWritable" );
     return getNumColAttrib(column,SQL_DESC_UPDATABLE) == SQL_ATTR_WRITE;
 }
 // -------------------------------------------------------------------------

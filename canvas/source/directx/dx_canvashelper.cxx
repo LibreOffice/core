@@ -21,7 +21,6 @@
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 
 #include <com/sun/star/rendering/TexturingMode.hpp>
@@ -80,7 +79,7 @@ namespace dxcanvas
             switch( nJoinType )
             {
                 case rendering::PathJoinType::NONE:
-                    OSL_FAIL( "gdiJoinFromJoin(): Join NONE not possible, mapping to MITER" );
+                    SAL_WARN( "canvas.directx", "gdiJoinFromJoin(): Join NONE not possible, mapping to MITER" );
                     // FALLTHROUGH intended
                 case rendering::PathJoinType::MITER:
                     return Gdiplus::LineJoinMiter;

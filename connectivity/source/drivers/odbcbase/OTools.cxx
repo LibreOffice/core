@@ -23,7 +23,6 @@
 #include <osl/diagnose.h>
 #include "odbc/OConnection.hxx"
 #include "diagnose_ex.h"
-#include <rtl/logfile.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <boost/static_assert.hpp>
 
@@ -121,16 +120,16 @@ void OTools::getValue(  OConnection* _pConnection,
                         void* _pValue,
                         SQLLEN _nSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::getValue" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::getValue" );
     const size_t properSize = sqlTypeLen(_nType);
     if ( properSize == static_cast<size_t>(-1) )
-        OSL_FAIL("connectivity::odbc::OTools::getValue: unknown SQL type - cannot check buffer size");
+        SAL_WARN( "connectivity.drivers", "connectivity::odbc::OTools::getValue: unknown SQL type - cannot check buffer size");
     else
     {
         OSL_ENSURE(static_cast<size_t>(_nSize) == properSize, "connectivity::odbc::OTools::getValue got wrongly sized memory region to write result to");
         if ( static_cast<size_t>(_nSize) > properSize )
         {
-            OSL_FAIL("memory region is too big - trying to fudge it");
+            SAL_WARN( "connectivity.drivers", "memory region is too big - trying to fudge it");
             memset(_pValue, 0, _nSize);
 #ifdef OSL_BIGENDIAN
             // This is skewed in favour of integer types
@@ -163,7 +162,7 @@ void OTools::bindValue( OConnection* _pConnection,
                         rtl_TextEncoding _nTextEncoding,
                         sal_Bool _bUseOldTimeDate) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::bindValue" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::bindValue" );
     SQLRETURN nRetcode;
     SQLSMALLINT   fSqlType;
     SQLSMALLINT   fCType;
@@ -313,13 +312,13 @@ void OTools::ThrowException(const OConnection* _pConnection,
         case SQL_ERROR:             break;
 
 
-        case SQL_INVALID_HANDLE:    OSL_FAIL("SdbODBC3_SetStatus: SQL_INVALID_HANDLE");
+        case SQL_INVALID_HANDLE:    SAL_WARN( "connectivity.drivers", "SdbODBC3_SetStatus: SQL_INVALID_HANDLE");
                                     throw SQLException();
     }
 
     // Additional Information on the latest ODBC-functioncall available
     // SQLError provides this Information.
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::ThrowException" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::ThrowException" );
 
     SDB_ODBC_CHAR szSqlState[5];
     SQLINTEGER pfNativeError;
@@ -358,7 +357,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
                                          sal_Bool &_bWasNull,
                                          const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::getBytesValue" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::getBytesValue" );
     sal_Int8 aCharArray[2048];
     // First try to fetch the data with the little Buffer:
     const SQLLEN nMaxLen = sizeof aCharArray;
@@ -412,7 +411,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
                                        const Reference< XInterface >& _xInterface,
                                        rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::getStringValue" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::getStringValue" );
     OUStringBuffer aData;
     switch(_fSqlType)
     {
@@ -456,7 +455,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
                 nReadChars = nMaxLen-1;
                 if ( waCharArray[nReadChars] != 0)
                 {
-                    OSL_FAIL("Buggy ODBC driver? Did not null-terminate (variable length) data!");
+                    SAL_WARN( "connectivity.drivers", "Buggy ODBC driver? Did not null-terminate (variable length) data!");
                     ++nReadChars;
                 }
             }
@@ -499,7 +498,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
                 nReadChars = nMaxLen-1;
                 if ( aCharArray[nReadChars] != 0)
                 {
-                    OSL_FAIL("Buggy ODBC driver? Did not null-terminate (variable length) data!");
+                    SAL_WARN( "connectivity.drivers", "Buggy ODBC driver? Did not null-terminate (variable length) data!");
                     ++nReadChars;
                 }
             }
@@ -665,7 +664,7 @@ sal_Int32 OTools::MapOdbcType2Jdbc(SQLSMALLINT _nType)
 //--------------------------------------------------------------------
 SQLSMALLINT OTools::jdbcTypeToOdbc(sal_Int32 jdbcType)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::jdbcTypeToOdbc" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::jdbcTypeToOdbc" );
     // For the most part, JDBC types match ODBC types.  We'll
     // just convert the ones that we know are different
 
@@ -701,7 +700,7 @@ void OTools::getBindTypes(sal_Bool _bUseWChar,
                           SQLSMALLINT& fSqlType
                           )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::getBindTypes" );
+    SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OTools::getBindTypes" );
     switch(_nOdbcType)
     {
         case SQL_CHAR:              if(_bUseWChar)

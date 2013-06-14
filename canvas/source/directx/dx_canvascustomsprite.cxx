@@ -23,7 +23,6 @@
 #include <canvas/verbosetrace.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 
 #include <canvas/canvastools.hxx>

@@ -51,7 +51,6 @@
 #include "connectivity/FValue.hxx"
 #include "connectivity/dbconversion.hxx"
 #include "resource/dbase_res.hrc"
-#include <rtl/logfile.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <algorithm>
@@ -193,7 +192,7 @@ void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,com::sun::star::u
 // -------------------------------------------------------------------------
 void ODbaseTable::readHeader()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::readHeader" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::readHeader" );
     OSL_ENSURE(m_pFileStream,"No Stream available!");
     if(!m_pFileStream)
         return;
@@ -296,7 +295,7 @@ void ODbaseTable::readHeader()
 // -------------------------------------------------------------------------
 void ODbaseTable::fillColumns()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::fillColumns" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::fillColumns" );
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
     m_pFileStream->Seek(32L);
 
@@ -344,7 +343,7 @@ void ODbaseTable::fillColumns()
         cType[0] = aDBFColumn.db_typ;
         cType[1] = 0;
         aTypeName = OUString::createFromAscii(cType);
-OSL_TRACE("column type: %c",aDBFColumn.db_typ);
+        SAL_INFO( "connectivity.drivers","column type: " << aDBFColumn.db_typ);
 
         switch (aDBFColumn.db_typ)
         {
@@ -448,7 +447,7 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables,ODbaseConnection* _pConnec
         ,m_pMemoStream(NULL)
         ,m_bWriteableMemo(sal_False)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::ODbaseTable" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::ODbaseTable" );
     // initialize the header
     m_aHeader.db_typ    = dBaseIII;
     m_aHeader.db_anz    = 0;
@@ -471,14 +470,14 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables,ODbaseConnection* _pConnec
                 ,m_pMemoStream(NULL)
                 ,m_bWriteableMemo(sal_False)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::ODbaseTable" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::ODbaseTable" );
     m_eEncoding = getConnection()->getTextEncoding();
 }
 
 // -----------------------------------------------------------------------------
 void ODbaseTable::construct()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::construct" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::construct" );
     // initialize the header
     m_aHeader.db_typ    = dBaseIII;
     m_aHeader.db_anz    = 0;
@@ -561,7 +560,7 @@ void ODbaseTable::construct()
 //------------------------------------------------------------------
 sal_Bool ODbaseTable::ReadMemoHeader()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::ReadMemoHeader" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::ReadMemoHeader" );
     m_pMemoStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
     m_pMemoStream->RefreshBuffer();         // make sure that the header information is actually read again
     m_pMemoStream->Seek(0L);
@@ -603,7 +602,7 @@ sal_Bool ODbaseTable::ReadMemoHeader()
             (*m_pMemoStream) >> m_aMemoHeader.db_size;
             break;
         default:
-            OSL_FAIL( "ODbaseTable::ReadMemoHeader: unsupported memo type!" );
+            SAL_WARN( "connectivity.drivers", "ODbaseTable::ReadMemoHeader: unsupported memo type!" );
             break;
     }
     return sal_True;
@@ -611,7 +610,7 @@ sal_Bool ODbaseTable::ReadMemoHeader()
 // -------------------------------------------------------------------------
 String ODbaseTable::getEntry(OConnection* _pConnection,const OUString& _sName )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::getEntry" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::getEntry" );
     OUString sURL;
     try
     {
@@ -655,7 +654,7 @@ String ODbaseTable::getEntry(OConnection* _pConnection,const OUString& _sName )
 // -------------------------------------------------------------------------
 void ODbaseTable::refreshColumns()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::refreshColumns" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::refreshColumns" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
     TStringVector aVector;
@@ -672,7 +671,7 @@ void ODbaseTable::refreshColumns()
 // -------------------------------------------------------------------------
 void ODbaseTable::refreshIndexes()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::refreshIndexes" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::refreshIndexes" );
     TStringVector aVector;
     if(m_pFileStream && (!m_pIndexes || m_pIndexes->getCount() == 0))
     {
@@ -717,7 +716,7 @@ void ODbaseTable::refreshIndexes()
 // -------------------------------------------------------------------------
 void SAL_CALL ODbaseTable::disposing(void)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::disposing" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::disposing" );
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aColumns = NULL;
@@ -725,7 +724,7 @@ void SAL_CALL ODbaseTable::disposing(void)
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::getTypes" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::getTypes" );
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
     ::std::vector<Type> aOwnTypes;
     aOwnTypes.reserve(aTypes.getLength());
@@ -748,7 +747,7 @@ Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException)
 // -------------------------------------------------------------------------
 Any SAL_CALL ODbaseTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::queryInterface" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::queryInterface" );
     if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0)  ||
         rType == ::getCppuType((const Reference<XDataDescriptorFactory>*)0))
         return Any();
@@ -760,7 +759,7 @@ Any SAL_CALL ODbaseTable::queryInterface( const Type & rType ) throw(RuntimeExce
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > ODbaseTable::getUnoTunnelImplementationId()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::getUnoTunnelImplementationId" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::getUnoTunnelImplementationId" );
     static ::cppu::OImplementationId * pId = 0;
     if (! pId)
     {
@@ -778,7 +777,7 @@ Sequence< sal_Int8 > ODbaseTable::getUnoTunnelImplementationId()
 //------------------------------------------------------------------
 sal_Int64 ODbaseTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::getSomething" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::getSomething" );
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : ODbaseTable_BASE::getSomething(rId);
@@ -786,7 +785,7 @@ sal_Int64 ODbaseTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (R
 //------------------------------------------------------------------
 sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::fetchRow" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::fetchRow" );
     // Read the data
     bool bIsCurRecordDeleted = (char)m_pBuffer[0] == '*';
 
@@ -995,7 +994,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
                         (_rRow->get())[i]->setNull();
                 }   break;
                 default:
-                    OSL_FAIL("Falscher Type");
+                    SAL_WARN( "connectivity.drivers","Falscher Type");
             }
             (_rRow->get())[i]->setTypeKind(nType);
         }
@@ -1009,7 +1008,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
 // -------------------------------------------------------------------------
 void ODbaseTable::FileClose()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::FileClose" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::FileClose" );
     ::osl::MutexGuard aGuard(m_aMutex);
     // if not everything has been written yet
     if (m_pMemoStream && m_pMemoStream->IsWritable())
@@ -1023,7 +1022,7 @@ void ODbaseTable::FileClose()
 // -------------------------------------------------------------------------
 sal_Bool ODbaseTable::CreateImpl()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::CreateImpl" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::CreateImpl" );
     OSL_ENSURE(!m_pFileStream, "SequenceError");
 
     if ( m_pConnection->isCheckEnabled() && ::dbtools::convertName2SQLName(m_Name,OUString()) != m_Name )
@@ -1138,7 +1137,7 @@ sal_Bool ODbaseTable::CreateImpl()
 // -----------------------------------------------------------------------------
 void ODbaseTable::throwInvalidColumnType(const sal_uInt16 _nErrorId,const OUString& _sColumnName)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::throwInvalidColumnType" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::throwInvalidColumnType" );
     try
     {
         // we have to drop the file because it is corrupted now
@@ -1158,7 +1157,7 @@ void ODbaseTable::throwInvalidColumnType(const sal_uInt16 _nErrorId,const OUStri
 // creates in principle dBase IV file format
 sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMemo)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::CreateFile" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::CreateFile" );
     bCreateMemo = sal_False;
     Date aDate( Date::SYSTEM );                     // current date
 
@@ -1407,7 +1406,7 @@ sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMe
 // creates in principle dBase III file format
 sal_Bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::CreateMemoFile" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::CreateMemoFile" );
     // filehandling macro for table creation
     m_pMemoStream = createStream_simpleError( aFile.GetMainURL(INetURLObject::NO_DECODE),STREAM_READWRITE | STREAM_SHARE_DENYWRITE);
 
@@ -1427,7 +1426,7 @@ sal_Bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
 //------------------------------------------------------------------
 sal_Bool ODbaseTable::Drop_Static(const OUString& _sUrl,sal_Bool _bHasMemoFields,OCollection* _pIndexes )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::Drop_Static" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::Drop_Static" );
     INetURLObject aURL;
     aURL.SetURL(_sUrl);
 
@@ -1476,7 +1475,7 @@ sal_Bool ODbaseTable::Drop_Static(const OUString& _sUrl,sal_Bool _bHasMemoFields
 // -----------------------------------------------------------------------------
 sal_Bool ODbaseTable::DropImpl()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::DropImpl" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::DropImpl" );
     FileClose();
 
     if(!m_pIndexes)
@@ -1495,7 +1494,7 @@ sal_Bool ODbaseTable::DropImpl()
 //------------------------------------------------------------------
 sal_Bool ODbaseTable::InsertRow(OValueRefVector& rRow, sal_Bool bFlush,const Reference<XIndexAccess>& _xCols)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::InsertRow" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::InsertRow" );
     // fill buffer with blanks
     AllocBuffer();
     memset(m_pBuffer, 0, m_aHeader.db_slng);
@@ -1553,7 +1552,7 @@ sal_Bool ODbaseTable::InsertRow(OValueRefVector& rRow, sal_Bool bFlush,const Ref
 //------------------------------------------------------------------
 sal_Bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const Reference<XIndexAccess>& _xCols)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::UpdateRow" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::UpdateRow" );
     // fill buffer with blanks
     AllocBuffer();
 
@@ -1583,7 +1582,7 @@ sal_Bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,con
 //------------------------------------------------------------------
 sal_Bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::DeleteRow" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::DeleteRow" );
     // Set the Delete-Flag (be it set or not):
     // Position on desired record:
     long nFilePos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
@@ -1636,7 +1635,7 @@ sal_Bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
 // -------------------------------------------------------------------------
 Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(sal_Int32 _nColumnPos)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::isUniqueByColumnName" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::isUniqueByColumnName" );
     if(!m_pIndexes)
         refreshIndexes();
     if(m_pIndexes->hasElements())
@@ -1671,7 +1670,7 @@ static double toDouble(const OString& rString)
 //------------------------------------------------------------------
 sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, const Reference<XIndexAccess>& _xCols, const bool bForceAllFields)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::UpdateBuffer" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::UpdateBuffer" );
     OSL_ENSURE(m_pBuffer,"Buffer is NULL!");
     if ( !m_pBuffer )
         return sal_False;
@@ -2008,7 +2007,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, 
 // -----------------------------------------------------------------------------
 sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_uIntPtr& rBlockNr)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::WriteMemo" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::WriteMemo" );
     // if the BlockNo 0 is given, the block will be appended at the end
     sal_uIntPtr nSize = 0;
     OString aStr;
@@ -2144,7 +2143,7 @@ sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_uIntPtr& rBlo
 // XAlterTable
 void SAL_CALL ODbaseTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::alterColumnByName" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::alterColumnByName" );
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
@@ -2157,7 +2156,7 @@ void SAL_CALL ODbaseTable::alterColumnByName( const OUString& colName, const Ref
 // -------------------------------------------------------------------------
 void SAL_CALL ODbaseTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::alterColumnByIndex" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::alterColumnByIndex" );
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
@@ -2173,7 +2172,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
                               const Reference< XPropertySet >& descriptor ,
                               const Reference< XDataDescriptorFactory >& xOldColumn )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::alterColumn" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::alterColumn" );
     if(index < 0 || index >= m_pColumns->getCount())
         throw IndexOutOfBoundsException(OUString::number(index),*this);
 
@@ -2272,20 +2271,20 @@ void ODbaseTable::alterColumn(sal_Int32 index,
     }
     catch(const Exception&)
     {
-        OSL_FAIL("ODbaseTable::alterColumn: Exception occurred!");
+        SAL_WARN( "connectivity.drivers","ODbaseTable::alterColumn: Exception occurred!");
         throw;
     }
 }
 // -----------------------------------------------------------------------------
 Reference< XDatabaseMetaData> ODbaseTable::getMetaData() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::getMetaData" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::getMetaData" );
     return getConnection()->getMetaData();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ODbaseTable::rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::rename" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::rename" );
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
     if(m_pTables && m_pTables->hasByName(newName))
@@ -2344,7 +2343,7 @@ namespace
 // -------------------------------------------------------------------------
 void SAL_CALL ODbaseTable::renameImpl( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::getEntry" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::getEntry" );
     ::osl::MutexGuard aGuard(m_aMutex);
 
     FileClose();
@@ -2360,7 +2359,7 @@ void SAL_CALL ODbaseTable::renameImpl( const OUString& newName ) throw(::com::su
 // -----------------------------------------------------------------------------
 void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::addColumn" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::addColumn" );
     String sTempName = createTempFile();
 
     ODbaseTable* pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
@@ -2433,7 +2432,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
 // -----------------------------------------------------------------------------
 void ODbaseTable::dropColumn(sal_Int32 _nPos)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::dropColumn" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::dropColumn" );
     String sTempName = createTempFile();
 
     ODbaseTable* pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
@@ -2489,7 +2488,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
 // -----------------------------------------------------------------------------
 String ODbaseTable::createTempFile()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::createTempFile" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::createTempFile" );
     OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
     if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
         aIdent += "/";
@@ -2514,7 +2513,7 @@ String ODbaseTable::createTempFile()
 // -----------------------------------------------------------------------------
 void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::copyData" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::copyData" );
     sal_Int32 nPos = _nPos + 1; // +1 because we always have the bookmark clumn as well
     OValueRefRow aRow = new OValueRefVector(m_pColumns->getCount());
     OValueRefRow aInsertRow;
@@ -2572,7 +2571,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
 // -----------------------------------------------------------------------------
 void ODbaseTable::throwInvalidDbaseFormat()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::throwInvalidDbaseFormat" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::throwInvalidDbaseFormat" );
     FileClose();
     // no dbase file
 
@@ -2585,14 +2584,14 @@ void ODbaseTable::throwInvalidDbaseFormat()
 // -----------------------------------------------------------------------------
 void ODbaseTable::refreshHeader()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::refreshHeader" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::refreshHeader" );
     if ( m_aHeader.db_anz == 0 )
         readHeader();
 }
 //------------------------------------------------------------------
 sal_Bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::seekRow" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::seekRow" );
     // ----------------------------------------------------------
     // prepare positioning:
     OSL_ENSURE(m_pFileStream,"ODbaseTable::seekRow: FileStream is NULL!");
@@ -2676,7 +2675,7 @@ End:
 // -----------------------------------------------------------------------------
 sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::ReadMemo" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::ReadMemo" );
     bool bIsText = true;
 
     m_pMemoStream->Seek(nBlockNo * m_aMemoHeader.db_size);
@@ -2753,7 +2752,7 @@ sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
 // -----------------------------------------------------------------------------
 void ODbaseTable::AllocBuffer()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::AllocBuffer" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::AllocBuffer" );
     sal_uInt16 nSize = m_aHeader.db_slng;
     OSL_ENSURE(nSize > 0, "Size too small");
 
@@ -2773,7 +2772,7 @@ void ODbaseTable::AllocBuffer()
 // -----------------------------------------------------------------------------
 sal_Bool ODbaseTable::WriteBuffer()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::WriteBuffer" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::WriteBuffer" );
     OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
 
     // postion on desired record:
@@ -2784,7 +2783,7 @@ sal_Bool ODbaseTable::WriteBuffer()
 // -----------------------------------------------------------------------------
 sal_Int32 ODbaseTable::getCurrentLastPos() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::getCurrentLastPos" );
+    SAL_INFO( "connectivity.drivers", "dbase Ocke.Janssen@sun.com ODbaseTable::getCurrentLastPos" );
     return m_aHeader.db_anz;
 }
 

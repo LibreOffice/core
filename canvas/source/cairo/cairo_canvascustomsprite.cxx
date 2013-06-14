@@ -21,7 +21,6 @@
 #include <canvas/verbosetrace.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 
 #include <canvas/canvastools.hxx>
@@ -47,9 +46,7 @@ namespace cairocanvas
         ENSURE_OR_THROW( rRefDevice.get(),
                           "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
-        OSL_TRACE("sprite size: %d, %d",
-                  ::canvas::tools::roundUp( rSpriteSize.Width ),
-                  ::canvas::tools::roundUp( rSpriteSize.Height ));
+        SAL_INFO( "canvas.cairo", "sprite size: " << ::canvas::tools::roundUp( rSpriteSize.Width ) << ", " << ::canvas::tools::roundUp( rSpriteSize.Height ));
 
         mpBufferSurface = mpSpriteCanvas->createSurface( maSize );
 
@@ -125,7 +122,7 @@ namespace cairocanvas
     {
         if( !bHasAlpha && !bCopyContent )
         {
-            OSL_TRACE("replacing sprite background surface");
+            SAL_INFO( "canvas.cairo", "replacing sprite background surface");
 
             mpBufferSurface = mpSpriteCanvas->createSurface( maSize, CAIRO_CONTENT_COLOR );
             maSpriteHelper.setSurface( mpBufferSurface );

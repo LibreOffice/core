@@ -18,7 +18,6 @@
  */
 
 #include "file/quotedstring.hxx"
-#include <rtl/logfile.hxx>
 
 namespace connectivity
 {
@@ -28,7 +27,7 @@ namespace connectivity
     //------------------------------------------------------------------
     xub_StrLen QuotedTokenizedString::GetTokenCount( sal_Unicode cTok, sal_Unicode cStrDel ) const
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "QuotedTokenizedString::GetTokenCount" );
+        SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com QuotedTokenizedString::GetTokenCount" );
         const xub_StrLen nLen = m_sString.Len();
         if ( !nLen )
             return 0;
@@ -87,7 +86,7 @@ namespace connectivity
     //------------------------------------------------------------------
     String QuotedTokenizedString::GetTokenSpecial(xub_StrLen& nStartPos, sal_Unicode cTok, sal_Unicode cStrDel) const
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "QuotedTokenizedString::GetTokenCount" );
+        SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com QuotedTokenizedString::GetTokenCount" );
         String aStr;
         const xub_StrLen nLen = m_sString.Len();
         if ( nLen )

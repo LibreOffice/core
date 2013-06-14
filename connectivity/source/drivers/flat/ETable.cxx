@@ -44,7 +44,6 @@
 #include "connectivity/dbconversion.hxx"
 #include "file/quotedstring.hxx"
 #include <unotools/syslocale.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -66,7 +65,7 @@ using std::lower_bound;
 // -------------------------------------------------------------------------
 void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::fillColumns" );
+    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::fillColumns" );
     m_bNeedToReadLine = true; // we overwrite m_aCurrentLine, seek the stream, ...
     m_pFileStream->Seek(0);
     m_aCurrentLine = QuotedTokenizedString();
@@ -425,13 +424,13 @@ OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnectio
     ,m_cFieldDelimiter(_pConnection->getFieldDelimiter())
     ,m_bNeedToReadLine(false)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::OFlatTable" );
+    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::OFlatTable" );
 
 }
 // -----------------------------------------------------------------------------
 void OFlatTable::construct()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::construct" );
+    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::construct" );
     SvtSysLocale aLocale;
     ::com::sun::star::lang::Locale aAppLocale(aLocale.GetLanguageTag().getLocale());
 
@@ -473,7 +472,7 @@ void OFlatTable::construct()
 // -------------------------------------------------------------------------
 String OFlatTable::getEntry()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::getEntry" );
+    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::getEntry" );
     OUString sURL;
     try
     {
@@ -519,7 +518,7 @@ String OFlatTable::getEntry()
 // -------------------------------------------------------------------------
 void OFlatTable::refreshColumns()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::refreshColumns" );
+    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::refreshColumns" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
     TStringVector aVector;
@@ -537,7 +536,7 @@ void OFlatTable::refreshColumns()
 // -------------------------------------------------------------------------
 void SAL_CALL OFlatTable::disposing(void)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::disposing" );
+    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::disposing" );
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aColumns = NULL;
@@ -599,7 +598,7 @@ Sequence< sal_Int8 > OFlatTable::getUnoTunnelImplementationId()
 //------------------------------------------------------------------
 sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::getSomething" );
+    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::getSomething" );
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OFlatTable_BASE::getSomething(rId);
@@ -607,7 +606,7 @@ sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
 //------------------------------------------------------------------
 sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, sal_Bool bIsTable, sal_Bool bRetrieveData)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::fetchRow" );
+    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::fetchRow" );
     *(_rRow->get())[0] = m_nFilePos;
 
     if (!bRetrieveData)
@@ -749,7 +748,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, s
 // -----------------------------------------------------------------------------
 void OFlatTable::refreshHeader()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "lionel@mamane.lu", "OFlatTable::refreshHeader" );
+    SAL_INFO( "connectivity.drivers", "flat lionel@mamane.lu OFlatTable::refreshHeader" );
 }
 
 // -----------------------------------------------------------------------------
@@ -776,7 +775,7 @@ namespace
 // -----------------------------------------------------------------------------
 sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::seekRow" );
+    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::seekRow" );
     OSL_ENSURE(m_pFileStream,"OFlatTable::seekRow: FileStream is NULL!");
     // ----------------------------------------------------------
 
@@ -929,7 +928,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
 // -----------------------------------------------------------------------------
 bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos, const bool nonEmpty)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::readLine" );
+    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatTable::readLine" );
     const rtl_TextEncoding nEncoding = m_pConnection->getTextEncoding();
     m_aCurrentLine = QuotedTokenizedString();
     do
