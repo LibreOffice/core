@@ -351,7 +351,12 @@ void setInterpolationMode(
 
     if(bSameWidth && bSameHeight)
     {
+#ifdef __MINGW32__
+        //Gdiplus::InterpolationModeInvalid is missing on mingw
+        rGraphics.SetInterpolationMode(Gdiplus::InterpolationModeDefault);
+#else
         rGraphics.SetInterpolationMode(Gdiplus::InterpolationModeInvalid);
+#endif
     }
     else if(rDestWidth > rSrcWidth && rDestHeight > rSrcHeight)
     {

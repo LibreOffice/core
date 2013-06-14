@@ -31,7 +31,29 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <map>
 
+#if defined _MSC_VER
+#pragma warning(push, 1)
+#endif
+
+#ifdef __MINGW32__
+#ifdef GetObject
+#undef GetObject
+#endif
+#define GetObject GetObjectA
+#endif
+
 #include <gdiplus.h>
+
+#ifdef __MINGW32__
+#ifdef GetObject
+#undef GetObject
+#endif
+#endif
+
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
+
 
 // ------------------------------------------------------------------
 // - Inlines -
