@@ -5690,19 +5690,18 @@ return !(i != 0 && j != 0);
         CXXFLAGS=$save_CXXFLAGS
     fi
 
-    if test "$HAVE_CXX11" != "TRUE"; then
-        if test -n "$CXXFLAGS_CXX11"; then
-            AC_MSG_NOTICE([Disabling C++11 support])
-            CXXFLAGS_CXX11=
-        elif test "$CPP_LIBRARY" = LIBCPP -a $_os = Darwin; then
-            AC_MSG_ERROR([Selected libc++ but C++11 support broken])
-        fi
+    if test "$HAVE_CXX11" = "TRUE"; then
+        AC_DEFINE(HAVE_CXX11)
+    elif test -n "$CXXFLAGS_CXX11"; then
+        AC_MSG_NOTICE([Disabling C++11 support])
+        CXXFLAGS_CXX11=
+    elif test "$CPP_LIBRARY" = LIBCPP -a $_os = Darwin; then
+        AC_MSG_ERROR([Selected libc++ but C++11 support broken])
     fi
 fi
 
 AC_SUBST(CXXFLAGS_CXX11)
 AC_SUBST(HAVE_CXX11)
-AC_DEFINE(HAVE_CXX11)
 
 dnl ==================================
 dnl Check for C++11 "= delete" support
