@@ -849,8 +849,7 @@ void UniversalContentBroker::prepareAndRegister(
                           m_xContext,
                           aIt->ServiceName,
                           aProviderArguments,
-                          aIt->URLTemplate,
-                          0);
+                          aIt->URLTemplate);
 
         }
         else

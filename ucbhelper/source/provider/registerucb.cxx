@@ -45,8 +45,7 @@ registerAtUcb(
     uno::Reference< uno::XComponentContext > const & rxContext,
     OUString const & rName,
     OUString const & rArguments,
-    OUString const & rTemplate,
-    ContentProviderRegistrationInfo * pInfo)
+    OUString const & rTemplate)
     throw (uno::RuntimeException)
 {
     OSL_ENSURE(rxContext.is(),
@@ -85,8 +84,6 @@ registerAtUcb(
         catch (uno::RuntimeException const &) { throw; }
         catch (uno::Exception const &) {}
 
-    uno::Reference< ucb::XContentProvider >
-        xOriginalProvider(xProvider);
     uno::Reference< ucb::XParameterizedContentProvider >
         xParameterized(xProvider, uno::UNO_QUERY);
     if (xParameterized.is())
@@ -136,12 +133,6 @@ registerAtUcb(
                 catch (uno::RuntimeException const &) {}
             throw;
         }
-    }
-    if (bSuccess && pInfo)
-    {
-        pInfo->m_xProvider = xOriginalProvider;
-        pInfo->m_aArguments = aProviderArguments;
-        pInfo->m_aTemplate = rTemplate;
     }
     return bSuccess;
 }

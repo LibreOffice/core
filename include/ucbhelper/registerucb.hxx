@@ -22,7 +22,6 @@
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <vector>
 
@@ -35,28 +34,6 @@ namespace com { namespace sun { namespace star {
 
 
 namespace ucbhelper {
-
-//============================================================================
-/** Information about a registered content provider.
- */
-struct ContentProviderRegistrationInfo
-{
-    /** The registered content provider (or null if registration failed).
-     */
-    com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >
-        m_xProvider;
-
-    /** The arguments the content provider was instantiated with.
-     */
-    OUString m_aArguments;
-
-    /** The URL template the content provider is registered on.
-     */
-    OUString m_aTemplate;
-};
-
-typedef std::vector< ContentProviderRegistrationInfo >
-                                    ContentProviderRegistrationInfoList;
 
 //============================================================================
 /** Information about a content provider, passed to
@@ -113,8 +90,7 @@ UCBHELPER_DLLPUBLIC bool registerAtUcb(
         rxContext,
     OUString const & rName,
     OUString const & rArguments,
-    OUString const & rTemplate,
-    ContentProviderRegistrationInfo * pInfo)
+    OUString const & rTemplate)
     throw (com::sun::star::uno::RuntimeException);
 
 }
