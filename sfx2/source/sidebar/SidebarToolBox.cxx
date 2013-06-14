@@ -125,11 +125,11 @@ SidebarToolBox::~SidebarToolBox (void)
 
 void SidebarToolBox::InsertItem(const OUString& rCommand,
         const com::sun::star::uno::Reference<com::sun::star::frame::XFrame>& rFrame,
-        ToolBoxItemBits nBits, sal_uInt16 nPos)
+        ToolBoxItemBits nBits, const Size& rRequestedSize, sal_uInt16 nPos)
 {
-    ToolBox::InsertItem(rCommand, rFrame, nBits, nPos);
+    ToolBox::InsertItem(rCommand, rFrame, nBits, rRequestedSize, nPos);
 
-    CreateController(GetItemId(rCommand), rFrame, 0);
+    CreateController(GetItemId(rCommand), rFrame, std::max(rRequestedSize.Width(), 0L));
     RegisterHandlers();
 }
 

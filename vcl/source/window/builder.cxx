@@ -633,6 +633,25 @@ namespace
         return sActionName;
     }
 
+    Size extractSizeRequest(VclBuilder::stringmap &rMap)
+    {
+        OString sWidthRequest("0");
+        OString sHeightRequest("0");
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("width-request"));
+        if (aFind != rMap.end())
+        {
+            sWidthRequest = aFind->second;
+            rMap.erase(aFind);
+        }
+        aFind = rMap.find(OString("height-request"));
+        if (aFind != rMap.end())
+        {
+            sHeightRequest = aFind->second;
+            rMap.erase(aFind);
+        }
+        return Size(sWidthRequest.toInt32(), sHeightRequest.toInt32());
+    }
+
     Window * extractStockAndBuildPushButton(Window *pParent, VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
@@ -1259,7 +1278,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
                 nBits |= TIB_DROPDOWN;
 
             if (!aCommand.isEmpty())
-                pToolBox->InsertItem(aCommand, m_xFrame, nBits);
+                pToolBox->InsertItem(aCommand, m_xFrame, nBits, extractSizeRequest(rMap));
 
             return NULL; // no widget to be created
         }

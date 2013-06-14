@@ -63,7 +63,9 @@ struct ImplToolItem
     OString        maHelpId;
     Rectangle           maRect;
     Rectangle           maCalcRect;
-    // the overall horizontal item size, including one or more of [image size + textlength + dropdown arrow]
+    /// Widget layout may request size; set it as the minimal size.
+    Size                maMinimalItemSize;
+    /// The overall horizontal item size, including one or more of [image size + textlength + dropdown arrow]
     Size                maItemSize;
     long                mnSepSize;
     long                mnDropDownArrowWidth;

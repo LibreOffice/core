@@ -166,6 +166,7 @@ ImplToolItem::ImplToolItem( const ImplToolItem& rItem ) :
         maHelpId                ( rItem.maHelpId ),
         maRect                  ( rItem.maRect ),
         maCalcRect              ( rItem.maCalcRect ),
+        maMinimalItemSize       ( rItem.maMinimalItemSize ),
         maItemSize              ( rItem.maItemSize ),
         mnSepSize               ( rItem.mnSepSize ),
         mnDropDownArrowWidth    ( rItem.mnDropDownArrowWidth ),
@@ -207,6 +208,7 @@ ImplToolItem& ImplToolItem::operator=( const ImplToolItem& rItem )
     maCalcRect              = rItem.maCalcRect;
     mnSepSize               = rItem.mnSepSize;
     mnDropDownArrowWidth    = rItem.mnDropDownArrowWidth;
+    maMinimalItemSize       = rItem.maMinimalItemSize;
     maItemSize              = rItem.maItemSize;
     mbVisibleText           = rItem.mbVisibleText;
     meType                  = rItem.meType;
@@ -758,7 +760,7 @@ static Image getCommandImage(const OUString& rCommand, bool bLarge,
     return Image();
 }
 
-void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::XFrame>& rFrame, ToolBoxItemBits nBits, sal_uInt16 nPos)
+void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::XFrame>& rFrame, ToolBoxItemBits nBits, const Size& rRequestedSize, sal_uInt16 nPos)
 {
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
     uno::Reference<frame::XModuleManager2> xModuleManager(frame::ModuleManager::create(xContext));
@@ -773,6 +775,11 @@ void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::X
 
     InsertItem(nItemId, aImage, aLabel, nBits, nPos);
     SetItemCommand(nItemId, rCommand);
+
+    // set the minimal size
+    ImplToolItem* pItem = ImplGetItem( nItemId );
+    if ( pItem )
+        pItem->maMinimalItemSize = rRequestedSize;
 }
 
 // -----------------------------------------------------------------------

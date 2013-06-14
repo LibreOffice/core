@@ -1935,10 +1935,13 @@ sal_Bool ToolBox::ImplCalcItem()
 
                 if( it->meType == TOOLBOXITEM_BUTTON )
                 {
-                    if( it->maItemSize.Width() < nMinWidth )
-                        it->maItemSize.Width() = nMinWidth;
-                    if( it->maItemSize.Height() < nMinHeight )
-                        it->maItemSize.Height() = nMinHeight;
+                    long nMinW = std::max(nMinWidth, it->maMinimalItemSize.Width());
+                    long nMinH = std::max(nMinHeight, it->maMinimalItemSize.Height());
+
+                    if( it->maItemSize.Width() < nMinW )
+                        it->maItemSize.Width() = nMinW;
+                    if( it->maItemSize.Height() < nMinH )
+                        it->maItemSize.Height() = nMinH;
                 }
 
                 // keep track of max item size
