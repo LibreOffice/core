@@ -203,8 +203,6 @@ public:
     int             GetUnitsPerPixel() const                { return mnUnitsPerPixel; }
     int             GetOrientation() const                  { return mnOrientation; }
 
-    virtual const PhysicalFontFace* GetFallbackFontData( sal_GlyphId ) const;
-
     // methods using string indexing
     virtual int     GetTextBreak( long nMaxWidth, long nCharExtra=0, int nFactor=1 ) const = 0;
     virtual long    FillDXArray( sal_Int32* pDXArray ) const = 0;
@@ -214,7 +212,8 @@ public:
 
     // methods using glyph indexing
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdAry, Point& rPos, int&,
-                        sal_Int32* pGlyphAdvAry = NULL, int* pCharPosAry = NULL ) const = 0;
+                        sal_Int32* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
+                        const PhysicalFontFace** pFallbackFonts = NULL ) const = 0;
     virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
@@ -267,7 +266,8 @@ public:
     virtual long    FillDXArray( sal_Int32* pDXArray ) const;
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
-                                   int&, sal_Int32* pGlyphAdvAry, int* pCharPosAry ) const;
+                                   int&, sal_Int32* pGlyphAdvAry, int* pCharPosAry,
+                                   const PhysicalFontFace** pFallbackFonts ) const;
     virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const;
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
@@ -278,8 +278,6 @@ public:
     virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    AdjustLayout( ImplLayoutArgs& );
     virtual void    InitFont() const;
-
-    virtual const PhysicalFontFace* GetFallbackFontData( sal_GlyphId ) const;
 
     void SetInComplete(bool bInComplete = true);
 
@@ -365,7 +363,8 @@ public:
 
     // used by display layers
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos, int&,
-                        sal_Int32* pGlyphAdvAry = NULL, int* pCharPosAry = NULL ) const;
+                        sal_Int32* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
+                        const PhysicalFontFace** pFallbackFonts = NULL ) const;
 
 protected:
                     GenericSalLayout();

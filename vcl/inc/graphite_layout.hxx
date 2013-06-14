@@ -127,7 +127,8 @@ public:
 
     // methods using glyph indexing
     virtual int   GetNextGlyphs(int nLen, sal_GlyphId* pGlyphIdxAry, ::Point & rPos, int&,
-            sal_Int32* pGlyphAdvAry = 0, int* pCharPosAry = 0 ) const;
+            sal_Int32* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
+            const PhysicalFontFace** pFallbackFonts = NULL ) const;
 
     // used by glyph+font+script fallback
     virtual void    MoveGlyph( int nStart, long nNewXPos );

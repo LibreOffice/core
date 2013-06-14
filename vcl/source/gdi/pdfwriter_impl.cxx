@@ -7621,7 +7621,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     sal_Int32 pUnicodesPerGlyph[nMaxGlyphs];
     int pCharPosAry[nMaxGlyphs];
     sal_Int32 nAdvanceWidths[nMaxGlyphs];
-    const PhysicalFontFace* pFallbackFonts[nMaxGlyphs];
+    const PhysicalFontFace* pFallbackFonts[nMaxGlyphs] = { NULL };
     bool bVertical = m_aCurrentPDFState.m_aFont.IsVertical();
     int nGlyphs;
     int nIndex = 0;
@@ -7749,13 +7749,11 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     aGlyphs.reserve( nTmpMaxGlyphs );
     // first get all the glyphs and register them; coordinates still in Pixel
     Point aGNGlyphPos;
-    while( (nGlyphs = rLayout.GetNextGlyphs( nTmpMaxGlyphs, pGlyphs, aGNGlyphPos, nIndex, nAdvanceWidths, pCharPosAry )) != 0 )
+    while( (nGlyphs = rLayout.GetNextGlyphs( nTmpMaxGlyphs, pGlyphs, aGNGlyphPos, nIndex, nAdvanceWidths, pCharPosAry, pFallbackFonts )) != 0 )
     {
         aUnicodes.clear();
         for( int i = 0; i < nGlyphs; i++ )
         {
-            pFallbackFonts[i] = rLayout.GetFallbackFontData( pGlyphs[i] );
-
             // default case: 1 glyph is one unicode
             pUnicodesPerGlyph[i] = 1;
             if( (pGlyphs[i] & GF_ISCHAR) )
