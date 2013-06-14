@@ -32,16 +32,14 @@
 
 namespace com { namespace sun { namespace star { namespace uno {
 
-bool operator<( const TypeDescription& rLeft, const TypeDescription& rRight) {
-	assert( rLeft.is() && rRight.is());
-	const typelib_TypeDescription& rA = *rLeft.get();
-	const typelib_TypeDescription& rB = *rRight.get();
-        if( rA.eTypeClass != rB.eTypeClass)
-		return (rA.eTypeClass < rB.eTypeClass);
-	const sal_Int32 nCmp = rtl_ustr_compare_WithLength(
-			rA.pTypeName->buffer, rA.pTypeName->length,
-			rB.pTypeName->buffer, rB.pTypeName->length);
-	return (nCmp < 0);
+bool operator <(TypeDescription const & left, TypeDescription const & right) {
+    assert(left.is() && right.is());
+    typelib_TypeClass tc1 = left.get()->eTypeClass;
+    typelib_TypeClass tc2 = right.get()->eTypeClass;
+    return tc1 < tc2 ||
+        (tc1 == tc2 &&
+         (OUString::unacquired(&left.get()->pTypeName) <
+          OUString::unacquired(&right.get()->pTypeName)));
 }
 
 bool TypeDescEqual::operator()( const TypeDescription& rLeft, const TypeDescription& rRight) const
