@@ -16,6 +16,23 @@
       "revId": "4c2e016013313eb331bbd73c4e8772a5c816f531",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7YY\u003d",
+        "filename": "unotools/source/i18n/localedatawrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-06-14T07:50:17Z",
+      "side": 1,
+      "message": "a.Equals(b,n,b.getLength()) is a substring match at position n; should n be known to be \u003c\u003d a.getLength(), the replacement would be a.match(b,n)",
+      "revId": "4c2e016013313eb331bbd73c4e8772a5c816f531",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
