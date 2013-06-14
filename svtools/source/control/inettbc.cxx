@@ -899,10 +899,12 @@ void SvtURLBox::Init(bool bSetDefaultHelpID)
         SetHelpId( ".uno:OpenURL" );
     EnableAutocomplete( sal_False );
 
-    SetText( String() );
+    SetText( OUString() );
 
     GetSubEdit()->SetAutocompleteHdl( LINK( this, SvtURLBox, AutoCompleteHdl_Impl ) );
     UpdatePicklistForSmartProtocol_Impl();
+
+    EnableAutoSize(GetStyle() & WB_AUTOSIZE);
 }
 
 SvtURLBox::~SvtURLBox()
