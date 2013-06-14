@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7VE\u003d",
+        "filename": "sd/source/ui/slidesorter/view/SlsPageObjectPainter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-06-14T15:05:36Z",
+      "side": 1,
+      "message": "Please get the spelling of the function finally right: PaintCustomAnimationEffect",
+      "revId": "004ad7439ce6290ef379b3de8b04bca96fe6cd35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7U8\u003d",
+        "filename": "sd/source/ui/slidesorter/view/SlsPageObjectPainter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-06-14T15:05:36Z",
+      "side": 1,
+      "message": "It would be nicer, if you created a CustomAnimationEffectIndicator Rectangle, and placed the icon above the transition effect icon.",
+      "revId": "004ad7439ce6290ef379b3de8b04bca96fe6cd35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7VA\u003d",
+        "filename": "sd/source/ui/slidesorter/view/SlsPageObjectPainter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-06-14T15:05:36Z",
+      "side": 1,
+      "message": "break; here, after you found the first animated object, display the icon, and don\u0027t iterate over the rest of the objects",
+      "revId": "004ad7439ce6290ef379b3de8b04bca96fe6cd35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
