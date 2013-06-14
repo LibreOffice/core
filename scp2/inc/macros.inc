@@ -453,6 +453,14 @@ End
         Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID); \
     End
 
+#define LIBO_EXECUTABLE(id,name) \
+    File id \
+        BIN_FILE_BODY; \
+        Dir = gid_Brand_Dir_Program; \
+        Name = name; \
+        Styles = (PACKED); \
+    End
+
 #define GALLERY_NAME(id) \
 
 #define GALLERY_FILELIST(id) \

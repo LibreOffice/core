@@ -73,8 +73,11 @@ $(eval $(call gb_Helper_register_executables,SDK, \
 	) \
 ))
 
+$(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),gengal) \
+))
+
 $(eval $(call gb_Helper_register_executables,OOO, \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),gengal.bin) \
 	gnome-open-url.bin \
 	$(if $(filter YES,$(ENABLE_NPAPI_INTO_BROWSER)),nsplugin) \
 	$(if $(filter MACOSX,$(OS)),officeloader) \
@@ -93,7 +96,6 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg.bin) \
 	$(if $(filter WNT,$(OS)), \
 		crashrep_com \
-		gengal \
 		gcc-wrapper \
 		g++-wrapper \
 		guiloader \

@@ -65,7 +65,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter-out MACOSX WNT,$(OS_FOR_BUILD)),$(if $(ENABLE_HEADLESS),, \
 			SAL_USE_VCLPLUGIN=svp \
 		)) \
-		$(call gb_Executable_get_command,$(gb_GENGAL),$(ICECREAM_RUN)) \
+		$(call gb_Executable_get_command,gengal,$(ICECREAM_RUN)) \
 			$(call gb_Gallery__make_env_args) \
 			--build-tree \
 			--destdir $(GALLERY_BASEDIR) \
@@ -105,7 +105,7 @@ $(dir $(call gb_Gallery_get_target,$(1)))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_Gallery_get_target,%) : \
-		$(call gb_Executable_get_runtime_dependencies,$(gb_GENGAL)) \
+		$(call gb_Executable_get_runtime_dependencies,gengal) \
 		$(gb_Gallery_EXTRA_DEPENCENCIES)
 	$(call gb_Gallery__command,$@,$*)
 

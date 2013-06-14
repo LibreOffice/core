@@ -17,26 +17,19 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-ifeq ($(OS),WNT)
-svx_GENGALBIN := gengal
-else
-svx_GENGALBIN := gengal.bin
-endif
+$(eval $(call gb_Executable_Executable,gengal))
 
-
-$(eval $(call gb_Executable_Executable,$(svx_GENGALBIN)))
-
-$(eval $(call gb_Executable_set_include,$(svx_GENGALBIN),\
+$(eval $(call gb_Executable_set_include,gengal,\
     $$(INCLUDE) \
     -I$(SRCDIR)/svx/inc/ \
     -I$(SRCDIR)/svx/inc/pch \
 ))
 
-$(eval $(call gb_Executable_use_external,$(svx_GENGALBIN),boost_headers))
+$(eval $(call gb_Executable_use_external,gengal,boost_headers))
 
-$(eval $(call gb_Executable_use_sdk_api,$(svx_GENGALBIN)))
+$(eval $(call gb_Executable_use_sdk_api,gengal))
 
-$(eval $(call gb_Executable_use_libraries,$(svx_GENGALBIN),\
+$(eval $(call gb_Executable_use_libraries,gengal,\
     basegfx \
     sal \
     tl \
@@ -51,16 +44,16 @@ $(eval $(call gb_Executable_use_libraries,$(svx_GENGALBIN),\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Executable_add_exception_objects,$(svx_GENGALBIN),\
+$(eval $(call gb_Executable_add_exception_objects,gengal,\
     svx/source/gengal/gengal \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,$(svx_GENGALBIN),\
+$(eval $(call gb_Executable_use_static_libraries,gengal,\
     vclmain \
 ))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Executable_use_system_win32_libs,$(svx_GENGALBIN),\
+$(eval $(call gb_Executable_use_system_win32_libs,gengal,\
 	kernel32 \
 	msvcrt \
 	oldnames \
@@ -69,7 +62,7 @@ $(eval $(call gb_Executable_use_system_win32_libs,$(svx_GENGALBIN),\
 endif
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Executable_add_libs,$(svx_GENGALBIN),\
+$(eval $(call gb_Executable_add_libs,gengal,\
 	-ldl \
 	-lpthread \
 ))
