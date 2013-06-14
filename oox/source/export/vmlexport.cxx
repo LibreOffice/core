@@ -708,23 +708,41 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                 }
                 break;
             case ESCHER_Prop_gtextUNICODE:
+            case ESCHER_Prop_gtextFont:
                 {
-                    SvMemoryStream aStream;
-                    aStream.Write(it->pBuf, it->nPropSize);
-                    aStream.Seek(0);
-                    OUString aTextPathString = SvxMSDffManager::MSDFFReadZString(aStream, it->nPropSize, true);
+                    EscherPropSortStruct aUnicode;
+                    if (rProps.GetOpt(ESCHER_Prop_gtextUNICODE, aUnicode))
+                    {
+                        SvMemoryStream aStream;
+                        aStream.Write(it->pBuf, it->nPropSize);
+                        aStream.Seek(0);
+                        OUString aTextPathString = SvxMSDffManager::MSDFFReadZString(aStream, it->nPropSize, true);
+                        aStream.Seek(0);
 
-                    m_pSerializer->singleElementNS( XML_v, XML_path,
-                            XML_textpathok, "t",
-                            FSEND );
+                        m_pSerializer->singleElementNS( XML_v, XML_path,
+                                XML_textpathok, "t",
+                                FSEND );
 
-                    m_pSerializer->singleElementNS( XML_v, XML_textpath,
-                            XML_on, "t",
-                            XML_fitshape, "t",
-                            XML_string, OUStringToOString(aTextPathString, RTL_TEXTENCODING_UTF8),
-                            FSEND );
+                        sax_fastparser::FastAttributeList* pAttrList = m_pSerializer->createAttrList();
+                        pAttrList->add(XML_on, "t");
+                        pAttrList->add(XML_fitshape, "t");
+                        pAttrList->add(XML_string, OUStringToOString(aTextPathString, RTL_TEXTENCODING_UTF8));
+                        EscherPropSortStruct aFont;
+                        OUString aStyle;
+                        if (rProps.GetOpt(ESCHER_Prop_gtextFont, aFont))
+                        {
+                            aStream.Write(aFont.pBuf, aFont.nPropSize);
+                            aStream.Seek(0);
+                            OUString aTextPathFont = SvxMSDffManager::MSDFFReadZString(aStream, aFont.nPropSize, true);
+                            aStyle += "font-family:\"" + aTextPathFont + "\"";
+                        }
+                        if (!aStyle.isEmpty())
+                            pAttrList->add(XML_style, OUStringToOString(aStyle, RTL_TEXTENCODING_UTF8));
+                        m_pSerializer->singleElementNS(XML_v, XML_textpath, XFastAttributeListRef(pAttrList));
+                    }
 
                     bAlreadyWritten[ESCHER_Prop_gtextUNICODE] = true;
+                    bAlreadyWritten[ESCHER_Prop_gtextFont] = true;
                 }
                 break;
             case ESCHER_Prop_Rotation:
