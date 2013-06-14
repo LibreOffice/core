@@ -9,19 +9,13 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,firebird))
 
-$(eval $(call gb_ExternalProject_use_unpacked,firebird,firebird))
-
 $(eval $(call gb_ExternalProject_use_autoconf,firebird,build))
 
 $(eval $(call gb_ExternalProject_use_externals,firebird,\
 	boost_headers \
 	icu \
+	libatomic_ops \
 ))
-
-# Dependency in 2.5
-# $(eval $(call gb_ExternalProject_use_packages,firebird, \
-#     atomic_op \
-# ))
 
 # Dependency in 3.0
 # $(eval $(call gb_ExternalProject_use_packages,firebird, \
@@ -37,18 +31,14 @@ $(eval $(call gb_ExternalProject_register_targets,firebird,\
 
 $(call gb_ExternalProject_get_state_target,firebird,build):
 	$(call gb_ExternalProject_run,build,\
+		unset MAKEFLAGS && \
 		export CFLAGS="$(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden)" \
-		&& export LDFLAGS="-L$(OUTDIR)/lib \
+		&& LDFLAGS="-L$(OUTDIR)/lib \
 			$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib") \
 			$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
 		&& CPPFLAGS="-I$(OUTDIR)/inc/external $(if $(SYSBASE),-I$(SYSBASE)/usr/include)" \
-		&& export ICU_LIBS=" " \
-		&& export ICU_CFLAGS="$(if $(filter NO,$(SYSTEM_ICU)),\
-			-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
-			-I$(call gb_UnpackedTarball_get_dir,icu)/source/common, )" \
 		&& export PKG_CONFIG="" \
 		&& ./configure \
-			--with-system-icu \
 			--without-editline \
 			--disable-superserver \
 			$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(call gb_UnpackedTarball_get_dir,boost),CXXFLAGS=$(BOOST_CPPFLAGS)) \

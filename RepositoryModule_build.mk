@@ -73,6 +73,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 			framework \
 			harfbuzz \
 			lcms2 \
+			libfbembed \
 			linguistic \
 			nss \
 			package \

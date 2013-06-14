@@ -12,7 +12,7 @@ $(eval $(call gb_Library_Library,firebird-sdbc))
 $(eval $(call gb_Library_use_sdk_api,firebird-sdbc))
 
 $(eval $(call gb_Library_use_externals,firebird-sdbc,\
-	firebird \
+	libfbembed \
 ))
 
 $(eval $(call gb_Library_set_include,firebird-sdbc,\

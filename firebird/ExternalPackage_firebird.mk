@@ -11,12 +11,12 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,firebird,firebird))
 
 $(eval $(call gb_ExternalPackage_use_external_project,firebird,firebird))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,firebird,inc/external/firebird,\
-	gen/firebird/include/ib_util.h \
-	gen/firebird/include/ibase.h \
-	gen/firebird/include/iberror.h \
-	gen/firebird/include/perf.h \
-))
+#$(eval $(call gb_ExternalPackage_add_unpacked_files,firebird,inc/external/firebird,\
+#	gen/firebird/include/ib_util.h \
+#	gen/firebird/include/ibase.h \
+#	gen/firebird/include/iberror.h \
+#	gen/firebird/include/perf.h \
+#))
 
 # Need to be added?
 # $(eval $(call gb_ExternalPackage_add_unpacked_files,firebird,share/firebird,\
@@ -39,8 +39,9 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,firebird,inc/external/firebi
 # 	gen/firebird/security2.fdb \
 # ))
 
-$(eval $(call gb_ExternalPackage_add_library_for_install,firebird,lib/libfbembed.so.2.5.2,gen/firebird/lib/libfbembed.so.2.5.2))
 
 $(eval $(call gb_ExternalPackage_add_file,firebird,lib/libfbembed.so.2.5.2,gen/firebird/lib/libfbembed.so.2.5.2))
+$(eval $(call gb_ExternalPackage_add_library_for_install,firebird,lib/libfbembed.so.2.5.2,gen/firebird/lib/libfbembed.so.2.5.2))
+$(eval $(call gb_ExternalPackage_add_file,firebird,lib/libfbembed.so,gen/firebird/lib/libfbembed.so.2.5.2))
 
 # vim: set noet sw=4 ts=4:

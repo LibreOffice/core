@@ -48,6 +48,8 @@ $(eval $(call gb_Library_use_externals,merged,\
 	icuuc \
 	jpeg \
 	lcms2 \
+	libatomic_ops \
+	libfbembed \
 	liblangtag \
 	libxml2 \
 	libxslt \

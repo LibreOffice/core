@@ -74,10 +74,9 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 	@mkdir -p $(TARFILE_LOCATION)/tmp
 	@date >> $(fetch_LOGFILE)
 	$(foreach item, \
-		$(call fetch_Optional,FIREBIRD,FIREBIRD_TARBALL) \
-	,$(call fetch_Download_item_special,http://people.igalia.com/agomez/files,$(item)))
-	$(foreach item, \
+		$(call fetch_Optional,LIBATOMIC_OPS,LIBATOMIC_OPS_TARBALL) \
 		$(call fetch_Optional,CDR,CDR_TARBALL) \
+		$(call fetch_Optional,FIREBIRD,FIREBIRD_TARBALL) \
 		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
 		$(call fetch_Optional,MWAW,MWAW_TARBALL) \
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \

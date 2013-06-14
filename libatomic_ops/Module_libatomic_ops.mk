@@ -7,15 +7,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,firebird))
+$(eval $(call gb_Module_Module,libatomic_ops))
 
-ifeq ($(SYSTEM_FIREBIRD),NO)
+ifeq ($(SYSTEM_ATOMIC_OPS),NO)
 
-$(eval $(call gb_Module_add_targets,firebird,\
-	ExternalPackage_firebird \
-	ExternalProject_firebird \
-	UnpackedTarball_firebird \
+$(eval $(call gb_Module_add_targets,libatomic_ops,\
+	ExternalProject_libatomic_ops \
+	ExternalPackage_libatomic_ops \
+	UnpackedTarball_libatomic_ops \
 ))
+
 endif
 
 # vim: set noet sw=4 ts=4:
