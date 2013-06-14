@@ -31,8 +31,9 @@ namespace drawinglayer
         {
             ::osl::MutexGuard aGuard( m_aMutex );
 
-            // get the current DiscreteUnit
-            const double fDiscreteUnit((rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
+            // get the current DiscreteUnit, look at X and Y and use the maximum
+            const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+            const double fDiscreteUnit(std::min(fabs(aDiscreteVector.getX()), fabs(aDiscreteVector.getY())));
 
             if(getBuffered2DDecomposition().hasElements() && !basegfx::fTools::equal(fDiscreteUnit, getDiscreteUnit()))
             {

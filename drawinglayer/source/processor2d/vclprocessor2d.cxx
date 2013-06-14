@@ -1396,7 +1396,8 @@ namespace drawinglayer
             {
                 const basegfx::BColor aColorA(maBColorModifierStack.getModifiedColor(rCandidate.getColorA()));
                 const basegfx::BColor aColorB(maBColorModifierStack.getModifiedColor(rCandidate.getColorB()));
-                const double fDiscreteUnit((getViewInformation2D().getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
+                const basegfx::B2DVector aDiscreteVector(getViewInformation2D().getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+                const double fDiscreteUnit(std::min(fabs(aDiscreteVector.getX()), fabs(aDiscreteVector.getY())));
 
                 // use color distance and discrete lengths to calculate step count
                 const sal_uInt32 nSteps(calculateStepsForSvgGradient(aColorA, aColorB, fDelta, fDiscreteUnit));
@@ -1438,7 +1439,8 @@ namespace drawinglayer
             {
                 const basegfx::BColor aColorA(maBColorModifierStack.getModifiedColor(rCandidate.getColorA()));
                 const basegfx::BColor aColorB(maBColorModifierStack.getModifiedColor(rCandidate.getColorB()));
-                const double fDiscreteUnit((getViewInformation2D().getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 0.0)).getLength());
+                const basegfx::B2DVector aDiscreteVector(getViewInformation2D().getInverseObjectToViewTransformation() * basegfx::B2DVector(1.0, 1.0));
+                const double fDiscreteUnit(std::min(fabs(aDiscreteVector.getX()), fabs(aDiscreteVector.getY())));
 
                 // use color distance and discrete lengths to calculate step count
                 const sal_uInt32 nSteps(calculateStepsForSvgGradient(aColorA, aColorB, fDeltaScale, fDiscreteUnit));
