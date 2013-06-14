@@ -54,39 +54,39 @@ namespace svx { namespace sidebar {
 
 
 ParaLineSpacingControl::ParaLineSpacingControl(Window* pParent, svx::sidebar::ParaPropertyPanel& rPanel)
-:   PopupControl( pParent,SVX_RES(RID_POPUPPANEL_PARAPAGE_LINESPACING))
-,   mrParaPropertyPanel(rPanel)
-,   mpBindings(NULL)
-,aLineDist              ( this, SVX_RES( LB_LINE_SPACING )),
-aLineDistAtPercentBox   ( this, SVX_RES( ED_SBINDE_LINEDISTPERCENT ) ),
-aLineDistAtMetricBox    ( this, SVX_RES( ED_SBINDE_LINEDISTPOINT ) ),
-maCustomFT        ( this, SVX_RES( FT_CUSTOM ) ),
-maLSpacingFT      ( this, SVX_RES( FT_LINE_SPACING ) ),
-maOfFT            ( this, SVX_RES( FT_OF ) ),
-maSpacing1       (SVX_RES(IMG_SPACING1)),
-maSpacing115     (SVX_RES(IMG_SPACING115)),
-maSpacing15      (SVX_RES(IMG_SPACING15)),
-maSpacing2       (SVX_RES(IMG_SPACING2)),
-maSelSpacing1    (SVX_RES(IMG_SEL_SPACING1)),
-maSelSpacing115  (SVX_RES(IMG_SEL_SPACING115)),
-maSelSpacing15   (SVX_RES(IMG_SEL_SPACING15)),
-maSelSpacing2    (SVX_RES(IMG_SEL_SPACING2)),
-maImgCusGrey     (SVX_RES(IMG_CUSTOM_GRAY)),
-maImgCus         (SVX_RES(IMG_CUSTOM)),
-maStrCus         (SVX_RES(STR_LCVALUE)),
-pActLineDistFld         ( &aLineDistAtPercentBox ),
-nMinFixDist             ( BEGIN_VALUE ),
-maValue                 ( 0 ),
-maPos                   ( 0 ),
-maLineSpacing       (ValueSetWithTextControl::IMAGE_TEXT,this, SVX_RES( LINE_SPACING ) ),
-mpImg           (NULL),
-mpImgSel        (NULL),
-mpStr           (NULL),
-mpStrTip        (NULL),
-maLine          (SVX_RES(STR_LSPACING)),
-maOf            (SVX_RES(STR_LS_OF))
-, mbUseLineSPCustom             (0)
-, mbLineSPDisable               (0)
+:   PopupControl( pParent,SVX_RES(RID_POPUPPANEL_PARAPAGE_LINESPACING)),
+    mbUseLineSPCustom   (0),
+    mbLineSPDisable     (0),
+    mrParaPropertyPanel (rPanel),
+    mpBindings      (NULL),
+    nMinFixDist     (BEGIN_VALUE),
+    pActLineDistFld     (&aLineDistAtPercentBox),
+    maLineSpacing       (ValueSetWithTextControl::IMAGE_TEXT,this, SVX_RES(LINE_SPACING)),
+    maCustomFT      (this, SVX_RES(FT_CUSTOM)),
+    maLSpacingFT        (this, SVX_RES(FT_LINE_SPACING)),
+    aLineDist       (this, SVX_RES(LB_LINE_SPACING)),
+    maOfFT          (this, SVX_RES(FT_OF)),
+    aLineDistAtPercentBox   (this, SVX_RES(ED_SBINDE_LINEDISTPERCENT)),
+    aLineDistAtMetricBox    (this, SVX_RES(ED_SBINDE_LINEDISTPOINT)),
+    maSpacing1      (SVX_RES(IMG_SPACING1)),
+    maSpacing115        (SVX_RES(IMG_SPACING115)),
+    maSpacing15     (SVX_RES(IMG_SPACING15)),
+    maSpacing2      (SVX_RES(IMG_SPACING2)),
+    maSelSpacing1       (SVX_RES(IMG_SEL_SPACING1)),
+    maSelSpacing115     (SVX_RES(IMG_SEL_SPACING115)),
+    maSelSpacing15      (SVX_RES(IMG_SEL_SPACING15)),
+    maSelSpacing2       (SVX_RES(IMG_SEL_SPACING2)),
+    maImgCus        (SVX_RES(IMG_CUSTOM)),
+    maImgCusGrey        (SVX_RES(IMG_CUSTOM_GRAY)),
+    maStrCus        (SVX_RES(STR_LCVALUE)),
+    mpImg           (NULL),
+    mpImgSel        (NULL),
+    mpStr           (NULL),
+    mpStrTip        (NULL),
+    maLine          (SVX_RES(STR_LSPACING)),
+    maOf            (SVX_RES(STR_LS_OF)),
+    maValue                 (0),
+    maPos                   (0)
 {
     initial();
     FreeResource();
