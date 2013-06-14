@@ -35,7 +35,8 @@ public:
     virtual void    DrawText( SalGraphics& ) const;
 
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
-                        sal_Int32* pGlyphAdvances, int* pCharIndexes ) const;
+                        sal_Int32* pGlyphAdvances, int* pCharIndexes,
+                        const PhysicalFontFace** pFallbackFonts ) const;
 
     virtual long    GetTextWidth() const;
     virtual long    FillDXArray( sal_Int32* pDXArray ) const;
@@ -43,8 +44,6 @@ public:
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
     virtual bool    GetGlyphOutlines( SalGraphics&, PolyPolyVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
-
-    const PhysicalFontFace* GetFallbackFontData( sal_GlyphId ) const;
 
     virtual void    InitFont( void) const;
     virtual void    MoveGlyph( int nStart, long nNewXPos );
@@ -224,7 +223,8 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
 // -----------------------------------------------------------------------
 
 int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int& nStart,
-    sal_Int32* pGlyphAdvances, int* pCharIndexes ) const
+    sal_Int32* pGlyphAdvances, int* pCharIndexes,
+    const PhysicalFontFace** pFallbackFonts ) const
 {
     if( !mpCTLine )
         return 0;
@@ -293,6 +293,8 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int&
             }
         }
 
+        const PhysicalFontFace* pFallbackFont = NULL;
+
         // get the details for each interesting glyph
         // TODO: handle nLen>1
         for(; (--nLen >= 0) && (nSubIndex < nGlyphsInRun); ++nSubIndex, ++nStart )
@@ -303,6 +305,8 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int&
                 *(pGlyphAdvances++) = pCGGlyphAdvs[ nSubIndex ].width;
             if( pCharIndexes )
                 *(pCharIndexes++) = pCGGlyphStrIdx[ nSubIndex] + mnMinCharPos;
+            if( pFallbackFonts )
+                *(pFallbackFonts++) = pFallbackFont;
             if( !nCount++ ) {
                 const CGPoint& rCurPos = pCGGlyphPos[ nSubIndex ];
                 rPos = GetDrawPosition( Point( mfFontScale * rCurPos.x, mfFontScale * rCurPos.y) );
@@ -447,26 +451,6 @@ void CTLayout::InitFont() const {}
 void CTLayout::MoveGlyph( int /*nStart*/, long /*nNewXPos*/ ) {}
 void CTLayout::DropGlyph( int /*nStart*/ ) {}
 void CTLayout::Simplify( bool /*bIsBase*/ ) {}
-
-// get the PhysicalFontFace for a glyph fallback font
-// for a glyphid that was returned by CTLayout::GetNextGlyphs()
-const PhysicalFontFace* CTLayout::GetFallbackFontData( sal_GlyphId /*nGlyphId*/ ) const
-{
-#if 0
-    // check if any fallback fonts were needed
-    if( !mpFallbackInfo )
-        return NULL;
-    // check if the current glyph needs a fallback font
-    int nFallbackLevel = (nGlyphId & GF_FONTMASK) >> GF_FONTSHIFT;
-    if( !nFallbackLevel )
-        return NULL;
-    pFallbackFont = mpFallbackInfo->GetFallbackFontData( nFallbackLevel );
-#else
-    // let CoreText's font cascading handle glyph fallback
-    const PhysicalFontFace* pFallbackFont = NULL;
-#endif
-    return pFallbackFont;
-}
 
 // =======================================================================
 

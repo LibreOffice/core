@@ -56,8 +56,6 @@ public:
     virtual void    GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray ) const;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
-    const PhysicalFontFace* GetFallbackFontData( sal_GlyphId ) const;
-
     virtual void    InitFont() const;
     virtual void    MoveGlyph( int nStart, long nNewXPos );
     virtual void    DropGlyph( int nStart );
@@ -505,7 +503,8 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
  * @return : number of glyph details that were provided
 **/
 int ATSLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int& nStart,
-    sal_Int32* pGlyphAdvances, int* pCharIndexes ) const
+    sal_Int32* pGlyphAdvances, int* pCharIndexes,
+    const PhysicalFontFace** pFallbackFonts ) const
 {
     if( nStart < 0 )                // first glyph requested?
         nStart = 0;
@@ -582,6 +581,9 @@ int ATSLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int
             const int nLevel = mpFallbackInfo->AddFallback( nFallbackFontID );
                // update sal_GlyphId with fallback level
             nGlyphId |= (nLevel << GF_FONTSHIFT);
+
+            if( pFallbackFonts )
+                *(pFallbackFonts++) = mpFallbackInfo->GetFallbackFontData( nLevel );
         }
 
         // update resulting glyphid array
@@ -1183,20 +1185,6 @@ void ATSLayout::InitFont() const {}
 void ATSLayout::MoveGlyph( int /*nStart*/, long /*nNewXPos*/ ) {}
 void ATSLayout::DropGlyph( int /*nStart*/ ) {}
 void ATSLayout::Simplify( bool /*bIsBase*/ ) {}
-
-// get the PhysicalFontFace for a glyph fallback font
-// for a glyphid that was returned by ATSLayout::GetNextGlyphs()
-const PhysicalFontFace* ATSLayout::GetFallbackFontData( sal_GlyphId nGlyphId ) const
-{
-    // check if any fallback fonts were needed
-    if( !mpFallbackInfo )
-        return NULL;
-    // check if the current glyph needs a fallback font
-    int nFallbackLevel = (nGlyphId & GF_FONTMASK) >> GF_FONTSHIFT;
-    if( !nFallbackLevel )
-        return NULL;
-    return mpFallbackInfo->GetFallbackFontData( nFallbackLevel );
-}
 
 // =======================================================================
 
