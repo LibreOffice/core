@@ -422,7 +422,6 @@ void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     // through it as should be all event handlers
 
     SalData* pSalData = GetSalData();
-    SystemFontList* GetCoretextFontList(void); // forward declaration
     if( !pSalData->mpFontList )
         pSalData->mpFontList = GetCoretextFontList();
 
