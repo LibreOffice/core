@@ -337,24 +337,34 @@ MountOperation::~MountOperation()
 
 GFileInfo* Content::getGFileInfo(const uno::Reference< ucb::XCommandEnvironment >& xEnv, GError **ppError)
 {
-    /*If we don't have it already, and we're not a "pre-creation" content then query for the info"*/
-    if (!mpInfo && !mbTransient)
-    {
-        if (!(mpInfo = g_file_query_info(getGFile(), "*", G_FILE_QUERY_INFO_NONE, NULL, ppError)))
-        {
-            //Try and mount if unmounted
-            if (ppError && (*ppError)->code == G_IO_ERROR_NOT_MOUNTED)
-            {
-                g_error_free(*ppError);
-
-                MountOperation aMounter(xEnv);
-                *ppError = aMounter.Mount(getGFile());
-
-                //No Mount error, reattempt query
-        if (!*ppError)
-                    mpInfo = g_file_query_info(getGFile(), "*", G_FILE_QUERY_INFO_NONE, NULL, ppError);
+    GError * err = 0;
+    if (mpInfo == 0 && !mbTransient) {
+        for (bool retried = false;; retried = true) {
+            mpInfo = g_file_query_info(
+                getGFile(), "*", G_FILE_QUERY_INFO_NONE, 0, &err);
+            if (mpInfo != 0) {
+                break;
+            }
+            assert(err != 0);
+            if (err->code != G_IO_ERROR_NOT_MOUNTED || retried) {
+                break;
+            }
+            SAL_INFO(
+                "ucb.ucp.gio",
+                "G_IO_ERROR_NOT_MOUNTED \"" << err->message
+                    << "\", trying to mount");
+            g_error_free(err);
+            err = MountOperation(xEnv).Mount(getGFile());
+            if (err != 0) {
+                break;
             }
         }
+    }
+    if (ppError != 0) {
+        *ppError = err;
+    } else if (err != 0) {
+        SAL_WARN("ucb.ucp.gio", "ignoring GError \"" << err->message << "\"");
+        g_error_free(err);
     }
     return mpInfo;
 }
