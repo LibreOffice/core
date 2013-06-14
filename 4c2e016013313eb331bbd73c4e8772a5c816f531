@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7Yg\u003d",
+        "filename": "unotools/source/config/fontcfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1179,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2013-06-14T07:36:34Z",
+      "side": 1,
+      "message": "what the original two lines boil down to is\n\n  if( aSearchFont.startsWith( rFoundAttr.Name ) )\n\ninstead",
+      "revId": "4c2e016013313eb331bbd73c4e8772a5c816f531",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
