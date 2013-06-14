@@ -5702,6 +5702,7 @@ fi
 
 AC_SUBST(CXXFLAGS_CXX11)
 AC_SUBST(HAVE_CXX11)
+AC_DEFINE(HAVE_CXX11)
 
 dnl ==================================
 dnl Check for C++11 "= delete" support
