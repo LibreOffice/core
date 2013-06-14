@@ -294,6 +294,18 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int&
         }
 
         const PhysicalFontFace* pFallbackFont = NULL;
+        if( pFallbackFonts ) {
+            CFDictionaryRef pRunAttributes = CTRunGetAttributes( pGlyphRun );
+            CTFontRef pRunFont = (CTFontRef)CFDictionaryGetValue( pRunAttributes, kCTFontAttributeName );
+
+            CFDictionaryRef pAttributes = mpTextStyle->GetStyleDict();
+            CTFontRef pFont = (CTFontRef)CFDictionaryGetValue( pAttributes, kCTFontAttributeName );
+            if ( !CFEqual( pRunFont,  pFont ) ) {
+                CTFontDescriptorRef pFontDesc = CTFontCopyFontDescriptor( pRunFont );
+                ImplDevFontAttributes rDevFontAttr = DevFontFromCTFontDescriptor( pFontDesc, NULL );
+                pFallbackFont = new CTFontData( rDevFontAttr, (sal_IntPtr)pFontDesc );
+            }
+        }
 
         // get the details for each interesting glyph
         // TODO: handle nLen>1
