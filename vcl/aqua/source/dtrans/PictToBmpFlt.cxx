@@ -63,7 +63,7 @@ bool PICTtoPNG( com::sun::star::uno::Sequence<sal_Int8>& rPictData,
         rPngData.realloc( nPngSize);
 
         HLock( hPng);
-        rtl_copyMemory( rPngData.getArray(), ((sal_Int8*)*hPng), nPngSize);
+        memmove( rPngData.getArray(), ((sal_Int8*)*hPng), nPngSize);
         HUnlock( hPng);
     }
 
@@ -120,7 +120,7 @@ bool PNGtoPICT( com::sun::star::uno::Sequence<sal_Int8>& rPngData,
         rPictData.realloc( nPictSize);
 
         HLock( (Handle)hPict);
-        rtl_copyMemory( rPictData.getArray(), ((sal_Int8*)*hPict), nPictSize);
+        memmove( rPictData.getArray(), ((sal_Int8*)*hPict), nPictSize);
         HUnlock( (Handle)hPict);
 
         // Release the data associated with the picture
