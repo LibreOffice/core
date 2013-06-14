@@ -1163,7 +1163,10 @@ bool X11SalGraphics::drawPolyLine(
     // #i11575#desc5#b adjust B2D tesselation result to raster positions
     basegfx::B2DPolygon aPolygon = rPolygon;
     const double fHalfWidth = 0.5 * rLineWidth.getX();
-    aPolygon.transform( basegfx::tools::createTranslateB2DHomMatrix(+fHalfWidth,+fHalfWidth) );
+
+    // #i122456# This is probably thought to happen to align hairlines to pixel positions, so
+    // it should be a 0.5 translation, not more. It will definitely go wrong with fat lines
+    aPolygon.transform( basegfx::tools::createTranslateB2DHomMatrix(0.5, 0.5) );
 
     // shortcut for hairline drawing to improve performance
     bool bDrawnOk = true;
