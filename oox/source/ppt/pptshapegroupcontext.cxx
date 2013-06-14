@@ -58,9 +58,8 @@ PPTShapeGroupContext::PPTShapeGroupContext(
 {
 }
 
-Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
     if( getNamespace( aElementToken ) == NMSP_dsp )
         aElementToken = NMSP_ppt | getBaseToken( aElementToken );
 
@@ -68,41 +67,34 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
     {
     case PPT_TOKEN( cNvPr ):
     {
-        AttributeList aAttribs( xAttribs );
-        mpGroupShapePtr->setHidden( aAttribs.getBool( XML_hidden, false ) );
-        mpGroupShapePtr->setId( xAttribs->getOptionalValue( XML_id ) );
-        mpGroupShapePtr->setName( xAttribs->getOptionalValue( XML_name ) );
+        mpGroupShapePtr->setHidden( rAttribs.getBool( XML_hidden, false ) );
+        mpGroupShapePtr->setId( rAttribs.getString( XML_id ).get() );
+        mpGroupShapePtr->setName( rAttribs.getString( XML_name ).get() );
         break;
     }
     case PPT_TOKEN( ph ):
-        mpGroupShapePtr->setSubType( xAttribs->getOptionalValueToken( XML_type, FastToken::DONTKNOW ) );
-        if( xAttribs->hasAttribute( XML_idx ) )
-            mpGroupShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+        mpGroupShapePtr->setSubType( rAttribs.getToken( XML_type, FastToken::DONTKNOW ) );
+        if( rAttribs.hasAttribute( XML_idx ) )
+            mpGroupShapePtr->setSubTypeIndex( rAttribs.getString( XML_idx ).get().toInt32() );
         break;
     // nvSpPr CT_ShapeNonVisual end
 
     case PPT_TOKEN( grpSpPr ):
-        xRet = new oox::drawingml::ShapePropertiesContext( *this, *mpGroupShapePtr );
-        break;
+        return new oox::drawingml::ShapePropertiesContext( *this, *mpGroupShapePtr );
     case PPT_TOKEN( spPr ):
-        xRet = new oox::drawingml::ShapePropertiesContext( *this, *mpGroupShapePtr );
-        break;
+        return new oox::drawingml::ShapePropertiesContext( *this, *mpGroupShapePtr );
 /*
     case PPT_TOKEN( style ):
-        xRet = new ShapeStyleContext( getParser() );
-        break;
+        return new ShapeStyleContext( getParser() );
 */
     case PPT_TOKEN( cxnSp ):        // connector shape
-        xRet.set( new oox::drawingml::ConnectorShapeContext( *this, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.ConnectorShape" ) ) ) );
-        break;
+        return new oox::drawingml::ConnectorShapeContext( *this, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.ConnectorShape" ) ) );
     case PPT_TOKEN( grpSp ):        // group shape
-        xRet.set( new PPTShapeGroupContext( *this, mpSlidePersistPtr, meShapeLocation, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GroupShape" ) ) ) );
-        break;
+        return new PPTShapeGroupContext( *this, mpSlidePersistPtr, meShapeLocation, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GroupShape" ) ) );
     case PPT_TOKEN( sp ):           // Shape
         {
-            AttributeList aAttribs( xAttribs );
             boost::shared_ptr<PPTShape> pShape( new PPTShape( meShapeLocation, "com.sun.star.drawing.CustomShape" ) );
-            if( aAttribs.getBool( XML_useBgFill, false ) )
+            if( rAttribs.getBool( XML_useBgFill, false ) )
             {
                 ::oox::drawingml::FillProperties &aFill = pShape->getFillProperties();
                 aFill.moFillType = XML_solidFill;
@@ -110,28 +102,21 @@ Reference< XFastContextHandler > PPTShapeGroupContext::createFastChildContext( s
                 // TODO: We are using white here, because thats the closest we can assume (?)
                 aFill.maFillColor.setSrgbClr( API_RGB_WHITE );
             }
-            pShape->setModelId(xAttribs->getOptionalValue( XML_modelId ));
-            xRet.set( new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, pShape ) );
+            pShape->setModelId(rAttribs.getString( XML_modelId ).get());
+            return new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, pShape );
         }
-        break;
     case PPT_TOKEN( pic ):          // CT_Picture
-        xRet.set( new PPTGraphicShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr,  oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GraphicObjectShape" ) ) ) );
-        break;
+        return new PPTGraphicShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr,  oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GraphicObjectShape" ) ) );
     case PPT_TOKEN( graphicFrame ): // CT_GraphicalObjectFrame
         {
             if( pGraphicShape )
                 importExtDrawings();
             pGraphicShape = oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.OLE2Shape" ) );
-            xRet.set( new oox::drawingml::GraphicalObjectFrameContext( *this, mpGroupShapePtr, pGraphicShape, true ) );
+            return new oox::drawingml::GraphicalObjectFrameContext( *this, mpGroupShapePtr, pGraphicShape, true );
         }
-        break;
-
     }
-    if( !xRet.is() )
-        xRet.set( this );
 
-
-    return xRet;
+    return this;
 }
 
 void PPTShapeGroupContext::importExtDrawings( )
@@ -152,7 +137,7 @@ void PPTShapeGroupContext::importExtDrawings( )
     }
 }
 
-void PPTShapeGroupContext::endFastElement( sal_Int32 /*nElement*/ ) throw (SAXException, RuntimeException)
+void PPTShapeGroupContext::onEndElement()
 {
     importExtDrawings();
 }

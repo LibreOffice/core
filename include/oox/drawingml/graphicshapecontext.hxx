@@ -33,8 +33,7 @@ class OOX_DLLPUBLIC GraphicShapeContext : public ShapeContext
 public:
     GraphicShapeContext( ::oox::core::ContextHandler2Helper& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 };
 
 // ====================================================================
@@ -44,7 +43,7 @@ class OOX_DLLPUBLIC GraphicalObjectFrameContext : public ShapeContext
 public:
     GraphicalObjectFrameContext( ::oox::core::ContextHandler2Helper& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr, bool bEmbedShapesInChart );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     bool                mbEmbedShapesInChart;
@@ -57,7 +56,7 @@ class OleObjectGraphicDataContext : public ShapeContext
 public:
     OleObjectGraphicDataContext( ::oox::core::ContextHandler2Helper& rParent, ShapePtr pShapePtr );
     ~OleObjectGraphicDataContext();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     ::oox::vml::OleObjectInfo& mrOleObjectInfo;
@@ -73,7 +72,7 @@ class DiagramGraphicDataContext
 public:
     DiagramGraphicDataContext( ::oox::core::ContextHandler2Helper& rParent, ShapePtr pShapePtr );
     virtual ~DiagramGraphicDataContext();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     OUString msDm;
@@ -91,11 +90,10 @@ public:
                             ::oox::core::ContextHandler2Helper& rParent,
                             const ShapePtr& rxShape, bool bEmbedShapes );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
-                        createFastChildContext(
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext(
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
-                        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+                            const ::oox::AttributeList& rAttribs) SAL_OVERRIDE;
 
 private:
     ChartShapeInfo&     mrChartShapeInfo;

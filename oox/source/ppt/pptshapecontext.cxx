@@ -92,9 +92,8 @@ oox::drawingml::ShapePtr findPlaceholder( sal_Int32 nFirstPlaceholder, sal_Int32
     return !nSecondPlaceholder || pPlaceholder.get() ? pPlaceholder : findPlaceholder( nSecondPlaceholder, oSubTypeIndex, rShapes );
 }
 
-Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
     if( getNamespace( aElementToken ) == NMSP_dsp )
         aElementToken = NMSP_ppt | getBaseToken( aElementToken );
 
@@ -105,18 +104,17 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
         //      break;
         case PPT_TOKEN( cNvPr ):
         {
-            AttributeList aAttribs( xAttribs );
-            mpShapePtr->setHidden( aAttribs.getBool( XML_hidden, false ) );
-            mpShapePtr->setId( xAttribs->getOptionalValue( XML_id ) );
-            mpShapePtr->setName( xAttribs->getOptionalValue( XML_name ) );
+            mpShapePtr->setHidden( rAttribs.getBool( XML_hidden, false ) );
+            mpShapePtr->setId( rAttribs.getString( XML_id ).get() );
+            mpShapePtr->setName( rAttribs.getString( XML_name ).get() );
             break;
         }
         case PPT_TOKEN( ph ):
         {
-            sal_Int32 nSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
+            sal_Int32 nSubType( rAttribs.getToken( XML_type, XML_obj ) );
             mpShapePtr->setSubType( nSubType );
-            if( xAttribs->hasAttribute( XML_idx ) )
-                mpShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+            if( rAttribs.hasAttribute( XML_idx ) )
+                mpShapePtr->setSubTypeIndex( rAttribs.getString( XML_idx ).get().toInt32() );
             if ( nSubType )
             {
                 PPTShape* pPPTShapePtr = dynamic_cast< PPTShape* >( mpShapePtr.get() );
@@ -208,32 +206,25 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
         // nvSpPr CT_ShapeNonVisual end
 
         case PPT_TOKEN( spPr ):
-            xRet = new PPTShapePropertiesContext( *this, *mpShapePtr );
-            break;
+            return new PPTShapePropertiesContext( *this, *mpShapePtr );
 
         case PPT_TOKEN( style ):
-            xRet = new oox::drawingml::ShapeStyleContext( *this, *mpShapePtr );
-            break;
+            return new oox::drawingml::ShapeStyleContext( *this, *mpShapePtr );
 
         case PPT_TOKEN( txBody ):
         {
             oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody( mpShapePtr->getTextBody() ) );
             xTextBody->getTextProperties().maPropertyMap[ PROP_FontIndependentLineSpacing ] <<= static_cast< sal_Bool >( sal_True );
             mpShapePtr->setTextBody( xTextBody );
-            xRet = new oox::drawingml::TextBodyContext( *this, *xTextBody );
-            break;
+            return new oox::drawingml::TextBodyContext( *this, *xTextBody );
         }
         case PPT_TOKEN( txXfrm ):
         {
-            xRet = new oox::drawingml::Transform2DContext( *this, xAttribs, *mpShapePtr, true );
-            break;
+            return new oox::drawingml::Transform2DContext( *this, rAttribs.getFastAttributeList(), *mpShapePtr, true );
         }
     }
 
-    if( !xRet.is() )
-        xRet.set( this );
-
-    return xRet;
+    return this;
 }
 
 

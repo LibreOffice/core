@@ -57,22 +57,18 @@ GraphicShapeContext::GraphicShapeContext( ContextHandler2Helper& rParent, ShapeP
 {
 }
 
-Reference< XFastContextHandler > GraphicShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
-
     switch( getBaseToken( aElementToken ) )
     {
     // CT_ShapeProperties
     case XML_xfrm:
-        xRet.set( new Transform2DContext( *this, xAttribs, *mpShapePtr ) );
-        break;
+        return new Transform2DContext( *this, rAttribs.getFastAttributeList(), *mpShapePtr );
     case XML_blipFill:
-        xRet.set( new BlipFillContext( *this, xAttribs, mpShapePtr->getGraphicProperties().maBlipProps ) );
-        break;
+        return new BlipFillContext( *this, rAttribs.getFastAttributeList(), mpShapePtr->getGraphicProperties().maBlipProps );
     case XML_wavAudioFile:
         {
-            getEmbeddedWAVAudioFile( getRelations(), xAttribs, mpShapePtr->getGraphicProperties().maAudio );
+            getEmbeddedWAVAudioFile( getRelations(), rAttribs.getFastAttributeList(), mpShapePtr->getGraphicProperties().maAudio );
             if( !mpShapePtr->getGraphicProperties().maAudio.msEmbed.isEmpty() )
             {
                 Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
@@ -99,10 +95,7 @@ Reference< XFastContextHandler > GraphicShapeContext::createFastChildContext( sa
         pCstmShpProps->setShapePresetType( getBaseToken( aElementToken ) );
     }
 
-    if( !xRet.is() )
-        xRet.set( ShapeContext::createFastChildContext( aElementToken, xAttribs ) );
-
-    return xRet;
+    return ShapeContext::onCreateContext( aElementToken, rAttribs );
 }
 
 // ============================================================================
@@ -114,45 +107,39 @@ GraphicalObjectFrameContext::GraphicalObjectFrameContext( ContextHandler2Helper&
 {
 }
 
-Reference< XFastContextHandler > GraphicalObjectFrameContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef GraphicalObjectFrameContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
-
     switch( getBaseToken( aElementToken ) )
     {
     // CT_ShapeProperties
     case XML_nvGraphicFramePr:      // CT_GraphicalObjectFrameNonVisual
         break;
     case XML_xfrm:                  // CT_Transform2D
-        xRet.set( new Transform2DContext( *this, xAttribs, *mpShapePtr ) );
-        break;
+        return new Transform2DContext( *this, rAttribs.getFastAttributeList(), *mpShapePtr );
     case XML_graphic:               // CT_GraphicalObject
-        xRet.set( this );
-        break;
+        return this;
 
         case XML_graphicData :          // CT_GraphicalObjectData
         {
-            OUString sUri( xAttribs->getOptionalValue( XML_uri ) );
+            OUString sUri( rAttribs.getString( XML_uri ).get() );
             if ( sUri == "http://schemas.openxmlformats.org/presentationml/2006/ole" )
-                xRet.set( new OleObjectGraphicDataContext( *this, mpShapePtr ) );
+                return new OleObjectGraphicDataContext( *this, mpShapePtr );
             else if ( sUri == "http://schemas.openxmlformats.org/drawingml/2006/diagram" )
-                xRet.set( new DiagramGraphicDataContext( *this, mpShapePtr ) );
+                return new DiagramGraphicDataContext( *this, mpShapePtr );
             else if ( sUri == "http://schemas.openxmlformats.org/drawingml/2006/chart" )
-                xRet.set( new ChartGraphicDataContext( *this, mpShapePtr, mbEmbedShapesInChart ) );
+                return new ChartGraphicDataContext( *this, mpShapePtr, mbEmbedShapesInChart );
             else if ( sUri.compareToAscii( "http://schemas.openxmlformats.org/drawingml/2006/table" ) == 0 )
-                xRet.set( new table::TableContext( *this, mpShapePtr ) );
+                return new table::TableContext( *this, mpShapePtr );
             else
             {
                 OSL_TRACE( "OOX: Ignore graphicsData of %s", OUSTRING_TO_CSTR( sUri ) );
-                return xRet;
+                return 0;
             }
         }
         break;
     }
-    if( !xRet.is() )
-        xRet.set( ShapeContext::createFastChildContext( aElementToken, xAttribs ) );
 
-    return xRet;
+    return ShapeContext::onCreateContext( aElementToken, rAttribs );
 }
 
 // ============================================================================
@@ -172,17 +159,14 @@ OleObjectGraphicDataContext::~OleObjectGraphicDataContext()
             pVmlDrawing->registerOleObject( mrOleObjectInfo );
 }
 
-Reference< XFastContextHandler > OleObjectGraphicDataContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef OleObjectGraphicDataContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
-    AttributeList aAttribs( xAttribs );
-
     switch( nElement )
     {
         case PPT_TOKEN( oleObj ):
         {
-            mrOleObjectInfo.maShapeId = aAttribs.getXString( XML_spid, OUString() );
-            const Relation* pRelation = getRelations().getRelationFromRelId( aAttribs.getString( R_TOKEN( id ), OUString() ) );
+            mrOleObjectInfo.maShapeId = rAttribs.getXString( XML_spid, OUString() );
+            const Relation* pRelation = getRelations().getRelationFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
             OSL_ENSURE( pRelation, "OleObjectGraphicDataContext::createFastChildContext - missing relation for OLE object" );
             if( pRelation )
             {
@@ -198,10 +182,10 @@ Reference< XFastContextHandler > OleObjectGraphicDataContext::createFastChildCon
                         getFilter().importBinaryData( mrOleObjectInfo.maEmbeddedData, aFragmentPath );
                 }
             }
-            mrOleObjectInfo.maName = aAttribs.getXString( XML_name, OUString() );
-            mrOleObjectInfo.maProgId = aAttribs.getXString( XML_progId, OUString() );
-            mrOleObjectInfo.mbShowAsIcon = aAttribs.getBool( XML_showAsIcon, false );
-            xRet.set( this );
+            mrOleObjectInfo.maName = rAttribs.getXString( XML_name, OUString() );
+            mrOleObjectInfo.maProgId = rAttribs.getXString( XML_progId, OUString() );
+            mrOleObjectInfo.mbShowAsIcon = rAttribs.getBool( XML_showAsIcon, false );
+            return this;
         }
         break;
 
@@ -211,13 +195,13 @@ Reference< XFastContextHandler > OleObjectGraphicDataContext::createFastChildCon
 
         case PPT_TOKEN( link ):
             OSL_ENSURE( mrOleObjectInfo.mbLinked, "OleObjectGraphicDataContext::createFastChildContext - unexpected child element" );
-            mrOleObjectInfo.mbAutoUpdate = aAttribs.getBool( XML_updateAutomatic, false );
+            mrOleObjectInfo.mbAutoUpdate = rAttribs.getBool( XML_updateAutomatic, false );
         break;
         case PPT_TOKEN( pic ):
-            xRet.set( new GraphicShapeContext( *this, mpMasterShapePtr, mpShapePtr ) );
+            return new GraphicShapeContext( *this, mpMasterShapePtr, mpShapePtr );
         break;
     }
-    return xRet;
+    return 0;
 }
 
 // ============================================================================
@@ -232,19 +216,16 @@ DiagramGraphicDataContext::~DiagramGraphicDataContext()
 {
 }
 
-Reference< XFastContextHandler > DiagramGraphicDataContext::createFastChildContext( ::sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
-    throw (SAXException, RuntimeException)
+ContextHandlerRef DiagramGraphicDataContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
-
     switch( aElementToken )
     {
     case DGM_TOKEN( relIds ):
     {
-        msDm = xAttribs->getOptionalValue( R_TOKEN( dm ) );
-        msLo = xAttribs->getOptionalValue( R_TOKEN( lo ) );
-        msQs = xAttribs->getOptionalValue( R_TOKEN( qs ) );
-        msCs = xAttribs->getOptionalValue( R_TOKEN( cs ) );
+        msDm = rAttribs.getString( R_TOKEN( dm ) ).get();
+        msLo = rAttribs.getString( R_TOKEN( lo ) ).get();
+        msQs = rAttribs.getString( R_TOKEN( qs ) ).get();
+        msCs = rAttribs.getString( R_TOKEN( cs ) ).get();
         loadDiagram(mpShapePtr,
                     getFilter(),
                     getFragmentPathFromRelId( msDm ),
@@ -264,10 +245,7 @@ Reference< XFastContextHandler > DiagramGraphicDataContext::createFastChildConte
         break;
     }
 
-    if( !xRet.is() )
-        xRet.set( ShapeContext::createFastChildContext( aElementToken, xAttribs ) );
-
-    return xRet;
+    return ShapeContext::onCreateContext( aElementToken, rAttribs );
 }
 
 // ============================================================================
@@ -278,13 +256,11 @@ ChartGraphicDataContext::ChartGraphicDataContext( ContextHandler2Helper& rParent
 {
 }
 
-Reference< XFastContextHandler > ChartGraphicDataContext::createFastChildContext( ::sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
-    throw (SAXException, RuntimeException)
+ContextHandlerRef ChartGraphicDataContext::onCreateContext( ::sal_Int32 nElement, const AttributeList& rAttribs )
 {
     if( nElement == C_TOKEN( chart ) )
     {
-        AttributeList aAttribs( rxAttribs );
-        mrChartShapeInfo.maFragmentPath = getFragmentPathFromRelId( aAttribs.getString( R_TOKEN( id ), OUString() ) );
+        mrChartShapeInfo.maFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
     }
     return 0;
 }

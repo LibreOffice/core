@@ -96,26 +96,19 @@ void SAL_CALL DiagramLayoutFragmentHandler::endDocument()
 }
 
 
-Reference< XFastContextHandler > SAL_CALL
-DiagramLayoutFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
-                                                      const Reference< XFastAttributeList >& xAttribs )
-    throw ( SAXException, RuntimeException)
+ContextHandlerRef
+DiagramLayoutFragmentHandler::onCreateContext( ::sal_Int32 aElement,
+                                               const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
-
     switch( aElement )
     {
     case DGM_TOKEN( layoutDef ):
-        xRet.set( new DiagramDefinitionContext( *this, AttributeList( xAttribs ), mpDataPtr ) );
-        break;
+        return new DiagramDefinitionContext( *this, AttributeList( rAttribs ), mpDataPtr );
     default:
         break;
     }
 
-    if( !xRet.is() )
-        xRet = getFastContextHandler();
-
-    return xRet;
+    return this;
 }
 
 ///////////////////////

@@ -48,23 +48,18 @@ ConnectorShapeContext::~ConnectorShapeContext()
 {
 }
 
-Reference< XFastContextHandler > ConnectorShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef ConnectorShapeContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
-
     switch( getBaseToken( aElementToken ) )
     {
         case XML_nvCxnSpPr :
         break;
 
         default:
-            xRet = ShapeContext::createFastChildContext( aElementToken, xAttribs );
+            return ShapeContext::onCreateContext( aElementToken, rAttribs );
     }
-    if( !xRet.is() )
-        xRet.set( this );
 
-
-    return xRet;
+    return this;
 }
 
 } }

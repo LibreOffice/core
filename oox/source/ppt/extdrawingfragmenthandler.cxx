@@ -37,31 +37,24 @@ ExtDrawingFragmentHandler::~ExtDrawingFragmentHandler( ) throw ()
 
 }
 
-Reference< XFastContextHandler > SAL_CALL
-ExtDrawingFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
-                                                    const Reference< XFastAttributeList >& )
-    throw ( SAXException, RuntimeException)
+ContextHandlerRef
+ExtDrawingFragmentHandler::onCreateContext( ::sal_Int32 aElement,
+                                            const AttributeList& )
 {
-    Reference< XFastContextHandler > xRet;
-
     switch( aElement )
     {
     case DSP_TOKEN( drawing ):
         break;
     case DSP_TOKEN( spTree ):
         mpShapePtr = oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GroupShape" ) );
-        xRet.set( new PPTShapeGroupContext(
+        return new PPTShapeGroupContext(
                 *this, mpSlidePersistPtr, meShapeLocation, mpSlidePersistPtr->getShapes(),
-                mpShapePtr ) );
-        break;
+                mpShapePtr );
     default:
         break;
     }
 
-    if( !xRet.is() )
-        xRet = getFastContextHandler();
-
-    return xRet;
+    return this;
 }
 void SAL_CALL ExtDrawingFragmentHandler::endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
 {

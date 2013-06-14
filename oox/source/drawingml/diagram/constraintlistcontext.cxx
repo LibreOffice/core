@@ -41,20 +41,10 @@ ConstraintListContext::~ConstraintListContext()
 {
 }
 
-void SAL_CALL ConstraintListContext::endFastElement( ::sal_Int32 )
-    throw (SAXException, RuntimeException)
+ContextHandlerRef
+ConstraintListContext::onCreateContext( ::sal_Int32 aElement,
+                                        const AttributeList& rAttribs )
 {
-}
-
-Reference< XFastContextHandler > SAL_CALL
-ConstraintListContext::createFastChildContext( ::sal_Int32 aElement,
-                                               const Reference< XFastAttributeList >& xAttribs )
-    throw (SAXException, RuntimeException)
-{
-    Reference< XFastContextHandler > xRet;
-
-    OUString aEmptyStr;
-
     switch( aElement )
     {
     case DGM_TOKEN( constr ):
@@ -62,27 +52,24 @@ ConstraintListContext::createFastChildContext( ::sal_Int32 aElement,
         ConstraintAtomPtr pNode( new ConstraintAtom() );
         mpNode->addChild( pNode );
 
-        AttributeList aAttribs( xAttribs );
-        pNode->setFor( aAttribs.getToken( XML_for, XML_none ) );
-        pNode->setForName( aAttribs.getString( XML_forName, aEmptyStr ) );
-        pNode->setPointType( aAttribs.getToken( XML_ptType, XML_none ) );
-        pNode->setType( aAttribs.getToken( XML_type, XML_none ) );
-        pNode->setRefFor( aAttribs.getToken( XML_refFor, XML_none ) );
-        pNode->setRefForName( aAttribs.getString( XML_refForName, aEmptyStr ) );
-        pNode->setRefType( aAttribs.getToken( XML_refType, XML_none ) );
-        pNode->setRefPointType( aAttribs.getToken( XML_refPtType, XML_none ) );
-        pNode->setFactor( aAttribs.getDouble( XML_fact, 1.0 ) );
-        pNode->setValue( aAttribs.getDouble( XML_val, 0.0 ) );
-        pNode->setOperator( aAttribs.getToken( XML_op, XML_none ) );
+        pNode->setFor( rAttribs.getToken( XML_for, XML_none ) );
+        pNode->setForName( rAttribs.getString( XML_forName, "" ) );
+        pNode->setPointType( rAttribs.getToken( XML_ptType, XML_none ) );
+        pNode->setType( rAttribs.getToken( XML_type, XML_none ) );
+        pNode->setRefFor( rAttribs.getToken( XML_refFor, XML_none ) );
+        pNode->setRefForName( rAttribs.getString( XML_refForName, "" ) );
+        pNode->setRefType( rAttribs.getToken( XML_refType, XML_none ) );
+        pNode->setRefPointType( rAttribs.getToken( XML_refPtType, XML_none ) );
+        pNode->setFactor( rAttribs.getDouble( XML_fact, 1.0 ) );
+        pNode->setValue( rAttribs.getDouble( XML_val, 0.0 ) );
+        pNode->setOperator( rAttribs.getToken( XML_op, XML_none ) );
         break;
     }
     default:
         break;
     }
-    if( !xRet.is() )
-        xRet.set(this);
 
-    return xRet;
+    return this;
 }
 
 

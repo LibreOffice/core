@@ -60,27 +60,25 @@ static oox::drawingml::ShapePtr findPlaceholder( sal_Int32 nFirstPlaceholder, sa
     return !nSecondPlaceholder || pPlaceholder.get() ? pPlaceholder : PPTShape::findPlaceholder( nSecondPlaceholder, rShapes );
 }
 
-Reference< XFastContextHandler > PPTGraphicShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
-
     switch( aElementToken )
     {
     // nvSpPr CT_ShapeNonVisual begin
 //  case NMSP_PPT|XML_drElemPr:
 //      break;
     case PPT_TOKEN(cNvPr):
-        mpShapePtr->setId( xAttribs->getOptionalValue( XML_id ) );
-        mpShapePtr->setName( xAttribs->getOptionalValue( XML_name ) );
+        mpShapePtr->setId( rAttribs.getString( XML_id ).get() );
+        mpShapePtr->setName( rAttribs.getString( XML_name ).get() );
         break;
     case PPT_TOKEN(ph):
     {
-        sal_Int32 nSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
+        sal_Int32 nSubType( rAttribs.getToken( XML_type, XML_obj ) );
         mpShapePtr->setSubType( nSubType );
-        OUString sIdx( xAttribs->getOptionalValue( XML_idx ) );
+        OUString sIdx( rAttribs.getString( XML_idx ).get() );
         sal_Bool bHasIdx = !sIdx.isEmpty();
         sal_Int32 nIdx = sIdx.toInt32();
-        if( xAttribs->hasAttribute( XML_idx ) )
+        if( rAttribs.hasAttribute( XML_idx ) )
             mpShapePtr->setSubTypeIndex( nIdx );
 
         if ( nSubType || bHasIdx )
@@ -95,7 +93,7 @@ Reference< XFastContextHandler > PPTGraphicShapeContext::createFastChildContext(
                 {
                     // TODO: use id to shape map
                     SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
-                    if ( pMasterPersist.get() && xAttribs->hasAttribute( XML_idx ) )
+                    if ( pMasterPersist.get() && rAttribs.hasAttribute( XML_idx ) )
                         pPlaceholder = PPTShape::findPlaceholderByIndex( nIdx, pMasterPersist->getShapes()->getChildren() );
                 }
                 if ( !pPlaceholder.get() && ( ( eShapeLocation == Slide ) || ( eShapeLocation == Layout ) ) )
@@ -165,26 +163,20 @@ Reference< XFastContextHandler > PPTGraphicShapeContext::createFastChildContext(
     // nvSpPr CT_ShapeNonVisual end
 
     case PPT_TOKEN(spPr):
-        xRet = new PPTShapePropertiesContext( *this, *mpShapePtr );
-        break;
+        return new PPTShapePropertiesContext( *this, *mpShapePtr );
 
     case PPT_TOKEN(style):
-        xRet = new oox::drawingml::ShapeStyleContext( *this, *mpShapePtr );
-        break;
+        return new oox::drawingml::ShapeStyleContext( *this, *mpShapePtr );
 
     case PPT_TOKEN(txBody):
     {
         oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
         mpShapePtr->setTextBody( xTextBody );
-        xRet = new oox::drawingml::TextBodyContext( *this, *xTextBody );
-        break;
+        return new oox::drawingml::TextBodyContext( *this, *xTextBody );
     }
     }
 
-    if( !xRet.is() )
-        xRet.set( GraphicShapeContext::createFastChildContext( aElementToken, xAttribs ) );
-
-    return xRet;
+    return GraphicShapeContext::onCreateContext( aElementToken, rAttribs );
 }
 
 
