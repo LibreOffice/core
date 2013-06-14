@@ -653,6 +653,48 @@ gb_LinkTarget__use_jawt :=
 endif # $(OS)$(COM) = WNTGCC
 
 
+ifeq ($(SYSTEM_LIBATOMIC_OPS),YES)
+
+define gb_LinkTarget__use_libatomic_ops
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(LIBATOMIC_OPS_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1), $(LIBATOMIC_OPS_LIBS))
+
+endef
+gb_ExternalProject__use_libatomic_ops :=
+
+else # !SYSTEM_LIBATOMIC_OPS
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+    libatomic-ops-7.2d \
+))
+
+
+define gb_LinkTarget__use_libatomic_ops
+$(call gb_LinkTarget_set_include,$(1),\
+$(LIBATOMIC_OPS_CFLAGS) \
+	$$(INCLUDE) \
+	$(LIBATOMIC_OPS_CFLAGS) \
+)
+$(call gb_LinkTarget_use_package,$(1),\
+	libatomic_ops \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	libatomic_ops \
+)
+
+endef
+
+define gb_ExternalProject__use_libatomic_ops
+$(call gb_ExternalProject_use_package,$(1),libatomic_ops)
+
+endef
+
+endif # SYSTEM_LIBATOMIC_OPS
+
+
 ifeq ($(SYSTEM_LIBEXTTEXTCAT),YES)
 
 define gb_LinkTarget__use_libexttextcat
@@ -2052,6 +2094,8 @@ ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 
 ifeq ($(SYSTEM_FIREBIRD),YES)
 
+$(call gb_LinkTarget__use_libatomic_ops,$(1))
+
 define gb_LinkTarget__use_firebird
 $(call gb_LinkTarget_set_include,$(1),\
 	$(FIREBIRD_CFLAGS) \
@@ -2066,36 +2110,25 @@ endef
 
 else # !SYSTEM_FIREBIRD
 
-$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	firebird \
+#$(call gb_LinkTarget__use_libatomic_ops,$(1))
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+    fbembed \
 ))
-define gb_LinkTarget__use_firebird
-$(call gb_LinkTarget_use_unpacked,$(1),firebird)
+
+define gb_LinkTarget__use_libfbembed
+$(call gb_LinkTarget_use_package,$(1),firebird)
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(OUTDIR)/inc/external/firebird \
 	$$(INCLUDE) \
+	-I$(call gb_UnpackedTarball_get_dir,firebird)/src/include \
+	-I$(call gb_UnpackedTarball_get_dir,firebird)/src/include/gen \
+	-I$(call gb_UnpackedTarball_get_dir,firebird)/src/jrd \
 )
 $(call gb_LinkTarget_use_libraries,$(1),\
-	firebird \
+    fbembed \
 )
 
 endef
-
-# $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-# 	atomic_ops \
-# ))
-
-# define gb_LinkTarget__use_atomic_ops
-# $(call gb_LinkTarget_use_static_libraries,$(1),\
-# 	atomic_ops \
-# )
-
-# endef
-# define gb_ExternalProject__use_atomic_ops
-# $(call gb_ExternalProject_use_package,$(1),atomic_ops)
-# $(call gb_ExternalProject_use_static_libraries,$(1),atomic_ops)
-
-# endef
 
 # define gb_LinkTarget__use_tommath
 # $(call gb_LinkTarget_set_include,$(1),\

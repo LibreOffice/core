@@ -1,0 +1,4 @@
+From [https://github.com/ivmai/libatomic_ops/].
+
+Note that some files (linked into libatomic_ops_gpl) are GPL'd, the portion
+needed for Firebird (ibatomic_ops) is however MIT licensed. 
