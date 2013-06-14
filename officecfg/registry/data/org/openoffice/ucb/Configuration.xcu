@@ -188,6 +188,17 @@
                 <value/>
               </prop>
             </node>
+            <node oor:name="Provider900" oor:op="replace">
+              <prop oor:name="ServiceName">
+                <value/>
+              </prop>
+              <prop oor:name="URLTemplate">
+                <value>private</value>
+              </prop>
+              <prop oor:name="Arguments">
+                <value/>
+              </prop>
+            </node>
             <!-- We want the Provider to be the final fallback provider -->
             <node oor:name="Provider999" oor:op="replace" install:module="gio">
               <prop oor:name="ServiceName">

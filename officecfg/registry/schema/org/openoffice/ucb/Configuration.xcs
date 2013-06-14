@@ -28,7 +28,7 @@
       </info>
       <prop oor:name="ServiceName" oor:type="xs:string">
         <info>
-          <desc>Specifies the name of the UNO service to be used to instantiate the UCP.</desc>
+          <desc>Specifies the name of the UNO service to be used to instantiate the UCP.  If it is the empty string, a null provider will be used (see the documentation of the Provider argument to com.sun.star.ucb.XContentProviderManager.registerContentProvider).</desc>
         </info>
       </prop>
       <prop oor:name="URLTemplate" oor:type="xs:string">

@@ -58,31 +58,35 @@ registerAtUcb(
                                    copy(RTL_CONSTASCII_LENGTH("{noproxy}")) :
                                rArguments);
 
-    // First, try to instantiate proxy for provider:
     uno::Reference< ucb::XContentProvider > xProvider;
-    if (!bNoProxy)
-    {
-        uno::Reference< ucb::XContentProviderFactory > xProxyFactory;
-        try
-        {
-            xProxyFactory = ucb::ContentProviderProxyFactory::create( rxContext );
-        }
-        catch (uno::Exception const &) {}
-        OSL_ENSURE(xProxyFactory.is(), "No ContentProviderProxyFactory");
-        if (xProxyFactory.is())
-            xProvider = xProxyFactory->createContentProvider(rName);
-    }
 
-    // Then, try to instantiate provider directly:
-    if (!xProvider.is())
-        try
+    if (!rName.isEmpty())
+    {
+        // First, try to instantiate proxy for provider:
+        if (!bNoProxy)
         {
-            xProvider = uno::Reference< ucb::XContentProvider >(
-                            rxContext->getServiceManager()->createInstanceWithContext(rName, rxContext),
-                            uno::UNO_QUERY);
+            uno::Reference< ucb::XContentProviderFactory > xProxyFactory;
+            try
+            {
+                xProxyFactory = ucb::ContentProviderProxyFactory::create( rxContext );
+            }
+            catch (uno::Exception const &) {}
+            OSL_ENSURE(xProxyFactory.is(), "No ContentProviderProxyFactory");
+            if (xProxyFactory.is())
+                xProvider = xProxyFactory->createContentProvider(rName);
         }
-        catch (uno::RuntimeException const &) { throw; }
-        catch (uno::Exception const &) {}
+
+        // Then, try to instantiate provider directly:
+        if (!xProvider.is())
+            try
+            {
+                xProvider = uno::Reference< ucb::XContentProvider >(
+                    rxContext->getServiceManager()->createInstanceWithContext(rName, rxContext),
+                    uno::UNO_QUERY);
+            }
+            catch (uno::RuntimeException const &) { throw; }
+            catch (uno::Exception const &) {}
+    }
 
     uno::Reference< ucb::XParameterizedContentProvider >
         xParameterized(xProvider, uno::UNO_QUERY);
@@ -104,7 +108,7 @@ registerAtUcb(
     }
 
     bool bSuccess = false;
-    if (rManager.is() && xProvider.is())
+    if (rManager.is() && (rName.isEmpty() || xProvider.is()))
     {
         try
         {

@@ -42,6 +42,10 @@ namespace ucbhelper {
 struct ContentProviderData
 {
     /** The UNO service name to use to instanciate the content provider.
+
+        If it is the empty string, a null provider will be used (see the
+        documentation of the Provider argument to
+        com.sun.star.ucb.XContentProviderManager.registerContentProvider).
      */
     OUString ServiceName;
 
@@ -71,7 +75,10 @@ typedef std::vector< ContentProviderData > ContentProviderDataList;
     @param rServiceFactory  A factory through which to obtain the required
     services.
 
-    @param rName  The service name of the content provider.
+    @param rName  The service name of the content provider.  If it is the empty
+    string, a null provider will be used (see the documentation of the Provider
+    argument to
+    com.sun.star.ucb.XContentProviderManager.registerContentProvider).
 
     @param rArguments  Any arguments to instantiate the content provider with.
 

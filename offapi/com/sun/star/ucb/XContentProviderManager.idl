@@ -146,7 +146,7 @@ published interface XContentProviderManager: com::sun::star::uno::XInterface
         a content identifier (i.e., a URL).
 
         @returns
-        a content provider.
+        a content provider, or null.
     */
     com::sun::star::ucb::XContentProvider queryContentProvider(
                 [in] string Identifier );
