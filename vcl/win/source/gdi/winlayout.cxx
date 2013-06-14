@@ -532,7 +532,8 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
 // -----------------------------------------------------------------------
 
 int SimpleWinLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int& nStart,
-    long* pGlyphAdvances, int* pCharIndexes ) const
+    long* pGlyphAdvances, int* pCharIndexes,
+    const PhysicalFontFace** /*pFallbackFonts*/ ) const
 {
     // return zero if no more glyph found
     if( nStart >= mnGlyphCount )
@@ -1631,7 +1632,8 @@ bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
 // -----------------------------------------------------------------------
 
 int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
-    int& nStartx8, sal_Int32* pGlyphAdvances, int* pCharPosAry ) const
+    int& nStartx8, sal_Int32* pGlyphAdvances, int* pCharPosAry,
+    const PhysicalFontFace** /*pFallbackFonts*/ ) const
 {
     // HACK to allow fake-glyph insertion (e.g. for kashidas)
     // TODO: use iterator idiom instead of GetNextGlyphs(...)
@@ -2858,11 +2860,12 @@ void GraphiteWinLayout::GetCaretPositions( int nArraySize, long* pCaretXArray ) 
 }
 
 int GraphiteWinLayout::GetNextGlyphs( int length, sal_GlyphId* glyph_out,
-        ::Point & pos_out, int &glyph_slot, long * glyph_adv, int *char_index) const
+        ::Point & pos_out, int &glyph_slot, long * glyph_adv, int *char_index,
+        const PhysicalFontFace** pFallbackFonts ) const
 {
     maImpl.DrawBase() = WinLayout::maDrawBase;
     maImpl.DrawOffset() = WinLayout::maDrawOffset;
-    return maImpl.GetNextGlyphs(length, glyph_out, pos_out, glyph_slot, glyph_adv, char_index);
+    return maImpl.GetNextGlyphs(length, glyph_out, pos_out, glyph_slot, glyph_adv, char_index, pFallbackFonts);
 }
 
 void GraphiteWinLayout::MoveGlyph( int glyph_idx, long new_x_pos )
