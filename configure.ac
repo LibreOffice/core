@@ -5445,13 +5445,31 @@ if test "$GCC" = "yes"; then
     dnl GNU/Linux" machine); see the definition of __cxa_guard_acquire in GCC's
     dnl libstdc++-v3/libsupc++/guard.cc for what #ifdefs actually make a
     dnl difference there.  Conservative advice from Jakub Jelinek is to assume
-    dnl it working in GCC >= 4.3:
-    if test "$_os" = "Darwin" -o $_os = Android -o "${GCCVER?}" -lt 040300; then
-        AC_MSG_RESULT([broken (i.e., no)])
-    else
-        HAVE_THREADSAFE_STATICS=TRUE
+    dnl it working in GCC >= 4.3, so conservative way to check here is to use
+    dnl GCCVER for GCC but resort to __GLIBCXX__ corresponding to libstdc++
+    dnl shipped with GCC 4.3.0 (cf. <http://gcc.gnu.org/onlinedocs/libstdc++/
+    dnl manual/abi.html#abi.versioning.history>; 4.3.0 is 20080306, 4.2.4 is
+    dnl 20080519, 4.3.1 is 20080606) for Clang (for which GCCVER is notoriously
+    dnl "too old"):
+    if test "$_os" != Darwin -a "$_os" != Android; then
+        if test "$COM_GCC_IS_CLANG" = TRUE; then
+            AC_LANG_PUSH([C++])
+            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <list>
+#if !defined __GLIBCXX__ ||(__GLIBCXX__ < 20080606 && __GLIBCXX__ != 20080306)
+#error
+#endif
+                ]])],[HAVE_THREADSAFE_STATICS=TRUE],[])
+            AC_LANG_POP([C++])
+        elif test "${GCCVER?}" -ge 040300; then
+            HAVE_THREADSAFE_STATICS=TRUE
+        fi
+    fi
+    if test "$HAVE_THREADSAFE_STATICS" = TRUE; then
         AC_DEFINE(HAVE_THREADSAFE_STATICS)
         AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([broken (i.e., no)])
     fi
 else
     AC_MSG_RESULT([unknown (assuming no)])
