@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7WA\u003d",
+        "filename": "sc/source/core/data/attrib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-14T11:55:53Z",
+      "side": 1,
+      "message": "is this the preferred way now ? ( I admit I have lost track with the recent string changes, but... it was in the past preferred to use OUStringBuffer for this )",
+      "revId": "425cf930c59e6fcdb929dc582e42fcfc3ba9d310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7V8\u003d",
+        "filename": "sc/source/core/data/attrib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-14T11:55:53Z",
+      "side": 1,
+      "message": "I think it is definitely better to define the temporary aStrYes and aStrNo as before, it\u0027s clearer and more efficient",
+      "revId": "425cf930c59e6fcdb929dc582e42fcfc3ba9d310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7V4\u003d",
+        "filename": "sc/source/core/data/attrib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-14T11:55:53Z",
+      "side": 1,
+      "message": "same comment here, it\u0027s really harder to read now, better to stick to using aStrYes etc. imho",
+      "revId": "425cf930c59e6fcdb929dc582e42fcfc3ba9d310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7Vw\u003d",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3314,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-14T11:55:53Z",
+      "side": 1,
+      "message": "not sure what the point is in changing the param name",
+      "revId": "425cf930c59e6fcdb929dc582e42fcfc3ba9d310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7Vs\u003d",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3339,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-14T11:55:53Z",
+      "side": 1,
+      "message": "I find this very confusing ( ok I undestand why you are doing this ) but... it\u0027s really confusing, maybe it could be simpilfied\n\nOUString sTmpOUSting \u003d pGrfName ? *pGrfName : \"\";\nconst OUString *pLink \u003d pGrfName ? sTmpOUString : ((const SvxBrushItem \u0026)rHt).GetGraphicLink();",
+      "revId": "425cf930c59e6fcdb929dc582e42fcfc3ba9d310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7Vo\u003d",
+        "filename": "sw/source/filter/html/css1atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3364,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-14T11:55:53Z",
+      "side": 1,
+      "message": "why do we need another temp ( this is in the same method right? ), can\u0027t we resue GrfName ( or whatever ever temp oustring  you use ) I mean pLink just needs to point to an OUString populated by the name passed in, or GetGraphicLink or....",
+      "revId": "425cf930c59e6fcdb929dc582e42fcfc3ba9d310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7Vg\u003d",
+        "filename": "sw/source/filter/html/htmlfly.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-14T11:55:53Z",
+      "side": 1,
+      "message": "what about rGrName, isn\u0027t it an out param, but we no longer update it here",
+      "revId": "425cf930c59e6fcdb929dc582e42fcfc3ba9d310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7Vk\u003d",
+        "filename": "sw/source/filter/html/wrthtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1155,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-14T11:55:53Z",
+      "side": 1,
+      "message": "what about rEmbGrfNm it seems this is at least an out param to SwHTMLWriter::OutBackground but it isn\u0027t getting updated here",
+      "revId": "425cf930c59e6fcdb929dc582e42fcfc3ba9d310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
