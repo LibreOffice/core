@@ -121,11 +121,11 @@ endef
 # Set the executable as internal
 #
 # Optionally set a specific executable target to use (if the target
-# returned by gb_Executable_get_target_for_build is not suitable).
+# $(OUTDIR_FOR_BUILD)/bin/$(1)$(gb_Executable_EXT_for_build) is not suitable).
 #
 # gb_ExternalExecutable_set_internal executable call?
 define gb_ExternalExecutable_set_internal
-$(call gb_ExternalExecutable__set_internal,$(1),$(if $(strip $(2)),$(2),$(call gb_Executable_get_target_for_build,$(1))))
+$(call gb_ExternalExecutable__set_internal,$(1),$(if $(strip $(2)),$(2),$(OUTDIR_FOR_BUILD)/bin/$(1)$(gb_Executable_EXT_for_build)))
 
 endef
 

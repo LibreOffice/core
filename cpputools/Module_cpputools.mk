@@ -19,12 +19,6 @@ $(eval $(call gb_Module_add_targets,cpputools,\
     Executable_uno \
 ))
 
-ifneq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,cpputools,\
-    Package_bin \
-))
-endif
-
 endif
 
 # vim:set noet sw=4 ts=4:

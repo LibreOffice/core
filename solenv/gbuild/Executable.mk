@@ -33,7 +33,7 @@ $(dir $(call gb_Executable_get_runtime_target,%)).dir :
 $(dir $(call gb_Executable_get_runtime_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_Executable_get_runtime_target,%) : $(call gb_Executable_get_target_for_build,%)
+$(call gb_Executable_get_runtime_target,%) :
 	touch $@
 
 .PHONY : $(call gb_Executable_get_clean_target,%)
@@ -54,7 +54,7 @@ ifeq (,$$(findstring $(1),$$(gb_Executable_KNOWN)))
 $$(eval $$(call gb_Output_info,Currently known executables: $(sort $(gb_Executable_KNOWN)),ALL))
 $$(eval $$(call gb_Output_error,Executable $(1) must be registered in Repository.mk))
 endif
-$(call gb_Executable__Executable_impl,$(1),Executable/$(1)$(gb_Executable_EXT))
+$(call gb_Executable__Executable_impl,$(1),$(call gb_Executable_get_linktargetname,$(1)))
 
 endef
 
@@ -65,6 +65,7 @@ $(call gb_LinkTarget_add_libs,$(2),$(gb_STDLIBS))
 $(call gb_Executable_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) \
 	| $(dir $(call gb_Executable_get_target,$(1))).dir
 $(call gb_Executable_get_runtime_target,$(1)) :| $(dir $(call gb_Executable_get_runtime_target,$(1))).dir
+$(call gb_Executable_get_runtime_target,$(1)) : $(call gb_Executable_get_target_for_build,$(1))
 $(call gb_Executable_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Executable_Executable_platform,$(1),$(2))
@@ -94,7 +95,7 @@ $(call gb_Executable_get_clean_target,$(1)) : $(call gb_Package_get_clean_target
 endef
 
 define gb_Executable_set_targettype_gui
-$(call gb_LinkTarget_get_target,Executable/$(1)$(gb_Executable_EXT)) : TARGETGUI := $(2)
+$(call gb_LinkTarget_get_target,$(call gb_Executable_get_linktargetname,$(1))) : TARGETGUI := $(2)
 endef
 
 # The auxtarget is delivered via the rule in Package.mk.

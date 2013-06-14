@@ -24,7 +24,7 @@ $(call gb_AutoInstall_get_target,%) : $(SRCDIR)/Repository.mk $(GBUILDDIR)/AutoI
 	$(foreach lib,$(gb_Library_MODULE_$*),\
 		echo "$(SCP2LIBTEMPLATE)(auto_$*_lib_$(lib),$(call gb_Library_get_runtime_filename,$(lib)))" >> $@;)
 	$(foreach exe,$(gb_Executable_MODULE_$*),\
-		echo "$(SCP2EXETEMPLATE)(auto_$*_exe_$(exe),$(exe)$(gb_Executable_EXT))" >> $@;)
+		echo "$(SCP2EXETEMPLATE)(auto_$*_exe_$(exe),$(call gb_Executable_get_filename,$(exe)))" >> $@;)
 
 
 $(call gb_AutoInstall_get_clean_target,%) :

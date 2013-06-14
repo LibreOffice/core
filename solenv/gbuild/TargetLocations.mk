@@ -22,8 +22,6 @@
 gb_CliLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliLibrary_EXT)
 gb_CliNativeLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliNativeLibrary_EXT)
 gb_CliUnoApi_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliUnoApi_EXT)
-gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
-gb_Executable_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1)$(gb_Executable_EXT_for_build)
 gb_Pagein_get_outdir_target = $(OUTDIR)/bin/pagein-$(1)
 gb_PackagePart_get_destinations = \
 	$(INSTDIR) \
@@ -51,6 +49,13 @@ gb_XcuDataTarget_get_outdir_target = $(gb_Configuration_registry)/data/$(1)
 gb_XcuLangpackTarget_get_outdir_target = $(gb_Configuration_registry)/spool/$(1)
 gb_XcuModuleTarget_get_outdir_target = $(gb_Configuration_registry)/spool/$(1)
 
+define gb_Executable_get_target
+$(patsubst $(1):%,$(OUTDIR)/bin/%,$(filter $(1):%,$(gb_Executable_FILENAMES)))
+endef
+
+define gb_Executable_get_target_for_build
+$(patsubst $(1):%,$(OUTDIR_FOR_BUILD)/bin/%,$(filter $(1):%,$(gb_Executable_FILENAMES_FOR_BUILD)))
+endef
 
 define gb_Library_get_target
 $(patsubst $(1):%,$(gb_Library_OUTDIRLOCATION)/%,$(filter $(1):%,$(gb_Library_FILENAMES)))
@@ -247,6 +252,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	CustomPackage \
 	DescriptionTranslateTarget \
 	Dictionary \
+	Executable \
 	ExternalPackage \
 	Extension \
 	Gallery \
@@ -316,7 +322,6 @@ $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	CliLibrary \
 	CliNativeLibrary \
 	CliUnoApi \
-	Executable \
 	InstallScript \
 	Library \
 	StaticLibrary \
@@ -353,6 +358,10 @@ define gb_Library_get_filename
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_FILENAMES)))
 endef
 
+define gb_Executable_get_filename
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Executable_FILENAMES)))
+endef
+
 # Get dependencies needed for running the executable
 #
 # This is not strictly necessary, but it makes the use more similar to
@@ -372,7 +381,7 @@ define gb_Executable_get_command
 $(gb_Helper_set_ld_path) $(2) $(call gb_Executable_get_target_for_build,$(1))
 endef
 
-gb_Executable_get_linktargetname = Executable/$(1)$(gb_Executable_EXT)
+gb_Executable_get_linktargetname = Executable/$(call gb_Executable_get_filename,$(1))
 gb_Library_get_linktargetname = Library/$(call gb_Library_get_filename,$(1))
 gb_StaticLibrary_get_linktargetname = StaticLibrary/$(call gb_StaticLibrary_get_filename,$(1))
 

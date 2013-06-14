@@ -65,16 +65,6 @@ End
 
 // Public Executables:
 
-#if defined WNT
-File gid_File_Exe_Uno
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
-    Name = EXENAME(uno);
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "C66A9E2B-B16D-46A9-B9EC-772D9D3837F5";
-End
-#endif
-
 #ifndef WNT
 Shortcut gid_Shortcut_Exe_Uno
     FileID = gid_File_Exe_StartupSh;
@@ -93,16 +83,6 @@ File gid_File_Exe_StartupSh
     Name = "/ure/startup.sh";
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "C86E816A-4EAE-47E9-BD1F-3E23C80F4EAE";
-End
-#endif
-
-#if !defined WNT
-File gid_File_Exe_UnoBin
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
-    Name = "uno.bin";
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "4AE33B3E-B33E-4BA4-AADC-8D7ED303FDE9";
 End
 #endif
 
@@ -621,9 +601,7 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_ThirdpartylicensereadmeHtml_Ure,
             gid_File_Readme_Ure,
             gid_File_License_Ure,
-            gid_File_Exe_Uno,
             gid_File_Exe_StartupSh,
-            gid_File_Exe_UnoBin,
             gid_File_Dl_Cli_Uno,
             gid_File_Dl_Cli_Ure_Assembly,
             gid_File_Dl_Policy_Cli_Ure_Assembly,

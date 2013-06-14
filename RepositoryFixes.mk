@@ -17,6 +17,15 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+# fixes for executables
+
+gb_Executable_FILENAMES := $(foreach group,$(gb_Executable_VALIDGROUPS),\
+	$(foreach exe,$(gb_Executable_$(group)),$(exe):$(exe)$(gb_Executable_EXT)))
+
+gb_Executable_FILENAMES := $(patsubst uno:uno,uno:uno.bin,$(gb_Executable_FILENAMES))
+
+gb_Executable_FILENAMES_FOR_BUILD := $(subst $(gb_Executable_EXT),$(gb_Executable_EXT_for_build),$(gb_Executable_FILENAMES))
+
 # fixes for all the libraries that are named with too much creativity and do
 # not follow any of the established nameschemes
 
