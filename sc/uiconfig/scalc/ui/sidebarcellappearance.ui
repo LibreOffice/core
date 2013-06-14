@@ -40,7 +40,7 @@
                 <child>
                   <object class="GtkMenuToolButton" id="cellbackground">
                     <property name="use_action_appearance">False</property>
-                    <property name="width_request">90</property>
+                    <property name="width_request">105</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
@@ -92,14 +92,12 @@
             <property name="spacing">6</property>
             <child>
               <object class="GtkToolbar" id="cellbordertype">
-                <property name="width_request">80</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="valign">center</property>
                 <child>
                   <object class="GtkMenuToolButton" id="bordertype">
                     <property name="use_action_appearance">False</property>
-                    <property name="width_request">90</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
@@ -136,7 +134,7 @@
                     <child>
                       <object class="GtkMenuToolButton" id="linestyle">
                         <property name="use_action_appearance">False</property>
-                        <property name="width_request">90</property>
+                        <property name="width_request">105</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
@@ -170,7 +168,7 @@
                     <child>
                       <object class="GtkMenuToolButton" id="linecolor">
                         <property name="use_action_appearance">False</property>
-                        <property name="width_request">90</property>
+                        <property name="width_request">105</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
