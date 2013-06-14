@@ -885,9 +885,6 @@ bool BitmapEx::Create( const ::com::sun::star::uno::Reference<
                        ::com::sun::star::rendering::XBitmapCanvas > &xBitmapCanvas,
                        const Size &rSize )
 {
-    SetEmpty();
-    Size aSize( rSize );
-
     uno::Reference< beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, uno::UNO_QUERY );
     if( xFastPropertySet.get() )
     {
@@ -907,38 +904,17 @@ bool BitmapEx::Create( const ::com::sun::star::uno::Reference<
     pSalBmp = ImplGetSVData()->mpDefInst->CreateSalBitmap();
     pSalMask = ImplGetSVData()->mpDefInst->CreateSalBitmap();
 
-    if( pSalBmp->Create( xBitmapCanvas, aSize ) )
+    Size aLocalSize(rSize);
+    if( pSalBmp->Create( xBitmapCanvas, aLocalSize ) )
     {
-#ifdef CLAMP_BITDEPTH_PARANOIA
-        // did we get alpha mixed up in the bitmap itself
-        // eg. Cairo Canvas ... yes performance of this is awful.
-        if( pSalBmp->GetBitCount() > 24 )
+        if ( pSalMask->Create( xBitmapCanvas, aLocalSize, true ) )
         {
-            // Format convert the pixels with generic code
-            Bitmap aSrcPixels( pSalBmp );
-            aBitmap = Bitmap( rSize, 24 );
-            BitmapReadAccess aSrcRead( aSrcPixels );
-            BitmapWriteAccess aDestWrite( aBitmap );
-            aDestWrite.CopyBuffer( aSrcRead );
-        }
-        else
-#endif
-            aBitmap = Bitmap( pSalBmp );
-
-        aBitmapSize = rSize;
-        if ( pSalMask->Create( xBitmapCanvas, aSize, true ) )
-        {
-            aMask = Bitmap( pSalMask );
-            bAlpha = sal_True;
-            aBitmapSize = rSize;
-            eTransparent = !aMask ? TRANSPARENT_NONE : TRANSPARENT_BITMAP;
-
+            *this = BitmapEx(Bitmap(pSalBmp), Bitmap(pSalMask) );
             return true;
         }
         else
         {
-            bAlpha = sal_False;
-            eTransparent = TRANSPARENT_NONE;
+            *this = BitmapEx(Bitmap(pSalBmp));
             return true;
         }
     }
