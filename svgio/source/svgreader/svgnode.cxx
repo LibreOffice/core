@@ -179,12 +179,43 @@ namespace svgio
         void SvgNode::parseAttributes(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs)
         {
             const sal_uInt32 nAttributes(xAttribs->getLength());
+            // #i122522# SVG defines that 'In general, this means that the presentation attributes have
+            // lower priority than other CSS style rules specified in author style sheets or ‘style’
+            // attributes.' in http://www.w3.org/TR/SVG/styling.html#UsingPresentationAttributes
+            // (6.4 Specifying properties using the presentation attributes SVG 1.1). That means that
+            // e.g. font-size will appear as presentation attribute and CSS style attribute. In these
+            // cases, CSS style attributes need to have precedence. To do so it is possible to create
+            // a proirity system for all properties of a shape, but it will also work to parse the
+            // presentation attributes of type 'style' last, so they will overwrite the less-prioritized
+            // already interpreted ones. Thus, remember SVGTokenStyle entries and parse them last.
+            // To make this work it is required that parseAttribute is only called by parseAttributes
+            // which is the case.
+            std::vector< sal_uInt32 > aSVGTokenStyleIndexes;
 
             for(sal_uInt32 a(0); a < nAttributes; a++)
             {
                 const OUString aTokenName(xAttribs->getNameByIndex(a));
+                const SVGToken aSVGToken(StrToSVGToken(aTokenName));
 
-                parseAttribute(aTokenName, StrToSVGToken(aTokenName), xAttribs->getValueByIndex(a));
+                if(SVGTokenStyle == aSVGToken)
+                {
+                    // #i122522# remember SVGTokenStyle entry
+                    aSVGTokenStyleIndexes.push_back(a);
+                }
+                else
+                {
+                    parseAttribute(aTokenName, StrToSVGToken(aTokenName), xAttribs->getValueByIndex(a));
+                }
+            }
+
+            // #i122522# parse SVGTokenStyle entries last to override already interpreted
+            // 'presentation attributes' of potenially the same type
+            for(sal_uInt32 b(0); b < aSVGTokenStyleIndexes.size(); b++)
+            {
+                const sal_uInt32 nSVGTokenStyleIndex(aSVGTokenStyleIndexes[b]);
+                const ::rtl::OUString aTokenName(xAttribs->getNameByIndex(nSVGTokenStyleIndex));
+
+                parseAttribute(aTokenName, SVGTokenStyle, xAttribs->getValueByIndex(nSVGTokenStyleIndex));
             }
         }
 
