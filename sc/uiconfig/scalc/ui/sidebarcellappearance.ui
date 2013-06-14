@@ -12,17 +12,16 @@
         <property name="can_focus">False</property>
         <property name="border_width">6</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
+        <property name="spacing">6</property>
         <child>
-          <object class="GtkBox" id="box2">
+          <object class="GtkBox" id="box4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel" id="cellbackgroundlabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_right">119</property>
+                <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Cell background:</property>
                 <property name="use_underline">True</property>
               </object>
@@ -36,14 +35,18 @@
               <object class="GtkToolbar" id="cellbackgroundcolor">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="has_tooltip">True</property>
                 <property name="tooltip_text" translatable="yes">Select the background color of the selected cells.</property>
                 <child>
                   <object class="GtkMenuToolButton" id="cellbackground">
-                    <property name="width_request">100</property>
+                    <property name="use_action_appearance">False</property>
+                    <property name="width_request">90</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="has_tooltip">True</property>
                     <property name="tooltip_text" translatable="yes">Select the background color of the selected cells.</property>
                     <property name="halign">start</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="action_name">.uno:BackgroundColor</property>
                     <property name="label" translatable="yes">toolbutton1</property>
                     <property name="use_underline">True</property>
@@ -57,6 +60,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
+                <property name="pack_type">end</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -64,14 +68,14 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="cellborderlabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_right">153</property>
+            <property name="xalign">0</property>
             <property name="label" translatable="yes">Cell _border:</property>
             <property name="use_underline">True</property>
           </object>
@@ -82,82 +86,27 @@
           </packing>
         </child>
         <child>
-          <object class="GtkGrid" id="grid2">
+          <object class="GtkBox" id="box2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="borderlinecolor">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Select the line color of the borders.</property>
-                <property name="hexpand">True</property>
-                <child>
-                  <object class="GtkMenuToolButton" id="linecolor">
-                    <property name="width_request">90</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Select the line color of the borders.</property>
-                    <property name="halign">end</property>
-                    <property name="hexpand">True</property>
-                    <property name="action_name">.uno:FrameLineColor</property>
-                    <property name="label" translatable="yes">toolbutton1</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolbar" id="borderlinestyle">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <child>
-                  <object class="GtkMenuToolButton" id="linestyle">
-                    <property name="width_request">90</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Select the line style of the borders.</property>
-                    <property name="halign">end</property>
-                    <property name="action_name">.uno:LineStyle</property>
-                    <property name="label" translatable="yes">toolbutton2</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
+            <property name="spacing">6</property>
             <child>
               <object class="GtkToolbar" id="cellbordertype">
                 <property name="width_request">80</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
+                <property name="valign">center</property>
                 <child>
                   <object class="GtkMenuToolButton" id="bordertype">
+                    <property name="use_action_appearance">False</property>
                     <property name="width_request">90</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Specify the borders of the selected cells.</property>
                     <property name="tooltip_text" translatable="yes">Specify the borders of the selected cells.</property>
                     <property name="halign">start</property>
+                    <property name="use_action_appearance">False</property>
                     <property name="action_name">.uno:SetBorderStyle</property>
                     <property name="label" translatable="yes">toolbutton1</property>
                     <property name="use_underline">True</property>
@@ -169,30 +118,108 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkBox" id="box3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkToolbar" id="borderlinestyle">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkMenuToolButton" id="linestyle">
+                        <property name="use_action_appearance">False</property>
+                        <property name="width_request">90</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip_markup" translatable="yes">Select the line style of the borders.</property>
+                        <property name="tooltip_text" translatable="yes">Select the line style of the borders.</property>
+                        <property name="halign">end</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="action_name">.uno:LineStyle</property>
+                        <property name="label" translatable="yes">toolbutton2</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolbar" id="borderlinecolor">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Select the line color of the borders.</property>
+                    <property name="tooltip_text" translatable="yes">Select the line color of the borders.</property>
+                    <child>
+                      <object class="GtkMenuToolButton" id="linecolor">
+                        <property name="use_action_appearance">False</property>
+                        <property name="width_request">90</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip_markup" translatable="yes">Select the line color of the borders.</property>
+                        <property name="tooltip_text" translatable="yes">Select the line color of the borders.</property>
+                        <property name="halign">end</property>
+                        <property name="hexpand">True</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="action_name">.uno:FrameLineColor</property>
+                        <property name="label" translatable="yes">toolbutton1</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="pack_type">end</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="cellgridlines">
             <property name="label" translatable="yes">Show cell _grid lines</property>
+            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="tooltip_text" translatable="yes">Show the grid lines of the cells in the entire spreadsheet.</property>
             <property name="action_name">.uno:ToggleSheetGrid</property>
+            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
