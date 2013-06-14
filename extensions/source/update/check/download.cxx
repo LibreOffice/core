@@ -104,8 +104,6 @@ static void openFile( OutData& out )
 static inline OString
 getStringValue(const uno::Reference< container::XNameAccess >& xNameAccess, const OUString& aName)
 {
-    OString aRet;
-
     OSL_ASSERT(xNameAccess->hasByName(aName));
     uno::Any aValue = xNameAccess->getByName(aName);
 
