@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7YE\u003d",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3621,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-14T09:29:47Z",
+      "side": 1,
+      "message": "can we get riid of the \"String() : String( aOrigURL.copy( nPrefixLen )\" while we are here",
+      "revId": "cded9cf5cf223b7c00fd10a6212604cf33a0dcc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7YA\u003d",
+        "filename": "sw/source/ui/dbui/addresslistdialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-14T09:29:47Z",
+      "side": 1,
+      "message": "prefer OUString sExt(\".odb\")",
+      "revId": "cded9cf5cf223b7c00fd10a6212604cf33a0dcc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7X8\u003d",
+        "filename": "sw/source/ui/dbui/dbmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2338,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-14T09:29:47Z",
+      "side": 1,
+      "message": "prefer the briefer OUString sOutputExt(\".odb\")",
+      "revId": "cded9cf5cf223b7c00fd10a6212604cf33a0dcc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7WY\u003d",
+        "filename": "unotools/source/ucbhelper/tempfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-14T09:29:47Z",
+      "side": 1,
+      "message": "175-179 could be written a little more clearly now we use OUString\nif ( !aName.isEmpty() \u0026\u0026 !aName.endsWith(\"/\") )\n    aName +\u003d \"/\";",
+      "revId": "cded9cf5cf223b7c00fd10a6212604cf33a0dcc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7WU\u003d",
+        "filename": "unotools/source/ucbhelper/tempfile.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-14T09:29:47Z",
+      "side": 1,
+      "message": "use rBaseName.endsWith(\"/\")",
+      "revId": "cded9cf5cf223b7c00fd10a6212604cf33a0dcc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
