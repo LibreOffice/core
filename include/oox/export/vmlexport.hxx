@@ -53,6 +53,9 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     /// Anchoring.
     sal_Int16 m_eHOri, m_eVOri, m_eHRel, m_eVRel;
 
+    /// Parent position.
+    const Point* m_pNdTopLeft;
+
     /// The object we're exporting.
     const SdrObject* m_pSdrObject;
 
@@ -83,7 +86,9 @@ public:
     /// Export the sdr object as VML.
     ///
     /// Call this when you need to export the object as VML.
-    sal_uInt32 AddSdrObject( const SdrObject& rObj, const sal_Int16 eHOri = -1, const sal_Int16 eVOri = -1, const sal_Int16 eHRel = -1, const sal_Int16 eVRel = -1 );
+    sal_uInt32 AddSdrObject( const SdrObject& rObj, const sal_Int16 eHOri = -1,
+            const sal_Int16 eVOri = -1, const sal_Int16 eHRel = -1, const
+            sal_Int16 eVRel = -1, const Point* pNdTopLeft = 0 );
 
 protected:
     /// Add an attribute to the generated <v:shape/> element.

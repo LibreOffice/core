@@ -2689,7 +2689,7 @@ void DocxAttributeOutput::WritePostponedMath()
     m_postponedMath = NULL;
 }
 
-void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Point& /*rNdTopLeft*/ )
+void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Point& rNdTopLeft )
 {
     m_pSerializer->mark();
 
@@ -2735,7 +2735,10 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                     const SwFrmFmt& rFrmFmt = rFrame.GetFrmFmt();
                     SwFmtHoriOrient rHoriOri = rFrmFmt.GetHoriOrient();
                     SwFmtVertOrient rVertOri = rFrmFmt.GetVertOrient();
-                    m_rExport.VMLExporter().AddSdrObject( *pSdrObj, rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(), rHoriOri.GetRelationOrient(), rVertOri.GetRelationOrient() );
+                    m_rExport.VMLExporter().AddSdrObject( *pSdrObj,
+                            rHoriOri.GetHoriOrient(), rVertOri.GetVertOrient(),
+                            rHoriOri.GetRelationOrient(),
+                            rVertOri.GetRelationOrient(), &rNdTopLeft );
 
                     m_pSerializer->endElementNS( XML_w, XML_pict );
 

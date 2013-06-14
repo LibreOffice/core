@@ -48,6 +48,7 @@ VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* 
     , m_eVOri( 0 )
     , m_eHRel( 0 )
     , m_eVRel( 0 )
+    , m_pNdTopLeft( 0 )
     , m_pSdrObject( 0 )
     , m_pShapeAttrList( NULL )
     , m_nShapeType( ESCHER_ShpInst_Nil )
@@ -324,7 +325,15 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
     if ( m_nShapeType == ESCHER_ShpInst_Line )
         AddLineDimensions( rRect );
     else
-        AddRectangleDimensions( *m_pShapeStyle, rRect );
+    {
+        Rectangle aRect(rRect);
+        if (m_pNdTopLeft)
+        {
+            aRect = m_pSdrObject->GetSnapRect();
+            aRect -= *m_pNdTopLeft;
+        }
+        AddRectangleDimensions( *m_pShapeStyle, aRect );
+    }
 
     // properties
     bool bAlreadyWritten[ 0xFFF ];
@@ -1000,13 +1009,14 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
     }
 }
 
-sal_uInt32 VMLExport::AddSdrObject( const SdrObject& rObj, const sal_Int16 eHOri, const sal_Int16 eVOri, const sal_Int16 eHRel, const sal_Int16 eVRel )
+sal_uInt32 VMLExport::AddSdrObject( const SdrObject& rObj, const sal_Int16 eHOri, const sal_Int16 eVOri, const sal_Int16 eHRel, const sal_Int16 eVRel, const Point* pNdTopLeft )
 {
     m_pSdrObject = &rObj;
     m_eHOri = eHOri;
     m_eVOri = eVOri;
     m_eHRel = eHRel;
     m_eVRel = eVRel;
+    m_pNdTopLeft = pNdTopLeft;
     return EscherEx::AddSdrObject(rObj);
 }
 
