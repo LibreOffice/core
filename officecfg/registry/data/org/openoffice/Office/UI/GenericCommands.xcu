@@ -5594,6 +5594,11 @@
           <value xml:lang="en-US">Template Manager</value>
         </prop>
       </node>
+      <node oor:name=".uno:TemplateMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Templates</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ExternalEdit" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Edit with External Tool</value>

@@ -25,10 +25,16 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
       <menu:menuseparator/>
+            <menu:menu menu:id=".uno:TemplateMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:SaveAsTemplate"/>
+                    <menu:menuitem menu:id=".uno:NewDoc"/>
+                </menu:menupopup>
+            </menu:menu>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:CloseDoc"/>
       <menu:menuitem menu:id=".uno:Save"/>
       <menu:menuitem menu:id=".uno:SaveAs"/>
-      <menu:menuitem menu:id=".uno:SaveAsTemplate"/>
       <menu:menuitem menu:id=".uno:SaveAll"/>
       <menu:menuitem menu:id=".uno:CheckOut"/>
       <menu:menuitem menu:id=".uno:CancelCheckOut"/>
