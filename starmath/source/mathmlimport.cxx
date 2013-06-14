@@ -719,7 +719,6 @@ void SmXMLContext_Helper::ApplyAttrs()
     {
         SmToken aToken;
         aToken.cMathChar = '\0';
-        aToken.nGroup = 0;
         aToken.nLevel = 5;
 
         if (nIsBold != -1)
@@ -960,7 +959,6 @@ void SmXMLPhantomContext_Impl::EndElement()
 
     SmToken aToken;
     aToken.cMathChar = '\0';
-    aToken.nGroup = 0;
     aToken.nLevel = 5;
     aToken.eType = TPHANTOM;
 
@@ -1024,7 +1022,6 @@ void SmXMLFencedContext_Impl::EndElement()
 {
     SmToken aToken;
     aToken.cMathChar = '\0';
-    aToken.nGroup = 0;
     aToken.aText = ",";
     aToken.eType = TLEFT;
     aToken.nLevel = 5;
@@ -1110,7 +1107,6 @@ public:
         : SmXMLImportContext(rImport,nPrefix,rLName)
     {
         aToken.cMathChar = '\0';
-        aToken.nGroup = 0;
         aToken.nLevel = 5;
         aToken.eType = TNUMBER;
     }
@@ -1190,7 +1186,6 @@ public:
         : SmXMLImportContext(rImport,nPrefix,rLName)
     {
         aToken.cMathChar = '\0';
-        aToken.nGroup = 0;
         aToken.nLevel = 5;
         aToken.eType = TTEXT;
     }
@@ -1223,7 +1218,6 @@ public:
         : SmXMLImportContext(rImport,nPrefix,rLName)
     {
         aToken.cMathChar = '\0';
-        aToken.nGroup = 0;
         aToken.nLevel = 5;
         aToken.eType = TTEXT;
     }
@@ -1267,7 +1261,6 @@ public:
         : SmXMLImportContext(rImport,nPrefix,rLName),aStyleHelper(*this)
     {
         aToken.cMathChar = '\0';
-        aToken.nGroup = 0;
         aToken.nLevel = 5;
         aToken.eType = TIDENT;
     }
@@ -1332,7 +1325,6 @@ public:
         const OUString& rLName)
         : SmXMLImportContext(rImport,nPrefix,rLName), bIsStretchy(sal_False)
     {
-        aToken.nGroup = 0;
         aToken.eType = TSPECIAL;
         aToken.nLevel = 5;
     }
@@ -1404,7 +1396,6 @@ void SmXMLSpaceContext_Impl::StartElement(
 {
     SmToken aToken;
     aToken.cMathChar = '\0';
-    aToken.nGroup = 0;
     aToken.eType = TBLANK;
     aToken.nLevel = 5;
     SmBlankNode *pBlank = new SmBlankNode(aToken);
@@ -1441,8 +1432,6 @@ void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup eSubSup
 
     SmToken aToken;
     aToken.cMathChar = '\0';
-    aToken.nGroup = 0;
-    aToken.nLevel = 0;
     aToken.eType = eType;
     SmSubSupNode *pNode = new SmSubSupNode(aToken);
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
@@ -1503,8 +1492,6 @@ void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType,
 
     SmToken aToken;
     aToken.cMathChar = '\0';
-    aToken.nGroup = 0;
-    aToken.nLevel = 0;
     aToken.eType = eType;
     SmSubSupNode *pNode = new SmSubSupNode(aToken);
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
@@ -1557,8 +1544,6 @@ void SmXMLUnderContext_Impl::HandleAccent()
     SmNode *pTest = lcl_popOrZero(rNodeStack);
     SmToken aToken;
     aToken.cMathChar = '\0';
-    aToken.nGroup = 0;
-    aToken.nLevel = 0;
     aToken.eType = TUNDERLINE;
 
 
@@ -1632,8 +1617,6 @@ void SmXMLOverContext_Impl::HandleAccent()
 
     SmToken aToken;
     aToken.cMathChar = '\0';
-    aToken.nGroup = 0;
-    aToken.nLevel = 0;
     aToken.eType = TACUTE;
 
     SmAttributNode *pNode = new SmAttributNode(aToken);
@@ -1701,7 +1684,6 @@ void SmXMLNoneContext_Impl::EndElement(void)
 {
     SmToken aToken;
     aToken.cMathChar = '\0';
-    aToken.nGroup = 0;
     aToken.aText = "";
     aToken.nLevel = 5;
     aToken.eType = TIDENT;
@@ -2184,8 +2166,6 @@ void SmXMLFracContext_Impl::EndElement()
 
     SmToken aToken;
     aToken.cMathChar = '\0';
-    aToken.nGroup = 0;
-    aToken.nLevel = 0;
     aToken.eType = TOVER;
     SmStructureNode *pSNode = new SmBinVerNode(aToken);
     SmNode *pOper = new SmRectangleNode(aToken);
@@ -2205,8 +2185,6 @@ void SmXMLRootContext_Impl::EndElement()
 
     SmToken aToken;
     aToken.cMathChar = MS_SQRT;  //Temporary: alert, based on StarSymbol font
-    aToken.nGroup = 0;
-    aToken.nLevel = 0;
     aToken.eType = TNROOT;
     SmStructureNode *pSNode = new SmRootNode(aToken);
     SmNode *pOper = new SmRootSymbolNode(aToken);
@@ -2229,8 +2207,6 @@ void SmXMLSqrtContext_Impl::EndElement()
 
     SmToken aToken;
     aToken.cMathChar = MS_SQRT;  //Temporary: alert, based on StarSymbol font
-    aToken.nGroup = 0;
-    aToken.nLevel = 0;
     aToken.eType = TSQRT;
     SmStructureNode *pSNode = new SmRootNode(aToken);
     SmNode *pOper = new SmRootSymbolNode(aToken);
@@ -2266,7 +2242,6 @@ void SmXMLRowContext_Impl::EndElement()
         {
             SmToken aToken;
             aToken.cMathChar = '\0';
-            aToken.nGroup = 0;
             aToken.nLevel = 5;
 
             int nLeft=0,nRight=0;
@@ -2321,7 +2296,6 @@ void SmXMLRowContext_Impl::EndElement()
         aRelationArray.resize(1);
         SmToken aToken;
         aToken.cMathChar = '\0';
-        aToken.nGroup = 0;
         aToken.nLevel = 5;
         aToken.eType = TNEWLINE;
         aRelationArray[0] = new SmLineNode(aToken);
@@ -2452,8 +2426,6 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
     {
         SmToken aToken;
         aToken.cMathChar = '\0';
-        aToken.nGroup = 0;
-        aToken.nLevel = 0;
         aToken.eType = bIsPrescript ? TLSUB : TRSUB;
 
         SmNodeStack aReverseStack;
@@ -2555,7 +2527,6 @@ void SmXMLTableContext_Impl::EndElement()
     SmToken aToken;
     aToken.cMathChar = '\0';
     aToken.nGroup = TRGROUP;
-    aToken.nLevel = 0;
     aToken.eType = TMATRIX;
     SmMatrixNode *pSNode = new SmMatrixNode(aToken);
     pSNode->SetSubNodes(aExpressionArray);
