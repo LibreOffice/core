@@ -194,6 +194,7 @@ static const char* strListSqlKeyWords[] = {
     "join",
     "left",
     "like",
+    "limit",
     "local",
     "match",
     "max",
