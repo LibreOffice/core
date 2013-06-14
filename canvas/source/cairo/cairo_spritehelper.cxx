@@ -21,7 +21,6 @@
 #include <canvas/verbosetrace.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 
 #include <canvas/canvastools.hxx>
@@ -95,7 +94,7 @@ namespace cairocanvas
 
         if( isActive() && !::basegfx::fTools::equalZero( fAlpha ) )
         {
-            OSL_TRACE ("CanvasCustomSprite::redraw called");
+            SAL_INFO( "canvas.cairo", "CanvasCustomSprite::redraw called");
             if( pCairo )
             {
                 basegfx::B2DVector aSize = getSizePixel();
@@ -143,7 +142,7 @@ namespace cairocanvas
                                                  rClip->getFillRule() );
                 }
 
-                OSL_TRACE ("aSize %f x %f position: %f,%f", aSize.getX(), aSize.getY(), fX, fY );
+                SAL_INFO( "canvas.cairo","aSize " << aSize.getX() << " x " << aSize.getY() << " position: " << fX << "," << fY );
                 cairo_rectangle( pCairo.get(), 0, 0, floor( aSize.getX() ), floor( aSize.getY() ) );
                 cairo_clip( pCairo.get() );
                 cairo_set_matrix( pCairo.get(), &aOrigMatrix );

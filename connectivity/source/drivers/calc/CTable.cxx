@@ -47,7 +47,6 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <comphelper/types.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace connectivity;
 using namespace connectivity::calc;
@@ -68,7 +67,7 @@ using namespace ::com::sun::star::util;
 
 static void lcl_UpdateArea( const Reference<XCellRange>& xUsedRange, sal_Int32& rEndCol, sal_Int32& rEndRow )
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::lcl_UpdateArea" );
+    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_UpdateArea" );
     //  update rEndCol, rEndRow if any non-empty cell in xUsedRange is right/below
 
     const Reference<XCellRangesQuery> xUsedQuery( xUsedRange, UNO_QUERY );
@@ -92,7 +91,7 @@ static void lcl_UpdateArea( const Reference<XCellRange>& xUsedRange, sal_Int32& 
 
 static void lcl_GetDataArea( const Reference<XSpreadsheet>& xSheet, sal_Int32& rColumnCount, sal_Int32& rRowCount )
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::lcl_GetDataArea" );
+    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_GetDataArea" );
     Reference<XSheetCellCursor> xCursor = xSheet->createCursor();
     Reference<XCellRangeAddressable> xRange( xCursor, UNO_QUERY );
     if ( !xRange.is() )
@@ -142,7 +141,7 @@ static void lcl_GetDataArea( const Reference<XSpreadsheet>& xSheet, sal_Int32& r
 
 static CellContentType lcl_GetContentOrResultType( const Reference<XCell>& xCell )
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::lcl_GetContentOrResultType" );
+    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_GetContentOrResultType" );
     CellContentType eCellType = xCell->getType();
     if ( eCellType == CellContentType_FORMULA )
     {
@@ -162,7 +161,7 @@ static CellContentType lcl_GetContentOrResultType( const Reference<XCell>& xCell
 
 static Reference<XCell> lcl_GetUsedCell( const Reference<XSpreadsheet>& xSheet, sal_Int32 nDocColumn, sal_Int32 nDocRow )
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::lcl_GetUsedCell" );
+    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_GetUsedCell" );
     Reference<XCell> xCell = xSheet->getCellByPosition( nDocColumn, nDocRow );
     if ( xCell.is() && xCell->getType() == CellContentType_EMPTY )
     {
@@ -200,7 +199,7 @@ static Reference<XCell> lcl_GetUsedCell( const Reference<XSpreadsheet>& xSheet, 
 
 static bool lcl_HasTextInColumn( const Reference<XSpreadsheet>& xSheet, sal_Int32 nDocColumn, sal_Int32 nDocRow )
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::lcl_HasTextInColumn" );
+    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_HasTextInColumn" );
     // look for any text cell or text result in the column
 
     Reference<XCellRangeAddressable> xAddr( xSheet, UNO_QUERY );
@@ -230,7 +229,7 @@ static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Refe
                         sal_Int32 nDocColumn, sal_Int32 nStartRow, sal_Bool bHasHeaders,
                         OUString& rName, sal_Int32& rDataType, sal_Bool& rCurrency )
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::lcl_GetColumnInfo" );
+    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_GetColumnInfo" );
     //! avoid duplicate field names
 
     //  get column name from first row, if range contains headers
@@ -319,7 +318,7 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                     const ::Date& rNullDate,
                     sal_Int32 nDBRow, sal_Int32 nDBColumn, sal_Int32 nType )
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::lcl_SetValue" );
+    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_SetValue" );
     sal_Int32 nDocColumn = nStartCol + nDBColumn - 1;   // database counts from 1
     sal_Int32 nDocRow = nStartRow + nDBRow - 1;
     if (bHasHeaders)
@@ -433,7 +432,7 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
 
 static OUString lcl_GetColumnStr( sal_Int32 nColumn )
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::lcl_GetColumnStr" );
+    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_GetColumnStr" );
     if ( nColumn < 26 )
         return OUString::valueOf( (sal_Unicode) ( 'A' + nColumn ) );
     else
@@ -448,7 +447,7 @@ static OUString lcl_GetColumnStr( sal_Int32 nColumn )
 
 void OCalcTable::fillColumns()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::fillColumns" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::fillColumns" );
     if ( !m_xSheet.is() )
         throw SQLException();
 
@@ -497,7 +496,7 @@ void OCalcTable::fillColumns()
                 aTypeName = OUString("TIMESTAMP");
                 break;
             default:
-                OSL_FAIL("missing type name");
+                SAL_WARN( "connectivity.drivers","missing type name");
                 aTypeName = OUString();
         }
 
@@ -544,12 +543,12 @@ OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnectio
                 ,m_bHasHeaders(sal_False)
                 ,m_aNullDate(::Date::EMPTY)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::OCalcTable" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::OCalcTable" );
 }
 // -----------------------------------------------------------------------------
 void OCalcTable::construct()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::construct" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::construct" );
     //  get sheet object
     Reference< XSpreadsheetDocument> xDoc = m_pConnection->acquireDoc();
     if (xDoc.is())
@@ -632,7 +631,7 @@ void OCalcTable::construct()
 // -------------------------------------------------------------------------
 void OCalcTable::refreshColumns()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::refreshColumns" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::refreshColumns" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
     TStringVector aVector;
@@ -649,14 +648,14 @@ void OCalcTable::refreshColumns()
 // -------------------------------------------------------------------------
 void OCalcTable::refreshIndexes()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::refreshIndexes" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::refreshIndexes" );
     //  Calc table has no index
 }
 
 // -------------------------------------------------------------------------
 void SAL_CALL OCalcTable::disposing(void)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::disposing" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::disposing" );
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aColumns = NULL;
@@ -668,7 +667,7 @@ void SAL_CALL OCalcTable::disposing(void)
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException)
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::getTypes" );
+    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getTypes" );
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
     ::std::vector<Type> aOwnTypes;
     aOwnTypes.reserve(aTypes.getLength());
@@ -707,7 +706,7 @@ Any SAL_CALL OCalcTable::queryInterface( const Type & rType ) throw(RuntimeExcep
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OCalcTable::getUnoTunnelImplementationId()
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::getUnoTunnelImplementationId" );
+    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getUnoTunnelImplementationId" );
     static ::cppu::OImplementationId * pId = 0;
     if (! pId)
     {
@@ -725,7 +724,7 @@ Sequence< sal_Int8 > OCalcTable::getUnoTunnelImplementationId()
 //------------------------------------------------------------------
 sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::getSomething" );
+    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getSomething" );
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OCalcTable_BASE::getSomething(rId);
@@ -733,13 +732,13 @@ sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
 //------------------------------------------------------------------
 sal_Int32 OCalcTable::getCurrentLastPos() const
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::getCurrentLastPos" );
+    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getCurrentLastPos" );
     return m_nDataRows;
 }
 //------------------------------------------------------------------
 sal_Bool OCalcTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::seekRow" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::seekRow" );
     // ----------------------------------------------------------
     // prepare positioning:
 
@@ -813,7 +812,7 @@ End:
 sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
                                 sal_Bool _bUseTableDefs, sal_Bool bRetrieveData )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::fetchRow" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::fetchRow" );
     // read the bookmark
 
     sal_Bool bIsCurRecordDeleted = sal_False;
@@ -849,7 +848,7 @@ sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
 // -------------------------------------------------------------------------
 void OCalcTable::FileClose()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::FileClose" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::FileClose" );
     ::osl::MutexGuard aGuard(m_aMutex);
 
     OCalcTable_BASE::FileClose();

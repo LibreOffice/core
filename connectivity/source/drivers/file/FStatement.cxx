@@ -36,7 +36,6 @@
 #include "resource/file_res.hrc"
 #include <algorithm>
 #include <tools/debug.hxx>
-#include <rtl/logfile.hxx>
 
 namespace connectivity
 {
@@ -75,7 +74,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     ,m_bEscapeProcessing(sal_True)
     ,rBHelper(OStatement_BASE::rBHelper)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::OStatement_Base" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::OStatement_Base" );
     DBG_CTOR( file_OStatement_Base, NULL );
 
     m_pConnection->acquire();
@@ -105,7 +104,7 @@ OStatement_Base::~OStatement_Base()
 //------------------------------------------------------------------------------
 void OStatement_Base::disposeResultSet()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::disposeResultSet" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::disposeResultSet" );
     // free the cursor if alive
     Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
     if (xComp.is())
@@ -165,14 +164,14 @@ void SAL_CALL OStatement_BASE2::release() throw()
 //-----------------------------------------------------------------------------
 Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::queryInterface" );
+    //SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::queryInterface" );
     const Any aRet = OStatement_BASE::queryInterface(rType);
     return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::getTypes" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::getTypes" );
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
                                                                     ::getCppuType( (const Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
                                                                     ::getCppuType( (const Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
@@ -183,13 +182,13 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
 
 void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::cancel" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::cancel" );
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::close" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::close" );
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -200,7 +199,7 @@ void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
 
 void OStatement_Base::reset() throw (SQLException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::reset" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::reset" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
@@ -217,7 +216,7 @@ void OStatement_Base::reset() throw (SQLException)
 
 void OStatement_Base::clearMyResultSet () throw (SQLException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::clearMyResultSet " );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::clearMyResultSet " );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
@@ -235,7 +234,7 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
 // -------------------------------------------------------------------------
 Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::getWarnings" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::getWarnings" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
@@ -244,7 +243,7 @@ Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeExcepti
 // -------------------------------------------------------------------------
 void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::clearWarnings" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::clearWarnings" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
@@ -253,7 +252,7 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OStatement_Base::createArrayHelper( ) const
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::createArrayHelper" );
+    //SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::createArrayHelper" );
     Sequence< Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
@@ -262,7 +261,7 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & OStatement_Base::getInfoHelper()
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::getInfoHelper" );
+    //SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::getInfoHelper" );
     return *const_cast<OStatement_Base*>(this)->getArrayHelper();
 }
 // -------------------------------------------------------------------------
@@ -335,7 +334,7 @@ sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& sql ) throw(SQLExc
 // -----------------------------------------------------------------------------
 void SAL_CALL OStatement_Base::disposing(void)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::disposing" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::disposing" );
     if(m_aEvaluateRow.is())
     {
         m_aEvaluateRow->get().clear();
@@ -347,7 +346,7 @@ void SAL_CALL OStatement_Base::disposing(void)
 // -----------------------------------------------------------------------------
 Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::getPropertySetInfo" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::getPropertySetInfo" );
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------
@@ -359,13 +358,13 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
 // -----------------------------------------------------------------------------
 OSQLAnalyzer* OStatement_Base::createAnalyzer()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::createAnalyzer" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::createAnalyzer" );
     return new OSQLAnalyzer(m_pConnection);
 }
 // -----------------------------------------------------------------------------
 void OStatement_Base::anylizeSQL()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::anylizeSQL" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::anylizeSQL" );
     OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::anylizeSQL: Analyzer isn't set!");
     // start analysing the statement
     m_pSQLAnalyzer->setOrigColumns(m_xColNames);
@@ -397,7 +396,7 @@ void OStatement_Base::anylizeSQL()
 void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
                                         OSQLParseNode* pAscendingDescending)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::setOrderbyColumn" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::setOrderbyColumn" );
     OUString aColumnName;
     if (pColumnRef->count() == 1)
         aColumnName = pColumnRef->getChild(0)->getTokenValue();
@@ -429,7 +428,7 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
 // -----------------------------------------------------------------------------
 void OStatement_Base::construct(const OUString& sql)  throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::construct" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::construct" );
     OUString aErr;
     m_pParseTree = m_aParser.parseTree(aErr,sql);
     if(m_pParseTree)
@@ -508,7 +507,7 @@ void OStatement_Base::construct(const OUString& sql)  throw(SQLException, Runtim
 // -----------------------------------------------------------------------------
 void OStatement_Base::createColumnMapping()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::createColumnMapping" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::createColumnMapping" );
     // initialize the column index map (mapping select columns to table columns)
     ::rtl::Reference<connectivity::OSQLColumns> xColumns = m_aSQLIterator.getSelectColumns();
     m_aColMapping.resize(xColumns->get().size() + 1);
@@ -522,7 +521,7 @@ void OStatement_Base::createColumnMapping()
 // -----------------------------------------------------------------------------
 void OStatement_Base::initializeResultSet(OResultSet* _pResult)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::initializeResultSet" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::initializeResultSet" );
     GetAssignValues();
 
     _pResult->setSqlAnalyzer(m_pSQLAnalyzer);
@@ -541,7 +540,7 @@ void OStatement_Base::initializeResultSet(OResultSet* _pResult)
 // -----------------------------------------------------------------------------
 void OStatement_Base::GetAssignValues()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::GetAssignValues" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::GetAssignValues" );
     if (m_pParseTree == NULL)
     {
         ::dbtools::throwFunctionSequenceException(*this);
@@ -689,7 +688,7 @@ void OStatement_Base::GetAssignValues()
 // -------------------------------------------------------------------------
 void OStatement_Base::ParseAssignValues(const ::std::vector< String>& aColumnNameList,OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::ParseAssignValues" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::ParseAssignValues" );
     OSL_ENSURE(nIndex <= aColumnNameList.size(),"SdbFileCursor::ParseAssignValues: nIndex > aColumnNameList.GetTokenCount()");
     String aColumnName(aColumnNameList[nIndex]);
     OSL_ENSURE(aColumnName.Len() > 0,"OResultSet: Column-Name nicht gefunden");
@@ -720,7 +719,7 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
                                    sal_Bool bSetNull,
                                    sal_uInt32 nParameter)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::SetAssignValue" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::SetAssignValue" );
     Reference<XPropertySet> xCol;
     m_xColNames->getByName(aColumnName) >>= xCol;
     sal_Int32 nId = Reference<XColumnLocate>(m_xColNames,UNO_QUERY)->findColumn(aColumnName);
@@ -788,7 +787,7 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
 // -----------------------------------------------------------------------------
 void OStatement_Base::parseParamterElem(const String& /*_sColumnName*/,OSQLParseNode* /*pRow_Value_Constructor_Elem*/)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::parseParamterElem" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::parseParamterElem" );
     // do nothing here
 }
 // =============================================================================

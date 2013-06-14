@@ -35,7 +35,6 @@
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/types.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace connectivity::calc;
 using namespace connectivity::file;
@@ -51,7 +50,7 @@ using namespace ::com::sun::star::sheet;
 
 OCalcDatabaseMetaData::OCalcDatabaseMetaData(OConnection* _pCon)    :ODatabaseMetaData(_pCon)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcDatabaseMetaData::OCalcDatabaseMetaData" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::OCalcDatabaseMetaData" );
 }
 
 // -------------------------------------------------------------------------
@@ -63,7 +62,7 @@ OCalcDatabaseMetaData::~OCalcDatabaseMetaData()
 // -------------------------------------------------------------------------
 Reference< XResultSet > OCalcDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcDatabaseMetaData::impl_getTypeInfo_throw" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::impl_getTypeInfo_throw" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
@@ -146,7 +145,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern,
         const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcDatabaseMetaData::getColumns" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getColumns" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
 
@@ -242,7 +241,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
 
 OUString SAL_CALL OCalcDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcDatabaseMetaData::getURL" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getURL" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return OUString("sdbc:calc:") + m_pConnection->getURL();
@@ -252,7 +251,7 @@ OUString SAL_CALL OCalcDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeE
 
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcDatabaseMetaData::getMaxBinaryLiteralLength" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getMaxBinaryLiteralLength" );
     return STRING_MAXLEN;
 }
 
@@ -260,25 +259,25 @@ sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQ
 
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcDatabaseMetaData::getMaxCharLiteralLength" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getMaxCharLiteralLength" );
     return STRING_MAXLEN;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcDatabaseMetaData::getMaxColumnNameLength" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getMaxColumnNameLength" );
     return STRING_MAXLEN;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcDatabaseMetaData::getMaxColumnsInIndex" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getMaxColumnsInIndex" );
     return 1;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcDatabaseMetaData::getMaxColumnsInTable" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getMaxColumnsInTable" );
     return 256;
 }
 
@@ -361,7 +360,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
         const OUString& tableNamePattern, const Sequence< OUString >& types )
         throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcDatabaseMetaData::getTables" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcDatabaseMetaData::getTables" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);

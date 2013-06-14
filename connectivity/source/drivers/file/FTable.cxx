@@ -28,7 +28,6 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/debug.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace connectivity;
 using namespace connectivity::file;
@@ -48,7 +47,7 @@ OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
                 ,m_nBufferSize(0)
                 ,m_bWriteable(sal_False)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::OFileTable" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::OFileTable" );
     DBG_CTOR( file_OFileTable, NULL );
     construct();
     m_aColumns = new OSQLColumns();
@@ -73,7 +72,7 @@ OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
                 ,m_nBufferSize(0)
                 ,m_bWriteable(sal_False)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::OFileTable" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::OFileTable" );
     DBG_CTOR( file_OFileTable, NULL );
     m_aColumns = new OSQLColumns();
     construct();
@@ -87,7 +86,7 @@ OFileTable::~OFileTable( )
 // -------------------------------------------------------------------------
 void OFileTable::refreshColumns()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::refreshColumns" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::refreshColumns" );
     TStringVector aVector;
         Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
                                                     m_SchemaName,m_Name,OUString("%"));
@@ -107,17 +106,17 @@ void OFileTable::refreshColumns()
 // -------------------------------------------------------------------------
 void OFileTable::refreshKeys()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::refreshKeys" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::refreshKeys" );
 }
 // -------------------------------------------------------------------------
 void OFileTable::refreshIndexes()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::refreshIndexes" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::refreshIndexes" );
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OFileTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::queryInterface" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::queryInterface" );
     if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0) ||
         rType == ::getCppuType((const Reference<XRename>*)0) ||
         rType == ::getCppuType((const Reference<XAlterTable>*)0) ||
@@ -130,7 +129,7 @@ Any SAL_CALL OFileTable::queryInterface( const Type & rType ) throw(RuntimeExcep
 // -------------------------------------------------------------------------
 void SAL_CALL OFileTable::disposing(void)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::disposing" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::disposing" );
     OTable::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -140,7 +139,7 @@ void SAL_CALL OFileTable::disposing(void)
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OFileTable::getUnoTunnelImplementationId()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::getUnoTunnelImplementationId" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::getUnoTunnelImplementationId" );
     static ::cppu::OImplementationId * pId = 0;
     if (! pId)
     {
@@ -158,7 +157,7 @@ Sequence< sal_Int8 > OFileTable::getUnoTunnelImplementationId()
 //------------------------------------------------------------------
 sal_Int64 OFileTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::getSomething" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::getSomething" );
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OTable_TYPEDEF::getSomething(rId);
@@ -166,7 +165,7 @@ sal_Int64 OFileTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
 // -----------------------------------------------------------------------------
 void OFileTable::FileClose()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::FileClose" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::FileClose" );
     ::osl::MutexGuard aGuard(m_aMutex);
 
     if (m_pFileStream && m_pFileStream->IsWritable())
@@ -194,38 +193,38 @@ void SAL_CALL OFileTable::release() throw()
 // -----------------------------------------------------------------------------
 sal_Bool OFileTable::InsertRow(OValueRefVector& /*rRow*/, sal_Bool /*bFlush*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::InsertRow" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::InsertRow" );
     return sal_False;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OFileTable::DeleteRow(const OSQLColumns& /*_rCols*/)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::DeleteRow" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::DeleteRow" );
     return sal_False;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OFileTable::UpdateRow(OValueRefVector& /*rRow*/, OValueRefRow& /*pOrgRow*/,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& /*_xCols*/)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::UpdateRow" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::UpdateRow" );
     return sal_False;
 }
 // -----------------------------------------------------------------------------
 void OFileTable::addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& /*descriptor*/)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::addColumn" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::addColumn" );
     OSL_FAIL( "OFileTable::addColumn: not implemented!" );
 }
 // -----------------------------------------------------------------------------
 void OFileTable::dropColumn(sal_Int32 /*_nPos*/)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::dropColumn" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::dropColumn" );
     OSL_FAIL( "OFileTable::addColumn: not implemented!" );
 }
 
 // -----------------------------------------------------------------------------
 SvStream* OFileTable::createStream_simpleError( const String& _rFileName, StreamMode _eOpenMode)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::createStream_simpleError" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::createStream_simpleError" );
     utl::UcbLockBytesHandler* p_null_dummy=NULL;
     SvStream* pReturn = ::utl::UcbStreamHelper::CreateStream( _rFileName, _eOpenMode, (_eOpenMode & STREAM_NOCREATE) == STREAM_NOCREATE ,p_null_dummy);
     if (pReturn && (ERRCODE_NONE != pReturn->GetErrorCode()))
@@ -239,7 +238,7 @@ SvStream* OFileTable::createStream_simpleError( const String& _rFileName, Stream
 // -----------------------------------------------------------------------------
 void OFileTable::refreshHeader()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::refreshHeader" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OFileTable::refreshHeader" );
 }
 // -----------------------------------------------------------------------------
 

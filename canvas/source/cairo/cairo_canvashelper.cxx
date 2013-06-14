@@ -20,7 +20,6 @@
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <rtl/instance.hxx>
 
@@ -147,7 +146,7 @@ namespace cairocanvas
 
         if( viewState.Clip.is() )
         {
-            OSL_TRACE ("view clip");
+            SAL_INFO( "canvas.cairo", "view clip");
 
             aViewMatrix.x0 = basegfx::fround( aViewMatrix.x0 );
             aViewMatrix.y0 = basegfx::fround( aViewMatrix.y0 );
@@ -161,10 +160,10 @@ namespace cairocanvas
 
         if( renderState.Clip.is() )
         {
-            OSL_TRACE ("render clip BEGIN");
+            SAL_INFO( "canvas.cairo", "render clip BEGIN");
 
             doPolyPolygonPath( renderState.Clip, Clip );
-            OSL_TRACE ("render clip END");
+            SAL_INFO( "canvas.cairo", "render clip END");
         }
 
         if( bSetColor )
@@ -221,7 +220,7 @@ namespace cairocanvas
 
     void CanvasHelper::clear()
     {
-        OSL_TRACE ("clear whole area: %d x %d", maSize.getX(), maSize.getY() );
+        SAL_INFO( "canvas.cairo", "clear whole area: " << maSize.getX() << " x " << maSize.getY() );
 
         if( mpCairo )
         {
@@ -389,7 +388,7 @@ namespace cairocanvas
                 }
                 break;
             default:
-                OSL_TRACE( "fallback to GetColor for alpha - slow, format: %d", pAlphaReadAcc->GetScanlineFormat() );
+                SAL_INFO( "canvas.cairo", "fallback to GetColor for alpha - slow, format: " << pAlphaReadAcc->GetScanlineFormat() );
                 for( nX = 0; nX < nWidth; nX++ )
                 {
                     nAlpha = data[ nOff ] = 255 - pAlphaReadAcc->GetColor( nY, nX ).GetIndex();
@@ -613,7 +612,7 @@ namespace cairocanvas
                         }
                         break;
                     default:
-                        OSL_TRACE( "fallback to GetColor - slow, format: %d", pBitmapReadAcc->GetScanlineFormat() );
+                        SAL_INFO( "canvas.cairo", "fallback to GetColor - slow, format: " << pBitmapReadAcc->GetScanlineFormat() );
 
                         if( pAlphaReadAcc )
                             if( readAlpha( pAlphaReadAcc, nY, nWidth, data, nOff ) )
@@ -662,7 +661,7 @@ namespace cairocanvas
 
                 bHasAlpha = bIsAlpha;
 
-                OSL_TRACE("image: %d x %d alpha: %d alphaRead %p", nWidth, nHeight, bIsAlpha, pAlphaReadAcc);
+                SAL_INFO( "canvas.cairo","image: " << nWidth << " x " << nHeight << " alpha: " << bIsAlpha << " alphaRead " << std::hex << pAlphaReadAcc);
             }
         }
 
@@ -830,14 +829,14 @@ namespace cairocanvas
                     {
                         uno::Reference< lang::XServiceInfo > xRef( aTexture.Gradient, uno::UNO_QUERY );
 
-                        OSL_TRACE( "gradient fill" );
+                        SAL_INFO( "canvas.cairo", "gradient fill" );
                         if( xRef.is() && xRef->getImplementationName() == PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME )
                         {
                             // TODO(Q1): Maybe use dynamic_cast here
 
                             // TODO(E1): Return value
                             // TODO(F1): FillRule
-                            OSL_TRACE( "known implementation" );
+                            SAL_INFO( "canvas.cairo", "known implementation" );
 
                             ::canvas::ParametricPolyPolygon* pPolyImpl = static_cast< ::canvas::ParametricPolyPolygon* >( aTexture.Gradient.get() );
                             ::com::sun::star::geometry::AffineMatrix2D aTransform( aTexture.AffineTransform );
@@ -900,7 +899,7 @@ namespace cairocanvas
 
                                 if( pPattern )
                                 {
-                                    OSL_TRACE( "filling with pattern" );
+                                    SAL_INFO( "canvas.cairo", "filling with pattern" );
 
                                     cairo_save( pCairo );
 
@@ -917,22 +916,22 @@ namespace cairocanvas
                 }
                 else
                     cairo_fill( pCairo );
-                OSL_TRACE("fill");
+                SAL_INFO( "canvas.cairo", "fill");
                 break;
             case Stroke:
                 cairo_stroke( pCairo );
-                OSL_TRACE("stroke");
+                SAL_INFO( "canvas.cairo", "stroke");
                 break;
             case Clip:
                 cairo_clip( pCairo );
-                OSL_TRACE("clip");
+                SAL_INFO( "canvas.cairo", "clip");
                 break;
         }
     }
 
     static void clipNULL( Cairo *pCairo )
     {
-        OSL_TRACE("clipNULL");
+        SAL_INFO( "canvas.cairo", "clipNULL");
         Matrix aOrigMatrix, aIdentityMatrix;
 
         /* we set identity matrix here to overcome bug in cairo 0.9.2
@@ -1015,7 +1014,7 @@ namespace cairocanvas
                     if( j==0 )
                     {
                         cairo_move_to( pCairo, nX, nY );
-                        OSL_TRACE( "move to %f,%f", nX, nY );
+                        SAL_INFO( "canvas.cairo", "move to " << nX << "," << nY );
                     }
                     else
                     {
@@ -1045,7 +1044,7 @@ namespace cairocanvas
                         else
                         {
                             cairo_line_to( pCairo, nX, nY );
-                            OSL_TRACE( "line to %f,%f", nX, nY );
+                            SAL_INFO( "canvas.cairo", "line to " << nX << "," << nY );
                         }
                         bOpToDo = true;
                     }
@@ -1057,7 +1056,7 @@ namespace cairocanvas
             }
             else
             {
-                OSL_TRACE( "empty polygon for op: %d", aOperation );
+                SAL_INFO( "canvas.cairo", "empty polygon for op: " << aOperation );
                 if( aOperation == Clip )
                 {
                     clipNULL( pCairo );
@@ -1160,7 +1159,7 @@ namespace cairocanvas
             cairo_restore( mpCairo.get() );
         }
         else
-            OSL_TRACE ("CanvasHelper called after it was disposed");
+            SAL_INFO( "canvas.cairo", "CanvasHelper called after it was disposed");
 
 #ifdef CAIRO_CANVAS_PERF_TRACE
         mxDevice->stopPerfTrace( &aTimer, "drawPolyPolygon" );
@@ -1242,7 +1241,7 @@ namespace cairocanvas
             cairo_restore( mpCairo.get() );
         }
         else
-            OSL_TRACE ("CanvasHelper called after it was disposed");
+            SAL_INFO( "canvas.cairo", "CanvasHelper called after it was disposed");
 
 #ifdef CAIRO_CANVAS_PERF_TRACE
         mxDevice->stopPerfTrace( &aTimer, "strokePolyPolygon" );
@@ -1305,7 +1304,7 @@ namespace cairocanvas
             cairo_restore( mpCairo.get() );
         }
         else
-            OSL_TRACE ("CanvasHelper called after it was disposed");
+            SAL_INFO( "canvas.cairo", "CanvasHelper called after it was disposed");
 
 #ifdef CAIRO_CANVAS_PERF_TRACE
         mxDevice->stopPerfTrace( &aTimer, "fillPolyPolygon" );
@@ -1419,10 +1418,10 @@ namespace cairocanvas
 
                 // in case the bitmap doesn't have alpha and covers whole area
                 // we try to change surface to plain rgb
-                OSL_TRACE ("chance to change surface to rgb, %f, %f, %f x %f (%d x %d)", x, y, width, height, maSize.getX(), maSize.getY() );
+                SAL_INFO( "canvas.cairo","chance to change surface to rgb, " << x << ", " << y << ", " << width << " x " << height << " (" << maSize.getX() << " x " << maSize.getY() << ")" );
                 if( x <= 0 && y <= 0 && x + width >= maSize.getX() && y + height >= maSize.getY() )
                 {
-                    OSL_TRACE ("trying to change surface to rgb");
+                    SAL_INFO( "canvas.cairo","trying to change surface to rgb");
                     if( mpSurfaceProvider ) {
                         SurfaceSharedPtr pNewSurface = mpSurfaceProvider->changeSurface( false, false );
 
@@ -1457,7 +1456,7 @@ namespace cairocanvas
             cairo_restore( mpCairo.get() );
         }
         else
-            OSL_TRACE ("CanvasHelper called after it was disposed");
+            SAL_INFO( "canvas.cairo", "CanvasHelper called after it was disposed");
 
         return rv; // uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
@@ -1568,7 +1567,7 @@ namespace cairocanvas
                                                                            mpSurfaceProvider, mpDevice, false ) );
         }
         else
-            OSL_TRACE ("CanvasHelper called after it was disposed");
+            SAL_INFO( "canvas.cairo", "CanvasHelper called after it was disposed");
 
 #ifdef CAIRO_CANVAS_PERF_TRACE
         mxDevice->stopPerfTrace( &aTimer, "getScaledBitmap" );
@@ -2331,7 +2330,7 @@ namespace cairocanvas
                                 const rendering::ViewState&      viewState,
                                 const rendering::RenderState&    renderState )
     {
-        OSL_TRACE("CanvasHelper::repaint");
+        SAL_INFO( "canvas.cairo", "CanvasHelper::repaint");
 
         if( mpCairo )
         {

@@ -29,7 +29,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace ::comphelper;
 
@@ -45,17 +44,17 @@ using namespace ::com::sun::star::container;
 
 OFlatDatabaseMetaData::OFlatDatabaseMetaData(::connectivity::file::OConnection* _pCon)  :ODatabaseMetaData(_pCon)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatDatabaseMetaData::OFlatDatabaseMetaData" );
+    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatDatabaseMetaData::OFlatDatabaseMetaData" );
 }
 // -------------------------------------------------------------------------
 OFlatDatabaseMetaData::~OFlatDatabaseMetaData()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatDatabaseMetaData::~OFlatDatabaseMetaData" );
+    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatDatabaseMetaData::~OFlatDatabaseMetaData" );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > OFlatDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatDatabaseMetaData::impl_getTypeInfo_throw" );
+    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatDatabaseMetaData::impl_getTypeInfo_throw" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
@@ -156,7 +155,7 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern,
         const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatDatabaseMetaData::getColumns" );
+    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatDatabaseMetaData::getColumns" );
     ::osl::MutexGuard aGuard( m_aMutex );
 
     Reference< XTablesSupplier > xTables = m_pConnection->createCatalog();
@@ -244,7 +243,7 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
 // -------------------------------------------------------------------------
 OUString SAL_CALL OFlatDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatDatabaseMetaData::getURL" );
+    SAL_INFO( "connectivity.drivers", "flat Ocke.Janssen@sun.com OFlatDatabaseMetaData::getURL" );
     ::osl::MutexGuard aGuard( m_aMutex );
     return OUString("sdbc:flat:") + m_pConnection->getURL();
 }

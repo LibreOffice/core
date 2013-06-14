@@ -26,7 +26,7 @@
 #include "hsqldb/StorageFileAccess.h"
 #include "hsqldb/HStorageMap.hxx"
 
-#include <rtl/logfile.hxx>
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;

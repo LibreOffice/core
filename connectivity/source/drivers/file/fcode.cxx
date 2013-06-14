@@ -26,7 +26,6 @@
 #include "TConnection.hxx"
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <comphelper/types.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -84,7 +83,7 @@ OOperandRow::OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType)
 //------------------------------------------------------------------
 void OOperandRow::bindValue(const OValueRefRow& _pRow)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOperandRow::OOperandRow" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOperandRow::OOperandRow" );
     OSL_ENSURE(_pRow.is(),"NO EMPTY row allowed!");
     m_pRow = _pRow;
     OSL_ENSURE(m_pRow.is() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
@@ -93,14 +92,14 @@ void OOperandRow::bindValue(const OValueRefRow& _pRow)
 // -----------------------------------------------------------------------------
 void OOperandRow::setValue(const ORowSetValue& _rVal)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOperandRow::setValue" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOperandRow::setValue" );
     OSL_ENSURE(m_pRow.is() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
     (*(m_pRow->get())[m_nRowPos]) = _rVal;
 }
 //------------------------------------------------------------------
 const ORowSetValue& OOperandRow::getValue() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOperandRow::getValue" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOperandRow::getValue" );
     OSL_ENSURE(m_pRow.is() && m_nRowPos < m_pRow->get().size(),"Invalid RowPos is >= vector.size()");
     return (m_pRow->get())[m_nRowPos]->getValue();
 }
@@ -108,7 +107,7 @@ const ORowSetValue& OOperandRow::getValue() const
 // -----------------------------------------------------------------------------
 void OOperandValue::setValue(const ORowSetValue& _rVal)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOperandValue::setValue" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOperandValue::setValue" );
     m_aValue = _rVal;
 }
 // -------------------------------------------------------------------------
@@ -131,7 +130,7 @@ OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
         aParameterName = pNode->getChild(1)->getTokenValue();
     else
     {
-        OSL_FAIL("Fehler im Parse Tree");
+        SAL_WARN( "connectivity.drivers","Fehler im Parse Tree");
     }
 
     // set up Parameter-Column with default type, can be specified more precisely later using Describe-Parameter
@@ -149,14 +148,14 @@ OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
 //------------------------------------------------------------------
 const ORowSetValue& OOperandValue::getValue() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOperandValue::getValue" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOperandValue::getValue" );
     return m_aValue;
 }
 
 //------------------------------------------------------------------
 OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const OUString& aStrValue)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOperandConst::OOperandConst" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOperandConst::OOperandConst" );
     switch (rColumnRef.getNodeType())
     {
         case SQL_NODE_STRING:
@@ -188,7 +187,7 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const OUString& aS
     }
     else
     {
-        OSL_FAIL("Parse Error");
+        SAL_WARN( "connectivity.drivers", "Parse Error");
     }
     m_aValue.setBound(sal_True);
 }
@@ -202,7 +201,7 @@ sal_uInt16 OOperator::getRequestedOperands() const {return 2;}
 //------------------------------------------------------------------
 sal_Bool OBoolOperator::operate(const OOperand*, const OOperand*) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OBoolOperator::operate" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OBoolOperator::operate" );
     return sal_False;
 }
 
@@ -210,7 +209,7 @@ sal_Bool OBoolOperator::operate(const OOperand*, const OOperand*) const
 //------------------------------------------------------------------
 void OBoolOperator::Exec(OCodeStack& rCodeStack)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OBoolOperator::Exec" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OBoolOperator::Exec" );
     OOperand  *pRight   = rCodeStack.top();
     rCodeStack.pop();
     OOperand  *pLeft    = rCodeStack.top();
@@ -225,13 +224,13 @@ void OBoolOperator::Exec(OCodeStack& rCodeStack)
 //------------------------------------------------------------------
 sal_Bool OOp_NOT::operate(const OOperand* pLeft, const OOperand* ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_AND::operate" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_AND::operate" );
     return !pLeft->isValid();
 }
 //------------------------------------------------------------------
 void OOp_NOT::Exec(OCodeStack& rCodeStack)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_ISNULL::Exec" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_ISNULL::Exec" );
     OOperand* pOperand = rCodeStack.top();
     rCodeStack.pop();
 
@@ -242,35 +241,35 @@ void OOp_NOT::Exec(OCodeStack& rCodeStack)
 //------------------------------------------------------------------
 sal_uInt16 OOp_NOT::getRequestedOperands() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_NOT::getRequestedOperands" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_NOT::getRequestedOperands" );
     return 1;
 }
 
 //------------------------------------------------------------------
 sal_Bool OOp_AND::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_AND::operate" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_AND::operate" );
     return pLeft->isValid() && pRight->isValid();
 }
 
 //------------------------------------------------------------------
 sal_Bool OOp_OR::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_OR::operate" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_OR::operate" );
     return pLeft->isValid() || pRight->isValid();
 }
 
 //------------------------------------------------------------------
 sal_uInt16 OOp_ISNULL::getRequestedOperands() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_ISNULL::getRequestedOperands" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_ISNULL::getRequestedOperands" );
     return 1;
 }
 
 //------------------------------------------------------------------
 void OOp_ISNULL::Exec(OCodeStack& rCodeStack)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_ISNULL::Exec" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_ISNULL::Exec" );
     OOperand* pOperand = rCodeStack.top();
     rCodeStack.pop();
 
@@ -282,7 +281,7 @@ void OOp_ISNULL::Exec(OCodeStack& rCodeStack)
 //------------------------------------------------------------------
 sal_Bool OOp_ISNULL::operate(const OOperand* pOperand, const OOperand*) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_ISNULL::operate" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_ISNULL::operate" );
     return pOperand->getValue().isNull();
 }
 
@@ -295,7 +294,7 @@ sal_Bool OOp_ISNOTNULL::operate(const OOperand* pOperand, const OOperand*) const
 //------------------------------------------------------------------
 sal_Bool OOp_LIKE::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_ISNULL::operate" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_ISNULL::operate" );
     sal_Bool bMatch;
     ORowSetValue aLH(pLeft->getValue());
     ORowSetValue aRH(pRight->getValue());
@@ -312,14 +311,14 @@ sal_Bool OOp_LIKE::operate(const OOperand* pLeft, const OOperand* pRight) const
 //------------------------------------------------------------------
 sal_Bool OOp_NOTLIKE::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_NOTLIKE::operate" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_NOTLIKE::operate" );
     return !OOp_LIKE::operate(pLeft, pRight);
 }
 
 //------------------------------------------------------------------
 sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_COMPARE::operate" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_COMPARE::operate" );
     ORowSetValue aLH(pLeft->getValue());
     ORowSetValue aRH(pRight->getValue());
 
@@ -390,7 +389,7 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
 //------------------------------------------------------------------
 void ONumOperator::Exec(OCodeStack& rCodeStack)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ONumOperator::Exec" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ONumOperator::Exec" );
 
     OOperand  *pRight   = rCodeStack.top();
     rCodeStack.pop();
@@ -406,40 +405,40 @@ void ONumOperator::Exec(OCodeStack& rCodeStack)
 //------------------------------------------------------------------
 double OOp_ADD::operate(const double& fLeft,const double& fRight) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_ADD::operate" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_ADD::operate" );
     return fLeft + fRight;
 }
 
 //------------------------------------------------------------------
 double OOp_SUB::operate(const double& fLeft,const double& fRight) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_SUB::operate" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_SUB::operate" );
     return fLeft - fRight;
 }
 
 //------------------------------------------------------------------
 double OOp_MUL::operate(const double& fLeft,const double& fRight) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_MUL::operate" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_MUL::operate" );
     return fLeft * fRight;
 }
 
 //------------------------------------------------------------------
 double OOp_DIV::operate(const double& fLeft,const double& fRight) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_DIV::operate" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOp_DIV::operate" );
     return fLeft / fRight;
 }
 // -----------------------------------------------------------------------------
 OEvaluateSet* OOperandAttr::preProcess(OBoolOperator* /*pOp*/, OOperand* /*pRight*/)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOperandAttr::preProcess" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OOperandAttr::preProcess" );
     return NULL;
 }
 //------------------------------------------------------------------
 void ONthOperator::Exec(OCodeStack& rCodeStack)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ONthOperator::Exec" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com ONthOperator::Exec" );
     ::std::vector<ORowSetValue> aValues;
     ::std::vector<OOperand*> aOperands;
     OOperand* pOperand;
@@ -467,7 +466,7 @@ void ONthOperator::Exec(OCodeStack& rCodeStack)
 //------------------------------------------------------------------
 void OBinaryOperator::Exec(OCodeStack& rCodeStack)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OBinaryOperator::Exec" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OBinaryOperator::Exec" );
     OOperand  *pRight   = rCodeStack.top();
     rCodeStack.pop();
     OOperand  *pLeft    = rCodeStack.top();
@@ -485,7 +484,7 @@ void OBinaryOperator::Exec(OCodeStack& rCodeStack)
 //------------------------------------------------------------------
 void OUnaryOperator::Exec(OCodeStack& rCodeStack)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OUnaryOperator::Exec" );
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OUnaryOperator::Exec" );
     OSL_ENSURE(!rCodeStack.empty(),"Stack is empty!");
     OOperand* pOperand = rCodeStack.top();
     rCodeStack.pop();

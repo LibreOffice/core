@@ -22,7 +22,6 @@
 #include "calc/CTables.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <rtl/logfile.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -35,12 +34,12 @@ using namespace connectivity::calc;
 // -------------------------------------------------------------------------
 OCalcCatalog::OCalcCatalog(OCalcConnection* _pCon) : file::OFileCatalog(_pCon)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcCatalog::OCalcCatalog" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcCatalog::OCalcCatalog" );
 }
 // -------------------------------------------------------------------------
 void OCalcCatalog::refreshTables()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcCatalog::refreshTables" );
+    SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcCatalog::refreshTables" );
     TStringVector aVector;
     Sequence< OUString > aTypes;
     OCalcConnection::ODocHolder aDocHodler(((OCalcConnection*)m_pConnection));
