@@ -73,11 +73,12 @@ public:
 
         // used by display layers
         virtual int     GetNextGlyphs( int l, sal_GlyphId* gia, Point& p, int& s,
-                        sal_Int32* gaa = NULL, int* cpa = NULL ) const
+                        sal_Int32* gaa = NULL, int* cpa = NULL,
+                        const PhysicalFontFace** pFallbackFonts = NULL ) const
         {
             maImpl.DrawBase() = maDrawBase;
             maImpl.DrawOffset() = maDrawOffset;
-            return maImpl.GetNextGlyphs(l, gia, p, s, gaa, cpa);
+            return maImpl.GetNextGlyphs(l, gia, p, s, gaa, cpa, pFallbackFonts);
         }
 
         virtual void    MoveGlyph( int nStart, long nNewXPos ) { maImpl.MoveGlyph(nStart, nNewXPos); };
