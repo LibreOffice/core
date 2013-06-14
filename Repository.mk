@@ -357,6 +357,17 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	xof \
 	xsltdlg \
 	xsltfilter \
+	$(if $(filter $(OS),WNT), \
+		ado \
+		$(if $(DISABLE_ATL),,oleautobridge) \
+		smplmail \
+		wininetbe1 \
+	) \
+	$(if $(filter $(OS),MACOSX), \
+		AppleRemote \
+		fps_aqua \
+		MacOSXSpell \
+	) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,writer, \
@@ -475,6 +486,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	$(if $(ENABLE_GSTREAMER),avmediagst) \
 	$(if $(ENABLE_GSTREAMER_0_10),avmediagst_0_10) \
+	$(if $(ENABLE_DIRECTX),avmediawin) \
 	cached1 \
 	collator_data \
 	comphelper \
@@ -512,18 +524,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	xmlsecurity \
 	xsec_fw \
 	xstor \
-	$(if $(filter $(OS),WNT), \
-  	        ado \
-	        $(if $(ENABLE_DIRECTX),avmediawin) \
-	        $(if $(DISABLE_ATL),,oleautobridge) \
-		smplmail \
-		wininetbe1 \
-	) \
-	$(if $(filter $(OS),MACOSX), \
-	        AppleRemote \
-		fps_aqua \
-    	        MacOSXSpell \
-	) \
 ))
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	bluez_bluetooth \
