@@ -45,9 +45,6 @@
 #include <ucbhelper/activedatasink.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <rtl/ustrbuf.hxx>
-
-
 namespace comphelper{
 
 const OUString& MediaDescriptor::PROP_ABORTED()
@@ -473,20 +470,12 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
         OUString sNormalizedURL = impl_normalizeURL( sURL );
         return impl_openStreamWithURL( sNormalizedURL, bLockFile );
     }
-#if OSL_DEBUG_LEVEL > 0
     catch(const css::uno::Exception& ex)
     {
-        OUStringBuffer sMsg(256);
-        sMsg.appendAscii("Invalid MediaDescriptor detected:\n");
-        sMsg.append     (ex.Message                           );
-        OSL_FAIL(OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr());
+        SAL_WARN(
+            "comphelper", "invalid MediaDescriptor detected: " << ex.Message);
+        return false;
     }
-#else
-    catch(const css::uno::Exception&)
-        {}
-#endif
-
-    return sal_False;
 }
 
 sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference< css::io::XInputStream >& _rxPostData )
