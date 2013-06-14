@@ -291,13 +291,13 @@ Date SAL_CALL OResultSet::getDate(sal_Int32 column)
             token = dateString.getToken (0, '-', nIndex);
             switch (i) {
                 case 0:
-                    d.Year =  static_cast<sal_uInt16>(token.toInt32(10));
+                    d.Year =  static_cast<sal_uInt16>(token.toUInt32());
                     break;
                 case 1:
-                    d.Month =  static_cast<sal_uInt16>(token.toInt32(10));
+                    d.Month =  static_cast<sal_uInt16>(token.toUInt32());
                     break;
                 case 2:
-                    d.Day =  static_cast<sal_uInt16>(token.toInt32(10));
+                    d.Day =  static_cast<sal_uInt16>(token.toUInt32());
                     break;
                 default:;
             }
@@ -566,13 +566,13 @@ Time SAL_CALL OResultSet::getTime(sal_Int32 column)
         token = timeString.getToken (0, ':', nIndex);
         switch (i) {
             case 0:
-                t.Hours =  static_cast<sal_uInt16>(token.toInt32(10));
+                t.Hours =  static_cast<sal_uInt16>(token.toUInt32());
                 break;
             case 1:
-                t.Minutes =  static_cast<sal_uInt16>(token.toInt32(10));
+                t.Minutes =  static_cast<sal_uInt16>(token.toUInt32());
                 break;
             case 2:
-                t.Seconds =  static_cast<sal_uInt16>(token.toInt32(10));
+                t.Seconds =  static_cast<sal_uInt16>(token.toUInt32());
                 break;
         }
         i++;

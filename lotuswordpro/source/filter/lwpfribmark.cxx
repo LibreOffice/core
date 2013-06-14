@@ -318,7 +318,7 @@ void LwpFribField::XFConvert(XFContentContainer* pXFPara)
             XFEntry* pEntry = new XFEntry;
             pEntry->SetEntryType(enumXFEntryTOC);
             pEntry->SetStringValue(sText);
-            pEntry->SetOutlineLevel(sLevel.toInt32(10));
+            pEntry->SetOutlineLevel(sLevel.toInt32());
             pXFPara->Add(pEntry);
         }
     }

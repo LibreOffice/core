@@ -86,7 +86,7 @@ struct lcl_OUStringRestToInt32 : public ::std::unary_function< OUString, sal_Int
     {
         if( m_nPrefixLength > rStr.getLength() )
             return 0;
-        return rStr.copy( m_nPrefixLength ).toInt32( 10 /* radix */ );
+        return rStr.copy( m_nPrefixLength ).toInt32();
     }
 private:
     sal_Int32 m_nPrefixLength;
