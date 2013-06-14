@@ -23,7 +23,4 @@
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.oox.xls.FormulaParser">
-    <service name="com.sun.star.sheet.FilterFormulaParser"/>
-  </implementation>
 </component>
