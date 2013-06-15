@@ -39,9 +39,6 @@
 #include "oox/helper/zipstorage.hxx"
 #include "oox/ole/olestorage.hxx"
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
-#include <com/sun/star/xml/dom/XDocument.hpp>
-#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
-#include <com/sun/star/xml/dom/NodeType.hpp>
 
 namespace oox {
 namespace core {
@@ -52,7 +49,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::dom;
 using namespace ::com::sun::star::xml::sax;
 
 using ::comphelper::MediaDescriptor;
@@ -284,7 +280,6 @@ const sal_uInt32 ENCRYPTINFO_CRYPTOAPI      = 0x00000004;
 const sal_uInt32 ENCRYPTINFO_DOCPROPS       = 0x00000008;
 const sal_uInt32 ENCRYPTINFO_EXTERNAL       = 0x00000010;
 const sal_uInt32 ENCRYPTINFO_AES            = 0x00000020;
-const sal_uInt32 ENCRYPTINFO_AGILE          = 0x00000040;
 
 const sal_uInt32 ENCRYPT_ALGO_AES128        = 0x0000660E;
 const sal_uInt32 ENCRYPT_ALGO_AES192        = 0x0000660F;
@@ -316,296 +311,30 @@ struct PackageEncryptionInfo
     sal_uInt32          mnVerifierHashSize;
 };
 
-bool lclReadEncryptionInfo( const  Reference< XComponentContext >& rxContext,
-    PackageEncryptionInfo& rEncrInfo, Reference< XInputStream >& rxStrm )
+bool lclReadEncryptionInfo( PackageEncryptionInfo& rEncrInfo, BinaryInputStream& rStrm )
 {
-    BinaryXInputStream aInfoStrm( rxStrm, true );
-    aInfoStrm.skip( 4 );
-    aInfoStrm >> rEncrInfo.mnFlags;
+    rStrm.skip( 4 );
+    rStrm >> rEncrInfo.mnFlags;
     if( getFlag( rEncrInfo.mnFlags, ENCRYPTINFO_EXTERNAL ) )
         return false;
 
-    if( getFlag( rEncrInfo.mnFlags, ENCRYPTINFO_AGILE) )
-    {
-        //in this mode the info follows in xml format
-
-        fprintf(stderr, "AGILE\n");
-
-        Reference<XDocumentBuilder> xDomBuilder(
-            DocumentBuilder::create(rxContext));
-
-        fprintf(stderr, "dom\n");
-
-        Reference<XDocument> xDom(
-            xDomBuilder->parse(rxStrm),
-            UNO_QUERY_THROW );
-
-        fprintf(stderr, "loaded\n");
-
-        Reference<XElement> xDocElem( xDom->getDocumentElement(),
-            UNO_QUERY_THROW );
-
-        fprintf(stderr, "has root\n");
-
-        Reference< XNodeList > keyDataList = xDocElem->getElementsByTagNameNS(
-            "http://schemas.microsoft.com/office/2006/encryption", "keyData");
-
-        fprintf(stderr, "nodelist is %d\n", keyDataList.is() && keyDataList->getLength() > 0);
-
-        if (!keyDataList.is() || keyDataList->getLength() < 1)
-            return false;
-
-        Reference< XNode > keyData = keyDataList->item(0);
-
-        Reference< XNamedNodeMap > keyDataAttributes = keyData->getAttributes();
-
-        if (!keyDataAttributes.is())
-            return false;
-
-        Reference< XNode > xAttrib;
-
-        xAttrib = keyDataAttributes->getNamedItem("saltSize");
-        if (!xAttrib.is())
-            return false;
-        rEncrInfo.mnSaltSize = xAttrib->getNodeValue().toInt32();
-
-        xAttrib = keyDataAttributes->getNamedItem("blockSize");
-        if (!xAttrib.is())
-            return false;
-        int kdBlockSize = xAttrib->getNodeValue().toInt32();
-
-        xAttrib = keyDataAttributes->getNamedItem("keyBits");
-        if (!xAttrib.is())
-            return false;
-        int kdKeyBits = xAttrib->getNodeValue().toInt32();
-
-        xAttrib = keyDataAttributes->getNamedItem("hashSize");
-        if (!xAttrib.is())
-            return false;
-        int kdHashSize = xAttrib->getNodeValue().toInt32();
-
-        fprintf(stderr, "salt block bits hash is %d %d %d %d\n",
-            rEncrInfo.mnSaltSize, kdBlockSize, kdKeyBits, kdHashSize);
-
-
-        OUString kdCipherAlgorithm;
-        xAttrib = keyDataAttributes->getNamedItem("cipherAlgorithm");
-        if (xAttrib.is())
-            kdCipherAlgorithm = xAttrib->getNodeValue();
-        if (kdCipherAlgorithm.isEmpty())
-            kdCipherAlgorithm = "AES";
-
-        fprintf(stderr, "alg is %s\n", OUStringToOString(kdCipherAlgorithm, RTL_TEXTENCODING_UTF8).getStr());
-
-        OUString kdCipherChaining;
-        xAttrib = keyDataAttributes->getNamedItem("cipherChaining");
-        if (xAttrib.is())
-            kdCipherChaining = xAttrib->getNodeValue();
-        if (kdCipherChaining.isEmpty())
-            kdCipherChaining = "ChainingModeCBC";
-
-        fprintf(stderr, "chaining is %s\n", OUStringToOString(kdCipherChaining, RTL_TEXTENCODING_UTF8).getStr());
-
-        OUString kdHashAlgorithm;
-        xAttrib = keyDataAttributes->getNamedItem("hashAlgorithm");
-        if (xAttrib.is())
-            kdHashAlgorithm = xAttrib->getNodeValue();
-        if (kdHashAlgorithm.isEmpty())
-            kdHashAlgorithm = "SHA1";
-
-        fprintf(stderr, "hash is %s\n", OUStringToOString(kdHashAlgorithm, RTL_TEXTENCODING_UTF8).getStr());
-
-        OUString kdSaltValue;
-        xAttrib = keyDataAttributes->getNamedItem("saltValue");
-        if (xAttrib.is())
-            kdSaltValue = xAttrib->getNodeValue();
-
-        fprintf(stderr, "salt is %s\n", OUStringToOString(kdSaltValue, RTL_TEXTENCODING_UTF8).getStr());
-
-        Reference< XNodeList > dataIntegrityList = xDocElem->getElementsByTagNameNS(
-            "http://schemas.microsoft.com/office/2006/encryption", "dataIntegrity");
-
-        fprintf(stderr, "dataIntegrity is %d\n", dataIntegrityList.is() && dataIntegrityList->getLength() > 0);
-
-        if (!dataIntegrityList.is() || dataIntegrityList->getLength() < 1)
-            return false;
-
-        Reference< XNode > dataIntegrity = dataIntegrityList->item(0);
-
-        Reference< XNamedNodeMap > dataIntegrityAttributes = dataIntegrity->getAttributes();
-
-        if (!dataIntegrityAttributes.is())
-            return false;
-
-        OUString encryptedHmacKey;
-        xAttrib = keyDataAttributes->getNamedItem("encryptedHmacKey");
-        if (xAttrib.is())
-            encryptedHmacKey = xAttrib->getNodeValue();
-
-        fprintf(stderr, "hmackey is %s\n", OUStringToOString(encryptedHmacKey, RTL_TEXTENCODING_UTF8).getStr());
-
-        OUString encryptedHmacValue;
-        xAttrib = keyDataAttributes->getNamedItem("encryptedHmacValue");
-        if (xAttrib.is())
-            encryptedHmacValue = xAttrib->getNodeValue();
-
-        fprintf(stderr, "hmacvalue is %s\n", OUStringToOString(encryptedHmacValue, RTL_TEXTENCODING_UTF8).getStr());
-
-        OUString encryptedDataIntegritySaltValue;
-        xAttrib = keyDataAttributes->getNamedItem("encryptedSaltValue");
-        if (xAttrib.is())
-            encryptedDataIntegritySaltValue = xAttrib->getNodeValue();
-
-        fprintf(stderr, "saltvalue is %s\n", OUStringToOString(encryptedDataIntegritySaltValue, RTL_TEXTENCODING_UTF8).getStr());
-
-        OUString encryptedDataIntegrityHashValue;
-        xAttrib = keyDataAttributes->getNamedItem("encryptedHashValue");
-        if (xAttrib.is())
-            encryptedDataIntegrityHashValue = xAttrib->getNodeValue();
-
-        fprintf(stderr, "hashvalue is %s\n", OUStringToOString(encryptedDataIntegrityHashValue, RTL_TEXTENCODING_UTF8).getStr());
-
-
-#if 0
-                encryptedDataIntegritySaltValue = encryptedHmacKey;
-                encryptedDataIntegrityHashValue = encryptedHmacValue;
-#endif
-
-        Reference< XNodeList > passwordKeyEncryptorList = xDocElem->getElementsByTagNameNS(
-            "http://schemas.microsoft.com/office/2006/encryption", "keyEncryptors");
-
-        fprintf(stderr, "keyEncryptors is %d\n", passwordKeyEncryptorList.is() && passwordKeyEncryptorList->getLength() > 0);
-
-        if (!passwordKeyEncryptorList.is() || passwordKeyEncryptorList->getLength() < 1)
-            return false;
-
-        Reference< XElement > passwordKeyEncryptor(passwordKeyEncryptorList->item(0), UNO_QUERY_THROW);
-
-        Reference< XNodeList > keList = passwordKeyEncryptor->getElementsByTagNameNS(
-            "http://schemas.microsoft.com/office/2006/encryption", "keyEncryptor");
-
-        fprintf(stderr, "keyEncryptor is %d\n", keList.is() && keList->getLength() > 0);
-
-        if (!keList.is() || keList->getLength() < 1)
-            return false;
-
-        Reference< XNode > ke = keList->item(0);
-
-        fprintf(stderr, "ke is %d\n", ke.is());
-
-        if (!ke.is())
-            return false;
-
-        ke = ke->getFirstChild();
-
-        fprintf(stderr, "ke now %d\n", ke.is());
-
-        if (!ke.is())
-            return false;
-
-        Reference< XNamedNodeMap > keAttributes = ke->getAttributes();
-
-        if (!keAttributes.is())
-            return false;
-
-        xAttrib = keAttributes->getNamedItem("spinCount");
-        int spinCount = xAttrib.is() ? xAttrib->getNodeValue().toInt32() : 0;
-        fprintf(stderr, "spincount is %d\n", spinCount);
-
-        xAttrib = keAttributes->getNamedItem("saltSize");
-        int pkeSaltSize = xAttrib.is() ? xAttrib->getNodeValue().toInt32() : 0;
-        fprintf(stderr, "saltsize is %d\n", pkeSaltSize);
-
-        xAttrib = keAttributes->getNamedItem("blockSize");
-        int pkeBlockSize = xAttrib.is() ? xAttrib->getNodeValue().toInt32() : 0;
-        fprintf(stderr, "blockSize is %d\n", pkeBlockSize);
-
-        xAttrib = keAttributes->getNamedItem("keyBits");
-        int pkeKeyBits = xAttrib.is() ? xAttrib->getNodeValue().toInt32() : 0;
-        fprintf(stderr, "keyBits is %d\n", pkeKeyBits);
-
-        xAttrib = keAttributes->getNamedItem("hashSize");
-        int pkeHashSize = xAttrib.is() ? xAttrib->getNodeValue().toInt32() : 0;
-        fprintf(stderr, "hashSize is %d\n", pkeHashSize);
-
-        OUString pkeCipherAlgorithm;
-        xAttrib = keAttributes->getNamedItem("cipherAlgorithm");
-        if (xAttrib.is())
-            pkeCipherAlgorithm = xAttrib->getNodeValue();
-        if (pkeCipherAlgorithm.isEmpty())
-            pkeCipherAlgorithm = "AES";
-
-        fprintf(stderr, "alg is %s\n", OUStringToOString(pkeCipherAlgorithm, RTL_TEXTENCODING_UTF8).getStr());
-
-        OUString pkeCipherChaining;
-        xAttrib = keAttributes->getNamedItem("cipherChaining");
-        if (xAttrib.is())
-            pkeCipherChaining = xAttrib->getNodeValue();
-        if (pkeCipherChaining.isEmpty())
-            pkeCipherChaining = "ChainingModeCBC";
-
-        fprintf(stderr, "chaining is %s\n", OUStringToOString(pkeCipherChaining, RTL_TEXTENCODING_UTF8).getStr());
-
-        OUString pkeHashAlgorithm;
-        xAttrib = keAttributes->getNamedItem("hashAlgorithm");
-        if (xAttrib.is())
-            pkeHashAlgorithm = xAttrib->getNodeValue();
-        if (pkeHashAlgorithm.isEmpty())
-            pkeHashAlgorithm = "SHA1";
-
-        fprintf(stderr, "hash is %s\n", OUStringToOString(pkeHashAlgorithm, RTL_TEXTENCODING_UTF8).getStr());
-
-
-        OUString pkeSaltValue;
-        xAttrib = keAttributes->getNamedItem("saltValue");
-        if (xAttrib.is())
-            pkeSaltValue = xAttrib->getNodeValue();
-
-        fprintf(stderr, "salt is %s\n", OUStringToOString(pkeSaltValue, RTL_TEXTENCODING_UTF8).getStr());
-
-        OUString encryptedVerifierHashInput;
-        xAttrib = keAttributes->getNamedItem("saltValue");
-        if (xAttrib.is())
-            encryptedVerifierHashInput = xAttrib->getNodeValue();
-
-        fprintf(stderr, "hashinput is %s\n", OUStringToOString(encryptedVerifierHashInput, RTL_TEXTENCODING_UTF8).getStr());
-
-        OUString encryptedVerifierHashValue;
-        xAttrib = keAttributes->getNamedItem("encryptedVerifierHashValue");
-        if (xAttrib.is())
-            encryptedVerifierHashValue = xAttrib->getNodeValue();
-
-        fprintf(stderr, "hashvalue is %s\n", OUStringToOString(encryptedVerifierHashValue, RTL_TEXTENCODING_UTF8).getStr());
-
-        OUString pkeEncryptedKeyValue;
-        xAttrib = keAttributes->getNamedItem("encryptedVerifierHashValue");
-        if (xAttrib.is())
-            pkeEncryptedKeyValue = xAttrib->getNodeValue();
-
-        fprintf(stderr, "keyval is %s\n", OUStringToOString(pkeEncryptedKeyValue, RTL_TEXTENCODING_UTF8).getStr());
-
-        return true;
-    }
-    else
-    {
-        sal_uInt32 nHeaderSize, nRepeatedFlags;
-        aInfoStrm >> nHeaderSize >> nRepeatedFlags;
-        if( (nHeaderSize < 20) || (nRepeatedFlags != rEncrInfo.mnFlags) )
-            return false;
-
-        aInfoStrm.skip( 4 );
-        aInfoStrm >> rEncrInfo.mnAlgorithmId >> rEncrInfo.mnAlgorithmIdHash >> rEncrInfo.mnKeySize;
-        aInfoStrm.skip( nHeaderSize - 20 );
-        aInfoStrm >> rEncrInfo.mnSaltSize;
-        if( rEncrInfo.mnSaltSize != 16 )
-            return false;
-
-        aInfoStrm.readMemory( rEncrInfo.mpnSalt, 16 );
-        aInfoStrm.readMemory( rEncrInfo.mpnEncrVerifier, 16 );
-        aInfoStrm >> rEncrInfo.mnVerifierHashSize;
-        aInfoStrm.readMemory( rEncrInfo.mpnEncrVerifierHash, 32 );
-    }
-    return !aInfoStrm.isEof();
+    sal_uInt32 nHeaderSize, nRepeatedFlags;
+    rStrm >> nHeaderSize >> nRepeatedFlags;
+    if( (nHeaderSize < 20) || (nRepeatedFlags != rEncrInfo.mnFlags) )
+        return false;
+
+    rStrm.skip( 4 );
+    rStrm >> rEncrInfo.mnAlgorithmId >> rEncrInfo.mnAlgorithmIdHash >> rEncrInfo.mnKeySize;
+    rStrm.skip( nHeaderSize - 20 );
+    rStrm >> rEncrInfo.mnSaltSize;
+    if( rEncrInfo.mnSaltSize != 16 )
+        return false;
+
+    rStrm.readMemory( rEncrInfo.mpnSalt, 16 );
+    rStrm.readMemory( rEncrInfo.mpnEncrVerifier, 16 );
+    rStrm >> rEncrInfo.mnVerifierHashSize;
+    rStrm.readMemory( rEncrInfo.mpnEncrVerifierHash, 32 );
+    return !rStrm.isEof();
 }
 
 // ----------------------------------------------------------------------------
@@ -845,11 +574,10 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
         Reference< XInputStream > xEncryptionInfo( aOleStorage.openInputStream( "EncryptionInfo" ), UNO_SET_THROW );
         Reference< XInputStream > xEncryptedPackage( aOleStorage.openInputStream( "EncryptedPackage" ), UNO_SET_THROW );
 
-        fprintf(stderr, "EncryptedPackage %d %d\n", xEncryptionInfo.is(), xEncryptedPackage.is());
-
         // read the encryption info stream
         PackageEncryptionInfo aEncryptInfo;
-        bool bValidInfo = lclReadEncryptionInfo( mxContext, aEncryptInfo, xEncryptionInfo );
+        BinaryXInputStream aInfoStrm( xEncryptionInfo, true );
+        bool bValidInfo = lclReadEncryptionInfo( aEncryptInfo, aInfoStrm );
 
         // check flags and algorithm IDs, required are AES128 and SHA-1
         bool bImplemented = bValidInfo &&
@@ -860,9 +588,6 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
             // hash algorithm ID 0 defaults to SHA-1 too
             ((aEncryptInfo.mnAlgorithmIdHash == 0) || (aEncryptInfo.mnAlgorithmIdHash == ENCRYPT_HASH_SHA1)) &&
             (aEncryptInfo.mnVerifierHashSize == 20);
-
-        fprintf(stderr, "bImplemented is %d\n", bImplemented);
-
 
         if( bImplemented )
         {
