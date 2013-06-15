@@ -33,7 +33,6 @@ namespace svx
 {
 //........................................................................
 
-#define TBX_UPDATER_MODE_NONE               0x00
 #define TBX_UPDATER_MODE_CHAR_COLOR         0x01
 #define TBX_UPDATER_MODE_CHAR_BACKGROUND    0x02
 #define TBX_UPDATER_MODE_CHAR_COLOR_NEW     0x03

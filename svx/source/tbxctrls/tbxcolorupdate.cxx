@@ -125,36 +125,26 @@ namespace svx
 
                 pBmpAcc->SetFillColor( maCurColor = aColor );
 
-                if( TBX_UPDATER_MODE_CHAR_COLOR_NEW == mnDrawMode || TBX_UPDATER_MODE_NONE == mnDrawMode )
+                if( TBX_UPDATER_MODE_CHAR_COLOR_NEW == mnDrawMode )
                 {
-                    if( TBX_UPDATER_MODE_CHAR_COLOR_NEW == mnDrawMode )
+                    if( maBmpSize.Width() <= 16 )
+                        maUpdRect = Rectangle( Point( 0,12 ), Size( maBmpSize.Width(), 4 ) );
+                    else if(76 == maBmpSize.Width() && 12 == maBmpSize.Height())
                     {
-                        if( maBmpSize.Width() <= 16 )
-                            maUpdRect = Rectangle( Point( 0,12 ), Size( maBmpSize.Width(), 4 ) );
-                        else if(76 == maBmpSize.Width() && 12 == maBmpSize.Height())
-                        {
-                            maUpdRect.Left() = 22;
-                            maUpdRect.Top() = 2;
-                            maUpdRect.Right() = 73;
-                            maUpdRect.Bottom() = 9;
-                        }
-                        else if(30 == maBmpSize.Width() && 16 == maBmpSize.Height())
-                        {
-                            maUpdRect.Left() = 17;
-                            maUpdRect.Top() = 2;
-                            maUpdRect.Right() = 27;
-                            maUpdRect.Bottom() = 13;
-                        }
-                        else
-                            maUpdRect = Rectangle( Point( 1, maBmpSize.Height() - 7 ), Size( maBmpSize.Width() - 2 ,6 ) );
+                        maUpdRect.Left() = 22;
+                        maUpdRect.Top() = 2;
+                        maUpdRect.Right() = 73;
+                        maUpdRect.Bottom() = 9;
+                    }
+                    else if(30 == maBmpSize.Width() && 16 == maBmpSize.Height())
+                    {
+                        maUpdRect.Left() = 17;
+                        maUpdRect.Top() = 2;
+                        maUpdRect.Right() = 27;
+                        maUpdRect.Bottom() = 13;
                     }
                     else
-                    {
-                        if( maBmpSize.Width() <= 16 )
-                            maUpdRect = Rectangle( Point( 7, 7 ), Size( 8, 8 ) );
-                        else
-                            maUpdRect = Rectangle( Point( maBmpSize.Width() - 12, maBmpSize.Height() - 12 ), Size( 11, 11 ) );
-                    }
+                        maUpdRect = Rectangle( Point( 1, maBmpSize.Height() - 7 ), Size( maBmpSize.Width() - 2 ,6 ) );
 
                     pBmpAcc->DrawRect( maUpdRect );
 
