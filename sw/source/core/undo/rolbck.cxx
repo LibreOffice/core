@@ -195,6 +195,8 @@ SwHistorySetTxt::SwHistorySetTxt( SwTxtAttr* pTxtHt, sal_uLong nNodePos )
     , m_nNodeIndex( nNodePos )
     , m_nStart( *pTxtHt->GetStart() )
     , m_nEnd( *pTxtHt->GetAnyEnd() )
+    , m_bFormatIgnoreStart(pTxtHt->IsFormatIgnoreStart())
+    , m_bFormatIgnoreEnd  (pTxtHt->IsFormatIgnoreEnd  ())
 {
     // Caution: the following attributes generate no format attributes:
     //  - NoLineBreak, NoHypen, Inserted, Deleted
@@ -234,9 +236,19 @@ void SwHistorySetTxt::SetInDoc( SwDoc* pDoc, bool )
 
     if ( pTxtNd )
     {
-        pTxtNd->InsertItem( *m_pAttr, m_nStart, m_nEnd,
+        SwTxtAttr *const pAttr = pTxtNd->InsertItem(*m_pAttr, m_nStart, m_nEnd,
                         nsSetAttrMode::SETATTR_NOTXTATRCHR |
                         nsSetAttrMode::SETATTR_NOHINTADJUST );
+        // shouldn't be possible to hit any error/merging path from here
+        assert(pAttr);
+        if (m_bFormatIgnoreStart)
+        {
+            pAttr->SetFormatIgnoreStart(true);
+        }
+        if (m_bFormatIgnoreEnd)
+        {
+            pAttr->SetFormatIgnoreEnd(true);
+        }
     }
 }
 

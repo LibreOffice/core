@@ -584,8 +584,8 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
     if (bChanged)
     {
         if ( HasHints() )
-        {
-            m_pSwpHints->Resort();
+        {   // possibly sometimes Resort would be sufficient, but...
+            m_pSwpHints->MergePortions(*this);
         }
         //TxtFrm's reagieren auf aHint, andere auf aNew
         SwUpdateAttr aHint( nMin, nMax, 0 );

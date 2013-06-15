@@ -24,6 +24,8 @@
 
 #ifdef DBG_UTIL
 #include <pam.hxx>
+#include <fmtautofmt.hxx>
+#include <set>
 #endif
 
 
@@ -171,7 +173,7 @@ sal_uInt16 SwpHintsArray::GetPos( const SwTxtAttr *pHt ) const
             return false; \
         }
 
-bool SwpHintsArray::Check() const
+bool SwpHintsArray::Check(bool bPortionsMerged) const
 {
     // 1) gleiche Anzahl in beiden Arrays
     CHECK_ERR( m_HintStarts.size() == m_HintEnds.size(),
@@ -181,6 +183,23 @@ bool SwpHintsArray::Check() const
 
     const SwTxtAttr *pLastStart = 0;
     const SwTxtAttr *pLastEnd = 0;
+    std::set<SwTxtAttr const*> RsidOnlyAutoFmts;
+    if (bPortionsMerged)
+    {
+        for (sal_uInt16 i = 0; i < Count(); ++i)
+        {
+            SwTxtAttr const*const pHint(m_HintStarts[i]);
+            if (RES_TXTATR_AUTOFMT == pHint->Which())
+            {
+                boost::shared_ptr<SfxItemSet> const pSet(
+                        pHint->GetAutoFmt().GetStyleHandle());
+                if (pSet->Count() == 1 && pSet->GetItem(RES_CHRATR_RSID, false))
+                {
+                    RsidOnlyAutoFmts.insert(pHint);
+                }
+            }
+        }
+    }
 
     for( sal_uInt16 i = 0; i < Count(); ++i )
     {
@@ -269,6 +288,73 @@ bool SwpHintsArray::Check() const
             ||  (*pHtThis->GetStart() == *pHtThis->GetEnd()), // this empty
                    "HintsCheck: Portion inconsistency. "
                    "This can be temporarily ok during undo operations" );
+
+        // 8 1/2) format ignore start/end flag check
+        // (problems because MergePortions buggy or not called)
+        if (bPortionsMerged)
+        {
+            if (RES_TXTATR_AUTOFMT == pHt->Which() ||
+                RES_TXTATR_CHARFMT == pHt->Which())
+            {
+                // mostly ignore the annoying no-length hints
+                // BuildPortions inserts these in the middle of an exsiting one
+                bool const bNoLength(*pHt->GetStart() == *pHt->GetEnd());
+                bool bNeedContinuation(!bNoLength && pHt->IsFormatIgnoreEnd());
+                bool bForbidContinuation(!bNoLength && !bNeedContinuation);
+                if (RES_TXTATR_AUTOFMT == pHt->Which())
+                {
+                    if (RsidOnlyAutoFmts.find(pHt) != RsidOnlyAutoFmts.end())
+                    {
+                        assert(pHt->IsFormatIgnoreStart());
+                        bNeedContinuation = false;
+                        // don't forbid continuation - may be other hint here!
+                    }
+                }
+                if (bNeedContinuation || bForbidContinuation)
+                {
+                    bool bFound(false);
+                    for (sal_uInt16 j = i + 1; j < Count(); ++j)
+                    {
+                        SwTxtAttr *const pOther(m_HintStarts[j]);
+                        if (*pOther->GetStart() > *pHt->GetEnd())
+                        {
+                            break; // done
+                        }
+                        else if (*pOther->GetStart() == *pOther->GetAnyEnd())
+                        {
+                            continue; // empty hint: ignore
+                        }
+                        else if (*pOther->GetStart() == *pHt->GetEnd())
+                        {
+                            if (RES_TXTATR_AUTOFMT == pOther->Which() ||
+                                RES_TXTATR_CHARFMT == pOther->Which())
+                            {   // multiple charfmt on same range must all match
+                                if (bNeedContinuation)
+                                {
+                                    assert(pOther->IsFormatIgnoreStart());
+                                    bFound = true;
+                                }
+                                else if (bForbidContinuation &&
+                                         (RsidOnlyAutoFmts.find(pOther) ==
+                                          RsidOnlyAutoFmts.end()))
+                                {
+                                    assert(!pOther->IsFormatIgnoreStart());
+                                }
+                            }
+                        }
+                    }
+                    if (bNeedContinuation)
+                    {
+                        assert(bFound); // ? can this happen temp. during undo?
+                    }
+                }
+            }
+            else
+            {
+                assert(!pHt->IsFormatIgnoreStart());
+                assert(!pHt->IsFormatIgnoreEnd());
+            }
+        }
 
         // 9) nesting portion check
         if (pHtThis->IsNesting())

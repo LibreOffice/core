@@ -192,6 +192,8 @@ namespace nsSetAttrMode
     const SetAttrMode SETATTR_DONTREPLACE    = 0x0002;  // Don't replace another text attribute.
 
     const SetAttrMode SETATTR_NOTXTATRCHR    = 0x0004;  // Don't insert 0xFF at attributes with no end.
+    /// attention: NOHINTADJUST prevents MergePortions!
+    /// when using this need to pay attention to ignore start/end flags of hint
     const SetAttrMode SETATTR_NOHINTADJUST   = 0x0008;  // No merging of ranges.
     const SetAttrMode SETATTR_NOFORMATATTR   = 0x0010;  // Do not change into format attribute.
     const SetAttrMode SETATTR_DONTCHGNUMRULE = 0x0020;  // Do not change NumRule.

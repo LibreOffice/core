@@ -122,6 +122,8 @@ class SwHistorySetTxt : public SwHistoryHint
     const sal_uLong m_nNodeIndex;
     const xub_StrLen m_nStart;
     const xub_StrLen m_nEnd;
+    bool m_bFormatIgnoreStart : 1;
+    bool m_bFormatIgnoreEnd   : 1;
 
 public:
     SwHistorySetTxt( SwTxtAttr* pTxtHt, sal_uLong nNode );

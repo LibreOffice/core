@@ -55,6 +55,8 @@ private:
     bool m_bDontExpandStart     : 1;    // don't expand start at paragraph start (ruby)
     bool m_bNesting             : 1;    // SwTxtAttrNesting
     bool m_bHasDummyChar        : 1;    // without end + meta
+    bool m_bFormatIgnoreStart   : 1;    ///< text formatting should ignore start
+    bool m_bFormatIgnoreEnd     : 1;    ///< text formatting should ignore end
 
 protected:
     SwTxtAttr( SfxPoolItem& rAttr, xub_StrLen nStart );
@@ -94,6 +96,10 @@ public:
     bool IsDontExpandStartAttr() const      { return m_bDontExpandStart; }
     bool IsNesting() const                  { return m_bNesting; }
     bool HasDummyChar() const               { return m_bHasDummyChar; }
+    bool IsFormatIgnoreStart() const        { return m_bFormatIgnoreStart; }
+    bool IsFormatIgnoreEnd  () const        { return m_bFormatIgnoreEnd  ; }
+    void SetFormatIgnoreStart(bool bFlag)   { m_bFormatIgnoreStart = bFlag; }
+    void SetFormatIgnoreEnd  (bool bFlag)   { m_bFormatIgnoreEnd   = bFlag; }
 
     inline const SfxPoolItem& GetAttr() const;
     inline       SfxPoolItem& GetAttr();

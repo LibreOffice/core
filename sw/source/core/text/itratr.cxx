@@ -311,12 +311,26 @@ xub_StrLen SwAttrIter::GetNextAttr( ) const
     xub_StrLen nNext = STRING_LEN;
     if( pHints )
     {
-        if (pHints->GetStartCount() > nStartIndex) // Gibt es noch Starts?
-           nNext = (*pHints->GetStart(nStartIndex)->GetStart());
-        if (pHints->GetEndCount() > nEndIndex) // Gibt es noch Enden?
+        // are there attribute starts left?
+        for (sal_uInt16 i = nStartIndex; i < pHints->GetStartCount(); ++i)
         {
-            xub_StrLen nNextEnd = (*pHints->GetEnd(nEndIndex)->GetAnyEnd());
-            if ( nNextEnd<nNext ) nNext = nNextEnd; // Wer ist naeher?
+            SwTxtAttr *const pAttr(pHints->GetStart(i));
+            if (!pAttr->IsFormatIgnoreStart())
+            {
+                nNext = *pAttr->GetStart();
+                break;
+            }
+        }
+        // are there attribute ends left?
+        for (sal_uInt16 i = nEndIndex; i < pHints->GetEndCount(); ++i)
+        {
+            SwTxtAttr *const pAttr(pHints->GetEnd(i));
+            if (!pAttr->IsFormatIgnoreEnd())
+            {
+                xub_StrLen const nNextEnd = *pAttr->GetAnyEnd();
+                nNext = std::min(nNext, nNextEnd); // pick nearest one
+                break;
+            }
         }
     }
     if (m_pTxtNode!=NULL) {
