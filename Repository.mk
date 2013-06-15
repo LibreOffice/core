@@ -64,17 +64,17 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 
 $(eval $(call gb_Helper_register_executables,SDK, \
 	$(if $(filter MSC,$(COM)),climaker) \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),cppumaker) \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),idlc) \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),javamaker) \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),regcompare) \
+	cppumaker \
+	idlc \
+	javamaker \
+	regcompare \
 	$(if $(filter UCPP,$(BUILD_TYPE)),ucpp) \
 	$(if $(filter ODK,$(BUILD_TYPE)),unoapploader) \
 	$(if $(filter ODK,$(BUILD_TYPE)),uno-skeletonmaker) \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),gengal) \
+	gengal \
 ))
 
 $(eval $(call gb_Helper_register_executables,OOO, \
