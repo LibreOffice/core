@@ -2642,7 +2642,9 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
             const OUString sAdjustmentValues   ( "AdjustmentValues"  );
 
             const beans::PropertyValue* pAdjustmentValuesProp = NULL;
-            const beans::PropertyValue* pPathCoordinatesProp = NULL;
+            bool bPathCoordinatesProp = false;
+            uno::Any aPathCoordinatesProp;
+
             sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
             uno::Sequence< beans::PropertyValues > aHandlesPropSeq;
             sal_Bool bPredefinedHandlesUsed = sal_True;
@@ -3090,7 +3092,10 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             else if ( rrProp.Name.equals( sPathCoordinates ) )
                             {
                                 if ( !bIsDefaultObject )
-                                    pPathCoordinatesProp = &rrProp;
+                                {
+                                    aPathCoordinatesProp = rrProp.Value;
+                                    bPathCoordinatesProp = true;
+                                }
                             }
                             else if ( rrProp.Name.equals( sPathGluePoints ) )
                             {
@@ -3717,10 +3722,10 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             AddOpt( (sal_uInt16)( DFF_Prop_adjustValue + k ), (sal_uInt32)nValue );
                 }
             }
-            if( pPathCoordinatesProp )
+            if( bPathCoordinatesProp )
             {
                 com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
-                if ( pPathCoordinatesProp->Value >>= aCoordinates )
+                if ( aPathCoordinatesProp >>= aCoordinates )
                 {
                     // creating the vertices
                     if ( (sal_uInt16)aCoordinates.getLength() )
