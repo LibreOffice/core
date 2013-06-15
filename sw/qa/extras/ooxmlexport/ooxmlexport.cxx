@@ -727,6 +727,7 @@ void Test::testFdo65655()
     CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
     xPropertySet->getPropertyValue("FooterIsShared") >>= bValue;
     CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
+}
 
 void Test::testFDO63053()
 {
