@@ -493,7 +493,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     SwTxtSizeInfo aInf( GetInfo(), &aText, nStart );
     if( GetPropFont() )
         aInf.GetFont()->SetProportion( GetPropFont() );
-    KSHORT nTmpAscent, nTmpHeight;  // Zeilenhoehe
+    KSHORT nTmpAscent, nTmpHeight;  // Line height
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
     const Size  aCharSize( 1, nTmpHeight );
     const Point aCharPos;
@@ -533,11 +533,11 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
         sal_Bool bNoTxt = sal_True;
 
-        // Zuerst werden alle Portions ohne Len am Zeilenanfang uebersprungen.
-        // Ausnahme bilden die fiesen Spezialportions aus WhichFirstPortion:
+        // First all portions without Len at beginning of line are skipped.
+        // Exceptions are the mean special portions from WhichFirstPortion:
         // Num, ErgoSum, FtnNum, FeldReste
-        // 8477: aber auch die einzige Textportion einer leeren Zeile mit
-        // Right/Center-Adjustment! Also nicht nur pPor->GetExpandPortion() ...
+        // 8477: but also the only Textportion of an empty line with
+        // Right/Center-Adjustment! So not just pPor->GetExpandPortion() ...
         while( pPor && !pPor->GetLen() && ! bInsideFirstField )
         {
             nX += pPor->Width();
@@ -545,7 +545,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 nX += pPor->CalcSpacing( nSpaceAdd, aInf );
             if( bNoTxt )
                 nTmpFirst = nX;
-            // 8670: EndPortions zaehlen hier einmal als TxtPortions.
+            // 8670: EndPortions count once as TxtPortions.
 //            if( pPor->InTxtGrp() || pPor->IsBreakPortion() )
             if( pPor->InTxtGrp() || pPor->IsBreakPortion() || pPor->InTabGrp() )
             {
@@ -589,7 +589,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
         if( !pPor )
         {
-            // Es sind nur Spezialportions unterwegs.
+            // There's just Spezialportions.
             nX = nTmpFirst;
         }
         else
