@@ -4261,7 +4261,10 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
     {
         case SVX_ADJUST_LEFT:
             if ( bEcma )
-                pAdjustString = "left";
+                if ( bRtl )
+                    pAdjustString = "right";
+                else
+                    pAdjustString = "left";
             else if ( bRtl )
                 pAdjustString = "end";
             else
@@ -4269,7 +4272,10 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
             break;
         case SVX_ADJUST_RIGHT:
             if ( bEcma )
-                pAdjustString = "right";
+                if ( bRtl )
+                    pAdjustString = "left";
+                else
+                    pAdjustString = "right";
             else if ( bRtl )
                 pAdjustString = "start";
             else
@@ -5001,7 +5007,7 @@ void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDi
     else if ( !m_rExport.bOutFlyFrmAttrs )
     {
         if ( bBiDi )
-            m_pSerializer->singleElementNS( XML_w, XML_bidi, FSEND );
+            m_pSerializer->singleElementNS( XML_w, XML_bidi, FSNS( XML_w, XML_val ), "1", FSEND );
     }
 }
 

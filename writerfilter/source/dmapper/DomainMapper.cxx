@@ -1505,6 +1505,21 @@ sal_Int32 lcl_getCurrentNumberingProperty(uno::Reference<container::XIndexAccess
     return nRet;
 }
 
+// In rtl-paragraphs the meaning of left/right are to be exchanged
+static bool ExchangeLeftRight( const PropertyMapPtr rContext )
+{
+    bool bExchangeLeftRight = false;
+    PropertyMap::const_iterator aPropParaIte = rContext->find( PropertyDefinition( PROP_WRITING_MODE, false ));
+    if( aPropParaIte != rContext->end())
+    {
+        sal_Int32 aAdjust ;
+        aPropParaIte->second >>= aAdjust;
+        if( aAdjust == text::WritingMode2::RL_TB )
+            bExchangeLeftRight = true;
+    }
+    return bExchangeLeftRight;
+}
+
 void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmType )
 {
     OSL_ENSURE(rContext.get(), "PropertyMap has to be valid!");
@@ -1514,9 +1529,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     sal_uInt32 nSprmId = rSprm.getId();
     //needed for page properties
     SectionPropertyMap * pSectionContext = m_pImpl->GetSectionContext();
-
-    //TODO: In rtl-paragraphs the meaning of left/right are to be exchanged
-    bool bExchangeLeftRight = false;
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
     OUString sStringValue = pValue->getString();
@@ -1534,7 +1546,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
         break;  // sprmPIncLvl
     case NS_sprm::LN_PJcExtra: // sprmPJc Asian (undocumented)
     case NS_sprm::LN_PJc: // sprmPJc
-        handleParaJustification(nIntValue, rContext, bExchangeLeftRight);
+        handleParaJustification(nIntValue, rContext, ExchangeLeftRight( rContext ));
         break;
     case NS_sprm::LN_PFSideBySide:
         break;  // sprmPFSideBySide
@@ -1629,6 +1641,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_PDxaRight:   // sprmPDxaRight - right margin
     case 17:
     case NS_sprm::LN_PDxaLeft:   // sprmPDxaLeft
+    {
+        bool bExchangeLeftRight = ExchangeLeftRight( rContext );
         if( NS_sprm::LN_PDxaLeft == nSprmId || 0x17 == nSprmId|| (bExchangeLeftRight && nSprmId == 0x845d) || ( !bExchangeLeftRight && nSprmId == 0x845e))
             rContext->Insert(
                              eSprmType == SPRM_DEFAULT ? PROP_PARA_LEFT_MARGIN : PROP_LEFT_MARGIN,
@@ -1638,6 +1652,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             rContext->Insert(
                              PROP_PARA_RIGHT_MARGIN, true,
                              uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
+    }
         //TODO: what happens to the right margins in numberings?
         break;
     case 18: // sprmPNest
