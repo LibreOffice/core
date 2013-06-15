@@ -1612,7 +1612,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         NfIndexTableOffset eFormat = (NfIndexTableOffset) SvXMLNumFmtDefaults::GetDefaultDateFormat(
             eDateDOW, eDateDay, eDateMonth, eDateYear,
             eDateHours, eDateMins, eDateSecs, bFromSystem );
-        if ( eFormat < NF_INDEX_TABLE_ENTRIES )
+        if ( eFormat < NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS )
         {
             //  #109651# if a date format has the automatic-order attribute and
             //  contains exactly the elements of one of the default date formats,

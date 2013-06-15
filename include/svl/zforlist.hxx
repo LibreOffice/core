@@ -176,10 +176,12 @@ enum NfIndexTableOffset
     NF_BOOLEAN,                             // BOOLEAN
     NF_TEXT,                                // @
 
+    NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS,    // old number of predefined entries, locale data additions start after this
+
     // From here on are values of new built-in formats that are not in the
     // original NumberFormatIndex.idl
 
-    NF_FRACTION_3,                          // # ?/4
+    NF_FRACTION_3 = NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS,    // # ?/4
     NF_FRACTION_4,                          // # ?/100
 
     NF_INDEX_TABLE_ENTRIES
