@@ -266,6 +266,7 @@ namespace writerfilter {
                 sal_Int32 nFLine;
                 sal_Int32 nPolyLineCount;
                 uno::Sequence<awt::Point> aPolyLinePoints;
+                bool bHadShapeText;
         };
 
         /// Stores the properties of a picture.
@@ -402,6 +403,10 @@ namespace writerfilter {
                 /// If we're inside a \listpicture group.
                 bool bInListpicture;
                 bool bStartedTrackchange; ///< Track change is started, need to end it before popping.
+                /// If we're inside a \background group.
+                bool bInBackground;
+
+                bool bHadShapeText;
         };
 
         class RTFTokenizer;
