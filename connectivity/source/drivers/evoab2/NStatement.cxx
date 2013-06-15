@@ -375,7 +375,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         }
         else if( aMatchString.indexOf( WILDCARD ) == -1 )
         {   // Simple string , eg. "to match" "contains in evo"
-            SAL_INFO( "evoab2", "Plain contains '" << aMatchString << "'" );
+            SAL_INFO( "connectivity.evoab2", "Plain contains '" << aMatchString << "'" );
             pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS, aMatchString );
             if( pResult && bNotLike )
                 pResult = e_book_query_not( pResult, TRUE );
@@ -445,7 +445,7 @@ OUString OCommonStatement::getTableName()
 
 void OCommonStatement::parseSql( const OUString& sql, QueryData& _out_rQueryData )
 {
-    SAL_INFO( "evoab2", "parsing " << sql );
+    SAL_INFO( "connectivity.evoab2", "parsing " << sql );
 
     _out_rQueryData.eFilterType = eFilterOther;
 
@@ -463,7 +463,7 @@ void OCommonStatement::parseSql( const OUString& sql, QueryData& _out_rQueryData
     #if OSL_DEBUG_LEVEL > 1
         OUString sTreeDebug;
         pOrderByClause->showParseTree( sTreeDebug );
-        SAL_INFO( "evoab2", "found order-by tree:\n" << sTreeDebug );
+        SAL_INFO( "connectivity.evoab2", "found order-by tree:\n" << sTreeDebug );
     #endif
         orderByAnalysis( pOrderByClause, _out_rQueryData.aSortOrder );
     }
@@ -474,7 +474,7 @@ void OCommonStatement::parseSql( const OUString& sql, QueryData& _out_rQueryData
     #if OSL_DEBUG_LEVEL > 1
         OUString sTreeDebug;
         pWhereClause->showParseTree( sTreeDebug );
-        SAL_INFO( "evoab2", "found where tree:\n" << sTreeDebug );
+        SAL_INFO( "connectivity.evoab2", "found where tree:\n" << sTreeDebug );
     #endif
         EBookQuery* pQuery = whereAnalysis( pWhereClause->getChild( 1 ) );
         if ( !pQuery )
@@ -582,7 +582,7 @@ Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const QueryDa
 // -------------------------------------------------------------------------
 Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const OUString& _rSql )
 {
-    SAL_INFO( "evoab2", "OCommonStatement::impl_executeQuery_throw(" << _rSql << "%s)\n" );
+    SAL_INFO( "connectivity.evoab2", "OCommonStatement::impl_executeQuery_throw(" << _rSql << "%s)\n" );
 
 #if OSL_DEBUG_LEVEL > 1
     g_message( "Parse SQL '%s'\n",

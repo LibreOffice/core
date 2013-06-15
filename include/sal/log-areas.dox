@@ -51,6 +51,7 @@ certain functionality.
 
 @section connectivity
 
+@li @c connectivity.evoab2
 @li @c connectivity.cpool
 @li @c connectivity.commontools
 @li @c connectivity.mork

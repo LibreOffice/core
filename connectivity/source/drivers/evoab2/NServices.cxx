@@ -61,13 +61,15 @@ struct ProviderRequest
             )
     {
         if (!xRet.is() && (Implname == sImplementationName))
-        try
         {
-            xRet = creator( xServiceManager, sImplementationName,Factory, Services,0);
-        }
-        catch(const ::com::sun::star::uno::Exception&)
-        {
-            OSL_FAIL("Service Creation Exception");
+            try
+            {
+                xRet = creator( xServiceManager, sImplementationName,Factory, Services,0);
+            }
+            catch(const ::com::sun::star::uno::Exception&)
+            {
+                OSL_FAIL("Service Creation Exception");
+            }
         }
         return xRet.is();
     }

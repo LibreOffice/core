@@ -217,9 +217,11 @@ namespace connectivity
         initFields();
 
         if( pSpec )
+        {
             aName = OStringToOUString( g_param_spec_get_name( ( GParamSpec * )pSpec ),
                                             RTL_TEXTENCODING_UTF8 );
             aName = aName.replace( '-', '_' );
+        }
         return aName;
     }
 

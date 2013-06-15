@@ -96,7 +96,7 @@ IMPLEMENT_SERVICE_INFO(OEvoabConnection, "com.sun.star.sdbc.drivers.evoab.Connec
 void OEvoabConnection::construct(const OUString& url, const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     osl_atomic_increment( &m_refCount );
-    SAL_INFO("evoab2", "OEvoabConnection::construct()::url = " << url );
+    SAL_INFO("connectivity.evoab2", "OEvoabConnection::construct()::url = " << url );
 
      OUString sPassword;
         const char* pPwd                = "password";
