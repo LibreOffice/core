@@ -2395,11 +2395,10 @@ fi
 
 
 dnl ===================================================================
-dnl Check / find MacOSX SDK and compiler, version checks
+dnl Check OS X SDK and compiler
 dnl ===================================================================
-if test "$_os" = "Darwin"; then
 
-    xcode_developer=`xcoce-select -print-path`
+if test $_os = Darwin; then
 
     if test "$enable_64_bit" = "" -o "$enable_64_bit" = "no"; then
         bitness=-m32
@@ -2668,11 +2667,14 @@ AC_SUBST(ENABLE_MACOSX_SANDBOX)
 AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
 
 dnl ===================================================================
-dnl Check / find iOS SDK and compiler, version checks
+dnl Check iOS SDK and compiler
 dnl ===================================================================
+
 if test $_os = iOS; then
 
     AC_MSG_CHECKING([what iOS SDK to use])
+
+    xcode_developer=`xcode-select -print-path`
 
     if test "$enable_ios_simulator" = yes; then
         platform=iPhoneSimulator
