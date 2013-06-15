@@ -12,6 +12,7 @@
 #import "Server.h"
 #import "CommandTransmitter.h"
 #import "CommandInterpreter.h"
+#import "libreoffice_sdremoteViewController.h"
 #import <dispatch/dispatch.h>
 
 @interface CommunicationManager()
@@ -19,7 +20,9 @@
 @property (nonatomic, strong) Client* client;
 @property (nonatomic, strong) CommandInterpreter* interpreter;
 @property (nonatomic, strong) CommandTransmitter* transmitter;
-@property (atomic, strong) NSMutableArray* servers;
+@property (atomic, strong) NSMutableSet* servers;
+@property (nonatomic, strong) id connectionConnectedObserver;
+@property (nonatomic, strong) id connectionDisconnectedObserver;
 
 @end
 
@@ -31,8 +34,9 @@
 @synthesize interpreter = _interpreter;
 @synthesize transmitter = _transmitter;
 @synthesize servers = _servers;
-
-NSLock *connectionLock;
+@synthesize delegate = _delegate;
+@synthesize connectionConnectedObserver = _connectionConnectedObserver;
+@synthesize connectionDisconnectedObserver = _connectionDisconnectedObserver;
 
 + (CommunicationManager *)sharedComManager
 {
@@ -47,14 +51,39 @@ NSLock *connectionLock;
     return sharedComManager;
 }
 
+
+- (void) connectionStatusHandler:(NSNotification *)note
+{
+    if([[note name] isEqualToString:@"connection.status.connected"]){
+        NSLog(@"Connected");
+        self.transmitter = [[CommandTransmitter alloc] initWithClient:self.client];
+        self.state = CONNECTED;
+        [self.delegate setPinLabelText:[NSString stringWithFormat:@"%@", [self getPairingPin]]];
+    } else if ([[note name] isEqualToString:@"connection.status.disconnected"]){
+        NSLog(@"Connection Failed");
+        self.state = DISCONNECTED;
+        [self.client disconnect];
+    }
+}
+
 - (id) init
 {
     self = [super init];
     self.state = DISCONNECTED;
-    connectionLock = [NSLock new];
-    backgroundQueue = dispatch_queue_create("org.libreoffice.iosremote", NULL);
+    
+    [[NSNotificationCenter defaultCenter]addObserver: self
+                                            selector: @selector(connectionStatusHandler:)
+                                                name: @"connection.status.connected"
+                                              object: nil];
+    [[NSNotificationCenter defaultCenter]addObserver: self
+                                            selector: @selector(connectionStatusHandler:)
+                                                name: @"connection.status.disconnected"
+                                              object: nil];
+    
     return self;
 }
+
+
 
 - (id) initWithExistingServers
 {
@@ -70,35 +99,27 @@ NSLock *connectionLock;
     {
         NSArray *oldSavedArray = [NSKeyedUnarchiver unarchiveObjectWithData:dataRepresentingExistingServers];
         if (oldSavedArray != nil)
-            self.servers = [[NSMutableArray alloc] initWithArray:oldSavedArray];
+            self.servers = [[NSMutableSet alloc] initWithArray:oldSavedArray];
         else
-            self.servers = [[NSMutableArray alloc] init];
+            self.servers = [[NSMutableSet alloc] init];
     }
+    return self;
 }
 
 - (void) connectToServer:(Server*)server
 {
-    dispatch_async(backgroundQueue, ^(void) {
-        if ([connectionLock tryLock]) {
+    [self.servers addObject:server];
+    if (self.state == CONNECTING || self.state == CONNECTED) {
+        return;
+    } else {
             self.state = CONNECTING;
             [self.client disconnect];
             // initialise it with a given server
             self.client = [[Client alloc]initWithServer:server managedBy:self interpretedBy:self.interpreter];
-            if([self.client connect]){
-                self.state = CONNECTED;
-                self.transmitter = [[CommandTransmitter alloc] initWithClient:self.client];
-            }
-            else{
-                // streams closing is handled by client itself in case of connection failure
-                self.state = DISCONNECTED;
-            }
-            [connectionLock unlock];
-        }
-        else
-            // Already a threading working on that ... and that thread will unlock in 5 seconds anyway, so just return for now. 
-            return;
-    });
+            [self.client connect];
+    }
 }
+
 
 - (NSNumber *) getPairingPin{
     return [self.client pin];

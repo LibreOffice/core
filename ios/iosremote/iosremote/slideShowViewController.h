@@ -14,7 +14,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *image;
 @property (weak, nonatomic) IBOutlet UIWebView *lecturer_notes;
 
-@property (nonatomic, strong) SlideShow *slideshow;
+@property (nonatomic, strong) SlideShow* slideshow;
 @property (nonatomic, strong) id slideShowImageReadyObserver;
 @property (nonatomic, strong) id slideShowNoteReadyObserver;
 

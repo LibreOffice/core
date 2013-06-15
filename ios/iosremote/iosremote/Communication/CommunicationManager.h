@@ -8,9 +8,10 @@
 
 
 #import <Foundation/Foundation.h>
-#import "Client.h"
-#import "Server.h"
-#import "CommandInterpreter.h"
+
+@class Client;
+@class Server;
+@class CommandInterpreter;
 
 #define MSG_SLIDESHOW_STARTED @"SLIDESHOW_STARTED"
 #define MSG_SLIDE_CHANGED @"SLIDE_CHANGED"
@@ -48,10 +49,11 @@ enum ConnectionState : NSInteger {
     CONNECTED
 };
 
-dispatch_queue_t backgroundQueue;
-
 @interface CommunicationManager : NSObject
 
+- (void) connectToServer:(Server*)server;
+
 @property ConnectionState state;
+@property (nonatomic, strong) id delegate;
 
 @end

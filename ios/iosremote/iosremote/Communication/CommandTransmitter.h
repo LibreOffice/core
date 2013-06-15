@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Client.h"
+
+@class Client;
+
 
 @interface CommandTransmitter : NSObject
 

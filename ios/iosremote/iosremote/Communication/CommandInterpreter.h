@@ -8,7 +8,8 @@
 
 
 #import <Foundation/Foundation.h>
-#import "SlideShow.h"
+
+@class SlideShow;
 
 @interface CommandInterpreter : NSObject
 

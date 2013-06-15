@@ -9,15 +9,14 @@
 
 #import "libreoffice_sdremoteViewController.h"
 #import "Server.h"
-#import "Client.h"
 #import "slideShowViewController.h"
+#import "CommunicationManager.h"
 
 @interface libreoffice_sdremoteViewController ()
 
 // For debug use, will use a manager to manage server and client instead
 @property (nonatomic, strong) Server* server;
-@property (nonatomic, strong) Client* client;
-@property (nonatomic, strong) CommandInterpreter * interpreter;
+@property (nonatomic, strong) CommunicationManager *comManager;
 @property (nonatomic, weak) NSNotificationCenter* center;
 @property (nonatomic, strong) id slideShowPreviewStartObserver;
 
@@ -26,9 +25,8 @@
 @implementation libreoffice_sdremoteViewController
 
 @synthesize server = _server;
-@synthesize client = _client;
 @synthesize center = _center;
-@synthesize interpreter = _interpreter;
+@synthesize comManager = _comManager;
 @synthesize slideShowPreviewStartObserver = _slideShowPreviewStartObserver;
 
 - (void)viewDidLoad
@@ -48,7 +46,6 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"slidesPreviewSegue"]) {
         slideShowViewController *destViewController = segue.destinationViewController;
-        destViewController.slideshow = [self.interpreter slideShow];
         [destViewController.slideshow setDelegate:destViewController];
     }
 }
@@ -62,22 +59,19 @@
 
 - (IBAction)connectToServer:(id)sender {
     NSString * address = [self.ipAddressTextEdit text];
-    self.interpreter = [[CommandInterpreter alloc] init];
-    self.server = [[Server alloc] initWithProtocol:NETWORK atAddress:address ofName:@"Server"];
-    self.client = [[Client alloc] initWithServer:self.server managedBy:nil interpretedBy:self.interpreter];
-    [self.client connect];
-    
-    if([self.client connected])
-    {
-        [self.pinLabel setText:[NSString stringWithFormat:@"%@", self.client.pin]];
-    }
+    self.comManager = [[CommunicationManager alloc] init];
+    self.server = [[Server alloc] initWithProtocol:NETWORK atAddress:address ofName:@"Macbook Pro Retina"];
+    [self.comManager setDelegate:self];
+    [self.comManager connectToServer:self.server];
 }
-
 
 - (void)viewDidUnload {
     [self setIpAddressTextEdit:nil];
     [self setPinLabel:nil];
-    [self setPinLabel:nil];
     [super viewDidUnload];
+}
+
+- (void)setPinLabelText:(NSString *)text{
+    [self.pinLabel setText:text];
 }
 @end

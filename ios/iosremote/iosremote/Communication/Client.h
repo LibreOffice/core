@@ -7,9 +7,10 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "Server.h"
-#import "CommunicationManager.h"
-#import "CommandInterpreter.h"
+
+@class Server;
+@class CommunicationManager;
+@class CommandInterpreter;
 
 @interface Client : NSObject
 
@@ -18,7 +19,7 @@
 @property (nonatomic, strong) NSString* name;
 @property (nonatomic, weak) Server* server;
 
-- (BOOL) connect;
+- (void) connect;
 - (void) disconnect;
 
 - (id) initWithServer:(Server*)server

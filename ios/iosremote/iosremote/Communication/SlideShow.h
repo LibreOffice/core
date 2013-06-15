@@ -8,7 +8,8 @@
 
 
 #import <Foundation/Foundation.h>
-#import "slideShowViewController.h"
+
+@class slideShowViewController;
 
 @interface SlideShow : NSObject
 

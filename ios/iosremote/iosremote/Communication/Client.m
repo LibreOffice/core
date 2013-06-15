@@ -20,13 +20,10 @@
 @property (nonatomic, strong) NSOutputStream* outputStream;
 
 @property uint mPort;
-
 @property (nonatomic, weak) CommandInterpreter* receiver;
 @property (nonatomic, weak) CommunicationManager* comManager;
 
 @end
-
-NSCondition *connected;
 
 @implementation Client
 
@@ -39,6 +36,7 @@ NSCondition *connected;
 @synthesize connected = _mReady;
 @synthesize receiver = _receiver;
 
+
 - (id) initWithServer:(Server*)server
             managedBy:(CommunicationManager*)manager
         interpretedBy:(CommandInterpreter*)receiver
@@ -46,7 +44,6 @@ NSCondition *connected;
     self = [self init];
     if (self)
     {
-        connected = [NSCondition new];
         self.connected = NO;
         self.name = [[UIDevice currentDevice] name];
         self.pin = [NSNumber numberWithInteger:[self getPin]];
@@ -111,24 +108,25 @@ NSCondition *connected;
     [self.outputStream write:(uint8_t *)[data bytes] maxLength:[data length]];
 }
 
+int count = 0;
+
 - (void)stream:(NSStream *)stream handleEvent:(NSStreamEvent)eventCode {
-    
     switch(eventCode) {
         case NSStreamEventOpenCompleted:{
             NSLog(@"Connection established");
-            [connected lock];
-            NSArray *temp = [[NSArray alloc]initWithObjects:@"LO_SERVER_CLIENT_PAIR\n", self.name, @"\n", self.pin, @"\n\n", nil];
-            NSString *command = [temp componentsJoinedByString:@""];
-            [self sendCommand:command];
             self.connected = YES;
-            [connected signal];
-            [connected unlock];
+            if (count == 1) {
+                [[NSNotificationCenter defaultCenter]postNotificationName:@"connection.status.connected" object:nil];
+            } else {
+                count++;
             }
-            
+
+            }
             break;
         case NSStreamEventErrorOccurred:{
             NSLog(@"Connection error occured");
             [self disconnect];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"connection.status.disconnected" object:nil];
             }
             break;
         case NSStreamEventHasBytesAvailable:
@@ -179,18 +177,9 @@ NSCondition *connected;
     self.connected = NO;
 }
 
-- (BOOL) connect
+- (void) connect
 {
     [self streamOpenWithIp:self.server.serverAddress withPortNumber:self.mPort];
-    [connected lock];
-    if([connected waitUntilDate:[NSDate dateWithTimeIntervalSinceNow:5]]){
-        [connected unlock];
-        return YES;
-    } else {
-        [self disconnect];
-        [connected unlock];
-        return NO;
-    }
 }
 
 

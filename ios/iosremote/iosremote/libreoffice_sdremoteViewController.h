@@ -11,9 +11,9 @@
 @interface libreoffice_sdremoteViewController : UIViewController
 
 - (IBAction)connectToServer:(id)sender;
+- (void)setPinLabelText:(NSString*)text;
 
 @property (weak, nonatomic) IBOutlet UILabel *pinLabel;
-
 @property (weak, nonatomic) IBOutlet UITextField *ipAddressTextEdit;
 
 @end
