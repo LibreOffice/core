@@ -1040,7 +1040,7 @@ void VMLExport::EndShape( sal_Int32 nShapeElement )
     }
 }
 
-sal_uInt32 VMLExport::AddSdrObject( const SdrObject& rObj, const sal_Int16 eHOri, const sal_Int16 eVOri, const sal_Int16 eHRel, const sal_Int16 eVRel, const Point* pNdTopLeft )
+sal_uInt32 VMLExport::AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri, sal_Int16 eVOri, sal_Int16 eHRel, sal_Int16 eVRel, const Point* pNdTopLeft )
 {
     m_pSdrObject = &rObj;
     m_eHOri = eHOri;

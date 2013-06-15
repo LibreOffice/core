@@ -86,8 +86,8 @@ public:
     /// Export the sdr object as VML.
     ///
     /// Call this when you need to export the object as VML.
-    sal_uInt32 AddSdrObject( const SdrObject& rObj, const sal_Int16 eHOri = -1,
-            const sal_Int16 eVOri = -1, const sal_Int16 eHRel = -1, const
+    sal_uInt32 AddSdrObject( const SdrObject& rObj, sal_Int16 eHOri = -1,
+            sal_Int16 eVOri = -1, sal_Int16 eHRel = -1,
             sal_Int16 eVRel = -1, const Point* pNdTopLeft = 0 );
 
 protected:
