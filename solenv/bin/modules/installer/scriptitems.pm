@@ -667,9 +667,6 @@ sub replace_setup_variables
     if ($? || !$buildidstring) {
         $buildidstring = $localbuild . $localminor . "(Build:" . $installer::globals::buildid . ")";
     }
-    else {
-        $buildidstring = substr($buildidstring, 0, -1);
-    }
 
     if ( $localminor =~ /^\s*\w(\d+)\w*\s*$/ ) { $localminor = $1; }
 
