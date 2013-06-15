@@ -65,6 +65,11 @@ $(call gb_UnoApiPartTarget_get_target,%.done) : $(gb_UnoApiPartTarget_IDLCDEPS)
 	$(call gb_UnoApiPartTarget__command,$@,$*,$(filter-out $(gb_UnoApiPartTarget_IDLCDEPS),$(if $(filter $(gb_UnoApiPartTarget_IDLCDEPS),$?),$^,$?)))
 
 ifeq ($(gb_FULLDEPS),$(true))
+$(dir $(call gb_UnoApiPartTarget_get_dep_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_UnoApiPartTarget_get_dep_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_UnoApiPartTarget_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
@@ -137,6 +142,11 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 ifeq ($(gb_FULLDEPS),$(true))
+$(dir $(call gb_UnoApiTarget_get_dep_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_UnoApiTarget_get_dep_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_UnoApiTarget_get_dep_target,%) : $(call gb_Executable_get_runtime_dependencies,concat-deps)
 	$(call gb_UnoApiTarget__command_dep,$@,$*,$(UNOAPI_IDLFILES))
@@ -153,6 +163,7 @@ $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_DEPRDBS :=
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_UnoApiTarget_get_dep_target,$(1)) : UNOAPI_IDLFILES :=
 -include $(call gb_UnoApiTarget_get_dep_target,$(1))
+$(call gb_UnoApiTarget_get_dep_target,$(1)) :| $(dir $(call gb_UnoApiTarget_get_dep_target,$(1))).dir
 endif
 
 endef
@@ -175,6 +186,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_UnoApiTarget_get_dep_target,$(1)) : UNOAPI_IDLFILES += $(2)/$(3).idl
 $(call gb_UnoApiTarget_get_dep_target,$(1)) : \
 	$(call gb_UnoApiPartTarget_get_dep_target,$(2)/$(3))
+$(call gb_UnoApiPartTarget_get_dep_target,$(2)/$(3)) :| $(dir $(call gb_UnoApiPartTarget_get_dep_target,$(2)/$(3))).dir
 endif
 
 endef
