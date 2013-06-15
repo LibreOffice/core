@@ -1467,10 +1467,11 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
         case RTF_SHPTXT:
         case RTF_DPTXBXTEXT:
             m_aStates.top().nDestinationState = DESTINATION_SHAPETEXT;
+            checkFirstRun();
             dispatchFlag(RTF_PARD);
             m_bNeedPap = true;
-            OSL_ENSURE(!m_aShapetextBuffer.size(), "shapetext buffer is not empty");
-            m_aStates.top().pCurrentBuffer = &m_aShapetextBuffer;
+            if (nKeyword == RTF_SHPTXT)
+                m_pSdrImport->resolve(m_aStates.top().aShape, false);
             break;
         case RTF_FORMFIELD:
             if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
@@ -2251,7 +2252,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 // Reset everything.
                 m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
                 m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
-                if (m_aStates.top().nDestinationState != DESTINATION_SHAPETEXT)
+                if (m_aStates.top().pCurrentBuffer != &m_aShapetextBuffer)
                     m_aStates.top().pCurrentBuffer = 0;
             }
             else
@@ -2573,6 +2574,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                                 std::vector<beans::PropertyValue> aDefaults = m_pSdrImport->getTextFrameDefaults(false);
                                 for (size_t i = 0; i < aDefaults.size(); ++i)
                                     m_aStates.top().aDrawingObject.aPendingProperties.push_back(aDefaults[i]);
+                                checkFirstRun();
+                                Mapper().startShape(m_aStates.top().aDrawingObject.xShape);
+                                m_aStates.top().aDrawingObject.bHadShapeText = true;
                             }
                             break;
                         default:
@@ -3891,12 +3895,16 @@ int RTFDocumentImpl::popState()
             break;
         case DESTINATION_SHAPEPROPERTYVALUE:
             if (aState.aShape.aProperties.size())
+            {
                 aState.aShape.aProperties.back().second = m_aStates.top().aDestinationText.makeStringAndClear();
+                if (m_aStates.top().bHadShapeText)
+                    m_pSdrImport->append(aState.aShape.aProperties.back().first, aState.aShape.aProperties.back().second);
+            }
             break;
         case DESTINATION_PICPROP:
         case DESTINATION_SHAPEINSTRUCTION:
-            if (!m_bObject && !aState.bInListpicture)
-                m_pSdrImport->resolve(m_aStates.top().aShape);
+            if (!m_bObject && !aState.bInListpicture && !m_aStates.top().bHadShapeText)
+                m_pSdrImport->resolve(m_aStates.top().aShape, true);
             break;
         case DESTINATION_BOOKMARKSTART:
             {
@@ -4160,8 +4168,11 @@ int RTFDocumentImpl::popState()
 
                 m_pSdrImport->resolveFLine(xPropertySet, rDrawing.nFLine);
 
-                Mapper().startShape(xShape);
-                replayShapetext();
+                if (!m_aStates.top().aDrawingObject.bHadShapeText)
+                {
+                    Mapper().startShape(xShape);
+                    replayShapetext();
+                }
                 Mapper().endShape();
             }
             break;
@@ -4614,6 +4625,14 @@ int RTFDocumentImpl::popState()
                     m_xDocumentProperties->setTitle(aState.aDestinationText.makeStringAndClear());
             }
             break;
+        case DESTINATION_SHAPETEXT:
+            // If we're leaving the shapetext group (it may have nested ones) and this is a shape, not an old drawingobject.
+            if (m_aStates.top().nDestinationState != DESTINATION_SHAPETEXT && !m_aStates.top().aDrawingObject.bHadShapeText)
+            {
+                m_aStates.top().bHadShapeText = true;
+                m_pSdrImport->close();
+            }
+            break;
         default:
             {
                 if (m_aStates.size() && m_aStates.top().nDestinationState == DESTINATION_PICT)
@@ -4751,7 +4770,9 @@ RTFParserState::RTFParserState(RTFDocumentImpl *pDocumentImpl)
     pCurrentBuffer(0),
     bHasTableStyle(false),
     bInListpicture(false),
-    bStartedTrackchange(false)
+    bStartedTrackchange(false),
+    bInBackground(false),
+    bHadShapeText(false)
 {
 }
 
@@ -4807,7 +4828,8 @@ RTFDrawingObject::RTFDrawingObject()
     bHasFillColor(false),
     nDhgt(0),
     nFLine(-1),
-    nPolyLineCount(0)
+    nPolyLineCount(0),
+    bHadShapeText(false)
 {
 }
 
