@@ -1440,8 +1440,6 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
     {
         const Rectangle aRect(rAct.GetPoint(),rAct.GetSize());
 
-        Rectangle aHairline;
-
         // convert metafile sub-content to BitmapEx
         BitmapEx aBitmapEx(
             convertMetafileToBitmapEx(
