@@ -516,6 +516,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
             case ESCHER_Prop_fillBackColor: // 387
             case ESCHER_Prop_fillBlip: // 390
             case ESCHER_Prop_fNoFillHitTest: // 447
+            case ESCHER_Prop_fillOpacity: // 386
                 {
                     sal_uInt32 nValue;
                     sax_fastparser::FastAttributeList *pAttrList = m_pSerializer->createAttrList();
@@ -567,6 +568,10 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     if ( rProps.GetOpt( ESCHER_Prop_fNoFillHitTest, nValue ) )
                         impl_AddBool( pAttrList, XML_detectmouseclick, nValue );
 
+                    if (rProps.GetOpt(ESCHER_Prop_fillOpacity, nValue))
+                        // Partly undo the transformation at the end of EscherPropertyContainer::CreateFillProperties(): VML opacity is 0..1.
+                        pAttrList->add(XML_opacity, OString::number(double((nValue * 100) >> 16) / 100));
+
                     m_pSerializer->singleElementNS( XML_v, XML_fill, XFastAttributeListRef( pAttrList ) );
                 }
                 bAlreadyWritten[ ESCHER_Prop_fillType ] = true;
@@ -574,6 +579,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                 bAlreadyWritten[ ESCHER_Prop_fillBackColor ] = true;
                 bAlreadyWritten[ ESCHER_Prop_fillBlip ] = true;
                 bAlreadyWritten[ ESCHER_Prop_fNoFillHitTest ] = true;
+                bAlreadyWritten[ ESCHER_Prop_fillOpacity ] = true;
                 break;
 
             case ESCHER_Prop_lineColor: // 448
