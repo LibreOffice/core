@@ -244,7 +244,9 @@ namespace writerfilter {
                 sal_Int32 nRight;
                 sal_Int32 nBottom;
                 boost::optional<sal_Int32> oZ; ///< Z-Order of the shape.
+                sal_Int16 nHoriOrient;
                 sal_Int16 nHoriOrientRelation;
+                sal_Int16 nVertOrient;
                 sal_Int16 nVertOrientRelation;
                 int nWrap;
         };

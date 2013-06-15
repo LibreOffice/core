@@ -32,6 +32,8 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <rtl/ustring.hxx>
@@ -139,6 +141,7 @@ public:
     void testFdo64671();
     void testPageBackground();
     void testFdo62044();
+    void testPoshPosv();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -267,6 +270,7 @@ void Test::run()
         {"fdo64671.rtf", &Test::testFdo64671},
         {"page-background.rtf", &Test::testPageBackground},
         {"fdo62044.rtf", &Test::testFdo62044},
+        {"posh-posv.rtf", &Test::testPoshPosv},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1269,6 +1273,14 @@ void Test::testFdo62044()
 
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Heading 1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(xPropertySet, "CharHeight")); // Was 18, i.e. reset back to original value.
+}
+
+void Test::testPoshPosv()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(xDraws->getByIndex(0), "HoriOrient"));
+    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xDraws->getByIndex(0), "VertOrient"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
