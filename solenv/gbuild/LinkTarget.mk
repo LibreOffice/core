@@ -102,7 +102,6 @@ endef
 # It is used on first build and in case the user deletes the object dep file.
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_Object__command_dep
-mkdir -p $(dir $(1)) && \
 	echo "$(2) : $(gb_Helper_PHONY)" > $(1)
 
 endef
@@ -184,6 +183,12 @@ $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%)
 endif
 
 ifeq ($(gb_FULLDEPS),$(true))
+$(dir $(call gb_CxxObject_get_dep_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_CxxObject_get_dep_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_CxxObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
 	  $(eval $(gb_CxxObject__set_pchflags))\
@@ -919,6 +924,7 @@ $(call gb_CObject_get_target,$(2)) : \
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_CObject_get_dep_target,$(2))
+$(call gb_CObject_get_dep_target,$(2)) :| $(dir $(call gb_CObject_get_dep_target,$(2))).dir
 endif
 
 endef
@@ -940,6 +946,7 @@ endif
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_CxxObject_get_dep_target,$(2))
+$(call gb_CxxObject_get_dep_target,$(2)) :| $(dir $(call gb_CxxObject_get_dep_target,$(2))).dir
 endif
 
 endef
@@ -1015,6 +1022,7 @@ $(call gb_GenCObject_get_target,$(2)) : \
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_GenCObject_get_dep_target,$(2))
+$(call gb_GenCObject_get_dep_target,$(2)) :| $(dir $(call gb_GenCObject_get_dep_target,$(2))).dir
 endif
 
 endef
@@ -1041,6 +1049,7 @@ endif
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_GenCxxObject_get_dep_target,$(2))
+$(call gb_GenCxxObject_get_dep_target,$(2)) :| $(dir $(call gb_GenCxxObject_get_dep_target,$(2))).dir
 endif
 
 endef
