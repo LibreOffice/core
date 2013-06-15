@@ -184,7 +184,7 @@ static void lcl_SetViewMetaChars( SwViewOption& rVOpt, sal_Bool bOn)
 
 void SwView::RecheckBrowseMode()
 {
-    // OS: numerische Reihenfolge beachten!
+    // OS: pay attention to numerical order!
     static sal_uInt16 const aInva[] =
         {
             //SID_NEWWINDOW,/*5620*/
@@ -222,9 +222,8 @@ void SwView::RecheckBrowseMode()
     InvalidateBorder();
 }
 
-/*--------------------------------------------------------------------
-    State of view options
- --------------------------------------------------------------------*/
+// State of view options
+
 void SwView::StateViewOptions(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);
@@ -335,9 +334,8 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
     }
 }
 
-/*--------------------------------------------------------------------
-    execute view options
- --------------------------------------------------------------------*/
+// execute view options
+
 void SwView::ExecViewOptions(SfxRequest &rReq)
 {
     SwViewOption* pOpt = new SwViewOption( *GetWrtShell().GetViewOptions() );
@@ -535,7 +533,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             return;
     }
 
-    // UserPrefs setzen Request als bearbeitet kennzeichnen
+    // Set UserPrefs, mark request as modified
     sal_Bool bWebView =  0 != dynamic_cast<const SwWebView*>(this);
     SwWrtShell &rSh = GetWrtShell();
     rSh.StartAction();
@@ -549,13 +547,12 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             CheckVisArea();
         }
 
-        //Die UsrPref muessen als Modified gekennzeichnet werden.
-        //call for initialization
+        // The UsrPref must be marked as modified.
+        // call for initialization
         pModule->GetUsrPref(bWebView);
         pModule->CheckSpellChanges( pOpt->IsOnlineSpell(), false, false, false );
     }
-    //OS:   Modified wieder zuruecksetzen, weil Ansicht/Felder
-    //      das Doc modified setzt.
+    //OS: Set back modified again, because view/fields sets the Doc modified.
     if( !bModified )
         rSh.ResetModified();
 

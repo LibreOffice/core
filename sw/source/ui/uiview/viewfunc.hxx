@@ -31,12 +31,12 @@ class SwScrollbar;
 class ViewShell;
 class Window;
 
-// folgende Funktionen stehen im viewprt.cxx
+// The following functions are available in viewprt.cxx
 void SetPrinter( IDocumentDeviceAccess*, SfxPrinter*, sal_Bool bWeb );
 SfxTabPage* CreatePrintOptionsPage( Window*, const SfxItemSet& );
 void SetAppPrintOptions( ViewShell* pSh, sal_Bool bWeb );
 
-// folgende Funktionen stehen im viewport.cxx
+// The following functions are available in viewport.cxx
 void ViewResizePixel( const Window &rRef,
                     const Point &rOfst,
                     const Size &rSize,

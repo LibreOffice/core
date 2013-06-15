@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "hintids.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <editeng/tstpitem.hxx>
@@ -34,11 +33,10 @@
 
 #include "pagedesc.hxx"
 
-
 void SwView::ExecDlg(SfxRequest &rReq)
 {
     ModalDialog *pDialog = 0;
-    //Damit aus dem Basic keine Dialoge fuer Hintergrund-Views aufgerufen werden:
+    // Thus, from the basic no dialogues for background views are called:
     const SfxPoolItem* pItem = 0;
     const SfxItemSet* pArgs = rReq.GetArgs();
 
@@ -80,7 +78,5 @@ void SwView::ExecDlg(SfxRequest &rReq)
         delete pDialog;
     }
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

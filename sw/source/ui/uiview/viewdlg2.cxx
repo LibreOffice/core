@@ -105,17 +105,17 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 
     const String &rName = pOpt->GetCategory();
 
-    // Existiert Pool-Vorlage gleichen Namens?
+    // Is there a pool template with the same name?
     SwWrtShell &rSh = GetWrtShell();
     if(rName.Len())
     {
         sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
         if( USHRT_MAX != nPoolId )
             rSh.GetTxtCollFromPool(nPoolId);
-            // Pool-Vorlage existiert nicht: Existiert sie am Dokument?
+            // Pool template does not exist: Does it exist on the document?
         else if( !rSh.GetParaStyle(rName) )
         {
-            // Sie existiert auch nicht am Dokument: erzeugen
+            // It also does not exist in the document: generate
             SwTxtFmtColl* pDerivedFrom = rSh.GetTxtCollFromPool(RES_POOLCOLL_LABEL);
             rSh.MakeTxtFmtColl(rName, pDerivedFrom);
         }
@@ -125,7 +125,6 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     if (eType & nsSelectionType::SEL_OLE)
         eType = nsSelectionType::SEL_GRF;
 
-    // SwLabelType
     const SwLabelType eT = eType & nsSelectionType::SEL_TBL ? LTYPE_TABLE :
                       eType & nsSelectionType::SEL_FRM ? LTYPE_FLY :
                       eType == nsSelectionType::SEL_TXT ? LTYPE_FLY :
@@ -137,7 +136,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
             (SwSetExpFieldType*)aMgr.GetFldType(RES_SETEXPFLD, rName);
     if (!pFldType && rName.Len() )
     {
-        // Neuen Feldtypen erzeugen
+        // Create new field types
         SwSetExpFieldType aSwSetExpFieldType(rSh.GetDoc(), rName, nsSwGetSetExpType::GSE_SEQ);
         aMgr.InsertFldType(aSwSetExpFieldType);
         pFldType = (SwSetExpFieldType*)aMgr.GetFldType(RES_SETEXPFLD, rName);
@@ -178,7 +177,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
                                 nID,
                                 pOpt->GetCharacterStyle(),
                                 pOpt->CopyAttributes() );
-    // Nummernformat setzen
+    // Set Number Format
     if(pType)
         ((SwSetExpFieldType*)pType)->SetSeqFormat(pOpt->GetNumType());
 
@@ -192,7 +191,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
         rSh.EnterSelFrmMode();
     }
 
-    // Kategorie merken
+    // rember category
     String** ppStr = 0;
     if (eType & nsSelectionType::SEL_GRF)
         ppStr = &pOldGrfCat;
@@ -213,6 +212,5 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
             **ppStr = rName;
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

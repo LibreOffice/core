@@ -70,9 +70,8 @@
 
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Drawing-Ids ausfuehren
- --------------------------------------------------------------------*/
+// Execute Drawing-Ids
+
 void SwView::ExecDraw(SfxRequest& rReq)
 {
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -122,7 +121,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
             if (nNewId == m_nFormSfxId)
             {
                 bDeselect = sal_True;
-                GetViewFrame()->GetDispatcher()->Execute(SID_FM_LEAVE_CREATE);  // Button soll rauspoppen
+                GetViewFrame()->GetDispatcher()->Execute(SID_FM_LEAVE_CREATE);  // Button should popping out
             }
         }
     }
@@ -253,7 +252,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     LeaveDrawCreate();
 
     if (m_pWrtShell->IsFrmSelected())
-        m_pWrtShell->EnterStdMode();  // wegen Bug #45639
+        m_pWrtShell->EnterStdMode();  // because bug #45639
 
     SwDrawBase* pFuncPtr = NULL;
 
@@ -335,7 +334,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
 
     static sal_uInt16 const aInval[] =
     {
-        // Slot-Ids muessen beim Aufruf von Invalidate sortiert sein!
+        // Slot IDs must be sorted when calling Invalidate!
         SID_ATTRIBUTES_AREA,
         SID_INSERT_DRAW,
         0
@@ -394,9 +393,8 @@ void SwView::ExecDraw(SfxRequest& rReq)
     AttrChangedNotify(m_pWrtShell);
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Drawing beenden
- --------------------------------------------------------------------*/
+// End drawing
+
 void SwView::ExitDraw()
 {
     NoRotate();
@@ -445,9 +443,8 @@ void SwView::ExitDraw()
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Rotate-Mode abschalten
- --------------------------------------------------------------------*/
+// Disable rotate mode
+
 void SwView::NoRotate()
 {
     if (IsDrawRotate())
@@ -460,9 +457,8 @@ void SwView::NoRotate()
     }
 }
 
-/******************************************************************************
- *  Beschreibung: DrawTextEditMode einschalten
- ******************************************************************************/
+// Enable DrawTextEditMode
+
 sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
 {
     SdrObject* pObj;
@@ -495,9 +491,8 @@ sal_Bool SwView::EnterDrawTextMode(const Point& aDocPos)
     return bReturn;
 }
 
-/******************************************************************************
- *  Beschreibung: DrawTextEditMode einschalten
- ******************************************************************************/
+// Enable DrawTextEditMode
+
 sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
         bool bIsNewObj, bool bSetSelectionToStart)
 {
@@ -590,9 +585,8 @@ sal_Bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
     return bRet;
 }
 
-/******************************************************************************
- *  Beschreibung: Ist ein DrawTextObjekt selektiert?
- ******************************************************************************/
+// Is a DrawTextObjekt selected?
+
 bool SwView::IsTextTool() const
 {
     sal_uInt16 nId;
@@ -655,7 +649,7 @@ bool SwView::AreOnlyFormsSelected() const
     {
         for (sal_uInt32 i = 0; i < nCount; i++)
         {
-            // Sind ausser Controls noch normale Draw-Objekte selektiert?
+            // Except controls, are still normal draw objects selected?
             SdrObject *pSdrObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
 
             if (!HasOnlyObj(pSdrObj, FmFormInventor))
