@@ -1825,7 +1825,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const ::com::sun::star::i18n
                                                     sal_Int16 nOrgIndex )
 {
     String aCodeStr( rCode.Code );
-    if ( rCode.Index < NF_INDEX_TABLE_ENTRIES &&
+    if ( rCode.Index < NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS &&
             rCode.Usage == ::com::sun::star::i18n::KNumberFormatUsage::CURRENCY &&
             rCode.Index != NF_CURRENCY_1000DEC2_CCC )
     {   // strip surrounding [$...] on automatic currency
@@ -1865,7 +1865,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat( const ::com::sun::star::i18n
         delete pFormat;
         return NULL;
     }
-    if ( rCode.Index >= NF_INDEX_TABLE_ENTRIES )
+    if ( rCode.Index >= NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS )
     {
         sal_uInt32 nCLOffset = nPos - (nPos % SV_COUNTRY_LANGUAGE_OFFSET);
         sal_uInt32 nKey = ImpIsEntry( aCodeStr, nCLOffset, ActLnge );
@@ -2714,7 +2714,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
             SAL_WARN( "svl.numbers", "ImpGenerateAdditionalFormats: too many formats" );
             break;  // for
         }
-        if ( pFormatArr[j].Index < NF_INDEX_TABLE_ENTRIES &&
+        if ( pFormatArr[j].Index < NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS &&
                 pFormatArr[j].Index != NF_CURRENCY_1000DEC2_CCC )
         {   // Insert only if not already inserted, but internal index must be
             // above so ImpInsertFormat can distinguish it.
@@ -2750,7 +2750,7 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
                 SAL_WARN( "svl.numbers", "ImpGenerateAdditionalFormats: too many formats" );
                 break;  // for
             }
-            if ( pFormatArr[j].Index >= NF_INDEX_TABLE_ENTRIES )
+            if ( pFormatArr[j].Index >= NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS )
                 if ( ImpInsertNewStandardFormat( pFormatArr[j], nPos+1,
                         SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS,
                         bAfterChangingSystemCL ) )
