@@ -21,7 +21,9 @@ namespace writerfilter {
                 RTFSdrImport(RTFDocumentImpl& rImport, uno::Reference<lang::XComponent> const& xDstDoc);
                 virtual ~RTFSdrImport();
 
-                void resolve(RTFShape& rShape);
+                void resolve(RTFShape& rShape, bool bClose);
+                void close();
+                void append(OUString aKey, OUString aValue);
                 void resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder);
                 void resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nFLine);
                 /**
@@ -36,6 +38,7 @@ namespace writerfilter {
 
                 RTFDocumentImpl& m_rImport;
                 uno::Reference<drawing::XDrawPage> m_xDrawPage;
+                uno::Reference<drawing::XShape> m_xShape;
         };
     } // namespace rtftok
 } // namespace writerfilter

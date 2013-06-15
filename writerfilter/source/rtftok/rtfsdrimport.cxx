@@ -166,7 +166,7 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, OUStrin
         xPropertySet->setPropertyValue("VertOrient", uno::makeAny(nVertOrient));
 }
 
-void RTFSdrImport::resolve(RTFShape& rShape)
+void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
 {
     int nType = -1;
     bool bPib = false;
@@ -204,7 +204,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                     break;
                 case ESCHER_ShpInst_Rectangle:
                 case ESCHER_ShpInst_TextBox:
-                    if (!m_rImport.getShapetextBuffer().empty())
+                    if (!bClose)
                     {
                         createShape("com.sun.star.text.TextFrame", xShape, xPropertySet);
                         bTextFrame = true;
@@ -594,8 +594,22 @@ void RTFSdrImport::resolve(RTFShape& rShape)
 
     // Send it to dmapper
     m_rImport.Mapper().startShape(xShape);
-    m_rImport.replayShapetext();
+    if (bClose)
+    {
+        m_rImport.replayShapetext();
+        m_rImport.Mapper().endShape();
+    }
+    m_xShape = xShape;
+}
+
+void RTFSdrImport::close()
+{
     m_rImport.Mapper().endShape();
+}
+
+void RTFSdrImport::append(OUString aKey, OUString aValue)
+{
+    applyProperty(m_xShape, aKey, aValue);
 }
 
 } // namespace rtftok
