@@ -9,6 +9,7 @@
 
 #import "SlideShow.h"
 #import "Base64.h"
+#import <dispatch/dispatch.h>
 #import "slideShowViewController.h"
 
 @interface SlideShow()
@@ -24,16 +25,22 @@
 @synthesize currentSlide = _currentSlide;
 @synthesize delegate = _delegate;
 
+dispatch_queue_t backgroundQueue;
+
 - (SlideShow *) init{
     self = [super init];
     self.imagesArray = [[NSMutableArray alloc] init];
     self.notesArray = [[NSMutableArray alloc] init];
     _size = 0;
     _currentSlide = 0;
+    
+    backgroundQueue = dispatch_queue_create("org.libreoffice.iosremote.bgqueue", NULL);
+    
     return self;
 }
 
 - (void) putImage: (NSString *)img AtIndex: (uint) index{
+    
     NSData* data = [NSData dataWithBase64String:img];
     UIImage* image = [UIImage imageWithData:data];
     [self.imagesArray insertObject:image atIndex:index];
