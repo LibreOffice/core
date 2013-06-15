@@ -7,9 +7,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_PythonTest_PythonTest,sw_python))
+$(eval $(call gb_PythonTest_PythonTest,sw_python,
+    TDOC="$(SRCDIR)/sw/qa/complex/writer/testdocuments" \
+))
 
 $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
+        check_fields \
 	check_index \
 	get_expression \
 	set_expression \
