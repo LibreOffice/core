@@ -547,6 +547,7 @@ OUString StyleSettings::ImplSymbolsStyleToName( sal_uLong nStyle ) const
         case STYLE_SYMBOLS_OXYGEN:     return OUString("oxygen");
         case STYLE_SYMBOLS_CLASSIC:    return OUString("classic");
         case STYLE_SYMBOLS_HUMAN:      return OUString("human");
+        case STYLE_SYMBOLS_SIFR:       return OUString("sifr");
         case STYLE_SYMBOLS_TANGO_TESTING: return OUString("tango_testing");
     }
 
@@ -573,6 +574,8 @@ sal_uLong StyleSettings::ImplNameToSymbolsStyle( const OUString &rName ) const
         return STYLE_SYMBOLS_CLASSIC;
     else if ( rName == OUString("human") )
         return STYLE_SYMBOLS_HUMAN;
+    else if ( rName == OUString("sifr") )
+        return STYLE_SYMBOLS_SIFR;
     else if ( rName == OUString("tango_testing") )
         return STYLE_SYMBOLS_TANGO_TESTING;
 

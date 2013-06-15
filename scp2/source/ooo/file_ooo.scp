@@ -845,6 +845,15 @@ File gid_File_ImagesTangoTesting_Zip
 End
 #endif
 
+#ifdef THEME_SIFR
+File gid_File_ImagesSifr_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Config;
+    Name = "images_sifr.zip";
+    Styles = (PACKED);
+End
+#endif
+
 #ifdef THEME_HUMAN
 File gid_File_ImagesHuman_Zip
     TXT_FILE_BODY;

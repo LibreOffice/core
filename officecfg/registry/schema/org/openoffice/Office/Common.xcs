@@ -5617,6 +5617,11 @@
               <desc>Tango Testing - used for testing by the design team</desc>
             </info>
           </enumeration>
+          <enumeration oor:value="sifr">
+            <info>
+              <desc>Sifr - an adaptation of the Gnome symbolic theme</desc>
+            </info>
+          </enumeration>
         </constraints>
         <value>auto</value>
       </prop>

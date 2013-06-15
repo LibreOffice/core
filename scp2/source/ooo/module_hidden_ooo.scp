@@ -400,6 +400,9 @@ Module gid_Module_Root_Files_Images
 #ifdef THEME_HUMAN
              gid_File_ImagesHuman_Zip,
 #endif
+#ifdef THEME_SIFR
+             gid_File_ImagesSifr_Zip
+#endif
 #ifdef THEME_TANGO
              gid_File_ImagesTango_Zip
 #endif

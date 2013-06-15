@@ -28,7 +28,7 @@ How to add a new image set:
          scp2 compilation crashes when using a dash '-'.
          It evidently splits the name into two strings.
 
-- Add its name (new_set) to WITH_THEMES variable in configure.in
+- Add its name (new_set) to WITH_THEMES variable in configure.ac
 
 - Add its gid to the Files section of gid_Module_Root_Brand in
   scp2/source/ooo/module_hidden_ooo.scp and add a corresponding File entry
