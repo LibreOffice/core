@@ -263,10 +263,14 @@ ShapeBase::ShapeBase( Drawing& rDrawing ) :
 
 void ShapeBase::finalizeFragmentImport()
 {
-    // resolve shape template reference
-    if( (maShapeModel.maType.getLength() > 1) && (maShapeModel.maType[ 0 ] == '#') )
-        if( const ShapeType* pShapeType = mrDrawing.getShapes().getShapeTypeById( maShapeModel.maType.copy( 1 ), true ) )
+    if( maShapeModel.maType.getLength() > 1 )
+    {
+        OUString aType = maShapeModel.maType;
+        if (aType[ 0 ] == '#')
+            aType = aType.copy(1);
+        if( const ShapeType* pShapeType = mrDrawing.getShapes().getShapeTypeById( aType, true ) )
             maTypeModel.assignUsed( pShapeType->getTypeModel() );
+    }
 }
 
 OUString ShapeBase::getShapeName() const
