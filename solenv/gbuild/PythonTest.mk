@@ -40,6 +40,7 @@ $(call gb_PythonTest_get_target,%) :
 		($(gb_PythonTest_PRECOMMAND) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
+		$(DEFS) \
 		URE_BOOTSTRAP=vnd.sun.star.pathname:$(call gb_Helper_get_rcfile,$(gb_DEVINSTALLROOT)/program/fundamental) \
 		PYTHONPATH="$(PYPATH)" \
 		UserInstallation=$(call gb_Helper_make_url,$(dir $(call gb_PythonTest_get_target,$*))user) \
@@ -60,6 +61,11 @@ $(call gb_PythonTest_get_target,$(1)) : MODULES :=
 
 $(eval $(call gb_Module_register_target,$(call gb_PythonTest_get_target,$(1)),$(call gb_PythonTest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),PythonTest)
+
+endef
+
+define gb_PythonTest_set_defs
+$(call gb_PythonTest_get_target,$(1)) : DEFS := $(2)
 
 endef
 
@@ -94,6 +100,7 @@ $(call gb_Helper_make_userfriendly_targets,$(1),PythonTest)
 
 endef
 
+gb_PythonTest_set_defs :=
 gb_PythonTest_add_modules :=
 gb_PythonTest_use_customtarget :=
 

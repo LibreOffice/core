@@ -31,6 +31,11 @@ except ImportError:
     print("  URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
+try:
+    from urllib.parse import quote
+except ImportError:
+    from urllib import quote
+
 ### utilities ###
 
 def mkPropertyValue(name, value):
@@ -178,6 +183,18 @@ class UnoInProcess:
         props = [("Hidden", True), ("ReadOnly", False)]
         loadProps = tuple([mkPropertyValue(name, value) for (name, value) in props])
         self.xDoc = desktop.loadComponentFromURL("private:factory/swriter", "_blank", 0, loadProps)
+        assert(self.xDoc)
+        return self.xDoc
+
+    def openWriterTemplateDoc(self, file):
+        assert(self.xContext)
+        smgr = self.getContext().ServiceManager
+        desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", self.getContext())
+        props = [("Hidden", True), ("ReadOnly", False), ("AsTemplate", True)]
+        loadProps = tuple([mkPropertyValue(name, value) for (name, value) in props])
+        path = os.getenv("TDOC")
+        url = "file://" + quote(path) + "/" + quote(file)
+        self.xDoc = desktop.loadComponentFromURL(url, "_blank", 0, loadProps)
         assert(self.xDoc)
         return self.xDoc
 

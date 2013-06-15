@@ -9,8 +9,13 @@
 
 $(eval $(call gb_PythonTest_PythonTest,sw_python))
 
+$(eval $(call gb_PythonTest_set_defs,sw_python,\
+    TDOC="$(SRCDIR)/sw/qa/complex/writer/testdocuments" \
+))
+
 $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	check_index \
+	check_fields \
 	get_expression \
 	set_expression \
 	var_fields \
