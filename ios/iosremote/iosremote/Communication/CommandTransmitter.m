@@ -24,11 +24,7 @@
 {
     self = [self init];
     self.client = client;
-    
-    NSArray *temp = [[NSArray alloc]initWithObjects:@"LO_SERVER_CLIENT_PAIR\n", self.client.name, @"\n", self.client.pin, @"\n\n", nil];
-    NSString *command = [temp componentsJoinedByString:@""];
-    
-    [self.client sendCommand:command];
+
     return self;
 }
 

@@ -12,6 +12,7 @@
 @class Client;
 @class Server;
 @class CommandInterpreter;
+@class SlideShow;
 
 #define MSG_SLIDESHOW_STARTED @"SLIDESHOW_STARTED"
 #define MSG_SLIDE_CHANGED @"SLIDE_CHANGED"
@@ -55,5 +56,6 @@ enum ConnectionState : NSInteger {
 
 @property ConnectionState state;
 @property (nonatomic, strong) id delegate;
+@property (nonatomic, strong) CommandInterpreter* interpreter;
 
 @end

@@ -37,14 +37,12 @@
     NSData* data = [NSData dataWithBase64String:img];
     UIImage* image = [UIImage imageWithData:data];
     [self.imagesArray insertObject:image atIndex:index];
-    slideShowViewController* vc = [self delegate];
-    [[vc image] setImage:image];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"IMAGE_READY" object:nil];
 }
 
 - (void) putNotes: (NSString *)notes AtIndex: (uint) index{
     [self.notesArray insertObject:notes atIndex:index];
-    slideShowViewController* vc = [self delegate];
-    [[vc lecturer_notes] loadHTMLString:notes baseURL:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"NOTE_READY" object:nil];
 }
 
 - (UIImage *) getImageAtIndex: (uint) index

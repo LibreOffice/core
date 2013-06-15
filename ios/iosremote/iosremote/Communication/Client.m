@@ -96,6 +96,11 @@
         [self.outputStream setDelegate:self];
         [self.outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         [self.outputStream open];
+        
+        NSArray *temp = [[NSArray alloc]initWithObjects:@"LO_SERVER_CLIENT_PAIR\n", self.name, @"\n", self.pin, @"\n\n", nil];
+        NSString *command = [temp componentsJoinedByString:@""];
+        
+        [self sendCommand:command];
     }
 }
 
@@ -114,18 +119,15 @@ int count = 0;
     switch(eventCode) {
         case NSStreamEventOpenCompleted:{
             NSLog(@"Connection established");
-            self.connected = YES;
             if (count == 1) {
                 [[NSNotificationCenter defaultCenter]postNotificationName:@"connection.status.connected" object:nil];
             } else {
                 count++;
-            }
-
+                }
             }
             break;
         case NSStreamEventErrorOccurred:{
             NSLog(@"Connection error occured");
-            [self disconnect];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"connection.status.disconnected" object:nil];
             }
             break;
@@ -153,7 +155,6 @@ int count = 0;
             }
             
             NSArray *commands = [str componentsSeparatedByString:@"\n"];
-            
             [self.receiver parse:commands];
             data = nil;
             str = nil;

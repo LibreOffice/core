@@ -10,6 +10,7 @@
 #import "CommunicationManager.h"
 #import "Client.h"
 #import "Server.h"
+#import "SlideShow.h"
 #import "CommandTransmitter.h"
 #import "CommandInterpreter.h"
 #import "libreoffice_sdremoteViewController.h"
@@ -18,7 +19,6 @@
 @interface CommunicationManager()
 
 @property (nonatomic, strong) Client* client;
-@property (nonatomic, strong) CommandInterpreter* interpreter;
 @property (nonatomic, strong) CommandTransmitter* transmitter;
 @property (atomic, strong) NSMutableSet* servers;
 @property (nonatomic, strong) id connectionConnectedObserver;
@@ -74,6 +74,7 @@
 {
     self = [super init];
     self.state = DISCONNECTED;
+    self.interpreter = [[CommandInterpreter alloc] init];
     
     [[NSNotificationCenter defaultCenter]addObserver: self
                                             selector: @selector(connectionStatusHandler:)
@@ -120,6 +121,7 @@
             [self.client disconnect];
             // initialise it with a given server
             self.client = [[Client alloc]initWithServer:server managedBy:self interpretedBy:self.interpreter];
+            self.transmitter = [[CommandTransmitter alloc] initWithClient:self.client];
             [self.client connect];
     }
 }

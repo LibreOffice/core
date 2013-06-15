@@ -11,6 +11,7 @@
 #import "Server.h"
 #import "slideShowViewController.h"
 #import "CommunicationManager.h"
+#import "CommandInterpreter.h"
 
 @interface libreoffice_sdremoteViewController ()
 
@@ -46,6 +47,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"slidesPreviewSegue"]) {
         slideShowViewController *destViewController = segue.destinationViewController;
+        destViewController.slideshow = [self.comManager.interpreter slideShow];
         [destViewController.slideshow setDelegate:destViewController];
     }
 }
