@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7Ss\u003d",
+        "filename": "include/svx/svdmrkv.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000270
+      },
+      "writtenOn": "2013-06-15T23:18:03Z",
+      "side": 1,
+      "message": "// There might be points which can\u0027t be marked:",
+      "revId": "2a28f4e646168ed6c24e8d9edc1d649259f98f6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7Sw\u003d",
+        "filename": "include/svx/svdmrkv.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1000270
+      },
+      "writtenOn": "2013-06-15T23:18:03Z",
+      "side": 1,
+      "message": "sal_Bool BegMarkGluePoints(const Point\u0026 rPnt, OutputDevice* pOut);",
+      "revId": "2a28f4e646168ed6c24e8d9edc1d649259f98f6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
