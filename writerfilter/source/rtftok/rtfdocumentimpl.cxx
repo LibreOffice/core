@@ -4750,9 +4750,7 @@ RTFShape::RTFShape()
     nTop(0),
     nRight(0),
     nBottom(0),
-    nHoriOrient(0),
     nHoriOrientRelation(0),
-    nVertOrient(0),
     nVertOrientRelation(0),
     nWrap(-1)
 {

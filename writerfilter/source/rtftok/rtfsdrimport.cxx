@@ -115,6 +115,57 @@ void RTFSdrImport::resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet
         xPropertySet->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
 }
 
+void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, OUString aKey, OUString aValue)
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+    sal_Int16 nHoriOrient = 0;
+    sal_Int16 nVertOrient = 0;
+    if (aKey == "posh")
+    {
+        switch (aValue.toInt32())
+        {
+            case 1:
+                nHoriOrient = text::HoriOrientation::LEFT;
+                break;
+            case 2:
+                nHoriOrient = text::HoriOrientation::CENTER;
+                break;
+            case 3:
+                nHoriOrient = text::HoriOrientation::RIGHT;
+                break;
+            case 4:
+                nHoriOrient = text::HoriOrientation::INSIDE;
+                break;
+            case 5:
+                nHoriOrient = text::HoriOrientation::OUTSIDE;
+                break;
+            default:
+                break;
+        }
+    }
+    else if (aKey == "posv")
+    {
+        switch (aValue.toInt32())
+        {
+            case 1:
+                nVertOrient = text::VertOrientation::TOP;
+                break;
+            case 2:
+                nVertOrient = text::VertOrientation::CENTER;
+                break;
+            case 3:
+                nVertOrient = text::VertOrientation::BOTTOM;
+                break;
+            default:
+                break;
+        }
+    }
+    if (nHoriOrient != 0)
+        xPropertySet->setPropertyValue("HoriOrient", uno::makeAny(nHoriOrient));
+    if (nVertOrient != 0)
+        xPropertySet->setPropertyValue("VertOrient", uno::makeAny(nVertOrient));
+}
+
 void RTFSdrImport::resolve(RTFShape& rShape)
 {
     int nType = -1;
@@ -393,46 +444,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         else if (i->first == "shadowOffsetX")
             // EMUs to points
             aShadowModel.moOffset.set(OUString::number(i->second.toDouble() / 12700) + "pt");
-        else if (i->first == "posh")
-        {
-            switch(i->second.toInt32())
-            {
-                case 1:
-                    rShape.nHoriOrient = text::HoriOrientation::LEFT;
-                    break;
-                case 2:
-                    rShape.nHoriOrient = text::HoriOrientation::CENTER;
-                    break;
-                case 3:
-                    rShape.nHoriOrient = text::HoriOrientation::RIGHT;
-                    break;
-                case 4:
-                    rShape.nHoriOrient = text::HoriOrientation::INSIDE;
-                    break;
-                case 5:
-                    rShape.nHoriOrient = text::HoriOrientation::OUTSIDE;
-                    break;
-                default:
-                    break;
-            }
-        }
-        else if (i->first == "posv")
-        {
-            switch(i->second.toInt32())
-            {
-                case 1:
-                    rShape.nVertOrient = text::VertOrientation::TOP;
-                    break;
-                case 2:
-                    rShape.nVertOrient = text::VertOrientation::CENTER;
-                    break;
-                case 3:
-                    rShape.nVertOrient = text::VertOrientation::BOTTOM;
-                    break;
-                default:
-                    break;
-            }
-        }
+        else if (i->first == "posh" || i->first == "posv")
+            applyProperty(xShape, i->first, i->second);
         else if (i->first == "posrelh")
         {
             switch (i->second.toInt32())
@@ -543,12 +556,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         else
             xShape->setPosition(awt::Point(rShape.nLeft, rShape.nTop));
         xShape->setSize(awt::Size(rShape.nRight - rShape.nLeft, rShape.nBottom - rShape.nTop));
-        if (rShape.nHoriOrient != 0)
-            xPropertySet->setPropertyValue("HoriOrient", uno::makeAny(rShape.nHoriOrient));
         if (rShape.nHoriOrientRelation != 0)
             xPropertySet->setPropertyValue("HoriOrientRelation", uno::makeAny(rShape.nHoriOrientRelation));
-        if (rShape.nVertOrient != 0)
-            xPropertySet->setPropertyValue("VertOrient", uno::makeAny(rShape.nVertOrient));
         if (rShape.nVertOrientRelation != 0)
             xPropertySet->setPropertyValue("VertOrientRelation", uno::makeAny(rShape.nVertOrientRelation));
         if (rShape.nWrap != -1)

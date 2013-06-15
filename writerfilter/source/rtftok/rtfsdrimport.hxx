@@ -32,6 +32,7 @@ namespace writerfilter {
                 std::vector<beans::PropertyValue> getTextFrameDefaults(bool bNew);
             private:
                 void createShape(OUString aService, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet);
+                void applyProperty(uno::Reference<drawing::XShape> xShape, OUString aKey, OUString aValue);
 
                 RTFDocumentImpl& m_rImport;
                 uno::Reference<drawing::XDrawPage> m_xDrawPage;
