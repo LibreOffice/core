@@ -697,7 +697,7 @@ sal_Int32 SwSrcView::PrintSource(
 
     String aTitle( GetViewFrame()->GetWindow().GetText() );
 
-    sal_uInt16 nLineHeight = (sal_uInt16) pOutDev->GetTextHeight(); // etwas mehr.
+    sal_uInt16 nLineHeight = (sal_uInt16) pOutDev->GetTextHeight(); // slightly more
     sal_uInt16 nParaSpace = 10;
 
     Size aPaperSz = pOutDev->GetOutputSize();

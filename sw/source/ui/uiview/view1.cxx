@@ -49,17 +49,16 @@ void SwView::Activate(sal_Bool bMDIActivate)
     m_pWrtShell->StartAction();
     m_pWrtShell->EndAction( sal_True );
 
-    // aktuelle View anmelden an der DocShell
-    // die View bleibt solange an der DocShell
-    // aktiv bis Sie zerstoert wird oder durch Activate eine
-    // neue gesetzt wird
+    // Register the current View at the DocShell.
+    // The view remains active at the DocShell until it will
+    // be destroyed or by Activate a new one will be set.
     SwDocShell* pDocSh = GetDocShell();
     if(pDocSh)
         pDocSh->SetView(this);
     SwModule* pSwMod = SW_MOD();
     pSwMod->SetView(this);
 
-    // Dokumentgroesse hat sich geaendert
+    // Document size has changed.
     if(!bDocSzUpdated)
         DocSzChgd(m_aDocSz);
 
@@ -74,7 +73,7 @@ void SwView::Activate(sal_Bool bMDIActivate)
 
     if ( bMDIActivate )
     {
-        m_pWrtShell->ShGetFcs(sal_False);     // Selektionen sichtbar
+        m_pWrtShell->ShGetFcs(sal_False);     // Selections visible
 
         if( m_sSwViewData.Len() )
         {
@@ -84,14 +83,14 @@ void SwView::Activate(sal_Bool bMDIActivate)
 
         AttrChangedNotify(m_pWrtShell);
 
-        // Flddlg ggf neu initialisieren (z.B. fuer TYP_SETVAR)
+        // Initialize Flddlg newly if necessary (e.g. for TYP_SETVAR)
         sal_uInt16 nId = SwFldDlgWrapper::GetChildWindowId();
         SfxViewFrame* pVFrame = GetViewFrame();
         SwFldDlgWrapper *pWrp = (SwFldDlgWrapper*)pVFrame->GetChildWindow(nId);
         if (pWrp)
             pWrp->ReInitDlg(GetDocShell());
 
-        // RedlineDlg ggf neu initialisieren
+        // Initialize RedlineDlg newly if necessary
         nId = SwRedlineAcceptChild::GetChildWindowId();
         SwRedlineAcceptChild *pRed = (SwRedlineAcceptChild*)pVFrame->GetChildWindow(nId);
         if (pRed)
@@ -111,7 +110,7 @@ void SwView::Activate(sal_Bool bMDIActivate)
             pAuthMrk->ReInitDlg(*m_pWrtShell);
     }
     else
-        //Wenigstens das Notify rufen (vorsichtshalber wegen der SlotFilter
+        // At least call the Notify (as a precaution because of the SlotFilter).
         AttrChangedNotify(m_pWrtShell);
 
     SfxViewShell::Activate(bMDIActivate);
@@ -120,13 +119,13 @@ void SwView::Activate(sal_Bool bMDIActivate)
 void SwView::Deactivate(sal_Bool bMDIActivate)
 {
     extern bool bFlushCharBuffer ;
-        // Befinden sich noch Zeichen im Input Buffer?
+        // Are Characters still in the input buffer?
     if( bFlushCharBuffer )
         GetEditWin().FlushInBuffer();
 
     if( bMDIActivate )
     {
-        m_pWrtShell->ShLooseFcs();    // Selektionen unsichtbar
+        m_pWrtShell->ShLooseFcs();    // Selections invisible
 
         m_pHRuler->SetActive( sal_False );
         m_pVRuler->SetActive( sal_False );
