@@ -10,15 +10,17 @@
 $(eval $(call gb_CppunitTest_CppunitTest,vcl_complextext))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,vcl_complextext, \
-    vcl/qa/cppunit/complextext \
+	vcl/qa/cppunit/complextext \
 ))
+
+$(eval $(call gb_CppunitTest_use_externals,vcl_complextext,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_libraries,vcl_complextext, \
 	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
-    svt \
+	svt \
 	test \
 	tl \
 	unotest \
@@ -27,16 +29,16 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_complextext, \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,vcl_complextext,\
-    udkapi \
-    offapi \
+	udkapi \
+	offapi \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,vcl_complextext))
 
 $(eval $(call gb_CppunitTest_use_components,vcl_complextext,\
-    configmgr/source/configmgr \
-    i18npool/util/i18npool \
-    ucb/source/core/ucb1 \
+	configmgr/source/configmgr \
+	i18npool/util/i18npool \
+	ucb/source/core/ucb1 \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_complextext))
