@@ -453,11 +453,11 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                     break;
 
                 case DC_TOKEN( subject ):
-                    m_xDocProp->setSubject( aChars );
+                    m_xDocProp->setSubject( m_xDocProp->getSubject() + aChars );
                     break;
 
                 case DC_TOKEN( title ):
-                    m_xDocProp->setTitle( aChars );
+                    m_xDocProp->setTitle( m_xDocProp->getTitle() + aChars );
                     break;
 
                 default:

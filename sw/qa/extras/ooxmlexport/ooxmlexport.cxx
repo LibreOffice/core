@@ -75,7 +75,7 @@ public:
     void testPageGraphicBackground();
     void testFdo65265();
     void testFdo65655();
-
+    void testFDO63053();
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(run);
@@ -127,6 +127,8 @@ void Test::run()
         {"page-graphic-background.odt", &Test::testPageGraphicBackground},
         {"fdo65265.docx", &Test::testFdo65265},
         {"fdo65655.docx", &Test::testFdo65655},
+        {"fdo63053.docx" , &Test::testFDO63053},
+
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -725,6 +727,13 @@ void Test::testFdo65655()
     CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
     xPropertySet->getPropertyValue("FooterIsShared") >>= bValue;
     CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
+
+void Test::testFDO63053()
+{
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
+    CPPUNIT_ASSERT_EQUAL(OUString("test1&test2"), xDocumentProperties->getTitle());
+    CPPUNIT_ASSERT_EQUAL(OUString("test1&test2"), xDocumentProperties->getSubject());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

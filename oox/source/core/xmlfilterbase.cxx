@@ -450,7 +450,7 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const OUString& sValue )
     if( sValue.isEmpty() )
         return;
     pDoc->startElement( nXmlElement, FSEND );
-    pDoc->write( sValue );
+    pDoc->writeEscaped( sValue );
     pDoc->endElement( nXmlElement );
 }
 
