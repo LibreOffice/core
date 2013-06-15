@@ -114,7 +114,6 @@ public:
     void testN592908_Picture();
     void testN779630();
     void testIndentation();
-    void testWatermark();
     void testPageBorderShadow();
     void testN816593();
     void testN820509();
@@ -200,7 +199,6 @@ void Test::run()
         {"n592908-picture.docx", &Test::testN592908_Picture},
         {"n779630.docx", &Test::testN779630},
         {"indentation.docx", &Test::testIndentation},
-        {"watermark.docx", &Test::testWatermark},
         {"page-border-shadow.docx", &Test::testPageBorderShadow},
         {"n816593.docx", &Test::testN816593},
         {"n820509.docx", &Test::testN820509},
@@ -1392,30 +1390,6 @@ void Test::testIndentation()
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
     // This was RL_TB (e.g. right-to-left).
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, getProperty<sal_Int16>(xPropertySet, "WritingMode"));
-}
-
-void Test::testWatermark()
-{
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
-    // 1st problem: last character was missing
-    CPPUNIT_ASSERT_EQUAL(OUString("SAMPLE"), xShape->getString());
-
-    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xShape, "CustomShapeGeometry");
-    bool bFound = false;
-    for (int i = 0; i < aProps.getLength(); ++i)
-        if (aProps[i].Name == "TextPath")
-            bFound = true;
-    // 2nd problem: v:textpath wasn't imported
-    CPPUNIT_ASSERT_EQUAL(true, bFound);
-
-    // 3rd problem: rotation angle was 315, not 45.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(45 * 100), getProperty<sal_Int32>(xShape, "RotateAngle"));
-
-    // 4th problem: mso-position-vertical-relative:margin was ignored, VertOrientRelation was text::RelOrientation::FRAME.
-    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_PRINT_AREA, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
 }
 
 void Test::testPageBorderShadow()

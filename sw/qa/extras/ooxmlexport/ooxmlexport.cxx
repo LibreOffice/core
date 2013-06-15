@@ -9,10 +9,12 @@
 
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
@@ -76,6 +78,8 @@ public:
     void testFdo65265();
     void testFdo65655();
     void testFDO63053();
+    void testWatermark();
+
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(run);
@@ -128,7 +132,7 @@ void Test::run()
         {"fdo65265.docx", &Test::testFdo65265},
         {"fdo65655.docx", &Test::testFdo65655},
         {"fdo63053.docx" , &Test::testFDO63053},
-
+        {"watermark.docx", &Test::testWatermark},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -735,6 +739,36 @@ void Test::testFDO63053()
     uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
     CPPUNIT_ASSERT_EQUAL(OUString("test1&test2"), xDocumentProperties->getTitle());
     CPPUNIT_ASSERT_EQUAL(OUString("test1&test2"), xDocumentProperties->getSubject());
+}
+
+void Test::testWatermark()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    // 1st problem: last character was missing
+    CPPUNIT_ASSERT_EQUAL(OUString("SAMPLE"), xShape->getString());
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xShape, "CustomShapeGeometry");
+    bool bFound = false;
+    for (int i = 0; i < aProps.getLength(); ++i)
+        if (aProps[i].Name == "TextPath")
+            bFound = true;
+    // 2nd problem: v:textpath wasn't imported
+    CPPUNIT_ASSERT_EQUAL(true, bFound);
+
+    // 3rd problem: rotation angle was 315, not 45.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(45 * 100), getProperty<sal_Int32>(xShape, "RotateAngle"));
+
+    // 4th problem: mso-position-vertical-relative:margin was ignored, VertOrientRelation was text::RelOrientation::FRAME.
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_PRINT_AREA, getProperty<sal_Int16>(xShape, "VertOrientRelation"));
+
+    // These problems were in the exporter
+    // The textpath wasn't semi-transparent.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(50), getProperty<sal_Int16>(xShape, "FillTransparence"));
+    // The textpath had a stroke.
+    CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_NONE, getProperty<drawing::LineStyle>(xShape, "LineStyle"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
