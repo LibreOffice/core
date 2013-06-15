@@ -55,14 +55,18 @@
 - (void) connectionStatusHandler:(NSNotification *)note
 {
     if([[note name] isEqualToString:@"connection.status.connected"]){
-        NSLog(@"Connected");
-        self.transmitter = [[CommandTransmitter alloc] initWithClient:self.client];
-        self.state = CONNECTED;
-        [self.delegate setPinLabelText:[NSString stringWithFormat:@"%@", [self getPairingPin]]];
+        if (self.state!=CONNECTED){
+            NSLog(@"Connected");
+            self.transmitter = [[CommandTransmitter alloc] initWithClient:self.client];
+            self.state = CONNECTED;
+            [self.delegate setPinLabelText:[NSString stringWithFormat:@"%@", [self getPairingPin]]];
+        }
     } else if ([[note name] isEqualToString:@"connection.status.disconnected"]){
-        NSLog(@"Connection Failed");
-        self.state = DISCONNECTED;
-        [self.client disconnect];
+        if (self.state != DISCONNECTED) {
+            NSLog(@"Connection Failed");
+            self.state = DISCONNECTED;
+            [self.client disconnect];            
+        }
     }
 }
 
