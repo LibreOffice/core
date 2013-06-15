@@ -28,7 +28,7 @@ gb_SdiTarget_SVIDLCOMMAND := $(call gb_Executable_get_command,svidl)
 $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi $(gb_SdiTarget_SVIDLDEPS)
 	$(call gb_Output_announce,$*,$(true),SDI,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		mkdir -p $(dir $@) $(dir $(call gb_SdiTarget_get_dep_target,$*)))
+		mkdir -p $(dir $@))
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(dir $<) && \
 		$(gb_SdiTarget_SVIDLCOMMAND) -quiet \
@@ -39,7 +39,7 @@ $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi $(gb_SdiTarget_SVIDLDEPS)
 			-fz$@.sid \
 			-fx$(EXPORTS) \
 			-fm$@ \
-			-fM$(call gb_SdiTarget_get_dep_target,$*) \
+			$(if $(gb_FULLDEPS),-fM$(call gb_SdiTarget_get_dep_target,$*)) \
 			$<)
 
 # rule necessary to rebuild cxx files that include the header
@@ -47,6 +47,12 @@ $(call gb_SdiTarget_get_target,%.hxx) : $(call gb_SdiTarget_get_target,%)
 	@true
 
 ifeq ($(gb_FULLDEPS),$(true))
+$(dir $(call gb_SdiObject_get_dep_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_SdiObject_get_dep_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_SdiTarget_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_SdiTarget_get_target,$*)))
@@ -66,6 +72,7 @@ $(call gb_SdiTarget_get_target,$(1)) : INCLUDE := $$(subst -I. ,-I$$(dir $(SRCDI
 $(call gb_SdiTarget_get_target,$(1)) : EXPORTS := $(SRCDIR)/$(2).sdi
 ifeq ($(gb_FULLDEPS),$(true))
 -include $(call gb_SdiTarget_get_dep_target,$(1))
+$(call gb_SdiTarget_get_dep_target,$(1)) :| $(dir $(call gb_SdiTarget_get_dep_target,$(1))).dir
 endif
 endef
 
