@@ -400,6 +400,9 @@ public:
     Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
     Rectangle           GetItemPosRect( sal_uInt16 nPos ) const;
 
+    /// Returns size of the bitmap / text that is inside this toolbox item.
+    Size                GetItemContentSize( sal_uInt16 nItemId ) const;
+
     /// Retrieves the optimal position to place a popup window for this item (subtoolbar or dropdown)
     Point               GetItemPopupPosition( sal_uInt16 nItemId, const Size& rSize ) const;
 

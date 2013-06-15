@@ -170,6 +170,7 @@ ImplToolItem::ImplToolItem( const ImplToolItem& rItem ) :
         maItemSize              ( rItem.maItemSize ),
         mnSepSize               ( rItem.mnSepSize ),
         mnDropDownArrowWidth    ( rItem.mnDropDownArrowWidth ),
+        maContentSize           ( rItem.maContentSize ),
         meType                  ( rItem.meType ),
         mnBits                  ( rItem.mnBits ),
         meState                 ( rItem.meState ),
@@ -208,6 +209,7 @@ ImplToolItem& ImplToolItem::operator=( const ImplToolItem& rItem )
     maCalcRect              = rItem.maCalcRect;
     mnSepSize               = rItem.mnSepSize;
     mnDropDownArrowWidth    = rItem.mnDropDownArrowWidth;
+    maContentSize           = rItem.maContentSize;
     maMinimalItemSize       = rItem.maMinimalItemSize;
     maItemSize              = rItem.maItemSize;
     mbVisibleText           = rItem.mbVisibleText;
@@ -1237,6 +1239,18 @@ Rectangle ToolBox::GetItemPosRect( sal_uInt16 nPos ) const
         return mpData->m_aItems[nPos].maRect;
     else
         return Rectangle();
+}
+
+Size ToolBox::GetItemContentSize( sal_uInt16 nItemId ) const
+{
+    if ( mbCalc || mbFormat )
+        ((ToolBox*)this)->ImplFormat();
+
+    sal_uInt16 nPos = GetItemPos( nItemId );
+    if ( nPos < mpData->m_aItems.size() )
+        return mpData->m_aItems[nPos].maContentSize;
+    else
+        return Size();
 }
 
 // -----------------------------------------------------------------------

@@ -86,7 +86,9 @@ namespace svx
     void ToolboxButtonColorUpdater::Update( const Color& rColor )
     {
         Image       aImage( mpTbx->GetItemImage( mnBtnId ) );
-        const bool  bSizeChanged = ( maBmpSize != aImage.GetSizePixel() );
+        Size        aItemSize( mpTbx->GetItemContentSize( mnBtnId ) );
+
+        const bool  bSizeChanged = ( maBmpSize != aItemSize );
         const bool  bDisplayModeChanged = ( mbWasHiContrastMode != mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode() );
         Color       aColor( rColor );
 
@@ -96,7 +98,15 @@ namespace svx
 
         if( ( maCurColor != aColor ) || bSizeChanged || bDisplayModeChanged )
         {
-            BitmapEx            aBmpEx( aImage.GetBitmapEx() );
+            // create an empty bitmap, and copy the original bitmap inside
+            // (so that it grows in case the original bitmap was smaller)
+            sal_uInt8 nAlpha = 255;
+            BitmapEx aBmpEx( Bitmap( aItemSize, 24 ), AlphaMask( aItemSize, &nAlpha ) );
+            BitmapEx aSource( aImage.GetBitmapEx() );
+            Rectangle aRect( Point( 0, 0 ),
+                    Size( std::min( aItemSize.Width(), aSource.GetSizePixel().Width() ), std::min( aItemSize.Height(), aSource.GetSizePixel().Height() ) ) );
+            aBmpEx.CopyPixel( aRect, aRect, &aSource );
+
             Bitmap              aBmp( aBmpEx.GetBitmap() );
             BitmapWriteAccess*  pBmpAcc = aBmp.IsEmpty() ? NULL : aBmp.AcquireWriteAccess();
 
@@ -136,12 +146,12 @@ namespace svx
                         maUpdRect.Right() = 73;
                         maUpdRect.Bottom() = 9;
                     }
-                    else if(30 == maBmpSize.Width() && 16 == maBmpSize.Height())
+                    else if(maBmpSize.Width() >= (2 * maBmpSize.Height() - 2) && maBmpSize.Height() >= 16)
                     {
-                        maUpdRect.Left() = 17;
+                        maUpdRect.Left() = maBmpSize.Height() + 2;
                         maUpdRect.Top() = 2;
-                        maUpdRect.Right() = 27;
-                        maUpdRect.Bottom() = 13;
+                        maUpdRect.Right() = maBmpSize.Width() - 3;
+                        maUpdRect.Bottom() = maBmpSize.Height() - 3;
                     }
                     else
                         maUpdRect = Rectangle( Point( 1, maBmpSize.Height() - 7 ), Size( maBmpSize.Width() - 2 ,6 ) );

@@ -1899,6 +1899,9 @@ sal_Bool ToolBox::ImplCalcItem()
                     it->mbEmptyBtn = sal_True;
                 }
 
+                // save the content size
+                it->maContentSize = it->maItemSize;
+
                 // if required, take window height into consideration
                 if ( it->mpWindow )
                 {
@@ -1921,11 +1924,16 @@ sal_Bool ToolBox::ImplCalcItem()
                     long tmp = it->maItemSize.Width();
                     it->maItemSize.Width() = it->maItemSize.Height();
                     it->maItemSize.Height() = tmp;
+
+                    tmp = it->maContentSize.Width();
+                    it->maContentSize.Width() = it->maContentSize.Height();
+                    it->maContentSize.Height() = tmp;
                 }
             }
             else if ( it->meType == TOOLBOXITEM_SPACE )
             {
                 it->maItemSize = Size( nDefWidth, nDefHeight );
+                it->maContentSize = it->maItemSize;
             }
 
             if ( it->meType == TOOLBOXITEM_BUTTON || it->meType == TOOLBOXITEM_SPACE )
@@ -1938,10 +1946,23 @@ sal_Bool ToolBox::ImplCalcItem()
                     long nMinW = std::max(nMinWidth, it->maMinimalItemSize.Width());
                     long nMinH = std::max(nMinHeight, it->maMinimalItemSize.Height());
 
+                    long nGrowContentWidth = 0;
+                    long nGrowContentHeight = 0;
+
                     if( it->maItemSize.Width() < nMinW )
+                    {
+                        nGrowContentWidth = nMinW - it->maItemSize.Width();
                         it->maItemSize.Width() = nMinW;
+                    }
                     if( it->maItemSize.Height() < nMinH )
+                    {
+                        nGrowContentHeight = nMinH - it->maItemSize.Height();
                         it->maItemSize.Height() = nMinH;
+                    }
+
+                    // grow the content size by the additional available space
+                    it->maContentSize.Width() += nGrowContentWidth;
+                    it->maContentSize.Height() += nGrowContentHeight;
                 }
 
                 // keep track of max item size
