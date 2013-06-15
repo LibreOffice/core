@@ -5422,7 +5422,7 @@ void Test::testFunctionLists()
         for (sal_uInt32 j = 0; j < nFuncCount; ++j)
         {
             const formula::IFunctionDescription* pFunc = pCat->getFunction(j);
-            CPPUNIT_ASSERT_MESSAGE("Unexpected function name", pFunc->getFunctionName().equalsAscii(aTests[i].Functions[j]));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected function name", pFunc->getFunctionName(), OUString::createFromAscii(aTests[i].Functions[j]));
         }
     }
 }
