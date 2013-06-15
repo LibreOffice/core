@@ -5877,9 +5877,9 @@ SalLayout* OutputDevice::ImplLayout( const OUString& rOrigStr, sal_Int32 nMinInd
     return pSalLayout;
 }
 
-SalLayout* OutputDevice::getFallbackFontThatFits(ImplFontEntry &rFallbackFont,
+SalLayout* OutputDevice::getFallbackFont(ImplFontEntry &rFallbackFont,
     FontSelectPattern &rFontSelData, int nFallbackLevel,
-    ImplLayoutArgs& rLayoutArgs, const ImplFontMetricData& rOrigMetric) const
+    ImplLayoutArgs& rLayoutArgs) const
 {
     rFallbackFont.mnSetFontFlags = mpGraphics->SetFont( &rFontSelData, nFallbackLevel );
 
@@ -5896,68 +5896,8 @@ SalLayout* OutputDevice::getFallbackFontThatFits(ImplFontEntry &rFallbackFont,
         return NULL;
     }
 
-    Rectangle aBoundRect;
-    bool bHaveBounding = false;
-    Rectangle aRectangle;
-
     pFallback->AdjustLayout( rLayoutArgs );
 
-    // All we care about here is getting the vertical bounds of this text and
-    // make sure it will fit inside the available space
-    Point aPos;
-    for( int nStart = 0;;)
-    {
-        sal_GlyphId nLGlyph;
-        if( !pFallback->GetNextGlyphs( 1, &nLGlyph, aPos, nStart ) )
-            break;
-
-        sal_GlyphId nFontTag = nFallbackLevel << GF_FONTSHIFT;
-        nLGlyph |= nFontTag;
-
-        // get bounding rectangle of individual glyph
-        if( mpGraphics->GetGlyphBoundRect( nLGlyph, aRectangle ) )
-        {
-            // merge rectangle
-            aRectangle += aPos;
-            aBoundRect.Union( aRectangle );
-            bHaveBounding = true;
-        }
-    }
-
-    // Shrink it down if it won't fit
-    if (bHaveBounding)
-    {
-        long  nGlyphsAscent = -aBoundRect.Top();
-        float fScaleTop = nGlyphsAscent > rOrigMetric.mnAscent ?
-            rOrigMetric.mnAscent/(float)nGlyphsAscent : 1;
-        long  nGlyphsDescent = aBoundRect.Bottom();
-        float fScaleBottom = nGlyphsDescent > rOrigMetric.mnDescent ?
-            rOrigMetric.mnDescent/(float)nGlyphsDescent : 1;
-        float fScale = fScaleBottom < fScaleTop ? fScaleBottom : fScaleTop;
-        if (fScale < 1)
-        {
-            long nOrigHeight = rFontSelData.mnHeight;
-            long nNewHeight = static_cast<int>(static_cast<float>(rFontSelData.mnHeight) * fScale);
-
-            if (nNewHeight == nOrigHeight)
-                --nNewHeight;
-
-            pFallback->Release();
-
-            rFontSelData.mnHeight = nNewHeight;
-            rFallbackFont.mnSetFontFlags = mpGraphics->SetFont( &rFontSelData, nFallbackLevel );
-            rFontSelData.mnHeight = nOrigHeight;
-
-            rLayoutArgs.ResetPos();
-            pFallback = mpGraphics->GetTextLayout( rLayoutArgs, nFallbackLevel );
-            if (pFallback && !pFallback->LayoutText(rLayoutArgs))
-            {
-                pFallback->Release();
-                pFallback = NULL;
-            }
-            SAL_WARN_IF(!pFallback, "vcl.gdi", "we couldn't layout text with a smaller point size that worked with a bigger one");
-        }
-    }
     return pFallback;
 }
 
@@ -5979,10 +5919,6 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     OUString aMissingCodes = aMissingCodeBuf.makeStringAndClear();
 
     FontSelectPattern aFontSelData = mpFontEntry->maFontSelData;
-
-    ImplFontMetricData aOrigMetric( aFontSelData );
-    // TODO: use cached metric in fontentry
-    mpGraphics->GetFontMetric( &aOrigMetric );
 
     // when device specific font substitution may have been performed for
     // the originally selected font then make sure that a fallback to that
@@ -6018,8 +5954,8 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
         }
 
         // create and add glyph fallback layout to multilayout
-        SalLayout* pFallback = getFallbackFontThatFits(*pFallbackFont, aFontSelData,
-            nFallbackLevel, rLayoutArgs, aOrigMetric);
+        SalLayout* pFallback = getFallbackFont(*pFallbackFont, aFontSelData,
+            nFallbackLevel, rLayoutArgs);
         if (pFallback)
         {
             if( !pMultiSalLayout )

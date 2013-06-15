@@ -541,9 +541,9 @@ public:
     // Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
     void impPaintLineGeometryWithEvtlExpand(const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon);
 
-    SAL_DLLPRIVATE SalLayout* getFallbackFontThatFits(ImplFontEntry &rFallbackFont,
+    SAL_DLLPRIVATE SalLayout* getFallbackFont(ImplFontEntry &rFallbackFont,
         FontSelectPattern &rFontSelData, int nFallbackLevel,
-        ImplLayoutArgs& rLayoutArgs, const ImplFontMetricData& rOrigMetric) const;
+        ImplLayoutArgs& rLayoutArgs) const;
 protected:
                         OutputDevice();
 
