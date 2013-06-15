@@ -522,7 +522,7 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
             HIThemeBackgroundDrawInfo aThemeBackgroundInfo;
             aThemeBackgroundInfo.version = 0;
             aThemeBackgroundInfo.state = getState( nState );
-            aThemeBackgroundInfo.kind = kThemeBrushDialogBackgroundInactive;
+            aThemeBackgroundInfo.kind = kThemeBrushDialogBackgroundActive;
             // FIXME: without this magical offset there is a 2 pixel black border on the right and bottom
             rc.size.width += 2;
             rc.size.height += 2;
