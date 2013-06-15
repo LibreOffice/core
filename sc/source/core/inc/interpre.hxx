@@ -793,6 +793,8 @@ void ScRightB();
 void ScLeftB();
 void ScMidB();
 
+void ScFilterXML();
+
 static const double fMaxGammaArgument;
 
 double GetGammaContFraction(double fA,double fX);

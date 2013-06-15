@@ -5365,6 +5365,7 @@ void Test::testFunctionLists()
         "DECIMAL",
         "DOLLAR",
         "EXACT",
+        "FILTERXML",
         "FIND",
         "FIXED",
         "JIS",

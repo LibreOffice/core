@@ -4029,6 +4029,7 @@ StackVar ScInterpreter::Interpret()
                 case ocZW               : ScZW();                       break;
                 case ocZZR              : ScZZR();                      break;
                 case ocZins             : ScZins();                     break;
+                case ocFilterXML        : ScFilterXML();                     break;
                 case ocZinsZ            : ScZinsZ();                    break;
                 case ocKapz             : ScKapz();                     break;
                 case ocKumZinsZ         : ScKumZinsZ();                 break;

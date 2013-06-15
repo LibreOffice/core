@@ -407,9 +407,10 @@
 #define SC_OPCODE_RIGHTB            409
 #define SC_OPCODE_LEFTB             410
 #define SC_OPCODE_MIDB              412
-#define SC_OPCODE_LAST_OPCODE_ID    413     /* last OpCode */
+#define SC_OPCODE_FILTERXML         413
+#define SC_OPCODE_LAST_OPCODE_ID    414     /* last OpCode */
 
-#define SC_OPCODE_STOP_FUNCTION     412
+#define SC_OPCODE_STOP_FUNCTION     415
 
 /*** Internal ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9999
