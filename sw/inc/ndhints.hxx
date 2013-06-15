@@ -116,7 +116,7 @@ public:
     inline sal_uInt16 Count() const { return m_HintStarts.size(); }
 
 #ifdef DBG_UTIL
-    bool Check() const;
+    bool Check(bool) const;
 #endif
 };
 

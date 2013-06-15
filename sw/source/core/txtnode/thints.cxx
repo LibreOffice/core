@@ -72,9 +72,11 @@
 #include <map>
 
 #ifdef DBG_UTIL
-#define CHECK    Check();
+#define CHECK           Check(true);
+#define CHECK_NOTMERGED Check(false);
 #else
 #define CHECK
+#define CHECK_NOTMERGED
 #endif
 
 using namespace ::com::sun::star::i18n;
@@ -649,7 +651,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
 
 #ifdef DBG_UTIL
     if( !rNode.GetDoc()->IsInReading() )
-        CHECK;
+        CHECK_NOTMERGED; // ignore flags not set properly yet, don't check them
 #endif
 
     //
@@ -1563,6 +1565,8 @@ void SwTxtNode::DeleteAttributes( const sal_uInt16 nWhich,
                 const SfxPoolItem* pHiddenItem = CharFmt::GetItem( *pTxtHt, RES_CHRATR_HIDDEN );
                 if ( pHiddenItem )
                     SetCalcHiddenCharFlags();
+                // for auto styles DeleteAttributes is only called from Undo
+                // so it shouldn't need to care about ignore start/end flags
             }
 
             xub_StrLen const * const pEndIdx = pTxtHt->GetEnd();
@@ -2306,6 +2310,9 @@ SwTxtNode::impl_FmtToTxtAttr(const SfxItemSet& i_rAttrSet)
         aCurRange = aRange.second;
     }
 
+    // hints were directly inserted, so need to fix the Ignore flags now
+    m_pSwpHints->MergePortions(*this);
+
     // 3. Clear items from the node
     std::vector<sal_uInt16> aClearedIds;
     lcl_FillWhichIds(i_rAttrSet, aClearedIds);
@@ -2497,8 +2504,9 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
     SwpHintsArray::Resort();
 
     bool bRet = false;
-    typedef std::multimap< int, SwTxtAttr* > PortionMap;
+    typedef std::multimap< int, std::pair<SwTxtAttr*, bool> > PortionMap;
     PortionMap aPortionMap;
+    std::map<int, bool> RsidOnlyAutoFmtFlagMap;
     xub_StrLen nLastPorStart = STRING_LEN;
     sal_uInt16 i = 0;
     int nKey = 0;
@@ -2513,14 +2521,45 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
              //RES_TXTATR_INETFMT != pHt->Which() )
             continue;
 
+        bool isRsidOnlyAutoFmt(false);
+        // check for RSID-only AUTOFMT
+        if (RES_TXTATR_AUTOFMT == pHt->Which())
+        {
+            boost::shared_ptr<SfxItemSet> const pSet(
+                    pHt->GetAutoFmt().GetStyleHandle());
+            if ((pSet->Count() == 1) && pSet->GetItem(RES_CHRATR_RSID, false))
+            {
+                // fdo#52028: this one has _only_ RSID => ignore it completely
+                if (!pHt->IsFormatIgnoreStart() || !pHt->IsFormatIgnoreEnd())
+                {
+                    NoteInHistory(pHt);
+                    pHt->SetFormatIgnoreStart(true);
+                    pHt->SetFormatIgnoreEnd  (true);
+                    NoteInHistory(pHt, true);
+                }
+                isRsidOnlyAutoFmt = true;
+            }
+        }
+
+        if (*pHt->GetStart() == *pHt->GetEnd())
+        {
+            // no-length hints are a disease. ignore them here.
+            // the SwAttrIter::SeekFwd will not call Rst/Chg for them.
+            continue;
+        }
+
         const xub_StrLen nPorStart = *pHt->GetStart();
-        if ( nPorStart != nLastPorStart && nLastPorStart != STRING_LEN )
+        if (nPorStart != nLastPorStart)
             ++nKey;
         nLastPorStart = nPorStart;
-        aPortionMap.insert( std::pair< const int, SwTxtAttr* >( nKey, pHt ) );
+        aPortionMap.insert(std::make_pair(nKey,
+                            std::make_pair(pHt, isRsidOnlyAutoFmt)));
+        RsidOnlyAutoFmtFlagMap[nKey] = isRsidOnlyAutoFmt;
     }
 
     // check if portion i can be merged with portion i+1:
+    // note: need to include i=0 to set IgnoreStart and j=nKey+1 to reset
+    // IgnoreEnd at first / last portion
     i = 0;
     int j = i + 1;
     while ( i <= nKey )
@@ -2530,20 +2569,109 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
         PortionMap::iterator aIter1 = aRange1.first;
         PortionMap::iterator aIter2 = aRange2.first;
 
-        bool bMerge = true;
-        const sal_uInt16 nAttributesInPor1  = static_cast<sal_uInt16>(std::distance( aRange1.first, aRange1.second ));
-        const sal_uInt16 nAttributesInPor2  = static_cast<sal_uInt16>(std::distance( aRange2.first, aRange2.second ));
+        enum { MATCH, DIFFER_ONLY_RSID, DIFFER } eMerge(MATCH);
+        size_t const nAttributesInPor1 = std::distance(aRange1.first, aRange1.second);
+        size_t const nAttributesInPor2 = std::distance(aRange2.first, aRange2.second);
+        bool const isRsidOnlyAutoFmt1(RsidOnlyAutoFmtFlagMap[i]);
+        bool const isRsidOnlyAutoFmt2(RsidOnlyAutoFmtFlagMap[j]);
 
-        if ( nAttributesInPor1 == nAttributesInPor2 && nAttributesInPor1 != 0 )
+        // if both have one they could be equal, but not if only one has it
+        bool const bSkipRsidOnlyAutoFmt(nAttributesInPor1 != nAttributesInPor2);
+
+        // this loop needs to handle the case where one has a CHARFMT and the
+        // other CHARFMT + RSID-only AUTOFMT, so...
+        // want to skip over RSID-only AUTOFMT here, hence the -1
+        if ((nAttributesInPor1 - ((isRsidOnlyAutoFmt1) ? 1 : 0)) ==
+            (nAttributesInPor2 - ((isRsidOnlyAutoFmt2) ? 1 : 0))
+            && (nAttributesInPor1 != 0 || nAttributesInPor2 != 0))
         {
-            while ( aIter1 != aRange1.second )
+            // _if_ there is one element more either in aRange1 or aRange2
+            // it _must_ be an RSID-only AUTOFMT, which can be ignored here...
+            // But if both have RSID-only AUTOFMT they could be equal, no skip!
+            while (aIter1 != aRange1.second || aIter2 != aRange2.second)
             {
-                const SwTxtAttr* p1 = (*aIter1).second;
-                const SwTxtAttr* p2 = (*aIter2).second;
-                if ( *p1->GetEnd() < *p2->GetStart() || p1->Which() != p2->Which() || !(*p1 == *p2) )
+                // first of all test if there's no gap (before skipping stuff!)
+                if (aIter1 != aRange1.second && aIter2 != aRange2.second &&
+                    *aIter1->second.first->GetEnd() < *aIter2->second.first->GetStart())
                 {
-                    bMerge = false;
+                    eMerge = DIFFER;
                     break;
+                }
+                // skip it - cannot be equal if bSkipRsidOnlyAutoFmt is set
+                if (bSkipRsidOnlyAutoFmt
+                    && aIter1 != aRange1.second && aIter1->second.second)
+                {
+                    assert(DIFFER != eMerge);
+                    eMerge = DIFFER_ONLY_RSID;
+                    ++aIter1;
+                    continue;
+                }
+                if (bSkipRsidOnlyAutoFmt
+                    && aIter2 != aRange2.second && aIter2->second.second)
+                {
+                    assert(DIFFER != eMerge);
+                    eMerge = DIFFER_ONLY_RSID;
+                    ++aIter2;
+                    continue;
+                }
+                assert(aIter1 != aRange1.second && aIter2 != aRange2.second);
+                SwTxtAttr const*const p1 = aIter1->second.first;
+                SwTxtAttr const*const p2 = aIter2->second.first;
+                if (p1->Which() != p2->Which())
+                {
+                    eMerge = DIFFER;
+                    break;
+                }
+                if (!(*p1 == *p2))
+                {
+                    // fdo#52028: for auto styles, check if they differ only
+                    // in the RSID, which should have no effect on text layout
+                    if (RES_TXTATR_AUTOFMT == p1->Which())
+                    {
+                        SfxItemSet set1(*p1->GetAutoFmt().GetStyleHandle());
+                        SfxItemSet set2(*p2->GetAutoFmt().GetStyleHandle());
+
+                        set1.ClearItem(RES_CHRATR_RSID);
+                        set2.ClearItem(RES_CHRATR_RSID);
+
+                        // sadly SfxItemSet::operator== does not seem to work?
+                        SfxItemIter iter1(set1);
+                        SfxItemIter iter2(set2);
+                        if (set1.Count() == set2.Count())
+                        {
+                            for (SfxPoolItem const* pItem1 = iter1.FirstItem(),
+                                                  * pItem2 = iter2.FirstItem();
+                                 pItem1 && pItem2;
+                                 pItem1 = iter1.NextItem(),
+                                 pItem2 = iter2.NextItem())
+                            {
+                                if (pItem1 != pItem2 ||
+                                    pItem1->Which() != pItem2->Which() ||
+                                    *pItem1 != *pItem2)
+                                {
+                                    eMerge = DIFFER;
+                                    break;
+                                }
+                                if (iter1.IsAtEnd())
+                                {
+                                    assert(iter2.IsAtEnd());
+                                    eMerge = DIFFER_ONLY_RSID;
+                                }
+                            }
+                            if (DIFFER == eMerge)
+                                break; // outer loop too
+                        }
+                        else
+                        {
+                            eMerge = DIFFER;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        eMerge = DIFFER;
+                        break;
+                    }
                 }
                 ++aIter1;
                 ++aIter2;
@@ -2551,16 +2679,18 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
         }
         else
         {
-            bMerge = false;
+            eMerge = DIFFER;
         }
 
-        if ( bMerge )
+        if (MATCH == eMerge)
         {
+            // important: delete second range so any IgnoreStart on the first
+            // range is still valid
             // erase all elements with key i + 1
             xub_StrLen nNewPortionEnd = 0;
             for ( aIter2 = aRange2.first; aIter2 != aRange2.second; ++aIter2 )
             {
-                SwTxtAttr* p2 = (*aIter2).second;
+                SwTxtAttr *const p2 = aIter2->second.first;
                 nNewPortionEnd = *p2->GetEnd();
 
                 const sal_uInt16 nCountBeforeDelete = Count();
@@ -2577,7 +2707,7 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
             aRange1 = aPortionMap.equal_range( i );
             for ( aIter1 = aRange1.first; aIter1 != aRange1.second; ++aIter1 )
             {
-                SwTxtAttr* p1 = (*aIter1).second;
+                SwTxtAttr *const p1 = aIter1->second.first;
                 NoteInHistory( p1 );
                 *p1->GetEnd() = nNewPortionEnd;
                 NoteInHistory( p1, true );
@@ -2586,8 +2716,37 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
         }
         else
         {
-            ++i;
-            j = i + 1;
+            // when not merging the ignore flags need to be either set or reset
+            // (reset too in case one of the autofmts was recently changed)
+            bool const bSetIgnoreFlag(DIFFER_ONLY_RSID == eMerge);
+            for (aIter1 = aRange1.first; aIter1 != aRange1.second; ++aIter1)
+            {
+                if (!aIter1->second.second) // already set above, don't change
+                {
+                    SwTxtAttr *const pCurrent(aIter1->second.first);
+                    if (pCurrent->IsFormatIgnoreEnd() != bSetIgnoreFlag)
+                    {
+                        NoteInHistory(pCurrent);
+                        pCurrent->SetFormatIgnoreEnd(bSetIgnoreFlag);
+                        NoteInHistory(pCurrent, true);
+                    }
+                }
+            }
+            for (aIter2 = aRange2.first; aIter2 != aRange2.second; ++aIter2)
+            {
+                if (!aIter2->second.second) // already set above, don't change
+                {
+                    SwTxtAttr *const pCurrent(aIter2->second.first);
+                    if (pCurrent->IsFormatIgnoreStart() != bSetIgnoreFlag)
+                    {
+                        NoteInHistory(pCurrent);
+                        pCurrent->SetFormatIgnoreStart(bSetIgnoreFlag);
+                        NoteInHistory(pCurrent, true);
+                    }
+                }
+            }
+            i = j; // ++i not enough: i + 1 may have been deleted (MATCH)!
+            ++j;
         }
     }
 
@@ -2676,6 +2835,16 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
     // #i75430# Recalc hidden flags if necessary
     case RES_TXTATR_AUTOFMT:
     {
+        if (*pHint->GetStart() == *pHint->GetEnd())
+        {
+            boost::shared_ptr<SfxItemSet> const pSet(
+                    pHint->GetAutoFmt().GetStyleHandle());
+            if (pSet->Count() == 1 && pSet->GetItem(RES_CHRATR_RSID, false))
+            {   // empty range RSID-only hints could cause trouble, there's no
+                rNode.DestroyAttr(pHint); // need for them so don't insert
+                return false;
+            }
+        }
         // Check if auto style contains hidden attribute:
         const SfxPoolItem* pHiddenItem = CharFmt::GetItem( *pHint, RES_CHRATR_HIDDEN );
         if ( pHiddenItem )
@@ -2974,7 +3143,7 @@ void SwpHints::DeleteAtPos( const sal_uInt16 nPos )
     }
 
     CalcFlags();
-    CHECK;
+    CHECK_NOTMERGED; // called from BuildPortions
 }
 
 // Ist der Hint schon bekannt, dann suche die Position und loesche ihn.

@@ -95,7 +95,7 @@ TYPEINIT1( SwTxtNode, SwCntntNode )
 #ifdef DBG_UTIL
 #define CHECK_SWPHINTS(pNd)  { if( pNd->GetpSwpHints() && \
                                    !pNd->GetDoc()->IsInReading() ) \
-                                  pNd->GetpSwpHints()->Check(); }
+                                  pNd->GetpSwpHints()->Check(true); }
 #else
 #define CHECK_SWPHINTS(pNd)
 #endif
@@ -263,6 +263,12 @@ SwTxtNode::~SwTxtNode()
 
 SwCntntFrm *SwTxtNode::MakeFrm( SwFrm* pSib )
 {
+    // fdo#52028: ODF file import does not result in MergePortions being called
+    // for every attribute, since that would be inefficient.  So call it here.
+    if (m_pSwpHints)
+    {
+        m_pSwpHints->MergePortions(*this);
+    }
     SwCntntFrm *pFrm = new SwTxtFrm( this, pSib );
     return pFrm;
 }
@@ -883,6 +889,7 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
         {
             bool bNoExp = false;
             bool bResort = false;
+            bool bMergePortionsNeeded = false;
             const sal_uInt16 coArrSz = static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
                                    static_cast<sal_uInt16>(RES_CHRATR_BEGIN);
 
@@ -929,6 +936,11 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
                         {
                             pHint->SetDontExpand( false );
                             bResort = true;
+                            // could have a continuation with IgnoreStart()...
+                            if (pHint->IsFormatIgnoreEnd())
+                            {
+                                bMergePortionsNeeded = true;
+                            }
                             if ( pHint->IsCharFmtAttr() )
                             {
                                 bNoExp = true;
@@ -969,7 +981,11 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
                     }
                 }
             }
-            if ( bResort )
+            if (bMergePortionsNeeded)
+            {
+                m_pSwpHints->MergePortions(*this); // does Resort too
+            }
+            else if (bResort)
             {
                 m_pSwpHints->Resort();
             }
@@ -1745,6 +1761,7 @@ OUString SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
 
     if ( HasHints() )
     {
+        bool bMergePortionsNeeded(false);
         for ( sal_uInt16 i = 0; i < m_pSwpHints->Count() &&
                 rIdx >= *(*m_pSwpHints)[i]->GetStart(); ++i )
         {
@@ -1764,6 +1781,14 @@ OUString SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
                         *pHt->GetStart() = *pHt->GetStart() - nLen;
                     *pEndIdx = *pEndIdx - nLen;
                     m_pSwpHints->DeleteAtPos(i);
+                    // could be that pHt has IsFormatIgnoreEnd set, and it's
+                    // not a RSID-only hint - now we have the inserted text
+                    // between pHt and its continuation... which we don't know.
+                    // punt the job to MergePortions below.
+                    if (pHt->IsFormatIgnoreEnd())
+                    {
+                        bMergePortionsNeeded = true;
+                    }
                     InsertHint( pHt, nsSetAttrMode::SETATTR_NOHINTADJUST );
                 }
                 // empty hints at insert position?
@@ -1792,8 +1817,13 @@ OUString SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
                 // Kein Feld, am Absatzanfang, HintExpand
                 m_pSwpHints->DeleteAtPos(i);
                 *pHt->GetStart() = *pHt->GetStart() - nLen;
+                // no effect on format ignore flags here (para start)
                 InsertHint( pHt, nsSetAttrMode::SETATTR_NOHINTADJUST );
             }
+        }
+        if (bMergePortionsNeeded)
+        {
+            m_pSwpHints->MergePortions(*this);
         }
         TryDeleteSwpHints();
     }
@@ -2042,6 +2072,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         // 2. Attribute verschieben
         // durch das Attribute-Array, bis der Anfang des Geltungsbereiches
         // des Attributs hinter dem zu verschiebenden Bereich liegt
+        bool bMergePortionsNeeded(false);
         sal_uInt16 nAttrCnt = 0;
         while ( m_pSwpHints && (nAttrCnt < m_pSwpHints->Count()) )
         {
@@ -2085,6 +2116,10 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
                     // Attribut verschieben
                     m_pSwpHints->Delete( pHt );
                     // die Start/End Indicies neu setzen
+                    if (pHt->IsFormatIgnoreStart() || pHt->IsFormatIgnoreEnd())
+                    {
+                        bMergePortionsNeeded = true;
+                    }
                     *pHt->GetStart() =
                             nDestStart + (nAttrStartIdx - nTxtStartIdx);
                     if( pEndIdx )
@@ -2162,6 +2197,11 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         else
         {
             Update( rStart, nLen, sal_True, sal_True );
+        }
+
+        if (bMergePortionsNeeded)
+        {
+            m_pSwpHints->MergePortions(*this);
         }
 
         CHECK_SWPHINTS(this);

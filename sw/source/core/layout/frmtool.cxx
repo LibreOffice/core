@@ -1277,8 +1277,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         if ( pNd->IsCntntNode() )
         {
             SwCntntNode* pNode = (SwCntntNode*)pNd;
-            pFrm = pNode->IsTxtNode() ? new SwTxtFrm( (SwTxtNode*)pNode, pLay ) :
-                                        pNode->MakeFrm( pLay );
+            pFrm = pNode->MakeFrm(pLay);
             if( pPageMaker )
                 pPageMaker->CheckInsert( nIndex );
 
