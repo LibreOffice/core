@@ -201,6 +201,9 @@
     <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="52">
       <FormatCode>[NatNum1]YYYY/MM/DD</FormatCode>
     </FormatElement>
+    <FormatElement msgid="FixedFormatskey7" default="false" type="medium" usage="FIXED_NUMBER" formatindex="53">
+      <FormatCode>[NatNum1]General</FormatCode>
+    </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION ref="en_US" />
   <LC_SEARCH ref="en_US"/>
