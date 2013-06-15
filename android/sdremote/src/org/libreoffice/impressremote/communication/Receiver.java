@@ -8,7 +8,7 @@
  */
 package org.libreoffice.impressremote.communication;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,106 +16,133 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
 
 public class Receiver {
-
-    public Receiver(Context aContext) {
-        mContext = aContext;
-        mSlideShow = new SlideShow(mContext);
-    }
-
-    private Context mContext;
+    private final Context mContext;
 
     private SlideShow mSlideShow;
+
+    public Receiver(Context aContext) {
+        this.mContext = aContext;
+        this.mSlideShow = new SlideShow(mContext);
+    }
 
     public SlideShow getSlideShow() {
         return mSlideShow;
     }
 
     public boolean isSlideShowRunning() {
-        return (mSlideShow.getSize() > 0);
+        return mSlideShow.getSlidesCount() > 0;
     }
 
-    public void parseCommand(ArrayList<String> aCommand) {
-        if (aCommand.size() == 0)
-            return; // E.g. if empty line received for whatever reason.
-        String aInstruction = aCommand.get(0);
-        if (aInstruction.equals("slideshow_started")) {
-            int aSlideShowlength = Integer.parseInt(aCommand.get(1));
-            int aCurrentSlide = Integer.parseInt(aCommand.get(2));
-            mSlideShow.setLength(aSlideShowlength);
-            mSlideShow.setCurrentSlide(aCurrentSlide);
-            //            Intent aIntent = new Intent(mContext.getApplicationContext(),
-            //                            PresentationActivity.class);
-            //            aIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //            aIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            //            mContext.getApplicationContext().startActivity(aIntent);
-            Intent aIntent = new Intent(
-                            CommunicationService.STATUS_CONNECTED_SLIDESHOW_RUNNING);
-            LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
-            aIntent = new Intent(
-                     CommunicationService.MSG_SLIDE_CHANGED);
-            aIntent.putExtra("slide_number", aCurrentSlide);
-            LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
-        } else if (aInstruction.equals("slideshow_finished")) {
-            mSlideShow = new SlideShow(mContext);
-            //            Intent aIntent = new Intent(mContext.getApplicationContext(),
-            //                            StartPresentationActivity.class);
-            //            aIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            //            aIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            //            mContext.getApplicationContext().startActivity(aIntent);
-            Intent aIntent = new Intent(
-                            CommunicationService.STATUS_CONNECTED_NOSLIDESHOW);
-            LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
-        } else {
-            if (mSlideShow == null)
-                return;
-
-            if (aInstruction.equals("slide_updated")) {
-
-                int aSlideNumber = Integer.parseInt(aCommand.get(1));
-
-                mSlideShow.setCurrentSlide(aSlideNumber);
-
-                Intent aIntent = new Intent(
-                                CommunicationService.MSG_SLIDE_CHANGED);
-                aIntent.putExtra("slide_number", aSlideNumber);
-                LocalBroadcastManager.getInstance(mContext).sendBroadcast(
-                                aIntent);
-            } else if (aInstruction.equals("slide_preview")) {
-                int aSlideNumber = Integer.parseInt(aCommand.get(1));
-                String aImageString = aCommand.get(2);
-                try {
-                    byte[] aImage = Base64.decode(aImageString, Base64.DEFAULT);
-
-                    // Store image internally
-                    mSlideShow.putImage(aSlideNumber, aImage);
-
-                    Intent aIntent = new Intent(
-                        CommunicationService.MSG_SLIDE_PREVIEW);
-                    aIntent.putExtra("slide_number", aSlideNumber);
-                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(
-                        aIntent);
-                } catch (IllegalArgumentException e) {
-                    // Bad data - tough luck
-                }
-            } else if (aInstruction.equals("slide_notes")) {
-                int aSlideNumber = Integer.parseInt(aCommand.get(1));
-                StringBuilder aNotes = new StringBuilder();
-                for (int i = 2; i < aCommand.size(); i++) {
-                    aNotes.append(aCommand.get(i));
-                }
-
-                // Store image internally
-                mSlideShow.putNotes(aSlideNumber, aNotes.toString());
-
-                Intent aIntent = new Intent(
-                                CommunicationService.MSG_SLIDE_NOTES);
-                aIntent.putExtra("slide_number", aSlideNumber);
-                LocalBroadcastManager.getInstance(mContext).sendBroadcast(
-                                aIntent);
-            }
-
+    public void parseCommand(List<String> aInstruction) {
+        if (aInstruction.isEmpty()) {
+            return;
         }
 
+        String aCommand = aInstruction.get(0);
+
+        if (aCommand.equals(Protocol.Messages.SLIDESHOW_STARTED)) {
+            startSlideShow(aInstruction);
+            return;
+        }
+
+        if (aCommand.equals(Protocol.Messages.SLIDESHOW_FINISHED)) {
+            finishSlideShow();
+            return;
+        }
+
+        if (mSlideShow == null) {
+            return;
+        }
+
+        if (aCommand.equals(Protocol.Messages.SLIDE_UPDATED)) {
+            setUpCurrentSlide(aInstruction);
+            return;
+        }
+
+        if (aCommand.equals(Protocol.Messages.SLIDE_PREVIEW)) {
+            setUpSlidePreview(aInstruction);
+            return;
+        }
+
+        if (aCommand.equals(Protocol.Messages.SLIDE_NOTES)) {
+            setUpSlideNotes(aInstruction);
+        }
+    }
+
+    private void startSlideShow(List<String> aInstruction) {
+        int aSlideShowSlidesCount = Integer.parseInt(aInstruction.get(1));
+        int aCurrentSlideIndex = Integer.parseInt(aInstruction.get(2));
+
+        mSlideShow.setSlidesCount(aSlideShowSlidesCount);
+        mSlideShow.setCurrentSlideIndex(aCurrentSlideIndex);
+
+        Intent aStatusConnectedSlideShowRunningIntent = new Intent(
+            CommunicationService.STATUS_CONNECTED_SLIDESHOW_RUNNING);
+        Intent aSlideChangedIntent = new Intent(
+            CommunicationService.MSG_SLIDE_CHANGED);
+        aSlideChangedIntent.putExtra("slide_number", aCurrentSlideIndex);
+
+        LocalBroadcastManager.getInstance(mContext)
+            .sendBroadcast(aStatusConnectedSlideShowRunningIntent);
+        LocalBroadcastManager.getInstance(mContext)
+            .sendBroadcast(aSlideChangedIntent);
+    }
+
+    private void finishSlideShow() {
+        this.mSlideShow = new SlideShow(mContext);
+
+        Intent aStatusConnectedNoSlideShowIntent = new Intent(
+            CommunicationService.STATUS_CONNECTED_NOSLIDESHOW);
+
+        LocalBroadcastManager.getInstance(mContext)
+            .sendBroadcast(aStatusConnectedNoSlideShowIntent);
+    }
+
+    private void setUpCurrentSlide(List<String> aInstruction) {
+        int aCurrentSlideIndex = Integer.parseInt(aInstruction.get(1));
+
+        mSlideShow.setCurrentSlideIndex(aCurrentSlideIndex);
+
+        Intent aSlideChangedIntent = new Intent(
+            CommunicationService.MSG_SLIDE_CHANGED);
+        aSlideChangedIntent.putExtra("slide_number", aCurrentSlideIndex);
+
+        LocalBroadcastManager.getInstance(mContext)
+            .sendBroadcast(aSlideChangedIntent);
+    }
+
+    private void setUpSlidePreview(List<String> aInstruction) {
+        int aSlideIndex = Integer.parseInt(aInstruction.get(1));
+        String aImageAsString = aInstruction.get(2);
+
+        byte[] aImage = Base64.decode(aImageAsString, Base64.DEFAULT);
+        mSlideShow.setSlidePreview(aSlideIndex, aImage);
+
+        Intent aSlidePreviewChangedIntent = new Intent(
+            CommunicationService.MSG_SLIDE_PREVIEW);
+        aSlidePreviewChangedIntent.putExtra("slide_number", aSlideIndex);
+
+        LocalBroadcastManager.getInstance(mContext)
+            .sendBroadcast(aSlidePreviewChangedIntent);
+    }
+
+    private void setUpSlideNotes(List<String> aInstruction) {
+        int aSlideIndex = Integer.parseInt(aInstruction.get(1));
+        StringBuilder aNotesBuilder = new StringBuilder();
+        for (int aNoteIndex = 2; aNoteIndex < aInstruction
+            .size(); aNoteIndex++) {
+            aNotesBuilder.append(aInstruction.get(aNoteIndex));
+        }
+        String aNotes = aNotesBuilder.toString();
+
+        mSlideShow.setSlideNotes(aSlideIndex, aNotes);
+
+        Intent aSlideNotesChangedIntent = new Intent(
+            CommunicationService.MSG_SLIDE_NOTES);
+        aSlideNotesChangedIntent.putExtra("slide_number", aSlideIndex);
+
+        LocalBroadcastManager.getInstance(mContext)
+            .sendBroadcast(aSlideNotesChangedIntent);
     }
 }
 

@@ -39,8 +39,8 @@ public class BlankScreenFragment extends SherlockFragment {
         View v = inflater.inflate(R.layout.fragment_blankscreen, container,
                         false);
 
-        Bitmap aBitmap = mCommunicationService.getSlideShow().getImage(
-                        mCommunicationService.getSlideShow().getCurrentSlide());
+        Bitmap aBitmap = mCommunicationService.getSlideShow().getSlidePreview(
+            mCommunicationService.getSlideShow().getCurrentSlideIndex());
 
         // Process the image
         final int borderWidth = 8;
@@ -74,14 +74,14 @@ public class BlankScreenFragment extends SherlockFragment {
         v.findViewById(R.id.blankscreen_slidepreview).setOnClickListener(
                         aListener);
         v.findViewById(R.id.blankscreen_return).setOnClickListener(aListener);
-        mCommunicationService.getTransmitter().blankScreen();
+        mCommunicationService.getTransmitter().setUpBlankScreen();
         return v;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mCommunicationService.getTransmitter().resume();
+        mCommunicationService.getTransmitter().resumePresentation();
     }
 }
 

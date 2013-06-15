@@ -127,12 +127,12 @@ public class PresentationActivity extends SherlockFragmentActivity {
             switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
                 if (action == KeyEvent.ACTION_UP) {
-                    mCommunicationService.getTransmitter().nextTransition();
+                    mCommunicationService.getTransmitter().performNextTransition();
                 }
                 return true;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
                 if (action == KeyEvent.ACTION_DOWN) {
-                    mCommunicationService.getTransmitter().previousTransition();
+                    mCommunicationService.getTransmitter().performPreviousTransition();
                 }
                 return true;
             }

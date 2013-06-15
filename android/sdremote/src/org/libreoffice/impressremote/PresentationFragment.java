@@ -66,12 +66,12 @@ public class PresentationFragment extends SherlockFragment {
                 mTopView.setAdapter(new ThumbnailAdapter(mContext,
                                 mCommunicationService.getSlideShow()));
                 mTopView.setSelection(mCommunicationService.getSlideShow()
-                                .getCurrentSlide(), true);
+                                .getCurrentSlideIndex(), true);
                 mTopView.setOnItemSelectedListener(new ClickListener());
             }
 
             updateSlideNumberDisplay(mCommunicationService.getSlideShow()
-                            .getCurrentSlide());
+                            .getCurrentSlideIndex());
 
         }
 
@@ -151,9 +151,9 @@ public class PresentationFragment extends SherlockFragment {
     private void updateSlideNumberDisplay(int aPosition) {
         //        int aSlide = mCommunicationService.getSlideShow().getCurrentSlide();
         mNumberText.setText((aPosition + 1) + "/"
-                        + mCommunicationService.getSlideShow().getSize());
+                        + mCommunicationService.getSlideShow().getSlidesCount());
         mNotes.loadDataWithBaseURL(null, mCommunicationService.getSlideShow()
-                        .getNotes(aPosition), "text/html", "UTF-8", null);
+                        .getSlideNotes(aPosition), "text/html", "UTF-8", null);
     }
 
     // -------------------------------------------------- RESIZING LISTENER ----
@@ -241,7 +241,8 @@ public class PresentationFragment extends SherlockFragment {
         public void onItemSelected(AdapterView<?> arg0, View arg1,
                         int aPosition, long arg3) {
             if (mCommunicationService != null)
-                mCommunicationService.getTransmitter().gotoSlide(aPosition);
+                mCommunicationService.getTransmitter().setCurrentSlide(
+                    aPosition);
             lastUpdateTime = System.currentTimeMillis();
             updateSlideNumberDisplay(aPosition);
         }
@@ -278,7 +279,7 @@ public class PresentationFragment extends SherlockFragment {
                 int aPosition = aIntent.getExtras().getInt("slide_number");
                 if ( aPosition == mTopView.getSelectedItemPosition() ) {
                     mNotes.loadDataWithBaseURL(null, mCommunicationService.getSlideShow()
-                                    .getNotes(aPosition), "text/html", "UTF-8", null);
+                                    .getSlideNotes(aPosition), "text/html", "UTF-8", null);
                 }
             }
 
@@ -297,12 +298,12 @@ public class PresentationFragment extends SherlockFragment {
 
         @Override
         public int getCount() {
-            return mSlideShow.getSize();
+            return mSlideShow.getSlidesCount();
         }
 
         @Override
         protected Bitmap createBitmap(int position) {
-            return mSlideShow.getImage(position);
+            return mSlideShow.getSlidePreview(position);
         }
     }
 }

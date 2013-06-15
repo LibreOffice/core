@@ -125,7 +125,7 @@ public class ThumbnailFragment extends SherlockFragment {
         public void onItemClick(AdapterView<?> parent, View v, int position,
                         long id) {
             if (mCommunicationService != null)
-                mCommunicationService.getTransmitter().gotoSlide(position);
+                mCommunicationService.getTransmitter().setCurrentSlide(position);
         }
     }
 
@@ -172,7 +172,7 @@ public class ThumbnailFragment extends SherlockFragment {
 
         @Override
         public int getCount() {
-            return mSlideShow.getSize();
+            return mSlideShow.getSlidesCount();
         }
 
         @Override
@@ -201,7 +201,7 @@ public class ThumbnailFragment extends SherlockFragment {
                             aBorderWidth);
 
             if ((mSlideShow != null)
-                            && (position == mSlideShow.getCurrentSlide())) {
+                            && (position == mSlideShow.getCurrentSlideIndex())) {
                 formatSelected(aImage, aText);
                 mCurrentImage = aImage;
                 mCurrentText = aText;
@@ -209,7 +209,7 @@ public class ThumbnailFragment extends SherlockFragment {
                 formatUnselected(aImage, aText);
             }
 
-            Bitmap aBitmap = mSlideShow.getImage(position);
+            Bitmap aBitmap = mSlideShow.getSlidePreview(position);
             // Width
             int aWidth = (mGrid.getWidth()) / 3 - 20;
             aImage.setMaxWidth(aWidth);

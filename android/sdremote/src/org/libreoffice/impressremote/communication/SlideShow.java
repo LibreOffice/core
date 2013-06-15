@@ -8,8 +8,6 @@
  */
 package org.libreoffice.impressremote.communication;
 
-import org.libreoffice.impressremote.R;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,69 +17,79 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.SparseArray;
 
+import org.libreoffice.impressremote.R;
+
 
 public class SlideShow {
+    private final Context mContext;
 
-    private SparseArray<Bitmap> mPreviews = new SparseArray<Bitmap>();
-    private SparseArray<String> mNotes = new SparseArray<String>();
+    private int mSlidesCount;
+    private int mCurrentSlideIndex;
 
-    private int mSize = 0;
-    private int mCurrentSlide = 0;
-    private Context mContext;
+    private final SparseArray<Bitmap> mSlidePreviews;
+    private final SparseArray<String> mSlideNotes;
 
-    protected SlideShow(Context aContext) {
-        mContext = aContext;
+    public SlideShow(Context aContext) {
+        this.mContext = aContext;
+
+        this.mSlidesCount = 0;
+        this.mCurrentSlideIndex = 0;
+
+        this.mSlidePreviews = new SparseArray<Bitmap>();
+        this.mSlideNotes = new SparseArray<String>();
     }
 
-    protected void setLength(int aSize) {
-        mSize = aSize;
+    public void setSlidesCount(int aSlidesCount) {
+        this.mSlidesCount = aSlidesCount;
     }
 
-    public int getSize() {
-        return mSize;
+    public int getSlidesCount() {
+        return mSlidesCount;
     }
 
-    public int getCurrentSlide() {
-        return mCurrentSlide;
+    public void setCurrentSlideIndex(int aCurrentSlideIndex) {
+        this.mCurrentSlideIndex = aCurrentSlideIndex;
     }
 
-    protected void setCurrentSlide(int aSlide) {
-        mCurrentSlide = aSlide;
+    public int getCurrentSlideIndex() {
+        return mCurrentSlideIndex;
     }
 
-    protected void putImage(int aSlide, byte[] aImage) {
-        Bitmap aBitmap = BitmapFactory.decodeByteArray(aImage, 0, aImage.length);
+    public void setSlidePreview(int aSlideIndex, byte[] aSlidePreview) {
+        Bitmap aBitmap = BitmapFactory
+            .decodeByteArray(aSlidePreview, 0, aSlidePreview.length);
         final int borderWidth = 8;
 
         Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
         p.setShadowLayer(borderWidth, 0, 0, Color.BLACK);
 
         RectF aRect = new RectF(borderWidth, borderWidth, borderWidth
-                        + aBitmap.getWidth(), borderWidth
-                        + aBitmap.getHeight());
+            + aBitmap.getWidth(), borderWidth
+            + aBitmap.getHeight());
         Bitmap aOut = Bitmap.createBitmap(aBitmap.getWidth() + 2
-                        * borderWidth, aBitmap.getHeight() + 2
-                        * borderWidth, aBitmap.getConfig());
+            * borderWidth, aBitmap.getHeight() + 2
+            * borderWidth, aBitmap.getConfig());
         Canvas canvas = new Canvas(aOut);
         canvas.drawColor(mContext.getResources().getColor(R.color.light_grey));
         canvas.drawRect(aRect, p);
         canvas.drawBitmap(aBitmap, null, aRect, null);
 
-        mPreviews.put(aSlide, aOut);
+        mSlidePreviews.put(aSlideIndex, aOut);
     }
 
-    public Bitmap getImage(int aSlide) {
-        return mPreviews.get(aSlide);
+    public Bitmap getSlidePreview(int aSlideIndex) {
+        return mSlidePreviews.get(aSlideIndex);
     }
 
-    protected void putNotes(int aSlide, String aNotes) {
-        mNotes.put(aSlide, aNotes);
+    public void setSlideNotes(int aSlideIndex, String aSlideNotes) {
+        mSlideNotes.put(aSlideIndex, aSlideNotes);
     }
 
-    public String getNotes(int aSlide) {
-        String aNote = mNotes.get(aSlide);
-        if (aNote != null) {
-            return aNote;
+    public String getSlideNotes(int aSlideIndex) {
+        String aSlideNotes = mSlideNotes.get(aSlideIndex);
+
+        if (aSlideNotes != null) {
+            return aSlideNotes;
         } else {
             return "";
         }
@@ -97,7 +105,7 @@ public class SlideShow {
     public class Timer {
         /**
          * This stores the starting time of the timer if running.
-         *
+         * <p/>
          * If paused this stores how long the timer was previously running.
          */
         private long aTime = 0;
@@ -110,8 +118,8 @@ public class SlideShow {
 
         /**
          * Set whether this timer should be a normal or a countdown timer.
-         * @param aIsCountdown
-         *     Whether this should be a countdown timer.
+         *
+         * @param aIsCountdown Whether this should be a countdown timer.
          */
         public void setCountdown(boolean aIsCountdown) {
             mIsCountdown = aIsCountdown;
@@ -124,8 +132,8 @@ public class SlideShow {
         /**
          * Set the countdown time. Can be set, and isn't lost, whatever mode
          * the timer is running in.
-         * @param aCountdownTime
-         *      The countdown time.
+         *
+         * @param aCountdownTime The countdown time.
          */
         public void setCountdownTime(long aCountdownTime) {
             mCountdownTime = aCountdownTime;
@@ -170,6 +178,7 @@ public class SlideShow {
         /**
          * Get either how long this timer has been running, or how long the
          * timer still has left to run.
+         *
          * @return
          */
         public long getTimeMillis() {

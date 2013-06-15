@@ -12,27 +12,28 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Server implements Parcelable {
+    private static final int SPECIAL_PARCELABLE_OBJECTS_BITMASK = 0;
 
-    public enum Protocol {
+    public static enum Protocol {
         NETWORK, BLUETOOTH
     }
 
-    private Protocol mProtocol;
-    private String mAddress;
-    private String mName;
-    private long mTimeDiscovered;
+    private final Protocol mProtocol;
+    private final String mAddress;
+    private final String mName;
+    private final long mTimeDiscovered;
+
     /**
      * Signifies a Server that shouldn't be automatically removed from the list.
      * Used e.g. for the emulator.
      */
     protected boolean mNoTimeout = false;
 
-    protected Server(Protocol aProtocol, String aAddress, String aName,
-                    long aTimeDiscovered) {
-        mProtocol = aProtocol;
-        mAddress = aAddress;
-        mName = aName;
-        mTimeDiscovered = aTimeDiscovered;
+    protected Server(Protocol aProtocol, String aAddress, String aName, long aTimeDiscovered) {
+        this.mProtocol = aProtocol;
+        this.mAddress = aAddress;
+        this.mName = aName;
+        this.mTimeDiscovered = aTimeDiscovered;
     }
 
     public Protocol getProtocol() {
@@ -43,11 +44,6 @@ public class Server implements Parcelable {
         return mAddress;
     }
 
-    /**
-     * Get a human friendly name for the server.
-     *
-     * @return The name.
-     */
     public String getName() {
         return mName;
     }
@@ -57,25 +53,26 @@ public class Server implements Parcelable {
     }
 
     public String toString() {
-        return getClass().getName() + '@' + Integer.toHexString(hashCode()) + ":{" + mAddress + "," + mName + "}";
+        return getClass().getName() + '@' + Integer
+            .toHexString(hashCode()) + ":{" + mAddress + "," + mName + "}";
     }
 
     @Override
     public int describeContents() {
-        return 0;
+        return SPECIAL_PARCELABLE_OBJECTS_BITMASK;
     }
 
     @Override
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeString(mAddress);
-        out.writeString(mName);
-        out.writeString(mProtocol.name());
-        out.writeLong(mTimeDiscovered);
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeString(mAddress);
+        parcel.writeString(mName);
+        parcel.writeString(mProtocol.name());
+        parcel.writeLong(mTimeDiscovered);
     }
 
     public static final Parcelable.Creator<Server> CREATOR = new Parcelable.Creator<Server>() {
-        public Server createFromParcel(Parcel in) {
-            return new Server(in);
+        public Server createFromParcel(Parcel parcel) {
+            return new Server(parcel);
         }
 
         public Server[] newArray(int size) {
@@ -83,11 +80,11 @@ public class Server implements Parcelable {
         }
     };
 
-    private Server(Parcel in) {
-        mAddress = in.readString();
-        mName = in.readString();
-        mProtocol = Protocol.valueOf(in.readString());
-        mTimeDiscovered = in.readLong();
+    private Server(Parcel parcel) {
+        this.mAddress = parcel.readString();
+        this.mName = parcel.readString();
+        this.mProtocol = Protocol.valueOf(parcel.readString());
+        this.mTimeDiscovered = parcel.readLong();
     }
 }
 
