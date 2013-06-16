@@ -107,35 +107,46 @@ void ScInterpreter::ScFilterXML()
                             aResult = OUString::createFromAscii((char*)pChar2.get());
                         }
                     }
+                    else
+                    {
+                        PushError( errNoValue );
+                        return;
+                    }
                 }
+                PushString(aResult);
                 break;
             case XPATH_BOOLEAN:
-                assert(false);
+                {
+                    bool bVal = pXPathObj->boolval != 0;
+                    PushDouble(bVal);
+                }
                 break;
             case XPATH_NUMBER:
-                assert(false);
+                {
+                    double fVal = pXPathObj->floatval;
+                    PushDouble(fVal);
+                }
                 break;
             case XPATH_STRING:
-                assert(false);
+                PushString(OUString::createFromAscii((char*)pXPathObj->stringval));
                 break;
             case XPATH_POINT:
-                assert(false);
+                PushNoValue();
                 break;
             case XPATH_RANGE:
-                assert(false);
+                PushNoValue();
                 break;
             case XPATH_LOCATIONSET:
-                assert(false);
+                PushNoValue();
                 break;
             case XPATH_USERS:
-                assert(false);
+                PushNoValue();
                 break;
             case XPATH_XSLT_TREE:
-                assert(false);
+                PushNoValue();
                 break;
 
         }
-        PushString(aResult);
     }
 }
 
