@@ -54,6 +54,14 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 ))
 endif
 
+ifeq ($(ENABLE_OPENCL),TRUE)
+$(eval $(call gb_Library_use_externals,sc,opencl))
+
+$(eval $(call gb_Library_add_exception_objects,sc,\
+	sc/source/core/opencl/openclwrapper \
+))
+endif
+
 $(eval $(call gb_Library_use_libraries,sc,\
 	avmedia \
 	basegfx \
