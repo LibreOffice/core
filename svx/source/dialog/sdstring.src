@@ -138,6 +138,22 @@ String RID_SVXSTR_ORANGE
 {
     Text [ en-US ] = "Orange" ;
 };
+String RID_SVXSTR_CYAN2
+{
+    Text [ en-US ] = "Cyan" ;
+};
+String RID_SVXSTR_YELLOW_GREEN
+{
+    Text [ en-US ] = "Yellow Green" ;
+};
+String RID_SVXSTR_SKY_BLUE
+{
+    Text [ en-US ] = "Sky Blue" ;
+};
+String RID_SVXSTR_PINK
+{
+    Text [ en-US ] = "Pink" ;
+};
 String RID_SVXSTR_ARROW
 {
     Text [ en-US ] = "Arrow" ;
@@ -495,6 +511,22 @@ String RID_SVXSTR_COLOR_SUN_DEF
 {
     // attention: this is the color string for the Sun Microsystems specific colors !!!
     Text = "Sun";
+};
+String RID_SVXSTR_CYAN2_DEF
+{
+    Text = "Cyan" ;
+};
+String RID_SVXSTR_YELLOW_GREEN_DEF
+{
+    Text = "Yellow Green" ;
+};
+String RID_SVXSTR_SKY_BLUE_DEF
+{
+    Text = "Sky Blue" ;
+};
+String RID_SVXSTR_PINK_DEF
+{
+    Text = "Pink" ;
 };
 /* do not translate */
 String RID_SVXSTR_COLOR_CHART_DEF
