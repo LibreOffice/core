@@ -146,58 +146,58 @@ int macxp_resolveAlias(char *path, int buflen)
   char *unprocessedPath = path;
 
   if ( *unprocessedPath == '/' )
-    unprocessedPath++;
+      unprocessedPath++;
 
   int nRet = 0;
   while ( !nRet && unprocessedPath && *unprocessedPath )
-    {
+  {
       unprocessedPath = strchr( unprocessedPath, '/' );
       if ( unprocessedPath )
-    *unprocessedPath = '\0';
+          *unprocessedPath = '\0';
 
       nErr = noErr;
       bFolder = FALSE;
       bAliased = FALSE;
       if ( FSPathMakeRef( (const UInt8 *)path, &aFSRef, 0 ) == noErr )
-    {
-      nErr = FSResolveAliasFileWithMountFlags( &aFSRef, TRUE, &bFolder, &bAliased, kResolveAliasFileNoUI );
-      if ( nErr == nsvErr )
-        {
-          errno = ENOENT;
-          nRet = -1;
-        }
-      else if ( nErr == noErr && bAliased )
-        {
-          char tmpPath[ PATH_MAX ];
-          if ( FSRefMakePath( &aFSRef, (UInt8 *)tmpPath, PATH_MAX ) == noErr )
-        {
-          int nLen = strlen( tmpPath ) + ( unprocessedPath ? strlen( unprocessedPath + 1 ) + 1 : 0 );
-          if ( nLen < buflen && nLen < PATH_MAX )
-            {
-              if ( unprocessedPath )
-            {
-              int nTmpPathLen = strlen( tmpPath );
-              strcat( tmpPath, "/" );
-              strcat( tmpPath, unprocessedPath + 1 );
-              strcpy( path, tmpPath);
-              unprocessedPath = path + nTmpPathLen;
-            }
-              else if ( !unprocessedPath )
-            {
-              strcpy( path, tmpPath);
-            }
-            }
-          else
-            {
-              errno = ENAMETOOLONG;
+      {
+          nErr = FSResolveAliasFileWithMountFlags( &aFSRef, TRUE, &bFolder, &bAliased, kResolveAliasFileNoUI );
+          if ( nErr == nsvErr )
+          {
+              errno = ENOENT;
               nRet = -1;
-            }
-        }
-        }
-    }
+          }
+          else if ( nErr == noErr && bAliased )
+          {
+              char tmpPath[ PATH_MAX ];
+              if ( FSRefMakePath( &aFSRef, (UInt8 *)tmpPath, PATH_MAX ) == noErr )
+              {
+                  int nLen = strlen( tmpPath ) + ( unprocessedPath ? strlen( unprocessedPath + 1 ) + 1 : 0 );
+                  if ( nLen < buflen && nLen < PATH_MAX )
+                  {
+                      if ( unprocessedPath )
+                      {
+                          int nTmpPathLen = strlen( tmpPath );
+                          strcat( tmpPath, "/" );
+                          strcat( tmpPath, unprocessedPath + 1 );
+                          strcpy( path, tmpPath);
+                          unprocessedPath = path + nTmpPathLen;
+                      }
+                      else if ( !unprocessedPath )
+                      {
+                          strcpy( path, tmpPath);
+                      }
+                  }
+                  else
+                  {
+                      errno = ENAMETOOLONG;
+                      nRet = -1;
+                  }
+              }
+          }
+      }
 
       if ( unprocessedPath )
-    *unprocessedPath++ = '/';
+          *unprocessedPath++ = '/';
     }
 
   return nRet;
