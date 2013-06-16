@@ -9756,8 +9756,8 @@ if test "z$with_opencl_sdk" = "z"; then
 else
        if test -d $with_opencl_sdk/include; then
                ENABLE_OPENCL=TRUE
-               OPENCL_CFLAGS="-I $with_opencl_sdk/include"
-               OPENCL_LIBS="-L $with_opencl_sdk/lib/x86 -lOpenCL"
+               OPENCL_CFLAGS="-I$with_opencl_sdk/include"
+               OPENCL_LIBS="-L$with_opencl_sdk/lib/x86 -lOpenCL"
                AC_MSG_RESULT([found at path $with_opencl_sdk])
        else
                AC_MSG_ERROR([no headers found found at $with_opencl_sdk/include ])

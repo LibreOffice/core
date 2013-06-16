@@ -29,7 +29,7 @@
 
 # External headers
 
-ifeq ($(ENABLE_OPENGCL),TRUE)
+ifeq ($(ENABLE_OPENCL),TRUE)
 
 define gb_LinkTarget__use_opencl
 $(call gb_LinkTarget_set_include,$(1),\

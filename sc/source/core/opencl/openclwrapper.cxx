@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "random.hxx"
 #include "openclwrapper.hxx"
 #include "oclkernels.hxx"
 
@@ -1003,10 +1004,8 @@ double OclCalc::OclProcess(cl_kernel_function function, double *data,
 double OclCalc::OclTest() {
     double data[NUM];
 
-    srand((unsigned int) time(NULL));
-
     for (int i = 0; i < NUM; i++) {
-        data[i] = rand() / (RAND_MAX + 1.0);
+        data[i] = sc::rng::uniform();
         fprintf(stderr, "%f\t", data[i]);
     }
     OclProcess(&OclFormulax, data, AVG);
