@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7O4\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 3499,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-06-16T16:09:16Z",
+      "side": 0,
+      "message": "... setting GUI\u003dUNX for darwin here",
+      "revId": "11fcd99263cf5f3bd447cc570313fc3b19547105",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

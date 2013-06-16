@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7O8\u003d",
+        "filename": "helpcompiler/source/HelpCompiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-06-16T16:09:16Z",
+      "side": 1,
+      "message": "this is a change from the old code - $GUI was not set to MAC on MacOSX but to UNX",
+      "revId": "4b7c0d860f87e90e4c18182b91ff31341b7340d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
