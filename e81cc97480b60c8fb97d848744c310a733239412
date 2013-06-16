@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7SI\u003d",
+        "filename": "solenv/bin/concat-deps.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 992,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-06-16T04:47:30Z",
+      "side": 1,
+      "message": "how often is this going to happen ?\nmore importantly how often can this happen that is _not_ one of the 3 cases below. iow is it worth factoring out the \"Dep/\" from the strncmp ?",
+      "revId": "e81cc97480b60c8fb97d848744c310a733239412",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7SM\u003d",
+        "filename": "solenv/bin/concat-deps.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-06-16T04:47:30Z",
+      "side": 1,
+      "message": "do not use printf when puts/putc will do the trick.\nsame for the 3 others below",
+      "revId": "e81cc97480b60c8fb97d848744c310a733239412",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
