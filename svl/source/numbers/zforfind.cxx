@@ -81,7 +81,6 @@ ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         bTextInitialized( false ),
         bScanGenitiveMonths( false ),
         bScanPartitiveMonths( false ),
-        IsNum( false ),
         eScannedType( NUMBERFORMAT_UNDEFINED ),
         eSetType( NUMBERFORMAT_UNDEFINED )
 {
