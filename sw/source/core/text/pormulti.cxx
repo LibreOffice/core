@@ -1830,7 +1830,7 @@ sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     const OUString* pOldTxt = &(rInf.GetTxt());
     const SwTwips nOldPaintOfst = rInf.GetPaintOfst();
 
-    XubString aMultiStr( rInf.GetTxt(), 0, nMultiLen + rInf.GetIdx() );
+    OUString const aMultiStr( rInf.GetTxt().copy(0, nMultiLen + rInf.GetIdx()) );
     rInf.SetTxt( aMultiStr );
     SwTxtFormatInfo aInf( rInf, rMulti.GetRoot(), nActWidth );
     // Do we allow break cuts? The FirstMulti-Flag is evaluated during
