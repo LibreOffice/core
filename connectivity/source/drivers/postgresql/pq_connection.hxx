@@ -105,6 +105,8 @@ struct ConnectionSettings
         pConnection(0),
         maxNameLen(0),
         maxIndexKeys(0),
+        pTablesImpl(0),
+        pViewsImpl(0),
         showSystemColumns( sal_False ),
         logFile( 0 ),
         loglevel( LogLevel::INFO )

@@ -121,7 +121,8 @@ typedef ::boost::unordered_map
 struct ImplementationStatics
 {
     ImplementationStatics() :
-        implementationId( 16 )
+        implementationId(16),
+        pProps(0)
     {
         rtl_createUuid( (sal_uInt8*)implementationId.getArray(), 0 , sal_False );
     }
