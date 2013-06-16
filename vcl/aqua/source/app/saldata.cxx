@@ -47,7 +47,6 @@ SalData::SalData()
     mxP50Pattern( NULL ),
     maCursors( POINTER_COUNT, INVALID_CURSOR_PTR ),
     mbIsScrollbarDoubleMax( false ),
-    mnSystemVersion( VER_TIGER ),
     mpMainController( NULL ),
     mpDockIconClickHandler( nil ),
     mnDPIX( 0 ),

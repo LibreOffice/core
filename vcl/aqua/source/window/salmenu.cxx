@@ -872,9 +872,6 @@ void AquaSalMenu::RemoveMenuBarButton( sal_uInt16 i_nId )
 
 Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame )
 {
-    if( GetSalData()->mnSystemVersion < VER_LEOPARD )
-        return Rectangle( Point( -1, -1 ), Size( 1, 1 ) );
-
     if( ! i_pReferenceFrame || ! AquaSalFrame::isAlive( static_cast<AquaSalFrame*>(i_pReferenceFrame) ) )
         return Rectangle();
 
