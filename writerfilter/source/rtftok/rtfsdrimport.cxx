@@ -120,6 +120,7 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, OUStrin
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     sal_Int16 nHoriOrient = 0;
     sal_Int16 nVertOrient = 0;
+    boost::optional<bool> obFitShapeToText;
     if (aKey == "posh")
     {
         switch (aValue.toInt32())
@@ -160,10 +161,17 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, OUStrin
                 break;
         }
     }
+    else if (aKey == "fFitShapeToText")
+        obFitShapeToText.reset(aValue.toInt32() == 1);
     if (nHoriOrient != 0)
         xPropertySet->setPropertyValue("HoriOrient", uno::makeAny(nHoriOrient));
     if (nVertOrient != 0)
         xPropertySet->setPropertyValue("VertOrient", uno::makeAny(nVertOrient));
+    if (obFitShapeToText)
+    {
+        xPropertySet->setPropertyValue("SizeType", uno::makeAny(*obFitShapeToText ? text::SizeType::MIN : text::SizeType::FIX));
+        xPropertySet->setPropertyValue("FrameIsAutomaticHeight", uno::makeAny(*obFitShapeToText));
+    }
 }
 
 void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
@@ -444,7 +452,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         else if (i->first == "shadowOffsetX")
             // EMUs to points
             aShadowModel.moOffset.set(OUString::number(i->second.toDouble() / 12700) + "pt");
-        else if (i->first == "posh" || i->first == "posv")
+        else if (i->first == "posh" || i->first == "posv" || i->first == "fFitShapeToText")
             applyProperty(xShape, i->first, i->second);
         else if (i->first == "posrelh")
         {

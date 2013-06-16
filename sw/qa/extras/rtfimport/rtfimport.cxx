@@ -1283,6 +1283,7 @@ void Test::testPoshPosv()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(xDraws->getByIndex(0), "HoriOrient"));
     CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xDraws->getByIndex(0), "VertOrient"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xDraws->getByIndex(0), "FrameIsAutomaticHeight"));
 }
 
 void Test::testTextframeTable()
