@@ -181,6 +181,7 @@ class SwXMLTableCell_Impl
 public:
 
     SwXMLTableCell_Impl( sal_uInt32 nRSpan=1UL, sal_uInt32 nCSpan=1UL ) :
+        dValue( 0.0 ),
         pStartNode( 0 ),
         nRowSpan( nRSpan ),
         nColSpan( nCSpan ),

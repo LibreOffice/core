@@ -724,6 +724,7 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const String& rBaseURL, sal_uI
     pSheetItemSet(0),
     pItemSet(0),
     pSearchEntry( 0 ),
+    pPropInfo( 0 ),
     nMinFixLineSpace( nMinFixLineSp ),
     eDfltEnc( RTL_TEXTENCODING_DONTKNOW ),
     nScriptFlags( CSS1_SCRIPT_ALL ),

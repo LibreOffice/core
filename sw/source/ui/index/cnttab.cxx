@@ -3892,6 +3892,7 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, VclBuilderContainer* pBuilde
                            BROWSER_HIDECURSOR   )
     , aCellEdit(&GetDataWindow(), 0)
     , aCellCheckBox(&GetDataWindow())
+    , nCurrentRow(0)
     , bModified(false)
 {
     sSearch = pBuilder->get<Window>("searchterm")->GetText();

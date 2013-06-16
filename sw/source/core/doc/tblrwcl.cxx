@@ -106,7 +106,7 @@ struct CR_SetBoxWidth
 
     CR_SetBoxWidth( sal_uInt16 eType, SwTwips nDif, SwTwips nSid, SwTwips nTblW,
                     SwTwips nMax, SwTableNode* pTNd )
-        : pTblNd( pTNd ),
+        : pTblNd( pTNd ), pUndo( 0 ),
         nDiff( nDif ), nSide( nSid ), nMaxSize( nMax ), nLowerDiff( 0 ),
         nTblWidth( (sal_uInt16)nTblW ), nRemainWidth( 0 ), nBoxWidth( 0 ),
         bSplittBox( false ), bAnyBoxFnd( false )
