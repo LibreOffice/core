@@ -49,7 +49,6 @@
           <object class="GtkToolbar" id="selectsize">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="tooltip_text" translatable="yes">Size</property>
             <property name="show_arrow">False</property>
             <child>
               <object class="GtkMenuToolButton" id="size">
@@ -57,8 +56,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Select a predefined paper size for the current page style.</property>
-                <property name="tooltip_text" translatable="yes">Select a predefined paper size for the current page style.</property>
+                <property name="tooltip_text" translatable="yes">Size</property>
                 <property name="use_action_appearance">False</property>
                 <property name="action_name">.uno:Size</property>
                 <property name="label" translatable="yes">toolbutton3</property>
@@ -112,7 +110,6 @@
           <object class="GtkToolbar" id="selectmargin">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="tooltip_text" translatable="yes">Margin</property>
             <property name="halign">center</property>
             <child>
               <object class="GtkMenuToolButton" id="margin">
@@ -120,8 +117,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Select the margin values for the current page style.</property>
-                <property name="tooltip_text" translatable="yes">Select the margin values for the current page style.</property>
+                <property name="tooltip_text" translatable="yes">Margin</property>
                 <property name="use_action_appearance">False</property>
                 <property name="action_name">.uno:Margin</property>
                 <property name="label" translatable="yes">toolbutton2</property>
