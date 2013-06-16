@@ -15,17 +15,55 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <rcid.hrc>
 #include "PropertyPanel.hrc"
 
-#define FT_ORIENTATION          1
-#define TB_ORIENTATION          2
-#define FT_MARGIN               3
-#define TB_MARGIN               4
-#define FT_SIZE                 5
-#define TB_SIZE                 6
-#define FT_COLUMN               7
-#define TB_COLUMN               8
-#define TBI_MARGIN              9
+// global definitions
+#define IMG_PAGE_PORTRAIT       (RC_SIDEBAR_BEGIN +  0)
+#define IMG_PAGE_LANDSCAPE      (RC_SIDEBAR_BEGIN +  1)
+#define IMG_PAGE_NARROW         (RC_SIDEBAR_BEGIN +  2)
+#define IMG_PAGE_NORMAL         (RC_SIDEBAR_BEGIN +  3)
+#define IMG_PAGE_WIDE           (RC_SIDEBAR_BEGIN +  4)
+#define IMG_PAGE_MIRRORED       (RC_SIDEBAR_BEGIN +  5)
+#define IMG_PAGE_MARGIN_CUSTOM  (RC_SIDEBAR_BEGIN +  6)
+#define IMG_PAGE_NARROW_L       (RC_SIDEBAR_BEGIN +  7)
+#define IMG_PAGE_NORMAL_L       (RC_SIDEBAR_BEGIN +  8)
+#define IMG_PAGE_WIDE_L         (RC_SIDEBAR_BEGIN +  9)
+#define IMG_PAGE_MIRRORED_L     (RC_SIDEBAR_BEGIN + 10)
+#define IMG_PAGE_MARGIN_CUSTOM_L (RC_SIDEBAR_BEGIN+ 11)
+#define IMG_PAGE_A3             (RC_SIDEBAR_BEGIN + 12)
+#define IMG_PAGE_A4             (RC_SIDEBAR_BEGIN + 13)
+#define IMG_PAGE_A5             (RC_SIDEBAR_BEGIN + 14)
+#define IMG_PAGE_B4             (RC_SIDEBAR_BEGIN + 15)
+#define IMG_PAGE_B5             (RC_SIDEBAR_BEGIN + 16)
+#define IMG_PAGE_C5             (RC_SIDEBAR_BEGIN + 17)
+#define IMG_PAGE_LETTER         (RC_SIDEBAR_BEGIN + 18)
+#define IMG_PAGE_LEGAL          (RC_SIDEBAR_BEGIN + 19)
+#define IMG_PAGE_SIZE_NONE      (RC_SIDEBAR_BEGIN + 20)
+#define IMG_PAGE_A3_L           (RC_SIDEBAR_BEGIN + 21)
+#define IMG_PAGE_A4_L           (RC_SIDEBAR_BEGIN + 22)
+#define IMG_PAGE_A5_L           (RC_SIDEBAR_BEGIN + 23)
+#define IMG_PAGE_B4_L           (RC_SIDEBAR_BEGIN + 24)
+#define IMG_PAGE_B5_L           (RC_SIDEBAR_BEGIN + 25)
+#define IMG_PAGE_C5_L           (RC_SIDEBAR_BEGIN + 26)
+#define IMG_PAGE_LETTER_L       (RC_SIDEBAR_BEGIN + 27)
+#define IMG_PAGE_LEGAL_L        (RC_SIDEBAR_BEGIN + 28)
+#define IMG_PAGE_SIZE_NONE_L    (RC_SIDEBAR_BEGIN + 29)
+#define IMG_PAGE_COLUMN_1       (RC_SIDEBAR_BEGIN + 30)
+#define IMG_PAGE_COLUMN_2       (RC_SIDEBAR_BEGIN + 31)
+#define IMG_PAGE_COLUMN_3       (RC_SIDEBAR_BEGIN + 32)
+#define IMG_PAGE_COLUMN_LEFT    (RC_SIDEBAR_BEGIN + 33)
+#define IMG_PAGE_COLUMN_RIGHT   (RC_SIDEBAR_BEGIN + 34)
+#define IMG_PAGE_COLUMN_NONE    (RC_SIDEBAR_BEGIN + 35)
+#define IMG_PAGE_COLUMN_1_L     (RC_SIDEBAR_BEGIN + 36)
+#define IMG_PAGE_COLUMN_2_L     (RC_SIDEBAR_BEGIN + 37)
+#define IMG_PAGE_COLUMN_3_L     (RC_SIDEBAR_BEGIN + 38)
+#define IMG_PAGE_COLUMN_LEFT_L  (RC_SIDEBAR_BEGIN + 39)
+#define IMG_PAGE_COLUMN_RIGHT_L (RC_SIDEBAR_BEGIN + 40)
+#define IMG_PAGE_COLUMN_NONE_L  (RC_SIDEBAR_BEGIN + 41)
+
+// local
 #define IMG_PORTRAIT            10
 #define IMG_LANDSCAPE           11
 #define STR_PORTRAIT            12
@@ -38,16 +76,12 @@
 #define MF_SWRIGHT_MARGIN       19
 #define MF_SWTOP_MARGIN         20
 #define MF_SWBOTTOM_MARGIN      21
-#define TBI_SIZE                22
 #define VS_SIZE                 23
 #define STR_LCVALUE             24
 #define FT_CUSTOM               25
 #define FLD_WIDTH_HEIGHT        26
 
-#define TBI_ORIENTATION         28
 #define VS_ORIENTATION          29
-#define IMG_PAGE_PORTRAIT       30
-#define IMG_PAGE_LANDSCAPE      31
 #define IMG_NARROW              32
 #define IMG_NORMAL              33
 #define IMG_WIDE                34
@@ -64,7 +98,6 @@
 #define FT_BOTTOM               45
 #define FT_INNER                46
 #define FT_OUTER                47
-#define TBI_COLUMN              48
 #define VS_COLUMN               49
 #define MBOX_WIDTH              50
 #define IMG_ONE                 51
@@ -81,51 +114,11 @@
 
 #define CB_SIZE_MORE            61
 
-#define IMG_PAGE_NARROW         64
-#define IMG_PAGE_NORMAL         65
-#define IMG_PAGE_WIDE           63
-#define IMG_PAGE_MIRRORED       67
-#define IMG_PAGE_MARGIN_CUSTOM  68
-#define IMG_PAGE_A3             69
-#define IMG_PAGE_A4             70
-#define IMG_PAGE_A5             71
-#define IMG_PAGE_B4             72
-#define IMG_PAGE_B5             73
-#define IMG_PAGE_C5             74
-#define IMG_PAGE_LETTER         75
-#define IMG_PAGE_LEGAL          76
-#define IMG_PAGE_COLUMN_1       77
-#define IMG_PAGE_COLUMN_2       78
-#define IMG_PAGE_COLUMN_3       79
-#define IMG_PAGE_COLUMN_LEFT    80
-#define IMG_PAGE_COLUMN_RIGHT   81
-#define IMG_PAGE_SIZE_NONE      82
-#define IMG_PAGE_COLUMN_NONE    83
-#define IMG_PAGE_COLUMN_1_L     84
-#define IMG_PAGE_COLUMN_2_L     85
-#define IMG_PAGE_COLUMN_3_L     86
-#define IMG_PAGE_COLUMN_LEFT_L  87
-#define IMG_PAGE_COLUMN_RIGHT_L 88
-#define IMG_PAGE_COLUMN_NONE_L  89
 #define IMG_ONE_L               90
 #define IMG_TWO_L               91
 #define IMG_THREE_L             92
 #define IMG_LEFT_L              93
 #define IMG_RIGHT_L             94
-#define IMG_PAGE_A3_L           95
-#define IMG_PAGE_A4_L           96
-#define IMG_PAGE_A5_L           97
-#define IMG_PAGE_B4_L           98
-#define IMG_PAGE_B5_L           99
-#define IMG_PAGE_C5_L           100
-#define IMG_PAGE_LETTER_L       101
-#define IMG_PAGE_LEGAL_L        102
-#define IMG_PAGE_SIZE_NONE_L    103
-#define IMG_PAGE_NARROW_L       104
-#define IMG_PAGE_NORMAL_L       105
-#define IMG_PAGE_WIDE_L         106
-#define IMG_PAGE_MIRRORED_L     107
-#define IMG_PAGE_MARGIN_CUSTOM_L    108
 #define IMG_NARROW_L            109
 #define IMG_NORMAL_L            110
 #define IMG_WIDE_L              111
@@ -135,10 +128,6 @@
 #define FLD_TOP_MARGIN          115
 #define FLD_BOTTOM_MARGIN       116
 
-#define STR_QHELP_TB_ORIENTATION    117
-#define STR_QHELP_TB_MARGIN         118
-#define STR_QHELP_TB_SIZE           119
-#define STR_QHELP_TB_COLUMN         120
 #define IMG_CUSTOM_DIS          121
 //
 #define STR_MARGIN_TOOLTIP_LEFT             122

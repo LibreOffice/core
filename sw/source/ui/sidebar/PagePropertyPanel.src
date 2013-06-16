@@ -21,300 +21,173 @@
 #include "PagePropertyPanel.hrc"
 #include "helpid.h"
 
-// page property panel control
-Control RID_PROPERTYPANEL_SWPAGE
+Image IMG_PAGE_PORTRAIT
 {
-    OutputSize = TRUE;
-    DialogControl = TRUE;
-    Border = FALSE;
-    Size = MAP_APPFONT( PROPERTYPAGE_WIDTH, PAGE_HEIGHT );
-    HelpID = HID_PROPERTYPANEL_SWPAGE_SECTION;
-    Text = "Page";
-
-    FixedText FT_ORIENTATION
-    {
-        Pos = MAP_APPFONT ( FT_ORIENTATION_X, FT_ORIENTATION_Y );
-        Size = MAP_APPFONT ( MBOX_WIDTH, TEXT_HEIGHT) ;
-        Text [ en-US ] = "~Orientation:";
-    };
-    ToolBox TB_ORIENTATION
-    {
-        Pos = MAP_APPFONT (TBX_ORIENTATION_X, TBX_ORIENTATION_Y) ;
-        HelpID = HID_SWPAGE_ORIENTATION;
-        SVLook = TRUE ;
-        TabStop = TRUE ;
-        Text = "Orientation" ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                HelpID = HID_SWPAGE_TBI_ORIENTATION;
-                Identifier = TBI_ORIENTATION ;
-                Text [ en-US ] = "Orientation" ;
-                DropDown = TRUE ;
-            };
-        };
-    };
-    String STR_QHELP_TB_ORIENTATION
-    {
-        Text [ en-US ] = "Select the paper orientation - vertically (portrait) or horizontally (landscape) - for the current page style.";
-    };
-
-    FixedText FT_MARGIN
-    {
-        Pos = MAP_APPFONT ( FT_MARGIN_X, FT_MARGIN_Y );
-        Size = MAP_APPFONT ( MBOX_WIDTH + 50, TEXT_HEIGHT) ;
-        Text [ en-US ] = "~Margin:";
-    };
-    ToolBox TB_MARGIN
-    {
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT (TBX_MARGIN_X, TBX_MARGIN_Y) ;
-        HelpID = HID_SWPAGE_MARGIN;
-        TabStop = TRUE ;
-        Text = "Margin" ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                HelpID = HID_SWPAGE_TBI_MARGIN;
-                Identifier = TBI_MARGIN ;
-                Text [ en-US ] = "Margin" ;
-                DropDown = TRUE ;
-            };
-        };
-    };
-    String STR_QHELP_TB_MARGIN
-    {
-        Text [ en-US ] = "Select the margin values for the current page style.";
-    };
-
-    FixedText FT_SIZE
-    {
-        Pos = MAP_APPFONT ( FT_SIZE_X, FT_SIZE_Y );
-        Size = MAP_APPFONT ( MBOX_WIDTH, TEXT_HEIGHT) ;
-        Text [ en-US ] = "~Size:";
-    };
-    ToolBox TB_SIZE
-    {
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT ( TBX_SIZE_X , TBX_SIZE_Y ) ;
-        HelpID = HID_SWPAGE_SIZE;
-        TabStop = TRUE ;
-        Text = "Size" ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                HelpID = HID_SWPAGE_TBI_SIZE;
-                Identifier = TBI_SIZE ;
-                Text [ en-US ] = "Size" ;
-                DropDown = TRUE ;
-            };
-        };
-    };
-    String STR_QHELP_TB_SIZE
-    {
-        Text [ en-US ] = "Select a predefined paper size for the current page style.";
-    };
-
-    FixedText FT_COLUMN
-    {
-        Pos = MAP_APPFONT ( FT_COLUMN_X, FT_COLUMN_Y );
-        Size = MAP_APPFONT ( MBOX_WIDTH + 50, TEXT_HEIGHT) ;
-        Text [ en-US ] = "~Column:";
-    };
-    ToolBox TB_COLUMN
-    {
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT ( TBX_COLUMN_X , TBX_COLUMN_Y ) ;
-        HelpID = HID_SWPAGE_COLUMN;
-        TabStop = TRUE ;
-        Text = "Column" ;
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                HelpID = HID_SWPAGE_TBI_COLUMN;
-                Identifier = TBI_COLUMN;
-                Text [ en-US ] = "Column" ;
-                DropDown = TRUE ;
-            };
-        };
-    };
-    String STR_QHELP_TB_COLUMN
-    {
-        Text [ en-US ] = "Select the layout and the number of columns for the current page style.";
-    };
-
-    Image IMG_PAGE_PORTRAIT
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/portraitcopy_24x24.png";};
-    };
-    Image IMG_PAGE_LANDSCAPE
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/Landscapecopy_24x24.png";};
-    };
-    Image IMG_PAGE_NARROW
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/format_L_narrow_24x24.png";};
-    };
-    Image IMG_PAGE_NORMAL
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/format_L_nomal_24x24.png";};
-    };
-    Image IMG_PAGE_WIDE
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/format_L_wide_24x24.png";};
-    };
-    Image IMG_PAGE_MIRRORED
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/format_L_mirror_24x24.png";};
-    };
-    Image IMG_PAGE_MARGIN_CUSTOM
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/format_L_copy_24x24.png";};
-    };
-    Image IMG_PAGE_NARROW_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/formatnarrow_24x24.png";};
-    };
-    Image IMG_PAGE_NORMAL_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/formatnormal_24x24.png";};
-    };
-    Image IMG_PAGE_WIDE_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/formatwide_24x24.png";};
-    };
-    Image IMG_PAGE_MIRRORED_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/formatmirror_24x24.png";};
-    };
-    Image IMG_PAGE_MARGIN_CUSTOM_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/formatcopy_24x24.png";};
-    };
-    Image IMG_PAGE_A3
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_A3_24x24.png";};
-    };
-    Image IMG_PAGE_A4
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_A4_24x24.png";};
-    };
-    Image IMG_PAGE_A5
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_A5_24x24.png";};
-    };
-    Image IMG_PAGE_B4
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_B4_24x24.png";};
-    };
-    Image IMG_PAGE_B5
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_B5_24x24.png";};
-    };
-    Image IMG_PAGE_C5
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_C5_24x24.png";};
-    };
-    Image IMG_PAGE_LETTER
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_copy_24x24.png";};
-    };
-    Image IMG_PAGE_LEGAL
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_copy_24x24.png";};
-    };
-    Image IMG_PAGE_SIZE_NONE
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_copy_24x24.png";};
-    };
-    Image IMG_PAGE_A3_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizeA3_24x24.png";};
-    };
-    Image IMG_PAGE_A4_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizeA4_24x24.png";};
-    };
-    Image IMG_PAGE_A5_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizeA5_24x24.png";};
-    };
-    Image IMG_PAGE_B4_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizeB4_24x24.png";};
-    };
-    Image IMG_PAGE_B5_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizeB5_24x24.png";};
-    };
-    Image IMG_PAGE_C5_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizeC5_24x24.png";};
-    };
-    Image IMG_PAGE_LETTER_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizecopy_24x24.png";};
-    };
-    Image IMG_PAGE_LEGAL_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizecopy_24x24.png";};
-    };
-    Image IMG_PAGE_SIZE_NONE_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizecopy_24x24.png";};
-    };
-    Image IMG_PAGE_COLUMN_1
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_1_24x24.png";};
-    };
-    Image IMG_PAGE_COLUMN_2
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_2_24x24.png";};
-    };
-    Image IMG_PAGE_COLUMN_3
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_3_24x24.png";};
-    };
-    Image IMG_PAGE_COLUMN_LEFT
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_left_24x24.png";};
-    };
-    Image IMG_PAGE_COLUMN_RIGHT
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_right_24x24.png";};
-    };
-    Image IMG_PAGE_COLUMN_NONE
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_copy_24x24.png";};
-    };
-    Image IMG_PAGE_COLUMN_1_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column1_24x24.png";};
-    };
-    Image IMG_PAGE_COLUMN_2_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column2_24x24.png";};
-    };
-    Image IMG_PAGE_COLUMN_3_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column3_24x24.png";};
-    };
-    Image IMG_PAGE_COLUMN_LEFT_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/columnleft_24x24.png";};
-    };
-    Image IMG_PAGE_COLUMN_RIGHT_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/columnright_24x24.png";};
-    };
-    Image IMG_PAGE_COLUMN_NONE_L
-    {
-        ImageBitmap = Bitmap{File = "sidebar/pageproppanel/columncopy_24x24.png";};
-    };
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/portraitcopy_24x24.png";};
+};
+Image IMG_PAGE_LANDSCAPE
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/Landscapecopy_24x24.png";};
+};
+Image IMG_PAGE_NARROW
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/format_L_narrow_24x24.png";};
+};
+Image IMG_PAGE_NORMAL
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/format_L_nomal_24x24.png";};
+};
+Image IMG_PAGE_WIDE
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/format_L_wide_24x24.png";};
+};
+Image IMG_PAGE_MIRRORED
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/format_L_mirror_24x24.png";};
+};
+Image IMG_PAGE_MARGIN_CUSTOM
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/format_L_copy_24x24.png";};
+};
+Image IMG_PAGE_NARROW_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/formatnarrow_24x24.png";};
+};
+Image IMG_PAGE_NORMAL_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/formatnormal_24x24.png";};
+};
+Image IMG_PAGE_WIDE_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/formatwide_24x24.png";};
+};
+Image IMG_PAGE_MIRRORED_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/formatmirror_24x24.png";};
+};
+Image IMG_PAGE_MARGIN_CUSTOM_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/formatcopy_24x24.png";};
+};
+Image IMG_PAGE_A3
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_A3_24x24.png";};
+};
+Image IMG_PAGE_A4
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_A4_24x24.png";};
+};
+Image IMG_PAGE_A5
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_A5_24x24.png";};
+};
+Image IMG_PAGE_B4
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_B4_24x24.png";};
+};
+Image IMG_PAGE_B5
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_B5_24x24.png";};
+};
+Image IMG_PAGE_C5
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_C5_24x24.png";};
+};
+Image IMG_PAGE_LETTER
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_copy_24x24.png";};
+};
+Image IMG_PAGE_LEGAL
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_copy_24x24.png";};
+};
+Image IMG_PAGE_SIZE_NONE
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsize_L_copy_24x24.png";};
+};
+Image IMG_PAGE_A3_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizeA3_24x24.png";};
+};
+Image IMG_PAGE_A4_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizeA4_24x24.png";};
+};
+Image IMG_PAGE_A5_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizeA5_24x24.png";};
+};
+Image IMG_PAGE_B4_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizeB4_24x24.png";};
+};
+Image IMG_PAGE_B5_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizeB5_24x24.png";};
+};
+Image IMG_PAGE_C5_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizeC5_24x24.png";};
+};
+Image IMG_PAGE_LETTER_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizecopy_24x24.png";};
+};
+Image IMG_PAGE_LEGAL_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizecopy_24x24.png";};
+};
+Image IMG_PAGE_SIZE_NONE_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/documentsizecopy_24x24.png";};
+};
+Image IMG_PAGE_COLUMN_1
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_1_24x24.png";};
+};
+Image IMG_PAGE_COLUMN_2
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_2_24x24.png";};
+};
+Image IMG_PAGE_COLUMN_3
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_3_24x24.png";};
+};
+Image IMG_PAGE_COLUMN_LEFT
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_left_24x24.png";};
+};
+Image IMG_PAGE_COLUMN_RIGHT
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_right_24x24.png";};
+};
+Image IMG_PAGE_COLUMN_NONE
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column_L_copy_24x24.png";};
+};
+Image IMG_PAGE_COLUMN_1_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column1_24x24.png";};
+};
+Image IMG_PAGE_COLUMN_2_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column2_24x24.png";};
+};
+Image IMG_PAGE_COLUMN_3_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/column3_24x24.png";};
+};
+Image IMG_PAGE_COLUMN_LEFT_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/columnleft_24x24.png";};
+};
+Image IMG_PAGE_COLUMN_RIGHT_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/columnright_24x24.png";};
+};
+Image IMG_PAGE_COLUMN_NONE_L
+{
+    ImageBitmap = Bitmap{File = "sidebar/pageproppanel/columncopy_24x24.png";};
 };
 
 // popup for page orientation attribute

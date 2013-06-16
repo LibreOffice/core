@@ -22,6 +22,7 @@
 #include <com/sun/star/document/XUndoManager.hpp>
 
 #include <svx/sidebar/Popup.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 
 #include <sfx2/sidebar/ControllerItem.hxx>
 
@@ -52,7 +53,7 @@ namespace cssu = ::com::sun::star::uno;
 namespace sw { namespace sidebar {
 
     class PagePropertyPanel
-        : public Control,
+        : public PanelLayout,
           public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
     {
     public:
@@ -109,18 +110,10 @@ namespace sw { namespace sidebar {
         SfxBindings* mpBindings;
 
         // toolboxes - on click open corresponding popup
-        FixedText   maFtOrientation;
-        ::boost::scoped_ptr<Window> mpToolBoxOrientationBackground;
-        ::boost::scoped_ptr<ToolBox> mpToolBoxOrientation;
-        FixedText               maFtMargin;
-        ::boost::scoped_ptr<Window> mpToolBoxMarginBackground;
-        ::boost::scoped_ptr<ToolBox> mpToolBoxMargin;
-        FixedText               maFtSize;
-        ::boost::scoped_ptr<Window> mpToolBoxSizeBackground;
-        ::boost::scoped_ptr<ToolBox> mpToolBoxSize;
-        FixedText               maFtColumn;
-        ::boost::scoped_ptr<Window> mpToolBoxColumnBackground;
-        ::boost::scoped_ptr<ToolBox> mpToolBoxColumn;
+        ToolBox*                mpToolBoxOrientation;
+        ToolBox*                mpToolBoxMargin;
+        ToolBox*                mpToolBoxSize;
+        ToolBox*                mpToolBoxColumn;
 
         Image*                  maImgSize;
         Image*                  maImgSize_L;

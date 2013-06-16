@@ -71,6 +71,7 @@
 #define RC_ANNOTATION               (RC_BASE + 4150)
 #define RC_PAGEFRM                  (RC_BASE + 4250)
 #define RC_IDXTXT                   (RC_BASE + 4350)
+#define RC_SIDEBAR                  (RC_BASE + 4450)
 
 /*--------------------------------------------------------------------
     Description: areas unharness
@@ -259,6 +260,10 @@
 // property panel
 #define RC_PROPERTYPANEL_BEGIN            RC_PROPERTYPANEL
 #define RC_PROPERTYPANEL_END              (RC_PROPERTYPANEL + 10)
+
+// sidebar (mostly the Page one)
+#define RC_SIDEBAR_BEGIN            RC_SIDEBAR
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
