@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7O0\u003d",
+        "filename": "solenv/bin/concat-deps.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-06-16T16:19:23Z",
+      "side": 1,
+      "message": "really ?\nso we allocate a buffer to make sure we concatenate together a runtime constant (workdir) 2 litteral \u0027/\u0027 and \u0027 : $(....)\u0027\nand a variable taht is a c-string... all that using a printf... so that we have only 1 fputs that will buffer it again btw...\nif you are going to waste a printf you might as well do a fprintf and be done with it.\nif not then just do 3 fputs and 1 fputc..",
+      "revId": "a26f849d0c35495ad63a1872efb2c8990a562241",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7OQ\u003d",
+        "filename": "solenv/bin/concat-deps.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-06-16T16:19:23Z",
+      "side": 1,
+      "message": "I\u0027m all for speed... but assuming that fopen will always work here is a bit of a stretch here...\n\nbtw: have you considered race conditions ?\nI do not knwo for sure when these special case can happen... but concat-deps can run in //... is it possible that 2 differents concat deps may want to create these \u0027special\u0027 dep files ?",
+      "revId": "a26f849d0c35495ad63a1872efb2c8990a562241",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7OU\u003d",
+        "filename": "solenv/bin/concat-deps.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 1023,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-06-16T16:19:23Z",
+      "side": 1,
+      "message": "oh my... let\u0027s copy thing a 3rd time for good measure... and let\u0027s run strlen twice (once to reduce the size by 2 and another time implicte by strcat... it is not like we could know where to add the \".urd\".\n\nGet the size of the fragment to copy. then with workdir_len you already have you can 1/ avoid wasting cpu 2/ make sure that you do not overflow without random truncation without test from the various strn* functions...\nactually there is no need to copy things around to start with.. just fputs/fputc the piece you need directly from the source",
+      "revId": "a26f849d0c35495ad63a1872efb2c8990a562241",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
