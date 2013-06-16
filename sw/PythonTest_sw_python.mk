@@ -10,6 +10,7 @@
 $(eval $(call gb_PythonTest_PythonTest,sw_python))
 
 $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
+	check_index \
 	get_expression \
 	set_expression \
 	var_fields \
