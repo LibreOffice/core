@@ -32,8 +32,6 @@
 
 #include <map>
 
-
-
 using ::rtl::OUString;
 using namespace css;
 using namespace cssu;
@@ -48,7 +46,6 @@ public:
         delete pObject;
     }
 };
-
 
 ResourceManager& ResourceManager::Instance (void)
 {
@@ -528,6 +525,13 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
         const ::utl::OConfigurationNode aChildNode (aLegacyRootNode.openNode(rsNodeName));
         if ( ! aChildNode.isValid())
             continue;
+
+        if ( rsNodeName == "private:resource/toolpanel/DrawingFramework/CustomAnimations" ||
+             rsNodeName == "private:resource/toolpanel/DrawingFramework/Layouts" ||
+             rsNodeName == "private:resource/toolpanel/DrawingFramework/MasterPages" ||
+             rsNodeName == "private:resource/toolpanel/DrawingFramework/SlideTransitions" ||
+             rsNodeName == "private:resource/toolpanel/DrawingFramework/TableDesign" )
+          continue;
 
         DeckDescriptor& rDeckDescriptor (maDecks[nDeckWriteIndex++]);
         rDeckDescriptor.msTitle = ::comphelper::getString(aChildNode.getNodeValue("UIName"));
