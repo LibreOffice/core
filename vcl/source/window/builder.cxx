@@ -1286,7 +1286,6 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         if (pToolBox)
         {
             OUString aCommand(OStringToOUString(extractActionName(rMap), RTL_TEXTENCODING_UTF8));
-            OUString aTooltip(OStringToOUString(extractTooltipText(rMap), RTL_TEXTENCODING_UTF8));
 
             ToolBoxItemBits nBits = 0;
             if (name == "GtkMenuToolButton")
@@ -1296,6 +1295,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             {
                 pToolBox->InsertItem(aCommand, m_xFrame, nBits, extractSizeRequest(rMap));
 
+                OUString aTooltip(OStringToOUString(extractTooltipText(rMap), RTL_TEXTENCODING_UTF8));
                 if (!aTooltip.isEmpty())
                     pToolBox->SetQuickHelpText(pToolBox->GetItemId(aCommand), aTooltip);
             }
