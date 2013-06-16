@@ -239,7 +239,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_xStorage(),
     m_aTableBuffer(),
     m_aSuperBuffer(),
-    m_aShapetextBuffer(),
     m_bHasFootnote(false),
     m_pSuperstream(0),
     m_nHeaderFooterPositions(),
@@ -597,11 +596,6 @@ RTFParserState& RTFDocumentImpl::getDefaultState()
         return m_aDefaultState;
     else
         return m_pSuperstream->getDefaultState();
-}
-
-RTFBuffer_t RTFDocumentImpl::getShapetextBuffer()
-{
-    return m_aShapetextBuffer;
 }
 
 oox::GraphicHelper& RTFDocumentImpl::getGraphicHelper()
@@ -1161,7 +1155,6 @@ void RTFDocumentImpl::text(OUString& rString)
 
 void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer)
 {
-    bool bShapeText = !m_aShapetextBuffer.empty();
     while (rBuffer.size())
     {
         std::pair<RTFBufferTypes, RTFValue::Pointer_t> aPair = rBuffer.front();
@@ -1199,13 +1192,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer)
         else if (aPair.first == BUFFER_ENDRUN)
             Mapper().endCharacterGroup();
         else if (aPair.first == BUFFER_PAR)
-        {
-            if (!rBuffer.empty() || !bShapeText)
-                // RTF may have a fake paragraph at the end of the shape text,
-                // that would cause an additional empty paragraph at the end of
-                // the shape text.
-                parBreak();
-        }
+            parBreak();
         else
             SAL_WARN("writerfilter", "should not happen");
     }

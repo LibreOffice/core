@@ -465,8 +465,6 @@ namespace writerfilter {
                 rtl_TextEncoding getEncoding(sal_uInt32 nFontIndex);
                 /// Get the default parser state.
                 RTFParserState& getDefaultState();
-                /// Get the shape text buffer;
-                RTFBuffer_t getShapetextBuffer();
                 oox::GraphicHelper& getGraphicHelper();
 
             private:
@@ -541,8 +539,6 @@ namespace writerfilter {
                 RTFBuffer_t m_aTableBuffer;
                 /// Buffered superscript, till footnote is reached (or not).
                 RTFBuffer_t m_aSuperBuffer;
-                /// Buffered shape text.
-                RTFBuffer_t m_aShapetextBuffer;
 
                 bool m_bHasFootnote;
                 /// Superstream of this substream.
