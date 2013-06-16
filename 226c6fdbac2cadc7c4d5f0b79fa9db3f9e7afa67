@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7RI\u003d",
+        "filename": "vcl/source/control/edit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2410,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-06-16T13:18:42Z",
+      "side": 1,
+      "message": "Watch it, getLength() is not negated, so it needs to be !isEmpty()",
+      "revId": "226c6fdbac2cadc7c4d5f0b79fa9db3f9e7afa67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
