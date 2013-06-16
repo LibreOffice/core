@@ -191,8 +191,7 @@ $(dir $(call gb_CxxObject_get_dep_target,%))%/.dir :
 
 $(call gb_CxxObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
-	  $(eval $(gb_CxxObject__set_pchflags))\
-	  $(call gb_Object__command_dep,$@,$(call gb_CxxObject_get_target,$*)))
+	  $(eval $(gb_CxxObject__set_pchflags)))
 
 endif
 
