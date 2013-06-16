@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7Nk\u003d",
+        "filename": "solenv/gbuild/SdiTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-06-16T16:45:19Z",
+      "side": 0,
+      "message": "^ This needs to be $(if $(gb_FULLDEPS),...) now, otherwise it tries to write to the nonexistant dep file directory.",
+      "revId": "caba2af375181004ea10aa61cecf56356df2c677",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
