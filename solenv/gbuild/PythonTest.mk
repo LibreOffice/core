@@ -40,9 +40,9 @@ $(call gb_PythonTest_get_target,%) :
 		($(gb_PythonTest_PRECOMMAND) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
-		URE_BOOTSTRAP=vnd.sun.star.pathname:$(gb_DEVINSTALLROOT)/program/fundamentalrc \
-		PYTHONPATH=$(PYPATH) \
-		UserInstallation="$(call gb_Helper_make_url,$(OUTDIR)/unittest)" \
+		URE_BOOTSTRAP=vnd.sun.star.pathname:$(call gb_Helper_get_rcfile,$(gb_DEVINSTALLROOT)/program/fundamental) \
+		PYTHONPATH="$(PYPATH)" \
+		UserInstallation=$(call gb_Helper_make_url,$(dir $(call gb_PythonTest_get_target,$*))user) \
 		TestUserDir="$(call gb_Helper_make_url,$(dir $(call gb_PythonTest_get_target,$*)))" \
 		$(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_PythonTest_COMMAND) \
 			$(MODULES) \
@@ -55,7 +55,7 @@ $(call gb_PythonTest_get_target,%) :
 
 # always use udkapi and URE services
 define gb_PythonTest_PythonTest
-$(call gb_PythonTest_get_target,$(1)) : PYPATH := $(SRCDIR)/unotest/source/python:$(gb_DEVINSTALLROOT)/program
+$(call gb_PythonTest_get_target,$(1)) : PYPATH := $(SRCDIR)/unotest/source/python$$(gb_CLASSPATHSEP)$(gb_DEVINSTALLROOT)/program
 $(call gb_PythonTest_get_target,$(1)) : MODULES :=
 
 $(eval $(call gb_Module_register_target,$(call gb_PythonTest_get_target,$(1)),$(call gb_PythonTest_get_clean_target,$(1))))
@@ -70,7 +70,7 @@ endef
 #
 # gb_PythonTest_add_modules directory module(s)
 define gb_PythonTest_add_modules
-$(call gb_PythonTest_get_target,$(1)) : PYPATH := $$(PYPATH):$(2)
+$(call gb_PythonTest_get_target,$(1)) : PYPATH := $$(PYPATH)$$(gb_CLASSPATHSEP)$(2)
 $(call gb_PythonTest_get_target,$(1)) : MODULES += $(3)
 
 endef
