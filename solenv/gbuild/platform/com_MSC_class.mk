@@ -452,7 +452,6 @@ endef
 
 # PythonTest class
 
-#TODO:
 gb_PythonTest_PRECOMMAND :=
 
 # SrsPartTarget class
