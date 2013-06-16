@@ -83,23 +83,25 @@ NSString* resolveAlias( NSString* i_pSystemPath )
                                                    kCFURLPOSIXPathStyle, false);
     if( rUrl != NULL )
     {
-        FSRef rFS;
-        if( CFURLGetFSRef( rUrl, &rFS ) )
+        CFErrorRef rError;
+        CFDataRef rBookmark = CFURLCreateBookmarkDataFromFile( NULL, rUrl, &rError );
+        CFRelease( rUrl );
+        if( rBookmark != NULL )
         {
-            Boolean bIsFolder = false;
-            Boolean bAlias = false;
-            OSErr err = FSResolveAliasFile( &rFS, true, &bIsFolder, &bAlias);
-            if( (err == noErr) && bAlias )
+            Boolean bIsStale;
+            CFURLRef rResolvedUrl = CFURLCreateByResolvingBookmarkData( kCFAllocatorDefault, rBookmark, kCFBookmarkResolutionWithoutUIMask,
+                                                                        NULL, NULL, &bIsStale, &rError );
+            CFRelease( rBookmark );
+            if( rResolvedUrl == NULL )
             {
-                CFURLRef rResolvedUrl = CFURLCreateFromFSRef( kCFAllocatorDefault, &rFS );
-                if( rResolvedUrl != NULL )
-                {
-                    pResolvedPath = (NSString*)CFURLCopyFileSystemPath( rResolvedUrl, kCFURLPOSIXPathStyle );
-                    CFRelease( rResolvedUrl );
-                }
+                CFRelease( rError );
+            }
+            else
+            {
+                pResolvedPath = (NSString*)CFURLCopyFileSystemPath( rResolvedUrl, kCFURLPOSIXPathStyle );
+                CFRelease( rResolvedUrl );
             }
         }
-        CFRelease( rUrl );
     }
     
     return pResolvedPath;
