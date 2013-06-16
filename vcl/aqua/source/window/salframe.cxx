@@ -872,9 +872,6 @@ void AquaSalFrame::ToTop(sal_uInt16 nFlags)
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    // #i113170# may not be the main thread if called from UNO API
-    SalData::ensureThreadAutoreleasePool();
-
     if( ! (nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN) )
     {
         if( ! [mpWindow isVisible] || [mpWindow isMiniaturized] )
