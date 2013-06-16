@@ -26,14 +26,12 @@
 
 #include "vcl/svapp.hxx"
 #include "vcl/window.hxx"
-#include "vcl/timer.hxx"
 #include "vcl/syswin.hxx"
 
 #include "aqua/saldata.hxx"
 #include "aqua/salgdi.h"
 #include "aqua/salframe.h"
 #include "aqua/salmenu.h"
-#include "aqua/saltimer.h"
 #include "aqua/salinst.h"
 #include "aqua/salframeview.h"
 #include "aqua/aqua11yfactory.h"
@@ -831,25 +829,6 @@ void AquaSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay )
 
 // -----------------------------------------------------------------------
 
-class PreventSleepTimer : public AutoTimer
-{
-public:
-    PreventSleepTimer()
-    {
-        SetTimeout( 30000 );
-        Start();
-    }
-
-    virtual ~PreventSleepTimer()
-    {
-    }
-
-    virtual void Timeout()
-    {
-        UpdateSystemActivity(OverallAct);
-    }
-};
-
 void AquaSalFrame::StartPresentation( sal_Bool bStart )
 {
     if ( !mpWindow )
@@ -861,7 +840,10 @@ void AquaSalFrame::StartPresentation( sal_Bool bStart )
     if( bStart )
     {
         GetSalData()->maPresentationFrames.push_back( this );
-        mpActivityTimer.reset( new PreventSleepTimer() );
+        IOPMAssertionCreateWithName(kIOPMAssertionTypeNoDisplaySleep,
+                                    kIOPMAssertionLevelOn,
+                                    CFSTR("LibreOffice presentation running"),
+                                    &mnAssertionID);
         [mpWindow setLevel: NSPopUpMenuWindowLevel];
         if( mbShown )
             [mpWindow makeMainWindow];
@@ -869,7 +851,7 @@ void AquaSalFrame::StartPresentation( sal_Bool bStart )
     else
     {
         GetSalData()->maPresentationFrames.remove( this );
-        mpActivityTimer.reset();
+        IOPMAssertionRelease(mnAssertionID);
         [mpWindow setLevel: NSNormalWindowLevel];
     }
 }

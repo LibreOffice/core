@@ -20,6 +20,10 @@
 #ifndef _SV_SALFRAME_H
 #define _SV_SALFRAME_H
 
+#include <premac.h>
+#include <IOKit/pwr_mgt/IOPMLib.h>
+#include <postmac.h>
+
 #include "vcl/sysdata.hxx"
 
 #include "aqua/salmenu.h"
@@ -31,8 +35,6 @@
 #include <vector>
 #include <utility>
 #include <stdexcept>
-
-#include <boost/shared_ptr.hpp>
 
 class AquaSalGraphics;
 class AquaSalFrame;
@@ -92,7 +94,9 @@ public:
 
     sal_uLong                           mnICOptions;
 
-    boost::shared_ptr< Timer >      mpActivityTimer; // Timer to prevent system sleep during presentation
+    // To prevent display sleep during presentation
+    IOPMAssertionID                 mnAssertionID;
+
 public:
     /** Constructor
 
