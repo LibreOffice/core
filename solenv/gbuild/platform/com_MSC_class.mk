@@ -452,7 +452,7 @@ endef
 
 # PythonTest class
 
-gb_PythonTest_PRECOMMAND :=
+gb_PythonTest_PRECOMMAND := $(gb_Helper_LIBRARY_PATH_VAR)=$${$(gb_Helper_LIBRARY_PATH_VAR):+$$$(gb_Helper_LIBRARY_PATH_VAR):}$(gb_DEVINSTALLROOT)/URE/bin:$(gb_DEVINSTALLROOT)/program:$(OUTDIR)/bin
 
 # SrsPartTarget class
 
