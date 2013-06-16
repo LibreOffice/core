@@ -7403,7 +7403,12 @@ libo_CHECK_SYSTEM_MODULE([libcmis],[CMIS],[libcmis-0.3 >= 0.3.1])
 dnl ===================================================================
 dnl Check for system libatomic-ops
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libatomic_ops],[ATOMIC_OPS],[libatomic_ops >= 0.7.2])
+libo_CHECK_SYSTEM_MODULE([libatomic_ops],[ATOMIC_OPS],[atomic_ops >= 0.7.2])
+if test "$with_system_libatomic_ops" = "yes"; then
+	SYSTEM_LIBATOMIC_OPS=YES
+    AC_CHECK_HEADERS(atomic_ops.h, [],
+       [AC_MSG_ERROR(atomic_ops.h not found. install libatomic-ops)], [])
+fi
 
 dnl ===================================================================
 dnl Check for system libwpd
@@ -8136,11 +8141,6 @@ if test "x$enable_firebird_sdbc" != "xno"; then
         FIREBIRD_CFLAGS="-I${WORKDIR}/UnpackedTarball/firebird/include"
         FIREBIRD_LIBS="-lfbembed"
         dnl FIREBIRD_LIBS="-L${OUTDIR}/lib -lfbclient"
-
-        if test "$SYSTEM_LIBATOMIC_OPS" = "YES"; then
-            AC_CHECK_HEADERS(atomic_ops.h, [],
-                [AC_MSG_ERROR(atomic_ops.h not found. install libatomic-ops)], [])
-        fi
 
         dnl TODO: Checking to build IBPP in case we want to use it for the SDBC driver
 
