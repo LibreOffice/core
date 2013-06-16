@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//7R8\u003d",
+        "filename": "sc/source/core/data/attrib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-06-16T09:40:13Z",
+      "side": 1,
+      "message": "As verified on mail list, it\u0027s now considered the best way.",
+      "parentUuid": "AAAAXH//7WA\u003d",
+      "revId": "425cf930c59e6fcdb929dc582e42fcfc3ba9d310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//7V8\u003d",
         "filename": "sc/source/core/data/attrib.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//7R4\u003d",
+        "filename": "sc/source/core/data/attrib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-06-16T09:40:13Z",
+      "side": 1,
+      "message": "Done in patch 2",
+      "parentUuid": "AAAAXH//7V8\u003d",
+      "revId": "425cf930c59e6fcdb929dc582e42fcfc3ba9d310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//7V4\u003d",
         "filename": "sc/source/core/data/attrib.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2013-06-14T11:55:53Z",
       "side": 1,
       "message": "same comment here, it\u0027s really harder to read now, better to stick to using aStrYes etc. imho",
+      "revId": "425cf930c59e6fcdb929dc582e42fcfc3ba9d310",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7R0\u003d",
+        "filename": "sc/source/core/data/attrib.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2013-06-16T09:40:13Z",
+      "side": 1,
+      "message": "Done in patch 2",
+      "parentUuid": "AAAAXH//7V4\u003d",
       "revId": "425cf930c59e6fcdb929dc582e42fcfc3ba9d310",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
