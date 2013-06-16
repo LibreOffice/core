@@ -200,8 +200,10 @@ bool isInstanceOfStructOrException( PyObject *obj)
     PyRef attr(
         PyObject_GetAttrString(obj, "__class__"),
         SAL_NO_ACQUIRE );
-    return PyObject_HasAttrString(
-        attr.get(), "__pyunostruct__");
+    if(attr.is())
+        return PyObject_HasAttrString(attr.get(), "__pyunostruct__");
+    else
+        return false;
 }
 
 sal_Bool isInterfaceClass( const Runtime &runtime, PyObject * obj )
