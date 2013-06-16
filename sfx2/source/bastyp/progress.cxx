@@ -103,7 +103,7 @@ void SfxProgress_Impl::Enable_Impl( sal_Bool bEnable )
 // -----------------------------------------------------------------------
 
 SfxProgress_Impl::SfxProgress_Impl( const String &/*rTitle*/ )
-    :   pActiveProgress( 0 )
+    : pActiveProgress(0), pWorkWin(0), pView(0)
 {
 }
 

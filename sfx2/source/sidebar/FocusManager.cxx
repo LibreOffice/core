@@ -45,7 +45,8 @@ FocusManager::FocusManager (const ::boost::function<void(const Panel&)>& rShowPa
       maButtons(),
       maShowPanelFunctor(rShowPanelFunctor),
       mbObservingContentControlFocus(false),
-      mpFirstFocusedContentControl(NULL)
+      mpFirstFocusedContentControl(NULL),
+      mpLastFocusedWindow(NULL)
 {
 }
 

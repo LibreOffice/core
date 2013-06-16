@@ -58,6 +58,8 @@ struct SfxViewFrame_Impl
                         : rFrame( i_rFrame )
                         , pReloader(0 )
                         , pWindow( 0 )
+                        , pActiveChild(0)
+                        , pFocusWin(0)
                         , bWindowWasEnabled(sal_True)
                         , bActive( sal_False )
                         {

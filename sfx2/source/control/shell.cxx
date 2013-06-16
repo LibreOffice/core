@@ -87,7 +87,7 @@ struct SfxShell_Impl: public SfxBroadcaster
     com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor > aVerbList;
     ::sfx2::sidebar::ContextChangeBroadcaster maContextChangeBroadcaster;
 
-    SfxShell_Impl()  : pExecuter( 0 ), pUpdater( 0 ) {}
+    SfxShell_Impl()  : pViewSh(0), pFrame(0), pRepeatTarget(0), pExecuter(0), pUpdater(0) {}
     ~SfxShell_Impl() { delete pExecuter; delete pUpdater;}
 };
 

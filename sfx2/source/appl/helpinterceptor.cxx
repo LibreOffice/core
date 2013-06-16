@@ -43,6 +43,7 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 HelpInterceptor_Impl::HelpInterceptor_Impl() :
 
     m_pHistory  ( NULL ),
+    m_pWindow  ( NULL ),
     m_nCurPos   ( 0 )
 
 {
