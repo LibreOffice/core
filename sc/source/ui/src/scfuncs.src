@@ -9741,7 +9741,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             U2S( HID_FUNC_BITLSHIFT );
             2; 0; 0;
             0;
-        }
+        };
         String 1 // Description
         {
             Text [ en-US ] = "Apply an XPath expression to an XML document";
