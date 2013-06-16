@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAXH//7Nc\u003d",
+        "filename": "solenv/bin/concat-deps.c",
+        "patchSetId": 2
+      },
+      "lineNbr": 878,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-06-16T17:02:04Z",
+      "side": 1,
+      "message": "No, there should be no race conditions as one object shall never be linked in two libraries.\n\nAs for the writing of the file failing here: Its likely best to ignore that. The contents of this file are just a extra safety measure to prevent a Cxx-File that gets written without a Dep-File is not overlooked in a rebuild. As we are generating the file long before that (and mostly only to make the dependency of the LinkTarget dep file happy), this file could even be empty. So giving it content is already a conservative bonus.",
+      "parentUuid": "AAAAXH//7OQ\u003d",
+      "revId": "a26f849d0c35495ad63a1872efb2c8990a562241",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAXH//7OU\u003d",
         "filename": "solenv/bin/concat-deps.c",
         "patchSetId": 2
