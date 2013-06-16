@@ -2750,7 +2750,7 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
     }
 
     std::vector< sal_Int32 > aAttribObjects;
-    if( aLayout.getLength() )
+    if( !aLayout.isEmpty() )
     {
         aAttribObjects.push_back( createObject() );
         updateObject( aAttribObjects.back() );
@@ -2762,7 +2762,7 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
         writeBuffer( aObj.getStr(), aObj.getLength() );
         writeBuffer( aLayout.getStr(), aLayout.getLength() );
     }
-    if( aList.getLength() )
+    if( !aList.isEmpty() )
     {
         aAttribObjects.push_back( createObject() );
         updateObject( aAttribObjects.back() );
@@ -2774,7 +2774,7 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
         writeBuffer( aObj.getStr(), aObj.getLength() );
         writeBuffer( aList.getStr(), aList.getLength() );
     }
-    if( aTable.getLength() )
+    if( !aTable.isEmpty() )
     {
         aAttribObjects.push_back( createObject() );
         updateObject( aAttribObjects.back() );
@@ -5556,7 +5556,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             aLine.append( rWidget.m_nFlags );
             aLine.append( "\n" );
         }
-        if( aValue.getLength() )
+        if( !aValue.isEmpty() )
         {
             OString aVal = aValue.makeStringAndClear();
             aLine.append( "/V " );
@@ -6856,7 +6856,7 @@ bool PDFWriterImpl::emitTrailer()
         }
         aLine.append( "> ]\n" );
     }
-    if( aDocChecksum.getLength() )
+    if( !aDocChecksum.isEmpty() )
     {
         aLine.append( "/DocChecksum /" );
         aLine.append( aDocChecksum.makeStringAndClear() );
@@ -10685,7 +10685,7 @@ void PDFWriterImpl::updateGraphicsState()
 
     // everything is up to date now
     m_aCurrentPDFState = m_aGraphicsStack.front();
-    if( aLine.getLength() )
+    if( !aLine.isEmpty() )
         writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
