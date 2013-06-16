@@ -375,11 +375,6 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
-// 'fileAttributesAtPath:traverseLink:' is deprecated 
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
-#pragma GCC diagnostic warning "-Wdeprecated-declarations"
-#endif
-
 sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
@@ -390,7 +385,7 @@ sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
     }
 
     NSFileManager *manager = [NSFileManager defaultManager];
-    NSDictionary* pAttribs = [manager fileAttributesAtPath: sFilename traverseLink: NO];
+    NSDictionary* pAttribs = [manager attributesOfItemAtPath: sFilename error: nil];
     if( pAttribs )
     {
         NSObject* pType = [pAttribs objectForKey: NSFileType];
@@ -435,10 +430,6 @@ sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 
     return sal_False;
 }
-
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
-#pragma GCC diagnostic error "-Wdeprecated-declarations"
-#endif
 
 FilterList* FilterHelper::getFilterList() {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
