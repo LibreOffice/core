@@ -118,6 +118,7 @@
 int internal_boost = 0;
 static char* base_dir;
 static char* work_dir;
+int work_dir_len;
 
 #ifdef __GNUC__
 #define clz __builtin_clz
@@ -985,6 +986,30 @@ off_t size;
             }
         }
     }
+    else
+    {
+        if(strncmp(fn, work_dir, work_dir_len) == 0)
+        {
+            if(strncmp(fn+work_dir_len, "Dep/CxxObject/", 14) == 0)
+            {
+                *(fn+strlen(fn)-1)='o';
+                printf("%s/%s: $(gb_Helper_PHONY)\n", base_dir, fn+work_dir_len+14);
+                rc = 0;
+            }
+            else if(strncmp(fn+work_dir_len, "Dep/UnoApiPartTarget/", 21) == 0)
+            {
+                *(fn+strlen(fn)-2)=0;
+                printf("%s/%s.urd: $(gb_Helper_PHONY)\n", base_dir, fn+work_dir_len+21);
+                rc = 0;
+            }
+            else if(strncmp(fn+work_dir_len, "Dep/SrsPartTarget/", 18) == 0)
+            {
+                *(fn+strlen(fn)-2)=0;
+                printf("%s/%s: $(gb_Helper_PHONY)\n", base_dir, fn+work_dir_len+18);
+                rc = 0;
+            }
+        }
+    }
     return rc;
 }
 
@@ -1023,6 +1048,7 @@ const char *env_str;
     }
     if(get_var(&base_dir, "SRCDIR") || get_var(&work_dir, "WORKDIR"))
         return 1;
+    work_dir_len = strlen(work_dir);
 
     env_str = getenv("SYSTEM_BOOST");
     internal_boost = !env_str || strcmp(env_str,"TRUE");
