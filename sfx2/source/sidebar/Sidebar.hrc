@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -55,3 +56,5 @@
 #define SFX_STR_SIDEBAR_MORE_OPTIONS                (RID_SFX_SIDEBAR_START +  1)
 #define SFX_STR_SIDEBAR_CLOSE_DECK                  (RID_SFX_SIDEBAR_START +  2)
 #define SFX_STR_SIDEBAR_ACCESSIBILITY_PANEL_PREFIX  (RID_SFX_SIDEBAR_START +  3)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

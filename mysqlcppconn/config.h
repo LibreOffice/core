@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <sal/types.h>
 
 #define HAVE_FUNCTION_STRTOL 1
@@ -34,3 +35,5 @@ typedef sal_uInt32  uint32_t;
 typedef sal_Int64   int64_t;
 typedef sal_uInt64  uint64_t;
 #endif // !defined(HAVE_STDINT_H) && !defined(HAVE_INTTYPES_H)
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

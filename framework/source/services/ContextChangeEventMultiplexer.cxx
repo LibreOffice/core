@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -381,3 +382,5 @@ cssu::Reference<cssu::XInterface> SAL_CALL ContextChangeEventMultiplexer::static
 }
 
 }  // end of namespace framework
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

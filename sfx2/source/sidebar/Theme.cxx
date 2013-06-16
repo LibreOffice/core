@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -1151,3 +1152,5 @@ void Theme::ProcessNewValue (
 }
 
 } } // end of namespace sfx2::sidebar
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
