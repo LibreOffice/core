@@ -794,6 +794,7 @@ void ScLeftB();
 void ScMidB();
 
 void ScFilterXML();
+void ScWebservice();
 
 static const double fMaxGammaArgument;
 

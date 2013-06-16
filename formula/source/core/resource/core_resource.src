@@ -363,6 +363,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_ERROR_NUM     { Text = "#NUM!"   ; };
     String SC_OPCODE_ERROR_NA      { Text = "#N/A"    ; };
     String SC_OPCODE_FILTERXML     { Text = "COM.MICROSOFT.FILTERXML";};
+    String SC_OPCODE_WEBSERVICE    { Text = "COM.MICROSOFT.WEBSERVICE"; };
     /* END defined ERROR.TYPE() values. */
 };
 // DO NOT CHANGE!
@@ -2000,6 +2001,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_FILTERXML
     {
         Text [ en-US ] = "FILTERXML";
+    };
+    String SC_OPCODE_WEBSERVICE
+    {
+        Text [ en-US ] = "WEBSERVICE";
     };
 };
 

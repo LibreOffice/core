@@ -402,6 +402,7 @@ enum OpCodeEnum
         ocGetPivotData      = SC_OPCODE_GET_PIVOT_DATA,
         ocEuroConvert       = SC_OPCODE_EUROCONVERT,
         ocFilterXML         = SC_OPCODE_FILTERXML,
+        ocWebservice        = SC_OPCODE_WEBSERVICE,
     // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
         ocTTT               = SC_OPCODE_TTT,

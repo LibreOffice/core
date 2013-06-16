@@ -9762,6 +9762,29 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "String containing a valid XPath expression";
         };
     };
+    Resource SC_OPCODE_WEBSERVICE
+    {
+        String 1 // Description
+        {
+            Text [ en-US] = "Get some webcontent from an URI.";
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_TEXT;
+            U2S( HID_FUNC_BITLSHIFT );
+            1; 0; 0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "URI";
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "URI of the webservice";
+        };
+    };
 };
 
 #if defined(U2S)

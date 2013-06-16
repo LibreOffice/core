@@ -408,9 +408,10 @@
 #define SC_OPCODE_LEFTB             410
 #define SC_OPCODE_MIDB              412
 #define SC_OPCODE_FILTERXML         413
-#define SC_OPCODE_LAST_OPCODE_ID    414     /* last OpCode */
+#define SC_OPCODE_WEBSERVICE        414
+#define SC_OPCODE_LAST_OPCODE_ID    415     /* last OpCode */
 
-#define SC_OPCODE_STOP_FUNCTION     415
+#define SC_OPCODE_STOP_FUNCTION     416
 
 /*** Internal ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9999

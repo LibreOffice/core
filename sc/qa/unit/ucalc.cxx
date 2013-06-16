@@ -5392,6 +5392,7 @@ void Test::testFunctionLists()
         "UNICODE",
         "UPPER",
         "VALUE",
+        "WEBSERVICE",
         0
     };
 
