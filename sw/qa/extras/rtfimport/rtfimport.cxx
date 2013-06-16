@@ -142,7 +142,6 @@ public:
     void testPageBackground();
     void testFdo62044();
     void testPoshPosv();
-    void testTextframeTable();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -272,7 +271,6 @@ void Test::run()
         {"page-background.rtf", &Test::testPageBackground},
         {"fdo62044.rtf", &Test::testFdo62044},
         {"posh-posv.rtf", &Test::testPoshPosv},
-        {"textframe-table.rtf", &Test::testTextframeTable},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1284,19 +1282,6 @@ void Test::testPoshPosv()
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(xDraws->getByIndex(0), "HoriOrient"));
     CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xDraws->getByIndex(0), "VertOrient"));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xDraws->getByIndex(0), "FrameIsAutomaticHeight"));
-}
-
-void Test::testTextframeTable()
-{
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xTextRange(xDraws->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText = xTextRange->getText();
-    CPPUNIT_ASSERT_EQUAL(OUString("First para."), getParagraphOfText(1, xText)->getString());
-    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2, xText), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("A"), uno::Reference<text::XTextRange>(xTable->getCellByName("A1"), uno::UNO_QUERY)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("B"), uno::Reference<text::XTextRange>(xTable->getCellByName("B1"), uno::UNO_QUERY)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString("Last para."), getParagraphOfText(3, xText)->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

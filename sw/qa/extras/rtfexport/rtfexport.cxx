@@ -65,6 +65,7 @@ public:
     void testTextFrameBorders();
     void testTextframeGradient();
     void testRecordChanges();
+    void testTextframeTable();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -119,6 +120,7 @@ void Test::run()
         {"textframe-borders.rtf", &Test::testTextFrameBorders},
         {"textframe-gradient.rtf", &Test::testTextframeGradient},
         {"record-changes.rtf", &Test::testRecordChanges},
+        {"textframe-table.rtf", &Test::testTextframeTable},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -590,6 +592,19 @@ void Test::testRecordChanges()
 {
     // \revisions wasn't imported/exported.
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(mxComponent, "RecordChanges"));
+}
+
+void Test::testTextframeTable()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    CPPUNIT_ASSERT_EQUAL(OUString("First para."), getParagraphOfText(1, xText)->getString());
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2, xText), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), uno::Reference<text::XTextRange>(xTable->getCellByName("A1"), uno::UNO_QUERY)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("B"), uno::Reference<text::XTextRange>(xTable->getCellByName("B1"), uno::UNO_QUERY)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Last para."), getParagraphOfText(3, xText)->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
