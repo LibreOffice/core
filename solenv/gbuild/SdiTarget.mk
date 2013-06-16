@@ -54,8 +54,7 @@ $(dir $(call gb_SdiObject_get_dep_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_SdiTarget_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@,\
-	  $(call gb_Object__command_dep,$@,$(call gb_SdiTarget_get_target,$*)))
+	$(if $(wildcard $@),touch $@)
 endif
 
 .PHONY : $(call gb_SdiTarget_get_clean_target,%)

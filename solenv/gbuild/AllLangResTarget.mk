@@ -102,8 +102,7 @@ $(call gb_SrsPartTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) \
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_SrsPartTarget_get_dep_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY)
 	$(call gb_Helper_abbreviate_dirs,\
-		mkdir -p $(dir $@) && \
-		echo "$(call gb_SrsPartTarget_get_target,$*) : $(gb_Helper_PHONY)" > $@)
+		mkdir -p $(dir $@))
 endif
 
 
