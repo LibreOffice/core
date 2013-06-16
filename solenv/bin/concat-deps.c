@@ -118,6 +118,7 @@
 int internal_boost = 0;
 static char* base_dir;
 static char* work_dir;
+int work_dir_len;
 
 #ifdef __GNUC__
 #define clz __builtin_clz
@@ -864,6 +865,22 @@ static inline char * eat_space_at_end(char * end)
     return real_end;
 }
 
+static char* phony_content_buffer;
+static inline char* generate_phony_line(char* phony_target)
+{
+    sprintf(phony_content_buffer, "%s/%s : $(gb_Helper_PHONY)\n", work_dir, phony_target);
+    return phony_content_buffer;
+}
+
+static inline void generate_phony_file(char* fn, char* content)
+{
+FILE* depfile;
+    depfile = fopen(fn, "w");
+    fputs(content, depfile);
+    fclose(depfile);
+}
+
+static char* target;
 static int _process(struct hash* dep_hash, char* fn)
 {
 int rc;
@@ -872,6 +889,7 @@ char* end;
 char* cursor;
 char* cursor_out;
 char* base;
+char* created_line;
 int continuation = 0;
 char last_ns = 0;
 off_t size;
@@ -985,6 +1003,45 @@ off_t size;
             }
         }
     }
+    else
+    {
+        if(strncmp(fn, work_dir, work_dir_len) == 0)
+        {
+            if(strncmp(fn+work_dir_len, "/Dep/CxxObject/", 15) == 0)
+            {
+                strncpy(target, fn+work_dir_len+5, 4000);
+                *(target+strlen(target)-1) = 'o';
+                created_line = generate_phony_line(target);
+                generate_phony_file(fn, created_line);
+                puts(created_line);
+                rc = 0;
+            }
+            else if(strncmp(fn+work_dir_len, "/Dep/UnoApiPartTarget/", 22) == 0)
+            {
+                strncpy(target, fn+work_dir_len+5, 4000);
+                *(target+strlen(target)-2) = 0;
+                strncat(target, ".urd", 5);
+                created_line = generate_phony_line(target);
+                generate_phony_file(fn, created_line);
+                puts(created_line);
+                rc = 0;
+            }
+            else if(strncmp(fn+work_dir_len, "/Dep/SrsPartTarget/", 19) == 0)
+            {
+                strncpy(target, fn+work_dir_len+5, 20);
+                *(target+strlen(target)-2) = 0;
+                strncat(target, ".urd", 4);
+                created_line = generate_phony_line(target);
+                generate_phony_file(fn, created_line);
+                puts(created_line);
+                rc = 0;
+            }
+            else
+            {
+                fprintf(stderr, "no magic for %s in %s", fn, work_dir);
+            }
+        }
+    }
     return rc;
 }
 
@@ -1023,6 +1080,9 @@ const char *env_str;
     }
     if(get_var(&base_dir, "SRCDIR") || get_var(&work_dir, "WORKDIR"))
         return 1;
+    work_dir_len = strlen(work_dir);
+    phony_content_buffer = malloc(work_dir_len+4096);
+    target = malloc(4096);
 
     env_str = getenv("SYSTEM_BOOST");
     internal_boost = !env_str || strcmp(env_str,"TRUE");
