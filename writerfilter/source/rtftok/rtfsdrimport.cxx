@@ -604,7 +604,6 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
     m_rImport.Mapper().startShape(xShape);
     if (bClose)
     {
-        m_rImport.replayShapetext();
         m_rImport.Mapper().endShape();
     }
     m_xShape = xShape;

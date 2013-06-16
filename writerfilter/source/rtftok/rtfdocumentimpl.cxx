@@ -2237,8 +2237,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 // Reset everything.
                 m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
                 m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
-                if (m_aStates.top().pCurrentBuffer != &m_aShapetextBuffer)
-                    m_aStates.top().pCurrentBuffer = 0;
+                m_aStates.top().pCurrentBuffer = 0;
             }
             else
             {
@@ -4147,7 +4146,6 @@ int RTFDocumentImpl::popState()
                 if (!m_aStates.top().aDrawingObject.bHadShapeText)
                 {
                     Mapper().startShape(xShape);
-                    replayShapetext();
                 }
                 Mapper().endShape();
             }
@@ -4647,19 +4645,6 @@ void RTFDocumentImpl::setDestinationText(OUString& rString)
 {
     m_aStates.top().aDestinationText.setLength(0);
     m_aStates.top().aDestinationText.append(rString);
-}
-
-void RTFDocumentImpl::replayShapetext()
-{
-    Mapper().startParagraphGroup();
-    if (!m_aShapetextBuffer.empty())
-    {
-        replayBuffer(m_aShapetextBuffer);
-        Mapper().startCharacterGroup();
-        runBreak();
-        Mapper().endCharacterGroup();
-    }
-    Mapper().endParagraphGroup();
 }
 
 bool RTFDocumentImpl::getSkipUnknown()

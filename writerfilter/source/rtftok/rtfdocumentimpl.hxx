@@ -440,7 +440,6 @@ namespace writerfilter {
                 void setDestinationText(OUString& rString);
                 /// Resolve a picture: If not inline, then anchored.
                 int resolvePict(bool bInline);
-                void replayShapetext();
                 bool getSkipUnknown();
                 void setSkipUnknown(bool bSkipUnknown);
 
