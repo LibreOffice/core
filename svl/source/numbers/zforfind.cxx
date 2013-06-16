@@ -139,6 +139,12 @@ void ImpSvNumberInputScan::Reset()
     nDatePatternStart = 0;
     nDatePatternNumbers = 0;
     nCanForceToIso8601 = 0;
+
+    for (sal_uInt32 i = 0; i < SV_MAX_ANZ_INPUT_STRINGS; i++)
+    {
+        IsNum[i] = false;
+        nNums[i] = 0;
+    }
 }
 
 
