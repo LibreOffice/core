@@ -204,7 +204,7 @@ static bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
             aStr2.remove(i, 1);
     }
 
-    if (!aStr1.Len() && !aStr2.getLength())
+    if (!aStr1.Len() && aStr2.isEmpty())
         return false;
 
     if ( !aStr1.Len() )

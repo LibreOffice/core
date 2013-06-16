@@ -176,7 +176,7 @@ namespace psp
             aKey.append( sal_Unicode( ':' ) );
             aKey.append( i_rValue );
         }
-        if( aKey.getLength() && !i_rTranslation.isEmpty() )
+        if( !aKey.isEmpty() && !i_rTranslation.isEmpty() )
         {
             OUString aK( aKey.makeStringAndClear() );
             com::sun::star::lang::Locale aLoc;
@@ -208,7 +208,7 @@ namespace psp
             aKey.append( sal_Unicode( ':' ) );
             aKey.append( i_rValue );
         }
-        if( aKey.getLength() )
+        if( !aKey.isEmpty() )
         {
             OUString aK( aKey.makeStringAndClear() );
             key_translation_map::const_iterator it = m_aTranslations.find( aK );

@@ -2407,7 +2407,7 @@ void Edit::StateChanged( StateChangedType nType )
             mnAlign = EDIT_ALIGN_RIGHT;
         else if ( nStyle & WB_CENTER )
             mnAlign = EDIT_ALIGN_CENTER;
-        if ( maText.getLength() && ( mnAlign != nOldAlign ) )
+        if ( !maText.isEmpty() && ( mnAlign != nOldAlign ) )
         {
             ImplAlign();
             Invalidate();

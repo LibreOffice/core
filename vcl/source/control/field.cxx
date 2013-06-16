@@ -1111,7 +1111,7 @@ static OUString ImplMetricGetUnitText(const OUString& rStr)
             aStr.insert(0, c);
         else
         {
-            if (aStr.getLength())
+            if (!aStr.isEmpty())
                 break;
         }
     }

@@ -159,7 +159,7 @@ const char* SalGenericSystem::getFrameResName()
      *  then use argv[0] stripped by directories
      */
     static OStringBuffer aResName;
-    if( !aResName.getLength() )
+    if( aResName.isEmpty() )
     {
         int nArgs = osl_getCommandArgCount();
         for( int n = 0; n < nArgs-1; n++ )
@@ -173,13 +173,13 @@ const char* SalGenericSystem::getFrameResName()
                 break;
             }
         }
-        if( !aResName.getLength() )
+        if( aResName.isEmpty() )
         {
             const char* pEnv = getenv( "RESOURCE_NAME" );
             if( pEnv && *pEnv )
                 aResName.append( pEnv );
         }
-        if( !aResName.getLength() )
+        if( aResName.isEmpty() )
             aResName.append( OUStringToOString( utl::ConfigManager::getProductName().toAsciiLowerCase(),
                 osl_getThreadTextEncoding()));
     }
@@ -189,7 +189,7 @@ const char* SalGenericSystem::getFrameResName()
 const char* SalGenericSystem::getFrameClassName()
 {
     static OStringBuffer aClassName;
-    if( !aClassName.getLength() )
+    if( aClassName.isEmpty() )
     {
         OUString aIni, aProduct;
         rtl::Bootstrap::get( "BRAND_BASE_DIR", aIni );

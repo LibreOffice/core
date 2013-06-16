@@ -2212,7 +2212,7 @@ static bool ImplIsValidTimePortion( sal_Bool _bSkipInvalidCharacters, const OUSt
 {
     if ( !_bSkipInvalidCharacters )
     {
-        if ( ( _rStr.getLength() > 2 ) || ( _rStr.getLength() < 1 ) || !ImplIsOnlyDigits( _rStr ) )
+        if ( ( _rStr.getLength() > 2 ) || _rStr.isEmpty() || !ImplIsOnlyDigits( _rStr ) )
             return false;
     }
     return true;
