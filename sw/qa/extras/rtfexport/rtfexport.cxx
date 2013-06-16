@@ -64,6 +64,7 @@ public:
     void testHyperlink();
     void testTextFrameBorders();
     void testTextframeGradient();
+    void testRecordChanges();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -117,6 +118,7 @@ void Test::run()
         {"hyperlink.rtf", &Test::testHyperlink},
         {"textframe-borders.rtf", &Test::testTextFrameBorders},
         {"textframe-gradient.rtf", &Test::testTextframeGradient},
+        {"record-changes.rtf", &Test::testRecordChanges},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -582,6 +584,12 @@ void Test::testTextframeGradient()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x000000), aGradient.StartColor);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x666666), aGradient.EndColor);
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_AXIAL, aGradient.Style);
+}
+
+void Test::testRecordChanges()
+{
+    // \revisions wasn't imported/exported.
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(mxComponent, "RecordChanges"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -2655,6 +2655,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_MNOR:
                 m_bMathNor = true;
                 break;
+        case RTF_REVISIONS:
+                m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_trackRevisions, RTFValue::Pointer_t(new RTFValue(1)));
+                break;
         default:
                 {
                     SAL_INFO("writerfilter", "TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");

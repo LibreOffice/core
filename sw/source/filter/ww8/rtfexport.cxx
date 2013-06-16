@@ -515,6 +515,9 @@ void RtfExport::ExportDocument_Impl()
         Strm() << OOO_STRING_SVTOOLS_RTF_VIEWSCALE;
         OutULong(pViewShell->GetViewOptions()->GetZoom());
     }
+    // Record changes?
+    if (nsRedlineMode_t::REDLINE_ON & mnRedlineMode)
+        Strm() << OOO_STRING_SVTOOLS_RTF_REVISIONS;
     // Page description
     WritePageDescTable();
 
