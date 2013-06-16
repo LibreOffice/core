@@ -311,7 +311,7 @@ int CTFontData::GetFontTable( const char pTagName[5], unsigned char* pResultBuf 
     // get the raw table length
     CTFontDescriptorRef pFontDesc = reinterpret_cast<CTFontDescriptorRef>( GetFontId());
     CTFontRef rCTFont = CTFontCreateWithFontDescriptor( pFontDesc, 0.0, NULL);
-#ifdef MACOSX
+#if defined(MACOSX) && MACOSX_SDK_VERSION < 1080
     const uint32_t opts( kCTFontTableOptionExcludeSynthetic );
 #else
     const uint32_t opts( kCTFontTableOptionNoOptions );
