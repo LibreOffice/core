@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <drawinglayer/processor2d/vclmetafileprocessor2d.hxx>
+#include "vclmetafileprocessor2d.hxx"
 #include <tools/gen.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
@@ -34,7 +34,7 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
-#include <drawinglayer/processor2d/vclpixelprocessor2d.hxx>
+#include "vclpixelprocessor2d.hxx"
 #include <tools/stream.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>

@@ -18,7 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
-#include <drawinglayer/processor2d/vclprocessor2d.hxx>
+#include "vclprocessor2d.hxx"
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <tools/debug.hxx>

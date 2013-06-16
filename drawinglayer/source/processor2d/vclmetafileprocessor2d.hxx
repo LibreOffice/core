@@ -22,7 +22,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <drawinglayer/processor2d/vclprocessor2d.hxx>
+#include "vclprocessor2d.hxx"
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 

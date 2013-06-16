@@ -22,7 +22,7 @@
 
 #include <drawinglayer/drawinglayerdllapi.h>
 
-#include <drawinglayer/processor2d/vclprocessor2d.hxx>
+#include "vclprocessor2d.hxx"
 #include <vcl/outdev.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

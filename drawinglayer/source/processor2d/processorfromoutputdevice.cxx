@@ -24,8 +24,8 @@
 #include <vcl/gdimtf.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
-#include <drawinglayer/processor2d/vclmetafileprocessor2d.hxx>
-#include <drawinglayer/processor2d/vclpixelprocessor2d.hxx>
+#include "vclmetafileprocessor2d.hxx"
+#include "vclpixelprocessor2d.hxx"
 #include <vcl/window.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
