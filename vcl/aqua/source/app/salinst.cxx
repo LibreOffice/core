@@ -169,20 +169,7 @@ static void initNSApp()
                                           name: @"AppleNoRedisplayAppearancePreferenceChanged"
                                           object: nil ];
 
-    // get System Version and store the value in GetSalData()->mnSystemVersion
-    OSErr err = noErr;
-    SInt32 systemVersion = VER_TIGER; // Initialize with minimal requirement
-    if( (err = Gestalt(gestaltSystemVersion, &systemVersion)) == noErr )
-    {
-        GetSalData()->mnSystemVersion = systemVersion;
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "System Version %x\n", (unsigned int)systemVersion);
-#endif
-    }
-    else
-        NSLog(@"Unable to obtain system version: %ld", (long)err);
-
-     // Initialize Apple Remote
+    // Initialize Apple Remote
     GetSalData()->mpMainController = [[MainController alloc] init];
 
     [[NSDistributedNotificationCenter defaultCenter] addObserver: NSApp

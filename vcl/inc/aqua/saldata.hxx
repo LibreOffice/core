@@ -89,7 +89,6 @@ public:
     static oslThreadKey                           s_aAutoReleaseKey;
 
     bool                                          mbIsScrollbarDoubleMax;   // TODO: support DoubleMin and DoubleBoth too
-    SInt32                                        mnSystemVersion;          // Store System Version
     MainController*                               mpMainController;         // Apple Remote
 
     NSObject*                                     mpDockIconClickHandler;

@@ -193,18 +193,6 @@
             }
         }
     }
-    else if( eType == NSScrollWheel && ( GetSalData()->mnSystemVersion < VER_LEOPARD /* fixed in Leopard and above */ ) )
-    {
-
-        NSWindow* pWin = [pEvent window];
-        // on Tiger wheel events do not reach non key windows
-        // which probably should be considered a bug
-        if( [pWin isKindOfClass: [SalFrameWindow class]] && [pWin canBecomeKeyWindow] == NO )
-        {
-            [[pWin contentView] scrollWheel: pEvent];
-            return;
-        }
-    }
     [super sendEvent: pEvent];
 }
 
