@@ -119,12 +119,14 @@ SvtCTLOptions_Impl::SvtCTLOptions_Impl() :
     m_bCTLFontEnabled       ( sal_False ),
     m_bCTLSequenceChecking  ( sal_False ),
     m_bCTLRestricted        ( sal_False ),
+    m_bCTLTypeAndReplace    ( sal_False ),
     m_eCTLCursorMovement    ( SvtCTLOptions::MOVEMENT_LOGICAL ),
     m_eCTLTextNumerals      ( SvtCTLOptions::NUMERALS_ARABIC ),
 
     m_bROCTLFontEnabled     ( CFG_READONLY_DEFAULT ),
     m_bROCTLSequenceChecking( CFG_READONLY_DEFAULT ),
     m_bROCTLRestricted      ( CFG_READONLY_DEFAULT ),
+    m_bROCTLTypeAndReplace  ( CFG_READONLY_DEFAULT ),
     m_bROCTLCursorMovement  ( CFG_READONLY_DEFAULT ),
     m_bROCTLTextNumerals    ( CFG_READONLY_DEFAULT )
 {
