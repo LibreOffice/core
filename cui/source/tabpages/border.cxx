@@ -993,6 +993,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
     m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( SOLID ), SOLID );
     m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( DOTTED ), DOTTED );
     m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( DASHED ), DASHED );
+    m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( FINE_DASHED ), FINE_DASHED );
 
     // Double lines
     m_pLbLineStyle->InsertEntry( SvxBorderLine::getWidthImpl( DOUBLE ), DOUBLE );

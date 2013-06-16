@@ -643,6 +643,11 @@ namespace svtools
                     aPattern.push_back( 4 );
                     aPattern.push_back( 1 );
                 }
+                else if ( eUnit == MAP_TWIP )
+                {
+                    aPattern.push_back( 120.0 );
+                    aPattern.push_back( 30.0 );
+                }
                 break;
             default:
                 break;
