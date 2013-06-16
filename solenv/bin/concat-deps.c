@@ -118,6 +118,7 @@
 int internal_boost = 0;
 static char* base_dir;
 static char* work_dir;
+int work_dir_len;
 
 #ifdef __GNUC__
 #define clz __builtin_clz
@@ -864,6 +865,44 @@ static inline char * eat_space_at_end(char * end)
     return real_end;
 }
 
+static char* phony_content_buffer;
+static inline char* generate_phony_line(char* phony_target, char* extension)
+{
+char* src;
+char* dest;
+char* last_dot;
+    //fprintf(stderr, "generate_phony_line called with phony_target %s and extension %s\n", phony_target, extension);
+    for(dest = phony_content_buffer+work_dir_len, src = phony_target; *src != 0; ++src, ++dest)
+    {
+        *dest = *src;
+        if(*dest == '.')
+        {
+            last_dot = dest;
+        }
+    }
+    //fprintf(stderr, "generate_phony_line after phony_target copy: %s\n", phony_content_buffer);
+    for(dest = last_dot+1, src = extension; *src != 0; ++src, ++dest)
+    {
+        *dest = *src;
+    }
+    //fprintf(stderr, "generate_phony_line after extension add: %s\n", phony_content_buffer);
+    strcpy(dest, ": $(gb_Helper_PHONY)\n");
+    //fprintf(stderr, "generate_phony_line after phony add: %s\n", phony_content_buffer);
+    return phony_content_buffer;
+}
+
+static inline int generate_phony_file(char* fn, char* content)
+{
+FILE* depfile;
+    depfile = fopen(fn, "w");
+    if(depfile)
+    {
+        fputs(content, depfile);
+        fclose(depfile);
+    }
+    return !depfile;
+}
+
 static int _process(struct hash* dep_hash, char* fn)
 {
 int rc;
@@ -872,6 +911,8 @@ char* end;
 char* cursor;
 char* cursor_out;
 char* base;
+char* created_line;
+char* src_relative;
 int continuation = 0;
 char last_ns = 0;
 off_t size;
@@ -985,6 +1026,75 @@ off_t size;
             }
         }
     }
+    else
+    {
+        if(strncmp(fn, work_dir, work_dir_len) == 0)
+        {
+            if(strncmp(fn+work_dir_len, "/Dep/", 5) == 0)
+            {
+                src_relative = fn+work_dir_len+5;
+                // cases ordered by frequency
+                if(strncmp(src_relative, "CxxObject/", 10) == 0)
+                {
+                    created_line = generate_phony_line(src_relative+10, "o");
+                    rc = generate_phony_file(fn, created_line);
+                }
+                else if(strncmp(fn+work_dir_len+5, "UnoApiPartTarget/", 17) == 0)
+                {
+                    created_line = generate_phony_line(src_relative+17, "urd");
+                    rc = generate_phony_file(fn, created_line);
+                }
+                else if(strncmp(fn+work_dir_len+5, "SrsPartTarget/", 14) == 0)
+                {
+                    created_line = generate_phony_line(src_relative+14, "");
+                    rc = generate_phony_file(fn, created_line);
+                }
+                else if(strncmp(src_relative, "GenCxxObject/", 13) == 0)
+                {
+                    created_line = generate_phony_line(src_relative+13, "o");
+                    rc = generate_phony_file(fn, created_line);
+                }
+                else if(strncmp(src_relative, "CObject/", 8) == 0)
+                {
+                    created_line = generate_phony_line(src_relative+8, "o");
+                    rc = generate_phony_file(fn, created_line);
+                }
+                else if(strncmp(src_relative, "GenCObject/", 11) == 0)
+                {
+                    created_line = generate_phony_line(src_relative+11, "o");
+                    rc = generate_phony_file(fn, created_line);
+                }
+                else if(strncmp(src_relative, "SdiObject/", 10) == 0)
+                {
+                    created_line = generate_phony_line(src_relative+10, "o");
+                    rc = generate_phony_file(fn, created_line);
+                }
+                else if(strncmp(src_relative, "AsmObject/", 10) == 0)
+                {
+                    created_line = generate_phony_line(src_relative+10, "o");
+                    rc = generate_phony_file(fn, created_line);
+                }
+                else if(strncmp(src_relative, "ObjCxxObject/", 13) == 0)
+                {
+                    created_line = generate_phony_line(src_relative+13, "o");
+                    rc = generate_phony_file(fn, created_line);
+                }
+                else if(strncmp(src_relative, "ObjCObject/", 11) == 0)
+                {
+                    created_line = generate_phony_line(src_relative+11, "o");
+                    rc = generate_phony_file(fn, created_line);
+                }
+                else
+                {
+                    fprintf(stderr, "no magic for %s(%s) in %s\n", fn, src_relative, work_dir);
+                }
+            }
+            if(!rc)
+            {
+                puts(created_line);
+            }
+        }
+    }
     return rc;
 }
 
@@ -994,6 +1104,7 @@ static void _usage(void)
 }
 
 #define kDEFAULT_HASH_SIZE 4096
+#define PHONY_TARGET_BUFFER 4096
 
 static int get_var(char **var, const char *name)
 {
@@ -1023,6 +1134,10 @@ const char *env_str;
     }
     if(get_var(&base_dir, "SRCDIR") || get_var(&work_dir, "WORKDIR"))
         return 1;
+    work_dir_len = strlen(work_dir);
+    phony_content_buffer = malloc(PHONY_TARGET_BUFFER);
+    strcpy(phony_content_buffer, work_dir);
+    phony_content_buffer[work_dir_len] = '/';
 
     env_str = getenv("SYSTEM_BOOST");
     internal_boost = !env_str || strcmp(env_str,"TRUE");

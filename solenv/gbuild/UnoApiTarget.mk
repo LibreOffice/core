@@ -72,8 +72,7 @@ $(dir $(call gb_UnoApiPartTarget_get_dep_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_UnoApiPartTarget_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@,\
-	  $(call gb_Object__command_dep,$@,$(call gb_UnoApiPartTarget_get_target,$*.urd)))
+	$(if $(wildcard $@),touch $@)
 
 endif
 
