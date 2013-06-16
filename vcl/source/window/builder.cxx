@@ -652,6 +652,20 @@ namespace
         return Size(sWidthRequest.toInt32(), sHeightRequest.toInt32());
     }
 
+    OString extractTooltipText(VclBuilder::stringmap &rMap)
+    {
+        OString sTooltipText;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("tooltip-text"));
+        if (aFind == rMap.end())
+            aFind = rMap.find(OString("tooltip-markup"));
+        if (aFind != rMap.end())
+        {
+            sTooltipText = aFind->second;
+            rMap.erase(aFind);
+        }
+        return sTooltipText;
+    }
+
     Window * extractStockAndBuildPushButton(Window *pParent, VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
@@ -1272,13 +1286,19 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         if (pToolBox)
         {
             OUString aCommand(OStringToOUString(extractActionName(rMap), RTL_TEXTENCODING_UTF8));
+            OUString aTooltip(OStringToOUString(extractTooltipText(rMap), RTL_TEXTENCODING_UTF8));
 
             ToolBoxItemBits nBits = 0;
             if (name == "GtkMenuToolButton")
                 nBits |= TIB_DROPDOWN;
 
             if (!aCommand.isEmpty())
+            {
                 pToolBox->InsertItem(aCommand, m_xFrame, nBits, extractSizeRequest(rMap));
+
+                if (!aTooltip.isEmpty())
+                    pToolBox->SetQuickHelpText(pToolBox->GetItemId(aCommand), aTooltip);
+            }
 
             return NULL; // no widget to be created
         }
