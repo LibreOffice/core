@@ -70,6 +70,7 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
 {
     pFormatter = pFormatterP;
     bConvertMode = false;
+    bConvertSystemToSystem = false;
     //! All keywords MUST be UPPERCASE!
     sKeyword[NF_KEY_E] =     "E";        // Exponent
     sKeyword[NF_KEY_AMPM] =  "AM/PM";    // AM/PM
