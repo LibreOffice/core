@@ -264,6 +264,8 @@ protected:
 
     void load(const char* pDir, const char* pName, bool bCalcLayout = true)
     {
+        if (mxComponent.is())
+            mxComponent->dispose();
         // Output name early, so in the case of a hang, the name of the hanging input file is visible.
         std::cerr << pName << ",";
         m_nStartTime = osl_getGlobalTimer();
