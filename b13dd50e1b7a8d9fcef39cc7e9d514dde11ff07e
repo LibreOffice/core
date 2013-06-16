@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7OA\u003d",
+        "filename": "editeng/source/lookuptree/Trie.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-06-16T16:36:52Z",
+      "side": 1,
+      "message": "could split out this block and the duplicate below into some helper function",
+      "revId": "b13dd50e1b7a8d9fcef39cc7e9d514dde11ff07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7N8\u003d",
+        "filename": "editeng/source/lookuptree/Trie.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-06-16T16:36:52Z",
+      "side": 1,
+      "message": "mRoot could be scoped_ptr",
+      "revId": "b13dd50e1b7a8d9fcef39cc7e9d514dde11ff07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7N4\u003d",
+        "filename": "include/editeng/Trie.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-06-16T16:36:52Z",
+      "side": 1,
+      "message": "does this definition need to be in the header file? it looks like a forward declaration would be sufficient.",
+      "revId": "b13dd50e1b7a8d9fcef39cc7e9d514dde11ff07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
