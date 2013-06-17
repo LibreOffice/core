@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "hintids.hxx"
 #include "ndtxt.hxx"
 #include "frmfmt.hxx"
@@ -48,8 +47,8 @@
 // #i111284#
 #include <numrule.hxx>
 
-// Nicht reentrant !!!
-// wird in GetCharRect gesetzt und im UnitUp/Down ausgewertet.
+// Not reentrant !!!
+// is set in GetCharRect and is interpreted in UnitUp/Down.
 sal_Bool SwTxtCursor::bRightMargin = sal_False;
 
 
@@ -234,7 +233,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
           !nLMWithNum ) )
     {
         nLeft = pFrm->Prt().Left() + pFrm->Frm().Left();
-        if( nLeft >= nRight )   // z.B. bei grossen Absatzeinzuegen in schmalen Tabellenspalten
+        if( nLeft >= nRight )   // e.g. with large paragraph indentations in slim table columns
             nRight = nLeft + 1; // einen goennen wir uns immer
     }
 
@@ -273,8 +272,8 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                     case SVX_INTER_LINE_SPACE_PROP:
                     {
                         long nTmp = pSpace->GetPropLineSpace();
-                        // 50% ist das Minimum, bei 0% schalten wir auf
-                        // den Defaultwert 100% um ...
+                        // 50% is the minimumm, at 0% we switch to
+                        // the default value 100% ...
                         if( nTmp < 50 )
                             nTmp = nTmp ? 50 : 100;
 
@@ -375,15 +374,15 @@ void SwTxtMargin::DropInit()
  *                SwTxtMargin::GetLineStart()
  *************************************************************************/
 
-// Unter Beruecksichtigung des Erstzeileneinzuges und der angebenen Breite.
+// The function is interpreting / observing / evaluating / keeping / respecting the first line indention and the specified width.
 SwTwips SwTxtMargin::GetLineStart() const
 {
     SwTwips nRet = GetLeftMargin();
     if( GetAdjust() != SVX_ADJUST_LEFT &&
         !pCurr->GetFirstPortion()->IsMarginPortion() )
     {
-        // Wenn die erste Portion ein Margin ist, dann wird das
-        // Adjustment durch die Portions ausgedrueckt.
+        // If the first portion is a Margin, then the
+        // adjustment is expressed by the portions.
         if( GetAdjust() == SVX_ADJUST_RIGHT )
             nRet = Right() - CurrWidth();
         else if( GetAdjust() == SVX_ADJUST_CENTER )
@@ -398,7 +397,7 @@ SwTwips SwTxtMargin::GetLineStart() const
 void SwTxtCursor::CtorInitTxtCursor( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
 {
     CtorInitTxtMargin( pNewFrm, pNewInf );
-    // 6096: Vorsicht, die Iteratoren sind abgeleitet!
+    // 6096: Attention, the iterators are derived!
     // GetInfo().SetOut( GetInfo().GetWin() );
 }
 
@@ -406,21 +405,21 @@ void SwTxtCursor::CtorInitTxtCursor( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
  *                      SwTxtCursor::GetEndCharRect()
  *************************************************************************/
 
-// 1170: Antikbug: Shift-Ende vergisst das letzte Zeichen ...
+// 1170: Ancient bug: Shift-End forgets the last character ...
 
 sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                   SwCrsrMoveState* pCMS, const long nMax )
 {
-    // 1170: Mehrdeutigkeit von Dokumentpositionen
+    // 1170: Ambiguity of document positions
     bRightMargin = sal_True;
     CharCrsrToLine(nOfst);
 
-    // Etwas verdreht: nOfst bezeichnet die Position hinter dem letzten
-    // Zeichen der letzten Zeile == Position vor dem ersten Zeichen der
-    // Zeile in der wir gerade stehen:
+    // Somehow twisted: nOfst names the position behind the last
+    // character of the last line == This is the position in front of the first character
+    // of the line, in which we are situated:
     if( nOfst != GetStart() || !pCurr->GetLen() )
     {
-        // 8810: Masterzeile RightMargin, danach LeftMargin
+        // 8810: Master line RightMargin, after that LeftMargin
         const sal_Bool bRet = GetCharRect( pOrig, nOfst, pCMS, nMax );
         bRightMargin = nOfst >= GetEnd() && nOfst < GetInfo().GetTxt().getLength();
         return bRet;
@@ -429,7 +428,7 @@ sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     if( !GetPrev() || !GetPrev()->GetLen() || !PrevLine() )
         return GetCharRect( pOrig, nOfst, pCMS, nMax );
 
-    // Adjustierung ggf. nachholen
+    // If necessary, as catch up, do the adjustment
     GetAdjusted();
 
     KSHORT nX = 0;
@@ -441,7 +440,7 @@ sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     KSHORT nPorHeight = nTmpHeight;
     KSHORT nPorAscent = nTmpAscent;
 
-    // Die letzte Text/EndPortion der Zeile suchen
+    // Search for the last Text/EndPortion of the line
     while( pPor )
     {
         nX = nX + pPor->Width();
@@ -956,7 +955,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     bEmptyFld = sal_True;
                 }
             }
-            // 8513: Felder im Blocksatz, ueberspringen
+            // 8513: Fields in justified text, skipped
             while( pPor && !pPor->GetLen() && ! bInsideFirstField &&
                    ( pPor->IsFlyPortion() || pPor->IsKernPortion() ||
                      pPor->IsBlankPortion() || pPor->InTabGrp() ||
@@ -1009,10 +1008,10 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
             if( aInf.GetIdx() == nOfst && pPor && pPor->InHyphGrp() &&
                 pPor->GetPortion() && pPor->GetPortion()->InFixGrp() )
             {
-                // Alle Sonderportions muessen uebersprungen werden
-                // Beispiel: zu-[FLY]sammen, 'u' == 19, 's' == 20; Right()
-                // Ohne den Ausgleich landen wir vor '-' mit dem
-                // Ausgleich vor 's'.
+                // All special portions have to be skipped
+                // Taking the German word "zusammen" as example: zu-[FLY]sammen, 'u' == 19, 's' == 20; Right()
+                // Without the adjustment we end up in front of '-', with the
+                // adjustment in front of the 's'.
                 while( pPor && !pPor->GetLen() )
                 {
                     nX += pPor->Width();
@@ -1188,7 +1187,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
             Next();
     }
 
-    // Adjustierung ggf. nachholen
+    // If necessary, as catch up, do the adjustment
     GetAdjusted();
 
     const Point aCharPos( GetTopLeft() );
@@ -1252,18 +1251,18 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 /*************************************************************************
  *                      SwTxtCursor::GetCrsrOfst()
  *
- * Return: Offset im String
+ * Return: Offset in String
  *************************************************************************/
 xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                      const MSHORT nChgNode, SwCrsrMoveState* pCMS ) const
 {
-    // Adjustierung ggf. nachholen
+    // If necessary, as catch up, do the adjustment
     GetAdjusted();
 
     const XubString &rText = GetInfo().GetTxt();
     xub_StrLen nOffset = 0;
 
-    // x ist der horizontale Offset innerhalb der Zeile.
+    // x is the horizontal offset within the line.
     SwTwips x = rPoint.X();
     const SwTwips nLeftMargin  = GetLineStart();
     SwTwips nRightMargin = GetLineEnd();
@@ -1279,13 +1278,13 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
     sal_Bool bRightAllowed = pCMS && ( pCMS->eState == MV_NONE );
 
-    // Bis hierher in Dokumentkoordinaten.
+    // Until here everything in document coordinates.
     x -= nLeftMargin;
 
     KSHORT nX = KSHORT( x );
 
-    // Wenn es in der Zeile Attributwechsel gibt, den Abschnitt
-    // suchen, in dem nX liegt.
+    // If there are attribut changes in the line, search for the paragraph,
+    // in which nX is situated.
     SwLinePortion *pPor = pCurr->GetFirstPortion();
     xub_StrLen nCurrStart  = nStart;
     sal_Bool bHolePortion = sal_False;
@@ -1298,8 +1297,8 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     long nSpaceAdd = pCurr->IsSpaceAdd() ? pCurr->GetLLSpaceAdd( 0 ) : 0;
     short nKanaComp = pKanaComp ? (*pKanaComp)[0] : 0;
 
-    // nWidth ist die Breite der Zeile, oder die Breite des
-    // Abschnitts mit dem Fontwechsel, in dem nX liegt.
+    // nWidth is the width of the line, or the width of
+    // the paragraph with the font change, in which nX is situated.
 
     KSHORT nWidth = pPor->Width();
     if ( pCurr->IsSpaceAdd() || pKanaComp )
@@ -1424,9 +1423,9 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         }
     }
 
-    // 7684: Wir sind genau auf der HyphPortion angelangt und muessen dafuer
-    // sorgen, dass wir in dem String landen.
-    // 7993: Wenn die Laenge 0 ist muessen wir raus...
+    // 7684: We are exactly ended up at ther HyphPortion. It is our task to
+    // provide, that we end up in the String.
+    // 7993: If length = 0, then we must exit...
     if( !nLength )
     {
         if( pCMS )
@@ -1448,11 +1447,11 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         if( !nCurrStart )
             return 0;
 
-         // 7849, 7816: auf pPor->GetHyphPortion kann nicht verzichtet werden!
+        // 7849, 7816: pPor->GetHyphPortion is mandatory!
         if( bHolePortion || ( !bRightAllowed && bLastHyph ) ||
             ( pPor->IsMarginPortion() && !pPor->GetPortion() &&
-            // 46598: In der letzten Zeile eines zentrierten Absatzes wollen
-            // wir auch mal hinter dem letzten Zeichen landen.
+              // 46598: Consider the situation: We might end up behind the last character,
+              // in the last line of a centered paragraph
               nCurrStart < rText.Len() ) )
             --nCurrStart;
         else if( pPor->InFldGrp() && ((SwFldPortion*)pPor)->IsFollow()
@@ -1475,7 +1474,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     {
         if ( nWidth )
         {
-            // Sonst kommen wir nicht mehr in zeichengeb. Rahmen hinein...
+            // Else we may not enter the character-supplying frame...
             if( !( nChgNode && pPos && pPor->IsFlyCntPortion() ) )
             {
                 if ( pPor->InFldGrp() ||
@@ -1662,9 +1661,9 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             if( nChgNode && pPos && pPor->IsFlyCntPortion()
                 && !( (SwFlyCntPortion*)pPor )->IsDraw() )
             {
-                // JP 24.11.94: liegt die Pos nicht im Fly, dann
-                //              darf nicht mit STRING_LEN returnt werden!
-                //              (BugId: 9692 + Aenderung in feshview)
+                // JP 24.11.94: if the Position is not in Fly, then
+                //              we many not return with STRING_LEN as value!
+                //              (BugId: 9692 + Change in feshview)
                 SwFlyInCntFrm *pTmp = ( (SwFlyCntPortion*)pPor )->GetFlyFrm();
                 sal_Bool bChgNode = 1 < nChgNode;
                 if( !bChgNode )
@@ -1686,13 +1685,13 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 {
                     nLength = ((SwFlyCntPortion*)pPor)->
                               GetFlyCrsrOfst( nX, aTmpPoint, pPos, pCMS );
-                    // Sobald der Frame gewechselt wird, muessen wir aufpassen, dass
-                    // unser Font wieder im OutputDevice steht.
-                    // vgl. Paint und new SwFlyCntPortion !
+                    // After a change of the frame, our font must be still
+                    // available for/in the OutputDevice.
+                    // For comparison: Paint and new SwFlyCntPortion !
                     ((SwTxtSizeInfo*)pInf)->SelectFont();
 
-                    // 6776: Das pIter->GetCrsrOfst returnt
-                    // aus einer Verschachtelung mit STRING_LEN.
+                    // 6776: The pIter->GetCrsrOfst is returning here
+                    // from a nesting with STRING_LEN.
                     return STRING_LEN;
                 }
             }
@@ -1702,10 +1701,9 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     }
     nOffset = nCurrStart + nLength;
 
-    // 7684: Wir sind vor der HyphPortion angelangt und muessen dafuer
-    // sorgen, dass wir in dem String landen.
-    // Bei Zeilenenden vor FlyFrms muessen ebenso behandelt werden.
-
+    // 7684: We end up in front of the HyphPortion. We must assure
+    // that we end up in the string.
+    // If we are at end of line in front of FlyFrms, we must proceed the same way.
     if( nOffset && pPor->GetLen() == nLength && pPor->GetPortion() &&
         !pPor->GetPortion()->GetLen() && pPor->GetPortion()->InHyphGrp() )
         --nOffset;
