@@ -57,6 +57,7 @@ class SbiParser : public SbiTokenizer
     void DefEnum( bool bPrivate );  // Parse enum declaration
     void DefDeclare( bool bPrivate );
     void EnableCompatibility();
+    bool IsUnoInterface(const OUString& sTypeName);
 public:
     SbxArrayRef   rTypeArray;
     SbxArrayRef   rEnumArray;

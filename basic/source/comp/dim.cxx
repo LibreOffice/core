@@ -20,7 +20,17 @@
 #include <basic/sbx.hxx>
 #include "sbcomp.hxx"
 #include "sbunoobj.hxx"
+#include <svtools/miscopt.hxx>
+#include "com/sun/star/reflection/XIdlReflection.hpp"
+#include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/configurationhelper.hxx>
+#include "com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp"
+#include "com/sun/star/reflection/XIdlMethod.hpp"
+#include "com/sun/star/uno/Exception.hpp"
 
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
 
@@ -197,6 +207,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
     bool bSwitchPool = false;
     bool bPersistantGlobal = false;
     SbiToken eFirstTok = eCurTok;
+    SvtMiscOptions aMiscOptions;
     if( pProc && ( eCurTok == GLOBAL || eCurTok == PUBLIC || eCurTok == PRIVATE ) )
         Error( SbERR_NOT_IN_SUBR, eCurTok );
     if( eCurTok == PUBLIC || eCurTok == GLOBAL )
@@ -391,7 +402,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             if( !bCompatible && !pDef->IsNew() )
             {
                 OUString aTypeName( aGblStrings.Find( pDef->GetTypeId() ) );
-                if( rTypeArray->Find( aTypeName, SbxCLASS_OBJECT ) == NULL )
+                if( rTypeArray->Find( aTypeName, SbxCLASS_OBJECT ) == NULL && (aMiscOptions.IsExperimentalMode() && !IsUnoInterface(aTypeName)))
                 {
                     Error( SbERR_UNDEF_TYPE, aTypeName );
                 }
@@ -1309,6 +1320,31 @@ void SbiParser::DefStatic( bool bPrivate )
         pPool = p;
         break;
     }
+}
+
+bool SbiParser::IsUnoInterface(const OUString& sTypeName)
+{
+    try
+    {
+        Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
+        Reference< reflection::XIdlReflection > xRefl( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );
+        //DBG_ASSERT(xRefl.Is(), "No reflection class!"); ???
+        if( !xRefl.is() )
+        {
+            return false;
+        }
+        Reference< reflection::XIdlClass > xClass = xRefl->forName(sTypeName);
+        if( xClass != NULL )
+        {
+            return true;
+        }
+        return false;
+    }
+    catch(const Exception& ex)
+    {
+        OSL_FAIL("Could not create reflection.CoreReflection.");
+    }
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
