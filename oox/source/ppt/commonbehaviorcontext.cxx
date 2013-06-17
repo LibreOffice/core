@@ -69,7 +69,7 @@ namespace oox { namespace ppt {
                 std::list< Attribute >::const_iterator iter;
                 for(iter = maAttributes.begin(); iter != maAttributes.end(); ++iter)
                 {
-                    if( sAttributes.getLength() )
+                    if( !sAttributes.isEmpty() )
                     {
                         sAttributes.appendAscii( ";" );
                     }

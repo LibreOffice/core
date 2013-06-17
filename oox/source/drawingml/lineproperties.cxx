@@ -203,7 +203,7 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
         break;
     }
 
-    if( aBuffer.getLength() > 0 )
+    if( !aBuffer.isEmpty() )
     {
         sal_Int32 nLength = lclGetArrowSize( rArrowProps.moArrowLength.get( XML_med ) );
         sal_Int32 nWidth  = lclGetArrowSize( rArrowProps.moArrowWidth.get( XML_med ) );
