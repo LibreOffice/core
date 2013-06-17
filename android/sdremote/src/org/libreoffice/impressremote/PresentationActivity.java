@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
 import org.libreoffice.impressremote.communication.CommunicationService;
-import org.libreoffice.impressremote.communication.SlideShow.Timer;
+import org.libreoffice.impressremote.communication.Timer;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -459,22 +459,22 @@ public class PresentationActivity extends SherlockFragmentActivity {
             // ------------------------------------- TIMER BUTTONS
             else if (aSource == mStopwatchButtonRun) {
                 if (aTimer.isRunning()) {
-                    aTimer.stopTimer();
+                    aTimer.stop();
                 } else {
-                    aTimer.startTimer();
+                    aTimer.start();
                 }
                 updateClockBar();
             } else if (aSource == mStopwatchButtonReset) {
                 if (aTimer.isRunning()) {
                     aTimer.reset();
-                    aTimer.startTimer();
+                    aTimer.start();
                 } else {
                     aTimer.reset();
                 }
                 updateClockBar();
             } else if (aSource == mCountdownButton) {
                 if (aTimer.isRunning()) {
-                    aTimer.stopTimer();
+                    aTimer.stop();
                     mCountdownButton.setTag(Boolean.valueOf(true));
                     updateClockBar();
                 } else {
@@ -485,7 +485,7 @@ public class PresentationActivity extends SherlockFragmentActivity {
                         editor.putString(COUNTDOWN_KEY, time);
                         editor.commit();
                         aTimer.setCountdownTime(aTime);
-                        aTimer.startTimer();
+                        aTimer.start();
                         mCountdownButton.setTag(Boolean.valueOf(true));
                         updateClockBar();
                     } catch (ParseException e) {

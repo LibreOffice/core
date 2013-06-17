@@ -22,7 +22,7 @@ public class Receiver {
 
     public Receiver(Context aContext) {
         this.mContext = aContext;
-        this.mSlideShow = new SlideShow(mContext);
+        this.mSlideShow = new SlideShow();
     }
 
     public SlideShow getSlideShow() {
@@ -89,7 +89,7 @@ public class Receiver {
     }
 
     private void finishSlideShow() {
-        this.mSlideShow = new SlideShow(mContext);
+        this.mSlideShow = new SlideShow();
 
         Intent aStatusConnectedNoSlideShowIntent = new Intent(
             CommunicationService.STATUS_CONNECTED_NOSLIDESHOW);
