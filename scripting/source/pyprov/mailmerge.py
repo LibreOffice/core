@@ -239,11 +239,14 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 			encode_base64(msgattachment)
 			fname = attachment.ReadableName
 			try:
-				fname.encode('ascii')
+				msgattachment.add_header('Content-Disposition', 'attachment', \
+					filename=fname)
 			except:
-				fname = ('utf-8','',fname.encode('utf-8'))
-			msgattachment.add_header('Content-Disposition', 'attachment', \
-				filename=fname)
+				msgattachment.add_header('Content-Disposition', 'attachment', \
+					filename=('utf-8','',fname))
+			if dbg:
+				print(("PyMailSMTPService attachmentheader: ", str(msgattachment)), file=dbgout)
+
 			msg.attach(msgattachment)
 
 		uniquer = {}
