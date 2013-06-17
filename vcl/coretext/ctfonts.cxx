@@ -130,7 +130,6 @@ void CTTextStyle::GetFontMetric( float fPixelSize, ImplFontMetricData& rMetric )
 
     // all CoreText fonts are scalable
     rMetric.mbScalableFont = true;
-    // TODO: check if any kerning is supported
     rMetric.mbKernableFont = true;
 }
 
