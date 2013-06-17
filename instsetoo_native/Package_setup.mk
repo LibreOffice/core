@@ -17,6 +17,4 @@ $(eval $(call gb_Package_add_files,instsetoo_native_setup,$(gb_PROGRAMDIRNAME),\
 	versionrc \
 ))
 
-$(eval $(call gb_Package_add_file,instsetoo_native_setup,ure-link,ure-link))
-
 # vim: set noet sw=4 ts=4:

@@ -10,9 +10,8 @@
 $(eval $(call gb_Module_Module,ure))
 
 $(eval $(call gb_Module_add_targets,ure,\
-    Package_distribution \
-	$(if $(gb_RUNNABLE_INSTDIR),Package_install) \
-    Rdb_ure \
+	Package_install \
+	Rdb_ure \
 ))
 
 # vim:set noet sw=4 ts=4:

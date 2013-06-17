@@ -11,8 +11,20 @@ $(eval $(call gb_Package_Package,ure_install,$(SRCDIR)/ure/source))
 
 $(eval $(call gb_Package_set_outdir,ure_install,$(INSTDIR)))
 
+ifneq (WNT,$(OS))
 $(eval $(call gb_Package_add_file,ure_install,ure/bin/startup.sh,startup.sh))
-$(eval $(call gb_Package_add_file,ure_install,ure/lib/$(call gb_Helper_get_rcfile,jvmfwk3),jvmfwk3rc))
-$(eval $(call gb_Package_add_file,ure_install,ure/lib/$(call gb_Helper_get_rcfile,uno),unorc))
+$(eval $(call gb_Package_add_symbolic_link,ure_install,ure/bin/uno,startup.sh))
+endif
+
+ifeq (MACOSX,$(OS))
+$(eval $(call gb_Package_add_symbolic_link,ure_install,ure-link/bin/urelibs,../lib))
+else ifneq (WNT,$(OS))
+$(eval $(call gb_Package_add_symbolic_link,ure_install,ure-link,ure))
+endif
+
+$(eval $(call gb_Package_add_files,ure_install,$(LIBO_URE_LIB_FOLDER),\
+	$(call gb_Helper_get_rcfile,jvmfwk3) \
+	$(call gb_Helper_get_rcfile,uno) \
+))
 
 # vim:set noet sw=4 ts=4:

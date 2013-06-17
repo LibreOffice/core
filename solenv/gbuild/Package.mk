@@ -135,6 +135,18 @@ gb_Package_OUTDIR_$(1) := $(2)
 
 endef
 
+define gb_Package_add_symbolic_link
+$(call gb_Package__check,$(1))
+$(if $(strip $(3)),,$(call gb_Output_error,gb_Package_add_symbolic_link requires 3 arguments))
+$(call gb_Package_get_target,$(1)) : $$(gb_Package_OUTDIR_$(1))/$(2)
+$$(gb_Package_OUTDIR_$(1))/$(2) : $$(dir $$(gb_Package_OUTDIR_$(1))/$(2)).dir
+	rm -f $$@ && ln -s $(3) $$@
+
+$(call gb_Package_get_target,$(1)) : FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
+$(call gb_Package_get_clean_target,$(1)) : FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
+
+endef
+
 define gb_Package_add_file
 $(call gb_Package__check,$(1))
 $(if $(strip $(3)),,$(call gb_Output_error,gb_Package_add_file requires 3 arguments))

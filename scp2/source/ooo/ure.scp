@@ -20,6 +20,31 @@
 
 #include "AutoInstall/ure"
 
+#ifndef MACOSX
+Directory gid_Dir_Common_Ure
+  #ifdef WNT
+    ParentID = gid_Dir_Brand_Root;
+  #else
+    ParentID = PREDEFINED_PROGDIR;
+  #endif
+  #ifdef WNT
+    HostName = "URE";
+  #else
+    HostName = "ure";
+  #endif
+    Styles = (UREDIRECTORY);
+End
+#endif
+
+#if defined MACOSX
+#if !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+Directory gid_Dir_UreLink
+    ParentID = gid_Dir_Bundle_Contents;
+    DosName = "ure-link";
+End
+#endif
+#endif
+
 #if !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 
 Directory gid_Dir_Ure_Bin
@@ -67,26 +92,12 @@ End
 
 #endif // !ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
 
-// Public Executables:
-
-#if !defined WNT && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
-Shortcut gid_Shortcut_Exe_Uno
-    FileID = gid_File_Exe_StartupSh;
-    Dir = gid_Dir_Ure_Bin;
-    Name = EXENAME(uno);
-    Styles = (RELATIVE);
-End
-#endif
-
-// Private Executables:
-
-#if !defined WNT && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
-File gid_File_Exe_StartupSh
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Ure_Bin;
-    Name = "/ure/startup.sh";
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "C86E816A-4EAE-47E9-BD1F-3E23C80F4EAE";
+#if defined WNT
+File gid_File_UreLink
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Brand_Root;
+    Name = "ure-link";
+    Styles = (PACKED);
 End
 #endif
 
@@ -263,11 +274,11 @@ ProfileItem gid_Profileitem_Dl_Uno_Uno_Services
 #endif
 End
 
-File gid_File_Dl_Profile_Jvmfwk3rc
+File gid_File_ure_install
     TXT_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = PROFILENAME(/ure/jvmfwk3);
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Dir = FILELIST_DIR;
+    Name = ure_install.filelist;
+    Styles = (FILELIST, PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "1124A984-F905-47DC-ACEF-EDEC037F9B38";
 End
 
@@ -629,7 +640,6 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_ThirdpartylicensereadmeHtml_Ure,
             gid_File_Readme_Ure,
             gid_File_License_Ure,
-            gid_File_Exe_StartupSh,
             gid_File_Dl_Cli_Uno,
             gid_File_Dl_Cli_Ure_Assembly,
             gid_File_Dl_Policy_Cli_Ure_Assembly,
@@ -659,7 +669,7 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_Profile_Uno,
             gid_Unixlink_File_Dl_Rmcxt,
             gid_File_Dl_JrepropertiesClass,
-            gid_File_Dl_Profile_Jvmfwk3rc,
+            gid_File_ure_install,
             gid_File_Dl_Jpipe,
             gid_File_Dl_Jpipx,
             gid_File_Dl_Libxml2,
@@ -678,8 +688,7 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Misc_TypesRdb,
             gid_File_Misc_ServicesRdb,
             gid_File_Misc_JavavendorsXml);
-    Unixlinks = (gid_Unixlink_Ure_Bin_Urelibs,
-                 gid_Unixlink_Dl_JavaUno,
+    Unixlinks = (gid_Unixlink_Dl_JavaUno,
                  gid_Unixlink_File_Dl_Sal,
                  gid_Unixlink_File_Dl_Salhelper,
                  gid_Unixlink_File_Dl_Cppu,

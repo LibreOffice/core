@@ -12,7 +12,6 @@ $(eval $(call gb_CustomTarget_CustomTarget,instsetoo_native/setup))
 $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/setup,\
 	ooenv \
 	$(if $(filter TRUE,$(DISABLE_PYTHON)),,pythonloader.unorc) \
-	ure-link \
 	versionrc \
 ))
 
@@ -42,13 +41,6 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/pythonloader.unorc :
 			echo PYUNO_LOADER_PYTHONPATH='$(foreach dir,lib lib/lib-dynload lib/lib-tk lib/site-packages,$$ORIGIN/python-core-$(PYTHON_VERSION)/$(dir)) $$ORIGIN' \
 		) \
 	) > $@
-
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/ure-link :
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),LN ,1)
-	rm -f $@ && \
-	mkdir -p $(dir $@)/ure && \
-	cd $(dir $@) && \
-	ln -s ure ure-link
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/versionrc :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
