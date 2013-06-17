@@ -786,8 +786,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         pEntry->pProperties->Insert(PROP_PARA_ORPHANS, true, aTwo, false);
     //                  Left-to-right direction if not already set
                         pEntry->pProperties->Insert(PROP_WRITING_MODE, true, uno::makeAny( sal_Int16(text::WritingMode_LR_TB) ), false);
-    //                  font color COL_AUTO if not already set
-                        pEntry->pProperties->Insert(PROP_CHAR_COLOR, true, uno::makeAny( sal_Int32(0xffffffff) ), false);
+                        // Don't set font color to Auto if not already set: this could hide the default font color setting
                     }
 
                     uno::Sequence< beans::PropertyValue > aPropValues = pEntry->pProperties->GetPropertyValues();
