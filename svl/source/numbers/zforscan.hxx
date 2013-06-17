@@ -42,17 +42,16 @@ public:
 
     ImpSvNumberformatScan( SvNumberFormatter* pFormatter );
     ~ImpSvNumberformatScan();
-    void ChangeIntl();                          // tauscht Keywords aus
+    void ChangeIntl(); // Replaces Keywords
 
-    void ChangeNullDate(sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear);
-                                                // tauscht Referenzdatum aus
-    void ChangeStandardPrec(sal_uInt16 nPrec);  // tauscht Standardprecision aus
+    void ChangeNullDate(sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear); // Replaces reference date
+    void ChangeStandardPrec(sal_uInt16 nPrec); // Replaces standard precision
 
-    sal_Int32 ScanFormat( OUString& rString );   // Aufruf der Scan-Analyse
+    sal_Int32 ScanFormat( OUString& rString ); // Call scan analysis
 
     void CopyInfo(ImpSvNumberformatInfo* pInfo,
-                     sal_uInt16 nAnz);              // Kopiert die FormatInfo
-    sal_uInt16 GetAnzResStrings() const             { return nAnzResStrings; }
+                     sal_uInt16 nAnz); // Copies the FormatInfo
+    sal_uInt16 GetAnzResStrings() const         { return nAnzResStrings; }
 
     const CharClass& GetChrCls() const          { return *pFormatter->GetCharClass(); }
     const LocaleDataWrapper& GetLoc() const     { return *pFormatter->GetLocaleData(); }
@@ -93,8 +92,7 @@ public:
         }
     sal_uInt16 GetStandardPrec() const          { return nStandardPrec; }
     const Color& GetRedColor() const            { return StandardColor[4]; }
-    Color* GetColor(OUString& sStr);          // Setzt Hauptfarben oder
-                                                // definierte Farben
+    Color* GetColor(OUString& sStr); // Set main colors or defines colors
 
     // the compatibility currency symbol for old automatic currency formats
     const OUString& GetCurSymbol() const
@@ -134,109 +132,88 @@ public:
         eTmpLnge = eTmpLge;
         bConvertSystemToSystem = bSystemToSystem;
     }
+    // Only changes the bool variable, in order to temporarily pause the convert mode
     void SetConvertMode(bool bMode) { bConvertMode = bMode; }
-                                                // Veraendert nur die Bool-Variable
-                                                // (zum temporaeren Unterbrechen des
-                                                // Convert-Modus)
     bool GetConvertMode() const     { return bConvertMode; }
-    LanguageType GetNewLnge() const { return eNewLnge; }
-                                                // Lesezugriff auf ConvertMode
-                                                // und Konvertierungsland/Spr.
-    LanguageType GetTmpLnge() const { return eTmpLnge; }
-                                                // Lesezugriff auf
-                                                // und Ausgangsland/Spr.
+    LanguageType GetNewLnge() const { return eNewLnge; } // Read access on ConvertMode and convert country/language
+    LanguageType GetTmpLnge() const { return eTmpLnge; } // Read access on StartCountry/Language
 
                                                 /// get Thai T speciality
     sal_uInt8 GetNatNumModifier() const      { return nNatNumModifier; }
                                                 /// set Thai T speciality
     void SetNatNumModifier( sal_uInt8 n )    { nNatNumModifier = n; }
 
-    SvNumberFormatter* GetNumberformatter() { return pFormatter; }
-                                                // Zugriff auf Formatierer
-                                                // (fuer zformat.cxx)
+    SvNumberFormatter* GetNumberformatter() { return pFormatter; } // Access to formatter (for zformat.cxx)
 
-
-private:                            // ---- privater Teil
-    NfKeywordTable sKeyword;                    // Schluesselworte der Syntax
-    Color StandardColor[NF_MAX_DEFAULT_COLORS];
-                                                // Array der Standardfarben
+private: // Private section
+    NfKeywordTable sKeyword;                    // Syntax keywords
+    Color StandardColor[NF_MAX_DEFAULT_COLORS]; // Standard color array
     Date* pNullDate;                            // 30Dec1899
     OUString sNameStandardFormat;               // "Standard"
-    sal_uInt16 nStandardPrec;                   // default Precision for Standardformat
-    SvNumberFormatter* pFormatter;              // Pointer auf die Formatliste
+    sal_uInt16 nStandardPrec;                   // Default Precision for Standardformat
+    SvNumberFormatter* pFormatter;              // Pointer to the FormatList
 
-    OUString sStrArray[NF_MAX_FORMAT_SYMBOLS];    // Array der Symbole
-    short nTypeArray[NF_MAX_FORMAT_SYMBOLS];    // Array der Infos
-                                                // externe Infos:
-    sal_uInt16 nAnzResStrings;                  // Anzahl der Ergebnissymbole
+    OUString sStrArray[NF_MAX_FORMAT_SYMBOLS];  // Array of symbols
+    short nTypeArray[NF_MAX_FORMAT_SYMBOLS];    // Array of infos
+                                                // External Infos:
+    sal_uInt16 nAnzResStrings;                  // Result symbol count
 #if !(defined SOLARIS && defined X86)
-    short eScannedType;                         // Typ gemaess Scan
+    short eScannedType;                         // Type according to scan
 #else
-    int eScannedType;                           // wg. Optimierung
+    int eScannedType;                           // Due to optimisation
 #endif
-    bool bThousand;                             // Mit Tausenderpunkt
-    sal_uInt16 nThousand;                       // Zaehlt ....-Folgen
-    sal_uInt16 nCntPre;                         // Zaehlt Vorkommastellen
-    sal_uInt16 nCntPost;                        // Zaehlt Nachkommastellen
-    sal_uInt16 nCntExp;                         // Zaehlt Exp.Stellen, AM/PM
-                                                // interne Infos:
-    sal_uInt16 nAnzStrings;                     // Anzahl der Symbole
-    sal_uInt16 nRepPos;                         // Position eines '*'
-    sal_uInt16 nExpPos;                         // interne Position des E
-    sal_uInt16 nBlankPos;                       // interne Position des Blank
-    short nDecPos;                              // interne Pos. des ,
-    bool bExp;                                  // wird bei Lesen des E gesetzt
-    bool bFrac;                                 // wird bei Lesen des / gesetzt
-    bool bBlank;                                // wird bei ' '(Fraction) ges.
-    bool bDecSep;                               // Wird beim ersten , gesetzt
+    bool bThousand;                             // With thousands marker
+    sal_uInt16 nThousand;                       // Counts .... series
+    sal_uInt16 nCntPre;                         // Counts digits of integral part
+    sal_uInt16 nCntPost;                        // Counts digits of fractional part
+    sal_uInt16 nCntExp;                         // Counts exponent digits AM/PM
+                                                // Internal info:
+    sal_uInt16 nAnzStrings;                     // Symbol count
+    sal_uInt16 nRepPos;                         // Position of a '*'
+    sal_uInt16 nExpPos;                         // Internal position of E
+    sal_uInt16 nBlankPos;                       // Internal position of the Blank
+    short nDecPos;                              // Internal position of the ,
+    bool bExp;                                  // Set when reading E
+    bool bFrac;                                 // Set when reading /
+    bool bBlank;                                // Set when reading ' ' (Fraction)
+    bool bDecSep;                               // Set on first ,
     mutable bool bKeywordsNeedInit;             // Locale dependent keywords need to be initialized
     mutable bool bCompatCurNeedInit;            // Locale dependent compatibility currency need to be initialized
     OUString sCurSymbol;                        // Currency symbol for compatibility format codes
     OUString sCurString;                        // Currency symbol in upper case
     OUString sCurAbbrev;                        // Currency abbreviation
-    OUString sErrStr;                           // String fuer Fehlerausgaben
+    OUString sErrStr;                           // String for error output
 
-    bool bConvertMode;                          // Wird im Convert-Mode gesetzt
-                                                // Land/Sprache, in die der
-    LanguageType eNewLnge;                      // gescannte String konvertiert
-                                                // wird (fuer Excel Filter)
-                                                // Land/Sprache, aus der der
-    LanguageType eTmpLnge;                      // gescannte String konvertiert
-                                                // wird (fuer Excel Filter)
-    bool bConvertSystemToSystem;                // Whether the conversion is
-                                                // from one system locale to
-                                                // another system locale (in
-                                                // this case the automatic
-                                                // currency symbol is converted
-                                                // too).
+    bool bConvertMode;                          // Set in the convert mode
+                                                // Language/country which the scanned string is converted to (for Excel filter)
+                                                // Language/country which the scanned string is converted from (for Excel filter)
+    LanguageType eTmpLnge;
 
-    sal_Int32 nCurrPos;                         // Position des Waehrungssymbols
+    bool bConvertSystemToSystem;                // Whether the conversion is from one system locale to another system locale
+                                                // (in this case the automatic currency symbol is converted too).
 
-    sal_uInt8 nNatNumModifier;                       // Thai T speciality
+    sal_Int32 nCurrPos;                         // Position of currency symbol
+
+    sal_uInt8 nNatNumModifier;                  // Thai T speciality
 
     void InitKeywords() const;
     void InitSpecialKeyword( NfKeywordIndex eIdx ) const;
     void InitCompatCur() const;
 
     void SetDependentKeywords();
-                                                // Setzt die Sprachabh. Keyw.
-    void SkipStrings(sal_uInt16& i, sal_Int32& nPos);// Ueberspringt StringSymbole
-    sal_uInt16 PreviousKeyword(sal_uInt16 i);   // Gibt Index des vorangeh.
-                                                // Schluesselworts oder 0
-    sal_uInt16 NextKeyword(sal_uInt16 i);       // Gibt Index des naechsten
-                                                // Schluesselworts oder 0
-    sal_Unicode PreviousChar(sal_uInt16 i);     // Gibt letzten Buchstaben
-                                                // vor der Position,
-                                                // skipt EMPTY, STRING, STAR, BLANK
-    sal_Unicode NextChar(sal_uInt16 i);         // Gibt ersten Buchst. danach
-    short PreviousType( sal_uInt16 i );         // Gibt Typ vor Position,
-                                                // skipt EMPTY
-    bool IsLastBlankBeforeFrac(sal_uInt16 i);   // True <=> es kommt kein ' '
-                                                // mehr bis zum '/'
-    void Reset();                               // Reset aller Variablen
-                                                // vor Analysestart
-    short GetKeyWord( const OUString& sSymbol,  // determine keyword at nPos
-                      sal_Int32 nPos );         // return 0 <=> not found
+                                                // Sets the language dependent keywords
+    void SkipStrings(sal_uInt16& i, sal_Int32& nPos);// Skips StringSymbols
+    sal_uInt16 PreviousKeyword(sal_uInt16 i);   // Returns index of the preceding one
+                                                // Keyword or 0
+    sal_uInt16 NextKeyword(sal_uInt16 i);       // Returns index of the next one
+                                                // Keyword or 0
+    sal_Unicode PreviousChar(sal_uInt16 i);     // Returns last char before index skips EMPTY, STRING, STAR, BLANK
+    sal_Unicode NextChar(sal_uInt16 i);         // Returns first following char
+    short PreviousType( sal_uInt16 i );         // Returns type before position skips EMPTY
+    bool IsLastBlankBeforeFrac(sal_uInt16 i);   // True <=> there won't be a ' ' until the '/'
+    void Reset();                               // Reset all variables before starting the analysis
+    short GetKeyWord( const OUString& sSymbol,  // Determine keyword at nPos
+                      sal_Int32 nPos );         // Return 0 <=> not found
 
     inline bool IsAmbiguousE( short nKey )      // whether nKey is ambiguous E of NF_KEY_E/NF_KEY_EC
         {
@@ -249,10 +226,10 @@ private:                            // ---- privater Teil
 
     short Next_Symbol(const OUString& rStr,
                       sal_Int32& nPos,
-                      OUString& sSymbol);       // Naechstes Symbol
-    sal_Int32 Symbol_Division(const OUString& rString);// lexikalische Voranalyse
-    sal_Int32 ScanType(); // Analyse des Formattyps
-    sal_Int32 FinalScan( OUString& rString );  // Endanalyse mit Vorgabe des Typs
+                      OUString& sSymbol); // Next Symbol
+    sal_Int32 Symbol_Division(const OUString& rString);// Initial lexical scan
+    sal_Int32 ScanType(); // Analysis of the Format type
+    sal_Int32 FinalScan( OUString& rString ); // Final analysis with supplied type
 
     // -1:= error, return nPos in FinalScan; 0:= no calendar, 1:= calendar found
     int FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i, sal_uInt16& nAnzResStrings );

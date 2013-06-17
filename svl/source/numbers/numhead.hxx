@@ -22,7 +22,7 @@
 
 #include <tools/stream.hxx>
 
-        //  Header mit Groessenangaben fuer mehrere Objekte
+// This header contains size measures for various objects
 
 class ImpSvNumMultipleReadHeader
 {

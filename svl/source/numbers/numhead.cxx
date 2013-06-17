@@ -21,12 +21,12 @@
 
 #include "numhead.hxx"
 
-//      ID's fuer Dateien:
+// ID's for files:
 #define SV_NUMID_SIZES                      0x4200
 
 //#pragma SEG_FUNCDEF(numhead_06)
 
-//! mit Skip() synchron
+//! Synchronous with Skip()
 ImpSvNumMultipleReadHeader::ImpSvNumMultipleReadHeader(SvStream& rNewStream) :
     rStream( rNewStream )
 {
@@ -40,7 +40,7 @@ ImpSvNumMultipleReadHeader::ImpSvNumMultipleReadHeader(SvStream& rNewStream) :
     rStream >> nID;
     if (nID != SV_NUMID_SIZES)
     {
-        OSL_FAIL("SV_NUMID_SIZES nicht gefunden");
+        OSL_FAIL("SV_NUMID_SIZES not found");
     }
     sal_uInt32 nSizeTableLen;
     rStream >> nSizeTableLen;
@@ -57,7 +57,7 @@ ImpSvNumMultipleReadHeader::ImpSvNumMultipleReadHeader(SvStream& rNewStream) :
 ImpSvNumMultipleReadHeader::~ImpSvNumMultipleReadHeader()
 {
     DBG_ASSERT( pMemStream->Tell() == pMemStream->GetEndOfData(),
-                "Sizes nicht vollstaendig gelesen" );
+                "Sizes not completely read" );
     delete pMemStream;
     delete [] pBuf;
 
@@ -69,9 +69,9 @@ ImpSvNumMultipleReadHeader::~ImpSvNumMultipleReadHeader()
 void ImpSvNumMultipleReadHeader::EndEntry()
 {
     sal_uLong nPos = rStream.Tell();
-    DBG_ASSERT( nPos <= nEntryEnd, "zuviel gelesen" );
+    DBG_ASSERT( nPos <= nEntryEnd, "Read too much" );
     if ( nPos != nEntryEnd )
-        rStream.Seek( nEntryEnd );          // Rest ueberspringen
+        rStream.Seek( nEntryEnd ); // Skip the rest
 }
 
 //#pragma SEG_FUNCDEF(numhead_0d)
@@ -93,11 +93,10 @@ sal_uLong ImpSvNumMultipleReadHeader::BytesLeft() const
     if (nReadEnd <= nEntryEnd)
         return nEntryEnd-nReadEnd;
 
-    OSL_FAIL("Fehler bei ImpSvNumMultipleReadHeader::BytesLeft");
+    OSL_FAIL("Error in ImpSvNumMultipleReadHeader::BytesLeft");
     return 0;
 }
 
-// -----------------------------------------------------------------------
 
 //#pragma SEG_FUNCDEF(numhead_0a)
 
@@ -123,12 +122,12 @@ ImpSvNumMultipleWriteHeader::~ImpSvNumMultipleWriteHeader()
     rStream << static_cast<sal_uInt32>(aMemStream.Tell());
     rStream.Write( aMemStream.GetData(), aMemStream.Tell() );
 
-    if ( nDataEnd - nDataPos != nDataSize )                 // Default getroffen?
+    if ( nDataEnd - nDataPos != nDataSize ) // Hit Default?
     {
         nDataSize = nDataEnd - nDataPos;
         sal_uLong nPos = rStream.Tell();
         rStream.Seek(nDataPos-sizeof(sal_uInt32));
-        rStream << nDataSize;                               // Groesse am Anfang eintragen
+        rStream << nDataSize; // Add size at the start
         rStream.Seek(nPos);
     }
 }

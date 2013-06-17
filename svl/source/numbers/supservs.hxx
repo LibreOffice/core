@@ -26,14 +26,14 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
 
-//=========================================================================
-//= SvNumberFormatsSupplierServiceObject - a number formats supplier which
-//=             - can be instantiated as an service
-//=             - supports the ::com::sun::star::io::XPersistObject interface
-//=             - works with it's own SvNumberFormatter instance
-//=             - can be initialized (::com::sun::star::lang::XInitialization)
-//=                 with a specific language (i.e. ::com::sun::star::lang::Locale)
-//=========================================================================
+/**
+ * SvNumberFormatsSupplierServiceObject - a number formats supplier which
+ * - can be instantiated as an service
+ * - supports the ::com::sun::star::io::XPersistObject interface
+ * - works with it's own SvNumberFormatter instance
+ * - can be initialized (::com::sun::star::lang::XInitialization)
+ * with a specific language (i.e. ::com::sun::star::lang::Locale)
+ */
 class SvNumberFormatsSupplierServiceObject
             :protected SvNumberFormatsSupplierObj
             ,public ::com::sun::star::lang::XInitialization

@@ -26,7 +26,6 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
 
 class SvNumFmtSuppl_Impl
 {
@@ -38,9 +37,8 @@ public:
         pFormatter(p) {}
 };
 
-//------------------------------------------------------------------------
 
-// Default-ctor fuer getReflection
+// Default ctor for getReflection
 SvNumberFormatsSupplierObj::SvNumberFormatsSupplierObj()
 {
     pImpl = new SvNumFmtSuppl_Impl(NULL);
@@ -68,18 +66,18 @@ SvNumberFormatter* SvNumberFormatsSupplierObj::GetNumberFormatter() const
 
 void SvNumberFormatsSupplierObj::SetNumberFormatter(SvNumberFormatter* pNew)
 {
-    //  der alte Numberformatter ist ungueltig geworden, nicht mehr darauf zugreifen!
+    // The old Numberformatter has been retired, do not access it anymore!
     pImpl->pFormatter = pNew;
 }
 
 void SvNumberFormatsSupplierObj::NumberFormatDeleted(sal_uInt32)
 {
-    //  Basis-Implementierung tut nix...
+    // Base implementation; does nothing
 }
 
 void SvNumberFormatsSupplierObj::SettingsChanged()
 {
-    //  Basis-Implementierung tut nix...
+    // Base implementation; does nothing
 }
 
 // XNumberFormatsSupplier
@@ -135,10 +133,5 @@ SvNumberFormatsSupplierObj* SvNumberFormatsSupplierObj::getImplementation(
         pRet = reinterpret_cast<SvNumberFormatsSupplierObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething( getUnoTunnelId() )));
     return pRet;
 }
-
-
-//------------------------------------------------------------------------
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
