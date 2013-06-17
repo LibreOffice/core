@@ -33,7 +33,16 @@ void VclComplexTextTest::testArabic()
 #if !defined (LINUX)
     return;
 #else // only tested on Linux so far
-    OUString aOneTwoThree( "واحِدْ إثٍنين ثلاثةٌ" );
+    const unsigned char pOneTwoThreeUTF8[] = {
+        0xd9, 0x88, 0xd8, 0xa7, 0xd8, 0xad, 0xd9, 0x90,
+        0xd8, 0xaf, 0xd9, 0x92, 0x20, 0xd8, 0xa5, 0xd8,
+        0xab, 0xd9, 0x8d, 0xd9, 0x86, 0xd9, 0x8a, 0xd9,
+        0x86, 0x20, 0xd8, 0xab, 0xd9, 0x84, 0xd8, 0xa7,
+        0xd8, 0xab, 0xd8, 0xa9, 0xd9, 0x8c, 0x00
+    };
+    OUString aOneTwoThree( (sal_Char *)pOneTwoThreeUTF8,
+                           SAL_N_ELEMENTS( pOneTwoThreeUTF8 ) - 1,
+                           RTL_TEXTENCODING_UTF8 );
     Window* pWin = new WorkWindow( (Window *)NULL );
     CPPUNIT_ASSERT( pWin != NULL );
 
