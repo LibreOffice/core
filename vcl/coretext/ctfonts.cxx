@@ -317,7 +317,6 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
     rDFA.mbSubsettable = true;
 
     // get font name
-    // TODO: use kCTFontDisplayNameAttribute instead???
     CFStringRef pFamilyName = (CFStringRef)CTFontDescriptorCopyAttribute( pFD, kCTFontFamilyNameAttribute );
     rDFA.SetFamilyName( GetOUString( pFamilyName ) );
     // get font style
