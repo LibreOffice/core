@@ -181,9 +181,9 @@ private: // Private section
     OUString sErrStr;                           // String for error output
 
     bool bConvertMode;                          // Set in the convert mode
-                                                // Language/country which the scanned string is converted to (for Excel filter)
-                                                // Language/country which the scanned string is converted from (for Excel filter)
-    LanguageType eTmpLnge;
+
+    LanguageType eNewLnge;                      // Language/country which the scanned string is converted to (for Excel filter)
+    LanguageType eTmpLnge;                      // Language/country which the scanned string is converted from (for Excel filter)
 
     bool bConvertSystemToSystem;                // Whether the conversion is from one system locale to another system locale
                                                 // (in this case the automatic currency symbol is converted too).
