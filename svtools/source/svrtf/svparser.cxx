@@ -42,7 +42,7 @@ struct SvParser_Impl
     rtl_TextToUnicodeContext   hContext;
 
     SvParser_Impl() :
-        nSaveToken(0), hConv( 0 ), hContext( (rtl_TextToUnicodeContext)1 )
+        nTokenValue(0), nToken(0), nSaveToken(0), hConv( 0 ), hContext( (rtl_TextToUnicodeContext)1 )
     {
     }
 

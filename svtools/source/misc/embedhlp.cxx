@@ -235,6 +235,7 @@ struct EmbeddedObjectRef_Impl
     awt::Size                                   aDefaultSizeForChart_In_100TH_MM;//#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this member
 
     EmbeddedObjectRef_Impl() :
+        xListener(0),
         pContainer(NULL),
         pGraphic(NULL),
         nViewAspect(embed::Aspects::MSOLE_CONTENT),
@@ -246,6 +247,7 @@ struct EmbeddedObjectRef_Impl
 
     EmbeddedObjectRef_Impl( const EmbeddedObjectRef_Impl& r ) :
         mxObj(r.mxObj),
+        xListener(0),
         aPersistName(r.aPersistName),
         aMediaType(r.aMediaType),
         pContainer(r.pContainer),
