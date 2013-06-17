@@ -41,22 +41,22 @@ String STR_PASSWD
 
 Bitmap ( SFX_THUMBNAIL_TEXT )
 {
-    File = "ott_48_8.png";
+    File = "ott_96_8.png";
 };
 
 Bitmap ( SFX_THUMBNAIL_SHEET )
 {
-    File = "ots_48_8.png";
+    File = "ots_96_8.png";
 };
 
 Bitmap ( SFX_THUMBNAIL_PRESENTATION )
 {
-    File = "otp_48_8.png";
+    File = "otp_96_8.png";
 };
 
 Bitmap ( SFX_THUMBNAIL_DRAWING )
 {
-    File = "otg_48_8.png";
+    File = "otg_96_8.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
