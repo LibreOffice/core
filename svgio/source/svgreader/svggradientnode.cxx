@@ -29,7 +29,7 @@ namespace svgio
     {
         void SvgGradientNode::tryToFindLink()
         {
-            if(!mpXLink && maXLink.getLength())
+            if(!mpXLink && !maXLink.isEmpty())
             {
                 mpXLink = dynamic_cast< const SvgGradientNode* >(getDocument().findSvgNodeById(maXLink));
             }
@@ -180,7 +180,7 @@ namespace svgio
                 }
                 case SVGTokenGradientUnits:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         if(aContent.match(commonStrings::aStrUserSpaceOnUse, 0))
                         {
@@ -195,7 +195,7 @@ namespace svgio
                 }
                 case SVGTokenSpreadMethod:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static OUString aStrPad(OUString::createFromAscii("pad"));
                         static OUString aStrReflect(OUString::createFromAscii("reflect"));

@@ -54,7 +54,7 @@ namespace svgio
             {
                 case SVGTokenType:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static OUString aStrTextCss(OUString::createFromAscii("text/css"));
 
@@ -88,14 +88,14 @@ namespace svgio
                     copyToLimiter(aContent, sal_Unicode('{'), nPos, aTokenValue, nLen);
                     const OUString aStyleName = aTokenValue.makeStringAndClear().trim();
 
-                    if(aStyleName.getLength() && nPos < nLen)
+                    if(!aStyleName.isEmpty() && nPos < nLen)
                     {
                         skip_char(aContent, sal_Unicode(' '), sal_Unicode('{'), nPos, nLen);
                         copyToLimiter(aContent, sal_Unicode('}'), nPos, aTokenValue, nLen);
                         skip_char(aContent, sal_Unicode(' '), sal_Unicode('}'), nPos, nLen);
                         const OUString aStyleContent = aTokenValue.makeStringAndClear().trim();
 
-                        if(aStyleContent.getLength())
+                        if(!aStyleContent.isEmpty())
                         {
                             // create new style
                             SvgStyleAttributes* pNewStyle = new SvgStyleAttributes(*this);

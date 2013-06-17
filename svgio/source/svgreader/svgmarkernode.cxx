@@ -107,7 +107,7 @@ namespace svgio
                 }
                 case SVGTokenMarkerUnits:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static OUString aStrStrokeWidth(OUString::createFromAscii("strokeWidth"));
 

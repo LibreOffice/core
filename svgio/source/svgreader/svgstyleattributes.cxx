@@ -183,7 +183,7 @@ namespace svgio
                 OUStringBuffer aTokenName;
                 copyString(rCandidate, nPos, aTokenName, nLen);
 
-                if(aTokenName.getLength())
+                if(!aTokenName.isEmpty())
                 {
                     skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(':'), nPos, nLen);
                     OUStringBuffer aTokenValue;
@@ -1085,7 +1085,7 @@ namespace svgio
                     aSource = drawinglayer::primitive2d::Primitive2DSequence(&xRef, 1);
                 }
 
-                if(getClipPathXLink().getLength())
+                if(!getClipPathXLink().isEmpty())
                 {
                     // try to access linked ClipPath
                     const SvgClipPathNode* mpClip = dynamic_cast< const SvgClipPathNode* >(mrOwner.getDocument().findSvgNodeById(getClipPathXLink()));
@@ -1098,7 +1098,7 @@ namespace svgio
 
                 if(aSource.hasElements()) // test again, applied clipPath may have lead to empty geometry
                 {
-                    if(getMaskXLink().getLength())
+                    if(!getMaskXLink().isEmpty())
                     {
                         // try to access linked Mask
                         const SvgMaskNode* mpMask = dynamic_cast< const SvgMaskNode* >(mrOwner.getDocument().findSvgNodeById(getMaskXLink()));
@@ -1193,7 +1193,7 @@ namespace svgio
                     {
                         setFill(aSvgPaint);
                     }
-                    else if(aURL.getLength())
+                    else if(!aURL.isEmpty())
                     {
                         const SvgNode* pNode = mrOwner.getDocument().findSvgNodeById(aURL);
 
@@ -1226,7 +1226,7 @@ namespace svgio
                 }
                 case SVGTokenFillRule:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         if(aContent.match(commonStrings::aStrNonzero))
                         {
@@ -1248,7 +1248,7 @@ namespace svgio
                     {
                         setStroke(aSvgPaint);
                     }
-                    else if(aURL.getLength())
+                    else if(!aURL.isEmpty())
                     {
                         const SvgNode* pNode = mrOwner.getDocument().findSvgNodeById(aURL);
 
@@ -1268,7 +1268,7 @@ namespace svgio
                 }
                 case SVGTokenStrokeDasharray:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static rtl::OUString aStrNone(rtl::OUString::createFromAscii("none"));
                         SvgNumberVector aVector;
@@ -1303,7 +1303,7 @@ namespace svgio
                 }
                 case SVGTokenStrokeLinecap:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static OUString aStrButt(OUString::createFromAscii("butt"));
                         static OUString aStrRound(OUString::createFromAscii("round"));
@@ -1326,7 +1326,7 @@ namespace svgio
                 }
                 case SVGTokenStrokeLinejoin:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static OUString aStrMiter(OUString::createFromAscii("miter"));
                         static OUString aStrRound(OUString::createFromAscii("round"));
@@ -1440,7 +1440,7 @@ namespace svgio
                 }
                 case SVGTokenFontStretch:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static OUString aStrNormal(OUString::createFromAscii("normal"));
                         static OUString aStrWider(OUString::createFromAscii("wider"));
@@ -1503,7 +1503,7 @@ namespace svgio
                 }
                 case SVGTokenFontStyle:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static OUString aStrNormal(OUString::createFromAscii("normal"));
                         static OUString aStrItalic(OUString::createFromAscii("italic"));
@@ -1526,7 +1526,7 @@ namespace svgio
                 }
                 case SVGTokenFontVariant:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static OUString aStrNormal(OUString::createFromAscii("normal"));
                         static OUString aStrSmallCaps(OUString::createFromAscii("small-caps"));
@@ -1544,7 +1544,7 @@ namespace svgio
                 }
                 case SVGTokenFontWeight:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static OUString aStrNormal(OUString::createFromAscii("normal"));
                         static OUString aStrBold(OUString::createFromAscii("bold"));
@@ -1617,7 +1617,7 @@ namespace svgio
                 }
                 case SVGTokenTextDecoration:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static OUString aStrNone(OUString::createFromAscii("none"));
                         static OUString aStrUnderline(OUString::createFromAscii("underline"));
@@ -1658,7 +1658,7 @@ namespace svgio
                 }
                 case SVGTokenTextAnchor:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static OUString aStrStart(OUString::createFromAscii("start"));
                         static OUString aStrMiddle(OUString::createFromAscii("middle"));
@@ -1681,7 +1681,7 @@ namespace svgio
                 }
                 case SVGTokenTextAlign:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static OUString aStrLeft(OUString::createFromAscii("left"));
                         static OUString aStrRight(OUString::createFromAscii("right"));
@@ -1750,7 +1750,7 @@ namespace svgio
                 }
                 case SVGTokenClipRule:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         if(aContent.match(commonStrings::aStrNonzero))
                         {
@@ -2426,7 +2426,7 @@ namespace svgio
 
         OUString SvgStyleAttributes::getMarkerStartXLink() const
         {
-            if(maMarkerStartXLink.getLength())
+            if(!maMarkerStartXLink.isEmpty())
             {
                 return maMarkerStartXLink;
             }
@@ -2447,7 +2447,7 @@ namespace svgio
             {
                 const OUString aMarker(getMarkerStartXLink());
 
-                if(aMarker.getLength())
+                if(!aMarker.isEmpty())
                 {
                     const_cast< SvgStyleAttributes* >(this)->mpMarkerStartXLink = dynamic_cast< const SvgMarkerNode* >(mrOwner.getDocument().findSvgNodeById(getMarkerStartXLink()));
                 }
@@ -2458,7 +2458,7 @@ namespace svgio
 
         OUString SvgStyleAttributes::getMarkerMidXLink() const
         {
-            if(maMarkerMidXLink.getLength())
+            if(!maMarkerMidXLink.isEmpty())
             {
                 return maMarkerMidXLink;
             }
@@ -2479,7 +2479,7 @@ namespace svgio
             {
                 const OUString aMarker(getMarkerMidXLink());
 
-                if(aMarker.getLength())
+                if(!aMarker.isEmpty())
                 {
                     const_cast< SvgStyleAttributes* >(this)->mpMarkerMidXLink = dynamic_cast< const SvgMarkerNode* >(mrOwner.getDocument().findSvgNodeById(getMarkerMidXLink()));
                 }
@@ -2490,7 +2490,7 @@ namespace svgio
 
         OUString SvgStyleAttributes::getMarkerEndXLink() const
         {
-            if(maMarkerEndXLink.getLength())
+            if(!maMarkerEndXLink.isEmpty())
             {
                 return maMarkerEndXLink;
             }
@@ -2511,7 +2511,7 @@ namespace svgio
             {
                 const OUString aMarker(getMarkerEndXLink());
 
-                if(aMarker.getLength())
+                if(!aMarker.isEmpty())
                 {
                     const_cast< SvgStyleAttributes* >(this)->mpMarkerEndXLink = dynamic_cast< const SvgMarkerNode* >(mrOwner.getDocument().findSvgNodeById(getMarkerEndXLink()));
                 }

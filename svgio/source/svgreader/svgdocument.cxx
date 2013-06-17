@@ -51,7 +51,7 @@ namespace svgio
 
         void SvgDocument::addSvgNodeToMapper(const OUString& rStr, const SvgNode& rNode)
         {
-            if(rStr.getLength())
+            if(!rStr.isEmpty())
             {
                 maIdTokenMapperList.insert(IdTokenValueType(rStr, &rNode));
             }
@@ -59,7 +59,7 @@ namespace svgio
 
         void SvgDocument::removeSvgNodeFromMapper(const OUString& rStr)
         {
-            if(rStr.getLength())
+            if(!rStr.isEmpty())
             {
                 maIdTokenMapperList.erase(rStr);
             }
@@ -81,7 +81,7 @@ namespace svgio
 
         void SvgDocument::addSvgStyleAttributesToMapper(const OUString& rStr, const SvgStyleAttributes& rSvgStyleAttributes)
         {
-            if(rStr.getLength())
+            if(!rStr.isEmpty())
             {
                 maIdStyleTokenMapperList.insert(IdStyleTokenValueType(rStr, &rSvgStyleAttributes));
             }

@@ -212,7 +212,7 @@ namespace svgio
                     const basegfx::B2DRange aTarget(fX, fY, fX + fWidth, fY + fHeight);
                     basegfx::B2DRange aViewBox(aTarget);
 
-                    if(maMimeType.getLength() && maData.getLength())
+                    if(!maMimeType.isEmpty() && !maData.isEmpty())
                     {
                         // use embedded base64 encoded data
                         ::com::sun::star::uno::Sequence< sal_Int8 > aPass;
@@ -232,12 +232,12 @@ namespace svgio
                             }
                         }
                     }
-                    else if(maUrl.getLength())
+                    else if(!maUrl.isEmpty())
                     {
                         const OUString& rPath = getDocument().getAbsolutePath();
                         const OUString aAbsUrl(rtl::Uri::convertRelToAbs(rPath, maUrl));
 
-                        if(aAbsUrl.getLength())
+                        if(!aAbsUrl.isEmpty())
                         {
                             SvFileStream aStream(aAbsUrl, STREAM_STD_READ);
                             Graphic aGraphic;
@@ -251,7 +251,7 @@ namespace svgio
                             }
                         }
                     }
-                    else if(maXLink.getLength())
+                    else if(!maXLink.isEmpty())
                     {
                         const SvgNode* mpXLink = getDocument().findSvgNodeById(maXLink);
 

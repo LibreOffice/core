@@ -384,7 +384,7 @@ namespace svgio
                     }
                 }
 
-                if(aNum.getLength())
+                if(!aNum.isEmpty())
                 {
                     rtl_math_ConversionStatus eStatus;
 
@@ -1248,7 +1248,7 @@ namespace svgio
                     OUStringBuffer aTokenName;
                     copyString(rCandidate, nPos, aTokenName, nLen);
 
-                    if(aTokenName.getLength())
+                    if(!aTokenName.isEmpty())
                     {
                         switch(StrToSVGToken(aTokenName.makeStringAndClear()))
                         {
@@ -1370,7 +1370,7 @@ namespace svgio
                     skip_char(rCandidate, sal_Unicode(','), sal_Unicode(' '), nPos, nLen);
                     const OUString aString = aTokenValue.makeStringAndClear();
 
-                    if(aString.getLength())
+                    if(!aString.isEmpty())
                     {
                         rSvgStringVector.push_back(aString);
                     }
@@ -1406,7 +1406,7 @@ namespace svgio
                     skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(';'), nPos, nLen);
                     rMimeType = aBuffer.makeStringAndClear();
 
-                    if(rMimeType.getLength() && nPos < nLen)
+                    if(!rMimeType.isEmpty() && nPos < nLen)
                     {
                         static OUString aStrImage(OUString::createFromAscii("image"));
 

@@ -159,7 +159,7 @@ namespace svgio
                     const OUString aTrimmedChars(aText.copy(nIndex, nLength).trim());
                     const double fEndPos(mfPosition + fSnippetWidth);
 
-                    if(aTrimmedChars.getLength() && (mfPosition < mfBasegfxPathLength || fEndPos > 0.0))
+                    if(!aTrimmedChars.isEmpty() && (mfPosition < mfBasegfxPathLength || fEndPos > 0.0))
                     {
                         const double fHalfSnippetWidth(fSnippetWidth * 0.5);
 
@@ -300,7 +300,7 @@ namespace svgio
                 }
                 case SVGTokenMethod:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static OUString aStrAlign(OUString::createFromAscii("align"));
                         static OUString aStrStretch(OUString::createFromAscii("stretch"));
@@ -318,7 +318,7 @@ namespace svgio
                 }
                 case SVGTokenSpacing:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static OUString aStrAuto(OUString::createFromAscii("auto"));
                         static OUString aStrExact(OUString::createFromAscii("exact"));

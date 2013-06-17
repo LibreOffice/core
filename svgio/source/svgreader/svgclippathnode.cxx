@@ -79,7 +79,7 @@ namespace svgio
                 }
                 case SVGTokenClipPathUnits:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         if(aContent.match(commonStrings::aStrUserSpaceOnUse, 0))
                         {
