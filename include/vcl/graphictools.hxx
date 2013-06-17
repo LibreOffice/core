@@ -142,6 +142,34 @@ public:
     // mutators
     /// Set path to stroke
     void    setPath             ( const Polygon& );
+    /** Set the polygon that is put at the start of the line
+
+        The polygon has to be in a special normalized position, and
+        already scaled to the desired size: the center of the stroked
+        path will meet the given polygon at (0,0) from negative y
+        values. Thus, an arrow would have its baseline on the x axis,
+        going upwards to positive y values. Furthermore, the polygon
+        also has to be scaled appropriately: the width of the joining
+        stroke is defined to be SvtGraphicStroke::normalizedArrowWidth
+        (0x10000), i.e. ranging from x=-0x8000 to x=0x8000. If your
+        arrow does have this width, it will fit every stroke with
+        every stroke width exactly.
+     */
+    void    setStartArrow       ( const PolyPolygon& );
+    /** Set the polygon that is put at the end of the line
+
+        The polygon has to be in a special normalized position, and
+        already scaled to the desired size: the center of the stroked
+        path will meet the given polygon at (0,0) from negative y
+        values. Thus, an arrow would have its baseline on the x axis,
+        going upwards to positive y values. Furthermore, the polygon
+        also has to be scaled appropriately: the width of the joining
+        stroke is defined to be SvtGraphicStroke::normalizedArrowWidth
+        (0x10000), i.e. ranging from x=-0x8000 to x=0x8000. If your
+        arrow does have this width, it will fit every stroke with
+        every stroke width exactly.
+     */
+    void    setEndArrow         ( const PolyPolygon& );
     /// Affine scaling in both X and Y dimensions
     void    scale               ( double fScaleX, double fScaleY );
 
