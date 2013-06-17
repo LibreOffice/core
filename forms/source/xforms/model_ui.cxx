@@ -219,7 +219,7 @@ OUString Model::getDefaultBindingExpressionForNode(
          xCurrent = xCurrent->getParentNode() )
     {
         // insert a '/' for every step except the first
-        if( aBuffer.getLength() > 0 )
+        if( !aBuffer.isEmpty() )
             aBuffer.insert( 0, sal_Unicode('/') );
 
         switch( xCurrent->getNodeType() )

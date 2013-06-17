@@ -134,7 +134,7 @@ void CSerializationURLEncoded::serialize_node(const Reference< XNode >& aNode)
         }
 
         // found anything?
-        if (aValue.getLength() > 0)
+        if (!aValue.isEmpty())
         {
             OUString aUnencValue = aValue.makeStringAndClear();
             OStringBuffer aEncodedBuffer;
