@@ -222,7 +222,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs) throw(IllegalArgum
           sal_Int32 k = 0;
           do
           {
-            if (buffer.getLength() > 0)
+            if (!buffer.isEmpty())
               buffer.append(' ');
 //          buffer.append("-I\"");
             buffer.append(param.getToken(0, ';', k));

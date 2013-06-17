@@ -109,7 +109,7 @@ namespace dbtools
     //--------------------------------------------------------------------
     void FilterManager::appendFilterComponent( OUStringBuffer& io_appendTo, const OUString& i_component ) const
     {
-        if ( io_appendTo.getLength() > 0 )
+        if ( !io_appendTo.isEmpty() )
         {
             io_appendTo.insert( 0, sal_Unicode( '(' ) );
             io_appendTo.insert( 1, sal_Unicode( ' ' ) );

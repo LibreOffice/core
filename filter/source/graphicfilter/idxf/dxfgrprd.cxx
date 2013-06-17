@@ -68,7 +68,7 @@ OString DXFReadLine(SvStream& rIStm)
         }
     }
 
-    if( !bEnd && !rIStm.GetError() && aBuf.getLength() )
+    if( !bEnd && !rIStm.GetError() && !aBuf.isEmpty() )
         bEnd = sal_True;
 
     nOldFilePos += aBuf.getLength();

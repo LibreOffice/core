@@ -767,7 +767,7 @@ com::sun::star::uno::Sequence< Any > parseArray( const OUString & str ) throw( S
             }
             if( brackets == 0 )
             {
-                if( current.getLength() > 0 || doubleQuotedValue )
+                if( !current.isEmpty() || doubleQuotedValue )
                     elements.push_back( makeAny( current.makeStringAndClear() ) );
             }
             else

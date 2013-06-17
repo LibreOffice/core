@@ -505,7 +505,7 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
         SvClassElement * pEle = aClassList[n];
         SvMetaClass * pCl = pEle->GetClass();
         OStringBuffer rPre(rPrefix);
-        if( rPre.getLength() && pEle->GetPrefix().getLength() )
+        if( !rPre.isEmpty() && !pEle->GetPrefix().isEmpty() )
             rPre.append('.');
         rPre.append(pEle->GetPrefix());
 

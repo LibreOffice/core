@@ -790,7 +790,7 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
         aDel = ", ";
     }
 
-    if( aOut.getLength() )
+    if( !aOut.isEmpty() )
     {
         WriteTab( rOutStm, nTab );
         rOutStm << aOut.getStr() << endl;
