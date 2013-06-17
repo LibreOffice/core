@@ -175,7 +175,7 @@ ChartItemPool::ChartItemPool():
 }
 
 ChartItemPool::ChartItemPool(const ChartItemPool& rPool):
-    SfxItemPool(rPool)
+    SfxItemPool(rPool), ppPoolDefaults(0), pItemInfos(0)
 {
 }
 
