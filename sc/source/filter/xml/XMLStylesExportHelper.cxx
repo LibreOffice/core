@@ -329,7 +329,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
                 sTemp.append(sText[i]);
             ++i;
         }
-        if (sTemp.getLength())
+        if (!sTemp.isEmpty())
         {
             SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, true, false);
             rExport.GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);

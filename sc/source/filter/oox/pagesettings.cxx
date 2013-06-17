@@ -786,7 +786,7 @@ void HeaderFooterParser::setAttributes()
 
 void HeaderFooterParser::appendText()
 {
-    if( maBuffer.getLength() > 0 )
+    if( !maBuffer.isEmpty() )
     {
         getEndPos()->gotoEnd( sal_False );
         getEndPos()->setString( maBuffer.makeStringAndClear() );
