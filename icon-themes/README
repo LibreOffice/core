@@ -3,7 +3,7 @@ Icon repository for the applications
 All of the icons, separated by themes are included in this
 directory. These icons are built into .zip files, and re-ordered /
 packed for efficiency reasons based on our UI configuration by the
-packimages/ module.
+postprocess/CustomTarget_images.mk.
 
 An icon theme does not need to contain all images, since these can be
 layered one on top of another.
@@ -27,13 +27,9 @@ How to add a new image set:
   FIXME: It is important to use an underscore '_' to delimit more words.
          scp2 compilation crashes when using a dash '-'.
          It evidently splits the name into two strings.
+   ^ It's probably not true anymore with filelists.
 
 - Add its name (new_set) to WITH_THEMES variable in configure.ac
-
-- Add its gid to the Files section of gid_Module_Root_Brand in
-  scp2/source/ooo/module_hidden_ooo.scp and add a corresponding File entry
-  to scp2/source/ooo/file_ooo.scp (see for example
-  gid_Brand_File_ImagesCrystal_Zip)
 
 - Add a vcl constant for it in vcl/inc/vcl/settings.hxx, e.g.
   #define STYLE_SYMBOLS_NEW_SET ((ULONG)5)

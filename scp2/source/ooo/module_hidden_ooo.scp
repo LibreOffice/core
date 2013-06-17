@@ -358,32 +358,7 @@ Module gid_Module_Root_Files_Images
 	Sortkey = "2050";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (
-#ifdef THEME_DEFAULT
-	     gid_File_Images_Zip,
-#endif
-#ifdef THEME_CRYSTAL
-             gid_File_ImagesCrystal_Zip,
-#endif
-#ifdef THEME_OXYGEN
-             gid_File_ImagesOxygen_Zip,
-#endif
-#ifdef THEME_HICONTRAST
-             gid_File_ImagesHicontrast_Zip,
-#endif
-#ifdef THEME_HUMAN
-             gid_File_ImagesHuman_Zip,
-#endif
-#ifdef THEME_SIFR
-             gid_File_ImagesSifr_Zip
-#endif
-#ifdef THEME_TANGO
-             gid_File_ImagesTango_Zip
-#endif
-#ifdef THEME_TANGO_TESTING
-             gid_File_ImagesTangoTesting_Zip
-#endif
-	);
+	Files = (gid_File_Images);
 End
 #endif
 

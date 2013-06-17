@@ -775,77 +775,12 @@ File gid_File_Spotlight_Bundle_lib
 End
 #endif
 
-#ifdef THEME_DEFAULT
-File gid_File_Images_Zip
+File gid_File_Images
     TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Config;
-    Name = "images.zip";
-    Styles = (PACKED);
+    Dir = FILELIST_DIR;
+    Name = "postprocess_images.filelist";
+    Styles = (FILELIST, PACKED);
 End
-#endif
-
-#ifdef THEME_CRYSTAL
-File gid_File_ImagesCrystal_Zip
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Config;
-    Name = "images_crystal.zip";
-    Styles = (PACKED);
-End
-#endif
-
-#ifdef THEME_OXYGEN
-File gid_File_ImagesOxygen_Zip
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Config;
-    Name = "images_oxygen.zip";
-    Styles = (PACKED);
-End
-#endif
-
-#ifdef THEME_HICONTRAST
-File gid_File_ImagesHicontrast_Zip
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Config;
-    Name = "images_hicontrast.zip";
-    Styles = (PACKED);
-End
-#endif
-
-#ifdef THEME_TANGO
-File gid_File_ImagesTango_Zip
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Config;
-    Name = "images_tango.zip";
-    Styles = (PACKED);
-End
-#endif
-
-#ifdef THEME_TANGO_TESTING
-File gid_File_ImagesTangoTesting_Zip
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Config;
-    Name = "images_tango_testing.zip";
-    Styles = (PACKED);
-End
-#endif
-
-#ifdef THEME_SIFR
-File gid_File_ImagesSifr_Zip
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Config;
-    Name = "images_sifr.zip";
-    Styles = (PACKED);
-End
-#endif
-
-#ifdef THEME_HUMAN
-File gid_File_ImagesHuman_Zip
-    TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Share_Config;
-    Name = "images_human.zip";
-    Styles = (PACKED);
-End
-#endif
 
 File gid_File_Share_Registry_Lingucomponent_Xcd
     TXT_FILE_BODY;

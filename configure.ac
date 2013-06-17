@@ -11195,7 +11195,6 @@ if test "x$with_theme" != "xno"; then
             *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
         esac
         WITH_THEMES="$WITH_THEMES $theme"
-        SCPDEFS="$SCPDEFS -DTHEME_`echo $theme|tr '[[:lower:]]' '[[:upper:]]'`"
     done
 fi
 AC_MSG_RESULT([$WITH_THEMES])

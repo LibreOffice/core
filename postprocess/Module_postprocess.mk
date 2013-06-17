@@ -28,7 +28,6 @@ endif
 
 ifneq ($(gb_RUNNABLE_INSTDIR),)
 $(eval $(call gb_Module_add_targets,postprocess,\
-	Package_images_install \
 	Package_registry_install \
 ))
 endif
