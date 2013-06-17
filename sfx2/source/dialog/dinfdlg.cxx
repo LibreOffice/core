@@ -45,6 +45,7 @@
 #include <com/sun/star/util/DateWithTimezone.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/CmisPropertyValue.hpp>
 
 #include <vcl/timer.hxx>
 #include "sfx2/dinfdlg.hxx"
@@ -89,6 +90,35 @@ struct CustomProperty
 
     inline bool operator==( const CustomProperty& rProp )
     { return m_sName.equals( rProp.m_sName ) && m_aValue == rProp.m_aValue; }
+};
+
+struct CmisProperty
+{
+    OUString                    m_sId;
+    OUString                    m_sName;
+    bool                        m_bUpdatable;
+    bool                        m_bRequired;
+    com::sun::star::uno::Any    m_aValue;
+
+    CmisProperty( const OUString& sId,
+                  const OUString& sName,
+                  const bool bUpdatable,
+                  const bool bRequired,
+                  const com::sun::star::uno::Any& rValue ) :
+                m_sId( sId ),
+                m_sName( sName ),
+                m_bUpdatable( bUpdatable ),
+                m_bRequired( bRequired ),
+                m_aValue( rValue )
+        {}
+
+    inline bool operator==( const CmisProperty& rProp )
+    { return m_sId.equals( rProp.m_sId )
+          && m_sName      == rProp.m_sName
+          && m_bUpdatable == rProp.m_bUpdatable
+          && m_bRequired  == rProp.m_bRequired
+          && m_aValue     == rProp.m_aValue;
+    }
 };
 
 static
@@ -222,7 +252,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
 
 SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
-        const uno::Sequence<beans::PropertyValue>& i_cmisProps,
+        const uno::Sequence<document::CmisPropertyValue>& i_cmisProps,
         sal_Bool bIs )
     : SfxStringItem( SID_DOCINFO, rFile )
     , m_AutoloadDelay( i_xDocProps->getAutoloadSecs() )
@@ -274,7 +304,11 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
 
         for ( sal_Int32 i = 0; i < i_cmisProps.getLength(); ++i )
         {
-           CustomProperty* pProp = new CustomProperty( i_cmisProps[i].Name, i_cmisProps[i].Value );
+           CmisProperty* pProp = new CmisProperty( i_cmisProps[i].Id,
+                                                   i_cmisProps[i].Name,
+                                                   i_cmisProps[i].Updatable,
+                                                   i_cmisProps[i].Required,
+                                                   i_cmisProps[i].Value );
            m_aCmisProperties.push_back( pProp );
         }
     }
@@ -314,8 +348,11 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     }
     for ( sal_uInt32 i = 0; i < rItem.m_aCmisProperties.size(); i++ )
     {
-        CustomProperty* pProp = new CustomProperty( rItem.m_aCmisProperties[i]->m_sName,
-                                                    rItem.m_aCmisProperties[i]->m_aValue );
+        CmisProperty* pProp = new CmisProperty( rItem.m_aCmisProperties[i]->m_sId,
+                                                rItem.m_aCmisProperties[i]->m_sName,
+                                                rItem.m_aCmisProperties[i]->m_bUpdatable,
+                                                rItem.m_aCmisProperties[i]->m_bRequired,
+                                                rItem.m_aCmisProperties[i]->m_aValue );
         m_aCmisProperties.push_back( pProp );
     }
 }
@@ -502,13 +539,16 @@ void SfxDocumentInfoItem::AddCustomProperty( const OUString& sName, const Any& r
 }
 
 
-std::vector< CustomProperty* > SfxDocumentInfoItem::GetCmisProperties() const
+std::vector< CmisProperty* > SfxDocumentInfoItem::GetCmisProperties() const
 {
-    std::vector< CustomProperty* > aRet;
+    std::vector< CmisProperty* > aRet;
     for ( sal_uInt32 i = 0; i < m_aCmisProperties.size(); i++ )
     {
-        CustomProperty* pProp = new CustomProperty( m_aCmisProperties[i]->m_sName,
-                                                    m_aCmisProperties[i]->m_aValue );
+        CmisProperty* pProp = new CmisProperty( m_aCmisProperties[i]->m_sId,
+                                                m_aCmisProperties[i]->m_sName,
+                                                m_aCmisProperties[i]->m_bUpdatable,
+                                                m_aCmisProperties[i]->m_bRequired,
+                                                m_aCmisProperties[i]->m_aValue );
         aRet.push_back( pProp );
     }
 
@@ -522,9 +562,14 @@ void SfxDocumentInfoItem::ClearCmisProperties()
     m_aCmisProperties.clear();
 }
 
-void SfxDocumentInfoItem::AddCmisProperty( const OUString& sName, const Any& rValue )
+void SfxDocumentInfoItem::AddCmisProperty( const OUString& sId,
+                                           const OUString& sName,
+                                           const bool bUpdatable,
+                                           const bool bRequired,
+                                           const Any& rValue )
 {
-    CustomProperty* pProp = new CustomProperty( sName, rValue );
+    CmisProperty* pProp = new CmisProperty( sId, sName, bUpdatable,
+                                              bRequired, rValue );
     m_aCmisProperties.push_back( pProp );
 }
 
@@ -2409,7 +2454,9 @@ void CmisPropertiesWindow::updateLineWidth()
     }
 }
 
-void CmisPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
+void CmisPropertiesWindow::AddLine( const OUString& /*sId*/, const OUString& sName,
+                                    const bool /*bUpdatable*/, const bool /*bRequired*/,
+                                    Any& rAny )
 {
     CmisPropertyLine* pNewLine = new CmisPropertyLine( this );
     pNewLine->m_aValueEdit.SetLoseFocusHdl( LINK( this, CmisPropertiesWindow, EditLoseFocusHdl ) );
@@ -2561,9 +2608,9 @@ void CmisPropertiesWindow::DoScroll( sal_Int32 nNewPos )
     }
 }
 
-Sequence< beans::PropertyValue > CmisPropertiesWindow::GetCmisProperties() const
+Sequence< document::CmisPropertyValue > CmisPropertiesWindow::GetCmisProperties() const
 {
-    Sequence< beans::PropertyValue > aPropertiesSeq( m_aCmisPropertiesLines.size() );
+    Sequence< document::CmisPropertyValue > aPropertiesSeq( m_aCmisPropertiesLines.size() );
     sal_Int32 i = 0;
     std::vector< CmisPropertyLine* >::const_iterator pIter;
     for ( pIter = m_aCmisPropertiesLines.begin();
@@ -2701,11 +2748,14 @@ IMPL_LINK( CmisPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar )
 }
 
 
-void CmisPropertiesControl::AddLine( const OUString& sName, Any& rAny, bool bInteractive )
+void CmisPropertiesControl::AddLine( const OUString& sId, const OUString& sName,
+                                     const bool bUpdatable, const bool bRequired,
+                                     Any& rAny, bool bInteractive )
 {
-    m_pPropertiesWin->AddLine( sName, rAny );
+    m_pPropertiesWin->AddLine( sId, sName, bUpdatable, bRequired, rAny );
     m_pVertScroll->SetRangeMax( m_pPropertiesWin->GetLineCount() + 1 );
-    if ( bInteractive && m_pPropertiesWin->GetOutputSizePixel().Height() < m_pPropertiesWin->GetLineCount() * m_pPropertiesWin->GetLineHeight() )
+    if ( bInteractive && m_pPropertiesWin->GetOutputSizePixel().Height() <
+        m_pPropertiesWin->GetLineCount() * m_pPropertiesWin->GetLineHeight() )
         m_pVertScroll->DoScroll( m_pPropertiesWin->GetLineCount() + 1 );
 }
 
@@ -2739,12 +2789,16 @@ sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
     if ( pInfo )
     {
         pInfo->ClearCmisProperties();
-        Sequence< beans::PropertyValue > aPropertySeq = m_pPropertiesCtrl->GetCmisProperties();
+        Sequence< document::CmisPropertyValue > aPropertySeq = m_pPropertiesCtrl->GetCmisProperties();
         sal_Int32 i = 0, nCount = aPropertySeq.getLength();
         for ( ; i < nCount; ++i )
         {
             if ( !aPropertySeq[i].Name.isEmpty() )
-                pInfo->AddCmisProperty( aPropertySeq[i].Name, aPropertySeq[i].Value );
+                pInfo->AddCmisProperty( aPropertySeq[i].Id,
+                                        aPropertySeq[i].Name,
+                                        aPropertySeq[i].Updatable,
+                                        aPropertySeq[i].Required,
+                                        aPropertySeq[i].Value );
         }
     }
 
@@ -2758,10 +2812,14 @@ void SfxCmisPropertiesPage::Reset( const SfxItemSet& rItemSet )
 {
     m_pPropertiesCtrl->ClearAllLines();
     const SfxDocumentInfoItem* m_pInfoItem = &(const SfxDocumentInfoItem &)rItemSet.Get(SID_DOCINFO);
-    std::vector< CustomProperty* > aCmisProps = m_pInfoItem->GetCmisProperties();
+    std::vector< CmisProperty* > aCmisProps = m_pInfoItem->GetCmisProperties();
     for ( sal_uInt32 i = 0; i < aCmisProps.size(); i++ )
     {
-        m_pPropertiesCtrl->AddLine( aCmisProps[i]->m_sName, aCmisProps[i]->m_aValue, false );
+        m_pPropertiesCtrl->AddLine( aCmisProps[i]->m_sId,
+                                    aCmisProps[i]->m_sName,
+                                    aCmisProps[i]->m_bUpdatable,
+                                    aCmisProps[i]->m_bRequired,
+                                    aCmisProps[i]->m_aValue, false );
     }
 }
 

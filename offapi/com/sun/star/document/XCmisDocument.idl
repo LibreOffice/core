@@ -9,7 +9,7 @@
 #ifndef __com_sun_star_document_XCmisDocument_idl__
 #define __com_sun_star_document_XCmisDocument_idl__
 
-#include <com/sun/star/beans/PropertyValues.idl>
+#include <com/sun/star/document/CmisPropertyValue.idl>
 #include <com/sun/star/uno/XInterface.idl>
 
 module com {   module sun {   module star {   module document {
@@ -46,11 +46,7 @@ interface XCmisDocument : com::sun::star::uno::XInterface
 
     /** Contains the properties values named after their CMIS ID.
      */
-    [attribute] com::sun::star::beans::PropertyValues CmisPropertiesValues;
-
-    /** Contains the property names to show to the user from their CMIS id.
-     */
-    [attribute] com::sun::star::beans::PropertyValues CmisPropertiesDisplayNames;
+    [attribute] sequence <com::sun::star::document::CmisPropertyValue> CmisPropertiesValues;
 };
 
 }; }; }; };

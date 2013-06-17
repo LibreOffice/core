@@ -26,6 +26,7 @@
 
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Duration.hpp>
+#include <com/sun/star/document/CmisPropertyValue.hpp>
 
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
@@ -51,6 +52,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 struct CustomProperty;
+struct CmisProperty;
 
 
 // class SfxDocumentInfoItem ---------------------------------------------
@@ -78,8 +80,8 @@ private:
     sal_Bool                            m_bHasTemplate;
     sal_Bool                            m_bDeleteUserData;
     sal_Bool                            m_bUseUserData;
-    std::vector< CustomProperty* >      m_aCustomProperties;
-    std::vector< CustomProperty* >      m_aCmisProperties;
+    std::vector< CustomProperty* >    m_aCustomProperties;
+    std::vector< CmisProperty* >      m_aCmisProperties;
 
 public:
     TYPEINFO();
@@ -88,7 +90,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::document::XDocumentProperties> & i_xDocProps,
         const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue> & i_cmisProps,
+            ::com::sun::star::document::CmisPropertyValue> & i_cmisProps,
         sal_Bool bUseUserData );
     SfxDocumentInfoItem( const SfxDocumentInfoItem& );
     virtual ~SfxDocumentInfoItem();
@@ -161,10 +163,11 @@ public:
     void        AddCustomProperty(  const OUString& sName,
                                     const com::sun::star::uno::Any& rValue );
 
-    std::vector< CustomProperty* >  GetCmisProperties() const;
+    std::vector< CmisProperty* >  GetCmisProperties() const;
     void        ClearCmisProperties();
-    void        AddCmisProperty(  const OUString& sName,
-                                    const com::sun::star::uno::Any& rValue );
+    void        AddCmisProperty(  const OUString& sId, const OUString& sName,
+                                  const bool bUpdatable, const bool bRequired,
+                                  const com::sun::star::uno::Any& rValue );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -630,12 +633,14 @@ public:
     void                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
     sal_uInt16          GetLineCount() const;
     inline sal_Int32    GetLineHeight() const { return m_nLineHeight; }
-    void                AddLine( const OUString& sName, com::sun::star::uno::Any& rAny );
+    void                AddLine( const OUString& sId, const OUString& sName,
+                                 const bool bUpdatable, const bool bRequired,
+                                 com::sun::star::uno::Any& rAny );
     bool                AreAllLinesValid() const;
     void                ClearAllLines();
     void                DoScroll( sal_Int32 nNewPos );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+    ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisPropertyValue >
                         GetCmisProperties() const;
     void                updateLineWidth();
 };
@@ -657,11 +662,13 @@ public:
     CmisPropertiesControl(Window* pParent);
     ~CmisPropertiesControl();
 
-    void            AddLine( const OUString& sName, com::sun::star::uno::Any& rAny, bool bInteractive );
+    void            AddLine( const OUString& sId, const OUString& sName,
+                             const bool bUpdatable, const bool bRequired,
+                             com::sun::star::uno::Any& rAny, bool bInteractive );
 
     inline bool     AreAllLinesValid() const { return m_pPropertiesWin->AreAllLinesValid(); }
     inline void     ClearAllLines() { m_pPropertiesWin->ClearAllLines(); }
-    inline ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+    inline ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisPropertyValue >
                     GetCmisProperties() const
                         { return m_pPropertiesWin->GetCmisProperties(); }
     void    Init(VclBuilderContainer& rParent);

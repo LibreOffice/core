@@ -13,6 +13,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/document/CmisPropertyValue.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
@@ -577,39 +578,21 @@ namespace cmis
                     {
                         libcmis::ObjectPtr object = getObject( xEnv );
                         map< string, libcmis::PropertyPtr >& aProperties = object->getProperties( );
-                        beans::PropertyValues aCmisProperties( aProperties.size( ) );
-                        beans::PropertyValue* pCmisProps = aCmisProperties.getArray( );
+                        uno::Sequence< document::CmisPropertyValue > aCmisProperties( aProperties.size( ) );
+                        document::CmisPropertyValue* pCmisProps = aCmisProperties.getArray( );
                         sal_Int32 i = 0;
                         for ( map< string, libcmis::PropertyPtr >::iterator it = aProperties.begin();
                                 it != aProperties.end( ); ++it, ++i )
                         {
-                            string name = it->first;
-                            pCmisProps[i].Name = STD_TO_OUSTR( name );
+                            string sId = it->first;
+                            string sDisplayName =  it->second->getPropertyType()->getDisplayName( );
+                            bool isUpdatable = it->second->getPropertyType()->isUpdatable( );
+                            bool isRequired = it->second->getPropertyType()->isRequired( );
+                            pCmisProps[i].Id = STD_TO_OUSTR( sId );
+                            pCmisProps[i].Name = STD_TO_OUSTR( sDisplayName );
+                            pCmisProps[i].Updatable = isUpdatable;
+                            pCmisProps[i].Required = isRequired;
                             pCmisProps[i].Value = lcl_cmisPropertyToUno( it->second );
-                        }
-                        xRow->appendObject( rProp.Name, uno::makeAny( aCmisProperties ) );
-                    }
-                    catch ( const libcmis::Exception& )
-                    {
-                        xRow->appendVoid( rProp );
-                    }
-                }
-                else if ( rProp.Name == "CmisPropertiesDisplayNames" )
-                {
-                    try
-                    {
-                        libcmis::ObjectPtr object = getObject( xEnv );
-                        map< string, libcmis::PropertyPtr >& aProperties = object->getProperties( );
-                        beans::PropertyValues aCmisProperties( aProperties.size( ) );
-                        beans::PropertyValue* pCmisProps = aCmisProperties.getArray( );
-                        sal_Int32 i = 0;
-                        for ( map< string, libcmis::PropertyPtr >::iterator it = aProperties.begin();
-                                it != aProperties.end( ); ++it, ++i )
-                        {
-                            string name = it->first;
-                            string displayName = it->second->getPropertyType()->getDisplayName( );
-                            pCmisProps[i].Name = STD_TO_OUSTR( name );
-                            pCmisProps[i].Value = uno::makeAny( STD_TO_OUSTR( displayName ) );
                         }
                         xRow->appendObject( rProp.Name, uno::makeAny( aCmisProperties ) );
                     }

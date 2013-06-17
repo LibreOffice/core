@@ -492,7 +492,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
 
                 Reference< XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY );
-                beans::PropertyValues aCmisProperties = xCmisDoc->getCmisPropertiesValues();
+                uno::Sequence< document::CmisPropertyValue> aCmisProperties = xCmisDoc->getCmisPropertiesValues();
 
                 SfxDocumentInfoItem aDocInfoItem( aURL, getDocProperties(), aCmisProperties,
                     IsUseUserData() );
@@ -923,7 +923,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 {
                     bool bShow = false;
                     Reference< XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY );
-                    beans::PropertyValues aCmisProperties = xCmisDoc->getCmisPropertiesValues();
+                    uno::Sequence< document::CmisPropertyValue> aCmisProperties = xCmisDoc->getCmisPropertiesValues();
 
                     if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
                     {
@@ -954,7 +954,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 {
                     bool bShow = false;
                     Reference< XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY );
-                    beans::PropertyValues aCmisProperties = xCmisDoc->getCmisPropertiesValues( );
+                    uno::Sequence< document::CmisPropertyValue> aCmisProperties = xCmisDoc->getCmisPropertiesValues( );
 
                     if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
                     {
