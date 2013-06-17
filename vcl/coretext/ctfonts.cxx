@@ -94,15 +94,6 @@ CTTextStyle::CTTextStyle( const FontSelectPattern& rFSD )
     mpStyleDict = CFDictionaryCreateMutable( NULL, nMaxDictSize,
         &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks );
 
-    // set some default styles: no kerning, regular ligatures
-    static const CGFloat fValZero = 0.0;
-    CFNumberRef pCFFloatNumZero = CFNumberCreate( NULL, kCFNumberFloatType, &fValZero );
-    CFDictionarySetValue( mpStyleDict, kCTKernAttributeName, pCFFloatNumZero );
-    CFRelease( pCFFloatNumZero);
-    static const int nValOne = 1;
-    CFNumberRef pCFIntNumOne = CFNumberCreate( NULL, kCFNumberIntType, &nValOne );
-    CFDictionarySetValue( mpStyleDict, kCTLigatureAttributeName, pCFIntNumOne );
-    CFRelease( pCFIntNumOne);
     CFBooleanRef pCFVertBool = pReqFont->mbVertical ? kCFBooleanTrue : kCFBooleanFalse;
     CFDictionarySetValue( mpStyleDict, kCTVerticalFormsAttributeName, pCFVertBool );
 
