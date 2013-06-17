@@ -119,10 +119,8 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 
 $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	$(if $(and $(SOLAR_JAVA),$(filter-out MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),javaldx) \
-	$(if $(filter-out IOS,$(OS)), \
-		regmerge \
-		regview \
-	) \
+	regmerge \
+	regview \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),uno) \
 ))
 
