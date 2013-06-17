@@ -446,62 +446,51 @@ IMPL_LINK( SmFontSizeDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ 
     Help* pHelp = Application::GetHelp();
     if( pHelp )
     {
-        pHelp->Start( OUString( "HID_SMA_FONTSIZEDIALOG" ), &aHelpButton1 );
+        pHelp->Start( OUString( "HID_SMA_FONTSIZEDIALOG" ), m_pHelpButton1 );
     }
     return 0;
 }
 
-SmFontSizeDialog::SmFontSizeDialog(Window * pParent, bool bFreeRes)
-    : ModalDialog(pParent, SmResId(RID_FONTSIZEDIALOG)),
-    aFixedText1(this, SmResId(1)),
-    aBaseSize(this, SmResId(1)),
-    aFixedText4(this, SmResId(4)),
-    aTextSize(this, SmResId(4)),
-    aFixedText5(this, SmResId(5)),
-    aIndexSize(this, SmResId(5)),
-    aFixedText6(this, SmResId(6)),
-    aFunctionSize(this, SmResId(6)),
-    aFixedText7(this, SmResId(7)),
-    aOperatorSize(this, SmResId(7)),
-    aFixedText8(this, SmResId(8)),
-    aBorderSize(this, SmResId(8)),
-    aFixedLine1(this, SmResId(1)),
-    aOKButton1(this, SmResId(1)),
-    aHelpButton1(this, SmResId(1)),
-    aCancelButton1(this, SmResId(1)),
-    aDefaultButton(this, SmResId(1))
+SmFontSizeDialog::SmFontSizeDialog(Window * pParent)
+    : ModalDialog(pParent, "FontSizeDialog", "modules/smath/ui/fontsizedialog.ui")
 {
-    if (bFreeRes)
-        FreeResource();
+    get(m_pTextSize, "spinB_text");
+    get(m_pIndexSize, "spinB_index");
+    get(m_pFunctionSize, "spinB_function");
+    get(m_pOperatorSize, "spinB_operator");
+    get(m_pBorderSize, "spinB_limit");
+    get(m_pBaseSize, "spinB_baseSize");
+    get(m_pHelpButton1, "help");
+    get(m_pDefaultButton, "default");
 
-    aDefaultButton.SetClickHdl(LINK(this, SmFontSizeDialog, DefaultButtonClickHdl));
-    aHelpButton1.SetClickHdl(LINK(this, SmFontSizeDialog, HelpButtonClickHdl));
+    m_pDefaultButton->SetClickHdl(LINK(this, SmFontSizeDialog, DefaultButtonClickHdl));
+    m_pHelpButton1->SetClickHdl(LINK(this, SmFontSizeDialog, HelpButtonClickHdl));
 }
 
 
 void SmFontSizeDialog::ReadFrom(const SmFormat &rFormat)
 {
     //! aufpassen: richtig runden!
-    aBaseSize.SetValue( SmRoundFraction(
+    m_pBaseSize->SetValue( SmRoundFraction(
         Sm100th_mmToPts( rFormat.GetBaseSize().Height() ) ) );
 
-    aTextSize    .SetValue( rFormat.GetRelSize(SIZ_TEXT) );
-    aIndexSize   .SetValue( rFormat.GetRelSize(SIZ_INDEX) );
-    aFunctionSize.SetValue( rFormat.GetRelSize(SIZ_FUNCTION) );
-    aOperatorSize.SetValue( rFormat.GetRelSize(SIZ_OPERATOR) );
-    aBorderSize  .SetValue( rFormat.GetRelSize(SIZ_LIMITS) );
+    m_pTextSize->SetValue( rFormat.GetRelSize(SIZ_TEXT) );
+    m_pIndexSize->SetValue( rFormat.GetRelSize(SIZ_INDEX) );
+    m_pFunctionSize->SetValue( rFormat.GetRelSize(SIZ_FUNCTION) );
+    m_pOperatorSize->SetValue( rFormat.GetRelSize(SIZ_OPERATOR) );
+    m_pBorderSize->SetValue( rFormat.GetRelSize(SIZ_LIMITS) );
 }
 
 
 void SmFontSizeDialog::WriteTo(SmFormat &rFormat) const
 {
-    rFormat.SetBaseSize( Size(0, SmPtsTo100th_mm( static_cast< long >(aBaseSize.GetValue()))) );
+    rFormat.SetBaseSize( Size(0, SmPtsTo100th_mm( static_cast< long >(m_pBaseSize->GetValue()))) );
 
-    rFormat.SetRelSize(SIZ_TEXT,     (sal_uInt16) aTextSize    .GetValue());
-    rFormat.SetRelSize(SIZ_INDEX,    (sal_uInt16) aIndexSize   .GetValue());
-    rFormat.SetRelSize(SIZ_FUNCTION, (sal_uInt16) aFunctionSize.GetValue());
-    rFormat.SetRelSize(SIZ_OPERATOR, (sal_uInt16) aOperatorSize.GetValue());
-    rFormat.SetRelSize(SIZ_LIMITS,   (sal_uInt16) aBorderSize  .GetValue());
+    rFormat.SetRelSize(SIZ_TEXT,     (sal_uInt16) m_pTextSize->GetValue());
+    rFormat.SetRelSize(SIZ_INDEX,    (sal_uInt16) m_pIndexSize->GetValue());
+    rFormat.SetRelSize(SIZ_FUNCTION, (sal_uInt16) m_pFunctionSize->GetValue());
+    rFormat.SetRelSize(SIZ_OPERATOR, (sal_uInt16) m_pOperatorSize->GetValue());
+    rFormat.SetRelSize(SIZ_LIMITS,   (sal_uInt16) m_pBorderSize->GetValue());
 
     const Size aTmp (rFormat.GetBaseSize());
     for (sal_uInt16  i = FNT_BEGIN;  i <= FNT_END;  i++)

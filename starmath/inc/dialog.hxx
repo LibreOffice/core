@@ -121,29 +121,20 @@ public:
 
 class SmFontSizeDialog : public ModalDialog
 {
-    FixedText       aFixedText1;
-    MetricField     aBaseSize;
-    FixedText       aFixedText4;
-    MetricField     aTextSize;
-    FixedText       aFixedText5;
-    MetricField     aIndexSize;
-    FixedText       aFixedText6;
-    MetricField     aFunctionSize;
-    FixedText       aFixedText7;
-    MetricField     aOperatorSize;
-    FixedText       aFixedText8;
-    MetricField     aBorderSize;
-    FixedLine       aFixedLine1;
-    OKButton        aOKButton1;
-    HelpButton      aHelpButton1;
-    CancelButton    aCancelButton1;
-    PushButton      aDefaultButton;
+    MetricField* m_pBaseSize;
+    MetricField* m_pTextSize;
+    MetricField* m_pIndexSize;
+    MetricField* m_pFunctionSize;
+    MetricField* m_pOperatorSize;
+    MetricField* m_pBorderSize;
+    HelpButton* m_pHelpButton1;
+    PushButton* m_pDefaultButton;
 
     DECL_LINK(DefaultButtonClickHdl, Button *);
     DECL_LINK(HelpButtonClickHdl, Button *);
 
 public:
-    SmFontSizeDialog(Window *pParent, bool bFreeRes = true);
+    SmFontSizeDialog(Window *pParent);
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) const;
