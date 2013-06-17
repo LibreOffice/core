@@ -2211,7 +2211,7 @@ void CmisPropertiesYesNoButton::Resize()
 
 // struct CmisPropertyLine ---------------------------------------------
 CmisPropertyLine::CmisPropertyLine( Window* pParent ) :
-    m_aName         ( pParent, SfxResId( SFX_CMIS_PROPERTY_TYPE ) ),
+    m_aName         ( pParent, SfxResId( SFX_CMIS_PROPERTY_NAME ) ),
     m_aType         ( pParent, SfxResId( SFX_CMIS_PROPERTY_TYPE ) ),
     m_aValueEdit    ( pParent, SfxResId( SFX_CMIS_ED_PROPERTY_VALUE ), this ),
     m_aDateField    ( pParent, SfxResId( SFX_CMIS_FLD_DATE), this),
@@ -2329,7 +2329,8 @@ void CmisPropertiesWindow::InitControls( HeaderBar* pHeaderBar, const ScrollBar*
     const long nOffset = 4;
     const long nScrollBarWidth = pScrollBar->GetSizePixel().Width();
     const long nButtonWidth = nScrollBarWidth + nOffset;
-    long nTypeWidth = m_aType.CalcMinimumSize().Width() + ( 2 * nOffset );
+    long nTypeWidth = m_aValueEdit.CalcMinimumSizeForText( CMIS_TYPE_DATETIME ).Width( )
+                      + ( 2 * nOffset );
     long nFullWidth = pHeaderBar->GetSizePixel().Width();
     long nItemWidth = ( nFullWidth - nTypeWidth - nButtonWidth ) / 2;
     pHeaderBar->SetItemSize( HI_NAME, nItemWidth );
