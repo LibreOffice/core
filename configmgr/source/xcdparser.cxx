@@ -41,7 +41,7 @@ namespace configmgr {
 XcdParser::XcdParser(
     int layer, std::set< OUString > const & processedDependencies, Data & data):
     layer_(layer), processedDependencies_(processedDependencies), data_(data),
-    state_(STATE_START)
+    state_(STATE_START), dependencyOptional_(false), nesting_(0)
 {}
 
 XcdParser::~XcdParser() {}

@@ -114,7 +114,7 @@ void merge(
 }
 
 XcsParser::XcsParser(int layer, Data & data):
-    valueParser_(layer), data_(data), state_(STATE_START)
+    valueParser_(layer), data_(data), state_(STATE_START), ignoring_(0)
 {}
 
 XcsParser::~XcsParser() {}
