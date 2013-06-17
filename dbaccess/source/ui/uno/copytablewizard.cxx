@@ -1503,7 +1503,7 @@ OUString CopyTableWizard::impl_getServerSideCopyStatement_throw(const Reference<
     {
         if ( COLUMN_POSITION_NOT_FOUND != aPosIter->second )
         {
-            if ( sColumns.getLength() )
+            if ( !sColumns.isEmpty() )
                 sColumns.append(",");
             sColumns.append(sQuote + aDestColumnNames[aPosIter->second - 1] + sQuote);
         }

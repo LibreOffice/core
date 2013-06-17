@@ -565,7 +565,7 @@ void ODBExport::exportConnectionData()
                 {
                     ::svt::OFileNotation aTransformer( sFileName );
                     OUStringBuffer sURL( aTransformer.get( ::svt::OFileNotation::N_URL ) );
-                    if (sURL.getLength() == 0 || sURL[sURL.getLength() - 1] != '/')
+                    if (sURL.isEmpty() || sURL[sURL.getLength() - 1] != '/')
                         sURL.append('/');
 
                     AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,GetRelativeReference(sURL.makeStringAndClear()));

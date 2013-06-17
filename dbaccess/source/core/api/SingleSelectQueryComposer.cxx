@@ -1497,7 +1497,7 @@ namespace
                 sRet.append(R_BRACKET);
             }
             ++pOrIter;
-            if ( pOrIter != pOrEnd && sRet.getLength() )
+            if ( pOrIter != pOrEnd && !sRet.isEmpty() )
                 sRet.append(STR_OR);
         }
         return sRet.makeStringAndClear();
@@ -1669,7 +1669,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
     // Construct SELECT without WHERE and ORDER BY
     OUString sFilter = getFilter();
 
-    if ( !sFilter.isEmpty() && aSQL.getLength() )
+    if ( !sFilter.isEmpty() && !aSQL.isEmpty() )
     {
         OUString sTemp(L_BRACKET + sFilter + R_BRACKET);
         sTemp += andCriteria ? OUString(STR_AND) : OUString(STR_OR);

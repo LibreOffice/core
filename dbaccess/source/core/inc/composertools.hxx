@@ -82,7 +82,7 @@ namespace dbaccess
             #endif
             if ( !lhs.isEmpty() )
             {
-                if ( m_aBuffer.getLength() )
+                if ( !m_aBuffer.isEmpty() )
                     appendNonEmptyToNonEmpty( lhs );
                 else
                     m_aBuffer.append( lhs );

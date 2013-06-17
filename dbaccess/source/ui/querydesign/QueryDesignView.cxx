@@ -307,7 +307,7 @@ namespace
                 for(;aIter != aEnd;++aIter)
                 {
                     OConnectionLineDataRef pLineData = *aIter;
-                    if(aCondition.getLength())
+                    if(!aCondition.isEmpty())
                         aCondition.append(C_AND);
                     aCondition.append(quoteTableAlias(sal_True,pData->GetAliasName(JTCS_FROM),aQuote));
                     aCondition.append(::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_FROM) ));
@@ -723,7 +723,7 @@ namespace
                     aFieldListStr.append(sFieldSeparator);
                 }
             }
-            if(aFieldListStr.getLength())
+            if(!aFieldListStr.isEmpty())
                 aFieldListStr.setLength(aFieldListStr.getLength()-2);
         }
         catch(SQLException&)
@@ -881,7 +881,7 @@ namespace
                 if (!aWhereStr.isEmpty())
                 {
                     aWhereStr += OUString(')');                      // close bracket for the AND branch
-                    if (rRetStr.getLength())                            // are there conditions on the field?
+                    if (!rRetStr.isEmpty())                            // are there conditions on the field?
                         rRetStr.append(C_OR);
                     else                                        // open bracket for the OR branch
                         rRetStr.append(sal_Unicode('('));
@@ -890,7 +890,7 @@ namespace
                 if (!aHavingStr.isEmpty())
                 {
                     aHavingStr += OUString(')');                     // close bracket for the AND branch
-                    if (rHavingStr.getLength())                         // are there conditions on the field?
+                    if (!rHavingStr.isEmpty())                         // are there conditions on the field?
                         rHavingStr.append(C_OR);
                     else                                        // Open bracket for the OR branch
                         rHavingStr.append(sal_Unicode('('));
@@ -898,9 +898,9 @@ namespace
                 }
             }
 
-            if (rRetStr.getLength())
+            if (!rRetStr.isEmpty())
                 rRetStr.append(sal_Unicode(')'));                               // close bracket for the OR branch
-            if (rHavingStr.getLength())
+            if (!rHavingStr.isEmpty())
                 rHavingStr.append(sal_Unicode(')'));                                // close bracket for the OR branch
         }
         catch(SQLException&)
@@ -2933,7 +2933,7 @@ OUString OQueryDesignView::getStatement()
         OUString aTmp("( ");
         aTmp += aJoinCrit;
         aTmp += OUString(" )");
-        if(aCriteriaListStr.getLength())
+        if(!aCriteriaListStr.isEmpty())
         {
             aTmp += C_AND;
             aTmp += aCriteriaListStr.makeStringAndClear();
@@ -2948,7 +2948,7 @@ OUString OQueryDesignView::getStatement()
     aSqlCmd.append(OUString(" FROM "));
     aSqlCmd.append(aTableListStr);
 
-    if (aCriteriaListStr.getLength())
+    if (!aCriteriaListStr.isEmpty())
     {
         aSqlCmd.append(OUString(" WHERE "));
         aSqlCmd.append(aCriteriaListStr.makeStringAndClear());
@@ -2963,7 +2963,7 @@ OUString OQueryDesignView::getStatement()
 
     aSqlCmd.append(GenerateGroupBy(this,rFieldList,bUseAlias));
     // ----------------- attache having  ------------
-    if(aHavingStr.getLength())
+    if(!aHavingStr.isEmpty())
     {
         aSqlCmd.append(OUString(" HAVING "));
         aSqlCmd.append(aHavingStr.makeStringAndClear());

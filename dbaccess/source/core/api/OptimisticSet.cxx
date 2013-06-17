@@ -237,7 +237,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
     TSQLStatements::iterator aSqlEnd  = aSql.end();
     for(;aSqlIter != aSqlEnd ; ++aSqlIter)
     {
-        if ( aSqlIter->second.getLength() )
+        if ( !aSqlIter->second.isEmpty() )
         {
             m_bResultSetChanged = m_bResultSetChanged || aResultSetChanged[aSqlIter->first];
             OUString sCatalog,sSchema,sTable;
@@ -303,7 +303,7 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
     TSQLStatements::iterator aSqlEnd  = aSql.end();
     for(;aSqlIter != aSqlEnd ; ++aSqlIter)
     {
-        if ( aSqlIter->second.getLength() )
+        if ( !aSqlIter->second.isEmpty() )
         {
             m_bResultSetChanged = m_bResultSetChanged || aResultSetChanged[aSqlIter->first];
             OUString sCatalog,sSchema,sTable;
@@ -630,7 +630,7 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
     TSQLStatements::iterator aSqlEnd  = aSql.end();
     for(;aSqlIter != aSqlEnd ; ++aSqlIter)
     {
-        if ( aSqlIter->second.getLength() )
+        if ( !aSqlIter->second.isEmpty() )
         {
             OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
             if ( !rCondition.isEmpty() )
