@@ -63,6 +63,7 @@
 #include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/document/CmisPropertyValue.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
@@ -1307,19 +1308,12 @@ public:
 
     // XCmisDocument
 
-    virtual css::uno::Sequence< css::beans::PropertyValue >
+    virtual css::uno::Sequence< css::document::CmisPropertyValue >
             SAL_CALL getCmisPropertiesValues()
         throw (css::uno::RuntimeException);
     virtual void SAL_CALL setCmisPropertiesValues(
             const css::uno::Sequence<
-                css::beans::PropertyValue >& _cmispropertiesvalues )
-        throw (css::uno::RuntimeException);
-    virtual css::uno::Sequence< css::beans::PropertyValue >
-            SAL_CALL getCmisPropertiesDisplayNames()
-        throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setCmisPropertiesDisplayNames(
-            const css::uno::Sequence<
-                css::beans::PropertyValue >& _cmispropertiesdisplaynames )
+                css::document::CmisPropertyValue >& _cmispropertiesvalues )
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL checkOut(  ) throw ( css::uno::RuntimeException );
