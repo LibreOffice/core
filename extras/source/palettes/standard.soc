@@ -148,7 +148,7 @@
 
   <!-- #i121520# use some 'nice' colors from original palette -->
   <draw:color draw:name="Blue gray" draw:color="#e6e6ff"/>
-  <draw:color draw:name="Blue nine" draw:color="#CFE7F5"/>
+  <draw:color draw:name="Blue 11" draw:color="#CFE7F5"/>
 
   <!-- #i121520# add 'pale' colors from original palette -->
   <draw:color draw:name="Violet" draw:color="#9999ff"/>
