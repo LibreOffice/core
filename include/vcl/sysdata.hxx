@@ -216,11 +216,9 @@ struct SystemFontData
 #if defined( WNT )
     HFONT           hFont;          // native font object
 #elif defined( MACOSX )
-#ifdef ENABLE_CORETEXT
-#else
+#ifndef ENABLE_CORETEXT
     void*           aATSUFontID;    // native font object
 #endif
-#elif defined( IOS )
 #elif defined( UNX )
     void*           nFontId;        // native font id
     int             nFontFlags;     // native font flags
@@ -235,11 +233,9 @@ struct SystemFontData
 #if defined( WNT )
         , hFont( 0 )
 #elif defined( MACOSX )
-#ifdef ENABLE_CORETEXT
-#else
+#ifndef ENABLE_CORETEXT
         , aATSUFontID( NULL )
 #endif
-#elif defined( IOS )
 #elif defined( UNX )
         , nFontId( NULL )
         , nFontFlags( 0 )
