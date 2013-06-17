@@ -157,11 +157,7 @@ private: // Private section
     short nTypeArray[NF_MAX_FORMAT_SYMBOLS];    // Array of infos
                                                 // External Infos:
     sal_uInt16 nAnzResStrings;                  // Result symbol count
-#if !(defined SOLARIS && defined X86)
     short eScannedType;                         // Type according to scan
-#else
-    int eScannedType;                           // Due to optimisation
-#endif
     bool bThousand;                             // With thousands marker
     sal_uInt16 nThousand;                       // Counts .... series
     sal_uInt16 nCntPre;                         // Counts digits of integral part
