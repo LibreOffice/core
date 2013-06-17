@@ -9845,19 +9845,26 @@ dnl =================================================
 OPENCL_LIBS=
 OPENCL_CFLAGS=
 ENABLE_OPENCL=
-AC_MSG_CHECKING([opencl sdk])
-if test "z$with_opencl_sdk" = "z"; then
-       AC_MSG_RESULT([no])
+AC_MSG_CHECKING([OpenCL])
+if test \( -z "$with_opencl_sdk" -o "$with_opencl_sdk" = yes \) -a $_os = Darwin; then
+    # OS X
+    AC_MSG_RESULT([yes, always on OS X])
+    ENABLE_OPENCL=TRUE
+    OPENCL_CFLAGS=
+    OPENCL_LIBS="-framework OpenCL"
+    AC_DEFINE(HAVE_FEATURE_OPENCL)
+elif test "z$with_opencl_sdk" = "z"; then
+    AC_MSG_RESULT([no])
 else
-       if test -d $with_opencl_sdk/include; then
-               ENABLE_OPENCL=TRUE
-               OPENCL_CFLAGS="-I$with_opencl_sdk/include"
-               OPENCL_LIBS="-L$with_opencl_sdk/lib/x86 -lOpenCL"
-               AC_MSG_RESULT([found at path $with_opencl_sdk])
-               AC_DEFINE(HAVE_FEATURE_OPENCL)
-       else
-               AC_MSG_ERROR([no headers found found at $with_opencl_sdk/include ])
-       fi
+    if test -d $with_opencl_sdk/include; then
+        ENABLE_OPENCL=TRUE
+        OPENCL_CFLAGS="-I$with_opencl_sdk/include"
+        OPENCL_LIBS="-L$with_opencl_sdk/lib/x86 -lOpenCL"
+        AC_MSG_RESULT([found at path $with_opencl_sdk])
+        AC_DEFINE(HAVE_FEATURE_OPENCL)
+    else
+        AC_MSG_ERROR([no headers found found at $with_opencl_sdk/include ])
+    fi
 fi
 AC_SUBST(OPENCL_CFLAGS)
 AC_SUBST(OPENCL_LIBS)
