@@ -1425,16 +1425,19 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
                     fXnew = fX + 1.1 * SCdEpsilon;  // move away from zero slope
                 else
                     fXnew = fX - fTerm / fTermDerivation;
-            nCount++;
-            // more accuracy not possible in oscillating cases
-            bFound = (fabs(fXnew - fX) < SCdEpsilon);
-            fX = fXnew;
+                nCount++;
+                // more accuracy not possible in oscillating cases
+                bFound = (fabs(fXnew - fX) < SCdEpsilon);
+                fX = fXnew;
             }
         }
         // Gnumeric returns roots < -1, Excel gives an error in that cases,
         // ODFF says nothing about it. Enable the statement, if you want Excel's
-        // behavior
+        // behavior.
         //bValid =(fX >=-1.0);
+        // Update 2013-06-17: Gnumeric (v1.12.2) doesn't return roots <= -1
+        // anymore.
+        bValid = (fX > -1.0);
     }
     else
     { // Nper is not an integer value.
@@ -1461,11 +1464,11 @@ bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
                     fXnew = fX + 1.1 * SCdEpsilon;  // move away from zero slope
                 else
                     fXnew = fX - fTerm / fTermDerivation;
-            nCount++;
-             // more accuracy not possible in oscillating cases
-            bFound = (fabs(fXnew - fX) < SCdEpsilon);
-            fX = fXnew;
-            bValid = (fX >= -1.0);  // otherwise pow(1.0+fX,fNper) will fail
+                nCount++;
+                // more accuracy not possible in oscillating cases
+                bFound = (fabs(fXnew - fX) < SCdEpsilon);
+                fX = fXnew;
+                bValid = (fX >= -1.0);  // otherwise pow(1.0+fX,fNper) will fail
             }
         }
     }
@@ -1479,14 +1482,18 @@ void ScInterpreter::ScZins()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScZins" );
     double fPv, fPayment, fNper;
     // defaults for missing arguments, see ODFF spec
-    double fFv = 0, fPayType = 0, fGuess = 0.1;
+    double fFv = 0, fPayType = 0, fGuess = 0.1, fOrigGuess = 0.1;
     bool bValid = true;
+    bool bDefaultGuess = true;
     nFuncFmtType = NUMBERFORMAT_PERCENT;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 6 ) )
         return;
     if (nParamCount == 6)
-        fGuess = GetDouble();
+    {
+        fOrigGuess = fGuess = GetDouble();
+        bDefaultGuess = false;
+    }
     if (nParamCount >= 5)
         fPayType = GetDouble();
     if (nParamCount >= 4)
@@ -1504,7 +1511,33 @@ void ScInterpreter::ScZins()
     //if (fPayType != 0.0) fPayType = 1.0;
     bValid = RateIteration(fNper, fPayment, fPv, fFv, fPayType, fGuess);
     if (!bValid)
-        SetError(errNoConvergence);
+    {
+        /* TODO: try also for specified guess values, not only default? As is,
+         * a specified 0.1 guess may be error result but a default 0.1 guess
+         * may succeed. On the other hand, using a different guess value than
+         * the specified one may not be desired, even if that didn't match. */
+        if (bDefaultGuess)
+        {
+            /* TODO: this is rather ugly, instead of looping over different
+             * guess values and doing a Newton goal seek for each we could
+             * first insert the values into the RATE equation to obtain a set
+             * of y values and then do a bisecting goal seek, possibly using
+             * different algorithms. */
+            double fX = fOrigGuess;
+            for (int nStep = 2; nStep <= 10 && !bValid; ++nStep)
+            {
+                fGuess = fX * nStep;
+                bValid = RateIteration( fNper, fPayment, fPv, fFv, fPayType, fGuess);
+                if (!bValid)
+                {
+                    fGuess = fX / nStep;
+                    bValid = RateIteration( fNper, fPayment, fPv, fFv, fPayType, fGuess);
+                }
+            }
+        }
+        if (!bValid)
+            SetError(errNoConvergence);
+    }
     PushDouble(fGuess);
 }
 
