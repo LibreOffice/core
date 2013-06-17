@@ -2065,6 +2065,26 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Invalid condition." ;
     };
+    String STR_DISMISS
+    {
+        Text [ en-US ] = "~Discard" ;
+    };
+    String STR_QUERYREMOVE
+    {
+        Text [ en-US ] = "Should the entry\n#\nbe deleted?" ;
+    };
+    String STR_COPYLIST
+    {
+        Text [ en-US ] = "Copy List" ;
+    };
+    String STR_COPYFROM
+    {
+        Text [ en-US ] = "List from" ;
+    };
+    String STR_COPYERR
+    {
+        Text [ en-US ] = "Cells without text have been ignored." ;
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

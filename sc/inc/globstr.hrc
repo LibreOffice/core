@@ -673,7 +673,13 @@
 
 #define STR_FUN_TEXT_SELECTION_COUNT    546
 
-#define STR_COUNT                   547
+#define STR_DISMISS                 547
+#define STR_QUERYREMOVE             548
+#define STR_COPYLIST                549
+#define STR_COPYFROM                550
+#define STR_COPYERR                 551
+
+#define STR_COUNT                   552
 
 #endif
 

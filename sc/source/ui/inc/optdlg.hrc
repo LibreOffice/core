@@ -37,26 +37,6 @@
 #define BTN_NULLVALS        21
 #define BTN_NOTES           22
 
-
-// TP_USERLISTS:
-#define FT_LISTS            1
-#define LB_LISTS            1
-#define FT_ENTRIES          2
-#define ED_ENTRIES          2
-#define FT_COPYFROM         3
-#define ED_COPYFROM         3
-#define BTN_NEW             1
-#define BTN_ADD             2
-#define BTN_REMOVE          3
-#define BTN_COPY            4
-#define STR_QUERYREMOVE     5
-#define STR_DISMISS         6
-#define STR_COPYLIST        7
-#define STR_COPYFROM        8
-#define STR_COPYERR         9
-
-// TP_PRINT:
-
 // TP_LCONTENT
 
 #define GB_DISPLAY          20

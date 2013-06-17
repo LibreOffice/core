@@ -23,7 +23,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/svmedit.hxx>
+#include <vcl/vclmedit.hxx>
 
 //========================================================================
 
@@ -48,19 +48,19 @@ private:
             ~ScTpUserLists();
 
 private:
-    FixedText       aFtLists;
-    ListBox         aLbLists;
-    FixedText       aFtEntries;
-    MultiLineEdit   aEdEntries;
-    FixedText       aFtCopyFrom;
-    Edit            aEdCopyFrom;
-    PushButton      aBtnNew;
-    PushButton      aBtnAdd;
-    PushButton      aBtnRemove;
-    PushButton      aBtnCopy;
+    FixedText*          mpFtLists;
+    ListBox*            mpLbLists;
+    FixedText*          mpFtEntries;
+    VclMultiLineEdit*   mpEdEntries;
+    FixedText*          mpFtCopyFrom;
+    Edit*               mpEdCopyFrom;
+    PushButton*         mpBtnNew;
+    PushButton*         mpBtnAdd;
+    PushButton*         mpBtnRemove;
+    PushButton*         mpBtnCopy;
 
     const String    aStrQueryRemove;
-    const String    aStrNew;
+    String          aStrNew;
     const String    aStrCancel;
     const String    aStrAdd;
     const String    aStrModify;
@@ -97,7 +97,7 @@ private:
     // Handler:
     DECL_LINK( LbSelectHdl,     ListBox* );
     DECL_LINK( BtnClickHdl,     PushButton* );
-    DECL_LINK( EdEntriesModHdl, MultiLineEdit* );
+    DECL_LINK( EdEntriesModHdl, VclMultiLineEdit* );
 #endif
 };
 
