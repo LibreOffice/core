@@ -2794,7 +2794,7 @@ endef
 # Better duplication with gb_Gallery__UNO_COMPONENTS than nothing.
 # This is used to determine what we need for 'build' platform.
 define gb_Executable__register_gengal
-$(call gb_Executable_add_runtime_dependencies,$(1),\
+$(call gb_Executable_add_runtime_dependencies,gengal,\
 	$(foreach component, \
 		comphelper/util/comphelp \
 		configmgr/source/configmgr \
