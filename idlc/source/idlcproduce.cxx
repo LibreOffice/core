@@ -67,7 +67,7 @@ static sal_Bool checkOutputPath(const OString& completeName)
     {
         buffer.append(sysPathName.getToken(0, SEPARATOR, nIndex));
 
-        if ( buffer.getLength() > 0 && nIndex != -1 )
+        if ( !buffer.isEmpty() && nIndex != -1 )
         {
 #if defined(SAL_UNX)
             if (mkdir((char*)buffer.getStr(), 0777) == -1)

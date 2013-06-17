@@ -116,7 +116,7 @@ static bool CheckPlugin( const OString& rPath, list< PluginDescription* >& rDesc
         }
         pclose( pResult );
 
-        if( aMIME.getLength() > 0 )
+        if( !aMIME.isEmpty() )
         {
             OString aLine = aMIME.makeStringAndClear();
 
