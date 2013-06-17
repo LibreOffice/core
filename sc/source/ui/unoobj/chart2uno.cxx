@@ -126,7 +126,7 @@ OUString lcl_createTableNumberList( const ::std::list< SCTAB > & rTableList )
     OUStringBuffer aBuffer;
     ::std::for_each( rTableList.begin(), rTableList.end(), lcl_appendTableNumber( aBuffer ));
     // remove last trailing ' '
-    if( aBuffer.getLength() > 0 )
+    if( !aBuffer.isEmpty() )
         aBuffer.setLength( aBuffer.getLength() - 1 );
     return aBuffer.makeStringAndClear();
 }
@@ -2277,7 +2277,7 @@ OUString SAL_CALL ScChart2DataProvider::convertRangeFromXML( const OUString& sXM
                 if ( aUIString.GetChar(0) == (sal_Unicode) '.' )
                     aUIString.Erase( 0, 1 );
 
-                if( sRet.getLength() )
+                if( !sRet.isEmpty() )
                     sRet.append( (sal_Unicode) ';' );
                 sRet.append( aUIString );
             }

@@ -3085,7 +3085,7 @@ void ScInterpreter::ScBahtText()
 
             aText.insert(0, aBlock.makeStringAndClear());
         }
-        if (aText.getLength() > 0)
+        if (!aText.isEmpty())
             aText.append( RTL_CONSTASCII_STRINGPARAM(UTF8_TH_BAHT) );
 
         // generate text for Satang value
