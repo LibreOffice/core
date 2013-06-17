@@ -477,7 +477,7 @@ private:
     }
     /** Append a blank for separation, if needed */
     inline void Separate( ){
-        if( !aCmdText.getLength() || aCmdText[ aCmdText.getLength() - 1 ] != ' ' )
+        if( aCmdText.isEmpty() || aCmdText[ aCmdText.getLength() - 1 ] != ' ' )
             aCmdText.append(' ');
     }
     /** Output text generated from the pNodes */
