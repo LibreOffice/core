@@ -189,7 +189,7 @@
     </SearchOptions>
   </LC_SEARCH>
   <LC_INDEX>
-    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-Z</IndexKey>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-C {Ch} D {Dh} E-N {Ny} O P {Ph} Q-S {Sh} T {TS} U-Z {ZH}</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
     <FollowPageWord>STP</FollowPageWord>
