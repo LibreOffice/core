@@ -26,24 +26,6 @@
 #include <Cocoa/Cocoa.h>
 #include <postmac.h>
 
-/** Transform an image from PICT to PNG format
-
-   Returns true if the conversion was successful false
-   otherwise.
- */
-bool PICTtoPNG(com::sun::star::uno::Sequence<sal_Int8>& rPictData,
-               com::sun::star::uno::Sequence<sal_Int8>& rPngData);
-
-/** Transform an image from PNG to a PICT format
-
-   Returns true if the conversion was successful false
-   otherwise.
- */
-bool PNGtoPICT(com::sun::star::uno::Sequence<sal_Int8>& rPngData,
-               com::sun::star::uno::Sequence<sal_Int8>& rPictData);
-
-#define PICTImageFileType ((NSBitmapImageFileType)~0)
-
 bool ImageToPNG( com::sun::star::uno::Sequence<sal_Int8>& rImgData,
                  com::sun::star::uno::Sequence<sal_Int8>& rPngData,
                  NSBitmapImageFileType eInFormat);

@@ -109,15 +109,6 @@ namespace // private
     bool DataTypeOUString; // sequence<byte> otherwise
   };
 
-// NSPICTPboardType is deprecated in 10.6 and later
-
-// Make deprecation warnings just warnings even in a -Werror
-// compilation.
-
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY
-#pragma GCC diagnostic warning "-Wdeprecated-declarations"
-#endif
-
   /* At the moment it appears as if only MS Office pastes "public.html" to the clipboard.
    */
   FlavorMap flavorMap[] =
@@ -125,7 +116,6 @@ namespace // private
       { NSStringPboardType, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", true },
       { NSRTFPboardType, "text/richtext", "Rich Text Format", false },
       { NSTIFFPboardType, "image/png", "Portable Network Graphics", false },
-      { NSPICTPboardType, "image/png", "Portable Network Graphics", false },
       { NSHTMLPboardType, "text/html", "Plain Html", false },
       { NSFilenamesPboardType, "application/x-openoffice-filelist;windows_formatname=\"FileList\"", "FileList", false },
       { PBTYPE_SESX, FLAVOR_SESX, "Star Embed Source (XML)", false },
@@ -573,7 +563,7 @@ NSString* DataFlavorMapper::openOfficeToSystemFlavor(const DataFlavor& oOOFlavor
 
 NSString* DataFlavorMapper::openOfficeImageToSystemFlavor(NSPasteboard* pPasteboard) const
 {
-    NSArray *supportedTypes = [NSArray arrayWithObjects: NSTIFFPboardType, NSPICTPboardType, nil];
+    NSArray *supportedTypes = [NSArray arrayWithObjects: NSTIFFPboardType, nil];
     NSString *sysFlavor = [pPasteboard availableTypeFromArray:supportedTypes];
     return sysFlavor;
 }
@@ -602,11 +592,7 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider(NSString* systemFlavor, Refe
             }
           else
           */
-          if ([systemFlavor caseInsensitiveCompare: NSPICTPboardType] == NSOrderedSame)
-            {
-              dp = DataProviderPtr_t( new PNGDataProvider( data, PICTImageFileType));
-            }
-          else if ([systemFlavor caseInsensitiveCompare: NSTIFFPboardType] == NSOrderedSame)
+          if ([systemFlavor caseInsensitiveCompare: NSTIFFPboardType] == NSOrderedSame)
             {
               dp = DataProviderPtr_t( new PNGDataProvider( data, NSTIFFFileType));
             }
@@ -653,10 +639,6 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider(const NSString* systemFlavor
     {
       dp = DataProviderPtr_t(new HTMLFormatDataProvider(systemData));
     }
-  else if ([systemFlavor caseInsensitiveCompare: NSPICTPboardType] == NSOrderedSame)
-    {
-      dp = DataProviderPtr_t( new PNGDataProvider(systemData, PICTImageFileType));
-    }
   else if ([systemFlavor caseInsensitiveCompare: NSTIFFPboardType] == NSOrderedSame)
     {
       dp = DataProviderPtr_t( new PNGDataProvider(systemData, NSTIFFFileType));
@@ -701,7 +683,6 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno:
       if( flavors[i].MimeType.startsWith("image/bmp") )
       {
           [array addObject: NSTIFFPboardType];
-          [array addObject: NSPICTPboardType];
       }
       else
       {
