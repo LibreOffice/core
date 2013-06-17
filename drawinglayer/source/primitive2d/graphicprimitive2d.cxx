@@ -146,6 +146,16 @@ namespace drawinglayer
         {
         }
 
+        GraphicPrimitive2D::GraphicPrimitive2D(
+            const basegfx::B2DHomMatrix& rTransform,
+            const GraphicObject& rGraphicObject)
+        :   BufferedDecompositionPrimitive2D(),
+            maTransform(rTransform),
+            maGraphicObject(rGraphicObject),
+            maGraphicAttr()
+        {
+        }
+
         bool GraphicPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
