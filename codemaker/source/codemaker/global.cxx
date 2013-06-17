@@ -135,7 +135,7 @@ OString createFileNameFromType( const OString& destination,
         if( nIndex == -1 )
             break;
 
-        if (buffer.getLength() == 0 || OString(".") == buffer.getStr())
+        if (buffer.isEmpty() || OString(".") == buffer.getStr())
         {
             buffer.append(token);
             continue;
