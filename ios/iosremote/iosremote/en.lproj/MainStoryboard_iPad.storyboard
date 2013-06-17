@@ -9,7 +9,7 @@
             <objects>
                 <viewController id="2" customClass="libreoffice_sdremoteViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5">
-                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <rect key="frame" x="0.0" y="64" width="768" height="916"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="192.168.0.22" borderStyle="roundedRect" minimumFontSize="17" id="9w1-Ym-HcF">
@@ -28,6 +28,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <toolbarItems>
+                        <barButtonItem title="Start Presentation" id="R1W-H8-kVN">
+                            <connections>
+                                <action selector="startPresentation:" destination="2" id="D8F-FY-mIu"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" id="7ye-Vv-ZD0">
                         <barButtonItem key="rightBarButtonItem" title="Connect" id="ZJB-Ei-Sa9">
                             <connections>
@@ -35,6 +42,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="ipAddressTextEdit" destination="9w1-Ym-HcF" id="hab-JH-3Lf"/>
                         <outlet property="pinLabel" destination="Cg3-f5-zuM" id="HaU-jr-8oJ"/>
@@ -126,22 +134,36 @@
             <objects>
                 <viewController id="zdX-BL-bmY" customClass="slideShowViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Tkv-NW-1bl">
-                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <rect key="frame" x="0.0" y="64" width="768" height="916"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="T6z-xu-j8h">
-                                <rect key="frame" x="14" y="20" width="741" height="442"/>
+                                <rect key="frame" x="14" y="20" width="741" height="398"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <webView contentMode="scaleToFill" id="y0E-Wp-yUc">
-                                <rect key="frame" x="20" y="513" width="728" height="378"/>
+                                <rect key="frame" x="20" y="487.5" width="728" height="359.5"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </webView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" id="uc0-p3-wnG"/>
+                    <toolbarItems>
+                        <barButtonItem title="Previous" id="fEE-h8-5be">
+                            <connections>
+                                <action selector="previousSlide:" destination="zdX-BL-bmY" id="DMr-Rh-WfD"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" id="uc0-p3-wnG">
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="502-Fp-Hjs">
+                            <connections>
+                                <action selector="nextSlide:" destination="zdX-BL-bmY" id="YU1-0k-qPi"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="image" destination="T6z-xu-j8h" id="o1L-LM-TbP"/>
                         <outlet property="lecturer_notes" destination="y0E-Wp-yUc" id="qNC-Bc-jAZ"/>

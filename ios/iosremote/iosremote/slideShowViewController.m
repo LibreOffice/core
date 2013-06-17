@@ -8,8 +8,12 @@
 
 #import "slideShowViewController.h"
 #import "SlideShow.h"
+#import "CommandTransmitter.h"
+#import "CommunicationManager.h"
 
 @interface slideShowViewController ()
+
+@property (nonatomic, strong) CommunicationManager* comManager;
 
 @end
 
@@ -18,6 +22,7 @@
 @synthesize slideshow = _slideshow;
 @synthesize slideShowImageReadyObserver = _slideShowImageReadyObserver;
 @synthesize slideShowNoteReadyObserver = _slideShowNoteReadyObserver;
+@synthesize comManager = _comManager;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -34,23 +39,34 @@
     
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
-//    [self.image setImage:[self.slideshow getImageAtIndex:0]];
-//    [self.lecturer_notes loadHTMLString: [self.slideshow getNotesAtIndex:0]baseURL:nil];
-    self.slideShowImageReadyObserver = [center addObserverForName:@"IMAGE_READY" object:nil
-                                                              queue:mainQueue usingBlock:^(NSNotification *note) {
-                                                                  if ([self.slideshow size] == 0)
-                                                                      NSLog(@"Oups");
-                                                                  NSLog(@"Getting image to display: %@", [self.slideshow getImageAtIndex:0]);
-                                                                  [self.image setImage:[self.slideshow getImageAtIndex:0]];
+
+    self.slideShowImageReadyObserver =[center addObserverForName:MSG_SLIDE_CHANGED
+                                                          object:nil
+                                                           queue:mainQueue
+                                                      usingBlock:^(NSNotification *note) {
+                                                                  NSLog(@"Getting slide: %u image to display: %@", self.slideshow.currentSlide, [self.slideshow getImageAtIndex:self.slideshow.currentSlide]);
+                                                          
+                                                                  [self.image setImage:[self.slideshow getImageAtIndex:self.slideshow.currentSlide]];
+                                                                  [self.lecturer_notes loadHTMLString: [self.slideshow getNotesAtIndex:self.slideshow.currentSlide]baseURL:nil];
                                                               }];
-    self.slideShowNoteReadyObserver = [center addObserverForName:@"NOTE_READY" object:nil
-                                                              queue:mainQueue usingBlock:^(NSNotification *note) {
-                                                                  NSLog(@"Getting note to display: %@", [self.slideshow getNotesAtIndex:0]);
-                                                                  [self.lecturer_notes loadHTMLString: [self.slideshow getNotesAtIndex:0]baseURL:nil];
+    
+    self.slideShowNoteReadyObserver = [center addObserverForName:STATUS_CONNECTED_NOSLIDESHOW
+                                                          object:nil
+                                                           queue:mainQueue
+                                                      usingBlock:^(NSNotification *note) {
+                                                                  [self.navigationController popViewControllerAnimated:YES];
                                                               }];
+    
+    self.comManager = [CommunicationManager sharedComManager];
 }
 
+- (IBAction)nextSlide:(id)sender {
+    [self.comManager.transmitter nextTransition];
+}
 
+- (IBAction)previousSlide:(id)sender {
+    [self.comManager.transmitter previousTransition];
+}
 
 - (void)didReceiveMemoryWarning
 {

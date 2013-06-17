@@ -51,7 +51,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:MSG_SLIDE_CHANGED object:[NSNumber numberWithUnsignedInt:currentSlide]];
         
     } else if ([instruction isEqualToString:@"slideshow_finished"]){
-        NSLog(@"Interpreter: slideshow_started");
+        NSLog(@"Interpreter: slideshow_finished");
         self.slideShow = [[SlideShow alloc] init];
         [[NSNotificationCenter defaultCenter] postNotificationName:STATUS_CONNECTED_NOSLIDESHOW object:nil];
     } else {

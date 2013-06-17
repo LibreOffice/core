@@ -12,6 +12,7 @@
 @class Client;
 @class Server;
 @class CommandInterpreter;
+@class CommandTransmitter;
 @class SlideShow;
 
 #define MSG_SLIDESHOW_STARTED @"SLIDESHOW_STARTED"
@@ -57,5 +58,8 @@ enum ConnectionState : NSInteger {
 @property ConnectionState state;
 @property (nonatomic, strong) id delegate;
 @property (nonatomic, strong) CommandInterpreter* interpreter;
+@property (nonatomic, strong) CommandTransmitter* transmitter;
+
++ (CommunicationManager *)sharedComManager;
 
 @end

@@ -15,7 +15,7 @@
 
 @property uint size;
 @property uint currentSlide;
-@property (nonatomic, strong) id delegate;
+@property (nonatomic, strong) slideShowViewController* delegate;
 
 - (void) putImage: (NSString *)img AtIndex: (uint) index;
 - (void) putNotes: (NSString *)notes AtIndex: (uint) index;

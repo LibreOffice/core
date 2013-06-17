@@ -19,7 +19,6 @@
 @interface CommunicationManager()
 
 @property (nonatomic, strong) Client* client;
-@property (nonatomic, strong) CommandTransmitter* transmitter;
 @property (atomic, strong) NSMutableSet* servers;
 @property (nonatomic, strong) id connectionConnectedObserver;
 @property (nonatomic, strong) id connectionDisconnectedObserver;
