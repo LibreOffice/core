@@ -167,7 +167,7 @@ void ContextHandler2Helper::processCollectedChars()
 {
     OSL_ENSURE( !mxContextStack->empty(), "ContextHandler2Helper::processCollectedChars - no context info" );
     ElementInfo& rInfo = mxContextStack->back();
-    if( rInfo.maChars.getLength() > 0 )
+    if( !rInfo.maChars.isEmpty() )
     {
         OUString aChars = rInfo.maChars.makeStringAndClear();
         if( mbEnableTrimSpace && rInfo.mbTrimSpaces )

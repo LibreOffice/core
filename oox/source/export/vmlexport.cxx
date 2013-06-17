@@ -86,7 +86,7 @@ void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
         m_nShapeType = ESCHER_ShpInst_Nil;
         m_pShapeAttrList = m_pSerializer->createAttrList();
 
-        if ( m_pShapeStyle->getLength() )
+        if ( !m_pShapeStyle->isEmpty() )
             m_pShapeStyle->makeStringAndClear();
 
         m_pShapeStyle->ensureCapacity( 200 );
@@ -132,7 +132,7 @@ sal_uInt32 VMLExport::EnterGroup( const OUString& rShapeName, const Rectangle* p
     if ( pRect )
         AddRectangleDimensions( aStyle, *pRect );
 
-    if ( aStyle.getLength() )
+    if ( !aStyle.isEmpty() )
         pAttrList->add( XML_style, aStyle.makeStringAndClear() );
 
     // coordorigin/coordsize
@@ -499,7 +499,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                             }
                         }
 
-                        if ( aPath.getLength() )
+                        if ( !aPath.isEmpty() )
                             m_pShapeAttrList->add( XML_path, aPath.getStr() );
                     }
 #if OSL_DEBUG_LEVEL > 0
@@ -796,7 +796,7 @@ OString VMLExport::ShapeIdString( sal_uInt32 nId )
 void VMLExport::AddLineDimensions( const Rectangle& rRectangle )
 {
     // style
-    if ( m_pShapeStyle->getLength() )
+    if ( !m_pShapeStyle->isEmpty() )
         m_pShapeStyle->append( ";" );
 
     m_pShapeStyle->append( "position:absolute" );
@@ -840,7 +840,7 @@ void VMLExport::AddLineDimensions( const Rectangle& rRectangle )
 
 void VMLExport::AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle )
 {
-    if ( rBuffer.getLength() )
+    if ( !rBuffer.isEmpty() )
         rBuffer.append( ";" );
 
     rBuffer.append( "position:absolute;" );

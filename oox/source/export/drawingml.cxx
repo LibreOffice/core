@@ -780,7 +780,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
             usLanguageBuffer.append( eLocale.Country );
         }
 
-        if( usLanguageBuffer.getLength() )
+        if( !usLanguageBuffer.isEmpty() )
             usLanguage = usLanguageBuffer.makeStringAndClear();
     }
 
