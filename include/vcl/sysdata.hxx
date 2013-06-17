@@ -217,12 +217,10 @@ struct SystemFontData
     HFONT           hFont;          // native font object
 #elif defined( MACOSX )
 #ifdef ENABLE_CORETEXT
-    CTFontRef       rCTFont;        // native font object
 #else
     void*           aATSUFontID;    // native font object
 #endif
 #elif defined( IOS )
-    CTFontRef       rCTFont;        // native font object
 #elif defined( UNX )
     void*           nFontId;        // native font id
     int             nFontFlags;     // native font flags
