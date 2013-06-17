@@ -317,8 +317,9 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                                 sal_Char aBuffer2[200];
                                 nBytesRead = pStrm->Read( aBuffer2, sizeof(aBuffer2) - 1);
                                 aBuffer2[nBytesRead] = 0;
-                                if (strstr( aBuffer2, "<math>" ) != NULL ||
-                                    strstr( aBuffer2, "<math " ) != NULL)
+                                if (strstr( aBuffer2, "<math>" ) ||
+                                    strstr( aBuffer2, "<math " ) ||
+                                    strstr( aBuffer2, "<math:math " ))
                                 {
                                     static const sal_Char sFltrNm_2[] = MATHML_XML;
                                     static const sal_Char sTypeNm_2[] = "math_MathML_XML_Math";
