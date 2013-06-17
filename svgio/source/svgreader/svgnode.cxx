@@ -67,7 +67,7 @@ namespace svgio
                             aId = aId + aOUTokenValue;
                             pNew = rDocument.findSvgStyleAttributesById(aId);
 
-                            if(!pNew && rClassStr.getLength())
+                            if(!pNew && !rClassStr.isEmpty())
                             {
                                 // look for CSS style common to class.token
                                 aId = rClassStr + aId;
@@ -93,7 +93,7 @@ namespace svgio
                         }
                     }
 
-                    if(maCssStyleVector.empty() && rClassStr.getLength())
+                    if(maCssStyleVector.empty() && !rClassStr.isEmpty())
                     {
                         // if none found, search for CSS style equal to class type
                         const SvgStyleAttributes* pNew = rDocument.findSvgStyleAttributesById(rClassStr);
@@ -326,7 +326,7 @@ namespace svgio
             {
                 case SVGTokenId:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         setId(&aContent);
                     }
@@ -334,7 +334,7 @@ namespace svgio
                 }
                 case SVGTokenClass:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         setClass(&aContent);
                     }
@@ -342,7 +342,7 @@ namespace svgio
                 }
                 case SVGTokenXmlSpace:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static OUString aStrDefault(OUString::createFromAscii("default"));
                         static OUString aStrPreserve(OUString::createFromAscii("preserve"));
@@ -443,7 +443,7 @@ namespace svgio
                         const OUString& rTitle = pStyles->getTitle();
                         const OUString& rDesc = pStyles->getDesc();
 
-                        if(rTitle.getLength() || rDesc.getLength())
+                        if(!rTitle.isEmpty() || !rDesc.isEmpty())
                         {
                             // default object name is empty
                             OUString aObjectName;
@@ -453,7 +453,7 @@ namespace svgio
                             {
                                 aObjectName = getDocument().getAbsolutePath();
 
-                                if(aObjectName.getLength())
+                                if(!aObjectName.isEmpty())
                                 {
                                     INetURLObject aURL(aObjectName);
 

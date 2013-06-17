@@ -50,7 +50,7 @@ namespace svgio
             {
                 case SVGTokenX:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         SvgNumberVector aVector;
 
@@ -63,7 +63,7 @@ namespace svgio
                 }
                 case SVGTokenY:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         SvgNumberVector aVector;
 
@@ -76,7 +76,7 @@ namespace svgio
                 }
                 case SVGTokenDx:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         SvgNumberVector aVector;
 
@@ -89,7 +89,7 @@ namespace svgio
                 }
                 case SVGTokenDy:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         SvgNumberVector aVector;
 
@@ -102,7 +102,7 @@ namespace svgio
                 }
                 case SVGTokenRotate:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         SvgNumberVector aVector;
 
@@ -128,7 +128,7 @@ namespace svgio
                 }
                 case SVGTokenLengthAdjust:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static OUString aStrSpacing(OUString::createFromAscii("spacing"));
                         static OUString aStrSpacingAndGlyphs(OUString::createFromAscii("spacingAndGlyphs"));
@@ -572,7 +572,7 @@ namespace svgio
 
         void SvgCharacterNode::decomposeText(drawinglayer::primitive2d::Primitive2DSequence& rTarget, SvgTextPosition& rSvgTextPosition) const
         {
-            if(getText().getLength())
+            if(!getText().isEmpty())
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getSvgStyleAttributes();
 

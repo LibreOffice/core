@@ -132,7 +132,7 @@ namespace svgio
                 }
                 case SVGTokenMaskUnits:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         if(aContent.match(commonStrings::aStrUserSpaceOnUse, 0))
                         {
@@ -147,7 +147,7 @@ namespace svgio
                 }
                 case SVGTokenMaskContentUnits:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         if(aContent.match(commonStrings::aStrUserSpaceOnUse, 0))
                         {

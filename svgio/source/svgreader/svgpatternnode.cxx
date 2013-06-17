@@ -28,7 +28,7 @@ namespace svgio
     {
         void SvgPatternNode::tryToFindLink()
         {
-            if(!mpXLink && maXLink.getLength())
+            if(!mpXLink && !maXLink.isEmpty())
             {
                 mpXLink = dynamic_cast< const SvgPatternNode* >(getDocument().findSvgNodeById(maXLink));
             }
@@ -147,7 +147,7 @@ namespace svgio
                 }
                 case SVGTokenPatternUnits:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         if(aContent.match(commonStrings::aStrUserSpaceOnUse, 0))
                         {
@@ -162,7 +162,7 @@ namespace svgio
                 }
                 case SVGTokenPatternContentUnits:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         if(aContent.match(commonStrings::aStrUserSpaceOnUse, 0))
                         {
@@ -274,7 +274,7 @@ namespace svgio
                 decomposeSvgNode(const_cast< SvgPatternNode* >(this)->aPrimitives, true);
             }
 
-            if(!aPrimitives.hasElements() && maXLink.getLength())
+            if(!aPrimitives.hasElements() && !maXLink.isEmpty())
             {
                 const_cast< SvgPatternNode* >(this)->tryToFindLink();
 

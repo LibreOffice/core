@@ -76,7 +76,7 @@ namespace
 
                             // pCharNode may have lost all text. If that's the case, ignore
                             // as invalid character node
-                            if(pCharNode->getText().getLength())
+                            if(!pCharNode->getText().isEmpty())
                             {
                                 if(pLast)
                                 {
@@ -171,7 +171,7 @@ namespace svgio
 
         void SvgDocHdl::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException)
         {
-            if(aName.getLength())
+            if(!aName.isEmpty())
             {
                 const SVGToken aSVGToken(StrToSVGToken(aName));
 
@@ -385,7 +385,7 @@ namespace svgio
 
         void SvgDocHdl::endElement( const OUString& aName ) throw (xml::sax::SAXException, uno::RuntimeException)
         {
-            if(aName.getLength())
+            if(!aName.isEmpty())
             {
                 const SVGToken aSVGToken(StrToSVGToken(aName));
                 SvgNode* pWhitespaceCheck(SVGTokenText == aSVGToken ? mpTarget : 0);
@@ -471,7 +471,7 @@ namespace svgio
                 {
                     const OUString aText(pSvgTitleDescNode->getText());
 
-                    if(aText.getLength())
+                    if(!aText.isEmpty())
                     {
                         if(SVGTokenTitle == aSVGToken)
                         {
@@ -551,7 +551,7 @@ namespace svgio
                             {
                                 const OUString aTrimmedChars(aChars.trim());
 
-                                if(aTrimmedChars.getLength())
+                                if(!aTrimmedChars.isEmpty())
                                 {
                                     std::vector< OUString >::iterator aString(maCssContents.end() - 1);
                                     (*aString) += aTrimmedChars;
