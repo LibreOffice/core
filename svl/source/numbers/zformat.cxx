@@ -85,7 +85,7 @@ sal_Int32 SvNumberformat::InsertBlanks( OUStringBuffer& r, sal_Int32 nPos, sal_U
 {
     if( c >= 32 )
     {
-        int n = 2;   // Default fuer Zeichen > 128 (HACK!)
+        int n = 2;   // Default for chars > 128 (HACK!)
         if( c <= 127 )
         {
             n = (int)cCharWidths[ c - 32 ];
@@ -103,7 +103,7 @@ static long GetPrecExp( double fAbsVal )
     DBG_ASSERT( fAbsVal > 0.0, "GetPrecExp: fAbsVal <= 0.0" );
     if ( fAbsVal < 1e-7 || fAbsVal > 1e7 )
     {
-        // die Schere, ob's schneller ist oder nicht, liegt zwischen 1e6 und 1e7
+        // Shear: whether it's faster or not, falls in between 1e6 and 1e7
         return (long) floor( log10( fAbsVal ) ) + 1;
     }
     else
@@ -123,11 +123,13 @@ static long GetPrecExp( double fAbsVal )
     }
 }
 
-const sal_uInt16 nNewCurrencyVersionId = 0x434E;    // "NC"
-const sal_Unicode cNewCurrencyMagic = 0x01;     // Magic for format code in comment
-const sal_uInt16 nNewStandardFlagVersionId = 0x4653;    // "SF"
+const sal_uInt16 nNewCurrencyVersionId = 0x434E; // "NC"
+const sal_Unicode cNewCurrencyMagic = 0x01; // Magic for format code in comment
+const sal_uInt16 nNewStandardFlagVersionId = 0x4653; // "SF"
 
-/***********************Funktion SvNumberformatInfo******************************/
+/**
+ * SvNumberformatInfo
+ * */
 
 void ImpSvNumberformatInfo::Copy( const ImpSvNumberformatInfo& rNumFor, sal_uInt16 nAnz )
 {
@@ -152,23 +154,23 @@ void ImpSvNumberformatInfo::Save(SvStream& rStream, sal_uInt16 nAnz) const
         short nType = nTypeArray[i];
         switch ( nType )
         {
-            // der Krampf fuer Versionen vor SV_NUMBERFORMATTER_VERSION_NEW_CURR
-        case NF_SYMBOLTYPE_CURRENCY :
-            rStream << short( NF_SYMBOLTYPE_STRING );
+            // The fight with versions before SV_NUMBERFORMATTER_VERSION_NEW_CURR
+            case NF_SYMBOLTYPE_CURRENCY :
+                rStream << short( NF_SYMBOLTYPE_STRING );
             break;
-        case NF_SYMBOLTYPE_CURRDEL :
-        case NF_SYMBOLTYPE_CURREXT :
-            rStream << short(0);        // werden ignoriert (hoffentlich..)
-            break;
-        default:
-            if ( nType > NF_KEY_LASTKEYWORD_SO5 )
-            {
-                rStream << short( NF_SYMBOLTYPE_STRING );  // all new keywords are string
-            }
-            else
-            {
-                rStream << nType;
-            }
+            case NF_SYMBOLTYPE_CURRDEL :
+            case NF_SYMBOLTYPE_CURREXT :
+                rStream << short(0); // will be ignored (hopefully ...)
+                break;
+            default:
+                if ( nType > NF_KEY_LASTKEYWORD_SO5 )
+                {
+                    rStream << short( NF_SYMBOLTYPE_STRING );  // all new keywords are string
+                }
+                else
+                {
+                    rStream << nType;
+                }
         }
 
     }
@@ -189,7 +191,6 @@ void ImpSvNumberformatInfo::Load(SvStream& rStream, sal_uInt16 nAnz)
     bThousand = bStreamThousand;
 }
 
-//============================================================================
 
 // static
 sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang, bool bDate )
@@ -381,7 +382,9 @@ sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLan
 }
 #endif
 
-/***********************Funktionen SvNumFor******************************/
+/**
+ * SvNumFor
+ */
 
 ImpSvNumFor::ImpSvNumFor()
 {
@@ -450,7 +453,7 @@ void ImpSvNumFor::Load(SvStream& rStream, ImpSvNumberformatScan& rSc,
                        OUString& rLoadedColorName )
 {
     sal_uInt16 nAnz;
-    rStream >> nAnz;        //! noch nicht direkt nAnzStrings wg. Enlarge
+    rStream >> nAnz; //! Not nAnzStrings rigth away due to Enlarge
     Enlarge( nAnz );
     aI.Load( rStream, nAnz );
     sColorName = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
@@ -489,7 +492,7 @@ bool ImpSvNumFor::GetNewCurrencySymbol( OUString& rSymbol,
             return true;
         }
     }
-    //! kein Erase an rSymbol, rExtension
+    //! No Erase at rSymbol, rExtension
     return false;
 }
 
@@ -538,7 +541,9 @@ void ImpSvNumFor::LoadNewCurrencyMap( SvStream& rStream )
     }
 }
 
-/***********************Funktionen SvNumberformat************************/
+/**
+ * SvNumberformat
+ */
 
 enum BracketFormatSymbolType
 {
@@ -546,7 +551,7 @@ enum BracketFormatSymbolType
     BRACKET_SYMBOLTYPE_COLOR    = -2,   // color
     BRACKET_SYMBOLTYPE_ERROR    = -3,   // error
     BRACKET_SYMBOLTYPE_DBNUM1   = -4,   // DoubleByteNumber, represent numbers
-    BRACKET_SYMBOLTYPE_DBNUM2   = -5,   // using CJK characters, Excel compatible.
+    BRACKET_SYMBOLTYPE_DBNUM2   = -5,   // using CJK characters, Excel compatible
     BRACKET_SYMBOLTYPE_DBNUM3   = -6,
     BRACKET_SYMBOLTYPE_DBNUM4   = -7,
     BRACKET_SYMBOLTYPE_DBNUM5   = -8,
@@ -557,7 +562,7 @@ enum BracketFormatSymbolType
     BRACKET_SYMBOLTYPE_LOCALE   = -13,
     BRACKET_SYMBOLTYPE_NATNUM0  = -14,  // Our NativeNumber support, ASCII
     BRACKET_SYMBOLTYPE_NATNUM1  = -15,  // Our NativeNumber support, represent
-    BRACKET_SYMBOLTYPE_NATNUM2  = -16,  //  numbers using CJK, CTL, ...
+    BRACKET_SYMBOLTYPE_NATNUM2  = -16,  // numbers using CJK, CTL, ...
     BRACKET_SYMBOLTYPE_NATNUM3  = -17,
     BRACKET_SYMBOLTYPE_NATNUM4  = -18,
     BRACKET_SYMBOLTYPE_NATNUM5  = -19,
@@ -625,7 +630,7 @@ static bool lcl_SvNumberformat_IsBracketedPrefix( short nSymbolType )
 {
     if ( nSymbolType > 0  )
     {
-        return true;        // conditions
+        return true; // conditions
     }
     switch ( nSymbolType )
     {
@@ -731,7 +736,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
     if (rScan.GetConvertMode())
     {
         maLocale.meLanguage = rScan.GetNewLnge();
-        eLan = maLocale.meLanguage;      // Wechsel auch zurueckgeben
+        eLan = maLocale.meLanguage; // Make sure to return switch
     }
     else
     {
@@ -761,14 +766,14 @@ SvNumberformat::SvNumberformat(OUString& rString,
         {
             (rScan.GetNumberformatter())->ChangeIntl(rScan.GetTmpLnge());
         }
-        OUString sInsertCalendar;     // a calendar resulting from parsing LCID
+        OUString sInsertCalendar; // a calendar resulting from parsing LCID
         OUString sStr;
-        nPosOld = nPos;                         // Start position of substring
+        nPosOld = nPos; // Start position of substring
         // first get bracketed prefixes; e.g. conditions, color
         do
         {
             eSymbolType = ImpNextSymbol(sBuff, nPos, sStr);
-            if (eSymbolType > 0)                    // condition
+            if (eSymbolType > 0) // condition
             {
                 if ( nIndex == 0 && !bCondition )
                 {
@@ -1129,7 +1134,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
         if ( nIndex == 1 && NumFor[0].GetCount() == 0 &&
              sBuff[sBuff.getLength() - 1] != ';' )
         {
-            // No format code => GENERAL   but not if specified empty
+            // No format code => GENERAL but not if specified empty
             OUString aAdd( pSc->GetStandardName() );
             if ( !pSc->ScanFormat( aAdd ) )
             {
@@ -1148,7 +1153,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                    (NumFor[0].GetCount() == 1 &&
                     NumFor[0].Info().nTypeArray[0] != NF_KEY_GENERAL)) )
         {
-            // No trailing second subformat => GENERAL   but not if specified empty
+            // No trailing second subformat => GENERAL but not if specified empty
             // and not if first subformat is GENERAL
             OUString aAdd( pSc->GetStandardName() );
             if ( !pSc->ScanFormat( aAdd ) )
@@ -1167,7 +1172,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                   sBuff[sBuff.getLength() - 1] != ';' &&
                   eOp2 != NUMBERFORMAT_OP_NO )
         {
-            // No trailing third subformat => GENERAL   but not if specified empty
+            // No trailing third subformat => GENERAL but not if specified empty
             OUString aAdd( pSc->GetStandardName() );
             if ( !pSc->ScanFormat( aAdd ) )
             {
@@ -1185,11 +1190,11 @@ SvNumberformat::SvNumberformat(OUString& rString,
     rString = sBuff.makeStringAndClear();
     sFormatstring = rString;
 
-    if (NumFor[2].GetCount() == 0 &&                 // kein 3. Teilstring
+    if (NumFor[2].GetCount() == 0 && // No third partial string
         eOp1 == NUMBERFORMAT_OP_GT && eOp2 == NUMBERFORMAT_OP_NO &&
         fLimit1 == 0.0 && fLimit2 == 0.0)
     {
-        eOp1 = NUMBERFORMAT_OP_GE;                  // 0 zum ersten Format dazu
+        eOp1 = NUMBERFORMAT_OP_GE; // Add 0 to the first format
     }
 
 }
@@ -1198,44 +1203,43 @@ SvNumberformat::~SvNumberformat()
 {
 }
 
-//---------------------------------------------------------------------------
-// Next_Symbol
-//---------------------------------------------------------------------------
-// Zerlegt die Eingabe in Symbole fuer die weitere
-// Verarbeitung (Turing-Maschine).
-//---------------------------------------------------------------------------
-// Ausgangs Zustand = SsStart
-//---------------+-------------------+-----------------------+---------------
-// Alter Zustand | gelesenes Zeichen | Aktion                | Neuer Zustand
-//---------------+-------------------+-----------------------+---------------
-// SsStart       | ;                 | Pos--                 | SsGetString
-//               | [                 | Symbol += Zeichen     | SsGetBracketed
-//               | ]                 | Fehler                | SsStop
-//               | BLANK             |                       |
-//               | Sonst             | Symbol += Zeichen     | SsGetString
-//---------------+-------------------+-----------------------+---------------
-// SsGetString   | ;                 |                       | SsStop
-//               | Sonst             | Symbol+=Zeichen       |
-//---------------+-------------------+-----------------------+---------------
-// SsGetBracketed| <, > =            | del [                 |
-//               |                   | Symbol += Zeichen     | SsGetCon
-//               | BLANK             |                       |
-//               | h, H, m, M, s, S  | Symbol += Zeichen     | SsGetTime
-//               | sonst             | del [                 |
-//               |                   | Symbol += Zeichen     | SsGetPrefix
-//---------------+-------------------+-----------------------+---------------
-// SsGetTime     | ]                 | Symbol += Zeichen     | SsGetString
-//               | h, H, m, M, s, S  | Symbol += Zeichen, *  | SsGetString
-//               | sonst             | del [; Symbol+=Zeichen| SsGetPrefix
-//---------------+-------------------+-----------------------+---------------
-// SsGetPrefix   | ]                 |                       | SsStop
-//               | sonst             | Symbol += Zeichen     |
-//---------------+-------------------+-----------------------+---------------
-// SsGetCon      | >, =              | Symbol+=Zeichen       |
-//               | ]                 |                       | SsStop
-//               | sonst             | Fehler                | SsStop
-//---------------+-------------------+-----------------------+---------------
-// * : Sonderbedingung
+/**
+ * Next_Symbol
+ *
+ * Splits up the symbols for further processing (by the Turing machine)
+ *
+ * Start state = SsStart, * = Special state
+ * ---------------+-------------------+----------------------------+---------------
+ *  Old State     | Symbol read       | Event                      | New state
+ * ---------------+-------------------+----------------------------+---------------
+ *  SsStart       | ;                 | Pos--                      | SsGetString
+ *                | [                 | Symbol += Character        | SsGetBracketed
+ *                | ]                 | Error                      | SsStop
+ *                | BLANK             |                            |
+ *                | Else              | Symbol += Character        | SsGetString
+ * ---------------+-------------------+----------------------------+---------------
+ *  SsGetString   | ;                 |                            | SsStop
+ *                | Else              | Symbol += Character        |
+ * ---------------+-------------------+----------------------------+---------------
+ * SsGetBracketed | <, > =            | del [                      |
+ *                |                   | Symbol += Character        | SsGetCon
+ *                | BLANK             |                            |
+ *                | h, H, m, M, s, S  | Symbol += Character        | SsGetTime
+ *                | Else              | del [                      |
+ *                |                   | Symbol += Character        | SsGetPrefix
+ * ---------------+-------------------+----------------------------+---------------
+ *  SsGetTime     | ]                 | Symbol += Character        | SsGetString
+ *                | h, H, m, M, s, S  | Symbol += Character, *     | SsGetString
+ *                | Else              | del [; Symbol += Character | SsGetPrefix
+ * ---------------+-------------------+----------------------------+---------------
+ *  SsGetPrefix   | ]                 |                            | SsStop
+ *                | Else              | Symbol += Character        |
+ * ---------------+-------------------+----------------------------+---------------
+ *  SsGetCon      | >, =              | Symbol += Character        |
+ *                | ]                 |                            | SsStop
+ *                | Else              | Error                      | SsStop
+ * ---------------+-------------------+----------------------------+---------------
+ */
 
 enum ScanState
 {
@@ -1436,7 +1440,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
 {
     short eSymbolType = BRACKET_SYMBOLTYPE_FORMAT;
     sal_Unicode cToken;
-    sal_Unicode cLetter = ' ';                               // Zwischenergebnis
+    sal_Unicode cLetter = ' '; // Preliminary result
     sal_Int32 nLen = rString.getLength();
     ScanState eState = SsStart;
     OUStringBuffer sBuffSymbol;
@@ -1465,7 +1469,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                 eState = SsStop;
                 eSymbolType = BRACKET_SYMBOLTYPE_ERROR;
             }
-            else if (cToken == ' ')             // Skip Blanks
+            else if (cToken == ' ') // Skip Blanks
             {
                 nPos--;
                 rString.remove(nPos, 1);
@@ -1597,9 +1601,9 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
             else
             {
                 sal_Unicode cUpper = rChrCls().uppercase(rString.toString(), nPos-1, 1)[0];
-                if (cUpper == rKeywords[NF_KEY_H][0] ||  // H
+                if (cUpper == rKeywords[NF_KEY_H][0] ||   // H
                     cUpper == rKeywords[NF_KEY_MI][0] ||  // M
-                    cUpper == rKeywords[NF_KEY_S][0] )   // S
+                    cUpper == rKeywords[NF_KEY_S][0] )    // S
                 {
                     if (cLetter == cToken)
                     {
@@ -1685,8 +1689,8 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
             break;
         default:
             break;
-        }                                   // of switch
-    }                                       // of while
+        } // of switch
+    } // of while
     sSymbol = sBuffSymbol.makeStringAndClear();
     return eSymbolType;
 }
@@ -1710,7 +1714,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
     LanguageType eOldNewLang = 0;
     if ( pHackConverter )
     {
-        // werden nur hierbei gebraucht
+        // Are only needed here
         bOldConvert = rScan.GetConvertMode();
         eOldTmpLang = rScan.GetTmpLnge();
         eOldNewLang = rScan.GetNewLnge();
@@ -1721,12 +1725,11 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
         NumFor[i].Load( rStream, rScan, aLoadedColorName );
         if ( pHackConverter && eHackConversion == NF_CONVERT_NONE )
         {
-            //! HACK! ER 29.07.97 13:52
-            // leider wurde nicht gespeichert, was SYSTEM on Save wirklich war :-/
-            // aber immerhin wird manchmal fuer einen Entry FARBE oder COLOR gespeichert..
-            // System-German FARBE nach System-xxx COLOR umsetzen und vice versa,
-            //! geht davon aus, dass onSave nur GERMAN und ENGLISH KeyWords in
-            //! ImpSvNumberformatScan existierten
+            // FIXME: HACK!
+            // Unfortunately we didn't save what SYSTEM on Save really was :-/
+            // After all we save FARBE or COLOR for an Entry ...
+            // When translating from System-German FARBE to System-xxx COLOR and vice versa,
+            // we assume that onSave only has GERMAN and ENGLISH KeyWords in ImpSvNumberformatScan
             if ( !aLoadedColorName.isEmpty() &&
                  !NumFor[i].GetColor() &&
                  aLoadedColorName != rScan.GetColorString() )
@@ -1757,10 +1760,10 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
     }
     eOp1 = (SvNumberformatLimitOps) nOp1;
     eOp2 = (SvNumberformatLimitOps) nOp2;
-    OUString aComment;        // wird nach dem NewCurrency-Geraffel richtig gesetzt
+    OUString aComment; // Will be set to the correct value after the NewCurrency troubles
     if ( rHdr.BytesLeft() )
     {
-        // ab SV_NUMBERFORMATTER_VERSION_NEWSTANDARD
+        // As of SV_NUMBERFORMATTER_VERSION_NEWSTANDARD
         aComment = SvNumberformat::LoadString( rStream );
         rStream >> nNewStandardDefined;
     }
@@ -1793,12 +1796,12 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
             }
             break;
         case nNewStandardFlagVersionId :
-            rStream >> bStreamStandard;   // the real standard flag
+            rStream >> bStreamStandard; // the real standard flag
             bStandard = bStreamStandard;
             break;
         default:
             SAL_WARN( "svl.numbers", "SvNumberformat::Load: unknown header bytes left nId" );
-            bGoOn = false;  // stop reading unknown stream left over of newer versions
+            bGoOn = false; // stop reading unknown stream left over of newer versions
             // Would be nice to have multiple read/write headers instead
             // but old versions wouldn't know it, TLOT.
         }
@@ -1808,7 +1811,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
     if ( bNewCurrencyLoaded )
     {
         if ( bNewCurrency && bNewCurrencyComment )
-        {   // original Formatstring und Kommentar wiederherstellen
+        {   // Recover original format string and comment
             sFormatstring = aComment.copy( 1, nNewCurrencyEnd-1 );
             if(nNewCurrencyEnd + 1 < aComment.getLength())
             {
@@ -1822,8 +1825,8 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
     }
     else if ( bNewCurrencyComment )
     {
-        // neu, aber mit Version vor SV_NUMBERFORMATTER_VERSION_NEW_CURR gespeichert
-        // original Formatstring und Kommentar wiederherstellen
+        // New, but saved with version before SV_NUMBERFORMATTER_VERSION_NEW_CURR
+        // Recover original format string and comment
         sFormatstring = aComment.copy( 1, nNewCurrencyEnd - 1 );
         if(nNewCurrencyEnd + 1 < aComment.getLength())
         {
@@ -1833,10 +1836,11 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
         {
             aComment = "";
         }
-        // Zustaende merken
+        // Remember states
         short nDefined = ( eType & NUMBERFORMAT_DEFINED );
         sal_uInt16 nNewStandard = nNewStandardDefined;
-        // neu parsen etc.
+
+        // Parse new ones etc.
         OUString aStr( sFormatstring );
         sal_Int32 nCheckPos = 0;
         SvNumberformat* pFormat = new SvNumberformat( aStr, &rScan, &rISc,
@@ -1844,7 +1848,8 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
         DBG_ASSERT( !nCheckPos, "SvNumberformat::Load: NewCurrencyRescan nCheckPos" );
         ImpCopyNumberformat( *pFormat );
         delete pFormat;
-        // Zustaende wiederherstellen
+
+        // Recover states
         eType |= nDefined;
         if ( nNewStandard )
         {
@@ -1855,7 +1860,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
 
     if ( eHackConversion != NF_CONVERT_NONE )
     {
-        //! und weiter mit dem HACK!
+        //! and we continue with the HACK!
         switch ( eHackConversion )
         {
         case NF_CONVERT_ENGLISH_GERMAN :
@@ -1896,12 +1901,12 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
     if ( pFormat )
     {
         ImpCopyNumberformat( *pFormat );
-        // aus Formatter/Scanner uebernommene Werte zuruecksetzen
+        // Reset values taken over from Formatter/Scanner
         if ( bSystem )
         {
             maLocale.meLanguage = LANGUAGE_SYSTEM;
         }
-        // pColor zeigt noch auf Tabelle in temporaerem Formatter/Scanner
+        // pColor still points to table in temporary Formatter/Scanner
         for ( sal_uInt16 i = 0; i < 4; i++ )
         {
             OUString aColorName = NumFor[i].GetColorName();
@@ -1938,11 +1943,11 @@ void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr 
     bool bNewCurrency = HasNewCurrency();
     if ( bNewCurrency )
     {
-        // SV_NUMBERFORMATTER_VERSION_NEW_CURR im Kommentar speichern
+        // Save SV_NUMBERFORMATTER_VERSION_NEW_CURR in comment
         aComment.insert( 0, cNewCurrencyMagic );
         aComment.insert( 0, cNewCurrencyMagic );
         aComment.insert( 1, aFormatstring );
-        Build50Formatstring( aFormatstring );       // alten Formatstring generieren
+        Build50Formatstring( aFormatstring ); // Generate old format string
     }
 
     // old SO5 versions do behave strange (no output) if standard flag is set
@@ -1973,10 +1978,10 @@ void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr 
     {
         NumFor[i].Save(rStream);
     }
-    // ab SV_NUMBERFORMATTER_VERSION_NEWSTANDARD
+    // As of SV_NUMBERFORMATTER_VERSION_NEWSTANDARD
     rStream.WriteUniOrByteString( aComment.makeStringAndClear(), rStream.GetStreamCharSet() );
     rStream << nNewStandardDefined;
-    // ab SV_NUMBERFORMATTER_VERSION_NEW_CURR
+    // As of SV_NUMBERFORMATTER_VERSION_NEW_CURR
     rStream << nNewCurrencyVersionId;
     rStream << sal_Bool(bNewCurrency);
     if ( bNewCurrency )
@@ -2110,7 +2115,7 @@ void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUString& OutString)
 {
     sal_uInt16 nStandardPrec = rScan.GetStandardPrec();
 
-    if ( fabs(fNumber) > 1.0E15 )       // #58531# war E16
+    if ( fabs(fNumber) > 1.0E15 ) // #58531# was E16
     {
         nStandardPrec = ::std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals
         OutString = ::rtl::math::doubleToUString( fNumber,
@@ -2164,7 +2169,7 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutS
     if (rOutString[0] == (sal_Unicode)'-' &&
         comphelper::string::getTokenCount(rOutString, '0') == rOutString.getLength())
     {
-        rOutString = comphelper::string::stripStart(rOutString, '-');            // nicht -0
+        rOutString = comphelper::string::stripStart(rOutString, '-'); // not -0
     }
     rOutString = impTransliterate(rOutString, NumFor[0].GetNatNum());
 }
@@ -2242,7 +2247,7 @@ bool SvNumberformat::GetOutputString(const OUString& sString,
     }
     else
     {
-        *ppColor = NULL;        // no change of color
+        *ppColor = NULL; // no change of color
         return false;
     }
     *ppColor = NumFor[nIx].GetColor();
@@ -2435,7 +2440,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
     bool bRes = false;
     OUStringBuffer sBuff;
     OutString = "";
-    *ppColor = NULL;                            // keine Farbaenderung
+    *ppColor = NULL; // No color change
     if (eType & NUMBERFORMAT_LOGICAL)
     {
         if (fNumber)
@@ -2455,16 +2460,16 @@ bool SvNumberformat::GetOutputString(double fNumber,
         return false;
     }
     bool bHadStandard = false;
-    if (bStandard)                              // einzelne Standardformate
+    if (bStandard) // Individual standard formats
     {
-        if (rScan.GetStandardPrec() == SvNumberFormatter::INPUTSTRING_PRECISION)     // alle Zahlformate InputLine
+        if (rScan.GetStandardPrec() == SvNumberFormatter::INPUTSTRING_PRECISION) // All number format InputLine
         {
             ImpGetOutputInputLine(fNumber, OutString);
             return false;
         }
         switch (eType)
         {
-        case NUMBERFORMAT_NUMBER:                   // Standardzahlformat
+        case NUMBERFORMAT_NUMBER: // Standard number format
             if (rScan.GetStandardPrec() == SvNumberFormatter::UNLIMITED_PRECISION)
             {
                 bool bSign = ::rtl::math::isSignBitSet(fNumber);
@@ -2525,9 +2530,9 @@ bool SvNumberformat::GetOutputString(double fNumber,
     }
     if ( !bHadStandard )
     {
-        sal_uInt16 nIx;                             // Index des Teilformats
+        sal_uInt16 nIx; // Index of the partial format
         short nCheck = ImpCheckCondition(fNumber, fLimit1, eOp1);
-        if (nCheck == -1 || nCheck == 1) // nur 1 String oder True
+        if (nCheck == -1 || nCheck == 1) // Only 1 String or True
         {
             nIx = 0;
         }
@@ -2544,19 +2549,19 @@ bool SvNumberformat::GetOutputString(double fNumber,
             }
         }
         if (fNumber < 0.0 &&
-                ((nIx == 0 && IsFirstSubformatRealNegative()) ||    // 1st, usually positive subformat
-                 (nIx == 1 && IsSecondSubformatRealNegative())))    // 2nd, usually negative subformat
+                ((nIx == 0 && IsFirstSubformatRealNegative()) || // 1st, usually positive subformat
+                 (nIx == 1 && IsSecondSubformatRealNegative()))) // 2nd, usually negative subformat
         {
-            fNumber = -fNumber;                 // eliminate sign
+            fNumber = -fNumber; // eliminate sign
         }
         *ppColor = NumFor[nIx].GetColor();
         const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
         const sal_uInt16 nAnz = NumFor[nIx].GetCount();
         if (nAnz == 0 && rInfo.eScannedType == NUMBERFORMAT_UNDEFINED)
         {
-            return false;                       // leer => nichts
+            return false; // Empty => nothing
         }
-        else if (nAnz == 0)                     // sonst Standard-Format
+        else if (nAnz == 0) // Else Standard Format
         {
             ImpGetOutputStandard(fNumber, sBuff);
             OutString = sBuff.makeStringAndClear();
@@ -2635,9 +2640,9 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
 
     if (fNumber < 0)
     {
-        if (nIx == 0)                       // nicht in hinteren
+        if (nIx == 0) // Not in the ones at the end
         {
-            bSign = true;                   // Formaten
+            bSign = true; // Formats
         }
         fNumber = -fNumber;
     }
@@ -2672,7 +2677,7 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
         {
             sStr.remove(index, 1);
         }
-        if ( rInfo.nCntPre != 1 )       // rescale Exp
+        if ( rInfo.nCntPre != 1 ) // rescale Exp
         {
             sal_Int32 nExp = ExpStr.toString().toInt32() * nExpSign;
 
@@ -2690,9 +2695,9 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
         }
     }
 
-    sal_uInt16 j = nAnz-1;                  // last symbol
-    sal_Int32 k;                       // position in ExpStr
-    sal_Int32 nZeros = 0;              // erase leading zeros
+    sal_uInt16 j = nAnz-1;  // Last symbol
+    sal_Int32 k;  // Position in ExpStr
+    sal_Int32 nZeros = 0; // Erase leading zeros
 
     bRes |= ImpNumberFill(ExpStr, fNumber, k, j, nIx, NF_SYMBOLTYPE_EXP);
 
@@ -2728,14 +2733,14 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
             bCont = false;
         }
     }
-    // weiter Hauptzahl:
+    // Continure main number:
     if ( !bCont )
     {
         sStr.truncate();
     }
     else
     {
-        k = sStr.getLength();                 // hinter letzter Ziffer
+        k = sStr.getLength(); // After last figure
         bRes |= ImpNumberFillWithThousands(sStr, fNumber, k, j, nIx,
                                            rInfo.nCntPre + rInfo.nCntPost);
     }
@@ -2755,29 +2760,28 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     bool bRes = false;
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     const sal_uInt16 nAnz = NumFor[nIx].GetCount();
-    OUStringBuffer sStr, sFrac, sDiv;               // Strings, Wert fuer
-    sal_uLong nFrac, nDiv;                  // Vorkommaanteil
-    bool bSign = false;                    // Zaehler und Nenner
+    OUStringBuffer sStr, sFrac, sDiv; // Strings, value for
+    sal_uLong nFrac, nDiv;            // Integral part
+    bool bSign = false;               // Numerator and denominator
 
     if (fNumber < 0)
     {
-        if (nIx == 0)                       // nicht in hinteren
-            bSign = true;                   // Formaten
+        if (nIx == 0) // Not in the ones at the end
+            bSign = true; // Formats
         fNumber = -fNumber;
     }
 
-    double fNum = floor(fNumber);           // Vorkommateil
+    double fNum = floor(fNumber); // Integral part
 
-    fNumber -= fNum;                        // Nachkommateil
-    if (fNum > _D_MAX_U_LONG_ || rInfo.nCntExp > 9)
-        // zu gross
+    fNumber -= fNum; // Fractional part
+    if (fNum > _D_MAX_U_LONG_ || rInfo.nCntExp > 9) // Too large
     {
         sBuff = rScan.GetErrorString();
         return false;
     }
     if (rInfo.nCntExp == 0)
     {
-        SAL_WARN( "svl.numbers", "SvNumberformat:: Bruch, nCntExp == 0");
+        SAL_WARN( "svl.numbers", "SvNumberformat:: Fraction, nCntExp == 0");
         sBuff.truncate();
         return false;
     }
@@ -2798,37 +2802,36 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
         {
             bUpperHalf = false;
         }
-        // Einstieg in Farey-Serie
-        // finden:
-        x0 = (sal_uLong) floor(fNumber*nBasis); // z.B. 2/9 <= x < 3/9
-        if (x0 == 0)                        //      => x0 = 2
+        // Find entry to Farey sequence:
+        x0 = (sal_uLong) floor(fNumber*nBasis); // e.g.: 2/9 <= x < 3/9
+        if (x0 == 0)                            // => x0 = 2
         {
             y0 = 1;
             x1 = 1;
             y1 = nBasis;
         }
         else if (x0 == (nBasis-1)/2)    // (b-1)/2, 1/2
-        {                               // geht (nBasis ungerade)
+        {                               // is ok (nBasis is odd)
             y0 = nBasis;
             x1 = 1;
             y1 = 2;
         }
         else if (x0 == 1)
         {
-            y0 = nBasis;                    //  1/n; 1/(n-1)
+            y0 = nBasis;                //  1/n; 1/(n-1)
             x1 = 1;
             y1 = nBasis - 1;
         }
         else
         {
-            y0 = nBasis;                    // z.B. 2/9   2/8
+            y0 = nBasis;                // e.g.: 2/9   2/8
             x1 = x0;
             y1 = nBasis - 1;
             double fUg = (double) x0 / (double) y0;
             double fOg = (double) x1 / (double) y1;
             sal_uLong nGgt = ImpGGT(y0, x0);       // x0/y0 kuerzen
             x0 /= nGgt;
-            y0 /= nGgt;                     // Einschachteln:
+            y0 /= nGgt;                     // Nest:
             sal_uLong x2 = 0;
             sal_uLong y2 = 0;
             bool bStop = false;
@@ -2861,21 +2864,21 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
                     {
                         bStop = true;
                     }
-                }                               // of while
-                nGgt = ImpGGT(y1, x1);             // x1/y1 kuerzen
+                } // of while
+                nGgt = ImpGGT(y1, x1); // Shorten x1/y1
                 x2 = x1 / nGgt;
                 y2 = y1 / nGgt;
-                if (x2*y0 - x0*y2 == 1 || y1 <= 1)  // Test, ob x2/y2
-                    bStop = true;               // naechste Farey-Zahl
+                if (x2*y0 - x0*y2 == 1 || y1 <= 1) // Test for x2/y2
+                    bStop = true;                  // Next Farey number
                 else
                 {
                     y1--;
                     bStop = false;
                 }
-            }                                   // of while
+            } // of while
             x1 = x2;
             y1 = y2;
-        }                                       // of else
+        } // of else
 
         double fup, flow;
 
@@ -2883,7 +2886,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
         fup  = (double)x1/(double)y1;
         while (fNumber > fup)
         {
-            sal_uLong x2 = ((y0+nBasis)/y1)*x1 - x0; // naechste Farey-Zahl
+            sal_uLong x2 = ((y0+nBasis)/y1)*x1 - x0; // Next Farey number
             sal_uLong y2 = ((y0+nBasis)/y1)*y1 - y0;
 
             x0 = x1;
@@ -2903,9 +2906,9 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
             nFrac = x1;
             nDiv  = y1;
         }
-        if (bUpperHalf)                     // Original restaur.
+        if (bUpperHalf) // Recover original
         {
-            if (nFrac == 0 && nDiv == 1)    // 1/1
+            if (nFrac == 0 && nDiv == 1) // 1/1
             {
                 fNum += 1.0;
             }
@@ -2915,8 +2918,8 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
             }
         }
     }
-    else                                    // grosse Nenner
-    {                                       // 0,1234->123/1000
+    else // Large denominator
+    {    // 0,1234->123/1000
         sal_uLong nGgt;
 
         nDiv = 10000000;
@@ -2960,7 +2963,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
         }
     }
 
-    if (rInfo.nCntPre == 0)    // unechter Bruch
+    if (rInfo.nCntPre == 0) // Improper fraction
     {
         double fNum1 = fNum * (double)nDiv + (double)nFrac;
 
@@ -2977,7 +2980,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     else
     {
         char aBuf[100];
-        sprintf( aBuf, "%.f", fNum );   // simple rounded integer (#100211# - checked)
+        sprintf( aBuf, "%.f", fNum ); // simple rounded integer (#100211# - checked)
         sStr.appendAscii( aBuf );
         impTransliterate(sStr, NumFor[nIx].GetNatNum());
     }
@@ -2991,8 +2994,8 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
         sDiv = ImpIntToString( nIx, nDiv );
     }
 
-    sal_uInt16 j = nAnz-1;                  // letztes Symbol->rueckw.
-    sal_Int32 k;                       // Nenner:
+    sal_uInt16 j = nAnz-1; // Last symbol -> backwards
+    sal_Int32 k;           // Denominator
 
     bRes |= ImpNumberFill(sDiv, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRAC);
 
@@ -3016,7 +3019,7 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
             bCont = false;
         }
     }
-    // weiter Zaehler:
+    // Further numerators:
     if ( !bCont )
     {
         sFrac.truncate();
@@ -3037,20 +3040,20 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
             }
         }
     }
-    // weiter Hauptzahl
+    // Continue main number
     if ( !bCont )
     {
         sStr.truncate();
     }
     else
     {
-        k = sStr.getLength();                 // hinter letzter Ziffer
+        k = sStr.getLength(); // After last figure
         bRes |= ImpNumberFillWithThousands(sStr, fNumber, k, j, nIx,
                                            rInfo.nCntPre);
     }
     if (bSign && !(nFrac == 0 && fNum == 0.0))
     {
-        sBuff.insert(0, (sal_Unicode)'-');        // nicht -0
+        sBuff.insert(0, (sal_Unicode)'-'); // Not -0
     }
     sBuff.append(sStr);
     sBuff.append(sFrac);
@@ -3076,9 +3079,9 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         }
     }
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    if (rInfo.bThousand)       // []-Format
+    if (rInfo.bThousand) // [] format
     {
-        if (fNumber > 1.0E10)               // zu gross
+        if (fNumber > 1.0E10) // Too large
         {
             sBuff = rScan.GetErrorString();
             return false;
@@ -3086,7 +3089,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
     }
     else
     {
-        fNumber -= floor(fNumber);          // sonst Datum abtrennen
+        fNumber -= floor(fNumber); // Else truncate date
     }
     bool bInputLine;
     sal_Int32 nCntPost;
@@ -3101,15 +3104,15 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         bInputLine = false;
         nCntPost = rInfo.nCntPost;
     }
-    if (bSign && !rInfo.bThousand)     // kein []-Format
+    if (bSign && !rInfo.bThousand) // No [] format
     {
-        fNumber = 1.0 - fNumber;        // "Kehrwert"
+        fNumber = 1.0 - fNumber; // "Inverse"
     }
     double fTime = fNumber * 86400.0;
     fTime = ::rtl::math::round( fTime, int(nCntPost) );
     if (bSign && fTime == 0.0)
     {
-        bSign = false;                      // nicht -00:00:00
+        bSign = false; // Not -00:00:00
     }
     if( floor( fTime ) > _D_MAX_U_LONG_ )
     {
@@ -3137,10 +3140,9 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         impTransliterate(sSecStr, NumFor[nIx].GetNatNum());
     }
 
-    sal_Int32 nSecPos = 0;                 // Zum Ziffernweisen
-                                            // abarbeiten
+    sal_Int32 nSecPos = 0; // For figure by figure processing
     sal_uLong nHour, nMin, nSec;
-    if (!rInfo.bThousand)      // kein [] Format
+    if (!rInfo.bThousand) // No [] format
     {
         nHour = (nSeconds/3600) % 24;
         nMin = (nSeconds%3600) / 60;
@@ -3172,8 +3174,8 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         nSec  = 0;
     }
 
-    sal_Unicode cAmPm = ' ';                   // a oder p
-    if (rInfo.nCntExp)     // AM/PM
+    sal_Unicode cAmPm = ' '; // a or p
+    if (rInfo.nCntExp) // AM/PM
     {
         if (nHour == 0)
         {
@@ -3351,13 +3353,13 @@ sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& r
         }
         if (io_nState == 0)
         {
-            io_nState = 1;      // no day of month
+            io_nState = 1; // No day of month
         }
     }
     switch (io_nState)
     {
     case 1:
-        // no day of month or forced nominative
+        // No day of month or forced nominative
         switch (eCodeType)
         {
         case NF_KEY_MMM:
@@ -3370,7 +3372,7 @@ sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& r
             ;   // nothing
         }
     case 2:
-        // day of month follows month (the month's 17th)
+        // Day of month follows month (the month's 17th)
         switch (eCodeType)
         {
         case NF_KEY_MMM:
@@ -3380,10 +3382,10 @@ sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& r
         case NF_KEY_MMMMM:
             return CalendarDisplayCode::NARROW_GENITIVE_MONTH_NAME;
         default:
-            ;   // nothing
+            ;   // Nothing
         }
     case 3:
-        // day of month precedes month (17 of month)
+        // Day of month precedes month (17 of month)
         switch (eCodeType)
         {
         case NF_KEY_MMM:
@@ -3665,8 +3667,8 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
     double fDiff = DateTime(*(rScan.GetNullDate())) - rCal.getEpochStart();
     fNumber += fDiff;
     rCal.setLocalDateTime( fNumber );
-    int nUseMonthCase = 0;      // not decided yet
-    OUString aOrgCalendar;        // empty => not changed yet
+    int nUseMonthCase = 0; // Not decided yet
+    OUString aOrgCalendar; // empty => not changed yet
 
     double fOrgDateTime(0.0);
     bool bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx] );
@@ -3888,8 +3890,8 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     }
     rCal.setLocalDateTime( fNumber );
 
-    int nUseMonthCase = 0;      // not decided yet
-    OUString aOrgCalendar;        // empty => not changed yet
+    int nUseMonthCase = 0; // Not decided yet
+    OUString aOrgCalendar; // empty => not changed yet
     double fOrgDateTime(0.0);
     bool bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx] );
     if ( bOtherCalendar )
@@ -3922,10 +3924,9 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         impTransliterate(sSecStr, NumFor[nIx].GetNatNum());
     }
 
-    sal_Int32 nSecPos = 0;                     // Zum Ziffernweisen
-                                               // abarbeiten
+    sal_Int32 nSecPos = 0; // For figure by figure processing
     sal_uLong nHour, nMin, nSec;
-    if (!rInfo.bThousand)      // [] Format
+    if (!rInfo.bThousand) // [] format
     {
         nHour = (nSeconds/3600) % 24;
         nMin = (nSeconds%3600) / 60;
@@ -3955,8 +3956,8 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         nMin  = 0;
         nSec  = 0;
     }
-    sal_Unicode cAmPm = ' ';                   // a oder p
-    if (rInfo.nCntExp)     // AM/PM
+    sal_Unicode cAmPm = ' '; // a or p
+    if (rInfo.nCntExp) // AM/PM
     {
         if (nHour == 0)
         {
@@ -4209,9 +4210,9 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
     bool bSign;
     if (fNumber < 0.0)
     {
-        if (nIx == 0)                       // nicht in hinteren
+        if (nIx == 0) // Not in the ones at the back
         {
-            bSign = true;                   // Formaten
+            bSign = true; // Formats
         }
         else
         {
@@ -4224,7 +4225,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         bSign = false;
         if ( ::rtl::math::isSignBitSet( fNumber ) )
         {
-            fNumber = -fNumber;     // yes, -0.0 is possible, eliminate '-'
+            fNumber = -fNumber; // yes, -0.0 is possible, eliminate '-'
         }
     }
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
@@ -4245,7 +4246,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
     bool bInteger = false;
     if ( rInfo.nThousand != FLAG_STANDARD_IN_FORMAT )
     {
-        // special formatting only if no GENERAL keyword in format code
+        // Special formatting only if no GENERAL keyword in format code
         const sal_uInt16 nThousand = rInfo.nThousand;
         long nPrecExp;
         for (i = 0; i < nThousand; i++)
@@ -4267,7 +4268,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         {
             nPrecExp = 0;
         }
-        if (rInfo.nCntPost)    // NachkommaStellen
+        if (rInfo.nCntPost) // Decimal places
         {
             if ((rInfo.nCntPost + nPrecExp) > 15 && nPrecExp < 15)
             {
@@ -4281,17 +4282,17 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
             {
                 sStr = ::rtl::math::doubleToUString( fNumber, rtl_math_StringFormat_F, rInfo.nCntPost, '.' );
             }
-            sStr.stripStart((sal_Unicode)'0');        // fuehrende Nullen weg
+            sStr.stripStart((sal_Unicode)'0'); // Strip leading zeros
         }
-        else if (fNumber == 0.0)            // Null
+        else if (fNumber == 0.0) // Null
         {
-            // nothing to be done here, keep empty string sStr,
+            // Nothing to be done here, keep empty string sStr,
             // ImpNumberFillWithThousands does the rest
         }
-        else                                // Integer
+        else // Integer
         {
             sStr = ::rtl::math::doubleToUString( fNumber, rtl_math_StringFormat_F, 0, '.');
-            sStr.stripStart((sal_Unicode)'0');        // fuehrende Nullen weg
+            sStr.stripStart((sal_Unicode)'0'); // Strip leading zeros
         }
         sal_Int32 nPoint = sStr.indexOf((sal_Unicode)'.' );
         if ( nPoint >= 0)
@@ -4303,26 +4304,25 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
             {
                 bInteger = true;
             }
-            sStr.remove( nPoint, 1 );            //  . herausnehmen
+            sStr.remove( nPoint, 1 ); //  Remove .
         }
         if (bSign && (sStr.getLength() == 0 ||
-                      comphelper::string::getTokenCount(sStr.toString(), '0') == sStr.getLength()+1))   // nur 00000
+                      comphelper::string::getTokenCount(sStr.toString(), '0') == sStr.getLength()+1))   // Only 00000
         {
-            bSign = false;              // nicht -0.00
+            bSign = false;              // Not -0.00
         }
     }                                   // End of != FLAG_STANDARD_IN_FORMAT
 
-                                        // von hinten nach vorn
-                                        // editieren:
-    k = sStr.getLength();               // hinter letzter Ziffer
-    j = NumFor[nIx].GetCount()-1;       // letztes Symbol
-                                        // Nachkommastellen:
+                                        // Edit backwards:
+    k = sStr.getLength();               // After last figure
+    j = NumFor[nIx].GetCount()-1;       // Last symbol
+                                        // Decimal places:
     if (rInfo.nCntPost > 0)
     {
-        bool bTrailing = true;          // ob Endnullen?
-        bool bFilled = false;           // ob aufgefuellt wurde ?
+        bool bTrailing = true;          // Trailing zeros?
+        bool bFilled = false;           // Was filled?
         short nType;
-        while (j > 0 &&                 // rueckwaerts
+        while (j > 0 &&                 // Backwards
                (nType = rInfo.nTypeArray[j]) != NF_SYMBOLTYPE_DECSEP)
         {
             switch ( nType )
@@ -4381,18 +4381,18 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                             sStr[ k ] = (sal_Unicode)' ';
                             bFilled = true;
                         }
-                        else if ( !bFilled )    // #
+                        else if ( !bFilled ) // #
                         {
                             sStr.remove(k,1);
                         }
                     }
-                }                           // of for
+                } // of for
                 break;
-            }                               // of case digi
-            case NF_KEY_CCC:                // CCC-Waehrung
+            } // of case digi
+            case NF_KEY_CCC: // CCC currency
                 sStr.insert(k, rScan.GetCurAbbrev());
                 break;
-            case NF_KEY_GENERAL:            // Standard im String
+            case NF_KEY_GENERAL: // Standard in the String
             {
                 OUStringBuffer sNum;
                 ImpGetOutputStandard(fNumber, sNum);
@@ -4402,12 +4402,12 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
             }
             default:
                 break;
-            }                                   // of switch
+            } // of switch
             j--;
-        }                                       // of while
-    }                                           // of Nachkomma
+        } // of while
+    } // of decimal places
 
-    bRes |= ImpNumberFillWithThousands(sStr, fNumber, k, j, nIx, // ggfs Auffuellen mit .
+    bRes |= ImpNumberFillWithThousands(sStr, fNumber, k, j, nIx, // Fill with . if needed
                                        rInfo.nCntPre);
     if ( rInfo.nCntPost > 0 )
     {
@@ -4415,7 +4415,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         sal_Int32 nLen = rDecSep.getLength();
         if ( sStr.getLength() > nLen && ( sStr.indexOf( rDecSep, sStr.getLength() - nLen) == sStr.getLength() - nLen) )
         {
-            sStr.truncate( sStr.getLength() - nLen );        // no decimals => strip DecSep
+            sStr.truncate( sStr.getLength() - nLen ); // no decimals => strip DecSep
         }
     }
     if (bSign)
@@ -4426,11 +4426,11 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
     return bRes;
 }
 
-bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,       // number string
-                                                 double& rNumber,    // number
-                                                 sal_Int32 k,       // position within string
-                                                 sal_uInt16 j,           // symbol index within format code
-                                                 sal_uInt16 nIx,         // subformat index
+bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // number string
+                                                 double& rNumber,       // number
+                                                 sal_Int32 k,           // position within string
+                                                 sal_uInt16 j,          // symbol index within format code
+                                                 sal_uInt16 nIx,        // subformat index
                                                  sal_Int32 nDigCnt)     // count of integer digits in format
 {
     bool bRes = false;
@@ -4442,7 +4442,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,       //
     bool bDoThousands = (rInfo.nThousand == 0);
     utl::DigitGroupingIterator aGrouping( GetFormatter().GetLocaleData()->getDigitGrouping());
 
-    while (!bStop)                                      // backwards
+    while (!bStop) // backwards
     {
         if (j == 0)
         {
@@ -4567,10 +4567,10 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,       //
             }
             break;
         }
-        case NF_KEY_CCC:                        // CCC currency
+        case NF_KEY_CCC: // CCC currency
             sBuff.insert(k, rScan.GetCurAbbrev());
             break;
-        case NF_KEY_GENERAL:                    // "General" in string
+        case NF_KEY_GENERAL: // "General" in string
         {
             OUStringBuffer sNum;
             ImpGetOutputStandard(rNumber, sNum);
@@ -4581,7 +4581,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,       //
         default:
             break;
         } // switch
-        j--;        // next format code string
+        j--; // next format code string
     } // while
 
     k = k + nLeadingStringChars;    // MSC converts += to int and then warns, so ...
@@ -4592,15 +4592,15 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,       //
     return bRes;
 }
 
-void SvNumberformat::ImpDigitFill(OUStringBuffer& sStr,                   // number string
-                                  sal_Int32 nStart,              // start of digits
-                                  sal_Int32 & k,                  // position within string
-                                  sal_uInt16 nIx,                     // subformat index
-                                  sal_Int32 & nDigitCount,       // count of integer digits from the right so far
-                                  utl::DigitGroupingIterator & rGrouping )    // current grouping
+void SvNumberformat::ImpDigitFill(OUStringBuffer& sStr,     // number string
+                                  sal_Int32 nStart,         // start of digits
+                                  sal_Int32 & k,            // position within string
+                                  sal_uInt16 nIx,           // subformat index
+                                  sal_Int32 & nDigitCount,  // count of integer digits from the right so far
+                                  utl::DigitGroupingIterator & rGrouping )  // current grouping
 {
-    if (NumFor[nIx].Info().bThousand)               // only if grouping
-    {                                               // fill in separators
+    if (NumFor[nIx].Info().bThousand) // Only if grouping fill in separators
+    {
         const OUString& rThousandSep = GetFormatter().GetNumThousandSep();
         while (k > nStart)
         {
@@ -4613,18 +4613,18 @@ void SvNumberformat::ImpDigitFill(OUStringBuffer& sStr,                   // num
             k--;
         }
     }
-    else                                            // simply skip
+    else // simply skip
     {
         k = nStart;
     }
 }
 
-bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff,       // number string
-                                    double& rNumber,        // number for "General" format
+bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
+                                    double& rNumber,       // number for "General" format
                                     sal_Int32& k,          // position within string
-                                    sal_uInt16& j,              // symbol index within format code
-                                    sal_uInt16 nIx,             // subformat index
-                                    short eSymbolType )     // type of stop condition
+                                    sal_uInt16& j,         // symbol index within format code
+                                    sal_uInt16 nIx,        // subformat index
+                                    short eSymbolType )    // type of stop condition
 {
     bool bRes = false;
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
@@ -4632,10 +4632,10 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff,       // number strin
     bool bDoThousands = (rInfo.nThousand == 0);
     short nType;
 
-    k = sBuff.getLength();                         // behind last digit
+    k = sBuff.getLength(); // behind last digit
 
-    while (j > 0 && (nType = rInfo.nTypeArray[j]) != eSymbolType )
-    {                                       // rueckwaerts:
+    while (j > 0 && (nType = rInfo.nTypeArray[j]) != eSymbolType ) // Backwards
+    {
         switch ( nType )
         {
         case NF_SYMBOLTYPE_STAR:
@@ -4692,10 +4692,10 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff,       // number strin
             }
         }
         break;
-        case NF_KEY_CCC:                // CCC-Waehrung
+        case NF_KEY_CCC:                // CCC currency
             sBuff.insert(k, rScan.GetCurAbbrev());
             break;
-        case NF_KEY_GENERAL:            // Standard im String
+        case NF_KEY_GENERAL: // Standard in the String
         {
             OUStringBuffer sNum;
             ImpGetOutputStandard(rNumber, sNum);
@@ -4703,15 +4703,15 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff,       // number strin
             sBuff.insert(k, sNum.makeStringAndClear());
         }
         break;
-        case NF_SYMBOLTYPE_FRAC_FDIV:       // Do Nothing
+        case NF_SYMBOLTYPE_FRAC_FDIV: // Do Nothing
             break;
 
         default:
             sBuff.insert(k, rInfo.sStrArray[j]);
             break;
-        }                                       // of switch
-        j--;                                    // naechster String
-    }                                           // of while
+        } // of switch
+        j--; // Next String
+    } // of while
     return bRes;
 }
 
@@ -4746,7 +4746,7 @@ void SvNumberformat::GetNumForInfo( sal_uInt16 nNumFor, short& rScannedType,
 
     if ( nNumFor > 3 )
     {
-        return;             // invalid
+        return; // invalid
     }
 
     const ImpSvNumberformatInfo& rInfo = NumFor[nNumFor].Info();
@@ -4804,7 +4804,7 @@ const OUString* SvNumberformat::GetNumForString( sal_uInt16 nNumFor, sal_uInt16 
     {
         nPos = nAnz - 1;
         if ( bString )
-        {   // rueckwaerts
+        {   // Backwards
             short* pType = NumFor[nNumFor].Info().nTypeArray + nPos;
             while ( nPos > 0 && (*pType != NF_SYMBOLTYPE_STRING) &&
                     (*pType != NF_SYMBOLTYPE_CURRENCY) )
@@ -4858,7 +4858,7 @@ short SvNumberformat::GetNumForType( sal_uInt16 nNumFor, sal_uInt16 nPos,
         nPos = nAnz - 1;
         if ( bString )
         {
-            // rueckwaerts
+            // Backwards
             short* pType = NumFor[nNumFor].Info().nTypeArray + nPos;
             while ( nPos > 0 && (*pType != NF_SYMBOLTYPE_STRING) &&
                     (*pType != NF_SYMBOLTYPE_CURRENCY) )
@@ -4878,7 +4878,7 @@ short SvNumberformat::GetNumForType( sal_uInt16 nNumFor, sal_uInt16 nPos,
     }
     else if ( bString )
     {
-        // vorwaerts
+        // Forwards
         short* pType = NumFor[nNumFor].Info().nTypeArray + nPos;
         while ( nPos < nAnz && (*pType != NF_SYMBOLTYPE_STRING) &&
                 (*pType != NF_SYMBOLTYPE_CURRENCY) )
@@ -5095,21 +5095,21 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
     }
     else if ( bDefault[0] )
     {
-        bDefault[0] = false;    // a single unconditional subformat is never delimited
+        bDefault[0] = false; // a single unconditional subformat is never delimited
     }
     else
     {
         if ( bDefault[2] && NumFor[2].GetCount() == 0 && NumFor[1].GetCount() > 0 )
         {
-            bDefault[3] = true;     // special cases x;x;; and ;x;;
+            bDefault[3] = true; // special cases x;x;; and ;x;;
         }
         for ( int i=0; i<3 && !bDefault[i]; ++i )
         {
             bDefault[i] = true;
         }
     }
-    int nSem = 0;       // needed ';' delimiters
-    int nSub = 0;       // subformats delimited so far
+    int nSem = 0; // needed ';' delimiters
+    int nSub = 0; // subformats delimited so far
     for ( int n=0; n<4; n++ )
     {
         if ( n > 0 )
@@ -5352,7 +5352,7 @@ void SvNumberformat::GetNatNumXml( com::sun::star::i18n::NativeNumberXmlAttribut
 // static
 bool SvNumberformat::HasStringNegativeSign( const OUString& rStr )
 {
-    // fuer Sign muss '-' am Anfang oder am Ende des TeilStrings sein (Blanks ignored)
+    // For Sign '-' needs to be at the start or at the end of the string (blanks ignored)
     sal_Int32 nLen = rStr.getLength();
     if ( !nLen )
     {
@@ -5362,7 +5362,7 @@ bool SvNumberformat::HasStringNegativeSign( const OUString& rStr )
     const sal_Unicode* const pEnd = pBeg + nLen;
     register const sal_Unicode* p = pBeg;
     do
-    {   // Anfang
+    {   // Start
         if ( *p == (sal_Unicode)'-' )
         {
             return true;
@@ -5373,7 +5373,7 @@ bool SvNumberformat::HasStringNegativeSign( const OUString& rStr )
     p = pEnd - 1;
 
     do
-    {   // Ende
+    {   // End
         if ( *p == (sal_Unicode)'-' )
         {
             return true;
@@ -5438,7 +5438,7 @@ sal_Int32 SvNumberformat::GetQuoteEnd( const OUString& rStr, sal_Int32 nPos,
     {
         if ( rStr[ nPos ] == cQuote )
         {
-            return nPos;        // schliessendes cQuote
+            return nPos; // Closing cQuote
         }
         return -1;
     }
@@ -5453,7 +5453,7 @@ sal_Int32 SvNumberformat::GetQuoteEnd( const OUString& rStr, sal_Int32 nPos,
         }
         p++;
     }
-    return nLen;        // String Ende
+    return nLen; // End of String
 }
 
 sal_uInt16 SvNumberformat::ImpGetNumForStringElementCount( sal_uInt16 nNumFor ) const
