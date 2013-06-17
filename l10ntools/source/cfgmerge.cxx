@@ -356,7 +356,7 @@ CfgExport::~CfgExport()
 void CfgExport::WorkOnResourceEnd()
 {
     if ( bLocalize ) {
-    if ( pStackData->sText[OString(RTL_CONSTASCII_STRINGPARAM("en-US"))].getLength() )
+    if ( !pStackData->sText["en-US"].isEmpty() )
         {
             OString sXComment = pStackData->sText[OString(RTL_CONSTASCII_STRINGPARAM("x-comment"))];
             OString sLocalId = pStackData->sIdentifier;
@@ -385,7 +385,7 @@ void CfgExport::WorkOnText(
     const OString &rIsoLang
 )
 {
-    if( rIsoLang.getLength() ) rText = helper::UnQuotHTML( rText );
+    if( !rIsoLang.isEmpty() ) rText = helper::UnQuotHTML( rText );
 }
 
 
@@ -409,7 +409,7 @@ CfgMerge::CfgMerge(
         std::exit(EXIT_FAILURE);
     }
 
-    if (rMergeSource.getLength())
+    if (!rMergeSource.isEmpty())
     {
         pMergeDataFile = new MergeDataFile(
             rMergeSource, global::inputPathname, true );
