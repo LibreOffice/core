@@ -372,8 +372,6 @@
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <drawinglayer/processor2d/textaspolygonextractor2d.hxx>
-#include <drawinglayer/processor2d/vclpixelprocessor2d.hxx>
-#include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #include <drawinglayer/processor3d/baseprocessor3d.hxx>
 #include <drawinglayer/processor3d/cutfindprocessor3d.hxx>
 #include <editeng/adjustitem.hxx>
