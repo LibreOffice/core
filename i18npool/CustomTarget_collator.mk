@@ -22,6 +22,7 @@ i18npool_COTXTS := \
     ln_charset.txt \
     my_dictionary.txt \
     ne_charset.txt \
+    sid_charset.txt \
     zh_charset.txt \
     zh_pinyin.txt \
     zh_radical.txt \

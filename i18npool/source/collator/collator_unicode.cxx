@@ -74,6 +74,7 @@ const sal_uInt8* get_collator_data_ku_alphanumeric();
 const sal_uInt8* get_collator_data_ln_charset();
 const sal_uInt8* get_collator_data_my_dictionary();
 const sal_uInt8* get_collator_data_ne_charset();
+const sal_uInt8* get_collator_data_sid_charset();
 const sal_uInt8* get_collator_data_zh_TW_charset();
 const sal_uInt8* get_collator_data_zh_TW_radical();
 const sal_uInt8* get_collator_data_zh_TW_stroke();
@@ -184,6 +185,9 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             } else if ( rLocale.Language == "ne" ) {
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_ne_charset;
+            } else if ( rLocale.Language == "sid" ) {
+                if ( rAlgorithm == "charset" )
+                    func = get_collator_data_sid_charset;
             } else if ( rLocale.Language == "zh" && (rLocale.Country == "TW" || rLocale.Country == "HK" || rLocale.Country == "MO") ) {
                 if ( rAlgorithm == "charset" )
                     func = get_collator_data_zh_TW_charset;
