@@ -61,12 +61,6 @@ endif
 
 endif # SYSTEM_PYTHON
 
-ifneq ($(gb_RUNNABLE_INSTDIR),)
-$(eval $(call gb_Module_add_targets,pyuno,\
-	Package_python_scripts_install \
-))
-endif
-
 endif # DISABLE_PYTHON
 
 # vim:set noet sw=4 ts=4:

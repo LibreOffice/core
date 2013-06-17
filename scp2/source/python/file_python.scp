@@ -27,6 +27,13 @@ File gid_File_scriptproviderforpython
     Styles = (FILELIST, PACKED);
 End
 
+File gid_File_pyuno_python_scripts
+    TXT_FILE_BODY;
+    Dir = FILELIST_DIR;
+    Name = "pyuno_python_scripts.filelist";
+    Styles = (FILELIST, PACKED);
+End
+
 File gid_File_Lib_Pyuno
     PACKED_LIB_FILE_BODY;
   #ifdef UNX
@@ -48,10 +55,6 @@ File gid_File_Pyuno_Rdb
     Name = "pyuno.rdb";
     Styles = (PACKED);
 End
-
-STD_PY_FILE(gid_File_Py_Unohelper, "pyuno/unohelper.py")
-STD_PY_FILE(gid_File_Py_Uno, "pyuno/uno.py")
-STD_PY_FILE(gid_File_Py_Pythonloader, "pyuno/pythonloader.py")
 
 #ifndef SYSTEM_PYTHON
 File gid_File_Py_Bin_Python

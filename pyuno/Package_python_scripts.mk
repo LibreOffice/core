@@ -7,16 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,pyuno_python,$(SRCDIR)/pyuno/source))
+$(eval $(call gb_Package_Package,pyuno_python_scripts,$(SRCDIR)/pyuno/source))
 
-ifeq ($(OS),WNT)
-pyuno_PYTHON_SCRIPT_DIR=bin
-else
-pyuno_PYTHON_SCRIPT_DIR=lib
-endif
+$(eval $(call gb_Package_set_outdir,pyuno_python_scripts,$(INSTDIR)))
 
-$(eval $(call gb_Package_add_file,pyuno_python,$(pyuno_PYTHON_SCRIPT_DIR)/pyuno/unohelper.py,module/unohelper.py))
-$(eval $(call gb_Package_add_file,pyuno_python,$(pyuno_PYTHON_SCRIPT_DIR)/pyuno/uno.py,module/uno.py))
-$(eval $(call gb_Package_add_file,pyuno_python,$(pyuno_PYTHON_SCRIPT_DIR)/pyuno/pythonloader.py,loader/pythonloader.py))
+$(eval $(call gb_Package_add_files,pyuno_python_scripts,$(LIBO_LIB_PYUNO_FOLDER),\
+	loader/pythonloader.py \
+	module/uno.py \
+	module/unohelper.py \
+))
 
 # vim: set noet sw=4 ts=4:
