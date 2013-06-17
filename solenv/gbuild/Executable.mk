@@ -70,7 +70,9 @@ $(call gb_Executable_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_tar
 $(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS := $(call gb_Executable_get_install_target,$(1))
 $(call gb_Executable_Executable_platform,$(1),$(2))
 
+ifneq ($(gb_RUNNABLE_INSTDIR),)
 $(call gb_Helper_install,Executable,$(1),$(call gb_LinkTarget_get_target,$(2)))
+endif
 $$(eval $$(call gb_Module_register_target,$(call gb_Executable_get_target,$(1)),$(call gb_Executable_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Executable)
 $(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
