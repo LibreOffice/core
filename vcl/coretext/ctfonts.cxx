@@ -138,7 +138,8 @@ void CTTextStyle::GetFontMetric( float fPixelSize, ImplFontMetricData& rMetric )
 
 bool CTTextStyle::GetGlyphBoundRect( sal_GlyphId nGlyphId, Rectangle& rRect ) const
 {
-    CGGlyph nCGGlyph = nGlyphId & GF_IDXMASK; // NOTE: CoreText handles glyph fallback itself
+    CGGlyph nCGGlyph = nGlyphId & GF_IDXMASK;
+    // XXX: this is broken if the glyph came from fallback font
     CTFontRef aCTFontRef = (CTFontRef)CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName );
 
     const CTFontOrientation aFontOrientation = kCTFontDefaultOrientation; // TODO: horz/vert
@@ -197,8 +198,8 @@ bool CTTextStyle::GetGlyphOutline( sal_GlyphId nGlyphId, basegfx::B2DPolyPolygon
 {
     rResult.clear();
 
-    // TODO: GF_FONTMASK if using non-native glyph fallback
     CGGlyph nCGGlyph = nGlyphId & GF_IDXMASK;
+    // XXX: this is broken if the glyph came from fallback font
     CTFontRef pCTFont = (CTFontRef)CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName );
     CGPathRef xPath = CTFontCreatePathForGlyph( pCTFont, nCGGlyph, NULL );
 
