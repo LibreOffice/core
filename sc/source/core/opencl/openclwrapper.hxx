@@ -12,7 +12,11 @@
 
 #include <config_features.h>
 
+#ifdef __APPLE__
+#include <OpenCL/cl.h>
+#else
 #include <CL/cl.h>
+#endif
 
 #define MaxTextExtent  4096
 //support AMD opencl
