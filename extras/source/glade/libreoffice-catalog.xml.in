@@ -39,6 +39,9 @@
     <glade-widget-class title="Font Name ListBox" name="svtlo-FontNameBox"
                         generic-name="Font name ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
+    <glade-widget-class title="Sidebar Font Name ListBox" name="svxlo-SvxSBFontNameBox"
+                        generic-name="Sidebar Font name ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Font Size ListBox" name="svtlo-FontSizeBox"
                         generic-name="Font Size ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
@@ -183,6 +186,9 @@
     <glade-widget-class title="Dial Control" name="svxlo-DialControl"
                         generic-name="Dial Control" parent="GtkSpinner"
                         icon-name="widget-gtk-spinner"/>
+    <glade-widget-class title="Sidebar Dial Control" name="svxlo-SidebarDialControl"
+                        generic-name="Sidebar Dial Control" parent="GtkSpinner"
+                        icon-name="widget-gtk-spinner"/>
     <glade-widget-class title="Wrap Field" name="svxlo-WrapField"
                         generic-name="Wrap Field" parent="GtkSpinButton"
                         icon-name="widget-gtk-spinbutton"/>
@@ -262,6 +268,10 @@
     <glade-widget-class title="Open Document Button" name="dbulo-OpenDocumentButton"
                         generic-name="Open Document Button" parent="GtkButton"
                         icon-name="widget-gtk-button"/>
+
+    <glade-widget-class title="Sidebar ToolBox" name="sfxlo-SidebarToolBox"
+                        generic-name="Sidebar ToolBox" parent="GtkToolbar"
+                        icon-name="widget-gtk-toolbar"/>
 
   </glade-widget-classes>
 </glade-catalog>
