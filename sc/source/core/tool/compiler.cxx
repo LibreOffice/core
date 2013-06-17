@@ -5101,7 +5101,7 @@ void ScCompiler::CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* _pT
         default:
             ;   // nothing
     }
-    if ( aBuffer.getLength() )
+    if ( !aBuffer.isEmpty() )
         rBuffer.append(aBuffer.makeStringAndClear());
     else
         rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));

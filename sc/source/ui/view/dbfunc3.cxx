@@ -1320,7 +1320,7 @@ static OUString lcl_replaceMemberNameInSubtotal(const OUString& rSubtotal, const
             aWordBuf.append(c);
     }
 
-    if (aWordBuf.getLength() > 0)
+    if (!aWordBuf.isEmpty())
     {
         OUString aWord = aWordBuf.makeStringAndClear();
         if (aWord.equals(rMemberName))

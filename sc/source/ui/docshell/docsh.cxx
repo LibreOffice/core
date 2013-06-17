@@ -990,14 +990,14 @@ static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLa
         const sal_Unicode c = p[i];
         if (c == sal_Unicode(' '))
         {
-            if (aBuf.getLength())
+            if (!aBuf.isEmpty())
                 aTokens.push_back( aBuf.makeStringAndClear() );
         }
         else
             aBuf.append(c);
     }
 
-    if (aBuf.getLength())
+    if (!aBuf.isEmpty())
         aTokens.push_back( aBuf.makeStringAndClear() );
 
     rLang = LanguageType( 0 );

@@ -777,13 +777,13 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
     const ScPostIt* pNote = rDoc.GetNotes(rPos.Tab())->findByAddress( rPos );
     if( pNote && !pNote->IsCaptionShown() )
     {
-        if( aBuffer.getLength() > 0 )
+        if( !aBuffer.isEmpty() )
             aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "\n--------\n" ) ).append( pNote->GetText() );
         pNoteCaption = pNote->GetOrCreateCaption( rPos );
     }
 
     // create a caption if any text exists
-    if( !pNoteCaption && (aBuffer.getLength() == 0) )
+    if( !pNoteCaption && aBuffer.isEmpty() )
         return 0;
 
     // prepare visible rectangle (add default distance to all borders)

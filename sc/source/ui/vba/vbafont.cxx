@@ -336,7 +336,7 @@ ScVbaFont::getFontStyle() throw ( uno::RuntimeException )
     getItalic() >>= bValue;
     if( bValue )
     {
-        if( aStyles.getLength() )
+        if( !aStyles.isEmpty() )
             aStyles.appendAscii(" ");
         aStyles.appendAscii("Italic");
     }

@@ -1515,7 +1515,7 @@ void ScXMLExport::SetBodyAttributes()
             }
         }
         ::sax::Converter::encodeBase64(aBuffer, aPassHash);
-        if (aBuffer.getLength())
+        if (!aBuffer.isEmpty())
         {
             AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY, aBuffer.makeStringAndClear());
             if ( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
@@ -2667,7 +2667,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
                     ::sax::Converter::encodeBase64(aBuffer, aHash);
                     eHashUsed = PASSHASH_XL;
                 }
-                if (aBuffer.getLength())
+                if (!aBuffer.isEmpty())
                 {
                     AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY, aBuffer.makeStringAndClear());
                     if ( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
@@ -3746,19 +3746,19 @@ void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
                 sBufferRangeType.append(GetXMLToken(XML_REPEAT_COLUMN));
             if ((nRangeType & sheet::NamedRangeFlag::ROW_HEADER) == sheet::NamedRangeFlag::ROW_HEADER)
             {
-                if (sBufferRangeType.getLength() > 0)
+                if (!sBufferRangeType.isEmpty())
                     sBufferRangeType.appendAscii(" ");
                 sBufferRangeType.append(GetXMLToken(XML_REPEAT_ROW));
             }
             if ((nRangeType & sheet::NamedRangeFlag::FILTER_CRITERIA) == sheet::NamedRangeFlag::FILTER_CRITERIA)
             {
-                if (sBufferRangeType.getLength() > 0)
+                if (!sBufferRangeType.isEmpty())
                     sBufferRangeType.appendAscii(" ");
                 sBufferRangeType.append(GetXMLToken(XML_FILTER));
             }
             if ((nRangeType & sheet::NamedRangeFlag::PRINT_AREA) == sheet::NamedRangeFlag::PRINT_AREA)
             {
-                if (sBufferRangeType.getLength() > 0)
+                if (!sBufferRangeType.isEmpty())
                     sBufferRangeType.appendAscii(" ");
                 sBufferRangeType.append(GetXMLToken(XML_PRINT_RANGE));
             }
@@ -4498,7 +4498,7 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
             {
                 ::sax::Converter::encodeBase64(aTrackedChangesKey,
                         GetDocument()->GetChangeTrack()->GetProtection());
-                if (aTrackedChangesKey.getLength())
+                if (!aTrackedChangesKey.isEmpty())
                     ++nPropsToAdd;
             }
 
@@ -4522,7 +4522,7 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
             {
                 sal_Int32 nCount(rProps.getLength());
                 rProps.realloc(nCount + nPropsToAdd);
-                if (aTrackedChangesKey.getLength())
+                if (!aTrackedChangesKey.isEmpty())
                 {
                     rProps[nCount].Name = OUString("TrackedChangesProtectionKey");
                     rProps[nCount].Value <<= aTrackedChangesKey.makeStringAndClear();
