@@ -275,9 +275,9 @@ End
 #if defined ENABLE_JAVA
 File gid_File_Dl_JrepropertiesClass
     TXT_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = "JREProperties.class";
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Dir = FILELIST_DIR;
+    Name = "jvmfwk_jreproperties.filelist";
+    Styles = (FILELIST, PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "0C4B8DCF-18D1-47D9-8BB7-A5C1D9268016";
 End
 #endif
@@ -602,9 +602,9 @@ End
 #if defined ENABLE_JAVA
 File gid_File_Misc_JavavendorsXml
     TXT_FILE_BODY;
-    Dir = GID_DIR_URE_SHARE_MISC;
-    Name = "javavendors.xml";
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Dir = FILELIST_DIR;
+    Name = "jvmfwk_javavendors.filelist";
+    Styles = (FILELIST, PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "403FCCFE-545B-44F6-91D1-5C75F846E587";
 End
 #endif

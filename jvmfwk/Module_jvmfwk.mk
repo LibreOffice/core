@@ -12,29 +12,19 @@ $(eval $(call gb_Module_Module,jvmfwk))
 ifeq ($(ENABLE_JAVA),TRUE)
 
 $(eval $(call gb_Module_add_targets,jvmfwk,\
-    Library_jvmfwk \
-    Package_rcfiles \
-))
-
-$(eval $(call gb_Module_add_targets,jvmfwk,\
-    CustomTarget_jreproperties \
-    Library_sunjavaplugin \
-    Package_jreproperties \
+	CustomTarget_jreproperties \
+	Library_jvmfwk \
+	Library_sunjavaplugin \
+	Package_jreproperties \
+	Package_rcfiles \
 ))
 
 ifneq (,$(filter-out MACOSX WNT,$(OS)))
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,jvmfwk,\
-    Executable_javaldx \
+	Executable_javaldx \
 ))
 endif
-endif
-
-ifneq ($(gb_RUNNABLE_INSTDIR),)
-$(eval $(call gb_Module_add_targets,jvmfwk,\
-	Package_jreproperties_install \
-	Package_rcfiles_install \
-))
 endif
 
 endif
