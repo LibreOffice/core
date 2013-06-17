@@ -16,6 +16,24 @@
       "revId": "28aa4a7a874cf8b887222b395fd6401a744561bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7LU\u003d",
+        "filename": "Repository.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2013-06-17T15:56:47Z",
+      "side": 1,
+      "message": "But here, we test about HAVE_WINDOWS_SDK \u003d\u003d true, so, we don\u0027t need one more \u0027,\u0027, right?",
+      "parentUuid": "AAAAXH//7Lc\u003d",
+      "revId": "28aa4a7a874cf8b887222b395fd6401a744561bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
