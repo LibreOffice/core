@@ -165,7 +165,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                     func = get_collator_data_hu_charset;
             } else if ( rLocale.Language == "ja" ) {
                 if ( rAlgorithm == "charset" )
-                    func = get_collator_data_hu_charset;
+                    func = get_collator_data_ja_charset;
                 else if ( rAlgorithm == "phonetic (alphanumeric first)" )
                     func = get_collator_data_ja_phonetic_alphanumeric_first;
                 else if ( rAlgorithm == "phonetic (alphanumeric last)" )
