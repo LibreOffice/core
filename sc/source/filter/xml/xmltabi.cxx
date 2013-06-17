@@ -122,7 +122,7 @@ static bool lcl_isExternalRefCache(const OUString& rName, OUString& rUrl, OUStri
     if (bInUrl)
         return false;
 
-    if (aTabNameBuf.getLength() == 0)
+    if (aTabNameBuf.isEmpty())
         return false;
 
     rExtTabName = aTabNameBuf.makeStringAndClear();

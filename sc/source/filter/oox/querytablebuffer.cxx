@@ -93,7 +93,7 @@ void lclAppendWebQueryTableName( OUStringBuffer& rTables, const OUString& rTable
 {
     if( !rTableName.isEmpty() )
     {
-        if( rTables.getLength() > 0 )
+        if( !rTables.isEmpty() )
             rTables.append( sal_Unicode( ';' ) );
         rTables.appendAscii( RTL_CONSTASCII_STRINGPARAM( "HTML__" ) ).append( rTableName );
     }
@@ -103,7 +103,7 @@ void lclAppendWebQueryTableIndex( OUStringBuffer& rTables, sal_Int32 nTableIndex
 {
     if( nTableIndex > 0 )
     {
-        if( rTables.getLength() > 0 )
+        if( !rTables.isEmpty() )
             rTables.append( sal_Unicode( ';' ) );
         rTables.appendAscii( RTL_CONSTASCII_STRINGPARAM( "HTML_" ) ).append( nTableIndex );
     }
