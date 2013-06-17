@@ -85,6 +85,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/optcompatibilitypage \
 	sc/uiconfig/scalc/ui/optdefaultpage \
 	sc/uiconfig/scalc/ui/optdlg \
+	sc/uiconfig/scalc/ui/optformula \
 	sc/uiconfig/scalc/ui/optsortlists \
 	sc/uiconfig/scalc/ui/printeroptions \
 	sc/uiconfig/scalc/ui/protectsheetdlg \

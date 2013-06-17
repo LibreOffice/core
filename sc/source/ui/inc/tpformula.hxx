@@ -56,30 +56,20 @@ private:
     DECL_LINK( SepEditOnFocusHdl, Edit* );
 
 private:
-    FixedLine maFlFormulaOpt;
-    FixedText maFtFormulaSyntax;
-    ListBox   maLbFormulaSyntax;
-    CheckBox  maCbEnglishFuncName;
+    ListBox*     mpLbFormulaSyntax;
+    CheckBox*    mpCbEnglishFuncName;
 
-    FixedLine  maFlCustomCalcOpt;
-    RadioButton maBtnCustomCalcDefault;
-    RadioButton maBtnCustomCalcCustom;
-    PushButton maBtnCustomCalcDetails;
+    RadioButton* mpBtnCustomCalcDefault;
+    RadioButton* mpBtnCustomCalcCustom;
+    PushButton*  mpBtnCustomCalcDetails;
 
-    FixedLine  maFlFormulaSeps;
-    FixedText  maFtSepFuncArg;
-    Edit       maEdSepFuncArg;
-    FixedText  maFtSepArrayCol;
-    Edit       maEdSepArrayCol;
-    FixedText  maFtSepArrayRow;
-    Edit       maEdSepArrayRow;
-    PushButton maBtnSepReset;
+    Edit*        mpEdSepFuncArg;
+    Edit*        mpEdSepArrayCol;
+    Edit*        mpEdSepArrayRow;
+    PushButton*  mpBtnSepReset;
 
-    FixedLine maFlRecalcOptions;
-    FixedText maFtOOXMLRecalc;
-    ListBox maLbOOXMLRecalcOptions;
-    FixedText maFtODFRecalc;
-    ListBox maLbODFRecalcOptions;
+    ListBox*     mpLbOOXMLRecalcOptions;
+    ListBox*     mpLbODFRecalcOptions;
 
     /** Stores old separator value of currently focused separator edit box.
         This value is used to revert undesired value change. */
