@@ -571,7 +571,7 @@ OUString Access::getHierarchicalName() throw (css::uno::RuntimeException) {
         path.append(root->getAbsolutePathRepresentation());
     }
     OUString rel(getRelativePathRepresentation());
-    if (path.getLength() != 0 && !rel.isEmpty()) {
+    if (!path.isEmpty() && !rel.isEmpty()) {
         path.append(sal_Unicode('/'));
     }
     path.append(rel);
@@ -594,7 +594,7 @@ OUString Access::composeHierarchicalName(
             static_cast< cppu::OWeakObject * >(this), -1);
     }
     OUStringBuffer path(getRelativePathRepresentation());
-    if (path.getLength() != 0) {
+    if (!path.isEmpty()) {
         path.append(sal_Unicode('/'));
     }
     path.append(aRelativeName);
@@ -1873,7 +1873,7 @@ void Access::initBroadcasterAndChanges(
                 }
                 if (allChanges != 0) {
                     OUStringBuffer path(getRelativePathRepresentation());
-                    if (path.getLength() != 0) {
+                    if (!path.isEmpty()) {
                         path.append(sal_Unicode('/'));
                     }
                     path.append(
@@ -1935,7 +1935,7 @@ void Access::initBroadcasterAndChanges(
                     if (allChanges != 0) {
                         OUStringBuffer path(
                             getRelativePathRepresentation());
-                        if (path.getLength() != 0) {
+                        if (!path.isEmpty()) {
                             path.append(sal_Unicode('/'));
                         }
                         path.append(i->first);
@@ -1972,7 +1972,7 @@ void Access::initBroadcasterAndChanges(
                     if (allChanges != 0) {
                         OUStringBuffer path(
                             getRelativePathRepresentation());
-                        if (path.getLength() != 0) {
+                        if (!path.isEmpty()) {
                             path.append(sal_Unicode('/'));
                         }
                         path.append(

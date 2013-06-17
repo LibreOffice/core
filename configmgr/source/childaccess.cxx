@@ -113,7 +113,7 @@ OUString ChildAccess::getRelativePathRepresentation() {
     rtl::Reference< Access > parent(getParentAccess());
     if (parent.is()) {
         path.append(parent->getRelativePathRepresentation());
-        if (path.getLength() != 0) {
+        if (!path.isEmpty()) {
             path.append(sal_Unicode('/'));
         }
     }
