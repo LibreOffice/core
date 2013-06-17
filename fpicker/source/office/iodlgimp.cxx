@@ -252,6 +252,8 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
     _pCbOptions         ( NULL ),
     _pPlaces            ( NULL ),
     _pBtnConnectToServer( NULL ),
+    _eMode              ( FILEDLG_MODE_OPEN ),
+    _eDlgType           ( FILEDLG_TYPE_FILEDLG ),
     _nState             ( FILEDLG_STATE_REMOTE ),
     _nStyle             ( 0 ),
     _bDoubleClick       ( sal_False ),
