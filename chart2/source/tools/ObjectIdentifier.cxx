@@ -1005,7 +1005,7 @@ OUString ObjectIdentifier::addChildParticle( const OUString& rParticle, const OU
 {
     OUStringBuffer aRet(rParticle);
 
-    if( aRet.getLength() && !rChildParticle.isEmpty() )
+    if( !aRet.isEmpty() && !rChildParticle.isEmpty() )
         aRet.appendAscii(":");
     if( !rChildParticle.isEmpty() )
         aRet.append(rChildParticle);
@@ -1016,7 +1016,7 @@ OUString ObjectIdentifier::addChildParticle( const OUString& rParticle, const OU
 OUString ObjectIdentifier::createChildParticleWithIndex( ObjectType eObjectType, sal_Int32 nIndex )
 {
     OUStringBuffer aRet( getStringForType( eObjectType ) );
-    if( aRet.getLength() )
+    if( !aRet.isEmpty() )
     {
         aRet.appendAscii("=");
         aRet.append(OUString::valueOf(nIndex));
