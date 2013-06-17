@@ -67,7 +67,6 @@ SystemFontList::~SystemFontList( void )
 
 ImplMacTextStyle::ImplMacTextStyle( const FontSelectPattern& rReqFont )
 :   mpFontData( (ImplMacFontData*)rReqFont.mpFontData )
-,   mfFontScale( 1.0 )
 ,   mfFontStretch( 1.0 )
 ,   mfFontRotation( 0.0 )
 {}

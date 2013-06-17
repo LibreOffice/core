@@ -59,11 +59,6 @@ private:
 
     int mnCharCount;        // ==mnEndCharPos-mnMinCharPos
 
-    // to prevent overflows
-    // font requests get size limited by downscaling huge fonts
-    // in these cases the font scale becomes something bigger than 1.0
-    float mfFontScale; // TODO: does CoreText have a font size limit?
-
     // cached details about the resulting layout
     // mutable members since these details are all lazy initialized
     mutable double  mfCachedWidth;          // cached value of resulting typographical width
@@ -80,7 +75,6 @@ CTLayout::CTLayout( const CTTextStyle* pTextStyle )
 ,   mpAttrString( NULL )
 ,   mpCTLine( NULL )
 ,   mnCharCount( 0 )
-,   mfFontScale( pTextStyle->mfFontScale )
 ,   mfCachedWidth( -1 )
 ,   mnBaseAdv( 0 )
 {
@@ -149,7 +143,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     // in RTL-layouts trailing spaces are leftmost
     // TODO: use BiDi-algorithm to thoroughly check this assumption
     if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
-        mnBaseAdv = rint( CTLineGetTrailingWhitespaceWidth( mpCTLine ) * mfFontScale );
+        mnBaseAdv = rint( CTLineGetTrailingWhitespaceWidth( mpCTLine ) );
 
     // return early if there is nothing to do
     if( nPixelWidth <= 0 )
@@ -160,7 +154,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     if( (nOrigWidth >= nPixelWidth-1) && (nOrigWidth <= nPixelWidth+1) )
         return;
 
-    CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth / mfFontScale );
+    CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth );
     if( !pNewCTLine ) { // CTLineCreateJustifiedLine can and does fail
         // handle failure by keeping the unjustified layout
         // TODO: a better solution such as
@@ -189,12 +183,12 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
     // so apply a temporary transformation that it flips back
     // also compensate if the font was size limited
     CGContextSaveGState( rAquaGraphics.mrContext );
-    CGContextScaleCTM( rAquaGraphics.mrContext, +mfFontScale, -mfFontScale );
+    CGContextScaleCTM( rAquaGraphics.mrContext, 1.0, -1.0 );
     CGContextSetShouldAntialias( rAquaGraphics.mrContext, !rAquaGraphics.mbNonAntialiasedText );
 
     // Draw the text
     const Point aVclPos = GetDrawPosition( Point(mnBaseAdv,0) );
-    CGPoint aTextPos = { +aVclPos.X()/mfFontScale, -aVclPos.Y()/mfFontScale };
+    CGPoint aTextPos = { (CGFloat) +aVclPos.X(), (CGFloat) -aVclPos.Y() };
 
     if( mpTextStyle->mfFontRotation != 0.0 )
     {
@@ -321,7 +315,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int&
                 *(pFallbackFonts++) = pFallbackFont;
             if( !nCount++ ) {
                 const CGPoint& rCurPos = pCGGlyphPos[ nSubIndex ];
-                rPos = GetDrawPosition( Point( mfFontScale * rCurPos.x, mfFontScale * rCurPos.y) );
+                rPos = GetDrawPosition( Point( rCurPos.x, rCurPos.y) );
             }
         }
         nSubIndex = 0; // prepare for the next glyph run
@@ -342,7 +336,7 @@ long CTLayout::GetTextWidth() const
         mfCachedWidth = CTLineGetTypographicBounds( mpCTLine, NULL, NULL, NULL);
     }
 
-    const long nScaledWidth = lrint( mfFontScale * mfCachedWidth );
+    const long nScaledWidth = lrint( mfCachedWidth );
     return nScaledWidth;
 }
 
@@ -392,7 +386,7 @@ int CTLayout::GetTextBreak( long nMaxWidth, long /*nCharExtra*/, int nFactor ) c
         return STRING_LEN;
 
     CTTypesetterRef aCTTypeSetter = CTTypesetterCreateWithAttributedString( mpAttrString );
-    const double fCTMaxWidth = (double)nMaxWidth / (nFactor * mfFontScale);
+    const double fCTMaxWidth = (double)nMaxWidth / nFactor;
     CFIndex nIndex = CTTypesetterSuggestClusterBreak( aCTTypeSetter, 0, fCTMaxWidth );
     if( nIndex >= mnCharCount )
         return STRING_LEN;
@@ -420,11 +414,11 @@ void CTLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
         (void)fPos2; // TODO: split cursor at line direction change
         // update previous trailing position
         if( n > 0 )
-            pCaretXArray[ 2*n-1 ] = lrint( fPos1 * mfFontScale );
+            pCaretXArray[ 2*n-1 ] = lrint( fPos1 );
         // update current leading position
         if( 2*n >= nMaxIndex )
             break;
-        pCaretXArray[ 2*n+0 ] = lrint( fPos1 * mfFontScale );
+        pCaretXArray[ 2*n+0 ] = lrint( fPos1 );
     }
 }
 
@@ -447,10 +441,10 @@ bool CTLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
     const Point aPos = GetDrawPosition( Point(mnBaseAdv, 0) );
 
     // CoreText top-bottom are vertically flipped from a VCL aspect
-    rVCLRect.Left()   = aPos.X() + mfFontScale * aMacRect.origin.x;
-    rVCLRect.Right()  = aPos.X() + mfFontScale * (aMacRect.origin.x + aMacRect.size.width);
-    rVCLRect.Bottom() = aPos.Y() - mfFontScale * aMacRect.origin.y;
-    rVCLRect.Top()    = aPos.Y() - mfFontScale * (aMacRect.origin.y + aMacRect.size.height);
+    rVCLRect.Left()   = aPos.X() + aMacRect.origin.x;
+    rVCLRect.Right()  = aPos.X() + aMacRect.origin.x + aMacRect.size.width;
+    rVCLRect.Bottom() = aPos.Y() - aMacRect.origin.y;
+    rVCLRect.Top()    = aPos.Y() - aMacRect.origin.y + aMacRect.size.height;
     return true;
 }
 

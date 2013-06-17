@@ -67,14 +67,6 @@ CTTextStyle::CTTextStyle( const FontSelectPattern& rFSD )
     const FontSelectPattern* const pReqFont = &rFSD;
 
     double fScaledFontHeight = pReqFont->mfExactHeight;
-#if 0 // TODO: does CoreText need font size limiting???
-    static const float fMaxFontHeight = 144.0; // TODO: is there a limit for CoreText?
-    if( fScaledFontHeight > fMaxFontHeight )
-    {
-        mfFontScale = fScaledFontHeight / fMaxFontHeight;
-        fScaledFontHeight = fMaxFontHeight;
-    }
-#endif
 
     // convert font rotation to radian
     mfFontRotation = pReqFont->mnOrientation * (M_PI / 1800.0);
@@ -121,13 +113,12 @@ CTTextStyle::~CTTextStyle( void )
 
 // -----------------------------------------------------------------------
 
-void CTTextStyle::GetFontMetric( float fDPIY, ImplFontMetricData& rMetric ) const
+void CTTextStyle::GetFontMetric( float fPixelSize, ImplFontMetricData& rMetric ) const
 {
     // get the matching CoreText font handle
     // TODO: is it worth it to cache the CTFontRef in SetFont() and reuse it here?
     CTFontRef aCTFontRef = (CTFontRef)CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName );
 
-    const double fPixelSize = (mfFontScale * fDPIY);
     rMetric.mnAscent       = lrint( CTFontGetAscent( aCTFontRef ) * fPixelSize);
     rMetric.mnDescent      = lrint( CTFontGetDescent( aCTFontRef ) * fPixelSize);
     rMetric.mnIntLeading   = lrint( CTFontGetLeading( aCTFontRef ) * fPixelSize);
@@ -153,10 +144,10 @@ bool CTTextStyle::GetGlyphBoundRect( sal_GlyphId nGlyphId, Rectangle& rRect ) co
     const CTFontOrientation aFontOrientation = kCTFontDefaultOrientation; // TODO: horz/vert
     const CGRect aCGRect = CTFontGetBoundingRectsForGlyphs( aCTFontRef, aFontOrientation, &nCGGlyph, NULL, 1 );
 
-    rRect.Left()   = lrint( mfFontScale * aCGRect.origin.x );
-    rRect.Top()    = lrint( mfFontScale * aCGRect.origin.y );
-    rRect.Right()  = lrint( mfFontScale * (aCGRect.origin.x + aCGRect.size.width) );
-    rRect.Bottom() = lrint( mfFontScale * (aCGRect.origin.y + aCGRect.size.height) );
+    rRect.Left()   = lrint( aCGRect.origin.x );
+    rRect.Top()    = lrint( aCGRect.origin.y );
+    rRect.Right()  = lrint( aCGRect.origin.x + aCGRect.size.width );
+    rRect.Bottom() = lrint( aCGRect.origin.y + aCGRect.size.height );
     return true;
 }
 
@@ -218,13 +209,6 @@ bool CTTextStyle::GetGlyphOutline( sal_GlyphId nGlyphId, basegfx::B2DPolyPolygon
     const CGPathElement aClosingElement = { kCGPathElementCloseSubpath, NULL };
     MyCGPathApplierFunc( (void*)&aGgoData, &aClosingElement );
 #endif
-
-    // apply the font scale
-    if( mfFontScale != 1.0 ) {
-        basegfx::B2DHomMatrix aScale;
-        aScale.scale( +mfFontScale, +mfFontScale );
-        rResult.transform( aScale );
-    }
 
     return true;
 }

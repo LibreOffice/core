@@ -108,8 +108,6 @@ public:
 
 //###protected:
     const ImplMacFontData*  mpFontData;
-    /// workaround to prevent overflows for huge font sizes
-    float               mfFontScale;
     /// <1.0: font is squeezed, >1.0 font is stretched, else 1.0
     float               mfFontStretch;
     /// text rotation in radian
