@@ -200,18 +200,19 @@ bool WinSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
             // checked that there is *no* transformation set (testcode commented out below) and
             // estimated that a stable factor dependent of the printer's DPI is used. Create
             // and set a transformation here to correct this
-            const Gdiplus::REAL aDpiX(aGraphics.GetDpiX());
-            const Gdiplus::REAL aDpiY(aGraphics.GetDpiY());
+            Gdiplus::REAL aDpiX;
+            Gdiplus::DllExports::GdipGetDpiX(pGraphics, &aDpiX);
+            Gdiplus::REAL aDpiY;
+            Gdiplus::DllExports::GdipGetDpiY(pGraphics, &aDpiY);
 
             // test code to check the current transformation at the graphics device
-            //Gdiplus::Matrix matrix;
-            //aGraphics.GetTransform(&matrix);
+            //Gdiplus::GpMatrix *pMatrix = NULL;
+            //Gdiplus::DllExports::GdipGetWorldTransform(pGraphics, pMatrix);
             //Gdiplus::REAL elements[6];
-            //matrix.GetElements(elements);
+            //Gdiplus::DllExports::GdipGetMatrixElements(pMatrix, elements);
+            //Gdiplus::DllExports::GdipDeleteMatrix(pMatrix);
 
-            Gdiplus::Matrix aPrinterTransform;
-            aPrinterTransform.Scale(Gdiplus::REAL(100.0) / aDpiX, Gdiplus::REAL(100.0) / aDpiY);
-            aGraphics.SetTransform(&aPrinterTransform);
+            Gdiplus::DllExports::GdipScaleWorldTransform(pGraphics, Gdiplus::REAL(100.0) / aDpiX, Gdiplus::REAL(100.0) / aDpiY, Gdiplus::MatrixOrderAppend);
         }
 
         Gdiplus::DllExports::GdipFillPath(pGraphics, pTestBrush, pPath);
