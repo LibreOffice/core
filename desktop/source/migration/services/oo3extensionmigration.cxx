@@ -46,6 +46,9 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 
+#include <com/sun/star/deployment/VersionException.hpp>
+#include <dp_gui_handleversionexception.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -516,6 +519,14 @@ void TmpRepositoryCommandEnv::handle(
 
     bool approve = true;
     bool abort   = false;
+
+    deployment::VersionException verExc;
+    if ( xRequest->getRequest() >>= verExc )
+    {
+        // user interaction, if an extension is already been installed.
+        approve = dp_gui::handleVersionException( verExc );
+        abort = !approve;
+    }
 
     // select:
     uno::Sequence< Reference< task::XInteractionContinuation > > conts(

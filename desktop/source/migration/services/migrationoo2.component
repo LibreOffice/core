@@ -24,10 +24,13 @@
 
 <component loader="com.sun.star.loader.SharedLibrary"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.desktop.migration.Basic">
-    <service name="com.sun.star.migration.Basic"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.desktop.migration.Wordbooks">
-    <service name="com.sun.star.migration.Wordbooks"/>
-  </implementation>
+    <implementation name="com.sun.star.comp.desktop.migration.Basic">
+        <service name="com.sun.star.migration.Basic"/>
+    </implementation>
+    <implementation name="com.sun.star.comp.desktop.migration.Wordbooks">
+        <service name="com.sun.star.migration.Wordbooks"/>
+    </implementation>
+    <implementation name="com.sun.star.comp.desktop.migration.OOo3Extensions">
+        <service name="com.sun.star.migration.Extensions"/>
+    </implementation>
 </component>
