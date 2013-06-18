@@ -215,11 +215,6 @@ String SCSTR_NEW
     Text [ en-US ] = "~New" ;
 };
 
-String SCSTR_ADD
-{
-    Text [ en-US ] = "~Add" ;
-};
-
 String SCSTR_REMOVE
 {
     Text [ en-US ] = "~Delete" ;
@@ -228,11 +223,6 @@ String SCSTR_REMOVE
 String SCSTR_CANCEL
 {
     Text [ en-US ] = "Cance~l" ;
-};
-
-String SCSTR_MODIFY
-{
-    Text [ en-US ] = "Modif~y" ;
 };
 
 String SCSTR_SHOWTABLE

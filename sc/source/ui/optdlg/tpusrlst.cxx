@@ -58,9 +58,6 @@ ScTpUserLists::ScTpUserLists( Window*               pParent,
                           "OptSortLists", "modules/scalc/ui/optsortlists.ui",
                           rCoreAttrs ),
         aStrQueryRemove ( ScGlobal::GetRscString( STR_QUERYREMOVE ) ),
-        aStrCancel      ( ScGlobal::GetRscString( STR_DISMISS ) ),
-        aStrAdd         ( ScResId( SCSTR_ADD ) ),
-        aStrModify      ( ScResId( SCSTR_MODIFY ) ),
         aStrCopyList    ( ScGlobal::GetRscString( STR_COPYLIST ) ),
         aStrCopyFrom    ( ScGlobal::GetRscString( STR_COPYFROM ) ),
         aStrCopyErr     ( ScGlobal::GetRscString( STR_COPYERR ) ),
@@ -81,11 +78,11 @@ ScTpUserLists::ScTpUserLists( Window*               pParent,
     get(mpFtCopyFrom, "copyfromlabel");
     get(mpEdCopyFrom, "copyfrom");
     get(mpBtnNew, "new");
+    get(mpBtnDiscard, "discard");
     get(mpBtnAdd, "add");
+    get(mpBtnModify, "modify");
     get(mpBtnRemove, "delete");
     get(mpBtnCopy, "copy");
-
-    aStrNew = mpBtnNew->GetText();
 
     SetExchangeSupport();
     Init();
@@ -109,8 +106,9 @@ void ScTpUserLists::Init()
 
     mpLbLists->SetSelectHdl   ( LINK( this, ScTpUserLists, LbSelectHdl ) );
     mpBtnNew->SetClickHdl     ( LINK( this, ScTpUserLists, BtnClickHdl ) );
-    mpBtnNew->SetClickHdl     ( LINK( this, ScTpUserLists, BtnClickHdl ) );
+    mpBtnDiscard->SetClickHdl ( LINK( this, ScTpUserLists, BtnClickHdl ) );
     mpBtnAdd->SetClickHdl     ( LINK( this, ScTpUserLists, BtnClickHdl ) );
+    mpBtnModify->SetClickHdl  ( LINK( this, ScTpUserLists, BtnClickHdl ) );
     mpBtnRemove->SetClickHdl  ( LINK( this, ScTpUserLists, BtnClickHdl ) );
     mpEdEntries->SetModifyHdl ( LINK( this, ScTpUserLists, EdEntriesModHdl ) );
 
@@ -192,9 +190,12 @@ void ScTpUserLists::Reset( const SfxItemSet& rCoreAttrs )
         mpBtnRemove->Disable();
     }
 
-    mpBtnNew->SetText( aStrNew );
-    mpBtnAdd->SetText( aStrAdd );
+    mpBtnNew->Show();
+    mpBtnDiscard->Hide();
+    mpBtnAdd->Show();
+    mpBtnModify->Hide();
     mpBtnAdd->Disable();
+    mpBtnModify->Disable();
 
     if ( !bCopyDone && pViewData )
     {
@@ -493,7 +494,11 @@ IMPL_LINK( ScTpUserLists, LbSelectHdl, ListBox*, pLb )
             if ( !mpFtEntries->IsEnabled() )  mpFtEntries->Enable();
             if ( !mpEdEntries->IsEnabled() )  mpEdEntries->Enable();
             if ( !mpBtnRemove->IsEnabled() )  mpBtnRemove->Enable();
-            if (  mpBtnAdd->IsEnabled() )     mpBtnAdd->Disable();
+            if ( mpBtnAdd->IsEnabled() )
+            {
+                mpBtnAdd->Disable();
+                mpBtnModify->Disable();
+            }
 
             UpdateEntries( nSelPos );
         }
@@ -506,7 +511,7 @@ IMPL_LINK( ScTpUserLists, LbSelectHdl, ListBox*, pLb )
 
 IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
 {
-    if ( pBtn == mpBtnNew )
+    if ( pBtn == mpBtnNew || pBtn == mpBtnDiscard )
     {
         if ( !bCancelMode )
         {
@@ -521,6 +526,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
             mpEdEntries->SetText( EMPTY_STRING );
             mpEdEntries->GrabFocus();
             mpBtnAdd->Disable();
+            mpBtnModify->Disable();
             mpBtnRemove->Disable();
             //-----------------------------
             if ( mpBtnCopy->IsEnabled() )
@@ -529,7 +535,8 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
                 mpFtCopyFrom->Disable();
                 mpEdCopyFrom->Disable();
             }
-            mpBtnNew->SetText( aStrCancel );
+            mpBtnNew->Hide();
+            mpBtnDiscard->Show();
             bCancelMode = sal_True;
         }
         else // if ( bCancelMode )
@@ -549,6 +556,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
                 mpBtnRemove->Disable();
             }
             mpBtnAdd->Disable();
+            mpBtnModify->Disable();
             //-----------------------------
             if ( pViewData && !bCopyDone )
             {
@@ -556,12 +564,13 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
                 mpFtCopyFrom->Enable();
                 mpEdCopyFrom->Enable();
             }
-            mpBtnNew->SetText( aStrNew );
+            mpBtnNew->Show();
+            mpBtnDiscard->Hide();
             bCancelMode = false;
             bModifyMode = false;
         }
     }
-    else if ( pBtn == mpBtnAdd )
+    else if (pBtn == mpBtnAdd || pBtn == mpBtnModify)
     {
         String theEntriesStr( mpEdEntries->GetText() );
 
@@ -588,8 +597,10 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
             }
 
             mpBtnAdd->Disable();
+            mpBtnModify->Disable();
             mpBtnRemove->Enable();
-            mpBtnNew->SetText( aStrNew );
+            mpBtnNew->Show();
+            mpBtnDiscard->Hide();
             bCancelMode = false;
         }
         else // if ( bModifyMode )
@@ -610,9 +621,14 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
                 LbSelectHdl( mpLbLists );
             }
 
-            mpBtnNew->SetText( aStrNew ); bCancelMode = false;
-            mpBtnAdd->SetText( aStrAdd ); bModifyMode = false;
+            mpBtnNew->Show();
+            mpBtnDiscard->Hide();
+            bCancelMode = false;
+            mpBtnAdd->Show();
+            mpBtnModify->Show();
             mpBtnAdd->Disable();
+            mpBtnModify->Disable();
+            bModifyMode = false;
             mpBtnRemove->Enable();
             mpFtLists->Enable();
             mpLbLists->Enable();
@@ -748,21 +764,34 @@ IMPL_LINK( ScTpUserLists, EdEntriesModHdl, VclMultiLineEdit*, pEd )
     {
         if ( !bCancelMode && !bModifyMode )
         {
-            mpBtnNew->SetText( aStrCancel );  bCancelMode = sal_True;
-            mpBtnAdd->SetText( aStrModify );  bModifyMode = sal_True;
+            mpBtnNew->Hide();
+            mpBtnDiscard->Show();
+            bCancelMode = sal_True;
+            mpBtnAdd->Hide();
             mpBtnAdd->Enable();
+            mpBtnModify->Show();
+            mpBtnModify->Enable();
+            bModifyMode = sal_True;
             mpBtnRemove->Disable();
             mpFtLists->Disable();
             mpLbLists->Disable();
         }
         else // if ( bCancelMode || bModifyMode )
         {
-            if ( !mpBtnAdd->IsEnabled() ) mpBtnAdd->Enable();
+            if ( !mpBtnAdd->IsEnabled() )
+            {
+                mpBtnAdd->Enable();
+                mpBtnModify->Enable();
+            }
         }
     }
     else
     {
-        if ( mpBtnAdd->IsEnabled() ) mpBtnAdd->Disable();
+        if ( mpBtnAdd->IsEnabled() )
+        {
+            mpBtnAdd->Disable();
+            mpBtnModify->Disable();
+        }
     }
 
     return 0;

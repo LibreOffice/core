@@ -718,10 +718,10 @@
 #define SCSTR_COLUMN            (STR_START + 13)
 #define SCSTR_ROW               (STR_START + 14)
 #define SCSTR_NEW               (STR_START + 15)
-#define SCSTR_ADD               (STR_START + 16)
+
 #define SCSTR_REMOVE            (STR_START + 17)
 #define SCSTR_CANCEL            (STR_START + 18)
-#define SCSTR_MODIFY            (STR_START + 19)
+
 #define SCSTR_SHOWTABLE         (STR_START + 20)
 #define SCSTR_HIDDENTABLES      (STR_START + 21)
 

@@ -2065,10 +2065,6 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Invalid condition." ;
     };
-    String STR_DISMISS
-    {
-        Text [ en-US ] = "~Discard" ;
-    };
     String STR_QUERYREMOVE
     {
         Text [ en-US ] = "Should the entry\n#\nbe deleted?" ;

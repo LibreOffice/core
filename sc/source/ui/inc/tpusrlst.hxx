@@ -54,16 +54,18 @@ private:
     VclMultiLineEdit*   mpEdEntries;
     FixedText*          mpFtCopyFrom;
     Edit*               mpEdCopyFrom;
+
     PushButton*         mpBtnNew;
+    PushButton*         mpBtnDiscard;
+
     PushButton*         mpBtnAdd;
+    PushButton*         mpBtnModify;
+
     PushButton*         mpBtnRemove;
+
     PushButton*         mpBtnCopy;
 
     const String    aStrQueryRemove;
-    String          aStrNew;
-    const String    aStrCancel;
-    const String    aStrAdd;
-    const String    aStrModify;
     const String    aStrCopyList;
     const String    aStrCopyFrom;
     const String    aStrCopyErr;
