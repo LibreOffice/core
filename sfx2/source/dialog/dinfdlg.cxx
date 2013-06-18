@@ -2455,7 +2455,7 @@ void CmisPropertiesWindow::updateLineWidth()
 }
 
 void CmisPropertiesWindow::AddLine( const OUString& /*sId*/, const OUString& sName,
-                                    const bool /*bUpdatable*/, const bool /*bRequired*/,
+                                    const bool bUpdatable, const bool /*bRequired*/,
                                     Any& rAny )
 {
     CmisPropertyLine* pNewLine = new CmisPropertyLine( this );
@@ -2464,6 +2464,9 @@ void CmisPropertiesWindow::AddLine( const OUString& /*sId*/, const OUString& sNa
     pNewLine->m_aName.SetAccessibleName(m_aName.GetAccessibleName());
     pNewLine->m_aType.SetAccessibleName(m_aType.GetAccessibleName());
     pNewLine->m_aValueEdit.SetAccessibleName(m_aValueEdit.GetAccessibleName());
+    pNewLine->m_aValueEdit.SetReadOnly( !bUpdatable );
+    pNewLine->m_aDateField.SetReadOnly( !bUpdatable );
+    pNewLine->m_aTimeField.SetReadOnly( !bUpdatable );
 
     m_nLineHeight = m_aValueEdit.GetSizePixel().Height() ;
 
