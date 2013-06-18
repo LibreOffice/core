@@ -9066,9 +9066,21 @@ the  Windows SDK are installed.])
             SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include/um -I$WINDOWS_SDK_HOME/include/shared"
         fi
     fi
+
+    dnl TODO: solenv/bin/modules/installer/windows/msiglobal.pm wants to use a
+    dnl WiLangId.vbs that is included only in some SDKs (e.g., included in v7.1
+    dnl but not in v8.0), so allow this to be overriden with a
+    dnl WINDOWS_SDK_WILANGID for now; a full-blown --with-windows-sdk-wilangid
+    dnl and configuration error if no WiLangId.vbs is found would arguably be
+    dnl better, but I do not know under which conditions exactly it is needed by
+    dnl msiglobal.pm:
+    if test -z "$WINDOWS_SDK_WILANGID" -a -n "$WINDOWS_SDK_HOME"; then
+        WINDOWS_SDK_WILANGID=$WINDOWS_SDK_HOME/Samples/sysmgmt/msi/scripts/WiLangId.vbs
+    fi
 fi
 AC_SUBST(WINDOWS_SDK_HOME)
 AC_SUBST(WINDOWS_SDK_VERSION)
+AC_SUBST(WINDOWS_SDK_WILANGID)
 
 dnl =========================================
 dnl Check for uuidgen

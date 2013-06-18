@@ -675,7 +675,7 @@ sub create_transforms
         $infoline = "ERROR: We cannot create transformations yet (we cannot use cscript.exe when cross-compiling)\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
-    my $wilangid = $ENV{WINDOWS_SDK_HOME} . "/Samples/SysMgmt/Msi/scripts/WiLangId.vbs";
+    my $wilangid = $ENV{WINDOWS_SDK_WILANGID};
 
     my $from = cwd();
 
@@ -827,7 +827,7 @@ sub create_transforms
         }
     }
 
-    $systemcall = "TEMP=$ENV{'TMPDIR'} $cscript $wilangid $basedbname Package $templatevalue";
+    $systemcall = "TEMP=$ENV{'TMPDIR'} $cscript \"$wilangid\" $basedbname Package $templatevalue";
 
     $returnvalue = system($systemcall);
 
@@ -836,7 +836,7 @@ sub create_transforms
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute WiLangId.vbs!\n";
+        $infoline = "ERROR: $returnvalue from $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
     else
