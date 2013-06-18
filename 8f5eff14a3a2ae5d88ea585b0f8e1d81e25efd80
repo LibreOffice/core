@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7Es\u003d",
+        "filename": "editeng/source/editeng/editeng.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2964,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-18T16:47:50Z",
+      "side": 1,
+      "message": "but why use a Rectangle* here, there seems no good reason ( and now you have to manage the memory )",
+      "revId": "8f5eff14a3a2ae5d88ea585b0f8e1d81e25efd80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7E0\u003d",
+        "filename": "oox/source/vml/vmlshape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-18T16:47:50Z",
+      "side": 1,
+      "message": "why is this stuff commented out, no need for that I think just adds to noise, the diff shows the removed lines",
+      "revId": "8f5eff14a3a2ae5d88ea585b0f8e1d81e25efd80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7Ew\u003d",
+        "filename": "oox/source/vml/vmlshape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 584,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-18T16:47:50Z",
+      "side": 1,
+      "message": "and these commented out lines make me feel there is some real uncertainty around whatever is going on here",
+      "revId": "8f5eff14a3a2ae5d88ea585b0f8e1d81e25efd80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7E4\u003d",
+        "filename": "oox/source/vml/vmlshapecontext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-18T16:47:50Z",
+      "side": 1,
+      "message": "the else block isn\u0027t necessary is it? this is the default return",
+      "revId": "8f5eff14a3a2ae5d88ea585b0f8e1d81e25efd80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7FA\u003d",
+        "filename": "svx/source/unodraw/unoshap2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1909,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2013-06-18T16:47:50Z",
+      "side": 1,
+      "message": "I find the bSetMrroredX bSetMirroredY very confusing ( especially \u0027cause there is bMirroredX \u0026 bMirroredY below )\ncould those local variables ( with similar names to existing variables ) be removed\n\nwouldn\u0027t \nif ( pObject \u0026\u0026 aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( \"Mir\nroredX\" ) )\n    ((SdrObjCustomShape*)pObject)-\u003eSetMirroredX(true);\n\nbe clearer",
+      "revId": "8f5eff14a3a2ae5d88ea585b0f8e1d81e25efd80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
