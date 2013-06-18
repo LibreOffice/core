@@ -1926,8 +1926,8 @@ sal_Bool SwSectionFtnEndTabPage::FillItemSet( SfxItemSet& rSet )
     {
     case FTNEND_ATTXTEND_OWNNUMANDFMT:
         aFtn.SetNumType( aFtnNumViewBox.GetSelectedNumberingType() );
-        aFtn.SetPrefix( aFtnPrefixED.GetText() );
-        aFtn.SetSuffix( aFtnSuffixED.GetText() );
+        aFtn.SetPrefix( aFtnPrefixED.GetText().replaceAll("\\t", "\t") ); // fdo#65666
+        aFtn.SetSuffix( aFtnSuffixED.GetText().replaceAll("\\t", "\t") );
         // no break;
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
@@ -1947,8 +1947,8 @@ sal_Bool SwSectionFtnEndTabPage::FillItemSet( SfxItemSet& rSet )
     {
     case FTNEND_ATTXTEND_OWNNUMANDFMT:
         aEnd.SetNumType( aEndNumViewBox.GetSelectedNumberingType() );
-        aEnd.SetPrefix( aEndPrefixED.GetText() );
-        aEnd.SetSuffix( aEndSuffixED.GetText() );
+        aEnd.SetPrefix( aEndPrefixED.GetText().replaceAll("\\t", "\t") );
+        aEnd.SetSuffix( aEndSuffixED.GetText().replaceAll("\\t", "\t") );
         // no break;
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
@@ -2017,8 +2017,8 @@ void SwSectionFtnEndTabPage::ResetState( sal_Bool bFtn,
 
     pNumViewBox->SelectNumberingType( rAttr.GetNumType() );
     pOffsetFld->SetValue( rAttr.GetOffset() + 1 );
-    pPrefixED->SetText( rAttr.GetPrefix() );
-    pSuffixED->SetText( rAttr.GetSuffix() );
+    pPrefixED->SetText( rAttr.GetPrefix().replaceAll("\t", "\\t") );
+    pSuffixED->SetText( rAttr.GetSuffix().replaceAll("\t", "\\t") );
 
     switch( eState )
     {
