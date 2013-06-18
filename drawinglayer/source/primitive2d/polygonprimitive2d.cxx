@@ -604,6 +604,17 @@ namespace drawinglayer
         {
         }
 
+        PolygonStrokeArrowPrimitive2D::PolygonStrokeArrowPrimitive2D(
+            const basegfx::B2DPolygon& rPolygon,
+            const attribute::LineAttribute& rLineAttribute,
+            const attribute::LineStartEndAttribute& rStart,
+            const attribute::LineStartEndAttribute& rEnd)
+        :   PolygonStrokePrimitive2D(rPolygon, rLineAttribute),
+            maStart(rStart),
+            maEnd(rEnd)
+        {
+        }
+
         bool PolygonStrokeArrowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
             if(PolygonStrokePrimitive2D::operator==(rPrimitive))

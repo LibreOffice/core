@@ -21,128 +21,25 @@
 #include <vcl/virdev.hxx>
 
 #include <vcl/svapp.hxx>
-#include <svl/itemset.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 
 #include <svx/xtable.hxx>
-#include <svx/xpool.hxx>
-#include <svx/xfillit0.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/xlnstwit.hxx>
-#include <svx/xlnedwit.hxx>
-#include <svx/xlnclit.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/xlnstit.hxx>
-#include <svx/xlnedit.hxx>
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
+#include <drawinglayer/attribute/linestartendattribute.hxx>
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-
-#include <svx/svdorect.hxx>
-#include <svx/svdopath.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
-#include <svx/xlnwtit.hxx>
 
 using namespace com::sun::star;
 
-class impXLineEndList
-{
-private:
-    VirtualDevice*          mpVirtualDevice;
-    SdrModel*               mpSdrModel;
-    SdrObject*              mpBackgroundObject;
-    SdrObject*              mpLineObject;
-
-public:
-    impXLineEndList(VirtualDevice* pV, SdrModel* pM, SdrObject* pB, SdrObject* pL)
-    :   mpVirtualDevice(pV),
-        mpSdrModel(pM),
-        mpBackgroundObject(pB),
-        mpLineObject(pL)
-    {}
-
-    ~impXLineEndList()
-    {
-        delete mpVirtualDevice;
-        SdrObject::Free(mpBackgroundObject);
-        SdrObject::Free(mpLineObject);
-        delete mpSdrModel;
-    }
-
-    VirtualDevice* getVirtualDevice() const { return mpVirtualDevice; }
-    SdrObject* getBackgroundObject() const { return mpBackgroundObject; }
-    SdrObject* getLineObject() const { return mpLineObject; }
-};
-
-void XLineEndList::impCreate()
-{
-    if(!mpData)
-    {
-        const Point aZero(0, 0);
-        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-
-        VirtualDevice* pVirDev = new VirtualDevice;
-        OSL_ENSURE(0 != pVirDev, "XLineEndList: no VirtualDevice created!" );
-        pVirDev->SetMapMode(MAP_100TH_MM);
-        const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
-        const Size aSize(pVirDev->PixelToLogic(Size(rSize.Width() * 2, rSize.Height())));
-        pVirDev->SetOutputSize(aSize);
-        pVirDev->SetDrawMode(rStyleSettings.GetHighContrastMode()
-            ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
-            : DRAWMODE_DEFAULT);
-        pVirDev->SetBackground(rStyleSettings.GetFieldColor());
-
-        SdrModel* pSdrModel = new SdrModel();
-        OSL_ENSURE(0 != pSdrModel, "XLineEndList: no SdrModel created!" );
-        pSdrModel->GetItemPool().FreezeIdRanges();
-
-        const Rectangle aBackgroundSize(aZero, aSize);
-        SdrObject* pBackgroundObject = new SdrRectObj(aBackgroundSize);
-        OSL_ENSURE(0 != pBackgroundObject, "XLineEndList: no BackgroundObject created!" );
-        pBackgroundObject->SetModel(pSdrModel);
-        pBackgroundObject->SetMergedItem(XFillStyleItem(XFILL_SOLID));
-        pBackgroundObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
-        pBackgroundObject->SetMergedItem(XFillColorItem(String(), rStyleSettings.GetFieldColor()));
-
-        const basegfx::B2DPoint aStart(0, aSize.Height() / 2);
-        const basegfx::B2DPoint aEnd(aSize.Width() - 1, aSize.Height() / 2);
-        basegfx::B2DPolygon aPolygon;
-        aPolygon.append(aStart);
-        aPolygon.append(aEnd);
-        SdrObject* pLineObject = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aPolygon));
-        OSL_ENSURE(0 != pLineObject, "XLineEndList: no LineObject created!" );
-        pLineObject->SetModel(pSdrModel);
-        const Size aLineWidth(pVirDev->PixelToLogic(Size(rStyleSettings.GetListBoxPreviewDefaultLineWidth(), 0)));
-        pLineObject->SetMergedItem(XLineWidthItem(aLineWidth.getWidth()));
-        const sal_uInt32 nArrowHeight((aSize.Height() * 8) / 10);
-        pLineObject->SetMergedItem(XLineStartWidthItem(nArrowHeight));
-        pLineObject->SetMergedItem(XLineEndWidthItem(nArrowHeight));
-        pLineObject->SetMergedItem(XLineColorItem(String(), rStyleSettings.GetFieldTextColor()));
-
-        mpData = new impXLineEndList(pVirDev, pSdrModel, pBackgroundObject, pLineObject);
-        OSL_ENSURE(0 != mpData, "XLineEndList: data creation went wrong!" );
-    }
-}
-
-void XLineEndList::impDestroy()
-{
-    delete mpData;
-    mpData = NULL;
-}
-
-XLineEndList::XLineEndList( const String& rPath, XOutdevItemPool* _pXPool )
-    : XPropertyList( XLINE_END_LIST, rPath, _pXPool ),
-      mpData(NULL)
+XLineEndList::XLineEndList( const String& rPath )
+    : XPropertyList( XLINE_END_LIST, rPath )
 {
 }
 
 XLineEndList::~XLineEndList()
 {
-    impDestroy();
 }
 
 XLineEndEntry* XLineEndList::Remove(long nIndex)
@@ -186,25 +83,86 @@ sal_Bool XLineEndList::Create()
 
 Bitmap XLineEndList::CreateBitmapForUI( long nIndex )
 {
-    impCreate();
-    VirtualDevice* pVD = mpData->getVirtualDevice();
-    SdrObject* pLine = mpData->getLineObject();
+    Bitmap aRetval;
+    OSL_ENSURE(nIndex < Count(), "OOps, access out of range (!)");
 
-    pLine->SetMergedItem(XLineStyleItem(XLINE_SOLID));
-    pLine->SetMergedItem(XLineStartItem(String(), GetLineEnd(nIndex)->GetLineEnd()));
-    pLine->SetMergedItem(XLineEndItem(String(), GetLineEnd(nIndex)->GetLineEnd()));
+    if(nIndex < Count())
+    {
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
 
-    sdr::contact::SdrObjectVector aObjectVector;
-    aObjectVector.push_back(mpData->getBackgroundObject());
-    aObjectVector.push_back(pLine);
-    sdr::contact::ObjectContactOfObjListPainter aPainter(*pVD, aObjectVector, 0);
-    sdr::contact::DisplayInfo aDisplayInfo;
+        const Size aSize(rSize.Width() * 2, rSize.Height());
 
-    pVD->Erase();
-    aPainter.ProcessDisplay(aDisplayInfo);
+        // prepare line geometry
+        basegfx::B2DPolygon aLine;
+        const double fBorderDistance(aSize.Height() * 0.1);
 
-    const Point aZero(0, 0);
-    return pVD->GetBitmap(aZero, pVD->GetOutputSize());
+        aLine.append(basegfx::B2DPoint(fBorderDistance, aSize.Height() / 2));
+        aLine.append(basegfx::B2DPoint(aSize.Width() - fBorderDistance, aSize.Height() / 2));
+
+        // prepare LineAttribute
+        const basegfx::BColor aLineColor(rStyleSettings.GetFieldTextColor().getBColor());
+        const double fLineWidth(rStyleSettings.GetListBoxPreviewDefaultLineWidth() * 1.1);
+        const drawinglayer::attribute::LineAttribute aLineAttribute(
+            aLineColor,
+            fLineWidth);
+
+        const basegfx::B2DPolyPolygon aLineEnd(GetLineEnd(nIndex)->GetLineEnd());
+        const double fArrowHeight(aSize.Height() - (2.0 * fBorderDistance));
+        const drawinglayer::attribute::LineStartEndAttribute aLineStartEndAttribute(
+            fArrowHeight,
+            aLineEnd,
+            false);
+
+        // prepare line primitive
+        const drawinglayer::primitive2d::Primitive2DReference aLineStartEndPrimitive(
+            new drawinglayer::primitive2d::PolygonStrokeArrowPrimitive2D(
+                aLine,
+                aLineAttribute,
+                aLineStartEndAttribute,
+                aLineStartEndAttribute));
+
+        // prepare VirtualDevice
+        VirtualDevice aVirtualDevice;
+        const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
+
+        aVirtualDevice.SetOutputSizePixel(aSize);
+        aVirtualDevice.SetDrawMode(rStyleSettings.GetHighContrastMode()
+            ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
+            : DRAWMODE_DEFAULT);
+
+        if(rStyleSettings.GetUIPreviewUsesCheckeredBackground())
+        {
+            const Point aNull(0, 0);
+            static const sal_uInt32 nLen(8);
+            static const Color aW(COL_WHITE);
+            static const Color aG(0xef, 0xef, 0xef);
+            aVirtualDevice.DrawCheckered(aNull, aSize, nLen, aW, aG);
+        }
+        else
+        {
+            aVirtualDevice.SetBackground(rStyleSettings.GetFieldColor());
+            aVirtualDevice.Erase();
+        }
+
+        // create processor and draw primitives
+        drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
+            aVirtualDevice,
+            aNewViewInformation2D);
+
+        if(pProcessor2D)
+        {
+            const drawinglayer::primitive2d::Primitive2DSequence aSequence(&aLineStartEndPrimitive, 1);
+
+            pProcessor2D->process(aSequence);
+            delete pProcessor2D;
+        }
+
+        // get result bitmap and scale
+        aRetval = aVirtualDevice.GetBitmap(Point(0, 0), aVirtualDevice.GetOutputSizePixel());
+    }
+
+    return aRetval;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

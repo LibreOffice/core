@@ -1189,12 +1189,22 @@ namespace
 
             if(rBitmapEx.IsTransparent())
             {
-                const Point aNull(0, 0);
-                static const sal_uInt32 nLen(8);
-                static const Color aW(COL_WHITE);
-                static const Color aG(0xef, 0xef, 0xef);
+                const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-                aVirtualDevice.DrawCheckered(aNull, rSize, nLen, aW, aG);
+                if(rStyleSettings.GetUIPreviewUsesCheckeredBackground())
+                {
+                    const Point aNull(0, 0);
+                    static const sal_uInt32 nLen(8);
+                    static const Color aW(COL_WHITE);
+                    static const Color aG(0xef, 0xef, 0xef);
+
+                    aVirtualDevice.DrawCheckered(aNull, rSize, nLen, aW, aG);
+                }
+                else
+                {
+                    aVirtualDevice.SetBackground(rStyleSettings.GetFieldColor());
+                    aVirtualDevice.Erase();
+                }
             }
 
             if(rBitmapEx.GetSizePixel().Width() >= rSize.Width() && rBitmapEx.GetSizePixel().Height() >= rSize.Height())

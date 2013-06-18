@@ -719,7 +719,7 @@ void SdrModel::ImpCreateTables()
     {
         if( !bExtColorTable || i != XCOLOR_LIST )
             maProperties[i] = XPropertyList::CreatePropertyList (
-                (XPropertyListType) i, aTablePath, (XOutdevItemPool*)pItemPool );
+                (XPropertyListType) i, aTablePath );
     }
 }
 

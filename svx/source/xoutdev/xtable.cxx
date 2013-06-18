@@ -41,19 +41,13 @@ Color RGB_Color( ColorData nColorName )
 
 XPropertyList::XPropertyList(
     XPropertyListType type,
-    const String& rPath,
-    XOutdevItemPool* pInPool
+    const String& rPath
 ) : meType           ( type ),
     maName           ( RTL_CONSTASCII_USTRINGPARAM( "standard" ) ),
     maPath           ( rPath ),
-    mpXPool          ( pInPool ),
     mbListDirty      ( true ),
     mbEmbedInDocument( false )
 {
-    if( !mpXPool )
-    {
-        mpXPool = static_cast< XOutdevItemPool* >(&SdrObject::GetGlobalDrawObjectItemPool());
-    }
 //    fprintf (stderr, "Create type %d count %d\n", (int)meType, count++);
 }
 
@@ -217,13 +211,12 @@ bool XPropertyList::SaveTo( const uno::Reference< embed::XStorage > &xStorage,
 }
 
 XPropertyListRef XPropertyList::CreatePropertyList( XPropertyListType t,
-                                                    const String& rPath,
-                                                    XOutdevItemPool* pXPool )
+                                                    const String& rPath )
 {
     XPropertyListRef pRet;
 
 #define MAP(e,c) \
-        case e: pRet = XPropertyListRef (new c( rPath, pXPool ) ); break
+        case e: pRet = XPropertyListRef (new c( rPath ) ); break
     switch (t) {
         MAP( XCOLOR_LIST, XColorList );
         MAP( XLINE_END_LIST, XLineEndList );
@@ -243,8 +236,7 @@ XPropertyListRef XPropertyList::CreatePropertyList( XPropertyListType t,
 
 XPropertyListRef
 XPropertyList::CreatePropertyListFromURL( XPropertyListType t,
-                                          const OUString & rURLStr,
-                                          XOutdevItemPool* pXPool )
+                                          const OUString & rURLStr )
 {
     INetURLObject aURL( rURLStr );
     INetURLObject aPathURL( aURL );
@@ -253,7 +245,7 @@ XPropertyList::CreatePropertyListFromURL( XPropertyListType t,
     aPathURL.removeFinalSlash();
 
     XPropertyListRef pList = XPropertyList::CreatePropertyList(
-        t, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool );
+        t, aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
     pList->SetName( aURL.getName() );
 
     return pList;

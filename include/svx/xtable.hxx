@@ -43,7 +43,6 @@
 class Color;
 class Bitmap;
 class VirtualDevice;
-class XOutdevItemPool;
 
 // Standard-Vergleichsstring
 extern sal_Unicode pszStandard[]; // "standard"
@@ -212,15 +211,13 @@ protected:
     XPropertyListType   meType;
     String              maName; // not persistent
     String              maPath;
-    XOutdevItemPool*    mpXPool;
 
     XPropertyEntryList_impl maList;
 
     bool                mbListDirty;
     bool                mbEmbedInDocument;
 
-                        XPropertyList( XPropertyListType t, const String& rPath,
-                                       XOutdevItemPool* pXPool = NULL );
+                        XPropertyList( XPropertyListType t, const String& rPath );
 
     virtual Bitmap      CreateBitmapForUI( long nIndex ) = 0;
 
@@ -268,12 +265,10 @@ public:
 
     // Factory method for sub-classes
     static XPropertyListRef CreatePropertyList( XPropertyListType t,
-                                                const String& rPath,
-                                                XOutdevItemPool* pXPool = NULL );
+                                                const String& rPath );
     // as above but initializes name as expected
     static XPropertyListRef CreatePropertyListFromURL( XPropertyListType t,
-                                                       const OUString & rUrl,
-                                                       XOutdevItemPool* pXPool = NULL );
+                                                       const OUString & rUrl );
 
     // helper accessors
     inline XDashListRef  AsDashList();
@@ -294,9 +289,8 @@ protected:
     virtual Bitmap  CreateBitmapForUI( long nIndex );
 
 public:
-    explicit        XColorList( const String& rPath,
-                                XOutdevItemPool* pXInPool = NULL ) :
-        XPropertyList( XCOLOR_LIST, rPath, pXInPool ) {}
+    explicit XColorList( const String& rPath )
+        : XPropertyList( XCOLOR_LIST, rPath ) {}
 
     using XPropertyList::Replace;
     using XPropertyList::Remove;
@@ -319,20 +313,11 @@ class impXLineEndList;
 
 class SVX_DLLPUBLIC XLineEndList : public XPropertyList
 {
-private:
-    impXLineEndList*    mpData;
-
-    void impCreate();
-    void impDestroy();
-
 protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit        XLineEndList(
-                        const String& rPath,
-                        XOutdevItemPool* pXPool = 0
-                    );
+    explicit        XLineEndList( const String& rPath );
     virtual         ~XLineEndList();
 
     using XPropertyList::Remove;
@@ -352,23 +337,16 @@ class impXDashList;
 class SVX_DLLPUBLIC XDashList : public XPropertyList
 {
 private:
-    impXDashList*       mpData;
     Bitmap              maBitmapSolidLine;
     String              maStringSolidLine;
     String              maStringNoLine;
-
-    void impCreate();
-    void impDestroy();
 
 protected:
     Bitmap ImpCreateBitmapForXDash(const XDash* pDash);
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit            XDashList(
-                            const String& rPath,
-                            XOutdevItemPool* pXPool = 0
-                        );
+    explicit            XDashList(const String& rPath);
     virtual             ~XDashList();
 
     using XPropertyList::Replace;
@@ -399,18 +377,11 @@ class impXHatchList;
 
 class SVX_DLLPUBLIC XHatchList : public XPropertyList
 {
-private:
-    impXHatchList*      mpData;
-
-    void impCreate();
-    void impDestroy();
-
 protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit XHatchList( const String& rPath,
-                         XOutdevItemPool* pXPool = 0 );
+    explicit XHatchList( const String& rPath );
     virtual ~XHatchList();
 
     using XPropertyList::Replace;
@@ -431,20 +402,11 @@ class impXGradientList;
 
 class SVX_DLLPUBLIC XGradientList : public XPropertyList
 {
-private:
-    impXGradientList* mpData;
-
-    void impCreate();
-    void impDestroy();
-
 protected:
     virtual Bitmap CreateBitmapForUI(long nIndex);
 
 public:
-    explicit    XGradientList(
-                    const String& rPath,
-                    XOutdevItemPool* pXPool = 0
-                );
+    explicit    XGradientList( const String& rPath );
     virtual     ~XGradientList();
 
     using XPropertyList::Replace;
@@ -468,9 +430,8 @@ protected:
     virtual Bitmap CreateBitmapForUI( long nIndex );
 
 public:
-    explicit        XBitmapList( const String& rPath,
-                                 XOutdevItemPool* pXInPool = NULL )
-                        : XPropertyList( XBITMAP_LIST, rPath, pXInPool ) {}
+    explicit XBitmapList( const String& rPath )
+        : XPropertyList( XBITMAP_LIST, rPath ) {}
 
     using XPropertyList::Replace;
     using XPropertyList::Remove;

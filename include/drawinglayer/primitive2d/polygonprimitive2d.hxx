@@ -287,6 +287,13 @@ namespace drawinglayer
                 const attribute::LineStartEndAttribute& rStart,
                 const attribute::LineStartEndAttribute& rEnd);
 
+            /// constructor without stroking
+            PolygonStrokeArrowPrimitive2D(
+                const basegfx::B2DPolygon& rPolygon,
+                const attribute::LineAttribute& rLineAttribute,
+                const attribute::LineStartEndAttribute& rStart,
+                const attribute::LineStartEndAttribute& rEnd);
+
             /// data read access
             const attribute::LineStartEndAttribute& getStart() const { return maStart; }
             const attribute::LineStartEndAttribute& getEnd() const { return maEnd; }

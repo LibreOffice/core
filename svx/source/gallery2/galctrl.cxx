@@ -258,14 +258,25 @@ void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
     }
 }
 
-void drawCheckered(OutputDevice& rOut, const Point& rPos, const Size& rSize)
+void drawTransparenceBackground(OutputDevice& rOut, const Point& rPos, const Size& rSize)
 {
-    // draw checkered background
-    static const sal_uInt32 nLen(8);
-    static const Color aW(COL_WHITE);
-    static const Color aG(0xef, 0xef, 0xef);
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-    rOut.DrawCheckered(rPos, rSize, nLen, aW, aG);
+    if(rStyleSettings.GetUIPreviewUsesCheckeredBackground())
+    {
+        // draw checkered background
+        static const sal_uInt32 nLen(8);
+        static const Color aW(COL_WHITE);
+        static const Color aG(0xef, 0xef, 0xef);
+
+        rOut.DrawCheckered(rPos, rSize, nLen, aW, aG);
+    }
+    else
+    {
+        rOut.SetLineColor();
+        rOut.SetFillColor(rStyleSettings.GetFieldColor());
+        rOut.DrawRect(Rectangle(rPos, rSize));
+    }
 }
 
 DBG_NAME(GalleryIconView)
@@ -381,7 +392,7 @@ void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
                 if(bTransparent)
                 {
                     // draw checkered background for full rectangle.
-                    drawCheckered(*pDev, rRect.TopLeft(), rRect.GetSize());
+                    drawTransparenceBackground(*pDev, rRect.TopLeft(), rRect.GetSize());
                 }
 
                 aGraphic.Draw( pDev, aPos, aSize );
@@ -599,7 +610,7 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
                     if(bTransparent)
                     {
                         // draw checkered background
-                        drawCheckered(rDev, aPos, aSize);
+                        drawTransparenceBackground(rDev, aPos, aSize);
                     }
 
                     aGrfObj.Draw( &rDev, aPos, aSize );

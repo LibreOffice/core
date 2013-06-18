@@ -114,6 +114,8 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 
     sal_uInt32 nModelPos;
     FmFormModel *pModel = NULL;
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
     for( nModelPos = 0; nModelPos < nFavCount; nModelPos++ )
     {
         BitmapEx aThumb;
@@ -122,17 +124,27 @@ void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 
         if(!!aThumb)
         {
-            static const sal_uInt32 nLen(8);
-            static const Color aW(COL_WHITE);
-            static const Color aG(0xef, 0xef, 0xef);
             VirtualDevice aVDev;
             const Point aNull(0, 0);
             const Size aSize(aThumb.GetSizePixel());
 
             aVDev.SetOutputSizePixel(aSize);
-            aVDev.DrawCheckered(aNull, aSize, nLen, aW, aG);
-            aVDev.DrawBitmapEx(aNull, aThumb);
 
+            if(rStyleSettings.GetUIPreviewUsesCheckeredBackground())
+            {
+                static const sal_uInt32 nLen(8);
+                static const Color aW(COL_WHITE);
+                static const Color aG(0xef, 0xef, 0xef);
+
+                aVDev.DrawCheckered(aNull, aSize, nLen, aW, aG);
+            }
+            else
+            {
+                aVDev.SetBackground(rStyleSettings.GetFieldColor());
+                aVDev.Erase();
+            }
+
+            aVDev.DrawBitmapEx(aNull, aThumb);
             maFavoritesHorizontal.push_back(aVDev.GetBitmap(aNull, aSize));
         }
     }

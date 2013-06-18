@@ -773,7 +773,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
             aPathURL.removeFinalSlash();
 
             XDashListRef pDshLst = XPropertyList::CreatePropertyList(
-                XGRADIENT_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool )->AsDashList();
+                XGRADIENT_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ) )->AsDashList();
             pDshLst->SetName( aURL.getName() );
 
             if( pDshLst->Load() )

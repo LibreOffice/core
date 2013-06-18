@@ -240,7 +240,7 @@ bool DocumentSettings::LoadList( XPropertyListType t, const OUString &rInPath,
     }
 
     XPropertyListRef pList = XPropertyList::CreatePropertyList(
-        t, aPath, (XOutdevItemPool*)&pDoc->GetPool() );
+        t, aPath );
     pList->SetName( aName );
 
     if( pList->LoadFrom( xStorage, rInPath ) )

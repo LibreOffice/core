@@ -651,7 +651,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
 
             // save list
             XGradientListRef pGrdList = XPropertyList::CreatePropertyList(
-                XGRADIENT_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ), pXPool )->AsGradientList();
+                XGRADIENT_LIST, aPathURL.GetMainURL( INetURLObject::NO_DECODE ) )->AsGradientList();
             pGrdList->SetName( aURL.getName() );
 
             if ( pGrdList->Load() )
