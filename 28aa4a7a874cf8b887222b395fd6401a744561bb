@@ -34,6 +34,24 @@
       "revId": "28aa4a7a874cf8b887222b395fd6401a744561bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//7Hs\u003d",
+        "filename": "Repository.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-06-18T08:47:15Z",
+      "side": 1,
+      "message": "@Marcos: We dont want any commas between instoofiltmsi and qslnkmsi etc. as this list is whitespace separated, not comma separated. Actually it seems to DISABLE_ATL line above also has an additional comma between oleautobridge and inprocserv (and thus should be fixed by removing that comma).\n\n@Matus: $(if $(foo),bar,baz,baz1) evalutes to \u0027bar\u0027 if foo is non-empty and to \u0027baz,baz1\u0027 if not. So differing from GNU make documentation, the else-part is \"all the rest\", not only the third argument. Of course, we dont want that behaviour here, and relying on undocumented stuff might be tricky in the long run anyway.",
+      "parentUuid": "AAAAXH//7LU\u003d",
+      "revId": "28aa4a7a874cf8b887222b395fd6401a744561bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
