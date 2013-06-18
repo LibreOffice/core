@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,python_shell,$(call gb_CustomTarget_get_workdir,pyuno/python_shell)))
 
-$(eval $(call gb_Package_add_file,python_shell,bin/pyuno/python,python.sh))
+$(eval $(call gb_Package_set_outdir,python_shell,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_file,python_shell,$(gb_Package_PROGRAMDIRNAME)/python,python.sh))
 
 # vim: set noet sw=4 ts=4:

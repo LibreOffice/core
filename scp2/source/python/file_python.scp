@@ -59,9 +59,9 @@ End
 #ifndef SYSTEM_PYTHON
 File gid_File_Py_Bin_Python
     BIN_FILE_BODY;
-    Name = EXENAME(pyuno/python);
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
+    Name = "python_shell.filelist";
+    Dir = FILELIST_DIR;
+    Styles = (FILELIST, PACKED);
 End
 
 #ifndef MACOSX
