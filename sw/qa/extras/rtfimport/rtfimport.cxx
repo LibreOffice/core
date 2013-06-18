@@ -138,6 +138,7 @@ public:
     void testN818997();
     void testFdo64671();
     void testFdo62044();
+    void testN825305();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -265,6 +266,7 @@ void Test::run()
         {"n818997.rtf", &Test::testN818997},
         {"fdo64671.rtf", &Test::testFdo64671},
         {"fdo62044.rtf", &Test::testFdo62044},
+        {"n825305.rtf", &Test::testN825305},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1260,6 +1262,18 @@ void Test::testFdo62044()
 
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Heading 1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(xPropertySet, "CharHeight")); // Was 18, i.e. reset back to original value.
+}
+
+void Test::testN825305()
+{
+    // The problem was that the textbox wasn't transparent, due to unimplemented fFilled == 0.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertyState> xPropertyState(xDraws->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(xDraws->getByIndex(1), "BackColorTransparency"));
+    beans::PropertyState ePropertyState = xPropertyState->getPropertyState("BackColorTransparency");
+    // Was beans::PropertyState_DEFAULT_VALUE.
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
