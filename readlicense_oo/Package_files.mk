@@ -12,7 +12,6 @@ $(eval $(call gb_Package_Package,readlicense_oo_files,$(SRCDIR)/readlicense_oo))
 # LICENSE (upper case) is copied without EOL conversion from license.txt
 # license.txt is converted, prior to copy, see Package_license.mk
 $(eval $(call gb_Package_add_file,readlicense_oo_files,bin/osl/LICENSE,txt/license.txt))
-$(eval $(call gb_Package_add_file,readlicense_oo_files,bin/ure/LICENSE,txt/license.txt))
 
 $(eval $(call gb_Package_add_file,readlicense_oo_files,bin/NOTICE,txt/NOTICE))
 

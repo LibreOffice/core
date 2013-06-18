@@ -15,15 +15,8 @@ readlicense_oo_DIR := $(call gb_CustomTarget_get_workdir,readlicense_oo/readme)
 # what we need here is: gb_WITH_LANG_OR_DEFAULT ;-)
 readlicense_oo_LANGS := en-US $(filter-out en-US,$(gb_WITH_LANG))
 
-ifneq ($(OS),WNT)
-readlicense_oo_READMEs := $(foreach lang,$(readlicense_oo_LANGS),$(readlicense_oo_DIR)/README_$(lang))
-readlicense_oo_README_PATTERN := $(readlicense_oo_DIR)/README_%
-else
-readlicense_oo_READMEs := $(foreach lang,$(readlicense_oo_LANGS),$(readlicense_oo_DIR)/readme_$(lang).txt)
-readlicense_oo_README_PATTERN := $(readlicense_oo_DIR)/readme_%.txt
-endif
-
-$(call gb_CustomTarget_get_target,readlicense_oo/readme) : $(readlicense_oo_READMEs)
+$(call gb_CustomTarget_get_target,readlicense_oo/readme) : \
+	$(foreach lang,$(readlicense_oo_LANGS),$(readlicense_oo_DIR)/$(call gb_README,$(lang)))
 
 ifeq ($(strip $(gb_WITH_LANG)),)
 readlicense_oo_README_XRM := $(SRCDIR)/readlicense_oo/docs/readme.xrm
@@ -48,7 +41,11 @@ $(readlicense_oo_DIR)/readme.xrm : \
 
 endif
 
-$(readlicense_oo_README_PATTERN) : \
+readlicense_oo_README_SED := \
+	-e 's,$${PRODUCTNAME},LibreOffice,g' \
+	-e 's,$${PRODUCTVERSION},$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR),g' \
+
+$(readlicense_oo_DIR)/$(call gb_README,%) : \
 		$(SRCDIR)/readlicense_oo/docs/readme.xsl \
 		$(readlicense_oo_README_XRM) \
 		| $(readlicense_oo_DIR)/.dir \
@@ -62,13 +59,13 @@ $(readlicense_oo_README_PATTERN) : \
 			--stringparam os1 $(OS) \
 			--stringparam type text \
 			$< \
-			$(readlicense_oo_README_XRM) && \
-		$(if $(filter WNT,$(OS)) \
-			,$(gb_AWK) 'sub("$$","\r")' $@.out > $@.tmp && \
-				mv $@.tmp $@ && \
-				rm $@.out \
-			,mv $@.out $@ \
+			$(readlicense_oo_README_XRM) \
+		$(if $(filter WNT,$(OS)), \
+			&& $(gb_AWK) 'sub("$$","\r")' $@.out > $@.tmp \
+			&& mv $@.tmp $@.out \
 		) \
+		&& sed $(readlicense_oo_README_SED) $@.out > $@ \
+		&& rm $@.out \
 	)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

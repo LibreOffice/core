@@ -1,6 +1,5 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
-#
 # This file is part of the LibreOffice project.
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -8,22 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-gb_LICENSE := license.txt
-gb_README = readme_$(1).txt
+$(eval $(call gb_Package_Package,odk_share_readme,$(OUTDIR)/bin))
 
-gb_Helper_get_rcfile = $(1).ini
+$(eval $(call gb_Package_set_outdir,odk_share_readme,$(INSTDIR)))
 
-gb_Helper_LIBRARY_PATH_VAR := PATH
+$(eval $(call gb_Package_add_files,odk_share_readme,$(gb_Package_SDKDIRNAME)/share/readme,\
+	LICENSE.html \
+	osl/$(gb_LICENSE) \
+	osl/$(call gb_README,en-US) \
+))
 
-gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
-
-gb_OSDEFS := \
-	-DWINVER=0x0500 \
-	-D_WIN32_IE=0x0500 \
-	-DWIN32 \
-	-DWNT \
-	-DNOMINMAX \
-
-gb_UWINAPI := uwinapi
-
-# vim:set noexpandtab:
+# vim: set noet sw=4 ts=4:

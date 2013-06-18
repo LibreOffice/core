@@ -11,6 +11,8 @@ gb_AWK := awk
 gb_YACC := bison
 
 gb_CLASSPATHSEP := :
+gb_LICENSE := LICENSE
+gb_README = README_$(1)
 
 # use CC/CXX if they are nondefaults
 ifneq ($(origin CC),default)

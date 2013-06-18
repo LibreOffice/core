@@ -10,6 +10,5 @@
 $(eval $(call gb_Package_Package,readlicense_oo_license,$(call gb_CustomTarget_get_workdir,readlicense_oo/license)))
 
 $(eval $(call gb_Package_add_file,readlicense_oo_license,bin/osl/license.txt,license.txt))
-$(eval $(call gb_Package_add_file,readlicense_oo_license,bin/ure/license.txt,license.txt))
 
 # vim: set noet sw=4 ts=4:

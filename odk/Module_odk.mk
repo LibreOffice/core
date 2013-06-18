@@ -28,6 +28,7 @@ $(eval $(call gb_Module_add_targets,odk,\
 	Package_odk_headers_generated \
 	Package_settings \
 	Package_settings_generated \
+	Package_share_readme \
 	PackageSet_odk_headers \
 ))
 

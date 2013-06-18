@@ -25,4 +25,14 @@ $(eval $(call gb_Package_add_files,odk_lib,$(gb_Package_SDKDIRNAME)/lib,\
 	$(if $(filter LINUX,$(OS)),$(notdir $(call gb_StaticLibrary_get_target,salcpprt))) \
 ))
 
+ifneq (,$(filter-out MACOSX WNT,$(OS)))
+define odk_add_sybolic_link
+$(call gb_Package_add_symbolic_link,odk_lib,$(gb_Package_SDKDIRNAME)/lib/$(1),../../ure-link/lib/$(1).3)
+
+endef
+
+$(foreach lib,cppu cppuhelper purpenvhelper sal salhelper,\
+$(eval $(call odk_add_sybolic_link,$(notdir $(call gb_Library_get_target,$(lib))))))
+endif
+
 # vim: set noet sw=4 ts=4:

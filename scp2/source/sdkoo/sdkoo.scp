@@ -29,82 +29,17 @@ Installation gid_Installation_Sdk
 #endif
 End
 
-#if defined MACOSX
-
-Directory gid_Dir_Basis_Sdk
-    ParentID = PREDEFINED_PROGDIR;
-    DosName = "LibreOffice${PRODUCTVERSION}_SDK";
-End
-
-#elif defined WNT
-
-Directory gid_Dir_Sdkoo_Root
-    ParentID = PREDEFINED_PROGDIR;
-    HostName = "${PRODUCTNAME}_${PRODUCTVERSION}_${POSTVERSIONEXTENSION}";
-    Styles = (OFFICEDIRECTORY, ISINSTALLLOCATION);
-End
-
-Directory gid_Dir_Basis_Sdk
-    ParentID = gid_Dir_Sdkoo_Root;
-    DosName = "sdk";
-End
-
-#else
-
-Directory gid_Dir_Basis_Sdk
-    ParentID = PREDEFINED_PROGDIR;
-    DosName = "sdk";
-End
-
-#endif
-
-Directory gid_Dir_Share_Sdk
-    ParentID = gid_Dir_Basis_Sdk;
-    DosName = "share";
-End
-
-Directory gid_Dir_Share_Readme_Sdk
-    ParentID = gid_Dir_Share_Sdk;
-    DosName = "readme";
-End
-
-
 Module gid_Module_Root_SDK
     Name = "sdkoo";
     Description = "sdkoo";
     PackageInfo = "packinfo_sdkoo.txt";
 End
 
-
-File gid_File_Txt_License
+File gid_File_Pakage_odk_share_readme
     TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Readme_Sdk;
-  #ifdef UNX
-    Name = "LICENSE";
-  #endif
-  #ifdef WNT
-    Name = "license.txt";
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
-File gid_File_Html_License
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Readme_Sdk;
-    Name = "LICENSE.html";
-    Styles = (PACKED, SCPZIP_REPLACE);
-End
-
-File gid_File_Txt_Readme
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Readme_Sdk;
-  #ifdef UNX
-    Name = "README_en-US";
-  #endif
-  #ifdef WNT
-    Name = "readme_en-US.txt";
-  #endif
-    Styles = (PACKED, SCPZIP_REPLACE);
+    Dir = FILELIST_SDK_DIR;
+    Name = "odk_share_readme.filelist";
+    Styles = (FILELIST,USE_INTERNAL_RIGHTS);
 End
 
 File gid_File_Package_odk_bin
@@ -251,64 +186,5 @@ File gid_File_Zip_uno_loader_classes
     Dir = FILELIST_SDK_DIR;
     Name = "odk_uno_loader_classes.filelist";
     Styles = (FILELIST,USE_INTERNAL_RIGHTS);
-End
-#endif
-
-#if (!defined(WNT) && !defined( MACOSX) )
-Directory gid_Dir_Lib_Sdk    
-    Styles = (CREATE);
-    ParentID = gid_Dir_Basis_Sdk;
-    DosName = "lib";
-End
-#endif
-
-#if (!defined(WNT) && !defined( MACOSX) )
-Unixlink gid_Unixlink_Sal_Link_Sdk
-    BIN_FILE_BODY;
-    Styles = ();
-    Name = SCP2_URE_DL_UNO_NORMAL("sal");
-    Dir = gid_Dir_Lib_Sdk;
-    Target = "../../ure-link/lib/" SCP2_URE_DL_UNO_VER("sal", "3");
-End
-#endif
-
-#if (!defined(WNT) && !defined( MACOSX) )
-Unixlink gid_Unixlink_Salhelper_Link_Sdk
-    BIN_FILE_BODY;
-    Styles = ();
-    Name = SCP2_URE_DL_UNO_COMID_NORMAL("salhelper");
-    Dir = gid_Dir_Lib_Sdk;
-    Target = "../../ure-link/lib/" SCP2_URE_DL_UNO_COMID_VER("salhelper", "3");
-End
-#endif
-
-#if (!defined(WNT) && !defined( MACOSX) )
-Unixlink gid_Unixlink_Cppu_Link_Sdk
-    BIN_FILE_BODY;
-    Styles = ();
-    Name = SCP2_URE_DL_UNO_NORMAL("cppu");
-    Dir = gid_Dir_Lib_Sdk;
-    Target = "../../ure-link/lib/" SCP2_URE_DL_UNO_VER("cppu", "3");
-End
-#endif
-
-#if (!defined(WNT) && !defined( MACOSX) )
-Unixlink gid_Unixlink_Cppuhelper_Link_Sdk
-    BIN_FILE_BODY;
-    Styles = ();
-    // Styles = (LAYERLINK);
-    Name = SCP2_URE_DL_UNO_COMID_NORMAL("cppuhelper");
-    Dir = gid_Dir_Lib_Sdk;
-    Target = "../../ure-link/lib/" SCP2_URE_DL_UNO_COMID_VER("cppuhelper", "3");
-End
-#endif
-
-#if (!defined(WNT) && !defined( MACOSX) )
-Unixlink gid_Unixlink_Purpenvhelper_Link_Sdk
-    BIN_FILE_BODY;
-    Styles = ();
-    Name = SCP2_URE_DL_UNO_COMID_NORMAL("purpenvhelper");
-    Dir = gid_Dir_Lib_Sdk;
-    Target = "../../ure-link/lib/" SCP2_URE_DL_UNO_COMID_VER("purpenvhelper", "3");
 End
 #endif
