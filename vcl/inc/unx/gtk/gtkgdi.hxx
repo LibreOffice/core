@@ -55,6 +55,8 @@ public:
                                                     Rectangle &rNativeBoundingRegion,
                                                     Rectangle &rNativeContentRegion );
     void updateSettings( AllSettings& rSettings );
+    static void refreshFontconfig( GtkSettings *pSettings );
+    static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );
 private:
     GtkWidget       *mpWindow;
     static GtkStyleContext *mpButtonStyle;
@@ -139,6 +141,8 @@ public:
 
     //helper methods for frame's UpdateSettings
     void updateSettings( AllSettings& rSettings );
+    static void refreshFontconfig( GtkSettings *pSettings );
+    static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );
 
     virtual bool            setClipRegion( const Region& );
     virtual void            ResetClipRegion();
