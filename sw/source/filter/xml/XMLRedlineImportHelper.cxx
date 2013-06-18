@@ -368,25 +368,32 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
     }
 
     // set redline mode & key
-    Any aAny;
+    try
+    {
+        Any aAny;
 
-    aAny.setValue( &bShowChanges, ::getBooleanCppuType() );
-    if ( bHandleShowChanges )
-        xModelPropertySet->setPropertyValue( sShowChanges, aAny );
-    else
-        xImportInfoPropertySet->setPropertyValue( sShowChanges, aAny );
+        aAny.setValue( &bShowChanges, ::getBooleanCppuType() );
+        if ( bHandleShowChanges )
+            xModelPropertySet->setPropertyValue( sShowChanges, aAny );
+        else
+            xImportInfoPropertySet->setPropertyValue( sShowChanges, aAny );
 
-    aAny.setValue( &bRecordChanges, ::getBooleanCppuType() );
-    if ( bHandleRecordChanges )
-        xModelPropertySet->setPropertyValue( sRecordChanges, aAny );
-    else
-        xImportInfoPropertySet->setPropertyValue( sRecordChanges, aAny );
+        aAny.setValue( &bRecordChanges, ::getBooleanCppuType() );
+        if ( bHandleRecordChanges )
+            xModelPropertySet->setPropertyValue( sRecordChanges, aAny );
+        else
+            xImportInfoPropertySet->setPropertyValue( sRecordChanges, aAny );
 
-    aAny <<= aProtectionKey;
-    if ( bHandleProtectionKey )
-        xModelPropertySet->setPropertyValue( sRedlineProtectionKey, aAny );
-    else
-        xImportInfoPropertySet->setPropertyValue( sRedlineProtectionKey, aAny);
+        aAny <<= aProtectionKey;
+        if ( bHandleProtectionKey )
+            xModelPropertySet->setPropertyValue( sRedlineProtectionKey, aAny );
+        else
+            xImportInfoPropertySet->setPropertyValue( sRedlineProtectionKey, aAny);
+    }
+    catch (const uno::RuntimeException &) // fdo#65882
+    {
+        SAL_WARN( "sw", "potentially benign ordering issue during shutdown" );
+    }
 }
 
 void XMLRedlineImportHelper::Add(
