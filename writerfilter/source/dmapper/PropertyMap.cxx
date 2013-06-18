@@ -1021,9 +1021,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
             sal_Int32 nPaperBin = m_nFirstPaperBin >= 0 ? m_nFirstPaperBin : m_nPaperBin >= 0 ? m_nPaperBin : 0;
             if( nPaperBin )
-                xFollowPageStyle->setPropertyValue( sTrayIndex, uno::makeAny( nPaperBin ) );
+                xFirstPageStyle->setPropertyValue( sTrayIndex, uno::makeAny( nPaperBin ) );
             if( xColumns.is() )
-                xFollowPageStyle->setPropertyValue(
+                xFirstPageStyle->setPropertyValue(
                     rPropNameSupplier.GetName( PROP_TEXT_COLUMNS ), uno::makeAny( xColumns ));
         }
 
