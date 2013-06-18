@@ -52,7 +52,6 @@
 #include "global.hxx"
 #include "table.hxx"
 #include "column.hxx"
-#include "cell.hxx"
 #include "poolhelp.hxx"
 #include "docpool.hxx"
 #include "stlpool.hxx"

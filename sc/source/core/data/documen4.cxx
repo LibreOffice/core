@@ -41,7 +41,6 @@
 #include "externalrefmgr.hxx"
 #include "colorscale.hxx"
 #include "attrib.hxx"
-#include "cell.hxx"
 #include "formulacell.hxx"
 #include "tokenarray.hxx"
 

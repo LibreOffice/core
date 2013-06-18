@@ -11,7 +11,6 @@
 #include "document.hxx"
 #include "table.hxx"
 #include "column.hxx"
-#include "cell.hxx"
 #include "formulacell.hxx"
 #include "docoptio.hxx"
 #include "globalnames.hxx"

@@ -84,7 +84,6 @@
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
 #include "macromgr.hxx"
-#include "cell.hxx"
 #include "formulacell.hxx"
 #include "clipcontext.hxx"
 

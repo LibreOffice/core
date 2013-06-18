@@ -19,7 +19,6 @@
 
 #include "column.hxx"
 #include "scitems.hxx"
-#include "cell.hxx"
 #include "formulacell.hxx"
 #include "document.hxx"
 #include "docpool.hxx"

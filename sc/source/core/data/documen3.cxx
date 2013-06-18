@@ -29,7 +29,6 @@
 #include <vcl/svapp.hxx>
 #include "document.hxx"
 #include "attrib.hxx"
-#include "cell.hxx"
 #include "table.hxx"
 #include "rangenam.hxx"
 #include "dbdata.hxx"

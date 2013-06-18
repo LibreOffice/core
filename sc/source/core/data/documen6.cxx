@@ -26,7 +26,6 @@
 #include <comphelper/processfactory.hxx>
 
 #include "document.hxx"
-#include "cell.hxx"
 #include "cellform.hxx"
 #include "patattr.hxx"
 #include "scrdata.hxx"

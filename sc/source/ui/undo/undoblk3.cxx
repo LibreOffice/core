@@ -50,7 +50,7 @@
 #include "docuno.hxx"
 #include "progress.hxx"
 #include "editutil.hxx"
-#include "cell.hxx"
+#include "editdataarray.hxx"
 
 // STATIC DATA ---------------------------------------------------------------
 
