@@ -515,7 +515,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     case '.':
                     case '\'':
                     case '\\':
-                        if( !aBuffer.getLength() )
+                        if( aBuffer.isEmpty() )
                         {
                             aBuffer.append( (sal_Unicode)'\'' );
                             aBuffer.append( sRange.copy( 0, i ) );
@@ -524,11 +524,11 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                             aBuffer.append( (sal_Unicode)'\\' );
                         // no break!
                     default:
-                        if( aBuffer.getLength() )
+                        if( !aBuffer.isEmpty() )
                             aBuffer.append( c );
                 }
             }
-            if( aBuffer.getLength() )
+            if( !aBuffer.isEmpty() )
             {
                 aBuffer.append( (sal_Unicode)'\'' );
                 sRange = aBuffer.makeStringAndClear();

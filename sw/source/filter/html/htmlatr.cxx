@@ -914,7 +914,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
         if( nDir != rHWrt.nDirection )
         {
-            if( sOut.getLength() )
+            if( !sOut.isEmpty() )
                 rWrt.Strm() << sOut.makeStringAndClear().getStr();
             rHWrt.OutDirection( nDir );
         }
@@ -3022,7 +3022,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
     if( sRel.Len() )
         sOut.append(OUStringToOString(sRel, RTL_TEXTENCODING_ASCII_US));
 
-    if( sOut.getLength() )
+    if( !sOut.isEmpty() )
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
     if( bEvents )

@@ -816,7 +816,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
         HTMLOutFuncs::Out_Color( rWrt.Strm(), rFillColor, rHTMLWrt.eDestEnc );
     }
 
-    if (sOut.getLength())
+    if (!sOut.isEmpty())
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
     // und nun noch ALIGN, HSPACE und VSPACE

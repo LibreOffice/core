@@ -60,7 +60,7 @@ void RtfSdrExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance 
     if ( nEscherContainer == ESCHER_SpContainer )
     {
         m_nShapeType = ESCHER_ShpInst_Nil;
-        if ( m_pShapeStyle->getLength() )
+        if ( !m_pShapeStyle->isEmpty() )
             m_pShapeStyle->makeStringAndClear();
         m_pShapeStyle->ensureCapacity( 200 );
         m_aShapeProps.clear();
@@ -318,7 +318,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                             }
                         }
 
-                        if (aVerticies.getLength() )
+                        if (!aVerticies.isEmpty() )
                         {
                             // We know the number of vertices at the end only, so we have to prepend them here.
                             OStringBuffer aBuf;
@@ -326,7 +326,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                             aBuf.append(aVerticies.makeStringAndClear());
                             m_aShapeProps.insert(std::pair<OString,OString>("pVerticies", aBuf.makeStringAndClear()));
                         }
-                        if ( aSegmentInfo.getLength() )
+                        if ( !aSegmentInfo.isEmpty() )
                             m_aShapeProps.insert(std::pair<OString,OString>("pSegmentInfo", aSegmentInfo.makeStringAndClear()));
                     }
                     else

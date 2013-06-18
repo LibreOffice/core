@@ -1793,7 +1793,7 @@ sal_Bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                         comphelper::string::padToLength(sInsert, aFPos.nTabCnt, '\t');
                     if (aFPos.nSpaceCnt)
                         comphelper::string::padToLength(sInsert, sInsert.getLength() + aFPos.nSpaceCnt, ' ');
-                    if (sInsert.getLength())
+                    if (!sInsert.isEmpty())
                         GetDoc()->InsertString( *m_pCurCrsr, sInsert.makeStringAndClear());
                 }
                 // no break - still need to set orientation

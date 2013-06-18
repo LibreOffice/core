@@ -281,7 +281,7 @@ void SwHTMLWriter::OutCSS1_Property( const sal_Char *pProp,
             sOut.append(OUStringToOString(*pSVal, eDestEnc));
     }
 
-    if (sOut.getLength())
+    if (!sOut.isEmpty())
         Strm() << sOut.makeStringAndClear().getStr();
 }
 
@@ -524,7 +524,7 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
             sOut.append(sCSS1_rule_end);
             break;
         }
-        if (sOut.getLength())
+        if (!sOut.isEmpty())
             Strm() << sOut.makeStringAndClear().getStr();
     }
 }
@@ -2503,26 +2503,26 @@ static Writer& OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( Writer& rWrt,
 
     if( pOStr )
     {
-        if (sOut.getLength())
+        if (!sOut.isEmpty())
             sOut.append(' ');
         sOut.append(pOStr);
     }
 
     if( pCOStr )
     {
-        if (sOut.getLength())
+        if (!sOut.isEmpty())
             sOut.append(' ');
         sOut.append(pCOStr);
     }
 
     if( pBStr )
     {
-        if (sOut.getLength())
+        if (!sOut.isEmpty())
             sOut.append(' ');
         sOut.append(pBStr);
     }
 
-    if (sOut.getLength())
+    if (!sOut.isEmpty())
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_decoration, sOut.makeStringAndClear() );
     else if( bNone )
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_text_decoration, sCSS1_PV_none );
