@@ -120,6 +120,7 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
+                <property name="homogeneous">True</property>
                 <child>
                   <object class="GtkRadioButton" id="sizenormal">
                     <property name="label" translatable="yes">O_riginal size</property>
