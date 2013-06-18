@@ -23,6 +23,7 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <editeng/lspcitem.hxx>
 #include <svtools/ctrlbox.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 #include <svx/tbxcolorupdate.hxx>
 #include <svx/relfld.hxx>
 #include <editeng/svxenum.hxx>
@@ -56,7 +57,7 @@ class PopupControl;
 class PopupContainer;
 
 class ParaPropertyPanel
-    : public Control,
+    : public PanelLayout,
       public ::sfx2::sidebar::IContextChangeReceiver,
       public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
@@ -95,31 +96,21 @@ private:
      **
     ***********************************************************/
     //Alignment
-    ::boost::scoped_ptr<Window>             mpAlignToolBoxBackground;
-    ::boost::scoped_ptr<ToolBox>            mpAlignToolBox;
-    ::boost::scoped_ptr<Window>             mpTBxVertAlignBackground;
-    ::boost::scoped_ptr<ToolBox>            mpTBxVertAlign;
+    ToolBox*            mpAlignToolBox;
+    ToolBox*            mpTBxVertAlign;
     //NumBullet&Backcolor
-    ::boost::scoped_ptr<Window>             mpTBxNumBulletBackground;
-    ::boost::scoped_ptr<ToolBox>            mpTBxNumBullet;
-    ::boost::scoped_ptr<Window>             mpTBxBackColorBackground;
-    ::boost::scoped_ptr<ToolBox>            mpTBxBackColor;
+    ToolBox*            mpTBxNumBullet;
+    ToolBox*            mpTBxBackColor;
     //Paragraph spacing
-    ::boost::scoped_ptr<FixedText>          mpFTUL;
-    ::boost::scoped_ptr<Window>             mpTbxUL_IncDecBackground;
-    ::boost::scoped_ptr<ToolBox>            mpTbxUL_IncDec;
-    ::boost::scoped_ptr<SvxRelativeField>   mpTopDist;
-    ::boost::scoped_ptr<SvxRelativeField>   mpBottomDist;
-    ::boost::scoped_ptr<Window>             mpLineSPTbxBackground;
-    ::boost::scoped_ptr<ToolBox>            mpLineSPTbx;
-    ::boost::scoped_ptr<FixedText>          mpFTIndent;
-    ::boost::scoped_ptr<Window>             mpTbxIndent_IncDecBackground;
-    ::boost::scoped_ptr<ToolBox>            mpTbxIndent_IncDec;
-    ::boost::scoped_ptr<Window>             mpTbxProDemoteBackground;
-    ::boost::scoped_ptr<ToolBox>            mpTbxProDemote;
-    ::boost::scoped_ptr<SvxRelativeField>   mpLeftIndent;
-    ::boost::scoped_ptr<SvxRelativeField>   mpRightIndent;
-    ::boost::scoped_ptr<SvxRelativeField>   mpFLineIndent;
+    ToolBox*            mpTbxUL_IncDec;
+    SvxRelativeField*   mpTopDist;
+    SvxRelativeField*   mpBottomDist;
+    ToolBox*            mpLineSPTbx;
+    ToolBox*            mpTbxIndent_IncDec;
+    ToolBox*            mpTbxProDemote;
+    SvxRelativeField*   mpLeftIndent;
+    SvxRelativeField*   mpRightIndent;
+    SvxRelativeField*   mpFLineIndent;
 
     ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > mpColorUpdater;
 
@@ -128,11 +119,6 @@ private:
      ** Resources
      **
     ***********************************************************/
-    FixedImage  maFISpace1;
-    FixedImage  maFISpace2;
-    FixedImage  maFIndent1;
-    FixedImage  maFIndent2;
-    FixedImage  maFIndent3;
 
     Image  maSpace1;
     Image  maSpace2;
@@ -172,7 +158,7 @@ private:
     SfxMapUnit                      m_eULSpaceUnit;
     /****************************************************************
     **
-    ** Controll Items
+    ** Control Items
     **
     *****************************************************************/
 
