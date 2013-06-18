@@ -146,6 +146,15 @@ namespace svgio
             FillRule_evenodd
         };
 
+        enum BaselineShift
+        {
+            BaselineShift_Baseline,
+            BaselineShift_Sub,
+            BaselineShift_Super,
+            BaselineShift_Percentage,
+            BaselineShift_Length
+        };
+
         class SvgStyleAttributes
         {
         private:
@@ -198,6 +207,10 @@ namespace svgio
 
             // ClipRule setting (only valid wne mbIsClipPathContent == true, default is FillRule_nonzero)
             FillRule                    maClipRule;
+
+            // BaselineShift: Type and number (in case of BaselineShift_Percentage or BaselineShift_Length)
+            BaselineShift               maBaselineShift;
+            SvgNumber                   maBaselineShiftNumber;
 
             /// bitfield
 
@@ -425,6 +438,11 @@ namespace svgio
             const SvgMarkerNode* accessMarkerEndXLink() const;
             void setMarkerEndXLink(const rtl::OUString& rNew) { maMarkerEndXLink = rNew; }
 
+            // BaselineShift
+            void setBaselineShift(const BaselineShift aBaselineShift = BaselineShift_Baseline) { maBaselineShift = aBaselineShift; }
+            BaselineShift getBaselineShift() const { return maBaselineShift; }
+            void setBaselineShiftNumber(const SvgNumber& rBaselineShift = SvgNumber()) { maBaselineShiftNumber = rBaselineShift; }
+            SvgNumber getBaselineShiftNumber() const;
         };
     } // end of namespace svgreader
 } // end of namespace svgio
