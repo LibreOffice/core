@@ -21,7 +21,7 @@
 
 module com {  module sun {  module star {  module document {
 
-/** specifies a CMIS property value.
+/** specifies a CMIS property.
  */
 struct CmisProperty
 {
@@ -41,6 +41,19 @@ struct CmisProperty
         can not be empty.
     */
     boolean Required;
+
+    /** specifies if the property has multiple value
+    */
+    boolean MultiValued;
+
+    /** specifies if the property value can be freely set
+        or is restricted from a list of choices.
+    */
+    boolean OpenChoice;
+
+    /** specifies the possible choices of the values.
+    */
+    any Choices;
 
     /** specifies value of the property
     */
