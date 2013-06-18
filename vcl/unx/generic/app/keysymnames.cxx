@@ -442,6 +442,18 @@ namespace vcl_sal {
         { SunXK_Cut,   "Iškirpti" },
     };
 
+    static const struct KeysymNameReplacement aImplReplacements_Hungarian[] =
+    {
+        { XK_Right, "Jobbra" },
+        { XK_Left, "Balra" },
+        { XK_Up, "Fel" },
+        { XK_Down, "Le" },
+        { XK_Return, "Enter" },
+        { XK_space, "Szóköz" },
+        { XK_asterisk, "Csillag" },
+        { XK_slash, "Osztásjel" },
+    };
+
     static const struct KeyboardReplacements aKeyboards[] =
     {
         { "ca", aImplReplacements_Catalan, SAL_N_ELEMENTS(aImplReplacements_Catalan) },
@@ -450,6 +462,7 @@ namespace vcl_sal {
         { "es", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
         { "et", aImplReplacements_Estonian, SAL_N_ELEMENTS(aImplReplacements_Estonian) },
         { "fr", aImplReplacements_French, SAL_N_ELEMENTS(aImplReplacements_French) },
+        { "hu", aImplReplacements_Hungarian, SAL_N_ELEMENTS(aImplReplacements_Hungarian) },
         { "it", aImplReplacements_Italian, SAL_N_ELEMENTS(aImplReplacements_Italian) },
         { "lt", aImplReplacements_Lithuanian, SAL_N_ELEMENTS(aImplReplacements_Lithuanian) },
         { "nl", aImplReplacements_Dutch, SAL_N_ELEMENTS(aImplReplacements_Dutch) },

@@ -175,11 +175,22 @@ namespace vcl_sal {
         { PAPUGA_KEY_SHIFT, "Mayús" },
     };
 
+    static const struct KeysNameReplacement aImplReplacements_Hungarian[] =
+    {
+        { PAPUGA_KEY_RIGHT, "Jobbra" },
+        { PAPUGA_KEY_LEFT, "Balra" },
+        { PAPUGA_KEY_UP, "Fel" },
+        { PAPUGA_KEY_DOWN, "Le" },
+        { PAPUGA_KEY_ENTER, "Enter" },
+        { PAPUGA_KEY_SPACEBAR, "Szóköz" },
+    };
+
     static const struct KeyboardReplacements aKeyboards[] =
     {
         { "ast",aImplReplacements_Asturian, SAL_N_ELEMENTS(aImplReplacements_Asturian) },
         { "ca", aImplReplacements_Catalan, SAL_N_ELEMENTS(aImplReplacements_Catalan) },
         { "et", aImplReplacements_Estonian, SAL_N_ELEMENTS(aImplReplacements_Estonian) },
+        { "hu", aImplReplacements_Hungarian, SAL_N_ELEMENTS(aImplReplacements_Hungarian) },
         { "lt", aImplReplacements_Lithuanian, SAL_N_ELEMENTS(aImplReplacements_Lithuanian) },
         { "sl", aImplReplacements_Slovenian, SAL_N_ELEMENTS(aImplReplacements_Slovenian) },
         { "es", aImplReplacements_Spanish, SAL_N_ELEMENTS(aImplReplacements_Spanish) },
