@@ -44,7 +44,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/document/CmisPropertyValue.hpp>
+#include <com/sun/star/document/CmisProperty.hpp>
 
 #include <vcl/timer.hxx>
 #include "sfx2/dinfdlg.hxx"
@@ -250,7 +250,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
 
 SfxDocumentInfoItem::SfxDocumentInfoItem( const String& rFile,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
-        const uno::Sequence<document::CmisPropertyValue>& i_cmisProps,
+        const uno::Sequence<document::CmisProperty>& i_cmisProps,
         sal_Bool bIs )
     : SfxStringItem( SID_DOCINFO, rFile )
     , m_AutoloadDelay( i_xDocProps->getAutoloadSecs() )
@@ -2573,9 +2573,9 @@ void CmisPropertiesWindow::DoScroll( sal_Int32 nNewPos )
     }
 }
 
-Sequence< document::CmisPropertyValue > CmisPropertiesWindow::GetCmisProperties() const
+Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() const
 {
-    Sequence< document::CmisPropertyValue > aPropertiesSeq( m_aCmisPropertiesLines.size() );
+    Sequence< document::CmisProperty > aPropertiesSeq( m_aCmisPropertiesLines.size() );
     sal_Int32 i = 0;
     std::vector< CmisPropertyLine* >::const_iterator pIter;
     for ( pIter = m_aCmisPropertiesLines.begin();
@@ -2754,7 +2754,7 @@ sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
     if ( pInfo )
     {
         pInfo->ClearCmisProperties();
-        Sequence< document::CmisPropertyValue > aPropertySeq = m_pPropertiesCtrl->GetCmisProperties();
+        Sequence< document::CmisProperty > aPropertySeq = m_pPropertiesCtrl->GetCmisProperties();
         sal_Int32 i = 0, nCount = aPropertySeq.getLength();
         for ( ; i < nCount; ++i )
         {
