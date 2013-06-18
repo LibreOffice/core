@@ -899,7 +899,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                                    eCharset,
                                    false);
                     }
-                    if (aSynAuthority.getLength() == 0)
+                    if (aSynAuthority.isEmpty())
                     {
                         setInvalid();
                         return false;
@@ -965,7 +965,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                                    false);
                     }
                 }
-                if (aSynAuthority.getLength() == 0)
+                if (aSynAuthority.isEmpty())
                 {
                     setInvalid();
                     return false;
@@ -1987,7 +1987,7 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
     // new relative URL would neither be empty nor start with <"/"> nor start
     // with <1*rseg> (i.e., it could be mistaken for an absolute URL starting
     // with a scheme part), then the new relative URL is prefixed with "./":
-    if (aSynRelURIRef.getLength() == 0)
+    if (aSynRelURIRef.isEmpty())
     {
         if (pSubjectPathEnd - pSubjectPathBegin >= nMatch + 2
             && pSubjectPathBegin[nMatch] == '/'
@@ -2886,12 +2886,12 @@ bool INetURLObject::setHost(OUString const & rTheHost, bool bOctets,
             }
             break;
         case INET_PROT_LDAP:
-            if (aSynHost.getLength() == 0 && m_aPort.isPresent())
+            if (aSynHost.isEmpty() && m_aPort.isPresent())
                 return false;
             break;
 
         default:
-            if (aSynHost.getLength() == 0)
+            if (aSynHost.isEmpty())
                 return false;
             break;
     }
@@ -2944,7 +2944,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
                            PART_HTTP_PATH, '%', eCharset, true);
             }
-            if (aTheSynPath.getLength() == 0)
+            if (aTheSynPath.isEmpty())
                 aTheSynPath.append(sal_Unicode('/'));
             break;
 
@@ -2965,7 +2965,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
                            PART_HTTP_PATH, '%', eCharset, true);
             }
-            if (aTheSynPath.getLength() == 0)
+            if (aTheSynPath.isEmpty())
                 aTheSynPath.append(sal_Unicode('/'));
             break;
 
@@ -3008,7 +3008,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
                            PART_PCHAR, '%', eCharset, true);
             }
-            if (aTheSynPath.getLength() == 0)
+            if (aTheSynPath.isEmpty())
                 aTheSynPath.append(sal_Unicode('/'));
             break;
         }
@@ -3076,7 +3076,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
                            PART_NEWS_ARTICLE_LOCALPART, '%', eCharset, true);
             }
-            if (aTheSynPath.getLength() == 0)
+            if (aTheSynPath.isEmpty())
                 return false;
             ++pPos;
             aTheSynPath.append(sal_Unicode('@'));
@@ -3197,7 +3197,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                     appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
                                PART_PCHAR, '%', eCharset, false);
             }
-            if (aTheSynPath.getLength() == 0)
+            if (aTheSynPath.isEmpty())
                 aTheSynPath.append(sal_Unicode('/'));
             break;
 
@@ -3362,7 +3362,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
                            PART_URIC, '%', eCharset, true);
             }
-            if (aTheSynPath.getLength() == 0)
+            if (aTheSynPath.isEmpty())
                 return false;
             break;
         default:
@@ -3732,7 +3732,7 @@ INetURLObject::getAbbreviated(
     }
     else
     {
-        if (m_aAbsURIRef.getLength() != 0)
+        if (!m_aAbsURIRef.isEmpty())
         {
             sal_Unicode const * pSchemeBegin
                 = m_aAbsURIRef.getStr();
@@ -3874,7 +3874,7 @@ INetURLObject::getAbbreviated(
         aBuffer.
             append(decode(m_aFragment, cEscapePrefix, eMechanism, eCharset));
     }
-    if (aBuffer.getLength() != 0)
+    if (!aBuffer.isEmpty())
     {
         OUStringBuffer aResult(aBuffer);
         if (rStringWidth->queryStringWidth(aResult.makeStringAndClear())
@@ -3884,7 +3884,7 @@ INetURLObject::getAbbreviated(
                 if (i == 0)
                 {
                     aBuffer.setLength(aBuffer.getLength() - 1);
-                    if (aBuffer.getLength() == 0)
+                    if (aBuffer.isEmpty())
                         break;
                 }
                 else
@@ -4088,7 +4088,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                     break;
 
                 case INET_PROT_LDAP:
-                    if (aSynHost.getLength() == 0 && nThePort != 0)
+                    if (aSynHost.isEmpty() && nThePort != 0)
                     {
                         setInvalid();
                         return false;
@@ -4096,7 +4096,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                     break;
 
                 default:
-                    if (aSynHost.getLength() == 0)
+                    if (aSynHost.isEmpty())
                     {
                         setInvalid();
                         return false;
@@ -4289,7 +4289,7 @@ bool INetURLObject::removeSegment(sal_Int32 nIndex, bool bIgnoreFinalSlash)
     else
         aNewPath.append(m_aAbsURIRef.getStr() + aSegment.getEnd(),
                         m_aPath.getEnd() - aSegment.getEnd());
-    if (aNewPath.getLength() == 0 && !aSegment.isEmpty() &&
+    if (aNewPath.isEmpty() && !aSegment.isEmpty() &&
         m_aAbsURIRef[aSegment.getBegin()] == '/')
     {
         aNewPath.append(sal_Unicode('/'));
