@@ -205,13 +205,7 @@ bool WinSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
             Gdiplus::REAL aDpiY;
             Gdiplus::DllExports::GdipGetDpiY(pGraphics, &aDpiY);
 
-            // test code to check the current transformation at the graphics device
-            //Gdiplus::GpMatrix *pMatrix = NULL;
-            //Gdiplus::DllExports::GdipGetWorldTransform(pGraphics, pMatrix);
-            //Gdiplus::REAL elements[6];
-            //Gdiplus::DllExports::GdipGetMatrixElements(pMatrix, elements);
-            //Gdiplus::DllExports::GdipDeleteMatrix(pMatrix);
-
+            Gdiplus::DllExports::GdipResetWorldTransform(pGraphics);
             Gdiplus::DllExports::GdipScaleWorldTransform(pGraphics, Gdiplus::REAL(100.0) / aDpiX, Gdiplus::REAL(100.0) / aDpiY, Gdiplus::MatrixOrderAppend);
         }
 
