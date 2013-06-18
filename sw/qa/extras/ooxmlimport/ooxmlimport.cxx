@@ -118,6 +118,7 @@ public:
     void testN816593();
     void testN820509();
     void testN820788();
+    void testN820504();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -203,6 +204,7 @@ void Test::run()
         {"n816593.docx", &Test::testN816593},
         {"n820509.docx", &Test::testN820509},
         {"n820788.docx", &Test::testN820788},
+        {"n820504.docx", &Test::testN820504},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1435,6 +1437,16 @@ void Test::testN820788()
     uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
     // This was text::SizeType::FIX.
     CPPUNIT_ASSERT_EQUAL(text::SizeType::MIN, getProperty<sal_Int16>(xFrame, "SizeType"));
+}
+
+void Test::testN820504()
+{
+    uno::Reference<style::XStyleFamiliesSupplier> xFamiliesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xFamiliesAccess(xFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStylesAccess(xFamiliesAccess->getByName("ParagraphStyles"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStylesAccess->getByName("Default Style"), uno::UNO_QUERY);
+    // The problem was that the CharColor was set to AUTO (-1) even if we have some default char color set
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4040635), getProperty<sal_Int32>(xStyle, "CharColor"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
