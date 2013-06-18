@@ -1200,7 +1200,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
 
                 while( nLength-- )
                 {
-                    if( sTmp.getLength() )
+                    if( !sTmp.isEmpty() )
                         sTmp.append( (sal_Unicode)';' );
 
                     sTmp.append( *p++ );
@@ -1244,7 +1244,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
 
                 while( nLength-- )
                 {
-                    if( sTmp.getLength() )
+                    if( !sTmp.isEmpty() )
                         sTmp.append( (sal_Unicode)';' );
 
                     sTmp.append( p->Time );
@@ -1475,7 +1475,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
 
         for( nElement = 0; nElement < nLength; nElement++, pAny++ )
         {
-            if( sTmp.getLength() )
+            if( !sTmp.isEmpty() )
                 sTmp.append( (sal_Unicode)';' );
             convertValue( eAttributeName, sTmp2, *pAny );
             sTmp.append( sTmp2.makeStringAndClear() );
@@ -1557,7 +1557,7 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
 
         for( nElement = 0; nElement < nLength; nElement++, pAny++ )
         {
-            if( sTmp.getLength() )
+            if( !sTmp.isEmpty() )
                 sTmp.append( (sal_Unicode)';' );
             convertTiming( sTmp2, *pAny );
             sTmp.append( sTmp2.makeStringAndClear() );
@@ -1596,7 +1596,7 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
         {
             convertTiming( sTmp2, pEvent->Offset );
 
-            if( sTmp.getLength() )
+            if( !sTmp.isEmpty() )
                 sTmp.append( (sal_Unicode)'+' );
 
             sTmp.append( sTmp2.makeStringAndClear() );

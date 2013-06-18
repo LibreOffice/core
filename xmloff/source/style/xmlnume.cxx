@@ -326,7 +326,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
                                        sTmp.makeStringAndClear() );
         GetExport().GetMM100UnitConverter().convertNumLetterSync( sTmp, eType );
-        if( sTmp.getLength() )
+        if( !sTmp.isEmpty() )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                       XML_NUM_LETTER_SYNC,
                                            sTmp.makeStringAndClear() );

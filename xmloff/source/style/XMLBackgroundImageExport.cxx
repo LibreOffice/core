@@ -90,7 +90,7 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
             break;
         }
 
-        if( aOut.getLength() )
+        if( !aOut.isEmpty() )
         {
             aOut.append( sal_Unicode( ' ' ) );
 
@@ -115,7 +115,7 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
                 break;
             }
         }
-        if( aOut.getLength() )
+        if( !aOut.isEmpty() )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                   XML_POSITION, aOut.makeStringAndClear() );
 
@@ -127,7 +127,7 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
         {
             aOut.append( GetXMLToken(XML_BACKGROUND_NO_REPEAT) );
         }
-        if( aOut.getLength() )
+        if( !aOut.isEmpty() )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REPEAT,
                           aOut.makeStringAndClear() );
 

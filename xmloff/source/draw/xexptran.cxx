@@ -227,7 +227,7 @@ double Imp_GetDoubleChar(const OUString& rStr, sal_Int32& rPos, const sal_Int32 
             sNumberString.append(rStr[rPos++]);
     }
 
-    if(sNumberString.getLength())
+    if(!sNumberString.isEmpty())
     {
         if(bLookForUnits)
             rConv.convertDouble(fRetval, sNumberString.makeStringAndClear(), true);

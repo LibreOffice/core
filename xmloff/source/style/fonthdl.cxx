@@ -154,7 +154,7 @@ sal_Bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno:
 
             if( nFirst <= nLast )
             {
-                if( sValue.getLength() != 0L )
+                if( !sValue.isEmpty() )
                 {
                     sValue.append( sal_Unicode( ',' ) );
                     sValue.append( sal_Unicode( ' ' ));

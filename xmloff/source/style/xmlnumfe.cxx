@@ -372,7 +372,7 @@ void SvXMLNumFmtExport::AddToTextElement_Impl( const OUString& rString )
 
 void SvXMLNumFmtExport::FinishTextElement_Impl()
 {
-    if ( sTextContent.getLength() )
+    if ( !sTextContent.isEmpty() )
     {
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_TEXT,
                                   sal_True, sal_False );
@@ -1603,7 +1603,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         }
     }
 
-    if ( sTextContent.getLength() )
+    if ( !sTextContent.isEmpty() )
         bAnyContent = sal_True;     // element written in FinishTextElement_Impl
 
     FinishTextElement_Impl();       // final text element - before maps

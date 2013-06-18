@@ -296,7 +296,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_FORMAT,
                              sBuffer.makeStringAndClear() );
     GetExport().GetMM100UnitConverter().convertNumLetterSync( sBuffer, nNumbering);
-    if (sBuffer.getLength() )
+    if (!sBuffer.isEmpty() )
     {
         GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_NUM_LETTER_SYNC,
                                  sBuffer.makeStringAndClear());

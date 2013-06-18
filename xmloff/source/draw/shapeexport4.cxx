@@ -78,7 +78,7 @@ using ::com::sun::star::uno::Sequence;
 
 void ExportParameter( OUStringBuffer& rStrBuffer, const com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter )
 {
-    if ( rStrBuffer.getLength() )
+    if ( !rStrBuffer.isEmpty() )
         rStrBuffer.append( (sal_Unicode)' ' );
     if ( rParameter.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
     {
@@ -364,7 +364,7 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
         else
             aSegment = rSegments[ j ];
 
-        if ( aStrBuffer.getLength() )
+        if ( !aStrBuffer.isEmpty() )
             aStrBuffer.append( (sal_Unicode)' ' );
 
         sal_Int32 nParameter = 0;
