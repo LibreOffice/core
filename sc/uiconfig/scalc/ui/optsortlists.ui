@@ -141,7 +141,7 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Lists</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">lists</property>
+                <property name="mnemonic_widget">lists:border</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -157,7 +157,7 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Entries</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">entries</property>
+                <property name="mnemonic_widget">entries:border</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -167,7 +167,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTextView" id="entries">
+              <object class="GtkTextView" id="entries:border">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
@@ -181,7 +181,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTreeView" id="lists">
+              <object class="GtkTreeView" id="lists:border">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
