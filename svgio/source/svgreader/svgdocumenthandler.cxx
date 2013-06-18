@@ -80,9 +80,29 @@ namespace
                             {
                                 if(pLast)
                                 {
+                                    bool bAddGap(true);
+                                    static bool bNoGapsForBaselineShift(true);
+
+                                    if(bNoGapsForBaselineShift)
+                                    {
+                                        // With this option a baseline shift between two char parts ('words')
+                                        // will not add a space 'gap' to the end of the (non-last) word. This
+                                        // seems to be the standard behaviour, see last bugdoc attached #122524#
+                                        const svgio::svgreader::SvgStyleAttributes* pStyleLast = pLast->getSvgStyleAttributes();
+                                        const svgio::svgreader::SvgStyleAttributes* pStyleCurrent = pCandidate->getSvgStyleAttributes();
+
+                                        if(pStyleLast && pStyleCurrent && pStyleLast->getBaselineShift() != pStyleCurrent->getBaselineShift())
+                                        {
+                                            bAddGap = false;
+                                        }
+                                    }
+
                                     // add in-between whitespace (single space) to last
                                     // known character node
-                                    pLast->addGap();
+                                    if(bAddGap)
+                                    {
+                                        pLast->addGap();
+                                    }
                                 }
 
                                 // remember new last corected character node

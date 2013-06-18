@@ -178,6 +178,7 @@ namespace svgio
 
             // text tokens
             SVGTokenText,
+            SVGTokenBaselineShift,
 
             SVGTokenLast
         };

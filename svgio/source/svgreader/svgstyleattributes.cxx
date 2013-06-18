@@ -1160,6 +1160,8 @@ namespace svgio
             mpMarkerEndXLink(0),
             maFillRule(FillRule_notset),
             maClipRule(FillRule_nonzero),
+            maBaselineShift(BaselineShift_Baseline),
+            maBaselineShiftNumber(0),
             mbIsClipPathContent(SVGTokenClipPathNode == mrOwner.getType()),
             mbStrokeDasharraySet(false)
         {
@@ -1794,6 +1796,43 @@ namespace svgio
                     }
                     break;
                 }
+                case SVGTokenBaselineShift:
+                {
+                    if(aContent.getLength())
+                    {
+                        static rtl::OUString aStrSub(rtl::OUString::createFromAscii("sub"));
+                        static rtl::OUString aStrSuper(rtl::OUString::createFromAscii("super"));
+                        SvgNumber aNum;
+
+                        if(aContent.match(aStrSub))
+                        {
+                            setBaselineShift(BaselineShift_Sub);
+                        }
+                        else if(aContent.match(aStrSuper))
+                        {
+                            setBaselineShift(BaselineShift_Super);
+                        }
+                        else if(readSingleNumber(aContent, aNum))
+                        {
+                            setBaselineShiftNumber(aNum);
+
+                            if(Unit_percent == aNum.getUnit())
+                            {
+                                setBaselineShift(BaselineShift_Percentage);
+                            }
+                            else
+                            {
+                                setBaselineShift(BaselineShift_Length);
+                            }
+                        }
+                        else
+                        {
+                            // no BaselineShift or inherit (which is automatically)
+                            setBaselineShift(BaselineShift_Baseline);
+                        }
+                    }
+                    break;
+                }
                 default:
                 {
                     break;
@@ -2175,6 +2214,24 @@ namespace svgio
         {
             if(maFontSize.isSet())
             {
+                // #122524# Handle Unit_percent realtive to parent FontSize (see SVG1.1
+                // spec 10.10 Font selection properties ‘font-size’, lastline (klick 'normative
+                // definition of the property')
+                if(Unit_percent == maFontSize.getUnit())
+                {
+                    const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                    if(pSvgStyleAttributes)
+                    {
+                        const SvgNumber aParentNumber = pSvgStyleAttributes->getFontSize();
+
+                        return SvgNumber(
+                            aParentNumber.getNumber() * maFontSize.getNumber() * 0.01,
+                            aParentNumber.getUnit(),
+                            true);
+                    }
+                }
+
                 return maFontSize;
             }
 
@@ -2463,6 +2520,26 @@ namespace svgio
             return mpMarkerEndXLink;
         }
 
+        SvgNumber SvgStyleAttributes::getBaselineShiftNumber() const
+        {
+            // #122524# Handle Unit_percent realtive to parent BaselineShift
+            if(Unit_percent == maBaselineShiftNumber.getUnit())
+            {
+                const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+                if(pSvgStyleAttributes)
+                {
+                    const SvgNumber aParentNumber = pSvgStyleAttributes->getBaselineShiftNumber();
+
+                    return SvgNumber(
+                        aParentNumber.getNumber() * maBaselineShiftNumber.getNumber() * 0.01,
+                        aParentNumber.getUnit(),
+                        true);
+                }
+            }
+
+            return maBaselineShiftNumber;
+        }
     } // end of namespace svgreader
 } // end of namespace svgio
 

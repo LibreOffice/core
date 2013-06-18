@@ -204,7 +204,7 @@ namespace svgio
                 }
                 else
                 {
-                    parseAttribute(aTokenName, StrToSVGToken(aTokenName), xAttribs->getValueByIndex(a));
+                    parseAttribute(aTokenName, aSVGToken, xAttribs->getValueByIndex(a));
                 }
             }
 

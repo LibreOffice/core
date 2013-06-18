@@ -160,6 +160,7 @@ namespace svgio
         static OUString aSVGStrStrokeWidth(OUString::createFromAscii("stroke-width"));
 
         static OUString aSVGStrText(OUString::createFromAscii("text"));
+        static OUString aSVGStrBaselineShift(OUString::createFromAscii("baseline-shift"));
 
         SVGToken StrToSVGToken(const OUString& rStr)
         {
@@ -302,6 +303,7 @@ namespace svgio
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStrokeWidth, SVGTokenStrokeWidth));
 
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrText, SVGTokenText));
+                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrBaselineShift, SVGTokenBaselineShift));
             }
 
             const SVGTokenMapper::const_iterator aResult(aSVGTokenMapperList.find(rStr.startsWith("svg:") ? rStr.copy(4) : rStr));

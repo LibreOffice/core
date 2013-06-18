@@ -403,6 +403,38 @@ namespace svgio
                     }
                 }
 
+                // get BaselineShift
+                const BaselineShift aBaselineShift(rSvgStyleAttributes.getBaselineShift());
+
+                // apply BaselineShift
+                switch(aBaselineShift)
+                {
+                    case BaselineShift_Sub:
+                    {
+                        aPosition.setY(aPosition.getY() + aTextLayouterDevice.getUnderlineOffset());
+                        break;
+                    }
+                    case BaselineShift_Super:
+                    {
+                        aPosition.setY(aPosition.getY() + aTextLayouterDevice.getOverlineOffset());
+                        break;
+                    }
+                    case BaselineShift_Percentage:
+                    case BaselineShift_Length:
+                    {
+                        const SvgNumber aNumber(rSvgStyleAttributes.getBaselineShiftNumber());
+                        const double mfBaselineShift(aNumber.solve(*this, length));
+
+                        aPosition.setY(aPosition.getY() + mfBaselineShift);
+                        break;
+                    }
+                    default: // BaselineShift_Baseline
+                    {
+                        // nothing to do
+                        break;
+                    }
+                }
+
                 // get fill color
                 const basegfx::BColor aFill(rSvgStyleAttributes.getFill()
                     ? *rSvgStyleAttributes.getFill()
