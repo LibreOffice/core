@@ -847,7 +847,7 @@ private:
             if( aEvent.mnDelta == 0 )
                 aEvent.mnDelta = aEvent.mnNotchDelta;
             aEvent.mbHorz = TRUE;
-            aEvent.mnScrollLines = dY > 0 ? dX/WHEEL_EVENT_FACTOR : -dX/WHEEL_EVENT_FACTOR;
+            aEvent.mnScrollLines = dX > 0 ? dX/WHEEL_EVENT_FACTOR : -dX/WHEEL_EVENT_FACTOR;
             if( aEvent.mnScrollLines == 0 )
                 aEvent.mnScrollLines = 1;
 
