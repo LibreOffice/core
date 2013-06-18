@@ -808,14 +808,14 @@ OString generateClassDefinition(std::ostream& o,
             }
             if (propinterfaces.find("com/sun/star/beans/XFastPropertySet")
                 != propinterfaces.end()) {
-                if (buffer.getLength() > 0)
+                if (!buffer.isEmpty())
                     buffer.append(" | IMPLEMENTS_FAST_PROPERTY_SET");
                 else
                     buffer.append("IMPLEMENTS_FAST_PROPERTY_SET");
             }
             if (propinterfaces.find("com/sun/star/beans/XPropertyAccess")
                 != propinterfaces.end()) {
-                if (buffer.getLength() > 0)
+                if (!buffer.isEmpty())
                     buffer.append(" | IMPLEMENTS_PROPERTY_ACCESS");
                 else
                     buffer.append("IMPLEMENTS_PROPERTY_ACCESS");

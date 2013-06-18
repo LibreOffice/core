@@ -206,7 +206,7 @@ bool checkAttribute(
     for (sal_uInt16 i = 0; i < 9; i++)
     {
         if (attribute & attributes[i]) {
-            if (attributeValue.getLength() > 0) {
+            if (!attributeValue.isEmpty()) {
                 cast |= true;
                 attributeValue.append("|");
             }

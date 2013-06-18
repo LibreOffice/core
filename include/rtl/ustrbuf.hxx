@@ -421,7 +421,7 @@ public:
      */
     OUStringBuffer & append(const OUStringBuffer &str)
     {
-        if(str.getLength() > 0)
+        if(!str.isEmpty())
         {
             append( str.getStr(), str.getLength() );
         }
