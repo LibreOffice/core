@@ -170,7 +170,7 @@ void XMLSectionFootnoteConfigExport::exportXML(
             // and letter sync, if applicable
             rExport.GetMM100UnitConverter().convertNumLetterSync(
                 sBuf, nNumberingType );
-            if (sBuf.getLength())
+            if (!sBuf.isEmpty())
             {
                 rExport.AddAttribute(XML_NAMESPACE_STYLE,
                                      XML_NUM_LETTER_SYNC,

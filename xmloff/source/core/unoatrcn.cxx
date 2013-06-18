@@ -143,7 +143,7 @@ uno::Sequence< OUString > SAL_CALL SvUnoAttributeContainer::getElementNames(void
     for( sal_uInt16 nAttr = 0; nAttr < nAttrCount; nAttr++ )
     {
         OUStringBuffer sBuffer( mpContainer->GetAttrPrefix(nAttr) );
-        if( sBuffer.getLength() != 0L )
+        if( !sBuffer.isEmpty() )
             sBuffer.append( (sal_Unicode)':' );
         sBuffer.append( mpContainer->GetAttrLName(nAttr) );
         *pNames++ = sBuffer.makeStringAndClear();

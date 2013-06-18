@@ -471,7 +471,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                 break;
         }
 
-        if( sValueBuffer.getLength())
+        if( !sValueBuffer.isEmpty())
         {
             sValue = sValueBuffer.makeStringAndClear();
             sAttrName = rNamespaceMap.GetQNameByKey( nNameSpace, sAttrName );

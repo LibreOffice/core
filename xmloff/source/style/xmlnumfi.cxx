@@ -1077,7 +1077,7 @@ void SvXMLNumFmtElementContext::EndElement()
 
                 rParent.SetHasLongDoW( sal_False );     // only once
             }
-            if ( aContent.getLength() )
+            if ( !aContent.isEmpty() )
             {
                 lcl_EnquoteIfNecessary( aContent, rParent );
                 rParent.AddToCode( aContent.makeStringAndClear() );
@@ -1096,7 +1096,7 @@ void SvXMLNumFmtElementContext::EndElement()
             rParent.AddToCode( (sal_Unicode)'@');
             break;
         case XML_TOK_STYLE_FILL_CHARACTER:
-            if ( aContent.getLength() )
+            if ( !aContent.isEmpty() )
             {
                 rParent.AddToCode( (sal_Unicode)'*' );
                 rParent.AddToCode( aContent[0] );
@@ -1571,7 +1571,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
         }
     }
 
-    if ( !aFormatCode.getLength() )
+    if ( aFormatCode.isEmpty() )
     {
         //  insert empty format as empty string (with quotes)
         //  #93901# this check has to be done before inserting the conditions
@@ -2053,8 +2053,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
 
         //! collect all conditions first and adjust default to >=0, >0 or <0 depending on count
         //! allow blanks in conditions
-        sal_Bool bFirstCond = ( aConditions.getLength() == 0 );
-        if ( bFirstCond && aMyConditions.size() == 1 && sRealCond.compareToAscii( ">=0" ) == 0 )
+        if ( aConditions.isEmpty() && aMyConditions.size() == 1 && sRealCond.compareToAscii( ">=0" ) == 0 )
             bDefaultCond = sal_True;
 
         if ( nType == XML_TOK_STYLES_TEXT_STYLE && nIndex == 2 )
@@ -2111,7 +2110,7 @@ void SvXMLNumFormatContext::AddColor( sal_uInt32 const nColor )
             break;
         }
 
-    if ( aColName.getLength() )
+    if ( !aColName.isEmpty() )
     {
         aColName.insert( 0, (sal_Unicode) '[' );
         aColName.append( (sal_Unicode) ']' );
