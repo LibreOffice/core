@@ -546,25 +546,42 @@ $(foreach lang,$(gb_Configuration_LANGS),$(eval $(call postprocess_lang_deps,$(l
 # Rules
 #
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.xcd : \
+postprocess_main_SED := \
+	-e 's,$${ABOUTBOXPRODUCTVERSION},$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX),g' \
+	-e 's,$${ABOUTBOXPRODUCTVERSIONSUFFIX},$(LIBO_VERSION_SUFFIX_SUFFIX),g' \
+	-e 's,$${DICT_REPO_URL},http://extensions.libreoffice.org/dictionaries/,g' \
+	-e 's,$${FILEFORMATNAME},OpenOffice.org,g' \
+	-e 's,$${FILEFORMATVERSION},1.0,g' \
+	-e 's,$${OOOVENDOR},$(if $(OOO_VENDOR),$(OOO_VENDOR),The Document Foundation),g' \
+	-e 's,$${PRODUCTNAME},$(PRODUCTNAME),g' \
+	-e 's,$${PRODUCTVERSION},$(PRODUCTVERSION),g' \
+	-e 's,$${PRODUCTEXTENSION},.$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX),g' \
+	-e 's,$${STARTCENTER_ADDFEATURE_URL},http://extensions.libreoffice.org/,g' \
+	-e 's,$${STARTCENTER_INFO_URL},http://www.libreoffice.org/,g' \
+	-e 's,$${STARTCENTER_HIDE_EXTERNAL_LINKS},0,g' \
+	-e 's,$${STARTCENTER_TEMPLREP_URL},http://templates.libreoffice.org/,g' \
+	-e 's,$${WRITERCOMPATIBILITYVERSIONOOO11},OpenOffice.org 1.1,g' \
+
+$(call gb_CustomTarget_get_workdir,postprocess/registry)/main.xcd : \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCD,3)
 	$(call gb_Helper_abbreviate_dirs, \
-	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ \
-		$(SOLARENV)/bin/packregistry.xslt $< \
+	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
+		-o $@.tmp $(SOLARENV)/bin/packregistry.xslt $< \
+	&& sed $(postprocess_main_SED) $@.tmp > $@ \
 	)
 
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.list :
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
-	echo '<list><dependency file="main"/><filename>$(call gb_XcuLangpackTarget_get_outdir_target,Langpack-$*.xcu)</filename></list>' > $@
-
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.xcd : \
+$(call gb_CustomTarget_get_workdir,postprocess/registry)/%.xcd : \
         | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCD,3)
 	$(call gb_Helper_abbreviate_dirs, \
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
 		-o $@ $(SOLARENV)/bin/packregistry.xslt $< \
 	)
+
+$(call gb_CustomTarget_get_workdir,postprocess/registry)/Langpack-%.list :
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
+	echo '<list><dependency file="main"/><filename>$(call gb_XcuLangpackTarget_get_outdir_target,Langpack-$*.xcu)</filename></list>' > $@
 
 # It can happen that localized fcfg_langpack_*.zip contains
 # zero-sized org/openoffice/TypeDectection/Filter.xcu; filter them out in the
@@ -575,14 +592,6 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/fcfg_langpack_%.list :
 		echo '<list>' > $@ \
 		&& ( find $(call gb_XcuResTarget_get_target,fcfg_langpack/$*/) -name *.xcu -size +0c -print0 | xargs -n1 -0 -I '{}' echo '<filename>{}</filename>') >> $@ \
 		&& echo '</list>' >> $@ \
-	)
-
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.xcd : \
-        | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCD,3)
-	$(call gb_Helper_abbreviate_dirs, \
-	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
-		-o $@ $(SOLARENV)/bin/packregistry.xslt $< \
 	)
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.list :
@@ -600,14 +609,6 @@ $(call gb_CustomTarget_get_workdir,postprocess/registry)/registry_%.list :
 		) \
 	) \
 	&& echo '</list>' >> $@
-
-$(call gb_CustomTarget_get_workdir,postprocess/registry)/%.xcd : \
-        | $(call gb_ExternalExecutable_get_dependencies,xsltproc)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),XCD,3)
-	$(call gb_Helper_abbreviate_dirs, \
-	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet \
-		-o $@ $(SOLARENV)/bin/packregistry.xslt $< \
-	)
 
 $(call gb_CustomTarget_get_workdir,postprocess/registry)/%.list :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,2)
