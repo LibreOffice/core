@@ -78,7 +78,7 @@ public:
     static void         ReadHlink( XclImpStream& rStrm );
 
     /** Reads the (undocumented) embedded hyperlink data and returns the URL. */
-    static String       ReadEmbeddedData( XclImpStream& rStrm );
+    static OUString     ReadEmbeddedData( XclImpStream& rStrm );
 
     /** Inserts the URL into a range of cells. Does not modify value or formula cells. */
     static void         InsertUrl( const XclImpRoot& rRoot, const XclRange& rXclRange, const String& rUrl );

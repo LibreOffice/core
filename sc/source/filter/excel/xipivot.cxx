@@ -625,12 +625,12 @@ void XclImpPivotCache::ReadDconref( XclImpStream& rStrm )
     /*  Read DCONREF only once (by checking maTabName), there may be other
         DCONREF records in another context. Read reference only if a leading
         SXVS record is present (by checking mnSrcType). */
-    if( (maTabName.Len() > 0) || (mnSrcType != EXC_SXVS_SHEET) )
+    if( !maTabName.isEmpty() || (mnSrcType != EXC_SXVS_SHEET) )
         return;
 
     XclRange aXclRange( ScAddress::UNINITIALIZED );
     aXclRange.Read( rStrm, false );
-    String aEncUrl = rStrm.ReadUniString();
+    OUString aEncUrl = rStrm.ReadUniString();
 
     XclImpUrlHelper::DecodeUrl( maUrl, maTabName, mbSelfRef, GetRoot(), aEncUrl );
 
@@ -704,7 +704,7 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
         nScTab = rDoc.GetTableCount();
         rDoc.MakeTable( nScTab );
         OUStringBuffer aDummyName(OUString("DPCache"));
-        if( maTabName.Len() > 0 )
+        if( maTabName.getLength() > 0 )
             aDummyName.append( '_' ).append( maTabName );
         OUString aName = aDummyName.makeStringAndClear();
         rDoc.CreateValidTabName( aName );

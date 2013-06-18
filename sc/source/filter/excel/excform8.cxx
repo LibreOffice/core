@@ -94,8 +94,8 @@ ExcelToSc8::~ExcelToSc8()
 
 bool ExcelToSc8::GetExternalFileIdFromXti( sal_uInt16 nIxti, sal_uInt16& rFileId ) const
 {
-    const String* pFileUrl = rLinkMan.GetSupbookUrl(nIxti);
-    if (!pFileUrl || pFileUrl->Len() == 0 || !GetDocShell())
+    const OUString* pFileUrl = rLinkMan.GetSupbookUrl(nIxti);
+    if (!pFileUrl || pFileUrl->isEmpty() || !GetDocShell())
         return false;
 
     String aFileUrl = ScGlobal::GetAbsDocName(*pFileUrl, GetDocShell());
@@ -123,7 +123,7 @@ bool ExcelToSc8::Read3DTabReference( sal_uInt16 nIxti, SCTAB& rFirstTab, SCTAB& 
 
 bool ExcelToSc8::HandleOleLink(sal_uInt16 nXtiIndex, const XclImpExtName& rExtName, ExternalTabInfo& rExtInfo)
 {
-    const String* pUrl = rLinkMan.GetSupbookUrl(nXtiIndex);
+    const OUString* pUrl = rLinkMan.GetSupbookUrl(nXtiIndex);
     if (!pUrl)
         return false;
 

@@ -596,22 +596,22 @@ void XclImpHFConverter::SetNewPortion( XclImpHFPortion eNew )
 
 namespace {
 
-void lclAppendUrlChar( String& rUrl, sal_Unicode cChar )
+void lclAppendUrlChar( OUString& rUrl, sal_Unicode cChar )
 {
     // encode special characters
     switch( cChar )
     {
-        case '#':   rUrl.AppendAscii( "%23" );  break;
-        case '%':   rUrl.AppendAscii( "%25" );  break;
-        default:    rUrl.Append( cChar );
+        case '#':   rUrl += "%23";  break;
+        case '%':   rUrl += "%25";  break;
+        default:    rUrl += OUString( cChar );
     }
 }
 
 } // namespace
 
 void XclImpUrlHelper::DecodeUrl(
-        String& rUrl, String& rTabName, bool& rbSameWb,
-        const XclImpRoot& rRoot, const String& rEncodedUrl )
+        OUString& rUrl, OUString& rTabName, bool& rbSameWb,
+        const XclImpRoot& rRoot, const OUString& rEncodedUrl )
 {
     enum
     {
@@ -630,7 +630,7 @@ void XclImpUrlHelper::DecodeUrl(
     if( (aDosBase.Len() > 2) && aDosBase.EqualsAscii( ":\\", 1, 2 ) )
         cCurrDrive = aDosBase.GetChar( 0 );
 
-    const sal_Unicode* pChar = rEncodedUrl.GetBuffer();
+    const sal_Unicode* pChar = rEncodedUrl.getStr();
     while( *pChar )
     {
         switch( eState )
@@ -674,35 +674,35 @@ void XclImpUrlHelper::DecodeUrl(
                         {
                             ++pChar;
                             if( *pChar == '@' )
-                                rUrl.AppendAscii( "\\\\" );
+                                rUrl += "\\\\";
                             else
                             {
                                 lclAppendUrlChar( rUrl, *pChar );
-                                rUrl.AppendAscii( ":\\" );
+                                rUrl += ":\\";
                             }
                         }
                         else
-                            rUrl.AppendAscii( "<NULL-DRIVE!>" );
+                            rUrl += "<NULL-DRIVE!>";
                     }
                     break;
                     case EXC_URL_DRIVEROOT:
                         if( cCurrDrive )
                         {
                             lclAppendUrlChar( rUrl, cCurrDrive );
-                            rUrl.Append( ':' );
+                            rUrl += ":";
                         }
                         // run through
                     case EXC_URL_SUBDIR:
                         if( bEncoded )
-                            rUrl.Append( '\\' );
+                            rUrl += "\\";
                         else    // control character in raw name -> DDE link
                         {
-                            rUrl.Append( EXC_DDE_DELIM );
+                            rUrl += OUString( EXC_DDE_DELIM );
                             eState = xlUrlRaw;
                         }
                     break;
                     case EXC_URL_PARENTDIR:
-                        rUrl.AppendAscii( "..\\" );
+                        rUrl += "..\\";
                     break;
                     case EXC_URL_RAW:
                     {
@@ -739,7 +739,7 @@ void XclImpUrlHelper::DecodeUrl(
 // --- sheet name ---
 
             case xlUrlSheetName:
-                rTabName.Append( *pChar );
+                rTabName += OUString( *pChar );
             break;
 
 // --- raw read mode ---
@@ -754,21 +754,13 @@ void XclImpUrlHelper::DecodeUrl(
 }
 
 void XclImpUrlHelper::DecodeUrl(
-        String& rUrl, bool& rbSameWb, const XclImpRoot& rRoot, const String& rEncodedUrl )
-{
-    String aTabName;
-    DecodeUrl( rUrl, aTabName, rbSameWb, rRoot, rEncodedUrl );
-    OSL_ENSURE( !aTabName.Len(), "XclImpUrlHelper::DecodeUrl - sheet name ignored" );
-}
-
-void XclImpUrlHelper::DecodeUrl(
     OUString& rUrl, bool& rbSameWb, const XclImpRoot& rRoot, const OUString& rEncodedUrl )
 {
-    String aTabName;
-    String aUrl;
+    OUString aTabName;
+    OUString aUrl;
     DecodeUrl( aUrl, aTabName, rbSameWb, rRoot, rEncodedUrl );
     rUrl = aUrl;
-    OSL_ENSURE( !aTabName.Len(), "XclImpUrlHelper::DecodeUrl - sheet name ignored" );
+    OSL_ENSURE( aTabName.isEmpty(), "XclImpUrlHelper::DecodeUrl - sheet name ignored" );
 }
 
 bool XclImpUrlHelper::DecodeLink( String& rApplic, String& rTopic, const String rEncUrl )

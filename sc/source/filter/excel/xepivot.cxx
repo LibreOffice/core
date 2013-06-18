@@ -920,9 +920,9 @@ namespace {
 // ----------------------------------------------------------------------------
 
 /** Returns a display string for a data field containing the field name and aggregation function. */
-String lclGetDataFieldCaption( const String& rFieldName, GeneralFunction eFunc )
+OUString lclGetDataFieldCaption( const OUString& rFieldName, GeneralFunction eFunc )
 {
-    String aCaption;
+    OUString aCaption;
 
     sal_uInt16 nResIdx = 0;
     using namespace ::com::sun::star::sheet;
@@ -942,9 +942,9 @@ String lclGetDataFieldCaption( const String& rFieldName, GeneralFunction eFunc )
         default:;
     }
     if( nResIdx )
-        aCaption.Assign( ScGlobal::GetRscString( nResIdx ) ).AppendAscii( RTL_CONSTASCII_STRINGPARAM( " - " ) );
-    aCaption.Append( rFieldName );
-    return aCaption;
+        aCaption = ScGlobal::GetRscString( nResIdx ) + " - ";
+    aCaption += rFieldName;
+    return( aCaption );
 }
 
 // ----------------------------------------------------------------------------
