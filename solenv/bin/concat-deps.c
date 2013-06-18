@@ -870,7 +870,7 @@ static inline char* generate_phony_line(char* phony_target, char* extension)
 {
 char* src;
 char* dest;
-char* last_dot;
+char* last_dot = NULL;
     //fprintf(stderr, "generate_phony_line called with phony_target %s and extension %s\n", phony_target, extension);
     for(dest = phony_content_buffer+work_dir_len, src = phony_target; *src != 0; ++src, ++dest)
     {
@@ -911,7 +911,7 @@ char* end;
 char* cursor;
 char* cursor_out;
 char* base;
-char* created_line;
+char* created_line = NULL;
 char* src_relative;
 int continuation = 0;
 char last_ns = 0;
