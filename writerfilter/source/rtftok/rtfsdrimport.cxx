@@ -121,6 +121,8 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, OUStrin
     sal_Int16 nHoriOrient = 0;
     sal_Int16 nVertOrient = 0;
     boost::optional<bool> obFitShapeToText;
+    bool bFilled = true;
+
     if (aKey == "posh")
     {
         switch (aValue.toInt32())
@@ -163,6 +165,9 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, OUStrin
     }
     else if (aKey == "fFitShapeToText")
         obFitShapeToText.reset(aValue.toInt32() == 1);
+    else if (aKey == "fFilled")
+        bFilled = aValue.toInt32() == 1;
+
     if (nHoriOrient != 0)
         xPropertySet->setPropertyValue("HoriOrient", uno::makeAny(nHoriOrient));
     if (nVertOrient != 0)
@@ -172,6 +177,8 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, OUStrin
         xPropertySet->setPropertyValue("SizeType", uno::makeAny(*obFitShapeToText ? text::SizeType::MIN : text::SizeType::FIX));
         xPropertySet->setPropertyValue("FrameIsAutomaticHeight", uno::makeAny(*obFitShapeToText));
     }
+    if (!bFilled)
+        xPropertySet->setPropertyValue("BackColorTransparency", uno::makeAny(sal_Int32(100)));
 }
 
 void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
@@ -452,7 +459,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         else if (i->first == "shadowOffsetX")
             // EMUs to points
             aShadowModel.moOffset.set(OUString::number(i->second.toDouble() / 12700) + "pt");
-        else if (i->first == "posh" || i->first == "posv" || i->first == "fFitShapeToText")
+        else if (i->first == "posh" || i->first == "posv" || i->first == "fFitShapeToText" || i->first == "fFilled")
             applyProperty(xShape, i->first, i->second);
         else if (i->first == "posrelh")
         {
