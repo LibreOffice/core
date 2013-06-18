@@ -442,9 +442,9 @@ bool CTLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
 
     // CoreText top-bottom are vertically flipped from a VCL aspect
     rVCLRect.Left()   = aPos.X() + aMacRect.origin.x;
-    rVCLRect.Right()  = aPos.X() + aMacRect.origin.x + aMacRect.size.width;
+    rVCLRect.Right()  = aPos.X() + (aMacRect.origin.x + aMacRect.size.width);
     rVCLRect.Bottom() = aPos.Y() - aMacRect.origin.y;
-    rVCLRect.Top()    = aPos.Y() - aMacRect.origin.y + aMacRect.size.height;
+    rVCLRect.Top()    = aPos.Y() - (aMacRect.origin.y + aMacRect.size.height);
     return true;
 }
 
