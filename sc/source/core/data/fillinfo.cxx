@@ -189,6 +189,12 @@ public:
         if (!isHidden(nRow))
             setInfo(ScRefCellValue(const_cast<ScFormulaCell*>(p)));
     }
+
+    void operator() (mdds::mtv::element_t, size_t, size_t nDataSize)
+    {
+        // Skip all empty cells.
+        mrArrY += nDataSize;
+    }
 };
 
 }
@@ -430,7 +436,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                 // cells that are not hidden.
                 RowInfoFiller aFunc(*this, nTab, pRowInfo, nArrX, nArrY);
                 sc::ParseAllNonEmpty(
-                    pThisCol->maCells.begin(), pThisCol->maCells, nY1, nY2, aFunc);
+                    pThisCol->maCells.begin(), pThisCol->maCells, nY1, nY2, aFunc, aFunc);
 
                 if (nX+1 >= nX1)                                // Attribute/Blockmarken ab nX1-1
                 {

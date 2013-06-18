@@ -112,6 +112,18 @@ ParseAllNonEmpty(
             itPos, rCells, nRow1, nRow2, rFunc, aElse);
 }
 
+template<typename _FuncElem, typename _FuncElse>
+typename CellStoreType::const_iterator
+ParseAllNonEmpty(
+    const typename CellStoreType::const_iterator& itPos, const CellStoreType& rCells,
+    SCROW nRow1, SCROW nRow2, _FuncElem& rFuncElem, _FuncElse& rFuncElse)
+{
+    return ParseElements4<CellStoreType,
+        numeric_block, string_block, edittext_block, formula_block,
+        _FuncElem, _FuncElse>(
+            itPos, rCells, nRow1, nRow2, rFuncElem, rFuncElse);
+}
+
 template<typename _Func>
 typename CellStoreType::const_iterator
 ParseFormulaNumeric(

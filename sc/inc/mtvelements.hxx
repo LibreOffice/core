@@ -15,7 +15,7 @@
 #include "svl/broadcast.hxx"
 #include "editeng/editobj.hxx"
 
-#define DEBUG_COLUMN_STORAGE 0
+#define DEBUG_COLUMN_STORAGE 1
 
 #if DEBUG_COLUMN_STORAGE
 #ifdef NDEBUG
