@@ -165,30 +165,27 @@ int SalAquaPicker::run()
 
     int retVal = 0;
 
-    NSString *startDirectory;
+    NSURL *startDirectory;
     if (m_sDisplayDirectory.getLength() > 0) {
         NSString *temp = [NSString stringWithOUString:m_sDisplayDirectory];
-        NSURL *url = [NSURL URLWithString:temp];
-        startDirectory = [url path];
+        startDirectory = [NSURL URLWithString:temp];
 
-        OSL_TRACE("start dir: %s", [startDirectory UTF8String]);
-        // NSLog(@"%@", startDirectory);
+        OSL_TRACE("start dir: %s", [startDirectory path]);
     }
     else {
-        startDirectory = NSHomeDirectory();
+        startDirectory = [NSURL fileURLWithPath:NSHomeDirectory() isDirectory:YES];
     }
 
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
-#pragma GCC diagnostic push
-#pragma GCC diagnostic warning "-Wdeprecated-declarations"
-#endif
     switch(m_nDialogType) {
         case NAVIGATIONSERVICES_DIRECTORY:
         case NAVIGATIONSERVICES_OPEN:
-            retVal = [(NSOpenPanel*)m_pDialog runModalForDirectory:startDirectory file:nil types:nil];
+            [m_pDialog setDirectoryURL:startDirectory];
+            retVal = [(NSOpenPanel*)m_pDialog runModal];
             break;
         case NAVIGATIONSERVICES_SAVE:
-            retVal = [m_pDialog runModalForDirectory:startDirectory file:[NSString stringWithOUString:((SalAquaFilePicker*)this)->getSaveFileName()]/*[m_pDialog saveFilename]*/];
+            [m_pDialog setDirectoryURL:startDirectory];
+            [m_pDialog setNameFieldStringValue:[NSString stringWithOUString:((SalAquaFilePicker*)this)->getSaveFileName()]];
+            retVal = [m_pDialog runModal];
             break;
         // [m_pDialog beginSheetForDirectory:startDirectory file:[m_pDialog saveFilename] modalForWindow:[NSApp keyWindow] modalDelegate:((SalAquaFilePicker*)this)->getDelegate() didEndSelector:@selector(savePanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
         default:
@@ -196,14 +193,11 @@ int SalAquaPicker::run()
     }
 
     if (retVal == NSFileHandlingPanelOKButton) {
-        NSString* pDir = [m_pDialog directory];
+        NSURL* pDir = [m_pDialog directoryURL];
         if (pDir) {
-            implsetDisplayDirectory([[NSURL fileURLWithPath:pDir] OUStringForInfo:FULLPATH]);
+            implsetDisplayDirectory([pDir OUStringForInfo:FULLPATH]);
         }
     }
-#if HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY && HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE
-#pragma GCC diagnostic pop
-#endif
     DBG_PRINT_EXIT(CLASS_NAME, __func__, retVal);
 
     [pool release];
