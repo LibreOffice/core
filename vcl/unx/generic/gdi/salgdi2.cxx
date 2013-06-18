@@ -471,8 +471,10 @@ void X11SalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSa
             const BitmapPalette& rPalette = pBitmapBuffer->maPalette;
             if (rPalette.GetEntryCount() == 2)
             {
-                aNewVal.foreground = rColMap.GetPixel(ImplColorToSal(rPalette[0]));
-                aNewVal.background = rColMap.GetPixel(ImplColorToSal(rPalette[1]));
+                const BitmapColor aBlack( rPalette[rPalette.GetBestIndex( Color( COL_BLACK ) )] );
+                const BitmapColor aWhite( rPalette[rPalette.GetBestIndex( Color( COL_WHITE ) )] );
+                aNewVal.foreground = rColMap.GetPixel(ImplColorToSal(aWhite));
+                aNewVal.background = rColMap.GetPixel(ImplColorToSal(aBlack));
             }
         }
 
