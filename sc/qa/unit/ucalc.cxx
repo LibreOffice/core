@@ -78,7 +78,7 @@
 #include <vector>
 
 #define CALC_DEBUG_OUTPUT 0
-#define CALC_TEST_PERF 1
+#define CALC_TEST_PERF 0
 
 #include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
@@ -268,7 +268,7 @@ public:
     void testCopyPasteFormulas();
     void testCopyPasteFormulasExternalDoc();
 
-    void testFindAreaPosRowDown();
+    void testFindAreaPosVertical();
     void testFindAreaPosColRight();
     void testSort();
     void testSortWithFormulaRefs();
@@ -351,7 +351,7 @@ public:
     CPPUNIT_TEST(testAutoFill);
     CPPUNIT_TEST(testCopyPasteFormulas);
     CPPUNIT_TEST(testCopyPasteFormulasExternalDoc);
-    CPPUNIT_TEST(testFindAreaPosRowDown);
+    CPPUNIT_TEST(testFindAreaPosVertical);
     CPPUNIT_TEST(testFindAreaPosColRight);
     CPPUNIT_TEST(testSort);
     CPPUNIT_TEST(testSortWithFormulaRefs);
@@ -6404,52 +6404,51 @@ void Test::testCopyPasteFormulasExternalDoc()
     CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=$ExtSheet2.$B$2"));
 }
 
-void Test::testFindAreaPosRowDown()
+void Test::testFindAreaPosVertical()
 {
-    const char* aData[][2] = {
-        { "", "1" },
-        { "1", "" },
-        { "1", "1" },
-        { "", "1" },
-        { "1", "1" },
-        { "1", "" },
-        { "1", "1" }, };
+    const char* aData[][3] = {
+        {   0, "1", "1" },
+        { "1",   0, "1" },
+        { "1", "1", "1" },
+        {   0, "1", "1" },
+        { "1", "1", "1" },
+        { "1",   0, "1" },
+        { "1", "1", "1" },
+    };
 
-    ScDocument* pDoc = m_xDocShRef->GetDocument();
-    OUString aTabName1("test1");
-    pDoc->InsertTab(0, aTabName1);
-    clearRange( pDoc, ScRange(0, 0, 0, 1, SAL_N_ELEMENTS(aData), 0));
+    m_pDoc->InsertTab(0, "Test1");
+    clearRange( m_pDoc, ScRange(0, 0, 0, 1, SAL_N_ELEMENTS(aData), 0));
     ScAddress aPos(0,0,0);
-    ScRange aDataRange = insertRangeData( pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData( m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
     CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
 
-    pDoc->SetRowHidden(4,4,0,true);
-    bool bHidden = pDoc->RowHidden(4,0);
+    m_pDoc->SetRowHidden(4,4,0,true);
+    bool bHidden = m_pDoc->RowHidden(4,0);
     CPPUNIT_ASSERT(bHidden);
 
     SCCOL nCol = 0;
     SCROW nRow = 0;
-    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
+    m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
+    m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
+    m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(5), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
+    m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(6), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
+    m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(MAXROW), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), nCol);
@@ -6457,17 +6456,24 @@ void Test::testFindAreaPosRowDown()
     nCol = 1;
     nRow = 2;
 
-    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
+    m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), nCol);
 
-    pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
+    m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(6), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), nCol);
 
-    pDoc->DeleteTab(0);
+    nCol = 2;
+    nRow = 6;
+    m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_UP);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(2), nCol);
+
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testFindAreaPosColRight()

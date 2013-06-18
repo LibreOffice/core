@@ -1969,6 +1969,9 @@ void ScColumn::FindDataAreaPos(SCROW& rRow, bool bDown) const
     do
     {
         nNextRow = FindNextVisibleRow(nLastRow, bDown);
+        if (nNextRow == nLastRow)
+            break;
+
         aPos = maCells.position(it, nNextRow);
         it = aPos.first;
         if (it->type != sc::element_type_empty)
