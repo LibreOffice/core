@@ -117,7 +117,7 @@ static void ImplDrawBrdWinSymbolButton( OutputDevice* pDev,
                                         const Rectangle& rRect,
                                         SymbolType eSymbol, sal_uInt16 nState )
 {
-    sal_Bool bMouseOver = (nState & BUTTON_DRAW_HIGHLIGHT) != 0;
+    bool bMouseOver = (nState & BUTTON_DRAW_HIGHLIGHT) != 0;
     nState &= ~BUTTON_DRAW_HIGHLIGHT;
 
     Rectangle aTempRect;
@@ -363,8 +363,8 @@ sal_Bool ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, 
         if ( pData->mnHitTest )
         {
             sal_uInt16 nDragFullTest = 0;
-            sal_Bool bTracking = sal_True;
-            sal_Bool bHitTest = sal_True;
+            bool bTracking = true;
+            bool bHitTest = true;
 
             if ( pData->mnHitTest & BORDERWINDOW_HITTEST_CLOSE )
             {
@@ -429,13 +429,13 @@ sal_Bool ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, 
                 }
                 else
                 {
-                    bTracking = sal_False;
+                    bTracking = false;
 
                     if ( (pData->mnHitTest & BORDERWINDOW_DRAW_TITLE) &&
                          ((rMEvt.GetClicks() % 2) == 0) )
                     {
                         pData->mnHitTest = 0;
-                        bHitTest = sal_False;
+                        bHitTest = false;
 
                         if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
                         {

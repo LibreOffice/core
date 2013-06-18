@@ -261,7 +261,7 @@ int GetCommandLineTokenCount(const OUString& rLine)
     return nTokenCount;
 }
 
-String WhitespaceToSpace( const String& rLine, sal_Bool bProtect )
+String WhitespaceToSpace( const String& rLine, bool bProtect )
 {
     int nLen = rLine.Len();
     if( ! nLen )
@@ -317,7 +317,7 @@ String WhitespaceToSpace( const String& rLine, sal_Bool bProtect )
     return OUString(*pBuffer == ' ' ? pBuffer+1 : pBuffer);
 }
 
-OString WhitespaceToSpace(const OString& rLine, sal_Bool bProtect)
+OString WhitespaceToSpace(const OString& rLine, bool bProtect)
 {
     sal_Int32 nLen = rLine.getLength();
     if (!nLen)

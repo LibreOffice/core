@@ -70,24 +70,24 @@ static OString ImplGetDialogText( Dialog* pDialog )
 
 // =======================================================================
 
-static sal_Bool ImplIsMnemonicCtrl( Window* pWindow )
+static bool ImplIsMnemonicCtrl( Window* pWindow )
 {
     if( ! pWindow->GetSettings().GetStyleSettings().GetAutoMnemonic() )
-        return sal_False;
+        return false;
 
     if ( (pWindow->GetType() == WINDOW_RADIOBUTTON) ||
          (pWindow->GetType() == WINDOW_CHECKBOX) ||
          (pWindow->GetType() == WINDOW_TRISTATEBOX) ||
          (pWindow->GetType() == WINDOW_PUSHBUTTON) )
-        return sal_True;
+        return true;
 
     if ( pWindow->GetType() == WINDOW_FIXEDTEXT )
     {
         if ( pWindow->GetStyle() & (WB_INFO | WB_NOLABEL) )
-            return sal_False;
+            return false;
         Window* pNextWindow = pWindow->GetWindow( WINDOW_NEXT );
         if ( !pNextWindow )
-            return sal_False;
+            return false;
         pNextWindow = pNextWindow->GetWindow( WINDOW_CLIENT );
         if ( !(pNextWindow->GetStyle() & WB_TABSTOP) ||
              (pNextWindow->GetType() == WINDOW_FIXEDTEXT) ||
@@ -96,12 +96,12 @@ static sal_Bool ImplIsMnemonicCtrl( Window* pWindow )
              (pNextWindow->GetType() == WINDOW_CHECKBOX) ||
              (pNextWindow->GetType() == WINDOW_TRISTATEBOX) ||
              (pNextWindow->GetType() == WINDOW_PUSHBUTTON) )
-            return sal_False;
+            return false;
 
-        return sal_True;
+        return true;
     }
 
-    return sal_False;
+    return false;
 }
 
 // -----------------------------------------------------------------------

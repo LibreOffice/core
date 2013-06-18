@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 
 // =======================================================================
 
-static sal_Bool ImplHasIndirectTabParent( Window* pWindow )
+static bool ImplHasIndirectTabParent( Window* pWindow )
 {
     // The window has inderect tab parent if it is included in tab hierarchy
     // of the indirect parent window
