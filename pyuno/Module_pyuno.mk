@@ -14,7 +14,6 @@ ifneq ($(DISABLE_PYTHON),TRUE)
 $(eval $(call gb_Module_add_targets,pyuno,\
     Library_pyuno \
     Library_pythonloader \
-    Package_pyunorc \
     Package_python_scripts \
     Rdb_pyuno \
 ))
