@@ -167,6 +167,8 @@ public:
     void        ClearCmisProperties();
     void        AddCmisProperty(  const OUString& sId, const OUString& sName,
                                   const bool bUpdatable, const bool bRequired,
+                                  const bool bMultiValued, const bool bOpenChoice,
+                                  const com::sun::star::uno::Any& Choices,
                                   const com::sun::star::uno::Any& rValue );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
@@ -635,6 +637,8 @@ public:
     inline sal_Int32    GetLineHeight() const { return m_nLineHeight; }
     void                AddLine( const OUString& sId, const OUString& sName,
                                  const bool bUpdatable, const bool bRequired,
+                                 const bool bMultiValued, const bool bOpenChoice,
+                                 com::sun::star::uno::Any& aChoices,
                                  com::sun::star::uno::Any& rAny );
     bool                AreAllLinesValid() const;
     void                ClearAllLines();
@@ -664,6 +668,8 @@ public:
 
     void            AddLine( const OUString& sId, const OUString& sName,
                              const bool bUpdatable, const bool bRequired,
+                             const bool bMultiValude, const bool bOpenChoice,
+                             com::sun::star::uno::Any& aChoices,
                              com::sun::star::uno::Any& rAny, bool bInteractive );
 
     inline bool     AreAllLinesValid() const { return m_pPropertiesWin->AreAllLinesValid(); }

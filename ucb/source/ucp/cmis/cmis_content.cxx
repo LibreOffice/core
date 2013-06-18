@@ -586,12 +586,17 @@ namespace cmis
                         {
                             string sId = it->first;
                             string sDisplayName =  it->second->getPropertyType()->getDisplayName( );
-                            bool isUpdatable = it->second->getPropertyType()->isUpdatable( );
-                            bool isRequired = it->second->getPropertyType()->isRequired( );
+                            bool bUpdatable = it->second->getPropertyType()->isUpdatable( );
+                            bool bRequired = it->second->getPropertyType()->isRequired( );
+                            bool bMultiValued = it->second->getPropertyType()->isMultiValued();
+                            bool bOpenChoice = it->second->getPropertyType()->isOpenChoice();
+
                             pCmisProps[i].Id = STD_TO_OUSTR( sId );
                             pCmisProps[i].Name = STD_TO_OUSTR( sDisplayName );
-                            pCmisProps[i].Updatable = isUpdatable;
-                            pCmisProps[i].Required = isRequired;
+                            pCmisProps[i].Updatable = bUpdatable;
+                            pCmisProps[i].Required = bRequired;
+                            pCmisProps[i].MultiValued = bMultiValued;
+                            pCmisProps[i].OpenChoice = bOpenChoice;
                             pCmisProps[i].Value = lcl_cmisPropertyToUno( it->second );
                         }
                         xRow->appendObject( rProp.Name, uno::makeAny( aCmisProperties ) );
