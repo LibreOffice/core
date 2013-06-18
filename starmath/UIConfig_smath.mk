@@ -28,6 +28,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/smath,\
 	starmath/uiconfig/smath/ui/catalogdialog \
 	starmath/uiconfig/smath/ui/printeroptions \
 	starmath/uiconfig/smath/ui/savedefaultsdialog \
+	starmath/uiconfig/smath/ui/smathsettings \
 	starmath/uiconfig/smath/ui/spacingdialog \
 ))
 

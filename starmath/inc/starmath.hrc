@@ -79,7 +79,6 @@
 #define RID_FONTDIALOG              (RID_APP_START + 2)
 #define RID_FONTSIZEDIALOG          (RID_APP_START + 3)
 #define RID_FONTTYPEDIALOG          (RID_APP_START + 4)
-#define RID_PRINTOPTIONPAGE         (RID_APP_START + 7)
 #define RID_SYMDEFINEDIALOG         (RID_APP_START + 9)
 #define RID_PRINTUIOPTIONS          (RID_APP_START + 11)
 

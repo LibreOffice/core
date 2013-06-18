@@ -152,32 +152,28 @@ void SetFontStyle(const OUString &rStyleName, Font &rFont)
 
 IMPL_LINK_INLINE_START( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, EMPTYARG/*pButton*/ )
 {
-    aZoom.Enable(aSizeZoomed.IsChecked());
+    m_pZoom->Enable(m_pSizeZoomed->IsChecked());
     return 0;
 }
 IMPL_LINK_INLINE_END( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, pButton )
 
 
 SmPrintOptionsTabPage::SmPrintOptionsTabPage(Window *pParent, const SfxItemSet &rOptions)
-    : SfxTabPage(pParent, SmResId(RID_PRINTOPTIONPAGE), rOptions),
-    aFixedLine1     (this, SmResId( FL_PRINTOPTIONS )),
-    aTitle          (this, SmResId( CB_TITLEROW )),
-    aText           (this, SmResId( CB_EQUATION_TEXT )),
-    aFrame          (this, SmResId( CB_FRAME )),
-    aFixedLine2     (this, SmResId( FL_PRINT_FORMAT )),
-    aSizeNormal     (this, SmResId( RB_ORIGINAL_SIZE )),
-    aSizeScaled     (this, SmResId( RB_FIT_TO_PAGE )),
-    aSizeZoomed     (this, SmResId( RB_ZOOM )),
-    aZoom           (this, SmResId( MF_ZOOM )),
-    aFixedLine3     (this, SmResId( FL_MISC_OPTIONS )),
-    aNoRightSpaces  (this, SmResId( CB_IGNORE_SPACING )),
-    aSaveOnlyUsedSymbols  (this, SmResId( CB_SAVE_ONLY_USED_SYMBOLS ))
+    : SfxTabPage(pParent, "SmathSettings", "modules/smath/ui/smathsettings.ui", rOptions)
 {
-    FreeResource();
+    get( m_pTitle,               "title");
+    get( m_pText,                "text");
+    get( m_pFrame,               "frame");
+    get( m_pSizeNormal,          "sizenormal");
+    get( m_pSizeScaled,          "sizescaled");
+    get( m_pSizeZoomed,          "sizezoomed");
+    get( m_pZoom,                "zoom");
+    get( m_pNoRightSpaces,       "norightspaces");
+    get( m_pSaveOnlyUsedSymbols, "saveonlyusedsymbols");
 
-    aSizeNormal.SetClickHdl(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
-    aSizeScaled.SetClickHdl(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
-    aSizeZoomed.SetClickHdl(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
+    m_pSizeNormal->SetClickHdl(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
+    m_pSizeScaled->SetClickHdl(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
+    m_pSizeZoomed->SetClickHdl(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
 
     Reset(rOptions);
 }
@@ -186,20 +182,20 @@ SmPrintOptionsTabPage::SmPrintOptionsTabPage(Window *pParent, const SfxItemSet &
 sal_Bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet& rSet)
 {
     sal_uInt16  nPrintSize;
-    if (aSizeNormal.IsChecked())
+    if (m_pSizeNormal->IsChecked())
         nPrintSize = PRINT_SIZE_NORMAL;
-    else if (aSizeScaled.IsChecked())
+    else if (m_pSizeScaled->IsChecked())
         nPrintSize = PRINT_SIZE_SCALED;
     else
         nPrintSize = PRINT_SIZE_ZOOMED;
 
     rSet.Put(SfxUInt16Item(GetWhich(SID_PRINTSIZE), (sal_uInt16) nPrintSize));
-    rSet.Put(SfxUInt16Item(GetWhich(SID_PRINTZOOM), (sal_uInt16) aZoom.GetValue()));
-    rSet.Put(SfxBoolItem(GetWhich(SID_PRINTTITLE), aTitle.IsChecked()));
-    rSet.Put(SfxBoolItem(GetWhich(SID_PRINTTEXT), aText.IsChecked()));
-    rSet.Put(SfxBoolItem(GetWhich(SID_PRINTFRAME), aFrame.IsChecked()));
-    rSet.Put(SfxBoolItem(GetWhich(SID_NO_RIGHT_SPACES), aNoRightSpaces.IsChecked()));
-    rSet.Put(SfxBoolItem(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS), aSaveOnlyUsedSymbols.IsChecked()));
+    rSet.Put(SfxUInt16Item(GetWhich(SID_PRINTZOOM), (sal_uInt16) m_pZoom->GetValue()));
+    rSet.Put(SfxBoolItem(GetWhich(SID_PRINTTITLE), m_pTitle->IsChecked()));
+    rSet.Put(SfxBoolItem(GetWhich(SID_PRINTTEXT), m_pText->IsChecked()));
+    rSet.Put(SfxBoolItem(GetWhich(SID_PRINTFRAME), m_pFrame->IsChecked()));
+    rSet.Put(SfxBoolItem(GetWhich(SID_NO_RIGHT_SPACES), m_pNoRightSpaces->IsChecked()));
+    rSet.Put(SfxBoolItem(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS), m_pSaveOnlyUsedSymbols->IsChecked()));
 
     return true;
 }
@@ -209,19 +205,19 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet& rSet)
 {
     SmPrintSize ePrintSize = (SmPrintSize)((const SfxUInt16Item &)rSet.Get(GetWhich(SID_PRINTSIZE))).GetValue();
 
-    aSizeNormal.Check(ePrintSize == PRINT_SIZE_NORMAL);
-    aSizeScaled.Check(ePrintSize == PRINT_SIZE_SCALED);
-    aSizeZoomed.Check(ePrintSize == PRINT_SIZE_ZOOMED);
+    m_pSizeNormal->Check(ePrintSize == PRINT_SIZE_NORMAL);
+    m_pSizeScaled->Check(ePrintSize == PRINT_SIZE_SCALED);
+    m_pSizeZoomed->Check(ePrintSize == PRINT_SIZE_ZOOMED);
 
-    aZoom.Enable(aSizeZoomed.IsChecked());
+    m_pZoom->Enable(m_pSizeZoomed->IsChecked());
 
-    aZoom.SetValue(((const SfxUInt16Item &)rSet.Get(GetWhich(SID_PRINTZOOM))).GetValue());
+    m_pZoom->SetValue(((const SfxUInt16Item &)rSet.Get(GetWhich(SID_PRINTZOOM))).GetValue());
 
-    aTitle.Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_PRINTTITLE))).GetValue());
-    aText.Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_PRINTTEXT))).GetValue());
-    aFrame.Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_PRINTFRAME))).GetValue());
-    aNoRightSpaces.Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_NO_RIGHT_SPACES))).GetValue());
-    aSaveOnlyUsedSymbols.Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS))).GetValue());
+    m_pTitle->Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_PRINTTITLE))).GetValue());
+    m_pText->Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_PRINTTEXT))).GetValue());
+    m_pFrame->Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_PRINTFRAME))).GetValue());
+    m_pNoRightSpaces->Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_NO_RIGHT_SPACES))).GetValue());
+    m_pSaveOnlyUsedSymbols->Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS))).GetValue());
 }
 
 

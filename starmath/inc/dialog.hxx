@@ -51,18 +51,15 @@ void SetFontStyle(const OUString &rStyleName, Font &rFont);
 
 class SmPrintOptionsTabPage : public SfxTabPage
 {
-    FixedLine       aFixedLine1;
-    CheckBox        aTitle;
-    CheckBox        aText;
-    CheckBox        aFrame;
-    FixedLine       aFixedLine2;
-    RadioButton     aSizeNormal;
-    RadioButton     aSizeScaled;
-    RadioButton     aSizeZoomed;
-    MetricField     aZoom;
-    FixedLine       aFixedLine3;
-    CheckBox        aNoRightSpaces;
-    CheckBox        aSaveOnlyUsedSymbols;
+    CheckBox*       m_pTitle;
+    CheckBox*       m_pText;
+    CheckBox*       m_pFrame;
+    RadioButton*    m_pSizeNormal;
+    RadioButton*    m_pSizeScaled;
+    RadioButton*    m_pSizeZoomed;
+    MetricField*    m_pZoom;
+    CheckBox*       m_pNoRightSpaces;
+    CheckBox*       m_pSaveOnlyUsedSymbols;
 
     DECL_LINK(SizeButtonClickHdl, Button *);
 
