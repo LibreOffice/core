@@ -202,7 +202,7 @@ public:
     /** Returns the specified external name or 0 on error. */
     const XclImpExtName* GetExternName( sal_uInt16 nXtiIndex, sal_uInt16 nExtName ) const;
 
-    const String* GetSupbookUrl( sal_uInt16 nXtiIndex ) const;
+    const OUString* GetSupbookUrl( sal_uInt16 nXtiIndex ) const;
 
     const String& GetSupbookTabName( sal_uInt16 nXti, sal_uInt16 nXtiTab ) const;
 

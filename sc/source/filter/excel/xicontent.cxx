@@ -98,10 +98,10 @@ namespace {
 /** Reads character array and stores it into rString.
     @param nChars  Number of following characters (not byte count!).
     @param b16Bit  true = 16-bit characters, false = 8-bit characters. */
-void lclAppendString32( String& rString, XclImpStream& rStrm, sal_uInt32 nChars, bool b16Bit )
+void lclAppendString32( OUString& rString, XclImpStream& rStrm, sal_uInt32 nChars, bool b16Bit )
 {
     sal_uInt16 nReadChars = ulimit_cast< sal_uInt16 >( nChars );
-    rString.Append( rStrm.ReadRawUniString( nReadChars, b16Bit ) );
+    rString += rStrm.ReadRawUniString( nReadChars, b16Bit );
     // ignore remaining chars
     sal_Size nIgnore = nChars - nReadChars;
     if( b16Bit )
@@ -111,7 +111,7 @@ void lclAppendString32( String& rString, XclImpStream& rStrm, sal_uInt32 nChars,
 
 /** Reads 32-bit string length and the character array and stores it into rString.
     @param b16Bit  true = 16-bit characters, false = 8-bit characters. */
-void lclAppendString32( String& rString, XclImpStream& rStrm, bool b16Bit )
+void lclAppendString32( OUString& rString, XclImpStream& rStrm, bool b16Bit )
 {
     lclAppendString32( rString, rStrm, rStrm.ReaduInt32(), b16Bit );
 }
@@ -130,24 +130,24 @@ void lclIgnoreString32( XclImpStream& rStrm, bool b16Bit )
 /** Converts a path to an absolute path.
     @param rPath  The source path. The resulting path is returned here.
     @param nLevel  Number of parent directories to add in front of the path. */
-void lclGetAbsPath( String& rPath, sal_uInt16 nLevel, SfxObjectShell* pDocShell )
+void lclGetAbsPath( OUString& rPath, sal_uInt16 nLevel, SfxObjectShell* pDocShell )
 {
-    String aTmpStr;
+    OUStringBuffer aTmpStr;
     while( nLevel )
     {
-        aTmpStr.AppendAscii( "../" );
+        aTmpStr.append( "../" );
         --nLevel;
     }
-    aTmpStr += rPath;
+    aTmpStr.append( rPath );
 
     if( pDocShell )
     {
         bool bWasAbs = false;
-        rPath = pDocShell->GetMedium()->GetURLObject().smartRel2Abs( aTmpStr, bWasAbs ).GetMainURL( INetURLObject::NO_DECODE );
+        rPath = pDocShell->GetMedium()->GetURLObject().smartRel2Abs( aTmpStr.makeStringAndClear(), bWasAbs ).GetMainURL( INetURLObject::NO_DECODE );
         // full path as stored in SvxURLField must be encoded
     }
     else
-        rPath = aTmpStr;
+        rPath = aTmpStr.makeStringAndClear();
 }
 
 /** Inserts the URL into a text cell. Does not modify value or formula cells. */
@@ -226,7 +226,7 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
         rStrm.GetRoot().GetXFRangeBuffer().SetHyperlink( aXclRange, aString );
 }
 
-String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
+OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
 {
     const XclImpRoot& rRoot = rStrm.GetRoot();
     SfxObjectShell* pDocShell = rRoot.GetDocShell();
@@ -242,9 +242,9 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
     OSL_ENSURE( aGuid == XclTools::maGuidStdLink, "XclImpHyperlink::ReadEmbeddedData - unknown header GUID" );
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< String > xLongName;    // link / file name
-    ::std::auto_ptr< String > xShortName;   // 8.3-representation of file name
-    ::std::auto_ptr< String > xTextMark;    // text mark
+    ::std::auto_ptr< OUString > xLongName;    // link / file name
+    ::std::auto_ptr< OUString > xShortName;   // 8.3-representation of file name
+    ::std::auto_ptr< OUString > xTextMark;    // text mark
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // description (ignore)
@@ -261,7 +261,7 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
     // UNC path
     if( ::get_flag( nFlags, EXC_HLINK_UNC ) )
     {
-        xLongName.reset( new String );
+        xLongName.reset( new OUString );
         lclAppendString32( *xLongName, rStrm, true );
         lclGetAbsPath( *xLongName, 0, pDocShell );
     }
@@ -274,7 +274,7 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
         {
             sal_uInt16 nLevel = 0; // counter for level to climb down in path
             rStrm >> nLevel;
-            xShortName.reset( new String );
+            xShortName.reset( new OUString );
             lclAppendString32( *xShortName, rStrm, false );
             rStrm.Ignore( 24 );
 
@@ -286,7 +286,7 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
                 rStrm >> nStrLen;
                 nStrLen /= 2;       // it's byte count here...
                 rStrm.Ignore( 2 );
-                xLongName.reset( new String );
+                xLongName.reset( new OUString );
                 lclAppendString32( *xLongName, rStrm, nStrLen, true );
                 lclGetAbsPath( *xLongName, nLevel, pDocShell );
             }
@@ -298,7 +298,7 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
             sal_uInt32 nStrLen(0);
             rStrm >> nStrLen;
             nStrLen /= 2;       // it's byte count here...
-            xLongName.reset( new String );
+            xLongName.reset( new OUString );
             lclAppendString32( *xLongName, rStrm, nStrLen, true );
             if( !::get_flag( nFlags, EXC_HLINK_ABS ) )
                 lclGetAbsPath( *xLongName, 0, pDocShell );
@@ -312,7 +312,7 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
     // text mark
     if( ::get_flag( nFlags, EXC_HLINK_MARK ) )
     {
-        xTextMark.reset( new String );
+        xTextMark.reset( new OUString );
         lclAppendString32( *xTextMark, rStrm, true );
     }
 
@@ -323,20 +323,20 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
     if( !xLongName.get() && xShortName.get() )
         xLongName = xShortName;
     else if( !xLongName.get() && xTextMark.get() )
-        xLongName.reset( new String );
+        xLongName.reset( new OUString );
 
     if( xLongName.get() )
     {
         if( xTextMark.get() )
         {
-            if( xLongName->Len() == 0 )
-                xTextMark->SearchAndReplaceAll( '!', '.' );
-            xLongName->Append( '#' );
-            xLongName->Append( *xTextMark );
+            if( xLongName->isEmpty() )
+                xTextMark.reset( new OUString( xTextMark->replace( '!', '.' ) ) );
+            xLongName.reset( new OUString( *xLongName + "#" ) );
+            xLongName.reset( new OUString( *xLongName + *xTextMark  ) );
         }
-        return *xLongName;
+        return( *xLongName );
     }
-    return String::EmptyString();
+    return( OUString() );
 }
 
 void XclImpHyperlink::ConvertToValidTabName(String& rUrl)

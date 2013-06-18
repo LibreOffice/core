@@ -1308,9 +1308,9 @@ void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, const XclExpNum
 
 namespace {
 
-String GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumberFormatter* xFormatter, NfKeywordTable* pKeywordTable)
+OUString GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumberFormatter* xFormatter, NfKeywordTable* pKeywordTable)
 {
-    String aFormatStr;
+    OUString aFormatStr;
 
     if( const SvNumberformat* pEntry = rRoot.GetFormatter().GetEntry( nScNumFmt ) )
     {
@@ -1320,9 +1320,9 @@ String GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumberF
             Color* pColor = 0;
             OUString aTemp;
             const_cast< SvNumberformat* >( pEntry )->GetOutputString( 1.0, aTemp, &pColor );
-            aFormatStr.Append( '"' ).Append( aTemp ).AppendAscii( "\";\"" ).Append( aTemp ).AppendAscii( "\";\"" );
+            aFormatStr += "\"" + aTemp + "\";\"" + aTemp + "\";\"";
             const_cast< SvNumberformat* >( pEntry )->GetOutputString( 0.0, aTemp, &pColor );
-            aFormatStr.Append( aTemp ).Append( '"' );
+            aFormatStr += aTemp + "\"";
         }
         else
         {
@@ -1339,17 +1339,17 @@ String GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumberF
             }
 
             aFormatStr = pEntry->GetMappedFormatstring( *pKeywordTable, *xFormatter->GetLocaleData() );
-            if( aFormatStr.EqualsAscii( "Standard" ) )
-                aFormatStr.AssignAscii( "General" );
+            if( aFormatStr.equalsAscii( "Standard" ) )
+                aFormatStr = "General";
         }
     }
     else
     {
         OSL_FAIL( "XclExpNumFmtBuffer::WriteFormatRecord - format not found" );
-        aFormatStr.AssignAscii( "General" );
+        aFormatStr = "General";
     }
 
-    return aFormatStr;
+    return( aFormatStr );
 }
 
 }

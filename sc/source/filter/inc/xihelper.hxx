@@ -250,21 +250,16 @@ public:
         @param rbSameWb  Returns true, if the URL is a reference to the own workbook.
         @param rEncodedUrl   An encoded URL from Excel. */
     static void         DecodeUrl(
-                            String& rUrl,
-                            String& rTabName,
+                            OUString& rUrl,
+                            OUString& rTabName,
                             bool& rbSameWb,
                             const XclImpRoot& rRoot,
-                            const String& rEncodedUrl );
+                            const OUString& rEncodedUrl );
 
     /** Decodes an encoded external document URL without sheet name.
         @param rUrl  Returns the decoded file name incl. path.
         @param rbSameWb  Returns true, if the URL is a reference to the own workbook.
         @param rEncodedUrl   An encoded URL from Excel. */
-    static void         DecodeUrl(
-                            String& rUrl,
-                            bool& rbSameWb,
-                            const XclImpRoot& rRoot,
-                            const String& rEncodedUrl );
 
     static void         DecodeUrl(
                             OUString& rUrl,

@@ -459,9 +459,9 @@ void ImportExcel::SheetPassword( void )
 
 void ImportExcel::Externsheet( void )
 {
-    String aUrl, aTabName;
+    OUString aUrl, aTabName;
     bool bSameWorkBook;
-    String aEncodedUrl( aIn.ReadByteString( false ) );
+    OUString aEncodedUrl( aIn.ReadByteString( false ) );
     XclImpUrlHelper::DecodeUrl( aUrl, aTabName, bSameWorkBook, *pExcRoot->pIR, aEncodedUrl );
     mnLastRefIdx = pExcRoot->pExtSheetBuff->Add( aUrl, aTabName, bSameWorkBook );
 }

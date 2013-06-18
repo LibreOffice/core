@@ -104,7 +104,7 @@ public:
     inline XclSupbookType GetType() const { return meType; }
 
     /** Returns the URL of the external document. */
-    inline const String& GetXclUrl() const { return maXclUrl; }
+    inline const OUString& GetXclUrl() const { return maXclUrl; }
 
     /** Returns the external name specified by an index from the Excel document (one-based). */
     const XclImpExtName* GetExternName( sal_uInt16 nXclIndex ) const;
@@ -128,7 +128,7 @@ private:
 
     XclImpSupbookTabList maSupbTabList;     /// All sheet names of the document.
     XclImpExtNameList   maExtNameList;      /// All external names of the document.
-    String              maXclUrl;           /// URL of the external document (Excel mode).
+    OUString            maXclUrl;           /// URL of the external document (Excel mode).
     String              maFilterName;       /// Detected filer name.
     String              maFilterOpt;        /// Detected filer options.
     XclSupbookType      meType;             /// Type of the supbook record.
@@ -184,7 +184,7 @@ public:
 
     /** Returns the absolute file URL of a supporting workbook specified by
         the index. */
-    const String*       GetSupbookUrl( sal_uInt16 nXtiIndex ) const;
+    const OUString*       GetSupbookUrl( sal_uInt16 nXtiIndex ) const;
 
     const String&       GetSupbookTabName( sal_uInt16 nXti, sal_uInt16 nXtiTab ) const;
 
@@ -631,11 +631,11 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
         return;
     }
 
-    String aEncUrl( rStrm.ReadUniString() );
+    OUString aEncUrl( rStrm.ReadUniString() );
     bool bSelf = false;
     XclImpUrlHelper::DecodeUrl( maXclUrl, bSelf, GetRoot(), aEncUrl );
 
-    if( maXclUrl.EqualsIgnoreCaseAscii( "\010EUROTOOL.XLA" ) )
+    if( maXclUrl.equalsIgnoreAsciiCase( "\010EUROTOOL.XLA" ) )
     {
         meType = EXC_SBTYPE_EUROTOOL;
         maSupbTabList.push_back( new XclImpSupbookTab( maXclUrl ) );
@@ -808,7 +808,7 @@ const XclImpExtName* XclImpLinkManagerImpl::GetExternName( sal_uInt16 nXtiIndex,
     return pSupbook ? pSupbook->GetExternName( nExtName ) : 0;
 }
 
-const String* XclImpLinkManagerImpl::GetSupbookUrl( sal_uInt16 nXtiIndex ) const
+const OUString* XclImpLinkManagerImpl::GetSupbookUrl( sal_uInt16 nXtiIndex ) const
 {
     const XclImpSupbook* p = GetSupbook( nXtiIndex );
     if (!p)
@@ -910,7 +910,7 @@ const XclImpExtName* XclImpLinkManager::GetExternName( sal_uInt16 nXtiIndex, sal
     return mxImpl->GetExternName( nXtiIndex, nExtName );
 }
 
-const String* XclImpLinkManager::GetSupbookUrl( sal_uInt16 nXtiIndex ) const
+const OUString* XclImpLinkManager::GetSupbookUrl( sal_uInt16 nXtiIndex ) const
 {
     return mxImpl->GetSupbookUrl(nXtiIndex);
 }

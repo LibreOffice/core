@@ -191,9 +191,9 @@ private:
     XclPCInfo           maPCInfo;           /// Pivot cache settings (SXDB record).
     XclImpPCFieldVec    maFields;           /// List of pivot cache fields.
     ScRange             maSrcRange;         /// Source range in the spreadsheet.
-    String              maUrl;              /// URL of the source data.
-    String              maTabName;          /// Sheet name of the source data.
-    OUString     maSrcRangeName;     /// Name of the source data range.
+    OUString            maUrl;              /// URL of the source data.
+    OUString            maTabName;          /// Sheet name of the source data.
+    OUString            maSrcRangeName;     /// Name of the source data range.
     sal_uInt16          mnStrmId;           /// Pivot cache stream identifier.
     sal_uInt16          mnSrcType;          /// Source data type.
     bool                mbSelfRef;          /// true = Source data from own document.
