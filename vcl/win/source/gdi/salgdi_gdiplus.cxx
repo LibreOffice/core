@@ -197,9 +197,9 @@ bool WinSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
             // by the user and thus happens. This call can only come (currently) from
             // OutputDevice::DrawTransparent, see comments there with the same TaskID.
             // If it is used, the mapping for the printer is wrong and needs to be corrected. I
-            // checked that there is *no* transformation set (testcode commented out below) and
-            // estimated that a stable factor dependent of the printer's DPI is used. Create
-            // and set a transformation here to correct this
+            // checked that there is *no* transformation set and estimated that a stable factor
+            // dependent of the printer's DPI is used. Create and set a transformation here to
+            // correct this.
             Gdiplus::REAL aDpiX;
             Gdiplus::DllExports::GdipGetDpiX(pGraphics, &aDpiX);
             Gdiplus::REAL aDpiY;
