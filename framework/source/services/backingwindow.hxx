@@ -22,11 +22,13 @@
 
 #include "rtl/ustring.hxx"
 
+#include "vcl/builder.hxx"
 #include "vcl/button.hxx"
 #include "vcl/menubtn.hxx"
 #include "vcl/fixed.hxx"
 #include "vcl/bitmapex.hxx"
 #include "vcl/toolbox.hxx"
+#include "vcl/layout.hxx"
 
 #include "unotools/moduleoptions.hxx"
 #include "svtools/acceleratorexecute.hxx"
@@ -71,7 +73,7 @@ namespace framework
         Size    getMinSize();
     };
 
-    class BackingWindow : public Window
+    class BackingWindow : public Window, public VclBuilderContainer
     {
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >         mxContext;
         com::sun::star::uno::Reference<com::sun::star::frame::XDispatchProvider >        mxDesktopDispatchProvider;
@@ -80,14 +82,14 @@ namespace framework
         com::sun::star::uno::Reference< com::sun::star::frame::XPopupMenuController >    mxPopupMenuController;
         com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >                mxPopupMenu;
 
-        ImageButton                     maWriterButton;
-        ImageButton                     maCalcButton;
-        ImageButton                     maImpressButton;
-        MenuButton                      maOpenButton;
-        ImageButton                     maDrawButton;
-        ImageButton                     maDBButton;
-        ImageButton                     maMathButton;
-        ImageButton                     maTemplateButton;
+        ImageButton*                    mpWriterButton;
+        ImageButton*                    mpCalcButton;
+        ImageButton*                    mpImpressButton;
+        MenuButton*                     mpOpenButton;
+        ImageButton*                    mpDrawButton;
+        ImageButton*                    mpDBButton;
+        ImageButton*                    mpMathButton;
+        ImageButton*                    mpTemplateButton;
 
         DecoToolBox                     maToolbox;
 
@@ -153,6 +155,8 @@ namespace framework
         virtual void        Resize();
         virtual long        Notify( NotifyEvent& rNEvt );
         virtual void        GetFocus();
+
+        virtual Size GetOptimalSize() const;
 
         void setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame );
     };
