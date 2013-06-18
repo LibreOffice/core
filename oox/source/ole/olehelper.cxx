@@ -298,7 +298,7 @@ void OleHelper::exportGuid( BinaryOutputStream& rOStr, const SvGlobalName& rId )
     memcpy(&b, pBytes+6, sizeof(sal_uInt16));
     rOStr << b;
 
-    rOStr.writeArray( (sal_Char *)&pBytes[ 8 ], 8 );
+    rOStr.writeArray( (sal_uInt8 *)&pBytes[ 8 ], 8 );
 }
 OUString OleHelper::importGuid( BinaryInputStream& rInStrm )
 {
