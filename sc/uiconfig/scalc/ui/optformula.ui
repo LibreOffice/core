@@ -41,6 +41,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">Formula _syntax:</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">formulasyntax</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -69,11 +70,10 @@
                     <child>
                       <object class="GtkCheckButton" id="englishfuncname">
                         <property name="label" translatable="yes">Use English function names</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
+                        <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -131,14 +131,14 @@
                         <child>
                           <object class="GtkRadioButton" id="calcdefault">
                             <property name="label" translatable="yes">Default</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <property name="group">calccustom</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -154,14 +154,13 @@
                             <child>
                               <object class="GtkRadioButton" id="calccustom">
                                 <property name="label" translatable="yes">Custom</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
+                                <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
-                                <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
+                                <property name="group">calcdefault</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -172,11 +171,9 @@
                             <child>
                               <object class="GtkButton" id="details">
                                 <property name="label" translatable="yes">Details...</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <property name="use_action_appearance">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -243,6 +240,7 @@
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">_Function</property>
                                 <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">function</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -258,6 +256,7 @@
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Array co_lumn</property>
                                 <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">arraycolumn</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -272,6 +271,8 @@
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Array _row</property>
+                                <property name="use_underline">True</property>
+                                <property name="mnemonic_widget">arrayrow</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -332,12 +333,10 @@
                         <child>
                           <object class="GtkButton" id="reset">
                             <property name="label" translatable="yes">Rese_t</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="halign">center</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
@@ -398,6 +397,8 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Excel 2007 and newer</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">ooxmlrecalc</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -412,6 +413,8 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">ODF Spreadsheet (not saved by %PRODUCTNAME)</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">odfrecalc</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
