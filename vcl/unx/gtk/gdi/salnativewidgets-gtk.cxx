@@ -3756,7 +3756,7 @@ void GtkSalGraphics::signalSettingsNotify( GObject *pSettings, GParamSpec *pSpec
 {
     g_return_if_fail( pSpec != NULL );
 
-    if( !strcmp( pSpec->name, "gtk-fontconfig-timestamp" ) && getenv ("DOFIX") )
+    if( !strcmp( pSpec->name, "gtk-fontconfig-timestamp" ) )
         GtkSalGraphics::refreshFontconfig( GTK_SETTINGS( pSettings ) );
 }
 
