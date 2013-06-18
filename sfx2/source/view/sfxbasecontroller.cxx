@@ -1429,7 +1429,7 @@ void SfxBaseController::ShowInfoBars( )
         Reference< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY );
         if ( xCmisDoc.is( ) && xCmisDoc->canCheckOut( ) )
         {
-            uno::Sequence< document::CmisPropertyValue> aCmisProperties = xCmisDoc->getCmisPropertiesValues( );
+            uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties( );
 
             if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
             {

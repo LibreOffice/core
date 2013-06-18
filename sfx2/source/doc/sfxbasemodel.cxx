@@ -120,7 +120,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::document::CmisPropertyValue;
+using ::com::sun::star::document::CmisProperty;
 using ::com::sun::star::frame::XFrame;
 using ::com::sun::star::frame::XController;
 using ::com::sun::star::frame::XController2;
@@ -212,7 +212,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     Reference< frame::XUntitledNumbers >     m_xNumberedControllers;
     Reference< rdf::XDocumentMetadataAccess>           m_xDocumentMetadata;
     ::rtl::Reference< ::sfx2::DocumentUndoManager >         m_pDocumentUndoManager;
-    Sequence< document::CmisPropertyValue>                    m_cmisPropertiesValues;
+    Sequence< document::CmisProperty>                    m_cmisProperties;
 
     IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& rMutex, SfxObjectShell* pObjectShell )
             :   m_pObjectShell          ( pObjectShell  )
@@ -230,7 +230,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_xNumberedControllers  ()
             ,   m_xDocumentMetadata     () // lazy
             ,   m_pDocumentUndoManager  ()
-            ,   m_cmisPropertiesValues  ()
+            ,   m_cmisProperties  ()
     {
         // increase global instance counter.
         ++g_nInstanceCounter;
@@ -2462,16 +2462,16 @@ void SAL_CALL SfxBaseModel::notifyDocumentEvent( const OUString&, const Referenc
     throw lang::NoSupportException("SfxBaseModel controlls all the sent notifications itself!", Reference< XInterface >() );
 }
 
-Sequence< document::CmisPropertyValue > SAL_CALL SfxBaseModel::getCmisPropertiesValues()
+Sequence< document::CmisProperty > SAL_CALL SfxBaseModel::getCmisProperties()
     throw ( RuntimeException )
 {
-    return m_pData->m_cmisPropertiesValues;
+    return m_pData->m_cmisProperties;
 }
 
-void SAL_CALL SfxBaseModel::setCmisPropertiesValues( const Sequence< document::CmisPropertyValue >& _cmispropertiesvalues )
+void SAL_CALL SfxBaseModel::setCmisProperties( const Sequence< document::CmisProperty >& _cmisproperties )
     throw ( RuntimeException )
 {
-    m_pData->m_cmisPropertiesValues = _cmispropertiesvalues;
+    m_pData->m_cmisProperties = _cmisproperties;
 }
 
 void SAL_CALL SfxBaseModel::checkOut(  ) throw ( RuntimeException )
@@ -2637,12 +2637,12 @@ void SfxBaseModel::loadCmisProperties( )
                 Reference<ucb::XCommandEnvironment>(),
                 comphelper::getProcessComponentContext() );
             Reference < beans::XPropertySetInfo > xProps = aContent.getProperties();
-            OUString aCmisPropsValues( "CmisPropertiesValues" );
-            if ( xProps->hasPropertyByName( aCmisPropsValues ) )
+            OUString aCmisProps( "CmisProperties" );
+            if ( xProps->hasPropertyByName( aCmisProps ) )
             {
-                Sequence< document::CmisPropertyValue> aCmisValues;
-                aContent.getPropertyValue( aCmisPropsValues ) >>= aCmisValues;
-                setCmisPropertiesValues( aCmisValues );
+                Sequence< document::CmisProperty> aCmisProperties;
+                aContent.getPropertyValue( aCmisProps ) >>= aCmisProperties;
+                setCmisProperties( aCmisProperties );
             }
         }
         catch (const ucb::ContentCreationException &)

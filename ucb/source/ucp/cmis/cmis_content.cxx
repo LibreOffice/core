@@ -13,7 +13,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <com/sun/star/document/CmisPropertyValue.hpp>
+#include <com/sun/star/document/CmisProperty.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
@@ -572,14 +572,14 @@ namespace cmis
                         xRow->appendVoid( rProp );
                     }
                 }
-                else if ( rProp.Name == "CmisPropertiesValues" )
+                else if ( rProp.Name == "CmisProperties" )
                 {
                     try
                     {
                         libcmis::ObjectPtr object = getObject( xEnv );
                         map< string, libcmis::PropertyPtr >& aProperties = object->getProperties( );
-                        uno::Sequence< document::CmisPropertyValue > aCmisProperties( aProperties.size( ) );
-                        document::CmisPropertyValue* pCmisProps = aCmisProperties.getArray( );
+                        uno::Sequence< document::CmisProperty > aCmisProperties( aProperties.size( ) );
+                        document::CmisProperty* pCmisProps = aCmisProperties.getArray( );
                         sal_Int32 i = 0;
                         for ( map< string, libcmis::PropertyPtr >::iterator it = aProperties.begin();
                                 it != aProperties.end( ); ++it, ++i )
@@ -1267,11 +1267,8 @@ namespace cmis
             beans::Property( OUString( "MediaType" ),
                 -1, getCppuType( static_cast< const OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( OUString( "CmisPropertiesValues" ),
-                -1, getCppuType( static_cast< const beans::PropertyValues * >( 0 ) ),
-                beans::PropertyAttribute::BOUND ),
-            beans::Property( OUString( "CmisPropertiesDisplayNames" ),
-                -1, getCppuType( static_cast< const beans::PropertyValues * >( 0 ) ),
+            beans::Property( OUString( "CmisProperties" ),
+                -1, getCppuType( static_cast< const uno::Sequence< document::CmisProperty> * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
             beans::Property( OUString( "IsVersionable" ),
                 -1, getCppuBooleanType(),

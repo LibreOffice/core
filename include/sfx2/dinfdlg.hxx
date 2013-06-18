@@ -26,7 +26,7 @@
 
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Duration.hpp>
-#include <com/sun/star/document/CmisPropertyValue.hpp>
+#include <com/sun/star/document/CmisProperty.hpp>
 
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
@@ -90,7 +90,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::document::XDocumentProperties> & i_xDocProps,
         const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::document::CmisPropertyValue> & i_cmisProps,
+            ::com::sun::star::document::CmisProperty> & i_cmisProps,
         sal_Bool bUseUserData );
     SfxDocumentInfoItem( const SfxDocumentInfoItem& );
     virtual ~SfxDocumentInfoItem();
@@ -640,7 +640,7 @@ public:
     void                ClearAllLines();
     void                DoScroll( sal_Int32 nNewPos );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisPropertyValue >
+    ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty >
                         GetCmisProperties() const;
     void                updateLineWidth();
 };
@@ -668,7 +668,7 @@ public:
 
     inline bool     AreAllLinesValid() const { return m_pPropertiesWin->AreAllLinesValid(); }
     inline void     ClearAllLines() { m_pPropertiesWin->ClearAllLines(); }
-    inline ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisPropertyValue >
+    inline ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty >
                     GetCmisProperties() const
                         { return m_pPropertiesWin->GetCmisProperties(); }
     void    Init(VclBuilderContainer& rParent);
