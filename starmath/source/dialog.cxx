@@ -440,17 +440,6 @@ IMPL_LINK( SmFontSizeDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton
     return 0;
 }
 
-IMPL_LINK( SmFontSizeDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
-{
-    // start help system
-    Help* pHelp = Application::GetHelp();
-    if( pHelp )
-    {
-        pHelp->Start( OUString( "HID_SMA_FONTSIZEDIALOG" ), m_pHelpButton1 );
-    }
-    return 0;
-}
-
 SmFontSizeDialog::SmFontSizeDialog(Window * pParent)
     : ModalDialog(pParent, "FontSizeDialog", "modules/smath/ui/fontsizedialog.ui")
 {
@@ -460,11 +449,9 @@ SmFontSizeDialog::SmFontSizeDialog(Window * pParent)
     get(m_pOperatorSize, "spinB_operator");
     get(m_pBorderSize, "spinB_limit");
     get(m_pBaseSize, "spinB_baseSize");
-    get(m_pHelpButton1, "help");
     get(m_pDefaultButton, "default");
 
     m_pDefaultButton->SetClickHdl(LINK(this, SmFontSizeDialog, DefaultButtonClickHdl));
-    m_pHelpButton1->SetClickHdl(LINK(this, SmFontSizeDialog, HelpButtonClickHdl));
 }
 
 

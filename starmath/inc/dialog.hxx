@@ -127,11 +127,9 @@ class SmFontSizeDialog : public ModalDialog
     MetricField* m_pFunctionSize;
     MetricField* m_pOperatorSize;
     MetricField* m_pBorderSize;
-    HelpButton* m_pHelpButton1;
     PushButton* m_pDefaultButton;
 
     DECL_LINK(DefaultButtonClickHdl, Button *);
-    DECL_LINK(HelpButtonClickHdl, Button *);
 
 public:
     SmFontSizeDialog(Window *pParent);
