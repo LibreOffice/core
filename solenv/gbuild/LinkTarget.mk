@@ -606,6 +606,7 @@ define gb_LinkTarget_set_soversion_script
 $(call gb_LinkTarget_get_target,$(1)) : $(3)
 $(call gb_LinkTarget_get_target,$(1)) : SOVERSION := $(2)
 $(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT := $(3)
+$(call gb_LinkTarget_get_target,$(1)).$(2) : $(call gb_LinkTarget_get_target,$(1))
 
 endef
 

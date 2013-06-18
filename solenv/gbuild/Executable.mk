@@ -23,8 +23,8 @@
 #  gb_Executable_Executable_platform
 
 # NOTE: SDKBIN executables are already packaged in module odk
-gb_Executable_LAYER_DIRS = \
-	OOO:$(gb_Package_PROGRAMDIRNAME) \
+gb_Executable_LAYER_DIRS := \
+	OOO:$(gb_PROGRAMDIRNAME) \
 	UREBIN:ure/bin
 
 $(dir $(call gb_Executable_get_runtime_target,%)).dir :
@@ -45,8 +45,7 @@ $(call gb_Executable_get_clean_target,%) :
 
 gb_Executable__get_dir_for_layer = $(patsubst $(1):%,$(INSTDIR)/%,$(filter $(1):%,$(call gb_Executable_LAYER_DIRS)))
 gb_Executable__get_dir_for_exe = $(call gb_Executable__get_dir_for_layer,$(call gb_Executable_get_layer,$(1)))
-gb_Executable__get_instdir = $(call gb_Executable__get_dir_for_exe,$(1))/$(call gb_Executable_get_filename,$(1))
-gb_Executable_get_install_target = $(if $(call gb_Executable__get_dir_for_exe,$(1)),$(call gb_Executable__get_instdir,$(1)))
+gb_Executable_get_install_target = $(call gb_Executable__get_dir_for_exe,$(1))/$(call gb_Executable_get_filename,$(1))
 
 define gb_Executable_Executable
 $(call gb_Postprocess_register_target,AllExecutables,Executable,$(1))
@@ -67,11 +66,15 @@ $(call gb_Executable_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) \
 $(call gb_Executable_get_runtime_target,$(1)) :| $(dir $(call gb_Executable_get_runtime_target,$(1))).dir
 $(call gb_Executable_get_runtime_target,$(1)) : $(call gb_Executable_get_target_for_build,$(1))
 $(call gb_Executable_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
-$(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS := $(call gb_Executable_get_install_target,$(1))
+$(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Executable_Executable_platform,$(1),$(2))
 
 ifneq ($(gb_RUNNABLE_INSTDIR),)
-$(call gb_Helper_install,Executable,$(1),$(call gb_LinkTarget_get_target,$(2)))
+$(if $(call gb_Executable__get_dir_for_exe,$(1)), \
+$(call gb_Helper_install,$(call gb_Executable_get_target,$(1)), \
+	$(call gb_Executable_get_install_target,$(1)), \
+	$(call gb_LinkTarget_get_target,$(2))) \
+)
 endif
 $$(eval $$(call gb_Module_register_target,$(call gb_Executable_get_target,$(1)),$(call gb_Executable_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Executable)

@@ -36,6 +36,8 @@ $(call gb_Pagein_get_clean_target,%) :
 $(call gb_Pagein_get_target,%) :
 	$(call gb_Pagein__command,$@,$*,$^)
 	
+gb_Pagein_get_install_target = $(INSTDIR)/$(gb_PROGRAMDIRNAME)/pagein-$(1)
+
 define gb_Pagein_Pagein
 $(call gb_Pagein_get_target,$(1)) : OBJECTS :=
 $(call gb_Pagein_get_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
@@ -44,6 +46,12 @@ $(call gb_Helper_make_userfriendly_targets,$(1),Pagein,$(call gb_Pagein_get_outd
 $(call gb_Deliver_add_deliverable,$(call gb_Pagein_get_outdir_target,$(1)),$(call gb_Pagein_get_target,$(1)),$(1))
 $(call gb_Pagein_get_outdir_target,$(1)) : $(call gb_Pagein_get_target,$(1))
 $(call gb_Pagein_get_outdir_target,$(1)) :| $(dir $(call gb_Pagein_get_outdir_target,$(1))).dir
+
+ifneq ($(gb_RUNNABLE_INSTDIR),)
+$(call gb_Helper_install,$(call gb_Pagein_get_outdir_target,$(1)), \
+	$(call gb_Pagein_get_install_target,$(1)), \
+	$(call gb_Pagein_get_target,$(1)))
+endif
 
 endef
 

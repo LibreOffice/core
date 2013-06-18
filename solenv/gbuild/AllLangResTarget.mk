@@ -459,8 +459,6 @@ define gb_AllLangResTarget_set_langs
 gb_AllLangResTarget_LANGS := $(1)
 endef
 
-gb_AllLangResTarget_get_packagename = AllLangResTarget/$(1)
-
 $(call gb_AllLangResTarget_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_AllLangResTarget_get_target,$*))
@@ -469,19 +467,17 @@ $(call gb_AllLangResTarget_get_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && touch $@)
 
+gb_ResTarget_get_install_target = $(INSTDIR)/$(gb_PROGRAMDIRNAME)/resource/$(1).res
+
 define gb_AllLangResTarget_AllLangResTarget
 $(foreach lang,$(gb_AllLangResTarget_LANGS),\
 	$(call gb_ResTarget_ResTarget,$(1)$(lang),$(1),$(lang)))
 
 ifneq ($(gb_RUNNABLE_INSTDIR),)
-$(call gb_Package_Package_internal,$(call gb_AllLangResTarget_get_packagename,$(1)),$(WORKDIR))
-$(call gb_Package_set_outdir,$(call gb_AllLangResTarget_get_packagename,$(1)),$(INSTDIR))
-$(call gb_AllLangResTarget_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_AllLangResTarget_get_packagename,$(1)))
-$(call gb_AllLangResTarget_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_AllLangResTarget_get_packagename,$(1)))
-$(call gb_Package_add_files,$(call gb_AllLangResTarget_get_packagename,$(1)),program/resource,\
-	$(foreach lang,$(gb_AllLangResTarget_LANGS),\
-		$(subst $(WORKDIR)/,,$(call gb_ResTarget_get_target,$(1)$(lang)))) \
-)
+$(foreach lang,$(gb_AllLangResTarget_LANGS),\
+$(call gb_Helper_install,$(call gb_AllLangResTarget_get_target,$(1)), \
+	$(call gb_ResTarget_get_install_target,$(1)$(lang)), \
+	$(call gb_ResTarget_get_target,$(1)$(lang))))
 endif
 
 $$(eval $$(call gb_Module_register_target,$(call gb_AllLangResTarget_get_target,$(1)),$(call gb_AllLangResTarget_get_clean_target,$(1))))

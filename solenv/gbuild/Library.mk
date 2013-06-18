@@ -30,7 +30,7 @@
 #  gb_Library_Library_platform
 
 gb_Library_LAYER_DIRS := \
-    OOO:program \
+    OOO:$(gb_PROGRAMDIRNAME) \
     URELIB:ure/$(notdir $(gb_Helper_OUTDIRLIBDIR))
 
 # doesn't do anything, just used for hooking up component target
@@ -43,10 +43,9 @@ $(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT) :
 		rm -f $(OUTDIR)/lib/$*$(gb_Library_PLAINEXT) \
 			$(AUXTARGETS))
 
-gb_Library_get_packagename = Library/$(1)
-
 gb_Library__get_dir_for_layer = $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_LAYER_DIRS)))
 gb_Library_get_instdir = $(call gb_Library__get_dir_for_layer,$(call gb_Library_get_layer,$(1)))
+gb_Library_get_install_target = $(INSTDIR)/$(call gb_Library_get_instdir,$(1))/$(call gb_Library_get_runtime_filename,$(1))
 
 define gb_Library_Library
 $(call gb_Postprocess_register_target,AllLibraries,Library,$(1))
@@ -88,8 +87,10 @@ $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Library_Library_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_Library_get_dllname,$(1)))
 
 ifneq ($(gb_RUNNABLE_INSTDIR),)
-$(if $(filter $(call gb_Library_get_layer,$(1)):%,$(gb_Library_LAYER_DIRS)),\
-    $(call gb_Library__Library_package,$(1),$(call gb_Library_get_packagename,$(1)),$(call gb_Library_get_runtime_filename,$(1))) \
+$(if $(call gb_Library_get_instdir,$(1)),\
+$(call gb_Helper_install,$(call gb_Library__get_final_target,$(1)), \
+	$(call gb_Library_get_install_target,$(1)), \
+	$(call gb_LinkTarget_get_target,$(2))) \
 )
 endif
 
@@ -97,18 +98,6 @@ $$(eval $$(call gb_Module_register_target,$(call gb_Library__get_final_target,$(
 
 $(call gb_Helper_make_userfriendly_targets,$(1),Library,$(call gb_Library__get_final_target,$(1)))
 $(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
-
-endef
-
-# gb_Library__Library_package library package filename
-define gb_Library__Library_package
-$(call gb_Package_Package_internal,$(2),$(gb_Helper_OUTDIRLIBDIR))
-$(call gb_Package_set_outdir,$(2),$(INSTDIR))
-$(call gb_Package_add_file,$(2),$(call gb_Library_get_instdir,$(1))/$(3),$(3))
-
-$(call gb_Library__get_final_target,$(1)) : $(call gb_Package_get_target,$(2))
-$(call gb_Package_get_target,$(2)) : $(call gb_Library_get_target,$(1))
-$(call gb_Library_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(2))
 
 endef
 
@@ -132,17 +121,19 @@ endef
 
 # gb_Library__add_soversion_link library package linkname
 define gb_Library__add_soversion_link
-$(call gb_Library_add_auxtarget,$(1),$(3))
-ifneq ($(gb_RUNNABLE_INSTDIR),)
-$(call gb_Package_add_file,$(2),$(call gb_Library_get_instdir,$(1))/$(notdir $(3)),$(notdir $(3)))
-endif
+$(call gb_Library_add_auxtarget,$(1),$(2))
 
 endef
 
 define gb_Library__set_soversion_script
 $(call gb_LinkTarget_set_soversion_script,$(call gb_Library_get_linktargetname,$(1)),$(2),$(3))
 $(call gb_Library_get_target,$(1)) : SOVERSION := $(2)
-$(call gb_Library__add_soversion_link,$(1),$(call gb_Library_get_packagename,$(1)),$(call gb_Library_get_target,$(1)).$(2))
+$(call gb_Library__add_soversion_link,$(1),$(call gb_Library_get_target,$(1)).$(2))
+ifneq ($(gb_RUNNABLE_INSTDIR),)
+$(call gb_Helper_install,$(call gb_Library__get_final_target,$(1)), \
+	$(call gb_Library_get_install_target,$(1)).$(2), \
+	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))).$(2))
+endif
 
 endef
 
