@@ -98,18 +98,6 @@ endef
 # dep file as a side effect.
 # In the dep file rule just touch it so it's newer than the object.
 
-# The gb_Object__command_dep generates an "always rebuild" dep file;
-# It is used on first build and in case the user deletes the object dep file.
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_Object__command_dep
-	echo "$(2) : $(gb_Helper_PHONY)" > $(1)
-
-endef
-else
-gb_Object__command_dep = \
- $(call gb_Output_error,gb_Object__command_dep is only for gb_FULLDEPS)
-endif
-
 ifneq ($(FORCE_COMPILE_ALL),)
 # This one only exists to force .c/.cxx "rebuilds" when running a compiler tool.
 .PHONY: force_compile_all_target
@@ -133,8 +121,7 @@ endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_CObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@,\
-	  $(call gb_Object__command_dep,$@,$(call gb_CObject_get_target,$*)))
+	$(if $(wildcard $@),touch $@)
 
 endif
 
@@ -191,8 +178,7 @@ $(dir $(call gb_CxxObject_get_dep_target,%))%/.dir :
 
 $(call gb_CxxObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
-	  $(eval $(gb_CxxObject__set_pchflags))\
-	  $(call gb_Object__command_dep,$@,$(call gb_CxxObject_get_target,$*)))
+	  $(eval $(gb_CxxObject__set_pchflags)))
 
 endif
 
@@ -209,8 +195,7 @@ $(call gb_GenCObject_get_target,%) :
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_GenCObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@,\
-	  $(call gb_Object__command_dep,$@,$(call gb_GenCObject_get_target,$*)))
+	$(if $(wildcard $@),touch $@)
 
 endif
 
@@ -229,8 +214,7 @@ $(call gb_GenCxxObject_get_target,%) :
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_GenCxxObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
-	  $(eval $(gb_CxxObject__set_pchflags))\
-	  $(call gb_Object__command_dep,$@,$(call gb_GenCxxObject_get_target,$*)))
+	  $(eval $(gb_CxxObject__set_pchflags)))
 
 endif
 
@@ -312,8 +296,7 @@ $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDI
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_ObjCxxObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@,\
-	  $(call gb_Object__command_dep,$@,$(call gb_ObjCxxObject_get_target,$*)))
+	$(if $(wildcard $@),touch $)
 
 endif
 endif
@@ -336,8 +319,7 @@ $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_ObjCObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@,\
-	  $(call gb_Object__command_dep,$@,$(call gb_ObjCObject_get_target,$*)))
+	$(if $(wildcard $@),touch $@)
 
 endif
 endif
@@ -353,9 +335,14 @@ $(call gb_AsmObject_get_target,%) : $(call gb_AsmObject_get_source,$(SRCDIR),%)
 	$(call gb_AsmObject__command,$@,$*,$<,$(call gb_AsmObject_get_dep_target,$*))
 
 ifeq ($(gb_FULLDEPS),$(true))
+$(dir $(call gb_AsmObject_get_dep_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_AsmObject_get_dep_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_AsmObject_get_dep_target,%) :
-	$(if $(wildcard $@),touch $@,\
-	  $(call gb_Object__command_dep,$@,$(call gb_AsmObject_get_target,$*)))
+	$(if $(wildcard $@),touch $@)
 
 endif
 
@@ -1000,6 +987,7 @@ $(call gb_AsmObject_get_target,$(2)) : \
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : ASMOBJECTS += $(2)
 $(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_AsmObject_get_dep_target,$(2))
+$(call gb_AsmObject_get_dep_target,$(2)) :| $(dir $(call gb_AsmObject_get_dep_target,$(2))).dir
 endif
 
 endef

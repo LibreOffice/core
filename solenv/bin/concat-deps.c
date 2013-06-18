@@ -118,6 +118,8 @@
 int internal_boost = 0;
 static char* base_dir;
 static char* work_dir;
+int work_dir_len;
+static char* phony_content_buffer;
 
 #ifdef __GNUC__
 #define clz __builtin_clz
@@ -985,6 +987,75 @@ off_t size;
             }
         }
     }
+    else
+    {
+        int len;
+        char* src_relative;
+        char* extension;
+        int ext_len = 0;
+        char * last_dot = NULL;
+        char* next_slash = NULL;
+        FILE* f;
+        if(strncmp(fn, work_dir, work_dir_len) == 0)
+        {
+            if(strncmp(fn+work_dir_len, "/Dep/", 5) == 0)
+            {
+                src_relative = fn+work_dir_len+5;
+                next_slash = strchr(src_relative, '/');
+                if(next_slash)
+                {
+                    last_dot = strrchr(next_slash, '.');
+                    if(!memcmp(next_slash - 7, "Object/", 7))
+                    {
+                        extension = ".o";
+                        ext_len = 2;
+                    }
+                    else if(!memcmp(next_slash - 17, "UnoApiPartTarget/", 17))
+                    {
+                        /* note: we alread have workdir + Deps/ so next_slash - 17 is
+                         * garanteeed to be good memory */
+                        extension = ".urd";
+                        ext_len = 4;
+                    }
+                    else if(!memcmp(next_slash - 14, "SrsPartTarget/", 14))
+                    {
+                        extension = "";
+                    }
+                    else
+                    {
+                        fprintf(stderr, "no magic for %s(%s) in %s\n", fn, src_relative, work_dir);
+                        /* shortcut return, rc is alread set to error due to file_load earlier */
+                        return rc;
+                    }
+
+                    f = fopen(fn, "w");
+                    if(f)
+                    {
+                        rc = 0;
+                        cursor = phony_content_buffer + work_dir_len;
+                        if(last_dot)
+                        {
+                            *last_dot = 0;
+                        }
+                        len = strlen(next_slash);
+                        memcpy(cursor, next_slash, len);
+                        cursor += len;
+                        if(ext_len)
+                        {
+                            memcpy(cursor, extension, ext_len);
+                            cursor += ext_len;
+                        }
+                        strcpy(cursor, ": $(gb_Helper_PHONY)\n");
+
+                        fputs(phony_content_buffer, f);
+                        fclose(f);
+                        puts(phony_content_buffer);
+                    }
+                    /* if fopen fails, rc is still set from the failure in file_load earlier */
+                }
+            }
+        }
+    }
     return rc;
 }
 
@@ -994,6 +1065,7 @@ static void _usage(void)
 }
 
 #define kDEFAULT_HASH_SIZE 4096
+#define kPHONY_TARGET_BUFFER_SIZE 4096
 
 static int get_var(char **var, const char *name)
 {
@@ -1023,6 +1095,10 @@ const char *env_str;
     }
     if(get_var(&base_dir, "SRCDIR") || get_var(&work_dir, "WORKDIR"))
         return 1;
+    work_dir_len = strlen(work_dir);
+    phony_content_buffer = malloc(kPHONY_TARGET_BUFFER_SIZE);
+    strcpy(phony_content_buffer, work_dir);
+
 
     env_str = getenv("SYSTEM_BOOST");
     internal_boost = !env_str || strcmp(env_str,"TRUE");
