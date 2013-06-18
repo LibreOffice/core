@@ -1043,7 +1043,7 @@ OStoreDirectory ORegKey::getStoreDir()
 OUString ORegKey::getFullPath(OUString const & path) const {
     OSL_ASSERT(!m_name.isEmpty() && !path.isEmpty());
     OUStringBuffer b(m_name);
-    if (b.getLength() > 0 && b[b.getLength() - 1] == '/') {
+    if (!b.isEmpty() && b[b.getLength() - 1] == '/') {
         if (path[0] == '/') {
             b.append(path.getStr() + 1, path.getLength() - 1);
         } else {

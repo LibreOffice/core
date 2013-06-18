@@ -1315,11 +1315,11 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     if(!rLoc.isNumTrailingZeros())
     {
         // Remove all trailing zeros.
-        while (aBuf.getLength() && aBuf[aBuf.getLength()-1] == sal_Unicode('0'))
+        while (!aBuf.isEmpty() && aBuf[aBuf.getLength()-1] == sal_Unicode('0'))
             aBuf.remove(aBuf.getLength()-1, 1);
 
         // Remove decimal if it's the last character.
-        if (aBuf.getLength() && aBuf[aBuf.getLength()-1] == cDec)
+        if (!aBuf.isEmpty() && aBuf[aBuf.getLength()-1] == cDec)
             aBuf.remove(aBuf.getLength()-1, 1);
     }
 
@@ -1340,7 +1340,7 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
         }
     }
 
-    if (!aBuf.getLength())
+    if (aBuf.isEmpty())
         aBuf.append(sal_Unicode('0'));
 
     if(bNegative)

@@ -338,7 +338,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                                 wchar_t __next=GetNextChar();
                                 if (__next>0xFF) // fix for #i43933# and #i35653#
                                 {
-                                    if (aByteString.getLength())
+                                    if (!aByteString.isEmpty())
                                         aStrBuffer.Append(String(OStringToOUString(aByteString.makeStringAndClear(), GetSrcEncoding())));
                                     aStrBuffer.Append((sal_Unicode)__next);
 
@@ -373,7 +373,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
 
                         bNextCh = false;
 
-                        if (aByteString.getLength())
+                        if (!aByteString.isEmpty())
                             aStrBuffer.Append(String(OStringToOUString(aByteString.makeStringAndClear(), GetSrcEncoding())));
                     }
                     break;

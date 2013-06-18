@@ -925,7 +925,7 @@ void SdrFormatter::TakeStr(long nVal, OUString& rStr) const
         }
     }
 
-    if(!aStr.getLength())
+    if(aStr.isEmpty())
         aStr.insert(aStr.getLength(), aNullCode);
 
     if(bNeg && (aStr.getLength() > 1 || aStr[0] != aNullCode[0]))

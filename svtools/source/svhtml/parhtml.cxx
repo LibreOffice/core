@@ -648,7 +648,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 {
                     // Restart with '&', the remainder is returned as
                     // text token.
-                    if( aToken.Len() || sTmpBuffer.getLength() )
+                    if( aToken.Len() || !sTmpBuffer.isEmpty() )
                     {
                         // _GetNextChar() returns the previous text and
                         // during the next execution a new character is read.
@@ -808,7 +808,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                           rInput.IsEof() ) ||
                         !IsParserWorking() )
                     {
-                        if( sTmpBuffer.getLength() )
+                        if( !sTmpBuffer.isEmpty() )
                             aToken += String(sTmpBuffer.makeStringAndClear());
                         return HTML_TEXTTOKEN;
                     }
@@ -824,7 +824,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             nNextCh = GetNextChar();
     }
 
-    if( sTmpBuffer.getLength() )
+    if( !sTmpBuffer.isEmpty() )
         aToken += String(sTmpBuffer.makeStringAndClear());
 
     return HTML_TEXTTOKEN;
@@ -1016,7 +1016,7 @@ int HTMLParser::_GetNextRawToken()
             if( rInput.IsEof() )
             {
                 bContinue = false;
-                if( aToken.Len() || sTmpBuffer.getLength() )
+                if( aToken.Len() || !sTmpBuffer.isEmpty() )
                 {
                     bEndTokenFound = true;
                 }
@@ -1036,7 +1036,7 @@ int HTMLParser::_GetNextRawToken()
             break;
         }
 
-        if( (!bContinue && sTmpBuffer.getLength() > 0L) ||
+        if( (!bContinue && !sTmpBuffer.isEmpty()) ||
             MAX_LEN == sTmpBuffer.getLength() )
             aToken += String(sTmpBuffer.makeStringAndClear());
 
@@ -1119,7 +1119,7 @@ int HTMLParser::_GetNextToken()
                     } while( '>' != nNextCh && '/' != nNextCh && !HTML_ISSPACE( nNextCh ) &&
                              IsParserWorking() && !rInput.IsEof() );
 
-                    if( sTmpBuffer.getLength() )
+                    if( !sTmpBuffer.isEmpty() )
                         aToken += String(sTmpBuffer.makeStringAndClear());
 
                     // Skip blanks
