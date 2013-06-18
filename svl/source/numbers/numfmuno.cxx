@@ -34,14 +34,10 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
-
 #define SERVICENAME_NUMBERFORMATTER "com.sun.star.util.NumberFormatter"
 #define SERVICENAME_NUMBERSETTINGS  "com.sun.star.util.NumberFormatSettings"
 #define SERVICENAME_NUMBERFORMATS   "com.sun.star.util.NumberFormats"
 #define SERVICENAME_NUMBERFORMAT    "com.sun.star.util.NumberFormatProperties"
-
-//------------------------------------------------------------------------
 
 #define PROPERTYNAME_FMTSTR     "FormatString"
 #define PROPERTYNAME_LOCALE     "Locale"
@@ -62,9 +58,7 @@ using namespace com::sun::star;
 #define PROPERTYNAME_STDDEC     "StandardDecimals"
 #define PROPERTYNAME_TWODIGIT   "TwoDigitDateStart"
 
-//------------------------------------------------------------------------
-
-//  alles ohne Which-ID, Map nur fuer PropertySetInfo
+// All without a Which-ID, Map only for PropertySetInfo
 
 static const SfxItemPropertyMapEntry* lcl_GetNumberFormatPropertyMap()
 {
@@ -101,8 +95,6 @@ static const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
     return aNumberSettingsPropertyMap_Impl;
 }
 
-//----------------------------------------------------------------------------------------
-
 static LanguageType lcl_GetLanguage( const lang::Locale& rLocale )
 {
     //  empty language -> LANGUAGE_SYSTEM
@@ -111,12 +103,10 @@ static LanguageType lcl_GetLanguage( const lang::Locale& rLocale )
 
     LanguageType eRet = LanguageTag( rLocale ).getLanguageType( false );
     if ( eRet == LANGUAGE_NONE )
-        eRet = LANGUAGE_SYSTEM;         //! or throw an exception?
+        eRet = LANGUAGE_SYSTEM; //! or throw an exception?
 
     return eRet;
 }
-
-//----------------------------------------------------------------------------------------
 
 SvNumberFormatterServiceObj::SvNumberFormatterServiceObj()
     :m_aMutex()
@@ -145,7 +135,7 @@ void SAL_CALL SvNumberFormatterServiceObj::attachNumberFormatsSupplier( const un
 
         SvNumberFormatsSupplierObj* pNew = SvNumberFormatsSupplierObj::getImplementation( _xSupplier );
         if (!pNew)
-            throw uno::RuntimeException();      // wrong object
+            throw uno::RuntimeException(); // wrong object
 
         xAutoReleaseOld = xSupplier;
 
@@ -231,7 +221,7 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForNumber( sal_Int32
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    util::Color nRet = aDefaultColor;       // color = sal_Int32
+    util::Color nRet = aDefaultColor; // color = sal_Int32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
@@ -240,7 +230,7 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForNumber( sal_Int32
         pFormatter->GetOutputString(fValue, nKey, aStr, &pColor);
         if (pColor)
             nRet = pColor->GetColor();
-        // sonst Default behalten
+        // Else keep Default
     }
     else
         throw uno::RuntimeException();
@@ -276,7 +266,7 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForString( sal_Int32
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    util::Color nRet = aDefaultColor;       // color = sal_Int32
+    util::Color nRet = aDefaultColor; // color = sal_Int32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
@@ -288,7 +278,7 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryColorForString( sal_Int32
         {
             nRet = pColor->GetColor();
         }
-        // sonst Default behalten
+        // Else keep Default
     }
     else
     {
@@ -354,7 +344,7 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber( co
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    util::Color nRet = aDefaultColor;       // color = sal_Int32
+    util::Color nRet = aDefaultColor; // color = sal_Int32
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : NULL;
     if (pFormatter)
     {
@@ -372,7 +362,7 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber( co
         {
             if (pColor)
                 nRet = pColor->GetColor();
-            // sonst Default behalten
+            // Else keep Default
         }
         else
             throw util::MalformedNumberFormatException();
@@ -405,8 +395,6 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatterServiceObj::getSupportedServic
     pArray[0] = SERVICENAME_NUMBERFORMATTER;
     return aRet;
 }
-
-//------------------------------------------------------------------------
 
 SvNumberFormatsObj::SvNumberFormatsObj( SvNumberFormatsSupplierObj& _rParent, ::comphelper::SharedMutex& _rMutex )
     :rSupplier( _rParent )
@@ -477,7 +465,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::queryKey( const OUString& aFormat,
         LanguageType eLang = lcl_GetLanguage( nLocale );
         if (bScan)
         {
-            //! irgendwas muss hier noch passieren...
+            //! FIXME: Something still needs to happen here ...
         }
         nRet = pFormatter->GetEntryKey( aFormat, eLang );
     }
@@ -507,10 +495,10 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNew( const OUString& aFormat,
             nRet = nKey;
         else if (nCheckPos)
         {
-            throw util::MalformedNumberFormatException();       // ungueltiges Format
+            throw util::MalformedNumberFormatException(); // Invalid Format
         }
         else
-            throw uno::RuntimeException();                      // anderer Fehler (z.B. schon vorhanden)
+            throw uno::RuntimeException(); // Other error (e.g. already added)
     }
     else
         throw uno::RuntimeException();
@@ -540,10 +528,10 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNewConverted( const OUString& aFormat,
             nRet = nKey;
         else if (nCheckPos)
         {
-            throw util::MalformedNumberFormatException();       // ungueltiges Format
+            throw util::MalformedNumberFormatException();       // Invalid format
         }
         else
-            throw uno::RuntimeException();                      // anderer Fehler (z.B. schon vorhanden)
+            throw uno::RuntimeException(); // Other error (e.g. already added)
     }
     else
         throw uno::RuntimeException();
@@ -559,7 +547,7 @@ void SAL_CALL SvNumberFormatsObj::removeByKey( sal_Int32 nKey ) throw(uno::Runti
     if (pFormatter)
     {
         pFormatter->DeleteEntry(nKey);
-        rSupplier.NumberFormatDeleted(nKey);        // Benachrichtigung fuers Dokument
+        rSupplier.NumberFormatDeleted(nKey); // Notification for the Document
     }
 }
 
@@ -615,8 +603,8 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getStandardFormat( sal_Int16 nType, const
     if (pFormatter)
     {
         LanguageType eLang = lcl_GetLanguage( nLocale );
-        //  mask out "defined" bit, so type from an existing number format
-        //  can directly be used for getStandardFormat
+        // Mask out "defined" bit, so type from an existing number format
+        // can directly be used for getStandardFormat
         nType &= ~NUMBERFORMAT_DEFINED;
         nRet = pFormatter->GetStandardFormat(nType, eLang);
     }
@@ -700,8 +688,6 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatsObj::getSupportedServiceNames()
     return aRet;
 }
 
-//------------------------------------------------------------------------
-
 SvNumberFormatObj::SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_uLong nK, const ::comphelper::SharedMutex& _rMutex )
     :rSupplier( rParent )
     ,nKey( nK )
@@ -732,7 +718,7 @@ void SAL_CALL SvNumberFormatObj::setPropertyValue( const OUString&,
           lang::IllegalArgumentException, lang::WrappedTargetException,
           uno::RuntimeException)
 {
-    throw beans::UnknownPropertyException();    //  everything is read-only
+    throw beans::UnknownPropertyException(); // Everything is read-only
 }
 
 uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aPropertyName )
@@ -768,7 +754,7 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
         }
         else if (aPropertyName.equalsAscii( PROPERTYNAME_STDFORM ))
         {
-            //! SvNumberformat Member bStandard rausreichen?
+            //! Pass through SvNumberformat Member bStandard?
             sal_Bool bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
             aRet.setValue( &bStandard, getBooleanCppuType() );
         }
@@ -885,7 +871,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
         OUString aFmtStr = pFormat->GetFormatstring();
         OUString aComment = pFormat->GetComment();
         sal_Bool bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
-        //! SvNumberformat Member bStandard rausreichen?
+        //! Pass through SvNumberformat Member bStandard?
         sal_Bool bUserDef = ( ( pFormat->GetType() & NUMBERFORMAT_DEFINED ) != 0 );
         bool bThousand, bRed;
         sal_uInt16 nDecimals, nLeading;
@@ -933,7 +919,7 @@ void SAL_CALL SvNumberFormatObj::setPropertyValues( const uno::Sequence<beans::P
           lang::IllegalArgumentException, lang::WrappedTargetException,
           uno::RuntimeException)
 {
-    throw beans::UnknownPropertyException();    //  everything is read-only
+    throw beans::UnknownPropertyException(); // Everything is read-only
 }
 
 // XServiceInfo
@@ -958,8 +944,6 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatObj::getSupportedServiceNames()
     pArray[0] = SERVICENAME_NUMBERFORMAT;
     return aRet;
 }
-
-//------------------------------------------------------------------------
 
 SvNumberFormatSettingsObj::SvNumberFormatSettingsObj( SvNumberFormatsSupplierObj& rParent, const ::comphelper::SharedMutex& _rMutex )
     :rSupplier( rParent )
@@ -1119,6 +1103,5 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatSettingsObj::getSupportedServiceN
     pArray[0] = SERVICENAME_NUMBERSETTINGS;
     return aRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
