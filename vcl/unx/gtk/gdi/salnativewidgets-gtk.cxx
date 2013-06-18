@@ -3752,14 +3752,16 @@ void printStyleColors( GtkStyle* pStyle )
 }
 #endif
 
-void GtkSalGraphics::updateSettings( AllSettings& rSettings )
+void GtkSalGraphics::signalSettingsNotify( GObject *pSettings, GParamSpec *pSpec, gpointer )
 {
-    GdkScreen* pScreen = gtk_widget_get_screen( m_pWindow );
-    gtk_widget_ensure_style( m_pWindow );
-    GtkStyle* pStyle = gtk_widget_get_style( m_pWindow );
-    GtkSettings* pSettings = gtk_widget_get_settings( m_pWindow );
-    StyleSettings aStyleSet = rSettings.GetStyleSettings();
+    g_return_if_fail( pSpec != NULL );
 
+    if( !strcmp( pSpec->name, "gtk-fontconfig-timestamp" ) && getenv ("DOFIX") )
+        GtkSalGraphics::refreshFontconfig( GTK_SETTINGS( pSettings ) );
+}
+
+void GtkSalGraphics::refreshFontconfig( GtkSettings *pSettings )
+{
     guint latest_fontconfig_timestamp = 0;
     static guint our_fontconfig_timestamp = 0;
     g_object_get( pSettings, "gtk-fontconfig-timestamp", &latest_fontconfig_timestamp, (char *)NULL );
@@ -3768,8 +3770,31 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         bool bFirstTime = our_fontconfig_timestamp == 0;
         our_fontconfig_timestamp = latest_fontconfig_timestamp;
         if (!bFirstTime)
+        {
             psp::PrintFontManager::get().initialize();
+        }
     }
+}
+
+void GtkSalGraphics::updateSettings( AllSettings& rSettings )
+{
+    GdkScreen* pScreen = gtk_widget_get_screen( m_pWindow );
+    gtk_widget_ensure_style( m_pWindow );
+    GtkStyle* pStyle = gtk_widget_get_style( m_pWindow );
+    GtkSettings* pSettings = gtk_widget_get_settings( m_pWindow );
+    StyleSettings aStyleSet = rSettings.GetStyleSettings();
+
+    // Listen for font changes
+    if( !g_object_get_data( G_OBJECT( pSettings ), "libo:listening" ) )
+    {
+        g_object_set_data( G_OBJECT( pSettings ), "libo:listening",
+                           GUINT_TO_POINTER( 1 ) );
+        g_signal_connect_data( G_OBJECT( pSettings ), "notify",
+                               G_CALLBACK( signalSettingsNotify ),
+                               NULL, NULL, G_CONNECT_AFTER );
+    }
+
+    refreshFontconfig( pSettings );
 
     // get the widgets in place
     NWEnsureGTKMenu( m_nXScreen );
