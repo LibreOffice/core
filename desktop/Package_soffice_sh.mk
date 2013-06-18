@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,desktop_soffice_sh,$(call gb_CustomTarget_get_workdir,desktop/soffice)))
 
-$(eval $(call gb_Package_add_file,desktop_soffice_sh,bin/soffice,soffice.sh))
+$(eval $(call gb_Package_set_outdir,desktop_soffice_sh,$(INSTDIR)))
+
+$(eval $(call gb_Package_add_file,desktop_soffice_sh,$(gb_PROGRAMDIRNAME)/soffice,soffice.sh))
 
 # vim:set noet sw=4 ts=4:

@@ -500,6 +500,17 @@ End
 
 #endif
 
+#if !defined MACOSX && !defined WNT
+
+File gid_Brand_File_Bin_Soffice
+    BIN_FILE_BODY;
+    Dir = FILELIST_DIR;
+    Name = "desktop_soffice_sh.filelist";
+    Styles = (FILELIST, PACKED);
+End
+
+#else
+
 File gid_Brand_File_Bin_Soffice
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -512,6 +523,8 @@ File gid_Brand_File_Bin_Soffice
     Styles = (PACKED);
 #endif
 End
+
+#endif
 
 #if defined(UNX) && !defined(MACOSX) && !defined(LIBO_HEADLESS)
 File gid_Brand_File_Bin_Spadmin
