@@ -1513,8 +1513,7 @@ static bool ExchangeLeftRight( const PropertyMapPtr rContext )
     if( aPropParaIte != rContext->end())
     {
         sal_Int32 aAdjust ;
-        aPropParaIte->second >>= aAdjust;
-        if( aAdjust == text::WritingMode2::RL_TB )
+        if( (aPropParaIte->second >>= aAdjust) && aAdjust == text::WritingMode2::RL_TB )
             bExchangeLeftRight = true;
     }
     return bExchangeLeftRight;
