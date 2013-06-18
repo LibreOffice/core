@@ -873,7 +873,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             }
         }
 
-        if (sOut.getLength())
+        if (!sOut.isEmpty())
             rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
         if( rWrt.bCfgOutStyles )

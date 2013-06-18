@@ -742,7 +742,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
         }
     }
 
-    if (sOut.getLength())
+    if (!sOut.isEmpty())
         Strm() << sOut.makeStringAndClear().getStr();
 
     // Umlauf fuer absatzgeb. Grafiken als <BR CLEAR=...> in den String
@@ -1039,7 +1039,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                 sOut.append('\"');
             }
 
-            if (sOut.getLength())
+            if (!sOut.isEmpty())
                 rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
             if( pMacItem )

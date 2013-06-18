@@ -1063,7 +1063,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         }
     }
 
-    if( sOut.getLength() )
+    if( !sOut.isEmpty() )
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
     OSL_ENSURE( !bInCntnr, "Container wird fuer Controls nicht unterstuertzt" );

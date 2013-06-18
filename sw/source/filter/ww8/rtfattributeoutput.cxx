@@ -977,7 +977,7 @@ void RtfAttributeOutput::EndTableRow( )
     if ( m_nTableDepth > 1 )
     {
         m_aAfterRuns.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_NESTTABLEPROPRS);
-        if (m_aRowDefs.getLength() > 0)
+        if (!m_aRowDefs.isEmpty())
             m_aAfterRuns.append(m_aRowDefs.makeStringAndClear());
         else if (!m_aTables.empty())
         {
