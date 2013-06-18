@@ -67,6 +67,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		self.notify = EventObject(self)
 		if dbg:
 			print("PyMailSMTPService init", file=dbgout)
+			print("python version is: " + sys.version, file=dbgout)
 	def addConnectionListener(self, xListener):
 		if dbg:
 			print("PyMailSMTPService addConnectionListener", file=dbgout)
