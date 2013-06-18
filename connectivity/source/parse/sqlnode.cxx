@@ -134,6 +134,9 @@ namespace
         using namespace connectivity;
         assert(SQL_ISRULE(pSubTree,column_ref));
 
+        if(!rParam.xField.is())
+            return false;
+
         // retrieve the field's name & table range
         OUString aFieldName;
         try
