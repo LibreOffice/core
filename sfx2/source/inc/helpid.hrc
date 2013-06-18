@@ -27,7 +27,6 @@
 #define HID_PRINTMONITOR                                      "SFX2_HID_PRINTMONITOR"
 #define HID_CONFIG_EVENT                                      "SFX2_HID_CONFIG_EVENT"
 #define HID_BROWSERCONTROL                                    "SFX2_HID_BROWSERCONTROL"
-#define HID_PRINT_OPTIONS                                     "SFX2_HID_PRINT_OPTIONS"
 #define HID_PREVIEW_FRAME                                     "SFX2_HID_PREVIEW_FRAME"
 #define HID_DOCINFO_FRAME                                     "SFX2_HID_DOCINFO_FRAME"
 #define HID_EXPLORER_FRAME                                    "SFX2_HID_EXPLORER_FRAME"
