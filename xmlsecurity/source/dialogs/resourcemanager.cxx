@@ -284,7 +284,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
                 }
             }
         }
-        if (sbufValue.getLength())
+        if (!sbufValue.isEmpty())
         {
             OSL_ASSERT(!sType.isEmpty());
             retVal.push_back(make_pair(sType, sbufValue.makeStringAndClear()));

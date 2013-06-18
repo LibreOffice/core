@@ -502,7 +502,7 @@ namespace DOM
         Reference< XAttr > aAttr;
         if (!oldAttr->getNamespaceURI().isEmpty()) {
             OUStringBuffer qname(oldAttr->getPrefix());
-            if (0 != qname.getLength()) {
+            if (!qname.isEmpty()) {
                 qname.append(sal_Unicode(':'));
             }
             qname.append(oldAttr->getName());

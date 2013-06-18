@@ -1237,7 +1237,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                         aBuf.append(ch);
                     else if (bInKeyword && isspace(ch))
                         bInKeyword = false;
-                    if (aBuf.getLength() > 0 && !isalnum(ch))
+                    if (!aBuf.isEmpty() && !isalnum(ch))
                         bFoundCode = true;
                 }
                 Strm().Seek(nPos);
@@ -4649,12 +4649,12 @@ void RTFDocumentImpl::setSkipUnknown(bool bSkipUnknown)
 
 void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
 {
-    if (bUnicode && m_aUnicodeBuffer.getLength() > 0)
+    if (bUnicode && !m_aUnicodeBuffer.isEmpty())
     {
         OUString aString = m_aUnicodeBuffer.makeStringAndClear();
         text(aString);
     }
-    if (bHex && m_aHexBuffer.getLength() > 0)
+    if (bHex && !m_aHexBuffer.isEmpty())
     {
         OUString aString = OStringToOUString(m_aHexBuffer.makeStringAndClear(), m_aStates.top().nCurrentEncoding);
         text(aString);
