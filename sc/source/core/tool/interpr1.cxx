@@ -3983,7 +3983,6 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
     {
         switch (GetStackType())
         {
-
             case svString:
             {
                 if( eFunc == ifCOUNT )

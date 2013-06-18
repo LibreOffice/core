@@ -288,7 +288,7 @@ bool ScValueIterator::GetFirst(double& rValue, sal_uInt16& rErr)
     mnTab = maStartPos.Tab();
 
     ScTable* pTab = pDoc->FetchTable(mnTab);
-    if (pTab)
+    if (!pTab)
         return false;
 
     nNumFormat = 0; // Initialized in GetNumberFormat
