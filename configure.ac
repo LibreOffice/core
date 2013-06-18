@@ -2697,7 +2697,7 @@ if test $_os = iOS; then
     fi
 
     pref_sdk_ver=6.1
-    for I in 6.1 6.0; do
+    for I in 6.1 6.0 7.0; do
         t=$xcode_developer/Platforms/$platform.platform/Developer/SDKs/$platform$I.sdk
         if test -d $t; then
             sysroot=$t
