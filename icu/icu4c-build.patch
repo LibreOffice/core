@@ -1,3 +1,22 @@
+--- misc/icu/source/common/umutex.h
++++ misc/icu/source/common/umutex.h
+@@ -48,16 +48,8 @@
+ #endif  /* win32 */
+ 
+ #if U_PLATFORM_IS_DARWIN_BASED
+-#if defined(__STRICT_ANSI__)
+-#define UPRV_REMAP_INLINE
+-#define inline
+-#endif
+ #include <libkern/OSAtomic.h>
+ #define USE_MAC_OS_ATOMIC_INCREMENT 1
+-#if defined(UPRV_REMAP_INLINE)
+-#undef inline
+-#undef UPRV_REMAP_INLINE
+-#endif
+ #endif
+ 
+ /*
 --- misc/icu/source/tools/toolutil/pkg_genc.h
 +++ misc/build/icu/source/tools/toolutil/pkg_genc.h
 @@ -58,7 +58,7 @@
