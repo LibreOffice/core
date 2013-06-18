@@ -585,7 +585,7 @@ sal_Bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
             aBuf.append(buf, n);
     }
 
-    if ( !bEnd && !GetError() && aBuf.getLength() )
+    if ( !bEnd && !GetError() && !aBuf.isEmpty() )
         bEnd = sal_True;
 
     nOldFilePos += nTotalLen;
@@ -627,7 +627,7 @@ sal_Bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsTo
         nLen /= sizeof(sal_Unicode);
         if ( !nLen )
         {
-            if ( aBuf.getLength() == 0 )
+            if ( aBuf.isEmpty() )
             {
                 // exit on first BlockRead error
                 bIsEof = sal_True;
@@ -671,7 +671,7 @@ sal_Bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsTo
             aBuf.append( buf, n );
     }
 
-    if ( !bEnd && !GetError() && aBuf.getLength() )
+    if ( !bEnd && !GetError() && !aBuf.isEmpty() )
         bEnd = sal_True;
 
     nOldFilePos += nTotalLen * sizeof(sal_Unicode);

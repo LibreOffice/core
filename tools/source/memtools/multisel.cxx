@@ -714,7 +714,7 @@ bool StringRangeEnumerator::setRange( const OUString& i_rNewRange, bool i_bStric
     {
         while( *pInput >= sal_Unicode('0') && *pInput <= sal_Unicode('9') )
             aNumberBuf.append( *pInput++ );
-        if( aNumberBuf.getLength() )
+        if( !aNumberBuf.isEmpty() )
         {
             sal_Int32 nNumber = aNumberBuf.makeStringAndClear().toInt32() + mnOffset;
             aNumbers.push_back( nNumber );
