@@ -11,127 +11,132 @@ package org.libreoffice.impressremote.communication;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-
-import org.libreoffice.impressremote.Globals;
-import org.libreoffice.impressremote.communication.CommunicationService.State;
+import java.util.List;
 
 import android.content.Intent;
-import android.util.Log;
+import android.text.TextUtils;
 
-/**
- * Generic Client for the remote control. To implement a Client for a specific
- * transport medium you must provide input and output streams (
- * <code>mInputStream</code> and <code>mOutputStream</code> before calling any
- * methods.
- */
-public abstract class Client {
+public abstract class Client implements Runnable {
+    protected final BufferedReader mMessagesReader;
+    protected final OutputStream mCommandsStream;
 
-    protected static final String CHARSET = "UTF-8";
-
-    protected InputStream mInputStream;
-    protected BufferedReader mReader;
-    protected OutputStream mOutputStream;
     protected String mPin = "";
     protected String mName = "";
 
     private static Client latestInstance = null;
 
-    public abstract void closeConnection();
+    protected final Server mServer;
+    protected final CommunicationService mCommunicationService;
+    protected final Receiver mReceiver;
 
-    public abstract void validating() throws IOException;
-    private Receiver mReceiver;
-
-    protected Server mServer;
-
-    protected CommunicationService mCommunicationService;
-
-    protected Client(Server aServer,
-                    CommunicationService aCommunicationService,
-                    Receiver aReceiver) {
+    protected Client(Server aServer, CommunicationService aCommunicationService, Receiver aReceiver) {
         mServer = aServer;
         mName = aServer.getName();
         mCommunicationService = aCommunicationService;
         mReceiver = aReceiver;
         latestInstance = this;
+
+        setUpServerConnection();
+
+        mMessagesReader = buildMessagesReader(buildMessagesStream());
+        mCommandsStream = buildCommandsStream();
     }
 
-    protected void startListening() {
+    protected abstract void setUpServerConnection();
 
-        Thread t = new Thread() {
-            public void run() {
-                listen();
-            }
-
-        };
-        t.start();
-    }
-
-    private final void listen() {
+    private BufferedReader buildMessagesReader(InputStream aMessagesStream) {
         try {
-            while (true) {
-                ArrayList<String> aList = new ArrayList<String>();
-                String aTemp;
-                // read until empty line
-                while ((aTemp = mReader.readLine()) != null
-                                && aTemp.length() != 0) {
-                    aList.add(aTemp);
-                }
-                if (aTemp == null) {
-                    Intent aIntent = new Intent(
-                                    mCommunicationService
-                                                    .getApplicationContext(),
-                                    ReconnectionActivity.class);
-                    aIntent.putExtra("server", mServer);
-                    aIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mCommunicationService.getApplicationContext()
-                                    .startActivity(aIntent);
-                    return;
-                }
-                mReceiver.parseCommand(aList);
-            }
+            return new BufferedReader(
+                new InputStreamReader(aMessagesStream, Protocol.CHARSET));
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e1) {
-            // TODO stream couldn't be opened.
-            e1.printStackTrace();
-        } finally {
-            onDisconnect();
+            throw new RuntimeException("Unable to create messages reader.");
         }
-
     }
+
+    protected abstract InputStream buildMessagesStream();
+
+    protected abstract OutputStream buildCommandsStream();
 
     public static String getPin() {
-        if (latestInstance != null) {
-            return latestInstance.mPin;
-        } else {
+        if (latestInstance == null) {
             return "";
         }
+
+        return latestInstance.mName;
     }
 
     public static String getName() {
-        if (latestInstance != null) {
-            return latestInstance.mName;
-        } else {
+        if (latestInstance == null) {
             return "";
+        }
+
+        return latestInstance.mName;
+    }
+
+    protected void startListening() {
+        Thread aListeningThread = new Thread(this);
+
+        aListeningThread.start();
+    }
+
+    @Override
+    public void run() {
+        listen();
+    }
+
+    private void listen() {
+        try {
+            while (true) {
+                List<String> aMessage = readMessage();
+
+                if (aMessage == null) {
+                    return;
+                }
+
+                mReceiver.parseCommand(aMessage);
+            }
+        } catch (IOException e) {
+            // TODO: stream couldn't be opened
+            e.printStackTrace();
+        } finally {
+            onDisconnect();
         }
     }
 
-    /**
-     * Send a valid command to the Server.
-     */
-    public void sendCommand(String command) {
-        try {
-            mOutputStream.write(command.getBytes(CHARSET));
-        } catch (UnsupportedEncodingException e) {
-            throw new Error("Specified network encoding [" + CHARSET
-                            + " not available.");
-        } catch (IOException e) {
-            // I.e. connection closed. This will be dealt with by the listening
-            // loop.
+    private List<String> readMessage() throws IOException {
+        List<String> aMessage = new ArrayList<String>();
+
+        String aMessageParameter = mMessagesReader.readLine();
+
+        while ((aMessageParameter != null) && (!TextUtils
+            .isEmpty(aMessageParameter))) {
+            aMessage.add(aMessageParameter);
+
+            aMessageParameter = mMessagesReader.readLine();
         }
+
+        if (aMessageParameter == null) {
+            startReconnection();
+
+            return null;
+        }
+
+        return aMessage;
+    }
+
+    private void startReconnection() {
+        Intent aReconnectionIntent = new Intent(
+            mCommunicationService.getApplicationContext(),
+            ReconnectionActivity.class);
+        aReconnectionIntent.putExtra("server", mServer);
+        aReconnectionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        mCommunicationService.getApplicationContext()
+            .startActivity(aReconnectionIntent);
     }
 
     /**
@@ -141,6 +146,23 @@ public abstract class Client {
     protected void onDisconnect() {
     }
 
+    /**
+     * Send a valid command to the Server.
+     */
+    public void sendCommand(String aCommand) {
+        try {
+            mCommandsStream.write(aCommand.getBytes(Protocol.CHARSET));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("UTF-8 must be used for commands.");
+        } catch (IOException e) {
+            // I.e. connection closed. This will be dealt with by the listening
+            // loop.
+        }
+    }
+
+    public abstract void closeConnection();
+
+    public abstract void validating() throws IOException;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,134 +8,173 @@
  */
 package org.libreoffice.impressremote.communication;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Random;
 
-import org.libreoffice.impressremote.Globals;
-
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
-/**
- * Standard Network client. Connects to a server using Sockets.
- */
+import org.libreoffice.impressremote.Preferences;
+
 public class NetworkClient extends Client {
-
-    private static final int PORT = 1599;
-
     private Socket mSocket;
-    private Intent mIntent;
-    private String mPin;
-    private Server mServer;
 
-    public NetworkClient(Server aServer,
-            CommunicationService aCommunicationService, Receiver aReceiver)
-            throws UnknownHostException, IOException {
+    private final String mPin;
+
+    public NetworkClient(Server aServer, CommunicationService aCommunicationService, Receiver aReceiver) {
         super(aServer, aCommunicationService, aReceiver);
-        mServer = aServer;
-        mSocket = new Socket(mServer.getAddress(), PORT);
-        mInputStream = mSocket.getInputStream();
-        mReader = new BufferedReader(new InputStreamReader(mInputStream,
-                CHARSET));
-        mOutputStream = mSocket.getOutputStream();
 
-        // Pairing.
-        mPin = setupPin(mServer);
-        mIntent = new Intent(CommunicationService.MSG_PAIRING_STARTED);
-        mIntent.putExtra("PIN", mPin);
-        LocalBroadcastManager.getInstance(mCommunicationService).sendBroadcast(
-                mIntent);
-        // Send out
-        String aName = CommunicationService.getDeviceName(); // TODO: get the
-                                                             // proper name
-        sendCommand("LO_SERVER_CLIENT_PAIR\n" + aName + "\n" + mPin + "\n\n");
+        mPin = loadPin();
+
+        startPairingActivity();
+        startPairing();
     }
 
-    private String setupPin(Server aServer) {
-        // Get settings
-        SharedPreferences aPreferences = mCommunicationService
-                .getSharedPreferences("sdremote_authorisedremotes",
-                        android.content.Context.MODE_PRIVATE);
-        if (aPreferences.contains(aServer.getName())) {
-            return aPreferences.getString(aServer.getName(), "");
-        } else {
-            String aPin = generatePin();
+    private String loadPin() {
+        Context aContext = mCommunicationService.getApplicationContext();
 
-            Editor aEdit = aPreferences.edit();
-            aEdit.putString(aServer.getName(), aPin);
-            aEdit.commit();
-
-            return aPin;
+        if (Preferences
+            .doContain(aContext, Preferences.Locations.AUTHORIZED_REMOTES,
+                mServer.getName())) {
+            return Preferences
+                .getString(aContext, Preferences.Locations.AUTHORIZED_REMOTES,
+                    mServer.getName());
         }
 
+        String aPin = generatePin();
+
+        Preferences.set(aContext, Preferences.Locations.AUTHORIZED_REMOTES,
+            mServer.getName(), aPin);
+
+        return aPin;
     }
 
     private String generatePin() {
-        Random aRandom = new Random();
-        String aPin = "" + (aRandom.nextInt(9000) + 1000);
-        while (aPin.length() < 4) {
-            aPin = "0" + aPin; // Add leading zeros if necessary
+        return String.format("%04d", generatePinNumber());
+    }
+
+    private int generatePinNumber() {
+        Random aRandomGenerator = new Random();
+
+        int aMaximumPin = (int) Math.pow(10, Protocol.PIN_NUMBERS_COUNT) - 1;
+
+        return aRandomGenerator.nextInt(aMaximumPin);
+    }
+
+    private void startPairingActivity() {
+        Intent aPairingIntent = new Intent(
+            CommunicationService.MSG_PAIRING_STARTED);
+        aPairingIntent.putExtra("PIN", mPin);
+
+        LocalBroadcastManager.getInstance(mCommunicationService)
+            .sendBroadcast(aPairingIntent);
+    }
+
+    private void startPairing() {
+        // TODO: get the proper name
+        String aPhoneName = CommunicationService.getDeviceName();
+
+        sendCommand(Protocol.Commands
+            .prepareCommand(Protocol.Commands.PAIR, aPhoneName, mPin));
+    }
+
+    @Override
+    protected void setUpServerConnection() {
+        mSocket = buildServerConnection();
+    }
+
+    private Socket buildServerConnection() {
+        try {
+            return new Socket(mServer.getAddress(),
+                Protocol.Ports.CLIENT_CONNECTION);
+        } catch (UnknownHostException e) {
+            throw new RuntimeException("Unable to connect to unknown host.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Unable to connect to host.");
         }
-        return aPin;
+    }
+
+    @Override
+    protected InputStream buildMessagesStream() {
+        try {
+            return mSocket.getInputStream();
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to open messages stream.");
+        }
+    }
+
+    @Override
+    protected OutputStream buildCommandsStream() {
+        try {
+            return mSocket.getOutputStream();
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to open commands stream.");
+        }
     }
 
     @Override
     public void closeConnection() {
         try {
-            if (mSocket != null)
-                mSocket.close();
+            mSocket.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new RuntimeException("Unable to close network socket.");
         }
     }
 
     @Override
     public void validating() throws IOException {
+        String aMessage = mMessagesReader.readLine();
 
-        // Wait until we get the appropriate string back...
-        String aTemp = mReader.readLine();
-
-        if (aTemp == null) {
-            throw new IOException(
-                    "End of stream reached before any data received.");
+        if (aMessage == null) {
+            throw new RuntimeException(
+                "End of stream reached before any data received.");
         }
 
-        while (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
-            if (aTemp.equals("LO_SERVER_VALIDATING_PIN")) {
-                // Broadcast that we need a pin screen.
-                mIntent = new Intent(
-                        CommunicationService.STATUS_PAIRING_PINVALIDATION);
-                mIntent.putExtra("PIN", mPin);
-                mIntent.putExtra("SERVERNAME", mServer.getName());
-                LocalBroadcastManager.getInstance(mCommunicationService)
-                        .sendBroadcast(mIntent);
-                while (mReader.readLine().length() != 0) {
+        while (!aMessage.equals(Protocol.Messages.PAIRED)) {
+            if (aMessage.equals(Protocol.Messages.VALIDATING)) {
+                startPinValidation();
+
+                while (mMessagesReader.readLine().length() != 0) {
                     // Read off empty lines
                 }
-                aTemp = mReader.readLine();
+
+                aMessage = mMessagesReader.readLine();
             } else {
                 return;
             }
         }
 
-        mIntent = new Intent(CommunicationService.MSG_PAIRING_SUCCESSFUL);
-        LocalBroadcastManager.getInstance(mCommunicationService).sendBroadcast(
-                mIntent);
+        callSuccessfulPairing();
 
-        while (mReader.readLine().length() != 0) {
+        while (mMessagesReader.readLine().length() != 0) {
             // Get rid of extra lines
-            Log.i(Globals.TAG, "NetworkClient: extra line");
         }
-        Log.i(Globals.TAG, "NetworkClient: calling startListening");
+
         startListening();
+    }
+
+    private void startPinValidation() {
+        Intent aPairingIntent = new Intent(
+            CommunicationService.STATUS_PAIRING_PINVALIDATION);
+        aPairingIntent.putExtra("PIN", mPin);
+        aPairingIntent.putExtra("SERVERNAME", mServer.getName());
+
+        LocalBroadcastManager.getInstance(mCommunicationService)
+            .sendBroadcast(aPairingIntent);
+    }
+
+    private void callSuccessfulPairing() {
+        Intent aSuccessfulPairingIntent = new Intent(
+            CommunicationService.MSG_PAIRING_SUCCESSFUL);
+
+        LocalBroadcastManager.getInstance(mCommunicationService)
+            .sendBroadcast(aSuccessfulPairingIntent);
     }
 }
 

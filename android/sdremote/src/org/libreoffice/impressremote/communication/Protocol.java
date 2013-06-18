@@ -14,9 +14,23 @@ final class Protocol {
     private Protocol() {
     }
 
+    public static final String CHARSET = "UTF-8";
+
+    public static final int PIN_NUMBERS_COUNT = 4;
+
+    public static final class Ports {
+        private Ports() {
+        }
+
+        public static final int CLIENT_CONNECTION = 1599;
+    }
+
     public static final class Messages {
         private Messages() {
         }
+
+        public static final String PAIRED = "LO_SERVER_SERVER_PAIRED";
+        public static final String VALIDATING = "LO_SERVER_VALIDATING_PIN";
 
         public static final String SLIDESHOW_STARTED = "slideshow_started";
         public static final String SLIDESHOW_FINISHED = "slideshow_finished";
@@ -28,6 +42,8 @@ final class Protocol {
     public static final class Commands {
         private Commands() {
         }
+
+        public static final String PAIR = "LO_SERVER_CLIENT_PAIR";
 
         public static final String TRANSITION_NEXT = "transition_next";
         public static final String TRANSITION_PREVIOUS = "transition_previous";

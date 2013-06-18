@@ -8,99 +8,118 @@
  */
 package org.libreoffice.impressremote.communication;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.UUID;
-
-import org.libreoffice.impressremote.Globals;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
-/**
- * Standard Network client. Connects to a server using Sockets.
- */
 public class BluetoothClient extends Client {
+    // Standard UUID for the Serial Port Profile.
+    // https://www.bluetooth.org/en-us/specification/assigned-numbers-overview/service-discovery
+    private static final String STANDARD_SPP_UUID = "00001101-0000-1000-8000-00805F9B34FB";
 
-    private boolean mBluetoothWasEnabled;
-    private BluetoothAdapter mAdapter;
+    private final boolean mBluetoothWasEnabled;
+
+    private final BluetoothAdapter mBluetoothAdapter;
     private BluetoothSocket mSocket;
 
-    public BluetoothClient(Server aServer,
-                    CommunicationService aCommunicationService,
-                    Receiver aReceiver, boolean aBluetoothWasEnabled)
-                    throws IOException {
+    public BluetoothClient(Server aServer, CommunicationService aCommunicationService, Receiver aReceiver, boolean aBluetoothWasEnabled) {
         super(aServer, aCommunicationService, aReceiver);
 
-        Log.i(Globals.TAG, "BluetoothClient(" + aServer + ")");
-
-        mAdapter = BluetoothAdapter.getDefaultAdapter();
         mBluetoothWasEnabled = aBluetoothWasEnabled;
+
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
         if (!mBluetoothWasEnabled) {
-            mAdapter.enable();
+            mBluetoothAdapter.enable();
         }
+    }
 
-        BluetoothDevice aDevice = mAdapter
-                        .getRemoteDevice(aServer.getAddress());
-        mAdapter.cancelDiscovery();
+    @Override
+    protected void setUpServerConnection() {
+        mSocket = buildServerConnection();
+    }
 
-        // This is the "standard UUID for the Serial Port Profile".
-        // I.e. the 16-bit SerialPort UUID 0x1101 inserted into the
-        // Bluetooth BASE_UUID. See
-        // https://www.bluetooth.org/Technical/AssignedNumbers/service_discovery.htm
-        mSocket = aDevice.createRfcommSocketToServiceRecord(UUID
-                        .fromString("00001101-0000-1000-8000-00805F9B34FB"));
+    private BluetoothSocket buildServerConnection() {
+        try {
+            BluetoothDevice aBluetoothServer = mBluetoothAdapter
+                .getRemoteDevice(mServer.getAddress());
 
-        mSocket.connect();
-        Log.i(Globals.TAG, "BluetoothClient: connected");
+            mBluetoothAdapter.cancelDiscovery();
+
+            BluetoothSocket aSocket = aBluetoothServer
+                .createRfcommSocketToServiceRecord(
+                    UUID.fromString(STANDARD_SPP_UUID));
+
+            aSocket.connect();
+
+            return aSocket;
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to connect to Bluetooth host");
+        }
+    }
+
+    protected InputStream buildMessagesStream() {
+        try {
+            return mSocket.getInputStream();
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to open messages stream.");
+        }
+    }
+
+    protected OutputStream buildCommandsStream() {
+        try {
+            return mSocket.getOutputStream();
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to open commands stream.");
+        }
     }
 
     @Override
     public void closeConnection() {
         try {
-            if (mSocket != null)
-                mSocket.close();
+            mSocket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Unable to close Bluetooth socket.");
         }
     }
 
     protected void onDisconnect() {
         if (!mBluetoothWasEnabled) {
-            mAdapter.disable();
+            mBluetoothAdapter.disable();
         }
     }
 
     @Override
     public void validating() throws IOException {
-        // TODO Auto-generated method stub
+        String aMessage = mMessagesReader.readLine();
 
-        mInputStream = mSocket.getInputStream();
-        mReader = new BufferedReader(new InputStreamReader(mInputStream,
-                        CHARSET));
-
-        mOutputStream = mSocket.getOutputStream();
-
-        String aTemp = mReader.readLine();
-        Log.i(Globals.TAG, "BluetoothClient: got line " + aTemp);
-        if (!aTemp.equals("LO_SERVER_SERVER_PAIRED")) {
+        if (!aMessage.equals(Protocol.Messages.PAIRED)) {
             return;
         }
-        while (mReader.readLine().length() != 0) {
+
+        while (mMessagesReader.readLine().length() != 0) {
             // Get rid of extra lines
         }
-        Intent aIntent = new Intent(CommunicationService.MSG_PAIRING_SUCCESSFUL);
-        LocalBroadcastManager.getInstance(mCommunicationService).sendBroadcast(
-                        aIntent);
-        startListening();
 
+        callSuccessfulPairing();
+
+        startListening();
     }
 
+    private void callSuccessfulPairing() {
+        Intent aSuccessfulPairingIntent = new Intent(
+            CommunicationService.MSG_PAIRING_SUCCESSFUL);
+
+        LocalBroadcastManager.getInstance(mCommunicationService)
+            .sendBroadcast(aSuccessfulPairingIntent);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
