@@ -22,11 +22,13 @@
 
 #include "rtl/ustring.hxx"
 
+#include "vcl/builder.hxx"
 #include "vcl/button.hxx"
 #include "vcl/menubtn.hxx"
 #include "vcl/fixed.hxx"
 #include "vcl/bitmapex.hxx"
 #include "vcl/toolbox.hxx"
+#include "vcl/layout.hxx"
 
 #include "unotools/moduleoptions.hxx"
 #include "svtools/acceleratorexecute.hxx"
@@ -54,24 +56,7 @@ class MnemonicGenerator;
 
 namespace framework
 {
-        // To get the transparent mouse-over look, the closer is actually a toolbox
-    // overload DataChange to handle style changes correctly
-    class DecoToolBox : public ToolBox
-    {
-        Size maMinSize;
-
-        using Window::ImplInit;
-    public:
-                DecoToolBox( Window* pParent, WinBits nStyle = 0 );
-                DecoToolBox( Window* pParent, const ResId& rResId );
-
-        void    DataChanged( const DataChangedEvent& rDCEvt );
-
-        void    calcMinSize();
-        Size    getMinSize();
-    };
-
-    class BackingWindow : public Window
+    class BackingWindow : public Window, public VclBuilderContainer
     {
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >         mxContext;
         com::sun::star::uno::Reference<com::sun::star::frame::XDispatchProvider >        mxDesktopDispatchProvider;
@@ -80,16 +65,22 @@ namespace framework
         com::sun::star::uno::Reference< com::sun::star::frame::XPopupMenuController >    mxPopupMenuController;
         com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >                mxPopupMenu;
 
-        ImageButton                     maWriterButton;
-        ImageButton                     maCalcButton;
-        ImageButton                     maImpressButton;
-        MenuButton                      maOpenButton;
-        ImageButton                     maDrawButton;
-        ImageButton                     maDBButton;
-        ImageButton                     maMathButton;
-        ImageButton                     maTemplateButton;
+        PushButton*                    mpWriterButton;
+        PushButton*                    mpCalcButton;
+        PushButton*                    mpImpressButton;
+        //MenuButton*                     mpOpenButton;
+        PushButton*                    mpOpenButton;
+        PushButton*                    mpDrawButton;
+        PushButton*                    mpDBButton;
+        PushButton*                    mpMathButton;
+        PushButton*                    mpTemplateButton;
 
-        DecoToolBox                     maToolbox;
+
+        PushButton*                    mpExtensionsButton;
+        PushButton*                    mpInfoButton;
+        PushButton*                    mpTplRepButton;
+
+        VclGrid*                       mpStartCenterContainer;
 
         BitmapEx                        maBackgroundLeft;
         BitmapEx                        maBackgroundMiddle;
@@ -102,34 +93,43 @@ namespace framework
         Font                            maTextFont;
         Rectangle                       maControlRect;
 
-        long                            mnColumnWidth[2];
-        long                            mnTextColumnWidth[2];
+        Rectangle                       maStartCentButtons;
+
         Color                           maLabelTextColor;
 
-        Size                            maButtonImageSize;
 
         bool                            mbInitControls;
         sal_Int32                       mnHideExternalLinks;
         svt::AcceleratorExecute*        mpAccExec;
-        long                            mnBtnPos;
-        long                            mnBtnTop;
 
         static const int nItemId_Extensions = 1;
         static const int nItemId_Info = 3;
         static const int nItemId_TplRep = 4;
+
         static const int nShadowTop = 30;
         static const int nShadowLeft = 30;
         static const int nShadowRight = 30;
         static const int nShadowBottom = 30;
 
+        static const int nPaddingTop = 30;
+        static const int nPaddingLeft = 50;
+        static const int nPaddingRight = 50;
+        static const int nPaddingBottom = 30;
+
+        static const int nLogoHeight = 150;
+        int nSCWidth;
+        int nSCHeight;
+
         void loadImage( const ResId& i_rId, PushButton& i_rButton );
 
-        void layoutButton( const char* i_pURL, int nColumn, int i_nExtraWidth, const std::set<OUString>& i_rURLS,
+        void layoutButton( const char* i_pURL, const std::set<OUString>& i_rURLS,
                            SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
                            PushButton& i_rBtn,
                            MnemonicGenerator& i_rMnemonicGen,
                            const String& i_rStr = String()
                            );
+
+        void layoutExternalLink( PushButton& i_rBtn );
 
         void dispatchURL( const OUString& i_rURL,
                           const OUString& i_rTarget = OUString( "_default" ),
@@ -138,13 +138,13 @@ namespace framework
                           );
 
         DECL_LINK( ClickHdl, Button* );
-        DECL_LINK( ActivateHdl, Button* );
-        DECL_LINK( ToolboxHdl, void* );
+        DECL_LINK( ExtLinkClickHdl, Button* );
+        //DECL_LINK( ActivateHdl, Button* );
         DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
         void initControls();
         void initBackground();
-        void prepareRecentFileMenu();
+        //void prepareRecentFileMenu();
         public:
         BackingWindow( Window* pParent );
         ~BackingWindow();
@@ -153,6 +153,8 @@ namespace framework
         virtual void        Resize();
         virtual long        Notify( NotifyEvent& rNEvt );
         virtual void        GetFocus();
+
+        virtual Size GetOptimalSize() const;
 
         void setOwningFrame( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame );
     };
