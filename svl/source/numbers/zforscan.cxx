@@ -1079,14 +1079,6 @@ void ImpSvNumberformatScan::Reset()
 {
     nAnzStrings = 0;
     nAnzResStrings = 0;
-#if 0
-// ER 20.06.97 14:05   nicht noetig, wenn nAnzStrings beachtet wird
-    for (size_t i = 0; i < NF_MAX_FORMAT_SYMBOLS; i++)
-    {
-        sStrArray[i].Erase();
-        nTypeArray[i] = 0;
-    }
-#endif
     eScannedType = NUMBERFORMAT_UNDEFINED;
     nRepPos = 0;
     bExp = false;
