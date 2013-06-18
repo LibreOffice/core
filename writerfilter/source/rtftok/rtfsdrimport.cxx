@@ -120,6 +120,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     bool bPib = false;
     bool bCustom = false;
     bool bTextFrame = false;
+    bool bFilled = true;
 
     uno::Reference<drawing::XShape> xShape;
     uno::Reference<beans::XPropertySet> xPropertySet;
@@ -414,6 +415,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                     break;
             }
         }
+        else if (i->first == "fFilled")
+            bFilled = i->second.toInt32() == 1;
         else
             SAL_INFO("writerfilter", "TODO handle shape property '" << i->first << "':'" << i->second << "'");
     }
@@ -445,6 +448,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             xPropertySet->setPropertyValue("WritingMode", uno::makeAny(sal_Int16(eWritingMode)));
         else
             xPropertySet->setPropertyValue("TextWritingMode", uno::makeAny(eWritingMode));
+        if (!bFilled)
+            xPropertySet->setPropertyValue("BackColorTransparency", uno::makeAny(sal_Int32(100)));
     }
 
     if (nType == ESCHER_ShpInst_PictureFrame) // picture frame
