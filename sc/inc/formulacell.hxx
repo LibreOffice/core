@@ -20,7 +20,6 @@
 #ifndef SC_FORMULACELL_HXX
 #define SC_FORMULACELL_HXX
 
-#include "cell.hxx"
 #include "formularesult.hxx"
 
 #include "formula/tokenarray.hxx"
@@ -35,6 +34,7 @@ class EndListeningContext;
 
 }
 
+class ScProgress;
 class ScTokenArray;
 struct ScSimilarFormulaDelta;
 
@@ -65,7 +65,7 @@ enum ScMatrixMode {
     MM_FAKE      = 3                    // Interpret "as-if" matrix formula (legacy)
 };
 
-class SC_DLLPUBLIC ScFormulaCell : public ScBaseCell, public SvtListener
+class SC_DLLPUBLIC ScFormulaCell : public SvtListener
 {
 private:
     ScFormulaResult aResult;
@@ -111,8 +111,6 @@ public:
     ScAddress       aPos;
 
                     ~ScFormulaCell();
-
-    using ScBaseCell::Clone;
 
     ScFormulaCell* Clone() const;
 

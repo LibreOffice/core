@@ -40,6 +40,7 @@
 #include "rechead.hxx"
 #include "globstr.hrc"
 #include "segmenttree.hxx"
+#include "cell.hxx"
 #include "formulacell.hxx"
 #include "cellvalue.hxx"
 #include "editutil.hxx"

@@ -1059,7 +1059,7 @@ void ScDocument::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell )
 {
     if (!TableExists(rPos.Tab()))
     {
-        pCell->Delete();
+        delete pCell;
         return;
     }
 

@@ -172,7 +172,7 @@ void ScCellValue::clear()
             delete mpEditText;
         break;
         case CELLTYPE_FORMULA:
-            mpFormula->Delete();
+            delete mpFormula;
         break;
         default:
             ;

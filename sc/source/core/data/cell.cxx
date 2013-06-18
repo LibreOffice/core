@@ -60,8 +60,6 @@ ScBaseCell* lclCloneCell( const ScBaseCell& rSrcCell, ScDocument& rDestDoc, cons
             return new ScStringCell( static_cast< const ScStringCell& >( rSrcCell ) );
         case CELLTYPE_EDIT:
             return new ScEditCell(static_cast<const ScEditCell&>(rSrcCell), rDestDoc, rDestPos);
-        case CELLTYPE_FORMULA:
-            return new ScFormulaCell( static_cast< const ScFormulaCell& >( rSrcCell ), rDestDoc, rDestPos, nCloneFlags );
         default:;
     }
     OSL_FAIL( "lclCloneCell - unknown cell type" );
@@ -74,36 +72,12 @@ ScBaseCell* ScBaseCell::Clone( ScDocument& rDestDoc, int nCloneFlags ) const
 {
     // notes will not be cloned -> cell address only needed for formula cells
     ScAddress aDestPos;
-    if( eCellType == CELLTYPE_FORMULA )
-        aDestPos = static_cast< const ScFormulaCell* >( this )->aPos;
     return lclCloneCell( *this, rDestDoc, aDestPos, nCloneFlags );
 }
 
 ScBaseCell* ScBaseCell::Clone( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
 {
     return lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
-}
-
-void ScBaseCell::Delete()
-{
-    switch (eCellType)
-    {
-        case CELLTYPE_VALUE:
-            delete (ScValueCell*) this;
-            break;
-        case CELLTYPE_STRING:
-            delete (ScStringCell*) this;
-            break;
-        case CELLTYPE_EDIT:
-            delete (ScEditCell*) this;
-            break;
-        case CELLTYPE_FORMULA:
-            delete (ScFormulaCell*) this;
-            break;
-        default:
-            OSL_FAIL("Attempt to Delete() an unknown CELLTYPE");
-            break;
-    }
 }
 
 bool ScBaseCell::HasEmptyData() const

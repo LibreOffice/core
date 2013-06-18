@@ -55,10 +55,6 @@ public:
         broadcaster will not be cloned. */
     ScBaseCell*     Clone( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
 
-    /** Due to the fact that ScBaseCell does not have a vtable, this function
-        deletes the cell by calling the appropriate d'tor of the derived class. */
-    void            Delete();
-
     inline CellType GetCellType() const { return (CellType)eCellType; }
 
     /** ScFormulaCell with formula::svEmptyCell result, or ScNoteCell (may have been

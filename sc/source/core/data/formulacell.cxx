@@ -394,7 +394,6 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
                               const OUString& rFormula,
                               const FormulaGrammar::Grammar eGrammar,
                               sal_uInt8 cMatInd ) :
-    ScBaseCell( CELLTYPE_FORMULA ),
     eTempGrammar( eGrammar),
     pCode( NULL ),
     pDocument( pDoc ),
@@ -428,7 +427,6 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
                               const ScTokenArray* pArr,
                               const FormulaGrammar::Grammar eGrammar, sal_uInt8 cInd ) :
-    ScBaseCell( CELLTYPE_FORMULA ),
     eTempGrammar( eGrammar),
     pCode( pArr ? new ScTokenArray( *pArr ) : new ScTokenArray ),
     pDocument( pDoc ),
@@ -473,7 +471,6 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
 }
 
 ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, int nCloneFlags ) :
-    ScBaseCell( rCell ),
     SvtListener(),
     aResult( rCell.aResult ),
     eTempGrammar( rCell.eTempGrammar),
@@ -1826,8 +1823,7 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
                 else
                     pFCell = this;      // this MM_FORMULA
                 // There's only one this, don't compare pFCell==this.
-                if ( pFCell && pFCell->GetCellType() == CELLTYPE_FORMULA
-                  && pFCell->cMatrixFlag == MM_FORMULA )
+                if (pFCell && pFCell->cMatrixFlag == MM_FORMULA)
                 {
                     pFCell->GetMatColsRows( nC, nR );
                     if ( nC == 0 || nR == 0 )

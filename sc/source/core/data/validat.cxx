@@ -657,7 +657,7 @@ bool ScValidationData::GetSelectionFromFormula(
             xMatRef->PutError( nErrCode, 0, 0);
             bOk = false;
         }
-        else if (aValidationSrc.HasValueData())
+        else if (aValidationSrc.IsValue())
             xMatRef->PutDouble( aValidationSrc.GetValue(), 0);
         else
         {

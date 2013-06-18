@@ -1447,7 +1447,7 @@ void ScTable::SetFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* pCell )
 {
     if (!ValidColRow(nCol, nRow))
     {
-        pCell->Delete();
+        delete pCell;
         return;
     }
 

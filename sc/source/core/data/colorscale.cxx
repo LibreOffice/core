@@ -39,7 +39,7 @@ ScColorScaleEntry::ScColorScaleEntry(const ScColorScaleEntry& rEntry):
 {
     if(rEntry.mpCell)
     {
-        mpCell.reset(static_cast<ScFormulaCell*>(rEntry.mpCell->Clone(*rEntry.mpCell->GetDocument(), SC_CLONECELL_NOMAKEABS_EXTERNAL)));
+        mpCell.reset(new ScFormulaCell(*rEntry.mpCell, *rEntry.mpCell->GetDocument(), rEntry.mpCell->aPos, SC_CLONECELL_NOMAKEABS_EXTERNAL));
         mpCell->StartListeningTo( mpCell->GetDocument() );
     }
 }
@@ -52,7 +52,7 @@ ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& 
 {
     if(rEntry.mpCell)
     {
-        mpCell.reset(static_cast<ScFormulaCell*>(rEntry.mpCell->Clone(*pDoc, SC_CLONECELL_NOMAKEABS_EXTERNAL)));
+        mpCell.reset(new ScFormulaCell(*rEntry.mpCell, *rEntry.mpCell->GetDocument(), rEntry.mpCell->aPos, SC_CLONECELL_NOMAKEABS_EXTERNAL));
         mpCell->StartListeningTo( pDoc );
     }
 }

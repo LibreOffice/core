@@ -2612,7 +2612,7 @@ void ScChart2DataSequence::BuildDataCache()
                                 if (nErr)
                                     break;
 
-                                if (pFCell->HasValueData())
+                                if (pFCell->IsValue())
                                 {
                                     rItem.mfValue = pFCell->GetValue();
                                     rItem.mbIsValue = true;
