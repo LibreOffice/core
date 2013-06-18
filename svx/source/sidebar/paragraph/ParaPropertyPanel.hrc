@@ -15,75 +15,55 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #include "svx/dialogs.hrc"
 
-#define BT_SUBSTLEFT                                 1
-#define BT_SUBSTCENTER                               2
-#define BT_SUBSTRIGHT                                3
-#define BT_SUBSTJUSTIFY                              4
-#define BT_BTX_LINESP                                1
 #define BT_TBX_INDENT_INC                            1
 #define BT_TBX_INDENT_DEC                            2
-#define BT_TBX_UL_INC                                1
-#define BT_TBX_UL_DEC                                2
-#define ID_HANGING_INDENT                            3
 #define BT_TBX_INDENT_PROMOTE                        1
 #define BT_TBX_INDENT_DEMOTE                         2
+#define ID_HANGING_INDENT                            3
 #define SD_HANGING_INDENT                            3
 #define MF_BEFORE_INDENT                             2
 #define MF_AFTER_INDENT                              4
 #define MF_FL_INDENT                                 6
-#define TBX_HORIZONTALALIGNMENT                      5
-#define IMG_INDENT_HANG                              15
-#define FT_INDENT                                    16
 #define TBX_INDENT_INC_DEC                           17
-#define FI_SPACE1                                    18
-#define FI_SPACE2                                    19
-#define FI_INDENT1                                   20
-#define FI_INDENT2                                   21
-#define FI_INDENT3                                   22
-#define IMG_SPACE3                                   23
-#define TBX_LINESP                                   25
-#define IMG_SPACE1                                   26
-#define IMG_INDENT1                                  27
-#define IMG_INDENT2                                  28
-#define IMG_SPACE2                                   29
-#define IMG_INDENT3                                  30
-#define FT_SPACING                                   31
-#define TBX_UL_INC_DEC                               33
+
 #define MF_ABOVE_PARASPACING                         32
 #define MF_BELOW_PARASPACING                         34
 #define TBX_INDENT_PRO_DEMOTE                        35
-#define TBX_VERT_ALIGN      40
-#define TBX_NUM_BULLET      44
 #define IL_NUM_BULLET       45
 
 #define FT_BACK_COLOR       47
-#define TBX_BACK_COLOR      48
-#define TBI_BACK_COLOR      49
-#define IMG_BACK_COLOR      50
-#define IMG_BACK_COLOR_H    51
 #define IL_NUM_BULLET_RTL       52  //sym2_7380
-#define TBI_VERT_ALIGN_TOP      60
-#define TBI_VERT_ALIGN_CENTER   61
-#define TBI_VERT_ALIGN_BOT      62
-#define TBI_NUMBERING           63
-#define TBI_BULLET              64
+
 #define TBI_HOR_ALIGN_LEFT      65
 #define TBI_HOR_ALIGN_CENTER    66
 #define TBI_HOR_ALIGN_RIGHT     67
 #define TBI_HOR_ALIGN_JUSTIFY   68
-#define TBI_INDENT_INC          69
-#define TBI_INDENT_DEC          70
-#define TBI_UL_INC              71
-#define TBI_UL_DEC              72
 
-//for vertical alignment
-#define IID_VERT_TOP        1
-#define IID_VERT_CENTER     2
-#define IID_VERT_BOTTOM     3
+//============================== Global Definitions ==============================
+#define IMG_BACK_COLOR      (RID_SVX_SIDEBAR_BEGIN +  0)
+#define IMG_BACK_COLOR_H    (RID_SVX_SIDEBAR_BEGIN +  1)
+#define IMG_SPACE1          (RID_SVX_SIDEBAR_BEGIN +  2)
+#define IMG_SPACE2          (RID_SVX_SIDEBAR_BEGIN +  3)
+#define IMG_SPACE3          (RID_SVX_SIDEBAR_BEGIN +  4)
+#define IMG_INDENT1         (RID_SVX_SIDEBAR_BEGIN +  5)
+#define IMG_INDENT2         (RID_SVX_SIDEBAR_BEGIN +  6)
+#define IMG_INDENT3         (RID_SVX_SIDEBAR_BEGIN +  7)
+#define IMG_INDENT_HANG     (RID_SVX_SIDEBAR_BEGIN +  8)
+#define IMG_SPACING1        (RID_SVX_SIDEBAR_BEGIN +  9)
+#define IMG_SPACING115      (RID_SVX_SIDEBAR_BEGIN + 10)
+#define IMG_SPACING15       (RID_SVX_SIDEBAR_BEGIN + 11)
+#define IMG_SPACING2        (RID_SVX_SIDEBAR_BEGIN + 12)
+#define IMG_SEL_SPACING1    (RID_SVX_SIDEBAR_BEGIN + 13)
+#define IMG_SEL_SPACING115  (RID_SVX_SIDEBAR_BEGIN + 14)
+#define IMG_SEL_SPACING15   (RID_SVX_SIDEBAR_BEGIN + 15)
+#define IMG_SEL_SPACING2    (RID_SVX_SIDEBAR_BEGIN + 16)
+#define IMG_CUSTOM          (RID_SVX_SIDEBAR_BEGIN + 17)
+#define IMG_CUSTOM_GRAY     (RID_SVX_SIDEBAR_BEGIN + 18)
 
-//for numbering and bullett
+//for numbering and bullet
 #define IID_BULLET          1
 #define IID_NUMBER          2
 //============================== popup bullet and numbering & back color =========================
@@ -107,14 +87,6 @@
 #define FT_CUSTOM                          14
 #define FT_LINE_SPACING                    15
 #define FT_OF                              16
-#define IMG_SPACING1                       18
-#define IMG_SPACING115                     19
-#define IMG_SPACING15                      20
-#define IMG_SPACING2                       21
-#define IMG_SEL_SPACING1                   23
-#define IMG_SEL_SPACING115                 24
-#define IMG_SEL_SPACING15                  25
-#define IMG_SEL_SPACING2                   26
 #define IMG_LPCUSTOMNOBORDER               27
 #define FI_CUSTOM_NOBORDER_LSPACE          28
 #define LINE_SPACING                       29
@@ -122,8 +94,6 @@
 #define STR_SPACING115                     31
 #define STR_SPACING15                      32
 #define STR_SPACING2                       33
-#define IMG_CUSTOM                         34
-#define IMG_CUSTOM_GRAY                    35
 #define STR_LCVALUE                        36
 #define STR_LS_SINGLE                      37
 #define STR_LS_115                         38
@@ -233,13 +203,8 @@
 #define TBX_HORI_ALIGN_Y    SECTIONPAGE_MARGIN_VERTICAL_TOP
 
 #define TBX_VERT_ALIGN_X    TBX_HORI_ALIGN_X + TBX_OUT_BORDER_OFFSET_X*2 + TOOLBOX_ITEM_WIDTH * 4 + CONTROL_SPACING_HORIZONTAL
-#define TBX_VERT_ALIGN_Y    TBX_HORI_ALIGN_Y
 
-#define TBX_NUM_BULLET_X    TBX_HORI_ALIGN_X
 #define TBX_NUM_BULLET_Y    TBX_HORI_ALIGN_Y + TOOLBOX_ITEM_HEIGHT + CONTROL_SPACING_VERTICAL - 1
-
-#define TBX_BACK_COLOR_X    TBX_HORI_ALIGN_X + TBX_OUT_BORDER_OFFSET_X*2 + TOOLBOX_ITEM_WIDTH * 3 + CONTROL_SPACING_HORIZONTAL
-#define TBX_BACK_COLOR_Y    TBX_NUM_BULLET_Y
 
 #define FT_PARA_SPACE_X     SECTIONPAGE_MARGIN_HORIZONTAL
 #define FT_PARA_SPACE_Y     TBX_NUM_BULLET_Y + TOOLBOX_ITEM_HEIGHT + CONTROL_SPACING_VERTICAL - 3
@@ -250,7 +215,7 @@
 #define TBX_PARA_SPACE_INC_DEC_Y2   FT_PARA_SPACE_Y2 + TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL
 
 #define FT_PARA_INDENT_X    TBX_VERT_ALIGN_X
-#define FT_PARA_INDENT_Y    FT_PARA_SPACE_Y
+
 #define FT_PARA_INDENT_Y2   FT_PARA_SPACE_Y2
 
 #define TBX_PARA_INDENT_INC_DEC_X   TBX_VERT_ALIGN_X
@@ -279,14 +244,6 @@
 #define MBX_FLINE_DIST_X    MBX_LEFT_DIST_X
 #define MBX_FLINE_DIST_Y    MBX_RIGHT_DIST_Y + MBOX_HEIGHT + CONTROL_SPACING_VERTICAL
 #define MBX_FLINE_DIST_Y2   MBX_RIGHT_DIST_Y2 + MBOX_HEIGHT + CONTROL_SPACING_VERTICAL
-
-#define IMG_INDENT_X        FT_PARA_INDENT_X - 4
-#define IMG_INDENT1_Y       MBX_LEFT_DIST_Y - 1
-#define IMG_INDENT2_Y       MBX_RIGHT_DIST_Y - 1
-#define IMG_INDENT3_Y       MBX_FLINE_DIST_Y - 1
-#define IMG_INDENT1_Y2      MBX_LEFT_DIST_Y2 - 1
-#define IMG_INDENT2_Y2      MBX_RIGHT_DIST_Y2- 1
-#define IMG_INDENT3_Y2      MBX_FLINE_DIST_Y2- 1
 
 #define TBX_LINE_SPACE_X    TBX_HORI_ALIGN_X
 #define TBX_LINE_SPACE_Y    MBX_FLINE_DIST_Y
