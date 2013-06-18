@@ -26,7 +26,7 @@ PRJ = ..$/..$/..
 PRJNAME = desktop
 TARGET = deploymentgui
 ENABLE_EXCEPTIONS = TRUE
-#USE_DEFFILE = TRUE
+USE_DEFFILE = TRUE
 NO_BSYMBOLIC = TRUE
 USE_PCH :=
 ENABLE_PCH :=
@@ -50,6 +50,8 @@ SLOFILES = \
         $(SLO)$/dp_gui_system.obj \
         $(SLO)$/dp_gui_extensioncmdqueue.obj \
         $(SLO)$/descedit.obj
+
+SHL1OBJS = $(SLO)$/dp_gui_extensioncmdqueue.obj
 
 .IF "$(GUI)"=="OS2"
 SHL1TARGET = deplgui$(DLLPOSTFIX)
@@ -84,8 +86,6 @@ SHL1LIBS = $(SLB)$/$(TARGET).lib
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME = $(SHL1TARGET)
-#DEFLIB1NAME = $(TARGET)
-#DEF1DEPN =
 
 SRS1NAME = $(TARGET)
 SRC1FILES = \

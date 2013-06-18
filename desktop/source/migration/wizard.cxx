@@ -116,9 +116,11 @@ ResMgr *FirstStartWizard::GetResManager()
 }
 
 FirstStartWizard::FirstStartWizard( Window* pParent, sal_Bool bLicenseNeedsAcceptance, const rtl::OUString &rLicensePath )
-    :RoadmapWizard( pParent, WizardResId(DLG_FIRSTSTART_WIZARD),
-        WZB_NEXT|WZB_PREVIOUS|WZB_FINISH|WZB_CANCEL|WZB_HELP)
+    :RoadmapWizard( pParent,
+                    WizardResId(DLG_FIRSTSTART_WIZARD),
+                    WZB_NEXT|WZB_PREVIOUS|WZB_FINISH|WZB_CANCEL|WZB_HELP)
     ,m_bOverride(sal_False)
+    , m_lastState( STATE_WELCOME )
     ,m_aDefaultPath(0)
     ,m_aMigrationPath(0)
     ,m_bDone(sal_False)
@@ -129,9 +131,6 @@ FirstStartWizard::FirstStartWizard( Window* pParent, sal_Bool bLicenseNeedsAccep
     ,m_aLicensePath( rLicensePath )
 {
     FreeResource();
-    // ---
-//  enableState(STATE_USER, sal_False);
-//  enableState(STATE_REGISTRATION, sal_False);
 
     Size aTPSize(TP_WIDTH, TP_HEIGHT);
     SetPageSizePixel(LogicToPixel(aTPSize, MAP_APPFONT));
@@ -141,7 +140,6 @@ FirstStartWizard::FirstStartWizard( Window* pParent, sal_Bool bLicenseNeedsAccep
     m_pNextPage->SetHelpId(HID_FIRSTSTART_NEXT);
     m_pCancel->SetHelpId(HID_FIRSTSTART_CANCEL);
     m_pFinish->SetHelpId(HID_FIRSTSTART_FINISH);
-    // m_pHelp->SetUniqueId(UID_FIRSTSTART_HELP);
     m_pHelp->Hide();
     m_pHelp->Disable();
 
@@ -173,23 +171,25 @@ void FirstStartWizard::DisableButtonsWhileMigration()
 {
     ::svt::RoadmapWizardTypes::PathId aDefaultPath = 0;
 
-    sal_Bool bPage_Welcome      = sal_True;
     sal_Bool bPage_Migration    = sal_True;
-    sal_Bool bPage_User         = sal_True;
     sal_Bool bPage_UpdateCheck  = sal_True;
 
     bPage_Migration   = Migration::checkMigration();
     bPage_UpdateCheck = showOnlineUpdatePage();
 
     WizardPath aPath;
-    if (bPage_Welcome)
-        aPath.push_back(STATE_WELCOME);
+    aPath.push_back(STATE_WELCOME);
     if (bPage_Migration)
+    {
         aPath.push_back(STATE_MIGRATION);
-    if (bPage_User)
-        aPath.push_back(STATE_USER);
+    }
+    aPath.push_back(STATE_USER);
+    m_lastState = STATE_USER;
     if (bPage_UpdateCheck)
+    {
         aPath.push_back(STATE_UPDATE_CHECK);
+        m_lastState = STATE_UPDATE_CHECK;
+    }
 
     declarePath(aDefaultPath, aPath);
 
@@ -200,12 +200,11 @@ void FirstStartWizard::DisableButtonsWhileMigration()
     //    such direct links can be enabled by default.
     sal_Bool bAllowDirectLink = true;
 
-    if (bPage_User)
-        enableState(STATE_USER, bAllowDirectLink);
-    if (bPage_UpdateCheck)
-        enableState(STATE_UPDATE_CHECK, bAllowDirectLink);
+    enableState(STATE_USER, bAllowDirectLink);
     if (bPage_Migration)
         enableState(STATE_MIGRATION, bAllowDirectLink);
+    if (bPage_UpdateCheck)
+        enableState(STATE_UPDATE_CHECK, bAllowDirectLink);
 
     return aDefaultPath;
 }
@@ -252,15 +251,13 @@ void FirstStartWizard::enterState(WizardState _nState)
         // attach warning dialog to cancel/decline button
         m_pCancel->SetClickHdl( LINK(this, FirstStartWizard, DeclineHdl) );
         break;
-    case STATE_REGISTRATION:
+    }
+    if ( _nState == m_lastState )
+    {
         enableButtons(WZB_NEXT, sal_False);
         enableButtons(WZB_FINISH, sal_True);
         defaultButton(WZB_FINISH);
-        break;
     }
-
-    // focus
-
 }
 
 IMPL_LINK( FirstStartWizard, DeclineHdl, PushButton *, EMPTYARG )

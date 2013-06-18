@@ -160,8 +160,12 @@
 #include "com/sun/star/deployment/ExtensionManager.hpp"
 #include "com/sun/star/deployment/XExtensionManager.hpp"
 #include "com/sun/star/task/XInteractionApprove.hpp"
+#include "com/sun/star/task/XInteractionAbort.hpp"
 #include "cppuhelper/compbase3.hxx"
 #include <hash_set>
+
+#include "com/sun/star/deployment/VersionException.hpp"
+#include <dp_gui_handleversionexception.hxx>
 
 #if defined MACOSX
 #include <errno.h>
@@ -179,7 +183,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-//using namespace ::com::sun::star::bridge;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::view;
@@ -793,16 +796,39 @@ void MinimalCommandEnv::handle(
     css::uno::Reference< css::task::XInteractionRequest> const& xRequest)
     throw ( css::uno::RuntimeException )
 {
+    bool bApprove = true;
+
+    css::deployment::VersionException verExc;
+    if ( xRequest->getRequest() >>= verExc )
+    {
+        // user interaction, if an extension is already been installed.
+        bApprove = dp_gui::handleVersionException( verExc );
+    }
+
     const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > conts( xRequest->getContinuations());
     const css::uno::Reference< css::task::XInteractionContinuation>* pConts = conts.getConstArray();
     const sal_Int32 len = conts.getLength();
     for( sal_Int32 pos = 0; pos < len; ++pos )
     {
-        css::uno::Reference< css::task::XInteractionApprove> xInteractionApprove( pConts[ pos ], css::uno::UNO_QUERY);
-        if( xInteractionApprove.is()) {
-            xInteractionApprove->select();
-            // don't query again for ongoing continuations:
-            break;
+        if ( bApprove )
+        {
+            css::uno::Reference< css::task::XInteractionApprove> xInteractionApprove( pConts[ pos ], css::uno::UNO_QUERY);
+            if( xInteractionApprove.is())
+            {
+                xInteractionApprove->select();
+                // don't query again for ongoing continuations:
+                break;
+            }
+        }
+        else
+        {
+            css::uno::Reference< css::task::XInteractionAbort > xInteractionAbort( pConts[ pos ], css::uno::UNO_QUERY );
+            if (xInteractionAbort.is())
+            {
+                xInteractionAbort->select();
+                // don't query again for ongoing continuations:
+                break;
+            }
         }
     }
 }
@@ -885,7 +911,6 @@ static void installBundledExtensionBlobs()
 {
     rtl::OUString aDirUrl( OUSTR("$OOO_BASE_DIR/share/extensions/install"));
     ::rtl::Bootstrap::expandMacros( aDirUrl);
-    ::osl::Directory aDir( aDirUrl);
 
     // Find out if we can exit early: only when there is an extension file newer
     // than the marker we have to install any extension.
@@ -901,29 +926,16 @@ static void installBundledExtensionBlobs()
     // provide the minimal set of requirements to call ExtensionManager's methods
     MinimalCommandEnv* pMiniCmdEnv = new MinimalCommandEnv;
     ::css::uno::Reference< css::ucb::XCommandEnvironment> xCmdEnv( static_cast< cppu::OWeakObject*>(pMiniCmdEnv), css::uno::UNO_QUERY);
-    const ::css::beans::NamedValue aNamedProps( OUSTR("SUPPRESS_LICENSE"), ::css::uno::makeAny( OUSTR("1")));
-    const ::css::uno::Sequence< ::css::beans::NamedValue> xProperties( &aNamedProps, 1);
     ::css::uno::Reference< ::css::task::XAbortChannel> xAbortChannel;
 
-    // get the list of deployed extensions
-    typedef std::hash_set< rtl::OUString, ::rtl::OUStringHash> StringSet;
-    StringSet aExtNameSet;
-    css::uno::Sequence< css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > > xListOfLists = xEM->getAllExtensions( xAbortChannel, xCmdEnv);
-    const sal_Int32 nLen1 = xListOfLists.getLength();
-    for( int i1 = 0; i1 < nLen1; ++i1) {
-        css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > xListOfPacks = xListOfLists[i1];
-        const sal_Int32 nLen2 = xListOfPacks.getLength();
-        for( int i2 = 0; i2 < nLen2; ++i2) {
-            css::uno::Reference<css::deployment::XPackage> xPackage = xListOfPacks[i2];
-            if( !xPackage.is())
-                continue;
-            aExtNameSet.insert( xPackage->getName());
-        }
-    }
+    const ::css::beans::NamedValue aNamedProps( OUSTR("SUPPRESS_LICENSE"), ::css::uno::makeAny( OUSTR("1")));
+    const ::css::uno::Sequence< ::css::beans::NamedValue> xProperties( &aNamedProps, 1);
 
     // iterate over the bundled extension blobs
+    ::osl::Directory aDir( aDirUrl);
     ::osl::File::RC rc = aDir.open();
-    while( rc == osl::File::E_None) {
+    while( rc == osl::File::E_None)
+    {
         ::osl::DirectoryItem aDI;
         if( aDir.getNextItem( aDI) != osl::File::E_None)
             break;
@@ -932,20 +944,16 @@ static void installBundledExtensionBlobs()
             continue;
         if( aFileStat.getFileType() != ::osl::FileStatus::Regular)
             continue;
-        try {
-            // check if the extension is already installed
-            const rtl::OUString& rExtFileUrl = aFileStat.getFileURL();
-            const sal_Int32 nBaseIndex = rExtFileUrl.lastIndexOf('/');
-            const ::rtl::OUString aBaseName = (nBaseIndex < 0) ? rExtFileUrl : rExtFileUrl.copy( nBaseIndex+1);
-            const bool bFound = (aExtNameSet.find( aBaseName) != aExtNameSet.end());
-            if( bFound)
-                continue;
+        try
+        {
             // request to install the extension blob
-            xEM->addExtension( rExtFileUrl, xProperties, OUSTR("user"), xAbortChannel, xCmdEnv);
-        // ExtensionManager problems are not worth to die for here
-        } catch( css::uno::RuntimeException&) {
-        } catch( css::deployment::DeploymentException&) {
+            xEM->addExtension( aFileStat.getFileURL(), xProperties, OUSTR("user"), xAbortChannel, xCmdEnv);
         }
+        // ExtensionManager problems are not worth to die for here
+        catch( css::uno::RuntimeException&)
+        {}
+        catch( css::deployment::DeploymentException&)
+        {}
     }
 }
 
@@ -2010,8 +2018,21 @@ void Desktop::Main()
                     DEFINE_CONST_UNICODE( "com.sun.star.comp.desktop.FirstStart" ) ), UNO_QUERY );
                 if (xFirstStartJob.is())
                 {
-                   // mark first start as done
-                   FinishFirstStart();
+                    sal_Bool bDone = sal_False;
+                    Sequence< NamedValue > lArgs(2);
+                    lArgs[0].Name    = ::rtl::OUString::createFromAscii("LicenseNeedsAcceptance");
+                    lArgs[0].Value <<= LicenseNeedsAcceptance();
+                    lArgs[1].Name    = ::rtl::OUString::createFromAscii("LicensePath");
+                    lArgs[1].Value <<= GetLicensePath();
+
+                    xFirstStartJob->execute(lArgs) >>= bDone;
+                    if ( !bDone )
+                    {
+                        doShutdown();
+                        return;
+                    }
+                    // mark first start as done
+                    FinishFirstStart();
                 }
             }
 

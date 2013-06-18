@@ -62,6 +62,7 @@ public:
 private:
     sal_Bool m_bOverride;
     WizardState _currentState;
+    WizardState m_lastState;
     ::svt::RoadmapWizardTypes::PathId m_aDefaultPath;
     ::svt::RoadmapWizardTypes::PathId m_aMigrationPath;
     String m_sNext;
