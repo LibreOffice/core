@@ -45,12 +45,11 @@ ScBaseCell::ScBaseCell( const ScBaseCell& rCell ) :
 
 ScBaseCell::~ScBaseCell()
 {
-    OSL_ENSURE( eCellType == CELLTYPE_DESTROYED, "BaseCell Destructor" );
 }
 
 namespace {
 
-ScBaseCell* lclCloneCell( const ScBaseCell& rSrcCell, ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags )
+ScBaseCell* lclCloneCell( const ScBaseCell& rSrcCell, ScDocument& rDestDoc, const ScAddress& rDestPos )
 {
     switch( rSrcCell.GetCellType() )
     {
@@ -68,16 +67,16 @@ ScBaseCell* lclCloneCell( const ScBaseCell& rSrcCell, ScDocument& rDestDoc, cons
 
 } // namespace
 
-ScBaseCell* ScBaseCell::Clone( ScDocument& rDestDoc, int nCloneFlags ) const
+ScBaseCell* ScBaseCell::Clone( ScDocument& rDestDoc, int ) const
 {
     // notes will not be cloned -> cell address only needed for formula cells
     ScAddress aDestPos;
-    return lclCloneCell( *this, rDestDoc, aDestPos, nCloneFlags );
+    return lclCloneCell( *this, rDestDoc, aDestPos );
 }
 
-ScBaseCell* ScBaseCell::Clone( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
+ScBaseCell* ScBaseCell::Clone( ScDocument& rDestDoc, const ScAddress& rDestPos, int ) const
 {
-    return lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
+    return lclCloneCell( *this, rDestDoc, rDestPos );
 }
 
 bool ScBaseCell::HasEmptyData() const
@@ -147,7 +146,6 @@ ScValueCell::ScValueCell( double fValue ) :
 #if OSL_DEBUG_LEVEL > 0
 ScValueCell::~ScValueCell()
 {
-    eCellType = CELLTYPE_DESTROYED;
 }
 #endif
 
@@ -162,7 +160,6 @@ ScStringCell::ScStringCell( const OUString& rString ) :
 #if OSL_DEBUG_LEVEL > 0
 ScStringCell::~ScStringCell()
 {
-    eCellType = CELLTYPE_DESTROYED;
 }
 #endif
 

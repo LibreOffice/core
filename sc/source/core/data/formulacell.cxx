@@ -599,9 +599,6 @@ ScFormulaCell::~ScFormulaCell()
         pDocument->GetExternalRefManager()->removeRefCell(this);
 
     delete pCode;
-#if OSL_DEBUG_LEVEL > 0
-    eCellType = CELLTYPE_DESTROYED;
-#endif
 }
 
 ScFormulaCell* ScFormulaCell::Clone() const

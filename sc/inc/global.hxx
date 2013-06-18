@@ -287,9 +287,6 @@ enum CellType
         CELLTYPE_STRING,
         CELLTYPE_FORMULA,
         CELLTYPE_EDIT,
-#if OSL_DEBUG_LEVEL > 0
-        CELLTYPE_DESTROYED
-#endif
     };
 
 enum DelCellCmd

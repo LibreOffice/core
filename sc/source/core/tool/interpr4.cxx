@@ -498,12 +498,6 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
         case CELLTYPE_NONE:
             fValue = 0.0;       // empty or broadcaster cell
         break;
-#if OSL_DEBUG_LEVEL > 0
-        case CELLTYPE_DESTROYED:
-            SetError(errCellNoValue);
-            fValue = 0.0;
-        break;
-#endif
     }
 
     return fValue;

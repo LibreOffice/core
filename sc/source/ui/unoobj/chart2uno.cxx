@@ -2619,9 +2619,6 @@ void ScChart2DataSequence::BuildDataCache()
                                 }
                             }
                             break;
-#if OSL_DEBUG_LEVEL > 0
-                            case CELLTYPE_DESTROYED:
-#endif
                             case CELLTYPE_EDIT:
                             case CELLTYPE_NONE:
                             case CELLTYPE_STRING:
