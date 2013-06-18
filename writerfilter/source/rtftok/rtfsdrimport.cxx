@@ -104,6 +104,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     uno::Any aLineColor = uno::makeAny(COL_BLACK);
     // Default line width is 0.75 pt (26 mm100) in Word, 0 in Writer.
     uno::Any aLineWidth = uno::makeAny(sal_Int32(26));
+    bool bFilled = true;
 
     for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShape.aProperties.begin();
             i != rShape.aProperties.end(); ++i)
@@ -288,6 +289,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             aViewBox.Height = i->second.toInt32();
         else if ( i->first == "dhgt" )
             resolveDhgt(xPropertySet, i->second.toInt32());
+        else if (i->first == "fFilled")
+            bFilled = i->second.toInt32() == 1;
         else
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle shape property '" <<
                     OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr() << "':'" <<
@@ -357,6 +360,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             xPropertySet->setPropertyValue("VertOrientRelation", uno::makeAny(rShape.nVertOrientRelation));
         if (rShape.nWrap != -1)
             xPropertySet->setPropertyValue("Surround", uno::makeAny(text::WrapTextMode(rShape.nWrap)));
+        if (!bFilled)
+            xPropertySet->setPropertyValue("FillTransparence", uno::makeAny(sal_Int32(100)));
     }
 
     // Send it to dmapper

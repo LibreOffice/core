@@ -149,6 +149,7 @@ public:
     void testFdo63023();
     void testN818997();
     void testFdo64671();
+    void testN825305();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -268,6 +269,7 @@ void Test::run()
         {"fdo63023.rtf", &Test::testFdo63023},
         {"n818997.rtf", &Test::testN818997},
         {"fdo64671.rtf", &Test::testFdo64671},
+        {"n825305.rtf", &Test::testN825305},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1228,6 +1230,18 @@ void Test::testFdo64671()
 {
     // Additional '}' was inserted before the special character.
     getRun(getParagraph(1), 1, OUString("\xC5\xBD", 2, RTL_TEXTENCODING_UTF8));
+}
+
+void Test::testN825305()
+{
+    // The problem was that the textbox wasn't transparent, due to unimplemented fFilled == 0.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertyState> xPropertyState(xDraws->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(xDraws->getByIndex(1), "FillTransparence"));
+    beans::PropertyState ePropertyState = xPropertyState->getPropertyState("FillTransparence");
+    // Was beans::PropertyState_DEFAULT_VALUE.
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
