@@ -2332,8 +2332,16 @@ basegfx::B2DPolyPolygon SwDrawVirtObj::TakeContour() const
 SdrHdl* SwDrawVirtObj::GetHdl(sal_uInt32 nHdlNum) const
 {
     SdrHdl* pHdl = rRefObj.GetHdl(nHdlNum);
-    Point aP(pHdl->GetPos() + GetOffset());
-    pHdl->SetPos(aP);
+
+    if(pHdl)
+    {
+        Point aP(pHdl->GetPos() + GetOffset());
+        pHdl->SetPos(aP);
+    }
+    else
+    {
+        OSL_ENSURE(false, "Got no SdrHdl(!)");
+    }
 
     return pHdl;
 }
@@ -2342,8 +2350,14 @@ SdrHdl* SwDrawVirtObj::GetPlusHdl(const SdrHdl& rHdl, sal_uInt16 nPlNum) const
 {
     SdrHdl* pHdl = rRefObj.GetPlusHdl(rHdl, nPlNum);
 
-    if (pHdl)
+    if(pHdl)
+    {
         pHdl->SetPos(pHdl->GetPos() + GetOffset());
+    }
+    else
+    {
+        OSL_ENSURE(false, "Got no SdrHdl(!)");
+    }
 
     return pHdl;
 }
