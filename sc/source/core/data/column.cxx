@@ -1998,6 +1998,8 @@ public:
     UpdateRefHandler(const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz, UpdateRefMode eMode, ScDocument* pUndoDoc) :
         maRange(rRange), mnDx(nDx), mnDy(nDy), mnDz(nDz), meMode(eMode), mpUndoDoc(pUndoDoc), mbUpdated(false) {}
 
+    virtual ~UpdateRefHandler() {}
+
     bool isUpdated() const { return mbUpdated; }
 
     void operator() (sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
