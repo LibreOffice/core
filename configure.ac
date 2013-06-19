@@ -6253,7 +6253,7 @@ if test "$SOLAR_JAVA" != ""; then
         fi
         JAVAINTERPRETER=`cygpath -d "$JAVAINTERPRETER"`
         JAVAINTERPRETER=`cygpath -u "$JAVAINTERPRETER"`
-    elif test "$_os" = "Darwin"; then
+    elif test $_os = Darwin -a "$BITNESS_OVERRIDE" = ""; then
         dnl HACK:  There currently is only a 32 bit version of LibreOffice for Mac OS X,
         dnl and Tiger Java complains about -d32 while Snow Leopard Java needs it
         dnl to run in 32 bit mode and be able to load LibreOffice jnilibs:
