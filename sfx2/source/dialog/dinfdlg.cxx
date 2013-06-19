@@ -1398,6 +1398,19 @@ CustomPropertiesWindow::CustomPropertiesWindow(Window* pParent,
     m_aNameBox.SetAccessibleName(rHeaderAccName);
     m_aTypeBox.SetAccessibleName(rHeaderAccType);
     m_aValueEdit.SetAccessibleName(rHeaderAccValue);
+
+    m_aNameBox.Hide();
+    m_aTypeBox.Hide();
+    m_aValueEdit.Hide();
+    m_aDateField.Hide();
+    m_aTimeField.Hide();
+    m_aDurationField.Hide();
+    m_aEditButton.Hide();
+    m_aYesNoButton.Hide();
+    m_aRemoveButton.Hide();
+
+    m_nLineHeight =
+        ( m_aRemoveButton.GetPosPixel().Y() * 2 ) + m_aRemoveButton.GetSizePixel().Height();
 }
 
 CustomPropertiesWindow::~CustomPropertiesWindow()
@@ -1555,16 +1568,6 @@ void CustomPropertiesWindow::InitControls( HeaderBar* pHeaderBar, const ScrollBa
     DBG_ASSERT( pHeaderBar, "CustomPropertiesWindow::InitControls(): invalid headerbar" );
     DBG_ASSERT( pScrollBar, "CustomPropertiesWindow::InitControls(): invalid scrollbar" );
 
-    m_aNameBox.Hide();
-    m_aTypeBox.Hide();
-    m_aValueEdit.Hide();
-    m_aDateField.Hide();
-    m_aTimeField.Hide();
-    m_aDurationField.Hide();
-    m_aEditButton.Hide();
-    m_aYesNoButton.Hide();
-    m_aRemoveButton.Hide();
-
     const long nOffset = 4;
     const long nScrollBarWidth = pScrollBar->GetSizePixel().Width();
     const long nButtonWidth = m_aRemoveButton.GetSizePixel().Width() + nScrollBarWidth + nOffset;
@@ -1614,9 +1617,6 @@ void CustomPropertiesWindow::InitControls( HeaderBar* pHeaderBar, const ScrollBa
 
         pCurrent++;
     }
-
-    m_nLineHeight =
-        ( m_aRemoveButton.GetPosPixel().Y() * 2 ) + m_aRemoveButton.GetSizePixel().Height();
 }
 
 sal_uInt16 CustomPropertiesWindow::GetVisibleLineCount() const
