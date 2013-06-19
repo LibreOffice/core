@@ -81,7 +81,6 @@ public:
     void remove( CustomAnimationEffectPtr& pEffect );
 
     // Control
-    virtual void Resize();
     virtual void StateChanged( StateChangedType nStateChange );
     virtual void KeyInput( const KeyEvent& rKEvt );
 
@@ -100,7 +99,6 @@ public:
 private:
     void addListener();
     void removeListener();
-    void updateLayout();
     void updateControls();
     void updateMotionPathTags();
     void markShapesFromSelectedEffects();

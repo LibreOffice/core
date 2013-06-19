@@ -192,12 +192,6 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
 
     maStrProperty = mpFTProperty->GetText();
 
-    // use bold font for group headings (same font for all fixed lines):
-    /*Font font( mpFLEffect->GetFont() );
-    font.SetWeight( WEIGHT_BOLD );
-    mpFLEffect->SetFont( font );
-    mpFLModify->SetFont( font );*/
-
     fillDurationComboBox( mpCBSpeed );
     mpPBMoveUp->SetSymbol( SYMBOL_ARROW_UP );
     mpPBMoveDown->SetSymbol( SYMBOL_ARROW_DOWN );
@@ -215,9 +209,6 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     mpCBAutoPreview->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
 
     //maStrModify = mpFLEffect->GetText();
-
-    // resize controls according to current size
-    //updateLayout();
 
     // get current controller and initialize listeners
     try
@@ -282,12 +273,6 @@ void CustomAnimationPane::addUndo()
         if( pPage )
             pManager->AddUndoAction( new UndoAnimation( mrBase.GetDocShell()->GetDoc(), pPage ) );
     }
-}
-
-void CustomAnimationPane::Resize()
-{
-    //updateLayout();
-    return;
 }
 
 void CustomAnimationPane::StateChanged( StateChangedType nStateChange )
@@ -368,213 +353,6 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
             break;
     }
     return 0;
-}
-
-
-void CustomAnimationPane::updateLayout()
-{
-    Size aPaneSize( GetSizePixel() );
-    if( aPaneSize.Width() < maMinSize.Width() )
-        aPaneSize.Width() = maMinSize.Width();
-
-    if( aPaneSize.Height() < maMinSize.Height() )
-        aPaneSize.Height() = maMinSize.Height();
-
-    Point aOffset( LogicToPixel( Point(3,3), MAP_APPFONT ) );
-    Point aCursor( aOffset );
-
-    // place the modify fixed line
-
-    // place the "modify effect" fixed line
-    Size aSize;/*( mpFLModify->GetSizePixel() );*/
-    aSize.Width() = aPaneSize.Width() - 2 * aOffset.X();
-
-    //mpFLModify->SetPosSizePixel( aCursor, aSize );
-
-    aCursor.Y() += aSize.Height() + aOffset.Y();
-
-    const int nButtonExtraWidth = 4 * aOffset.X();
-
-    // the "add effect" button is placed top-left
-    Size aCtrlSize( mpPBAddEffect->GetSizePixel() );
-    aCtrlSize.setWidth( mpPBAddEffect->CalcMinimumSize( aSize.Width() ).getWidth() + nButtonExtraWidth );
-    mpPBAddEffect->SetPosSizePixel( aCursor, aCtrlSize );
-
-    aCursor.X() += aOffset.X() + aCtrlSize.Width();
-
-    // place the "change effect" button
-
-    // if the "change" button does not fit right of the "add effect", put it on the next line
-    aCtrlSize = mpPBChangeEffect->GetSizePixel();
-    aCtrlSize.setWidth( mpPBChangeEffect->CalcMinimumSize( aSize.Width() ).getWidth() + nButtonExtraWidth );
-    if( ( aCursor.X() + aCtrlSize.Width() + aOffset.X() ) > aPaneSize.Width() )
-    {
-        aCursor.X() = aOffset.X();
-        aCursor.Y() += aCtrlSize.Height() + aOffset.Y();
-    }
-    mpPBChangeEffect->SetPosSizePixel( aCursor, aCtrlSize );
-
-    aCursor.X() += aOffset.X() + aCtrlSize.Width();
-
-    // place the "remove effect" button
-
-    // if the "remove" button does not fit right of the "add effect", put it on the next line
-    aCtrlSize = mpPBRemoveEffect->GetSizePixel();
-    aCtrlSize.setWidth( mpPBRemoveEffect->CalcMinimumSize( aSize.Width() ).getWidth() + nButtonExtraWidth );
-    if( ( aCursor.X() + aCtrlSize.Width() + aOffset.X() ) > aPaneSize.Width() )
-    {
-        aCursor.X() = aOffset.X();
-        aCursor.Y() += aCtrlSize.Height() + aOffset.Y();
-    }
-
-    mpPBRemoveEffect->SetPosSizePixel( aCursor, aCtrlSize );
-
-    aCursor.X() = aOffset.X();
-    aCursor.Y() += aCtrlSize.Height() + 2 * aOffset.Y();
-
-    // place the "modify effect" fixed line
-    /*aSize = mpFLEffect->GetSizePixel();
-    aSize.Width() = aPaneSize.Width() - 2 * aOffset.X();*/
-
-    //mpFLEffect->SetPosSizePixel( aCursor, aSize );
-
-    aCursor.Y() += aSize.Height() + aOffset.Y();
-
-    // ---------------------------------------------------------------------------
-    // place the properties controls
-
-    // calc minimum width for fixedtext
-
-    Size aFixedTextSize( mpFTStart->CalcMinimumSize() );
-    long nWidth = aFixedTextSize.Width();
-    aFixedTextSize = mpFTProperty->CalcMinimumSize();
-    nWidth = std::max( nWidth, aFixedTextSize.Width() );
-    aFixedTextSize = mpFTSpeed->CalcMinimumSize();
-    aFixedTextSize.Width() = std::max( nWidth, aFixedTextSize.Width() ) + aOffset.X();
-    mpFTStart->SetSizePixel(aFixedTextSize);
-    mpFTProperty->SetSizePixel(aFixedTextSize);
-    mpFTSpeed->SetSizePixel(aFixedTextSize);
-
-    aSize = mpPBPropertyMore->GetSizePixel();
-
-    // place the "start" fixed text
-
-    Point aFTPos( aCursor );
-    Point aLBPos( aCursor );
-    Size aListBoxSize( LogicToPixel( Size( 60, 12 ), MAP_APPFONT ) );
-    long nDeltaY = aListBoxSize.Height() + aOffset.Y();
-
-    // linebreak?
-    if( (aFixedTextSize.Width() + aListBoxSize.Width() + aSize.Width() + 4 * aOffset.X()) > aPaneSize.Width() )
-    {
-        // y position for list box is below fixed text
-        aLBPos.Y() += aFixedTextSize.Height() + aOffset.Y();
-
-        // height of fixed text + list box + something = 2 * list box
-        nDeltaY = aListBoxSize.Height() +  aFixedTextSize.Height() + 2*aOffset.Y();
-    }
-    else
-    {
-        // x position for list box is right of fixed text
-        aLBPos.X() += aFixedTextSize.Width() + aOffset.X();
-
-        if( aListBoxSize.Height() > aFixedTextSize.Height() )
-            aFTPos.Y() = aLBPos.Y() + ((aListBoxSize.Height() - aFixedTextSize.Height()) >> 1);
-        else
-            aLBPos.Y() = aFTPos.Y() + ((aFixedTextSize.Height() - aListBoxSize.Height()) >> 1);
-    }
-
-    // width of the listbox is from its left side until end of pane
-    aListBoxSize.Width() = aPaneSize.Width() - aLBPos.X() - aSize.Width() - 2 * aOffset.X();
-
-    mpFTStart->SetPosPixel( aFTPos );
-    mpLBStart->SetPosSizePixel( aLBPos, aListBoxSize );
-
-    aFTPos.Y() += nDeltaY; aLBPos.Y() += nDeltaY;
-
-    mpFTProperty->SetPosPixel( aFTPos );
-    mpLBProperty->SetPosSizePixel( aLBPos, aListBoxSize );
-    mpLBProperty->Resize();
-
-    Point aMorePos( aLBPos );
-    aMorePos.X() += aListBoxSize.Width() + aOffset.X();
-    mpPBPropertyMore->SetPosPixel( aMorePos );
-
-    aFTPos.Y() += nDeltaY; aLBPos.Y() += nDeltaY;
-
-    mpFTSpeed->SetPosPixel( aFTPos );
-    mpCBSpeed->SetPosSizePixel( aLBPos, aListBoxSize );
-
-    aFTPos.Y() += nDeltaY + aOffset.Y();
-
-    Point aListPos( aFTPos );
-
-    // positionate the buttons on the bottom
-
-    // place the auto preview checkbox
-    aCursor = Point( aOffset.X(), aPaneSize.Height() - mpCBAutoPreview->GetSizePixel().Height() - aOffset.Y() );
-    mpCBAutoPreview->SetPosPixel( aCursor );
-
-    // place the separator 2 fixed line
-    /* aCursor.Y() -=  aOffset.Y() +  mpFLSeparator2->GetSizePixel().Height();
-    aSize = mpFLSeparator2->GetSizePixel();
-    aSize.Width() = aPaneSize.Width() - 2 * aOffset.X();
-    mpFLSeparator2->SetPosSizePixel( aCursor, aSize );*/
-
-    // next, layout and place the play and slide show buttons
-    aCtrlSize = mpPBSlideShow->GetSizePixel();
-    aCtrlSize.setWidth( mpPBSlideShow->CalcMinimumSize( aSize.Width() ).getWidth() + nButtonExtraWidth );
-
-    Size aPlaySize( mpPBPlay->GetSizePixel() );
-    aPlaySize.setWidth( mpPBPlay->CalcMinimumSize( aSize.Width() ).getWidth() + nButtonExtraWidth );
-
-    aCursor.Y() -= aCtrlSize.Height() /* + aOffset.Y() */;
-
-    // do we need two lines for the buttons?
-    int aTestWidth = aCursor.X() + mpPBPlay->GetSizePixel().Width() + 2 * aOffset.X() + mpPBSlideShow->GetSizePixel().Width();
-    if( aTestWidth > aPaneSize.Width() )
-    {
-        mpPBSlideShow->SetPosSizePixel( aCursor, aCtrlSize );
-        aCursor.Y() -= aCtrlSize.Height() + aOffset.Y();
-        mpPBPlay->SetPosSizePixel( aCursor, aPlaySize );
-    }
-    else
-    {
-        mpPBPlay->SetPosSizePixel( aCursor, aPlaySize );
-        aCursor.X() += aPlaySize.Width() + aOffset.X();
-        mpPBSlideShow->SetPosSizePixel( aCursor, aCtrlSize );
-    }
-
-    // place the separator 1 fixed line
-    aCursor.X() = aOffset.X();
-    /* aCursor.Y() -=  aOffset.Y() + mpFLSeparator1->GetSizePixel().Height();
-    aSize = mpFLSeparator1->GetSizePixel();
-    aSize.Width() = aPaneSize.Width() - 2 * aOffset.X();
-    mpFLSeparator1->SetPosSizePixel( aCursor, aSize ); */
-
-    // place the move down button
-    aSize = mpPBMoveDown->GetSizePixel();
-
-    aCursor.X() = aPaneSize.Width() - aOffset.X() - aSize.Width();
-    aCursor.Y() -= aOffset.Y() + aSize.Height();
-    mpPBMoveDown->SetPosPixel( aCursor );
-
-    aCursor.X() -= aOffset.X() + aSize.Width();
-    mpPBMoveUp->SetPosPixel( aCursor );
-
-    // Place the change order label.
-    // Its width has to be calculated dynamically so that is can be
-    // displayed flush right without having too much space to the buttons
-    // with some languages or truncated text with others.
-    mpFTChangeOrder->SetSizePixel(mpFTChangeOrder->CalcMinimumSize());
-
-    aCursor.X() -= aOffset.X() + mpFTChangeOrder->GetSizePixel().Width();
-    aCursor.Y() += (aSize.Height() - mpFTChangeOrder->GetSizePixel().Height()) >> 1;
-    mpFTChangeOrder->SetPosPixel( aCursor );
-
-    // positionate the custom animation list control
-    Size aCustomAnimationListSize( aPaneSize.Width() - aListPos.X() - aOffset.X(), aCursor.Y() - aListPos.Y() - 2 * aOffset.Y() );
-    mpCustomAnimationList->SetPosSizePixel( aListPos, aCustomAnimationListSize );
 }
 
 static sal_Int32 getPropertyType( const OUString& rProperty )
@@ -701,17 +479,14 @@ OUString getPropertyName( sal_Int32 nPropertyType )
 
 void CustomAnimationPane::updateControls()
 {
-    //mpFLModify->Enable( mxView.is() );
     mpFTSpeed->Enable( mxView.is() );
     mpCBSpeed->Enable( mxView.is() );
     mpCustomAnimationList->Enable( mxView.is() );
     mpFTChangeOrder->Enable( mxView.is() );
     mpPBMoveUp->Enable( mxView.is() );
     mpPBMoveDown->Enable( mxView.is() );
-    //mpFLSeparator1->Enable( mxView.is() );
     mpPBPlay->Enable( mxView.is() );
     mpPBSlideShow->Enable( mxView.is() );
-    //mpFLSeparator2->Enable( mxView.is() );
     mpCBAutoPreview->Enable( mxView.is() );
 
     if( !mxView.is() )
@@ -719,7 +494,6 @@ void CustomAnimationPane::updateControls()
         mpPBAddEffect->Enable( sal_False );
         mpPBChangeEffect->Enable( sal_False );
         mpPBRemoveEffect->Enable( sal_False );
-        //mpFLEffect->Enable( sal_False );
         mpFTStart->Enable( sal_False );
         mpLBStart->Enable( sal_False );
         mpPBPropertyMore->Enable( sal_False );
@@ -735,7 +509,6 @@ void CustomAnimationPane::updateControls()
     mpPBChangeEffect->Enable( nSelectionCount);
     mpPBRemoveEffect->Enable(nSelectionCount);
 
-    //mpFLEffect->Enable(nSelectionCount > 0);
     mpFTStart->Enable(nSelectionCount > 0);
     mpLBStart->Enable(nSelectionCount > 0);
     mpPBPropertyMore->Enable(nSelectionCount > 0);
@@ -757,7 +530,6 @@ void CustomAnimationPane::updateControls()
             aTemp += OUString( (sal_Unicode)' ' );
             aTemp += aUIName;
         }
-        //mpFLEffect->SetText( aTemp );
 
         CustomAnimationPresetPtr pDescriptor = getPresets().getEffectDescriptor( pEffect->getPresetId() );
         if( pDescriptor.get() )
@@ -857,7 +629,6 @@ void CustomAnimationPane::updateControls()
         mpFTChangeOrder->Enable( sal_False );
         mpLBStart->SetNoSelection();
         mpCBSpeed->SetNoSelection();
-        //mpFLEffect->SetText( maStrModify );
     }
 
     bool bEnableUp = true;
