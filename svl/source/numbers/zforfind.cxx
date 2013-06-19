@@ -33,7 +33,7 @@
 #include <com/sun/star/i18n/LocaleCalendar.hpp>
 #include <unotools/digitgroupingiterator.hxx>
 
-#include <svl/zforlist.hxx>         // NUMBERFORMAT_XXX
+#include <svl/zforlist.hxx> // NUMBERFORMAT_XXX
 #include "zforscan.hxx"
 #include <svl/zformat.hxx>
 
@@ -65,9 +65,6 @@ const sal_uInt8 ImpSvNumberInputScan::nMatchedUsedAsReturn = 0x10;
  * would work, together with the nTimezonePos handling in GetTimeRef(). */
 #define NF_RECOGNIZE_ISO8601_TIMEZONES 0
 
-//---------------------------------------------------------------------------
-//      Konstruktor
-
 ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         :
         pUpperMonthText( NULL ),
@@ -92,9 +89,6 @@ ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
 }
 
 
-//---------------------------------------------------------------------------
-//      Destruktor
-
 ImpSvNumberInputScan::~ImpSvNumberInputScan()
 {
     Reset();
@@ -109,9 +103,6 @@ ImpSvNumberInputScan::~ImpSvNumberInputScan()
     delete [] pUpperAbbrevDayText;
 }
 
-
-//---------------------------------------------------------------------------
-//      Reset
 
 void ImpSvNumberInputScan::Reset()
 {
@@ -148,8 +139,6 @@ void ImpSvNumberInputScan::Reset()
 }
 
 
-//---------------------------------------------------------------------------
-//
 // static
 inline bool ImpSvNumberInputScan::MyIsdigit( sal_Unicode c )
 {
@@ -157,8 +146,6 @@ inline bool ImpSvNumberInputScan::MyIsdigit( sal_Unicode c )
 }
 
 
-//---------------------------------------------------------------------------
-//
 void ImpSvNumberInputScan::TransformInput( OUString& rStr )
 {
     sal_Int32 nPos, nLen;
@@ -178,12 +165,10 @@ void ImpSvNumberInputScan::TransformInput( OUString& rStr )
 }
 
 
-//---------------------------------------------------------------------------
-//      StringToDouble
-//
-// Only simple unsigned floating point values without any error detection,
-// decimal separator has to be '.'
-
+/**
+ * Only simple unsigned floating point values without any error detection,
+ * decimal separator has to be '.'
+ */
 double ImpSvNumberInputScan::StringToDouble( const OUString& rStr, bool bForceFraction )
 {
     double fNum = 0.0;
@@ -218,27 +203,25 @@ double ImpSvNumberInputScan::StringToDouble( const OUString& rStr, bool bForceFr
 }
 
 
-//---------------------------------------------------------------------------
-//       NextNumberStringSymbol
-//
-// Zerlegt die Eingabe in Zahlen und Strings fuer die weitere
-// Verarbeitung (Turing-Maschine).
-//---------------------------------------------------------------------------
-// Ausgangs Zustand = GetChar
-//---------------+-------------------+-----------------------+---------------
-// Alter Zustand | gelesenes Zeichen | Aktion                | Neuer Zustand
-//---------------+-------------------+-----------------------+---------------
-// GetChar       | Ziffer            | Symbol=Zeichen        | GetValue
-//               | Sonst             | Symbol=Zeichen        | GetString
-//---------------|-------------------+-----------------------+---------------
-// GetValue      | Ziffer            | Symbol=Symbol+Zeichen | GetValue
-//               | Sonst             | Dec(CharPos)          | Stop
-//---------------+-------------------+-----------------------+---------------
-// GetString     | Ziffer            | Dec(CharPos)          | Stop
-//               | Sonst             | Symbol=Symbol+Zeichen | GetString
-//---------------+-------------------+-----------------------+---------------
-
-enum ScanState              // States der Turing-Maschine
+/**
+ * Splits up the input into numbers and strings for further processing
+ * (by the Turing machine).
+ *
+ * Starting state = GetChar
+ * ---------------+-------------------+-----------------------------+---------------
+ *  Old State     | Character read    | Event                       | New state
+ * ---------------+-------------------+-----------------------------+---------------
+ *  GetChar       | Number            | Symbol = Character          | GetValue
+ *                | Else              | Symbol = Character          | GetString
+ * ---------------|-------------------+-----------------------------+---------------
+ *  GetValue      | Number            | Symbol = Symbol + Character | GetValue
+ *                | Else              | Dec(CharPos)                | Stop
+ * ---------------+-------------------+-----------------------------+---------------
+ *  GetString     | Number            | Dec(CharPos)                | Stop
+ *                | Else              | Symbol = Symbol + Character | GetString
+ * ---------------+-------------------+-----------------------------+---------------
+ */
+enum ScanState  // States of the Turing machine
 {
     SsStop      = 0,
     SsStart     = 1,
@@ -296,8 +279,8 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
             break;
         default:
             break;
-        }   // switch
-    }   // while
+        } // switch
+    } // while
 
     if ( nChars )
     {
@@ -314,9 +297,6 @@ bool ImpSvNumberInputScan::NextNumberStringSymbol( const sal_Unicode*& pStr,
 }
 
 
-//---------------------------------------------------------------------------
-//      SkipThousands
-
 // FIXME: should be grouping; it is only used though in case nAnzStrings is
 // near SV_MAX_ANZ_INPUT_STRINGS, in NumberStringDivision().
 
@@ -329,7 +309,7 @@ bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
     const OUString& rThSep = pFormatter->GetNumThousandSep();
     register const sal_Unicode* pHere = pStr;
     ScanState eState = SsStart;
-    sal_Int32 nCounter = 0;                                // counts 3 digits
+    sal_Int32 nCounter = 0; // counts 3 digits
 
     while ( ((cToken = *pHere) != 0) && eState != SsStop)
     {
@@ -357,7 +337,7 @@ bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
                 if (nCounter == 3)
                 {
                     eState = SsStart;
-                    res = true;                 // .000 combination found
+                    res = true; // .000 combination found
                 }
             }
             else
@@ -368,16 +348,16 @@ bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
             break;
         default:
             break;
-        }   // switch
-    }   // while
+        } // switch
+    } // while
 
-    if (eState == SsGetValue)               // break witth less than 3 digits
+    if (eState == SsGetValue) // break witth less than 3 digits
     {
         if ( nCounter )
         {
             sBuff.remove( sBuff.getLength() - nCounter, nCounter );
         }
-        pHere -= nCounter + rThSep.getLength();       // put back ThSep also
+        pHere -= nCounter + rThSep.getLength(); // put back ThSep also
     }
     rSymbol = sBuff.makeStringAndClear();
     pStr = pHere;
@@ -386,9 +366,6 @@ bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
 }
 
 
-//---------------------------------------------------------------------------
-//      NumberStringDivision
-
 void ImpSvNumberInputScan::NumberStringDivision( const OUString& rString )
 {
     const sal_Unicode* pStr = rString.getStr();
@@ -396,12 +373,12 @@ void ImpSvNumberInputScan::NumberStringDivision( const OUString& rString )
     while ( pStr < pEnd && nAnzStrings < SV_MAX_ANZ_INPUT_STRINGS )
     {
         if ( NextNumberStringSymbol( pStr, sStrArray[nAnzStrings] ) )
-        {                                               // Zahl
+        {   // Number
             IsNum[nAnzStrings] = true;
             nNums[nAnzNums] = nAnzStrings;
             nAnzNums++;
             if (nAnzStrings >= SV_MAX_ANZ_INPUT_STRINGS - 7 &&
-                nPosThousandString == 0)                // nur einmal
+                nPosThousandString == 0) // Only once
             {
                 if ( SkipThousands( pStr, sStrArray[nAnzStrings] ) )
                 {
@@ -418,9 +395,9 @@ void ImpSvNumberInputScan::NumberStringDivision( const OUString& rString )
 }
 
 
-//---------------------------------------------------------------------------
-// Whether rString contains rWhat at nPos
-
+/**
+ * Whether rString contains rWhat at nPos
+ */
 bool ImpSvNumberInputScan::StringContainsImpl( const OUString& rWhat,
                                                const OUString& rString, sal_Int32 nPos )
 {
@@ -432,9 +409,9 @@ bool ImpSvNumberInputScan::StringContainsImpl( const OUString& rWhat,
 }
 
 
-//---------------------------------------------------------------------------
-// Whether pString contains rWhat at nPos
-
+/**
+ * Whether pString contains rWhat at nPos
+ */
 bool ImpSvNumberInputScan::StringPtrContainsImpl( const OUString& rWhat,
                                                   const sal_Unicode* pString, sal_Int32 nPos )
 {
@@ -458,11 +435,9 @@ bool ImpSvNumberInputScan::StringPtrContainsImpl( const OUString& rWhat,
 }
 
 
-//---------------------------------------------------------------------------
-//      SkipChar
-//
-// ueberspringt genau das angegebene Zeichen
-
+/**
+ * Skips the supplied char
+ */
 inline bool ImpSvNumberInputScan::SkipChar( sal_Unicode c, const OUString& rString,
                                             sal_Int32& nPos )
 {
@@ -475,11 +450,9 @@ inline bool ImpSvNumberInputScan::SkipChar( sal_Unicode c, const OUString& rStri
 }
 
 
-//---------------------------------------------------------------------------
-//      SkipBlanks
-//
-// Ueberspringt Leerzeichen
-
+/**
+ * Skips blanks
+ */
 inline void ImpSvNumberInputScan::SkipBlanks( const OUString& rString,
                                               sal_Int32& nPos )
 {
@@ -495,11 +468,9 @@ inline void ImpSvNumberInputScan::SkipBlanks( const OUString& rString,
 }
 
 
-//---------------------------------------------------------------------------
-//      SkipString
-//
-// jump over rWhat in rString at nPos
-
+/**
+ * jump over rWhat in rString at nPos
+ */
 inline bool ImpSvNumberInputScan::SkipString( const OUString& rWhat,
                                               const OUString& rString, sal_Int32& nPos )
 {
@@ -512,11 +483,9 @@ inline bool ImpSvNumberInputScan::SkipString( const OUString& rWhat,
 }
 
 
-//---------------------------------------------------------------------------
-//      GetThousandSep
-//
-// recognizes exactly ,111 in {3} and {3,2} or ,11 in {3,2} grouping
-
+/**
+ * Recognizes exactly ,111 in {3} and {3,2} or ,11 in {3,2} grouping
+ */
 inline bool ImpSvNumberInputScan::GetThousandSep( const OUString& rString,
                                                   sal_Int32& nPos,
                                                   sal_uInt16 nStringPos )
@@ -529,7 +498,7 @@ inline bool ImpSvNumberInputScan::GetThousandSep( const OUString& rString,
            nStringPos < nAnzStrings - 1 &&         // safety first!
            IsNum[ nStringPos + 1 ] ))              // number follows
     {
-        return false;                                   // no? => out
+        return false; // no? => out
     }
 
     utl::DigitGroupingIterator aGrouping( pFormatter->GetLocaleData()->getDigitGrouping());
@@ -551,14 +520,12 @@ inline bool ImpSvNumberInputScan::GetThousandSep( const OUString& rString,
 }
 
 
-//---------------------------------------------------------------------------
-//      GetLogical
-//
-// Conversion of text to logial value
-// "true" =>  1:
-// "false"=> -1:
-// else   =>  0:
-
+/**
+ * Conversion of text to logical value
+ *  "true" =>  1:
+ *  "false"=> -1:
+ *  else   =>  0:
+ */
 short ImpSvNumberInputScan::GetLogical( const OUString& rString )
 {
     short res;
@@ -580,12 +547,10 @@ short ImpSvNumberInputScan::GetLogical( const OUString& rString )
 }
 
 
-//---------------------------------------------------------------------------
-//      GetMonth
-//
-// Converts a string containing a month name (JAN, January) at nPos into the
-// month number (negative if abbreviated), returns 0 if nothing found
-
+/**
+ * Converts a string containing a month name (JAN, January) at nPos into the
+ * month number (negative if abbreviated), returns 0 if nothing found
+ */
 short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
 {
     // #102136# The correct English form of month September abbreviated is
@@ -593,9 +558,9 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
     static const OUString aSeptCorrect("SEPT");
     static const OUString aSepShortened("SEP");
 
-    short res = 0;      // no month found
+    short res = 0; // no month found
 
-    if (rString.getLength() > nPos)                           // only if needed
+    if (rString.getLength() > nPos) // only if needed
     {
         if ( !bTextInitialized )
         {
@@ -605,44 +570,44 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
         for ( sal_Int16 i = 0; i < nMonths; i++ )
         {
             if ( bScanGenitiveMonths && StringContains( pUpperGenitiveMonthText[i], rString, nPos ) )
-            {                                           // genitive full names first
+            {   // genitive full names first
                 nPos = nPos + pUpperGenitiveMonthText[i].getLength();
                 res = i + 1;
                 break;  // for
             }
             else if ( bScanGenitiveMonths && StringContains( pUpperGenitiveAbbrevMonthText[i], rString, nPos ) )
-            {                                           // genitive abbreviated
+            {   // genitive abbreviated
                 nPos = nPos + pUpperGenitiveAbbrevMonthText[i].getLength();
                 res = sal::static_int_cast< short >(-(i+1)); // negative
                 break;  // for
             }
             else if ( bScanPartitiveMonths && StringContains( pUpperPartitiveMonthText[i], rString, nPos ) )
-            {                                           // partitive full names
+            {   // partitive full names
                 nPos = nPos + pUpperPartitiveMonthText[i].getLength();
                 res = i+1;
                 break;  // for
             }
             else if ( bScanPartitiveMonths && StringContains( pUpperPartitiveAbbrevMonthText[i], rString, nPos ) )
-            {                                           // partitive abbreviated
+            {   // partitive abbreviated
                 nPos = nPos + pUpperPartitiveAbbrevMonthText[i].getLength();
                 res = sal::static_int_cast< short >(-(i+1)); // negative
                 break;  // for
             }
             else if ( StringContains( pUpperMonthText[i], rString, nPos ) )
-            {                                           // noun full names
+            {   // noun full names
                 nPos = nPos + pUpperMonthText[i].getLength();
                 res = i+1;
                 break;  // for
             }
             else if ( StringContains( pUpperAbbrevMonthText[i], rString, nPos ) )
-            {                                           // noun abbreviated
+            {   // noun abbreviated
                 nPos = nPos + pUpperAbbrevMonthText[i].getLength();
                 res = sal::static_int_cast< short >(-(i+1)); // negative
                 break;  // for
             }
             else if ( i == 8 && pUpperAbbrevMonthText[i] == aSeptCorrect &&
                     StringContains( aSepShortened, rString, nPos ) )
-            {                                           // #102136# SEPT/SEP
+            {   // #102136# SEPT/SEP
                 nPos = nPos + aSepShortened.getLength();
                 res = sal::static_int_cast< short >(-(i+1)); // negative
                 break;  // for
@@ -654,17 +619,15 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
 }
 
 
-//---------------------------------------------------------------------------
-//      GetDayOfWeek
-//
-// Converts a string containing a DayOfWeek name (Mon, Monday) at nPos into the
-// DayOfWeek number + 1 (negative if abbreviated), returns 0 if nothing found
-
+/**
+ * Converts a string containing a DayOfWeek name (Mon, Monday) at nPos into the
+ * DayOfWeek number + 1 (negative if abbreviated), returns 0 if nothing found
+ */
 int ImpSvNumberInputScan::GetDayOfWeek( const OUString& rString, sal_Int32& nPos )
 {
-    int res = 0;      // no day found
+    int res = 0; // no day found
 
-    if (rString.getLength() > nPos)                           // only if needed
+    if (rString.getLength() > nPos) // only if needed
     {
         if ( !bTextInitialized )
         {
@@ -674,15 +637,15 @@ int ImpSvNumberInputScan::GetDayOfWeek( const OUString& rString, sal_Int32& nPos
         for ( sal_Int16 i = 0; i < nDays; i++ )
         {
             if ( StringContains( pUpperDayText[i], rString, nPos ) )
-            {                                           // full names first
+            {   // full names first
                 nPos = nPos + pUpperDayText[i].getLength();
                 res = i + 1;
                 break;  // for
             }
             if ( StringContains( pUpperAbbrevDayText[i], rString, nPos ) )
-            {                                           // abbreviated
+            {   // abbreviated
                 nPos = nPos + pUpperAbbrevDayText[i].getLength();
-                res = -(i + 1);                         // negative
+                res = -(i + 1); // negative
                 break;  // for
             }
         }
@@ -692,13 +655,11 @@ int ImpSvNumberInputScan::GetDayOfWeek( const OUString& rString, sal_Int32& nPos
 }
 
 
-//---------------------------------------------------------------------------
-//      GetCurrency
-//
-// Lesen eines Waehrungssysmbols
-// '$'   => true
-// sonst => false
-
+/**
+ * Reading a currency symbol
+ * '$'   => true
+ * else => false
+ */
 bool ImpSvNumberInputScan::GetCurrency( const OUString& rString, sal_Int32& nPos,
                                         const SvNumberformat* pFormat )
 {
@@ -737,20 +698,18 @@ bool ImpSvNumberInputScan::GetCurrency( const OUString& rString, sal_Int32& nPos
 }
 
 
-//---------------------------------------------------------------------------
-//      GetTimeAmPm
-//
-// Lesen des Zeitsymbols (AM od. PM) f. kurze Zeitangabe
-//
-// Rueckgabe:
-//  "AM" od. "PM" => true
-//  sonst         => false
-//
-// nAmPos:
-//  "AM"  =>  1
-//  "PM"  => -1
-//  sonst =>  0
-
+/**
+ * Reading the time period specifier (AM/PM) for the 12 hour clock
+ *
+ *  Returns:
+ *   "AM" or "PM" => true
+ *   else         => false
+ *
+ *  nAmPos:
+ *   "AM"  =>  1
+ *   "PM"  => -1
+ *   else =>  0
+*/
 bool ImpSvNumberInputScan::GetTimeAmPm( const OUString& rString, sal_Int32& nPos )
 {
 
@@ -776,13 +735,11 @@ bool ImpSvNumberInputScan::GetTimeAmPm( const OUString& rString, sal_Int32& nPos
 }
 
 
-//---------------------------------------------------------------------------
-//      GetDecSep
-//
-// Lesen eines Dezimaltrenners (',')
-// ','   => true
-// sonst => false
-
+/**
+ * Read a decimal separator (',')
+ * ','   => true
+ * else => false
+ */
 inline bool ImpSvNumberInputScan::GetDecSep( const OUString& rString, sal_Int32& nPos )
 {
     if ( rString.getLength() > nPos )
@@ -798,9 +755,9 @@ inline bool ImpSvNumberInputScan::GetDecSep( const OUString& rString, sal_Int32&
 }
 
 
-//---------------------------------------------------------------------------
-// read a hundredth seconds separator
-
+/**
+ * Reading a hundredth seconds separator
+ */
 inline bool ImpSvNumberInputScan::GetTime100SecSep( const OUString& rString, sal_Int32& nPos )
 {
     if ( rString.getLength() > nPos )
@@ -816,15 +773,13 @@ inline bool ImpSvNumberInputScan::GetTime100SecSep( const OUString& rString, sal
 }
 
 
-//---------------------------------------------------------------------------
-//      GetSign
-//
-// Lesen eines Vorzeichens, auch Klammer !?!
-// '+'   =>  1
-// '-'   => -1
-// '('   => -1, nNegCheck = 1
-// sonst =>  0
-
+/**
+ * Read a sign including brackets
+ * '+'   =>  1
+ * '-'   => -1
+ *  '('   => -1, nNegCheck = 1
+ * else =>  0
+ */
 int ImpSvNumberInputScan::GetSign( const OUString& rString, sal_Int32& nPos )
 {
     if (rString.getLength() > nPos)
@@ -833,7 +788,7 @@ int ImpSvNumberInputScan::GetSign( const OUString& rString, sal_Int32& nPos )
         case '+':
             nPos++;
             return 1;
-        case '(':               // '(' aehnlich wie '-' ?!?
+        case '(': // '(' similar to '-' ?!?
             nNegCheck = 1;
             //! fallthru
         case '-':
@@ -847,14 +802,12 @@ int ImpSvNumberInputScan::GetSign( const OUString& rString, sal_Int32& nPos )
 }
 
 
-//---------------------------------------------------------------------------
-//      GetESign
-//
-// Lesen eines Vorzeichens, gedacht fuer Exponent ?!?
-// '+'   =>  1
-// '-'   => -1
-// sonst =>  0
-
+/**
+ * Read a sign with an exponent
+ * '+'   =>  1
+ * '-'   => -1
+ * else =>  0
+ */
 short ImpSvNumberInputScan::GetESign( const OUString& rString, sal_Int32& nPos )
 {
     if (rString.getLength() > nPos)
@@ -875,12 +828,10 @@ short ImpSvNumberInputScan::GetESign( const OUString& rString, sal_Int32& nPos )
 }
 
 
-//---------------------------------------------------------------------------
-//      GetNextNumber
-//
-// i counts string portions, j counts numbers thereof.
-// It should had been called SkipNumber instead.
-
+/**
+ * i counts string portions, j counts numbers thereof.
+ * It should had been called SkipNumber instead.
+ */
 inline bool ImpSvNumberInputScan::GetNextNumber( sal_uInt16& i, sal_uInt16& j )
 {
     if ( i < nAnzStrings && IsNum[i] )
@@ -893,12 +844,9 @@ inline bool ImpSvNumberInputScan::GetNextNumber( sal_uInt16& i, sal_uInt16& j )
 }
 
 
-//---------------------------------------------------------------------------
-//      GetTimeRef
-
 bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
-                                       sal_uInt16 nIndex,          // j-value of the first numeric time part of input, default 0
-                                       sal_uInt16 nAnz )           // count of numeric time parts
+                                       sal_uInt16 nIndex, // j-value of the first numeric time part of input, default 0
+                                       sal_uInt16 nAnz )  // count of numeric time parts
 {
     bool bRet = true;
     sal_uInt16 nHour;
@@ -924,7 +872,7 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
         }
     }
 
-    if (nDecPos == 2 && (nAnz == 3 || nAnz == 2))   // 20:45.5 or 45.5
+    if (nDecPos == 2 && (nAnz == 3 || nAnz == 2)) // 20:45.5 or 45.5
     {
         nHour = 0;
     }
@@ -938,7 +886,7 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
         bRet = false;
         SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetTimeRef: bad number index");
     }
-    if (nDecPos == 2 && nAnz == 2)                  // 45.5
+    if (nDecPos == 2 && nAnz == 2) // 45.5
     {
         nMinute = 0;
     }
@@ -954,15 +902,15 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     {
         fSecond100 = StringToDouble( sStrArray[nNums[nIndex]], true );
     }
-    if (nAmPm && nHour > 12)                    // not a valid AM/PM clock time
+    if (nAmPm && nHour > 12) // not a valid AM/PM clock time
     {
         bRet = false;
     }
-    else if (nAmPm == -1 && nHour != 12)        // PM
+    else if (nAmPm == -1 && nHour != 12) // PM
     {
         nHour += 12;
     }
-    else if (nAmPm == 1 && nHour == 12)         // 12 AM
+    else if (nAmPm == 1 && nHour == 12) // 12 AM
     {
         nHour = 0;
     }
@@ -973,9 +921,6 @@ bool ImpSvNumberInputScan::GetTimeRef( double& fOutNumber,
     return bRet;
 }
 
-
-//---------------------------------------------------------------------------
-//      ImplGetDay
 
 sal_uInt16 ImpSvNumberInputScan::ImplGetDay( sal_uInt16 nIndex )
 {
@@ -994,12 +939,9 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetDay( sal_uInt16 nIndex )
 }
 
 
-//---------------------------------------------------------------------------
-//      ImplGetMonth
-
 sal_uInt16 ImpSvNumberInputScan::ImplGetMonth( sal_uInt16 nIndex )
 {
-    // preset invalid month number
+    // Preset invalid month number
     sal_uInt16 nRes = pFormatter->GetCalendar()->getNumberOfMonthsInYear();
 
     if (sStrArray[nNums[nIndex]].getLength() <= 2)
@@ -1007,7 +949,7 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetMonth( sal_uInt16 nIndex )
         sal_uInt16 nNum = (sal_uInt16) sStrArray[nNums[nIndex]].toInt32();
         if ( 0 < nNum && nNum <= nRes )
         {
-            nRes = nNum - 1;        // zero based for CalendarFieldIndex::MONTH
+            nRes = nNum - 1; // zero based for CalendarFieldIndex::MONTH
         }
     }
 
@@ -1015,11 +957,9 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetMonth( sal_uInt16 nIndex )
 }
 
 
-//---------------------------------------------------------------------------
-//      ImplGetYear
-//
-// 30 -> 1930, 29 -> 2029, oder 56 -> 1756, 55 -> 1855, ...
-
+/**
+ * 30 -> 1930, 29 -> 2029, or 56 -> 1756, 55 -> 1855, ...
+ */
 sal_uInt16 ImpSvNumberInputScan::ImplGetYear( sal_uInt16 nIndex )
 {
     sal_uInt16 nYear = 0;
@@ -1039,7 +979,6 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetYear( sal_uInt16 nIndex )
     return nYear;
 }
 
-//---------------------------------------------------------------------------
 
 bool ImpSvNumberInputScan::MayBeIso8601()
 {
@@ -1065,7 +1004,6 @@ bool ImpSvNumberInputScan::MayBeIso8601()
     return nMayBeIso8601 > 1;
 }
 
-//---------------------------------------------------------------------------
 
 bool ImpSvNumberInputScan::CanForceToIso8601( DateFormat eDateFormat )
 {
@@ -1108,7 +1046,6 @@ bool ImpSvNumberInputScan::CanForceToIso8601( DateFormat eDateFormat )
     return nCanForceToIso8601 > 1;
 }
 
-//---------------------------------------------------------------------------
 
 bool ImpSvNumberInputScan::MayBeMonthDate()
 {
@@ -1155,7 +1092,6 @@ bool ImpSvNumberInputScan::MayBeMonthDate()
     return nMayBeMonthDate > 1;
 }
 
-//---------------------------------------------------------------------------
 
 bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
 {
@@ -1178,7 +1114,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
     {
         return false;
     }
-    nDatePatternStart = nStartPatternAt;    // remember start particle
+    nDatePatternStart = nStartPatternAt; // remember start particle
 
     for (sal_Int32 nPattern=0; nPattern < sDateAcceptancePatterns.getLength(); ++nPattern)
     {
@@ -1292,7 +1228,6 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
     return false;
 }
 
-//---------------------------------------------------------------------------
 
 bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_Int32 & rPos )
 {
@@ -1332,7 +1267,7 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_I
                 }
                 if (bOk)
                 {
-                    rPos = nLen;    // yes, set, not add!
+                    rPos = nLen; // yes, set, not add!
                     return true;
                 }
                 else
@@ -1345,7 +1280,6 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_I
     return false;
 }
 
-//---------------------------------------------------------------------------
 
 sal_uInt16 ImpSvNumberInputScan::GetDatePatternNumbers()
 {
@@ -1357,7 +1291,6 @@ sal_uInt16 ImpSvNumberInputScan::GetDatePatternNumbers()
     return nDatePatternNumbers;
 }
 
-//---------------------------------------------------------------------------
 
 sal_uInt32 ImpSvNumberInputScan::GetDatePatternOrder()
 {
@@ -1382,7 +1315,6 @@ sal_uInt32 ImpSvNumberInputScan::GetDatePatternOrder()
     return nOrder;
 }
 
-//---------------------------------------------------------------------------
 
 DateFormat ImpSvNumberInputScan::GetDateOrder()
 {
@@ -1458,9 +1390,6 @@ DateFormat ImpSvNumberInputScan::GetDateOrder()
     return pFormatter->GetLocaleData()->getDateFormat();
 }
 
-//---------------------------------------------------------------------------
-//      GetDateRef
-
 bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
                                        const SvNumberformat* pFormat )
 {
@@ -1474,7 +1403,7 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
         {
         case NF_EVALDATEFORMAT_INTL :
         case NF_EVALDATEFORMAT_FORMAT :
-            nFormatOrder = 1;       // only one loop
+            nFormatOrder = 1; // only one loop
             break;
         default:
             nFormatOrder = 2;
@@ -1496,8 +1425,8 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
     CalendarWrapper* pCal = pFormatter->GetCalendar();
     for ( int nTryOrder = 1; nTryOrder <= nFormatOrder; nTryOrder++ )
     {
-        pCal->setGregorianDateTime( Date( Date::SYSTEM ) );       // today
-        OUString aOrgCalendar;        // empty => not changed yet
+        pCal->setGregorianDateTime( Date( Date::SYSTEM ) ); // today
+        OUString aOrgCalendar; // empty => not changed yet
         DateFormat DateFmt;
         bool bFormatTurn;
         switch ( eEDF )
@@ -1585,10 +1514,10 @@ input for the following reasons:
         // For incomplete dates, always assume first day of month if not specified.
         pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
 
-        switch (nAnzNums)       // count of numbers in string
+        switch (nAnzNums) // count of numbers in string
         {
         case 0:                 // none
-            if (nMonthPos)          // only month (Jan)
+            if (nMonthPos)      // only month (Jan)
             {
                 pCal->setValue( CalendarFieldIndex::MONTH, std::abs(nMonth)-1 );
             }
@@ -1741,7 +1670,7 @@ input for the following reasons:
                 {
                     if ( !bHadExact && nExactDateOrder )
                     {
-                        pCal->setGregorianDateTime( Date( Date::SYSTEM ) );   // reset today
+                        pCal->setGregorianDateTime( Date( Date::SYSTEM ) ); // reset today
                     }
                     switch (DateFmt)
                     {
@@ -1843,7 +1772,7 @@ input for the following reasons:
                         if ( nNums[j] == nTimePos - 2 )
                         {
                             nCounter = j;
-                            break;  // for
+                            break; // for
                         }
                     }
                 }
@@ -1920,7 +1849,7 @@ input for the following reasons:
             double fDiff = DateTime(*pNullDate) - pCal->getEpochStart();
             fDays = ::rtl::math::approxFloor( pCal->getLocalDateTime() );
             fDays -= fDiff;
-            nTryOrder = nFormatOrder;   // break for
+            nTryOrder = nFormatOrder; // break for
         }
         else
         {
@@ -1928,7 +1857,7 @@ input for the following reasons:
         }
         if ( aOrgCalendar.getLength() )
         {
-            pCal->loadCalendar( aOrgCalendar, pLoc->getLanguageTag().getLocale() );  // restore calendar
+            pCal->loadCalendar( aOrgCalendar, pLoc->getLanguageTag().getLocale() ); // restore calendar
         }
 #if NF_TEST_CALENDAR
         {
@@ -1959,7 +1888,7 @@ input for the following reasons:
                 aLocale.Country  = OUString::createFromAscii( p->cou );
                 xCal->loadCalendar( OUString::createFromAscii( p->cal ),
                                     aLocale );
-                double nDateTime = 0.0;     // 1-Jan-1970 00:00:00
+                double nDateTime = 0.0; // 1-Jan-1970 00:00:00
                 nZO           = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET );
                 nZOmillis     = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS );
                 nZoneInMillis = static_cast<sal_Int32>(nZO) * 60000 +
@@ -2015,13 +1944,11 @@ input for the following reasons:
 }
 
 
-//---------------------------------------------------------------------------
-//      ScanStartString
-//
-// ersten String analysieren
-// Alles weg => true
-// sonst     => false
-
+/**
+ * Analyze first string
+ * All gone => true
+ * else     => false
+ */
 bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
                                             const SvNumberformat* pFormat )
 {
@@ -2115,7 +2042,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
                     nMonth = GetMonth(rString, nPos);
                     if ( nMonth ) // month (Jan 1)?
                     {
-                        nMonthPos = 1;                  // month a the beginning
+                        nMonthPos = 1; // month a the beginning
                         if ( nMonth < 0 )
                         {
                             SkipChar( '.', rString, nPos ); // abbreviated
@@ -2138,7 +2065,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
         while (SkipChar ('-', rString, nPos) || SkipChar ('/', rString, nPos))
             ; // do nothing
     }
-    if (nPos < rString.getLength())                       // not everything consumed
+    if (nPos < rString.getLength()) // not everything consumed
     {
         // Does input StartString equal StartString of format?
         // This time with sign detection!
@@ -2152,13 +2079,11 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
 }
 
 
-//---------------------------------------------------------------------------
-//      ScanMidString
-//
-// String in der Mitte analysieren
-// Alles weg => true
-// sonst     => false
-
+/**
+ * Analyze string in the middle
+ * All gone => true
+ * else     => false
+ */
 bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
                                           sal_uInt16 nStringPos, const SvNumberformat* pFormat )
 {
@@ -2188,7 +2113,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
         }
         else if (nDecPos == 2)                      // . dup: 12.4.
         {
-            if (bDecSepInDateSeps ||                   // . also date separator
+            if (bDecSepInDateSeps ||                // . also date separator
                 SkipDatePatternSeparator( nStringPos, nPos))
             {
                 if ( eScannedType != NUMBERFORMAT_UNDEFINED &&
@@ -2199,7 +2124,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
                 }
                 if (eScannedType == NUMBERFORMAT_UNDEFINED)
                 {
-                    eScannedType = NUMBERFORMAT_DATE;   // !!! it IS a date
+                    eScannedType = NUMBERFORMAT_DATE; // !!! it IS a date
                 }
                 SkipBlanks(rString, nPos);
             }
@@ -2449,7 +2374,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
         }
     }
 
-    if (nPos < rString.getLength())                       // not everything consumed?
+    if (nPos < rString.getLength()) // not everything consumed?
     {
         if ( nMatchedAllStrings & ~nMatchedVirgin )
         {
@@ -2465,13 +2390,11 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
 }
 
 
-//---------------------------------------------------------------------------
-//      ScanEndString
-//
-// Schlussteil analysieren
-// Alles weg => true
-// sonst     => false
-
+/**
+ * Analyze the end
+ * All gone => true
+ * else     => false
+ */
 bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
                                           const SvNumberformat* pFormat )
 {
@@ -2694,7 +2617,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
             // seconds and 78 hundredths in the morning. Keep as suffix.
             if (eScannedType != NUMBERFORMAT_TIME && nDecPos == 2 && nAnzNums == 2)
             {
-                nPos = nOrigPos;     // rewind am/pm
+                nPos = nOrigPos; // rewind am/pm
             }
             else
             {
@@ -2762,7 +2685,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
     }
 #endif
 
-    if (nPos < rString.getLength())                       // everything consumed?
+    if (nPos < rString.getLength()) // everything consumed?
     {
         // does input EndString equal EndString in Format?
         if ( !ScanStringNumFor( rString, nPos, pFormat, 0xFFFF ) )
@@ -2775,11 +2698,11 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
 }
 
 
-bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,          // String to scan
+bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,       // String to scan
                                              sal_Int32 nPos,                // Position until which was consumed
-                                             const SvNumberformat* pFormat,  // The format to match
-                                             sal_uInt16 nString,                 // Substring of format, 0xFFFF => last
-                                             bool bDontDetectNegation)        // Suppress sign detection
+                                             const SvNumberformat* pFormat, // The format to match
+                                             sal_uInt16 nString,            // Substring of format, 0xFFFF => last
+                                             bool bDontDetectNegation)      // Suppress sign detection
 {
     if ( !pFormat )
     {
@@ -2837,7 +2760,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,          /
             {
                 bFound = true;
                 nStringScanSign = -1;
-                nSub = 0;       //! not 1
+                nSub = 0; //! not 1
             }
         }
         if ( !bFound )
@@ -2853,7 +2776,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,          /
         {
             if ( (nSign < 0) && (nStringScanNumFor != 1) )
             {
-                nStringScanSign = 1;        // triple negated --1 yyy
+                nStringScanSign = 1; // triple negated --1 yyy
             }
         }
         else if ( nStringScanSign == 0 )
@@ -2864,11 +2787,11 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,          /
                 if ( (nString == 0) && !bFirst &&
                      SvNumberformat::HasStringNegativeSign( aString ) )
                 {
-                    nStringScanSign = -1;   // direct double negation
+                    nStringScanSign = -1; // direct double negation
                 }
                 else if ( pFormat->IsNegativeWithoutSign() )
                 {
-                    nStringScanSign = -1;   // indirect double negation
+                    nStringScanSign = -1; // indirect double negation
                 }
             }
             else
@@ -2886,22 +2809,20 @@ bool ImpSvNumberInputScan::ScanStringNumFor( const OUString& rString,          /
 }
 
 
-//---------------------------------------------------------------------------
-//      IsNumberFormatMain
-//
-// Recognizes types of number, exponential, fraction, percent, currency, date, time.
-// Else text => return false
-
-bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,                  // string to be analyzed
-                                               const SvNumberformat* pFormat )         // maybe number format set to match against
+/**
+ * Recognizes types of number, exponential, fraction, percent, currency, date, time.
+ * Else text => return false
+ */
+bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        // string to be analyzed
+                                               const SvNumberformat* pFormat ) // maybe number format set to match against
 {
     Reset();
-    NumberStringDivision( rString );            // breakdown into strings and numbers
+    NumberStringDivision( rString );             // breakdown into strings and numbers
     if (nAnzStrings >= SV_MAX_ANZ_INPUT_STRINGS) // too many elements
     {
-        return false;                           // Njet, Nope, ...
+        return false;                            // Njet, Nope, ...
     }
-    if (nAnzNums == 0)                          // no number in input
+    if (nAnzNums == 0)                           // no number in input
     {
         if ( nAnzStrings > 0 )
         {
@@ -2927,18 +2848,18 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,         
         }
     }
 
-    sal_uInt16 i = 0;                               // mark any symbol
-    sal_uInt16 j = 0;                               // mark only numbers
+    sal_uInt16 i = 0;                           // mark any symbol
+    sal_uInt16 j = 0;                           // mark only numbers
 
     switch ( nAnzNums )
     {
     case 1 :                                // Exactly 1 number in input
         // nAnzStrings >= 1
-        if (GetNextNumber(i,j))             // i=1,0
-        {                                   // Number at start
+        if (GetNextNumber(i,j)) // i=1,0
+        {   // Number at start
             if (eSetType == NUMBERFORMAT_FRACTION)  // Fraction 1 = 1/1
             {
-                if (i >= nAnzStrings ||     // no end string nor decimal separator
+                if (i >= nAnzStrings || // no end string nor decimal separator
                     sStrArray[i] == pFormatter->GetNumDecimalSep())
                 {
                     eScannedType = NUMBERFORMAT_FRACTION;
@@ -3188,14 +3109,15 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,         
     }
     else
     {
-        nMatchedAllStrings = 0;  // reset flag to no substrings matched
+        nMatchedAllStrings = 0; // reset flag to no substrings matched
     }
     return true;
 }
 
 
-//---------------------------------------------------------------------------
-// return true or false depending on the nMatched... state and remember usage
+/**
+ * Return true or false depending on the nMatched... state and remember usage
+ */
 bool ImpSvNumberInputScan::MatchedReturn()
 {
     if ( nMatchedAllStrings & ~nMatchedVirgin )
@@ -3207,9 +3129,9 @@ bool ImpSvNumberInputScan::MatchedReturn()
 }
 
 
-//---------------------------------------------------------------------------
-// Initialize uppercase months and weekdays
-
+/**
+ * Initialize uppercase months and weekdays
+ */
 void ImpSvNumberInputScan::InitText()
 {
     sal_Int32 j, nElems;
@@ -3283,14 +3205,9 @@ void ImpSvNumberInputScan::InitText()
 }
 
 
-//===========================================================================
-//          P U B L I C
-
-//---------------------------------------------------------------------------
-//      ChangeIntl
-//
-// MUST be called if International/Locale is changed
-
+/**
+ * MUST be called if International/Locale is changed
+ */
 void ImpSvNumberInputScan::ChangeIntl()
 {
     sal_Unicode cDecSep = pFormatter->GetNumDecimalSep()[0];
@@ -3311,9 +3228,6 @@ void ImpSvNumberInputScan::InvalidateDateAcceptancePatterns()
 }
 
 
-//---------------------------------------------------------------------------
-//      ChangeNullDate
-
 void ImpSvNumberInputScan::ChangeNullDate( const sal_uInt16 Day,
                                            const sal_uInt16 Month,
                                            const sal_uInt16 Year )
@@ -3329,26 +3243,24 @@ void ImpSvNumberInputScan::ChangeNullDate( const sal_uInt16 Day,
 }
 
 
-//---------------------------------------------------------------------------
-//      IsNumberFormat
-//
-// => does rString represent a number (also date, time et al)
-
-bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,                  // string to be analyzed
-                                           short& F_Type,                          // IN: old type, OUT: new type
-                                           double& fOutNumber,                     // OUT: number if convertible
-                                           const SvNumberformat* pFormat )         // maybe a number format to match against
+/**
+ * Does rString represent a number (also date, time et al)
+ */
+bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // string to be analyzed
+                                           short& F_Type,                   // IN: old type, OUT: new type
+                                           double& fOutNumber,              // OUT: number if convertible
+                                           const SvNumberformat* pFormat )  // maybe a number format to match against
 {
     OUString aString;
-    bool res;                                   // return value
+    bool res; // return value
     sal_uInt16 k;
-    eSetType = F_Type;                          // old type set
+    eSetType = F_Type; // old type set
 
     if ( !rString.getLength() )
     {
         res = false;
     }
-    else if (rString.getLength() > 308)               // arbitrary
+    else if (rString.getLength() > 308) // arbitrary
     {
         res = false;
     }
@@ -3534,7 +3446,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,             
     OUStringBuffer sResString;
 
     if (res)
-    {                                           // we finally have a number
+    {                                       // we finally have a number
         switch (eScannedType)
         {
         case NUMBERFORMAT_LOGICAL:
@@ -3557,7 +3469,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,             
         case NUMBERFORMAT_NUMBER:
         case NUMBERFORMAT_SCIENTIFIC:
         case NUMBERFORMAT_DEFINED:          // if no category detected handle as number
-            if ( nDecPos == 1 )                         // . at start
+            if ( nDecPos == 1 )             // . at start
             {
                 sResString.append("0.");
             }
@@ -3638,7 +3550,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,             
                 if (nThousand == 1)
                 {
                     sResString = sStrArray[nNums[0]];
-                    sResString.append(sStrArray[nNums[1]]);  // integer part
+                    sResString.append(sStrArray[nNums[1]]); // integer part
                     fOutNumber = StringToDouble(sResString.makeStringAndClear());
                 }
                 else
@@ -3655,7 +3567,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,             
                     }
                 }
             }
-            else                                        // nAnzNums > 2
+            else // nAnzNums > 2
             {
                 k = 1;
                 sResString = sStrArray[nNums[0]];
@@ -3729,7 +3641,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,             
         }
     }
 
-    if (res)        // overflow/underflow -> Text
+    if (res) // overflow/underflow -> Text
     {
         if (fOutNumber < -DBL_MAX) // -1.7E308
         {
