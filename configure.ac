@@ -5596,7 +5596,13 @@ dnl ===================================================================
 
 CXXFLAGS_CXX11=
 HAVE_CXX11=
-if test "$GCC" = "yes"; then
+if test "$COM" = MSC; then
+    AC_MSG_CHECKING([whether $CXX supports C++11])
+    AC_MSG_RESULT(yes)
+    # MSVC supports (a subset of) CXX11 without any switch
+    HAVE_CXX11=TRUE
+    CXXFLAGS_CXX11=
+elif test "$GCC" = "yes"; then
     CXXFLAGS_CXX11=
     AC_MSG_CHECKING([whether $CXX supports C++11])
     if test "$CPP_LIBRARY" = LIBCPP -a $_os = Darwin; then
@@ -5622,11 +5628,12 @@ if test "$GCC" = "yes"; then
             AC_MSG_RESULT(no)
         fi
     fi
+fi
 
-    if test "$HAVE_CXX11" = TRUE; then
-        AC_MSG_CHECKING([whether using C++11 causes libstdc++ 4.7.0/4.7.1 ABI breakage])
-        AC_LANG_PUSH([C++])
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+if test "$HAVE_CXX11" = TRUE; then
+    AC_MSG_CHECKING([whether using C++11 causes libstdc++ 4.7.0/4.7.1 ABI breakage])
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <list>
 #if !defined(__GLIBCXX__)
 /* ok */
@@ -5637,19 +5644,19 @@ if test "$GCC" = "yes"; then
 #else
 abi broken
 #endif
-            ]])], [AC_MSG_RESULT(no, ok)],
-            [AC_MSG_RESULT(yes, disabling C++11)
-             HAVE_CXX11=])
-        AC_LANG_POP([C++])
-    fi
+        ]])], [AC_MSG_RESULT(no, ok)],
+        [AC_MSG_RESULT(yes, disabling C++11)
+         HAVE_CXX11=])
+    AC_LANG_POP([C++])
+fi
 
-    if test "$HAVE_CXX11" = TRUE; then
-        AC_MSG_CHECKING([whether $CXX supports C++11 without Language Defect 757])
-        save_CXXFLAGS=$CXXFLAGS
-        CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-        AC_LANG_PUSH([C++])
+if test "$HAVE_CXX11" = TRUE; then
+    AC_MSG_CHECKING([whether $CXX supports C++11 without Language Defect 757])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+    AC_LANG_PUSH([C++])
 
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <stddef.h>
 
 template <typename T, size_t S> char (&sal_n_array_size( T(&)[S] ))[S];
@@ -5678,61 +5685,60 @@ return !(i != 0 && j != 0);
         [ AC_MSG_RESULT(no)
           HAVE_CXX11=
         ])
-        AC_LANG_POP([C++])
-        CXXFLAGS=$save_CXXFLAGS
-    fi
+    AC_LANG_POP([C++])
+    CXXFLAGS=$save_CXXFLAGS
+fi
 
-    if test "$HAVE_CXX11" = TRUE; then
-        AC_MSG_CHECKING([whether $CXX supports C++11 without __float128 compile error])
-        save_CXXFLAGS=$CXXFLAGS
-        CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
-        AC_LANG_PUSH([C++])
+if test "$HAVE_CXX11" = TRUE; then
+    AC_MSG_CHECKING([whether $CXX supports C++11 without __float128 compile error])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+    AC_LANG_PUSH([C++])
 
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+#include <vector>
+    // some Clang fail when compiling against libstdc++ headers with -std=gnu++0x
+    // (__float128)
+]])
+    ],[ AC_MSG_RESULT(yes) ],
+    [
+        AC_MSG_RESULT(no)
+        # The only reason why libstdc++ headers fail with Clang in C++11 mode is because
+        # they use the __float128 type that Clang doesn't know (libstdc++ checks whether
+        # __float128 is available during its build, but it's usually built using GCC,
+        # and so c++config.h hardcodes __float128 being supported). As the only place
+        # where __float128 is actually used is in a template specialization,
+        # -D__float128=void will avoid the problem there while still causing a problem
+        # if somebody actually uses the type.
+        AC_MSG_CHECKING([whether -D__float128=void workaround helps])
+        CXXFLAGS="$CXXFLAGS -D__float128=void"
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <vector>
     // some Clang fail when compiling against libstdc++ headers with -std=gnu++0x
     // (__float128)
 ]])
-        ],[ AC_MSG_RESULT(yes) ],
+        ],
         [
-            AC_MSG_RESULT(no)
-            # The only reason why libstdc++ headers fail with Clang in C++11 mode is because
-            # they use the __float128 type that Clang doesn't know (libstdc++ checks whether
-            # __float128 is available during its build, but it's usually built using GCC,
-            # and so c++config.h hardcodes __float128 being supported). As the only place
-            # where __float128 is actually used is in a template specialization,
-            # -D__float128=void will avoid the problem there while still causing a problem
-            # if somebody actually uses the type.
-            AC_MSG_CHECKING([whether -D__float128=void workaround helps])
-            CXXFLAGS="$CXXFLAGS -D__float128=void"
-            AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-#include <vector>
-    // some Clang fail when compiling against libstdc++ headers with -std=gnu++0x
-    // (__float128)
-]])
-            ],
-            [
-             AC_MSG_RESULT(yes)
-             CXXFLAGS_CXX11="$CXXFLAGS_CXX11 -D__float128=void"
-            ],
-            [
-             AC_MSG_RESULT(no)
-             HAVE_CXX11=
-            ])
+         AC_MSG_RESULT(yes)
+         CXXFLAGS_CXX11="$CXXFLAGS_CXX11 -D__float128=void"
+        ],
+        [
+         AC_MSG_RESULT(no)
+         HAVE_CXX11=
         ])
+    ])
 
-        AC_LANG_POP([C++])
-        CXXFLAGS=$save_CXXFLAGS
-    fi
+    AC_LANG_POP([C++])
+    CXXFLAGS=$save_CXXFLAGS
+fi
 
-    if test "$HAVE_CXX11" = "TRUE"; then
-        AC_DEFINE(HAVE_CXX11)
-    elif test -n "$CXXFLAGS_CXX11"; then
-        AC_MSG_NOTICE([Disabling C++11 support])
-        CXXFLAGS_CXX11=
-    elif test "$CPP_LIBRARY" = LIBCPP -a $_os = Darwin; then
-        AC_MSG_ERROR([Selected libc++ but C++11 support broken])
-    fi
+if test "$HAVE_CXX11" = "TRUE"; then
+    AC_DEFINE(HAVE_CXX11)
+elif test -n "$CXXFLAGS_CXX11"; then
+    AC_MSG_NOTICE([Disabling C++11 support])
+    CXXFLAGS_CXX11=
+elif test "$CPP_LIBRARY" = LIBCPP -a $_os = Darwin; then
+    AC_MSG_ERROR([Selected libc++ but C++11 support broken])
 fi
 
 AC_SUBST(CXXFLAGS_CXX11)
