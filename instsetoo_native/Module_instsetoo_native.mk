@@ -17,11 +17,9 @@ $(eval $(call gb_Module_add_targets,instsetoo_native,\
 
 endif
 
-ifneq ($(gb_RUNNABLE_INSTDIR),)
 $(eval $(call gb_Module_add_targets,instsetoo_native,\
 	CustomTarget_setup \
 	Package_setup \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:

@@ -101,13 +101,11 @@ $(call gb_Deliver_add_deliverable,$(call gb_Jar_get_outdir_target,$(1)),$(call g
 $(call gb_Jar_get_outdir_target,$(1)) : $(call gb_Jar_get_target,$(1))
 $(call gb_Jar_get_outdir_target,$(1)) :| $(dir $(call gb_Jar_get_outdir_target,$(1))).dir
 
-ifneq ($(gb_RUNNABLE_INSTDIR),)
 $(if $(filter OOO URE,$(call gb_Jar__get_layer,$(1))),\
 $(call gb_Helper_install,$(call gb_Jar_get_outdir_target,$(1)), \
 	$(call gb_Jar_get_install_target,$(1)), \
 	$(call gb_Jar_get_target,$(1))) \
 )
-endif
 
 endef
 

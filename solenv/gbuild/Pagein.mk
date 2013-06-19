@@ -47,11 +47,9 @@ $(call gb_Deliver_add_deliverable,$(call gb_Pagein_get_outdir_target,$(1)),$(cal
 $(call gb_Pagein_get_outdir_target,$(1)) : $(call gb_Pagein_get_target,$(1))
 $(call gb_Pagein_get_outdir_target,$(1)) :| $(dir $(call gb_Pagein_get_outdir_target,$(1))).dir
 
-ifneq ($(gb_RUNNABLE_INSTDIR),)
 $(call gb_Helper_install,$(call gb_Pagein_get_outdir_target,$(1)), \
 	$(call gb_Pagein_get_install_target,$(1)), \
 	$(call gb_Pagein_get_target,$(1)))
-endif
 
 endef
 

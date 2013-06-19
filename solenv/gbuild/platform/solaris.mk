@@ -352,7 +352,7 @@ define gb_Module_DEBUGRUNCOMMAND
 OFFICESCRIPT=`mktemp` && \
 printf ". $(gb_DEVINSTALLROOT)/program/ooenv\\n" > $${OFFICESCRIPT} && \
 printf "gdb --tui $(gb_DEVINSTALLROOT)/program/soffice.bin" >> $${OFFICESCRIPT} && \
-printf " -ex \"set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=$(call gb_Helper_make_url,$(DEVINSTALLDIR)/)\"" >> $${OFFICESCRIPT} && \
+printf " -ex \"set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=$(gb_USER_INSTALLATION)\"" >> $${OFFICESCRIPT} && \
 printf " -ex \"r\"\\n" >> $${OFFICESCRIPT} && \
 $(SHELL) $${OFFICESCRIPT} && \
 rm $${OFFICESCRIPT}

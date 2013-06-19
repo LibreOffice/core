@@ -347,7 +347,7 @@ define gb_Module_DEBUGRUNCOMMAND
 OFFICESCRIPT=`mktemp` && \
 printf 'if [ -e $(gb_DEVINSTALLROOT)/program/ooenv ]; then . $(gb_DEVINSTALLROOT)/program/ooenv; fi\n' > $${OFFICESCRIPT} && \
 printf "gdb $(gb_DEVINSTALLROOT)/program/soffice.bin" >> $${OFFICESCRIPT} && \
-printf " -ex \"set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=$(call gb_Helper_make_url,$(DEVINSTALLDIR)/)\"" >> $${OFFICESCRIPT} && \
+printf " -ex \"set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=$(gb_USER_INSTALLATION)\"" >> $${OFFICESCRIPT} && \
 $(SHELL) $${OFFICESCRIPT} && \
 rm $${OFFICESCRIPT}
 endef

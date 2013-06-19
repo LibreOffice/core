@@ -86,13 +86,11 @@ $(call gb_Library_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target
 $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Library_Library_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_Library_get_dllname,$(1)))
 
-ifneq ($(gb_RUNNABLE_INSTDIR),)
 $(if $(call gb_Library_get_instdir,$(1)),\
 $(call gb_Helper_install,$(call gb_Library__get_final_target,$(1)), \
 	$(call gb_Library_get_install_target,$(1)), \
 	$(call gb_LinkTarget_get_target,$(2))) \
 )
-endif
 
 $$(eval $$(call gb_Module_register_target,$(call gb_Library__get_final_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
 
@@ -129,11 +127,9 @@ define gb_Library__set_soversion_script
 $(call gb_LinkTarget_set_soversion_script,$(call gb_Library_get_linktargetname,$(1)),$(2),$(3))
 $(call gb_Library_get_target,$(1)) : SOVERSION := $(2)
 $(call gb_Library__add_soversion_link,$(1),$(call gb_Library_get_target,$(1)).$(2))
-ifneq ($(gb_RUNNABLE_INSTDIR),)
 $(call gb_Helper_install,$(call gb_Library__get_final_target,$(1)), \
 	$(call gb_Library_get_install_target,$(1)).$(2), \
 	$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))).$(2))
-endif
 
 endef
 

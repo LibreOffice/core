@@ -17,18 +17,13 @@ $(eval $(call gb_Module_add_targets,postprocess,\
 	CustomTarget_registry \
 	Package_images \
 	Package_registry \
+	Package_registry_install \
 	Rdb_services \
 ))
 
 ifeq ($(WINDOWS_BUILD_SIGNING),TRUE)
 $(eval $(call gb_Module_add_targets,postprocess,\
 	CustomTarget_signing \
-))
-endif
-
-ifneq ($(gb_RUNNABLE_INSTDIR),)
-$(eval $(call gb_Module_add_targets,postprocess,\
-	Package_registry_install \
 ))
 endif
 

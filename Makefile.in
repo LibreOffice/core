@@ -381,7 +381,7 @@ findunusedcode:
               | grep -v ^WSObject \
               > unusedcode.easy
 
-check: dev-install subsequentcheck
+check: build subsequentcheck
 
 dump-deps:
 	@$(SRCDIR)/bin/module-deps.pl $(GNUMAKE) $(SRCDIR)/Makefile.gbuild
@@ -389,7 +389,7 @@ dump-deps:
 dump-deps-png:
 	@$(SRCDIR)/bin/module-deps.pl $(GNUMAKE) $(SRCDIR)/Makefile.gbuild | dot -Tpng -o lo.png
 
-subsequentcheck :| $(if $(filter-out subsequentcheck,$(MAKECMDGOALS)),dev-install)
+subsequentcheck :| $(if $(filter-out subsequentcheck,$(MAKECMDGOALS)),build)
 	$(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 .PHONY : debugrun help slowcheck translations unitcheck

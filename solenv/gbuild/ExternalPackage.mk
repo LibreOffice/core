@@ -63,9 +63,7 @@ define gb_ExternalPackage_ExternalPackage_internal
 $(call gb_Package_Package_internal,$(1),$(call gb_UnpackedTarball_get_dir,$(2)))
 $(call gb_Package_use_unpacked,$(1),$(2))
 
-ifneq ($(gb_RUNNABLE_INSTDIR),)
 $(call gb_ExternalPackage__ExternalPackage_package,$(1),$(call gb_ExternalPackage_get_packagename,$(1)),$(2))
-endif
 
 $(call gb_ExternalPackage_get_target,$(1)) : $(call gb_Package_get_target,$(1))
 $(call gb_ExternalPackage_get_target,$(1)) :| $(dir $(call gb_ExternalPackage_get_target,$(1))).dir
@@ -199,9 +197,7 @@ endef
 define gb_ExternalPackage_use_external_project
 $(call gb_Package_use_external_project,$(1),$(2))
 
-ifneq ($(gb_RUNNABLE_INSTDIR),)
 $(call gb_Package_use_external_project,$(call gb_ExternalPackage_get_packagename,$(1)),$(2))
-endif
 
 $(if $(gb_ExternalPackage_PROJECT_$(1)),$(call gb_Output_error,gb_ExternalPackage_use_external_project: only one project allowed))
 gb_ExternalPackage_PROJECT_$(1) := $(2)
@@ -212,11 +208,9 @@ endef
 define gb_ExternalPackage__add_file_for_install
 $(call gb_ExternalPackage_add_file,$(1),$(3),$(5))
 
-ifneq ($(gb_RUNNABLE_INSTDIR),)
 $(call gb_ExternalPackage_add_file,$(2),$(4),$(5))
 $(call gb_ExternalPackage_get_target,$(1)) : $(call gb_Package_get_target,$(2))
 $(call gb_ExternalPackage_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(2))
-endif
 
 endef
 

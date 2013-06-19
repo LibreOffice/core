@@ -18,6 +18,8 @@
 #
 
 GBUILDDIR:=$(SRCDIR)/solenv/gbuild
+gb_DEVINSTALLROOT := $(INSTDIR)
+gb_USER_INSTALLATION = $(call gb_Helper_make_url,$(DEVINSTALLDIR)/)
 
 # vars needed from the env/calling makefile
 
@@ -263,10 +265,6 @@ gb_GLOBALDEFS += \
 	)
 
 gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))
-
-ifeq ($(origin gb_RUNNABLE_INSTDIR),undefined)
-gb_RUNNABLE_INSTDIR :=
-endif
 
 include $(GBUILDDIR)/Deliver.mk
 

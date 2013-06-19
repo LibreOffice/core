@@ -327,7 +327,7 @@ gb_PythonTest_PRECOMMAND := $(gb_PythonTest_PRECOMMAND):$(OUTDIR)/lib
 
 define gb_Module_DEBUGRUNCOMMAND
 OFFICESCRIPT=$$($(gb_MKTEMP)) && \
-printf '%s\n' "set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=$(call gb_Helper_make_url,$(DEVINSTALLDIR)/)" > $${OFFICESCRIPT} && \
+printf '%s\n' "set args --norestore --nologo '--accept=pipe,name=$(USER);urp;' -env:UserInstallation=$(gb_USER_INSTALLATION)" > $${OFFICESCRIPT} && \
 gdb -x $${OFFICESCRIPT} $(gb_DEVINSTALLROOT)/MacOS/soffice && \
 rm $${OFFICESCRIPT}
 endef
