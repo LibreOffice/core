@@ -104,7 +104,7 @@ WrapPolygon::Pointer_t WrapPolygon::scale(const Fraction & rFractionX, const Fra
     return pResult;
 }
 
-WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSrcSize, const awt::Size & rDstSize)
+WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSrcSize)
 {
     WrapPolygon::Pointer_t pResult;
 
@@ -119,9 +119,9 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSr
     Fraction aScaleY(nWrap100Percent, Fraction(nWrap100Percent) - aMove);
     pResult = pResult->scale(aScaleX, aScaleY);
 
-    Fraction aScaleDestX(rDstSize.Width, nWrap100Percent);
-    Fraction aScaleDestY(rDstSize.Height, nWrap100Percent);
-    pResult = pResult->scale(aScaleDestX, aScaleDestY);
+    Fraction aScaleSrcX(rSrcSize.Width, nWrap100Percent);
+    Fraction aScaleSrcY(rSrcSize.Height, nWrap100Percent);
+    pResult = pResult->scale(aScaleSrcX, aScaleSrcY);
 
     return pResult;
 }

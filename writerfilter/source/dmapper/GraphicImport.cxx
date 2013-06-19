@@ -1536,8 +1536,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 if( aGraphicSize.Width && aGraphicSize.Height &&
                     m_pImpl->mpWrapPolygon.get() != NULL)
                 {
-                    awt::Size aDstSize(m_pImpl->getXSize(), m_pImpl->getYSize());
-                    WrapPolygon::Pointer_t pCorrected = m_pImpl->mpWrapPolygon->correctWordWrapPolygon(aGraphicSize, aDstSize);
+                    WrapPolygon::Pointer_t pCorrected = m_pImpl->mpWrapPolygon->correctWordWrapPolygon(aGraphicSize);
                     aContourPolyPolygon <<= pCorrected->getPointSequenceSequence();
                 }
 
