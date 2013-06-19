@@ -448,7 +448,6 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
                 {
                     if ( Impl_matchString( pSecondPart, pData->mpCharsetStr ) )
                     {
-                        eEncoding = pData->meTextEncoding;
                         break;
                     }
 
