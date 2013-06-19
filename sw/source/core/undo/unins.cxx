@@ -74,9 +74,18 @@ String * SwUndoInsert::GetTxtFromDoc() const
 
     if( pCNd->IsTxtNode() )
     {
-        pResult = new String(
-            static_cast<SwTxtNode*>(pCNd)->GetTxt().copy(nCntnt-nLen, nLen));
+        OUString sTxt = static_cast<SwTxtNode*>(pCNd)->GetTxt();
 
+        sal_Int32 nStart = nCntnt-nLen;
+        sal_Int32 nLength = nLen;
+
+        if (nStart < 0)
+        {
+            nLength += nStart;
+            nStart = 0;
+        }
+
+        pResult = new String(sTxt.copy(nStart, nLength));
     }
 
     return pResult;
