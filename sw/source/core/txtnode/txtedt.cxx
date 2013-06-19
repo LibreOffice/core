@@ -595,6 +595,15 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, sal_uInt16 nWhich,
     }
 }
 
+sal_Int32 clipIndexBounds(const OUString &rStr, sal_Int32 nPos)
+{
+    if (nPos < 0)
+        return 0;
+    if (nPos > rStr.getLength())
+        return rStr.getLength();
+    return nPos;
+}
+
 /*************************************************************************
  *                SwTxtNode::GetCurWord()
  *
@@ -639,6 +648,10 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
     // enforce returning an empty string
     if (aBndry.endPos != aBndry.startPos && IsSymbol( (xub_StrLen)aBndry.startPos ))
         aBndry.endPos = aBndry.startPos;
+
+    // can have -1 as start/end of bounds not found
+    aBndry.startPos = clipIndexBounds(m_Text, aBndry.startPos);
+    aBndry.endPos = clipIndexBounds(m_Text, aBndry.endPos);
 
     return m_Text.copy(aBndry.startPos,
                        aBndry.endPos - aBndry.startPos);
