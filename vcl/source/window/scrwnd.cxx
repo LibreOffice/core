@@ -51,8 +51,8 @@ ImplWheelWindow::ImplWheelWindow( Window* pParent ) :
 
     const Size      aSize( pParent->GetOutputSizePixel() );
     const sal_uInt16    nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
-    const sal_Bool      bHorz = ( nFlags & AUTOSCROLL_HORZ ) != 0;
-    const sal_Bool      bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
+    const bool      bHorz = ( nFlags & AUTOSCROLL_HORZ ) != 0;
+    const bool      bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
 
     // calculate maximum speed distance
     mnMaxWidth = (sal_uLong) ( 0.4 * hypot( (double) aSize.Width(), aSize.Height() ) );
@@ -217,8 +217,8 @@ PointerStyle ImplWheelWindow::ImplGetMousePointer( long nDistX, long nDistY )
 {
     PointerStyle    eStyle;
     const sal_uInt16    nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
-    const sal_Bool      bHorz = ( nFlags & AUTOSCROLL_HORZ ) != 0;
-    const sal_Bool      bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
+    const bool      bHorz = ( nFlags & AUTOSCROLL_HORZ ) != 0;
+    const bool      bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
 
     if( bHorz || bVert )
     {
@@ -296,9 +296,9 @@ void ImplWheelWindow::MouseMove( const MouseEvent& rMEvt )
 
     const PointerStyle  eActStyle = ImplGetMousePointer( nDistX, nDistY );
     const sal_uInt16        nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
-    const sal_Bool          bHorz = ( nFlags & AUTOSCROLL_HORZ ) != 0;
-    const sal_Bool          bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
-    const sal_Bool          bOuter = mnActDist > WHEEL_RADIUS;
+    const bool          bHorz = ( nFlags & AUTOSCROLL_HORZ ) != 0;
+    const bool          bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
+    const bool          bOuter = mnActDist > WHEEL_RADIUS;
 
     if( bOuter && ( maLastMousePos != aMousePos ) )
     {

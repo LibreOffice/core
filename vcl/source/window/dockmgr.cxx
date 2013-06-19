@@ -54,7 +54,7 @@ private:
     Timer           maEndDockTimer;
     Point           maDockPos;
     Rectangle       maDockRect;
-    sal_Bool            mbInMove;
+    bool            mbInMove;
     sal_uLong           mnLastUserEvent;
 
     DECL_LINK(DockingHdl, void *);
@@ -87,7 +87,7 @@ ImplDockFloatWin2::ImplDockFloatWin2( Window* pParent, WinBits nWinBits,
         FloatingWindow( pParent, nWinBits ),
         mpDockWin( pDockingWin ),
         mnLastTicks( Time::GetSystemTicks() ),
-        mbInMove( sal_False ),
+        mbInMove( false ),
         mnLastUserEvent( 0 )
 {
     // Daten vom DockingWindow uebernehmen
@@ -175,7 +175,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
     Window *pDockingArea = mpDockWin->GetWindow()->GetParent();
     PointerState aState = pDockingArea->GetPointerState();
 
-    sal_Bool bRealMove = sal_True;
+    bool bRealMove = true;
     if( GetStyle() & WB_OWNERDRAWDECORATION )
     {
         // for windows with ownerdraw decoration
@@ -196,9 +196,9 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
 
             PointerState aBorderState = pBorder->GetPointerState();
             if( aBorderRect.IsInside( aBorderState.maPos ) )
-                bRealMove = sal_True;
+                bRealMove = true;
             else
-                bRealMove = sal_False;
+                bRealMove = false;
         }
     }
 
@@ -236,7 +236,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
             EndDockTimerHdl( this );
         }
     }
-    mbInMove = sal_False;
+    mbInMove = false;
     return 0;
 }
 // -----------------------------------------------------------------------
@@ -246,7 +246,7 @@ void ImplDockFloatWin2::Move()
     if( mbInMove )
         return;
 
-    mbInMove = sal_True;
+    mbInMove = true;
     FloatingWindow::Move();
     mpDockWin->GetWindow()->Move();
 
@@ -518,8 +518,8 @@ class ImplPopupFloatWin : public FloatingWindow
 {
 private:
     ImplDockingWindowWrapper*   mpDockingWin;
-    sal_Bool                        mbHighlight;
-    sal_Bool                        mbMoving;
+    bool                        mbHighlight;
+    bool                        mbMoving;
     bool                        mbTrackingEnabled;
     Point                       maDelta;
     Point                       maTearOffPosition;
@@ -555,8 +555,8 @@ ImplPopupFloatWin::ImplPopupFloatWin( Window* pParent, ImplDockingWindowWrapper*
     mpWindowImpl->mbToolbarFloatingWindow = sal_True;   // indicate window type, required for accessibility
                                                     // which should not see this window as a toplevel window
     mpDockingWin = pDockingWin;
-    mbHighlight = sal_False;
-    mbMoving = sal_False;
+    mbHighlight = false;
+    mbMoving = false;
     mbTrackingEnabled = sal_False;
     mbGripAtBottom = sal_True;
     mbHasGrip = bHasGrip;
@@ -772,18 +772,18 @@ void ImplPopupFloatWin::MouseMove( const MouseEvent& rMEvt )
         if( mbTrackingEnabled && rMEvt.IsLeft() && GetDragRect().IsInside( aMousePos ) )
         {
             // start window move
-            mbMoving = sal_True;
+            mbMoving = true;
             StartTracking( STARTTRACK_NOKEYCANCEL );
             return;
         }
         if( !mbHighlight && GetDragRect().IsInside( aMousePos ) )
         {
-            mbHighlight = sal_True;
+            mbHighlight = true;
             DrawGrip();
         }
         if( mbHighlight && ( rMEvt.IsLeaveWindow() || !GetDragRect().IsInside( aMousePos ) ) )
         {
-            mbHighlight = sal_False;
+            mbHighlight = false;
             DrawGrip();
         }
     }
@@ -820,7 +820,7 @@ void ImplPopupFloatWin::Tracking( const TrackingEvent& rTEvt )
     {
         if ( rTEvt.IsTrackingEnded() )
         {
-            mbMoving = sal_False;
+            mbMoving = false;
             EndPopupMode( FLOATWIN_POPUPMODEEND_TEAROFF );
         }
         else if ( !rTEvt.GetMouseEvent().IsSynthetic() )
@@ -1062,12 +1062,12 @@ void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, sal_Bool bFlo
 
     if ( !IsDockingCanceled() )
     {
-        sal_Bool bShow = sal_False;
+        bool bShow = false;
         if ( bFloatMode != IsFloatingMode() )
         {
             GetWindow()->Show( sal_False, SHOW_NOFOCUSCHANGE );
             SetFloatingMode( bFloatMode );
-            bShow = sal_True;
+            bShow = true;
             if ( bFloatMode )
             {
                 // #i44800# always use outputsize - as in all other places

@@ -72,7 +72,7 @@ private:
     Timer           maDockTimer;
     Point           maDockPos;
     Rectangle       maDockRect;
-    sal_Bool            mbInMove;
+    bool            mbInMove;
     sal_uLong           mnLastUserEvent;
 
     DECL_LINK(DockingHdl, void *);
@@ -100,7 +100,7 @@ ImplDockFloatWin::ImplDockFloatWin( Window* pParent, WinBits nWinBits,
         FloatingWindow( pParent, nWinBits ),
         mpDockWin( pDockingWin ),
         mnLastTicks( Time::GetSystemTicks() ),
-        mbInMove( sal_False ),
+        mbInMove( false ),
         mnLastUserEvent( 0 )
 {
     // Daten vom DockingWindow uebernehmen
@@ -192,7 +192,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin, DockingHdl)
             mpDockWin->EndDocking( maDockRect, sal_True );
         }
     }
-    mbInMove = sal_False;
+    mbInMove = false;
     return 0;
 }
 // -----------------------------------------------------------------------
@@ -202,7 +202,7 @@ void ImplDockFloatWin::Move()
     if( mbInMove )
         return;
 
-    mbInMove = sal_True;
+    mbInMove = true;
     FloatingWindow::Move();
     mpDockWin->Move();
 
@@ -668,12 +668,12 @@ void DockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
 {
     if ( !IsDockingCanceled() )
     {
-        sal_Bool bShow = sal_False;
+        bool bShow = false;
         if ( bFloatMode != IsFloatingMode() )
         {
             Show( sal_False, SHOW_NOFOCUSCHANGE );
             SetFloatingMode( bFloatMode );
-            bShow = sal_True;
+            bShow = true;
             if ( bFloatMode && mpFloatWin )
                 mpFloatWin->SetPosSizePixel( rRect.TopLeft(), rRect.GetSize() );
         }

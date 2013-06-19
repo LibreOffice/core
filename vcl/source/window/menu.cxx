@@ -91,7 +91,7 @@ DBG_NAME( Menu )
 // document closer
 #define IID_DOCUMENTCLOSE 1
 
-static sal_Bool ImplAccelDisabled()
+static bool ImplAccelDisabled()
 {
     // display of accelerator strings may be suppressed via configuration
     static int nAccelDisabled = -1;
@@ -103,7 +103,7 @@ static sal_Bool ImplAccelDisabled()
             getValue( "Menu", "SuppressAccelerators" );
         nAccelDisabled = aStr.equalsIgnoreAsciiCase("true") ? 1 : 0;
     }
-    return (nAccelDisabled == 1) ? sal_True : sal_False;
+    return nAccelDisabled == 1;
 }
 
 struct MenuItemData

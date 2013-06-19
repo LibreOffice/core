@@ -746,7 +746,7 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
                 sal_uInt16  nType;
                 sal_uInt16  nGetFocusFlags = GETFOCUS_TAB;
                 sal_uInt16  nNewIndex;
-                sal_Bool    bFormular = sal_False;
+                bool        bFormular = false;
 
                 // Bei Ctrl-Tab erstmal testen, ob zwischen Formularen
                 // gesprungen werden soll
@@ -763,7 +763,7 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
                         if ( pTempWindow->ImplGetWindow()->IsDialogControlStart() )
                         {
                             if ( iTemp != 0 )
-                                bFormular = sal_True;
+                                bFormular = true;
                             if ( aKeyCode.IsShift() )
                             {
                                 if ( iTemp <= nIndex )
@@ -1140,7 +1140,7 @@ static Window* ImplGetLabelFor( Window* pFrameWindow, WindowType nMyType, Window
     {
         // #i100833# MT 2010/02: Group box and fixed lines can also lable a fixed text.
         // See tools/options/print for example.
-        sal_Bool bThisIsAGroupControl = (nMyType == WINDOW_GROUPBOX) || (nMyType == WINDOW_FIXEDLINE);
+        bool bThisIsAGroupControl = (nMyType == WINDOW_GROUPBOX) || (nMyType == WINDOW_FIXEDLINE);
         // get index, form start and form end
         sal_uInt16 nIndex=0, nFormStart=0, nFormEnd=0;
         Window* pSWindow = ::ImplFindDlgCtrlWindow( pFrameWindow,

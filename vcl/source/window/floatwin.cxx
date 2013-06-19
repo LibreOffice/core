@@ -268,7 +268,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
 
     sal_uInt16      nArrangeAry[5];
     sal_uInt16      nArrangeIndex;
-    sal_Bool        bBreak;
+    bool        bBreak;
     Point       e1,e2;  // the common edge between the item rect and the floating window
 
     if ( nFlags & FLOATWIN_POPUPMODE_LEFT )
@@ -310,7 +310,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
 
     for ( ; nArrangeIndex < 5; nArrangeIndex++ )
     {
-        bBreak = sal_True;
+        bBreak = true;
         switch ( nArrangeAry[nArrangeIndex] )
         {
 
@@ -321,12 +321,12 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 if( bRTL ) // --- RTL --- we're comparing screen coordinates here
                 {
                     if( (devRectRTL.Right()+aSize.Width()) > aScreenRect.Right() )
-                        bBreak = sal_False;
+                        bBreak = false;
                 }
                 else
                 {
                     if ( aPos.X() < aScreenRect.Left() )
-                        bBreak = sal_False;
+                        bBreak = false;
                 }
                 if( bBreak )
                 {
@@ -345,12 +345,12 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 if( bRTL ) // --- RTL --- we're comparing screen coordinates here
                 {
                     if( (devRectRTL.Left() - aSize.Width()) < aScreenRect.Left() )
-                        bBreak = sal_False;
+                        bBreak = false;
                 }
                 else
                 {
                     if ( aPos.X()+aSize.Width() > aScreenRect.Right() )
-                        bBreak = sal_False;
+                        bBreak = false;
                 }
                 if( bBreak )
                 {
@@ -367,7 +367,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 aPos.X() = devRect.Left();
                 aPos.Y() = devRect.Top()-aSize.Height()+1;
                 if ( aPos.Y() < aScreenRect.Top() )
-                    bBreak = sal_False;
+                    bBreak = false;
                 if( bBreak )
                 {
                     e1 = devRect.TopLeft();
@@ -382,7 +382,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
             case FLOATWIN_POPUPMODE_DOWN:
                 aPos = devRect.BottomLeft();
                 if ( aPos.Y()+aSize.Height() > aScreenRect.Bottom() )
-                    bBreak = sal_False;
+                    bBreak = false;
                 if( bBreak )
                 {
                     e1 = devRect.BottomLeft();
