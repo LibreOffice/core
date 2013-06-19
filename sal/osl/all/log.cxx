@@ -225,13 +225,16 @@ void log(
         switch (level) {
         case SAL_DETAIL_LOG_LEVEL_INFO:
             prio = LOG_INFO;
+            break;
         default:
             assert(false); // this cannot happen
             // fall through
         case SAL_DETAIL_LOG_LEVEL_WARN:
             prio = LOG_WARNING;
+            break;
         case SAL_DETAIL_LOG_LEVEL_DEBUG:
             prio = LOG_DEBUG;
+            break;
         }
         syslog(prio, "%s", s.str().c_str());
 #endif
