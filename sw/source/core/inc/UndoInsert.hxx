@@ -40,6 +40,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
     xub_StrLen nCntnt, nLen;
     sal_Bool bIsWordDelim : 1;
     sal_Bool bIsAppend : 1;
+    sal_Bool m_bWithRsid : 1;
 
     const IDocumentContentOperations::InsertFlags m_nInsertFlags;
 
@@ -75,6 +76,8 @@ public:
        @return rewriter for this undo object
      */
     virtual SwRewriter GetRewriter() const;
+
+    void SetWithRsid() { m_bWithRsid = true; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoInsert)
 };

@@ -26,6 +26,7 @@
 #include <editeng/langitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/formatbreakitem.hxx>
+#include <editeng/rsiditem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
@@ -44,6 +45,7 @@
 #include <pam.hxx>
 #include <UndoCore.hxx>
 #include <UndoAttribute.hxx>
+#include <UndoInsert.hxx>
 #include <ndgrf.hxx>
 #include <pagedesc.hxx>         // For special treatment in InsFrmFmt
 #include <rolbck.hxx>           // Undo-Attr
@@ -63,6 +65,7 @@
 #include <fmtautofmt.hxx>
 #include <istyleaccess.hxx>
 #include <SwUndoFmt.hxx>
+#include <UndoManager.hxx>
 #include <docsh.hxx>
 
 using namespace ::com::sun::star::i18n;
@@ -1096,6 +1099,47 @@ bool SwDoc::InsertItemSet ( const SwPaM &rRg, const SfxItemSet &rSet,
     if( bRet )
         SetModified();
     return bRet;
+}
+
+/// Set the rsid of the next nLen symbols of rRg to the current session number
+bool SwDoc::UpdateRsid( const SwPaM &rRg, const xub_StrLen nLen )
+{
+    SwTxtNode *pTxtNode = rRg.GetPoint()->nNode.GetNode().GetTxtNode();
+    if (!pTxtNode)
+    {
+        return false;
+    }
+    xub_StrLen const nStart(rRg.GetPoint()->nContent.GetIndex() - nLen);
+    SvxRsidItem aRsid( mnRsid, RES_CHRATR_RSID );
+
+    SfxItemSet aSet(GetAttrPool(), RES_CHRATR_RSID, RES_CHRATR_RSID);
+    aSet.Put(aRsid);
+    bool const bRet(pTxtNode->SetAttr(aSet, nStart,
+        rRg.GetPoint()->nContent.GetIndex(), nsSetAttrMode::SETATTR_DEFAULT));
+
+    if (bRet && GetIDocumentUndoRedo().DoesUndo())
+    {
+        SwUndo *const pLastUndo = GetUndoManager().GetLastUndo();
+        SwUndoInsert *const pUndoInsert(dynamic_cast<SwUndoInsert*>(pLastUndo));
+        // this function is called after Insert so expects to find SwUndoInsert
+        assert(pUndoInsert);
+        if (pUndoInsert)
+        {
+            pUndoInsert->SetWithRsid();
+        }
+    }
+    return bRet;
+}
+
+bool SwDoc::UpdateParRsid( SwTxtNode *pTxtNode, sal_uInt32 nVal )
+{
+    if (!pTxtNode)
+    {
+        return false;
+    }
+
+    SvxRsidItem aRsid( nVal ? nVal : mnRsid, RES_PARATR_RSID );
+    return pTxtNode->SetAttr( aRsid );
 }
 
 /// Set the attribute according to the stated format.

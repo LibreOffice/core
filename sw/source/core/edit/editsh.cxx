@@ -95,14 +95,17 @@ void SwEditShell::Insert2(const String &rStr, const bool bForceExpandHints )
             const bool bSuccess =
                 GetDoc()->InsertString(*_pStartCrsr, rStr, nInsertFlags);
             OSL_ENSURE( bSuccess, "Doc->Insert() failed." );
-            (void) bSuccess;
 
-            GetDoc()->UpdateRsid( *_pStartCrsr, rStr.Len() );
+            if (bSuccess)
+            {
+                GetDoc()->UpdateRsid( *_pStartCrsr, rStr.Len() );
 
-            // Set paragraph rsid if beginning of paragraph
-            SwTxtNode *pTxtNode = _pStartCrsr->GetPoint()->nNode.GetNode().GetTxtNode();
-            if( pTxtNode && pTxtNode->Len() == 1)
-                GetDoc()->UpdateParRsid( pTxtNode );
+                // Set paragraph rsid if beginning of paragraph
+                SwTxtNode *const pTxtNode =
+                    _pStartCrsr->GetPoint()->nNode.GetNode().GetTxtNode();
+                if( pTxtNode && pTxtNode->Len() == 1)
+                    GetDoc()->UpdateParRsid( pTxtNode );
+            }
 
             SaveTblBoxCntnt( _pStartCrsr->GetPoint() );
 

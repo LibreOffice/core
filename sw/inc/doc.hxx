@@ -866,7 +866,6 @@ public:
     virtual bool Overwrite(const SwPaM &rRg, const String& rStr);
     virtual bool InsertString(const SwPaM &rRg, const String&,
               const enum InsertFlags nInsertMode = INS_EMPTYEXPAND );
-    virtual bool UpdateRsid( SwTxtNode *pTxtNode, xub_StrLen nStt, xub_StrLen nEnd );
     virtual bool UpdateParRsid( SwTxtNode *pTxtNode, sal_uInt32 nVal = 0 );
     virtual bool UpdateRsid( const SwPaM &rRg, xub_StrLen nLen );
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const String& rGrfName, const String& rFltName, const Graphic* pGraphic,

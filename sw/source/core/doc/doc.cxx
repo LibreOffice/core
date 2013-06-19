@@ -52,7 +52,6 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
 #include <editeng/pbinitem.hxx>
-#include <editeng/rsiditem.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/timer.hxx>
@@ -1109,40 +1108,6 @@ SwFieldType *SwDoc::GetSysFldType( const sal_uInt16 eWhich ) const
         if( eWhich == (*mpFldTypes)[i]->Which() )
             return (*mpFldTypes)[i];
     return 0;
-}
-
-/// Set the rsid from nStt to nEnd of pTxtNode to the current session number
-bool SwDoc::UpdateRsid( SwTxtNode *pTxtNode, xub_StrLen nStt, xub_StrLen nEnd )
-{
-    if ( !pTxtNode )
-    {
-        return false;
-    }
-
-    SvxRsidItem aRsid( mnRsid, RES_CHRATR_RSID );
-    SwTxtAttr* pAttr = MakeTxtAttr( *this, aRsid, nStt, nEnd );
-    return pTxtNode->InsertHint( pAttr, INS_DEFAULT );
-}
-
-/// Set the rsid of the next nLen symbols of rRg to the current session number
-bool SwDoc::UpdateRsid( const SwPaM &rRg, const xub_StrLen nLen )
-{
-    const SwPosition* pPos = rRg.GetPoint();
-    SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
-    xub_StrLen nInsPos = pPos->nContent.GetIndex();
-
-    return UpdateRsid( pTxtNode, nInsPos - nLen, nInsPos );
-}
-
-bool SwDoc::UpdateParRsid( SwTxtNode *pTxtNode, sal_uInt32 nVal )
-{
-    if ( !pTxtNode )
-    {
-        return false;
-    }
-
-    SvxRsidItem aRsid( nVal ? nVal : mnRsid, RES_PARATR_RSID );
-    return pTxtNode->SetAttr( aRsid );
 }
 
 void SwDoc::SetDocStat( const SwDocStat& rStat )

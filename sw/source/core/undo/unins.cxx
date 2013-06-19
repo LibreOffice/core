@@ -115,6 +115,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd, xub_StrLen nCnt,
     : SwUndo(UNDO_TYPING), pTxt( 0 ), pRedlData( 0 ),
         nNode( rNd.GetIndex() ), nCntnt(nCnt), nLen(nL),
         bIsWordDelim( bWDelim ), bIsAppend( sal_False )
+    , m_bWithRsid(false)
     , m_nInsertFlags(nInsertFlags)
 {
     Init(rNd);
@@ -125,6 +126,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
     : SwUndo(UNDO_SPLITNODE), pTxt( 0 ),
         pRedlData( 0 ), nNode( rNd.GetIndex() ), nCntnt(0), nLen(1),
         bIsWordDelim( sal_False ), bIsAppend( sal_True )
+    , m_bWithRsid(false)
     , m_nInsertFlags(IDocumentContentOperations::INS_EMPTYEXPAND)
 {
     Init(rNd);
@@ -208,8 +210,6 @@ SwUndoInsert::~SwUndoInsert()
     delete pUndoTxt;
 }
 
-
-
 void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc *const pTmpDoc = & rContext.GetDoc();
@@ -249,6 +249,18 @@ void SwUndoInsert::UndoImpl(::sw::UndoRedoContext & rContext)
                 aPaM.GetPoint()->nContent -= nLen;
                 if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
                     pTmpDoc->DeleteRedline( aPaM, true, USHRT_MAX );
+                if (m_bWithRsid)
+                {
+                    // RSID was added: remove any CHARFMT/AUTOFMT that may be
+                    // set on the deleted text; EraseText will leave empty
+                    // ones behind otherwise
+                    pTxtNode->DeleteAttributes(RES_TXTATR_AUTOFMT,
+                        aPaM.GetPoint()->nContent.GetIndex(),
+                        aPaM.GetMark()->nContent.GetIndex());
+                    pTxtNode->DeleteAttributes(RES_TXTATR_CHARFMT,
+                        aPaM.GetPoint()->nContent.GetIndex(),
+                        aPaM.GetMark()->nContent.GetIndex());
+                }
                 RemoveIdxFromRange( aPaM, sal_False );
                 pTxt = new String( pTxtNode->GetTxt().copy(nCntnt-nLen, nLen) );
                 pTxtNode->EraseText( aPaM.GetPoint()->nContent, nLen );
@@ -354,6 +366,11 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
                     m_nInsertFlags) );
                 assert(ins.getLength() == pTxt->Len()); // must succeed
                 DELETEZ( pTxt );
+                if (m_bWithRsid) // re-insert RSID
+                {
+                    SwPaM pam(*pPam->GetMark(), 0); // mark -> point
+                    pTmpDoc->UpdateRsid(pam, ins.getLength());
+                }
             }
             else
             {
@@ -383,7 +400,6 @@ void SwUndoInsert::RedoImpl(::sw::UndoRedoContext & rContext)
 
     pUndoTxt = GetTxtFromDoc();
 }
-
 
 void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
 {
