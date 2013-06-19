@@ -557,12 +557,10 @@ void SmXMLImport::endDocument(void)
             pDocShell->SetFormulaTree(pTree);
             if (0 == aText.Len())  //If we picked up no annotation text
             {
-                //Make up some editable text
-                aText = pDocShell->GetText();
+                // Get text from imported formula
                 pTree->CreateTextFromNode(aText);
                 aText = comphelper::string::stripEnd(aText, ' ');
             }
-            pDocShell->SetText( String() );
 
             // Convert symbol names
             SmParser &rParser = pDocShell->GetParser();
