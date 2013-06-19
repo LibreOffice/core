@@ -989,7 +989,7 @@ void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
         }
     }
 
-    rTo.mnIntLeading = (rTo.mnAscent + rTo.mnDescent) - ((maFaceFT->units_per_EM + 32) >> 6);
+    rTo.mnIntLeading = rTo.mnAscent + rTo.mnDescent - (maFaceFT->units_per_EM * fScale + 0.5);
 
     if( pOS2 && (pOS2->version != 0xFFFF) )
     {
