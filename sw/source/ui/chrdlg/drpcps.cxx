@@ -71,7 +71,6 @@ class SwDropCapsPict : public Control
     long            mnLineH;
     long            mnTextH;
     sal_uInt16          mnDistance;
-    sal_Int32       mnLeading;
     Printer*        mpPrinter;
     bool            mbDelPrinter;
     /// The _ScriptInfo structure holds information on where we change from one
@@ -243,7 +242,6 @@ void SwDropCapsPict::UpdatePaintSettings( void )
     // gray lines
     mnTotLineH = (GetOutputSizePixel().Height() - 2 * BORDER) / LINES;
     mnLineH = mnTotLineH - 2;
-    mnLeading = GetFontMetric().GetIntLeading();
 
     Font aFont;
     {
@@ -302,11 +300,11 @@ void SwDropCapsPict::UpdatePaintSettings( void )
     maCJKFont.SetFillColor(GetSettings().GetStyleSettings().GetWindowColor());
     maCTLFont.SetFillColor(GetSettings().GetStyleSettings().GetWindowColor());
 
-    maCJKFont.SetSize(Size(0, maCJKFont.GetSize().Height() + mnLeading));
-    maCTLFont.SetSize(Size(0, maCTLFont.GetSize().Height() + mnLeading));
+    maCJKFont.SetSize(Size(0, maCJKFont.GetSize().Height()));
+    maCTLFont.SetSize(Size(0, maCTLFont.GetSize().Height()));
 
     SetFont(aFont);
-    aFont.SetSize(Size(0, aFont.GetSize().Height() + mnLeading));
+    aFont.SetSize(Size(0, aFont.GetSize().Height()));
     SetFont(aFont);
     maFont = aFont;
 
@@ -356,7 +354,7 @@ void  SwDropCapsPict::Paint(const Rectangle &/*rRect*/)
         DrawRect( Rectangle( Point( BORDER, nY0 ), aTextSize ) );
 
         // draw Text
-        DrawPrev( Point( BORDER, nY0 - mnLeading ) );
+        DrawPrev( Point( BORDER, nY0 ) );
     }
 
     SetClipRegion();
