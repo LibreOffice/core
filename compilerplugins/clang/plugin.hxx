@@ -19,6 +19,7 @@
 #include <clang/Basic/SourceManager.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <set>
+#include <unordered_map>
 
 #if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 2
 #include <clang/Rewrite/Rewriter.h>
@@ -54,10 +55,18 @@ class Plugin
         bool ignoreLocation( const Decl* decl );
         bool ignoreLocation( const Stmt* stmt );
         CompilerInstance& compiler;
+        /**
+         Returns the parent of the given AST node. Clang's internal AST representation doesn't provide this information,
+         it can only provide children, but getting the parent is often useful for inspecting a part of the AST.
+        */
+        const Stmt* parentStmt( const Stmt* stmt );
+        Stmt* parentStmt( Stmt* stmt );
     private:
         static void registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), const char* optionName, bool isRewriter );
         template< typename T > static Plugin* createHelper( CompilerInstance& compiler, Rewriter& rewriter );
         enum { isRewriter = false };
+        static unordered_map< const Stmt*, const Stmt* > parents;
+        static void buildParents( CompilerInstance& compiler );
     };
 
 /**

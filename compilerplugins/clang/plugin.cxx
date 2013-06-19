@@ -67,6 +67,71 @@ void Plugin::registerPlugin( Plugin* (*create)( CompilerInstance&, Rewriter& ), 
     PluginHandler::registerPlugin( create, optionName, isRewriter );
     }
 
+unordered_map< const Stmt*, const Stmt* > Plugin::parents;
+
+const Stmt* Plugin::parentStmt( const Stmt* stmt )
+    {
+    if( parents.empty())
+        buildParents( compiler );
+    assert( parents.count( stmt ) == 1 );
+    return parents[ stmt ];
+    }
+
+Stmt* Plugin::parentStmt( Stmt* stmt )
+    {
+    if( parents.empty())
+        buildParents( compiler );
+    assert( parents.count( stmt ) == 1 );
+    return const_cast< Stmt* >( parents[ stmt ] );
+    }
+
+namespace
+{
+class ParentBuilder
+    : public RecursiveASTVisitor< ParentBuilder >
+    {
+    public:
+        bool VisitFunctionDecl( const FunctionDecl* function );
+        void walk( const Stmt* stmt );
+        unordered_map< const Stmt*, const Stmt* >* parents;
+    };
+
+bool ParentBuilder::VisitFunctionDecl( const FunctionDecl* function )
+    {
+//    if( ignoreLocation( declaration ))
+//        return true; ???
+    if( !function->doesThisDeclarationHaveABody())
+        return true;
+    const Stmt* body = function->getBody();
+    (*parents)[ body ] = NULL; // no parent
+    walk( body );
+    return true;
+    }
+
+void ParentBuilder::walk( const Stmt* stmt )
+    {
+    for( ConstStmtIterator it = stmt->child_begin();
+         it != stmt->child_end();
+         ++it )
+        {
+        if( *it != NULL )
+            {
+            (*parents)[ *it ] = stmt;
+            walk( *it );
+            }
+        }
+    }
+
+} // namespace
+
+void Plugin::buildParents( CompilerInstance& compiler )
+    {
+    assert( parents.empty());
+    ParentBuilder builder;
+    builder.parents = &parents;
+    builder.TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
+    }
+
 /////
 
 RewritePlugin::RewritePlugin( CompilerInstance& compiler, Rewriter& rewriter )
