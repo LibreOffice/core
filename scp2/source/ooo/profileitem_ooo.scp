@@ -20,6 +20,13 @@
 
 #include "config_folders.h"
 
+Profile gid_Profile_Uno_Ini
+    ModuleID = gid_Module_Root;
+    Name = PROFILENAME(uno);
+    Dir = GID_BRAND_DIR_ETC;
+    Styles = (NETWORK);
+End
+
 ProfileItem gid_Profileitem_Setup_Uno_Services
     ProfileID = gid_Profile_Setup_Ini;
     ModuleID = gid_Module_Root;

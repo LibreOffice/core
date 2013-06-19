@@ -18,6 +18,18 @@
 
 #include "macros.inc"
 
+#ifndef MACOSX
+Directory gid_Dir_Brand_Root
+    ParentID = PREDEFINED_PROGDIR;
+  #ifdef WNT
+    HostName = "${WINDOWSBASISROOTNAME}";
+  #else
+    HostName = ".";
+  #endif
+    Styles = (OFFICEDIRECTORY,ISINSTALLLOCATION,CREATE);
+End
+#endif
+
 #ifdef MACOSX
 Directory gid_Dir_Bundle_Contents_Resources
     ParentID = gid_Dir_Bundle_Contents;
