@@ -39,7 +39,7 @@ namespace svgio
         :   SvgNode(SVGTokenSvg, rDocument, pParent),
             maSvgStyleAttributes(*this),
             mpViewBox(0),
-            maSvgAspectRatio(),
+            maSvgAspectRatio(SvgAspectRatio(Align_xMidYMid, false, true)),
             maX(),
             maY(),
             maWidth(),
@@ -329,126 +329,123 @@ namespace svgio
                 else
                 {
                     // Outermost SVG element; create target range homing width and height as given.
-                    // SVG defines that x,y has no meanig for the outermost SVG element. Use a fallback
-                    // width and height of din A 4 (21 x 29,7 cm)
-                    double fW(getWidth().isSet() ? getWidth().solve(*this, xcoordinate) : (210.0 * 3.543307));
-                    double fH(getHeight().isSet() ? getHeight().solve(*this, ycoordinate) : (297.0 * 3.543307));
+                    // SVG defines that x,y has no meaning for the outermost SVG element. Use a fallback
+                    // width and height of DIN A 4 (21 x 29,7 cm)
+                    double fViewPortW(getWidth().isSet() ? getWidth().solve(*this, xcoordinate) : (210.0 * 3.543307));
+                    double fViewPortH(getHeight().isSet() ? getHeight().solve(*this, ycoordinate) : (297.0 * 3.543307));
+                    basegfx::B2DRange aSvgCanvasRange(0.0, 0.0, 0.0, 0.0);
 
                     // Svg defines that a negative value is an error and that 0.0 disables rendering
-                    if(basegfx::fTools::more(fW, 0.0) && basegfx::fTools::more(fH, 0.0))
+                    if(basegfx::fTools::more(fViewPortW, 0.0) && basegfx::fTools::more(fViewPortH, 0.0))
                     {
-                        const basegfx::B2DRange aSvgCanvasRange(0.0, 0.0, fW, fH);
-
+                        basegfx::B2DRange aContentRange; // ViewBox or bounding box
                         if(getViewBox())
                         {
-                            if(!basegfx::fTools::equalZero(getViewBox()->getWidth()) && !basegfx::fTools::equalZero(getViewBox()->getHeight()))
-                            {
-                                // create mapping
-                                const SvgAspectRatio& rRatio = getSvgAspectRatio();
-                                basegfx::B2DHomMatrix aViewBoxMapping;
-
-                                if(rRatio.isSet())
-                                {
-                                    // let mapping be created from SvgAspectRatio
-                                    aViewBoxMapping = rRatio.createMapping(aSvgCanvasRange, *getViewBox());
-
-                                    // no need to check ratio here for slice, the outermost Svg will
-                                    // be clipped anyways (see below)
-                                }
-                                else
-                                {
-                                    // choose default mapping
-                                    aViewBoxMapping = rRatio.createLinearMapping(aSvgCanvasRange, *getViewBox());
-                                }
-
-                                // scale content to viewBox definitions
-                                const drawinglayer::primitive2d::Primitive2DReference xTransform(
-                                    new drawinglayer::primitive2d::TransformPrimitive2D(
-                                        aViewBoxMapping,
-                                        aSequence));
-
-                                aSequence = drawinglayer::primitive2d::Primitive2DSequence(&xTransform, 1);
-                            }
+                            aContentRange = *getViewBox();
                         }
-
-                        // to be completely correct in Svg sense it is necessary to clip
-                        // the whole content to the given canvas. I choose here to do this
-                        // initially despite I found various examples of Svg files out there
-                        // which have no correct values for this clipping. It's correct
-                        // due to the Svg spec.
-                        bool bDoCorrectCanvasClipping(true);
-
-                        if(bDoCorrectCanvasClipping)
+                        else    // no ViewBox given -> get bounding box  TODO: ignore preserveAspectRatio i.e. set to default?
                         {
-                            // different from Svg we have the possibility with primitives to get
-                            // a correct bounding box for the geometry. Get it for evtl. taking action
-                            const basegfx::B2DRange aContentRange(
-                                drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(
-                                    aSequence,
-                                    drawinglayer::geometry::ViewInformation2D()));
-
-                            if(aSvgCanvasRange.isInside(aContentRange))
-                            {
-                                // no clip needed, but an invisible HiddenGeometryPrimitive2D
-                                // to allow getting the full Svg range using the primitive mechanisms.
-                                // This is needed since e.g. an SdrObject using this as graphic will
-                                // create a mapping transformation to exactly map the content to it's
-                                // real life size
-                                const drawinglayer::primitive2d::Primitive2DReference xLine(
-                                    new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                                        basegfx::tools::createPolygonFromRect(
-                                            aSvgCanvasRange),
-                                        basegfx::BColor(0.0, 0.0, 0.0)));
-                                const drawinglayer::primitive2d::Primitive2DReference xHidden(
-                                    new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(
-                                        drawinglayer::primitive2d::Primitive2DSequence(&xLine, 1)));
-
-                                drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aSequence, xHidden);
-                            }
-                            else if(aSvgCanvasRange.overlaps(aContentRange))
-                            {
-                                // Clip is necessary. This will make Svg images evtl. smaller
-                                // than wanted from Svg (the free space which may be around it is
-                                // conform to the Svg spec), but avoids an expensive and unneccessary
-                                // clip. Keep the full Svg range here to get the correct mappings
-                                // to objects using this. Optimizations can be done in the processors
-                                const drawinglayer::primitive2d::Primitive2DReference xMask(
-                                    new drawinglayer::primitive2d::MaskPrimitive2D(
-                                        basegfx::B2DPolyPolygon(
-                                            basegfx::tools::createPolygonFromRect(
-                                                aSvgCanvasRange)),
-                                        aSequence));
-
-                                aSequence = drawinglayer::primitive2d::Primitive2DSequence(&xMask, 1);
-                            }
-                            else
-                            {
-                                // not inside, no overlap. Empty Svg
-                                aSequence.realloc(0);
-                            }
+                            aContentRange = drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(aSequence, drawinglayer::geometry::ViewInformation2D());
                         }
+                        double fW(aContentRange.getWidth());
+                        double fH(aContentRange.getHeight());
 
-                        if(aSequence.hasElements())
+                        if(!basegfx::fTools::equalZero(fW) && !basegfx::fTools::equalZero(fH))
                         {
-                            // embed in transform primitive to scale to 1/100th mm
-                            // where 1 mm == 3.543307 px to get from Svg coordinates to
-                            // drawinglayer ones
-                            const double fScaleTo100thmm(100.0 / 3.543307);
-                            const basegfx::B2DHomMatrix aTransform(
-                                basegfx::tools::createScaleB2DHomMatrix(
-                                    fScaleTo100thmm,
-                                    fScaleTo100thmm));
+                            const SvgAspectRatio& rRatio = getSvgAspectRatio();
+                            double fScale = std::min(fViewPortW/fW, fViewPortH/fH);
+                            fW *= fScale;
+                            fH *= fScale;
+                            aSvgCanvasRange = basegfx::B2DRange(0.0, 0.0, fW, fH);
 
+                            // let mapping be created from SvgAspectRatio
+                            basegfx::B2DHomMatrix aViewBoxMapping;
+                            aViewBoxMapping = rRatio.createMapping(aSvgCanvasRange, aContentRange);
+
+                            // no need to check ratio here for slice, the outermost Svg will
+                            // be clipped anyways (see below)
+
+                            // scale content to viewBox definitions
                             const drawinglayer::primitive2d::Primitive2DReference xTransform(
-                                new drawinglayer::primitive2d::TransformPrimitive2D(
-                                    aTransform,
-                                    aSequence));
+                                     new drawinglayer::primitive2d::TransformPrimitive2D(
+                                     aViewBoxMapping,
+                                     aSequence));
 
                             aSequence = drawinglayer::primitive2d::Primitive2DSequence(&xTransform, 1);
-
-                            // append to result
-                            drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aSequence);
                         }
+                    }
+                    // to be completely correct in Svg sense it is necessary to clip
+                    // the whole content to the given canvas. I choose here to do this
+                    // initially despite I found various examples of Svg files out there
+                    // which have no correct values for this clipping. It's correct
+                    // due to the Svg spec.
+                    bool bDoCorrectCanvasClipping(true);
+
+                    if(bDoCorrectCanvasClipping)
+                    {
+                        // different from Svg we have the possibility with primitives to get
+                        // a correct bounding box for the geometry. Get it for evtl. taking action
+                        const basegfx::B2DRange aContentRange(
+                            drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(
+                                aSequence,
+                                drawinglayer::geometry::ViewInformation2D()));
+
+                        if(aSvgCanvasRange.isInside(aContentRange))
+                        {
+                            // no clip needed, but an invisible HiddenGeometryPrimitive2D
+                            // to allow getting the full Svg range using the primitive mechanisms.
+                            // This is needed since e.g. an SdrObject using this as graphic will
+                            // create a mapping transformation to exactly map the content to it's
+                            // real life size
+                            const drawinglayer::primitive2d::Primitive2DReference xLine(
+                                new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+                                    basegfx::tools::createPolygonFromRect( aSvgCanvasRange),
+                                    basegfx::BColor(0.0, 0.0, 0.0)));
+                            const drawinglayer::primitive2d::Primitive2DReference xHidden(
+                                new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(
+                                    drawinglayer::primitive2d::Primitive2DSequence(&xLine, 1)));
+
+                            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aSequence, xHidden);
+                        }
+                        else if(aSvgCanvasRange.overlaps(aContentRange))
+                        {
+                            // Clip is necessary. This will make Svg images evtl. smaller
+                            // than wanted from Svg (the free space which may be around it is
+                            // conform to the Svg spec), but avoids an expensive and unneccessary
+                            // clip. Keep the full Svg range here to get the correct mappings
+                            // to objects using this. Optimizations can be done in the processors
+                            const drawinglayer::primitive2d::Primitive2DReference xMask(
+                                new drawinglayer::primitive2d::MaskPrimitive2D(
+                                    basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(aSvgCanvasRange)),
+                                    aSequence));
+
+                            aSequence = drawinglayer::primitive2d::Primitive2DSequence(&xMask, 1);
+                        }
+                        else
+                        {
+                            // not inside, no overlap. Empty Svg
+                            aSequence.realloc(0);
+                        }
+                    }
+
+                    if(aSequence.hasElements())
+                    {
+                        // embed in transform primitive to scale to 1/100th mm
+                        // where 1 mm == 3.543307 px to get from Svg coordinates to
+                        // drawinglayer ones
+                        const double fScaleTo100thmm(100.0 / 3.543307);
+                        const basegfx::B2DHomMatrix aTransform(
+                            basegfx::tools::createScaleB2DHomMatrix(
+                                fScaleTo100thmm,
+                                fScaleTo100thmm));
+
+                        const drawinglayer::primitive2d::Primitive2DReference xTransform(
+                            new drawinglayer::primitive2d::TransformPrimitive2D( aTransform, aSequence));
+
+                        aSequence = drawinglayer::primitive2d::Primitive2DSequence(&xTransform, 1);
+
+                        // append to result
+                        drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aSequence);
                     }
                 }
             }
