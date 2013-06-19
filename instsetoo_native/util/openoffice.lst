@@ -71,7 +71,7 @@ Apache_OpenOffice
             ABOUTBOXPRODUCTVERSION 4.0.0
             BASEPRODUCTVERSION 4.0
             PCPFILENAME openoffice.pcp
-            UPDATEURL https://ooo-site.apache.org/projects/update/aoo40/check.Update
+            UPDATEURL https://ooo-updates.apache.org/aoo40/check.Update
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt,version.lst
             REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
             ADDSYSTEMINTEGRATION 1
