@@ -461,7 +461,7 @@ oslFileError FileHandle_Impl::readFileAt (
                     if (result != osl_File_E_None)
                         return (result);
 
-                    nBytesRequested -= uDone, *pBytesRead += uDone;
+                    *pBytesRead += uDone;
                     return osl_File_E_None;
                 }
 
@@ -533,7 +533,7 @@ oslFileError FileHandle_Impl::writeFileAt (
                     if (uDone != nBytesToWrite)
                         return osl_File_E_IO;
 
-                    nBytesToWrite -= uDone, *pBytesWritten += uDone;
+                    *pBytesWritten += uDone;
                     return osl_File_E_None;
                 }
 
