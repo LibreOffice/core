@@ -73,7 +73,7 @@
 #include <viewsh.hxx>
 #include <shellres.hxx>
 #include <mdiexp.hxx>           // Progress
-#include <statstr.hrc>          // ResId fuer Statusleiste
+#include <statstr.hrc>          // ResId for Statusbar
 #include <swerror.h>            // ERR_WW8_...
 #include <swtable.hxx>          // class SwTableLines, ...
 #include <fchrfmt.hxx>
@@ -459,7 +459,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             }
         }
 
-        //  Textrahmen, auch Title oder Outline
+        // Text Frame also Title or Outline
         sal_uInt32 nTextId = GetPropertyValue( DFF_Prop_lTxid, 0 );
         if( nTextId )
         {
@@ -574,14 +574,14 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 pObj = new SdrRectObj(OBJ_TEXT, rTextRect);
             }
 
-            // Die vertikalen Absatzeinrueckungen sind im BoundRect mit drin,
-            // hier rausrechnen
+            // The vertical paragraph justification are contained within the
+            // BoundRect so calculate it here
             Rectangle aNewRect(rTextRect);
             aNewRect.Bottom() -= nTextTop + nTextBottom;
             aNewRect.Right() -= nTextLeft + nTextRight;
 
-            // Nur falls es eine einfache Textbox ist, darf der Writer
-            // das Objekt durch einen Rahmen ersetzen, ansonsten
+            // Only if its a simple Textbox, Writer can replace the Object
+            // with a Frame, else
             if( bIsSimpleDrawingTextBox )
             {
                 ::boost::shared_ptr<SvxMSDffShapeInfo> const pTmpRec(
@@ -628,7 +628,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                     ;
             }
 
-            // Abstaende an den Raendern der Textbox setzen
+            // Set distances on Textbox's margins
             aSet.Put( SdrTextLeftDistItem( nTextLeft ) );
             aSet.Put( SdrTextRightDistItem( nTextRight ) );
             aSet.Put( SdrTextUpperDistItem( nTextTop ) );
@@ -853,12 +853,12 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
         if( pImpRec->nShapeId )
         {
-            // Import-Record-Liste ergaenzen
+            // Complement Import Record List
             pImpRec->pObj = pObj;
             rImportData.aRecords.insert( pImpRec );
 
-            // Eintrag in Z-Order-Liste um Zeiger auf dieses Objekt ergaenzen
-            /*Only store objects which are not deep inside the tree*/
+            // Complement entry in Z Order List with a pointer to this Object
+            // Only store objects which are not deep inside the tree
             if( ( rObjData.nCalledByGroup == 0 )
                 ||
                 ( (rObjData.nSpFlags & SP_FGROUP)
@@ -875,10 +875,9 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
     return pObj;
 }
 
-/***************************************************************************
-#  Spezial FastSave - Attribute
-#**************************************************************************/
-
+/**
+ * Special FastSave - Attributes
+ */
 void SwWW8ImplReader::Read_StyleCode( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     if (nLen < 0)
@@ -898,14 +897,16 @@ void SwWW8ImplReader::Read_StyleCode( sal_uInt16, const sal_uInt8* pData, short 
     }
 }
 
-// Read_Majority ist fuer Majority ( 103 ) und Majority50 ( 108 )
+/**
+ * Read_Majority is for Majority (103) and Majority50 (108)
+ */
 void SwWW8ImplReader::Read_Majority( sal_uInt16, const sal_uInt8* , short )
 {
 }
 
-//-----------------------------------------
-//            Stack
-//-----------------------------------------
+/**
+ * Stack
+ */
 void SwWW8FltControlStack::NewAttr(const SwPosition& rPos,
     const SfxPoolItem& rAttr)
 {
@@ -1390,7 +1391,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
                     pSty = 0;
             }
             else
-                pSty = 0;                           // gib die Suche auf
+                pSty = 0; // Give up on the search
         }
     }
 
@@ -1406,7 +1407,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
     {
         short nPos = SVBT16ToShort(pIns + i*2);
         aTabStop.GetTabPos() = nPos;
-        switch( SVBT8ToByte( pTyp[i].aBits1 ) & 0x7 )       // pTyp[i].jc
+        switch( SVBT8ToByte( pTyp[i].aBits1 ) & 0x7 ) // pTyp[i].jc
         {
             case 0:
                 aTabStop.GetAdjustment() = SVX_TAB_ADJUST_LEFT;
@@ -1421,7 +1422,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
                 aTabStop.GetAdjustment() = SVX_TAB_ADJUST_DECIMAL;
                 break;
             case 4:
-                continue;                   // ignoriere Bar
+                continue; // Ignore Bar
         }
 
         switch( SVBT8ToByte( pTyp[i].aBits1 ) >> 3 & 0x7 )
@@ -1443,7 +1444,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
 
         sal_uInt16 nPos2 = aAttr.GetPos( nPos );
         if (nPos2 != SVX_TAB_NOTFOUND)
-            aAttr.Remove(nPos2, 1); // sonst weigert sich das Insert()
+            aAttr.Remove(nPos2, 1); // Or else Insert() refuses
         aAttr.Insert(aTabStop);
     }
 
@@ -1469,10 +1470,9 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
     }
 }
 
-//-----------------------------------------
-//              DOP
-//-----------------------------------------
-
+/**
+ * DOP
+*/
 void SwWW8ImplReader::ImportDop()
 {
     // correct the LastPrinted date in DocumentProperties
@@ -1501,8 +1501,8 @@ void SwWW8ImplReader::ImportDop()
     rDoc.Setn32DummyCompatabilityOptions1( pWDop->GetCompatabilityOptions());
     rDoc.Setn32DummyCompatabilityOptions2( pWDop->GetCompatabilityOptions2());
 
-    // Abstand zwischen zwei Absaetzen ist die SUMME von unterem
-    // Abst. des ersten und oberem Abst. des zweiten
+    // The distance between two paragraphs is the sum of the bottom distance of
+    // the first paragraph and the top distance of the second one
     rDoc.set(IDocumentSettingAccess::PARA_SPACE_MAX, pWDop->fDontUseHTMLAutoSpacing);
     rDoc.set(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES, true );
     // move tabs on alignment
@@ -1510,18 +1510,18 @@ void SwWW8ImplReader::ImportDop()
     // #i24363# tab stops relative to indent
     rDoc.set(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT, false);
 
-    // Import Default-Tabs
+    // Import Default Tabs
     long nDefTabSiz = pWDop->dxaTab;
     if( nDefTabSiz < 56 )
         nDefTabSiz = 709;
 
-    // wir wollen genau einen DefaultTab
+    // We want exactly one DefaultTab
     SvxTabStopItem aNewTab( 1, sal_uInt16(nDefTabSiz), SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
     ((SvxTabStop&)aNewTab[0]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;
 
     rDoc.GetAttrPool().SetPoolDefaultItem( aNewTab );
 
-    // Import zoom factor.
+    // Import zoom factor
     if (pWDop->wScaleSaved)
     {
         uno::Sequence<beans::PropertyValue> aViewProps(3);
@@ -1652,11 +1652,9 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
     rDoc.setCharacterCompressionType(static_cast<SwCharCompressType>(rTypo.iJustification));
 }
 
-//-----------------------------------------
-//      Fuss- und Endnoten
-
-//-----------------------------------------
-
+/**
+ * Footnotes and Endnotes
+ */
 WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     maTmpPos(*pRdr->pPaM->GetPoint()),
     mpOldStck(pRdr->pCtrlStck),
@@ -1703,9 +1701,8 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
 
     pRdr->pAnchorStck = new SwWW8FltAnchorStack(&pRdr->rDoc, pRdr->nFieldFlags);
 
-    // rette die Attributverwaltung: dies ist noetig, da der neu anzulegende
-    // PLCFx Manager natuerlich auf die gleichen FKPs zugreift, wie der alte
-    // und deren Start-End-Positionen veraendert...
+    // Save the attribute manager: we need this as the newly created PLCFx Manager
+    // access the same FKPs as the old one and their Start-End position changes.
     if (pRdr->pPlcxMan)
         pRdr->pPlcxMan->SaveAllPLCFx(maPLCFxSave);
 
@@ -1741,8 +1738,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->bHasBorder = mbHasBorder;
     pRdr->bFirstPara = mbFirstPara;
 
-    // schliesse alle Attribute, da sonst Attribute
-    // entstehen koennen, die aus dem Fly rausragen
+    // Close all attributes as attributes could be created that extend the Fly
     pRdr->DeleteCtrlStk();
     pRdr->pCtrlStck = mpOldStck;
 
@@ -1769,15 +1765,14 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
 void SwWW8ImplReader::Read_HdFtFtnText( const SwNodeIndex* pSttIdx,
     long nStartCp, long nLen, ManTypes nType )
 {
-    // rettet Flags u.ae. u. setzt sie zurueck
+    // Saves Flags (amongst other things) and resets them
     WW8ReaderSave aSave( this );
 
-    pPaM->GetPoint()->nNode = pSttIdx->GetIndex() + 1;      //
+    pPaM->GetPoint()->nNode = pSttIdx->GetIndex() + 1;
     pPaM->GetPoint()->nContent.Assign( pPaM->GetCntntNode(), 0 );
 
-    // dann Text fuer Header, Footer o. Footnote einlesen
-
-    ReadText( nStartCp, nLen, nType );              // Sepx dabei ignorieren
+    // Read Text for Header, Footer or Footnote
+    ReadText( nStartCp, nLen, nType ); // Ignore Sepx when doing so
     aSave.Restore( this );
 }
 
@@ -2235,29 +2230,29 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
     // TabRowEnd
     bool bTableRowEnd = (pPlcxMan->HasParaSprm(bVer67 ? 25 : 0x2417) != 0 );
 
-// es muss leider fuer jeden Absatz zuerst nachgesehen werden,
-// ob sich unter den sprms
-// das sprm 29 (bzw. 0x261B) befindet, das ein APO einleitet.
-// Alle weiteren sprms  beziehen sich dann naemlich auf das APO und nicht
-// auf den normalen Text drumrum.
-// Dasselbe gilt fuer eine Tabelle ( sprm 24 (bzw. 0x2416) )
-// und Anls ( sprm 13 ).
-// WW: Tabelle in APO geht ( Beide Anfaende treten gleichzeitig auf )
-// WW: APO in Tabelle geht nicht
-// d.h. Wenn eine Tabelle Inhalt eines Apo ist, dann muss der
-// Apo-Anfang zuerst bearbeitet werden, damit die Tabelle im Apo steht
-// und nicht umgekehrt. Am Ende muss dagegen zuerst das Tabellenende
-// bearbeitet werden, da die Apo erst nach der Tabelle abgeschlossen
-// werden darf ( sonst wird das Apo-Ende nie gefunden ).
-// Dasselbe gilt fuer Fly / Anl, Tab / Anl, Fly / Tab / Anl.
+// Unfortunately, for every paragraph we need to check first whether
+// they contain a sprm 29 (0x261B), which starts an APO.
+// All other sprms then refer to that APO and not to the normal text
+// surrounding it.
+// The same holds true for a Table (sprm 24 (0x2416)) and Anls (sprm 13).
 //
-// Wenn die Tabelle in einem Apo steht, fehlen im TabRowEnd-Bereich
-// die Apo-Angaben. Damit hier die Apo nicht beendet wird, wird
-// ProcessApo dann nicht aufgerufen.
+// WW: Table in APO is possible (Both Start-Ends occur at the same time)
+// WW: APO in Table not possible
+//
+// This mean that of a Table is the content of a APO, the APO start needs
+// to be edited first, so that the Table remains in the APO and not the
+// other way around.
+// At the End, however, we need to edit the Table End first as the APO
+// must end after that Table (or else we never find the APO End).
+//
+// The same holds true for Fly / Anl, Tab / Anl, Fly / Tab / Anl.
+//
+// If the Table is within an APO the TabRowEnd Area misses the
+// APO settings.
+// To not end the APO there, we do not call ProcessApo
 
 // KHZ: When there is a table inside the Apo the Apo-flags are also
 //      missing for the 2nd, 3rd... paragraphs of each cell.
-
 
 //  1st look for in-table flag, for 2000+ there is a subtable flag to
 //  be considered, the sprm 6649 gives the level of the table
@@ -2601,7 +2596,9 @@ sal_Unicode SwWW8ImplReader::TranslateToHindiNumbers(sal_Unicode nChar)
     return nChar;
 }
 
-// Returnwert: true for no Sonderzeichen
+/**
+ * Return value: true for non special chars
+ */
 bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
 {
     sal_Size nRequestedStrLen = nEnd - rPos;
@@ -3013,7 +3010,7 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const String& rAddString)
     bReadTable = false;
 }
 
-// Returnwert: true for para end
+// Return value: true for para end
 bool SwWW8ImplReader::ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd,
     long nCpOfs)
 {
@@ -3021,7 +3018,7 @@ bool SwWW8ImplReader::ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd,
 
     if (bSymbol || bIgnoreText)
     {
-        if( bSymbol )   // Spezialzeichen einfuegen
+        if( bSymbol ) // Insert special chars
         {
             for(sal_uInt16 nCh = 0; nCh < nEnd - rPos; ++nCh)
             {
@@ -3030,18 +3027,18 @@ bool SwWW8ImplReader::ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd,
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_FONT );
         }
         pStrm->SeekRel( nEnd- rPos );
-        rPos = nEnd;    // ignoriere bis Attributende
+        rPos = nEnd; // Ignore until attribute end
         return false;
     }
 
     while (true)
     {
         if (ReadPlainChars(rPos, nEnd, nCpOfs))
-            return false;                   // Fertig
+            return false; // Done
 
         bool bStartLine = ReadChar(rPos, nCpOfs);
         rPos++;
-        if (bPgSecBreak || bStartLine || rPos == nEnd)  // CR oder Fertig
+        if (bPgSecBreak || bStartLine || rPos == nEnd) // CR or Done
         {
             return bStartLine;
         }
@@ -3535,7 +3532,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
     bPgSecBreak = false;
 
     pPlcxMan = new WW8PLCFMan( pSBase, nType, nStartCp );
-    long nCpOfs = pPlcxMan->GetCpOfs(); // Offset fuer Header/Footer, Footnote
+    long nCpOfs = pPlcxMan->GetCpOfs(); // Offset for Header/Footer, Footnote
 
     WW8_CP nNext = pPlcxMan->Where();
     SwTxtNode* pPreviousNode = 0;
@@ -5604,7 +5601,7 @@ sal_uLong SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
     sal_uInt16 nMagic(0);
     *pStrm >> nMagic;
 
-    // beachte: 6 steht fuer "6 ODER 7",  7 steht fuer "NUR 7"
+    // Remember: 6 means "6 OR 7", 7 means "JUST 7"
     switch (nWantedVersion)
     {
         case 6:
@@ -5782,10 +5779,10 @@ sal_Bool SwMSDffManager::GetOLEStorageName(long nOLEId, OUString& rStorageName,
     sal_Int32 nPictureId = 0;
     if (rReader.pStg)
     {
-        // dann holen wir uns mal ueber den TextBox-PLCF die richtigen
-        // Char Start-/End-Positionen. In dem Bereich sollte dann
-        // das EinbettenFeld und die entsprechenden Sprms zu finden
-        // sein. Wir brauchen hier aber nur das Sprm fuer die Picture Id
+        // Via the TextBox-PLCF we get the right char Start-End positions
+        // We should then find the EmbedField and the corresponding Sprms
+        // in that Area.
+        // We only need the Sprm for the Picture Id.
         long nOldPos = rReader.pStrm->Tell();
         {
             // #i32596# - consider return value of method
