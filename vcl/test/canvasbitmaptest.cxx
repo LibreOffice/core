@@ -54,11 +54,9 @@
 using namespace ::com::sun::star;
 using namespace ::vcl::unotools;
 
-// -----------------------------------------------------------------------
 
 void Main();
 
-// -----------------------------------------------------------------------
 
 SAL_IMPLEMENT_MAIN()
 {
@@ -78,7 +76,6 @@ SAL_IMPLEMENT_MAIN()
     return 0;
 }
 
-// -----------------------------------------------------------------------
 
 namespace com { namespace sun { namespace star { namespace rendering
 {
@@ -94,7 +91,6 @@ bool operator==( const ARGBColor& rLHS, const RGBColor& rRHS )
 
 } } } }
 
-//----------------------------------------------------------------------------------
 
 namespace
 {
@@ -121,7 +117,6 @@ class TestWindow : public Dialog
         virtual void Paint( const Rectangle& rRect );
 };
 
-//----------------------------------------------------------------------------------
 
 static bool g_failure=false;
 
@@ -138,7 +133,6 @@ void test( bool bResult, const char* msg )
     }
 }
 
-//----------------------------------------------------------------------------------
 
 bool rangeCheck( const rendering::RGBColor& rColor )
 {
@@ -147,7 +141,6 @@ bool rangeCheck( const rendering::RGBColor& rColor )
         rColor.Blue < 0.0 || rColor.Blue > 1.0;
 }
 
-//----------------------------------------------------------------------------------
 
 void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                         const char*                            msg,
@@ -296,158 +289,6 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
         }
     }
 }
-
-//----------------------------------------------------------------------------------
-
-void checkBitmapImport( const rtl::Reference<VclCanvasBitmap>& xBmp,
-                        const char*                            msg,
-                        int                                    nOriginalDepth )
-{
-    OSL_TRACE("-------------------------");
-    OSL_TRACE("Testing %s, with depth %d", msg, nOriginalDepth);
-
-    BitmapEx aContainedBmpEx( xBmp->getBitmapEx() );
-    Bitmap   aContainedBmp( aContainedBmpEx.GetBitmap() );
-    int      nDepth = nOriginalDepth;
-
-    {
-        Bitmap::ScopedReadAccess pAcc( aContainedBmp );
-        nDepth = pAcc->GetBitCount();
-    }
-
-    test( aContainedBmp.GetSizePixel() == Size(200,200),
-          "Original bitmap size" );
-
-    test( xBmp->getSize().Width == 200 && xBmp->getSize().Height == 200,
-          "Original bitmap size via API" );
-
-    test( xBmp->hasAlpha() == aContainedBmpEx.IsTransparent(),
-          "Correct alpha state" );
-
-    test( xBmp->getScaledBitmap( geometry::RealSize2D(500,500), sal_False ).is(),
-          "getScaledBitmap()" );
-
-    rendering::IntegerBitmapLayout aLayout;
-    uno::Sequence<sal_Int8> aPixelData = xBmp->getData(aLayout, geometry::IntegerRectangle2D(0,0,1,1));
-
-    const sal_Int32 nExpectedBitsPerPixel(
-        aContainedBmpEx.IsTransparent() ? std::max(8,nDepth)+8 : nDepth);
-    test( aLayout.ScanLines == 1,
-          "# scanlines" );
-    test( aLayout.ScanLineBytes == (nExpectedBitsPerPixel+7)/8,
-          "# scanline bytes" );
-    test( aLayout.ScanLineStride == (nExpectedBitsPerPixel+7)/8 ||
-          aLayout.ScanLineStride == -(nExpectedBitsPerPixel+7)/8,
-          "# scanline stride" );
-    test( aLayout.PlaneStride == 0,
-          "# plane stride" );
-
-    test( aLayout.ColorSpace.is(),
-          "Color space there" );
-
-    test( aLayout.Palette.is() == (nDepth <= 8),
-          "Palette existance conforms to bitmap" );
-
-    uno::Sequence<sal_Int8> aPixelData2 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(0,0) );
-
-    test( aPixelData2.getLength() == aPixelData.getLength(),
-          "getData and getPixel return same amount of data" );
-
-    aPixelData = xBmp->getData(aLayout, geometry::IntegerRectangle2D(0,0,200,1));
-    test( aLayout.ScanLines == 1,
-          "# scanlines" );
-    test( aLayout.ScanLineBytes == (200*nExpectedBitsPerPixel+7)/8,
-          "# scanline bytes" );
-    test( aLayout.ScanLineStride == (200*nExpectedBitsPerPixel+7)/8 ||
-          aLayout.ScanLineStride == -(200*nExpectedBitsPerPixel+7)/8,
-          "# scanline stride" );
-
-    uno::Sequence< rendering::RGBColor >  aRGBColors  = xBmp->convertIntegerToRGB( aPixelData );
-    uno::Sequence< rendering::ARGBColor > aARGBColors = xBmp->convertIntegerToARGB( aPixelData );
-
-    const rendering::RGBColor*  pRGBStart ( aRGBColors.getConstArray() );
-    const rendering::RGBColor*  pRGBEnd   ( aRGBColors.getConstArray()+aRGBColors.getLength() );
-    const rendering::ARGBColor* pARGBStart( aARGBColors.getConstArray() );
-    std::pair<const rendering::RGBColor*,
-        const rendering::ARGBColor*> aRes = std::mismatch( pRGBStart, pRGBEnd, pARGBStart );
-    test( aRes.first == pRGBEnd,
-          "argb and rgb colors are equal" );
-
-    test( std::find_if(pRGBStart,pRGBEnd,&rangeCheck) == pRGBEnd,
-          "rgb colors are within [0,1] range" );
-
-    test( pRGBStart[0].Red == 1.0 && pRGBStart[0].Green == 1.0 && pRGBStart[0].Blue == 1.0,
-          "First pixel is white" );
-    test( pARGBStart[1].Alpha == 1.0,
-          "Second pixel is opaque" );
-    if( aContainedBmpEx.IsTransparent() )
-    {
-        test( pARGBStart[0].Alpha == 0.0,
-              "First pixel is fully transparent" );
-    }
-
-    test( pRGBStart[1].Red == 0.0 && pRGBStart[1].Green == 0.0 && pRGBStart[1].Blue == 0.0,
-          "Second pixel is black" );
-
-    if( nOriginalDepth > 8 )
-    {
-        const Color aCol(COL_GREEN);
-        test( pRGBStart[5].Red == vcl::unotools::toDoubleColor(aCol.GetRed()) &&
-              pRGBStart[5].Green == vcl::unotools::toDoubleColor(aCol.GetGreen()) &&
-              pRGBStart[5].Blue == vcl::unotools::toDoubleColor(aCol.GetBlue()),
-              "Sixth pixel is green" );
-    }
-    else if( nDepth <= 8 )
-    {
-        uno::Reference<rendering::XBitmapPalette> xPal = xBmp->getPalette();
-        test( xPal.is(),
-              "8bit or less: needs palette" );
-        test( xPal->getNumberOfEntries() == 1L << nOriginalDepth,
-              "Palette has correct entry count" );
-        uno::Sequence<double> aIndex;
-        test( xPal->setIndex(aIndex,sal_True,0) == sal_False,
-              "Palette is read-only" );
-        test( xPal->getIndex(aIndex,0),
-              "Palette entry 0 is opaque" );
-        test( xPal->getColorSpace().is(),
-              "Palette has a valid color space" );
-    }
-
-    test( pRGBStart[150].Red == 1.0 && pRGBStart[150].Green == 1.0 && pRGBStart[150].Blue == 1.0,
-          "150th pixel is white" );
-
-    if( nOriginalDepth > 8 )
-    {
-        const uno::Sequence<sal_Int8> aComponentTags( xBmp->getComponentTags() );
-        uno::Sequence<rendering::ARGBColor> aARGBColor(1);
-        uno::Sequence<rendering::RGBColor>  aRGBColor(1);
-        uno::Sequence<sal_Int8> aPixel3, aPixel4;
-
-        const Color aCol(COL_GREEN);
-        aARGBColor[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
-        aARGBColor[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
-        aARGBColor[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
-        aARGBColor[0].Alpha = 1.0;
-
-        aRGBColor[0].Red   = vcl::unotools::toDoubleColor(aCol.GetRed());
-        aRGBColor[0].Green = vcl::unotools::toDoubleColor(aCol.GetGreen());
-        aRGBColor[0].Blue  = vcl::unotools::toDoubleColor(aCol.GetBlue());
-
-        aPixel3 = xBmp->convertIntegerFromARGB( aARGBColor );
-        aPixel4 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(5,0) );
-        test( aPixel3 == aPixel4,
-              "Green pixel from bitmap matches with manually converted green pixel" );
-
-        if( !aContainedBmpEx.IsTransparent() )
-        {
-            aPixel3 = xBmp->convertIntegerFromRGB( aRGBColor );
-            test( aPixel3 == aPixel4,
-                  "Green pixel from bitmap matches with manually RGB-converted green pixel" );
-        }
-    }
-}
-
-//----------------------------------------------------------------------------------
 
 class TestBitmap : public cppu::WeakImplHelper3< rendering::XIntegerReadOnlyBitmap,
                                                  rendering::XBitmapPalette,
@@ -857,7 +698,6 @@ public:
 };
 
 
-//----------------------------------------------------------------------------------
 
 void TestWindow::Paint( const Rectangle& )
 {
