@@ -823,7 +823,7 @@ void Test::testFdo64238_a()
     uno::Reference< text::XTextRange > xFooterParagraph = getParagraphOfText( 1, xFooterText );
     uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xFooterParagraph, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
-    int numOfRuns = 0;
+    sal_Int32 numOfRuns = 0;
     while (xRunEnum->hasMoreElements())
     {
         uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
@@ -843,7 +843,7 @@ void Test::testFdo64238_b()
     uno::Reference< text::XTextRange > xFooterParagraph = getParagraphOfText( 1, xFooterText );
     uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xFooterParagraph, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
-    int numOfRuns = 0;
+    sal_Int32 numOfRuns = 0;
     while (xRunEnum->hasMoreElements())
     {
         uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
