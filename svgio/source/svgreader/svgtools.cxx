@@ -54,13 +54,13 @@ namespace svgio
             const double fSHeight(rSource.getHeight());
             const bool bNoSWidth(basegfx::fTools::equalZero(fSWidth));
             const bool bNoSHeight(basegfx::fTools::equalZero(fSHeight));
+            const double fScaleX((bNoSWidth ? 1.0 : 1.0 / fSWidth) * rTarget.getWidth());
+            const double fScaleY((bNoSHeight ? 1.0 : 1.0 / fSHeight) * rTarget.getHeight());
+            const double fScale(std::min(fScaleX, fScaleY));
 
             // transform from source state to unit range
             aRetval.translate(-rSource.getMinX(), -rSource.getMinY());
-            aRetval.scale(
-                (bNoSWidth ? 1.0 : 1.0 / fSWidth) * rTarget.getWidth(),
-                (bNoSHeight ? 1.0 : 1.0 / fSHeight) * rTarget.getHeight());
-
+            aRetval.scale(fScale, fScale);
             // transform from unit rage to target range
             aRetval.translate(rTarget.getMinX(), rTarget.getMinY());
 
