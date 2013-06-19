@@ -433,18 +433,39 @@ bool CTLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
         return false;
 #endif
 
+    CGContextSaveGState( rAquaGraphics.mrContext );
+    CGContextScaleCTM( rAquaGraphics.mrContext, 1.0, -1.0 );
+    CGContextSetShouldAntialias( rAquaGraphics.mrContext, !rAquaGraphics.mbNonAntialiasedText );
+
+    const Point aVclPos = GetDrawPosition( Point(mnBaseAdv,0) );
+    CGPoint aTextPos = { (CGFloat) +aVclPos.X(), (CGFloat) -aVclPos.Y() };
+
+    if( mpTextStyle->mfFontRotation != 0.0 )
+    {
+        const CGFloat fRadians = mpTextStyle->mfFontRotation;
+        CGContextRotateCTM( rAquaGraphics.mrContext, +fRadians );
+
+        const CGAffineTransform aInvMatrix = CGAffineTransformMakeRotation( -fRadians );
+        aTextPos = CGPointApplyAffineTransform( aTextPos, aInvMatrix );
+    }
+
+    CGContextSetTextPosition( rAquaGraphics.mrContext, aTextPos.x, aTextPos.y );
     CGRect aMacRect = CTLineGetImageBounds( mpCTLine, rAquaGraphics.mrContext );
-    CGPoint aMacPos = CGContextGetTextPosition( rAquaGraphics.mrContext );
-    aMacRect.origin.x -= aMacPos.x;
-    aMacRect.origin.y -= aMacPos.y;
 
-    const Point aPos = GetDrawPosition( Point(mnBaseAdv, 0) );
+    if( mpTextStyle->mfFontRotation != 0.0 )
+    {
+        const CGFloat fRadians = mpTextStyle->mfFontRotation;
+        const CGAffineTransform aMatrix = CGAffineTransformMakeRotation( +fRadians );
+        aMacRect = CGRectApplyAffineTransform( aMacRect, aMatrix );
+    }
 
-    // CoreText top-bottom are vertically flipped from a VCL aspect
-    rVCLRect.Left()   = aPos.X() + aMacRect.origin.x;
-    rVCLRect.Right()  = aPos.X() + (aMacRect.origin.x + aMacRect.size.width);
-    rVCLRect.Bottom() = aPos.Y() - aMacRect.origin.y;
-    rVCLRect.Top()    = aPos.Y() - (aMacRect.origin.y + aMacRect.size.height);
+    CGContextRestoreGState( rAquaGraphics.mrContext );
+
+    rVCLRect.Left()   = aVclPos.X() + aMacRect.origin.x;
+    rVCLRect.Right()  = aVclPos.X() + (aMacRect.origin.x + aMacRect.size.width);
+    rVCLRect.Bottom() = aVclPos.Y() - (aMacRect.origin.y);
+    rVCLRect.Top()    = aVclPos.Y() - (aMacRect.origin.y + aMacRect.size.height);
+
     return true;
 }
 
