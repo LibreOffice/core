@@ -188,6 +188,8 @@ typedef sal_uInt16 SetAttrMode;
 namespace nsSetAttrMode
 {
     const SetAttrMode SETATTR_DEFAULT        = 0x0000;  // Default.
+    /// @attention: DONTEXPAND does not work very well for CHARATR
+    ///             because it can expand only the whole AUTOFMT or nothing
     const SetAttrMode SETATTR_DONTEXPAND     = 0x0001;  // Don't expand text attribute any further.
     const SetAttrMode SETATTR_DONTREPLACE    = 0x0002;  // Don't replace another text attribute.
 

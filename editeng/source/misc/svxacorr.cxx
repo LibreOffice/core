@@ -762,24 +762,27 @@ sal_Bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const String& 
 
     if( STRING_NOTFOUND != nFndPos )
     {
-        // Span the Attribute over the area and delete the Character found at
+        // first delete the Character at the end - this allows insertion
+        // of an empty hint in SetAttr which would be removed by Delete
+        // (fdo#62536, AUTOFMT in Writer)
+        rDoc.Delete( nEndPos, nEndPos + 1 );
+        rDoc.Delete( nFndPos, nFndPos + 1 );
+        // Span the Attribute over the area
         // the end.
         if( '*' == cInsChar )           // Bold
         {
             SvxWeightItem aSvxWeightItem( WEIGHT_BOLD, SID_ATTR_CHAR_WEIGHT );
-            rDoc.SetAttr( nFndPos + 1, nEndPos,
+            rDoc.SetAttr( nFndPos, nEndPos - 1,
                             SID_ATTR_CHAR_WEIGHT,
                             aSvxWeightItem);
         }
         else                            // underline
         {
             SvxUnderlineItem aSvxUnderlineItem( UNDERLINE_SINGLE, SID_ATTR_CHAR_UNDERLINE );
-            rDoc.SetAttr( nFndPos + 1, nEndPos,
+            rDoc.SetAttr( nFndPos, nEndPos - 1,
                             SID_ATTR_CHAR_UNDERLINE,
                             aSvxUnderlineItem);
         }
-        rDoc.Delete( nEndPos, nEndPos + 1 );
-        rDoc.Delete( nFndPos, nFndPos + 1 );
     }
 
     return STRING_NOTFOUND != nFndPos;
