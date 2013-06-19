@@ -26,6 +26,7 @@
   <namespace-alias name="urn:schemas-microsoft-com:vml" alias="vml" id="vml"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/picture" alias="picture" id="dmlPicture"/>
   <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/diagram" alias="diagram" id="dmlDiagram"/>
+  <namespace-alias name="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas" alias="lockedCanvas" id="dmlLockedCanvas"/>
   <namespace-alias name="urn:schemas-microsoft-com:office:word" alias="vml_wordprocessingDrawing" id="vmlWord"/>
   <namespace-alias name="http://schemas.openxmlformats.org/wordprocessingml/2006/main" alias="wordprocessingml" id="doc"/>
   <namespace-alias name="http://schemas.openxmlformats.org/officeDocument/2006/math" alias="math" id="officeMath"/>
@@ -5165,6 +5166,7 @@
         <zeroOrMore>
           <ref name="pic"/>
           <ref name="relIds"/>
+          <ref name="lockedCanvas"/>
           <element>
             <anyName/>
             <ref name="BUILT_IN_ANY_TYPE"/>
@@ -5191,6 +5193,7 @@
     <resource name="CT_GraphicalObjectData" resource="Properties" tag="shape">
       <element name="pic" tokenid="ooxml:CT_GraphicalObjectData_pic"/>
       <element name="relIds" tokenid="ooxml:CT_GraphicalObjectData_relIds"/>
+      <element name="lockedCanvas" tokenid="ooxml:CT_GraphicalObjectData_lockedCanvas"/>
       <attribute name="uri" tokenid="ooxml:CT_GraphicalObjectData_uri"/>
     </resource>
     <resource name="CT_GraphicalObject" resource="Properties" tag="shape">
@@ -8454,6 +8457,19 @@
           <ref name="CT_RelIds"/>
         </element>
       </define>
+      <define xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_GvmlGroupShape">
+        <element name="nvGrpSpPr">
+          <ref name="CT_NonVisualGroupDrawingShapeProps"/>
+        </element>
+        <element name="grpSpPr">
+          <ref name="CT_GroupShapeProperties"/>
+        </element>
+      </define>
+      <define name="lockedCanvas">
+        <element xmlns:lc="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas" name="lc:lockedCanvas">
+          <ref name="CT_GvmlGroupShape"/>
+        </element>
+      </define>
     </grammar>
     <resource name="CT_PictureNonVisual" resource="Properties" tag="shape">
       <element name="cNvPr" tokenid="ooxml:CT_PictureNonVisual_cNvPr"/>
@@ -8475,6 +8491,13 @@
     </resource>
     <resource name="relIds" resource="Shape" tag="shape">
       <element xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram" name="dgm:relIds" tokenid="ooxml:dgm_relIds"/>
+    </resource>
+    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="CT_GvmlGroupShape" resource="Shape" tag="shape">
+      <element name="a:nvGrpSpPr" tokenid="ooxml:CT_GvmlGroupShape_nvGrpSpPr"/>
+      <element name="a:grpSpPr" tokenid="ooxml:CT_GvmlGroupShape_grpSpPr"/>
+    </resource>
+    <resource name="lockedCanvas" resource="Shape" tag="shape">
+      <element xmlns:lc="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas" name="lc:lockedCanvas" tokenid="ooxml:lc_lockedCanvas"/>
     </resource>
   </namespace>
   <namespace name="vml-main" file="vml-main.rng" todo="ignore">
