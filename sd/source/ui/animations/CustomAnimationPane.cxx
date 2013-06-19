@@ -2319,25 +2319,6 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
 
 // ====================================================================
 
-::Window * createCustomAnimationPanel( ::Window* pParent, ViewShellBase& rBase )
-{
-    DialogListBox* pWindow = 0;
-
-    DrawDocShell* pDocSh = rBase.GetDocShell();
-    if( pDocSh )
-    {
-        pWindow = new DialogListBox( pParent, WB_CLIPCHILDREN|WB_TABSTOP|WB_AUTOHSCROLL );
-        const Size aMinSize( pWindow->LogicToPixel( Size( 80, 256 ), MAP_APPFONT ) );
-        pWindow->SetSizePixel(aMinSize);
-        pWindow->SetBackground(Wallpaper(Color(COL_BLUE)));
-
-        ::Window* pPaneWindow = new CustomAnimationPane( pWindow, rBase, NULL,  aMinSize );
-        pWindow->SetChildWindow( pPaneWindow, aMinSize );
-        pWindow->SetText( pPaneWindow->GetText() );
-    }
-
-    return pWindow;
-}
 
 ::Window * createCustomAnimationPanel( ::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame )
 {

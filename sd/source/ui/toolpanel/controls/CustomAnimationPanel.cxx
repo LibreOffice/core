@@ -30,7 +30,8 @@ namespace sd
 {
 
     class ViewShellBase;
-    extern ::Window * createCustomAnimationPanel( ::Window* pParent, ViewShellBase& rBase );
+    extern ::Window * createCustomAnimationPanel( ::Window* pParent, ViewShellBase& rBase,
+                                                  const cssu::Reference<css::frame::XFrame>& rxFrame );
 
 namespace toolpanel { namespace controls {
 
@@ -39,7 +40,7 @@ CustomAnimationPanel::CustomAnimationPanel(Window& i_rParentWindow, ToolPanelVie
     :SubToolPanel( i_rParentWindow )
     ,m_pPanelViewShell( &i_rPanelViewShell )
 {
-    mpWrappedControl = createCustomAnimationPanel( &i_rParentWindow, i_rPanelViewShell.GetViewShellBase() );
+    mpWrappedControl = createCustomAnimationPanel( &i_rParentWindow, i_rPanelViewShell.GetViewShellBase(), NULL );
     mpWrappedControl->Show();
 }
 
