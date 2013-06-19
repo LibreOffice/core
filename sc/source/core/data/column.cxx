@@ -2055,20 +2055,33 @@ public:
     }
 };
 
-class UpdateRefOnNonCopy : public UpdateRefHandler
+class UpdateRefOnNonCopy
 {
     SCCOL mnCol;
     SCROW mnTab;
-public:
-    UpdateRefOnNonCopy(SCCOL nCol, SCTAB nTab, const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz, UpdateRefMode eMode, ScDocument* pUndoDoc) :
-        UpdateRefHandler(rRange, nDx, nDy, nDz, eMode, pUndoDoc),
-    mnCol(nCol), mnTab(nTab) {}
+    ScRange maRange;
+    SCCOL mnDx;
+    SCROW mnDy;
+    SCTAB mnDz;
+    UpdateRefMode meMode;
+    ScDocument* mpUndoDoc;
+    bool mbUpdated;
 
-    virtual void updateReference(ScFormulaCell& rCell, SCROW nRow)
+public:
+    UpdateRefOnNonCopy(
+        SCCOL nCol, SCTAB nTab, const ScRange& rRange,
+        SCCOL nDx, SCROW nDy, SCTAB nDz, UpdateRefMode eMode,
+        ScDocument* pUndoDoc) :
+        mnCol(nCol), mnTab(nTab), maRange(rRange),
+        mnDx(nDx), mnDy(nDy), mnDz(nDz), meMode(eMode), mpUndoDoc(pUndoDoc), mbUpdated(false) {}
+
+    void operator() (size_t nRow, ScFormulaCell* pCell)
     {
         ScAddress aUndoPos(mnCol, nRow, mnTab);
-        mbUpdated |= rCell.UpdateReference(meMode, maRange, mnDx, mnDy, mnDz, mpUndoDoc, &aUndoPos);
+        mbUpdated |= pCell->UpdateReference(meMode, maRange, mnDx, mnDy, mnDz, mpUndoDoc, &aUndoPos);
     }
+
+    bool isUpdated() const { return mbUpdated; }
 };
 
 }
@@ -2087,7 +2100,7 @@ bool ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW
     }
 
     UpdateRefOnNonCopy aHandler(nCol, nTab, aRange, nDx, nDy, nDz, eUpdateRefMode, pUndoDoc);
-    sc::ProcessBlock(maCells.begin(), maCells, aHandler, nRow1, nRow2);
+    sc::ProcessFormula(maCells, aHandler);
     return aHandler.isUpdated();
 }
 
