@@ -98,6 +98,51 @@ ProcessBlock(const typename _StoreT::iterator& itPos, _StoreT& rStore, _Func& rF
     return it;
 }
 
+template<typename _BlkT, typename _ItrT, typename _NodeT, typename _FuncElem>
+void EachElem(_NodeT& rNode, size_t nOffset, size_t nDataSize, _FuncElem& rFuncElem)
+{
+    _ItrT it = _BlkT::begin(*rNode.data);
+    std::advance(it, nOffset);
+    _ItrT itEnd = it;
+    std::advance(itEnd, nDataSize);
+    size_t nRow = rNode.position + nOffset;
+    for (; it != itEnd; ++it, ++nRow)
+        rFuncElem(nRow, *it);
+}
+
+template<typename _BlkT, typename _ItrT, typename _NodeT, typename _FuncElem>
+void EachElem(_NodeT& rNode, _FuncElem& rFuncElem)
+{
+    _ItrT it = _BlkT::begin(*rNode.data);
+    _ItrT itEnd = _BlkT::end(*rNode.data);
+    size_t nRow = rNode.position;
+    for (; it != itEnd; ++it, ++nRow)
+        rFuncElem(nRow, *it);
+}
+
+template<typename _BlkT, typename _StoreT, typename _FuncElem>
+std::pair<typename _StoreT::const_iterator, size_t>
+CheckElem(
+    const _StoreT& rStore, const typename _StoreT::const_iterator& it, size_t nOffset, size_t nDataSize,
+    _FuncElem& rFuncElem)
+{
+    typedef std::pair<typename _StoreT::const_iterator, size_t> PositionType;
+
+    typename _BlkT::const_iterator itData = _BlkT::begin(*it->data);
+    std::advance(itData, nOffset);
+    typename _BlkT::const_iterator itDataEnd = itData;
+    std::advance(itDataEnd, nDataSize);
+    size_t nTopRow = it->position + nOffset;
+    size_t nRow = nTopRow;
+    for (; itData != itDataEnd; ++itData, ++nRow)
+    {
+        if (rFuncElem(nRow, *itData))
+            return PositionType(it, nRow - it->position);
+    }
+
+    return PositionType(rStore.end(), 0);
+}
+
 template<typename _StoreT, typename _BlkT, typename _FuncElem, typename _FuncElse>
 void ParseElements1(const _StoreT& rStore, _FuncElem& rFuncElem, _FuncElse& rFuncElse)
 {
@@ -112,11 +157,7 @@ void ParseElements1(const _StoreT& rStore, _FuncElem& rFuncElem, _FuncElse& rFun
             continue;
         }
 
-        typename _BlkT::const_iterator itf    = _BlkT::begin(*it->data);
-        typename _BlkT::const_iterator itfEnd = _BlkT::end(*it->data);
-        typename _StoreT::size_type nRow = nTopRow;
-        for (; itf != itfEnd; ++itf, ++nRow)
-            rFuncElem(nRow, *itf);
+        EachElem<_BlkT, typename _BlkT::const_iterator>(*it, rFuncElem);
     }
 }
 
@@ -147,15 +188,7 @@ ParseElements1(
         }
 
         if (it->type == _BlkT::block_type)
-        {
-            typename _BlkT::const_iterator itf    = _BlkT::begin(*it->data);
-            std::advance(itf, nOffset);
-            typename _BlkT::const_iterator itfEnd = itf;
-            std::advance(itfEnd, nDataSize);
-            typename _StoreT::size_type nRow = nTopRow;
-            for (; itf != itfEnd; ++itf, ++nRow)
-                rFuncElem(nRow, *itf);
-        }
+            EachElem<_BlkT, typename _BlkT::const_iterator>(*it, nOffset, nDataSize, rFuncElem);
         else
             rFuncElse(it->type, nTopRow, nDataSize);
 
@@ -195,26 +228,10 @@ ParseElements2(
         switch (it->type)
         {
             case _Blk1::block_type:
-            {
-                typename _Blk1::const_iterator itData = _Blk1::begin(*it->data);
-                std::advance(itData, nOffset);
-                typename _Blk1::const_iterator itDataEnd = itData;
-                std::advance(itDataEnd, nDataSize);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk1, typename _Blk1::const_iterator>(*it, nOffset, nDataSize, rFuncElem);
             break;
             case _Blk2::block_type:
-            {
-                typename _Blk2::const_iterator itData = _Blk2::begin(*it->data);
-                std::advance(itData, nOffset);
-                typename _Blk2::const_iterator itDataEnd = itData;
-                std::advance(itDataEnd, nDataSize);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk2, typename _Blk2::const_iterator>(*it, nOffset, nDataSize, rFuncElem);
             break;
             default:
                 rFuncElse(it->type, nTopRow, nDataSize);
@@ -255,48 +272,16 @@ ParseElements4(
         switch (it->type)
         {
             case _Blk1::block_type:
-            {
-                typename _Blk1::const_iterator itData = _Blk1::begin(*it->data);
-                std::advance(itData, nOffset);
-                typename _Blk1::const_iterator itDataEnd = itData;
-                std::advance(itDataEnd, nDataSize);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk1, typename _Blk1::const_iterator>(*it, nOffset, nDataSize, rFuncElem);
             break;
             case _Blk2::block_type:
-            {
-                typename _Blk2::const_iterator itData = _Blk2::begin(*it->data);
-                std::advance(itData, nOffset);
-                typename _Blk2::const_iterator itDataEnd = itData;
-                std::advance(itDataEnd, nDataSize);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk2, typename _Blk2::const_iterator>(*it, nOffset, nDataSize, rFuncElem);
             break;
             case _Blk3::block_type:
-            {
-                typename _Blk3::const_iterator itData = _Blk3::begin(*it->data);
-                std::advance(itData, nOffset);
-                typename _Blk3::const_iterator itDataEnd = itData;
-                std::advance(itDataEnd, nDataSize);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk3, typename _Blk3::const_iterator>(*it, nOffset, nDataSize, rFuncElem);
             break;
             case _Blk4::block_type:
-            {
-                typename _Blk4::const_iterator itData = _Blk4::begin(*it->data);
-                std::advance(itData, nOffset);
-                typename _Blk4::const_iterator itDataEnd = itData;
-                std::advance(itDataEnd, nDataSize);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk4, typename _Blk4::const_iterator>(*it, nOffset, nDataSize, rFuncElem);
             break;
             default:
                 rFuncElse(it->type, nTopRow, nDataSize);
@@ -323,11 +308,7 @@ void ProcessElements1(_StoreT& rStore, _FuncElem& rFuncElem, _FuncElse& rFuncEls
             continue;
         }
 
-        typename _BlkT::iterator itf    = _BlkT::begin(*it->data);
-        typename _BlkT::iterator itfEnd = _BlkT::end(*it->data);
-        typename _StoreT::size_type nRow = nTopRow;
-        for (; itf != itfEnd; ++itf, ++nRow)
-            rFuncElem(nRow, *itf);
+        EachElem<_BlkT, typename _BlkT::iterator>(*it, rFuncElem);
     }
 }
 
@@ -361,15 +342,7 @@ ProcessElements1(
         }
 
         if (it->type == _BlkT::block_type)
-        {
-            typename _BlkT::iterator itf    = _BlkT::begin(*it->data);
-            std::advance(itf, nOffset);
-            typename _BlkT::iterator itfEnd = itf;
-            std::advance(itfEnd, nDataSize);
-            typename _StoreT::size_type nRow = nTopRow;
-            for (; itf != itfEnd; ++itf, ++nRow)
-                rFuncElem(nRow, *itf);
-        }
+            EachElem<_BlkT, typename _BlkT::iterator>(*it, nOffset, nDataSize, rFuncElem);
         else
             rFuncElse(it->type, nTopRow, nDataSize);
 
@@ -391,22 +364,10 @@ void ProcessElements2(_StoreT& rStore, _FuncElem& rFuncElem, _FuncElse& rFuncEls
         switch (it->type)
         {
             case _Blk1::block_type:
-            {
-                typename _Blk1::iterator itData    = _Blk1::begin(*it->data);
-                typename _Blk1::iterator itDataEnd = _Blk1::end(*it->data);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk1, typename _Blk1::iterator>(*it, rFuncElem);
             break;
             case _Blk2::block_type:
-            {
-                typename _Blk2::iterator itData    = _Blk2::begin(*it->data);
-                typename _Blk2::iterator itDataEnd = _Blk2::end(*it->data);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk2, typename _Blk2::iterator>(*it, rFuncElem);
             break;
             default:
                 rFuncElse(it->type, nTopRow, nDataSize);
@@ -443,26 +404,10 @@ ProcessElements2(
         switch (it->type)
         {
             case _Blk1::block_type:
-            {
-                typename _Blk1::iterator itData = _Blk1::begin(*it->data);
-                std::advance(itData, nOffset);
-                typename _Blk1::iterator itDataEnd = itData;
-                std::advance(itDataEnd, nDataSize);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk1, typename _Blk1::iterator>(*it, nOffset, nDataSize, rFuncElem);
             break;
             case _Blk2::block_type:
-            {
-                typename _Blk2::iterator itData = _Blk2::begin(*it->data);
-                std::advance(itData, nOffset);
-                typename _Blk2::iterator itDataEnd = itData;
-                std::advance(itDataEnd, nDataSize);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk2, typename _Blk2::iterator>(*it, nOffset, nDataSize, rFuncElem);
             break;
             default:
                 rFuncElse(it->type, nTopRow, nDataSize);
@@ -486,31 +431,13 @@ void ProcessElements3(_StoreT& rStore, _FuncElem& rFuncElem, _FuncElse& rFuncEls
         switch (it->type)
         {
             case _Blk1::block_type:
-            {
-                typename _Blk1::iterator itData    = _Blk1::begin(*it->data);
-                typename _Blk1::iterator itDataEnd = _Blk1::end(*it->data);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk1, typename _Blk1::iterator>(*it, rFuncElem);
             break;
             case _Blk2::block_type:
-            {
-                typename _Blk2::iterator itData    = _Blk2::begin(*it->data);
-                typename _Blk2::iterator itDataEnd = _Blk2::end(*it->data);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk2, typename _Blk2::iterator>(*it, rFuncElem);
             break;
             case _Blk3::block_type:
-            {
-                typename _Blk3::iterator itData    = _Blk3::begin(*it->data);
-                typename _Blk3::iterator itDataEnd = _Blk3::end(*it->data);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk3, typename _Blk3::iterator>(*it, rFuncElem);
             break;
             default:
                 rFuncElse(it->type, nTopRow, nDataSize);
@@ -529,40 +456,16 @@ void ProcessElements4(_StoreT& rStore, _FuncElem& rFuncElem, _FuncElse& rFuncEls
         switch (it->type)
         {
             case _Blk1::block_type:
-            {
-                typename _Blk1::iterator itData    = _Blk1::begin(*it->data);
-                typename _Blk1::iterator itDataEnd = _Blk1::end(*it->data);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk1, typename _Blk1::iterator>(*it, rFuncElem);
             break;
             case _Blk2::block_type:
-            {
-                typename _Blk2::iterator itData    = _Blk2::begin(*it->data);
-                typename _Blk2::iterator itDataEnd = _Blk2::end(*it->data);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk2, typename _Blk2::iterator>(*it, rFuncElem);
             break;
             case _Blk3::block_type:
-            {
-                typename _Blk3::iterator itData    = _Blk3::begin(*it->data);
-                typename _Blk3::iterator itDataEnd = _Blk3::end(*it->data);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk3, typename _Blk3::iterator>(*it, rFuncElem);
             break;
             case _Blk4::block_type:
-            {
-                typename _Blk4::iterator itData    = _Blk4::begin(*it->data);
-                typename _Blk4::iterator itDataEnd = _Blk4::end(*it->data);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk4, typename _Blk4::iterator>(*it, rFuncElem);
             break;
             default:
                 rFuncElse(it->type, nTopRow, nDataSize);
@@ -599,48 +502,16 @@ ProcessElements4(
         switch (it->type)
         {
             case _Blk1::block_type:
-            {
-                typename _Blk1::iterator itData = _Blk1::begin(*it->data);
-                std::advance(itData, nOffset);
-                typename _Blk1::iterator itDataEnd = itData;
-                std::advance(itDataEnd, nDataSize);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk1, typename _Blk1::iterator>(*it, nOffset, nDataSize, rFuncElem);
             break;
             case _Blk2::block_type:
-            {
-                typename _Blk2::iterator itData = _Blk2::begin(*it->data);
-                std::advance(itData, nOffset);
-                typename _Blk2::iterator itDataEnd = itData;
-                std::advance(itDataEnd, nDataSize);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk2, typename _Blk2::iterator>(*it, nOffset, nDataSize, rFuncElem);
             break;
             case _Blk3::block_type:
-            {
-                typename _Blk3::iterator itData = _Blk3::begin(*it->data);
-                std::advance(itData, nOffset);
-                typename _Blk3::iterator itDataEnd = itData;
-                std::advance(itDataEnd, nDataSize);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk3, typename _Blk3::iterator>(*it, nOffset, nDataSize, rFuncElem);
             break;
             case _Blk4::block_type:
-            {
-                typename _Blk4::iterator itData = _Blk4::begin(*it->data);
-                std::advance(itData, nOffset);
-                typename _Blk4::iterator itDataEnd = itData;
-                std::advance(itDataEnd, nDataSize);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    rFuncElem(nRow, *itData);
-            }
+                EachElem<_Blk4, typename _Blk4::iterator>(*it, nOffset, nDataSize, rFuncElem);
             break;
             default:
                 rFuncElse(it->type, nTopRow, nDataSize);
@@ -683,16 +554,9 @@ FindElement1(
         {
             case _Blk1::block_type:
             {
-                typename _Blk1::const_iterator itData = _Blk1::begin(*it->data);
-                std::advance(itData, nOffset);
-                typename _Blk1::const_iterator itDataEnd = itData;
-                std::advance(itDataEnd, nDataSize);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                {
-                    if (rFuncElem(nRow, *itData))
-                        return PositionType(it, nRow-nTopRow);
-                }
+                PositionType aRet = CheckElem<_Blk1>(rStore, it, nOffset, nDataSize, rFuncElem);
+                if (aRet.first != rStore.end())
+                    return aRet;
             }
             break;
             default:
@@ -740,28 +604,16 @@ FindElement2(
         {
             case _Blk1::block_type:
             {
-                typename _Blk1::const_iterator itData = _Blk1::begin(*it->data);
-                std::advance(itData, nOffset);
-                typename _Blk1::const_iterator itDataEnd = itData;
-                std::advance(itDataEnd, nDataSize);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                {
-                    if (rFuncElem(nRow, *itData))
-                        return PositionType(it, nRow-nTopRow);
-                }
+                PositionType aRet = CheckElem<_Blk1>(rStore, it, nOffset, nDataSize, rFuncElem);
+                if (aRet.first != rStore.end())
+                    return aRet;
             }
             break;
             case _Blk2::block_type:
             {
-                typename _Blk2::const_iterator itData = _Blk2::begin(*it->data);
-                std::advance(itData, nOffset);
-                typename _Blk2::const_iterator itDataEnd = itData;
-                std::advance(itDataEnd, nDataSize);
-                typename _StoreT::size_type nRow = nTopRow;
-                for (; itData != itDataEnd; ++itData, ++nRow)
-                    if (rFuncElem(nRow, *itData))
-                        return PositionType(it, nRow-nTopRow);
+                PositionType aRet = CheckElem<_Blk2>(rStore, it, nOffset, nDataSize, rFuncElem);
+                if (aRet.first != rStore.end())
+                    return aRet;
             }
             break;
             default:
