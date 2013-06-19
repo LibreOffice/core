@@ -17,18 +17,18 @@ namespace writerfilter {
         {
             public:
                 RTFVertOrient(sal_uInt16 nValue)
+                    : nVal(nValue)
                 {
-                    Value.nVal = nValue;
                 }
 
                 sal_uInt16 GetOrient() const
                 {
-                    return Value.Flags.nOrient;
+                    return OSL_LONIBBLE(OSL_LOBYTE(nVal));
                 }
 
                 sal_uInt16 GetRelation() const
                 {
-                    return Value.Flags.nRelOrient;
+                    return OSL_HINIBBLE(OSL_LOBYTE(nVal));
                 }
 
                 sal_Int32 GetAlign() const
@@ -71,19 +71,11 @@ namespace writerfilter {
 
                 sal_uInt16 GetValue() const
                 {
-                    return Value.nVal;
+                    return nVal;
                 }
 
             private:
-                union
-                {
-                    struct
-                    {
-                        sal_uInt16 nOrient : 4;
-                        sal_uInt16 nRelOrient : 4;
-                    } Flags;
-                    sal_uInt16 nVal;
-                } Value;
+                sal_uInt16 nVal;
         };
 
         /// Stores the horizontal orientation properties of an RTF fly frame.
@@ -91,18 +83,23 @@ namespace writerfilter {
         {
             public:
                 RTFHoriOrient(sal_uInt16 nValue)
+                    : nVal(nValue)
                 {
-                    Value.nVal = nValue;
                 }
 
                 sal_uInt16 GetOrient() const
                 {
-                    return Value.Flags.nOrient;
+                    return OSL_LONIBBLE(OSL_LOBYTE(nVal));
                 }
 
                 sal_uInt16 GetRelation() const
                 {
-                    return Value.Flags.nRelOrient;
+                    return OSL_LONIBBLE(OSL_HIBYTE(nVal));
+                }
+
+                sal_uInt16 GetRelAnchor() const
+                {
+                    return OSL_HINIBBLE(OSL_LOBYTE(nVal));
                 }
 
                 sal_Int32 GetAlign() const
@@ -151,20 +148,11 @@ namespace writerfilter {
 
                 sal_uInt16 GetValue() const
                 {
-                    return Value.nVal;
+                    return nVal;
                 }
 
             private:
-                union
-                {
-                    struct
-                    {
-                        sal_uInt16 nOrient : 4;
-                        sal_uInt16 nRelAnchor : 4;
-                        sal_uInt16 nRelOrient : 4;
-                    } Flags;
-                    sal_uInt16 nVal;
-                } Value;
+                sal_uInt16 nVal;
         };
     } // namespace rtftok
 } // namespace writerfilter
