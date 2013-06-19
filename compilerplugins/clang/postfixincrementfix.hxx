@@ -23,14 +23,11 @@ class PostfixIncrementFix
     public:
         explicit PostfixIncrementFix( CompilerInstance& compiler, Rewriter& rewriter );
         virtual void run() override;
-        bool VisitFunctionDecl( const FunctionDecl* declaration );
+        bool VisitCXXOperatorCallExpr( const CXXOperatorCallExpr* op );
     private:
-        typedef std::vector< const Stmt* > StmtParents;
-        void fixPostfixOperator( const CXXOperatorCallExpr* op, StmtParents& parents );
-        void fixPostfixOperators( const Stmt* stmt, StmtParents& parents );
-        bool canChangePostfixToPrefix( const CXXOperatorCallExpr* op, StmtParents& parents, int parent_pos );
-        bool canChangeInConditionStatement( const CXXOperatorCallExpr* op, const Expr* condition,
-            const StmtParents& parents, unsigned int parent_pos );
+        void fixPostfixOperator( const CXXOperatorCallExpr* op );
+        void fixPostfixOperators( const Stmt* stmt );
+        bool canChangePostfixToPrefix( const Stmt* stmt, const CXXOperatorCallExpr* op );
         bool shouldDoChange( const Expr* op );
     };
 

@@ -29,40 +29,20 @@ void PostfixIncrementFix::run()
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
-bool PostfixIncrementFix::VisitFunctionDecl( const FunctionDecl* declaration )
+bool PostfixIncrementFix::VisitCXXOperatorCallExpr( const CXXOperatorCallExpr* op )
     {
-    if( ignoreLocation( declaration ))
+    if( ignoreLocation( op ))
         return true;
-    if( !declaration->doesThisDeclarationHaveABody())
-        return true;
-    StmtParents parents;
-    fixPostfixOperators( declaration->getBody(), parents );
+    // postfix ++ has two arguments (the operand and the hidden extra int)
+    if( op->getOperator() == OO_PlusPlus && op->getNumArgs() == 2 )
+        fixPostfixOperator( op );
+    // For primitive types it would be UnaryOperatorExpr, but probably no good reason to change those.
     return true;
     }
 
-void PostfixIncrementFix::fixPostfixOperators( const Stmt* stmt, StmtParents& parents )
+void PostfixIncrementFix::fixPostfixOperator( const CXXOperatorCallExpr* op )
     {
-    if( const CXXOperatorCallExpr* op = dyn_cast<CXXOperatorCallExpr>( stmt ))
-        { // postfix ++ has two arguments (the operand and the hidden extra int)
-        if( op->getOperator() == OO_PlusPlus && op->getNumArgs() == 2 )
-            fixPostfixOperator( op, parents );
-        }
-    // For primitive types it would be UnaryOperatorExpr, but probably no good reason to change those.
-    parents.push_back( stmt );
-    for( ConstStmtIterator it = stmt->child_begin();
-         it != stmt->child_end();
-         ++it )
-        {
-        if( *it != NULL ) // some children can be apparently NULL
-            fixPostfixOperators( *it, parents );
-        }
-    assert( parents.back() == stmt );
-    parents.pop_back();
-    }
-
-void PostfixIncrementFix::fixPostfixOperator( const CXXOperatorCallExpr* op, StmtParents& parents )
-    {
-    if( !canChangePostfixToPrefix( op, parents, parents.size() - 1 ))
+    if( !canChangePostfixToPrefix( op, op ))
         return;
     if( !shouldDoChange( op->getArg( 0 )))
         return;
@@ -73,10 +53,13 @@ void PostfixIncrementFix::fixPostfixOperator( const CXXOperatorCallExpr* op, Stm
         removeText( op->getCallee()->getSourceRange());
     }
 
-bool PostfixIncrementFix::canChangePostfixToPrefix( const CXXOperatorCallExpr* op, StmtParents& parents, int parent_pos )
+bool PostfixIncrementFix::canChangePostfixToPrefix( const Stmt* stmt , const CXXOperatorCallExpr* op )
     {
+    const Stmt* parent = parentStmt( stmt );
+    if( parent == NULL )
+        return true;
     // check if foo++ can be safely replaced by ++foo
-    switch( parents[ parent_pos ]->getStmtClass())
+    switch( parent->getStmtClass())
         {
         case Stmt::CompoundStmtClass:
             return true;
@@ -91,49 +74,29 @@ bool PostfixIncrementFix::canChangePostfixToPrefix( const CXXOperatorCallExpr* o
         case Stmt::CXXBindTemporaryExprClass:
             // tricky, it may just mean the temporary will be cleaned up
             // (by ExprWithCleanups), ignore and go up
-            assert( parent_pos > 0 ); // should not happen
-            return canChangePostfixToPrefix( op, parents, parent_pos - 1 );
+            return canChangePostfixToPrefix( parent, op );
         case Stmt::ExprWithCleanupsClass:
             // cleanup of a temporary, should be harmless (if the use
             // of the postfix ++ operator here relies on the fact that
             // the dtor for the object will be called, that's pretty insane
             // code). Ignore and go up.
-            assert( parent_pos > 0 ); // should not happen
-            return canChangePostfixToPrefix( op, parents, parent_pos - 1 );
+            return canChangePostfixToPrefix( parent, op );
         case Stmt::ParenExprClass: // parentheses, go up
-            assert( parent_pos > 0 );
-            return canChangePostfixToPrefix( op, parents, parent_pos - 1 );
+            return canChangePostfixToPrefix( parent, op );
         case Stmt::IfStmtClass:
-            return canChangeInConditionStatement( op, cast< IfStmt >( parents[ parent_pos ] )->getCond(),
-                parents, parent_pos );
+            // cannot be changed in condition, can be changed in statements
+            return cast< IfStmt >( parent )->getCond() != stmt;
         case Stmt::WhileStmtClass:
-            return canChangeInConditionStatement( op, cast< WhileStmt >( parents[ parent_pos ] )->getCond(),
-                parents, parent_pos );
+            return cast< WhileStmt >( parent )->getCond() != stmt;
         case Stmt::DoStmtClass:
-            return canChangeInConditionStatement( op, cast< DoStmt >( parents[ parent_pos ] )->getCond(),
-                parents, parent_pos );
+            return cast< DoStmt >( parent )->getCond() != stmt;
         case Stmt::ForStmtClass:
-            return canChangeInConditionStatement( op, dyn_cast< ForStmt >( parents[ parent_pos ] )->getCond(),
-                parents, parent_pos );
+            return cast< ForStmt >( parent )->getCond() != stmt;
         default:
             report( DiagnosticsEngine::Fatal, "cannot analyze operator++ (plugin needs fixing)",
-                op->getLocStart()) << parents[ parent_pos ]->getSourceRange();
-//            parents[ parent_pos ]->dump();
-//            parents[ std::max( parent_pos - 3, 0 ) ]->dump();
+                op->getLocStart()) << parent->getSourceRange();
+            parent->dump();
             return false;
-        }
-    }
-
-bool PostfixIncrementFix::canChangeInConditionStatement( const CXXOperatorCallExpr* op, const Expr* condition,
-    const StmtParents& parents, unsigned int parent_pos )
-    {
-    // cannot be changed in condition, can be changed in statements
-    if( parent_pos == parents.size() - 1 )
-        return op != condition;
-    else
-        { // indirect child
-        assert( parent_pos + 1 < parents.size());
-        return parents[ parent_pos + 1 ] != condition;
         }
     }
 
