@@ -1205,6 +1205,7 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_graphic_graphic:
         case NS_ooxml::LN_pic_pic:
         case NS_ooxml::LN_dgm_relIds:
+        case NS_ooxml::LN_lc_lockedCanvas:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
