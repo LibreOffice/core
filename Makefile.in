@@ -384,6 +384,8 @@ findunusedcode:
 	@cp config_host/* callcatcher/config_host
 	@cp config_host.mk* callcatcher
 	@sed -e s,$$INPATH,callcatcher,g config_host.mk | sed -e s,"export OOO_JUNIT_JAR=.*","export OOO_JUNIT_JAR=",g > $(SRCDIR)/callcatcher/config_host.mk
+	@sed -i -e s,g++,"callcatcher g++",g $(SRCDIR)/callcatcher/config_host.mk
+	@sed -i -e s,gcc,"callcatcher gcc",g $(SRCDIR)/callcatcher/config_host.mk
 	@echo unexport ARCH_FLAGS >> $(SRCDIR)/callcatcher/config_host.mk
 	@echo unexport CFLAGS >> $(SRCDIR)/callcatcher/config_host.mk
 	@echo unexport CXXFLAGS >> $(SRCDIR)/callcatcher/config_host.mk
