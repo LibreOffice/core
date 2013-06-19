@@ -49,6 +49,8 @@
 #include <com/sun/star/deployment/VersionException.hpp>
 #include <dp_gui_handleversionexception.hxx>
 
+#include "com/sun/star/deployment/VersionException.hpp"
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -524,7 +526,7 @@ void TmpRepositoryCommandEnv::handle(
     if ( xRequest->getRequest() >>= verExc )
     {
         // user interaction, if an extension is already been installed.
-        approve = dp_gui::handleVersionException( verExc );
+        approve = handleVersionException( verExc );
         abort = !approve;
     }
 

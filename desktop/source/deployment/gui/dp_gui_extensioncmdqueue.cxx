@@ -26,6 +26,7 @@
 
 
 
+#include <dp_gui_handleversionexception.hxx>
 
 #include "sal/config.h"
 
@@ -104,20 +105,6 @@
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
-
-namespace {
-
-OUString getVersion( OUString const & sVersion )
-{
-    return ( sVersion.getLength() == 0 ) ? OUString( RTL_CONSTASCII_USTRINGPARAM( "0" ) ) : sVersion;
-}
-
-OUString getVersion( const uno::Reference< deployment::XPackage > &rPackage )
-{
-    return getVersion( rPackage->getVersion());
-}
-}
-
 
 namespace dp_gui {
 
@@ -360,62 +347,6 @@ uno::Reference< ucb::XProgressHandler > ProgressCmdEnv::getProgressHandler()
 //------------------------------------------------------------------------------
 // XInteractionHandler
 //------------------------------------------------------------------------------
-bool handleVersionException(
-    com::sun::star::deployment::VersionException verExc,
-    DialogHelper* pDialogHelper )
-{
-    bool bApprove = false;
-
-    sal_uInt32 id;
-    switch (dp_misc::compareVersions(
-        verExc.NewVersion, verExc.Deployed->getVersion() ))
-    {
-    case dp_misc::LESS:
-        id = RID_WARNINGBOX_VERSION_LESS;
-        break;
-    case dp_misc::EQUAL:
-        id = RID_WARNINGBOX_VERSION_EQUAL;
-        break;
-    default: // dp_misc::GREATER
-        id = RID_WARNINGBOX_VERSION_GREATER;
-        break;
-    }
-    OSL_ASSERT( verExc.Deployed.is() );
-    const bool bEqualNames = verExc.NewDisplayName.equals(
-        verExc.Deployed->getDisplayName());
-    {
-        vos::OGuard guard(Application::GetSolarMutex());
-        WarningBox box( pDialogHelper ? pDialogHelper->getWindow() : NULL, ResId(id, *DeploymentGuiResMgr::get()));
-        String s;
-        if (bEqualNames)
-        {
-            s = box.GetMessText();
-        }
-        else if (id == RID_WARNINGBOX_VERSION_EQUAL)
-        {
-            //hypothetical: requires two instances of an extension with the same
-            //version to have different display names. Probably the developer forgot
-            //to change the version.
-            s = String(ResId(RID_STR_WARNINGBOX_VERSION_EQUAL_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()));
-        }
-        else if (id == RID_WARNINGBOX_VERSION_LESS)
-        {
-            s = String(ResId(RID_STR_WARNINGBOX_VERSION_LESS_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()));
-        }
-        else if (id == RID_WARNINGBOX_VERSION_GREATER)
-        {
-            s = String(ResId(RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()));
-        }
-        s.SearchAndReplaceAllAscii( "$NAME", verExc.NewDisplayName);
-        s.SearchAndReplaceAllAscii( "$OLDNAME", verExc.Deployed->getDisplayName());
-        s.SearchAndReplaceAllAscii( "$NEW", getVersion(verExc.NewVersion) );
-        s.SearchAndReplaceAllAscii( "$DEPLOYED", getVersion(verExc.Deployed) );
-        box.SetMessText(s);
-        bApprove = box.Execute() == RET_OK;
-    }
-
-    return bApprove;
-}
 
 void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const & xRequest )
     throw ( uno::RuntimeException )

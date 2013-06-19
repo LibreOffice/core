@@ -27,6 +27,7 @@
 #include "dp_gui_shared.hxx"
 #include "dp_gui.h"
 #include "dp_gui_theextmgr.hxx"
+#include "dp_gui_api.hxx"
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "unotools/configmgr.hxx"
@@ -43,6 +44,7 @@
 #include "license_dialog.hxx"
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
+
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -346,12 +348,14 @@ sdecl::ServiceDecl const updateDecl(
 
 extern "C" {
 
+DESKTOP_DEPLOYMENTGUI_DLLPUBLIC
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
+DESKTOP_DEPLOYMENTGUI_DLLPUBLIC
 void * SAL_CALL component_getFactory(
     sal_Char const * pImplName,
     lang::XMultiServiceFactory * pServiceManager,

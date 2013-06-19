@@ -19,21 +19,18 @@
  *
  *************************************************************/
 
-#ifndef INCLUDED_DP_GUI_HANDLEVERSIONEXCEPTION_HXX
-#define INCLUDED_DP_GUI_HANDLEVERSIONEXCEPTION_HXX
-
-#include "dp_gui_api.hxx"
-#include "com/sun/star/deployment/VersionException.hpp"
-
-namespace dp_gui{ class DialogHelper; }
 
 
-extern "C" {
+#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_GUI_API_HXX
+#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_GUI_API_HXX
 
-    DESKTOP_DEPLOYMENTGUI_DLLPUBLIC
-    bool handleVersionException(
-        com::sun::star::deployment::VersionException verExc,
-        dp_gui::DialogHelper* pDialogHelper = 0 );
-}
+#include "sal/config.h"
+#include "sal/types.h"
+
+#if defined DESKTOP_DEPLOYMENTGUI_DLLIMPLEMENTATION
+#define DESKTOP_DEPLOYMENTGUI_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+#else
+#define DESKTOP_DEPLOYMENTGUI_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+#endif
 
 #endif

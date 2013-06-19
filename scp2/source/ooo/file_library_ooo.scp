@@ -1138,6 +1138,13 @@ File gid_File_Lib_Deployment
     PACKED_LIB_FILE_BODY;
 End
 
+#ifdef OS2
+STD_LIB_FILE(gid_File_Lib_DeploymentGui, deplgui)
+#else
+STD_LIB_FILE(gid_File_Lib_DeploymentGui, deploymentgui.uno)
+#endif
+
+/*
 File gid_File_Lib_DeploymentGui
 #if defined UNX
     Name = STRING(CONCAT4(deploymentgui,DLLPOSTFIX,.uno,UNXSUFFIX));
@@ -1148,6 +1155,7 @@ File gid_File_Lib_DeploymentGui
 #endif
     PACKED_LIB_FILE_BODY;
 End
+*/
 
 #ifdef OS2
 STD_LIB_FILE(gid_File_Lib_DeploymentMisc, deplmisc)

@@ -27,16 +27,20 @@ PRJNAME = desktop
 TARGET = deploymentgui
 ENABLE_EXCEPTIONS = TRUE
 USE_DEFFILE = TRUE
-NO_BSYMBOLIC = TRUE
+#NO_BSYMBOLIC = TRUE
+VISIBILITY_HIDDEN=TRUE
 USE_PCH :=
 ENABLE_PCH :=
 PRJINC:=..$/..
 
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
-DLLPRE =
+#DLLPRE =
 
-SLOFILES = \
+# Reduction of exported symbols:
+CDEFS += -DDESKTOP_DEPLOYMENTGUI_DLLIMPLEMENTATION
+
+SHL1OBJS = \
         $(SLO)$/dp_gui_service.obj \
         $(SLO)$/dp_gui_extlistbox.obj \
         $(SLO)$/dp_gui_dialog2.obj \
@@ -49,16 +53,17 @@ SLOFILES = \
         $(SLO)$/dp_gui_autoscrolledit.obj \
         $(SLO)$/dp_gui_system.obj \
         $(SLO)$/dp_gui_extensioncmdqueue.obj \
+        $(SLO)$/dp_gui_handleversionexception.obj \
         $(SLO)$/descedit.obj
 
-SHL1OBJS = $(SLO)$/dp_gui_extensioncmdqueue.obj
+SLOFILES = $(SHL1OBJS)
 
 .IF "$(GUI)"=="OS2"
 SHL1TARGET = deplgui$(DLLPOSTFIX)
 .ELSE
 SHL1TARGET = $(TARGET)$(DLLPOSTFIX).uno
 .ENDIF
-SHL1VERSIONMAP = $(SOLARENV)/src/component.map
+SHL1VERSIONMAP = $(TARGET).map
 
 SHL1STDLIBS = \
         $(SALLIB) \
@@ -82,7 +87,6 @@ SHL1STDLIBS = \
 
 SHL1DEPN =
 SHL1IMPLIB = i$(TARGET)
-SHL1LIBS = $(SLB)$/$(TARGET).lib
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME = $(SHL1TARGET)

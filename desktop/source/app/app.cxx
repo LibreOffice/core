@@ -802,7 +802,7 @@ void MinimalCommandEnv::handle(
     if ( xRequest->getRequest() >>= verExc )
     {
         // user interaction, if an extension is already been installed.
-        bApprove = dp_gui::handleVersionException( verExc );
+        bApprove = handleVersionException( verExc );
     }
 
     const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > conts( xRequest->getContinuations());
