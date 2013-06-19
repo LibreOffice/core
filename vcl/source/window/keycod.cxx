@@ -29,7 +29,7 @@
 
 
 // =======================================================================
-static sal_uInt16 aImplKeyFuncTab[(KEYFUNC_FRONT+1)*4] =
+static const sal_uInt16 aImplKeyFuncTab[(KEYFUNC_FRONT+1)*4] =
 {
     0, 0, 0, 0,                                                    // KEYFUNC_DONTKNOW
     KEY_N | KEY_MOD1, 0, 0, 0,                                     // KEYFUNC_NEW

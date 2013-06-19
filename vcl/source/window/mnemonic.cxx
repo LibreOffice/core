@@ -279,14 +279,14 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
                     nIndex = rKey.Len();
                     if( nIndex >= 2 )
                     {
-                        static sal_Unicode cGreaterGreater[] = { 0xFF1E, 0xFF1E };
+                        static const sal_Unicode cGreaterGreater[] = { 0xFF1E, 0xFF1E };
                         if ( rKey.EqualsAscii( ">>", nIndex-2, 2 ) ||
                             rKey.Equals( cGreaterGreater, nIndex-2, 2 ) )
                             nIndex -= 2;
                     }
                     if( nIndex >= 3 )
                     {
-                        static sal_Unicode cDotDotDot[] = { 0xFF0E, 0xFF0E, 0xFF0E };
+                        static const sal_Unicode cDotDotDot[] = { 0xFF0E, 0xFF0E, 0xFF0E };
                         if ( rKey.EqualsAscii( "...", nIndex-3, 3 ) ||
                             rKey.Equals( cDotDotDot, nIndex-3, 3 ) )
                             nIndex -= 3;
