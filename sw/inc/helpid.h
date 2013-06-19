@@ -142,7 +142,6 @@
 
 // TabPage Help-IDs
 
-#define HID_DROPCAPS                                            "SW_HID_DROPCAPS"
 #define HID_FRM_EXT                                             "SW_HID_FRM_EXT"
 #define HID_FRM_STD                                             "SW_HID_FRM_STD"
 #define HID_GRF_EXT                                             "SW_HID_GRF_EXT"
