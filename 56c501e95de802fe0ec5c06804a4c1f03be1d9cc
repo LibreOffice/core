@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//7Cg\u003d",
+        "filename": "svl/source/numbers/zforscan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1000107
+      },
+      "writtenOn": "2013-06-19T07:39:19Z",
+      "side": 1,
+      "message": "You deleted one { from line 899",
+      "revId": "56c501e95de802fe0ec5c06804a4c1f03be1d9cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
