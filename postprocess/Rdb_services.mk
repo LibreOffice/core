@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Rdb_Rdb,services))
 
+$(eval $(call gb_Rdb_install,services))
+
 $(eval $(call gb_Rdb_add_components,services,\
 	animations/source/animcore/animcore \
 	avmedia/util/avmedia \

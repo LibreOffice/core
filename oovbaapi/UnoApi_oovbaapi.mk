@@ -19,6 +19,8 @@
 
 $(eval $(call gb_UnoApi_UnoApi,oovbaapi))
 
+$(eval $(call gb_UnoApi_install,oovbaapi,$(gb_PROGRAMDIRNAME)/types/oovbaapi.rdb))
+
 $(eval $(call gb_UnoApi_use_api,oovbaapi,\
     udkapi \
     offapi \

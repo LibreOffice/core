@@ -29,6 +29,8 @@ $(call gb_Rdb_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_Rdb_get_outdir_target,$*) $(call gb_Rdb_get_target,$*))
 
+gb_Rdb_get_install_target = $(INSTDIR)/$(gb_PROGRAMDIRNAME)/services/$(1).rdb
+
 define gb_Rdb_Rdb
 $(call gb_Rdb_get_target,$(1)) : COMPONENTS :=
 $(call gb_Rdb_get_outdir_target,$(1)) : $(call gb_Rdb_get_target,$(1)) \
@@ -37,6 +39,13 @@ $(call gb_Deliver_add_deliverable,$(call gb_Rdb_get_outdir_target,$(1)),$(call g
 
 $$(eval $$(call gb_Module_register_target,$(call gb_Rdb_get_outdir_target,$(1)),$(call gb_Rdb_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),Rdb,$(call gb_Rdb_get_outdir_target,$(1)))
+endef
+
+define gb_Rdb_install
+$(call gb_Helper_install,$(call gb_Rdb_get_outdir_target,$(1)), \
+	$(if $(2),$(INSTDIR)/$(2),$(call gb_Rdb_get_install_target,$(1))), \
+	$(call gb_Rdb_get_target,$(1)))
+
 endef
 
 define gb_Rdb_add_component

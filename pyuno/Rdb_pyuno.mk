@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Rdb_Rdb,pyuno))
 
+$(eval $(call gb_Rdb_install,pyuno))
+
 $(eval $(call gb_Rdb_add_components,pyuno, \
     pyuno/source/loader/pythonloader \
 ))

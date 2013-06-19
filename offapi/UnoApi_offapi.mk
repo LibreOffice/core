@@ -19,6 +19,8 @@
 
 $(eval $(call gb_UnoApi_UnoApi,offapi))
 
+$(eval $(call gb_UnoApi_install,offapi,$(gb_PROGRAMDIRNAME)/types/offapi.rdb))
+
 $(eval $(call gb_UnoApi_package_idlfiles,offapi))
 
 $(eval $(call gb_UnoApi_use_api,offapi,\

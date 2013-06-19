@@ -37,6 +37,14 @@ $(call gb_Helper_make_userfriendly_targets,$(1),UnoApi)
 
 endef
 
+define gb_UnoApi_install
+$(if $(2),,$(call gb_Output_error,gb_UnoApi_install: missing install name.))
+$(call gb_Helper_install,$(call gb_UnoApi_get_target,$(1)), \
+	$(INSTDIR)/$(2), \
+	$(call gb_UnoApiTarget_get_target,$(1)))
+
+endef
+
 ifneq ($(gb_UnoApi_ENABLE_INSTALL),)
 
 # Create a package of IDL files for putting into SDK.

@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Rdb_Rdb,ure/services))
 
+$(eval $(call gb_Rdb_install,ure/services,$(LIBO_URE_SHARE_FOLDER)/misc/services.rdb))
+
 $(eval $(call gb_Rdb_add_components,ure/services,\
 	$(if $(filter IOS,$(OS)),, \
         io/source/acceptor/acceptor \

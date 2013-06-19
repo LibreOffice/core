@@ -19,6 +19,8 @@
 
 $(eval $(call gb_UnoApi_UnoApi,udkapi))
 
+$(eval $(call gb_UnoApi_install,udkapi,$(LIBO_URE_SHARE_FOLDER)/misc/types.rdb))
+
 $(eval $(call gb_UnoApi_package_idlfiles,udkapi))
 
 $(eval $(call gb_UnoApi_set_include,udkapi,\

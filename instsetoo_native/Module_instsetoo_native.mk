@@ -21,7 +21,6 @@ ifneq ($(gb_RUNNABLE_INSTDIR),)
 $(eval $(call gb_Module_add_targets,instsetoo_native,\
 	CustomTarget_setup \
 	Package_config \
-	Package_rdb \
 	Package_setup \
 ))
 endif

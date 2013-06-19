@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Rdb_Rdb,scriptproviderforbeanshell))
 
+$(eval $(call gb_Rdb_install,scriptproviderforbeanshell))
+
 $(eval $(call gb_Rdb_add_components,scriptproviderforbeanshell,\
 	scripting/java/ScriptProviderForBeanShell \
 ))

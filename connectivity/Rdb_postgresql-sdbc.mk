@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Rdb_Rdb,postgresql-sdbc))
 
+$(eval $(call gb_Rdb_install,postgresql-sdbc))
+
 $(eval $(call gb_Rdb_add_components,postgresql-sdbc,\
 	connectivity/source/drivers/postgresql/postgresql-sdbc \
 	connectivity/source/drivers/postgresql/postgresql-sdbc-impl \
