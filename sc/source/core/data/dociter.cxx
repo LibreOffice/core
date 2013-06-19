@@ -1672,7 +1672,7 @@ bool ScQueryCellIterator::BinarySearch()
 
 ScHorizontalCellIterator::ScHorizontalCellIterator(ScDocument* pDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) :
-    maColPositions(nCol2-nCol2+1),
+    maColPositions(nCol2-nCol1+1),
     pDoc( pDocument ),
     mnTab( nTable ),
     nStartCol( nCol1 ),
@@ -1768,35 +1768,74 @@ void ScHorizontalCellIterator::Advance()
     }
 
     // Move to the next row that has at least one non-empty cell.
-    size_t nMinRow = MAXROW+1;
-    size_t nMinRowCol = maColPositions.size();
-    for (size_t i = 0, n = maColPositions.size(); i < n; ++i)
+    ++mnRow;
+    while (mnRow <= nEndRow)
     {
-        ColParam& r = maColPositions[i];
-        if (r.maPos == r.maEnd)
-            // This column has ended.
-            continue;
-
-        // Move to the next block.
-        ++r.maPos;
-
-        if (r.maPos != r.maEnd && r.maPos->position < nMinRow)
+        size_t nRow = static_cast<size_t>(mnRow);
+        size_t nNextRow = MAXROW+1;
+        size_t nNextRowPos = 0;
+        for (size_t i = nNextRowPos, n = maColPositions.size(); i < n; ++i)
         {
-            nMinRow = r.maPos->position;
-            nMinRowCol = i;
+            ColParam& r = maColPositions[i];
+            if (r.maPos == r.maEnd)
+                // This column has ended.
+                continue;
+
+            if (nRow < r.maPos->position)
+            {
+                // This block is ahread of the current row position. Skip it.
+                if (r.maPos->position < nNextRow)
+                {
+                    nNextRow = r.maPos->position;
+                    nNextRowPos = i;
+                }
+                continue;
+            }
+
+            if (r.maPos->position + r.maPos->size <= nRow)
+            {
+                // This block is behind the current row position. Advance the block.
+                for (++r.maPos; r.maPos != r.maEnd; ++r.maPos)
+                {
+                    if (nRow < r.maPos->position + r.maPos->size)
+                        break;
+                }
+
+                if (r.maPos == r.maEnd)
+                    // This column has ended.
+                    continue;
+            }
+
+            if (r.maPos->type == sc::element_type_empty)
+            {
+                // Empty block. Move to the next block and try next column.
+                ++r.maPos;
+                if (r.maPos->position < nNextRow)
+                {
+                    nNextRow = r.maPos->position;
+                    nNextRowPos = i;
+                }
+                continue;
+            }
+
+            // Found a non-empty cell block!
+            mnCol = i + nStartCol;
+            mnRow = nRow;
+            bMore = true;
+            return;
         }
+
+        if (nNextRow > MAXROW)
+        {
+            // No more blocks to search.
+            bMore = false;
+            return;
+        }
+
+        mnRow = nNextRow; // move to the next non-empty row.
     }
 
-    if (nMinRowCol == maColPositions.size() || static_cast<SCROW>(nMinRow) > nEndRow)
-    {
-        // No more cells found.
-        bMore = false;
-        return;
-    }
-
-    mnCol = nMinRowCol + nStartCol;
-    mnRow = nMinRow;
-    bMore = true;
+    bMore = false;
 }
 
 //------------------------------------------------------------------------

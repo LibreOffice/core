@@ -410,8 +410,6 @@ public:
 
 class ScHorizontalCellIterator      // walk through all non empty cells in an area
 {                                   // row by row
-    typedef std::pair<sc::CellStoreType::const_iterator,size_t> PositionType;
-
     struct ColParam
     {
         sc::CellStoreType::const_iterator maPos;
