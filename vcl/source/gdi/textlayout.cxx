@@ -188,7 +188,7 @@ namespace vcl
             aTrace.append( " ): " );
             aTrace.append( nTextWidth );
             aTrace.append( " = ( " );
-            for ( size_t i=0; i<_nLength; )
+            for ( sal_Int32 i=0; i<_nLength; )
             {
                 aTrace.append( _pDXAry[i] );
                 if ( ++i < _nLength )

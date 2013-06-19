@@ -603,7 +603,7 @@ gr_segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
         if (pSegment != NULL)
         {
 #ifdef GRLAYOUT_DEBUG
-            fprintf(grLog(),"Gr::LayoutText %d-%d, context %d, len %d, numchars %" SAL_PRI_SIZET "u, rtl %d scaling %f:", rArgs.mnMinCharPos,
+            fprintf(grLog(),"Gr::LayoutText %d-%d, context %d, len %d, numchars %d, rtl %d scaling %f:", rArgs.mnMinCharPos,
                rArgs.mnEndCharPos, limit, rArgs.mnLength, numchars, bRtl, mfScaling);
             for (int i = mnSegCharOffset; i < limit; ++i)
                 fprintf(grLog(), " %04X", rArgs.mpStr[i]);

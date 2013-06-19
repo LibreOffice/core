@@ -106,10 +106,6 @@ using namespace ::com::sun::star::beans;
 # define WM_MOUSEHWHEEL 0x020E
 #endif
 
-#if OSL_DEBUG_LEVEL > 1
-void MyOutputDebugString( char *s) { OutputDebugString( s ); }
-#endif
-
 // =======================================================================
 
 const unsigned int WM_USER_SYSTEM_WINDOW_ACTIVATED = RegisterWindowMessageA("SYSTEM_WINDOW_ACTIVATED");
