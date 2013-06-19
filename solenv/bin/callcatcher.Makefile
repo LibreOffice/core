@@ -9,7 +9,7 @@
 
 .PHONY: all
 
-include config_host_callcatcher.mk
+include callcatcher/config_host.mk
 
 export CC:=callcatcher $(CC)
 export CXX:=callcatcher $(CXX)
@@ -23,9 +23,9 @@ export dbglevel:=2
 include $(SOLARENV)/gbuild/gbuild.mk
 
 findunusedcode:
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.gbuild
+	$(GNUMAKE) BUILDDIR=callcatcher -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.gbuild
 	ooinstall -l $(DEVINSTALLDIR)/opt
-	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.gbuild subsequentcheck
+	$(GNUMAKE) BUILDDIR=callcatcher -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.gbuild subsequentcheck
 	callanalyse $(WORKDIR)/LinkTarget/*/* $(WORKDIR)/LinkTarget/*/*/* \
 	  $(WORKDIR)/UnpackedTarball/cppunit/src/cppunit/.libs/libcppunit.so* \
 	  > unusedcode.all

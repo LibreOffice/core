@@ -380,11 +380,13 @@ docs:
 findunusedcode:
 	@which callcatcher > /dev/null 2>&1 || \
 	    (echo "callcatcher not installed" && false)
-	@sed -e s,$$INPATH,callcatcher,g config_host.mk | sed -e s,"export OOO_JUNIT_JAR=.*","export OOO_JUNIT_JAR=",g > $(SRCDIR)/config_host_callcatcher.mk
-	@echo unexport ARCH_FLAGS >> $(SRCDIR)/config_host_callcatcher.mk
-	@echo unexport CFLAGS >> $(SRCDIR)/config_host_callcatcher.mk
-	@echo unexport CXXFLAGS >> $(SRCDIR)/config_host_callcatcher.mk
-	@mkdir -p $(SRCDIR)/solenv/callcatcher/bin && \
+	@mkdir -p $(SRCDIR)/callcatcher/config_host
+	@cp config_host/* callcatcher/config_host
+	@cp config_host.mk* callcatcher
+	@sed -e s,$$INPATH,callcatcher,g config_host.mk | sed -e s,"export OOO_JUNIT_JAR=.*","export OOO_JUNIT_JAR=",g > $(SRCDIR)/callcatcher/config_host.mk
+	@echo unexport ARCH_FLAGS >> $(SRCDIR)/callcatcher/config_host.mk
+	@echo unexport CFLAGS >> $(SRCDIR)/callcatcher/config_host.mk
+	@echo unexport CXXFLAGS >> $(SRCDIR)/callcatcher/config_host.mk
 	$(GNUMAKE) -f $(SOLARENV)/bin/callcatcher.Makefile findunusedcode
 	@grep ::.*\( unusedcode.all \
               | grep -v ^Atom \
