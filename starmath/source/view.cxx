@@ -1519,9 +1519,7 @@ bool SmViewShell::InsertFrom(SfxMedium &rMedium)
         if (pEditWin)
             pEditWin->InsertText( aText );
         else
-        {
             SAL_WARN( "starmath", "EditWindow missing" );
-        }
 
         pDoc->Parse();
         pDoc->SetModified(true);
