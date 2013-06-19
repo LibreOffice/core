@@ -1522,6 +1522,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,sal_True,&pPoolItem)) {
         nSizY=((const SfxUInt32Item*)pPoolItem)->GetValue();
         bChgSiz=true;
+        bChgHgt=true;
     }
     if (bChgSiz) {
         eSizePoint=(RECT_POINT)((const SfxAllEnumItem&)rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT)).GetValue();
