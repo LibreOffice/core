@@ -60,7 +60,6 @@ namespace svgio
             aRetval.scale(
                 (bNoSWidth ? 1.0 : 1.0 / fSWidth) * rTarget.getWidth(),
                 (bNoSHeight ? 1.0 : 1.0 / fSHeight) * rTarget.getHeight());
-
             // transform from unit rage to target range
             aRetval.translate(rTarget.getMinX(), rTarget.getMinY());
 
