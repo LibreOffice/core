@@ -62,7 +62,7 @@ import com.sun.star.text.XTextField;
 import com.sun.star.text.XTextRange;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-// addintional interfaces used by the implementation
+import org.openoffice.XToDo;
 
 /** This class capsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getServiceFactory</CODE>) and a
