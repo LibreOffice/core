@@ -1199,7 +1199,7 @@ namespace svgio
 
                         if(pNode)
                         {
-                            if(SVGTokenLinearGradient == pNode->getType() || SVGTokenRadialGradient  == pNode->getType())
+                            if(SVGTokenLinearGradient == pNode->getType() || SVGTokenRadialGradient == pNode->getType())
                             {
                                 setSvgGradientNodeFill(static_cast< const SvgGradientNode* >(pNode));
                             }
@@ -1790,7 +1790,7 @@ namespace svgio
                     // style="display:none"
                     // taken from a svg example; this needs to be parsed and set at the owning node. Do not call
                     // mrOwner.parseAttribute(...) here, this would lead to a recursion
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         mrOwner.setDisplay(getDisplayFromContent(aContent));
                     }
@@ -1798,7 +1798,7 @@ namespace svgio
                 }
                 case SVGTokenBaselineShift:
                 {
-                    if(aContent.getLength())
+                    if(!aContent.isEmpty())
                     {
                         static rtl::OUString aStrSub(rtl::OUString::createFromAscii("sub"));
                         static rtl::OUString aStrSuper(rtl::OUString::createFromAscii("super"));

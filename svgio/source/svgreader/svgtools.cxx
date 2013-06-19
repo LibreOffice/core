@@ -1169,9 +1169,7 @@ namespace svgio
 
         bool readSvgPaint(const OUString& rCandidate, SvgPaint& rSvgPaint, OUString& rURL)
         {
-            const sal_Int32 nLen(rCandidate.getLength());
-
-            if(nLen)
+            if( !rCandidate.isEmpty() )
             {
                 basegfx::BColor aColor;
 
