@@ -1969,11 +1969,16 @@ sal_Bool SwSectionFtnEndTabPage::FillItemSet( SfxItemSet& rSet )
     switch( aFtn.GetValue() )
     {
     case FTNEND_ATTXTEND_OWNNUMANDFMT:
+      {
         aFtn.SetNumType( aFtnNumViewBox.GetSelectedNumberingType() );
-        aFtn.SetPrefix( aFtnPrefixED.GetText() );
-        aFtn.SetSuffix( aFtnSuffixED.GetText() );
+        String aPrefix( aFtnPrefixED.GetText() );
+        aPrefix.SearchAndReplaceAllAscii("\\t", '\t'); // fdo#65666
+        aFtn.SetPrefix( aPrefix );
+        String aSuffix( aFtnSuffixED.GetText() );
+        aSuffix.SearchAndReplaceAllAscii("\\t", '\t');
+        aFtn.SetSuffix( aSuffix );
         // no break;
-
+      }
     case FTNEND_ATTXTEND_OWNNUMSEQ:
         aFtn.SetOffset( static_cast< sal_uInt16 >( aFtnOffsetFld.GetValue()-1 ) );
         // no break;
@@ -1990,11 +1995,16 @@ sal_Bool SwSectionFtnEndTabPage::FillItemSet( SfxItemSet& rSet )
     switch( aEnd.GetValue() )
     {
     case FTNEND_ATTXTEND_OWNNUMANDFMT:
+      {
         aEnd.SetNumType( aEndNumViewBox.GetSelectedNumberingType() );
-        aEnd.SetPrefix( aEndPrefixED.GetText() );
-        aEnd.SetSuffix( aEndSuffixED.GetText() );
+        String aPrefix( aEndPrefixED.GetText() );
+        aPrefix.SearchAndReplaceAllAscii("\\t", '\t');
+        aEnd.SetPrefix( aPrefix );
+        String aSuffix( aEndSuffixED.GetText() );
+        aSuffix.SearchAndReplaceAllAscii("\\t", '\t');
+        aEnd.SetSuffix( aSuffix );
         // no break;
-
+      }
     case FTNEND_ATTXTEND_OWNNUMSEQ:
         aEnd.SetOffset( static_cast< sal_uInt16 >( aEndOffsetFld.GetValue()-1 ) );
         // no break;
@@ -2061,8 +2071,8 @@ void SwSectionFtnEndTabPage::ResetState( sal_Bool bFtn,
 
     pNumViewBox->SelectNumberingType( rAttr.GetNumType() );
     pOffsetFld->SetValue( rAttr.GetOffset() + 1 );
-    pPrefixED->SetText( rAttr.GetPrefix() );
-    pSuffixED->SetText( rAttr.GetSuffix() );
+    pPrefixED->SetText( rAttr.GetPrefix().replaceAll("\t", "\\t") );
+    pSuffixED->SetText( rAttr.GetSuffix().replaceAll("\t", "\\t") );
 
     switch( eState )
     {
