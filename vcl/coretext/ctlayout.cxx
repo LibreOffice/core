@@ -426,6 +426,11 @@ void CTLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray ) const
 
 bool CTLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
 {
+    // Closely mimic DrawText(), except that instead of calling
+    // CTLineDraw() to draw the line, we call CTLineGetImageBounds()
+    // to get its bounds. But all the coordinate system manipulation
+    // before that is the same => should be factored out?
+
     AquaSalGraphics& rAquaGraphics = static_cast<AquaSalGraphics&>(rGraphics);
 
 #ifdef IOS
