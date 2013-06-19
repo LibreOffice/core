@@ -338,7 +338,6 @@ void ScColumn::CopyCellsInRangeToColumn(
             bLastBlock = true;
         }
 
-        bool bHasCells = true;
         switch (it->type)
         {
             case sc::element_type_numeric:
@@ -349,7 +348,7 @@ void ScColumn::CopyCellsInRangeToColumn(
                 std::advance(itDataEnd, nDataSize);
                 ScAddress aSrcPos(nCol, nCurRow, nTab);
                 ScAddress aDestPos(rColumn.nCol, nCurRow, rColumn.nTab);
-                rHdl.cloneDoubleBlock(aDestColPos.miCellPos, aSrcPos, aDestPos, itData, itDataEnd);
+                rHdl.cloneDoubleBlock(aDestColPos, aSrcPos, aDestPos, itData, itDataEnd);
             }
             break;
             case sc::element_type_string:
@@ -360,7 +359,7 @@ void ScColumn::CopyCellsInRangeToColumn(
                 std::advance(itDataEnd, nDataSize);
                 ScAddress aSrcPos(nCol, nCurRow, nTab);
                 ScAddress aDestPos(rColumn.nCol, nCurRow, rColumn.nTab);
-                rHdl.cloneStringBlock(aDestColPos.miCellPos, aSrcPos, aDestPos, itData, itDataEnd);
+                rHdl.cloneStringBlock(aDestColPos, aSrcPos, aDestPos, itData, itDataEnd);
             }
             break;
             case sc::element_type_edittext:
@@ -371,7 +370,7 @@ void ScColumn::CopyCellsInRangeToColumn(
                 std::advance(itDataEnd, nDataSize);
                 ScAddress aSrcPos(nCol, nCurRow, nTab);
                 ScAddress aDestPos(rColumn.nCol, nCurRow, rColumn.nTab);
-                rHdl.cloneEditTextBlock(aDestColPos.miCellPos, aSrcPos, aDestPos, itData, itDataEnd);
+                rHdl.cloneEditTextBlock(aDestColPos, aSrcPos, aDestPos, itData, itDataEnd);
             }
             break;
             case sc::element_type_formula:
@@ -382,20 +381,13 @@ void ScColumn::CopyCellsInRangeToColumn(
                 std::advance(itDataEnd, nDataSize);
                 ScAddress aSrcPos(nCol, nCurRow, nTab);
                 ScAddress aDestPos(rColumn.nCol, nCurRow, rColumn.nTab);
-                rHdl.cloneFormulaBlock(aDestColPos.miCellPos, aSrcPos, aDestPos, itData, itDataEnd);
+                rHdl.cloneFormulaBlock(aDestColPos, aSrcPos, aDestPos, itData, itDataEnd);
             }
             break;
             default:
-                bHasCells = false;
+                ;
         }
 
-        if (bHasCells)
-        {
-            // Set default text attribute values for the new cells in the clip doc.
-            std::vector<sc::CellTextAttr> aTextAttrs(nDataSize, sc::CellTextAttr());
-            aDestColPos.miCellTextAttrPos = rColumn.maCellTextAttrs.set(
-                aDestColPos.miCellTextAttrPos, nCurRow, aTextAttrs.begin(), aTextAttrs.end());
-        }
 
         if (bLastBlock)
             break;

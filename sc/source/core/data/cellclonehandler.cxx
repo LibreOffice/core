@@ -14,8 +14,10 @@
 namespace sc {
 
 CellBlockCloneHandler::CellBlockCloneHandler(
-    ScDocument& rSrcDoc, ScDocument& rDestDoc, CellStoreType& rDestCellStore) :
-    mrSrcDoc(rSrcDoc), mrDestDoc(rDestDoc), mrDestCellStore(rDestCellStore) {}
+    ScDocument& rSrcDoc, ScDocument& rDestDoc,
+    CellStoreType& rDestCellStore, CellTextAttrStoreType& rDestAttrStore) :
+    mrSrcDoc(rSrcDoc), mrDestDoc(rDestDoc),
+    mrDestCellStore(rDestCellStore), mrDestAttrStore(rDestAttrStore) {}
 
 CellBlockCloneHandler::~CellBlockCloneHandler() {}
 
@@ -39,22 +41,41 @@ CellStoreType& CellBlockCloneHandler::getDestCellStore()
     return mrDestCellStore;
 }
 
+CellTextAttrStoreType& CellBlockCloneHandler::getDestAttrStore()
+{
+    return mrDestAttrStore;
+}
+
+void CellBlockCloneHandler::setDefaultAttrToDest(ColumnBlockPosition& rPos, SCROW nRow)
+{
+    rPos.miCellTextAttrPos = mrDestAttrStore.set(rPos.miCellTextAttrPos, nRow, CellTextAttr());
+}
+
+void CellBlockCloneHandler::setDefaultAttrsToDest(ColumnBlockPosition& rPos, SCROW nRow, size_t nSize)
+{
+    std::vector<sc::CellTextAttr> aAttrs(nSize); // default values
+    rPos.miCellTextAttrPos = mrDestAttrStore.set(
+        rPos.miCellTextAttrPos, nRow, aAttrs.begin(), aAttrs.end());
+}
+
 void CellBlockCloneHandler::cloneDoubleBlock(
-    CellStoreType::iterator& itPos, const ScAddress& /*rSrcPos*/, const ScAddress& rDestPos,
+    ColumnBlockPosition& rPos, const ScAddress& /*rSrcPos*/, const ScAddress& rDestPos,
     const numeric_block::const_iterator& itBegin, const numeric_block::const_iterator& itEnd)
 {
-    itPos = mrDestCellStore.set(itPos, rDestPos.Row(), itBegin, itEnd);
+    rPos.miCellPos = mrDestCellStore.set(rPos.miCellPos, rDestPos.Row(), itBegin, itEnd);
+    setDefaultAttrsToDest(rPos, rDestPos.Row(), std::distance(itBegin, itEnd));
 }
 
 void CellBlockCloneHandler::cloneStringBlock(
-    CellStoreType::iterator& itPos, const ScAddress& /*rSrcPos*/, const ScAddress& rDestPos,
+    ColumnBlockPosition& rPos, const ScAddress& /*rSrcPos*/, const ScAddress& rDestPos,
     const string_block::const_iterator& itBegin, const string_block::const_iterator& itEnd)
 {
-    itPos = mrDestCellStore.set(itPos, rDestPos.Row(), itBegin, itEnd);
+    rPos.miCellPos = mrDestCellStore.set(rPos.miCellPos, rDestPos.Row(), itBegin, itEnd);
+    setDefaultAttrsToDest(rPos, rDestPos.Row(), std::distance(itBegin, itEnd));
 }
 
 void CellBlockCloneHandler::cloneEditTextBlock(
-    CellStoreType::iterator& itPos, const ScAddress& /*rSrcPos*/, const ScAddress& rDestPos,
+    ColumnBlockPosition& rPos, const ScAddress& /*rSrcPos*/, const ScAddress& rDestPos,
     const edittext_block::const_iterator& itBegin, const edittext_block::const_iterator& itEnd)
 {
     std::vector<EditTextObject*> aCloned;
@@ -62,11 +83,14 @@ void CellBlockCloneHandler::cloneEditTextBlock(
     for (edittext_block::const_iterator it = itBegin; it != itEnd; ++it)
         aCloned.push_back(ScEditUtil::Clone(**it, getDestDoc()));
 
-    itPos = getDestCellStore().set(itPos, rDestPos.Row(), aCloned.begin(), aCloned.end());
+    rPos.miCellPos = getDestCellStore().set(
+        rPos.miCellPos, rDestPos.Row(), aCloned.begin(), aCloned.end());
+
+    setDefaultAttrsToDest(rPos, rDestPos.Row(), std::distance(itBegin, itEnd));
 }
 
 void CellBlockCloneHandler::cloneFormulaBlock(
-    CellStoreType::iterator& itPos, const ScAddress& /*rSrcPos*/, const ScAddress& rDestPos,
+    ColumnBlockPosition& rPos, const ScAddress& /*rSrcPos*/, const ScAddress& rDestPos,
     const formula_block::const_iterator& itBegin, const formula_block::const_iterator& itEnd)
 {
     std::vector<ScFormulaCell*> aCloned;
@@ -81,7 +105,10 @@ void CellBlockCloneHandler::cloneFormulaBlock(
         aCloned.push_back(new ScFormulaCell(rOld, getDestDoc(), aDestPos));
     }
 
-    itPos = getDestCellStore().set(itPos, rDestPos.Row(), aCloned.begin(), aCloned.end());
+    rPos.miCellPos = getDestCellStore().set(
+        rPos.miCellPos, rDestPos.Row(), aCloned.begin(), aCloned.end());
+
+    setDefaultAttrsToDest(rPos, rDestPos.Row(), std::distance(itBegin, itEnd));
 }
 
 }

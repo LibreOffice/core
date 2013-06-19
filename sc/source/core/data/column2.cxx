@@ -1503,6 +1503,10 @@ void ScColumn::CellStorageModified()
         if (itCell->position != itAttr->position || itCell->size != itAttr->size)
         {
             cout << "ScColumn::CellStorageModified: Cell array and cell text attribute array are out of sync." << endl;
+            cout << "-- cell array" << endl;
+            maCells.dump_blocks(cout);
+            cout << "-- attribute array" << endl;
+            maCellTextAttrs.dump_blocks(cout);
             cout.flush();
             abort();
         }
