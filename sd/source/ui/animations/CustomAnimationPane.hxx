@@ -129,6 +129,7 @@ private:
     PushButton* mpPBAddEffect;
     PushButton* mpPBChangeEffect;
     PushButton* mpPBRemoveEffect;
+    FixedText*  mpFTEffect;
     FixedText*  mpFTStart;
     ListBox*    mpLBStart;
     FixedText*  mpFTProperty;

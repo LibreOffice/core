@@ -169,6 +169,8 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     get(mpPBChangeEffect, "change_effect");
     get(mpPBRemoveEffect, "remove_effect");
 
+    get(mpFTEffect, "effect_label");
+
     get(mpFTStart, "start_effect");
     get(mpLBStart, "start_effect_list");
     get(mpFTProperty, "effect_property");
@@ -192,7 +194,6 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
 
     maStrProperty = mpFTProperty->GetText();
 
-    fillDurationComboBox( mpCBSpeed );
     mpPBMoveUp->SetSymbol( SYMBOL_ARROW_UP );
     mpPBMoveDown->SetSymbol( SYMBOL_ARROW_DOWN );
 
@@ -208,7 +209,7 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     mpPBSlideShow->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
     mpCBAutoPreview->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
 
-    //maStrModify = mpFLEffect->GetText();
+    maStrModify = mpFTEffect->GetText();
 
     // get current controller and initialize listeners
     try
@@ -529,6 +530,7 @@ void CustomAnimationPane::updateControls()
         {
             aTemp += OUString( (sal_Unicode)' ' );
             aTemp += aUIName;
+            mpFTEffect->SetText( aTemp );
         }
 
         CustomAnimationPresetPtr pDescriptor = getPresets().getEffectDescriptor( pEffect->getPresetId() );
@@ -629,6 +631,7 @@ void CustomAnimationPane::updateControls()
         mpFTChangeOrder->Enable( sal_False );
         mpLBStart->SetNoSelection();
         mpCBSpeed->SetNoSelection();
+        mpFTEffect->SetText( maStrModify );
     }
 
     bool bEnableUp = true;

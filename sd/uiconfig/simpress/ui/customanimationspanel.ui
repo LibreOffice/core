@@ -308,7 +308,7 @@
           </object>
         </child>
         <child type="label">
-          <object class="GtkLabel" id="label1">
+          <object class="GtkLabel" id="effect_label">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Effect</property>
