@@ -47,6 +47,7 @@ class CustomAnimationList : public SvTreeListBox, public ISequenceListener
 
 public:
     CustomAnimationList( ::Window* pParent, const ResId& rResId, ICustomAnimationListController* pController );
+    CustomAnimationList( ::Window* pParent );
     virtual ~CustomAnimationList();
 
     // methods
@@ -86,6 +87,11 @@ public:
 
     /// clears all entries from the listbox
     void clear();
+
+    void setController( ICustomAnimationListController* pController )
+    {
+        mpController = pController;
+    };
 
 private:
     bool    mbIgnorePaint;

@@ -180,7 +180,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 
 #define EndsWith(s,t) s.endsWithAsciiL(t,strlen(t))
     if (EndsWith(rsUIElementResourceURL, gsResourceNameCustomAnimations))
-        pControl = new CustomAnimationPanel(pParentWindow, *pBase);
+        pControl = new CustomAnimationPanel(pParentWindow, *pBase, xFrame);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameLayouts))
         pControl = new LayoutMenu(pParentWindow, *pBase, xSidebar);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameAllMasterPages))

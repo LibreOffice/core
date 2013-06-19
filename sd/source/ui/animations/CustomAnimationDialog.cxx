@@ -1848,8 +1848,8 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
     mpRBInteractive.reset( new RadioButton( this, SdResId( RB_INTERACTIVE ) ) );
     mpLBTrigger.reset( new ListBox( this, SdResId( LB_TRIGGER ) ) );
 
-    fillRepeatComboBox( mpCBRepeat.get() );
-    fillDurationComboBox( mpCBDuration.get() );
+    //fillRepeatComboBox( mpCBRepeat.get() );
+    //fillDurationComboBox( mpCBDuration.get() );
 
     FreeResource();
 
@@ -2481,6 +2481,16 @@ STLPropertySet* CustomAnimationDialog::createDefaultSet()
 PropertyControl::PropertyControl( Window* pParent, const ResId& rResId )
 : ListBox( pParent, rResId ), mpSubControl(0)
 {
+}
+
+PropertyControl::PropertyControl( Window* pParent )
+: ListBox( pParent, WB_TABSTOP | WB_BORDER | WB_DROPDOWN ), mpSubControl(0)
+{
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makePropertyControl( Window *pParent )
+{
+    return new PropertyControl( pParent );
 }
 
 PropertyControl::~PropertyControl()

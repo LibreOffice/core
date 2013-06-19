@@ -64,7 +64,7 @@ const int EXIT = 2;
 const int MOTIONPATH = 3;
 const int MISCEFFECTS = 4;
 
-extern void fillDurationComboBox( ComboBox* pBox );
+//extern void fillDurationComboBox( ComboBox* pBox );
 
 // --------------------------------------------------------------------
 
@@ -286,7 +286,7 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
 
     mpLBEffects->SelectEntryPos( nFirstEffect );
 
-    fillDurationComboBox( mpCBSpeed );
+    //fillDurationComboBox( mpCBSpeed );
 
     if( nFirstEffect != LISTBOX_ENTRY_NOTFOUND )
         onSelectEffect();

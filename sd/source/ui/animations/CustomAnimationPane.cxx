@@ -108,7 +108,7 @@ namespace sd {
 
 // --------------------------------------------------------------------
 
-void fillDurationComboBox( ComboBox* pBox )
+void fillDurationComboBox( ListBox* pBox )
 {
     static const double gdVerySlow = 5.0;
     static const double gdSlow = 3.0;
@@ -132,7 +132,7 @@ void fillDurationComboBox( ComboBox* pBox )
     pBox->SetEntryData( pBox->InsertEntry( aVeryFast ), (void*)&gdVeryFast );
 }
 
-void fillRepeatComboBox( ComboBox* pBox )
+void fillRepeatComboBox( ListBox* pBox )
 {
     String aNone( SdResId( STR_CUSTOMANIMATION_REPEAT_NONE ) );
     pBox->SetEntryData( pBox->InsertEntry( aNone ), (void*)((sal_Int32)0) );
@@ -152,8 +152,11 @@ void fillRepeatComboBox( ComboBox* pBox )
 
 // --------------------------------------------------------------------
 
-CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBase, const Size& rMinSize )
-:   Control( pParent, SdResId(DLG_CUSTOMANIMATIONPANE) ),
+
+CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBase,
+                                          const cssu::Reference<css::frame::XFrame>& rxFrame,
+                                          const Size& rMinSize )
+:   PanelLayout( pParent, "CustomAnimationsPanel", "modules/simpress/ui/customanimationspanel.ui", rxFrame ),
     mrBase( rBase ),
     mpCustomAnimationPresets(NULL),
     mnPropertyType( nPropertyTypeNone ),
@@ -162,43 +165,38 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     maLateInitTimer()
 {
     // load resources
-    mpFLEffect = new FixedLine( this, SdResId( FL_EFFECT ) );
+    get(mpPBAddEffect, "add_effect");
+    get(mpPBChangeEffect, "change_effect");
+    get(mpPBRemoveEffect, "remove_effect");
 
-    mpPBAddEffect = new PushButton( this, SdResId( PB_ADD_EFFECT ) );
-    mpPBChangeEffect = new PushButton( this, SdResId( PB_CHANGE_EFFECT ) );
-    mpPBRemoveEffect = new PushButton( this, SdResId( PB_REMOVE_EFFECT ) );
+    get(mpFTStart, "start_effect");
+    get(mpLBStart, "start_effect_list");
+    get(mpFTProperty, "effect_property");
+    get(mpLBProperty, "effect_property_list");
+    get(mpPBPropertyMore, "more_properties");
 
-    mpFLModify = new FixedLine( this, SdResId( FL_MODIFY ) );
+    get(mpFTSpeed, "effect_speed");
+    get(mpCBSpeed, "effect_speed_list");
 
-    mpFTStart = new FixedText( this, SdResId( FT_START ) );
-    mpLBStart = new ListBox( this, SdResId( LB_START ) );
-    mpFTProperty = new FixedText( this, SdResId( FT_PROPERTY ) );
-    mpLBProperty = new PropertyControl( this, SdResId( LB_PROPERTY ) );
-    mpPBPropertyMore = new PushButton( this, SdResId( PB_PROPERTY_MORE ) );
+    get(mpCustomAnimationList, "custom_animation_list");
+    mpCustomAnimationList->setController( dynamic_cast<ICustomAnimationListController*> ( this ) );
+    mpCustomAnimationList->set_width_request(mpCustomAnimationList->approximate_char_width() * 16);
+    mpCustomAnimationList->set_height_request(mpCustomAnimationList->GetTextHeight() * 16);
 
-    mpFTSpeed = new FixedText( this, SdResId( FT_SPEED ) );
-    mpCBSpeed = new ComboBox( this, SdResId( CB_SPEED ) );
-
-    mpCustomAnimationList = new CustomAnimationList( this, SdResId( CT_CUSTOM_ANIMATION_LIST ), this );
-
-    mpPBMoveUp = new PushButton( this, SdResId( PB_MOVE_UP ) );
-    mpPBMoveDown = new PushButton( this, SdResId( PB_MOVE_DOWN ) );
-    mpFTChangeOrder = new FixedText( this, SdResId( FT_CHANGE_ORDER ) );
-    mpFLSeparator1 = new FixedLine( this, SdResId( FL_SEPARATOR1 ) );
-    mpPBPlay = new PushButton( this, SdResId( PB_PLAY ) );
-    mpPBSlideShow = new PushButton( this, SdResId( PB_SLIDE_SHOW ) );
-    mpFLSeparator2 = new FixedLine( this, SdResId( FL_SEPARATOR2 ) );
-    mpCBAutoPreview = new CheckBox( this, SdResId( CB_AUTOPREVIEW ) );
+    get(mpPBMoveUp, "move_up");
+    get(mpPBMoveDown, "move_down");
+    get(mpFTChangeOrder, "change_order");
+    get(mpPBPlay, "play");
+    get(mpPBSlideShow, "slideshow");
+    get(mpCBAutoPreview,"auto_preview");
 
     maStrProperty = mpFTProperty->GetText();
 
-    FreeResource();
-
     // use bold font for group headings (same font for all fixed lines):
-    Font font( mpFLEffect->GetFont() );
+    /*Font font( mpFLEffect->GetFont() );
     font.SetWeight( WEIGHT_BOLD );
     mpFLEffect->SetFont( font );
-    mpFLModify->SetFont( font );
+    mpFLModify->SetFont( font );*/
 
     fillDurationComboBox( mpCBSpeed );
     mpPBMoveUp->SetSymbol( SYMBOL_ARROW_UP );
@@ -216,10 +214,10 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     mpPBSlideShow->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
     mpCBAutoPreview->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
 
-    maStrModify = mpFLEffect->GetText();
+    //maStrModify = mpFLEffect->GetText();
 
     // resize controls according to current size
-    updateLayout();
+    //updateLayout();
 
     // get current controller and initialize listeners
     try
@@ -256,11 +254,9 @@ CustomAnimationPane::~CustomAnimationPane()
     for( aIter = aTags.begin(); aIter != aTags.end(); ++aIter )
         (*aIter)->Dispose();
 
-    delete mpFLModify;
     delete mpPBAddEffect;
     delete mpPBChangeEffect;
     delete mpPBRemoveEffect;
-    delete mpFLEffect;
     delete mpFTStart;
     delete mpLBStart;
     delete mpFTProperty;
@@ -272,10 +268,8 @@ CustomAnimationPane::~CustomAnimationPane()
     delete mpFTChangeOrder;
     delete mpPBMoveUp;
     delete mpPBMoveDown;
-    delete mpFLSeparator1;
     delete mpPBPlay;
     delete mpPBSlideShow;
-    delete mpFLSeparator2;
     delete mpCBAutoPreview;
 }
 
@@ -292,7 +286,8 @@ void CustomAnimationPane::addUndo()
 
 void CustomAnimationPane::Resize()
 {
-    updateLayout();
+    //updateLayout();
+    return;
 }
 
 void CustomAnimationPane::StateChanged( StateChangedType nStateChange )
@@ -391,10 +386,10 @@ void CustomAnimationPane::updateLayout()
     // place the modify fixed line
 
     // place the "modify effect" fixed line
-    Size aSize( mpFLModify->GetSizePixel() );
+    Size aSize;/*( mpFLModify->GetSizePixel() );*/
     aSize.Width() = aPaneSize.Width() - 2 * aOffset.X();
 
-    mpFLModify->SetPosSizePixel( aCursor, aSize );
+    //mpFLModify->SetPosSizePixel( aCursor, aSize );
 
     aCursor.Y() += aSize.Height() + aOffset.Y();
 
@@ -438,10 +433,10 @@ void CustomAnimationPane::updateLayout()
     aCursor.Y() += aCtrlSize.Height() + 2 * aOffset.Y();
 
     // place the "modify effect" fixed line
-    aSize = mpFLEffect->GetSizePixel();
-    aSize.Width() = aPaneSize.Width() - 2 * aOffset.X();
+    /*aSize = mpFLEffect->GetSizePixel();
+    aSize.Width() = aPaneSize.Width() - 2 * aOffset.X();*/
 
-    mpFLEffect->SetPosSizePixel( aCursor, aSize );
+    //mpFLEffect->SetPosSizePixel( aCursor, aSize );
 
     aCursor.Y() += aSize.Height() + aOffset.Y();
 
@@ -521,10 +516,10 @@ void CustomAnimationPane::updateLayout()
     mpCBAutoPreview->SetPosPixel( aCursor );
 
     // place the separator 2 fixed line
-    aCursor.Y() -= /* aOffset.Y() + */ mpFLSeparator2->GetSizePixel().Height();
+    /* aCursor.Y() -=  aOffset.Y() +  mpFLSeparator2->GetSizePixel().Height();
     aSize = mpFLSeparator2->GetSizePixel();
     aSize.Width() = aPaneSize.Width() - 2 * aOffset.X();
-    mpFLSeparator2->SetPosSizePixel( aCursor, aSize );
+    mpFLSeparator2->SetPosSizePixel( aCursor, aSize );*/
 
     // next, layout and place the play and slide show buttons
     aCtrlSize = mpPBSlideShow->GetSizePixel();
@@ -552,10 +547,10 @@ void CustomAnimationPane::updateLayout()
 
     // place the separator 1 fixed line
     aCursor.X() = aOffset.X();
-    aCursor.Y() -= /* aOffset.Y() + */ mpFLSeparator1->GetSizePixel().Height();
+    /* aCursor.Y() -=  aOffset.Y() + mpFLSeparator1->GetSizePixel().Height();
     aSize = mpFLSeparator1->GetSizePixel();
     aSize.Width() = aPaneSize.Width() - 2 * aOffset.X();
-    mpFLSeparator1->SetPosSizePixel( aCursor, aSize );
+    mpFLSeparator1->SetPosSizePixel( aCursor, aSize ); */
 
     // place the move down button
     aSize = mpPBMoveDown->GetSizePixel();
@@ -706,17 +701,17 @@ OUString getPropertyName( sal_Int32 nPropertyType )
 
 void CustomAnimationPane::updateControls()
 {
-    mpFLModify->Enable( mxView.is() );
+    //mpFLModify->Enable( mxView.is() );
     mpFTSpeed->Enable( mxView.is() );
     mpCBSpeed->Enable( mxView.is() );
     mpCustomAnimationList->Enable( mxView.is() );
     mpFTChangeOrder->Enable( mxView.is() );
     mpPBMoveUp->Enable( mxView.is() );
     mpPBMoveDown->Enable( mxView.is() );
-    mpFLSeparator1->Enable( mxView.is() );
+    //mpFLSeparator1->Enable( mxView.is() );
     mpPBPlay->Enable( mxView.is() );
     mpPBSlideShow->Enable( mxView.is() );
-    mpFLSeparator2->Enable( mxView.is() );
+    //mpFLSeparator2->Enable( mxView.is() );
     mpCBAutoPreview->Enable( mxView.is() );
 
     if( !mxView.is() )
@@ -724,7 +719,7 @@ void CustomAnimationPane::updateControls()
         mpPBAddEffect->Enable( sal_False );
         mpPBChangeEffect->Enable( sal_False );
         mpPBRemoveEffect->Enable( sal_False );
-        mpFLEffect->Enable( sal_False );
+        //mpFLEffect->Enable( sal_False );
         mpFTStart->Enable( sal_False );
         mpLBStart->Enable( sal_False );
         mpPBPropertyMore->Enable( sal_False );
@@ -740,7 +735,7 @@ void CustomAnimationPane::updateControls()
     mpPBChangeEffect->Enable( nSelectionCount);
     mpPBRemoveEffect->Enable(nSelectionCount);
 
-    mpFLEffect->Enable(nSelectionCount > 0);
+    //mpFLEffect->Enable(nSelectionCount > 0);
     mpFTStart->Enable(nSelectionCount > 0);
     mpLBStart->Enable(nSelectionCount > 0);
     mpPBPropertyMore->Enable(nSelectionCount > 0);
@@ -762,7 +757,7 @@ void CustomAnimationPane::updateControls()
             aTemp += OUString( (sal_Unicode)' ' );
             aTemp += aUIName;
         }
-        mpFLEffect->SetText( aTemp );
+        //mpFLEffect->SetText( aTemp );
 
         CustomAnimationPresetPtr pDescriptor = getPresets().getEffectDescriptor( pEffect->getPresetId() );
         if( pDescriptor.get() )
@@ -862,7 +857,7 @@ void CustomAnimationPane::updateControls()
         mpFTChangeOrder->Enable( sal_False );
         mpLBStart->SetNoSelection();
         mpCBSpeed->SetNoSelection();
-        mpFLEffect->SetText( maStrModify );
+        //mpFLEffect->SetText( maStrModify );
     }
 
     bool bEnableUp = true;
@@ -1080,10 +1075,10 @@ void CustomAnimationPane::UpdateLook (void)
         ::sfx2::sidebar::Theme::GetWallpaper(
             ::sfx2::sidebar::Theme::Paint_PanelBackground));
     SetBackground(aBackground);
-    if (mpFLModify != NULL)
+    /*if (mpFLModify != NULL)
         mpFLModify->SetBackground(aBackground);
     if (mpFLEffect != NULL)
-        mpFLEffect->SetBackground(aBackground);
+        mpFLEffect->SetBackground(aBackground);*/
     if (mpFTStart != NULL)
         mpFTStart->SetBackground(aBackground);
     if (mpFTProperty != NULL)
@@ -1092,10 +1087,10 @@ void CustomAnimationPane::UpdateLook (void)
         mpFTSpeed->SetBackground(aBackground);
     if (mpFTChangeOrder != NULL)
         mpFTChangeOrder->SetBackground(aBackground);
-    if (mpFLSeparator1 != NULL)
+    /*if (mpFLSeparator1 != NULL)
         mpFLSeparator1->SetBackground(aBackground);
     if (mpFLSeparator2 != NULL)
-        mpFLSeparator2->SetBackground(aBackground);
+        mpFLSeparator2->SetBackground(aBackground);*/
 }
 
 
@@ -2562,7 +2557,7 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
         pWindow->SetSizePixel(aMinSize);
         pWindow->SetBackground(Wallpaper(Color(COL_BLUE)));
 
-        ::Window* pPaneWindow = new CustomAnimationPane( pWindow, rBase, aMinSize );
+        ::Window* pPaneWindow = new CustomAnimationPane( pWindow, rBase, NULL,  aMinSize );
         pWindow->SetChildWindow( pPaneWindow, aMinSize );
         pWindow->SetText( pPaneWindow->GetText() );
     }
@@ -2570,6 +2565,25 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
     return pWindow;
 }
 
+::Window * createCustomAnimationPanel( ::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame )
+{
+    DialogListBox* pWindow = 0;
+
+    DrawDocShell* pDocSh = rBase.GetDocShell();
+    if( pDocSh )
+    {
+        pWindow = new DialogListBox( pParent, WB_CLIPCHILDREN|WB_TABSTOP|WB_AUTOHSCROLL );
+        const Size aMinSize( pWindow->LogicToPixel( Size( 80, 256 ), MAP_APPFONT ) );
+        pWindow->SetSizePixel(aMinSize);
+        pWindow->SetBackground(Wallpaper(Color(COL_BLUE)));
+
+        ::Window* pPaneWindow = new CustomAnimationPane( pWindow, rBase, rxFrame, aMinSize );
+        pWindow->SetChildWindow( pPaneWindow, aMinSize );
+        pWindow->SetText( pPaneWindow->GetText() );
+    }
+
+    return pWindow;
+}
 
 
 

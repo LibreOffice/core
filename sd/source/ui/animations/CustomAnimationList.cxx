@@ -469,6 +469,18 @@ CustomAnimationList::CustomAnimationList( ::Window* pParent, const ResId& rResId
     SetNodeDefaultImages();
 }
 
+CustomAnimationList::CustomAnimationList( ::Window* pParent )
+:   SvTreeListBox( pParent, WB_TABSTOP | WB_BORDER   ),
+    mpController(0)
+{
+
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCustomAnimationList( ::Window *pParent )
+{
+    return new CustomAnimationList( pParent );
+}
+
 // --------------------------------------------------------------------
 
 const Image&  CustomAnimationList::getImage( sal_uInt16 nId )

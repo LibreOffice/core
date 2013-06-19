@@ -19,7 +19,7 @@
 #define SD_SIDEBAR_CUSTOM_ANIMATION_PANEL_HXX
 
 #include "PanelBase.hxx"
-
+#include <sfx2/sidebar/ControlFactory.hxx>
 
 namespace sd { namespace sidebar {
 
@@ -29,7 +29,8 @@ class CustomAnimationPanel
 public:
     CustomAnimationPanel (
         ::Window* pParentWindow,
-        ViewShellBase& rViewShellBase);
+        ViewShellBase& rViewShellBase,
+        const cssu::Reference<css::frame::XFrame>& rxFrame);
     virtual ~CustomAnimationPanel (void);
 
     // ILayoutableWindow
@@ -39,6 +40,9 @@ protected:
     virtual ::Window* CreateWrappedControl (
         ::Window* pParentWindow,
         ViewShellBase& rViewShellBase);
+
+private:
+    cssu::Reference<css::frame::XFrame>     mxFrame;
 };
 
 } } // end of namespace sd::sidebar

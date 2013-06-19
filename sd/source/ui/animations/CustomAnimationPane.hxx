@@ -23,6 +23,8 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <vcl/dialog.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/ControlFactory.hxx>
 #include "CustomAnimationPreset.hxx"
 #include "CustomAnimationList.hxx"
 #include "CustomAnimationCreateDialog.hxx"
@@ -57,11 +59,11 @@ typedef std::vector< rtl::Reference< MotionPathTag > > MotionPathTagVector;
 
 // --------------------------------------------------------------------
 
-class CustomAnimationPane : public Control, public ICustomAnimationListController
+class CustomAnimationPane : public PanelLayout, public ICustomAnimationListController
 {
     friend class MotionPathTag;
 public:
-    CustomAnimationPane( ::Window* pParent, ViewShellBase& rBase, const Size& rMinSize );
+    CustomAnimationPane( ::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame, const Size& rMinSize );
     virtual ~CustomAnimationPane();
 
     // callbacks
@@ -126,26 +128,22 @@ private:
 
     const CustomAnimationPresets* mpCustomAnimationPresets;
 
-    FixedLine*  mpFLModify;
     PushButton* mpPBAddEffect;
     PushButton* mpPBChangeEffect;
     PushButton* mpPBRemoveEffect;
-    FixedLine*  mpFLEffect;
     FixedText*  mpFTStart;
     ListBox*    mpLBStart;
     FixedText*  mpFTProperty;
     PropertyControl*    mpLBProperty;
     PushButton* mpPBPropertyMore;
     FixedText*  mpFTSpeed;
-    ComboBox*   mpCBSpeed;
+    ListBox*   mpCBSpeed;
     CustomAnimationList*    mpCustomAnimationList;
     FixedText*  mpFTChangeOrder;
     PushButton* mpPBMoveUp;
     PushButton* mpPBMoveDown;
-    FixedLine*  mpFLSeparator1;
     PushButton* mpPBPlay;
     PushButton* mpPBSlideShow;
-    FixedLine*  mpFLSeparator2;
     CheckBox*   mpCBAutoPreview;
 
     String      maStrModify;

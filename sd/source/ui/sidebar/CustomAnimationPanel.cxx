@@ -22,22 +22,22 @@
 
 
 namespace sd {
-    extern ::Window * createCustomAnimationPanel (::Window* pParent, ViewShellBase& rBase);
+    extern ::Window * createCustomAnimationPanel (::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame);
     extern sal_Int32 getCustomAnimationPanelMinimumHeight (::Window* pParent);
 }
-
-
-
 
 namespace sd { namespace sidebar {
 
 
 CustomAnimationPanel::CustomAnimationPanel (
     ::Window* pParentWindow,
-    ViewShellBase& rViewShellBase)
+    ViewShellBase& rViewShellBase,
+    const cssu::Reference<css::frame::XFrame>& rxFrame
+    )
     : PanelBase(
         pParentWindow,
-        rViewShellBase)
+        rViewShellBase),
+      mxFrame( rxFrame )
 {
 #ifdef DEBUG
     SetText(OUString("sd:CustomAnimationPanel"));
@@ -58,7 +58,7 @@ CustomAnimationPanel::~CustomAnimationPanel (void)
     ::Window* pParentWindow,
     ViewShellBase& rViewShellBase)
 {
-    return createCustomAnimationPanel(pParentWindow, rViewShellBase);
+    return createCustomAnimationPanel(pParentWindow, rViewShellBase, mxFrame);
 }
 
 
