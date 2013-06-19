@@ -886,7 +886,7 @@ sal_Bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
         nHeight = MetricField::ConvertDoubleValue( nHeight, maMtrHeight.GetBaseValue(), maMtrHeight.GetDecimalDigits(), meDlgUnit, FUNIT_100TH_MM );
         long lHeight = long(nHeight * (double)aUIScale);
         lHeight = OutputDevice::LogicToLogic( lHeight, MAP_100TH_MM, (MapUnit)mePoolUnit );
-        lHeight = static_cast<long>(maMtrWidth.Denormalize( lHeight ));
+        lHeight = static_cast<long>(maMtrHeight.Denormalize( lHeight ));
 
         // put Width & Height to itemset
         rOutAttrs.Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_WIDTH ),
