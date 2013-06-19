@@ -102,6 +102,31 @@ bool equalsWithoutFormatImpl( const _T& left, const _T& right )
     return false;
 }
 
+template<typename _T>
+void commitToColumn( const _T& rCell, ScColumn& rColumn, SCROW nRow )
+{
+    switch (rCell.meType)
+    {
+        case CELLTYPE_STRING:
+            rColumn.SetRawString(nRow, *rCell.mpString);
+        break;
+        case CELLTYPE_EDIT:
+            rColumn.SetEditText(nRow, ScEditUtil::Clone(*rCell.mpEditText, rColumn.GetDoc()));
+        break;
+        case CELLTYPE_VALUE:
+            rColumn.SetValue(nRow, rCell.mfValue);
+        break;
+        case CELLTYPE_FORMULA:
+        {
+            ScAddress aDestPos(rColumn.GetCol(), nRow, rColumn.GetTab());
+            rColumn.SetFormulaCell(nRow, new ScFormulaCell(*rCell.mpFormula, rColumn.GetDoc(), aDestPos));
+        }
+        break;
+        default:
+            rColumn.Delete(nRow);
+    }
+}
+
 bool hasStringImpl( CellType eType, ScFormulaCell* pFormula )
 {
     switch (eType)
@@ -132,6 +157,25 @@ bool hasNumericImpl( CellType eType, ScFormulaCell* pFormula )
 }
 
 ScCellValue::ScCellValue() : meType(CELLTYPE_NONE), mfValue(0.0) {}
+
+ScCellValue::ScCellValue( const ScRefCellValue& rCell ) : meType(rCell.meType), mfValue(rCell.mfValue)
+{
+    switch (rCell.meType)
+    {
+        case CELLTYPE_STRING:
+            mpString = new OUString(*rCell.mpString);
+        break;
+        case CELLTYPE_EDIT:
+            mpEditText = rCell.mpEditText->Clone();
+        break;
+        case CELLTYPE_FORMULA:
+            mpFormula = rCell.mpFormula->Clone();
+        break;
+        default:
+            ;
+    }
+}
+
 ScCellValue::ScCellValue( double fValue ) : meType(CELLTYPE_VALUE), mfValue(fValue) {}
 ScCellValue::ScCellValue( const OUString& rString ) : meType(CELLTYPE_STRING), mpString(new OUString(rString)) {}
 ScCellValue::ScCellValue( const EditTextObject& rEditText ) : meType(CELLTYPE_EDIT), mpEditText(rEditText.Clone()) {}
@@ -315,6 +359,11 @@ void ScCellValue::commit( ScDocument& rDoc, const ScAddress& rPos ) const
     }
 }
 
+void ScCellValue::commit( ScColumn& rColumn, SCROW nRow ) const
+{
+    commitToColumn(*this, rColumn, nRow);
+}
+
 void ScCellValue::release( ScDocument& rDoc, const ScAddress& rPos )
 {
     switch (meType)
@@ -398,6 +447,13 @@ bool ScCellValue::equalsWithoutFormat( const ScCellValue& r ) const
 }
 
 ScCellValue& ScCellValue::operator= ( const ScCellValue& r )
+{
+    ScCellValue aTmp(r);
+    swap(aTmp);
+    return *this;
+}
+
+ScCellValue& ScCellValue::operator= ( const ScRefCellValue& r )
 {
     ScCellValue aTmp(r);
     swap(aTmp);
@@ -496,26 +552,7 @@ void ScRefCellValue::commit( ScDocument& rDoc, const ScAddress& rPos ) const
 
 void ScRefCellValue::commit( ScColumn& rColumn, SCROW nRow ) const
 {
-    switch (meType)
-    {
-        case CELLTYPE_STRING:
-            rColumn.SetRawString(nRow, *mpString);
-        break;
-        case CELLTYPE_EDIT:
-            rColumn.SetEditText(nRow, ScEditUtil::Clone(*mpEditText, rColumn.GetDoc()));
-        break;
-        case CELLTYPE_VALUE:
-            rColumn.SetValue(nRow, mfValue);
-        break;
-        case CELLTYPE_FORMULA:
-        {
-            ScAddress aDestPos(rColumn.GetCol(), nRow, rColumn.GetTab());
-            rColumn.SetFormulaCell(nRow, new ScFormulaCell(*mpFormula, rColumn.GetDoc(), aDestPos));
-        }
-        break;
-        default:
-            rColumn.Delete(nRow);
-    }
+    commitToColumn(*this, rColumn, nRow);
 }
 
 bool ScRefCellValue::hasString() const

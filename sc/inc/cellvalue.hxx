@@ -17,6 +17,7 @@ class ScDocument;
 class ScFormulaCell;
 class EditTextObject;
 class ScColumn;
+struct ScRefCellValue;
 
 /**
  * Store arbitrary cell value of any kind.  It only stores cell value and
@@ -34,6 +35,7 @@ struct SC_DLLPUBLIC ScCellValue
     };
 
     ScCellValue();
+    ScCellValue( const ScRefCellValue& rCell );
     ScCellValue( double fValue );
     ScCellValue( const OUString& rString );
     ScCellValue( const EditTextObject& rEditText );
@@ -61,6 +63,8 @@ struct SC_DLLPUBLIC ScCellValue
      */
     void commit( ScDocument& rDoc, const ScAddress& rPos ) const;
 
+    void commit( ScColumn& rColumn, SCROW nRow ) const;
+
     /**
      * Set cell value at specified position in specified document. But unlike
      * commit(), this method sets the original value to the document without
@@ -79,6 +83,7 @@ struct SC_DLLPUBLIC ScCellValue
     bool equalsWithoutFormat( const ScCellValue& r ) const;
 
     ScCellValue& operator= ( const ScCellValue& r );
+    ScCellValue& operator= ( const ScRefCellValue& r );
 
     void swap( ScCellValue& r );
 };

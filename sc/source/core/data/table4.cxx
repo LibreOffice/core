@@ -1390,7 +1390,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     for (rOuter = nOStart; rOuter <= nOEnd; rOuter++)
     {
         rInner = nISource;
-        ScRefCellValue aSrcCell = aCol[nCol].GetCellValue(static_cast<SCROW>(nRow));
+
+        // Source cell value. We need to clone the value since it may be inserted repeatedly.
+        ScCellValue aSrcCell = aCol[nCol].GetCellValue(static_cast<SCROW>(nRow));
 
         if (bAttribs)
         {
