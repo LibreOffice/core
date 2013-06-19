@@ -3171,6 +3171,11 @@ if test "$_os" = "WINNT"; then
                     ;;
                 esac
             fi
+
+            # Make AC_COMPILE_IFELSE etc. work (set by AC_PROG_C, which we don't use for MSVC)
+            ac_objext=obj
+            ac_exeext=exe
+
         else
             AC_MSG_ERROR([Visual C++ not found after all, huh])
         fi
