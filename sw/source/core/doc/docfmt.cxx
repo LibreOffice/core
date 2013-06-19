@@ -2475,7 +2475,31 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
         SetRedlineMode_intern( (RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
     }
 
+    xub_StrLen const nEnd(rPam.End()->nContent.GetIndex());
+    std::vector<sal_uInt16> whichIds;
+    SfxItemIter iter(rSet);
+    for (SfxPoolItem const* pItem = iter.FirstItem();
+            pItem; pItem = iter.NextItem())
+    {
+        whichIds.push_back(pItem->Which());
+        whichIds.push_back(pItem->Which());
+    }
+    whichIds.push_back(0);
+    SfxItemSet currentSet(GetAttrPool(), &whichIds[0]);
+    pTNd->GetAttr(currentSet, nEnd, nEnd, false, true, false);
+    for (size_t i = 0; whichIds[i]; i += 2)
+    {   // yuk - want to explicitly set the pool defaults too :-/
+        currentSet.Put(currentSet.Get(whichIds[i], true));
+    }
+
     InsertItemSet( rPam, rSet, nsSetAttrMode::SETATTR_DONTEXPAND );
+
+    // fdo#62536: DONTEXPAND does not work when there is already an AUTOFMT
+    // here, so insert the old attributes as an empty hint to stop expand
+    SwPaM endPam(*pTNd, nEnd);
+    endPam.SetMark();
+    InsertItemSet(endPam, currentSet, nsSetAttrMode::SETATTR_DEFAULT);
+
     SetRedlineMode_intern( eOld );
 }
 
