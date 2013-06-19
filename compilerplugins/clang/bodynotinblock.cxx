@@ -38,50 +38,42 @@ void BodyNotInBlock::run()
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
-bool BodyNotInBlock::VisitFunctionDecl( const FunctionDecl* declaration )
+bool BodyNotInBlock::VisitIfStmt( const IfStmt* stmt )
     {
-    if( ignoreLocation( declaration ))
+    if( ignoreLocation( stmt ))
         return true;
-    if( !declaration->doesThisDeclarationHaveABody())
-        return true;
-    StmtParents parents;
-    traverseStatement( declaration->getBody(), parents );
+    checkBody( stmt->getThen(), stmt->getIfLoc(), 0, stmt->getElse() != NULL );
+    checkBody( stmt->getElse(), stmt->getElseLoc(), 0 );
     return true;
     }
 
-void BodyNotInBlock::traverseStatement( const Stmt* stmt, StmtParents& parents )
+bool BodyNotInBlock::VisitWhileStmt( const WhileStmt* stmt )
     {
-    parents.push_back( stmt );
-    for( ConstStmtIterator it = stmt->child_begin();
-         it != stmt->child_end();
-         ++it )
-        {
-        if( *it != NULL ) // some children can be apparently NULL
-            {
-            traverseStatement( *it, parents ); // substatements first
-            parents.push_back( *it );
-            if( const IfStmt* ifstmt = dyn_cast< IfStmt >( *it ))
-                {
-                checkBody( ifstmt->getThen(), ifstmt->getIfLoc(), parents, 0, ifstmt->getElse() != NULL );
-                checkBody( ifstmt->getElse(), ifstmt->getElseLoc(), parents, 0 );
-                }
-            else if( const WhileStmt* whilestmt = dyn_cast< WhileStmt >( *it ))
-                checkBody( whilestmt->getBody(), whilestmt->getWhileLoc(), parents, 1 );
-            else if( const ForStmt* forstmt = dyn_cast< ForStmt >( *it ))
-                checkBody( forstmt->getBody(), forstmt->getForLoc(), parents, 2 );
-            else if( const CXXForRangeStmt* forstmt = dyn_cast< CXXForRangeStmt >( *it ))
-                checkBody( forstmt->getBody(), forstmt->getForLoc(), parents, 2 );
-            parents.pop_back();
-            }
-        }
-    assert( parents.back() == stmt );
-    parents.pop_back();
+    if( ignoreLocation( stmt ))
+        return true;
+    checkBody( stmt->getBody(), stmt->getWhileLoc(), 1 );
+    return true;
     }
 
-void BodyNotInBlock::checkBody( const Stmt* body, SourceLocation stmtLocation, const StmtParents& parents,
-    int stmtType, bool dontGoUp )
+bool BodyNotInBlock::VisitForStmt( const ForStmt* stmt )
     {
-    if( body == NULL || parents.size() < 2 )
+    if( ignoreLocation( stmt ))
+        return true;
+    checkBody( stmt->getBody(), stmt->getForLoc(), 2 );
+    return true;
+    }
+
+bool BodyNotInBlock::VisitCXXForRangeStmt( const CXXForRangeStmt* stmt )
+    {
+    if( ignoreLocation( stmt ))
+        return true;
+    checkBody( stmt->getBody(), stmt->getForLoc(), 2 );
+    return true;
+    }
+
+void BodyNotInBlock::checkBody( const Stmt* body, SourceLocation stmtLocation, int stmtType, bool dontGoUp )
+    {
+    if( body == NULL )
         return;
     // TODO: If the if/else/while/for comes from a macro expansion, ignore it completely for
     // now. The code below could assume everything is in the same place (and thus also column)
@@ -92,22 +84,24 @@ void BodyNotInBlock::checkBody( const Stmt* body, SourceLocation stmtLocation, c
         return;
     if( dyn_cast< CompoundStmt >( body ))
         return; // if body is a compound statement, then it is in {}
+    const Stmt* previousParent = parentStmt( body ); // Here the statement itself.
     // Find the next statement (in source position) after 'body'.
-    for( int parent_pos = parents.size() - 2; // start from grandparent
-         parent_pos >= 0;
-         --parent_pos )
+    for(;;)
         {
-        for( ConstStmtIterator it = parents[ parent_pos ]->child_begin();
-             it != parents[ parent_pos ]->child_end();
+        const Stmt* parent = parentStmt( previousParent );
+        if( parent == NULL )
+            break;
+        for( ConstStmtIterator it = parent->child_begin();
+             it != parent->child_end();
              )
             {
-            if( *it == parents[ parent_pos + 1 ] ) // found grand(grand...)parent
+            if( *it == previousParent ) // found grand(grand...)parent
                 {
                 // get next statement after our (grand...)parent
                 ++it;
-                while( it != parents[ parent_pos ]->child_end() && *it == NULL )
+                while( it != parent->child_end() && *it == NULL )
                     ++it; // skip empty ones (missing 'else' bodies for example)
-                if( it != parents[ parent_pos ]->child_end())
+                if( it != parent->child_end())
                     {
                     bool invalid1, invalid2;
                     unsigned bodyColumn = compiler.getSourceManager()
@@ -134,13 +128,14 @@ void BodyNotInBlock::checkBody( const Stmt* body, SourceLocation stmtLocation, c
             }
         // If going up would mean leaving a {} block, stop, because the } should
         // make it visible the two statements are not in the same body.
-        if( dyn_cast< CompoundStmt >( parents[ parent_pos ] ))
+        if( dyn_cast< CompoundStmt >( parent ))
             return;
         // If the body to be checked is a body of an if statement that has also
         // an else part, don't go up, the else is after the body and should make
         // it clear the body does not continue there.
         if( dontGoUp )
             return;
+        previousParent = parent;
         }
     }
 

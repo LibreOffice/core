@@ -23,12 +23,13 @@ class BodyNotInBlock
     public:
         explicit BodyNotInBlock( CompilerInstance& compiler );
         virtual void run() override;
-        bool VisitFunctionDecl( const FunctionDecl* declaration );
+        bool VisitIfStmt( const IfStmt* stmt );
+        bool VisitWhileStmt( const WhileStmt* stmt );
+        bool VisitForStmt( const ForStmt* stmt );
+        bool VisitCXXForRangeStmt( const CXXForRangeStmt* stmt );
     private:
         typedef vector< const Stmt* > StmtParents;
-        void traverseStatement( const Stmt* stmt, StmtParents& parents );
-        void checkBody( const Stmt* body, SourceLocation stmtLocation, const StmtParents& parents,
-            int stmtType, bool dontGoUp = false );
+        void checkBody( const Stmt* body, SourceLocation stmtLocation, int stmtType, bool dontGoUp = false );
     };
 
 } // namespace
