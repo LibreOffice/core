@@ -433,10 +433,8 @@ bool CTLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
 
     AquaSalGraphics& rAquaGraphics = static_cast<AquaSalGraphics&>(rGraphics);
 
-#ifdef IOS
     if( !rAquaGraphics.CheckContext() )
         return false;
-#endif
 
     CGContextSaveGState( rAquaGraphics.mrContext );
     CGContextScaleCTM( rAquaGraphics.mrContext, 1.0, -1.0 );
