@@ -766,7 +766,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             short nHeadNoneTail = 0;
             sal_Int32 nStringValue = 0;
             String aValue;
-            ScRefCellValue aSrcCell;
+            ScCellValue aSrcCell;
             CellType eCellType = CELLTYPE_NONE;
             bool bIsOrdinalSuffix = false;
 
@@ -846,21 +846,8 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 }
                             }
                             else
-                            {
-                                ScAddress aDestPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nTab );
-                                switch ( eCellType )
-                                {
-                                    case CELLTYPE_STRING:
-                                        aCol[nCol].SetRawString(aDestPos.Row(), *aSrcCell.mpString);
-                                    case CELLTYPE_EDIT:
-                                        aCol[nCol].SetEditText(aDestPos.Row(), aSrcCell.mpEditText->Clone());
-                                        break;
-                                    default:
-                                        {
-                                            // added to avoid warnings
-                                        }
-                                }
-                            }
+                                aSrcCell.commit(aCol[nCol], nRow);
+
                             break;
                         case CELLTYPE_FORMULA :
                             FillFormula( nFormulaCounter, bFirst, aSrcCell.mpFormula,
