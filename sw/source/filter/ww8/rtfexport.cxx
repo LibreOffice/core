@@ -391,8 +391,21 @@ void RtfExport::WriteStyles()
 void RtfExport::WriteMainText()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
-    pCurPam->GetPoint()->nNode = pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
+
+    SwTableNode* pTableNode = pCurPam->GetNode()->FindTableNode();
+    if ( m_pWriter && m_pWriter->bWriteOnlyFirstTable
+         && pTableNode != 0 )
+    {
+        pCurPam->GetPoint()->nNode = *pTableNode;
+        pCurPam->GetMark()->nNode = *(pTableNode->EndOfSectionNode());
+    }
+    else
+    {
+        pCurPam->GetPoint()->nNode = pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
+    }
+
     WriteText();
+
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " end");
 }
 
