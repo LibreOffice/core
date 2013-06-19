@@ -603,9 +603,9 @@ struct ButtonOrder
     int m_nPriority;
 };
 
-int getButtonPriority(const OString &rType)
+static int getButtonPriority(const OString &rType)
 {
-    const size_t N_TYPES = 3;
+    static const size_t N_TYPES = 3;
     static const ButtonOrder aDiscardCancelSave[N_TYPES] =
     {
         { "/discard", 0 },
