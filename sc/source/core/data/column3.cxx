@@ -573,15 +573,18 @@ public:
 
 class EmptyCells
 {
+    sc::ColumnBlockPosition& mrPos;
     sc::CellStoreType::iterator miPos;
     sc::CellStoreType& mrCells;
+    sc::CellTextAttrStoreType& mrAttrs;
 public:
-    EmptyCells(sc::CellStoreType::iterator itPos, sc::CellStoreType& rCells) :
-        miPos(itPos), mrCells(rCells) {}
+    EmptyCells(sc::ColumnBlockPosition& rPos, sc::CellStoreType& rCells, sc::CellTextAttrStoreType& rAttrs) :
+        mrPos(rPos), mrCells(rCells), mrAttrs(rAttrs) {}
 
     void operator() (const sc::SingleColumnSpanSet::Span& rSpan)
     {
-        miPos = mrCells.set_empty(miPos, rSpan.mnRow1, rSpan.mnRow2);
+        mrPos.miCellPos = mrCells.set_empty(mrPos.miCellPos, rSpan.mnRow1, rSpan.mnRow2);
+        mrPos.miCellTextAttrPos = mrAttrs.set_empty(mrPos.miCellTextAttrPos, rSpan.mnRow1, rSpan.mnRow2);
     }
 };
 
@@ -599,15 +602,24 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag)
 
     if (!IsEmptyData() && nContFlag)
     {
+        // There are cells to delete.  Determine which cells to delete based on the deletion flags.
         DeleteAreaHandler aFunc(*pDocument, nDelFlag);
         sc::CellStoreType::iterator itPos = maCells.position(nStartRow).first;
         sc::ProcessBlock(itPos, maCells, aFunc, nStartRow, nEndRow);
         aFunc.endFormulas(); // Have the formula cells stop listening.
         aFunc.getSpans().getRows(aDeletedRows);
 
+        // Get the deletion spans.
         sc::SingleColumnSpanSet::SpansType aSpans;
         aFunc.getSpans().getSpans(aSpans);
-        std::for_each(aSpans.begin(), aSpans.end(), EmptyCells(itPos, maCells));
+
+        sc::ColumnBlockPosition aBlockPos;
+        aBlockPos.miCellPos = itPos;
+        aBlockPos.miCellTextAttrPos = maCellTextAttrs.begin();
+
+        // Delete the cells for real.
+        std::for_each(aSpans.begin(), aSpans.end(), EmptyCells(aBlockPos, maCells, maCellTextAttrs));
+        CellStorageModified();
     }
 
     if ( nDelFlag & IDF_EDITATTR )
