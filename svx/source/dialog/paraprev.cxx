@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sfx2/dialoghelper.hxx>
 #include <svx/paraprev.hxx>
 #include <vcl/builder.hxx>
 
@@ -75,7 +76,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxParaPrevWindow(Window *p
 
 Size SvxParaPrevWindow::GetOptimalSize() const
 {
-    return LogicToPixel(Size(68 , 112), MAP_APPFONT);
+    return getParagraphPreviewOptimalSize(this);
 }
 
 // -----------------------------------------------------------------------

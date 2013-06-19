@@ -19,6 +19,7 @@
 
 #include <svl/style.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/dialoghelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/module.hxx>
 #include <vcl/mnemonic.hxx>
@@ -633,34 +634,6 @@ int SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
         FillItemSet( *_pSet );
     return LEAVE_PAGE;
 }
-
-namespace
-{
-    //these tab pages both have the same basic layout with a preview on the
-    //right, get both of their non-preview areas to request the same size
-    //so that the preview appears in the same place in each one so
-    //flipping between tabs isn't distracting as it jumps around
-    void setPreviewsToSamePlace(Window *pParent, VclBuilderContainer *pPage)
-    {
-        for (Window* pChild = pParent->GetWindow(WINDOW_FIRSTCHILD); pChild;
-            pChild = pChild->GetWindow(WINDOW_NEXT))
-        {
-            VclBuilderContainer *pPeer = dynamic_cast<VclBuilderContainer*>(pChild);
-            if (pPeer != pPage && pPeer->hasBuilder())
-            {
-                Window *pOtherGrid = pPeer->get<Window>("maingrid");
-                Window *pOurGrid = pPage->get<Window>("maingrid");
-                if (pOtherGrid && pOurGrid)
-                {
-                    boost::shared_ptr< VclSizeGroup > xGroup(new VclSizeGroup);
-                    pOtherGrid->add_to_size_group(xGroup);
-                    pOurGrid->add_to_size_group(xGroup);
-                }
-            }
-        }
-    }
-}
-
 
 // -----------------------------------------------------------------------
 

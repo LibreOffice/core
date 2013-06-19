@@ -29,6 +29,7 @@
 
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>
+#include <sfx2/dialoghelper.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/svxfont.hxx>
@@ -143,7 +144,7 @@ void SwDropCapsPict::SetText( const OUString& rT )
 
 Size SwDropCapsPict::GetOptimalSize() const
 {
-    return LogicToPixel(Size(105 , 80), MAP_APPFONT);
+    return getParagraphPreviewOptimalSize(this);
 }
 
 void SwDropCapsPict::Resize()
@@ -574,6 +575,8 @@ SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet)
     m_pDropCapsBox->SetClickHdl (LINK(this, SwDropCapsPage, ClickHdl ));
     m_pTemplateBox->SetSelectHdl(LINK(this, SwDropCapsPage, SelectHdl));
     m_pWholeWordCB->SetClickHdl (LINK(this, SwDropCapsPage, WholeWordHdl ));
+
+    setPreviewsToSamePlace(pParent, this);
 }
 
 SwDropCapsPage::~SwDropCapsPage()

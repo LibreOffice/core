@@ -2,6 +2,28 @@
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
+  <object class="GtkAdjustment" id="adjustmentED_DIST">
+    <property name="upper">9999</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentED_LINEDISTMETRIC">
+    <property name="upper">9999</property>
+    <property name="step_increment">10</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentLINEDISTPERCENT">
+    <property name="lower">50</property>
+    <property name="upper">200</property>
+    <property name="value">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentspinED_INDENT">
+    <property name="upper">9999</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkGrid" id="ParaIndentSpacing">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -14,9 +36,9 @@
       <object class="GtkAlignment" id="alignment5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_top">24</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
+        <property name="top_padding">24</property>
         <child>
           <object class="svxlo-SvxParaPrevWindow" id="drawingareaWN_EXAMPLE">
             <property name="visible">True</property>
@@ -503,28 +525,6 @@
         <property name="height">1</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkAdjustment" id="adjustmentED_DIST">
-    <property name="upper">9999</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustmentED_LINEDISTMETRIC">
-    <property name="upper">9999</property>
-    <property name="step_increment">10</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustmentLINEDISTPERCENT">
-    <property name="lower">50</property>
-    <property name="upper">200</property>
-    <property name="value">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjustmentspinED_INDENT">
-    <property name="upper">9999</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
   <object class="GtkListStore" id="liststoreLB_LINEDIST">
     <columns>

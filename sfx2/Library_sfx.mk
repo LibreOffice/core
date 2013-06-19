@@ -150,6 +150,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/alienwarn \
     sfx2/source/dialog/basedlgs \
     sfx2/source/dialog/checkin \
+    sfx2/source/dialog/dialoghelper \
     sfx2/source/dialog/dinfdlg \
     sfx2/source/dialog/dinfedt \
     sfx2/source/dialog/dockwin \
