@@ -51,17 +51,6 @@
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 
-#if OSL_DEBUG_LEVEL > 1
-char dbgbuffer[1024];
-#ifndef WNT
-#include <stdio.h>
-#define MyOutputDebugString(s) (fprintf(stderr, s ))
-#else
-extern void MyOutputDebugString( char *s);
-#endif
-#endif
-
-
 // =======================================================================
 
 #define IMPL_MIN_NEEDSYSWIN         49
