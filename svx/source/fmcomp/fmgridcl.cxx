@@ -1908,7 +1908,14 @@ namespace
                 Reference<XPropertySet> xProp;
                 xIndex->getByIndex( _nPosition ) >>= xProp;
                 if ( xProp.is() )
-                    xProp->getPropertyValue( _sPropName ) >>= sRetText;
+                {
+                    try {
+                        xProp->getPropertyValue( _sPropName ) >>= sRetText;
+                    } catch (UnknownPropertyException const& e) {
+                        SAL_WARN("svx.form",
+                                "exception caught: " << e.Message);
+                    }
+                }
             }
         }
         return sRetText;
