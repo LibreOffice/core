@@ -80,27 +80,30 @@ struct __cxa_eh_globals
 // Therefore, provide a declaration here for old GCC (libstdc++, really) version
 // that returns a void pointer, and in the code calling it always cast to the
 // above fake definition of CPPU_CURRENT_NAMESPACE::__cxa_eh_globals (which
-// hopefully keeps matching the real definition in libstdc++):
+// hopefully keeps matching the real definition in libstdc++); similarly for
+// __cxa_allocate_exception and __cxa_throw, though they do not have the
+// additional problem of an incompletely declared return type:
+
 #if !HAVE_GCC_CXXABI_H_CXA_GET_GLOBALS
-namespace __cxxabiv1 { extern "C" void * __cxa_get_globals () throw(); }
+namespace __cxxabiv1 { extern "C" void * __cxa_get_globals() throw(); }
+#endif
+
+#if !HAVE_GCC_CXXABI_H_CXA_ALLOCATE_EXCEPTION
+namespace __cxxabiv1 {
+extern "C" void * __cxa_allocate_exception(std::size_t thrown_size) throw();
+}
+#endif
+
+#if !HAVE_GCC_CXXABI_H_CXA_THROW
+namespace __cxxabiv1 {
+extern "C" void __cxa_throw(
+    void * thrown_exception, void * tinfo, void (* dest)(void *))
+    __attribute__((noreturn));
+}
 #endif
 
 namespace CPPU_CURRENT_NAMESPACE
 {
-
-// The following are in cxxabi.h since GCC 4.7 (they are wrapped in
-// CPPU_CURRENT_NAMESPACE here as different GCC versions have slightly different
-// declarations for them, e.g., with or without throw() specification, so would
-// complain about redeclarations of these somewhat implicitly declared
-// functions):
-#if __GNUC__ == 4 && __GNUC_MINOR__ <= 6
-extern "C" void *__cxa_allocate_exception(
-    std::size_t thrown_size ) throw();
-extern "C" void __cxa_throw (
-    void *thrown_exception, void *tinfo, void (*dest) (void *) ) __attribute__((noreturn));
-#endif
-
-// -----
 
 //==================================================================================================
 void raiseException(

@@ -5572,6 +5572,17 @@ if test "$GCC" = "yes"; then
         ], [AC_MSG_RESULT([no])])
     CFLAGS=$save_CFLAGS
 
+    AC_MSG_CHECKING([whether $CXX declares __cxa_allocate_exception in cxxabi.h])
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            #include <cxxabi.h>
+            void * f() { return __cxxabiv1::__cxa_allocate_exception(0); }
+        ])], [
+            AC_DEFINE([HAVE_GCC_CXXABI_H_CXA_ALLOCATE_EXCEPTION],[1])
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    AC_LANG_POP([C++])
+
     AC_MSG_CHECKING([whether $CXX declares __cxa_get_globals in cxxabi.h])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([
@@ -5579,6 +5590,17 @@ if test "$GCC" = "yes"; then
             void * f() { return __cxxabiv1::__cxa_get_globals(); }
         ])], [
             AC_DEFINE([HAVE_GCC_CXXABI_H_CXA_GET_GLOBALS],[1])
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    AC_LANG_POP([C++])
+
+    AC_MSG_CHECKING([whether $CXX declares __cxa_throw in cxxabi.h])
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            #include <cxxabi.h>
+            void f() { __cxxabiv1::__cxa_throw(0, 0, 0); }
+        ])], [
+            AC_DEFINE([HAVE_GCC_CXXABI_H_CXA_THROW],[1])
             AC_MSG_RESULT([yes])
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
