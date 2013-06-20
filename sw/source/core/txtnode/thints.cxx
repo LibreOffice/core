@@ -75,7 +75,6 @@
 #define CHECK           Check(true);
 #define CHECK_NOTMERGED Check(false);
 #else
-#define CHECK
 #define CHECK_NOTMERGED
 #endif
 
