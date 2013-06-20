@@ -92,6 +92,7 @@
 #include "formulacell.hxx"
 #include "clipcontext.hxx"
 #include "listenercontext.hxx"
+#include "scopetools.hxx"
 
 #include <map>
 #include <limits>
@@ -1921,13 +1922,13 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
                             sal_uInt16 nFlags, bool bOnlyMarked, ScDocument* pDestDoc,
                             const ScMarkData* pMarks)
 {
+    sc::AutoCalcSwitch aAutoCalcSwitch(*this, false);
+
     ScRange aNewRange = rRange;
     aNewRange.Justify();
     SCTAB nTab1 = aNewRange.aStart.Tab();
     SCTAB nTab2 = aNewRange.aEnd.Tab();
 
-    bool bOldAutoCalc = pDestDoc->GetAutoCalc();
-    pDestDoc->SetAutoCalc( false );     // avoid multiple calculations
     sc::CopyToDocContext aCxt(*pDestDoc);
     if (nTab1 > 0)
         CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, IDF_FORMULA, false, pDestDoc, pMarks );
@@ -1943,7 +1944,6 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
 
     if (nTab2 < static_cast<SCTAB>(maTabs.size()))
         CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,maTabs.size(), IDF_FORMULA, false, pDestDoc, pMarks );
-    pDestDoc->SetAutoCalc( bOldAutoCalc );
 }
 
 // bUseRangeForVBA added for VBA api support to allow content of a specified

@@ -388,7 +388,6 @@ void ScColumn::CopyCellsInRangeToColumn(
                 ;
         }
 
-
         if (bLastBlock)
             break;
     }

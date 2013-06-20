@@ -5914,14 +5914,12 @@ void Test::testCopyPaste()
     m_pDoc->SetRangeName(pGlobalRangeName);
     m_pDoc->SetRangeName(0, pLocalRangeName1);
 
-    //add formula
+    // Add formula to B1.
     OUString aFormulaString("=local1+global+SUM($C$1:$D$4)");
     m_pDoc->SetString(1, 0, 0, aFormulaString);
 
-    double aValue = 0;
-    m_pDoc->GetValue(1, 0, 0, aValue);
-    std::cout << "Value: " << aValue << std::endl;
-    ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 8", aValue, 8);
+    double fValue = m_pDoc->GetValue(ScAddress(1,0,0));
+    ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 8", fValue, 8);
 
     //copy Sheet1.A1:C1 to Sheet2.A2:C2
     ScRange aRange(0,0,0,2,0,0);
@@ -5939,17 +5937,17 @@ void Test::testCopyPaste()
     aMarkData2.SetMarkArea(aRange);
     ScRefUndoData* pRefUndoData= new ScRefUndoData(m_pDoc);
     ScUndoPaste aUndo(
-        &m_xDocShRef, ScRange(0, 1, 1, 2, 1, 1), aMarkData2, pUndoDoc, NULL, IDF_ALL, pRefUndoData, false);
+        &m_xDocShRef, aRange, aMarkData2, pUndoDoc, NULL, IDF_ALL, pRefUndoData, false);
     m_pDoc->CopyFromClip(aRange, aMarkData2, nFlags, NULL, &aClipDoc);
 
     //check values after copying
     OUString aString;
-    m_pDoc->GetValue(1,1,1, aValue);
+    fValue = m_pDoc->GetValue(ScAddress(1,1,1));
     m_pDoc->GetFormula(1,1,1, aString);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("copied formula should return 2", aValue, 2);
+    ASSERT_DOUBLES_EQUAL_MESSAGE("copied formula should return 2", fValue, 2);
     CPPUNIT_ASSERT_MESSAGE("formula string was not copied correctly", aString == aFormulaString);
-    m_pDoc->GetValue(0,1,1, aValue);
-    CPPUNIT_ASSERT_MESSAGE("copied value should be 1", aValue == 1);
+    fValue = m_pDoc->GetValue(ScAddress(0,1,1));
+    CPPUNIT_ASSERT_MESSAGE("copied value should be 1", fValue == 1);
 
     //chack local range name after copying
     pLocal1 = m_pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL1"));
@@ -5963,14 +5961,14 @@ void Test::testCopyPaste()
 
     //check undo and redo
     aUndo.Undo();
-    m_pDoc->GetValue(1,1,1, aValue);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("after undo formula should return nothing", aValue, 0);
+    fValue = m_pDoc->GetValue(ScAddress(1,1,1));
+    ASSERT_DOUBLES_EQUAL_MESSAGE("after undo formula should return nothing", fValue, 0);
     aString = m_pDoc->GetString(2, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("after undo string should be removed", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
 
     aUndo.Redo();
-    m_pDoc->GetValue(1,1,1, aValue);
-    ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 2 after redo", aValue, 2);
+    fValue = m_pDoc->GetValue(ScAddress(1,1,1));
+    ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 2 after redo", fValue, 2);
     aString = m_pDoc->GetString(2, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("Cell Sheet2.C2 should contain: test", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test")));
     m_pDoc->GetFormula(1,1,1, aString);

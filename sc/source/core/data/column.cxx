@@ -1587,8 +1587,9 @@ class CopyByCloneHandler : public sc::CellBlockCloneHandler
         if (bForceFormula || bCloneFormula)
         {
             // Clone as formula cell.
-            rPos.miCellPos = getDestCellStore().set(
-                rPos.miCellPos, rDestPos.Row(), new ScFormulaCell(rSrcCell, getDestDoc(), rDestPos));
+            ScFormulaCell* pCell = new ScFormulaCell(rSrcCell, getDestDoc(), rDestPos);
+            pCell->SetDirtyVar();
+            rPos.miCellPos = getDestCellStore().set(rPos.miCellPos, rDestPos.Row(), pCell);
             setDefaultAttrToDest(rPos, rDestPos.Row());
 
             return;
@@ -1772,7 +1773,6 @@ void ScColumn::CopyToColumn(
         else
             pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray);
     }
-
 
     if ((nFlags & IDF_CONTENTS) != 0)
     {
