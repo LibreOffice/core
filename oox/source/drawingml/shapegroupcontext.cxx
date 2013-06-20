@@ -86,7 +86,11 @@ Reference< XFastContextHandler > ShapeGroupContext::createFastChildContext( sal_
         break;
 */
     case XML_cxnSp:         // connector shape
-        xRet.set( new ConnectorShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.ConnectorShape" ) ) ) );
+        {
+            ShapePtr pShape(new Shape("com.sun.star.drawing.ConnectorShape"));
+            pShape->setLockedCanvas(mpGroupShapePtr->getLockedCanvas());
+            xRet.set( new ConnectorShapeContext( *this, mpGroupShapePtr, pShape ) );
+        }
         break;
     case XML_grpSp:         // group shape
         xRet.set( new ShapeGroupContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GroupShape" ) ) ) );

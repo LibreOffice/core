@@ -44,6 +44,7 @@ uno::Reference< xml::sax::XFastContextHandler > LockedCanvasContext::createFastC
         {
             oox::drawingml::ShapePtr pMasterShape;
             mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape"));
+            mpShape->setLockedCanvas(true);
             xRet = new oox::drawingml::ShapeContext( *this, pMasterShape, mpShape );
         }
         break;
@@ -51,6 +52,7 @@ uno::Reference< xml::sax::XFastContextHandler > LockedCanvasContext::createFastC
         {
             oox::drawingml::ShapePtr pMasterShape;
             mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape"));
+            mpShape->setLockedCanvas(true);
             xRet = new oox::drawingml::ShapeGroupContext( *this, pMasterShape, mpShape );
         }
         break;
