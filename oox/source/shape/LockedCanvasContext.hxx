@@ -10,19 +10,19 @@
 #ifndef OOX_SHAPE_LOCKEDCANVASCONTEXT
 #define OOX_SHAPE_LOCKEDCANVASCONTEXT
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 #include "oox/drawingml/shape.hxx"
 
 namespace oox { namespace shape {
 
 /// Locked canvas is kind of a container for drawingml shapes: it can even contain group shapes.
-class LockedCanvasContext : public oox::core::ContextHandler
+class LockedCanvasContext : public oox::core::ContextHandler2
 {
 public:
-    LockedCanvasContext( oox::core::ContextHandler& rParent );
+    LockedCanvasContext( oox::core::ContextHandler2Helper& rParent );
     virtual ~LockedCanvasContext();
 
-    virtual com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 Element, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
     oox::drawingml::ShapePtr getShape();
 

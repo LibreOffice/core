@@ -111,6 +111,8 @@ public:
     virtual void        finalizeImport();
 };
 
+typedef ::rtl::Reference< FragmentHandler2 > FragmentHandler2Ref;
+
 // ============================================================================
 
 } // namespace core
