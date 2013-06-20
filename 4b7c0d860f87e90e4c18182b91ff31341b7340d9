@@ -16,6 +16,24 @@
       "revId": "4b7c0d860f87e90e4c18182b91ff31341b7340d9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH//69o\u003d",
+        "filename": "helpcompiler/source/HelpCompiler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2013-06-20T10:12:46Z",
+      "side": 1,
+      "message": "In helpcompiler it was assumed that $GUI was MAC on MACOSX. It this wasn\u0027t so, then the patch fixes a hidden bug.",
+      "parentUuid": "AAAAXH//7O8\u003d",
+      "revId": "4b7c0d860f87e90e4c18182b91ff31341b7340d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
