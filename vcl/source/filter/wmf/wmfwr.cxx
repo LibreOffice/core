@@ -359,7 +359,7 @@ void WMFWriter::WMFRecord_CreatePenIndirect(const Color& rColor, const LineInfo&
                     nStyle = W_PS_DOT;
                 else
                 {
-                    if ( !rLineInfo.GetDotCount() == 1 )
+                    if ( rLineInfo.GetDotCount() == 1 )
                         nStyle = W_PS_DASHDOT;
                     else
                         nStyle = W_PS_DASHDOTDOT;
