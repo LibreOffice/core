@@ -144,7 +144,7 @@ static sal_Bool releaseProfile(osl_TProfileImpl* pProfile);
 static sal_Bool writeProfileImpl (osl_TFile* pFile);
 static osl_TFile* osl_openTmpProfileImpl(osl_TProfileImpl*);
 static sal_Bool osl_ProfileSwapProfileNames(osl_TProfileImpl*);
-static void osl_ProfileGenerateExtension(sal_Char* pszFileName, sal_Char* pszExtension, sal_Char* pszTmpName);
+static void osl_ProfileGenerateExtension(const sal_Char* pszFileName, const sal_Char* pszExtension, sal_Char* pszTmpName, int BufferMaxLen);
 static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfileOption Flags);
 
 /* implemented in file.c */
@@ -2008,7 +2008,7 @@ static osl_TFile* osl_openTmpProfileImpl(osl_TProfileImpl* pProfile)
     pszTmpName[0] = '\0';
 
     /* generate tmp profilename */
-    osl_ProfileGenerateExtension(pProfile->m_FileName,pszExtension,pszTmpName);
+    osl_ProfileGenerateExtension(pProfile->m_FileName, pszExtension, pszTmpName, PATH_MAX);
 
     if ( pszTmpName[0] == 0 )
     {
@@ -2030,41 +2030,75 @@ static osl_TFile* osl_openTmpProfileImpl(osl_TProfileImpl* pProfile)
 
 static sal_Bool osl_ProfileSwapProfileNames(osl_TProfileImpl* pProfile)
 {
-      sal_Bool bRet = sal_False;
+    sal_Bool bRet = sal_False;
 
-      sal_Char pszBakFile[PATH_MAX];
-      sal_Char pszTmpFile[PATH_MAX];
-      sal_Char pszIniFile[PATH_MAX];
+    sal_Char pszBakFile[PATH_MAX];
+    sal_Char pszTmpFile[PATH_MAX];
+    sal_Char pszIniFile[PATH_MAX];
 
     pszBakFile[0] = '\0';
     pszTmpFile[0] = '\0';
     pszIniFile[0] = '\0';
 
-      osl_ProfileGenerateExtension(pProfile->m_FileName,"bak",pszBakFile);
+    osl_ProfileGenerateExtension(pProfile->m_FileName, "bak", pszBakFile, PATH_MAX);
 
     strcpy(pszIniFile,pProfile->m_FileName);
 
-    osl_ProfileGenerateExtension(pProfile->m_FileName,"tmp",pszTmpFile);
+    osl_ProfileGenerateExtension(pProfile->m_FileName, "tmp", pszTmpFile, PATH_MAX);
 
-      /* unlink bak */
-      unlink( pszBakFile );
+    /* unlink bak */
+    unlink( pszBakFile );
 
-      /* rename ini bak */
-      rename( pszIniFile, pszBakFile );
+    /* rename ini bak */
+    rename( pszIniFile, pszBakFile );
 
-      /* rename tmp ini */
-      rename( pszTmpFile, pszIniFile );
+    /* rename tmp ini */
+    rename( pszTmpFile, pszIniFile );
 
     return bRet;
 }
 
 
-static void osl_ProfileGenerateExtension(sal_Char* pszFileName, sal_Char* pszExtension, sal_Char* pszTmpName)
+static void osl_ProfileGenerateExtension(const sal_Char* pszFileName, const sal_Char* pszExtension, sal_Char* pszTmpName, int BufferMaxLen)
 {
+    sal_Char* cursor = pszTmpName;
+    int len;
 
-    strcpy(pszTmpName,pszFileName);
-    strcat(pszTmpName,".");
-    strcat(pszTmpName,pszExtension);
+    /* concatenate filename + "." + extension, limited to the size of the
+     * output buffer; in case of overrun, data is truncated at the end...
+     * and the result is always 0-terminated.
+     */
+    len = strlen(pszFileName);
+    if(len < BufferMaxLen)
+    {
+        memcpy(cursor, pszFileName, len);
+        cursor += len;
+        BufferMaxLen -= len;
+    }
+    else
+    {
+        memcpy(cursor, pszFileName, BufferMaxLen - 1);
+        cursor += BufferMaxLen - 1;
+        BufferMaxLen = 1;
+    }
+    if(BufferMaxLen > 1)
+    {
+        *cursor++ = '.';
+        BufferMaxLen -= 1;
+    }
+    len = strlen(pszExtension);
+    if(len < BufferMaxLen)
+    {
+        memcpy(cursor, pszExtension, len);
+        cursor += len;
+    }
+    else
+    {
+        memcpy(cursor, pszExtension, BufferMaxLen - 1);
+        cursor += BufferMaxLen - 1;
+        BufferMaxLen = 1;
+    }
+    *cursor = 0;
 
     return;
 }
