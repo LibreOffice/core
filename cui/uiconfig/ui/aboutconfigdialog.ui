@@ -85,22 +85,27 @@
           <object class="GtkFrame" id="frame1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="vexpand">True</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">none</property>
             <child>
               <object class="GtkAlignment" id="alignment1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkBox" id="box1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkGrid" id="grid1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="row_spacing">6</property>
+                        <property name="column_spacing">6</property>
                         <property name="column_homogeneous">True</property>
                         <child>
                           <object class="GtkLabel" id="preference">
@@ -185,7 +190,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">frame1</property>
+                <property name="label" translatable="yes">Preferences</property>
                 <attributes>
                   <attribute name="weight" value="semibold"/>
                 </attributes>
