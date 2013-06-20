@@ -358,8 +358,11 @@ Sequence< OUString > lcl_getExplicitSimpleCategories(
             sal_Int32 nCurrentCount = lcl_getCategoryCount( *aOuterIt );
             if( nCurrentCount< nMaxCategoryCount )
             {
-                ComplexCategory& rComplexCategory = aOuterIt->back();
-                rComplexCategory.Count += (nMaxCategoryCount-nCurrentCount);
+                if(!aOuterIt->empty()) // #121277# Caution, aOuterIt may be empty (!)
+                {
+                    ComplexCategory& rComplexCategory = aOuterIt->back();
+                    rComplexCategory.Count += (nMaxCategoryCount-nCurrentCount);
+                }
             }
         }
     }
@@ -391,12 +394,17 @@ Sequence< OUString > lcl_getExplicitSimpleCategories(
             OUString aText;
             for( aOuterIt=aComplexCatsPerIndex.begin() ; aOuterIt != aOuterEnd; ++aOuterIt )
             {
-                OUString aAddText = (*aOuterIt)[nN].Text;
-                if( aAddText.getLength() )
+                OUString aAddText;
+
+                if(!aOuterIt->empty()) // #121277# Caution, aOuterIt may be empty (!)
                 {
-                    if(aText.getLength())
-                        aText += aSpace;
-                    aText += aAddText;
+                    aAddText = (*aOuterIt)[nN].Text;
+                    if( aAddText.getLength() )
+                    {
+                        if(aText.getLength())
+                            aText += aSpace;
+                        aText += aAddText;
+                    }
                 }
             }
             aRet[nN]=aText;
