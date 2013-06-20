@@ -28,6 +28,8 @@
 
 #include <boost/intrusive_ptr.hpp>
 
+#define DEBUG_MATRIX 1
+
 class ScInterpreter;
 class SvNumberFormatter;
 class ScMatrixImpl;
@@ -349,6 +351,10 @@ public:
 
     // All other matrix functions  MatMult, MInv, ...  are in ScInterpreter
     // to be numerically safe.
+
+#if DEBUG_MATRIX
+    void Dump() const;
+#endif
 };
 
 inline void intrusive_ptr_add_ref(const ScMatrix* p)

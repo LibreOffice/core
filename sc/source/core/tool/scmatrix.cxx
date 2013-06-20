@@ -37,6 +37,12 @@
 #include <mdds/multi_type_vector_types.hpp>
 #include <mdds/multi_type_vector_trait.hpp>
 
+#if DEBUG_MATRIX
+#include <iostream>
+using std::cout;
+using std::endl;
+#endif
+
 using ::std::pair;
 using ::std::for_each;
 using ::std::count_if;
@@ -215,6 +221,10 @@ public:
     ScMatrix::IterateResult SumSquare(bool bTextAsZero) const;
     ScMatrix::IterateResult Product(bool bTextAsZero) const;
     size_t Count(bool bCountStrings) const;
+
+#if DEBUG_MATRIX
+    void Dump() const;
+#endif
 
 private:
     void CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const;
@@ -957,6 +967,41 @@ size_t ScMatrixImpl::Count(bool bCountStrings) const
     return aFunc.getCount();
 }
 
+#if DEBUG_MATRIX
+void ScMatrixImpl::Dump() const
+{
+    cout << "-- matrix content" << endl;
+    SCSIZE nCols, nRows;
+    GetDimensions(nCols, nRows);
+    for (SCSIZE nRow = 0; nRow < nRows; ++nRow)
+    {
+        for (SCSIZE nCol = 0; nCol < nCols; ++nCol)
+        {
+            cout << "  row=" << nRow << ", col=" << nCol << " : ";
+            switch (maMat.get_type(nRow, nCol))
+            {
+                case mdds::mtm::element_string:
+                    cout << "string (" << maMat.get_string(nRow, nCol) << ")";
+                break;
+                case mdds::mtm::element_numeric:
+                    cout << "numeric (" << maMat.get_numeric(nRow, nCol) << ")";
+                break;
+                case mdds::mtm::element_boolean:
+                    cout << "boolean (" << maMat.get_boolean(nRow, nCol) << ")";
+                break;
+                case mdds::mtm::element_empty:
+                    cout << "empty";
+                break;
+                default:
+                    ;
+            }
+
+            cout << endl;
+        }
+    }
+}
+#endif
+
 void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
 {
     SCSIZE nRowSize = maMat.size().row;
@@ -1263,5 +1308,12 @@ size_t ScMatrix::Count(bool bCountStrings) const
 {
     return pImpl->Count(bCountStrings);
 }
+
+#if DEBUG_MATRIX
+void ScMatrix::Dump() const
+{
+    pImpl->Dump();
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
