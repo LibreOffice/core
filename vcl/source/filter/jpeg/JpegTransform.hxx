@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _JPEG_TRANSFROM_HXX
+#ifndef _JPEG_TRANSFORM_HXX
 #define _JPEG_TRANSFORM_HXX
 
 #include <tools/solar.h>
