@@ -57,6 +57,8 @@ struct SfxObjectBar_Impl
     SfxObjectBar_Impl() :
         nId(0),
         nMode(0),
+        nPos(0),
+        nIndex(0),
         bDestroy(sal_False),
         pIFace(0)
     {}
