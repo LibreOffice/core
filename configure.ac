@@ -4909,28 +4909,13 @@ AC_MSG_NOTICE([checking msms ===================================================
 
 find_msvc_x64_dlls()
 {
-    if test "$CPUNAME" = "INTEL"; then
-        vsarch=x86
-    else
-        vsarch=x64
-    fi
-
     msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
-    MSVC_DEBUG_DLL_PATH="$VC_PRODUCT_DIR/redist/Debug_NonRedist/$vsarch/Microsoft.VC${VCVER}.DebugCRT"
     msvcdlls="msvcp${VCVER}.dll msvcr${VCVER}.dll"
-    MSVC_DEBUG_DLLS="msvcp${VCVER}d.dll msvcr${VCVER}d.dll"
     for dll in $msvcdlls; do
         if ! test -f "$msvcdllpath/$dll"; then
             AC_MSG_ERROR([can not find $dll in $msvcdllpath])
         fi
     done
-    if test -n "$MSVC_USE_DEBUG_RUNTIME"; then
-        for dll in $MSVC_DEBUG_DLLS; do
-            if ! test -f "$MSVC_DEBUG_DLL_PATH/$dll"; then
-                AC_MSG_ERROR([can not find $dll in $MSVC_DEBUG_DLL_PATH])
-            fi
-        done
-    fi
 }
 
 if test "$build_os" = "cygwin"; then
@@ -6243,8 +6228,6 @@ fi
 
 AC_SUBST(MSVC_DLL_PATH)
 AC_SUBST(MSVC_DLLS)
-AC_SUBST(MSVC_DEBUG_DLL_PATH)
-AC_SUBST(MSVC_DEBUG_DLLS)
 AC_SUBST(MSM_PATH)
 AC_SUBST(MERGE_MODULES)
 
