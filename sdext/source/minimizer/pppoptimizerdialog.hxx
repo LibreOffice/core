@@ -18,7 +18,7 @@
  */
 
 #ifndef PPPOPTIMIZERDIALOG_HXX
-#define PPPOPTIMIZERDIALOGOG_HXX
+#define PPPOPTIMIZERDIALOG_HXX
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/document/XExporter.hpp>
