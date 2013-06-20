@@ -26,7 +26,6 @@ $(eval $(call gb_Module_add_targets,external,\
 	Package_dbghelp \
 	$(if $(MSM_PATH),Package_msms) \
 	Package_msvc_dlls \
-	$(if $(MSVC_USE_DEBUG_RUNTIME),Package_msvc_dlls_debug) \
 	$(if $(filter YES,$(WITH_MOZAB4WIN)),Package_msvc80_dlls) \
 ))
 endif
