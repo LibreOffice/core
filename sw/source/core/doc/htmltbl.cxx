@@ -1212,7 +1212,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
         sal_uLong nRealMin = 0;
         for( sal_uInt16 i=0; i<nCols; i++ )
         {
-            sal_uLong nRealColMin = MINLAY, nDummy1, nDummy2;
+            sal_uLong nRealColMin = MINLAY, nDummy1 = 0, nDummy2 = 0;
             AddBorderWidth( nRealColMin, nDummy1, nDummy2, i, 1 );
             nRealMin += nRealColMin;
         }
@@ -1261,7 +1261,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAv
             {
                 pColumn = GetColumn( i );
                 sal_uLong nColMin = pColumn->GetMin();
-                sal_uLong nRealColMin = MINLAY, nDummy1, nDummy2;
+                sal_uLong nRealColMin = MINLAY, nDummy1 = 0, nDummy2 = 0;
                 AddBorderWidth( nRealColMin, nDummy1, nDummy2, i, 1 );
 
                 if( nColMin <= USHRT_MAX )
