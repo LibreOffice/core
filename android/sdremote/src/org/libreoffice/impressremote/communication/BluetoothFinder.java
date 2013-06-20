@@ -10,9 +10,7 @@ package org.libreoffice.impressremote.communication;
 
 import java.util.Collection;
 import java.util.HashMap;
-
-import org.libreoffice.impressremote.Globals;
-import org.libreoffice.impressremote.communication.Server.Protocol;
+import java.util.Map;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -22,93 +20,126 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
-public class BluetoothFinder {
+import org.libreoffice.impressremote.communication.Server.Protocol;
 
+public class BluetoothFinder extends BroadcastReceiver {
     // TODO: add removal of cached items
-    private Context mContext;
+    private final Context mContext;
 
-    BluetoothAdapter mAdapter;
+    private final Map<String, Server> mServers;
 
     public BluetoothFinder(Context aContext) {
         mContext = aContext;
-        mAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        mServers = new HashMap<String, Server>();
     }
 
-    public void startFinding() {
-        Log.i(Globals.TAG, "BluetoothFinder.startFinding(): mAdapter=" + mAdapter);
-        if (mAdapter == null) {
-            return; // No bluetooth adapter found (emulator, special devices)
+    public void startSearch() {
+        if (!isBluetoothAvailable()) {
+            return;
         }
-        IntentFilter aFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        aFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        aFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
-        mContext.registerReceiver(mReceiver, aFilter);
-        mAdapter.startDiscovery();
+
+        BluetoothAdapter.getDefaultAdapter().startDiscovery();
+
+        registerSearchResultsReceiver();
     }
 
-    public void stopFinding() {
-        Log.i(Globals.TAG, "BluetoothFinder.stopFinding(): mAdapter=" + mAdapter);
-        if (mAdapter == null) {
-            return; // No bluetooth adapter found (emulator, special devices)
+    private boolean isBluetoothAvailable() {
+        return BluetoothAdapter.getDefaultAdapter() != null;
+    }
+
+    private void registerSearchResultsReceiver() {
+        IntentFilter aIntentFilter = new IntentFilter(
+            BluetoothDevice.ACTION_FOUND);
+        aIntentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        aIntentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+
+        mContext.registerReceiver(this, aIntentFilter);
+    }
+
+    public void stopSearch() {
+        if (!isBluetoothAvailable()) {
+            return;
         }
-        mAdapter.cancelDiscovery();
-        try {
-            mContext.unregisterReceiver(mReceiver);
-        } catch (IllegalArgumentException e) {
-            // The receiver wasn't registered
-            Log.i(Globals.TAG, "BluetoothFinder.stopFinding: " + e);
-        }
+
+        BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
+
+        unregisterSearchResultsReceiver();
     }
 
-    private HashMap<String, Server> mServerList = new HashMap<String, Server>();
-
-    public Collection<Server> getServerList() {
-        return mServerList.values();
+    private void unregisterSearchResultsReceiver() {
+        mContext.unregisterReceiver(this);
     }
 
-    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    public Collection<Server> getServers() {
+        return mServers.values();
+    }
 
-        @Override
-        public void onReceive(Context context, Intent aIntent) {
-            Log.i(Globals.TAG, "BluetoothFinder: BroadcastReceiver.onReceive: aIntent=" + aIntent);
-            if (aIntent.getAction().equals(BluetoothDevice.ACTION_FOUND)) {
-                BluetoothDevice aDevice = (BluetoothDevice) aIntent.getExtras()
-                                .get(BluetoothDevice.EXTRA_DEVICE);
-                Log.i(Globals.TAG, "BluetoothFinder.onReceive: found " + aDevice.getName() + " at " + aDevice.getAddress());
-                if (aDevice.getName() == null)
-                    return;
-                Server aServer = new Server(Protocol.BLUETOOTH,
-                                aDevice.getAddress(), aDevice.getName(),
-                                System.currentTimeMillis());
-                mServerList.put(aServer.getAddress(), aServer);
-                Intent aNIntent = new Intent(
-                                CommunicationService.MSG_SERVERLIST_CHANGED);
-                LocalBroadcastManager.getInstance(mContext).sendBroadcast(
-                                aNIntent);
-            } else if (aIntent.getAction().equals(
-                            BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
-                            || aIntent.getAction()
-                                            .equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
-                // Start discovery again after a small delay.
-                // but check whether device is on incase the user manually
-                // disabled bluetooth
-                if (mAdapter.isEnabled()) {
-                    Handler aHandler = new Handler();
-                    aHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            // Looping, huh?
-                            Log.i(Globals.TAG, "BluetothFinder: looping");
-                        }
-                    }, 1000 * 15);
-                }
+    @Override
+    public void onReceive(Context aContext, Intent aIntent) {
+        if (aIntent.getAction().equals(BluetoothDevice.ACTION_FOUND)) {
+            BluetoothDevice aBluetoothDevice = (BluetoothDevice) aIntent
+                .getExtras().get(BluetoothDevice.EXTRA_DEVICE);
+
+            if (aBluetoothDevice == null) {
+                return;
             }
 
+            createServer(aBluetoothDevice);
+
+            callUpdatingServersList();
+
+            return;
         }
 
-    };
+        if (aIntent.getAction()
+            .equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
+            startDiscoveryDelayed();
+
+            return;
+        }
+
+        if (aIntent.getAction()
+            .equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
+            startDiscoveryDelayed();
+        }
+    }
+
+    private void createServer(BluetoothDevice aBluetoothDevice) {
+        String aServerAddress = aBluetoothDevice.getAddress();
+        String aServerName = aBluetoothDevice.getName();
+
+        Server aServer = new Server(Protocol.BLUETOOTH, aServerAddress,
+            aServerName, System.currentTimeMillis());
+        mServers.put(aServerAddress, aServer);
+    }
+
+    private void callUpdatingServersList() {
+        Intent aServersListChangedIntent = new Intent(
+            CommunicationService.MSG_SERVERLIST_CHANGED);
+
+        LocalBroadcastManager.getInstance(mContext)
+            .sendBroadcast(aServersListChangedIntent);
+    }
+
+    private void startDiscoveryDelayed() {
+        // Start discovery again after a small delay.
+        // but check whether device is on in case the user manually
+        // disabled bluetooth
+
+        if (!BluetoothAdapter.getDefaultAdapter().isEnabled()) {
+            return;
+        }
+
+        Handler aHandler = new Handler();
+        aHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Looping, huh?
+            }
+        }, 1000 * 15);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

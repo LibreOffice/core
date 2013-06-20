@@ -9,43 +9,161 @@
 package org.libreoffice.impressremote.communication;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.HashMap;
-
-import org.libreoffice.impressremote.Globals;
-import org.libreoffice.impressremote.communication.Server.Protocol;
+import java.util.Map;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
-public class ServerFinder {
-
-    private Context mContext;
-
-    private static final int PORT = 1598;
-    private static final String GROUPADDRESS = "239.0.0.1";
-
-    private static final String CHARSET = "UTF-8";
-
-    private static final long SEARCH_INTERVAL = 1000 * 15;
+public class ServerFinder implements Runnable {
+    private final Context mContext;
 
     private DatagramSocket mSocket = null;
+    private Thread mListenerThread;
+    private boolean mFinishRequested;
 
-    private Thread mListenerThread = null;
-
-    private boolean mFinishRequested = false;
-
-    private HashMap<String, Server> mServerList = new HashMap<String, Server>();
+    private final Map<String, Server> mServers;
 
     public ServerFinder(Context aContext) {
         mContext = aContext;
+
+        mSocket = null;
+        mListenerThread = null;
+        mFinishRequested = false;
+
+        mServers = new HashMap<String, Server>();
+    }
+
+    public void startSearch() {
+        if (mSocket != null) {
+            return;
+        }
+
+        mFinishRequested = false;
+
+        if (mListenerThread == null) {
+            mListenerThread = new Thread(this);
+        }
+
+        mListenerThread.start();
+    }
+
+    @Override
+    public void run() {
+        addLocalServerForEmulator();
+
+        long aStartSearchTime = 0;
+
+        setUpSearchSocket();
+
+        while (!mFinishRequested) {
+            if (System
+                .currentTimeMillis() - aStartSearchTime > 1000 * 15) {
+                sendSearchCommand();
+
+                aStartSearchTime = System.currentTimeMillis();
+
+                removeStaleServers();
+            }
+
+            listenForServer();
+        }
+    }
+
+    /**
+     * Check whether we are on an emulator and add it's host to the list of
+     * servers if so (although we do not know whether libo is running on
+     * the host).
+     */
+    private void addLocalServerForEmulator() {
+        if (!isLocalServerForEmulatorReachable()) {
+            return;
+        }
+
+        Server aServer = new Server(Server.Protocol.NETWORK,
+            Protocol.Addresses.SERVER_LOCAL_FOR_EMULATOR, "Android Emulator",
+            0);
+
+        mServers.put(aServer.getAddress(), aServer);
+
+        callUpdatingServersList();
+    }
+
+    private boolean isLocalServerForEmulatorReachable() {
+        try {
+            InetAddress aLocalServerAddress = InetAddress
+                .getByName(Protocol.Addresses.SERVER_LOCAL_FOR_EMULATOR);
+
+            return aLocalServerAddress.isReachable(100);
+        } catch (UnknownHostException e) {
+            return false;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    private void callUpdatingServersList() {
+        Intent aIntent = new Intent(
+            CommunicationService.MSG_SERVERLIST_CHANGED);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
+    }
+
+    private void setUpSearchSocket() {
+        try {
+            mSocket = new DatagramSocket();
+            mSocket.setSoTimeout(1000 * 10);
+        } catch (SocketException e) {
+            throw new RuntimeException("Unable to open search socket.");
+        }
+    }
+
+    private void sendSearchCommand() {
+        try {
+            mSocket.send(buildSearchPacket());
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to send search packet.");
+        }
+    }
+
+    private DatagramPacket buildSearchPacket() {
+        try {
+            String aSearchCommand = Protocol.Commands
+                .prepareCommand(Protocol.Commands.SEARCH_SERVERS);
+
+            DatagramPacket aSearchPacket = new DatagramPacket(
+                aSearchCommand.getBytes(), aSearchCommand.length());
+            aSearchPacket.setAddress(
+                InetAddress.getByName(Protocol.Addresses.SERVER_SEARCH));
+            aSearchPacket.setPort(Protocol.Ports.SERVER_SEARCH);
+
+            return aSearchPacket;
+        } catch (UnknownHostException e) {
+            throw new RuntimeException("Unable to find address to search.");
+        }
+    }
+
+    private void removeStaleServers() {
+        for (Server aServer : mServers.values()) {
+            if (aServer.mNoTimeout) {
+                continue;
+            }
+
+            if (System.currentTimeMillis()
+                - aServer
+                .getTimeDiscovered() > 60 * 1000) {
+                mServers
+                    .remove(aServer.getAddress());
+                callUpdatingServersList();
+            }
+        }
     }
 
     private void listenForServer() {
@@ -59,7 +177,8 @@ public class ServerFinder {
             int i;
             for (i = 0; i < aBuffer.length; i++) {
                 if (aPacket.getData()[i] == '\n') {
-                    aCommand = new String(aPacket.getData(), 0, i, CHARSET);
+                    aCommand = new String(aPacket.getData(), 0, i,
+                        Protocol.CHARSET);
                     break;
                 }
             }
@@ -69,7 +188,7 @@ public class ServerFinder {
             for (int j = i + 1; j < aBuffer.length; j++) {
                 if (aPacket.getData()[j] == '\n') {
                     aName = new String(aPacket.getData(), i + 1, j - (i + 1),
-                                    CHARSET);
+                        Protocol.CHARSET);
                     break;
                 }
             }
@@ -77,13 +196,12 @@ public class ServerFinder {
                 return;
             }
             Server aServer = new Server(Server.Protocol.NETWORK, aPacket
-                            .getAddress().getHostAddress(), aName,
-                            System.currentTimeMillis());
-            mServerList.put(aServer.getAddress(), aServer);
-            Log.i(Globals.TAG, "ServerFinder.listenForServer: contains " + aName);
+                .getAddress().getHostAddress(), aName,
+                System.currentTimeMillis());
+            mServers.put(aServer.getAddress(), aServer);
 
-            notifyActivity();
-        } catch (java.net.SocketTimeoutException e) {
+            callUpdatingServersList();
+        } catch (SocketTimeoutException e) {
             // Ignore -- we want to timeout to enable checking whether we
             // should stop listening periodically
         } catch (IOException e) {
@@ -91,100 +209,17 @@ public class ServerFinder {
 
     }
 
-    public void startFinding() {
-        if (mSocket != null)
-            return;
-
-        mFinishRequested = false;
-
+    public void stopSearch() {
         if (mListenerThread == null) {
-            mListenerThread = new Thread() {
-                @Override
-                public void run() {
-                    checkAndAddEmulator();
-                    long aTime = 0;
-                    try {
-                        mSocket = new DatagramSocket();
-                        mSocket.setSoTimeout(1000 * 10);
-                        while (!mFinishRequested) {
-                            if (System.currentTimeMillis() - aTime > SEARCH_INTERVAL) {
-                                String aString = "LOREMOTE_SEARCH\n";
-                                DatagramPacket aPacket = new DatagramPacket(
-                                                aString.getBytes(CHARSET),
-                                                aString.length(),
-                                                InetAddress.getByName(GROUPADDRESS),
-                                                PORT);
-                                mSocket.send(aPacket);
-                                aTime = System.currentTimeMillis();
-                                // Remove stale servers
-                                for (Server aServer : mServerList.values()) {
-                                    if (!aServer.mNoTimeout
-                                                    && System.currentTimeMillis()
-                                                                    - aServer.getTimeDiscovered() > 60 * 1000) {
-                                        mServerList.remove(aServer.getAddress());
-                                        notifyActivity();
-
-                                    }
-                                }
-                            }
-
-                            listenForServer();
-                        }
-                    } catch (SocketException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    } catch (UnsupportedEncodingException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-
-                }
-            };
-            mListenerThread.start();
+            return;
         }
 
+        mFinishRequested = true;
+        mListenerThread = null;
     }
 
-    public void stopFinding() {
-        if (mListenerThread != null) {
-            mFinishRequested = true;
-            mListenerThread = null;
-        }
-    }
-
-    /**
-     * Check whether we are on an emulator and add it's host to the list of
-     * servers if so (although we do not know whether libo is running on
-     * the host).
-     */
-    private void checkAndAddEmulator() {
-        try {
-            if (InetAddress.getByName("10.0.2.2").isReachable(100)) {
-                Log.i(Globals.TAG, "ServerFinder.checkAndAddEmulator: NulledNot, whatever that is supposed to mean");
-                Server aServer = new Server(Protocol.NETWORK, "10.0.2.2",
-                                "Android Emulator Host", 0);
-                aServer.mNoTimeout = true;
-                mServerList.put(aServer.getAddress(), aServer);
-                notifyActivity();
-            }
-        } catch (IOException e) {
-            // Probably means we can't connect -- i.e. no emulator host
-        }
-    }
-
-    /**
-     * Notify the activity that the server list has changed.
-     */
-    private void notifyActivity() {
-        Intent aIntent = new Intent(CommunicationService.MSG_SERVERLIST_CHANGED);
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(aIntent);
-    }
-
-    public Collection<Server> getServerList() {
-        return mServerList.values();
+    public Collection<Server> getServers() {
+        return mServers.values();
     }
 }
 

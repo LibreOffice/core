@@ -80,7 +80,7 @@ public class NetworkClient extends Client {
         String aPhoneName = CommunicationService.getDeviceName();
 
         sendCommand(Protocol.Commands
-            .prepareCommand(Protocol.Commands.PAIR, aPhoneName, mPin));
+            .prepareCommand(Protocol.Commands.PAIR_WITH_SERVER, aPhoneName, mPin));
     }
 
     @Override

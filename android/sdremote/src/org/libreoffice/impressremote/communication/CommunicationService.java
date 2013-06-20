@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 import android.preference.PreferenceManager;
@@ -31,7 +32,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 public class CommunicationService extends Service implements Runnable {
 
-    public enum State {
+    public static enum State {
         DISCONNECTED, SEARCHING, CONNECTING, CONNECTED
     }
 
@@ -48,7 +49,7 @@ public class CommunicationService extends Service implements Runnable {
             if (aName != null)
                 return aName;
         }
-        return android.os.Build.MODEL;
+        return Build.MODEL;
     }
 
     /**
@@ -139,20 +140,20 @@ public class CommunicationService extends Service implements Runnable {
         SharedPreferences aPref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean bEnableWifi = aPref.getBoolean("option_enablewifi", false);
         if (bEnableWifi)
-            mNetworkFinder.startFinding();
+            mNetworkFinder.startSearch();
         BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
         if (aAdapter != null) {
             mBluetoothPreviouslyEnabled = aAdapter.isEnabled();
             if (!mBluetoothPreviouslyEnabled)
                 aAdapter.enable();
-            mBluetoothFinder.startFinding();
+            mBluetoothFinder.startSearch();
         }
     }
 
     public void stopSearching() {
         Log.i(Globals.TAG, "CommunicationService.stopSearching()");
-        mNetworkFinder.stopFinding();
-        mBluetoothFinder.stopFinding();
+        mNetworkFinder.stopSearch();
+        mBluetoothFinder.stopSearch();
         BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
         if (aAdapter != null) {
             if (!mBluetoothPreviouslyEnabled) {
@@ -165,8 +166,8 @@ public class CommunicationService extends Service implements Runnable {
         Log.i(Globals.TAG, "CommunicationService.connectTo(" + aServer + ")");
         synchronized (mConnectionVariableMutex) {
             if (mState == State.SEARCHING) {
-                mNetworkFinder.stopFinding();
-                mBluetoothFinder.stopFinding();
+                mNetworkFinder.stopSearch();
+                mBluetoothFinder.stopSearch();
                 mState = State.DISCONNECTED;
             }
             mServerDesired = aServer;
@@ -267,8 +268,8 @@ public class CommunicationService extends Service implements Runnable {
 
     public List<Server> getServers() {
         ArrayList<Server> aServers = new ArrayList<Server>();
-        aServers.addAll(mNetworkFinder.getServerList());
-        aServers.addAll(mBluetoothFinder.getServerList());
+        aServers.addAll(mNetworkFinder.getServers());
+        aServers.addAll(mBluetoothFinder.getServers());
         aServers.addAll(mManualServers.values());
         return aServers;
     }
@@ -324,7 +325,6 @@ public class CommunicationService extends Service implements Runnable {
     }
 
     public void removeServer(Server aServer) {
-
         mManualServers.remove(aServer.getAddress());
 
         SharedPreferences aPref = getSharedPreferences(SERVERSTORAGE_KEY,

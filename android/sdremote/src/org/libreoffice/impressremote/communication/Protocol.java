@@ -22,7 +22,16 @@ final class Protocol {
         private Ports() {
         }
 
+        public static final int SERVER_SEARCH = 1598;
         public static final int CLIENT_CONNECTION = 1599;
+    }
+
+    public static final class Addresses {
+        private Addresses() {
+        }
+
+        public static final String SERVER_SEARCH = "239.0.0.1";
+        public static final String SERVER_LOCAL_FOR_EMULATOR = "10.0.2.2";
     }
 
     public static final class Messages {
@@ -43,7 +52,8 @@ final class Protocol {
         private Commands() {
         }
 
-        public static final String PAIR = "LO_SERVER_CLIENT_PAIR";
+        public static final String PAIR_WITH_SERVER = "LO_SERVER_CLIENT_PAIR";
+        public static final String SEARCH_SERVERS = "LOREMOTE_SEARCH";
 
         public static final String TRANSITION_NEXT = "transition_next";
         public static final String TRANSITION_PREVIOUS = "transition_previous";
