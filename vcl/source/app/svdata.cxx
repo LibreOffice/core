@@ -256,6 +256,15 @@ DockingManager* ImplGetDockingManager()
     return pSVData->mpDockingManager;
 }
 
+BlendFrameCache* ImplGetBlendFrameCache()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if ( !pSVData->mpBlendFrameCache)
+        pSVData->mpBlendFrameCache= new BlendFrameCache();
+
+    return pSVData->mpBlendFrameCache;
+}
+
 class AccessBridgeCurrentContext: public cppu::WeakImplHelper1< com::sun::star::uno::XCurrentContext >
 {
 public:
