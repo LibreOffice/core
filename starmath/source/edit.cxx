@@ -455,6 +455,27 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
             aModifyTimer.Start();
         }
 
+        // get the current char of the key event
+        sal_Unicode charCode = rKEvt.GetCharCode();
+        OUString close;
+
+        if (charCode == '{')
+            close = "  }";
+        else if (charCode == '[')
+            close = "  ]";
+        else if (charCode == '(')
+            close = "  )";
+
+        // auto close the current character
+        if (!close.isEmpty())
+        {
+            pEditView->InsertText(close);
+            // position it at center of brackets
+            ESelection aSelection = pEditView->GetSelection();
+            aSelection.nStartPos = aSelection.nEndPos = aSelection.nEndPos - 2;
+            pEditView->SetSelection(aSelection);
+        }
+
         InvalidateSlots();
     }
 }
