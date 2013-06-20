@@ -71,7 +71,7 @@ ModalDialog RID_XMLSECTP_MACROWARN
         Pos = MAP_APPFONT( MW_COL_1, MW_ROW_3 );
         Size = MAP_APPFONT( MW_COL_4-MW_COL_1, RSC_CD_FIXEDTEXT_HEIGHT );
         Wordbreak = TRUE;
-        Text [ en-US ] = "Macros may contain viruses. Disabling macros for a document is always save. If you disable macros you may lose functionality provided by the document macros.";
+        Text [ en-US ] = "Macros may contain viruses. Disabling macros for a document is always safe. If you disable macros you may lose functionality provided by the document macros.";
     };
     CheckBox CB_ALWAYSTRUST
     {
