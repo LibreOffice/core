@@ -122,7 +122,7 @@ ifeq (,$(filter WNT MACOSX,$(OS)))
 	$(call instsetoo_native_install_command,not-used,en-US,_Test,,$(PKGFORMAT))
 endif
 ifeq (HELP,$(filter HELP,$(BUILD_TYPE))$(filter MACOSX,$(OS)))
-	$(foreach lang,$(filter-out $(WITH_POOR_HELP_LOCALIZATIONS),$(instsetoo_native_WITH_LANG)), \
+	$(foreach lang,$(gb_HELP_LANGS),\
 		$(call instsetoo_native_install_command,ooohelppack,$(lang),,-helppack,$(PKGFORMAT)))
 endif
 ifneq (WNT,$(OS))
