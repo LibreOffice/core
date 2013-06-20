@@ -403,7 +403,8 @@ IMPL_LINK_INLINE_END( SmEditWindow, MenuSelectHdl, Menu *, pMenu )
 
 void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
 {
-    if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
+    sal_uInt16 keycode = rKEvt.GetKeyCode().GetCode();
+    if (keycode == KEY_ESCAPE)
     {
         bool bCallBase = true;
         SfxViewShell* pViewShell = GetView();
@@ -453,6 +454,28 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
                 pDocShell->SetModified( GetEditEngine()->IsModified() );
 
             aModifyTimer.Start();
+        }
+
+        // get the current char of the key event
+        sal_Unicode charCode = rKEvt.GetCharCode();
+        OUString close;
+
+        if (charCode == '{')
+            close = "  }";
+        else if (charCode == '[')
+            close = "  ]";
+        else if (charCode == '(')
+            close = "  )";
+
+        // auto close the current character
+        if (!close.isEmpty())
+        {
+            // auto close bracket
+            pEditView->InsertText(close);
+            // position it at center of brackets
+            ESelection aSelection = pEditView->GetSelection();
+            aSelection.nStartPos = aSelection.nEndPos = aSelection.nEndPos - 2;
+            pEditView->SetSelection(aSelection);
         }
 
         InvalidateSlots();
