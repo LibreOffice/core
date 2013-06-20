@@ -4874,7 +4874,14 @@ find_msms()
 find_msvc_x64_dlls()
 {
     if test "$VCVER" != "90"; then
-        msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
+
+        if test "$CPUNAME" = "INTEL"; then
+           vsarch=x86
+        else
+           vsarch=x64
+        fi
+
+        msvcdllpath="$VC_PRODUCT_DIR/redist/$vsarch/Microsoft.VC${VCVER}.CRT"
         MSVC_DEBUG_DLL_PATH="$VC_PRODUCT_DIR/redist/Debug_NonRedist/$vsarch/Microsoft.VC${VCVER}.DebugCRT"
         msvcdlls="msvcp${VCVER}.dll msvcr${VCVER}.dll"
         MSVC_DEBUG_DLLS="msvcp${VCVER}d.dll msvcr${VCVER}d.dll"
