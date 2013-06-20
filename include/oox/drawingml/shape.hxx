@@ -172,6 +172,8 @@ public:
     const ::std::vector<OUString>&
                         getExtDrawings() { return maExtDrawings; }
     void                addExtDrawingRelId( const OUString &rRelId ) { maExtDrawings.push_back( rRelId ); }
+    void                setLockedCanvas(bool bLockedCanvas);
+    bool                getLockedCanvas();
 
 protected:
 
@@ -262,6 +264,7 @@ private:
     sal_Bool                        mbHiddenMasterShape; // master shapes can be hidden in layout slides
                                                          // we need separate flag because we don't want
                                                          // to propagate it when applying reference shape
+    bool mbLockedCanvas; ///< Is this shape part of a locked canvas?
 };
 
 // ============================================================================

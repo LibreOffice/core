@@ -81,6 +81,7 @@ Shape::Shape( const sal_Char* pServiceName )
 , mbFlipV( false )
 , mbHidden( false )
 , mbHiddenMasterShape( false )
+, mbLockedCanvas( false )
 {
     if ( pServiceName )
         msServiceName = OUString::createFromAscii( pServiceName );
@@ -115,6 +116,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mbFlipV( pSourceShape->mbFlipV )
 , mbHidden( pSourceShape->mbHidden )
 , mbHiddenMasterShape( pSourceShape->mbHiddenMasterShape )
+, mbLockedCanvas( pSourceShape->mbLockedCanvas )
 {}
 
 
@@ -221,6 +223,16 @@ void Shape::addShape(
     catch( const Exception&  )
     {
     }
+}
+
+void Shape::setLockedCanvas(bool bLockedCanvas)
+{
+    mbLockedCanvas = bLockedCanvas;
+}
+
+bool Shape::getLockedCanvas()
+{
+    return mbLockedCanvas;
 }
 
 void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
@@ -560,6 +572,12 @@ Reference< XShape > Shape::createAndInsert(
         if( aServiceName != "com.sun.star.drawing.GroupShape" )
         {
             PropertySet( xSet ).setProperties( aShapeProps );
+            if (mbLockedCanvas && aServiceName == "com.sun.star.drawing.LineShape")
+            {
+                // It seems the position and size for lines inside a locked canvas is absolute.
+                mxShape->setPosition(awt::Point(aShapeRectHmm.X, aShapeRectHmm.Y));
+                mxShape->setSize(awt::Size(aShapeRectHmm.Width, aShapeRectHmm.Height));
+            }
         }
 
         if( bIsCustomShape )
