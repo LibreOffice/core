@@ -32,45 +32,6 @@ Control RID_SIDEBAR_AREA_PANEL
     HelpID = HID_PROPERTYPANEL_AREA_SECTION ;
     Text [ en-US ] = "Area";
 
-    FixedText FT_COLOR_LIST
-    {
-        Pos     = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL , SECTIONPAGE_MARGIN_VERTICAL_TOP  ) ;
-        Size    = MAP_APPFONT ( FIXED_TEXT_WIDTH + 50, FIXED_TEXT_HEIGHT ) ;
-        Text [ en-US ] = "~Fill:";
-    };
-    FixedText FL_TRSP_TEXT
-    {
-        Pos     = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL , SECTIONPAGE_MARGIN_VERTICAL_TOP + FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL ) ;
-        Size    = MAP_APPFONT ( FIXED_TEXT_WIDTH + 50, FIXED_TEXT_HEIGHT ) ;
-        Text [ en-US ] = "~Transparency:";
-    };
-    ToolBox TB_COLOR
-    {
-        HelpID = HID_PPROPERTYPANEL_AREA_TBX_COLOR;
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL + MBOX_WIDTH + CONTROL_SPACING_HORIZONTAL, SECTIONPAGE_MARGIN_VERTICAL_TOP + FIXED_TEXT_HEIGHT + 1) ;
-        Size = MAP_APPFONT (TOOLBOX_WIDTH ,TOOLBOX_HEIGHT ) ;
-        TabStop = TRUE ;
-        Text = "Color";
-        ItemList =
-        {
-            ToolBoxItem
-            {
-                Identifier = TBI_COLOR ;
-                HelpID = HID_PPROPERTYPANEL_AREA_TBI_COLOR;
-                DropDown = TRUE ;
-                Text = "Color" ;
-            };
-        };
-    };
-    String STR_HELP_COLOR
-    {
-        Text [ en-US ] = "Select the color to apply." ;
-    };
-    String STR_HELP_TYPE
-    {
-        Text [en-US] = "Select the fill type to apply.";
-    };
     String STR_HELP_ATTR
     {
         Text [en-US] = "Select the effect to apply.";
@@ -105,45 +66,6 @@ Control RID_SIDEBAR_AREA_PANEL
     };
 
     //=====================================================================================================================================
-    ListBox LB_TRGR_TYPES
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL , SECTIONPAGE_MARGIN_VERTICAL_TOP + 2*(FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL) + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL ) ;
-        Size = MAP_APPFONT ( MBOX_WIDTH , LISTBOX_HEIGHT ) ;
-        QuickHelpText [ en-US ] = "Select the type of transparence to apply." ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        HelpID = HID_PPROPERTYPANEL_AREA_LB_TRGR_TYPES ;
-        StringList [ en-US ] =
-        {
-            < "None" ; Default ; > ;
-            < "Solid" ; Default ; > ;
-            < "Linear" ; Default ; > ;
-            < "Axial" ; Default ; > ;
-            < "Radial" ; Default ; > ;
-            < "Ellipsoid" ; Default ; > ;
-            < "Quadratic" ; Default ; > ;
-            < "Square" ; Default ; > ;
-        };
-    };
-
-    MetricField MTR_TRANSPARENT
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL + MBOX_WIDTH + CONTROL_SPACING_HORIZONTAL , SECTIONPAGE_MARGIN_VERTICAL_TOP + 2*(FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL) + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL ) ;
-        Size = MAP_APPFONT ( MBOX_WIDTH + 1 ,MBOX_HEIGHT ) ;
-        HelpID = HID_PPROPERTYPANEL_AREA_MTR_TRANSPARENT ;
-        QuickHelpText [ en-US ] = "Specify 0% for fully opaque through 100% for fully transparent." ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 100 ;
-        StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = "%" ;
-        Last = 100 ;
-        SpinSize = 5 ;
-    };
 
     ToolBox BTN_GRADIENT
     {
@@ -167,10 +89,6 @@ Control RID_SIDEBAR_AREA_PANEL
                 Text = "Gradient" ;
             };
         };
-    };
-    String STR_HELP_GRADIENT
-    {
-        Text [ en-US ] = "Specify the variation of gradient transparency." ;
     };
 };
 

@@ -16,9 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 //  RID_SIDEBAR_AREA_PANEL--------------------------------------------------------------
-#define FT_COLOR_LIST                        1
-#define TB_COLOR            2
-#define TBI_COLOR           3
+
 #define IMG_COLOR           5
 
 #define VS_COLOR            1
@@ -26,7 +24,6 @@
 #define TBI_LEFT                            1
 #define TBI_RIGHT                           1
 #define TBI_BTX_GRADIENT                    51
-#define FL_TRSP_TEXT                         4
 
 #define LB_TRGR_TYPES   6
 #define MTR_TRANSPARENT 7
