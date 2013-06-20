@@ -64,7 +64,6 @@
 #include <poolfmt.hxx>
 #include <swfont.hxx>
 #include <istyleaccess.hxx>
-// OD 26.06.2003 #108784#
 #include <dcontact.hxx>
 #include <docsh.hxx>
 #include <svl/smplhint.hxx>
