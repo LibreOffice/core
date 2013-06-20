@@ -75,7 +75,7 @@
 #define CHECK           Check(true);
 #define CHECK_NOTMERGED Check(false);
 #else
-#define CHECK
+// Do not #define CHECK otherwise error: macro "CHECK" is not used [-Werror=unused-macros]
 #define CHECK_NOTMERGED
 #endif
 
