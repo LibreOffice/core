@@ -609,13 +609,6 @@ sub run {
 
         $filesinproductlanguageresolvedarrayref = installer::archivefiles::resolving_archive_flag($filesinproductlanguageresolvedarrayref, \@additional_paths_from_zipfiles, $languagestringref, $loggingdir);
 
-        # packed files sometimes contain a "$" in their name: HighlightText$1.class. For epm the "$" has to be quoted by "$$"
-
-        if (!( $installer::globals::iswindowsbuild || $installer::globals::simple ) )
-        {
-            installer::scriptitems::quoting_illegal_filenames($filesinproductlanguageresolvedarrayref);
-        }
-
         ######################################################################################
         # Processing files with flag FILELIST and putting listed files into the file list
         ######################################################################################
@@ -623,6 +616,13 @@ sub run {
         installer::logger::print_message( "... analyzing files with flag FILELIST ...\n" );
 
         $filesinproductlanguageresolvedarrayref = installer::filelists::resolve_filelist_flag($filesinproductlanguageresolvedarrayref, $ENV{'INSTDIR'});
+
+        # packed files sometimes contain a "$" in their name: HighlightText$1.class. For epm the "$" has to be quoted by "$$"
+
+        if (!( $installer::globals::iswindowsbuild || $installer::globals::simple ) )
+        {
+            installer::scriptitems::quoting_illegal_filenames($filesinproductlanguageresolvedarrayref);
+        }
 
         #####################################
         # Files with flag SUBST_FILENAME
