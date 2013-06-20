@@ -1631,17 +1631,20 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
         sal_uInt16 nWhich = 0;
         switch(pTableBck_Impl->nActPos)
         {
-            case TBL_DEST_CELL:
-                *pActItem = pTableBck_Impl->pCellBrush;
-                nWhich = pTableBck_Impl->nCellWhich;
+        case TBL_DEST_CELL:
+            *pActItem = pTableBck_Impl->pCellBrush;
+            nWhich = pTableBck_Impl->nCellWhich;
             break;
-            case TBL_DEST_ROW:
-                *pActItem = pTableBck_Impl->pRowBrush;
-                nWhich = pTableBck_Impl->nRowWhich;
+        case TBL_DEST_ROW:
+            *pActItem = pTableBck_Impl->pRowBrush;
+            nWhich = pTableBck_Impl->nRowWhich;
             break;
-            case TBL_DEST_TBL:
-                *pActItem = pTableBck_Impl->pTableBrush;
-                nWhich = pTableBck_Impl->nTableWhich;
+        case TBL_DEST_TBL:
+            *pActItem = pTableBck_Impl->pTableBrush;
+            nWhich = pTableBck_Impl->nTableWhich;
+            break;
+        default:
+            *pActItem = NULL;
             break;
         }
         pTableBck_Impl->nActPos = nSelPos;
@@ -1671,23 +1674,24 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
         }
         switch(nSelPos)
         {
-            case TBL_DEST_CELL:
-                *pActItem = pTableBck_Impl->pCellBrush;
-                m_pLbSelect->Enable();
-                nWhich = pTableBck_Impl->nCellWhich;
+        case TBL_DEST_CELL:
+            *pActItem = pTableBck_Impl->pCellBrush;
+            m_pLbSelect->Enable();
+            nWhich = pTableBck_Impl->nCellWhich;
             break;
-            case TBL_DEST_ROW:
-            {
-                if((nHtmlMode & HTMLMODE_ON) && !(nHtmlMode & HTMLMODE_SOME_STYLES))
-                    m_pLbSelect->Disable();
-                *pActItem = pTableBck_Impl->pRowBrush;
-                nWhich = pTableBck_Impl->nRowWhich;
-            }
+        case TBL_DEST_ROW:
+            if((nHtmlMode & HTMLMODE_ON) && !(nHtmlMode & HTMLMODE_SOME_STYLES))
+                m_pLbSelect->Disable();
+            *pActItem = pTableBck_Impl->pRowBrush;
+            nWhich = pTableBck_Impl->nRowWhich;
             break;
-            case TBL_DEST_TBL:
-                *pActItem = pTableBck_Impl->pTableBrush;
-                m_pLbSelect->Enable();
-                nWhich = pTableBck_Impl->nTableWhich;
+        case TBL_DEST_TBL:
+            *pActItem = pTableBck_Impl->pTableBrush;
+            m_pLbSelect->Enable();
+            nWhich = pTableBck_Impl->nTableWhich;
+            break;
+        default:
+            *pActItem = NULL;
             break;
         }
         String aUserData = GetUserData();
