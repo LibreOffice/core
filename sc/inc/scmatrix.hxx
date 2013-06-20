@@ -28,7 +28,7 @@
 
 #include <boost/intrusive_ptr.hpp>
 
-#define DEBUG_MATRIX 1
+#define DEBUG_MATRIX 0
 
 class ScInterpreter;
 class SvNumberFormatter;
