@@ -18,7 +18,7 @@
  */
 
 #ifndef __DATECODE_H__
-#define __DATACODE_H__
+#define __DATECODE_H__
 
 static const hchar defaultform[] =
 {
