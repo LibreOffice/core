@@ -360,177 +360,181 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
     switch ( nSlot )
     {
-        case FN_VIEW_GRAPHIC:
+    case FN_VIEW_GRAPHIC:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsGraphic();
+        pOpt->SetGraphic( bFlag );
+        break;
 
-                if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsGraphic();
-                pOpt->SetGraphic( bFlag );
-                break;
+    case FN_VIEW_FIELDS:
+        if( STATE_TOGGLE == eState )
+            bFlag = !SwViewOption::IsFieldShadings() ;
+        SwViewOption::SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bFlag, sal_True );
+        break;
 
-        case FN_VIEW_FIELDS:
-                if( STATE_TOGGLE == eState )
-                    bFlag = !SwViewOption::IsFieldShadings() ;
-                SwViewOption::SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bFlag, sal_True );
-                break;
+    case FN_VIEW_BOUNDS:
+        if( STATE_TOGGLE == eState )
+            bFlag = !SwViewOption::IsDocBoundaries();
+        SwViewOption::SetAppearanceFlag(VIEWOPT_DOC_BOUNDARIES, bFlag, sal_True );
+        break;
 
-        case FN_VIEW_BOUNDS:
-                if( STATE_TOGGLE == eState )
-                    bFlag = !SwViewOption::IsDocBoundaries();
-                SwViewOption::SetAppearanceFlag(VIEWOPT_DOC_BOUNDARIES, bFlag, sal_True );
-                break;
+    case SID_GRID_VISIBLE:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsGridVisible();
 
-        case SID_GRID_VISIBLE:
-                if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsGridVisible();
+        pOpt->SetGridVisible( bFlag );
+        break;
 
-                pOpt->SetGridVisible( bFlag );
-                break;
+    case SID_GRID_USE:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsSnap();
 
-        case SID_GRID_USE:
-                if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsSnap();
+        pOpt->SetSnap( bFlag );
+        break;
 
-                pOpt->SetSnap( bFlag );
-                break;
+    case SID_HELPLINES_MOVE:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsCrossHair();
 
-        case SID_HELPLINES_MOVE:
-                if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsCrossHair();
+        pOpt->SetCrossHair( bFlag );
+        break;
 
-                pOpt->SetCrossHair( bFlag );
-                break;
-
-        case SID_BROWSER_MODE:
-        case FN_PRINT_LAYOUT:
-                if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->getBrowseMode();
-                else if( nSlot == FN_PRINT_LAYOUT )
-                    bFlag = !bFlag;
-                bBrowseModeChanged = bFlag != pOpt->getBrowseMode();
-                // Disable "multiple layout"
-                GetDocShell()->ToggleBrowserMode( bFlag, this );
-
-                pOpt->setBrowseMode( bFlag );
-                break;
+    case SID_BROWSER_MODE:
+    case FN_PRINT_LAYOUT:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->getBrowseMode();
+        else if( nSlot == FN_PRINT_LAYOUT )
+            bFlag = !bFlag;
+        bBrowseModeChanged = bFlag != pOpt->getBrowseMode();
+        // Disable "multiple layout"
+        GetDocShell()->ToggleBrowserMode( bFlag, this );
+        pOpt->setBrowseMode( bFlag );
+        break;
 
     case FN_VIEW_NOTES:
-                if ( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsPostIts();
+        if ( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsPostIts();
 
-                GetPostItMgr()->SetLayout();
-                pOpt->SetPostIts( bFlag );
-                   if (pOpt->IsPostIts())
+        GetPostItMgr()->SetLayout();
+        pOpt->SetPostIts( bFlag );
+        if (pOpt->IsPostIts())
             GetPostItMgr()->CheckMetaText();
-         break;
-
-        case FN_VIEW_HIDDEN_PARA:
-                if ( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsShowHiddenPara();
-
-                pOpt->SetShowHiddenPara( bFlag );
-                break;
-
-        case FN_VIEW_SMOOTH_SCROLL:
-
-                if ( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsSmoothScroll();
-
-                pOpt->SetSmoothScroll( bFlag );
-                break;
-
-
-        case FN_VLINEAL:
-                if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsViewVRuler();
-
-                pOpt->SetViewVRuler( bFlag );
-                break;
-
-        case FN_VSCROLLBAR:
-                if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsViewVScrollBar();
-
-                pOpt->SetViewVScrollBar( bFlag );
-                break;
-
-        case FN_HSCROLLBAR:
-                if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsViewHScrollBar();
-
-                pOpt->SetViewHScrollBar( bFlag );
-                break;
-        case FN_RULER:
-                if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsViewAnyRuler();
-
-                pOpt->SetViewAnyRuler( bFlag );
-                break;
-
-        case FN_VIEW_TABLEGRID:
-                if( STATE_TOGGLE == eState )
-                    bFlag = !SwViewOption::IsTableBoundaries();
-                SwViewOption::SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bFlag, sal_True );
-                break;
-
-        case FN_VIEW_FIELDNAME:
-                if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsFldName() ;
-
-                pOpt->SetFldName( bFlag );
-                break;
-        case FN_VIEW_MARKS:
-                if( STATE_TOGGLE == eState )
-                    bFlag = !lcl_IsViewMarks(*pOpt) ;
-
-                lcl_SetViewMarks( *pOpt, bFlag );
-                break;
-        case FN_VIEW_META_CHARS:
-                if( STATE_TOGGLE == eState )
-                    bFlag = !pOpt->IsViewMetaChars();
-
-                lcl_SetViewMetaChars( *pOpt, bFlag );
         break;
-        case SID_AUTOSPELL_CHECK:
-            if( STATE_TOGGLE == eState )
-                bFlag = bSet = !pOpt->IsOnlineSpell();
 
-            pOpt->SetOnlineSpell(bSet);
+    case FN_VIEW_HIDDEN_PARA:
+        if ( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsShowHiddenPara();
+
+        pOpt->SetShowHiddenPara( bFlag );
+        break;
+
+    case FN_VIEW_SMOOTH_SCROLL:
+
+        if ( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsSmoothScroll();
+
+        pOpt->SetSmoothScroll( bFlag );
+        break;
+
+
+    case FN_VLINEAL:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsViewVRuler();
+
+        pOpt->SetViewVRuler( bFlag );
+        break;
+
+    case FN_VSCROLLBAR:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsViewVScrollBar();
+
+        pOpt->SetViewVScrollBar( bFlag );
+        break;
+
+    case FN_HSCROLLBAR:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsViewHScrollBar();
+
+        pOpt->SetViewHScrollBar( bFlag );
+        break;
+
+    case FN_RULER:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsViewAnyRuler();
+
+        pOpt->SetViewAnyRuler( bFlag );
+        break;
+
+    case FN_VIEW_TABLEGRID:
+        if( STATE_TOGGLE == eState )
+            bFlag = !SwViewOption::IsTableBoundaries();
+        SwViewOption::SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bFlag, sal_True );
+        break;
+
+    case FN_VIEW_FIELDNAME:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsFldName() ;
+
+        pOpt->SetFldName( bFlag );
+        break;
+
+    case FN_VIEW_MARKS:
+        if( STATE_TOGGLE == eState )
+            bFlag = !lcl_IsViewMarks(*pOpt) ;
+
+        lcl_SetViewMarks( *pOpt, bFlag );
+        break;
+
+    case FN_VIEW_META_CHARS:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsViewMetaChars();
+
+        lcl_SetViewMetaChars( *pOpt, bFlag );
+        break;
+
+    case SID_AUTOSPELL_CHECK:
+        if( STATE_TOGGLE == eState )
+            bFlag = bSet = !pOpt->IsOnlineSpell();
+
+        pOpt->SetOnlineSpell(bSet);
+        {
+            uno::Any aVal( &bSet, ::getCppuBooleanType() );
+            OUString aPropName(UPN_IS_SPELL_AUTO);
+
+            SvtLinguConfig  aCfg;
+            aCfg.SetProperty( aPropName, aVal );
+
+            if (xLngProp.is())
+                xLngProp->setIsSpellAuto( bSet );
+
+            // for the time being we do not have a specific option for grammarchecking.
+            // thus we'll use the one for spell checking...
+            if (bSet)
             {
-                uno::Any aVal( &bSet, ::getCppuBooleanType() );
-                OUString aPropName(UPN_IS_SPELL_AUTO);
+                SwDocShell *pDocSh = GetDocShell();
+                SwDoc *pDoc = pDocSh? pDocSh->GetDoc() : NULL;
 
-                SvtLinguConfig  aCfg;
-                aCfg.SetProperty( aPropName, aVal );
+                // right now we don't have view options for automatic grammar checking. Thus...
+                sal_Bool bIsAutoGrammar = sal_False;
+                aCfg.GetProperty( UPN_IS_GRAMMAR_AUTO ) >>= bIsAutoGrammar;
 
-                if (xLngProp.is())
-                    xLngProp->setIsSpellAuto( bSet );
-
-                // for the time being we do not have a specific option for grammarchecking.
-                // thus we'll use the one for spell checking...
-                if (bSet)
-                {
-                    SwDocShell *pDocSh = GetDocShell();
-                    SwDoc *pDoc = pDocSh? pDocSh->GetDoc() : NULL;
-
-                    // right now we don't have view options for automatic grammar checking. Thus...
-                    sal_Bool bIsAutoGrammar = sal_False;
-                    aCfg.GetProperty( UPN_IS_GRAMMAR_AUTO ) >>= bIsAutoGrammar;
-
-                    if (pDoc && bIsAutoGrammar)
-                        StartGrammarChecking( *pDoc );
-                }
+                if (pDoc && bIsAutoGrammar)
+                    StartGrammarChecking( *pDoc );
             }
-        break;
-        case FN_SHADOWCURSOR:
-            if( STATE_TOGGLE == eState )
-                bFlag = bSet = !pOpt->IsShadowCursor();
-
-            pOpt->SetShadowCursor(bSet);
+        }
         break;
 
-        default:
-            OSL_FAIL("wrong request method");
-            return;
+    case FN_SHADOWCURSOR:
+        if( STATE_TOGGLE == eState )
+            bFlag = bSet = !pOpt->IsShadowCursor();
+
+        pOpt->SetShadowCursor(bSet);
+        break;
+
+    default:
+        delete pOpt;
+        OSL_FAIL("wrong request method");
+        return;
     }
 
     // Set UserPrefs, mark request as modified
