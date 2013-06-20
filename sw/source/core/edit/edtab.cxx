@@ -382,7 +382,7 @@ sal_Bool SwEditShell::IsTableBoxTextFormat() const
     if( !pBox )
         return sal_False;
 
-    sal_uInt32 nFmt;
+    sal_uInt32 nFmt = 0;
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == pBox->GetFrmFmt()->GetAttrSet().GetItemState(
         RES_BOXATR_FORMAT, sal_True, &pItem ))
