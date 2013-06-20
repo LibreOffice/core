@@ -22,6 +22,8 @@
 
 VersionCompat::VersionCompat( SvStream& rStm, sal_uInt16 nStreamMode, sal_uInt16 nVersion ) :
             mpRWStm     ( &rStm ),
+            mnCompatPos ( 0 ),
+            mnTotalSize ( 0 ),
             mnStmMode   ( nStreamMode ),
             mnVersion   ( nVersion )
 {
