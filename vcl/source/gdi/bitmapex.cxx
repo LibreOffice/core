@@ -1252,31 +1252,25 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
     Color aColorBottomRight,
     Color aColorBottomLeft)
 {
-    static Size aLastSize(0, 0);
-    static sal_uInt8 nLastAlpha(0);
-    static Color aLastColorTopLeft(COL_BLACK);
-    static Color aLastColorTopRight(COL_BLACK);
-    static Color aLastColorBottomRight(COL_BLACK);
-    static Color aLastColorBottomLeft(COL_BLACK);
-    static BitmapEx aLastResult;
+    BlendFrameCache* pBlendFrameCache = ImplGetBlendFrameCache();
 
-    if(aLastSize == rSize
-        && nLastAlpha == nAlpha
-        && aLastColorTopLeft == aLastColorTopLeft
-        && aLastColorTopRight == aLastColorTopRight
-        && aLastColorBottomRight == aLastColorBottomRight
-        && aLastColorBottomLeft == aLastColorBottomLeft)
+    if(pBlendFrameCache->m_aLastSize == rSize
+        && pBlendFrameCache->m_nLastAlpha == nAlpha
+        && pBlendFrameCache->m_aLastColorTopLeft == aColorTopLeft
+        && pBlendFrameCache->m_aLastColorTopRight == aColorTopRight
+        && pBlendFrameCache->m_aLastColorBottomRight == aColorBottomRight
+        && pBlendFrameCache->m_aLastColorBottomLeft == aColorBottomLeft)
     {
-        return aLastResult;
+        return pBlendFrameCache->m_aLastResult;
     }
 
-    aLastSize = rSize;
-    nLastAlpha = nAlpha;
-    aLastColorTopLeft = aLastColorTopLeft;
-    aLastColorTopRight = aLastColorTopRight;
-    aLastColorBottomRight = aLastColorBottomRight;
-    aLastColorBottomLeft = aLastColorBottomLeft;
-    aLastResult.Clear();
+    pBlendFrameCache->m_aLastSize = rSize;
+    pBlendFrameCache->m_nLastAlpha = nAlpha;
+    pBlendFrameCache->m_aLastColorTopLeft = aColorTopLeft;
+    pBlendFrameCache->m_aLastColorTopRight = aColorTopRight;
+    pBlendFrameCache->m_aLastColorBottomRight = aColorBottomRight;
+    pBlendFrameCache->m_aLastColorBottomLeft = aColorBottomLeft;
+    pBlendFrameCache->m_aLastResult.Clear();
 
     const long nW(rSize.Width());
     const long nH(rSize.Height());
@@ -1348,7 +1342,7 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
             aContent.ReleaseAccess(pContent);
             aAlpha.ReleaseAccess(pAlpha);
 
-            aLastResult = BitmapEx(aContent, aAlpha);
+            pBlendFrameCache->m_aLastResult = BitmapEx(aContent, aAlpha);
         }
         else
         {
@@ -1364,7 +1358,7 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
         }
     }
 
-    return aLastResult;
+    return pBlendFrameCache->m_aLastResult;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

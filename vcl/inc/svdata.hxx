@@ -284,6 +284,26 @@ struct ImplSVNWFData
     bool                    mbDDListBoxNoTextArea:1;
 };
 
+struct BlendFrameCache
+{
+    Size m_aLastSize;
+    sal_uInt8 m_nLastAlpha;
+    Color m_aLastColorTopLeft;
+    Color m_aLastColorTopRight;
+    Color m_aLastColorBottomRight;
+    Color m_aLastColorBottomLeft;
+    BitmapEx m_aLastResult;
+
+    BlendFrameCache()
+        : m_aLastSize(0, 0)
+        , m_nLastAlpha(0)
+        , m_aLastColorTopLeft(COL_BLACK)
+        , m_aLastColorTopRight(COL_BLACK)
+        , m_aLastColorBottomRight(COL_BLACK)
+        , m_aLastColorBottomLeft(COL_BLACK)
+    {
+    }
+};
 
 struct ImplSVData
 {
@@ -312,6 +332,7 @@ struct ImplSVData
     UnoWrapperBase*         mpUnoWrapper;
     Window*                 mpIntroWindow;      // the splash screen
     DockingManager*         mpDockingManager;
+    BlendFrameCache*        mpBlendFrameCache;
     sal_Bool                mbIsTestTool;
 
     oslThreadIdentifier                     mnMainThreadId;
@@ -330,6 +351,7 @@ Window*     ImplGetDefaultWindow();
 VCL_PLUGIN_PUBLIC ResMgr*     ImplGetResMgr();
 VCL_PLUGIN_PUBLIC ResId VclResId( sal_Int32 nId ); // throws std::bad_alloc if no res mgr
 DockingManager*     ImplGetDockingManager();
+BlendFrameCache*    ImplGetBlendFrameCache();
 void        ImplWindowAutoMnemonic( Window* pWindow );
 
 void        ImplUpdateSystemProcessWindow();

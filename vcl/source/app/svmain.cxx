@@ -540,6 +540,9 @@ void DeInitVCL()
     if ( pSVData->maAppData.mpFirstEventHook )
         ImplFreeEventHookData();
 
+    if (pSVData->mpBlendFrameCache)
+        delete pSVData->mpBlendFrameCache, pSVData->mpBlendFrameCache = NULL;
+
     ImplDeletePrnQueueList();
     delete pSVData->maGDIData.mpScreenFontList;
     pSVData->maGDIData.mpScreenFontList = NULL;
