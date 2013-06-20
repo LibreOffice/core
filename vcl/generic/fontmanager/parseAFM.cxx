@@ -331,7 +331,7 @@ static char *linetoken( FileInputStream* stream )
  */
 #include "afm_hash.hpp"
 
-static inline enum parseKey recognize( register char* ident, int len)
+static inline enum parseKey recognize( char* ident, int len)
 {
     const hash_entry* pEntry = AfmKeywordHash::in_word_set( ident, len );
     return pEntry ? pEntry->eKey : NOPE;
@@ -360,7 +360,7 @@ static inline enum parseKey recognize( register char* ident, int len)
  *  parseFile to determine if there is more file to parse.
  */
 
-static int parseGlobals( FileInputStream* fp, register GlobalFontInfo* gfi )
+static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
 {
     bool cont = true, save = (gfi != NULL);
     int error = ok;
@@ -565,11 +565,11 @@ static int parseGlobals( FileInputStream* fp, register GlobalFontInfo* gfi )
  *  parseFile to determine if there is more file to parse.
  */
 
-static int parseCharWidths( FileInputStream* fp, register int* cwi)
+static int parseCharWidths( FileInputStream* fp, int* cwi)
 {
     bool cont = true, save = (cwi != NULL);
     int pos = 0, error = ok, tokenlen;
-    register char *keyword;
+    char *keyword;
 
     while (cont)
     {
@@ -718,12 +718,12 @@ enlargeCount( unsigned int n_oldcount )
  *  parseFile to determine if there is more file to parse.
  */
 
-static int parseCharMetrics( FileInputStream* fp, register FontInfo* fi)
+static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
 {
     bool cont = true, firstTime = true;
     int error = ok, count = 0, tokenlen;
-    register CharMetricInfo *temp = fi->cmi;
-    register char *keyword;
+    CharMetricInfo *temp = fi->cmi;
+    char *keyword;
 
     while (cont)
     {
@@ -877,7 +877,7 @@ static int parseCharMetrics( FileInputStream* fp, register FontInfo* fi)
  *  parseFile to determine if there is more file to parse.
  */
 
-static int parseTrackKernData( FileInputStream* fp, register FontInfo* fi)
+static int parseTrackKernData( FileInputStream* fp, FontInfo* fi)
 {
     bool cont = true, save = (fi->tkd != NULL);
     int pos = 0, error = ok, tcount = 0, tokenlen;
@@ -985,11 +985,11 @@ static int parseTrackKernData( FileInputStream* fp, register FontInfo* fi)
  *  parseFile to determine if there is more file to parse.
  */
 
-static int parsePairKernData( FileInputStream* fp, register FontInfo* fi)
+static int parsePairKernData( FileInputStream* fp, FontInfo* fi)
 {
     bool cont = true, save = (fi->pkd != NULL);
     int pos = 0, error = ok, pcount = 0, tokenlen;
-    register char *keyword;
+    char *keyword;
 
     while (cont)
     {
@@ -1115,11 +1115,11 @@ static int parsePairKernData( FileInputStream* fp, register FontInfo* fi)
  *  parseFile to determine if there is more file to parse.
  */
 
-static int parseCompCharData( FileInputStream* fp, register FontInfo* fi)
+static int parseCompCharData( FileInputStream* fp, FontInfo* fi)
 {
     bool cont = true, firstTime = true, save = (fi->ccd != NULL);
     int pos = 0, j = 0, error = ok, ccount = 0, pcount = 0, tokenlen;
-    register char *keyword;
+    char *keyword;
 
     while (cont)
     {
@@ -1270,7 +1270,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
     int error = ok; /* used as the return code from this function */
     int tokenlen;
 
-    register char *keyword; /* used to store a token */
+    char *keyword; /* used to store a token */
 
 
     (*fi) = (FontInfo *) calloc(1, sizeof(FontInfo));

@@ -1376,7 +1376,7 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet, sal_Bool bIgnoreDefaults )
     else
     {
         SfxWhichIter aIter( rSet );
-        register sal_uInt16 nWhich;
+        sal_uInt16 nWhich;
         while( 0 != ( nWhich = aIter.NextWhich() ) )
         {
             const SfxPoolItem* pItem = 0;

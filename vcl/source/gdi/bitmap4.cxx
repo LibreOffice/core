@@ -22,7 +22,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/bitmap.hxx>
 
-#define S2(a,b)             { register long t; if( ( t = b - a ) < 0 ) { a += t; b -= t; } }
+#define S2(a,b)             { long t; if( ( t = b - a ) < 0 ) { a += t; b -= t; } }
 #define MN3(a,b,c)          S2(a,b); S2(a,c);
 #define MX3(a,b,c)          S2(b,c); S2(a,c);
 #define MNMX3(a,b,c)        MX3(a,b,c); S2(a,b);

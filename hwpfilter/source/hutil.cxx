@@ -83,7 +83,7 @@ void str2hstr(const char *c, hchar * i)
 
 int hstrlen(const hchar * s)
 {
-    register int n = 0;
+    int n = 0;
 
     while (*s++)
         n++;

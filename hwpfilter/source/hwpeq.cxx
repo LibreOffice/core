@@ -466,7 +466,7 @@ void push_token(MzString &white, MzString &token, istream *strm)
    alphabet string, sigle character */
 static int next_token(MzString &white, MzString &token, istream *strm)
 {
-  register int  ch = 0;
+  int  ch = 0;
 
   if( stk->state(strm) ) {
     white = stk->white;

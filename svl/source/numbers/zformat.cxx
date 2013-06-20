@@ -4297,7 +4297,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
         sal_Int32 nPoint = sStr.indexOf((sal_Unicode)'.' );
         if ( nPoint >= 0)
         {
-            register const sal_Unicode* p = sStr.getStr() + nPoint;
+            const sal_Unicode* p = sStr.getStr() + nPoint;
             while ( *++p == '0' )
                 ;
             if ( !*p )
@@ -4353,7 +4353,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
             {
                 const OUString& rStr = rInfo.sStrArray[j];
                 const sal_Unicode* p1 = rStr.getStr();
-                register const sal_Unicode* p = p1 + rStr.getLength();
+                const sal_Unicode* p = p1 + rStr.getLength();
                 while ( p1 < p-- )
                 {
                     const sal_Unicode c = *p;
@@ -4539,7 +4539,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
         {
             const OUString& rStr = rInfo.sStrArray[j];
             const sal_Unicode* p1 = rStr.getStr();
-            register const sal_Unicode* p = p1 + rStr.getLength();
+            const sal_Unicode* p = p1 + rStr.getLength();
             while ( p1 < p-- )
             {
                 nDigitCount++;
@@ -4670,7 +4670,7 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
         {
             const OUString& rStr = rInfo.sStrArray[j];
             const sal_Unicode* p1 = rStr.getStr();
-            register const sal_Unicode* p = p1 + rStr.getLength();
+            const sal_Unicode* p = p1 + rStr.getLength();
             while ( p1 < p-- )
             {
                 if (k > 0)
@@ -5360,7 +5360,7 @@ bool SvNumberformat::HasStringNegativeSign( const OUString& rStr )
     }
     const sal_Unicode* const pBeg = rStr.getStr();
     const sal_Unicode* const pEnd = pBeg + nLen;
-    register const sal_Unicode* p = pBeg;
+    const sal_Unicode* p = pBeg;
     do
     {   // Start
         if ( *p == (sal_Unicode)'-' )
@@ -5392,9 +5392,9 @@ bool SvNumberformat::IsInQuote( const OUString& rStr, sal_Int32 nPos,
     {
         return false;
     }
-    register const sal_Unicode* p0 = rStr.getStr();
-    register const sal_Unicode* p = p0;
-    register const sal_Unicode* p1 = p0 + nPos;
+    const sal_Unicode* p0 = rStr.getStr();
+    const sal_Unicode* p = p0;
+    const sal_Unicode* p1 = p0 + nPos;
     bool bQuoted = false;
     while ( p <= p1 )
     {
@@ -5442,9 +5442,9 @@ sal_Int32 SvNumberformat::GetQuoteEnd( const OUString& rStr, sal_Int32 nPos,
         }
         return -1;
     }
-    register const sal_Unicode* p0 = rStr.getStr();
-    register const sal_Unicode* p = p0 + nPos;
-    register const sal_Unicode* p1 = p0 + nLen;
+    const sal_Unicode* p0 = rStr.getStr();
+    const sal_Unicode* p = p0 + nPos;
+    const sal_Unicode* p1 = p0 + nLen;
     while ( p < p1 )
     {
         if ( *p == cQuote && p > p0 && *(p-1) != cEscIn )

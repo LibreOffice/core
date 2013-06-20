@@ -169,8 +169,8 @@ class INetURLHistory_Impl
     */
     void backlink (sal_uInt16 nThis, sal_uInt16 nTail)
     {
-        register lru_entry &rThis = m_pList[nThis];
-        register lru_entry &rTail = m_pList[nTail];
+        lru_entry &rThis = m_pList[nThis];
+        lru_entry &rTail = m_pList[nTail];
 
         rTail.m_nNext = nThis;
         rTail.m_nPrev = rThis.m_nPrev;
@@ -182,7 +182,7 @@ class INetURLHistory_Impl
     */
     void unlink (sal_uInt16 nThis)
     {
-        register lru_entry &rThis = m_pList[nThis];
+        lru_entry &rThis = m_pList[nThis];
 
         m_pList[rThis.m_nPrev].m_nNext = rThis.m_nNext;
         m_pList[rThis.m_nNext].m_nPrev = rThis.m_nPrev;

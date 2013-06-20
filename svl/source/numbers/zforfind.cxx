@@ -307,7 +307,7 @@ bool ImpSvNumberInputScan::SkipThousands( const sal_Unicode*& pStr,
     OUStringBuffer sBuff(rSymbol);
     sal_Unicode cToken;
     const OUString& rThSep = pFormatter->GetNumThousandSep();
-    register const sal_Unicode* pHere = pStr;
+    const sal_Unicode* pHere = pStr;
     ScanState eState = SsStart;
     sal_Int32 nCounter = 0; // counts 3 digits
 
@@ -458,7 +458,7 @@ inline void ImpSvNumberInputScan::SkipBlanks( const OUString& rString,
 {
     if ( nPos < rString.getLength() )
     {
-        register const sal_Unicode* p = rString.getStr() + nPos;
+        const sal_Unicode* p = rString.getStr() + nPos;
         while ( *p == ' ' )
         {
             nPos++;
