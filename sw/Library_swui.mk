@@ -118,7 +118,6 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/frmdlg/frmdlg \
     sw/source/ui/frmdlg/frmpage \
     sw/source/ui/frmdlg/pattern \
-    sw/source/ui/frmdlg/uiborder \
     sw/source/ui/frmdlg/wrap \
     sw/source/ui/index/cntex \
     sw/source/ui/index/cnttab \

@@ -38,7 +38,6 @@
 #include "swuipardlg.hxx"
 #include <pattern.hxx>
 #include <poolfmt.hxx>
-#include <uiborder.hxx>
 #include <uitool.hxx>
 
 #include <envfmt.hrc>

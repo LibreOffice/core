@@ -56,7 +56,6 @@
 #define RC_DLG_ADDR         (RC_DIALOG_BEGIN + 90)
 #define RC_SWDLG_BACKGROUND     (RC_DIALOG_BEGIN + 91)
 #define RC_DLG_SWNUMFMTDLG      (RC_DIALOG_BEGIN + 92)
-#define RC_DLG_SWBORDERDLG      (RC_DIALOG_BEGIN + 93)
 #define RC_DLG_SWWRAPDLG        (RC_DIALOG_BEGIN + 94)
 #define RC_DLG_SWFLDEDITDLG     (RC_DIALOG_BEGIN + 95)
 // Ueberlaufpruefung ********************************************************

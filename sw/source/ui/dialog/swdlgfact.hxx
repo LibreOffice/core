@@ -84,7 +84,7 @@ class AbstractSwInsertAbstractDlg_Impl : public AbstractSwInsertAbstractDlg
 
 //add for SwInsertAbstractDlg end
 
-// add for SwAddrDlg, SwDropCapsDlg, SwBackgroundDlg SwNumFmtDlg  SwWrapDlg SwBorderDlg, SwFldEditDlg  begin
+// add for SwAddrDlg, SwDropCapsDlg, SwBackgroundDlg SwNumFmtDlg  SwWrapDlg, SwFldEditDlg  begin
 class SfxNoLayoutSingleTabDialog;
 class SwAbstractSfxDialog_Impl :public SfxAbstractDialog
 {
@@ -93,7 +93,7 @@ class SwAbstractSfxDialog_Impl :public SfxAbstractDialog
     virtual void        SetText( const OUString& rStr );
     virtual OUString    GetText() const;
 };
-// add for SwAddrDlg,SwDropCapsDlg , SwBackgroundDlg  SwNumFmtDlg SwWrapDlg SwBorderDlg, SwFldEditDlg  end
+// add for SwAddrDlg,SwDropCapsDlg , SwBackgroundDlg  SwNumFmtDlg SwWrapDlg, SwFldEditDlg  end
 
 // add for SwAsciiFilterDlg begin
 class AbstractSwAsciiFilterDlg_Impl : public AbstractSwAsciiFilterDlg
@@ -477,7 +477,6 @@ public:
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell, //add for SwAutoFormatDlg
                                                             sal_Bool bSetAutoFmt = sal_True,
                                                             const SwTableAutoFmt* pSelFmt = 0 );
-    virtual SfxAbstractDialog * CreateSwBorderDlg (Window* pParent, SfxItemSet& rSet, sal_uInt16 nType,int nResId );//add for SwBorderDlg
 
     virtual SfxAbstractDialog * CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Bool bDrawMode, int nResId ); //add for SwWrapDlg
     virtual VclAbstractDialog * CreateSwTableWidthDlg(Window *pParent, SwTableFUNC &rFnc);

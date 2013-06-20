@@ -45,7 +45,6 @@
 
 #define STR_TOPPRT              (STR_FRMDLG_BEGIN + 1)
 
-#define STR_BORDER              (STR_FRMDLG_BEGIN + 16)
 #define STR_COLUMN              (STR_FRMDLG_BEGIN + 17)
 #define STR_CHAR                (STR_FRMDLG_BEGIN + 19)
 

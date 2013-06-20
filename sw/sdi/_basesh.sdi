@@ -275,11 +275,6 @@ interface BaseTextSelection
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    FN_FORMAT_BORDER_DLG // status(final|play)
-    [
-        ExecMethod = ExecDlg ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
 
     SID_ATTR_BORDER_INNER // status()
     [

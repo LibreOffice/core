@@ -102,10 +102,6 @@ String STR_COLL_HEADER
 {
     Text [ en-US ] = " (Template: " ;
 };
-String STR_FRMUI_BORDER
-{
-    Text [ en-US ] = "Borders" ;
-};
 String STR_FRMUI_PATTERN
 {
     Text [ en-US ] = "Background" ;

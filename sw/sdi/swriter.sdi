@@ -624,31 +624,6 @@ SfxVoidItem SwBackspace FN_BACKSPACE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem BorderDialog FN_FORMAT_BORDER_DLG
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_FORMAT;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem BulletsAndNumberingDialog FN_NUMBER_BULLETS
 ()
 [

@@ -59,7 +59,6 @@
 #include "srtdlg.hxx" //add for SwSortDlg
 #include "tautofmt.hxx" //add for SwAutoFormatDlg
 #include "tblnumfm.hxx" //add for SwNumFmtDlg
-#include "uiborder.hxx" //add for SwBorderDlg
 #include "wrap.hxx" //add for SwWrapDlg
 #include "colwd.hxx" //add for SwTableWidthDlg
 #include "tabledlg.hxx" //add for SwTableTabDlg
@@ -184,7 +183,7 @@ sal_uInt8 AbstractSwInsertAbstractDlg_Impl::GetPara() const
     return pDlg->GetPara();
 }
 
-//add for SwAddrDlg, SwDropCapsDlg ,SwBackgroundDlg, SwNumFmtDlg SwBorderDlg SwWrapDlg  SwFldEditDlg begin
+//add for SwAddrDlg, SwDropCapsDlg ,SwBackgroundDlg, SwNumFmtDlg SwWrapDlg  SwFldEditDlg begin
 const SfxItemSet* SwAbstractSfxDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
@@ -883,23 +882,6 @@ AbstractSwAutoFormatDlg * SwAbstractDialogFactory_Impl::CreateSwAutoFormatDlg(Wi
 {
     SwAutoFormatDlg* pDlg = new SwAutoFormatDlg(pParent, pShell, bSetAutoFmt, pSelFmt);
     return new AbstractSwAutoFormatDlg_Impl(pDlg);
-}
-
-SfxAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwBorderDlg (Window* pParent, SfxItemSet& rSet, sal_uInt16 nType,int nResId )
-{
-    SfxModalDialog* pDlg=NULL;
-    switch ( nResId )
-    {
-        case RC_DLG_SWBORDERDLG :
-            pDlg = new SwBorderDlg( pParent, rSet, nType );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new SwAbstractSfxDialog_Impl( pDlg );
-    return 0;
 }
 
 SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Bool bDrawMode, int nResId )

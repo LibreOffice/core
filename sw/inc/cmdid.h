@@ -323,7 +323,6 @@ included in c-context files, so c++ style stuff will cause problems.
 
 #define FN_FORMAT_PAGE_SETTING_DLG  (FN_FORMAT + 42)  /*  */
 #define FN_NUM_FORMAT_TABLE_DLG     (FN_FORMAT + 45)  /* number format in table */
-#define FN_FORMAT_BORDER_DLG        (FN_FORMAT + 48)  /* */
 #define FN_FORMAT_PAGE_COLUMN_DLG   (FN_FORMAT + 49)  /* columns per page */
 #define FN_FORMAT_BACKGROUND_DLG    (FN_FORMAT + 50)  /* background */
 #define FN_FORMAT_PAGE_DLG          (FN_FORMAT + 52)  /* page */
