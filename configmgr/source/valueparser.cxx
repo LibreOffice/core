@@ -257,7 +257,7 @@ css::uno::Any parseValue(
 
 }
 
-ValueParser::ValueParser(int layer): layer_(layer), state_(STATE_TEXT) {}
+ValueParser::ValueParser(int layer): layer_(layer), state_() {}
 
 ValueParser::~ValueParser() {}
 
