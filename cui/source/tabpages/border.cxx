@@ -1075,8 +1075,8 @@ IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl)
         // for tables everything is allowed
         sal_uInt16 nValid = VALID_TOP|VALID_BOTTOM|VALID_LEFT|VALID_RIGHT;
 
-        // for border and paragraph the edit is disabled, if there's no border set
-        if(nSWMode & (SW_BORDER_MODE_FRAME|SW_BORDER_MODE_PARA))
+        // for other objects (paragraph, page, frame) the edit is disabled, if there's no border set
+        if(!(nSWMode & SW_BORDER_MODE_TABLE))
         {
             if(bLineSet)
             {
