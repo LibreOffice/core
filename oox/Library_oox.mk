@@ -266,6 +266,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/ppt/timenodelistcontext \
     oox/source/ppt/timetargetelementcontext \
     oox/source/ppt/extdrawingfragmenthandler \
+    oox/source/shape/LockedCanvasContext \
     oox/source/shape/ShapeContextHandler \
     oox/source/shape/ShapeDrawingFragmentHandler \
     oox/source/shape/ShapeFilterBase \

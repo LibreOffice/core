@@ -21,6 +21,7 @@
 
 #include "ShapeContextHandler.hxx"
 #include "ShapeDrawingFragmentHandler.hxx"
+#include "LockedCanvasContext.hxx"
 #include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/drawingml/themefragmenthandler.hxx"
@@ -67,6 +68,26 @@ mnStartToken(0), m_xContext(context)
 
 ShapeContextHandler::~ShapeContextHandler()
 {
+}
+
+uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getLockedCanvasContext(sal_Int32 nElement)
+{
+    if (!mxLockedCanvasContext.is())
+    {
+        FragmentHandlerRef rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+        ShapePtr pMasterShape;
+
+        switch (nElement & 0xffff)
+        {
+            case XML_lockedCanvas:
+                mxLockedCanvasContext.set(new LockedCanvasContext(*rFragmentHandler));
+                break;
+            default:
+                break;
+        }
+    }
+
+    return mxLockedCanvasContext;
 }
 
 uno::Reference<xml::sax::XFastContextHandler>
@@ -140,6 +161,9 @@ ShapeContextHandler::getContextHandler()
         case NMSP_dmlDiagram:
             xResult.set(getDiagramShapeContext());
             break;
+        case NMSP_dmlLockedCanvas:
+            xResult.set(getLockedCanvasContext(mnStartToken));
+            break;
         default:
             xResult.set(getGraphicShapeContext(mnStartToken));
             break;
@@ -164,7 +188,7 @@ void SAL_CALL ShapeContextHandler::startFastElement
 
     mpThemePtr.reset(new Theme());
 
-    if (Element == DGM_TOKEN(relIds))
+    if (Element == DGM_TOKEN(relIds) || Element == LC_TOKEN(lockedCanvas))
     {
         // Parse the theme relation, if available; the diagram won't have colors without it.
         if (!msRelationFragmentPath.isEmpty())
@@ -308,6 +332,17 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
                 mpShape.reset((Shape*)0);
             }
             mxDiagramShapeContext.clear();
+        }
+        else if (mxLockedCanvasContext.is())
+        {
+            ShapePtr pShape = dynamic_cast<LockedCanvasContext*>(mxLockedCanvasContext.get())->getShape();
+            if (pShape)
+            {
+                basegfx::B2DHomMatrix aMatrix;
+                pShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
+                xResult = pShape->getXShape();
+                mxLockedCanvasContext.clear();
+            }
         }
         else if (mpShape.get() != NULL)
         {
