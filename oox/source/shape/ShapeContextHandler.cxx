@@ -74,7 +74,7 @@ uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getLockedCanv
 {
     if (!mxLockedCanvasContext.is())
     {
-        FragmentHandlerRef rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+        FragmentHandler2Ref rFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
         ShapePtr pMasterShape;
 
         switch (nElement & 0xffff)

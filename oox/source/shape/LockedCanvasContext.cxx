@@ -14,8 +14,8 @@ using namespace com::sun::star;
 
 namespace oox { namespace shape {
 
-LockedCanvasContext::LockedCanvasContext( ContextHandler& rParent )
-: ContextHandler( rParent )
+LockedCanvasContext::LockedCanvasContext( ContextHandler2Helper& rParent )
+: ContextHandler2( rParent )
 {
 }
 
@@ -28,10 +28,8 @@ oox::drawingml::ShapePtr LockedCanvasContext::getShape()
     return mpShape;
 }
 
-uno::Reference< xml::sax::XFastContextHandler > LockedCanvasContext::createFastChildContext( sal_Int32 aElementToken, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttribs*/ ) throw (xml::sax::SAXException, uno::RuntimeException)
+::oox::core::ContextHandlerRef LockedCanvasContext::onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& /*rAttribs*/ )
 {
-    uno::Reference< xml::sax::XFastContextHandler > xRet;
-
     switch( getBaseToken( aElementToken ) )
     {
     case XML_lockedCanvas:
@@ -45,22 +43,20 @@ uno::Reference< xml::sax::XFastContextHandler > LockedCanvasContext::createFastC
             oox::drawingml::ShapePtr pMasterShape;
             mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape"));
             mpShape->setLockedCanvas(true);
-            xRet = new oox::drawingml::ShapeContext( *this, pMasterShape, mpShape );
+            return new oox::drawingml::ShapeContext( *this, pMasterShape, mpShape );
         }
-        break;
     case XML_grpSp:
         {
             oox::drawingml::ShapePtr pMasterShape;
             mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.GroupShape"));
             mpShape->setLockedCanvas(true);
-            xRet = new oox::drawingml::ShapeGroupContext( *this, pMasterShape, mpShape );
+            return new oox::drawingml::ShapeGroupContext( *this, pMasterShape, mpShape );
         }
-        break;
     default:
         SAL_WARN("oox", "LockedCanvasContext::createFastChildContext: unhandled element:" << getBaseToken(aElementToken));
         break;
     }
-    return xRet;
+    return 0;
 }
 
 } }
