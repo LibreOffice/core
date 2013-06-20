@@ -155,7 +155,7 @@ public class SelectorActivity extends SherlockActivity {
     @Override
     public void onBackPressed() {
         if (mCommunicationService != null)
-            mCommunicationService.stopSearching();
+            mCommunicationService.stopSearch();
         Intent aIntent = new Intent(this, CommunicationService.class);
         stopService(aIntent);
         super.onBackPressed();
@@ -175,7 +175,7 @@ public class SelectorActivity extends SherlockActivity {
     protected void onPause() {
         super.onPause();
         if (mCommunicationService != null) {
-            mCommunicationService.stopSearching();
+            mCommunicationService.stopSearch();
         }
         doUnbindService();
         if (mProgressDialog != null) {
@@ -202,7 +202,7 @@ public class SelectorActivity extends SherlockActivity {
                         IBinder aService) {
             mCommunicationService = ((CommunicationService.CBinder) aService)
                             .getService();
-            mCommunicationService.startSearching();
+            mCommunicationService.startSearch();
             refreshLists();
         }
 
@@ -345,7 +345,7 @@ public class SelectorActivity extends SherlockActivity {
 
         @Override
         public void onClick(View aView) {
-            mCommunicationService.stopSearching();
+            mCommunicationService.stopSearch();
 
             Server aDesiredServer = null;
 

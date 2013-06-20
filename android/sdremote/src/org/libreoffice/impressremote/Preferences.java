@@ -17,6 +17,7 @@ public final class Preferences {
         }
 
         public static final String AUTHORIZED_REMOTES = "sdremote_authorisedremotes";
+        public static final String STORED_SERVERS = "sdremote_storedServers";
     }
 
     private Preferences() {
@@ -39,6 +40,15 @@ public final class Preferences {
             aLocation).edit();
 
         aPreferencesEditor.putString(aKey, aValue);
+
+        aPreferencesEditor.commit();
+    }
+
+    public static void remove(Context aContext, String aLocation, String aKey) {
+        SharedPreferences.Editor aPreferencesEditor = getPreferences(aContext,
+            aLocation).edit();
+
+        aPreferencesEditor.remove(aKey);
 
         aPreferencesEditor.commit();
     }
