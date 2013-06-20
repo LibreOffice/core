@@ -1505,6 +1505,11 @@ RMItemData SVTXRoadmap::GetRMItemData( const ::com::sun::star::container::Contai
         aValue = xPropertySet->getPropertyValue(OUString( "Enabled" ));
         aValue >>= aCurRMItemData.b_Enabled;
     }
+    else
+    {
+        aCurRMItemData.b_Enabled = sal_False;
+        aCurRMItemData.n_ID = 0;
+    }
     return aCurRMItemData;
 }
 
