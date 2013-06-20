@@ -136,6 +136,7 @@ Bitmap XGradientList::CreateBitmapForUI( long nIndex )
                 aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_AXIAL;
                 break;
             }
+            case XGRAD_RADIAL :
             {
                 aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_RADIAL;
                 break;
