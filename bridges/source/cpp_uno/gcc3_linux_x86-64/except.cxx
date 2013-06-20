@@ -22,11 +22,6 @@
 #include <string.h>
 #include <dlfcn.h>
 
-#include <cxxabi.h>
-#ifndef _GLIBCXX_CDTOR_CALLABI // new in GCC 4.7 cxxabi.h
-#define _GLIBCXX_CDTOR_CALLABI
-#endif
-
 #include <boost/unordered_map.hpp>
 
 #include <rtl/strbuf.hxx>

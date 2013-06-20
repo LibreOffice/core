@@ -5571,6 +5571,17 @@ if test "$GCC" = "yes"; then
             AC_MSG_RESULT([yes])
         ], [AC_MSG_RESULT([no])])
     CFLAGS=$save_CFLAGS
+
+    AC_MSG_CHECKING([whether $CXX declares __cxa_get_globals in cxxabi.h])
+    AC_LANG_PUSH([C++])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            #include <cxxabi.h>
+            void * f() { return __cxxabiv1::__cxa_get_globals(); }
+        ])], [
+            AC_DEFINE([HAVE_GCC_CXXABI_H_CXA_GET_GLOBALS],[1])
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    AC_LANG_POP([C++])
 fi
 
 AC_SUBST(HAVE_GCC_NO_LONG_DOUBLE)
@@ -12051,6 +12062,7 @@ fi
 AC_CONFIG_FILES([config_host.mk Makefile lo.xcent instsetoo_native/util/openoffice.lst])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
 AC_CONFIG_HEADERS([config_host/config_features.h])
+AC_CONFIG_HEADERS([config_host/config_gcc.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
 AC_CONFIG_HEADERS([config_host/config_graphite.h])
 AC_CONFIG_HEADERS([config_host/config_lgpl.h])
