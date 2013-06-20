@@ -221,10 +221,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             aStrURL = URIHelper::SmartRel2Abs(
                 INetURLObject(), aStrURL, URIHelper::GetMaybeFileHdl() );
 
-            INetURLObject* pURL = new INetURLObject();
-            pURL->SetSmartProtocol( INET_PROT_FILE );
+            INetURLObject url;
+            url.SetSmartProtocol( INET_PROT_FILE );
 
-            if ( pURL->SetURL( aStrURL, INetURLObject::WAS_ENCODED ) )
+            if ( url.SetURL( aStrURL, INetURLObject::WAS_ENCODED ) )
             {
                 OUString aName;
                 comphelper::EmbeddedObjectContainer aCnt;
@@ -238,7 +238,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     if ( xSet.is() )
                     {
                         xSet->setPropertyValue( OUString("PluginURL"),
-                                uno::makeAny( OUString( pURL->GetMainURL( INetURLObject::NO_DECODE ) ) ) );
+                                uno::makeAny( OUString( url.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                     }
                 }
 
