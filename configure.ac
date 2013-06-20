@@ -2417,8 +2417,8 @@ if test $_os = Darwin; then
         BITNESS_OVERRIDE=64
     fi
 
-    # If no --with-macosx-sdk option is given, look for 10.6, 10.7
-    # and 10.8 SDKs, in that order. If not found in some (old)
+    # If no --with-macosx-sdk option is given, look for 10.6, 10.7,
+    # 10.8 and 10.9 SDKs, in that order. If not found in some (old)
     # default locations, try the xcode-select tool.
 
     # The intent is that for "most" Mac-based developers, a suitable
@@ -2429,8 +2429,8 @@ if test $_os = Darwin; then
     # addition to Xcode 4 in /Applications/Xcode.app, the 10.6 SDK
     # should be found.
 
-    # For developers with a current Xcode 4 installed from the Mac App
-    # Store, the 10.6, 10.7 or 10.8 SDK should be found.
+    # For developers with a current Xcode, the lowest-numbered SDK
+    # should be found.
 
     AC_MSG_CHECKING([what Mac OS X SDK to use])
 
@@ -2451,6 +2451,8 @@ if test $_os = Darwin; then
                 with_macosx_sdk=10.7
             elif test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk"; then
                 with_macosx_sdk=10.8
+            elif test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk"; then
+                with_macosx_sdk=10.9
             fi
         fi
         if test -z "$with_macosx_sdk"; then
@@ -2468,6 +2470,9 @@ if test $_os = Darwin; then
     10.8)
         MACOSX_SDK_VERSION=1080
         ;;
+    10.9)
+        MACOSX_SDK_VERSION=1090
+        ;;
     *)
         AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported value are 10.6--8])
         ;;
@@ -2475,7 +2480,7 @@ if test $_os = Darwin; then
 
     # Next find it (again, if we deduced its version above by finding
     # it... but we need to look for it once more in case
-    # --with-macosx-sdk was given so that the aboce search did not
+    # --with-macosx-sdk was given so that the above search did not
     # happen).
     if test -z "$MACOSX_SDK_PATH"; then
         case $with_macosx_sdk in
@@ -2493,7 +2498,7 @@ if test $_os = Darwin; then
                 fi
             fi
             ;;
-        10.7|10.8)
+        10.7)
             if test -d /Developer/SDKs/MacOSX$with_macosx_sdk.sdk; then
                 MACOSX_SDK_PATH=/Developer/SDKs/MacOSX$with_macosx_sdk.sdk
             elif test -x /usr/bin/xcode-select; then
@@ -2501,6 +2506,12 @@ if test $_os = Darwin; then
                 if test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"; then
                     MACOSX_SDK_PATH="$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"
                 fi
+            fi
+            ;;
+        10.8|10.9)
+            xcodepath="`xcode-select -print-path`"
+            if test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"; then
+                MACOSX_SDK_PATH="$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"
             fi
             ;;
         esac
@@ -2531,8 +2542,11 @@ if test $_os = Darwin; then
     10.8)
         MAC_OS_X_VERSION_MIN_REQUIRED="1080"
         ;;
+    10.9)
+        MAC_OS_X_VERSION_MIN_REQUIRED="1090"
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported value are 10.6--8])
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported value are 10.6--9])
         ;;
     esac
 
@@ -2570,7 +2584,7 @@ if test $_os = Darwin; then
                 CXX="g++-4.2 $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             fi
             ;;
-        10.7|10.8)
+        10.7|10.8|10.9)
             if test "$enable_libc__" = yes -a "$with_macosx_version_min_required" != 10.6; then
                 # Use libc++ instead of libstdc++ when possible
                 # and also compile as C++11
@@ -2602,6 +2616,9 @@ if test $_os = Darwin; then
         ;;
     10.8)
         MAC_OS_X_VERSION_MAX_ALLOWED="1080"
+        ;;
+    10.9)
+        MAC_OS_X_VERSION_MAX_ALLOWED="1090"
         ;;
     *)
         AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported value are 10.6--8])
