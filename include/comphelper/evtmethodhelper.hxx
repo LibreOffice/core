@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef COMPHELPER_EVENTMEHODHELPER_HXX
-#define COMPHELPER_EVENMETHODHELPER_HXX
+#ifndef COMPHELPER_EVENTMETHODHELPER_HXX
+#define COMPHELPER_EVENTMETHODHELPER_HXX
 #include <comphelper/sequence.hxx>
 //........................................................................
 namespace comphelper
