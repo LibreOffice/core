@@ -39,9 +39,35 @@ $(eval $(call gb_ExternalPackage_use_external_project,firebird,firebird))
 # 	gen/firebird/security2.fdb \
 # ))
 
+$(eval $(call gb_ExternalPackage_set_outdir,firebird,$(INSTDIR)))
 
-$(eval $(call gb_ExternalPackage_add_file,firebird,lib/libfbembed.so.2.5.2,gen/firebird/lib/libfbembed.so.2.5.2))
-$(eval $(call gb_ExternalPackage_add_library_for_install,firebird,lib/libfbembed.so.2.5.2,gen/firebird/lib/libfbembed.so.2.5.2))
-$(eval $(call gb_ExternalPackage_add_file,firebird,lib/libfbembed.so,gen/firebird/lib/libfbembed.so.2.5.2))
+$(eval $(call gb_ExternalPackage_add_file,firebird,libfbembed.so.2.5.2,gen/firebird/lib/libfbembed.so.2.5.2))
+$(eval $(call gb_ExternalPackage_add_file,firebird,libfbembed.so.2.5,gen/firebird/lib/libfbembed.so.2.5))
+$(eval $(call gb_ExternalPackage_add_file,firebird,libfbembed.so,gen/firebird/lib/libfbembed.so))
+
+$(eval $(call gb_ExternalPackage_add_files,firebird,firebird,\
+    gen/firebird/firebird.msg \
+    gen/firebird/security2.fdb \
+))
+
+$(eval $(call gb_ExternalPackage_add_files,firebird,firebird/bin,\
+    gen/firebird/bin/isql \
+))
+
+$(eval $(call gb_ExternalPackage_add_files,firebird,firebird/lib,\
+    gen/firebird/lib/libfbembed.so.2.5.2 \
+    gen/firebird/lib/libfbembed.so.2.5 \
+    gen/firebird/lib/libfbembed.so \
+    gen/firebird/lib/libicudata.so \
+    gen/firebird/lib/libicudata.so.30 \
+    gen/firebird/lib/libicudata.so.30.0 \
+    gen/firebird/lib/libicuuc.so \
+    gen/firebird/lib/libicuuc.so.30 \
+    gen/firebird/lib/libicuuc.so.30.0 \
+    gen/firebird/lib/libicui18n.so \
+    gen/firebird/lib/libicui18n.so.30 \
+    gen/firebird/lib/libicui18n.so.30.0 \
+))
+
 
 # vim: set noet sw=4 ts=4:

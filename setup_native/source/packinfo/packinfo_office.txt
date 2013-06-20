@@ -193,6 +193,21 @@ packageversion = "%ABOUTBOXPRODUCTVERSION"
 End
 
 Start
+module = "gid_Module_Firebird"
+solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-Firebird"
+solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01"
+packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-firebird"
+freebsdrequires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
+requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core01"
+copyright = "2013 The Document Foundation"
+solariscopyright = "solariscopyrightfile"
+vendor = "The Document Foundation"
+description = "Firebird module for %PRODUCTNAME %PRODUCTVERSION"
+destpath = "/opt"
+packageversion = "%ABOUTBOXPRODUCTVERSION"
+End
+
+Start
 module = "gid_Module_Optional_Grfflt"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-graphicfilter"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core01,%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core04,%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core05"
