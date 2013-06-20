@@ -222,7 +222,7 @@ void EntryCache::destroy (Entry * entry)
  *======================================================================*/
 static int highbit(sal_Size n)
 {
-    register int k = 1;
+    int k = 1;
 
     if (n == 0)
         return (0);
@@ -420,7 +420,7 @@ void PageCache_Impl::rescale_Impl (sal_Size new_size)
 
 Entry * PageCache_Impl::lookup_Impl (Entry * entry, sal_uInt32 nOffset)
 {
-    register int lookups = 0;
+    int lookups = 0;
     while (entry != 0)
     {
         if (entry->m_nOffset == nOffset)

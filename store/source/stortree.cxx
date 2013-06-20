@@ -57,12 +57,12 @@ OStoreBTreeNodeData::OStoreBTreeNodeData (sal_uInt16 nPageSize)
  */
 sal_uInt16 OStoreBTreeNodeData::find (const T& t) const
 {
-    register sal_Int32 l = 0;
-    register sal_Int32 r = usageCount() - 1;
+    sal_Int32 l = 0;
+    sal_Int32 r = usageCount() - 1;
 
     while (l < r)
     {
-        register sal_Int32 const m = ((l + r) >> 1);
+        sal_Int32 const m = ((l + r) >> 1);
 
         if (t.m_aKey == m_pData[m].m_aKey)
             return ((sal_uInt16)(m));
