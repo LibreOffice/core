@@ -806,42 +806,6 @@ ScRefCellValue ScColumn::GetCellValue( sc::CellStoreType::const_iterator& itPos,
     return aVal;
 }
 
-void ScColumn::ReleaseCellValue( sc::CellStoreType::iterator& itPos, SCROW nRow, ScCellValue& rVal )
-{
-    std::pair<sc::CellStoreType::iterator,size_t> aPos = maCells.position(itPos, nRow);
-    itPos = aPos.first; // Store it for the next iteration.
-    if (aPos.first == maCells.end())
-        return;
-
-    switch (itPos->type)
-    {
-        case sc::element_type_numeric:
-            // Numeric cell
-            itPos = maCells.release(itPos, nRow, rVal.mfValue);
-            rVal.meType = CELLTYPE_VALUE;
-        break;
-        case sc::element_type_string:
-        {
-            // Make a copy until we implement shared strings...
-            OUString aStr;
-            itPos = maCells.release(itPos, nRow, aStr);
-            rVal.mpString = new OUString(aStr);
-            rVal.meType = CELLTYPE_STRING;
-        }
-        break;
-        case sc::element_type_edittext:
-            itPos = maCells.release(itPos, nRow, rVal.mpEditText);
-            rVal.meType = CELLTYPE_EDIT;
-        break;
-        case sc::element_type_formula:
-            itPos = maCells.release(itPos, nRow, rVal.mpFormula);
-            rVal.meType = CELLTYPE_FORMULA;
-        break;
-        default:
-            ;
-    }
-}
-
 namespace {
 
 ScFormulaCell* cloneFormulaCell(ScDocument* pDoc, const ScAddress& rNewPos, ScFormulaCell& rOldCell)

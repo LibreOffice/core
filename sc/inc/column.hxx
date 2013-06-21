@@ -489,12 +489,6 @@ private:
     void ResetCellTextAttrs();
 
     void SwapCellTextAttrs( SCROW nRow1, SCROW nRow2 );
-
-    /**
-     * Retrieve the cell value and set that slot empty. The ownership of that
-     * cell value moves to the returned cell value object.
-     */
-    void ReleaseCellValue( sc::CellStoreType::iterator& itPos, SCROW nRow, ScCellValue& rVal );
 };
 
 #endif
