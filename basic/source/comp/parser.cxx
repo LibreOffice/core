@@ -20,6 +20,7 @@
 #include <basic/sbx.hxx>
 #include "sbcomp.hxx"
 #include <com/sun/star/script/ModuleType.hpp>
+#include <svtools/miscopt.hxx>
 
 struct SbiParseStack {              // "Stack" for statement-blocks
     SbiParseStack* pNext;           // Chain

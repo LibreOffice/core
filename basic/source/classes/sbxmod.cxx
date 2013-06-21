@@ -83,6 +83,7 @@ using namespace com::sun::star::uno;
 #include <com/sun/star/awt/XControl.hpp>
 #include <comphelper/anytostring.hxx>
 #include <ooo/vba/VbQueryClose.hpp>
+#include "sbcomp.hxx"
 
 typedef ::cppu::WeakImplHelper1< XInvocation > DocObjectWrapper_BASE;
 typedef ::std::map< sal_Int16, Any, ::std::less< sal_Int16 > > OutParamMap;
@@ -1774,6 +1775,52 @@ IMPL_LINK( ErrorHdlResetter, BasicErrorHdl, StarBASIC *, /*pBasic*/)
 {
     mbError = true;
     return 0;
+}
+
+
+std::vector< CodeCompleteData > SbModule::GetCodeCompleteDataFromParse()
+{
+    ErrorHdlResetter aErrHdl;
+    StarBASIC* pBasic = PTR_CAST(StarBASIC,GetParent());
+    SbxBase::ResetError();
+    SbModule* pOld = GetSbData()->pCompMod;
+    GetSbData()->pCompMod = this;
+
+    SbiParser* pParser = new SbiParser( (StarBASIC*) GetParent(), this );
+
+    while( pParser->Parse() ) {}
+    SbiSymPool* pPool = pParser->pPool;
+    std::vector< CodeCompleteData > aRet;
+    for( sal_uInt16 i = 0; i < pPool->GetSize(); ++i )
+    {
+        SbiSymDef* pSymDef = pPool->Get(i);
+        if( pSymDef->GetType() == SbxOBJECT )
+        {
+            CodeCompleteData aCodeCompleteData;
+            aCodeCompleteData.sVarName = pSymDef->GetName();
+            aCodeCompleteData.sVarParent = OUString("");
+            aCodeCompleteData.sVarType = pParser->aGblStrings.Find( pSymDef->GetTypeId() );
+            if(!aCodeCompleteData.sVarType.isEmpty())
+                aRet.push_back(aCodeCompleteData);
+        }
+
+        SbiSymPool& pChildPool = pSymDef->GetPool();
+        for(sal_uInt16 j = 0; j < pChildPool.GetSize(); ++j )
+        {
+            CodeCompleteData aCodeCompleteData;
+            SbiSymDef* pChildSymDef = pChildPool.Get(j);
+            if( pChildSymDef->GetType() == SbxOBJECT )
+            {
+                aCodeCompleteData.sVarName = pChildSymDef->GetName();
+                aCodeCompleteData.sVarParent = pSymDef->GetName();
+                aCodeCompleteData.sVarType = pParser->aGblStrings.Find( pChildSymDef->GetTypeId() );
+                if(!aCodeCompleteData.sVarType.isEmpty())
+                    aRet.push_back(aCodeCompleteData);
+            }
+        }
+    }
+    delete pParser;
+    return aRet;
 }
 
 bool SbModule::HasExeCode()

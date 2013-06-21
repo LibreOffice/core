@@ -67,7 +67,6 @@ DBG_NAMEEX( ModulWindow )
 OUString getTextEngineText (ExtTextEngine&);
 void setTextEngineText (ExtTextEngine&, OUString const&);
 
-
 class EditorWindow : public Window, public SfxListener
 {
 private:
@@ -109,6 +108,7 @@ private:
     virtual
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
     GetComponentInterface(sal_Bool bCreate = true);
+    std::vector< CodeCompleteData > aCodeCompleteCache;
 
 protected:
     virtual void    Paint( const Rectangle& );

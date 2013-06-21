@@ -307,6 +307,8 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
     bool bDefined = false;
     while( ( pDef = VarDecl( &pDim, bStatic, bConst ) ) != NULL )
     {
+        /*fprintf(stderr, "Actual sub: \n");
+        fprintf(stderr, "Symbol name: %s\n",OUStringToOString(pDef->GetName(),RTL_TEXTENCODING_UTF8).getStr());*/
         EnableErrors();
         // search variable:
         if( bSwitchPool )

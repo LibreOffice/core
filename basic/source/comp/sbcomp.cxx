@@ -22,6 +22,7 @@
 #include "sbcomp.hxx"
 #include "image.hxx"
 #include <basic/sbobjmod.hxx>
+#include <svtools/miscopt.hxx>
 #include <stdio.h>
 
 // To activate tracing enable in sbtrace.hxx
@@ -993,5 +994,4 @@ sal_Bool SbModule::Compile()
 
     return bRet;
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

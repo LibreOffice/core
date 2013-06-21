@@ -39,9 +39,17 @@ class SbProcedureProperty;
 class SbIfaceMapperMethod;
 class SbClassModuleObject;
 
+
 class ModuleInitDependencyMap;
 struct ClassModuleRunInitItem;
 struct SbClassData;
+
+struct CodeCompleteData
+{
+    OUString sVarName;
+    OUString sVarParent;
+    OUString sVarType;
+};
 
 class BASIC_DLLPUBLIC SbModule : public SbxObject, private ::boost::noncopyable
 {
@@ -132,6 +140,7 @@ public:
     void     RemoveVars();
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > GetUnoModule();
     bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
+    std::vector< CodeCompleteData > GetCodeCompleteDataFromParse();
 };
 
 SV_DECL_IMPL_REF(SbModule)
