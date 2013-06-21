@@ -53,22 +53,17 @@ class SwDropCapsPict;
 class SwDropCapsPage : public SfxTabPage
 {
 friend class SwDropCapsPict;
-    // TODO: Work in progress
-    VclGrid*         m_pSwDropCapsGrid;
-    //FixedLine       aSettingsFL;
     CheckBox*        m_pDropCapsBox;
     CheckBox*        m_pWholeWordCB;
-    //FixedText       aSwitchText;
+    FixedText*       m_pSwitchText;
     NumericField*    m_pDropCapsField;
-    //FixedText       aLinesText;
+    FixedText*       m_pLinesText;
     NumericField*    m_pLinesField;
-    //FixedText       aDistanceText;
+    FixedText*       m_pDistanceText;
     MetricField*     m_pDistanceField;
-
-    VclFrame*        m_pContentFL;
     FixedText*       m_pTextText;
     Edit*            m_pTextEdit;
-    //FixedText       aTemplateText;
+    FixedText*       m_pTemplateText;
     ListBox*         m_pTemplateBox;
 
     SwDropCapsPict*  m_pPict;
