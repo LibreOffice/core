@@ -42,29 +42,45 @@ TYPEINIT0(SwIndexReg);  // rtti
 
 #ifdef CHK
 
-#define IDX_CHK_ARRAY       pArray->ChhkArr();
-#define ARR_CHK_ARRAY       ChhkArr();
-
+#define IDX_CHK_ARRAY       pArray->ChkArr();
+#define AR R_CHK_ARRAY       ChkArr();
 
 void SwIndexReg::ChkArr()
 {
-    ASSERT( (pFirst && pLast) || (!pFirst && !pLast),
-            "Array falsch Indiziert" );
+    if ( ! ((pFirst && pLast) || (!pFirst && !pLast)))
+    {
+        ASSERT(false, "array not correctly indexed");
+    }
 
     if( !pFirst )
         return;
 
     xub_StrLen nVal = 0;
     const SwIndex* pIdx = pFirst, *pPrev = 0;
-    ASSERT( !pIdx->pPrev, "Array-pFirst nicht am Anfang" );
+    if ( ! (!pIdx->pPrev))
+    {
+        ASSERT(false, "array-pFirst not at beginning");
+    }
 
     while( pIdx != pLast )
     {
-        ASSERT( pIdx->pPrev != pIdx && pIdx->pNext != pIdx,
-                "Index zeigt auf sich selbst" )
+        if ( ! (pIdx->pPrev != pIdx && pIdx->pNext != pIdx))
+        {
+            ASSERT(false, "index points to itself");
+        }
 
-        ASSERT( pIdx->nIndex >= nVal, "Reihenfolge stimmt nicht" );
-        ASSERT( pPrev == pIdx->pPrev, "Verkettung stimmt nicht" );
+        if ( ! (pIdx->nIndex >= nVal))
+        {
+            ASSERT(false, "wrong order");
+        }
+        if ( ! (pPrev == pIdx->pPrev))
+        {
+            ASSERT(false, "wrong array pointers");
+        }
+        if ( ! (this == pIdx->pArray))
+        {
+            ASSERT(false, "wrong array/child relationship");
+        }
         pPrev = pIdx;
         pIdx = pIdx->pNext;
         nVal = pPrev->nIndex;
@@ -224,16 +240,37 @@ IDX_CHK_ARRAY
 
 void SwIndex::Remove()
 {
-    if( !pPrev )
-        pArray->pFirst = pNext;
-    else
-        pPrev->pNext = pNext;
+    if (pArray->pFirst==NULL && pArray->pLast==NULL)
+    {
+        // The index object is not a member of its list and therefore
+        // can not be removed.
+        return;
+    }
 
-    if( !pNext )
-        pArray->pLast = pPrev;
+    if (pPrev==NULL && pNext==NULL)
+    {
+        // Removing last element in list.
+        pArray->pFirst = NULL;
+        pArray->pLast = NULL;
+    }
     else
-        pNext->pPrev = pPrev;
+    {
+        if( !pPrev )
+        {
+            OSL_ASSERT(pNext!=NULL);
+            pArray->pFirst = pNext;
+        }
+        else
+            pPrev->pNext = pNext;
 
+        if( !pNext )
+        {
+            OSL_ASSERT(pPrev!=NULL);
+            pArray->pLast = pPrev;
+        }
+        else
+            pNext->pPrev = pPrev;
+    }
 IDX_CHK_ARRAY
 }
 
