@@ -68,6 +68,7 @@ void SdFiltersTest::testDocumentLayout()
         // FIXME re-enable again when a better fix is found { "n819614.pptx", "xml/n819614_" },
         { "n820786.pptx", "xml/n820786_" },
         { "n762695.pptx", "xml/n762695_" },
+        { "n593612.pptx", "xml/n593612_" },
     };
 
     for ( int i = 0; i < static_cast< int >( SAL_N_ELEMENTS( aFilesToCompare ) ); ++i )
