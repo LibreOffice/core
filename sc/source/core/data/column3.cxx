@@ -1034,7 +1034,7 @@ public:
         mrDestColumn(rDestColumn),
         mrDestCells(rDestCells),
         mrDestAttrs(rDestAttrs),
-        maNewCells(0, nRow2 - nRow1 + 1),
+        maNewCells(nRow2 - nRow1 + 1),
         miNewCellsPos(maNewCells.begin()),
         mnRowOffset(nRow1),
         mnFunction(nFunction),
