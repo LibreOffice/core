@@ -4879,7 +4879,6 @@ find_winsdk()
 
 find_msms()
 {
-AC_MSG_NOTICE([checking msms ======================================================])
     for ver in 10.0 11.0; do
         reg_get_value HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
         if test -n "$regvalue"; then
