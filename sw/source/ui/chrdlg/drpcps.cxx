@@ -64,8 +64,8 @@ static sal_uInt16 aPageRg[] = {
 class SwDropCapsPict : public Control
 {
     SwDropCapsPage* mpPage;
-    String          maText;
-    String          maScriptText;
+    OUString        maText;
+    OUString        maScriptText;
     Color           maBackColor;
     Color           maTextLineColor;
     sal_uInt8       mnLines;
@@ -81,8 +81,8 @@ class SwDropCapsPict : public Control
     {
         sal_uLong  textWidth;   ///< Physical width of this segment.
         sal_uInt16 scriptType;  ///< Script type (e.g. Latin, Asian, Complex)
-        xub_StrLen changePos;   ///< Character position where the script changes.
-        _ScriptInfo(sal_uLong txtWidth, sal_uInt16 scrptType, xub_StrLen position)
+        sal_uInt16 changePos;   ///< Character position where the script changes.
+        _ScriptInfo(sal_uLong txtWidth, sal_uInt16 scrptType, sal_uInt16 position)
             : textWidth(txtWidth), scriptType(scrptType), changePos(position) {}
         bool operator<(_ScriptInfo other) { return changePos < other.changePos; }
     };
@@ -99,8 +99,8 @@ class SwDropCapsPict : public Control
     inline void     InitPrinter( void );
     void            _InitPrinter( void );
     void            GetFontSettings( const SwDropCapsPage& _rPage, Font& _rFont, sal_uInt16 _nWhich );
-    void            GetFirstScriptSegment(xub_StrLen &start, xub_StrLen &end, sal_uInt16 &scriptType);
-    bool            GetNextScriptSegment(size_t &nIdx, xub_StrLen &start, xub_StrLen &end, sal_uInt16 &scriptType);
+    void            GetFirstScriptSegment(sal_uInt16 &start, sal_uInt16 &end, sal_uInt16 &scriptType);
+    bool            GetNextScriptSegment(size_t &nIdx, sal_uInt16 &start, sal_uInt16 &end, sal_uInt16 &scriptType);
 
 public:
 
@@ -126,7 +126,7 @@ public:
     void SetText( const OUString& rT );
     void SetLines( sal_uInt8 nL );
     void SetDistance( sal_uInt16 nD );
-    void SetValues( const String& rText, sal_uInt8 nLines, sal_uInt16 nDistance );
+    void SetValues( const OUString& rText, sal_uInt8 nLines, sal_uInt16 nDistance );
 
     void        DrawPrev( const Point& rPt );
 };
@@ -165,7 +165,7 @@ void SwDropCapsPict::SetDistance( sal_uInt16 nD )
     UpdatePaintSettings();
 }
 
-void SwDropCapsPict::SetValues( const String& rText, sal_uInt8 nLines, sal_uInt16 nDistance )
+void SwDropCapsPict::SetValues( const OUString& rText, sal_uInt8 nLines, sal_uInt16 nDistance )
 {
     maText = rText;
     mnLines = nLines;
@@ -185,9 +185,9 @@ void SwDropCapsPict::InitPrinter( void )
 ****************************************************************************/
 
 
-String GetDefaultString(sal_uInt16 nChars)
+OUString GetDefaultString(sal_uInt16 nChars)
 {
-    String aStr;
+    OUString aStr;
     for (sal_uInt16 i = 0; i < nChars; i++)
         aStr += OUString((char) (i + 65));
     return aStr;
@@ -214,12 +214,12 @@ SwDropCapsPict::~SwDropCapsPict()
 /// @param[out] start      The character position of the start of the segment.
 /// @param[out] end        The character position of the end of the segment.
 /// @param[out] scriptType The script type (Latin, Asian, Complex etc.)
-void SwDropCapsPict::GetFirstScriptSegment(xub_StrLen &start, xub_StrLen &end, sal_uInt16 &scriptType)
+void SwDropCapsPict::GetFirstScriptSegment(sal_uInt16 &start, sal_uInt16 &end, sal_uInt16 &scriptType)
 {
     start = 0;
     if( maScriptChanges.empty() )
     {
-        end = maText.Len();
+        end = maText.getLength();
         scriptType = css::i18n::ScriptType::LATIN;
     }
     else
@@ -235,9 +235,9 @@ void SwDropCapsPict::GetFirstScriptSegment(xub_StrLen &start, xub_StrLen &end, s
 /// @param[in,out] end        The character position of the end of the segment.
 /// @param[out]    scriptType The script type (Latin, Asian, Complex etc.)
 /// @returns True if there was a next segment, false if not.
-bool SwDropCapsPict::GetNextScriptSegment(size_t &nIdx, xub_StrLen &start, xub_StrLen &end, sal_uInt16 &scriptType)
+bool SwDropCapsPict::GetNextScriptSegment(size_t &nIdx, sal_uInt16 &start, sal_uInt16 &end, sal_uInt16 &scriptType)
 {
-    if (maScriptChanges.empty() || nIdx >= maScriptChanges.size() - 1 || end >= maText.Len())
+    if (maScriptChanges.empty() || nIdx >= maScriptChanges.size() - 1 || end >= maText.getLength())
         return false;
     start = maScriptChanges[nIdx++].changePos;
     end = maScriptChanges[ nIdx ].changePos;
@@ -394,8 +394,8 @@ void SwDropCapsPict::DrawPrev( const Point& rPt )
     Font        aOldFont = mpPrinter->GetFont();
     sal_uInt16      nScript;
     size_t      nIdx = 0;
-    xub_StrLen  nStart;
-    xub_StrLen  nEnd;
+    sal_uInt16  nStart;
+    sal_uInt16  nEnd;
     GetFirstScriptSegment(nStart, nEnd, nScript);
     do
     {
@@ -428,8 +428,8 @@ void SwDropCapsPict::CheckScript( void )
     sal_uInt16 nChg = 0;
     if( css::i18n::ScriptType::WEAK == nScript )
     {
-        nChg = (xub_StrLen)xBreak->endOfScript( maText, nChg, nScript );
-        if( nChg < maText.Len() )
+        nChg = (sal_uInt16)xBreak->endOfScript( maText, nChg, nScript );
+        if( nChg < maText.getLength() )
             nScript = xBreak->getScriptType( maText, nChg );
         else
             nScript = css::i18n::ScriptType::LATIN;
@@ -437,10 +437,10 @@ void SwDropCapsPict::CheckScript( void )
 
     do
     {
-        nChg = (xub_StrLen)xBreak->endOfScript( maText, nChg, nScript );
+        nChg = (sal_uInt16)xBreak->endOfScript( maText, nChg, nScript );
         maScriptChanges.push_back( _ScriptInfo(0, nScript, nChg) );
 
-        if( nChg < maText.Len() )
+        if( nChg < maText.getLength() )
             nScript = xBreak->getScriptType( maText, nChg );
         else
             break;
@@ -453,8 +453,8 @@ Size SwDropCapsPict::CalcTextSize( void )
 
     sal_uInt16      nScript;
     size_t      nIdx = 0;
-    xub_StrLen  nStart;
-    xub_StrLen  nEnd;
+    sal_uInt16  nStart;
+    sal_uInt16  nEnd;
     GetFirstScriptSegment(nStart, nEnd, nScript);
     long        nTxtWidth = 0;
     long        nCJKHeight = 0;
@@ -544,10 +544,15 @@ SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet)
     get(m_pDropCapsField,"spinFLD_DROPCAPS");
     get(m_pLinesField,"spinFLD_LINES");
     get(m_pDistanceField,"spinFLD_DISTANCE");
-    get(m_pContentFL,"frameFL_CONTENT");
     get(m_pTextText,"labelTXT_TEXT");
     get(m_pTextEdit,"entryEDT_TEXT");
     get(m_pTemplateBox,"comboBOX_TEMPLATE");
+
+    get(m_pSwitchText,"labelFT_DROPCAPS");
+    get(m_pLinesText,"labelTXT_LINES");
+    get(m_pDistanceText,"labelTXT_DISTANCE");
+    get(m_pTemplateText,"labelTXT_TEMPLATE");
+
     get(m_pPict,"drawingareaWN_EXAMPLE");
     m_pPict->SetDropCapsPage(this);
 
@@ -675,16 +680,16 @@ IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl)
 
     m_pWholeWordCB->Enable( bChecked && !bHtmlMode );
 
-    //aSwitchText.Enable( bChecked && !m_pWholeWordCB->IsChecked() );
+    m_pSwitchText->Enable( bChecked && !m_pWholeWordCB->IsChecked() );
     m_pDropCapsField->Enable( bChecked && !m_pWholeWordCB->IsChecked() );
-    //aLinesText   .Enable( bChecked );
+    m_pLinesText->Enable( bChecked );
     m_pLinesField->Enable( bChecked );
-    //aDistanceText.Enable( bChecked );
+    m_pDistanceText->Enable( bChecked );
     m_pDistanceField->Enable( bChecked );
-    //aTemplateText .Enable( bChecked );
+    m_pTemplateText->Enable( bChecked );
     m_pTemplateBox->Enable( bChecked );
     m_pTextEdit->Enable( bChecked && !bFormat );
-    //aTextText     .Enable( bChecked && !bFormat );
+    m_pTextText->Enable( bChecked && !bFormat );
 
     if ( bChecked )
     {
@@ -692,7 +697,7 @@ IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl)
         m_pDropCapsField->GrabFocus();
     }
     else
-        m_pPict->SetText(OUString());
+        m_pPict->SetText("");
 
     bModified = sal_True;
 
@@ -722,7 +727,7 @@ Page: SpinFields' Modify-Handler
 
 IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
 {
-    String sPreview;
+    OUString sPreview;
 
     // set text if applicable
     if (pEdit == m_pDropCapsField)
@@ -743,11 +748,11 @@ IMPL_LINK( SwDropCapsPage, ModifyHdl, Edit *, pEdit )
             sPreview = rSh.GetDropTxt(nVal);
         }
 
-        String sEdit(m_pTextEdit->GetText());
+        OUString sEdit(m_pTextEdit->GetText());
 
-        if (sEdit.Len() && sPreview.CompareTo(sEdit, sEdit.Len()) != COMPARE_EQUAL)
+        if (!sEdit.isEmpty() && (sPreview != sEdit))
         {
-            sPreview = sEdit.Copy(0, sPreview.Len());
+            sPreview = sEdit;
             bSetText = false;
         }
 
@@ -821,8 +826,7 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
 
         // set attributes
         const SfxPoolItem* pOldItem;
-        if(0 == (pOldItem = GetOldItem( rSet, FN_FORMAT_DROPCAPS )) ||
-                    aFmt != *pOldItem )
+        if(0 == (pOldItem = GetOldItem( rSet, FN_FORMAT_DROPCAPS )) || aFmt != *pOldItem )
             rSet.Put(aFmt);
 
         // hard text formatting
@@ -832,7 +836,7 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
             String sText(m_pTextEdit->GetText());
 
             if (!m_pWholeWordCB->IsChecked())
-                sText.Erase( static_cast< xub_StrLen >(m_pDropCapsField->GetValue()));
+                sText.Erase( static_cast< sal_uInt16 >(m_pDropCapsField->GetValue()));
 
             SfxStringItem aStr(FN_PARAM_1, sText);
             rSet.Put( aStr );
