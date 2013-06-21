@@ -60,8 +60,8 @@ struct ImplSplitItem
     Window*             mpOrgParent;
     sal_uInt16              mnId;
     SplitWindowItemBits mnBits;
-    sal_Bool                mbFixed;
-    sal_Bool                mbSubSize;
+    bool                mbFixed;
+    bool                mbSubSize;
     /// Minimal width or height of the item.  -1 means no restriction.
     long                mnMinSize;
     /// Maximal width or height of the item.  -1 means no restriction.
@@ -77,7 +77,7 @@ struct ImplSplitSet
     long                mnSplitSize;
     sal_uInt16              mnItems;
     sal_uInt16              mnId;
-    sal_Bool                mbCalcPix;
+    bool                mbCalcPix;
 };
 
 
@@ -453,7 +453,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
     long                nMaxPos;
     long*               pSize;
     ImplSplitItem*      pItems = pSet->mpItems;
-    sal_Bool                bEmpty;
+    bool                bEmpty;
 
     // Anzahl sichtbarer Items ermitteln
     nVisItems = 0;
@@ -533,7 +533,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
             nCurSize += pItems[i].mnPixSize;
         }
 
-        pSet->mbCalcPix  = sal_False;
+        pSet->mbCalcPix  = false;
         pSet->mnLastSize = nCalcSize;
 
         // Fenster einpassen
@@ -584,10 +584,10 @@ static void ImplCalcSet( ImplSplitSet* pSet,
                 {
                     for ( i = 0; i < nItems; i++ )
                     {
-                        pItems[i].mbSubSize = sal_False;
+                        pItems[i].mbSubSize = false;
 
                         if ( j >= 2 )
-                            pItems[i].mbSubSize = sal_True;
+                            pItems[i].mbSubSize = true;
                         else
                         {
                             if ( !(pItems[i].mnBits & SWIB_INVISIBLE) )
@@ -595,11 +595,11 @@ static void ImplCalcSet( ImplSplitSet* pSet,
                                 if ( (nSizeDelta > 0) || pItems[i].mnPixSize )
                                 {
                                     if ( j >= 1 )
-                                        pItems[i].mbSubSize = sal_True;
+                                        pItems[i].mbSubSize = true;
                                     else
                                     {
                                         if ( (j == 0) && (pItems[i].mnBits & (SWIB_RELATIVESIZE | SWIB_PERCENTSIZE)) )
-                                            pItems[i].mbSubSize = sal_True;
+                                            pItems[i].mbSubSize = true;
                                     }
                                 }
                             }
@@ -696,20 +696,20 @@ static void ImplCalcSet( ImplSplitSet* pSet,
         pItems[i].mnOldHeight      = pItems[i].mnHeight;
 
         if ( pItems[i].mnBits & SWIB_INVISIBLE )
-            bEmpty = sal_True;
+            bEmpty = true;
         else
         {
-            bEmpty = sal_False;
+            bEmpty = false;
             if ( bDown )
             {
                 if ( nPos+pItems[i].mnPixSize > nMaxPos )
-                    bEmpty = sal_True;
+                    bEmpty = true;
             }
             else
             {
                 nPos -= pItems[i].mnPixSize;
                 if ( nPos < nMaxPos )
-                    bEmpty = sal_True;
+                    bEmpty = true;
             }
         }
 
@@ -780,9 +780,9 @@ static void ImplCalcSet( ImplSplitSet* pSet,
     // Fixed setzen
     for ( i = 0; i < nItems; i++ )
     {
-        pItems[i].mbFixed = sal_False;
+        pItems[i].mbFixed = false;
         if ( pItems[i].mnBits & SWIB_FIXED )
-            pItems[i].mbFixed = sal_True;
+            pItems[i].mbFixed = true;
         else
         {
             // Wenn Child-Set vorhanden, ist dieses Item auch Fixed, wenn
@@ -793,7 +793,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
                 {
                     if ( pItems[i].mpSet->mpItems[j].mbFixed )
                     {
-                        pItems[i].mbFixed = sal_True;
+                        pItems[i].mbFixed = true;
                         break;
                     }
                 }
@@ -1031,7 +1031,7 @@ static void ImplDrawSplit( SplitWindow* pWindow, ImplSplitSet* pSet,
     ImplSplitItem*          pItems = pSet->mpItems;
     const StyleSettings&    rStyleSettings = pWindow->GetSettings().GetStyleSettings();
 
-    sal_Bool bFlat = (pWindow->GetStyle() & WB_FLATSPLITDRAW) == WB_FLATSPLITDRAW;
+    bool bFlat = (pWindow->GetStyle() & WB_FLATSPLITDRAW) == WB_FLATSPLITDRAW;
 
     for ( i = 0; i < nItems-1; i++ )
     {
@@ -1305,7 +1305,7 @@ void SplitWindow::ImplInit( Window* pParent, WinBits nStyle )
     pNewSet->mnItems        = 0;
     pNewSet->mnId           = 0;
     pNewSet->mnSplitSize    = SPLITWIN_SPLITSIZE;
-    pNewSet->mbCalcPix      = sal_True;
+    pNewSet->mbCalcPix      = true;
 
     mpMainSet               = pNewSet;
     mpBaseSet               = pNewSet;
@@ -2089,14 +2089,14 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
         ImplSplitItem*  pSplitItem;
         long            nCurMaxSize;
         sal_uInt16          nTemp;
-        sal_Bool            bDown;
-        sal_Bool            bPropSmaller;
+        bool            bDown;
+        bool            bPropSmaller;
 
         mnMouseModifier = rMEvt.GetModifier();
         if ( !(mnMouseModifier & KEY_SHIFT) || (mnSplitPos+1 >= mpSplitSet->mnItems) )
-            bPropSmaller = sal_False;
+            bPropSmaller = false;
         else
-            bPropSmaller = sal_True;
+            bPropSmaller = true;
 
         // Hier kann noch die maximale Groesse gesetzt werden
         StartSplit();
@@ -2114,9 +2114,9 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
 
         if ( mpSplitSet->mpItems )
         {
-            bDown = sal_True;
+            bDown = true;
             if ( (mpSplitSet == mpMainSet) && mbBottomRight )
-                bDown = sal_False;
+                bDown = false;
 
             pSplitItem          = &(mpSplitSet->mpItems[mnSplitPos]);
             maDragRect.Left()   = pSplitItem->mnLeft;
@@ -2504,7 +2504,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
     else
     {
         ImplSplitMousePos( aMousePosPixel );
-        sal_Bool bSplit = sal_True;
+        bool bSplit = true;
         if ( mbDragFull )
         {
             if ( rTEvt.IsTrackingEnded() )
@@ -2521,7 +2521,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
                     ImplUpdate();
                     Split();
                 }
-                bSplit = sal_False;
+                bSplit = false;
             }
         }
         else
@@ -2534,7 +2534,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
             else
             {
                 ImplDrawSplitTracking( this, aMousePosPixel );
-                bSplit = sal_False;
+                bSplit = false;
             }
         }
 
@@ -2781,7 +2781,7 @@ void SplitWindow::InsertItem( sal_uInt16 nId, Window* pWindow, long nSize,
     delete[] pSet->mpItems;
     pSet->mpItems = pNewItems;
     pSet->mnItems++;
-    pSet->mbCalcPix = sal_True;
+    pSet->mbCalcPix = true;
 
     // Create and initialize item.
     pItem           = &(pSet->mpItems[nPos]);
@@ -2811,7 +2811,7 @@ void SplitWindow::InsertItem( sal_uInt16 nId, Window* pWindow, long nSize,
         pNewSet->mnItems        = 0;
         pNewSet->mnId           = nId;
         pNewSet->mnSplitSize    = pSet->mnSplitSize;
-        pNewSet->mbCalcPix      = sal_True;
+        pNewSet->mbCalcPix      = true;
 
         pItem->mpSet            = pNewSet;
     }
@@ -2850,7 +2850,7 @@ void SplitWindow::RemoveItem( sal_uInt16 nId, sal_Bool bHide )
 
     // Item entfernen
     pSet->mnItems--;
-    pSet->mbCalcPix = sal_True;
+    pSet->mbCalcPix = true;
     if ( pSet->mnItems )
     {
         memmove( pSet->mpItems+nPos, pSet->mpItems+nPos+1,
@@ -2892,7 +2892,7 @@ void SplitWindow::Clear()
     mpMainSet->mnItems          = 0;
     mpMainSet->mnId             = 0;
     mpMainSet->mnSplitSize      = SPLITWIN_SPLITSIZE;
-    mpMainSet->mbCalcPix        = sal_True;
+    mpMainSet->mbCalcPix        = true;
     if ( mnWinStyle & WB_NOSPLITDRAW )
         mpMainSet->mnSplitSize -= 2;
     mpBaseSet                   = mpMainSet;
@@ -2952,8 +2952,8 @@ void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
     }
 
     // Wenn das Fenster sizeable ist, wird das TopSet anders behandelt
-    sal_Bool bSmall  = sal_True;
-    sal_Bool bGreat  = sal_True;
+    bool bSmall  = true;
+    bool bGreat  = true;
     if ( (pSet == mpMainSet) && (mnWinStyle & WB_SIZEABLE) )
     {
         if ( nPos < pSet->mnItems-1 )
@@ -2963,23 +2963,23 @@ void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
                    ((nDelta < 0) && bPropGreat)) )
             {
                 if ( nDelta < 0 )
-                    bGreat = sal_False;
+                    bGreat = false;
                 else
-                    bSmall = sal_False;
+                    bSmall = false;
             }
         }
         else
         {
             if ( nDelta < 0 )
-                bGreat = sal_False;
+                bGreat = false;
             else
-                bSmall = sal_False;
+                bSmall = false;
         }
     }
     else if ( nPos >= nMax )
     {
-        bSmall = sal_False;
-        bGreat = sal_False;
+        bSmall = false;
+        bGreat = false;
     }
     else if ( nPos && (nPos >= pSet->mnItems-1) )
     {
@@ -3153,7 +3153,7 @@ void SplitWindow::SetItemSize( sal_uInt16 nId, long nNewSize )
     {
         // Neue Groesse setzen und neu durchrechnen
         pItem->mnSize = nNewSize;
-        pSet->mbCalcPix = sal_True;
+        pSet->mbCalcPix = true;
         ImplUpdate();
     }
 }

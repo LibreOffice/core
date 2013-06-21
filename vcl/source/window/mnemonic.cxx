@@ -149,8 +149,8 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
     // #110720#, avoid CJK-style mnemonics for latin-only strings that do not contain useful mnemonic chars
     if( bCJK )
     {
-        sal_Bool bLatinOnly = sal_True;
-        sal_Bool bMnemonicIndexFound = sal_False;
+        bool bLatinOnly = true;
+        bool bMnemonicIndexFound = false;
         sal_Unicode     c;
         xub_StrLen      nIndex;
 
@@ -160,11 +160,11 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
             if ( ((c >= 0x3000) && (c <= 0xD7FF)) ||    // cjk
                  ((c >= 0xFF61) && (c <= 0xFFDC)) )     // halfwidth forms
             {
-                bLatinOnly = sal_False;
+                bLatinOnly = false;
                 break;
             }
             if( ImplGetMnemonicIndex( c ) != MNEMONIC_INDEX_NOTFOUND )
-                bMnemonicIndexFound = sal_True;
+                bMnemonicIndexFound = true;
         }
         if( bLatinOnly && !bMnemonicIndexFound )
             return sal_False;
