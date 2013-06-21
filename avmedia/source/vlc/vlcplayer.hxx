@@ -20,10 +20,10 @@
 #ifndef _VLCPLAYER_HXX
 #define _VLCPLAYER_HXX
 
-#include "vlccommon.hxx"
-
-#include "com/sun/star/media/XPlayer.hpp"
+#include <vlc/vlc.h>
+#include <com/sun/star/media/XPlayer.hpp>
 #include <cppuhelper/basemutex.hxx>
+#include "vlccommon.hxx"
 
 namespace avmedia {
 namespace vlc {
@@ -34,7 +34,11 @@ typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::media::XPlayer,
 class VLCPlayer : public ::cppu::BaseMutex,
                   public VLC_Base
 {
+    boost::shared_ptr<libvlc_instance_t> mInstance;
+    boost::shared_ptr<libvlc_media_player_t> mPlayer;
 public:
+    VLCPlayer();
+
     void SAL_CALL start();
     void SAL_CALL stop();
     ::sal_Bool SAL_CALL isPlaying();
