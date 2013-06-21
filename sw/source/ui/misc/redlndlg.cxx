@@ -350,7 +350,7 @@ void SwRedlineAcceptDlg::InitAuthors()
     pFilterPage->ClearAuthors();
 
     String sParent;
-    sal_uInt16 nCount = pSh->GetRedlineCount();
+    const sal_uInt16 nRedlineCount = pSh->GetRedlineCount();
 
     bOnlyFormatedRedlines = sal_True;
     bHasReadonlySel = sal_False;
@@ -358,7 +358,7 @@ void SwRedlineAcceptDlg::InitAuthors()
     sal_uInt16 i;
 
     // Autoren ermitteln
-    for ( i = 0; i < nCount; i++)
+    for ( i = 0; i < nRedlineCount; i++)
     {
         const SwRedline& rRedln = pSh->GetRedline(i);
 
@@ -390,14 +390,18 @@ void SwRedlineAcceptDlg::InitAuthors()
     sal_Bool bEnable = pTable->GetEntryCount() != 0 && !pSh->getIDocumentRedlineAccess()->GetRedlinePassword().getLength();
     sal_Bool bSel = pTable->FirstSelected() != 0;
 
-    SvLBoxEntry* pSelEntry = pTable->FirstSelected();
-    while (pSelEntry)
     {
-        sal_uInt16 nPos = GetRedlinePos(*pSelEntry);
-        const SwRedline& rRedln = pSh->GetRedline( nPos );
-
-        bIsNotFormated |= nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType();
-        pSelEntry = pTable->NextSelected(pSelEntry);
+        SvLBoxEntry* pSelEntry = pTable->FirstSelected();
+        while (pSelEntry)
+        {
+            const sal_uInt16 nPos = GetRedlinePos(*pSelEntry);
+            if ( nPos < nRedlineCount )
+            {
+                const SwRedline& rRedln = pSh->GetRedline( nPos );
+                bIsNotFormated |= nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType();
+            }
+            pSelEntry = pTable->NextSelected(pSelEntry);
+        }
     }
 
     pTPView->EnableAccept( bEnable && bSel );
@@ -823,7 +827,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     sal_uInt16 nAutoFmt = HasRedlineAutoFmt() ? nsRedlineType_t::REDLINE_FORM_AUTOFMT : 0;
 
     String sParent;
-    sal_uInt16 nCount = pSh->GetRedlineCount();
+    const sal_uInt16 nCount = pSh->GetRedlineCount();
     nEnd = Min((sal_uInt16)nEnd, (sal_uInt16)(nCount - 1)); // Handelt auch nEnd=USHRT_MAX (bis zum Ende) ab
 
     if (nEnd == USHRT_MAX)
@@ -949,7 +953,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
          aIter != aEnd;
          aIter++ )
     {
-        sal_uInt16 nPosition = GetRedlinePos( **aIter );
+        const sal_uInt16 nPosition = GetRedlinePos( **aIter );
         if( nPosition != USHRT_MAX )
             (pSh->*FnAccRej)( nPosition );
     }
@@ -1102,7 +1106,6 @@ IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
 
     sal_Bool bIsNotFormated = sal_False;
     sal_Bool bSel = sal_False;
-//  sal_Bool bReadonlySel = sal_False;
 
     //#98883# don't select redlines while the dialog is not focussed
     //#107938# But not only ask pTable if it has the focus. To move
@@ -1136,16 +1139,12 @@ IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
                 bSel = sal_True;
 
             // #98864# find the selected redline (ignore, if the redline is already gone)
-            sal_uInt16 nPos = GetRedlinePos(*pActEntry);
-            if( nPos != USHRT_MAX )
+            const sal_uInt16 nPos = GetRedlinePos(*pActEntry);
+            if ( nPos < pSh->GetRedlineCount() )
             {
 
                 const SwRedline& rRedln = pSh->GetRedline( nPos );
                 bIsNotFormated |= nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType();
-
-//JP 27.9.2001: make no sense if we handle readonly sections
-//          if( !bReadonlySel && rRedln.HasReadonlySel() )
-//              bReadonlySel = sal_True;
 
                 if (pSh->GotoRedline(nPos, sal_True))
                 {
@@ -1192,7 +1191,7 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
                 if (pTable->GetParent(pEntry))
                     pTopEntry = pTable->GetParent(pEntry);
 
-                sal_uInt16 nPos = GetRedlinePos(*pTopEntry);
+                const sal_uInt16 nPos = GetRedlinePos(*pTopEntry);
 
                 // Bei geschuetzten Bereichen kommentieren disablen
                 if ((pRed = pSh->GotoRedline(nPos, sal_True)) != 0)
@@ -1228,7 +1227,7 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
 
             switch( nRet )
             {
-                case MN_EDIT_COMMENT:
+            case MN_EDIT_COMMENT:
                 {
                     String sComment;
                     if (pEntry)
@@ -1236,14 +1235,18 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
                         if (pTable->GetParent(pEntry))
                             pEntry = pTable->GetParent(pEntry);
 
-                        sal_uInt16 nPos = GetRedlinePos(*pEntry);
+                        const sal_uInt16 nPos = GetRedlinePos(*pEntry);
+                        if ( nPos >= pSh->GetRedlineCount() )
+                        {
+                            break;
+                        }
                         const SwRedline &rRedline = pSh->GetRedline(nPos);
 
 
                         /* enable again once we have redline comments in the margin
                         sComment = rRedline.GetComment();
                         if ( sComment == String(::rtl::OUString::createFromAscii("")) )
-                            GetActiveView()->GetDocShell()->Broadcast(SwRedlineHint(&rRedline,SWREDLINE_INSERTED));
+                        GetActiveView()->GetDocShell()->Broadcast(SwRedlineHint(&rRedline,SWREDLINE_INSERTED));
                         const_cast<SwRedline&>(rRedline).Broadcast(SwRedlineHint(&rRedline,SWREDLINE_FOCUS));
                         */
 
@@ -1258,8 +1261,8 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
                         aSet.Put(SvxPostItAuthorItem(rRedline.GetAuthorString(), SID_ATTR_POSTIT_AUTHOR));
 
                         aSet.Put(SvxPostItDateItem( GetAppLangDateTimeString(
-                                    rRedline.GetRedlineData().GetTimeStamp() ),
-                                    SID_ATTR_POSTIT_DATE ));
+                            rRedline.GetRedlineData().GetTimeStamp() ),
+                            SID_ATTR_POSTIT_DATE ));
 
                         AbstractSvxPostItDialog* pDlg = pFact->CreateSvxPostItDialog( pParentDlg, aSet, sal_False );
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");
