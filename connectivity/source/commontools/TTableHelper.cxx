@@ -339,12 +339,19 @@ void OTableHelper::refreshPrimaryKeys(TStringVector& _rNames)
             if ( !bAlreadyFetched )
             {
                 aPkName = xRow->getString(6);
+                SAL_WARN_IF(xRow.wasNull(),"connectivity.commontools", "NULL Primary Key name");
+                SAL_WARN_IF(aPkName.isEmpty(),"connectivity.commontools", "empty Primary Key name");
                 bAlreadyFetched = true;
             }
         }
 
-        m_pImpl->m_aKeys.insert(TKeyMap::value_type(aPkName,pKeyProps));
-        _rNames.push_back(aPkName);
+        if(bAlreadyFetched)
+        {
+            SAL_WARN_IF(aPkName.isEmpty(),"connectivity.commontools", "empty Primary Key name");
+            SAL_WARN_IF(pKeyProps->m_aKeyColumnNames.size() == 0,"connectivity.commontools", "Primary Key has no columns");
+            m_pImpl->m_aKeys.insert(TKeyMap::value_type(aPkName,pKeyProps));
+            _rNames.push_back(aPkName);
+        }
     } // if ( xResult.is() && xResult->next() )
     ::comphelper::disposeComponent(xResult);
 }
