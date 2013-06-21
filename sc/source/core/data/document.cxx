@@ -5921,13 +5921,6 @@ sal_uInt16 ScDocument::GetTextWidth( const ScAddress& rPos ) const
     return 0;
 }
 
-void ScDocument::SetTextWidth( const ScAddress& rPos, sal_uInt16 nWidth )
-{
-    SCTAB nTab = rPos.Tab();
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->SetTextWidth(rPos.Col(), rPos.Row(), nWidth);
-}
-
 sal_uInt8 ScDocument::GetScriptType( const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();

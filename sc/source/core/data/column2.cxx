@@ -1710,9 +1710,12 @@ sal_uInt16 ScColumn::GetTextWidth(SCROW nRow) const
 
 void ScColumn::SetTextWidth(SCROW nRow, sal_uInt16 nWidth)
 {
-    sc::CellTextAttr aVal = maCellTextAttrs.get<sc::CellTextAttr>(nRow);
-    aVal.mnTextWidth = nWidth;
-    maCellTextAttrs.set(nRow, aVal);
+    sc::CellTextAttrStoreType::position_type aPos = maCellTextAttrs.position(nRow);
+    if (aPos.first->type != sc::element_type_celltextattr)
+        return;
+
+    // Set new value only when the slot is not empty.
+    sc::celltextattr_block::at(*aPos.first->data, aPos.second).mnTextWidth = nWidth;
     CellStorageModified();
 }
 
@@ -1799,23 +1802,13 @@ void ScColumn::SetScriptType( SCROW nRow, sal_uInt8 nType )
     if (!ValidRow(nRow))
         return;
 
-    if (!nType)
-    {
-        if (maCellTextAttrs.is_empty(nRow))
-            return;
+    sc::CellTextAttrStoreType::position_type aPos = maCellTextAttrs.position(nRow);
+    if (aPos.first->type != sc::element_type_celltextattr)
+        // Set new value only when the slot is already set.
+        return;
 
-        sc::CellTextAttr aVal = maCellTextAttrs.get<sc::CellTextAttr>(nRow);
-        aVal.mnScriptType = nType;
-        maCellTextAttrs.set(nRow, aVal);
-        CellStorageModified();
-    }
-    else
-    {
-        sc::CellTextAttr aVal = maCellTextAttrs.get<sc::CellTextAttr>(nRow);
-        aVal.mnScriptType = nType;
-        maCellTextAttrs.set(nRow, aVal);
-        CellStorageModified();
-    }
+    sc::celltextattr_block::at(*aPos.first->data, aPos.second).mnScriptType = nType;
+    CellStorageModified();
 }
 
 size_t ScColumn::GetFormulaHash( SCROW nRow ) const
