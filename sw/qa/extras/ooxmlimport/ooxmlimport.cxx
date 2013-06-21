@@ -43,6 +43,7 @@
 #include <bordertest.hxx>
 
 #define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+#define EMU_TO_MM100(EMU) (EMU / 360)
 
 class Test : public SwModelTestBase
 {
@@ -119,6 +120,7 @@ public:
     void testN820509();
     void testN820788();
     void testN820504();
+    void testFdo43641();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -205,6 +207,7 @@ void Test::run()
         {"n820509.docx", &Test::testN820509},
         {"n820788.docx", &Test::testN820788},
         {"n820504.docx", &Test::testN820504},
+        {"fdo43641.docx", &Test::testFdo43641},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1447,6 +1450,16 @@ void Test::testN820504()
     uno::Reference<beans::XPropertySet> xStyle(xStylesAccess->getByName("Default Style"), uno::UNO_QUERY);
     // The problem was that the CharColor was set to AUTO (-1) even if we have some default char color set
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4040635), getProperty<sal_Int32>(xStyle, "CharColor"));
+}
+
+void Test::testFdo43641()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xGroupShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xLine(xGroupShape->getByIndex(1), uno::UNO_QUERY);
+    // This was 2200, not 2579 in mm100, i.e. the size of the line shape was incorrect.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(928694)), xLine->getSize().Width);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
