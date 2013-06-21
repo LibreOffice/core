@@ -296,27 +296,22 @@ public:
 //class tab page viewer
 class ImpPDFTabViewerPage : public SfxTabPage
 {
-    FixedLine                   maFlWindowOptions;
-    CheckBox                    maCbResWinInit;
-    CheckBox                    maCbCenterWindow;
-    CheckBox                    maCbOpenFullScreen;
-    CheckBox                    maCbDispDocTitle;
+    CheckBox*                   m_pCbResWinInit;
+    CheckBox*                   m_pCbCenterWindow;
+    CheckBox*                   m_pCbOpenFullScreen;
+    CheckBox*                   m_pCbDispDocTitle;
 
-    FixedLine m_aVerticalLine;
 
-    FixedLine                   maFlUIOptions;
-    CheckBox                    maCbHideViewerMenubar;
-    CheckBox                    maCbHideViewerToolbar;
-    CheckBox                    maCbHideViewerWindowControls;
+    CheckBox*                   m_pCbHideViewerMenubar;
+    CheckBox*                   m_pCbHideViewerToolbar;
+    CheckBox*                   m_pCbHideViewerWindowControls;
 
-    FixedLine                   maFlTransitions;
-    CheckBox                    maCbTransitionEffects;
+    CheckBox*                   m_pCbTransitionEffects;
     sal_Bool                    mbIsPresentation;
 
-    FixedLine                   maFlBookmarks;
-    RadioButton                 maRbAllBookmarkLevels;
-    RadioButton                 maRbVisibleBookmarkLevels;
-    NumericField                maNumBookmarkLevels;
+    RadioButton*                m_pRbAllBookmarkLevels;
+    RadioButton*                m_pRbVisibleBookmarkLevels;
+    NumericField*               m_pNumBookmarkLevels;
 
     DECL_LINK( ToggleRbBookmarksHdl, void* );
 public:

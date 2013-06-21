@@ -1023,33 +1023,25 @@ IMPL_LINK( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, void*, )
 // -----------------------------------------------------------------------------
 ImpPDFTabViewerPage::ImpPDFTabViewerPage( Window* pParent,
                                           const SfxItemSet& rCoreSet ) :
-    SfxTabPage( pParent, PDFFilterResId( RID_PDF_TAB_VPREFER ), rCoreSet ),
+    SfxTabPage( pParent, "PdfUserInterfacePage","filter/ui/pdfuserinterfacepage.ui", rCoreSet )
 
-    maFlWindowOptions( this, PDFFilterResId( FL_WINOPT ) ),
-    maCbResWinInit( this, PDFFilterResId( CB_WNDOPT_RESINIT ) ),
-    maCbCenterWindow( this, PDFFilterResId( CB_WNDOPT_CNTRWIN ) ),
-    maCbOpenFullScreen( this, PDFFilterResId( CB_WNDOPT_OPNFULL ) ),
-    maCbDispDocTitle( this, PDFFilterResId( CB_DISPDOCTITLE ) ),
-
-    m_aVerticalLine(this, PDFFilterResId(FL_VPREFER_VERTICAL)),
-
-    maFlUIOptions( this, PDFFilterResId( FL_USRIFOPT ) ),
-    maCbHideViewerMenubar( this, PDFFilterResId( CB_UOP_HIDEVMENUBAR ) ),
-    maCbHideViewerToolbar( this, PDFFilterResId( CB_UOP_HIDEVTOOLBAR ) ),
-    maCbHideViewerWindowControls( this, PDFFilterResId( CB_UOP_HIDEVWINCTRL ) ),
-    maFlTransitions( this, PDFFilterResId( FL_TRANSITIONS ) ),
-    maCbTransitionEffects( this, PDFFilterResId( CB_TRANSITIONEFFECTS ) ),
-    mbIsPresentation( sal_True ),
-    maFlBookmarks( this, PDFFilterResId( FL_BOOKMARKS ) ),
-    maRbAllBookmarkLevels( this, PDFFilterResId( RB_ALLBOOKMARKLEVELS ) ),
-    maRbVisibleBookmarkLevels( this, PDFFilterResId( RB_VISIBLEBOOKMARKLEVELS ) ),
-    maNumBookmarkLevels( this, PDFFilterResId( NUM_BOOKMARKLEVELS ) )
 {
-    FreeResource();
-    maRbAllBookmarkLevels.SetToggleHdl( LINK( this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl ) );
-    maRbVisibleBookmarkLevels.SetToggleHdl( LINK( this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl ) );
-    maNumBookmarkLevels.SetAccessibleName(maRbVisibleBookmarkLevels.GetText());
-    maNumBookmarkLevels.SetAccessibleRelationLabeledBy(&maRbVisibleBookmarkLevels);
+    get(m_pCbResWinInit,"resize");
+    get(m_pCbCenterWindow,"center");
+    get(m_pCbOpenFullScreen,"open");
+    get(m_pCbDispDocTitle,"display");
+    get(m_pCbHideViewerMenubar,"menubar");
+    get(m_pCbHideViewerToolbar,"toolbar");
+    get(m_pCbHideViewerWindowControls,"window");
+    get(m_pCbTransitionEffects,"effects");
+    get(m_pRbAllBookmarkLevels,"allbookmarks");
+    get(m_pRbVisibleBookmarkLevels,"visiblebookmark");
+    get(m_pNumBookmarkLevels,"visiblelevel");
+
+    m_pRbAllBookmarkLevels->SetToggleHdl( LINK( this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl ) );
+    m_pRbVisibleBookmarkLevels->SetToggleHdl( LINK( this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl ) );
+    m_pNumBookmarkLevels->SetAccessibleName(m_pRbVisibleBookmarkLevels->GetText());
+    m_pNumBookmarkLevels->SetAccessibleRelationLabeledBy(m_pRbVisibleBookmarkLevels);
 }
 
 // -----------------------------------------------------------------------------
@@ -1060,7 +1052,7 @@ ImpPDFTabViewerPage::~ImpPDFTabViewerPage()
 // -----------------------------------------------------------------------------
 IMPL_LINK( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, void*, )
 {
-    maNumBookmarkLevels.Enable( maRbVisibleBookmarkLevels.IsChecked() );
+    m_pNumBookmarkLevels->Enable( m_pRbVisibleBookmarkLevels->IsChecked() );
     return 0;
 }
 // -----------------------------------------------------------------------------
@@ -1073,42 +1065,42 @@ SfxTabPage*  ImpPDFTabViewerPage::Create( Window* pParent,
 // -----------------------------------------------------------------------------
 void ImpPDFTabViewerPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 {
-    paParent->mbHideViewerMenubar = maCbHideViewerMenubar.IsChecked();
-    paParent->mbHideViewerToolbar = maCbHideViewerToolbar.IsChecked( );
-    paParent->mbHideViewerWindowControls = maCbHideViewerWindowControls.IsChecked();
-    paParent->mbResizeWinToInit = maCbResWinInit.IsChecked();
-    paParent->mbOpenInFullScreenMode = maCbOpenFullScreen.IsChecked();
-    paParent->mbCenterWindow = maCbCenterWindow.IsChecked();
-    paParent->mbDisplayPDFDocumentTitle = maCbDispDocTitle.IsChecked();
-    paParent->mbUseTransitionEffects = maCbTransitionEffects.IsChecked();
-    paParent->mnOpenBookmarkLevels = maRbAllBookmarkLevels.IsChecked() ?
-                                     -1 : static_cast<sal_Int32>(maNumBookmarkLevels.GetValue());
+    paParent->mbHideViewerMenubar = m_pCbHideViewerMenubar->IsChecked();
+    paParent->mbHideViewerToolbar = m_pCbHideViewerToolbar->IsChecked( );
+    paParent->mbHideViewerWindowControls = m_pCbHideViewerWindowControls->IsChecked();
+    paParent->mbResizeWinToInit = m_pCbResWinInit->IsChecked();
+    paParent->mbOpenInFullScreenMode = m_pCbOpenFullScreen->IsChecked();
+    paParent->mbCenterWindow = m_pCbCenterWindow->IsChecked();
+    paParent->mbDisplayPDFDocumentTitle = m_pCbDispDocTitle->IsChecked();
+    paParent->mbUseTransitionEffects = m_pCbTransitionEffects->IsChecked();
+    paParent->mnOpenBookmarkLevels = m_pRbAllBookmarkLevels->IsChecked() ?
+                                     -1 : static_cast<sal_Int32>(m_pNumBookmarkLevels->GetValue());
 }
 
 // -----------------------------------------------------------------------------
 void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
 {
-    maCbHideViewerMenubar.Check( paParent->mbHideViewerMenubar );
-    maCbHideViewerToolbar.Check( paParent->mbHideViewerToolbar );
-    maCbHideViewerWindowControls.Check( paParent->mbHideViewerWindowControls );
+    m_pCbHideViewerMenubar->Check( paParent->mbHideViewerMenubar );
+    m_pCbHideViewerToolbar->Check( paParent->mbHideViewerToolbar );
+    m_pCbHideViewerWindowControls->Check( paParent->mbHideViewerWindowControls );
 
-    maCbResWinInit.Check( paParent->mbResizeWinToInit );
-    maCbOpenFullScreen.Check( paParent->mbOpenInFullScreenMode );
-    maCbCenterWindow.Check( paParent->mbCenterWindow );
-    maCbDispDocTitle.Check( paParent->mbDisplayPDFDocumentTitle );
+    m_pCbResWinInit->Check( paParent->mbResizeWinToInit );
+    m_pCbOpenFullScreen->Check( paParent->mbOpenInFullScreenMode );
+    m_pCbCenterWindow->Check( paParent->mbCenterWindow );
+    m_pCbDispDocTitle->Check( paParent->mbDisplayPDFDocumentTitle );
     mbIsPresentation = paParent->mbIsPresentation;
-    maCbTransitionEffects.Check( paParent->mbUseTransitionEffects );
-    maCbTransitionEffects.Enable( mbIsPresentation );
+    m_pCbTransitionEffects->Check( paParent->mbUseTransitionEffects );
+    m_pCbTransitionEffects->Enable( mbIsPresentation );
     if( paParent->mnOpenBookmarkLevels < 0 )
     {
-        maRbAllBookmarkLevels.Check( sal_True );
-        maNumBookmarkLevels.Enable( sal_False );
+        m_pRbAllBookmarkLevels->Check( sal_True );
+        m_pNumBookmarkLevels->Enable( sal_False );
     }
     else
     {
-        maRbVisibleBookmarkLevels.Check( sal_True );
-        maNumBookmarkLevels.Enable( sal_True );
-        maNumBookmarkLevels.SetValue( paParent->mnOpenBookmarkLevels );
+        m_pRbVisibleBookmarkLevels->Check( sal_True );
+        m_pNumBookmarkLevels->Enable( sal_True );
+        m_pNumBookmarkLevels->SetValue( paParent->mnOpenBookmarkLevels );
     }
 }
 

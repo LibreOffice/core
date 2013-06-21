@@ -113,26 +113,6 @@
 #define RB_PGLY_CONTFAC           97
 #define CB_PGLY_FIRSTLEFT         98
 
-//controls for viewer preferences tab page
-#define FL_WINOPT                100
-#define CB_WNDOPT_RESINIT        101
-#define CB_WNDOPT_CNTRWIN        102
-#define CB_WNDOPT_OPNFULL        103
-#define CB_DISPDOCTITLE          104
-
-#define FL_USRIFOPT              105
-#define CB_UOP_HIDEVMENUBAR      106
-#define CB_UOP_HIDEVTOOLBAR      107
-#define CB_UOP_HIDEVWINCTRL      108
-
-#define FL_TRANSITIONS           109
-#define CB_TRANSITIONEFFECTS     110
-
-#define FL_BOOKMARKS             111
-#define RB_ALLBOOKMARKLEVELS     112
-#define RB_VISIBLEBOOKMARKLEVELS 113
-#define NUM_BOOKMARKLEVELS       114
-
 //controls for security preferences tab page
 #define FL_PWD_GROUP            119
 #define BTN_SET_PWD             120
