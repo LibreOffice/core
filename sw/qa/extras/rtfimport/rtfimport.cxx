@@ -139,6 +139,7 @@ public:
     void testFdo64671();
     void testFdo62044();
     void testN825305();
+    void testParaBottomMargin();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -267,6 +268,7 @@ void Test::run()
         {"fdo64671.rtf", &Test::testFdo64671},
         {"fdo62044.rtf", &Test::testFdo62044},
         {"n825305.rtf", &Test::testN825305},
+        {"para-bottom-margin.rtf", &Test::testParaBottomMargin},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1274,6 +1276,12 @@ void Test::testN825305()
     beans::PropertyState ePropertyState = xPropertyState->getPropertyState("BackColorTransparency");
     // Was beans::PropertyState_DEFAULT_VALUE.
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
+}
+
+void Test::testParaBottomMargin()
+{
+    // This was 353, i.e. bottom margin of the paragraph was 0.35cm instead of 0.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
