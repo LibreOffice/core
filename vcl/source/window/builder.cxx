@@ -162,9 +162,17 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
     if (!bEN_US)
         loadTranslations(aLocale, sUri);
 
-    xmlreader::XmlReader reader(sUri);
+    try
+    {
+        xmlreader::XmlReader reader(sUri);
 
-    handleChild(pParent, reader);
+        handleChild(pParent, reader);
+    }
+    catch (const ::com::sun::star::uno::Exception &rExcept)
+    {
+        SAL_WARN("vcl.layout", "Unable to read .ui file: " << rExcept.Message);
+        throw;
+    }
 
     //Set Mnemonic widgets when everything has been imported
     for (std::vector<MnemonicWidgetMap>::iterator aI = m_pParserState->m_aMnemonicWidgetMaps.begin(),

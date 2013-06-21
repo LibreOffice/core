@@ -718,15 +718,9 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
 
         return xUIElement;
     }
-    catch(Exception& rException)
+    catch(const Exception& rException)
     {
-        OSL_TRACE("caught exception: %s",
-            OUStringToOString(rException.Message, RTL_TEXTENCODING_ASCII_US).getStr());
-        // For some reason we can not create the actual panel.
-        // Probably because its factory was not properly registered.
-        // TODO: provide feedback to developer to better pinpoint the
-        // source of the error.
-
+        SAL_WARN("sfx2.sidebar", "Cannot create panel: " << rException.Message);
         return NULL;
     }
 }
