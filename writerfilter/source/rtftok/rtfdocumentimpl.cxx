@@ -1028,6 +1028,7 @@ void RTFDocumentImpl::text(OUString& rString)
                             break;
                         case DESTINATION_STYLESHEET:
                         case DESTINATION_STYLEENTRY:
+                            if (m_aStates.top().aTableAttributes.find(NS_rtf::LN_SGC))
                             {
                                 RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aDestinationText.makeStringAndClear()));
                                 m_aStates.top().aTableAttributes.set(NS_rtf::LN_XSTZNAME1, pValue);
@@ -1037,6 +1038,8 @@ void RTFDocumentImpl::text(OUString& rString)
                                         );
                                 m_aStyleTableEntries.insert(make_pair(m_nCurrentStyleIndex, pProp));
                             }
+                            else
+                                SAL_INFO("writerfilter", "no RTF style type defined, ignoring");
                             break;
                         case DESTINATION_REVISIONTABLE:
                         case DESTINATION_REVISIONENTRY:
