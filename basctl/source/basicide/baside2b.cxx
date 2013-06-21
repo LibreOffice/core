@@ -48,6 +48,13 @@
 #include <vcl/help.hxx>
 
 #include <vector>
+#include <svtools/miscopt.hxx>
+#include "com/sun/star/reflection/XIdlReflection.hpp"
+#include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/configurationhelper.hxx>
+#include "com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp"
+#include "com/sun/star/reflection/XIdlMethod.hpp"
 
 namespace basctl
 {
@@ -479,6 +486,7 @@ bool EditorWindow::ImpCanModify()
 
 void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 {
+    SvtMiscOptions aMiscOptions;
     if ( !pEditView )   // Happens in Win95
         return;
 
@@ -492,7 +500,31 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     bool const bWasModified = pEditEngine->IsModified();
     // see if there is an accelerator to be processed first
     bool bDone = SfxViewShell::Current()->KeyInput( rKEvt );
+    if( rKEvt.GetKeyCode().GetCode() == KEY_POINT && aMiscOptions.IsExperimentalMode())
+    {
+        TextSelection aSel = GetEditView()->GetSelection();
+        sal_uLong nLine =  aSel.GetStart().GetPara();
+        OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
 
+        OUString aStr = (aLine.lastIndexOf(" ") == -1 ? aLine.replaceFirst(".","") : aLine.copy(aLine.lastIndexOf(" ")).replaceFirst(".",""));
+        for( unsigned int j = 0; j < aCodeCompleteCache.size(); ++j)
+        {
+            if( aCodeCompleteCache[j].sVarName == aStr )
+            {
+                Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
+                Reference< reflection::XIdlReflection > xRefl( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );
+                Reference< reflection::XIdlClass > xClass = xRefl->forName(aCodeCompleteCache[j].sVarType);
+                if( !xRefl.is() )
+                    break;
+                Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
+                for(sal_Int32 i = 0; i < aMethods.getLength(); ++i)
+                {
+                    SAL_WARN("method information",aMethods[i]->getName());
+                }
+                break;
+            }
+        }
+    }
     if ( !bDone && ( !TextEngine::DoesKeyChangeText( rKEvt ) || ImpCanModify()  ) )
     {
         if ( ( rKEvt.GetKeyCode().GetCode() == KEY_TAB ) && !rKEvt.GetKeyCode().IsMod1() &&
@@ -752,14 +784,26 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         {
             ParagraphInsertedDeleted( rTextHint.GetValue(), true );
             DoDelayedSyntaxHighlight( rTextHint.GetValue() );
+            OUString sMod = rModulWindow.GetSbModule()->GetSource();
+            OUString sActLine = pEditEngine->GetText( rTextHint.GetValue() );
+            std::vector< CodeCompleteData > aData = rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse();
+            aCodeCompleteCache = aData;
         }
         else if( rTextHint.GetId() == TEXT_HINT_PARAREMOVED )
         {
             ParagraphInsertedDeleted( rTextHint.GetValue(), false );
+            OUString sMod = rModulWindow.GetSbModule()->GetSource();
+            OUString sActLine = pEditEngine->GetText( rTextHint.GetValue() );
+            std::vector< CodeCompleteData > aData = rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse();
+            aCodeCompleteCache = aData;
         }
         else if( rTextHint.GetId() == TEXT_HINT_PARACONTENTCHANGED )
         {
             DoDelayedSyntaxHighlight( rTextHint.GetValue() );
+            OUString sMod = rModulWindow.GetSbModule()->GetSource();
+            OUString sActLine = pEditEngine->GetText( rTextHint.GetValue() );
+            std::vector< CodeCompleteData > aData = rModulWindow.GetSbModule()->GetCodeCompleteDataFromParse();
+            aCodeCompleteCache = aData;
         }
         else if( rTextHint.GetId() == TEXT_HINT_VIEWSELECTIONCHANGED )
         {

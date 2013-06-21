@@ -50,6 +50,7 @@
 
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
+#include <svtools/miscopt.hxx>
 using namespace ::com::sun::star::script;
 
 TYPEINIT1(StarBASIC,SbxObject)
