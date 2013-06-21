@@ -145,8 +145,16 @@ class RowInfoFiller
         return mbHiddenRow;
     }
 
-    void setInfo(size_t /*nRow*/, const ScRefCellValue& rCell)
+    void alignArray(size_t nRow)
     {
+        while (mpRowInfo[mrArrY].nRowNo < static_cast<SCROW>(nRow))
+            ++mrArrY;
+    }
+
+    void setInfo(size_t nRow, const ScRefCellValue& rCell)
+    {
+        alignArray(nRow);
+
         RowInfo* pThisRowInfo = &mpRowInfo[mrArrY];
         CellInfo* pInfo = &pThisRowInfo->pCellInfo[mnArrX];
         pInfo->maCell = rCell;
@@ -182,12 +190,6 @@ public:
     {
         if (!isHidden(nRow))
             setInfo(nRow, ScRefCellValue(const_cast<ScFormulaCell*>(p)));
-    }
-
-    void operator() (mdds::mtv::element_t, size_t, size_t nDataSize)
-    {
-        // Skip all empty cells.
-        mrArrY += nDataSize;
     }
 };
 
@@ -430,7 +432,7 @@ void ScDocument::FillInfo(
                 // cells that are not hidden.
                 RowInfoFiller aFunc(*this, nTab, pRowInfo, nArrCol, nArrRow);
                 sc::ParseAllNonEmpty(
-                    pThisCol->maCells.begin(), pThisCol->maCells, nRow1, nRow2, aFunc, aFunc);
+                    pThisCol->maCells.begin(), pThisCol->maCells, nRow1, nRow2, aFunc);
 
                 if (nX+1 >= nCol1)                                // Attribute/Blockmarken ab nX1-1
                 {
