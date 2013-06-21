@@ -728,11 +728,8 @@ void ScFormulaCell::Compile( const OUString& rFormula, bool bNoListening,
         CompileTokenArray( bNoListening );
     }
     else
-    {
         bChanged = true;
-        pDocument->SetTextWidth(aPos, TEXTWIDTH_DIRTY);
-        pDocument->SetScriptType(aPos, SC_SCRIPTTYPE_UNKNOWN);
-    }
+
     if ( bWasInFormulaTree )
         pDocument->PutInFormulaTree( this );
 }
@@ -820,11 +817,7 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
             pDocument->AddSubTotalCell(this);
     }
     else
-    {
         bChanged = true;
-        pDocument->SetTextWidth(aPos, TEXTWIDTH_DIRTY);
-        pDocument->SetScriptType(aPos, SC_SCRIPTTYPE_UNKNOWN);
-    }
 
     //  Same as in Load: after loading, it must be known if ocMacro is in any formula
     //  (for macro warning, CompileXML is called at the end of loading XML file)
@@ -1093,8 +1086,6 @@ void ScFormulaCell::Interpret()
                             pIterCell->bTableOpDirty = false;
                             pIterCell->aResult.SetResultError( errNoConvergence);
                             pIterCell->bChanged = true;
-                            pDocument->SetTextWidth(pIterCell->aPos, TEXTWIDTH_DIRTY);
-                            pDocument->SetScriptType(pIterCell->aPos, SC_SCRIPTTYPE_UNKNOWN);
                         }
                     }
                     // End this iteration and remove entries.
@@ -1389,11 +1380,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             aResult.SetResultError( nErr);
             bChanged = bContentChanged = true;
         }
-        if( bChanged )
-        {
-            pDocument->SetTextWidth(aPos, TEXTWIDTH_DIRTY);
-            pDocument->SetScriptType(aPos, SC_SCRIPTTYPE_UNKNOWN);
-        }
+
         if (bContentChanged && pDocument->IsStreamValid(aPos.Tab()))
         {
             // pass bIgnoreLock=true, because even if called from pending row height update,
