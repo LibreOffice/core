@@ -110,7 +110,7 @@ Control RID_SIDEBAR_AREA_PANEL
         Border = TRUE ;
         Pos = MAP_APPFONT ( SECTIONPAGE_MARGIN_HORIZONTAL , SECTIONPAGE_MARGIN_VERTICAL_TOP + 2*(FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL) + CBOX_HEIGHT + CONTROL_SPACING_VERTICAL ) ;
         Size = MAP_APPFONT ( MBOX_WIDTH , LISTBOX_HEIGHT ) ;
-        QuickHelpText [ en-US ] = "Select the type of transparence to apply." ;
+        QuickHelpText [ en-US ] = "Select the type of transparency to apply." ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         HelpID = HID_PPROPERTYPANEL_AREA_LB_TRGR_TYPES ;
