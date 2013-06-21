@@ -1238,6 +1238,13 @@ AC_ARG_WITH(referenced-git,
     GIT_REFERENCE_SRC=$withval ,
 )
 
+AC_ARG_WITH(linked-git,
+    AS_HELP_STRING([--with-linked-git=<submodules repo basedir>],
+        [Specify a directory where the repositories of submodules are located.
+         This uses a method similar to git-new-workdir to get submodules.]),
+    GIT_LINK_SRC=$withval ,
+)
+
 AC_ARG_WITH(galleries,
     AS_HELP_STRING([--with-galleries],
         [Specify how galleries should be built. It is possible either to
@@ -11615,6 +11622,17 @@ if test -n "${GIT_REFERENCE_SRC}"; then
     done
 fi
 AC_SUBST(GIT_REFERENCE_SRC)
+
+dnl git submodules linked dirs
+dnl ===================================================================
+if test -n "${GIT_LINK_SRC}"; then
+    for repo in ${GIT_NEEDED_SUBMODULES}; do
+        if ! test -d "${GIT_LINK_SRC}"/${repo}; then
+            AC_MSG_ERROR([linked git: required repository does not exist: ${GIT_LINK_SRC}/${repo}])
+        fi
+    done
+fi
+AC_SUBST(GIT_LINK_SRC)
 
 dnl branding
 dnl ===================================================================
