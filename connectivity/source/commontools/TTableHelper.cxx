@@ -339,7 +339,7 @@ void OTableHelper::refreshPrimaryKeys(TStringVector& _rNames)
             if ( !bAlreadyFetched )
             {
                 aPkName = xRow->getString(6);
-                SAL_WARN_IF(xRow.wasNull(),"connectivity.commontools", "NULL Primary Key name");
+                SAL_WARN_IF(xRow->wasNull(),"connectivity.commontools", "NULL Primary Key name");
                 SAL_WARN_IF(aPkName.isEmpty(),"connectivity.commontools", "empty Primary Key name");
                 bAlreadyFetched = true;
             }
