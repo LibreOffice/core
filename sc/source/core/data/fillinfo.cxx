@@ -323,7 +323,6 @@ void ScDocument::FillInfo(
         //! Conditionals auch bei HASATTR_ROTATE abfragen ????
 
         OSL_ENSURE( nArrCount>2, "nArrCount too small" );
-//      FindMaxRotCol( nTab, &pRowInfo[1], nArrCount-2, nX1, nX2 );
         FindMaxRotCol( nTab, &pRowInfo[1], nArrCount-1, nCol1, nCol2 );
         //  FindMaxRotCol setzt nRotMaxCol
 
