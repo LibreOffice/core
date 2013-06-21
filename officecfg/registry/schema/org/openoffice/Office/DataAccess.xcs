@@ -952,6 +952,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="IsIgnoreDiacritics_CTL" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies search with the use of CTL option.</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="IsUseAsianOptions" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Specifies that the Asian options for search should be used.</desc>

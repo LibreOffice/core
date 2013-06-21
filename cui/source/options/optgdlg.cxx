@@ -65,6 +65,7 @@
 #include <dialmgr.hxx>
 #include <svtools/helpopt.hxx>
 #include <unotools/saveopt.hxx>
+#include <unotools/searchopt.hxx>
 #include <sal/macros.h>
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -1396,6 +1397,8 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 
     if ( m_pCTLSupportCB->GetSavedValue() != m_pCTLSupportCB->IsChecked() )
     {
+        SvtSearchOptions aOpt;
+        aOpt.SetIgnoreDiacritics_CTL (true);
         pLangConfig->aLanguageOptions.SetCTLFontEnabled( m_pCTLSupportCB->IsChecked() );
 
         const sal_uInt16 STATE_COUNT = 1;

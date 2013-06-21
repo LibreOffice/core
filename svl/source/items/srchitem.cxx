@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <svl/memberid.hrc>
 #include <i18nlangtag/languagetag.hxx>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
 using namespace utl;
 using namespace com::sun::star::beans;
@@ -82,7 +83,8 @@ static Sequence< OUString > lcl_GetNotifyNames()
         "Japanese/IsIgnorePunctuation",         // 15
         "Japanese/IsIgnoreWhitespace",          // 16
         "Japanese/IsIgnoreProlongedSoundMark",  // 17
-        "Japanese/IsIgnoreMiddleDot"            // 18
+        "Japanese/IsIgnoreMiddleDot",           // 18
+        "IsIgnoreDiacritics_CTL"                // 19
     };
 
     const int nCount = SAL_N_ELEMENTS( aTranslitNames );
@@ -141,6 +143,8 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
         rFlags |= TransliterationModules_IGNORE_CASE;
     if ( aOpt.IsMatchFullHalfWidthForms())
         rFlags |= TransliterationModules_IGNORE_WIDTH;
+    if ( aOpt.IsIgnoreDiacritics_CTL())
+        rFlags |= TransliterationModulesExtra::ignoreDiacritics_CTL ;
     if ( bAsianOptions )
     {
         if ( aOpt.IsMatchHiraganaKatakana())

@@ -84,6 +84,7 @@ public:
     sal_Bool    IsIgnoreWhitespace() const;
     sal_Bool    IsIgnoreProlongedSoundMark() const;
     sal_Bool    IsIgnoreMiddleDot() const;
+    sal_Bool    IsIgnoreDiacritics_CTL() const;
 
     void    SetMatchFullHalfWidthForms( sal_Bool bVal );
     void    SetMatchHiraganaKatakana( sal_Bool bVal );
@@ -103,6 +104,7 @@ public:
     void    SetIgnoreWhitespace( sal_Bool bVal );
     void    SetIgnoreProlongedSoundMark( sal_Bool bVal );
     void    SetIgnoreMiddleDot( sal_Bool bVal );
+    void    SetIgnoreDiacritics_CTL( sal_Bool bVal );
 };
 
 

@@ -23,6 +23,7 @@
 #include <tools/debug.hxx>
 #include <unotools/configitem.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <rtl/logfile.hxx>
@@ -34,7 +35,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 
 
-#define MAX_FLAGS_OFFSET    25
+#define MAX_FLAGS_OFFSET    26
 
 //////////////////////////////////////////////////////////////////////
 
@@ -159,7 +160,8 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames() const
         "Japanese/IsIgnoreWhitespace",          // 22
         "Japanese/IsIgnoreProlongedSoundMark",      // 23
         "Japanese/IsIgnoreMiddleDot",           // 24
-        "IsNotes"                   // 25
+        "IsNotes",                              // 25
+        "IsIgnoreDiacritics_CTL"                // 26
     };
 
     const int nCount = SAL_N_ELEMENTS( aPropNames );
@@ -308,7 +310,8 @@ sal_Int32 SvtSearchOptions::GetTransliterationFlags() const
         nRes |= TransliterationModules_ignoreProlongedSoundMark_ja_JP;
     if ( IsIgnoreMiddleDot())
         nRes |= TransliterationModules_ignoreMiddleDot_ja_JP;
-
+    if ( IsIgnoreDiacritics_CTL())
+        nRes |= TransliterationModulesExtra::ignoreDiacritics_CTL;
     return nRes;
 }
 
@@ -614,6 +617,16 @@ sal_Bool SvtSearchOptions::IsNotes() const
 void SvtSearchOptions::SetNotes( sal_Bool bVal )
 {
         pImpl->SetFlag( 25, bVal );
+}
+
+sal_Bool SvtSearchOptions::IsIgnoreDiacritics_CTL() const
+{
+    return pImpl->GetFlag( 26 );
+}
+
+void SvtSearchOptions::SetIgnoreDiacritics_CTL( sal_Bool bVal )
+{
+    pImpl->SetFlag( 26, bVal );
 }
 
 //////////////////////////////////////////////////////////////////////

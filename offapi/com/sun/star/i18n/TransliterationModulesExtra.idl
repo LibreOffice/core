@@ -50,7 +50,8 @@ constants TransliterationModulesExtra
      */
     const short TOGGLE_CASE = 202;
 
-
+    /// because we cannot extend TransliterationModule we used TranslationModuleExtra and it will act the same way
+    const long ignoreDiacritics_CTL   = 0x40000000;
     const long END_OF_MODULE    = 0;
 };
 

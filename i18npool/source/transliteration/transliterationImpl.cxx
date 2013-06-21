@@ -23,6 +23,7 @@
 
 #include <com/sun/star/i18n/LocaleData.hpp>
 #include <com/sun/star/i18n/TransliterationType.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -190,6 +191,12 @@ TransliterationImpl::loadModule( TransliterationModules modType, const Locale& r
                 if (loadModuleByName(OUString::createFromAscii(TMlist[i].implName),
                                                 bodyCascade[numCascade], rLocale))
                     numCascade++;
+        }
+        // additional transliterations from TranslationModuleExtra (we cannot extend TransliterationModule)
+        if (modType & TransliterationModulesExtra::ignoreDiacritics_CTL)
+        {
+            if (loadModuleByName(OUString("ignoreDiacritics_CTL"), bodyCascade[numCascade], rLocale))
+                numCascade++;
         }
     } else if (modType&TransliterationModules_NON_IGNORE_MASK) {
         for (sal_Int16 i = 0; TMlist[i].tm; i++) {

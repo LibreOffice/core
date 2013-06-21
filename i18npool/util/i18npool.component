@@ -472,4 +472,7 @@
   <implementation name="com.sun.star.text.DefaultNumberingProvider">
     <service name="com.sun.star.text.DefaultNumberingProvider"/>
   </implementation>
+  <implementation name="com.sun.star.i18n.Transliteration.ignoreDiacritics_CTL">
+    <service name="com.sun.star.i18n.Transliteration.l10n"/>
+  </implementation>
 </component>

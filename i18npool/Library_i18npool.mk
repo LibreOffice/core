@@ -93,6 +93,7 @@ $(eval $(call gb_Library_add_exception_objects,i18npool,\
 	i18npool/source/transliteration/ignoreTraditionalKanji_ja_JP \
 	i18npool/source/transliteration/ignoreWidth \
 	i18npool/source/transliteration/ignoreZiZu_ja_JP \
+	i18npool/source/transliteration/ignoreDiacritics_CTL \
 	i18npool/source/transliteration/katakanaToHiragana \
 	i18npool/source/transliteration/largeToSmall_ja_JP \
 	i18npool/source/transliteration/numtochar \

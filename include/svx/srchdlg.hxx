@@ -164,7 +164,7 @@ private:
     CheckBox*       m_pWordBtn;
 
     PushButton*     m_pCloseBtn;
-
+    CheckBox*       m_pIgnoreDiacritics;
     CheckBox*       m_pSelectionBtn;
     CheckBox*       m_pBackwardsBtn;
     CheckBox*       m_pRegExpBtn;
