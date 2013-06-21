@@ -42,10 +42,6 @@
 #include "cellvalue.hxx"
 #include "mtvcellfunc.hxx"
 
-#include <iostream>
-
-// -----------------------------------------------------------------------
-
 const sal_uInt16 ROWINFO_MAX = 1024;
 
 
@@ -128,8 +124,6 @@ static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
     rEndX = rStartX + pMerge->GetColMerge() - 1;
     rEndY = rStartY + pMerge->GetRowMerge() - 1;
 }
-
-#define CELLINFO(x,y) pRowInfo[nArrY+y].pCellInfo[nArrX+x]
 
 namespace {
 
@@ -224,8 +218,8 @@ void ScDocument::FillInfo(
     SCCOL nX;
     SCROW nY;
     SCsROW nSignedY;
-    SCCOL nArrX;
-    SCSIZE nArrY;
+    SCCOL nArrCol;
+    SCSIZE nArrRow;
     SCSIZE nArrCount;
     bool bAnyMerged = false;
     bool bAnyShadow = false;
@@ -259,7 +253,7 @@ void ScDocument::FillInfo(
 
     //  zuerst nur die Eintraege fuer die ganze Spalte
 
-    nArrY=0;
+    nArrRow=0;
     SCROW nYExtra = nRow2+1;
     sal_uInt16 nDocHeight = ScGlobal::nStdRowHeight;
     SCROW nDocHeightEndRow = -1;
@@ -278,9 +272,9 @@ void ScDocument::FillInfo(
                 nDocHeight = ScGlobal::nStdRowHeight;
         }
 
-        if ( nArrY==0 || nDocHeight || nY > MAXROW )
+        if ( nArrRow==0 || nDocHeight || nY > MAXROW )
         {
-            RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+            RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
             pThisRowInfo->pCellInfo = NULL;                 // wird unten belegt
 
             sal_uInt16 nHeight = (sal_uInt16) ( nDocHeight * fRowScale );
@@ -296,8 +290,8 @@ void ScDocument::FillInfo(
             pThisRowInfo->bPivotButton  = false;
             pThisRowInfo->nRotMaxCol    = SC_ROTMAX_NONE;
 
-            ++nArrY;
-            if (nArrY >= ROWINFO_MAX)
+            ++nArrRow;
+            if (nArrRow >= ROWINFO_MAX)
             {
                 OSL_FAIL("FillInfo: Range too big" );
                 nYExtra = nSignedY;                                 // Ende
@@ -308,7 +302,7 @@ void ScDocument::FillInfo(
             if (nSignedY==(SCsROW) nYExtra)                         // zusaetzliche Zeile verdeckt ?
                 ++nYExtra;
     }
-    nArrCount = nArrY;                                      // incl. Dummys
+    nArrCount = nArrRow;                                      // incl. Dummys
 
     //  rotierter Text...
 
@@ -333,28 +327,28 @@ void ScDocument::FillInfo(
         FindMaxRotCol( nTab, &pRowInfo[1], nArrCount-1, nCol1, nCol2 );
         //  FindMaxRotCol setzt nRotMaxCol
 
-        for (nArrY=0; nArrY<nArrCount; nArrY++)
-            if (pRowInfo[nArrY].nRotMaxCol != SC_ROTMAX_NONE && pRowInfo[nArrY].nRotMaxCol > nRotMax)
-                nRotMax = pRowInfo[nArrY].nRotMaxCol;
+        for (nArrRow=0; nArrRow<nArrCount; nArrRow++)
+            if (pRowInfo[nArrRow].nRotMaxCol != SC_ROTMAX_NONE && pRowInfo[nArrRow].nRotMaxCol > nRotMax)
+                nRotMax = pRowInfo[nArrRow].nRotMaxCol;
     }
 
     //  Zell-Infos erst nach dem Test auf gedrehte allozieren
     //  bis nRotMax wegen nRotateDir Flag
 
-    for (nArrY=0; nArrY<nArrCount; nArrY++)
+    for (nArrRow=0; nArrRow<nArrCount; nArrRow++)
     {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
         nY = pThisRowInfo->nRowNo;
         pThisRowInfo->pCellInfo = new CellInfo[ nRotMax+1+2 ];  // vom Aufrufer zu loeschen !
 
-        for (nArrX=0; nArrX<=nRotMax+2; nArrX++)                // Zell-Infos vorbelegen
+        for (nArrCol=0; nArrCol<=nRotMax+2; nArrCol++)                // Zell-Infos vorbelegen
         {
-            if (nArrX>0)
-                nX = nArrX-1;
+            if (nArrCol>0)
+                nX = nArrCol-1;
             else
                 nX = MAXCOL+1;      // ungueltig
 
-            CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
+            CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrCol];
             pInfo->bEmptyCellText = true;
             pInfo->maCell.clear();
             if (bPaintMarks)
@@ -392,9 +386,9 @@ void ScDocument::FillInfo(
         }
     }
 
-    for (nArrX=nCol2+3; nArrX<=nRotMax+2; nArrX++)            // restliche Breiten eintragen
+    for (nArrCol=nCol2+3; nArrCol<=nRotMax+2; nArrCol++)            // restliche Breiten eintragen
     {
-        nX = nArrX-1;
+        nX = nArrCol-1;
         if ( ValidCol(nX) )
         {
             if (!ColHidden(nX, nTab))
@@ -403,7 +397,7 @@ void ScDocument::FillInfo(
                 if (!nThisWidth)
                     nThisWidth = 1;
 
-                pRowInfo[0].pCellInfo[nArrX].nWidth = nThisWidth;
+                pRowInfo[0].pCellInfo[nArrCol].nWidth = nThisWidth;
             }
         }
     }
@@ -412,9 +406,9 @@ void ScDocument::FillInfo(
     if(pCondFormList)
         pCondFormList->startRendering();
 
-    for (nArrX=0; nArrX<=nCol2+2; nArrX++)                    // links & rechts + 1
+    for (nArrCol=0; nArrCol<=nCol2+2; nArrCol++)                    // links & rechts + 1
     {
-        nX = (nArrX>0) ? nArrX-1 : MAXCOL+1;                    // negativ -> ungueltig
+        nX = (nArrCol>0) ? nArrCol-1 : MAXCOL+1;                    // negativ -> ungueltig
 
         if ( ValidCol(nX) )
         {
@@ -428,14 +422,14 @@ void ScDocument::FillInfo(
                 if (!nThisWidth)
                     nThisWidth = 1;
 
-                pRowInfo[0].pCellInfo[nArrX].nWidth = nThisWidth;           //! dies sollte reichen
+                pRowInfo[0].pCellInfo[nArrCol].nWidth = nThisWidth;           //! dies sollte reichen
 
                 ScColumn* pThisCol = &maTabs[nTab]->aCol[nX];                   // Spalten-Daten
 
-                nArrY = 1;
+                nArrRow = 1;
                 // Iterate between rows nY1 and nY2 and pick up non-empty
                 // cells that are not hidden.
-                RowInfoFiller aFunc(*this, nTab, pRowInfo, nArrX, nArrY);
+                RowInfoFiller aFunc(*this, nTab, pRowInfo, nArrCol, nArrRow);
                 sc::ParseAllNonEmpty(
                     pThisCol->maCells.begin(), pThisCol->maCells, nRow1, nRow2, aFunc, aFunc);
 
@@ -443,13 +437,13 @@ void ScDocument::FillInfo(
                 {
                     ScAttrArray* pThisAttrArr = pThisCol->pAttrArray;       // Attribute
 
-                    nArrY = 0;
+                    nArrRow = 0;
                     const ScPatternAttr* pPattern;
                     SCROW nCurRow=nRow1;                  // einzelne Zeile
                     if (nCurRow>0)
                         --nCurRow;                      // oben 1 mehr
                     else
-                        nArrY = 1;
+                        nArrRow = 1;
                     nThisRow=nCurRow;                   // Ende des Bereichs
                     SCSIZE  nIndex;
                     (void) pThisAttrArr->Search( nCurRow, nIndex );
@@ -508,9 +502,9 @@ void ScDocument::FillInfo(
                         {
                             SCROW nLastHiddenRow = -1;
                             bool bRowHidden = RowHidden(nCurRow, nTab, NULL, &nLastHiddenRow);
-                            if ( nArrY==0 || !bRowHidden )
+                            if ( nArrRow==0 || !bRowHidden )
                             {
-                                RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+                                RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
                                 if (pBackground != pDefBackground)          // Spalten-HG == Standard ?
                                     pThisRowInfo->bEmptyBack = false;
                                 if (bContainsCondFormat)
@@ -520,7 +514,7 @@ void ScDocument::FillInfo(
                                 if (bPivotButton || bPivotPopupButton)
                                     pThisRowInfo->bPivotButton = true;
 
-                                CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
+                                CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrCol];
                                 pInfo->pBackground  = pBackground;
                                 pInfo->pPatternAttr = pPattern;
                                 pInfo->bMerged      = bMerged;
@@ -600,7 +594,7 @@ void ScDocument::FillInfo(
                                 if (bHidden || (bFormulaMode && bHideFormula && pInfo->maCell.meType == CELLTYPE_FORMULA))
                                     pInfo->bEmptyCellText = true;
 
-                                ++nArrY;
+                                ++nArrRow;
                             }
                             else if (bRowHidden && nLastHiddenRow >= 0)
                             {
@@ -620,7 +614,7 @@ void ScDocument::FillInfo(
                     {
                         //  Blockmarken
                         const ScMarkArray* pThisMarkArr = pMarkData->GetArray()+nX;
-                        nArrY = 1;
+                        nArrRow = 1;
                         nCurRow = nRow1;                                      // einzelne Zeile
                         nThisRow = nRow1;                                     // Ende des Bereichs
 
@@ -645,12 +639,12 @@ void ScDocument::FillInfo(
                                                         nCurRow <= nBlockEndY;
                                             if (!bSkip)
                                             {
-                                                RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-                                                CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
+                                                RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
+                                                CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrCol];
                                                 pInfo->bMarked = true;
                                             }
                                         }
-                                        ++nArrY;
+                                        ++nArrRow;
                                     }
                                     ++nCurRow;
                                 }
@@ -663,10 +657,10 @@ void ScDocument::FillInfo(
                 }
                 else                                    // vordere Spalten
                 {
-                    for (nArrY=1; nArrY+1<nArrCount; nArrY++)
+                    for (nArrRow=1; nArrRow+1<nArrCount; nArrRow++)
                     {
-                        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-                        CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
+                        RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
+                        CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrCol];
 
                         pInfo->nWidth       = nThisWidth;           //! oder nur 0 abfragen ??
                     }
@@ -674,7 +668,7 @@ void ScDocument::FillInfo(
             }
         }
         else
-            pRowInfo[0].pCellInfo[nArrX].nWidth = STD_COL_WIDTH;
+            pRowInfo[0].pCellInfo[nArrCol].nWidth = STD_COL_WIDTH;
         // STD_COL_WIDTH ganz links und rechts wird fuer DrawExtraShadow gebraucht
     }
 
@@ -685,11 +679,11 @@ void ScDocument::FillInfo(
 
     if (bAnyCondition)
     {
-        for (nArrY=0; nArrY<nArrCount; nArrY++)
+        for (nArrRow=0; nArrRow<nArrCount; nArrRow++)
         {
-            for (nArrX=nCol1; nArrX<=nCol2+2; nArrX++)                  // links und rechts einer mehr
+            for (nArrCol=nCol1; nArrCol<=nCol2+2; nArrCol++)                  // links und rechts einer mehr
             {
-                CellInfo* pInfo = &pRowInfo[nArrY].pCellInfo[nArrX];
+                CellInfo* pInfo = &pRowInfo[nArrRow].pCellInfo[nArrCol];
                 const SfxItemSet* pCondSet = pInfo->pConditionSet;
                 if (pCondSet)
                 {
@@ -699,7 +693,7 @@ void ScDocument::FillInfo(
                     if ( pCondSet->GetItemState( ATTR_BACKGROUND, true, &pItem ) == SFX_ITEM_SET )
                     {
                         pInfo->pBackground = (const SvxBrushItem*) pItem;
-                        pRowInfo[nArrY].bEmptyBack = false;
+                        pRowInfo[nArrRow].bEmptyBack = false;
                     }
 
                             //  Umrandung
@@ -720,7 +714,7 @@ void ScDocument::FillInfo(
                 }
                 if(pInfo->pColorScale)
                 {
-                    pRowInfo[nArrY].bEmptyBack = false;
+                    pRowInfo[nArrRow].bEmptyBack = false;
                     pInfo->pBackground = new SvxBrushItem(*pInfo->pColorScale, ATTR_BACKGROUND);
                 }
             }
@@ -736,15 +730,15 @@ void ScDocument::FillInfo(
 
     if (bAnyMerged)
     {
-        for (nArrY=0; nArrY<nArrCount; nArrY++)
+        for (nArrRow=0; nArrRow<nArrCount; nArrRow++)
         {
-            RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-            nSignedY = nArrY ? pThisRowInfo->nRowNo : ((SCsROW)nRow1)-1;
+            RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
+            nSignedY = nArrRow ? pThisRowInfo->nRowNo : ((SCsROW)nRow1)-1;
 
-            for (nArrX=nCol1; nArrX<=nCol2+2; nArrX++)                  // links und rechts einer mehr
+            for (nArrCol=nCol1; nArrCol<=nCol2+2; nArrCol++)                  // links und rechts einer mehr
             {
-                SCsCOL nSignedX = ((SCsCOL) nArrX) - 1;
-                CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
+                SCsCOL nSignedX = ((SCsCOL) nArrCol) - 1;
+                CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrCol];
 
                 if (pInfo->bMerged || pInfo->bHOverlapped || pInfo->bVOverlapped)
                 {
@@ -752,7 +746,7 @@ void ScDocument::FillInfo(
                     SCsROW nStartY;
                     SCsCOL nEndX;
                     SCsROW nEndY;
-                    lcl_GetMergeRange( nSignedX,nSignedY, nArrY, this,pRowInfo, nCol1,nRow1,nCol2,nRow2,nTab,
+                    lcl_GetMergeRange( nSignedX,nSignedY, nArrRow, this,pRowInfo, nCol1,nRow1,nCol2,nRow2,nTab,
                                         nStartX,nStartY, nEndX,nEndY );
                     const ScPatternAttr* pStartPattern = GetPattern( nStartX,nStartY,nTab );
                     const SfxItemSet* pStartCond = GetCondResult( nStartX,nStartY,nTab );
@@ -764,7 +758,7 @@ void ScDocument::FillInfo(
                                     GetItemState(ATTR_BACKGROUND,true,&pItem) != SFX_ITEM_SET )
                         pItem = &pStartPattern->GetItem(ATTR_BACKGROUND);
                     pInfo->pBackground = (const SvxBrushItem*) pItem;
-                    pRowInfo[nArrY].bEmptyBack = false;
+                    pRowInfo[nArrRow].bEmptyBack = false;
 
                     // Schatten
 
@@ -799,17 +793,17 @@ void ScDocument::FillInfo(
 
     if (bAnyShadow)                             // Schatten verteilen
     {
-        for (nArrY=0; nArrY<nArrCount; nArrY++)
+        for (nArrRow=0; nArrRow<nArrCount; nArrRow++)
         {
-            bool bTop = ( nArrY == 0 );
-            bool bBottom = ( nArrY+1 == nArrCount );
+            bool bTop = ( nArrRow == 0 );
+            bool bBottom = ( nArrRow+1 == nArrCount );
 
-            for (nArrX=nCol1; nArrX<=nCol2+2; nArrX++)                  // links und rechts einer mehr
+            for (nArrCol=nCol1; nArrCol<=nCol2+2; nArrCol++)                  // links und rechts einer mehr
             {
-                bool bLeft = ( nArrX == nCol1 );
-                bool bRight = ( nArrX == nCol2+2 );
+                bool bLeft = ( nArrCol == nCol1 );
+                bool bRight = ( nArrCol == nCol2+2 );
 
-                CellInfo* pInfo = &pRowInfo[nArrY].pCellInfo[nArrX];
+                CellInfo* pInfo = &pRowInfo[nArrRow].pCellInfo[nArrCol];
                 const SvxShadowItem* pThisAttr = pInfo->pShadowAttr;
                 SvxShadowLocation eLoc = pThisAttr ? pThisAttr->GetLocation() : SVX_SHADOW_NONE;
                 if (eLoc != SVX_SHADOW_NONE)
@@ -819,19 +813,19 @@ void ScDocument::FillInfo(
                     SCsCOL nDxPos = 1;
                     SCsCOL nDxNeg = -1;
 
-                    while ( nArrX+nDxPos < nCol2+2 && pRowInfo[0].pCellInfo[nArrX+nDxPos].nWidth == 0 )
+                    while ( nArrCol+nDxPos < nCol2+2 && pRowInfo[0].pCellInfo[nArrCol+nDxPos].nWidth == 0 )
                         ++nDxPos;
-                    while ( nArrX+nDxNeg > nCol1 && pRowInfo[0].pCellInfo[nArrX+nDxNeg].nWidth == 0 )
+                    while ( nArrCol+nDxNeg > nCol1 && pRowInfo[0].pCellInfo[nArrCol+nDxNeg].nWidth == 0 )
                         --nDxNeg;
 
                     bool bLeftDiff = !bLeft &&
-                            CELLINFO(nDxNeg,0).pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
+                            pRowInfo[nArrRow].pCellInfo[nArrCol+nDxNeg].pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
                     bool bRightDiff = !bRight &&
-                            CELLINFO(nDxPos,0).pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
+                            pRowInfo[nArrRow].pCellInfo[nArrCol+nDxPos].pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
                     bool bTopDiff = !bTop &&
-                            CELLINFO(0,-1).pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
+                            pRowInfo[nArrRow-1].pCellInfo[nArrCol].pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
                     bool bBottomDiff = !bBottom &&
-                            CELLINFO(0,1).pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
+                            pRowInfo[nArrRow+1].pCellInfo[nArrCol].pShadowAttr->GetLocation() == SVX_SHADOW_NONE;
 
                     if ( bLayoutRTL )
                     {
@@ -853,80 +847,80 @@ void ScDocument::FillInfo(
                         case SVX_SHADOW_BOTTOMRIGHT:
                             if (bBottomDiff)
                             {
-                                CELLINFO(0,1).pHShadowOrigin = pThisAttr;
-                                CELLINFO(0,1).eHShadowPart =
+                                pRowInfo[nArrRow+1].pCellInfo[nArrCol].pHShadowOrigin = pThisAttr;
+                                pRowInfo[nArrRow+1].pCellInfo[nArrCol].eHShadowPart =
                                                 bLeftDiff ? SC_SHADOW_HSTART : SC_SHADOW_HORIZ;
                             }
                             if (bRightDiff)
                             {
-                                CELLINFO(1,0).pVShadowOrigin = pThisAttr;
-                                CELLINFO(1,0).eVShadowPart =
+                                pRowInfo[nArrRow].pCellInfo[nArrCol+1].pVShadowOrigin = pThisAttr;
+                                pRowInfo[nArrRow].pCellInfo[nArrCol+1].eVShadowPart =
                                                 bTopDiff ? SC_SHADOW_VSTART : SC_SHADOW_VERT;
                             }
                             if (bBottomDiff && bRightDiff)
                             {
-                                CELLINFO(1,1).pHShadowOrigin = pThisAttr;
-                                CELLINFO(1,1).eHShadowPart = SC_SHADOW_CORNER;
+                                pRowInfo[nArrRow+1].pCellInfo[nArrCol+1].pHShadowOrigin = pThisAttr;
+                                pRowInfo[nArrRow+1].pCellInfo[nArrCol+1].eHShadowPart = SC_SHADOW_CORNER;
                             }
                             break;
 
                         case SVX_SHADOW_BOTTOMLEFT:
                             if (bBottomDiff)
                             {
-                                CELLINFO(0,1).pHShadowOrigin = pThisAttr;
-                                CELLINFO(0,1).eHShadowPart =
+                                pRowInfo[nArrRow+1].pCellInfo[nArrCol].pHShadowOrigin = pThisAttr;
+                                pRowInfo[nArrRow+1].pCellInfo[nArrCol].eHShadowPart =
                                                 bRightDiff ? SC_SHADOW_HSTART : SC_SHADOW_HORIZ;
                             }
                             if (bLeftDiff)
                             {
-                                CELLINFO(-1,0).pVShadowOrigin = pThisAttr;
-                                CELLINFO(-1,0).eVShadowPart =
+                                pRowInfo[nArrRow].pCellInfo[nArrCol-1].pVShadowOrigin = pThisAttr;
+                                pRowInfo[nArrRow].pCellInfo[nArrCol-1].eVShadowPart =
                                                 bTopDiff ? SC_SHADOW_VSTART : SC_SHADOW_VERT;
                             }
                             if (bBottomDiff && bLeftDiff)
                             {
-                                CELLINFO(-1,1).pHShadowOrigin = pThisAttr;
-                                CELLINFO(-1,1).eHShadowPart = SC_SHADOW_CORNER;
+                                pRowInfo[nArrRow+1].pCellInfo[nArrCol-1].pHShadowOrigin = pThisAttr;
+                                pRowInfo[nArrRow+1].pCellInfo[nArrCol-1].eHShadowPart = SC_SHADOW_CORNER;
                             }
                             break;
 
                         case SVX_SHADOW_TOPRIGHT:
                             if (bTopDiff)
                             {
-                                CELLINFO(0,-1).pHShadowOrigin = pThisAttr;
-                                CELLINFO(0,-1).eHShadowPart =
+                                pRowInfo[nArrRow-1].pCellInfo[nArrCol].pHShadowOrigin = pThisAttr;
+                                pRowInfo[nArrRow-1].pCellInfo[nArrCol].eHShadowPart =
                                                 bLeftDiff ? SC_SHADOW_HSTART : SC_SHADOW_HORIZ;
                             }
                             if (bRightDiff)
                             {
-                                CELLINFO(1,0).pVShadowOrigin = pThisAttr;
-                                CELLINFO(1,0).eVShadowPart =
+                                pRowInfo[nArrRow].pCellInfo[nArrCol+1].pVShadowOrigin = pThisAttr;
+                                pRowInfo[nArrRow].pCellInfo[nArrCol+1].eVShadowPart =
                                                 bBottomDiff ? SC_SHADOW_VSTART : SC_SHADOW_VERT;
                             }
                             if (bTopDiff && bRightDiff)
                             {
-                                CELLINFO(1,-1).pHShadowOrigin = pThisAttr;
-                                CELLINFO(1,-1).eHShadowPart = SC_SHADOW_CORNER;
+                                pRowInfo[nArrRow-1].pCellInfo[nArrCol+1].pHShadowOrigin = pThisAttr;
+                                pRowInfo[nArrRow-1].pCellInfo[nArrCol+1].eHShadowPart = SC_SHADOW_CORNER;
                             }
                             break;
 
                         case SVX_SHADOW_TOPLEFT:
                             if (bTopDiff)
                             {
-                                CELLINFO(0,-1).pHShadowOrigin = pThisAttr;
-                                CELLINFO(0,-1).eHShadowPart =
+                                pRowInfo[nArrRow-1].pCellInfo[nArrCol].pHShadowOrigin = pThisAttr;
+                                pRowInfo[nArrRow-1].pCellInfo[nArrCol].eHShadowPart =
                                                 bRightDiff ? SC_SHADOW_HSTART : SC_SHADOW_HORIZ;
                             }
                             if (bLeftDiff)
                             {
-                                CELLINFO(-1,0).pVShadowOrigin = pThisAttr;
-                                CELLINFO(-1,0).eVShadowPart =
+                                pRowInfo[nArrRow].pCellInfo[nArrCol-1].pVShadowOrigin = pThisAttr;
+                                pRowInfo[nArrRow].pCellInfo[nArrCol-1].eVShadowPart =
                                                 bBottomDiff ? SC_SHADOW_VSTART : SC_SHADOW_VERT;
                             }
                             if (bTopDiff && bLeftDiff)
                             {
-                                CELLINFO(-1,-1).pHShadowOrigin = pThisAttr;
-                                CELLINFO(-1,-1).eHShadowPart = SC_SHADOW_CORNER;
+                                pRowInfo[nArrRow-1].pCellInfo[nArrCol-1].pHShadowOrigin = pThisAttr;
+                                pRowInfo[nArrRow-1].pCellInfo[nArrCol-1].eHShadowPart = SC_SHADOW_CORNER;
                             }
                             break;
 
