@@ -700,7 +700,7 @@ awt::Rectangle LineShape::getRelRectangle() const
 // ============================================================================
 
 BezierShape::BezierShape(Drawing& rDrawing)
-    : SimpleShape(rDrawing, "com.sun.star.drawing.OpenBezierShape")
+    : SimpleShape(rDrawing, "com.sun.star.drawing.OpenBezierShape") // TODO Could we need both Open and Closed?
 {
 }
 
@@ -708,6 +708,13 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
 {
     awt::Rectangle aCoordSys = getCoordSystem();
     PolyPolygonBezierCoords aBezierCoords;
+
+    // If we have an 'x' in the last part of the path it means it is closed...
+    sal_Int32 nPos = maShapeModel.maVmlPath.lastIndexOf(',');
+    if ( nPos != -1 && maShapeModel.maVmlPath.copy(nPos).indexOf('x') != -1 )
+    {
+        const_cast<BezierShape*>( this )->setService( "com.sun.star.drawing.ClosedBezierShape" );
+    }
 
     if( (aCoordSys.Width > 0) && (aCoordSys.Height > 0) )
     {
