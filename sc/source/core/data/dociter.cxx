@@ -1742,6 +1742,24 @@ bool ScHorizontalCellIterator::GetPos( SCCOL& rCol, SCROW& rRow )
     return bMore;
 }
 
+namespace {
+
+bool advanceBlock(size_t nRow, sc::CellStoreType::const_iterator& rPos, const sc::CellStoreType::const_iterator& rEnd)
+{
+    // This block is behind the current row position. Advance the block.
+    for (++rPos; rPos != rEnd; ++rPos)
+    {
+        if (nRow < rPos->position + rPos->size)
+            // Found the block that contains the specified row.
+            return true;
+    }
+
+    // No more blocks.
+    return false;
+}
+
+}
+
 void ScHorizontalCellIterator::Advance()
 {
     // Find the next non-empty cell in the current row.
@@ -1759,7 +1777,8 @@ void ScHorizontalCellIterator::Advance()
             continue;
 
         if (r.maPos->position + r.maPos->size <= nRow)
-            continue;
+            if (!advanceBlock(nRow, r.maPos, r.maEnd))
+                continue;
 
         // Found in the current row.
         mnCol = i;
@@ -1793,18 +1812,8 @@ void ScHorizontalCellIterator::Advance()
             }
 
             if (r.maPos->position + r.maPos->size <= nRow)
-            {
-                // This block is behind the current row position. Advance the block.
-                for (++r.maPos; r.maPos != r.maEnd; ++r.maPos)
-                {
-                    if (nRow < r.maPos->position + r.maPos->size)
-                        break;
-                }
-
-                if (r.maPos == r.maEnd)
-                    // This column has ended.
+                if (!advanceBlock(nRow, r.maPos, r.maEnd))
                     continue;
-            }
 
             if (r.maPos->type == sc::element_type_empty)
             {

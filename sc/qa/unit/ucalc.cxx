@@ -53,6 +53,7 @@
 #include "globstr.hrc"
 #include "tokenarray.hxx"
 #include "scopetools.hxx"
+#include "dociter.hxx"
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -130,6 +131,8 @@ public:
      */
     void testSheetsFunc();
     void testVolatileFunc();
+
+    void testHorizontalIterator();
 
     /**
      * Basic test for formula dependency tracking.
@@ -306,6 +309,7 @@ public:
     CPPUNIT_TEST(testCopyToDocument);
     CPPUNIT_TEST(testSheetsFunc);
     CPPUNIT_TEST(testVolatileFunc);
+    CPPUNIT_TEST(testHorizontalIterator);
     CPPUNIT_TEST(testFormulaDepTracking);
     CPPUNIT_TEST(testFormulaDepTracking2);
     CPPUNIT_TEST(testCellBroadcaster);
@@ -1774,6 +1778,53 @@ void Test::testVolatileFunc()
     double now2;
     m_pDoc->GetValue(0, 1, 0, now2);
     CPPUNIT_ASSERT_MESSAGE("Result should be the value of NOW() again.", (now2 - now1) >= 0.0);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testHorizontalIterator()
+{
+    m_pDoc->InsertTab(0, "test");
+
+    // Raw data
+    const char* aData[][2] = {
+        { "A", "B" },
+        { "C", "1" },
+        { "D", "2" },
+        { "E", "3" }
+    };
+
+    ScAddress aPos(0,0,0);
+    insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScHorizontalCellIterator aIter(m_pDoc, 0, 0, 0, 1, SAL_N_ELEMENTS(aData));
+
+    struct {
+        SCCOL nCol;
+        SCROW nRow;
+        const char* pVal;
+    } aChecks[] = {
+        { 0, 0, "A" },
+        { 1, 0, "B" },
+        { 0, 1, "C" },
+        { 1, 1, "1" },
+        { 0, 2, "D" },
+        { 1, 2, "2" },
+        { 0, 3, "E" },
+        { 1, 3, "3" },
+    };
+
+    SCCOL nCol;
+    SCROW nRow;
+    size_t i = 0, n = SAL_N_ELEMENTS(aChecks);
+    for (ScRefCellValue* pCell = aIter.GetNext(nCol, nRow); pCell; pCell = aIter.GetNext(nCol, nRow), ++i)
+    {
+        if (i >= n)
+            CPPUNIT_FAIL("Iterator claims there is more data than there should be.");
+
+        CPPUNIT_ASSERT_EQUAL(aChecks[i].nCol, nCol);
+        CPPUNIT_ASSERT_EQUAL(aChecks[i].nRow, nRow);
+        CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(aChecks[i].pVal), pCell->getString());
+    }
 
     m_pDoc->DeleteTab(0);
 }
@@ -6785,13 +6836,9 @@ void Test::testAnchoredRotatedShape()
         ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
 
         Rectangle aSnap = pObj->GetSnapRect();
-        printf("expected height %ld actual %ld\n", aRotRect.GetHeight(), aSnap.GetHeight() );
         CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.GetHeight(), aSnap.GetHeight(), TOLERANCE ) );
-        printf("expected width %ld actual %ld\n", aRotRect.GetWidth(), aSnap.GetWidth() );
         CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.GetWidth(), aSnap.GetWidth(), TOLERANCE ) );
-        printf("expected left %ld actual %ld\n", aRotRect.Left(), aSnap.Left() );
         CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.Left(), aSnap.Left(), TOLERANCE ) );
-        printf("expected right %ld actual %ld\n", aRotRect.Top(), aSnap.Top() );
         CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.Top(), aSnap.Top(), TOLERANCE ) );
 
         ScDrawObjData aAnchor;
@@ -6814,20 +6861,14 @@ void Test::testAnchoredRotatedShape()
 
         aSnap = pObj->GetSnapRect();
 
-        printf("expected new height %ld actual %ld\n", aRotRect.GetHeight(), aSnap.GetHeight() );
         // ensure that width and height have been adjusted accordingly
         CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.GetHeight(), aSnap.GetHeight(), TOLERANCE ) );
-        printf("expected new width %ld %ld\n", aRotRect.GetWidth(), aSnap.GetWidth() );
         CPPUNIT_ASSERT_EQUAL( true, testEqualsWithTolerance( aRotRect.GetWidth(), aSnap.GetWidth(), TOLERANCE ) );
 
         // ensure that anchor start and end addresses haven't changed
-        printf("expected startrow %ld actual %ld\n", (long)aAnchor.maStart.Row(), (long)pData->maStart.Row()  );
         CPPUNIT_ASSERT_EQUAL( aAnchor.maStart.Row(), pData->maStart.Row() ); // start row 0
-        printf("expected startcol %ld actual %ld\n", (long)aAnchor.maStart.Col(), (long)pData->maStart.Col()  );
         CPPUNIT_ASSERT_EQUAL( aAnchor.maStart.Col(), pData->maStart.Col() ); // start column 5
-        printf("expected endrow %ld actual %ld\n", (long)aAnchor.maEnd.Row(), (long)pData->maEnd.Row()  );
         CPPUNIT_ASSERT_EQUAL( aAnchor.maEnd.Row(), pData->maEnd.Row() ); // end row 3
-        printf("expected endcol %ld actual %ld\n", (long)aAnchor.maEnd.Col(), (long)pData->maEnd.Col()  );
         CPPUNIT_ASSERT_EQUAL( aAnchor.maEnd.Col(), pData->maEnd.Col() ); // end col 7
     }
     m_pDoc->DeleteTab(0);

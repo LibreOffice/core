@@ -583,6 +583,8 @@ OUString ScRefCellValue::getString()
 {
     switch (meType)
     {
+        case CELLTYPE_VALUE:
+            return OUString::number(mfValue);
         case CELLTYPE_STRING:
             return *mpString;
         case CELLTYPE_EDIT:
