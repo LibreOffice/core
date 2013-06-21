@@ -5,17 +5,33 @@ using namespace ::com::sun::star;
 namespace avmedia {
 namespace vlc {
 
+const char * const VLC_ARGS[] = {
+    "-I",
+    "dummy",
+    "--ignore-config",
+    "--verbose=-1",
+    "--quiet"
+};
+
+VLCPlayer::VLCPlayer()
+    : mInstance( libvlc_new( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS ), libvlc_release )
+    , mPlayer( libvlc_media_player_new(mInstance.get()), libvlc_media_player_release )
+{
+}
+
 void SAL_CALL VLCPlayer::start()
 {
+    libvlc_media_player_play( mPlayer.get() );
 }
 
 void SAL_CALL VLCPlayer::stop()
 {
+    libvlc_media_player_stop( mPlayer.get() );
 }
 
 ::sal_Bool SAL_CALL VLCPlayer::isPlaying()
 {
-    return false;
+    return (libvlc_media_player_is_playing( mPlayer.get() ) == 1);
 }
 
 double SAL_CALL VLCPlayer::getDuration()
@@ -34,7 +50,7 @@ double SAL_CALL VLCPlayer::getMediaTime()
 
 double SAL_CALL VLCPlayer::getRate()
 {
-    return 0.f;
+    return libvlc_media_player_get_rate( mPlayer.get() );
 }
 
 void SAL_CALL VLCPlayer::setPlaybackLoop( ::sal_Bool bSet )
