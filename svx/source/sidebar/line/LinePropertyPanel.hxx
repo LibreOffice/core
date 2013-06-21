@@ -27,6 +27,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
 #include <svx/sidebar/ColorPopup.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 #include <svx/xtable.hxx>
 #include "LineWidthPopup.hxx"
 
@@ -57,7 +58,7 @@ class LineWidthControl;
 
 
 class LinePropertyPanel
-:   public Control,
+:   public PanelLayout,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 private:
@@ -89,23 +90,21 @@ public:
 
 private:
     //ui controls
-    ::boost::scoped_ptr< FixedText >                        mpFTWidth;
-    ::boost::scoped_ptr< Window >                           mpTBWidthBackground;
-    ::boost::scoped_ptr< ToolBox >                          mpTBWidth;
-    ::boost::scoped_ptr< FixedText >                        mpFTColor;
-    ::boost::scoped_ptr< Window >                           mpTBColorBackground;
-    ::boost::scoped_ptr< ToolBox >                          mpTBColor;
-    ::boost::scoped_ptr< FixedText >                        mpFTStyle;
-    ::boost::scoped_ptr< ListBox >                          mpLBStyle;
-    ::boost::scoped_ptr< FixedText >                        mpFTTrancparency;
-    ::boost::scoped_ptr< MetricField >                      mpMFTransparent;
-    ::boost::scoped_ptr< FixedText >                        mpFTArrow;
-    ::boost::scoped_ptr< ListBox >                          mpLBStart;
-    ::boost::scoped_ptr< ListBox >                          mpLBEnd;
-    ::boost::scoped_ptr< FixedText >                        mpFTEdgeStyle;
-    ::boost::scoped_ptr< ListBox >                          mpLBEdgeStyle;
-    ::boost::scoped_ptr< FixedText >                        mpFTCapStyle;
-    ::boost::scoped_ptr< ListBox >                          mpLBCapStyle;
+    FixedText*                        mpFTWidth;
+    ToolBox*                          mpTBWidth;
+    FixedText*                        mpFTColor;
+    ToolBox*                          mpTBColor;
+    FixedText*                        mpFTStyle;
+    ListBox*                          mpLBStyle;
+    FixedText*                        mpFTTrancparency;
+    MetricField*                      mpMFTransparent;
+    FixedText*                        mpFTArrow;
+    ListBox*                          mpLBStart;
+    ListBox*                          mpLBEnd;
+    FixedText*                        mpFTEdgeStyle;
+    ListBox*                          mpLBEdgeStyle;
+    FixedText*                        mpFTCapStyle;
+    ListBox*                          mpLBCapStyle;
 
     //ControllerItem
     ::sfx2::sidebar::ControllerItem                         maStyleControl;
