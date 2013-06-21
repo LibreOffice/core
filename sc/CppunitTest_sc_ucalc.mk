@@ -87,6 +87,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_ucalc,\
     fileaccess/source/fileacc \
     framework/util/fwk \
     i18npool/util/i18npool \
+    i18npool/source/search/i18nsearch \
     sax/source/expatwrap/expwrap \
     sfx2/util/sfx \
     ucb/source/core/ucb1 \

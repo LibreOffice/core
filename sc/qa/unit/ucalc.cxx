@@ -64,6 +64,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
+#include "svl/srchitem.hxx"
 
 #include <sfx2/docfile.hxx>
 
@@ -234,6 +235,7 @@ public:
     void testCopyPaste();
     void testMergedCells();
     void testUpdateReference();
+    void testSearchCells();
 
     /**
      * Make sure the sheet streams are invalidated properly.
@@ -349,6 +351,7 @@ public:
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testMergedCells);
     CPPUNIT_TEST(testUpdateReference);
+    CPPUNIT_TEST(testSearchCells);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
     CPPUNIT_TEST(testSetBackgroundColor);
     CPPUNIT_TEST(testRenameTable);
@@ -6202,6 +6205,41 @@ void Test::testUpdateReference()
     m_pDoc->DeleteTab(3);
     m_pDoc->DeleteTab(2);
     m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testSearchCells()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetString(ScAddress(0,0,0), "A");
+    m_pDoc->SetString(ScAddress(0,1,0), "B");
+    m_pDoc->SetString(ScAddress(0,2,0), "A");
+    // Leave A4 blank.
+    m_pDoc->SetString(ScAddress(0,4,0), "A");
+    m_pDoc->SetString(ScAddress(0,5,0), "B");
+    m_pDoc->SetString(ScAddress(0,6,0), "C");
+
+    SvxSearchItem aItem(SID_SEARCH_ITEM);
+    aItem.SetSearchString(OUString("A"));
+    aItem.SetCommand(SVX_SEARCHCMD_FIND_ALL);
+    ScMarkData aMarkData;
+    aMarkData.SelectOneTable(0);
+    SCCOL nCol = 0;
+    SCROW nRow = 0;
+    SCTAB nTab = 0;
+    ScRangeList aMatchedRanges;
+    OUString aUndoStr;
+    m_pDoc->SearchAndReplace(aItem, nCol, nRow, nTab, aMarkData, aMatchedRanges, aUndoStr);
+
+    CPPUNIT_ASSERT_MESSAGE("There should be exactly 3 matching cells.", aMatchedRanges.size() == 3);
+    ScAddress aHit(0,0,0);
+    CPPUNIT_ASSERT_MESSAGE("A1 should be inside the matched range.", aMatchedRanges.In(aHit));
+    aHit.SetRow(2);
+    CPPUNIT_ASSERT_MESSAGE("A3 should be inside the matched range.", aMatchedRanges.In(aHit));
+    aHit.SetRow(4);
+    CPPUNIT_ASSERT_MESSAGE("A5 should be inside the matched range.", aMatchedRanges.In(aHit));
+
     m_pDoc->DeleteTab(0);
 }
 
