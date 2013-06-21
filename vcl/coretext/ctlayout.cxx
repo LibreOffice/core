@@ -140,10 +140,11 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
     }
 
+    float fTrailingSpace = CTLineGetTrailingWhitespaceWidth( mpCTLine );
     // in RTL-layouts trailing spaces are leftmost
     // TODO: use BiDi-algorithm to thoroughly check this assumption
     if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
-        mnBaseAdv = rint( CTLineGetTrailingWhitespaceWidth( mpCTLine ) );
+        mnBaseAdv = rint( fTrailingSpace );
 
     // return early if there is nothing to do
     if( nPixelWidth <= 0 )
@@ -154,7 +155,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     if( (nOrigWidth >= nPixelWidth-1) && (nOrigWidth <= nPixelWidth+1) )
         return;
 
-    CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth );
+    CTLineRef pNewCTLine = CTLineCreateJustifiedLine( mpCTLine, 1.0, nPixelWidth - fTrailingSpace );
     if( !pNewCTLine ) { // CTLineCreateJustifiedLine can and does fail
         // handle failure by keeping the unjustified layout
         // TODO: a better solution such as
