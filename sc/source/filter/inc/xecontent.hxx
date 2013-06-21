@@ -109,6 +109,7 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm );
 
     virtual void        WriteEmbeddedData( XclExpStream& rStrm );
+    void                SetDisplay( bool bDisplay ) { mbSetDisplay = bDisplay; }
 private:
     /** Builds file name from the passed file URL. Tries to convert to relative file name.
         @param rnLevel  (out-param) The parent directory level.
@@ -119,7 +120,6 @@ private:
 
     /** Writes the body of the HLINK record. */
     virtual void        WriteBody( XclExpStream& rStrm );
-
 private:
     typedef boost::scoped_ptr< String >   StringPtr;
     typedef boost::scoped_ptr< SvStream > SvStreamPtr;
@@ -130,6 +130,7 @@ private:
     sal_uInt32          mnFlags;            /// Option flags.
     XclExpStringRef     mxTextMark;         /// Location within mxRepr
     ::rtl::OUString     msTarget;           /// Target URL
+    bool                mbSetDisplay;       /// True if display attribute it written
 };
 
 typedef XclExpRecordList< XclExpHyperlink > XclExpHyperlinkList;

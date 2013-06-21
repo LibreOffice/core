@@ -335,7 +335,8 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     XclExpRecord( EXC_ID_HLINK ),
     maScPos( rScPos ),
     mxVarData( new SvMemoryStream ),
-    mnFlags( 0 )
+    mnFlags( 0 ),
+    mbSetDisplay( true )
 {
     const String& rUrl = rUrlField.GetURL();
     const String& rRepr = rUrlField.GetRepresentation();
@@ -498,6 +499,7 @@ void XclExpHyperlink::WriteEmbeddedData( XclExpStream& rStrm )
 
 void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
 {
+    OString sTmp = XclXmlUtils::ToOString( maScPos );
     OUString sId = !msTarget.isEmpty() ? rStrm.addRelation( rStrm.GetCurrentStream()->getOutputStream(),
             XclXmlUtils::ToOUString( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
             msTarget, true ) : OUString();
@@ -510,7 +512,9 @@ void XclExpHyperlink::SaveXml( XclExpXmlStream& rStrm )
                                         ? XclXmlUtils::ToOString( *mxTextMark ).getStr()
                                         : NULL,
             // OOXTODO: XML_tooltip,    from record HLinkTooltip 800h wzTooltip
-            XML_display,            XclXmlUtils::ToOString( *mxRepr ).getStr(),
+            XML_display,            mbSetDisplay
+                                       ? XclXmlUtils::ToOString( *mxRepr ).getStr()
+                                       : NULL,
             FSEND );
 }
 
