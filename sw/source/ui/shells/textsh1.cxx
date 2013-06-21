@@ -968,13 +968,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( !bUseDialog )
             {
                 if ( nSlot == SID_ATTR_PARA_LRSPACE)
-        {
-            SvxLRSpaceItem aParaMargin((const SvxLRSpaceItem&)pArgs->Get(nSlot));
-            aParaMargin.SetWhich( RES_LR_SPACE);
-            aCoreSet.Put(aParaMargin);
-            pSet = &aCoreSet;
+                {
+                    SvxLRSpaceItem aParaMargin((const SvxLRSpaceItem&)pArgs->Get(nSlot));
+                    aParaMargin.SetWhich( RES_LR_SPACE);
+                    aCoreSet.Put(aParaMargin);
+                    pSet = &aCoreSet;
 
-        } else
+                } else
                     pSet = (SfxItemSet*) pArgs;
 
             }
