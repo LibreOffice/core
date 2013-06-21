@@ -1564,10 +1564,10 @@ public:
     void            SetSrcCharSet( CharSet eNew )   { eSrcSet = eNew; }
     void            UpdateFontCharSet();
 
-    void            FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                        SCTAB nTab, double nScaleX, double nScaleY,
-                        bool bPageMode, bool bFormulaMode,
-                        const ScMarkData* pMarkData = NULL );
+    void FillInfo(
+        ScTableInfo& rTabInfo, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+        SCTAB nTab, double fColScale, double fRowScale, bool bPageMode, bool bFormulaMode,
+        const ScMarkData* pMarkData = NULL );
 
     SC_DLLPUBLIC SvNumberFormatter* GetFormatTable() const;
 
