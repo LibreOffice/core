@@ -230,6 +230,7 @@
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="no_show_all">True</property>
+        <property name="valign">center</property>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -244,6 +245,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
+        <property name="valign">center</property>
         <property name="use_underline">True</property>
       </object>
       <packing>
@@ -381,6 +383,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
+        <property name="valign">center</property>
         <property name="use_underline">True</property>
       </object>
       <packing>
