@@ -1627,32 +1627,36 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
     sal_uInt16 nSelPos = pBox->GetSelectEntryPos();
     if( pTableBck_Impl && pTableBck_Impl->nActPos != nSelPos)
     {
-        SvxBrushItem** pActItem = new (SvxBrushItem*);
+        SvxBrushItem* pActItem = NULL;
+        bool bDelete = false;
         sal_uInt16 nWhich = 0;
         switch(pTableBck_Impl->nActPos)
         {
         case TBL_DEST_CELL:
-            *pActItem = pTableBck_Impl->pCellBrush;
+            pActItem = pTableBck_Impl->pCellBrush;
             nWhich = pTableBck_Impl->nCellWhich;
             break;
         case TBL_DEST_ROW:
-            *pActItem = pTableBck_Impl->pRowBrush;
+            pActItem = pTableBck_Impl->pRowBrush;
             nWhich = pTableBck_Impl->nRowWhich;
             break;
         case TBL_DEST_TBL:
-            *pActItem = pTableBck_Impl->pTableBrush;
+            pActItem = pTableBck_Impl->pTableBrush;
             nWhich = pTableBck_Impl->nTableWhich;
             break;
         default:
-            *pActItem = NULL;
+            pActItem = NULL;
             break;
         }
         pTableBck_Impl->nActPos = nSelPos;
-        if(!*pActItem)
-            *pActItem = new SvxBrushItem(nWhich);
+        if(!pActItem)
+        {
+            pActItem = new SvxBrushItem(nWhich);
+            bDelete = true;
+        }
         if(XFILL_SOLID == lcl_getFillStyle(m_pLbSelect))  // brush selected
         {
-            **pActItem = SvxBrushItem( aBgdColor, nWhich );
+            *pActItem = SvxBrushItem( aBgdColor, nWhich );
         }
         else
         {
@@ -1663,42 +1667,53 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
                 bIsGraphicValid = LoadLinkedGraphic_Impl();
 
             if ( bIsLink )
-                **pActItem = SvxBrushItem( aBgdGraphicPath,
+                *pActItem = SvxBrushItem( aBgdGraphicPath,
                                             aBgdGraphicFilter,
                                             eNewPos,
-                                            (*pActItem)->Which() );
+                                            pActItem->Which() );
             else
-                **pActItem = SvxBrushItem( aBgdGraphic,
+                *pActItem = SvxBrushItem( aBgdGraphic,
                                             eNewPos,
-                                            (*pActItem)->Which() );
+                                            pActItem->Which() );
         }
         switch(nSelPos)
         {
         case TBL_DEST_CELL:
-            *pActItem = pTableBck_Impl->pCellBrush;
+            pActItem = pTableBck_Impl->pCellBrush;
             m_pLbSelect->Enable();
             nWhich = pTableBck_Impl->nCellWhich;
             break;
         case TBL_DEST_ROW:
             if((nHtmlMode & HTMLMODE_ON) && !(nHtmlMode & HTMLMODE_SOME_STYLES))
                 m_pLbSelect->Disable();
-            *pActItem = pTableBck_Impl->pRowBrush;
+            pActItem = pTableBck_Impl->pRowBrush;
             nWhich = pTableBck_Impl->nRowWhich;
             break;
         case TBL_DEST_TBL:
-            *pActItem = pTableBck_Impl->pTableBrush;
+            pActItem = pTableBck_Impl->pTableBrush;
             m_pLbSelect->Enable();
             nWhich = pTableBck_Impl->nTableWhich;
             break;
         default:
-            *pActItem = NULL;
+            if (bDelete)
+            {
+                // The item will be new'ed again below, but that will be the
+                // default item then, not an existing modified one.
+                delete pActItem;
+                bDelete = false;
+            }
+            pActItem = NULL;
             break;
         }
         String aUserData = GetUserData();
-        if(!*pActItem)
-            *pActItem = new SvxBrushItem(nWhich);
-        FillControls_Impl(**pActItem, aUserData);
-        delete pActItem;
+        if(!pActItem)
+        {
+            pActItem = new SvxBrushItem(nWhich);
+            bDelete = true;
+        }
+        FillControls_Impl(*pActItem, aUserData);
+        if (bDelete)
+            delete pActItem;
     }
     return 0;
 }
@@ -1710,21 +1725,21 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
     sal_uInt16 nSelPos = pBox->GetSelectEntryPos();
     if( pParaBck_Impl && pParaBck_Impl->nActPos != nSelPos)
     {
-        SvxBrushItem** pActItem = new (SvxBrushItem*);
+        SvxBrushItem* pActItem = NULL;
         switch(pParaBck_Impl->nActPos)
         {
             case PARA_DEST_PARA:
-                *pActItem = pParaBck_Impl->pParaBrush;
+                pActItem = pParaBck_Impl->pParaBrush;
             break;
             case PARA_DEST_CHAR:
-                *pActItem = pParaBck_Impl->pCharBrush;
+                pActItem = pParaBck_Impl->pCharBrush;
             break;
         }
         pParaBck_Impl->nActPos = nSelPos;
         if(XFILL_SOLID == lcl_getFillStyle(m_pLbSelect))  // brush selected
         {
-            sal_uInt16 nWhich = (*pActItem)->Which();
-            **pActItem = SvxBrushItem( aBgdColor, nWhich );
+            sal_uInt16 nWhich = pActItem->Which();
+            *pActItem = SvxBrushItem( aBgdColor, nWhich );
         }
         else
         {
@@ -1735,31 +1750,30 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
                     bIsGraphicValid = LoadLinkedGraphic_Impl();
 
                 if ( bIsLink )
-                    **pActItem = SvxBrushItem( aBgdGraphicPath,
+                    *pActItem = SvxBrushItem( aBgdGraphicPath,
                                                 aBgdGraphicFilter,
                                                 eNewPos,
-                                                (*pActItem)->Which() );
+                                                pActItem->Which() );
                 else
-                    **pActItem = SvxBrushItem( aBgdGraphic,
+                    *pActItem = SvxBrushItem( aBgdGraphic,
                                                 eNewPos,
-                                                (*pActItem)->Which() );
+                                                pActItem->Which() );
         }
         switch(nSelPos)
         {
             case PARA_DEST_PARA:
-                *pActItem = pParaBck_Impl->pParaBrush;
+                pActItem = pParaBck_Impl->pParaBrush;
                 m_pLbSelect->Enable();
             break;
             case PARA_DEST_CHAR:
             {
-                *pActItem = pParaBck_Impl->pCharBrush;
+                pActItem = pParaBck_Impl->pCharBrush;
                 m_pLbSelect->Enable(sal_False);
             }
             break;
         }
         String aUserData = GetUserData();
-        FillControls_Impl(**pActItem, aUserData);
-        delete pActItem;
+        FillControls_Impl(*pActItem, aUserData);
     }
     return 0;
 }
