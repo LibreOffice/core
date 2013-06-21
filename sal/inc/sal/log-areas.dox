@@ -36,6 +36,7 @@ certain functionality.
 
 @section connectivity
 
+@li @c connectivity.commontools
 @li @c connectivity.mork
 @li @c connectivity.parse
 
