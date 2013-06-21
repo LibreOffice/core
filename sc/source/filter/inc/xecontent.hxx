@@ -109,6 +109,7 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm );
 
     virtual void        WriteEmbeddedData( XclExpStream& rStrm );
+    void                SetDisplay( bool bDisplay ) { mbSetDisplay = bDisplay; }
 private:
     /** Builds file name from the passed file URL. Tries to convert to relative file name.
         @param rnLevel  (out-param) The parent directory level.
@@ -128,7 +129,8 @@ private:
     SvStreamPtr         mxVarData;          /// Buffer stream with variable data.
     sal_uInt32          mnFlags;            /// Option flags.
     XclExpStringRef     mxTextMark;         /// Location within m_Repr
-    OUString     msTarget;           /// Target URL
+    OUString            msTarget;           /// Target URL
+    bool                mbSetDisplay;       /// True if display attribute it written
 };
 
 typedef XclExpRecordList< XclExpHyperlink > XclExpHyperlinkList;
@@ -348,9 +350,9 @@ private:
     XclExpString        maErrorText;    /// The error text.
     XclExpStringRef     mxString1;      /// String for first condition formula.
     XclTokenArrayRef    mxTokArr1;      /// Formula for first condition.
-    OUString     msFormula1;     /// OOXML Formula for first condition.
+    OUString            msFormula1;     /// OOXML Formula for first condition.
     XclTokenArrayRef    mxTokArr2;      /// Formula for second condition.
-    OUString     msFormula2;     /// OOXML Formula for second condition.
+    OUString            msFormula2;     /// OOXML Formula for second condition.
     sal_uInt32          mnFlags;        /// Miscellaneous flags.
     sal_uLong               mnScHandle;     /// The core handle for quick list search.
 };
