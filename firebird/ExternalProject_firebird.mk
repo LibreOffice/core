@@ -31,17 +31,20 @@ $(eval $(call gb_ExternalProject_register_targets,firebird,\
 
 $(call gb_ExternalProject_get_state_target,firebird,build):
 	$(call gb_ExternalProject_run,build,\
-		unset MAKEFLAGS && \
-		export CFLAGS="$(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden)" \
-		&& LDFLAGS="-L$(OUTDIR)/lib \
-			$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib") \
-			$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
-		&& CPPFLAGS="-I$(OUTDIR)/inc/external $(if $(SYSBASE),-I$(SYSBASE)/usr/include)" \
+		unset MAKEFLAGS \
 		&& export PKG_CONFIG="" \
+		&& export CXXFLAGS="-L$(OUTDIR)/lib \
+			$(if $(filter NO,$(SYSTEM_BOOST)),-I$(call gb_UnpackedTarball_get_dir,boost),$(BOOST_CPPFLAGS)) \
+			$(if $(filter NO,$(SYSTEM_ICU)), \
+				-I$(call gb_UnpackedTarball_get_dir,icu)/source \
+				-I$(call gb_UnpackedTarball_get_dir,icu)/source/i18n \
+				-I$(call gb_UnpackedTarball_get_dir,icu)/source/common \
+				,$(ICU_CPPFLAGS))" \
+		&& export LD_LIBRARY_PATH="$(OUTDIR)/lib" \
 		&& ./configure \
 			--without-editline \
 			--disable-superserver \
-			$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(call gb_UnpackedTarball_get_dir,boost),CXXFLAGS=$(BOOST_CPPFLAGS)) \
+			--with-system-icu --without-fbsample --without-fbsample-db \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \

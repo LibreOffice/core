@@ -11,4 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,firebird))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,firebird,$(FIREBIRD_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_add_patches,firebird,\
+	firebird/firebird-icu.patch.1 \
+))
+
 # vim: set noet sw=4 ts=4:
