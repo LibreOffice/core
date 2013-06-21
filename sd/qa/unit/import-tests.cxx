@@ -48,10 +48,28 @@ public:
 
 /** Test document against a reference XML dump of shapes.
 
-If you want to update one of these tests, set the nUpdateMe to the index of
-the test, the dump XML's will be created (or rewritten) instead of checking.
-Use with care - when the test is failing, first find out why, instead of just
-updating .xml's blindly.
+If you want to update one of these tests, or add a new one, set the nUpdateMe
+to the index of the test, and the dump XML's will be created (or rewritten)
+instead of checking. Use with care - when the test is failing, first find out
+why, instead of just updating .xml's blindly.
+
+Example: Let's say you are adding a test called fdoABCD.pptx.  You'll place it
+to the data/ subdirectory, and will add an entry to aFilesToCompare below,
+like:
+
+        { "fdoABCD.pptx", "xml/fdoABCD_" },
+
+and will count the index in the aFilesToCompare structure (1st is 0, 2nd is 1,
+etc.)  Temporarily you'll set nUpdateMe to this index (instead of -1), and run
+
+make sd
+
+This will generate the sd/qa/unit/data/xml/fdoABCD_*.xml for you.  Now you
+will change nUpdateMe back to -1, and commit your fdoABCD.pptx test, the
+xml/fdoABCD_*.xml dumps, and the aFilesToCompare addition in one commit.
+
+As the last step, you will revert your fix and do 'make sd' again, to check
+that without your fix, the unit test breaks.  Then clean up, and push :-)
 
 NOTE: This approach is suitable only for tests of fixes that actually change
 the layout - best to check by reverting your fix locally after having added
