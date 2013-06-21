@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH//65g\u003d",
+        "filename": "sd/source/ui/slidesorter/view/SlsPageObjectPainter.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-21T08:50:07Z",
+      "side": 1,
+      "message": "Hm, what\u0027s the purpose of this enumeration? It does nothing in its current form.",
+      "revId": "b62b29ced4a232fffcb948df5f5d88f0d71a5db4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
