@@ -455,17 +455,17 @@ void ScColumn::BroadcastNewCell( SCROW nRow )
     pDocument->Broadcast(aHint);
 }
 
-void ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow )
+bool ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow )
 {
     if (rAttr.mnScriptType != SC_SCRIPTTYPE_UNKNOWN)
         // Already updated. Nothing to do.
-        return;
+        return false;
 
     // Script type not yet determined. Determine the real script
     // type, and store it.
     const ScPatternAttr* pPattern = GetPattern(nRow);
     if (!pPattern)
-        return;
+        return false;
 
     ScRefCellValue aCell;
     ScAddress aPos(nCol, nRow, nTab);
@@ -490,6 +490,7 @@ void ScColumn::UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow )
 
     // Store the real script type to the array.
     rAttr.mnScriptType = pDocument->GetStringScriptType(aStr);
+    return true;
 }
 
 namespace {
@@ -1346,6 +1347,7 @@ void ScColumn::MixData(
     sc::ParseAll(rSrcCol.maCells.begin(), rSrcCol.maCells, nRow1, nRow2, aFunc, aFunc);
 
     aFunc.commit(p);
+    CellStorageModified();
 }
 
 

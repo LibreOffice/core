@@ -464,7 +464,7 @@ private:
     sc::CellStoreType::iterator GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow );
     void ActivateNewFormulaCell( ScFormulaCell* pCell );
     void BroadcastNewCell( SCROW nRow );
-    void UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow );
+    bool UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow );
 
     const ScFormulaCell* FetchFormulaCell( SCROW nRow ) const;
 
@@ -476,7 +476,7 @@ private:
      * Called whenever the state of cell array gets modified i.e. new cell
      * insertion, cell removal or relocation, cell value update and so on.
      *
-     * Call this only from those methods where maItems is modified directly.
+     * Call this only from those methods where maCells is modified directly.
      */
     void CellStorageModified();
 

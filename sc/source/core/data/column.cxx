@@ -1369,6 +1369,8 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
         if (bLastBlock)
             break;
     }
+
+    rDestCol.CellStorageModified();
 }
 
 void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDestCol )
@@ -1416,6 +1418,8 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
         rDestCol.maCellTextAttrs.set(nDestRow, maCellTextAttrs.get<sc::CellTextAttr>(nSrcRow));
     else
         rDestCol.maCellTextAttrs.set_empty(nDestRow, nDestRow);
+
+    rDestCol.CellStorageModified();
 }
 
 namespace {
@@ -1918,9 +1922,6 @@ void ScColumn::SwapCol(ScColumn& rCol)
     maCells.swap(rCol.maCells);
     maCellTextAttrs.swap(rCol.maCellTextAttrs);
 
-    CellStorageModified();
-    rCol.CellStorageModified();
-
     ScAttrArray* pTempAttr = rCol.pAttrArray;
     rCol.pAttrArray = pAttrArray;
     pAttrArray = pTempAttr;
@@ -1934,6 +1935,10 @@ void ScColumn::SwapCol(ScColumn& rCol)
     // Reset column positions in formula cells.
     resetColumnPosition(maCells, nCol);
     resetColumnPosition(rCol.maCells, rCol.nCol);
+
+    CellStorageModified();
+    rCol.CellStorageModified();
+
 }
 
 void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
@@ -2107,17 +2112,21 @@ class InsertTabUpdater
     SCTAB mnTab;
     SCTAB mnInsPos;
     SCTAB mnNewSheets;
+    bool mbModified;
+
 public:
     InsertTabUpdater(sc::CellTextAttrStoreType& rTextAttrs, SCTAB nTab, SCTAB nInsPos, SCTAB nNewSheets) :
         mrTextAttrs(rTextAttrs),
         miAttrPos(rTextAttrs.begin()),
         mnTab(nTab),
         mnInsPos(nInsPos),
-        mnNewSheets(nNewSheets) {}
+        mnNewSheets(nNewSheets),
+        mbModified(false) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
         pCell->UpdateInsertTab(mnInsPos, mnNewSheets);
+        mbModified = true;
     }
 
     void operator() (size_t nRow, EditTextObject* pCell)
@@ -2125,7 +2134,10 @@ public:
         editeng::FieldUpdater aUpdater = pCell->GetFieldUpdater();
         aUpdater.updateTableFields(mnTab);
         miAttrPos = mrTextAttrs.set(miAttrPos, nRow, sc::CellTextAttr());
+        mbModified = true;
     }
+
+    bool isModified() const { return mbModified; }
 };
 
 class DeleteTabUpdater
@@ -2136,6 +2148,7 @@ class DeleteTabUpdater
     SCTAB mnSheets;
     SCTAB mnTab;
     bool mbIsMove;
+    bool mbModified;
 public:
     DeleteTabUpdater(sc::CellTextAttrStoreType& rTextAttrs, SCTAB nDelPos, SCTAB nSheets, SCTAB nTab, bool bIsMove) :
         mrTextAttrs(rTextAttrs),
@@ -2143,11 +2156,13 @@ public:
         mnDelPos(nDelPos),
         mnSheets(nSheets),
         mnTab(nTab),
-        mbIsMove(bIsMove) {}
+        mbIsMove(bIsMove),
+        mbModified(false) {}
 
     void operator() (size_t, ScFormulaCell* pCell)
     {
         pCell->UpdateDeleteTab(mnDelPos, mbIsMove, mnSheets);
+        mbModified = true;
     }
 
     void operator() (size_t nRow, EditTextObject* pCell)
@@ -2155,7 +2170,10 @@ public:
         editeng::FieldUpdater aUpdater = pCell->GetFieldUpdater();
         aUpdater.updateTableFields(mnTab);
         miAttrPos = mrTextAttrs.set(miAttrPos, nRow, sc::CellTextAttr());
+        mbModified = true;
     }
+
+    bool isModified() const { return mbModified; }
 };
 
 class InsertAbsTabUpdater
@@ -2164,16 +2182,19 @@ class InsertAbsTabUpdater
     sc::CellTextAttrStoreType::iterator miAttrPos;
     SCTAB mnTab;
     SCTAB mnNewPos;
+    bool mbModified;
 public:
     InsertAbsTabUpdater(sc::CellTextAttrStoreType& rTextAttrs, SCTAB nTab, SCTAB nNewPos) :
         mrTextAttrs(rTextAttrs),
         miAttrPos(rTextAttrs.begin()),
         mnTab(nTab),
-        mnNewPos(nNewPos) {}
+        mnNewPos(nNewPos),
+        mbModified(false) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
         pCell->UpdateInsertTabAbs(mnNewPos);
+        mbModified = true;
     }
 
     void operator() (size_t nRow, EditTextObject* pCell)
@@ -2181,7 +2202,10 @@ public:
         editeng::FieldUpdater aUpdater = pCell->GetFieldUpdater();
         aUpdater.updateTableFields(mnTab);
         miAttrPos = mrTextAttrs.set(miAttrPos, nRow, sc::CellTextAttr());
+        mbModified = true;
     }
+
+    bool isModified() const { return mbModified; }
 };
 
 class MoveTabUpdater
@@ -2191,17 +2215,20 @@ class MoveTabUpdater
     SCTAB mnTab;
     SCTAB mnOldPos;
     SCTAB mnNewPos;
+    bool mbModified;
 public:
     MoveTabUpdater(sc::CellTextAttrStoreType& rTextAttrs, SCTAB nTab, SCTAB nOldPos, SCTAB nNewPos) :
         mrTextAttrs(rTextAttrs),
         miAttrPos(rTextAttrs.begin()),
         mnTab(nTab),
         mnOldPos(nOldPos),
-        mnNewPos(nNewPos) {}
+        mnNewPos(nNewPos),
+        mbModified(false) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
         pCell->UpdateMoveTab(mnOldPos, mnNewPos, mnTab);
+        mbModified = true;
     }
 
     void operator() (size_t nRow, EditTextObject* pCell)
@@ -2209,14 +2236,18 @@ public:
         editeng::FieldUpdater aUpdater = pCell->GetFieldUpdater();
         aUpdater.updateTableFields(mnTab);
         miAttrPos = mrTextAttrs.set(miAttrPos, nRow, sc::CellTextAttr());
+        mbModified = true;
     }
+
+    bool isModified() const { return mbModified; }
 };
 
 class UpdateCompileHandler
 {
-    bool mbForceIfNameInUse;
+    bool mbForceIfNameInUse:1;
 public:
-    UpdateCompileHandler(bool bForceIfNameInUse) : mbForceIfNameInUse(bForceIfNameInUse) {}
+    UpdateCompileHandler(bool bForceIfNameInUse) :
+        mbForceIfNameInUse(bForceIfNameInUse) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
@@ -2541,6 +2572,8 @@ void ScColumn::UpdateInsertTabOnlyCells(SCTAB nInsPos, SCTAB nNewSheets)
 {
     InsertTabUpdater aFunc(maCellTextAttrs, nTab, nInsPos, nNewSheets);
     sc::ProcessFormulaEditText(maCells, aFunc);
+    if (aFunc.isModified())
+        CellStorageModified();
 }
 
 void ScColumn::UpdateDeleteTab(SCTAB nDelPos, bool bIsMove, ScColumn* /*pRefUndo*/, SCTAB nSheets)
@@ -2553,12 +2586,16 @@ void ScColumn::UpdateDeleteTab(SCTAB nDelPos, bool bIsMove, ScColumn* /*pRefUndo
 
     DeleteTabUpdater aFunc(maCellTextAttrs, nDelPos, nSheets, nTab, bIsMove);
     sc::ProcessFormulaEditText(maCells, aFunc);
+    if (aFunc.isModified())
+        CellStorageModified();
 }
 
 void ScColumn::UpdateInsertTabAbs(SCTAB nNewPos)
 {
     InsertAbsTabUpdater aFunc(maCellTextAttrs, nTab, nNewPos);
     sc::ProcessFormulaEditText(maCells, aFunc);
+    if (aFunc.isModified())
+        CellStorageModified();
 }
 
 void ScColumn::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
@@ -2568,6 +2605,8 @@ void ScColumn::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
 
     MoveTabUpdater aFunc(maCellTextAttrs, nTab, nOldPos, nNewPos);
     sc::ProcessFormulaEditText(maCells, aFunc);
+    if (aFunc.isModified())
+        CellStorageModified();
 }
 
 
