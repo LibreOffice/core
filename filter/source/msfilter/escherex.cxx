@@ -2641,7 +2641,8 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
             const OUString sHandles            ( "Handles"  );
             const OUString sAdjustmentValues   ( "AdjustmentValues"  );
 
-            const beans::PropertyValue* pAdjustmentValuesProp = NULL;
+            bool bAdjustmentValuesProp = false;
+            uno::Any aAdjustmentValuesProp;
             bool bPathCoordinatesProp = false;
             uno::Any aPathCoordinatesProp;
 
@@ -3705,13 +3706,14 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                 {
                     // it is required, that the information which handle is polar has already be read,
                     // so we are able to change the polar value to a fixed float
-                    pAdjustmentValuesProp = &rProp;
+                    aAdjustmentValuesProp = rProp.Value;
+                    bAdjustmentValuesProp = true;
                 }
             }
-            if ( pAdjustmentValuesProp )
+            if ( bAdjustmentValuesProp )
             {
                 uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
-                if ( pAdjustmentValuesProp->Value >>= aAdjustmentSeq )
+                if ( aAdjustmentValuesProp >>= aAdjustmentSeq )
                 {
                     if ( bPredefinedHandlesUsed )
                         LookForPolarHandles( eShapeType, nAdjustmentsWhichNeedsToBeConverted );
