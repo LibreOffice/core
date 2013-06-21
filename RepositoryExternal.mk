@@ -2094,8 +2094,6 @@ ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 
 ifeq ($(SYSTEM_FIREBIRD),YES)
 
-$(call gb_LinkTarget__use_libatomic_ops,$(1))
-
 define gb_LinkTarget__use_firebird
 $(call gb_LinkTarget_set_include,$(1),\
 	$(FIREBIRD_CFLAGS) \
