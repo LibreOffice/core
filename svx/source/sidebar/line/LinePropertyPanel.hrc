@@ -21,19 +21,6 @@
 #define CUSTOM_W    74
 #define CUSTOM_H    POPUPPANEL_MARGIN_LARGE * 2 +  TEXT_HEIGHT + 12 +  TEXT_CONTROL_SPACING_VERTICAL
 
-#define FT_COLOR            1
-#define TB_COLOR            2
-#define FT_WIDTH            3
-#define TB_WIDTH            4
-#define FT_STYLE            5
-#define LB_STYLE            6
-#define FT_ARROW            7
-#define FT_TRANSPARENT      8
-#define MF_TRANSPARENT      9
-#define LB_START            10
-#define LB_END              11
-#define TBI_COLOR           12
-#define TBI_WIDTH           13
 #define TBI_STYLE           14
 #define STR_QH_TB_WIDTH     15
 #define STR_QH_TB_COLOR     16
