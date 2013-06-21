@@ -1048,10 +1048,10 @@ void Edit::ImplSetText( const OUString& rText, const Selection* pNewSelection )
 
 // -----------------------------------------------------------------------
 
-int Edit::ImplGetNativeControlType()
+int Edit::ImplGetNativeControlType() const
 {
     int nCtrl = 0;
-    Window *pControl = mbIsSubEdit ? GetParent() : this;
+    const Window *pControl = mbIsSubEdit ? GetParent() : this;
 
     switch( pControl->GetType() )
     {
@@ -2877,6 +2877,8 @@ void Edit::SetSubEdit( Edit* pEdit )
 
 Size Edit::CalcMinimumSizeForText(const OUString &rString) const
 {
+    int eCtrlType = ImplGetNativeControlType();
+
     Size aSize;
     if (mnWidthInChars != -1)
     {
@@ -2893,8 +2895,12 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
         if (aSize.Width() < aMinSize.Width())
             aSize.Width() = aMinSize.Width();
     }
-    // add some space between text entry and border
-    aSize.Height() += 4;
+
+    if (eCtrlType != CTRL_EDITBOX_NOBORDER)
+    {
+        // add some space between text entry and border
+        aSize.Height() += 4;
+    }
 
     aSize = CalcWindowSize( aSize );
 
@@ -2903,7 +2909,7 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
     Rectangle aRect( Point( 0, 0 ), aSize );
     Rectangle aContent, aBound;
     if( const_cast<Edit*>(this)->GetNativeControlRegion(
-                   CTRL_EDITBOX, PART_ENTIRE_CONTROL,
+                   eCtrlType, PART_ENTIRE_CONTROL,
                    aRect, 0, aControlValue, OUString(), aBound, aContent) )
     {
         if( aBound.GetHeight() > aSize.Height() )

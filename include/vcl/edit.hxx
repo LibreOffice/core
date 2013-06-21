@@ -122,7 +122,7 @@ protected:
     SAL_DLLPRIVATE void        ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     SAL_DLLPRIVATE void        ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, sal_Bool bPaint = sal_True );
-    SAL_DLLPRIVATE int         ImplGetNativeControlType();
+    SAL_DLLPRIVATE int         ImplGetNativeControlType() const;
     SAL_DLLPRIVATE long        ImplGetExtraOffset() const;
     static SAL_DLLPRIVATE void ImplInvalidateOutermostBorder( Window* pWin );
 
