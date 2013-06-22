@@ -840,6 +840,72 @@ String RID_SVXSTR_GRDT58_DEF
     Text = "Vertical Violet";
 };
 
+/* do not translate */
+String RID_SVXSTR_GRDT59_DEF
+{
+    Text = "Gray Gradient";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT60_DEF
+{
+    Text = "Yellow Gradient";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT61_DEF
+{
+    Text = "Orange Gradient";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT62_DEF
+{
+    Text = "Red Gradient";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT63_DEF
+{
+    Text = "Pink Gradient";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT64_DEF
+{
+    Text = "Sky";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT65_DEF
+{
+    Text = "Cyan Gradient";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT66_DEF
+{
+    Text = "Blue Gradient";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT67_DEF
+{
+    Text = "Purple Pipe";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT68_DEF
+{
+    Text = "Night";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT69_DEF
+{
+    Text = "Green Gradient";
+};
+
 String RID_SVXSTR_GRDT0
 {
     Text [ en-US ] = "Gradient";
@@ -1132,6 +1198,61 @@ String RID_SVXSTR_GRDT57
 String RID_SVXSTR_GRDT58
 {
     Text [ en-US ] = "Vertical Violet";
+};
+
+String RID_SVXSTR_GRDT59
+{
+    Text [ en-US ] = "Gray Gradient";
+};
+
+String RID_SVXSTR_GRDT60
+{
+    Text [ en-US ] = "Yellow Gradient";
+};
+
+String RID_SVXSTR_GRDT61
+{
+    Text [ en-US ] = "Orange Gradient";
+};
+
+String RID_SVXSTR_GRDT62
+{
+    Text [ en-US ] = "Red Gradient";
+};
+
+String RID_SVXSTR_GRDT63
+{
+    Text [ en-US ] = "Pink Gradient";
+};
+
+String RID_SVXSTR_GRDT64
+{
+    Text [ en-US ] = "Sky";
+};
+
+String RID_SVXSTR_GRDT65
+{
+    Text [ en-US ] = "Cyan Gradient";
+};
+
+String RID_SVXSTR_GRDT66
+{
+    Text [ en-US ] = "Blue Gradient";
+};
+
+String RID_SVXSTR_GRDT67
+{
+    Text [ en-US ] = "Purple Pipe";
+};
+
+String RID_SVXSTR_GRDT68
+{
+    Text [ en-US ] = "Night";
+};
+
+String RID_SVXSTR_GRDT69
+{
+    Text [ en-US ] = "Green Gradient";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
