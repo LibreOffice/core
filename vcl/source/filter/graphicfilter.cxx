@@ -2057,7 +2057,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                 String aPhysicalName( ImpCreateFullFilterPath( getToken(aFilterPath, i, ';'), aFilterName ) );
                 osl::Module aLibrary( aPhysicalName );
 
-                PFilterCall pFunc = (PFilterCall) aLibrary.getFunctionSymbol(OUString(aFilterName+EXPORT_FUNCTION_NAME));
+                PFilterCall pFunc = (PFilterCall) aLibrary.getFunctionSymbol(OUString(EXPORT_FUNCTION_NAME));
                 // Execute dialog in DLL
 #else
                 PFilterCall pFunc = NULL;
