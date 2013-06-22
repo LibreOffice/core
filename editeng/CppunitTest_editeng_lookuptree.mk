@@ -47,6 +47,7 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_lookuptree, \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,editeng_lookuptree,\
+    boost_headers \
     icuuc \
 ))
 
