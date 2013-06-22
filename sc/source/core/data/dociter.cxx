@@ -1681,7 +1681,7 @@ ScHorizontalCellIterator::ScHorizontalCellIterator(ScDocument* pDocument, SCTAB 
     nEndRow( nRow2 ),
     mnCol( nCol1 ),
     mnRow( nRow1 ),
-    bMore( true )
+    bMore(false)
 {
     if (mnTab >= pDoc->GetTableCount())
         OSL_FAIL("try to access index out of bounds, FIX IT");
@@ -1700,22 +1700,40 @@ ScHorizontalCellIterator::~ScHorizontalCellIterator()
 
 void ScHorizontalCellIterator::SetTab( SCTAB nTabP )
 {
+    bMore = false;
     mnTab = nTabP;
     mnRow = nStartRow;
     mnCol = nStartCol;
-    bMore = true;
 
     // Set the start position in each column.
     for (SCCOL i = nStartCol; i <= nEndCol; ++i)
     {
         ScColumn* pCol = &pDoc->maTabs[mnTab]->aCol[i];
-        maColPositions[i-nStartCol].maPos = pCol->maCells.position(nStartRow).first;
-        maColPositions[i-nStartCol].maEnd = pCol->maCells.end();
+        ColParam& rParam = maColPositions[i-nStartCol];
+        rParam.maPos = pCol->maCells.position(nStartRow).first;
+        rParam.maEnd = pCol->maCells.end();
+        if (rParam.maPos != rParam.maEnd)
+            bMore = true;
     }
 
-    if (maColPositions[0].maPos->type == sc::element_type_empty)
+    if (!bMore)
+        return;
+
+    ColParam& rParam = maColPositions[0];
+    if (rParam.maPos == rParam.maEnd || rParam.maPos->type == sc::element_type_empty)
         // Skip to the first non-empty cell.
         Advance();
+}
+
+void ScHorizontalCellIterator::RehashCol( SCCOL nCol )
+{
+    if (nCol < nStartCol || nEndCol < nCol)
+        return;
+
+    ColParam& rParam = maColPositions[nCol-nStartCol];
+    ScColumn& rCol = pDoc->maTabs[mnTab]->aCol[nCol];
+    rParam.maPos = rCol.maCells.position(mnRow).first;
+    rParam.maEnd = rCol.maCells.end();
 }
 
 ScRefCellValue* ScHorizontalCellIterator::GetNext( SCCOL& rCol, SCROW& rRow )

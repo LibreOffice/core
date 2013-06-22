@@ -827,12 +827,14 @@ bool ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
                 {
                     // The cell will take ownership of pNewData.
                     SetEditText(ScAddress(nCol,nRow,nTab), pEngine->CreateTextObject());
+                    aIter.RehashCol(nCol);
                 }
                 else
                 {
                     ScSetStringParam aParam;
                     aParam.setTextInput();
                     SetString(ScAddress(nCol,nRow,nTab), pEngine->GetText(), &aParam);
+                    aIter.RehashCol(nCol);
                 }
 
                 //  Paint
