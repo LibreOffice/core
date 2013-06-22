@@ -139,8 +139,10 @@ enum MathSymbol
 
     MS_GRAVE        = (sal_Unicode) 0x0300,
     MS_ACUTE        = (sal_Unicode) 0x0301,
-    MS_HAT          = (sal_Unicode) 0x0302,
-    MS_TILDE        = (sal_Unicode) 0x0303,
+    MS_HAT          = (sal_Unicode) 0x005E,
+    MS_COMBHAT      = (sal_Unicode) 0x0302,
+    MS_TILDE        = (sal_Unicode) 0x007E,
+    MS_COMBTILDE    = (sal_Unicode) 0x0303,
     MS_BAR          = (sal_Unicode) 0x0304,
     MS_BREVE        = (sal_Unicode) 0x0306,
     MS_CIRCLE       = (sal_Unicode) 0x030A,

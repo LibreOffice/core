@@ -1121,6 +1121,15 @@ void SmXMLExport::ExportAttributes(const SmNode *pNode, int nLevel)
             break;
         case TOVERSTRIKE:
             break;
+        case TWIDETILDE:
+        case TWIDEHAT:
+        case TWIDEVEC:
+            {
+            // make these wide accents stretchy
+            AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_TRUE);
+            ExportNodes(pNode->GetSubNode(0), nLevel+1);
+            }
+            break;
         default:
             ExportNodes(pNode->GetSubNode(0), nLevel+1);
             break;
