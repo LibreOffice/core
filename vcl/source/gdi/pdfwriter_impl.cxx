@@ -7773,7 +7773,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                     // TODO: sanitize for RTL ligatures, more complex CTL, etc.
                     if( nChars < 0 )
                         nChars = -nChars;
-            else if( nChars == 0 )
+                    else if( nChars == 0 )
                         nChars = 1;
                     pUnicodesPerGlyph[i] = nChars;
                     for( int n = 1; n < nChars; n++ )
