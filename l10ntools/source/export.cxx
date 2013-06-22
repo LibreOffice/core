@@ -1197,10 +1197,6 @@ void Export::WriteToMerged(const OString &rText , bool bSDFContent)
 
 void Export::ConvertMergeContent( OString &rText )
 {
-    sal_Bool bNoOpen = ( rText.indexOf( "\\\"" ) != 0 );
-    sal_Bool bNoClose = !rText.endsWith("\\\"");
-
-
     rText = rText.replaceAll("\\\'","\'"); // Temporary: until PO files contain escaped single quotes
                                             // (Maybe next PO update solve this)
     rText =
@@ -1208,11 +1204,7 @@ void Export::ConvertMergeContent( OString &rText )
             rText.replaceAll("","\\0x7F"),
             "\n""\t""\\""\"","\\n""\\t""\\\\""\\\"");
 
-    if ( bNoOpen )
-        rText = "\"" + rText;
-
-    if ( bNoClose )
-        rText += "\"";
+    rText = "\"" + rText + "\"";
 }
 
 void Export::ConvertExportContent( OString& rText )
