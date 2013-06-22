@@ -350,8 +350,7 @@ bool ImplLayoutRuns::AddPos( int nCharPos, bool bRTL )
     {
         int nRunPos0 = maRuns[ nIndex-2 ];
         int nRunPos1 = maRuns[ nIndex-1 ];
-        if( ((nCharPos + bRTL) == nRunPos1)
-    &&  ((nRunPos0 > nRunPos1) == bRTL) )
+        if( ((nCharPos + bRTL) == nRunPos1) && ((nRunPos0 > nRunPos1) == bRTL) )
         {
             // extend current run by new charpos
             maRuns[ nIndex-1 ] = nCharPos + !bRTL;
