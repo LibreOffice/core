@@ -14,34 +14,17 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <editeng/editengdllapi.h>
+#include <boost/scoped_ptr.hpp>
 
 namespace editeng
 {
 
-struct TrieNode
-{
-    static const int LATIN_ARRAY_SIZE = 26;
-
-    sal_Unicode             mCharacter;
-    bool                    mMarker;
-    std::vector<TrieNode*>  mChildren;
-    TrieNode*               mLatinArray[LATIN_ARRAY_SIZE];
-
-
-    TrieNode(sal_Unicode aCharacter = '\0');
-    virtual ~TrieNode();
-
-    void      markWord();
-    TrieNode* findChild(sal_Unicode aCharacter);
-    TrieNode* traversePath(OUString sPath);
-    void      addNewChild(TrieNode* pChild);
-    void      collectSuggestions(OUString sPath, std::vector<OUString>& rSuggestionList);
-};
+struct TrieNode;
 
 class EDITENG_DLLPUBLIC Trie
 {
 private:
-    TrieNode* mRoot;
+    boost::scoped_ptr<TrieNode> mRoot;
 
 public:
     Trie();

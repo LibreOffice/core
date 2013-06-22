@@ -16,6 +16,27 @@ using namespace std;
 
 /* TrieNode */
 
+struct TrieNode
+{
+    static const int LATIN_ARRAY_SIZE = 26;
+
+    sal_Unicode             mCharacter;
+    bool                    mMarker;
+    std::vector<TrieNode*>  mChildren;
+    TrieNode*               mLatinArray[LATIN_ARRAY_SIZE];
+
+
+    TrieNode(sal_Unicode aCharacter = '\0');
+    virtual ~TrieNode();
+
+    void      markWord();
+    TrieNode* findChild(sal_Unicode aCharacter);
+    TrieNode* traversePath(OUString sPath);
+    void      addNewChild(TrieNode* pChild);
+    void      collectSuggestions(OUString sPath, std::vector<OUString>& rSuggestionList);
+    void      collectSuggestionsForCurrentNode(TrieNode* pCurrent, OUString sPath, vector<OUString>& rSuggestionList);
+};
+
 TrieNode::TrieNode(sal_Unicode aCharacter) :
     mCharacter(aCharacter),
     mMarker(false)
@@ -85,13 +106,7 @@ void TrieNode::collectSuggestions(OUString sPath, vector<OUString>& rSuggestionL
     {
         TrieNode* pCurrent = mLatinArray[i];
         if (pCurrent != NULL)
-        {
-            OUString aStringPath = sPath + OUString(pCurrent->mCharacter);
-            if(pCurrent->mMarker)
-                rSuggestionList.push_back(aStringPath);
-            // recursivly traverse tree
-            pCurrent->collectSuggestions(aStringPath, rSuggestionList);
-        }
+            collectSuggestionsForCurrentNode(pCurrent, sPath, rSuggestionList);
     }
 
     // traverse nodes for other characters
@@ -100,14 +115,19 @@ void TrieNode::collectSuggestions(OUString sPath, vector<OUString>& rSuggestionL
     {
         TrieNode* pCurrent = *iNode;
         if (pCurrent != NULL)
-        {
-            OUString aStringPath = sPath + OUString(pCurrent->mCharacter);
-            if(pCurrent->mMarker)
-                rSuggestionList.push_back(aStringPath);
-            // recursivly traverse tree
-            pCurrent->collectSuggestions(aStringPath, rSuggestionList);
-        }
+            collectSuggestionsForCurrentNode(pCurrent, sPath, rSuggestionList);
     }
+}
+
+void TrieNode::collectSuggestionsForCurrentNode(TrieNode* pCurrent, OUString sPath, vector<OUString>& rSuggestionList)
+{
+    OUString aStringPath = sPath + OUString(pCurrent->mCharacter);
+    if(pCurrent->mMarker)
+    {
+        rSuggestionList.push_back(aStringPath);
+    }
+    // recursivly descend tree
+    pCurrent->collectSuggestions(aStringPath, rSuggestionList);
 }
 
 TrieNode* TrieNode::traversePath(OUString sPath)
@@ -127,15 +147,12 @@ TrieNode* TrieNode::traversePath(OUString sPath)
 
 /* TRIE */
 
-Trie::Trie()
-{
-    mRoot = new TrieNode();
-}
+Trie::Trie() :
+    mRoot(new TrieNode())
+{}
 
 Trie::~Trie()
-{
-    delete mRoot;
-}
+{}
 
 void Trie::insert(OUString sInputString) const
 {
@@ -147,7 +164,7 @@ void Trie::insert(OUString sInputString) const
 
     // traverse the input string and modify the tree with new nodes / characters
 
-    TrieNode* pCurrent = mRoot;
+    TrieNode* pCurrent = mRoot.get();
     sal_Unicode aCurrentChar;
 
     for ( sal_Int32 i = 0; i < sInputString.getLength(); i++ )
