@@ -91,7 +91,7 @@ void DrawXmlEmitter::visit( HyperlinkElement& elem, const std::list< Element* >:
 
 void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::const_iterator&   )
 {
-    if( ! elem.Text.getLength() )
+    if( elem.Text.isEmpty() )
         return;
 
     OUString strSpace(32);
@@ -229,14 +229,14 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
         }
         if( fRotate != 0.0 )
         {
-            if( aBuf.getLength() > 0 )
+            if( !aBuf.isEmpty() )
                 aBuf.append( sal_Unicode(' ') );
             aBuf.appendAscii( "rotate( " );
             aBuf.append( -fRotate );
             aBuf.appendAscii( " )" );
 
         }
-        if( aBuf.getLength() > 0 )
+        if( !aBuf.isEmpty() )
             aBuf.append( sal_Unicode(' ') );
         aBuf.appendAscii( "translate( " );
         aBuf.append( convertPixelToUnitString( rel_x ) );

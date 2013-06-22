@@ -1122,7 +1122,7 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
             // embedded fonts and bitmaps
             Parser aParser(rSink,pErr,xContext);
             OStringBuffer line;
-            while( osl_File_E_None == readLine(pOut, line) && line.getLength() )
+            while( osl_File_E_None == readLine(pOut, line) && !line.isEmpty() )
                 aParser.parseLine(line.makeStringAndClear());
         }
     }

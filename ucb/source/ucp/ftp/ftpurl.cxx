@@ -278,7 +278,7 @@ OUString FTPURL::ident(bool withslash,bool internal) const
         else
             bff.append(sal_Unicode('/')).append(m_aPathSegmentVec[i]);
     if(withslash)
-        if(bff.getLength() && bff[bff.getLength()-1] != sal_Unicode('/'))
+        if(!bff.isEmpty() && bff[bff.getLength()-1] != sal_Unicode('/'))
             bff.append(sal_Unicode('/'));
 
     bff.append(m_aType);

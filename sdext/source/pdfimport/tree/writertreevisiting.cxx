@@ -58,7 +58,7 @@ void WriterXmlEmitter::visit( HyperlinkElement& elem, const std::list< Element* 
 
 void WriterXmlEmitter::visit( TextElement& elem, const std::list< Element* >::const_iterator&   )
 {
-    if( ! elem.Text.getLength() )
+    if( elem.Text.isEmpty() )
         return;
 
     PropertyMap aProps;
@@ -169,7 +169,7 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
         }
         if( fRotate != 0.0 )
         {
-            if( aBuf.getLength() > 0 )
+            if( !aBuf.isEmpty() )
                 aBuf.append( sal_Unicode(' ') );
             aBuf.appendAscii( "rotate( " );
             aBuf.append( -fRotate );
@@ -178,7 +178,7 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
         }
         if( ! rElem.isCharacter )
         {
-            if( aBuf.getLength() > 0 )
+            if( !aBuf.isEmpty() )
                 aBuf.append( sal_Unicode(' ') );
             aBuf.appendAscii( "translate( " );
             aBuf.append( convertPixelToUnitString( rel_x ) );
@@ -750,9 +750,9 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
                 if( !bRotatedFrame
                     && ! rCurGC.isRotatedOrSkewed()
                     && ! rNextGC.isRotatedOrSkewed()
-                    && pNext->Text.getLength() > 0
+                    && ! pNext->Text.isEmpty()
                     && pNext->Text[0] != sal_Unicode(' ')
-                    && pCur->Text.getLength() >  0
+                    && ! pCur->Text.isEmpty()
                     && pCur->Text[pCur->Text.getLength() - 1] != sal_Unicode(' ')
                     )
                 {

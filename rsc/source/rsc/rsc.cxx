@@ -155,7 +155,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             { // define include path
                 nCommands |= INCLUDE_FLAG;
                 OStringBuffer aBuffer(aPath);
-                if (aBuffer.getLength())
+                if (!aBuffer.isEmpty())
                     aBuffer.append(SAL_PATHSEPARATOR);
                 aBuffer.append((*ppStr) + 2);
                 aPath = aBuffer.makeStringAndClear();
@@ -636,7 +636,7 @@ ERRTYPE RscCompiler::Link()
             do
             {
                 OString aToken = aSearchPath.getToken( 0, cSearchDelim, nIndex );
-                if (aSysSearchPath.getLength())
+                if (!aSysSearchPath.isEmpty())
                     aSysSearchPath.append(cSearchDelim);
                 aSysSearchPath.append(aToken);
                 aSysSearchPath.append(cAccessDelim);
