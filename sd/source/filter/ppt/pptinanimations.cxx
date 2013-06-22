@@ -2555,7 +2555,7 @@ bool AnimationImporter::importAttributeNamesContainer( const Atom* pAtom, OUStri
                 OUString aName;
                 if( aAny >>= aName )
                 {
-                    if( aNames.getLength() )
+                    if( !aNames.isEmpty() )
                         aNames.append( (sal_Unicode)';' );
 
                     aNames.append( aName );
