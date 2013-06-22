@@ -235,7 +235,7 @@ OUString normalize(
             if (preCount != i) {
                 if (preCount == i - 1) {
                     buf.append(static_cast< sal_Unicode >('/'));
-                } else if (preCount - 1 == i && buf.getLength() > 0
+                } else if (preCount - 1 == i && !buf.isEmpty()
                            && buf[buf.getLength() - 1] == '/')
                 {
                     buf.setLength(buf.getLength() - 1);
