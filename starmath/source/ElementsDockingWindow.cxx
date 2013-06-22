@@ -517,7 +517,11 @@ SmElementsDockingWindowWrapper::SmElementsDockingWindowWrapper(
 {
     pWindow = new SmElementsDockingWindow(pBindings, this, pParentWindow);
     SmElementsDockingWindow* pDialog = (SmElementsDockingWindow*) pWindow;
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    pDialog->SetPosSizePixel(Point(0, 0), Size(300, 0));
+    pDialog->Show();
+
+    eChildAlignment = SFX_ALIGN_LEFT;
+
     pDialog->Initialize( pInfo );
 }
 
