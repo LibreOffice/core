@@ -1001,6 +1001,7 @@ void AquaSalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint *pPtAry )
         }
     }
 
+    CGContextClosePath( mrContext );
     CGContextDrawPath( mrContext, eMode );
     RefreshRect( nX, nY, nWidth, nHeight );
 }
