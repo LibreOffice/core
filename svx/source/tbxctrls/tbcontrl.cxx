@@ -2292,7 +2292,7 @@ SvxFontColorToolBoxControl::SvxFontColorToolBoxControl(
 
     :   SfxToolBoxControl( nSlotId, nId, rTbx ),
     pBtnUpdater( new ::svx::ToolboxButtonColorUpdater(
-                    nSlotId, nId, &GetToolBox(), TBX_UPDATER_MODE_CHAR_COLOR_NEW )),
+                    nSlotId, nId, &GetToolBox() )),
     mLastColor( COL_AUTO )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
@@ -2449,8 +2449,6 @@ SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
     pBtnUpdater(0),
     mLastColor( COL_AUTO )
 {
-    sal_uInt16 nMode;
-
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
     bChoiceFromPalette = sal_False;
 
@@ -2459,13 +2457,11 @@ SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
     {
         case SID_ATTR_CHAR_COLOR:
             addStatusListener( OUString( ".uno:Color" ));
-            nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
             mLastColor = COL_RED;
             break;
 
         case SID_ATTR_CHAR_COLOR2:
             addStatusListener( OUString( ".uno:CharColorExt" ));
-            nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
             mLastColor = COL_RED;
             break;
 
@@ -2473,18 +2469,16 @@ SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
         default:
             addStatusListener( OUString( ".uno:CharBackgroundExt" ));
-            nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
             mLastColor = COL_YELLOW;
             break;
 
         case SID_FRAME_LINECOLOR:
             addStatusListener( OUString( ".uno:FrameLineColor" ));
-            nMode = 0;
             mLastColor = COL_BLUE;
             break;
     }
 
-    pBtnUpdater = new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox(), nMode );
+    pBtnUpdater = new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() );
 }
 
 // -----------------------------------------------------------------------

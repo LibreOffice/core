@@ -221,10 +221,10 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
 
     mpFillColorUpdater.reset( new ::svx::ToolboxButtonColorUpdater(SID_ATTR_BRUSH,
         mpTBFillColor->GetItemId( UNO_BACKGROUNDCOLOR ),
-        mpTBFillColor, TBX_UPDATER_MODE_CHAR_COLOR_NEW) );
+        mpTBFillColor) );
     mpLineColorUpdater.reset( new ::svx::ToolboxButtonColorUpdater(SID_FRAME_LINECOLOR,
         mpTBLineColor->GetItemId( UNO_FRAMELINECOLOR ),
-        mpTBLineColor, TBX_UPDATER_MODE_CHAR_COLOR_NEW) );
+        mpTBLineColor) );
     mpCellBorderUpdater.reset( new CellBorderUpdater(
         mpTBCellBorder->GetItemId( UNO_SETBORDERSTYLE ), *mpTBCellBorder) );
 

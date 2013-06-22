@@ -185,7 +185,7 @@ LinePropertyPanel::LinePropertyPanel(
     maEdgeStyle(SID_ATTR_LINE_JOINT, *pBindings, *this),
     maCapStyle(SID_ATTR_LINE_CAP, *pBindings, *this),
     maColor(COL_BLACK),
-    mpColorUpdater(new ::svx::ToolboxButtonColorUpdater(SID_ATTR_LINE_COLOR, TBI_COLOR, mpTBColor.get(), TBX_UPDATER_MODE_CHAR_COLOR_NEW)),
+    mpColorUpdater(new ::svx::ToolboxButtonColorUpdater(SID_ATTR_LINE_COLOR, TBI_COLOR, mpTBColor.get())),
     mpStyleItem(),
     mpDashItem(),
     mnTrans(0),

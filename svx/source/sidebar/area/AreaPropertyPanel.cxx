@@ -87,7 +87,7 @@ AreaPropertyPanel::AreaPropertyPanel(
       mpMTRTransparent(new MetricField(this, SVX_RES(MTR_TRANSPARENT))),
       mpBTNGradientBackground(sfx2::sidebar::ControlFactory::CreateToolBoxBackground(this)),
       mpBTNGradient(sfx2::sidebar::ControlFactory::CreateToolBox(mpBTNGradientBackground.get(), SVX_RES(BTN_GRADIENT))),
-      mpColorUpdater(new ::svx::ToolboxButtonColorUpdater(SID_ATTR_FILL_COLOR, TBI_COLOR, mpToolBoxColor.get(), TBX_UPDATER_MODE_CHAR_COLOR_NEW)),
+      mpColorUpdater(new ::svx::ToolboxButtonColorUpdater(SID_ATTR_FILL_COLOR, TBI_COLOR, mpToolBoxColor.get())),
       mpStyleItem(),
       mpColorItem(),
       mpFillGradientItem(),

@@ -33,10 +33,6 @@ namespace svx
 {
 //........................................................................
 
-#define TBX_UPDATER_MODE_CHAR_COLOR         0x01
-#define TBX_UPDATER_MODE_CHAR_BACKGROUND    0x02
-#define TBX_UPDATER_MODE_CHAR_COLOR_NEW     0x03
-
     //====================================================================
     //= ToolboxButtonColorUpdater
     //====================================================================
@@ -49,14 +45,12 @@ namespace svx
     public:
                     ToolboxButtonColorUpdater( sal_uInt16   nSlotId,
                                                 sal_uInt16   nTbxBtnId,
-                                                ToolBox* ptrTbx,
-                                                sal_uInt16   nMode = 0 );
+                                                ToolBox* ptrTbx);
                     ~ToolboxButtonColorUpdater();
 
         void        Update( const Color& rColor );
 
     private:
-        sal_uInt16      mnDrawMode;
         sal_uInt16      mnBtnId;
         sal_uInt16      mnSlotId;
         ToolBox*    mpTbx;

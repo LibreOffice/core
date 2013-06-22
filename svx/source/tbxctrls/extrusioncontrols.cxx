@@ -981,7 +981,7 @@ ExtrusionColorControl::ExtrusionColorControl(
   mLastColor( COL_AUTO )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-    mpBtnUpdater = new ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox(), TBX_UPDATER_MODE_CHAR_COLOR_NEW );
+    mpBtnUpdater = new ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() );
 }
 
 // -----------------------------------------------------------------------

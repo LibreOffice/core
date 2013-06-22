@@ -45,16 +45,12 @@ namespace svx
     ToolboxButtonColorUpdater::ToolboxButtonColorUpdater(
         sal_uInt16 nId,
         sal_uInt16 nTbxBtnId,
-        ToolBox* ptrTbx,
-        sal_uInt16 nMode ) :
-        mnDrawMode        ( nMode ),
+        ToolBox* ptrTbx) :
         mnBtnId           ( nTbxBtnId ),
         mnSlotId           ( nId ),
         mpTbx             ( ptrTbx ),
         maCurColor        ( COL_TRANSPARENT )
     {
-        if (mnSlotId == SID_BACKGROUND_COLOR)
-            mnDrawMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
         DBG_ASSERT( ptrTbx, "ToolBox not found :-(" );
         mbWasHiContrastMode = ptrTbx ? ( ptrTbx->GetSettings().GetStyleSettings().GetHighContrastMode() ) : sal_False;
         switch( mnSlotId )
@@ -126,7 +122,7 @@ namespace svx
 
                 mbWasHiContrastMode = mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode();
 
-                if( mnDrawMode == TBX_UPDATER_MODE_CHAR_COLOR_NEW && ( COL_TRANSPARENT != aColor.GetColor() ) )
+                if( COL_TRANSPARENT != aColor.GetColor() )
                     pBmpAcc->SetLineColor( aColor );
                 else if( mpTbx->GetBackground().GetColor().IsDark() )
                     pBmpAcc->SetLineColor( Color( COL_WHITE ) );
@@ -135,46 +131,38 @@ namespace svx
 
                 pBmpAcc->SetFillColor( maCurColor = aColor );
 
-                if( TBX_UPDATER_MODE_CHAR_COLOR_NEW == mnDrawMode )
+                if( maBmpSize.Width() <= 16 )
+                    maUpdRect = Rectangle( Point( 0,12 ), Size( maBmpSize.Width(), 4 ) );
+                else if(76 == maBmpSize.Width() && 12 == maBmpSize.Height())
                 {
-                    if( maBmpSize.Width() <= 16 )
-                        maUpdRect = Rectangle( Point( 0,12 ), Size( maBmpSize.Width(), 4 ) );
-                    else if(76 == maBmpSize.Width() && 12 == maBmpSize.Height())
-                    {
-                        maUpdRect.Left() = 22;
-                        maUpdRect.Top() = 2;
-                        maUpdRect.Right() = 73;
-                        maUpdRect.Bottom() = 9;
-                    }
-                    else if(maBmpSize.Width() >= (2 * maBmpSize.Height() - 2) && maBmpSize.Height() >= 16)
-                    {
-                        maUpdRect.Left() = maBmpSize.Height() + 2;
-                        maUpdRect.Top() = 2;
-                        maUpdRect.Right() = maBmpSize.Width() - 3;
-                        maUpdRect.Bottom() = maBmpSize.Height() - 3;
-                    }
-                    else
-                        maUpdRect = Rectangle( Point( 1, maBmpSize.Height() - 7 ), Size( maBmpSize.Width() - 2 ,6 ) );
-
-                    pBmpAcc->DrawRect( maUpdRect );
-
-                    if( pMskAcc )
-                    {
-                        if( COL_TRANSPARENT == aColor.GetColor() )
-                        {
-                            pMskAcc->SetLineColor( COL_BLACK );
-                            pMskAcc->SetFillColor( COL_WHITE );
-                        }
-                        else
-                            pMskAcc->SetFillColor( COL_BLACK );
-
-                        pMskAcc->DrawRect( maUpdRect );
-                    }
+                    maUpdRect.Left() = 22;
+                    maUpdRect.Top() = 2;
+                    maUpdRect.Right() = 73;
+                    maUpdRect.Bottom() = 9;
+                }
+                else if(maBmpSize.Width() >= (2 * maBmpSize.Height() - 2) && maBmpSize.Height() >= 16)
+                {
+                    maUpdRect.Left() = maBmpSize.Height() + 2;
+                    maUpdRect.Top() = 2;
+                    maUpdRect.Right() = maBmpSize.Width() - 3;
+                    maUpdRect.Bottom() = maBmpSize.Height() - 3;
                 }
                 else
+                    maUpdRect = Rectangle( Point( 1, maBmpSize.Height() - 7 ), Size( maBmpSize.Width() - 2 ,6 ) );
+
+                pBmpAcc->DrawRect( maUpdRect );
+
+                if( pMskAcc )
                 {
-                    OSL_FAIL( "ToolboxButtonColorUpdater::Update: TBX_UPDATER_MODE_CHAR_COLOR / TBX_UPDATER_MODE_CHAR_BACKGROUND" );
-                    // !!! DrawChar( aVirDev, aColor );
+                    if( COL_TRANSPARENT == aColor.GetColor() )
+                    {
+                        pMskAcc->SetLineColor( COL_BLACK );
+                        pMskAcc->SetFillColor( COL_WHITE );
+                    }
+                    else
+                        pMskAcc->SetFillColor( COL_BLACK );
+
+                    pMskAcc->DrawRect( maUpdRect );
                 }
 
                 aBmp.ReleaseAccess( pBmpAcc );

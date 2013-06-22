@@ -439,7 +439,7 @@ void ParaPropertyPanel::InitToolBoxIndent()
 
 void ParaPropertyPanel::InitToolBoxBGColor()
 {
-    mpColorUpdater.reset(new ::svx::ToolboxButtonColorUpdater(SID_BACKGROUND_COLOR, TBI_BACK_COLOR, mpTBxBackColor.get(), TBX_UPDATER_MODE_CHAR_COLOR_NEW ));
+    mpColorUpdater.reset(new ::svx::ToolboxButtonColorUpdater(SID_BACKGROUND_COLOR, TBI_BACK_COLOR, mpTBxBackColor.get()));
 
     mpTBxBackColor->SetItemImage(TBI_BACK_COLOR, GetDisplayBackground().GetColor().IsDark()? maImgBackColorHigh : maImgBackColor);
     mpTBxBackColor->SetItemBits( TBI_BACK_COLOR, mpTBxBackColor->GetItemBits( TBI_BACK_COLOR ) | TIB_DROPDOWNONLY );
