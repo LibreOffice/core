@@ -110,11 +110,11 @@ void SAL_CALL BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 nStart
     if (Text != cachedText) {
         cachedText = Text;
         if (cellIndexSize < cachedText.getLength()) {
-        cellIndexSize = cachedText.getLength();
-        free(nextCellIndex);
-        free(previousCellIndex);
-        nextCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
-        previousCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
+            cellIndexSize = cachedText.getLength();
+            free(nextCellIndex);
+            free(previousCellIndex);
+            nextCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
+            previousCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
         }
         // reset nextCell for new Text
         memset(nextCellIndex, 0, cellIndexSize * sizeof(sal_Int32));
