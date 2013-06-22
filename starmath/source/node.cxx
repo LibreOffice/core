@@ -2820,10 +2820,12 @@ void SmAttributNode::CreateTextFromNode(String &rText)
             case MS_VEC: // COMBINING RIGHT ARROW ABOVE
                 rText += "vec ";
                 break;
-            case MS_TILDE: // COMBINING TILDE
+            case MS_TILDE: // TILDE
+            case MS_COMBTILDE: // COMBINING TILDE
                 rText += "tilde ";
                 break;
-            case MS_HAT: // COMBINING CIRCUMFLEX ACCENT
+            case MS_HAT: // CIRCUMFLEX ACCENT
+            case MS_COMBHAT: // COMBINING CIRCUMFLEX ACCENT
                 rText += "hat ";
                 break;
             case MS_BAR: // COMBINING MACRON

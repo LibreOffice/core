@@ -192,9 +192,11 @@ OUString SmOoxmlImport::handleAcc()
             acc = "widevec";
             break;
         case MS_TILDE:
+        case MS_COMBTILDE:
             acc = "widetilde";
             break;
         case MS_HAT:
+        case MS_COMBHAT:
             acc = "widehat";
             break;
         case MS_DOT:
