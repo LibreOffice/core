@@ -236,7 +236,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     }
 
     // Prefer DESKTOP_LAUNCH when available
-    if ( aLaunchBuffer.getLength() > 0 )
+    if ( !aLaunchBuffer.isEmpty() )
     {
         FILE *pLaunch = popen( aLaunchBuffer.makeStringAndClear().getStr(), "w" );
         if ( pLaunch != NULL )

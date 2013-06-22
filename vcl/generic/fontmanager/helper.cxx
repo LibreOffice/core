@@ -115,7 +115,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
 
     // append net path
     aPathBuffer.append( getOfficePath( psp::InstallationRootPath ) );
-    if( aPathBuffer.getLength() )
+    if( !aPathBuffer.isEmpty() )
     {
         aPathBuffer.appendAscii( "/share/psprint" );
         if( pSubDir )
@@ -127,7 +127,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
     }
     // append user path
     aPathBuffer.append( getOfficePath( psp::UserPath ) );
-    if( aPathBuffer.getLength() )
+    if( !aPathBuffer.isEmpty() )
     {
         aPathBuffer.appendAscii( "/user/psprint" );
         if( pSubDir )

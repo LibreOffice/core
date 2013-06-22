@@ -32,7 +32,7 @@ void Pad::add(char const * begin, sal_Int32 length) {
         begin != 0 && length >= 0 && !(span_.is() && buffer_.getLength() != 0));
     if (length != 0) {
         flushSpan();
-        if (buffer_.getLength() == 0) {
+        if (buffer_.isEmpty()) {
             span_ = Span(begin, length);
         } else {
             buffer_.append(begin, length);
@@ -59,7 +59,7 @@ Span Pad::get() const {
     assert(!(span_.is() && buffer_.getLength() != 0));
     if (span_.is()) {
         return span_;
-    } else if (buffer_.getLength() == 0) {
+    } else if (buffer_.isEmpty()) {
         return Span("");
     } else {
         return Span(buffer_.getStr(), buffer_.getLength());
