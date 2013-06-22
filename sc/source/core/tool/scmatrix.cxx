@@ -128,12 +128,13 @@ void compareMatrix(MatrixImplType& rMat)
     {
         for (size_t j = 0; j < aDim.column; ++j)
         {
-            mdds::mtm::element_t eType = rMat.get_type(i, j);
+            MatrixImplType::const_position_type aPos = rMat.position(i, j);
+            mdds::mtm::element_t eType = rMat.get_type(aPos);
             if (eType != mdds::mtm::element_numeric && eType != mdds::mtm::element_boolean)
                 // must be of numeric type (boolean can be numeric).
                 continue;
 
-            double fVal = rMat.get_numeric(i, j);
+            double fVal = rMat.get_numeric(aPos);
             if (!::rtl::math::isFinite(fVal))
                 /* FIXME: this silently skips an error instead of propagating it! */
                 continue;
@@ -469,20 +470,17 @@ OUString ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
     if (ValidColRowOrReplicated( nC, nR ))
     {
         double fErr = 0.0;
-        switch (maMat.get_type(nR, nC))
+        MatrixImplType::const_position_type aPos = maMat.position(nR, nC);
+        switch (maMat.get_type(aPos))
         {
             case mdds::mtm::element_string:
-                return maMat.get<OUString>(nR, nC);
+                return maMat.get_string(aPos);
             case mdds::mtm::element_empty:
                 return EMPTY_OUSTRING;
             case mdds::mtm::element_numeric:
-                OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
-                fErr = maMat.get<double>(nR, nC);
-            break;
             case mdds::mtm::element_boolean:
                 OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
-                fErr = maMat.get<bool>(nR, nC);
-            break;
+                fErr = maMat.get_numeric(aPos);
             default:
                 OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
         }
@@ -511,10 +509,11 @@ OUString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSI
     }
 
     double fVal = 0.0;
-    switch (maMat.get_type(nR, nC))
+    MatrixImplType::const_position_type aPos = maMat.position(nR, nC);
+    switch (maMat.get_type(aPos))
     {
         case mdds::mtm::element_string:
-            return maMat.get<OUString>(nR, nC);
+            return maMat.get_string(aPos);
         case mdds::mtm::element_empty:
         {
             if (!maMatFlag.get<bool>(nR, nC))
@@ -530,10 +529,8 @@ OUString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSI
             return aStr;
         }
         case mdds::mtm::element_numeric:
-            fVal = maMat.get<double>(nR, nC);
-        break;
         case mdds::mtm::element_boolean:
-            fVal = maMat.get<bool>(nR, nC);
+            fVal = maMat.get_numeric(aPos);
         break;
         default:
             ;
@@ -558,20 +555,21 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
     ScMatrixValue aVal;
     if (ValidColRowOrReplicated(nC, nR))
     {
-        mdds::mtm::element_t eType = maMat.get_type(nR, nC);
+        MatrixImplType::const_position_type aPos = maMat.position(nR, nC);
+        mdds::mtm::element_t eType = maMat.get_type(aPos);
         switch (eType)
         {
             case mdds::mtm::element_boolean:
                 aVal.nType = SC_MATVAL_BOOLEAN;
-                aVal.fVal = maMat.get_boolean(nR, nC);
+                aVal.fVal = maMat.get_boolean(aPos);
             break;
             case mdds::mtm::element_numeric:
                 aVal.nType = SC_MATVAL_VALUE;
-                aVal.fVal = maMat.get_numeric(nR, nC);
+                aVal.fVal = maMat.get_numeric(aPos);
             break;
             case mdds::mtm::element_string:
                 aVal.nType = SC_MATVAL_STRING;
-                aVal.aStr = maMat.get_string(nR, nC);
+                aVal.aStr = maMat.get_string(aPos);
             break;
             case mdds::mtm::element_empty:
                 // Empty path equals empty plus flag.
@@ -775,12 +773,13 @@ double EvalMatrix(const MatrixImplType& rMat)
     {
         for (size_t j = 0; j < nCols; ++j)
         {
-            mdds::mtm::element_t eType = rMat.get_type(i, j);
+            MatrixImplType::const_position_type aPos = rMat.position(i, j);
+            mdds::mtm::element_t eType = rMat.get_type(aPos);
             if (eType != mdds::mtm::element_numeric && eType != mdds::mtm::element_boolean)
                 // assuming a CompareMat this is an error
                 return CreateDoubleError(errIllegalArgument);
 
-            double fVal = rMat.get_numeric(i, j);
+            double fVal = rMat.get_numeric(aPos);
             if (!::rtl::math::isFinite(fVal))
                 // DoubleError
                 return fVal;
