@@ -59,17 +59,17 @@ sal_Int32 SAL_CALL BreakIterator_CTL::previousCharacters( const OUString& Text,
     if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) {
         nDone = 0;
         if (nStartPos > 0) {    // for others to skip cell.
-        makeIndex(Text, nStartPos);
+            makeIndex(Text, nStartPos);
 
-        if (nextCellIndex[nStartPos-1] == 0) // not a CTL character
-            return BreakIterator_Unicode::previousCharacters(Text, nStartPos, rLocale,
-                nCharacterIteratorMode, nCount, nDone);
-        else while (nCount > 0 && nextCellIndex[nStartPos - 1] > 0) {
-            nCount--; nDone++;
-            nStartPos = previousCellIndex[nStartPos - 1];
-        }
+            if (nextCellIndex[nStartPos-1] == 0) // not a CTL character
+                return BreakIterator_Unicode::previousCharacters(Text, nStartPos, rLocale,
+                    nCharacterIteratorMode, nCount, nDone);
+            else while (nCount > 0 && nextCellIndex[nStartPos - 1] > 0) {
+                nCount--; nDone++;
+                nStartPos = previousCellIndex[nStartPos - 1];
+            }
         } else
-        nStartPos = 0;
+            nStartPos = 0;
     } else { // for BS to delete one char.
         nDone = (nStartPos > nCount) ? nCount : nStartPos;
         nStartPos -= nDone;
@@ -87,17 +87,17 @@ sal_Int32 SAL_CALL BreakIterator_CTL::nextCharacters(const OUString& Text,
     if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) {
         nDone = 0;
         if (nStartPos < len) {
-        makeIndex(Text, nStartPos);
+            makeIndex(Text, nStartPos);
 
-        if (nextCellIndex[nStartPos] == 0) // not a CTL character
-            return BreakIterator_Unicode::nextCharacters(Text, nStartPos, rLocale,
-                nCharacterIteratorMode, nCount, nDone);
-        else while (nCount > 0 && nextCellIndex[nStartPos] > 0) {
-            nCount--; nDone++;
-            nStartPos = nextCellIndex[nStartPos];
-        }
+            if (nextCellIndex[nStartPos] == 0) // not a CTL character
+                return BreakIterator_Unicode::nextCharacters(Text, nStartPos, rLocale,
+                    nCharacterIteratorMode, nCount, nDone);
+            else while (nCount > 0 && nextCellIndex[nStartPos] > 0) {
+                nCount--; nDone++;
+                nStartPos = nextCellIndex[nStartPos];
+            }
         } else
-        nStartPos = len;
+            nStartPos = len;
     } else {
         nDone = (len - nStartPos > nCount) ? nCount : len - nStartPos;
         nStartPos += nDone;
