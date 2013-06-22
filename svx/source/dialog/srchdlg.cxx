@@ -2249,8 +2249,8 @@ void SvxSearchDialog::SaveToModule_Impl()
     if( !pSearchItem->IsUseAsianOptions())
         nFlags &= (TransliterationModules_IGNORE_CASE |
                    TransliterationModules_IGNORE_WIDTH );
-        if (GetCheckBoxValue(m_pIgnoreDiacritics))
-            nFlags |= TransliterationModulesExtra::ignoreDiacritics_CTL;
+    if (GetCheckBoxValue(m_pIgnoreDiacritics))
+        nFlags |= TransliterationModulesExtra::ignoreDiacritics_CTL;
     pSearchItem->SetTransliterationFlags( nFlags );
 
     if ( !bWriter )
