@@ -492,8 +492,6 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
 
     maElementListBox.SelectEntry(OUString(SmResId(RID_CATEGORY_UNARY_BINARY_OPERATORS)));
     maElementsControl.setElementSetId(RID_CATEGORY_UNARY_BINARY_OPERATORS);
-
-    Invalidate();
 }
 
 SmElementsDockingWindow::~SmElementsDockingWindow ()
@@ -573,7 +571,11 @@ SmElementsDockingWindowWrapper::SmElementsDockingWindowWrapper(
 {
     pWindow = new SmElementsDockingWindow(pBindings, this, pParentWindow);
     SmElementsDockingWindow* pDialog = (SmElementsDockingWindow*) pWindow;
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+    pDialog->SetPosSizePixel(Point(0, 0), Size(300, 0));
+    pDialog->Show();
+
+    eChildAlignment = SFX_ALIGN_LEFT;
+
     pDialog->Initialize( pInfo );
 }
 
