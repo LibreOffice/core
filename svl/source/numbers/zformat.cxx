@@ -1356,7 +1356,7 @@ OUString SvNumberformat::LocaleType::generateCode() const
     {
         sal_uInt8 n = static_cast<sal_uInt8>((n16 & 0xF000) >> 12);
         // Omit leading zeros for consistency.
-        if (n || aBuf.getLength() || i == 3)
+        if (n || !aBuf.isEmpty() || i == 3)
         {
             aBuf.append(toUniChar(n));
         }
@@ -4306,7 +4306,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
             }
             sStr.remove( nPoint, 1 ); //  Remove .
         }
-        if (bSign && (sStr.getLength() == 0 ||
+        if (bSign && (sStr.isEmpty() ||
                       comphelper::string::getTokenCount(sStr.toString(), '0') == sStr.getLength()+1))   // Only 00000
         {
             bSign = false;              // Not -0.00

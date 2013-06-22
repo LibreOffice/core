@@ -997,7 +997,7 @@ sal_uInt32 SvNumberFormatter::ImpGenerateCL( LanguageType eLnge, bool bNoAdditio
                             aDupes.append( ") ");
                         }
                     }
-                    if ( aDupes.getLength() > 0 )
+                    if ( !aDupes.isEmpty() )
                     {
                         OUStringBuffer aMsg(aDupes.getLength() + xSeq[j].formatKey.getLength() + 100);
                         aMsg.append("XML locale data FormatElement formatindex dupe: ");
@@ -2158,7 +2158,7 @@ sal_Int32 SvNumberFormatter::ImpAdjustFormatCodeDefault(
                     break;
                 }
             }
-            if (aMsg.getLength())
+            if (!aMsg.isEmpty())
             {
                 aMsg.insert(0, "SvNumberFormatter::ImpAdjustFormatCodeDefault: ");
                 aMsg.append("\nXML locale data FormatElement formatindex: ");
@@ -2174,7 +2174,7 @@ sal_Int32 SvNumberFormatter::ImpAdjustFormatCodeDefault(
             aMsg.append("no medium type default  ");
         if ( nLong != -1 && nLongDef == -1 )
             aMsg.append("no long type default  ");
-        if (aMsg.getLength())
+        if (!aMsg.isEmpty())
         {
             aMsg.insert(0, "SvNumberFormatter::ImpAdjustFormatCodeDefault: ");
             aMsg.append("\nXML locale data FormatElement group of: ");
