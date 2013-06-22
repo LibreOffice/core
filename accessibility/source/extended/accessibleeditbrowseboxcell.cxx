@@ -120,7 +120,7 @@ namespace accessibility
 
         // TODO: localize this!
         OUStringBuffer sName(mpBrowseBox->GetColumnDescription( ::sal::static_int_cast< sal_uInt16 >( getColumnPos() ) ));
-        if ( 0 == sName.getLength() )
+        if ( sName.isEmpty() )
         {
             sName.appendAscii("Column ");
             sName.append(getColumnPos());

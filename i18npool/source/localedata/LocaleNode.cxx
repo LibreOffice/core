@@ -1022,7 +1022,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     if (!(nDetected & 4))
                     {
                         aPatternBuf.append( 'Y');
-                        if (aPatternBuf2.getLength() > 0)
+                        if (!aPatternBuf2.isEmpty())
                             aPatternBuf2.append( 'Y');
                         nDetected |= 4;
                     }
@@ -1032,7 +1032,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     if (!(nDetected & 2))
                     {
                         aPatternBuf.append( 'M');
-                        if (aPatternBuf2.getLength() > 0)
+                        if (!aPatternBuf2.isEmpty())
                             aPatternBuf2.append( 'M');
                         nDetected |= 2;
                     }
@@ -1042,7 +1042,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     if (!(nDetected & 1))
                     {
                         aPatternBuf.append( 'D');
-                        if (aPatternBuf2.getLength() > 0)
+                        if (!aPatternBuf2.isEmpty())
                             aPatternBuf2.append( 'D');
                         nDetected |= 1;
                     }
@@ -1076,7 +1076,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                         aPatternBuf2 = aPatternBuf;
                     if (cChar == cDateSep || cChar == cDateSep2)
                         aPatternBuf.append( OUString( &cDateSep, 1));   // always the defined separator
-                    if (cChar == cDateSep2 && aPatternBuf2.getLength() > 0)
+                    if (cChar == cDateSep2 && !aPatternBuf2.isEmpty())
                         aPatternBuf2.append( OUString( &cDateSep2, 1)); // always the format's separator
                     break;
                 // The localized legacy:
@@ -1088,7 +1088,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                         // it GG/MM/AAAA
                         // fr_CA AAAA-MM-JJ
                         aPatternBuf.append( 'Y');
-                        if (aPatternBuf2.getLength() > 0)
+                        if (!aPatternBuf2.isEmpty())
                             aPatternBuf2.append( 'Y');
                         nDetected |= 4;
                     }
@@ -1099,7 +1099,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                         // fr JJ.MM.AAAA
                         // fr_CA AAAA-MM-JJ
                         aPatternBuf.append( 'D');
-                        if (aPatternBuf2.getLength() > 0)
+                        if (!aPatternBuf2.isEmpty())
                             aPatternBuf2.append( 'D');
                         nDetected |= 1;
                     }
@@ -1108,7 +1108,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                         // nl DD-MM-JJJJ
                         // de TT.MM.JJJJ
                         aPatternBuf.append( 'Y');
-                        if (aPatternBuf2.getLength() > 0)
+                        if (!aPatternBuf2.isEmpty())
                             aPatternBuf2.append( 'Y');
                         nDetected |= 4;
                     }
@@ -1118,7 +1118,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         // de TT.MM.JJJJ
                         aPatternBuf.append( 'D');
-                        if (aPatternBuf2.getLength() > 0)
+                        if (!aPatternBuf2.isEmpty())
                             aPatternBuf2.append( 'D');
                         nDetected |= 1;
                     }
@@ -1128,7 +1128,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         // it GG/MM/AAAA
                         aPatternBuf.append( 'D');
-                        if (aPatternBuf2.getLength() > 0)
+                        if (!aPatternBuf2.isEmpty())
                             aPatternBuf2.append( 'D');
                         nDetected |= 1;
                     }
@@ -1138,7 +1138,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         // fi PP.KK.VVVV
                         aPatternBuf.append( 'D');
-                        if (aPatternBuf2.getLength() > 0)
+                        if (!aPatternBuf2.isEmpty())
                             aPatternBuf2.append( 'D');
                         nDetected |= 1;
                     }
@@ -1148,7 +1148,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         // fi PP.KK.VVVV
                         aPatternBuf.append( 'M');
-                        if (aPatternBuf2.getLength() > 0)
+                        if (!aPatternBuf2.isEmpty())
                             aPatternBuf2.append( 'M');
                         nDetected |= 2;
                     }
@@ -1158,7 +1158,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         // fi PP.KK.VVVV
                         aPatternBuf.append( 'Y');
-                        if (aPatternBuf2.getLength() > 0)
+                        if (!aPatternBuf2.isEmpty())
                             aPatternBuf2.append( 'Y');
                         nDetected |= 4;
                     }
@@ -1182,7 +1182,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             // Insert at front so full date pattern is first in checks.
             theDateAcceptancePatterns.insert( theDateAcceptancePatterns.begin(), aPattern);
         }
-        if (aPatternBuf2.getLength() > 0)
+        if (!aPatternBuf2.isEmpty())
         {
             OUString aPattern2( aPatternBuf2.makeStringAndClear());
             if (aPattern2.getLength() < 5)

@@ -411,7 +411,7 @@ void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
 
         if ((nDigit = nPart % 100) < 20)
         {
-            if (aTemp.getLength())
+            if (!aTemp.isEmpty())
                 aTemp.insert( 0, sal_Unicode(0x0020));
             aTemp.insert( 0, table_PersianWord_decade1[nDigit]);
         }
@@ -419,13 +419,13 @@ void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
         {
             if ((nDigit = nPart % 10) != 0)
             {
-                if (aTemp.getLength())
+                if (!aTemp.isEmpty())
                     aTemp.insert( 0, asPersianWord_conjunction);
                 aTemp.insert( 0, table_PersianWord_decade1[nDigit]);
             }
             if ((nDigit = (nPart / 10) % 10) != 0)
             {
-                if (aTemp.getLength())
+                if (!aTemp.isEmpty())
                     aTemp.insert( 0, asPersianWord_conjunction);
                 aTemp.insert( 0, table_PersianWord_decade2[nDigit-2]);
             }
@@ -433,7 +433,7 @@ void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
 
         if ((nDigit = nPart / 100) != 0)
         {
-            if (aTemp.getLength())
+            if (!aTemp.isEmpty())
                 aTemp.insert( 0, asPersianWord_conjunction);
             aTemp.insert( 0, table_PersianWord_decade3[nDigit-1]);
         }

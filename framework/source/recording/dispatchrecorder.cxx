@@ -356,7 +356,7 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const OUString& aURL,
         {
             sValBuffer.setLength(0);
         }
-        if (!sValBuffer.getLength())
+        if (sValBuffer.isEmpty())
             continue;
 
         {

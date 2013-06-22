@@ -521,7 +521,7 @@ void TitleHelper::impl_appendProductName (OUStringBuffer& sTitle)
     OUString name(utl::ConfigManager::getProductName());
     if (!name.isEmpty())
     {
-        if (sTitle.getLength() != 0)
+        if (!sTitle.isEmpty())
             sTitle.appendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
         sTitle.append(name);
     }
