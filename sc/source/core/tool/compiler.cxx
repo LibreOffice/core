@@ -570,7 +570,7 @@ static bool lcl_parseExternalName(
             {
                 do
                 {
-                    if (CharClass::isAsciiAlphaNumeric(c))
+                    if (rtl::isAsciiAlphanumeric(c))
                         // allowed.
                         break;
 
@@ -2156,7 +2156,7 @@ Label_MaskStateMachine:
                         }
                     }
                     else if ((nMask & SC_COMPILER_C_WORD_SEP) ||
-                            (c < 128 && !CharClass::isAsciiAlphaNumeric( c)))
+                            (c < 128 && !rtl::isAsciiAlphanumeric( c)))
                     {
                         bAdd = false;
                         eState = ssStop;
@@ -2781,7 +2781,7 @@ bool ScCompiler::IsReference( const String& rName )
     if ( ch1 == cDecSep )
         return false;
     // Who was that imbecile introducing '.' as the sheet name separator!?!
-    if ( CharClass::isAsciiNumeric( OUString(ch1) ) )
+    if ( rtl::isAsciiDigit( ch1 ) )
     {
         // Numerical sheet name is valid.
         // But English 1.E2 or 1.E+2 is value 100, 1.E-2 is 0.01
@@ -2798,7 +2798,7 @@ bool ScCompiler::IsReference( const String& rName )
             }
             sal_Unicode const * const pTabSep = rName.GetBuffer() + nPos;
             sal_Unicode ch2 = pTabSep[1];   // maybe a column identifier
-            if ( !(ch2 == '$' || CharClass::isAsciiAlpha( ch2 )) )
+            if ( !(ch2 == '$' || rtl::isAsciiAlpha( ch2 )) )
                 return false;
             if ( cDecSep == '.' && (ch2 == 'E' || ch2 == 'e')   // E + - digit
                     && (GetCharTableFlags( pTabSep[2], pTabSep[1] ) & SC_COMPILER_C_VALUE_EXP) )

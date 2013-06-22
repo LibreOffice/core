@@ -21,7 +21,6 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #define _UNOTOOLS_CHARCLASS_HXX
 
-#include <ctype.h>      // isdigit(), isalpha()
 #include <boost/noncopyable.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/string.hxx>
@@ -32,6 +31,7 @@
 #include <com/sun/star/i18n/ParseResult.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <osl/mutex.hxx>
+#include <rtl/character.hxx>
 
 class String;
 namespace com { namespace sun { namespace star {
@@ -95,19 +95,19 @@ public:
     /// isdigit() on ascii values
     static inline sal_Bool isAsciiDigit( sal_Unicode c )
     {
-        return c < 128 ? sal_Bool(isdigit( (unsigned char) c ) != 0) : sal_False;
+        return rtl::isAsciiDigit( c );
     }
 
     /// isalpha() on ascii values
     static inline sal_Bool isAsciiAlpha( sal_Unicode c )
     {
-        return c < 128 ? sal_Bool(isalpha( (unsigned char) c ) != 0) : sal_False;
+        return rtl::isAsciiAlpha( c );
     }
 
     /// isalnum() on ascii values
     static inline sal_Bool isAsciiAlphaNumeric( sal_Unicode c )
     {
-        return c < 128 ? sal_Bool(isalnum( (unsigned char) c ) != 0) : sal_False;
+        return rtl::isAsciiAlphanumeric( c );
     }
 
     /// isdigit() on ascii values of entire string
