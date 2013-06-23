@@ -81,6 +81,7 @@ public:
     void testFDO63053();
     void testWatermark();
     void testFdo43093();
+    void testFdo65400();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -136,6 +137,7 @@ void Test::run()
         {"fdo63053.docx" , &Test::testFDO63053},
         {"watermark.docx", &Test::testWatermark},
         {"fdo43093.docx", &Test::testFdo43093},
+        {"fdo65400.docx", &Test::testFdo65400},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -806,6 +808,17 @@ void Test::testFdo43093()
 
     CPPUNIT_ASSERT_EQUAL( sal_Int32 (style::ParagraphAdjust_RIGHT), nLtrRight);
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::LR_TB, nLRDir);
+}
+
+void Test::testFdo65400()
+{
+    // The problem was that if in Word you choose 'Character Shading' - then the text portion
+    // is marked with 'w:shd val=pct15'. LO did not store this value and so when importing and exporting
+    // this value was lost (and so Word did not show 'Character Shading' was on)
+    uno::Reference< text::XTextRange > paragraph1 = getParagraph( 1 );
+    uno::Reference< text::XTextRange > shaded = getRun( paragraph1, 2, "normal" );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0x0026 ), getProperty< sal_Int32 >( shaded, "CharShadingValue" ));
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0xd8d8d8 ), getProperty< sal_Int32 >( shaded, "CharBackColor" ));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

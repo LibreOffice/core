@@ -171,6 +171,7 @@
 #define MID_GRAPHIC_TRANSPARENCY 8
 #define MID_BACK_COLOR_R_G_B    9
 #define MID_BACK_COLOR_TRANSPARENCY 10
+#define MID_SHADING_VALUE       11
 
 //SvxFmtBreakItem
 #define MID_BREAK_BEFORE        0

@@ -4449,75 +4449,74 @@ void SwWW8Shade::SetShade(ColorData nFore, ColorData nBack, sal_uInt16 nIndex)
 {
     static const sal_uLong eMSGrayScale[] =
     {
-        // Nul-Brush
-           0,   // 0
+        // Clear-Brush
+           0,   // 0    clear
         // Solid-Brush
-        1000,   // 1
-        // promillemaessig abgestufte Schattierungen
-          50,   // 2
-         100,   // 3
-         200,   // 4
-         250,   // 5
-         300,   // 6
-         400,   // 7
-         500,   // 8
-         600,   // 9
-         700,   // 10
-         750,   // 11
-         800,   // 12
-         900,   // 13
-         333, // 14 Dark Horizontal
-         333, // 15 Dark Vertical
-         333, // 16 Dark Forward Diagonal
-         333, // 17 Dark Backward Diagonal
-         333, // 18 Dark Cross
-         333, // 19 Dark Diagonal Cross
-         333, // 20 Horizontal
-         333, // 21 Vertical
-         333, // 22 Forward Diagonal
-         333, // 23 Backward Diagonal
-         333, // 24 Cross
-         333, // 25 Diagonal Cross
-         // neun Nummern ohne Bedeutung in Ver8
-         500, // 26
-         500, // 27
-         500, // 28
-         500, // 29
-         500, // 30
-         500, // 31
-         500, // 32
-         500, // 33
-         500, // 34
-         // und weiter gehts mit tollen Schattierungen ;-)
-          25,   // 35
-          75,   // 36
-         125,   // 37
-         150,   // 38
-         175,   // 39
-         225,   // 40
-         275,   // 41
-         325,   // 42
-         350,   // 43
-         375,   // 44
-         425,   // 45
-         450,   // 46
-         475,   // 47
-         525,   // 48
-         550,   // 49
-         575,   // 50
-         625,   // 51
-         650,   // 52
-         675,   // 53
-         725,   // 54
-         775,   // 55
-         825,   // 56
-         850,   // 57
-         875,   // 58
-         925,   // 59
-         950,   // 60
-         975,   // 61
-         // und zu guter Letzt:
-         970
+        1000,   // 1    solid
+        // Percent values
+          50,   // 2    pct5
+         100,   // 3    pct10
+         200,   // 4    pct20
+         250,   // 5    pct25
+         300,   // 6    pct30
+         400,   // 7    pct40
+         500,   // 8    pct50
+         600,   // 9    pct60
+         700,   // 10   pct70
+         750,   // 11   pct75
+         800,   // 12   pct80
+         900,   // 13   pct90
+        // Special cases
+         333,   // 14   Dark Horizontal
+         333,   // 15   Dark Vertical
+         333,   // 16   Dark Forward Diagonal
+         333,   // 17   Dark Backward Diagonal
+         333,   // 18   Dark Cross
+         333,   // 19   Dark Diagonal Cross
+         333,   // 20   Horizontal
+         333,   // 21   Vertical
+         333,   // 22   Forward Diagonal
+         333,   // 23   Backward Diagonal
+         333,   // 24   Cross
+         333,   // 25   Diagonal Cross
+        // Undefined values in DOC spec-sheet
+         500,   // 26
+         500,   // 27
+         500,   // 28
+         500,   // 29
+         500,   // 30
+         500,   // 31
+         500,   // 32
+         500,   // 33
+         500,   // 34
+        // Different shading types
+          25,   // 35   [available in DOC, not available in DOCX]
+          75,   // 36   [available in DOC, not available in DOCX]
+         125,   // 37   pct12
+         150,   // 38   pct15
+         175,   // 39   [available in DOC, not available in DOCX]
+         225,   // 40   [available in DOC, not available in DOCX]
+         275,   // 41   [available in DOC, not available in DOCX]
+         325,   // 42   [available in DOC, not available in DOCX]
+         350,   // 43   pct35
+         375,   // 44   pct37
+         425,   // 45   [available in DOC, not available in DOCX]
+         450,   // 46   pct45
+         475,   // 47   [available in DOC, not available in DOCX]
+         525,   // 48   [available in DOC, not available in DOCX]
+         550,   // 49   pct55
+         575,   // 50   [available in DOC, not available in DOCX]
+         625,   // 51   pct62
+         650,   // 52   pct65
+         675,   // 53   [available in DOC, not available in DOCX]
+         725,   // 54   [available in DOC, not available in DOCX]
+         775,   // 55   [available in DOC, not available in DOCX]
+         825,   // 56   [available in DOC, not available in DOCX]
+         850,   // 57   pct85
+         875,   // 58   pct87
+         925,   // 59   [available in DOC, not available in DOCX]
+         950,   // 60   pct95
+         975    // 61   [available in DOC, not available in DOCX]
     };// 62
 
 

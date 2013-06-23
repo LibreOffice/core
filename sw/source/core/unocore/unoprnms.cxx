@@ -789,7 +789,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0757 UNO_NAME_FILL_STYLE */              {MAP_CHAR_LEN("FillStyle")},
 /* 0758 UNO_NAME_FILL_GRADIENT */              {MAP_CHAR_LEN("FillGradient")},
 /* 0759 UNO_NAME_FILL_GRADIENT_NAME */              {MAP_CHAR_LEN("FillGradientName")},
-/* 0760 UNO_NAME_DEFAULT_PAGE_MODE */    {MAP_CHAR_LEN("DefaultPageMode")}
+/* 0760 UNO_NAME_DEFAULT_PAGE_MODE */    {MAP_CHAR_LEN("DefaultPageMode")},
+/* 0761 UNO_NAME_CHAR_SHADING_VALUE */   {MAP_CHAR_LEN("CharShadingValue")},
 
 // new items in this array must match enum SwPropNameIds
 };
