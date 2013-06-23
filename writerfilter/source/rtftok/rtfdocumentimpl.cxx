@@ -513,7 +513,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
         dispatchFlag(RTF_PARD);
         dispatchSymbol(RTF_PAR);
     }
-    while (m_nHeaderFooterPositions.size())
+    while (!m_nHeaderFooterPositions.empty())
     {
         std::pair<Id, sal_uInt32> aPair = m_nHeaderFooterPositions.front();
         m_nHeaderFooterPositions.pop();
@@ -4563,7 +4563,7 @@ int RTFDocumentImpl::popState()
         case DESTINATION_SHPPICT:
         case DESTINATION_SHAPE:
             m_aStates.top().aFrame = aState.aFrame;
-            if (aState.nDestinationState == DESTINATION_SHPPICT && m_aStates.size() && m_aStates.top().nDestinationState == DESTINATION_LISTPICTURE)
+            if (aState.nDestinationState == DESTINATION_SHPPICT && !m_aStates.empty() && m_aStates.top().nDestinationState == DESTINATION_LISTPICTURE)
             {
                 RTFSprms aAttributes;
                 aAttributes.set(NS_ooxml::LN_CT_NumPicBullet_numPicBulletId, RTFValue::Pointer_t(new RTFValue(m_nListPictureId++)));
@@ -4609,7 +4609,7 @@ int RTFDocumentImpl::popState()
         m_bHasFootnote = false;
     }
 
-    if (m_aStates.size())
+    if (!m_aStates.empty())
     {
         m_aStates.top().nCells = aState.nCells;
         m_aStates.top().aTableCellsSprms = aState.aTableCellsSprms;
