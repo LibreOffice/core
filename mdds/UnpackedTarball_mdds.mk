@@ -16,8 +16,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,mdds,3))
 $(eval $(call gb_UnpackedTarball_add_patches,mdds,\
 	mdds/mdds_0.6.0.patch \
 	mdds/0001-Workaround-for-gcc-bug.patch \
-	mdds/mdds_0.7.0_unreachable_warning.patch.1 \
-	mdds/0001-Avoid-crash-when-_GLIBCXX_DEBUG-is-defined.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
