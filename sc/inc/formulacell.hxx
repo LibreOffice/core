@@ -261,13 +261,6 @@ public:
                                     const formula::FormulaGrammar::Grammar eGrammar )
                         { aResult.SetHybridFormula( r); eTempGrammar = eGrammar; }
 
-    /**
-     * For import only: use for formula cells that return a number
-     * formatted as some kind of string
-     */
-    void SetHybridValueString( double nVal, const OUString& r )
-                        { aResult.SetHybridValueString( nVal, r ); }
-
     void SetResultMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL )
     {
         aResult.SetMatrix(nCols, nRows, pMat, pUL);

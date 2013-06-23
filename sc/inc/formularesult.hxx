@@ -177,8 +177,6 @@ public:
         SetHybridFormula() for formula string to be compiled later. */
     SC_DLLPUBLIC void SetHybridFormula( const String & rFormula );
 
-    void SetHybridValueString( double nVal, const OUString& rStr );
-
     SC_DLLPUBLIC void SetMatrix( SCCOL nCols, SCROW nRows, const ScConstMatrixRef& pMat, formula::FormulaToken* pUL );
 
     /** Get the const ScMatrixFormulaCellToken* if token is of that type, else

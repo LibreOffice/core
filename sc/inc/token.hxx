@@ -430,20 +430,6 @@ public:
     virtual FormulaToken* Clone() const { return new ScHybridCellToken(*this); }
 };
 
-class SC_DLLPUBLIC ScHybridValueCellToken : public ScToken
-{
-private:
-    double mfValue;
-    String maString;
-public:
-    ScHybridValueCellToken (double f, const OUString& rStr ):
-        ScToken( formula::svHybridValueCell ),
-        mfValue( f ), maString( rStr ) {}
-
-    virtual double GetDouble() const { return mfValue; }
-    virtual const String & GetString() const { return maString; }
-};
-
 // Simplify argument passing to RefUpdate methods with ScSingleRefToken or
 // ScDoubleRefToken
 class SingleDoubleRefModifier
