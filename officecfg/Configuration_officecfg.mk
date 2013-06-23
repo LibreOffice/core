@@ -34,7 +34,6 @@ $(eval $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
 	org/openoffice/Office/Calc.xcu \
 	org/openoffice/Office/Canvas.xcu \
 	org/openoffice/Office/Compatibility.xcu \
-	org/openoffice/Office/ExtendedColorScheme.xcu \
 	org/openoffice/Office/ExtensionDependencies.xcu \
 	org/openoffice/Office/ExtensionManager.xcu \
 	org/openoffice/Office/Impress.xcu \
@@ -143,6 +142,7 @@ $(eval $(call gb_Configuration_add_localized_datas,registry,officecfg/registry/d
 	org/openoffice/Office/TableWizard.xcu \
 	org/openoffice/Office/UI.xcu \
 	org/openoffice/Office/Embedding.xcu \
+	org/openoffice/Office/ExtendedColorScheme.xcu \
 	org/openoffice/Office/WebWizard.xcu \
 	org/openoffice/Office/FormWizard.xcu \
 	org/openoffice/Office/Writer.xcu \
