@@ -872,6 +872,8 @@ void SfxMedium::SetEncryptionDataToStorage_Impl()
     }
 }
 
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
+
 //------------------------------------------------------------------
 sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< OUString >& aData, sal_Bool bIsLoading, sal_Bool bOwnLock )
 {
@@ -983,15 +985,15 @@ sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< OUString >& a
 
 namespace
 {
-#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     bool isSuitableProtocolForLocking(const String & rLogicName)
     {
         INetURLObject aUrl( rLogicName );
         INetProtocol eProt = aUrl.GetProtocol();
         return eProt == INET_PROT_FILE || eProt == INET_PROT_SFTP;
     }
-#endif
 }
+
+#endif
 
 // returns true if the document can be opened for editing ( even if it should be a copy )
 // otherwise the document should be opened readonly
