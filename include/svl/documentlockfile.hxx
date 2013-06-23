@@ -52,8 +52,8 @@ public:
 
     // the methods allow to control whether UI interaction regarding the locked document file is allowed
     // this is a workaround for automated tests
-    static void AllowInteraction( bool bAllow ) { m_bAllowInteraction = bAllow; }
-    static bool IsInteractionAllowed() { return m_bAllowInteraction; }
+    static void AllowInteraction( bool bAllow );
+    static bool IsInteractionAllowed();
 };
 
 }

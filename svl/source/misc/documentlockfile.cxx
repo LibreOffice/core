@@ -51,6 +51,8 @@ using namespace ::com::sun::star;
 namespace svt {
 
 bool DocumentLockFile::m_bAllowInteraction = true;
+void DocumentLockFile::AllowInteraction( bool bAllow ) { m_bAllowInteraction = bAllow; }
+bool DocumentLockFile::IsInteractionAllowed() { return m_bAllowInteraction; }
 
 // ----------------------------------------------------------------------
 DocumentLockFile::DocumentLockFile( const OUString& aOrigURL )
