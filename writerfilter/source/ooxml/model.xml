@@ -12833,11 +12833,15 @@
         </list>
       </define>
       <define name="CT_Underline">
-        <optional><attribute name="val"><ref name="ST_Underline"/><xs:documentation>Underline Style</xs:documentation></attribute>ST_String
+        <optional>
+          <attribute name="val">
+            <ref name="ST_Underline"/>
+            <xs:documentation>Underline Style</xs:documentation>
+          </attribute>
         </optional>
         <optional>
           <attribute name="color">
-            <text/>
+            <ref name="ST_HexColor"/>
             <xs:documentation>Underline Color</xs:documentation>
           </attribute>
         </optional>

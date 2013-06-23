@@ -83,6 +83,7 @@ public:
     void testFdo43093();
     void testFdo64238_a();
     void testFdo64238_b();
+    void testFdo56679();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -140,6 +141,7 @@ void Test::run()
         {"fdo43093.docx", &Test::testFdo43093},
         {"fdo64238_a.docx", &Test::testFdo64238_a},
         {"fdo64238_b.docx", &Test::testFdo64238_b},
+        {"fdo56679.docx", &Test::testFdo56679},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -850,6 +852,17 @@ void Test::testFdo64238_b()
         numOfRuns++;
     }
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), numOfRuns);
+}
+
+void Test::testFdo56679()
+{
+    // The problem was that the DOCX importer and exporter did not handle the 'color' of an underline
+    // (not the color of the text, the color of the underline itself)
+    uno::Reference< text::XTextRange > xParagraph = getParagraph( 1 );
+    uno::Reference< text::XTextRange > xText = getRun( xParagraph, 2, "This is a simple sentence.");
+
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xText, "CharUnderlineHasColor")));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF0000), getProperty<sal_Int32>(xText, "CharUnderlineColor"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
