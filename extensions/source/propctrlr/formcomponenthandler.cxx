@@ -1841,8 +1841,7 @@ namespace pcr
                 OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_LISTSOURCETYPE ) >>= eLSType );
 
                 _rxInspectorUI->enablePropertyUI( PROPERTY_BOUNDCOLUMN,
-                        ( eLSType != ListSourceType_TABLEFIELDS )
-                    &&  ( eLSType != ListSourceType_VALUELIST )
+                        ( eLSType != ListSourceType_VALUELIST )
                 );
             }
             break;  // case PROPERTY_ID_BOUNDCOLUMN

@@ -937,6 +937,18 @@ namespace frm
                             seqNames.getConstArray() + seqNames.getLength(),
                             ::std::insert_iterator< ValueList >( aDisplayList, aDisplayList.end() )
                         );
+                        if(*aBoundColumn == -1)
+                        {
+                            // the type of i matters! It will be the type of the ORowSetValue pushed to aValueList!
+                            for(sal_Int16 i=0; i < aDisplayList.size(); ++i)
+                            {
+                                aValueList.push_back(i);
+                            }
+                        }
+                        else
+                        {
+                            aValueList = aDisplayList;
+                        }
                     }
                 }
                 break;
