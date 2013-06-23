@@ -1,0 +1,27 @@
+From 3e3a5c483217fe05b5bd556bf1b2c6f3ec297cb1 Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Sat, 22 Jun 2013 21:30:13 -0400
+Subject: [PATCH] Workaround for an old gcc bug.
+
+c.f. http://gcc.gnu.org/bugzilla/show_bug.cgi?id=44963
+---
+ include/mdds/multi_type_vector_types.hpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/include/mdds/multi_type_vector_types.hpp b/include/mdds/multi_type_vector_types.hpp
+index c4b2772..44af655 100644
+--- a/include/mdds/multi_type_vector_types.hpp
++++ b/c/d/include/mdds/multi_type_vector_types.hpp
+@@ -278,7 +278,8 @@ public:
+ #ifndef MDDS_MULTI_TYPE_VECTOR_USE_DEQUE
+         d.reserve(d.size() + len);
+ #endif
+-        std::copy(its.first, its.second, std::back_inserter(d));
++        for (; its.first != its.second; ++its.first)
++            d.push_back(*its.first);
+     }
+ 
+     static void assign_values_from_block(
+-- 
+1.8.1.4
+
