@@ -32,7 +32,7 @@ class WRITERFILTER_DLLPRIVATE CellColorHandler : public LoggedProperties
 public:
     enum OutputFormat { Form, Paragraph, Character }; // for what part of the document
 private:
-    sal_Int32 m_nShadowType;
+    sal_Int32 m_nShadingPattern;
     sal_Int32 m_nColor;
     sal_Int32 m_nFillColor;
     OutputFormat m_OutputFormat;
