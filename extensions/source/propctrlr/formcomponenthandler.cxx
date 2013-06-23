@@ -1574,6 +1574,7 @@ namespace pcr
                 // available list source values (tables or queries) might have changed
                 _rxInspectorUI->rebuildPropertyUI( PROPERTY_LISTSOURCE );
             aDependentProperties.push_back( PROPERTY_ID_STRINGITEMLIST );
+            aDependentProperties.push_back( PROPERTY_ID_BOUNDCOLUMN );
             // NO break!
 
         // ----- StringItemList -----
