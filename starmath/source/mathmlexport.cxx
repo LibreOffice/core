@@ -766,6 +766,42 @@ void SmXMLExport::ExportBinaryVertical(const SmNode *pNode, int nLevel)
     ExportNodes(pNode->GetSubNode(2), nLevel);
 }
 
+void SmXMLExport::ExportBinaryDiagonal(const SmNode *pNode, int nLevel)
+{
+    OSL_ENSURE(pNode->GetNumSubNodes()==3, "Bad Slash");
+
+    if (pNode->GetToken().eType == TWIDESLASH)
+    {
+        // wideslash
+        // export the node as <mfrac bevelled="true">
+        AddAttribute(XML_NAMESPACE_MATH, XML_BEVELLED, XML_TRUE);
+        SvXMLElementExport aFraction(*this, XML_NAMESPACE_MATH, XML_MFRAC,
+            sal_True, sal_True);
+        ExportNodes(pNode->GetSubNode(0), nLevel);
+        ExportNodes(pNode->GetSubNode(1), nLevel);
+    }
+    else
+    {
+        // widebslash
+        // We can not use <mfrac> to a backslash, so just use <mo>\</mo>
+        SvXMLElementExport *pRow = new SvXMLElementExport(*this,
+            XML_NAMESPACE_MATH, XML_MROW, sal_True, sal_True);
+
+        ExportNodes(pNode->GetSubNode(0), nLevel);
+
+        { // Scoping for <mo> creation
+        SvXMLElementExport aMo(*this, XML_NAMESPACE_MATH, XML_MO,
+            sal_True,sal_True);
+        sal_Unicode nArse[2] = {MS_BACKSLASH,0x00};
+        GetDocHandler()->characters(nArse);
+        }
+
+        ExportNodes(pNode->GetSubNode(1), nLevel);
+
+        delete pRow;
+    }
+}
+
 void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
 {
     SvXMLElementExport *pTable=0;
@@ -1090,7 +1126,14 @@ void SmXMLExport::ExportAttributes(const SmNode *pNode, int nLevel)
         pElement = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MUNDER,
             sal_True,sal_True);
     }
-    else if (pNode->GetToken().eType != TOVERSTRIKE)
+    else if (pNode->GetToken().eType == TOVERSTRIKE)
+    {
+        // export as <menclose notation="horizontalstrike">
+        AddAttribute(XML_NAMESPACE_MATH, XML_NOTATION, XML_HORIZONTALSTRIKE);
+        pElement = new SvXMLElementExport(*this, XML_NAMESPACE_MATH,
+            XML_MENCLOSE, sal_True, sal_True);
+    }
+    else
     {
         AddAttribute(XML_NAMESPACE_MATH, XML_ACCENT,
             XML_TRUE);
@@ -1448,6 +1491,9 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
             break;
         case NBINVER:
             ExportBinaryVertical(pNode, nLevel);
+            break;
+        case NBINDIAGONAL:
+            ExportBinaryDiagonal(pNode, nLevel);
             break;
         case NSUBSUP:
             ExportSubSupScript(pNode, nLevel);

@@ -92,6 +92,7 @@ protected:
     void ExportUnaryHorizontal(const SmNode *pNode, int nLevel);
     void ExportBrace(const SmNode *pNode, int nLevel);
     void ExportBinaryVertical(const SmNode *pNode, int nLevel);
+    void ExportBinaryDiagonal(const SmNode *pNode, int nLevel);
     void ExportSubSupScript(const SmNode *pNode, int nLevel);
     void ExportRoot(const SmNode *pNode, int nLevel);
     void ExportOperator(const SmNode *pNode, int nLevel);

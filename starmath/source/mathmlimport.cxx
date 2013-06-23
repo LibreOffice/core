@@ -837,9 +837,35 @@ public:
 
 ////////////////////////////////////////////////////////////
 
+class SmXMLEncloseContext_Impl : public SmXMLRowContext_Impl
+{
+public:
+    // TODO/LATER: convert <menclose notation="horizontalstrike"> into
+    // "overstrike{}" and extend the Math syntax to support more notations
+    SmXMLEncloseContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
+        const OUString& rLName)
+        : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
+
+    void EndElement();
+};
+
+void SmXMLEncloseContext_Impl::EndElement()
+{
+    /*
+    <menclose> accepts any number of arguments; if this number is not 1, its
+    contents are treated as a single "inferred <mrow>" containing its
+    arguments
+    */
+    if (GetSmImport().GetNodeStack().size() - nElementCount > 1)
+        SmXMLRowContext_Impl::EndElement();
+}
+
+////////////////////////////////////////////////////////////
+
 class SmXMLFracContext_Impl : public SmXMLRowContext_Impl
 {
 public:
+    // TODO/LATER: convert <mfrac bevelled="true"> into "wideslash{}{}"
     SmXMLFracContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
@@ -1867,6 +1893,7 @@ static SvXMLTokenMapEntry aPresLayoutElemTokenMap[] =
     { XML_NAMESPACE_MATH,   XML_MERROR,    XML_TOK_MERROR },
     { XML_NAMESPACE_MATH,   XML_MPHANTOM,  XML_TOK_MPHANTOM },
     { XML_NAMESPACE_MATH,   XML_MROW,      XML_TOK_MROW },
+    { XML_NAMESPACE_MATH,   XML_MENCLOSE,  XML_TOK_MENCLOSE },
     { XML_NAMESPACE_MATH,   XML_MFRAC,     XML_TOK_MFRAC },
     { XML_NAMESPACE_MATH,   XML_MSQRT,     XML_TOK_MSQRT },
     { XML_NAMESPACE_MATH,   XML_MROOT,     XML_TOK_MROOT },
@@ -2043,6 +2070,10 @@ SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
         /*General Layout Schemata*/
         case XML_TOK_MROW:
             pContext = GetSmImport().CreateRowContext(nPrefix,rLocalName,
+                xAttrList);
+            break;
+        case XML_TOK_MENCLOSE:
+            pContext = GetSmImport().CreateEncloseContext(nPrefix,rLocalName,
                 xAttrList);
             break;
         case XML_TOK_MFRAC:
@@ -2682,6 +2713,13 @@ SvXMLImportContext *SmXMLImport::CreateSpaceContext(sal_uInt16 nPrefix,
     return new SmXMLSpaceContext_Impl(*this,nPrefix,rLocalName);
 }
 
+
+SvXMLImportContext *SmXMLImport::CreateEncloseContext(sal_uInt16 nPrefix,
+    const OUString &rLocalName,
+    const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
+{
+    return new SmXMLEncloseContext_Impl(*this,nPrefix,rLocalName);
+}
 
 SvXMLImportContext *SmXMLImport::CreateFracContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,

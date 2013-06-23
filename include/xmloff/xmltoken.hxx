@@ -295,6 +295,7 @@ namespace xmloff { namespace token {
         XML_BELOW,
         XML_BETWEEN_DATE_TIMES,
         XML_BEVEL,
+        XML_BEVELLED,
         XML_BIBILIOGRAPHIC_TYPE,
         XML_BIBLIOGRAPHY,
         XML_BIBLIOGRAPHY_CONFIGURATION,
@@ -941,6 +942,7 @@ namespace xmloff { namespace token {
         XML_HIGHLIGHTED_RANGE,
         XML_HINT,
         XML_HORIZONTAL,
+        XML_HORIZONTALSTRIKE,
         XML_HORIZONTAL_LINES,
         // XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
         // are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
@@ -1166,6 +1168,7 @@ namespace xmloff { namespace token {
         XML_MEASURE_VERTICAL_ALIGN,
         XML_MEDIAN,
         XML_MEDIUM,
+        XML_MENCLOSE,
         XML_MERROR,
         XML_MESSAGE_TYPE,
         XML_META,
@@ -1262,6 +1265,7 @@ namespace xmloff { namespace token {
         XML_NORMALS_KIND,
         XML_NOT,
         XML_NOT_EQUAL_DATE,
+        XML_NOTATION,
         XML_NOTE,
         XML_NOTES,
         XML_NOTIN,

@@ -300,6 +300,7 @@ namespace xmloff { namespace token {
         TOKEN( "below",                           XML_BELOW ),
         TOKEN( "between-date-times",              XML_BETWEEN_DATE_TIMES ),
         TOKEN( "bevel",                           XML_BEVEL ),
+        TOKEN( "bevelled",                        XML_BEVELLED ),
         TOKEN( "bibiliographic-type",             XML_BIBILIOGRAPHIC_TYPE ),
         TOKEN( "bibliography",                    XML_BIBLIOGRAPHY ),
         TOKEN( "bibliography-configuration",      XML_BIBLIOGRAPHY_CONFIGURATION ),
@@ -946,6 +947,7 @@ namespace xmloff { namespace token {
         TOKEN( "highlighted-range",               XML_HIGHLIGHTED_RANGE ),
         TOKEN( "hint",                            XML_HINT),
         TOKEN( "horizontal",                      XML_HORIZONTAL ),
+        TOKEN( "horizontalstrike",                XML_HORIZONTALSTRIKE ),
         TOKEN( "horizontal-lines",                XML_HORIZONTAL_LINES ),
         /* XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
            are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
@@ -1172,6 +1174,7 @@ namespace xmloff { namespace token {
         TOKEN( "measure-vertical-align",          XML_MEASURE_VERTICAL_ALIGN ),
         TOKEN( "median",                          XML_MEDIAN ),
         TOKEN( "medium",                          XML_MEDIUM ),
+        TOKEN( "menclose",                        XML_MENCLOSE ),
         TOKEN( "merror",                          XML_MERROR ),
         TOKEN( "message-type",                    XML_MESSAGE_TYPE ),
         TOKEN( "meta",                            XML_META ),
@@ -1268,6 +1271,7 @@ namespace xmloff { namespace token {
         TOKEN( "normals-kind",                    XML_NORMALS_KIND ),
         TOKEN( "not",                             XML_NOT ),
         TOKEN( "not-equal-date",                  XML_NOT_EQUAL_DATE ),
+        TOKEN( "notation",                        XML_NOTATION ),
         TOKEN( "note",                            XML_NOTE ),
         TOKEN( "notes",                           XML_NOTES ),
         TOKEN( "notin",                           XML_NOTIN ),
