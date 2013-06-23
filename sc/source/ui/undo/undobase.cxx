@@ -561,18 +561,12 @@ sal_uInt16 ScUndoWrapper::GetId() const
         return 0;
 }
 
-sal_Bool ScUndoWrapper::IsLinked()
+void ScUndoWrapper::SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAction)
 {
     if (pWrappedUndo)
-        return pWrappedUndo->IsLinked();
+        pWrappedUndo->SetLinkToSfxLinkUndoAction(pSfxLinkUndoAction);
     else
-        return false;
-}
-
-void ScUndoWrapper::SetLinked( sal_Bool bIsLinked )
-{
-    if (pWrappedUndo)
-        pWrappedUndo->SetLinked(bIsLinked);
+        SetLinkToSfxLinkUndoAction(pSfxLinkUndoAction);
 }
 
 sal_Bool ScUndoWrapper::Merge( SfxUndoAction* pNextAction )

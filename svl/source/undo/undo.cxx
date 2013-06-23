@@ -57,16 +57,9 @@ SfxUndoContext::~SfxUndoContext()
 
 //------------------------------------------------------------------------
 
-sal_Bool SfxUndoAction::IsLinked()
+void SfxUndoAction::SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAction)
 {
-    return bLinked;
-}
-
-//------------------------------------------------------------------------
-
-void SfxUndoAction::SetLinked( sal_Bool bIsLinked )
-{
-    bLinked = bIsLinked;
+    mpSfxLinkUndoAction = pSfxLinkUndoAction;
 }
 
 //------------------------------------------------------------------------
@@ -74,14 +67,19 @@ void SfxUndoAction::SetLinked( sal_Bool bIsLinked )
 SfxUndoAction::~SfxUndoAction()
 {
     DBG_DTOR(SfxUndoAction, 0);
-    DBG_ASSERT( !IsLinked(), "Gelinkte Action geloescht" );
+
+    if(mpSfxLinkUndoAction)
+    {
+        mpSfxLinkUndoAction->LinkedSfxUndoActionDestructed(*this);
+        mpSfxLinkUndoAction = 0;
+    }
 }
 
 
 SfxUndoAction::SfxUndoAction()
+:   mpSfxLinkUndoAction(0)
 {
     DBG_CTOR(SfxUndoAction, 0);
-    SetLinked( sal_False );
 }
 
 //------------------------------------------------------------------------
@@ -449,24 +447,18 @@ void SfxUndoManager::SetMaxUndoActionCount( size_t nMaxUndoActionCount )
         if ( nPos > m_pData->pActUndoArray->nCurUndoAction )
         {
             SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[nPos-1].pAction;
-            if ( !pAction->IsLinked() )
-            {
-                aGuard.markForDeletion( pAction );
-                m_pData->pActUndoArray->aUndoActions.Remove( nPos-1 );
-                --nNumToDelete;
-            }
+            aGuard.markForDeletion( pAction );
+            m_pData->pActUndoArray->aUndoActions.Remove( nPos-1 );
+            --nNumToDelete;
         }
 
         if ( nNumToDelete > 0 && m_pData->pActUndoArray->nCurUndoAction > 0 )
         {
             SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[0].pAction;
-            if ( !pAction->IsLinked() )
-            {
-                aGuard.markForDeletion( pAction );
-                m_pData->pActUndoArray->aUndoActions.Remove(0);
-                --m_pData->pActUndoArray->nCurUndoAction;
-                --nNumToDelete;
-            }
+            aGuard.markForDeletion( pAction );
+            m_pData->pActUndoArray->aUndoActions.Remove(0);
+            --m_pData->pActUndoArray->nCurUndoAction;
+            --nNumToDelete;
         }
 
         if ( nPos == m_pData->pActUndoArray->aUndoActions.size() )
@@ -638,9 +630,7 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
     // respect max number
     if( m_pData->pActUndoArray == m_pData->pUndoArray )
     {
-        while( m_pData->pActUndoArray->aUndoActions.size() >=
-               m_pData->pActUndoArray->nMaxUndoActions &&
-               !m_pData->pActUndoArray->aUndoActions[0].pAction->IsLinked() )
+        while(m_pData->pActUndoArray->aUndoActions.size() >= m_pData->pActUndoArray->nMaxUndoActions)
         {
             i_guard.markForDeletion( m_pData->pActUndoArray->aUndoActions[0].pAction );
             m_pData->pActUndoArray->aUndoActions.Remove(0);
@@ -1399,7 +1389,7 @@ SfxLinkUndoAction::SfxLinkUndoAction(::svl::IUndoManager *pManager)
     {
         size_t nPos = pManager->GetUndoActionCount()-1;
         pAction = pUndoManagerImplementation->m_pData->pActUndoArray->aUndoActions[nPos].pAction;
-        pAction->SetLinked();
+        pAction->SetLinkToSfxLinkUndoAction(this);
     }
     else
         pAction = 0;
@@ -1464,9 +1454,18 @@ OUString SfxLinkUndoAction::GetRepeatComment(SfxRepeatTarget&r) const
 SfxLinkUndoAction::~SfxLinkUndoAction()
 {
     if( pAction )
-        pAction->SetLinked( sal_False );
+        pAction->SetLinkToSfxLinkUndoAction(0);
 }
 
+//------------------------------------------------------------------------
+
+void SfxLinkUndoAction::LinkedSfxUndoActionDestructed(const SfxUndoAction& rCandidate)
+{
+    OSL_ENSURE(0 != pAction, "OOps, we have no linked SfxUndoAction (!)");
+    OSL_ENSURE(pAction == &rCandidate, "OOps, the destroyed and linked UndoActions differ (!)");
+    (void)rCandidate;
+    pAction = 0;
+}
 
 //------------------------------------------------------------------------
 

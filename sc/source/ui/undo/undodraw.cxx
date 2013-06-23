@@ -63,18 +63,12 @@ sal_uInt16 ScUndoDraw::GetId() const
         return 0;
 }
 
-sal_Bool ScUndoDraw::IsLinked()
+void ScUndoDraw::SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAction)
 {
     if (pDrawUndo)
-        return pDrawUndo->IsLinked();
+        pDrawUndo->SetLinkToSfxLinkUndoAction(pSfxLinkUndoAction);
     else
-        return false;
-}
-
-void ScUndoDraw::SetLinked( sal_Bool bIsLinked )
-{
-    if (pDrawUndo)
-        pDrawUndo->SetLinked(bIsLinked);
+        SetLinkToSfxLinkUndoAction(pSfxLinkUndoAction);
 }
 
 sal_Bool  ScUndoDraw::Merge( SfxUndoAction* pNextAction )

@@ -2185,6 +2185,16 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
     OSL_ENSURE( aEditDoc.GetPos( pLeft ) != EE_PARA_NOT_FOUND, "Inserted node not found (1)" );
     OSL_ENSURE( aEditDoc.GetPos( pRight ) != EE_PARA_NOT_FOUND, "Inserted node not found (2)" );
 
+    // #i120020# it is possible that left and right are *not* in the desired order (left/right)
+    // so correct it. This correction is needed, else an invalid SfxLinkUndoAction will be
+    // created from ConnectParagraphs below. Assert this situation, it should be corrected by the
+    // caller.
+    if(aEditDoc.GetPos( pLeft ) > aEditDoc.GetPos( pRight ))
+    {
+        OSL_ENSURE(false, "ImpConnectParagraphs wit wrong order of pLeft/pRight nodes (!)");
+        std::swap(pLeft, pRight);
+    }
+
     sal_Int32 nParagraphTobeDeleted = aEditDoc.GetPos( pRight );
     DeletedNodeInfo* pInf = new DeletedNodeInfo( (sal_uIntPtr)pRight, nParagraphTobeDeleted );
     aDeletedNodes.push_back(pInf);
@@ -2301,18 +2311,34 @@ EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 n
         else if ( nDelMode == DELMODE_RESTOFWORD )
         {
             aDelEnd = EndOfWord( aCurPos );
+
             if (aDelEnd.GetIndex() == aCurPos.GetIndex())
             {
-                xub_StrLen nLen = aCurPos.GetNode()->Len();
-                // end of para?
-                if (aDelEnd.GetIndex() == nLen)
-                    aDelEnd = WordLeft( aCurPos );
-                else // there's still sth to delete on the right
+                const xub_StrLen nLen(aCurPos.GetNode()->Len());
+
+                // #i120020# when 0 == nLen, aDelStart needs to be adapted, not
+                // aDelEnd. This would (and did) lead to a wrong order in the
+                // ImpConnectParagraphs call later.
+                if(nLen)
                 {
-                    aDelEnd = EndOfWord( WordRight( aCurPos ) );
-                    // if there'n no next word...
-                    if (aDelEnd.GetIndex() == nLen )
-                        aDelEnd.SetIndex( nLen );
+                    // end of para?
+                    if (aDelEnd.GetIndex() == nLen)
+                    {
+                        aDelEnd = WordLeft( aCurPos );
+                    }
+                    else // there's still sth to delete on the right
+                    {
+                        aDelEnd = EndOfWord( WordRight( aCurPos ) );
+                        // if there'n no next word...
+                        if (aDelEnd.GetIndex() == nLen )
+                        {
+                            aDelEnd.SetIndex( nLen );
+                        }
+                    }
+                }
+                else
+                {
+                    aDelStart = WordLeft(aCurPos);
                 }
             }
         }

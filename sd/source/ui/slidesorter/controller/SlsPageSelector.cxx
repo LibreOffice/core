@@ -244,7 +244,11 @@ void PageSelector::CheckConsistency (void) const
     }
     if (nSelectionCount!=mnSelectedPageCount)
     {
-        assert(nSelectionCount==mnSelectedPageCount);
+        // #i120020# The former call to assert(..) internally calls
+        // SlideSorterModel::GetPageDescriptor which will crash in this situation
+        // (only in non-pro code). All what is wanted there is to assert it (the
+        // error is already detected), so do this directly.
+        OSL_ENSURE(false, "PageSelector: Consistency error (!)");
     }
 }
 

@@ -46,17 +46,20 @@ public:
 };
 
 //====================================================================
+class SfxLinkUndoAction;
 
 class SVL_DLLPUBLIC SfxUndoAction
 {
-    sal_Bool bLinked;
+private:
+    SfxLinkUndoAction*      mpSfxLinkUndoAction;
+
 public:
                             TYPEINFO();
                             SfxUndoAction();
     virtual                 ~SfxUndoAction();
 
-    virtual sal_Bool            IsLinked();
-    virtual void            SetLinked( sal_Bool bIsLinked = sal_True );
+    virtual void SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAction);
+
     virtual void            Undo();
     virtual void            UndoWithContext( SfxUndoContext& i_context );
     virtual void            Redo();
@@ -446,6 +449,10 @@ class SVL_DLLPUBLIC SfxLinkUndoAction : public SfxUndoAction
 */
 
 {
+private:
+    friend class SfxUndoAction;
+    void LinkedSfxUndoActionDestructed(const SfxUndoAction& rCandidate);
+
 public:
                             TYPEINFO();
                             SfxLinkUndoAction(::svl::IUndoManager *pManager);
