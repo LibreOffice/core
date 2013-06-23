@@ -114,6 +114,10 @@ public:
         const OUString &rLocalName,
         const com::sun::star::uno::Reference <
         com::sun::star::xml::sax::XAttributeList> &xAttrList);
+    SvXMLImportContext *CreateEncloseContext(sal_uInt16 nPrefix,
+        const OUString &rLocalName,
+        const com::sun::star::uno::Reference <
+        com::sun::star::xml::sax::XAttributeList> &xAttrList);
     SvXMLImportContext *CreateFracContext(sal_uInt16 nPrefix,
         const OUString &rLocalName,
         const com::sun::star::uno::Reference <
@@ -272,6 +276,7 @@ enum SmXMLPresLayoutElemTokenMap
     XML_TOK_MERROR,
     XML_TOK_MPHANTOM,
     XML_TOK_MROW,
+    XML_TOK_MENCLOSE,
     XML_TOK_MFRAC,
     XML_TOK_MSQRT,
     XML_TOK_MROOT,
