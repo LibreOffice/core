@@ -833,24 +833,11 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
 
         for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
         {
-            if(aRectIter->IsEmpty())
-            {
+            Rectangle aPaintRect = aCtrlRect.GetIntersection(*aRectIter);
+            if( aPaintRect.IsEmpty() )
                 continue;
-            }
-
-            aClip.push_back(*aRectIter);
+            aClip.push_back( aPaintRect );
         }
-
-        //RegionHandle aHdl = aClipRegion.BeginEnumRects();
-        //Rectangle aPaintRect;
-        //while( aClipRegion.GetEnumRects( aHdl, aPaintRect ) )
-        //{
-        //    aPaintRect = aCtrlRect.GetIntersection( aPaintRect );
-        //    if( aPaintRect.IsEmpty() )
-        //        continue;
-        //    aClip.push_back( aPaintRect );
-        //}
-        //aClipRegion.EndEnumRects( aHdl );
     }
 
     if ( (nType==CTRL_PUSHBUTTON) && (nPart==PART_ENTIRE_CONTROL) )
