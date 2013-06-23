@@ -448,8 +448,7 @@ void SmParser::NextToken()
         }
         else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
         {
-            String aName( m_aBufferString.Copy( nRealStart, 2 ));
-            if ( aName.EqualsAscii( "%%" ))
+            if (m_aBufferString.EqualsAscii("%%", nRealStart, 2))
             {
                 //SkipComment
                 m_nBufferIndex = nRealStart + 2;
@@ -549,17 +548,15 @@ void SmParser::NextToken()
     else if (aRes.TokenType & KParseType::BOOLEAN)
     {
         sal_Int32   &rnEndPos = aRes.EndPos;
-        String  aName( m_aBufferString.Copy( nRealStart,
-                        sal::static_int_cast< xub_StrLen >(rnEndPos - nRealStart) ));
-        if (2 >= aName.Len())
+        if (rnEndPos - nRealStart <= 2)
         {
-            sal_Unicode ch = aName.GetChar( 0 );
+            sal_Unicode ch = m_aBufferString.GetChar(nRealStart);
             switch (ch)
             {
                 case '<':
                     {
-                        if (m_aBufferString.Copy( nRealStart, 2 ).
-                                EqualsAscii( "<<" ))
+                        if (m_aBufferString.
+                                EqualsAscii("<<", nRealStart, 2))
                         {
                             m_aCurToken.eType    = TLL;
                             m_aCurToken.cMathChar = MS_LL;
@@ -569,8 +566,8 @@ void SmParser::NextToken()
 
                             rnEndPos = nRealStart + 2;
                         }
-                        else if (m_aBufferString.Copy( nRealStart, 2 ).
-                                EqualsAscii( "<=" ))
+                        else if (m_aBufferString.
+                                     EqualsAscii("<=", nRealStart, 2))
                         {
                             m_aCurToken.eType    = TLE;
                             m_aCurToken.cMathChar = MS_LE;
@@ -580,8 +577,8 @@ void SmParser::NextToken()
 
                             rnEndPos = nRealStart + 2;
                         }
-                        else if (m_aBufferString.Copy( nRealStart, 2 ).
-                                EqualsAscii( "<>" ))
+                        else if (m_aBufferString.
+                                     EqualsAscii("<>", nRealStart, 2))
                         {
                             m_aCurToken.eType    = TNEQ;
                             m_aCurToken.cMathChar = MS_NEQ;
@@ -591,8 +588,8 @@ void SmParser::NextToken()
 
                             rnEndPos = nRealStart + 2;
                         }
-                        else if (m_aBufferString.Copy( nRealStart, 3 ).
-                                EqualsAscii( "<?>" ))
+                        else if (m_aBufferString.
+                                     EqualsAscii("<?>", nRealStart, 3))
                         {
                             m_aCurToken.eType    = TPLACE;
                             m_aCurToken.cMathChar = MS_PLACE;
@@ -614,8 +611,8 @@ void SmParser::NextToken()
                     break;
                 case '>':
                     {
-                        if (m_aBufferString.Copy( nRealStart, 2 ).
-                                EqualsAscii( ">=" ))
+                        if (m_aBufferString.
+                                EqualsAscii(">=", nRealStart, 2))
                         {
                             m_aCurToken.eType    = TGE;
                             m_aCurToken.cMathChar = MS_GE;
@@ -625,8 +622,8 @@ void SmParser::NextToken()
 
                             rnEndPos = nRealStart + 2;
                         }
-                        else if (m_aBufferString.Copy( nRealStart, 2 ).
-                                EqualsAscii( ">>" ))
+                        else if (m_aBufferString.
+                                     EqualsAscii(">>", nRealStart, 2))
                         {
                             m_aCurToken.eType    = TGG;
                             m_aCurToken.cMathChar = MS_GG;
@@ -654,12 +651,9 @@ void SmParser::NextToken()
     else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
     {
         sal_Int32   &rnEndPos = aRes.EndPos;
-        String  aName( m_aBufferString.Copy( nRealStart,
-                            sal::static_int_cast< xub_StrLen >(rnEndPos - nRealStart) ) );
-
-        if (1 == aName.Len())
+        if (rnEndPos - nRealStart == 1)
         {
-            sal_Unicode ch = aName.GetChar( 0 );
+            sal_Unicode ch = m_aBufferString.GetChar(nRealStart);
             switch (ch)
             {
                 case '%':
@@ -795,8 +789,8 @@ void SmParser::NextToken()
                     break;
                 case '#':
                     {
-                        if (m_aBufferString.Copy( nRealStart, 2 ).
-                                EqualsAscii( "##" ))
+                        if (m_aBufferString.
+                                EqualsAscii("##", nRealStart, 2))
                         {
                             m_aCurToken.eType    = TDPOUND;
                             m_aCurToken.cMathChar = '\0';
@@ -854,8 +848,8 @@ void SmParser::NextToken()
                     break;
                 case '+':
                     {
-                        if (m_aBufferString.Copy( nRealStart, 2 ).
-                                EqualsAscii( "+-" ))
+                        if (m_aBufferString.
+                                EqualsAscii("+-", nRealStart, 2))
                         {
                             m_aCurToken.eType    = TPLUSMINUS;
                             m_aCurToken.cMathChar = MS_PLUSMINUS;
@@ -877,8 +871,8 @@ void SmParser::NextToken()
                     break;
                 case '-':
                     {
-                        if (m_aBufferString.Copy( nRealStart, 2 ).
-                                EqualsAscii( "-+" ))
+                        if (m_aBufferString.
+                                EqualsAscii("-+", nRealStart, 2))
                         {
                             m_aCurToken.eType    = TMINUSPLUS;
                             m_aCurToken.cMathChar = MS_MINUSPLUS;
