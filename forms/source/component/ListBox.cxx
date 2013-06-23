@@ -915,8 +915,13 @@ namespace frm
                             aBoundValue = static_cast<sal_Int16>(xListCursor->getRow()-1);
                         aValueList.push_back( aBoundValue );
 
-                        if ( bUseNULL && ( m_nNULLPos == -1 ) && aStr.isEmpty() )
+                        if ( bUseNULL && ( m_nNULLPos == -1 ) && aBoundValue.isNull() )
                             m_nNULLPos = sal_Int16( aDisplayList.size() - 1 );
+                        if ( bUseNULL && ( m_nNULLPos == -1 ) && aStr.isEmpty() )
+                            // There is already a non-NULL entry with empty display string;
+                            // adding another one for NULL would make things confusing,
+                            // so back off.
+                            bUseNULL = false;
                     }
                 }
                 break;
