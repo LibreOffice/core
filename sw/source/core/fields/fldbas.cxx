@@ -70,7 +70,10 @@ static sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFmt,
 /// field names
 std::vector<String>* SwFieldType::pFldNames = 0;
 
-    sal_uInt16 aTypeTab[] = {
+namespace
+{
+
+    const sal_uInt16 aTypeTab[] = {
     /* RES_DBFLD            */      TYP_DBFLD,
     /* RES_USERFLD          */      TYP_USERFLD,
     /* RES_FILENAMEFLD      */      TYP_FILENAMEFLD,
@@ -112,6 +115,8 @@ std::vector<String>* SwFieldType::pFldNames = 0;
     /* RES_COMBINED_CHARS   */      TYP_COMBINED_CHARS,
     /* RES_DROPDOWN         */      TYP_DROPDOWN
     };
+
+}
 
 const String& SwFieldType::GetTypeStr(sal_uInt16 nTypeId)
 {
