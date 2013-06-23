@@ -218,8 +218,6 @@ enum SwDateTimeSubType
 };
 
 
-extern sal_uInt16 aTypeTab[];
-
 /// General tools.
 String  GetResult(double nVal, sal_uInt32 nNumFmt, sal_uInt16 nLang = LANGUAGE_SYSTEM);
 void    SetErrorStr(const String& rStr);
