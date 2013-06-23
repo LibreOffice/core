@@ -912,7 +912,7 @@ namespace frm
                             aBoundValue.fill( *aBoundColumn + 1, m_nBoundColumnType, xCursorRow );
                         else
                             // -1 because getRow() is 1-indexed, but ListBox positions are 0-indexed
-                            aBoundValue = static_cast<sal_uInt16>(xListCursor->getRow()-1);
+                            aBoundValue = static_cast<sal_Int16>(xListCursor->getRow()-1);
                         aValueList.push_back( aBoundValue );
 
                         if ( bUseNULL && ( m_nNULLPos == -1 ) && aStr.isEmpty() )
