@@ -467,9 +467,7 @@ String SwValueFieldType::ExpandValue( const double& rVal,
 
     if( pFormatter->IsTextFormat( nFmt ) )
     {
-        String sValue;
-        DoubleToString(sValue, rVal, nFmtLng);
-        OUString sTempIn(sValue);
+        OUString sTempIn(DoubleToString(rVal, nFmtLng));
         pFormatter->GetOutputString(sTempIn, nFmt, sExpand, &pCol);
     }
     else
@@ -479,17 +477,19 @@ String SwValueFieldType::ExpandValue( const double& rVal,
     return sExpand;
 }
 
-void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
+String SwValueFieldType::DoubleToString(const double &rVal,
                                         sal_uInt32 nFmt) const
 {
     SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
     const SvNumberformat* pEntry = pFormatter->GetEntry(nFmt);
 
-    if (pEntry)
-        DoubleToString(rValue, rVal, pEntry->GetLanguage());
+    if (!pEntry)
+        return String();
+
+    return DoubleToString(rVal, pEntry->GetLanguage());
 }
 
-void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
+String SwValueFieldType::DoubleToString( const double &rVal,
                                         sal_uInt16 nLng ) const
 {
     SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
@@ -499,7 +499,7 @@ void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
         nLng = LANGUAGE_SYSTEM;
 
     pFormatter->ChangeIntl( nLng ); // get separator in the correct language
-    rValue = ::rtl::math::doubleToUString( rVal, rtl_math_StringFormat_F, 12,
+    return ::rtl::math::doubleToUString( rVal, rtl_math_StringFormat_F, 12,
                                     pFormatter->GetDecSep(), true );
 }
 
@@ -672,9 +672,8 @@ void SwFormulaField::SetExpandedFormula( const String& rStr )
         if (pFormatter->IsNumberFormat(rStr, nFmt, fTmpValue))
         {
             SwValueField::SetValue(fTmpValue);
-            sFormula.Erase();
 
-            ((SwValueFieldType *)GetTyp())->DoubleToString(sFormula, fTmpValue, nFmt);
+            sFormula = ((SwValueFieldType *)GetTyp())->DoubleToString(fTmpValue, nFmt);
             return;
         }
     }
@@ -694,10 +693,10 @@ String SwFormulaField::GetExpandedFormula() const
 
         if (pFormatter->IsTextFormat(nFmt))
         {
-            String sValue;
-            ((SwValueFieldType *)GetTyp())->DoubleToString(sValue, GetValue(), nFmt);
-            OUString sTempIn(sValue);
-            pFormatter->GetOutputString(sTempIn, nFmt, sFormattedValue, &pCol);
+            OUString sTempIn(((SwValueFieldType *)GetTyp())->DoubleToString(GetValue(), nFmt));
+            OUString sTempOut(sFormattedValue);
+            pFormatter->GetOutputString(sTempIn, nFmt, sTempOut, &pCol);
+            sFormattedValue = sTempOut;
         }
         else
         {

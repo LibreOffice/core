@@ -385,8 +385,8 @@ public:
     inline void     EnableFormat(sal_Bool bFormat = sal_True)   { bUseFormat = bFormat; }
 
     String          ExpandValue(const double& rVal, sal_uInt32 nFmt, sal_uInt16 nLng=0) const;
-    void            DoubleToString(String &rValue, const double &rVal, LanguageType eLng) const;
-    void            DoubleToString(String &rValue, const double &rVal, sal_uInt32 nFmt) const;
+    String          DoubleToString(const double &rVal, LanguageType eLng) const;
+    String          DoubleToString(const double &rVal, sal_uInt32 nFmt) const;
 };
 
 class SW_DLLPUBLIC SwValueField : public SwField
