@@ -21582,10 +21582,23 @@
       <attribute name="shadow" tokenid="rtf:FSHADOW"/>
       <attribute name="frame" tokenid="rtf:FFRAME"/>
     </resource>
+    <!-- This DOCX values will be mapped to match the 'DOC' values that are defined here: -->
+    <!-- http://msdn.microsoft.com/en-us/library/dd945712(v=office.12).aspx -->
     <resource name="ST_Shd" resource="List">
-      <value tokenid="0">nil</value>
       <value tokenid="0">clear</value>
       <value tokenid="1">solid</value>
+      <value tokenid="2">pct5</value>
+      <value tokenid="3">pct10</value>
+      <value tokenid="4">pct20</value>
+      <value tokenid="5">pct25</value>
+      <value tokenid="6">pct30</value>
+      <value tokenid="7">pct40</value>
+      <value tokenid="8">pct50</value>
+      <value tokenid="9">pct60</value>
+      <value tokenid="10">pct70</value>
+      <value tokenid="11">pct75</value>
+      <value tokenid="12">pct80</value>
+      <value tokenid="13">pct90</value>
       <value tokenid="14">horzStripe</value>
       <value tokenid="15">vertStripe</value>
       <value tokenid="17">reverseDiagStripe</value>
@@ -21598,29 +21611,18 @@
       <value tokenid="22">thinDiagStripe</value>
       <value tokenid="24">thinHorzCross</value>
       <value tokenid="25">thinDiagCross</value>
-      <value tokenid="2">pct5</value>
-      <value tokenid="3">pct10</value>
-      <value tokenid="27">pct12</value>
-      <value tokenid="28">pct15</value>
-      <value tokenid="4">pct20</value>
-      <value tokenid="5">pct25</value>
-      <value tokenid="6">pct30</value>
+      <value tokenid="37">pct12</value>
+      <value tokenid="38">pct15</value>
       <value tokenid="43">pct35</value>
       <value tokenid="44">pct37</value>
-      <value tokenid="7">pct40</value>
       <value tokenid="46">pct45</value>
-      <value tokenid="8">pct50</value>
       <value tokenid="49">pct55</value>
-      <value tokenid="9">pct60</value>
       <value tokenid="51">pct62</value>
       <value tokenid="52">pct65</value>
-      <value tokenid="10">pct70</value>
-      <value tokenid="11">pct75</value>
-      <value tokenid="12">pct80</value>
       <value tokenid="57">pct85</value>
       <value tokenid="58">pct87</value>
-      <value tokenid="13">pct90</value>
       <value tokenid="60">pct95</value>
+      <value tokenid="65535">nil</value>
     </resource>
     <resource name="CT_Shd" resource="Properties" tag="attribute">
       <attribute name="val" tokenid="ooxml:CT_Shd_val"/>

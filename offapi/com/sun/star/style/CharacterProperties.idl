@@ -118,6 +118,11 @@ published service CharacterProperties
     [optional, property] com::sun::star::util::Color CharBackColor;
 
 
+    /** This optional property contains the text shading value.
+     */
+    [optional, property] long CharShadingValue;
+
+
     /** This property determines if the text background color is set to
         transparent.
      */

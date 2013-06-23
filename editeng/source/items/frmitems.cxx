@@ -41,6 +41,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/frame/status/UpperLowerMarginScale.hpp>
+#include <com/sun/star/drawing/ShadingPattern.hpp>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <limits.h>
@@ -79,6 +80,7 @@
 using namespace ::editeng;
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::table::BorderLineStyle;
 
 
@@ -3322,12 +3324,13 @@ SvxBrushItem::SvxBrushItem( sal_uInt16 _nWhich ) :
 
     SfxPoolItem( _nWhich ),
 
-    aColor      ( COL_TRANSPARENT ),
-    pImpl       ( new SvxBrushItem_Impl( 0 ) ),
-    pStrLink    ( NULL ),
-    pStrFilter  ( NULL ),
-    eGraphicPos ( GPOS_NONE ),
-    bLoadAgain  ( sal_True )
+    aColor           ( COL_TRANSPARENT ),
+    nShadingValue    ( ShadingPattern::CLEAR ),
+    pImpl            ( new SvxBrushItem_Impl( 0 ) ),
+    pStrLink         ( NULL ),
+    pStrFilter       ( NULL ),
+    eGraphicPos      ( GPOS_NONE ),
+    bLoadAgain       ( sal_True )
 
 {
 }
@@ -3338,12 +3341,13 @@ SvxBrushItem::SvxBrushItem( const Color& rColor, sal_uInt16 _nWhich) :
 
     SfxPoolItem( _nWhich ),
 
-    aColor      ( rColor ),
-    pImpl       ( new SvxBrushItem_Impl( 0 ) ),
-    pStrLink    ( NULL ),
-    pStrFilter  ( NULL ),
-    eGraphicPos ( GPOS_NONE ),
-    bLoadAgain  ( sal_True )
+    aColor            ( rColor ),
+    nShadingValue     ( ShadingPattern::CLEAR ),
+    pImpl             ( new SvxBrushItem_Impl( 0 ) ),
+    pStrLink          ( NULL ),
+    pStrFilter        ( NULL ),
+    eGraphicPos       ( GPOS_NONE ),
+    bLoadAgain        ( sal_True )
 
 {
 }
@@ -3355,12 +3359,13 @@ SvxBrushItem::SvxBrushItem( const Graphic& rGraphic, SvxGraphicPosition ePos,
 
     SfxPoolItem( _nWhich ),
 
-    aColor      ( COL_TRANSPARENT ),
-    pImpl       ( new SvxBrushItem_Impl( new GraphicObject( rGraphic ) ) ),
-    pStrLink    ( NULL ),
-    pStrFilter  ( NULL ),
-    eGraphicPos ( ( GPOS_NONE != ePos ) ? ePos : GPOS_MM ),
-    bLoadAgain  ( sal_True )
+    aColor            ( COL_TRANSPARENT ),
+    nShadingValue     ( ShadingPattern::CLEAR ),
+    pImpl             ( new SvxBrushItem_Impl( new GraphicObject( rGraphic ) ) ),
+    pStrLink          ( NULL ),
+    pStrFilter        ( NULL ),
+    eGraphicPos       ( ( GPOS_NONE != ePos ) ? ePos : GPOS_MM ),
+    bLoadAgain        ( sal_True )
 
 {
     DBG_ASSERT( GPOS_NONE != ePos, "SvxBrushItem-Ctor with GPOS_NONE == ePos" );
@@ -3373,12 +3378,13 @@ SvxBrushItem::SvxBrushItem( const GraphicObject& rGraphicObj,
 
     SfxPoolItem( _nWhich ),
 
-    aColor      ( COL_TRANSPARENT ),
-    pImpl       ( new SvxBrushItem_Impl( new GraphicObject( rGraphicObj ) ) ),
-    pStrLink    ( NULL ),
-    pStrFilter  ( NULL ),
-    eGraphicPos ( ( GPOS_NONE != ePos ) ? ePos : GPOS_MM ),
-    bLoadAgain  ( sal_True )
+    aColor            ( COL_TRANSPARENT ),
+    nShadingValue     ( ShadingPattern::CLEAR ),
+    pImpl             ( new SvxBrushItem_Impl( new GraphicObject( rGraphicObj ) ) ),
+    pStrLink          ( NULL ),
+    pStrFilter        ( NULL ),
+    eGraphicPos       ( ( GPOS_NONE != ePos ) ? ePos : GPOS_MM ),
+    bLoadAgain        ( sal_True )
 
 {
     DBG_ASSERT( GPOS_NONE != ePos, "SvxBrushItem-Ctor with GPOS_NONE == ePos" );
@@ -3392,12 +3398,13 @@ SvxBrushItem::SvxBrushItem(
 
     SfxPoolItem( _nWhich ),
 
-    aColor      ( COL_TRANSPARENT ),
-    pImpl       ( new SvxBrushItem_Impl( NULL ) ),
-    pStrLink    ( new String( rLink ) ),
-    pStrFilter  ( new String( rFilter ) ),
-    eGraphicPos ( ( GPOS_NONE != ePos ) ? ePos : GPOS_MM ),
-    bLoadAgain  ( sal_True )
+    aColor            ( COL_TRANSPARENT ),
+    nShadingValue     ( ShadingPattern::CLEAR ),
+    pImpl             ( new SvxBrushItem_Impl( NULL ) ),
+    pStrLink          ( new String( rLink ) ),
+    pStrFilter        ( new String( rFilter ) ),
+    eGraphicPos       ( ( GPOS_NONE != ePos ) ? ePos : GPOS_MM ),
+    bLoadAgain        ( sal_True )
 
 {
     DBG_ASSERT( GPOS_NONE != ePos, "SvxBrushItem-Ctor with GPOS_NONE == ePos" );
@@ -3410,11 +3417,12 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
 
     SfxPoolItem( _nWhich ),
 
-    aColor      ( COL_TRANSPARENT ),
-    pImpl       ( new SvxBrushItem_Impl( NULL ) ),
-    pStrLink    ( NULL ),
-    pStrFilter  ( NULL ),
-    eGraphicPos ( GPOS_NONE )
+    aColor            ( COL_TRANSPARENT ),
+    nShadingValue     ( ShadingPattern::CLEAR ),
+    pImpl             ( new SvxBrushItem_Impl( NULL ) ),
+    pStrLink          ( NULL ),
+    pStrFilter        ( NULL ),
+    eGraphicPos       ( GPOS_NONE )
 
 {
     sal_Bool bTrans;
@@ -3525,12 +3533,12 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
 SvxBrushItem::SvxBrushItem( const SvxBrushItem& rItem ) :
 
     SfxPoolItem( rItem.Which() ),
-
-    pImpl       ( new SvxBrushItem_Impl( NULL ) ),
-    pStrLink    ( NULL ),
-    pStrFilter  ( NULL ),
-    eGraphicPos ( GPOS_NONE ),
-    bLoadAgain  ( sal_True )
+    nShadingValue     ( ShadingPattern::CLEAR ),
+    pImpl             ( new SvxBrushItem_Impl( NULL ) ),
+    pStrLink          ( NULL ),
+    pStrFilter        ( NULL ),
+    eGraphicPos       ( GPOS_NONE ),
+    bLoadAgain        ( sal_True )
 
 {
     *this = rItem;
@@ -3616,8 +3624,15 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= sFilter;
         }
         break;
-        case MID_GRAPHIC_TRANSPARENCY :
+
+        case MID_GRAPHIC_TRANSPARENCY:
             rVal <<= pImpl->nGraphicTransparency;
+        break;
+
+        case MID_SHADING_VALUE:
+        {
+            rVal <<= (sal_Int32)(nShadingValue);
+        }
         break;
     }
 
@@ -3732,6 +3747,16 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             }
         }
         break;
+
+        case MID_SHADING_VALUE:
+        {
+            sal_uInt32 nVal = 0;
+            if (!(rVal >>= nVal))
+                return false;
+
+            SetShadingValue( nVal );
+        }
+        break;
     }
 
     return true;
@@ -3800,6 +3825,9 @@ SvxBrushItem& SvxBrushItem::operator=( const SvxBrushItem& rItem )
             pImpl->pGraphicObject = new GraphicObject( *rItem.pImpl->pGraphicObject );
         }
     }
+
+    nShadingValue = rItem.nShadingValue;
+
     pImpl->nGraphicTransparency = rItem.pImpl->nGraphicTransparency;
     return *this;
 }
@@ -3839,6 +3867,11 @@ int SvxBrushItem::operator==( const SfxPoolItem& rAttr ) const
                     bEqual = pImpl->pGraphicObject &&
                              ( *pImpl->pGraphicObject == *rCmp.pImpl->pGraphicObject );
             }
+        }
+
+        if (bEqual)
+        {
+            bEqual = nShadingValue == rCmp.nShadingValue;
         }
     }
 
@@ -4049,6 +4082,11 @@ void SvxBrushItem::SetGraphicFilter( const String& rNew )
     }
 }
 
+void SvxBrushItem::SetShadingValue( const sal_uInt32 nNew )
+{
+    nShadingValue = nNew;
+}
+
 //static
 SvxGraphicPosition SvxBrushItem::WallpaperStyle2GraphicPos( WallpaperStyle eStyle )
 {
@@ -4097,11 +4135,12 @@ WallpaperStyle SvxBrushItem::GraphicPos2WallpaperStyle( SvxGraphicPosition ePos 
 }
 
 SvxBrushItem::SvxBrushItem( const CntWallpaperItem& rItem, sal_uInt16 _nWhich ) :
-    SfxPoolItem( _nWhich ),
-    pImpl( new SvxBrushItem_Impl( 0 ) ),
-    pStrLink(0),
-    pStrFilter(0),
-    bLoadAgain( sal_True )
+    SfxPoolItem    ( _nWhich ),
+    nShadingValue  ( ShadingPattern::CLEAR ),
+    pImpl          ( new SvxBrushItem_Impl( 0 ) ),
+    pStrLink       ( 0),
+    pStrFilter     ( 0),
+    bLoadAgain     ( sal_True )
 {
     aColor = rItem.GetColor();
 

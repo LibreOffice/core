@@ -49,6 +49,7 @@ class SvxBrushItem_Impl;
 class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
 {
     Color               aColor;
+    sal_Int32           nShadingValue;
     SvxBrushItem_Impl*  pImpl;
     String*             pStrLink;
     String*             pStrFilter;
@@ -104,11 +105,13 @@ public:
 
     void                PurgeMedium() const;
 
+    sal_uInt32              GetShadingValue() const     { return nShadingValue; }
     const Graphic*          GetGraphic() const;
     const GraphicObject*    GetGraphicObject() const;
     const String*           GetGraphicLink() const      { return pStrLink; }
     const String*           GetGraphicFilter() const    { return pStrFilter; }
 
+    void                SetShadingValue( const sal_uInt32 nNew );
     void                SetGraphicPos( SvxGraphicPosition eNew );
     void                SetGraphic( const Graphic& rNew );
     void                SetGraphicObject( const GraphicObject& rNewObj );

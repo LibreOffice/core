@@ -21,6 +21,7 @@
 #include <doctok/resourceids.hxx>
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
+#include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <sal/macros.h>
 #include "dmapperLoggers.hxx"
 
@@ -29,13 +30,13 @@
 namespace writerfilter {
 namespace dmapper {
 
-using namespace ::com::sun::star;
+using namespace ::com::sun::star::drawing;
 using namespace ::writerfilter;
 
 
 CellColorHandler::CellColorHandler() :
 LoggedProperties(dmapper_logger, "CellColorHandler"),
-m_nShadowType( 0 ),
+m_nShadingPattern( ShadingPattern::CLEAR ),
 m_nColor( 0xffffffff ),
 m_nFillColor( 0xffffffff ),
     m_OutputFormat( Form )
@@ -48,6 +49,7 @@ CellColorHandler::~CellColorHandler()
 
 void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
 {
+    OUString stringValue = rVal.getString();
     sal_Int32 nIntValue = rVal.getInt();
     switch( rName )
     {
@@ -61,7 +63,7 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
         {
             //might be clear, pct5...90, some hatch types
             //TODO: The values need symbolic names!
-            m_nShadowType = nIntValue; //clear == 0, solid: 1, pct5: 2, pct50:8, pct95: x3c, horzStripe:0x0e, thinVertStripe: 0x15
+            m_nShadingPattern = nIntValue; //clear == 0, solid: 1, pct5: 2, pct50:8, pct95: x3c, horzStripe:0x0e, thinVertStripe: 0x15
         }
         break;
         case NS_ooxml::LN_CT_Shd_fill:
@@ -93,88 +95,89 @@ void CellColorHandler::lcl_sprm(Sprm & rSprm)
 TablePropertyMapPtr  CellColorHandler::getProperties()
 {
     TablePropertyMapPtr pPropertyMap(new TablePropertyMap);
-//code from binary word filter
+
+    // Code from binary word filter (the values are out of 1000)
     static const sal_Int32 eMSGrayScale[] =
     {
-        // Nul-Brush
-           0,   // 0
+        // Clear-Brush
+           0,   // 0    clear
         // Solid-Brush
-        1000,   // 1
-        // percent values
-          50,   // 2
-         100,   // 3
-         200,   // 4
-         250,   // 5
-         300,   // 6
-         400,   // 7
-         500,   // 8
-         600,   // 9
-         700,   // 10
-         750,   // 11
-         800,   // 12
-         900,   // 13
-         333, // 14 Dark Horizontal
-         333, // 15 Dark Vertical
-         333, // 16 Dark Forward Diagonal
-         333, // 17 Dark Backward Diagonal
-         333, // 18 Dark Cross
-         333, // 19 Dark Diagonal Cross
-         333, // 20 Horizontal
-         333, // 21 Vertical
-         333, // 22 Forward Diagonal
-         333, // 23 Backward Diagonal
-         333, // 24 Cross
-         333, // 25 Diagonal Cross
-         // some undefined values
-         500, // 26
-         500, // 27
-         500, // 28
-         500, // 29
-         500, // 30
-         500, // 31
-         500, // 32
-         500, // 33
-         500, // 34
-         // different shading types
-          25,   // 35
-          75,   // 36
-         125,   // 37
-         150,   // 38
-         175,   // 39
-         225,   // 40
-         275,   // 41
-         325,   // 42
-         350,   // 43
-         375,   // 44
-         425,   // 45
-         450,   // 46
-         475,   // 47
-         525,   // 48
-         550,   // 49
-         575,   // 50
-         625,   // 51
-         650,   // 52
-         675,   // 53
-         725,   // 54
-         775,   // 55
-         825,   // 56
-         850,   // 57
-         875,   // 58
-         925,   // 59
-         950,   // 60
-         975,   // 61
-         // und zu guter Letzt:
-         970
+        1000,   // 1    solid
+        // Percent values
+          50,   // 2    pct5
+         100,   // 3    pct10
+         200,   // 4    pct20
+         250,   // 5    pct25
+         300,   // 6    pct30
+         400,   // 7    pct40
+         500,   // 8    pct50
+         600,   // 9    pct60
+         700,   // 10   pct70
+         750,   // 11   pct75
+         800,   // 12   pct80
+         900,   // 13   pct90
+        // Special cases
+         333,   // 14   Dark Horizontal
+         333,   // 15   Dark Vertical
+         333,   // 16   Dark Forward Diagonal
+         333,   // 17   Dark Backward Diagonal
+         333,   // 18   Dark Cross
+         333,   // 19   Dark Diagonal Cross
+         333,   // 20   Horizontal
+         333,   // 21   Vertical
+         333,   // 22   Forward Diagonal
+         333,   // 23   Backward Diagonal
+         333,   // 24   Cross
+         333,   // 25   Diagonal Cross
+        // Undefined values in DOC spec-sheet
+         500,   // 26
+         500,   // 27
+         500,   // 28
+         500,   // 29
+         500,   // 30
+         500,   // 31
+         500,   // 32
+         500,   // 33
+         500,   // 34
+        // Different shading types
+          25,   // 35   [available in DOC, not available in DOCX]
+          75,   // 36   [available in DOC, not available in DOCX]
+         125,   // 37   pct12
+         150,   // 38   pct15
+         175,   // 39   [available in DOC, not available in DOCX]
+         225,   // 40   [available in DOC, not available in DOCX]
+         275,   // 41   [available in DOC, not available in DOCX]
+         325,   // 42   [available in DOC, not available in DOCX]
+         350,   // 43   pct35
+         375,   // 44   pct37
+         425,   // 45   [available in DOC, not available in DOCX]
+         450,   // 46   pct45
+         475,   // 47   [available in DOC, not available in DOCX]
+         525,   // 48   [available in DOC, not available in DOCX]
+         550,   // 49   pct55
+         575,   // 50   [available in DOC, not available in DOCX]
+         625,   // 51   pct62
+         650,   // 52   pct65
+         675,   // 53   [available in DOC, not available in DOCX]
+         725,   // 54   [available in DOC, not available in DOCX]
+         775,   // 55   [available in DOC, not available in DOCX]
+         825,   // 56   [available in DOC, not available in DOCX]
+         850,   // 57   pct85
+         875,   // 58   pct87
+         925,   // 59   [available in DOC, not available in DOCX]
+         950,   // 60   pct95
+         975    // 61   [available in DOC, not available in DOCX]
     };// 62
-    if( m_nShadowType >= (sal_Int32)SAL_N_ELEMENTS( eMSGrayScale ) )
-        m_nShadowType = 0;
 
-    sal_Int32 nWW8BrushStyle = eMSGrayScale[m_nShadowType];
+    if( m_nShadingPattern >= (sal_Int32)SAL_N_ELEMENTS( eMSGrayScale ) )
+        m_nShadingPattern = 0;
+
+    sal_Int32 nWW8BrushStyle = eMSGrayScale[m_nShadingPattern];
     sal_Int32 nApplyColor = 0;
     if( !nWW8BrushStyle )
     {
-        // Null-Brush
-            nApplyColor = m_nFillColor;
+        // Clear-Brush
+        nApplyColor = m_nFillColor;
     }
     else
     {
@@ -189,6 +192,79 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
         nBlue += (nBack & 0xff) * (1000L - nWW8BrushStyle);
 
         nApplyColor = ( (nRed/1000) << 0x10 ) + ((nGreen/1000) << 8) + nBlue/1000;
+    }
+
+    // Check if it is a 'Character'
+    if (m_OutputFormat == Character)
+    {
+        static sal_Int32 aWWShadingPatterns[ ] =
+        {
+            ShadingPattern::CLEAR,
+            ShadingPattern::SOLID,
+            ShadingPattern::PCT5,
+            ShadingPattern::PCT10,
+            ShadingPattern::PCT20,
+            ShadingPattern::PCT25,
+            ShadingPattern::PCT30,
+            ShadingPattern::PCT40,
+            ShadingPattern::PCT50,
+            ShadingPattern::PCT60,
+            ShadingPattern::PCT70,
+            ShadingPattern::PCT75,
+            ShadingPattern::PCT80,
+            ShadingPattern::PCT90,
+            ShadingPattern::HORZ_STRIPE,
+            ShadingPattern::VERT_STRIPE,
+            ShadingPattern::REVERSE_DIAG_STRIPE,
+            ShadingPattern::DIAG_STRIPE,
+            ShadingPattern::HORZ_CROSS,
+            ShadingPattern::DIAG_CROSS,
+            ShadingPattern::THIN_HORZ_STRIPE,
+            ShadingPattern::THIN_VERT_STRIPE,
+            ShadingPattern::THIN_REVERSE_DIAG_STRIPE,
+            ShadingPattern::THIN_DIAG_STRIPE,
+            ShadingPattern::THIN_HORZ_CROSS,
+            ShadingPattern::THIN_DIAG_CROSS,
+            ShadingPattern::UNUSED_1,
+            ShadingPattern::UNUSED_2,
+            ShadingPattern::UNUSED_3,
+            ShadingPattern::UNUSED_4,
+            ShadingPattern::UNUSED_5,
+            ShadingPattern::UNUSED_6,
+            ShadingPattern::UNUSED_7,
+            ShadingPattern::UNUSED_8,
+            ShadingPattern::UNUSED_9,
+            ShadingPattern::PCT2,
+            ShadingPattern::PCT7,
+            ShadingPattern::PCT12,
+            ShadingPattern::PCT15,
+            ShadingPattern::PCT17,
+            ShadingPattern::PCT22,
+            ShadingPattern::PCT27,
+            ShadingPattern::PCT32,
+            ShadingPattern::PCT35,
+            ShadingPattern::PCT37,
+            ShadingPattern::PCT42,
+            ShadingPattern::PCT45,
+            ShadingPattern::PCT47,
+            ShadingPattern::PCT52,
+            ShadingPattern::PCT55,
+            ShadingPattern::PCT57,
+            ShadingPattern::PCT62,
+            ShadingPattern::PCT65,
+            ShadingPattern::PCT67,
+            ShadingPattern::PCT72,
+            ShadingPattern::PCT77,
+            ShadingPattern::PCT82,
+            ShadingPattern::PCT85,
+            ShadingPattern::PCT87,
+            ShadingPattern::PCT92,
+            ShadingPattern::PCT95,
+            ShadingPattern::PCT97
+        };
+
+        // Write the shading pattern property
+        pPropertyMap->Insert(PROP_CHAR_SHADING_VALUE, false, uno::makeAny( aWWShadingPatterns[m_nShadingPattern] ));
     }
 
     pPropertyMap->Insert( m_OutputFormat == Form ? PROP_BACK_COLOR

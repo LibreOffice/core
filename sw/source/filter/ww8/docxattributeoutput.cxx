@@ -103,6 +103,7 @@
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/drawing/ShadingPattern.hpp>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
@@ -117,6 +118,7 @@ using namespace nsSwDocInfoSubType;
 using namespace nsFieldFlags;
 using namespace sw::util;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::drawing;
 
 class FFDataWriterHelper
 {
@@ -3713,12 +3715,29 @@ void DocxAttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
         m_pSerializer->singleElementNS(XML_w, XML_effect, FSNS( XML_w, XML_val ), "none", FSEND );
 }
 
+#define MSWORD_CH_SHADING_CLR 0xD8D8D8 // This color is the same color as the ms-word's character shading color.
+#define MSWORD_CH_SHADING_FILL "FFFFFF" // The attribute w:fill of w:shd, for MS-Word's character shading,
+#define MSWORD_CH_SHADING_COLOR "auto" // The attribute w:color of w:shd, for MS-Word's character shading,
+#define MSWORD_CH_SHADING_VAL "pct15" // The attribute w:value of w:shd, for MS-Word's character shading,
+
 void DocxAttributeOutput::CharBackground( const SvxBrushItem& rBrush )
 {
-    m_pSerializer->singleElementNS( XML_w, XML_shd,
+    // Check if the brush shading pattern is 'PCT15'. If so - write it back to the DOCX
+    if (rBrush.GetShadingValue() == ShadingPattern::PCT15)
+    {
+        m_pSerializer->singleElementNS( XML_w, XML_shd,
+            FSNS( XML_w, XML_val ), MSWORD_CH_SHADING_VAL,
+            FSNS( XML_w, XML_color ), MSWORD_CH_SHADING_COLOR,
+            FSNS( XML_w, XML_fill ), MSWORD_CH_SHADING_FILL,
+            FSEND );
+    }
+    else
+    {
+        m_pSerializer->singleElementNS( XML_w, XML_shd,
             FSNS( XML_w, XML_fill ), msfilter::util::ConvertColor( rBrush.GetColor() ).getStr(),
             FSNS( XML_w, XML_val ), "clear",
             FSEND );
+    }
 }
 
 void DocxAttributeOutput::CharFontCJK( const SvxFontItem& rFont )

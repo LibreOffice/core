@@ -1,0 +1,225 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_drawing_ShadingPattern_idl__
+#define __com_sun_star_drawing_ShadingPattern_idl__
+
+
+
+module com {  module sun {  module star {  module drawing {
+
+/** The ShadingPattern determines the background color pattern against
+    which characters and graphics are displayed, typically in tables.
+    The color can be no color or it can be a specific color with
+    a transparency or pattern value.
+ */
+constants ShadingPattern
+{
+    /* Clear */
+    const long CLEAR     = 0x0000;
+
+    /* Solid */
+    const long SOLID     = 0x0001;
+
+    /* 5% - pct5 */
+    const long PCT5      = 0x0002;
+
+    /* 10% - pct10 */
+    const long PCT10     = 0x0003;
+
+    /* 20% - pct20 */
+    const long PCT20     = 0x0004;
+
+    /* 25% - pct25 */
+    const long PCT25     = 0x0005;
+
+    /* 30% - pct30 */
+    const long PCT30     = 0x0006;
+
+    /* 40% - pct40 */
+    const long PCT40     = 0x0007;
+
+    /* 50% - pct50 */
+    const long PCT50     = 0x0008;
+
+    /* 60% - pct60 */
+    const long PCT60     = 0x0009;
+
+    /* 70% - pct70 */
+    const long PCT70     = 0x000A;
+
+    /* 75% - pct75 */
+    const long PCT75     = 0x000B;
+
+    /* 80% - pct80 */
+    const long PCT80     = 0x000C;
+
+    /* 90% - pct90 */
+    const long PCT90     = 0x000D;
+
+
+
+    /* Horizontal Stripe */
+    const long HORZ_STRIPE               = 0x000E;
+
+    /* Vertical Stripe */
+    const long VERT_STRIPE               = 0x000F;
+
+    /* Reverse Diagonal Stripe */
+    const long REVERSE_DIAG_STRIPE       = 0x0010;
+
+    /* Diagonal Stripe */
+    const long DIAG_STRIPE               = 0x0011;
+
+    /* Horizontal Cross */
+    const long HORZ_CROSS                = 0x0012;
+
+    /* Diagonal Cross */
+    const long DIAG_CROSS                = 0x0013;
+
+    /* Thin Horizontal Stripe */
+    const long THIN_HORZ_STRIPE          = 0x0014;
+
+    /* Thin Vertical Stripe */
+    const long THIN_VERT_STRIPE          = 0x0015;
+
+    /* Thin Reverse Diagonal Stripe */
+    const long THIN_REVERSE_DIAG_STRIPE  = 0x0016;
+
+    /* Thin Diagonal Stripe */
+    const long THIN_DIAG_STRIPE          = 0x0017;
+
+    /* Thin Horizontal Cross */
+    const long THIN_HORZ_CROSS           = 0x0018;
+
+    /* Thin Diagonal Cross */
+    const long THIN_DIAG_CROSS           = 0x0019;
+
+
+
+    /* Unused 1 */
+    const long UNUSED_1  = 0x001A;
+
+    /* Unused 2 */
+    const long UNUSED_2  = 0x001B;
+
+    /* Unused 3 */
+    const long UNUSED_3  = 0x001C;
+
+    /* Unused 4 */
+    const long UNUSED_4  = 0x001D;
+
+    /* Unused 5 */
+    const long UNUSED_5  = 0x001E;
+
+    /* Unused 6 */
+    const long UNUSED_6  = 0x001F;
+
+    /* Unused 7 */
+    const long UNUSED_7  = 0x0020;
+
+    /* Unused 8 */
+    const long UNUSED_8  = 0x0021;
+
+    /* Unused 9 */
+    const long UNUSED_9  = 0x0022;
+
+
+
+    /* 2.5% */
+    const long PCT2  = 0x0023;
+
+    /* 7.5% */
+    const long PCT7  = 0x0024;
+
+    /* 12.5% - pct12 */
+    const long PCT12 = 0x0025;
+
+    /* 15% - pct15 */
+    const long PCT15 = 0x0026;
+
+    /* 17.5% */
+    const long PCT17 = 0x0027;
+
+    /* 22.5% */
+    const long PCT22 = 0x0028;
+
+    /* 27.5% */
+    const long PCT27 = 0x0029;
+
+    /* 32.5% */
+    const long PCT32 = 0x002A;
+
+    /* 35% - pct35 */
+    const long PCT35 = 0x002B;
+
+    /* 37.5% - pct37 */
+    const long PCT37 = 0x002C;
+
+    /* 42.5% */
+    const long PCT42 = 0x002D;
+
+    /* 45% - pct45 */
+    const long PCT45 = 0x002E;
+
+    /* 47.5% */
+    const long PCT47 = 0x002F;
+
+    /* 52.5% */
+    const long PCT52 = 0x0030;
+
+    /* 55% - pct55 */
+    const long PCT55 = 0x0031;
+
+    /* 57.5% */
+    const long PCT57 = 0x0032;
+
+    /* 62.5% - pct62 */
+    const long PCT62 = 0x0033;
+
+    /* 65% - pct65 */
+    const long PCT65 = 0x0034;
+
+    /* 67.5% */
+    const long PCT67 = 0x0035;
+
+    /* 72.5% */
+    const long PCT72 = 0x0036;
+
+    /* 77.5% */
+    const long PCT77 = 0x0037;
+
+    /* 82.5% */
+    const long PCT82 = 0x0038;
+
+    /* 85% - pct85 */
+    const long PCT85 = 0x0039;
+
+    /* 87.5% - pct87 */
+    const long PCT87 = 0x003A;
+
+    /* 92.5% */
+    const long PCT92 = 0x003B;
+
+    /* 95% - pct95 */
+    const long PCT95 = 0x003C;
+
+    /* 97.5% */
+    const long PCT97 = 0x003D;
+
+    /* Nil */
+    const long NIL = 0xFFFF;
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
