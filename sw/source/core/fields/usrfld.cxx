@@ -264,8 +264,7 @@ void SwUserFieldType::SetContent( const String& rStr, sal_uInt32 nFmt )
             if (pFormatter->IsNumberFormat(rStr, nFmt, fValue))
             {
                 SetValue(fValue);
-                aContent.Erase();
-                DoubleToString(aContent, fValue, nFmt);
+                aContent = DoubleToString(fValue, nFmt);
             }
         }
 
@@ -313,7 +312,7 @@ bool SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             // The following line is in fact wrong, since the language is unknown (is part of the
             // field) and, thus, aContent should also belong to the field. Each field can have a
             // differnt language, but the same content with just different formatting.
-            DoubleToString(aContent, nValue, (sal_uInt16)LANGUAGE_SYSTEM);
+            aContent = DoubleToString(nValue, static_cast<sal_uInt32>(LANGUAGE_SYSTEM));
         }
         break;
     case FIELD_PROP_PAR2:
