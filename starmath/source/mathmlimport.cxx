@@ -1418,6 +1418,8 @@ public:
 void SmXMLSpaceContext_Impl::StartElement(
     const uno::Reference<xml::sax::XAttributeList > & /*xAttrList*/ )
 {
+    // There is not any syntax in Math to specify blank nodes of arbitrary
+    // size. Hence we always interpret an <mspace> as a large gap "~".
     SmToken aToken;
     aToken.cMathChar = '\0';
     aToken.eType = TBLANK;

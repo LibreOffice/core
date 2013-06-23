@@ -882,15 +882,28 @@ void SmXMLExport::ExportText(const SmNode *pNode, int /*nLevel*/)
     delete pText;
 }
 
-void SmXMLExport::ExportBlank(const SmNode * /*pNode*/, int /*nLevel*/)
+void SmXMLExport::ExportBlank(const SmNode *pNode, int /*nLevel*/)
 {
-    //!! exports an empty <mi> tag since for example "~_~" is allowed in
+    const SmBlankNode *pTemp = static_cast<const SmBlankNode *>(pNode);
+    //!! exports an <mspace> element. Note that for example "~_~" is allowed in
     //!! Math (so it has no sense at all) but must not result in an empty
     //!! <msub> tag in MathML !!
 
+    if (pTemp->GetBlankNum() != 0)
+    {
+        // Attach a width attribute. We choose the (somewhat arbitrary) values
+        // ".5em" for a small gap '`' and "2em" for a large gap '~'.
+        // (see SmBlankNode::IncreaseBy for how pTemp->nNum is set).
+        OUStringBuffer sStrBuf;
+        ::sax::Converter::convertDouble(sStrBuf, pTemp->GetBlankNum() * .5);
+        sStrBuf.append(OUString("em"));
+        AddAttribute(XML_NAMESPACE_MATH, XML_WIDTH, sStrBuf.getStr());
+    }
+
     SvXMLElementExport *pText;
 
-    pText = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MI, sal_True, sal_False);
+    pText = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MSPACE,
+        sal_True, sal_False);
 
     GetDocHandler()->characters( OUString() );
     delete pText;
