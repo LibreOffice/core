@@ -3651,31 +3651,45 @@ void DocxAttributeOutput::CharShadow( const SvxShadowedItem& rShadow )
 
 void DocxAttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
 {
-    const char *pUnderline;
+    const char *sUnderlineValue;
 
     switch ( rUnderline.GetLineStyle() )
     {
-        case UNDERLINE_SINGLE:         pUnderline = "single";          break;
-        case UNDERLINE_BOLD:           pUnderline = "thick";           break;
-        case UNDERLINE_DOUBLE:         pUnderline = "double";          break;
-        case UNDERLINE_DOTTED:         pUnderline = "dotted";          break;
-        case UNDERLINE_DASH:           pUnderline = "dash";            break;
-        case UNDERLINE_DASHDOT:        pUnderline = "dotDash";         break;
-        case UNDERLINE_DASHDOTDOT:     pUnderline = "dotDotDash";      break;
-        case UNDERLINE_WAVE:           pUnderline = "wave";            break;
-        case UNDERLINE_BOLDDOTTED:     pUnderline = "dottedHeavy";     break;
-        case UNDERLINE_BOLDDASH:       pUnderline = "dashedHeavy";     break;
-        case UNDERLINE_LONGDASH:       pUnderline = "dashLongHeavy";   break;
-        case UNDERLINE_BOLDLONGDASH:   pUnderline = "dashLongHeavy";   break;
-        case UNDERLINE_BOLDDASHDOT:    pUnderline = "dashDotHeavy";    break;
-        case UNDERLINE_BOLDDASHDOTDOT: pUnderline = "dashDotDotHeavy"; break;
-        case UNDERLINE_BOLDWAVE:       pUnderline = "wavyHeavy";       break;
-        case UNDERLINE_DOUBLEWAVE:     pUnderline = "wavyDouble";      break;
+        case UNDERLINE_SINGLE:         sUnderlineValue = "single";          break;
+        case UNDERLINE_BOLD:           sUnderlineValue = "thick";           break;
+        case UNDERLINE_DOUBLE:         sUnderlineValue = "double";          break;
+        case UNDERLINE_DOTTED:         sUnderlineValue = "dotted";          break;
+        case UNDERLINE_DASH:           sUnderlineValue = "dash";            break;
+        case UNDERLINE_DASHDOT:        sUnderlineValue = "dotDash";         break;
+        case UNDERLINE_DASHDOTDOT:     sUnderlineValue = "dotDotDash";      break;
+        case UNDERLINE_WAVE:           sUnderlineValue = "wave";            break;
+        case UNDERLINE_BOLDDOTTED:     sUnderlineValue = "dottedHeavy";     break;
+        case UNDERLINE_BOLDDASH:       sUnderlineValue = "dashedHeavy";     break;
+        case UNDERLINE_LONGDASH:       sUnderlineValue = "dashLongHeavy";   break;
+        case UNDERLINE_BOLDLONGDASH:   sUnderlineValue = "dashLongHeavy";   break;
+        case UNDERLINE_BOLDDASHDOT:    sUnderlineValue = "dashDotHeavy";    break;
+        case UNDERLINE_BOLDDASHDOTDOT: sUnderlineValue = "dashDotDotHeavy"; break;
+        case UNDERLINE_BOLDWAVE:       sUnderlineValue = "wavyHeavy";       break;
+        case UNDERLINE_DOUBLEWAVE:     sUnderlineValue = "wavyDouble";      break;
         case UNDERLINE_NONE:           // fall through
-        default:                       pUnderline = "none";            break;
+        default:                       sUnderlineValue = "none";            break;
     }
 
-    m_pSerializer->singleElementNS( XML_w, XML_u, FSNS( XML_w, XML_val ), pUnderline, FSEND );
+    Color aUnderlineColor = rUnderline.GetColor();
+    bool  bUnderlineHasColor = aUnderlineColor.GetTransparency() == 0;
+    if (bUnderlineHasColor)
+    {
+        // Underline has a color
+        m_pSerializer->singleElementNS( XML_w, XML_u,
+                                        FSNS( XML_w, XML_val ), sUnderlineValue,
+                                        FSNS( XML_w, XML_color ), msfilter::util::ConvertColor( aUnderlineColor ).getStr(),
+                                    FSEND );
+    }
+    else
+    {
+        // Underline has no color
+        m_pSerializer->singleElementNS( XML_w, XML_u, FSNS( XML_w, XML_val ), sUnderlineValue, FSEND );
+    }
 }
 
 void DocxAttributeOutput::CharWeight( const SvxWeightItem& rWeight )
