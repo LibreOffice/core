@@ -1837,6 +1837,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
     {
         pTOXNd->InsertItem((*i)->aINetFmt, (*i)->nStartTextPos,
                            (*i)->nEndTextPos);
+        delete (*i);
     }
 }
 
