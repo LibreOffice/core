@@ -274,18 +274,19 @@ namespace pcr
     {
         if( m_pTheParent )
         {
-            String aText = m_aFtTitle.GetText();
-            while( m_pTheParent->GetTextWidth( aText ) < m_nNameWidth )
-                        aText.AppendAscii("...........");
+            OUStringBuffer aText( m_aFtTitle.GetText() );
 
-             // for Issue 69452
-             if (Application::GetSettings().GetLayoutRTL())
-             {
-                 sal_Unicode cRTL_mark = 0x200F;
-                 aText.Append(cRTL_mark);
-             }
+            while( m_pTheParent->GetTextWidth( aText.toString() ) < m_nNameWidth )
+                        aText.append("...........");
 
-             m_aFtTitle.SetText(aText);
+            // for Issue 69452
+            if (Application::GetSettings().GetLayoutRTL())
+            {
+                sal_Unicode cRTL_mark = 0x200F;
+                aText.append( OUString(cRTL_mark) );
+            }
+
+            m_aFtTitle.SetText( aText.makeStringAndClear() );
         }
     }
 
