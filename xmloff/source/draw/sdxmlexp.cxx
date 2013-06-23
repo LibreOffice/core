@@ -2915,15 +2915,16 @@ XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
         Reference< lang::XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
         if( xFac.is() )
         {
-            Reference<beans::XPropertySet> const xProps( xFac->createInstance(
-                         "com.sun.star.document.Settings"), UNO_QUERY );
-            if (xProps.is())
+            try
             {
-                try // clipboard document doesn't have shell so throws here
-                {
-                    xProps->getPropertyValue("EmbedFonts") >>= bEmbedFonts;
-                }
-                catch (uno::Exception const&) { }
+                Reference<beans::XPropertySet> const xProps( xFac->createInstance(
+                             "com.sun.star.document.Settings"), UNO_QUERY_THROW );
+                xProps->getPropertyValue("EmbedFonts") >>= bEmbedFonts;
+            }
+            catch (...)
+            {
+                // clipboard document doesn't have shell so throws from getPropertyValue
+                // gallery elements may not support com.sun.star.document.Settings so throws from createInstance
             }
         }
     }
