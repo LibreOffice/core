@@ -88,7 +88,6 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/awt/XMenuExtended.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/grid/GridInvalidDataException.hpp>
