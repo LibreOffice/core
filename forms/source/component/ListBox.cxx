@@ -843,7 +843,7 @@ namespace frm
         ValueList aDisplayList, aValueList;
         sal_Bool bUseNULL = hasField() && !isRequired();
 
-        // empty BoundColumn is treated as BoundColumn=0,
+        // empty BoundColumn is treated as BoundColumn==0,
         if(!aBoundColumn)
             aBoundColumn = 0;
 
