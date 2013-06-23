@@ -993,10 +993,7 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
         }
         else if (!rtl::math::isNan(fValue))
         {
-            if (mbEditEngineHasText)
-                pFCell->SetHybridValueString(fValue, mpEditEngine->GetText(0));
-            else
-                pFCell->SetHybridDouble(fValue);
+            pFCell->SetHybridDouble(fValue);
             pFCell->ResetDirty();
         }
         pFCell->StartListeningTo(rXMLImport.GetDocument());
