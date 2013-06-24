@@ -250,6 +250,7 @@ EditorWindow::EditorWindow (Window* pParent, ModulWindow* pModulWindow) :
     s[0] = OUString( "FontHeight" );
     s[1] = OUString( "FontName" );
     n->addPropertiesChangeListener(s, listener_.get());
+    aListBox = new CodeCompleteListBox(this);
 }
 
 
@@ -271,6 +272,7 @@ EditorWindow::~EditorWindow()
         EndListening( *pEditEngine );
         pEditEngine->RemoveView(pEditView.get());
     }
+    delete aListBox;
 }
 
 OUString EditorWindow::GetWordAtCursor()
@@ -513,13 +515,27 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
             {
                 Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
                 Reference< reflection::XIdlReflection > xRefl( xFactory->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY_THROW );
-                Reference< reflection::XIdlClass > xClass = xRefl->forName(aCodeCompleteCache[j].sVarType);
-                if( !xRefl.is() )
-                    break;
-                Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
-                for(sal_Int32 i = 0; i < aMethods.getLength(); ++i)
+                if( xRefl.is() )
                 {
-                    SAL_WARN("method information",aMethods[i]->getName());
+                    Reference< reflection::XIdlClass > xClass = xRefl->forName(aCodeCompleteCache[j].sVarType);
+                    if( xClass != NULL  )
+                    {
+                        Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
+                        aListBox->Clear();
+                        for(sal_Int32 i = 0; i < aMethods.getLength(); ++i)
+                        {
+                            aListBox->InsertEntry( OUString(aMethods[i]->getName()) );
+                            SAL_WARN("method information", aMethods[i]->getName());
+                        }
+                        aListBox->EnableAutoSize(true);
+                        aListBox->Show();
+                        aListBox->GetFocus();
+                        aListBox->ToggleDropDown();
+                    }
+                    else
+                    {
+                        SAL_WARN("Type does not exist", aCodeCompleteCache[j].sVarType);
+                    }
                 }
                 break;
             }
@@ -2291,6 +2307,24 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
     setBasicWatchMode( false );
 }
 
+CodeCompleteListBox::CodeCompleteListBox(EditorWindow* pPar)
+: ListBox(pPar, WB_DROPDOWN),
+pParent(pPar)
+{
+    SetSelectHdl( LINK(this, CodeCompleteListBox, ImplSelectHdl) );
+}
+
+CodeCompleteListBox::~CodeCompleteListBox()
+{
+}
+
+IMPL_LINK_NOARG(CodeCompleteListBox, ImplSelectHdl)
+{
+    TextSelection aSel = this->pParent->GetEditView()->GetSelection();
+    pParent->GetEditEngine()->ReplaceText(aSel, (OUString) GetEntry(GetSelectEntryPos()) );
+    Clear();
+    return 0;
+}
 
 } // namespace basctl
 
