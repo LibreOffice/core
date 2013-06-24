@@ -111,7 +111,7 @@ void ServerFontLayout::setNeedFallback(ImplLayoutArgs& rArgs, sal_Int32 nCharPos
     OUString aRun(rArgs.mpStr);
     sal_Int32 nDone;
     sal_Int32 nGraphemeStartPos =
-        mxBreak->previousCharacters(aRun, nCharPos, aLocale,
+        mxBreak->previousCharacters(aRun, nCharPos+1, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
     sal_Int32 nGraphemeEndPos =
         mxBreak->nextCharacters(aRun, nCharPos, aLocale,
