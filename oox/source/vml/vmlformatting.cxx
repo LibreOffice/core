@@ -338,7 +338,7 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                     rFlagLists.back().push_back( PolygonFlags_CONTROL );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
-                    nParamCount = 2 * 6;
+                    nParamCount = 6;
                     break;
 
                 case BEZIER_ABS: // 6* params -> param count reset
