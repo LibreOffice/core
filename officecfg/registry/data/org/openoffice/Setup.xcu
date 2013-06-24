@@ -952,55 +952,12 @@
                 <value oor:separator=",">OpenOffice.org 3=openoffice.org/3</value>
             </prop>
             <node oor:name="MigrationSteps">
-                <node oor:name="Datasources" oor:op="replace">
-                    <prop oor:name="IncludedFiles">
-                        <value>.*/database/biblio/biblio\.dbf</value>
-                    </prop>
-                    <prop oor:name="ExcludedFiles">
-                    </prop>
-                    <prop oor:name="IncludedNodes">
-                        <value>/org.openoffice.Office.DataAccess</value>
-                    </prop>
-                    <prop oor:name="ExcludedNodes">
-                        <value>
-                            <it>/org.openoffice.Office.DataAccess/Bibliography</it>
-                            <it>/org.openoffice.Office.DataAccess/ConnectionPool</it>
-                            <it>/org.openoffice.Office.DataAccess/DataSources</it>
-                            <it>/org.openoffice.Office.DataAccess/DriverManager</it>
-                        </value>
-                    </prop>
-                </node>
-                <node oor:name="Deployment" oor:op="replace">
-                    <prop oor:name="MigrationService">
-                        <value>com.sun.star.migration.Extensions</value>
-                    </prop>
-                    <prop oor:name="ExcludedExtensions">
-                        <value>
-                            <!-- presentation minimizer is integrated since AOO 4.0 -->
-                            <it>com.sun.star.PresentationMinimizer-*</it>
-                            <!-- presentation screen is integrated since AOO 4.0 -->
-                            <it>com.sun.PresenterScreen-*</it>
-                        </value>
-                    </prop>
-                </node>
-                <node oor:name="Inet" oor:op="replace">
-                    <prop oor:name="IncludedNodes">
-                        <value>/org.openoffice.Inet</value>
-                    </prop>
-                </node>
-                <node oor:name="Basic" oor:op="replace">
-                    <prop oor:name="MigrationService">
-                        <value>com.sun.star.migration.Basic</value>
-                    </prop>
-                </node>
-                <node oor:name="UserProfile" oor:op="replace">
-                    <prop oor:name="IncludedNodes">
-                        <value>/org.openoffice.UserProfile</value>
-                    </prop>
-                </node>
-                <node oor:name="Common" oor:op="replace">
+                <node oor:name="Files" oor:op="replace">
                     <prop oor:name="IncludedFiles">
                         <value>
+                            <!--Datasources-->
+                            <it>.*/database/biblio/biblio\.dbf</it>
+                            <!--Common-->
                             <it>.*/autotext/.*</it>
                             <it>.*/autocorr/.*</it>
                             <it>.*/config/.*\.so[bcdegh]</it>
@@ -1010,8 +967,19 @@
                             <it>.*/template/.*</it>
                         </value>
                     </prop>
+                    <prop oor:name="ExcludedFiles">
+                    </prop>
+                </node>
+                <node oor:name="Configuration" oor:op="replace">
                     <prop oor:name="IncludedNodes">
                         <value>
+                            <!--Datasources-->
+                            <it>/org.openoffice.Office.DataAccess</it>
+                            <!--Inet-->
+                            <it>/org.openoffice.Inet</it>
+                            <!--UserProfile-->
+                            <it>/org.openoffice.UserProfile</it>
+                            <!--Common-->
                             <it>/org.openoffice.Office.Compatibility</it>
                             <it>/org.openoffice.Office.Custom</it>
                             <it>/org.openoffice.Office.Embedding</it>
@@ -1051,70 +1019,65 @@
                             <it>/org.openoffice.Office.Common/View/Localization</it>
                             <it>/org.openoffice.Office.Common/View/Menu</it>
                             <it>/org.openoffice.Office.Common/_3D_Engine</it>
-                        </value>
-                    </prop>
-                    <prop oor:name="ExcludedNodes">
-                        <value>
-                            <it>/org.openoffice.Office.Common/_3D_Engine/OpenGL</it>
-                            <it>/org.openoffice.Office.Common/Help/Registration</it>
-                        </value>
-                    </prop>
-                </node>
-                <node oor:name="Calc" oor:op="replace">
-                    <prop oor:name="IncludedNodes">
-                        <value>/org.openoffice.Office.Calc</value>
-                    </prop>
-                </node>
-                <node oor:name="Chart" oor:op="replace">
-                    <prop oor:name="IncludedNodes">
-                        <value>/org.openoffice.Office.Chart</value>
-                    </prop>
-                </node>
-                <node oor:name="Draw" oor:op="replace">
-                    <prop oor:name="IncludedNodes">
-                        <value>/org.openoffice.Office.Draw</value>
-                    </prop>
-                </node>
-                <node oor:name="Impress" oor:op="replace">
-                    <prop oor:name="IncludedNodes">
-                        <value>/org.openoffice.Office.Impress</value>
-                    </prop>
-                </node>
-                <node oor:name="Labels" oor:op="replace">
-                    <prop oor:name="IncludedNodes">
-                        <value>/org.openoffice.Office.Labels</value>
-                    </prop>
-                </node>
-                <node oor:name="Linguistic" oor:op="replace">
-                    <prop oor:name="MigrationService">
-                        <value>com.sun.star.migration.Wordbooks</value>
-                    </prop>
-                    <prop oor:name="IncludedNodes">
-                        <value>/org.openoffice.Office.Linguistic</value>
-                    </prop>
-                    <prop oor:name="ExcludedNodes">
-                        <value>/org.openoffice.Office.Linguistic/ServiceManager</value>
-                    </prop>
-                </node>
-                <node oor:name="Math" oor:op="replace">
-                    <prop oor:name="IncludedNodes">
-                        <value>/org.openoffice.Office.Math</value>
-                    </prop>
-                </node>
-                <node oor:name="Security" oor:op="replace">
-                    <prop oor:name="IncludedNodes">
-                        <value>/org.openoffice.Office.Security</value>
-                    </prop>
-                </node>
-                <node oor:name="Writer" oor:op="replace">
-                    <prop oor:name="IncludedNodes">
-                        <value>
+                            <!--Calc-->
+                            <it>/org.openoffice.Office.Calc</it>
+                            <!--Chart-->
+                            <it>/org.openoffice.Office.Chart</it>
+                            <!--Draw-->
+                            <it>/org.openoffice.Office.Draw</it>
+                            <!--Impress-->
+                            <it>/org.openoffice.Office.Impress</it>
+                            <!--Labels-->
+                            <it>/org.openoffice.Office.Labels</it>
+                            <!--Linguistic-->
+                            <it>/org.openoffice.Office.Linguistic</it>
+                            <!--Math-->
+                            <it>/org.openoffice.Office.Math</it>
+                            <!--Security-->
+                            <it>/org.openoffice.Office.Security</it>
+                            <!--Writer-->
                             <it>/org.openoffice.Office.Writer</it>
                             <it>/org.openoffice.Office.WriterWeb</it>
                         </value>
                     </prop>
                     <prop oor:name="ExcludedNodes">
-                        <value>/org.openoffice.Office.Writer/Wizard</value>
+                        <value>
+                            <!--Datasources-->
+                            <it>/org.openoffice.Office.DataAccess/Bibliography</it>
+                            <it>/org.openoffice.Office.DataAccess/ConnectionPool</it>
+                            <it>/org.openoffice.Office.DataAccess/DataSources</it>
+                            <it>/org.openoffice.Office.DataAccess/DriverManager</it>
+                            <!--Common-->
+                            <it>/org.openoffice.Office.Common/_3D_Engine/OpenGL</it>
+                            <it>/org.openoffice.Office.Common/Help/Registration</it>
+                            <!--Linguistic-->
+                            <it>/org.openoffice.Office.Linguistic/ServiceManager</it>
+                            <!--Writer-->
+                            <it>/org.openoffice.Office.Writer/Wizard</it>
+                        </value>
+                    </prop>
+                </node>
+                <node oor:name="Deployment" oor:op="replace">
+                    <prop oor:name="MigrationService">
+                        <value>com.sun.star.migration.Extensions</value>
+                    </prop>
+                    <prop oor:name="ExcludedExtensions">
+                        <value>
+                            <!-- presentation minimizer is integrated since AOO 4.0 -->
+                            <it>com.sun.star.PresentationMinimizer-*</it>
+                            <!-- presentation screen is integrated since AOO 4.0 -->
+                            <it>com.sun.PresenterScreen-*</it>
+                        </value>
+                    </prop>
+                </node>
+                <node oor:name="Basic" oor:op="replace">
+                    <prop oor:name="MigrationService">
+                        <value>com.sun.star.migration.Basic</value>
+                    </prop>
+                </node>
+                <node oor:name="Linguistic" oor:op="replace">
+                    <prop oor:name="MigrationService">
+                        <value>com.sun.star.migration.Wordbooks</value>
                     </prop>
                 </node>
             </node>

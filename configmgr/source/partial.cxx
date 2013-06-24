@@ -119,15 +119,17 @@ Partial::Containment Partial::contains(Path const & path) const {
     bool includes = false;
     for (Path::const_iterator i(path.begin()); i != path.end(); ++i) {
         Node::Children::const_iterator j(p->children.find(*i));
-        if (j == p->children.end()) {
+        if ( j == p->children.end() )
+        {
             break;
         }
         p = &j->second;
         includes |= p->startInclude;
     }
-    return p->children.empty() && !p->startInclude
-        ? CONTAINS_NOT
-        : includes ? CONTAINS_NODE : CONTAINS_SUBNODES;
+    return ( ( p->children.empty() || p == &root_ )
+             && !p->startInclude )
+           ? CONTAINS_NOT
+           : ( includes ? CONTAINS_NODE : CONTAINS_SUBNODES );
 }
 
 }
