@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXX///8Y\u003d",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3654,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-24T09:02:08Z",
+      "side": 1,
+      "message": "The \u0027p\u0027 prefix refers to a pointer, and this is a const char*, so looks OK. The \u0027s\u0027 prefix is usually used for an OUString or OString instance or a static variable, neither of them is what we have here. Could you please undo the variable renaming here? A followup patch could port const char* to OString, if you want (though I don\u0027t see much benefit here). Also we prefer separating cosmetic changes (variable renaming) and bugfixes into separate commits if possible, it helps with reviewing.",
+      "revId": "0e6ddffcac3197bd5ca25574dad56e26ddc8c1c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXX///8M\u003d",
+        "filename": "writerfilter/source/ooxml/model.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 12840,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-24T09:02:08Z",
+      "side": 1,
+      "message": "Again, this looks unrelated. I don\u0027t mind having it here, but in the future, please let\u0027s do such changes independent from bugfix changes.",
+      "revId": "0e6ddffcac3197bd5ca25574dad56e26ddc8c1c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
