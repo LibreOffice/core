@@ -17,14 +17,16 @@ ignoreDiacritics_CTL_translator (const sal_Unicode c)
 {
     switch (c) {
         //Arabic Diacritics
-        case 0x064B:
-        case 0x064C:
-        case 0x064D:
-        case 0x064E:
-        case 0x064F:
-        case 0x0650:
-        case 0x0651:
-        case 0x0652:
+        case 0x064B: // Fathahtan
+        case 0x064C: // Dammahtan
+        case 0x064D: // Kasrahtan
+        case 0x064E: // Fathah
+        case 0x064F: // Dammah
+        case 0x0650: // Kasrah
+        case 0x0651: // Shaddah
+        case 0x0652: // Sukun
+        case 0x0653: // Maddah
+        case 0x0670: // Dagger alif
         // no break;
         return 0xffff; // Skip this character
     }
