@@ -1,4 +1,5 @@
 #include "vlcplayer.hxx"
+#include "vlcwindow.hxx"
 
 using namespace ::com::sun::star;
 
@@ -21,37 +22,44 @@ VLCPlayer::VLCPlayer()
 
 void SAL_CALL VLCPlayer::start()
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     libvlc_media_player_play( mPlayer.get() );
 }
 
 void SAL_CALL VLCPlayer::stop()
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     libvlc_media_player_stop( mPlayer.get() );
 }
 
 ::sal_Bool SAL_CALL VLCPlayer::isPlaying()
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     return (libvlc_media_player_is_playing( mPlayer.get() ) == 1);
 }
 
 double SAL_CALL VLCPlayer::getDuration()
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     libvlc_media_t* media = libvlc_media_player_get_media( mPlayer.get() );
     return libvlc_media_get_duration( media );
 }
 
 void SAL_CALL VLCPlayer::setMediaTime( double fTime )
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     libvlc_media_player_set_time( mPlayer.get(), fTime );
 }
 
 double SAL_CALL VLCPlayer::getMediaTime()
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     return libvlc_media_player_get_time( mPlayer.get() );
 }
 
 double SAL_CALL VLCPlayer::getRate()
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     return libvlc_media_player_get_rate( mPlayer.get() );
 }
 
@@ -66,21 +74,25 @@ void SAL_CALL VLCPlayer::setPlaybackLoop( ::sal_Bool bSet )
 
 void SAL_CALL VLCPlayer::setVolumeDB( ::sal_Int16 nDB )
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     libvlc_audio_set_volume( mPlayer.get(), nDB );
 }
 
 ::sal_Int16 SAL_CALL VLCPlayer::getVolumeDB()
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     return libvlc_audio_get_volume( mPlayer.get() );
 }
 
 void SAL_CALL VLCPlayer::setMute( ::sal_Bool bSet )
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     libvlc_audio_set_mute( mPlayer.get(), bSet );
 }
 
 ::sal_Bool SAL_CALL VLCPlayer::isMute()
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     return libvlc_audio_get_mute( mPlayer.get() );
 }
 
@@ -91,10 +103,12 @@ css::awt::Size SAL_CALL VLCPlayer::getPreferredPlayerWindowSize()
 
 uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWindow( const uno::Sequence< uno::Any >& aArguments )
 {
-    return uno::Reference< css::media::XPlayerWindow >();
+    ::osl::MutexGuard aGuard(m_aMutex);
+    return uno::Reference< css::media::XPlayerWindow >(new VLCWindow());
 }
 uno::Reference< css::media::XFrameGrabber > SAL_CALL VLCPlayer::createFrameGrabber()
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     return uno::Reference< css::media::XFrameGrabber >();
 }
 
