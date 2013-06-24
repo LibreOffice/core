@@ -1914,7 +1914,6 @@ const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& /*rCxt*/, SCR
     if (static_cast<SCROW>(nLen) < nRow2 - nRow1 + 1)
         // Array shorter than requested.
         return NULL;
-    }
 
     return &sc::numeric_block::at(*aPos.first->data, aPos.second);
 }
