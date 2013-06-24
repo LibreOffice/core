@@ -269,6 +269,9 @@
 
 // --------------------------------------------------------------------------
 // Svx-Id's
+// When adding new entries here, note that other SID_SVX_START entries exist in
+// include/editeng/editids.hrc and include/sfx2/sfxsids.hrc so don't use the
+// same id for two different attributes
 // --------------------------------------------------------------------------
 
 #define SID_ATTR_BORDER_INNER                           ( SID_SVX_START + 23 )

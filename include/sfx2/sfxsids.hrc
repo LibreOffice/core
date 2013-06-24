@@ -583,6 +583,10 @@
 #define SID_HELP_STYLESHEET                 (SID_OPTIONS_START + 99)
 
 // slot IDs from SVX (svxids.hrc) ---------------------------------------------
+// These SID_SVX_START entries came from include/svx/svxids.hrc, avoid
+// accidentally colliding entries with include/svx/svxids.hrc and
+// include/editeng/editids.hrc. Only add new SID_SVX_START entries
+// to include/svx/svxids.hrc
 
 #define SID_ZOOM_TOOLBOX                    (SID_SVX_START +  96)
 #define SID_ZOOM_OUT                        (SID_SVX_START +  97)
