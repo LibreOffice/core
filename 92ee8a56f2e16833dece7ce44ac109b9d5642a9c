@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXX///4Y\u003d",
+        "filename": "vcl/source/control/edit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2013-06-24T13:50:46Z",
+      "side": 1,
+      "message": "maybe change this one to some sal-foo that is noop in release build. Apart that it is ok.",
+      "revId": "92ee8a56f2e16833dece7ce44ac109b9d5642a9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
