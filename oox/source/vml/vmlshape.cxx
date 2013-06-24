@@ -715,7 +715,7 @@ awt::Rectangle LineShape::getRelRectangle() const
 // ============================================================================
 
 BezierShape::BezierShape(Drawing& rDrawing)
-    : SimpleShape(rDrawing, "com.sun.star.drawing.OpenBezierShape") // TODO Could we need both Open and Closed?
+    : SimpleShape(rDrawing, "com.sun.star.drawing.OpenBezierShape")
 {
 }
 
