@@ -318,7 +318,7 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                     rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
-                    nParamCount = 2 * 2;
+                    nParamCount = 2;
                     break;
 
                 case MOVE_ABS: // 2 params -> no param count reset
@@ -349,7 +349,7 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                     rFlagLists.back().push_back( PolygonFlags_CONTROL );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
-                    nParamCount = 2 * 6;
+                    nParamCount = 6;
                     break;
 
                 case LINE_REL: // 2* params -> param count reset
@@ -357,14 +357,14 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                                             aCurrentPoint.Y + aCoordList[ 1 ] ) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
-                    nParamCount = 2 * 2;
+                    nParamCount = 2;
                     break;
 
                 case LINE_ABS: // 2* params -> param count reset
                     rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
-                    nParamCount = 2 * 2;
+                    nParamCount = 2;
                     break;
 
                 case CLOSE: // 0 param
@@ -397,17 +397,17 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
             {
             // Single-character commands
             case 't': // rmoveto
-                state = MOVE_REL; nParamCount = 2 * 2; break;
+                state = MOVE_REL; nParamCount = 2; break;
             case 'm': // moveto
-                state = MOVE_ABS; nParamCount = 2 * 2; break;
+                state = MOVE_ABS; nParamCount = 2; break;
             case 'v': // rcurveto
-                state = BEZIER_REL; nParamCount = 2 * 6; break;
+                state = BEZIER_REL; nParamCount = 6; break;
             case 'c': // curveto
-                state = BEZIER_ABS; nParamCount = 2 * 6; break;
+                state = BEZIER_ABS; nParamCount = 6; break;
             case 'r': // rlineto
-                state = LINE_REL; nParamCount = 2 * 2; break;
+                state = LINE_REL; nParamCount = 2; break;
             case 'l': // lineto
-                state = LINE_ABS; nParamCount = 2 * 2; break;
+                state = LINE_ABS; nParamCount = 2; break;
             case 'x': // close
                 state = CLOSE; break;
             case 'e': // end
