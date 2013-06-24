@@ -27,13 +27,13 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-objectDefaultContext::objectDefaultContext( ContextHandler& rParent, Theme& rTheme )
-: ContextHandler( rParent )
+objectDefaultContext::objectDefaultContext( ContextHandler2Helper& rParent, Theme& rTheme )
+: ContextHandler2( rParent )
 , mrTheme( rTheme )
 {
 }
 
-Reference< XFastContextHandler > objectDefaultContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& /* xAttribs */ ) throw (SAXException, RuntimeException)
+ContextHandlerRef objectDefaultContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& /* rAttribs */ )
 {
     switch( aElementToken )
     {

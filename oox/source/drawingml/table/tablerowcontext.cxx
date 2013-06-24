@@ -28,42 +28,34 @@ using namespace ::com::sun::star;
 
 namespace oox { namespace drawingml { namespace table {
 
-TableRowContext::TableRowContext( ContextHandler& rParent, const uno::Reference< xml::sax::XFastAttributeList >& xAttribs, TableRow& rTableRow )
-: ContextHandler( rParent )
+TableRowContext::TableRowContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, TableRow& rTableRow )
+: ContextHandler2( rParent )
 , mrTableRow( rTableRow )
 {
-    rTableRow.setHeight( xAttribs->getOptionalValue( XML_h ).toInt32() );
+    rTableRow.setHeight( rAttribs.getString( XML_h ).get().toInt32() );
 }
 
 TableRowContext::~TableRowContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-TableRowContext::createFastChildContext( ::sal_Int32 aElementToken, const uno::Reference< xml::sax::XFastAttributeList >& xAttribs )
-    throw ( xml::sax::SAXException, uno::RuntimeException)
+ContextHandlerRef
+TableRowContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    uno::Reference< xml::sax::XFastContextHandler > xRet;
-
     switch( aElementToken )
     {
     case A_TOKEN( tc ):         // CT_TableCell
         {
             std::vector< TableCell >& rvTableCells = mrTableRow.getTableCells();
             rvTableCells.resize( rvTableCells.size() + 1 );
-            xRet.set( new TableCellContext( *this, xAttribs, rvTableCells.back() ) );
+            return new TableCellContext( *this, rAttribs, rvTableCells.back() );
         }
-        break;
     case A_TOKEN( extLst ):     // CT_OfficeArtExtensionList
     default:
         break;
     }
-    if( !xRet.is() )
-    {
-        uno::Reference< XFastContextHandler > xTmp( this );
-        xRet.set( xTmp );
-    }
-    return xRet;
+
+    return this;
 }
 
 } } }

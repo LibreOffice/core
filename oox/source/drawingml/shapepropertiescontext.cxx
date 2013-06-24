@@ -44,34 +44,29 @@ namespace oox { namespace drawingml {
 // ====================================================================
 
 // CT_ShapeProperties
-ShapePropertiesContext::ShapePropertiesContext( ContextHandler& rParent, Shape& rShape )
-: ContextHandler( rParent )
+ShapePropertiesContext::ShapePropertiesContext( ContextHandler2Helper& rParent, Shape& rShape )
+: ContextHandler2( rParent )
 , mrShape( rShape )
 {
 }
 
 // --------------------------------------------------------------------
 
-Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef ShapePropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
-
     switch( aElementToken )
     {
     // CT_Transform2D
     case A_TOKEN( xfrm ):
-        xRet.set( new Transform2DContext( *this, xAttribs, mrShape ) );
-        break;
+        return new Transform2DContext( *this, rAttribs, mrShape );
 
     // GeometryGroup
     case A_TOKEN( custGeom ):   // custom geometry "CT_CustomGeometry2D"
-        xRet.set( new CustomShapeGeometryContext( *this, xAttribs, *(mrShape.getCustomShapeProperties()) ) );
-        break;
-
+        return new CustomShapeGeometryContext( *this, rAttribs, *(mrShape.getCustomShapeProperties()) );
 
     case A_TOKEN( prstGeom ):   // preset geometry "CT_PresetGeometry2D"
         {
-            sal_Int32 nToken = xAttribs->getOptionalValueToken( XML_prst, 0 );
+            sal_Int32 nToken = rAttribs.getToken( XML_prst, 0 );
             // TODO: Move the following checks to a separate place or as a separate function
             if ( nToken == XML_line )
             {
@@ -83,29 +78,25 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
             {
                 mrShape.getServiceName() = "com.sun.star.drawing.CustomShape";
             }
-            xRet.set( new PresetShapeGeometryContext( *this, xAttribs, *(mrShape.getCustomShapeProperties()) ) );
+            return new PresetShapeGeometryContext( *this, rAttribs, *(mrShape.getCustomShapeProperties()) );
         }
-        break;
 
     case A_TOKEN( prstTxWarp ):
-        xRet.set( new PresetTextShapeContext( *this, xAttribs, *(mrShape.getCustomShapeProperties()) ) );
-        break;
+        return new PresetTextShapeContext( *this, rAttribs, *(mrShape.getCustomShapeProperties()) );
 
     // CT_LineProperties
     case A_TOKEN( ln ):
-        xRet.set( new LinePropertiesContext( *this, xAttribs, mrShape.getLineProperties() ) );
-        break;
+        return new LinePropertiesContext( *this, rAttribs, mrShape.getLineProperties() );
 
     // EffectPropertiesGroup
     // todo not supported by core
     case A_TOKEN( effectLst ):  // CT_EffectList
     case A_TOKEN( effectDag ):  // CT_EffectContainer
-        xRet.set( new EffectPropertiesContext( *this, mrShape.getEffectProperties() ) );
-        break;
+        return new EffectPropertiesContext( *this, mrShape.getEffectProperties() );
 
     // todo
     case A_TOKEN( scene3d ):    // CT_Scene3D
-//      xRet.set( new Scene3DContext( *this, xAttribs, *(mrShape.get3DShapeProperties()) ) );
+//      return new Scene3DContext( *this, rAttribs, *(mrShape.get3DShapeProperties()) );
         break;
 
     // todo
@@ -114,10 +105,7 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
     }
 
     // FillPropertiesGroupContext
-    if( !xRet.is() )
-        xRet.set( FillPropertiesContext::createFillContext( *this, aElementToken, xAttribs, mrShape.getFillProperties() ) );
-
-    return xRet;
+    return FillPropertiesContext::createFillContext( *this, aElementToken, rAttribs, mrShape.getFillProperties() );
 }
 
 } }

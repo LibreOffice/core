@@ -36,39 +36,28 @@ namespace oox { namespace drawingml {
 // --------------------------------------------------------------------
 
 // CT_TextParagraph
-class TextParagraphContext : public ContextHandler
+class TextParagraphContext : public ContextHandler2
 {
 public:
-    TextParagraphContext( ContextHandler& rParent, TextParagraph& rPara );
+    TextParagraphContext( ContextHandler2Helper& rParent, TextParagraph& rPara );
 
-    virtual void SAL_CALL endFastElement( sal_Int32 aElementToken ) throw (SAXException, RuntimeException);
-    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException);
+    virtual ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
     TextParagraph& mrParagraph;
 };
 
 // --------------------------------------------------------------------
-TextParagraphContext::TextParagraphContext( ContextHandler& rParent, TextParagraph& rPara )
-: ContextHandler( rParent )
+TextParagraphContext::TextParagraphContext( ContextHandler2Helper& rParent, TextParagraph& rPara )
+: ContextHandler2( rParent )
 , mrParagraph( rPara )
 {
 }
 
 // --------------------------------------------------------------------
-void TextParagraphContext::endFastElement( sal_Int32 aElementToken ) throw (SAXException, RuntimeException)
+
+ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    if( aElementToken == (A_TOKEN( p )) )
-    {
-    }
-}
-
-// --------------------------------------------------------------------
-
-Reference< XFastContextHandler > TextParagraphContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
-{
-    Reference< XFastContextHandler > xRet;
-
     // EG_TextRun
     switch( aElementToken )
     {
@@ -76,38 +65,33 @@ Reference< XFastContextHandler > TextParagraphContext::createFastChildContext( s
     {
         TextRunPtr pRun( new TextRun );
         mrParagraph.addRun( pRun );
-        xRet.set( new RegularTextRunContext( *this, pRun ) );
-        break;
+        return new RegularTextRunContext( *this, pRun );
     }
     case A_TOKEN( br ): // "CT_TextLineBreak" Soft return line break (vertical tab).
     {
         TextRunPtr pRun( new TextRun );
         pRun->setLineBreak();
         mrParagraph.addRun( pRun );
-        xRet.set( new RegularTextRunContext( *this, pRun ) );
-        break;
+        return new RegularTextRunContext( *this, pRun );
     }
     case A_TOKEN( fld ):    // "CT_TextField" Text Field.
     {
         TextFieldPtr pField( new TextField );
         mrParagraph.addRun( pField );
-        xRet.set( new TextFieldContext( *this, xAttribs, *pField ) );
-        break;
+        return new TextFieldContext( *this, rAttribs, *pField );
     }
     case A_TOKEN( pPr ):
-        xRet.set( new TextParagraphPropertiesContext( *this, xAttribs, mrParagraph.getProperties() ) );
-        break;
+        return new TextParagraphPropertiesContext( *this, rAttribs, mrParagraph.getProperties() );
     case A_TOKEN( endParaRPr ):
-        xRet.set( new TextCharacterPropertiesContext( *this, xAttribs, mrParagraph.getEndProperties() ) );
-        break;
+        return new TextCharacterPropertiesContext( *this, rAttribs, mrParagraph.getEndProperties() );
     }
 
-    return xRet;
+    return 0;
 }
 // --------------------------------------------------------------------
 
-RegularTextRunContext::RegularTextRunContext( ContextHandler& rParent, TextRunPtr pRunPtr )
-: ContextHandler( rParent )
+RegularTextRunContext::RegularTextRunContext( ContextHandler2Helper& rParent, TextRunPtr pRunPtr )
+: ContextHandler2( rParent )
 , mpRunPtr( pRunPtr )
 , mbIsInText( false )
 {
@@ -115,9 +99,9 @@ RegularTextRunContext::RegularTextRunContext( ContextHandler& rParent, TextRunPt
 
 // --------------------------------------------------------------------
 
-void RegularTextRunContext::endFastElement( sal_Int32 aElementToken ) throw (SAXException, RuntimeException)
+void RegularTextRunContext::onEndElement( )
 {
-    switch( aElementToken )
+    switch( getCurrentElement() )
     {
     case A_TOKEN( t ):
     {
@@ -134,7 +118,7 @@ void RegularTextRunContext::endFastElement( sal_Int32 aElementToken ) throw (SAX
 
 // --------------------------------------------------------------------
 
-void RegularTextRunContext::characters( const OUString& aChars ) throw (SAXException, RuntimeException)
+void RegularTextRunContext::onCharacters( const OUString& aChars )
 {
     if( mbIsInText )
     {
@@ -144,57 +128,44 @@ void RegularTextRunContext::characters( const OUString& aChars ) throw (SAXExcep
 
 // --------------------------------------------------------------------
 
-Reference< XFastContextHandler > RegularTextRunContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs) throw (SAXException, RuntimeException)
+ContextHandlerRef RegularTextRunContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs)
 {
-    Reference< XFastContextHandler > xRet( this );
-
     switch( aElementToken )
     {
     case A_TOKEN( rPr ):    // "CT_TextCharPropertyBag" The text char properties of this text run.
-        xRet.set( new TextCharacterPropertiesContext( *this, xAttribs, mpRunPtr->getTextCharacterProperties() ) );
+        return new TextCharacterPropertiesContext( *this, rAttribs, mpRunPtr->getTextCharacterProperties() );
         break;
     case A_TOKEN( t ):      // "xsd:string" minOccurs="1" The actual text string.
         mbIsInText = true;
         break;
     }
 
-    return xRet;
+    return this;
 }
 
 // --------------------------------------------------------------------
 
-TextBodyContext::TextBodyContext( ContextHandler& rParent, TextBody& rTextBody )
-: ContextHandler( rParent )
+TextBodyContext::TextBodyContext( ContextHandler2Helper& rParent, TextBody& rTextBody )
+: ContextHandler2( rParent )
 , mrTextBody( rTextBody )
 {
 }
 
 // --------------------------------------------------------------------
 
-void TextBodyContext::endFastElement( sal_Int32 ) throw (SAXException, RuntimeException)
+ContextHandlerRef TextBodyContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-}
-
-// --------------------------------------------------------------------
-
-Reference< XFastContextHandler > TextBodyContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
-{
-    Reference< XFastContextHandler > xRet;
-
     switch( aElementToken )
     {
     case A_TOKEN( bodyPr ):     // CT_TextBodyPropertyBag
-        xRet.set( new TextBodyPropertiesContext( *this, xAttribs, mrTextBody.getTextProperties() ) );
-        break;
+        return new TextBodyPropertiesContext( *this, rAttribs, mrTextBody.getTextProperties() );
     case A_TOKEN( lstStyle ):   // CT_TextListStyle
-        xRet.set( new TextListStyleContext( *this, mrTextBody.getTextListStyle() ) );
-        break;
+        return new TextListStyleContext( *this, mrTextBody.getTextListStyle() );
     case A_TOKEN( p ):          // CT_TextParagraph
-        xRet.set( new TextParagraphContext( *this, mrTextBody.addParagraph() ) );
-        break;
+        return new TextParagraphContext( *this, mrTextBody.addParagraph() );
     }
 
-    return xRet;
+    return 0;
 }
 
 // --------------------------------------------------------------------

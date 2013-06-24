@@ -21,18 +21,17 @@
 #define OOX_DRAWINGML_TEXTLISTSTYLECONTEXT_HXX
 
 #include "oox/drawingml/textliststyle.hxx"
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 
 namespace oox { namespace drawingml {
 
-class TextListStyleContext : public ::oox::core::ContextHandler
+class TextListStyleContext : public ::oox::core::ContextHandler2
 {
 public:
-    TextListStyleContext( ::oox::core::ContextHandler& rParent, TextListStyle& rTextListStyle );
+    TextListStyleContext( ::oox::core::ContextHandler2Helper& rParent, TextListStyle& rTextListStyle );
     ~TextListStyleContext();
 
-    virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
     TextListStyle& mrTextListStyle;

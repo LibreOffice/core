@@ -20,21 +20,20 @@
 #ifndef OOX_DRAWINGML_DIAGRAMFRAGMENTHANDLER
 #define OOX_DRAWINGML_DIAGRAMFRAGMENTHANDLER
 
-#include "oox/core/fragmenthandler.hxx"
 #include "oox/core/fragmenthandler2.hxx"
 #include "oox/drawingml/diagram/diagram.hxx"
 
 namespace oox { namespace drawingml {
 
 
-class DiagramDataFragmentHandler : public ::oox::core::FragmentHandler
+class DiagramDataFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
     DiagramDataFragmentHandler( oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, const DiagramDataPtr pDataPtr ) throw();
     virtual ~DiagramDataFragmentHandler() throw();
 
     virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
 

@@ -20,7 +20,7 @@
 #ifndef OOX_DRAWINGML_LINEPROPERTIESCONTEXT_HXX
 #define OOX_DRAWINGML_LINEPROPERTIESCONTEXT_HXX
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 #include "oox/dllapi.h"
 
 namespace oox { namespace drawingml {
@@ -29,17 +29,16 @@ namespace oox { namespace drawingml {
 
 struct LineProperties;
 
-class OOX_DLLPUBLIC LinePropertiesContext : public ::oox::core::ContextHandler
+class OOX_DLLPUBLIC LinePropertiesContext : public ::oox::core::ContextHandler2
 {
 public:
-    LinePropertiesContext( ::oox::core::ContextHandler& rParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes,
+    LinePropertiesContext( ::oox::core::ContextHandler2Helper& rParent,
+            const ::oox::AttributeList& rAttributes,
             LineProperties& rLineProperties ) throw();
     ~LinePropertiesContext();
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
-        createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
-            throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef
+        onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
     LineProperties& mrLineProperties;

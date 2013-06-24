@@ -30,8 +30,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml { namespace table {
 
-TableBackgroundStyleContext::TableBackgroundStyleContext( ContextHandler& rParent, TableStyle& rTableStyle )
-: ContextHandler( rParent )
+TableBackgroundStyleContext::TableBackgroundStyleContext( ContextHandler2Helper& rParent, TableStyle& rTableStyle )
+: ContextHandler2( rParent )
 , mrTableStyle( rTableStyle )
 {
 }
@@ -40,13 +40,9 @@ TableBackgroundStyleContext::~TableBackgroundStyleContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-TableBackgroundStyleContext::createFastChildContext( ::sal_Int32 aElementToken, const uno::Reference< xml::sax::XFastAttributeList >& xAttribs )
-    throw ( xml::sax::SAXException, uno::RuntimeException)
+ContextHandlerRef
+TableBackgroundStyleContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    uno::Reference< xml::sax::XFastContextHandler > xRet;
-
-    AttributeList aAttribs( xAttribs );
     switch( aElementToken )
     {
         // EG_ThemeableFillStyle (choice)
@@ -54,29 +50,22 @@ TableBackgroundStyleContext::createFastChildContext( ::sal_Int32 aElementToken, 
             {
                 boost::shared_ptr< FillProperties >& rxFillProperties = mrTableStyle.getBackgroundFillProperties();
                 rxFillProperties.reset( new FillProperties );
-                xRet.set( new FillPropertiesContext( *this, *rxFillProperties ) );
+                return new FillPropertiesContext( *this, *rxFillProperties );
             }
-            break;
         case A_TOKEN( fillRef ):    // CT_StyleMatrixReference
             {
                 ShapeStyleRef& rStyleRef = mrTableStyle.getBackgroundFillStyleRef();
-                rStyleRef.mnThemedIdx = aAttribs.getInteger( XML_idx, 0 );
-                xRet.set( new ColorContext( *this, rStyleRef.maPhClr ) );
+                rStyleRef.mnThemedIdx = rAttribs.getInteger( XML_idx, 0 );
+                return new ColorContext( *this, rStyleRef.maPhClr );
             }
-            break;
-
         // EG_ThemeableEffectStyle (choice)
         case A_TOKEN( effect ):     // CT_EffectProperties
             break;
         case A_TOKEN( effectRef ):  // CT_StyleMatrixReference
             break;
     }
-    if( !xRet.is() )
-    {
-        uno::Reference<XFastContextHandler> xTmp(this);
-        xRet.set( xTmp );
-    }
-    return xRet;
+
+    return this;
 }
 
 } } }

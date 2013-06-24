@@ -22,7 +22,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "oox/helper/propertymap.hxx"
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 #include "oox/drawingml/shape.hxx"
 
 namespace oox { namespace drawingml {
@@ -30,11 +30,11 @@ namespace oox { namespace drawingml {
 
 // ---------------------------------------------------------------------
 // CT_CustomGeometry2D
-class CustomShapeGeometryContext : public ::oox::core::ContextHandler
+class CustomShapeGeometryContext : public ::oox::core::ContextHandler2
 {
 public:
-    CustomShapeGeometryContext( ::oox::core::ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, CustomShapeProperties& rCustomShapeProperties );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    CustomShapeGeometryContext( ::oox::core::ContextHandler2Helper& rParent, const ::oox::AttributeList& rAttributes, CustomShapeProperties& rCustomShapeProperties );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     CustomShapeProperties& mrCustomShapeProperties;
@@ -42,11 +42,11 @@ private:
 
 // ---------------------------------------------------------------------
 // CT_PresetGeometry2D
-class PresetShapeGeometryContext : public ::oox::core::ContextHandler
+class PresetShapeGeometryContext : public ::oox::core::ContextHandler2
 {
 public:
-    PresetShapeGeometryContext( ::oox::core::ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, CustomShapeProperties& rCustomShapeProperties );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    PresetShapeGeometryContext( ::oox::core::ContextHandler2Helper& rParent, const ::oox::AttributeList& rAttributes, CustomShapeProperties& rCustomShapeProperties );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     CustomShapeProperties& mrCustomShapeProperties;
@@ -54,11 +54,11 @@ private:
 
 // ---------------------------------------------------------------------
 // CT_PresetTextShape
-class PresetTextShapeContext : public ::oox::core::ContextHandler
+class PresetTextShapeContext : public ::oox::core::ContextHandler2
 {
 public:
-    PresetTextShapeContext( ::oox::core::ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, CustomShapeProperties& rCustomShapeProperties );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    PresetTextShapeContext( ::oox::core::ContextHandler2Helper& rParent, const ::oox::AttributeList& rAttributes, CustomShapeProperties& rCustomShapeProperties );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     CustomShapeProperties& mrCustomShapeProperties;

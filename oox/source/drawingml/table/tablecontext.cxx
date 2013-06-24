@@ -61,7 +61,7 @@ TableContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& r
         {
             boost::shared_ptr< TableStyle >& rTableStyle = mrTableProperties.getTableStyle();
             rTableStyle.reset( new TableStyle() );
-            return new TableStyleContext( *this, rAttribs.getFastAttributeList(), *rTableStyle );
+            return new TableStyleContext( *this, rAttribs, *rTableStyle );
         }
     case A_TOKEN( tableStyleId ):       // ST_Guid
         return new oox::drawingml::GuidContext( *this, mrTableProperties.getStyleId() );
@@ -78,7 +78,7 @@ TableContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& r
         {
             std::vector< TableRow >& rvTableRows( mrTableProperties.getTableRows() );
             rvTableRows.resize( rvTableRows.size() + 1 );
-            return new TableRowContext( *this, rAttribs.getFastAttributeList(), rvTableRows.back() );
+            return new TableRowContext( *this, rAttribs, rvTableRows.back() );
         }
     }
 

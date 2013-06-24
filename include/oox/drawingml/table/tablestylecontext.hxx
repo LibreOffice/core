@@ -21,28 +21,26 @@
 #ifndef OOX_DRAWINGML_TABLESTYLECONTEXT
 #define OOX_DRAWINGML_TABLESTYLECONTEXT
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 #include "oox/drawingml/table/tablestyle.hxx"
 
 namespace oox { namespace drawingml { namespace table {
 
-class TableStyleContext : public ::oox::core::ContextHandler
+class TableStyleContext : public ::oox::core::ContextHandler2
 {
 public:
-    TableStyleContext( ::oox::core::ContextHandler& rParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs,
+    TableStyleContext( ::oox::core::ContextHandler2Helper& rParent,
+            const ::oox::AttributeList& rAttribs,
             TableStyle& rTableStyle );
     ~TableStyleContext();
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
-
     TableStyle& mrTableStyle;
 };
 
 } } }
-
 
 #endif
 

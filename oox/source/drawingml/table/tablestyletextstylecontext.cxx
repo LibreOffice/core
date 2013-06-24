@@ -30,21 +30,21 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml { namespace table {
 
-TableStyleTextStyleContext::TableStyleTextStyleContext( ContextHandler& rParent,
-    const Reference< XFastAttributeList >& xAttribs, TableStylePart& rTableStylePart )
-: ContextHandler( rParent )
+TableStyleTextStyleContext::TableStyleTextStyleContext( ContextHandler2Helper& rParent,
+    const AttributeList& rAttribs, TableStylePart& rTableStylePart )
+: ContextHandler2( rParent )
 , mrTableStylePart( rTableStylePart )
 {
-    if( xAttribs->hasAttribute( XML_b ) ) {
-        sal_Int32 nB = xAttribs->getOptionalValueToken( XML_b, XML_def );
+    if( rAttribs.hasAttribute( XML_b ) ) {
+        sal_Int32 nB = rAttribs.getToken( XML_b, XML_def );
         if ( nB == XML_on )
             mrTableStylePart.getTextBoldStyle() = ::boost::optional< sal_Bool >( sal_True );
         else if ( nB == XML_off )
             mrTableStylePart.getTextBoldStyle() = ::boost::optional< sal_Bool >( sal_False );
     }
 
-    if( xAttribs->hasAttribute( XML_i ) ) {
-        sal_Int32 nI = xAttribs->getOptionalValueToken( XML_i, XML_def );
+    if( rAttribs.hasAttribute( XML_i ) ) {
+        sal_Int32 nI = rAttribs.getToken( XML_i, XML_def );
         if ( nI == XML_on )
             mrTableStylePart.getTextItalicStyle() = ::boost::optional< sal_Bool >( sal_True );
         else if ( nI == XML_off )
@@ -57,47 +57,39 @@ TableStyleTextStyleContext::~TableStyleTextStyleContext()
 }
 
 // CT_TableStyleTextStyle
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-TableStyleTextStyleContext::createFastChildContext( ::sal_Int32 aElementToken, const uno::Reference< xml::sax::XFastAttributeList >& xAttribs )
-    throw ( xml::sax::SAXException, uno::RuntimeException)
+ContextHandlerRef
+TableStyleTextStyleContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    uno::Reference< xml::sax::XFastContextHandler > xRet;
-    AttributeList aAttribs( xAttribs );
-
     switch( aElementToken )
     {
         // EG_ThemeableFontStyles (choice)
         case A_TOKEN( font ):       // CT_FontCollection
-            xRet.set( this );
-            break;
+            return this;
         case A_TOKEN( ea ):             // CT_TextFont
-            mrTableStylePart.getAsianFont().setAttributes( aAttribs );
+            mrTableStylePart.getAsianFont().setAttributes( rAttribs );
             return 0;
         case A_TOKEN( cs ):             // CT_TextFont
-            mrTableStylePart.getComplexFont().setAttributes( aAttribs );
+            mrTableStylePart.getComplexFont().setAttributes( rAttribs );
             return 0;
         case A_TOKEN( sym ):            // CT_TextFont
-            mrTableStylePart.getSymbolFont().setAttributes( aAttribs );
+            mrTableStylePart.getSymbolFont().setAttributes( rAttribs );
             return 0;
         case A_TOKEN( latin ):          // CT_TextFont
-            mrTableStylePart.getLatinFont().setAttributes( aAttribs );
+            mrTableStylePart.getLatinFont().setAttributes( rAttribs );
             return 0;
 
         case A_TOKEN( fontRef ):    // CT_FontReference
             {
                 ShapeStyleRef& rFontStyle = mrTableStylePart.getStyleRefs()[ XML_fontRef ];
-                rFontStyle.mnThemedIdx = aAttribs.getToken( XML_idx, XML_none );
-                xRet.set( new ColorContext( *this, rFontStyle.maPhClr ) );
+                rFontStyle.mnThemedIdx = rAttribs.getToken( XML_idx, XML_none );
+                return new ColorContext( *this, rFontStyle.maPhClr );
             }
-            break;
 
         case A_TOKEN( extLst ):     // CT_OfficeArtExtensionList
             break;
     }
-    if( !xRet.is() )
-        xRet.set( new ColorValueContext( *this, mrTableStylePart.getTextColor() ) );
 
-    return xRet;
+    return new ColorValueContext( *this, mrTableStylePart.getTextColor() );
 }
 
 } } }

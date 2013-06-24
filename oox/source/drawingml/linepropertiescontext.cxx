@@ -32,25 +32,22 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace drawingml {
 // ---------------------------------------------------------------------
 
-LinePropertiesContext::LinePropertiesContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs,
+LinePropertiesContext::LinePropertiesContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs,
     LineProperties& rLineProperties ) throw()
-: ContextHandler( rParent )
+: ContextHandler2( rParent )
 , mrLineProperties( rLineProperties )
 {
-    AttributeList aAttribs( xAttribs );
-    mrLineProperties.moLineWidth = aAttribs.getInteger( XML_w );
-    mrLineProperties.moLineCompound = aAttribs.getToken( XML_cmpd );
-    mrLineProperties.moLineCap = aAttribs.getToken( XML_cap );
+    mrLineProperties.moLineWidth = rAttribs.getInteger( XML_w );
+    mrLineProperties.moLineCompound = rAttribs.getToken( XML_cmpd );
+    mrLineProperties.moLineCap = rAttribs.getToken( XML_cap );
 }
 
 LinePropertiesContext::~LinePropertiesContext()
 {
 }
 
-Reference< XFastContextHandler > LinePropertiesContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef LinePropertiesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
-    AttributeList aAttribs( xAttribs );
     switch( nElement )
     {
         // LineFillPropertiesGroup
@@ -58,19 +55,19 @@ Reference< XFastContextHandler > LinePropertiesContext::createFastChildContext( 
         case A_TOKEN( solidFill ):
         case A_TOKEN( gradFill ):
         case A_TOKEN( pattFill ):
-            xRet = FillPropertiesContext::createFillContext( *this, nElement, xAttribs, mrLineProperties.maLineFill );
+            return FillPropertiesContext::createFillContext( *this, nElement, rAttribs, mrLineProperties.maLineFill );
         break;
 
         // LineDashPropertiesGroup
         case A_TOKEN( prstDash ):  // CT_PresetLineDashProperties
-            mrLineProperties.moPresetDash = aAttribs.getToken( XML_val );
+            mrLineProperties.moPresetDash = rAttribs.getToken( XML_val );
         break;
         case A_TOKEN( custDash ):  // CT_DashStopList
-            xRet = this;
+            return this;
         break;
         case A_TOKEN( ds ):
             mrLineProperties.maCustomDash.push_back( LineProperties::DashStop(
-                aAttribs.getInteger( XML_d, 0 ), aAttribs.getInteger( XML_sp, 0 ) ) );
+                rAttribs.getInteger( XML_d, 0 ), rAttribs.getInteger( XML_sp, 0 ) ) );
         break;
 
         // LineJoinPropertiesGroup
@@ -85,13 +82,13 @@ Reference< XFastContextHandler > LinePropertiesContext::createFastChildContext( 
         {                         // ST_LineEndType
             bool bTailEnd = nElement == A_TOKEN( tailEnd );
             LineArrowProperties& rArrowProps = bTailEnd ? mrLineProperties.maEndArrow : mrLineProperties.maStartArrow;
-            rArrowProps.moArrowType = aAttribs.getToken( XML_type );
-            rArrowProps.moArrowWidth = aAttribs.getToken( XML_w );
-            rArrowProps.moArrowLength = aAttribs.getToken( XML_len );
+            rArrowProps.moArrowType = rAttribs.getToken( XML_type );
+            rArrowProps.moArrowWidth = rAttribs.getToken( XML_w );
+            rArrowProps.moArrowLength = rAttribs.getToken( XML_len );
         }
         break;
     }
-    return xRet;
+    return 0;
 }
 
 } }

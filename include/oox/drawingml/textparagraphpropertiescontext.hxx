@@ -26,20 +26,19 @@
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/textparagraphproperties.hxx"
 #include "oox/drawingml/textspacing.hxx"
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 
 namespace oox { namespace drawingml {
 
-class TextParagraphPropertiesContext : public ::oox::core::ContextHandler
+class TextParagraphPropertiesContext : public ::oox::core::ContextHandler2
 {
 public:
-    TextParagraphPropertiesContext( ::oox::core::ContextHandler& rParent,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >& rXAttributes,
+    TextParagraphPropertiesContext( ::oox::core::ContextHandler2Helper& rParent,
+            const ::oox::AttributeList& rAttributes,
             TextParagraphProperties& rTextParagraphProperties );
     ~TextParagraphPropertiesContext();
 
-    virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
     TextParagraphProperties& mrTextParagraphProperties;

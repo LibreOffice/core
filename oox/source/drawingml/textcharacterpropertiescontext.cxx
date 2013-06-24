@@ -34,33 +34,30 @@ using namespace ::com::sun::star::awt;
 
 namespace oox { namespace drawingml {
 
-// --------------------------------------------------------------------
-
 // CT_TextCharacterProperties
 TextCharacterPropertiesContext::TextCharacterPropertiesContext(
-        ContextHandler& rParent,
-        const Reference< XFastAttributeList >& rXAttributes,
+        ContextHandler2Helper& rParent,
+        const AttributeList& rAttribs,
         TextCharacterProperties& rTextCharacterProperties )
-: ContextHandler( rParent )
+: ContextHandler2( rParent )
 , mrTextCharacterProperties( rTextCharacterProperties )
 {
-    AttributeList aAttribs( rXAttributes );
-    if ( aAttribs.hasAttribute( XML_lang ) )
-        mrTextCharacterProperties.moLang = aAttribs.getString( XML_lang );
-    if ( aAttribs.hasAttribute( XML_sz ) )
-        mrTextCharacterProperties.moHeight = aAttribs.getInteger( XML_sz );
-    if ( aAttribs.hasAttribute( XML_spc ) )
-        mrTextCharacterProperties.moSpacing = aAttribs.getInteger( XML_spc );
-    if ( aAttribs.hasAttribute( XML_u ) )
-        mrTextCharacterProperties.moUnderline = aAttribs.getToken( XML_u );
-    if ( aAttribs.hasAttribute( XML_strike ) )
-        mrTextCharacterProperties.moStrikeout = aAttribs.getToken( XML_strike );
+    if ( rAttribs.hasAttribute( XML_lang ) )
+        mrTextCharacterProperties.moLang = rAttribs.getString( XML_lang );
+    if ( rAttribs.hasAttribute( XML_sz ) )
+        mrTextCharacterProperties.moHeight = rAttribs.getInteger( XML_sz );
+    if ( rAttribs.hasAttribute( XML_spc ) )
+        mrTextCharacterProperties.moSpacing = rAttribs.getInteger( XML_spc );
+    if ( rAttribs.hasAttribute( XML_u ) )
+        mrTextCharacterProperties.moUnderline = rAttribs.getToken( XML_u );
+    if ( rAttribs.hasAttribute( XML_strike ) )
+        mrTextCharacterProperties.moStrikeout = rAttribs.getToken( XML_strike );
 
-//  mrTextCharacterProperties.moCaseMap     = aAttribs.getToken( XML_cap );
-    if ( aAttribs.hasAttribute( XML_b ) )
-        mrTextCharacterProperties.moBold = aAttribs.getBool( XML_b );
-    if ( aAttribs.hasAttribute( XML_i ) )
-        mrTextCharacterProperties.moItalic = aAttribs.getBool( XML_i );
+//  mrTextCharacterProperties.moCaseMap     = rAttribs.getToken( XML_cap );
+    if ( rAttribs.hasAttribute( XML_b ) )
+        mrTextCharacterProperties.moBold = rAttribs.getBool( XML_b );
+    if ( rAttribs.hasAttribute( XML_i ) )
+        mrTextCharacterProperties.moItalic = rAttribs.getBool( XML_i );
 
 // TODO
 /*   todo: we need to be able to iterate over the XFastAttributes
@@ -70,7 +67,7 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
     //case A_TOKEN( kern ):
 
   // ST_TextLanguageID
-    OUString sAltLang = rXAttributes->getOptionalValue( XML_altLang );
+    OUString sAltLang = rAttribs.getString( XML_altLang ).get();
 
         case A_TOKEN( kumimoji ):       // xsd:boolean
             break;
@@ -91,28 +88,16 @@ TextCharacterPropertiesContext::~TextCharacterPropertiesContext()
 {
 }
 
-// --------------------------------------------------------------------
-
-void TextCharacterPropertiesContext::endFastElement( sal_Int32 ) throw (SAXException, RuntimeException)
+ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-}
-
-// --------------------------------------------------------------------
-
-Reference< XFastContextHandler > TextCharacterPropertiesContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttributes ) throw (SAXException, RuntimeException)
-{
-    AttributeList aAttribs( xAttributes );
-    Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
 // TODO unsupported yet
 //        case A_TOKEN( ln ):         // CT_LineProperties
-//            xRet.set( new LinePropertiesContext( getHandler(), xAttributes, maTextOutlineProperties ) );
-//        break;
+//            return new LinePropertiesContext( getHandler(), rAttribs, maTextOutlineProperties );
 
         case A_TOKEN( solidFill ):  // EG_FillProperties
-            xRet.set( new ColorContext( *this, mrTextCharacterProperties.maCharColor ) );
-        break;
+            return new ColorContext( *this, mrTextCharacterProperties.maCharColor );
 
         // EG_EffectProperties
         case A_TOKEN( effectDag ):  // CT_EffectContainer 5.1.10.25
@@ -120,8 +105,7 @@ Reference< XFastContextHandler > TextCharacterPropertiesContext::createFastChild
         break;
 
         case A_TOKEN( highlight ):  // CT_Color
-            xRet.set( new ColorContext( *this, mrTextCharacterProperties.maHighlightColor ) );
-        break;
+            return new ColorContext( *this, mrTextCharacterProperties.maHighlightColor );
 
         // EG_TextUnderlineLine
         case A_TOKEN( uLnTx ):      // CT_TextUnderlineLineFollowText
@@ -129,42 +113,36 @@ Reference< XFastContextHandler > TextCharacterPropertiesContext::createFastChild
         break;
 // TODO unsupported yet
 //        case A_TOKEN( uLn ):        // CT_LineProperties
-//            xRet.set( new LinePropertiesContext( getHandler(), xAttributes, maUnderlineProperties ) );
-//        break;
+//            return new LinePropertiesContext( getHandler(), rAttribs, maUnderlineProperties );
 
         // EG_TextUnderlineFill
         case A_TOKEN( uFillTx ):    // CT_TextUnderlineFillFollowText
             mrTextCharacterProperties.moUnderlineFillFollowText = true;
         break;
         case A_TOKEN( uFill ):      // CT_TextUnderlineFillGroupWrapper->EG_FillProperties (not supported)
-            xRet.set( new SimpleFillPropertiesContext( *this, mrTextCharacterProperties.maUnderlineColor ) );
-        break;
+            return new SimpleFillPropertiesContext( *this, mrTextCharacterProperties.maUnderlineColor );
 
         // CT_FontCollection
         case A_TOKEN( latin ):      // CT_TextFont
-            mrTextCharacterProperties.maLatinFont.setAttributes( aAttribs );
+            mrTextCharacterProperties.maLatinFont.setAttributes( rAttribs );
         break;
         case A_TOKEN( ea ):         // CT_TextFont
-            mrTextCharacterProperties.maAsianFont.setAttributes( aAttribs );
+            mrTextCharacterProperties.maAsianFont.setAttributes( rAttribs );
         break;
         case A_TOKEN( cs ):         // CT_TextFont
-            mrTextCharacterProperties.maComplexFont.setAttributes( aAttribs );
+            mrTextCharacterProperties.maComplexFont.setAttributes( rAttribs );
         break;
         case A_TOKEN( sym ):        // CT_TextFont
-            mrTextCharacterProperties.maSymbolFont.setAttributes( aAttribs );
+            mrTextCharacterProperties.maSymbolFont.setAttributes( rAttribs );
         break;
 
         case A_TOKEN( hlinkClick ):     // CT_Hyperlink
         case A_TOKEN( hlinkMouseOver ): // CT_Hyperlink
-            xRet.set( new HyperLinkContext( *this, xAttributes,  mrTextCharacterProperties.maHyperlinkPropertyMap ) );
-        break;
+            return new HyperLinkContext( *this, rAttribs,  mrTextCharacterProperties.maHyperlinkPropertyMap );
     }
-    if( !xRet.is() )
-        xRet.set( this );
-    return xRet;
-}
 
-// --------------------------------------------------------------------
+    return this;
+}
 
 } }
 

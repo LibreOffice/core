@@ -63,9 +63,9 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
     {
     // CT_ShapeProperties
     case XML_xfrm:
-        return new Transform2DContext( *this, rAttribs.getFastAttributeList(), *mpShapePtr );
+        return new Transform2DContext( *this, rAttribs, *mpShapePtr );
     case XML_blipFill:
-        return new BlipFillContext( *this, rAttribs.getFastAttributeList(), mpShapePtr->getGraphicProperties().maBlipProps );
+        return new BlipFillContext( *this, rAttribs, mpShapePtr->getGraphicProperties().maBlipProps );
     case XML_wavAudioFile:
         {
             getEmbeddedWAVAudioFile( getRelations(), rAttribs.getFastAttributeList(), mpShapePtr->getGraphicProperties().maAudio );
@@ -115,7 +115,7 @@ ContextHandlerRef GraphicalObjectFrameContext::onCreateContext( sal_Int32 aEleme
     case XML_nvGraphicFramePr:      // CT_GraphicalObjectFrameNonVisual
         break;
     case XML_xfrm:                  // CT_Transform2D
-        return new Transform2DContext( *this, rAttribs.getFastAttributeList(), *mpShapePtr );
+        return new Transform2DContext( *this, rAttribs, *mpShapePtr );
     case XML_graphic:               // CT_GraphicalObject
         return this;
 

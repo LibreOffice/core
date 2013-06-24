@@ -29,39 +29,31 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-spDefContext::spDefContext( ContextHandler& rParent, Shape& rDefaultObject )
-: ContextHandler( rParent )
+spDefContext::spDefContext( ContextHandler2Helper& rParent, Shape& rDefaultObject )
+: ContextHandler2( rParent )
 , mrDefaultObject( rDefaultObject )
 {
 }
 
-Reference< XFastContextHandler > spDefContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef spDefContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
         case A_TOKEN( spPr ):
-        {
-            xRet = new ShapePropertiesContext( *this, mrDefaultObject );
-            break;
-        }
+            return new ShapePropertiesContext( *this, mrDefaultObject );
         case A_TOKEN( bodyPr ):
         {
             TextBodyPtr xTextBody( new TextBody );
             mrDefaultObject.setTextBody( xTextBody );
-            xRet = new TextBodyPropertiesContext( *this, xAttribs, xTextBody->getTextProperties() );
-            break;
+            return new TextBodyPropertiesContext( *this, rAttribs, xTextBody->getTextProperties() );
         }
         case A_TOKEN( lstStyle ):
-            xRet.set( new TextListStyleContext( *this, *mrDefaultObject.getMasterTextListStyle() ) );
-            break;
+            return new TextListStyleContext( *this, *mrDefaultObject.getMasterTextListStyle() );
         case A_TOKEN( style ):
             break;
     }
-    if( !xRet.is() )
-        xRet.set( this );
 
-    return xRet;
+    return this;
 }
 
 } }

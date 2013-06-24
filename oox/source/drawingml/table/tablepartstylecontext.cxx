@@ -30,8 +30,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml { namespace table {
 
-TablePartStyleContext::TablePartStyleContext( ContextHandler& rParent, TableStylePart& rTableStylePart )
-: ContextHandler( rParent )
+TablePartStyleContext::TablePartStyleContext( ContextHandler2Helper& rParent, TableStylePart& rTableStylePart )
+: ContextHandler2( rParent )
 , mrTableStylePart( rTableStylePart )
 {
 }
@@ -41,27 +41,18 @@ TablePartStyleContext::~TablePartStyleContext()
 }
 
 // CT_TablePartStyle
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-TablePartStyleContext::createFastChildContext( ::sal_Int32 aElementToken, const uno::Reference< xml::sax::XFastAttributeList >& xAttribs )
-    throw ( xml::sax::SAXException, uno::RuntimeException)
+ContextHandlerRef
+TablePartStyleContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    uno::Reference< xml::sax::XFastContextHandler > xRet;
-
     switch( aElementToken )
     {
         case A_TOKEN( tcTxStyle ):  // CT_TableStyleTextStyle
-            xRet.set( new TableStyleTextStyleContext( *this, xAttribs, mrTableStylePart ) );
-            break;
+            return new TableStyleTextStyleContext( *this, rAttribs, mrTableStylePart );
         case A_TOKEN( tcStyle ):    // CT_TableStyleCellStyle
-            xRet.set( new TableStyleCellStyleContext( *this,  mrTableStylePart ) );
-            break;
+            return new TableStyleCellStyleContext( *this,  mrTableStylePart );
     }
-    if( !xRet.is() )
-    {
-        uno::Reference<XFastContextHandler> xTmp(this);
-        xRet.set( xTmp );
-    }
-    return xRet;
+
+    return this;
 }
 
 } } }

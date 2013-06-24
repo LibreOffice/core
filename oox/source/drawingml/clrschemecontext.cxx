@@ -26,35 +26,35 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-static void setClrMap( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes,
+static void setClrMap( const ::oox::AttributeList& rAttributes,
             ClrMap& rClrMap, sal_Int32 nToken )
 {
-    if ( xAttributes->hasAttribute( nToken ) )
+    if ( rAttributes.hasAttribute( nToken ) )
     {
-        sal_Int32 nMappedToken = xAttributes->getOptionalValueToken( nToken, 0 );
+        sal_Int32 nMappedToken = rAttributes.getToken( nToken, 0 );
         rClrMap.setColorMap( nToken, nMappedToken );
     }
 }
 
-clrMapContext::clrMapContext( ContextHandler& rParent,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, ClrMap& rClrMap )
-: ContextHandler( rParent )
+clrMapContext::clrMapContext( ContextHandler2Helper& rParent,
+    const ::oox::AttributeList& rAttributes, ClrMap& rClrMap )
+: ContextHandler2( rParent )
 {
-    setClrMap( xAttributes, rClrMap, XML_bg1 );
-    setClrMap( xAttributes, rClrMap, XML_tx1 );
-    setClrMap( xAttributes, rClrMap, XML_bg2 );
-    setClrMap( xAttributes, rClrMap, XML_tx2 );
-    setClrMap( xAttributes, rClrMap, XML_accent1 );
-    setClrMap( xAttributes, rClrMap, XML_accent2 );
-    setClrMap( xAttributes, rClrMap, XML_accent3 );
-    setClrMap( xAttributes, rClrMap, XML_accent4 );
-    setClrMap( xAttributes, rClrMap, XML_accent5 );
-    setClrMap( xAttributes, rClrMap, XML_accent6 );
-    setClrMap( xAttributes, rClrMap, XML_hlink );
-    setClrMap( xAttributes, rClrMap, XML_folHlink );
+    setClrMap( rAttributes, rClrMap, XML_bg1 );
+    setClrMap( rAttributes, rClrMap, XML_tx1 );
+    setClrMap( rAttributes, rClrMap, XML_bg2 );
+    setClrMap( rAttributes, rClrMap, XML_tx2 );
+    setClrMap( rAttributes, rClrMap, XML_accent1 );
+    setClrMap( rAttributes, rClrMap, XML_accent2 );
+    setClrMap( rAttributes, rClrMap, XML_accent3 );
+    setClrMap( rAttributes, rClrMap, XML_accent4 );
+    setClrMap( rAttributes, rClrMap, XML_accent5 );
+    setClrMap( rAttributes, rClrMap, XML_accent6 );
+    setClrMap( rAttributes, rClrMap, XML_hlink );
+    setClrMap( rAttributes, rClrMap, XML_folHlink );
 }
 
-clrSchemeColorContext::clrSchemeColorContext( ContextHandler& rParent, ClrScheme& rClrScheme, sal_Int32 nColorToken ) :
+clrSchemeColorContext::clrSchemeColorContext( ContextHandler2Helper& rParent, ClrScheme& rClrScheme, sal_Int32 nColorToken ) :
     ColorContext( rParent, *this ),
     mrClrScheme( rClrScheme ),
     mnColorToken( nColorToken )
@@ -66,14 +66,14 @@ clrSchemeColorContext::~clrSchemeColorContext()
     mrClrScheme.setColor( mnColorToken, getColor( getFilter().getGraphicHelper() ) );
 }
 
-clrSchemeContext::clrSchemeContext( ContextHandler& rParent, ClrScheme& rClrScheme ) :
-    ContextHandler( rParent ),
+clrSchemeContext::clrSchemeContext( ContextHandler2Helper& rParent, ClrScheme& rClrScheme ) :
+    ContextHandler2( rParent ),
     mrClrScheme( rClrScheme )
 {
 }
 
-Reference< XFastContextHandler > clrSchemeContext::createFastChildContext(
-        sal_Int32 nElement, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
+ContextHandlerRef clrSchemeContext::onCreateContext(
+        sal_Int32 nElement, const AttributeList& )
 {
     switch( nElement )
     {

@@ -28,26 +28,26 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-TextFieldContext::TextFieldContext( ContextHandler& rParent,
-            const Reference< XFastAttributeList >& rXAttributes,
+TextFieldContext::TextFieldContext( ContextHandler2Helper& rParent,
+            const AttributeList& rAttributes,
             TextField& rTextField)
-    : ContextHandler( rParent )
+    : ContextHandler2( rParent )
         , mrTextField( rTextField )
         , mbIsInText( false )
 {
-    mrTextField.setUuid( rXAttributes->getOptionalValue( XML_id ) );
-    mrTextField.setType( rXAttributes->getOptionalValue( XML_type ) );
+    mrTextField.setUuid( rAttributes.getString( XML_id ).get() );
+    mrTextField.setType( rAttributes.getString( XML_type ).get() );
 }
 
-void TextFieldContext::endFastElement( sal_Int32 aElementToken ) throw (SAXException, RuntimeException)
+void TextFieldContext::onEndElement( )
 {
-    if( aElementToken == (A_TOKEN( t )) )
+    if( getCurrentElement() == (A_TOKEN( t )) )
     {
         mbIsInText = false;
     }
 }
 
-void TextFieldContext::characters( const OUString& aChars ) throw (SAXException, RuntimeException)
+void TextFieldContext::onCharacters( const OUString& aChars )
 {
     if( mbIsInText )
     {
@@ -55,27 +55,20 @@ void TextFieldContext::characters( const OUString& aChars ) throw (SAXException,
     }
 }
 
-Reference< XFastContextHandler > TextFieldContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
-    throw (SAXException, RuntimeException)
+ContextHandlerRef TextFieldContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
     case A_TOKEN( rPr ):
-        xRet.set( new TextCharacterPropertiesContext( *this, xAttribs, mrTextField.getTextCharacterProperties() ) );
-        break;
+        return new TextCharacterPropertiesContext( *this, rAttribs, mrTextField.getTextCharacterProperties() );
     case A_TOKEN( pPr ):
-        xRet.set( new TextParagraphPropertiesContext( *this, xAttribs, mrTextField.getTextParagraphProperties() ) );
-        break;
+        return new TextParagraphPropertiesContext( *this, rAttribs, mrTextField.getTextParagraphProperties() );
     case A_TOKEN( t ):
         mbIsInText = true;
         break;
     }
-    if ( !xRet.is() )
-        xRet.set( this );
-    return xRet;
+    return this;
 }
-
 
 } }
 

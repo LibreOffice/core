@@ -36,18 +36,14 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-// --------------------------------------------------------------------
-
 // CT_TextBodyProperties
-TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
-    const Reference< XFastAttributeList >& xAttributes, TextBodyProperties& rTextBodyProp )
-: ContextHandler( rParent )
+TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper& rParent,
+    const AttributeList& rAttribs, TextBodyProperties& rTextBodyProp )
+: ContextHandler2( rParent )
 , mrTextBodyProp( rTextBodyProp )
 {
-    AttributeList aAttribs( xAttributes );
-
     // ST_TextWrappingType
-    sal_Int32 nWrappingType = aAttribs.getToken( XML_wrap, XML_square );
+    sal_Int32 nWrappingType = rAttribs.getToken( XML_wrap, XML_square );
     mrTextBodyProp.maPropertyMap[ PROP_TextWordWrap ] <<= static_cast< sal_Bool >( nWrappingType == XML_square );
 
     // ST_Coordinate
@@ -55,42 +51,42 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
     sal_Int32 aIns[] = { XML_lIns, XML_tIns, XML_rIns, XML_bIns };
     for( sal_Int32 i = 0; i < ( sal_Int32 )( sizeof( aIns ) / sizeof( sal_Int32 ) ); i++)
     {
-        sValue = xAttributes->getOptionalValue( aIns[i] );
+        sValue = rAttribs.getString( aIns[i] ).get();
         if( !sValue.isEmpty() )
             mrTextBodyProp.moInsets[i] = GetCoordinate( sValue );
     }
 
-    bool bAnchorCenter = aAttribs.getBool( XML_anchorCtr, false );
-    if( xAttributes->hasAttribute( XML_anchorCtr ) ) {
+    bool bAnchorCenter = rAttribs.getBool( XML_anchorCtr, false );
+    if( rAttribs.hasAttribute( XML_anchorCtr ) ) {
         if( bAnchorCenter )
             mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
                 TextHorizontalAdjust_CENTER;
     }
-//   bool bCompatLineSpacing = aAttribs.getBool( XML_compatLnSpc, false );
-//   bool bForceAA = aAttribs.getBool( XML_forceAA, false );
-//   bool bFromWordArt = aAttribs.getBool( XML_fromWordArt, false );
+//   bool bCompatLineSpacing = rAttribs.getBool( XML_compatLnSpc, false );
+//   bool bForceAA = rAttribs.getBool( XML_forceAA, false );
+//   bool bFromWordArt = rAttribs.getBool( XML_fromWordArt, false );
 
   // ST_TextHorzOverflowType
-//   sal_Int32 nHorzOverflow = xAttributes->getOptionalValueToken( XML_horzOverflow, XML_overflow );
+//   sal_Int32 nHorzOverflow = rAttribs.getToken( XML_horzOverflow, XML_overflow );
     // ST_TextVertOverflowType
-//   sal_Int32 nVertOverflow =  xAttributes->getOptionalValueToken( XML_vertOverflow, XML_overflow );
+//   sal_Int32 nVertOverflow =  rAttribs.getToken( XML_vertOverflow, XML_overflow );
 
     // ST_TextColumnCount
-//   sal_Int32 nNumCol = aAttribs.getInteger( XML_numCol, 1 );
+//   sal_Int32 nNumCol = rAttribs.getInteger( XML_numCol, 1 );
 
     // ST_Angle
-    mrTextBodyProp.moRotation = aAttribs.getInteger( XML_rot );
+    mrTextBodyProp.moRotation = rAttribs.getInteger( XML_rot );
 
-//   bool bRtlCol = aAttribs.getBool( XML_rtlCol, false );
+//   bool bRtlCol = rAttribs.getBool( XML_rtlCol, false );
     // ST_PositiveCoordinate
-//   sal_Int32 nSpcCol = aAttribs.getInteger( XML_spcCol, 0 );
-//   bool bSpcFirstLastPara = aAttribs.getBool( XML_spcFirstLastPara, 0 );
-//   bool bUpRight = aAttribs.getBool( XML_upright, 0 );
+//   sal_Int32 nSpcCol = rAttribs.getInteger( XML_spcCol, 0 );
+//   bool bSpcFirstLastPara = rAttribs.getBool( XML_spcFirstLastPara, 0 );
+//   bool bUpRight = rAttribs.getBool( XML_upright, 0 );
 
     // ST_TextVerticalType
-    if( xAttributes->hasAttribute( XML_vert ) ) {
-        mrTextBodyProp.moVert = aAttribs.getToken( XML_vert );
-        bool bRtl = aAttribs.getBool( XML_rtl, false );
+    if( rAttribs.hasAttribute( XML_vert ) ) {
+        mrTextBodyProp.moVert = rAttribs.getToken( XML_vert );
+        bool bRtl = rAttribs.getBool( XML_rtl, false );
         sal_Int32 tVert = mrTextBodyProp.moVert.get( XML_horz );
         if( tVert == XML_vert || tVert == XML_eaVert || tVert == XML_vert270 || tVert == XML_mongolianVert )
             mrTextBodyProp.moRotation = -5400000*(tVert==XML_vert270?3:1);
@@ -100,8 +96,8 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
     }
 
     // ST_TextAnchoringType
-    if( xAttributes->hasAttribute( XML_anchor ) ) {
-        switch( xAttributes->getOptionalValueToken( XML_anchor, XML_t ) )
+    if( rAttribs.hasAttribute( XML_anchor ) ) {
+        switch( rAttribs.getToken( XML_anchor, XML_t ) )
         {
             case XML_b :    mrTextBodyProp.meVA = drawing::TextVerticalAdjust_BOTTOM; break;
             case XML_dist :
@@ -118,17 +114,8 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
     mrTextBodyProp.maPropertyMap[ PROP_TextFitToSize ] <<= drawing::TextFitToSizeType_NONE;
 }
 
-// --------------------------------------------------------------------
-
-void TextBodyPropertiesContext::endFastElement( sal_Int32 ) throw (SAXException, RuntimeException)
+ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& /*rAttribs*/)
 {
-}
-
-// --------------------------------------------------------------------
-
-Reference< XFastContextHandler > TextBodyPropertiesContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& /*xAttributes*/) throw (SAXException, RuntimeException)
-{
-    Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
             // Sequence
@@ -157,10 +144,8 @@ Reference< XFastContextHandler > TextBodyPropertiesContext::createFastChildConte
                 break;
     }
 
-    return xRet;
+    return 0;
 }
-
-// --------------------------------------------------------------------
 
 } }
 
