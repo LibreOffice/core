@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXX///3k\u003d",
+        "filename": "sw/source/ui/chrdlg/drpcps.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 753,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2013-06-24T16:00:43Z",
+      "side": 1,
+      "message": "these aren\u0027t quite equivalent. the original seems to take a piece of the text, the first X letters rather than the whole string",
+      "revId": "350f3358a76ce036e803540f6eedebd77e8578eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
