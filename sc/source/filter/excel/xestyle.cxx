@@ -1575,12 +1575,13 @@ void lclGetBorderLine(
                 case table::BorderLineStyle::DOTTED:
                     rnXclLine = EXC_LINE_DOTTED;
                     break;
+                case table::BorderLineStyle::FINE_DASHED:
+                    rnXclLine = EXC_LINE_HAIR;
+                    break;
                 default:
                     break;
             }
         }
-        else if( nOuterWidth >= EXC_BORDER_HAIR )
-            rnXclLine = EXC_LINE_HAIR;
         else
             rnXclLine = EXC_LINE_NONE;
     }
