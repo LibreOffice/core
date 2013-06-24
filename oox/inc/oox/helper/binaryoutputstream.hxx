@@ -84,7 +84,7 @@ template< typename Type >
 void BinaryOutputStream::writeArray( Type* opnArray, sal_Int32 nElemCount )
 {
     sal_Int32 nWriteSize = getLimitedValue< sal_Int32, sal_Int32 >( nElemCount, 0, SAL_MAX_INT32 / sizeof( Type ) ) * sizeof( Type );
-    ByteOrderConverter::convertLittleEndianArray( opnArray, static_cast< size_t >( nWriteSize ) );
+    ByteOrderConverter::convertLittleEndianArray( opnArray, static_cast< size_t >( nElemCount ) );
     writeMemory( opnArray, nWriteSize, sizeof( Type ) );
 }
 
