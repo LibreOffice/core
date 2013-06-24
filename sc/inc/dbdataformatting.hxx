@@ -20,9 +20,11 @@
 #define SC_DBDATAFORMATTING_HXX
 
 #include "rtl/ustring.hxx"
+#include "scdllapi.h"
 
-class ScDBDataFormatting
+class SC_DLLPUBLIC ScDBDataFormatting
 {
+        OUString maTableStyleName;
         OUString maFirstRowStripeStyle;
         OUString maSecondRowStripeStyle;
         OUString maFirstColStripeStyle;
@@ -30,8 +32,11 @@ class ScDBDataFormatting
         bool bBandedRows;
         bool bBandedColumns;
     public:
+        ScDBDataFormatting();
         ScDBDataFormatting(const OUString& rFirstRowStripeStyle, const OUString& rSecondRowStripeStyle, const OUString& rFirstColStripeStyle, const OUString& rSecondColStripeStyle, bool bBRows, bool bBCols);
         ScDBDataFormatting( const ScDBDataFormatting& rTableFormatData );
+        void SetTableStyleName( const OUString& rTableStyleName );
+        const OUString& GetTableStyleName();
         void SetBandedRows( bool bBRows );
         bool GetBandedRows();
         void SetBandedColumns( bool bBCols );

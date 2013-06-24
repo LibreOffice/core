@@ -20,7 +20,12 @@
 #include "dbdataformatting.hxx"
 #include "rtl/ustring.hxx"
 
-ScDBDataFormatting::ScDBDataFormatting(const OUString& rFirstRowStripeStyle, const OUString& rSecondRowStripeStyle, const OUString& rFirstColStripeStyle, const OUString& rSecondColStripeStyle, bool bBRows, bool bBCols) :
+ScDBDataFormatting::ScDBDataFormatting()
+{
+}
+
+ScDBDataFormatting::ScDBDataFormatting(const OUString& rTableStyleName, const OUString& rFirstRowStripeStyle, const OUString& rSecondRowStripeStyle, const OUString& rFirstColStripeStyle, const OUString& rSecondColStripeStyle, bool bBRows, bool bBCols) :
+    maTableStyleName        ( rTableStyleName ),
     maFirstRowStripeStyle   ( rFirstRowStripeStyle),
     maSecondRowStripeStyle  ( rSecondRowStripeStyle ),
     maFirstColStripeStyle   ( rFirstColStripeStyle ),
@@ -31,6 +36,7 @@ ScDBDataFormatting::ScDBDataFormatting(const OUString& rFirstRowStripeStyle, con
 }
 
 ScDBDataFormatting::ScDBDataFormatting( const ScDBDataFormatting& rTableFormatData ):
+    maTableStyleName        ( rTableFormatData.maTableStyleName ),
     maFirstRowStripeStyle   ( rTableFormatData.maFirstRowStripeStyle ),
     maSecondRowStripeStyle  ( rTableFormatData.maSecondRowStripeStyle ),
     maFirstColStripeStyle   ( rTableFormatData.maFirstColStripeStyle ),
@@ -38,6 +44,16 @@ ScDBDataFormatting::ScDBDataFormatting( const ScDBDataFormatting& rTableFormatDa
     bBandedRows             ( rTableFormatData.bBandedRows ),
     bBandedColumns          ( rTableFormatData.bBandedColumns )
 {
+}
+
+void ScDBDataFormatting::SetTableStyleName( const OUString& rTableStyleName )
+{
+    maTableStyleName = rTableStyleName;
+}
+
+const OUString& ScDBDataFormatting::GetTableStyleName()
+{
+    return maTbleStyleName;
 }
 
 void ScDBDataFormatting::SetBandedRows( bool bBRows )
