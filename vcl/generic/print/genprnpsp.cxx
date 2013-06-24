@@ -1100,7 +1100,6 @@ sal_Bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i
     vcl::PDFWriter::PDFWriterContext aContext;
     aContext.Version            = vcl::PDFWriter::PDF_1_4;
     aContext.Tagged             = false;
-    aContext.EmbedStandardFonts = true;
     aContext.DocumentLocale     = Application::GetSettings().GetLanguageTag().getLocale();
     aContext.ColorMode          = i_rController.getPrinter()->GetPrinterOptions().IsConvertToGreyscales()
     ? vcl::PDFWriter::DrawGreyscale : vcl::PDFWriter::DrawColor;

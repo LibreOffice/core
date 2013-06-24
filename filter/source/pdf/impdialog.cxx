@@ -83,7 +83,6 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbUseTransitionEffects( sal_False ),
     mbIsSkipEmptyPages( sal_True ),
     mbAddStream( sal_False ),
-    mbEmbedStandardFonts( sal_False ),
     mnFormsType( 0 ),
     mbExportFormFields( sal_True ),
     mbAllowDuplicateFieldNames( sal_False ),
@@ -200,7 +199,6 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbUseTransitionEffects = maConfigItem.ReadBool( "UseTransitionEffects", sal_True );
     mbIsSkipEmptyPages = maConfigItem.ReadBool( "IsSkipEmptyPages", sal_False );
     mbAddStream = maConfigItem.ReadBool( "IsAddStream", sal_False );
-    mbEmbedStandardFonts = maConfigItem.ReadBool( "EmbedStandardFonts", sal_False );
 
     mnFormsType = maConfigItem.ReadInt32( "FormsType", 0 );
     mbExportFormFields = maConfigItem.ReadBool( "ExportFormFields", sal_True );
@@ -368,7 +366,6 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteBool( "UseTransitionEffects", mbUseTransitionEffects );
     maConfigItem.WriteBool( "IsSkipEmptyPages", mbIsSkipEmptyPages );
     maConfigItem.WriteBool( "IsAddStream", mbAddStream );
-    maConfigItem.WriteBool( "EmbedStandardFonts", mbEmbedStandardFonts );
 
     /*
     * FIXME: the entries are only implicitly defined by the resource file. Should there
@@ -504,7 +501,6 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
 
     maCbExportFormFields( this, PDFFilterResId( CB_EXPORTFORMFIELDS ) ),
     mbExportFormFieldsUserSelection( sal_False ),
-    mbEmbedStandardFontsUserSelection( sal_False ),
     maFtFormsFormat( this, PDFFilterResId( FT_FORMSFORMAT ) ),
     maLbFormsFormat( this, PDFFilterResId( LB_FORMSFORMAT ) ),
     maCbAllowDuplicateFieldNames( this, PDFFilterResId( CB_ALLOWDUPLICATEFIELDNAMES ) ),
@@ -517,7 +513,6 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
     maCbExportEmptyPages( this, PDFFilterResId( CB_EXPORTEMPTYPAGES ) ),
     maCbAddStream( this, PDFFilterResId( CB_ADDSTREAM ) ),
     maFtAddStreamDescription( this, PDFFilterResId( FT_ADDSTREAMDESCRIPTION ) ),
-    maCbEmbedStandardFonts( this, PDFFilterResId( CB_EMBEDSTANDARDFONTS ) ),
 
     maFlWatermark( this, PDFFilterResId( FL_WATERMARK ) ),
     maCbWatermark( this, PDFFilterResId( CB_WATERMARK ) ),
@@ -535,11 +530,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
     if ( aSize.Width() > aMinSize.Width() )
     {
         Size aNewSize = maCbExportNotes.GetSizePixel();
-        long nDelta = aSize.Height() - aNewSize.Height();
         maCbExportEmptyPages.SetSizePixel( aNewSize );
-        Point aNewPos = maCbEmbedStandardFonts.GetPosPixel();
-        aNewPos.Y() -= nDelta;
-        maCbEmbedStandardFonts.SetPosPixel( aNewPos );
     }
 
     maEdPages.SetAccessibleName(maRbRange.GetText());
@@ -609,13 +600,11 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
 // get the form values, for use with PDF/A-1 selection interface
     mbTaggedPDFUserSelection = paParent->mbUseTaggedPDF;
     mbExportFormFieldsUserSelection = paParent->mbExportFormFields;
-    mbEmbedStandardFontsUserSelection = paParent->mbEmbedStandardFonts;
 
     if( !maCbPDFA1b.IsChecked() )
     {// the value for PDF/A set by the ToggleExportPDFAHdl method called before
         maCbTaggedPDF.Check( mbTaggedPDFUserSelection  );
         maCbExportFormFields.Check( mbExportFormFieldsUserSelection );
-        maCbEmbedStandardFonts.Check( mbEmbedStandardFontsUserSelection );
     }
 
     maLbFormsFormat.SelectEntryPos( (sal_uInt16)paParent->mnFormsType );
@@ -643,8 +632,6 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
 
         Point aPos = maCbExportEmptyPages.GetPosPixel();
         maCbExportEmptyPages.SetPosPixel( Point( aPos.X(), aPos.Y() - nCheckBoxHeight ) );
-        aPos = maCbEmbedStandardFonts.GetPosPixel();
-        maCbEmbedStandardFonts.SetPosPixel( Point( aPos.X(), aPos.Y() - nCheckBoxHeight ) );
         maCbExportNotesPages.Show( sal_False );
         maCbExportNotesPages.Check( sal_False );
         maCbExportHiddenSlides.Show( sal_False);
@@ -698,13 +685,11 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
         paParent->mnPDFTypeSelection = 1;
         paParent->mbUseTaggedPDF =  mbTaggedPDFUserSelection;
         paParent->mbExportFormFields = mbExportFormFieldsUserSelection;
-        paParent->mbEmbedStandardFonts = mbEmbedStandardFontsUserSelection;
     }
     else
     {
         paParent->mbUseTaggedPDF =  maCbTaggedPDF.IsChecked();
         paParent->mbExportFormFields = maCbExportFormFields.IsChecked();
-        paParent->mbEmbedStandardFonts = maCbEmbedStandardFonts.IsChecked();
     }
 
     paParent->maWatermarkText = maEdWatermark.GetText();
@@ -814,9 +799,6 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl)
         mbExportFormFieldsUserSelection = maCbExportFormFields.IsChecked();
         maCbExportFormFields.Check( sal_False );
         maCbExportFormFields.Enable( sal_False );
-        mbEmbedStandardFontsUserSelection = maCbEmbedStandardFonts.IsChecked();
-        maCbEmbedStandardFonts.Check( sal_True );
-        maCbEmbedStandardFonts.Enable( sal_False );
     }
     else
     {
@@ -825,8 +807,6 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl)
         maCbTaggedPDF.Check( mbTaggedPDFUserSelection );
         maCbExportFormFields.Check( mbExportFormFieldsUserSelection );
         maCbExportFormFields.Enable();
-        maCbEmbedStandardFonts.Check( mbEmbedStandardFontsUserSelection );
-        maCbEmbedStandardFonts.Enable();
     }
 // PDF/A-1 doesn't allow launch action, so enable/disable the selection on
 // Link page

@@ -584,8 +584,6 @@ The following structure describes the permissions used in PDF security
            causes the MarkInfo entry in the document catalog to be set
         */
         bool                            Tagged;
-        /* forces the embedding of PDF standard fonts */
-        bool                            EmbedStandardFonts;
         /*  determines in which format a form
             will be submitted.
          */
@@ -639,7 +637,6 @@ The following structure describes the permissions used in PDF security
                 ForcePDFAction( false ),
                 Version( PDFWriter::PDF_1_4 ),
                 Tagged( false ),
-                EmbedStandardFonts( false ),
                 SubmitFormat( PDFWriter::FDF ),
                 AllowDuplicateFieldNames( false ),
                 FieldsUseSystemFonts( true ),

@@ -207,7 +207,7 @@ void OutputDevice::ImplUpdateFontData( bool bNewFontLists )
                         delete mpFontList;
                     if( mpFontCache && mpFontCache != pSVData->maGDIData.mpScreenFontCache )
                         delete mpFontCache;
-                    mpFontList = mpPDFWriter->filterDevFontList( pSVData->maGDIData.mpScreenFontList );
+                    mpFontList = pSVData->maGDIData.mpScreenFontList->Clone( true, true );
                     mpFontCache = new ImplFontCache( sal_False );
                 }
                 else
@@ -2873,11 +2873,8 @@ void OutputDevice::ImplInitFont() const
             mpFontEntry->maFontSelData.mbNonAntialiased = bNonAntialiased;
         }
 
-        if( !mpPDFWriter || !mpPDFWriter->isBuiltinFont( mpFontEntry->maFontSelData.mpFontData ) )
-        {
-            // select font in the device layers
-            mpFontEntry->mnSetFontFlags = mpGraphics->SetFont( &(mpFontEntry->maFontSelData), 0 );
-        }
+        // select font in the device layers
+        mpFontEntry->mnSetFontFlags = mpGraphics->SetFont( &(mpFontEntry->maFontSelData), 0 );
         mbInitFont = false;
     }
 }
@@ -2963,10 +2960,7 @@ bool OutputDevice::ImplNewFont() const
             pFontEntry->mbInit = true;
 
             pFontEntry->maMetric.mnOrientation  = sal::static_int_cast<short>(pFontEntry->maFontSelData.mnOrientation);
-            if( mpPDFWriter && mpPDFWriter->isBuiltinFont( pFontEntry->maFontSelData.mpFontData ) )
-                mpPDFWriter->getFontMetric( &pFontEntry->maFontSelData, &(pFontEntry->maMetric) );
-            else
-                pGraphics->GetFontMetric( &(pFontEntry->maMetric) );
+            pGraphics->GetFontMetric( &(pFontEntry->maMetric) );
 
             pFontEntry->maMetric.ImplInitTextLineSize( this );
             pFontEntry->maMetric.ImplInitAboveTextLineSize();
@@ -3915,10 +3909,6 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     if (!nWidth)
         return;
 
-    // PDF-export does its own strikeout drawing... why again?
-    if( mpPDFWriter && mpPDFWriter->isBuiltinFont(mpFontEntry->maFontSelData.mpFontData) )
-        return;
-
     // prepare string for strikeout measurement
     static char cStrikeoutChar;
     if ( eStrikeout == STRIKEOUT_SLASH )
@@ -4500,32 +4490,29 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout, sal_Bool bTextLine
             return;
 
     long nOldX = rSalLayout.DrawBase().X();
-    if( ! (mpPDFWriter && mpPDFWriter->isBuiltinFont(mpFontEntry->maFontSelData.mpFontData) ) )
+    if( ImplHasMirroredGraphics() )
     {
-        if( ImplHasMirroredGraphics() )
-        {
-            long w = meOutDevType == OUTDEV_VIRDEV ? mnOutWidth : mpGraphics->GetGraphicsWidth();
-            long x = rSalLayout.DrawBase().X();
-               rSalLayout.DrawBase().X() = w - 1 - x;
-            if( !IsRTLEnabled() )
-            {
-                OutputDevice *pOutDevRef = (OutputDevice *)this;
-                // mirror this window back
-                long devX = w-pOutDevRef->mnOutWidth-pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
-                rSalLayout.DrawBase().X() = devX + ( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) ) ;
-            }
-        }
-        else if( IsRTLEnabled() )
+        long w = meOutDevType == OUTDEV_VIRDEV ? mnOutWidth : mpGraphics->GetGraphicsWidth();
+        long x = rSalLayout.DrawBase().X();
+           rSalLayout.DrawBase().X() = w - 1 - x;
+        if( !IsRTLEnabled() )
         {
             OutputDevice *pOutDevRef = (OutputDevice *)this;
-
             // mirror this window back
-            long devX = pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
-            rSalLayout.DrawBase().X() = pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) + devX;
+            long devX = w-pOutDevRef->mnOutWidth-pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
+            rSalLayout.DrawBase().X() = devX + ( pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) ) ;
         }
-
-        rSalLayout.DrawText( *mpGraphics );
     }
+    else if( IsRTLEnabled() )
+    {
+        OutputDevice *pOutDevRef = (OutputDevice *)this;
+
+        // mirror this window back
+        long devX = pOutDevRef->mnOutOffX;   // re-mirrored mnOutOffX
+        rSalLayout.DrawBase().X() = pOutDevRef->mnOutWidth - 1 - (rSalLayout.DrawBase().X() - devX) + devX;
+    }
+
+    rSalLayout.DrawText( *mpGraphics );
 
     rSalLayout.DrawBase().X() = nOldX;
 
@@ -5853,12 +5840,7 @@ SalLayout* OutputDevice::ImplLayout( const OUString& rOrigStr, sal_Int32 nMinInd
 #endif
 
     // get matching layout object for base font
-    SalLayout* pSalLayout = NULL;
-    if( mpPDFWriter )
-        pSalLayout = mpPDFWriter->GetTextLayout( aLayoutArgs, &mpFontEntry->maFontSelData );
-
-    if( !pSalLayout )
-        pSalLayout = mpGraphics->GetTextLayout( aLayoutArgs, 0 );
+    SalLayout* pSalLayout = mpGraphics->GetTextLayout( aLayoutArgs, 0 );
 
     // layout text
     if( pSalLayout && !pSalLayout->LayoutText( aLayoutArgs ) )

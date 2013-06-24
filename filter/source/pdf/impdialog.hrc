@@ -80,7 +80,6 @@
 #define CB_ADDSTREAM                25
 #define CB_PDFA_1B_SELECT           26
 #define CB_EXPORTNOTESPAGES         27
-#define CB_EMBEDSTANDARDFONTS       28
 #define FT_ADDSTREAMDESCRIPTION     29
 #define CB_EXPORTHIDDENSLIDES       30
 #define FL_WATERMARK                31

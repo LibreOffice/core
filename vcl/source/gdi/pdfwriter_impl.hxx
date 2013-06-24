@@ -67,13 +67,11 @@ struct BitStreamState;
 namespace vcl
 {
 
-class PDFSalLayout;
 class PDFStreamIf;
 class Matrix3;
 
 class PDFWriterImpl
 {
-    friend class PDFSalLayout;
     friend class PDFStreamIf;
 public:
     // definition of structs
@@ -657,7 +655,6 @@ private:
     std::list< TransparencyEmit >       m_aTransparentObjects;
     /*  contains all font subsets in use */
     FontSubsetData                      m_aSubsets;
-    bool                                m_bEmbedStandardFonts;
     FontEmbedData                       m_aEmbeddedFonts;
     FontEmbedData                       m_aSystemFonts;
     sal_Int32                           m_nNextFID;
@@ -1073,18 +1070,6 @@ public:
            initEncryption( const OUString& i_rOwnerPassword,
                            const OUString& i_rUserPassword,
                            bool b128Bit );
-
-    /*  for OutputDevice so the reference device can have a list
-     *  that contains only suitable fonts (subsettable or builtin)
-     *  produces a new font list
-     */
-    ImplDevFontList* filterDevFontList( ImplDevFontList* pFontList );
-    /*  for OutputDevice: get layout for builtin fonts
-     */
-    bool isBuiltinFont( const PhysicalFontFace* ) const;
-    SalLayout* GetTextLayout( ImplLayoutArgs& rArgs, FontSelectPattern* pFont );
-    void getFontMetric( FontSelectPattern* pFont, ImplFontMetricData* pMetric ) const;
-
 
     /* for documentation of public functions please see pdfwriter.hxx */
 
