@@ -18,6 +18,7 @@
  */
 
 #include <svx/sdr/overlay/overlaymanagerbuffered.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -392,28 +393,12 @@ namespace sdr
                 {
                     Window& rWindow = static_cast< Window& >(rmOutputDevice);
 
-                    if(rWindow.IsChildTransparentModeEnabled() && rWindow.GetChildCount())
-                    {
-                        const Rectangle aRegionRectanglePixel(
-                            maBufferRememberedRangePixel.getMinX(), maBufferRememberedRangePixel.getMinY(),
-                            maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY());
-
-                        for(sal_uInt16 a(0); a < rWindow.GetChildCount(); a++)
-                        {
-                            Window* pCandidate = rWindow.GetChild(a);
-
-                            if(pCandidate && pCandidate->IsPaintTransparent())
-                            {
-                                const Rectangle aCandidatePosSizePixel(pCandidate->GetPosPixel(), pCandidate->GetSizePixel());
-
-                                if(aCandidatePosSizePixel.IsOver(aRegionRectanglePixel))
-                                {
-                                    pCandidate->Invalidate(INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN);
-                                    pCandidate->Update();
-                                }
-                            }
-                        }
-                    }
+                    const Rectangle aRegionRectanglePixel(
+                        maBufferRememberedRangePixel.getMinX(),
+                        maBufferRememberedRangePixel.getMinY(),
+                        maBufferRememberedRangePixel.getMaxX(),
+                        maBufferRememberedRangePixel.getMaxY());
+                    PaintTransparentChildren(rWindow, aRegionRectanglePixel);
                 }
 
                 // #i80730# restore visibility of VCL cursor

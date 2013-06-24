@@ -107,32 +107,8 @@ lcl_PaintTransparentFormControls(ViewShell & rShell, SwRect const& rRect)
     if (rShell.GetWin())
     {
         Window& rWindow = *(rShell.GetWin());
-        if (rWindow.IsChildTransparentModeEnabled())
-        {
-            Window * pCandidate = rWindow.GetWindow( WINDOW_FIRSTCHILD );
-            if (pCandidate)
-            {
-                const Rectangle aRectanglePixel(
-                            rWindow.LogicToPixel(rRect.SVRect()));
-                while (pCandidate)
-                {
-                    if (pCandidate->IsPaintTransparent())
-                    {
-                        const Rectangle aCandidatePosSizePixel(
-                                        pCandidate->GetPosPixel(),
-                                        pCandidate->GetSizePixel());
-
-                        if (aCandidatePosSizePixel.IsOver(aRectanglePixel))
-                        {
-                            pCandidate->Invalidate(
-                                INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN );
-                            pCandidate->Update();
-                        }
-                    }
-                    pCandidate = pCandidate->GetWindow( WINDOW_NEXT );
-                }
-            }
-        }
+        const Rectangle aRectanglePixel(rWindow.LogicToPixel(rRect.SVRect()));
+        PaintTransparentChildren(rWindow, aRectanglePixel);
     }
 }
 

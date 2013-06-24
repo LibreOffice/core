@@ -41,6 +41,12 @@ namespace sdr
 #endif
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/// paint the transparent children of rWin that overlap rPixelRect
+/// (for example, transparent form controls like check boxes)
+void SVX_DLLPUBLIC
+PaintTransparentChildren(Window & rWindow, Rectangle const& rPixelRect);
+
+
 class SdrPreRenderDevice
 {
     // The original OutputDevice
