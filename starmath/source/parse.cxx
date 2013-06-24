@@ -374,12 +374,12 @@ void SmParser::Replace( sal_uInt16 nPos, sal_uInt16 nLen, const String &rText )
 
 // First character may be any alphabetic
 const sal_Int32 coStartFlags =
-        KParseTokens::ANY_LETTER_OR_NUMBER |
+        KParseTokens::ANY_LETTER |
         KParseTokens::IGNORE_LEADING_WS;
 
-// Continuing characters may be any alphanumeric or dot.
+// Continuing characters may be any alphabetic
 const sal_Int32 coContFlags =
-    ((coStartFlags | KParseTokens::ASC_DOT) & ~KParseTokens::IGNORE_LEADING_WS)
+    (coStartFlags & ~KParseTokens::IGNORE_LEADING_WS)
     | KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
 
 // First character for numbers, may be any numeric or dot
@@ -389,7 +389,7 @@ const sal_Int32 coNumStartFlags =
         KParseTokens::IGNORE_LEADING_WS;
 // Continuing characters for numbers, may be any numeric or dot.
 const sal_Int32 coNumContFlags =
-    (coNumStartFlags | KParseTokens::ASC_DOT) & ~KParseTokens::IGNORE_LEADING_WS;
+    coNumStartFlags & ~KParseTokens::IGNORE_LEADING_WS;
 
 void SmParser::NextToken()
 {
@@ -399,7 +399,6 @@ void SmParser::NextToken()
     ParseResult aRes;
     xub_StrLen  nRealStart;
     bool        bCont;
-    bool        bNumStart = false;
     CharClass   aCC(SM_MOD()->GetSysLocale().GetLanguageTag());
     do
     {
@@ -408,29 +407,23 @@ void SmParser::NextToken()
                         aCC.getType( m_aBufferString, m_nBufferIndex ))
            ++m_nBufferIndex;
 
-        sal_Int32 nStartFlags = coStartFlags;
-        sal_Int32 nContFlags  = coContFlags;
-        sal_Unicode cFirstChar = m_aBufferString.GetChar( m_nBufferIndex );
-        aRes = aCC.parseAnyToken( m_aBufferString, m_nBufferIndex,
-                                            nStartFlags, aEmptyStr,
-                                            nContFlags, aEmptyStr );
+        // Try to parse a number. This should be independent from the locale
+        // setting, so temporarily set the language to English.
+        // See https://issues.apache.org/ooo/show_bug.cgi?id=45779
+        LanguageTag aOldLoc(aCC.getLanguageTag());
+        aCC.setLanguageTag(LanguageTag(m_aDotLoc));
+        aRes = aCC.parsePredefinedToken(KParseType::ASC_NUMBER,
+                                        m_aBufferString, m_nBufferIndex,
+                                        coNumStartFlags, aEmptyStr,
+                                        coNumContFlags, aEmptyStr);
+        aCC.setLanguageTag(aOldLoc);
 
-        // #i45779# parse numbers correctly
-        // i.e. independent from the locale setting.
-        // (note that #i11752# remains fixed)
-        if ((aRes.TokenType & KParseType::IDENTNAME) && CharClass::isAsciiDigit( cFirstChar ))
+        if (aRes.TokenType == 0)
         {
-            ParseResult aTmpRes;
-            LanguageTag aOldLoc( aCC.getLanguageTag() );
-            aCC.setLanguageTag( LanguageTag( m_aDotLoc ));
-            aTmpRes = aCC.parsePredefinedToken(
-                            KParseType::ASC_NUMBER,
-                            m_aBufferString, m_nBufferIndex,
-                            KParseTokens::ASC_DIGIT, aEmptyStr,
-                            KParseTokens::ASC_DIGIT | KParseTokens::ASC_DOT, aEmptyStr );
-            aCC.setLanguageTag( aOldLoc );
-            if (aTmpRes.TokenType & KParseType::ASC_NUMBER)
-                aRes.TokenType = aTmpRes.TokenType;
+            // Try again with the default token parsing.
+            aRes = aCC.parseAnyToken(m_aBufferString, m_nBufferIndex,
+                                     coStartFlags, aEmptyStr,
+                                     coContFlags, aEmptyStr);
         }
 
         nRealStart = m_nBufferIndex + sal::static_int_cast< xub_StrLen >(aRes.LeadingWhiteSpace);
@@ -476,8 +469,7 @@ void SmParser::NextToken()
         m_aCurToken.nLevel       = 0;
         m_aCurToken.aText = "";
     }
-    else if ((aRes.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER))
-             || (bNumStart && (aRes.TokenType & KParseType::IDENTNAME)))
+    else if (aRes.TokenType & KParseType::ANY_NUMBER)
     {
         sal_Int32 n = aRes.EndPos - nRealStart;
         OSL_ENSURE( n >= 0, "length < 0" );
@@ -1277,7 +1269,7 @@ void SmParser::SubSup(sal_uLong nActiveGroup)
             Relation();
         }
         else
-            Term();
+            Term(true);
 
         switch (eType)
         {   case TRSUB :    nIndex = (int) RSUB;    break;
@@ -1321,7 +1313,7 @@ void SmParser::OpSubSup()
 void SmParser::Power()
 {
     // get body for sub- supscripts on top of stack
-    Term();
+    Term(false);
 
     SubSup(TGPOWER);
 }
@@ -1349,7 +1341,7 @@ void SmParser::Blank()
 }
 
 
-void SmParser::Term()
+void SmParser::Term(bool bGroupNumberIdent)
 {
     switch (m_aCurToken.eType)
     {
@@ -1369,7 +1361,7 @@ void SmParser::Term()
             if (m_aCurToken.eType != TLGROUP)
             {
                 m_aNodeStack.pop();    // get rid of the 'no space' node pushed above
-                Term();
+                Term(false);
             }
             else
             {
@@ -1411,16 +1403,76 @@ void SmParser::Term()
             m_aNodeStack.push(new SmTextNode(m_aCurToken, FNT_TEXT));
             NextToken();
             break;
-        case TIDENT :
         case TCHARACTER :
             m_aNodeStack.push(new SmTextNode(m_aCurToken, FNT_VARIABLE));
             NextToken();
             break;
+        case TIDENT :
         case TNUMBER :
-            m_aNodeStack.push(new SmTextNode(m_aCurToken, FNT_NUMBER));
-            NextToken();
-            break;
+        {
+            m_aNodeStack.push(new SmTextNode(m_aCurToken,
+                                             m_aCurToken.eType == TNUMBER ?
+                                             FNT_NUMBER :
+                                             FNT_VARIABLE));
+            if (!bGroupNumberIdent)
+            {
+                NextToken();
+            }
+            else
+            {
+                // Some people want to be able to write "x_2n" for "x_{2n}"
+                // although e.g. LaTeX or AsciiMath interpret that as "x_2 n".
+                // The tokenizer skips whitespaces so we need some additional
+                // work to distinguish from "x_2 n".
+                // See https://issues.apache.org/ooo/show_bug.cgi?id=11752 and
+                // https://www.libreoffice.org/bugzilla/show_bug.cgi?id=55853
+                xub_StrLen nBufLen = m_aBufferString.Len();
+                CharClass aCC(SM_MOD()->GetSysLocale().GetLanguageTag());
+                sal_uInt16 nTokens = 1;
 
+                // We need to be careful to call NextToken() only after having
+                // tested for a whitespace separator (otherwise it will be
+                // skipped!)
+                bool moveToNextToken = true;
+                while (m_nBufferIndex < nBufLen &&
+                       aCC.getType(m_aBufferString, m_nBufferIndex) !=
+                       UnicodeType::SPACE_SEPARATOR)
+                {
+                    NextToken();
+                    if (m_aCurToken.eType != TNUMBER &&
+                        m_aCurToken.eType != TIDENT)
+                    {
+                        // Neither a number nor an indentifier. We just moved to
+                        // the next token, so no need to do that again.
+                        moveToNextToken = false;
+                        break;
+                    }
+                    m_aNodeStack.push(new SmTextNode(m_aCurToken,
+                                                     m_aCurToken.eType ==
+                                                     TNUMBER ?
+                                                     FNT_NUMBER :
+                                                     FNT_VARIABLE));
+                    nTokens++;
+                }
+                if (moveToNextToken) NextToken();
+                if (nTokens > 1)
+                {
+                    // We have several concatenated identifiers and numbers.
+                    // Let's group them into one SmExpressionNode.
+                    SmNodeArray nodeArray;
+                    nodeArray.resize(nTokens);
+                    while (nTokens > 0)
+                    {
+                        nodeArray[nTokens-1] = lcl_popOrZero(m_aNodeStack);
+                        nTokens--;
+                    }
+                    SmExpressionNode* pNode = new SmExpressionNode(SmToken());
+                    pNode->SetSubNodes(nodeArray);
+                    m_aNodeStack.push(pNode);
+                }
+            }
+            break;
+        }
         case TLEFTARROW :
         case TRIGHTARROW :
         case TUPARROW :
@@ -1541,7 +1593,7 @@ void SmParser::Term()
                     SmNode *pFunc = lcl_popOrZero(m_aNodeStack);
 
                     if (m_aCurToken.eType == TLPARENT)
-                    {   Term();
+                    {   Term(false);
                     }
                     else
                     {   Align();

@@ -228,7 +228,7 @@ protected:
     void    OpSubSup();
     void    Power();
     void    Blank();
-    void    Term();
+    void    Term(bool bGroupNumberIdent);
     void    Escape();
     void    Operator();
     void    Oper();
