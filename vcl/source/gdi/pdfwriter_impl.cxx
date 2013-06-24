@@ -1723,7 +1723,11 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
         m_nCurrentStructElement( 0 ),
         m_bEmitStructure( true ),
         m_bNewMCID( false ),
+#ifdef MACOSX
+        m_bEmbedStandardFonts( true ),
+#else
         m_bEmbedStandardFonts( false ),
+#endif
         m_nNextFID( 1 ),
         m_nInheritedPageWidth( 595 ),  // default A4
         m_nInheritedPageHeight( 842 ), // default A4
@@ -1840,7 +1844,9 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     if( m_bIsPDF_A1 )
         m_aContext.Version = PDFWriter::PDF_1_4; //meaning we need PDF 1.4, PDF/A flavour
 
+#ifndef MACOSX
     m_bEmbedStandardFonts = m_aContext.EmbedStandardFonts;
+#endif
 }
 
 PDFWriterImpl::~PDFWriterImpl()
