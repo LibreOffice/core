@@ -330,9 +330,9 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
 
         if ( GetStyle() & WB_HORZ )
         {
-            if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_LEFT,
+            if ( GetNativeControlRegion( CTRL_SCROLLBAR, IsRTLEnabled()? PART_BUTTON_RIGHT: PART_BUTTON_LEFT,
                         aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aBtn1Region ) &&
-                 GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_RIGHT,
+                 GetNativeControlRegion( CTRL_SCROLLBAR, IsRTLEnabled()? PART_BUTTON_LEFT: PART_BUTTON_RIGHT,
                         aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aBtn2Region ) )
             {
                 maBtn1Rect = aBtn1Region;
