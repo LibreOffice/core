@@ -136,6 +136,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/options/doclinkdialog \
     cui/source/options/fontsubs \
     cui/source/options/internationaloptions \
+	cui/source/options/optaboutconfig \
     cui/source/options/optaccessibility \
     cui/source/options/optasian \
     cui/source/options/optchart \

@@ -8,15 +8,17 @@
  */
 
 #ifndef INCLUDED_CUI_OPTABOUTCONFIG_HXX
-#define INCLUDED_CUI_OPTBABOUTCONFIG_HXX
+#define INCLUDED_CUI_OPTABOUTCONFIG_HXX
 
-#include <svx/simpltabl.hxx>
+#include <sfx2/tabdlg.hxx>
+#include <svtools/simptabl.hxx>
+#include "optHeaderTabListbox.hxx"
 
-namespace cui
+namespace svx
 {
     class OptHeaderTabListBox;
 }
-
+class CuiAboutConfigTabPage;
 
 class CuiAboutConfigTabPage : public SfxTabPage
 {
@@ -26,12 +28,15 @@ private:
     //PushButton* m_pDefaultBtn
     PushButton* m_pEditBtn;
 
-    ::cui::OptHeaderTabListBox* pPrefBox;
+    ::svx::OptHeaderTabListBox* pPrefBox;
 public:
    CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet );
    ~CuiAboutConfigTabPage();
 
-   static SfxTabPage* create( Window* pParent, const SfxItemSet& rItemset );
+   static SfxTabPage* Create( Window* pParent, const SfxItemSet& rItemset );
 
-}
+};
+
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

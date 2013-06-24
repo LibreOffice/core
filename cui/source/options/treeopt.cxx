@@ -32,6 +32,7 @@
 #include "dbregisterednamesconfig.hxx"
 #include "dialmgr.hxx"
 #include "fontsubs.hxx"
+#include "optaboutconfig.hxx"
 #include "optaccessibility.hxx"
 #include "optasian.hxx"
 #include "optchart.hxx"
@@ -317,6 +318,7 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
         case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
         case RID_SVXPAGE_ONLINEUPDATE:              fnCreate = &SvxOnlineUpdateTabPage::Create; break;
         case RID_OPTPAGE_CHART_DEFCOLORS:           fnCreate = &SvxDefaultColorOptPage::Create; break;
+        case RID_SVXPAGE_ABOUT_CONFIG:              fnCreate = &CuiAboutConfigTabPage::Create; break;
     }
 
     SfxTabPage* pRet = fnCreate ? (*fnCreate)( pParent, rSet ) : NULL;
@@ -348,6 +350,7 @@ static OptionsMapping_Impl const OptionsMap_Impl[] =
     { "ProductName",        "Accessibility",        RID_SVXPAGE_ACCESSIBILITYCONFIG },
     { "ProductName",        "Java",                 RID_SVXPAGE_OPTIONS_JAVA },
     { "ProductName",        "OnlineUpdate",         RID_SVXPAGE_ONLINEUPDATE },
+    { "ProductName",        "AboutConfig",          RID_SVXPAGE_ABOUT_CONFIG },
     { "LanguageSettings",   NULL,                   SID_LANGUAGE_OPTIONS },
     { "LanguageSettings",   "Languages",            OFA_TP_LANGUAGES  },
     { "LanguageSettings",   "WritingAids",          RID_SFXPAGE_LINGU },
