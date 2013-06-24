@@ -214,10 +214,22 @@ void Edit::SetWidthInChars(sal_Int32 nWidthInChars)
     }
 }
 
+void Edit::setMaxWidthChars(sal_Int32 nWidth)
+{
+    if (nWidth != mnMaxWidthChars)
+    {
+        mnMaxWidthChars = nWidth;
+        fprintf(stderr, "setMaxWidthChars of %d\n", nWidth);
+        queue_resize();
+    }
+}
+
 bool Edit::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "width-chars")
         SetWidthInChars(rValue.toInt32());
+    else if (rKey == "max-width-chars")
+        setMaxWidthChars(rValue.toInt32());
     else if (rKey == "max-length")
     {
         sal_Int32 nTextLen = rValue.toInt32();
@@ -295,6 +307,7 @@ void Edit::ImplInitEditData()
     mnAlign                 = EDIT_ALIGN_LEFT;
     mnMaxTextLen            = EDIT_NOLIMIT;
     mnWidthInChars          = -1;
+    mnMaxWidthChars         = -1;
     meAutocompleteAction    = AUTOCOMPLETE_KEYINPUT;
     mbModified              = sal_False;
     mbInternModified        = sal_False;
@@ -2886,8 +2899,14 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
     }
     else
     {
+        OUString aString;
+        if (mnMaxWidthChars != -1 && mnMaxWidthChars < rString.getLength())
+            aString = rString.copy(0, mnMaxWidthChars);
+        else
+            aString = rString;
+
         aSize.Height() = GetTextHeight();
-        aSize.Width() = GetTextWidth(rString);
+        aSize.Width() = GetTextWidth(aString);
         aSize.Width() += ImplGetExtraOffset() * 2;
         // do not create edit fields in which one cannot enter anything
         // a default minimum width should exist for at least 3 characters
