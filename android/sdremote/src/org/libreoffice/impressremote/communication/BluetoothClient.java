@@ -26,7 +26,6 @@ public class BluetoothClient extends Client {
 
     private final boolean mBluetoothWasEnabled;
 
-    private final BluetoothAdapter mBluetoothAdapter;
     private BluetoothSocket mSocket;
 
     public BluetoothClient(Server aServer, CommunicationService aCommunicationService, Receiver aReceiver, boolean aBluetoothWasEnabled) {
@@ -34,10 +33,8 @@ public class BluetoothClient extends Client {
 
         mBluetoothWasEnabled = aBluetoothWasEnabled;
 
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
         if (!mBluetoothWasEnabled) {
-            mBluetoothAdapter.enable();
+            BluetoothAdapter.getDefaultAdapter().enable();
         }
     }
 
@@ -48,10 +45,11 @@ public class BluetoothClient extends Client {
 
     private BluetoothSocket buildServerConnection() {
         try {
-            BluetoothDevice aBluetoothServer = mBluetoothAdapter
+            BluetoothDevice aBluetoothServer = BluetoothAdapter
+                .getDefaultAdapter()
                 .getRemoteDevice(mServer.getAddress());
 
-            mBluetoothAdapter.cancelDiscovery();
+            BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
 
             BluetoothSocket aSocket = aBluetoothServer
                 .createRfcommSocketToServiceRecord(
@@ -61,7 +59,7 @@ public class BluetoothClient extends Client {
 
             return aSocket;
         } catch (IOException e) {
-            throw new RuntimeException("Unable to connect to Bluetooth host");
+            throw new RuntimeException("Unable to connect to Bluetooth host.");
         }
     }
 
@@ -92,7 +90,7 @@ public class BluetoothClient extends Client {
 
     protected void onDisconnect() {
         if (!mBluetoothWasEnabled) {
-            mBluetoothAdapter.disable();
+            BluetoothAdapter.getDefaultAdapter().disable();
         }
     }
 
