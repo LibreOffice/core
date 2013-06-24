@@ -482,13 +482,6 @@ sal_Bool SwCursor::IsSelOvr( int eFlags )
     return sal_False;
 }
 
-#if defined( UNX )
-#define IDX     (*pCellStt)
-#else
-#define IDX     aCellStt
-#endif
-
-
 sal_Bool SwCursor::IsInProtectTable( sal_Bool bMove, sal_Bool bChgCrsr )
 {
     SwCntntNode* pCNd = GetCntntNode();
@@ -540,32 +533,24 @@ sal_Bool SwCursor::IsInProtectTable( sal_Bool bMove, sal_Bool bChgCrsr )
         // search next valid box
         // if there is another StartNode after the EndNode of a cell then
         // there is another cell
-#if defined( UNX )
-        SwNodeIndex* pCellStt = new SwNodeIndex( *GetNode()->
-                        FindTableBoxStartNode()->EndOfSectionNode(), 1 );
-#else
         SwNodeIndex aCellStt( *GetNode()->FindTableBoxStartNode()->EndOfSectionNode(), 1 );
-#endif
         sal_Bool bProt = sal_True;
 GoNextCell:
         do {
-            if( !IDX.GetNode().IsStartNode() )
+            if( !aCellStt.GetNode().IsStartNode() )
                 break;
-            ++IDX;
-            if( 0 == ( pCNd = IDX.GetNode().GetCntntNode() ))
-                pCNd = IDX.GetNodes().GoNext( &IDX );
+            ++aCellStt;
+            if( 0 == ( pCNd = aCellStt.GetNode().GetCntntNode() ))
+                pCNd = aCellStt.GetNodes().GoNext( &aCellStt );
             if( 0 == ( bProt = pCNd->IsProtect() ))
                 break;
-            IDX.Assign( *pCNd->FindTableBoxStartNode()->EndOfSectionNode(), 1 );
+            aCellStt.Assign( *pCNd->FindTableBoxStartNode()->EndOfSectionNode(), 1 );
         } while( bProt );
 
 SetNextCrsr:
         if( !bProt ) // found free cell
         {
-            GetPoint()->nNode = IDX;
-#if defined( UNX )
-            delete pCellStt;
-#endif
+            GetPoint()->nNode = aCellStt;
             SwCntntNode* pTmpCNd = GetCntntNode();
             if( pTmpCNd )
             {
@@ -576,19 +561,16 @@ SetNextCrsr:
                              nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
         }
         // end of table, so go to next node
-        ++IDX;
+        ++aCellStt;
         SwNode* pNd;
-        if( ( pNd = &IDX.GetNode())->IsEndNode() || HasMark())
+        if( ( pNd = &aCellStt.GetNode())->IsEndNode() || HasMark())
         {
             // if only table in FlyFrame or SSelection then stay on old position
             if( bChgCrsr )
                 RestoreSavePos();
-#if defined( UNX )
-            delete pCellStt;
-#endif
             return sal_True;
         }
-        else if( pNd->IsTableNode() && IDX++ )
+        else if( pNd->IsTableNode() && aCellStt++ )
             goto GoNextCell;
 
         bProt = sal_False; // index is now on a content node
@@ -599,33 +581,25 @@ SetNextCrsr:
     {
         // if there is another EndNode in front of the StartNode than there
         // exists a previous cell
-#if defined( UNX )
-        SwNodeIndex* pCellStt = new SwNodeIndex(
-                    *GetNode()->FindTableBoxStartNode(), -1 );
-#else
         SwNodeIndex aCellStt( *GetNode()->FindTableBoxStartNode(), -1 );
-#endif
         SwNode* pNd;
         sal_Bool bProt = sal_True;
 GoPrevCell:
         do {
-            if( !( pNd = &IDX.GetNode())->IsEndNode() )
+            if( !( pNd = &aCellStt.GetNode())->IsEndNode() )
                 break;
-            IDX.Assign( *pNd->StartOfSectionNode(), +1 );
-            if( 0 == ( pCNd = IDX.GetNode().GetCntntNode() ))
-                pCNd = pNd->GetNodes().GoNext( &IDX );
+            aCellStt.Assign( *pNd->StartOfSectionNode(), +1 );
+            if( 0 == ( pCNd = aCellStt.GetNode().GetCntntNode() ))
+                pCNd = pNd->GetNodes().GoNext( &aCellStt );
             if( 0 == ( bProt = pCNd->IsProtect() ))
                 break;
-            IDX.Assign( *pNd->FindTableBoxStartNode(), -1 );
+            aCellStt.Assign( *pNd->FindTableBoxStartNode(), -1 );
         } while( bProt );
 
 SetPrevCrsr:
         if( !bProt ) // found free cell
         {
-            GetPoint()->nNode = IDX;
-#if defined( UNX )
-            delete pCellStt;
-#endif
+            GetPoint()->nNode = aCellStt;
             SwCntntNode* pTmpCNd = GetCntntNode();
             if( pTmpCNd )
             {
@@ -636,18 +610,15 @@ SetPrevCrsr:
                              nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
         }
         // at the beginning of a table, so go to next node
-        IDX--;
-        if( ( pNd = &IDX.GetNode())->IsStartNode() || HasMark() )
+        aCellStt--;
+        if( ( pNd = &aCellStt.GetNode())->IsStartNode() || HasMark() )
         {
             // if only table in FlyFrame or SSelection then stay on old position
             if( bChgCrsr )
                 RestoreSavePos();
-#if defined( UNX )
-            delete pCellStt;
-#endif
             return sal_True;
         }
-        else if( pNd->StartOfSectionNode()->IsTableNode() && IDX-- )
+        else if( pNd->StartOfSectionNode()->IsTableNode() && aCellStt-- )
             goto GoPrevCell;
 
         bProt = sal_False; // index is now on a content node
