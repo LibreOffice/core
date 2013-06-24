@@ -23,6 +23,33 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>
 
+
+void PaintTransparentChildren(Window & rWindow, Rectangle const& rPixelRect)
+{
+    if (rWindow.IsChildTransparentModeEnabled())
+    {
+        Window * pCandidate = rWindow.GetWindow( WINDOW_FIRSTCHILD );
+        while (pCandidate)
+        {
+            if (pCandidate->IsPaintTransparent())
+            {
+                const Rectangle aCandidatePosSizePixel(
+                                pCandidate->GetPosPixel(),
+                                pCandidate->GetSizePixel());
+
+                if (aCandidatePosSizePixel.IsOver(rPixelRect))
+                {
+                    pCandidate->Invalidate(
+                        INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN );
+                    // important: actually paint the child here!
+                    pCandidate->Update();
+                }
+            }
+            pCandidate = pCandidate->GetWindow( WINDOW_NEXT );
+        }
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrPreRenderDevice::SdrPreRenderDevice(OutputDevice& rOriginal)
