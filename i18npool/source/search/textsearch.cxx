@@ -64,7 +64,8 @@ static sal_Int32 COMPLEX_TRANS_MASK_TMP =
     TransliterationModules_ignoreKiKuFollowedBySa_ja_JP |
     TransliterationModules_ignoreProlongedSoundMark_ja_JP;
 static const sal_Int32 COMPLEX_TRANS_MASK = COMPLEX_TRANS_MASK_TMP | TransliterationModules_IGNORE_KANA | TransliterationModules_FULLWIDTH_HALFWIDTH;
-static const sal_Int32 SIMPLE_TRANS_MASK = ~(COMPLEX_TRANS_MASK | TransliterationModules_IGNORE_CASE | TransliterationModules_UPPERCASE_LOWERCASE | TransliterationModules_LOWERCASE_UPPERCASE);
+static const sal_Int32 SIMPLE_TRANS_MASK = ~COMPLEX_TRANS_MASK;
+static const sal_Int32 REGEX_TRANS_MASK = ~(COMPLEX_TRANS_MASK | TransliterationModules_IGNORE_CASE | TransliterationModules_UPPERCASE_LOWERCASE | TransliterationModules_LOWERCASE_UPPERCASE);
     // Above 2 transliteration is simple but need to take effect in
     // complex transliteration
 
@@ -705,7 +706,7 @@ void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOp
 {
     // select the transliterated pattern string
     const OUString& rPatternStr =
-        (rOptions.transliterateFlags & SIMPLE_TRANS_MASK) ? sSrchStr
+        (rOptions.transliterateFlags & REGEX_TRANS_MASK) ? sSrchStr
         : ((rOptions.transliterateFlags & COMPLEX_TRANS_MASK) ? sSrchStr2 : rOptions.searchString);
 
     sal_uInt32 nIcuSearchFlags = UREGEX_UWORD; // request UAX#29 unicode capability
