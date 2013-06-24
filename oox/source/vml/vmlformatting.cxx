@@ -314,7 +314,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
                     rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
-                    nParamCount = 2 * 2;
+                    nParamCount = 2;
                     break;
 
                 case MOVE_ABS: // 2 params -> no param count reset
@@ -345,7 +345,7 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
                     rFlagLists.back().push_back( PolygonFlags_CONTROL );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
-                    nParamCount = 2 * 6;
+                    nParamCount = 6;
                     break;
 
                 case LINE_REL: // 2* params -> param count reset
@@ -353,14 +353,14 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
                                             aCurrentPoint.Y + aCoordList[ 1 ] ) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
-                    nParamCount = 2 * 2;
+                    nParamCount = 2;
                     break;
 
                 case LINE_ABS: // 2* params -> param count reset
                     rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
-                    nParamCount = 2 * 2;
+                    nParamCount = 2;
                     break;
 
                 case CLOSE: // 0 param
@@ -384,12 +384,12 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
             // Move on to current command state
             switch ( rPath[ i ] )
             {
-            case 't': state = MOVE_REL; nTokenLen = 0; nParamCount = 2 * 2; break;
-            case 'm': state = MOVE_ABS; nTokenLen = 0; nParamCount = 2 * 2; break;
-            case 'v': state = BEZIER_REL; nTokenLen = 0; nParamCount = 2 * 6; break;
-            case 'c': state = BEZIER_ABS; nTokenLen = 0; nParamCount = 2 * 6; break;
-            case 'r': state = LINE_REL; nTokenLen = 0; nParamCount = 2 * 2; break;
-            case 'l': state = LINE_ABS; nTokenLen = 0; nParamCount = 2 * 2; break;
+            case 't': state = MOVE_REL; nTokenLen = 0; nParamCount = 2; break;
+            case 'm': state = MOVE_ABS; nTokenLen = 0; nParamCount =  2; break;
+            case 'v': state = BEZIER_REL; nTokenLen = 0; nParamCount = 6; break;
+            case 'c': state = BEZIER_ABS; nTokenLen = 0; nParamCount = 6; break;
+            case 'r': state = LINE_REL; nTokenLen = 0; nParamCount = 2; break;
+            case 'l': state = LINE_ABS; nTokenLen = 0; nParamCount = 2; break;
             case 'x': state = CLOSE; nTokenLen = 0; break;
             case 'e': state = END; break;
             }
