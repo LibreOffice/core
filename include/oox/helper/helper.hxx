@@ -88,6 +88,7 @@ const sal_Int32 API_RGB_WHITE               = 0xFFFFFF;  ///< White color for AP
 const sal_Int16 API_LINE_SOLID              = 0;
 const sal_Int16 API_LINE_DOTTED             = 1;
 const sal_Int16 API_LINE_DASHED             = 2;
+const sal_Int16 API_FINE_LINE_DASHED        = 14;
 
 const sal_Int16 API_LINE_NONE               = 0;
 const sal_Int16 API_LINE_HAIR               = 2;

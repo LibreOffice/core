@@ -1834,7 +1834,7 @@ bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel&
                                     break;
         }
         case XML_double:            lclSetBorderLineWidth( rBorderLine, API_LINE_THIN, API_LINE_THIN, API_LINE_THIN ); break;
-        case XML_hair:              lclSetBorderLineWidth( rBorderLine, API_LINE_HAIR );    break;
+        case XML_hair:              lclSetBorderLineWidth( rBorderLine, API_LINE_HAIR ); rBorderLine.LineStyle = API_FINE_LINE_DASHED;   break;
         case XML_medium:            lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );  break;
         case XML_mediumDashDot:     lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );  break;
         case XML_mediumDashDotDot:  lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );  break;
