@@ -36,16 +36,18 @@ void SAL_CALL VLCPlayer::stop()
 
 double SAL_CALL VLCPlayer::getDuration()
 {
-    return 0.f;
+    libvlc_media_t* media = libvlc_media_player_get_media( mPlayer.get() );
+    return libvlc_media_get_duration( media );
 }
 
 void SAL_CALL VLCPlayer::setMediaTime( double fTime )
 {
+    libvlc_media_player_set_time( mPlayer.get(), fTime );
 }
 
 double SAL_CALL VLCPlayer::getMediaTime()
 {
-    return 0.f;
+    return libvlc_media_player_get_time( mPlayer.get() );
 }
 
 double SAL_CALL VLCPlayer::getRate()
@@ -64,20 +66,22 @@ void SAL_CALL VLCPlayer::setPlaybackLoop( ::sal_Bool bSet )
 
 void SAL_CALL VLCPlayer::setVolumeDB( ::sal_Int16 nDB )
 {
+    libvlc_audio_set_volume( mPlayer.get(), nDB );
 }
 
 ::sal_Int16 SAL_CALL VLCPlayer::getVolumeDB()
 {
-    return 1;
+    return libvlc_audio_get_volume( mPlayer.get() );
 }
 
 void SAL_CALL VLCPlayer::setMute( ::sal_Bool bSet )
 {
+    libvlc_audio_set_mute( mPlayer.get(), bSet );
 }
 
 ::sal_Bool SAL_CALL VLCPlayer::isMute()
 {
-    return false;
+    return libvlc_audio_get_mute( mPlayer.get() );
 }
 
 css::awt::Size SAL_CALL VLCPlayer::getPreferredPlayerWindowSize()
