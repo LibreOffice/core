@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXX///4o\u003d",
+        "filename": "editeng/source/items/frmitems.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3333,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-24T13:51:49Z",
+      "side": 1,
+      "message": "Would it be possible to please not mix cosmetics and functional changes? If I see correctly, you just added nShadingValue here, the rest belongs to a separate commit, containing whitespace changes.",
+      "revId": "489650ac862fa6cbd3f57d22a595a99c1075c8cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXX///4k\u003d",
+        "filename": "include/editeng/brushitem.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-24T13:51:49Z",
+      "side": 1,
+      "message": "Hmm, is this included needed here? Looks like you\u0027re operating with sal_Int32 values in the header anyway. Includes in headers are expensive (wrt. incremental build times).",
+      "revId": "489650ac862fa6cbd3f57d22a595a99c1075c8cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXX///4g\u003d",
+        "filename": "offapi/com/sun/star/drawing/ShadingPattern.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-24T13:51:49Z",
+      "side": 1,
+      "message": "Wrong license header? For new files you need to use the MPL2 header, without Apache notices.",
+      "revId": "489650ac862fa6cbd3f57d22a595a99c1075c8cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXX///4c\u003d",
+        "filename": "offapi/com/sun/star/style/CharacterProperties.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-24T13:51:49Z",
+      "side": 1,
+      "message": "Hmm, is this a string? Not a long, as you defined shading patterns as long/sal_Int32?",
+      "revId": "489650ac862fa6cbd3f57d22a595a99c1075c8cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
