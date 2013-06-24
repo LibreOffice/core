@@ -21,6 +21,12 @@
 
 #include <svl/solar.hrc>
 
+/*
+  These SID_SVX_START entries came from include/svx/svxids.hrc, avoid
+  accidentally colliding entries with include/svx/svxids.hrc and
+  include/sfx2/sfxsids.hrc. Only add new SID_SVX_START entries to
+  include/svx/svxids.hrc
+*/
 #define SID_ATTR_BRUSH                                  ( SID_SVX_START + 1 )
 #define SID_ATTR_TABSTOP                                ( SID_SVX_START + 2 )
 #define SID_ATTR_TABSTOP_DEFAULTS                       ( SID_SVX_START + 3 )
@@ -112,17 +118,16 @@
 #define SID_ATTR_CHAR_LATIN_LANGUAGE                    ( SID_SVX_START + 996 )
 #define SID_ATTR_CHAR_LATIN_POSTURE                     ( SID_SVX_START + 997 )
 #define SID_ATTR_CHAR_LATIN_WEIGHT                      ( SID_SVX_START + 998 )
-#define SID_ATTR_PARA_OUTLINE_LEVEL                     ( SID_SVX_START + 1121 )
-#define SID_ATTR_CHAR_PREVIEW_FONT                      ( SID_SVX_START + 1122 )
-#define SID_ATTR_CHAR_ENDPREVIEW_FONT                   ( SID_SVX_START + 1123 )
 
-
-// this ID didn't exist prior to the svx split
+// these ID didn't exist prior to the svx split, add new ids here
 #define SID_ATTR_CHAR_OVERLINE                          ( SID_EDIT_START + 68 )
 #define SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD               ( SID_EDIT_START + 69 )
 #define SID_ATTR_ALIGN_VER_JUSTIFY_METHOD               ( SID_EDIT_START + 70 )
 #define SID_ATTR_ALIGN_HOR_JUSTIFY                      ( SID_EDIT_START + 71 )
 #define SID_ATTR_ALIGN_VER_JUSTIFY                      ( SID_EDIT_START + 72 )
+#define SID_ATTR_PARA_OUTLINE_LEVEL                     ( SID_EDIT_START + 73 )
+#define SID_ATTR_CHAR_PREVIEW_FONT                      ( SID_EDIT_START + 74 )
+#define SID_ATTR_CHAR_ENDPREVIEW_FONT                   ( SID_EDIT_START + 75 )
 
 /*
 // planned, but not doable: changing value of SIDs will break code that uses them for WhichRanges
