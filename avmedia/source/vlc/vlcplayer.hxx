@@ -20,10 +20,13 @@
 #ifndef _VLCPLAYER_HXX
 #define _VLCPLAYER_HXX
 
+#include "vlccommon.hxx"
 #include <vlc/vlc.h>
+#include <boost/shared_ptr.hpp>
+#include <cppuhelper/compbase2.hxx>
 #include <com/sun/star/media/XPlayer.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include "vlccommon.hxx"
+
 
 namespace avmedia {
 namespace vlc {
@@ -55,6 +58,10 @@ public:
     css::awt::Size SAL_CALL getPreferredPlayerWindowSize();
     ::com::sun::star::uno::Reference< css::media::XPlayerWindow > SAL_CALL createPlayerWindow( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments );
     ::com::sun::star::uno::Reference< css::media::XFrameGrabber > SAL_CALL createFrameGrabber();
+
+    ::rtl::OUString SAL_CALL getImplementationName();
+    ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames();
 };
 
 }

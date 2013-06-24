@@ -15,7 +15,8 @@ const char * const VLC_ARGS[] = {
 };
 
 VLCPlayer::VLCPlayer()
-    : mInstance( libvlc_new( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS ), libvlc_release )
+    : VLC_Base(m_aMutex)
+    , mInstance( libvlc_new( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS ), libvlc_release )
     , mPlayer( libvlc_media_player_new(mInstance.get()), libvlc_media_player_release )
 {
 }
@@ -106,10 +107,26 @@ uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWind
     ::osl::MutexGuard aGuard(m_aMutex);
     return uno::Reference< css::media::XPlayerWindow >(new VLCWindow());
 }
+
 uno::Reference< css::media::XFrameGrabber > SAL_CALL VLCPlayer::createFrameGrabber()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return uno::Reference< css::media::XFrameGrabber >();
+}
+
+::rtl::OUString SAL_CALL VLCPlayer::getImplementationName()
+{
+    return ::rtl::OUString();
+}
+
+::sal_Bool SAL_CALL VLCPlayer::supportsService( const ::rtl::OUString& ServiceName )
+{
+    return false;
+}
+
+::uno::Sequence< ::rtl::OUString > SAL_CALL VLCPlayer::getSupportedServiceNames()
+{
+    return ::uno::Sequence< ::rtl::OUString >();
 }
 
 }
