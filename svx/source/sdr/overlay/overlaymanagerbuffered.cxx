@@ -391,15 +391,28 @@ namespace sdr
                 if(bTargetIsWindow)
                 {
                     Window& rWindow = static_cast< Window& >(rmOutputDevice);
-                    if(rWindow.IsChildTransparentModeEnabled())
+
+                    if(rWindow.IsChildTransparentModeEnabled() && rWindow.GetChildCount())
                     {
-                        // Get VCL to invalidate it's children - more efficiently. fdo#58029
                         const Rectangle aRegionRectanglePixel(
                             maBufferRememberedRangePixel.getMinX(), maBufferRememberedRangePixel.getMinY(),
                             maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY());
 
-                        rWindow.Invalidate(aRegionRectanglePixel,
-                                           INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN|INVALIDATE_UPDATE);
+                        for(sal_uInt16 a(0); a < rWindow.GetChildCount(); a++)
+                        {
+                            Window* pCandidate = rWindow.GetChild(a);
+
+                            if(pCandidate && pCandidate->IsPaintTransparent())
+                            {
+                                const Rectangle aCandidatePosSizePixel(pCandidate->GetPosPixel(), pCandidate->GetSizePixel());
+
+                                if(aCandidatePosSizePixel.IsOver(aRegionRectanglePixel))
+                                {
+                                    pCandidate->Invalidate(INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN);
+                                    pCandidate->Update();
+                                }
+                            }
+                        }
                     }
                 }
 
