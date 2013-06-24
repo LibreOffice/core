@@ -40,6 +40,7 @@ final class Protocol {
 
         public static final String PAIRED = "LO_SERVER_SERVER_PAIRED";
         public static final String VALIDATING = "LO_SERVER_VALIDATING_PIN";
+        public static final String ADVERTISE = "LOREMOTE_ADVERTISE";
 
         public static final String SLIDESHOW_STARTED = "slideshow_started";
         public static final String SLIDESHOW_FINISHED = "slideshow_finished";

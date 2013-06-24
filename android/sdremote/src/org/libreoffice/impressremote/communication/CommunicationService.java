@@ -68,8 +68,8 @@ public class CommunicationService extends Service implements Runnable {
 
     private final Receiver mReceiver = new Receiver(this);
 
-    private final ServerFinder mNetworkFinder = new ServerFinder(this);
-    private final BluetoothFinder mBluetoothFinder = new BluetoothFinder(this);
+    private final ServersFinder mTcpServersFinder = new TcpServersFinder(this);
+    private final ServersFinder mBluetoothServersFinder = new BluetoothServersFinder(this);
 
     private Thread mThread = null;
 
@@ -180,19 +180,19 @@ public class CommunicationService extends Service implements Runnable {
             .getDefaultSharedPreferences(this);
         boolean bEnableWifi = aPref.getBoolean("option_enablewifi", false);
         if (bEnableWifi)
-            mNetworkFinder.startSearch();
+            mTcpServersFinder.startSearch();
         BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
         if (aAdapter != null) {
             mBluetoothPreviouslyEnabled = aAdapter.isEnabled();
             if (!mBluetoothPreviouslyEnabled)
                 aAdapter.enable();
-            mBluetoothFinder.startSearch();
+            mBluetoothServersFinder.startSearch();
         }
     }
 
     public void stopSearch() {
-        mNetworkFinder.stopSearch();
-        mBluetoothFinder.stopSearch();
+        mTcpServersFinder.stopSearch();
+        mBluetoothServersFinder.stopSearch();
         BluetoothAdapter aAdapter = BluetoothAdapter.getDefaultAdapter();
         if (aAdapter != null) {
             if (!mBluetoothPreviouslyEnabled) {
@@ -204,8 +204,8 @@ public class CommunicationService extends Service implements Runnable {
     public void connectTo(Server aServer) {
         synchronized (mConnectionVariableMutex) {
             if (mState == State.SEARCHING) {
-                mNetworkFinder.stopSearch();
-                mBluetoothFinder.stopSearch();
+                mTcpServersFinder.stopSearch();
+                mBluetoothServersFinder.stopSearch();
                 mState = State.DISCONNECTED;
             }
             mServerDesired = aServer;
@@ -261,8 +261,8 @@ public class CommunicationService extends Service implements Runnable {
     public List<Server> getServers() {
         List<Server> aServers = new ArrayList<Server>();
 
-        aServers.addAll(mNetworkFinder.getServers());
-        aServers.addAll(mBluetoothFinder.getServers());
+        aServers.addAll(mTcpServersFinder.getServers());
+        aServers.addAll(mBluetoothServersFinder.getServers());
         aServers.addAll(mManualServers.values());
 
         return aServers;
