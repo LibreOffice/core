@@ -26,7 +26,6 @@ using namespace sd;
 
 ShapeList::ShapeList()
 {
-    maIter = maShapeList.end();
 }
 
 ShapeList::~ShapeList()
@@ -55,13 +54,8 @@ SdrObject* ShapeList::removeShape( SdrObject& rObject )
     ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rObject ) );
     if( aIter != maShapeList.end() )
     {
-        bool bIterErased = aIter == maIter;
-
         (*aIter)->RemoveObjectUser(*this);
         aIter = maShapeList.erase( aIter );
-
-        if( bIterErased )
-            maIter = aIter;
 
         if( aIter != maShapeList.end() )
             return (*aIter);
@@ -83,8 +77,6 @@ void ShapeList::clear()
     ListImpl::iterator aIter( aShapeList.begin() );
     while( aIter != aShapeList.end() )
         (*aIter++)->RemoveObjectUser(*this);
-
-    maIter = aShapeList.end();
 }
 
 /** returns true if this list is empty */
@@ -99,46 +91,27 @@ bool ShapeList::hasShape( SdrObject& rObject ) const
     return std::find( maShapeList.begin(), maShapeList.end(), &rObject )  != maShapeList.end();
 }
 
+ShapeList::const_iterator ShapeList::cbegin() const
+{
+    return maShapeList.begin();
+}
+
+ShapeList::const_iterator ShapeList::cend() const
+{
+    return maShapeList.end();
+}
+
 void ShapeList::ObjectInDestruction(const SdrObject& rObject)
 {
     ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rObject ) );
     if( aIter != maShapeList.end() )
     {
-        bool bIterErased = aIter == maIter;
-
-        aIter = maShapeList.erase( aIter );
-
-        if( bIterErased )
-            maIter = aIter;
+        maShapeList.erase( aIter );
     }
     else
     {
         OSL_FAIL("sd::ShapeList::ObjectInDestruction(), got a call from an unknown friend!");
     }
-}
-
-SdrObject* ShapeList::getNextShape()
-{
-    if( maIter != maShapeList.end() )
-    {
-        return (*maIter++);
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-void ShapeList::seekShape( sal_uInt32 nIndex )
-{
-    maIter = maShapeList.begin();
-    while( nIndex-- && (maIter != maShapeList.end()) )
-        maIter++;
-}
-
-bool ShapeList::hasMore() const
-{
-    return maIter != maShapeList.end();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

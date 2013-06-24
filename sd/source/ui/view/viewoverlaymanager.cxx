@@ -546,9 +546,10 @@ bool ViewOverlayManager::CreateTags()
 
     if( pPage && !pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )
     {
-        const std::list< SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();
+        ShapeList& rShapeList =  pPage->GetPresentationShapeList();
 
-        for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); ++iter )
+        for( ShapeList::const_iterator iter( rShapeList.cbegin() );
+             iter != rShapeList.cend(); ++iter )
         {
             if( (*iter)->IsEmptyPresObj() && ((*iter)->GetObjIdentifier() == OBJ_OUTLINETEXT) && (mrBase.GetDrawView()->GetTextEditObject() != (*iter)) )
             {

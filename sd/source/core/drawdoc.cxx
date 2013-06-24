@@ -144,6 +144,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 , mpWorkStartupTimer(NULL)
 , mpOnlineSpellingTimer(NULL)
 , mpOnlineSpellingList(NULL)
+, maShapeListIterator()
 , mpOnlineSearchItem(NULL)
 , mpCustomShowList(NULL)
 , mpDocSh(static_cast< ::sd::DrawDocShell*>(pDrDocSh))
@@ -694,7 +695,7 @@ void SdDrawDocument::UpdateAllLinks()
 */
 void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool )
 {
-    sd::ShapeList& rPresentationShapes( pPage->GetPresentationShapeList() );
+    const sd::ShapeList& rPresentationShapes( pPage->GetPresentationShapeList() );
     if(!rPresentationShapes.isEmpty())
     {
         // Create lists of title and outline styles
@@ -706,13 +707,13 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
         SfxStyleSheet* pTitleSheet = (SfxStyleSheet*)pSPool->GetTitleSheet(aName);
 
-        SdrObject* pObj = 0;
-        rPresentationShapes.seekShape(0);
-
         // Now look for title and outline text objects, then make those objects
         // listeners.
-        while( (pObj = rPresentationShapes.getNextShape()) )
+        for( ShapeList::const_iterator aIter (rPresentationShapes.cbegin() );
+             aIter != rPresentationShapes.cend(); ++aIter )
         {
+            SdrObject* pObj = *aIter;
+
             if (pObj->GetObjInventor() == SdrInventor)
             {
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();

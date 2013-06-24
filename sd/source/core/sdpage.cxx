@@ -155,11 +155,11 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearc
     // first sort all matching shapes with z-order
     std::vector< SdrObject* > aMatches;
 
-    SdrObject* pObj = 0;
-    maPresentationShapeList.seekShape(0);
-
-    while( (pObj = maPresentationShapeList.getNextShape()) )
+    for( ShapeList::const_iterator aIter( maPresentationShapeList.cbegin() );
+        aIter != maPresentationShapeList.cend(); ++aIter )
     {
+        SdrObject* pObj = *aIter;
+
         SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj);
         if( pInfo )
         {
@@ -1576,26 +1576,37 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate 
     // now delete all empty presentation objects that are no longer used by the new layout
     if( bInit )
     {
-        SdrObject* pObj = 0;
-        maPresentationShapeList.seekShape(0);
+        std::list< SdrObject* > aRemoveList;
 
-        while( (pObj = maPresentationShapeList.getNextShape()) )
+        for( ShapeList::const_iterator aIter = maPresentationShapeList.cbegin();
+             aIter != maPresentationShapeList.cend(); ++aIter )
         {
+            SdrObject* pObj = *aIter;
+
             if( aUsedPresentationObjects.count(pObj) == 0 )
             {
 
                 if( pObj->IsEmptyPresObj() )
                 {
-                    if( bUndo )
-                        pUndoManager->AddUndoAction(pModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
-
-                    RemoveObject( pObj->GetOrdNum() );
-
-                    if( !bUndo )
-                        SdrObject::Free( pObj );
+                    // remove the object now would invalidate the iterator and lead to a seg fault
+                    aRemoveList.push_back(pObj);
                 }
 /* #i108541# keep non empty pres obj as pres obj even if they are not part of the current layout */
             }
+        }
+
+        for( std::list<SdrObject*>::iterator aIter = aRemoveList.begin();
+             aIter != aRemoveList.end(); ++aIter )
+        {
+            SdrObject* pObj = *aIter;
+
+            if( bUndo )
+                pUndoManager->AddUndoAction(pModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
+
+            RemoveObject( pObj->GetOrdNum() );
+
+            if( !bUndo )
+                SdrObject::Free( pObj );
         }
     }
 }

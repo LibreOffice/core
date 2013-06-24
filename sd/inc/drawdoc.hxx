@@ -145,6 +145,7 @@ private:
     Timer*              mpWorkStartupTimer;
     Timer*              mpOnlineSpellingTimer;
     sd::ShapeList*      mpOnlineSpellingList;
+    sd::ShapeList::const_iterator maShapeListIterator;
     SvxSearchItem*      mpOnlineSearchItem;
     std::vector<sd::FrameView*> maFrameViewList;
     SdCustomShowList*   mpCustomShowList;
