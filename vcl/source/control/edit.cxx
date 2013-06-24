@@ -219,7 +219,6 @@ void Edit::setMaxWidthChars(sal_Int32 nWidth)
     if (nWidth != mnMaxWidthChars)
     {
         mnMaxWidthChars = nWidth;
-        fprintf(stderr, "setMaxWidthChars of %d\n", nWidth);
         queue_resize();
     }
 }
