@@ -8,6 +8,7 @@
 
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -144,6 +145,7 @@ public:
     void testPoshPosv();
     void testN825305();
     void testParaBottomMargin();
+    void testN823655();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -275,6 +277,7 @@ void Test::run()
         {"posh-posv.rtf", &Test::testPoshPosv},
         {"n825305.rtf", &Test::testN825305},
         {"para-bottom-margin.rtf", &Test::testParaBottomMargin},
+        {"n823655.rtf", &Test::testN823655},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1304,6 +1307,29 @@ void Test::testParaBottomMargin()
 {
     // This was 353, i.e. bottom margin of the paragraph was 0.35cm instead of 0.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
+}
+
+void Test::testN823655()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xDraws->getByIndex(0), "CustomShapeGeometry");
+    uno::Sequence<beans::PropertyValue> aPathProps;
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+        if (rProp.Name == "Path")
+            aPathProps = rProp.Value.get< uno::Sequence<beans::PropertyValue> >();
+    }
+    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
+    for (int i = 0; i < aPathProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aPathProps[i];
+        if (rProp.Name == "Coordinates")
+            aCoordinates = rProp.Value.get< uno::Sequence<drawing::EnhancedCustomShapeParameterPair> >();
+    }
+    // The first coordinate pair of this freeform shape was 286,0 instead of 0,286.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(286), aCoordinates[0].Second.Value.get<sal_Int32>());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

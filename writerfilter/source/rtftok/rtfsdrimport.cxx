@@ -317,19 +317,19 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
                     // The coordinates are in an (x,y) form.
                     aToken = aToken.copy(1, aToken.getLength() - 2);
                     sal_Int32 nI = 0;
-                    sal_Int32 nX = 0;
-                    sal_Int32 nY = 0;
+                    boost::optional<sal_Int32> oX;
+                    boost::optional<sal_Int32> oY;
                     do
                     {
                         OUString aPoint = aToken.getToken(0, ',', nI);
-                        if (!nX)
-                            nX = aPoint.toInt32();
+                        if (!oX)
+                            oX.reset(aPoint.toInt32());
                         else
-                            nY = aPoint.toInt32();
+                            oY.reset(aPoint.toInt32());
                     }
                     while (nI >= 0);
-                    aCoordinates[nIndex].First.Value <<= nX;
-                    aCoordinates[nIndex].Second.Value <<= nY;
+                    aCoordinates[nIndex].First.Value <<= *oX;
+                    aCoordinates[nIndex].Second.Value <<= *oY;
                     nIndex++;
                 }
             }
