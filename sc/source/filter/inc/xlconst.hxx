@@ -254,9 +254,9 @@ const sal_uInt16 EXC_FUTUREREC_ALERT        = 0x0002;
 // TODO: These values are approximate; we should probably tweak these values
 // further to better match Excel's border thickness.
 
-const sal_uInt16 EXC_BORDER_THICK = 16;
-const sal_uInt16 EXC_BORDER_MEDIUM = 12;
-const sal_uInt16 EXC_BORDER_THIN = 4;
+const sal_uInt16 EXC_BORDER_THICK = 30;
+const sal_uInt16 EXC_BORDER_MEDIUM = 20;
+const sal_uInt16 EXC_BORDER_THIN = 1;
 const sal_uInt16 EXC_BORDER_HAIR = 1;
 
 // ============================================================================
