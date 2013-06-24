@@ -33,56 +33,53 @@ namespace drawingml {
 
 // ============================================================================
 
-ColorValueContext::ColorValueContext( ContextHandler& rParent, Color& rColor ) :
-    ContextHandler( rParent ),
+ColorValueContext::ColorValueContext( ContextHandler2Helper& rParent, Color& rColor ) :
+    ContextHandler2( rParent ),
     mrColor( rColor )
 {
 }
 
-void ColorValueContext::startFastElement( sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
-    throw (SAXException, RuntimeException)
+void ColorValueContext::onStartElement( const AttributeList& rAttribs )
 {
-    AttributeList aAttribs( rxAttribs );
-    switch( nElement )
+    switch( getCurrentElement() )
     {
         case A_TOKEN( scrgbClr ):
             mrColor.setScrgbClr(
-                aAttribs.getInteger( XML_r, 0 ),
-                aAttribs.getInteger( XML_g, 0 ),
-                aAttribs.getInteger( XML_b, 0 ) );
+                rAttribs.getInteger( XML_r, 0 ),
+                rAttribs.getInteger( XML_g, 0 ),
+                rAttribs.getInteger( XML_b, 0 ) );
         break;
 
         case A_TOKEN( srgbClr ):
-            mrColor.setSrgbClr( aAttribs.getIntegerHex( XML_val, 0 ) );
+            mrColor.setSrgbClr( rAttribs.getIntegerHex( XML_val, 0 ) );
         break;
 
         case A_TOKEN( hslClr ):
             mrColor.setHslClr(
-                aAttribs.getInteger( XML_hue, 0 ),
-                aAttribs.getInteger( XML_sat, 0 ),
-                aAttribs.getInteger( XML_lum, 0 ) );
+                rAttribs.getInteger( XML_hue, 0 ),
+                rAttribs.getInteger( XML_sat, 0 ),
+                rAttribs.getInteger( XML_lum, 0 ) );
         break;
 
         case A_TOKEN( sysClr ):
             mrColor.setSysClr(
-                aAttribs.getToken( XML_val, XML_TOKEN_INVALID ),
-                aAttribs.getIntegerHex( XML_lastClr, -1 ) );
+                rAttribs.getToken( XML_val, XML_TOKEN_INVALID ),
+                rAttribs.getIntegerHex( XML_lastClr, -1 ) );
         break;
 
         case A_TOKEN( schemeClr ):
-            mrColor.setSchemeClr( aAttribs.getToken( XML_val, XML_TOKEN_INVALID ) );
+            mrColor.setSchemeClr( rAttribs.getToken( XML_val, XML_TOKEN_INVALID ) );
         break;
 
         case A_TOKEN( prstClr ):
-            mrColor.setPrstClr( aAttribs.getToken( XML_val, XML_TOKEN_INVALID ) );
+            mrColor.setPrstClr( rAttribs.getToken( XML_val, XML_TOKEN_INVALID ) );
         break;
     }
 }
 
-Reference< XFastContextHandler > ColorValueContext::createFastChildContext(
-        sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs ) throw (SAXException, RuntimeException)
+::oox::core::ContextHandlerRef ColorValueContext::onCreateContext(
+        sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    AttributeList aAttribs( rxAttribs );
     switch( nElement )
     {
         case A_TOKEN( alpha ):
@@ -108,7 +105,7 @@ Reference< XFastContextHandler > ColorValueContext::createFastChildContext(
         case A_TOKEN( satOff ):
         case A_TOKEN( shade ):
         case A_TOKEN( tint ):
-            mrColor.addTransformation( nElement, aAttribs.getInteger( XML_val, 0 ) );
+            mrColor.addTransformation( nElement, rAttribs.getInteger( XML_val, 0 ) );
         break;
         case A_TOKEN( comp ):
         case A_TOKEN( gamma ):
@@ -123,14 +120,14 @@ Reference< XFastContextHandler > ColorValueContext::createFastChildContext(
 
 // ============================================================================
 
-ColorContext::ColorContext( ContextHandler& rParent, Color& rColor ) :
-    ContextHandler( rParent ),
+ColorContext::ColorContext( ContextHandler2Helper& rParent, Color& rColor ) :
+    ContextHandler2( rParent ),
     mrColor( rColor )
 {
 }
 
-Reference< XFastContextHandler > ColorContext::createFastChildContext(
-        sal_Int32 nElement, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
+::oox::core::ContextHandlerRef ColorContext::onCreateContext(
+        sal_Int32 nElement, const AttributeList& )
 {
     switch( nElement )
     {

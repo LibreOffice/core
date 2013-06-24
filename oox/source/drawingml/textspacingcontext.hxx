@@ -20,31 +20,25 @@
 #ifndef OOX_DRAWINGML_TEXTSPACINGCONTEXT_HXX
 #define OOX_DRAWINGML_TEXTSPACINGCONTEXT_HXX
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 
 namespace oox { namespace drawingml {
 
 class TextSpacing;
 
-class TextSpacingContext : public ::oox::core::ContextHandler
+class TextSpacingContext : public ::oox::core::ContextHandler2
 {
 public:
-    TextSpacingContext( ::oox::core::ContextHandler& rParent, TextSpacing & aSpacing );
+    TextSpacingContext( ::oox::core::ContextHandler2Helper& rParent, TextSpacing & aSpacing );
 
-    virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     TextSpacing&        maSpacing;
 };
 
-
 } }
 
-
-
-
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

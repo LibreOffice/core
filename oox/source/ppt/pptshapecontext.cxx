@@ -220,7 +220,7 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
         }
         case PPT_TOKEN( txXfrm ):
         {
-            return new oox::drawingml::Transform2DContext( *this, rAttribs.getFastAttributeList(), *mpShapePtr, true );
+            return new oox::drawingml::Transform2DContext( *this, rAttribs, *mpShapePtr, true );
         }
     }
 

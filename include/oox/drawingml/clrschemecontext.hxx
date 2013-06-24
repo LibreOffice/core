@@ -20,24 +20,24 @@
 #ifndef OOX_DRAWINGML_CLRSCHEMECONTEXT_HXX
 #define OOX_DRAWINGML_CLRSCHEMECONTEXT_HXX
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 #include "oox/drawingml/clrscheme.hxx"
 #include "oox/drawingml/color.hxx"
 #include "oox/drawingml/colorchoicecontext.hxx"
 
 namespace oox { namespace drawingml {
 
-class clrMapContext : public oox::core::ContextHandler
+class clrMapContext : public oox::core::ContextHandler2
 {
 public:
-    clrMapContext( ::oox::core::ContextHandler& rParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, ClrMap& rClrMap );
+    clrMapContext( ::oox::core::ContextHandler2Helper& rParent,
+        const ::oox::AttributeList& rAttributes, ClrMap& rClrMap );
 };
 
 class clrSchemeColorContext : private Color, public ColorContext
 {
 public:
-    clrSchemeColorContext( ::oox::core::ContextHandler& rParent, ClrScheme& rClrScheme, sal_Int32 nColorToken );
+    clrSchemeColorContext( ::oox::core::ContextHandler2Helper& rParent, ClrScheme& rClrScheme, sal_Int32 nColorToken );
     virtual ~clrSchemeColorContext();
 
 private:
@@ -45,11 +45,11 @@ private:
     sal_Int32       mnColorToken;
 };
 
-class clrSchemeContext : public oox::core::ContextHandler
+class clrSchemeContext : public oox::core::ContextHandler2
 {
 public:
-    clrSchemeContext( ::oox::core::ContextHandler& rParent, ClrScheme& rClrScheme );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    clrSchemeContext( ::oox::core::ContextHandler2Helper& rParent, ClrScheme& rClrScheme );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     ClrScheme&      mrClrScheme;

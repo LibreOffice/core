@@ -175,7 +175,7 @@ SlideFragmentHandler::~SlideFragmentHandler() throw()
     case PPT_TOKEN( clrMap ):           // CT_ColorMapping
         {
             oox::drawingml::ClrMapPtr pClrMapPtr( ( aElementToken == PPT_TOKEN( clrMap ) || !mpSlidePersistPtr.get() || !mpSlidePersistPtr->getClrMap().get() ) ? new oox::drawingml::ClrMap() : new oox::drawingml::ClrMap( *mpSlidePersistPtr->getClrMap() ) );
-            ContextHandlerRef ret = new oox::drawingml::clrMapContext( *this, rAttribs.getFastAttributeList(), *pClrMapPtr );
+            ContextHandlerRef ret = new oox::drawingml::clrMapContext( *this, rAttribs, *pClrMapPtr );
             mpSlidePersistPtr->setClrMap( pClrMapPtr );
             return ret;
         }

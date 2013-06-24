@@ -32,8 +32,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-        TextTabStopListContext::TextTabStopListContext( ContextHandler& rParent, std::list< TabStop >  & aTabList )
-            : ContextHandler( rParent )
+        TextTabStopListContext::TextTabStopListContext( ContextHandler2Helper& rParent, std::list< TabStop >  & aTabList )
+            : ContextHandler2( rParent )
             , maTabList( aTabList )
         {
         }
@@ -42,29 +42,20 @@ namespace oox { namespace drawingml {
         {
         }
 
-        void SAL_CALL TextTabStopListContext::endFastElement( ::sal_Int32 /*Element*/ )
-            throw ( SAXException, RuntimeException)
+        ContextHandlerRef TextTabStopListContext::onCreateContext( ::sal_Int32 aElement, const AttributeList& rAttribs )
         {
-        }
-
-
-    Reference< ::XFastContextHandler > TextTabStopListContext::createFastChildContext( ::sal_Int32 aElement,
-                                                                                                                                                                             const Reference< XFastAttributeList >& xAttribs )
-            throw (SAXException, RuntimeException)
-        {
-            Reference< XFastContextHandler > xRet;
             switch( aElement )
             {
             case A_TOKEN( tab ):
             {
                 OUString sValue;
                 TabStop aTabStop;
-                sValue = xAttribs->getOptionalValue( XML_pos );
+                sValue = rAttribs.getString( XML_pos ).get();
                 if( !sValue.isEmpty() )
                 {
                     aTabStop.Position = GetCoordinate( sValue );
                 }
-                sal_Int32 aToken = xAttribs->getOptionalValueToken( XML_algn, 0 );
+                sal_Int32 aToken = rAttribs.getToken( XML_algn, 0 );
                 if( aToken != 0 )
                 {
                     aTabStop.Alignment = GetTabAlign( aToken );
@@ -75,13 +66,8 @@ namespace oox { namespace drawingml {
             default:
                 break;
             }
-            if ( !xRet.is() )
-                xRet.set( this );
-            return xRet;
+            return this;
         }
-
-
 } }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

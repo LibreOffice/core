@@ -33,151 +33,132 @@ class SolidFillContext : public ColorContext
 {
 public:
     explicit            SolidFillContext(
-                            ::oox::core::ContextHandler& rParent,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs,
+                            ::oox::core::ContextHandler2Helper& rParent,
+                            const ::oox::AttributeList& rAttribs,
                             FillProperties& rFillProps );
 };
 
 // ============================================================================
 
 /** Context handler that imports the a:gradFill element. */
-class GradientFillContext : public ::oox::core::ContextHandler
+class GradientFillContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            GradientFillContext(
-                            ::oox::core::ContextHandler& rParent,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs,
+                            ::oox::core::ContextHandler2Helper& rParent,
+                            const ::oox::AttributeList& rAttribs,
                             GradientFillProperties& rGradientProps );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
-                        createFastChildContext(
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext(
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
-                        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     GradientFillProperties& mrGradientProps;
 };
 
-// ============================================================================
-
 /** Context handler that imports the a:pattFill element. */
-class PatternFillContext : public ::oox::core::ContextHandler
+class PatternFillContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            PatternFillContext(
-                            ::oox::core::ContextHandler& rParent,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs,
+                            ::oox::core::ContextHandler2Helper& rParent,
+                            const ::oox::AttributeList& rAttribs,
                             PatternFillProperties& rPatternProps );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
-                        createFastChildContext(
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext(
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
-                        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     PatternFillProperties& mrPatternProps;
 };
 
-// ============================================================================
-// ============================================================================
 
 /** Context handler that imports the a:clrChange element containing the colors
     of a bitmap color change transformation. */
-class ColorChangeContext : public ::oox::core::ContextHandler
+class ColorChangeContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            ColorChangeContext(
-                            ::oox::core::ContextHandler& rParent,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs,
+                            ::oox::core::ContextHandler2Helper& rParent,
+                            const ::oox::AttributeList& rAttribs,
                             BlipFillProperties& rBlipProps );
     virtual             ~ColorChangeContext();
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
-                        createFastChildContext(
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext(
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
-                        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     BlipFillProperties& mrBlipProps;
     bool                mbUseAlpha;
 };
 
-// ============================================================================
-
 /** Context handler that imports the a:blip element containing the fill bitmap
     and bitmap color transformation settings. */
-class BlipContext : public ::oox::core::ContextHandler
+class BlipContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            BlipContext(
-                            ::oox::core::ContextHandler& rParent,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs,
+                            ::oox::core::ContextHandler2Helper& rParent,
+                            const ::oox::AttributeList& rAttribs,
                             BlipFillProperties& rBlipProps );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
-                        createFastChildContext(
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext(
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
-                        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     BlipFillProperties& mrBlipProps;
 };
 
-// ============================================================================
-
 /** Context handler that imports the a:blipFill element. */
-class BlipFillContext : public ::oox::core::ContextHandler
+class BlipFillContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            BlipFillContext(
-                            ::oox::core::ContextHandler& rParent,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs,
+                            ::oox::core::ContextHandler2Helper& rParent,
+                            const ::oox::AttributeList& rAttribs,
                             BlipFillProperties& rBlipProps );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
-                        createFastChildContext(
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext(
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
-                        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     BlipFillProperties& mrBlipProps;
 };
 
-// ============================================================================
-// ============================================================================
-
 /** Context handler for elements that contain a fill property element
     (a:noFill, a:solidFill, a:gradFill, a:pattFill, a:blipFill, a:grpFill). */
-class FillPropertiesContext : public ::oox::core::ContextHandler
+class FillPropertiesContext : public ::oox::core::ContextHandler2
 {
 public:
     explicit            FillPropertiesContext(
-                            ::oox::core::ContextHandler& rParent,
+                            ::oox::core::ContextHandler2Helper& rParent,
                             FillProperties& rFillProps );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
-                        createFastChildContext(
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext(
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
-                        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
+                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler >
+    static ::oox::core::ContextHandlerRef
                         createFillContext(
-                            ::oox::core::ContextHandler& rParent,
+                            ::oox::core::ContextHandler2Helper& rParent,
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs,
+                            const ::oox::AttributeList& rAttribs,
                             FillProperties& rFillProps );
 
 protected:
     FillProperties&     mrFillProps;
 };
-
-// ============================================================================
 
 /** Context handler for elements that contain a fill property element
     (a:noFill, a:solidFill, a:gradFill, a:pattFill, a:blipFill, a:grpFill).
@@ -190,15 +171,13 @@ class SimpleFillPropertiesContext : private FillProperties, public FillPropertie
 {
 public:
     explicit            SimpleFillPropertiesContext(
-                            ::oox::core::ContextHandler& rParent,
+                            ::oox::core::ContextHandler2Helper& rParent,
                             Color& rColor );
     virtual             ~SimpleFillPropertiesContext();
 
 protected:
     Color&              mrColor;
 };
-
-// ============================================================================
 
 } // namespace drawingml
 } // namespace oox

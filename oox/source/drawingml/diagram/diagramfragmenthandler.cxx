@@ -34,7 +34,7 @@ DiagramDataFragmentHandler::DiagramDataFragmentHandler( XmlFilterBase& rFilter,
                                                         const OUString& rFragmentPath,
                                                         const DiagramDataPtr pDataPtr )
     throw( )
-    : FragmentHandler( rFilter, rFragmentPath )
+    : FragmentHandler2( rFilter, rFragmentPath )
     , mpDataPtr( pDataPtr )
 {
 }
@@ -51,26 +51,19 @@ void SAL_CALL DiagramDataFragmentHandler::endDocument()
 }
 
 
-Reference< XFastContextHandler > SAL_CALL
-DiagramDataFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
-                                                    const Reference< XFastAttributeList >& )
-    throw ( SAXException, RuntimeException)
+ContextHandlerRef
+DiagramDataFragmentHandler::onCreateContext( ::sal_Int32 aElement,
+                                             const AttributeList& )
 {
-    Reference< XFastContextHandler > xRet;
-
     switch( aElement )
     {
     case DGM_TOKEN( dataModel ):
-        xRet.set( new DataModelContext( *this, mpDataPtr ) );
-        break;
+        return new DataModelContext( *this, mpDataPtr );
     default:
         break;
     }
 
-    if( !xRet.is() )
-        xRet = getFastContextHandler();
-
-    return xRet;
+    return this;
 }
 
 ///////////////////

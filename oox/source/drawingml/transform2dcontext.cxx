@@ -28,32 +28,29 @@ using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::xml::sax::SAXException;
 using ::com::sun::star::xml::sax::XFastAttributeList;
 using ::com::sun::star::xml::sax::XFastContextHandler;
-using ::oox::core::ContextHandler;
+using ::oox::core::ContextHandlerRef;
 
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
-
 /** context to import a CT_Transform2D */
-Transform2DContext::Transform2DContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, Shape& rShape, bool btxXfrm ) throw()
-: ContextHandler( rParent )
+Transform2DContext::Transform2DContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, Shape& rShape, bool btxXfrm ) throw()
+: ContextHandler2( rParent )
 , mrShape( rShape )
 , mbtxXfrm ( btxXfrm )
 {
-    AttributeList aAttributeList( xAttribs );
     if( !btxXfrm )
     {
-        mrShape.setRotation( aAttributeList.getInteger( XML_rot, 0 ) ); // 60000ths of a degree Positive angles are clockwise; negative angles are counter-clockwise
-        mrShape.setFlip( aAttributeList.getBool( XML_flipH, sal_False ), aAttributeList.getBool( XML_flipV, sal_False ) );
+        mrShape.setRotation( rAttribs.getInteger( XML_rot, 0 ) ); // 60000ths of a degree Positive angles are clockwise; negative angles are counter-clockwise
+        mrShape.setFlip( rAttribs.getBool( XML_flipH, sal_False ), rAttribs.getBool( XML_flipV, sal_False ) );
     }
     else
     {
-        mrShape.getTextBody()->getTextProperties().moRotation = aAttributeList.getInteger( XML_rot );
+        mrShape.getTextBody()->getTextProperties().moRotation = rAttribs.getInteger( XML_rot );
     }
 }
 
-Reference< XFastContextHandler > Transform2DContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     if( mbtxXfrm )
     {
@@ -61,8 +58,8 @@ Reference< XFastContextHandler > Transform2DContext::createFastChildContext( sal
         {
             case A_TOKEN( off ):
                 {
-                    OUString sXValue = xAttribs->getOptionalValue( XML_x );
-                    OUString sYValue = xAttribs->getOptionalValue( XML_y );
+                    OUString sXValue = rAttribs.getString( XML_x ).get();
+                    OUString sYValue = rAttribs.getString( XML_y ).get();
                     if( !sXValue.isEmpty() )
                         mrShape.getTextBody()->getTextProperties().moTextOffX = GetCoordinate( sXValue.toInt32() - mrShape.getPosition().X );
                     if( !sYValue.isEmpty() )
@@ -78,23 +75,21 @@ Reference< XFastContextHandler > Transform2DContext::createFastChildContext( sal
     switch( aElementToken )
     {
     case A_TOKEN( off ):        // horz/vert translation
-        mrShape.setPosition( awt::Point( xAttribs->getOptionalValue( XML_x ).toInt32(), xAttribs->getOptionalValue( XML_y ).toInt32() ) );
+        mrShape.setPosition( awt::Point( rAttribs.getString( XML_x ).get().toInt32(), rAttribs.getString( XML_y ).get().toInt32() ) );
         break;
     case A_TOKEN( ext ):        // horz/vert size
-        mrShape.setSize( awt::Size( xAttribs->getOptionalValue( XML_cx ).toInt32(), xAttribs->getOptionalValue( XML_cy ).toInt32() ) );
+        mrShape.setSize( awt::Size( rAttribs.getString( XML_cx ).get().toInt32(), rAttribs.getString( XML_cy ).get().toInt32() ) );
         break;
     case A_TOKEN( chOff ):  // horz/vert translation of children
-        mrShape.setChildPosition( awt::Point( xAttribs->getOptionalValue( XML_x ).toInt32(), xAttribs->getOptionalValue( XML_y ).toInt32() ) );
+        mrShape.setChildPosition( awt::Point( rAttribs.getString( XML_x ).get().toInt32(), rAttribs.getString( XML_y ).get().toInt32() ) );
         break;
     case A_TOKEN( chExt ):  // horz/vert size of children
-        mrShape.setChildSize( awt::Size( xAttribs->getOptionalValue( XML_cx ).toInt32(), xAttribs->getOptionalValue( XML_cy ).toInt32() ) );
+        mrShape.setChildSize( awt::Size( rAttribs.getString( XML_cx ).get().toInt32(), rAttribs.getString( XML_cy ).get().toInt32() ) );
         break;
     }
 
     return 0;
 }
-
-// ============================================================================
 
 } // namespace drawingml
 } // namespace oox

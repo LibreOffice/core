@@ -37,24 +37,23 @@ namespace drawingml {
 
 // ============================================================================
 
-class FillStyleListContext : public ContextHandler
+class FillStyleListContext : public ContextHandler2
 {
 public:
-    FillStyleListContext( ContextHandler& rParent, FillStyleList& rFillStyleList );
-    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException);
+    FillStyleListContext( ContextHandler2Helper& rParent, FillStyleList& rFillStyleList );
+    virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     FillStyleList& mrFillStyleList;
 };
 
-FillStyleListContext::FillStyleListContext( ContextHandler& rParent, FillStyleList& rFillStyleList ) :
-    ContextHandler( rParent ),
+FillStyleListContext::FillStyleListContext( ContextHandler2Helper& rParent, FillStyleList& rFillStyleList ) :
+    ContextHandler2( rParent ),
     mrFillStyleList( rFillStyleList )
 {
 }
 
-Reference< XFastContextHandler > FillStyleListContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttribs )
-    throw (SAXException, RuntimeException)
+ContextHandlerRef FillStyleListContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( nElement )
     {
@@ -65,60 +64,59 @@ Reference< XFastContextHandler > FillStyleListContext::createFastChildContext( s
         case A_TOKEN( pattFill ):
         case A_TOKEN( grpFill ):
             mrFillStyleList.push_back( FillPropertiesPtr( new FillProperties ) );
-            return FillPropertiesContext::createFillContext( *this, nElement, xAttribs, *mrFillStyleList.back() );
+            return FillPropertiesContext::createFillContext( *this, nElement, rAttribs, *mrFillStyleList.back() );
     }
     return 0;
 }
 
 // ============================================================================
 
-class LineStyleListContext : public ContextHandler
+class LineStyleListContext : public ContextHandler2
 {
 public:
-    LineStyleListContext( ContextHandler& rParent, LineStyleList& rLineStyleList );
-    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException);
+    LineStyleListContext( ContextHandler2Helper& rParent, LineStyleList& rLineStyleList );
+    virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     LineStyleList& mrLineStyleList;
 };
 
-LineStyleListContext::LineStyleListContext( ContextHandler& rParent, LineStyleList& rLineStyleList ) :
-    ContextHandler( rParent ),
+LineStyleListContext::LineStyleListContext( ContextHandler2Helper& rParent, LineStyleList& rLineStyleList ) :
+    ContextHandler2( rParent ),
     mrLineStyleList( rLineStyleList )
 {
 }
 
-Reference< XFastContextHandler > LineStyleListContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttribs )
-    throw (SAXException, RuntimeException)
+ContextHandlerRef LineStyleListContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( nElement )
     {
         case A_TOKEN( ln ):
             mrLineStyleList.push_back( LinePropertiesPtr( new LineProperties ) );
-            return new LinePropertiesContext( *this, xAttribs, *mrLineStyleList.back() );
+            return new LinePropertiesContext( *this, rAttribs, *mrLineStyleList.back() );
     }
     return 0;
 }
 
 // ============================================================================
 
-class EffectStyleListContext : public ContextHandler
+class EffectStyleListContext : public ContextHandler2
 {
 public:
-    EffectStyleListContext( ContextHandler& rParent, EffectStyleList& rEffectStyleList );
-    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException);
+    EffectStyleListContext( ContextHandler2Helper& rParent, EffectStyleList& rEffectStyleList );
+    virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     EffectStyleList& mrEffectStyleList;
 };
 
-EffectStyleListContext::EffectStyleListContext( ContextHandler& rParent, EffectStyleList& rEffectStyleList ) :
-    ContextHandler( rParent ),
+EffectStyleListContext::EffectStyleListContext( ContextHandler2Helper& rParent, EffectStyleList& rEffectStyleList ) :
+    ContextHandler2( rParent ),
     mrEffectStyleList( rEffectStyleList )
 {
 }
 
-Reference< XFastContextHandler > EffectStyleListContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& /*xAttribs*/ ) throw (SAXException, RuntimeException)
+ContextHandlerRef EffectStyleListContext::onCreateContext( sal_Int32 nElement, const AttributeList& /*rAttribs*/ )
 {
     switch( nElement )
     {
@@ -136,28 +134,26 @@ Reference< XFastContextHandler > EffectStyleListContext::createFastChildContext(
 
 // ============================================================================
 
-class FontSchemeContext : public ContextHandler
+class FontSchemeContext : public ContextHandler2
 {
 public:
-    FontSchemeContext( ContextHandler& rParent, FontScheme& rFontScheme );
-    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException);
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) throw (SAXException, RuntimeException);
+    FontSchemeContext( ContextHandler2Helper& rParent, FontScheme& rFontScheme );
+    virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void onEndElement() SAL_OVERRIDE;
 
 private:
     FontScheme& mrFontScheme;
     TextCharacterPropertiesPtr mxCharProps;
 };
 
-FontSchemeContext::FontSchemeContext( ContextHandler& rParent, FontScheme& rFontScheme ) :
-    ContextHandler( rParent ),
+FontSchemeContext::FontSchemeContext( ContextHandler2Helper& rParent, FontScheme& rFontScheme ) :
+    ContextHandler2( rParent ),
     mrFontScheme( rFontScheme )
 {
 }
 
-Reference< XFastContextHandler > FontSchemeContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
-    throw (SAXException, RuntimeException)
+ContextHandlerRef FontSchemeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    AttributeList aAttribs( rxAttribs );
     switch( nElement )
     {
         case A_TOKEN( majorFont ):
@@ -171,23 +167,23 @@ Reference< XFastContextHandler > FontSchemeContext::createFastChildContext( sal_
 
         case A_TOKEN( latin ):
             if( mxCharProps.get() )
-                mxCharProps->maLatinFont.setAttributes( aAttribs );
+                mxCharProps->maLatinFont.setAttributes( rAttribs );
         break;
         case A_TOKEN( ea ):
             if( mxCharProps.get() )
-                mxCharProps->maAsianFont.setAttributes( aAttribs );
+                mxCharProps->maAsianFont.setAttributes( rAttribs );
         break;
         case A_TOKEN( cs ):
             if( mxCharProps.get() )
-                mxCharProps->maComplexFont.setAttributes( aAttribs );
+                mxCharProps->maComplexFont.setAttributes( rAttribs );
         break;
     }
     return 0;
 }
 
-void FontSchemeContext::endFastElement( sal_Int32 nElement ) throw (SAXException, RuntimeException)
+void FontSchemeContext::onEndElement()
 {
-    switch( nElement )
+    switch( getCurrentElement() )
     {
         case A_TOKEN( majorFont ):
         case A_TOKEN( minorFont ):
@@ -198,16 +194,15 @@ void FontSchemeContext::endFastElement( sal_Int32 nElement ) throw (SAXException
 
 // ============================================================================
 
-ThemeElementsContext::ThemeElementsContext( ContextHandler& rParent, Theme& rTheme ) :
-    ContextHandler( rParent ),
+ThemeElementsContext::ThemeElementsContext( ContextHandler2Helper& rParent, Theme& rTheme ) :
+    ContextHandler2( rParent ),
     mrTheme( rTheme )
 {
 }
 
-Reference< XFastContextHandler > ThemeElementsContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef ThemeElementsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     // CT_BaseStyles
-    Reference< XFastContextHandler > xRet;
     switch( nElement )
     {
         case A_TOKEN( clrScheme ):  // CT_ColorScheme
@@ -216,7 +211,7 @@ Reference< XFastContextHandler > ThemeElementsContext::createFastChildContext( s
             return new FontSchemeContext( *this, mrTheme.getFontScheme() );
 
         case A_TOKEN( fmtScheme ):  // CT_StyleMatrix
-            mrTheme.setStyleName( xAttribs->getOptionalValue( XML_name ) );
+            mrTheme.setStyleName( rAttribs.getString( XML_name ).get() );
             return this;
 
         case A_TOKEN( fillStyleLst ):   // CT_FillStyleList

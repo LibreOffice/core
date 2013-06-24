@@ -22,9 +22,9 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace drawingml {
 // ---------------------------------------------------------------------
 
-EffectPropertiesContext::EffectPropertiesContext( ContextHandler& rParent,
+EffectPropertiesContext::EffectPropertiesContext( ContextHandler2Helper& rParent,
     EffectProperties& rEffectProperties ) throw()
-: ContextHandler( rParent )
+: ContextHandler2( rParent )
 , mrEffectProperties( rEffectProperties )
 {
 }
@@ -33,15 +33,14 @@ EffectPropertiesContext::~EffectPropertiesContext()
 {
 }
 
-Reference< XFastContextHandler > EffectPropertiesContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    AttributeList aAttribs( xAttribs );
     switch( nElement )
     {
         case A_TOKEN( outerShdw ):
         {
-            mrEffectProperties.maShadow.moShadowDist = aAttribs.getInteger( XML_dist, 0 );
-            mrEffectProperties.maShadow.moShadowDir = aAttribs.getInteger( XML_dir, 0 );
+            mrEffectProperties.maShadow.moShadowDist = rAttribs.getInteger( XML_dist, 0 );
+            mrEffectProperties.maShadow.moShadowDir = rAttribs.getInteger( XML_dir, 0 );
             return new ColorContext( *this, mrEffectProperties.maShadow.moShadowColor );
         }
         break;

@@ -20,22 +20,20 @@
 #ifndef OOX_DRAWINGML_GUIDCONTEXT_HXX
 #define OOX_DRAWINGML_GUIDCONTEXT_HXX
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 
 namespace oox { namespace drawingml {
 
-    class GuidContext : public ::oox::core::ContextHandler
+    class GuidContext : public ::oox::core::ContextHandler2
     {
 
     public:
-        GuidContext( ::oox::core::ContextHandler& rParent, OUString& rGuidId );
-        virtual void SAL_CALL characters( const OUString& aChars ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+        GuidContext( ::oox::core::ContextHandler2Helper& rParent, OUString& rGuidId );
+        virtual void onCharacters( const OUString& aChars ) SAL_OVERRIDE;
 
     private:
-
         OUString& mrGuidId;
     };
-
 } }
 
 #endif

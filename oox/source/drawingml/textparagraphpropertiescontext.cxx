@@ -39,58 +39,57 @@ using namespace ::com::sun::star::text;
 namespace oox { namespace drawingml {
 
 // CT_TextParagraphProperties
-TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler& rParent,
-                                                                const Reference< XFastAttributeList >& xAttribs,
+TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler2Helper& rParent,
+                                                                const AttributeList& rAttribs,
                                                                 TextParagraphProperties& rTextParagraphProperties )
-: ContextHandler( rParent )
+: ContextHandler2( rParent )
 , mrTextParagraphProperties( rTextParagraphProperties )
 , mrSpaceBefore( rTextParagraphProperties.getParaTopMargin() )
 , mrSpaceAfter( rTextParagraphProperties.getParaBottomMargin() )
 , mrBulletList( rTextParagraphProperties.getBulletList() )
 {
     OUString sValue;
-    AttributeList attribs( xAttribs );
 
     PropertyMap& rPropertyMap( mrTextParagraphProperties.getTextParagraphPropertyMap() );
 
     // ST_TextAlignType
-    rPropertyMap[ PROP_ParaAdjust ] <<= GetParaAdjust( xAttribs->getOptionalValueToken( XML_algn, XML_l ) );
+    rPropertyMap[ PROP_ParaAdjust ] <<= GetParaAdjust( rAttribs.getToken( XML_algn, XML_l ) );
     // TODO see to do the same with RubyAdjust
 
     // ST_Coordinate32
-//  sValue = xAttribs->getOptionalValue( XML_defTabSz );    SJ: we need to be able to set the default tab size for each text object,
+//  sValue = rAttribs.getString( XML_defTabSz ).get();    SJ: we need to be able to set the default tab size for each text object,
 //                                                          this is possible at the moment only for the whole document.
 //  sal_Int32 nDefTabSize = ( sValue.getLength() == 0 ? 0 : GetCoordinate(  sValue ) );
     // TODO
 
-//  bool bEaLineBrk = attribs.getBool( XML_eaLnBrk, true );
-    if ( xAttribs->hasAttribute( XML_latinLnBrk ) )
+//  bool bEaLineBrk = rAttribs.getBool( XML_eaLnBrk, true );
+    if ( rAttribs.hasAttribute( XML_latinLnBrk ) )
     {
-        bool bLatinLineBrk = attribs.getBool( XML_latinLnBrk, true );
+        bool bLatinLineBrk = rAttribs.getBool( XML_latinLnBrk, true );
         rPropertyMap[ PROP_ParaIsHyphenation ] <<= bLatinLineBrk;
     }
     // TODO see what to do with Asian hyphenation
 
     // ST_TextFontAlignType
     // TODO
-//  sal_Int32 nFontAlign = xAttribs->getOptionalValueToken( XML_fontAlgn, XML_base );
+//  sal_Int32 nFontAlign = rAttribs.getToken( XML_fontAlgn, XML_base );
 
-    if ( xAttribs->hasAttribute( XML_hangingPunct ) )
+    if ( rAttribs.hasAttribute( XML_hangingPunct ) )
     {
-        bool bHangingPunct = attribs.getBool( XML_hangingPunct, false );
+        bool bHangingPunct = rAttribs.getBool( XML_hangingPunct, false );
         rPropertyMap[ PROP_ParaIsHangingPunctuation ] <<= bHangingPunct;
     }
 
   // ST_Coordinate
-    if ( xAttribs->hasAttribute( XML_indent ) )
+    if ( rAttribs.hasAttribute( XML_indent ) )
     {
-        sValue = xAttribs->getOptionalValue( XML_indent );
+        sValue = rAttribs.getString( XML_indent ).get();
         mrTextParagraphProperties.getFirstLineIndentation() = boost::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
     }
 
   // ST_TextIndentLevelType
     // -1 is an invalid value and denote the lack of level
-    sal_Int32 nLevel = attribs.getInteger( XML_lvl, 0 );
+    sal_Int32 nLevel = rAttribs.getInteger( XML_lvl, 0 );
     if( nLevel > 8 || nLevel < 0 )
     {
         nLevel = 0;
@@ -105,27 +104,26 @@ TextParagraphPropertiesContext::TextParagraphPropertiesContext( ContextHandler& 
 
     // ST_TextMargin
     // ParaLeftMargin
-    if ( xAttribs->hasAttribute( XML_marL ) )
+    if ( rAttribs.hasAttribute( XML_marL ) )
     {
-        sValue = xAttribs->getOptionalValue( XML_marL );
+        sValue = rAttribs.getString( XML_marL ).get();
         mrTextParagraphProperties.getParaLeftMargin() = boost::optional< sal_Int32 >( sValue.isEmpty() ? 0 : GetCoordinate( sValue ) );
     }
 
     // ParaRightMargin
-    if ( xAttribs->hasAttribute( XML_marR ) )
+    if ( rAttribs.hasAttribute( XML_marR ) )
     {
-        sValue = xAttribs->getOptionalValue( XML_marR );
+        sValue = rAttribs.getString( XML_marR ).get();
         sal_Int32 nMarR  = sValue.isEmpty() ? 0 : GetCoordinate( sValue ) ;
         rPropertyMap[ PROP_ParaRightMargin ] <<= nMarR;
     }
 
-    if ( xAttribs->hasAttribute( XML_rtl ) )
+    if ( rAttribs.hasAttribute( XML_rtl ) )
     {
-        bool bRtl = attribs.getBool( XML_rtl, false );
+        bool bRtl = rAttribs.getBool( XML_rtl, false );
         rPropertyMap[ PROP_WritingMode ] <<= ( bRtl ? WritingMode2::RL_TB : WritingMode2::LR_TB );
     }
 }
-
 
 
 TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
@@ -159,48 +157,33 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
 
 // --------------------------------------------------------------------
 
-void TextParagraphPropertiesContext::endFastElement( sal_Int32 ) throw (SAXException, RuntimeException)
+ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-}
-
-
-
-// --------------------------------------------------------------------
-
-Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& rXAttributes ) throw (SAXException, RuntimeException)
-{
-    AttributeList aAttribs( rXAttributes );
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
         case A_TOKEN( lnSpc ):          // CT_TextSpacing
-            xRet.set( new TextSpacingContext( *this, maLineSpacing ) );
-            break;
+            return new TextSpacingContext( *this, maLineSpacing );
         case A_TOKEN( spcBef ):         // CT_TextSpacing
-            xRet.set( new TextSpacingContext( *this, mrSpaceBefore ) );
-            break;
+            return new TextSpacingContext( *this, mrSpaceBefore );
         case A_TOKEN( spcAft ):         // CT_TextSpacing
-            xRet.set( new TextSpacingContext( *this, mrSpaceAfter ) );
-            break;
-
+            return new TextSpacingContext( *this, mrSpaceAfter );
         // EG_TextBulletColor
         case A_TOKEN( buClrTx ):        // CT_TextBulletColorFollowText ???
             mrBulletList.mbBulletColorFollowText <<= sal_True;
             break;
         case A_TOKEN( buClr ):          // CT_Color
-            xRet.set( new ColorContext( *this, *mrBulletList.maBulletColorPtr ) );
-            break;
-
+            return new ColorContext( *this, *mrBulletList.maBulletColorPtr );
         // EG_TextBulletSize
         case A_TOKEN( buSzTx ):         // CT_TextBulletSizeFollowText
             mrBulletList.setBulletSize(100);
             break;
         case A_TOKEN( buSzPct ):        // CT_TextBulletSizePercent
-            mrBulletList.setBulletSize( static_cast<sal_Int16>( GetPercent( rXAttributes->getOptionalValue( XML_val ) ) / 1000 ) );
+            mrBulletList.setBulletSize( static_cast<sal_Int16>( GetPercent( rAttribs.getString( XML_val ).get() ) / 1000 ) );
             break;
         case A_TOKEN( buSzPts ):        // CT_TextBulletSizePoint
             mrBulletList.setBulletSize(0);
-            mrBulletList.setFontSize( static_cast<sal_Int16>(GetTextSize( rXAttributes->getOptionalValue( XML_val ) ) ) );
+            mrBulletList.setFontSize( static_cast<sal_Int16>(GetTextSize( rAttribs.getString( XML_val ).get() ) ) );
             break;
 
         // EG_TextBulletTypeface
@@ -208,7 +191,7 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
             mrBulletList.mbBulletFontFollowText <<= sal_True;
             break;
         case A_TOKEN( buFont ):         // CT_TextFont
-            mrBulletList.maBulletFont.setAttributes( aAttribs );
+            mrBulletList.maBulletFont.setAttributes( rAttribs );
             break;
 
         // EG_TextBullet
@@ -217,10 +200,9 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
             break;
         case A_TOKEN( buAutoNum ):      // CT_TextAutonumberBullet
         {
-            AttributeList attribs( rXAttributes );
             try {
-                sal_Int32 nType = rXAttributes->getValueToken( XML_type );
-                sal_Int32 nStartAt = attribs.getInteger( XML_startAt, 1 );
+                sal_Int32 nType = rAttribs.getToken( XML_type, 0 );
+                sal_Int32 nStartAt = rAttribs.getInteger( XML_startAt, 1 );
                 if( nStartAt > 32767 )
                 {
                     nStartAt = 32767;
@@ -240,7 +222,7 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
         }
         case A_TOKEN( buChar ):         // CT_TextCharBullet
             try {
-                mrBulletList.setBulletChar( rXAttributes->getValue( XML_char ) );
+                mrBulletList.setBulletChar( rAttribs.getString( XML_char ).get() );
             }
             catch(SAXException& /* e */)
             {
@@ -250,23 +232,15 @@ Reference< XFastContextHandler > TextParagraphPropertiesContext::createFastChild
         case A_TOKEN( buBlip ):         // CT_TextBlipBullet
             {
                 mxBlipProps.reset( new BlipFillProperties );
-                xRet.set( new BlipFillContext( *this, rXAttributes, *mxBlipProps ) );
+                return new BlipFillContext( *this, rAttribs, *mxBlipProps );
             }
-            break;
-
         case A_TOKEN( tabLst ):         // CT_TextTabStopList
-            xRet.set( new TextTabStopListContext( *this, maTabList ) );
-            break;
+            return new TextTabStopListContext( *this, maTabList );
         case A_TOKEN( defRPr ):         // CT_TextCharacterProperties
-            xRet.set( new TextCharacterPropertiesContext( *this, rXAttributes, mrTextParagraphProperties.getTextCharacterProperties() ) );
-            break;
+            return new TextCharacterPropertiesContext( *this, rAttribs, mrTextParagraphProperties.getTextCharacterProperties() );
     }
-    if ( !xRet.is() )
-        xRet.set( this );
-    return xRet;
+    return this;
 }
-
-// --------------------------------------------------------------------
 
 } }
 

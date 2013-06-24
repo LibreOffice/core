@@ -31,8 +31,8 @@ namespace oox { namespace drawingml {
 // ---------------
 // CT_ShapeStyle
 // ---------------
-ShapeStyleContext::ShapeStyleContext( ContextHandler& rParent, Shape& rShape )
-: ContextHandler( rParent )
+ShapeStyleContext::ShapeStyleContext( ContextHandler2Helper& rParent, Shape& rShape )
+: ContextHandler2( rParent )
 , mrShape( rShape )
 {
 }
@@ -41,19 +41,8 @@ ShapeStyleContext::~ShapeStyleContext()
 {
 }
 
-// --------------------------------------------------------------------
-
-void ShapeStyleContext::endFastElement( sal_Int32 ) throw (SAXException, RuntimeException)
+ContextHandlerRef ShapeStyleContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-}
-
-// --------------------------------------------------------------------
-
-Reference< XFastContextHandler > ShapeStyleContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& rxAttributes )
-    throw ( SAXException, RuntimeException )
-{
-    Reference< XFastContextHandler > xRet;
-    AttributeList aAttribs( rxAttributes );
     switch( aElementToken )
     {
         case A_TOKEN( lnRef ) :     // CT_StyleMatrixReference
@@ -63,20 +52,17 @@ Reference< XFastContextHandler > ShapeStyleContext::createFastChildContext( sal_
         {
             sal_Int32 nToken = getBaseToken( aElementToken );
             ShapeStyleRef& rStyleRef = mrShape.getShapeStyleRefs()[ nToken ];
-            rStyleRef.mnThemedIdx = (nToken == XML_fontRef) ? aAttribs.getToken( XML_idx, XML_none ) : aAttribs.getInteger( XML_idx, 0 );
+            rStyleRef.mnThemedIdx = (nToken == XML_fontRef) ? rAttribs.getToken( XML_idx, XML_none ) : rAttribs.getInteger( XML_idx, 0 );
             // Set default Text Color. Some xml files don't seem
             // to have color definitions inside fontRef - Use
             // tx1 in such cases
             if( nToken == XML_fontRef && !rStyleRef.maPhClr.isUsed() )
                 rStyleRef.maPhClr.setSchemeClr(XML_tx1);
-            xRet.set( new ColorContext( *this, rStyleRef.maPhClr ) );
+            return new ColorContext( *this, rStyleRef.maPhClr );
         }
-        break;
     }
-    return xRet;
+    return 0;
 }
-
-// --------------------------------------------------------------------
 
 } }
 

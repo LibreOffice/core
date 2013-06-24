@@ -20,7 +20,7 @@
 #ifndef OOX_DRAWINGML_COLORCHOICECONTEXT_HXX
 #define OOX_DRAWINGML_COLORCHOICECONTEXT_HXX
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 
 namespace oox {
 namespace drawingml {
@@ -31,21 +31,19 @@ class Color;
 
 /** Context handler for the different color value elements (a:scrgbClr,
     a:srgbClr, a:hslClr, a:sysClr, a:schemeClr, a:prstClr). */
-class ColorValueContext : public ::oox::core::ContextHandler
+class ColorValueContext : public ::oox::core::ContextHandler2
 {
 public:
-    explicit            ColorValueContext( ::oox::core::ContextHandler& rParent, Color& rColor );
+    explicit            ColorValueContext( ::oox::core::ContextHandler2Helper& rParent, Color& rColor );
 
-    virtual void SAL_CALL startFastElement(
-                            sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
-                        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
-                        createFastChildContext(
+    virtual void onStartElement(
+                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext(
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
-                        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     Color&              mrColor;
@@ -55,16 +53,15 @@ private:
 
 /** Context handler for elements that *contain* a color value element
     (a:scrgbClr, a:srgbClr, a:hslClr, a:sysClr, a:schemeClr, a:prstClr). */
-class ColorContext : public ::oox::core::ContextHandler
+class ColorContext : public ::oox::core::ContextHandler2
 {
 public:
-    explicit            ColorContext( ::oox::core::ContextHandler& rParent, Color& rColor );
+    explicit            ColorContext( ::oox::core::ContextHandler2Helper& rParent, Color& rColor );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
-                        createFastChildContext(
+    virtual ::oox::core::ContextHandlerRef
+                        onCreateContext(
                             sal_Int32 nElement,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs )
-                        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+                            const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     Color&              mrColor;

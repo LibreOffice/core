@@ -440,19 +440,19 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
 
 // ---------------------------------------------------------------------
 // CT_GeomGuideList
-class GeomGuideListContext : public ContextHandler
+class GeomGuideListContext : public ContextHandler2
 {
 public:
-    GeomGuideListContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< CustomShapeGuide >& rGuideList );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    GeomGuideListContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< CustomShapeGuide >& rGuideList );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
     std::vector< CustomShapeGuide >&    mrGuideList;
     CustomShapeProperties&              mrCustomShapeProperties;
 };
 
-GeomGuideListContext::GeomGuideListContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< CustomShapeGuide >& rGuideList )
-: ContextHandler( rParent )
+GeomGuideListContext::GeomGuideListContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< CustomShapeGuide >& rGuideList )
+: ContextHandler2( rParent )
 , mrGuideList( rGuideList )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
@@ -624,13 +624,13 @@ static OUString convertToOOEquation( CustomShapeProperties& rCustomShapeProperti
     return aEquation;
 }
 
-Reference< XFastContextHandler > GeomGuideListContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef GeomGuideListContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     if ( aElementToken == A_TOKEN( gd ) )   // CT_GeomGuide
     {
         CustomShapeGuide aGuide;
-        aGuide.maName = xAttribs->getOptionalValue( XML_name );
-        aGuide.maFormula = convertToOOEquation( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_fmla ) );
+        aGuide.maName = rAttribs.getString( XML_name ).get();
+        aGuide.maFormula = convertToOOEquation( mrCustomShapeProperties, rAttribs.getString( XML_fmla ).get() );
         mrGuideList.push_back( aGuide );
     }
     return this;
@@ -645,257 +645,249 @@ static const OUString GetGeomGuideName( const OUString& rValue )
 
 // ---------------------------------------------------------------------
 // CT_AdjPoint2D
-class AdjPoint2DContext : public ContextHandler
+class AdjPoint2DContext : public ContextHandler2
 {
 public:
-    AdjPoint2DContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
+    AdjPoint2DContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
 };
 
-AdjPoint2DContext::AdjPoint2DContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
-: ContextHandler( rParent )
+AdjPoint2DContext::AdjPoint2DContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
+: ContextHandler2( rParent )
 {
-    rAdjPoint2D.First = GetAdjCoordinate( rCustomShapeProperties, xAttribs->getOptionalValue( XML_x ), sal_True );
-    rAdjPoint2D.Second = GetAdjCoordinate( rCustomShapeProperties, xAttribs->getOptionalValue( XML_y ), sal_True );
+    rAdjPoint2D.First = GetAdjCoordinate( rCustomShapeProperties, rAttribs.getString( XML_x ).get(), sal_True );
+    rAdjPoint2D.Second = GetAdjCoordinate( rCustomShapeProperties, rAttribs.getString( XML_y ).get(), sal_True );
 }
 
 // ---------------------------------------------------------------------
 // CT_XYAdjustHandle
-class XYAdjustHandleContext : public ContextHandler
+class XYAdjustHandleContext : public ContextHandler2
 {
 public:
-    XYAdjustHandleContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    XYAdjustHandleContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
     AdjustHandle& mrAdjustHandle;
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-XYAdjustHandleContext::XYAdjustHandleContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle )
-: ContextHandler( rParent )
+XYAdjustHandleContext::XYAdjustHandleContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle )
+: ContextHandler2( rParent )
 , mrAdjustHandle( rAdjustHandle )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
     const OUString aEmptyDefault;
-    AttributeList aAttribs( xAttribs );
-    if ( aAttribs.hasAttribute( XML_gdRefX ) )
+    if ( rAttribs.hasAttribute( XML_gdRefX ) )
     {
-        mrAdjustHandle.gdRef1 = GetGeomGuideName( aAttribs.getString( XML_gdRefX, aEmptyDefault ) );
+        mrAdjustHandle.gdRef1 = GetGeomGuideName( rAttribs.getString( XML_gdRefX, aEmptyDefault ) );
     }
-    if ( aAttribs.hasAttribute( XML_minX ) )
+    if ( rAttribs.hasAttribute( XML_minX ) )
     {
-        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, aAttribs.getString( XML_minX, aEmptyDefault ), sal_True );
+        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minX, aEmptyDefault ), sal_True );
     }
-    if ( aAttribs.hasAttribute( XML_maxX ) )
+    if ( rAttribs.hasAttribute( XML_maxX ) )
     {
-        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, aAttribs.getString( XML_maxX, aEmptyDefault ), sal_True );
+        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxX, aEmptyDefault ), sal_True );
     }
-    if ( aAttribs.hasAttribute( XML_gdRefY ) )
+    if ( rAttribs.hasAttribute( XML_gdRefY ) )
     {
-        mrAdjustHandle.gdRef2 = GetGeomGuideName( aAttribs.getString( XML_gdRefY, aEmptyDefault ) );
+        mrAdjustHandle.gdRef2 = GetGeomGuideName( rAttribs.getString( XML_gdRefY, aEmptyDefault ) );
     }
-    if ( aAttribs.hasAttribute( XML_minY ) )
+    if ( rAttribs.hasAttribute( XML_minY ) )
     {
-        mrAdjustHandle.min2 = GetAdjCoordinate( mrCustomShapeProperties, aAttribs.getString( XML_minY, aEmptyDefault ), sal_True );
+        mrAdjustHandle.min2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minY, aEmptyDefault ), sal_True );
     }
-    if ( aAttribs.hasAttribute( XML_maxY ) )
+    if ( rAttribs.hasAttribute( XML_maxY ) )
     {
-        mrAdjustHandle.max2 = GetAdjCoordinate( mrCustomShapeProperties, aAttribs.getString( XML_maxY, aEmptyDefault ), sal_True );
+        mrAdjustHandle.max2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxY, aEmptyDefault ), sal_True );
     }
 }
 
-Reference< XFastContextHandler > XYAdjustHandleContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef XYAdjustHandleContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xContext;
     if ( aElementToken == A_TOKEN( pos ) )
-        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
-    return xContext;
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
+    return 0;
 }
 
 // ---------------------------------------------------------------------
 // CT_PolarAdjustHandle
-class PolarAdjustHandleContext : public ContextHandler
+class PolarAdjustHandleContext : public ContextHandler2
 {
 public:
-    PolarAdjustHandleContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    PolarAdjustHandleContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
     AdjustHandle& mrAdjustHandle;
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-PolarAdjustHandleContext::PolarAdjustHandleContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle )
-: ContextHandler( rParent )
+PolarAdjustHandleContext::PolarAdjustHandleContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, AdjustHandle& rAdjustHandle )
+: ContextHandler2( rParent )
 , mrAdjustHandle( rAdjustHandle )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
     const OUString aEmptyDefault;
-    AttributeList aAttribs( xAttribs );
-    if ( aAttribs.hasAttribute( XML_gdRefR ) )
+    if ( rAttribs.hasAttribute( XML_gdRefR ) )
     {
-        mrAdjustHandle.gdRef1 = GetGeomGuideName( aAttribs.getString( XML_gdRefR, aEmptyDefault ) );
+        mrAdjustHandle.gdRef1 = GetGeomGuideName( rAttribs.getString( XML_gdRefR, aEmptyDefault ) );
     }
-    if ( aAttribs.hasAttribute( XML_minR ) )
+    if ( rAttribs.hasAttribute( XML_minR ) )
     {
-        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, aAttribs.getString( XML_minR, aEmptyDefault ), sal_True );
+        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minR, aEmptyDefault ), sal_True );
     }
-    if ( aAttribs.hasAttribute( XML_maxR ) )
+    if ( rAttribs.hasAttribute( XML_maxR ) )
     {
-        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, aAttribs.getString( XML_maxR, aEmptyDefault ), sal_True );
+        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxR, aEmptyDefault ), sal_True );
     }
-    if ( aAttribs.hasAttribute( XML_gdRefAng ) )
+    if ( rAttribs.hasAttribute( XML_gdRefAng ) )
     {
-        mrAdjustHandle.gdRef2 = GetGeomGuideName( aAttribs.getString( XML_gdRefAng, aEmptyDefault ) );
+        mrAdjustHandle.gdRef2 = GetGeomGuideName( rAttribs.getString( XML_gdRefAng, aEmptyDefault ) );
     }
-    if ( aAttribs.hasAttribute( XML_minAng ) )
+    if ( rAttribs.hasAttribute( XML_minAng ) )
     {
-        mrAdjustHandle.min2 = GetAdjCoordinate( mrCustomShapeProperties, aAttribs.getString( XML_minAng, aEmptyDefault ) );
+        mrAdjustHandle.min2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minAng, aEmptyDefault ) );
     }
-    if ( aAttribs.hasAttribute( XML_maxAng ) )
+    if ( rAttribs.hasAttribute( XML_maxAng ) )
     {
-        mrAdjustHandle.max2 = GetAdjCoordinate( mrCustomShapeProperties, aAttribs.getString( XML_maxAng, aEmptyDefault ) );
+        mrAdjustHandle.max2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxAng, aEmptyDefault ) );
     }
 }
 
-Reference< XFastContextHandler > PolarAdjustHandleContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef PolarAdjustHandleContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xContext;
     if ( aElementToken == A_TOKEN( pos ) )
-        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
-    return xContext;
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
+    return 0;
 }
 
 // ---------------------------------------------------------------------
 // CT_AdjustHandleList
-class AdjustHandleListContext : public ContextHandler
+class AdjustHandleListContext : public ContextHandler2
 {
 public:
-    AdjustHandleListContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< AdjustHandle >& rAdjustHandleList );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    AdjustHandleListContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< AdjustHandle >& rAdjustHandleList );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
     std::vector< AdjustHandle >& mrAdjustHandleList;
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-AdjustHandleListContext::AdjustHandleListContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< AdjustHandle >& rAdjustHandleList )
-: ContextHandler( rParent )
+AdjustHandleListContext::AdjustHandleListContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< AdjustHandle >& rAdjustHandleList )
+: ContextHandler2( rParent )
 , mrAdjustHandleList( rAdjustHandleList )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
 }
 
-Reference< XFastContextHandler > AdjustHandleListContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef AdjustHandleListContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xContext;
     if ( aElementToken == A_TOKEN( ahXY ) )         // CT_XYAdjustHandle
     {
         AdjustHandle aAdjustHandle( sal_False );
         mrAdjustHandleList.push_back( aAdjustHandle );
-        xContext = new XYAdjustHandleContext( *this, xAttribs, mrCustomShapeProperties, mrAdjustHandleList.back() );
+        return new XYAdjustHandleContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandleList.back() );
     }
     else if ( aElementToken == A_TOKEN( ahPolar ) ) // CT_PolarAdjustHandle
     {
         AdjustHandle aAdjustHandle( sal_True );
         mrAdjustHandleList.push_back( aAdjustHandle );
-        xContext = new PolarAdjustHandleContext( *this, xAttribs, mrCustomShapeProperties, mrAdjustHandleList.back() );
+        return new PolarAdjustHandleContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandleList.back() );
     }
-    return xContext;
+    return 0;
 }
 
 // ---------------------------------------------------------------------
 // CT_ConnectionSite
-class ConnectionSiteContext : public ContextHandler
+class ConnectionSiteContext : public ContextHandler2
 {
 public:
-    ConnectionSiteContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, ConnectionSite& rConnectionSite );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    ConnectionSiteContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, ConnectionSite& rConnectionSite );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
     ConnectionSite& mrConnectionSite;
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-ConnectionSiteContext::ConnectionSiteContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, ConnectionSite& rConnectionSite )
-: ContextHandler( rParent )
+ConnectionSiteContext::ConnectionSiteContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, ConnectionSite& rConnectionSite )
+: ContextHandler2( rParent )
 , mrConnectionSite( rConnectionSite )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
-    mrConnectionSite.ang = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_ang ) );
+    mrConnectionSite.ang = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_ang ).get() );
 }
 
-Reference< XFastContextHandler > ConnectionSiteContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef ConnectionSiteContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xContext;
     if ( aElementToken == A_TOKEN( pos ) )
-        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrConnectionSite.pos ); // CT_AdjPoint2D
-    return xContext;
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrConnectionSite.pos ); // CT_AdjPoint2D
+    return 0;
 }
 
 // ---------------------------------------------------------------------
 // CT_Path2DMoveTo
-class Path2DMoveToContext : public ContextHandler
+class Path2DMoveToContext : public ContextHandler2
 {
 public:
-    Path2DMoveToContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    Path2DMoveToContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
     EnhancedCustomShapeParameterPair& mrAdjPoint2D;
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-Path2DMoveToContext::Path2DMoveToContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
-: ContextHandler( rParent )
+Path2DMoveToContext::Path2DMoveToContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
+: ContextHandler2( rParent )
 , mrAdjPoint2D( rAdjPoint2D )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
 }
 
-Reference< XFastContextHandler > Path2DMoveToContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef Path2DMoveToContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xContext;
     if ( aElementToken == A_TOKEN( pt ) )
-        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjPoint2D );     // CT_AdjPoint2D
-    return xContext;
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjPoint2D );     // CT_AdjPoint2D
+    return 0;
 }
 
 // ---------------------------------------------------------------------
 // CT_Path2DLineTo
-class Path2DLineToContext : public ContextHandler
+class Path2DLineToContext : public ContextHandler2
 {
 public:
-    Path2DLineToContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    Path2DLineToContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
     EnhancedCustomShapeParameterPair& mrAdjPoint2D;
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-Path2DLineToContext::Path2DLineToContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
-: ContextHandler( rParent )
+Path2DLineToContext::Path2DLineToContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rAdjPoint2D )
+: ContextHandler2( rParent )
 , mrAdjPoint2D( rAdjPoint2D )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
 }
 
-Reference< XFastContextHandler > Path2DLineToContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef Path2DLineToContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xContext;
     if ( aElementToken == A_TOKEN( pt ) )
-        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, mrAdjPoint2D );     // CT_AdjPoint2D
-    return xContext;
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjPoint2D );     // CT_AdjPoint2D
+    return 0;
 }
 
 // ---------------------------------------------------------------------
 // CT_Path2DQuadBezierTo
-class Path2DQuadBezierToContext : public ContextHandler
+class Path2DQuadBezierToContext : public ContextHandler2
 {
 public:
-    Path2DQuadBezierToContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rPt1, EnhancedCustomShapeParameterPair& rPt2 );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    Path2DQuadBezierToContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, EnhancedCustomShapeParameterPair& rPt1, EnhancedCustomShapeParameterPair& rPt2 );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
     EnhancedCustomShapeParameterPair& mrPt1;
@@ -904,11 +896,11 @@ protected:
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-Path2DQuadBezierToContext::Path2DQuadBezierToContext( ContextHandler& rParent,
+Path2DQuadBezierToContext::Path2DQuadBezierToContext( ContextHandler2Helper& rParent,
     CustomShapeProperties& rCustomShapeProperties,
         EnhancedCustomShapeParameterPair& rPt1,
             EnhancedCustomShapeParameterPair& rPt2 )
-: ContextHandler( rParent )
+: ContextHandler2( rParent )
 , mrPt1( rPt1 )
 , mrPt2( rPt2 )
 , nCount( 0 )
@@ -916,22 +908,21 @@ Path2DQuadBezierToContext::Path2DQuadBezierToContext( ContextHandler& rParent,
 {
 }
 
-Reference< XFastContextHandler > Path2DQuadBezierToContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef Path2DQuadBezierToContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xContext;
     if ( aElementToken == A_TOKEN( pt ) )
-        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties, nCount++ ? mrPt2 : mrPt1 ); // CT_AdjPoint2D
-    return xContext;
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, nCount++ ? mrPt2 : mrPt1 ); // CT_AdjPoint2D
+    return 0;
 }
 
 // ---------------------------------------------------------------------
 // CT_Path2DCubicBezierTo
-class Path2DCubicBezierToContext : public ContextHandler
+class Path2DCubicBezierToContext : public ContextHandler2
 {
 public:
-    Path2DCubicBezierToContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties,
+    Path2DCubicBezierToContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties,
         EnhancedCustomShapeParameterPair&, EnhancedCustomShapeParameterPair&, EnhancedCustomShapeParameterPair& );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
     CustomShapeProperties& mrCustomShapeProperties;
@@ -941,11 +932,11 @@ protected:
     int nCount;
 };
 
-Path2DCubicBezierToContext::Path2DCubicBezierToContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties,
+Path2DCubicBezierToContext::Path2DCubicBezierToContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties,
     EnhancedCustomShapeParameterPair& rControlPt1,
         EnhancedCustomShapeParameterPair& rControlPt2,
             EnhancedCustomShapeParameterPair& rEndPt )
-: ContextHandler( rParent )
+: ContextHandler2( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
 , mrControlPt1( rControlPt1 )
 , mrControlPt2( rControlPt2 )
@@ -954,25 +945,23 @@ Path2DCubicBezierToContext::Path2DCubicBezierToContext( ContextHandler& rParent,
 {
 }
 
-Reference< XFastContextHandler > Path2DCubicBezierToContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef Path2DCubicBezierToContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xContext;
     if ( aElementToken == A_TOKEN( pt ) )
-        xContext = new AdjPoint2DContext( *this, xAttribs, mrCustomShapeProperties,
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties,
             nCount++ ? nCount == 2 ? mrControlPt2 : mrEndPt : mrControlPt1 );   // CT_AdjPoint2D
-    return xContext;
+    return 0;
 }
 
 // ---------------------------------------------------------------------
 // CT_Path2DContext
-class Path2DContext : public ContextHandler
+class Path2DContext : public ContextHandler2
 {
 public:
-    Path2DContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D );
+    Path2DContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D );
     virtual ~Path2DContext();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL
-        createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs )
-            throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef
+        onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
     Path2D& mrPath2D;
@@ -980,20 +969,19 @@ protected:
     CustomShapeProperties& mrCustomShapeProperties;
 };
 
-Path2DContext::Path2DContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D )
-: ContextHandler( rParent )
+Path2DContext::Path2DContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties, std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& rSegments, Path2D& rPath2D )
+: ContextHandler2( rParent )
 , mrPath2D( rPath2D )
 , mrSegments( rSegments )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
     const OUString aEmptyString;
 
-    AttributeList aAttribs( xAttribs );
-    rPath2D.w = aAttribs.getString( XML_w, aEmptyString ).toInt64();
-    rPath2D.h = aAttribs.getString( XML_h, aEmptyString ).toInt64();
-    rPath2D.fill = aAttribs.getToken( XML_fill, XML_norm );
-    rPath2D.stroke = aAttribs.getBool( XML_stroke, sal_True );
-    rPath2D.extrusionOk = aAttribs.getBool( XML_extrusionOk, sal_True );
+    rPath2D.w = rAttribs.getString( XML_w, aEmptyString ).toInt64();
+    rPath2D.h = rAttribs.getString( XML_h, aEmptyString ).toInt64();
+    rPath2D.fill = rAttribs.getToken( XML_fill, XML_norm );
+    rPath2D.stroke = rAttribs.getBool( XML_stroke, sal_True );
+    rPath2D.extrusionOk = rAttribs.getBool( XML_extrusionOk, sal_True );
 }
 
 Path2DContext::~Path2DContext()
@@ -1032,10 +1020,9 @@ Path2DContext::~Path2DContext()
     mrSegments.push_back( aNewSegment );
 }
 
-Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int32 aElementToken,
-    const Reference< XFastAttributeList >& xAttribs ) throw ( SAXException, RuntimeException )
+ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
+    const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xContext;
     switch( aElementToken )
     {
         case A_TOKEN( close ) :
@@ -1058,7 +1045,7 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
 
             EnhancedCustomShapeParameterPair aAdjPoint2D;
             mrPath2D.parameter.push_back( aAdjPoint2D );
-            xContext = new Path2DMoveToContext( *this, mrCustomShapeProperties, mrPath2D.parameter.back() );
+            return new Path2DMoveToContext( *this, mrCustomShapeProperties, mrPath2D.parameter.back() );
         }
         break;
         case A_TOKEN( lnTo ) :
@@ -1074,7 +1061,7 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
             }
             EnhancedCustomShapeParameterPair aAdjPoint2D;
             mrPath2D.parameter.push_back( aAdjPoint2D );
-            xContext = new Path2DLineToContext( *this, mrCustomShapeProperties, mrPath2D.parameter.back() );
+            return new Path2DLineToContext( *this, mrCustomShapeProperties, mrPath2D.parameter.back() );
         }
         break;
         case A_TOKEN( arcTo ) : // CT_Path2DArcTo
@@ -1092,8 +1079,8 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
             EnhancedCustomShapeParameterPair aScale;
             EnhancedCustomShapeParameterPair aAngles;
 
-            aScale.First = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_wR ), sal_True );
-            aScale.Second = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_hR ), sal_True );
+            aScale.First = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_wR ).get(), sal_True );
+            aScale.Second = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_hR ).get(), sal_True );
 
             CustomShapeGuide aGuide;
             sal_Int32 nArcNum = mrCustomShapeProperties.getArcNum();
@@ -1101,7 +1088,7 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
             // start angle
             aGuide.maName = "arctosa" + OUString::valueOf( nArcNum );
             aGuide.maFormula = "("
-                + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_stAng ) ) )
+                + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_stAng ).get() ) )
                 + ")/60000.0";
             aAngles.First.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( mrCustomShapeProperties.getGuideList(), aGuide ) );
             aAngles.First.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -1109,7 +1096,7 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
             // swing angle
             aGuide.maName = "arctosw" + OUString::valueOf( nArcNum );
             aGuide.maFormula = "("
-                + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_swAng ) ) )
+                + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_swAng ).get() ) )
                 + ")/60000.0";
             aAngles.Second.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( mrCustomShapeProperties.getGuideList(), aGuide ) );
             aAngles.Second.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -1133,7 +1120,7 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
             EnhancedCustomShapeParameterPair aPt2;
             mrPath2D.parameter.push_back( aPt1 );
             mrPath2D.parameter.push_back( aPt2 );
-            xContext = new Path2DQuadBezierToContext( *this, mrCustomShapeProperties,
+            return new Path2DQuadBezierToContext( *this, mrCustomShapeProperties,
                             mrPath2D.parameter[ mrPath2D.parameter.size() - 2 ],
                                 mrPath2D.parameter.back() );
         }
@@ -1155,25 +1142,25 @@ Reference< XFastContextHandler > Path2DContext::createFastChildContext( sal_Int3
             mrPath2D.parameter.push_back( aControlPt1 );
             mrPath2D.parameter.push_back( aControlPt2 );
             mrPath2D.parameter.push_back( aEndPt );
-            xContext = new Path2DCubicBezierToContext( *this, mrCustomShapeProperties,
+            return new Path2DCubicBezierToContext( *this, mrCustomShapeProperties,
                             mrPath2D.parameter[ mrPath2D.parameter.size() - 3 ],
                                 mrPath2D.parameter[ mrPath2D.parameter.size() - 2 ],
                                     mrPath2D.parameter.back() );
         }
         break;
     }
-    return xContext;
+    return 0;
 }
 
 // ---------------------------------------------------------------------
 // CT_Path2DList
-class Path2DListContext : public ContextHandler
+class Path2DListContext : public ContextHandler2
 {
 public:
-    Path2DListContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< EnhancedCustomShapeSegment >& rSegments,
+    Path2DListContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< EnhancedCustomShapeSegment >& rSegments,
         std::vector< Path2D >& rPath2DList );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
 
@@ -1182,90 +1169,82 @@ protected:
     std::vector< Path2D >& mrPath2DList;
 };
 
-Path2DListContext::Path2DListContext( ContextHandler& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< EnhancedCustomShapeSegment >& rSegments,
+Path2DListContext::Path2DListContext( ContextHandler2Helper& rParent, CustomShapeProperties& rCustomShapeProperties, std::vector< EnhancedCustomShapeSegment >& rSegments,
                                         std::vector< Path2D >& rPath2DList )
-: ContextHandler( rParent )
+: ContextHandler2( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
 , mrSegments( rSegments )
 , mrPath2DList( rPath2DList )
 {
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL Path2DListContext::createFastChildContext( sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
+ContextHandlerRef Path2DListContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xContext;
     if ( aElementToken == A_TOKEN( path ) )
     {
         Path2D aPath2D;
         mrPath2DList.push_back( aPath2D );
-        xContext = new Path2DContext( *this, xAttribs, mrCustomShapeProperties,  mrSegments, mrPath2DList.back() );
+        return new Path2DContext( *this, rAttribs, mrCustomShapeProperties,  mrSegments, mrPath2DList.back() );
     }
-    return xContext;
+    return 0;
 }
 
 // ---------------------------------------------------------------------
 // CT_CustomGeometry2D
-CustomShapeGeometryContext::CustomShapeGeometryContext( ContextHandler& rParent, const Reference< XFastAttributeList >& /* xAttribs */, CustomShapeProperties& rCustomShapeProperties )
-: ContextHandler( rParent )
+CustomShapeGeometryContext::CustomShapeGeometryContext( ContextHandler2Helper& rParent, const AttributeList& /* rAttribs */, CustomShapeProperties& rCustomShapeProperties )
+: ContextHandler2( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
 }
 
-Reference< XFastContextHandler > CustomShapeGeometryContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef CustomShapeGeometryContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xContext;
     switch( aElementToken )
     {
         case A_TOKEN( avLst ):          // CT_GeomGuideList adjust value list
-            xContext = new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustmentGuideList() );
-        break;
+            return new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustmentGuideList() );
         case A_TOKEN( gdLst ):          // CT_GeomGuideList guide list
-            xContext = new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getGuideList() );
-        break;
+            return new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getGuideList() );
         case A_TOKEN( ahLst ):          // CT_AdjustHandleList adjust handle list
-            xContext = new AdjustHandleListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustHandleList() );
-        break;
+            return new AdjustHandleListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustHandleList() );
         case A_TOKEN( cxnLst ):         // CT_ConnectionSiteList connection site list
-            xContext = this;
-        break;
+            return this;
         case A_TOKEN( rect ):           // CT_GeomRectList geometry rect list
         {
             GeomRect aGeomRect;
-            aGeomRect.l = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_l ), sal_True );
-            aGeomRect.t = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_t ), sal_True );
-            aGeomRect.r = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_r ), sal_True );
-            aGeomRect.b = GetAdjCoordinate( mrCustomShapeProperties, xAttribs->getOptionalValue( XML_b ), sal_True );
+            aGeomRect.l = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_l ).get(), sal_True );
+            aGeomRect.t = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_t ).get(), sal_True );
+            aGeomRect.r = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_r ).get(), sal_True );
+            aGeomRect.b = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_b ).get(), sal_True );
             mrCustomShapeProperties.getTextRect() = aGeomRect;
         }
         break;
         case A_TOKEN( pathLst ):        // CT_Path2DList 2d path list
-            xContext = new Path2DListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getSegments(), mrCustomShapeProperties.getPath2DList() );
-        break;
+            return new Path2DListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getSegments(), mrCustomShapeProperties.getPath2DList() );
 
         // from cxnLst:
         case A_TOKEN( cxn ):                // CT_ConnectionSite
         {
             ConnectionSite aConnectionSite;
             mrCustomShapeProperties.getConnectionSiteList().push_back( aConnectionSite );
-            xContext = new ConnectionSiteContext( *this, xAttribs, mrCustomShapeProperties, mrCustomShapeProperties.getConnectionSiteList().back() );
+            return new ConnectionSiteContext( *this, rAttribs, mrCustomShapeProperties, mrCustomShapeProperties.getConnectionSiteList().back() );
         }
-        break;
     }
-    return xContext;
+    return 0;
 }
 
 // ---------------------------------------------------------------------
 // CT_PresetGeometry2D
-PresetShapeGeometryContext::PresetShapeGeometryContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties )
-: ContextHandler( rParent )
+PresetShapeGeometryContext::PresetShapeGeometryContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties )
+: ContextHandler2( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
-    sal_Int32 nShapeType = xAttribs->getOptionalValueToken( XML_prst, FastToken::DONTKNOW );
+    sal_Int32 nShapeType = rAttribs.getToken( XML_prst, FastToken::DONTKNOW );
     OSL_ENSURE( nShapeType != FastToken::DONTKNOW, "oox::drawingml::CustomShapeCustomGeometryContext::CustomShapeCustomGeometryContext(), unknown shape type" );
     mrCustomShapeProperties.setShapePresetType( nShapeType );
 }
 
-Reference< XFastContextHandler > PresetShapeGeometryContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
+ContextHandlerRef PresetShapeGeometryContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& )
 {
     if ( aElementToken == A_TOKEN( avLst ) )
         return new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustmentGuideList() );
@@ -1275,16 +1254,16 @@ Reference< XFastContextHandler > PresetShapeGeometryContext::createFastChildCont
 
 // ---------------------------------------------------------------------
 // CT_PresetTextShape
-PresetTextShapeContext::PresetTextShapeContext( ContextHandler& rParent, const Reference< XFastAttributeList >& xAttribs, CustomShapeProperties& rCustomShapeProperties )
-: ContextHandler( rParent )
+PresetTextShapeContext::PresetTextShapeContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties )
+: ContextHandler2( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
-    sal_Int32 nShapeType = xAttribs->getOptionalValueToken( XML_prst, FastToken::DONTKNOW );
+    sal_Int32 nShapeType = rAttribs.getToken( XML_prst, FastToken::DONTKNOW );
     OSL_ENSURE( nShapeType != FastToken::DONTKNOW, "oox::drawingml::CustomShapeCustomGeometryContext::CustomShapeCustomGeometryContext(), unknown shape type" );
     mrCustomShapeProperties.setShapePresetType( nShapeType );
 }
 
-Reference< XFastContextHandler > PresetTextShapeContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
+ContextHandlerRef PresetTextShapeContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& )
 {
     if ( aElementToken == A_TOKEN( avLst ) )
         return new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustmentGuideList() );

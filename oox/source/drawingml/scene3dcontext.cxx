@@ -37,24 +37,20 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-Scene3DContext::Scene3DContext( ContextHandler& rParent, Shape3DProperties& r3DProperties ) throw()
-: ContextHandler( rParent )
+Scene3DContext::Scene3DContext( ContextHandler2Helper& rParent, Shape3DProperties& r3DProperties ) throw()
+: ContextHandler2( rParent )
 , mr3DProperties( r3DProperties )
 {
 }
 
-Reference< XFastContextHandler > Scene3DContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
-    throw ( SAXException, RuntimeException )
+ContextHandlerRef Scene3DContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    AttributeList aAttribs( xAttribs );
-    Reference< XFastContextHandler > xRet;
-
     switch( aElementToken )
     {
     case NMSP_DRAWINGML|XML_camera:
-        mr3DProperties.mfFieldOfVision = aAttribs.getInteger( XML_fov, 0 ) / 36000000.0;
-        mr3DProperties.mfZoom = aAttribs.getInteger( XML_zoom, 100000 ) / 100000.0;
-        mr3DProperties.mnPreset = aAttribs.getToken( XML_prst, XML_none );
+        mr3DProperties.mfFieldOfVision = rAttribs.getInteger( XML_fov, 0 ) / 36000000.0;
+        mr3DProperties.mfZoom = rAttribs.getInteger( XML_zoom, 100000 ) / 100000.0;
+        mr3DProperties.mnPreset = rAttribs.getToken( XML_prst, XML_none );
 
 legacyObliqueTopLeft
 legacyObliqueTop
@@ -123,7 +119,7 @@ perspectiveRelaxedModerately
         // TODO: nested element XML_rot
         break;
     case NMSP_DRAWINGML|XML_lightRig:
-        mr3DProperties.mnLightRigDirection = aAttribs.getToken( XML_dir, XML_none );
+        mr3DProperties.mnLightRigDirection = rAttribs.getToken( XML_dir, XML_none );
 
 XML_tl
 XML_t
@@ -135,7 +131,7 @@ XML_b
 XML_br
 
 
-        mr3DProperties.mnLightRigType = aAttribs.getToken( XML_rig, XML_none );
+        mr3DProperties.mnLightRigType = rAttribs.getToken( XML_rig, XML_none );
 
 XML_legacyFlat1
 XML_legacyFlat2
@@ -169,9 +165,9 @@ XML_brightRoom
         break;
     case NMSP_DRAWINGML|XML_backdrop:
     case NMSP_DRAWINGML|XML_extLst:
-        return xRet; // TODO: later (backdrop is not supported by core anyway)
+        return 0; // TODO: later (backdrop is not supported by core anyway)
     }
-    return xRet;
+    return 0;
 }
 
 } }

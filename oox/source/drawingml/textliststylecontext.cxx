@@ -27,11 +27,9 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-// --------------------------------------------------------------------
-
 // CT_TextListStyle
-TextListStyleContext::TextListStyleContext( ContextHandler& rParent, TextListStyle& rTextListStyle )
-: ContextHandler( rParent )
+TextListStyleContext::TextListStyleContext( ContextHandler2Helper& rParent, TextListStyle& rTextListStyle )
+: ContextHandler2( rParent )
 , mrTextListStyle( rTextListStyle )
 {
 }
@@ -42,57 +40,37 @@ TextListStyleContext::~TextListStyleContext()
 
 // --------------------------------------------------------------------
 
-void TextListStyleContext::endFastElement( sal_Int32 ) throw (SAXException, RuntimeException)
+ContextHandlerRef TextListStyleContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-}
-
-// --------------------------------------------------------------------
-
-Reference< XFastContextHandler > TextListStyleContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& rxAttributes ) throw (SAXException, RuntimeException)
-{
-    Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
         case A_TOKEN( defPPr ):     // CT_TextParagraphProperties
-            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 0 ] ) );
-            break;
+            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 0 ] );
         case A_TOKEN( outline1pPr ):
-            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getAggregationListStyle()[ 0 ] ) );
-            break;
+            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getAggregationListStyle()[ 0 ] );
         case A_TOKEN( outline2pPr ):
-            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getAggregationListStyle()[ 1 ] ) );
-            break;
+            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getAggregationListStyle()[ 1 ] );
         case A_TOKEN( lvl1pPr ):
-            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 0 ] ) );
-            break;
+            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 0 ] );
         case A_TOKEN( lvl2pPr ):
-            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 1 ] ) );
-            break;
+            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 1 ] );
         case A_TOKEN( lvl3pPr ):
-            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 2 ] ) );
-            break;
+            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 2 ] );
         case A_TOKEN( lvl4pPr ):
-            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 3 ] ) );
-            break;
+            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 3 ] );
         case A_TOKEN( lvl5pPr ):
-            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 4 ] ) );
-            break;
+            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 4 ] );
         case A_TOKEN( lvl6pPr ):
-            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 5 ] ) );
-            break;
+            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 5 ] );
         case A_TOKEN( lvl7pPr ):
-            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 6 ] ) );
-            break;
+            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 6 ] );
         case A_TOKEN( lvl8pPr ):
-            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 7 ] ) );
-            break;
+            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 7 ] );
         case A_TOKEN( lvl9pPr ):
-            xRet.set( new TextParagraphPropertiesContext( *this, rxAttributes, *mrTextListStyle.getListStyle()[ 8 ] ) );
-            break;
+            return new TextParagraphPropertiesContext( *this, rAttribs, *mrTextListStyle.getListStyle()[ 8 ] );
     }
-    if ( !xRet.is() )
-        xRet.set( this );
-    return xRet;
+
+    return this;
 }
 
 // --------------------------------------------------------------------

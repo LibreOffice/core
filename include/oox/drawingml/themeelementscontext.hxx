@@ -20,28 +20,23 @@
 #ifndef OOX_DRAWINGML_THEMEELEMENTSCONTEXT_HXX
 #define OOX_DRAWINGML_THEMEELEMENTSCONTEXT_HXX
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 
 namespace oox {
 namespace drawingml {
 
 class Theme;
 
-// ============================================================================
-
-class ThemeElementsContext : public oox::core::ContextHandler
+class ThemeElementsContext : public oox::core::ContextHandler2
 {
 public:
-    ThemeElementsContext( ::oox::core::ContextHandler& rParent, Theme& rTheme );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
-            throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    ThemeElementsContext( ::oox::core::ContextHandler2Helper& rParent, Theme& rTheme );
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement,
+        const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
     Theme& mrTheme;
 };
-
-// ============================================================================
 
 } // namespace drawingml
 } // namespace oox

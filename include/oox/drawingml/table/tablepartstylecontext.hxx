@@ -21,18 +21,18 @@
 #ifndef OOX_DRAWINGML_TABLEPARTSTYLECONTEXT
 #define OOX_DRAWINGML_TABLEPARTSTYLECONTEXT
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 #include "oox/drawingml/table/tablestylepart.hxx"
 
 namespace oox { namespace drawingml { namespace table {
 
-class TablePartStyleContext : public ::oox::core::ContextHandler
+class TablePartStyleContext : public ::oox::core::ContextHandler2
 {
 public:
-    TablePartStyleContext( ::oox::core::ContextHandler& rParent, TableStylePart& rTableStylePart );
+    TablePartStyleContext( ::oox::core::ContextHandler2Helper& rParent, TableStylePart& rTableStylePart );
     ~TablePartStyleContext();
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
 
@@ -40,7 +40,6 @@ private:
 };
 
 } } }
-
 
 #endif
 

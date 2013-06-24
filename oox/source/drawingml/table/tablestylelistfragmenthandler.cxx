@@ -30,8 +30,6 @@ namespace oox {
 namespace drawingml {
 namespace table {
 
-// ============================================================================
-
 TableStyleListFragmentHandler::TableStyleListFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, TableStyleList& rTableStyleList ):
 FragmentHandler2( rFilter, rFragmentPath ),
 mrTableStyleList( rTableStyleList )
@@ -54,12 +52,10 @@ ContextHandlerRef TableStyleListFragmentHandler::onCreateContext(
         case A_TOKEN( tblStyle ):       // CT_TableStyle
             std::vector< TableStyle >& rTableStyles = mrTableStyleList.getTableStyles();
             rTableStyles.resize( rTableStyles.size() + 1 );
-            return new TableStyleContext( *this, rAttribs.getFastAttributeList(), rTableStyles.back() );
+            return new TableStyleContext( *this, rAttribs, rTableStyles.back() );
     }
     return this;
 }
-
-// ============================================================================
 
 } // namespace table
 } // namespace drawingml

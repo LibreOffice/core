@@ -24,17 +24,16 @@
 
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/textrun.hxx"
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 
 namespace oox { namespace drawingml {
 
-class TextBodyContext : public ::oox::core::ContextHandler
+class TextBodyContext : public ::oox::core::ContextHandler2
 {
 public:
-    TextBodyContext( ::oox::core::ContextHandler& rParent, TextBody& rTextBody );
+    TextBodyContext( ::oox::core::ContextHandler2Helper& rParent, TextBody& rTextBody );
 
-    virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
     TextBody&           mrTextBody;
@@ -42,14 +41,14 @@ protected:
 };
 
 // CT_RegularTextRun
-class RegularTextRunContext : public ::oox::core::ContextHandler
+class RegularTextRunContext : public ::oox::core::ContextHandler2
 {
 public:
-    RegularTextRunContext( ::oox::core::ContextHandler& rParent, TextRunPtr pRunPtr );
+    RegularTextRunContext( ::oox::core::ContextHandler2Helper& rParent, TextRunPtr pRunPtr );
 
-    virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL characters( const OUString& aChars ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL onEndElement() SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void SAL_CALL onCharacters( const OUString& aChars ) SAL_OVERRIDE;
 
 protected:
     TextRunPtr          mpRunPtr;

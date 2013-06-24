@@ -78,8 +78,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
     }
     case XML_hlinkMouseOver:
     case XML_hlinkClick:
-        return new HyperLinkContext( *this, rAttribs.getFastAttributeList(),  getShape()->getShapeProperties() );
-        break;
+        return new HyperLinkContext( *this, rAttribs,  getShape()->getShapeProperties() );
     case XML_ph:
         mpShapePtr->setSubType( rAttribs.getToken( XML_type, XML_obj ) );
         if( rAttribs.hasAttribute( XML_idx ) )

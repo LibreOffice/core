@@ -20,24 +20,23 @@
 #ifndef OOX_DRAWINGML_TEXTFIELDCONTEXT_HXX
 #define OOX_DRAWINGML_TEXTFIELDCONTEXT_HXX
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 
 namespace oox { namespace drawingml {
 
 class TextField;
 
 class TextFieldContext
-    : public ::oox::core::ContextHandler
+    : public ::oox::core::ContextHandler2
 {
 public:
-    TextFieldContext( ::oox::core::ContextHandler& rParent,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rXAttributes,
+    TextFieldContext( ::oox::core::ContextHandler2Helper& rParent,
+                        const ::oox::AttributeList& rAttributes,
                         TextField& rTextField);
-    virtual void SAL_CALL endFastElement( sal_Int32 aElementToken ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL characters( const OUString& aChars ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 aElementToken, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rXAttributes )
-        throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void onEndElement( ) SAL_OVERRIDE;
+    virtual void onCharacters( const OUString& aChars ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext(
+        sal_Int32 aElementToken, const ::oox::AttributeList& rAttributes ) SAL_OVERRIDE;
 
 private:
     TextField& mrTextField;
@@ -45,7 +44,6 @@ private:
 };
 
 } }
-
 
 #endif
 

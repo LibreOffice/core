@@ -24,27 +24,24 @@
 
 #include <com/sun/star/style/TabStop.hpp>
 
-#include "oox/core/contexthandler.hxx"
+#include "oox/core/contexthandler2.hxx"
 
 namespace oox { namespace drawingml {
 
-    class TextTabStopListContext : public ::oox::core::ContextHandler
+    class TextTabStopListContext : public ::oox::core::ContextHandler2
     {
     public:
-        TextTabStopListContext( ::oox::core::ContextHandler& rParent,
+        TextTabStopListContext( ::oox::core::ContextHandler2Helper& rParent,
                 ::std::list< ::com::sun::star::style::TabStop >  & aTabList );
         ~TextTabStopListContext();
 
-        virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+        virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
         ::std::list< ::com::sun::star::style::TabStop >  & maTabList;
     };
 
-
 } }
-
 
 #endif
 

@@ -44,31 +44,23 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace ppt {
 
 // CT_Shape
-PPTShapePropertiesContext::PPTShapePropertiesContext( ContextHandler& rParent, ::oox::drawingml::Shape& rShape )
+PPTShapePropertiesContext::PPTShapePropertiesContext( ContextHandler2Helper& rParent, ::oox::drawingml::Shape& rShape )
 : ShapePropertiesContext( rParent, rShape )
 {
 }
 
-Reference< XFastContextHandler > PPTShapePropertiesContext::createFastChildContext( sal_Int32 aElementToken, const Reference< XFastAttributeList >& xAttribs )
-    throw (SAXException, RuntimeException)
+ContextHandlerRef PPTShapePropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
-
     switch( aElementToken )
     {
         case A_TOKEN( xfrm ):
-        {
             mrShape.getShapeProperties()[ PROP_IsPlaceholderDependent ] <<= sal_False;
-
-            xRet = ShapePropertiesContext::createFastChildContext( aElementToken, xAttribs );
-        }
-        break;
+            return ShapePropertiesContext::onCreateContext( aElementToken, rAttribs );
 
         default:
-            xRet = ShapePropertiesContext::createFastChildContext( aElementToken, xAttribs );
-        break;
+            return ShapePropertiesContext::onCreateContext( aElementToken, rAttribs );
     }
-    return xRet;
+    return 0;
 }
 
 } }

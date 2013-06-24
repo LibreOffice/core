@@ -28,41 +28,32 @@ using namespace ::com::sun::star::uno;
 
 namespace oox { namespace drawingml {
 
-    TextSpacingContext::TextSpacingContext( ContextHandler& rParent, TextSpacing & aSpacing )
-        : ContextHandler( rParent )
+    TextSpacingContext::TextSpacingContext( ContextHandler2Helper& rParent, TextSpacing & aSpacing )
+        : ContextHandler2( rParent )
         , maSpacing( aSpacing )
     {
         maSpacing.bHasValue = true;
     }
 
-    void TextSpacingContext::endFastElement( sal_Int32 /*nElement*/ )
-        throw ( SAXException, RuntimeException )
+    ContextHandlerRef TextSpacingContext::onCreateContext( ::sal_Int32 aElement,
+            const AttributeList& rAttribs )
     {
-    }
-
-    Reference< XFastContextHandler > TextSpacingContext::createFastChildContext( ::sal_Int32 aElement,
-            const Reference< XFastAttributeList >& xAttribs )
-        throw ( SAXException, RuntimeException )
-    {
-        Reference< XFastContextHandler > xRet;
         switch( aElement )
         {
         case A_TOKEN( spcPct ):
             maSpacing.nUnit = TextSpacing::PERCENT;
-            maSpacing.nValue = GetPercent( xAttribs->getValue( XML_val ) );
+            maSpacing.nValue = GetPercent( rAttribs.getString( XML_val ).get() );
             break;
         case A_TOKEN( spcPts ):
             maSpacing.nUnit = TextSpacing::POINTS;
-            maSpacing.nValue = GetTextSpacingPoint( xAttribs->getValue( XML_val ) );
+            maSpacing.nValue = GetTextSpacingPoint( rAttribs.getString( XML_val ).get() );
             break;
         default:
             break;
         }
-        if ( !xRet.is() )
-            xRet.set( this );
-        return xRet;
-    }
 
+        return this;
+    }
 
 } }
 

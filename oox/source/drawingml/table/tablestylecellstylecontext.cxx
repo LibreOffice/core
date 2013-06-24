@@ -31,8 +31,8 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml { namespace table {
 
-TableStyleCellStyleContext::TableStyleCellStyleContext( ContextHandler& rParent, TableStylePart& rTableStylePart )
-: ContextHandler( rParent )
+TableStyleCellStyleContext::TableStyleCellStyleContext( ContextHandler2Helper& rParent, TableStylePart& rTableStylePart )
+: ContextHandler2( rParent )
 , mrTableStylePart( rTableStylePart )
 , mnLineType( XML_none )
 {
@@ -43,12 +43,9 @@ TableStyleCellStyleContext::~TableStyleCellStyleContext()
 }
 
 // CT_TableStyleCellStyle
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-TableStyleCellStyleContext::createFastChildContext( ::sal_Int32 aElementToken, const uno::Reference< xml::sax::XFastAttributeList >& xAttribs )
-    throw ( xml::sax::SAXException, uno::RuntimeException)
+ContextHandlerRef
+TableStyleCellStyleContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    uno::Reference< xml::sax::XFastContextHandler > xRet;
-    AttributeList aAttribs( xAttribs );
     switch( aElementToken )
     {
         case A_TOKEN( tcBdr ):      // CT_TableCellBorderStyle
@@ -71,7 +68,7 @@ TableStyleCellStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
                     std::map < sal_Int32, ::oox::drawingml::LinePropertiesPtr >& rLineBorders = mrTableStylePart.getLineBorders();
                     ::oox::drawingml::LinePropertiesPtr mpLineProperties( new oox::drawingml::LineProperties );
                     rLineBorders[ mnLineType ] = mpLineProperties;
-                    xRet = new LinePropertiesContext( *this, xAttribs, *mpLineProperties );
+                    return new LinePropertiesContext( *this, rAttribs, *mpLineProperties );
                 }
             }
             break;
@@ -80,8 +77,8 @@ TableStyleCellStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
                 if ( mnLineType != XML_none )
                 {
                     ShapeStyleRef& rLineStyleRef = mrTableStylePart.getStyleRefs()[ mnLineType ];
-                    rLineStyleRef.mnThemedIdx = aAttribs.getInteger( XML_idx, 0 );
-                    xRet.set( new ColorContext( *this, rLineStyleRef.maPhClr ) );
+                    rLineStyleRef.mnThemedIdx = rAttribs.getInteger( XML_idx, 0 );
+                    return new ColorContext( *this, rLineStyleRef.maPhClr );
                 }
             }
             break;
@@ -91,26 +88,19 @@ TableStyleCellStyleContext::createFastChildContext( ::sal_Int32 aElementToken, c
             {
                 FillPropertiesPtr& rxFillProperties = mrTableStylePart.getFillProperties();
                 rxFillProperties.reset( new FillProperties );
-                xRet.set( new FillPropertiesContext( *this, *rxFillProperties ) );
+                return new FillPropertiesContext( *this, *rxFillProperties );
             }
-            break;
         case A_TOKEN( fillRef ):    // CT_StyleMatrixReference
             {
                 ShapeStyleRef& rStyleRef = mrTableStylePart.getStyleRefs()[ XML_fillRef ];
-                rStyleRef.mnThemedIdx = aAttribs.getInteger( XML_idx, 0 );
-                xRet.set( new ColorContext( *this, rStyleRef.maPhClr ) );
+                rStyleRef.mnThemedIdx = rAttribs.getInteger( XML_idx, 0 );
+                return new ColorContext( *this, rStyleRef.maPhClr );
             }
-            break;
-
         case A_TOKEN( cell3D ):     // CT_Cell3D
             break;
     }
-    if( !xRet.is() )
-    {
-        uno::Reference<XFastContextHandler> xTmp(this);
-        xRet.set( xTmp );
-    }
-    return xRet;
+
+    return this;
 }
 
 } } }

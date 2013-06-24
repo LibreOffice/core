@@ -25,12 +25,12 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-GuidContext::GuidContext( ContextHandler& rParent, OUString& rGuidId )
-: ContextHandler( rParent )
+GuidContext::GuidContext( ContextHandler2Helper& rParent, OUString& rGuidId )
+: ContextHandler2( rParent )
 , mrGuidId( rGuidId )
 {
 }
-void GuidContext::characters( const OUString& aChars ) throw ( SAXException, RuntimeException )
+void GuidContext::onCharacters( const OUString& aChars )
 {
     mrGuidId += aChars;
 }

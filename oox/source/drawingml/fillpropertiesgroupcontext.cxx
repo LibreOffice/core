@@ -28,83 +28,75 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
-using ::oox::core::ContextHandler;
+using ::oox::core::ContextHandler2;
 using ::oox::core::XmlFilterBase;
+using ::oox::core::ContextHandlerRef;
 
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
-
-SolidFillContext::SolidFillContext( ContextHandler& rParent,
-        const Reference< XFastAttributeList >&, FillProperties& rFillProps ) :
+SolidFillContext::SolidFillContext( ContextHandler2Helper& rParent,
+        const AttributeList&, FillProperties& rFillProps ) :
     ColorContext( rParent, rFillProps.maFillColor )
 {
 }
 
-// ============================================================================
-
-GradientFillContext::GradientFillContext( ContextHandler& rParent,
-        const Reference< XFastAttributeList >& rxAttribs, GradientFillProperties& rGradientProps ) :
-    ContextHandler( rParent ),
+GradientFillContext::GradientFillContext( ContextHandler2Helper& rParent,
+        const AttributeList& rAttribs, GradientFillProperties& rGradientProps ) :
+    ContextHandler2( rParent ),
     mrGradientProps( rGradientProps )
 {
-    AttributeList aAttribs( rxAttribs );
-    mrGradientProps.moShadeFlip = aAttribs.getToken( XML_flip );
-    mrGradientProps.moRotateWithShape = aAttribs.getBool( XML_rotWithShape );
+    mrGradientProps.moShadeFlip = rAttribs.getToken( XML_flip );
+    mrGradientProps.moRotateWithShape = rAttribs.getBool( XML_rotWithShape );
 }
 
-Reference< XFastContextHandler > GradientFillContext::createFastChildContext(
-        sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef GradientFillContext::onCreateContext(
+        sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    AttributeList aAttribs( rxAttribs );
     switch( nElement )
     {
         case A_TOKEN( gsLst ):
             return this;    // for gs elements
 
         case A_TOKEN( gs ):
-            if( aAttribs.hasAttribute( XML_pos ) )
+            if( rAttribs.hasAttribute( XML_pos ) )
             {
-                double fPosition = getLimitedValue< double >( aAttribs.getDouble( XML_pos, 0.0 ) / 100000.0, 0.0, 1.0 );
+                double fPosition = getLimitedValue< double >( rAttribs.getDouble( XML_pos, 0.0 ) / 100000.0, 0.0, 1.0 );
                 return new ColorContext( *this, mrGradientProps.maGradientStops[ fPosition ] );
             }
         break;
 
         case A_TOKEN( lin ):
-            mrGradientProps.moShadeAngle = aAttribs.getInteger( XML_ang );
-            mrGradientProps.moShadeScaled = aAttribs.getBool( XML_scaled );
+            mrGradientProps.moShadeAngle = rAttribs.getInteger( XML_ang );
+            mrGradientProps.moShadeScaled = rAttribs.getBool( XML_scaled );
         break;
 
         case A_TOKEN( path ):
             // always set a path type, this disables linear gradient in conversion
-            mrGradientProps.moGradientPath = aAttribs.getToken( XML_path, XML_rect );
+            mrGradientProps.moGradientPath = rAttribs.getToken( XML_path, XML_rect );
             return this;    // for fillToRect element
 
         case A_TOKEN( fillToRect ):
-            mrGradientProps.moFillToRect = GetRelativeRect( rxAttribs );
+            mrGradientProps.moFillToRect = GetRelativeRect( rAttribs.getFastAttributeList() );
         break;
 
         case A_TOKEN( tileRect ):
-            mrGradientProps.moTileRect = GetRelativeRect( rxAttribs );
+            mrGradientProps.moTileRect = GetRelativeRect( rAttribs.getFastAttributeList() );
         break;
     }
     return 0;
 }
 
-// ============================================================================
-
-PatternFillContext::PatternFillContext( ContextHandler& rParent,
-        const Reference< XFastAttributeList >& rxAttribs, PatternFillProperties& rPatternProps ) :
-    ContextHandler( rParent ),
+PatternFillContext::PatternFillContext( ContextHandler2Helper& rParent,
+        const AttributeList& rAttribs, PatternFillProperties& rPatternProps ) :
+    ContextHandler2( rParent ),
     mrPatternProps( rPatternProps )
 {
-    AttributeList aAttribs( rxAttribs );
-    mrPatternProps.moPattPreset = aAttribs.getToken( XML_prst );
+    mrPatternProps.moPattPreset = rAttribs.getToken( XML_prst );
 }
 
-Reference< XFastContextHandler > PatternFillContext::createFastChildContext(
-        sal_Int32 nElement, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
+ContextHandlerRef PatternFillContext::onCreateContext(
+        sal_Int32 nElement, const AttributeList& )
 {
     switch( nElement )
     {
@@ -116,18 +108,14 @@ Reference< XFastContextHandler > PatternFillContext::createFastChildContext(
     return 0;
 }
 
-// ============================================================================
-// ============================================================================
-
-ColorChangeContext::ColorChangeContext( ContextHandler& rParent,
-        const Reference< XFastAttributeList >& rxAttribs, BlipFillProperties& rBlipProps ) :
-    ContextHandler( rParent ),
+ColorChangeContext::ColorChangeContext( ContextHandler2Helper& rParent,
+        const AttributeList& rAttribs, BlipFillProperties& rBlipProps ) :
+    ContextHandler2( rParent ),
     mrBlipProps( rBlipProps )
 {
     mrBlipProps.maColorChangeFrom.setUnused();
     mrBlipProps.maColorChangeTo.setUnused();
-    AttributeList aAttribs( rxAttribs );
-    mbUseAlpha = aAttribs.getBool( XML_useA, true );
+    mbUseAlpha = rAttribs.getBool( XML_useA, true );
 }
 
 ColorChangeContext::~ColorChangeContext()
@@ -136,8 +124,8 @@ ColorChangeContext::~ColorChangeContext()
         mrBlipProps.maColorChangeTo.clearTransparence();
 }
 
-Reference< XFastContextHandler > ColorChangeContext::createFastChildContext(
-        sal_Int32 nElement, const Reference< XFastAttributeList >& ) throw (SAXException, RuntimeException)
+ContextHandlerRef ColorChangeContext::onCreateContext(
+        sal_Int32 nElement, const AttributeList& )
 {
     switch( nElement )
     {
@@ -149,29 +137,26 @@ Reference< XFastContextHandler > ColorChangeContext::createFastChildContext(
     return 0;
 }
 
-// ============================================================================
-
-BlipContext::BlipContext( ContextHandler& rParent,
-        const Reference< XFastAttributeList >& rxAttribs, BlipFillProperties& rBlipProps ) :
-    ContextHandler( rParent ),
+BlipContext::BlipContext( ContextHandler2Helper& rParent,
+        const AttributeList& rAttribs, BlipFillProperties& rBlipProps ) :
+    ContextHandler2( rParent ),
     mrBlipProps( rBlipProps )
 {
-    AttributeList aAttribs( rxAttribs );
-    if( aAttribs.hasAttribute( R_TOKEN( embed ) ) )
+    if( rAttribs.hasAttribute( R_TOKEN( embed ) ) )
     {
         // internal picture URL
-        OUString aFragmentPath = getFragmentPathFromRelId( aAttribs.getString( R_TOKEN( embed ), OUString() ) );
+        OUString aFragmentPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( embed ), OUString() ) );
         if( !aFragmentPath.isEmpty() )
             mrBlipProps.mxGraphic = getFilter().getGraphicHelper().importEmbeddedGraphic( aFragmentPath );
     }
-    else if( aAttribs.hasAttribute( R_TOKEN( link ) ) )
+    else if( rAttribs.hasAttribute( R_TOKEN( link ) ) )
     {
         // external URL
 
         // we will embed this link, this is better than just doing nothing..
         // TODO: import this graphic as real link, but this requires some
         // code rework.
-        OUString aRelId = aAttribs.getString( R_TOKEN( link ), OUString() );
+        OUString aRelId = rAttribs.getString( R_TOKEN( link ), OUString() );
         OUString aTargetLink = getFilter().getAbsoluteUrl( getRelations().getExternalTargetFromRelId( aRelId ) );
         SfxMedium xMed( aTargetLink, STREAM_STD_READ );
         xMed.DownLoad();
@@ -181,10 +166,9 @@ BlipContext::BlipContext( ContextHandler& rParent,
     }
 }
 
-Reference< XFastContextHandler > BlipContext::createFastChildContext(
-        sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef BlipContext::onCreateContext(
+        sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    AttributeList aAttribs( rxAttribs );
     switch( nElement )
     {
         case A_TOKEN( biLevel ):
@@ -193,56 +177,52 @@ Reference< XFastContextHandler > BlipContext::createFastChildContext(
         break;
 
         case A_TOKEN( clrChange ):
-            return new ColorChangeContext( *this, rxAttribs, mrBlipProps );
+            return new ColorChangeContext( *this, rAttribs, mrBlipProps );
 
         case A_TOKEN( lum ):
-            mrBlipProps.moBrightness = aAttribs.getInteger( XML_bright );
-            mrBlipProps.moContrast = aAttribs.getInteger( XML_contrast );
+            mrBlipProps.moBrightness = rAttribs.getInteger( XML_bright );
+            mrBlipProps.moContrast = rAttribs.getInteger( XML_contrast );
         break;
     }
     return 0;
 }
 
-// ============================================================================
-
-BlipFillContext::BlipFillContext( ContextHandler& rParent,
-        const Reference< XFastAttributeList >& rxAttribs, BlipFillProperties& rBlipProps ) :
-    ContextHandler( rParent ),
+BlipFillContext::BlipFillContext( ContextHandler2Helper& rParent,
+        const AttributeList& rAttribs, BlipFillProperties& rBlipProps ) :
+    ContextHandler2( rParent ),
     mrBlipProps( rBlipProps )
 {
-    AttributeList aAttribs( rxAttribs );
-    mrBlipProps.moRotateWithShape = aAttribs.getBool( XML_rotWithShape );
+    mrBlipProps.moRotateWithShape = rAttribs.getBool( XML_rotWithShape );
 }
 
-Reference< XFastContextHandler > BlipFillContext::createFastChildContext(
-        sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef BlipFillContext::onCreateContext(
+        sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    AttributeList aAttribs( rxAttribs );
     switch( nElement )
     {
         case A_TOKEN( blip ):
-            return new BlipContext( *this, rxAttribs, mrBlipProps );
+            return new BlipContext( *this, rAttribs, mrBlipProps );
 
         case A_TOKEN( srcRect ):
             {
                 OUString aDefault( "0" );
                 ::com::sun::star::geometry::IntegerRectangle2D aClipRect;
-                aClipRect.X1 = GetPercent( aAttribs.getString( XML_l, aDefault ) );
-                aClipRect.Y1 = GetPercent( aAttribs.getString( XML_t, aDefault ) );
-                aClipRect.X2 = GetPercent( aAttribs.getString( XML_r, aDefault ) );
-                aClipRect.Y2 = GetPercent( aAttribs.getString( XML_b, aDefault ) );
+                aClipRect.X1 = GetPercent( rAttribs.getString( XML_l, aDefault ) );
+                aClipRect.Y1 = GetPercent( rAttribs.getString( XML_t, aDefault ) );
+                aClipRect.X2 = GetPercent( rAttribs.getString( XML_r, aDefault ) );
+                aClipRect.Y2 = GetPercent( rAttribs.getString( XML_b, aDefault ) );
                 mrBlipProps.moClipRect = aClipRect;
             }
         break;
 
         case A_TOKEN( tile ):
             mrBlipProps.moBitmapMode = getBaseToken( nElement );
-            mrBlipProps.moTileOffsetX = aAttribs.getInteger( XML_tx );
-            mrBlipProps.moTileOffsetY = aAttribs.getInteger( XML_ty );
-            mrBlipProps.moTileScaleX = aAttribs.getInteger( XML_sx );
-            mrBlipProps.moTileScaleY = aAttribs.getInteger( XML_sy );
-            mrBlipProps.moTileAlign = aAttribs.getToken( XML_algn );
-            mrBlipProps.moTileFlip = aAttribs.getToken( XML_flip );
+            mrBlipProps.moTileOffsetX = rAttribs.getInteger( XML_tx );
+            mrBlipProps.moTileOffsetY = rAttribs.getInteger( XML_ty );
+            mrBlipProps.moTileScaleX = rAttribs.getInteger( XML_sx );
+            mrBlipProps.moTileScaleY = rAttribs.getInteger( XML_sy );
+            mrBlipProps.moTileAlign = rAttribs.getToken( XML_algn );
+            mrBlipProps.moTileFlip = rAttribs.getToken( XML_flip );
         break;
 
         case A_TOKEN( stretch ):
@@ -250,47 +230,41 @@ Reference< XFastContextHandler > BlipFillContext::createFastChildContext(
             return this;    // for fillRect element
 
         case A_TOKEN( fillRect ):
-            mrBlipProps.moFillRect = GetRelativeRect( rxAttribs );
+            mrBlipProps.moFillRect = GetRelativeRect( rAttribs.getFastAttributeList() );
         break;
     }
     return 0;
 }
 
-// ============================================================================
-// ============================================================================
-
-FillPropertiesContext::FillPropertiesContext( ContextHandler& rParent, FillProperties& rFillProps ) :
-    ContextHandler( rParent ),
+FillPropertiesContext::FillPropertiesContext( ContextHandler2Helper& rParent, FillProperties& rFillProps ) :
+    ContextHandler2( rParent ),
     mrFillProps( rFillProps )
 {
 }
 
-Reference< XFastContextHandler > FillPropertiesContext::createFastChildContext(
-        sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
-    throw ( SAXException, RuntimeException )
+ContextHandlerRef FillPropertiesContext::onCreateContext(
+        sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    return createFillContext( *this, nElement, rxAttribs, mrFillProps );
+    return createFillContext( *this, nElement, rAttribs, mrFillProps );
 }
 
-Reference< XFastContextHandler > FillPropertiesContext::createFillContext(
-        ContextHandler& rParent, sal_Int32 nElement,
-        const Reference< XFastAttributeList >& rxAttribs, FillProperties& rFillProps )
+ContextHandlerRef FillPropertiesContext::createFillContext(
+        ContextHandler2Helper& rParent, sal_Int32 nElement,
+        const AttributeList& rAttribs, FillProperties& rFillProps )
 {
     switch( nElement )
     {
         case A_TOKEN( noFill ):     { rFillProps.moFillType = getBaseToken( nElement ); return 0; };
-        case A_TOKEN( solidFill ):  { rFillProps.moFillType = getBaseToken( nElement ); return new SolidFillContext( rParent, rxAttribs, rFillProps ); };
-        case A_TOKEN( gradFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new GradientFillContext( rParent, rxAttribs, rFillProps.maGradientProps ); };
-        case A_TOKEN( pattFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new PatternFillContext( rParent, rxAttribs, rFillProps.maPatternProps ); };
-        case A_TOKEN( blipFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new BlipFillContext( rParent, rxAttribs, rFillProps.maBlipProps ); };
+        case A_TOKEN( solidFill ):  { rFillProps.moFillType = getBaseToken( nElement ); return new SolidFillContext( rParent, rAttribs, rFillProps ); };
+        case A_TOKEN( gradFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new GradientFillContext( rParent, rAttribs, rFillProps.maGradientProps ); };
+        case A_TOKEN( pattFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new PatternFillContext( rParent, rAttribs, rFillProps.maPatternProps ); };
+        case A_TOKEN( blipFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new BlipFillContext( rParent, rAttribs, rFillProps.maBlipProps ); };
         case A_TOKEN( grpFill ):    { rFillProps.moFillType = getBaseToken( nElement ); return 0; };    // TODO
     }
     return 0;
 }
 
-// ============================================================================
-
-SimpleFillPropertiesContext::SimpleFillPropertiesContext( ContextHandler& rParent, Color& rColor ) :
+SimpleFillPropertiesContext::SimpleFillPropertiesContext( ContextHandler2Helper& rParent, Color& rColor ) :
     FillPropertiesContext( rParent, *this ),
     mrColor( rColor )
 {
@@ -300,8 +274,6 @@ SimpleFillPropertiesContext::~SimpleFillPropertiesContext()
 {
     mrColor = getBestSolidColor();
 }
-
-// ============================================================================
 
 } // namespace drawingml
 } // namespace oox

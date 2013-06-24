@@ -33,13 +33,13 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox {
 namespace drawingml {
 
-HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
-        const Reference< XFastAttributeList >& xAttributes, PropertyMap& aProperties )
-    : ContextHandler( rParent )
+HyperLinkContext::HyperLinkContext( ContextHandler2Helper& rParent,
+        const AttributeList& rAttribs, PropertyMap& aProperties )
+    : ContextHandler2( rParent )
     , maProperties(aProperties)
 {
     OUString sURL, sHref;
-    OUString aRelId = xAttributes->getOptionalValue( R_TOKEN( id ) );
+    OUString aRelId = rAttribs.getString( R_TOKEN( id ) ).get();
     if ( !aRelId.isEmpty() )
     {
         OSL_TRACE("OOX: URI rId %s", OUStringToOString (aRelId, RTL_TEXTENCODING_UTF8).pData->buffer);
@@ -55,13 +55,13 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
             sURL = getRelations().getInternalTargetFromRelId( aRelId );
         }
     }
-    OUString sTooltip = xAttributes->getOptionalValue( R_TOKEN( tooltip ) );
+    OUString sTooltip = rAttribs.getString( R_TOKEN( tooltip ) ).get();
     if ( !sTooltip.isEmpty() )
         maProperties[ PROP_Representation ] <<= sTooltip;
-    OUString sFrame = xAttributes->getOptionalValue( R_TOKEN( tgtFrame ) );
+    OUString sFrame = rAttribs.getString( R_TOKEN( tgtFrame ) ).get();
     if( !sFrame.isEmpty() )
         maProperties[ PROP_TargetFrame ] <<= sFrame;
-    OUString aAction = xAttributes->getOptionalValue( XML_action );
+    OUString aAction = rAttribs.getString( XML_action ).get();
     if ( !aAction.isEmpty() )
     {
         // reserved values of the unrestricted string aAction:
@@ -149,22 +149,20 @@ HyperLinkContext::~HyperLinkContext()
 {
 }
 
-Reference< XFastContextHandler > HyperLinkContext::createFastChildContext(
-        ::sal_Int32 aElement, const Reference< XFastAttributeList >& xAttribs ) throw (SAXException, RuntimeException)
+ContextHandlerRef HyperLinkContext::onCreateContext(
+        ::sal_Int32 aElement, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
     switch( aElement )
     {
     case A_TOKEN( extLst ):
-        return xRet;
+        return 0;
     case A_TOKEN( snd ):
         EmbeddedWAVAudioFile aAudio;
-        getEmbeddedWAVAudioFile( getRelations(), xAttribs, aAudio );
+        getEmbeddedWAVAudioFile( getRelations(), rAttribs.getFastAttributeList(), aAudio );
         break;
     }
-    if ( !xRet.is() )
-        xRet.set( this );
-    return xRet;
+
+    return this;
 }
 
 } // namespace drawingml

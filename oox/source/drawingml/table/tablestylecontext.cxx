@@ -30,78 +30,56 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml { namespace table {
 
-TableStyleContext::TableStyleContext( ContextHandler& rParent,
-    const Reference< XFastAttributeList >& xAttribs, TableStyle& rTableStyle )
-: ContextHandler( rParent )
+TableStyleContext::TableStyleContext( ContextHandler2Helper& rParent,
+    const AttributeList& rAttribs, TableStyle& rTableStyle )
+: ContextHandler2( rParent )
 , mrTableStyle( rTableStyle )
 {
-    mrTableStyle.getStyleId() = xAttribs->getOptionalValue( XML_styleId );
-    mrTableStyle.getStyleName() = xAttribs->getOptionalValue( XML_styleName );
+    mrTableStyle.getStyleId() = rAttribs.getString( XML_styleId ).get();
+    mrTableStyle.getStyleName() = rAttribs.getString( XML_styleName ).get();
 }
 
 TableStyleContext::~TableStyleContext()
 {
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-TableStyleContext::createFastChildContext( ::sal_Int32 aElementToken, const uno::Reference< xml::sax::XFastAttributeList >& /* xAttribs */ )
-    throw ( xml::sax::SAXException, uno::RuntimeException)
+ContextHandlerRef
+TableStyleContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& /* rAttribs */ )
 {
-    uno::Reference< xml::sax::XFastContextHandler > xRet;
-
     switch( aElementToken )
     {
         case A_TOKEN( tblBg ):      // CT_TableBackgroundStyle
-            xRet = new TableBackgroundStyleContext( *this, mrTableStyle );
-            break;
+            return new TableBackgroundStyleContext( *this, mrTableStyle );
         case A_TOKEN( wholeTbl ):   // CT_TablePartStyle
-            xRet = new TablePartStyleContext( *this, mrTableStyle.getWholeTbl() );
-            break;
+            return new TablePartStyleContext( *this, mrTableStyle.getWholeTbl() );
         case A_TOKEN( band1H ):     // CT_TablePartStyle
-            xRet = new TablePartStyleContext( *this, mrTableStyle.getBand1H() );
-            break;
+            return new TablePartStyleContext( *this, mrTableStyle.getBand1H() );
         case A_TOKEN( band2H ):     // CT_TablePartStyle
-            xRet = new TablePartStyleContext( *this, mrTableStyle.getBand2H() );
-            break;
+            return new TablePartStyleContext( *this, mrTableStyle.getBand2H() );
         case A_TOKEN( band1V ):     // CT_TablePartStyle
-            xRet = new TablePartStyleContext( *this, mrTableStyle.getBand1V() );
-            break;
+            return new TablePartStyleContext( *this, mrTableStyle.getBand1V() );
         case A_TOKEN( band2V ):     // CT_TablePartStyle
-            xRet = new TablePartStyleContext( *this, mrTableStyle.getBand2V() );
-            break;
+            return new TablePartStyleContext( *this, mrTableStyle.getBand2V() );
         case A_TOKEN( lastCol ):    // CT_TablePartStyle
-            xRet = new TablePartStyleContext( *this, mrTableStyle.getLastCol() );
-            break;
+            return new TablePartStyleContext( *this, mrTableStyle.getLastCol() );
         case A_TOKEN( firstCol ):   // CT_TablePartStyle
-            xRet = new TablePartStyleContext( *this, mrTableStyle.getFirstCol() );
-            break;
+            return new TablePartStyleContext( *this, mrTableStyle.getFirstCol() );
         case A_TOKEN( lastRow ):    // CT_TablePartStyle
-            xRet = new TablePartStyleContext( *this, mrTableStyle.getLastRow() );
-            break;
+            return new TablePartStyleContext( *this, mrTableStyle.getLastRow() );
         case A_TOKEN( seCell ):     // CT_TablePartStyle
-            xRet = new TablePartStyleContext( *this, mrTableStyle.getSeCell() );
-            break;
+            return new TablePartStyleContext( *this, mrTableStyle.getSeCell() );
         case A_TOKEN( swCell ):     // CT_TablePartStyle
-            xRet = new TablePartStyleContext( *this, mrTableStyle.getSwCell() );
-            break;
+            return new TablePartStyleContext( *this, mrTableStyle.getSwCell() );
         case A_TOKEN( firstRow ):   // CT_TablePartStyle
-            xRet = new TablePartStyleContext( *this, mrTableStyle.getFirstRow() );
-            break;
+            return new TablePartStyleContext( *this, mrTableStyle.getFirstRow() );
         case A_TOKEN( neCell ):     // CT_TablePartStyle
-            xRet = new TablePartStyleContext( *this, mrTableStyle.getNeCell() );
-            break;
+            return new TablePartStyleContext( *this, mrTableStyle.getNeCell() );
         case A_TOKEN( nwCell ):     // CT_TablePartStyle
-            xRet = new TablePartStyleContext( *this, mrTableStyle.getNwCell() );
-            break;
+            return new TablePartStyleContext( *this, mrTableStyle.getNwCell() );
         case A_TOKEN( extLst ):     // CT_OfficeArtExtensionList
             break;
     }
-    if( !xRet.is() )
-    {
-        uno::Reference<XFastContextHandler> xTmp(this);
-        xRet.set( xTmp );
-    }
-    return xRet;
+    return this;
 }
 
 } } }
