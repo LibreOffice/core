@@ -19,8 +19,6 @@
 
 #ifndef _VLCCOMMON_HXX
 #define _VLCCOMMON_HXX
-//TODO: Remove it before committing
-#define SAL_CALL
 
 #include <vlc/libvlc.h>
 
