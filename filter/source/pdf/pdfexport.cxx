@@ -100,8 +100,6 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mbExportNotes               ( sal_True ),
     mbViewPDF                   ( sal_True ),
     mbExportNotesPages          ( sal_False ),
-    mbEmbedStandardFonts        ( sal_False ),//in preparation for i54636 and i76458.
-                                              //already used for i59651 (PDF/A-1)
     mbUseTransitionEffects      ( sal_True ),
     mbExportBookmarks           ( sal_True ),
     mbExportHiddenSlides        ( sal_False ),
@@ -461,8 +459,6 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mbViewPDF;
                 else if ( rFilterData[ nData ].Name == "ExportNotesPages" )
                     rFilterData[ nData ].Value >>= mbExportNotesPages;
-                else if ( rFilterData[ nData ].Name == "EmbedStandardFonts" )
-                    rFilterData[ nData ].Value >>= mbEmbedStandardFonts;
                 else if ( rFilterData[ nData ].Name == "UseTransitionEffects" )
                     rFilterData[ nData ].Value >>= mbUseTransitionEffects;
                 else if ( rFilterData[ nData ].Name == "ExportFormFields" )
@@ -567,8 +563,6 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 aContext.Version    = PDFWriter::PDF_A_1;
                 //force the tagged PDF as well
                 mbUseTaggedPDF = sal_True;
-                //force embedding of standard fonts
-                mbEmbedStandardFonts = sal_True;
                 //force disabling of form conversion
                 mbExportFormFields = sal_False;
                 // PDF/A does not allow transparencies
@@ -592,7 +586,6 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             aContext.DisplayPDFDocumentTitle    = mbDisplayPDFDocumentTitle;
             aContext.InitialPage                = mnInitialPage-1;
             aContext.OpenBookmarkLevels         = mnOpenBookmarkLevels;
-            aContext.EmbedStandardFonts         = mbEmbedStandardFonts;
 
             switch( mnPDFDocumentMode )
             {

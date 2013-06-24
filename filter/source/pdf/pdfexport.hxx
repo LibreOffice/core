@@ -49,7 +49,6 @@ private:
     sal_Bool                mbExportNotes;
     sal_Bool                mbViewPDF;
     sal_Bool                mbExportNotesPages;
-    sal_Bool                mbEmbedStandardFonts;
     sal_Bool                mbUseTransitionEffects;
     sal_Bool                mbExportBookmarks;
     sal_Bool                mbExportHiddenSlides;

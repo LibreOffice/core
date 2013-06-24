@@ -303,14 +303,6 @@ TabPage  RID_PDF_TAB_GENER
         WordBreak = TRUE ;
         Text[ en-US ] = "Exp~ort automatically inserted blank pages";
     };
-    CheckBox CB_EMBEDSTANDARDFONTS
-    {
-        HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EMBEDSTANDARDFONTS";
-        Pos = MAP_APPFONT ( 188 , 176 ) ;
-        Size = MAP_APPFONT ( 158 , 10 ) ;
-        TabStop = TRUE ;
-        Text[ en-US ] = "E~mbed standard fonts";
-    };
         CheckBox CB_VIEWPDF
     {
         Pos = MAP_APPFONT ( 188 , 181 ) ;

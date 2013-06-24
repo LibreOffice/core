@@ -99,7 +99,6 @@ protected:
     sal_Bool                    mbUseTransitionEffects;
     sal_Bool                    mbIsSkipEmptyPages;
     sal_Bool                    mbAddStream;
-    sal_Bool                    mbEmbedStandardFonts;
     sal_Int32                   mnFormsType;
     sal_Bool                    mbExportFormFields;
     sal_Bool                    mbAllowDuplicateFieldNames;
@@ -201,7 +200,6 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 
     CheckBox                    maCbExportFormFields;
     sal_Bool                    mbExportFormFieldsUserSelection;
-    sal_Bool                    mbEmbedStandardFontsUserSelection;
     FixedText                   maFtFormsFormat;
     ListBox                     maLbFormsFormat;
     CheckBox                    maCbAllowDuplicateFieldNames;
@@ -215,7 +213,6 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     CheckBox                    maCbExportEmptyPages;
     CheckBox                    maCbAddStream;
     FixedText                   maFtAddStreamDescription;
-    CheckBox                    maCbEmbedStandardFonts;
 
     FixedLine                   maFlWatermark;
     CheckBox                    maCbWatermark;
