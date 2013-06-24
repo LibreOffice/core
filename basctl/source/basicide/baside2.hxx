@@ -41,6 +41,7 @@ class SvxSearchItem;
 #include <vcl/split.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/colorcfg.hxx>
+#include "vcl/lstbox.hxx"
 
 #include <sfx2/progress.hxx>
 #include <unotools/options.hxx>
@@ -57,6 +58,7 @@ namespace basctl
 {
 
 class ObjectCatalog;
+class CodeCompleteListBox;
 
 DBG_NAMEEX( ModulWindow )
 
@@ -109,6 +111,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
     GetComponentInterface(sal_Bool bCreate = true);
     std::vector< CodeCompleteData > aCodeCompleteCache;
+    CodeCompleteListBox* aListBox;
 
 protected:
     virtual void    Paint( const Rectangle& );
@@ -461,6 +464,17 @@ private:
         EditorWindow* pEditor;
 
     } aSyntaxColors;
+};
+
+class CodeCompleteListBox: public ListBox
+{
+private:
+    EditorWindow* pParent; // parent window
+    DECL_LINK(ImplSelectHdl, void*);
+
+public:
+    CodeCompleteListBox(EditorWindow* pPar);
+    virtual ~CodeCompleteListBox();
 };
 
 } // namespace basctl
