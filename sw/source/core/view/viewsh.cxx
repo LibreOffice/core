@@ -99,6 +99,43 @@ void ViewShell::ToggleHeaderFooterEdit()
     GetWin()->Invalidate();
 }
 
+static void
+lcl_PaintTransparentFormControls(ViewShell & rShell, SwRect const& rRect)
+{
+    // Direct paint has been performed: the background of transparent child
+    // windows has been painted, so need to paint the child windows now.
+    if (rShell.GetWin())
+    {
+        Window& rWindow = *(rShell.GetWin());
+        if (rWindow.IsChildTransparentModeEnabled())
+        {
+            Window * pCandidate = rWindow.GetWindow( WINDOW_FIRSTCHILD );
+            if (pCandidate)
+            {
+                const Rectangle aRectanglePixel(
+                            rWindow.LogicToPixel(rRect.SVRect()));
+                while (pCandidate)
+                {
+                    if (pCandidate->IsPaintTransparent())
+                    {
+                        const Rectangle aCandidatePosSizePixel(
+                                        pCandidate->GetPosPixel(),
+                                        pCandidate->GetSizePixel());
+
+                        if (aCandidatePosSizePixel.IsOver(aRectanglePixel))
+                        {
+                            pCandidate->Invalidate(
+                                INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN );
+                            pCandidate->Update();
+                        }
+                    }
+                    pCandidate = pCandidate->GetWindow( WINDOW_NEXT );
+                }
+            }
+        }
+    }
+}
+
 // #i72754# 2nd set of Pre/PostPaints
 // This time it uses the lock counter (mPrePostPaintRegions empty/non-empty) to allow only one activation
 // and deactivation and mpPrePostOutDev to remember the OutDev from the BeginDrawLayers
@@ -356,39 +393,7 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
                         DLPostPaint2(true);
                     }
 
-                    // #i107365#
-                    // Direct paint has been performed. Thus, take care of
-                    // transparent child windows.
-                    if ( GetWin() )
-                    {
-                        Window& rWindow = *(GetWin());
-                        if (rWindow.IsChildTransparentModeEnabled())
-                        {
-                            Window* pCandidate = rWindow.GetWindow( WINDOW_FIRSTCHILD );
-                            if (pCandidate)
-                            {
-                                const Rectangle aRectanglePixel(rWindow.LogicToPixel(aRect.SVRect()));
-
-                                while (pCandidate)
-                                {
-                                    if ( pCandidate->IsPaintTransparent() )
-                                    {
-                                        const Rectangle aCandidatePosSizePixel(
-                                                        pCandidate->GetPosPixel(),
-                                                        pCandidate->GetSizePixel());
-
-                                        if ( aCandidatePosSizePixel.IsOver(aRectanglePixel) )
-                                        {
-                                            pCandidate->Invalidate( INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN );
-                                            pCandidate->Update();
-                                        }
-                                    }
-
-                                    pCandidate = pCandidate->GetWindow( WINDOW_NEXT );
-                                }
-                            }
-                        }
-                    }
+                    lcl_PaintTransparentFormControls(*this, aRect); // i#107365
                 }
 
                 delete pVout;
@@ -471,6 +476,8 @@ void ViewShell::ImplUnlockPaint( sal_Bool bVirDev )
 
                 // #i72754# end Pre/PostPaint encapsulation when mpOut is back and content is painted
                 DLPostPaint2(true);
+
+                lcl_PaintTransparentFormControls(*this, VisArea()); // fdo#63949
             }
             else
             {
