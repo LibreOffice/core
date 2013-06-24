@@ -9,27 +9,16 @@
 
 #define TRANSLITERATION_Diacritics_CTL
 #include <transliteration_Ignore.hxx>
+#include <unicode/uchar.h>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
 sal_Unicode
 ignoreDiacritics_CTL_translator (const sal_Unicode c)
 {
-    switch (c) {
-        //Arabic Diacritics
-        case 0x064B: // Fathahtan
-        case 0x064C: // Dammahtan
-        case 0x064D: // Kasrahtan
-        case 0x064E: // Fathah
-        case 0x064F: // Dammah
-        case 0x0650: // Kasrah
-        case 0x0651: // Shaddah
-        case 0x0652: // Sukun
-        case 0x0653: // Maddah
-        case 0x0670: // Dagger alif
-        // no break;
+    if(u_getIntPropertyValue(c, UCHAR_GENERAL_CATEGORY) == U_NON_SPACING_MARK)
         return 0xffff; // Skip this character
-    }
+
     return c;
 }
 
