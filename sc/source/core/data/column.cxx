@@ -1174,7 +1174,7 @@ bool ScColumn::TestInsertRow( SCROW nStartRow, SCSIZE nSize ) const
 
     // Find the position of the last non-empty cell below nStartRow.
     size_t nLastNonEmptyRow = MAXROW;
-    sc::CellStoreType::const_reverse_iterator it = maCells.rbegin(), itEnd = maCells.rend();
+    sc::CellStoreType::const_reverse_iterator it = maCells.rbegin();
     if (it->type == sc::element_type_empty)
         nLastNonEmptyRow -= it->size;
 
