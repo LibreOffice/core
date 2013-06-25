@@ -26,11 +26,13 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
+#include <svl/ctloptions.hxx>
 #include <svl/srchitem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/toolbox.hxx>
@@ -98,8 +100,11 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
     lArgs[2].Name = OUString(SEARCHITEM_SEARCHFLAGS);
     lArgs[2].Value <<= (sal_Int32)0;
     lArgs[3].Name = OUString(SEARCHITEM_TRANSLITERATEFLAGS);
-    lArgs[3].Value <<= (sal_Int32)(!aMatchCase ?
-        com::sun::star::i18n::TransliterationModules_IGNORE_CASE : 0);
+    SvtCTLOptions aCTLOptions;
+    sal_Int32 nFlags = 0;
+    nFlags |= (!aMatchCase ? com::sun::star::i18n::TransliterationModules_IGNORE_CASE : 0);
+    nFlags |= (aCTLOptions.IsCTLFontEnabled() ? com::sun::star::i18n::TransliterationModulesExtra::ignoreDiacritics_CTL:0 );
+    lArgs[3].Value <<= nFlags;
     lArgs[4].Name = OUString(SEARCHITEM_COMMAND);
     lArgs[4].Value <<= (sal_Int16)(aFindAll ?
         SVX_SEARCHCMD_FIND_ALL : SVX_SEARCHCMD_FIND );
