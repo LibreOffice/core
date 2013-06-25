@@ -1831,13 +1831,12 @@ namespace {
 class StrCellIterator
 {
     typedef std::pair<sc::CellStoreType::const_iterator,size_t> PosType;
-    const sc::CellStoreType& mrCells;
     PosType maPos;
     sc::CellStoreType::const_iterator miBeg;
     sc::CellStoreType::const_iterator miEnd;
 public:
     StrCellIterator(const sc::CellStoreType& rCells, SCROW nStart) :
-        mrCells(rCells), maPos(rCells.position(nStart)), miBeg(rCells.begin()), miEnd(rCells.end()) {}
+        maPos(rCells.position(nStart)), miBeg(rCells.begin()), miEnd(rCells.end()) {}
 
     bool valid() const { return (maPos.first != miEnd); }
 
