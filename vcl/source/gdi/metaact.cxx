@@ -154,7 +154,7 @@ void MetaAction::Read( SvStream& rIStm, ImplMetaReadData* )
 MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData )
 {
     MetaAction* pAction = NULL;
-    sal_uInt16      nType;
+    sal_uInt16 nType = 0;
 
     rIStm >> nType;
 
