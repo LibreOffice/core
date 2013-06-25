@@ -2658,6 +2658,16 @@ void TableStyle::importTableStyleElement( const AttributeList& rAttribs )
     //is not showing up.
 }
 
+const OUString& TableStyle::getTableStyleName() const
+{
+    return mxTableFormatting->GetTableStyleName();
+}
+
+ScDBDataFormatting& TableStyle::getTableFormatting()
+{
+    return (*mxTableFormatting);
+}
+
 void TableStyle::finalizeImport()
 {
 }
@@ -3423,6 +3433,18 @@ void StylesBuffer::writeStyleXfToPropertySet( PropertySet& rPropSet, sal_Int32 n
 {
     if( Xf* pXf = maStyleXfs.get( nXfId ).get() )
         pXf->writeToPropertySet( rPropSet );
+}
+
+TableStyleRef StylesBuffer::getTableStyle( OUString& rTableStyleName )
+{
+    for( ::std::vector< TableStyleRef >::iterator i = maTableStyles.begin(); i < maTableStyles.end(); ++i)
+    {
+        if( ((*i)->getTableStyleName() ).equals(rTableStyleName) )
+        {
+            return(*i);
+        }
+    }
+    return 0;
 }
 
 // ============================================================================
