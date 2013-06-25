@@ -36,6 +36,8 @@
 #include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/propertyset.hxx>
 
+#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+
 namespace writerfilter {
 namespace rtftok {
 
@@ -201,6 +203,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
     // Default line width is 0.75 pt (26 mm100) in Word, 0 in Writer.
     uno::Any aLineWidth = uno::makeAny(sal_Int32(26));
     text::WritingMode eWritingMode = text::WritingMode_LR_TB;
+    // Groupshape support
+    boost::optional<sal_Int32> oGroupLeft, oGroupTop, oGroupRight, oGroupBottom;
+    boost::optional<sal_Int32> oRelLeft, oRelTop, oRelRight, oRelBottom;
 
     // Importing these are not trivial, let the VML import do the hard work.
     oox::vml::FillModel aFillModel; // Gradient.
@@ -483,6 +488,22 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
                     break;
             }
         }
+        else if (i->first == "groupLeft")
+            oGroupLeft.reset(TWIP_TO_MM100(i->second.toInt32()));
+        else if (i->first == "groupTop")
+            oGroupTop.reset(TWIP_TO_MM100(i->second.toInt32()));
+        else if (i->first == "groupRight")
+            oGroupRight.reset(TWIP_TO_MM100(i->second.toInt32()));
+        else if (i->first == "groupBottom")
+            oGroupBottom.reset(TWIP_TO_MM100(i->second.toInt32()));
+        else if (i->first == "relLeft")
+            oRelLeft.reset(TWIP_TO_MM100(i->second.toInt32()));
+        else if (i->first == "relTop")
+            oRelTop.reset(TWIP_TO_MM100(i->second.toInt32()));
+        else if (i->first == "relRight")
+            oRelRight.reset(TWIP_TO_MM100(i->second.toInt32()));
+        else if (i->first == "relBottom")
+            oRelBottom.reset(TWIP_TO_MM100(i->second.toInt32()));
         else
             SAL_INFO("writerfilter", "TODO handle shape property '" << i->first << "':'" << i->second << "'");
     }
@@ -563,14 +584,37 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
     // Set position and size
     if (xShape.is())
     {
+        sal_Int32 nLeft = rShape.nLeft;
+        sal_Int32 nTop = rShape.nTop;
+
+        bool bInShapeGroup = oGroupLeft && oGroupTop && oGroupRight && oGroupBottom
+            && oRelLeft && oRelTop && oRelRight && oRelBottom;
+        if (bInShapeGroup)
+        {
+            // See lclGetAbsPoint() in the VML import: rShape is the group shape, oGroup is its coordinate system, oRel is the relative child shape.
+            sal_Int32 nShapeWidth = rShape.nRight - rShape.nLeft;
+            sal_Int32 nShapeHeight = rShape.nBottom - rShape.nTop;
+            sal_Int32 nCoordSysWidth = *oGroupRight - *oGroupLeft;
+            sal_Int32 nCoordSysHeight = *oGroupBottom - *oGroupTop;
+            double fWidthRatio = static_cast< double >( nShapeWidth ) / nCoordSysWidth;
+            double fHeightRatio = static_cast< double >( nShapeHeight ) / nCoordSysHeight;
+            nLeft = static_cast< sal_Int32 >( rShape.nLeft + fWidthRatio * (*oRelLeft - *oGroupLeft) );
+            nTop = static_cast< sal_Int32 >( rShape.nTop + fHeightRatio * (*oRelTop - *oGroupTop) );
+        }
+
         if (bTextFrame)
         {
-            xPropertySet->setPropertyValue("HoriOrientPosition", uno::makeAny(rShape.nLeft));
-            xPropertySet->setPropertyValue("VertOrientPosition", uno::makeAny(rShape.nTop));
+            xPropertySet->setPropertyValue("HoriOrientPosition", uno::makeAny(nLeft));
+            xPropertySet->setPropertyValue("VertOrientPosition", uno::makeAny(nTop));
         }
         else
-            xShape->setPosition(awt::Point(rShape.nLeft, rShape.nTop));
-        xShape->setSize(awt::Size(rShape.nRight - rShape.nLeft, rShape.nBottom - rShape.nTop));
+            xShape->setPosition(awt::Point(nLeft, nTop));
+
+        if (bInShapeGroup)
+            xShape->setSize(awt::Size(*oRelRight - *oRelLeft, *oRelBottom - *oRelTop));
+        else
+            xShape->setSize(awt::Size(rShape.nRight - rShape.nLeft, rShape.nBottom - rShape.nTop));
+
         if (rShape.nHoriOrientRelation != 0)
             xPropertySet->setPropertyValue("HoriOrientRelation", uno::makeAny(rShape.nHoriOrientRelation));
         if (rShape.nVertOrientRelation != 0)

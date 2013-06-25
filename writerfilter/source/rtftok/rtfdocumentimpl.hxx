@@ -164,6 +164,7 @@ namespace writerfilter {
             DESTINATION_UPR,
             DESTINATION_LFOLEVEL,
             DESTINATION_BACKGROUND,
+            DESTINATION_SHAPEGROUP,
         };
 
         enum RTFBorderState
@@ -406,6 +407,7 @@ namespace writerfilter {
                 bool bInBackground;
 
                 bool bHadShapeText;
+                bool bInShapeGroup; ///< If we're inside a \shpgrp group.
         };
 
         class RTFTokenizer;

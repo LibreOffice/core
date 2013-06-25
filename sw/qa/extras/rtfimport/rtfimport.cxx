@@ -146,6 +146,7 @@ public:
     void testN825305();
     void testParaBottomMargin();
     void testN823655();
+    void testFdo66040();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -278,6 +279,7 @@ void Test::run()
         {"n825305.rtf", &Test::testN825305},
         {"para-bottom-margin.rtf", &Test::testParaBottomMargin},
         {"n823655.rtf", &Test::testN823655},
+        {"fdo66040.rtf", &Test::testFdo66040},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1330,6 +1332,27 @@ void Test::testN823655()
     }
     // The first coordinate pair of this freeform shape was 286,0 instead of 0,286.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(286), aCoordinates[0].Second.Value.get<sal_Int32>());
+}
+
+void Test::testFdo66040()
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    // This was 0 (no shapes were imported), we want two textframes.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDraws->getCount());
+
+    // The second paragraph of the first shape should be actually a table, with "A" in its A1 cell.
+    uno::Reference<text::XTextRange> xTextRange(xDraws->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextRange->getText();
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2, xText), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), uno::Reference<text::XTextRange>(xTable->getCellByName("A1"), uno::UNO_QUERY)->getString());
+
+    // Make sure the second shape has the correct position and size.
+    uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(14420), getProperty<sal_Int32>(xShape, "HoriOrientPosition"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1032), getProperty<sal_Int32>(xShape, "VertOrientPosition"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(14000), xShape->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(21001), xShape->getSize().Height);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

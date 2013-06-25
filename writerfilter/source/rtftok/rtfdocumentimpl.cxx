@@ -1667,6 +1667,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_BACKGROUND;
             m_aStates.top().bInBackground = true;
             break;
+        case RTF_SHPGRP:
+            m_aStates.top().nDestinationState = DESTINATION_SHAPEGROUP;
+            m_aStates.top().bInShapeGroup = true;
+            break;
         default:
             SAL_INFO("writerfilter", "TODO handle destination '" << lcl_RtfToString(nKeyword) << "'");
             // Make sure we skip destinations (even without \*) till we don't handle them
@@ -3876,7 +3880,7 @@ int RTFDocumentImpl::popState()
             break;
         case DESTINATION_PICPROP:
         case DESTINATION_SHAPEINSTRUCTION:
-            if (!m_bObject && !aState.bInListpicture && !m_aStates.top().bHadShapeText)
+            if (!m_bObject && !aState.bInListpicture && !m_aStates.top().bHadShapeText && !m_aStates.top().bInShapeGroup)
                 m_pSdrImport->resolve(m_aStates.top().aShape, true);
             break;
         case DESTINATION_BOOKMARKSTART:
@@ -4711,7 +4715,8 @@ RTFParserState::RTFParserState(RTFDocumentImpl *pDocumentImpl)
     bHasTableStyle(false),
     bInListpicture(false),
     bInBackground(false),
-    bHadShapeText(false)
+    bHadShapeText(false),
+    bInShapeGroup(false)
 {
 }
 
