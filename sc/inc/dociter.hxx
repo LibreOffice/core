@@ -198,7 +198,6 @@ class ScCellIterator
     ScAddress maCurPos;
 
     PositionType maCurColPos;
-    SCSIZE mnIndex;
     bool mbSubTotal;
 
     ScRefCellValue maCurCell;
