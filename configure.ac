@@ -4915,7 +4915,7 @@ find_msvc_x64_dlls()
         vsarch=x64
     fi
 
-    msvcdllpath="$VC_PRODUCT_DIR/redist/$vsarch/Microsoft.VC${VCVER}.CRT"
+    msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
     MSVC_DEBUG_DLL_PATH="$VC_PRODUCT_DIR/redist/Debug_NonRedist/$vsarch/Microsoft.VC${VCVER}.DebugCRT"
     msvcdlls="msvcp${VCVER}.dll msvcr${VCVER}.dll"
     MSVC_DEBUG_DLLS="msvcp${VCVER}d.dll msvcr${VCVER}d.dll"
