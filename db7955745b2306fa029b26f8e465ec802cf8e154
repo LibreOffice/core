@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXX///y0\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-06-25T14:19:20Z",
+      "side": 1,
+      "message": "can it be used in a threaded context ?\nthe whole app is pretty much thread unsafe, hence the SoalrMutex uglyness...",
+      "revId": "db7955745b2306fa029b26f8e465ec802cf8e154",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXX///y4\u003d",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 829,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-06-25T14:19:20Z",
+      "side": 1,
+      "message": "the test mpOnlineSpellingList !\u003d NULL seems to indicate that\nit could be NULL...\nin which case the line above would segfault on mpOnlineSpellingList-\u003ecend()",
+      "revId": "db7955745b2306fa029b26f8e465ec802cf8e154",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
