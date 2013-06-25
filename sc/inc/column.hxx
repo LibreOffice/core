@@ -464,6 +464,28 @@ public:
 
     void InterpretDirtyCells( SCROW nRow1, SCROW nRow2 );
 
+    /**
+     * Regroup formula cells for the entire column.
+     */
+    void RegroupFormulaCells();
+
+    /**
+     * Regroup existing formula cells when a new cell is inserted.
+     *
+     * @param nRow row at which a new cell is inserted.
+     */
+    void RegroupFormulaCells( SCROW nRow );
+
+    /**
+     * Regroup existing formula cells when a range of new cells are inserted.
+     *
+     * @param nRow1 first row of inserted new cell span.
+     * @param nRow2 last row of inserted new cell span.
+     */
+    void RegroupFormulaCells( SCROW nRow1, SCROW nRow2 );
+
+    void FormulaCellsUndecided( SCROW nRow1, SCROW nRow2 );
+
 private:
 
     void CopyCellsInRangeToColumn(

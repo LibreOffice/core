@@ -886,6 +886,9 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 ScFormulaCell* pNew2 = cloneFormulaCell(pDocument, ScAddress(nCol, nRow2, nTab), *pOld1);
                 *itf1 = pNew1;
                 *itf2 = pNew2;
+
+                RegroupFormulaCells(nRow1);
+                RegroupFormulaCells(nRow2);
             }
             break;
             default:
@@ -930,6 +933,8 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *aCell2.mpFormula);
                 it1 = maCells.set(it1, nRow1, pNew);
                 maCells.set_empty(it1, nRow2, nRow2); // original formula cell gets deleted.
+
+                RegroupFormulaCells(nRow2);
             }
             break;
             default:
@@ -971,6 +976,9 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow2, nTab), *aCell1.mpFormula);
                 it1 = maCells.set_empty(it1, nRow1, nRow1); // original formula cell is gone.
                 maCells.set(it1, nRow2, pNew);
+
+                RegroupFormulaCells(nRow1);
+                RegroupFormulaCells(nRow2);
             }
             break;
             default:
@@ -1012,6 +1020,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             }
 
             maCells.set(it1, nRow2, aCell1.mfValue);
+
         }
         break;
         case CELLTYPE_STRING:
@@ -1101,6 +1110,8 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
     }
 
     SwapCellTextAttrs(nRow1, nRow2);
+    RegroupFormulaCells(nRow1);
+    RegroupFormulaCells(nRow2);
     CellStorageModified();
     BroadcastCells(aRows);
 }
@@ -1125,6 +1136,7 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
     ScFormulaCell* pCell2 = rCol.maCells.get<ScFormulaCell*>(nRow);
     if (pCell1)
         updateRefInFormulaCell(*pCell1, rCol.nCol, nTab, rCol.nCol - nCol);
+
     if (pCell2)
         updateRefInFormulaCell(*pCell2, nCol, nTab, nCol - rCol.nCol);
 
@@ -1133,6 +1145,13 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
 
     CellStorageModified();
     rCol.CellStorageModified();
+
+    if (pCell1 || pCell2)
+    {
+        // At least one of the two cells is a formula cell. Regroup them.
+        RegroupFormulaCells(nRow);
+        rCol.RegroupFormulaCells(nRow);
+    }
 }
 
 
@@ -1200,15 +1219,18 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
     maCellTextAttrs.insert_empty(nStartRow, nSize);
     maCellTextAttrs.resize(MAXROWCOUNT);
 
-    maCells.insert_empty(nStartRow, nSize);
+    // Check if this insertion will split an existing formula block.
+    sc::CellStoreType::position_type aPos = maCells.position(nStartRow);
+    bool bSplitFormulaBlock = aPos.second != 0;
+
+    sc::CellStoreType::iterator it = maCells.insert_empty(aPos.first, nStartRow, nSize);
     maCells.resize(MAXROWCOUNT);
 
-    bool bOldAutoCalc = pDocument->GetAutoCalc();
-    pDocument->SetAutoCalc( false );    // avoid recalculations
+    sc::AutoCalcSwitch aSwitch(*pDocument, false);
 
     // Get the position of the first affected cell.
-    std::pair<sc::CellStoreType::iterator,size_t> aPos = maCells.position(nStartRow+nSize);
-    sc::CellStoreType::iterator it = aPos.first;
+    aPos = maCells.position(it, nStartRow+nSize);
+    it = aPos.first;
 
     // Update the positions of all affected formula cells.
     if (it->type == sc::element_type_formula)
@@ -1237,9 +1259,10 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
         }
     }
 
-    CellStorageModified();
+    if (bSplitFormulaBlock)
+        RegroupFormulaCells(nStartRow, nStartRow+nSize-1);
 
-    pDocument->SetAutoCalc( bOldAutoCalc );
+    CellStorageModified();
 
     // We *probably* don't need to broadcast here since the parent call seems
     // to take care of it.
@@ -1370,6 +1393,7 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
             break;
     }
 
+    rDestCol.RegroupFormulaCells(nRow1, nRow2);
     rDestCol.CellStorageModified();
 }
 
@@ -1419,6 +1443,7 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
     else
         rDestCol.maCellTextAttrs.set_empty(nDestRow, nDestRow);
 
+    rDestCol.RegroupFormulaCells(nDestRow);
     rDestCol.CellStorageModified();
 }
 
@@ -1956,6 +1981,8 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     maCells.transfer(nStartRow, nEndRow, rCol.maCells, nStartRow);
     maCellTextAttrs.transfer(nStartRow, nEndRow, rCol.maCellTextAttrs, nStartRow);
 
+    RegroupFormulaCells(nStartRow, nEndRow);
+    rCol.RegroupFormulaCells(nStartRow, nEndRow);
     CellStorageModified();
     rCol.CellStorageModified();
 
@@ -2064,11 +2091,13 @@ bool ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW
     if (eUpdateRefMode == URM_COPY)
     {
         UpdateRefOnCopy aHandler(aRange, nDx, nDy, nDz, pUndoDoc);
+        FormulaCellsUndecided(nRow1, nRow2);
         sc::ProcessBlock(maCells.begin(), maCells, aHandler, nRow1, nRow2);
         return aHandler.isUpdated();
     }
 
     UpdateRefOnNonCopy aHandler(nCol, nTab, aRange, nDx, nDy, nDz, eUpdateRefMode, pUndoDoc);
+    FormulaCellsUndecided(0, MAXROW);
     sc::ProcessFormula(maCells, aHandler);
     return aHandler.isUpdated();
 }
@@ -2546,6 +2575,7 @@ void ScColumn::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
 {
     UpdateTransHandler aFunc(rSource, rDest, pUndoDoc);
     sc::ProcessFormula(maCells, aFunc);
+    RegroupFormulaCells();
 }
 
 
@@ -2553,6 +2583,7 @@ void ScColumn::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
     UpdateGrowHandler aFunc(rArea, nGrowX, nGrowY);
     sc::ProcessFormula(maCells, aFunc);
+    RegroupFormulaCells();
 }
 
 
@@ -2572,7 +2603,10 @@ void ScColumn::UpdateInsertTabOnlyCells(SCTAB nInsPos, SCTAB nNewSheets)
     InsertTabUpdater aFunc(maCellTextAttrs, nTab, nInsPos, nNewSheets);
     sc::ProcessFormulaEditText(maCells, aFunc);
     if (aFunc.isModified())
+    {
+        RegroupFormulaCells();
         CellStorageModified();
+    }
 }
 
 void ScColumn::UpdateDeleteTab(SCTAB nDelPos, bool bIsMove, ScColumn* /*pRefUndo*/, SCTAB nSheets)
@@ -2586,7 +2620,10 @@ void ScColumn::UpdateDeleteTab(SCTAB nDelPos, bool bIsMove, ScColumn* /*pRefUndo
     DeleteTabUpdater aFunc(maCellTextAttrs, nDelPos, nSheets, nTab, bIsMove);
     sc::ProcessFormulaEditText(maCells, aFunc);
     if (aFunc.isModified())
+    {
+        RegroupFormulaCells();
         CellStorageModified();
+    }
 }
 
 void ScColumn::UpdateInsertTabAbs(SCTAB nNewPos)
@@ -2594,7 +2631,10 @@ void ScColumn::UpdateInsertTabAbs(SCTAB nNewPos)
     InsertAbsTabUpdater aFunc(maCellTextAttrs, nTab, nNewPos);
     sc::ProcessFormulaEditText(maCells, aFunc);
     if (aFunc.isModified())
+    {
+        RegroupFormulaCells();
         CellStorageModified();
+    }
 }
 
 void ScColumn::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
@@ -2605,7 +2645,10 @@ void ScColumn::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
     MoveTabUpdater aFunc(maCellTextAttrs, nTab, nOldPos, nNewPos);
     sc::ProcessFormulaEditText(maCells, aFunc);
     if (aFunc.isModified())
+    {
+        RegroupFormulaCells();
         CellStorageModified();
+    }
 }
 
 
@@ -2613,6 +2656,7 @@ void ScColumn::UpdateCompile( bool bForceIfNameInUse )
 {
     UpdateCompileHandler aFunc(bForceIfNameInUse);
     sc::ProcessFormula(maCells, aFunc);
+    RegroupFormulaCells();
 }
 
 
@@ -2710,12 +2754,17 @@ void ScColumn::CompileXML( ScProgress& rProgress )
 {
     CompileXMLHandler aFunc(rProgress);
     sc::ProcessFormula(maCells, aFunc);
+    RegroupFormulaCells();
 }
 
 bool ScColumn::CompileErrorCells(sal_uInt16 nErrCode)
 {
     CompileErrorCellsHandler aHdl(nErrCode, pDocument->GetGrammar());
     sc::ProcessFormula(maCells, aHdl);
+    if (aHdl.isCompiled())
+        // TODO: Probably more efficient to do this individually rather than the whole column.
+        RegroupFormulaCells();
+
     return aHdl.isCompiled();
 }
 

@@ -1466,6 +1466,8 @@ SCROW ScColumn::FindNextVisibleRowWithContent(
 
 void ScColumn::CellStorageModified()
 {
+    // TODO: Update column's "last updated" timestamp here.
+
     mbDirtyGroups = true;
 
 #if DEBUG_COLUMN_STORAGE
@@ -1524,6 +1526,22 @@ void ScColumn::CellStorageModified()
             ++itAttr;
     }
 #endif
+}
+
+void ScColumn::RegroupFormulaCells()
+{
+}
+
+void ScColumn::RegroupFormulaCells( SCROW nRow )
+{
+}
+
+void ScColumn::RegroupFormulaCells( SCROW nRow1, SCROW nRow2 )
+{
+}
+
+void ScColumn::FormulaCellsUndecided( SCROW nRow1, SCROW nRow2 )
+{
 }
 
 void ScColumn::CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const
@@ -1988,7 +2006,7 @@ public:
                 sc::formula_block::const_iterator itEnd = it;
                 std::advance(itEnd, nDataSize);
 
-                size_t nPrevRow, nThisRow = node.position + nOffset;
+                size_t nPrevRow = 0, nThisRow = node.position + nOffset;
                 for (; it != itEnd; ++it, nPrevRow = nThisRow, ++nThisRow)
                 {
                     ScFormulaCell& rCell = const_cast<ScFormulaCell&>(**it);
@@ -2393,24 +2411,28 @@ void ScColumn::CompileDBFormula()
 {
     CompileDBFormulaHandler aFunc;
     sc::ProcessFormula(maCells, aFunc);
+    RegroupFormulaCells();
 }
 
 void ScColumn::CompileDBFormula( bool bCreateFormulaString )
 {
     CompileDBFormula2Handler aFunc(bCreateFormulaString);
     sc::ProcessFormula(maCells, aFunc);
+    RegroupFormulaCells();
 }
 
 void ScColumn::CompileNameFormula( bool bCreateFormulaString )
 {
     CompileNameFormulaHandler aFunc(bCreateFormulaString);
     sc::ProcessFormula(maCells, aFunc);
+    RegroupFormulaCells();
 }
 
 void ScColumn::CompileColRowNameFormula()
 {
     CompileColRowNameFormulaHandler aFunc;
     sc::ProcessFormula(maCells, aFunc);
+    RegroupFormulaCells();
 }
 
 namespace {
