@@ -28,6 +28,8 @@ ifeq ($(CXX),)
 $(error You must set CXX in the environment. See README.cross for example.)
 endif
 
+gb_COMPILERDEFAULTOPTFLAGS := -O3
+
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
 # Darwin mktemp -t expects a prefix, not a pattern
