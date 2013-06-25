@@ -29,7 +29,6 @@ namespace ValidListType = ::com::sun::star::sheet::TableValidationVisibility;
 class ScPatternAttr;
 class ScTokenArray;
 class ScTypedStrData;
-class ScCellIterator;
 
 enum ScValidationMode
 {

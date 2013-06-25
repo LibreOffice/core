@@ -2052,18 +2052,7 @@ void ScXMLExport::_ExportAutoStyles()
             SCTAB nTabCount = pDoc->GetTableCount();
             for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
                 if (pDoc->IsStreamValid(nTab))
-                {
-                    ScCellIterator aIter( pDoc, ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab) );
-                    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
-                    {
-                        if (aIter.getType() != CELLTYPE_FORMULA)
-                            continue;
-
-                        ScFormulaCell* pFC = aIter.getFormulaCell();
-                        if (pFC)
-                            pFC->IsValue(); // interpret if dirty
-                    }
-                }
+                    pDoc->InterpretDirtyCells(ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab));
 
             // stored cell styles
             const std::vector<ScCellStyleEntry>& rCellEntries = pSheetData->GetCellStyles();

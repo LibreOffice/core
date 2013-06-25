@@ -49,7 +49,6 @@ struct ScComplexRefData;
 
 class ScToken;
 class ScJumpMatrix;
-class ScCellIterator;
 struct ScRefCellValue;
 
 #define MAXSTACK      (4096 / sizeof(formula::FormulaToken*))
