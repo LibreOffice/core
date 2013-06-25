@@ -3482,20 +3482,22 @@ void ScDocument::SetTableOpDirty( const ScRange& rRange )
     SetAutoCalc( bOldAutoCalc );
 }
 
-
 void ScDocument::InterpretDirtyCells( const ScRangeList& rRanges )
 {
+    if (!GetAutoCalc())
+        return;
+
     for (size_t nPos=0, nRangeCount = rRanges.size(); nPos < nRangeCount; nPos++)
     {
-        ScCellIterator aIter( this, *rRanges[ nPos ] );
-        for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
+        const ScRange& rRange = *rRanges[nPos];
+        for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
         {
-            if (aIter.getType() != CELLTYPE_FORMULA)
-                continue;
+            ScTable* pTab = FetchTable(nTab);
+            if (!pTab)
+                return;
 
-            ScFormulaCell* p = aIter.getFormulaCell();
-            if (p->GetDirty() && GetAutoCalc())
-                p->Interpret();
+            pTab->InterpretDirtyCells(
+                rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
         }
     }
 }

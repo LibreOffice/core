@@ -2209,6 +2209,12 @@ void ScTable::FillMatrix( ScMatrix& rMat, SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
         aCol[nCol].FillMatrix(rMat, nMatCol, nRow1, nRow2);
 }
 
+void ScTable::InterpretDirtyCells( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        aCol[nCol].InterpretDirtyCells(nRow1, nRow2);
+}
+
 const SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidColRow(nCol, nRow))

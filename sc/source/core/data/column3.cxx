@@ -115,6 +115,21 @@ void ScColumn::EndFormulaListening( sc::ColumnBlockPosition& rBlockPos, SCROW nR
         sc::ProcessFormula(rBlockPos.miCellPos, maCells, nRow1, nRow2, aFunc);
 }
 
+struct DirtyCellInterpreter
+{
+    void operator() (size_t, ScFormulaCell* p)
+    {
+        if (p->GetDirty())
+            p->Interpret();
+    }
+};
+
+void ScColumn::InterpretDirtyCells( SCROW nRow1, SCROW nRow2 )
+{
+    DirtyCellInterpreter aFunc;
+    sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
+}
+
 void ScColumn::Delete( SCROW nRow )
 {
     std::pair<sc::CellStoreType::iterator,size_t> aPos = maCells.position(nRow);

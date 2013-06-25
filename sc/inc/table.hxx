@@ -853,6 +853,8 @@ public:
 
     void FillMatrix( ScMatrix& rMat, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
 
+    void InterpretDirtyCells( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
+
     /** Replace behaves differently to the Search; adjust the rCol and rRow accordingly.
 
         'Replace' replaces at the 'current' position, but in order to achieve
