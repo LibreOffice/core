@@ -703,9 +703,13 @@ static void __rtl_digest_endMD5 (DigestContextMD5 *ctx)
     switch (ctx->m_nDatLen & 0x03)
     {
         case 0: X[i]  = ((sal_uInt32)(*(p++))) <<  0L;
+            /* fallthrough */
         case 1: X[i] |= ((sal_uInt32)(*(p++))) <<  8L;
+            /* fallthrough */
         case 2: X[i] |= ((sal_uInt32)(*(p++))) << 16L;
+            /* fallthrough */
         case 3: X[i] |= ((sal_uInt32)(*p)) << 24L;
+            /* fallthrough */
     }
 
     i += 1;
@@ -1154,9 +1158,13 @@ static void __rtl_digest_endSHA (DigestContextSHA *ctx)
     switch (ctx->m_nDatLen & 0x03)
     {
         case 0: X[i]  = ((sal_uInt32)(*(p++))) <<  0L;
+            /* fallthrough */
         case 1: X[i] |= ((sal_uInt32)(*(p++))) <<  8L;
+            /* fallthrough */
         case 2: X[i] |= ((sal_uInt32)(*(p++))) << 16L;
+            /* fallthrough */
         case 3: X[i] |= ((sal_uInt32)(*(p++))) << 24L;
+            /* fallthrough */
     }
 
     __rtl_digest_swapLong (X, i + 1);
