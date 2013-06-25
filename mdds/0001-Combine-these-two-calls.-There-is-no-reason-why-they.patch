@@ -1,0 +1,27 @@
+From a2a1c432f65c0612bb6f1c23a50bd41d2cf0cbdd Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Tue, 25 Jun 2013 08:08:09 -0400
+Subject: [PATCH] Combine these two calls. There is no reason why they have to
+ separate.
+
+---
+ include/mdds/multi_type_vector_def.inl | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/include/mdds/multi_type_vector_def.inl b/include/mdds/multi_type_vector_def.inl
+index 36dde5e..685899b 100644
+--- a/include/mdds/multi_type_vector_def.inl
++++ b/c/d/include/mdds/multi_type_vector_def.inl
+@@ -1801,8 +1801,7 @@ void multi_type_vector<_CellBlockFunc>::swap_single_blocks(
+         else
+         {
+             // Insert a new block to store the new elements.
+-            m_blocks.insert(m_blocks.begin()+block_index, NULL);
+-            m_blocks[block_index] = new block(len);
++            m_blocks.insert(m_blocks.begin()+block_index, new block(len));
+             block* blk = m_blocks[block_index];
+             blk->mp_data = dst_data.release();
+         }
+-- 
+1.8.0
+
