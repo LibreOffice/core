@@ -17,11 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*************************************************************************
-|* Contained once the class SdPresentationLayoutDlg (not needed anymore).
-|* This file disappeared in a mysterious way from the PVCS. It is newly
-|* checked in and does only contain the enumerator.
-\************************************************************************/
+/** Contained once the class SdPresentationLayoutDlg (not needed anymore).
+* This file disappeared in a mysterious way from the PVCS. It is newly
+* checked in and does only contain the enumerator.
+*/
 
 #ifndef _SD_PRLAYOUT_HXX_
 #define _SD_PRLAYOUT_HXX_
@@ -44,6 +43,6 @@ enum PresentationObjects
     PO_SUBTITLE
 };
 
-#endif // _SD_PRLAYOUT_HXX_
+#endif /// _SD_PRLAYOUT_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
