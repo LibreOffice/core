@@ -54,7 +54,7 @@ service AccessibleGraphicShape
     /**  Give access to image specific information.
 
         <p>The support of the
-        ::com::sun::star::accessibility::AccessibleImage interface
+        ::com::sun::star::accessibility::XAccessibleImage interface
         requires the shape to provide a description of the displayed image
         and the image's size in the screen coordinate system (pixel).  At
         the time being this interface does not provide information that is
