@@ -49,7 +49,6 @@ CellColorHandler::~CellColorHandler()
 
 void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
 {
-    OUString stringValue = rVal.getString();
     sal_Int32 nIntValue = rVal.getInt();
     switch( rName )
     {
