@@ -46,7 +46,7 @@ enum PresObjKind
 
 enum AutoLayout
 {
-    // new layouts with enum/text/chart/org/clip merged to content
+    /// new layouts with enum/text/chart/org/clip merged to content
     AUTOLAYOUT__START = 0,
     AUTOLAYOUT_TITLE = 0,                       ///< Title Slide
     AUTOLAYOUT_TITLE_CONTENT = 1,               ///< Title, Content
@@ -65,7 +65,7 @@ enum AutoLayout
     AUTOLAYOUT_TITLE_VCONTENT = 29,             ///< Title, Vertical Content
     AUTOLAYOUT_TITLE_2VTEXT = 30,               ///< Title, 2 Vertical Content
 
-    // deprecated
+    /// deprecated
     AUTOLAYOUT_ENUM = 1,
     AUTOLAYOUT_CHART = 2,
     AUTOLAYOUT_2TEXT = 3,
@@ -129,6 +129,6 @@ enum NavigatorDragType
 };
 #define NAVIGATOR_DRAGTYPE_COUNT 4
 
-#endif  // _PRESENTATION_HXX
+#endif  /// _PRESENTATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
