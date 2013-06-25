@@ -101,6 +101,9 @@ gb_AFLAGS := $(AFLAGS)
 #   of the compiler did not override when parameters only differed by
 #   const/volatile qualifiers.
 
+# C4481: nonstandard extension used: override specifier 'override'
+# (MSVC 2010 warns about this, even though it's C++11 keyword)
+
 # C4505: 'function' : unreferenced local function has been removed
 
 # C4512: 'class' : assignment operator could not be generated
@@ -165,6 +168,7 @@ gb_CXXFLAGS := \
 	-wd4351 \
 	-wd4355 \
 	-wd4373 \
+	-wd4481 \
 	-wd4505 \
 	-wd4512 \
 	-wd4611 \
