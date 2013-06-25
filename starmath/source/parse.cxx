@@ -1108,10 +1108,18 @@ void SmParser::Expression()
         RelationArray[n - 1] = lcl_popOrZero(m_aNodeStack);
     }
 
-    SmExpressionNode *pSNode = new SmExpressionNode(m_aCurToken);
-    pSNode->SetSubNodes(RelationArray);
-    pSNode->SetUseExtraSpaces(bUseExtraSpaces);
-    m_aNodeStack.push(pSNode);
+    if (n > 1)
+    {
+        SmExpressionNode *pSNode = new SmExpressionNode(m_aCurToken);
+        pSNode->SetSubNodes(RelationArray);
+        pSNode->SetUseExtraSpaces(bUseExtraSpaces);
+        m_aNodeStack.push(pSNode);
+    }
+    else
+    {
+        // This expression has only one node so just push this node.
+        m_aNodeStack.push(RelationArray[0]);
+    }
 }
 
 
