@@ -1762,6 +1762,10 @@ namespace {
 
 bool advanceBlock(size_t nRow, sc::CellStoreType::const_iterator& rPos, const sc::CellStoreType::const_iterator& rEnd)
 {
+    if (nRow < rPos->position + rPos->size)
+        // Block already contains the specified row. Nothing to do.
+        return true;
+
     // This block is behind the current row position. Advance the block.
     for (++rPos; rPos != rEnd; ++rPos)
     {
@@ -1789,9 +1793,8 @@ void ScHorizontalCellIterator::Advance()
         if (nRow < r.maPos->position)
             continue;
 
-        if (r.maPos->position + r.maPos->size <= nRow)
-            if (!advanceBlock(nRow, r.maPos, r.maEnd))
-                continue;
+        if (!advanceBlock(nRow, r.maPos, r.maEnd))
+            continue;
 
         if (r.maPos->type == sc::element_type_empty)
             continue;
@@ -1827,9 +1830,8 @@ void ScHorizontalCellIterator::Advance()
                 continue;
             }
 
-            if (r.maPos->position + r.maPos->size <= nRow)
-                if (!advanceBlock(nRow, r.maPos, r.maEnd))
-                    continue;
+            if (!advanceBlock(nRow, r.maPos, r.maEnd))
+                continue;
 
             if (r.maPos->type == sc::element_type_empty)
             {
