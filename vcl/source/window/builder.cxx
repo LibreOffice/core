@@ -2201,7 +2201,7 @@ OString VclBuilder::convertMnemonicMarkup(const OString &rIn)
     OStringBuffer aRet(rIn);
     for (sal_Int32 nI = 0; nI < aRet.getLength(); ++nI)
     {
-        if (aRet[nI] == '_')
+        if (aRet[nI] == '_' && nI+1 < aRet.getLength())
         {
             if (aRet[nI+1] != '_')
                 aRet[nI] = MNEMONIC_CHAR;
