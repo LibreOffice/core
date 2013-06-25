@@ -755,7 +755,6 @@ void SdDrawDocument::StartOnlineSpelling(sal_Bool bForceSpelling)
         pOutl->SetDefaultLanguage( meLanguage );
 
         mpOnlineSpellingList = new ShapeList;
-        maShapeListIterator = mpOnlineSpellingList->cend();
         sal_uInt16 nPage;
 
         for ( nPage = 0; nPage < GetPageCount(); nPage++ )
@@ -770,7 +769,7 @@ void SdDrawDocument::StartOnlineSpelling(sal_Bool bForceSpelling)
             FillOnlineSpellingList((SdPage*) GetMasterPage(nPage));
         }
 
-        maShapeListIterator = mpOnlineSpellingList->cbegin();
+        mpOnlineSpellingList->seekShape(0);
         mpOnlineSpellingTimer = new Timer();
         mpOnlineSpellingTimer->SetTimeoutHdl( LINK(this, SdDrawDocument, OnlineSpellingHdl) );
         mpOnlineSpellingTimer->SetTimeout(250);
@@ -824,14 +823,11 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
 // OnlineSpelling in the background
 IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl)
 {
-    bool bHasMore = maShapeListIterator != mpOnlineSpellingList->cend();
-
     if (mpOnlineSpellingList!=NULL
-        && ( !mbOnlineSpell || bHasMore))
+        && ( !mbOnlineSpell || mpOnlineSpellingList->hasMore()))
     {
         // Spell next object
-        SdrObject* pObj = *maShapeListIterator;
-        ++maShapeListIterator;
+        SdrObject* pObj = mpOnlineSpellingList->getNextShape();
 
         if (pObj)
         {

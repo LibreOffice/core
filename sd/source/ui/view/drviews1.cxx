@@ -1059,12 +1059,11 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             {
                 // set pages for all available handout presentation objects
                 sd::ShapeList& rShapeList = pMaster->GetPresentationShapeList();
+                SdrObject* pObj = 0;
+                rShapeList.seekShape(0);
 
-                for( ShapeList::const_iterator aIter( rShapeList.cbegin() );
-                    aIter != rShapeList.cend(); ++aIter )
+                while( (pObj = rShapeList.getNextShape()) )
                 {
-                    SdrObject* pObj = *aIter;
-
                     if( pMaster->GetPresObjKind(pObj) == PRESOBJ_HANDOUT )
                     {
                         // #i105146# We want no content to be displayed for PK_HANDOUT,

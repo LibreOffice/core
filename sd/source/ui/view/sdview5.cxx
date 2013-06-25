@@ -101,10 +101,9 @@ SdrObject* View::GetEmptyPresentationObject( PresObjKind eKind )
         // last try to find empty pres obj of multiple type
         if( !pEmptyObj )
         {
-            ShapeList& rShapeList = pPage->GetPresentationShapeList();
+            const std::list< SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();
 
-            for( ShapeList::const_iterator iter( rShapeList.cbegin() );
-                 iter != rShapeList.cend(); ++iter )
+            for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); ++iter )
             {
                 if( (*iter)->IsEmptyPresObj() && implIsMultiPresObj(pPage->GetPresObjKind(*iter)) )
                 {
