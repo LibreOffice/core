@@ -111,6 +111,9 @@ $(JAVA_SRC_FILES) : $(SOLARCOMMONBINDIR)$/$$(@:f)
 $(JAVA_DOCU_INDEX_FILE) .SEQUENTIAL : $(JAVA_SRC_FILES)
     -$(MKDIRHIER) $(@:d)        
     $(JAVADOC) -J-Xmx120m $(JAVADOCPARAMS) > $(JAVADOCLOG)
+.IF "$(OS)" != "MACOSX"
+    patch $(JAVA_DOCU_INDEX_FILE) idl_ref_javadoc.patch
+.ENDIF
 .ENDIF
 
 .ELSE
