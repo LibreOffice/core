@@ -133,9 +133,7 @@ namespace sd
 }
 
 
-// ------------------
-// - SdDrawDocument -
-// ------------------
+///SdDrawDocument
 
 class SdDrawDocument : public FmFormModel
 {
