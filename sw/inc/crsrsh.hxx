@@ -258,6 +258,8 @@ private:
 
     SW_DLLPRIVATE short GetTextDirection( const Point* pPt = 0 ) const;
 
+    SW_DLLPRIVATE bool isInHiddenTxtFrm(SwShellCrsr* pShellCrsr);
+
 typedef sal_Bool (SwCursor:: *FNCrsr)();
     SW_DLLPRIVATE sal_Bool CallCrsrFN( FNCrsr );
 
