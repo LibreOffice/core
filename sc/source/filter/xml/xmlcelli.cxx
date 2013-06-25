@@ -1344,8 +1344,9 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
             pDoc->IncXMLImportedFormulaCount( aText.getLength() );
             ScFormulaCell* pNewCell = new ScFormulaCell(pDoc, rCellPos, pCode.get(), eGrammar, MM_NONE);
             SetFormulaCell(pNewCell);
-            pDoc->SetFormulaCell(rCellPos, pNewCell);
-            pNewCell->SetNeedNumberFormat( true );
+            pNewCell = pDoc->SetFormulaCell(rCellPos, pNewCell);
+            if (pNewCell)
+                pNewCell->SetNeedNumberFormat( true );
         }
         else if ( aText[0] == '\'' && aText.getLength() > 1 )
         {

@@ -124,7 +124,7 @@ void ImportExcel::Formula(
         {
             pCell = new ScFormulaCell( pD, aScPos, pResult );
             pD->EnsureTable(aScPos.Tab());
-            pD->SetFormulaCell(aScPos, pCell);
+            pCell = pD->SetFormulaCell(aScPos, pCell);
         }
         else
         {

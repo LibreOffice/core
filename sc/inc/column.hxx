@@ -255,8 +255,15 @@ public:
     void SetEditText( SCROW nRow, const EditTextObject& rEditText, const SfxItemPool* pEditPool );
     void SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram );
     void SetFormula( SCROW nRow, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram );
-    void SetFormulaCell( SCROW nRow, ScFormulaCell* pCell );
-    void SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell );
+
+    /**
+     * Takes ownership of pCell
+     *
+     * @return pCell if it was successfully inserted, NULL otherwise. pCell
+     *         is deleted automatically on failure to insert.
+     */
+    ScFormulaCell* SetFormulaCell( SCROW nRow, ScFormulaCell* pCell );
+    ScFormulaCell* SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell );
 
     void SetRawString( SCROW nRow, const OUString& rStr, bool bBroadcast = true );
     void SetRawString( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, const OUString& rStr, bool bBroadcast = true );

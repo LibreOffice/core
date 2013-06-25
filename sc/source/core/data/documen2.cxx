@@ -1054,15 +1054,15 @@ void ScDocument::SetFormula(
     maTabs[rPos.Tab()]->SetFormula(rPos.Col(), rPos.Row(), rFormula, eGram);
 }
 
-void ScDocument::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell )
+ScFormulaCell* ScDocument::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell )
 {
     if (!TableExists(rPos.Tab()))
     {
         delete pCell;
-        return;
+        return NULL;
     }
 
-    maTabs[rPos.Tab()]->SetFormulaCell(rPos.Col(), rPos.Row(), pCell);
+    return maTabs[rPos.Tab()]->SetFormulaCell(rPos.Col(), rPos.Row(), pCell);
 }
 
 void ScDocument::SetConsolidateDlgData( const ScConsolidateParam* pData )

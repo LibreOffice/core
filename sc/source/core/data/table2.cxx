@@ -1438,15 +1438,15 @@ void ScTable::SetFormula(
     aCol[nCol].SetFormula(nRow, rFormula, eGram);
 }
 
-void ScTable::SetFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* pCell )
+ScFormulaCell* ScTable::SetFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* pCell )
 {
     if (!ValidColRow(nCol, nRow))
     {
         delete pCell;
-        return;
+        return NULL;
     }
 
-    aCol[nCol].SetFormulaCell(nRow, pCell);
+    return aCol[nCol].SetFormulaCell(nRow, pCell);
 }
 
 void ScTable::SetValue( SCCOL nCol, SCROW nRow, const double& rVal )

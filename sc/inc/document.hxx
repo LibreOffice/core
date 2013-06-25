@@ -792,7 +792,13 @@ public:
         const ScAddress& rPos, const OUString& rFormula,
         formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_DEFAULT );
 
-    SC_DLLPUBLIC void SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell );
+    /**
+     * Takes ownership of pCell
+     *
+     * @return pCell if it was successfully inserted, NULL otherwise. pCell
+     *         is deleted automatically on failure to insert.
+     */
+    SC_DLLPUBLIC ScFormulaCell* SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell );
 
     SC_DLLPUBLIC void InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,

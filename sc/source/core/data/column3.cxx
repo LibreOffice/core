@@ -1699,7 +1699,7 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
     ActivateNewFormulaCell(pCell);
 }
 
-void ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell )
+ScFormulaCell* ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell )
 {
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     maCells.set(it, nRow, pCell);
@@ -1707,9 +1707,11 @@ void ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell )
     CellStorageModified();
 
     ActivateNewFormulaCell(pCell);
+
+    return pCell;
 }
 
-void ScColumn::SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell )
+ScFormulaCell* ScColumn::SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell )
 {
     rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow);
     rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, pCell);
@@ -1718,6 +1720,8 @@ void ScColumn::SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, S
     CellStorageModified();
 
     ActivateNewFormulaCell(pCell);
+
+    return pCell;
 }
 
 namespace {

@@ -653,13 +653,13 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
         // other API compatibility grammars.
         ScFormulaCell* pFormula = new ScFormulaCell( pDoc, aFormulaPos,
                 &aTokenArr, formula::FormulaGrammar::GRAM_PODF_A1, (sal_uInt8)(mbArray ? MM_FORMULA : MM_NONE) );
-        pDoc->SetFormulaCell(aFormulaPos, pFormula);
+        pFormula = pDoc->SetFormulaCell(aFormulaPos, pFormula);
 
         //  call GetMatrix before GetErrCode because GetMatrix always recalculates
         //  if there is no matrix result
 
-        const ScMatrix* pMat = mbArray ? pFormula->GetMatrix() : 0;
-        sal_uInt16 nErrCode = pFormula->GetErrCode();
+        const ScMatrix* pMat = (mbArray && pFormula) ? pFormula->GetMatrix() : 0;
+        sal_uInt16 nErrCode = pFormula ? pFormula->GetErrCode() : errIllegalArgument;
         if ( nErrCode == 0 )
         {
             if ( pMat )

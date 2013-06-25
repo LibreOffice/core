@@ -324,7 +324,13 @@ public:
     void SetFormula(
         SCCOL nCol, SCROW nRow, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram );
 
-    void SetFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* pCell );
+    /**
+     * Takes ownership of pCell
+     *
+     * @return pCell if it was successfully inserted, NULL otherwise. pCell
+     *         is deleted automatically on failure to insert.
+     */
+    ScFormulaCell* SetFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* pCell );
 
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
