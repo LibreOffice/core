@@ -502,7 +502,6 @@ class DeleteAreaHandler
     sc::SingleColumnSpanSet maDeleteRanges;
 
     bool mbNumeric:1;
-    bool mbDateTime:1;
     bool mbString:1;
     bool mbFormula:1;
 
@@ -510,7 +509,6 @@ public:
     DeleteAreaHandler(ScDocument& rDoc, sal_uInt16 nDelFlag) :
         mrDoc(rDoc),
         mbNumeric(nDelFlag & IDF_VALUE),
-        mbDateTime(nDelFlag & IDF_DATETIME),
         mbString(nDelFlag & IDF_STRING),
         mbFormula(nDelFlag & IDF_FORMULA) {}
 
