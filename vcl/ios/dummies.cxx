@@ -32,13 +32,6 @@ sal_Bool SvpSalGraphics::CreateFontSubset( const OUString&    /* rToFile */,
     return sal_False;
 }
 
-bool SvpSalGraphics::AddTempDevFont( ImplDevFontList*     /* pFontList */,
-                                     const OUString& /* rFileURL */,
-                                     const OUString& /* rFontName */ )
-{
-    return false;
-}
-
 SalPrinter* SvpSalInstance::CreatePrinter( SalInfoPrinter* /* pInfoPrinter */ )
 {
     return NULL;
