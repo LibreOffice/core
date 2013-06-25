@@ -246,23 +246,6 @@ CustomAnimationPane::~CustomAnimationPane()
     for( aIter = aTags.begin(); aIter != aTags.end(); ++aIter )
         (*aIter)->Dispose();
 
-    delete mpPBAddEffect;
-    delete mpPBChangeEffect;
-    delete mpPBRemoveEffect;
-    delete mpFTStart;
-    delete mpLBStart;
-    delete mpFTProperty;
-    delete mpLBProperty;
-    delete mpPBPropertyMore;
-    delete mpFTSpeed;
-    delete mpCBSpeed;
-    delete mpCustomAnimationList;
-    delete mpFTChangeOrder;
-    delete mpPBMoveUp;
-    delete mpPBMoveDown;
-    delete mpPBPlay;
-    delete mpPBSlideShow;
-    delete mpCBAutoPreview;
 }
 
 void CustomAnimationPane::addUndo()
