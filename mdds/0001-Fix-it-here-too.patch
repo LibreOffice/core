@@ -1,0 +1,26 @@
+From e9fdebe0cad9277cfed994cae7fe9d08efbb4ba8 Mon Sep 17 00:00:00 2001
+From: Kohei Yoshida <kohei.yoshida@gmail.com>
+Date: Tue, 25 Jun 2013 09:42:19 -0400
+Subject: [PATCH] Fix it here too.
+
+---
+ include/mdds/multi_type_vector_def.inl | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/include/mdds/multi_type_vector_def.inl b/include/mdds/multi_type_vector_def.inl
+index 685899b..cea8ae0 100644
+--- a/include/mdds/multi_type_vector_def.inl
++++ b/c/d/include/mdds/multi_type_vector_def.inl
+@@ -1829,8 +1829,7 @@ void multi_type_vector<_CellBlockFunc>::swap_single_blocks(
+         }
+         else
+         {
+-            m_blocks.insert(m_blocks.begin()+block_index+1, NULL);
+-            m_blocks[block_index+1] = new block(len);
++            m_blocks.insert(m_blocks.begin()+block_index+1, new block(len));
+             block* blk = m_blocks[block_index+1];
+             blk->mp_data = dst_data.release();
+         }
+-- 
+1.8.0
+
