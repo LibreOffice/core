@@ -37,8 +37,8 @@ struct DirectoryItem_Impl
     static void * operator new(size_t n);
     static void operator delete (void * p);
 
-    void acquire(); /* @see osl_acquireDirectoryItem() */
-    void release(); /* @see osl_releaseDirectoryItem() */
+    void acquire(); /// @see osl_acquireDirectoryItem()
+    void release(); /// @see osl_releaseDirectoryItem()
 
     oslFileType getFileType() const;
 };

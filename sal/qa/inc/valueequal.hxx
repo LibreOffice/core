@@ -26,10 +26,10 @@
 template<class T>
 bool is_equal(T x, T y, sal_Int16 _nPrec)
 {
-    // due to the fact that this check looks only if both values are equal
-    // we only need to look on one value
+    /** due to the fact that this check looks only if both values are equal
+        we only need to look on one value.
 
-    // 14 digits will announce the checkPrecisionSize
+        14 digits will announce the checkPrecisionSize */
 
     sal_Int32 nPRECISION;
     switch(_nPrec)
@@ -56,21 +56,20 @@ bool is_equal(T x, T y, sal_Int16 _nPrec)
         y = -y;
     }
 
-    // LLA: due to a bug in printf with '%f' and long double within linux environment
-    //      we have to use %lf instead.
+    /** LLA: due to a bug in printf with '%f' and long double within linux environment we have to use %lf instead.*/
 
     if (_nPrec != PREC_long_double)
     {
         printf("double equal: %.20f\n", x);
         printf("              %.20f\n", y);
     }
-    //here nPrecOfN is the number after dot
+    /// here nPrecOfN is the number after dot
     sal_Int32 nBeforeDot = sal_Int32( log10(x) );
     if ( nBeforeDot < 0)
     {
          nBeforeDot = 0;
     }
-    //printf("nPRECISION is  %d\n", nPRECISION);
+    /// printf("nPRECISION is  %d\n", nPRECISION);
     sal_Int32 nPrecOfN = -nPRECISION + nBeforeDot;
 
     if (_nPrec != PREC_long_double)
@@ -92,11 +91,11 @@ bool is_equal(T x, T y, sal_Int16 _nPrec)
 
     if (nDelta > nPrec)
     {
-        // values are not equal
+        /// values are not equal
         return false;
     }
 
-    // values are equal
+    /// values are equal
     return true;
 }
 

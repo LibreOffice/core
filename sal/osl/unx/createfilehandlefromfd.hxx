@@ -16,7 +16,7 @@
 
 namespace osl { namespace detail {
 
-oslFileHandle createFileHandleFromFD(int fd); // defined in file.cxx
+oslFileHandle createFileHandleFromFD(int fd); /// @see file.cxx
 
 } }
 

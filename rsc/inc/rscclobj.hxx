@@ -23,11 +23,11 @@
 #include <rscdef.hxx>
 #include <rscall.h>
 
-/******************* O b j N o d e ***************************************/
+
 class ObjNode : public IdNode{
-    RscId       aRscId; // Id der Resource
-    CLASS_DATA  pRscObj;// pointer to a resourceobject
-    sal_uLong       lFileKey;// Dateischluessel
+    RscId       aRscId; /// Id der Resource
+    CLASS_DATA  pRscObj;/// pointer to a resourceobject
+    sal_uLong       lFileKey;/// Dateischluessel
 protected:
     using NameNode::Search;
 
@@ -40,23 +40,23 @@ public:
     RscId       GetRscId(){ return( aRscId ); }
     sal_uLong       GetFileKey(){ return lFileKey; };
     ObjNode*    Search( const RscId &rName ) const{
-                    // search the index in the b-tree
+                    /// search the index in the b-tree
                     return( (ObjNode *)IdNode::Search( rName ) );
                 }
     sal_Bool        Insert( ObjNode* pTN ){
-                    // insert a new node in the b-tree
+                    /// insert a new node in the b-tree
                     return( IdNode::Insert( (IdNode *)pTN ) );
                 }
     CLASS_DATA  GetRscObj(){
-                    // get the Object from this Node
+                    /// get the Object from this Node
                     return( pRscObj );
                 }
     sal_Bool        IsConsistent();
 };
 
-/******************* R e f N o d e ***************************************/
+
 class RefNode : public IdNode{
-    Atom        nTypNameId; // index of a Name in a hashtabel
+    Atom        nTypNameId; /// index of a Name in a hashtabel
 protected:
     using NameNode::Search;
 
@@ -67,20 +67,20 @@ public:
                 RefNode( Atom nTyp );
     sal_uInt32      GetId() const;
     RefNode*    Search( Atom typ ) const{
-                    // search the index in the b-tree
+                    /// search the index in the b-tree
                     return( (RefNode *)IdNode::Search( typ ) );
                 };
     sal_Bool        Insert( RefNode* pTN ){
-                    // insert a new node in the b-tree
+                    /// insert a new node in the b-tree
                     return( IdNode::Insert( (IdNode *)pTN ) );
                 };
     sal_Bool        PutObjNode( ObjNode * pPutObject );
 
-                // insert new node in b-tree pObjBiTree
+                /// insert new node in b-tree pObjBiTree
     ObjNode *   GetObjNode( const RscId &rRscId );
 
     ObjNode *   GetObjNode(){
-                    // hole  pObjBiTree
+                    /// hole  pObjBiTree
                     return( pObjBiTree );
                 };
 };

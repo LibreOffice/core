@@ -33,39 +33,39 @@ class Atom
 public:
     ~Atom();
 
-    /** imports this atom and its child atoms */
+    /// imports this atom and its child atoms
     static Atom* import( const DffRecordHeader& rRootRecordHeader, SvStream& rStCtrl );
 
     inline const DffRecordHeader& getHeader() const;
 
-    /** @return true if at least one atim with the given nRecType is found */
+    /// @return true if at least one atim with the given nRecType is found
     inline bool hasChildAtom( sal_uInt16 nRecType ) const;
 
-    /** @return the first child atom with nRecType or NULL */
+    /// @return the first child atom with nRecType or NULL
     inline const Atom* findFirstChildAtom( sal_uInt16 nRecType ) const;
 
-    /** @return the next child atom after pLast with nRecType or NULL */
+    /// @return the next child atom after pLast with nRecType or NULL
     const Atom* findNextChildAtom( sal_uInt16 nRecType, const Atom* pLast ) const;
 
-    /** @return the first child atom or NULL */
+    /// @return the first child atom or NULL
     inline const Atom* findFirstChildAtom() const;
 
-    /** @return the next child atom after pLast or NULL */
+    /// @return the next child atom after pLast or NULL
     inline const Atom* findNextChildAtom( const Atom* pLast ) const;
 
-    /** @return true if this atom is a container */
+    /// @return true if this atom is a container
     inline bool isContainer() const;
 
-    /** seeks to the contents of this atom */
+    /// seeks to the contents of this atom
     inline bool seekToContent() const;
 
-    /** @return the record type */
+    /// @return the record type
     inline sal_uInt16 getType() const;
 
-    /** @return the record instance */
+    /// @return the record instance
     inline sal_uInt16 getInstance() const;
 
-    /** @return the record length */
+    /// @return the record length
     inline sal_uInt32 getLength() const;
 
 private:

@@ -23,15 +23,16 @@
 #include <sfx2/module.hxx>
 #include <sfx2/sfxdefs.hxx>
 
-/*************************************************************************
-|*
-|* This class is a wrapper for a Load-On-Demand-DLL. One instance
-|* per SfxApplication will be created for the runtime of
-|* SfxApplication-subclass::Main().
-|*
-|* Remember: Do export this class! It is used by the application.
-|*
-\************************************************************************/
+/**
+  This class is a wrapper for a Load-On-Demand-DLL.
+
+  One instance per SfxApplication will be created for the runtime of
+  SfxApplication-subclass::Main().
+
+  Remember: Do export this class! It is used by the application.
+
+  @see  SfxApplication-subclass::Main()
+ */
 
 class SdDLL
 {
@@ -44,16 +45,16 @@ protected:
     static void     RegisterControllers();
 
 public:
-                    // Ctor/Dtor must be linked to the application
+                    /// Ctor/Dtor must be linked to the application
                     SdDLL();
                     ~SdDLL();
 
-                    // static-init/exit-code must be linked to the application
-    static void     LibInit();  // called from SfxApplication-subclass::Init()
-    static void     LibExit();  // called from SfxApplication-subclass::Exit()
+                    /// static-init/exit-code must be linked to the application
+    static void     LibInit();  /// @see SfxApplication-subclass::Init()
+    static void     LibExit();  /// @see SfxApplication-subclass::Exit()
 
-                    // DLL-init/exit-code must be linked to the DLL only
-    static void     Init();     // called directly after loading the DLL
+                    /// DLL-init/exit-code must be linked to the DLL only
+    static void     Init();     /// called directly after loading the DLL
 };
 
 

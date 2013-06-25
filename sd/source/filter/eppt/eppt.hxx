@@ -107,10 +107,10 @@
 struct EPPTHyperlink
 {
     String      aURL;
-    sal_uInt32  nType;      // bit 0-7 : type       ( 1: click action to a slide )
-                            //                      ( 2: hyperlink url )
-                            // bit 8-23: index
-                            // bit 31  : hyperlink is attached to a shape
+    sal_uInt32  nType;      /// bit 0-7 : type       ( 1: click action to a slide )
+                            ///                      ( 2: hyperlink url )
+                            /// bit 8-23: index
+                            /// bit 31  : hyperlink is attached to a shape
 
     EPPTHyperlink( const String rURL, sal_uInt32 nT ) :
         aURL        ( rURL ),
@@ -125,8 +125,8 @@ enum PPTExOleObjEntryType
 struct PPTExOleObjEntry
 {
     PPTExOleObjEntryType    eType;
-    sal_uInt32              nOfsA; ///< offset to the EPP_ExOleObjAtom in mpExEmbed (set at creation)
-    sal_uInt32              nOfsB; ///< offset to the EPP_ExOleObjStg
+    sal_uInt32              nOfsA; /// offset to the EPP_ExOleObjAtom in mpExEmbed (set at creation)
+    sal_uInt32              nOfsB; /// offset to the EPP_ExOleObjStg
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >    xControlModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >       xShape;
@@ -171,10 +171,10 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         std::vector<OUString>      maSlideNameList;
         OUString                   maBaseURI;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText >             mXText;             // TextRef of the global text
+        ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText >             mXText;             /// TextRef of the global text
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >             mXCursor;
-        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >              mXCursorText;       // TextRef of part of the cursor
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           mXCursorPropSet;    // properties of the part
+        ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >              mXCursorText;       /// TextRef of part of the cursor
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           mXCursorPropSet;    /// properties of the part
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >              mXTextField;
         sal_uInt32          mnTextStyle;
 
@@ -193,13 +193,13 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         sal_uInt32          mnExEmbed;
         SvMemoryStream*     mpExEmbed;
 
-        sal_uInt32          mnDrawings;         // number of Slides +  masterpages + notes +  handout
+        sal_uInt32          mnDrawings;         /// number of Slides +  masterpages + notes +  handout
         sal_uInt32          mnPagesWritten;
         sal_uInt32          mnUniqueSlideIdentifier;
-        sal_uInt32          mnTxId;             // Identifier determined by the HOST (PP) ????
-        sal_uInt32          mnDiaMode;          // 0 -> manual
-                                                // 1 -> semi-automatic
-                                                // 2 -> automatic
+        sal_uInt32          mnTxId;             /// Identifier determined by the HOST (PP) ????
+        sal_uInt32          mnDiaMode;          /// 0 -> manual
+                                                /// 1 -> semi-automatic
+                                                /// 2 -> automatic
 
         sal_uInt32          mnShapeMasterTitle;
         sal_uInt32          mnShapeMasterBody;
@@ -270,7 +270,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         void                ImplCreateTable( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rXShape, EscherSolverContainer& aSolverContainer,
                                 EscherPropertyContainer& aPropOpt );
 
-        sal_Bool                            ImplCloseDocument();        // we write the font, hyper and sound list
+        sal_Bool                            ImplCloseDocument();        /// we write the font, hyper and sound list
 
         virtual void        ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterID, sal_uInt16 nMode,
                                             sal_Bool bHasBackground, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet );

@@ -70,11 +70,11 @@ public:
 
     ~PowerPointExport();
 
-    // from FilterBase
+    /// from FilterBase
     virtual bool importDocument() throw();
     virtual bool exportDocument() throw();
 
-    // only needed for import, leave them empty, refactor later XmlFilterBase to export and import base?
+    /// only needed for import, leave them empty, refactor later XmlFilterBase to export and import base?
     virtual sal_Int32 getSchemeClr( sal_Int32 /* nColorSchemeToken */ ) const { return 0; }
     virtual oox::vml::Drawing* getVmlDrawing() { return NULL; }
     virtual const oox::drawingml::Theme* getCurrentTheme() const { return NULL; }

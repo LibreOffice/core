@@ -29,7 +29,7 @@
 namespace osl
 {
 
- /*******************************************
+ /**
     systemPathRemoveSeparator
     Removes the last separator from the
     given system path if any and if the path
@@ -44,14 +44,14 @@ namespace osl
 
     @returns nothing
 
-  ******************************************/
+  */
 
  inline void systemPathRemoveSeparator(/*inout*/ rtl::OUString& Path)
  {
      osl_systemPathRemoveSeparator(Path.pData);
  }
 
- /*******************************************
+ /**
     systemPathEnsureSeparator
     Adds a trailing path separator to the
     given system path if not already there
@@ -66,14 +66,14 @@ namespace osl
 
     @returns nothing
 
-  ******************************************/
+  */
 
  inline void systemPathEnsureSeparator(/*inout*/ rtl::OUString& Path)
  {
      osl_systemPathEnsureSeparator(&Path.pData);
  }
 
- /*******************************************
+ /**
     systemPathIsRelativePath
     Returns true if the given path is a
     relative path and so starts not with '/'
@@ -85,14 +85,14 @@ namespace osl
              doesn't start with a separator
              else sal_False will be returned
 
-  ******************************************/
+  */
 
  inline bool systemPathIsRelativePath(const rtl::OUString& Path)
  {
     return osl_systemPathIsRelativePath(Path.pData);
  }
 
- /******************************************
+ /**
     systemPathMakeAbsolutePath
     Append a relative path to a base path
 
@@ -124,7 +124,7 @@ namespace osl
             must be 0 or point to a valid
             rtl_uString
 
-  *****************************************/
+  */
 
  inline void systemPathMakeAbsolutePath(
      const rtl::OUString& BasePath,
@@ -135,7 +135,7 @@ namespace osl
         BasePath.pData, RelPath.pData, &AbsolutePath.pData);
  }
 
- /*****************************************
+ /**
      systemPathGetFileOrLastDirectoryPart
     Returns the file or the directory part
     of the given path
@@ -158,7 +158,7 @@ namespace osl
 
     @returns nothing
 
-  ****************************************/
+  */
 
  inline void systemPathGetFileNameOrLastDirectoryPart(
      const rtl::OUString& Path,
@@ -169,7 +169,7 @@ namespace osl
  }
 
 
- /********************************************
+ /**
      systemPathIsHiddenFileOrDirectoryEntry
     Returns sal_True if the last part of
     given system path is not '.' or '..'
@@ -184,7 +184,7 @@ namespace osl
              part is '.' or '..' alone or
              doesn't start with a dot
 
- *********************************************/
+ */
 
  inline bool systemPathIsHiddenFileOrDirectoryEntry(
      const rtl::OUString& Path)
@@ -193,7 +193,7 @@ namespace osl
  }
 
 
- /************************************************
+ /**
      systemPathIsLocalOrParentDirectoryEntry
     Returns sal_True if the last part of the given
     system path is the local directory entry '.'
@@ -206,7 +206,7 @@ namespace osl
              given system path is '.' or '..'
              else sal_False
 
- ************************************************/
+ */
 
  inline bool systemPathIsLocalOrParentDirectoryEntry(
      const rtl::OUString& Path)
@@ -214,9 +214,7 @@ namespace osl
     return osl_systemPathIsLocalOrParentDirectoryEntry(Path.pData);
  }
 
- /************************************************
-  searchPath
-  ***********************************************/
+ /// searchPath
 
  inline bool searchPath(
      const rtl::OUString& ustrFilePath,
