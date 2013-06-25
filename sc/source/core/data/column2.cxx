@@ -1899,6 +1899,162 @@ bool ScColumn::ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow
     return aFunc.isSuccess();
 }
 
+namespace {
+
+struct CellBucket
+{
+    SCSIZE mnNumValStart;
+    SCSIZE mnStrValStart;
+    std::vector<double> maNumVals;
+    std::vector<OUString> maStrVals;
+
+    CellBucket() : mnNumValStart(0), mnStrValStart(0) {}
+
+    void flush(ScMatrix& rMat, SCSIZE nCol)
+    {
+        if (!maNumVals.empty())
+        {
+            const double* p = &maNumVals[0];
+            rMat.PutDouble(p, maNumVals.size(), nCol, mnNumValStart);
+            reset();
+        }
+        else if (!maStrVals.empty())
+        {
+            const OUString* p = &maStrVals[0];
+            rMat.PutString(p, maStrVals.size(), nCol, mnStrValStart);
+            reset();
+        }
+    }
+
+    void reset()
+    {
+        mnNumValStart = mnStrValStart = 0;
+        maNumVals.clear();
+        maStrVals.clear();
+    }
+};
+
+class FillMatrixHandler
+{
+    ScMatrix& mrMat;
+    size_t mnMatCol;
+    size_t mnTopRow;
+
+    SCCOL mnCol;
+    SCTAB mnTab;
+
+public:
+    FillMatrixHandler(ScMatrix& rMat, size_t nMatCol, size_t nTopRow, SCCOL nCol, SCTAB nTab) :
+        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow), mnCol(nCol), mnTab(nTab) {}
+
+    void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
+    {
+        size_t nMatRow = node.position + nOffset - mnTopRow;
+
+        switch (node.type)
+        {
+            case sc::element_type_numeric:
+            {
+                const double* p = &sc::numeric_block::at(*node.data, nOffset);
+                mrMat.PutDouble(p, nDataSize, mnMatCol, nMatRow);
+            }
+            break;
+            case sc::element_type_string:
+            {
+                const OUString* p = &sc::string_block::at(*node.data, nOffset);
+                mrMat.PutString(p, nDataSize, mnMatCol, nMatRow);
+            }
+            break;
+            case sc::element_type_edittext:
+            {
+                std::vector<OUString> aStrs;
+                aStrs.reserve(nDataSize);
+                sc::edittext_block::const_iterator it = sc::edittext_block::begin(*node.data);
+                std::advance(it, nOffset);
+                sc::edittext_block::const_iterator itEnd = it;
+                std::advance(itEnd, nDataSize);
+                for (; it != itEnd; ++it)
+                    aStrs.push_back(ScEditUtil::GetString(**it));
+
+                const OUString* p = &aStrs[0];
+                mrMat.PutString(p, nDataSize, mnMatCol, nMatRow);
+            }
+            break;
+            case sc::element_type_formula:
+            {
+                CellBucket aBucket;
+                sc::formula_block::const_iterator it = sc::formula_block::begin(*node.data);
+                std::advance(it, nOffset);
+                sc::formula_block::const_iterator itEnd = it;
+                std::advance(itEnd, nDataSize);
+
+                size_t nPrevRow, nThisRow = node.position + nOffset;
+                for (; it != itEnd; ++it, nPrevRow = nThisRow, ++nThisRow)
+                {
+                    ScFormulaCell& rCell = const_cast<ScFormulaCell&>(**it);
+
+                    if (rCell.IsEmpty())
+                    {
+                        aBucket.flush(mrMat, mnMatCol);
+                        continue;
+                    }
+
+                    sal_uInt16 nErr;
+                    double fVal;
+                    if (rCell.GetErrorOrValue(nErr, fVal))
+                    {
+                        ScAddress aAdr(mnCol, nThisRow, mnTab);
+
+                        if (nErr)
+                            fVal = CreateDoubleError(nErr);
+
+                        if (!aBucket.maNumVals.empty() && nThisRow == nPrevRow + 1)
+                        {
+                            // Secondary numbers.
+                            aBucket.maNumVals.push_back(fVal);
+                        }
+                        else
+                        {
+                            // First number.
+                            aBucket.flush(mrMat, mnMatCol);
+                            aBucket.mnNumValStart = nThisRow - mnTopRow;
+                            aBucket.maNumVals.push_back(fVal);
+                        }
+                        continue;
+                    }
+
+                    OUString aStr = rCell.GetString();
+                    if (!aBucket.maStrVals.empty() && nThisRow == nPrevRow + 1)
+                    {
+                        // Secondary strings.
+                        aBucket.maStrVals.push_back(aStr);
+                    }
+                    else
+                    {
+                        // First string.
+                        aBucket.flush(mrMat, mnMatCol);
+                        aBucket.mnStrValStart = nThisRow - mnTopRow;
+                        aBucket.maStrVals.push_back(aStr);
+                    }
+                }
+
+                aBucket.flush(mrMat, mnMatCol);
+            }
+            break;
+            default:
+                ;
+        }
+    }
+};
+
+}
+
+void ScColumn::FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nRow2 ) const
+{
+    FillMatrixHandler aFunc(rMat, nMatCol, nRow1, nCol, nTab);
+    sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
+}
+
 const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& /*rCxt*/, SCROW nRow1, SCROW nRow2 ) const
 {
     // TODO: I'll use the context object later.

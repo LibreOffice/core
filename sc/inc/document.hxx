@@ -1708,6 +1708,8 @@ public:
      */
     bool IsEmptyData( SCTAB nTab, SCCOL nCol ) const;
 
+    void FillMatrix( ScMatrix& rMat, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
+
 private:
     ScDocument(const ScDocument& r); // disabled with no definition
 

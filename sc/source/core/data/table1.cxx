@@ -2202,6 +2202,13 @@ bool ScTable::HasBroadcaster( SCCOL nCol ) const
     return aCol[nCol].HasBroadcaster();
 }
 
+void ScTable::FillMatrix( ScMatrix& rMat, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
+{
+    size_t nMatCol = 0;
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol, ++nMatCol)
+        aCol[nCol].FillMatrix(rMat, nMatCol, nRow1, nRow2);
+}
+
 const SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidColRow(nCol, nRow))

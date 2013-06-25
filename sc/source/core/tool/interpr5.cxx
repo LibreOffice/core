@@ -344,43 +344,6 @@ ScInterpreter::VolatileType ScInterpreter::GetVolatileType() const
     return meVolatileType;
 }
 
-namespace {
-
-struct CellBucket
-{
-    SCSIZE mnNumValStart;
-    SCSIZE mnStrValStart;
-    std::vector<double> maNumVals;
-    std::vector<OUString> maStrVals;
-
-    CellBucket() : mnNumValStart(0), mnStrValStart(0) {}
-
-    void flush(ScMatrix& rMat, SCSIZE nCol)
-    {
-        if (!maNumVals.empty())
-        {
-            const double* p = &maNumVals[0];
-            rMat.PutDouble(p, maNumVals.size(), nCol, mnNumValStart);
-            reset();
-        }
-        else if (!maStrVals.empty())
-        {
-            const OUString* p = &maStrVals[0];
-            rMat.PutString(p, maStrVals.size(), nCol, mnStrValStart);
-            reset();
-        }
-    }
-
-    void reset()
-    {
-        mnNumValStart = mnStrValStart = 0;
-        maNumVals.clear();
-        maStrVals.clear();
-    }
-};
-
-}
-
 ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken,
         SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         SCCOL nCol2, SCROW nRow2, SCTAB nTab2 )
@@ -412,93 +375,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
     if (!pMat || nGlobalError)
         return NULL;
 
-    CellBucket aBucket;
-
-    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-    {
-        // Scan one column at a time, to pass a sequence of values to matrix in one call.
-        ScCellIterator aCellIter(
-            pDok, ScRange(nCol, nRow1, nTab1, nCol, nRow2, nTab2));
-
-        SCROW nPrevRow = -2, nThisRow = -2;
-
-        // Neighboring cell values of identical type are stored and passed as
-        // an array to the matrix object, for performance reasons.
-        for (bool bHas = aCellIter.first(); bHas; bHas = aCellIter.next(), nPrevRow = nThisRow)
-        {
-            nThisRow = aCellIter.GetPos().Row();
-
-            if (aCellIter.hasEmptyData())
-            {
-                aBucket.flush(*pMat, static_cast<SCSIZE>(nCol-nCol1));
-                continue;
-            }
-
-            if (aCellIter.hasNumeric())
-            {
-                ScAddress aAdr(nCol, nThisRow, nTab1);
-                ScRefCellValue aCell = aCellIter.getRefCellValue();
-                double fVal = GetCellValue(aCellIter.GetPos(), aCell);
-
-                if ( nGlobalError )
-                {
-                    fVal = CreateDoubleError( nGlobalError);
-                    nGlobalError = 0;
-                }
-
-                if (!aBucket.maNumVals.empty() && nThisRow == nPrevRow + 1)
-                {
-                    // Secondary numbers.
-                    aBucket.maNumVals.push_back(fVal);
-                }
-                else
-                {
-                    // First number.
-                    aBucket.flush(*pMat, static_cast<SCSIZE>(nCol-nCol1));
-                    aBucket.mnNumValStart = nThisRow - nRow1;
-                    aBucket.maNumVals.push_back(fVal);
-                }
-                continue;
-            }
-
-            String aStr = aCellIter.getString();
-            if ( nGlobalError )
-            {
-                double fVal = CreateDoubleError( nGlobalError);
-                nGlobalError = 0;
-
-                if (!aBucket.maNumVals.empty() && nThisRow == nPrevRow + 1)
-                {
-                    // Secondary numbers.
-                    aBucket.maNumVals.push_back(fVal);
-                }
-                else
-                {
-                    // First number.
-                    aBucket.flush(*pMat, static_cast<SCSIZE>(nCol-nCol1));
-                    aBucket.mnNumValStart = nThisRow - nRow1;
-                    aBucket.maNumVals.push_back(fVal);
-                }
-            }
-            else
-            {
-                if (!aBucket.maStrVals.empty() && nThisRow == nPrevRow + 1)
-                {
-                    // Secondary numbers.
-                    aBucket.maStrVals.push_back(aStr);
-                }
-                else
-                {
-                    // First number.
-                    aBucket.flush(*pMat, static_cast<SCSIZE>(nCol-nCol1));
-                    aBucket.mnStrValStart = nThisRow - nRow1;
-                    aBucket.maStrVals.push_back(aStr);
-                }
-            }
-        }
-
-        aBucket.flush(*pMat, static_cast<SCSIZE>(nCol-nCol1));
-    }
+    pDok->FillMatrix(*pMat, nTab1, nCol1, nRow1, nCol2, nRow2);
 
     if (pTokenMatrixMap)
         pTokenMatrixMap->insert( ScTokenMatrixMap::value_type(
