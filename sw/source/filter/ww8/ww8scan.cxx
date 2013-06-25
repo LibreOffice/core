@@ -943,7 +943,7 @@ namespace {
         WW8_CP nValue = 0;
         for ( sal_Int32 i = 0; i <= nMaxIndex; ++i )
         {
-            if ( pPLCFPosArray[i] < nValue )
+            if ( pPLCFPosArray[i] != 0 && pPLCFPosArray[i] < nValue )
             {
                 bIsValid = false;
                 break;
