@@ -508,6 +508,7 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, OUString language )
     get(m_pDelButton, "delete");
     // must be a neater way to deal with the strings than as above
     // append the language to the dialog title
+    setDeferredProperties();
     String winTitle( GetText() );
     winTitle.SearchAndReplace( OUString( "%MACROLANG" ), m_sLanguage );
     SetText( winTitle );
