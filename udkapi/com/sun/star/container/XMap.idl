@@ -59,7 +59,7 @@ interface XMap
 
     /** clears the map, removing all key-value pairs from it.
 
-        @throws ::com::sun::star::beans::NoSupportException
+        @throws ::com::sun::star::lang::NoSupportException
             if the map is not mutable.
     */
     void clear()
@@ -113,7 +113,7 @@ interface XMap
 
         @throws ::com::sun::star::beans::IllegalTypeException
             if the given key is not of a type which is accepted by the map
-        @throws ::com::sun::star::beans::IllegalArgumentException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             if the given key is not supported to be put into the map. It's up to the service
             implementing the <code>XMap</code> interface to specify which special values are not
             supported. For instances, implementations might decide to not allow `VOID` keys, or
@@ -149,7 +149,7 @@ interface XMap
             For instances, implementations might decide to not allow `VOID` keys or values, or to
             reject <code>Double.NaN</code> (<em>not a number</em>) to due its problematic behavior
             with respect to equality.
-        @throws ::com::sun::star::beans::NoSupportException
+        @throws ::com::sun::star::lang::NoSupportException
             if the map does not support putting new mappings into it
     */
     any     put( [in] any Key, [in] any Value )
@@ -172,7 +172,7 @@ interface XMap
             supported. For instances, implementations might decide to not allow `VOID` keys, or
             to reject <code>Double.NaN</code> (<em>not a number</em>) to due its problematic
             behavior with respect to equality.
-        @throws ::com::sun::star::beans::NoSupportException
+        @throws ::com::sun::star::lang::NoSupportException
             if the map does not support removing mappings
         @throws ::com::sun::star::container::NoSuchElementException
             if there is no value associated with the given key
