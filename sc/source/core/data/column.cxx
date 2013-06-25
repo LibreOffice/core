@@ -2499,12 +2499,11 @@ struct ResetChangedHandler
 class FindEditCellsHandler
 {
     ScColumn& mrColumn;
-    sc::CellTextAttrStoreType& mrAttrs;
     sc::CellTextAttrStoreType::iterator miAttrPos;
 
 public:
     FindEditCellsHandler(ScColumn& rColumn, sc::CellTextAttrStoreType& rAttrs) :
-        mrColumn(rColumn), mrAttrs(rAttrs), miAttrPos(rAttrs.begin()) {}
+        mrColumn(rColumn), miAttrPos(rAttrs.begin()) {}
 
     bool operator() (size_t, const EditTextObject*)
     {
