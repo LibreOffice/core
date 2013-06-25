@@ -46,9 +46,11 @@ namespace sdr
 
         basegfx::B2DRange ViewContactOfSdrObjCustomShape::getCorrectedTextBoundRect() const
         {
-            const Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
+            Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
+            aObjectBound += GetCustomShapeObj().GetGridOffset();
             Rectangle aTextBound(aObjectBound);
             GetCustomShapeObj().GetTextBounds(aTextBound);
+            aTextBound += GetCustomShapeObj().GetGridOffset();
             basegfx::B2DRange aTextRange(aTextBound.Left(), aTextBound.Top(), aTextBound.Right(), aTextBound.Bottom());
             const basegfx::B2DRange aObjectRange(aObjectBound.Left(), aObjectBound.Top(), aObjectBound.Right(), aObjectBound.Bottom());
 
