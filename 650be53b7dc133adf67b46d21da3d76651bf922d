@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXX///zc\u003d",
+        "filename": "sc/inc/AccessibleFilterMenu.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-25T11:56:39Z",
+      "side": 1,
+      "message": "Are you sure this is a good move? /// is a doxygen comment to document the next method only, while this comment is relevant not only for getAccessibleAtPoint(), but also for the next 4 other methods.",
+      "revId": "650be53b7dc133adf67b46d21da3d76651bf922d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
