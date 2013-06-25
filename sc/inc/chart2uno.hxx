@@ -57,7 +57,7 @@
 
 class ScDocument;
 
-// DataProvider ==============================================================
+///---DataProvider---
 
 class ScChart2DataProvider : public
                 ::cppu::WeakImplHelper5<
@@ -74,7 +74,7 @@ public:
     virtual ~ScChart2DataProvider();
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    // XDataProvider ---------------------------------------------------------
+    ///XDataProvider
 
     virtual ::sal_Bool SAL_CALL createDataSourcePossible(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
@@ -102,7 +102,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelection > SAL_CALL getRangeSelection()
         throw (::com::sun::star::uno::RuntimeException);
 
-    // XSheetDataProvider ----------------------------------------------------
+    ///XSheetDataProvider
 
     virtual sal_Bool SAL_CALL createDataSequenceByFormulaTokensPossible(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& aTokens )
@@ -113,7 +113,7 @@ public:
             const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& aTokens )
                 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    // XRangeXMLConversion ---------------------------------------------------
+    ///XRangeXMLConversion
 
     virtual OUString SAL_CALL convertRangeToXML( const OUString& sRangeRepresentation )
         throw ( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
@@ -121,7 +121,7 @@ public:
     virtual OUString SAL_CALL convertRangeFromXML( const OUString& sXMLRange )
         throw ( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
-    // XPropertySet ----------------------------------------------------------
+    ///XPropertySet
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySetInfo> SAL_CALL
@@ -174,7 +174,7 @@ public:
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
 
-    // XServiceInfo ----------------------------------------------------------
+    ///XServiceInfo
 
     virtual OUString SAL_CALL getImplementationName() throw(
             ::com::sun::star::uno::RuntimeException);
@@ -194,7 +194,7 @@ private:
 };
 
 
-// DataSource ================================================================
+///---DataSource---
 
 class ScChart2DataSource : public
                 ::cppu::WeakImplHelper2<
@@ -208,13 +208,13 @@ public:
     virtual ~ScChart2DataSource();
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    // XDataSource -----------------------------------------------------------
+    ///XDataSource
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XLabeledDataSequence > > SAL_CALL
         getDataSequences() throw (::com::sun::star::uno::RuntimeException);
 
-    // XServiceInfo ----------------------------------------------------------
+    ///XServiceInfo
 
     virtual OUString SAL_CALL getImplementationName() throw(
             ::com::sun::star::uno::RuntimeException);
@@ -226,7 +226,7 @@ public:
         getSupportedServiceNames() throw(
                 ::com::sun::star::uno::RuntimeException);
 
-    // implementation
+    ///implementation
 
     void AddLabeledSequence(const com::sun::star::uno::Reference < com::sun::star::chart2::data::XLabeledDataSequence >& xNew);
 
@@ -239,7 +239,7 @@ private:
 };
 
 
-// DataSequence ==============================================================
+///---DataSequence---
 
 class ScChart2DataSequence : public
                 ::cppu::WeakImplHelper7<
@@ -261,7 +261,7 @@ public:
     virtual ~ScChart2DataSequence();
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    // XDataSequence ---------------------------------------------------------
+    ///XDataSequence
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
         SAL_CALL getData() throw (::com::sun::star::uno::RuntimeException);
@@ -274,17 +274,17 @@ public:
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                ::com::sun::star::uno::RuntimeException);
 
-    // XNumericalDataSequence --------------------------------------------------
+    ///XNumericalDataSequence
 
     virtual ::com::sun::star::uno::Sequence< double >
         SAL_CALL getNumericalData(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XTextualDataSequence --------------------------------------------------
+    ///XTextualDataSequence
 
     virtual ::com::sun::star::uno::Sequence< OUString >
         SAL_CALL getTextualData(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XPropertySet ----------------------------------------------------------
+    ///XPropertySet
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySetInfo> SAL_CALL
@@ -337,12 +337,12 @@ public:
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
 
-    // XCloneable ------------------------------------------------------------
+    ///XCloneable
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
         throw (::com::sun::star::uno::RuntimeException);
 
-    // XModifyBroadcaster ----------------------------------------------------
+    ///XModifyBroadcaster
 
     virtual void SAL_CALL addModifyListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
@@ -351,7 +351,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
         throw (::com::sun::star::uno::RuntimeException);
 
-    // XServiceInfo ----------------------------------------------------------
+    ///XServiceInfo
 
     virtual OUString SAL_CALL getImplementationName() throw(
             ::com::sun::star::uno::RuntimeException);
@@ -366,14 +366,14 @@ public:
 private:
     void setDataChangedHint(bool b);
 
-    // Implementation --------------------------------------------------------
+    ///Implementation
 
     void    RefChanged();
     DECL_LINK( ValueListenerHdl, SfxHint* );
 
 private:
-    ScChart2DataSequence(); // disabled
-    ScChart2DataSequence(const ScChart2DataSequence& r); // disabled
+    ScChart2DataSequence(); ///disabled
+    ScChart2DataSequence(const ScChart2DataSequence& r); ///disabled
 
     class ExternalRefListener : public ScExternalRefManager::LinkListener
     {
@@ -414,7 +414,7 @@ private:
 
 private:
 
-    // data array
+    ///data array
     struct Item
     {
         double              mfValue;
@@ -446,11 +446,11 @@ private:
 
     ::com::sun::star::uno::Sequence<sal_Int32>  m_aHiddenValues;
 
-    // properties
+    ///properties
     ::com::sun::star::chart2::data::DataSequenceRole  m_aRole;
     sal_Bool                    m_bIncludeHiddenCells;
 
-    // internals
+    ///internals
     typedef boost::scoped_ptr<std::vector<ScTokenRef> >  TokenListPtr;
     typedef boost::scoped_ptr<std::vector<sal_uInt32> >  RangeIndexMapPtr;
     typedef boost::scoped_ptr<ExternalRefListener>       ExtRefListenerPtr;
@@ -472,6 +472,6 @@ private:
     bool                        m_bExtDataRebuildQueued;
 };
 
-#endif // SC_CHART2UNO_HXX
+#endif ///SC_CHART2UNO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

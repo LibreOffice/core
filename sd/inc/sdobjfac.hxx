@@ -20,12 +20,10 @@
 #ifndef _SDOBJFAC_HXX
 #define _SDOBJFAC_HXX
 
-
 #include <tools/link.hxx>
 
-//-----------------------
-// class SdObjectFactory
-//-----------------------
+
+///class SdObjectFactory
 class SdrObjFactory;
 
 class SdObjectFactory
@@ -47,6 +45,6 @@ public:
 extern SdObjectFactory aSdObjectFactory;
 
 
-#endif // _SDOBJFAC_HXX
+#endif ///_SDOBJFAC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

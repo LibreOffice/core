@@ -29,11 +29,8 @@
 class SdDrawDocument;
 class SdPage;
 
-/*************************************************************************
-|*
-|* CustomShow
-|*
-\************************************************************************/
+
+///CustomShow
 class SD_DLLPUBLIC SdCustomShow
 {
 public:
@@ -44,20 +41,20 @@ private:
     String          aName;
     SdDrawDocument* pDoc;
 
-    // this is a weak reference to a possible living api wrapper for this custom show
+    ///this is a weak reference to a possible living api wrapper for this custom show
     ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > mxUnoCustomShow;
 
-    // forbidden and not implemented
+    ///forbidden and not implemented
     SdCustomShow();
 
 public:
-    // single argument ctors shall be explicit
+    ///single argument ctors shall be explicit
     explicit SdCustomShow(SdDrawDocument* pDrawDoc);
     SdCustomShow(SdDrawDocument* pDrawDoc, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xShow );
 
     virtual ~SdCustomShow();
 
-    // @@@ copy ctor, but no copy assignment? @@@
+    ///@@@ copy ctor, but no copy assignment? @@@
     SdCustomShow( const SdCustomShow& rShow );
 
     /** Provides a direct access to the collection of the SdPage objects. */
@@ -78,6 +75,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoCustomShow();
 };
 
-#endif      // _SD_CUSSHOW_HXX
+#endif      ///_SD_CUSSHOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

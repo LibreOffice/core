@@ -22,9 +22,7 @@
 
 #include "sdfilter.hxx"
 
-// ---------------
-// - SdPPTFilter -
-// ---------------
+///SdPPTFilter
 
 class SdPPTFilter : public SdFilter
 {
@@ -35,17 +33,17 @@ public:
         sal_Bool bShowProgress);
     virtual ~SdPPTFilter (void);
 
-    /// these methods are necessary for the export to PowerPoint
+    ///these methods are necessary for the export to PowerPoint
     sal_Bool        Import();
     sal_Bool        Export();
 
-    /// restores the original basic storage
+    ///restores the original basic storage
     void                    PreSaveBasic();
 
 private:
     SvMemoryStream*         pBas;
 };
 
-#endif // _SD_PPTWRP_HXX
+#endif ///_SD_PPTWRP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

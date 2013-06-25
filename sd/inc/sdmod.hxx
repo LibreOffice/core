@@ -22,7 +22,6 @@
 
 #include "glob.hxx"
 #include "pres.hxx"
-
 #include <sot/storage.hxx>
 #include <tools/shl.hxx>
 #include "sddllapi.h"
@@ -30,7 +29,6 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <sfx2/module.hxx>
 #include <vcl/vclevent.hxx>
-
 #include <memory>
 
 class SdOptions;
@@ -53,9 +51,7 @@ namespace com { namespace sun { namespace star { namespace frame {
 } } } }
 
 
-// ----------------------
-// - SdOptionStreamMode -
-// ----------------------
+///SdOptionStreamMode
 
 enum SdOptionStreamMode
 {
@@ -63,8 +59,7 @@ enum SdOptionStreamMode
     SD_OPTION_STORE = 1
 };
 
-/*************************************************************************
-|*
+/**
 |* This subclass of <SfxModule> (which is a subclass of <SfxShell>) is
 |* linked to the DLL. One instance of this class exists while the DLL is
 |* loaded.
@@ -72,8 +67,7 @@ enum SdOptionStreamMode
 |* SdModule is like to be compared with the <SfxApplication>-subclass.
 |*
 |* Remember: Don`t export this class! It uses DLL-internal symbols.
-|*
-\************************************************************************/
+*/
 
 class SdModule : public SfxModule, public SfxListener
 {
@@ -118,7 +112,7 @@ public:
 
     SD_DLLPUBLIC SvNumberFormatter*     GetNumberFormatter();
 
-    // virtual methods for the option dialog
+    ///virtual methods for the option dialog
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId );
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
     virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet );
@@ -186,6 +180,6 @@ private:
 
 #define SD_MOD() ( *(SdModule**) GetAppData(SHL_DRAW) )
 
-#endif                                 // _SDMOD_HXX
+#endif   ///_SDMOD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

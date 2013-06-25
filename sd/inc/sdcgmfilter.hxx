@@ -22,9 +22,7 @@
 
 #include "sdfilter.hxx"
 
-// ---------------
-// - SdCGMFilter -
-// ---------------
+///SdCGMFilter
 
 class SdCGMFilter : public SdFilter
 {
@@ -39,6 +37,6 @@ public:
     sal_Bool        Export();
 };
 
-#endif // _SD_SDCGMFILTER_HXX
+#endif ///_SD_SDCGMFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
