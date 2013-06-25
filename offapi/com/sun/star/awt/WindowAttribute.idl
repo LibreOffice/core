@@ -87,7 +87,7 @@ published constants WindowAttribute
 
 
     /** specifies that the window should support the
-        com::sun::star::awt::::XSystemDependentWindowPeer
+        com::sun::star::awt::XSystemDependentWindowPeer
         interface.
 
         <p>This flag may be ignored, but in this case no system-dependent
