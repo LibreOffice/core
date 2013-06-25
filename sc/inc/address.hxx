@@ -40,13 +40,13 @@ namespace com { namespace sun { namespace star {
 
 class ScDocument;
 
-// The typedefs
+/// The typedefs
 typedef sal_Int32 SCROW;
 typedef sal_Int16 SCCOL;
 typedef sal_Int16 SCTAB;
 typedef sal_Int32 SCCOLROW;     ///< a type capable of holding either SCCOL or SCROW
 
-// temporarily signed typedefs
+/// temporarily signed typedefs
 typedef sal_Int32 SCsROW;
 typedef sal_Int16 SCsCOL;
 typedef sal_Int16 SCsTAB;
@@ -56,9 +56,8 @@ typedef sal_Int32 SCsCOLROW;
     to size_t and is used to read/write from/to streams. */
 typedef size_t SCSIZE;
 
-// Maximum possible value of data type, NOT maximum row value.
-// MSC confuses numeric_limit max() with macro max() if vcl/wintypes.hxx is
-// included, we should not be using those stupid macros anyway.
+/// Maximum possible value of data type, NOT maximum row value.
+/** MSC confuses numeric_limit max() with macro max() if vcl/wintypes.hxx is included, we should not be using those stupid macros anyway.*/
 #undef min
 #undef max
 const SCROW    SCROW_MAX    = ::std::numeric_limits<SCROW>::max();
@@ -67,40 +66,41 @@ const SCTAB    SCTAB_MAX    = ::std::numeric_limits<SCTAB>::max();
 const SCCOLROW SCCOLROW_MAX = ::std::numeric_limits<SCCOLROW>::max();
 const SCSIZE   SCSIZE_MAX   = ::std::numeric_limits<SCSIZE>::max();
 
-// The maximum values. Defines are needed for preprocessor checks, for example
-// in bcaslot.cxx, otherwise type safe constants are preferred.
+/** The maximum values. Defines are needed for preprocessor checks, for example
+ in bcaslot.cxx, otherwise type safe constants are preferred.*/
 #define MAXROWCOUNT_DEFINE 1048576
 #define MAXCOLCOUNT_DEFINE 1024
 
-// Count values
+/// Count values
 const SCROW       MAXROWCOUNT    = MAXROWCOUNT_DEFINE;
 const SCCOL       MAXCOLCOUNT    = MAXCOLCOUNT_DEFINE;
 /// limiting to 10000 for now, problem with 32 bit builds for now
 const SCTAB       MAXTABCOUNT    = 10000;
 const SCCOLROW    MAXCOLROWCOUNT = MAXROWCOUNT;
-// Maximum values
+/// Maximum values
 const SCROW       MAXROW         = MAXROWCOUNT - 1;
 const SCCOL       MAXCOL         = MAXCOLCOUNT - 1;
 const SCTAB       MAXTAB         = MAXTABCOUNT - 1;
 const SCCOLROW    MAXCOLROW      = MAXROW;
-// Limit the initial tab count to prevent users to set the count too high,
-// which could cause the memory usage of blank documents to exceed the
-// available system memory.
+/** Limit the initial tab count to prevent users to set the count too high,
+ which could cause the memory usage of blank documents to exceed the
+ available system memory.*/
 const SCTAB       MAXINITTAB = 1024;
 const SCTAB       MININITTAB = 1;
 
-// Special values
+/// Special values
 const SCTAB SC_TAB_APPEND     = SCTAB_MAX;
-const SCTAB TABLEID_DOC       = SCTAB_MAX;  // entire document, e.g. protect
+const SCTAB TABLEID_DOC       = SCTAB_MAX;  /// entire document, e.g. protect
 const SCROW SCROWS32K         = 32000;
 const SCCOL SCCOL_REPEAT_NONE = SCCOL_MAX;
 const SCROW SCROW_REPEAT_NONE = SCROW_MAX;
 
-// For future reference, place in code where more than 64k rows would need a
-// special handling:
-// #if SC_ROWLIMIT_MORE_THAN_64K
-// #error row limit 64k
-// #endif
+/** For future reference, place in code where more than 64k rows would need a
+ special handling:
+ #if SC_ROWLIMIT_MORE_THAN_64K
+ #error row limit 64k
+ #endif
+*/
 #if MAXROWCOUNT_DEFINE > 65536
 #define SC_ROWLIMIT_MORE_THAN_64K 1
 #else
@@ -108,7 +108,7 @@ const SCROW SCROW_REPEAT_NONE = SCROW_MAX;
 #endif
 const SCROW SCROWS64K = 65536;
 
-// === old stuff defines =====================================================
+///old stuff defines
 
 #define MAXROW_30   8191
 
@@ -121,7 +121,7 @@ const SCROW W16MAXROW = W16MAXROWCOUNT - 1;
 #define MAXROW      W16MAXROW
 #endif
 
-// === old stuff defines end =================================================
+///old stuff defines end
 
 inline bool ValidCol( SCCOL nCol )
 {
@@ -173,17 +173,18 @@ inline SCTAB SanitizeTab( SCTAB nTab, SCTAB nMaxTab )
     return nTab < 0 ? 0 : (nTab > nMaxTab ? nMaxTab : nTab);
 }
 
-// === ScAddress =============================================================
+/// ScAddress
 
-// The old cell address is combined in one UINT32:
-// +---+---+-------+
-// |Tab|Col|  Row  |
-// +---+---+-------+
-// For speed reasons access isn't done by shifting bits but by using platform
-// dependent casts, which unfortunately also leads to aliasing problems when
-// not using gcc -fno-strict-aliasing
+/** The old cell address is combined in one UINT32:
+ +---+---+-------+
+ |Tab|Col|  Row  |
+ +---+---+-------+
+*/
+/** For speed reasons access isn't done by shifting bits but by using platform
+dependent casts, which unfortunately also leads to aliasing problems when
+not using gcc -fno-strict-aliasing */
 
-// The result of ConvertRef() is a bit group of the following:
+/// The result of ConvertRef() is a bit group of the following:
 
 #define SCA_COL_ABSOLUTE    0x01
 #define SCA_ROW_ABSOLUTE    0x02
@@ -196,11 +197,11 @@ inline SCTAB SanitizeTab( SCTAB nTab, SCTAB nMaxTab )
 #define SCA_VALID_ROW       0x0100
 #define SCA_VALID_COL       0x0200
 #define SCA_VALID_TAB       0x0400
-// SCA_BITS is a convience for
-// (SCA_VALID_TAB | SCA_VALID_COL | SCA_VALID_ROW | SCA_TAB_3D | SCA_TAB_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_COL_ABSOLUTE)
+/** SCA_BITS is a convience for
+(SCA_VALID_TAB | SCA_VALID_COL | SCA_VALID_ROW | SCA_TAB_3D | SCA_TAB_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_COL_ABSOLUTE) */
 #define SCA_BITS            0x070F
-// somewhat cheesy kludge to force the display of the document name even for
-// local references.  Requires TAB_3D to be valid
+/** somewhat cheesy kludge to force the display of the document name even for
+ local references.  Requires TAB_3D to be valid */
 #define SCA_FORCE_DOC       0x0800
 #define SCA_VALID_ROW2      0x1000
 #define SCA_VALID_COL2      0x2000
@@ -216,7 +217,7 @@ inline SCTAB SanitizeTab( SCTAB nTab, SCTAB nMaxTab )
 #define SCA_ABS_3D          SCA_ABS | SCA_TAB_3D
 #define SCR_ABS_3D          SCR_ABS | SCA_TAB_3D
 
-// === ScAddress =============================================================
+///ScAddress
 
 class ScAddress
 {
@@ -243,7 +244,7 @@ public:
         inline Details( formula::FormulaGrammar::AddressConvention eConvP)
             : eConv( eConvP ), nRow( 0 ), nCol( 0 )
             {}
-        /* Use the formula::FormulaGrammar::AddressConvention associated with rAddr::Tab() */
+        /// Use the formula::FormulaGrammar::AddressConvention associated with rAddr::Tab()
         Details( const ScDocument* pDoc, const ScAddress & rAddr );
     };
     SC_DLLPUBLIC static const Details detailsOOOa1;
@@ -298,7 +299,7 @@ public:
     SC_DLLPUBLIC void Format( String&, sal_uInt16 = 0, const ScDocument* = NULL,
                  const Details& rDetails = detailsOOOa1) const;
 
-    // The document for the maximum defined sheet number
+    /// The document for the maximum defined sheet number
     SC_DLLPUBLIC bool Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* =NULL );
     inline bool operator==( const ScAddress& r ) const;
     inline bool operator!=( const ScAddress& r ) const;
@@ -394,8 +395,7 @@ inline bool ScAddress::operator>=( const ScAddress& r ) const
 
 inline size_t ScAddress::hash() const
 {
-    // Assume that there are not that many addresses with row > 2^16 AND column
-    // > 2^8 AND sheet > 2^8 so we won't have too many collisions.
+    /** Assume that there are not that many addresses with row > 2^16 AND column > 2^8 AND sheet > 2^8 so we won't have too many collisions. */
     if (nRow <= 0xffff)
         return (static_cast<size_t>(nTab) << 24) ^
             (static_cast<size_t>(nCol) << 16) ^ static_cast<size_t>(nRow);
@@ -421,7 +421,7 @@ struct ScAddressEqualFunctor
 };
 
 
-// === ScRange ===============================================================
+///ScRange
 
 class ScRange
 {
@@ -498,11 +498,11 @@ public:
 
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
         SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const;
-    // The document for the maximum defined sheet number
+    /// The document for the maximum defined sheet number
     SC_DLLPUBLIC bool Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* =NULL );
     SC_DLLPUBLIC void Justify();
     SC_DLLPUBLIC void ExtendTo( const ScRange& rRange );
-    SC_DLLPUBLIC bool Intersects( const ScRange& ) const;    // do two ranges intersect?
+    SC_DLLPUBLIC bool Intersects( const ScRange& ) const;    /// do two ranges intersect?
     inline bool operator==( const ScRange& r ) const;
     inline bool operator!=( const ScRange& r ) const;
     inline bool operator<( const ScRange& r ) const;
@@ -573,29 +573,29 @@ inline bool ScRange::In( const ScRange& r ) const
 
 inline size_t ScRange::hashArea() const
 {
-    // Assume that there are not that many ranges with identical corners so we
-    // won't have too many collisions. Also assume that more lower row and
-    // column numbers are used so that there are not too many conflicts with
-    // the columns hashed into the values, and that start row and column
-    // usually don't exceed certain values. High bits are not masked off and
-    // may overlap with lower bits of other values, e.g. if start column is
-    // greater than assumed.
+    /** Assume that there are not that many ranges with identical corners so we
+     won't have too many collisions. Also assume that more lower row and
+     column numbers are used so that there are not too many conflicts with
+     the columns hashed into the values, and that start row and column
+     usually don't exceed certain values. High bits are not masked off and
+     may overlap with lower bits of other values, e.g. if start column is
+     greater than assumed. */
     return
-        (static_cast<size_t>(aStart.Row()) << 26) ^ // start row <= 2^6
-        (static_cast<size_t>(aStart.Col()) << 21) ^ // start column <= 2^5
-        (static_cast<size_t>(aEnd.Col()) << 15) ^   // end column <= 2^6
-        static_cast<size_t>(aEnd.Row());            // end row <= 2^15
+        (static_cast<size_t>(aStart.Row()) << 26) ^ /// start row <= 2^6
+        (static_cast<size_t>(aStart.Col()) << 21) ^ /// start column <= 2^5
+        (static_cast<size_t>(aEnd.Col()) << 15) ^   /// end column <= 2^6
+        static_cast<size_t>(aEnd.Row());            /// end row <= 2^15
 }
 
 
 inline size_t ScRange::hashStartColumn() const
 {
-    // Assume that for the start row more lower row numbers are used so that
-    // there are not too many conflicts with the column hashed into the higher
-    // values.
+    /** Assume that for the start row more lower row numbers are used so that
+     there are not too many conflicts with the column hashed into the higher
+     values. */
     return
-        (static_cast<size_t>(aStart.Col()) << 24) ^ // start column <= 2^8
-        (static_cast<size_t>(aStart.Row()) << 16) ^ // start row <= 2^8
+        (static_cast<size_t>(aStart.Col()) << 24) ^ /// start column <= 2^8
+        (static_cast<size_t>(aStart.Row()) << 16) ^ /// start row <= 2^8
         static_cast<size_t>(aEnd.Row());
 }
 
@@ -617,7 +617,7 @@ struct ScRangeEqualFunctor
 };
 
 
-// === ScRangePair ===========================================================
+///ScRangePair
 
 class ScRangePair
 {
@@ -655,7 +655,7 @@ inline int ScRangePair::operator!=( const ScRangePair& r ) const
     return !operator==( r );
 }
 
-// === ScRefAddress ==========================================================
+///ScRefAddress
 
 class ScRefAddress
 {
@@ -742,12 +742,10 @@ inline int ScRefAddress::operator==( const ScRefAddress& r ) const
         bRelTab == r.bRelTab;
 }
 
-// ===========================================================================
-// Global functions
-// ===========================================================================
+/// Global functions
 
-// Special values for cells always broadcasting or listening (RECALCMODE_ALWAYS
-// and the like).
+/** Special values for cells always broadcasting or listening (RECALCMODE_ALWAYS
+ and the like). */
 #define BCA_BRDCST_ALWAYS ScAddress( 0, SCROW_MAX, 0 )
 #define BCA_LISTEN_ALWAYS ScRange( BCA_BRDCST_ALWAYS, BCA_BRDCST_ALWAYS )
 
@@ -793,6 +791,6 @@ inline String ScColToAlpha( SCCOL nCol )
 /// get column number of A..IV... string
 bool AlphaToCol( SCCOL& rCol, const String& rStr);
 
-#endif // SC_ADDRESS_HXX
+#endif /// SC_ADDRESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

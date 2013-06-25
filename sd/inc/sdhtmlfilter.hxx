@@ -22,9 +22,7 @@
 
 #include "sdfilter.hxx"
 
-// ----------------
-// - SdHTMLFilter -
-// ----------------
+///SdHTMLFilter
 
 class SdHTMLFilter
     : public SdFilter
@@ -43,6 +41,6 @@ private:
 
 };
 
-#endif // _SD_SDHTMLFILTER_HXX
+#endif /// _SD_SDHTMLFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

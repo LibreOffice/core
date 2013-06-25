@@ -62,7 +62,6 @@ enum ScAddInArgumentType
     SC_ADDINARG_VARARGS                 ///< sequence<any>
 };
 
-//------------------------------------------------------------------------
 
 struct ScAddInArgDesc
 {
@@ -135,7 +134,6 @@ public:
     void    SetCompNames( const ::std::vector< LocalizedName >& rNew );
 };
 
-//------------------------------------------------------------------------
 
 class SC_DLLPUBLIC ScUnoAddInCollection
 {
@@ -197,7 +195,7 @@ private:
     com::sun::star::uno::Sequence<com::sun::star::uno::Any>         aVarArg;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xCaller;
     bool                        bValidCount;
-    // result:
+    /// result:
     sal_uInt16                  nErrCode;
     bool                        bHasString;
     double                      fValue;
@@ -209,7 +207,7 @@ private:
                         com::sun::star::uno::Sequence<com::sun::star::uno::Any>& rCallArgs);
 
 public:
-                    // exact name
+                    /// exact name
                     ScUnoAddInCall( ScUnoAddInCollection& rColl, const OUString& rName,
                                     long nParamCount );
                     ~ScUnoAddInCall();

@@ -22,7 +22,6 @@
 
 #include <tools/stream.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
 class SvStream;
 
 class old_SdrDownCompat
@@ -44,7 +43,7 @@ public:
     void  OpenSubRecord();
     void  CloseSubRecord();
 };
-//////////////////////////////////////////////////////////////////////////////
+
 #include "sddllapi.h"
 
 #define SDIOCOMPAT_VERSIONDONTKNOW (sal_uInt16)0xffff
@@ -55,15 +54,15 @@ private:
     sal_uInt16 nVersion;
 
 public:
-                // nNewMode: STREAM_READ or STREAM_WRITE
-                // nVer:     specify only when writing
+                /// nNewMode: STREAM_READ or STREAM_WRITE
+                /// nVer:     specify only when writing
             SdIOCompat(SvStream& rNewStream, sal_uInt16 nNewMode,
                        sal_uInt16 nVer = SDIOCOMPAT_VERSIONDONTKNOW);
             ~SdIOCompat();
     sal_uInt16  GetVersion() const { return nVersion; }
 };
 
-#endif      // _SD_SDIOCMPT_HXX
+#endif      /// _SD_SDIOCMPT_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

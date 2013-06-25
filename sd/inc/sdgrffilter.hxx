@@ -25,9 +25,7 @@
 #include <tools/errinf.hxx>
 #include "sdfilter.hxx"
 
-// ---------------
-// - SdCGMFilter -
-// ---------------
+///SdCGMFilter
 
 class SdGRFFilter : public SdFilter
 {
@@ -42,6 +40,6 @@ public:
     static void HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong nStreamError = ERRCODE_NONE );
 };
 
-#endif // _SD_SDGRFFILTER_HXX
+#endif /// _SD_SDGRFFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
