@@ -60,7 +60,6 @@ ContextHandlerRef PPTShapePropertiesContext::onCreateContext( sal_Int32 aElement
         default:
             return ShapePropertiesContext::onCreateContext( aElementToken, rAttribs );
     }
-    return 0;
 }
 
 } }
