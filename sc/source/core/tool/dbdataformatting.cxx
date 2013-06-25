@@ -53,7 +53,7 @@ void ScDBDataFormatting::SetTableStyleName( const OUString& rTableStyleName )
 
 const OUString& ScDBDataFormatting::GetTableStyleName()
 {
-    return maTbleStyleName;
+    return maTableStyleName;
 }
 
 void ScDBDataFormatting::SetBandedRows( bool bBRows )

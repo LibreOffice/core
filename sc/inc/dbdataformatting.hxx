@@ -33,7 +33,7 @@ class SC_DLLPUBLIC ScDBDataFormatting
         bool bBandedColumns;
     public:
         ScDBDataFormatting();
-        ScDBDataFormatting(const OUString& rFirstRowStripeStyle, const OUString& rSecondRowStripeStyle, const OUString& rFirstColStripeStyle, const OUString& rSecondColStripeStyle, bool bBRows, bool bBCols);
+        ScDBDataFormatting(const OUString& rTableStyleName, const OUString& rFirstRowStripeStyle, const OUString& rSecondRowStripeStyle, const OUString& rFirstColStripeStyle, const OUString& rSecondColStripeStyle, bool bBRows, bool bBCols);
         ScDBDataFormatting( const ScDBDataFormatting& rTableFormatData );
         void SetTableStyleName( const OUString& rTableStyleName );
         const OUString& GetTableStyleName();
