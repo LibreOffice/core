@@ -26,9 +26,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 
-// ------------
-// - SdFilter -
-// ------------
+///SdFilter
 
 class SfxMedium;
 namespace sd {
@@ -68,6 +66,6 @@ private:
 
 };
 
-#endif // _SD_SDFILTER_HXX
+#endif /// _SD_SDFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
