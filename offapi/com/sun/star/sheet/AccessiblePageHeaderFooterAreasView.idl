@@ -52,7 +52,7 @@ service AccessiblePageHeaderFooterAreasView
         <ul>
             <li>::com::sun::star::text::AccessibleHeaderFooterView:
                 A child where calling
-                ::com::sun::star::text::XAccessibleContext::getAccessibleChild()
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleChild()
                 an object that supports this service is returned for
                 every header and footer that is at least partially visible.</li>
         </ul>
