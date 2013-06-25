@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXX///zE\u003d",
+        "filename": "sc/inc/AccessibleFilterMenuItem.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2013-06-25T14:00:14Z",
+      "side": 1,
+      "message": "that must be a typo... but then again why upload it then ?",
+      "revId": "f073a6bdcb1b609b53987a1bee06a7dbc2cd886c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
