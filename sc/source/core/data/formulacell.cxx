@@ -1934,6 +1934,25 @@ sal_uInt16 ScFormulaCell::GetRawError()
     return aResult.GetResultError();
 }
 
+bool ScFormulaCell::GetErrorOrValue( sal_uInt16& rErr, double& rVal )
+{
+    MaybeInterpret();
+
+    rErr = pCode->GetCodeError();
+    if (rErr)
+        return true;
+
+    rErr = aResult.GetResultError();
+    if (rErr)
+        return true;
+
+    if (!aResult.IsValue())
+        return false;
+
+    rVal = aResult.GetDouble();
+    return true;
+}
+
 bool ScFormulaCell::HasOneReference( ScRange& r ) const
 {
     pCode->Reset();

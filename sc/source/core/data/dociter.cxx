@@ -220,18 +220,16 @@ bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
             break;
             case sc::element_type_formula:
             {
-                ScFormulaCell* pCell = sc::formula_block::at(*maCurPos.first->data, maCurPos.second);
-                if (bSubTotal && pCell->IsSubTotal())
+                ScFormulaCell& rCell = *sc::formula_block::at(*maCurPos.first->data, maCurPos.second);
+                if (bSubTotal && rCell.IsSubTotal())
                 {
                     // Skip subtotal formula cells.
                     IncPos();
                     break;
                 }
 
-                rErr = pCell->GetErrCode();
-                if (rErr || pCell->IsValue())
+                if (rCell.GetErrorOrValue(rErr, rValue))
                 {
-                    rValue = pCell->GetValue();
                     bNumValid = false;
                     return true; // Found it!
                 }

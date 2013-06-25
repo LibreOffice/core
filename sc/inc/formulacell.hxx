@@ -213,6 +213,7 @@ public:
     sal_uInt16 GetMatrixEdge( ScAddress& rOrgPos ) const;
     sal_uInt16      GetErrCode();   // interpret first if necessary
     sal_uInt16      GetRawError();  // don't interpret, just return code or result error
+    bool GetErrorOrValue( sal_uInt16& rErr, double& rVal );
     sal_uInt8       GetMatrixFlag() const                   { return cMatrixFlag; }
     ScTokenArray*   GetCode() const                         { return pCode; }
 
