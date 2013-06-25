@@ -36,6 +36,7 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/frmdir.hxx>
 #include "attarray.hxx"
+#include "dbdataformatting.hxx"
 #include <list>
 
 class ScMarkData;
@@ -785,6 +786,23 @@ typedef ::boost::shared_ptr< Dxf > DxfRef;
 
 // ============================================================================
 
+/* Contains attributes for table styles from the <tableStyle> element */
+class TableStyle : public WorkbookHelper
+{
+public:
+    explicit            TableStyle( const WorkbookHelper& rHelper, const OUString& rTableStyleName );
+    void                importTableStyleElement( const AttributeList& rAttribs );
+    void                finalizeImport();
+private:
+    typedef ::boost::shared_ptr< ::ScDBDataFormatting > TableFormattingRef;
+
+    TableFormattingRef mxTableFormatting;
+};
+
+typedef ::boost::shared_ptr< TableStyle > TableStyleRef;
+
+// ============================================================================
+
 /** Contains attributes of a cell style, e.g. from the cellStyle element. */
 struct CellStyleModel
 {
@@ -920,7 +938,9 @@ public:
     /** Creates a new empty differential formatting object.
         @param opnDxfId  (out-param) The identifier of the new DXF object. */
     DxfRef              createDxf( sal_Int32* opnDxfId = 0 );
-
+    /** Creates a new TableStyle object for storing table formatting.
+        @param opnTableStyleId (out-param) The identifier of the new TableStyle object. */
+    TableStyleRef       createTableStyle(const OUString& rTableStyleName, sal_Int32* opnTableStyleId = 0 );
     /** Appends a new color to the color palette. */
     void                importPaletteColor( const AttributeList& rAttribs );
     /** Inserts a new number format code. */
@@ -995,6 +1015,7 @@ private:
     typedef RefVector< Fill >                           FillVector;
     typedef RefVector< Xf >                             XfVector;
     typedef RefVector< Dxf >                            DxfVector;
+    typedef RefVector< TableStyle >                     TableStyleVector;
     typedef ::std::map< sal_Int32, OUString >    DxfStyleMap;
 
     ColorPalette        maPalette;          /// Color palette.
@@ -1006,6 +1027,7 @@ private:
     XfVector            maStyleXfs;         /// List of cell styles.
     CellStyleBuffer     maCellStyles;       /// All built-in and user defined cell styles.
     DxfVector           maDxfs;             /// List of differential cell styles.
+    TableStyleVector    maTableStyles;        /// List of Table styles for tables.
     mutable DxfStyleMap maDxfStyles;        /// Maps DXF identifiers to Calc style sheet names.
 };
 

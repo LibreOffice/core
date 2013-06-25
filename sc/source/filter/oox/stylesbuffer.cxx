@@ -2630,6 +2630,41 @@ void Dxf::writeToPropertySet( PropertySet& rPropSet ) const
 
 // ============================================================================
 
+TableStyle::TableStyle( const WorkbookHelper& rHelper, const OUString& rTableStyleName ) :
+    WorkbookHelper( rHelper )
+{
+    mxTableFormatting.reset( new ::ScDBDataFormatting() );
+    mxTableFormatting->SetTableStyleName( rTableStyleName );
+}
+
+void TableStyle::importTableStyleElement( const AttributeList& rAttribs )
+{
+    //Get the table Style element type.
+    OUString aStyleElementType = rAttribs.getXString( XML_type, OUString() );
+    //Extract the Dxf Id and create such a style
+    sal_Int32 aDxfId = static_cast< sal_Int32 >( rAttribs.getInteger( XML_dxfId, -1 ) );
+    SAL_WARN_IF( (aDxfId == -1) ,"sc", "TableStyle::importTableStyleElement - DxfId not defined for table style element" );
+    //Should I stop on finding this missing feild or keep going?
+    OUString aDxfStyleName = getStyles().createDxfStyle( aDxfId );
+    if( aStyleElementType.equals("firstColumnStripe") )
+        mxTableFormatting->SetFirstColStripeStyle( aDxfStyleName );
+    else if( aStyleElementType.equals("secondColumnStripe") )
+        mxTableFormatting->SetSecondColStripeStyle( aDxfStyleName );
+    else if( aStyleElementType.equals("firstRowStripe") )
+        mxTableFormatting->SetFirstRowStripeStyle( aDxfStyleName );
+    else if( aStyleElementType.equals("secondRowStripe") )
+        mxTableFormatting->SetSecondRowStripeStyle( aDxfStyleName );
+    //Though the Dxf styles are being imported, the bsckground color etc
+    //is not showing up.
+}
+
+void TableStyle::finalizeImport()
+{
+}
+
+
+// ============================================================================
+
 namespace {
 
 const sal_Char* const spcLegacyStyleNamePrefix = "Excel_BuiltIn_";
@@ -3086,6 +3121,14 @@ DxfRef StylesBuffer::createDxf( sal_Int32* opnDxfId )
     return xDxf;
 }
 
+TableStyleRef StylesBuffer::createTableStyle( const OUString& rTableStyleName, sal_Int32* opnTableStyleId ) // should I be using sal_Int32 here??
+{
+    if( opnTableStyleId ) *opnTableStyleId = static_cast< sal_Int32 >( maTableStyles.size() );
+    TableStyleRef xTableStyle( new TableStyle( *this, rTableStyleName ) );
+    maTableStyles.push_back( xTableStyle );
+    return xTableStyle;
+}
+
 void StylesBuffer::importPaletteColor( const AttributeList& rAttribs )
 {
     maPalette.importPaletteColor( rAttribs );
@@ -3136,6 +3179,8 @@ void StylesBuffer::finalizeImport()
     maCellStyles.finalizeImport();
     // differential formatting (for conditional formatting)
     maDxfs.forEachMem( &Dxf::finalizeImport );
+    // Table Styles
+    maTableStyles.forEachMem( &TableStyle::finalizeImport );
 }
 
 sal_Int32 StylesBuffer::getPaletteColor( sal_Int32 nPaletteIdx ) const

@@ -124,6 +124,21 @@ private:
 
 // ============================================================================
 
+class TableStyleContext : public WorkbookContextBase
+{
+public:
+    template< typename ParentType >
+    inline explicit     TableStyleContext( ParentType& rParent, const TableStyleRef& rxTableStyle ) :
+                        WorkbookContextBase( rParent ), mxTableStyle( rxTableStyle ) {}
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+
+private:
+    TableStyleRef       mxTableStyle;
+};
+
+// ============================================================================
+
 class StylesFragment : public WorkbookFragmentBase
 {
 public:

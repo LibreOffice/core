@@ -174,6 +174,23 @@ ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const Attribu
 
 // ============================================================================
 
+ContextHandlerRef TableStyleContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    if( mxTableStyle.get() ) switch( getCurrentElement() )
+    {
+        case XLS_TOKEN( tableStyle ):
+            switch( nElement )
+            {
+                case XLS_TOKEN( tableStyleElement ):
+                    mxTableStyle->importTableStyleElement( rAttribs );
+                    break;
+            }
+    }
+    return 0;
+}
+
+// ============================================================================
+
 StylesFragment::StylesFragment( const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
     WorkbookFragmentBase( rHelper, rFragmentPath )
 {
@@ -198,7 +215,8 @@ ContextHandlerRef StylesFragment::onCreateContext( sal_Int32 nElement, const Att
                 case XLS_TOKEN( cellXfs ):
                 case XLS_TOKEN( cellStyleXfs ):
                 case XLS_TOKEN( dxfs ):
-                case XLS_TOKEN( cellStyles ):   return this;
+                case XLS_TOKEN( cellStyles ):
+                case XLS_TOKEN( tableStyles ):  return this;
             }
         break;
 
@@ -228,6 +246,10 @@ ContextHandlerRef StylesFragment::onCreateContext( sal_Int32 nElement, const Att
         break;
         case XLS_TOKEN( cellStyles ):
             if( nElement == XLS_TOKEN( cellStyle ) ) getStyles().importCellStyle( rAttribs );
+        break;
+        case XLS_TOKEN( tableStyles ):
+            OUString aTableStyleName = rAttribs.getXString( XML_name, OUString() );
+            if( nElement == XLS_TOKEN( tableStyle ) ) return new TableStyleContext( *this, getStyles().createTableStyle( aTableStyleName ) );
         break;
     }
     return 0;
