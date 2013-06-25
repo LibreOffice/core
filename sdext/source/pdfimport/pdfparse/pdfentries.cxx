@@ -737,14 +737,14 @@ static void unzipToBuffer( const char* pBegin, unsigned int nLen,
     aZStr.zalloc        = ( alloc_func )0;
     aZStr.zfree         = ( free_func )0;
     aZStr.opaque        = ( voidpf )0;
-    inflateInit(&aZStr);
+
+    int err = inflateInit(&aZStr);
 
     const unsigned int buf_increment_size = 16384;
 
     *pOutBuf = (sal_uInt8*)rtl_reallocateMemory( *pOutBuf, buf_increment_size );
     aZStr.next_out      = (Bytef*)*pOutBuf;
     aZStr.avail_out     = buf_increment_size;
-    int err = Z_OK;
     *pOutLen = buf_increment_size;
     while( err != Z_STREAM_END && err >= Z_OK && aZStr.avail_in )
     {
