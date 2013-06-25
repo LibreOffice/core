@@ -46,9 +46,9 @@ class RegularTextRunContext : public ::oox::core::ContextHandler2
 public:
     RegularTextRunContext( ::oox::core::ContextHandler2Helper& rParent, TextRunPtr pRunPtr );
 
-    virtual void SAL_CALL onEndElement() SAL_OVERRIDE;
+    virtual void onEndElement() SAL_OVERRIDE;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void SAL_CALL onCharacters( const OUString& aChars ) SAL_OVERRIDE;
+    virtual void onCharacters( const OUString& aChars ) SAL_OVERRIDE;
 
 protected:
     TextRunPtr          mpRunPtr;
