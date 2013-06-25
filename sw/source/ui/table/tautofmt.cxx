@@ -36,6 +36,9 @@
 #include "tblafmt.hxx"
 #include "tautofmt.hxx"
 #include "shellres.hxx"
+#include "doc.hxx"
+#include "SwStyleNameMapper.hxx"
+#include "poolfmt.hxx"
 
 using namespace com::sun::star;
 
@@ -56,7 +59,7 @@ protected:
     virtual void Paint( const Rectangle& rRect );
 
 private:
-    SwTableAutoFmt          aCurData;
+    SwTableAutoFmt*         pCurData;
     VirtualDevice           aVD;
     SvtScriptedTextHelper   aScriptedText;
     svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
@@ -166,7 +169,7 @@ SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
 
     m_pWndPreview->DetectRTL(pWrtShell);
 
-    pTableTbl = new SwTableAutoFmtTbl;
+    pTableTbl = new SwTableAutoFmtTbl(pWrtShell->GetDoc());
     pTableTbl->Load();
 
     Init(pSelFmt);
@@ -307,8 +310,12 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
                 if( n >= pTableTbl->size() )
                 {
                     // Format with the name does not already exist, so take up.
+                    SwDoc* pDoc = pShell->GetDoc();
+                    SwTableFmt* pStyle = pDoc->FindTblFmtByName( aFormatName );
+                    if ( !pStyle )
+                        pStyle = pDoc->MakeTblFrmFmt( aFormatName, NULL);
                     SwTableAutoFmt* pNewData = new
-                                        SwTableAutoFmt( aFormatName );
+                                        SwTableAutoFmt( aFormatName, pStyle );
                     pShell->GetTableAutoFmt( *pNewData );
 
                     // Insert sorted!!
@@ -467,7 +474,14 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFmtHdl)
     {
         nIndex = 255;
 
-        SwTableAutoFmt aTmp( ViewShell::GetShellRes()->aStrNone );
+        String sNm;
+        // FIXME Yuk! we are creating the table styles ATM, but in the targetted
+        // ideal, the table styles are created with the document
+        SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm );
+        SwTableFmt* pStyle = pShell->GetDoc()->FindTblFmtByName(sNm);
+        if ( !pStyle )
+            pStyle = pShell->GetDoc()->MakeTblFrmFmt(sNm, NULL);
+        SwTableAutoFmt aTmp( sNm, pStyle );
         aTmp.SetFont( sal_False );
         aTmp.SetJustify( sal_False );
         aTmp.SetFrame( sal_False );
@@ -499,7 +513,7 @@ IMPL_LINK_NOARG_INLINE_END(SwAutoFormatDlg, OkHdl)
 
 AutoFmtPreview::AutoFmtPreview(Window* pParent) :
         Window          ( pParent ),
-        aCurData        ( aEmptyStr ),
+        pCurData        ( NULL ),
         aVD             ( *this ),
         aScriptedText   ( aVD ),
         bFitWidth       ( sal_False ),
@@ -531,7 +545,7 @@ void AutoFmtPreview::Resize()
     nDataColWidth1 = (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 3;
     nDataColWidth2 = (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 4;
     nRowHeight = (aPrvSize.Height() - 4) / 5;
-    NotifyChange(aCurData);
+    NotifyChange(*pCurData);
 }
 
 void AutoFmtPreview::DetectRTL(SwWrtShell* pWrtShell)
@@ -569,7 +583,7 @@ rCTLFont.MethodName( Value );
 
 void AutoFmtPreview::MakeFonts( sal_uInt8 nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont )
 {
-    const SwBoxAutoFmt& rBoxFmt = aCurData.GetBoxFmt( nIndex );
+    const SwBoxAutoFmt& rBoxFmt = pCurData->GetBoxFmt( nIndex );
 
     rFont = rCJKFont = rCTLFont = GetFont();
     Size aFontSize( rFont.GetSize().Width(), 10 );
@@ -603,7 +617,7 @@ sal_uInt8 AutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
 
 const SvxBoxItem& AutoFmtPreview::GetBoxItem( size_t nCol, size_t nRow ) const
 {
-    return aCurData.GetBoxFmt( GetFormatIndex( nCol, nRow ) ).GetBox();
+    return pCurData->GetBoxFmt( GetFormatIndex( nCol, nRow ) ).GetBox();
 }
 
 void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
@@ -649,10 +663,10 @@ void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
         case 23:    nVal = 39; nNum = 13;   goto MAKENUMSTR;
         case 24:    nVal = 108; nNum = 15;  goto MAKENUMSTR;
 MAKENUMSTR:
-            if( aCurData.IsValueFormat() )
+            if( pCurData->IsValueFormat() )
             {
                 String sFmt; LanguageType eLng, eSys;
-                aCurData.GetBoxFmt( (sal_uInt8)nNum ).GetValueFormat( sFmt, eLng, eSys );
+                pCurData->GetBoxFmt( (sal_uInt8)nNum ).GetValueFormat( sFmt, eLng, eSys );
 
                 short nType;
                 bool bNew;
@@ -678,7 +692,7 @@ MAKENUMSTR:
 
         Size theMaxStrSize( cellRect.GetWidth() - FRAME_OFFSET,
                             cellRect.GetHeight() - FRAME_OFFSET );
-        if( aCurData.IsFont() )
+        if( pCurData->IsFont() )
         {
             Font aFont, aCJKFont, aCTLFont;
             MakeFonts( nFmtIndex, aFont, aCJKFont, aCTLFont );
@@ -690,7 +704,7 @@ MAKENUMSTR:
         aScriptedText.SetText( cellString, m_xBreak );
         aStrSize = aScriptedText.GetTextSize();
 
-        if( aCurData.IsFont() &&
+        if( pCurData->IsFont() &&
             theMaxStrSize.Height() < aStrSize.Height() )
         {
                 // If the string in this font does not
@@ -718,11 +732,11 @@ MAKENUMSTR:
         // horizontal
         if( mbRTL )
             aPos.X() += nRightX;
-        else if (aCurData.IsJustify())
+        else if (pCurData->IsJustify())
         {
             sal_uInt16 nHorPos = (sal_uInt16)
                     ((cellRect.GetWidth()-aStrSize.Width())/2);
-            const SvxAdjustItem& rAdj = aCurData.GetBoxFmt(nFmtIndex).GetAdjust();
+            const SvxAdjustItem& rAdj = pCurData->GetBoxFmt(nFmtIndex).GetAdjust();
             switch ( rAdj.GetAdjust() )
             {
                 case SVX_ADJUST_LEFT:
@@ -770,7 +784,7 @@ void AutoFmtPreview::DrawBackground()
     {
         for( size_t nCol = 0; nCol < 5; ++nCol )
         {
-            SvxBrushItem aBrushItem( aCurData.GetBoxFmt( GetFormatIndex( nCol, nRow ) ).GetBackground() );
+            SvxBrushItem aBrushItem( pCurData->GetBoxFmt( GetFormatIndex( nCol, nRow ) ).GetBackground() );
 
             aVD.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
             aVD.SetLineColor();
@@ -784,14 +798,14 @@ void AutoFmtPreview::DrawBackground()
 void AutoFmtPreview::PaintCells()
 {
     // 1) background
-    if ( aCurData.IsBackground() )
+    if ( pCurData->IsBackground() )
         DrawBackground();
 
     // 2) values
     DrawStrings();
 
     // 3) border
-    if ( aCurData.IsFrame() )
+    if ( pCurData->IsFrame() )
         maArray.DrawArray( aVD );
 }
 
@@ -852,8 +866,8 @@ void AutoFmtPreview::CalcLineMap()
 
 void AutoFmtPreview::NotifyChange( const SwTableAutoFmt& rNewData )
 {
-    aCurData  = rNewData;
-    bFitWidth = aCurData.IsJustify();//sal_True;  //???
+    pCurData  = const_cast< SwTableAutoFmt* >( &rNewData );
+    bFitWidth = pCurData->IsJustify();//sal_True;  //???
     CalcCellArray( bFitWidth );
     CalcLineMap();
     DoPaint( Rectangle( Point(0,0), GetSizePixel() ) );

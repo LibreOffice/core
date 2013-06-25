@@ -233,6 +233,7 @@ class SW_DLLPUBLIC SwTableAutoFmt
     friend void _FinitCore();       // To destroy dflt. pointer.
     static SwBoxAutoFmt* pDfltBoxAutoFmt;
 
+    SwTableFmt* m_pTableStyle;
     String aName;
     sal_uInt16 nStrResId;
 
@@ -259,7 +260,7 @@ class SW_DLLPUBLIC SwTableAutoFmt
     SvxShadowItem m_aShadow;
 
 public:
-    SwTableAutoFmt( const String& rName );
+    SwTableAutoFmt( const String& rName, SwTableFmt* pTableStyle );
     SwTableAutoFmt( const SwTableAutoFmt& rNew );
     ~SwTableAutoFmt();
 
@@ -293,7 +294,7 @@ public:
     void SetValueFormat( const sal_Bool bNew )  { bInclValueFormat = bNew; }
     void SetWidthHeight( const sal_Bool bNew )  { bInclWidthHeight = bNew; }
 
-    sal_Bool Load( SvStream& rStream, const SwAfVersions& );
+    static SwTableAutoFmt* Load( SvStream& rStream, const SwAfVersions&, SwDoc* pDoc );
     sal_Bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
 };
 
@@ -301,12 +302,13 @@ class SW_DLLPUBLIC SwTableAutoFmtTbl
 {
     struct Impl;
     ::boost::scoped_ptr<Impl> m_pImpl;
+    SwDoc* m_pDoc;
 
     SW_DLLPRIVATE sal_Bool Load( SvStream& rStream );
     SW_DLLPRIVATE sal_Bool Save( SvStream& rStream ) const;
 
 public:
-    explicit SwTableAutoFmtTbl();
+    explicit SwTableAutoFmtTbl(SwDoc* pDoc);
     ~SwTableAutoFmtTbl();
 
     size_t size() const;

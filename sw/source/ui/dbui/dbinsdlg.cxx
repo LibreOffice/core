@@ -1804,7 +1804,8 @@ void SwInsertDBColAutoPilot::Load()
             if( sTmp.Len() )
             {
                 // then load the AutoFmt file and look for Autoformat first
-                SwTableAutoFmtTbl aAutoFmtTbl;
+                SwDoc* pDoc = pView->GetWrtShell().GetDoc();
+                SwTableAutoFmtTbl aAutoFmtTbl(pDoc);
                 aAutoFmtTbl.Load();
                 for( sal_uInt16 nAutoFmt = aAutoFmtTbl.size(); nAutoFmt; )
                     if( sTmp == aAutoFmtTbl[ --nAutoFmt ].GetName() )

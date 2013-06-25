@@ -781,7 +781,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 {
                     String sAutoFmt = static_cast< const SfxStringItem* >(pItem)->GetValue();
 
-                    pAutoFmtTbl = new SwTableAutoFmtTbl;
+                    pAutoFmtTbl = new SwTableAutoFmtTbl(GetShell().GetDoc());
                     pAutoFmtTbl->Load();
 
                     for( sal_uInt16 i = 0, nCount = pAutoFmtTbl->size(); i < nCount; i++ )
@@ -2558,7 +2558,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                     aAutoName = pAuto->GetValue();
                     if ( aAutoName.Len() )
                     {
-                        SwTableAutoFmtTbl aTableTbl;
+                        SwTableAutoFmtTbl aTableTbl(GetShell().GetDoc());
                         aTableTbl.Load();
                         for ( sal_uInt16 n=0; n<aTableTbl.size(); n++ )
                         {

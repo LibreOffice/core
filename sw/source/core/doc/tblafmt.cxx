@@ -590,8 +590,9 @@ sal_Bool SwBoxAutoFmt::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion 
 
 
 
-SwTableAutoFmt::SwTableAutoFmt( const String& rName )
-    : aName( rName )
+SwTableAutoFmt::SwTableAutoFmt( const String& rName, SwTableFmt* pTableStyle )
+    : m_pTableStyle( pTableStyle )
+    , aName( rName )
     , nStrResId( USHRT_MAX )
     , m_aBreak( SVX_BREAK_NONE, RES_BREAK )
     , m_aKeepWithNextPara( sal_False, RES_KEEP )
@@ -639,6 +640,7 @@ SwTableAutoFmt& SwTableAutoFmt::operator=( const SwTableAutoFmt& rNew )
             aBoxAutoFmt[ n ] = 0;
     }
 
+    m_pTableStyle = rNew.m_pTableStyle;
     aName = rNew.aName;
     nStrResId = rNew.nStrResId;
     bInclFont = rNew.bInclFont;
@@ -913,8 +915,10 @@ void SwTableAutoFmt::StoreTableProperties(const SwTable &table)
     m_aShadow = static_cast<const SvxShadowItem&>(rSet.Get(RES_SHADOW));
 }
 
-sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions )
+SwTableAutoFmt* SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc )
 {
+    SwTableAutoFmt* pRet = NULL;
+
     sal_uInt16  nVal = 0;
     rStream >> nVal;
     sal_Bool bRet = 0 == rStream.GetError();
@@ -925,7 +929,8 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
         sal_Bool b;
         // --- from 680/dr25 on: store strings as UTF-8
         CharSet eCharSet = (nVal >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
-        aName = rStream.ReadUniOrByteString( eCharSet );
+        OUString aName = rStream.ReadUniOrByteString( eCharSet );
+        sal_uInt16 nStrResId  = USHRT_MAX;
         if( AUTOFORMAT_DATA_ID_552 <= nVal )
         {
             rStream >> nStrResId;
@@ -938,24 +943,34 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
             else
                 nStrResId = USHRT_MAX;
         }
-        rStream >> b; bInclFont = b;
-        rStream >> b; bInclJustify = b;
-        rStream >> b; bInclFrame = b;
-        rStream >> b; bInclBackground = b;
-        rStream >> b; bInclValueFormat = b;
-        rStream >> b; bInclWidthHeight = b;
+
+        // FIXME Yuk! we are creating the table styles ATM, but in the targetted
+        // ideal, the table styles are created with the document
+        SwTableFmt* pStyle = pDoc->FindTblFmtByName(aName);
+        if ( !pStyle )
+            pStyle = pDoc->MakeTblFrmFmt(aName, NULL);
+        pRet = new SwTableAutoFmt( aName, pStyle );
+
+        pRet->nStrResId = nStrResId;
+
+        rStream >> b; pRet->bInclFont = b;
+        rStream >> b; pRet->bInclJustify = b;
+        rStream >> b; pRet->bInclFrame = b;
+        rStream >> b; pRet->bInclBackground = b;
+        rStream >> b; pRet->bInclValueFormat = b;
+        rStream >> b; pRet->bInclWidthHeight = b;
 
         if (nVal >= AUTOFORMAT_DATA_ID_31005 && WriterSpecificBlockExists(rStream))
         {
             SfxPoolItem* pNew = 0;
 
-            READ(m_aBreak, SvxFmtBreakItem, AUTOFORMAT_FILE_VERSION);
-            READ(m_aPageDesc, SwFmtPageDesc, AUTOFORMAT_FILE_VERSION);
-            READ(m_aKeepWithNextPara, SvxFmtKeepItem, AUTOFORMAT_FILE_VERSION);
+            READ(pRet->m_aBreak, SvxFmtBreakItem, AUTOFORMAT_FILE_VERSION);
+            READ(pRet->m_aPageDesc, SwFmtPageDesc, AUTOFORMAT_FILE_VERSION);
+            READ(pRet->m_aKeepWithNextPara, SvxFmtKeepItem, AUTOFORMAT_FILE_VERSION);
 
-            rStream >> m_aRepeatHeading >> m_bLayoutSplit >> m_bRowSplit >> m_bCollapsingBorders;
+            rStream >> pRet->m_aRepeatHeading >> pRet->m_bLayoutSplit >> pRet->m_bRowSplit >> pRet->m_bCollapsingBorders;
 
-            READ(m_aShadow, SvxShadowItem, AUTOFORMAT_FILE_VERSION);
+            READ(pRet->m_aShadow, SvxShadowItem, AUTOFORMAT_FILE_VERSION);
         }
 
         bRet = 0 == rStream.GetError();
@@ -965,7 +980,7 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
             SwBoxAutoFmt* pFmt = new SwBoxAutoFmt;
             bRet = pFmt->Load( rStream, rVersions, nVal );
             if( bRet )
-                aBoxAutoFmt[ i ] = pFmt;
+                pRet->aBoxAutoFmt[ i ] = pFmt;
             else
             {
                 delete pFmt;
@@ -973,7 +988,12 @@ sal_Bool SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions 
             }
         }
     }
-    return bRet;
+    if ( !bRet )
+    {
+        delete pRet;
+        pRet = NULL;
+    }
+    return pRet;
 }
 
 sal_Bool SwTableAutoFmt::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
@@ -1060,12 +1080,18 @@ SwTableAutoFmtTbl::~SwTableAutoFmtTbl()
 {
 }
 
-SwTableAutoFmtTbl::SwTableAutoFmtTbl()
+SwTableAutoFmtTbl::SwTableAutoFmtTbl(SwDoc* pDoc)
     : m_pImpl(new Impl)
+    , m_pDoc( pDoc)
 {
     String sNm;
-    SwTableAutoFmt* pNew = new SwTableAutoFmt(
-                            SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm ) );
+    // FIXME Yuk! we are creating the table styles ATM, but in the targetted
+    // ideal, the table styles are created with the document
+    SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm );
+    SwTableFmt* pStyle = pDoc->FindTblFmtByName(sNm);
+    if ( !pStyle )
+        pStyle = pDoc->MakeTblFrmFmt(sNm, NULL);
+    SwTableAutoFmt* pNew = new SwTableAutoFmt( sNm, pStyle );
 
     SwBoxAutoFmt aNew;
 
@@ -1191,15 +1217,14 @@ sal_Bool SwTableAutoFmtTbl::Load( SvStream& rStream )
 
                 for( sal_uInt16 i = 0; i < nAnz; ++i )
                 {
-                    pNew = new SwTableAutoFmt( aEmptyStr );
-                    bRet = pNew->Load( rStream, aVersions );
-                    if( bRet )
+                    pNew = SwTableAutoFmt::Load( rStream, aVersions, m_pDoc );
+                    if( pNew )
                     {
                         m_pImpl->m_AutoFormats.push_back(pNew);
                     }
                     else
                     {
-                        delete pNew;
+                        bRet = false;
                         break;
                     }
                 }
