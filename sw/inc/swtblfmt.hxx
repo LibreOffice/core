@@ -22,6 +22,8 @@
 #include <frmfmt.hxx>
 
 class SwDoc;
+class SwTableLineFmt;
+class SwTableBoxFmt;
 
 class SW_DLLPUBLIC SwTableFmt : public SwFrmFmt
 {
@@ -31,14 +33,64 @@ protected:
     SwTableFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
-    {}
+    {
+        pFstLineFmt = NULL;
+        pLstLineFmt = NULL;
+        pOddLineFmt = NULL;
+        pEvnLineFmt = NULL;
+
+        pFstColFmt = NULL;
+        pLstColFmt = NULL;
+        pOddColFmt = NULL;
+        pEvnColFmt = NULL;
+    }
     SwTableFmt( SwAttrPool& rPool, const String &rFmtNm,
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
-    {}
+    {
+        pFstLineFmt = NULL;
+        pLstLineFmt = NULL;
+        pOddLineFmt = NULL;
+        pEvnLineFmt = NULL;
 
+        pFstColFmt = NULL;
+        pLstColFmt = NULL;
+        pOddColFmt = NULL;
+        pEvnColFmt = NULL;
+    }
+
+    SwTableLineFmt* pFstLineFmt;
+    SwTableLineFmt* pLstLineFmt;
+    SwTableLineFmt* pOddLineFmt;
+    SwTableLineFmt* pEvnLineFmt;
+
+    SwTableLineFmt* pFstColFmt;
+    SwTableLineFmt* pLstColFmt;
+    SwTableLineFmt* pOddColFmt;
+    SwTableLineFmt* pEvnColFmt;
 
 public:
+
+    void SetFirstLineFmt( SwTableLineFmt* pNew ) { pFstLineFmt = pNew; }
+    void SetLastLineFmt( SwTableLineFmt* pNew ) { pLstLineFmt = pNew; }
+    void SetOddLineFmt( SwTableLineFmt* pNew ) { pOddLineFmt = pNew; }
+    void SetEvenLineFmt( SwTableLineFmt* pNew ) { pEvnLineFmt = pNew; }
+
+    void SetFirstColFmt( SwTableLineFmt* pNew ) { pFstColFmt = pNew; }
+    void SetLastColFmt( SwTableLineFmt* pNew ) { pLstColFmt = pNew; }
+    void SetOddColFmt( SwTableLineFmt* pNew ) { pOddColFmt = pNew; }
+    void SetEvenColFmt( SwTableLineFmt* pNew ) { pEvnColFmt = pNew; }
+
+    SwTableLineFmt* GetFirstLineFmt() { return pFstLineFmt; }
+    SwTableLineFmt* GetLastLineFmt() { return pLstLineFmt; }
+    SwTableLineFmt* GetOddLineFmt() { return pOddLineFmt; }
+    SwTableLineFmt* GetEvenLineFmt() { return pEvnLineFmt; }
+
+    SwTableLineFmt* GetFirstColFmt() { return pFstColFmt; }
+    SwTableLineFmt* GetLastColFmt() { return pLstColFmt; }
+    SwTableLineFmt* GetOddColFmt() { return pOddColFmt; }
+    SwTableLineFmt* GetEvenColFmt() { return pEvnColFmt; }
+
     TYPEINFO();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableFmt)
@@ -52,13 +104,40 @@ protected:
     SwTableLineFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
-    {}
+    {
+        pFstBoxFmt = NULL;
+        pLstBoxFmt = NULL;
+        pOddBoxFmt = NULL;
+        pEvnBoxFmt = NULL;
+    }
     SwTableLineFmt( SwAttrPool& rPool, const String &rFmtNm,
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
-    {}
+    {
+        pFstBoxFmt = NULL;
+        pLstBoxFmt = NULL;
+        pOddBoxFmt = NULL;
+        pEvnBoxFmt = NULL;
+    }
+
+    // Odd and Even Box formats will be used to handle alternating columns
+    SwTableBoxFmt* pFstBoxFmt;
+    SwTableBoxFmt* pLstBoxFmt;
+    SwTableBoxFmt* pOddBoxFmt;
+    SwTableBoxFmt* pEvnBoxFmt;
 
 public:
+
+    void SetFirstBoxFmt( SwTableBoxFmt* pNew ) { pFstBoxFmt = pNew; }
+    void SetLastBoxFmt( SwTableBoxFmt* pNew ) { pLstBoxFmt = pNew; }
+    void SetOddBoxFmt( SwTableBoxFmt* pNew ) { pOddBoxFmt = pNew; }
+    void SetEvenBoxFmt( SwTableBoxFmt* pNew ) { pEvnBoxFmt = pNew; }
+
+    SwTableBoxFmt* GetFirstBoxFmt() { return pFstBoxFmt; }
+    SwTableBoxFmt* GetLastBoxFmt() { return pLstBoxFmt; }
+    SwTableBoxFmt* GetOddBoxFmt() { return pOddBoxFmt; }
+    SwTableBoxFmt* GetEvenBoxFmt() { return pEvnBoxFmt; }
+
     TYPEINFO();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableLineFmt)
