@@ -570,14 +570,34 @@ sal_Bool SwCrsrShell::MovePage( SwWhichPage fnWhichPage, SwPosPage fnPosPage )
     return bRet;
 }
 
+bool SwCrsrShell::isInHiddenTxtFrm(SwShellCrsr* pShellCrsr)
+{
+    SwCntntNode *pCNode = pShellCrsr->GetCntntNode();
+    SwCntntFrm  *pFrm = pCNode ?
+        pCNode->getLayoutFrm( GetLayout(), &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), sal_False ) : 0;
+    return !pFrm || (pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsHiddenNow());
+}
 
 sal_Bool SwCrsrShell::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
-    SwCursor* pTmpCrsr = getShellCrsr( true );
+    SwShellCrsr* pTmpCrsr = getShellCrsr( true );
     sal_Bool bRet = pTmpCrsr->MovePara( fnWhichPara, fnPosPara );
     if( bRet )
+    {
+        //keep going until we get something visible, i.e. skip
+        //over hidden paragraphs, don't get stuck at the start
+        //which is what SwCrsrShell::UpdateCrsrPos will reset
+        //the position to if we pass it a position in an
+        //invisible hidden paragraph field
+        while (isInHiddenTxtFrm(pTmpCrsr))
+        {
+            if (!pTmpCrsr->MovePara(fnWhichPara, fnPosPara))
+                break;
+        }
+
         UpdateCrsr();
+    }
     return bRet;
 }
 
@@ -1215,10 +1235,8 @@ void SwCrsrShell::UpdateCrsrPos()
     ++mnStartAction;
     SwShellCrsr* pShellCrsr = getShellCrsr( true );
     Size aOldSz( GetDocSize() );
-    SwCntntNode *pCNode = pShellCrsr->GetCntntNode();
-    SwCntntFrm  *pFrm = pCNode ?
-        pCNode->getLayoutFrm( GetLayout(), &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), sal_False ) :0;
-    if( !pFrm || (pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsHiddenNow()) )
+
+    if( isInHiddenTxtFrm(pShellCrsr) )
     {
         SwCrsrMoveState aTmpState( MV_NONE );
         aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
