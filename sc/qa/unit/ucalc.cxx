@@ -404,6 +404,12 @@ void printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCaption)
 template<size_t _Size>
 ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const char* aData[][_Size], size_t nRowCount)
 {
+    ScRange aRange(rPos);
+    aRange.aEnd.SetCol(rPos.Col()+_Size-1);
+    aRange.aEnd.SetRow(rPos.Row()+nRowCount-1);
+
+    clearRange(pDoc, aRange);
+
     for (size_t i = 0; i < _Size; ++i)
     {
         for (size_t j = 0; j < nRowCount; ++j)
@@ -417,9 +423,6 @@ ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const char* aDa
         }
     }
 
-    ScRange aRange(rPos);
-    aRange.aEnd.SetCol(rPos.Col()+_Size-1);
-    aRange.aEnd.SetRow(rPos.Row()+nRowCount-1);
     printRange(pDoc, aRange, "Range data content");
     return aRange;
 }
@@ -1785,48 +1788,97 @@ void Test::testVolatileFunc()
     m_pDoc->DeleteTab(0);
 }
 
+namespace {
+
+struct HoriIterCheck
+{
+    SCCOL nCol;
+    SCROW nRow;
+    const char* pVal;
+};
+
+template<size_t _Size>
+bool checkHorizontalIterator(ScDocument* pDoc, const char* pData[][_Size], size_t nDataCount, const HoriIterCheck* pChecks, size_t nCheckCount)
+{
+    ScAddress aPos(0,0,0);
+    insertRangeData(pDoc, aPos, pData, nDataCount);
+    ScHorizontalCellIterator aIter(pDoc, 0, 0, 0, 1, nDataCount-1);
+
+    SCCOL nCol;
+    SCROW nRow;
+    size_t i = 0;
+    for (ScRefCellValue* pCell = aIter.GetNext(nCol, nRow); pCell; pCell = aIter.GetNext(nCol, nRow), ++i)
+    {
+        if (i >= nCheckCount)
+            CPPUNIT_FAIL("Iterator claims there is more data than there should be.");
+
+        if (pChecks[i].nCol != nCol)
+            return false;
+
+        if (pChecks[i].nRow != nRow)
+            return false;
+
+        if (OUString::createFromAscii(pChecks[i].pVal) != pCell->getString())
+            return false;
+    }
+
+    return true;
+}
+
+}
+
 void Test::testHorizontalIterator()
 {
     m_pDoc->InsertTab(0, "test");
 
-    // Raw data
-    const char* aData[][2] = {
-        { "A", "B" },
-        { "C", "1" },
-        { "D", "2" },
-        { "E", "3" }
-    };
-
-    ScAddress aPos(0,0,0);
-    insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
-    ScHorizontalCellIterator aIter(m_pDoc, 0, 0, 0, 1, SAL_N_ELEMENTS(aData));
-
-    struct {
-        SCCOL nCol;
-        SCROW nRow;
-        const char* pVal;
-    } aChecks[] = {
-        { 0, 0, "A" },
-        { 1, 0, "B" },
-        { 0, 1, "C" },
-        { 1, 1, "1" },
-        { 0, 2, "D" },
-        { 1, 2, "2" },
-        { 0, 3, "E" },
-        { 1, 3, "3" },
-    };
-
-    SCCOL nCol;
-    SCROW nRow;
-    size_t i = 0, n = SAL_N_ELEMENTS(aChecks);
-    for (ScRefCellValue* pCell = aIter.GetNext(nCol, nRow); pCell; pCell = aIter.GetNext(nCol, nRow), ++i)
     {
-        if (i >= n)
-            CPPUNIT_FAIL("Iterator claims there is more data than there should be.");
+        // Raw data
+        const char* aData[][2] = {
+            { "A", "B" },
+            { "C", "1" },
+            { "D", "2" },
+            { "E", "3" }
+        };
 
-        CPPUNIT_ASSERT_EQUAL(aChecks[i].nCol, nCol);
-        CPPUNIT_ASSERT_EQUAL(aChecks[i].nRow, nRow);
-        CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(aChecks[i].pVal), pCell->getString());
+        HoriIterCheck aChecks[] = {
+            { 0, 0, "A" },
+            { 1, 0, "B" },
+            { 0, 1, "C" },
+            { 1, 1, "1" },
+            { 0, 2, "D" },
+            { 1, 2, "2" },
+            { 0, 3, "E" },
+            { 1, 3, "3" },
+        };
+
+        bool bRes = checkHorizontalIterator(
+            m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
+
+        if (!bRes)
+            CPPUNIT_FAIL("Failed on test 1.");
+    }
+
+    {
+        // Raw data
+        const char* aData[][2] = {
+            { "A", "B" },
+            { "C",  0  },
+            { "D", "E" },
+        };
+
+        HoriIterCheck aChecks[] = {
+            { 0, 0, "A" },
+            { 1, 0, "B" },
+            { 0, 1, "C" },
+            { 0, 2, "D" },
+            { 1, 2, "E" },
+        };
+
+        bool bRes = checkHorizontalIterator(
+            m_pDoc, aData, SAL_N_ELEMENTS(aData), aChecks, SAL_N_ELEMENTS(aChecks));
+
+        if (!bRes)
+            CPPUNIT_FAIL("Failed on test 2.");
     }
 
     m_pDoc->DeleteTab(0);

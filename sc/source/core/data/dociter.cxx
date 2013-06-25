@@ -1787,9 +1787,6 @@ void ScHorizontalCellIterator::Advance()
         if (r.maPos == r.maEnd)
             continue;
 
-        if (r.maPos->type == sc::element_type_empty)
-            continue;
-
         size_t nRow = static_cast<size_t>(mnRow);
         if (nRow < r.maPos->position)
             continue;
@@ -1797,6 +1794,9 @@ void ScHorizontalCellIterator::Advance()
         if (r.maPos->position + r.maPos->size <= nRow)
             if (!advanceBlock(nRow, r.maPos, r.maEnd))
                 continue;
+
+        if (r.maPos->type == sc::element_type_empty)
+            continue;
 
         // Found in the current row.
         mnCol = i;
