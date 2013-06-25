@@ -373,7 +373,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the index is invalid
-        @throws ::com::sun::star::lang::InvalidArgumentException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             if the given text type is not valid.
     */
     TextSegment getTextAtIndex([in] long nIndex, [in] short nTextType)
@@ -412,7 +412,7 @@ interface XAccessibleText : ::com::sun::star::uno::XInterface
 
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the index is invalid.
-        @throws ::com::sun::star::lang::InvalidArgumentException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             if the given text type is not valid.
     */
     TextSegment getTextBeforeIndex([in] long nIndex, [in] short nTextType)
