@@ -52,6 +52,7 @@
 #include "editutil.hxx"
 #include "postit.hxx"
 #include "charthelper.hxx"
+#include "interpre.hxx"
 
 using namespace ::com::sun::star;
 #include <stdio.h>
@@ -689,9 +690,11 @@ void ScDocument::ApplyAsianEditSettings( ScEditEngineDefaulter& rEngine )
 
 void ScDocument::RebuildFormulaGroups()
 {
-    static const char *pEnableFormulaGroups = getenv("SC_FORMULAGROUP");
+    bool bEnableFormulaGroups;
 
-    if ( !pEnableFormulaGroups )
+    bEnableFormulaGroups = ScInterpreter::GetGlobalConfig().mbOpenCLEnabled;
+
+    if ( !bEnableFormulaGroups )
         return;
 
     SCTAB nTab;

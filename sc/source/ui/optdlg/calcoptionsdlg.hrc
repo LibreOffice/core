@@ -35,5 +35,8 @@
 #define STR_EMPTY_STRING_AS_ZERO_CAPTION 27
 #define STR_EMPTY_STRING_AS_ZERO_DESC 28
 
+#define STR_OPENCL_ENABLED 28
+#define STR_OPENCL_ENABLED_DESC 29
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

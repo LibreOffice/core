@@ -204,7 +204,8 @@ SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
 #define SCFORMULAOPT_EMPTY_STRING_AS_ZERO 6
 #define SCFORMULAOPT_OOXML_RECALC         7
 #define SCFORMULAOPT_ODF_RECALC           8
-#define SCFORMULAOPT_COUNT                9
+#define SCFORMULAOPT_OPENCL_ENABLED       9
+#define SCFORMULAOPT_COUNT               10
 
 Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 {
@@ -219,6 +220,7 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
         "Syntax/EmptyStringAsZero",      // SCFORMULAOPT_EMPTY_STRING_AS_ZERO
         "Load/OOXMLRecalcMode",          // SCFORMULAOPT_OOXML_RECALC
         "Load/ODFRecalcMode",            // SCFORMULAOPT_ODF_RECALC
+        "Calculation/OpenCL"             // SCFORMULAOPT_OPENCL_ENABLED
     };
     Sequence<OUString> aNames(SCFORMULAOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -390,6 +392,12 @@ ScFormulaCfg::ScFormulaCfg() :
                     SetODFRecalcOptions(eOpt);
                 }
                 break;
+                case SCFORMULAOPT_OPENCL_ENABLED:
+                {
+                    sal_Bool bVal = GetCalcConfig().mbOpenCLEnabled;
+                    pValues[nProp] >>= bVal;
+                    GetCalcConfig().mbOpenCLEnabled = bVal;
+                }
                 default:
                     ;
                 }
@@ -490,6 +498,12 @@ void ScFormulaCfg::Commit()
                 }
 
                 pValues[nProp] <<= nVal;
+            }
+            break;
+            case SCFORMULAOPT_OPENCL_ENABLED:
+            {
+                sal_Bool bVal = GetCalcConfig().mbOpenCLEnabled;
+                pValues[nProp] <<= bVal;
             }
             break;
             default:

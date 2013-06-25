@@ -1318,6 +1318,18 @@
       <info>
         <desc>Contains settings that affect formula handling.</desc>
       </info>
+      <group oor:name="Calculation">
+        <info>
+          <desc>Contains settings for how to calculate formulae.</desc>
+        </info>
+        <prop oor:name="OpenCL" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
+          <info>
+            <desc>Whether to use OpenCL for formula computation, if available.</desc>
+          </info>
+          <value>false</value>
+        </prop>
+      </group>
       <group oor:name="Syntax">
         <info>
           <desc>Contains settings for formula syntax.</desc>

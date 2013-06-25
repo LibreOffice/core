@@ -19,6 +19,12 @@
 
 namespace {
 
+typedef enum {
+    CALC_OPTION_REF_SYNTAX    = 0,
+    CALC_OPTION_EMPTY_AS_ZERO = 1,
+    CALC_OPTION_ENABLE_OPENCL = 2
+} CalcOptionOrder;
+
 class OptionString : public SvLBoxString
 {
     OUString maDesc;
@@ -26,6 +32,8 @@ class OptionString : public SvLBoxString
 public:
     OptionString(const OUString& rDesc, const OUString& rValue) :
         maDesc(rDesc), maValue(rValue) {}
+
+    void SetValue(const OUString &rValue) { maValue = rValue; }
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
 };
@@ -88,6 +96,8 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
     maUseFormulaSyntax(ScResId(STR_USE_FORMULA_SYNTAX).toString()),
     maCaptionEmptyStringAsZero(ScResId(STR_EMPTY_STRING_AS_ZERO_CAPTION).toString()),
     maDescEmptyStringAsZero(ScResId(STR_EMPTY_STRING_AS_ZERO_DESC).toString()),
+    maCaptionOpenCLEnabled(ScResId(STR_OPENCL_ENABLED).toString()),
+    maDescOpenCLEnabled(ScResId(STR_OPENCL_ENABLED_DESC).toString()),
     maConfig(rConfig)
 {
     maLbSettings.SetStyle(maLbSettings.GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
@@ -115,6 +125,36 @@ const ScCalcConfig& ScCalcOptionsDialog::GetConfig() const
     return maConfig;
 }
 
+SvTreeListEntry *ScCalcOptionsDialog::createBoolItem(const OUString &rCaption, bool bValue) const
+{
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
+    pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
+    pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), 0));
+    OptionString* pItem = new OptionString(rCaption, toString(bValue));
+    pEntry->AddItem(pItem);
+    return pEntry;
+}
+
+void ScCalcOptionsDialog::setValueAt(size_t nPos, const OUString &rValue)
+{
+    SvTreeList *pModel = maLbSettings.GetModel();
+    SvTreeListEntry* pEntry = pModel->GetEntry(NULL, nPos);
+    if (!pEntry)
+    {
+        SAL_WARN("sc", "missing entry at " << nPos << " in value view");
+        return;
+    }
+    OptionString* pOpt = dynamic_cast<OptionString *>(pEntry->GetItem(2));
+    if (!pOpt)
+    {
+        SAL_WARN("sc", "missing option string item so can't set " << rValue);
+        return;
+    }
+
+    pOpt->SetValue(rValue);
+    pModel->InvalidateEntry(pEntry);
+}
+
 void ScCalcOptionsDialog::FillOptionsList()
 {
     maLbSettings.SetUpdateMode(false);
@@ -133,16 +173,8 @@ void ScCalcOptionsDialog::FillOptionsList()
         pModel->Insert(pEntry);
     }
 
-    {
-        // Treat empty string as zero.
-        SvTreeListEntry* pEntry = new SvTreeListEntry;
-        pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
-        pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), 0));
-        OptionString* pItem = new OptionString(
-            maCaptionEmptyStringAsZero, toString(maConfig.mbEmptyStringAsZero));
-        pEntry->AddItem(pItem);
-        pModel->Insert(pEntry);
-    }
+    pModel->Insert(createBoolItem(maCaptionEmptyStringAsZero,maConfig.mbEmptyStringAsZero));
+    pModel->Insert(createBoolItem(maCaptionOpenCLEnabled,maConfig.mbOpenCLEnabled));
 
     maLbSettings.SetUpdateMode(true);
 }
@@ -150,9 +182,9 @@ void ScCalcOptionsDialog::FillOptionsList()
 void ScCalcOptionsDialog::SelectionChanged()
 {
     sal_uInt16 nSelectedPos = maLbSettings.GetSelectEntryPos();
-    switch (nSelectedPos)
+    switch ((CalcOptionOrder)nSelectedPos)
     {
-        case 0:
+        case CALC_OPTION_REF_SYNTAX:
         {
             // Formula syntax for INDIRECT function.
             maBtnTrue.Hide();
@@ -182,14 +214,23 @@ void ScCalcOptionsDialog::SelectionChanged()
             maFtAnnotation.SetText(maDescStringRefSyntax);
         }
         break;
-        case 1:
+
+        // booleans
+        case CALC_OPTION_EMPTY_AS_ZERO:
+        case CALC_OPTION_ENABLE_OPENCL:
         {
             // Treat empty string as zero.
             maLbOptionEdit.Hide();
             maBtnTrue.Show();
             maBtnFalse.Show();
 
-            if (maConfig.mbEmptyStringAsZero)
+            bool bValue = false;
+            if ( nSelectedPos == CALC_OPTION_EMPTY_AS_ZERO )
+                bValue = maConfig.mbEmptyStringAsZero;
+            else
+                bValue = maConfig.mbOpenCLEnabled;
+
+            if ( bValue )
             {
                 maBtnTrue.Check(true);
                 maBtnFalse.Check(false);
@@ -210,59 +251,41 @@ void ScCalcOptionsDialog::SelectionChanged()
 void ScCalcOptionsDialog::ListOptionValueChanged()
 {
     sal_uInt16 nSelected = maLbSettings.GetSelectEntryPos();
-    switch (nSelected)
+    switch ((CalcOptionOrder) nSelected)
     {
-        case 0:
+        case CALC_OPTION_REF_SYNTAX:
         {
             // Formula syntax for INDIRECT function.
             sal_uInt16 nPos = maLbOptionEdit.GetSelectEntryPos();
             maConfig.meStringRefAddressSyntax = toAddressConvention(nPos);
 
-            maLbSettings.SetUpdateMode(false);
-
-            SvTreeList* pModel = maLbSettings.GetModel();
-            SvTreeListEntry* pEntry = pModel->GetEntry(NULL, 0);
-            if (!pEntry)
-                return;
-
-            OptionString* pItem = new OptionString(
-                maCaptionStringRefSyntax, toString(maConfig.meStringRefAddressSyntax));
-            pEntry->ReplaceItem(pItem, 2);
-
-            maLbSettings.SetUpdateMode(true);
+            setValueAt(nSelected, toString(maConfig.meStringRefAddressSyntax));
         }
         break;
-        default:
-            ;
+
+        case CALC_OPTION_EMPTY_AS_ZERO:
+        case CALC_OPTION_ENABLE_OPENCL:
+            break;
     }
 }
 
 void ScCalcOptionsDialog::RadioValueChanged()
 {
     sal_uInt16 nSelected = maLbSettings.GetSelectEntryPos();
+    bool bValue = maBtnTrue.IsChecked();
     switch (nSelected)
     {
-        case 1:
-        {
-            // Treat empty string as zero.
-            maConfig.mbEmptyStringAsZero = maBtnTrue.IsChecked();
-            maLbSettings.SetUpdateMode(false);
-
-            SvTreeList* pModel = maLbSettings.GetModel();
-            SvTreeListEntry* pEntry = pModel->GetEntry(NULL, 1);
-            if (!pEntry)
-                return;
-
-            OptionString* pItem = new OptionString(
-                maCaptionEmptyStringAsZero, toString(maConfig.mbEmptyStringAsZero));
-            pEntry->ReplaceItem(pItem, 2);
-
-            maLbSettings.SetUpdateMode(true);
-        }
-        break;
-        default:
-            ;
+        case CALC_OPTION_REF_SYNTAX:
+            return;
+        case CALC_OPTION_EMPTY_AS_ZERO:
+            maConfig.mbEmptyStringAsZero = bValue;
+            break;
+        case CALC_OPTION_ENABLE_OPENCL:
+            maConfig.mbOpenCLEnabled = bValue;
+            break;
     }
+
+    setValueAt(nSelected, toString(bValue));
 }
 
 OUString ScCalcOptionsDialog::toString(formula::FormulaGrammar::AddressConvention eConv) const

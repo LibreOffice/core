@@ -39,6 +39,8 @@ private:
 
     OUString toString(formula::FormulaGrammar::AddressConvention eConv) const;
     OUString toString(bool bVal) const;
+    SvTreeListEntry *createBoolItem(const OUString &rCaption, bool bValue) const;
+    void     setValueAt(size_t nPos, const OUString &rString);
 
 private:
     SvxCheckListBox maLbSettings;
@@ -67,6 +69,9 @@ private:
 
     OUString maCaptionEmptyStringAsZero;
     OUString maDescEmptyStringAsZero;
+
+    OUString maCaptionOpenCLEnabled;
+    OUString maDescOpenCLEnabled;
 
     ScCalcConfig maConfig;
 };

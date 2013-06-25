@@ -14,7 +14,10 @@
 
 ScCalcConfig::ScCalcConfig() :
     meStringRefAddressSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED),
-    mbEmptyStringAsZero(false) {}
+    mbEmptyStringAsZero(false),
+    mbOpenCLEnabled(false)
+{
+}
 
 void ScCalcConfig::reset()
 {
@@ -24,7 +27,8 @@ void ScCalcConfig::reset()
 bool ScCalcConfig::operator== (const ScCalcConfig& r) const
 {
     return meStringRefAddressSyntax == r.meStringRefAddressSyntax &&
-        mbEmptyStringAsZero == r.mbEmptyStringAsZero;
+           mbEmptyStringAsZero == r.mbEmptyStringAsZero &&
+           mbOpenCLEnabled == r.mbOpenCLEnabled;
 }
 
 bool ScCalcConfig::operator!= (const ScCalcConfig& r) const

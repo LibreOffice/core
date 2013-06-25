@@ -24,7 +24,7 @@ ModalDialog RID_SCDLG_FORMULA_CALCOPTIONS
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 10 ) ;
-        Size = MAP_APPFONT ( 218 , 67 ) ;
+        Size = MAP_APPFONT ( 218 , 70 ) ;
         TabStop = TRUE ;
     };
 
@@ -121,6 +121,16 @@ ModalDialog RID_SCDLG_FORMULA_CALCOPTIONS
     String STR_FALSE
     {
         Text [ en-US ] = "False";
+    };
+
+    String STR_OPENCL_ENABLED
+    {
+        Text [ en-US ] = "Enable OpenCL for some formula computation";
+    };
+
+    String STR_OPENCL_ENABLED_DESC
+    {
+        Text [ en-US ] = "This option enables some sorts of simple formula expressions to be executed using OpenCL if it is available on your system.";
     };
 };
 
