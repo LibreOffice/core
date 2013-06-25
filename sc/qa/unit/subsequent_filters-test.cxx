@@ -96,6 +96,7 @@ public:
     void testMatrixXLS();
     void testBorderODS();
     void testBorderXLS();
+    void testBorderXLSX();
     void testBordersOoo33();
     void testBugFixesODS();
     void testBugFixesXLS();
@@ -158,6 +159,7 @@ public:
     CPPUNIT_TEST(testMatrixXLS);
     CPPUNIT_TEST(testBorderODS);
     CPPUNIT_TEST(testBorderXLS);
+    CPPUNIT_TEST(testBorderXLSX);
     CPPUNIT_TEST(testBordersOoo33);
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
@@ -208,7 +210,7 @@ public:
 
 private:
     void testPassword_Impl(const OUString& rFileNameBase);
-
+    void testBorderImpl( sal_uLong nFormatType );
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
@@ -750,9 +752,9 @@ void ScFiltersTest::testBorderODS()
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testBorderXLS()
+void ScFiltersTest::testBorderImpl( sal_uLong nFormatType )
 {
-    ScDocShellRef xDocSh = loadDoc("border.", XLS);
+    ScDocShellRef xDocSh = loadDoc("border.", nFormatType );
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load border.xls", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -779,7 +781,24 @@ void ScFiltersTest::testBorderXLS()
     CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
             table::BorderLineStyle::SOLID);
     CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),30L);
+
+    pDoc->GetBorderLines( 7, 9, 0, &pLeft, &pTop, &pRight, &pBottom );
+    CPPUNIT_ASSERT(pRight);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetBorderLineStyle(),
+            table::BorderLineStyle::FINE_DASHED);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),1L);
 }
+
+void ScFiltersTest::testBorderXLS()
+{
+    testBorderImpl( XLS );
+}
+
+void ScFiltersTest::testBorderXLSX()
+{
+    testBorderImpl( XLSX );
+}
+
 struct Border
 {
     sal_Int16 column;
