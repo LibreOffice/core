@@ -1132,7 +1132,7 @@ bool ScQueryCellIterator::GetThis()
             do
             {
                 if ( ++nCol > mpParam->nCol2 )
-                    return NULL; // Over and out
+                    return false; // Over and out
                 if ( bAdvanceQuery )
                 {
                     AdvanceQueryParamEntryField();
