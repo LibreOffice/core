@@ -734,7 +734,37 @@ void SmXMLExport::ExportLine(const SmNode *pNode, int nLevel)
 
 void SmXMLExport::ExportBinaryHorizontal(const SmNode *pNode, int nLevel)
 {
-    ExportExpression(pNode, nLevel);
+    sal_uLong nGroup = pNode->GetToken().nGroup;
+
+    SvXMLElementExport* pRow = new SvXMLElementExport(*this,
+        XML_NAMESPACE_MATH, XML_MROW, sal_True, sal_True);
+
+    // Unfold the binary tree structure as long as the nodes are SmBinHorNode
+    // with the same nGroup. This will reduce the number of nested <mrow>
+    // elements e.g. we only need three <mrow> levels to export
+    //
+    // "a*b*c*d+e*f*g*h+i*j*k*l = a*b*c*d+e*f*g*h+i*j*k*l =
+    //  a*b*c*d+e*f*g*h+i*j*k*l = a*b*c*d+e*f*g*h+i*j*k*l"
+    //
+    // See https://www.libreoffice.org/bugzilla/show_bug.cgi?id=66081
+    ::std::stack< const SmNode* > s;
+    s.push(pNode);
+    while (!s.empty())
+    {
+        const SmNode *node = s.top();
+        s.pop();
+        if (node->GetType() != NBINHOR || node->GetToken().nGroup != nGroup)
+        {
+            ExportNodes(node, nLevel+1);
+            continue;
+        }
+        const SmBinHorNode* binNode = static_cast<const SmBinHorNode*>(node);
+        s.push(binNode->RightOperand());
+        s.push(binNode->Symbol());
+        s.push(binNode->LeftOperand());
+    }
+
+    delete pRow;
 }
 
 void SmXMLExport::ExportUnaryHorizontal(const SmNode *pNode, int nLevel)
