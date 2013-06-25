@@ -301,8 +301,6 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
     sal_uInt16 nPos, Menu& rMenu, SfxBindings& rBindings )
     : SfxMenuControl( nPos, rBindings ), pMenu(0)
 {
-    String aText = rMenu.GetItemText( nPos );
-
     // Determine the current background color setting for menus
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_nSymbolsStyle         = rSettings.GetSymbolsStyle();
