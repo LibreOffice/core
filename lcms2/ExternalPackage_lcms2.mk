@@ -28,6 +28,5 @@ endif
 else
 $(eval $(call gb_ExternalPackage_add_file,lcms2,lib/liblcms2.so,src/.libs/liblcms2.so))
 $(eval $(call gb_ExternalPackage_add_library_for_install,lcms2,lib/liblcms2.so.2,src/.libs/liblcms2.so.2.0.4))
-$(eval $(call gb_ExternalPackage_add_library_for_install,lcms2,lib/liblcms2.so.2.0.4,src/.libs/liblcms2.so.2.0.4))
 endif
 # vim: set noet sw=4 ts=4:
