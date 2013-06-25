@@ -43,7 +43,7 @@ interface XScriptProvider : ::com::sun::star::uno::XInterface {
         @returns
             an object implementing ::com::sun::star::script::provider::XScript representing the script
 
-        @throws ::com::sun::star::provider::ScriptFrameworkErrorException
+        @throws ::com::sun::star::script::provider::ScriptFrameworkErrorException
             Framework error getting  script for URI.
     */
     XScript getScript( [in] string sScriptURI )  raises ( ::com::sun::star::script::provider::ScriptFrameworkErrorException );

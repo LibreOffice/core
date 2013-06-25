@@ -88,7 +88,7 @@ interface XTextLayout;
     that such caching is a lot more complicated, should the actual
     rendering a method yields depend on internal state (which is the
     case e.g. for the
-    ::com::sun::star::drawing::::com::sun::star::drawing::XGraphics
+    ::com::sun::star::awt::XGraphics
     interface).  Please note, though, that deciding whether to return
     an XCachedPrimitive is completely up to the
     implementation - don't rely on the methods returning something

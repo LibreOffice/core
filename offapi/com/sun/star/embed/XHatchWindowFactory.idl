@@ -47,7 +47,7 @@ published interface XHatchWindowFactory: com::sun::star::uno::XInterface
         @returns
             a new hatch window
 
-        @throws ::com::sun::star::IllegalArgumentException
+        @throws ::com::sun::star::lang::IllegalArgumentException
             one of arguments is illegal
 
      */

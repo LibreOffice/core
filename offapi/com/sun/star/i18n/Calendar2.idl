@@ -29,7 +29,7 @@ module com { module sun { module star { module i18n {
     nominative case nouns in Calendar::Months. If a
     locale does not provide the partitive case in 
     #PartitiveMonths, the names are identical to
-    #GenititiveMonths. </p>
+    #GenitiveMonths. </p>
 
     <p> The sequences are of type
     com::sun::star::i18n::CalendarItem2 instead of

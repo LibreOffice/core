@@ -130,7 +130,7 @@ interface XFilterController
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if _Component is out of the allowed range.
 
-        @see ::com::sun::star::form::component::DataAwareControlModel::BoundField
+        @see ::com::sun::star::form::DataAwareControlModel::BoundField
     */
     ::com::sun::star::awt::XControl
         getFilterComponent( [in] long _Component )
