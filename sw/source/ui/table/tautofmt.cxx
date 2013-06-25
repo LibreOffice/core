@@ -32,13 +32,16 @@
 #include <svtools/accessibilityoptions.hxx>
 #include <svx/framelinkarray.hxx>
 #include "app.hrc"
+#include "doc.hxx"
 #include "swmodule.hxx"
 #include "swtypes.hxx"
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "tblafmt.hxx"
 #include "tautofmt.hxx"
+#include "poolfmt.hxx"
 #include "shellres.hxx"
+#include "SwStyleNameMapper.hxx"
 
 using namespace com::sun::star;
 
@@ -60,7 +63,7 @@ protected:
     virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
 private:
-    SwTableAutoFormat          aCurData;
+    SwTableAutoFormat*      pCurData;
     ScopedVclPtr<VirtualDevice> aVD;
     svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
     bool                    bFitWidth;
@@ -172,7 +175,7 @@ SwAutoFormatDlg::SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pWrtShell,
 
     m_pWndPreview->DetectRTL(pWrtShell);
 
-    pTableTable = new SwTableAutoFormatTable;
+    pTableTable = new SwTableAutoFormatTable(pWrtShell->GetDoc());
     pTableTable->Load();
 
     Init(pSelFormat);
@@ -327,8 +330,12 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, AddHdl, Button*, void)
                 if( n >= pTableTable->size() )
                 {
                     // Format with the name does not already exist, so take up.
-                    std::unique_ptr<SwTableAutoFormat> pNewData(
-                            new SwTableAutoFormat(aFormatName));
+                    SwDoc* pDoc = pShell->GetDoc();
+                    SwTableFormat* pStyle = pDoc->FindTableFormatByName( aFormatName );
+                    if ( !pStyle )
+                        pStyle = pDoc->MakeTableFrameFormat( aFormatName, NULL);
+
+                    std::unique_ptr<SwTableAutoFormat> pNewData(new SwTableAutoFormat(aFormatName, pStyle));
                     pShell->GetTableAutoFormat( *pNewData );
 
                     // Insert sorted!!
@@ -476,7 +483,14 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl)
     {
         nIndex = 255;
 
-        SwTableAutoFormat aTmp( SwViewShell::GetShellRes()->aStrNone );
+        OUString sNm;
+        // FIXME Yuk! we are creating the table styles ATM, but in the targetted
+        // ideal, the table styles are created with the document
+        SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm );
+        SwTableFormat* pStyle = pShell->GetDoc()->FindTableFormatByName(sNm);
+        if ( !pStyle )
+            pStyle = pShell->GetDoc()->MakeTableFrameFormat(sNm, NULL);
+        SwTableAutoFormat aTmp( sNm, pStyle );
         aTmp.SetFont( false );
         aTmp.SetJustify( false );
         aTmp.SetFrame( false );
@@ -504,7 +518,7 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, OkHdl, Button*, void)
 
 AutoFormatPreview::AutoFormatPreview(vcl::Window* pParent, WinBits nStyle) :
         Window          ( pParent, nStyle ),
-        aCurData        ( OUString() ),
+        pCurData        ( NULL ),
         aVD             ( VclPtr<VirtualDevice>::Create(*this) ),
         bFitWidth       ( false ),
         mbRTL           ( false ),
@@ -539,7 +553,7 @@ void AutoFormatPreview::Resize()
     nDataColWidth1 = (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 3;
     nDataColWidth2 = (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 4;
     nRowHeight = (aPrvSize.Height() - 4) / 5;
-    NotifyChange(aCurData);
+    NotifyChange(*pCurData);
 }
 
 void AutoFormatPreview::DetectRTL(SwWrtShell* pWrtShell)
@@ -583,7 +597,7 @@ rCTLFont.MethodName( Value );
 
 void AutoFormatPreview::MakeFonts( sal_uInt8 nIndex, vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont )
 {
-    const SwBoxAutoFormat& rBoxFormat = aCurData.GetBoxFormat( nIndex );
+    const SwBoxAutoFormat& rBoxFormat = pCurData->GetBoxFormat( nIndex );
 
     rFont = rCJKFont = rCTLFont = GetFont();
     Size aFontSize( rFont.GetSize().Width(), 10 * GetDPIScaleFactor() );
@@ -617,7 +631,7 @@ sal_uInt8 AutoFormatPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
 
 const SvxBoxItem& AutoFormatPreview::GetBoxItem( size_t nCol, size_t nRow ) const
 {
-    return aCurData.GetBoxFormat( GetFormatIndex( nCol, nRow ) ).GetBox();
+    return pCurData->GetBoxFormat( GetFormatIndex( nCol, nRow ) ).GetBox();
 }
 
 void AutoFormatPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCol, size_t nRow)
@@ -693,11 +707,11 @@ void AutoFormatPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nC
         goto MAKENUMSTR;
 
 MAKENUMSTR:
-        if (aCurData.IsValueFormat())
+        if (pCurData->IsValueFormat())
         {
             OUString sFormat;
             LanguageType eLng, eSys;
-            aCurData.GetBoxFormat(sal_uInt8(nNum)).GetValueFormat(sFormat, eLng, eSys);
+            pCurData->GetBoxFormat(sal_uInt8(nNum)).GetValueFormat(sFormat, eLng, eSys);
 
             short nType;
             bool bNew;
@@ -724,7 +738,7 @@ MAKENUMSTR:
 
         Size theMaxStrSize(cellRect.GetWidth() - FRAME_OFFSET,
                            cellRect.GetHeight() - FRAME_OFFSET);
-        if (aCurData.IsFont())
+        if (pCurData->IsFont())
         {
             vcl::Font aFont, aCJKFont, aCTLFont;
             MakeFonts(nFormatIndex, aFont, aCJKFont, aCTLFont);
@@ -736,7 +750,7 @@ MAKENUMSTR:
         aScriptedText.SetText(cellString, m_xBreak);
         aStrSize = aScriptedText.GetTextSize();
 
-        if (aCurData.IsFont() &&
+        if (pCurData->IsFont() &&
             theMaxStrSize.Height() < aStrSize.Height())
         {
                 // If the string in this font does not
@@ -762,9 +776,9 @@ MAKENUMSTR:
         // horizontal
         if (mbRTL)
             aPos.X() += nRightX;
-        else if (aCurData.IsJustify())
+        else if (pCurData->IsJustify())
         {
-            const SvxAdjustItem& rAdj = aCurData.GetBoxFormat(nFormatIndex).GetAdjust();
+            const SvxAdjustItem& rAdj = pCurData->GetBoxFormat(nFormatIndex).GetAdjust();
             switch (rAdj.GetAdjust())
             {
                 case SVX_ADJUST_LEFT:
@@ -812,7 +826,7 @@ void AutoFormatPreview::DrawBackground(vcl::RenderContext& rRenderContext)
     {
         for (size_t nCol = 0; nCol < 5; ++nCol)
         {
-            SvxBrushItem aBrushItem(aCurData.GetBoxFormat(GetFormatIndex(nCol, nRow)).GetBackground());
+            SvxBrushItem aBrushItem(pCurData->GetBoxFormat(GetFormatIndex(nCol, nRow)).GetBackground());
 
             rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::FILLCOLOR);
             rRenderContext.SetLineColor();
@@ -826,14 +840,14 @@ void AutoFormatPreview::DrawBackground(vcl::RenderContext& rRenderContext)
 void AutoFormatPreview::PaintCells(vcl::RenderContext& rRenderContext)
 {
     // 1) background
-    if (aCurData.IsBackground())
+    if (pCurData->IsBackground())
         DrawBackground(rRenderContext);
 
     // 2) values
     DrawStrings(rRenderContext);
 
     // 3) border
-    if (aCurData.IsFrame())
+    if (pCurData->IsFrame())
         maArray.DrawArray(rRenderContext);
 }
 
@@ -894,8 +908,8 @@ void AutoFormatPreview::CalcLineMap()
 
 void AutoFormatPreview::NotifyChange( const SwTableAutoFormat& rNewData )
 {
-    aCurData  = rNewData;
-    bFitWidth = aCurData.IsJustify();  // true;  //???
+    pCurData  = const_cast< SwTableAutoFormat* >( &rNewData );
+    bFitWidth = pCurData->IsJustify();  // true;  //???
     CalcCellArray( bFitWidth );
     CalcLineMap();
     Invalidate(Rectangle(Point(0,0), GetSizePixel()));

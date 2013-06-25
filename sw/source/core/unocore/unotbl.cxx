@@ -2427,7 +2427,7 @@ void SwXTextTable::autoFormat(const OUString& sAutoFormatName)
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this));
     SwTable* pTable = lcl_EnsureTableNotComplex(SwTable::FindTable(pFormat), static_cast<cppu::OWeakObject*>(this));
-    SwTableAutoFormatTable aAutoFormatTable;
+    SwTableAutoFormatTable aAutoFormatTable(pFormat->GetDoc());
     aAutoFormatTable.Load();
     for (size_t i = aAutoFormatTable.size(); i;)
         if( sAutoFormatName == aAutoFormatTable[ --i ].GetName() )

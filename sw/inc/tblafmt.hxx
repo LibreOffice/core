@@ -231,6 +231,7 @@ class SW_DLLPUBLIC SwTableAutoFormat
     friend void _FinitCore();       // To destroy default pointer.
     static SwBoxAutoFormat* pDfltBoxAutoFormat;
 
+    SwTableFormat* m_pTableStyle;
     OUString m_aName;
     sal_uInt16 nStrResId;
 
@@ -257,7 +258,7 @@ class SW_DLLPUBLIC SwTableAutoFormat
     SvxShadowItem m_aShadow;
 
 public:
-    SwTableAutoFormat( const OUString& rName );
+    SwTableAutoFormat( const OUString& rName, SwTableFormat* pTableStyle );
     SwTableAutoFormat( const SwTableAutoFormat& rNew );
     ~SwTableAutoFormat();
 
@@ -291,7 +292,7 @@ public:
     void SetValueFormat( const bool bNew )  { bInclValueFormat = bNew; }
     void SetWidthHeight( const bool bNew )  { bInclWidthHeight = bNew; }
 
-    bool Load( SvStream& rStream, const SwAfVersions& );
+    static SwTableAutoFormat* Load( SvStream& rStream, const SwAfVersions&, SwDoc* pDoc );
     bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
 };
 
@@ -299,12 +300,13 @@ class SW_DLLPUBLIC SwTableAutoFormatTable
 {
     struct Impl;
     std::unique_ptr<Impl> m_pImpl;
+    SwDoc* m_pDoc;
 
     SAL_DLLPRIVATE bool Load( SvStream& rStream );
     SAL_DLLPRIVATE bool Save( SvStream& rStream ) const;
 
 public:
-    explicit SwTableAutoFormatTable();
+    explicit SwTableAutoFormatTable(SwDoc* pDoc);
     ~SwTableAutoFormatTable();
 
     size_t size() const;

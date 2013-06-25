@@ -1761,7 +1761,8 @@ void SwInsertDBColAutoPilot::Load()
             if( !sTmp.isEmpty() )
             {
                 // then load the AutoFormat file and look for Autoformat first
-                SwTableAutoFormatTable aAutoFormatTable;
+                SwDoc* pDoc = pView->GetWrtShell().GetDoc();
+                SwTableAutoFormatTable aAutoFormatTable(pDoc);
                 aAutoFormatTable.Load();
                 for( size_t nAutoFormat = aAutoFormatTable.size(); nAutoFormat; )
                     if( sTmp == aAutoFormatTable[ --nAutoFormat ].GetName() )
