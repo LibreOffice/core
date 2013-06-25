@@ -1210,6 +1210,11 @@ namespace osl_FileBase
 
         public:
 
+        searchFileURL()
+            : nError1(FileBase::E_None)
+            , nError2(FileBase::E_None)
+            , nError3(FileBase::E_None)
+            , nError4(FileBase::E_None) {}
         // test code.
         void searchFileURL_001()
         {
@@ -1305,6 +1310,7 @@ namespace osl_FileBase
         ::osl::FileBase::RC nError;
 
         public:
+        getTempDirURL() :nError(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -1355,6 +1361,7 @@ namespace osl_FileBase
         ::rtl::OUString *pUStr_FileURL;
 
         public:
+        createTempFile() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
 
         // initialization
         void setUp()
@@ -1468,6 +1475,7 @@ namespace osl_VolumeInfo
          ::osl::VolumeDevice aVolumeDevice1;
 
         public:
+        ctors() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -1563,6 +1571,7 @@ namespace osl_VolumeInfo
         ::osl::FileBase::RC nError1;
 
         public:
+        isValid() :nError1(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -1641,6 +1650,7 @@ namespace osl_VolumeInfo
         ::osl::FileBase::RC nError1;
 
         public:
+        getRemoteFlag() :nError1(FileBase::E_None) {}
         // test code.
         void getRemoteFlag_001()
         {
@@ -1689,6 +1699,7 @@ namespace osl_VolumeInfo
         ::osl::FileBase::RC nError1;
 
         public:
+        getRemoveableFlag() :nError1(FileBase::E_None) {}
         // test code.
         void getRemoveableFlag_001()
         {
@@ -1729,6 +1740,7 @@ namespace osl_VolumeInfo
         ::osl::FileBase::RC nError1;
 
         public:
+        getCompactDiscFlag() :nError1(FileBase::E_None) {}
         // test code.
         void getCompactDiscFlag_001()
         {
@@ -1769,6 +1781,7 @@ namespace osl_VolumeInfo
         ::osl::FileBase::RC nError1;
 
         public:
+        getFloppyDiskFlag() :nError1(FileBase::E_None) {}
         // test code.
         void getFloppyDiskFlag_001()
         {
@@ -1809,6 +1822,7 @@ namespace osl_VolumeInfo
         ::osl::FileBase::RC nError1;
 
         public:
+        getFixedDiskFlag() :nError1(FileBase::E_None) {}
         // test code.
         void getFixedDiskFlag_001()
         {
@@ -1848,6 +1862,7 @@ namespace osl_VolumeInfo
         ::osl::FileBase::RC nError1;
 
         public:
+        getRAMDiskFlag() :nError1(FileBase::E_None) {}
         // test code.
         void getRAMDiskFlag_001()
         {
@@ -1888,6 +1903,7 @@ namespace osl_VolumeInfo
         ::osl::FileBase::RC nError1;
 
         public:
+        getTotalSpace() :nError1(FileBase::E_None) {}
         // test code.
         void getTotalSpace_001()
         {
@@ -1969,6 +1985,7 @@ namespace osl_VolumeInfo
         ::osl::FileBase::RC nError1;
 
         public:
+        getFreeSpace() :nError1(FileBase::E_None) {}
         // test code.
         void getFreeSpace_001()
         {
@@ -2050,6 +2067,7 @@ namespace osl_VolumeInfo
         ::osl::FileBase::RC nError1;
 
         public:
+        getUsedSpace() :nError1(FileBase::E_None) {}
         // test code.
         void getUsedSpace_001()
         {
@@ -2133,6 +2151,7 @@ namespace osl_VolumeInfo
         ::osl::FileBase::RC nError1;
 
         public:
+        getMaxNameLength() :nError1(FileBase::E_None) {}
         // test code.
         void getMaxNameLength_001()
         {
@@ -2192,6 +2211,7 @@ namespace osl_VolumeInfo
         ::osl::FileBase::RC nError1;
 
         public:
+        getMaxPathLength() :nError1(FileBase::E_None) {}
         // test code.
         void getMaxPathLength_001()
         {
@@ -2246,6 +2266,7 @@ namespace osl_VolumeInfo
         ::osl::FileBase::RC nError1;
 
         public:
+        getFileSystemName() :nError1(FileBase::E_None) {}
         // test code.
         void getFileSystemName_001()
         {
@@ -2306,6 +2327,7 @@ namespace osl_VolumeInfo
         ::osl::FileBase::RC nError1;
 
         public:
+        getDeviceHandle() :nError1(FileBase::E_None) {}
         // test code.
         void getDeviceHandle_001()
         {
@@ -2363,6 +2385,7 @@ namespace osl_FileStatus
         ::osl::DirectoryItem    rItem;
 
         public:
+        ctors() :nError1(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -2639,6 +2662,7 @@ namespace osl_FileStatus
         ::osl::DirectoryItem    m_aLinkItem, m_aSocketItem, m_aSpecialItem;
 
         public:
+        getFileType() :nError1(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -2767,6 +2791,7 @@ namespace osl_FileStatus
         ::osl::DirectoryItem    rItem, rItem_hidden;
 
         public:
+        getAttributes() :nError(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -2896,6 +2921,7 @@ namespace osl_FileStatus
         ::osl::DirectoryItem    rItem;
 
         public:
+        getAccessTime() :nError(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -2951,6 +2977,8 @@ namespace osl_FileStatus
         ::osl::DirectoryItem    rItem;
 
         public:
+        getModifyTime() :nError(FileBase::E_None) {}
+
 
         // test code.
         void getModifyTime_001()
@@ -3005,6 +3033,9 @@ namespace osl_FileStatus
         ::osl::DirectoryItem    rItem;
 
         public:
+
+        getFileSize() :nError(FileBase::E_None) {}
+
         // initialization
         void setUp()
         {
@@ -3068,6 +3099,7 @@ namespace osl_FileStatus
         ::osl::DirectoryItem    rItem;
 
         public:
+        getFileName() :nError(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -3112,6 +3144,8 @@ namespace osl_FileStatus
         ::osl::DirectoryItem    rItem;
 
         public:
+        getFileURL() :nError(FileBase::E_None) {}
+
         // initialization
         void setUp()
         {
@@ -3154,6 +3188,8 @@ namespace osl_FileStatus
         ::osl::DirectoryItem    rItem;
 
         public:
+
+        getLinkTargetURL() :nError(FileBase::E_None) {}
         // test code.
         // initialization
         void setUp()
@@ -3297,6 +3333,10 @@ namespace osl_File
         ::osl::FileBase::RC     nError1, nError2, nError3;
 
         public:
+        open()
+            : nError1(FileBase::E_None)
+            , nError2(FileBase::E_None)
+            , nError3(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -3418,6 +3458,10 @@ namespace osl_File
         ::osl::FileBase::RC     nError1, nError2, nError3;
 
         public:
+        close()
+            : nError1(FileBase::E_None)
+            , nError2(FileBase::E_None)
+            , nError3(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -3480,6 +3524,8 @@ namespace osl_File
         sal_uInt64 nCount_write, nCount_read;
 
         public:
+        setPos() :nError1(FileBase::E_None) {}
+
         // initialization
         void setUp()
         {
@@ -3583,6 +3629,7 @@ namespace osl_File
         sal_uInt64 nCount_write;
 
         public:
+        getPos() :nError1(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -3648,6 +3695,7 @@ namespace osl_File
         sal_uInt64 nCount_write;
 
         public:
+        isEndOfFile() :nError1(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -3742,6 +3790,7 @@ namespace osl_File
         sal_uInt64 nCount_write;
 
         public:
+        setSize() :nError1(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -3841,6 +3890,7 @@ namespace osl_File
         sal_uInt64 nCount_write, nCount_read;
 
         public:
+        read() :nError1(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -3929,6 +3979,7 @@ namespace osl_File
         sal_uInt64 nCount_write, nCount_read;
 
         public:
+        write() :nError1(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -3989,6 +4040,7 @@ namespace osl_File
         ::rtl::ByteSequence      aSequence;
 
         public:
+        readLine() :nError1(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -4100,6 +4152,7 @@ namespace osl_File
         sal_uInt64 nCount_write;
 
         public:
+        copy() :nError1(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -4234,6 +4287,7 @@ namespace osl_File
         sal_uInt64 nCount_write;
 
         public:
+        move() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -4395,6 +4449,7 @@ namespace osl_File
         sal_uInt64 nCount_write;
 
         public:
+        remove() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -4480,6 +4535,7 @@ namespace osl_File
         ::osl::DirectoryItem    rItem, rItem_hidden;
 
         public:
+        setAttributes() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -4575,6 +4631,7 @@ namespace osl_File
         ::osl::DirectoryItem    rItem;
 
         public:
+        setTime() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -4658,6 +4715,7 @@ namespace osl_File
         ::osl::DirectoryItem    rItem;
 
         public:
+        sync() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -4746,6 +4804,7 @@ namespace osl_DirectoryItem
         ::osl::FileBase::RC     nError1;
 
         public:
+        ctors() :nError1(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -4787,6 +4846,7 @@ namespace osl_DirectoryItem
         ::osl::FileBase::RC     nError1;
 
         public:
+        copy_assin_Ctors() :nError1(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -4849,6 +4909,7 @@ namespace osl_DirectoryItem
         ::osl::FileBase::RC     nError1;
 
         public:
+        is() :nError1(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -4897,6 +4958,7 @@ namespace osl_DirectoryItem
         ::osl::FileBase::RC     nError1, nError2;
 
         public:
+        get() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -4963,6 +5025,7 @@ namespace osl_DirectoryItem
         ::osl::FileBase::RC     nError1, nError2;
 
         public:
+        getFileStatus() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -5056,6 +5119,7 @@ namespace osl_Directory
         ::osl::FileBase::RC     nError1, nError2;
 
         public:
+        ctors() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -5120,6 +5184,7 @@ namespace osl_Directory
         ::osl::FileBase::RC     nError1, nError2;
 
         public:
+        open() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -5218,6 +5283,7 @@ namespace osl_Directory
         ::osl::FileBase::RC     nError1, nError2;
 
         public:
+        isOpen() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -5275,6 +5341,7 @@ namespace osl_Directory
         ::osl::FileBase::RC     nError1, nError2;
 
         public:
+        close() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -5332,6 +5399,7 @@ namespace osl_Directory
         ::osl::DirectoryItem    rItem;
 
         public:
+        reset() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -5447,6 +5515,7 @@ namespace osl_Directory
         ::osl::DirectoryItem    rItem;
 
         public:
+        getNextItem() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         // initialization
         void setUp()
         {
@@ -5617,6 +5686,7 @@ namespace osl_Directory
 
         public:
 
+        getVolumeInfo() :nError1(FileBase::E_None) {}
         // test code.
         void checkValidMask(osl::VolumeInfo const& _aVolumeInfo, sal_Int32 _nMask)
             {
@@ -5796,6 +5866,7 @@ namespace osl_Directory
         public:
 
         // test code.
+        create() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         void create_001()
         {
             //create directory in $TEMP/tmpdir
@@ -5873,6 +5944,7 @@ namespace osl_Directory
 
         public:
 
+        remove() :nError1(FileBase::E_None),nError2(FileBase::E_None) {}
         // test code.
         void remove_001()
         {
