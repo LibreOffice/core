@@ -850,9 +850,11 @@ AC_ARG_ENABLE(linkoo,
 AC_ARG_ENABLE(lto,
     AS_HELP_STRING([--enable-lto],
         [Enable link-time optimization. Suitable for product builds.
-         Building takes longer but libraries are optimized for speed.
-         (possible only with gcc-4.5 or later,
-          better to use gcc-4.6 and 'gold' as linker)]))
+         Building takes longer but libraries and executables are optimized for speed.
+         (For GCC, best to use GCC 4.6 or later and 'gold' linker.
+          Also possible for Clang.
+          Experimental work in progress,
+          don't use unless you are working on this.)]))
 
 AC_ARG_ENABLE(crashdump,
     AS_HELP_STRING([--enable-crashdump],
@@ -2384,6 +2386,18 @@ if test "$COMPATH" = "."; then
 fi
 COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`
 
+# Set the ENABLE_LTO variable
+# ===================================================================
+AC_MSG_CHECKING([whether to use link-time optimization])
+if test -n "$enable_lto" -a "$enable_lto" != "no"; then
+    ENABLE_LTO="TRUE"
+    AC_MSG_RESULT([yes])
+else
+    ENABLE_LTO=""
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_LTO)
+
 dnl ===================================================================
 dnl  Test the Solaris compiler version
 dnl ===================================================================
@@ -2598,9 +2612,14 @@ if test $_os = Darwin; then
                 stdlib="-std=c++11 -stdlib=libc++"
                 CPP_LIBRARY="LIBCPP"
             fi
-            CC="`xcrun -find clang` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-            CXX="`xcrun -find clang++` $bitness $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            if test "$ENABLE_LTO" = TRUE; then
+                lto=-flto
+            fi
+            CC="`xcrun -find clang` $bitness $lto -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            CXX="`xcrun -find clang++` $bitness $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             XCRUN=xcrun
+            AR=`xcrun -find ar`
+            RANLIB=`xcrun -find ranlib`
             ;;
         esac
         AC_MSG_RESULT([$CC and $CXX])
@@ -2735,8 +2754,14 @@ if test $_os = iOS; then
 
     AC_MSG_RESULT($sysroot)
 
-    CXX="$xcode_developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch $arch -isysroot $sysroot $versionmin"
-    CC="$xcode_developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -arch $arch -isysroot $sysroot $versionmin"
+    if test "$ENABLE_LTO" = TRUE; then
+        lto=-flto
+    fi
+    CC="`xcrun -find clang` -arch $arch -isysroot $sysroot $lto $versionmin"
+    CXX="`xcrun -find clang++` -arch $arch -isysroot $sysroot $lto $versionmin"
+    XCRUN=xcrun
+    AR=`xcrun -find ar`
+    RANLIB=`xcrun -find ranlib`
 fi
 
 AC_MSG_CHECKING([whether to treat the installation as read-only])
@@ -4332,18 +4357,6 @@ else
     AC_MSG_RESULT([yes])
 fi
 AC_SUBST(DISABLE_LINKOO)
-
-# Set the ENABLE_LTO variable
-# ===================================================================
-AC_MSG_CHECKING([whether to use link-time optimization])
-if test -n "$enable_lto" -a "$enable_lto" != "no"; then
-    ENABLE_LTO="TRUE"
-    AC_MSG_RESULT([yes])
-else
-    ENABLE_LTO=""
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_LTO)
 
 if test "$enable_headless" = "yes"; then
     # be sure to do not mess with uneeded stuff
