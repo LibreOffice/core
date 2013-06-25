@@ -249,11 +249,19 @@ bool ScFormulaResult::IsEmptyDisplayedAsString() const
     return false;
 }
 
-bool ScFormulaResult::IsValue() const
+namespace {
+
+inline bool isValue( formula::StackVar sv )
 {
-    formula::StackVar sv = GetCellResultType();
     return sv == formula::svDouble || sv == formula::svError
         || sv == formula::svEmptyCell || sv == formula::svHybridValueCell;
+}
+
+}
+
+bool ScFormulaResult::IsValue() const
+{
+    return isValue(GetCellResultType());
 }
 
 bool ScFormulaResult::IsMultiline() const
@@ -267,6 +275,39 @@ bool ScFormulaResult::IsMultiline() const
             const_cast<ScFormulaResult*>(this)->meMultiline = MULTILINE_FALSE;
     }
     return meMultiline == MULTILINE_TRUE;
+}
+
+bool ScFormulaResult::GetErrorOrDouble( sal_uInt16& rErr, double& rVal ) const
+{
+    if (mnError)
+    {
+        rErr = mnError;
+        return true;
+    }
+
+    formula::StackVar sv = GetCellResultType();
+    if (sv == formula::svError)
+    {
+        if (GetType() == formula::svMatrixCell)
+        {
+            // don't need to test for mpToken here, GetType() already did it
+            rErr = static_cast<const ScMatrixCellResultToken*>(mpToken)->
+                GetUpperLeftToken()->GetError();
+        }
+        else if (mpToken)
+        {
+            rErr = mpToken->GetError();
+        }
+    }
+
+    if (rErr)
+        return true;
+
+    if (!isValue(sv))
+        return false;
+
+    rVal = GetDouble();
+    return true;
 }
 
 sal_uInt16 ScFormulaResult::GetResultError() const

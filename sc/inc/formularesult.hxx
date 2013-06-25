@@ -132,6 +132,8 @@ public:
         one paragraph */
     bool IsMultiline() const;
 
+    bool GetErrorOrDouble( sal_uInt16& rErr, double& rVal ) const;
+
     /** Get error code if set or GetCellResultType() is formula::svError or svUnknown,
         else 0. */
     sal_uInt16 GetResultError() const;

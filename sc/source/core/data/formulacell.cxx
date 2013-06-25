@@ -1942,15 +1942,7 @@ bool ScFormulaCell::GetErrorOrValue( sal_uInt16& rErr, double& rVal )
     if (rErr)
         return true;
 
-    rErr = aResult.GetResultError();
-    if (rErr)
-        return true;
-
-    if (!aResult.IsValue())
-        return false;
-
-    rVal = aResult.GetDouble();
-    return true;
+    return aResult.GetErrorOrDouble(rErr, rVal);
 }
 
 bool ScFormulaCell::HasOneReference( ScRange& r ) const
