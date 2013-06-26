@@ -1073,18 +1073,13 @@ void TextPropertyPanel::NotifyItemUpdate (
                     else
                         mpToolBoxIncDec->Enable();
                     const sal_Int64 nSize (mpFontSizeBox->GetValue());
-                    switch(nSID)
+                    if(nSID == SID_GROW_FONT_SIZE)
                     {
-                        case SID_GROW_FONT_SIZE:
-                            mpToolBoxIncDec->EnableItem(mpToolBoxIncDec->GetItemId(UNO_GROW), bIsEnabled && nSize<960);
-                            break;
-
-                        case SID_SHRINK_FONT_SIZE:
-                            mpToolBoxIncDec->EnableItem(mpToolBoxIncDec->GetItemId(UNO_SHRINK), bIsEnabled && nSize>60);
-                            break;
-
-                        default:
-                            break;
+                        mpToolBoxIncDec->EnableItem(mpToolBoxIncDec->GetItemId(UNO_GROW), bIsEnabled && nSize<960);
+                    }
+                    else if (nSID == SID_SHRINK_FONT_SIZE)
+                    {
+                        mpToolBoxIncDec->EnableItem(mpToolBoxIncDec->GetItemId(UNO_SHRINK), bIsEnabled && nSize>60);
                     }
                 }
             }
