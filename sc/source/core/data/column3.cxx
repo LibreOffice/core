@@ -327,13 +327,13 @@ sc::CellStoreType::iterator ScColumn::GetPositionToInsert( SCROW nRow )
     return GetPositionToInsert(maCells.begin(), nRow);
 }
 
-namespace {
-
-/**
- * Re-group a shared formula cell that's being overwritten.
- */
-void adjustSharedFormulaCell(const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell)
+void ScColumn::UnshareFormulaCell(
+    const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const
 {
+    if (!rCell.IsShared())
+        return;
+
+    ScFormulaCellGroupRef xNone;
     sc::CellStoreType::iterator it = aPos.first;
 
     // This formula cell is shared. Adjust the shared group.
@@ -352,7 +352,6 @@ void adjustSharedFormulaCell(const sc::CellStoreType::position_type& aPos, ScFor
                 abort();
             }
 #endif
-            ScFormulaCellGroupRef xNone;
             ScFormulaCell& rNext = *sc::formula_block::at(*it->data, aPos.second+1);
             rNext.SetCellGroup(xNone);
         }
@@ -378,7 +377,6 @@ void adjustSharedFormulaCell(const sc::CellStoreType::position_type& aPos, ScFor
                 abort();
             }
 #endif
-            ScFormulaCellGroupRef xNone;
             ScFormulaCell& rPrev = *sc::formula_block::at(*it->data, aPos.second-1);
             rPrev.SetCellGroup(xNone);
         }
@@ -417,8 +415,8 @@ void adjustSharedFormulaCell(const sc::CellStoreType::position_type& aPos, ScFor
             rCell2.SetCellGroup(xGroup2);
         }
     }
-}
 
+    rCell.SetCellGroup(xNone);
 }
 
 sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow )
@@ -434,7 +432,7 @@ sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreTy
             rCell.EndListeningTo(pDocument);
 
         if (rCell.IsShared())
-            adjustSharedFormulaCell(aPos, rCell);
+            UnshareFormulaCell(aPos, rCell);
     }
 
     return itRet;
