@@ -147,8 +147,7 @@ public:
     const sc::CellTextAttrStoreType& GetCellAttrStore() const { return maCellTextAttrs; }
 
     ScRefCellValue GetCellValue( SCROW nRow ) const;
-    ScRefCellValue GetCellValue( sc::CellStoreType::const_iterator& itPos, SCROW nRow ) const;
-    ScRefCellValue GetCellValue( sc::CellStoreType::const_iterator& itPos, size_t nOffset ) const;
+    ScRefCellValue GetCellValue( const sc::CellStoreType::const_iterator& itPos, size_t nOffset ) const;
 
     void        Delete( SCROW nRow );
     void        FreeAll();
@@ -468,6 +467,12 @@ public:
 
     void JoinNewFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const;
 
+    /**
+     * Detouch a formula cell that's about to be deleted, or removed from
+     * document storage (if that ever happens).
+     */
+    void DetouchFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const;
+
     void UnshareFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const;
 
     /**
@@ -497,6 +502,7 @@ private:
     sc::CellStoreType::iterator GetPositionToInsert( SCROW nRow );
     sc::CellStoreType::iterator GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow );
     void ActivateNewFormulaCell( const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell );
+    void ActivateNewFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell );
     void BroadcastNewCell( SCROW nRow );
     bool UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow );
 

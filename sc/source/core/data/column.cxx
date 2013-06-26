@@ -763,17 +763,7 @@ ScRefCellValue ScColumn::GetCellValue( SCROW nRow ) const
     return GetCellValue(aPos.first, aPos.second);
 }
 
-ScRefCellValue ScColumn::GetCellValue( sc::CellStoreType::const_iterator& itPos, SCROW nRow ) const
-{
-    std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(itPos, nRow);
-    itPos = aPos.first;
-    if (aPos.first == maCells.end())
-        return ScRefCellValue();
-
-    return GetCellValue(itPos, aPos.second);
-}
-
-ScRefCellValue ScColumn::GetCellValue( sc::CellStoreType::const_iterator& itPos, size_t nOffset ) const
+ScRefCellValue ScColumn::GetCellValue( const sc::CellStoreType::const_iterator& itPos, size_t nOffset ) const
 {
     ScRefCellValue aVal; // Defaults to empty cell.
     switch (itPos->type)
@@ -820,8 +810,6 @@ ScFormulaCell* cloneFormulaCell(ScDocument* pDoc, const ScAddress& rNewPos, ScFo
 
 void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
 {
-    typedef std::pair<sc::CellStoreType::iterator,size_t> CellPosType;
-
     if (nRow1 == nRow2)
         // Nothing to swap.
         return;
@@ -832,11 +820,11 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
 
     // Broadcasters (if exist) should NOT be swapped.
 
-    CellPosType aPos1 = maCells.position(nRow1);
+    sc::CellStoreType::position_type aPos1 = maCells.position(nRow1);
     if (aPos1.first == maCells.end())
         return;
 
-    CellPosType aPos2 = maCells.position(aPos1.first, nRow2);
+    sc::CellStoreType::position_type aPos2 = maCells.position(aPos1.first, nRow2);
     if (aPos2.first == maCells.end())
         return;
 
@@ -881,13 +869,15 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 // TODO: Find out a way to adjust references without cloning new instances.
                 boost::scoped_ptr<ScFormulaCell> pOld1(*itf1);
                 boost::scoped_ptr<ScFormulaCell> pOld2(*itf2);
+                DetouchFormulaCell(aPos1, **itf1);
+                DetouchFormulaCell(aPos2, **itf2);
                 ScFormulaCell* pNew1 = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *pOld2);
                 ScFormulaCell* pNew2 = cloneFormulaCell(pDocument, ScAddress(nCol, nRow2, nTab), *pOld1);
                 *itf1 = pNew1;
                 *itf2 = pNew2;
 
-                RegroupFormulaCells(nRow1);
-                RegroupFormulaCells(nRow2);
+                ActivateNewFormulaCell(aPos1, *pNew1);
+                ActivateNewFormulaCell(aPos2, *pNew2);
             }
             break;
             default:
@@ -902,10 +892,10 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
 
     // The two cells are of different types.
 
-    sc::CellStoreType::const_iterator cit = it1;
-    ScRefCellValue aCell1 = GetCellValue(cit, nRow1);
-    cit = it2;
-    ScRefCellValue aCell2 = GetCellValue(cit, nRow2);
+    ScRefCellValue aCell1 = GetCellValue(aPos1.first, aPos1.second);
+    ScRefCellValue aCell2 = GetCellValue(aPos2.first, aPos2.second);
+
+    // Make sure to put cells in row 1 first then row 2!
 
     if (aCell1.meType == CELLTYPE_NONE)
     {
@@ -929,11 +919,12 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             break;
             case CELLTYPE_FORMULA:
             {
+                // cell 1 is empty and cell 2 is a formula cell.
                 ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *aCell2.mpFormula);
+                DetouchFormulaCell(aPos2, *aCell2.mpFormula);
                 it1 = maCells.set(it1, nRow1, pNew);
                 maCells.set_empty(it1, nRow2, nRow2); // original formula cell gets deleted.
-
-                RegroupFormulaCells(nRow2);
+                ActivateNewFormulaCell(it1, nRow1, *pNew);
             }
             break;
             default:
@@ -972,12 +963,12 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             break;
             case CELLTYPE_FORMULA:
             {
+                // cell 1 is a formula cell and cell 2 is empty.
                 ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow2, nTab), *aCell1.mpFormula);
+                DetouchFormulaCell(aPos1, *aCell1.mpFormula);
                 it1 = maCells.set_empty(it1, nRow1, nRow1); // original formula cell is gone.
-                maCells.set(it1, nRow2, pNew);
-
-                RegroupFormulaCells(nRow1);
-                RegroupFormulaCells(nRow2);
+                it1 = maCells.set(it1, nRow2, pNew);
+                ActivateNewFormulaCell(it1, nRow2, *pNew);
             }
             break;
             default:
@@ -1009,8 +1000,10 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 break;
                 case CELLTYPE_FORMULA:
                 {
+                    DetouchFormulaCell(aPos2, *aCell2.mpFormula);
                     ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *aCell2.mpFormula);
                     it1 = maCells.set(it1, nRow1, pNew);
+                    ActivateNewFormulaCell(it1, nRow1, *pNew);
                     // The old formula cell will get overwritten below.
                 }
                 break;
@@ -1040,8 +1033,10 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 case CELLTYPE_FORMULA:
                 {
                     // cell 1 - string, cell 2 - formula
+                    DetouchFormulaCell(aPos2, *aCell2.mpFormula);
                     ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *aCell2.mpFormula);
                     it1 = maCells.set(it1, nRow1, pNew);
+                    ActivateNewFormulaCell(it1, nRow1, *pNew);
                     // Old formula cell will get overwritten below.
                 }
                 break;
@@ -1067,8 +1062,10 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                 break;
                 case CELLTYPE_FORMULA:
                 {
+                    DetouchFormulaCell(aPos2, *aCell2.mpFormula);
                     ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow1, nTab), *aCell2.mpFormula);
                     it1 = maCells.set(it1, nRow1, pNew);
+                    ActivateNewFormulaCell(it1, nRow1, *pNew);
                     // Old formula cell will get overwritten below.
                 }
                 break;
@@ -1081,6 +1078,8 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         break;
         case CELLTYPE_FORMULA:
         {
+            // cell 1 is a formula cell and cell 2 is not.
+            DetouchFormulaCell(aPos1, *aCell1.mpFormula);
             ScFormulaCell* pNew = cloneFormulaCell(pDocument, ScAddress(nCol, nRow2, nTab), *aCell1.mpFormula);
             switch (aCell2.meType)
             {
@@ -1101,7 +1100,8 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
                     ;
             }
 
-            maCells.set(it1, nRow2, pNew);
+            it1 = maCells.set(it1, nRow2, pNew);
+            ActivateNewFormulaCell(it1, nRow2, *pNew);
         }
         break;
         default:
@@ -1109,8 +1109,6 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
     }
 
     SwapCellTextAttrs(nRow1, nRow2);
-    RegroupFormulaCells(nRow1);
-    RegroupFormulaCells(nRow2);
     CellStorageModified();
     BroadcastCells(aRows);
 }

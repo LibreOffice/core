@@ -398,6 +398,17 @@ void ScColumn::JoinNewFormulaCell(
     }
 }
 
+void ScColumn::DetouchFormulaCell(
+    const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const
+{
+    if (!pDocument->IsClipOrUndo())
+        // Have the dying formula cell stop listening.
+        rCell.EndListeningTo(pDocument);
+
+    if (rCell.IsShared())
+        UnshareFormulaCell(aPos, rCell);
+}
+
 void ScColumn::UnshareFormulaCell(
     const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const
 {
@@ -498,12 +509,7 @@ sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreTy
     if (itRet->type == sc::element_type_formula)
     {
         ScFormulaCell& rCell = *sc::formula_block::at(*itRet->data, aPos.second);
-        if (!pDocument->IsClipOrUndo())
-            // Have the dying formula cell stop listening.
-            rCell.EndListeningTo(pDocument);
-
-        if (rCell.IsShared())
-            UnshareFormulaCell(aPos, rCell);
+        DetouchFormulaCell(aPos, rCell);
     }
 
     return itRet;
@@ -512,9 +518,13 @@ sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreTy
 void ScColumn::ActivateNewFormulaCell(
     const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell )
 {
-    // See if this new formula cell can join an existing shared formula group.
-    sc::CellStoreType::position_type aPos = maCells.position(itPos, nRow);
+    ActivateNewFormulaCell(maCells.position(itPos, nRow), rCell);
+}
 
+void ScColumn::ActivateNewFormulaCell(
+    const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell )
+{
+    // See if this new formula cell can join an existing shared formula group.
     JoinNewFormulaCell(aPos, rCell);
 
     // When we insert from the Clipboard we still have wrong (old) References!
