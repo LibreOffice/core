@@ -110,8 +110,6 @@ class ScColumn
     SCCOL           nCol;
     SCTAB           nTab;
 
-    std::vector<ScFormulaCellGroupRef> maFnGroups;
-
     ScAttrArray*          pAttrArray;
     ScDocument*           pDocument;
     bool mbDirtyGroups;     /// formula groups are dirty.
