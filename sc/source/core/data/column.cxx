@@ -1275,6 +1275,7 @@ class CopyToClipHandler
     const ScColumn& mrSrcCol;
     ScColumn& mrDestCol;
     sc::ColumnBlockPosition maDestPos;
+    sc::ColumnBlockPosition* mpDestPos;
 
     void setDefaultAttrsToDest(size_t nRow, size_t nSize)
     {
@@ -1285,12 +1286,18 @@ class CopyToClipHandler
 
 public:
     CopyToClipHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos) :
-        mrSrcCol(rSrcCol), mrDestCol(rDestCol)
+        mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos)
     {
-        if (pDestPos)
-            maDestPos = *pDestPos;
+        if (mpDestPos)
+            maDestPos = *mpDestPos;
         else
             mrDestCol.InitBlockPosition(maDestPos);
+    }
+
+    ~CopyToClipHandler()
+    {
+        if (mpDestPos)
+            *mpDestPos = maDestPos;
     }
 
     void operator() (const sc::CellStoreType::value_type& aNode, size_t nOffset, size_t nDataSize)
