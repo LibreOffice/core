@@ -618,7 +618,7 @@ void SdTpOptionsMisc::SetImpressMode (void)
     lcl_MoveWin (aCbxEnableSdremote, -nLineHeight);
     lcl_MoveWin (aCbxEnablePresenterScreen,
         nDialogWidth/2 - aCbxEnablePresenterScreen.GetPosPixel().X(),
-        -nLineHeight);
+        -2*nLineHeight);
     lcl_MoveWin (aTxtCompatibility, -nLineHeight);
 
     // Move the printer-independent-metrics check box up two lines to change
