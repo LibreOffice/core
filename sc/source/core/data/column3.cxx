@@ -327,6 +327,77 @@ sc::CellStoreType::iterator ScColumn::GetPositionToInsert( SCROW nRow )
     return GetPositionToInsert(maCells.begin(), nRow);
 }
 
+namespace {
+
+void joinFormulaCells(SCROW nRow, ScFormulaCell& rCell1, ScFormulaCell& rCell2)
+{
+    ScFormulaCell::CompareState eState = rCell1.CompareByTokenArray(rCell2);
+    if (eState == ScFormulaCell::NotEqual)
+        return;
+
+    // Formula tokens equal those of the previous formula cell.
+    ScFormulaCellGroupRef xGroup1 = rCell1.GetCellGroup();
+    ScFormulaCellGroupRef xGroup2 = rCell2.GetCellGroup();
+    if (xGroup1)
+    {
+        if (xGroup2)
+        {
+            // Both cell1 and cell2 are shared. Merge them together.
+            xGroup1->mnLength += xGroup2->mnLength;
+            rCell2.SetCellGroup(xGroup1);
+        }
+        else
+        {
+            // cell1 is shared but cell2 is not.
+            rCell2.SetCellGroup(xGroup1);
+            ++xGroup1->mnLength;
+        }
+    }
+    else
+    {
+        if (xGroup2)
+        {
+            // cell1 is not shared, but cell2 is already shared.
+            rCell1.SetCellGroup(xGroup2);
+            xGroup2->mnStart = nRow;
+            ++xGroup2->mnLength;
+        }
+        else
+        {
+            // neither cells are shared.
+            xGroup1.reset(new ScFormulaCellGroup);
+            xGroup1->mnStart = nRow;
+            xGroup1->mbInvariant = (eState == ScFormulaCell::EqualInvariant);
+            xGroup1->mnLength = 2;
+
+            rCell1.SetCellGroup(xGroup1);
+            rCell2.SetCellGroup(xGroup1);
+        }
+    }
+}
+
+}
+
+void ScColumn::JoinNewFormulaCell(
+    const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const
+{
+    SCROW nRow = aPos.first->position + aPos.second;
+
+    // Check the previous row position for possible grouping.
+    if (aPos.first->type == sc::element_type_formula && aPos.second > 0)
+    {
+        ScFormulaCell& rPrev = *sc::formula_block::at(*aPos.first->data, aPos.second-1);
+        joinFormulaCells(nRow-1, rPrev, rCell);
+    }
+
+    // Check the next row position for possible grouping.
+    if (aPos.first->type == sc::element_type_formula && aPos.second+1 < aPos.first->size)
+    {
+        ScFormulaCell& rNext = *sc::formula_block::at(*aPos.first->data, aPos.second+1);
+        joinFormulaCells(nRow, rCell, rNext);
+    }
+}
+
 void ScColumn::UnshareFormulaCell(
     const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const
 {
@@ -438,76 +509,13 @@ sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreTy
     return itRet;
 }
 
-namespace {
-
-void joinFormulaCells(SCROW nRow, ScFormulaCell& rCell1, ScFormulaCell& rCell2)
-{
-    ScFormulaCell::CompareState eState = rCell1.CompareByTokenArray(rCell2);
-    if (eState == ScFormulaCell::NotEqual)
-        return;
-
-    // Formula tokens equal those of the previous formula cell.
-    ScFormulaCellGroupRef xGroup1 = rCell1.GetCellGroup();
-    ScFormulaCellGroupRef xGroup2 = rCell2.GetCellGroup();
-    if (xGroup1)
-    {
-        if (xGroup2)
-        {
-            // Both cell1 and cell2 are shared. Merge them together.
-            xGroup1->mnLength += xGroup2->mnLength;
-            rCell2.SetCellGroup(xGroup1);
-        }
-        else
-        {
-            // cell1 is shared but cell2 is not.
-            rCell2.SetCellGroup(xGroup1);
-            ++xGroup1->mnLength;
-        }
-    }
-    else
-    {
-        if (xGroup2)
-        {
-            // cell1 is not shared, but cell2 is already shared.
-            rCell1.SetCellGroup(xGroup2);
-            xGroup2->mnStart = nRow;
-            ++xGroup2->mnLength;
-        }
-        else
-        {
-            // neither cells are shared.
-            xGroup1.reset(new ScFormulaCellGroup);
-            xGroup1->mnStart = nRow;
-            xGroup1->mbInvariant = (eState == ScFormulaCell::EqualInvariant);
-            xGroup1->mnLength = 2;
-
-            rCell1.SetCellGroup(xGroup1);
-            rCell2.SetCellGroup(xGroup1);
-        }
-    }
-}
-
-}
-
 void ScColumn::ActivateNewFormulaCell(
     const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell )
 {
     // See if this new formula cell can join an existing shared formula group.
     sc::CellStoreType::position_type aPos = maCells.position(itPos, nRow);
 
-    // Check the previous row position for possible grouping.
-    if (aPos.first->type == sc::element_type_formula && aPos.second > 0)
-    {
-        ScFormulaCell& rPrev = *sc::formula_block::at(*aPos.first->data, aPos.second-1);
-        joinFormulaCells(nRow-1, rPrev, rCell);
-    }
-
-    // Check the next row position for possible grouping.
-    if (aPos.first->type == sc::element_type_formula && aPos.second+1 < aPos.first->size)
-    {
-        ScFormulaCell& rNext = *sc::formula_block::at(*aPos.first->data, aPos.second+1);
-        joinFormulaCells(nRow, rCell, rNext);
-    }
+    JoinNewFormulaCell(aPos, rCell);
 
     // When we insert from the Clipboard we still have wrong (old) References!
     // First they are rewired in CopyBlockFromClip via UpdateReference and the

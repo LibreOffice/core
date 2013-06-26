@@ -466,6 +466,8 @@ public:
 
     void InterpretDirtyCells( SCROW nRow1, SCROW nRow2 );
 
+    void JoinNewFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const;
+
     void UnshareFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const;
 
     /**
