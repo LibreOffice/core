@@ -913,6 +913,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 define gb_LinkTarget__use_librdf
 $(call gb_LinkTarget_use_packages,$(1),raptor rasqal redland)
 $(call gb_LinkTarget_use_libraries,$(1),\
+	raptor2 \
 	rdf \
 )
 
