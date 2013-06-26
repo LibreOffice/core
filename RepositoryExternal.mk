@@ -692,11 +692,13 @@ else # !SYSTEM_REDLAND
 ifneq ($(OS),ANDROID)
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	raptor \
 	rdf \
 ))
 
 define gb_LinkTarget__use_librdf
 $(call gb_LinkTarget_use_libraries,$(1),\
+	raptor \
 	rdf \
 )
 
