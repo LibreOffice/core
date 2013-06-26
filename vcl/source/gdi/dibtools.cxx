@@ -1111,14 +1111,7 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
 
                             if(bWriteAlpha)
                             {
-                                if(pAccAlpha)
-                                {
-                                    *pTmp++ = (sal_uInt8)0xff - (sal_uInt8)pAccAlpha->GetPixelIndex( nY, nX );
-                                }
-                                else
-                                {
-                                    *pTmp++ = (sal_uInt8)0xff;
-                                }
+                                *pTmp++ = (sal_uInt8)0xff - (sal_uInt8)pAccAlpha->GetPixelIndex( nY, nX );
                             }
                         }
 
