@@ -2591,6 +2591,7 @@ if test $_os = Darwin; then
     fi
 
     # If no CC and CXX environment vars, try to guess where the compiler is
+    LIBTOOL=libtool
     if test -z "$save_CC"; then
         AC_MSG_CHECKING([what compiler to use])
         case $with_macosx_sdk in
@@ -2604,6 +2605,7 @@ if test $_os = Darwin; then
                 CC="gcc-4.2 $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
                 CXX="g++-4.2 $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             fi
+            LIBTOOL=libtool
             ;;
         10.7|10.8|10.9)
             if test "$enable_libc__" = yes -a "$with_macosx_version_min_required" != 10.6; then
@@ -2619,6 +2621,7 @@ if test $_os = Darwin; then
             CXX="`xcrun -find clang++` $bitness $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             XCRUN=xcrun
             AR=`xcrun -find ar`
+            LIBTOOL=`xcrun -find libtool`
             RANLIB=`xcrun -find ranlib`
             ;;
         esac
@@ -2715,6 +2718,7 @@ AC_SUBST(MACOSX_DEPLOYMENT_TARGET)
 AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED)
 AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
 AC_SUBST(XCRUN)
+AC_SUBST(LIBTOOL) # Note that the OS X libtool command is unrelated to GNU libtool
 AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
 AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
@@ -2761,6 +2765,7 @@ if test $_os = iOS; then
     CXX="`xcrun -find clang++` -arch $arch -isysroot $sysroot $lto $versionmin"
     XCRUN=xcrun
     AR=`xcrun -find ar`
+    LIBTOOL=`xcrun -find libtool`
     RANLIB=`xcrun -find ranlib`
 fi
 
