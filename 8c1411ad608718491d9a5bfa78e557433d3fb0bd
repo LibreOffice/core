@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXX///vA\u003d",
+        "filename": "sc/inc/defaultsoptions.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000101
+      },
+      "writtenOn": "2013-06-26T16:14:17Z",
+      "side": 1,
+      "message": "it will be better if both of comments had the same indent\n    ///\u003c ....\n    ///\u003c ....",
+      "revId": "8c1411ad608718491d9a5bfa78e557433d3fb0bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
