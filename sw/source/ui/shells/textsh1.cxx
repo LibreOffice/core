@@ -887,8 +887,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( !pPaM )
                 pPaM = rWrtSh.GetCrsr();
 
-            bool bUseCurCrsr = true;
-
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
 
@@ -934,9 +932,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
             aCoreSet.Put( aOff );
 
-            // Setting the BoxInfo if based on the current cursor
-            if ( bUseCurCrsr )
-                ::PrepareBoxInfo( aCoreSet, rWrtSh );
+            // Setting the BoxInfo
+            ::PrepareBoxInfo( aCoreSet, rWrtSh );
 
             // Current page format
             ::SwToSfxPageDescAttr( aCoreSet );
