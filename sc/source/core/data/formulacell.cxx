@@ -2844,20 +2844,20 @@ void ScFormulaCell::CompileColRowNameFormula()
     }
 }
 
-ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell *pOtherCell ) const
+ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& rOther ) const
 {
     // no Matrix formulae yet.
     if ( GetMatrixFlag() != MM_NONE )
         return NotEqual;
 
     // are these formule at all similar ?
-    if ( GetHash() != pOtherCell->GetHash() )
+    if ( GetHash() != rOther.GetHash() )
         return NotEqual;
 
     FormulaToken **pThis = pCode->GetCode();
     sal_uInt16     nThisLen = pCode->GetCodeLen();
-    FormulaToken **pOther = pOtherCell->pCode->GetCode();
-    sal_uInt16     nOtherLen = pOtherCell->pCode->GetCodeLen();
+    FormulaToken **pOther = rOther.pCode->GetCode();
+    sal_uInt16     nOtherLen = rOther.pCode->GetCodeLen();
 
     if ( !pThis || !pOther )
     {
@@ -3398,6 +3398,25 @@ void ScFormulaCell::EndListeningTo( sc::EndListeningContext& rCxt )
                 ;   // nothing
         }
     }
+}
+
+bool ScFormulaCell::IsShared() const
+{
+    return xGroup.get() != NULL;
+}
+
+bool ScFormulaCell::IsSharedInvariant() const
+{
+    return xGroup ? xGroup->mbInvariant : false;
+}
+
+SCROW ScFormulaCell::GetSharedTopRow() const
+{
+    return xGroup ? xGroup->mnStart : -1;
+}
+SCROW ScFormulaCell::GetSharedLength() const
+{
+    return xGroup ? xGroup->mnLength : 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

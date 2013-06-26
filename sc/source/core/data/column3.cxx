@@ -332,17 +332,172 @@ sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreTy
     // See if we are overwriting an existing formula cell.
     sc::CellStoreType::position_type aRet = maCells.position(it, nRow);
     sc::CellStoreType::iterator itRet = aRet.first;
-    if (itRet->type == sc::element_type_formula && !pDocument->IsClipOrUndo())
+    if (itRet->type == sc::element_type_formula)
     {
-        ScFormulaCell* pCell = sc::formula_block::at(*itRet->data, aRet.second);
-        pCell->EndListeningTo(pDocument);
+        ScFormulaCell& rCell = *sc::formula_block::at(*itRet->data, aRet.second);
+        if (!pDocument->IsClipOrUndo())
+            // Have the dying formula cell stop listening.
+            rCell.EndListeningTo(pDocument);
+
+        if (rCell.IsShared())
+        {
+            // This formula cell is shared. Adjust the shared group.
+            if (rCell.aPos.Row() == rCell.GetSharedTopRow())
+            {
+                // Top of the shared range.
+                ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
+                if (xGroup->mnLength == 2)
+                {
+                    // Group consists only only two cells. Mark the second one non-shared.
+#if DEBUG_COLUMN_STORAGE
+                    if (aRet.second+1 >= aRet.first->size)
+                    {
+                        cerr << "ScColumn::GetPositionToInsert: There is no next formula cell but there should be!" << endl;
+                        cerr.flush();
+                        abort();
+                    }
+#endif
+                    ScFormulaCellGroupRef xNone;
+                    ScFormulaCell& rNext = *sc::formula_block::at(*itRet->data, aRet.second+1);
+                    rNext.SetCellGroup(xNone);
+                }
+                else
+                {
+                    // Move the top cell to the next formula cell down.
+                    --xGroup->mnLength;
+                    ++xGroup->mnStart;
+                }
+            }
+            else if (rCell.aPos.Row() == rCell.GetSharedTopRow() + rCell.GetSharedLength() - 1)
+            {
+                // Bottom of the shared range.
+                ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
+                if (xGroup->mnLength == 2)
+                {
+                    // Mark the top cell non-shared.
+#if DEBUG_COLUMN_STORAGE
+                    if (aRet.second == 0)
+                    {
+                        cerr << "ScColumn::GetPositionToInsert: There is no previous formula cell but there should be!" << endl;
+                        cerr.flush();
+                        abort();
+                    }
+#endif
+                    ScFormulaCellGroupRef xNone;
+                    ScFormulaCell& rPrev = *sc::formula_block::at(*itRet->data, aRet.second-1);
+                    rPrev.SetCellGroup(xNone);
+                }
+                else
+                {
+                    // Just shortern the shared range length by one.
+                    --xGroup->mnLength;
+                }
+            }
+            else
+            {
+                // In the middle of the shared range. Split it into two groups.
+                ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
+                SCROW nEndRow = xGroup->mnStart + xGroup->mnLength - 1;
+                xGroup->mnLength = rCell.aPos.Row() - xGroup->mnStart; // Shorten the top group.
+
+                ScFormulaCellGroupRef xGroup2(new ScFormulaCellGroup);
+                xGroup2->mnStart = rCell.aPos.Row() + 1;
+                xGroup2->mnLength = nEndRow - rCell.aPos.Row();
+#if DEBUG_COLUMN_STORAGE
+                if (xGroup2->mnStart + xGroup2->mnLength > itRet->position + itRet->size)
+                {
+                    cerr << "ScColumn::GetPositionToInsert: Shared formula region goes beyond the formula block. Not good." << endl;
+                    cerr.flush();
+                    abort();
+                }
+#endif
+                sc::formula_block::iterator itCell = sc::formula_block::begin(*itRet->data);
+                std::advance(itCell, aRet.second+1);
+                sc::formula_block::iterator itCellEnd = itCell;
+                std::advance(itCellEnd, xGroup2->mnLength);
+                for (; itCell != itCellEnd; ++itCell)
+                {
+                    ScFormulaCell& rCell2 = **itCell;
+                    rCell2.SetCellGroup(xGroup2);
+                }
+            }
+        }
     }
 
     return itRet;
 }
 
-void ScColumn::ActivateNewFormulaCell( ScFormulaCell* pCell )
+namespace {
+
+void joinFormulaCells(SCROW nRow, ScFormulaCell& rCell1, ScFormulaCell& rCell2)
 {
+    ScFormulaCell::CompareState eState = rCell1.CompareByTokenArray(rCell2);
+    if (eState == ScFormulaCell::NotEqual)
+        return;
+
+    // Formula tokens equal those of the previous formula cell.
+    ScFormulaCellGroupRef xGroup1 = rCell1.GetCellGroup();
+    ScFormulaCellGroupRef xGroup2 = rCell2.GetCellGroup();
+    if (xGroup1)
+    {
+        if (xGroup2)
+        {
+            // Both cell1 and cell2 are shared. Merge them together.
+            xGroup1->mnLength += xGroup2->mnLength;
+            rCell2.SetCellGroup(xGroup1);
+        }
+        else
+        {
+            // cell1 is shared but cell2 is not.
+            rCell2.SetCellGroup(xGroup1);
+            ++xGroup1->mnLength;
+        }
+    }
+    else
+    {
+        if (xGroup2)
+        {
+            // cell1 is not shared, but cell2 is already shared.
+            rCell1.SetCellGroup(xGroup2);
+            xGroup2->mnStart = nRow;
+            ++xGroup2->mnLength;
+        }
+        else
+        {
+            // neither cells are shared.
+            xGroup1.reset(new ScFormulaCellGroup);
+            xGroup1->mnStart = nRow;
+            xGroup1->mbInvariant = (eState == ScFormulaCell::EqualInvariant);
+            xGroup1->mnLength = 2;
+
+            rCell1.SetCellGroup(xGroup1);
+            rCell2.SetCellGroup(xGroup1);
+        }
+    }
+}
+
+}
+
+void ScColumn::ActivateNewFormulaCell(
+    const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell )
+{
+    // See if this new formula cell can join an existing shared formula group.
+    sc::CellStoreType::position_type aPos = maCells.position(itPos, nRow);
+
+    // Check the previous row position for possible grouping.
+    if (aPos.first->type == sc::element_type_formula && aPos.second > 0)
+    {
+        ScFormulaCell& rPrev = *sc::formula_block::at(*aPos.first->data, aPos.second-1);
+        joinFormulaCells(nRow-1, rPrev, rCell);
+    }
+
+    // Check the next row position for possible grouping.
+    if (aPos.first->type == sc::element_type_formula && aPos.second+1 < aPos.first->size)
+    {
+        ScFormulaCell& rNext = *sc::formula_block::at(*aPos.first->data, aPos.second+1);
+        joinFormulaCells(nRow, rCell, rNext);
+    }
+
     // When we insert from the Clipboard we still have wrong (old) References!
     // First they are rewired in CopyBlockFromClip via UpdateReference and the
     // we call StartListeningFromClip and BroadcastFromClip.
@@ -350,9 +505,9 @@ void ScColumn::ActivateNewFormulaCell( ScFormulaCell* pCell )
     // After Import we call CalcAfterLoad and in there Listening.
     if (!pDocument->IsClipOrUndo() && !pDocument->IsInsertingFromOtherDoc())
     {
-        pCell->StartListeningTo(pDocument);
+        rCell.StartListeningTo(pDocument);
         if (!pDocument->IsCalcingAfterLoad())
-            pCell->SetDirty();
+            rCell.SetDirty();
     }
 }
 
@@ -1597,12 +1752,11 @@ void ScColumn::SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::Form
     sal_uInt32 nCellFormat = GetNumberFormat(nRow);
     if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
         pCell->SetNeedNumberFormat(true);
-    maCells.set(it, nRow, pCell);
+    it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
-    RegroupFormulaCells(nRow);
     CellStorageModified();
 
-    ActivateNewFormulaCell(pCell);
+    ActivateNewFormulaCell(it, nRow, *pCell);
 }
 
 void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram )
@@ -1614,24 +1768,21 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
     sal_uInt32 nCellFormat = GetNumberFormat(nRow);
     if( (nCellFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
         pCell->SetNeedNumberFormat(true);
-    maCells.set(it, nRow, pCell);
+    it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
-    RegroupFormulaCells(nRow);
     CellStorageModified();
 
-    ActivateNewFormulaCell(pCell);
+    ActivateNewFormulaCell(it, nRow, *pCell);
 }
 
 ScFormulaCell* ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell )
 {
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
-    maCells.set(it, nRow, pCell);
+    it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
-    RegroupFormulaCells(nRow);
     CellStorageModified();
 
-    ActivateNewFormulaCell(pCell);
-
+    ActivateNewFormulaCell(it, nRow, *pCell);
     return pCell;
 }
 
@@ -1641,11 +1792,9 @@ ScFormulaCell* ScColumn::SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCR
     rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow, pCell);
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.set(
         rBlockPos.miCellTextAttrPos, nRow, sc::CellTextAttr());
-    RegroupFormulaCells(nRow);
     CellStorageModified();
 
-    ActivateNewFormulaCell(pCell);
-
+    ActivateNewFormulaCell(rBlockPos.miCellPos, nRow, *pCell);
     return pCell;
 }
 
@@ -2032,12 +2181,12 @@ void ScColumn::SetError( SCROW nRow, const sal_uInt16 nError)
     pCell->SetErrCode(nError);
 
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
-    maCells.set(it, nRow, pCell);
+    it = maCells.set(it, nRow, pCell);
     maCellTextAttrs.set(nRow, sc::CellTextAttr());
     RegroupFormulaCells(nRow);
     CellStorageModified();
 
-    ActivateNewFormulaCell(pCell);
+    ActivateNewFormulaCell(it, nRow, *pCell);
 }
 
 void ScColumn::SetRawString( SCROW nRow, const OUString& rStr, bool bBroadcast )
@@ -2575,7 +2724,7 @@ public:
             if (!pPrev)
                 continue;
 
-            ScFormulaCell::CompareState eCompState = pPrev->CompareByTokenArray(pCur);
+            ScFormulaCell::CompareState eCompState = pPrev->CompareByTokenArray(*pCur);
             if (eCompState == ScFormulaCell::NotEqual)
             {
                 // different formula tokens.

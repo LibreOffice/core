@@ -236,6 +236,7 @@ public:
     void testMergedCells();
     void testUpdateReference();
     void testSearchCells();
+    void testSharedFormulas();
 
     /**
      * Make sure the sheet streams are invalidated properly.
@@ -352,6 +353,7 @@ public:
     CPPUNIT_TEST(testMergedCells);
     CPPUNIT_TEST(testUpdateReference);
     CPPUNIT_TEST(testSearchCells);
+    CPPUNIT_TEST(testSharedFormulas);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
     CPPUNIT_TEST(testSetBackgroundColor);
     CPPUNIT_TEST(testRenameTable);
@@ -6291,6 +6293,81 @@ void Test::testSearchCells()
     CPPUNIT_ASSERT_MESSAGE("A3 should be inside the matched range.", aMatchedRanges.In(aHit));
     aHit.SetRow(4);
     CPPUNIT_ASSERT_MESSAGE("A5 should be inside the matched range.", aMatchedRanges.In(aHit));
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testSharedFormulas()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScAddress aPos(1, 9, 0); // B10
+    m_pDoc->SetString(aPos, "=A10*2"); // Insert into B10.
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Expected to be a non-shared cell.", pFC && !pFC->IsShared());
+
+    aPos.SetRow(10); // B11
+    m_pDoc->SetString(aPos, "=A11*2");
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("This cell is expected to be a shared formula cell.", pFC && pFC->IsShared());
+    CPPUNIT_ASSERT_EQUAL(9, pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(2, pFC->GetSharedLength());
+
+    aPos.SetRow(8); // B9
+    m_pDoc->SetString(aPos, "=A9*2");
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("This cell is expected to be a shared formula cell.", pFC && pFC->IsShared());
+    CPPUNIT_ASSERT_EQUAL(8, pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(3, pFC->GetSharedLength());
+
+    aPos.SetRow(12); // B13
+    m_pDoc->SetString(aPos, "=A13*2");
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("This formula cell shouldn't be shared yet.", pFC && !pFC->IsShared());
+
+    // Insert a formula to B12, and B9:B13 should be shared.
+    aPos.SetRow(11); // B12
+    m_pDoc->SetString(aPos, "=A12*2");
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("This cell is expected to be a shared formula cell.", pFC && pFC->IsShared());
+    CPPUNIT_ASSERT_EQUAL(8, pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(5, pFC->GetSharedLength());
+
+    // Insert formulas to B15:B16.
+    aPos.SetRow(14); // B15
+    m_pDoc->SetString(aPos, "=A15*2");
+    aPos.SetRow(15); // B16
+    m_pDoc->SetString(aPos, "=A16*2");
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("This cell is expected to be a shared formula cell.", pFC && pFC->IsShared());
+    CPPUNIT_ASSERT_EQUAL(14, pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(2, pFC->GetSharedLength());
+
+    // Insert a formula to B14, and B9:B16 should be shared.
+    aPos.SetRow(13); // B14
+    m_pDoc->SetString(aPos, "=A14*2");
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("This cell is expected to be a shared formula cell.", pFC && pFC->IsShared());
+    CPPUNIT_ASSERT_EQUAL(8, pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(8, pFC->GetSharedLength());
+
+    // Insert an incompatible formula to B12, to split the shared range to B9:B11 and B13:B16.
+    aPos.SetRow(11); // B12
+    m_pDoc->SetString(aPos, "=$A$1*4");
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("This cell shouldn't be shared.", pFC && !pFC->IsShared());
+
+    aPos.SetRow(8); // B9
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("This cell is expected to be a shared formula cell.", pFC && pFC->IsShared());
+    CPPUNIT_ASSERT_EQUAL(8, pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(3, pFC->GetSharedLength());
+
+    aPos.SetRow(12); // B13
+    pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT_MESSAGE("This cell is expected to be a shared formula cell.", pFC && pFC->IsShared());
+    CPPUNIT_ASSERT_EQUAL(12, pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(4, pFC->GetSharedLength());
 
     m_pDoc->DeleteTab(0);
 }

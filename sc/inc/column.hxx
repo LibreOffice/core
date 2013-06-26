@@ -494,7 +494,7 @@ private:
 
     sc::CellStoreType::iterator GetPositionToInsert( SCROW nRow );
     sc::CellStoreType::iterator GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow );
-    void ActivateNewFormulaCell( ScFormulaCell* pCell );
+    void ActivateNewFormulaCell( const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell );
     void BroadcastNewCell( SCROW nRow );
     bool UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow );
 
