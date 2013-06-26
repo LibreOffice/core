@@ -1297,8 +1297,6 @@ sal_Bool Bitmap::ImplScaleSuper(
     {
         BitmapColor         aCol0, aCol1, aColRes;
         BitmapReadAccess*   pAcc = AcquireReadAccess();
-        long                nW = pAcc->Width() ;
-        long                nH = pAcc->Height() ;
         Bitmap              aOutBmp( Size( nDstW, nDstH ), 24 );
         BitmapWriteAccess*  pWAcc = aOutBmp.AcquireWriteAccess();
         long*               pMapIX = new long[ nDstW ];
@@ -1316,6 +1314,8 @@ sal_Bool Bitmap::ImplScaleSuper(
 
         if( pAcc && pWAcc )
         {
+            long                nW = pAcc->Width() ;
+            long                nH = pAcc->Height() ;
             const double    fRevScaleX = ( nDstW > 1L ) ? ( (double) ( nW - 1 ) / ( nDstW - 1 ) ) : 0.0;
             const double    fRevScaleY = ( nDstH > 1L ) ? ( (double) ( nH - 1 ) / ( nDstH - 1 ) ) : 0.0;
 
@@ -1488,7 +1488,7 @@ sal_Bool Bitmap::ImplScaleSuper(
                             }
                         }
                     }
-}
+                }
                 else
                 {
                     if( scaleX >= fScaleThresh && scaleY >= fScaleThresh )
@@ -2075,9 +2075,14 @@ sal_Bool Bitmap::ImplScaleSuper(
         delete[] pMapFX;
         delete[] pMapFY;
 
-        ReleaseAccess( pAcc );
-        aOutBmp.ReleaseAccess( pWAcc );
-
+        if(pAcc)
+        {
+            ReleaseAccess( pAcc );
+        }
+        if(pWAcc)
+        {
+            aOutBmp.ReleaseAccess( pWAcc );
+        }
         if( bRet )
         {
             ImplAdaptBitCount(aOutBmp);
