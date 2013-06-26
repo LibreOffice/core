@@ -2411,8 +2411,9 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, sal_uInt16 nPoolId,
 {
     SwPaM aPam( rPos );
     SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
+    assert(pTNd);
 
-    if( mbIsAutoFmtRedline && pTNd )
+    if (mbIsAutoFmtRedline)
     {
         // create the redline object
         const SwTxtFmtColl& rColl = *pTNd->GetTxtColl();
@@ -2442,7 +2443,7 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, sal_uInt16 nPoolId,
 
     SetTxtFmtColl( aPam, GetTxtCollFromPool( nPoolId ) );
 
-    if( pSet && pTNd && pSet->Count() )
+    if (pSet && pSet->Count())
     {
         aPam.SetMark();
         aPam.GetMark()->nContent.Assign(pTNd, pTNd->GetTxt().getLength());
@@ -2453,10 +2454,11 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, sal_uInt16 nPoolId,
 void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
 {
     SwTxtNode* pTNd = rPam.GetPoint()->nNode.GetNode().GetTxtNode();
+    assert(pTNd);
 
     RedlineMode_t eOld = GetRedlineMode();
 
-    if( mbIsAutoFmtRedline && pTNd )
+    if (mbIsAutoFmtRedline)
     {
         // create the redline object
         SwRedline* pRedl = new SwRedline( nsRedlineType_t::REDLINE_FORMAT, rPam );
