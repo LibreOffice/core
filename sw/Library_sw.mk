@@ -195,6 +195,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/doc/sortopt \
     sw/source/core/doc/swserv \
     sw/source/core/doc/swstylemanager \
+    sw/source/core/doc/swtblfmt \
     sw/source/core/doc/tblafmt \
     sw/source/core/doc/tblcpy \
     sw/source/core/doc/tblrwcl \

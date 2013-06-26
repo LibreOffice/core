@@ -31,33 +31,10 @@ class SW_DLLPUBLIC SwTableFmt : public SwFrmFmt
 
 protected:
     SwTableFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
-    {
-        pFstLineFmt = NULL;
-        pLstLineFmt = NULL;
-        pOddLineFmt = NULL;
-        pEvnLineFmt = NULL;
+                    SwFrmFmt *pDrvdFrm );
 
-        pFstColFmt = NULL;
-        pLstColFmt = NULL;
-        pOddColFmt = NULL;
-        pEvnColFmt = NULL;
-    }
     SwTableFmt( SwAttrPool& rPool, const String &rFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
-    {
-        pFstLineFmt = NULL;
-        pLstLineFmt = NULL;
-        pOddLineFmt = NULL;
-        pEvnLineFmt = NULL;
-
-        pFstColFmt = NULL;
-        pLstColFmt = NULL;
-        pOddColFmt = NULL;
-        pEvnColFmt = NULL;
-    }
+                    SwFrmFmt *pDrvdFrm );
 
     SwTableLineFmt* pFstLineFmt;
     SwTableLineFmt* pLstLineFmt;
@@ -102,23 +79,10 @@ class SwTableLineFmt : public SwFrmFmt
 
 protected:
     SwTableLineFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
-    {
-        pFstBoxFmt = NULL;
-        pLstBoxFmt = NULL;
-        pOddBoxFmt = NULL;
-        pEvnBoxFmt = NULL;
-    }
+                    SwFrmFmt *pDrvdFrm );
+
     SwTableLineFmt( SwAttrPool& rPool, const String &rFmtNm,
-                    SwFrmFmt *pDrvdFrm )
-        : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
-    {
-        pFstBoxFmt = NULL;
-        pLstBoxFmt = NULL;
-        pOddBoxFmt = NULL;
-        pEvnBoxFmt = NULL;
-    }
+                    SwFrmFmt *pDrvdFrm );
 
     // Odd and Even Box formats will be used to handle alternating columns
     SwTableBoxFmt* pFstBoxFmt;
