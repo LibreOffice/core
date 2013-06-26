@@ -306,11 +306,16 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
             // Upon finding the next command code, deal with stored
             // coordinates for previous command and reset parameters counter if needed.
             // See http://www.w3.org/TR/NOTE-VML#_Toc416858382 for params count reference
-            if ( rPath[ i ] != ',' || nParamCount == 0)
+            if ( rPath[ i ] != ',' || nParamCount == 0 )
             {
                 switch ( state )
                 {
                 case MOVE_REL: // 2* params -> param count reset
+                    if ( rPointLists.size() > 0 && rPointLists.back().size() > 0 )
+                    {
+                        rPointLists.push_back( ::std::vector< Point >() );
+                        rFlagLists.push_back( ::std::vector< PolygonFlags >() );
+                    }
                     rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
@@ -318,6 +323,11 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
                     break;
 
                 case MOVE_ABS: // 2 params -> no param count reset
+                    if ( rPointLists.size() > 0 && rPointLists.back().size() > 0 )
+                    {
+                        rPointLists.push_back( ::std::vector< Point >() );
+                        rFlagLists.push_back( ::std::vector< PolygonFlags >() );
+                    }
                     rPointLists.back().push_back( Point( aCoordList[ 0 ], aCoordList[ 1 ] ) );
                     rFlagLists.back().push_back( PolygonFlags_NORMAL );
                     aCurrentPoint = rPointLists.back().back();
