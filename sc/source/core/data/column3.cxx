@@ -403,6 +403,7 @@ sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreTy
                 ScFormulaCellGroupRef xGroup2(new ScFormulaCellGroup);
                 xGroup2->mnStart = rCell.aPos.Row() + 1;
                 xGroup2->mnLength = nEndRow - rCell.aPos.Row();
+                xGroup2->mbInvariant = xGroup->mbInvariant;
 #if DEBUG_COLUMN_STORAGE
                 if (xGroup2->mnStart + xGroup2->mnLength > itRet->position + itRet->size)
                 {
