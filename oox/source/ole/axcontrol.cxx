@@ -1033,7 +1033,10 @@ void AxCommandButtonModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
 {
     AxBinaryPropertyWriter aWriter( rOutStrm );
     aWriter.writeIntProperty< sal_uInt32 >( mnTextColor );
-    aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    if ( mnBackColor )
+        aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    else
+        aWriter.skipProperty(); // default backcolour
     aWriter.writeIntProperty< sal_uInt32 >( mnFlags );
     aWriter.writeStringProperty( maCaption );
     aWriter.skipProperty(); // pict pos
@@ -1156,7 +1159,12 @@ void AxLabelModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
 {
     AxBinaryPropertyWriter aWriter( rOutStrm );
     aWriter.writeIntProperty< sal_uInt32 >( mnTextColor );
-    aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    if ( mnBackColor )
+        aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    else
+        // if mnBackColor == 0 then it's the libreoffice default backcolour is
+        // the MSO Label default which is AX_SYSCOLOR_BUTTONFACE
+        aWriter.writeIntProperty< sal_uInt32 >( AX_SYSCOLOR_WINDOWBACK );
     aWriter.writeIntProperty< sal_uInt32 >( mnFlags );
     aWriter.writeStringProperty( maCaption );
     aWriter.skipProperty(); // picture position
@@ -1299,7 +1307,10 @@ void AxImageModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
     aWriter.skipProperty(); //undefined
     aWriter.skipProperty(); //auto-size
     aWriter.writeIntProperty< sal_uInt32 >( mnBorderColor );
-    aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    if ( mnBackColor )
+        aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    else
+        aWriter.skipProperty(); // default backcolour
     aWriter.writeIntProperty< sal_uInt8 >( mnBorderStyle );
     aWriter.skipProperty(); // mouse pointer
     aWriter.writeIntProperty< sal_uInt8 >( mnPicSizeMode );
@@ -1500,7 +1511,10 @@ void AxMorphDataModelBase::exportBinaryModel( BinaryOutputStream& rOutStrm )
         aWriter.writeIntProperty< sal_uInt32 >( mnFlags );
     else
         aWriter.skipProperty(); //mnFlags
-    aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    if ( mnBackColor )
+        aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    else
+        aWriter.skipProperty(); // default backcolour
     aWriter.writeIntProperty< sal_uInt32 >( mnTextColor );
 
     // only write if different from default
@@ -2116,7 +2130,10 @@ void AxSpinButtonModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
 {
     AxBinaryPropertyWriter aWriter( rOutStrm );
     aWriter.writeIntProperty< sal_uInt32 >( mnArrowColor );
-    aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    if ( mnBackColor )
+        aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    else
+        aWriter.skipProperty(); // default backcolour
     aWriter.writeIntProperty< sal_uInt32 >( mnFlags );
     aWriter.writePairProperty( maSize );
     aWriter.skipProperty(); // unused
@@ -2261,7 +2278,10 @@ void AxScrollBarModel::exportBinaryModel( BinaryOutputStream& rOutStrm )
 {
     AxBinaryPropertyWriter aWriter( rOutStrm );
     aWriter.writeIntProperty< sal_uInt32 >( mnArrowColor );
-    aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    if ( mnBackColor )
+        aWriter.writeIntProperty< sal_uInt32 >( mnBackColor );
+    else
+        aWriter.skipProperty(); // default backcolour
     aWriter.writeIntProperty< sal_uInt32 >( mnFlags );
     aWriter.writePairProperty( maSize );
     aWriter.skipProperty(); // mouse pointer

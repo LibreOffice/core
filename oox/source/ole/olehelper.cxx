@@ -461,7 +461,7 @@ void OleFormCtrlExportHelper::exportName( const Reference< XOutputStream >& rxOu
 void OleFormCtrlExportHelper::exportCompObj( const Reference< XOutputStream >& rxOut )
 {
     oox::BinaryXOutputStream aOut( rxOut, false );
-    if ( mpModel && mpModel->getControlType() == API_CONTROL_BUTTON )
+    if ( mpModel )
         mpModel->exportCompObj( aOut );
 }
 
