@@ -43,18 +43,13 @@ private:
     void     setValueAt(size_t nPos, const OUString &rString);
 
 private:
-    SvxCheckListBox maLbSettings;
+    SvxCheckListBox* mpLbSettings;
 
-    FixedText maFtOptionEditCaption;
-    ListBox maLbOptionEdit;
-    RadioButton maBtnTrue;
-    RadioButton maBtnFalse;
+    ListBox* mpLbOptionEdit;
+    RadioButton* mpBtnTrue;
+    RadioButton* mpBtnFalse;
 
-    FixedLine maFlAnnotation;
-    FixedText maFtAnnotation;
-
-    OKButton maBtnOK;
-    CancelButton maBtnCancel;
+    FixedText* mpFtAnnotation;
 
     OUString maTrue;
     OUString maFalse;

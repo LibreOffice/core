@@ -11,7 +11,7 @@
  */
 
 #include "calcoptionsdlg.hxx"
-#include "calcoptionsdlg.hrc"
+#include "sc.hrc"
 #include "scresid.hxx"
 
 #include "svtools/svlbitm.hxx"
@@ -101,46 +101,43 @@ formula::FormulaGrammar::AddressConvention toAddressConvention(sal_uInt16 nPos)
 
 }
 
-ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rConfig) :
-    ModalDialog(pParent, ScResId(RID_SCDLG_FORMULA_CALCOPTIONS)),
-    maLbSettings(this, ScResId(LB_SETTINGS)),
-    maFtOptionEditCaption(this, ScResId(FT_OPTION_EDIT_CAPTION)),
-    maLbOptionEdit(this, ScResId(LB_OPTION_EDIT)),
-    maBtnTrue(this, ScResId(BTN_OPTION_TRUE)),
-    maBtnFalse(this, ScResId(BTN_OPTION_FALSE)),
-    maFlAnnotation(this, ScResId(FL_ANNOTATION)),
-    maFtAnnotation(this, ScResId(FT_ANNOTATION)),
-    maBtnOK(this, ScResId(BTN_OK)),
-    maBtnCancel(this, ScResId(BTN_CANCEL)),
-    maTrue(ScResId(STR_TRUE).toString()),
-    maFalse(ScResId(STR_FALSE).toString()),
-    maCalcA1(ScResId(SCSTR_FORMULA_SYNTAX_CALC_A1).toString()),
-    maExcelA1(ScResId(SCSTR_FORMULA_SYNTAX_XL_A1).toString()),
-    maExcelR1C1(ScResId(SCSTR_FORMULA_SYNTAX_XL_R1C1).toString()),
-    maCaptionStringRefSyntax(ScResId(STR_STRING_REF_SYNTAX_CAPTION).toString()),
-    maDescStringRefSyntax(ScResId(STR_STRING_REF_SYNTAX_DESC).toString()),
-    maUseFormulaSyntax(ScResId(STR_USE_FORMULA_SYNTAX).toString()),
-    maCaptionEmptyStringAsZero(ScResId(STR_EMPTY_STRING_AS_ZERO_CAPTION).toString()),
-    maDescEmptyStringAsZero(ScResId(STR_EMPTY_STRING_AS_ZERO_DESC).toString()),
-    maCaptionOpenCLEnabled(ScResId(STR_OPENCL_ENABLED).toString()),
-    maDescOpenCLEnabled(ScResId(STR_OPENCL_ENABLED_DESC).toString()),
-    maConfig(rConfig)
+ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rConfig)
+    : ModalDialog(pParent, "FormulaCalculationOptions",
+        "modules/scalc/ui/formulacalculationoptions.ui")
+    , maCalcA1(ScResId(SCSTR_FORMULA_SYNTAX_CALC_A1).toString())
+    , maExcelA1(ScResId(SCSTR_FORMULA_SYNTAX_XL_A1).toString())
+    , maExcelR1C1(ScResId(SCSTR_FORMULA_SYNTAX_XL_R1C1).toString())
+    , maConfig(rConfig)
 {
-    maLbSettings.SetStyle(maLbSettings.GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
-    maLbSettings.SetHighlightRange();
+    get(mpLbSettings, "settings");
+    get(mpLbOptionEdit, "edit");
+    get(mpFtAnnotation, "annotation");
+    get(mpBtnTrue, "true");
+    get(mpBtnFalse, "false");
+
+    maCaptionStringRefSyntax = get<Window>("ref_syntax_caption")->GetText();
+    maDescStringRefSyntax = get<Window>("ref_syntax_desc")->GetText();
+    maUseFormulaSyntax = get<Window>("use_formula_syntax")->GetText();
+    maCaptionEmptyStringAsZero = get<Window>("empty_str_as_zero_caption")->GetText();
+    maDescEmptyStringAsZero = get<Window>("empty_str_as_zero_desc")->GetText();
+    maCaptionOpenCLEnabled = get<Window>("opencl_enabled")->GetText();
+    maDescOpenCLEnabled = get<Window>("opencl_enabled_desc")->GetText();
+
+    mpLbSettings->set_height_request(8 * mpLbSettings->GetTextHeight());
+    mpLbSettings->SetStyle(mpLbSettings->GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
+    mpLbSettings->SetHighlightRange();
 
     Link aLink = LINK(this, ScCalcOptionsDialog, SettingsSelHdl);
-    maLbSettings.SetSelectHdl(aLink);
-    maLbOptionEdit.SetSelectHdl(aLink);
+    mpLbSettings->SetSelectHdl(aLink);
+    mpLbOptionEdit->SetSelectHdl(aLink);
 
     aLink = LINK(this, ScCalcOptionsDialog, BtnToggleHdl);
-    maBtnTrue.SetToggleHdl(aLink); // Set handler only to the 'True' button.
+    mpBtnTrue->SetToggleHdl(aLink); // Set handler only to the 'True' button.
 
-    maBtnTrue.SetText(maTrue);
-    maBtnFalse.SetText(maFalse);
+    maTrue = mpBtnTrue->GetText();
+    maFalse = mpBtnFalse->GetText();
 
     FillOptionsList();
-    FreeResource();
     SelectionChanged();
 }
 
@@ -163,7 +160,7 @@ SvTreeListEntry *ScCalcOptionsDialog::createBoolItem(const OUString &rCaption, b
 
 void ScCalcOptionsDialog::setValueAt(size_t nPos, const OUString &rValue)
 {
-    SvTreeList *pModel = maLbSettings.GetModel();
+    SvTreeList *pModel = mpLbSettings->GetModel();
     SvTreeListEntry* pEntry = pModel->GetEntry(NULL, nPos);
     if (!pEntry)
     {
@@ -183,10 +180,10 @@ void ScCalcOptionsDialog::setValueAt(size_t nPos, const OUString &rValue)
 
 void ScCalcOptionsDialog::FillOptionsList()
 {
-    maLbSettings.SetUpdateMode(false);
-    maLbSettings.Clear();
+    mpLbSettings->SetUpdateMode(false);
+    mpLbSettings->Clear();
 
-    SvTreeList* pModel = maLbSettings.GetModel();
+    SvTreeList* pModel = mpLbSettings->GetModel();
 
     {
         // Syntax for INDIRECT function.
@@ -202,42 +199,42 @@ void ScCalcOptionsDialog::FillOptionsList()
     pModel->Insert(createBoolItem(maCaptionEmptyStringAsZero,maConfig.mbEmptyStringAsZero));
     pModel->Insert(createBoolItem(maCaptionOpenCLEnabled,maConfig.mbOpenCLEnabled));
 
-    maLbSettings.SetUpdateMode(true);
+    mpLbSettings->SetUpdateMode(true);
 }
 
 void ScCalcOptionsDialog::SelectionChanged()
 {
-    sal_uInt16 nSelectedPos = maLbSettings.GetSelectEntryPos();
+    sal_uInt16 nSelectedPos = mpLbSettings->GetSelectEntryPos();
     switch ((CalcOptionOrder)nSelectedPos)
     {
         case CALC_OPTION_REF_SYNTAX:
         {
             // Formula syntax for INDIRECT function.
-            maBtnTrue.Hide();
-            maBtnFalse.Hide();
-            maLbOptionEdit.Show();
+            mpBtnTrue->Hide();
+            mpBtnFalse->Hide();
+            mpLbOptionEdit->Show();
 
-            maLbOptionEdit.Clear();
-            maLbOptionEdit.InsertEntry(maUseFormulaSyntax);
-            maLbOptionEdit.InsertEntry(maCalcA1);
-            maLbOptionEdit.InsertEntry(maExcelA1);
-            maLbOptionEdit.InsertEntry(maExcelR1C1);
+            mpLbOptionEdit->Clear();
+            mpLbOptionEdit->InsertEntry(maUseFormulaSyntax);
+            mpLbOptionEdit->InsertEntry(maCalcA1);
+            mpLbOptionEdit->InsertEntry(maExcelA1);
+            mpLbOptionEdit->InsertEntry(maExcelR1C1);
             switch (maConfig.meStringRefAddressSyntax)
             {
                 case formula::FormulaGrammar::CONV_OOO:
-                    maLbOptionEdit.SelectEntryPos(1);
+                    mpLbOptionEdit->SelectEntryPos(1);
                 break;
                 case formula::FormulaGrammar::CONV_XL_A1:
-                    maLbOptionEdit.SelectEntryPos(2);
+                    mpLbOptionEdit->SelectEntryPos(2);
                 break;
                 case formula::FormulaGrammar::CONV_XL_R1C1:
-                    maLbOptionEdit.SelectEntryPos(3);
+                    mpLbOptionEdit->SelectEntryPos(3);
                 break;
                 case formula::FormulaGrammar::CONV_UNSPECIFIED:
                 default:
-                    maLbOptionEdit.SelectEntryPos(0);
+                    mpLbOptionEdit->SelectEntryPos(0);
             }
-            maFtAnnotation.SetText(maDescStringRefSyntax);
+            mpFtAnnotation->SetText(maDescStringRefSyntax);
         }
         break;
 
@@ -246,9 +243,9 @@ void ScCalcOptionsDialog::SelectionChanged()
         case CALC_OPTION_ENABLE_OPENCL:
         {
             // Treat empty string as zero.
-            maLbOptionEdit.Hide();
-            maBtnTrue.Show();
-            maBtnFalse.Show();
+            mpLbOptionEdit->Hide();
+            mpBtnTrue->Show();
+            mpBtnFalse->Show();
 
             bool bValue = false;
             if ( nSelectedPos == CALC_OPTION_EMPTY_AS_ZERO )
@@ -258,15 +255,15 @@ void ScCalcOptionsDialog::SelectionChanged()
 
             if ( bValue )
             {
-                maBtnTrue.Check(true);
-                maBtnFalse.Check(false);
+                mpBtnTrue->Check(true);
+                mpBtnFalse->Check(false);
             }
             else
             {
-                maBtnTrue.Check(false);
-                maBtnFalse.Check(true);
+                mpBtnTrue->Check(false);
+                mpBtnFalse->Check(true);
             }
-            maFtAnnotation.SetText(maDescEmptyStringAsZero);
+            mpFtAnnotation->SetText(maDescEmptyStringAsZero);
         }
         break;
         default:
@@ -276,13 +273,13 @@ void ScCalcOptionsDialog::SelectionChanged()
 
 void ScCalcOptionsDialog::ListOptionValueChanged()
 {
-    sal_uInt16 nSelected = maLbSettings.GetSelectEntryPos();
+    sal_uInt16 nSelected = mpLbSettings->GetSelectEntryPos();
     switch ((CalcOptionOrder) nSelected)
     {
         case CALC_OPTION_REF_SYNTAX:
         {
             // Formula syntax for INDIRECT function.
-            sal_uInt16 nPos = maLbOptionEdit.GetSelectEntryPos();
+            sal_uInt16 nPos = mpLbOptionEdit->GetSelectEntryPos();
             maConfig.meStringRefAddressSyntax = toAddressConvention(nPos);
 
             setValueAt(nSelected, toString(maConfig.meStringRefAddressSyntax));
@@ -297,8 +294,8 @@ void ScCalcOptionsDialog::ListOptionValueChanged()
 
 void ScCalcOptionsDialog::RadioValueChanged()
 {
-    sal_uInt16 nSelected = maLbSettings.GetSelectEntryPos();
-    bool bValue = maBtnTrue.IsChecked();
+    sal_uInt16 nSelected = mpLbSettings->GetSelectEntryPos();
+    bool bValue = mpBtnTrue->IsChecked();
     switch (nSelected)
     {
         case CALC_OPTION_REF_SYNTAX:
@@ -338,9 +335,9 @@ OUString ScCalcOptionsDialog::toString(bool bVal) const
 
 IMPL_LINK(ScCalcOptionsDialog, SettingsSelHdl, Control*, pCtrl)
 {
-    if (pCtrl == &maLbSettings)
+    if (pCtrl == mpLbSettings)
         SelectionChanged();
-    else if (pCtrl == &maLbOptionEdit)
+    else if (pCtrl == mpLbOptionEdit)
         ListOptionValueChanged();
 
     return 0;

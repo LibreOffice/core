@@ -69,6 +69,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/externaldata \
 	sc/uiconfig/scalc/ui/footerdialog \
 	sc/uiconfig/scalc/ui/formatcellsdialog \
+	sc/uiconfig/scalc/ui/formulacalculationoptions \
 	sc/uiconfig/scalc/ui/goalseekdlg \
 	sc/uiconfig/scalc/ui/groupdialog \
 	sc/uiconfig/scalc/ui/headerdialog \
