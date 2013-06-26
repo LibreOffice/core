@@ -45,7 +45,6 @@ namespace sc {
     class CopyToDocContext;
     class MixDocContext;
     struct ColumnBlockPosition;
-    class CellBlockCloneHandler;
     class SingleColumnSpanSet;
 }
 

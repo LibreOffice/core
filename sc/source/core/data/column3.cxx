@@ -44,7 +44,6 @@
 #include "columnspanset.hxx"
 #include "mtvcellfunc.hxx"
 #include "scopetools.hxx"
-#include "cellclonehandler.hxx"
 #include "editutil.hxx"
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>

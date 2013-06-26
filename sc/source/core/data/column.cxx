@@ -36,7 +36,6 @@
 #include "clipcontext.hxx"
 #include "types.hxx"
 #include "editutil.hxx"
-#include "cellclonehandler.hxx"
 #include "mtvcellfunc.hxx"
 #include "columnspanset.hxx"
 #include "scopetools.hxx"
