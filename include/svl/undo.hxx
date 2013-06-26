@@ -240,6 +240,7 @@ namespace svl
 
         virtual size_t          GetRedoActionCount( bool const i_currentLevel = CurrentLevel ) const = 0;
         virtual OUString        GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
+        virtual SfxUndoAction*  GetRedoAction( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
 
         virtual sal_Bool        Undo() = 0;
         virtual sal_Bool        Redo() = 0;
@@ -358,6 +359,7 @@ public:
     virtual SfxUndoAction*  GetUndoAction( size_t nNo=0 ) const;
     virtual size_t          GetRedoActionCount( bool const i_currentLevel = CurrentLevel ) const;
     virtual OUString        GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
+    virtual SfxUndoAction*  GetRedoAction( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
     virtual sal_Bool        Undo();
     virtual sal_Bool        Redo();
     virtual void            Clear();

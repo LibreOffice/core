@@ -111,9 +111,11 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
         // Keep Cursor - so that we're able to set it at
         // the same position for autoformat or autocorrection
         SwUndoId nLastUndoId(UNDO_EMPTY);
-        GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(0, & nLastUndoId);
-        bool bRestoreCrsr = 1 == nCount && (UNDO_AUTOFORMAT == nLastUndoId ||
-                                           UNDO_AUTOCORRECT == nLastUndoId );
+        GetLastUndoInfo(0, & nLastUndoId);
+        const bool bRestoreCrsr = nCount == 1
+                                  && ( UNDO_AUTOFORMAT == nLastUndoId
+                                       || UNDO_AUTOCORRECT == nLastUndoId
+                                       || UNDO_SETDEFTATTR == nLastUndoId );
         Push();
 
         // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!
@@ -168,6 +170,11 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
         SetMark();          // Bound1 and Bound2 in the same Node
         ClearMark();
 
+        SwUndoId nFirstRedoId(UNDO_EMPTY);
+        GetDoc()->GetIDocumentUndoRedo().GetFirstRedoInfo(0, & nFirstRedoId);
+        const bool bRestoreCrsr = nCount == 1 && UNDO_SETDEFTATTR == nFirstRedoId;
+        Push();
+
         // Destroy stored TableBoxPtr. A dection is only permitted for the new "Box"!
         ClearTblBoxCntnt();
 
@@ -184,6 +191,8 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
                 OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8)
                     .getStr());
         }
+
+        Pop( !bRestoreCrsr );
 
         GetDoc()->SetRedlineMode( eOld );
         GetDoc()->CompressRedlines();

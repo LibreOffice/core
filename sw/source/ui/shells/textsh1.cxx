@@ -328,6 +328,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rWrtSh.StartAction();
                 // prevent view from jumping because of (temporary) selection changes
                 rWrtSh.LockView( sal_True );
+
                 // save selection for later restoration
                 rWrtSh.Push();
 
@@ -377,12 +378,16 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         rWrtSh.SelAll();
                         rWrtSh.ExtendedSelectAll();
                     }
+
+                    rWrtSh.StartUndo( ( !bForParagraph && !bForSelection ) ? UNDO_SETDEFTATTR : UNDO_EMPTY );
                     if (aNewLangTxt == aStrNone)
                         SwLangHelper::SetLanguage_None( rWrtSh, bForSelection, aCoreSet );
                     else if (aNewLangTxt == aStrResetLangs)
                         SwLangHelper::ResetLanguages( rWrtSh, bForSelection );
                     else
                         SwLangHelper::SetLanguage( rWrtSh, aNewLangTxt, bForSelection, aCoreSet );
+                    rWrtSh.EndUndo();
+
                 }
 
                 // restore selection...

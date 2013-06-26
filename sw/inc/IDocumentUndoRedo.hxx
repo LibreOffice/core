@@ -156,11 +156,13 @@ public:
     */
     virtual sal_Bool Redo() = 0;
 
-    /** Get comment of first Redo action.
+    /** Get Id and comment of first Redo action.
         @param o_pStr       if not 0, receives comment of first Redo action.
+        @param o_pId        if not 0, receives Id of first Redo action.
         @return     true if there is a Redo action, false if none
     */
-    virtual bool GetFirstRedoInfo(OUString *const o_pStr) const = 0;
+    virtual bool GetFirstRedoInfo(OUString *const o_pStr,
+                                  SwUndoId *const o_pId = 0) const = 0;
 
     /** Get comments of Redo actions.
         @return     comments of all top-level Redo actions.

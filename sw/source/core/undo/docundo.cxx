@@ -332,16 +332,29 @@ SwUndoComments_t UndoManager::GetUndoComments() const
 
 
 /**************** REDO ******************/
-bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr) const
+
+bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr,
+                                   SwUndoId *const o_pId) const
 {
     if (!SdrUndoManager::GetRedoActionCount(CurrentLevel))
     {
         return false;
     }
 
+    SfxUndoAction *const pAction( SdrUndoManager::GetRedoAction(0, CurrentLevel) );
+    if ( pAction == NULL )
+    {
+        return false;
+    }
+
     if (o_pStr)
     {
-        *o_pStr = SdrUndoManager::GetRedoActionComment(0, CurrentLevel);
+        *o_pStr = pAction->GetComment();
+    }
+    if (o_pId)
+    {
+        sal_uInt16 const nId(pAction->GetId());
+        *o_pId = static_cast<SwUndoId>(nId);
     }
 
     return true;
@@ -443,7 +456,7 @@ public:
     {
         if (m_bSaveCursor)
         {
-            m_rShell.Pop();
+            m_rShell.Pop( sal_False );
         }
     }
 private:
@@ -468,7 +481,7 @@ bool UndoManager::impl_DoUndoRedo(UndoOrRedo_t const undoOrRedo)
     // in case the model has controllers locked, the Undo should not
     // change the view cursors!
     bool const bSaveCursors(pEditShell->CursorsLocked());
-    CursorGuard(*pEditShell, bSaveCursors);
+    CursorGuard aCursorGuard(*pEditShell, bSaveCursors);
     if (!bSaveCursors)
     {
         // (in case Undo was called via API) clear the cursors:

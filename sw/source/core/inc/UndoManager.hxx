@@ -59,10 +59,10 @@ public:
                 SwRewriter const*const pRewriter);
     virtual void DelAllUndoObj();
     virtual bool GetLastUndoInfo(OUString *const o_pStr,
-                SwUndoId *const o_pId) const;
+                                 SwUndoId *const o_pId) const;
     virtual SwUndoComments_t GetUndoComments() const;
-
-    virtual bool GetFirstRedoInfo(OUString *const o_pStr) const;
+    virtual bool GetFirstRedoInfo(OUString *const o_pStr,
+                                  SwUndoId *const o_pId = 0) const;
     virtual SwUndoComments_t GetRedoComments() const;
     virtual bool Repeat(::sw::RepeatContext & rContext,
                 sal_uInt16 const nRepeatCnt);

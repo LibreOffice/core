@@ -830,11 +830,30 @@ size_t SfxUndoManager::ImplGetRedoActionCount_Lock( bool const i_currentLevel ) 
 
 //------------------------------------------------------------------------
 
-OUString SfxUndoManager::GetRedoActionComment( size_t nNo, bool const i_currentLevel ) const
+SfxUndoAction* SfxUndoManager::GetRedoAction( size_t nNo, bool const i_currentLevel ) const
 {
     UndoManagerGuard aGuard( *m_pData );
+
     const SfxUndoArray* pUndoArray = i_currentLevel ? m_pData->pActUndoArray : m_pData->pUndoArray;
-    return pUndoArray->aUndoActions[ pUndoArray->nCurUndoAction + nNo ].pAction->GetComment();
+    if ( (pUndoArray->nCurUndoAction + nNo) > pUndoArray->aUndoActions.size() )
+    {
+        return NULL;
+    }
+    return pUndoArray->aUndoActions[ pUndoArray->nCurUndoAction + nNo ].pAction;
+}
+
+//------------------------------------------------------------------------
+
+OUString SfxUndoManager::GetRedoActionComment( size_t nNo, bool const i_currentLevel ) const
+{
+    String sComment;
+    UndoManagerGuard aGuard( *m_pData );
+    const SfxUndoArray* pUndoArray = i_currentLevel ? m_pData->pActUndoArray : m_pData->pUndoArray;
+    if ( (pUndoArray->nCurUndoAction + nNo) < pUndoArray->aUndoActions.size() )
+    {
+        sComment = pUndoArray->aUndoActions[ pUndoArray->nCurUndoAction + nNo ].pAction->GetComment();
+    }
+    return sComment;
 }
 
 //------------------------------------------------------------------------
