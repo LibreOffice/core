@@ -2364,7 +2364,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
     SdrMarkView* pView = pHdlList ? pHdlList->GetView() : 0;
     SdrPageView* pPageView = pView ? pView->GetSdrPageView() : 0;
 
-    if(pPageView && pView->areMarkHandlesHidden())
+    if(!pPageView || (pPageView && pView->areMarkHandlesHidden()))
     {
         return;
     }
@@ -2525,7 +2525,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
     for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
     {
         // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
-        const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
+        const SdrPageWindow& rPageWindow = *(pPageView->GetPageWindow(b));
 
         if(rPageWindow.GetPaintWindow().OutputToWindow())
         {
