@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXX///vc\u003d",
+        "filename": "svx/source/accessibility/AccessibleControlShape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2013-06-26T12:49:03Z",
+      "side": 0,
+      "message": "Removing the //.... line is OK, but the other is a doxygen comment, and you convert that one to //*, which is not. Please use /// or just leave that one alone. See here for more info: https://wiki.documentfoundation.org/Development/Doxygen",
+      "revId": "96456205067220cc73bffae6ae860dd120641660",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
