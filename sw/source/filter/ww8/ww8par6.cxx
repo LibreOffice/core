@@ -230,14 +230,6 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     nTextareaHeight -= rUL.GetUpper();
     nTextareaHeight -= rUL.GetLower();
 
-    SwTwips nTextareaWidth = rFmt.GetFrmSize().GetWidth();
-    const SvxLRSpaceItem &rLR = ItemGet<SvxLRSpaceItem>(rFmt, RES_LR_SPACE);
-    nTextareaWidth -= rLR.GetLeft();
-    nTextareaWidth -= rLR.GetRight();
-
-    if (rSection.IsVertical())
-        std::swap(nTextareaHeight, nTextareaWidth);
-
     SwTextGridItem aGrid;
     aGrid.SetDisplayGrid(false);
     aGrid.SetPrintGrid(false);
@@ -275,46 +267,66 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     rDoc.SetDefaultPageMode( bSquaredMode );
     aGrid.SetSquaredMode( bSquaredMode );
 
-    //sep.dyaLinePitch
-    sal_Int32 nLinePitch = rSection.maSep.dyaLinePitch;
-
-    //Get the size of word's default styles font
-    sal_uInt32 nCharWidth=240;
-    for (sal_uInt16 nI = 0; nI < pStyles->GetCount(); ++nI)
+    if ( eType != GRID_NONE )
     {
-        if (pCollA[nI].bValid && pCollA[nI].pFmt &&
-            pCollA[nI].GetWWStyleId() == 0)
+
+        //sep.dyaLinePitch
+        const sal_Int32 nLinePitch = rSection.maSep.dyaLinePitch;
+
+        //Get the size of word's default styles font
+        sal_uInt32 nCharWidth=240;
+        for (sal_uInt16 nI = 0; nI < pStyles->GetCount(); ++nI)
         {
-            nCharWidth = ItemGet<SvxFontHeightItem>(*(pCollA[nI].pFmt),
-                RES_CHRATR_CJK_FONTSIZE).GetHeight();
-            break;
+            if (pCollA[nI].bValid && pCollA[nI].pFmt &&
+                pCollA[nI].GetWWStyleId() == 0)
+            {
+                nCharWidth = ItemGet<SvxFontHeightItem>(*(pCollA[nI].pFmt),
+                    RES_CHRATR_CJK_FONTSIZE).GetHeight();
+                break;
+            }
         }
+
+        //dxtCharSpace
+        if (rSection.maSep.dxtCharSpace)
+        {
+            sal_uInt32 nCharSpace = rSection.maSep.dxtCharSpace;
+            //main lives in top 20 bits, and is signed.
+            sal_Int32 nMain = (nCharSpace & 0xFFFFF000);
+            nMain/=0x1000;
+            nCharWidth += nMain*20;
+
+            int nFraction = (nCharSpace & 0x00000FFF);
+            nFraction = (nFraction*20)/0xFFF;
+            nCharWidth += nFraction;
+        }
+
+        SwTwips nTextareaWidth = rFmt.GetFrmSize().GetWidth();
+        {
+            const SvxLRSpaceItem &rLR = ItemGet<SvxLRSpaceItem>(rFmt, RES_LR_SPACE);
+            nTextareaWidth -= rLR.GetLeft();
+            nTextareaWidth -= rLR.GetRight();
+
+            if (rSection.IsVertical())
+                std::swap(nTextareaHeight, nTextareaWidth);
+        }
+
+        // only apply sensible grid property values
+        if ( nLinePitch > 0
+             && nCharWidth > 0
+             && nTextareaHeight > nLinePitch )
+        {
+            aGrid.SetBaseWidth( writer_cast<sal_uInt16>(nCharWidth));
+            aGrid.SetLines(writer_cast<sal_uInt16>(nTextareaHeight/nLinePitch));
+            aGrid.SetBaseHeight(writer_cast<sal_uInt16>(nLinePitch));
+        }
+
+        // ruby height is not supported in ww8
+        //sal_Int32 nRubyHeight = nLinePitch - nCharWidth;
+        //if (nRubyHeight < 0)
+        //    nRubyHeight = 0;
+        sal_Int32 nRubyHeight = 0;
+        aGrid.SetRubyHeight(writer_cast<sal_uInt16>(nRubyHeight));
     }
-
-    //dxtCharSpace
-    if (rSection.maSep.dxtCharSpace)
-    {
-        sal_uInt32 nCharSpace = rSection.maSep.dxtCharSpace;
-        //main lives in top 20 bits, and is signed.
-        sal_Int32 nMain = (nCharSpace & 0xFFFFF000);
-        nMain/=0x1000;
-        nCharWidth += nMain*20;
-
-        int nFraction = (nCharSpace & 0x00000FFF);
-        nFraction = (nFraction*20)/0xFFF;
-        nCharWidth += nFraction;
-    }
-
-    aGrid.SetBaseWidth( writer_cast<sal_uInt16>(nCharWidth));
-    aGrid.SetLines(writer_cast<sal_uInt16>(nTextareaHeight/nLinePitch));
-    aGrid.SetBaseHeight(writer_cast<sal_uInt16>(nLinePitch));
-
-    // ruby height is not supported in ww8
-    //sal_Int32 nRubyHeight = nLinePitch - nCharWidth;
-    //if (nRubyHeight < 0)
-    //    nRubyHeight = 0;
-    sal_Int32 nRubyHeight = 0;
-    aGrid.SetRubyHeight(writer_cast<sal_uInt16>(nRubyHeight));
 
     rFmt.SetFmtAttr(aGrid);
 }
