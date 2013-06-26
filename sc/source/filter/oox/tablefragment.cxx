@@ -53,6 +53,10 @@ ContextHandlerRef TableFragment::onCreateContext( sal_Int32 nElement, const Attr
         case XLS_TOKEN( table ):
             if( nElement == XLS_TOKEN( autoFilter ) )
                 return new AutoFilterContext( *this, mrTable.createAutoFilter() );
+            if( nElement == XLS_TOKEN( tableStyleInfo ) )
+            {
+                mrTable.importTableStyleInfo( rAttribs );
+            }
         break;
     }
     return 0;

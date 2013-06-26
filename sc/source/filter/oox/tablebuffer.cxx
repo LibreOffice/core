@@ -25,6 +25,8 @@
 #include "oox/helper/propertyset.hxx"
 #include "oox/token/properties.hxx"
 #include "addressconverter.hxx"
+#include "dbdataformatting.hxx"
+#include "stylesbuffer.hxx"
 
 namespace oox {
 namespace xls {
@@ -79,6 +81,13 @@ void Table::importTable( SequenceInputStream& rStrm, sal_Int16 nSheet )
     maModel.mnType = STATIC_ARRAY_SELECT( spnTypes, nType, XML_TOKEN_INVALID );
 }
 
+void Table::importTableStyleInfo( const AttributeList& rAttribs )
+{
+    maModel.maTableStyleName = rAttribs.getXString( XML_name, OUString() );
+    maModel.mbShowRowStripes = rAttribs.getBool( XML_showRowStripes, false );
+    maModel.mbShowColumnStripes = rAttribs.getBool( XML_showColumnStripes, false );
+}
+
 void Table::finalizeImport()
 {
     // Create database range.  Note that Excel 2007 and later names database
@@ -99,6 +108,16 @@ void Table::finalizeImport()
 
         // filter settings
         maAutoFilters.finalizeImport( xDatabaseRange );
+
+        //Setting the ScDBDataFormatting (Table style) attribute.
+        ScDBDataFormatting aTableFormatting = getStyles().getTableStyle( maModel.maTableStyleName )->getTableFormatting(); //May fail in cases of malformed corrupt table/table#.xml where the maTableStyleName is messed up
+        aTableFormatting.SetBandedRows( maModel.mbShowRowStripes );
+        aTableFormatting.SetBandedColumns( maModel.mbShowColumnStripes );
+        //Add this table formatting information to the ScDBData instance.
+        //xDatabaseRange->SetTableFormatting( aTableFormatting );
+        //Still figuring how to have an ScDBData object out of this
+        //xDatabaseRange of type XDatabaseRange... all that needs to be
+        //done is call the SetTableFormatting on that ScDBData object
     }
     catch( Exception& )
     {

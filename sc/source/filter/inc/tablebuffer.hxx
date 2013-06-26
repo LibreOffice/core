@@ -35,10 +35,14 @@ struct TableModel
                         maRange;            /// Original (unchecked) range of the table.
     OUString     maProgName;         /// Programmatical name.
     OUString     maDisplayName;      /// Display name.
+    OUString     maTableStyleName;   /// Name of associated table style
     sal_Int32           mnId;               /// Unique table identifier.
     sal_Int32           mnType;             /// Table type (worksheet, query, etc.).
     sal_Int32           mnHeaderRows;       /// Number of header rows.
     sal_Int32           mnTotalsRows;       /// Number of totals rows.
+
+    bool                mbShowRowStripes;  /// <tableStyleInfo> data banded rows
+    bool                mbShowColumnStripes;/// <tableStyleInfo> data banded columns
 
     explicit            TableModel();
 };
@@ -52,6 +56,8 @@ public:
 
     /** Imports a table definition from the passed attributes. */
     void                importTable( const AttributeList& rAttribs, sal_Int16 nSheet );
+    /**Imports the table style info from <tableStyleInfo> tag. */
+    void                importTableStyleInfo( const AttributeList& rAttribs );
     /** Imports a table definition from a TABLE record. */
     void                importTable( SequenceInputStream& rStrm, sal_Int16 nSheet );
     /** Creates a new auto filter and stores it internally. */
