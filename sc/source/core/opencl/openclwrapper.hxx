@@ -90,15 +90,15 @@ typedef struct _GPUEnv {
 
     cl_kernel kernels[MAX_CLFILE_NUM];
 
-    cl_program programs[MAX_CLFILE_NUM]; //one program object maps one kernel source file
+    cl_program programs[MAX_CLFILE_NUM]; ///< one program object maps one kernel source file
 
-    char kernelSrcFile[MAX_CLFILE_NUM][256], //the max len of kernel file name is 256
+    char kernelSrcFile[MAX_CLFILE_NUM][256], ///< the max len of kernel file name is 256
          kernel_names[MAX_CLKERNEL_NUM][MAX_KERNEL_STRING_LEN + 1];
 
     cl_kernel_function kernel_functions[MAX_CLKERNEL_NUM];
 
     int kernel_count, file_count, // only one kernel file
-        isUserCreated; // 1: created , 0:no create and needed to create by opencl wrapper
+        isUserCreated; ///< 1: created , 0:no create and needed to create by opencl wrapper
 
 } GPUEnv;
 
