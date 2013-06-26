@@ -22,7 +22,6 @@
 #include <sal/types.h>
 
 const sal_Int32 n_ConstBufferSize = 32768;
-const sal_Int32 n_ConstMaxMemoryStreamSize = 20480;
 
 // by calculation of the digest we read 32 bytes more ( if available )
 // it allows to ignore the padding if the stream is longer than n_ConstDigestDecrypt since we read at least two blocks more;
