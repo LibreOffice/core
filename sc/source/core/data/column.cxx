@@ -1897,13 +1897,7 @@ void ScColumn::UndoToColumn(
 void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
 {
     // Copy cells from this column to the destination column only for those
-    // rows that are present in the position column.
-
-    sc::CellBlockCloneHandler aHdl(*pDocument, *rDestCol.pDocument, rDestCol.maCells, rDestCol.maCellTextAttrs);
-    sc::ColumnBlockConstPosition aSrcPos;
-    sc::ColumnBlockPosition aDestPos;
-    InitBlockPosition(aSrcPos);
-    rDestCol.InitBlockPosition(aDestPos);
+    // rows that are present in the position column (rPosCol).
 
     // First, mark all the non-empty cell ranges from the position column.
     sc::SingleColumnSpanSet aRangeSet;
@@ -1913,9 +1907,17 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
     // marked row ranges.
     sc::SingleColumnSpanSet::SpansType aRanges;
     aRangeSet.getSpans(aRanges);
+
+    CopyToClipHandler aFunc(*this, rDestCol, NULL);
+    sc::CellStoreType::const_iterator itPos = maCells.begin();
     sc::SingleColumnSpanSet::SpansType::const_iterator it = aRanges.begin(), itEnd = aRanges.end();
     for (; it != itEnd; ++it)
-        CopyCellsInRangeToColumn(&aSrcPos, &aDestPos, aHdl, it->mnRow1, it->mnRow2, rDestCol);
+    {
+        itPos = sc::ParseBlock(itPos, maCells, aFunc, it->mnRow1, it->mnRow2);
+        rDestCol.RegroupFormulaCells(it->mnRow1, it->mnRow2);
+    }
+
+    rDestCol.CellStorageModified();
 }
 
 
