@@ -4633,9 +4633,29 @@ uno::Reference<lang::XMultiServiceFactory> RTFDocumentImpl::getModelFactory()
     return m_xModelFactory;
 }
 
-RTFParserState& RTFDocumentImpl::getState()
+bool RTFDocumentImpl::isInBackground()
 {
-    return m_aStates.top();
+    return m_aStates.top().bInBackground;
+}
+
+RTFInternalState RTFDocumentImpl::getInternalState()
+{
+    return m_aStates.top().nInternalState;
+}
+
+void RTFDocumentImpl::setInternalState(RTFInternalState nInternalState)
+{
+    m_aStates.top().nInternalState = nInternalState;
+}
+
+RTFDesitnationState RTFDocumentImpl::getDestinationState()
+{
+    return m_aStates.top().nDestinationState;
+}
+
+void RTFDocumentImpl::setDestinationState(RTFDesitnationState nDestinationState)
+{
+    m_aStates.top().nDestinationState = nDestinationState;
 }
 
 void RTFDocumentImpl::setDestinationText(OUString& rString)

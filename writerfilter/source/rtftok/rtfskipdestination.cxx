@@ -26,7 +26,7 @@ RTFSkipDestination::~RTFSkipDestination()
         if (!m_bParsed)
         {
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": skipping destination");
-            m_rImport.getState().nDestinationState = DESTINATION_SKIP;
+            m_rImport.setDestinationState(DESTINATION_SKIP);
         }
         m_rImport.setSkipUnknown(false);
     }

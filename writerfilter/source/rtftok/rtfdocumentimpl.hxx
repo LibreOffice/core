@@ -438,7 +438,11 @@ namespace writerfilter {
                 void setIgnoreFirst(OUString& rIgnoreFirst);
                 void seek(sal_uInt32 nPos);
                 uno::Reference<lang::XMultiServiceFactory> getModelFactory();
-                RTFParserState& getState();
+                bool isInBackground();
+                RTFInternalState getInternalState();
+                void setInternalState(RTFInternalState nInternalState);
+                RTFDesitnationState getDestinationState();
+                void setDestinationState(RTFDesitnationState nDestinationState);
                 void setDestinationText(OUString& rString);
                 /// Resolve a picture: If not inline, then anchored.
                 int resolvePict(bool bInline);

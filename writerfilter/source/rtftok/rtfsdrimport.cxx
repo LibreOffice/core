@@ -639,7 +639,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
         }
     }
 
-    if (m_rImport.getState().bInBackground)
+    if (m_rImport.isInBackground())
     {
         RTFSprms aAttributes;
         aAttributes.set(NS_ooxml::LN_CT_Background_color, RTFValue::Pointer_t(new RTFValue(xPropertySet->getPropertyValue("FillColor").get<sal_Int32>())));

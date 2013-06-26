@@ -82,7 +82,7 @@ int RTFTokenizer::resolveParse()
 
         if (m_nGroup < 0)
             return ERROR_GROUP_UNDER;
-        if (m_nGroup > 0 && m_rImport.getState().nInternalState == INTERNAL_BIN)
+        if (m_nGroup > 0 && m_rImport.getInternalState() == INTERNAL_BIN)
         {
             ret = m_rImport.resolveChars(ch);
             if (ret)
@@ -122,7 +122,7 @@ int RTFTokenizer::resolveParse()
                 default:
                     if (m_nGroup == 0)
                         return ERROR_CHAR_OVER;
-                    if (m_rImport.getState().nInternalState == INTERNAL_NORMAL)
+                    if (m_rImport.getInternalState() == INTERNAL_NORMAL)
                     {
                         ret = m_rImport.resolveChars(ch);
                         if (ret)
@@ -144,7 +144,7 @@ int RTFTokenizer::resolveParse()
                                 return ret;
                             count = 2;
                             b = 0;
-                            m_rImport.getState().nInternalState = INTERNAL_NORMAL;
+                            m_rImport.setInternalState(INTERNAL_NORMAL);
                         }
                     }
                     break;
@@ -269,7 +269,7 @@ int RTFTokenizer::resolveKeyword()
 
 int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
 {
-    if (m_rImport.getState().nDestinationState == DESTINATION_SKIP)
+    if (m_rImport.getDestinationState() == DESTINATION_SKIP)
         return 0;
     /*SAL_INFO("writefilter", OSL_THIS_FUNC << ": keyword '\\" << rKeyword.getStr() <<
                "' with param? " << (bParam ? 1 : 0) <<" param val: '" << (bParam ? nParam : 0) << "'");*/
