@@ -319,28 +319,31 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             }
         }
     }
-    //add  for exporting OCX control
-    //for OCX control import from MS office file,we need keep the id value as MS office file.
-    //GetOldRoot().pObjRecs->Add( pCurrXclObj ) statement has generated the id value as obj id rule;
-    //but we trick it here.
-    sal_uInt16 nObjType = pObj->GetObjIdentifier();
-    if( nObjType == OBJ_UNO && pCurrXclObj )
+    if(pObj)
     {
-        Reference< XPropertySet > xPropSet( rxShape, UNO_QUERY );
-        Any aAny;
-        try
+        //add  for exporting OCX control
+        //for OCX control import from MS office file,we need keep the id value as MS office file.
+        //GetOldRoot().pObjRecs->Add( pCurrXclObj ) statement has generated the id value as obj id rule;
+        //but we trick it here.
+        sal_uInt16 nObjType = pObj->GetObjIdentifier();
+        if( nObjType == OBJ_UNO && pCurrXclObj )
         {
-            aAny = xPropSet->getPropertyValue(rtl::OUString::createFromAscii("ObjIDinMSO"));
-        }
-        catch(const Exception&)
-        {
-            OSL_TRACE("XclEscherEx::StartShape, this control can't get the property ObjIDinMSO!");
-        }
-        sal_uInt16 nObjIDinMSO = 0xFFFF;
-        aAny >>= nObjIDinMSO;
-        if( nObjIDinMSO != 0xFFFF && nMsCtlType == 2)  //OCX
-        {
-            pCurrXclObj->SetId(nObjIDinMSO);
+            Reference< XPropertySet > xPropSet( rxShape, UNO_QUERY );
+            Any aAny;
+            try
+            {
+                aAny = xPropSet->getPropertyValue(rtl::OUString::createFromAscii("ObjIDinMSO"));
+            }
+            catch(const Exception&)
+            {
+                OSL_TRACE("XclEscherEx::StartShape, this control can't get the property ObjIDinMSO!");
+            }
+            sal_uInt16 nObjIDinMSO = 0xFFFF;
+            aAny >>= nObjIDinMSO;
+            if( nObjIDinMSO != 0xFFFF && nMsCtlType == 2)  //OCX
+            {
+                pCurrXclObj->SetId(nObjIDinMSO);
+            }
         }
     }
     if ( !pCurrXclObj )
