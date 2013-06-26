@@ -900,8 +900,6 @@ double OclCalc::OclProcess(cl_kernel_function function, double *data, formulax t
 double OclCalc::OclTest() {
     double data[NUM];
 
-    srand((unsigned int) time(NULL));
-
     for (int i = 0; i < NUM; i++) {
         data[i] = sc::rng::uniform();
         fprintf(stderr, "%f\t", data[i]);
@@ -912,10 +910,9 @@ double OclCalc::OclTest() {
 
 double OclCalc::OclTestDll() {
     double data[NUM];
-    srand((unsigned int) time(NULL));
 
     for (int i = 0; i < NUM; i++) {
-        data[i] = rand() / (RAND_MAX + 1.0);
+        data[i] = sc::rng::uniform();
         fprintf(stderr, "%f\t", data[i]);
     }
     OclProcess(&OclFormulaxDll, data, AVG);
