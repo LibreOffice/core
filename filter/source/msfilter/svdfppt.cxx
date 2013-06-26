@@ -5206,26 +5206,11 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
 
             PPTCharPropSet aCharPropSet( nCurrentPara );
             if ( bTextPropAtom )
-            {
-                if( nCharAnzRead == ( nStringLen - 1 ) && aString[nCharAnzRead] == '\r' )
-                {
-                    /* n#782833: Seems like the new line character at end of the para
-                     * has two char properties and we would need to use the next one.
-                     */
-                    PPTCharPropSet aDummyCharPropSet( nCurrentPara );
-                    ReadCharProps( rIn, aDummyCharPropSet, aString, nCharCount, nCharAnzRead,
-                               bTextPropAtom, nExtParaPos, aStyleTextProp9, nExtParaFlags,
-                               nBuBlip, nHasAnm, nAnmScheme );
-                    bEmptyParaPossible = true;
-                }
                 ReadCharProps( rIn, aCharPropSet, aString, nCharCount, nCharAnzRead,
                                bTextPropAtom, nExtParaPos, aStyleTextProp9, nExtParaFlags,
                                nBuBlip, nHasAnm, nAnmScheme );
-            }
             else
-            {
                 nCharCount = nStringLen;
-            }
 
             sal_uInt32 nLen;
             while( nCharCount )
