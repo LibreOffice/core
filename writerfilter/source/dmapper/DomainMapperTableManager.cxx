@@ -57,6 +57,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_bRowSizeTypeInserted(false),
     m_bTableSizeTypeInserted(false),
     m_nLayoutType(0),
+    m_nMaxFixedWidth(0),
     m_pTablePropsHandler( new TablePropertiesHandler( bOOXML ) )
 {
     m_pTablePropsHandler->SetTableManager( this );
@@ -132,8 +133,61 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                         }
                         else if( sal::static_int_cast<Id>(pMeasureHandler->getUnit()) == NS_ooxml::LN_Value_ST_TblWidth_auto )
                         {
-                            pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
-                            pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 100 );
+                            /*
+                            This attribute specifies the width type of table. This is uses as part of the table layout
+                            algorithm specified by the tblLayout element.(See 17.4.64 and 17.4.65 of the ISO/IEC 29500-1:2011.)
+                            If this valus is 'auto', the table layout have to uses the preferred widths on the table items to generate
+                            the final sizing of the table, but then must uses the contents of each cell to determine final column widths.(See 17.18.87
+                            of the ISO/IEC 29500-1:2011.)
+                            But, case that the width type of table(w:tbl / w:tblPr / w:tblW) is 'auto', the old source assgined the width value with
+                            100(%) without considering the total width of table.
+
+                            Accordingly, I fixed this bug as follows.
+                            1.Check whether any cell has fixed width in the given row of table.
+                            2.If the cell has fixed value, sum the width of cells to find the total width of given row(nRowFixedWidth).
+                            3.Check whether the total width of given row is compared with the maximum value of rows(m_nMaxFixedWidth).
+                              If nRowFixedWidth > m_nMaxFixedWidth, update the m_nMaxFixedValue with nRowFixedWidth, hence the width of table
+                              depends on the maximum width of rows. Of course, the initial value of m_nMaxFixedValue is 0.
+                              m_nMaxFixedValue stores the maximum width of row in the table.
+                            4. If any cell has fixed value, Set the width type of table with "FIX" and set the width value with m_nMaxFixedValue.
+                            5. If any cell has no fixed value, Set the width type of table with "Auto" and set the width value with 100(%)
+                            like in the previous code.
+                            */
+                            bool bFixed = false;
+                            sal_Int32 nRowFixedWidth = 0;
+                            if (!m_aCellWidths.empty())
+                            {
+                                // Step 1. Check whether any cell has fixed width in the given row of table.
+                                ::std::vector< IntVectorPtr >::iterator itr;
+                                for (itr = m_aCellWidths.begin(); itr != m_aCellWidths.end(); itr ++)
+                                {
+                                    IntVectorPtr itrVal = (*itr);
+                                    ::std::vector<sal_Int32>::iterator aValIter = itrVal->begin();
+                                    for (aValIter; aValIter != itrVal->end(); aValIter++)
+                                    {
+                                        // Step 2
+                                        nRowFixedWidth += (*aValIter);
+                                        bFixed = true;
+                                    }
+                                }
+                            }
+
+                            if (bFixed ) // If there is at least one cell that has fixed width....
+                            {
+                                // Step 3
+                                if (m_nMaxFixedWidth < nRowFixedWidth)
+                                    m_nMaxFixedWidth = nRowFixedWidth;
+
+                                // Step 4
+                                pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::FIX );
+                                pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nMaxFixedWidth );
+                            }
+                            else
+                            {
+                                // Step 5 - If there is no a cell cell that has fixed width....
+                                pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
+                                pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 100 );
+                            }
                         }
                         m_bTableSizeTypeInserted = true;
                     }
