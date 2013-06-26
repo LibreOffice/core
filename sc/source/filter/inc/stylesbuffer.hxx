@@ -793,6 +793,8 @@ public:
     explicit            TableStyle( const WorkbookHelper& rHelper, const OUString& rTableStyleName );
     void                importTableStyleElement( const AttributeList& rAttribs );
     void                finalizeImport();
+    const OUString&     getTableStyleName() const;
+    ScDBDataFormatting& getTableFormatting(); //not const since it will be edited and put in ScDBData objects
 private:
     typedef ::boost::shared_ptr< ::ScDBDataFormatting > TableFormattingRef;
 
@@ -1009,6 +1011,9 @@ public:
     void                writeStyleXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const;
 
     bool                hasBorder( sal_Int32 nBorderId ) const;
+    /**Returns the TableStyleRef for given table style name*/
+    TableStyleRef       getTableStyle( OUString& rTableStyleName );
+
 private:
     typedef RefVector< Font >                           FontVector;
     typedef RefVector< Border >                         BorderVector;
