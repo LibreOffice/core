@@ -154,6 +154,10 @@ awt::Rectangle ShapeType::getCoordSystem() const
 {
     Int32Pair aCoordPos = maTypeModel.moCoordPos.get( Int32Pair( 0, 0 ) );
     Int32Pair aCoordSize = maTypeModel.moCoordSize.get( Int32Pair( 1000, 1000 ) );
+    if( aCoordSize.first == 0 )
+        aCoordSize.first = 1;
+    if( aCoordSize.second == 0 )
+        aCoordSize.second = 1;
     return awt::Rectangle( aCoordPos.first, aCoordPos.second, aCoordSize.first, aCoordSize.second );
 }
 
