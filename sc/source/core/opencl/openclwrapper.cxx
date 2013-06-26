@@ -152,20 +152,20 @@ int OpenclDevice::ConvertToString(const char *filename, char **source) {
         rewind(file);
         *source = (char*) malloc(sizeof(char) * file_size + 1);
         if (*source == (char*) NULL) {
-            return (0);
+            return 0;
         }
         result = fread(*source, 1, file_size, file);
         if (result != (size_t) file_size) {
             free(*source);
-            return (0);
+            return 0;
         }
         (*source)[file_size] = '\0';
         fclose(file);
 
-        return (1);
+        return 1;
     }
     printf("open kernel file failed.\n");
-    return (0);
+    return 0;
 }
 
 int OpenclDevice::BinaryGenerated(const char * clFileName, FILE ** fhandle) {
@@ -388,12 +388,12 @@ int OpenclDevice::CachedOfKernerPrg(const GPUEnv *gpuEnvCached,
     for (i = 0; i < gpuEnvCached->fileCount; i++) {
         if (strcasecmp(gpuEnvCached->kernelSrcFile[i], clFileName) == 0) {
             if (gpuEnvCached->programs[i] != NULL) {
-                return (1);
+                return 1;
             }
         }
     }
 
-    return (0);
+    return 0;
 }
 
 int OpenclDevice::CompileKernelFile(GPUEnv *gpuInfo, const char *buildOption) {
@@ -409,7 +409,7 @@ int OpenclDevice::CompileKernelFile(GPUEnv *gpuInfo, const char *buildOption) {
     const char* filename = "kernel.cl";
 	fprintf(stderr, "CompileKernelFile ... \n");
     if (CachedOfKernerPrg(gpuInfo, filename) == 1) {
-        return (1);
+        return 1;
     }
 
     idx = gpuInfo->fileCount;
@@ -471,7 +471,7 @@ int OpenclDevice::CompileKernelFile(GPUEnv *gpuInfo, const char *buildOption) {
     }
 
     if (gpuInfo->programs[idx] == (cl_program) NULL) {
-        return (0);
+        return 0;
     }
 
     //char options[512];
@@ -498,11 +498,11 @@ int OpenclDevice::CompileKernelFile(GPUEnv *gpuInfo, const char *buildOption) {
         }
         if (status != CL_SUCCESS) {
             printf("opencl create build log fail\n");
-            return (0);
+            return 0;
         }
         buildLog = (char*) malloc(length);
         if (buildLog == (char*) NULL) {
-            return (0);
+            return 0;
         }
         if (!gpuInfo->isUserCreated) {
             status = clGetProgramBuildInfo(gpuInfo->programs[idx],
@@ -521,7 +521,7 @@ int OpenclDevice::CompileKernelFile(GPUEnv *gpuInfo, const char *buildOption) {
         }
 
         free(buildLog);
-        return (0);
+        return 0;
     }
 
     strcpy(gpuEnv.kernelSrcFile[idx], filename);
@@ -531,7 +531,7 @@ int OpenclDevice::CompileKernelFile(GPUEnv *gpuInfo, const char *buildOption) {
 
     gpuInfo->fileCount += 1;
 
-    return (1);
+    return 1;
 
 
 }
@@ -546,10 +546,10 @@ int OpenclDevice::GetKernelEnvAndFunc(const char *kernelName,
             env->program = gpuEnv.programs[0];
             env->kernel = gpuEnv.kernels[i];
             *function = gpuEnv.kernelFunctions[i];
-            return (1);
+            return 1;
         }
     }
-    return (0);
+    return 0;
 }
 
 int OpenclDevice::RunKernel(const char *kernelName, void **userdata) {
@@ -565,11 +565,11 @@ int OpenclDevice::RunKernel(const char *kernelName, void **userdata) {
     if (status == 1) {
         if (&env == (KernelEnv *) NULL
                 || &function == (cl_kernel_function *) NULL) {
-            return (0);
+            return 0;
         }
         return (function(userdata, &env));
     }
-    return (0);
+    return 0;
 }
 int OpenclDevice::InitOpenclRunEnv(int argc, const char *buildOptionKernelfiles)
 {
@@ -587,19 +587,19 @@ int OpenclDevice::InitOpenclRunEnv(int argc, const char *buildOptionKernelfiles)
         status = InitOpenclRunEnv(&gpuEnv);
         if (status) {
             printf("init_opencl_env failed.\n");
-            return (1);
+            return 1;
         }
         printf("init_opencl_env successed.\n");
         //initialize program, kernelName, kernelCount
         status = CompileKernelFile( &gpuEnv, buildOptionKernelfiles);
         if (status == 0 || gpuEnv.kernelCount == 0) {
             printf("CompileKernelFile failed.\n");
-            return (1);
+            return 1;
         }
         printf("CompileKernelFile successed.\n");
         isInited = 1;
     }
-    return (0);
+    return 0;
 }
 
 int OpenclDevice::InitOpenclRunEnv(GPUEnv *gpuInfo)
@@ -617,7 +617,7 @@ int OpenclDevice::InitOpenclRunEnv(GPUEnv *gpuInfo)
     if (!gpuInfo->isUserCreated) {
         status = clGetPlatformIDs(0, NULL, &numPlatforms);
         if (status != CL_SUCCESS) {
-            return (1);
+            return 1;
         }
         gpuInfo->platform = NULL;
 
@@ -625,12 +625,12 @@ int OpenclDevice::InitOpenclRunEnv(GPUEnv *gpuInfo)
             platforms = (cl_platform_id*) malloc(
                     numPlatforms * sizeof(cl_platform_id));
             if (platforms == (cl_platform_id*) NULL) {
-                return (1);
+                return 1;
             }
             status = clGetPlatformIDs(numPlatforms, platforms, NULL);
 
             if (status != CL_SUCCESS) {
-                return (1);
+                return 1;
             }
 
             for (i = 0; i < numPlatforms; i++) {
@@ -638,7 +638,7 @@ int OpenclDevice::InitOpenclRunEnv(GPUEnv *gpuInfo)
                         sizeof(platformName), platformName, NULL);
 
                 if (status != CL_SUCCESS) {
-                    return (1);
+                    return 1;
                 }
                 gpuInfo->platform = platforms[i];
 
@@ -654,7 +654,7 @@ int OpenclDevice::InitOpenclRunEnv(GPUEnv *gpuInfo)
 												&numDevices);
 
                     if (status != CL_SUCCESS) {
-                        return (1);
+                        return 1;
                     }
 
                     if (numDevices) {
@@ -665,7 +665,7 @@ int OpenclDevice::InitOpenclRunEnv(GPUEnv *gpuInfo)
             free(platforms);
         }
         if (NULL == gpuInfo->platform) {
-            return (1);
+            return 1;
         }
 
         // Use available platform.
@@ -692,25 +692,25 @@ int OpenclDevice::InitOpenclRunEnv(GPUEnv *gpuInfo)
         }
         if ((gpuInfo->context == (cl_context) NULL)
                 || (status != CL_SUCCESS)) {
-            return (1);
+            return 1;
         }
         // Detect OpenCL devices.
         // First, get the size of device list data
         status = clGetContextInfo(gpuInfo->context, CL_CONTEXT_DEVICES, 0,
                 NULL, &length);
         if ((status != CL_SUCCESS) || (length == 0)) {
-            return (1);
+            return 1;
         }
         // Now allocate memory for device list based on the size we got earlier
         gpuInfo->devices = (cl_device_id*) malloc(length);
         if (gpuInfo->devices == (cl_device_id*) NULL) {
-            return (1);
+            return 1;
         }
         // Now, get the device list data
         status = clGetContextInfo(gpuInfo->context, CL_CONTEXT_DEVICES, length,
                 gpuInfo->devices, NULL);
         if (status != CL_SUCCESS) {
-            return (1);
+            return 1;
         }
 
         // Create OpenCL command queue.
@@ -718,7 +718,7 @@ int OpenclDevice::InitOpenclRunEnv(GPUEnv *gpuInfo)
                 gpuInfo->devices[0], 0, &status);
 
         if (status != CL_SUCCESS) {
-            return (1);
+            return 1;
         }
     }
 
@@ -737,10 +737,10 @@ int OpenclDevice::RegisterKernelWrapper(const char *kernelName,cl_kernel_functio
 		if (strcasecmp(kernelName, gpuEnv.kernelNames[i]) == 0)
 		{
 			gpuEnv.kernelFunctions[i] = function;
-			return (1);
+			return 1;
 		}
 	}
-    return (0);
+    return 0;
 }
 
 
