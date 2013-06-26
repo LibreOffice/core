@@ -1,0 +1,11 @@
+--- misc/cairo-1.10.2/configure.sav	2013-06-26 15:00:42.000000000 +0200
++++ misc/cairo-1.10.2/configure	2013-06-26 15:03:36.995117032 +0200
+@@ -17236,7 +17236,7 @@ MAYBE_WARN="-Wall -Wextra \
+ MAYBE_WARN="$MAYBE_WARN -erroff=E_ENUM_TYPE_MISMATCH_ARG \
+ 			-erroff=E_ENUM_TYPE_MISMATCH_OP"
+ 
+-MAYBE_WARN="$MAYBE_WARN -fno-strict-aliasing -fno-common -flto"
++MAYBE_WARN="$MAYBE_WARN -fno-strict-aliasing -fno-common"
+ 
+ MAYBE_WARN="$MAYBE_WARN -Wp,-D_FORTIFY_SOURCE=2"
+ 
