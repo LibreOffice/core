@@ -121,6 +121,7 @@ public:
     void testN820788();
     void testN820504();
     void testFdo43641();
+    void testTableAutoColumnFixedSize();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -208,6 +209,7 @@ void Test::run()
         {"n820788.docx", &Test::testN820788},
         {"n820504.docx", &Test::testN820504},
         {"fdo43641.docx", &Test::testFdo43641},
+        {"table-auto-column-fixed-size.docx", &Test::testTableAutoColumnFixedSize},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1460,6 +1462,16 @@ void Test::testFdo43641()
     uno::Reference<drawing::XShape> xLine(xGroupShape->getByIndex(1), uno::UNO_QUERY);
     // This was 2200, not 2579 in mm100, i.e. the size of the line shape was incorrect.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(928694)), xLine->getSize().Width);
+}
+
+void Test::testTableAutoColumnFixedSize()
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    // Width was not recognized during import when table size was 'auto'
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(3996)), getProperty<sal_Int32>(xTextTable, "Width"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

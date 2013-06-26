@@ -57,6 +57,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_bRowSizeTypeInserted(false),
     m_bTableSizeTypeInserted(false),
     m_nLayoutType(0),
+    m_nMaxFixedWidth(0),
     m_pTablePropsHandler( new TablePropertiesHandler( bOOXML ) )
 {
     m_pTablePropsHandler->SetTableManager( this );
@@ -132,8 +133,47 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                         }
                         else if( sal::static_int_cast<Id>(pMeasureHandler->getUnit()) == NS_ooxml::LN_Value_ST_TblWidth_auto )
                         {
-                            pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
-                            pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 100 );
+                            /*
+                            This attribute specifies the width type of table. This is used as part of the table layout
+                            algorithm specified by the tblLayout element.(See 17.4.64 and 17.4.65 of the ISO/IEC 29500-1:2011.)
+                            If this valus is 'auto', the table layout has to uses the preferred widths on the table items to generate
+                            the final sizing of the table, but then must use the contents of each cell to determine final column widths.
+                            (See 17.18.87 of the ISO/IEC 29500-1:2011.)
+                            */
+                            bool bFixed = false;
+                            sal_Int32 nRowFixedWidth = 0;
+                            if (!m_aCellWidths.empty())
+                            {
+                                // Step 1. Check whether any cell has fixed width in the given row of table.
+                                ::std::vector< IntVectorPtr >::iterator itr;
+                                for (itr = m_aCellWidths.begin(); itr != m_aCellWidths.end(); itr ++)
+                                {
+                                    IntVectorPtr itrVal = (*itr);
+                                    for (std::vector<sal_Int32>::const_iterator aValIter = itrVal->begin(); aValIter != itrVal->end(); ++aValIter)
+                                    {
+                                        // Sum the width of cells to find the total width of given row
+                                        nRowFixedWidth += (*aValIter);
+                                        bFixed = true;
+                                    }
+                                }
+                            }
+
+                            // Check whether the total width of given row is compared with the maximum value of rows (m_nMaxFixedWidth).
+                            if (bFixed )
+                            {
+                                // Check if total width
+                                if (m_nMaxFixedWidth < nRowFixedWidth)
+                                    m_nMaxFixedWidth = nRowFixedWidth;
+
+                                pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::FIX );
+                                pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nMaxFixedWidth );
+                            }
+                            else
+                            {
+                                // Set the width type of table with 'Auto' and set the width value to 100(%)
+                                pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
+                                pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 100 );
+                            }
                         }
                         m_bTableSizeTypeInserted = true;
                     }
