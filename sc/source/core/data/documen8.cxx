@@ -449,6 +449,15 @@ void ScDocument::FillMatrix(
     pTab->FillMatrix(rMat, nCol1, nRow1, nCol2, nRow2);
 }
 
+void ScDocument::SetFormulaResults( const ScAddress& rTopPos, const double* pResults, size_t nLen )
+{
+    ScTable* pTab = FetchTable(rTopPos.Tab());
+    if (!pTab)
+        return;
+
+    pTab->SetFormulaResults(rTopPos.Col(), rTopPos.Row(), pResults, nLen);
+}
+
 
 //------------------------------------------------------------------------
 

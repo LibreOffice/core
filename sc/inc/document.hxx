@@ -1710,6 +1710,16 @@ public:
 
     void FillMatrix( ScMatrix& rMat, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
 
+    /**
+     * Set an array of numerical formula results to a group of contiguous
+     * formula cells.
+     *
+     * @param rTopPos position of the top formula cell of a group.
+     * @param pResults array of numeric results.
+     * @param nLen length of numeric results.
+     */
+    void SetFormulaResults( const ScAddress& rTopPos, const double* pResults, size_t nLen );
+
 private:
     ScDocument(const ScDocument& r); // disabled with no definition
 

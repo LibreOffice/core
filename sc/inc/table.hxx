@@ -855,6 +855,8 @@ public:
 
     void InterpretDirtyCells( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
+    void SetFormulaResults( SCCOL nCol, SCROW nRow, const double* pResults, size_t nLen );
+
     /** Replace behaves differently to the Search; adjust the rCol and rRow accordingly.
 
         'Replace' replaces at the 'current' position, but in order to achieve

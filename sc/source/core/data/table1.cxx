@@ -2215,6 +2215,14 @@ void ScTable::InterpretDirtyCells( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
         aCol[nCol].InterpretDirtyCells(nRow1, nRow2);
 }
 
+void ScTable::SetFormulaResults( SCCOL nCol, SCROW nRow, const double* pResults, size_t nLen )
+{
+    if (!ValidCol(nCol))
+        return;
+
+    aCol[nCol].SetFormulaResults(nRow, pResults, nLen);
+}
+
 const SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidColRow(nCol, nRow))
