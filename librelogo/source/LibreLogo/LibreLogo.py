@@ -722,7 +722,7 @@ def turnright(deg):
 def heading(deg = -1, go = False):
     turtle = __getshape__(__TURTLE__)
     if deg == -1:
-        return turtle.RotateAngle / 100
+        return -turtle.RotateAngle / 100 + 360
     else:
         if deg == u'any':
             turtle.RotateAngle = random.random() * 36000
