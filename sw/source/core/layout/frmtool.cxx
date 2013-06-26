@@ -1913,7 +1913,7 @@ static bool lcl_hasTabFrm(const SwTxtFrm* pTxtFrm)
             if (pObject->IsA(TYPE(SwFlyFrm)))
             {
                 SwFlyFrm* pFly = (SwFlyFrm*)pObject;
-                if (pFly->Lower()->IsTabFrm())
+                if (pFly->Lower() && pFly->Lower()->IsTabFrm())
                     return true;
             }
         }
