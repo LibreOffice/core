@@ -113,12 +113,12 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
         SetMark();          // Bound1 und Bound2 in den gleichen Node
         ClearMark();
 
-        // JP 02.04.98: Cursor merken - beim Auto-Format/-Korrektur
-        //              soll dieser wieder an die Position
         SwUndoId nLastUndoId(UNDO_EMPTY);
-        GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(0, & nLastUndoId);
-        bool bRestoreCrsr = 1 == nCount && (UNDO_AUTOFORMAT == nLastUndoId ||
-                                           UNDO_AUTOCORRECT == nLastUndoId );
+        GetLastUndoInfo(0, & nLastUndoId);
+        const bool bRestoreCrsr = nCount == 1
+                                  && ( UNDO_AUTOFORMAT == nLastUndoId
+                                       || UNDO_AUTOCORRECT == nLastUndoId
+                                       || UNDO_SETDEFTATTR == nLastUndoId );
         Push();
 
         //JP 18.09.97: gesicherten TabellenBoxPtr zerstoeren, eine autom.
@@ -172,6 +172,11 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
         SetMark();          // Bound1 und Bound2 in den gleichen Node
         ClearMark();
 
+        SwUndoId nFirstRedoId(UNDO_EMPTY);
+        GetDoc()->GetIDocumentUndoRedo().GetFirstRedoInfo(0, & nFirstRedoId);
+        const bool bRestoreCrsr = nCount == 1 && UNDO_SETDEFTATTR == nFirstRedoId;
+        Push();
+
         //JP 18.09.97: gesicherten TabellenBoxPtr zerstoeren, eine autom.
         //          Erkennung darf nur noch fuer die neue "Box" erfolgen!
         ClearTblBoxCntnt();
@@ -189,6 +194,8 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
                 ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8)
                     .getStr());
         }
+
+        Pop( !bRestoreCrsr );
 
         GetDoc()->SetRedlineMode( eOld );
         GetDoc()->CompressRedlines();

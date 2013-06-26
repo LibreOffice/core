@@ -2008,35 +2008,19 @@ inline void Sub( SwRegionRects& rRegion, const SwRect& rRect )
 void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
 {
     SwPosition *pStartPos = rCrsr.Start(),
-               *pEndPos   = rCrsr.GetPoint() == pStartPos ?
-                            rCrsr.GetMark() : rCrsr.GetPoint();
+               *pEndPos   = rCrsr.GetPoint() == pStartPos ? rCrsr.GetMark() : rCrsr.GetPoint();
 
     ViewShell *pSh = GetCurrShell();
 
-// --> FME 2004-06-08 #i12836# enhanced pdf
     SwRegionRects aRegion( pSh && !pSh->GetViewOptions()->IsPDFExport() ?
                            pSh->VisArea() :
                            Frm() );
-// <--
     if( !pStartPos->nNode.GetNode().IsCntntNode() ||
         !pStartPos->nNode.GetNode().GetCntntNode()->getLayoutFrm(this) ||
         ( pStartPos->nNode != pEndPos->nNode &&
           ( !pEndPos->nNode.GetNode().IsCntntNode() ||
             !pEndPos->nNode.GetNode().GetCntntNode()->getLayoutFrm(this) ) ) )
     {
-        /* For SelectAll we will need something like this later on...
-        const SwFrm* pPageFrm = GetLower();
-        while( pPageFrm )
-        {
-            SwRect aTmp( pPageFrm->Prt() );
-            aTmp.Pos() += pPageFrm->Frm().Pos();
-            Sub( aRegion, aTmp );
-            pPageFrm = pPageFrm->GetNext();
-        }
-        aRegion.Invert();
-        rCrsr.Remove( 0, rCrsr.Count() );
-        rCrsr.Insert( &aRegion, 0 );
-        */
         return;
     }
 
@@ -2058,7 +2042,11 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
         const SwAnchoredObject* pObj = pStartFrm->FindFlyFrm();
         aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj)) );
         const SwAnchoredObject* pObj2 = pEndFrm->FindFlyFrm();
-        aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj2)) );
+        ASSERT( pObj2 != NULL, "SwRootFrm::CalcFrmRects(..) - FlyFrame missing - looks like an invalid selection" );
+        if ( pObj2 != NULL && pObj2 != pObj )
+        {
+            aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj2)) );
+        }
     }
 
     //Fall 4: Tabellenselection
@@ -2093,7 +2081,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                 break;
 
             ASSERT( pEndLFrm->GetType() == pSttLFrm->GetType(),
-                    "Selection ueber unterschiedliche Inhalte" );
+                "Selection ueber unterschiedliche Inhalte" );
             switch( pSttLFrm->GetType() )
             {
             case FRM_HEADER:
@@ -2116,11 +2104,11 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                 {
                     const SwTabFrm* pTabFrm = (SwTabFrm*)pSttLFrm;
                     if( ( pTabFrm->GetFollow() ||
-                          ((SwTabFrm*)pEndLFrm)->GetFollow() ) &&
+                        ((SwTabFrm*)pEndLFrm)->GetFollow() ) &&
                         pTabFrm->GetTable()->GetRowsToRepeat() > 0 &&
                         pTabFrm->GetLower() != ((SwTabFrm*)pEndLFrm)->GetLower() &&
                         ( lcl_IsInRepeatedHeadline( pStartFrm ) ||
-                          lcl_IsInRepeatedHeadline( pEndFrm ) ) )
+                        lcl_IsInRepeatedHeadline( pEndFrm ) ) )
                     {
                         // End- auf den Start-CntntFrame setzen
                         if( pStartPos == rCrsr.GetPoint() )
@@ -2150,10 +2138,11 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
 
         SwRect aStFrm ( pStartFrm->UnionFrm( sal_True ) );
         aStFrm.Intersection( pStartFrm->PaintArea() );
-        SwRect aEndFrm( pStartFrm == pEndFrm ? aStFrm :
-                                               pEndFrm->UnionFrm( sal_True ) );
+        SwRect aEndFrm( pStartFrm == pEndFrm ? aStFrm : pEndFrm->UnionFrm( sal_True ) );
         if( pStartFrm != pEndFrm )
+        {
             aEndFrm.Intersection( pEndFrm->PaintArea() );
+        }
         SWRECTFN( pStartFrm )
         const sal_Bool bR2L = pStartFrm->IsRightToLeft();
         const sal_Bool bEndR2L = pEndFrm->IsRightToLeft();
@@ -2174,8 +2163,8 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
 
                 // BiDi-Portions are swimming against the current.
                 const sal_Bool bPorR2L = ( MT_BIDI == pSt2Pos->nMultiType ) ?
-                                           ! bR2L :
-                                             bR2L;
+                    ! bR2L :
+                bR2L;
 
                 if( MT_BIDI == pSt2Pos->nMultiType &&
                     (pSt2Pos->aPortion2.*fnRect->fnGetWidth)() )
@@ -2425,9 +2414,9 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                 {
                     OutputDevice* pOut = pSh->GetOut();
                     long nCrsrWidth = pOut->GetSettings().GetStyleSettings().
-                                        GetCursorSize();
+                        GetCursorSize();
                     (aTmp.*fnRect->fnSetWidth)( pOut->PixelToLogic(
-                                              Size( nCrsrWidth, 0 ) ).Width() );
+                        Size( nCrsrWidth, 0 ) ).Width() );
                 }
                 aTmp.Intersection( aStFrm );
                 Sub( aRegion, aTmp );
@@ -2444,9 +2433,9 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                 else
                 {
                     lLeft = (pStartFrm->Frm().*fnRect->fnGetLeft)() +
-                            (pStartFrm->Prt().*fnRect->fnGetLeft)();
+                        (pStartFrm->Prt().*fnRect->fnGetLeft)();
                     lRight = (pStartFrm->Frm().*fnRect->fnGetLeft)() +
-                             (pStartFrm->Prt().*fnRect->fnGetRight)();
+                        (pStartFrm->Prt().*fnRect->fnGetRight)();
                 }
                 if( lLeft < (aStFrm.*fnRect->fnGetLeft)() )
                     lLeft = (aStFrm.*fnRect->fnGetLeft)();
@@ -2502,17 +2491,13 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
             //Now the frames between, if there are any
             sal_Bool bBody = pStartFrm->IsInDocBody();
             const SwTableBox* pCellBox = pStartFrm->GetUpper()->IsCellFrm() ?
-                                         ((SwCellFrm*)pStartFrm->GetUpper())->GetTabBox() : 0;
+                ((SwCellFrm*)pStartFrm->GetUpper())->GetTabBox() : 0;
             const SwCntntFrm *pCntnt = pStartFrm->GetNextCntntFrm();
             SwRect aPrvRect;
 
-            // --> OD 2006-01-24 #123908# - introduce robust code:
-            // The stacktrace issue reveals that <pCntnt> could be NULL.
-            // One root cause found by AMA - see #130650#
             ASSERT( pCntnt,
-                    "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect -> please inform OD" );
+                "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect -> please inform OD" );
             while ( pCntnt && pCntnt != pEndFrm )
-            // <--
             {
                 if ( pCntnt->IsInFly() )
                 {
@@ -2524,7 +2509,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                 // If pStartFrm is inside a SwCellFrm, consider only frames which are inside the
                 // same cell frame (or its follow cell)
                 const SwTableBox* pTmpCellBox = pCntnt->GetUpper()->IsCellFrm() ?
-                                                ((SwCellFrm*)pCntnt->GetUpper())->GetTabBox() : 0;
+                    ((SwCellFrm*)pCntnt->GetUpper())->GetTabBox() : 0;
                 if ( bBody == pCntnt->IsInDocBody() &&
                     ( !pCellBox || pCellBox == pTmpCellBox ) )
                 {
@@ -2549,10 +2534,8 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                     }
                 }
                 pCntnt = pCntnt->GetNextCntntFrm();
-                // --> OD 2006-01-24 #123908#
                 ASSERT( pCntnt,
-                        "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect -> please inform OD" );
-                // <--
+                    "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect -> please inform OD" );
             }
             if ( aPrvRect.HasArea() )
                 Sub( aRegion, aPrvRect );
@@ -2562,7 +2545,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
             bRev = pEndFrm->IsReverse();
             //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
             fnRect = bVert ? ( bRev ? fnRectVL2R : ( pEndFrm->IsVertLR() ? fnRectVertL2R : fnRectVert ) ) :
-                             ( bRev ? fnRectB2T : fnRectHori );
+                ( bRev ? fnRectB2T : fnRectHori );
             nTmpTwips = (aEndRect.*fnRect->fnGetTop)();
             if( (aEndFrm.*fnRect->fnGetTop)() != nTmpTwips )
             {
@@ -2578,7 +2561,6 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
             Sub( aRegion, aSubRect );
         }
 
-//      aRegion.Compress( sal_False );
         aRegion.Invert();
         delete pSt2Pos;
         delete pEnd2Pos;
@@ -2606,8 +2588,8 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                 const SwVirtFlyDrawObj* pObj = pFly->GetVirtDrawObj();
                 const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
                 if ( !pFly->IsAnLower( pStartFrm ) &&
-                     (rSur.GetSurround() != SURROUND_THROUGHT &&
-                      !rSur.IsContour()) )
+                    (rSur.GetSurround() != SURROUND_THROUGHT &&
+                    !rSur.IsContour()) )
                 {
                     if ( aSortObjs.Contains( *pAnchoredObj ) )
                         continue;
@@ -2617,13 +2599,18 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
                     for ( sal_uInt16 k = 0; bSub && k < aSortObjs.Count(); ++k )
                     {
                         ASSERT( aSortObjs[k]->ISA(SwFlyFrm),
-                                "<SwRootFrm::CalcFrmRects(..)> - object in <aSortObjs> of unexcepted type" );
+                            "<SwRootFrm::CalcFrmRects(..)> - object in <aSortObjs> of unexcepted type" );
                         const SwFlyFrm* pTmp = static_cast<SwFlyFrm*>(aSortObjs[k]);
                         do
-                        {   if ( nPos < pTmp->GetVirtDrawObj()->GetOrdNumDirect() )
+                        {
+                            if ( nPos < pTmp->GetVirtDrawObj()->GetOrdNumDirect() )
+                            {
                                 bSub = sal_False;
+                            }
                             else
+                            {
                                 pTmp = pTmp->GetAnchorFrm()->FindFlyFrm();
+                            }
                         } while ( bSub && pTmp );
                     }
                     if ( bSub )
