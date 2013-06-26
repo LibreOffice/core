@@ -37,8 +37,8 @@ class SvxMacroItem;
 
 class SwCharDlg: public SfxTabDialog
 {
-    SwView&   rView;
-    bool bIsDrwTxtMode;
+    SwView&   m_rView;
+    sal_uInt8 m_nDialogMode;
 
     sal_uInt16 m_nCharStdId;
     sal_uInt16 m_nCharExtId;
@@ -46,10 +46,11 @@ class SwCharDlg: public SfxTabDialog
     sal_uInt16 m_nCharTwoId;
     sal_uInt16 m_nCharUrlId;
     sal_uInt16 m_nCharBgdId;
+    sal_uInt16 m_nCharBrdId;
 
 public:
     SwCharDlg(Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
-              const String* pFmtStr = 0, bool bIsDrwTxtDlg = false);
+              sal_uInt8 nDialogMode, const String* pFmtStr = 0);
 
     ~SwCharDlg();
 

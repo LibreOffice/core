@@ -77,6 +77,7 @@
 #include <wrtsh.hxx>
 #include <uitool.hxx>
 #include <popup.hrc>
+#include <chrdlgmodes.hxx>
 #include <pardlg.hxx>
 #include <swdtflvr.hxx>
 #include <drwtxtsh.hxx>
@@ -478,7 +479,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( rView.GetWindow(), rView, aDlgAttr, 0, sal_True );
+                SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( rView.GetWindow(), rView, aDlgAttr, DLG_CHAR_ANN);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {

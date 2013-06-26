@@ -22,10 +22,12 @@
 // defines ---------------------------------------------------------------
 
 // copy from border.hxx
-// Border-Modes for paragraphs, textframes and tables
+// Border-Modes for SvxBorderTabPage
 #define SW_BORDER_MODE_PARA     0x01
 #define SW_BORDER_MODE_TABLE    0x02
 #define SW_BORDER_MODE_FRAME    0x04
+//#define SW_BORDER_MODE_PAGE     0x08
+//#define SW_BORDER_MODE_CHAR     0x10
 
 // flags for SvxBackgroundTabPage
 #define SVX_SHOW_SELECTOR       0x01

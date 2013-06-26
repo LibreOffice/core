@@ -1034,15 +1034,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
     switch(nFamily)
     {
         case SFX_STYLE_FAMILY_CHAR:
-            {
-                OSL_ENSURE(pCharFmt, "Where's SwCharFmt");
-                aCoreSet.Put(pCharFmt->GetAttrSet());
-
-                if(pCharFmt->DerivedFrom())
-                    aCoreSet.SetParent(&pCharFmt->DerivedFrom()->GetAttrSet());
-            }
-            break;
-        case SFX_STYLE_FAMILY_PARA :
+        case SFX_STYLE_FAMILY_PARA:
         case SFX_STYLE_FAMILY_FRAME:
             {
                 SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
@@ -1052,7 +1044,17 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
                 aBoxInfo.SetDefDist( MIN_BORDER_DIST );// always set Default-Gap
                     // Single lines can only have DontCare-Status in tables
                 aBoxInfo.SetValid( VALID_DISABLE, sal_True );
-                if ( nFamily == SFX_STYLE_FAMILY_PARA )
+
+                if( nFamily == SFX_STYLE_FAMILY_CHAR )
+                {
+                    SAL_WARN_IF(!pCharFmt, "sw.app.docstyle", "Where's SwCharFmt");
+                    aCoreSet.Put(pCharFmt->GetAttrSet());
+                    aCoreSet.Put( aBoxInfo );
+
+                    if(pCharFmt->DerivedFrom())
+                        aCoreSet.SetParent(&pCharFmt->DerivedFrom()->GetAttrSet());
+                }
+                else if ( nFamily == SFX_STYLE_FAMILY_PARA )
                 {
                     OSL_ENSURE(pColl, "Where's Collection");
                     aCoreSet.Put(pColl->GetAttrSet());

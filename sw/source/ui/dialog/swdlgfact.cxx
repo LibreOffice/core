@@ -706,10 +706,10 @@ VclAbstractDialog   * SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg(SwView& 
 
  // add for SwCharDlg
 SfxAbstractTabDialog *  SwAbstractDialogFactory_Impl::CreateSwCharDlg(Window* pParent, SwView& pVw,
-    const SfxItemSet& rCoreSet, const String* pFmtStr, sal_Bool bIsDrwTxtDlg)
+    const SfxItemSet& rCoreSet, sal_uInt8 nDialogMode, const String* pFmtStr)
 {
 
-    SfxTabDialog* pDlg = new SwCharDlg(pParent, pVw, rCoreSet, pFmtStr, bIsDrwTxtDlg);
+    SfxTabDialog* pDlg = new SwCharDlg(pParent, pVw, rCoreSet, nDialogMode, pFmtStr);
     return new AbstractTabDialog_Impl(pDlg);
 }
 

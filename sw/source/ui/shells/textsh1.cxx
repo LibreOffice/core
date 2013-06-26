@@ -73,6 +73,7 @@
 #include <docsh.hxx>
 #include <mdiexp.hxx>
 #include <inputwin.hxx>
+#include <chrdlgmodes.hxx>
 #include <pardlg.hxx>
 #include <frmatr.hxx>
 #include <fmtcol.hxx>
@@ -138,6 +139,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
                         RES_CHRATR_BEGIN,      RES_CHRATR_END-1,
                         RES_TXTATR_INETFMT,    RES_TXTATR_INETFMT,
                         RES_BACKGROUND,        RES_BACKGROUND,
+                        SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                         FN_PARAM_SELECTION,    FN_PARAM_SELECTION,
                         SID_HTML_MODE,         SID_HTML_MODE,
                         SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,   SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
@@ -174,6 +176,9 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         aCoreSet.Put( aTmpBrush );
     }
 
+    // Setting the BoxInfo
+    ::PrepareBoxInfo( aCoreSet, rWrtSh );
+
     aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(rWrtSh.GetView().GetDocShell())));
     SfxAbstractTabDialog* pDlg = NULL;
     if ( bUseDialog && GetActiveView() )
@@ -181,7 +186,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        pDlg = pFact->CreateSwCharDlg(rWrtSh.GetView().GetWindow(), rWrtSh.GetView(), aCoreSet);
+        pDlg = pFact->CreateSwCharDlg(rWrtSh.GetView().GetWindow(), rWrtSh.GetView(), aCoreSet, DLG_CHAR_STD);
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
         if( FN_INSERT_HYPERLINK == nSlot )
             pDlg->SetCurPageId("hyperlink");

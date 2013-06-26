@@ -84,6 +84,7 @@
 #include <hintids.hxx>
 #include <initui.hxx>               // for SpellPointer
 #include <langhelper.hxx>
+#include <chrdlgmodes.hxx>
 #include <pardlg.hxx>
 #include <shells.hrc>
 #include <string.h>
@@ -321,7 +322,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg(pView->GetWindow(), *pView, aDlgAttr, 0, sal_True);
+                SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg(pView->GetWindow(), *pView, aDlgAttr, DLG_CHAR_DRAW);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {

@@ -444,7 +444,7 @@ public:
     virtual AbstractSwBreakDlg * CreateSwBreakDlg(Window *pParent, SwWrtShell &rSh); // add for SwBreakDlg
     virtual VclAbstractDialog   * CreateSwChangeDBDlg(SwView& rVw); //add for SwChangeDBDlg
     virtual SfxAbstractTabDialog *  CreateSwCharDlg(Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,
-        const String* pFmtStr = 0, sal_Bool bIsDrwTxtDlg = sal_False); // add for SwCharDlg
+        sal_uInt8 nDialogMode, const String* pFmtStr = 0); // add for SwCharDlg
     virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg(SwView& rView, bool bToTable); //add for SwConvertTableDlg
     virtual VclAbstractDialog * CreateSwCaptionDialog ( Window *pParent, SwView &rV,int nResId); //add for SwCaptionDialog
 

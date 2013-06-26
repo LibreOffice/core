@@ -41,6 +41,7 @@
 
 #include <globals.hrc>
 #include <chrdlg.hrc>
+#include <chrdlgmodes.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <SwStyleNameMapper.hxx>
@@ -58,11 +59,11 @@ using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 
 SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
-    const String* pStr, bool bIsDrwTxtDlg)
+    sal_uInt8 nDialogMode, const String* pStr)
     : SfxTabDialog(0, pParent, "CharacterPropertiesDialog",
         "modules/swriter/ui/characterproperties.ui", &rCoreSet, pStr != 0)
-    , rView(rVw)
-    , bIsDrwTxtMode(bIsDrwTxtDlg)
+    , m_rView(rVw)
+    , m_nDialogMode(nDialogMode)
 {
     if(pStr)
     {
@@ -80,9 +81,10 @@ SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
     m_nCharTwoId = AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), 0 );
     m_nCharUrlId = AddTabPage("hyperlink", SwCharURLPage::Create, 0);
     m_nCharBgdId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
+    m_nCharBrdId = AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), 0 );
 
     SvtCJKOptions aCJKOptions;
-    if(bIsDrwTxtMode)
+    if(m_nDialogMode == DLG_CHAR_DRAW || m_nDialogMode == DLG_CHAR_ANN)
     {
         RemoveTabPage(m_nCharUrlId);
         RemoveTabPage(m_nCharBgdId);
@@ -90,6 +92,9 @@ SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
     }
     else if(!aCJKOptions.IsDoubleLinesEnabled())
         RemoveTabPage(m_nCharTwoId);
+
+    if(m_nDialogMode != DLG_CHAR_STD)
+        RemoveTabPage(m_nCharBrdId);
 }
 
 SwCharDlg::~SwCharDlg()
@@ -106,15 +111,15 @@ void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     if (nId == m_nCharStdId)
     {
         SvxFontListItem aFontListItem( *( (SvxFontListItem*)
-           ( rView.GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) ) );
+           ( m_rView.GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) ) );
         aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
-            if(!bIsDrwTxtMode)
-                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
+        if(m_nDialogMode != DLG_CHAR_DRAW && m_nDialogMode != DLG_CHAR_ANN)
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
         rPage.PageCreated(aSet);
     }
     else if (nId == m_nCharExtId)
     {
-        if(bIsDrwTxtMode)
+        if(m_nDialogMode == DLG_CHAR_DRAW || m_nDialogMode == DLG_CHAR_ANN)
             aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
 
         else

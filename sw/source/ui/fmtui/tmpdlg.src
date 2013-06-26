@@ -62,6 +62,12 @@ TabDialog DLG_TEMPLATE_1
                 Text [ en-US ] = "Background" ;
                 PageResID = TP_BACKGROUND ;
             };
+            PageItem
+            {
+                Identifier = TP_BORDER ;
+                Text [ en-US ] = "Borders" ;
+                PageResID = TP_BORDER ;
+            };
         };
     };
 };
