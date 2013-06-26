@@ -10,57 +10,140 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "random.hxx"
 #include "openclwrapper.hxx"
 #include "oclkernels.hxx"
+#ifdef WIN32
+#include <Windows.h>
+#endif
+//#define USE_KERNEL_FILE
+using namespace std;
+GPUEnv OpenclDevice::gpuEnv;
+int OpenclDevice::isInited =0;
 
+#ifdef WIN32
 
-inline int OpenclDevice::add_kernel_cfg(int kCount, const char *kName) {
-    strcpy(gpu_env.kernel_names[kCount], kName);
-    gpu_env.kernel_count++;
+#define OPENCL_DLL_NAME "opencllo.dll"
+#define OCLERR -1
+#define OCLSUCCESS 1
+HINSTANCE HOpenclDll = NULL;
+    void *OpenclDll = NULL;
+
+int OpenclDevice::LoadOpencl()
+{
+	//fprintf(stderr, " LoadOpenclDllxx... \n");
+	OpenclDll = static_cast<HINSTANCE>(HOpenclDll);
+	OpenclDll = LoadLibrary(OPENCL_DLL_NAME);
+	if (!static_cast<HINSTANCE>(OpenclDll))
+	{
+		fprintf(stderr, " Load opencllo.dll failed! \n");
+		FreeLibrary(static_cast<HINSTANCE>(OpenclDll));
+		return OCLERR;
+	}
+	fprintf(stderr, " Load opencllo.dll successfully!\n");
+	return OCLSUCCESS;
+}
+
+void OpenclDevice::FreeOpenclDll()
+{
+	fprintf(stderr, " Free opencllo.dll ... \n");
+	if(!static_cast<HINSTANCE>(OpenclDll))
+		FreeLibrary(static_cast<HINSTANCE>(OpenclDll));
+}
+#endif
+
+int OpenclDevice::InitEnv()
+{
+#ifdef WIN32
+	while(1){
+	    if(1==LoadOpencl())
+			break;
+	}
+#endif
+	InitOpenclRunEnv(0,NULL);
+	return 1;
+}
+
+int OpenclDevice::ReleaseOpenclRunEnv() {
+	ReleaseOpenclEnv(&gpuEnv);
+#ifdef WIN32
+	FreeOpenclDll();
+#endif
+    return 1;
+}
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+inline int OpenclDevice::AddKernelConfig(int kCount, const char *kName) {
+    strcpy(gpuEnv.kernelNames[kCount], kName);
+    gpuEnv.kernelCount++;
     return 0;
 }
 
-int OpenclDevice::regist_opencl_kernel() {
-    if (!gpu_env.isUserCreated) {
-        memset(&gpu_env, 0, sizeof(gpu_env));
+int OpenclDevice::RegistOpenclKernel() {
+    if (!gpuEnv.isUserCreated) {
+        memset(&gpuEnv, 0, sizeof(gpuEnv));
     }
 
-    gpu_env.file_count = 0; //argc;
-    gpu_env.kernel_count = 0UL;
+    gpuEnv.fileCount = 0; //argc;
+    gpuEnv.kernelCount = 0UL;
 
-    add_kernel_cfg(0, (const char*) "hello");
-    add_kernel_cfg(1, (const char*) "oclformula");
-    add_kernel_cfg(2, (const char*) "oclFormulaMin");
-    add_kernel_cfg(3, (const char*) "oclFormulaMax");
-    add_kernel_cfg(4, (const char*) "oclFormulaSum");
-    add_kernel_cfg(5, (const char*) "oclFormulaCount");
-    add_kernel_cfg(6, (const char*) "oclFormulaAverage");
-    add_kernel_cfg(7, (const char*) "oclFormulaSumproduct");
-    add_kernel_cfg(8, (const char*) "oclFormulaMinverse");
-    return 0;
+    AddKernelConfig(0, (const char*) "hello");
+    AddKernelConfig(1, (const char*) "oclformula");
+    AddKernelConfig(2, (const char*) "oclFormulaMin");
+    AddKernelConfig(3, (const char*) "oclFormulaMax");
+    AddKernelConfig(4, (const char*) "oclFormulaSum");
+    AddKernelConfig(5, (const char*) "oclFormulaCount");
+    AddKernelConfig(6, (const char*) "oclFormulaAverage");
+    AddKernelConfig(7, (const char*) "oclFormulaSumproduct");
+    AddKernelConfig(8, (const char*) "oclFormulaMinverse");
+
+    AddKernelConfig(9,  (const char*) "oclSignedAdd");
+    AddKernelConfig(10, (const char*) "oclSignedSub");
+    AddKernelConfig(11, (const char*) "oclSignedMul");
+    AddKernelConfig(12, (const char*) "oclSignedDiv");
+	return 0;
 }
-OpenclDevice::OpenclDevice() :
-        isInited(0) {
-
+OpenclDevice::OpenclDevice(){
+	//InitEnv();
 }
 
 OpenclDevice::~OpenclDevice() {
-
+	//ReleaseOpenclRunEnv();
 }
-#ifdef USE_KERNEL_FILE
-int OpenclDevice::convert_to_string(const char *filename, char **source) {
+
+int OpenclDevice::CheckKernelName(KernelEnv *envInfo,const char *kernelName){
+    //printf("CheckKernelName,total count of kernels...%d\n", gpuEnv.kernelCount);
+    int kCount;
+    for(kCount=0; kCount < gpuEnv.kernelCount; kCount++) {
+        if(strcasecmp(kernelName, gpuEnv.kernelNames[kCount]) == 0) {
+	    printf("match  %s kernel right\n",kernelName);
+	    break;
+        }
+    }
+    envInfo->context      = gpuEnv.context;
+    envInfo->commandQueue = gpuEnv.commandQueue;
+    envInfo->program      = gpuEnv.programs[0];
+    envInfo->kernel       = gpuEnv.kernels[kCount];
+    strcpy(envInfo->kernelName, kernelName);
+    if (envInfo == (KernelEnv *) NULL)
+    {
+        printf("get err func and env\n");
+        return 0;
+    }
+    return 1;
+}
+
+int OpenclDevice::ConvertToString(const char *filename, char **source) {
     int file_size;
     size_t result;
     FILE *file = NULL;
-
     file_size = 0;
     result = 0;
     file = fopen(filename, "rb+");
-    printf("open kernel file %s.\n", filename);
+    printf("open kernel file %s.\n",filename);
 
     if (file != NULL) {
+		printf("Open ok!\n");
         fseek(file, 0, SEEK_END);
 
         file_size = ftell(file);
@@ -82,68 +165,41 @@ int OpenclDevice::convert_to_string(const char *filename, char **source) {
     printf("open kernel file failed.\n");
     return (0);
 }
-#endif
-int OpenclDevice::binary_generated(cl_context context,
-        const char * cl_file_name, FILE ** fhandle) {
+
+int OpenclDevice::BinaryGenerated(const char * clFileName, FILE ** fhandle) {
     unsigned int i = 0;
-    cl_int status;
+	cl_int status;
+	char *str = NULL;
+	FILE *fd = NULL;
+	cl_uint numDevices=0;
+	status = clGetDeviceIDs(gpuEnv.platform, // platform
+							CL_DEVICE_TYPE_GPU, // device_type
+							0, // num_entries
+							NULL, // devices
+							&numDevices);
+	for (i = 0; i <numDevices; i++) {
+		char fileName[256] = { 0 }, cl_name[128] = { 0 };
+		if (gpuEnv.devices[i] != 0) {
+			char deviceName[1024];
+			status = clGetDeviceInfo(gpuEnv.devices[i], CL_DEVICE_NAME,sizeof(deviceName), deviceName, NULL);
+			CHECK_OPENCL(status);
+			str = (char*) strstr(clFileName, (char*) ".cl");
+			memcpy(cl_name, clFileName, str - clFileName);
+			cl_name[str - clFileName] = '\0';
+			sprintf(fileName, "./%s-%s.bin", cl_name, deviceName);
+			fd = fopen(fileName, "rb");
+			status = (fd != NULL) ? 1 : 0;
+			}
+		}
+		if (fd != NULL) {
+			*fhandle = fd;
+			}
 
-    size_t numDevices;
+		return status;
 
-    cl_device_id *devices;
-
-    char *str = NULL;
-
-    FILE *fd = NULL;
-
-    status = clGetContextInfo(context, CL_CONTEXT_NUM_DEVICES,
-            sizeof(numDevices), &numDevices, NULL);
-
-    CHECK_OPENCL(status)
-
-    devices = (cl_device_id*) malloc(sizeof(cl_device_id) * numDevices);
-
-    if (devices == NULL) {
-        return 0;
-    }
-
-    /* grab the handles to all of the devices in the context. */
-    status = clGetContextInfo(context, CL_CONTEXT_DEVICES,
-            sizeof(cl_device_id) * numDevices, devices, NULL);
-
-    status = 0;
-    /* dump out each binary into its own separate file. */
-    for (i = 0; i < numDevices; i++) {
-        char fileName[256] = { 0 }, cl_name[128] = { 0 };
-
-        if (devices[i] != 0) {
-            char deviceName[1024];
-            status = clGetDeviceInfo(devices[i], CL_DEVICE_NAME,
-                    sizeof(deviceName), deviceName, NULL);
-            CHECK_OPENCL(status)
-            str = (char*) strstr(cl_file_name, (char*) ".cl");
-            memcpy(cl_name, cl_file_name, str - cl_file_name);
-            cl_name[str - cl_file_name] = '\0';
-            sprintf(fileName, "./%s-%s.bin", cl_name, deviceName);
-            fd = fopen(fileName, "rb");
-            status = (fd != NULL) ? 1 : 0;
-        }
-
-    }
-
-    if (devices != NULL) {
-        free(devices);
-        devices = NULL;
-    }
-
-    if (fd != NULL) {
-        *fhandle = fd;
-    }
-
-    return status;
 }
 
-int OpenclDevice::write_binary_to_file(const char* fileName, const char* birary,
+int OpenclDevice::WriteBinaryToFile(const char* fileName, const char* birary,
         size_t numBytes) {
     FILE *output = NULL;
     output = fopen(fileName, "wb");
@@ -155,11 +211,12 @@ int OpenclDevice::write_binary_to_file(const char* fileName, const char* birary,
     fclose(output);
 
     return 1;
+
 }
 
-int OpenclDevice::generat_bin_from_kernel_source(cl_program program,
-        const char * cl_file_name) {
-    unsigned int i = 0;
+int OpenclDevice::GeneratBinFromKernelSource(cl_program program,
+        const char * clFileName) {
+     unsigned int i = 0;
     cl_int status;
     size_t *binarySizes, numDevices;
     cl_device_id *devices;
@@ -216,12 +273,12 @@ int OpenclDevice::generat_bin_from_kernel_source(cl_program program,
                     sizeof(deviceName), deviceName, NULL);
             CHECK_OPENCL(status)
 
-            str = (char*) strstr(cl_file_name, (char*) ".cl");
-            memcpy(cl_name, cl_file_name, str - cl_file_name);
-            cl_name[str - cl_file_name] = '\0';
+            str = (char*) strstr(clFileName, (char*) ".cl");
+            memcpy(cl_name, clFileName, str - clFileName);
+            cl_name[str - clFileName] = '\0';
             sprintf(fileName, "./%s-%s.bin", cl_name, deviceName);
 
-            if (!write_binary_to_file(fileName, binaries[i], binarySizes[i])) {
+            if (!WriteBinaryToFile(fileName, binaries[i], binarySizes[i])) {
                 printf("opencl-wrapper: write binary[%s] failds\n", fileName);
                 return 0;
             } //else
@@ -254,164 +311,36 @@ int OpenclDevice::generat_bin_from_kernel_source(cl_program program,
     return 1;
 }
 
-int OpenclDevice::init_opencl_attr(OpenCLEnv * env) {
-    if (gpu_env.isUserCreated) {
+int OpenclDevice::InitOpenclAttr(OpenCLEnv * env) {
+    if (gpuEnv.isUserCreated) {
         return 1;
     }
 
-    gpu_env.context = env->context;
-    gpu_env.platform = env->platform;
-    gpu_env.dev = env->devices;
-    gpu_env.command_queue = env->command_queue;
+    gpuEnv.context = env->context;
+    gpuEnv.platform = env->platform;
+    gpuEnv.dev = env->devices;
+    gpuEnv.commandQueue = env->commandQueue;
 
-    gpu_env.isUserCreated = 1;
+    gpuEnv.isUserCreated = 1;
 
     return 0;
 }
 
-int OpenclDevice::create_kernel(char * kernelname, KernelEnv * env) {
+int OpenclDevice::CreateKernel(char * kernelname, KernelEnv * env) {
     int status;
 
-    env->kernel = clCreateKernel(gpu_env.programs[0], kernelname, &status);
-    env->context = gpu_env.context;
-    env->command_queue = gpu_env.command_queue;
+    env->kernel = clCreateKernel(gpuEnv.programs[0], kernelname, &status);
+    env->context = gpuEnv.context;
+    env->commandQueue = gpuEnv.commandQueue;
     return status != CL_SUCCESS ? 1 : 0;
 }
 
-int OpenclDevice::release_kernel(KernelEnv * env) {
+int OpenclDevice::ReleaseKernel(KernelEnv * env) {
     int status = clReleaseKernel(env->kernel);
     return status != CL_SUCCESS ? 1 : 0;
 }
 
-int OpenclDevice::init_opencl_env(GPUEnv *gpu_info) {
-    size_t length;
-    cl_int status;
-    cl_uint numPlatforms, numDevices;
-    cl_platform_id *platforms;
-    cl_context_properties cps[3];
-    char platformName[100];
-    unsigned int i;
-
-    /*
-     * Have a look at the available platforms.
-     */
-    if (!gpu_info->isUserCreated) {
-        status = clGetPlatformIDs(0, NULL, &numPlatforms);
-        if (status != CL_SUCCESS) {
-            return (1);
-        }
-        gpu_info->platform = NULL;
-        ;
-        if (0 < numPlatforms) {
-            platforms = (cl_platform_id*) malloc(
-                    numPlatforms * sizeof(cl_platform_id));
-            if (platforms == (cl_platform_id*) NULL) {
-                return (1);
-            }
-            status = clGetPlatformIDs(numPlatforms, platforms, NULL);
-
-            if (status != CL_SUCCESS) {
-                return (1);
-            }
-
-            for (i = 0; i < numPlatforms; i++) {
-                status = clGetPlatformInfo(platforms[i], CL_PLATFORM_VENDOR,
-                        sizeof(platformName), platformName, NULL);
-
-                if (status != CL_SUCCESS) {
-                    return (1);
-                }
-                gpu_info->platform = platforms[i];
-
-                //if (!strcmp(platformName, "Intel(R) Coporation"))
-                //if( !strcmp( platformName, "Advanced Micro Devices, Inc." ))
-                {
-                    gpu_info->platform = platforms[i];
-
-                    status = clGetDeviceIDs(gpu_info->platform /* platform */,
-                            CL_DEVICE_TYPE_GPU /* device_type */,
-                            0 /* num_entries */, NULL /* devices */,
-                            &numDevices);
-
-                    if (status != CL_SUCCESS) {
-                        return (1);
-                    }
-
-                    if (numDevices) {
-                        break;
-                    }
-                }
-            }
-            free(platforms);
-        }
-        if (NULL == gpu_info->platform) {
-            return (1);
-        }
-
-        /*
-         * Use available platform.
-         */
-        cps[0] = CL_CONTEXT_PLATFORM;
-        cps[1] = (cl_context_properties) gpu_info->platform;
-        cps[2] = 0;
-        /* Check for GPU. */
-        gpu_info->dType = CL_DEVICE_TYPE_GPU;
-        gpu_info->context = clCreateContextFromType(cps, gpu_info->dType, NULL,
-                NULL, &status);
-
-        if ((gpu_info->context == (cl_context) NULL)
-                || (status != CL_SUCCESS)) {
-            gpu_info->dType = CL_DEVICE_TYPE_CPU;
-            gpu_info->context = clCreateContextFromType(cps, gpu_info->dType,
-                    NULL, NULL, &status);
-        }
-        if ((gpu_info->context == (cl_context) NULL)
-                || (status != CL_SUCCESS)) {
-            gpu_info->dType = CL_DEVICE_TYPE_DEFAULT;
-            gpu_info->context = clCreateContextFromType(cps, gpu_info->dType,
-                    NULL, NULL, &status);
-        }
-        if ((gpu_info->context == (cl_context) NULL)
-                || (status != CL_SUCCESS)) {
-            return (1);
-        }
-        /* Detect OpenCL devices. */
-        /* First, get the size of device list data */
-        status = clGetContextInfo(gpu_info->context, CL_CONTEXT_DEVICES, 0,
-                NULL, &length);
-
-        if ((status != CL_SUCCESS) || (length == 0)) {
-            return (1);
-        }
-        /* Now allocate memory for device list based on the size we got earlier */
-        gpu_info->devices = (cl_device_id*) malloc(length);
-        if (gpu_info->devices == (cl_device_id*) NULL) {
-            return (1);
-        }
-        /* Now, get the device list data */
-        status = clGetContextInfo(gpu_info->context, CL_CONTEXT_DEVICES, length,
-                gpu_info->devices, NULL);
-
-        if (status != CL_SUCCESS) {
-            return (1);
-        }
-
-        /* Create OpenCL command queue. */
-        gpu_info->command_queue = clCreateCommandQueue(gpu_info->context,
-                gpu_info->devices[0], 0, &status);
-
-        if (status != CL_SUCCESS) {
-            return (1);
-        }
-    }
-
-    status = clGetCommandQueueInfo(gpu_info->command_queue,
-            CL_QUEUE_THREAD_HANDLE_AMD, 0, NULL, NULL);
-
-    return 0;
-}
-
-int OpenclDevice::release_opencl_env(GPUEnv *gpu_info) {
+int OpenclDevice::ReleaseOpenclEnv(GPUEnv *gpuInfo) {
     int i = 0;
     int status = 0;
 
@@ -419,60 +348,44 @@ int OpenclDevice::release_opencl_env(GPUEnv *gpu_info) {
         return 1;
     }
 
-    for (i = 0; i < gpu_env.file_count; i++) {
-        if (gpu_env.programs[i]) {
-            status = clReleaseProgram(gpu_env.programs[i]);
+    for (i = 0; i < gpuEnv.fileCount; i++) {
+        if (gpuEnv.programs[i]) {
+            status = clReleaseProgram(gpuEnv.programs[i]);
             CHECK_OPENCL(status)
-            gpu_env.programs[i] = NULL;
+            gpuEnv.programs[i] = NULL;
         }
     }
-    if (gpu_env.command_queue) {
-        clReleaseCommandQueue(gpu_env.command_queue);
-        gpu_env.command_queue = NULL;
+    if (gpuEnv.commandQueue) {
+        clReleaseCommandQueue(gpuEnv.commandQueue);
+        gpuEnv.commandQueue = NULL;
     }
-    if (gpu_env.context) {
-        clReleaseContext(gpu_env.context);
-        gpu_env.context = NULL;
+    if (gpuEnv.context) {
+        clReleaseContext(gpuEnv.context);
+        gpuEnv.context = NULL;
     }
     isInited = 0;
-    gpu_info->isUserCreated = 0;
-    free(gpu_info->devices);
+    gpuInfo->isUserCreated = 0;
+    free(gpuInfo->devices);
     return 1;
 }
 
-int OpenclDevice::run_kernel_wrapper(cl_kernel_function function,
-        char * kernel_name, void **usrdata) {
-    printf("oclwrapper:run_kernel_wrapper...\n");
-    if (register_kernel_wrapper(kernel_name, function) != 1) {
+int OpenclDevice::RunKernelWrapper(cl_kernel_function function,
+        const char * kernelName, void **usrdata) {
+    printf("oclwrapper:RunKernel_wrapper...\n");
+    if (RegisterKernelWrapper(kernelName, function) != 1) {
         fprintf(stderr,
-                "Error:run_kernel_wrapper:register_kernel_wrapper fail!\n");
+                "Error:RunKernel_wrapper:RegisterKernelWrapper fail!\n");
         return -1;
     }
-    return (run_kernel(kernel_name, usrdata));
+    return (RunKernel(kernelName, usrdata));
 }
 
-int OpenclDevice::register_kernel_wrapper(const char *kernel_name,
-        cl_kernel_function function) {
-    int i;
-    printf("oclwrapper:register_kernel_wrapper...%d\n", gpu_env.kernel_count);
-    for (i = 0; i < gpu_env.kernel_count; i++) {
-        //printf("oclwrapper:register_kernel_wrapper kname...%s\n", kernel_name);
-        //printf("oclwrapper:register_kernel_wrapper kname...%s\n", gpu_env.kernel_names[i]);
-        if (strcasecmp(kernel_name, gpu_env.kernel_names[i]) == 0) {
-            //printf("oclwrapper:register_kernel_wrapper if()...\n");
-            gpu_env.kernel_functions[i] = function;
-            return (1);
-        }
-    }
-    return (0);
-}
-
-int OpenclDevice::cached_of_kerner_prg(const GPUEnv *gpu_env_cached,
-        const char * cl_file_name) {
-    int i;
-    for (i = 0; i < gpu_env_cached->file_count; i++) {
-        if (strcasecmp(gpu_env_cached->kernelSrcFile[i], cl_file_name) == 0) {
-            if (gpu_env_cached->programs[i] != NULL) {
+int OpenclDevice::CachedOfKernerPrg(const GPUEnv *gpuEnvCached,
+        const char * clFileName) {
+  int i;
+    for (i = 0; i < gpuEnvCached->fileCount; i++) {
+        if (strcasecmp(gpuEnvCached->kernelSrcFile[i], clFileName) == 0) {
+            if (gpuEnvCached->programs[i] != NULL) {
                 return (1);
             }
         }
@@ -481,37 +394,30 @@ int OpenclDevice::cached_of_kerner_prg(const GPUEnv *gpu_env_cached,
     return (0);
 }
 
-int OpenclDevice::compile_kernel_file(GPUEnv *gpu_info, const char *build_option) {
+int OpenclDevice::CompileKernelFile(GPUEnv *gpuInfo, const char *buildOption) {
     cl_int status;
-
     size_t length;
-
     char *buildLog = NULL, *binary;
-
     const char *source;
     size_t source_size[1];
-
     int b_error, binary_status, binaryExisted, idx;
-
     size_t numDevices;
-
     cl_device_id *devices;
-
     FILE *fd, *fd1;
     const char* filename = "kernel.cl";
-    if (cached_of_kerner_prg(gpu_info, filename) == 1) {
+	fprintf(stderr, "CompileKernelFile ... \n");
+    if (CachedOfKernerPrg(gpuInfo, filename) == 1) {
         return (1);
     }
 
-    idx = gpu_info->file_count;
+    idx = gpuInfo->fileCount;
 
     source = kernel_src;
 
     source_size[0] = strlen(source);
-
     binaryExisted = 0;
-    if ((binaryExisted = binary_generated(gpu_info->context, filename, &fd)) == 1) {
-        status = clGetContextInfo(gpu_info->context, CL_CONTEXT_NUM_DEVICES,
+    if ((binaryExisted = BinaryGenerated(filename, &fd)) == 1) {
+        status = clGetContextInfo(gpuInfo->context, CL_CONTEXT_NUM_DEVICES,
                 sizeof(numDevices), &numDevices, NULL);
         CHECK_OPENCL(status)
 
@@ -543,11 +449,11 @@ int OpenclDevice::compile_kernel_file(GPUEnv *gpu_info, const char *build_option
         fclose(fd);
         fd = NULL;
         // grab the handles to all of the devices in the context.
-        status = clGetContextInfo(gpu_info->context, CL_CONTEXT_DEVICES,
+        status = clGetContextInfo(gpuInfo->context, CL_CONTEXT_DEVICES,
                 sizeof(cl_device_id) * numDevices, devices, NULL);
         CHECK_OPENCL(status)
 
-        gpu_info->programs[idx] = clCreateProgramWithBinary(gpu_info->context,
+        gpuInfo->programs[idx] = clCreateProgramWithBinary(gpuInfo->context,
                 numDevices, devices, &length, (const unsigned char**) &binary,
                 &binary_status, &status);
         CHECK_OPENCL(status)
@@ -556,40 +462,37 @@ int OpenclDevice::compile_kernel_file(GPUEnv *gpu_info, const char *build_option
         free(devices);
         devices = NULL;
     } else {
-
         // create a CL program using the kernel source
-        gpu_info->programs[idx] = clCreateProgramWithSource(gpu_info->context,
+        gpuEnv.programs[idx] = clCreateProgramWithSource(gpuEnv.context,
                 1, &source, source_size, &status);
-        CHECK_OPENCL(status)
-
-        printf("clCreateProgramWithSource.\n");
+        CHECK_OPENCL(status);
     }
 
-    if (gpu_info->programs[idx] == (cl_program) NULL) {
+    if (gpuInfo->programs[idx] == (cl_program) NULL) {
         return (0);
     }
 
     //char options[512];
     // create a cl program executable for all the devices specified
-    if (!gpu_info->isUserCreated) {
-        status = clBuildProgram(gpu_info->programs[idx], 1, gpu_info->devices,
-                build_option, NULL, NULL);
+    if (!gpuInfo->isUserCreated) {
+        status = clBuildProgram(gpuInfo->programs[idx], 1, gpuInfo->devices,
+                buildOption, NULL, NULL);
         CHECK_OPENCL(status)
     } else {
-        status = clBuildProgram(gpu_info->programs[idx], 1, &(gpu_info->dev),
-                build_option, NULL, NULL);
+        status = clBuildProgram(gpuInfo->programs[idx], 1, &(gpuInfo->dev),
+                buildOption, NULL, NULL);
         CHECK_OPENCL(status)
     }
     printf("BuildProgram.\n");
 
     if (status != CL_SUCCESS) {
-        if (!gpu_info->isUserCreated) {
-            status = clGetProgramBuildInfo(gpu_info->programs[idx],
-                    gpu_info->devices[0], CL_PROGRAM_BUILD_LOG, 0, NULL,
+        if (!gpuInfo->isUserCreated) {
+            status = clGetProgramBuildInfo(gpuInfo->programs[idx],
+                    gpuInfo->devices[0], CL_PROGRAM_BUILD_LOG, 0, NULL,
                     &length);
         } else {
-            status = clGetProgramBuildInfo(gpu_info->programs[idx],
-                    gpu_info->dev, CL_PROGRAM_BUILD_LOG, 0, NULL, &length);
+            status = clGetProgramBuildInfo(gpuInfo->programs[idx],
+                    gpuInfo->dev, CL_PROGRAM_BUILD_LOG, 0, NULL, &length);
         }
         if (status != CL_SUCCESS) {
             printf("opencl create build log fail\n");
@@ -599,13 +502,13 @@ int OpenclDevice::compile_kernel_file(GPUEnv *gpu_info, const char *build_option
         if (buildLog == (char*) NULL) {
             return (0);
         }
-        if (!gpu_info->isUserCreated) {
-            status = clGetProgramBuildInfo(gpu_info->programs[idx],
-                    gpu_info->devices[0], CL_PROGRAM_BUILD_LOG, length,
+        if (!gpuInfo->isUserCreated) {
+            status = clGetProgramBuildInfo(gpuInfo->programs[idx],
+                    gpuInfo->devices[0], CL_PROGRAM_BUILD_LOG, length,
                     buildLog, &length);
         } else {
-            status = clGetProgramBuildInfo(gpu_info->programs[idx],
-                    gpu_info->dev, CL_PROGRAM_BUILD_LOG, length, buildLog,
+            status = clGetProgramBuildInfo(gpuInfo->programs[idx],
+                    gpuInfo->dev, CL_PROGRAM_BUILD_LOG, length, buildLog,
                     &length);
         }
 
@@ -619,199 +522,35 @@ int OpenclDevice::compile_kernel_file(GPUEnv *gpu_info, const char *build_option
         return (0);
     }
 
-    strcpy(gpu_env.kernelSrcFile[idx], filename);
+    strcpy(gpuEnv.kernelSrcFile[idx], filename);
 
     if (binaryExisted == 0)
-        generat_bin_from_kernel_source(gpu_env.programs[idx], filename);
+        GeneratBinFromKernelSource(gpuEnv.programs[idx], filename);
 
-    gpu_info->file_count += 1;
-
-    return (1);
-}
-
-int OpenclDevice::compile_kernel_file(const char *filename, GPUEnv *gpu_info,
-        const char *build_option) {
-    cl_int status;
-
-    size_t length;
-
-#ifdef USE_KERNEL_FILE
-    char
-    *source_str;
-#endif
-    char *buildLog = NULL, *binary;
-
-    const char *source;
-    size_t source_size[1];
-
-    int b_error, binary_status, binaryExisted, idx;
-
-    size_t numDevices;
-
-    cl_device_id *devices;
-
-    FILE *fd, *fd1;
-
-    if (cached_of_kerner_prg(gpu_info, filename) == 1) {
-        return (1);
-    }
-
-    idx = gpu_info->file_count;
-#ifdef USE_KERNEL_FILE
-    status = convert_to_string( filename, &source_str, gpu_info, idx );
-
-    if( status == 0 )
-    {
-        printf("convert_to_string failed.\n");
-        return(0);
-    }
-    source = source_str;
-#else
-
-    source = kernel_src;
-#endif
-    source_size[0] = strlen(source);
-
-    binaryExisted = 0;
-    if ((binaryExisted = binary_generated(gpu_info->context, filename, &fd))
-            == 1) {
-        status = clGetContextInfo(gpu_info->context, CL_CONTEXT_NUM_DEVICES,
-                sizeof(numDevices), &numDevices, NULL);
-        CHECK_OPENCL(status)
-
-        devices = (cl_device_id*) malloc(sizeof(cl_device_id) * numDevices);
-        if (devices == NULL) {
-            return 0;
-        }
-
-        b_error = 0;
-        length = 0;
-        b_error |= fseek(fd, 0, SEEK_END) < 0;
-        b_error |= (length = ftell(fd)) <= 0;
-        b_error |= fseek(fd, 0, SEEK_SET) < 0;
-        if (b_error) {
-            return 0;
-        }
-
-        binary = (char*) malloc(length + 2);
-        if (!binary) {
-            return 0;
-        }
-
-        memset(binary, 0, length + 2);
-        b_error |= fread(binary, 1, length, fd) != length;
-        if (binary[length - 1] != '\n') {
-            binary[length++] = '\n';
-        }
-
-        fclose(fd);
-        fd = NULL;
-        /* grab the handles to all of the devices in the context. */
-        status = clGetContextInfo(gpu_info->context, CL_CONTEXT_DEVICES,
-                sizeof(cl_device_id) * numDevices, devices, NULL);
-        CHECK_OPENCL(status)
-
-        gpu_info->programs[idx] = clCreateProgramWithBinary(gpu_info->context,
-                numDevices, devices, &length, (const unsigned char**) &binary,
-                &binary_status, &status);
-        CHECK_OPENCL(status)
-
-        free(binary);
-        free(devices);
-        devices = NULL;
-    } else {
-
-        // create a CL program using the kernel source
-        gpu_info->programs[idx] = clCreateProgramWithSource(gpu_info->context,
-                1, &source, source_size, &status);
-        CHECK_OPENCL(status)
-#ifdef USE_KERNEL_FILE
-        free((char*)source);
-#endif
-        printf("clCreateProgramWithSource.\n");
-    }
-
-    if (gpu_info->programs[idx] == (cl_program) NULL) {
-        return (0);
-    }
-
-    //char options[512];
-    // create a cl program executable for all the devices specified
-    if (!gpu_info->isUserCreated) {
-        status = clBuildProgram(gpu_info->programs[idx], 1, gpu_info->devices,
-                build_option, NULL, NULL);
-        CHECK_OPENCL(status)
-    } else {
-        status = clBuildProgram(gpu_info->programs[idx], 1, &(gpu_info->dev),
-                build_option, NULL, NULL);
-        CHECK_OPENCL(status)
-    }
-    printf("BuildProgram.\n");
-
-    if (status != CL_SUCCESS) {
-        if (!gpu_info->isUserCreated) {
-            status = clGetProgramBuildInfo(gpu_info->programs[idx],
-                    gpu_info->devices[0], CL_PROGRAM_BUILD_LOG, 0, NULL,
-                    &length);
-        } else {
-            status = clGetProgramBuildInfo(gpu_info->programs[idx],
-                    gpu_info->dev, CL_PROGRAM_BUILD_LOG, 0, NULL, &length);
-        }
-        if (status != CL_SUCCESS) {
-            printf("opencl create build log fail\n");
-            return (0);
-        }
-        buildLog = (char*) malloc(length);
-        if (buildLog == (char*) NULL) {
-            return (0);
-        }
-        if (!gpu_info->isUserCreated) {
-            status = clGetProgramBuildInfo(gpu_info->programs[idx],
-                    gpu_info->devices[0], CL_PROGRAM_BUILD_LOG, length,
-                    buildLog, &length);
-        } else {
-            status = clGetProgramBuildInfo(gpu_info->programs[idx],
-                    gpu_info->dev, CL_PROGRAM_BUILD_LOG, length, buildLog,
-                    &length);
-        }
-
-        fd1 = fopen("kernel-build.log", "w+");
-        if (fd1 != NULL) {
-            fwrite(buildLog, sizeof(char), length, fd1);
-            fclose(fd1);
-        }
-
-        free(buildLog);
-        return (0);
-    }
-
-    strcpy(gpu_env.kernelSrcFile[idx], filename);
-
-    if (binaryExisted == 0)
-        generat_bin_from_kernel_source(gpu_env.programs[idx], filename);
-
-    gpu_info->file_count += 1;
+    gpuInfo->fileCount += 1;
 
     return (1);
-}
 
-int OpenclDevice::get_kernel_env_and_func(const char *kernel_name,
+
+}
+int OpenclDevice::GetKernelEnvAndFunc(const char *kernelName,
         KernelEnv *env, cl_kernel_function *function) {
     int i; //,program_idx ;
-    for (i = 0; i < gpu_env.kernel_count; i++) {
-        if (strcasecmp(kernel_name, gpu_env.kernel_names[i]) == 0) {
-            env->context = gpu_env.context;
-            env->command_queue = gpu_env.command_queue;
-            env->program = gpu_env.programs[0];
-            env->kernel = gpu_env.kernels[i];
-            *function = gpu_env.kernel_functions[i];
+    printf("----------------OpenclDevice::GetKernelEnvAndFunc\n");
+    for (i = 0; i < gpuEnv.kernelCount; i++) {
+        if (strcasecmp(kernelName, gpuEnv.kernelNames[i]) == 0) {
+            env->context = gpuEnv.context;
+            env->commandQueue = gpuEnv.commandQueue;
+            env->program = gpuEnv.programs[0];
+            env->kernel = gpuEnv.kernels[i];
+            *function = gpuEnv.kernelFunctions[i];
             return (1);
         }
     }
     return (0);
 }
 
-int OpenclDevice::run_kernel(const char *kernel_name, void **userdata) {
+int OpenclDevice::RunKernel(const char *kernelName, void **userdata) {
     KernelEnv env;
 
     cl_kernel_function function;
@@ -819,8 +558,8 @@ int OpenclDevice::run_kernel(const char *kernel_name, void **userdata) {
     int status;
 
     memset(&env, 0, sizeof(KernelEnv));
-    status = get_kernel_env_and_func(kernel_name, &env, &function);
-    strcpy(env.kernel_name, kernel_name);
+    status = GetKernelEnvAndFunc(kernelName, &env, &function);
+    strcpy(env.kernelName, kernelName);
     if (status == 1) {
         if (&env == (KernelEnv *) NULL
                 || &function == (cl_kernel_function *) NULL) {
@@ -830,11 +569,9 @@ int OpenclDevice::run_kernel(const char *kernel_name, void **userdata) {
     }
     return (0);
 }
-
-int OpenclDevice::init_opencl_run_env(int argc, const char *build_option_kernelfiles)
+int OpenclDevice::InitOpenclRunEnv(int argc, const char *buildOptionKernelfiles)
 {
     int status = 0;
-
     if (MAX_CLKERNEL_NUM <= 0) {
         return 1;
     }
@@ -843,82 +580,177 @@ int OpenclDevice::init_opencl_run_env(int argc, const char *build_option_kernelf
     }
 
     if (!isInited) {
-        printf("regist_opencl_kernel start.\n");
-        regist_opencl_kernel();
+        RegistOpenclKernel();
         //initialize devices, context, comand_queue
-        status = init_opencl_env(&gpu_env);
+        status = InitOpenclRunEnv(&gpuEnv);
         if (status) {
             printf("init_opencl_env failed.\n");
             return (1);
         }
         printf("init_opencl_env successed.\n");
-        //initialize program, kernel_name, kernel_count
-        status = compile_kernel_file( &gpu_env, build_option_kernelfiles);
-        if (status == 0 || gpu_env.kernel_count == 0) {
-            printf("compile_kernel_file failed.\n");
+        //initialize program, kernelName, kernelCount
+        status = CompileKernelFile( &gpuEnv, buildOptionKernelfiles);
+        if (status == 0 || gpuEnv.kernelCount == 0) {
+            printf("CompileKernelFile failed.\n");
             return (1);
         }
-        printf("compile_kernel_file successed.\n");
+        printf("CompileKernelFile successed.\n");
         isInited = 1;
     }
-
     return (0);
 }
 
-int OpenclDevice::init_opencl_run_env(int argc, const char *argv_kernelfiles[],
-        const char *build_option_kernelfiles) {
-    int status = 0;
+int OpenclDevice::InitOpenclRunEnv(GPUEnv *gpuInfo)
+{
+    size_t length;
+    cl_int status;
+    cl_uint numPlatforms, numDevices;
+    cl_platform_id *platforms;
+    cl_context_properties cps[3];
+    char platformName[100];
+    unsigned int i;
 
-    if (MAX_CLKERNEL_NUM <= 0) {
-        return 1;
-    }
-    if ((argc > MAX_CLFILE_NUM) || (argc < 0)) {
-        return 1;
-    }
+    // Have a look at the available platforms.
 
-    if (!isInited) {
-        printf("regist_opencl_kernel start.\n");
-        regist_opencl_kernel();
-        //initialize devices, context, comand_queue
-        status = init_opencl_env(&gpu_env);
-        if (status) {
-            printf("init_opencl_env failed.\n");
+    if (!gpuInfo->isUserCreated) {
+        status = clGetPlatformIDs(0, NULL, &numPlatforms);
+        if (status != CL_SUCCESS) {
             return (1);
         }
-        printf("init_opencl_env successed.\n");
-        //initialize program, kernel_name, kernel_count
-        status = compile_kernel_file(argv_kernelfiles[0], &gpu_env,
-                build_option_kernelfiles);
-        if (status == 0 || gpu_env.kernel_count == 0) {
-            printf("compile_kernel_file failed.\n");
+        gpuInfo->platform = NULL;
+
+        if (0 < numPlatforms) {
+            platforms = (cl_platform_id*) malloc(
+                    numPlatforms * sizeof(cl_platform_id));
+            if (platforms == (cl_platform_id*) NULL) {
+                return (1);
+            }
+            status = clGetPlatformIDs(numPlatforms, platforms, NULL);
+
+            if (status != CL_SUCCESS) {
+                return (1);
+            }
+
+            for (i = 0; i < numPlatforms; i++) {
+                status = clGetPlatformInfo(platforms[i], CL_PLATFORM_VENDOR,
+                        sizeof(platformName), platformName, NULL);
+
+                if (status != CL_SUCCESS) {
+                    return (1);
+                }
+                gpuInfo->platform = platforms[i];
+
+                //if (!strcmp(platformName, "Intel(R) Coporation"))
+                //if( !strcmp( platformName, "Advanced Micro Devices, Inc." ))
+                {
+                    gpuInfo->platform = platforms[i];
+
+                    status = clGetDeviceIDs(gpuInfo->platform, // platform
+												CL_DEVICE_TYPE_GPU, // device_type
+												0, // num_entries
+												NULL, // devices
+												&numDevices);
+
+                    if (status != CL_SUCCESS) {
+                        return (1);
+                    }
+
+                    if (numDevices) {
+                        break;
+                    }
+                }
+            }
+            free(platforms);
+        }
+        if (NULL == gpuInfo->platform) {
             return (1);
         }
-        printf("compile_kernel_file successed.\n");
-        isInited = 1;
+
+        // Use available platform.
+
+        cps[0] = CL_CONTEXT_PLATFORM;
+        cps[1] = (cl_context_properties) gpuInfo->platform;
+        cps[2] = 0;
+        // Check for GPU.
+        gpuInfo->dType = CL_DEVICE_TYPE_GPU;
+        gpuInfo->context = clCreateContextFromType(cps, gpuInfo->dType, NULL,
+                NULL, &status);
+
+        if ((gpuInfo->context == (cl_context) NULL)
+                || (status != CL_SUCCESS)) {
+            gpuInfo->dType = CL_DEVICE_TYPE_CPU;
+            gpuInfo->context = clCreateContextFromType(cps, gpuInfo->dType,
+                    NULL, NULL, &status);
+        }
+        if ((gpuInfo->context == (cl_context) NULL)
+                || (status != CL_SUCCESS)) {
+            gpuInfo->dType = CL_DEVICE_TYPE_DEFAULT;
+            gpuInfo->context = clCreateContextFromType(cps, gpuInfo->dType,
+                    NULL, NULL, &status);
+        }
+        if ((gpuInfo->context == (cl_context) NULL)
+                || (status != CL_SUCCESS)) {
+            return (1);
+        }
+        // Detect OpenCL devices.
+        // First, get the size of device list data
+        status = clGetContextInfo(gpuInfo->context, CL_CONTEXT_DEVICES, 0,
+                NULL, &length);
+        if ((status != CL_SUCCESS) || (length == 0)) {
+            return (1);
+        }
+        // Now allocate memory for device list based on the size we got earlier
+        gpuInfo->devices = (cl_device_id*) malloc(length);
+        if (gpuInfo->devices == (cl_device_id*) NULL) {
+            return (1);
+        }
+        // Now, get the device list data
+        status = clGetContextInfo(gpuInfo->context, CL_CONTEXT_DEVICES, length,
+                gpuInfo->devices, NULL);
+        if (status != CL_SUCCESS) {
+            return (1);
+        }
+
+        // Create OpenCL command queue.
+        gpuInfo->commandQueue = clCreateCommandQueue(gpuInfo->context,
+                gpuInfo->devices[0], 0, &status);
+
+        if (status != CL_SUCCESS) {
+            return (1);
+        }
     }
 
-    return (0);
+    status = clGetCommandQueueInfo(gpuInfo->commandQueue,
+            CL_QUEUE_THREAD_HANDLE_AMD, 0, NULL, NULL);
+
+    return 0;
+
+}
+int OpenclDevice::RegisterKernelWrapper(const char *kernelName,cl_kernel_function function)
+{
+	int i;
+	printf("oclwrapper:RegisterKernelWrapper...%d\n", gpuEnv.kernelCount);
+	for (i = 0; i < gpuEnv.kernelCount; i++)
+	{
+		if (strcasecmp(kernelName, gpuEnv.kernelNames[i]) == 0)
+		{
+			gpuEnv.kernelFunctions[i] = function;
+			return (1);
+		}
+	}
+		return (0);
 }
 
-int OpenclDevice::release_opencl_run_env() {
-    return release_opencl_env(&gpu_env);
-}
 
-void OpenclDevice::setOpenclState(int state) {
+void OpenclDevice::SetOpenclState(int state) {
+     //printf("OpenclDevice::setOpenclState...\n");
      isInited = state;
 }
 
-int OpenclDevice::getOpenclState() {
+int OpenclDevice::GetOpenclState() {
     return isInited;
 }
 //ocldbg
-int OclFormulaMin(void ** usrdata, KernelEnv *env) { return 0; }
-int OclFormulaMax(void ** usrdata, KernelEnv *env) { return 0; }
-int OclFormulaSum(void ** usrdata, KernelEnv *env) { return 0; }
-int OclFormulaCount(void ** usrdata, KernelEnv *env) { return 0; }
-int OclFormulaAverage(void ** usrdata, KernelEnv *env) { return 0; }
-int OclFormulaSumproduct(void ** usrdata, KernelEnv *env) { return 0; }
-int OclFormulaMinverse(void ** usrdata, KernelEnv *env) { return 0; }
 
 int OclFormulax(void ** usrdata, KernelEnv *env) {
     fprintf(stderr, "In OpenclDevice,...Formula_proc\n");
@@ -958,16 +790,16 @@ int OclFormulax(void ** usrdata, KernelEnv *env) {
 
     while (global_work_size[0] != 1) {
         global_work_size[0] = global_work_size[0] / 2;
-        status = clEnqueueNDRangeKernel(env->command_queue, env->kernel, 1,
+        status = clEnqueueNDRangeKernel(env->commandQueue, env->kernel, 1,
                 NULL, global_work_size, NULL, 0, NULL, NULL);
         CHECK_OPENCL(status)
 
     }
     //fprintf(stderr, "\nIn OpenclDevice,...before clEnqueueReadBuffer\n");
-    status = clEnqueueReadBuffer(env->command_queue, formula_data, CL_FALSE, 0,
+    status = clEnqueueReadBuffer(env->commandQueue, formula_data, CL_FALSE, 0,
             sizeof(float), (void *) &tdata, 0, NULL, NULL);
     CHECK_OPENCL(status)
-    status = clFinish(env->command_queue);
+    status = clFinish(env->commandQueue);
     CHECK_OPENCL(status)
 
     //PPAStopCpuEvent(ppa_proc);
@@ -986,46 +818,572 @@ int OclFormulax(void ** usrdata, KernelEnv *env) {
 
     return 0;
 }
-double OclCalc::OclProcess(cl_kernel_function function, double *data,
-        formulax type) {
-    fprintf(stderr, "\In OpenclDevice, proc...begin\n");
-    double ret = 0;
 
-    void *usrdata[2];
+int OclFormulaxDll(void ** usrdata, KernelEnv *env) {
 
-    usrdata[0] = (void *) data;
-    usrdata[1] = (void *) &type;
+    fprintf(stderr, "In OclFormulaxDll...\n");
+    cl_int clStatus;
+    int status;
+    size_t global_work_size[1];
+    float tdata[NUM];
 
-    run_kernel_wrapper(function, "oclformula", usrdata);
-    //fprintf(stderr, "\In OpenclDevice, proc...after run_kernel_wrapper\n");
-    return ret;
+    double *data = (double *) usrdata[0];
+    const formulax type = *((const formulax *) usrdata[1]);
+    double ret = 0.0;
+
+    for (int i = 0; i < NUM; i++) {
+        tdata[i] = (float) data[i];
+    }
+
+    env->kernel = clCreateKernel(env->program, "oclformula", &clStatus);
+    //printf("ScInterpreter::IterateParameters...after clCreateKernel.\n");
+    //fprintf(stderr, "\nIn OpenclDevice,...after clCreateKernel\n");
+    int size = NUM;
+
+    cl_mem formula_data = clCreateBuffer(env->context,
+            (cl_mem_flags) (CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR),
+            size * sizeof(float), (void *) tdata, &clStatus);
+    //fprintf(stderr, "\nIn OpenclDevice,...after clCreateBuffer\n");
+
+    status = clSetKernelArg(env->kernel, 0, sizeof(cl_mem),
+            (void *) &formula_data);
+    CHECK_OPENCL(status)
+    status = clSetKernelArg(env->kernel, 1, sizeof(unsigned int),
+            (void *) &type);
+    CHECK_OPENCL(status)
+
+    global_work_size[0] = size;
+    //fprintf(stderr, "\nIn OpenclDevice,...after global_work_size\n");
+    //PPAStartCpuEvent(ppa_proc);
+
+    while (global_work_size[0] != 1) {
+        global_work_size[0] = global_work_size[0] / 2;
+        status = clEnqueueNDRangeKernel(env->commandQueue, env->kernel, 1,
+                NULL, global_work_size, NULL, 0, NULL, NULL);
+        CHECK_OPENCL(status)
+
+    }
+    //fprintf(stderr, "\nIn OpenclDevice,...before clEnqueueReadBuffer\n");
+    status = clEnqueueReadBuffer(env->commandQueue, formula_data, CL_FALSE, 0,
+            sizeof(float), (void *) &tdata, 0, NULL, NULL);
+    CHECK_OPENCL(status)
+    status = clFinish(env->commandQueue);
+    CHECK_OPENCL(status)
+
+    //PPAStopCpuEvent(ppa_proc);
+    //fprintf(stderr, "\nIn OpenclDevice,...before clReleaseKernel\n");
+    status = clReleaseKernel(env->kernel);
+    CHECK_OPENCL(status)
+    status = clReleaseMemObject(formula_data);
+    CHECK_OPENCL(status)
+
+    if (type == AVG)
+        ret = (double) tdata[0] / NUM;
+    else
+        ret = (double) tdata[0];
+
+    printf("OclFormulaxDllxx:size = %d ret = %f.\n\n", NUM, ret);
+
+    return 0;
+}
+double OclCalc::OclProcess(cl_kernel_function function, double *data, formulax type)
+{
+	fprintf(stderr, "\n OpenclDevice, proc...begin\n");
+	double ret = 0;
+	void *usrdata[2];
+	usrdata[0] = (void *) data;
+	usrdata[1] = (void *) &type;
+	RunKernelWrapper(function, "oclformula", usrdata);
+	return ret;
 }
 
 double OclCalc::OclTest() {
     double data[NUM];
+
+    srand((unsigned int) time(NULL));
 
     for (int i = 0; i < NUM; i++) {
         data[i] = sc::rng::uniform();
         fprintf(stderr, "%f\t", data[i]);
     }
     OclProcess(&OclFormulax, data, AVG);
-    //fprintf(stderr, "\nIn OpenclDevice,OclTest() after proc,data0...%f\n", data[0]);
+    return 0.0;
+}
 
+double OclCalc::OclTestDll() {
+    double data[NUM];
+    srand((unsigned int) time(NULL));
+
+    for (int i = 0; i < NUM; i++) {
+        data[i] = rand() / (RAND_MAX + 1.0);
+        fprintf(stderr, "%f\t", data[i]);
+    }
+    OclProcess(&OclFormulaxDll, data, AVG);
     return 0.0;
 }
 
 OclCalc::OclCalc()
 {
-    OpenclDevice::init_opencl_run_env(0, NULL);
-    OpenclDevice::setOpenclState(1);
-    fprintf(stderr,"OclCalc:: init opencl.\n");
+    OpenclDevice::SetOpenclState(1);
+    fprintf(stderr,"OclCalc:: init opencl ok.\n");
 }
 
 OclCalc::~OclCalc()
 {
-    OpenclDevice::release_opencl_run_env();
-    OpenclDevice::setOpenclState(0);
-    fprintf(stderr,"OclCalc:: opencl end.\n");
+    OpenclDevice::SetOpenclState(0);
+    fprintf(stderr,"OclCalc:: opencl end ok.\n");
+}
+/////////////////////////////////////////////////////////////////////////////
+int OclCalc::OclHostFormulaMax(double *srcData,int *start,int *end,double *output,int size) {
+	KernelEnv env;
+	const char *kernelName = "oclFormulaMax";
+	CheckKernelName(&env,kernelName);
+	cl_int clStatus;
+	size_t global_work_size[1];
+	int alignSize = size + end[0]-start[0];
+
+	env.kernel = clCreateKernel(env.program,kernelName, &clStatus);
+	cl_int ret=0;
+	cl_mem inputCl = clCreateBuffer(env.context,(cl_mem_flags) (CL_MEM_READ_WRITE),
+		alignSize * sizeof(float), NULL, &clStatus);
+	cl_mem startCl = clCreateBuffer(env.context, (cl_mem_flags) (CL_MEM_READ_WRITE),
+		size * sizeof(unsigned int), NULL, &ret);
+	cl_mem endCl = clCreateBuffer(env.context, (cl_mem_flags) (CL_MEM_READ_WRITE),
+		size * sizeof(unsigned int), NULL, &ret);
+	cl_mem outputCl = clCreateBuffer(env.context, (cl_mem_flags) (CL_MEM_READ_WRITE),
+	size* sizeof(float), NULL, &ret);
+
+	float * hostMapSrc = (float *)clEnqueueMapBuffer(env.commandQueue,inputCl,CL_TRUE,CL_MAP_WRITE,0,alignSize * sizeof(float),0,NULL,NULL,NULL);
+	int * hostMapStart = (int *)clEnqueueMapBuffer(env.commandQueue,startCl,CL_TRUE,CL_MAP_WRITE,0,size * sizeof(unsigned int),0,NULL,NULL,NULL);
+	int * hostMapEnd   = (int *)clEnqueueMapBuffer(env.commandQueue,endCl,CL_TRUE,CL_MAP_WRITE,0,size * sizeof(unsigned int),0,NULL,NULL,NULL);
+	for(int i=0;i<size;i++)
+	{
+		hostMapStart[i] = start[i];
+		hostMapEnd[i]	= end[i];
+	}
+	for(int i=0;i<alignSize;i++)
+		hostMapSrc[i] = (float)srcData[i];
+	clEnqueueUnmapMemObject(env.commandQueue,inputCl,hostMapSrc,0,NULL,NULL);
+	clEnqueueUnmapMemObject(env.commandQueue,startCl,hostMapStart,0,NULL,NULL);
+	clEnqueueUnmapMemObject(env.commandQueue,endCl,hostMapEnd,0,NULL,NULL);
+
+	clStatus = clSetKernelArg(env.kernel, 0, sizeof(cl_mem),
+		(void *)&inputCl);
+	clStatus = clSetKernelArg(env.kernel, 1, sizeof(cl_mem),
+		(void *)&startCl);
+	clStatus = clSetKernelArg(env.kernel, 2, sizeof(cl_mem),
+		(void *)&endCl);
+	clStatus = clSetKernelArg(env.kernel, 3, sizeof(cl_mem),
+		(void *)&outputCl);
+	CHECK_OPENCL(clStatus);
+
+	global_work_size[0] = size;
+	clStatus = clEnqueueNDRangeKernel(env.commandQueue, env.kernel, 1,
+		NULL, global_work_size, NULL, 0, NULL, NULL);
+	CHECK_OPENCL(clStatus)
+
+	float * outPutMap = (float *)clEnqueueMapBuffer(env.commandQueue,outputCl,CL_TRUE,CL_MAP_READ,0,size*sizeof(float),0,NULL,NULL,NULL);
+	for(int i=0;i<size;i++)
+		output[i]=outPutMap[i];
+
+	clEnqueueUnmapMemObject(env.commandQueue,outputCl,outPutMap,0,NULL,NULL);
+	clStatus = clFinish(env.commandQueue);
+
+	CHECK_OPENCL(clStatus);
+	clStatus = clReleaseKernel(env.kernel);
+	CHECK_OPENCL(clStatus);
+	clStatus = clReleaseMemObject(inputCl);
+	CHECK_OPENCL(clStatus);
+	clStatus = clReleaseMemObject(startCl);
+	CHECK_OPENCL(clStatus);
+	clStatus = clReleaseMemObject(endCl);
+	CHECK_OPENCL(clStatus);
+	clStatus = clReleaseMemObject(outputCl);
+	CHECK_OPENCL(clStatus);
+	return 0;
+}
+int OclCalc::OclHostFormulaMin(double *srcData,int *start,int *end,double *output,int size) {
+	KernelEnv env;
+	const char *kernelName = "oclFormulaMin";
+	CheckKernelName(&env,kernelName);
+
+	cl_int clStatus;
+	size_t global_work_size[1];
+	int alignSize = size + end[0]-start[0];
+
+	env.kernel = clCreateKernel(env.program,kernelName, &clStatus);
+	cl_int ret=0;
+	cl_mem inputCl = clCreateBuffer(env.context,(cl_mem_flags) (CL_MEM_READ_WRITE),
+		alignSize * sizeof(float), NULL, &clStatus);
+	cl_mem startCl = clCreateBuffer(env.context, (cl_mem_flags) (CL_MEM_READ_WRITE),
+		size * sizeof(unsigned int), NULL, &ret);
+	cl_mem endCl = clCreateBuffer(env.context, (cl_mem_flags) (CL_MEM_READ_WRITE),
+		size * sizeof(unsigned int), NULL, &ret);
+	cl_mem outputCl = clCreateBuffer(env.context, (cl_mem_flags) (CL_MEM_READ_WRITE),
+	size* sizeof(float), NULL, &ret);
+
+	float * hostMapSrc = (float *)clEnqueueMapBuffer(env.commandQueue,inputCl,CL_TRUE,CL_MAP_WRITE,0,alignSize * sizeof(float),0,NULL,NULL,NULL);
+	int * hostMapStart = (int *)clEnqueueMapBuffer(env.commandQueue,startCl,CL_TRUE,CL_MAP_WRITE,0,size * sizeof(unsigned int),0,NULL,NULL,NULL);
+	int * hostMapEnd   = (int *)clEnqueueMapBuffer(env.commandQueue,endCl,CL_TRUE,CL_MAP_WRITE,0,size * sizeof(unsigned int),0,NULL,NULL,NULL);
+	for(int i=0;i<size;i++)
+	{
+		hostMapStart[i] = start[i];
+		hostMapEnd[i]	= end[i];
+	}
+	for(int i=0;i<alignSize;i++)
+		hostMapSrc[i] = (float)srcData[i];
+	clEnqueueUnmapMemObject(env.commandQueue,inputCl,hostMapSrc,0,NULL,NULL);
+	clEnqueueUnmapMemObject(env.commandQueue,startCl,hostMapStart,0,NULL,NULL);
+	clEnqueueUnmapMemObject(env.commandQueue,endCl,hostMapEnd,0,NULL,NULL);
+
+	clStatus = clSetKernelArg(env.kernel, 0, sizeof(cl_mem),
+		(void *)&inputCl);
+	clStatus = clSetKernelArg(env.kernel, 1, sizeof(cl_mem),
+		(void *)&startCl);
+	clStatus = clSetKernelArg(env.kernel, 2, sizeof(cl_mem),
+		(void *)&endCl);
+	clStatus = clSetKernelArg(env.kernel, 3, sizeof(cl_mem),
+		(void *)&outputCl);
+	CHECK_OPENCL(clStatus);
+
+	global_work_size[0] = size;
+	clStatus = clEnqueueNDRangeKernel(env.commandQueue, env.kernel, 1,
+		NULL, global_work_size, NULL, 0, NULL, NULL);
+	CHECK_OPENCL(clStatus)
+
+	float * outPutMap = (float *)clEnqueueMapBuffer(env.commandQueue,outputCl,CL_TRUE,CL_MAP_READ,0,size*sizeof(float),0,NULL,NULL,NULL);
+	for(int i=0;i<size;i++)
+		output[i]=outPutMap[i];
+
+	clEnqueueUnmapMemObject(env.commandQueue,outputCl,outPutMap,0,NULL,NULL);
+	clStatus = clFinish(env.commandQueue);
+
+	CHECK_OPENCL(clStatus);
+	clStatus = clReleaseKernel(env.kernel);
+	CHECK_OPENCL(clStatus);
+	clStatus = clReleaseMemObject(inputCl);
+	CHECK_OPENCL(clStatus);
+	clStatus = clReleaseMemObject(startCl);
+	CHECK_OPENCL(clStatus);
+	clStatus = clReleaseMemObject(endCl);
+	CHECK_OPENCL(clStatus);
+	clStatus = clReleaseMemObject(outputCl);
+	CHECK_OPENCL(clStatus);
+	return 0;
+}
+int OclCalc::OclHostFormulaAverage(double *srcData,int *start,int *end,double *output,int size) {
+	KernelEnv env;
+	const char *kernelName = "oclFormulaAverage";
+	CheckKernelName(&env,kernelName);
+
+	cl_int clStatus;
+	size_t global_work_size[1];
+	int alignSize = size + end[0]-start[0];
+
+	env.kernel = clCreateKernel(env.program, kernelName, &clStatus);
+	cl_int ret=0;
+	cl_mem inputCl = clCreateBuffer(env.context,(cl_mem_flags) (CL_MEM_READ_WRITE),
+		alignSize * sizeof(float), NULL, &clStatus);
+	cl_mem startCl = clCreateBuffer(env.context, (cl_mem_flags) (CL_MEM_READ_WRITE),
+		size * sizeof(unsigned int), NULL, &ret);
+	cl_mem endCl = clCreateBuffer(env.context, (cl_mem_flags) (CL_MEM_READ_WRITE),
+		size * sizeof(unsigned int), NULL, &ret);
+	cl_mem outputCl = clCreateBuffer(env.context, (cl_mem_flags) (CL_MEM_READ_WRITE),
+	size* sizeof(float), NULL, &ret);
+
+	float * hostMapSrc = (float *)clEnqueueMapBuffer(env.commandQueue,inputCl,CL_TRUE,CL_MAP_WRITE,0,alignSize * sizeof(float),0,NULL,NULL,NULL);
+	int * hostMapStart = (int *)clEnqueueMapBuffer(env.commandQueue,startCl,CL_TRUE,CL_MAP_WRITE,0,size * sizeof(unsigned int),0,NULL,NULL,NULL);
+	int * hostMapEnd   = (int *)clEnqueueMapBuffer(env.commandQueue,endCl,CL_TRUE,CL_MAP_WRITE,0,size * sizeof(unsigned int),0,NULL,NULL,NULL);
+	for(int i=0;i<size;i++)
+	{
+		hostMapStart[i] = start[i];
+		hostMapEnd[i]	= end[i];
+	}
+	for(int i=0;i<alignSize;i++)
+		hostMapSrc[i] = (float)srcData[i];
+	clEnqueueUnmapMemObject(env.commandQueue,inputCl,hostMapSrc,0,NULL,NULL);
+	clEnqueueUnmapMemObject(env.commandQueue,startCl,hostMapStart,0,NULL,NULL);
+	clEnqueueUnmapMemObject(env.commandQueue,endCl,hostMapEnd,0,NULL,NULL);
+
+	clStatus = clSetKernelArg(env.kernel, 0, sizeof(cl_mem),
+		(void *)&inputCl);
+	clStatus = clSetKernelArg(env.kernel, 1, sizeof(cl_mem),
+		(void *)&startCl);
+	clStatus = clSetKernelArg(env.kernel, 2, sizeof(cl_mem),
+		(void *)&endCl);
+	clStatus = clSetKernelArg(env.kernel, 3, sizeof(cl_mem),
+		(void *)&outputCl);
+	CHECK_OPENCL(clStatus);
+
+	global_work_size[0] = size;
+	clStatus = clEnqueueNDRangeKernel(env.commandQueue, env.kernel, 1,
+		NULL, global_work_size, NULL, 0, NULL, NULL);
+	CHECK_OPENCL(clStatus)
+
+	float * outPutMap = (float *)clEnqueueMapBuffer(env.commandQueue,outputCl,CL_TRUE,CL_MAP_READ,0,size*sizeof(float),0,NULL,NULL,NULL);
+	for(int i=0;i<size;i++)
+		output[i]=outPutMap[i];
+
+	clEnqueueUnmapMemObject(env.commandQueue,outputCl,outPutMap,0,NULL,NULL);
+	clStatus = clFinish(env.commandQueue);
+
+	CHECK_OPENCL(clStatus);
+	clStatus = clReleaseKernel(env.kernel);
+	CHECK_OPENCL(clStatus);
+	clStatus = clReleaseMemObject(inputCl);
+	CHECK_OPENCL(clStatus);
+	clStatus = clReleaseMemObject(startCl);
+	CHECK_OPENCL(clStatus);
+	clStatus = clReleaseMemObject(endCl);
+	CHECK_OPENCL(clStatus);
+	clStatus = clReleaseMemObject(outputCl);
+	CHECK_OPENCL(clStatus);
+	return 0;
+
+
+}
+
+
+int OclCalc::OclHostSignedAdd(double *lData,double *rData,double *rResult,int dSize) {
+
+	KernelEnv env;
+	int status;
+	const char *kernelName = "oclSignedAdd";
+	CheckKernelName(&env,kernelName);
+
+
+	cl_int clStatus;
+	size_t global_work_size[1];
+
+	env.kernel = clCreateKernel(env.program,kernelName, &clStatus);
+	cl_mem clLiftData = clCreateBuffer(env.context,
+		(cl_mem_flags) (CL_MEM_READ_WRITE),
+		dSize * sizeof(float), NULL, &clStatus);
+	cl_mem clRightData = clCreateBuffer(env.context,
+		(cl_mem_flags) (CL_MEM_READ_WRITE),
+		dSize * sizeof(float), NULL, &clStatus);
+	cl_mem clResult = clCreateBuffer(env.context,
+		(cl_mem_flags) (CL_MEM_READ_WRITE),
+		dSize * sizeof(float), NULL, &clStatus);
+
+	float * hostMapLeftData 	= (float *)clEnqueueMapBuffer(env.commandQueue,clLiftData,CL_TRUE,CL_MAP_WRITE,0,dSize*sizeof(float),0,NULL,NULL,NULL);
+	float * hostMapRightData 	= (float *)clEnqueueMapBuffer(env.commandQueue,clRightData,CL_TRUE,CL_MAP_WRITE,0,dSize*sizeof(float),0,NULL,NULL,NULL);
+	for(int i=0;i<dSize;i++)
+	{
+		hostMapLeftData[i] 	= (float)lData[i];
+		hostMapRightData[i] = (float)rData[i];
+	}
+	clEnqueueUnmapMemObject(env.commandQueue,clLiftData,hostMapLeftData,0,NULL,NULL);
+	clEnqueueUnmapMemObject(env.commandQueue,clRightData,hostMapRightData,0,NULL,NULL);
+
+	status = clSetKernelArg(env.kernel, 0, sizeof(cl_mem),
+		(void *)&clLiftData);
+	status = clSetKernelArg(env.kernel, 1, sizeof(cl_mem),
+		(void *)&clRightData);
+	status = clSetKernelArg(env.kernel, 2, sizeof(cl_mem),
+		(void *)&clResult);
+	CHECK_OPENCL(status)
+	global_work_size[0] = dSize;
+	status = clEnqueueNDRangeKernel(env.commandQueue, env.kernel, 1,
+		NULL, global_work_size, NULL, 0, NULL, NULL);
+	CHECK_OPENCL(status);
+
+	float * hostMapResult = (float *)clEnqueueMapBuffer(env.commandQueue,clResult,CL_TRUE,CL_MAP_READ,0,dSize*sizeof(float),0,NULL,NULL,NULL);
+	for(int i=0;i<dSize;i++)
+		rResult[i]=hostMapResult[i];
+	clEnqueueUnmapMemObject(env.commandQueue,clResult,hostMapResult,0,NULL,NULL);
+
+	CHECK_OPENCL(status);
+	status = clFinish(env.commandQueue);
+	CHECK_OPENCL(status);
+	status = clReleaseKernel(env.kernel);
+	CHECK_OPENCL(status);
+	status = clReleaseMemObject(clLiftData);
+	CHECK_OPENCL(status);
+	status = clReleaseMemObject(clRightData);
+	CHECK_OPENCL(status);
+	status = clReleaseMemObject(clResult);
+	CHECK_OPENCL(status);
+	return 0;
+}
+int OclCalc::OclHostSignedMul(double *lData,double *rData,double *rResult,int dSize) {
+	KernelEnv env;
+	int status;
+	const char *kernelName = "oclSignedMul";
+	CheckKernelName(&env,kernelName);
+
+
+	size_t global_work_size[1];
+	cl_int clStatus;
+	env.kernel = clCreateKernel(env.program, kernelName, &clStatus);
+	cl_mem clLiftData = clCreateBuffer(env.context,
+		(cl_mem_flags) (CL_MEM_READ_WRITE),
+		dSize * sizeof(float), NULL, &clStatus);
+	cl_mem clRightData = clCreateBuffer(env.context,
+		(cl_mem_flags) (CL_MEM_READ_WRITE),
+		dSize * sizeof(float), NULL, &clStatus);
+	cl_mem clResult = clCreateBuffer(env.context,
+		(cl_mem_flags) (CL_MEM_READ_WRITE),
+		dSize * sizeof(float), NULL, &clStatus);
+
+	float * hostMapLeftData 	= (float *)clEnqueueMapBuffer(env.commandQueue,clLiftData,CL_TRUE,CL_MAP_WRITE,0,dSize*sizeof(float),0,NULL,NULL,NULL);
+	float * hostMapRightData 	= (float *)clEnqueueMapBuffer(env.commandQueue,clRightData,CL_TRUE,CL_MAP_WRITE,0,dSize*sizeof(float),0,NULL,NULL,NULL);
+	for(int i=0;i<dSize;i++)
+	{
+		hostMapLeftData[i] 	= (float)lData[i];
+		hostMapRightData[i] = (float)rData[i];
+	}
+	clEnqueueUnmapMemObject(env.commandQueue,clLiftData,hostMapLeftData,0,NULL,NULL);
+	clEnqueueUnmapMemObject(env.commandQueue,clRightData,hostMapRightData,0,NULL,NULL);
+
+	status = clSetKernelArg(env.kernel, 0, sizeof(cl_mem),
+		(void *)&clLiftData);
+	status = clSetKernelArg(env.kernel, 1, sizeof(cl_mem),
+		(void *)&clRightData);
+	status = clSetKernelArg(env.kernel, 2, sizeof(cl_mem),
+		(void *)&clResult);
+	CHECK_OPENCL(status)
+	global_work_size[0] = dSize;
+	status = clEnqueueNDRangeKernel(env.commandQueue, env.kernel, 1,
+		NULL, global_work_size, NULL, 0, NULL, NULL);
+	CHECK_OPENCL(status);
+
+	float * hostMapResult = (float *)clEnqueueMapBuffer(env.commandQueue,clResult,CL_TRUE,CL_MAP_READ,0,dSize*sizeof(float),0,NULL,NULL,NULL);
+	for(int i=0;i<dSize;i++)
+		rResult[i]=hostMapResult[i];
+	clEnqueueUnmapMemObject(env.commandQueue,clResult,hostMapResult,0,NULL,NULL);
+
+	CHECK_OPENCL(status);
+	status = clFinish(env.commandQueue);
+	CHECK_OPENCL(status);
+	status = clReleaseKernel(env.kernel);
+	CHECK_OPENCL(status);
+	status = clReleaseMemObject(clLiftData);
+	CHECK_OPENCL(status);
+	status = clReleaseMemObject(clRightData);
+	CHECK_OPENCL(status);
+	status = clReleaseMemObject(clResult);
+	CHECK_OPENCL(status);
+	return 0;
+}
+int OclCalc::OclHostSignedSub(double *lData,double *rData,double *rResult,int dSize) {
+	KernelEnv env;
+	int status;
+	const char *kernelName = "oclSignedSub";
+	CheckKernelName(&env,kernelName);
+
+	cl_int clStatus;
+	size_t global_work_size[1];
+	env.kernel = clCreateKernel(env.program,kernelName, &clStatus);
+	cl_mem clLiftData = clCreateBuffer(env.context,
+		(cl_mem_flags) (CL_MEM_READ_WRITE),
+		dSize * sizeof(float), NULL, &clStatus);
+	cl_mem clRightData = clCreateBuffer(env.context,
+		(cl_mem_flags) (CL_MEM_READ_WRITE),
+		dSize * sizeof(float), NULL, &clStatus);
+	cl_mem clResult = clCreateBuffer(env.context,
+		(cl_mem_flags) (CL_MEM_READ_WRITE),
+		dSize * sizeof(float), NULL, &clStatus);
+
+	float * hostMapLeftData 	= (float *)clEnqueueMapBuffer(env.commandQueue,clLiftData,CL_TRUE,CL_MAP_WRITE,0,dSize*sizeof(float),0,NULL,NULL,NULL);
+	float * hostMapRightData 	= (float *)clEnqueueMapBuffer(env.commandQueue,clRightData,CL_TRUE,CL_MAP_WRITE,0,dSize*sizeof(float),0,NULL,NULL,NULL);
+	for(int i=0;i<dSize;i++)
+	{
+		hostMapLeftData[i] 	= (float)lData[i];
+		hostMapRightData[i] = (float)rData[i];
+	}
+	clEnqueueUnmapMemObject(env.commandQueue,clLiftData,hostMapLeftData,0,NULL,NULL);
+	clEnqueueUnmapMemObject(env.commandQueue,clRightData,hostMapRightData,0,NULL,NULL);
+
+	status = clSetKernelArg(env.kernel, 0, sizeof(cl_mem),
+		(void *)&clLiftData);
+	status = clSetKernelArg(env.kernel, 1, sizeof(cl_mem),
+		(void *)&clRightData);
+	status = clSetKernelArg(env.kernel, 2, sizeof(cl_mem),
+		(void *)&clResult);
+	CHECK_OPENCL(status)
+	global_work_size[0] = dSize;
+	status = clEnqueueNDRangeKernel(env.commandQueue, env.kernel, 1,
+		NULL, global_work_size, NULL, 0, NULL, NULL);
+	CHECK_OPENCL(status);
+
+	float * hostMapResult = (float *)clEnqueueMapBuffer(env.commandQueue,clResult,CL_TRUE,CL_MAP_READ,0,dSize*sizeof(float),0,NULL,NULL,NULL);
+	for(int i=0;i<dSize;i++)
+		rResult[i]=hostMapResult[i];
+	clEnqueueUnmapMemObject(env.commandQueue,clResult,hostMapResult,0,NULL,NULL);
+
+	CHECK_OPENCL(status);
+	status = clFinish(env.commandQueue);
+	CHECK_OPENCL(status);
+	status = clReleaseKernel(env.kernel);
+	CHECK_OPENCL(status);
+	status = clReleaseMemObject(clLiftData);
+	CHECK_OPENCL(status);
+	status = clReleaseMemObject(clRightData);
+	CHECK_OPENCL(status);
+	status = clReleaseMemObject(clResult);
+	CHECK_OPENCL(status);
+	return 0;
+}
+int OclCalc::OclHostSignedDiv(double *lData,double *rData,double *rResult,int dSize) {
+	KernelEnv env;
+	int status;
+	const char *kernelName = "oclSignedDiv";
+	CheckKernelName(&env,kernelName);
+
+
+	size_t global_work_size[1];
+	cl_int clStatus;
+	env.kernel = clCreateKernel(env.program,kernelName, &clStatus);
+	cl_mem clLiftData = clCreateBuffer(env.context,
+		(cl_mem_flags) (CL_MEM_READ_WRITE),
+		dSize * sizeof(float), NULL, &clStatus);
+	cl_mem clRightData = clCreateBuffer(env.context,
+		(cl_mem_flags) (CL_MEM_READ_WRITE),
+		dSize * sizeof(float), NULL, &clStatus);
+	cl_mem clResult = clCreateBuffer(env.context,
+		(cl_mem_flags) (CL_MEM_READ_WRITE),
+		dSize * sizeof(float), NULL, &clStatus);
+
+	float * hostMapLeftData 	= (float *)clEnqueueMapBuffer(env.commandQueue,clLiftData,CL_TRUE,CL_MAP_WRITE,0,dSize*sizeof(float),0,NULL,NULL,NULL);
+	float * hostMapRightData 	= (float *)clEnqueueMapBuffer(env.commandQueue,clRightData,CL_TRUE,CL_MAP_WRITE,0,dSize*sizeof(float),0,NULL,NULL,NULL);
+	for(int i=0;i<dSize;i++)
+	{
+		hostMapLeftData[i] 	= (float)lData[i];
+		hostMapRightData[i] = (float)rData[i];
+	}
+	clEnqueueUnmapMemObject(env.commandQueue,clLiftData,hostMapLeftData,0,NULL,NULL);
+	clEnqueueUnmapMemObject(env.commandQueue,clRightData,hostMapRightData,0,NULL,NULL);
+
+	status = clSetKernelArg(env.kernel, 0, sizeof(cl_mem),
+		(void *)&clLiftData);
+	status = clSetKernelArg(env.kernel, 1, sizeof(cl_mem),
+		(void *)&clRightData);
+	status = clSetKernelArg(env.kernel, 2, sizeof(cl_mem),
+		(void *)&clResult);
+	CHECK_OPENCL(status)
+	global_work_size[0] = dSize;
+	status = clEnqueueNDRangeKernel(env.commandQueue, env.kernel, 1,
+		NULL, global_work_size, NULL, 0, NULL, NULL);
+	CHECK_OPENCL(status);
+
+	float * hostMapResult = (float *)clEnqueueMapBuffer(env.commandQueue,clResult,CL_TRUE,CL_MAP_READ,0,dSize*sizeof(float),0,NULL,NULL,NULL);
+	for(int i=0;i<dSize;i++)
+		rResult[i]=hostMapResult[i];
+	clEnqueueUnmapMemObject(env.commandQueue,clResult,hostMapResult,0,NULL,NULL);
+
+	CHECK_OPENCL(status);
+	status = clFinish(env.commandQueue);
+	CHECK_OPENCL(status);
+	status = clReleaseKernel(env.kernel);
+	CHECK_OPENCL(status);
+	status = clReleaseMemObject(clLiftData);
+	CHECK_OPENCL(status);
+	status = clReleaseMemObject(clRightData);
+	CHECK_OPENCL(status);
+	status = clReleaseMemObject(clResult);
+	CHECK_OPENCL(status);
+	return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

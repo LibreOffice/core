@@ -101,6 +101,10 @@
 #include "scabstdlg.hxx"
 #include "formula/errorcodes.hxx"
 
+#ifdef ENABLE_OPENCL
+#include "openclwrapper.hxx"
+#endif
+
 #define SC_IDLE_MIN     150
 #define SC_IDLE_MAX     3000
 #define SC_IDLE_STEP    75
@@ -148,6 +152,9 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     mbIsInSharedDocLoading( false ),
     mbIsInSharedDocSaving( false )
 {
+#ifdef ENABLE_OPENCL
+    OclCalc::InitEnv();
+#endif
     //  im ctor ist der ResManager (DLL-Daten) noch nicht initialisiert!
 
     SetName(OUString("StarCalc"));       // fuer Basic
@@ -181,6 +188,9 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
 
 ScModule::~ScModule()
 {
+#ifdef ENABLE_OPENCL
+    OclCalc::ReleaseOpenclRunEnv();
+#endif
     OSL_ENSURE( !pSelTransfer, "Selection Transfer object not deleted" );
 
     //  InputHandler braucht nicht mehr geloescht zu werden (gibt keinen an der App mehr)

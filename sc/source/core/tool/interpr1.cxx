@@ -4332,10 +4332,6 @@ void ScInterpreter::ScProduct()
 void ScInterpreter::ScAverage( bool bTextAsZero )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAverage" );
-#ifdef ENABLE_OPENCL
-    static OclCalc ocl_calc;
-    ocl_calc.OclTest();
-#endif
     PushDouble( IterateParameters( ifAVERAGE, bTextAsZero ) );
 }
 
