@@ -10,10 +10,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "sal/config.h"
 #include "random.hxx"
 #include "openclwrapper.hxx"
 #include "oclkernels.hxx"
-#ifdef WIN32
+#ifdef SAL_WIN32
 #include <Windows.h>
 #endif
 //#define USE_KERNEL_FILE
@@ -21,7 +22,7 @@ using namespace std;
 GPUEnv OpenclDevice::gpuEnv;
 int OpenclDevice::isInited =0;
 
-#ifdef WIN32
+#ifdef SAL_WIN32
 
 #define OPENCL_DLL_NAME "opencllo.dll"
 #define OCLERR -1
@@ -54,8 +55,9 @@ void OpenclDevice::FreeOpenclDll()
 
 int OpenclDevice::InitEnv()
 {
-#ifdef WIN32
-	while(1){
+#ifdef SAL_WIN32
+	while(1)
+    {
 	    if(1==LoadOpencl())
 			break;
 	}
@@ -66,7 +68,7 @@ int OpenclDevice::InitEnv()
 
 int OpenclDevice::ReleaseOpenclRunEnv() {
 	ReleaseOpenclEnv(&gpuEnv);
-#ifdef WIN32
+#ifdef SAL_WIN32
 	FreeOpenclDll();
 #endif
     return 1;
@@ -738,16 +740,18 @@ int OpenclDevice::RegisterKernelWrapper(const char *kernelName,cl_kernel_functio
 			return (1);
 		}
 	}
-		return (0);
+    return (0);
 }
 
 
-void OpenclDevice::SetOpenclState(int state) {
+void OpenclDevice::SetOpenclState(int state)
+{
      //printf("OpenclDevice::setOpenclState...\n");
      isInited = state;
 }
 
-int OpenclDevice::GetOpenclState() {
+int OpenclDevice::GetOpenclState()
+{
     return isInited;
 }
 //ocldbg
@@ -886,6 +890,7 @@ int OclFormulaxDll(void ** usrdata, KernelEnv *env) {
 
     return 0;
 }
+
 double OclCalc::OclProcess(cl_kernel_function function, double *data, formulax type)
 {
 	fprintf(stderr, "\n OpenclDevice, proc...begin\n");
@@ -930,6 +935,7 @@ OclCalc::~OclCalc()
     OpenclDevice::SetOpenclState(0);
     fprintf(stderr,"OclCalc:: opencl end ok.\n");
 }
+
 /////////////////////////////////////////////////////////////////////////////
 int OclCalc::OclHostFormulaMax(double *srcData,int *start,int *end,double *output,int size) {
 	KernelEnv env;

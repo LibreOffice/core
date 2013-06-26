@@ -173,7 +173,8 @@ bool FormulaGroupInterpreter::interpret()
 //            }
         }
 #endif
-        if(getenv("SC_FORMULAGROUP")&&(!getenv("SC_GPU"))){
+        if(!getenv("SC_GPU"))
+        {
             fprintf(stderr,"ccCPU flow...\n\n");
             ScCompiler aComp(&mrDoc, aTmpPos, aCode2);
             aComp.SetGrammar(mrDoc.GetGrammar());
@@ -186,11 +187,12 @@ bool FormulaGroupInterpreter::interpret()
         }
     } // for loop end (mxGroup->mnLength)
     // For GPU calculation
-#ifdef ENABLE_OPENCL //dbg: Using "export SC_FORMULAGROUP=1;export SC_GPU=1" to open if{} in terminal
-    if(getenv("SC_FORMULAGROUP")&&(getenv("SC_GPU"))){
+#ifdef ENABLE_OPENCL //dbg: Using "export SC_GPU=1" to open if{} in terminal
+    if(getenv("SC_GPU"))
+    {
             fprintf(stderr,"ggGPU flow...\n\n");
             printf(" oclOp is... %d\n",oclOp);
-osl_getSystemTime(&aTimeBefore);//timer
+            osl_getSystemTime(&aTimeBefore); //timer
             static OclCalc ocl_calc;
             switch(oclOp)
             {
@@ -219,14 +221,13 @@ osl_getSystemTime(&aTimeBefore);//timer
                     fprintf(stderr,"No OpenCL function for this calculation.\n");
                     break;
             }
-/////////////////////////////////////////////////////
-osl_getSystemTime(&aTimeAfter);
-double diff = getTimeDiff(aTimeAfter, aTimeBefore);
-//if (diff >= 1.0)
-{
-    fprintf(stderr,"OpenCL,diff...%f.\n",diff);
-
-}
+            /////////////////////////////////////////////////////
+            osl_getSystemTime(&aTimeAfter);
+            double diff = getTimeDiff(aTimeAfter, aTimeBefore);
+            //if (diff >= 1.0)
+            {
+                fprintf(stderr,"OpenCL,diff...%f.\n",diff);
+            }
 /////////////////////////////////////////////////////
 
 //rResult[i];
@@ -261,10 +262,10 @@ double diff = getTimeDiff(aTimeAfter, aTimeBefore);
         if(srcData)
             free(srcData);
 
-if(getenv("SC_GPUSAMPLE")){
-    //fprintf(stderr,"FormulaGroupInterpreter::interpret(),iniflag...%d\n",ocl_calc.GetOpenclState());
-    //ocl_calc.OclTest();//opencl test sample for debug
-}
+        if(getenv("SC_GPUSAMPLE")){
+            //fprintf(stderr,"FormulaGroupInterpreter::interpret(),iniflag...%d\n",ocl_calc.GetOpenclState());
+            //ocl_calc.OclTest();//opencl test sample for debug
+        }
 #endif
 
     return true;
