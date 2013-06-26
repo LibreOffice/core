@@ -1270,12 +1270,102 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
 
 namespace {
 
-class CopyToClipHandler : public sc::CellBlockCloneHandler
+class CopyToClipHandler
 {
+    const ScColumn& mrSrcCol;
+    ScColumn& mrDestCol;
+    sc::ColumnBlockPosition maDestPos;
+
+    void setDefaultAttrsToDest(size_t nRow, size_t nSize)
+    {
+        std::vector<sc::CellTextAttr> aAttrs(nSize); // default values
+        maDestPos.miCellTextAttrPos = mrDestCol.GetCellAttrStore().set(
+            maDestPos.miCellTextAttrPos, nRow, aAttrs.begin(), aAttrs.end());
+    }
+
 public:
-    CopyToClipHandler(ScDocument& rSrcDoc, ScDocument& rDestDoc,
-                      sc::CellStoreType& rDestCellStore, sc::CellTextAttrStoreType& rDestAttrStore) :
-        sc::CellBlockCloneHandler(rSrcDoc, rDestDoc, rDestCellStore, rDestAttrStore) {}
+    CopyToClipHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos) :
+        mrSrcCol(rSrcCol), mrDestCol(rDestCol)
+    {
+        if (pDestPos)
+            maDestPos = *pDestPos;
+        else
+            mrDestCol.InitBlockPosition(maDestPos);
+    }
+
+    void operator() (const sc::CellStoreType::value_type& aNode, size_t nOffset, size_t nDataSize)
+    {
+        size_t nTopRow = aNode.position;
+
+        switch (aNode.type)
+        {
+            case sc::element_type_numeric:
+            {
+                sc::numeric_block::const_iterator it = sc::numeric_block::begin(*aNode.data);
+                std::advance(it, nOffset);
+                sc::numeric_block::const_iterator itEnd = it;
+                std::advance(itEnd, nDataSize);
+                maDestPos.miCellPos = mrDestCol.GetCellStore().set(maDestPos.miCellPos, nTopRow, it, itEnd);
+                setDefaultAttrsToDest(nTopRow, nDataSize);
+            }
+            break;
+            case sc::element_type_string:
+            {
+                sc::string_block::const_iterator it = sc::string_block::begin(*aNode.data);
+                std::advance(it, nOffset);
+                sc::string_block::const_iterator itEnd = it;
+                std::advance(itEnd, nDataSize);
+                maDestPos.miCellPos = mrDestCol.GetCellStore().set(maDestPos.miCellPos, nTopRow, it, itEnd);
+                setDefaultAttrsToDest(nTopRow, nDataSize);
+            }
+            break;
+            case sc::element_type_edittext:
+            {
+                sc::edittext_block::const_iterator it = sc::edittext_block::begin(*aNode.data);
+                std::advance(it, nOffset);
+                sc::edittext_block::const_iterator itEnd = it;
+                std::advance(itEnd, nDataSize);
+
+                std::vector<EditTextObject*> aCloned;
+                aCloned.reserve(nDataSize);
+                for (; it != itEnd; ++it)
+                    aCloned.push_back(ScEditUtil::Clone(**it, mrDestCol.GetDoc()));
+
+                maDestPos.miCellPos = mrDestCol.GetCellStore().set(
+                    maDestPos.miCellPos, nTopRow, aCloned.begin(), aCloned.end());
+
+                setDefaultAttrsToDest(nTopRow, nDataSize);
+            }
+            break;
+            case sc::element_type_formula:
+            {
+                sc::formula_block::const_iterator it = sc::formula_block::begin(*aNode.data);
+                std::advance(it, nOffset);
+                sc::formula_block::const_iterator itEnd = it;
+                std::advance(itEnd, nDataSize);
+
+                std::vector<ScFormulaCell*> aCloned;
+                aCloned.reserve(nDataSize);
+                ScAddress aDestPos(mrDestCol.GetCol(), nTopRow, mrDestCol.GetTab());
+                for (; it != itEnd; ++it, aDestPos.IncRow())
+                {
+                    const ScFormulaCell& rOld = **it;
+                    if (rOld.GetDirty() && mrSrcCol.GetDoc().GetAutoCalc())
+                        const_cast<ScFormulaCell&>(rOld).Interpret();
+
+                    aCloned.push_back(new ScFormulaCell(rOld, mrDestCol.GetDoc(), aDestPos));
+                }
+
+                maDestPos.miCellPos = mrDestCol.GetCellStore().set(
+                    maDestPos.miCellPos, nTopRow, aCloned.begin(), aCloned.end());
+
+                setDefaultAttrsToDest(nTopRow, nDataSize);
+            }
+            break;
+            default:
+                ;
+        }
+    }
 };
 
 }
@@ -1286,8 +1376,10 @@ void ScColumn::CopyToClip(
     pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray,
                           rCxt.isKeepScenarioFlags() ? (SC_MF_ALL & ~SC_MF_SCENARIO) : SC_MF_ALL );
 
-    CopyToClipHandler aHdl(*pDocument, *rColumn.pDocument, rColumn.maCells, rColumn.maCellTextAttrs);
-    CopyCellsInRangeToColumn(NULL, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), aHdl, nRow1, nRow2, rColumn);
+    CopyToClipHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol));
+    sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
+    rColumn.RegroupFormulaCells(nRow1, nRow2);
+    rColumn.CellStorageModified();
 }
 
 void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol)

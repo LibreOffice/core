@@ -144,6 +144,10 @@ public:
     const ScDocument& GetDoc() const;
     SCTAB GetTab() const { return nTab; }
     SCCOL GetCol() const { return nCol; }
+    sc::CellStoreType& GetCellStore() { return maCells; }
+    const sc::CellStoreType& GetCellStore() const { return maCells; }
+    sc::CellTextAttrStoreType& GetCellAttrStore() { return maCellTextAttrs; }
+    const sc::CellTextAttrStoreType& GetCellAttrStore() const { return maCellTextAttrs; }
 
     ScRefCellValue GetCellValue( SCROW nRow ) const;
     ScRefCellValue GetCellValue( sc::CellStoreType::const_iterator& itPos, SCROW nRow ) const;
