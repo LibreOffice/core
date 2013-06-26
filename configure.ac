@@ -9854,6 +9854,7 @@ else
                OPENCL_CFLAGS="-I$with_opencl_sdk/include"
                OPENCL_LIBS="-L$with_opencl_sdk/lib/x86 -lOpenCL"
                AC_MSG_RESULT([found at path $with_opencl_sdk])
+               AC_DEFINE(HAVE_FEATURE_OPENCL)
        else
                AC_MSG_ERROR([no headers found found at $with_opencl_sdk/include ])
        fi

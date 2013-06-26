@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
 #include "formulagroup.hxx"
 #include "document.hxx"
 #include "formulacell.hxx"
@@ -15,8 +16,8 @@
 #include "interpre.hxx"
 #include "formula/vectortoken.hxx"
 
-#ifdef ENABLE_OPENCL
-#include "openclwrapper.hxx"
+#if HAVE_FEATURE_OPENCL
+#  include "openclwrapper.hxx"
 #endif
 
 namespace sc {
@@ -40,7 +41,7 @@ TimeValue aTimeBefore, aTimeAfter;
 
 bool FormulaGroupInterpreter::interpret()
 {
-#ifdef ENABLE_OPENCL //dbg
+#if HAVE_FEATURE_OPENCL
     size_t rowSize = mxGroup->mnLength, srcSize = 0;
     fprintf(stderr,"rowSize at begin is ...%ld.\n",rowSize);
     int *rangeStart =NULL; // The first position for calculation,for example,the A1 in (=MAX(A1:A100))
@@ -100,7 +101,7 @@ bool FormulaGroupInterpreter::interpret()
                         nRowEnd += i;
                     size_t nRowSize = nRowEnd - nRowStart + 1;
                     ScMatrixRef pMat(new ScMatrix(nColSize, nRowSize, 0.0));
-#ifdef ENABLE_OPENCL
+#if HAVE_FEATURE_OPENCL
                     //srcSize = rowSize+nRowSize-rowSize%nRowSize;//align as nRowSize
                     //srcData = (double *)calloc(srcSize,sizeof(double));
                     rangeStart[i] = nRowStart;//record the start position
@@ -109,7 +110,7 @@ bool FormulaGroupInterpreter::interpret()
                     for (size_t nCol = 0; nCol < nColSize; ++nCol)
                     {
                         const double* pArray = rArrays[nCol];
-#ifdef ENABLE_OPENCL
+#if HAVE_FEATURE_OPENCL
                         //printf("pArray is %p.\n",pArray);
                         if( NULL==pArray )
                         {
@@ -146,7 +147,7 @@ bool FormulaGroupInterpreter::interpret()
         if (!pDest)
             return false;
 
-#ifdef ENABLE_OPENCL
+#if HAVE_FEATURE_OPENCL
         const formula::FormulaToken *pCur = aCode2.First();
         aCode2.Reset();
         while( ( pCur = aCode2.Next() ) != NULL )
@@ -187,7 +188,7 @@ bool FormulaGroupInterpreter::interpret()
         }
     } // for loop end (mxGroup->mnLength)
     // For GPU calculation
-#ifdef ENABLE_OPENCL //dbg: Using "export SC_GPU=1" to open if{} in terminal
+#if HAVE_FEATURE_OPENCL //dbg: Using "export SC_GPU=1" to open if{} in terminal
     if(getenv("SC_GPU"))
     {
             fprintf(stderr,"ggGPU flow...\n\n");
@@ -236,17 +237,20 @@ bool FormulaGroupInterpreter::interpret()
 //            }
 
 // We want to stuff the double data, which in rResult[i] from GPU calculated well, to UI view for users
-                for (sal_Int32 i = 0; i < mxGroup->mnLength; ++i)
-                    {
-                    ScFormulaCell* pDestx = mrDoc.GetFormulaCell(aTmpPos);
-                    if (!pDestx)
-                        return false;
-                    formula::FormulaTokenRef xResult = new formula::FormulaDoubleToken(rResult[i]);
-                    pDestx->SetResultToken(xResult.get());
-                    pDestx->ResetDirty();
-                    pDestx->SetChanged(true);
-                    aTmpPos.SetRow(mxGroup->mnStart + i + 1);
-                 }
+            ScAddress aInsertPos = maTopPos;
+            for (sal_Int32 i = 0; i < mxGroup->mnLength; ++i)
+            {
+                aInsertPos.SetRow(mxGroup->mnStart + i);
+                ScFormulaCell* pDestx = mrDoc.GetFormulaCell(aInsertPos);
+
+                SAL_DEBUG(" put value " << rResult[i] << " into formula at " << aInsertPos.Col() << " , " << aInsertPos.Row() );
+                assert(pDestx);
+
+                formula::FormulaTokenRef xResult = new formula::FormulaDoubleToken(rResult[i]);
+                pDestx->SetResultToken(xResult.get());
+                pDestx->ResetDirty();
+                pDestx->SetChanged(true);
+            }
         }
 
         if(leftData)

@@ -10,6 +10,8 @@
 #ifndef _OPENCL_WRAPPER_H_
 #define _OPENCL_WRAPPER_H_
 
+#include <config_features.h>
+
 #include <CL/cl.h>
 
 #define MaxTextExtent  4096
@@ -22,7 +24,7 @@
 #define strcasecmp strcmp
 #endif
 #endif
-#define ENABLE_OPENCL //dbg
+
 typedef struct _KernelEnv {
     cl_context context;
     cl_command_queue commandQueue;

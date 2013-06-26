@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 #include <comphelper/processfactory.hxx>
 
@@ -101,8 +103,8 @@
 #include "scabstdlg.hxx"
 #include "formula/errorcodes.hxx"
 
-#ifdef ENABLE_OPENCL
-#include "openclwrapper.hxx"
+#if HAVE_FEATURE_OPENCL
+#  include "openclwrapper.hxx"
 #endif
 
 #define SC_IDLE_MIN     150
@@ -152,7 +154,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     mbIsInSharedDocLoading( false ),
     mbIsInSharedDocSaving( false )
 {
-#ifdef ENABLE_OPENCL
+#if HAVE_FEATURE_OPENCL
     OclCalc::InitEnv();
 #endif
     //  im ctor ist der ResManager (DLL-Daten) noch nicht initialisiert!
@@ -188,7 +190,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
 
 ScModule::~ScModule()
 {
-#ifdef ENABLE_OPENCL
+#if HAVE_FEATURE_OPENCL
     OclCalc::ReleaseOpenclRunEnv();
 #endif
     OSL_ENSURE( !pSelTransfer, "Selection Transfer object not deleted" );
