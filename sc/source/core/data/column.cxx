@@ -1558,92 +1558,114 @@ bool canCopyValue(const ScDocument& rDoc, const ScAddress& rPos, sal_uInt16 nFla
     return ((nFlags & IDF_VALUE) != 0);
 }
 
-class CopyAsLinkHandler : public sc::CellBlockCloneHandler
+class CopyAsLinkHandler
 {
+    const ScColumn& mrSrcCol;
+    ScColumn& mrDestCol;
+    sc::ColumnBlockPosition maDestPos;
+    sc::ColumnBlockPosition* mpDestPos;
     sal_uInt16 mnCopyFlags;
     std::vector<ScFormulaCell*> maCellBuffer;
 
-    ScFormulaCell* createRefCell(const ScAddress& rSrcPos, const ScAddress& rDestPos)
+    void setDefaultAttrToDest(size_t nRow)
+    {
+        maDestPos.miCellTextAttrPos = mrDestCol.GetCellAttrStore().set(
+            maDestPos.miCellTextAttrPos, nRow, sc::CellTextAttr());
+    }
+
+    void setDefaultAttrsToDest(size_t nRow, size_t nSize)
+    {
+        std::vector<sc::CellTextAttr> aAttrs(nSize); // default values
+        maDestPos.miCellTextAttrPos = mrDestCol.GetCellAttrStore().set(
+            maDestPos.miCellTextAttrPos, nRow, aAttrs.begin(), aAttrs.end());
+    }
+
+    ScFormulaCell* createRefCell(size_t nRow)
     {
         ScSingleRefData aRef;
-        aRef.InitAddress(rSrcPos); // Absolute reference.
+        aRef.InitAddress(ScAddress(mrSrcCol.GetCol(), nRow, mrSrcCol.GetTab())); // Absolute reference.
         aRef.SetFlag3D(true);
 
         ScTokenArray aArr;
         aArr.AddSingleReference(aRef);
-        return new ScFormulaCell(&getDestDoc(), rDestPos, &aArr);
+        return new ScFormulaCell(&mrDestCol.GetDoc(), ScAddress(mrDestCol.GetCol(), nRow, mrDestCol.GetTab()), &aArr);
     }
 
-    template<typename _DataBlock>
-    void createRefBlock(
-        sc::ColumnBlockPosition& rPos, const ScAddress& rSrcPos, const ScAddress& rDestPos,
-        const typename _DataBlock::const_iterator& itBegin, const typename _DataBlock::const_iterator& itEnd)
+    void createRefBlock(const sc::CellStoreType::value_type& aNode, size_t nOffset, size_t nDataSize)
     {
-        size_t nSize = std::distance(itBegin, itEnd);
-        maCellBuffer.clear();
-        maCellBuffer.reserve(nSize);
-        ScAddress aSrcPos = rSrcPos;
-        ScAddress aDestPos = rDestPos;
-        for (typename _DataBlock::const_iterator it = itBegin; it != itEnd; ++it, aSrcPos.IncRow(), aDestPos.IncRow())
-            maCellBuffer.push_back(createRefCell(aSrcPos, aDestPos));
+        size_t nTopRow = aNode.position + nOffset;
 
-        rPos.miCellPos = getDestCellStore().set(rPos.miCellPos, rDestPos.Row(), maCellBuffer.begin(), maCellBuffer.end());
-        setDefaultAttrsToDest(rPos, rDestPos.Row(), nSize);
+        maCellBuffer.clear();
+        maCellBuffer.reserve(nDataSize);
+
+        for (size_t i = 0; i < nDataSize; ++i)
+            maCellBuffer.push_back(createRefCell(nTopRow + i));
+
+        maDestPos.miCellPos = mrDestCol.GetCellStore().set(maDestPos.miCellPos, nTopRow, maCellBuffer.begin(), maCellBuffer.end());
+        setDefaultAttrsToDest(nTopRow, nDataSize);
     }
 
 public:
-    CopyAsLinkHandler(
-        ScDocument& rSrcDoc, ScDocument& rDestDoc, sc::CellStoreType& rDestCellStore, sc::CellTextAttrStoreType& rDestAttrStore, sal_uInt16 nCopyFlags) :
-        sc::CellBlockCloneHandler(rSrcDoc, rDestDoc, rDestCellStore, rDestAttrStore),
-        mnCopyFlags(nCopyFlags) {}
-
-    virtual void cloneDoubleBlock(
-        sc::ColumnBlockPosition& rPos, const ScAddress& rSrcPos, const ScAddress& rDestPos,
-        const sc::numeric_block::const_iterator& itBegin, const sc::numeric_block::const_iterator& itEnd)
+    CopyAsLinkHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos, sal_uInt16 nCopyFlags) :
+        mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos), mnCopyFlags(nCopyFlags)
     {
-        if ((mnCopyFlags & (IDF_DATETIME|IDF_VALUE)) == 0)
-            return;
+        if (mpDestPos)
+            maDestPos = *mpDestPos;
+    }
 
-        ScAddress aSrcPos = rSrcPos;
-        ScAddress aDestPos = rDestPos;
-        for (sc::numeric_block::const_iterator it = itBegin; it != itEnd; ++it, aSrcPos.IncRow(), aDestPos.IncRow())
+    ~CopyAsLinkHandler()
+    {
+        if (mpDestPos)
+            *mpDestPos = maDestPos;
+    }
+
+    void operator() (const sc::CellStoreType::value_type& aNode, size_t nOffset, size_t nDataSize)
+    {
+        size_t nRow = aNode.position - nOffset;
+
+        switch (aNode.type)
         {
-            if (!canCopyValue(getSrcDoc(), aSrcPos, mnCopyFlags))
-                continue;
+            case sc::element_type_numeric:
+            {
+                if ((mnCopyFlags & (IDF_DATETIME|IDF_VALUE)) == 0)
+                    return;
 
-            rPos.miCellPos = getDestCellStore().set(rPos.miCellPos, aDestPos.Row(), createRefCell(aSrcPos, aDestPos));
-            setDefaultAttrToDest(rPos, aDestPos.Row());
+                sc::numeric_block::const_iterator it = sc::numeric_block::begin(*aNode.data);
+                std::advance(it, nOffset);
+                sc::numeric_block::const_iterator itEnd = it;
+                std::advance(itEnd, nDataSize);
+
+                ScAddress aSrcPos(mrSrcCol.GetCol(), nRow, mrSrcCol.GetTab());
+                for (; it != itEnd; ++it, aSrcPos.IncRow(), ++nRow)
+                {
+                    if (!canCopyValue(mrSrcCol.GetDoc(), aSrcPos, mnCopyFlags))
+                        continue;
+
+                    maDestPos.miCellPos = mrDestCol.GetCellStore().set(maDestPos.miCellPos, nRow, createRefCell(nRow));
+                    setDefaultAttrToDest(nRow);
+                }
+            }
+            break;
+            case sc::element_type_string:
+            case sc::element_type_edittext:
+            {
+                if (!(mnCopyFlags & IDF_STRING))
+                    return;
+
+                createRefBlock(aNode, nOffset, nDataSize);
+            }
+            break;
+            case sc::element_type_formula:
+            {
+                if (!(mnCopyFlags & IDF_FORMULA))
+                    return;
+
+                createRefBlock(aNode, nOffset, nDataSize);
+            }
+            break;
+            default:
+                ;
         }
-    }
-
-    virtual void cloneStringBlock(
-        sc::ColumnBlockPosition& rPos, const ScAddress& rSrcPos, const ScAddress& rDestPos,
-        const sc::string_block::const_iterator& itBegin, const sc::string_block::const_iterator& itEnd)
-    {
-        if (!(mnCopyFlags & IDF_STRING))
-            return;
-
-        createRefBlock<sc::string_block>(rPos, rSrcPos, rDestPos, itBegin, itEnd);
-    }
-
-    virtual void cloneEditTextBlock(
-        sc::ColumnBlockPosition& rPos, const ScAddress& rSrcPos, const ScAddress& rDestPos,
-        const sc::edittext_block::const_iterator& itBegin, const sc::edittext_block::const_iterator& itEnd)
-    {
-        if (!(mnCopyFlags & IDF_STRING))
-            return;
-
-        createRefBlock<sc::edittext_block>(rPos, rSrcPos, rDestPos, itBegin, itEnd);
-    }
-
-    virtual void cloneFormulaBlock(
-        sc::ColumnBlockPosition& rPos, const ScAddress& rSrcPos, const ScAddress& rDestPos,
-        const sc::formula_block::const_iterator& itBegin, const sc::formula_block::const_iterator& itEnd)
-    {
-        if (!(mnCopyFlags & IDF_FORMULA))
-            return;
-
-        createRefBlock<sc::formula_block>(rPos, rSrcPos, rDestPos, itBegin, itEnd);
     }
 };
 
@@ -1920,21 +1942,19 @@ void ScColumn::CopyToColumn(
 
     if ((nFlags & IDF_CONTENTS) != 0)
     {
-        boost::scoped_ptr<sc::CellBlockCloneHandler> pHdl(NULL);
-
         if (bAsLink)
         {
-            pHdl.reset(new CopyAsLinkHandler(*pDocument, *rColumn.pDocument, rColumn.maCells, rColumn.maCellTextAttrs, nFlags));
-            CopyCellsInRangeToColumn(NULL, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), *pHdl, nRow1, nRow2, rColumn);
+            CopyAsLinkHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), nFlags);
+            sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
         }
         else
         {
             CopyByCloneHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), nFlags);
             sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
-            rColumn.RegroupFormulaCells(nRow1, nRow2);
-            rColumn.CellStorageModified();
         }
 
+        rColumn.RegroupFormulaCells(nRow1, nRow2);
+        rColumn.CellStorageModified();
     }
 }
 

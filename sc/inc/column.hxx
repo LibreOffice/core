@@ -492,10 +492,6 @@ public:
 
 private:
 
-    void CopyCellsInRangeToColumn(
-        sc::ColumnBlockConstPosition* rSrcColPos, sc::ColumnBlockPosition* pDestColPos,
-        sc::CellBlockCloneHandler& Hdl, SCROW nRow1, SCROW nRow2, ScColumn& rColumn ) const;
-
     sc::CellStoreType::iterator GetPositionToInsert( SCROW nRow );
     sc::CellStoreType::iterator GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow );
     void ActivateNewFormulaCell( ScFormulaCell* pCell );
