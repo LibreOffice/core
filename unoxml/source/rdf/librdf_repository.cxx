@@ -1897,6 +1897,16 @@ librdf_Repository::getStatementsGraph(
     return new librdf_GraphResult(this, m_aMutex, pStream, pContext);
 }
 
+extern "C"
+void librdf_raptor_init(void* /*user_data*/, raptor_world* pRaptorWorld)
+{
+    // fdo#64672 prevent raptor from setting global libxml2 error handlers
+    raptor_world_set_flag(pRaptorWorld,
+            RAPTOR_WORLD_FLAG_LIBXML_STRUCTURED_ERROR_SAVE, 0);
+    raptor_world_set_flag(pRaptorWorld,
+            RAPTOR_WORLD_FLAG_LIBXML_GENERIC_ERROR_SAVE, 0);
+}
+
 librdf_world *librdf_TypeConverter::createWorld() const
 {
     // create and initialize world
@@ -1906,6 +1916,7 @@ librdf_world *librdf_TypeConverter::createWorld() const
             "librdf_TypeConverter::createWorld: librdf_new_world failed",
             m_rRep);
     }
+    librdf_world_set_raptor_init_handler(pWorld, 0, &librdf_raptor_init);
     //FIXME logger, digest, features?
     xsltSecurityPrefsPtr origprefs = xsltGetDefaultSecurityPrefs();
     librdf_world_open(pWorld);
