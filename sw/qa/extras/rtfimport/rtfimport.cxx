@@ -6,6 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -161,6 +162,7 @@ public:
     void testFdo68291();
     void testFdo69384();
     void testFdo70221();
+    void testN823675();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -306,6 +308,7 @@ void Test::run()
         {"fdo68291.odt", &Test::testFdo68291},
         {"hello.rtf", &Test::testFdo69384},
         {"fdo70221.rtf", &Test::testFdo70221},
+        {"n823675.rtf", &Test::testN823675},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1486,6 +1489,25 @@ void Test::testFdo70221()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     // The picture was imported twice.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+}
+
+void Test::testN823675()
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+    awt::FontDescriptor aFont;
+
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "BulletFont")
+            aFont = rProp.Value.get<awt::FontDescriptor>();
+    }
+    // This was empty, i.e. no font name was set for the bullet numbering.
+    CPPUNIT_ASSERT_EQUAL(OUString("Symbol"), aFont.Name);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
