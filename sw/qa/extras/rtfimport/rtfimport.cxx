@@ -6,6 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -147,6 +148,7 @@ public:
     void testParaBottomMargin();
     void testN823655();
     void testFdo66040();
+    void testN823675();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -280,6 +282,7 @@ void Test::run()
         {"para-bottom-margin.rtf", &Test::testParaBottomMargin},
         {"n823655.rtf", &Test::testN823655},
         {"fdo66040.rtf", &Test::testFdo66040},
+        {"n823675.rtf", &Test::testN823675},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1353,6 +1356,25 @@ void Test::testFdo66040()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1032), getProperty<sal_Int32>(xShape, "VertOrientPosition"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(14000), xShape->getSize().Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21001), xShape->getSize().Height);
+}
+
+void Test::testN823675()
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+    awt::FontDescriptor aFont;
+
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "BulletFont")
+            aFont = rProp.Value.get<awt::FontDescriptor>();
+    }
+    // This was empty, i.e. no font name was set for the bullet numbering.
+    CPPUNIT_ASSERT_EQUAL(OUString("Symbol"), aFont.Name);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

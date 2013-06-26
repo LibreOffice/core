@@ -2700,7 +2700,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     // Trivial character sprms.
     switch (nKeyword)
     {
-        case RTF_AF: nSprm = (m_aStates.top().bIsCjk ? NS_sprm::LN_CRgFtc1 : NS_sprm::LN_CRgFtc2); break;
         case RTF_FS: nSprm = NS_sprm::LN_CHps; break;
         case RTF_AFS: nSprm = NS_sprm::LN_CHpsBi; break;
         case RTF_ANIMTEXT: nSprm = NS_sprm::LN_CSfxText; break;
@@ -2831,6 +2830,11 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     switch (nKeyword)
     {
         case RTF_F:
+        case RTF_AF:
+            if (nKeyword == RTF_F)
+                nSprm = NS_sprm::LN_CRgFtc0;
+            else
+                nSprm = (m_aStates.top().bIsCjk ? NS_sprm::LN_CRgFtc1 : NS_sprm::LN_CRgFtc2);
             if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE || m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
             {
                 m_aFontIndexes.push_back(nParam);
@@ -2839,16 +2843,21 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             else if (m_aStates.top().nDestinationState == DESTINATION_LISTLEVEL)
             {
                 RTFSprms aFontSprms;
-                aFontSprms.set(NS_sprm::LN_CRgFtc0, RTFValue::Pointer_t(new RTFValue(getFontIndex(nParam))));
+                aFontSprms.set(nSprm, RTFValue::Pointer_t(new RTFValue(getFontIndex(nParam))));
+                // In the context of listlevels, \af seems to imply \f.
+                if (nKeyword == RTF_AF)
+                    aFontSprms.set(NS_sprm::LN_CRgFtc0, RTFValue::Pointer_t(new RTFValue(getFontIndex(nParam))));
                 RTFSprms aRunPropsSprms;
                 aRunPropsSprms.set(NS_ooxml::LN_EG_RPrBase_rFonts, RTFValue::Pointer_t(new RTFValue(RTFSprms(), aFontSprms)));
-                m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_rPr, RTFValue::Pointer_t(new RTFValue(RTFSprms(), aRunPropsSprms)));
+                // If there are multiple \f or \af tokens, only handle the first one.
+                if (!m_aStates.top().aTableSprms.find(NS_ooxml::LN_CT_Lvl_rPr))
+                    m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_rPr, RTFValue::Pointer_t(new RTFValue(RTFSprms(), aRunPropsSprms)));
             }
             else
             {
                 int nFontIndex = getFontIndex(nParam);
                 RTFValue::Pointer_t pValue(new RTFValue(nFontIndex));
-                m_aStates.top().aCharacterSprms.set(NS_sprm::LN_CRgFtc0, pValue);
+                m_aStates.top().aCharacterSprms.set(nSprm, pValue);
                 m_aStates.top().nCurrentEncoding = getEncoding(nFontIndex);
             }
             break;
