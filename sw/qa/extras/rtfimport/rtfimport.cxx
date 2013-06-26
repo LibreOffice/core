@@ -25,6 +25,7 @@
  * instead of those above.
  */
 
+#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -153,6 +154,7 @@ public:
     void testN825305();
     void testParaBottomMargin();
     void testN823655();
+    void testN823675();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -275,6 +277,7 @@ void Test::run()
         {"n825305.rtf", &Test::testN825305},
         {"para-bottom-margin.rtf", &Test::testParaBottomMargin},
         {"n823655.rtf", &Test::testN823655},
+        {"n823675.rtf", &Test::testN823675},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1276,6 +1279,25 @@ void Test::testN823655()
     }
     // The first coordinate pair of this freeform shape was 286,0 instead of 0,286.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(286), aCoordinates[0].Second.Value.get<sal_Int32>());
+}
+
+void Test::testN823675()
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+    awt::FontDescriptor aFont;
+
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "BulletFont")
+            aFont = rProp.Value.get<awt::FontDescriptor>();
+    }
+    // This was empty, i.e. no font name was set for the bullet numbering.
+    CPPUNIT_ASSERT_EQUAL(OUString("Symbol"), aFont.Name);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
