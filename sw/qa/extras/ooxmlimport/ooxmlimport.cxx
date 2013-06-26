@@ -126,6 +126,7 @@ public:
     void testPageBorderShadow();
     void testN820509();
     void testN820788();
+    void testTableAutoColumnFixedSize();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -201,6 +202,7 @@ void Test::run()
         {"page-border-shadow.docx", &Test::testPageBorderShadow},
         {"n820509.docx", &Test::testN820509},
         {"n820788.docx", &Test::testN820788},
+        {"table-auto-column-fixed-size.docx", &Test::testTableAutoColumnFixedSize},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1257,6 +1259,16 @@ void Test::testN820788()
     uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
     // This was text::SizeType::FIX.
     CPPUNIT_ASSERT_EQUAL(text::SizeType::MIN, getProperty<sal_Int16>(xFrame, "SizeType"));
+}
+
+void Test::testTableAutoColumnFixedSize()
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    // Width was not recognized during import when table size was 'auto'
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(3996)), getProperty<sal_Int32>(xTextTable, "Width"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -56,6 +56,7 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     ::std::vector< IntVectorPtr >  m_aCellWidths;
     /// Table layout algorithm, IOW if we should consider fixed column width or not.
     sal_uInt32 m_nLayoutType;
+    sal_Int32 m_nMaxFixedWidth;
 
     TablePropertiesHandler   *m_pTablePropsHandler;
     PropertyMapPtr            m_pStyleProps;
