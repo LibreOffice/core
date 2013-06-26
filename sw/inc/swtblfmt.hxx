@@ -30,34 +30,8 @@ class SW_DLLPUBLIC SwTableFormat : public SwFrameFormat
     friend class SwDoc;
 
 protected:
-    SwTableFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
-                    SwFrameFormat *pDrvdFrm )
-        : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
-    {
-        pFstLineFormat = NULL;
-        pLstLineFormat = NULL;
-        pOddLineFormat = NULL;
-        pEvnLineFormat = NULL;
-
-        pFstColFormat = NULL;
-        pLstColFormat = NULL;
-        pOddColFormat = NULL;
-        pEvnColFormat = NULL;
-    }
-    SwTableFormat( SwAttrPool& rPool, const OUString &rFormatNm,
-                    SwFrameFormat *pDrvdFrm )
-        : SwFrameFormat( rPool, rFormatNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
-    {
-        pFstLineFormat = NULL;
-        pLstLineFormat = NULL;
-        pOddLineFormat = NULL;
-        pEvnLineFormat = NULL;
-
-        pFstColFormat = NULL;
-        pLstColFormat = NULL;
-        pOddColFormat = NULL;
-        pEvnColFormat = NULL;
-    }
+    SwTableFormat(SwAttrPool& rPool, const sal_Char* pFormatNm, SwFrameFormat *pDrvdFrm);
+    SwTableFormat(SwAttrPool& rPool, const OUString &rFormatNm, SwFrameFormat *pDrvdFrm);
 
     SwTableLineFormat* pFstLineFormat;
     SwTableLineFormat* pLstLineFormat;
@@ -102,24 +76,8 @@ class SwTableLineFormat : public SwFrameFormat
     friend class SwDoc;
 
 protected:
-    SwTableLineFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
-                    SwFrameFormat *pDrvdFrm )
-        : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
-    {
-        pFstBoxFormat = NULL;
-        pLstBoxFormat = NULL;
-        pOddBoxFormat = NULL;
-        pEvnBoxFormat = NULL;
-    }
-    SwTableLineFormat( SwAttrPool& rPool, const OUString &rFormatNm,
-                    SwFrameFormat *pDrvdFrm )
-        : SwFrameFormat( rPool, rFormatNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
-    {
-        pFstBoxFormat = NULL;
-        pLstBoxFormat = NULL;
-        pOddBoxFormat = NULL;
-        pEvnBoxFormat = NULL;
-    }
+    SwTableLineFormat(SwAttrPool& rPool, const sal_Char* pFormatNm, SwFrameFormat *pDrvdFrm);
+    SwTableLineFormat(SwAttrPool& rPool, const OUString &rFormatNm, SwFrameFormat *pDrvdFrm);
 
     // Odd and Even Box formats will be used to handle alternating columns
     SwTableBoxFormat* pFstBoxFormat;
