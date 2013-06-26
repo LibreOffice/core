@@ -1129,26 +1129,43 @@ void updateRefInFormulaCell( ScFormulaCell& rCell, SCCOL nCol, SCTAB nTab, SCCOL
 
 void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
 {
-    ScFormulaCell* pCell1 = maCells.get<ScFormulaCell*>(nRow);
-    ScFormulaCell* pCell2 = rCol.maCells.get<ScFormulaCell*>(nRow);
-    if (pCell1)
-        updateRefInFormulaCell(*pCell1, rCol.nCol, nTab, rCol.nCol - nCol);
+    sc::CellStoreType::position_type aPos1 = maCells.position(nRow);
+    sc::CellStoreType::position_type aPos2 = rCol.maCells.position(nRow);
 
-    if (pCell2)
-        updateRefInFormulaCell(*pCell2, nCol, nTab, nCol - rCol.nCol);
+    if (aPos1.first->type == sc::element_type_formula)
+    {
+        ScFormulaCell& rCell = *sc::formula_block::at(*aPos1.first->data, aPos1.second);
+        updateRefInFormulaCell(rCell, rCol.nCol, nTab, rCol.nCol - nCol);
+        UnshareFormulaCell(aPos1, rCell);
+    }
+
+    if (aPos2.first->type == sc::element_type_formula)
+    {
+        ScFormulaCell& rCell = *sc::formula_block::at(*aPos2.first->data, aPos2.second);
+        updateRefInFormulaCell(rCell, nCol, nTab, nCol - rCol.nCol);
+        UnshareFormulaCell(aPos2, rCell);
+    }
 
     maCells.swap(nRow, nRow, rCol.maCells, nRow);
     maCellTextAttrs.swap(nRow, nRow, rCol.maCellTextAttrs, nRow);
 
+    aPos1 = maCells.position(nRow);
+    aPos2 = rCol.maCells.position(nRow);
+
+    if (aPos1.first->type == sc::element_type_formula)
+    {
+        ScFormulaCell& rCell = *sc::formula_block::at(*aPos1.first->data, aPos1.second);
+        JoinNewFormulaCell(aPos1, rCell);
+    }
+
+    if (aPos2.first->type == sc::element_type_formula)
+    {
+        ScFormulaCell& rCell = *sc::formula_block::at(*aPos2.first->data, aPos2.second);
+        rCol.JoinNewFormulaCell(aPos2, rCell);
+    }
+
     CellStorageModified();
     rCol.CellStorageModified();
-
-    if (pCell1 || pCell2)
-    {
-        // At least one of the two cells is a formula cell. Regroup them.
-        RegroupFormulaCells(nRow);
-        rCol.RegroupFormulaCells(nRow);
-    }
 }
 
 
