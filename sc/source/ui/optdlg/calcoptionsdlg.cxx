@@ -36,7 +36,31 @@ public:
     void SetValue(const OUString &rValue) { maValue = rValue; }
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
+
+    virtual void InitViewData(SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData);
 };
+
+void OptionString::InitViewData(
+    SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData)
+{
+    if( !pViewData )
+        pViewData = pView->GetViewDataItem( pEntry, this );
+
+    OUString aDesc = maDesc + OUString(": ");
+    Size aDescSize(pView->GetTextWidth(aDesc), pView->GetTextHeight());
+
+    Font aOldFont = pView->GetFont();
+    Font aFont = aOldFont;
+    aFont.SetWeight(WEIGHT_BOLD);
+    //To not make the SvTreeListBox try and recalculate all rows, call the
+    //underlying SetFont, we just want to know what size this text will be
+    //and are going to reset the font to the original again afterwards
+    pView->Control::SetFont(aFont);
+    Size aValueSize(pView->GetTextWidth(maValue), pView->GetTextHeight());
+    pView->Control::SetFont(aOldFont);
+
+    pViewData->maSize = Size(aDescSize.Width() + aValueSize.Width(), std::max(aDescSize.Height(), aValueSize.Height()));
+}
 
 void OptionString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
@@ -49,10 +73,12 @@ void OptionString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDat
     Font aFont = aOldFont;
     aFont.SetWeight(WEIGHT_BOLD);
 
-    rDev.SetFont(aFont);
+    //To not make the SvTreeListBox try and recalculate all rows, call the
+    //underlying SetFont, we are going to draw this string and then going to
+    //reset the font to the original again afterwards
+    rDev.Control::SetFont(aFont);
     rDev.DrawText(aPos, maValue);
-
-    rDev.SetFont(aOldFont);
+    rDev.Control::SetFont(aOldFont);
 }
 
 formula::FormulaGrammar::AddressConvention toAddressConvention(sal_uInt16 nPos)
