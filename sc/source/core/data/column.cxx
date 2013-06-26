@@ -2002,22 +2002,19 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 
 namespace {
 
-class UpdateRefHandler
+class UpdateRefOnCopy
 {
 protected:
     ScRange maRange;
     SCCOL mnDx;
     SCROW mnDy;
     SCTAB mnDz;
-    UpdateRefMode meMode;
     ScDocument* mpUndoDoc;
     bool mbUpdated;
 
 public:
-    UpdateRefHandler(const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz, UpdateRefMode eMode, ScDocument* pUndoDoc) :
-        maRange(rRange), mnDx(nDx), mnDy(nDy), mnDz(nDz), meMode(eMode), mpUndoDoc(pUndoDoc), mbUpdated(false) {}
-
-    virtual ~UpdateRefHandler() {}
+    UpdateRefOnCopy(const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz, ScDocument* pUndoDoc) :
+        maRange(rRange), mnDx(nDx), mnDy(nDy), mnDz(nDz), mpUndoDoc(pUndoDoc), mbUpdated(false) {}
 
     bool isUpdated() const { return mbUpdated; }
 
@@ -2031,23 +2028,11 @@ public:
         sc::formula_block::iterator itEnd = it;
         std::advance(itEnd, nDataSize);
 
-        size_t nRow = node.position + nOffset;
-        for (; it != itEnd; ++it, ++nRow)
-            updateReference(**it, static_cast<SCROW>(nRow));
-    }
-
-    virtual void updateReference(ScFormulaCell& rCell, SCROW nRow) = 0;
-};
-
-class UpdateRefOnCopy : public UpdateRefHandler
-{
-public:
-    UpdateRefOnCopy(const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz, ScDocument* pUndoDoc) :
-        UpdateRefHandler(rRange, nDx, nDy, nDz, URM_COPY, pUndoDoc) {}
-
-    virtual void updateReference(ScFormulaCell& rCell, SCROW /*nRow*/)
-    {
-        mbUpdated |= rCell.UpdateReference(meMode, maRange, mnDx, mnDy, mnDz, mpUndoDoc);
+        for (; it != itEnd; ++it)
+        {
+            ScFormulaCell& rCell = **it;
+            mbUpdated |= rCell.UpdateReference(URM_COPY, maRange, mnDx, mnDy, mnDz, mpUndoDoc);
+        }
     }
 };
 
