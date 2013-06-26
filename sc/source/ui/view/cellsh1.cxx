@@ -1291,7 +1291,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                                      nClipStartX + nClipSizeX, nClipStartY + nClipSizeY, nStartTab );
                                     ScRange aDest( nStartX, nStartY, nStartTab,
                                                    nStartX + nRangeSizeX, nStartY + nRangeSizeY, nStartTab );
-                                    if ( aSource.Intersects( aDest ) )
+                                    if ( pOwnClip->GetDocument()->IsCutMode() && aSource.Intersects( aDest ) )
                                         pDlg->SetCellShiftDisabled( SC_CELL_SHIFT_DISABLE_DOWN | SC_CELL_SHIFT_DISABLE_RIGHT );
                                     else
                                     {
