@@ -42,8 +42,8 @@ TimeValue aTimeBefore, aTimeAfter;
 bool FormulaGroupInterpreter::interpret()
 {
 #if HAVE_FEATURE_OPENCL
-    size_t rowSize = mxGroup->mnLength, srcSize = 0;
-    fprintf(stderr,"rowSize at begin is ...%ld.\n",rowSize);
+    size_t rowSize = mxGroup->mnLength; //, srcSize = 0;
+    fprintf(stderr,"rowSize at begin is ...%ld.\n",(long)rowSize);
     int *rangeStart =NULL; // The first position for calculation,for example,the A1 in (=MAX(A1:A100))
     int *rangeEnd = NULL; // The last position for calculation,for example, the A100 in (=MAX(A1:A100))
     // The row quantity can be gotten from p2->GetArrayLength()
@@ -236,21 +236,8 @@ bool FormulaGroupInterpreter::interpret()
 //                fprintf(stderr,"After GPU,rRsults[%d] is ...%f\n",i,rResult[i]);
 //            }
 
-// We want to stuff the double data, which in rResult[i] from GPU calculated well, to UI view for users
-            ScAddress aInsertPos = maTopPos;
-            for (sal_Int32 i = 0; i < mxGroup->mnLength; ++i)
-            {
-                aInsertPos.SetRow(mxGroup->mnStart + i);
-                ScFormulaCell* pDestx = mrDoc.GetFormulaCell(aInsertPos);
-
-                SAL_DEBUG(" put value " << rResult[i] << " into formula at " << aInsertPos.Col() << " , " << aInsertPos.Row() );
-                assert(pDestx);
-
-                formula::FormulaTokenRef xResult = new formula::FormulaDoubleToken(rResult[i]);
-                pDestx->SetResultToken(xResult.get());
-                pDestx->ResetDirty();
-                pDestx->SetChanged(true);
-            }
+            // Insert the double data, in rResult[i] back into the document
+            mrDoc.SetFormulaResults(maTopPos, rResult, mxGroup->mnLength);
         }
 
         if(leftData)
