@@ -1395,7 +1395,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
                 aRect.Left(), aRect.Top(),
                 aRect.getWidth(), aRect.getHeight());
         }
-        else if(pObj)
+        else
         {
             // single object, get homogen transformation
             basegfx::B2DPolyPolygon aPolyPolygon;
