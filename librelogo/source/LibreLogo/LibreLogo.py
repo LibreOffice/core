@@ -739,7 +739,7 @@ def heading(deg = -1, go = False):
             if go and n > 0:
                 __go__(__TURTLE__, -n, False, a)
         else:
-            turtle.RotateAngle = deg * 100
+            turtle.RotateAngle = -deg * 100
 
 def rotate(shapename, deg):
     shape = __getshape__(shapename)
