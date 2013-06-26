@@ -183,7 +183,7 @@ void BaseContainerNode::showState() const
     for( std::size_t i=0; i<maChildren.size(); ++i )
     {
         BaseNodeSharedPtr pNode =
-            boost::shared_dynamic_cast<BaseNode>(maChildren[i]);
+            boost::dynamic_pointer_cast<BaseNode>(maChildren[i]);
         VERBOSE_TRACE(
             "Node connection: n0x%X -> n0x%X",
             (const char*)this+debugGetCurrentOffset(),
