@@ -327,102 +327,114 @@ sc::CellStoreType::iterator ScColumn::GetPositionToInsert( SCROW nRow )
     return GetPositionToInsert(maCells.begin(), nRow);
 }
 
+namespace {
+
+/**
+ * Re-group a shared formula cell that's being overwritten.
+ */
+void adjustSharedFormulaCell(const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell)
+{
+    sc::CellStoreType::iterator it = aPos.first;
+
+    // This formula cell is shared. Adjust the shared group.
+    if (rCell.aPos.Row() == rCell.GetSharedTopRow())
+    {
+        // Top of the shared range.
+        ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
+        if (xGroup->mnLength == 2)
+        {
+            // Group consists only only two cells. Mark the second one non-shared.
+#if DEBUG_COLUMN_STORAGE
+            if (aPos.second+1 >= aPos.first->size)
+            {
+                cerr << "ScColumn::GetPositionToInsert: There is no next formula cell but there should be!" << endl;
+                cerr.flush();
+                abort();
+            }
+#endif
+            ScFormulaCellGroupRef xNone;
+            ScFormulaCell& rNext = *sc::formula_block::at(*it->data, aPos.second+1);
+            rNext.SetCellGroup(xNone);
+        }
+        else
+        {
+            // Move the top cell to the next formula cell down.
+            --xGroup->mnLength;
+            ++xGroup->mnStart;
+        }
+    }
+    else if (rCell.aPos.Row() == rCell.GetSharedTopRow() + rCell.GetSharedLength() - 1)
+    {
+        // Bottom of the shared range.
+        ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
+        if (xGroup->mnLength == 2)
+        {
+            // Mark the top cell non-shared.
+#if DEBUG_COLUMN_STORAGE
+            if (aPos.second == 0)
+            {
+                cerr << "ScColumn::GetPositionToInsert: There is no previous formula cell but there should be!" << endl;
+                cerr.flush();
+                abort();
+            }
+#endif
+            ScFormulaCellGroupRef xNone;
+            ScFormulaCell& rPrev = *sc::formula_block::at(*it->data, aPos.second-1);
+            rPrev.SetCellGroup(xNone);
+        }
+        else
+        {
+            // Just shortern the shared range length by one.
+            --xGroup->mnLength;
+        }
+    }
+    else
+    {
+        // In the middle of the shared range. Split it into two groups.
+        ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
+        SCROW nEndRow = xGroup->mnStart + xGroup->mnLength - 1;
+        xGroup->mnLength = rCell.aPos.Row() - xGroup->mnStart; // Shorten the top group.
+
+        ScFormulaCellGroupRef xGroup2(new ScFormulaCellGroup);
+        xGroup2->mnStart = rCell.aPos.Row() + 1;
+        xGroup2->mnLength = nEndRow - rCell.aPos.Row();
+        xGroup2->mbInvariant = xGroup->mbInvariant;
+#if DEBUG_COLUMN_STORAGE
+        if (xGroup2->mnStart + xGroup2->mnLength > it->position + it->size)
+        {
+            cerr << "ScColumn::GetPositionToInsert: Shared formula region goes beyond the formula block. Not good." << endl;
+            cerr.flush();
+            abort();
+        }
+#endif
+        sc::formula_block::iterator itCell = sc::formula_block::begin(*it->data);
+        std::advance(itCell, aPos.second+1);
+        sc::formula_block::iterator itCellEnd = itCell;
+        std::advance(itCellEnd, xGroup2->mnLength);
+        for (; itCell != itCellEnd; ++itCell)
+        {
+            ScFormulaCell& rCell2 = **itCell;
+            rCell2.SetCellGroup(xGroup2);
+        }
+    }
+}
+
+}
+
 sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow )
 {
     // See if we are overwriting an existing formula cell.
-    sc::CellStoreType::position_type aRet = maCells.position(it, nRow);
-    sc::CellStoreType::iterator itRet = aRet.first;
+    sc::CellStoreType::position_type aPos = maCells.position(it, nRow);
+    sc::CellStoreType::iterator itRet = aPos.first;
     if (itRet->type == sc::element_type_formula)
     {
-        ScFormulaCell& rCell = *sc::formula_block::at(*itRet->data, aRet.second);
+        ScFormulaCell& rCell = *sc::formula_block::at(*itRet->data, aPos.second);
         if (!pDocument->IsClipOrUndo())
             // Have the dying formula cell stop listening.
             rCell.EndListeningTo(pDocument);
 
         if (rCell.IsShared())
-        {
-            // This formula cell is shared. Adjust the shared group.
-            if (rCell.aPos.Row() == rCell.GetSharedTopRow())
-            {
-                // Top of the shared range.
-                ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
-                if (xGroup->mnLength == 2)
-                {
-                    // Group consists only only two cells. Mark the second one non-shared.
-#if DEBUG_COLUMN_STORAGE
-                    if (aRet.second+1 >= aRet.first->size)
-                    {
-                        cerr << "ScColumn::GetPositionToInsert: There is no next formula cell but there should be!" << endl;
-                        cerr.flush();
-                        abort();
-                    }
-#endif
-                    ScFormulaCellGroupRef xNone;
-                    ScFormulaCell& rNext = *sc::formula_block::at(*itRet->data, aRet.second+1);
-                    rNext.SetCellGroup(xNone);
-                }
-                else
-                {
-                    // Move the top cell to the next formula cell down.
-                    --xGroup->mnLength;
-                    ++xGroup->mnStart;
-                }
-            }
-            else if (rCell.aPos.Row() == rCell.GetSharedTopRow() + rCell.GetSharedLength() - 1)
-            {
-                // Bottom of the shared range.
-                ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
-                if (xGroup->mnLength == 2)
-                {
-                    // Mark the top cell non-shared.
-#if DEBUG_COLUMN_STORAGE
-                    if (aRet.second == 0)
-                    {
-                        cerr << "ScColumn::GetPositionToInsert: There is no previous formula cell but there should be!" << endl;
-                        cerr.flush();
-                        abort();
-                    }
-#endif
-                    ScFormulaCellGroupRef xNone;
-                    ScFormulaCell& rPrev = *sc::formula_block::at(*itRet->data, aRet.second-1);
-                    rPrev.SetCellGroup(xNone);
-                }
-                else
-                {
-                    // Just shortern the shared range length by one.
-                    --xGroup->mnLength;
-                }
-            }
-            else
-            {
-                // In the middle of the shared range. Split it into two groups.
-                ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
-                SCROW nEndRow = xGroup->mnStart + xGroup->mnLength - 1;
-                xGroup->mnLength = rCell.aPos.Row() - xGroup->mnStart; // Shorten the top group.
-
-                ScFormulaCellGroupRef xGroup2(new ScFormulaCellGroup);
-                xGroup2->mnStart = rCell.aPos.Row() + 1;
-                xGroup2->mnLength = nEndRow - rCell.aPos.Row();
-                xGroup2->mbInvariant = xGroup->mbInvariant;
-#if DEBUG_COLUMN_STORAGE
-                if (xGroup2->mnStart + xGroup2->mnLength > itRet->position + itRet->size)
-                {
-                    cerr << "ScColumn::GetPositionToInsert: Shared formula region goes beyond the formula block. Not good." << endl;
-                    cerr.flush();
-                    abort();
-                }
-#endif
-                sc::formula_block::iterator itCell = sc::formula_block::begin(*itRet->data);
-                std::advance(itCell, aRet.second+1);
-                sc::formula_block::iterator itCellEnd = itCell;
-                std::advance(itCellEnd, xGroup2->mnLength);
-                for (; itCell != itCellEnd; ++itCell)
-                {
-                    ScFormulaCell& rCell2 = **itCell;
-                    rCell2.SetCellGroup(xGroup2);
-                }
-            }
-        }
+            adjustSharedFormulaCell(aPos, rCell);
     }
 
     return itRet;
