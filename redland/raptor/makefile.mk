@@ -60,6 +60,7 @@ OOO_PATCH_FILES= \
     $(TARFILE_NAME).patch.fixes \
     $(TARFILE_NAME).patch.rindex \
     raptor-aix.patch \
+    $(TARFILE_NAME)-fdo64672.patch \
     $(TARFILE_NAME).entities.patch
 
 .IF "$(GUI)" == "UNX"
