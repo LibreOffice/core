@@ -1728,12 +1728,16 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
         SvxBrushItem* pActItem = NULL;
         switch(pParaBck_Impl->nActPos)
         {
-            case PARA_DEST_PARA:
-                pActItem = pParaBck_Impl->pParaBrush;
+        case PARA_DEST_PARA:
+            pActItem = pParaBck_Impl->pParaBrush;
             break;
-            case PARA_DEST_CHAR:
-                pActItem = pParaBck_Impl->pCharBrush;
+        case PARA_DEST_CHAR:
+            pActItem = pParaBck_Impl->pCharBrush;
             break;
+        default:
+            /* we assert here because the rest of the code expect pActItem to be non NULL */
+            assert(false);
+            return 0;
         }
         pParaBck_Impl->nActPos = nSelPos;
         if(XFILL_SOLID == lcl_getFillStyle(m_pLbSelect))  // brush selected
