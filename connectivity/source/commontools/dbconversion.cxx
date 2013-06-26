@@ -33,7 +33,6 @@
 
 namespace
 {
-    const double fMilliSecondsPerDay = 86400000.0;
     const sal_Int64 nanoSecInSec = 1000000000;
     const sal_Int16 secInMin  = 60;
     const sal_Int16 minInHour = 60;
