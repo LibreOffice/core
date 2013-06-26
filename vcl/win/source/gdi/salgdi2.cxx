@@ -151,7 +151,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
     int     nOldClipRgnType = ERROR;
     HRGN    hInvalidateRgn = 0;
 
-    // do we have to invalidate also the overlaping regions?
+    // do we have to invalidate also the overlapping regions?
     if ( (nFlags & SAL_COPYAREA_WINDOWINVALIDATE) && mbWindow )
     {
         // compute and invalidate those parts that were either off-screen or covered by other windows
@@ -200,7 +200,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
                 {
                     hWndTopWindow = ::GetParent( hWndTopWindow );
 
-                    // Test, if the Parent clips our window
+                    // Test if the Parent clips our window
                     GetClientRect( hWndTopWindow, &aTempRect );
                     POINT aPt2;
                     aPt2.x = 0;

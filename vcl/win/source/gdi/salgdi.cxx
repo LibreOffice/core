@@ -175,7 +175,7 @@ void ImplInitSalGDI()
 
     if ( (nBitCount > 8) && (nBitCount < 24) )
     {
-        // test, if we have to dither
+        // test if we have to dither
         HDC         hMemDC = ::CreateCompatibleDC( hDC );
         HBITMAP     hMemBmp = ::CreateCompatibleBitmap( hDC, 8, 8 );
         HBITMAP     hBmpOld = (HBITMAP) ::SelectObject( hMemDC, hMemBmp );
@@ -551,7 +551,7 @@ HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp )
     {
         HDC hDC = GetDC( 0 );
 
-        // create new DC sith DefaultBitmap
+        // create new DC with DefaultBitmap
         pC->mhDC = CreateCompatibleDC( hDC );
 
         if( pSalData->mhDitherPal )
@@ -883,7 +883,6 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
         RectangleVector aRectangles;
         i_rClip.GetRegionRectangles(aRectangles);
 
-        //sal_uLong nRectCount = i_rClip.GetRectCount();
         sal_uLong nRectBufSize = sizeof(RECT)*aRectangles.size();
         if ( aRectangles.size() < SAL_CLIPRECT_COUNT )
         {
@@ -955,53 +954,6 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
                 mpClipRgnData->rdh.nRgnSize -= sizeof( RECT );
             }
         }
-
-        //ImplRegionInfo aInfo;
-        //long nX, nY, nW, nH;
-        //bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
-        //while( bRegionRect )
-        //{
-        //    if ( nW && nH )
-        //    {
-        //        long      nRight = nX + nW;
-        //        long      nBottom = nY + nH;
-        //
-        //        if ( bFirstClipRect )
-        //        {
-        //            pBoundRect->left  = nX;
-        //            pBoundRect->top   = nY;
-        //            pBoundRect->right = nRight;
-        //            pBoundRect->bottom    = nBottom;
-        //            bFirstClipRect = false;
-        //        }
-        //        else
-        //        {
-        //            if ( nX < pBoundRect->left )
-        //                pBoundRect->left = (int)nX;
-        //
-        //            if ( nY < pBoundRect->top )
-        //                pBoundRect->top = (int)nY;
-        //
-        //            if ( nRight > pBoundRect->right )
-        //                pBoundRect->right = (int)nRight;
-        //
-        //            if ( nBottom > pBoundRect->bottom )
-        //                pBoundRect->bottom = (int)nBottom;
-        //        }
-        //
-        //        pNextClipRect->left   = (int)nX;
-        //        pNextClipRect->top        = (int)nY;
-        //        pNextClipRect->right  = (int)nRight;
-        //        pNextClipRect->bottom = (int)nBottom;
-        //        pNextClipRect++;
-        //    }
-        //    else
-        //    {
-        //        mpClipRgnData->rdh.nCount--;
-        //        mpClipRgnData->rdh.nRgnSize -= sizeof( RECT );
-        //    }
-        //    bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
-        //}
 
         // create clip region from ClipRgnData
         if ( mpClipRgnData->rdh.nCount == 1 )

@@ -840,10 +840,10 @@ HANDLE WinSalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
     {
         BITMAP aBmp;
 
-        // Source-Bitmap nach Groesse befragen
+        // find out size of source bitmap
         WIN_GetObject( hHdl, sizeof( BITMAP ), (LPSTR) &aBmp );
 
-        // Destination-Bitmap erzeugen
+        // create destination bitmap
         if ( (hCopy = CreateBitmapIndirect( &aBmp )) != 0 )
         {
             HDC     hBmpDC = CreateCompatibleDC( 0 );

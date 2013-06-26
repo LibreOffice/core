@@ -261,7 +261,7 @@ OUString WinSalInstance::GetDefaultPrinter()
     GetProfileStringA( aImplWindows, aImplDevice, "", szBuffer, sizeof( szBuffer ) );
     if ( szBuffer[0] )
     {
-        // Printername suchen
+        // search for printer name
         char* pBuf = szBuffer;
         char* pTmp = pBuf;
         while ( *pTmp && (*pTmp != ',') )

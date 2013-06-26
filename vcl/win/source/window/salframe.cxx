@@ -3231,7 +3231,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
                 pSalData->mpMouseLeaveTimer = new AutoTimer;
                 pSalData->mpMouseLeaveTimer->SetTimeout( SAL_MOUSELEAVE_TIMEOUT );
                 pSalData->mpMouseLeaveTimer->Start();
-                // We dont need to set a timeout handler, because we test
+                // We don't need to set a timeout handler, because we test
                 // for mouseleave in the timeout callback
             }
             aMouseEvt.mnButton = 0;
@@ -3251,7 +3251,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
                     delete pSalData->mpMouseLeaveTimer;
                     pSalData->mpMouseLeaveTimer = NULL;
                 }
-                // Mouse-Coordinaates are relativ to the screen
+                // Mouse-Coordinates are relative to the screen
                 POINT aPt;
                 aPt.x = (short)LOWORD( lParam );
                 aPt.y = (short)HIWORD( lParam );
@@ -3298,7 +3298,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
     }
 
     // check if this window was destroyed - this might happen if we are the help window
-    // and sent a mouse leave message to the application which killed the help window, ie ourself
+    // and sent a mouse leave message to the application which killed the help window, ie ourselves
     if( !IsWindow( hWnd ) )
         return 0;
 

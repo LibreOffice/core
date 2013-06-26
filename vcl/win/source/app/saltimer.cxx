@@ -29,7 +29,7 @@
 
 // =======================================================================
 
-// Maximale Periode
+// maximum period
 #define MAX_SYSPERIOD     65533
 
 // =======================================================================
@@ -38,7 +38,7 @@ void ImplSalStartTimer( sal_uLong nMS, sal_Bool bMutex )
 {
     SalData* pSalData = GetSalData();
 
-    // Remenber the time of the timer
+    // Remember the time of the timer
     pSalData->mnTimerMS = nMS;
     if ( !bMutex )
         pSalData->mnTimerOrgMS = nMS;
