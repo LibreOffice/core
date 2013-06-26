@@ -60,11 +60,11 @@ class SC_DLLPUBLIC ScDetectiveFunc
 
     enum DrawPosMode
     {
-        DRAWPOS_TOPLEFT,        /// Top-left edge of the cell.
-        DRAWPOS_BOTTOMRIGHT,    /// Bottom-right edge of the cell.
-        DRAWPOS_DETARROW,       /// Position inside cell for detective arrows.
-        DRAWPOS_CAPTIONLEFT,    /// Top-left edge of the cell for captions.
-        DRAWPOS_CAPTIONRIGHT    /// Top-right edge of the cell for captions (incl. merged cells).
+        DRAWPOS_TOPLEFT,        ///< Top-left edge of the cell.
+        DRAWPOS_BOTTOMRIGHT,    ///< Bottom-right edge of the cell.
+        DRAWPOS_DETARROW,       ///< Position inside cell for detective arrows.
+        DRAWPOS_CAPTIONLEFT,    ///< Top-left edge of the cell for captions.
+        DRAWPOS_CAPTIONRIGHT    ///< Top-right edge of the cell for captions (incl. merged cells).
     };
 
     /** Returns a drawing layer position for the passed cell address. */

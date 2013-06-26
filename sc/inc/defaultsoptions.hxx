@@ -19,8 +19,8 @@
 class SC_DLLPUBLIC ScDefaultsOptions
 {
 private:
-    SCTAB nInitTabCount;             // number of Tabs for new Spreadsheet doc
-    OUString aInitTabPrefix;  // The Tab prefix name in new Spreadsheet doc
+    SCTAB nInitTabCount;             ///< number of Tabs for new Spreadsheet doc
+    OUString aInitTabPrefix;  ///< The Tab prefix name in new Spreadsheet doc
 
 
 public:
