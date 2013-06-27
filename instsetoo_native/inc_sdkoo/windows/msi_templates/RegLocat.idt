@@ -1,7 +1,11 @@
 Signature_	Root	Key	Name	Type
 s72	i2	s255	S255	I2
 RegLocator	Signature_
-basisinstalluser	1	Software\OpenOffice\Layers\Basis\[OOOBASEVERSION]	BASISINSTALLLOCATION	2
-basisinstalluser_	1	Software\OpenOffice\Layers_\Basis\[OOOBASEVERSION]	BASISINSTALLLOCATION	2
-basisinstallmachine	2	Software\OpenOffice\Layers\Basis\[OOOBASEVERSION]	BASISINSTALLLOCATION	2
-basisinstallmachine_	2	Software\OpenOffice\Layers_\Basis\[OOOBASEVERSION]	BASISINSTALLLOCATION	2
+installuser	1	Software\OpenOffice\Layers\[DEFINEDPRODUCT]\[BRANDPACKAGEVERSION]	INSTALLLOCATION	2
+installuser_	1	Software\OpenOffice\Layers_\[DEFINEDPRODUCT]\[BRANDPACKAGEVERSION]	INSTALLLOCATION	2
+installuser64	1	Software\Wow6432Node\OpenOffice\Layers\[DEFINEDPRODUCT]\[BRANDPACKAGEVERSION]	INSTALLLOCATION	2
+installuser64_	1	Software\Wow6432Node\OpenOffice\Layers_\[DEFINEDPRODUCT]\[BRANDPACKAGEVERSION]	INSTALLLOCATION	2
+installmachine	2	Software\OpenOffice\Layers\[DEFINEDPRODUCT]\[BRANDPACKAGEVERSION]	INSTALLLOCATION	2
+installmachine_	2	Software\OpenOffice\Layers_\[DEFINEDPRODUCT]\[BRANDPACKAGEVERSION]	INSTALLLOCATION	2
+installmachine64	2	Software\Wow6432Node\OpenOffice\Layers\[DEFINEDPRODUCT]\[BRANDPACKAGEVERSION]	INSTALLLOCATION	2
+installmachine64_	2	Software\Wow6432Node\OpenOffice\Layers_\[DEFINEDPRODUCT]\[BRANDPACKAGEVERSION]	INSTALLLOCATION	2
