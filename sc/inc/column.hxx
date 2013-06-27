@@ -308,10 +308,27 @@ public:
 
     void        ResetChanged( SCROW nStartRow, SCROW nEndRow );
 
-    bool        UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                     ScDocument* pUndoDoc = NULL );
+    /**
+     * Update reference addresses in formula cell in response to mass cell
+     * movement.
+     *
+     * @param eUpdateRefMode update mode - insert/delete, copy, move,
+     *                       reorder...
+     * @param rRange range of cells that are about to be moved or copied.
+     *               (TODO: find out what this range means for the reorder
+     *               mode).
+     * @param nDx moved by how many cells in the column direction.
+     * @param nDy moved by how many cells in the row direction.
+     * @param nDz moved by how many sheets in the sheet direction.
+     * @param pUndoDoc undo document instance.
+     *
+     * @return true if reference of at least one formula cell has been
+     *         updated, false otherwise.
+     */
+    bool UpdateReference(
+        UpdateRefMode eUpdateRefMode, const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
+        ScDocument* pUndoDoc = NULL );
+
     void UpdateInsertTab(SCTAB nInsPos, SCTAB nNewSheets = 1);
     void UpdateInsertTabOnlyCells(SCTAB nInsPos, SCTAB nNewSheets = 1);
     void UpdateDeleteTab(SCTAB nDelPos, bool bIsMove, ScColumn* pRefUndo = NULL, SCTAB nSheets = 1);

@@ -1992,9 +1992,8 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
             //  UpdateUsed not needed, already done in TestCopyScenario (obsolete comment ?)
 
             SCsTAB nDz = nTab - rSrcCol.nTab;
-            UpdateReference(URM_COPY, nCol, nStart, nTab,
-                                      nCol, nEnd,   nTab,
-                                      0, 0, nDz, NULL);
+            UpdateReference(
+                URM_COPY, ScRange(nCol, nStart, nTab, nCol, nEnd, nTab), 0, 0, nDz, NULL);
             UpdateCompile();
         }
 
@@ -2023,9 +2022,9 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
             //  UpdateUsed not needed, is already done in TestCopyScenario (obsolete comment ?)
 
             SCsTAB nDz = rDestCol.nTab - nTab;
-            rDestCol.UpdateReference(URM_COPY, rDestCol.nCol, nStart, rDestCol.nTab,
-                                               rDestCol.nCol, nEnd,   rDestCol.nTab,
-                                               0, 0, nDz, NULL);
+            rDestCol.UpdateReference(
+                URM_COPY, ScRange(rDestCol.nCol, nStart, rDestCol.nTab, rDestCol.nCol, nEnd, rDestCol.nTab),
+                0, 0, nDz, NULL);
             rDestCol.UpdateCompile();
         }
 
@@ -2221,21 +2220,19 @@ public:
 
 }
 
-bool ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-             SCCOL nCol2, SCROW nRow2, SCTAB nTab2, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-             ScDocument* pUndoDoc )
+bool ScColumn::UpdateReference(
+    UpdateRefMode eUpdateRefMode, const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
+    ScDocument* pUndoDoc )
 {
-    ScRange aRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-
     if (eUpdateRefMode == URM_COPY)
     {
-        UpdateRefOnCopy aHandler(aRange, nDx, nDy, nDz, pUndoDoc);
-        FormulaCellsUndecided(nRow1, nRow2);
-        sc::ProcessBlock(maCells.begin(), maCells, aHandler, nRow1, nRow2);
+        UpdateRefOnCopy aHandler(rRange, nDx, nDy, nDz, pUndoDoc);
+        FormulaCellsUndecided(rRange.aStart.Row(), rRange.aEnd.Row());
+        sc::ProcessBlock(maCells.begin(), maCells, aHandler, rRange.aStart.Row(), rRange.aEnd.Row());
         return aHandler.isUpdated();
     }
 
-    UpdateRefOnNonCopy aHandler(nCol, nTab, aRange, nDx, nDy, nDz, eUpdateRefMode, pUndoDoc);
+    UpdateRefOnNonCopy aHandler(nCol, nTab, rRange, nDx, nDy, nDz, eUpdateRefMode, pUndoDoc);
     FormulaCellsUndecided(0, MAXROW);
     sc::ProcessFormula(maCells, aHandler);
     return aHandler.isUpdated();
