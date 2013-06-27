@@ -4222,25 +4222,25 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
             }
         }
         // Check for SharedFormulas.
-        ScRangeData* pRangeData = NULL;
+        ScRangeData* pSharedCode = NULL;
         pArr->Reset();
-        for( FormulaToken* j = pArr->GetNextName(); j && !pRangeData;
+        for( FormulaToken* j = pArr->GetNextName(); j && !pSharedCode;
              j = pArr->GetNextName() )
         {
             if( j->GetOpCode() == ocName )
             {
                 ScRangeData* pName = GetRangeData( *j);
                 if (pName && pName->HasType(RT_SHARED))
-                    pRangeData = pName;
+                    pSharedCode = pName;
             }
         }
         // Check SharedFormulas for wraps.
-        if (pRangeData)
+        if (pSharedCode)
         {
-            ScRangeData* pName = pRangeData;
-            pRangeData = NULL;
+            ScRangeData* pName = pSharedCode;
+            pSharedCode = NULL;
             pArr->Reset();
-            for( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()); t && !pRangeData;
+            for( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()); t && !pSharedCode;
                  t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) )
             {
                 bool bRelName = (t->GetType() == svSingleRef ?
@@ -4257,16 +4257,16 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                     // wrapped it. Replace SharedFormula.
                     if (!bValid)
                     {
-                        pRangeData = pName;
+                        pSharedCode = pName;
                         rChanged = true;
                     }
                 }
             }
         }
-        return pRangeData;
+        return pSharedCode;
     }
 
-    ScRangeData* pRangeData = NULL;
+    ScRangeData* pSharedCode = NULL;
     ScToken* t;
     pArr->Reset();
     while( (t = static_cast<ScToken*>(pArr->GetNextReferenceOrName())) != NULL )
@@ -4276,7 +4276,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
             ScRangeData* pName = GetRangeData( *t);
             if (pName && pName->HasType(RT_SHAREDMOD))
             {
-                pRangeData = pName;     // maybe need a replacement of shared with own code
+                pSharedCode = pName;     // maybe need a replacement of shared with own code
                 rChanged = true;
             }
         }
@@ -4373,7 +4373,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
         }
     }
 
-    return pRangeData;
+    return pSharedCode;
 }
 
 bool ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
