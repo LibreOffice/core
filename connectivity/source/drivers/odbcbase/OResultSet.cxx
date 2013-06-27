@@ -650,7 +650,7 @@ Time OResultSet::impl_getTime( sal_Int32 columnIndex ) throw(SQLException, Runti
     TIME_STRUCT aTime = impl_getValue< TIME_STRUCT > ( columnIndex,
                                                       m_pStatement->getOwnConnection()->useOldDateFormat() ? SQL_C_TIME : SQL_C_TYPE_TIME );
 
-    return Time(0,aTime.second,aTime.minute,aTime.hour);
+    return Time(0, aTime.second,aTime.minute,aTime.hour, false);
 }
 Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
@@ -668,7 +668,8 @@ DateTime OResultSet::impl_getTimestamp( sal_Int32 columnIndex ) throw(SQLExcepti
                     aTime.hour,
                     aTime.day,
                     aTime.month,
-                    aTime.year);
+                    aTime.year,
+                    false);
 }
 DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {

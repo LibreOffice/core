@@ -3309,7 +3309,7 @@ void UnoDateFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
             if ( xText.is() && xText->getText().getLength() )
                 // and in real, the text of the peer is *not* empty
                 // -> simulate an invalid date, which is different from "no date"
-                aValue <<= util::Date( 0, 0, 0 );
+                aValue <<= util::Date();
         }
     }
     else

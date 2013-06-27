@@ -54,7 +54,8 @@ namespace ftp {
                                                       hours,
                                                       day,
                                                       month,
-                                                      year) { }
+                                                      year,
+                                                      false) { }
 
         void SetYear(sal_uInt16 year) { Year = year; }
         void SetMonth(sal_uInt16 month) { Month = month; }
