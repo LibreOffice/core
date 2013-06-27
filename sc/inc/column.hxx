@@ -312,11 +312,15 @@ public:
      * Update reference addresses in formula cell in response to mass cell
      * movement.
      *
-     * @param eUpdateRefMode update mode - insert/delete, copy, move,
-     *                       reorder...
-     * @param rRange range of cells that are about to be moved or copied.
-     *               (TODO: find out what this range means for the reorder
-     *               mode).
+     * @param eUpdateRefMode update mode - insert/delete, copy, or move. The
+     *                       reorder mode (which corresponds with the
+     *                       reordering of sheets) is not used with this
+     *                       method.
+     *
+     * @param rRange range of cells that are about to be moved for
+     *               insert/delete/move modes. For copy mode, it's the
+     *               destination range of cells that are about to be copied.
+     *
      * @param nDx moved by how many cells in the column direction.
      * @param nDy moved by how many cells in the row direction.
      * @param nDz moved by how many sheets in the sheet direction.
