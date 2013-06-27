@@ -1238,7 +1238,8 @@ void OOle2Obj::initializeOle()
         {
             uno::Reference< beans::XPropertySet > xChartProps( xCompSupp->getComponent(), uno::UNO_QUERY );
             if ( xChartProps.is() )
-                xChartProps->setPropertyValue("NullDate",uno::makeAny(util::DateTime(0,0,0,0,1,1,1900)));
+                xChartProps->setPropertyValue("NullDate",
+                    uno::makeAny(util::DateTime(0,0,0,0,1,1,1900,false)));
         }
     }
 }
