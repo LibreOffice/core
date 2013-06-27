@@ -242,8 +242,6 @@ public:
     void connectTableStyle();
     void disconnectTableStyle();
     virtual bool isInUse();
-
-    bool UpdateWritingMode();
 };
 
 // -----------------------------------------------------------------------------
@@ -271,7 +269,6 @@ void SdrTableObjImpl::init( SdrTableObj* pTable, sal_Int32 nColumns, sal_Int32 n
     mpLayouter = new TableLayouter( mxTable );
     Reference< XModifyListener > xListener( static_cast< ::com::sun::star::util::XModifyListener* >(this) );
     mxTable->addModifyListener( xListener );
-    UpdateWritingMode();
     LayoutTable( mpTableObj->aRect, true, true );
     mpTableObj->maLogicRect = mpTableObj->aRect;
 }
@@ -303,7 +300,6 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
         Reference< XModifyListener > xListener( static_cast< ::com::sun::star::util::XModifyListener* >(this) );
         mxTable->addModifyListener( xListener );
         mxTableStyle = rSource.mxTableStyle;
-        UpdateWritingMode();
         ApplyCellStyles();
         mpTableObj->aRect = mpTableObj->maLogicRect;
         LayoutTable( mpTableObj->aRect, false, false );
@@ -490,7 +486,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
             //Todo: Implement Dragging functionality for leftmost edge of table.
             if( (nEdge >= 0) && (nEdge <= getColumnCount()) )
             {
-                const bool bRTL = mpLayouter->GetWritingMode() == WritingMode_RL_TB;
+                const bool bRTL = !mpTableObj? false: (mpTableObj->GetWritingMode() == WritingMode_RL_TB);
                 sal_Int32 nWidth;
                 if(bRTL)
                 {
@@ -666,31 +662,6 @@ void SdrTableObjImpl::LayoutTable( Rectangle& rArea, bool bFitWidth, bool bFitHe
         TableModelNotifyGuard aGuard( mxTable.get() );
         mpLayouter->LayoutTable( rArea, bFitWidth, bFitHeight );
     }
-}
-
-// -----------------------------------------------------------------------------
-
-bool SdrTableObjImpl::UpdateWritingMode()
-{
-    if( mpTableObj && mpLayouter )
-    {
-        WritingMode eWritingMode = (WritingMode)static_cast< const SvxWritingModeItem& >( mpTableObj->GetObjectItem( SDRATTR_TEXTDIRECTION ) ).GetValue();
-
-        if( eWritingMode != WritingMode_TB_RL )
-        {
-            if( static_cast< const SvxFrameDirectionItem& >( mpTableObj->GetObjectItem( EE_PARA_WRITINGDIR ) ).GetValue() == FRMDIR_HORI_LEFT_TOP )
-                eWritingMode = WritingMode_LR_TB;
-            else
-                eWritingMode = WritingMode_RL_TB;
-        }
-
-        if( eWritingMode != mpLayouter->GetWritingMode() )
-        {
-            mpLayouter->SetWritingMode( eWritingMode );
-            return true;
-        }
-    }
-    return false;
 }
 
 // -----------------------------------------------------------------------------
@@ -1060,7 +1031,7 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
         return SDRTABLEHIT_NONE;
 
     // get vertical edge number and check for a hit
-    const bool bRTL = GetWritingMode() == WritingMode_RL_TB;
+    const bool bRTL = (GetWritingMode() == WritingMode_RL_TB);
     bool bVrtHit = false;
     if( nX >= 0 )
     {
@@ -2080,10 +2051,27 @@ void SdrTableObj::SetVerticalWriting(sal_Bool bVertical )
 
 WritingMode SdrTableObj::GetWritingMode() const
 {
-    WritingMode eMode = WritingMode_LR_TB;
-    if( mpImpl && mpImpl->mpLayouter )
-        eMode = mpImpl->mpLayouter->GetWritingMode();
-    return eMode;
+    SfxStyleSheet* pStyle = GetStyleSheet();
+    if ( !pStyle )
+        return WritingMode_LR_TB;
+
+    WritingMode eWritingMode = WritingMode_LR_TB;
+    const SfxItemSet &rSet = pStyle->GetItemSet();
+    const SfxPoolItem *pItem;
+
+    if ( rSet.GetItemState( SDRATTR_TEXTDIRECTION, sal_False, &pItem ) == SFX_ITEM_SET )
+        eWritingMode = static_cast< WritingMode >( static_cast< const SvxWritingModeItem * >( pItem )->GetValue() );
+
+    if ( ( eWritingMode != WritingMode_TB_RL ) &&
+         ( rSet.GetItemState( EE_PARA_WRITINGDIR, sal_False, &pItem ) == SFX_ITEM_SET ) )
+    {
+        if ( static_cast< const SvxFrameDirectionItem * >( pItem )->GetValue() == FRMDIR_HORI_LEFT_TOP )
+            eWritingMode = WritingMode_LR_TB;
+        else
+            eWritingMode = WritingMode_RL_TB;
+    }
+
+    return eWritingMode;
 }
 
 // --------------------------------------------------------------------
@@ -2576,8 +2564,7 @@ void SdrTableObj::SetChanged()
 {
     if( mpImpl )
     {
-        if( mpImpl->UpdateWritingMode() )
-            mpImpl->LayoutTable( aRect, false, false );
+        mpImpl->LayoutTable( aRect, false, false );
     }
 
     ::SdrTextObj::SetChanged();

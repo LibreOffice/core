@@ -101,9 +101,6 @@ public:
     void DistributeColumns( ::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol );
     void DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal_Int32 nLastRow );
 
-    com::sun::star::text::WritingMode GetWritingMode() const { return meWritingMode; }
-    void SetWritingMode( com::sun::star::text::WritingMode eWritingMode );
-
 private:
     CellRef getCell( const CellPos& rPos ) const;
 
@@ -142,8 +139,6 @@ private:
 
     BorderLineMap maHorizontalBorders;
     BorderLineMap maVerticalBorders;
-
-    com::sun::star::text::WritingMode   meWritingMode;
 
     const OUString msSize;
 };

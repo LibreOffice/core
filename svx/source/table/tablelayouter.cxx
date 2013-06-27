@@ -59,7 +59,6 @@ static SvxBorderLine gEmptyBorder;
 
 TableLayouter::TableLayouter( const TableModelRef& xTableModel )
 : mxTable( xTableModel )
-, meWritingMode( WritingMode_LR_TB )
 , msSize( "Size" )
 {
 }
@@ -126,7 +125,7 @@ bool TableLayouter::getCellArea( const CellPos& rPos, basegfx::B2IRectangle& rAr
         if( xCell.is() && !xCell->isMerged() && isValid(rPos) )
         {
             const basegfx::B2ITuple aCellSize( getCellSize( rPos ) );
-            const bool bRTL = meWritingMode == WritingMode_RL_TB;
+            const bool bRTL = (mxTable->getSdrTableObj()->GetWritingMode() == WritingMode_RL_TB);
 
             if( (rPos.mnCol < ((sal_Int32)maColumns.size()) && (rPos.mnRow < ((sal_Int32)maRows.size()) ) ) )
             {
@@ -256,7 +255,7 @@ sal_Int32 TableLayouter::getVerticalEdge( int nEdgeX, sal_Int32* pnMin /*= 0*/, 
     if( (nEdgeX >= 0) && (nEdgeX <= nColCount ) )
         nRet = maColumns[std::min((sal_Int32)nEdgeX,nColCount-1)].mnPos;
 
-    const bool bRTL = meWritingMode == WritingMode_RL_TB;
+    const bool bRTL = (mxTable->getSdrTableObj()->GetWritingMode() == WritingMode_RL_TB);
     if( bRTL )
     {
         if( (nEdgeX >= 0) && (nEdgeX < nColCount) )
@@ -649,7 +648,7 @@ void TableLayouter::LayoutTableWidth( Rectangle& rArea, bool bFit )
     // last step, update left edges
     sal_Int32 nNewWidth = 0;
 
-    const bool bRTL = meWritingMode == WritingMode_RL_TB;
+    const bool bRTL = (mxTable->getSdrTableObj()->GetWritingMode() == WritingMode_RL_TB);
     RangeIterator<sal_Int32> coliter( 0, nColCount, !bRTL );
     while( coliter.next(nCol ) )
     {
@@ -1141,12 +1140,6 @@ void TableLayouter::DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal
         (void)e;
         OSL_FAIL("sdr::table::TableLayouter::DistributeRows(), exception caught!");
     }
-}
-
-// -----------------------------------------------------------------------------
-void TableLayouter::SetWritingMode( com::sun::star::text::WritingMode eWritingMode )
-{
-    meWritingMode = eWritingMode;
 }
 
 } }
