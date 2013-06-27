@@ -429,7 +429,7 @@ void ScColumn::UnshareFormulaCell(
 #if DEBUG_COLUMN_STORAGE
             if (aPos.second+1 >= aPos.first->size)
             {
-                cerr << "ScColumn::GetPositionToInsert: There is no next formula cell but there should be!" << endl;
+                cerr << "ScColumn::UnshareFormulaCell: There is no next formula cell but there should be!" << endl;
                 cerr.flush();
                 abort();
             }
@@ -454,7 +454,7 @@ void ScColumn::UnshareFormulaCell(
 #if DEBUG_COLUMN_STORAGE
             if (aPos.second == 0)
             {
-                cerr << "ScColumn::GetPositionToInsert: There is no previous formula cell but there should be!" << endl;
+                cerr << "ScColumn::UnshareFormulaCell: There is no previous formula cell but there should be!" << endl;
                 cerr.flush();
                 abort();
             }
@@ -482,7 +482,7 @@ void ScColumn::UnshareFormulaCell(
 #if DEBUG_COLUMN_STORAGE
         if (xGroup2->mnStart + xGroup2->mnLength > it->position + it->size)
         {
-            cerr << "ScColumn::GetPositionToInsert: Shared formula region goes beyond the formula block. Not good." << endl;
+            cerr << "ScColumn::UnshareFormulaCell: Shared formula region goes beyond the formula block. Not good." << endl;
             cerr.flush();
             abort();
         }
@@ -499,6 +499,56 @@ void ScColumn::UnshareFormulaCell(
     }
 
     rCell.SetCellGroup(xNone);
+}
+
+void ScColumn::SplitFormulaCellGroup( const sc::CellStoreType::position_type& aPos ) const
+{
+    SCROW nRow = aPos.first->position + aPos.second;
+
+    if (aPos.first->type != sc::element_type_formula)
+        // Not a formula cell block.
+        return;
+
+    if (aPos.second == 0)
+        // Split position coincides with the block border. Nothing to do.
+        return;
+
+    sc::formula_block::iterator it = sc::formula_block::begin(*aPos.first->data);
+    std::advance(it, aPos.second);
+    ScFormulaCell& rTop = **it;
+    if (!rTop.IsShared())
+        // Not a shared formula.
+        return;
+
+    if (nRow == rTop.GetSharedTopRow())
+        // Already the top cell of a shared group.
+        return;
+
+    ScFormulaCellGroupRef xGroup = rTop.GetCellGroup();
+
+    ScFormulaCellGroupRef xGroup2(new ScFormulaCellGroup);
+    xGroup2->mbInvariant = xGroup->mbInvariant;
+    xGroup2->mnStart = nRow;
+    xGroup2->mnLength = xGroup->mnStart + xGroup->mnLength - nRow;
+
+    xGroup->mnLength = nRow - xGroup->mnStart;
+
+    // Apply the lower group object to the lower cells.
+#if DEBUG_COLUMN_STORAGE
+        if (xGroup2->mnStart + xGroup2->mnLength > aPos.first->position + aPos.first->size)
+        {
+            cerr << "ScColumn::SplitFormulaCellGroup: Shared formula region goes beyond the formula block. Not good." << endl;
+            cerr.flush();
+            abort();
+        }
+#endif
+    sc::formula_block::iterator itEnd = it;
+    std::advance(itEnd, xGroup2->mnLength);
+    for (; it != itEnd; ++it)
+    {
+        ScFormulaCell& rCell = **it;
+        rCell.SetCellGroup(xGroup2);
+    }
 }
 
 sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow )

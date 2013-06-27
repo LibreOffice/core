@@ -476,6 +476,13 @@ public:
     void UnshareFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell ) const;
 
     /**
+     * Split existing shared formula range at specified position. The cell at
+     * specified position becomes the top cell of the lower shared formula
+     * range after this call.
+     */
+    void SplitFormulaCellGroup( const sc::CellStoreType::position_type& aPos ) const;
+
+    /**
      * Regroup formula cells for the entire column.
      */
     void RegroupFormulaCells();

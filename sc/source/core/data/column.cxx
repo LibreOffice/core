@@ -1233,10 +1233,7 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
     maCellTextAttrs.insert_empty(nStartRow, nSize);
     maCellTextAttrs.resize(MAXROWCOUNT);
 
-    // Check if this insertion will split an existing formula block.
     sc::CellStoreType::position_type aPos = maCells.position(nStartRow);
-    bool bSplitFormulaBlock = aPos.second != 0;
-
     sc::CellStoreType::iterator it = maCells.insert_empty(aPos.first, nStartRow, nSize);
     maCells.resize(MAXROWCOUNT);
 
@@ -1254,8 +1251,8 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
         std::advance(itf, aPos.second);
         for (; itf != itfEnd; ++itf)
         {
-            ScFormulaCell* pCell = *itf;
-            pCell->aPos.IncRow(nSize);
+            ScFormulaCell& rCell = **itf;
+            rCell.aPos.IncRow(nSize);
         }
     }
 
@@ -1272,9 +1269,6 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
             pCell->aPos.IncRow(nSize);
         }
     }
-
-    if (bSplitFormulaBlock)
-        RegroupFormulaCells(nStartRow, nStartRow+nSize-1);
 
     CellStorageModified();
 
