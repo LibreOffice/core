@@ -8559,7 +8559,8 @@ if test "$with_system_redland" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_REDLAND=YES
     dnl versions before 1.0.8 write RDF/XML that is useless for ODF (@xml:base)
-    PKG_CHECK_MODULES(REDLAND, redland >= 1.0.8)
+    dnl raptor2: need at least 2.0.7 for CVE-2012-0037
+    PKG_CHECK_MODULES(REDLAND, redland >= 1.0.8 raptor2 >= 2.0.7)
     libo_MINGW_CHECK_DLL([REDLAND], [librdf])
     libo_MINGW_TRY_DLL([RAPTOR], [libraptor])
     libo_MINGW_TRY_DLL([RASQAL], [librasqal])
