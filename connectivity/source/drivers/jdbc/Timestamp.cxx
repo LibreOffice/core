@@ -104,7 +104,7 @@ java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_
     // Convert parameters
     OUString sDateStr;
     // java.sql.Time supports only whole seconds...
-    sDateStr = ::dbtools::DBTypeConversion::toTimeString(_rOut).copy(0, 8);
+    sDateStr = ::dbtools::DBTypeConversion::toTimeStringS(_rOut);
     args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
     // Turn off Java-Call for the constructor

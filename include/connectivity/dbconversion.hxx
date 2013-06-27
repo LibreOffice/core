@@ -141,6 +141,8 @@ namespace dbtools
 
         // return the date in the format %04d-%02d-%02d
         static OUString toDateString(const ::com::sun::star::util::Date& rDate);
+        // return the time in the format %02d:%02d:%02d
+        static OUString toTimeStringS(const ::com::sun::star::util::Time& rTime);
         // return the time in the format %02d:%02d:%02d.%09d
         static OUString toTimeString(const ::com::sun::star::util::Time& rTime);
         // return the DateTime in the format %04d-%02d-%02d %02d:%02d:%02d.%09d

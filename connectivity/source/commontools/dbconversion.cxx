@@ -81,6 +81,17 @@ namespace dbtools
         return OUString::createFromAscii(s);
     }
     //------------------------------------------------------------------
+    OUString DBTypeConversion::toTimeStringS(const Time& rTime)
+    {
+        std::ostringstream ostr;
+        using std::setw;
+        ostr.fill('0');
+        ostr << setw(2) << rTime.Hours   << ":"
+             << setw(2) << rTime.Minutes << ":"
+             << setw(2) << rTime.Seconds;
+        return OUString::createFromAscii(ostr.str().c_str());
+    }
+    //------------------------------------------------------------------
     OUString DBTypeConversion::toTimeString(const Time& rTime)
     {
         std::ostringstream ostr;
@@ -92,7 +103,6 @@ namespace dbtools
              << setw(9) << rTime.NanoSeconds;
         return OUString::createFromAscii(ostr.str().c_str());
     }
-
     //------------------------------------------------------------------
     OUString DBTypeConversion::toDateTimeString(const DateTime& _rDateTime)
     {
