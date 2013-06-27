@@ -1529,6 +1529,14 @@ void VCartesianAxis::updatePositions()
                         ,static_cast<sal_Int32>(aTickScreenPos2D.getY()));
 
                     double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
+                    if( nDepth > 0 )
+                    {
+                        /* Multi-level Labels: default to 0 or 90 */
+                        if( pTickFactory2D->isHorizontalAxis() )
+                            fRotationAngleDegree = 0.0;
+                        else
+                            fRotationAngleDegree = 90;
+                    }
 
                     // #i78696# use mathematically correct rotation now
                     const double fRotationAnglePi(fRotationAngleDegree * (F_PI / -180.0));
