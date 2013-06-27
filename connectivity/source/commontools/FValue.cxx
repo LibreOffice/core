@@ -983,13 +983,13 @@ OUString ORowSetValue::getString( ) const
                 aRet = OUString::number(static_cast<double>(*this));
                 break;
             case DataType::DATE:
-                aRet = connectivity::toDateString(*this);
+                aRet = DBTypeConversion::toDateString(*this);
                 break;
             case DataType::TIME:
-                aRet = connectivity::toTimeString(*this);
+                aRet = DBTypeConversion::toTimeString(*this);
                 break;
             case DataType::TIMESTAMP:
-                aRet = connectivity::toDateTimeString(*this);
+                aRet = DBTypeConversion::toDateTimeString(*this);
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
