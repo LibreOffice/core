@@ -1299,6 +1299,7 @@ public:
                     sc::edittext_block::iterator itDataEnd = sc::edittext_block::end(*it->data);
                     itDestPos = mrDestCells.set(itDestPos, nDestRow, itData, itDataEnd);
                 }
+                break;
                 case sc::element_type_formula:
                 {
                     sc::formula_block::iterator itData = sc::formula_block::begin(*it->data);
