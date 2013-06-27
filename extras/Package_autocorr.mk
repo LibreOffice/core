@@ -41,6 +41,7 @@ $(eval $(call gb_Package_add_files,extras_autocorr,share/autocorr,\
 	acor_pl-PL.dat \
 	acor_pt-BR.dat \
 	acor_pt-PT.dat \
+	acor_ro-RO.dat \
 	acor_ru-RU.dat \
 	acor_sh-ME.dat \
 	acor_sh-RS.dat \
