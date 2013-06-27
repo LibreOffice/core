@@ -2072,6 +2072,7 @@ namespace svt { namespace table
 
         case TableAreaAll:
             m_pDataWindow->Invalidate();
+            m_pDataWindow->GetParent()->Invalidate( INVALIDATE_TRANSPARENT );
             break;
         }
     }
@@ -2346,7 +2347,10 @@ namespace svt { namespace table
                 m_pDataWindow->Scroll( 0, (long)-nPixelDelta, aDataArea, SCROLL_CLIP | SCROLL_UPDATE | SCROLL_CHILDREN);
             }
             else
+            {
                 m_pDataWindow->Invalidate( INVALIDATE_UPDATE );
+                m_pDataWindow->GetParent()->Invalidate( INVALIDATE_TRANSPARENT );
+            }
 
             // update the position at the vertical scrollbar
             if ( m_pVScroll != NULL )
@@ -2423,7 +2427,10 @@ namespace svt { namespace table
                 m_pDataWindow->Scroll( nPixelDelta, 0, aDataArea, SCROLL_CLIP | SCROLL_UPDATE );
             }
             else
+            {
                 m_pDataWindow->Invalidate( INVALIDATE_UPDATE );
+                m_pDataWindow->GetParent()->Invalidate( INVALIDATE_TRANSPARENT );
+            }
 
             // update the position at the horizontal scrollbar
             if ( m_pHScroll != NULL )
