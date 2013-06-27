@@ -18,7 +18,7 @@
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="row_spacing">6</property>
+        <property name="row_spacing">12</property>
         <property name="column_spacing">12</property>
         <property name="column_homogeneous">True</property>
         <child>
@@ -37,6 +37,7 @@
                   <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="center">
                         <property name="label" translatable="yes">_Center window on screen</property>
@@ -147,6 +148,7 @@
                   <object class="GtkGrid" id="grid4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="toolbar">
                         <property name="label" translatable="yes">Hide _toolbar</property>
@@ -295,6 +297,8 @@
                   <object class="GtkGrid" id="grid5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="allbookmarks">
                         <property name="label" translatable="yes">_All bookmark levels</property>
