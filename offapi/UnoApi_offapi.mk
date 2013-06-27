@@ -4036,7 +4036,9 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/util,\
 	DataEditorEvent \
 	DataEditorEventType \
 	Date \
+	DateWithTimeZone \
 	DateTime \
+	DateTimeWithTimeZone \
 	DateTimeRange \
 	Duration \
 	ElementChange \
@@ -4057,6 +4059,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/util,\
 	SortField \
 	SortFieldType \
 	Time \
+	TimeWithTimeZone \
 	TriState \
 	URL \
 	VetoException \
