@@ -176,11 +176,10 @@ public:
     bool            HasRelNameReference() const;
     bool            HasColRowName() const;
 
-    bool            UpdateReference(UpdateRefMode eUpdateRefMode,
-                                    const ScRange& r,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ScDocument* pUndoDoc = NULL,
-                                    const ScAddress* pUndoCellPos = NULL );
+    bool UpdateReference(
+        UpdateRefMode eUpdateRefMode, const ScRange& rRange,
+        SCsCOL nDx, SCsROW nDy, SCsTAB nDz, ScDocument* pUndoDoc = NULL,
+        const ScAddress* pUndoCellPos = NULL );
 
     void            TransposeReference();
     void            UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
