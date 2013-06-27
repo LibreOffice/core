@@ -4265,126 +4265,115 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
         }
         return pRangeData;
     }
-    else
+
+    ScRangeData* pRangeData = NULL;
+    ScToken* t;
+    pArr->Reset();
+    while( (t = static_cast<ScToken*>(pArr->GetNextReferenceOrName())) != NULL )
     {
-        ScRangeData* pRangeData = NULL;
-        ScToken* t;
-        pArr->Reset();
-        while( (t = static_cast<ScToken*>(pArr->GetNextReferenceOrName())) != NULL )
+        if( t->GetOpCode() == ocName )
         {
-            if( t->GetOpCode() == ocName )
+            ScRangeData* pName = GetRangeData( *t);
+            if (pName && pName->HasType(RT_SHAREDMOD))
             {
-                ScRangeData* pName = GetRangeData( *t);
-                if (pName && pName->HasType(RT_SHAREDMOD))
-                {
-                    pRangeData = pName;     // maybe need a replacement of shared with own code
-                    rChanged = true;
-                }
-            }
-            else if( t->GetType() != svIndex )  // it may be a DB area!!!
-            {
-                t->CalcAbsIfRel( rOldPos );
-                switch (t->GetType())
-                {
-                    case svExternalSingleRef:
-                    case svExternalDoubleRef:
-                        // External references never change their positioning
-                        // nor point to parts that will be removed or expanded.
-                        // In fact, calling ScRefUpdate::Update() for URM_MOVE
-                        // may have negative side effects. Simply adapt
-                        // relative references to the new position.
-                        t->CalcRelFromAbs( aPos);
-                        break;
-                    case svSingleRef:
-                        {
-                            if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
-                                        aPos, r, nDx, nDy, nDz,
-                                        SingleDoubleRefModifier(
-                                            t->GetSingleRef()).Ref())
-                                    != UR_NOTHING)
-                                rChanged = true;
-                        }
-                        break;
-                    default:
-                        {
-                            ScComplexRefData& rRef = t->GetDoubleRef();
-                            SCCOL nCols = rRef.Ref2.nCol - rRef.Ref1.nCol;
-                            SCROW nRows = rRef.Ref2.nRow - rRef.Ref1.nRow;
-                            SCTAB nTabs = rRef.Ref2.nTab - rRef.Ref1.nTab;
-                            if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
-                                        aPos, r, nDx, nDy, nDz,
-                                        t->GetDoubleRef()) != UR_NOTHING)
-                            {
-                                rChanged = true;
-                                if (rRef.Ref2.nCol - rRef.Ref1.nCol != nCols ||
-                                        rRef.Ref2.nRow - rRef.Ref1.nRow != nRows ||
-                                        rRef.Ref2.nTab - rRef.Ref1.nTab != nTabs)
-                                    rRefSizeChanged = true;
-                            }
-                        }
-                }
+                pRangeData = pName;     // maybe need a replacement of shared with own code
+                rChanged = true;
             }
         }
-        pArr->Reset();
-        while ( (t = static_cast<ScToken*>(pArr->GetNextReferenceRPN())) != NULL )
+        else if( t->GetType() != svIndex )  // it may be a DB area!!!
         {
-            if ( t->GetRef() != 1 )
+            t->CalcAbsIfRel( rOldPos );
+            switch (t->GetType())
             {
-            }
-            else
-            {   // if nRefCnt>1 it's already updated in token code
-                if ( t->GetType() == svSingleRef )
+                case svExternalSingleRef:
+                case svExternalDoubleRef:
+                    // External references never change their positioning
+                    // nor point to parts that will be removed or expanded.
+                    // In fact, calling ScRefUpdate::Update() for URM_MOVE
+                    // may have negative side effects. Simply adapt
+                    // relative references to the new position.
+                    t->CalcRelFromAbs( aPos);
+                    break;
+                case svSingleRef:
                 {
-                    ScSingleRefData& rRef = t->GetSingleRef();
-                    SingleDoubleRefModifier aMod( rRef );
-                    if ( rRef.IsRelName() )
-                    {
-                        ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, aMod.Ref() );
+                    if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
+                                aPos, r, nDx, nDy, nDz,
+                                SingleDoubleRefModifier(
+                                    t->GetSingleRef()).Ref())
+                            != UR_NOTHING)
                         rChanged = true;
-                    }
-                    else
-                    {
-                        aMod.Ref().CalcAbsIfRel( rOldPos );
-                        if ( ScRefUpdate::Update( pDoc, eUpdateRefMode, aPos,
-                                    r, nDx, nDy, nDz, aMod.Ref() )
-                                != UR_NOTHING
-                            )
-                            rChanged = true;
-                    }
                 }
-                else
+                break;
+                default:
                 {
                     ScComplexRefData& rRef = t->GetDoubleRef();
                     SCCOL nCols = rRef.Ref2.nCol - rRef.Ref1.nCol;
                     SCROW nRows = rRef.Ref2.nRow - rRef.Ref1.nRow;
                     SCTAB nTabs = rRef.Ref2.nTab - rRef.Ref1.nTab;
-                    if ( rRef.Ref1.IsRelName() || rRef.Ref2.IsRelName() )
+                    if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
+                                aPos, r, nDx, nDy, nDz,
+                                t->GetDoubleRef()) != UR_NOTHING)
                     {
-                        ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, rRef );
                         rChanged = true;
-                    }
-                    else
-                    {
-                        if ( ScRefUpdate::Update( pDoc, eUpdateRefMode, aPos,
-                                    r, nDx, nDy, nDz, rRef )
-                                != UR_NOTHING
-                            )
-                        {
-                            rChanged = true;
-                            if (rRef.Ref2.nCol - rRef.Ref1.nCol != nCols ||
-                                    rRef.Ref2.nRow - rRef.Ref1.nRow != nRows ||
-                                    rRef.Ref2.nTab - rRef.Ref1.nTab != nTabs)
-                            {
-                                rRefSizeChanged = true;
-                            }
-                        }
+                        if (rRef.Ref2.nCol - rRef.Ref1.nCol != nCols ||
+                                rRef.Ref2.nRow - rRef.Ref1.nRow != nRows ||
+                                rRef.Ref2.nTab - rRef.Ref1.nTab != nTabs)
+                            rRefSizeChanged = true;
                     }
                 }
             }
         }
-
-        return pRangeData;
     }
+    pArr->Reset();
+    while ( (t = static_cast<ScToken*>(pArr->GetNextReferenceRPN())) != NULL )
+    {
+        if (t->GetRef() != 1)
+            continue;
+
+        if ( t->GetType() == svSingleRef )
+        {
+            ScSingleRefData& rRef = t->GetSingleRef();
+            SingleDoubleRefModifier aMod( rRef );
+            if ( rRef.IsRelName() )
+            {
+                ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, aMod.Ref() );
+                rChanged = true;
+            }
+            else
+            {
+                aMod.Ref().CalcAbsIfRel( rOldPos );
+                if ( ScRefUpdate::Update( pDoc, eUpdateRefMode, aPos,
+                            r, nDx, nDy, nDz, aMod.Ref() )
+                        != UR_NOTHING
+                    )
+                    rChanged = true;
+            }
+        }
+        else
+        {
+            ScComplexRefData& rRef = t->GetDoubleRef();
+            SCCOL nCols = rRef.Ref2.nCol - rRef.Ref1.nCol;
+            SCROW nRows = rRef.Ref2.nRow - rRef.Ref1.nRow;
+            SCTAB nTabs = rRef.Ref2.nTab - rRef.Ref1.nTab;
+            if ( rRef.Ref1.IsRelName() || rRef.Ref2.IsRelName() )
+            {
+                ScRefUpdate::MoveRelWrap( pDoc, aPos, MAXCOL, MAXROW, rRef );
+                rChanged = true;
+            }
+            else if (ScRefUpdate::Update(pDoc, eUpdateRefMode, aPos, r, nDx, nDy, nDz, rRef) != UR_NOTHING)
+            {
+                rChanged = true;
+                if (rRef.Ref2.nCol - rRef.Ref1.nCol != nCols ||
+                        rRef.Ref2.nRow - rRef.Ref1.nRow != nRows ||
+                        rRef.Ref2.nTab - rRef.Ref1.nTab != nTabs)
+                {
+                    rRefSizeChanged = true;
+                }
+            }
+        }
+    }
+
+    return pRangeData;
 }
 
 bool ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
