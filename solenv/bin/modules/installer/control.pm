@@ -256,7 +256,7 @@ sub check_makecab_version
 
 ######################################################################
 # Reading the environment variables for the paths in ziplist.
-# solarpath, solarenvpath, solarcommonpath, os, pmiscpath
+# solarpath, solarenvpath, os, pmiscpath
 ######################################################################
 
 sub check_system_environment
