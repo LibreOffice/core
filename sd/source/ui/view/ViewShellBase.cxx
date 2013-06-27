@@ -223,13 +223,6 @@ TYPEINIT1(ViewShellBase, SfxViewShell);
 // new ViewShellBase object has been constructed.
 
 SfxViewFactory* ViewShellBase::pFactory;
-SfxViewShell* ViewShellBase::CreateInstance (
-    SfxViewFrame *pFrame, SfxViewShell *pOldView)
-{
-    ViewShellBase* pBase = new ViewShellBase(pFrame, pOldView);
-    pBase->LateInit("");
-    return pBase;
-}
 
 SFX_IMPL_INTERFACE(ViewShellBase, SfxViewShell, SdResId(0))
 {
