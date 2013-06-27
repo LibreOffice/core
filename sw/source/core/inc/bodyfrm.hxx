@@ -29,14 +29,9 @@ class SwBodyFrm: public SwLayoutFrm
 protected:
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
 
-#if defined ( __GNUC__ ) && defined ( C272 )
-    ~SwBodyFrm();
-#endif
-
 public:
     SwBodyFrm( SwFrmFmt*, SwFrm* );
 
-    virtual void Paint( const SwRect&, const SwPrintData *pPrintData = NULL ) const;
     virtual void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwBodyFrm)

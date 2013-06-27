@@ -177,22 +177,6 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
     mbValidSize = mbValidPrtArea = sal_True;
 }
 
-void SwBodyFrm::Paint( const SwRect& rRect, const SwPrintData* ) const
-{
-#if OSL_DEBUG_LEVEL > 1
-    // Paint a red border around the SwBodyFrm in debug mode
-    ViewShell *pSh = GetShell();
-    OutputDevice* pOut =  pSh->GetOut();
-    pOut->Push();
-    pOut->SetLineColor(Color(255, 0, 0));
-    pOut->SetFillColor(COL_TRANSPARENT);
-    SwRect aRect = Frm();
-    pOut->DrawRect(aRect.SVRect());
-    pOut->Pop();
-#endif
-    SwLayoutFrm::Paint(rRect);
-}
-
 /*************************************************************************
 |*
 |*  SwPageFrm::SwPageFrm(), ~SwPageFrm()
