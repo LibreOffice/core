@@ -342,15 +342,31 @@ namespace svgio
             }
         }
 
+        double SvgNode::getCurrentFontSizeInherited() const
+        {
+            if(getParent())
+            {
+                return getParent()->getCurrentFontSize();
+            }
+            else
+            {
+                return 0.0;
+            }
+        }
+
         double SvgNode::getCurrentFontSize() const
         {
             if(getSvgStyleAttributes())
-            {
                 return getSvgStyleAttributes()->getFontSize().solve(*this, xcoordinate);
-            }
-            else if(getParent())
+
+            return getCurrentFontSizeInherited();
+        }
+
+        double SvgNode::getCurrentXHeightInherited() const
+        {
+            if(getParent())
             {
-                return getParent()->getCurrentFontSize();
+                return getParent()->getCurrentXHeight();
             }
             else
             {
@@ -361,18 +377,10 @@ namespace svgio
         double SvgNode::getCurrentXHeight() const
         {
             if(getSvgStyleAttributes())
-            {
                 // for XHeight, use FontSize currently
                 return getSvgStyleAttributes()->getFontSize().solve(*this, ycoordinate);
-            }
-            else if(getParent())
-            {
-                return getParent()->getCurrentXHeight();
-            }
-            else
-            {
-                return 0.0;
-            }
+
+            return getCurrentXHeightInherited();
         }
 
         void SvgNode::setId(const OUString* pfId)
