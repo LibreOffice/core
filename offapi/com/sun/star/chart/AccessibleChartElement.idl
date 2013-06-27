@@ -101,7 +101,7 @@ service AccessibleChartElement
               <li>::com::sun::star::accessibility::AccessibleStateType::EDITABLE</li>
               <li>::com::sun::star::accessibility::AccessibleStateType::ENABLED
                   is always set.<sup>*</sup></li>
-              <li>::com::sun::star::accessibility::AccessibleStateType::MULTILINE
+              <li>::com::sun::star::accessibility::AccessibleStateType::MULTI_LINE
                   is set for all titles.</li>
               <li>::com::sun::star::accessibility::AccessibleStateType::OPAQUE
                   is set for all elements that do have a transparency

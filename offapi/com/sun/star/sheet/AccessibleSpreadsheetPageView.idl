@@ -108,7 +108,7 @@ service AccessibleSpreadsheetPageView
                     So it is left out of the list.</li>
                 <li>::com::sun::star::accessibility::AccessibleStateType::ENABLED
                     is always true.</li>
-                <li>::com::sun::star::accessibility::AccessibleStateType::MULTILINE
+                <li>::com::sun::star::accessibility::AccessibleStateType::MULTI_LINE
                     makes no sense on a
                     document and so it is left out of the list.</li>
                 <li>::com::sun::star::accessibility::AccessibleStateType::MULTI_SELECTABLE
@@ -116,7 +116,7 @@ service AccessibleSpreadsheetPageView
                     not possible. So it is left out of the list.</li>
                 <li>::com::sun::star::accessibility::AccessibleStateType::OPAQUE
                     is always true.</li>
-                <li>::com::sun::star::accessibility::AccessibleStateType::RESIZEABLE
+                <li>::com::sun::star::accessibility::AccessibleStateType::RESIZABLE
                     is always false,
                     because you can resize the window of the page preview, but
                     not the page preview itself. So it is left out of the

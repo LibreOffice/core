@@ -84,7 +84,7 @@ service AccessibleSpreadsheet
                     is always true.</li>
                 <li>::com::sun::star::accessibility::AccessibleStateType::OPAQUE
                     is always true.</li>
-                <li>::com::sun::star::accessibility::AccessibleStateType::RESIZEABLE
+                <li>::com::sun::star::accessibility::AccessibleStateType::RESIZABLE
                     is always false.</li>
                 <li>::com::sun::star::accessibility::AccessibleStateType::SELECTABLE
                     is always true.</li>

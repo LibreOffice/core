@@ -106,7 +106,7 @@ service AccessibleSpreadsheetDocumentView
                 document is not selectable. Only the children are
                 selectable. So it is left out of the list.</li>
                 <li>::com::sun::star::accessibility::AccessibleStateType::OPAQUE is always true.</li>
-                <li>::com::sun::star::accessibility::AccessibleStateType::RESIZEABLE is always false, because you can
+                <li>::com::sun::star::accessibility::AccessibleStateType::RESIZABLE is always false, because you can
                     resize the window, but not the document. So it is left out
                     of the list.</li>
                 <li>::com::sun::star::accessibility::AccessibleStateType::SELECTABLE is always false, because a
@@ -115,9 +115,9 @@ service AccessibleSpreadsheetDocumentView
                 <li>::com::sun::star::accessibility::AccessibleStateType::SELECTED is always false, because a
                     document is not selectable. Only the children are
                     selectable. So it is left out of the list.</li>
-                <li>::com::sun::star::accessibility::AccessibleStateType::SHOWINGIs true if the Bounding Box lies in
+                <li>::com::sun::star::accessibility::AccessibleStateType::SHOWING is true if the Bounding Box lies in
                     the Bounding Box of the parent. Otherwise it is false.</li>
-                <li>::com::sun::star::accessibility::AccessibleStateType::VISIBLEIs always true.</li>
+                <li>::com::sun::star::accessibility::AccessibleStateType::VISIBLE is always true.</li>
             </ul>
         </li>
     </ul>
