@@ -38,7 +38,7 @@ module com { module sun { module star {
     This interface's only method returns the actual accessibility object, an
     instance of ::com::sun::star::accessibility::XAccessibleContext.
     These two interfaces may be implemented by the same class in which case
-    a call to ::com::sun::star::accessibility::XAccessible::getAccessible()
+    a call to ::com::sun::star::accessibility::XAccessible getAccessible()
     returns the same object that is
     called.  Alternatively the implementation of the
     ::com::sun::star::accessibility::XAccessibleContext

@@ -132,7 +132,7 @@ published service UnoControlDialogModel
 
     /** specifies a graphic to be displayed as a background image
 
-        <p>If this property is present, it interacts with the #ImageURLin the
+        <p>If this property is present, it interacts with the #ImageURL in the
         following way:
         <ul><li>If #ImageURL is set, #Graphic will be reset
             to an object as loaded from the given image URL, or `NULL` if #ImageURL

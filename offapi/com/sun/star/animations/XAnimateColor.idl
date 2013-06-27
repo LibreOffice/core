@@ -45,7 +45,7 @@ interface XAnimateColor : XAnimate
     [attribute] short ColorInterpolation;
 
     /** defines the direction which is used to perform the interpolation
-        inside the color space defined with #ColorSpace.
+        inside the color space defined with #ColorInterpolation.
         <br>
         Values could be `TRUE` for clockwise and `FALSE` for counterclockwise.
 
