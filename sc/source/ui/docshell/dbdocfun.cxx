@@ -541,7 +541,7 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
 
         // #i59745# collect all drawing undo actions affecting cell note captions
         if( pDrawLayer )
-            pDrawLayer->BeginCalcUndo();
+            pDrawLayer->BeginCalcUndo(false);
     }
 
     if ( bCopy )

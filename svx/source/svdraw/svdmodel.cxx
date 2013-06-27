@@ -171,7 +171,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mbKernAsianPunctuation = sal_False;
     mbAddExtLeading = sal_False;
     mnHandoutPageCount = 0;
-
+    mbDisableTextEditUsesCommonUndoManager = false;
     SvxAsianConfig aAsian;
     mnCharCompressType = aAsian.GetCharDistanceCompression();
 

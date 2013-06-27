@@ -75,7 +75,7 @@ SfxBroadcaster* ScDocument::GetDrawBroadcaster()
 void ScDocument::BeginDrawUndo()
 {
     if (pDrawLayer)
-        pDrawLayer->BeginCalcUndo();
+        pDrawLayer->BeginCalcUndo(false);
 }
 
 sal_Bool ScDocument::IsDrawRecording() const

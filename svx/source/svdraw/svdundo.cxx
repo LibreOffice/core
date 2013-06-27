@@ -1164,7 +1164,7 @@ void SdrUndoObjSetText::Undo()
 
     SdrText* pText = static_cast< SdrTextObj*>( pObj )->getText(mnText);
     if( pText )
-        pText->SetOutlinerParaObject(pText1);
+        static_cast< SdrTextObj* >( pObj )->NbcSetOutlinerParaObjectForText( pText1, pText );
 
     pObj->SetEmptyPresObj( bEmptyPresObj );
     pObj->ActionChanged();
