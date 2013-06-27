@@ -116,34 +116,19 @@ void SwTableFmt::SetShadow( const SvxShadowItem& rNew )
     SetFmtAttr( rNew );
 }
 
-const SvxFmtBreakItem& SwTableFmt::GetBreak() const
-{
-    return static_cast<const SvxFmtBreakItem&>( GetFmtAttr( RES_BREAK ) );
-}
-
-const SwFmtPageDesc& SwTableFmt::GetPageDesc() const
-{
-    return static_cast<const SwFmtPageDesc&>( GetFmtAttr( RES_PAGEDESC ) );
-}
-
 const SvxFmtKeepItem& SwTableFmt::GetKeepWithNextPara() const
 {
-    return static_cast<const SvxFmtKeepItem&>( GetFmtAttr( RES_KEEP ) );
+    return SwFmt::GetKeep();
 }
 
 sal_Bool SwTableFmt::GetLayoutSplit() const
 {
-    return (static_cast<const SwFmtLayoutSplit&>( GetFmtAttr( RES_LAYOUT_SPLIT ) )).GetValue();
+    return SwFmt::GetLayoutSplit().GetValue();
 }
 
 sal_Bool SwTableFmt::GetCollapsingBorders() const
 {
     return (static_cast<const SfxBoolItem&>( GetFmtAttr( RES_COLLAPSING_BORDERS ) )).GetValue();
-}
-
-const SvxShadowItem& SwTableFmt::GetShadow() const
-{
-    return static_cast<const SvxShadowItem&>( GetFmtAttr( RES_SHADOW ) );
 }
 
 SwTableLineFmt::SwTableLineFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,

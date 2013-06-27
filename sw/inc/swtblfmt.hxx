@@ -24,6 +24,7 @@
 #include <editeng/shaditem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtlsplt.hxx>
+#include <frmatr.hxx>
 #include <frmfmt.hxx>
 
 class SwDoc;
@@ -90,12 +91,9 @@ public:
     void SetCollapsingBorders( const sal_Bool& rNew );
     void SetShadow( const SvxShadowItem& rNew );
 
-    const SvxFmtBreakItem& GetBreak() const;
-    const SwFmtPageDesc& GetPageDesc() const;
     const SvxFmtKeepItem& GetKeepWithNextPara() const;
     sal_Bool GetLayoutSplit() const;
     sal_Bool GetCollapsingBorders() const;
-    const SvxShadowItem& GetShadow() const;
 
     TYPEINFO();     // Already in base class Content.
 
