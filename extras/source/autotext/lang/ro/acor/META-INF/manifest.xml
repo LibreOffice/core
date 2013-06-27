@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest:manifest>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="META-INF/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="DocumentList.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="WordExceptList.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="SentenceExceptList.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="BlockList.xml"/>
+</manifest:manifest>

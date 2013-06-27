@@ -38,6 +38,7 @@ $(eval $(call gb_Zip_add_files,autocorr,\
 	acor_pl-PL.dat \
 	acor_pt-BR.dat \
 	acor_pt-PT.dat \
+	acor_ro-RO.dat \
 	acor_ru-RU.dat \
 	acor_sh-ME.dat \
 	acor_sh-RS.dat \
