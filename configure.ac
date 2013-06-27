@@ -8831,6 +8831,8 @@ dnl raptor2: need at least 2.0.7 for CVE-2012-0037
 libo_CHECK_SYSTEM_MODULE([redland],[REDLAND],[redland >= 1.0.8 raptor2 >= 2.0.7])
 if test "$with_system_redland" = "yes"; then
     libo_MINGW_CHECK_DLL([librdf])
+    AC_CHECK_LIB([rdf], [librdf_world_set_raptor_init_handler], [:],
+            [AC_MSG_ERROR(librdf too old. Need >= 1.16)], [])
     libo_MINGW_TRY_DLL([libraptor])
     libo_MINGW_TRY_DLL([librasqal])
     libo_MINGW_TRY_DLL([libsqlite3])
