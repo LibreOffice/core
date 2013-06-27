@@ -1995,6 +1995,7 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *):
     pImpl( new SmViewShell_Impl ),
     aGraphic(this),
     aGraphicController(aGraphic, SID_GAPHIC_SM, pFrame_->GetBindings())
+    , bInsertIntoEditWindow(false)
 {
     SAL_INFO( "starmath", "starmath: SmViewShell::SmViewShell" );
 
