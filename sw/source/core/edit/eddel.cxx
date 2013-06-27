@@ -35,17 +35,17 @@
 
 void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
 {
-    // only on a selection
-    if ( !rPam.HasMark() || *rPam.GetPoint() == *rPam.GetMark())
+    // only for selections
+    if( !rPam.HasMark() || *rPam.GetPoint() == *rPam.GetMark())
         return;
 
     // Is the selection in a table? Then delete only the content of the selected boxes.
     // Here, there are two cases:
     // 1. Point and Mark are in one box, delete selection as usual
     // 2. Point and Mare are in different boxes, search all selected boxes and delete content
-
     if( rPam.GetNode()->FindTableNode() &&
-        rPam.GetNode()->StartOfSectionNode() != rPam.GetNode(sal_False)->StartOfSectionNode() )
+        rPam.GetNode()->StartOfSectionNode() !=
+        rPam.GetNode(sal_False)->StartOfSectionNode() )
     {
         // group the Undo in the table
         if( pUndo && !*pUndo )
@@ -71,9 +71,6 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
                 aDelPam.Move( fnMoveBackward, fnGoCntnt );
             }
             // skip protected boxes
-            //For i117395, in some situation, the node would be hidden or invisible, which makes the frame of it unavailable
-            //So verify it before use it.
-            SwCntntFrm* pFrm = NULL;
             if( !pNd->IsCntntNode() ||
                 !pNd->IsInProtectSect() )
             {
