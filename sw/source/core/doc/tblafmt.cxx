@@ -588,13 +588,6 @@ SwTableAutoFormat::SwTableAutoFormat( const OUString& rName, SwTableFormat* pTab
     : m_pTableStyle( pTableStyle )
     , m_aName( rName )
     , nStrResId( USHRT_MAX )
-    , m_aBreak( SVX_BREAK_NONE, RES_BREAK )
-    , m_aKeepWithNextPara( false, RES_KEEP )
-    , m_aRepeatHeading( 0 )
-    , m_bLayoutSplit( true )
-    , m_bRowSplit( true )
-    , m_bCollapsingBorders(true)
-    , m_aShadow( RES_SHADOW )
 {
     bInclFont = true;
     bInclJustify = true;
@@ -607,9 +600,6 @@ SwTableAutoFormat::SwTableAutoFormat( const OUString& rName, SwTableFormat* pTab
 }
 
 SwTableAutoFormat::SwTableAutoFormat( const SwTableAutoFormat& rNew )
-    : m_aBreak( rNew.m_aBreak )
-    , m_aKeepWithNextPara( false, RES_KEEP )
-    , m_aShadow( RES_SHADOW )
 {
     for( sal_uInt8 n = 0; n < 16; ++n )
         aBoxAutoFormat[ n ] = 0;
@@ -642,15 +632,6 @@ SwTableAutoFormat& SwTableAutoFormat::operator=( const SwTableAutoFormat& rNew )
     bInclBackground = rNew.bInclBackground;
     bInclValueFormat = rNew.bInclValueFormat;
     bInclWidthHeight = rNew.bInclWidthHeight;
-
-    m_aBreak = rNew.m_aBreak;
-    m_aPageDesc = rNew.m_aPageDesc;
-    m_aKeepWithNextPara = rNew.m_aKeepWithNextPara;
-    m_aRepeatHeading = rNew.m_aRepeatHeading;
-    m_bLayoutSplit = rNew.m_bLayoutSplit;
-    m_bRowSplit = rNew.m_bRowSplit;
-    m_bCollapsingBorders = rNew.m_bCollapsingBorders;
-    m_aShadow = rNew.m_aShadow;
 
     return *this;
 }
@@ -856,21 +837,12 @@ void SwTableAutoFormat::RestoreTableProperties(SwTable &table) const
     if (!pDoc)
         return;
 
-    SfxItemSet rSet(pDoc->GetAttrPool(), aTableSetRange);
-
-    rSet.Put(m_aBreak);
-    rSet.Put(m_aPageDesc);
-    rSet.Put(SwFormatLayoutSplit(m_bLayoutSplit));
-    rSet.Put(SfxBoolItem(RES_COLLAPSING_BORDERS, m_bCollapsingBorders));
-    rSet.Put(m_aKeepWithNextPara);
-    rSet.Put(m_aShadow);
-
-    pFormat->SetFormatAttr(rSet);
+    pFormat->SetFormatAttr(m_pTableStyle->GetAttrSet());
 
     SwEditShell *pShell = pDoc->GetEditShell();
-    pDoc->SetRowSplit(*pShell->getShellCrsr(false), SwFormatRowSplit(m_bRowSplit));
+    pDoc->SetRowSplit(*pShell->getShellCrsr(false), SwFormatRowSplit(m_pTableStyle->GetRowSplit()));
 
-    table.SetRowsToRepeat(m_aRepeatHeading);
+    table.SetRowsToRepeat(m_pTableStyle->GetRepeatHeading());
 }
 
 void SwTableAutoFormat::StoreTableProperties(const SwTable &table)
@@ -886,21 +858,11 @@ void SwTableAutoFormat::StoreTableProperties(const SwTable &table)
     SwEditShell *pShell = pDoc->GetEditShell();
     SwFormatRowSplit *pRowSplit = 0;
     SwDoc::GetRowSplit(*pShell->getShellCrsr(false), pRowSplit);
-    m_bRowSplit = pRowSplit && pRowSplit->GetValue();
+    m_pTableStyle->SetRowSplit(pRowSplit ? pRowSplit->GetValue() : false);
     delete pRowSplit;
     pRowSplit = 0;
 
-    const SfxItemSet &rSet = pFormat->GetAttrSet();
-
-    m_aBreak = static_cast<const SvxFormatBreakItem&>(rSet.Get(RES_BREAK));
-    m_aPageDesc = static_cast<const SwFormatPageDesc&>(rSet.Get(RES_PAGEDESC));
-    const SwFormatLayoutSplit &layoutSplit = static_cast<const SwFormatLayoutSplit&>(rSet.Get(RES_LAYOUT_SPLIT));
-    m_bLayoutSplit = layoutSplit.GetValue();
-    m_bCollapsingBorders = static_cast<const SfxBoolItem&>(rSet.Get(RES_COLLAPSING_BORDERS)).GetValue();
-
-    m_aKeepWithNextPara = static_cast<const SvxFormatKeepItem&>(rSet.Get(RES_KEEP));
-    m_aRepeatHeading = table.GetRowsToRepeat();
-    m_aShadow = static_cast<const SvxShadowItem&>(rSet.Get(RES_SHADOW));
+    m_pTableStyle->SetFormatAttr(pFormat->GetAttrSet());
 }
 
 SwTableAutoFormat* SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc )
@@ -952,13 +914,31 @@ SwTableAutoFormat* SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersion
         {
             SfxPoolItem* pNew = 0;
 
-            READ(pRet->m_aBreak, SvxFormatBreakItem, AUTOFORMAT_FILE_VERSION);
-            READ(pRet->m_aPageDesc, SwFormatPageDesc, AUTOFORMAT_FILE_VERSION);
-            READ(pRet->m_aKeepWithNextPara, SvxFormatKeepItem, AUTOFORMAT_FILE_VERSION);
+            SvxFormatBreakItem m_aBreak = SvxFormatBreakItem( SVX_BREAK_NONE, RES_BREAK );
+            READ(m_aBreak, SvxFormatBreakItem, AUTOFORMAT_FILE_VERSION);
+            pStyle->SetBreak( m_aBreak );
 
-            rStream.ReadUInt16(pRet->m_aRepeatHeading).ReadCharAsBool(pRet->m_bLayoutSplit).ReadCharAsBool(pRet->m_bRowSplit).ReadCharAsBool(pRet->m_bCollapsingBorders);
+            SwFormatPageDesc m_aPageDesc;
+            READ(m_aPageDesc, SwFormatPageDesc, AUTOFORMAT_FILE_VERSION);
+            pStyle->SetPageDesc( m_aPageDesc );
 
-            READ(pRet->m_aShadow, SvxShadowItem, AUTOFORMAT_FILE_VERSION);
+            SvxFormatKeepItem m_aKeepWithNextPara = SvxFormatKeepItem( sal_False, RES_KEEP );
+            READ(m_aKeepWithNextPara, SvxFormatKeepItem, AUTOFORMAT_FILE_VERSION);
+            pStyle->SetKeepWithNextPara( m_aKeepWithNextPara );
+
+            sal_uInt16 m_aRepeatHeading;
+            bool m_bLayoutSplit;
+            bool m_bRowSplit;
+            bool m_bCollapsingBorders;
+            rStream.ReadUInt16(m_aRepeatHeading).ReadCharAsBool(m_bLayoutSplit).ReadCharAsBool(m_bRowSplit).ReadCharAsBool(m_bCollapsingBorders);
+            pStyle->SetRepeatHeading( m_aRepeatHeading );
+            pStyle->SetRowSplit( m_bRowSplit );
+            pStyle->SetLayoutSplit( m_bLayoutSplit );
+            pStyle->SetCollapsingBorders( m_bCollapsingBorders );
+
+            SvxShadowItem m_aShadow = SvxShadowItem( RES_SHADOW );
+            READ(m_aShadow, SvxShadowItem, AUTOFORMAT_FILE_VERSION);
+            pStyle->SetShadow( m_aShadow );
         }
 
         bRet = 0 == rStream.GetError();
@@ -1002,10 +982,21 @@ bool SwTableAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     {
         WriterSpecificAutoFormatBlock block(rStream);
 
+        SvxFormatBreakItem m_aBreak = m_pTableStyle->GetBreak();
         m_aBreak.Store(rStream, m_aBreak.GetVersion(fileVersion));
+
+        SwFormatPageDesc m_aPageDesc = m_pTableStyle->GetPageDesc();
         m_aPageDesc.Store(rStream, m_aPageDesc.GetVersion(fileVersion));
+
+        SvxFormatKeepItem m_aKeepWithNextPara = m_pTableStyle->GetKeepWithNextPara();
         m_aKeepWithNextPara.Store(rStream, m_aKeepWithNextPara.GetVersion(fileVersion));
-        rStream.WriteUInt16( m_aRepeatHeading ).WriteBool( m_bLayoutSplit ).WriteBool( m_bRowSplit ).WriteBool( m_bCollapsingBorders );
+
+        rStream.WriteUInt16(m_pTableStyle->GetRepeatHeading());
+        rStream.WriteBool(m_pTableStyle->GetLayoutSplit());
+        rStream.WriteBool(m_pTableStyle->GetRowSplit());
+        rStream.WriteBool(m_pTableStyle->GetCollapsingBorders());
+
+        SvxShadowItem m_aShadow = m_pTableStyle->GetShadow();
         m_aShadow.Store(rStream, m_aShadow.GetVersion(fileVersion));
     }
 

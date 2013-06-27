@@ -247,22 +247,14 @@ class SW_DLLPUBLIC SwTableAutoFormat
 
     SwBoxAutoFormat* aBoxAutoFormat[ 16 ];
 
-    // Writer-specific options
-    SvxFormatBreakItem m_aBreak;
-    SwFormatPageDesc m_aPageDesc;
-    SvxFormatKeepItem m_aKeepWithNextPara;
-    sal_uInt16 m_aRepeatHeading;
-    bool m_bLayoutSplit;
-    bool m_bRowSplit;
-    bool m_bCollapsingBorders;
-    SvxShadowItem m_aShadow;
-
 public:
     SwTableAutoFormat( const OUString& rName, SwTableFormat* pTableStyle );
     SwTableAutoFormat( const SwTableAutoFormat& rNew );
     ~SwTableAutoFormat();
 
     SwTableAutoFormat& operator=( const SwTableAutoFormat& rNew );
+
+    SwTableFormat* GetTableStyle() { return m_pTableStyle; }
 
     void SetBoxFormat( const SwBoxAutoFormat& rNew, sal_uInt8 nPos );
     const SwBoxAutoFormat& GetBoxFormat( sal_uInt8 nPos ) const;

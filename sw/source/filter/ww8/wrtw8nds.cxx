@@ -2687,7 +2687,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
                 const SvxFormatKeepItem& rKeep = rTable.GetFrameFormat()->GetKeep();
                 const bool bKeep = rKeep.GetValue();
                 const bool bDontSplit = !(bKeep ||
-                                          rTable.GetFrameFormat()->GetLayoutSplit().GetValue());
+                                          rTable.GetFrameFormat()->GetLayoutSplit());
 
                 if ( bKeep || bDontSplit )
                 {

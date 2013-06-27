@@ -22,7 +22,15 @@
 SwTableFormat::SwTableFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
                     SwFrameFormat *pDrvdFrm )
     : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
+    , m_aRepeatHeading( 0 )
+    , m_bRowSplit( sal_True )
     {
+        SetBreak( SvxFormatBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
+        SetKeepWithNextPara( SvxFormatKeepItem( sal_False, RES_KEEP ) );
+        SetLayoutSplit( sal_True );
+        SetCollapsingBorders( sal_True );
+        SetShadow( SvxShadowItem( RES_SHADOW ) );
+
         pFstLineFormat = NULL;
         pLstLineFormat = NULL;
         pOddLineFormat = NULL;
@@ -37,7 +45,15 @@ SwTableFormat::SwTableFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
 SwTableFormat::SwTableFormat( SwAttrPool& rPool, const OUString &rFormatNm,
                     SwFrameFormat *pDrvdFrm )
     : SwFrameFormat( rPool, rFormatNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
+    , m_aRepeatHeading( 0 )
+    , m_bRowSplit( sal_True )
     {
+        SetBreak( SvxFormatBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
+        SetKeepWithNextPara( SvxFormatKeepItem( sal_False, RES_KEEP ) );
+        SetLayoutSplit( sal_True );
+        SetCollapsingBorders( sal_True );
+        SetShadow( SvxShadowItem( RES_SHADOW ) );
+
         pFstLineFormat = NULL;
         pLstLineFormat = NULL;
         pOddLineFormat = NULL;
@@ -48,6 +64,87 @@ SwTableFormat::SwTableFormat( SwAttrPool& rPool, const OUString &rFormatNm,
         pOddColFormat = NULL;
         pEvnColFormat = NULL;
     }
+
+SwTableFormat& SwTableFormat::operator=( const SwTableFormat& rNew )
+    {
+        if (&rNew == this)
+            return *this;
+
+        m_aRepeatHeading = rNew.m_aRepeatHeading;
+        m_bRowSplit = rNew.m_bRowSplit;
+
+        pFstLineFormat = rNew.pFstLineFormat;
+        pLstLineFormat = rNew.pLstLineFormat;
+        pOddLineFormat = rNew.pOddLineFormat;
+        pEvnLineFormat = rNew.pEvnLineFormat;
+
+        pFstColFormat = rNew.pFstColFormat;
+        pLstColFormat = rNew.pLstColFormat;
+        pOddColFormat = rNew.pOddColFormat;
+        pEvnColFormat = rNew.pEvnColFormat;
+
+        return *this;
+    }
+
+void SwTableFormat::SetBreak( const SvxFormatBreakItem& rNew )
+{
+    SetFormatAttr( rNew );
+}
+
+void SwTableFormat::SetPageDesc( const SwFormatPageDesc& rNew )
+{
+    SetFormatAttr( rNew );
+}
+
+void SwTableFormat::SetKeepWithNextPara( const SvxFormatKeepItem& rNew )
+{
+    SetFormatAttr( rNew );
+}
+
+void SwTableFormat::SetLayoutSplit( const sal_Bool& rNew )
+{
+    SetFormatAttr( SwFormatLayoutSplit( rNew ) );
+}
+
+void SwTableFormat::SetCollapsingBorders( const sal_Bool& rNew )
+{
+    SetFormatAttr( SfxBoolItem( RES_COLLAPSING_BORDERS, rNew ) );
+}
+
+void SwTableFormat::SetShadow( const SvxShadowItem& rNew )
+{
+    SetFormatAttr( rNew );
+}
+
+const SvxFormatBreakItem& SwTableFormat::GetBreak() const
+{
+    return static_cast<const SvxFormatBreakItem&>( GetFormatAttr( RES_BREAK ) );
+}
+
+const SwFormatPageDesc& SwTableFormat::GetPageDesc() const
+{
+    return static_cast<const SwFormatPageDesc&>( GetFormatAttr( RES_PAGEDESC ) );
+}
+
+const SvxFormatKeepItem& SwTableFormat::GetKeepWithNextPara() const
+{
+    return static_cast<const SvxFormatKeepItem&>( GetFormatAttr( RES_KEEP ) );
+}
+
+sal_Bool SwTableFormat::GetLayoutSplit() const
+{
+    return (static_cast<const SwFormatLayoutSplit&>( GetFormatAttr( RES_LAYOUT_SPLIT ) )).GetValue();
+}
+
+sal_Bool SwTableFormat::GetCollapsingBorders() const
+{
+    return (static_cast<const SfxBoolItem&>( GetFormatAttr( RES_COLLAPSING_BORDERS ) )).GetValue();
+}
+
+const SvxShadowItem& SwTableFormat::GetShadow() const
+{
+    return static_cast<const SvxShadowItem&>( GetFormatAttr( RES_SHADOW ) );
+}
 
 SwTableLineFormat::SwTableLineFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
                     SwFrameFormat *pDrvdFrm )

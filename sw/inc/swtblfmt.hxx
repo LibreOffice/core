@@ -19,6 +19,11 @@
 #ifndef INCLUDED_SW_INC_SWTBLFMT_HXX
 #define INCLUDED_SW_INC_SWTBLFMT_HXX
 
+#include <editeng/formatbreakitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <fmtpdsc.hxx>
+#include <fmtlsplt.hxx>
 #include <frmfmt.hxx>
 
 class SwDoc;
@@ -43,10 +48,15 @@ protected:
     SwTableLineFormat* pOddColFormat;
     SwTableLineFormat* pEvnColFormat;
 
+    sal_uInt16 m_aRepeatHeading;
+    sal_Bool m_bRowSplit;
+
 public:
     TYPEINFO_OVERRIDE();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableFormat)
+
+    SwTableFormat& operator=( const SwTableFormat& rNew );
 
     void SetFirstLineFormat( SwTableLineFormat* pNew ) { pFstLineFormat = pNew; }
     void SetLastLineFormat( SwTableLineFormat* pNew ) { pLstLineFormat = pNew; }
@@ -67,6 +77,26 @@ public:
     SwTableLineFormat* GetLastColFormat() { return pLstColFormat; }
     SwTableLineFormat* GetOddColFormat() { return pOddColFormat; }
     SwTableLineFormat* GetEvenColFormat() { return pEvnColFormat; }
+
+    void SetRepeatHeading( const sal_uInt16& rNew ) { m_aRepeatHeading = rNew; }
+    void SetRowSplit( const sal_Bool& rNew ) { m_bRowSplit = rNew; }
+
+    const sal_uInt16& GetRepeatHeading() const { return m_aRepeatHeading; }
+    const sal_Bool& GetRowSplit() const { return m_bRowSplit; }
+
+    void SetBreak( const SvxFormatBreakItem& rNew );
+    void SetPageDesc( const SwFormatPageDesc& rNew );
+    void SetKeepWithNextPara( const SvxFormatKeepItem& rNew );
+    void SetLayoutSplit( const sal_Bool& rNew );
+    void SetCollapsingBorders( const sal_Bool& rNew );
+    void SetShadow( const SvxShadowItem& rNew );
+
+    const SvxFormatBreakItem& GetBreak() const;
+    const SwFormatPageDesc& GetPageDesc() const;
+    const SvxFormatKeepItem& GetKeepWithNextPara() const;
+    sal_Bool GetLayoutSplit() const;
+    sal_Bool GetCollapsingBorders() const;
+    const SvxShadowItem& GetShadow() const;
 
     virtual bool supportsFullDrawingLayerFillAttributeSet() const SAL_OVERRIDE;
 };
