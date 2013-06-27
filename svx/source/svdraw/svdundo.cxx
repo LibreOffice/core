@@ -715,11 +715,29 @@ void SdrUndoObjList::ObjListListener::Notify(SfxBroadcaster&, const SfxHint& rHi
     const SdrHint* const pSdrHint(dynamic_cast<const SdrHint*>(&rHint));
     if (pSdrHint)
     {
-        if ((pSdrHint->GetObject() == &m_rObject) && (pSdrHint->GetKind() == HINT_OBJCHG))
+        if (pSdrHint->GetObject() == &m_rObject)
         {
-            const sal_uInt32 nNewOrdNum(m_rObject.GetOrdNum());
-            if (nNewOrdNum != m_rThat.GetOrdNum())
-                m_rThat.SetOrdNum(nNewOrdNum);
+            switch (pSdrHint->GetKind())
+            {
+                case HINT_OBJCHG :
+                    if (IsListening(*m_pBroadcaster))
+                    {
+                        const sal_uInt32 nNewOrdNum(m_rObject.GetOrdNum());
+                        if (nNewOrdNum != m_rThat.GetOrdNum())
+                            m_rThat.SetOrdNum(nNewOrdNum);
+                    }
+                    break;
+                case HINT_OBJREMOVED :
+                    SAL_WARN_IF(!IsListening(*m_pBroadcaster), "svx.sdr", "Object is not in any list");
+                    EndListening(*m_pBroadcaster);
+                    break;
+                case HINT_OBJINSERTED :
+                    SAL_WARN_IF(IsListening(*m_pBroadcaster), "svx.sdr", "Object is already in a list");
+                    StartListening(*m_pBroadcaster);
+                    break;
+                default :
+                    break;
+            }
         }
     }
 }
