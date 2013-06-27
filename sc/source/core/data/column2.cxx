@@ -1532,15 +1532,15 @@ void ScColumn::RegroupFormulaCells()
 {
 }
 
-void ScColumn::RegroupFormulaCells( SCROW nRow )
+void ScColumn::RegroupFormulaCells( SCROW /*nRow*/ )
 {
 }
 
-void ScColumn::RegroupFormulaCells( SCROW nRow1, SCROW nRow2 )
+void ScColumn::RegroupFormulaCells( SCROW /*nRow1*/, SCROW /*nRow2*/ )
 {
 }
 
-void ScColumn::FormulaCellsUndecided( SCROW nRow1, SCROW nRow2 )
+void ScColumn::FormulaCellsUndecided( SCROW /*nRow1*/, SCROW /*nRow2*/ )
 {
 }
 
