@@ -205,7 +205,7 @@ void SfxObjectShell::UpdateDocInfoForSave()
             xDocProps->setModificationDate( util::DateTime(
                 now.GetNanoSec(), now.GetSec(), now.GetMin(),
                 now.GetHour(), now.GetDay(), now.GetMonth(),
-                now.GetYear() ) );
+                now.GetYear(), false) );
             xDocProps->setModifiedBy( aUserName );
             if ( !HasName() || pImp->bIsSaving )
                 // QUESTION: not in case of "real" SaveAs as this is meant to create a new document
@@ -836,7 +836,7 @@ void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const Strin
                 xDocProps->setTemplateDate( util::DateTime(
                     now.GetNanoSec(), now.GetSec(), now.GetMin(),
                     now.GetHour(), now.GetDay(), now.GetMonth(),
-                    now.GetYear() ) );
+                    now.GetYear(), false) );
 
                 SetQueryLoadTemplate( sal_True );
             }
