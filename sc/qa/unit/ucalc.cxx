@@ -237,6 +237,7 @@ public:
     void testUpdateReference();
     void testSearchCells();
     void testSharedFormulas();
+    void testFormulaPosition();
 
     /**
      * Make sure the sheet streams are invalidated properly.
@@ -354,6 +355,7 @@ public:
     CPPUNIT_TEST(testUpdateReference);
     CPPUNIT_TEST(testSearchCells);
     CPPUNIT_TEST(testSharedFormulas);
+    CPPUNIT_TEST(testFormulaPosition);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
     CPPUNIT_TEST(testSetBackgroundColor);
     CPPUNIT_TEST(testRenameTable);
@@ -6399,6 +6401,76 @@ void Test::testSharedFormulas()
     CPPUNIT_ASSERT_EQUAL(20, pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(5, pFC->GetSharedLength());
 #endif
+
+    m_pDoc->DeleteTab(0);
+}
+
+namespace {
+
+bool checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos)
+{
+    OUString aStr;
+    rPos.Format(aStr, SCA_VALID);
+    const ScFormulaCell* pFC = rDoc.GetFormulaCell(rPos);
+    if (!pFC)
+    {
+        cerr << "Formula cell expected at " << aStr << " but not found." << endl;
+        return false;
+    }
+
+    if (pFC->aPos != rPos)
+    {
+        OUString aStr2;
+        pFC->aPos.Format(aStr2, SCA_VALID);
+        cerr << "Formula cell at " << aStr << " has incorrect position of " << aStr2 << endl;
+        return false;
+    }
+
+    return true;
+}
+
+void checkFormulaPositions(ScDocument& rDoc, const ScAddress& rPos, const SCROW* pRows, size_t nRowCount)
+{
+    ScAddress aPos = rPos;
+    for (size_t i = 0; i < nRowCount; ++i)
+    {
+        SCROW nRow = pRows[i];
+        aPos.SetRow(nRow);
+
+        if (!checkFormulaPosition(rDoc, aPos))
+        {
+            OUString aStr;
+            aPos.Format(aStr, SCA_VALID);
+            std::ostringstream os;
+            os << "Formula cell position failed at " << aStr;
+            CPPUNIT_FAIL(os.str().c_str());
+        }
+    }
+}
+
+}
+
+void Test::testFormulaPosition()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScAddress aPos(0,0,0); // A1
+    m_pDoc->SetString(aPos, "=ROW()");
+    aPos.IncRow(); // A2
+    m_pDoc->SetString(aPos, "=ROW()");
+    aPos.SetRow(3); // A4;
+    m_pDoc->SetString(aPos, "=ROW()");
+
+    {
+        SCROW aRows[] = { 0, 1, 3 };
+        checkFormulaPositions(*m_pDoc, aPos, aRows, SAL_N_ELEMENTS(aRows));
+    }
+
+    m_pDoc->InsertRow(0,0,0,0,1,5); // Insert 5 rows at A2.
+    {
+        SCROW aRows[] = { 0, 6, 8 };
+        checkFormulaPositions(*m_pDoc, aPos, aRows, SAL_N_ELEMENTS(aRows));
+    }
 
     m_pDoc->DeleteTab(0);
 }

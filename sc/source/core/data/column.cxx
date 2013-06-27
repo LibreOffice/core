@@ -1233,42 +1233,8 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
     maCellTextAttrs.insert_empty(nStartRow, nSize);
     maCellTextAttrs.resize(MAXROWCOUNT);
 
-    sc::CellStoreType::position_type aPos = maCells.position(nStartRow);
-    sc::CellStoreType::iterator it = maCells.insert_empty(aPos.first, nStartRow, nSize);
+    maCells.insert_empty(nStartRow, nSize);
     maCells.resize(MAXROWCOUNT);
-
-    sc::AutoCalcSwitch aSwitch(*pDocument, false);
-
-    // Get the position of the first affected cell.
-    aPos = maCells.position(it, nStartRow+nSize);
-    it = aPos.first;
-
-    // Update the positions of all affected formula cells.
-    if (it->type == sc::element_type_formula)
-    {
-        sc::formula_block::iterator itf = sc::formula_block::begin(*it->data);
-        sc::formula_block::iterator itfEnd = sc::formula_block::end(*it->data);
-        std::advance(itf, aPos.second);
-        for (; itf != itfEnd; ++itf)
-        {
-            ScFormulaCell& rCell = **itf;
-            rCell.aPos.IncRow(nSize);
-        }
-    }
-
-    for (++it; it != maCells.end(); ++it)
-    {
-        if (it->type != sc::element_type_formula)
-            continue;
-
-        sc::formula_block::iterator itf = sc::formula_block::begin(*it->data);
-        sc::formula_block::iterator itfEnd = sc::formula_block::end(*it->data);
-        for (; itf != itfEnd; ++itf)
-        {
-            ScFormulaCell* pCell = *itf;
-            pCell->aPos.IncRow(nSize);
-        }
-    }
 
     CellStorageModified();
 
