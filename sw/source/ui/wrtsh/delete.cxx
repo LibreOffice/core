@@ -446,7 +446,17 @@ long SwWrtShell::DelToStartOfSentence()
     if(IsStartOfDoc())
         return 0;
     OpenMark();
-    long nRet = _BwdSentence() ? Delete() : 0;
+
+    SwCrsrSaveState aSaveState( *(_GetCrsr()) );
+    sal_Bool bSuccessfulSelection = _BwdSentence();
+    if ( _GetCrsr()->IsInProtectTable( sal_True )
+         || _GetCrsr()->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
+                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ) )
+    {
+        bSuccessfulSelection = sal_False;
+    }
+    long nRet = bSuccessfulSelection ? Delete() : 0;
+
     CloseMark( 0 != nRet );
     return nRet;
 }
