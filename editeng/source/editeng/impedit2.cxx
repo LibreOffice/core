@@ -1893,15 +1893,19 @@ void ImpEditEngine::InitWritingDirections( sal_Int32 nPara )
 
         size_t nCount = ubidi_countRuns( pBidi, &nError );
 
-        int32_t nStart = 0;
-        int32_t nEnd;
-        UBiDiLevel nCurrDir;
-
-        for ( size_t nIdx = 0; nIdx < nCount; ++nIdx )
+        /* ubidi_countRuns can return -1 in case of error */
+        if(nCount > 0)
         {
-            ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
-            rInfos.push_back( WritingDirectionInfo( nCurrDir, (sal_uInt16)nStart, (sal_uInt16)nEnd ) );
-            nStart = nEnd;
+            int32_t nStart = 0;
+            int32_t nEnd;
+            UBiDiLevel nCurrDir;
+
+            for ( size_t nIdx = 0; nIdx < nCount; ++nIdx )
+            {
+                ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
+                rInfos.push_back( WritingDirectionInfo( nCurrDir, (sal_uInt16)nStart, (sal_uInt16)nEnd ) );
+                nStart = nEnd;
+            }
         }
 
         ubidi_close( pBidi );
