@@ -40,7 +40,6 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/util/DateTimeRange.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>

@@ -405,7 +405,6 @@
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/DateTimeRange.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/util/JobManager.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
