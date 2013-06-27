@@ -2008,12 +2008,10 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                         }
                                         if ( i && bCopied )
                                         {
-                                            SvxImportMSVBasic aMSVBas( *pShell, *xDest );
-
                                             uno::Reference < embed::XStorage > xDoc( pShell->GetStorage() );
                                             if ( xDoc.is() )
                                             {
-                                                SotStorageRef xVBA = SotStorage::OpenOLEStorage( xDoc, String( RTL_CONSTASCII_USTRINGPARAM( "_MS_VBA_Macros" ) ) );
+                                                SotStorageRef xVBA = SotStorage::OpenOLEStorage( xDoc, SvxImportMSVBasic::GetMSBasicStorageName() );
                                                 if ( xVBA.Is() && ( xVBA->GetError() == SVSTREAM_OK ) )
                                                 {
                                                     SotStorageRef xSubVBA = xVBA->OpenSotStorage( String( RTL_CONSTASCII_USTRINGPARAM( "_MS_VBA_Overhead" ) ) );
@@ -2048,6 +2046,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                                         }
                                                     }
                                                 }
+                                                xVBA->Commit();
                                             }
                                         }
                                     }
