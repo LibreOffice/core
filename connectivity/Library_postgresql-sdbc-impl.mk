@@ -20,6 +20,7 @@ $(eval $(call gb_Library_use_sdk_api,postgresql-sdbc-impl))
 $(eval $(call gb_Library_use_libraries,postgresql-sdbc-impl,\
 	cppu \
 	cppuhelper \
+	dbtools \
 	sal \
 	salhelper \
 	$(gb_UWINAPI) \

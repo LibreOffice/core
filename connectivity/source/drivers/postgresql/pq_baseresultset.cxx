@@ -49,6 +49,8 @@
 
 #include <com/sun/star/lang/DisposedException.hpp>
 
+#include <connectivity/dbconversion.hxx>
+
 using osl::Mutex;
 using osl::MutexGuard;
 
@@ -82,6 +84,8 @@ using com::sun::star::sdbc::XResultSetMetaDataSupplier;
 
 
 using com::sun::star::beans::Property;
+
+using namespace dbtools;
 
 namespace pq_sdbc_driver
 {
@@ -540,19 +544,19 @@ Sequence< sal_Int8 > BaseResultSet::getBytes( sal_Int32 columnIndex )
 ::com::sun::star::util::Date BaseResultSet::getDate( sal_Int32 columnIndex )
         throw (SQLException, RuntimeException)
 {
-    return string2Date( getString( columnIndex ) );
+    return DBTypeConversion::toDate( getString( columnIndex ) );
 }
 
 ::com::sun::star::util::Time BaseResultSet::getTime( sal_Int32 columnIndex )
         throw (SQLException, RuntimeException)
 {
-    return string2Time( getString( columnIndex ) );
+    return DBTypeConversion::toTime( getString( columnIndex ) );
 }
 
 ::com::sun::star::util::DateTime BaseResultSet::getTimestamp( sal_Int32 columnIndex )
         throw (SQLException, RuntimeException)
 {
-    return string2DateTime( getString( columnIndex ) );
+    return DBTypeConversion::toDateTime( getString( columnIndex ) );
 }
 
   // LEM TODO: these look like they are missing an actual implementation
