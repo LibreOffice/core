@@ -424,8 +424,11 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
                 }
                 goto end;
             }
+            if(n >= aTimeStr.getLength())
+                goto end;
         }
     }
+
     // minutes
     if (bSuccess && (bSuccess = getISO8601TimeToken(aTimeStr, n, tokInt, bFrac, tokFrac)))
     {
@@ -452,12 +455,14 @@ bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
                 }
                 goto end;
             }
+            if(n >= aTimeStr.getLength())
+                goto end;
         }
     }
     // seconds
     if (bSuccess && (bSuccess = getISO8601TimeToken(aTimeStr, n, tokInt, bFrac, tokFrac)))
     {
-        if ( bFrac && n < aTimeStr.getLength())
+        if (n < aTimeStr.getLength())
             // junk after ISO time
             bSuccess = false;
         // max 60 for leap seconds
