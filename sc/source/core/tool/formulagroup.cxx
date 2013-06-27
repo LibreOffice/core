@@ -111,7 +111,7 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
 
     if ( !msInstance )
     {
-#if HAVE_FEATURE_OPENCL
+#ifdef HAVE_FEATURE_OPENCL
         if ( ScInterpreter::GetGlobalConfig().mbOpenCLEnabled )
             msInstance = sc::opencl::createFormulaGroupInterpreter();
 #endif
