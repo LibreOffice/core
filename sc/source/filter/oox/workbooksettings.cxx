@@ -252,9 +252,9 @@ sal_Int16 WorkbookSettings::getApiShowObjectMode() const
 
 Date WorkbookSettings::getNullDate() const
 {
-    static const Date saDate1900                 ( 30, 12, 1899 );
-    static const Date saDate1904                 ( 1, 1, 1904 );
-    static const Date saDateBackCompatibility1900( 31, 12, 1899 );
+    static const Date saDate1900                 ( 30, 12, 1899, Optional<sal_Int16>() );
+    static const Date saDate1904                 ( 1, 1, 1904, Optional<sal_Int16>() );
+    static const Date saDateBackCompatibility1900( 31, 12, 1899, Optional<sal_Int16>() );
 
     if( getOoxFilter().getVersion() == oox::core::ISOIEC_29500_2008 )
     {

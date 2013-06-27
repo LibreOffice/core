@@ -1099,7 +1099,8 @@ OSQLParseNode* OSQLParser::buildNode_Date(const double& fValue, sal_Int32 nType)
             }
             else
             {
-                Date aDate(aDateTime.Day,aDateTime.Month,aDateTime.Year);
+                Date const aDate(aDateTime.Day, aDateTime.Month, aDateTime.Year,
+                        aDateTime.TimeZone);
                 pDateNode->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, SQL_TOKEN_D));
                 pDateNode->append(new OSQLInternalNode(DBTypeConversion::toDateString(aDate), SQL_NODE_STRING));
             }

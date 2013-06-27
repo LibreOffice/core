@@ -279,7 +279,7 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
         aDate.month = 0;
         aDate.year = 0;
         OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,m_pConnection->useOldDateFormat() ? SQL_C_DATE : SQL_C_TYPE_DATE,m_bWasNull,**this,&aDate,sizeof aDate);
-        return Date(aDate.day,aDate.month,aDate.year);
+        return Date(aDate.day, aDate.month, aDate.year, Optional<sal_Int16>());
     }
     else
         m_bWasNull = sal_True;
@@ -418,7 +418,7 @@ OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex )
         OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,m_pConnection->useOldDateFormat() ? SQL_C_TIME : SQL_C_TYPE_TIME,m_bWasNull,**this,&aTime,sizeof aTime);
     else
         m_bWasNull = sal_True;
-    return Time(0,aTime.second,aTime.minute,aTime.hour);
+    return Time(0, aTime.second,aTime.minute,aTime.hour, Optional<sal_Int16>());
 }
 // -------------------------------------------------------------------------
 
@@ -436,7 +436,8 @@ OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex )
         OTools::getValue(m_pConnection,m_aStatementHandle,columnIndex,m_pConnection->useOldDateFormat() ? SQL_C_TIMESTAMP : SQL_C_TYPE_TIMESTAMP,m_bWasNull,**this,&aTime,sizeof aTime);
     else
         m_bWasNull = sal_True;
-    return DateTime(aTime.fraction,aTime.second,aTime.minute,aTime.hour,aTime.day,aTime.month,aTime.year);
+    return DateTime(aTime.fraction, aTime.second, aTime.minute, aTime.hour,
+            aTime.day, aTime.month, aTime.year, Optional<sal_Int16>());
 }
 // -------------------------------------------------------------------------
 

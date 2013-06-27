@@ -100,6 +100,7 @@ bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
         && i_rLeft.Minutes          == i_rRight.Minutes
         && i_rLeft.Seconds          == i_rRight.Seconds
         && i_rLeft.NanoSeconds      == i_rRight.NanoSeconds;
+    // FIXME TimeZone?
 }
 
 // STATIC DATA -----------------------------------------------------------
@@ -353,7 +354,8 @@ void SfxDocumentInfoItem::resetUserData(const OUString & i_rAuthor)
     DateTime now( DateTime::SYSTEM );
     setCreationDate( util::DateTime(
         now.GetNanoSec(), now.GetSec(), now.GetMin(), now.GetHour(),
-        now.GetDay(), now.GetMonth(), now.GetYear() ) );
+        now.GetDay(), now.GetMonth(), now.GetYear(),
+        beans::Optional<sal_Int16>()) );
     setModifiedBy(OUString());
     setPrintedBy(OUString());
     setModificationDate(util::DateTime());
@@ -799,7 +801,8 @@ IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
     DateTime now( DateTime::SYSTEM );
     util::DateTime uDT(
         now.GetNanoSec(), now.GetSec(), now.GetMin(), now.GetHour(),
-        now.GetDay(), now.GetMonth(), now.GetYear() );
+        now.GetDay(), now.GetMonth(), now.GetYear(),
+        beans::Optional<sal_Int16>() );
     m_pCreateValFt->SetText( ConvertDateTime_Impl( aName, uDT, rLocaleWrapper ) );
     OUString aEmpty;
     m_pChangeValFt->SetText( aEmpty );
@@ -1866,8 +1869,10 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
             {
                 Date aTmpDate = pLine->m_aDateField.GetDate();
                 Time aTmpTime = pLine->m_aTimeField.GetTime();
-                util::DateTime aDateTime(aTmpTime.GetNanoSec(), aTmpTime.GetSec(), aTmpTime.GetMin(), aTmpTime.GetHour(),
-                        aTmpDate.GetDay(), aTmpDate.GetMonth(), aTmpDate.GetYear() );
+                util::DateTime const aDateTime(aTmpTime.GetNanoSec(),
+                    aTmpTime.GetSec(), aTmpTime.GetMin(), aTmpTime.GetHour(),
+                    aTmpDate.GetDay(), aTmpDate.GetMonth(), aTmpDate.GetYear(),
+                    beans::Optional<sal_Int16>());
                 aPropertiesSeq[i].Value <<= aDateTime;
             }
             else if ( CUSTOM_TYPE_DURATION == nType )
@@ -1877,7 +1882,8 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
             else if ( CUSTOM_TYPE_DATE == nType )
             {
                 Date aTmpDate = pLine->m_aDateField.GetDate();
-                util::Date aDate(aTmpDate.GetDay(), aTmpDate.GetMonth(), aTmpDate.GetYear());
+                util::Date const aDate(aTmpDate.GetDay(), aTmpDate.GetMonth(),
+                        aTmpDate.GetYear(), beans::Optional<sal_Int16>());
                 aPropertiesSeq[i].Value <<= aDate;
 
             }

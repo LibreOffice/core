@@ -960,7 +960,8 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
                     const sal_uInt16  nMonth  = (sal_uInt16)aStr.copy( 4, 2 ).toInt32();
                     const sal_uInt16  nDay    = (sal_uInt16)aStr.copy( 6, 2 ).toInt32();
 
-                    const ::com::sun::star::util::Date aDate(nDay,nMonth,nYear);
+                    const ::com::sun::star::util::Date aDate(
+                            nDay, nMonth, nYear, Optional<sal_Int16>());
                     *(_rRow->get())[i] = aDate;
                 }
                 break;

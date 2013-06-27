@@ -29,6 +29,9 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
+
+using ::com::sun::star::beans::Optional;
+
 // STATIC DATA -----------------------------------------------------------
 
 DBG_NAME(SfxDateTimeItem)
@@ -182,7 +185,8 @@ bool SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
                                            aDateTime.GetHour(),
                                            aDateTime.GetDay(),
                                            aDateTime.GetMonth(),
-                                           aDateTime.GetYear() );
+                                           aDateTime.GetYear(),
+                                           Optional<sal_Int16>());
     rVal <<= aValue;
     return true;
 }

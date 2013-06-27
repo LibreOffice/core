@@ -1190,8 +1190,8 @@ void Converter::convertDate(
         OUStringBuffer& i_rBuffer,
         const util::Date& i_rDate)
 {
-    const util::DateTime dt(
-            0, 0, 0, 0, i_rDate.Day, i_rDate.Month, i_rDate.Year);
+    const util::DateTime dt(0, 0, 0, 0,
+        i_rDate.Day, i_rDate.Month, i_rDate.Year, beans::Optional<sal_Int16>());
     convertDateTime(i_rBuffer, dt, false);
 }
 
@@ -1260,6 +1260,40 @@ void Converter::convertDateTime(
             i_rBuffer.append(OUString::createFromAscii(ostr.str().c_str()));
         }
     }
+
+    if (i_rDateTime.TimeZone.IsPresent)
+    {
+        if (0 == i_rDateTime.TimeZone.Value)
+        {
+            i_rBuffer.append(sal_Unicode('Z'));
+        }
+        else
+        {
+            if (0 < i_rDateTime.TimeZone.Value)
+            {
+                i_rBuffer.append(sal_Unicode('+'));
+            }
+            else
+            {
+                i_rBuffer.append(sal_Unicode('-'));
+            }
+            const sal_Int16 nHours  (abs(i_rDateTime.TimeZone.Value) / 60);
+            const sal_Int16 nMinutes(abs(i_rDateTime.TimeZone.Value) % 60);
+            SAL_WARN_IF(nHours > 14 || (nHours == 14 && nMinutes > 0),
+                    "sax", "convertDateTime: timezone overflow");
+            if (nHours < 10)
+            {
+                i_rBuffer.append(zero);
+            }
+            i_rBuffer.append(nHours);
+            i_rBuffer.append(col);
+            if (nMinutes < 10)
+            {
+                i_rBuffer.append(zero);
+            }
+            i_rBuffer.append(nMinutes);
+        }
+    }
 }
 
 /** convert ISO "date" or "dateTime" string to util::DateTime */
@@ -1279,6 +1313,7 @@ bool Converter::convertDateTime( util::DateTime& rDateTime,
             rDateTime.Minutes = 0;
             rDateTime.Seconds = 0;
             rDateTime.NanoSeconds = 0;
+            rDateTime.TimeZone = date.TimeZone;
         }
         return true;
     }
@@ -1526,11 +1561,6 @@ bool Converter::convertDateOrDateTime(
 
     bSuccess &= (nPos == string.getLength()); // trailing junk?
 
-    if (bSuccess && bHaveTimezone)
-    {
-        // util::DateTime does not support timezones!
-    }
-
     if (bSuccess)
     {
         if (bHaveTime) // time is optional
@@ -1543,6 +1573,13 @@ bool Converter::convertDateOrDateTime(
             rDateTime.Minutes = static_cast<sal_uInt16>(nMinutes);
             rDateTime.Seconds = static_cast<sal_uInt16>(nSeconds);
             rDateTime.NanoSeconds = static_cast<sal_uInt32>(nNanoSeconds);
+            if (bHaveTimezone)
+            {
+                rDateTime.TimeZone.IsPresent = true;
+                rDateTime.TimeZone.Value =
+                    ((bHaveTimezoneMinus) ? (-1) : (+1))
+                        * ((nTimezoneHours * 60) + nTimezoneMinutes);
+            }
             rbDateTime = true;
         }
         else
@@ -1551,6 +1588,13 @@ bool Converter::convertDateOrDateTime(
                 ((isNegative) ? (-1) : (+1)) * static_cast<sal_Int16>(nYear);
             rDate.Month = static_cast<sal_uInt16>(nMonth);
             rDate.Day = static_cast<sal_uInt16>(nDay);
+            if (bHaveTimezone)
+            {
+                rDate.TimeZone.IsPresent = true;
+                rDate.TimeZone.Value =
+                    ((bHaveTimezoneMinus) ? (-1) : (+1))
+                        * ((nTimezoneHours * 60) + nTimezoneMinutes);
+            }
             rbDateTime = false;
         }
     }

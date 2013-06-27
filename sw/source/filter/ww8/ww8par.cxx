@@ -1496,7 +1496,8 @@ void SwWW8ImplReader::ImportDop()
        ::util::DateTime uDT(aLastPrinted.GetNanoSec(),
             aLastPrinted.GetSec(), aLastPrinted.GetMin(),
             aLastPrinted.GetHour(), aLastPrinted.GetDay(),
-            aLastPrinted.GetMonth(), aLastPrinted.GetYear());
+            aLastPrinted.GetMonth(), aLastPrinted.GetYear(),
+            beans::Optional<sal_Int16>());
         xDocuProps->setPrintDate(uDT);
     }
 

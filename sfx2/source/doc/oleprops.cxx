@@ -40,8 +40,10 @@ using ::com::sun::star::uno::makeAny;
 using namespace ::com::sun::star;
 
 #define TIMESTAMP_INVALID_DATETIME      ( DateTime ( Date ( 1, 1, 1601 ), Time ( 0, 0, 0 ) ) )  /// Invalid value for date and time to create invalid instance of TimeStamp.
-#define TIMESTAMP_INVALID_UTILDATETIME  ( util::DateTime ( 0, 0, 0, 0, 1, 1, 1601 ) )   /// Invalid value for date and time to create invalid instance of TimeStamp.
-#define TIMESTAMP_INVALID_UTILDATE  ( util::Date ( 1, 1, 1601 ) )   /// Invalid value for date to create invalid instance of TimeStamp.
+/// Invalid value for date and time to create invalid instance of TimeStamp.
+#define TIMESTAMP_INVALID_UTILDATETIME  (util::DateTime(0, 0, 0, 0, 1, 1, 1601, beans::Optional<sal_Int16>()))
+/// Invalid value for date to create invalid instance of TimeStamp.
+#define TIMESTAMP_INVALID_UTILDATE  (util::Date(1, 1, 1601, beans::Optional<sal_Int16>()))
 
 static
 bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
@@ -52,7 +54,9 @@ bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
         && i_rLeft.Hours            == i_rRight.Hours
         && i_rLeft.Minutes          == i_rRight.Minutes
         && i_rLeft.Seconds          == i_rRight.Seconds
-        && i_rLeft.NanoSeconds      == i_rRight.NanoSeconds;
+        && i_rLeft.NanoSeconds      == i_rRight.NanoSeconds
+        && i_rLeft.TimeZone.IsPresent == i_rRight.TimeZone.IsPresent
+        && i_rLeft.TimeZone.Value     == i_rRight.TimeZone.Value;
 }
 
 static
@@ -60,7 +64,9 @@ bool operator==(const util::Date &i_rLeft, const util::Date &i_rRight)
 {
     return i_rLeft.Year             == i_rRight.Year
         && i_rLeft.Month            == i_rRight.Month
-        && i_rLeft.Day              == i_rRight.Day;
+        && i_rLeft.Day              == i_rRight.Day
+        && i_rLeft.TimeZone.IsPresent == i_rRight.TimeZone.IsPresent
+        && i_rLeft.TimeZone.Value     == i_rRight.TimeZone.Value;
 }
 
 // ============================================================================
@@ -587,6 +593,7 @@ void SfxOleFileTimeProperty::ImplLoad( SvStream& rStrm )
     maDateTime.Minutes = aDateTime.GetMin();
     maDateTime.Seconds = aDateTime.GetSec();
     maDateTime.NanoSeconds = aDateTime.GetNanoSec();
+    maDateTime.TimeZone = beans::Optional<sal_Int16>();
 }
 
 void SfxOleFileTimeProperty::ImplSave( SvStream& rStrm )
@@ -895,7 +902,8 @@ void SfxOleSection::SetDateValue( sal_Int32 nPropId, const util::Date& rValue )
         SetProperty( SfxOlePropertyRef( new SfxOleFileTimeProperty( nPropId, TIMESTAMP_INVALID_UTILDATETIME ) ) );
     else
     {
-        const util::DateTime aValue(0, 0, 0, 0, rValue.Day, rValue.Month, rValue.Year );
+        const util::DateTime aValue(0, 0, 0, 0, rValue.Day, rValue.Month,
+                rValue.Year, rValue.TimeZone );
         SetProperty( SfxOlePropertyRef( new SfxOleFileTimeProperty( nPropId, aValue ) ) );
     }
 }

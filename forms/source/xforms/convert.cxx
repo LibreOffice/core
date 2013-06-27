@@ -38,6 +38,7 @@
 using xforms::Convert;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
+using com::sun::star::beans::Optional;
 using namespace std;
 using namespace o3tl;
 using namespace utl;
@@ -276,7 +277,7 @@ namespace
     // ------------------------------------------------------------------------
     UNODate lcl_toUNODate( const OUString& rString )
     {
-        UNODate aDate( 1, 1, 1900 );
+        UNODate aDate( 1, 1, 1900, Optional<sal_Int16>() );
 
         bool bWellformed = ISO8601parseDate(rString, aDate);
 
@@ -292,7 +293,7 @@ namespace
 
         // all okay?
         if ( !bWellformed )
-            return UNODate( 1, 1, 1900 );
+            return UNODate( 1, 1, 1900, Optional<sal_Int16>() );
 
         return aDate;
     }
@@ -338,7 +339,7 @@ namespace
     // ------------------------------------------------------------------------
     UNOTime lcl_toUNOTime( const OUString& rString )
     {
-        UNOTime aTime( 0, 0, 0, 0 );
+        UNOTime aTime;
 
         bool bWellformed = ISO8601parseTime(rString, aTime);
 
@@ -362,7 +363,7 @@ namespace
 
         // all okay?
         if ( !bWellformed )
-            return UNOTime( 0, 0, 0, 0 );
+            return UNOTime();
 
         return aTime;
     }
@@ -379,10 +380,11 @@ namespace
         UNODateTime aDateTime;
         OSL_VERIFY( rAny >>= aDateTime );
 
-        UNODate aDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
+        UNODate aDate( aDateTime.Day, aDateTime.Month, aDateTime.Year,
+                    Optional<sal_Int16>() );
         OUString sDate = lcl_toXSD_UNODate_typed( aDate );
 
-        UNOTime aTime( aDateTime.NanoSeconds, aDateTime.Seconds, aDateTime.Minutes, aDateTime.Hours );
+        UNOTime aTime( aDateTime.NanoSeconds, aDateTime.Seconds, aDateTime.Minutes, aDateTime.Hours, aDateTime.TimeZone );
         OUString sTime = lcl_toXSD_UNOTime_typed( aTime );
 
         OUStringBuffer sInfo;
@@ -405,7 +407,6 @@ namespace
         if ( nDateTimeSep == -1 )
         {   // no time part
             aDate = lcl_toUNODate( rString );
-            aTime = UNOTime( 0, 0, 0, 0 );
         }
         else
         {
@@ -414,7 +415,7 @@ namespace
         }
         UNODateTime aDateTime(
             aTime.NanoSeconds, aTime.Seconds, aTime.Minutes, aTime.Hours,
-            aDate.Day, aDate.Month, aDate.Year
+            aDate.Day, aDate.Month, aDate.Year, aDate.TimeZone
         );
         return makeAny( aDateTime );
     }

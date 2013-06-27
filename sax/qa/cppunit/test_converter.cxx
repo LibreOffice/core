@@ -38,6 +38,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using sax::Converter;
 
@@ -157,7 +158,9 @@ static bool eqDateTime(util::DateTime a, util::DateTime b) {
     return a.Year == b.Year && a.Month == b.Month && a.Day == b.Day
         && a.Hours == b.Hours && a.Minutes == b.Minutes
         && a.Seconds == b.Seconds
-        && a.NanoSeconds == b.NanoSeconds;
+        && a.NanoSeconds == b.NanoSeconds
+        && a.TimeZone.IsPresent == b.TimeZone.IsPresent
+        && a.TimeZone.Value == b.TimeZone.Value;
 }
 
 static void doTest(util::DateTime const & rdt, char const*const pis,
@@ -168,13 +171,14 @@ static void doTest(util::DateTime const & rdt, char const*const pis,
     util::DateTime odt;
     SAL_INFO("sax.cppunit","about to convert '" << is << "'");
     bool bSuccess( Converter::convertDateTime(odt, is) );
-    SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << " M:" << odt.Minutes << " S:" << odt.Seconds << " nS:" << odt.NanoSeconds);
+    SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << " M:" << odt.Minutes << " S:" << odt.Seconds << " nS:" << odt.NanoSeconds << " TZ: " << (bool)odt.TimeZone.IsPresent << " nTZ: " << odt.TimeZone.Value);
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT(eqDateTime(rdt, odt));
     OUStringBuffer buf;
     Converter::convertDateTime(buf, odt, true);
     SAL_INFO("sax.cppunit","" << buf.getStr());
-    CPPUNIT_ASSERT(buf.makeStringAndClear().equalsAscii(pos));
+    CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(pos),
+                         buf.makeStringAndClear());
 }
 
 static void doTestDateTimeF(char const*const pis)
@@ -189,43 +193,42 @@ static void doTestDateTimeF(char const*const pis)
 void ConverterTest::testDateTime()
 {
     SAL_INFO("sax.cppunit","\nSAX CONVERTER TEST BEGIN");
-    doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1), "0001-01-01T00:00:00" );
-    doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1),
-            "0001-01-01T00:00:00Z", "0001-01-01T00:00:00" );
-    doTest( util::DateTime(0, 0, 0, 0, 1, 1, -1), "-0001-01-01T00:00:00");
-//    doTest( util::DateTime(0, 0, 0, 0, 1, 1, -1), "-0001-01-01T00:00:00Z");
-    doTest( util::DateTime(0, 0, 0, 0, 1, 1, -324),
+    Optional<sal_Int16> const noTZ;
+    Optional<sal_Int16> const UTC(true, 0);
+    doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1, noTZ), "0001-01-01T00:00:00" );
+    doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1, UTC), "0001-01-01T00:00:00Z" );
+    doTest( util::DateTime(0, 0, 0, 0, 1, 1, -1, noTZ), "-0001-01-01T00:00:00");
+    doTest( util::DateTime(0, 0, 0, 0, 1, 1, -1, UTC), "-0001-01-01T00:00:00Z");
+    doTest( util::DateTime(0, 0, 0, 0, 1, 1, -324, noTZ),
             "-0324-01-01T00:00:00" );
-    doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1),
-            "0001-01-01T00:00:00-00:00", "0001-01-01T00:00:00" );
-    doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1),
-            "0001-01-01T00:00:00+00:00", "0001-01-01T00:00:00" );
-    doTest( util::DateTime(0, 0, 0, 0, 2, 1, 1)/*(0, 0, 12, 0, 2, 1, 1)*/,
-            "0001-01-02T00:00:00-12:00", "0001-01-02T00:00:00" );
-//            "0001-02-01T12:00:00" );
-    doTest( util::DateTime(0, 0, 0, 0, 2, 1, 1)/*(0, 0, 12, 0, 1, 1, 1)*/,
-            "0001-01-02T00:00:00+12:00", "0001-01-02T00:00:00" );
-//            "0001-01-01T12:00:00" );
-    doTest( util::DateTime(990000000, 59, 59, 23, 31, 12, 9999),
+    doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1, UTC),
+            "0001-01-01T00:00:00-00:00", "0001-01-01T00:00:00Z" );
+    doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1, UTC),
+            "0001-01-01T00:00:00+00:00", "0001-01-01T00:00:00Z" );
+    doTest( util::DateTime(0, 0, 0, 0, 2, 1, 1, Optional<sal_Int16>(true,-720)),
+            "0001-01-02T00:00:00-12:00" );
+    doTest( util::DateTime(0, 0, 0, 0, 2, 1, 1, Optional<sal_Int16>(true,+720)),
+            "0001-01-02T00:00:00+12:00" );
+    doTest( util::DateTime(990000000, 59, 59, 23, 31, 12, 9999, noTZ),
             "9999-12-31T23:59:59.99",  "9999-12-31T23:59:59.990000000" );
-    doTest( util::DateTime(990000000, 59, 59, 23, 31, 12, 9999),
-            "9999-12-31T23:59:59.99Z", "9999-12-31T23:59:59.990000000" );
-    doTest( util::DateTime(999999999, 59, 59, 23, 31, 12, 9999),
+    doTest( util::DateTime(990000000, 59, 59, 23, 31, 12, 9999, UTC),
+            "9999-12-31T23:59:59.99Z", "9999-12-31T23:59:59.990000000Z" );
+    doTest( util::DateTime(999999999, 59, 59, 23, 31, 12, 9999, noTZ),
             "9999-12-31T23:59:59.9999999999999999999999999999999999999",
             "9999-12-31T23:59:59.999999999" );
-    doTest( util::DateTime(999999999, 59, 59, 23, 31, 12, 9999),
+    doTest( util::DateTime(999999999, 59, 59, 23, 31, 12, 9999, UTC),
             "9999-12-31T23:59:59.9999999999999999999999999999999999999Z",
-            "9999-12-31T23:59:59.999999999" );
-    doTest( util::DateTime(0, 0, 0, 0, 29, 2, 2000), // leap year
-            "2000-02-29T00:00:00-00:00", "2000-02-29T00:00:00" );
-    doTest( util::DateTime(0, 0, 0, 0, 29, 2, 1600), // leap year
-            "1600-02-29T00:00:00-00:00", "1600-02-29T00:00:00" );
-    doTest( util::DateTime(0, 0, 0, 24, 1, 1, 333)
+            "9999-12-31T23:59:59.999999999Z" );
+    doTest( util::DateTime(0, 0, 0, 0, 29, 2, 2000, UTC), // leap year
+            "2000-02-29T00:00:00-00:00", "2000-02-29T00:00:00Z" );
+    doTest( util::DateTime(0, 0, 0, 0, 29, 2, 1600, UTC), // leap year
+            "1600-02-29T00:00:00-00:00", "1600-02-29T00:00:00Z" );
+    doTest( util::DateTime(0, 0, 0, 24, 1, 1, 333, noTZ)
                 /*(0, 0, 0, 0, 2, 1, 333)*/,
             "0333-01-01T24:00:00"/*, "0333-01-02T00:00:00"*/ );
     // While W3C XMLSchema specifies a minimum of 4 year digits we are lenient
     // in what we accept.
-    doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1),
+    doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1, noTZ),
             "1-01-01T00:00:00", "0001-01-01T00:00:00" );
     doTestDateTimeF( "+0001-01-01T00:00:00" ); // invalid: ^+
     doTestDateTimeF( "0001-1-01T00:00:00" ); // invalid: < 2 M

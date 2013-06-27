@@ -19,6 +19,7 @@
 #ifndef __com_sun_star_util_DateTime_idl__
 #define __com_sun_star_util_DateTime_idl__
 
+#include <com/sun/star/beans/Optional.idl>
 
 
 module com {  module sun {  module star {  module util {
@@ -61,7 +62,13 @@ published struct DateTime
      */
     short Year;
 
-    /** TODO: timezone **/
+    /** contains the time zone, as signed offset in minutes from UTC.
+
+        If not present, the Time is not in a specific time zone.
+
+        @since LibreOffice 4.1
+     */
+    ::com::sun::star::beans::Optional<short> TimeZone;
 
 };
 

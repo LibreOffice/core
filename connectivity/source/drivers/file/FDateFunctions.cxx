@@ -23,8 +23,10 @@
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
 
+using ::com::sun::star::beans::Optional;
 using namespace connectivity;
 using namespace connectivity::file;
+
 //------------------------------------------------------------------
 ORowSetValue OOp_DayOfWeek::operate(const ORowSetValue& lhs) const
 {
@@ -254,7 +256,8 @@ ORowSetValue OOp_CurDate::operate(const ::std::vector<ORowSetValue>& lhs) const
         return ORowSetValue();
 
     Date aCurDate( Date::SYSTEM );
-    return ::com::sun::star::util::Date(aCurDate.GetDay(),aCurDate.GetMonth(),aCurDate.GetYear());
+    return ::com::sun::star::util::Date(aCurDate.GetDay(), aCurDate.GetMonth(),
+            aCurDate.GetYear(), Optional<sal_Int16>());
 }
 //------------------------------------------------------------------
 ORowSetValue OOp_CurTime::operate(const ::std::vector<ORowSetValue>& lhs) const
@@ -263,7 +266,9 @@ ORowSetValue OOp_CurTime::operate(const ::std::vector<ORowSetValue>& lhs) const
         return ORowSetValue();
 
     Time aCurTime( Time::SYSTEM );
-    return ::com::sun::star::util::Time(aCurTime.GetNanoSec(),aCurTime.GetSec(),aCurTime.GetMin(),aCurTime.GetHour());
+    return ::com::sun::star::util::Time(aCurTime.GetNanoSec(),
+            aCurTime.GetSec(), aCurTime.GetMin(), aCurTime.GetHour(),
+            Optional<sal_Int16>());
 }
 //------------------------------------------------------------------
 ORowSetValue OOp_Now::operate(const ::std::vector<ORowSetValue>& lhs) const
@@ -272,8 +277,10 @@ ORowSetValue OOp_Now::operate(const ::std::vector<ORowSetValue>& lhs) const
         return ORowSetValue();
 
     DateTime aCurTime( DateTime::SYSTEM );
-    return ::com::sun::star::util::DateTime(aCurTime.GetNanoSec(),aCurTime.GetSec(),aCurTime.GetMin(),aCurTime.GetHour(),
-                                            aCurTime.GetDay(),aCurTime.GetMonth(),aCurTime.GetYear());
+    return ::com::sun::star::util::DateTime(aCurTime.GetNanoSec(),
+            aCurTime.GetSec(), aCurTime.GetMin(), aCurTime.GetHour(),
+            aCurTime.GetDay(), aCurTime.GetMonth(), aCurTime.GetYear(),
+            Optional<sal_Int16>());
 }
 //------------------------------------------------------------------
 

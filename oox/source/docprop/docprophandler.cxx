@@ -153,7 +153,10 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
         }
     }
 
-    return util::DateTime( (sal_uInt16)( aOslDTime.NanoSeconds / 1e7 ), aOslDTime.Seconds, aOslDTime.Minutes, aOslDTime.Hours, aOslDTime.Day, aOslDTime.Month, aOslDTime.Year );
+    return util::DateTime( (sal_uInt16)( aOslDTime.NanoSeconds / 1e7 ),
+            aOslDTime.Seconds, aOslDTime.Minutes, aOslDTime.Hours,
+            aOslDTime.Day, aOslDTime.Month, aOslDTime.Year,
+            beans::Optional<sal_Int16>());
 }
 
 // ------------------------------------------------

@@ -56,7 +56,7 @@ public class _SpreadsheetDocumentSettings extends MultiPropertyTest {
         protected Object getNewValue(String propName, Object oldValue) {
             Date date = (Date) oldValue;
             Date newDate = new Date((short) (date.Day - 1), date.Month,
-                                    date.Year);
+                                    date.Year, date.TimeZone);
 
             return newDate;
         }

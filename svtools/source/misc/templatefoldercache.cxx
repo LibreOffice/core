@@ -91,6 +91,7 @@ namespace svt
     //---------------------------------------------------------------------
     sal_Bool operator == ( const util::DateTime& _rLHS, const util::DateTime& _rRHS )
     {
+        // FIXME TimeZone?
         return  _rLHS.NanoSeconds == _rRHS.NanoSeconds
             &&  _rLHS.Seconds   == _rRHS.Seconds
             &&  _rLHS.Minutes   == _rRHS.Minutes

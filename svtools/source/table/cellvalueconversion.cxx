@@ -44,6 +44,7 @@ namespace svt
 //......................................................................................................................
 
     using namespace ::com::sun::star::uno;
+    using ::com::sun::star::beans::Optional;
     using ::com::sun::star::util::XNumberFormatter;
     using ::com::sun::star::util::XNumberFormatter2;
     using ::com::sun::star::util::NumberFormatter;
@@ -332,7 +333,7 @@ namespace svt
                     NumberFormatsSupplier::createWithLocale( xContext, aLocale );
 
                 // ensure a NullDate we will assume later on
-                UnoDate const aNullDate( 1, 1, 1900 );
+                UnoDate const aNullDate(1, 1, 1900, Optional<sal_Int16>());
                 Reference< XPropertySet > const xFormatSettings( xSupplier->getNumberFormatSettings(), UNO_SET_THROW );
                 xFormatSettings->setPropertyValue( "NullDate", makeAny( aNullDate ) );
 

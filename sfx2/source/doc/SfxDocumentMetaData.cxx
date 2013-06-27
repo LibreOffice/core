@@ -413,6 +413,7 @@ bool operator== (const css::util::DateTime &i_rLeft,
         && i_rLeft.Minutes          == i_rRight.Minutes
         && i_rLeft.Seconds          == i_rRight.Seconds
         && i_rLeft.NanoSeconds      == i_rRight.NanoSeconds;
+    // FIXME TimeZone?
 }
 
 // NB: keep these two arrays in sync!
@@ -1838,7 +1839,8 @@ SfxDocumentMetaData::resetUserData(const OUString & the_value)
     bModified |= setMetaText("meta:initial-creator", the_value);
     ::DateTime now( ::DateTime::SYSTEM );
     css::util::DateTime uDT(now.GetNanoSec(), now.GetSec(), now.GetMin(),
-        now.GetHour(), now.GetDay(), now.GetMonth(), now.GetYear());
+        now.GetHour(), now.GetDay(), now.GetMonth(), now.GetYear(),
+        css::beans::Optional<sal_Int16>());
     bModified |= setMetaText("meta:creation-date", dateTimeToText(uDT));
     bModified |= setMetaText("dc:creator", OUString());
     bModified |= setMetaText("meta:printed-by", OUString());
