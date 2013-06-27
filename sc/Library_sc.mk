@@ -58,6 +58,7 @@ ifeq ($(ENABLE_OPENCL),TRUE)
 $(eval $(call gb_Library_use_externals,sc,opencl))
 
 $(eval $(call gb_Library_add_exception_objects,sc,\
+	sc/source/core/opencl/formulagroupcl \
 	sc/source/core/opencl/openclwrapper \
 ))
 endif

@@ -415,6 +415,7 @@ private:
     ::std::set<ScFormulaCell*> maSubTotalCells;
 
     bool                mbUseEmbedFonts;
+
 public:
     bool              IsUsingEmbededFonts() { return mbUseEmbedFonts; }
     void              SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }

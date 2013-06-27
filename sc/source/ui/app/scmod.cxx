@@ -102,10 +102,7 @@
 
 #include "scabstdlg.hxx"
 #include "formula/errorcodes.hxx"
-
-#if HAVE_FEATURE_OPENCL
-#  include "openclwrapper.hxx"
-#endif
+#include "formulagroup.hxx"
 
 #define SC_IDLE_MIN     150
 #define SC_IDLE_MAX     3000
@@ -154,12 +151,8 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     mbIsInSharedDocLoading( false ),
     mbIsInSharedDocSaving( false )
 {
-#if HAVE_FEATURE_OPENCL
-    OclCalc::InitEnv();
-#endif
     //  im ctor ist der ResManager (DLL-Daten) noch nicht initialisiert!
-
-    SetName(OUString("StarCalc"));       // fuer Basic
+    SetName(OUString("StarCalc"));       // for Basic
 
     ResetDragObject();
     SetClipObject( NULL, NULL );
@@ -186,13 +179,13 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     ScGlobal::InitTextHeight( pMessagePool );
 
     StartListening( *SFX_APP() );       // for SFX_HINT_DEINITIALIZING
+
+    // initialize formula grouping
+    sc::FormulaGroupInterpreter::getStatic();
 }
 
 ScModule::~ScModule()
 {
-#if HAVE_FEATURE_OPENCL
-    OclCalc::ReleaseOpenclRunEnv();
-#endif
     OSL_ENSURE( !pSelTransfer, "Selection Transfer object not deleted" );
 
     //  InputHandler braucht nicht mehr geloescht zu werden (gibt keinen an der App mehr)

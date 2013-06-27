@@ -86,6 +86,8 @@
 #include "macromgr.hxx"
 #include "formulacell.hxx"
 #include "clipcontext.hxx"
+#include "interpre.hxx"
+#include "formulagroup.hxx"
 
 using namespace com::sun::star;
 

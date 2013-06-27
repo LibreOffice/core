@@ -30,19 +30,31 @@ struct FormulaGroupContext : boost::noncopyable
 };
 
 /**
- * All the vectorized formula calculation code should be collectd here.
+ * All the vectorized formula calculation code should be collected here.
+ *
+ * Abstract base class for formula group interpreters, and a factory.
  */
-class FormulaGroupInterpreter
+class SC_DLLPUBLIC FormulaGroupInterpreter
 {
-    ScDocument& mrDoc;
-    ScAddress maTopPos;
-    ScFormulaCellGroupRef mxGroup;
-    ScTokenArray& mrCode;
-public:
-    FormulaGroupInterpreter(
-        ScDocument& rDoc, const ScAddress& rTopPos, const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode);
+    static FormulaGroupInterpreter *msInstance;
+ protected:
+    FormulaGroupInterpreter() {}
+    virtual ~FormulaGroupInterpreter() {}
+ public:
+    static FormulaGroupInterpreter *getStatic();
 
-    bool interpret();
+    virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode) = 0;
+};
+
+/// Inherit from this for alternate formula group calculation approaches.
+class SC_DLLPUBLIC FormulaGroupInterpreterSoftware : public FormulaGroupInterpreter
+{
+public:
+    FormulaGroupInterpreterSoftware() :
+        FormulaGroupInterpreter() {}
+    virtual ~FormulaGroupInterpreterSoftware() {}
+
+    virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos, const ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode);
 };
 
 }

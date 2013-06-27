@@ -3094,9 +3094,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
     GroupTokenConverter aConverter(aCode, *pDocument, *this);
     if (!aConverter.convert(*pCode))
         return false;
-
-    sc::FormulaGroupInterpreter aInterpreter(*pDocument, aPos, xGroup, aCode);
-    return aInterpreter.interpret();
+    return sc::FormulaGroupInterpreter::getStatic()->interpret(*pDocument, aPos, xGroup, aCode);
 }
 
 bool ScFormulaCell::InterpretInvariantFormulaGroup()
