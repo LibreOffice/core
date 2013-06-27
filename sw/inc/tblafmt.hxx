@@ -249,22 +249,14 @@ class SW_DLLPUBLIC SwTableAutoFmt
 
     SwBoxAutoFmt* aBoxAutoFmt[ 16 ];
 
-    // Writer-specific options
-    SvxFmtBreakItem m_aBreak;
-    SwFmtPageDesc m_aPageDesc;
-    SvxFmtKeepItem m_aKeepWithNextPara;
-    sal_uInt16 m_aRepeatHeading;
-    sal_Bool m_bLayoutSplit;
-    sal_Bool m_bRowSplit;
-    sal_Bool m_bCollapsingBorders;
-    SvxShadowItem m_aShadow;
-
 public:
     SwTableAutoFmt( const String& rName, SwTableFmt* pTableStyle );
     SwTableAutoFmt( const SwTableAutoFmt& rNew );
     ~SwTableAutoFmt();
 
     SwTableAutoFmt& operator=( const SwTableAutoFmt& rNew );
+
+    SwTableFmt* GetTableStyle() { return m_pTableStyle; }
 
     void SetBoxFmt( const SwBoxAutoFmt& rNew, sal_uInt8 nPos );
     const SwBoxAutoFmt& GetBoxFmt( sal_uInt8 nPos ) const;

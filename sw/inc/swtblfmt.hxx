@@ -19,6 +19,11 @@
 #ifndef _SWTBLFMT_HXX
 #define _SWTBLFMT_HXX
 
+#include <editeng/formatbreakitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <fmtpdsc.hxx>
+#include <fmtlsplt.hxx>
 #include <frmfmt.hxx>
 
 class SwDoc;
@@ -46,7 +51,11 @@ protected:
     SwTableLineFmt* pOddColFmt;
     SwTableLineFmt* pEvnColFmt;
 
+    sal_uInt16 m_aRepeatHeading;
+    sal_Bool m_bRowSplit;
+
 public:
+    SwTableFmt& operator=( const SwTableFmt& rNew );
 
     void SetFirstLineFmt( SwTableLineFmt* pNew ) { pFstLineFmt = pNew; }
     void SetLastLineFmt( SwTableLineFmt* pNew ) { pLstLineFmt = pNew; }
@@ -67,6 +76,26 @@ public:
     SwTableLineFmt* GetLastColFmt() { return pLstColFmt; }
     SwTableLineFmt* GetOddColFmt() { return pOddColFmt; }
     SwTableLineFmt* GetEvenColFmt() { return pEvnColFmt; }
+
+    void SetRepeatHeading( const sal_uInt16& rNew ) { m_aRepeatHeading = rNew; }
+    void SetRowSplit( const sal_Bool& rNew ) { m_bRowSplit = rNew; }
+
+    const sal_uInt16& GetRepeatHeading() const { return m_aRepeatHeading; }
+    const sal_Bool& GetRowSplit() const { return m_bRowSplit; }
+
+    void SetBreak( const SvxFmtBreakItem& rNew );
+    void SetPageDesc( const SwFmtPageDesc& rNew );
+    void SetKeepWithNextPara( const SvxFmtKeepItem& rNew );
+    void SetLayoutSplit( const sal_Bool& rNew );
+    void SetCollapsingBorders( const sal_Bool& rNew );
+    void SetShadow( const SvxShadowItem& rNew );
+
+    const SvxFmtBreakItem& GetBreak() const;
+    const SwFmtPageDesc& GetPageDesc() const;
+    const SvxFmtKeepItem& GetKeepWithNextPara() const;
+    sal_Bool GetLayoutSplit() const;
+    sal_Bool GetCollapsingBorders() const;
+    const SvxShadowItem& GetShadow() const;
 
     TYPEINFO();     // Already in base class Content.
 
