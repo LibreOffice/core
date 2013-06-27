@@ -1020,8 +1020,8 @@ function writeBatFile(fdir, file)
 	" )\n" +
         "\n\n" +
         "@set \"OO_SDK_OFFICE_BIN_DIR=%OFFICE_PROGRAM_PATH%\"\n" +
-        "@set \"OO_SDK_OFFICE_LIB_DIR=%OFFICE_BASE_PROGRAM_PATH%\"\n" +
-        "@set \"OO_SDK_OFFICE_JAVA_DIR=%OFFICE_BASE_PROGRAM_PATH%\\classes\"\n" +
+        "@set \"OO_SDK_OFFICE_LIB_DIR=%OFFICE_PROGRAM_PATH%\"\n" +
+        "@set \"OO_SDK_OFFICE_JAVA_DIR=%OFFICE_PROGRAM_PATH%\\classes\"\n" +
         "\n" +
         "REM Set classpath\n" +
         "@set \"CLASSPATH=%OO_SDK_OFFICE_JAVA_DIR%\\juh.jar;%OO_SDK_OFFICE_JAVA_DIR%\\jurt.jar;%OO_SDK_OFFICE_JAVA_DIR%\\ridl.jar;%OO_SDK_OFFICE_JAVA_DIR%\\unoloader.jar;%OO_SDK_OFFICE_JAVA_DIR%\\unoil.jar\"\n" +
