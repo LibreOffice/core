@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// stdafx.cpp : Quelltextdatei, die nur die Standard-Includes einbindet
-//  TestWin32.pch ist die vorkompilierte Header-Datei
-//  stdafx.obj enthält die vorkompilierte Typinformation
+// stdafx.cpp : source file which only includes the standard header files
+// TestWin32.pch is a pre-compiled header file
+// stdafx.obj contains the pre-compiled type information
 
 #include "stdafx.h"
 
-// ZU ERLEDIGEN: Verweis auf alle zusätzlichen Header-Dateien, die Sie in STDAFX.H
-// und nicht in dieser Datei benötigen
+// TO DO: Reference all additional header files required by STDAFX.H
+// rather than by this file
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
