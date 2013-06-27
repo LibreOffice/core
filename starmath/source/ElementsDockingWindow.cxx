@@ -492,6 +492,8 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
 
     maElementListBox.SelectEntry(OUString(SmResId(RID_CATEGORY_UNARY_BINARY_OPERATORS)));
     maElementsControl.setElementSetId(RID_CATEGORY_UNARY_BINARY_OPERATORS);
+
+    FreeResource();
 }
 
 SmElementsDockingWindow::~SmElementsDockingWindow ()
