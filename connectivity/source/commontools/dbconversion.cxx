@@ -109,7 +109,8 @@ namespace dbtools
         utl::Date aDate(_rDateTime.Day,_rDateTime.Month,_rDateTime.Year);
         OUStringBuffer aTemp(toDateString(aDate));
         aTemp.appendAscii(" ");
-        utl::Time aTime(_rDateTime.NanoSeconds,_rDateTime.Seconds,_rDateTime.Minutes,_rDateTime.Hours);
+        utl::Time const aTime(_rDateTime.NanoSeconds, _rDateTime.Seconds,
+                _rDateTime.Minutes, _rDateTime.Hours, _rDateTime.IsUTC);
         aTemp.append( toTimeString(aTime) );
         return  aTemp.makeStringAndClear();
     }
@@ -459,7 +460,7 @@ namespace dbtools
             aTime = toTime( _sSQLString.copy( nSeparation ) );
 
         return utl::DateTime(aTime.NanoSeconds, aTime.Seconds, aTime.Minutes, aTime.Hours,
-                        aDate.Day, aDate.Month, aDate.Year);
+                        aDate.Day, aDate.Month, aDate.Year, false);
     }
 
     //-----------------------------------------------------------------------------

@@ -99,7 +99,8 @@ namespace pcr
         if ( !getTypedControlWindow()->GetText().isEmpty() )
         {
             ::Time aTime( getTypedControlWindow()->GetTime() );
-            util::Time aUNOTime( aTime.GetNanoSec(), aTime.GetSec(), aTime.GetMin(), aTime.GetHour() );
+            util::Time const aUNOTime( aTime.GetNanoSec(), aTime.GetSec(),
+                    aTime.GetMin(), aTime.GetHour(), false );
             aPropValue <<= aUNOTime;
         }
         return aPropValue;

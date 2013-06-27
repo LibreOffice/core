@@ -28,6 +28,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <osl/time.h>
 
 #include <algorithm>
 
@@ -1185,13 +1186,48 @@ bool Converter::convertDuration(util::Duration& rDuration,
 }
 
 
+static void
+lcl_AppendTimezone(OUStringBuffer & i_rBuffer, sal_Int16 const nOffset)
+{
+    if (0 == nOffset)
+    {
+        i_rBuffer.append(sal_Unicode('Z'));
+    }
+    else
+    {
+        if (0 < nOffset)
+        {
+            i_rBuffer.append(sal_Unicode('+'));
+        }
+        else
+        {
+            i_rBuffer.append(sal_Unicode('-'));
+        }
+        const sal_Int32 nHours  (abs(nOffset) / 60);
+        const sal_Int32 nMinutes(abs(nOffset) % 60);
+        SAL_WARN_IF(nHours > 14 || (nHours == 14 && nMinutes > 0),
+                "sax", "convertDateTime: timezone overflow");
+        if (nHours < 10)
+        {
+            i_rBuffer.append('0');
+        }
+        i_rBuffer.append(nHours);
+        i_rBuffer.append(':');
+        if (nMinutes < 10)
+        {
+            i_rBuffer.append('0');
+        }
+        i_rBuffer.append(nMinutes);
+    }
+}
+
 /** convert util::Date to ISO "date" string */
 void Converter::convertDate(
         OUStringBuffer& i_rBuffer,
         const util::Date& i_rDate)
 {
-    const util::DateTime dt(
-            0, 0, 0, 0, i_rDate.Day, i_rDate.Month, i_rDate.Year);
+    const util::DateTime dt(0, 0, 0, 0,
+        i_rDate.Day, i_rDate.Month, i_rDate.Year, false);
     convertDateTime(i_rBuffer, dt, false);
 }
 
@@ -1260,6 +1296,17 @@ void Converter::convertDateTime(
             i_rBuffer.append(OUString::createFromAscii(ostr.str().c_str()));
         }
     }
+
+    sal_uInt16 * pTimezone(0); // FIXME pass this as parameter
+    if (pTimezone)
+    {
+        lcl_AppendTimezone(i_rBuffer, *pTimezone);
+    }
+    else if (i_rDateTime.IsUTC)
+    {
+        // append local time
+        lcl_AppendTimezone(i_rBuffer, 0);
+    }
 }
 
 /** convert ISO "date" or "dateTime" string to util::DateTime */
@@ -1279,12 +1326,109 @@ bool Converter::convertDateTime( util::DateTime& rDateTime,
             rDateTime.Minutes = 0;
             rDateTime.Seconds = 0;
             rDateTime.NanoSeconds = 0;
+            // FIXME
+#if 0
+            rDateTime.IsUTC = date.IsUTC;
+#endif
         }
         return true;
     }
     else
     {
         return false;
+    }
+}
+
+static bool lcl_isLeapYear(const sal_uInt32 nYear)
+{
+    return ((nYear % 4) == 0)
+        && (((nYear % 100) != 0) || ((nYear % 400) == 0));
+}
+
+static sal_uInt16
+lcl_MaxDaysPerMonth(const sal_Int32 nMonth, const sal_Int32 nYear)
+{
+    static sal_uInt16 s_MaxDaysPerMonth[12] =
+        { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    OSL_ASSERT(0 < nMonth && nMonth <= 12);
+    if ((2 == nMonth) && lcl_isLeapYear(nYear))
+    {
+        return 29;
+    }
+    return s_MaxDaysPerMonth[nMonth - 1];
+}
+
+static void lcl_ConvertToUTC(
+        sal_Int16 & o_rYear, sal_uInt16 & o_rMonth, sal_uInt16 & o_rDay,
+        sal_uInt16 & o_rHours, sal_uInt16 & o_rMinutes,
+        sal_Int16 const nSourceOffset)
+{
+    sal_Int16 nOffsetHours(abs(nSourceOffset) / 60);
+    sal_Int16 const nOffsetMinutes(abs(nSourceOffset) % 60);
+    o_rMinutes += nOffsetMinutes;
+    if (nSourceOffset < 0)
+    {
+        o_rMinutes += nOffsetMinutes;
+        if (60 <= o_rMinutes)
+        {
+            o_rMinutes -= 60;
+            ++nOffsetHours;
+        }
+        o_rHours += nOffsetHours;
+        if (o_rHours < 24)
+        {
+            return;
+        }
+        while (24 <= o_rHours)
+        {
+            o_rHours -= 24;
+            ++o_rDay;
+        }
+        sal_Int16 const nDaysInMonth(lcl_MaxDaysPerMonth(o_rMonth, o_rYear));
+        if (o_rDay <= nDaysInMonth)
+        {
+            return;
+        }
+        o_rDay -= nDaysInMonth;
+        ++o_rMonth;
+        if (o_rMonth <= 12)
+        {
+            return;
+        }
+        o_rMonth = 1;
+        ++o_rYear; // works for negative year too
+    }
+    else if (0 < nSourceOffset)
+    {
+        // argh everything is unsigned
+        if (o_rMinutes < nOffsetMinutes)
+        {
+            o_rMinutes += 60;
+            ++nOffsetHours;
+        }
+        o_rMinutes -= nOffsetMinutes;
+        sal_Int16 nDaySubtract(0);
+        while (o_rHours < nOffsetHours)
+        {
+            o_rHours += 24;
+            ++nDaySubtract;
+        }
+        o_rHours -= nOffsetHours;
+        if (nDaySubtract < o_rDay)
+        {
+            o_rDay -= nDaySubtract;
+            return;
+        }
+        sal_Int16 const nPrevMonth((o_rMonth == 1) ? 12 : o_rMonth - 1);
+        sal_Int16 const nDaysInMonth(lcl_MaxDaysPerMonth(nPrevMonth, o_rYear));
+        o_rDay += nDaysInMonth;
+        --o_rMonth;
+        if (0 == o_rMonth)
+        {
+            o_rMonth = 12;
+            --o_rYear; // works for negative year too
+        }
+        o_rDay -= nDaySubtract;
     }
 }
 
@@ -1309,24 +1453,7 @@ readDateTimeComponent(const OUString & rString,
     return true;
 }
 
-static bool lcl_isLeapYear(const sal_uInt32 nYear)
-{
-    return ((nYear % 4) == 0)
-        && (((nYear % 100) != 0) || ((nYear % 400) == 0));
-}
 
-static sal_uInt16
-lcl_MaxDaysPerMonth(const sal_Int32 nMonth, const sal_Int32 nYear)
-{
-    static sal_uInt16 s_MaxDaysPerMonth[12] =
-        { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-    OSL_ASSERT(0 < nMonth && nMonth <= 12);
-    if ((2 == nMonth) && lcl_isLeapYear(nYear))
-    {
-        return 29;
-    }
-    return s_MaxDaysPerMonth[nMonth - 1];
-}
 
 /** convert ISO "date" or "dateTime" string to util::DateTime or util::Date */
 bool Converter::convertDateOrDateTime(
@@ -1526,13 +1653,11 @@ bool Converter::convertDateOrDateTime(
 
     bSuccess &= (nPos == string.getLength()); // trailing junk?
 
-    if (bSuccess && bHaveTimezone)
-    {
-        // util::DateTime does not support timezones!
-    }
-
     if (bSuccess)
     {
+        sal_uInt16 * pTimezone(0); // FIXME pass this as parameter
+        sal_Int16 const nTimezoneOffset = ((bHaveTimezoneMinus) ? (-1) : (+1))
+                        * ((nTimezoneHours * 60) + nTimezoneMinutes);
         if (bHaveTime) // time is optional
         {
             rDateTime.Year =
@@ -1543,6 +1668,25 @@ bool Converter::convertDateOrDateTime(
             rDateTime.Minutes = static_cast<sal_uInt16>(nMinutes);
             rDateTime.Seconds = static_cast<sal_uInt16>(nSeconds);
             rDateTime.NanoSeconds = static_cast<sal_uInt32>(nNanoSeconds);
+            if (bHaveTimezone)
+            {
+                if (pTimezone)
+                {
+                    *pTimezone = nTimezoneOffset;
+                    rDateTime.IsUTC = (0 == nTimezoneOffset);
+                }
+                else
+                {
+                    lcl_ConvertToUTC(rDateTime.Year, rDateTime.Month,
+                            rDateTime.Day, rDateTime.Hours, rDateTime.Minutes,
+                            nTimezoneOffset);
+                    rDateTime.IsUTC = true;
+                }
+            }
+            else
+            {
+                rDateTime.IsUTC = false;
+            }
             rbDateTime = true;
         }
         else
@@ -1551,6 +1695,18 @@ bool Converter::convertDateOrDateTime(
                 ((isNegative) ? (-1) : (+1)) * static_cast<sal_Int16>(nYear);
             rDate.Month = static_cast<sal_uInt16>(nMonth);
             rDate.Day = static_cast<sal_uInt16>(nDay);
+            if (bHaveTimezone)
+            {
+                if (pTimezone)
+                {
+                    *pTimezone = nTimezoneOffset;
+                }
+                else
+                {
+                    // a Date cannot be adjusted
+                    SAL_INFO("sax", "dropping timezone");
+                }
+            }
             rbDateTime = false;
         }
     }
