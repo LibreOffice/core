@@ -54,6 +54,8 @@
 
 #include <string.h>
 
+#include <connectivity/dbconversion.hxx>
+
 using osl::Mutex;
 using osl::MutexGuard;
 
@@ -88,6 +90,8 @@ using com::sun::star::beans::XPropertySetInfo;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::XMultiPropertySet;
 using com::sun::star::beans::XFastPropertySet;
+
+using namespace dbtools;
 
 namespace pq_sdbc_driver
 {
@@ -597,20 +601,20 @@ void PreparedStatement::setBytes(
 void PreparedStatement::setDate( sal_Int32 parameterIndex, const ::com::sun::star::util::Date& x )
     throw (SQLException, RuntimeException)
 {
-    setString( parameterIndex, date2String( x ) );
+    setString( parameterIndex, DBTypeConversion::toDateString( x ) );
 }
 
 void PreparedStatement::setTime( sal_Int32 parameterIndex, const ::com::sun::star::util::Time& x )
     throw (SQLException, RuntimeException)
 {
-    setString( parameterIndex, time2String( x ) );
+    setString( parameterIndex, DBTypeConversion::toTimeString( x ) );
 }
 
 void PreparedStatement::setTimestamp(
     sal_Int32 parameterIndex, const ::com::sun::star::util::DateTime& x )
     throw (SQLException, RuntimeException)
 {
-    setString( parameterIndex, dateTime2String( x ) );
+    setString( parameterIndex, DBTypeConversion::toDateTimeString( x ) );
 }
 
 void PreparedStatement::setBinaryStream(
