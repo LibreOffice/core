@@ -13,9 +13,15 @@
 using namespace svx;
 
 CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent, const SfxItemSet& rItemSet )
-    :SfxTabPage( pParent, "AboutConfig", "cui/ui/optaboutconfigdialog.ui", rItemSet)
+    :SfxTabPage( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui", rItemSet)
 {
 //    get(m_pEditBtn, "");
+
+    m_pPrefCtrl = get<SvxSimpleTableContainer>("preferences");
+
+    Size aControlSize(200,200);
+    m_pPrefCtrl->set_width_request(aControlSize.Width());
+    m_pPrefCtrl->set_height_request(aControlSize.Height());
 
     WinBits nBits = WB_SCROLL | WB_SORT;
     pPrefBox = new svx::OptHeaderTabListBox( *m_pPrefCtrl, nBits );

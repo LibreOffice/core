@@ -101,6 +101,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Accessibility" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
             < "Advanced" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Online Update" ; RID_SVXPAGE_ONLINEUPDATE ; > ;
+            < "About Config" ; RID_SVXPAGE_ABOUT_CONFIG ; > ;
         };
     };
     StringArray SID_LANGUAGE_OPTIONS
