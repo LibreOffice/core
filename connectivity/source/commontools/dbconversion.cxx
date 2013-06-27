@@ -28,6 +28,8 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sstream>
+#include <iomanip>
 
 #define MAX_DAYS    3636532
 
@@ -82,11 +84,12 @@ namespace dbtools
     OUString DBTypeConversion::toTimeString(const Time& rTime)
     {
         std::ostringstream ostr;
+        using std::setw;
         ostr.fill('0');
-        ostr.width(2);
-        ostr << rTime.Hours << ":" << rTime.Minutes << ":" << rTime.Seconds;
-        ostr.width(9);
-        ostr << "." << rTime.NanoSeconds;
+        ostr << setw(2) << rTime.Hours   << ":"
+             << setw(2) << rTime.Minutes << ":"
+             << setw(2) << rTime.Seconds << "."
+             << setw(9) << rTime.NanoSeconds;
         return OUString::createFromAscii(ostr.str().c_str());
     }
 
