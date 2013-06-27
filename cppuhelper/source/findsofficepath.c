@@ -87,6 +87,7 @@ static char* getPathFromRegistryKey( HKEY hroot, const char* subKeyName )
 static char* platformSpecific()
 {
     const char* SUBKEYNAME = "Software\\OpenOffice\\UNO\\InstallPath";
+    const char* SUBKEYNAME64 = "Software\\Wow6432Node\\OpenOffice\\UNO\\InstallPath";
 
     char* path = NULL;
 
@@ -95,8 +96,18 @@ static char* platformSpecific()
 
     if ( path == NULL )
     {
+        /* read the key's default value from HKEY_LOCAL_USER 64 */
+        path = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, SUBKEYNAME64 );
+    }
+    else if ( path == NULL )
+    {
         /* read the key's default value from HKEY_LOCAL_MACHINE */
         path = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, SUBKEYNAME );
+    }
+    else if ( path == NULL )
+    {
+        /* read the key's default value from HKEY_LOCAL_MACHINE 64*/
+        path = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, SUBKEYNAME64 );
     }
 
     return path;

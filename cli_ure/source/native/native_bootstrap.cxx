@@ -55,6 +55,7 @@ namespace cli_ure {
 // INSTALL_PATH value needs to correspond to the Windows registry subkey
 // in main\scp2\source\ooo\registryitem_ooo.scp
 #define INSTALL_PATH L"Software\\OpenOffice\\UNO\\InstallPath"
+#define INSTALL_PATH_64 L"Software\\Wow6432Node\\OpenOffice\\UNO\\InstallPath"
 #define BASIS_LINK L"\\basis-link"
 #define URE_LINK L"\\ure-link"
 #define URE_BIN L"\\bin"
@@ -156,8 +157,18 @@ WCHAR * getInstallPath()
         szInstallPath = getPathFromRegistryKey( HKEY_CURRENT_USER, INSTALL_PATH );
         if ( szInstallPath == NULL )
         {
+            /* read the key's default value from HKEY_LOCAL_USER */
+            szInstallPath = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, INSTALL_PATH_64 );
+        }
+        else if ( szInstallPath == NULL )
+        {
             /* read the key's default value from HKEY_LOCAL_MACHINE */
             szInstallPath = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, INSTALL_PATH );
+        }
+        else if ( szInstallPath == NULL )
+        {
+            /* read the key's default value from HKEY_LOCAL_MACHINE */
+            szInstallPath = getPathFromRegistryKey( HKEY_LOCAL_MACHINE, INSTALL_PATH_64 );
         }
     }
     return szInstallPath;
@@ -269,7 +280,8 @@ HMODULE loadFromPath(LPCWSTR sLibName)
     if (sLibName == NULL)
         return NULL;
 
-    WCHAR * szUreBinPath =  getUnoPath();
+//  WCHAR * szUreBinPath =  getUnoPath();
+    WCHAR * szUreBinPath =  getInstallPath();
     if (!szUreBinPath)
         return NULL;
 
