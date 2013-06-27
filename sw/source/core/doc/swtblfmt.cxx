@@ -116,34 +116,19 @@ void SwTableFormat::SetShadow( const SvxShadowItem& rNew )
     SetFormatAttr( rNew );
 }
 
-const SvxFormatBreakItem& SwTableFormat::GetBreak() const
-{
-    return static_cast<const SvxFormatBreakItem&>( GetFormatAttr( RES_BREAK ) );
-}
-
-const SwFormatPageDesc& SwTableFormat::GetPageDesc() const
-{
-    return static_cast<const SwFormatPageDesc&>( GetFormatAttr( RES_PAGEDESC ) );
-}
-
 const SvxFormatKeepItem& SwTableFormat::GetKeepWithNextPara() const
 {
-    return static_cast<const SvxFormatKeepItem&>( GetFormatAttr( RES_KEEP ) );
+    return SwFormat::GetKeep();
 }
 
 sal_Bool SwTableFormat::GetLayoutSplit() const
 {
-    return (static_cast<const SwFormatLayoutSplit&>( GetFormatAttr( RES_LAYOUT_SPLIT ) )).GetValue();
+    return SwFormat::GetLayoutSplit().GetValue();
 }
 
 sal_Bool SwTableFormat::GetCollapsingBorders() const
 {
     return (static_cast<const SfxBoolItem&>( GetFormatAttr( RES_COLLAPSING_BORDERS ) )).GetValue();
-}
-
-const SvxShadowItem& SwTableFormat::GetShadow() const
-{
-    return static_cast<const SvxShadowItem&>( GetFormatAttr( RES_SHADOW ) );
 }
 
 SwTableLineFormat::SwTableLineFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
