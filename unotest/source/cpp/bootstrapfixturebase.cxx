@@ -76,18 +76,6 @@ OUString test::BootstrapFixtureBase::getPathFromSrc( const char *pPath )
     return m_aSrcRootPath + OUString::createFromAscii( pPath );
 }
 
-
-OUString test::BootstrapFixtureBase::getURLFromWorkdir( const char *pPath )
-{
-    return m_aWorkdirRootURL + OUString::createFromAscii( pPath );
-}
-
-OUString test::BootstrapFixtureBase::getPathFromWorkdir( const char *pPath )
-{
-    return m_aWorkdirRootPath + OUString::createFromAscii( pPath );
-
-}
-
 void test::BootstrapFixtureBase::setUp()
 {
     // set UserInstallation to user profile dir in test/user-template

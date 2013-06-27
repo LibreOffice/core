@@ -274,11 +274,6 @@ bluezDetachCloseSocket( GMainContext *pContext, GPollFD *pSocketFD )
 
 #endif // LINUX_BLUETOOTH
 
-void BluetoothServer::addCommunicator( Communicator* pCommunicator )
-{
-    mpCommunicators->push_back( pCommunicator );
-}
-
 #if defined(MACOSX)
 
 OSXBluetoothWrapper::OSXBluetoothWrapper( IOBluetoothRFCOMMChannel* channel ) :
