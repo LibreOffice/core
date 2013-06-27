@@ -160,14 +160,19 @@ namespace xmloff
             @param _pPropertyName
                 the name of the property to ask the control for
             @param _nDefault
-                the default of the attribute. If the current property value equals this default, no
-                attribute is added.
+                the default of the attribute. See force parameter.
+            @param force
+                if true and the property is not set or does not contain a sal_Int16,
+                then _nDefault is written out.
+                if false and the current property value equals _nDefault,
+                then no attribute is added.
         */
         void exportInt16PropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
             const OUString& _rPropertyName,
-            const sal_Int16 _nDefault);
+            const sal_Int16 _nDefault,
+            const bool force = false);
 
         /** add an attribute which is represented by a sal_Int32 property to the export context
 

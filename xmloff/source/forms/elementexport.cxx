@@ -890,7 +890,8 @@ namespace xmloff
                 OAttributeMetaData::getDatabaseAttributeNamespace(DA_BOUND_COLUMN),
                 OAttributeMetaData::getDatabaseAttributeName(DA_BOUND_COLUMN),
                 PROPERTY_BOUNDCOLUMN,
-                0);
+                0,
+                true);
             RESET_BIT( nIncludeDatabase, DA_BOUND_COLUMN );
         }
 

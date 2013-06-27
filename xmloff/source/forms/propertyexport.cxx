@@ -319,7 +319,7 @@ namespace xmloff
 
     //---------------------------------------------------------------------
     void OPropertyExport::exportInt16PropertyAttribute(const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
-        const OUString& _rPropertyName, const sal_Int16 _nDefault)
+        const OUString& _rPropertyName, const sal_Int16 _nDefault, bool force)
     {
         DBG_CHECK_PROPERTY( _rPropertyName, sal_Int16 );
 
@@ -328,7 +328,7 @@ namespace xmloff
         m_xProps->getPropertyValue( _rPropertyName ) >>= nCurrentValue;
 
         // add the attribute
-        if (_nDefault != nCurrentValue)
+        if (force || _nDefault != nCurrentValue)
         {
             // let the formatter of the export context build a string
             OUStringBuffer sBuffer;

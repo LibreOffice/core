@@ -650,6 +650,11 @@ namespace frm
             _rxInStream >> nValue;
             m_aBoundColumn <<= nValue;
         }
+        else // the constructor initialises to 1, so if it is empty,
+             // we must explicitly set to empty
+        {
+            m_aBoundColumn = Any();
+        }
 
         if (nVersion > 2)
             readHelpTextCompatibly(_rxInStream);
