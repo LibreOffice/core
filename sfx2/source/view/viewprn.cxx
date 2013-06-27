@@ -318,7 +318,7 @@ void SfxPrinterController::jobStarted()
 
         xDocProps->setPrintDate( util::DateTime(
             now.GetNanoSec(), now.GetSec(), now.GetMin(), now.GetHour(),
-            now.GetDay(), now.GetMonth(), now.GetYear() ) );
+            now.GetDay(), now.GetMonth(), now.GetYear(), false) );
 
         SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_PRINTDOC, GlobalEventConfig::GetEventName( STR_EVENT_PRINTDOC ), mpObjectShell ) );
         // FIXME: how to get all print options incl. AdditionalOptions easily?
