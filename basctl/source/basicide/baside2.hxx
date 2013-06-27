@@ -42,6 +42,7 @@ class SvxSearchItem;
 #include <svl/lstner.hxx>
 #include <svtools/colorcfg.hxx>
 #include "vcl/lstbox.hxx"
+#include "vcl/scrbar.hxx"
 
 #include <sfx2/progress.hxx>
 #include <unotools/options.hxx>

@@ -508,7 +508,8 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
         sal_uLong nLine =  aSel.GetStart().GetPara();
         OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
 
-        OUString aStr = (aLine.lastIndexOf(" ") == -1 ? aLine.replaceFirst(".","") : aLine.copy(aLine.lastIndexOf(" ")).replaceFirst(".",""));
+        OUString aStr = aLine.copy( std::max(aLine.lastIndexOf(" "), aLine.lastIndexOf("\t"))+1 );
+
         for( unsigned int j = 0; j < aCodeCompleteCache.size(); ++j)
         {
             if( aCodeCompleteCache[j].sVarName == aStr )
@@ -522,13 +523,17 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
                     {
                         Sequence< Reference< reflection::XIdlMethod > > aMethods = xClass->getMethods();
                         aListBox->Clear();
+
+                        Rectangle aRect = ( (TextEngine*) GetEditEngine() )->PaMtoEditCursor(aSel.GetEnd() , false);
+                        aListBox->SetPosPixel( aRect.TopLeft() );
+                        aListBox->SetSizePixel( Size(150,150) );
+
                         for(sal_Int32 i = 0; i < aMethods.getLength(); ++i)
                         {
                             aListBox->InsertEntry( OUString(aMethods[i]->getName()) );
                             SAL_WARN("method information", aMethods[i]->getName());
                         }
-                        aListBox->EnableAutoSize(true);
-                        aListBox->Show();
+
                         aListBox->GetFocus();
                         aListBox->ToggleDropDown();
                     }
