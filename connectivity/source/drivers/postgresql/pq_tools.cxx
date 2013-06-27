@@ -54,7 +54,6 @@
 #include <libpq-fe.h>
 #include <string.h>
 
-
 using com::sun::star::beans::XPropertySet;
 
 using com::sun::star::lang::XComponent;
@@ -83,110 +82,6 @@ using com::sun::star::container::XEnumerationAccess;
 
 namespace pq_sdbc_driver
 {
-
-OUString date2String( const com::sun::star::util::Date & x )
-{
-    // TODO FIXME: replace by DBTypeConversion::toDateString
-    char buffer[64];
-    sprintf( buffer, "%d-%02d-%02d", x.Year, x.Month, x.Day );
-    return OUString::createFromAscii( buffer );
-}
-
-com::sun::star::util::Date string2Date( const  OUString &date )
-{
-    // TODO FIXME: replace by DBTypeConversion::toDate (if it parses the same format)
-    // Format: Year-Month-Day
-    com::sun::star::util::Date ret;
-
-    ret.Year = (sal_Int32) rtl_ustr_toInt32( date.pData->buffer, 10 );
-
-    int index = date.indexOf( '-' );
-    if( index >= 0 )
-    {
-        ret.Month = (sal_Int32)rtl_ustr_toInt32( &(date.pData->buffer[ index+1]), 10 );
-        int start = index;
-        index = date.indexOf( '-', start+1 );
-        if( index >= 0 )
-        {
-            ret.Day = (sal_Int32)rtl_ustr_toInt32( &date.pData->buffer[index+1], 10 );
-        }
-    }
-    return ret;
-}
-
-OUString time2String( const com::sun::star::util::Time & x )
-{
-    // TODO FIXME: replace by DBTypeConversion::toTimeString
-    const size_t buflen = 19;
-    char buffer[buflen];
-    snprintf( buffer, buflen, "%02d:%02d:%02d.%09" SAL_PRIuUINT32, x.Hours, x.Minutes, x.Seconds, x.NanoSeconds );
-    return OUString::createFromAscii( buffer );
-}
-
-
-com::sun::star::util::Time string2Time( const OUString & time )
-{
-    // TODO FIXME: replace by DBTypeConversion::toTime
-    com::sun::star::util::Time ret;
-
-    sal_Unicode temp[4];
-
-    temp[0] = time[0];
-    temp[1] = time[1];
-    temp[2] = 0;
-    ret.Hours = (sal_Int32)rtl_ustr_toInt32( temp , 10 );
-
-    temp[0] = time[3];
-    temp[1] = time[4];
-    ret.Minutes = (sal_Int32)rtl_ustr_toInt32( temp , 10 );
-
-    temp[0] = time[6];
-    temp[1] = time[7];
-    ret.Seconds = (sal_Int32)rtl_ustr_toInt32( temp , 10 );
-
-    if( time.getLength() >9 )
-    {
-        // FIXME does not take into account shorter precision
-        ret.NanoSeconds = (sal_Int32)rtl_ustr_toInt32( &time.getStr()[9] , 10 );
-    }
-    return ret;
-
-}
-
-
-
-OUString dateTime2String( const com::sun::star::util::DateTime & x )
-{
-    // TODO FIXME: replace by DBTypeConversion::toDateTimeString
-    char buffer[128];
-    sprintf( buffer, "%d-%02d-%02d %02d:%02d:%02d.%09" SAL_PRIuUINT32,
-             x.Year, x.Month, x.Day,
-             x.Hours, x.Minutes, x.Seconds, x.NanoSeconds );
-    return OUString::createFromAscii( buffer );
-
-}
-
-com::sun::star::util::DateTime string2DateTime( const OUString & dateTime )
-{
-    // TODO FIXME: replace by DBTypeConversion::toDateTime (if same format)
-    int space = dateTime.indexOf( ' ' );
-    com::sun::star::util::DateTime ret;
-
-    if( space >= 0 )
-    {
-        com::sun::star::util::Date date ( string2Date( OUString( dateTime.getStr(), space ) ) );
-        com::sun::star::util::Time time( string2Time( OUString( dateTime.getStr() + space +1 ) ) );
-        ret.Day = date.Day;
-        ret.Month = date.Month;
-        ret.Year = date.Year;
-
-        ret.Hours = time.Hours;
-        ret.Minutes = time.Minutes;
-        ret.Seconds = time.Seconds;
-        ret.NanoSeconds = time.NanoSeconds;
-    }
-    return ret;
-}
 
 OUString concatQualified( const OUString & a, const OUString &b)
 {

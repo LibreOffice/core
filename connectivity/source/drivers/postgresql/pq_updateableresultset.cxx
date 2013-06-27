@@ -49,6 +49,8 @@
 
 #include <string.h>
 
+#include <connectivity/dbconversion.hxx>
+
 using osl::MutexGuard;
 
 
@@ -74,6 +76,8 @@ using com::sun::star::sdbc::XStatement;
 using com::sun::star::beans::XFastPropertySet;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::XMultiPropertySet;
+
+using namespace dbtools;
 
 namespace pq_sdbc_driver
 {
@@ -513,17 +517,17 @@ void UpdateableResultSet::updateBytes( sal_Int32 columnIndex, const ::com::sun::
 
 void UpdateableResultSet::updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw (SQLException, RuntimeException)
 {
-    updateString( columnIndex, date2String( x ) );
+    updateString( columnIndex, DBTypeConversion::toDateString( x ) );
 }
 
 void UpdateableResultSet::updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw (SQLException, RuntimeException)
 {
-    updateString( columnIndex, time2String( x ) );
+    updateString( columnIndex, DBTypeConversion::toTimeString( x ) );
 }
 
 void UpdateableResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x ) throw (SQLException, RuntimeException)
 {
-    updateString( columnIndex, dateTime2String( x ) );
+    updateString( columnIndex, DBTypeConversion::toDateTimeString( x ) );
 }
 
 void UpdateableResultSet::updateBinaryStream( sal_Int32 /* columnIndex */, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& /* x */, sal_Int32 /* length */ ) throw (SQLException, RuntimeException)

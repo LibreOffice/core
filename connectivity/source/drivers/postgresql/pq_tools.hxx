@@ -51,15 +51,6 @@ namespace pq_sdbc_driver
 {
 bool isWhitespace( sal_Unicode c );
 
-OUString date2String( const com::sun::star::util::Date & date );
-com::sun::star::util::Date string2Date( const OUString & str );
-
-OUString time2String( const com::sun::star::util::Time & time );
-com::sun::star::util::Time string2Time( const OUString & str );
-
-OUString dateTime2String( const com::sun::star::util::DateTime & dateTime );
-com::sun::star::util::DateTime string2DateTime( const OUString & dateTime );
-
 OUString concatQualified( const OUString & a, const OUString &b);
 
 OString OUStringToOString( OUString str, ConnectionSettings *settings);
