@@ -342,7 +342,7 @@ namespace
     {
         bool bWellformed = true;
 
-        UNOTime aTime( 0, 0, 0, 0 );
+        UNOTime aTime;
 
         bWellformed = ISO8601parseTime(rString, aTime);
 
@@ -366,7 +366,7 @@ namespace
 
         // all okay?
         if ( !bWellformed )
-            return UNOTime( 0, 0, 0, 0 );
+            return UNOTime();
 
         return aTime;
     }
@@ -386,7 +386,8 @@ namespace
         UNODate aDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
         OUString sDate = lcl_toXSD_UNODate_typed( aDate );
 
-        UNOTime aTime( aDateTime.NanoSeconds, aDateTime.Seconds, aDateTime.Minutes, aDateTime.Hours );
+        UNOTime const aTime( aDateTime.NanoSeconds, aDateTime.Seconds,
+                    aDateTime.Minutes, aDateTime.Hours, aDateTime.IsUTC);
         OUString sTime = lcl_toXSD_UNOTime_typed( aTime );
 
         OUStringBuffer sInfo;
@@ -409,7 +410,6 @@ namespace
         if ( nDateTimeSep == -1 )
         {   // no time part
             aDate = lcl_toUNODate( rString );
-            aTime = UNOTime( 0, 0, 0, 0 );
         }
         else
         {
@@ -418,7 +418,7 @@ namespace
         }
         UNODateTime aDateTime(
             aTime.NanoSeconds, aTime.Seconds, aTime.Minutes, aTime.Hours,
-            aDate.Day, aDate.Month, aDate.Year
+            aDate.Day, aDate.Month, aDate.Year, aTime.IsUTC
         );
         return makeAny( aDateTime );
     }

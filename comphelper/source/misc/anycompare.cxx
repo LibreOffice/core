@@ -70,6 +70,7 @@ namespace comphelper
                 ||  !( _rhs >>= rhs )
                 )
                 throw ::com::sun::star::lang::IllegalArgumentException();
+            // FIXME Timezone?
 
             if ( lhs.Year < rhs.Year )
                 return true;
@@ -100,6 +101,7 @@ namespace comphelper
                 ||  !( _rhs >>= rhs )
                 )
                 throw ::com::sun::star::lang::IllegalArgumentException();
+            // FIXME Timezone?
 
             if ( lhs.Hours < rhs.Hours )
                 return true;
@@ -135,6 +137,7 @@ namespace comphelper
                 ||  !( _rhs >>= rhs )
                 )
                 throw ::com::sun::star::lang::IllegalArgumentException();
+            // FIXME Timezone?
 
             if ( lhs.Year < rhs.Year )
                 return true;

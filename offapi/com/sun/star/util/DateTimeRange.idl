@@ -20,7 +20,6 @@
 #define __com_sun_star_util_DateTimeRange_idl__
 
 
-
 module com {  module sun {  module star {  module util {
 
 
@@ -84,7 +83,12 @@ published struct DateTimeRange
      */
     short EndYear;
 
-    /** TODO timezones **/
+    /** true: time zone is UTC false: unknown time zone.
+
+        @since LibreOffice 4.1
+     */
+    boolean IsUTC;
+
 };
 
 

@@ -20,11 +20,12 @@
 #define __com_sun_star_util_Date_idl__
 
 
-
 module com {  module sun {  module star {  module util {
 
 
 /** represents a date value.
+
+    The time zone is unknown.
  */
 published struct Date
 {
