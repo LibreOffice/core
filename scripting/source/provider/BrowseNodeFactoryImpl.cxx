@@ -38,7 +38,6 @@
 #include "BrowseNodeFactoryImpl.hxx"
 #include "ActiveMSPList.hxx"
 #include <util/MiscUtils.hxx>
-#include <util/util.hxx>
 
 #include <vector>
 #include <algorithm>

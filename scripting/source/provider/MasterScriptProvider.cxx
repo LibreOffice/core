@@ -40,7 +40,6 @@
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 
 #include <util/scriptingconstants.hxx>
-#include <util/util.hxx>
 #include <util/MiscUtils.hxx>
 
 #include "ActiveMSPList.hxx"

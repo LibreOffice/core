@@ -22,7 +22,6 @@
 #include <tools/diagnose_ex.h>
 
 #include <util/scriptingconstants.hxx>
-#include <util/util.hxx>
 
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include "ProviderCache.hxx"
