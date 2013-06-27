@@ -39,6 +39,7 @@ extras_AUTOCORR_LANGS := \
 	pl:pl-PL \
 	pt:pt-PT \
 	pt-BR:pt-BR \
+	ro:ro-RO \
 	ru:ru-RU \
 	sh-ME:sh-ME \
 	sh-RS:sh-RS \
