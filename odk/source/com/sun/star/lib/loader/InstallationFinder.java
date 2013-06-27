@@ -189,6 +189,7 @@ final class InstallationFinder {
     private static String getPathFromWindowsRegistry() {
 
         final String SUBKEYNAME = "Software\\OpenOffice\\UNO\\InstallPath";
+        final String SUBKEYNAME64 = "Software\\Wow6432Node\\OpenOffice\\UNO\\InstallPath";
 
         String path = null;
 
@@ -199,13 +200,27 @@ final class InstallationFinder {
         } catch ( WinRegKeyException e ) {
             try {
                 // read the key's default value from HKEY_LOCAL_MACHINE
-                WinRegKey key = new WinRegKey( "HKEY_LOCAL_MACHINE",
-                                               SUBKEYNAME );
+                WinRegKey key = new WinRegKey( "HKEY_LOCAL_USER",
+                                               SUBKEYNAME64 );
                 path = key.getStringValue( "" ); // default
-            } catch ( WinRegKeyException we ) {
-                System.err.println( "com.sun.star.lib.loader." +
-                    "InstallationFinder::getPathFromWindowsRegistry: " +
-                    "reading key from Windows Registry failed: " + we );
+            } catch ( WinRegKeyException e64 ) {
+                try {
+                    // read the key's default value from HKEY_LOCAL_MACHINE
+                    WinRegKey key = new WinRegKey( "HKEY_LOCAL_MACHINE",
+                                                   SUBKEYNAME );
+                    path = key.getStringValue( "" ); // default
+                } catch ( WinRegKeyException we ) {
+                    try {
+                        // read the key's default value from HKEY_LOCAL_MACHINE
+                        WinRegKey key = new WinRegKey( "HKEY_LOCAL_MACHINE",
+                                                       SUBKEYNAME64 );
+                        path = key.getStringValue( "" ); // default
+                    } catch ( WinRegKeyException we64 ) {
+                        System.err.println( "com.sun.star.lib.loader." +
+                                            "InstallationFinder::getPathFromWindowsRegistry: " +
+                                            "reading key from Windows Registry failed: " + we64 );
+                    }
+                }
             }
         }
 
