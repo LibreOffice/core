@@ -411,7 +411,7 @@ sub print_bugs($$$$)
             $authors = " [" . join (", ", keys %{$pbugs->{$bug}{'author'}}) . "]";
         }
 
-        $bug =~ s/(.*)\#(.*)/* {{$1|$2}}/ if ($wiki);
+        $bug =~ s/(.*)\#(.*)/# {{$1|$2}}/ if ($wiki);
         print $log $bug, " ", $summary, $authors, "\n";
     }
 }
