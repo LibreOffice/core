@@ -354,7 +354,7 @@ namespace dbtools
     Time DBTypeConversion::toTime(double dVal)
     {
         sal_Int32 nDays     = (sal_Int32)dVal;
-        sal_Int32 nNS = sal_Int32((dVal - (double)nDays) * fNanoSecondsPerDay + 0.5);
+        sal_Int64 nNS = static_cast<sal_Int64>((dVal - (double)nDays) * fNanoSecondsPerDay + 0.5);
 
         sal_Int16 nSign;
         if ( nNS < 0 )
@@ -368,7 +368,7 @@ namespace dbtools
         Time xRet;
         // normalize time
         // we have to sal_Int32 here because otherwise we get an overflow
-        sal_Int32 nNanoSeconds      = nNS;
+        sal_Int64 nNanoSeconds      = nNS;
         sal_Int32 nSeconds          = nNanoSeconds / nanoSecInSec;
         sal_Int32 nMinutes          = nSeconds / secInMin;
 
