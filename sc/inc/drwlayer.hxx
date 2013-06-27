@@ -125,7 +125,7 @@ public:
 
     void            EnableAdjust( sal_Bool bSet = sal_True )    { bAdjustEnabled = bSet; }
 
-    void            BeginCalcUndo();
+    void            BeginCalcUndo(bool bDisableTextEditUsesCommonUndoManager);
     SdrUndoGroup*   GetCalcUndo();
     sal_Bool            IsRecording() const         { return bRecording; }
     void            AddCalcUndo( SdrUndoAction* pUndo );

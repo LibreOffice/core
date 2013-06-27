@@ -1025,8 +1025,9 @@ void ScDrawLayer::AddCalcUndo( SdrUndoAction* pUndo )
         delete pUndo;
 }
 
-void ScDrawLayer::BeginCalcUndo()
+void ScDrawLayer::BeginCalcUndo(bool bDisableTextEditUsesCommonUndoManager)
 {
+    SetDisableTextEditUsesCommonUndoManager(bDisableTextEditUsesCommonUndoManager);
     DELETEZ(pUndoGroup);
     bRecording = sal_True;
 }
@@ -1036,6 +1037,7 @@ SdrUndoGroup* ScDrawLayer::GetCalcUndo()
     SdrUndoGroup* pRet = pUndoGroup;
     pUndoGroup = NULL;
     bRecording = false;
+    SetDisableTextEditUsesCommonUndoManager(false);
     return pRet;
 }
 

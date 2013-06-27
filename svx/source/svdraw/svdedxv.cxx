@@ -745,7 +745,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
             if( mxSelectionController.is() )
                 mxSelectionController->onSelectionHasChanged();
 
-            if(IsUndoEnabled())
+            if(IsUndoEnabled() && GetModel() && !GetModel()->GetDisableTextEditUsesCommonUndoManager())
             {
                 SdrUndoManager* pSdrUndoManager = getSdrUndoManagerForEnhancedTextEdit();
 
@@ -827,7 +827,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
     SdrUndoManager* pUndoEditUndoManager = 0;
     bool bNeedToUndoSavedRedoTextEdit(false);
 
-    if(IsUndoEnabled() && GetModel() && pTEObj && pTEOutliner)
+    if(IsUndoEnabled() && GetModel() && pTEObj && pTEOutliner && !GetModel()->GetDisableTextEditUsesCommonUndoManager())
     {
         // change back the UndoManager to the remembered original one
         ::svl::IUndoManager* pOriginal = pTEOutliner->SetUndoManager(mpOldTextEditUndoManager);

@@ -209,6 +209,7 @@ protected:
     bool            bSaveOLEPreview:1;      // save preview metafile of OLE objects
     bool            bSaveNative:1;
     bool            bStarDrawPreviewMode:1;
+    bool            mbDisableTextEditUsesCommonUndoManager:1;
     sal_uInt16          nStreamCompressMode;  // Komprimiert schreiben?
     sal_uInt16          nStreamNumberFormat;
     sal_uInt16          nDefaultTabulator;
@@ -629,6 +630,9 @@ public:
 
     void    SetStarDrawPreviewMode(sal_Bool bPreview);
     sal_Bool    IsStarDrawPreviewMode() { return bStarDrawPreviewMode; }
+
+    bool GetDisableTextEditUsesCommonUndoManager() const { return mbDisableTextEditUsesCommonUndoManager; }
+    void SetDisableTextEditUsesCommonUndoManager(bool bNew) { mbDisableTextEditUsesCommonUndoManager = bNew; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoModel();
     void setUnoModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xModel );

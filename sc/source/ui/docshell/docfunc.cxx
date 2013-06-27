@@ -182,7 +182,7 @@ sal_Bool ScDocFunc::DetectiveAddPred(const ScAddress& rPos)
     SCTAB nTab = rPos.Tab();
 
     if (bUndo)
-        pModel->BeginCalcUndo();
+        pModel->BeginCalcUndo(false);
     sal_Bool bDone = ScDetectiveFunc( pDoc,nTab ).ShowPred( nCol, nRow );
     SdrUndoGroup* pUndo = NULL;
     if (bUndo)
@@ -223,7 +223,7 @@ sal_Bool ScDocFunc::DetectiveDelPred(const ScAddress& rPos)
     SCTAB nTab = rPos.Tab();
 
     if (bUndo)
-        pModel->BeginCalcUndo();
+        pModel->BeginCalcUndo(false);
     sal_Bool bDone = ScDetectiveFunc( pDoc,nTab ).DeletePred( nCol, nRow );
     SdrUndoGroup* pUndo = NULL;
     if (bUndo)
@@ -262,7 +262,7 @@ sal_Bool ScDocFunc::DetectiveAddSucc(const ScAddress& rPos)
     SCTAB nTab = rPos.Tab();
 
     if (bUndo)
-        pModel->BeginCalcUndo();
+        pModel->BeginCalcUndo(false);
     sal_Bool bDone = ScDetectiveFunc( pDoc,nTab ).ShowSucc( nCol, nRow );
     SdrUndoGroup* pUndo = NULL;
     if (bUndo)
@@ -303,7 +303,7 @@ sal_Bool ScDocFunc::DetectiveDelSucc(const ScAddress& rPos)
     SCTAB nTab = rPos.Tab();
 
     if (bUndo)
-        pModel->BeginCalcUndo();
+        pModel->BeginCalcUndo(false);
     sal_Bool bDone = ScDetectiveFunc( pDoc,nTab ).DeleteSucc( nCol, nRow );
     SdrUndoGroup* pUndo = NULL;
     if (bUndo)
@@ -342,7 +342,7 @@ sal_Bool ScDocFunc::DetectiveAddError(const ScAddress& rPos)
     SCTAB nTab = rPos.Tab();
 
     if (bUndo)
-        pModel->BeginCalcUndo();
+        pModel->BeginCalcUndo(false);
     sal_Bool bDone = ScDetectiveFunc( pDoc,nTab ).ShowError( nCol, nRow );
     SdrUndoGroup* pUndo = NULL;
     if (bUndo)
@@ -381,7 +381,7 @@ sal_Bool ScDocFunc::DetectiveMarkInvalid(SCTAB nTab)
     if (pWaitWin)
         pWaitWin->EnterWait();
     if (bUndo)
-        pModel->BeginCalcUndo();
+        pModel->BeginCalcUndo(false);
     sal_Bool bOverflow;
     sal_Bool bDone = ScDetectiveFunc( pDoc,nTab ).MarkInvalid( bOverflow );
     SdrUndoGroup* pUndo = NULL;
@@ -421,7 +421,7 @@ sal_Bool ScDocFunc::DetectiveDelAll(SCTAB nTab)
     ScDocShellModificator aModificator( rDocShell );
 
     if (bUndo)
-        pModel->BeginCalcUndo();
+        pModel->BeginCalcUndo(false);
     sal_Bool bDone = ScDetectiveFunc( pDoc,nTab ).DeleteAll( SC_DET_DETECTIVE );
     SdrUndoGroup* pUndo = NULL;
     if (bUndo)
@@ -463,7 +463,7 @@ sal_Bool ScDocFunc::DetectiveRefresh( sal_Bool bAutomatic )
         rDocShell.MakeDrawLayer();
         ScDrawLayer* pModel = pDoc->GetDrawLayer();
         if (bUndo)
-            pModel->BeginCalcUndo();
+            pModel->BeginCalcUndo(false);
 
         //  Loeschen auf allen Tabellen
 
@@ -1219,7 +1219,7 @@ bool ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
 
         // collect drawing undo actions for deleting/inserting caption obejcts
         if( pUndoMgr )
-            pDrawLayer->BeginCalcUndo();
+            pDrawLayer->BeginCalcUndo(false);
 
         // delete the note (creates drawing undo action for the caption object)
         delete pOldNote;

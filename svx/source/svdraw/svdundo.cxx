@@ -1167,6 +1167,7 @@ void SdrUndoObjSetText::Undo()
         // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
         OutlinerParaObject* pText1 = pOldText ? new OutlinerParaObject(*pOldText) : NULL;
         pText->SetOutlinerParaObject(pText1);
+        static_cast< SdrTextObj* >( pObj )->NbcSetOutlinerParaObjectForText( pText1, pText );
     }
 
     pObj->SetEmptyPresObj( bEmptyPresObj );

@@ -67,7 +67,7 @@ SfxBroadcaster* ScDocument::GetDrawBroadcaster()
 void ScDocument::BeginDrawUndo()
 {
     if (pDrawLayer)
-        pDrawLayer->BeginCalcUndo();
+        pDrawLayer->BeginCalcUndo(false);
 }
 
 rtl::Reference<XColorList> ScDocument::GetColorList()

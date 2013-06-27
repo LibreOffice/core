@@ -81,14 +81,18 @@ void FuText::StopEditMode(sal_Bool /*bTextDirection*/)
     {
         /*  Put all undo actions already collected (e.g. create caption object)
             and all following undo actions (text changed) together into a ListAction. */
-        String aUndoStr = ScGlobal::GetRscString( STR_UNDO_EDITNOTE );
-        pUndoMgr->EnterListAction( aUndoStr, aUndoStr );
-        if( SdrUndoGroup* pCalcUndo = pDrawLayer->GetCalcUndo() )
+        SdrUndoGroup* pCalcUndo = pDrawLayer->GetCalcUndo();
+
+        if(pCalcUndo)
         {
+            const String aUndoStr = ScGlobal::GetRscString( STR_UNDO_EDITNOTE );
+            pUndoMgr->EnterListAction( aUndoStr, aUndoStr );
+
             /*  Note has been created before editing, if first undo action is
                 an insert action. Needed below to decide whether to drop the
                 undo if editing a new note has been cancelled. */
             bNewNote = (pCalcUndo->GetActionCount() > 0) && pCalcUndo->GetAction( 0 )->ISA( SdrUndoNewObj );
+
             // create a "insert note" undo action if needed
             if( bNewNote )
                 pUndoMgr->AddUndoAction( new ScUndoReplaceNote( *pDocShell, aNotePos, pNote->GetNoteData(), true, pCalcUndo ) );
@@ -134,7 +138,7 @@ void FuText::StopEditMode(sal_Bool /*bTextDirection*/)
             if( pUndoMgr )
             {
                 // collect the "remove object" drawing undo action created by DeleteNote()
-                pDrawLayer->BeginCalcUndo();
+                pDrawLayer->BeginCalcUndo(false);
                 // rescue note data before deletion
                 ScNoteData aNoteData( pNote->GetNoteData() );
                 // delete note from document (removes caption, but does not delete it)

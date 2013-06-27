@@ -167,6 +167,8 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mbAddExtLeading = sal_False;
     mnHandoutPageCount = 0;
 
+    mbDisableTextEditUsesCommonUndoManager = false;
+
     mnCharCompressType =
         officecfg::Office::Common::AsianLayout::CompressCharacterDistance::
         get();

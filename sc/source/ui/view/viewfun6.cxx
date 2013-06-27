@@ -290,7 +290,7 @@ void ScViewFunc::EditNote()
     // start drawing undo to catch undo action for insertion of the caption object
     pDocSh->MakeDrawLayer();
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-    pDrawLayer->BeginCalcUndo();
+    pDrawLayer->BeginCalcUndo(true);
     // generated undo action is processed in FuText::StopEditMode
 
     // get existing note or create a new note (including caption drawing object)
