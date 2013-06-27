@@ -159,11 +159,11 @@ namespace svgio
                 {
                     case Unit_em:
                     {
-                        return mfNumber * rInfoProvider.getCurrentFontSize();
+                        return mfNumber * rInfoProvider.getCurrentFontSizeInherited();
                     }
                     case Unit_ex:
                     {
-                        return mfNumber * rInfoProvider.getCurrentXHeight() * 0.5;
+                        return mfNumber * rInfoProvider.getCurrentXHeightInherited() * 0.5;
                     }
                     case Unit_px:
                     {
