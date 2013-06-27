@@ -228,7 +228,8 @@ $(call gb_Output_announce,SRS:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,$(3)) && \
-	$(call gb_Executable_get_command,concat-deps) $${RESPONSEFILE} > $(1))
+	$(call gb_Executable_get_command,concat-deps) $${RESPONSEFILE} > $(1)) && \
+	rm -f $${RESPONSEFILE}
 endef
 endif
 
