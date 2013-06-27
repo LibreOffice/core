@@ -47,8 +47,8 @@
 
 void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
 {
-    // nur bei Selektion
-    if( !rPam.HasMark() || *rPam.GetPoint() == *rPam.GetMark())
+    // only on a selection
+    if ( !rPam.HasMark() || *rPam.GetPoint() == *rPam.GetMark())
         return;
 
     // besteht eine Selection in einer Tabelle ?
@@ -58,11 +58,8 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
     //  2. Point und Mark stehen in unterschiedlichen Boxen, alle
     // selektierten Boxen suchen in den Inhalt loeschen
 
-    //Comment:If the point is outside of a table and the mark point is in the a table cell,
-    //          should go throw the following code
-    if( (rPam.GetNode()->FindTableNode() || rPam.GetNode(sal_False)->FindTableNode()) &&
-        rPam.GetNode()->StartOfSectionNode() !=
-        rPam.GetNode(sal_False)->StartOfSectionNode() )
+    if( rPam.GetNode()->FindTableNode() &&
+        rPam.GetNode()->StartOfSectionNode() != rPam.GetNode(sal_False)->StartOfSectionNode() )
     {
         // in Tabellen das Undo gruppieren
         if( pUndo && !*pUndo )
@@ -75,11 +72,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
         do {
             aDelPam.SetMark();
             SwNode* pNd = aDelPam.GetNode();
-            //Comment:If the point is outside of table, select the table start node as the end node of current selection node
-            const SwNode& rEndNd = !rPam.GetNode()->FindTableNode() && !pNd->FindTableNode()?
-                        *(SwNode*)(rPam.GetNode(sal_False)->FindTableNode())
-                        :
-                        *pNd->EndOfSectionNode();
+            const SwNode& rEndNd = *pNd->EndOfSectionNode();
             if( pEndSelPos->nNode.GetIndex() <= rEndNd.GetIndex() )
             {
                 *aDelPam.GetPoint() = *pEndSelPos;
@@ -91,7 +84,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
                 aDelPam.GetPoint()->nNode = rEndNd;
                 aDelPam.Move( fnMoveBackward, fnGoCntnt );
             }
-                // geschuetze Boxen ueberspringen !
+            // geschuetze Boxen ueberspringen !
             //For i117395, in some situation, the node would be hidden or invisible, which makes the frame of it unavailable
             //So verify it before use it.
             SwCntntFrm* pFrm = NULL;
@@ -111,7 +104,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
     }
     else
     {
-            // alles loeschen
+        // alles loeschen
         GetDoc()->DeleteAndJoin( rPam );
         SaveTblBoxCntnt( rPam.GetPoint() );
     }
