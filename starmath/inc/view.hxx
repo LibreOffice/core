@@ -230,9 +230,6 @@ class SmViewShell: public SfxViewShell
     SmGraphicController aGraphicController;
     OUString            aStatusText;
 
-    ::com::sun::star::uno:: Reference <
-            ::com::sun::star::lang:: XEventListener > xClipEvtLstnr;
-    SmClipboardChangeListener*  pClipEvtLstnr;
     bool                bPasteState;
 
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );

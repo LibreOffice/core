@@ -1907,7 +1907,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
             break;
 
         case SID_PASTE:
-            if( !xClipEvtLstnr.is()  &&  pEditWin)
+            if (pEditWin)
             {
                 TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard(
