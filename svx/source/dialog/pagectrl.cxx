@@ -18,6 +18,7 @@
  */
 
 #include <vcl/bitmap.hxx>
+#include <vcl/builder.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/pagectrl.hxx>
@@ -146,7 +147,7 @@ SvxPageWindow::~SvxPageWindow()
     delete pFtBorder;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxPageWindow(Window *pParent)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxPageWindow(Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxPageWindow(pParent);
 }

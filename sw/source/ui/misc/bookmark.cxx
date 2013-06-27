@@ -236,7 +236,7 @@ long BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeBookmarkCombo(Window* pParent)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeBookmarkCombo(Window* pParent, VclBuilder::stringmap &)
 {
     return new BookmarkCombo(pParent);
 }

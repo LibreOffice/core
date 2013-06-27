@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <vcl/builder.hxx>
 #include "LimitBox.hxx"
 #include "dbu_qry.hrc"
 #include "moduledbu.hxx"
@@ -111,7 +112,7 @@ void LimitBox::LoadDefaultLimits()
     }
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeLimitBox( Window *pParent )
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeLimitBox( Window *pParent, VclBuilder::stringmap & )
 {
     LimitBox* pBox = new LimitBox( pParent, WB_DROPDOWN | WB_VSCROLL );
     return pBox;

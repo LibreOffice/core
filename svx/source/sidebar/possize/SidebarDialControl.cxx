@@ -18,6 +18,7 @@
  */
 #include <svx/sidebar/SidebarDialControl.hxx>
 
+#include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 
 namespace svx { namespace sidebar {
@@ -28,7 +29,7 @@ SidebarDialControl::SidebarDialControl (Window* pParent, WinBits nBits)
     Init(GetOutputSizePixel());
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSidebarDialControl(Window *pParent)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSidebarDialControl(Window *pParent, VclBuilder::stringmap &)
 {
     return new SidebarDialControl(pParent, WB_TABSTOP);
 }

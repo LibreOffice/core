@@ -24,7 +24,7 @@
 #include <editeng/flstitem.hxx>
 #include <editeng/editids.hrc>
 #include <editeng/fontitem.hxx>
-
+#include <vcl/builder.hxx>
 
 const static sal_uInt16 MAX_MRU_FONTNAME_ENTRIES = 5;
 
@@ -104,7 +104,7 @@ SvxSBFontNameBox::SvxSBFontNameBox( Window* pParent ) :
 //  StartListening( *SFX_APP() );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxSBFontNameBox(Window *pParent)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxSBFontNameBox(Window *pParent, VclBuilder::stringmap &)
 {
     return new SvxSBFontNameBox(pParent);
 }

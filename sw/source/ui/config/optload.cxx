@@ -388,7 +388,7 @@ void SwCaptionPreview::Paint( const Rectangle& rRect )
     DrawText( Point( 4, 6 ), maText );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwCaptionPreview(Window* pParent)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwCaptionPreview(Window* pParent, VclBuilder::stringmap &)
 {
     return new SwCaptionPreview(pParent);
 }
