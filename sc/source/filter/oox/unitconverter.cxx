@@ -67,7 +67,7 @@ void lclSkipYearBlock( sal_Int32& ornDays, sal_Int16& ornYear, sal_Int32 nDaysIn
 
 /** Returns the number of days before the passed date, starting from the null
     date 0000-Jan-01, using standard leap year conventions. */
-sal_Int32 lclGetDays( const css::util::Date& rDate )
+sal_Int32 lclGetDays( const Date& rDate )
 {
     // number of days in all full years before passed date including all leap days
     sal_Int32 nDays = rDate.Year * 365 + ((rDate.Year + 3) / 4) - ((rDate.Year + 99) / 100) + ((rDate.Year + 399) / 400);
@@ -98,7 +98,7 @@ sal_Int32 lclGetDays( const css::util::Date& rDate )
 UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     maCoeffs( UNIT_ENUM_SIZE, 1.0 ),
-    mnNullDate( lclGetDays( css::util::Date( 30, 12, 1899 ) ) )
+    mnNullDate( lclGetDays( Date( 30, 12, 1899 ) ) )
 {
     // initialize constant and default coefficients
     const DeviceInfo& rDeviceInfo = getBaseFilter().getGraphicHelper().getDeviceInfo();
@@ -157,7 +157,7 @@ void UnitConverter::finalizeImport()
     }
 }
 
-void UnitConverter::finalizeNullDate( const css::util::Date& rNullDate )
+void UnitConverter::finalizeNullDate( const Date& rNullDate )
 {
     // convert the nulldate to number of days since 0000-Jan-01
     mnNullDate = lclGetDays( rNullDate );
@@ -180,17 +180,17 @@ double UnitConverter::scaleFromMm100( sal_Int32 nMm100, Unit eUnit ) const
     return static_cast< double >( nMm100 ) / getCoefficient( eUnit );
 }
 
-double UnitConverter::calcSerialFromDateTime( const css::util::DateTime& rDateTime ) const
+double UnitConverter::calcSerialFromDateTime( const DateTime& rDateTime ) const
 {
-    sal_Int32 nDays = lclGetDays( css::util::Date( rDateTime.Day, rDateTime.Month, rDateTime.Year ) ) - mnNullDate;
+    sal_Int32 nDays = lclGetDays( Date( rDateTime.Day, rDateTime.Month, rDateTime.Year ) ) - mnNullDate;
     OSL_ENSURE( nDays >= 0, "UnitConverter::calcDateTimeSerial - invalid date" );
     OSL_ENSURE( (rDateTime.Hours <= 23) && (rDateTime.Minutes <= 59) && (rDateTime.Seconds <= 59), "UnitConverter::calcDateTimeSerial - invalid time" );
     return nDays + rDateTime.Hours / 24.0 + rDateTime.Minutes / 1440.0 + rDateTime.Seconds / 86400.0;
 }
 
-css::util::DateTime UnitConverter::calcDateTimeFromSerial( double fSerial ) const
+DateTime UnitConverter::calcDateTimeFromSerial( double fSerial ) const
 {
-    css::util::DateTime aDateTime( 0, 0, 0, 0, 1, 1, 0 );
+    DateTime aDateTime( 0, 0, 0, 0, 1, 1, 0, false );
     double fDays = 0.0;
     double fTime = modf( fSerial, &fDays );
 

@@ -154,7 +154,9 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
         }
     }
 
-    return util::DateTime( aOslDTime.NanoSeconds, aOslDTime.Seconds, aOslDTime.Minutes, aOslDTime.Hours, aOslDTime.Day, aOslDTime.Month, aOslDTime.Year );
+    return util::DateTime( aOslDTime.NanoSeconds, aOslDTime.Seconds,
+            aOslDTime.Minutes, aOslDTime.Hours,
+            aOslDTime.Day, aOslDTime.Month, aOslDTime.Year, false);
 }
 
 // ------------------------------------------------

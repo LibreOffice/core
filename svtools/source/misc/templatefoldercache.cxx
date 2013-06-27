@@ -97,7 +97,8 @@ namespace svt
             &&  _rLHS.Hours     == _rRHS.Hours
             &&  _rLHS.Day       == _rRHS.Day
             &&  _rLHS.Month     == _rRHS.Month
-            &&  _rLHS.Year      == _rRHS.Year;
+            &&  _rLHS.Year      == _rRHS.Year
+            &&  _rLHS.IsUTC     == _rRHS.IsUTC;
     }
 
     //---------------------------------------------------------------------

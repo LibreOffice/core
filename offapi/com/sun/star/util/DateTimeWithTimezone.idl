@@ -1,0 +1,43 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_util_DateTimeTZ_idl__
+#define __com_sun_star_util_DateTimeTZ_idl__
+
+#include <com/sun/star/util/DateTime.idl>
+
+
+module com {  module sun {  module star {  module util {
+
+/** represents a combined date+time value with time zone.
+
+    @since LibreOffice 4.1
+ */
+struct DateTimeWithTimeZone
+{
+    /** the date and time (in TimeZone)
+    */
+    DateTime DateTimeInTZ;
+
+    /** contains the time zone, as signed offset in minutes *from* UTC,
+        that is *east* of UTC, that is the amount of minutes that should
+        be added to UTC time to obtain the time in that timezone.
+
+        To obtain UTC datetime from DateTimeInTZ, you need to *subtract*
+        TimeZone minutes.
+    */
+    short Timezone;
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
