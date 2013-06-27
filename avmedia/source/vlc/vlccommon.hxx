@@ -40,6 +40,7 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/media/XManager.hpp>
+#include <com/sun/star/media/XPlayerWindow.hpp>
 
 #endif // _VLCCOMMOM_HXX
 

@@ -42,6 +42,7 @@ $(eval $(call gb_Library_add_exception_objects,avmediavlc,\
 	avmedia/source/vlc/vlcmanager \
 	avmedia/source/vlc/vlcplayer \
 	avmedia/source/vlc/vlcuno \
+	avmedia/source/vlc/vlcwindow \
 ))
 
 # vim: set noet sw=4 ts=4:
