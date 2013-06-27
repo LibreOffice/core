@@ -39,6 +39,9 @@ sub create_pathvariables
     my $solarcommonpath = $environment->{'SOLARVERSION'} . $installer::globals::separator . "common" . $installer::globals::productextension;
     $variables{'solarcommonpath'} = $solarcommonpath;
 
+    my $shlxthdlpath = $ENV{'INSTDIR'} . $installer::globals::separator . "program" . $installer::globals::separator . "shlxthdl";
+    $variables{'shlxthdlpath'} = $shlxthdlpath;
+
     $variables{'os'} = $installer::globals::compiler;
 
     my $solarenvpath = "";
