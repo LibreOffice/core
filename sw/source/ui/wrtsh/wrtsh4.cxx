@@ -198,15 +198,14 @@ sal_Bool SwWrtShell::_BwdSentence()
     if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
     {
         Pop(sal_False);
-        return sal_False;
+        return 0;
     }
     if( !GoStartSentence()  && !IsSttPara() )
             // not found --> go to the beginning of the paragraph
         SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
     ClearMark();
     Combine();
-
-    return sal_True;
+    return 1;
 }
 
 sal_Bool SwWrtShell::_FwdPara()
