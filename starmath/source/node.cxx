@@ -621,6 +621,7 @@ void SmNode::DumpAsDot(std::ostream &out, OUString* label, int number, int& id, 
         case NROOTSYMBOL:      out<<"SmRootSymbolNode"; break;
         case NRECTANGLE:       out<<"SmRectangleNode"; break;
         case NVERTICAL_BRACE:  out<<"SmVerticalBraceNode"; break;
+        case NMATHIDENT:       out<<"SmMathIdentifierNode"; break;
         default:
             out<<"Unknown Node";
     }

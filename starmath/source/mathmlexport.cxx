@@ -871,7 +871,26 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
 void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
 {
     const SmMathSymbolNode *pTemp = static_cast<const SmMathSymbolNode *>(pNode);
-    SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO, sal_True, sal_False);
+    SvXMLElementExport *pMath = 0;
+
+    if (pNode->GetType() == NMATH)
+    {
+        // Export NMATH symbols as <mo> elements
+        pMath = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MO, sal_True, sal_False);
+    }
+    else
+    {
+        // Export NMATHIDENT and NPLACE symbols as <mi> elements:
+        // - These math symbols should not be drawn slanted. Hence we should
+        // attach a mathvariant="normal" attribute to single-char <mi> elements
+        // that are not mathematical alphanumeric symbol. For simplicity and to
+        // work around browser limitations, we always attach such an attribute.
+        // - The MathML specification suggests to use empty <mi> elements as
+        // placeholders but they won't be visible in most MathML rendering
+        // engines so let's use an empty square for NPLACE instead.
+        AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, XML_NORMAL);
+        pMath = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MI, sal_True, sal_False);
+    }
     sal_Unicode nArse[2];
     nArse[0] = pTemp->GetText()[0];
     sal_Unicode cTmp = ConvertMathToMathML( nArse[0] );
@@ -880,6 +899,8 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
     OSL_ENSURE(nArse[0] != 0xffff,"Non existent symbol");
     nArse[1] = 0;
     GetDocHandler()->characters(nArse);
+
+    delete pMath;
 }
 
 void SmXMLExport::ExportText(const SmNode *pNode, int /*nLevel*/)
@@ -1520,6 +1541,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
                 }
             }
             break;
+        case NMATHIDENT :
         case NPLACE:
             ExportMath(pNode, nLevel);
             break;

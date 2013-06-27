@@ -1997,6 +1997,7 @@ sal_uInt8 MathType::HandleNodes(SmNode *pNode,int nLevel)
             }
             break;
         case NMATH:
+        case NMATHIDENT:
             HandleMath(pNode,nLevel);
             break;
         case NSUBSUP:

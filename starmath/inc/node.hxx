@@ -73,7 +73,7 @@ enum SmNodeType
 /*10*/ NBINDIAGONAL,   NSUBSUP,        NMATRIX,        NPLACE,         NTEXT,
 /*15*/ NSPECIAL,       NGLYPH_SPECIAL, NMATH,          NBLANK,         NERROR,
 /*20*/ NLINE,          NEXPRESSION,    NPOLYLINE,      NROOT,          NROOTSYMBOL,
-/*25*/ NRECTANGLE,     NVERTICAL_BRACE
+/*25*/ NRECTANGLE,     NVERTICAL_BRACE, NMATHIDENT
 };
 
 
@@ -579,6 +579,20 @@ public:
     void Accept(SmVisitor* pVisitor);
 };
 
+////////////////////////////////////////////////////////////////////////////////
+
+/** Math Identifier
+ *
+ * This behaves essentially the same as SmMathSymbolNode and is only used to
+ * represent math symbols that should be exported as <mi> elements rather than
+ * <mo> elements.
+ */
+class SmMathIdentifierNode : public SmMathSymbolNode
+{
+public:
+    SmMathIdentifierNode(const SmToken &rNodeToken)
+    :   SmMathSymbolNode(NMATHIDENT, rNodeToken) {}
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
