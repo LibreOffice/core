@@ -47,10 +47,10 @@ COMP_PACKAGE_DIR=$(subst /,$(PS),$(OUT_BIN))
 SDKTYPEFLAG=$(OUT_MISC)/oosdk_cpp_types.flag
 
 URE_TYPES="$(subst \,/,$(OFFICE_PROGRAM_PATH)$(PS)types.rdb)"
-URE_SERVICES=$(subst \\,\,$(OFFICE_PROGRAM_PATH)$(PS)services.rdb)
+URE_SERVICES="$(subst \\,\,$(OFFICE_PROGRAM_PATH)$(PS)services.rdb)"
 
 OFFICE_TYPES="$(subst \,/,$(OFFICE_PROGRAM_PATH)$(PS)types.rdb)"
-OFFICE_SERVICES=$(subst \\,\,$(OFFICE_PROGRAM_PATH)$(PS)services.rdb)
+OFFICE_SERVICES="$(subst \\,\,$(OFFICE_PROGRAM_PATH)$(PS)services.rdb)"
 
 OFFICE_TYPE_LIBRARY="$(OFFICE_TYPES)"
 
