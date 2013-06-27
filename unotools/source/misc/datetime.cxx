@@ -200,35 +200,6 @@ void typeConvert(const starutil::DateTime& _rDateTime, DateTime& _rOut)
     _rOut = DateTime(aDate, aTime);
 }
 
-// FIXME: these operators should be.... in toplevel namespace? announced in the .hxx file?
-//-------------------------------------------------------------------------
-bool operator ==(const starutil::DateTime& _rLeft, const starutil::DateTime& _rRight)
-{
-    return ( _rLeft.NanoSeconds == _rRight.NanoSeconds) &&
-    ( _rLeft.Seconds == _rRight.Seconds) &&
-    ( _rLeft.Minutes == _rRight.Minutes) &&
-    ( _rLeft.Hours == _rRight.Hours) &&
-    ( _rLeft.Day == _rRight.Day) &&
-    ( _rLeft.Month == _rRight.Month) &&
-    ( _rLeft.Year == _rRight.Year) ;
-}
-
-//-------------------------------------------------------------------------
-bool operator ==(const starutil::Date& _rLeft, const starutil::Date& _rRight)
-{
-    return ( _rLeft.Day == _rRight.Day) &&
-    ( _rLeft.Month == _rRight.Month) &&
-    ( _rLeft.Year == _rRight.Year) ;
-}
-
-//-------------------------------------------------------------------------
-bool operator ==(const starutil::Time& _rLeft, const starutil::Time& _rRight)
-{
-    return ( _rLeft.NanoSeconds == _rRight.NanoSeconds) &&
-    ( _rLeft.Seconds == _rRight.Seconds) &&
-    ( _rLeft.Minutes == _rRight.Minutes) &&
-    ( _rLeft.Hours == _rRight.Hours) ;
-}
 
 OUString toISO8601(const starutil::DateTime& rDateTime)
 {
