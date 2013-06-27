@@ -73,7 +73,7 @@ struct SvXMLUnitConverter::Impl
             sal_Int16 const eXMLMeasureUnit)
         : m_eCoreMeasureUnit(eCoreMeasureUnit)
         , m_eXMLMeasureUnit(eXMLMeasureUnit)
-        , m_aNullDate(30, 12, 1899)
+        , m_aNullDate(30, 12, 1899, beans::Optional<sal_Int16>())
         , m_xContext(xContext)
     {
         OSL_ENSURE( m_xContext.is(), "got no service manager" );

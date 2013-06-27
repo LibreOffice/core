@@ -99,7 +99,8 @@ namespace pcr
         if ( !getTypedControlWindow()->GetText().isEmpty() )
         {
             ::Time aTime( getTypedControlWindow()->GetTime() );
-            util::Time aUNOTime( aTime.GetNanoSec(), aTime.GetSec(), aTime.GetMin(), aTime.GetHour() );
+            util::Time const aUNOTime( aTime.GetNanoSec(), aTime.GetSec(),
+                    aTime.GetMin(), aTime.GetHour(), Optional<sal_Int16>() );
             aPropValue <<= aUNOTime;
         }
         return aPropValue;
@@ -153,7 +154,8 @@ namespace pcr
         if ( !getTypedControlWindow()->GetText().isEmpty() )
         {
             ::Date aDate( getTypedControlWindow()->GetDate() );
-            util::Date aUNODate( aDate.GetDay(), aDate.GetMonth(), aDate.GetYear() );
+            util::Date const aUNODate( aDate.GetDay(), aDate.GetMonth(),
+                    aDate.GetYear(), Optional<sal_Int16>() );
             aPropValue <<= aUNODate;
         }
         return aPropValue;

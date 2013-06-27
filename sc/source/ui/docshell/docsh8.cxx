@@ -1000,7 +1000,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, CharSet eCharS
                             {
                                 Date aDate = *(pNumFmt->GetNullDate());     // tools date
                                 aDate += (long)fVal;                        //! approxfloor?
-                                util::Date aUnoDate( aDate.GetDay(), aDate.GetMonth(), aDate.GetYear() );
+                                util::Date aUnoDate( aDate.GetDay(), aDate.GetMonth(), aDate.GetYear(), beans::Optional<sal_Int16>() );
                                 xRowUpdate->updateDate( nCol+1, aUnoDate );
                             }
                         }

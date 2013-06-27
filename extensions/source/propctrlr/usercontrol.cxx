@@ -36,6 +36,7 @@ namespace pcr
 
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::beans::Optional;
     using ::com::sun::star::beans::IllegalTypeException;
     using ::com::sun::star::uno::RuntimeException;
 
@@ -123,7 +124,8 @@ namespace pcr
             case NUMBERFORMAT_DATE:
                 {
                     Date aCurrentDate( Date::SYSTEM );
-                    static ::com::sun::star::util::Date STANDARD_DB_DATE(30,12,1899);
+                    static const ::com::sun::star::util::Date STANDARD_DB_DATE(
+                            30, 12, 1899, Optional<sal_Int16>());
                     nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(static_cast<sal_Int32>(aCurrentDate.GetDate())),STANDARD_DB_DATE);
                 }
                 break;

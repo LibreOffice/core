@@ -38,6 +38,7 @@ namespace xls {
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
 
@@ -98,7 +99,7 @@ sal_Int32 lclGetDays( const Date& rDate )
 UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     maCoeffs( UNIT_ENUM_SIZE, 1.0 ),
-    mnNullDate( lclGetDays( Date( 30, 12, 1899 ) ) )
+    mnNullDate( lclGetDays( Date(30, 12, 1899, Optional<sal_Int16>()) ) )
 {
     // initialize constant and default coefficients
     const DeviceInfo& rDeviceInfo = getBaseFilter().getGraphicHelper().getDeviceInfo();
@@ -182,7 +183,7 @@ double UnitConverter::scaleFromMm100( sal_Int32 nMm100, Unit eUnit ) const
 
 double UnitConverter::calcSerialFromDateTime( const DateTime& rDateTime ) const
 {
-    sal_Int32 nDays = lclGetDays( Date( rDateTime.Day, rDateTime.Month, rDateTime.Year ) ) - mnNullDate;
+    sal_Int32 nDays = lclGetDays( Date( rDateTime.Day, rDateTime.Month, rDateTime.Year, rDateTime.TimeZone ) ) - mnNullDate;
     OSL_ENSURE( nDays >= 0, "UnitConverter::calcDateTimeSerial - invalid date" );
     OSL_ENSURE( (rDateTime.Hours <= 23) && (rDateTime.Minutes <= 59) && (rDateTime.Seconds <= 59), "UnitConverter::calcDateTimeSerial - invalid time" );
     return nDays + rDateTime.Hours / 24.0 + rDateTime.Minutes / 1440.0 + rDateTime.Seconds / 86400.0;
@@ -190,7 +191,7 @@ double UnitConverter::calcSerialFromDateTime( const DateTime& rDateTime ) const
 
 DateTime UnitConverter::calcDateTimeFromSerial( double fSerial ) const
 {
-    DateTime aDateTime( 0, 0, 0, 0, 1, 1, 0 );
+    DateTime aDateTime( 0, 0, 0, 0, 1, 1, 0, Optional<sal_Int16>() );
     double fDays = 0.0;
     double fTime = modf( fSerial, &fDays );
 

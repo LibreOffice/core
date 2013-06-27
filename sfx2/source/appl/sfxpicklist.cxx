@@ -367,7 +367,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     xDocProps->setCreationDate( util::DateTime(
                         now.GetNanoSec(), now.GetSec(), now.GetMin(),
                         now.GetHour(), now.GetDay(), now.GetMonth(),
-                        now.GetYear() ) );
+                        now.GetYear(), Optional<sal_Int16>()) );
                 }
 
                 if ( bAllowModif )

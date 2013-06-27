@@ -19,6 +19,7 @@
 #ifndef __com_sun_star_util_DateTimeRange_idl__
 #define __com_sun_star_util_DateTimeRange_idl__
 
+#include <com/sun/star/beans/Optional.idl>
 
 
 module com {  module sun {  module star {  module util {
@@ -84,7 +85,16 @@ published struct DateTimeRange
      */
     short EndYear;
 
-    /** TODO timezones **/
+    /** contains the time zone, as signed offset in minutes from UTC.
+
+        If not present, the DateTimeRange is not in a specific time zone.
+
+        Both start and end of the DateTimeRange are in this time zone.
+
+        @since LibreOffice 4.1
+     */
+    ::com::sun::star::beans::Optional<short> TimeZone;
+
 };
 
 

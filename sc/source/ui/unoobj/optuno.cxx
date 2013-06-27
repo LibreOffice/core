@@ -161,7 +161,7 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
         {
             sal_uInt16 nD, nM, nY;
             rOptions.GetDate( nD, nM, nY );
-            util::Date aDate( nD, nM, nY );
+            util::Date aDate( nD, nM, nY, beans::Optional<sal_Int16>() );
             aRet <<= aDate;
         }
         break;

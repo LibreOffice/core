@@ -335,7 +335,7 @@ public class _XParameters extends MultiMethodTest {
         else {
             try {
                 oObj.setDate(
-                    idx, new Date ((short)19, (short)01, (short)1979)) ;
+                    idx, new Date((short)19, (short)01, (short)1979, null));
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -357,7 +357,7 @@ public class _XParameters extends MultiMethodTest {
         else {
             try {
                 oObj.setTime(
-                    idx, new Time((short)1,(short)2,(short)3,(short)44)) ;
+                    idx, new Time((short)1,(short)2,(short)3,(short)44, null));
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;
@@ -379,7 +379,7 @@ public class _XParameters extends MultiMethodTest {
         else {
             try {
                 oObj.setTimestamp(idx, new DateTime((short)1,(short)2,(short)3,
-                    (short)4, (short)19, (short)01, (short)1979)) ;
+                    (short)4, (short)19, (short)01, (short)1979, null)) ;
             } catch (SQLException e) {
                 log.println("Unexpected SQL exception:") ;
                 log.println(e) ;

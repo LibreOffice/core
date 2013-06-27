@@ -84,10 +84,10 @@ public class DBTools {
     */
     public final static Object[][] TST_TABLE_VALUES = new Object[][] {
         {"String1", new Integer(1), null, null, new Double(1.1),
-         new Date((short) 1,(short) 1, (short) 2001), null, null, null,
+         new Date((short) 1,(short) 1, (short) 2001, null), null, null, null,
          Boolean.TRUE, null, null},
         {"String2", new Integer(2), null, null, new Double(1.2),
-         new Date((short) 2, (short) 1,(short)  2001), null, null, null,
+         new Date((short) 2, (short) 1,(short)  2001, null), null, null, null,
          Boolean.FALSE, null, null},
         {null, null, null, null, null,
          null, null, null, null,

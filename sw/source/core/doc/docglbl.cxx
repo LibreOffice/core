@@ -275,7 +275,8 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, bool bOutline, c
                     ::util::DateTime uDT(aTmplDate.GetNanoSec(),
                         aTmplDate.GetSec(), aTmplDate.GetMin(),
                         aTmplDate.GetHour(), aTmplDate.GetDay(),
-                        aTmplDate.GetMonth(), aTmplDate.GetYear());
+                        aTmplDate.GetMonth(), aTmplDate.GetYear(),
+                        beans::Optional<sal_Int16>() );
                     xDocProps->setTemplateDate(uDT);
                     xDocProps->setTemplateURL(rPath);
                     // Set the new doc's title to the text of the "split para".

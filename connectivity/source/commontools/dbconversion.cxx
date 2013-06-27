@@ -66,7 +66,8 @@ namespace dbtools
     //------------------------------------------------------------------------------
     ::com::sun::star::util::Date DBTypeConversion::getStandardDate()
     {
-        static ::com::sun::star::util::Date STANDARD_DB_DATE(1,1,1900);
+        static const ::com::sun::star::util::Date STANDARD_DB_DATE(
+                1, 1, 1900, Optional<sal_Int16>());
         return STANDARD_DB_DATE;
     }
     //------------------------------------------------------------------------------
@@ -108,10 +109,10 @@ namespace dbtools
     //------------------------------------------------------------------
     OUString DBTypeConversion::toDateTimeString(const utl::DateTime& _rDateTime)
     {
-        utl::Date aDate(_rDateTime.Day,_rDateTime.Month,_rDateTime.Year);
+        utl::Date aDate(_rDateTime.Day,_rDateTime.Month,_rDateTime.Year,Optional<sal_Int16>());
         OUStringBuffer aTemp(toDateString(aDate));
         aTemp.appendAscii(" ");
-        utl::Time aTime(_rDateTime.NanoSeconds,_rDateTime.Seconds,_rDateTime.Minutes,_rDateTime.Hours);
+        utl::Time aTime(_rDateTime.NanoSeconds,_rDateTime.Seconds,_rDateTime.Minutes,_rDateTime.Hours,_rDateTime.TimeZone);
         aTemp.append( toTimeString(aTime) );
         return  aTemp.makeStringAndClear();
     }
@@ -297,7 +298,9 @@ namespace dbtools
     //------------------------------------------------------------------------------
     double DBTypeConversion::toDouble(const utl::DateTime& _rVal, const utl::Date& _rNullDate)
     {
-        sal_Int64   nTime     = toDays(utl::Date(_rVal.Day, _rVal.Month, _rVal.Year), _rNullDate);
+        sal_Int64   nTime     = toDays(
+            utl::Date(_rVal.Day, _rVal.Month, _rVal.Year, Optional<sal_Int16>()),
+            _rNullDate);
         utl::Time aTimePart;
 
         aTimePart.Hours             = _rVal.Hours;
@@ -443,7 +446,7 @@ namespace dbtools
                 nDay = (sal_uInt16)_sSQLString.getToken(0,sDateSep,nIndex).toInt32();
         }
 
-        return utl::Date(nDay,nMonth,nYear);
+        return utl::Date(nDay, nMonth, nYear, Optional<sal_Int16>());
     }
 
     //-----------------------------------------------------------------------------
@@ -461,7 +464,7 @@ namespace dbtools
             aTime = toTime( _sSQLString.copy( nSeparation ) );
 
         return utl::DateTime(aTime.NanoSeconds, aTime.Seconds, aTime.Minutes, aTime.Hours,
-                        aDate.Day, aDate.Month, aDate.Year);
+                        aDate.Day, aDate.Month, aDate.Year, aTime.TimeZone);
     }
 
     //-----------------------------------------------------------------------------

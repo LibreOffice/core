@@ -54,7 +54,8 @@ namespace ftp {
                                                       hours,
                                                       day,
                                                       month,
-                                                      year) { }
+                                                      year,
+                              com::sun::star::beans::Optional<sal_Int16>()) { }
 
         void SetYear(sal_uInt16 year) { Year = year; }
         void SetMonth(sal_uInt16 month) { Month = month; }
