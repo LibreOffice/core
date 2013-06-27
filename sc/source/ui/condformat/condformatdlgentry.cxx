@@ -596,6 +596,14 @@ void ScFormulaFrmtEntry::SetInactive()
 
 namespace {
 
+OUString convertNumberToString(double nVal, ScDocument* pDoc)
+{
+    SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
+    OUString aText;
+    pNumberFormatter->GetInputLineString(nVal, 0, aText);
+    return aText;
+}
+
 void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, ColorListBox& rLbCol, ScDocument* pDoc )
 {
     // entry Automatic is not available for color scales
@@ -612,10 +620,7 @@ void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType,
         case COLORSCALE_PERCENT:
             {
                 double nVal = rEntry.GetValue();
-                SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
-                OUString aText;
-                pNumberFormatter->GetInputLineString(nVal, 0, aText);
-                rEdit.SetText(aText);
+                rEdit.SetText(convertNumberToString(nVal, pDoc));
             }
             break;
         case COLORSCALE_FORMULA:
@@ -1259,14 +1264,15 @@ class ScIconSetFrmtDataEntry : public Control
         ListBox maLbEntryType;
 
     public:
-        ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, sal_Int32 i, const ScColorScaleEntry* pEntry = NULL );
+        ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, ScDocument* pDoc,
+                sal_Int32 i, const ScColorScaleEntry* pEntry = NULL );
 
         ScColorScaleEntry* CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const;
 
         void SetFirstEntry();
 };
 
-ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, sal_Int32 i, const ScColorScaleEntry* pEntry ):
+ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType eType, ScDocument* pDoc, sal_Int32 i, const ScColorScaleEntry* pEntry ):
     Control( pParent, ScResId( RID_ICON_SET_ENTRY ) ),
     maImgIcon( this, ScResId( IMG_ICON ) ),
     maFtEntry( this, ScResId( FT_ICON_SET_ENTRY_TEXT ) ),
@@ -1280,15 +1286,15 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType e
         {
             case COLORSCALE_VALUE:
                 maLbEntryType.SelectEntryPos(0);
-                maEdEntry.SetText(OUString::valueOf(pEntry->GetValue()));
+                maEdEntry.SetText(convertNumberToString(pEntry->GetValue(), pDoc));
                 break;
             case COLORSCALE_PERCENTILE:
                 maLbEntryType.SelectEntryPos(2);
-                maEdEntry.SetText(OUString::valueOf(pEntry->GetValue()));
+                maEdEntry.SetText(convertNumberToString(pEntry->GetValue(), pDoc));
                 break;
             case COLORSCALE_PERCENT:
                 maLbEntryType.SelectEntryPos(1);
-                maEdEntry.SetText(OUString::valueOf(pEntry->GetValue()));
+                maEdEntry.SetText(convertNumberToString(pEntry->GetValue(), pDoc));
                 break;
             case COLORSCALE_FORMULA:
                 maLbEntryType.SelectEntryPos(3);
@@ -1367,7 +1373,7 @@ ScIconSetFrmtEntry::ScIconSetFrmtEntry( Window* pParent, ScDocument* pDoc, const
         for(size_t i = 0, n = pIconSetFormatData->maEntries.size();
                 i < n; ++i)
         {
-            maEntries.push_back( new ScIconSetFrmtDataEntry( this, eType, i, &pIconSetFormatData->maEntries[i] ) );
+            maEntries.push_back( new ScIconSetFrmtDataEntry( this, eType, pDoc, i, &pIconSetFormatData->maEntries[i] ) );
             Point aPos = maEntries[0].GetPosPixel();
             aPos.Y() += maEntries[0].GetSizePixel().Height() * i * 1.2;
             maEntries[i].SetPosPixel( aPos );
@@ -1397,7 +1403,7 @@ IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl )
 
     for(size_t i = 0; i < nElements; ++i)
     {
-        maEntries.push_back( new ScIconSetFrmtDataEntry( this, static_cast<ScIconSetType>(nPos), i ) );
+        maEntries.push_back( new ScIconSetFrmtDataEntry( this, static_cast<ScIconSetType>(nPos), mpDoc, i ) );
         Point aPos = maEntries[0].GetPosPixel();
         aPos.Y() += maEntries[0].GetSizePixel().Height() * i * 1.2;
         maEntries[i].SetPosPixel( aPos );
