@@ -53,11 +53,6 @@ namespace connectivity
     {
         return match(rWild.getStr(), rStr.getStr(), cEscape);
     }
-    //------------------------------------------------------------------------------
-    OOO_DLLPUBLIC_DBTOOLS OUString toDateString(const ::com::sun::star::util::Date& rDate);
-    OOO_DLLPUBLIC_DBTOOLS OUString toTimeString(const ::com::sun::star::util::Time& rTime);
-    OOO_DLLPUBLIC_DBTOOLS OUString toDateTimeString(const ::com::sun::star::util::DateTime& rDateTime);
-
     // typedefs
     typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>    OSQLTable;

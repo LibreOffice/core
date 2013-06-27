@@ -111,50 +111,6 @@ namespace connectivity
         return ( *pStr == 0 ) && ( *pWild == 0 );
     }
     //------------------------------------------------------------------
-    OUString toDateString(const ::com::sun::star::util::Date& rDate)
-    {
-        sal_Char s[11];
-        snprintf(s,
-                sizeof(s),
-                "%04d-%02d-%02d",
-                (int)rDate.Year,
-                (int)rDate.Month,
-                (int)rDate.Day);
-        s[10] = 0;
-        return OUString::createFromAscii(s);
-    }
-
-    //------------------------------------------------------------------
-    OUString toTimeString(const ::com::sun::star::util::Time& rTime)
-    {
-        sal_Char s[9];
-        snprintf(s,
-                sizeof(s),
-                "%02d:%02d:%02d",
-                (int)rTime.Hours,
-                (int)rTime.Minutes,
-                (int)rTime.Seconds);
-        s[8] = 0;
-        return OUString::createFromAscii(s);
-    }
-
-    //------------------------------------------------------------------
-    OUString toDateTimeString(const ::com::sun::star::util::DateTime& rDateTime)
-    {
-        sal_Char s[20];
-        snprintf(s,
-                sizeof(s),
-                "%04d-%02d-%02d %02d:%02d:%02d",
-                (int)rDateTime.Year,
-                (int)rDateTime.Month,
-                (int)rDateTime.Day,
-                (int)rDateTime.Hours,
-                (int)rDateTime.Minutes,
-                (int)rDateTime.Seconds);
-        s[19] = 0;
-        return OUString::createFromAscii(s);
-    }
-
 #ifdef SOLAR_JAVA
     ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const Reference<XComponentContext >& _rxContext)
     {
