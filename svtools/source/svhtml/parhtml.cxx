@@ -2187,7 +2187,8 @@ bool HTMLParser::ParseMetaOptionsImpl(
                 ::util::DateTime uDT(aDateTime.GetNanoSec(),
                     aDateTime.GetSec(), aDateTime.GetMin(),
                     aDateTime.GetHour(), aDateTime.GetDay(),
-                    aDateTime.GetMonth(), aDateTime.GetYear());
+                    aDateTime.GetMonth(), aDateTime.GetYear(),
+                    false);
                 if ( HTML_META_CREATED==nAction )
                     i_xDocProps->setCreationDate( uDT );
                 else

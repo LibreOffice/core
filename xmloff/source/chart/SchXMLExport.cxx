@@ -1165,7 +1165,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
     sal_Bool bHasMainTitle = sal_False;
     sal_Bool bHasSubTitle = sal_False;
     sal_Bool bHasLegend = sal_False;
-    util::DateTime aNullDate(0,0,0,0,30,12,1899);
+    util::DateTime aNullDate(0,0,0,0,30,12,1899, false);
 
     std::vector< XMLPropertyState > aPropertyStates;
 

@@ -190,7 +190,7 @@ double UnitConverter::calcSerialFromDateTime( const DateTime& rDateTime ) const
 
 DateTime UnitConverter::calcDateTimeFromSerial( double fSerial ) const
 {
-    DateTime aDateTime( 0, 0, 0, 0, 1, 1, 0 );
+    DateTime aDateTime( 0, 0, 0, 0, 1, 1, 0, false );
     double fDays = 0.0;
     double fTime = modf( fSerial, &fDays );
 

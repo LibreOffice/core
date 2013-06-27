@@ -25,6 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
+
 namespace
 {
     sal_Int32 impl_pow(sal_Int32 x, sal_Int32 y)
@@ -299,7 +300,7 @@ bool ISO8601parseDateTime(const OUString &rString, starutil::DateTime& rDateTime
     if (bSuccess)
     {
         rDateTime = starutil::DateTime(aTime.NanoSeconds, aTime.Seconds, aTime.Minutes, aTime.Hours,
-                                       aDate.Day, aDate.Month, aDate.Year);
+               aDate.Day, aDate.Month, aDate.Year, false);
     }
 
     return bSuccess;
