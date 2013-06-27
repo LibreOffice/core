@@ -190,9 +190,28 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         void            StoreMapUnit_impl();
 
     public:
-        NBOTypeMgrBase(const NBOType aType):eType(aType),pSet(0),eCoreUnit(SFX_MAPUNIT_TWIP),aNumCharFmtName(String()){}
-        NBOTypeMgrBase(const NBOType aType,const SfxItemSet* pArg):eType(aType),pSet(pArg),eCoreUnit(SFX_MAPUNIT_TWIP),aNumCharFmtName(String()){}
-        NBOTypeMgrBase(const NBOTypeMgrBase& aTypeMgr){eType = aTypeMgr.eType;pSet = aTypeMgr.pSet;eCoreUnit = aTypeMgr.eCoreUnit;aNumCharFmtName = aTypeMgr.aNumCharFmtName; }
+        NBOTypeMgrBase(const NBOType aType)
+            : eType(aType)
+            , pSet(0)
+            , eCoreUnit(SFX_MAPUNIT_TWIP)
+            , aNumCharFmtName(String())
+            , bIsLoading(false)
+        {}
+        NBOTypeMgrBase(const NBOType aType,const SfxItemSet* pArg)
+            : eType(aType)
+            , pSet(pArg)
+            , eCoreUnit(SFX_MAPUNIT_TWIP)
+            , aNumCharFmtName(String())
+            , bIsLoading(false)
+        {}
+        NBOTypeMgrBase(const NBOTypeMgrBase& aTypeMgr)
+        {
+            eType = aTypeMgr.eType;
+            pSet = aTypeMgr.pSet;
+            eCoreUnit = aTypeMgr.eCoreUnit;
+            aNumCharFmtName = aTypeMgr.aNumCharFmtName;
+            bIsLoading = false;
+        }
         virtual ~NBOTypeMgrBase() {}
         virtual void Init()=0;
         virtual sal_uInt16 GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex=0)=0;
@@ -208,7 +227,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         String GetBulCharFmtName();
         SfxMapUnit GetMapUnit();
     protected:
-        sal_Bool    bIsLoading;
+        bool    bIsLoading;
         void    ImplLoad(String filename);
         void    ImplStore(String filename);
 
