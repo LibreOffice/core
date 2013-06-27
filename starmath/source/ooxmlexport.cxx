@@ -236,7 +236,7 @@ void SmOoxmlExport::HandleRoot( const SmRootNode* pNode, int nLevel )
 
 static OString mathSymbolToString( const SmNode* node )
 {
-    assert( node->GetType() == NMATH );
+    assert( node->GetType() == NMATH || node->GetType() == NMATHIDENT );
     const SmTextNode* txtnode = static_cast< const SmTextNode* >( node );
     assert( txtnode->GetText().getLength() == 1 );
     sal_Unicode chr = SmTextNode::ConvertSymbolToUnicode( txtnode->GetText()[0] );
@@ -463,7 +463,7 @@ void SmOoxmlExport::HandleBrace( const SmBraceNode* pNode, int nLevel )
         for( int i = 0; i < body->GetNumSubNodes(); ++i )
         {
             const SmNode* subnode = body->GetSubNode( i );
-            if( subnode->GetType() == NMATH )
+            if (subnode->GetType() == NMATH || subnode->GetType() == NMATHIDENT)
             { // do not write, but write what separator it is
                 const SmMathSymbolNode* math = static_cast< const SmMathSymbolNode* >( subnode );
                 if( !separatorWritten )

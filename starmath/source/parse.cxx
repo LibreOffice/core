@@ -1431,24 +1431,10 @@ void SmParser::Term()
         case TRIGHTARROW :
         case TUPARROW :
         case TDOWNARROW :
-        case TSETN :
-        case TSETZ :
-        case TSETQ :
-        case TSETR :
-        case TSETC :
-        case THBAR :
-        case TLAMBDABAR :
         case TCIRC :
         case TDRARROW :
         case TDLARROW :
         case TDLRARROW :
-        case TBACKEPSILON :
-        case TALEPH :
-        case TIM :
-        case TRE :
-        case TWP :
-        case TEMPTYSET :
-        case TINFINITY :
         case TEXISTS :
         case TNOTEXISTS :
         case TFORALL :
@@ -1462,6 +1448,24 @@ void SmParser::Term()
         case TDOTSUP :
         case TDOTSVERT :
             m_aNodeStack.push(new SmMathSymbolNode(m_aCurToken));
+            NextToken();
+            break;
+
+        case TSETN :
+        case TSETZ :
+        case TSETQ :
+        case TSETR :
+        case TSETC :
+        case THBAR :
+        case TLAMBDABAR :
+        case TBACKEPSILON :
+        case TALEPH :
+        case TIM :
+        case TRE :
+        case TWP :
+        case TEMPTYSET :
+        case TINFINITY :
+            m_aNodeStack.push(new SmMathIdentifierNode(m_aCurToken));
             NextToken();
             break;
 

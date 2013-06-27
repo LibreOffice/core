@@ -115,7 +115,7 @@ void SmVisitorTest::Visit( SmGlyphSpecialNode* pNode )
 
 void SmVisitorTest::Visit( SmMathSymbolNode* pNode )
 {
-    OSL_ENSURE( pNode->GetType( ) == NMATH, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NMATH || pNode->GetType( ) == NMATHIDENT, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 

@@ -179,7 +179,7 @@ void SmRtfExport::HandleRoot(const SmRootNode* pNode, int nLevel)
 namespace {
 OString mathSymbolToString(const SmNode* node, rtl_TextEncoding nEncoding)
 {
-    assert(node->GetType() == NMATH);
+    assert(node->GetType() == NMATH || node->GetType() == NMATHIDENT);
     const SmTextNode* txtnode = static_cast<const SmTextNode*>(node);
     if (txtnode->GetText().isEmpty())
         return OString();
@@ -403,7 +403,7 @@ void SmRtfExport::HandleBrace(const SmBraceNode* pNode, int nLevel)
         for (int i = 0; i < body->GetNumSubNodes(); ++i)
         {
             const SmNode* subnode = body->GetSubNode(i);
-            if (subnode->GetType() == NMATH)
+            if (subnode->GetType() == NMATH || subnode->GetType() == NMATHIDENT)
             { // do not write, but write what separator it is
                 const SmMathSymbolNode* math = static_cast<const SmMathSymbolNode*>(subnode);
                 if(!separatorWritten)

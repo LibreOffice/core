@@ -65,6 +65,7 @@ void SmWordExportBase::HandleNode( const SmNode* pNode, int nLevel )
             break;
         }
         case NMATH:
+        case NMATHIDENT:
             HandleMath(pNode,nLevel);
             break;
         case NSUBSUP:
