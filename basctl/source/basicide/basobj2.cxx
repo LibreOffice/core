@@ -42,7 +42,7 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
-
+#include "basic/basmgr.hxx"
 namespace basctl
 {
 
@@ -405,13 +405,25 @@ Sequence< OUString > GetMethodNames( const ScriptDocument& rDocument, const OUSt
     OUString aOUSource;
     if ( rDocument.getModule( rLibName, rModName, aOUSource ) )
     {
-        SbModuleRef xModule = new SbModule( rModName );
-        xModule->SetSource32( aOUSource );
-        sal_uInt16 nCount = xModule->GetMethods()->Count();
+        BasicManager* pBasMgr = rDocument.getBasicManager();
+        StarBASIC* pSb = pBasMgr ? pBasMgr->GetLib( rLibName ) : NULL;
+        SbModule* pMod = pSb ? pSb->FindModule( rModName ) : NULL;
+
+        SbModuleRef xModule;
+        // Only reparse modules if ScriptDocument source is out of sync
+        // with basic's Module
+        if ( !pMod || ( pMod && pMod->GetSource() != aOUSource ) )
+        {
+            xModule = new SbModule( rModName );
+            xModule->SetSource32( aOUSource );
+            pMod = xModule;
+        }
+
+        sal_uInt16 nCount = pMod->GetMethods()->Count();
         sal_uInt16 nRealCount = nCount;
         for ( sal_uInt16 i = 0; i < nCount; i++ )
         {
-            SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( i );
+            SbMethod* pMethod = (SbMethod*)pMod->GetMethods()->Get( i );
             if( pMethod->IsHidden() )
                 --nRealCount;
         }
@@ -420,7 +432,7 @@ Sequence< OUString > GetMethodNames( const ScriptDocument& rDocument, const OUSt
         sal_uInt16 iTarget = 0;
         for ( sal_uInt16 i = 0 ; i < nCount; ++i )
         {
-            SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( i );
+            SbMethod* pMethod = (SbMethod*)pMod->GetMethods()->Get( i );
             if( pMethod->IsHidden() )
                 continue;
             SAL_WARN_IF( !pMethod, "basctl.basicide","Method not found! (NULL)" );
@@ -445,9 +457,20 @@ bool HasMethod (
     OUString aOUSource;
     if ( rDocument.hasModule( rLibName, rModName ) && rDocument.getModule( rLibName, rModName, aOUSource ) )
     {
-        SbModuleRef xModule = new SbModule( rModName );
-        xModule->SetSource32( aOUSource );
-        SbxArray* pMethods = xModule->GetMethods();
+        // Check if we really need to scan the source ( again )
+        BasicManager* pBasMgr = rDocument.getBasicManager();
+        StarBASIC* pSb = pBasMgr ? pBasMgr->GetLib( rLibName ) : NULL;
+        SbModule* pMod = pSb ? pSb->FindModule( rModName ) : NULL;
+        SbModuleRef xModule;
+        // Only reparse modules if ScriptDocument source is out of sync
+        // with basic's Module
+        if ( !pMod || ( pMod && pMod->GetSource() != aOUSource ))
+        {
+            xModule = new SbModule( rModName );
+            xModule->SetSource32( aOUSource );
+            pMod = xModule;
+        }
+        SbxArray* pMethods = pMod->GetMethods();
         if ( pMethods )
         {
             SbMethod* pMethod = (SbMethod*)pMethods->Find( rMethName, SbxCLASS_METHOD );
