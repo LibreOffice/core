@@ -44,7 +44,6 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <util/util.hxx>
 #include <framework/documentundoguard.hxx>
 
 #include "com/sun/star/uno/XComponentContext.hpp"

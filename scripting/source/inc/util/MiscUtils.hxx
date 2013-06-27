@@ -37,8 +37,6 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include "util.hxx"
-
 namespace sf_misc
 {
 

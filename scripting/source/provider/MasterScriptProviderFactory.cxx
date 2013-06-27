@@ -23,8 +23,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-#include <util/util.hxx>
-
 #include "MasterScriptProviderFactory.hxx"
 
 using namespace ::com::sun::star;

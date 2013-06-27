@@ -24,7 +24,6 @@
 #include <cppuhelper/factory.hxx>
 
 #include <util/scriptingconstants.hxx>
-#include <util/util.hxx>
 
 #include "ScriptingContext.hxx"
 

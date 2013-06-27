@@ -21,7 +21,6 @@
 #include <stdio.h>
 
 #include "ScriptImpl.hxx"
-#include <util/util.hxx>
 #include "sal/log.hxx"
 
 using namespace ::com::sun::star;

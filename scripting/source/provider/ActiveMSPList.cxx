@@ -22,7 +22,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <util/scriptingconstants.hxx>
-#include <util/util.hxx>
 #include <util/MiscUtils.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>

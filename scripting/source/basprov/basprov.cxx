@@ -47,7 +47,6 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 
-#include <util/util.hxx>
 #include <util/MiscUtils.hxx>
 
 
