@@ -16,7 +16,7 @@
 #include "sal/types.h"
 #include "tools/solar.h"
 #include "rtl/ustring.hxx"
-#include "dpmacros.hxx"
+#include "calcmacros.hxx"
 #include "dpglobal.hxx"
 
 /**

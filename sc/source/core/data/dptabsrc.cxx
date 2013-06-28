@@ -45,7 +45,7 @@
 #include "dpitemdata.hxx"
 #include "dputil.hxx"
 #include "dpresfilter.hxx"
-#include "dpmacros.hxx"
+#include "calcmacros.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>

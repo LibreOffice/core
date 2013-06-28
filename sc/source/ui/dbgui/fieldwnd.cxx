@@ -48,7 +48,7 @@
 
 #include "pvlaydlg.hxx"
 #include "dpuiglobal.hxx"
-#include "dpmacros.hxx"
+#include "calcmacros.hxx"
 #include "AccessibleDataPilotControl.hxx"
 #include "scresid.hxx"
 #include "pivot.hrc"

@@ -26,7 +26,7 @@
 #include "dpoutput.hxx"
 #include "dptypes.hxx"
 #include "pivot.hxx"
-#include "dpmacros.hxx"
+#include "calcmacros.hxx"
 
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 

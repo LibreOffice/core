@@ -14,8 +14,7 @@
 #include "formulacell.hxx"
 #include "svl/broadcast.hxx"
 #include "editeng/editobj.hxx"
-
-#define DEBUG_COLUMN_STORAGE 0
+#include "calcmacros.hxx"
 
 #if DEBUG_COLUMN_STORAGE
 #ifdef NDEBUG

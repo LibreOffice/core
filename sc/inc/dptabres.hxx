@@ -22,7 +22,7 @@
 
 #include "global.hxx"
 #include "dpfilteredcache.hxx"
-#include "dpmacros.hxx"
+#include "calcmacros.hxx"
 
 #include <tools/string.hxx>
 #include <com/sun/star/sheet/MemberResult.hpp>

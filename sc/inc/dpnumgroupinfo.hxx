@@ -11,7 +11,7 @@
 #define __SC_DPNUMGROUPINFO_HXX__
 
 #include "scdllapi.h"
-#include "dpmacros.hxx"
+#include "calcmacros.hxx"
 
 struct ScDPNumGroupInfo
 {

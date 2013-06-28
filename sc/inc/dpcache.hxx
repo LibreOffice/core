@@ -21,7 +21,7 @@
 
 #include "global.hxx"
 #include "dpnumgroupinfo.hxx"
-#include "dpmacros.hxx"
+#include "calcmacros.hxx"
 #include "tools/date.hxx"
 
 #include <boost/noncopyable.hpp>

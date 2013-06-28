@@ -24,7 +24,7 @@
 #include "dpoutput.hxx"
 #include "dpfilteredcache.hxx"
 #include "dpcache.hxx"
-#include "dpmacros.hxx"
+#include "calcmacros.hxx"
 
 #include "svl/zforlist.hxx"
 

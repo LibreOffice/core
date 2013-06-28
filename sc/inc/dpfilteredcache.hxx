@@ -24,7 +24,7 @@
 #include "osl/mutex.hxx"
 #include "global.hxx"
 #include "dpitemdata.hxx"
-#include "dpmacros.hxx"
+#include "calcmacros.hxx"
 
 #include <vector>
 #include <boost/unordered_set.hpp>
