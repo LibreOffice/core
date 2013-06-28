@@ -18,7 +18,7 @@
 #include <Windows.h>
 #endif
 //#define USE_KERNEL_FILE
-using namespace std;
+
 GPUEnv OpenclDevice::gpuEnv;
 int OpenclDevice::isInited =0;
 
