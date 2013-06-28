@@ -2570,6 +2570,20 @@ void ChartExport::exportTrendlines( Reference< chart2::XDataSeries > xSeries )
                     XML_val, OString::number(aExtrapolateBackward).getStr(),
                     FSEND );
 
+            sal_Bool aForceIntercept = false;
+            xProperties->getPropertyValue( "ForceIntercept") >>= aForceIntercept;
+
+            if (aForceIntercept)
+            {
+                double aInterceptValue = 0.0;
+                xProperties->getPropertyValue( "InterceptValue") >>= aInterceptValue;
+
+                pFS->singleElement( FSNS( XML_c, XML_intercept ),
+                    XML_val, OString::number(aInterceptValue).getStr(),
+                    FSEND );
+            }
+
+
             // Equation properties
             Reference< XPropertySet > xEquationProperties( xRegCurve->getEquationProperties() );
 
