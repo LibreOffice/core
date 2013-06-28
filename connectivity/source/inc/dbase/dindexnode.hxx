@@ -21,9 +21,11 @@
 
 #include "file/fcode.hxx"
 #include "file/FTable.hxx"
-#include "dbase/DIndexPage.hxx"
 #include "connectivity/FValue.hxx"
+#include <rtl/ref.hxx>
 #include <tools/ref.hxx>
+#include <tools/stream.hxx>
+#include <vector>
 
 #define NODE_NOTFOUND 0xFFFF
 #define DINDEX_PAGE_SIZE 512
