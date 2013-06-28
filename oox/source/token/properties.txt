@@ -185,6 +185,7 @@ FooterHeight
 FooterIsDynamicHeight
 FooterIsOn
 FooterIsShared
+ForceIntercept
 FormulaConvention
 FrameIsAutomaticHeight
 Function
@@ -238,6 +239,7 @@ ImageURL
 IncludeHiddenCells
 InputMessage
 InputTitle
+InterceptValue
 IsActive
 IsAdjustHeightEnabled
 IsCaseSensitive

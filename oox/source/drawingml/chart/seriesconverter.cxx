@@ -436,6 +436,13 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             aPropSet.setProperty( PROP_PolynomialDegree, mrModel.mnOrder );
             aPropSet.setProperty( PROP_MovingAveragePeriod, mrModel.mnPeriod );
 
+            // Intercept
+            sal_Bool hasIntercept = mrModel.mfIntercept.has();
+            aPropSet.setProperty( PROP_ForceIntercept, hasIntercept);
+            if (hasIntercept)
+                aPropSet.setProperty( PROP_InterceptValue,  mrModel.mfIntercept.get());
+
+            // Extrapolation
             if (mrModel.mfForward.has())
                 aPropSet.setProperty( PROP_ExtrapolateForward, mrModel.mfForward.get() );
             if (mrModel.mfBackward.has())
