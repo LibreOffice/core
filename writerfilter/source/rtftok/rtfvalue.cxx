@@ -8,6 +8,7 @@
  */
 
 #include <rtfreferenceproperties.hxx>
+#include <rtfdocumentimpl.hxx>
 
 namespace writerfilter {
 namespace rtftok {
@@ -15,7 +16,8 @@ namespace rtftok {
 
 RTFValue::RTFValue(int nValue, OUString sValue, RTFSprms rAttributes,
         RTFSprms rSprms, uno::Reference<drawing::XShape> xShape,
-        uno::Reference<io::XInputStream> xStream, uno::Reference<embed::XEmbeddedObject> xObject, bool bForceString)
+        uno::Reference<io::XInputStream> xStream, uno::Reference<embed::XEmbeddedObject> xObject, bool bForceString,
+        RTFShape aShape)
     : m_nValue(nValue),
     m_sValue(sValue),
     m_xShape(xShape),
@@ -25,6 +27,7 @@ RTFValue::RTFValue(int nValue, OUString sValue, RTFSprms rAttributes,
 {
     m_pAttributes.reset(new RTFSprms(rAttributes));
     m_pSprms.reset(new RTFSprms(rSprms));
+    m_pShape.reset(new RTFShape(aShape));
 }
 
 RTFValue::RTFValue(int nValue)
@@ -37,6 +40,7 @@ RTFValue::RTFValue(int nValue)
 {
     m_pAttributes.reset(new RTFSprms());
     m_pSprms.reset(new RTFSprms());
+    m_pShape.reset(new RTFShape());
 }
 
 RTFValue::RTFValue(OUString sValue, bool bForce)
@@ -49,6 +53,7 @@ RTFValue::RTFValue(OUString sValue, bool bForce)
 {
     m_pAttributes.reset(new RTFSprms());
     m_pSprms.reset(new RTFSprms());
+    m_pShape.reset(new RTFShape());
 }
 
 RTFValue::RTFValue(RTFSprms rAttributes)
@@ -61,6 +66,7 @@ RTFValue::RTFValue(RTFSprms rAttributes)
 {
     m_pAttributes.reset(new RTFSprms(rAttributes));
     m_pSprms.reset(new RTFSprms());
+    m_pShape.reset(new RTFShape());
 }
 
 RTFValue::RTFValue(RTFSprms rAttributes, RTFSprms rSprms)
@@ -73,6 +79,7 @@ RTFValue::RTFValue(RTFSprms rAttributes, RTFSprms rSprms)
 {
     m_pAttributes.reset(new RTFSprms(rAttributes));
     m_pSprms.reset(new RTFSprms(rSprms));
+    m_pShape.reset(new RTFShape());
 }
 
 RTFValue::RTFValue(uno::Reference<drawing::XShape> rShape)
@@ -85,6 +92,7 @@ RTFValue::RTFValue(uno::Reference<drawing::XShape> rShape)
 {
     m_pAttributes.reset(new RTFSprms());
     m_pSprms.reset(new RTFSprms());
+    m_pShape.reset(new RTFShape());
 }
 
 RTFValue::RTFValue(uno::Reference<io::XInputStream> rStream)
@@ -97,6 +105,7 @@ RTFValue::RTFValue(uno::Reference<io::XInputStream> rStream)
 {
     m_pAttributes.reset(new RTFSprms());
     m_pSprms.reset(new RTFSprms());
+    m_pShape.reset(new RTFShape());
 }
 
 RTFValue::RTFValue(uno::Reference<embed::XEmbeddedObject> xObject)
@@ -109,6 +118,20 @@ RTFValue::RTFValue(uno::Reference<embed::XEmbeddedObject> xObject)
 {
     m_pAttributes.reset(new RTFSprms());
     m_pSprms.reset(new RTFSprms());
+    m_pShape.reset(new RTFShape());
+}
+
+RTFValue::RTFValue(RTFShape aShape)
+    : m_nValue(),
+    m_sValue(),
+    m_xShape(),
+    m_xStream(),
+    m_xObject(),
+    m_bForceString(false)
+{
+    m_pAttributes.reset(new RTFSprms());
+    m_pSprms.reset(new RTFSprms());
+    m_pShape.reset(new RTFShape(aShape));
 }
 
 RTFValue::~RTFValue()
@@ -149,6 +172,11 @@ uno::Any RTFValue::getAny() const
     return ret;
 }
 
+RTFShape& RTFValue::getShape() const
+{
+    return *m_pShape;
+}
+
 writerfilter::Reference<Properties>::Pointer_t RTFValue::getProperties()
 {
     writerfilter::Reference<Properties>::Pointer_t const pProperties(
@@ -177,7 +205,7 @@ std::string RTFValue::toString() const
 
 RTFValue* RTFValue::Clone()
 {
-    return new RTFValue(m_nValue, m_sValue, *m_pAttributes, *m_pSprms, m_xShape, m_xStream, m_xObject, m_bForceString);
+    return new RTFValue(m_nValue, m_sValue, *m_pAttributes, *m_pSprms, m_xShape, m_xStream, m_xObject, m_bForceString, *m_pShape);
 }
 
 bool RTFValue::equals(RTFValue& rOther)

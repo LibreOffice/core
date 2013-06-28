@@ -17,6 +17,7 @@
 namespace writerfilter {
     namespace rtftok {
         class RTFSprms;
+        class RTFShape;
         /// Value of an RTF keyword
         class RTFValue
             : public Value
@@ -24,7 +25,8 @@ namespace writerfilter {
             public:
                 typedef boost::shared_ptr<RTFValue> Pointer_t;
                 RTFValue(int nValue, OUString sValue, RTFSprms rAttributes, RTFSprms rSprms, uno::Reference<drawing::XShape> rShape,
-                        uno::Reference<io::XInputStream> rStream, uno::Reference<embed::XEmbeddedObject> rObject, bool bForceString);
+                        uno::Reference<io::XInputStream> rStream, uno::Reference<embed::XEmbeddedObject> rObject, bool bForceString,
+                        RTFShape aShape);
                 RTFValue(int nValue);
                 RTFValue(OUString sValue, bool bForce = false);
                 RTFValue(RTFSprms rAttributes);
@@ -32,6 +34,7 @@ namespace writerfilter {
                 RTFValue(uno::Reference<drawing::XShape> rShape);
                 RTFValue(uno::Reference<io::XInputStream> rStream);
                 RTFValue(uno::Reference<embed::XEmbeddedObject> rObject);
+                RTFValue(RTFShape aShape);
                 virtual ~RTFValue();
                 void setString(OUString sValue);
                 virtual int getInt() const;
@@ -44,6 +47,7 @@ namespace writerfilter {
                 virtual RTFValue* Clone();
                 RTFSprms& getAttributes();
                 RTFSprms& getSprms();
+                RTFShape& getShape() const;
                 bool equals(RTFValue& rOther);
             private:
                 RTFValue& operator=(RTFValue const& rOther);
@@ -55,6 +59,7 @@ namespace writerfilter {
                 uno::Reference<io::XInputStream> m_xStream;
                 uno::Reference<embed::XEmbeddedObject> m_xObject;
                 bool m_bForceString;
+                boost::shared_ptr<RTFShape> m_pShape;
         };
     } // namespace rtftok
 } // namespace writerfilter
