@@ -755,7 +755,7 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, c
     SQLParseNodeParameter aNewParam(rParam);
     //aNewParam.bQuote = sal_True; // why setting this to true? @see http://www.openoffice.org/issues/show_bug.cgi?id=75557
 
-    if (bSimple && !columnMatchP(m_aChildren[0], rParam))
+    if ( !(bSimple && rParam.bPredicate && rParam.xField.is() && SQL_ISRULE(m_aChildren[0],column_ref) && columnMatchP(m_aChildren[0], rParam)) )
         m_aChildren[0]->impl_parseNodeToString_throw( rString, aNewParam, bSimple );
 
     const OSQLParseNode* pPart2 = m_aChildren[1];
