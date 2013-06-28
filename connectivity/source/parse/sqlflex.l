@@ -26,9 +26,7 @@
 #include <cstdarg>      // std::va_list
 #endif
 
-#ifndef _INC_STRING
 #include <string.h>
-#endif
 
 #include "internalnode.hxx"
 

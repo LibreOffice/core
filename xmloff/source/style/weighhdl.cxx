@@ -26,9 +26,7 @@
 #include <tools/fontenum.hxx>
 #include <tools/solar.h>
 
-#ifndef _INC_LIMITS
 #include <limits.h>
-#endif
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 

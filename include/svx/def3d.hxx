@@ -20,9 +20,7 @@
 #ifndef _SVX_DEF3D_HXX
 #define _SVX_DEF3D_HXX
 
-#ifndef _INC_MATH
 #include <math.h>
-#endif
 #include <tools/solar.h>
 
 const double fPiDiv180 = 0.01745329251994;
