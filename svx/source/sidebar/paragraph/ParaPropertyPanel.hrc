@@ -32,10 +32,8 @@
 #define MF_ABOVE_PARASPACING                         32
 #define MF_BELOW_PARASPACING                         34
 #define TBX_INDENT_PRO_DEMOTE                        35
-#define IL_NUM_BULLET       45
 
 #define FT_BACK_COLOR       47
-#define IL_NUM_BULLET_RTL       52  //sym2_7380
 
 #define TBI_HOR_ALIGN_LEFT      65
 #define TBI_HOR_ALIGN_CENTER    66
@@ -62,6 +60,8 @@
 #define IMG_SEL_SPACING2    (RID_SVX_SIDEBAR_BEGIN + 16)
 #define IMG_CUSTOM          (RID_SVX_SIDEBAR_BEGIN + 17)
 #define IMG_CUSTOM_GRAY     (RID_SVX_SIDEBAR_BEGIN + 18)
+#define IL_NUM_BULLET       (RID_SVX_SIDEBAR_BEGIN + 19)
+#define IL_NUM_BULLET_RTL   (RID_SVX_SIDEBAR_BEGIN + 20)
 
 //for numbering and bullet
 #define IID_BULLET          1
