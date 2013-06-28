@@ -690,9 +690,6 @@ void ScDocument::ApplyAsianEditSettings( ScEditEngineDefaulter& rEngine )
 
 void ScDocument::RebuildFormulaGroups()
 {
-    if (!ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
-        return;
-
     SCTAB nTab;
     for (nTab=0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
         if (maTabs[nTab])
