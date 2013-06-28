@@ -1250,10 +1250,8 @@ void ImpPDFTabSecurityPage::enablePermissionControls()
 {
     sal_Bool bIsPDFASel =  sal_False;
     ImpPDFTabDialog* pParent = static_cast<ImpPDFTabDialog*>(GetTabDialog());
-    fprintf(stderr, "pParent is %p\n", pParent);
     if( pParent && pParent->GetTabPage( RID_PDF_TAB_GENER ) )
     {
-        fprintf(stderr,"got it\n");
         bIsPDFASel = ( ( ImpPDFTabGeneralPage* )pParent->
                        GetTabPage( RID_PDF_TAB_GENER ) )->IsPdfaSelected();
     }
