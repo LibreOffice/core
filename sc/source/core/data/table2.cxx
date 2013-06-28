@@ -773,7 +773,7 @@ void ScTable::CopyFromClip(
             aCol[i].CopyFromClip(rCxt, nRow1, nRow2, nDy, pTable->aCol[i - nDx]);
 
 
-        if (rCxt.getInsertFlag() != IDF_OBJECTS)
+        if (rCxt.getInsertFlag() == IDF_ATTRIB)
         {
             // make sure that there are no old references to the cond formats
             sal_uInt16 nWhichArray[2];
