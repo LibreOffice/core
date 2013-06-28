@@ -22,13 +22,13 @@
 SwTableFmt::SwTableFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
                     SwFrmFmt *pDrvdFrm )
     : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
-    , m_aRepeatHeading( 0 )
-    , m_bRowSplit( sal_True )
     {
         SetBreak( SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
         SetKeepWithNextPara( SvxFmtKeepItem( sal_False, RES_KEEP ) );
         SetLayoutSplit( sal_True );
         SetCollapsingBorders( sal_True );
+        SetRowSplit( sal_True );
+        SetRepeatHeading( 0 );
         SetShadow( SvxShadowItem( RES_SHADOW ) );
 
         pFstLineFmt = NULL;
@@ -45,13 +45,13 @@ SwTableFmt::SwTableFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
 SwTableFmt::SwTableFmt( SwAttrPool& rPool, const String &rFmtNm,
                     SwFrmFmt *pDrvdFrm )
     : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableSetRange )
-    , m_aRepeatHeading( 0 )
-    , m_bRowSplit( sal_True )
     {
         SetBreak( SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
         SetKeepWithNextPara( SvxFmtKeepItem( sal_False, RES_KEEP ) );
         SetLayoutSplit( sal_True );
         SetCollapsingBorders( sal_True );
+        SetRowSplit( sal_True );
+        SetRepeatHeading( 0 );
         SetShadow( SvxShadowItem( RES_SHADOW ) );
 
         pFstLineFmt = NULL;
@@ -69,9 +69,6 @@ SwTableFmt& SwTableFmt::operator=( const SwTableFmt& rNew )
     {
         if (&rNew == this)
             return *this;
-
-        m_aRepeatHeading = rNew.m_aRepeatHeading;
-        m_bRowSplit = rNew.m_bRowSplit;
 
         pFstLineFmt = rNew.pFstLineFmt;
         pLstLineFmt = rNew.pLstLineFmt;
@@ -111,6 +108,16 @@ void SwTableFmt::SetCollapsingBorders( const sal_Bool& rNew )
     SetFmtAttr( SfxBoolItem( RES_COLLAPSING_BORDERS, rNew ) );
 }
 
+void SwTableFmt::SetRowSplit( const sal_Bool& rNew )
+{
+    SetFmtAttr( SwFmtRowSplit( rNew ) );
+}
+
+void SwTableFmt::SetRepeatHeading( const sal_uInt16& rNew )
+{
+    SetFmtAttr( SfxUInt16Item( FN_PARAM_TABLE_HEADLINE, rNew ) );
+}
+
 void SwTableFmt::SetShadow( const SvxShadowItem& rNew )
 {
     SetFmtAttr( rNew );
@@ -129,6 +136,16 @@ sal_Bool SwTableFmt::GetLayoutSplit() const
 sal_Bool SwTableFmt::GetCollapsingBorders() const
 {
     return (static_cast<const SfxBoolItem&>( GetFmtAttr( RES_COLLAPSING_BORDERS ) )).GetValue();
+}
+
+sal_Bool SwTableFmt::GetRowSplit() const
+{
+    return SwFmt::GetRowSplit().GetValue();
+}
+
+sal_uInt16 SwTableFmt::GetRepeatHeading() const
+{
+    return (static_cast<const SfxUInt16Item&>( GetFmtAttr( FN_PARAM_TABLE_HEADLINE ) )).GetValue();
 }
 
 SwTableLineFmt::SwTableLineFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,

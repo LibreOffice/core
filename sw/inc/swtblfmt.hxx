@@ -19,11 +19,28 @@
 #ifndef _SWTBLFMT_HXX
 #define _SWTBLFMT_HXX
 
+#include <cmdid.h>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/adjustitem.hxx>
+#include <editeng/justifyitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
+#include <editeng/lineitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <editeng/shaditem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtlsplt.hxx>
+#include <fmtrowsplt.hxx>
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
 
@@ -52,9 +69,6 @@ protected:
     SwTableLineFmt* pOddColFmt;
     SwTableLineFmt* pEvnColFmt;
 
-    sal_uInt16 m_aRepeatHeading;
-    sal_Bool m_bRowSplit;
-
 public:
     SwTableFmt& operator=( const SwTableFmt& rNew );
 
@@ -78,22 +92,20 @@ public:
     SwTableLineFmt* GetOddColFmt() { return pOddColFmt; }
     SwTableLineFmt* GetEvenColFmt() { return pEvnColFmt; }
 
-    void SetRepeatHeading( const sal_uInt16& rNew ) { m_aRepeatHeading = rNew; }
-    void SetRowSplit( const sal_Bool& rNew ) { m_bRowSplit = rNew; }
-
-    const sal_uInt16& GetRepeatHeading() const { return m_aRepeatHeading; }
-    const sal_Bool& GetRowSplit() const { return m_bRowSplit; }
-
     void SetBreak( const SvxFmtBreakItem& rNew );
     void SetPageDesc( const SwFmtPageDesc& rNew );
     void SetKeepWithNextPara( const SvxFmtKeepItem& rNew );
     void SetLayoutSplit( const sal_Bool& rNew );
     void SetCollapsingBorders( const sal_Bool& rNew );
+    void SetRowSplit( const sal_Bool& rNew );
+    void SetRepeatHeading( const sal_uInt16& rNew );
     void SetShadow( const SvxShadowItem& rNew );
 
     const SvxFmtKeepItem& GetKeepWithNextPara() const;
     sal_Bool GetLayoutSplit() const;
     sal_Bool GetCollapsingBorders() const;
+    sal_Bool GetRowSplit() const;
+    sal_uInt16 GetRepeatHeading() const;
 
     TYPEINFO();     // Already in base class Content.
 
