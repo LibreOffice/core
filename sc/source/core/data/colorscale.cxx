@@ -19,6 +19,24 @@
 
 #include <algorithm>
 
+class ScFormulaListener : public SvtListener
+{
+private:
+    std::vector<ScRange> maCells;
+    mutable bool mbDirty;
+    ScDocument* mpDoc;
+
+    void startListening(ScTokenArray* pTokens, const ScAddress& rPos);
+
+public:
+    ScFormulaListener(ScFormulaCell* pCell);
+    virtual ~ScFormulaListener();
+
+    void Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
+
+    bool NeedsRepaint() const;
+};
+
 ScFormulaListener::ScFormulaListener(ScFormulaCell* pCell):
     mbDirty(false),
     mpDoc(pCell->GetDocument())

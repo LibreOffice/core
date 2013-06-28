@@ -29,24 +29,7 @@ class ScFormulaCell;
 class ScTokenArray;
 struct ScDataBarInfo;
 class BitmapEx;
-
-class ScFormulaListener : public SvtListener
-{
-private:
-    std::vector<ScRange> maCells;
-    mutable bool mbDirty;
-    ScDocument* mpDoc;
-
-    void startListening(ScTokenArray* pTokens, const ScAddress& rPos);
-
-public:
-    ScFormulaListener(ScFormulaCell* pCell);
-    virtual ~ScFormulaListener();
-
-    void Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
-
-    bool NeedsRepaint() const;
-};
+class ScFormulaListener;
 
 // don't change the order
 // they are also used in the dialog to determine the position
