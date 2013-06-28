@@ -119,7 +119,7 @@ void SalGraphics::mirror( long& x, const OutputDevice *pOutDev, bool bBack ) con
             {
                 long devX = pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
                 if( bBack )
-                    x = x - pOutDevRef->GetOutputWidthPixel() + devX - pOutDevRef->GetOutOffXPixel() + 1;
+                    x = devX + (pOutDevRef->GetOutputWidthPixel() + devX) - (x + 1);
                 else
                     x = pOutDevRef->GetOutputWidthPixel() - (x - devX) + pOutDevRef->GetOutOffXPixel() - 1;
             }
@@ -155,7 +155,7 @@ void SalGraphics::mirror( long& x, long& nWidth, const OutputDevice *pOutDev, bo
             {
                 long devX = pOutDevRef->GetOutOffXPixel();   // re-mirrored mnOutOffX
                 if( bBack )
-                    x = x - pOutDevRef->GetOutputWidthPixel() + devX - pOutDevRef->GetOutOffXPixel() + nWidth;
+                    x = devX + (pOutDevRef->GetOutputWidthPixel() + devX) - (x + nWidth);
                 else
                     x = pOutDevRef->GetOutputWidthPixel() - (x - devX) + pOutDevRef->GetOutOffXPixel() - nWidth;
             }
