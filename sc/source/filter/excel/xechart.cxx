@@ -1731,6 +1731,11 @@ bool XclExpChSerTrendLine::Convert( Reference< XRegressionCurve > xRegCurve, sal
 
     aCurveProp.GetProperty(maData.mfForecastFor,  EXC_CHPROP_EXTRAPOLATE_FORWARD);
     aCurveProp.GetProperty(maData.mfForecastBack, EXC_CHPROP_EXTRAPOLATE_BACKWARD);
+    sal_Bool bIsForceIntercept = false;
+    aCurveProp.GetProperty(bIsForceIntercept,  EXC_CHPROP_FORCE_INTERCEPT);
+    if (bIsForceIntercept)
+        aCurveProp.GetProperty(maData.mfIntercept, EXC_CHPROP_INTERCEPT_VALUE);
+
 
     // line formatting
     XclChDataPointPos aPointPos( nSeriesIdx );
