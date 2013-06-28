@@ -1145,25 +1145,6 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
     HTMLOutFuncs::Out_String( rWrt.Strm(), aGrfNm, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ) << '\"';
 
-////////////<<<-----------------------------------------
-    Graphic aGraphic( ((SwFrmFmt &)rFrmFmt).MakeGraphic() );
-    const GfxLink aGfxLink( ( (Graphic&) aGraphic ).GetLink() );
-    sal_uLong aExt;
-    switch( aGfxLink.GetType() )
-    {
-        case( GFX_LINK_TYPE_NATIVE_GIF ): aExt = 0x38464947; break;
-        case( GFX_LINK_TYPE_NATIVE_JPG ): aExt = 0xffd8ff00; break;
-        case( GFX_LINK_TYPE_NATIVE_PNG ): aExt = 0x0d0a1a0a; break;
-        default:break;
-    }
-    GraphicConverter* aGraphicConverter;
-    sal_uLong nErr;
-    SvStream aOStm;
-    nErr = aGraphicConverter->Export(aOStm,aGraphic,aExt);
-    OUStringBuffer aStrBuffer;
-    //::sax::Converter::encodeBase64(aStrBuffer, aOStm);
-////////////----------------------------------------->>>
-
     // Events
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRMMACRO, sal_True, &pItem ))
     {
@@ -1573,7 +1554,6 @@ static Writer & OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
     ImageMap aIMap;
     Graphic aGrf( ((SwFrmFmt &)rFrmFmt).MakeGraphic( &aIMap ) );
-
     String aGrfNm;
     if( rHTMLWrt.GetOrigFileName() )
         aGrfNm = *rHTMLWrt.GetOrigFileName();
@@ -1603,7 +1583,6 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                       sal_Bool bInCntnr )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
-
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
     sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
     SwGrfNode *pGrfNd = rHTMLWrt.pDoc->GetNodes()[ nStt ]->GetGrfNode();
@@ -1660,6 +1639,30 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         nFrmFlags |= HTML_FRMOPTS_IMG_CSS1;
     OutHTML_Image( rWrt, rFrmFmt, aGrfNm, pGrfNd->GetTitle(),
                    pGrfNd->GetTwipSize(), nFrmFlags, pMarkToGraphic );
+
+////////////<<<-----------------------------------------
+    /*const GfxLink aGfxLink( ( (Graphic&) aGraphic ).GetLink() );
+    sal_uLong aExt;
+    switch( aGfxLink.GetType() )
+    {
+        case( GFX_LINK_TYPE_NATIVE_GIF ): aExt = CVT_GIF; break;
+        case( GFX_LINK_TYPE_NATIVE_JPG ): aExt = CVT_JPG; break;
+        case( GFX_LINK_TYPE_NATIVE_PNG ): aExt = CVT_PNG; break;
+        default:break;
+    }*/
+    GraphicConverter* aGraphicConverter;
+    sal_uLong nErr;
+    SvStream aOStm;
+    Graphic aGraphic = pGrfNd->GetGraphic();
+    nErr = aGraphicConverter->Export(aOStm,aGraphic,CVT_JPG);
+    /*uno::Sequence<sal_Int8> aOStmSeq(aOStm.Tell());
+    OUStringBuffer aStrBuffer;
+    ::sax::Converter::encodeBase64(aStrBuffer,aOStmSeq);
+    String aBase = aStrBuffer.toString();
+    std::cout << aBase << std::endl;
+    OutHTML_Image( rWrt, rFrmFmt, aaGrfNm, pGrfNd->GetTitle(),
+                   pGrfNd->GetTwipSize(), nFrmFlags, pMarkToGraphic );*/
+////////////----------------------------------------->>>
 
     return rWrt;
 }
