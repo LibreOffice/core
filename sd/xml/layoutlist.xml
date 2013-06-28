@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- At present I am not sure about corect XML namespace,so once I am aware of it.I am ready to add it.
+-->
+<layout-list>
+<layout type="AUTOLAYOUT_TITLE_CONTENT"><presobj kind="PRESOBJ_TITLE" layout-pos-x="1400" layout-pos-y="837" layout-size-height="4400" layout-size-width="25600"/><presobj kind="PRESOBJ_OUTLINE1" layout-pos-x="1400" layout-pos-y="4914" layout-size-height="25200" layout-size-width="12180"/></layout>
+<layout type="AUTOLAYOUT_TITLE_2VTEXT"><presobj kind="PRESOBJ_TITLE" layout-pos-x="1400" layout-pos-y="837" layout-size-height="4400" layout-size-width="25600"/><presobj kind="PRESOBJ_OUTLINE1" layout-pos-x="1400" layout-pos-y="4914" layout-size-height="12297" layout-size-width="12180"/><presobj kind="PRESOBJ_OUTLINE2" layout-pos-x="14311" layout-pos-y="4914" layout-size-height="12297" layout-size-width="12180"/></layout>
+<layout type="AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT"><presobj kind="PRESOBJ_TITLE" layout-pos-x="1400" layout-pos-y="837" layout-size-height="4400" layout-size-width="25600"/><presobj kind="PRESOBJ_OUTLINE1" layout-pos-x="1400" layout-pos-y="4914" layout-size-height="25200" layout-size-width="5809"/><presobj kind="PRESOBJ_OUTLINE2" layout-pos-x="1400" layout-pos-y="11274" layout-size-height="25200" layout-size-width="5809"/></layout>
+</layout-list>

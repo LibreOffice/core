@@ -14,6 +14,7 @@ $(eval $(call gb_Package_set_outdir,sd_xml,$(INSTDIR)))
 $(eval $(call gb_Package_add_files,sd_xml,share/config/soffice.cfg/simpress,\
 	effects.xml \
 	transitions.xml \
+	layoutlist.xml  \
 ))
 
 # vim: set noet sw=4 ts=4:
