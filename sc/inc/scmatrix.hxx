@@ -349,6 +349,9 @@ public:
     IterateResult Product(bool bTextAsZero) const;
     size_t Count(bool bCountStrings) const;
 
+    double GetMaxValue( bool bTextAsZero ) const;
+    double GetMinValue( bool bTextAsZero ) const;
+
     // All other matrix functions  MatMult, MInv, ...  are in ScInterpreter
     // to be numerically safe.
 

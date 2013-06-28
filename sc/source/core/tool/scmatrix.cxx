@@ -223,6 +223,9 @@ public:
     ScMatrix::IterateResult Product(bool bTextAsZero) const;
     size_t Count(bool bCountStrings) const;
 
+    double GetMaxValue( bool bTextAsZero ) const;
+    double GetMinValue( bool bTextAsZero ) const;
+
 #if DEBUG_MATRIX
     void Dump() const;
 #endif
@@ -935,6 +938,90 @@ public:
     }
 };
 
+struct MaxOp
+{
+    static double init() { return std::numeric_limits<double>::min(); }
+    static double compare(double left, double right)
+    {
+        return std::max(left, right);
+    }
+
+    static double boolValue(
+        mdds::mtv::boolean_element_block::const_iterator it,
+        mdds::mtv::boolean_element_block::const_iterator itEnd)
+    {
+        // If the array has at least one true value, the maximum value is 1.
+        it = std::find(it, itEnd, true);
+        return it == itEnd ? 0.0 : 1.0;
+    }
+};
+
+struct MinOp
+{
+    static double init() { return std::numeric_limits<double>::max(); }
+    static double compare(double left, double right)
+    {
+        return std::min(left, right);
+    }
+
+    static double boolValue(
+        mdds::mtv::boolean_element_block::const_iterator it,
+        mdds::mtv::boolean_element_block::const_iterator itEnd)
+    {
+        // If the array has at least one false value, the minimum value is 0.
+        it = std::find(it, itEnd, false);
+        return it == itEnd ? 1.0 : 0.0;
+    }
+};
+
+template<typename _Op>
+class CalcMaxMinValue : std::unary_function<MatrixImplType::element_block_type, void>
+{
+    double mfVal;
+    bool mbTextAsZero;
+public:
+    CalcMaxMinValue( bool bTextAsZero ) :
+        mfVal(_Op::init()),
+        mbTextAsZero(bTextAsZero) {}
+
+    double getValue() const { return mfVal; }
+
+    void operator() (const MatrixImplType::element_block_node_type& node)
+    {
+        using namespace mdds::mtv;
+
+        switch (node.type)
+        {
+            case mdds::mtm::element_numeric:
+            {
+                numeric_element_block::const_iterator it = numeric_element_block::begin(*node.data);
+                numeric_element_block::const_iterator itEnd = numeric_element_block::end(*node.data);
+                for (; it != itEnd; ++it)
+                    mfVal = _Op::compare(mfVal, *it);
+            }
+            break;
+            case mdds::mtm::element_boolean:
+            {
+                boolean_element_block::const_iterator it = boolean_element_block::begin(*node.data);
+                boolean_element_block::const_iterator itEnd = boolean_element_block::end(*node.data);
+                double fVal = _Op::boolValue(it, itEnd);
+                mfVal = _Op::compare(mfVal, fVal);
+            }
+            break;
+            case mdds::mtm::element_string:
+            case mdds::mtm::element_empty:
+            {
+                // empty elements are treated as empty strings.
+                if (mbTextAsZero)
+                    mfVal = _Op::compare(mfVal, 0.0);
+            }
+            break;
+            default:
+                ;
+        }
+    }
+};
+
 }
 
 ScMatrix::IterateResult ScMatrixImpl::Sum(bool bTextAsZero) const
@@ -964,6 +1051,20 @@ size_t ScMatrixImpl::Count(bool bCountStrings) const
     CountElements aFunc(bCountStrings);
     maMat.walk(aFunc);
     return aFunc.getCount();
+}
+
+double ScMatrixImpl::GetMaxValue( bool bTextAsZero ) const
+{
+    CalcMaxMinValue<MaxOp> aFunc(bTextAsZero);
+    maMat.walk(aFunc);
+    return aFunc.getValue();
+}
+
+double ScMatrixImpl::GetMinValue( bool bTextAsZero ) const
+{
+    CalcMaxMinValue<MinOp> aFunc(bTextAsZero);
+    maMat.walk(aFunc);
+    return aFunc.getValue();
 }
 
 #if DEBUG_MATRIX
@@ -1306,6 +1407,16 @@ ScMatrix::IterateResult ScMatrix::Product(bool bTextAsZero) const
 size_t ScMatrix::Count(bool bCountStrings) const
 {
     return pImpl->Count(bCountStrings);
+}
+
+double ScMatrix::GetMaxValue( bool bTextAsZero ) const
+{
+    return pImpl->GetMaxValue(bTextAsZero);
+}
+
+double ScMatrix::GetMinValue( bool bTextAsZero ) const
+{
+    return pImpl->GetMinValue(bTextAsZero);
 }
 
 #if DEBUG_MATRIX

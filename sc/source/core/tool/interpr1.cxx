@@ -3729,39 +3729,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
             {
                 ScMatrixRef pMat = GetMatrix();
                 if (pMat)
-                {
-                    SCSIZE nC, nR;
-                    nFuncFmtType = NUMBERFORMAT_NUMBER;
-                    pMat->GetDimensions(nC, nR);
-                    if (pMat->IsNumeric())
-                    {
-                        for (SCSIZE nMatCol = 0; nMatCol < nC; nMatCol++)
-                            for (SCSIZE nMatRow = 0; nMatRow < nR; nMatRow++)
-                            {
-                                nVal = pMat->GetDouble(nMatCol,nMatRow);
-                                if (nMin > nVal) nMin = nVal;
-                            }
-                    }
-                    else
-                    {
-                        for (SCSIZE nMatCol = 0; nMatCol < nC; nMatCol++)
-                        {
-                            for (SCSIZE nMatRow = 0; nMatRow < nR; nMatRow++)
-                            {
-                                if (!pMat->IsString(nMatCol,nMatRow))
-                                {
-                                    nVal = pMat->GetDouble(nMatCol,nMatRow);
-                                    if (nMin > nVal) nMin = nVal;
-                                }
-                                else if ( bTextAsZero )
-                                {
-                                    if ( nMin > 0.0 )
-                                        nMin = 0.0;
-                                }
-                            }
-                         }
-                    }
-                }
+                    nMin = pMat->GetMinValue(bTextAsZero);
             }
             break;
             case svString :
@@ -3855,36 +3823,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
                 if (pMat)
                 {
                     nFuncFmtType = NUMBERFORMAT_NUMBER;
-                    SCSIZE nC, nR;
-                    pMat->GetDimensions(nC, nR);
-                    if (pMat->IsNumeric())
-                    {
-                        for (SCSIZE nMatCol = 0; nMatCol < nC; nMatCol++)
-                            for (SCSIZE nMatRow = 0; nMatRow < nR; nMatRow++)
-                            {
-                                nVal = pMat->GetDouble(nMatCol,nMatRow);
-                                if (nMax < nVal) nMax = nVal;
-                            }
-                    }
-                    else
-                    {
-                        for (SCSIZE nMatCol = 0; nMatCol < nC; nMatCol++)
-                        {
-                            for (SCSIZE nMatRow = 0; nMatRow < nR; nMatRow++)
-                            {
-                                if (!pMat->IsString(nMatCol,nMatRow))
-                                {
-                                    nVal = pMat->GetDouble(nMatCol,nMatRow);
-                                    if (nMax < nVal) nMax = nVal;
-                                }
-                                else if ( bTextAsZero )
-                                {
-                                    if ( nMax < 0.0 )
-                                        nMax = 0.0;
-                                }
-                            }
-                        }
-                    }
+                    nMax = pMat->GetMaxValue(bTextAsZero);
                 }
             }
             break;
