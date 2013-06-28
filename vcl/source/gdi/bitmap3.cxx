@@ -215,7 +215,7 @@ void ImplCreateDitherMatrix( sal_uInt8 (*pDitherMatrix)[16][16] )
     long            i, j, k, l;
     sal_uInt16          pMtx[ 16 ][ 16 ];
     sal_uInt16          nMax = 0;
-    static sal_uInt8    pMagic[4][4] = { { 0, 14,  3, 13, },
+    static const sal_uInt8 pMagic[4][4] = { { 0, 14,  3, 13, },
                                      {11,  5,  8,  6, },
                                      {12,  2, 15,  1, },
                                      {7,   9,  4, 10 } };

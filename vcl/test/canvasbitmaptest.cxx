@@ -701,7 +701,7 @@ public:
 
 void TestWindow::Paint( const Rectangle& )
 {
-    static sal_Int8 lcl_depths[]={1,4,8,16,24};
+    static const sal_Int8 lcl_depths[]={1,4,8,16,24};
 
     try
     {
