@@ -63,7 +63,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Yearfrac
         {
-            Text [ en-US ] = "Returns the number of whole days between 'start date' and 'end date' as a year fraction";
+            Text [ en-US ] = "Extracts the number of years (including fractional part) between two dates";
         };
 
         String 2 // name of parameter 1         Yearfrac
@@ -93,7 +93,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 7 // description of parameter 3  Yearfrac
         {
-            Text [ en-US ] = "Basis for determining the interest days";
+            Text [ en-US ] = "Basis indicates the day-count convention to use in the calculation";
         };
     };
 
