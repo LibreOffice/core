@@ -1973,7 +1973,7 @@ public:
     formula::FormulaTokenRef ResolveStaticReference( const ScRange& rRange );
 
     const double* FetchDoubleArray(
-        sc::FormulaGroupContext& rCxt, const ScAddress& rPos, SCROW nLength ) const;
+        sc::FormulaGroupContext& rCxt, const ScAddress& rPos, SCROW nLength );
 
     SvtBroadcaster* GetBroadcaster( const ScAddress& rPos );
     const SvtBroadcaster* GetBroadcaster( const ScAddress& rPos ) const;

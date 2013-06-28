@@ -842,7 +842,7 @@ public:
     formula::FormulaTokenRef ResolveStaticReference( SCCOL nCol, SCROW nRow );
     formula::FormulaTokenRef ResolveStaticReference( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     const double* FetchDoubleArray(
-        sc::FormulaGroupContext& rCxt, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
+        sc::FormulaGroupContext& rCxt, SCCOL nCol, SCROW nRow1, SCROW nRow2 );
 
     ScRefCellValue GetRefCellValue( SCCOL nCol, SCROW nRow );
 

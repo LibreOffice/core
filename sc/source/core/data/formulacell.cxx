@@ -2941,13 +2941,13 @@ namespace {
 
 class GroupTokenConverter
 {
-    sc::FormulaGroupContext maCxt;
+    sc::FormulaGroupContext& mrCxt;
     ScTokenArray& mrGroupTokens;
     ScDocument& mrDoc;
     ScFormulaCell& mrCell;
 public:
-    GroupTokenConverter(ScTokenArray& rGroupTokens, ScDocument& rDoc, ScFormulaCell& rCell) :
-        mrGroupTokens(rGroupTokens), mrDoc(rDoc), mrCell(rCell) {}
+    GroupTokenConverter(sc::FormulaGroupContext& rCxt, ScTokenArray& rGroupTokens, ScDocument& rDoc, ScFormulaCell& rCell) :
+        mrCxt(rCxt), mrGroupTokens(rGroupTokens), mrDoc(rDoc), mrCell(rCell) {}
 
     bool convert(ScTokenArray& rCode)
     {
@@ -2978,7 +2978,7 @@ public:
                         // we finish cell storage rework, we'll support temporary
                         // generation of a double array which is a combination of
                         // multiple cell array segments.
-                        const double* pArray = mrDoc.FetchDoubleArray(maCxt, aRefPos, mrCell.GetCellGroup()->mnLength);
+                        const double* pArray = mrDoc.FetchDoubleArray(mrCxt, aRefPos, mrCell.GetCellGroup()->mnLength);
                         if (!pArray)
                             return false;
 
@@ -3020,7 +3020,7 @@ public:
                         for (SCCOL i = aRef.Ref1.nCol; i <= aRef.Ref2.nCol; ++i)
                         {
                             aRefPos.SetCol(i);
-                            const double* pArray = mrDoc.FetchDoubleArray(maCxt, aRefPos, nArrayLength);
+                            const double* pArray = mrDoc.FetchDoubleArray(mrCxt, aRefPos, nArrayLength);
                             if (!pArray)
                                 return false;
 
@@ -3108,9 +3108,8 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return InterpretInvariantFormulaGroup();
 
     sc::FormulaGroupContext aCxt;
-
     ScTokenArray aCode;
-    GroupTokenConverter aConverter(aCode, *pDocument, *this);
+    GroupTokenConverter aConverter(aCxt, aCode, *pDocument, *this);
     if (!aConverter.convert(*pCode))
         return false;
     return sc::FormulaGroupInterpreter::getStatic()->interpret(*pDocument, aPos, xGroup, aCode);

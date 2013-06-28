@@ -2156,7 +2156,7 @@ formula::FormulaTokenRef ScTable::ResolveStaticReference( SCCOL nCol1, SCROW nRo
 }
 
 const double* ScTable::FetchDoubleArray(
-    sc::FormulaGroupContext& rCxt, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const
+    sc::FormulaGroupContext& rCxt, SCCOL nCol, SCROW nRow1, SCROW nRow2 )
 {
     if (nRow2 < nRow1)
         return NULL;

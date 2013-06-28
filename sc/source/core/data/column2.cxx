@@ -2073,23 +2073,189 @@ void ScColumn::FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nR
     sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
 }
 
-const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& /*rCxt*/, SCROW nRow1, SCROW nRow2 ) const
+namespace {
+
+bool appendDouble(
+    sc::FormulaGroupContext::DoubleArrayType& rArray, size_t nLen,
+    sc::CellStoreType::iterator it, const sc::CellStoreType::iterator& itEnd )
 {
-    // TODO: I'll use the context object later.
+    size_t nLenRemain = nLen;
+    for (; it != itEnd; ++it)
+    {
+        switch (it->type)
+        {
+            case sc::element_type_numeric:
+            {
+                sc::numeric_block::iterator itData = sc::numeric_block::begin(*it->data);
+                sc::numeric_block::iterator itDataEnd;
+                if (nLenRemain >= it->size)
+                {
+                    // Block is shorter than the remaining requested length.
+                    itDataEnd = sc::numeric_block::end(*it->data);
+                    nLenRemain -= it->size;
+                }
+                else
+                {
+                    itDataEnd = itData;
+                    std::advance(itDataEnd, nLenRemain);
+                    nLenRemain = 0;
+                }
+
+                for (; itData != itDataEnd; ++itData)
+                    rArray.push_back(*itData);
+            }
+            break;
+            case sc::element_type_formula:
+            {
+                sc::formula_block::iterator itData = sc::formula_block::begin(*it->data);
+                sc::formula_block::iterator itDataEnd;
+                if (nLenRemain >= it->size)
+                {
+                    // Block is shorter than the remaining requested length.
+                    itDataEnd = sc::formula_block::end(*it->data);
+                    nLenRemain -= it->size;
+                }
+                else
+                {
+                    itDataEnd = itData;
+                    std::advance(itDataEnd, nLenRemain);
+                    nLenRemain = 0;
+                }
+
+                for (; itData != itDataEnd; ++itData)
+                {
+                    ScFormulaCell& rFC = **itData;
+                    rArray.push_back(rFC.GetValue());
+                }
+            }
+            break;
+            case sc::element_type_empty:
+            {
+                // Fill it with 0's.
+                if (nLenRemain >= it->size)
+                {
+                    rArray.resize(rArray.size() + it->size, 0);
+                    nLenRemain -= it->size;
+                }
+                else
+                {
+                    rArray.resize(rArray.size() + nLenRemain, 0);
+                    nLenRemain = 0;
+                }
+            }
+            break;
+            case sc::element_type_string:
+            case sc::element_type_edittext:
+            default:
+                return false;
+        }
+
+        if (!nLenRemain)
+            return true;
+    }
+
+    return false;
+}
+
+}
+
+const double* ScColumn::FetchDoubleArray( sc::FormulaGroupContext& rCxt, SCROW nRow1, SCROW nRow2 )
+{
     if (nRow1 > nRow2)
         return NULL;
 
-    std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow1);
-    if (aPos.first->type != sc::element_type_numeric)
-        // This is not a numeric cell block.
-        return NULL;
-
+    size_t nLenRequested = nRow2 - nRow1 + 1;
+    sc::CellStoreType::position_type aPos = maCells.position(nRow1);
     size_t nLen = aPos.first->size - aPos.second;
-    if (static_cast<SCROW>(nLen) < nRow2 - nRow1 + 1)
-        // Array shorter than requested.
-        return NULL;
+    switch (aPos.first->type)
+    {
+        case sc::element_type_numeric:
+        {
+            // This is a numeric cell block.
+            if (nLenRequested <= nLen)
+                // Requested length fits a single block.
+                return &sc::numeric_block::at(*aPos.first->data, aPos.second);
 
-    return &sc::numeric_block::at(*aPos.first->data, aPos.second);
+            // Allocate a new array and copy the values to it.
+            sc::numeric_block::const_iterator it = sc::numeric_block::begin(*aPos.first->data);
+            sc::numeric_block::const_iterator itEnd = sc::numeric_block::end(*aPos.first->data);
+            std::advance(it, aPos.second);
+            rCxt.maArrays.push_back(new sc::FormulaGroupContext::DoubleArrayType(it, itEnd));
+            sc::FormulaGroupContext::DoubleArrayType& rArray = rCxt.maArrays.back();
+            rArray.reserve(nLenRequested);
+
+            // Fill the remaining array with values from the following blocks.
+            ++aPos.first;
+            if (!appendDouble(rArray, nLenRequested - nLen, aPos.first, maCells.end()))
+                return NULL;
+
+            return &rArray[0];
+        }
+        break;
+        case sc::element_type_formula:
+        {
+            rCxt.maArrays.push_back(new sc::FormulaGroupContext::DoubleArrayType);
+            sc::FormulaGroupContext::DoubleArrayType& rArray = rCxt.maArrays.back();
+            rArray.reserve(nLenRequested);
+
+            sc::formula_block::const_iterator it = sc::formula_block::begin(*aPos.first->data);
+            sc::formula_block::const_iterator itEnd;
+            if (nLenRequested <= nLen)
+            {
+                // Requested length is within a single block.
+                itEnd = it;
+                std::advance(itEnd, nLenRequested);
+                for (; it != itEnd; ++it)
+                {
+                    ScFormulaCell& rCell = **it;
+                    rArray.push_back(rCell.GetValue()); // the cell may be interpreted.
+                }
+
+                return &rArray[0];
+            }
+
+            itEnd = sc::formula_block::end(*aPos.first->data);
+            std::advance(itEnd, nLenRequested);
+            for (; it != itEnd; ++it)
+            {
+                ScFormulaCell& rCell = **it;
+                rArray.push_back(rCell.GetValue()); // the cell may be interpreted.
+            }
+
+            // Fill the remaining array with values from the following blocks.
+            ++aPos.first;
+            if (!appendDouble(rArray, nLenRequested - nLen, aPos.first, maCells.end()))
+                return NULL;
+
+            return &rArray[0];
+        }
+        break;
+        case sc::element_type_empty:
+        {
+            if (nLenRequested <= nLen)
+            {
+                // Fill the whole length with zero.
+                rCxt.maArrays.push_back(new sc::FormulaGroupContext::DoubleArrayType(nLenRequested, 0.0));
+                return &rCxt.maArrays.back()[0];
+            }
+
+            // Fill the array with zero for the length of the empty block.
+            rCxt.maArrays.push_back(new sc::FormulaGroupContext::DoubleArrayType(nLen, 0.0));
+            sc::FormulaGroupContext::DoubleArrayType& rArray = rCxt.maArrays.back();
+            rArray.reserve(nLenRequested);
+
+            // Fill the remaining array with values from the following blocks.
+            ++aPos.first;
+            if (!appendDouble(rArray, nLenRequested - nLen, aPos.first, maCells.end()))
+                return NULL;
+
+            return &rArray[0];
+        }
+        default:
+            ;
+    }
+
+    return NULL;
 }
 
 void ScColumn::SetFormulaResults( SCROW nRow, const double* pResults, size_t nLen )
