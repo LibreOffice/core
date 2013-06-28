@@ -1128,9 +1128,9 @@ bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool bJust
         if ( bJustQueryIfProtected && !bProtected )
             return true;
 
-        String aTitle( ScResId( bProtected ? SCSTR_CHG_UNPROTECT : SCSTR_CHG_PROTECT ) );
-        String aText( ScResId( SCSTR_PASSWORD ) );
-        String aPassword;
+        OUString aTitle( ScResId( bProtected ? SCSTR_CHG_UNPROTECT : SCSTR_CHG_PROTECT ) );
+        OUString aText( ScResId( SCSTR_PASSWORD ) );
+        OUString aPassword;
 
         SfxPasswordDialog* pDlg = new SfxPasswordDialog(
             _pParent ? _pParent : GetActiveDialogParent(), &aText );
@@ -1144,7 +1144,7 @@ bool ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, sal_Bool bJust
             aPassword = pDlg->GetPassword();
         delete pDlg;
 
-        if ( aPassword.Len() )
+        if (!aPassword.isEmpty())
         {
             if ( bProtected )
             {

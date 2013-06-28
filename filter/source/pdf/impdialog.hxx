@@ -27,6 +27,7 @@
 #include "vcl/fixed.hxx"
 #include "vcl/field.hxx"
 #include "vcl/edit.hxx"
+#include "vcl/layout.hxx"
 #include "vcl/lstbox.hxx"
 #include "vcl/combobox.hxx"
 #include "vcl/group.hxx"
@@ -326,42 +327,39 @@ public:
 //class security tab page
 class ImpPDFTabSecurityPage : public SfxTabPage
 {
-    FixedLine                   maFlGroup;
-    PushButton                  maPbSetPwd;
-    FixedText                   maFtUserPwd;
-    String                      maUserPwdSet;
-    String                      maUserPwdUnset;
-    String                      maUserPwdPdfa;
-    String                      maStrSetPwd;
+    PushButton*                 mpPbSetPwd;
+    OUString                    msStrSetPwd;
 
-    FixedText                   maFtOwnerPwd;
-    String                      maOwnerPwdSet;
-    String                      maOwnerPwdUnset;
-    String                      maOwnerPwdPdfa;
+    VclContainer*               mpUserPwdSet;
+    VclContainer*               mpUserPwdUnset;
+    VclContainer*               mpUserPwdPdfa;
 
-    FixedLine m_aVerticalLine;
+    VclContainer*               mpOwnerPwdSet;
+    VclContainer*               mpOwnerPwdUnset;
+    VclContainer*               mpOwnerPwdPdfa;
 
-    FixedLine                   maFlPrintPermissions;
-    RadioButton                 maRbPrintNone;
-    RadioButton                 maRbPrintLowRes;
-    RadioButton                 maRbPrintHighRes;
+    VclContainer*               mpPrintPermissions;
+    RadioButton*                mpRbPrintNone;
+    RadioButton*                mpRbPrintLowRes;
+    RadioButton*                mpRbPrintHighRes;
 
-    FixedLine                   maFlChangesAllowed;
-    RadioButton                 maRbChangesNone;
-    RadioButton                 maRbChangesInsDel;
-    RadioButton                 maRbChangesFillForm;
-    RadioButton                 maRbChangesComment;
-    RadioButton                 maRbChangesAnyNoCopy;
+    VclContainer*               mpChangesAllowed;
+    RadioButton*                mpRbChangesNone;
+    RadioButton*                mpRbChangesInsDel;
+    RadioButton*                mpRbChangesFillForm;
+    RadioButton*                mpRbChangesComment;
+    RadioButton*                mpRbChangesAnyNoCopy;
 
-    CheckBox                    maCbEnableCopy;
-    CheckBox                    maCbEnableAccessibility;
+    VclContainer*               mpContent;
+    CheckBox*                   mpCbEnableCopy;
+    CheckBox*                   mpCbEnableAccessibility;
 
-    String                      msUserPwdTitle;
+    OUString                    msUserPwdTitle;
 
     bool                        mbHaveOwnerPassword;
     bool                        mbHaveUserPassword;
     com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > maPreparedOwnerPassword;
-    String                      msOwnerPwdTitle;
+    OUString                    msOwnerPwdTitle;
 
     com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > mxPreparedPasswords;
 

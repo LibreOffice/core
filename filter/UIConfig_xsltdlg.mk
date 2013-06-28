@@ -10,8 +10,9 @@
 $(eval $(call gb_UIConfig_UIConfig,filter))
 
 $(eval $(call gb_UIConfig_add_uifiles,filter,\
-	filter/uiconfig/ui/pdflinkspage \
-	filter/uiconfig/ui/pdfuserinterfacepage \
+    filter/uiconfig/ui/pdflinkspage \
+    filter/uiconfig/ui/pdfsecuritypage \
+    filter/uiconfig/ui/pdfuserinterfacepage \
 	filter/uiconfig/ui/testxmlfilter \
 	filter/uiconfig/ui/xmlfiltersettings \
 ))

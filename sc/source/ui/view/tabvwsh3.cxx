@@ -987,14 +987,14 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScDocProtection* pProtect = pDoc->GetDocProtection();
                 if (pProtect && pProtect->isProtected())
                 {
-                    sal_Bool    bCancel = false;
-                    String  aPassword;
+                    sal_Bool bCancel = false;
+                    OUString aPassword;
 
                     if (pProtect->isProtectedWithPass())
                     {
-                        String  aText( ScResId(SCSTR_PASSWORD) );
+                        OUString aText(ScResId(SCSTR_PASSWORD));
 
-                        pDlg = new SfxPasswordDialog(   GetDialogParent(), &aText );
+                        pDlg = new SfxPasswordDialog(GetDialogParent(), &aText);
                         pDlg->SetText( ScResId(SCSTR_UNPROTECTDOC) );
                         pDlg->SetMinLen( 0 );
                         pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand() );
@@ -1015,7 +1015,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    String aText( ScResId(SCSTR_PASSWORDOPT) );
+                    OUString aText(ScResId(SCSTR_PASSWORDOPT));
 
                     pDlg = new SfxPasswordDialog(   GetDialogParent(), &aText );
                     pDlg->SetText( ScResId(SCSTR_PROTECTDOC) );
@@ -1065,7 +1065,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
                 if (pProtect && pProtect->isProtectedWithPass())
                 {
-                    String aText( ScResId(SCSTR_PASSWORDOPT) );
+                    OUString aText( ScResId(SCSTR_PASSWORDOPT) );
                     auto_ptr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(GetDialogParent(), &aText));
                     pDlg->SetText( ScResId(SCSTR_UNPROTECTTAB) );
                     pDlg->SetMinLen( 0 );
