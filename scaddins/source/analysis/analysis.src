@@ -63,7 +63,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Yearfrac
         {
-            Text [ en-US ] = "Extracts the number of years (including fractional part) between two dates";
+            Text [ en-US ] = "Returns the number of years (including fractional part) between two dates";
         };
 
         String 2 // name of parameter 1         Yearfrac
