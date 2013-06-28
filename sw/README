@@ -25,3 +25,82 @@ comments show that Writer core dates back until at least November
    * ww8: DOC import, DOC/DOCX/RTF export
    * xml: ODF import/export, subclassed from xmloff (where most of the work is done)
  * ui: user interface
+
+== Core ==
+
+There is a good overview documentation of basic architecture of Writer core
+in the OOo wiki:
+
+http://wiki.openoffice.org/wiki/Writer/Core_And_Layout
+http://wiki.openoffice.org/wiki/Writer/Text_Formatting
+
+Writer specific WhichIds are defined in sw/inc/hintids.hxx.
+
+The details below are mainly about details missing from the Wiki pages.
+
+=== SwDoc ===
+
+The central class for a document is SwDoc, which represents a document.
+
+This is a huge class with hundreds of methods; there are some efforts
+to split up the class into many smaller classes that implement more
+specific interfaces but this is not fully implemented yet; see the various
+IDocument* classes.
+
+=== SwNodes ===
+
+Basically a (fancy) array of SwNode pointers.  There are special subclasses of
+SwNode (SwStartNode and SwEndNode) which are used to encode a nested tree
+structure into the flat array; the range of nodes from SwStartNode to its
+corresponding SwEndNode is sometimes called a "section" (but is not necessarily
+what the high-level document model calls a "Section"; that is just one of the
+possibilities).
+
+The SwNodes contains the following top-level sections:
+
+1. Empty
+2. Footnote content
+3. Frame / Header / Footer content
+4. Deleted Change Tracking content
+5. Body content
+
+=== Undo ===
+
+The Undo/Redo information is stored in a sw::UndoManager member of SwDoc,
+which implements the IDocumentUndoRedo interface.
+Its members include a SwNodes array containing the document content that
+is currently not in the actual document but required for Undo/Redo, and
+a stack of SwUndo actions, each of which represents one user-visible
+Undo/Redo step.
+
+There are also ListActions which internally contain several individual SwUndo
+actions; these are created by the StartUndo/EndUndo wrapper methods.
+
+=== Text Attributes ===
+
+The sub-structure of paragraphs is stored in the SwpHintsArray member
+SwTxtNode::m_pSwpHints.  There is a base class SwTxtAttr with numerous
+subclasses; the SwTxtAttr has a start and end index and a SfxPoolItem
+to store the actual formatting attribute.
+
+There are several sub-categories of SwTxtAttr:
+
+- formatting attributes: Character Styles (SwTxtCharFmt, RES_TXTATR_CHARFMT)
+  and Automatic Styles (no special class, RES_TXTATR_AUTOFMT):
+  these are handled by SwpHintsArray::BuildPortions and MergePortions,
+  which create non-overlapping portions of formatting attributes.
+
+- nesting attributes: Hyperlinks (SwTxtINetFmt, RES_TXTATR_INETFMT),
+  Ruby (SwTxtRuby, RES_TXTATR_CJK_RUBY) and Meta/MetaField (SwTxtMeta,
+  RES_TXTATR_META/RES_TXTATR_METAFIELD):
+  these maintain a properly nested tree structure.
+  The Meta/Metafield are "special" because they have both start/end
+  and a dummy character at the start.
+
+- misc. attributes: Reference Marks, ToX Marks
+
+- attributes without end: Fields, Footnotes, Flys (AS_CHAR)
+  These all have a corresponding dummy character in the paragraph text, which
+  is a placeholder for the "expansion" of the attribute, e.g. field content.
+
+
