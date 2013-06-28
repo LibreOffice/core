@@ -5,6 +5,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="row_spacing">6</property>
     <property name="column_spacing">18</property>
@@ -210,9 +211,11 @@
     <child>
       <object class="GtkCheckButton" id="userdatacb">
         <property name="label" translatable="yes">_Apply user data</property>
+        <property name="use_action_appearance">False</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="no_show_all">True</property>
+        <property name="use_action_appearance">False</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
@@ -227,6 +230,7 @@
     <child>
       <object class="GtkButton" id="reset">
         <property name="label" translatable="yes">Reset</property>
+        <property name="use_action_appearance">False</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="no_show_all">True</property>
@@ -242,6 +246,7 @@
     <child>
       <object class="GtkButton" id="signature">
         <property name="label" translatable="yes">Di_gital Signature...</property>
+        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
@@ -337,9 +342,11 @@
       <object class="GtkLabel" id="showlocation">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">0</property>
+        <property name="justify">left</property>
         <property name="selectable">True</property>
         <property name="max_width_chars">56</property>
+        <property name="wrap">True</property>
+        <property name="hexpand">True</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -382,6 +389,7 @@
     <child>
       <object class="GtkButton" id="changepass">
         <property name="label" translatable="yes">Change _Password</property>
+        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
@@ -466,9 +474,11 @@
     <child>
       <object class="GtkCheckButton" id="readonlycb">
         <property name="label" translatable="yes">_Read-only</property>
+        <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="use_action_appearance">False</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
