@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXn///84\u003d",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2013-06-28T07:55:35Z",
+      "side": 1,
+      "message": "just for kicks, this could be a const_interator, right?",
+      "revId": "62d1ed6f3ea2ade746ce58f372b1a47a4dd53792",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
