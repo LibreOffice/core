@@ -22,8 +22,7 @@
 #include <stdio.h>
 
 #include <tools/rc.h>
-
-#include <vclrsc.hxx>
+#include <tools/wintypes.hxx>
 
 #include <rsctree.hxx>
 #include <rsctop.hxx>
@@ -36,7 +35,6 @@
 #include <rscclass.hxx>
 #include <rsckey.hxx>
 #include <rscdb.hxx>
-
 #include <rsclex.hxx>
 #include <rscyacc.hxx>
 

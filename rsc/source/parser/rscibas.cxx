@@ -22,20 +22,23 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <comphelper/string.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <comphelper/string.hxx>
-#include <tools/rc.h>
 #include <tools/color.hxx>
+#include <tools/fldunit.hxx>
+#include <tools/mapunit.hxx>
+#include <tools/rc.h>
+#include <tools/wintypes.hxx>
+#include <rsc/rsc-vcl-shared-types.hxx>
 
-#include <vclrsc.hxx>
+#include <com/sun/star/awt/Key.hpp>
+
 #include <rscconst.hxx>
 #include <rscarray.hxx>
 #include <rscclass.hxx>
 #include <rsccont.hxx>
 #include <rscdb.hxx>
-
-
 #include <rsclex.hxx>
 #include <rscyacc.hxx>
 

@@ -49,7 +49,6 @@ class Window;
 #define QUICKHELP_NOEVADEPOINTER    ((sal_uInt16)0x4000)
 #define QUICKHELP_BIDI_RTL          ((sal_uInt16)0x8000)
 
-// By changes you must also change: rsc/vclrsc.hxx
 #define OOO_HELP_INDEX          ".help:index"
 #define OOO_HELP_HELPONHELP     ".help:helponhelp"
 

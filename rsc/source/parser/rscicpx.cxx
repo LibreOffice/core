@@ -22,14 +22,14 @@
 #include <stdio.h>
 
 #include <tools/rc.h>
+#include <tools/wintypes.hxx>
+#include <rsc/rsc-vcl-shared-types.hxx>
 
-#include <vclrsc.hxx>
 #include <rscmgr.hxx>
 #include <rscclass.hxx>
 #include <rsccont.hxx>
 #include <rscdb.hxx>
 #include <rsc/rscsfx.hxx>
-
 #include <rsclex.hxx>
 #include <rscyacc.hxx>
 
