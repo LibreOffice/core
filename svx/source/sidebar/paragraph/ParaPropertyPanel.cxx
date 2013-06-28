@@ -64,8 +64,8 @@ const char UNO_INCREMENTINDENT[]  = ".uno:IncrementIndent";
 const char UNO_DECREMENTINDENT[]  = ".uno:DecrementIndent";
 const char UNO_HANGINGINDENT[]    = ".uno:HangingIndent";
 
-const char UNO_PROMOTE[]          = ".uno:IncrementIndent2";
-const char UNO_DEMOTE[]           = ".uno:DecrementIndent2";
+const char UNO_PROMOTE[]          = ".uno:Promote";
+const char UNO_DEMOTE[]           = ".uno:Demote";
 const char UNO_HANGINGINDENT2[]   = ".uno:HangingIndent2";
 
 const char UNO_LINESPACING[]      = ".uno:LineSpacing";
@@ -82,8 +82,6 @@ namespace svx {namespace sidebar {
 
 #define MAX_DURCH             5670
 
-#define INDENT_INCREMENT       1
-#define INDENT_DECREMENT       2
 #define INDENT_STEP            706
 #define UL_STEP                58
 
@@ -396,15 +394,16 @@ void ParaPropertyPanel::InitToolBoxSpacing()
     mpTbxUL_IncDec->SetSelectHdl(aLink);
     m_eULSpaceUnit = maULSpaceControl.GetCoreMetric();
 }
+
 void ParaPropertyPanel::InitToolBoxLineSpacing()
 {
     Link aLink = LINK( this, ParaPropertyPanel, ClickLineSPDropDownHdl_Impl );
     mpLineSPTbx->SetDropdownClickHdl( aLink );
     mpLineSPTbx->SetSelectHdl( aLink );     //support keyinput "ENTER"
 
-    const sal_uInt16 nIdLeft = mpAlignToolBox->GetItemId(UNO_LEFTPARA);
-    mpLineSPTbx->SetItemBits( nIdLeft, mpLineSPTbx->GetItemBits( nIdLeft ) | TIB_DROPDOWNONLY );
-    mpLineSPTbx->SetItemImage(nIdLeft, maSpace3);
+    const sal_uInt16 nIdSpacing = mpLineSPTbx->GetItemId(UNO_LINESPACING);
+    mpLineSPTbx->SetItemBits( nIdSpacing, mpLineSPTbx->GetItemBits( nIdSpacing ) | TIB_DROPDOWNONLY );
+    mpLineSPTbx->SetItemImage(nIdSpacing, maSpace3);
 }
 
 void ParaPropertyPanel::initial()
@@ -483,8 +482,7 @@ IMPL_LINK(ParaPropertyPanel, NumBTbxDDHandler, ToolBox*, pToolBox)
 
 IMPL_LINK(ParaPropertyPanel, NumBTbxSelectHandler, ToolBox*, pToolBox)
 {
-    const sal_uInt16 nId = pToolBox->GetCurItemId();
-    const OUString aCommand(pToolBox->GetItemCommand(nId));
+    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
     sal_uInt16 nSID = SID_TABLE_VERT_NONE;
 
     EndTracking();
@@ -509,7 +507,7 @@ IMPL_LINK(ParaPropertyPanel, NumBTbxSelectHandler, ToolBox*, pToolBox)
 
 IMPL_LINK(ParaPropertyPanel, VertTbxSelectHandler, ToolBox*, pToolBox)
 {
-    const sal_uInt16 nId = pToolBox->GetCurItemId();
+    const OUString aCommand(pToolBox->GetItemCommand(pToolBox->GetCurItemId()));
     sal_uInt16 nSID = SID_TABLE_VERT_NONE;
     EndTracking();
 
@@ -517,21 +515,21 @@ IMPL_LINK(ParaPropertyPanel, VertTbxSelectHandler, ToolBox*, pToolBox)
     const sal_uInt16 nIdVertCenter = mpTBxVertAlign->GetItemId(UNO_CELLVERTCENTER);
     const sal_uInt16 nIdVertBottom = mpTBxVertAlign->GetItemId(UNO_CELLVERTBOTTOM);
 
-    if (nId == nIdVertTop)
+    if (aCommand == UNO_CELLVERTTOP)
     {
         nSID = SID_TABLE_VERT_NONE;
         mpTBxVertAlign->SetItemState(nIdVertTop, STATE_CHECK);
         mpTBxVertAlign->SetItemState(nIdVertCenter, STATE_NOCHECK);
         mpTBxVertAlign->SetItemState(nIdVertBottom, STATE_NOCHECK);
     }
-    else if (nId == nIdVertCenter)
+    else if (aCommand == UNO_CELLVERTCENTER)
     {
         nSID = SID_TABLE_VERT_CENTER;
         mpTBxVertAlign->SetItemState(nIdVertTop, STATE_NOCHECK);
         mpTBxVertAlign->SetItemState(nIdVertCenter, STATE_CHECK);
         mpTBxVertAlign->SetItemState(nIdVertBottom, STATE_NOCHECK);
     }
-    else if (nId == nIdVertBottom)
+    else if (aCommand == UNO_CELLVERTBOTTOM)
     {
         nSID = SID_TABLE_VERT_BOTTOM;
         mpTBxVertAlign->SetItemState(nIdVertTop, STATE_NOCHECK);
@@ -618,10 +616,10 @@ void ParaPropertyPanel::VertStateChanged(sal_uInt16 nSID, SfxItemState eState, c
 
 IMPL_LINK(ParaPropertyPanel, ToolBoxBackColorDDHandler,ToolBox*, pToolBox)
 {
-    const sal_uInt16 nIdBackColor = mpTBxBackColor->GetItemId(UNO_PARABACKCOLOR);
-    sal_uInt16 nId = pToolBox->GetCurItemId();
-    OSL_ASSERT(nId == nIdBackColor);
-    if(nId == nIdBackColor)
+    const sal_uInt16 nId = pToolBox->GetCurItemId();
+    const OUString aCommand(pToolBox->GetItemCommand(nId));
+
+    if(aCommand == UNO_PARABACKCOLOR)
     {
         pToolBox->SetItemDown( nId, true );
         maBGColorPopup.Show(*pToolBox);
@@ -674,12 +672,13 @@ void ParaPropertyPanel::SetBGColor (
 //==================================for Paragraph Alignment=====================
 IMPL_LINK( ParaPropertyPanel, AlignStyleModifyHdl_Impl, ToolBox*, pBox )
 {
-    const sal_uInt16 nIdLeft    = mpAlignToolBox->GetItemId(UNO_LEFTPARA);
-    const sal_uInt16 nIdRight   = mpAlignToolBox->GetItemId(UNO_RIGHTPARA);
-    const sal_uInt16 nIdCenter  = mpAlignToolBox->GetItemId(UNO_CENTERPARA);
-    const sal_uInt16 nIdJustify = mpAlignToolBox->GetItemId(UNO_JUSTIFYPARA);
+    const sal_uInt16 nIdLeft    = pBox->GetItemId(UNO_LEFTPARA);
+    const sal_uInt16 nIdRight   = pBox->GetItemId(UNO_RIGHTPARA);
+    const sal_uInt16 nIdCenter  = pBox->GetItemId(UNO_CENTERPARA);
+    const sal_uInt16 nIdJustify = pBox->GetItemId(UNO_JUSTIFYPARA);
 
     const OUString aCommand(pBox->GetItemCommand(pBox->GetCurItemId()));
+
         if( aCommand == UNO_LEFTPARA )
         {
             pBox->SetItemState(nIdLeft, STATE_CHECK);
@@ -734,9 +733,9 @@ IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl)
 
 IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
 {
-    switch (pControl->GetCurItemId())
-    {
-    case INDENT_INCREMENT:
+    const OUString aCommand(pControl->GetItemCommand(pControl->GetCurItemId()));
+
+        if (aCommand == UNO_INCREMENTINDENT)
         {
             switch (maContext.GetCombinedContext_DI())
             {
@@ -765,8 +764,7 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
                 }
             }
         }
-        break;
-    case INDENT_DECREMENT:
+        else if (aCommand == UNO_DECREMENTINDENT)
         {
             switch (maContext.GetCombinedContext_DI())
             {
@@ -800,8 +798,7 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
                 }
             }
         }
-        break;
-    case ID_HANGING_INDENT:
+        else if (aCommand == UNO_HANGINGINDENT)
         {
             SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
             aMargin.SetTxtLeft( (const long)GetCoreValue( *mpLeftIndent, m_eLRSpaceUnit ) + (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
@@ -811,26 +808,23 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
             GetBindings()->GetDispatcher()->Execute(
                 SID_ATTR_PARA_LRSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
         }
-        break;
-    }
+
     return( 0L );
 }
 
 IMPL_LINK(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl)
 {
-    switch (pControl->GetCurItemId())
-    {
-        case BT_TBX_INDENT_PROMOTE:
+    const OUString aCommand(pControl->GetItemCommand(pControl->GetCurItemId()));
+
+        if (aCommand == UNO_PROMOTE)
         {
             GetBindings()->GetDispatcher()->Execute( SID_OUTLINE_RIGHT, SFX_CALLMODE_RECORD );
         }
-        break;
-        case BT_TBX_INDENT_DEMOTE:
+        else if (aCommand == UNO_DEMOTE)
         {
             GetBindings()->GetDispatcher()->Execute( SID_OUTLINE_LEFT, SFX_CALLMODE_RECORD );
         }
-        break;
-        case SD_HANGING_INDENT:
+        else if (aCommand == UNO_HANGINGINDENT2)
         {
             SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
             aMargin.SetTxtLeft( (const long)GetCoreValue( *mpLeftIndent, m_eLRSpaceUnit ) + (const short)GetCoreValue( *mpFLineIndent, m_eLRSpaceUnit ) );
@@ -839,19 +833,17 @@ IMPL_LINK(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl)
 
             GetBindings()->GetDispatcher()->Execute( SID_ATTR_PARA_LRSPACE, SFX_CALLMODE_RECORD, &aMargin, 0L);
         }
-        break;
-    }
+
     return( 0L );
 }
 //==================================for Paragraph Line Spacing=====================
 
 IMPL_LINK( ParaPropertyPanel, ClickLineSPDropDownHdl_Impl, ToolBox*, pBox )
 {
-    const sal_uInt16 nIdLeft = mpAlignToolBox->GetItemId(UNO_LEFTPARA);
     const sal_uInt16 nId = pBox->GetCurItemId();
+    const OUString aCommand(pBox->GetItemCommand(nId));
 
-    OSL_ASSERT(nId == nIdLeft);
-    if(nId == nIdLeft)
+    if (aCommand == UNO_LINESPACING)
     {
         pBox->SetItemDown( nId, true );
         maLineSpacePopup.Rearrange(meLnSpState,m_eMetricUnit,mpLnSPItem,maContext);
@@ -1311,15 +1303,18 @@ void ParaPropertyPanel::StateChangeOutLineImpl( sal_uInt16 nSID, SfxItemState eS
         else
             mbOutLineRight = 0;
     }
-    if(mbOutLineLeft)
-        mpTbxProDemote->EnableItem(BT_TBX_INDENT_DEMOTE, sal_True);
-    else
-        mpTbxProDemote->EnableItem(BT_TBX_INDENT_DEMOTE, sal_False);
 
-    if(mbOutLineRight)
-        mpTbxProDemote->EnableItem(BT_TBX_INDENT_PROMOTE, sal_True);
+    const sal_uInt16 nIdDemote = mpTbxProDemote->GetItemId(UNO_DEMOTE);
+    if(mbOutLineLeft)
+        mpTbxProDemote->EnableItem(nIdDemote, sal_True);
     else
-        mpTbxProDemote->EnableItem(BT_TBX_INDENT_PROMOTE, sal_False);
+        mpTbxProDemote->EnableItem(nIdDemote, sal_False);
+
+    const sal_uInt16 nIdPromote = mpTbxProDemote->GetItemId(UNO_PROMOTE);
+    if(mbOutLineRight)
+        mpTbxProDemote->EnableItem(nIdPromote, sal_True);
+    else
+        mpTbxProDemote->EnableItem(nIdPromote, sal_False);
 
 }
 
