@@ -76,7 +76,7 @@
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/bindings.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>

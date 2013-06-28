@@ -58,7 +58,7 @@
 #include <connectivity/sqlerror.hxx>
 #include <sfx2/mailmodelapi.hxx>
 #include <svx/dbaexchange.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <unotools/bootstrap.hxx>

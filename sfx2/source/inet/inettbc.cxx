@@ -28,7 +28,7 @@
 #include <svl/stritem.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/toolbox.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>

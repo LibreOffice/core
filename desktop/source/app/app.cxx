@@ -73,7 +73,7 @@
 #include <com/sun/star/frame/PopupMenuControllerFactory.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
 
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/bootstrap.hxx>

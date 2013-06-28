@@ -359,7 +359,6 @@
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/unohlp.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <tools/errinf.hxx>

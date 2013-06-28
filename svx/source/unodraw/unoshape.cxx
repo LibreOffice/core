@@ -34,7 +34,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/serviceinfohelper.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/objsh.hxx>

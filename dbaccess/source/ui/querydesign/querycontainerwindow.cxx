@@ -23,7 +23,7 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include "JoinController.hxx"
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include "dbustrings.hrc"
 #include <sfx2/sfxsids.hrc>
 #include <vcl/fixed.hxx>

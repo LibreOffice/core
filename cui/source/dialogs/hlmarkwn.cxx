@@ -32,7 +32,7 @@
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include "svtools/treelistentry.hxx"
 
 #include <cuires.hrc>

@@ -19,7 +19,7 @@
 
 
 #include <dbaccess/dataview.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <sfx2/app.hxx>

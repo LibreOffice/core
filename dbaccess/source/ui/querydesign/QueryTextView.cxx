@@ -26,7 +26,7 @@
 #include "querycontroller.hxx"
 #include "dbu_qry.hrc"
 #include "dbustrings.hrc"
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/split.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/types.hxx>

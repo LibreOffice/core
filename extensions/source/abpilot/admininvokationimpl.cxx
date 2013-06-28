@@ -24,7 +24,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <vcl/stdtext.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include "abpresid.hrc"
 #include "componentmodule.hxx"
 #include <vcl/waitobj.hxx>

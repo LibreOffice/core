@@ -49,7 +49,7 @@
 #include <framework/actiontriggerhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 
 #include <sfx2/app.hxx>

@@ -49,7 +49,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/image.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <svtools/menuoptions.hxx>
 #include <unotools/cmdoptions.hxx>

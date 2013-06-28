@@ -77,7 +77,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/moduleoptions.hxx>

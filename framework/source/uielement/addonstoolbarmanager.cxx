@@ -48,7 +48,7 @@
 #include <comphelper/processfactory.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/toolboxcontroller.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <svtools/miscopt.hxx>
 #include <vcl/svapp.hxx>

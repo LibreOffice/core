@@ -55,7 +55,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>

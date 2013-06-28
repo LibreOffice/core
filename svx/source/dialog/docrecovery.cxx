@@ -37,7 +37,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/scrbar.hxx>
 
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

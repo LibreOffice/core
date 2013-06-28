@@ -42,7 +42,7 @@
 #include <unotools/bootstrap.hxx>
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <tools/diagnose_ex.h>

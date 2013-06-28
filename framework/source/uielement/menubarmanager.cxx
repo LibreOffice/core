@@ -65,7 +65,7 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <osl/mutex.hxx>

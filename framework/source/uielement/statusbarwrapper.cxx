@@ -36,7 +36,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <tools/solar.h>
 #include <vcl/svapp.hxx>

@@ -22,7 +22,7 @@
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <vcl/bitmapex.hxx>
 #include <tools/stream.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <math.h>
 #include <rtl/math.hxx>
 #include <unotools/fontdefs.hxx>

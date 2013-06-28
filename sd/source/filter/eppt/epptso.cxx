@@ -64,7 +64,7 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/extract.hxx>
 #include <cppuhelper/proptypehlp.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <rtl/crc.h>
 #include <comphelper/classids.hxx>
 #include <unotools/ucbstreamhelper.hxx>

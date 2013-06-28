@@ -45,7 +45,6 @@
 #include <com/sun/star/awt/Command.hpp>
 #include <com/sun/star/ui/XStatusbarItem.hdl>
 #include <comphelper/processfactory.hxx>
-#include <toolkit/unohlp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/statusbarcontroller.hxx>
 #include <comphelper/processfactory.hxx>

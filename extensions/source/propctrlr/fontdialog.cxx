@@ -23,7 +23,7 @@
 #include "modulepcr.hxx"
 #include "formlocalid.hrc"
 #include <vcl/svapp.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
