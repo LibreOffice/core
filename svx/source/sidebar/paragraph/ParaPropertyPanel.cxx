@@ -387,10 +387,10 @@ void ParaPropertyPanel::InitToolBoxSpacing()
     const sal_uInt16 nIdParaSpaceDec = mpTbxUL_IncDec->GetItemId(UNO_PARASPACEDEC);
     mpTbxUL_IncDec->SetItemImage(
         nIdParaSpaceInc,
-        sfx2::sidebar::Tools::GetImage(mpTbxUL_IncDec->GetItemCommand(nIdParaSpaceInc), mxFrame));
+        sfx2::sidebar::Tools::GetImage("private:graphicrepository/cmd/sc_paraspaceincrease.png" /* i#122446 */, mxFrame));
     mpTbxUL_IncDec->SetItemImage(
         nIdParaSpaceDec,
-        sfx2::sidebar::Tools::GetImage(mpTbxUL_IncDec->GetItemCommand(nIdParaSpaceDec), mxFrame));
+        sfx2::sidebar::Tools::GetImage("private:graphicrepository/cmd/sc_paraspacedecrease.png" /* i#122446 */, mxFrame));
 
     aLink = LINK( this, ParaPropertyPanel, ClickUL_IncDec_Hdl_Impl );
     mpTbxUL_IncDec->SetSelectHdl(aLink);
