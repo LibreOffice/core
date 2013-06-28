@@ -1265,6 +1265,18 @@ bool Dialog::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
+void Dialog::SetText(const OUString& rStr)
+{
+    setDeferredProperties();
+    SystemWindow::SetText(rStr);
+}
+
+OUString Dialog::GetText() const
+{
+    const_cast<Dialog*>(this)->setDeferredProperties();
+    return SystemWindow::GetText();
+}
+
 VclBuilderContainer::VclBuilderContainer()
     : m_pUIBuilder(NULL)
 {

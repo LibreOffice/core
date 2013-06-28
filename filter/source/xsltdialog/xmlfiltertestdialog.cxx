@@ -162,7 +162,6 @@ XMLFilterTestDialog::XMLFilterTestDialog(Window* pParent,
     m_pPBRecentFile->SetClickHdl(LINK( this, XMLFilterTestDialog, ClickHdl_Impl ) );
     m_pPBClose->SetClickHdl(LINK( this, XMLFilterTestDialog, ClickHdl_Impl ) );
 
-    setDeferredProperties();
     m_sDialogTitle = GetText();
 
     try

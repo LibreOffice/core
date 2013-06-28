@@ -73,7 +73,7 @@ private:
     void            SetPasswdText();
 
 public:
-    SfxPasswordDialog(Window* pParent, const String* pGroupText = NULL);
+    SfxPasswordDialog(Window* pParent, const OUString* pGroupText = NULL);
 
     String GetUser() const
     {

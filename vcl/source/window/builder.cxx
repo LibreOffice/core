@@ -1376,9 +1376,10 @@ void VclBuilder::setDeferredProperties()
 {
     if (!m_bToplevelHasDeferredProperties)
         return;
-    set_properties(m_pParent, m_aDeferredProperties);
-    m_aDeferredProperties.clear();
+    stringmap aDeferredProperties;
+    aDeferredProperties.swap(m_aDeferredProperties);
     m_bToplevelHasDeferredProperties = false;
+    set_properties(m_pParent, aDeferredProperties);
 }
 
 void VclBuilder::set_properties(Window *pWindow, const stringmap &rProps)
