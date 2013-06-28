@@ -18,29 +18,6 @@
 
 #include "svx/dialogs.hrc"
 
-#define BT_TBX_INDENT_INC                            1
-#define BT_TBX_INDENT_DEC                            2
-#define BT_TBX_INDENT_PROMOTE                        1
-#define BT_TBX_INDENT_DEMOTE                         2
-#define ID_HANGING_INDENT                            3
-#define SD_HANGING_INDENT                            3
-#define MF_BEFORE_INDENT                             2
-#define MF_AFTER_INDENT                              4
-#define MF_FL_INDENT                                 6
-#define TBX_INDENT_INC_DEC                           17
-
-#define MF_ABOVE_PARASPACING                         32
-#define MF_BELOW_PARASPACING                         34
-#define TBX_INDENT_PRO_DEMOTE                        35
-
-#define FT_BACK_COLOR       47
-
-#define TBI_HOR_ALIGN_LEFT      65
-#define TBI_HOR_ALIGN_CENTER    66
-#define TBI_HOR_ALIGN_RIGHT     67
-#define TBI_HOR_ALIGN_JUSTIFY   68
-
-//============================== Global Definitions ==============================
 #define IMG_BACK_COLOR      (RID_SVX_SIDEBAR_BEGIN +  0)
 #define IMG_BACK_COLOR_H    (RID_SVX_SIDEBAR_BEGIN +  1)
 #define IMG_SPACE1          (RID_SVX_SIDEBAR_BEGIN +  2)
