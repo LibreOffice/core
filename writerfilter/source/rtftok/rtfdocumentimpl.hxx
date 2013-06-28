@@ -195,7 +195,9 @@ namespace writerfilter {
             BUFFER_TEXT,
             BUFFER_UTEXT,
             BUFFER_ENDRUN,
-            BUFFER_PAR
+            BUFFER_PAR,
+            BUFFER_STARTSHAPE,
+            BUFFER_ENDSHAPE
         };
 
         /// Form field types

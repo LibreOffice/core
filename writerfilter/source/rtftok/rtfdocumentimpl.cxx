@@ -1197,6 +1197,10 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer)
             Mapper().endCharacterGroup();
         else if (aPair.first == BUFFER_PAR)
             parBreak();
+        else if (aPair.first == BUFFER_STARTSHAPE)
+            m_pSdrImport->resolve(aPair.second->getShape(), false);
+        else if (aPair.first == BUFFER_ENDSHAPE)
+            m_pSdrImport->close();
         else
             SAL_WARN("writerfilter", "should not happen");
     }
@@ -1313,11 +1317,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_SHAPE;
             break;
         case RTF_SHPINST:
-            // Don't try to support shapes inside tables for now.
-            if (m_aStates.top().pCurrentBuffer != &m_aTableBuffer)
-                m_aStates.top().nDestinationState = DESTINATION_SHAPEINSTRUCTION;
-            else
-                m_aStates.top().nDestinationState = DESTINATION_SKIP;
+            m_aStates.top().nDestinationState = DESTINATION_SHAPEINSTRUCTION;
             break;
         case RTF_NESTTABLEPROPS:
             // Don't try to support nested tables having table styles for now.
@@ -1445,7 +1445,15 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             dispatchFlag(RTF_PARD);
             m_bNeedPap = true;
             if (nKeyword == RTF_SHPTXT)
-                m_pSdrImport->resolve(m_aStates.top().aShape, false);
+            {
+                if (!m_aStates.top().pCurrentBuffer)
+                    m_pSdrImport->resolve(m_aStates.top().aShape, false);
+                else
+                {
+                    RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aShape));
+                    m_aStates.top().pCurrentBuffer->push_back(make_pair(BUFFER_STARTSHAPE, pValue));
+                }
+            }
             break;
         case RTF_FORMFIELD:
             if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
@@ -4602,7 +4610,10 @@ int RTFDocumentImpl::popState()
             if (m_aStates.top().nDestinationState != DESTINATION_SHAPETEXT && !m_aStates.top().aDrawingObject.bHadShapeText)
             {
                 m_aStates.top().bHadShapeText = true;
-                m_pSdrImport->close();
+                if (!m_aStates.top().pCurrentBuffer)
+                    m_pSdrImport->close();
+                else
+                    m_aStates.top().pCurrentBuffer->push_back(make_pair(BUFFER_ENDSHAPE, RTFValue::Pointer_t()));
             }
             break;
         default:
