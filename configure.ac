@@ -10539,6 +10539,7 @@ your KDE3 installation by exporting KDEDIR before running "configure".])
     dnl Set the variables
     KDE_CFLAGS="-I$qt_incdir -I$kde_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
     KDE_LIBS="-L$kde_libdir -L$qt_libdir -lkdeui -lkdecore -lqt-mt"
+    KDE_CFLAGS=$(printf '%s' "$KDE_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 fi
 AC_SUBST(KDE_CFLAGS)
 AC_SUBST(KDE_LIBS)
@@ -10691,6 +10692,7 @@ the root of your Qt installation by exporting QT4DIR before running "configure".
 
     KDE4_CFLAGS="`pkg-config --cflags QtCore` `pkg-config --cflags QtGui` -I$kde_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
     KDE4_LIBS="-L$kde_libdir -L$qt_lib_dir -lkio -lkfile -lkdeui -lkdecore -lQtCore -lQtGui"
+    KDE4_CFLAGS=$(printf '%s' "$KDE4_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
