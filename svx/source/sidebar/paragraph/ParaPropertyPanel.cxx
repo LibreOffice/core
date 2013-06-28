@@ -461,17 +461,18 @@ void ParaPropertyPanel::InitImageList(::boost::scoped_ptr<ToolBox>& rTbx, ImageL
 
 IMPL_LINK(ParaPropertyPanel, NumBTbxDDHandler, ToolBox*, pToolBox)
 {
-    sal_uInt16 nId = pToolBox->GetCurItemId();
+    const sal_uInt16 nId = pToolBox->GetCurItemId();
+    const OUString aCommand(pToolBox->GetItemCommand(nId));
 
     EndTracking();
     pToolBox->SetItemDown( nId, sal_True );
 
-    if (nId == 1)
+    if (aCommand == UNO_DEFAULTBULLET)
     {
         maBulletsPopup.UpdateValueSet();
         maBulletsPopup.Show(*pToolBox);
     }
-    else if (nId == 2)
+    else if (aCommand == UNO_DEFAULTNUMBERING)
     {
         maNumberingPopup.UpdateValueSet();
         maNumberingPopup.Show(*pToolBox);
@@ -482,15 +483,16 @@ IMPL_LINK(ParaPropertyPanel, NumBTbxDDHandler, ToolBox*, pToolBox)
 
 IMPL_LINK(ParaPropertyPanel, NumBTbxSelectHandler, ToolBox*, pToolBox)
 {
-    sal_uInt16 nId = pToolBox->GetCurItemId();
+    const sal_uInt16 nId = pToolBox->GetCurItemId();
+    const OUString aCommand(pToolBox->GetItemCommand(nId));
     sal_uInt16 nSID = SID_TABLE_VERT_NONE;
 
     EndTracking();
-    if (nId == 1)
+    if (aCommand == UNO_DEFAULTBULLET)
     {
         nSID = FN_NUM_BULLET_ON;
     }
-    else if ( nId == 2)
+    else if (aCommand == UNO_DEFAULTNUMBERING)
     {
         nSID = FN_NUM_NUMBERING_ON;
     }
@@ -507,7 +509,7 @@ IMPL_LINK(ParaPropertyPanel, NumBTbxSelectHandler, ToolBox*, pToolBox)
 
 IMPL_LINK(ParaPropertyPanel, VertTbxSelectHandler, ToolBox*, pToolBox)
 {
-    sal_uInt16 nId = pToolBox->GetCurItemId();
+    const sal_uInt16 nId = pToolBox->GetCurItemId();
     sal_uInt16 nSID = SID_TABLE_VERT_NONE;
     EndTracking();
 
@@ -515,21 +517,21 @@ IMPL_LINK(ParaPropertyPanel, VertTbxSelectHandler, ToolBox*, pToolBox)
     const sal_uInt16 nIdVertCenter = mpTBxVertAlign->GetItemId(UNO_CELLVERTCENTER);
     const sal_uInt16 nIdVertBottom = mpTBxVertAlign->GetItemId(UNO_CELLVERTBOTTOM);
 
-    if (nId == 1)
+    if (nId == nIdVertTop)
     {
         nSID = SID_TABLE_VERT_NONE;
         mpTBxVertAlign->SetItemState(nIdVertTop, STATE_CHECK);
         mpTBxVertAlign->SetItemState(nIdVertCenter, STATE_NOCHECK);
         mpTBxVertAlign->SetItemState(nIdVertBottom, STATE_NOCHECK);
     }
-    else if (nId == 2)
+    else if (nId == nIdVertCenter)
     {
         nSID = SID_TABLE_VERT_CENTER;
         mpTBxVertAlign->SetItemState(nIdVertTop, STATE_NOCHECK);
         mpTBxVertAlign->SetItemState(nIdVertCenter, STATE_CHECK);
         mpTBxVertAlign->SetItemState(nIdVertBottom, STATE_NOCHECK);
     }
-    else if (nId == 3)
+    else if (nId == nIdVertBottom)
     {
         nSID = SID_TABLE_VERT_BOTTOM;
         mpTBxVertAlign->SetItemState(nIdVertTop, STATE_NOCHECK);
