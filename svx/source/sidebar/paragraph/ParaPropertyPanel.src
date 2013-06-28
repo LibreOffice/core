@@ -55,29 +55,9 @@ Image IMG_BACK_COLOR_H
 {
     ImageBitmap = Bitmap{File = "symphony/sch_backgroundcolor.bmp";};
 };
-Image IMG_SPACE1
-{
-    ImageBitmap = Bitmap{File = "symphony/spacing1.png";};
-};
-Image IMG_SPACE2
-{
-    ImageBitmap = Bitmap{File = "symphony/spacing2.png";};
-};
 Image IMG_SPACE3
 {
     ImageBitmap = Bitmap{File = "symphony/spacing3.png";};
-};
-Image IMG_INDENT1
-{
-    ImageBitmap = Bitmap{File = "symphony/Indent2.png";};
-};
-Image IMG_INDENT2
-{
-    ImageBitmap = Bitmap{File = "symphony/Indent3.png";};
-};
-Image IMG_INDENT3
-{
-    ImageBitmap = Bitmap{File = "symphony/Indent4.png";};
 };
 Image IMG_INDENT_HANG
 {

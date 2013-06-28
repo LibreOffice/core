@@ -120,13 +120,7 @@ private:
      **
     ***********************************************************/
 
-    Image  maSpace1;
-    Image  maSpace2;
     Image  maSpace3;
-    Image  maIndent1;
-    Image  maIndent2;
-    Image  maIndent3;
-
     Image  maIndHang;
 
     ImageList   maNumBImageList;

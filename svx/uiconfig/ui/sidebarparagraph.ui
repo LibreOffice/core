@@ -459,8 +459,19 @@
           <object class="GtkBox" id="box6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="spacing">6</property>
             <child>
-              <placeholder/>
+              <object class="GtkImage" id="image1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="ypad">15</property>
+                <property name="pixbuf">svx/res/symphony/spacing1.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <object class="svxlo-SvxRelativeField" id="aboveparaspacing">
@@ -491,8 +502,18 @@
           <object class="GtkBox" id="box7">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="spacing">6</property>
             <child>
-              <placeholder/>
+              <object class="GtkImage" id="image2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="pixbuf">svx/res/symphony/spacing2.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <object class="svxlo-SvxRelativeField" id="belowparaspacing">
@@ -523,8 +544,18 @@
           <object class="GtkBox" id="box8">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="spacing">6</property>
             <child>
-              <placeholder/>
+              <object class="GtkImage" id="image3">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="pixbuf">svx/res/symphony/Indent4.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <object class="svxlo-SvxRelativeField" id="beforetextindent">
@@ -552,8 +583,18 @@
           <object class="GtkBox" id="box9">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="spacing">6</property>
             <child>
-              <placeholder/>
+              <object class="GtkImage" id="image4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="pixbuf">svx/res/symphony/Indent3.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <object class="svxlo-SvxRelativeField" id="aftertextindent">
@@ -581,8 +622,18 @@
           <object class="GtkBox" id="box10">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="spacing">6</property>
             <child>
-              <placeholder/>
+              <object class="GtkImage" id="image5">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="pixbuf">svx/res/symphony/Indent2.png</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <object class="svxlo-SvxRelativeField" id="firstlineindent">
