@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SW_INC_SWTBLFMT_HXX
 #define INCLUDED_SW_INC_SWTBLFMT_HXX
 
+#include "hintids.hxx"
+#include <charatr.hxx>
 #include <cmdid.h>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -40,9 +42,11 @@
 #include <editeng/shaditem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtlsplt.hxx>
+#include <fmtornt.hxx>
 #include <fmtrowsplt.hxx>
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
+#include <paratr.hxx>
 
 class SwDoc;
 class SwTableLineFormat;
@@ -147,20 +151,54 @@ class SW_DLLPUBLIC SwTableBoxFormat : public SwFrameFormat
 {
     friend class SwDoc;
 
+    OUString            sNumFormatString;
+    LanguageType        eSysLanguage, eNumFormatLanguage;
+
 protected:
     SwTableBoxFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
-                    SwFrameFormat *pDrvdFrm )
-        : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_FRMFMT, aTableBoxSetRange )
-    {}
+                    SwFrameFormat *pDrvdFrm );
     SwTableBoxFormat( SwAttrPool& rPool, const OUString &rFormatNm,
-                    SwFrameFormat *pDrvdFrm )
-        : SwFrameFormat( rPool, rFormatNm, pDrvdFrm, RES_FRMFMT, aTableBoxSetRange )
-    {}
+                    SwFrameFormat *pDrvdFrm );
 
    // For recognition of changes (especially TableBoxAttribute).
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue ) SAL_OVERRIDE;
 
 public:
+    void SetFont( const SvxFontItem& rNew );
+    void SetHeight( const SvxFontHeightItem& rNew );
+    void SetWeight( const SvxWeightItem& rNew );
+    void SetPosture( const SvxPostureItem& rNew );
+
+    void SetCJKFont( const SvxFontItem& rNew );
+    void SetCJKHeight( const SvxFontHeightItem& rNew );
+    void SetCJKWeight( const SvxWeightItem& rNew );
+    void SetCJKPosture( const SvxPostureItem& rNew );
+
+    void SetCTLFont( const SvxFontItem& rNew );
+    void SetCTLHeight( const SvxFontHeightItem& rNew );
+    void SetCTLWeight( const SvxWeightItem& rNew );
+    void SetCTLPosture( const SvxPostureItem& rNew );
+
+    void SetUnderline( const SvxUnderlineItem& rNew );
+    void SetOverline( const SvxOverlineItem& rNew );
+    void SetCrossedOut( const SvxCrossedOutItem& rNew );
+    void SetContour( const SvxContourItem& rNew );
+    void SetShadowed( const SvxShadowedItem& rNew );
+    void SetColor( const SvxColorItem& rNew );
+    void SetBox( const SvxBoxItem& rNew );
+    void SetBackground( const SvxBrushItem& rNew );
+
+    void SetAdjust( const SvxAdjustItem& rNew );
+    void SetTextOrientation( const SvxFrameDirectionItem& rNew );
+    void SetVerticalAlignment( const SwFormatVertOrient& rNew );
+
+    void SetValueFormat( const OUString& rFormat, LanguageType eLng, LanguageType eSys );
+
+    const SvxFrameDirectionItem& GetTextOrientation() const;
+    const SwFormatVertOrient& GetVerticalAlignment() const;
+
+    void GetValueFormat( OUString& rFormat, LanguageType& rLng, LanguageType& rSys ) const;
+
     TYPEINFO_OVERRIDE();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableBoxFormat)

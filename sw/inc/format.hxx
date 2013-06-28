@@ -235,6 +235,7 @@ public:
 
     /// Paragraph-attributes - implemented in paratr.hxx.
     inline const SvxLineSpacingItem       &GetLineSpacing( bool = true ) const;
+    inline const SvxAdjustItem            &GetAdjust( bool = true ) const;
     inline const SwNumRuleItem            &GetNumRule( bool = true ) const;
     inline const SvxTabStopItem           &GetTabStops( bool = true ) const;
     inline const SwFormatDrop                &GetDrop( bool = true ) const;

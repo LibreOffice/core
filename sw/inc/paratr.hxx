@@ -205,6 +205,8 @@ inline SwParaConnectBorderItem& SwParaConnectBorderItem::operator=(
 //  Implementation of paragraph-attributes methods of SwAttrSet
 inline const SvxLineSpacingItem &SwAttrSet::GetLineSpacing(bool bInP) const
     {   return static_cast<const SvxLineSpacingItem&>(Get( RES_PARATR_LINESPACING,bInP)); }
+inline const SvxAdjustItem &SwFormat::GetAdjust(bool bInP) const
+    {   return m_aSet.GetAdjust(bInP); }
 inline const SvxAdjustItem &SwAttrSet::GetAdjust(bool bInP) const
     {   return static_cast<const SvxAdjustItem&>(Get( RES_PARATR_ADJUST,bInP)); }
 inline const SvxFormatSplitItem &SwAttrSet::GetSplit(bool bInP) const
