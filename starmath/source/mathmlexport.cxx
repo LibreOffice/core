@@ -599,6 +599,22 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
 
 void SmXMLExport::_ExportContent()
 {
+    uno::Reference <frame::XModel> xModel = GetModel();
+    uno::Reference <lang::XUnoTunnel> xTunnel;
+    xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
+    SmModel *pModel = reinterpret_cast<SmModel *>
+        (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+    SmDocShell *pDocShell = pModel ?
+        static_cast<SmDocShell*>(pModel->GetObjectShell()) : 0;
+    OSL_ENSURE( pDocShell, "doc shell missing" );
+
+    if (pDocShell && !pDocShell->GetFormat().IsTextmode())
+    {
+        // If the Math equation is not in text mode, we attach a display="block"
+        // attribute on the <math> root. We don't do anything if it is in
+        // text mode, the default display="inline" value will be used.
+        AddAttribute(XML_NAMESPACE_MATH, XML_DISPLAY, XML_BLOCK);
+    }
     SvXMLElementExport aEquation(*this, XML_NAMESPACE_MATH, XML_MATH, sal_True, sal_True);
     SvXMLElementExport *pSemantics=0;
 
@@ -613,14 +629,6 @@ void SmXMLExport::_ExportContent()
     if (aText.Len())
     {
         // Convert symbol names
-        uno::Reference <frame::XModel> xModel = GetModel();
-        uno::Reference <lang::XUnoTunnel> xTunnel;
-        xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
-        SmModel *pModel = reinterpret_cast<SmModel *>
-            (xTunnel->getSomething(SmModel::getUnoTunnelId()));
-        SmDocShell *pDocShell = pModel ?
-            static_cast<SmDocShell*>(pModel->GetObjectShell()) : 0;
-        OSL_ENSURE( pDocShell, "doc shell missing" );
         if (pDocShell)
         {
             SmParser &rParser = pDocShell->GetParser();
