@@ -1859,13 +1859,10 @@ formula::FormulaTokenRef ScColumn::ResolveStaticReference( SCROW nRow )
         case sc::element_type_formula:
         {
             ScFormulaCell* p = sc::formula_block::at(*it->data, aPos.second);
-            if (p->GetDirty())
-                // Dirty formula cell is not considered static (for now).
-                // Return null token. Later we will switch to dynamically
-                // interpreting all dirty formula cells.
-                return formula::FormulaTokenRef();
+            if (p->IsValue())
+                return formula::FormulaTokenRef(new formula::FormulaDoubleToken(p->GetValue()));
 
-            return formula::FormulaTokenRef(new formula::FormulaDoubleToken(p->GetResultDouble()));
+            return formula::FormulaTokenRef(new formula::FormulaStringToken(p->GetString()));
         }
         case sc::element_type_empty:
         default:
@@ -1881,28 +1878,34 @@ class ToMatrixHandler
     ScMatrix& mrMat;
     SCCOL mnMatCol;
     SCROW mnTopRow;
-    bool mbSuccess;
 public:
     ToMatrixHandler(ScMatrix& rMat, SCCOL nMatCol, SCROW nTopRow) :
-        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow), mbSuccess(true) {}
+        mrMat(rMat), mnMatCol(nMatCol), mnTopRow(nTopRow) {}
 
     void operator() (size_t nRow, double fVal)
     {
         mrMat.PutDouble(fVal, mnMatCol, nRow - mnTopRow);
     }
 
-    void operator() (size_t nRow, ScFormulaCell* p)
+    void operator() (size_t nRow, const ScFormulaCell* p)
     {
-        if (p->GetDirty())
-        {
-            mbSuccess = false;
-            return;
-        }
-
-        mrMat.PutDouble(p->GetResultDouble(), mnMatCol, nRow - mnTopRow);
+        // Formula cell may need to re-calculate.
+        ScFormulaCell& rCell = const_cast<ScFormulaCell&>(*p);
+        if (rCell.IsValue())
+            mrMat.PutDouble(rCell.GetValue(), mnMatCol, nRow - mnTopRow);
+        else
+            mrMat.PutString(rCell.GetString(), mnMatCol, nRow - mnTopRow);
     }
 
-    bool isSuccess() const { return mbSuccess; }
+    void operator() (size_t nRow, const OUString& rStr)
+    {
+        mrMat.PutString(rStr, mnMatCol, nRow - mnTopRow);
+    }
+
+    void operator() (size_t nRow, const EditTextObject* pStr)
+    {
+        mrMat.PutString(ScEditUtil::GetString(*pStr), mnMatCol, nRow - mnTopRow);
+    }
 };
 
 }
@@ -1913,8 +1916,8 @@ bool ScColumn::ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow
         return false;
 
     ToMatrixHandler aFunc(rMat, nMatCol, nRow1);
-    sc::ProcessFormulaNumeric(maCells.begin(), maCells, nRow1, nRow2, aFunc);
-    return aFunc.isSuccess();
+    sc::ParseAllNonEmpty(maCells.begin(), maCells, nRow1, nRow2, aFunc);
+    return true;
 }
 
 namespace {
