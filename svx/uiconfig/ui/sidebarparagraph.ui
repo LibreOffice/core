@@ -101,7 +101,6 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Align Top</property>
                     <property name="action_name">.uno:CellVertTop</property>
-                    <property name="label" translatable="yes">toolbutton1</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -115,7 +114,6 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Align Center Vertically</property>
                     <property name="action_name">.uno:CellVertCenter</property>
-                    <property name="label" translatable="yes">toolbutton2</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -130,7 +128,6 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Align Bottom</property>
                     <property name="action_name">.uno:CellVertBottom</property>
-                    <property name="label" translatable="yes">toolbutton3</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -216,7 +213,6 @@
                     <property name="valign">start</property>
                     <property name="margin_left">35</property>
                     <property name="action_name">.uno:ParaBackColor</property>
-                    <property name="label" translatable="yes">toolbutton1</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>
@@ -305,7 +301,6 @@
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes">Increase Spacing</property>
                         <property name="action_name">.uno:ParaspaceIncrease</property>
-                        <property name="label" translatable="yes">toolbutton1</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -320,7 +315,6 @@
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes">Decrease Spacing</property>
                         <property name="action_name">.uno:ParaSpaceDecrease</property>
-                        <property name="label" translatable="yes">toolbutton1</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -343,7 +337,7 @@
                     <property name="margin_left">63</property>
                     <property name="show_arrow">False</property>
                     <child>
-                      <object class="GtkToolButton" id="increaseindent1">
+                      <object class="GtkToolButton" id="increaseindent">
                         <property name="width_request">15</property>
                         <property name="height_request">25</property>
                         <property name="visible">True</property>
@@ -351,7 +345,6 @@
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes">Increase Indent</property>
                         <property name="action_name">.uno:IncrementIndent</property>
-                        <property name="label" translatable="yes">toolbutton1</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -360,13 +353,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkToolButton" id="decreaseindent1">
+                      <object class="GtkToolButton" id="decreaseindent">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes">Decrease Indent</property>
                         <property name="action_name">.uno:DecrementIndent</property>
-                        <property name="label" translatable="yes">toolbutton1</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -375,13 +367,56 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkToolButton" id="hangingindent1">
+                      <object class="GtkToolButton" id="hangingindent">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes">Switch to Hanging Indent</property>
                         <property name="action_name">.uno:HangingIndent</property>
-                        <property name="label" translatable="yes">toolbutton1</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolbar" id="promotedemote">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Indent</property>
+                    <property name="margin_left">63</property>
+                    <property name="show_arrow">False</property>
+                    <child>
+                      <object class="GtkToolButton" id="promote">
+                        <property name="width_request">15</property>
+                        <property name="height_request">25</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip_text" translatable="yes">Increase Indent</property>
+                        <property name="action_name">.uno:Promote</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="demote">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip_text" translatable="yes">Decrease Indent</property>
+                        <property name="action_name">.uno:Demote</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -393,9 +428,9 @@
                       <object class="GtkToolButton" id="hangingindent2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="has_tooltip">True</property>
                         <property name="tooltip_text" translatable="yes">Switch to Hanging Indent</property>
                         <property name="action_name">.uno:HangingIndent2</property>
-                        <property name="label" translatable="yes">toolbutton3</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -517,7 +552,6 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Line Spacing</property>
                     <property name="action_name">.uno:LineSpacing</property>
-                    <property name="label" translatable="yes">toolbutton1</property>
                     <property name="use_underline">True</property>
                   </object>
                   <packing>

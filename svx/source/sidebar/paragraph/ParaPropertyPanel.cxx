@@ -64,8 +64,8 @@ const char UNO_INCREMENTINDENT[]  = ".uno:IncrementIndent";
 const char UNO_DECREMENTINDENT[]  = ".uno:DecrementIndent";
 const char UNO_HANGINGINDENT[]    = ".uno:HangingIndent";
 
-const char UNO_INCREMENTINDENT2[] = ".uno:IncrementIndent2";
-const char UNO_DECREMENTINDENT2[] = ".uno:DecrementIndent2";
+const char UNO_PROMOTE[]          = ".uno:IncrementIndent2";
+const char UNO_DEMOTE[]           = ".uno:DecrementIndent2";
 const char UNO_HANGINGINDENT2[]   = ".uno:HangingIndent2";
 
 const char UNO_LINESPACING[]      = ".uno:LineSpacing";
@@ -304,37 +304,40 @@ void ParaPropertyPanel::InitToolBoxIndent()
     mpRightIndent->SetAccessibleName(mpRightIndent->GetQuickHelpText());
     mpFLineIndent->SetAccessibleName(mpFLineIndent->GetQuickHelpText());
 
-    const sal_uInt16 nIdLeft   = mpAlignToolBox->GetItemId(UNO_LEFTPARA);
-    const sal_uInt16 nIdCenter = mpAlignToolBox->GetItemId(UNO_CENTERPARA);
-    const sal_uInt16 nIdRight  = mpAlignToolBox->GetItemId(UNO_RIGHTPARA);
+    const sal_uInt16 nIdIncrement = mpTbxIndent_IncDec->GetItemId(UNO_INCREMENTINDENT);
+    const sal_uInt16 nIdDecrement = mpTbxIndent_IncDec->GetItemId(UNO_DECREMENTINDENT);
+    const sal_uInt16 nIdHanging   = mpTbxIndent_IncDec->GetItemId(UNO_HANGINGINDENT);
 
     if( Application::GetSettings().GetLayoutRTL())
     {
-        mpTbxIndent_IncDec->SetItemImage(nIdLeft, maIncIndentControl.GetIcon());
-        mpTbxIndent_IncDec->SetItemImage(nIdCenter, maDecIndentControl.GetIcon());
+        mpTbxIndent_IncDec->SetItemImage(nIdIncrement, maIncIndentControl.GetIcon());
+        mpTbxIndent_IncDec->SetItemImage(nIdDecrement, maDecIndentControl.GetIcon());
     }
     else
     {
-        mpTbxIndent_IncDec->SetItemImage(nIdLeft, maIncIndentControl.GetIcon());
-        mpTbxIndent_IncDec->SetItemImage(nIdCenter, maDecIndentControl.GetIcon());
+        mpTbxIndent_IncDec->SetItemImage(nIdIncrement, maIncIndentControl.GetIcon());
+        mpTbxIndent_IncDec->SetItemImage(nIdDecrement, maDecIndentControl.GetIcon());
     }
-    mpTbxIndent_IncDec->SetItemImage(nIdRight, maIndHang);
+    mpTbxIndent_IncDec->SetItemImage(nIdHanging, maIndHang);
 
     aLink = LINK( this, ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl );
     mpTbxIndent_IncDec->SetSelectHdl(aLink);
     m_eLRSpaceUnit = maLRSpaceControl.GetCoreMetric();
 
+    const sal_uInt16 nIdPromote  = mpTbxProDemote->GetItemId(UNO_PROMOTE);
+    const sal_uInt16 nIdDemote   = mpTbxProDemote->GetItemId(UNO_DEMOTE);
+    const sal_uInt16 nIdHanging2 = mpTbxProDemote->GetItemId(UNO_HANGINGINDENT2);
     if( Application::GetSettings().GetLayoutRTL())
     {
-        mpTbxProDemote->SetItemImage(nIdLeft, maOutLineLeftControl.GetIcon());
-        mpTbxProDemote->SetItemImage(nIdCenter, maOutLineRightControl.GetIcon());
+        mpTbxProDemote->SetItemImage(nIdPromote, maOutLineLeftControl.GetIcon());
+        mpTbxProDemote->SetItemImage(nIdDemote, maOutLineRightControl.GetIcon());
     }
     else
     {
-        mpTbxProDemote->SetItemImage(nIdLeft, maOutLineLeftControl.GetIcon());
-        mpTbxProDemote->SetItemImage(nIdCenter, maOutLineRightControl.GetIcon());
+        mpTbxProDemote->SetItemImage(nIdPromote, maOutLineLeftControl.GetIcon());
+        mpTbxProDemote->SetItemImage(nIdDemote, maOutLineRightControl.GetIcon());
     }
-    mpTbxProDemote->SetItemImage(nIdRight, maIndHang);
+    mpTbxProDemote->SetItemImage(nIdHanging2, maIndHang);
     aLink = LINK( this, ParaPropertyPanel, ClickProDemote_Hdl_Impl );
     mpTbxProDemote->SetSelectHdl(aLink);
     m_eLRSpaceUnit = maLRSpaceControl.GetCoreMetric();
@@ -1530,6 +1533,7 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
     get(mpTopDist,      "aboveparaspacing");
     get(mpBottomDist,   "belowparaspacing");
     get(mpTbxIndent_IncDec, "indent");
+    get(mpTbxProDemote, "promotedemote");
     get(mpLineSPTbx,    "linespacing");
     get(mpTbxUL_IncDec, "paraspacing");
     get(mpLeftIndent,   "beforetextindent");
