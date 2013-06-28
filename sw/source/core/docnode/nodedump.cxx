@@ -220,25 +220,36 @@ void SwStartNode::dumpAsXml( xmlTextWriterPtr w )
 {
     WriterHelper writer( w );
     const char* name = "???";
-    switch( GetStartNodeType())
+    switch( GetNodeType() )
     {
-        case SwNormalStartNode:
-            name = "start";
+        case ND_TABLENODE:
+            name = "table";
             break;
-        case SwTableBoxStartNode:
-            name = "tablebox";
+        case ND_SECTIONNODE:
+            name = "section";
             break;
-        case SwFlyStartNode:
-            name = "fly";
-            break;
-        case SwFootnoteStartNode:
-            name = "footnote";
-            break;
-        case SwHeaderStartNode:
-            name = "header";
-            break;
-        case SwFooterStartNode:
-            name = "footer";
+        default:
+            switch( GetStartNodeType())
+            {
+                case SwNormalStartNode:
+                    name = "start";
+                    break;
+                case SwTableBoxStartNode:
+                    name = "tablebox";
+                    break;
+                case SwFlyStartNode:
+                    name = "fly";
+                    break;
+                case SwFootnoteStartNode:
+                    name = "footnote";
+                    break;
+                case SwHeaderStartNode:
+                    name = "header";
+                    break;
+                case SwFooterStartNode:
+                    name = "footer";
+                    break;
+            }
             break;
     }
     writer.startElement( name );
