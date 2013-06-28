@@ -86,7 +86,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/string.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/virdev.hxx>
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>

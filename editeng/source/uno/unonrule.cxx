@@ -24,7 +24,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/grfmgr.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <editeng/brushitem.hxx>
 #include <editeng/unoprnms.hxx>

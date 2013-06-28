@@ -955,7 +955,6 @@
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/unohlp.hxx>
 #include <tools/bigint.hxx>
 #include <tools/cachestr.hxx>
 #include <tools/color.hxx>

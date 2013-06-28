@@ -90,7 +90,7 @@
 #include <editeng/langitem.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/unoapi.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>

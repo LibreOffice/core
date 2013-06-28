@@ -77,7 +77,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/syswin.hxx>
 
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/ucbhelper.hxx>

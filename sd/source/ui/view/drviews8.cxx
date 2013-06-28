@@ -22,7 +22,7 @@
 
 #include "ViewShellHint.hxx"
 
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/msgbox.hxx>

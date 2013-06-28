@@ -32,7 +32,7 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/ui/UIElementFactoryManager.hpp>
 
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/splitwin.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svl/intitem.hxx>

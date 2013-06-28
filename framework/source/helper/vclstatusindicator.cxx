@@ -22,7 +22,7 @@
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 
 

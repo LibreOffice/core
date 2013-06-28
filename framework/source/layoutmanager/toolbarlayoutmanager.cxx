@@ -35,7 +35,7 @@
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
 
 #include <unotools/cmdoptions.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/i18nhelp.hxx>

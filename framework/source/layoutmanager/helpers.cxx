@@ -33,7 +33,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 using namespace com::sun::star;
 

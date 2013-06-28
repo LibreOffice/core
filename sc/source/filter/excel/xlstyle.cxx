@@ -28,7 +28,7 @@
 #include <sal/macros.h>
 #include <rtl/tencinfo.h>
 #include <svtools/colorcfg.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <editeng/svxfont.hxx>
 #include "global.hxx"
 #include "xlroot.hxx"

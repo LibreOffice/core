@@ -39,7 +39,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/stl_types.hxx>

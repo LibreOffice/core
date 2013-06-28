@@ -53,7 +53,7 @@
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 

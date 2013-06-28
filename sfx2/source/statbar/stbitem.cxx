@@ -45,7 +45,7 @@
 #include <comphelper/processfactory.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 
 using namespace ::com::sun::star;

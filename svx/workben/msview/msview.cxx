@@ -42,7 +42,7 @@
 #include <svtools/svmedit.hxx>
 #include <sfx2/filedlghelper.hxx>
 
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <tools/stream.hxx>
 #include <tools/resmgr.hxx>

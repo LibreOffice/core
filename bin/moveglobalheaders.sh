@@ -42,9 +42,3 @@ git add svtools/Library_svt.mk sfx2/Library_sfx.mk sfx2/Library_qstart_gtk.mk
 # urgh
 sed -ie 's/\.\.\/svx\//svx\//' svx/source/svdraw/svdoashp.cxx
 git add svx/source/svdraw/svdoashp.cxx
-
-# this one is making me speechless ...
-echo "// ah, yes: thats a sane thing to do -- deliver the same header _twice_ with different names" > include/toolkit/unohlp.hxx
-echo "// please kill me (this file)!" >> include/toolkit/unohlp.hxx
-echo "#include <toolkit/helper/vclunohelper.hxx>" >> include/toolkit/unohlp.hxx
-git add include/toolkit/unohlp.hxx

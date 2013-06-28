@@ -39,7 +39,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/property.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>

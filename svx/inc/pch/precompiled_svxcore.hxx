@@ -37,7 +37,6 @@
 #include "sal/config.h"
 #include "sal/types.h"
 #include "svtools/treelistentry.hxx"
-#include "toolkit/unohlp.hxx"
 #include "uno/lbnames.h"
 #include "xmloff/DashStyle.hxx"
 #include "xmloff/GradientStyle.hxx"
@@ -532,7 +531,6 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/unohlp.hxx>
 #include <tools/b3dtrans.hxx>
 #include <tools/bigint.hxx>
 #include <tools/color.hxx>

@@ -21,7 +21,7 @@
 #include <dbtablepreviewdialog.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/frame/Frame.hpp>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <dbui.hrc>
 #include <dbtablepreviewdialog.hrc>

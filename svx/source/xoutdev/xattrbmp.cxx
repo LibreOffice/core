@@ -23,7 +23,7 @@
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapex.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <svl/style.hxx>
 #include <editeng/memberids.hrc>
 #include <svx/dialogs.hrc>

@@ -790,7 +790,6 @@
 #include <time.h>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/unohlp.hxx>
 #include <tools/color.hxx>
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>

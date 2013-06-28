@@ -40,7 +40,7 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>
 
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 
 //_______________________________________________

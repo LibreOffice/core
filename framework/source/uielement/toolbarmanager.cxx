@@ -58,7 +58,7 @@
 #include <svtools/imgdef.hxx>
 #include <svtools/toolboxcontroller.hxx>
 #include <unotools/cmdoptions.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/miscopt.hxx>

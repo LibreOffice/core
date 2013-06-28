@@ -47,7 +47,7 @@
 #include "svtools/treelistentry.hxx"
 #include "svtools/viewdataentry.hxx"
 #include <tools/diagnose_ex.h>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <algorithm>
 #include <cuires.hrc>

@@ -49,17 +49,11 @@
 #include <tools/diagnose_ex.h>
 
 #include <svl/intitem.hxx>
-
 #include <svx/algitem.hxx>
-
 #include <tools/multisel.hxx>
-
 #include <svl/numuno.hxx>
-
 #include <svl/itempool.hxx>
-
 #include <svl/itemset.hxx>
-
 #include <svl/rngitem.hxx>
 
 #include <vcl/waitobj.hxx>

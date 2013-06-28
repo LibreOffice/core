@@ -35,7 +35,7 @@
 #include <cppuhelper/component_context.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdview.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/stdtext.hxx>
 

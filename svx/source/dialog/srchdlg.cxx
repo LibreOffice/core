@@ -47,7 +47,7 @@
 #include <svl/intitem.hxx>
 
 #include <sfx2/app.hxx>
-#include <toolkit/unohlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include "svx/srchdlg.hxx"
 
