@@ -2221,6 +2221,16 @@ void ScTable::SetFormulaResults( SCCOL nCol, SCROW nRow, const double* pResults,
     aCol[nCol].SetFormulaResults(nRow, pResults, nLen);
 }
 
+#if DEBUG_COLUMN_STORAGE
+void ScTable::DumpFormulaGroups( SCCOL nCol ) const
+{
+    if (!ValidCol(nCol))
+        return;
+
+    aCol[nCol].DumpFormulaGroups();
+}
+#endif
+
 const SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidColRow(nCol, nRow))

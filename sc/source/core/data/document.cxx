@@ -2266,6 +2266,17 @@ bool ScDocument::HasBroadcaster( SCTAB nTab, SCCOL nCol ) const
     return pTab->HasBroadcaster(nCol);
 }
 
+#if DEBUG_COLUMN_STORAGE
+void ScDocument::DumpFormulaGroups( SCTAB nTab, SCCOL nCol ) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return;
+
+    pTab->DumpFormulaGroups(nCol);
+}
+#endif
+
 bool ScDocument::TableExists( SCTAB nTab ) const
 {
     return ValidTab(nTab) && static_cast<size_t>(nTab) < maTabs.size() && maTabs[nTab];

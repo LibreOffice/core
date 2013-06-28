@@ -525,6 +525,10 @@ public:
 
     void FormulaCellsUndecided( SCROW nRow1, SCROW nRow2 );
 
+#if DEBUG_COLUMN_STORAGE
+    void DumpFormulaGroups() const;
+#endif
+
 private:
 
     sc::CellStoreType::iterator GetPositionToInsert( SCROW nRow );

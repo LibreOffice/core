@@ -1544,6 +1544,46 @@ void ScColumn::FormulaCellsUndecided( SCROW /*nRow1*/, SCROW /*nRow2*/ )
 {
 }
 
+#if DEBUG_COLUMN_STORAGE
+
+namespace {
+
+struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, void>
+{
+    void operator() (const sc::CellStoreType::value_type& rNode) const
+    {
+        if (rNode.type != sc::element_type_formula)
+            return;
+
+        sc::formula_block::const_iterator it = sc::formula_block::begin(*rNode.data);
+        sc::formula_block::const_iterator itEnd = sc::formula_block::end(*rNode.data);
+
+        for (; it != itEnd; ++it)
+        {
+            const ScFormulaCell& rCell = **it;
+            if (!rCell.IsShared())
+                continue;
+
+            if (rCell.GetSharedTopRow() != rCell.aPos.Row())
+                continue;
+
+            SCROW nLen = rCell.GetSharedLength();
+            cout << "  * group: start=" << rCell.aPos.Row() << ", length=" << nLen << endl;
+            std::advance(it, nLen-1);
+        }
+    }
+};
+
+}
+
+void ScColumn::DumpFormulaGroups() const
+{
+    cout << "-- formua groups" << endl;
+    std::for_each(maCells.begin(), maCells.end(), FormulaGroupDumper());
+    cout << "--" << endl;
+}
+#endif
+
 void ScColumn::CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const
 {
     rDestCol.maCellTextAttrs.set_empty(nRow1, nRow2); // Empty the destination range first.

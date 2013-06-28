@@ -32,6 +32,7 @@
 #include "types.hxx"
 #include "cellvalue.hxx"
 #include "formula/types.hxx"
+#include "calcmacros.hxx"
 
 #include <set>
 #include <map>
@@ -856,6 +857,10 @@ public:
     void InterpretDirtyCells( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
     void SetFormulaResults( SCCOL nCol, SCROW nRow, const double* pResults, size_t nLen );
+
+#if DEBUG_COLUMN_STORAGE
+    void DumpFormulaGroups( SCCOL nCol ) const;
+#endif
 
     /** Replace behaves differently to the Search; adjust the rCol and rRow accordingly.
 

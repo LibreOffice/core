@@ -36,6 +36,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "typedstrdata.hxx"
 #include "compressedarray.hxx"
+#include "calcmacros.hxx"
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 
@@ -1983,6 +1984,10 @@ public:
      * See if specified column has any broadcaster at all.
      */
     bool HasBroadcaster( SCTAB nTab, SCCOL nCol ) const;
+
+#if DEBUG_COLUMN_STORAGE
+    void DumpFormulaGroups( SCTAB nTab, SCCOL nCol ) const;
+#endif
 
 private: // CLOOK-Impl-methods
 
