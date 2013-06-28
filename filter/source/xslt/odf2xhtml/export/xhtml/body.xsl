@@ -2949,9 +2949,7 @@
 -->
 	<!-- MathML -->
 	<xsl:template match="draw:object[math:math]">
-		<math xmlns="http://www.w3.org/1998/Math/MathML">
-			<xsl:apply-templates select="math:math/math:semantics/*" mode="math"/>
-		</math>
+		<xsl:apply-templates select="math:math" mode="math"/>
 	</xsl:template>
 
 	<xsl:template match="*" mode="math">
@@ -2966,6 +2964,8 @@
 		</xsl:attribute>
 	</xsl:template>
 
-	<xsl:template match="math:annotation" mode="math"/>
+	<xsl:template match="math:semantics" mode="math">
+		<xsl:apply-templates select="*[1]" mode="math"/>
+	</xsl:template>
 
 </xsl:stylesheet>
