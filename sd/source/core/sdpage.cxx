@@ -57,6 +57,15 @@
 #include <rtl/ustring.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <unotools/streamwrap.hxx>
+#include <rtl/uri.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 #include "../ui/inc/DrawDocShell.hxx"
 #include "Outliner.hxx"
@@ -81,8 +90,14 @@
 
 using namespace ::sd;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 using namespace com::sun::star::xml::dom;
 using ::com::sun::star::uno::Reference;
+
+using ::com::sun::star::io::XInputStream;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::container::XNameAccess;
+using ::com::sun::star::beans::PropertyValue;
 
 
 TYPEINIT2( SdPage, FmFormPage, SdrObjUserCall );
@@ -1173,15 +1188,51 @@ static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
     return aLayouts[ eLayout - AUTOLAYOUT__START ];
 }
 
+#define EXPAND_PROTOCOL "vnd.sun.star.expand:"
 //to get the root element of the xml file
 Reference<XElement> getRootElement()
 {
     rtl::OUString filepath="/home/vishv/layoutlist.xml";
     const Reference<css::uno::XComponentContext> xContext(comphelper_getProcessComponentContext());
-    const Reference<XDocumentBuilder> xDocBuilder(css::xml::dom::DocumentBuilder::create(xContext));
-    const Reference<XDocument> xDoc = xDocBuilder->parseURI(filepath);
-    const Reference<XElement> xRoot = xDoc->getDocumentElement();
-    return xRoot;
+    Reference< XMultiServiceFactory > xServiceFactory(xContext->getServiceManager(), UNO_QUERY_THROW );
+    Reference< util::XMacroExpander > xMacroExpander =util::theMacroExpander::get(xContext);
+    Reference< XMultiServiceFactory > xConfigProvider =configuration::theDefaultProvider::get( xContext );
+       // read path to transition effects files from config
+    Any propValue = uno::makeAny(
+        beans::PropertyValue(
+            "nodepath", -1,
+            uno::makeAny( OUString( "/org.openoffice.Office.Impress/Misc" )),
+            beans::PropertyState_DIRECT_VALUE ) );
+
+    Reference<container::XNameAccess> xNameAccess(
+        xConfigProvider->createInstanceWithArguments(
+            "com.sun.star.configuration.ConfigurationAccess",
+            Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
+    uno::Sequence< OUString > aFiles;
+    xNameAccess->getByName( "LayoutListFiles" ) >>= aFiles;
+
+    for( sal_Int32 i=0; i<aFiles.getLength(); ++i )
+    {
+        OUString aURL = aFiles[i];
+        if( aURL.startsWith( EXPAND_PROTOCOL ) )
+        {
+            // cut protocol
+            OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
+            // decode uric class chars
+            aMacro = rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+            // expand macro string
+            aURL = xMacroExpander->expandMacros( aMacro );
+        }
+        SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( aURL, STREAM_READ );
+        ::utl::OInputStreamWrapper* isw=new ::utl::OInputStreamWrapper( pIStm);
+        Reference<XInputStream> xIs(isw);
+
+        rtl::OUString sServName = rtl::OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder");
+        Reference<XDocumentBuilder> xDb( xServiceFactory->createInstance(sServName), UNO_QUERY);
+        const Reference<XDocument> xDom(xDb->parse(xIs), UNO_QUERY_THROW );
+        const Reference<XElement> xRoot( xDom->getDocumentElement(),UNO_QUERY_THROW );
+        return xRoot;//this loops seems to work only once,so temporary returning the root element
+    }
 }
 
 //read the information from XML file(traversing from layout node)
