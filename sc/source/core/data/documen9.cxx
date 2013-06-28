@@ -690,11 +690,7 @@ void ScDocument::ApplyAsianEditSettings( ScEditEngineDefaulter& rEngine )
 
 void ScDocument::RebuildFormulaGroups()
 {
-    bool bEnableFormulaGroups;
-
-    bEnableFormulaGroups = ScInterpreter::GetGlobalConfig().mbOpenCLEnabled;
-
-    if ( !bEnableFormulaGroups )
+    if (!ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
         return;
 
     SCTAB nTab;

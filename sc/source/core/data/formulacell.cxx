@@ -3084,6 +3084,9 @@ public:
 
 bool ScFormulaCell::InterpretFormulaGroup()
 {
+    if (!ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
+        return false;
+
     // Re-build formulae groups if necessary - ideally this is done at
     // import / insert / delete etc. and is integral to the data structures
     pDocument->RebuildFormulaGroups();
