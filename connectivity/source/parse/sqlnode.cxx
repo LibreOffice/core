@@ -747,6 +747,7 @@ void OSQLParseNode::impl_parseTableRangeNodeToString_throw(OUStringBuffer& rStri
 void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, const SQLParseNodeParameter& rParam, bool bSimple ) const
 {
     SAL_INFO( "connectivity.parse", "parse Ocke.Janssen@sun.com OSQLParseNode::impl_parseLikeNodeToString_throw" );
+    assert(SQL_ISRULE(this,like_predicate));
     OSL_ENSURE(count() == 2,"count != 2: Prepare for GPF");
 
     const OSQLParseNode* pEscNode = NULL;
