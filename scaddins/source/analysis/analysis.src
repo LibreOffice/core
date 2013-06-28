@@ -1037,7 +1037,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Impower
         {
-            Text [ en-US ] = "Returns a complex number raised to an integer power";
+            Text [ en-US ] = "Returns a complex number raised to a real power";
         };
 
         String 2 // name of parameter 1         Impower
