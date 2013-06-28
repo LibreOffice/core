@@ -91,8 +91,6 @@ RTSDialog::RTSDialog( const PrinterInfo& rJobData, const String& rPrinter, bool 
     get(m_pCancelButton, "cancel");
     get(m_pTabControl, "notebook");
 
-    setDeferredProperties();
-
     OUString aTitle(GetText());
     SetText(aTitle.replaceAll("%s", m_aJobData.m_aPrinterName));
 

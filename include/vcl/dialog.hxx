@@ -114,6 +114,9 @@ public:
     virtual short   Execute();
     sal_Bool            IsInExecute() const { return mbInExecute; }
 
+    virtual void      SetText( const OUString& rStr );
+    virtual OUString  GetText() const;
+
     ////////////////////////////////////////
     // Dialog::Execute replacement API
 public:
