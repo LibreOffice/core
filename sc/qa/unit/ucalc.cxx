@@ -2562,6 +2562,25 @@ void Test::testMatrix()
     CPPUNIT_ASSERT_EQUAL(1.5, pMat->GetDouble(0, 1));
     CPPUNIT_ASSERT_EQUAL(1.5, pMat->GetDouble(1, 0));
     CPPUNIT_ASSERT_MESSAGE("PutEmpty() call failed.", pMat->IsEmpty(1, 1));
+
+    // Max and min values.
+    pMat = new ScMatrix(2, 2, 0.0);
+    pMat->PutDouble(-10, 0, 0);
+    pMat->PutDouble(-12, 0, 1);
+    pMat->PutDouble(-8, 1, 0);
+    pMat->PutDouble(-25, 1, 1);
+    CPPUNIT_ASSERT_EQUAL(-25.0, pMat->GetMinValue(false));
+    CPPUNIT_ASSERT_EQUAL(-8.0, pMat->GetMaxValue(false));
+    pMat->PutString("Test", 0, 0);
+    CPPUNIT_ASSERT_EQUAL(0.0, pMat->GetMaxValue(true)); // text as zero.
+    CPPUNIT_ASSERT_EQUAL(-8.0, pMat->GetMaxValue(false)); // ignore text.
+    pMat->PutBoolean(true, 0, 0);
+    CPPUNIT_ASSERT_EQUAL(1.0, pMat->GetMaxValue(false));
+    pMat = new ScMatrix(2, 2, 10.0);
+    pMat->PutBoolean(false, 0, 0);
+    pMat->PutDouble(12.5, 1, 1);
+    CPPUNIT_ASSERT_EQUAL(0.0, pMat->GetMinValue(false));
+    CPPUNIT_ASSERT_EQUAL(12.5, pMat->GetMaxValue(false));
 }
 
 void Test::testEnterMixedMatrix()

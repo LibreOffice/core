@@ -940,7 +940,7 @@ public:
 
 struct MaxOp
 {
-    static double init() { return std::numeric_limits<double>::min(); }
+    static double init() { return -std::numeric_limits<double>::max(); }
     static double compare(double left, double right)
     {
         return std::max(left, right);
