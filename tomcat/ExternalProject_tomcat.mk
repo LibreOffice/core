@@ -25,6 +25,6 @@ $(call gb_ExternalProject_get_state_target,tomcat,build) :
 				 -Dant.build.javac.target=$(JAVA_TARGET_VER) \
 			) \
 			$(if $(debug),-Dbuild.debug="on") \
-	,jakarta-servletapi-5)
+	,servletapi)
 
 # vim: set noet sw=4 ts=4:

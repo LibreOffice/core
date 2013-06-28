@@ -11,6 +11,6 @@ $(eval $(call gb_Package_Package,tomcat_inc,$(call gb_UnpackedTarball_get_dir,to
 
 $(eval $(call gb_Package_use_external_project,tomcat_inc,tomcat))
 
-$(eval $(call gb_Package_add_file,tomcat_inc,bin/servlet-api.jar,jakarta-servletapi-5/jsr154/dist/lib/servlet-api.jar))
+$(eval $(call gb_Package_add_file,tomcat_inc,bin/servlet-api.jar,servletapi/jsr154/dist/lib/servlet-api.jar))
 
 # vim: set noet sw=4 ts=4:

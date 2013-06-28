@@ -12,6 +12,6 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,tomcat))
 $(eval $(call gb_UnpackedTarball_set_tarball,tomcat,$(TOMCAT_TARBALL)))
 
 
-$(eval $(call gb_UnpackedTarball_add_file,tomcat,jakarta-servletapi-5/build.xml,tomcat/build.xml))
+$(eval $(call gb_UnpackedTarball_add_file,tomcat,servletapi/build.xml,tomcat/build.xml))
 
 # vim: set noet sw=4 ts=4:
