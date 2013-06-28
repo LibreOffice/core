@@ -39,7 +39,7 @@ namespace writerfilter {
         // Note that this is not a 1:1 mapping between destination control
         // words, e.g. RTF_PICT gets mapped to DESTINATION_PICT or
         // DESTINATION_SHAPEPROPERTYVALUEPICT, etc.
-        enum RTFDesitnationState
+        enum RTFDestinationState
         {
             DESTINATION_NORMAL,
             DESTINATION_SKIP,
@@ -319,7 +319,7 @@ namespace writerfilter {
 
                 RTFDocumentImpl* m_pDocumentImpl;
                 RTFInternalState nInternalState;
-                RTFDesitnationState nDestinationState;
+                RTFDestinationState nDestinationState;
                 RTFFieldStatus nFieldStatus;
                 RTFBorderState nBorderState;
                 // font table, stylesheet table
@@ -441,8 +441,8 @@ namespace writerfilter {
                 bool isInBackground();
                 RTFInternalState getInternalState();
                 void setInternalState(RTFInternalState nInternalState);
-                RTFDesitnationState getDestinationState();
-                void setDestinationState(RTFDesitnationState nDestinationState);
+                RTFDestinationState getDestinationState();
+                void setDestinationState(RTFDestinationState nDestinationState);
                 void setDestinationText(OUString& rString);
                 /// Resolve a picture: If not inline, then anchored.
                 int resolvePict(bool bInline);

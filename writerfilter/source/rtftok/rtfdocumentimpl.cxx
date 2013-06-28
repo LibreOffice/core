@@ -4657,12 +4657,12 @@ void RTFDocumentImpl::setInternalState(RTFInternalState nInternalState)
     m_aStates.top().nInternalState = nInternalState;
 }
 
-RTFDesitnationState RTFDocumentImpl::getDestinationState()
+RTFDestinationState RTFDocumentImpl::getDestinationState()
 {
     return m_aStates.top().nDestinationState;
 }
 
-void RTFDocumentImpl::setDestinationState(RTFDesitnationState nDestinationState)
+void RTFDocumentImpl::setDestinationState(RTFDestinationState nDestinationState)
 {
     m_aStates.top().nDestinationState = nDestinationState;
 }
