@@ -390,6 +390,8 @@ public:
     // don't use the same name as for the const version
     ScRangeList& GetRangeList() { return maRanges; }
 
+    ScDocument* GetDocument() { return pDoc; }
+
     bool IsEmpty() const;
     size_t size() const;
 

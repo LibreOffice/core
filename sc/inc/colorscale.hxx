@@ -17,6 +17,9 @@
 #include <rangelst.hxx>
 #include "conditio.hxx"
 
+#include <svl/listener.hxx>
+#include <svl/broadcast.hxx>
+
 #include <vector>
 
 //TODO: merge this with conditio.hxx
@@ -26,6 +29,24 @@ class ScFormulaCell;
 class ScTokenArray;
 struct ScDataBarInfo;
 class BitmapEx;
+
+class ScFormulaListener : public SvtListener
+{
+private:
+    std::vector<ScRange> maCells;
+    mutable bool mbDirty;
+    ScDocument* mpDoc;
+
+    void startListening(ScTokenArray* pTokens, const ScAddress& rPos);
+
+public:
+    ScFormulaListener(ScFormulaCell* pCell);
+    virtual ~ScFormulaListener();
+
+    void Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
+
+    bool NeedsRepaint() const;
+};
 
 // don't change the order
 // they are also used in the dialog to determine the position
@@ -47,6 +68,7 @@ private:
     double mnVal;
     Color maColor;
     boost::scoped_ptr<ScFormulaCell> mpCell;
+    boost::scoped_ptr<ScFormulaListener> mpListener;
     ScColorScaleEntryType meType;
 
 public:
@@ -60,7 +82,9 @@ public:
     void SetColor(const Color&);
     double GetValue() const;
     void SetValue(double nValue);
-    void SetFormula(const OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT);
+    void SetFormula(const OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr,
+            formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT);
+
     void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab, SCTAB nTabNo);
     void UpdateReference( UpdateRefMode eUpdateRefMode,
             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
@@ -71,6 +95,7 @@ public:
     ScColorScaleEntryType GetType() const;
     void SetType( ScColorScaleEntryType eType );
 
+    bool NeedsRepaint() const;
 };
 
 namespace databar
@@ -200,6 +225,8 @@ public:
     virtual void startRendering();
     virtual void endRendering();
 
+    virtual bool NeedsRepaint() const = 0;
+
 protected:
     std::vector<double>& getValues() const;
 
@@ -243,6 +270,8 @@ public:
     virtual void UpdateReference( UpdateRefMode eUpdateRefMode,
             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
+    virtual bool NeedsRepaint() const;
+
     virtual condformat::ScFormatEntryType GetType() const;
     typedef ColorScaleEntries::iterator iterator;
     typedef ColorScaleEntries::const_iterator const_iterator;
@@ -270,6 +299,8 @@ public:
     virtual void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);
     virtual void UpdateReference( UpdateRefMode eUpdateRefMode,
             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+
+    virtual bool NeedsRepaint() const;
 
     virtual condformat::ScFormatEntryType GetType() const;
 
@@ -312,6 +343,8 @@ public:
     virtual void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);
     virtual void UpdateReference( UpdateRefMode eUpdateRefMode,
             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+
+    virtual bool NeedsRepaint() const;
 
     virtual condformat::ScFormatEntryType GetType() const;
 

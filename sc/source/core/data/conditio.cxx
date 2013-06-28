@@ -2053,11 +2053,26 @@ void ScConditionalFormat::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 void ScConditionalFormat::SourceChanged( const ScAddress& rAddr )
 {
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
-        if(itr->GetType() == condformat::CONDITION)
+    {
+        condformat::ScFormatEntryType eEntryType = itr->GetType();
+        if( eEntryType == condformat::CONDITION)
         {
             ScCondFormatEntry& rFormat = static_cast<ScCondFormatEntry&>(*itr);
             rFormat.SourceChanged( rAddr );
         }
+        else if( eEntryType == condformat::COLORSCALE ||
+                eEntryType == condformat::DATABAR ||
+                eEntryType == condformat::ICONSET )
+        {
+            ScColorFormat& rFormat = static_cast<ScColorFormat&>(*itr);
+            if(rFormat.NeedsRepaint())
+            {
+                // we need to repaint the whole range anyway
+                DoRepaint(NULL);
+                return;
+            }
+        }
+    }
 }
 
 bool ScConditionalFormat::MarkUsedExternalReferences() const

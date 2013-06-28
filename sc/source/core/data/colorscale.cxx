@@ -13,12 +13,117 @@
 #include "fillinfo.hxx"
 #include "iconsets.hrc"
 #include "scresid.hxx"
+#include "tokenarray.hxx"
+
+#include "formula/token.hxx"
 
 #include <algorithm>
 
+ScFormulaListener::ScFormulaListener(ScFormulaCell* pCell):
+    mbDirty(false),
+    mpDoc(pCell->GetDocument())
+{
+    startListening( pCell->GetCode(), pCell->aPos );
+}
+
+void ScFormulaListener::startListening(ScTokenArray* pArr, const ScAddress& rPos)
+{
+    pArr->Reset();
+    ScToken* t;
+    while ( ( t = static_cast<ScToken*>(pArr->GetNextReferenceRPN()) ) != NULL )
+    {
+        switch (t->GetType())
+        {
+            case formula::svSingleRef:
+            {
+                ScAddress aCell =  t->GetSingleRef().toAbs(rPos);
+                if (aCell.IsValid())
+                    mpDoc->StartListeningCell(aCell, this);
+
+                maCells.push_back(aCell);
+            }
+            break;
+            case formula::svDoubleRef:
+            {
+                const ScSingleRefData& rRef1 = t->GetSingleRef();
+                const ScSingleRefData& rRef2 = t->GetSingleRef2();
+                ScAddress aCell1 = rRef1.toAbs(rPos);
+                ScAddress aCell2 = rRef2.toAbs(rPos);
+                if (aCell1.IsValid() && aCell2.IsValid())
+                {
+                    if (t->GetOpCode() == ocColRowNameAuto)
+                    {   // automagically
+                        if ( rRef1.IsColRel() )
+                        {   // ColName
+                            aCell2.SetRow(MAXROW);
+                        }
+                        else
+                        {   // RowName
+                            aCell2.SetCol(MAXCOL);
+                        }
+                    }
+                    mpDoc->StartListeningArea(ScRange(aCell1, aCell2), this);
+                    maCells.push_back(ScRange(aCell1, aCell2));
+                }
+            }
+            break;
+            default:
+                ;   // nothing
+        }
+    }
+
+}
+
+namespace {
+
+struct StopListeningCell
+{
+    StopListeningCell(ScDocument* pDoc, SvtListener* pListener):
+        mpDoc(pDoc), mpListener(pListener) {}
+
+    void operator()(const ScRange& rRange)
+    {
+        for(SCTAB nTab = rRange.aStart.Tab(),
+                nTabEnd = rRange.aEnd.Tab(); nTab <= nTabEnd; ++nTab)
+        {
+            for(SCCOL nCol = rRange.aStart.Col(),
+                    nColEnd = rRange.aEnd.Col(); nCol <= nColEnd; ++nCol)
+            {
+                for(SCROW nRow = rRange.aStart.Row(),
+                        nRowEnd = rRange.aEnd.Row(); nRow <= nRowEnd; ++nRow)
+                {
+                    mpDoc->EndListeningCell(ScAddress(nCol, nRow, nTab), mpListener);
+                }
+            }
+        }
+    }
+
+private:
+    ScDocument* mpDoc;
+    SvtListener* mpListener;
+};
+
+}
+
+ScFormulaListener::~ScFormulaListener()
+{
+    std::for_each(maCells.begin(), maCells.end(), StopListeningCell(mpDoc, this));
+}
+
+void ScFormulaListener::Notify(SvtBroadcaster&, const SfxHint&)
+{
+    mbDirty = true;
+}
+
+bool ScFormulaListener::NeedsRepaint() const
+{
+    bool bRet = mbDirty;
+    mbDirty = false;
+    return bRet;
+}
+
 ScColorScaleEntry::ScColorScaleEntry():
     mnVal(0),
-    mpCell(NULL),
     meType(COLORSCALE_VALUE)
 {
 }
@@ -26,7 +131,6 @@ ScColorScaleEntry::ScColorScaleEntry():
 ScColorScaleEntry::ScColorScaleEntry(double nVal, const Color& rCol):
     mnVal(nVal),
     maColor(rCol),
-    mpCell(NULL),
     meType(COLORSCALE_VALUE)
 {
 }
@@ -34,13 +138,13 @@ ScColorScaleEntry::ScColorScaleEntry(double nVal, const Color& rCol):
 ScColorScaleEntry::ScColorScaleEntry(const ScColorScaleEntry& rEntry):
     mnVal(rEntry.mnVal),
     maColor(rEntry.maColor),
-    mpCell(),
     meType(rEntry.meType)
 {
     if(rEntry.mpCell)
     {
         mpCell.reset(new ScFormulaCell(*rEntry.mpCell, *rEntry.mpCell->GetDocument(), rEntry.mpCell->aPos, SC_CLONECELL_NOMAKEABS_EXTERNAL));
         mpCell->StartListeningTo( mpCell->GetDocument() );
+        mpListener.reset(new ScFormulaListener(mpCell.get()));
     }
 }
 
@@ -54,6 +158,7 @@ ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& 
     {
         mpCell.reset(new ScFormulaCell(*rEntry.mpCell, *rEntry.mpCell->GetDocument(), rEntry.mpCell->aPos, SC_CLONECELL_NOMAKEABS_EXTERNAL));
         mpCell->StartListeningTo( pDoc );
+        mpListener.reset(new ScFormulaListener(mpCell.get()));
     }
 }
 
@@ -67,6 +172,7 @@ void ScColorScaleEntry::SetFormula( const OUString& rFormula, ScDocument* pDoc, 
 {
     mpCell.reset(new ScFormulaCell( pDoc, rAddr, rFormula, eGrammar ));
     mpCell->StartListeningTo( pDoc );
+    mpListener.reset(new ScFormulaListener(mpCell.get()));
 }
 
 const ScTokenArray* ScColorScaleEntry::GetFormula() const
@@ -107,6 +213,7 @@ double ScColorScaleEntry::GetValue() const
 void ScColorScaleEntry::SetValue(double nValue)
 {
     mnVal = nValue;
+    mpCell.reset();
 }
 
 void ScColorScaleEntry::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab, SCTAB nTabNo )
@@ -114,6 +221,7 @@ void ScColorScaleEntry::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab, SCTAB nTabN
     if(mpCell)
     {
         mpCell->UpdateMoveTab( nOldTab, nNewTab, nTabNo );
+        mpListener.reset(new ScFormulaListener(mpCell.get()));
     }
 }
 
@@ -123,7 +231,16 @@ void ScColorScaleEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
     if(mpCell)
     {
         mpCell->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz );
+        mpListener.reset(new ScFormulaListener(mpCell.get()));
     }
+}
+
+bool ScColorScaleEntry::NeedsRepaint() const
+{
+    if(mpListener)
+        return mpListener->NeedsRepaint();
+
+    return false;
 }
 
 const Color& ScColorScaleEntry::GetColor() const
@@ -182,7 +299,10 @@ void ScColorScaleEntry::SetType( ScColorScaleEntryType eType )
 {
     meType = eType;
     if(eType != COLORSCALE_FORMULA)
+    {
         mpCell.reset();
+        mpListener.reset();
+    }
 }
 
 ScColorScaleEntryType ScColorScaleEntry::GetType() const
@@ -445,6 +565,17 @@ void ScColorScaleFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
     }
 }
 
+bool ScColorScaleFormat::NeedsRepaint() const
+{
+    for(const_iterator itr = begin(), itrEnd = end();
+            itr != itrEnd; ++itr)
+    {
+        if(itr->NeedsRepaint())
+            return true;
+    }
+    return false;
+}
+
 bool ScColorScaleFormat::CheckEntriesForRel(const ScRange& rRange) const
 {
     bool bNeedUpdate = false;
@@ -545,6 +676,12 @@ void ScDataBarFormat::UpdateReference( UpdateRefMode eRefMode,
 {
     mpFormatData->mpUpperLimit->UpdateReference( eRefMode, rRange, nDx, nDy, nDz );
     mpFormatData->mpLowerLimit->UpdateReference( eRefMode, rRange, nDx, nDy, nDz );
+}
+
+bool ScDataBarFormat::NeedsRepaint() const
+{
+    return mpFormatData->mpUpperLimit->NeedsRepaint() ||
+        mpFormatData->mpLowerLimit->NeedsRepaint();
 }
 
 namespace {
@@ -852,6 +989,17 @@ void ScIconSetFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
     {
         itr->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz );
     }
+}
+
+bool ScIconSetFormat::NeedsRepaint() const
+{
+    for(const_iterator itr = begin(); itr != end(); ++itr)
+    {
+        if(itr->NeedsRepaint())
+            return true;
+    }
+
+    return false;
 }
 
 ScIconSetFormat::iterator ScIconSetFormat::begin()
