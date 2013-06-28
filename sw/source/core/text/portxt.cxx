@@ -459,10 +459,6 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
 
 sal_Bool SwTxtPortion::Format( SwTxtFormatInfo &rInf )
 {
-#if OSL_DEBUG_LEVEL > 1
-    const XubString aDbgTxt( rInf.GetTxt().Copy( rInf.GetIdx(), rInf.GetLen() ) );
-#endif
-
     if( rInf.X() > rInf.Width() || (!GetLen() && !InExpGrp()) )
     {
         Height( 0 );
