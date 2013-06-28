@@ -22,6 +22,7 @@
 #include "hintids.hxx"
 #include <charatr.hxx>
 #include <cmdid.h>
+#include <doc.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>

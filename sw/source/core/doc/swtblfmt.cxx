@@ -31,15 +31,17 @@ SwTableFmt::SwTableFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
         SetRepeatHeading( 0 );
         SetShadow( SvxShadowItem( RES_SHADOW ) );
 
-        pFstLineFmt = NULL;
-        pLstLineFmt = NULL;
-        pOddLineFmt = NULL;
-        pEvnLineFmt = NULL;
+        SwDoc* pDoc = GetDoc();
 
-        pFstColFmt = NULL;
-        pLstColFmt = NULL;
-        pOddColFmt = NULL;
-        pEvnColFmt = NULL;
+        pFstLineFmt = pDoc->MakeTableLineFmt();
+        pLstLineFmt = pDoc->MakeTableLineFmt();
+        pOddLineFmt = pDoc->MakeTableLineFmt();
+        pEvnLineFmt = pDoc->MakeTableLineFmt();
+
+        pFstColFmt = pDoc->MakeTableLineFmt();
+        pLstColFmt = pDoc->MakeTableLineFmt();
+        pOddColFmt = pDoc->MakeTableLineFmt();
+        pEvnColFmt = pDoc->MakeTableLineFmt();
     }
 
 SwTableFmt::SwTableFmt( SwAttrPool& rPool, const String &rFmtNm,
@@ -54,15 +56,17 @@ SwTableFmt::SwTableFmt( SwAttrPool& rPool, const String &rFmtNm,
         SetRepeatHeading( 0 );
         SetShadow( SvxShadowItem( RES_SHADOW ) );
 
-        pFstLineFmt = NULL;
-        pLstLineFmt = NULL;
-        pOddLineFmt = NULL;
-        pEvnLineFmt = NULL;
+        SwDoc* pDoc = GetDoc();
 
-        pFstColFmt = NULL;
-        pLstColFmt = NULL;
-        pOddColFmt = NULL;
-        pEvnColFmt = NULL;
+        pFstLineFmt = pDoc->MakeTableLineFmt();
+        pLstLineFmt = pDoc->MakeTableLineFmt();
+        pOddLineFmt = pDoc->MakeTableLineFmt();
+        pEvnLineFmt = pDoc->MakeTableLineFmt();
+
+        pFstColFmt = pDoc->MakeTableLineFmt();
+        pLstColFmt = pDoc->MakeTableLineFmt();
+        pOddColFmt = pDoc->MakeTableLineFmt();
+        pEvnColFmt = pDoc->MakeTableLineFmt();
     }
 
 SwTableFmt& SwTableFmt::operator=( const SwTableFmt& rNew )
@@ -152,20 +156,24 @@ SwTableLineFmt::SwTableLineFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
                     SwFrmFmt *pDrvdFrm )
     : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
     {
-        pFstBoxFmt = NULL;
-        pLstBoxFmt = NULL;
-        pOddBoxFmt = NULL;
-        pEvnBoxFmt = NULL;
+        SwDoc* pDoc = GetDoc();
+
+        pFstBoxFmt = pDoc->MakeTableBoxFmt();
+        pLstBoxFmt = pDoc->MakeTableBoxFmt();
+        pOddBoxFmt = pDoc->MakeTableBoxFmt();
+        pEvnBoxFmt = pDoc->MakeTableBoxFmt();
     }
 
 SwTableLineFmt::SwTableLineFmt( SwAttrPool& rPool, const String &rFmtNm,
                     SwFrmFmt *pDrvdFrm )
     : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
     {
-        pFstBoxFmt = NULL;
-        pLstBoxFmt = NULL;
-        pOddBoxFmt = NULL;
-        pEvnBoxFmt = NULL;
+        SwDoc* pDoc = GetDoc();
+
+        pFstBoxFmt = pDoc->MakeTableBoxFmt();
+        pLstBoxFmt = pDoc->MakeTableBoxFmt();
+        pOddBoxFmt = pDoc->MakeTableBoxFmt();
+        pEvnBoxFmt = pDoc->MakeTableBoxFmt();
     }
 
 SwTableBoxFmt::SwTableBoxFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
