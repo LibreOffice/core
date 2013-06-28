@@ -31,7 +31,6 @@
 #include <xmloff/styleexp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/SinglePropertySetInfoCache.hxx>
-#include <xmloff/XMLStringVector.hxx>
 #include <vector>
 #include <boost/scoped_ptr.hpp>
 
@@ -87,7 +86,7 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
 
     /// may be NULL (if no redlines should be exported; e.g. in block mode)
     XMLRedlineExport            *pRedlineExport;
-    XMLStringVector             *pHeadingStyles;
+    std::vector<OUString>       *pHeadingStyles;
 
     sal_Bool                    bProgress;
 

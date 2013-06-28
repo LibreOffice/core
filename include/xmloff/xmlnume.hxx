@@ -22,7 +22,6 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/mapunit.hxx>
-#include <xmloff/XMLStringVector.hxx>
 #include <xmloff/attrlist.hxx>
 
 namespace com { namespace sun { namespace star {
