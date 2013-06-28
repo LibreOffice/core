@@ -168,4 +168,219 @@ SwTableLineFmt::SwTableLineFmt( SwAttrPool& rPool, const String &rFmtNm,
         pEvnBoxFmt = NULL;
     }
 
+SwTableBoxFmt::SwTableBoxFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
+                    SwFrmFmt *pDrvdFrm )
+    : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableBoxSetRange )
+    {
+        SetFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_FONT ) );
+        SetHeight( SvxFontHeightItem( 240, 100, RES_CHRATR_FONTSIZE) );
+        SetWeight( SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_WEIGHT ) );
+        SetPosture( SvxPostureItem( ITALIC_NONE, RES_CHRATR_POSTURE ) );
+
+        SetCJKFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_CJK_FONT ) );
+        SetCJKHeight( SvxFontHeightItem( 240, 100, RES_CHRATR_CJK_FONTSIZE) );
+        SetCJKWeight( SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_CJK_WEIGHT ) );
+        SetCJKPosture( SvxPostureItem( ITALIC_NONE, RES_CHRATR_CJK_POSTURE ) );
+
+        SetCTLFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_CTL_FONT ) );
+        SetCTLHeight( SvxFontHeightItem( 240, 100, RES_CHRATR_CTL_FONTSIZE) );
+        SetCTLWeight( SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT ) );
+        SetCTLPosture( SvxPostureItem( ITALIC_NONE, RES_CHRATR_CTL_POSTURE ) );
+
+        SetUnderline( SvxUnderlineItem( UNDERLINE_NONE, RES_CHRATR_UNDERLINE ) );
+        SetOverline( SvxOverlineItem( UNDERLINE_NONE, RES_CHRATR_OVERLINE ) );
+        SetCrossedOut( SvxCrossedOutItem( STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT ) );
+        SetContour( SvxContourItem( sal_False, RES_CHRATR_CONTOUR ) );
+        SetShadowed( SvxShadowedItem( sal_False, RES_CHRATR_SHADOWED ) );
+        SetColor( SvxColorItem( RES_CHRATR_COLOR ) );
+        SvxBoxItem rNew = SvxBoxItem( RES_BOX );
+        rNew.SetDistance( 55 );
+        SetBox( rNew );
+        SetBackground( SvxBrushItem( RES_BACKGROUND ) );
+        SetAdjust( SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ) );
+        SetTextOrientation( SvxFrameDirectionItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR ) );
+        SetVerticalAlignment( SwFmtVertOrient( 0, com::sun::star::text::VertOrientation::NONE, com::sun::star::text::RelOrientation::FRAME ) );
+
+        eSysLanguage = eNumFmtLanguage = ::GetAppLanguage();
+    }
+
+SwTableBoxFmt::SwTableBoxFmt( SwAttrPool& rPool, const String &rFmtNm,
+                    SwFrmFmt *pDrvdFrm )
+    : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableBoxSetRange )
+    {
+        SetFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_FONT ) );
+        SetHeight( SvxFontHeightItem( 240, 100, RES_CHRATR_FONTSIZE) );
+        SetWeight( SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_WEIGHT ) );
+        SetPosture( SvxPostureItem( ITALIC_NONE, RES_CHRATR_POSTURE ) );
+
+        SetCJKFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_CJK_FONT ) );
+        SetCJKHeight( SvxFontHeightItem( 240, 100, RES_CHRATR_CJK_FONTSIZE) );
+        SetCJKWeight( SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_CJK_WEIGHT ) );
+        SetCJKPosture( SvxPostureItem( ITALIC_NONE, RES_CHRATR_CJK_POSTURE ) );
+
+        SetCTLFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_CTL_FONT ) );
+        SetCTLHeight( SvxFontHeightItem( 240, 100, RES_CHRATR_CTL_FONTSIZE) );
+        SetCTLWeight( SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT ) );
+        SetCTLPosture( SvxPostureItem( ITALIC_NONE, RES_CHRATR_CTL_POSTURE ) );
+
+        SetUnderline( SvxUnderlineItem( UNDERLINE_NONE, RES_CHRATR_UNDERLINE ) );
+        SetOverline( SvxOverlineItem( UNDERLINE_NONE, RES_CHRATR_OVERLINE ) );
+        SetCrossedOut( SvxCrossedOutItem( STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT ) );
+        SetContour( SvxContourItem( sal_False, RES_CHRATR_CONTOUR ) );
+        SetShadowed( SvxShadowedItem( sal_False, RES_CHRATR_SHADOWED ) );
+        SetColor( SvxColorItem( RES_CHRATR_COLOR ) );
+        SvxBoxItem rNew = SvxBoxItem( RES_BOX );
+        rNew.SetDistance( 55 );
+        SetBox( rNew );
+        SetBackground( SvxBrushItem( RES_BACKGROUND ) );
+        SetAdjust( SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ) );
+        SetTextOrientation( SvxFrameDirectionItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR ) );
+        SetVerticalAlignment( SwFmtVertOrient( 0, com::sun::star::text::VertOrientation::NONE, com::sun::star::text::RelOrientation::FRAME ) );
+
+        eSysLanguage = eNumFmtLanguage = ::GetAppLanguage();
+    }
+
+void SwTableBoxFmt::SetFont( const SvxFontItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetHeight( const SvxFontHeightItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetWeight( const SvxWeightItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetPosture( const SvxPostureItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetCJKFont( const SvxFontItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetCJKHeight( const SvxFontHeightItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetCJKWeight( const SvxWeightItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetCJKPosture( const SvxPostureItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetCTLFont( const SvxFontItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetCTLHeight( const SvxFontHeightItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetCTLWeight( const SvxWeightItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetCTLPosture( const SvxPostureItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetUnderline( const SvxUnderlineItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetOverline( const SvxOverlineItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetCrossedOut( const SvxCrossedOutItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetContour( const SvxContourItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetShadowed( const SvxShadowedItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetColor( const SvxColorItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetBox( const SvxBoxItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetBackground( const SvxBrushItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetAdjust( const SvxAdjustItem& rNew )
+{
+    SvxAdjustItem rTmp = SwFmt::GetAdjust();
+    rTmp.SetAdjust( rNew.GetAdjust() );
+    rTmp.SetOneWord( rNew.GetOneWord() );
+    rTmp.SetLastBlock( rNew.GetLastBlock() );
+    SetFmtAttr( rTmp );
+}
+
+void SwTableBoxFmt::SetTextOrientation( const SvxFrameDirectionItem& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetVerticalAlignment( const SwFmtVertOrient& rNew )
+{
+    SetFmtAttr( rNew );
+}
+
+void SwTableBoxFmt::SetValueFormat( const String& rFmt, LanguageType eLng, LanguageType eSys )
+{
+    sNumFmtString = rFmt;
+    eNumFmtLanguage = eLng;
+    eSysLanguage = eSys;
+}
+
+const SvxFrameDirectionItem& SwTableBoxFmt::GetTextOrientation() const
+{
+    return SwFmt::GetFrmDir();
+}
+
+const SwFmtVertOrient& SwTableBoxFmt::GetVerticalAlignment() const
+{
+    return SwFmt::GetVertOrient();
+}
+
+void SwTableBoxFmt::GetValueFormat( String& rFmt, LanguageType& rLng, LanguageType& rSys ) const
+{
+    rFmt = sNumFmtString;
+    rLng = eNumFmtLanguage;
+    rSys = eSysLanguage;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
