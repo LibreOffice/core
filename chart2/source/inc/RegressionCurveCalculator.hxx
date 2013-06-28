@@ -28,64 +28,71 @@ namespace chart
 {
 
 class RegressionCurveCalculator : public
-    ::cppu::WeakImplHelper1< ::com::sun::star::chart2::XRegressionCurveCalculator >
+    cppu::WeakImplHelper1< com::sun::star::chart2::XRegressionCurveCalculator >
 {
 public:
     RegressionCurveCalculator();
     virtual ~RegressionCurveCalculator();
 
     static bool isLinearScaling(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling > & xScaling );
+        const com::sun::star::uno::Reference< com::sun::star::chart2::XScaling >& xScaling );
+
     static bool isLogarithmicScaling(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling > & xScaling );
+        const com::sun::star::uno::Reference< com::sun::star::chart2::XScaling >& xScaling );
 
 protected:
     virtual OUString ImplGetRepresentation(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xNumFormatter,
-        ::sal_Int32 nNumberFormatKey ) const = 0;
+        const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatter >& xNumFormatter,
+        sal_Int32 nNumberFormatKey ) const = 0;
 
     OUString getFormattedString(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xNumFormatter,
-        ::sal_Int32 nNumberFormatKey,
+        const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatter >& xNumFormatter,
+        sal_Int32 nNumberFormatKey,
         double fNumber ) const;
 
     double m_fCorrelationCoeffitient;
 
-    sal_Int32       mDegree;
-    double          mIntercept;
-    sal_Int32       mPeriod;
+    sal_Int32 mDegree;
+    sal_Bool  mForceIntercept;
+    double    mInterceptValue;
+    sal_Int32 mPeriod;
 
     // ____ XRegressionCurveCalculator ____
     virtual void SAL_CALL setRegressionProperties(
         sal_Int32 aDegree,
-        double aIntercept,
+        sal_Bool  aForceIntercept,
+        double    aInterceptValue,
         sal_Int32 aPeriod);
 
     virtual void SAL_CALL recalculateRegression(
-        const ::com::sun::star::uno::Sequence< double >& aXValues,
-        const ::com::sun::star::uno::Sequence< double >& aYValues )
-        throw (::com::sun::star::uno::RuntimeException) = 0;
-    virtual double SAL_CALL getCurveValue( double x )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException) = 0;
+        const com::sun::star::uno::Sequence< double >& aXValues,
+        const com::sun::star::uno::Sequence< double >& aYValues )
+        throw (com::sun::star::uno::RuntimeException) = 0;
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealPoint2D > SAL_CALL getCurveValues(
+    virtual double SAL_CALL getCurveValue( double x )
+        throw (com::sun::star::lang::IllegalArgumentException,
+               com::sun::star::uno::RuntimeException) = 0;
+
+    virtual com::sun::star::uno::Sequence< com::sun::star::geometry::RealPoint2D > SAL_CALL getCurveValues(
         double min,
         double max,
-        ::sal_Int32 nPointCount,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling >& xScalingX,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling >& xScalingY,
-        ::sal_Bool bMaySkipPointsInCalculation )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::uno::RuntimeException);
+        sal_Int32 nPointCount,
+        const com::sun::star::uno::Reference< com::sun::star::chart2::XScaling >& xScalingX,
+        const com::sun::star::uno::Reference< com::sun::star::chart2::XScaling >& xScalingY,
+        sal_Bool bMaySkipPointsInCalculation )
+        throw (com::sun::star::lang::IllegalArgumentException,
+               com::sun::star::uno::RuntimeException);
+
     virtual double SAL_CALL getCorrelationCoefficient()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException);
+
     virtual OUString SAL_CALL getRepresentation()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (com::sun::star::uno::RuntimeException);
+
     virtual OUString SAL_CALL getFormattedRepresentation(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumFmtSupplier,
-        ::sal_Int32 nNumberFormatKey )
-        throw (::com::sun::star::uno::RuntimeException);
+        const com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >& xNumFmtSupplier,
+        sal_Int32 nNumberFormatKey )
+        throw (com::sun::star::uno::RuntimeException);
 };
 
 } //  namespace chart

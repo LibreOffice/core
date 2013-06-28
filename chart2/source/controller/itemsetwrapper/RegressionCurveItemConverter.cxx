@@ -261,11 +261,49 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
 
         case SCHATTR_REGRESSION_SET_INTERCEPT:
         {
+            if( xCurve.is())
+            {
+                sal_Bool bNewValue = static_cast< sal_Bool >(
+                    static_cast< const SfxBoolItem & >(
+                        rItemSet.Get( nWhichId )).GetValue());
+
+                uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
+                OSL_ASSERT( xProperties.is());
+                sal_Bool bOldValue = false;
+                if( xProperties.is() )
+                {
+                    xProperties->getPropertyValue( "ForceIntercept" ) >>= bOldValue;
+                    if (bOldValue != bNewValue)
+                    {
+                        xProperties->setPropertyValue( "ForceIntercept" , uno::makeAny( bNewValue ));
+                        bChanged = true;
+                    }
+                }
+            }
         }
         break;
 
         case SCHATTR_REGRESSION_INTERCEPT_VALUE:
         {
+            if( xCurve.is())
+            {
+                double aValue = static_cast< double >(
+                    static_cast< const SvxDoubleItem & >(
+                        rItemSet.Get( nWhichId )).GetValue());
+
+                uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
+                OSL_ASSERT( xProperties.is());
+                double aOldValue = 0.0;
+                if( xProperties.is() )
+                {
+                    xProperties->getPropertyValue( "InterceptValue" ) >>= aOldValue;
+                    if (aOldValue != aValue)
+                    {
+                        xProperties->setPropertyValue( "InterceptValue" , uno::makeAny( aValue ));
+                        bChanged = true;
+                    }
+                }
+            }
         }
         break;
 
@@ -400,6 +438,40 @@ void RegressionCurveItemConverter::FillSpecialItem(
                 double aValue = 0.0;
                 if( xProperties.is() &&
                     (xProperties->getPropertyValue( "ExtrapolateBackward" ) >>= aValue))
+                {
+                    rOutItemSet.Put( SvxDoubleItem( aValue, nWhichId ));
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_REGRESSION_SET_INTERCEPT:
+        {
+            OSL_ASSERT( xCurve.is());
+            if( xCurve.is())
+            {
+                uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
+                OSL_ASSERT( xProperties.is());
+                sal_Bool bForceIntercept = false;
+                if( xProperties.is() &&
+                    (xProperties->getPropertyValue( "ForceIntercept" ) >>= bForceIntercept))
+                {
+                    rOutItemSet.Put( SfxBoolItem( nWhichId, bForceIntercept ));
+                }
+            }
+        }
+        break;
+
+        case SCHATTR_REGRESSION_INTERCEPT_VALUE:
+        {
+            OSL_ASSERT( xCurve.is());
+            if( xCurve.is())
+            {
+                uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
+                OSL_ASSERT( xProperties.is());
+                double aValue = 0.0;
+                if( xProperties.is() &&
+                    (xProperties->getPropertyValue( "InterceptValue" ) >>= aValue))
                 {
                     rOutItemSet.Put( SvxDoubleItem( aValue, nWhichId ));
                 }

@@ -25,7 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 #include "gauss.hxx"
 
-using namespace ::com::sun::star;
+using namespace com::sun::star;
 
 
 namespace chart
@@ -43,66 +43,76 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
     const uno::Sequence< double >& aYValues )
     throw (uno::RuntimeException)
 {
-    ::rtl::math::setNan( & m_fCorrelationCoeffitient );
+    rtl::math::setNan(&m_fCorrelationCoeffitient);
 
     RegressionCalculationHelper::tDoubleVectorPair aValues(
         RegressionCalculationHelper::cleanup( aXValues, aYValues, RegressionCalculationHelper::isValid()));
 
-    const double EPSILON( 1.0e-20 );
-
-    int aNumberOfPolyElements = mDegree + 1;
-    int aNumberOfPowers = 2 * aNumberOfPolyElements - 1;
+    int aNoElements = mForceIntercept ? mDegree : mDegree + 1;
+    int aNumberOfPowers = 2 * aNoElements - 1;
 
     std::vector<double> aPowers;
     aPowers.resize(aNumberOfPowers, 0.0);
 
-    int aNumberOfColumns = aNumberOfPolyElements;
-    int aNumberOfRows = aNumberOfPolyElements + 1;
+    int aNoColumns = aNoElements;
+    int aNoRows    = aNoElements + 1;
 
     std::vector<double> aMatrix;
-    aMatrix.resize(aNumberOfColumns*aNumberOfRows, 0.0);
+    aMatrix.resize(aNoColumns * aNoRows, 0.0);
 
-    const size_t aSizeOfValues = aValues.first.size();
+    const size_t aNoValues = aValues.first.size();
 
     double yAverage = 0.0;
 
-    aPowers[0] += aSizeOfValues;
-
-    for( size_t i = 0; i < aSizeOfValues; ++i )
+    for( size_t i = 0; i < aNoValues; ++i )
     {
         double x = aValues.first[i];
         double y = aValues.second[i];
 
-        for (int j = 1; j < aNumberOfPowers; j++) {
-            aPowers[j] += pow(x, j);
+        for (int j = 0; j < aNumberOfPowers; j++)
+        {
+            if (mForceIntercept)
+                aPowers[j] += std::pow(x, j + 2);
+            else
+                aPowers[j] += std::pow(x, j);
         }
 
-        for (int j = 0; j < aNumberOfPolyElements; j++) {
-            aMatrix[j * aNumberOfRows + aNumberOfPolyElements] += pow(x, j) * y;
+        for (int j = 0; j < aNoElements; j++)
+        {
+            if (mForceIntercept)
+                aMatrix[j * aNoRows + aNoElements] += std::pow(x, j + 1) * ( y - mInterceptValue );
+            else
+                aMatrix[j * aNoRows + aNoElements] += std::pow(x, j) * y;
         }
 
         yAverage += y;
     }
 
-    yAverage = yAverage / aSizeOfValues;
+    yAverage = yAverage / aNoValues;
 
-    for (int y = 0; y < aNumberOfPolyElements; y++) {
-        for (int x = 0; x < aNumberOfPolyElements; x++) {
-            aMatrix[y * aNumberOfRows + x] = aPowers[y + x];
+    for (int y = 0; y < aNoElements; y++)
+    {
+        for (int x = 0; x < aNoElements; x++)
+        {
+            aMatrix[y * aNoRows + x] = aPowers[y + x];
         }
     }
 
     mResult.clear();
-    mResult.resize(aNumberOfPolyElements, 0.0);
+    mResult.resize(aNoElements, 0.0);
 
-    solve(aMatrix, aNumberOfColumns, aNumberOfRows, mResult, EPSILON);
+    solve(aMatrix, aNoColumns, aNoRows, mResult, 1.0e-20);
+
+    // Set intercept value if force intercept is enabled
+    if (mForceIntercept) {
+        mResult.insert( mResult.begin(), mInterceptValue );
+    }
 
     // Calculate correlation coeffitient
-
     double aSumError = 0.0;
     double aSumTotal = 0.0;
 
-    for( size_t i = 0; i < aSizeOfValues; ++i )
+    for( size_t i = 0; i < aNoValues; ++i )
     {
         double x = aValues.first[i];
         double yActual = aValues.second[i];
@@ -111,8 +121,11 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
         aSumError += (yActual - yPredicted) * (yActual - yPredicted);
     }
 
-    m_fCorrelationCoeffitient = sqrt(1 - (aSumError / aSumTotal));
-
+    double aRSquared = 1.0 - (aSumError / aSumTotal);
+    if (aRSquared > 0.0)
+        m_fCorrelationCoeffitient = std::sqrt(aRSquared);
+    else
+        m_fCorrelationCoeffitient = 0.0;
 }
 
 double SAL_CALL PolynomialRegressionCurveCalculator::getCurveValue( double x )
@@ -130,7 +143,7 @@ double SAL_CALL PolynomialRegressionCurveCalculator::getCurveValue( double x )
     fResult = 0.0;
     for (size_t i = 0; i<mResult.size(); i++)
     {
-        fResult += mResult[i]*pow(x,i);
+        fResult += mResult[i] * std::pow(x, i);
     }
     return fResult;
 }
@@ -149,17 +162,34 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL PolynomialRegressionCurveCalcula
 
 OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
-    ::sal_Int32 nNumberFormatKey ) const
+    sal_Int32 nNumberFormatKey ) const
 {
     OUStringBuffer aBuf( "f(x) = ");
 
-    for (int i=mResult.size()-1; i>=0; i--)
+    int aLastIndex = mResult.size() - 1;
+    for (int i = aLastIndex; i >= 0; i--)
     {
-        aBuf.append(getFormattedString( xNumFormatter, nNumberFormatKey, mResult[i] ));
-        if(i > 0) {
+        double aValue = mResult[i];
+        if (aValue == 0.0)
+        {
+            continue;
+        }
+        else if (aValue < 0.0)
+        {
+            aBuf.appendAscii( " - " );
+        }
+        else
+        {
+            if (i != aLastIndex)
+                aBuf.appendAscii( " + " );
+        }
+
+        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, std::abs( aValue ) ) );
+
+        if(i > 0)
+        {
             aBuf.appendAscii( "x^" );
             aBuf.append(i);
-            aBuf.append(" + ");
         }
     }
 

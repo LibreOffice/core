@@ -985,8 +985,9 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries
         sal_Int32 aPeriod = 2;
         double aExtrapolateForward = 0.0;
         double aExtrapolateBackward = 0.0;
-        double aIntercept;
-        rtl::math::setNan(&aIntercept);
+        sal_Bool aForceIntercept = false;
+        double aInterceptValue;
+        rtl::math::setNan(&aInterceptValue);
 
         if ( xProperties.is() )
         {
@@ -994,10 +995,12 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries
             xProperties->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
             xProperties->getPropertyValue( "ExtrapolateForward") >>= aExtrapolateForward;
             xProperties->getPropertyValue( "ExtrapolateBackward") >>= aExtrapolateBackward;
+            xProperties->getPropertyValue( "ForceIntercept") >>= aForceIntercept;
+            if (aForceIntercept)
+                xProperties->getPropertyValue( "InterceptValue") >>= aInterceptValue;
         }
 
-        uno::Reference< XRegressionCurveCalculator > xRegressionCurveCalculator(
-            aCurveList[nN]->getCalculator() );
+        uno::Reference< XRegressionCurveCalculator > xRegressionCurveCalculator( aCurveList[nN]->getCalculator() );
 
         if( ! xRegressionCurveCalculator.is())
             continue;
@@ -1009,7 +1012,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries
         fMaxX += aExtrapolateForward;
         fMinX -= aExtrapolateBackward;
 
-        xRegressionCurveCalculator->setRegressionProperties(aDegree, aIntercept, aPeriod);
+        xRegressionCurveCalculator->setRegressionProperties(aDegree, aForceIntercept, aInterceptValue, aPeriod);
         xRegressionCurveCalculator->recalculateRegression( rVDataSeries.getAllX(), rVDataSeries.getAllY() );
 
         sal_Int32 nRegressionPointCount = 100; //@todo find a more optimal solution if more complicated curve types are introduced

@@ -37,13 +37,14 @@ namespace chart
 {
 
 RegressionCurveCalculator::RegressionCurveCalculator() :
-        m_fCorrelationCoeffitient( 0.0 ),
+        m_fCorrelationCoeffitient(0.0),
         mDegree(2),
-        mIntercept(0.0),
+        mForceIntercept(false),
+        mInterceptValue(0.0),
         mPeriod(2)
 {
-    ::rtl::math::setNan( &m_fCorrelationCoeffitient );
-    ::rtl::math::setNan( &mIntercept );
+    rtl::math::setNan( &m_fCorrelationCoeffitient );
+    rtl::math::setNan( &mInterceptValue );
 }
 
 RegressionCurveCalculator::~RegressionCurveCalculator()
@@ -70,17 +71,19 @@ bool RegressionCurveCalculator::isLogarithmicScaling(
 
 void RegressionCurveCalculator::setRegressionProperties(
     sal_Int32   aDegree,
-    double      aIntercept,
+    sal_Bool    aForceIntercept,
+    double      aInterceptValue,
     sal_Int32   aPeriod)
 {
-    mDegree    = aDegree;
-    mIntercept = aIntercept;
-    mPeriod    = aPeriod;
+    mDegree = aDegree;
+    mForceIntercept = aForceIntercept;
+    mInterceptValue = aInterceptValue;
+    mPeriod  = aPeriod;
 }
 
 OUString RegressionCurveCalculator::getFormattedString(
     const Reference< util::XNumberFormatter >& xNumFormatter,
-    ::sal_Int32 nNumberFormatKey,
+    sal_Int32 nNumberFormatKey,
     double fNumber ) const
 {
     OUString aResult;
@@ -97,9 +100,8 @@ Sequence< geometry::RealPoint2D > SAL_CALL RegressionCurveCalculator::getCurveVa
     double min, double max, ::sal_Int32 nPointCount,
     const Reference< chart2::XScaling >& xScalingX,
     const Reference< chart2::XScaling >& /* xScalingY */,
-    ::sal_Bool /* bMaySkipPointsInCalculation */ )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+    sal_Bool /* bMaySkipPointsInCalculation */ )
+        throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     if( nPointCount < 2 )
         throw lang::IllegalArgumentException();
@@ -148,7 +150,7 @@ OUString SAL_CALL RegressionCurveCalculator::getRepresentation()
 
 OUString SAL_CALL RegressionCurveCalculator::getFormattedRepresentation(
     const Reference< util::XNumberFormatsSupplier > & xNumFmtSupplier,
-    ::sal_Int32 nNumberFormatKey )
+    sal_Int32 nNumberFormatKey )
     throw (uno::RuntimeException)
 {
     // create and prepare a number formatter

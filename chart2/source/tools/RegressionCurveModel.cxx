@@ -60,7 +60,9 @@ enum
     PROPERTY_DEGREE,
     PROPERTY_PERIOD,
     PROPERTY_EXTRAPOLATE_FORWARD,
-    PROPERTY_EXTRAPOLATE_BACKWARD
+    PROPERTY_EXTRAPOLATE_BACKWARD,
+    PROPERTY_FORCE_INTERCEPT,
+    PROPERTY_INTERCEPT_VALUE
 };
 
 void lcl_AddPropertiesToVector(
@@ -90,6 +92,20 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "ExtrapolateBackward",
                 PROPERTY_EXTRAPOLATE_BACKWARD,
+                ::getCppuType( reinterpret_cast< const double* >(0) ),
+                beans::PropertyAttribute::BOUND |
+                beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( "ForceIntercept",
+                  PROPERTY_FORCE_INTERCEPT,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( "InterceptValue",
+                PROPERTY_INTERCEPT_VALUE,
                 ::getCppuType( reinterpret_cast< const double* >(0) ),
                 beans::PropertyAttribute::BOUND |
                 beans::PropertyAttribute::MAYBEDEFAULT ));

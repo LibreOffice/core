@@ -60,11 +60,17 @@ private:
     FixedImage  m_aFIPolynomial;
     FixedImage  m_aFIMovingAverage;
 
+    FixedText         m_aFT_Degree;
     NumericField      m_aNF_Degree;
+    FixedText         m_aFT_Period;
     NumericField      m_aNF_Period;
 
+    FixedText         m_aFT_ExtrapolateForward;
     NumericField      m_aNF_ExtrapolateForward;
+
+    FixedText         m_aFT_ExtrapolateBackward;
     NumericField      m_aNF_ExtrapolateBackward;
+
     CheckBox          m_aCB_SetIntercept;
     NumericField      m_aNF_InterceptValue;
 

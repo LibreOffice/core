@@ -38,7 +38,8 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
 {
 
     void setRegressionProperties( [in] long degree,
-                                  [in] double intercept,
+                                  [in] boolean forceIntercept,
+                                  [in] double interceptValue,
                                   [in] long period);
 
     /** recalculates the parameters of the internal regression curve according to

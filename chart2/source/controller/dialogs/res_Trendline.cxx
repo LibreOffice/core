@@ -78,11 +78,15 @@ TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInA
         m_aFIPolynomial(    pParent, SchResId( FI_POLYNOMIAL       )),
         m_aFIMovingAverage( pParent, SchResId( FI_MOVING_AVERAGE    )),
 
+        m_aFT_Degree(       pParent, SchResId( FT_DEGREE            )),
         m_aNF_Degree(       pParent, SchResId( NF_DEGREE            )),
+        m_aFT_Period(       pParent, SchResId( FT_PERIOD            )),
         m_aNF_Period(       pParent, SchResId( NF_PERIOD            )),
 
+        m_aFT_ExtrapolateForward(   pParent, SchResId( FT_EXTRAPOLATE_FORWARD            )),
         m_aNF_ExtrapolateForward(   pParent, SchResId( NF_EXTRAPOLATE_FORWARD            )),
-        m_aNF_ExtrapolateBackward(  pParent, SchResId( NF_EXTRAPOLATE_BACKWARD            )),
+        m_aFT_ExtrapolateBackward(  pParent, SchResId( FT_EXTRAPOLATE_BACKWARD           )),
+        m_aNF_ExtrapolateBackward(  pParent, SchResId( NF_EXTRAPOLATE_BACKWARD           )),
         m_aCB_SetIntercept(         pParent, SchResId( CB_SET_INTERCEPT          )),
         m_aNF_InterceptValue(       pParent, SchResId( NF_INTERCEPT_VALUE            )),
 
@@ -121,7 +125,7 @@ TrendlineResources::~TrendlineResources()
 long TrendlineResources::adjustControlSizes()
 {
     // calculate right edge
-    ::std::vector< long > aControlRightEdges;
+    std::vector< long > aControlRightEdges;
     aControlRightEdges.push_back( lcl_getRightEdge( m_aRBNone ));
     aControlRightEdges.push_back( lcl_getRightEdge( m_aRBLinear ));
     aControlRightEdges.push_back( lcl_getRightEdge( m_aRBLogarithmic ));
@@ -129,8 +133,17 @@ long TrendlineResources::adjustControlSizes()
     aControlRightEdges.push_back( lcl_getRightEdge( m_aRBPower ));
     aControlRightEdges.push_back( lcl_getRightEdge( m_aRBPolynomial ));
     aControlRightEdges.push_back( lcl_getRightEdge( m_aRBMovingAverage ));
+
+    aControlRightEdges.push_back( lcl_getRightEdge( m_aNF_Degree ));
+    aControlRightEdges.push_back( lcl_getRightEdge( m_aNF_Period ));
+    aControlRightEdges.push_back( lcl_getRightEdge( m_aNF_ExtrapolateForward ));
+    aControlRightEdges.push_back( lcl_getRightEdge( m_aNF_ExtrapolateBackward ));
+    aControlRightEdges.push_back( lcl_getRightEdge( m_aNF_InterceptValue ));
+    aControlRightEdges.push_back( lcl_getRightEdge( m_aCB_SetIntercept ));
+
     aControlRightEdges.push_back( lcl_getRightEdge( m_aCBShowEquation ));
     aControlRightEdges.push_back( lcl_getRightEdge( m_aCBShowCorrelationCoeff ));
+
 
     lcl_AdjustControlSize( m_aRBNone );
     lcl_AdjustControlSize( m_aRBLinear );
@@ -139,6 +152,14 @@ long TrendlineResources::adjustControlSizes()
     lcl_AdjustControlSize( m_aRBPower );
     lcl_AdjustControlSize( m_aRBPolynomial );
     lcl_AdjustControlSize( m_aRBMovingAverage );
+
+    lcl_AdjustControlSize( m_aNF_Degree );
+    lcl_AdjustControlSize( m_aNF_Period );
+    lcl_AdjustControlSize( m_aNF_ExtrapolateForward );
+    lcl_AdjustControlSize( m_aNF_ExtrapolateBackward );
+    lcl_AdjustControlSize( m_aNF_InterceptValue );
+    lcl_AdjustControlSize( m_aCB_SetIntercept );
+
     lcl_AdjustControlSize( m_aCBShowEquation );
     lcl_AdjustControlSize( m_aCBShowCorrelationCoeff );
 
@@ -240,6 +261,29 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
         m_aNF_ExtrapolateBackward.SetValue( 0 );
     }
 
+    if( rInAttrs.GetItemState( SCHATTR_REGRESSION_INTERCEPT_VALUE, sal_True, &pPoolItem ) == SFX_ITEM_SET )
+    {
+        double nValue = static_cast< const SvxDoubleItem * >( pPoolItem )->GetValue() * 10000;
+        m_aNF_InterceptValue.SetValue( (sal_Int64) nValue );
+    }
+    else
+    {
+        m_aNF_InterceptValue.SetValue( 0 );
+    }
+
+    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SET_INTERCEPT, sal_True, &pPoolItem );
+    if( aState == SFX_ITEM_DONTCARE )
+    {
+        m_aCB_SetIntercept.EnableTriState( sal_True );
+        m_aCB_SetIntercept.SetState( STATE_DONTKNOW );
+    }
+    else
+    {
+        m_aCB_SetIntercept.EnableTriState( sal_False );
+        if( aState == SFX_ITEM_SET )
+            m_aCB_SetIntercept.Check( static_cast< const SfxBoolItem * >( pPoolItem )->GetValue());
+    }
+
     aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_EQUATION, sal_True, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
@@ -300,8 +344,10 @@ sal_Bool TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
 {
     if( m_bTrendLineUnique )
         rOutAttrs.Put( SvxChartRegressItem( m_eTrendLineType, SCHATTR_REGRESSION_TYPE ));
+
     if( m_aCBShowEquation.GetState() != STATE_DONTKNOW )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_EQUATION, m_aCBShowEquation.IsChecked() ));
+
     if( m_aCBShowCorrelationCoeff.GetState() != STATE_DONTKNOW )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_COEFF, m_aCBShowCorrelationCoeff.IsChecked() ));
 
@@ -316,6 +362,12 @@ sal_Bool TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
 
     double aExtrapolateBackwardValue = m_aNF_ExtrapolateBackward.GetValue() / 100.0;
     rOutAttrs.Put(SvxDoubleItem( aExtrapolateBackwardValue, SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD ) );
+
+    if( m_aCB_SetIntercept.GetState() != STATE_DONTKNOW )
+        rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SET_INTERCEPT, m_aCB_SetIntercept.IsChecked() ));
+
+    double aInterceptValue = m_aNF_InterceptValue.GetValue() / 10000.0;
+    rOutAttrs.Put(SvxDoubleItem( aInterceptValue, SCHATTR_REGRESSION_INTERCEPT_VALUE ) );
 
     return sal_True;
 }

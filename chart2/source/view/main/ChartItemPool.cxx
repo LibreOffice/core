@@ -74,7 +74,7 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_STAT_INDICATE            - SCHATTR_START] = new SvxChartIndicateItem (CHINDICATE_NONE, SCHATTR_STAT_INDICATE);
     ppPoolDefaults[SCHATTR_STAT_RANGE_POS           - SCHATTR_START] = new SfxStringItem (SCHATTR_STAT_RANGE_POS, String());
     ppPoolDefaults[SCHATTR_STAT_RANGE_NEG           - SCHATTR_START] = new SfxStringItem (SCHATTR_STAT_RANGE_NEG, String());
-    ppPoolDefaults[SCHATTR_STAT_ERRORBAR_TYPE - SCHATTR_START] = new SfxBoolItem(SCHATTR_STAT_ERRORBAR_TYPE, true);
+    ppPoolDefaults[SCHATTR_STAT_ERRORBAR_TYPE       - SCHATTR_START] = new SfxBoolItem(SCHATTR_STAT_ERRORBAR_TYPE, true);
 
     ppPoolDefaults[SCHATTR_STYLE_DEEP     - SCHATTR_START] = new SfxBoolItem (SCHATTR_STYLE_DEEP, 0);
     ppPoolDefaults[SCHATTR_STYLE_3D       - SCHATTR_START] = new SfxBoolItem (SCHATTR_STYLE_3D, 0);
@@ -83,7 +83,7 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_STYLE_LINES    - SCHATTR_START] = new SfxBoolItem (SCHATTR_STYLE_LINES, 0);
     ppPoolDefaults[SCHATTR_STYLE_PERCENT  - SCHATTR_START] = new SfxBoolItem (SCHATTR_STYLE_PERCENT, 0);
     ppPoolDefaults[SCHATTR_STYLE_STACKED  - SCHATTR_START] = new SfxBoolItem (SCHATTR_STYLE_STACKED, 0);
-    ppPoolDefaults[SCHATTR_STYLE_SPLINES    - SCHATTR_START] = new SfxInt32Item (SCHATTR_STYLE_SPLINES, 0); //Bug: was Bool! test ->Fileformat (touches only 5's)
+    ppPoolDefaults[SCHATTR_STYLE_SPLINES  - SCHATTR_START] = new SfxInt32Item (SCHATTR_STYLE_SPLINES, 0); //Bug: was Bool! test ->Fileformat (touches only 5's)
     ppPoolDefaults[SCHATTR_STYLE_SYMBOL   - SCHATTR_START] = new SfxInt32Item (SCHATTR_STYLE_SYMBOL, 0);
     ppPoolDefaults[SCHATTR_STYLE_SHAPE    - SCHATTR_START] = new SfxInt32Item (SCHATTR_STYLE_SHAPE, 0);
 
@@ -152,11 +152,11 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_REGRESSION_TYPE                  - SCHATTR_START] = new SvxChartRegressItem  (CHREGRESS_NONE, SCHATTR_REGRESSION_TYPE);
     ppPoolDefaults[SCHATTR_REGRESSION_SHOW_EQUATION         - SCHATTR_START] = new SfxBoolItem(SCHATTR_REGRESSION_SHOW_EQUATION, 0);
     ppPoolDefaults[SCHATTR_REGRESSION_SHOW_COEFF            - SCHATTR_START] = new SfxBoolItem(SCHATTR_REGRESSION_SHOW_COEFF, 0);
-    ppPoolDefaults[SCHATTR_REGRESSION_DEGREE                - SCHATTR_START] = new SfxInt32Item( SCHATTR_REGRESSION_DEGREE, 2 );
-    ppPoolDefaults[SCHATTR_REGRESSION_PERIOD                - SCHATTR_START] = new SfxInt32Item( SCHATTR_REGRESSION_PERIOD, 2 );
-    ppPoolDefaults[SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD   - SCHATTR_START] = new SvxDoubleItem( 0.0, SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD );
-    ppPoolDefaults[SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD  - SCHATTR_START] = new SvxDoubleItem( 0.0, SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD );
-    ppPoolDefaults[SCHATTR_REGRESSION_SET_INTERCEPT         - SCHATTR_START] = new SfxBoolItem( SCHATTR_REGRESSION_SET_INTERCEPT, false );
+    ppPoolDefaults[SCHATTR_REGRESSION_DEGREE                - SCHATTR_START] = new SfxInt32Item(SCHATTR_REGRESSION_DEGREE, 2);
+    ppPoolDefaults[SCHATTR_REGRESSION_PERIOD                - SCHATTR_START] = new SfxInt32Item(SCHATTR_REGRESSION_PERIOD, 2);
+    ppPoolDefaults[SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD   - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD);
+    ppPoolDefaults[SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD  - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD);
+    ppPoolDefaults[SCHATTR_REGRESSION_SET_INTERCEPT         - SCHATTR_START] = new SfxBoolItem(SCHATTR_REGRESSION_SET_INTERCEPT, sal_False);
     ppPoolDefaults[SCHATTR_REGRESSION_INTERCEPT_VALUE       - SCHATTR_START] = new SvxDoubleItem( 0.0, SCHATTR_REGRESSION_INTERCEPT_VALUE);
 
     /**************************************************************************
