@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkWindow" id="StartCenter">
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/odt_32_8.png</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/ods_32_8.png</property>
+  </object>
+  <object class="GtkBox" id="StartCenter">
     <property name="can_focus">False</property>
     <child>
       <object class="GtkGrid" id="grid1">
@@ -19,6 +29,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="image">image1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -47,6 +58,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="image">image2</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>

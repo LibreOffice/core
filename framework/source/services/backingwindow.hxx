@@ -81,7 +81,7 @@ namespace framework
         com::sun::star::uno::Reference< com::sun::star::frame::XUIControllerFactory >    mxPopupMenuFactory;
         com::sun::star::uno::Reference< com::sun::star::frame::XPopupMenuController >    mxPopupMenuController;
         com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >                mxPopupMenu;
-
+/*
         ImageButton*                    mpWriterButton;
         ImageButton*                    mpCalcButton;
         ImageButton*                    mpImpressButton;
@@ -90,8 +90,17 @@ namespace framework
         ImageButton*                    mpDBButton;
         ImageButton*                    mpMathButton;
         ImageButton*                    mpTemplateButton;
+*/
+        PushButton*                    mpWriterButton;
+        PushButton*                    mpCalcButton;
+        PushButton*                    mpImpressButton;
+        //MenuButton*                     mpOpenButton;
+        PushButton*                    mpDrawButton;
+        PushButton*                    mpDBButton;
+        PushButton*                    mpMathButton;
+        PushButton*                    mpTemplateButton;
 
-        DecoToolBox                     maToolbox;
+        //DecoToolBox                     maToolbox;
 
         BitmapEx                        maBackgroundLeft;
         BitmapEx                        maBackgroundMiddle;
@@ -104,8 +113,8 @@ namespace framework
         Font                            maTextFont;
         Rectangle                       maControlRect;
 
-        long                            mnColumnWidth[2];
-        long                            mnTextColumnWidth[2];
+        //long                            mnColumnWidth[2];
+        //long                            mnTextColumnWidth[2];
         Color                           maLabelTextColor;
 
         Size                            maButtonImageSize;
@@ -126,7 +135,7 @@ namespace framework
 
         void loadImage( const ResId& i_rId, PushButton& i_rButton );
 
-        void layoutButton( const char* i_pURL, int nColumn, int i_nExtraWidth, const std::set<OUString>& i_rURLS,
+        void layoutButton( const char* i_pURL, const std::set<OUString>& i_rURLS,
                            SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
                            PushButton& i_rBtn,
                            MnemonicGenerator& i_rMnemonicGen,
@@ -141,7 +150,7 @@ namespace framework
 
         DECL_LINK( ClickHdl, Button* );
         DECL_LINK( ActivateHdl, Button* );
-        DECL_LINK( ToolboxHdl, void* );
+        //DECL_LINK( ToolboxHdl, void* );
         DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
         void initControls();

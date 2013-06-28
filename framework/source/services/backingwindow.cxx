@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-*/
 /*
  * This file is part of the LibreOffice project.
  *
@@ -15,7 +15,7 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
- */
+*/
 
 // autogen include statement, do not remove
 
@@ -82,6 +82,7 @@ using namespace framework;
 #define TEMPLATE_URL    "slot:5500"
 #define OPEN_URL        ".uno:Open"
 
+/*
 DecoToolBox::DecoToolBox( Window* pParent, WinBits nStyle ) :
     ToolBox( pParent, nStyle )
 {
@@ -118,6 +119,7 @@ Size DecoToolBox::getMinSize()
 {
     return maMinSize;
 }
+*/
 
 class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XStringWidth >
 {
@@ -136,8 +138,8 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star
 #define STC_BUTTON_STYLE  (WB_LEFT | WB_VCENTER | WB_FLATBUTTON | WB_BEVELBUTTON)
 
 BackingWindow::BackingWindow( Window* i_pParent ) :
-    Window( i_pParent, FwkResId( DLG_BACKING ) ),
-    maToolbox( this, WB_DIALOGCONTROL ),
+    Window( i_pParent /*,FwkResId( DLG_BACKING )*/ ),
+    //maToolbox( this, WB_DIALOGCONTROL ),
     maOpenString( FwkResId( STR_BACKING_FILE ) ),
     maTemplateString( FwkResId( STR_BACKING_TEMPLATE ) ),
     maButtonImageSize( 10, 10 ),
@@ -150,17 +152,18 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
 
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(),
       "modules/StartModule/ui/startcenter.ui",
-      "StartCenter");
+      "StartCenter" );
     get( mpWriterButton,    "writer");
     get( mpCalcButton,      "calc");
     get( mpImpressButton,   "impress");
-    get( mpOpenButton,      "open");
+    //get( mpOpenButton,      "open");
     get( mpDrawButton,      "draw");
     get( mpDBButton,        "database");
     get( mpMathButton,      "math");
     get( mpTemplateButton,  "templates");
-    mnColumnWidth[0] = mnColumnWidth[1] = 0;
-    mnTextColumnWidth[0] = mnTextColumnWidth[1] = 0;
+
+    //mnColumnWidth[0] = mnColumnWidth[1] = 0;
+    //mnTextColumnWidth[0] = mnTextColumnWidth[1] = 0;
 
     try
     {
@@ -195,7 +198,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     {
         SAL_WARN( "fwk", "BackingWindow - caught an exception! " << e.Message );
     }
-
+/*
     OUString aExtHelpText( FwkResId( STR_BACKING_EXTHELP ) );
     OUString aInfoHelpText( FwkResId( STR_BACKING_INFOHELP ) );
     OUString aTplRepHelpText( FwkResId( STR_BACKING_TPLREP ) );
@@ -232,7 +235,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     maToolbox.SetQuickHelpText( nItemId_Info, aInfoHelpText );
     maToolbox.SetItemCommand( nItemId_Info, String( ".HelpId:StartCenter:Info"  ) );
     maToolbox.ShowItem( nItemId_Info );
-
+*/
     // get dispatch provider
     Reference<XDesktop2> xDesktop = Desktop::create( comphelper::getProcessComponentContext() );
     mxDesktopDispatchProvider = xDesktop;
@@ -244,25 +247,27 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     mpDBButton->SetHelpId( ".HelpId:StartCenter:DBButton" );
     mpMathButton->SetHelpId( ".HelpId:StartCenter:MathButton" );
     mpTemplateButton->SetHelpId( ".HelpId:StartCenter:TemplateButton" );
-    mpOpenButton->SetHelpId( ".HelpId:StartCenter:OpenButton" );
-    maToolbox.SetHelpId( ".HelpId:StartCenter:Toolbox" );
+    //mpOpenButton->SetHelpId( ".HelpId:StartCenter:OpenButton" );
+    //maToolbox.SetHelpId( ".HelpId:StartCenter:Toolbox" );
 
     // init background
     initBackground();
 
     // add some breathing space for the images
-    maButtonImageSize.Width() += 12;
-    maButtonImageSize.Height() += 12;
+    //maButtonImageSize.Width() += 12;
+    //maButtonImageSize.Height() += 12;
 
     // set a slighly larger font than normal labels on the texts
-    maTextFont.SetSize( Size( 0, 11 ) );
-    maTextFont.SetWeight( WEIGHT_NORMAL );
+    //maTextFont.SetSize( Size( 0, 11 ) );
+    //maTextFont.SetWeight( WEIGHT_NORMAL );
+
+    Window::Show();
 }
 
 
 BackingWindow::~BackingWindow()
 {
-    maToolbox.RemoveEventListener( LINK( this, BackingWindow, WindowEventListener ) );
+    //maToolbox.RemoveEventListener( LINK( this, BackingWindow, WindowEventListener ) );
     delete mpAccExec;
 
     if( mxPopupMenuController.is() )
@@ -290,12 +295,14 @@ void BackingWindow::GetFocus()
     Window::GetFocus();
 }
 
+/*
 class ImageContainerRes : public Resource
 {
     public:
     ImageContainerRes( const ResId& i_rId ) : Resource( i_rId ) {}
     ~ImageContainerRes() { FreeResource(); }
 };
+*/
 
 IMPL_LINK( BackingWindow, WindowEventListener, VclSimpleEvent*, pEvent )
 {
@@ -349,7 +356,7 @@ void BackingWindow::prepareRecentFileMenu()
         VCLXMenu* pTKMenu = VCLXMenu::GetImplementation( mxPopupMenu );
         if ( pTKMenu )
             pRecentMenu = dynamic_cast< PopupMenu * >( pTKMenu->GetMenu() );
-        mpOpenButton->SetPopupMenu( pRecentMenu );
+        //mpOpenButton->SetPopupMenu( pRecentMenu );
     }
 }
 
@@ -367,6 +374,7 @@ static void lcl_SetBlackButtonTextColor( PushButton& rButton )
 
 void BackingWindow::initBackground()
 {
+/*
     SetBackground();
 
     // select image set
@@ -399,9 +407,9 @@ void BackingWindow::initBackground()
 //###    maToolbox.SetItemImage( nItemId_Reg, BitmapEx( FwkResId( BMP_BACKING_REG ) ) );
     maToolbox.SetItemImage( nItemId_Info, BitmapEx( FwkResId( BMP_BACKING_INFO ) ) );
     maToolbox.SetItemImage( nItemId_TplRep, BitmapEx( FwkResId( BMP_BACKING_TPLREP ) ) );
-
+*/
     // get icon images from fwk resource and set them on the appropriate buttons
-
+/*
     loadImage( FwkResId( BMP_BACKING_WRITER ), *mpWriterButton );
     loadImage( FwkResId( BMP_BACKING_CALC ), *mpCalcButton );
     loadImage( FwkResId( BMP_BACKING_IMPRESS ), *mpImpressButton );
@@ -410,12 +418,13 @@ void BackingWindow::initBackground()
     loadImage( FwkResId( BMP_BACKING_FORMULA ), *mpMathButton );
     loadImage( FwkResId( BMP_BACKING_OPENFILE ), *mpOpenButton );
     loadImage( FwkResId( BMP_BACKING_OPENTEMPLATE ), *mpTemplateButton );
+*/
 
-    mpOpenButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED ); // CRASH?
-    mpOpenButton->SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
+    //mpOpenButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED ); // CRASH?
+    //mpOpenButton->SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
 
     // fdo#41440: force black text color, since the background image is white.
-
+/*
     lcl_SetBlackButtonTextColor( *mpWriterButton );
     lcl_SetBlackButtonTextColor( *mpCalcButton );
     lcl_SetBlackButtonTextColor( *mpImpressButton );
@@ -424,7 +433,7 @@ void BackingWindow::initBackground()
     lcl_SetBlackButtonTextColor( *mpDBButton );
     lcl_SetBlackButtonTextColor( *mpMathButton );
     lcl_SetBlackButtonTextColor( *mpTemplateButton );
-
+*/
 }
 
 void BackingWindow::initControls()
@@ -437,19 +446,8 @@ void BackingWindow::initControls()
     // calculate dialog size
     // begin with background bitmap
 
-    maControlRect = Rectangle( Point(), maBackgroundLeft.GetSizePixel() );
-    maControlRect.Left() += nShadowLeft;
-    maControlRect.Right() -= nShadowRight;
-    maControlRect.Top() += nShadowTop;
-    maControlRect.Bottom() -= nShadowBottom;
-
-    long nYPos = 0;
-
-    if( maControlRect.GetWidth() < mnBtnPos + 20 )
-        maControlRect.Right() = maControlRect.Left() + mnBtnPos + 20;
-
-    if( maControlRect.GetWidth() < mnBtnPos + 10 )
-        maControlRect.Right() = maControlRect.Left() + mnBtnPos + 10;
+//    maControlRect = Rectangle( Point(), maBackgroundLeft.GetSizePixel() );
+    maControlRect = Rectangle( Point(), GetSizePixel() );
 
 
     // collect the URLs of the entries in the File/New menu
@@ -492,81 +490,35 @@ void BackingWindow::initControls()
 
     // layout the buttons
 
-    layoutButton( WRITER_URL, 0, 0, aFileNewAppsAvailable,
+    layoutButton( WRITER_URL, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SWRITER,
                   *mpWriterButton, aMnemns );
-    layoutButton( DRAW_URL, 1, 0, aFileNewAppsAvailable,
+    layoutButton( DRAW_URL, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SDRAW,
                   *mpDrawButton, aMnemns );
-    nYPos += maButtonImageSize.Height() + 10;
-    layoutButton( CALC_URL, 0, 0, aFileNewAppsAvailable,
+    layoutButton( CALC_URL, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SCALC,
                   *mpCalcButton, aMnemns );
-    layoutButton( BASE_URL, 1, 0, aFileNewAppsAvailable,
+    layoutButton( BASE_URL, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SDATABASE,
                   *mpDBButton, aMnemns );
-    nYPos += maButtonImageSize.Height() + 10;
-    layoutButton( IMPRESS_WIZARD_URL, 0, 0, aFileNewAppsAvailable,
+    layoutButton( IMPRESS_WIZARD_URL, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SIMPRESS,
                   *mpImpressButton, aMnemns );
-    layoutButton( MATH_URL, 1, 0, aFileNewAppsAvailable,
+    layoutButton( MATH_URL, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SMATH,
                   *mpMathButton, aMnemns );
 
-    nYPos += 3*maButtonImageSize.Height() / 2;
-
-    layoutButton( NULL, 0, 18, aFileNewAppsAvailable,
-                  aModuleOptions, SvtModuleOptions::E_SWRITER,
-                  *mpOpenButton, aMnemns, maOpenString );
-    layoutButton( NULL, 1, 0, aFileNewAppsAvailable,
+    //layoutButton( NULL, aFileNewAppsAvailable,
+    //              aModuleOptions, SvtModuleOptions::E_SWRITER,
+    //              *mpOpenButton, aMnemns, maOpenString );
+    layoutButton( NULL, aFileNewAppsAvailable,
                   aModuleOptions, SvtModuleOptions::E_SWRITER,
                   *mpTemplateButton, aMnemns, maTemplateString );
-    nYPos += 10;
 
-    DBG_ASSERT( nYPos < maControlRect.GetHeight(), "misformatting !" );
-
-    if( mnColumnWidth[0] + mnColumnWidth[1] + mnBtnPos + 20 > maControlRect.GetWidth() )
-        maControlRect.Right() = maControlRect.Left() + mnColumnWidth[0] + mnColumnWidth[1] + mnBtnPos + 20;
-
-    mnTextColumnWidth[0] = mnColumnWidth[0];
-    mnTextColumnWidth[1] = mnColumnWidth[1];
-
-    if( mnTextColumnWidth[1] > mnTextColumnWidth[0] )
-    {
-        mnColumnWidth[0]     = mnColumnWidth[1];
-        mnTextColumnWidth[0] = mnTextColumnWidth[1];
-    }
-    else
-    {
-        mnColumnWidth[1]     = mnColumnWidth[0];
-        mnTextColumnWidth[1] = mnTextColumnWidth[0];
-    }
-    if( maControlRect.GetWidth() < maControlRect.GetHeight() * 3 / 2 )
-    {
-        maControlRect.Right() = maControlRect.Left() + maControlRect.GetHeight() * 3 / 2;
-        long nDelta = (maControlRect.GetWidth() - mnBtnPos - mnColumnWidth[1] - mnColumnWidth[0] - 20);
-        mnColumnWidth[0] += nDelta/2;
-        mnColumnWidth[1] += nDelta/2;
-    }
-
-    maToolbox.SetSelectHdl( LINK( this, BackingWindow, ToolboxHdl ) );
-    if( mnHideExternalLinks == 0 )
-        maToolbox.Show();
-
-    // scale middle map to formatted width
-    Size aMiddleSegmentSize( maControlRect.GetSize().Width() + nShadowLeft + nShadowRight,
-                             maBackgroundMiddle.GetSizePixel().Height() );
-
-    long nLW = maBackgroundLeft.GetSizePixel().Width();
-    long nRW = maBackgroundRight.GetSizePixel().Width();
-    if( aMiddleSegmentSize.Width() > nLW + nRW )
-    {
-        aMiddleSegmentSize.Width() -= nLW;
-        aMiddleSegmentSize.Width() -= nRW;
-        maBackgroundMiddle.Scale( aMiddleSegmentSize );
-    }
-    else
-        maBackgroundMiddle = BitmapEx();
+    //maToolbox.SetSelectHdl( LINK( this, BackingWindow, ToolboxHdl ) );
+    //if( mnHideExternalLinks == 0 )
+    //    maToolbox.Show();
 
     Resize();
 
@@ -574,20 +526,8 @@ void BackingWindow::initControls()
 }
 
 
-void BackingWindow::loadImage( const ResId& i_rId, PushButton& i_rButton )
-{
-    BitmapEx aBmp( i_rId );
-    Size aImgSize( aBmp.GetSizePixel() );
-    if( aImgSize.Width() > maButtonImageSize.Width() )
-        maButtonImageSize.Width() = aImgSize.Width();
-    if( aImgSize.Height() > maButtonImageSize.Height() )
-        maButtonImageSize.Height() = aImgSize.Height();
-    i_rButton.SetModeImage( aBmp );
-}
-
-
 void BackingWindow::layoutButton(
-                          const char* i_pURL, int nColumn, int i_nExtraWidth,
+                          const char* i_pURL,
                           const std::set<OUString>& i_rURLS,
                           SvtModuleOptions& i_rOpt, SvtModuleOptions::EModule i_eMod,
                           PushButton& i_rBtn,
@@ -597,7 +537,7 @@ void BackingWindow::layoutButton(
 {
     OUString aURL( i_pURL ? OUString::createFromAscii( i_pURL ) : OUString() );
     // setup button
-    i_rBtn.SetPaintTransparent( sal_True );
+    //i_rBtn.SetPaintTransparent( sal_True );
     i_rBtn.SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
     if( i_pURL && (! i_rOpt.IsModuleInstalled( i_eMod ) || i_rURLS.find( aURL ) == i_rURLS.end()) )
     {
@@ -605,21 +545,18 @@ void BackingWindow::layoutButton(
     }
 
     // setup text
-    i_rBtn.SetFont( maTextFont );
-    i_rBtn.SetControlFont( maTextFont );
+    //i_rBtn.SetFont( maTextFont );
+    //i_rBtn.SetControlFont( maTextFont );
 
     String aText( i_rStr.Len() ? i_rStr : SvFileInformationManager::GetDescription( INetURLObject( aURL ) ) );
     i_rMnemns.CreateMnemonic( aText );
     i_rBtn.SetText( aText );
-
-    long nTextWidth = i_rBtn.GetTextWidth( i_rBtn.GetText() );
-
-    nTextWidth += maButtonImageSize.Width() + 8 + i_nExtraWidth; // add some fuzz to be on the safe side
-    if( nColumn >= 0 && nColumn < static_cast<int>(sizeof (mnColumnWidth) / sizeof (mnColumnWidth[0])) )
-    {
-        if( nTextWidth > mnColumnWidth[nColumn] )
-            mnColumnWidth[nColumn] = nTextWidth;
-    }
+    // this seems to have no effect
+    //SAL _DEBUG(aText);
+    //i_rBtn.SetPosPixel(Point(100, 100));
+    //SAL _DEBUG(i_rBtn.GetPosPixel().X() << " " << i_rBtn.GetPosPixel().Y());
+    //i_rBtn.SetSizePixel(Size(100, 100));
+    //SAL _DEBUG(i_rBtn.GetSizePixel().Width() << " " << i_rBtn.GetSizePixel().Height());
 
     i_rBtn.SetImageAlign( IMAGEALIGN_LEFT );
 
@@ -630,20 +567,15 @@ void BackingWindow::layoutButton(
 void BackingWindow::Paint( const Rectangle& )
 {
     Resize();
-
+/*
     Wallpaper aBack( svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor );
     Region aClip( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
-    Rectangle aBmpRect(maControlRect);
-    aBmpRect.Left()   -= nShadowLeft;
-    aBmpRect.Top()    -= nShadowTop;
-    aBmpRect.Right()  += nShadowRight;
-    aBmpRect.Bottom() += nShadowBottom;
-    aClip.Exclude( aBmpRect );
     Push( PUSH_CLIPREGION );
     IntersectClipRegion( aClip );
     DrawWallpaper( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ), aBack );
     Pop();
-
+*/
+/*
     VirtualDevice aDev( *this );
     aDev.EnableRTL( IsRTLEnabled() );
     aDev.SetOutputSizePixel( aBmpRect.GetSize() );
@@ -664,87 +596,11 @@ void BackingWindow::Paint( const Rectangle& )
     DrawOutDev( aBmpRect.TopLeft(), aBmpRect.GetSize(),
                 Point( 0, 0 ), aBmpRect.GetSize(),
                 aDev );
+*/
 }
 
 long BackingWindow::Notify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
-    {
-        if( ! mpAccExec )
-        {
-            mpAccExec = svt::AcceleratorExecute::createAcceleratorHelper();
-            mpAccExec->init( comphelper::getProcessComponentContext(), mxFrame);
-        }
-
-        const KeyEvent* pEvt = rNEvt.GetKeyEvent();
-        const KeyCode& rKeyCode(pEvt->GetKeyCode());
-        if( pEvt && mpAccExec->execute(rKeyCode) )
-            return 1;
-        // #i110344# extrawurst: specialized arrow key control
-        if( rKeyCode.GetModifier() == 0 )
-        {
-            if( rKeyCode.GetCode() == KEY_RIGHT )
-            {
-                if( mpWriterButton->HasFocus() )
-                    mpDrawButton->GrabFocus();
-                else if( mpCalcButton->HasFocus() )
-                    mpDBButton->GrabFocus();
-                else if( mpImpressButton->HasFocus() )
-                    mpMathButton->GrabFocus();
-                else if( mpOpenButton->HasFocus() )
-                    mpTemplateButton->GrabFocus();
-                return 1;
-            }
-            else if( rKeyCode.GetCode() == KEY_LEFT )
-            {
-                if( mpDrawButton->HasFocus() )
-                    mpWriterButton->GrabFocus();
-                else if( mpDBButton->HasFocus() )
-                    mpCalcButton->GrabFocus();
-                else if( mpMathButton->HasFocus() )
-                    mpImpressButton->GrabFocus();
-                else if( mpTemplateButton->HasFocus() )
-                    mpOpenButton->GrabFocus();
-                return 1;
-            }
-            else if( rKeyCode.GetCode() == KEY_UP )
-            {
-                // first column
-                if( mpOpenButton->HasFocus() )
-                    mpImpressButton->GrabFocus();
-                else if( mpImpressButton->HasFocus() )
-                    mpCalcButton->GrabFocus();
-                else if( mpCalcButton->HasFocus() )
-                    mpWriterButton->GrabFocus();
-                // second column
-                else if( mpTemplateButton->HasFocus() )
-                    mpMathButton->GrabFocus();
-                else if( mpMathButton->HasFocus() )
-                    mpDBButton->GrabFocus();
-                else if( mpDBButton->HasFocus() )
-                    mpDrawButton->GrabFocus();
-                return 1;
-            }
-            else if( rKeyCode.GetCode() == KEY_DOWN )
-            {
-                // first column
-                if( mpWriterButton->HasFocus() )
-                    mpCalcButton->GrabFocus();
-                else if( mpCalcButton->HasFocus() )
-                    mpImpressButton->GrabFocus();
-                else if( mpImpressButton->HasFocus() )
-                    mpOpenButton->GrabFocus();
-                // second column
-                else if( mpDrawButton->HasFocus() )
-                    mpDBButton->GrabFocus();
-                else if( mpDBButton->HasFocus() )
-                    mpMathButton->GrabFocus();
-                else if( mpMathButton->HasFocus() )
-                    mpTemplateButton->GrabFocus();
-                return 1;
-            }
-        }
-    }
     return Window::Notify( rNEvt );
 }
 
@@ -757,57 +613,23 @@ void BackingWindow::setOwningFrame( const com::sun::star::uno::Reference< com::s
 
 void BackingWindow::Resize()
 {
-    Size aWindowSize( GetSizePixel() );
-    Size aControlSize = maControlRect.GetSize();
-    maControlRect = Rectangle( Point( (aWindowSize.Width() - aControlSize.Width()) / 2,
-                                      (aWindowSize.Height() - aControlSize.Height()) / 2 ),
-                               aControlSize );
-
-    maToolbox.calcMinSize();
+//    maToolbox.calcMinSize();
+/*
     Size aTBSize( maToolbox.getMinSize() );
     Point aTBPos( maControlRect.Left() + mnBtnPos,
                   maControlRect.Bottom() - aTBSize.Height() - 10 );
     if( Application::GetSettings().GetLayoutRTL() )
         aTBPos.X() = maControlRect.Right() - aTBSize.Width() - mnBtnPos;
-
+*/
     // #i93631# squeeze controls so they fit into the box
     // this can be necessary due to application font height which has small deviations
     // from the size set
-    const long nBDelta    = maButtonImageSize.Height() + 10;
-    const long nB2Delta   = 3*maButtonImageSize.Height()/2;
-    const long nLastDelta = maButtonImageSize.Height();
-    long nDiff = 0;
-    while( ( maControlRect.Top()   -
-             3 * nDiff +
-             3 * (nBDelta - nDiff) +
-                 (nB2Delta- nDiff) +
-                 nLastDelta
-            ) > aTBPos.Y() )
-    {
-        nDiff++;
-    }
-
-    // Recompute column widths
-    mnTextColumnWidth[0] = mpWriterButton->GetTextWidth( mpWriterButton->GetText() ) + maButtonImageSize.Width() + 8;
-    if( mnTextColumnWidth[0] < mpCalcButton->GetTextWidth( mpCalcButton->GetText() ) + maButtonImageSize.Width() + 8 )
-        mnTextColumnWidth[0] = mpCalcButton->GetTextWidth( mpCalcButton->GetText() ) + maButtonImageSize.Width() + 8;
-    if( mnTextColumnWidth[0] < mpImpressButton->GetTextWidth( mpImpressButton->GetText() ) + maButtonImageSize.Width() + 8 )
-        mnTextColumnWidth[0] = mpImpressButton->GetTextWidth( mpImpressButton->GetText() ) + maButtonImageSize.Width() + 8;
-    if( mnTextColumnWidth[0] < mpOpenButton->GetTextWidth( mpOpenButton->GetText() ) + maButtonImageSize.Width() + 26 )
-        mnTextColumnWidth[0] = mpOpenButton->GetTextWidth( mpOpenButton->GetText() ) + maButtonImageSize.Width() + 26;
-
-    mnTextColumnWidth[1] = mpDrawButton->GetTextWidth( mpDrawButton->GetText() ) + maButtonImageSize.Width() + 8;
-    if( mnTextColumnWidth[1] < mpDBButton->GetTextWidth( mpDBButton->GetText() ) + maButtonImageSize.Width() + 8 )
-        mnTextColumnWidth[1] = mpDBButton->GetTextWidth( mpDBButton->GetText() ) + maButtonImageSize.Width() + 8;
-    if( mnTextColumnWidth[1] < mpMathButton->GetTextWidth( mpMathButton->GetText() ) + maButtonImageSize.Width() + 8 )
-        mnTextColumnWidth[1] = mpMathButton->GetTextWidth( mpMathButton->GetText() ) + maButtonImageSize.Width() + 8;
-    if( mnTextColumnWidth[1] < mpTemplateButton->GetTextWidth( mpTemplateButton->GetText() ) + maButtonImageSize.Width() + 8 )
-        mnTextColumnWidth[1] = mpTemplateButton->GetTextWidth( mpTemplateButton->GetText() ) + maButtonImageSize.Width() + 8;
 
     if( !IsInPaint())
         Invalidate();
 }
 
+/*
 IMPL_LINK_NOARG(BackingWindow, ToolboxHdl)
 {
     const char* pNodePath = NULL;
@@ -864,6 +686,7 @@ IMPL_LINK_NOARG(BackingWindow, ToolboxHdl)
 
     return 0;
 }
+*/
 
 IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 {
@@ -880,6 +703,7 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
         dispatchURL( BASE_URL );
     else if( pButton == mpMathButton )
         dispatchURL( MATH_URL );
+/*
     else if( pButton == mpOpenButton )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
@@ -891,6 +715,7 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 
         dispatchURL( OPEN_URL, OUString(), xFrame, aArgs );
     }
+*/
     else if( pButton == mpTemplateButton )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
@@ -907,8 +732,8 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 
 IMPL_LINK( BackingWindow, ActivateHdl, Button*, pButton )
 {
-    if( pButton == mpOpenButton )
-        prepareRecentFileMenu();
+    //if( pButton == mpOpenButton )
+    //    prepareRecentFileMenu();
     return 0;
 }
 
@@ -998,4 +823,4 @@ Size BackingWindow::GetOptimalSize() const
         return Window::GetOptimalSize();
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab:*/
