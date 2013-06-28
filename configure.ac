@@ -2860,6 +2860,26 @@ AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
 AC_SUBST(XCRUN)
 AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 
+# Use -isystem (gcc) if possible, to avoid warnigs in 3rd party headers.
+ISYSTEM=
+if test "$GCC" = "yes"; then
+    AC_MSG_CHECKING( for -isystem )
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror"
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ ISYSTEM=-isystem ],[])
+    CFLAGS=$save_CFLAGS
+    if test -n "$ISYSTEM"; then
+        AC_MSG_RESULT(yes)
+    else
+        AC_MSG_RESULT(no)
+    fi
+fi
+if test -z "$ISYSTEM"; then
+    # fall back to using -I
+    ISYSTEM=-I
+fi
+AC_SUBST(ISYSTEM)
+
 dnl ===================================================================
 dnl Windows specific tests and stuff
 dnl ===================================================================
