@@ -114,7 +114,6 @@ public:
     void testNewCondFormatXLSX();
 
     //change this test file only in excel and not in calc
-    void testSharedFormulaXLSX();
     void testCellValueXLSX();
 
     //misc tests unrelated to the import filters
@@ -168,7 +167,6 @@ public:
     CPPUNIT_TEST(testRepeatedColumnsODS);
     CPPUNIT_TEST(testDataValidityODS);
     CPPUNIT_TEST(testBrokenQuotesCSV);
-    CPPUNIT_TEST(testSharedFormulaXLSX);
     CPPUNIT_TEST(testCellValueXLSX);
     CPPUNIT_TEST(testControlImport);
     CPPUNIT_TEST(testChartImportODS);
@@ -1186,41 +1184,6 @@ void ScFiltersTest::testBrokenQuotesCSV()
     createCSVPath( aSheet2CSV, aCSVPath );
     // fdo#48621
     testFile( aCSVPath, pDoc, 0, PureString);
-
-    xDocSh->DoClose();
-}
-
-void ScFiltersTest::testSharedFormulaXLSX()
-{
-    const OUString aFileNameBase("shared-formula.");
-    OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
-    OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
-    OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
-
-    unsigned int nFormatType = aFileFormats[XLSX].nFormatType;
-    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
-    ScDocShellRef xDocSh = ScBootstrapFixture::load(aFileName, aFilterName, OUString(), aFilterType,
-        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
-
-    xDocSh->DoHardRecalc(true);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load shared-formula.xlsx", xDocSh.Is());
-    ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT_MESSAGE("No Document", pDoc); //remove with first test
-
-    OUString aCSVPath;
-    createCSVPath( aFileNameBase, aCSVPath );
-    testFile( aCSVPath, pDoc, 0 );
-
-    //test some additional properties
-    ScRangeName* pName = pDoc->GetRangeName();
-    for (ScRangeName::iterator itr = pName->begin(); itr != pName->end(); ++itr)
-    {
-        CPPUNIT_ASSERT(itr->second->GetType() & RT_SHARED);
-    }
 
     xDocSh->DoClose();
 }

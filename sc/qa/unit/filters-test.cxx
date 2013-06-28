@@ -65,6 +65,8 @@ public:
     void testContentXLSX();
     void testContentLotus123();
     void testContentDIF();
+    void testSharedFormulaXLS();
+    void testSharedFormulaXLSX();
 #if TEST_BUG_FILES
     //goes recursively through all files in this dir and tries to open them
     void testDir(osl::Directory& rDir, sal_Int32 nType);
@@ -83,6 +85,8 @@ public:
     CPPUNIT_TEST(testContentXLSX);
     CPPUNIT_TEST(testContentLotus123);
     CPPUNIT_TEST(testContentDIF);
+    CPPUNIT_TEST(testSharedFormulaXLS);
+    CPPUNIT_TEST(testSharedFormulaXLSX);
     CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
 
 #if TEST_BUG_FILES
@@ -325,7 +329,39 @@ void ScFiltersTest::testContentDIF()
 
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoClose();
+}
 
+void ScFiltersTest::testSharedFormulaXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("shared-formula.", XLS);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i <= 18; ++i)
+    {
+        double fVal = pDoc->GetValue(ScAddress(1,i,0));
+        double fCheck = i*10.0;
+        CPPUNIT_ASSERT_EQUAL(fCheck, fVal);
+    }
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testSharedFormulaXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("shared-formula.", XLSX);
+    ScDocument* pDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+    xDocSh->DoHardRecalc(true);
+    // Check the results of formula cells in the shared formula range.
+    for (SCROW i = 1; i <= 18; ++i)
+    {
+        double fVal = pDoc->GetValue(ScAddress(1,i,0));
+        double fCheck = i*10.0;
+        CPPUNIT_ASSERT_EQUAL(fCheck, fVal);
+    }
+    xDocSh->DoClose();
 }
 
 void impl_testLegacyCellAnchoredRotatedShape( ScDocument* pDoc, Rectangle& aRect, ScDrawObjData& aAnchor, long TOLERANCE = 30 /* 30 hmm */ )
