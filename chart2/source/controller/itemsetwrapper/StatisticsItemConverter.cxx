@@ -412,28 +412,38 @@ bool StatisticsItemConverter::ApplySpecialItem(
         case SCHATTR_REGRESSION_TYPE:
         {
             SvxChartRegress eRegress =
-                static_cast< const SvxChartRegressItem & >(
+                static_cast< const SvxChartRegressItem& >(
                     rItemSet.Get( nWhichId )).GetValue();
 
-            uno::Reference< chart2::XRegressionCurveContainer > xRegCnt(
-                GetPropertySet(), uno::UNO_QUERY );
+            uno::Reference< chart2::XRegressionCurve > xRegressionCurve( GetPropertySet(), uno::UNO_QUERY );
+            uno::Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer( GetPropertySet(), uno::UNO_QUERY );
 
             if( eRegress == CHREGRESS_NONE )
             {
-                bChanged = RegressionCurveHelper::removeAllExceptMeanValueLine( xRegCnt );
+                if ( xRegressionCurve.is() )
+                {
+                    xRegressionCurveContainer->removeRegressionCurve( xRegressionCurve );
+                    bChanged = true;
+                }
             }
             else
             {
-                SvxChartRegress eOldRegress(
-                    static_cast< SvxChartRegress >(
-                        static_cast< sal_Int32 >(
-                            RegressionCurveHelper::getFirstRegressTypeNotMeanValueLine( xRegCnt ))));
-                if( eOldRegress != eRegress )
+                if ( xRegressionCurve.is() )
                 {
-                    RegressionCurveHelper::replaceOrAddCurveAndReduceToOne(
-                        lcl_convertRegressionType( eRegress ), xRegCnt,
-                        uno::Reference< uno::XComponentContext >());
-                    bChanged = true;
+                    SvxChartRegress eOldRegress(
+                        static_cast< SvxChartRegress >(
+                            static_cast< sal_Int32 >(
+                                RegressionCurveHelper::getRegressionType( xRegressionCurve ))));
+
+                    if( eOldRegress != eRegress )
+                    {
+                        RegressionCurveHelper::changeRegressionCurveType(
+                            lcl_convertRegressionType( eRegress ),
+                            xRegressionCurveContainer,
+                            xRegressionCurve,
+                            uno::Reference< uno::XComponentContext >());
+                        bChanged = true;
+                    }
                 }
             }
         }

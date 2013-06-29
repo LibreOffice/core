@@ -146,18 +146,12 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
                     // for which this converter was created. Not optimal, but
                     // currently the only way to handle the type in the
                     // regression curve properties dialog
-                    RegressionCurveHelper::replaceOrAddCurveAndReduceToOne(
-                        lcl_convertRegressionType( eNewRegress ), m_xCurveContainer,
+                    RegressionCurveHelper::changeRegressionCurveType(
+                        lcl_convertRegressionType( eNewRegress ),
+                        m_xCurveContainer,
+                        xCurve,
                         uno::Reference< uno::XComponentContext >());
-                    uno::Reference< beans::XPropertySet > xNewPropSet(
-                        RegressionCurveHelper::getFirstCurveNotMeanValueLine( m_xCurveContainer ),
-                        uno::UNO_QUERY );
-                    OSL_ASSERT( xNewPropSet.is());
-                    if( xNewPropSet.is())
-                    {
-                        resetPropertySet( xNewPropSet );
-                        bChanged = true;
-                    }
+                    bChanged = true;
                 }
             }
         }

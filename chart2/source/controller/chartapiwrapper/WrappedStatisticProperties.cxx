@@ -867,13 +867,18 @@ WrappedRegressionCurvesProperty::~WrappedRegressionCurvesProperty()
 }
 void WrappedRegressionCurvesProperty::setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, ::com::sun::star::chart::ChartRegressionCurveType aNewValue ) const
 {
-    uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropertySet, uno::UNO_QUERY );
-    if( xRegCnt.is() )
+    uno::Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer( xSeriesPropertySet, uno::UNO_QUERY );
+    uno::Reference< chart2::XRegressionCurve > xRegressionCurve( xSeriesPropertySet, uno::UNO_QUERY );
+
+    if( xRegressionCurveContainer.is() && xRegressionCurve.is() )
     {
         RegressionCurveHelper::tRegressionType eNewRegressionType = lcl_getRegressionType( aNewValue );
-        RegressionCurveHelper::removeAllExceptMeanValueLine( xRegCnt );
-        if( eNewRegressionType != RegressionCurveHelper::REGRESSION_TYPE_NONE )
-            RegressionCurveHelper::addRegressionCurve( eNewRegressionType, xRegCnt, 0, 0 );
+
+        RegressionCurveHelper::changeRegressionCurveType(
+                        eNewRegressionType,
+                        xRegressionCurveContainer,
+                        xRegressionCurve,
+                        uno::Reference< uno::XComponentContext >());
     }
 }
 

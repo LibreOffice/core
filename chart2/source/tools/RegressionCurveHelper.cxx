@@ -382,17 +382,17 @@ void RegressionCurveHelper::addRegressionCurve(
         if( xEquationProperties.is())
             xCurve->setEquationProperties( xEquationProperties );
 
-        uno::Reference< beans::XPropertySet > xProp( xCurve, uno::UNO_QUERY );
-        if( xProp.is())
+        uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
+        if( xProperties.is())
         {
             if( xPropertySource.is())
-                comphelper::copyProperties( xPropertySource, xProp );
+                comphelper::copyProperties( xPropertySource, xProperties );
             else
             {
                 uno::Reference< XPropertySet > xSeriesProp( xRegCnt, uno::UNO_QUERY );
                 if( xSeriesProp.is())
                 {
-                    xProp->setPropertyValue( "LineColor",
+                    xProperties->setPropertyValue( "LineColor",
                                              xSeriesProp->getPropertyValue( "Color"));
                 }
 //                 xProp->setPropertyValue( "LineWidth", uno::makeAny( sal_Int32( 100 )));
@@ -472,26 +472,19 @@ void RegressionCurveHelper::removeEquations(
     }
 }
 
-void RegressionCurveHelper::replaceOrAddCurveAndReduceToOne(
+void RegressionCurveHelper::changeRegressionCurveType(
     tRegressionType eType,
-    uno::Reference< XRegressionCurveContainer > & xRegCnt,
+    uno::Reference< XRegressionCurveContainer > & xRegressionCurveContainer,
+    uno::Reference< XRegressionCurve > & xRegressionCurve,
     const uno::Reference< XComponentContext > & xContext )
 {
-    uno::Reference< chart2::XRegressionCurve > xRegressionCurve( getFirstCurveNotMeanValueLine( xRegCnt ));
-    if( ! xRegressionCurve.is())
-        RegressionCurveHelper::addRegressionCurve( eType, xRegCnt, xContext );
-    else
-    {
-        OUString aServiceName( lcl_getServiceNameForType( eType ));
-        if( !aServiceName.isEmpty())
-        {
-            RegressionCurveHelper::removeAllExceptMeanValueLine( xRegCnt );
-            RegressionCurveHelper::addRegressionCurve(
-                eType, xRegCnt, xContext,
-                Reference< beans::XPropertySet >( xRegressionCurve, uno::UNO_QUERY ),
-                xRegressionCurve->getEquationProperties());
-        }
-    }
+    xRegressionCurveContainer->removeRegressionCurve( xRegressionCurve );
+    RegressionCurveHelper::addRegressionCurve(
+            eType,
+            xRegressionCurveContainer,
+            xContext,
+            uno::Reference< beans::XPropertySet >( xRegressionCurve, uno::UNO_QUERY ),
+            xRegressionCurve->getEquationProperties());
 }
 
 uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveNotMeanValueLine(

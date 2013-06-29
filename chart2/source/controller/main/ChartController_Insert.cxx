@@ -386,13 +386,13 @@ void ChartController::executeDispatch_InsertMenu_Trendlines()
 
         //prepare and open dialog
         SolarMutexGuard aGuard;
-        InsertTrendlineDialog aDlg( m_pChartWindow, aItemSet );
-        aDlg.adjustSize();
+        InsertTrendlineDialog aDialog( m_pChartWindow, aItemSet );
+        aDialog.adjustSize();
 
-        if( aDlg.Execute() == RET_OK )
+        if( aDialog.Execute() == RET_OK )
         {
             SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
-            aDlg.FillItemSet( aOutItemSet );
+            aDialog.FillItemSet( aOutItemSet );
 
             // lock controllers till end of block
             ControllerLockGuard aCLGuard( getModel() );
@@ -443,14 +443,14 @@ void ChartController::executeDispatch_InsertTrendline()
         aDialogParameter.init( getModel() );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
         SolarMutexGuard aGuard;
-        SchAttribTabDlg aDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
+        SchAttribTabDlg aDialog( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
                               uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY ));
 
         // note: when a user pressed "OK" but didn't change any settings in the
         // dialog, the SfxTabDialog returns "Cancel"
-        if( aDlg.Execute() == RET_OK || aDlg.DialogWasClosedWithOK())
+        if( aDialog.Execute() == RET_OK || aDialog.DialogWasClosedWithOK())
         {
-            const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
+            const SfxItemSet* pOutItemSet = aDialog.GetOutputItemSet();
             if( pOutItemSet )
             {
                 ControllerLockGuard aCLGuard( getModel() );

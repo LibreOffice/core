@@ -85,6 +85,9 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
+namespace chart
+{
+
 namespace
 {
 
@@ -94,25 +97,25 @@ bool lcl_deleteDataSeries(
     const Reference< document::XUndoManager > & xUndoManager )
 {
     bool bResult = false;
-    uno::Reference< chart2::XDataSeries > xSeries( ::chart::ObjectIdentifier::getDataSeriesForCID( rCID, xModel ));
+    uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rCID, xModel ));
     uno::Reference< chart2::XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
     if( xSeries.is() && xChartDoc.is())
     {
         uno::Reference< chart2::XChartType > xChartType(
-            ::chart::DataSeriesHelper::getChartTypeOfSeries( xSeries, xChartDoc->getFirstDiagram()));
+            DataSeriesHelper::getChartTypeOfSeries( xSeries, xChartDoc->getFirstDiagram()));
         if( xChartType.is())
         {
-            ::chart::UndoGuard aUndoGuard(
+            UndoGuard aUndoGuard(
                 ActionDescriptionProvider::createDescription(
-                    ActionDescriptionProvider::DELETE, String( ::chart::SchResId( STR_OBJECT_DATASERIES ))),
+                    ActionDescriptionProvider::DELETE, String( SchResId( STR_OBJECT_DATASERIES ))),
                 xUndoManager );
 
-            Reference< chart2::XDiagram > xDiagram( ::chart::ChartModelHelper::findDiagram( xModel ) );
-            uno::Reference< chart2::XAxis > xAxis( ::chart::DiagramHelper::getAttachedAxis( xSeries, xDiagram ) );
+            Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
+            uno::Reference< chart2::XAxis > xAxis( DiagramHelper::getAttachedAxis( xSeries, xDiagram ) );
 
-            ::chart::DataSeriesHelper::deleteSeries( xSeries, xChartType );
+            DataSeriesHelper::deleteSeries( xSeries, xChartType );
 
-            ::chart::AxisHelper::hideAxisIfNoDataIsAttached( xAxis, xDiagram );
+            AxisHelper::hideAxisIfNoDataIsAttached( xAxis, xDiagram );
 
             bResult = true;
             aUndoGuard.commit();
@@ -127,27 +130,35 @@ bool lcl_deleteDataCurve(
     const Reference< document::XUndoManager > & xUndoManager )
 {
     bool bResult = false;
-    uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
-        ::chart::ObjectIdentifier::getObjectPropertySet(
-            ::chart::ObjectIdentifier::getSeriesParticleFromCID( rCID ), xModel ), uno::UNO_QUERY );
-    if( xRegCurveCnt.is())
+
+    uno::Reference< beans::XPropertySet > xProperties(
+        ObjectIdentifier::getObjectPropertySet( rCID, xModel));
+
+    uno::Reference< chart2::XRegressionCurve > xRegressionCurve( xProperties, uno::UNO_QUERY );
+
+    if( xRegressionCurve.is())
     {
-        ::chart::UndoGuard aUndoGuard(
-            ActionDescriptionProvider::createDescription(
-                ActionDescriptionProvider::DELETE, String( ::chart::SchResId( STR_OBJECT_CURVE ))),
-            xUndoManager );
-        ::chart::RegressionCurveHelper::removeAllExceptMeanValueLine( xRegCurveCnt );
-        bResult = true;
-        aUndoGuard.commit();
+        uno::Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer(
+            ObjectIdentifier::getObjectPropertySet(
+                ObjectIdentifier::getFullParentParticle( rCID ), xModel), uno::UNO_QUERY );
+
+        if( xRegressionCurveContainer.is())
+        {
+            UndoGuard aUndoGuard = UndoGuard(
+                ActionDescriptionProvider::createDescription(
+                    ActionDescriptionProvider::DELETE, String( SchResId( STR_OBJECT_CURVE ))),
+                xUndoManager );
+
+            xRegressionCurveContainer->removeRegressionCurve( xRegressionCurve );
+
+            bResult = true;
+            aUndoGuard.commit();
+        }
     }
     return bResult;
 }
 
 } // anonymous namespace
-
-
-namespace chart
-{
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr< ReferenceSizeProvider > ChartController::impl_createReferenceSizeProvider()
@@ -657,9 +668,16 @@ bool ChartController::executeDispatch_Delete()
                 ObjectType eParentObjectType = ObjectIdentifier::getObjectType(
                     ObjectIdentifier::getFullParentParticle( aCID ));
                 if( eParentObjectType == OBJECTTYPE_DATA_SERIES )
+                {
                     bReturn = lcl_deleteDataSeries( aCID, getModel(), m_xUndoManager );
+                }
                 else if( eParentObjectType == OBJECTTYPE_DATA_CURVE )
-                    bReturn = lcl_deleteDataCurve( aCID, getModel(), m_xUndoManager );
+                {
+                    sal_Int32 nEndPos = aCID.lastIndexOf(':');
+                    OUString aParentCID = aCID.copy(0, nEndPos);
+
+                    bReturn = lcl_deleteDataCurve(aParentCID, getModel(), m_xUndoManager );
+                }
                 else if( eParentObjectType == OBJECTTYPE_DATA_AVERAGE_LINE )
                 {
                     executeDispatch_DeleteMeanValue();
@@ -684,17 +702,20 @@ bool ChartController::executeDispatch_Delete()
                     bReturn = true;
                     aUndoGuard.commit();
                 }
-                break;
             }
+            break;
 
             case OBJECTTYPE_DATA_CURVE:
+            {
                 bReturn = lcl_deleteDataCurve( aCID, getModel(), m_xUndoManager );
-                break;
+            }
+            break;
 
             case OBJECTTYPE_DATA_CURVE_EQUATION:
             {
                 uno::Reference< beans::XPropertySet > xEqProp(
                     ObjectIdentifier::getObjectPropertySet( aCID, getModel()));
+
                 if( xEqProp.is())
                 {
                     uno::Reference< frame::XModel > xModel( getModel() );
@@ -711,8 +732,8 @@ bool ChartController::executeDispatch_Delete()
                     bReturn = true;
                     aUndoGuard.commit();
                 }
-                break;
             }
+            break;
 
             case OBJECTTYPE_DATA_ERRORS_X:
             case OBJECTTYPE_DATA_ERRORS_Y:

@@ -152,12 +152,14 @@ public:
 
         <p>This function ignores mean-value lines.</p>
      */
-    static void replaceOrAddCurveAndReduceToOne(
+    static void changeRegressionCurveType(
         tRegressionType eType,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+        com::sun::star::uno::Reference<
+            com::sun::star::chart2::XRegressionCurveContainer > & xRegressionCurveContainer,
+        com::sun::star::uno::Reference<
+            com::sun::star::chart2::XRegressionCurve > & xRegressionCurve,
+        const com::sun::star::uno::Reference<
+            com::sun::star::uno::XComponentContext > & xContext );
 
     // ------------------------------------------------------------
 
