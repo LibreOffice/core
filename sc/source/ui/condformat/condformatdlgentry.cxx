@@ -167,13 +167,16 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
     maEdVal2( this, NULL, NULL, ScResId( ED_VAL2 ) ),
     maFtStyle( this, ScResId( FT_STYLE ) ),
     maLbStyle( this, ScResId( LB_STYLE ) ),
-    maWdPreview( this, ScResId( WD_PREVIEW ) )
+    maWdPreview( this, ScResId( WD_PREVIEW ) ),
+    mbIsInStyleCreate(false)
 {
 
     FreeResource();
     maLbType.SelectEntryPos(1);
 
     Init();
+
+    StartListening(*pDoc->GetStyleSheetPool(), true);
 
     if(pFormatEntry)
     {
@@ -436,6 +439,35 @@ void ScConditionFrmtEntry::SetInactive()
 
 namespace {
 
+void UpdateStyleList(ListBox& rLbStyle, ScDocument* pDoc)
+{
+    OUString aSelectedStyle = rLbStyle.GetSelectEntry();
+    for(sal_Int32 i = rLbStyle.GetEntryCount(); i >= 1; --i)
+    {
+        rLbStyle.RemoveEntry(i);
+    }
+    FillStyleListBox(pDoc, rLbStyle);
+    rLbStyle.SelectEntry(aSelectedStyle);
+}
+
+}
+
+void ScConditionFrmtEntry::Notify(SfxBroadcaster&, const SfxHint& rHint)
+{
+    SfxStyleSheetHint* pHint = PTR_CAST(SfxStyleSheetHint, &rHint);
+    if(!pHint)
+        return;
+
+    sal_uInt16 nHint = pHint->GetHint();
+    if(nHint == SFX_STYLESHEET_MODIFIED)
+    {
+        if(!mbIsInStyleCreate)
+            UpdateStyleList(maLbStyle, mpDoc);
+    }
+}
+
+namespace {
+
 void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPreview )
 {
     if(rLbStyle.GetSelectEntryPos() == 0)
@@ -503,7 +535,9 @@ void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPre
 
 IMPL_LINK_NOARG(ScConditionFrmtEntry, StyleSelectHdl)
 {
+    mbIsInStyleCreate = true;
     StyleSelect( maLbStyle, mpDoc, maWdPreview );
+    mbIsInStyleCreate = false;
     return 0;
 }
 
@@ -1189,10 +1223,13 @@ ScDateFrmtEntry::ScDateFrmtEntry( Window* pParent, ScDocument* pDoc, const ScCon
     maLbDateEntry( this, ScResId( LB_DATE_TYPE ) ),
     maFtStyle( this, ScResId( FT_STYLE ) ),
     maLbStyle( this, ScResId( LB_STYLE ) ),
-    maWdPreview( this, ScResId( WD_PREVIEW ) )
+    maWdPreview( this, ScResId( WD_PREVIEW ) ),
+    mbIsInStyleCreate(false)
 {
     Init();
     FreeResource();
+
+    StartListening(*pDoc->GetStyleSheetPool(), sal_True);
 
     if(pFormat)
     {
@@ -1234,6 +1271,20 @@ void ScDateFrmtEntry::SetInactive()
     Deselect();
 }
 
+void ScDateFrmtEntry::Notify( SfxBroadcaster&, const SfxHint& rHint )
+{
+    SfxStyleSheetHint* pHint = PTR_CAST(SfxStyleSheetHint, &rHint);
+    if(!pHint)
+        return;
+
+    sal_uInt16 nHint = pHint->GetHint();
+    if(nHint == SFX_STYLESHEET_MODIFIED)
+    {
+        if(!mbIsInStyleCreate)
+            UpdateStyleList(maLbStyle, mpDoc);
+    }
+}
+
 ScFormatEntry* ScDateFrmtEntry::GetEntry() const
 {
     ScCondDateFormatEntry* pNewEntry = new ScCondDateFormatEntry(mpDoc);
@@ -1250,7 +1301,9 @@ OUString ScDateFrmtEntry::GetExpressionString()
 
 IMPL_LINK_NOARG( ScDateFrmtEntry, StyleSelectHdl )
 {
+    mbIsInStyleCreate = true;
     StyleSelect( maLbStyle, mpDoc, maWdPreview );
+    mbIsInStyleCreate = false;
 
     return 0;
 }
