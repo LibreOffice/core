@@ -498,59 +498,60 @@ sal_Bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
     ScrollbarValue scrValue;
 
     sal_Bool bNativeOK = IsNativeControlSupported(CTRL_SCROLLBAR, PART_ENTIRE_CONTROL);
-    if( bNativeOK )
+    if( !bNativeOK )
+        return sal_False;
+
+    bool bHorz = (GetStyle() & WB_HORZ ? true : false);
+
+    // Draw the entire background if the control supports it
+    if( IsNativeControlSupported(CTRL_SCROLLBAR, bHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT) )
     {
-        bool bHorz = (GetStyle() & WB_HORZ ? true : false);
+        ControlState        nState = ( IsEnabled() ? CTRL_STATE_ENABLED : 0 ) | ( HasFocus() ? CTRL_STATE_FOCUSED : 0 );
 
-        // Draw the entire background if the control supports it
-        if( IsNativeControlSupported(CTRL_SCROLLBAR, bHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT) )
+        scrValue.mnMin = mnMinRange;
+        scrValue.mnMax = mnMaxRange;
+        scrValue.mnCur = mnThumbPos;
+        scrValue.mnVisibleSize = mnVisibleSize;
+        scrValue.maThumbRect = maThumbRect;
+        scrValue.maButton1Rect = maBtn1Rect;
+        scrValue.maButton2Rect = maBtn2Rect;
+        scrValue.mnButton1State = ((mnStateFlags & SCRBAR_STATE_BTN1_DOWN) ? CTRL_STATE_PRESSED : 0) |
+                            ((!(mnStateFlags & SCRBAR_STATE_BTN1_DISABLE)) ? CTRL_STATE_ENABLED : 0);
+        scrValue.mnButton2State = ((mnStateFlags & SCRBAR_STATE_BTN2_DOWN) ? CTRL_STATE_PRESSED : 0) |
+                            ((!(mnStateFlags & SCRBAR_STATE_BTN2_DISABLE)) ? CTRL_STATE_ENABLED : 0);
+        scrValue.mnThumbState = nState | ((mnStateFlags & SCRBAR_STATE_THUMB_DOWN) ? CTRL_STATE_PRESSED : 0);
+        scrValue.mnPage1State = nState | ((mnStateFlags & SCRBAR_STATE_PAGE1_DOWN) ? CTRL_STATE_PRESSED : 0);
+        scrValue.mnPage2State = nState | ((mnStateFlags & SCRBAR_STATE_PAGE2_DOWN) ? CTRL_STATE_PRESSED : 0);
+
+        if( IsMouseOver() )
         {
-            ControlState        nState = ( IsEnabled() ? CTRL_STATE_ENABLED : 0 ) | ( HasFocus() ? CTRL_STATE_FOCUSED : 0 );
-
-            scrValue.mnMin = mnMinRange;
-            scrValue.mnMax = mnMaxRange;
-            scrValue.mnCur = mnThumbPos;
-            scrValue.mnVisibleSize = mnVisibleSize;
-            scrValue.maThumbRect = maThumbRect;
-            scrValue.maButton1Rect = maBtn1Rect;
-            scrValue.maButton2Rect = maBtn2Rect;
-            scrValue.mnButton1State = ((mnStateFlags & SCRBAR_STATE_BTN1_DOWN) ? CTRL_STATE_PRESSED : 0) |
-                                ((!(mnStateFlags & SCRBAR_STATE_BTN1_DISABLE)) ? CTRL_STATE_ENABLED : 0);
-            scrValue.mnButton2State = ((mnStateFlags & SCRBAR_STATE_BTN2_DOWN) ? CTRL_STATE_PRESSED : 0) |
-                                ((!(mnStateFlags & SCRBAR_STATE_BTN2_DISABLE)) ? CTRL_STATE_ENABLED : 0);
-            scrValue.mnThumbState = nState | ((mnStateFlags & SCRBAR_STATE_THUMB_DOWN) ? CTRL_STATE_PRESSED : 0);
-            scrValue.mnPage1State = nState | ((mnStateFlags & SCRBAR_STATE_PAGE1_DOWN) ? CTRL_STATE_PRESSED : 0);
-            scrValue.mnPage2State = nState | ((mnStateFlags & SCRBAR_STATE_PAGE2_DOWN) ? CTRL_STATE_PRESSED : 0);
-
-            if( IsMouseOver() )
+            Rectangle* pRect = ImplFindPartRect( GetPointerPosPixel() );
+            if( pRect )
             {
-                Rectangle* pRect = ImplFindPartRect( GetPointerPosPixel() );
-                if( pRect )
-                {
-                    if( pRect == &maThumbRect )
-                        scrValue.mnThumbState |= CTRL_STATE_ROLLOVER;
-                    else if( pRect == &maBtn1Rect )
-                        scrValue.mnButton1State |= CTRL_STATE_ROLLOVER;
-                    else if( pRect == &maBtn2Rect )
-                        scrValue.mnButton2State |= CTRL_STATE_ROLLOVER;
-                    else if( pRect == &maPage1Rect )
-                        scrValue.mnPage1State |= CTRL_STATE_ROLLOVER;
-                    else if( pRect == &maPage2Rect )
-                        scrValue.mnPage2State |= CTRL_STATE_ROLLOVER;
-                }
+                if( pRect == &maThumbRect )
+                    scrValue.mnThumbState |= CTRL_STATE_ROLLOVER;
+                else if( pRect == &maBtn1Rect )
+                    scrValue.mnButton1State |= CTRL_STATE_ROLLOVER;
+                else if( pRect == &maBtn2Rect )
+                    scrValue.mnButton2State |= CTRL_STATE_ROLLOVER;
+                else if( pRect == &maPage1Rect )
+                    scrValue.mnPage1State |= CTRL_STATE_ROLLOVER;
+                else if( pRect == &maPage2Rect )
+                    scrValue.mnPage2State |= CTRL_STATE_ROLLOVER;
             }
-
-            Rectangle aCtrlRegion;
-            aCtrlRegion.Union( maBtn1Rect );
-            aCtrlRegion.Union( maBtn2Rect );
-            aCtrlRegion.Union( maPage1Rect );
-            aCtrlRegion.Union( maPage2Rect );
-            aCtrlRegion.Union( maThumbRect );
-            bNativeOK = DrawNativeControl( CTRL_SCROLLBAR, (bHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT),
-                            aCtrlRegion, nState, scrValue, OUString() );
         }
-        else
-      {
+
+        Rectangle aCtrlRegion;
+        aCtrlRegion.Union( maBtn1Rect );
+        aCtrlRegion.Union( maBtn2Rect );
+        aCtrlRegion.Union( maPage1Rect );
+        aCtrlRegion.Union( maPage2Rect );
+        aCtrlRegion.Union( maThumbRect );
+        bNativeOK = DrawNativeControl( CTRL_SCROLLBAR, (bHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT),
+                        aCtrlRegion, nState, scrValue, OUString() );
+    }
+    else
+    {
         if ( (nDrawFlags & SCRBAR_DRAW_PAGE1) || (nDrawFlags & SCRBAR_DRAW_PAGE2) )
         {
             sal_uInt32  part1 = bHorz ? PART_TRACK_HORZ_LEFT : PART_TRACK_VERT_UPPER;
@@ -649,7 +650,6 @@ sal_Bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
             bNativeOK = DrawNativeControl( CTRL_SCROLLBAR, (bHorz ? PART_THUMB_HORZ : PART_THUMB_VERT),
                     aCtrlRegion, nState, scrValue, OUString() );
         }
-      }
     }
     return bNativeOK;
 }
