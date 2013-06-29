@@ -42,9 +42,6 @@ interface XRangeBasedSmartTagRecognizer: com::sun::star::lang::XInitialization
         @param eDataType
                 This value indicates the type of the passed text.
 
-        @param aLocale
-                Is used to indicate the language of the passed text.
-
         @param xTextMarkup
                 This object is used to submit any recognized smart tags
                 to the calling application.
