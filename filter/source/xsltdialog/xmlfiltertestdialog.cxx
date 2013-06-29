@@ -369,7 +369,7 @@ void XMLFilterTestDialog::onExportBrowse()
                                         for( n = 0; n < nCount; n++ )
                                         {
                                             if( n > 0 )
-                                                aExtension += OUString( sal_Unicode(';') );
+                                                aExtension += ";";
                                             aExtension += "*.";
                                             aExtension += (*pExtensions++);
                                         }
@@ -377,13 +377,9 @@ void XMLFilterTestDialog::onExportBrowse()
                                 }
                             }
 
-                            String aExtensions( aExtension );
-                            String aFilterName( aInterfaceName );
-                            aFilterName += String( RTL_CONSTASCII_USTRINGPARAM(" (") );
-                            aFilterName += aExtensions;
-                            aFilterName += sal_Unicode(')');
+                            OUString aFilterName( aInterfaceName + " (" + aExtension + ")" );
 
-                            aDlg.AddFilter( aFilterName, aExtensions );
+                            aDlg.AddFilter( aFilterName, aExtension );
 
                             if( (nFlags & 0x100) == 0x100 )
                                 aDlg.SetCurrentFilter( aFilterName );
@@ -533,36 +529,34 @@ void XMLFilterTestDialog::onImportBrowse()
     // Open Fileopen-Dialog
        ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
-    String aFilterName( m_pFilterInfo->maInterfaceName );
-    String aExtensions;
+    OUString aFilterName( m_pFilterInfo->maInterfaceName );
+    OUString aExtensions;
 
     int nLastIndex = 0;
     int nCurrentIndex = 0;
     for( int i = 0; nLastIndex != -1; i++ )
     {
-        nLastIndex = m_pFilterInfo->maExtension.indexOf( sal_Unicode( ';' ), nLastIndex );
+        nLastIndex = m_pFilterInfo->maExtension.indexOf( ';', nLastIndex );
 
         if( i > 0 )
-            aExtensions += ';';
+            aExtensions += ";";
 
-        aExtensions += String( RTL_CONSTASCII_USTRINGPARAM("*.") );
+        aExtensions += "*.";
 
         if( nLastIndex == -1 )
         {
 
-            aExtensions += String( m_pFilterInfo->maExtension.copy( nCurrentIndex ) );
+            aExtensions += m_pFilterInfo->maExtension.copy( nCurrentIndex );
         }
         else
         {
-            aExtensions += String( m_pFilterInfo->maExtension.copy( nCurrentIndex, nLastIndex - nCurrentIndex ) );
+            aExtensions += m_pFilterInfo->maExtension.copy( nCurrentIndex, nLastIndex - nCurrentIndex );
             nCurrentIndex = nLastIndex + 1;
             nLastIndex = nCurrentIndex;
         }
     }
 
-    aFilterName += String( RTL_CONSTASCII_USTRINGPARAM( " (" ) );
-    aFilterName += aExtensions;
-    aFilterName += sal_Unicode(')');
+    aFilterName += " (" + aExtensions + ")";
 
     aDlg.AddFilter( aFilterName, aExtensions );
     aDlg.SetDisplayDirectory( m_sImportRecentFile );

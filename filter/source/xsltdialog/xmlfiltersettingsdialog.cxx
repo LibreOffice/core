@@ -301,7 +301,7 @@ static Sequence< OUString > createExtensionsSequence( const OUString& rExtension
 
     for( i = 0; i < nExtensions; i++ )
     {
-        nLastIndex = rExtensions.indexOf( sal_Unicode( ';' ), nLastIndex );
+        nLastIndex = rExtensions.indexOf( ';', nLastIndex );
 
         if( nLastIndex == -1 )
         {
@@ -326,7 +326,7 @@ static Sequence< OUString > createExtensionsSequence( const OUString& rExtension
 OUString XMLFilterSettingsDialog::createUniqueFilterName( const OUString& rFilterName )
 {
     OUString aFilterName( rFilterName );
-    OUString aSpace( sal_Unicode( ' ' ) );
+    OUString aSpace(" ");
 
     sal_Int32 nId = 2;
 
@@ -347,7 +347,7 @@ OUString XMLFilterSettingsDialog::createUniqueFilterName( const OUString& rFilte
 OUString XMLFilterSettingsDialog::createUniqueTypeName( const OUString& rTypeName )
 {
     OUString aTypeName( rTypeName );
-    OUString aSpace( sal_Unicode( ' ' ) );
+    OUString aSpace(" ");
 
     sal_Int32 nId = 2;
 
@@ -415,8 +415,7 @@ OUString XMLFilterSettingsDialog::createUniqueInterfaceName( const OUString& rIn
     OUString aInterfaceName( rInterfaceName );
     if( nDefaultNumber )
     {
-        aInterfaceName += OUString( sal_Unicode( ' ' ) );
-        aInterfaceName += OUString::number( nDefaultNumber );
+        aInterfaceName += " " + OUString::number( nDefaultNumber );
     }
 
     return aInterfaceName;
@@ -486,8 +485,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             if( !aSourceURL.GetName().isEmpty() )
             {
                 OUString aDestURL( m_sTemplatePath );
-                aDestURL += pFilterEntry->maFilterName;
-                aDestURL += OUString( sal_Unicode('/') );
+                aDestURL += pFilterEntry->maFilterName + "/";
                 if( createDirectory( aDestURL ) )
                 {
                     aDestURL += aSourceURL.GetName();
@@ -900,9 +898,7 @@ void XMLFilterSettingsDialog::onSave()
 
     OUString aExtensions( "*.jar" );
     OUString aFilterName(RESIDSTR(STR_FILTER_PACKAGE));
-    aFilterName += " (";
-    aFilterName += aExtensions;
-    aFilterName += OUString( sal_Unicode( ')' ) );
+    aFilterName += " (" + aExtensions + ")";
 
     aDlg.AddFilter( aFilterName, aExtensions );
 
@@ -946,9 +942,7 @@ void XMLFilterSettingsDialog::onOpen()
 
     OUString aExtensions( "*.jar" );
     OUString aFilterName(RESIDSTR(STR_FILTER_PACKAGE));
-    aFilterName += " (";
-    aFilterName += aExtensions;
-    aFilterName += OUString( sal_Unicode( ')' ) );
+    aFilterName += " (" + aExtensions + ")";
 
     aDlg.AddFilter( aFilterName, aExtensions );
 
@@ -1182,7 +1176,7 @@ void XMLFilterSettingsDialog::initFilterList()
                                         for( n = 0; n < nCount3; n++ )
                                         {
                                             if( n > 0 )
-                                                pTempFilter->maExtension += OUString( sal_Unicode(';') );
+                                                pTempFilter->maExtension += ";";
                                             pTempFilter->maExtension += (*pExtensions++);
                                         }
                                     }
@@ -1512,15 +1506,12 @@ void XMLFilterListBox::changeEntry( const filter_info_impl* pInfo )
 
 OUString XMLFilterListBox::getEntryString( const filter_info_impl* pInfo ) const
 {
-    OUString aEntryStr( pInfo->maFilterName );
-    aEntryStr += OUString( sal_Unicode( '\t' ) );
+    OUString aEntryStr( pInfo->maFilterName + "\t");
     if ( !pInfo->maExportService.isEmpty() )
         aEntryStr += OUString( getApplicationUIName( pInfo->maExportService ) );
     else
         aEntryStr += OUString( getApplicationUIName( pInfo->maImportService ) );
-    aEntryStr += OUString( sal_Unicode( ' ' ) );
-    aEntryStr += OUString( sal_Unicode( '-' ) );
-    aEntryStr += OUString( sal_Unicode( ' ' ) );
+    aEntryStr += " - ";
 
     if( pInfo->maFlags & 1 )
     {
@@ -1706,7 +1697,7 @@ bool createDirectory( OUString& rURL )
     sal_Int32 nLastIndex = sizeof( "file:///" ) - 2;
     while( nLastIndex != -1 )
     {
-        nLastIndex = rURL.indexOf( sal_Unicode('/'), nLastIndex + 1);
+        nLastIndex = rURL.indexOf( '/', nLastIndex + 1);
         if( nLastIndex != -1 )
         {
             OUString aDirURL( rURL.copy( 0, nLastIndex ) );

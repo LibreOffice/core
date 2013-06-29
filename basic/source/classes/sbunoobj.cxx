@@ -1731,15 +1731,15 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const OUString& rClass )
             which matches the interface names 'ooo.vba.excel.XWorkbooks' or
             'ooo.vba.msforms.XLabel'.
          */
-        OUString aClassName( sal_Unicode( '.' ) );
+        OUString aClassName( "." );
         sal_Int32 nClassNameDot = rClass.lastIndexOf( '.' );
         if( nClassNameDot >= 0 )
         {
-            aClassName += rClass.copy( 0, nClassNameDot + 1 ) + OUString( sal_Unicode( 'X' ) ) + rClass.copy( nClassNameDot + 1 );
+            aClassName += rClass.copy( 0, nClassNameDot + 1 ) + "X" + rClass.copy( nClassNameDot + 1 );
         }
         else
         {
-            aClassName += OUString( sal_Unicode( 'X' ) ) + rClass;
+            aClassName += "X" + rClass;
         }
         Sequence< Type > aTypeSeq = xTypeProvider->getTypes();
         const Type* pTypeArray = aTypeSeq.getConstArray();

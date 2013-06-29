@@ -162,7 +162,7 @@ OUString XMLFontAutoStylePool::Add(
     else
     {
         OUString sName;
-        sal_Int32 nLen = rFamilyName.indexOf( sal_Unicode(';'), 0 );
+        sal_Int32 nLen = rFamilyName.indexOf( ';', 0 );
         if( -1 == nLen )
         {
             sName = rFamilyName;

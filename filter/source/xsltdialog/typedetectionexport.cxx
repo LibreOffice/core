@@ -53,7 +53,7 @@ static OUString createRelativeURL( const OUString& rFilterName, const OUString& 
         OUString aName( aURL.GetName() );
         if( aName.isEmpty() )
         {
-            sal_Int32 nPos = rURL.lastIndexOf( sal_Unicode( '/' ) );
+            sal_Int32 nPos = rURL.lastIndexOf( '/' );
             if( nPos == -1 )
             {
                 aName = rURL;
@@ -64,11 +64,7 @@ static OUString createRelativeURL( const OUString& rFilterName, const OUString& 
             }
         }
 
-        OUString aRelURL( "vnd.sun.star.Package:" );
-        aRelURL += rFilterName;
-        aRelURL += OUString( sal_Unicode( '/' ) );
-        aRelURL += aName;
-        return aRelURL;
+        return OUString( "vnd.sun.star.Package:" + rFilterName + "/" + aName );
     }
     else
     {
@@ -125,7 +121,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 pAttrList->AddAttribute( sName, sCdataAttribute, pFilter->maType );
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->startElement( sNode, xAttrList );
-                OUString sValue( sal_Unicode('0') );
+                OUString sValue("0");
                 sValue += sComma;
                 sValue += sComma;
                 if( !pFilter->maDocType.isEmpty() )
@@ -170,7 +166,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 xHandler->startElement( sNode, xAttrList );
                 addLocaleProperty( xHandler, sUIName, pFilter->maInterfaceName );
 
-                OUString sValue( sal_Unicode('0') );
+                OUString sValue("0");
                 sValue += sComma;
                 sValue += pFilter->maType;
                 sValue += sComma,
@@ -199,7 +195,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 sValue += sDelim;
                 sValue += pFilter->maComment;
                 sValue += sComma;
-                sValue += OUString( sal_Unicode('0') );
+                sValue += "0";
                 sValue += sComma;
                 sValue += createRelativeURL( pFilter->maFilterName, pFilter->maImportTemplate );
                 addProperty( xHandler, sData, sValue );

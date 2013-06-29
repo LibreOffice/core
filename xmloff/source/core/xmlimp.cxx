@@ -1283,8 +1283,7 @@ OUString SvXMLImport::ResolveEmbeddedObjectURL(
             OUString sURL( rURL );
             if( !rClassId.isEmpty() )
             {
-                sURL += OUString( sal_Unicode('!') );
-                sURL += rClassId;
+                sURL += "!" + rClassId;
             }
             sRet = mxEmbeddedResolver->resolveEmbeddedObjectURL( sURL );
         }

@@ -477,7 +477,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         }
         //prepare text
         OUStringBuffer aText;
-        OUString aSeparator(sal_Unicode(' '));
+        OUString aSeparator(" ");
         double fRotationDegrees = 0.0;
         try
         {
@@ -1080,7 +1080,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
 
     bool bShowEquation = false;
     bool bShowCorrCoeff = false;
-    OUString aSep( sal_Unicode('\n'));
+    OUString aSep( "\n" );
     if(( xEquationProperties->getPropertyValue( "ShowEquation") >>= bShowEquation ) &&
        ( xEquationProperties->getPropertyValue( "ShowCorrelationCoefficient") >>= bShowCorrCoeff ))
     {
@@ -1111,7 +1111,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
         }
         if( bShowCorrCoeff )
         {
-            aFormula.append( sal_Unicode( 'R' ));
+            aFormula.append( "R" );
             aFormula.append( sal_Unicode( 0x00b2 ));
             aFormula.append( " = ");
             double fR( xRegressionCurveCalculator->getCorrelationCoefficient());

@@ -152,7 +152,7 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
                                         {
                                             // @todo: using implcit knowledge that ranges can be
                                             // merged with ";". This should be done more general
-                                            pCellRange->Value <<= (aOldRange + OUString( sal_Unicode(';')) + aRangeString );
+                                            pCellRange->Value <<= (aOldRange + ";" + aRangeString );
                                         }
                                         // move means replace range
                                         else
