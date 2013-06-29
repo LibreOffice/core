@@ -1595,9 +1595,8 @@ Size StatusBar::CalcWindowSizePixel() const
     long nMinHeight = GetTextHeight();
     const long nBarTextOffset = STATUSBAR_OFFSET_TEXTY*2;
     long nProgressHeight = nMinHeight + nBarTextOffset;
-    // FIXME: IsNativeControlSupported and GetNativeControlRegion should be const ?
-    StatusBar* pThis = const_cast<StatusBar*>( this );
-    if( pThis->IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
+
+    if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aValue;
         Rectangle aControlRegion( (const Point&)Point(), Size( nCalcWidth, nMinHeight ) );
@@ -1611,7 +1610,7 @@ Size StatusBar::CalcWindowSizePixel() const
     }
 
     if( mpImplData->mbDrawItemFrames &&
-        pThis->IsNativeControlSupported( CTRL_FRAME, PART_BORDER ) )
+        IsNativeControlSupported( CTRL_FRAME, PART_BORDER ) )
     {
         ImplControlValue aControlValue( FRAME_DRAW_NODRAW );
         Rectangle aBound, aContent;

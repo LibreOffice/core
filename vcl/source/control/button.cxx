@@ -2891,10 +2891,8 @@ long RadioButton::ImplGetImageToTextDistance() const
 Size RadioButton::ImplGetRadioImageSize() const
 {
     Size aSize;
-    // why are IsNativeControlSupported and GetNativeControlRegion not const ?
-    RadioButton* pThis = const_cast<RadioButton*>(this);
     bool bDefaultSize = true;
-    if( pThis->IsNativeControlSupported( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL ) )
+    if( IsNativeControlSupported( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aControlValue;
         // #i45896# workaround gcc3.3 temporary problem
@@ -3825,10 +3823,8 @@ long CheckBox::ImplGetImageToTextDistance() const
 Size CheckBox::ImplGetCheckImageSize() const
 {
     Size aSize;
-    // why are IsNativeControlSupported and GetNativeControlRegion not const ?
-    CheckBox* pThis = const_cast<CheckBox*>(this);
     bool bDefaultSize = true;
-    if( pThis->IsNativeControlSupported( CTRL_CHECKBOX, PART_ENTIRE_CONTROL ) )
+    if( IsNativeControlSupported( CTRL_CHECKBOX, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aControlValue;
         // #i45896# workaround gcc3.3 temporary problem
