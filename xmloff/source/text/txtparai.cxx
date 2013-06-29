@@ -899,8 +899,7 @@ void XMLMetaImportContext::InsertMeta(
         const uno::Reference<rdf::XMetadatable> xMeta(
             XMLTextMarkImportContext::CreateAndInsertMark(
                 GetImport(),
-                OUString(
-                    "com.sun.star.text.InContentMetadata"),
+                OUString("com.sun.star.text.InContentMetadata"),
                 OUString(),
                 i_xInsertionRange, m_XmlId),
             uno::UNO_QUERY);
@@ -978,8 +977,7 @@ void XMLMetaFieldImportContext::InsertMeta(
         const Reference<XPropertySet> xPropertySet(
             XMLTextMarkImportContext::CreateAndInsertMark(
                 GetImport(),
-                OUString(
-                    "com.sun.star.text.textfield.MetadataField"),
+                OUString("com.sun.star.text.textfield.MetadataField"),
                 OUString(),
                 i_xInsertionRange, m_XmlId),
             UNO_QUERY);

@@ -195,8 +195,7 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
         const OUString sName = ::rtl::Uri::decode(
             rURI, rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
         if (sName.isEmpty() && !rURI.isEmpty())
-            throw uno::Exception(OUString(
-            "Could not decode URI for stream element."), 0);
+            throw uno::Exception("Could not decode URI for stream element.", 0);
 
         uno::Reference< io::XStream > xStream;
         xStream = rxStore->cloneStreamElement( sName );
@@ -209,9 +208,7 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
         const OUString aStoreName = ::rtl::Uri::decode(
             rURI.copy( 0, nSepPos ), rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
         if (aStoreName.isEmpty() && !rURI.isEmpty())
-            throw uno::Exception(
-            OUString(
-            "Could not decode URI for stream element."), 0);
+            throw uno::Exception("Could not decode URI for stream element.", 0);
 
         OUString aElement = rURI.copy( nSepPos+1 );
         uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aStoreName, embed::ElementModes::READ );

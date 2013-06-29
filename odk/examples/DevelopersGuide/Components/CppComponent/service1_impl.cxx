@@ -60,8 +60,7 @@ Sequence< OUString > SAL_CALL getSupportedServiceNames_MyService1Impl()
 
 OUString SAL_CALL getImplementationName_MyService1Impl()
 {
-    return OUString(
-                         "my_module.my_sc_implementation.MyService1");
+    return OUString("my_module.my_sc_implementation.MyService1");
 }
 
 
@@ -222,8 +221,7 @@ OUString MyService1Impl::getImplementationName()
     throw (RuntimeException)
 {
     // unique implementation name
-    return OUString(
-                         "my_module.my_sc_implementation.MyService1");
+    return OUString("my_module.my_sc_implementation.MyService1");
 }
 sal_Bool MyService1Impl::supportsService( OUString const & serviceName )
     throw (RuntimeException)

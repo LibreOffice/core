@@ -181,14 +181,13 @@ void SAL_CALL XSecParser::startElement(
     {//getCaughtException MUST be the first line in the catch block
         cssu::Any exc =  cppu::getCaughtException();
         throw cssxs::SAXException(
-            OUString(
-                              "xmlsecurity: Exception in XSecParser::startElement"),
+            "xmlsecurity: Exception in XSecParser::startElement",
             0, exc);
     }
     catch (...)
     {
         throw cssxs::SAXException(
-            OUString("xmlsecurity: unexpected exception in XSecParser::startElement"), 0,
+            "xmlsecurity: unexpected exception in XSecParser::startElement", 0,
             cssu::Any());
     }
 }
@@ -254,14 +253,13 @@ void SAL_CALL XSecParser::endElement( const OUString& aName )
     {//getCaughtException MUST be the first line in the catch block
         cssu::Any exc =  cppu::getCaughtException();
         throw cssxs::SAXException(
-            OUString(
-                              "xmlsecurity: Exception in XSecParser::endElement"),
+            "xmlsecurity: Exception in XSecParser::endElement",
             0, exc);
     }
     catch (...)
     {
         throw cssxs::SAXException(
-            OUString("xmlsecurity: unexpected exception in XSecParser::endElement"), 0,
+            "xmlsecurity: unexpected exception in XSecParser::endElement", 0,
             cssu::Any());
     }
 }

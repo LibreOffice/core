@@ -66,8 +66,7 @@ static Sequence< OUString > getSupportedServiceNames_MyService2Impl()
 
 static OUString getImplementationName_MyService2Impl()
 {
-    return OUString(
-                         "my_module.my_sc_implementation.MyService2");
+    return OUString("my_module.my_sc_implementation.MyService2");
 }
 
 class MyService2Impl : public ::cppu::WeakImplHelper3<
@@ -148,8 +147,7 @@ OUString MyService2Impl::getImplementationName()
     throw (RuntimeException)
 {
     // unique implementation name
-    return OUString(
-                         "my_module.my_sc_implementation.MyService2");
+    return OUString("my_module.my_sc_implementation.MyService2");
 }
 
 sal_Bool MyService2Impl::supportsService( OUString const & serviceName )

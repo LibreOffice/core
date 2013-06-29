@@ -102,8 +102,7 @@ void ImplFillElementList(
                 pNames[n], rtl_UriCharClassRelSegment,
                 rtl_UriEncodeStrict, RTL_TEXTENCODING_UTF8);
             if (sEncName.isEmpty() && !pNames[n].isEmpty())
-                throw css::uno::Exception(OUString(
-                "Failed to encode element name of XStorage"), 0);
+                throw css::uno::Exception("Failed to encode element name of XStorage", 0);
 
             if ( rxStore->isStreamElement( pNames[n] ) )
             {

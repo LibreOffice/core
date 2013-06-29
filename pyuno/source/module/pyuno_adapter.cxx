@@ -132,9 +132,7 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
             if( ! method.is( ) )
             {
                 throw RuntimeException(
-                    (OUString(
-                            "pyuno bridge: Couldn't get reflection for method ")
-                     + functionName),
+                    "pyuno bridge: Couldn't get reflection for method " + functionName,
                     Reference< XInterface > () );
             }
 
@@ -265,9 +263,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
                     if( ! ( ret >>= seq ) )
                     {
                         throw RuntimeException(
-                            (OUString("pyuno bridge: Couldn't extract out"
-                                    " parameters for method ")
-                             + aFunctionName),
+                            "pyuno bridge: Couldn't extract out parameters for method " + aFunctionName,
                             Reference< XInterface > () );
                     }
 
