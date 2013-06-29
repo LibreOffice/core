@@ -59,6 +59,7 @@
 #include "colorscale.hxx"
 #include "conditio.hxx"
 #include "cellvalue.hxx"
+#include "stylehelper.hxx"
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -4000,7 +4001,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                             default:
                                 SAL_WARN("sc", "unimplemented conditional format export");
                         }
-                        OUString sStyle = pEntry->GetStyle();
+                        OUString sStyle = ScStyleNameConversion::DisplayToProgrammaticName(pEntry->GetStyle(), SFX_STYLE_FAMILY_PARA);
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_APPLY_STYLE_NAME, sStyle);
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, aCond.makeStringAndClear());
 
@@ -4127,7 +4128,8 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                     {
                         const ScCondDateFormatEntry& mrDateFormat = static_cast<const ScCondDateFormatEntry&>(*pFormatEntry);
                         OUString aDateType = getDateStringForType(mrDateFormat.GetDateType());
-                        AddAttribute( XML_NAMESPACE_CALC_EXT, XML_STYLE, mrDateFormat.GetStyleName());
+                        OUString aStyleName = ScStyleNameConversion::DisplayToProgrammaticName(mrDateFormat.GetStyleName(), SFX_STYLE_FAMILY_PARA );
+                        AddAttribute( XML_NAMESPACE_CALC_EXT, XML_STYLE, aStyleName);
                         AddAttribute( XML_NAMESPACE_CALC_EXT, XML_DATE, aDateType);
                         SvXMLElementExport aElementDateFormat(*this, XML_NAMESPACE_CALC_EXT, XML_DATE_IS, true, true);
                     }

@@ -18,6 +18,7 @@
 #include "rangeutl.hxx"
 #include "docfunc.hxx"
 #include "XMLConverter.hxx"
+#include "stylehelper.hxx"
 
 
 ScXMLConditionalFormatsContext::ScXMLConditionalFormatsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
@@ -566,7 +567,7 @@ ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                 sExpression = sValue;
                 break;
             case XML_TOK_CONDITION_APPLY_STYLE_NAME:
-                sStyle = sValue;
+                sStyle = ScStyleNameConversion::ProgrammaticToDisplayName(sValue, SFX_STYLE_FAMILY_PARA );
                 break;
             case XML_TOK_CONDITION_BASE_CELL_ADDRESS:
                 sAddress = sValue;
@@ -764,7 +765,7 @@ ScXMLDateContext::ScXMLDateContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                 sDateType = sValue;
                 break;
             case XML_TOK_COND_DATE_STYLE:
-                sStyle = sValue;
+                sStyle = ScStyleNameConversion::ProgrammaticToDisplayName(sValue, SFX_STYLE_FAMILY_PARA );
                 break;
             default:
                 break;
