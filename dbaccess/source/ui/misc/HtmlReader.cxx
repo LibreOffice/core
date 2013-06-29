@@ -55,7 +55,6 @@
 #include <rtl/tencinfo.h>
 #include "UITools.hxx"
 #include <vcl/svapp.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -84,7 +83,7 @@ OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
     ,m_bMetaOptions(sal_False)
     ,m_bSDNum(sal_False)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::OHTMLReader" );
+    SAL_INFO("dbaccess.ui", "OHTMLReader::OHTMLReader" );
     DBG_CTOR(OHTMLReader,NULL);
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
     // If the file starts with a BOM, switch to UCS2.
@@ -106,7 +105,7 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
     ,m_bMetaOptions(sal_False)
     ,m_bSDNum(sal_False)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::OHTMLReader" );
+    SAL_INFO("dbaccess.ui", "OHTMLReader::OHTMLReader" );
     DBG_CTOR(OHTMLReader,NULL);
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
     // If the file starts with a BOM, switch to UCS2.
@@ -120,7 +119,7 @@ OHTMLReader::~OHTMLReader()
 // ---------------------------------------------------------------------------
 SvParserState OHTMLReader::CallParser()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::CallParser" );
+    SAL_INFO("dbaccess.ui", "OHTMLReader::CallParser" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
@@ -131,7 +130,7 @@ SvParserState OHTMLReader::CallParser()
 // -----------------------------------------------------------------------------
 void OHTMLReader::NextToken( int nToken )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::NextToken" );
+    SAL_INFO("dbaccess.ui", "OHTMLReader::NextToken" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     if(m_bError || !m_nRows) // if there is an error or no more rows to check, return immediatelly
         return;
@@ -301,7 +300,7 @@ void OHTMLReader::NextToken( int nToken )
 // -----------------------------------------------------------------------------
 void OHTMLReader::fetchOptions()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::fetchOptions" );
+    SAL_INFO("dbaccess.ui", "OHTMLReader::fetchOptions" );
     m_bInTbl = sal_True;
     const HTMLOptions& options = GetOptions();
     for (size_t i = 0, n = options.size(); i < n; ++i)
@@ -324,7 +323,7 @@ void OHTMLReader::fetchOptions()
 //---------------------------------------------------------------------------------
 void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::TableDataOn" );
+    SAL_INFO("dbaccess.ui", "OHTMLReader::TableDataOn" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     const HTMLOptions& rHtmlOptions = GetOptions();
     for (size_t i = 0, n = rHtmlOptions.size(); i < n; ++i)
@@ -355,7 +354,7 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal)
 //---------------------------------------------------------------------------------
 void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::TableFontOn" );
+    SAL_INFO("dbaccess.ui", "OHTMLReader::TableFontOn" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     const HTMLOptions& rHtmlOptions = GetOptions();
     for (size_t i = 0, n = rHtmlOptions.size(); i < n; ++i)
@@ -405,7 +404,7 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
 // ---------------------------------------------------------------------------
 sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::GetWidthPixel" );
+    SAL_INFO("dbaccess.ui", "OHTMLReader::GetWidthPixel" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     const String& rOptVal = rOption.GetString();
     if ( rOptVal.Search('%') != STRING_NOTFOUND )
@@ -427,7 +426,7 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
 // ---------------------------------------------------------------------------
 sal_Bool OHTMLReader::CreateTable(int nToken)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::CreateTable" );
+    SAL_INFO("dbaccess.ui", "OHTMLReader::CreateTable" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     String aTempName(ModuleRes(STR_TBL_TITLE));
     aTempName = aTempName.GetToken(0,' ');
@@ -538,7 +537,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
 // -----------------------------------------------------------------------------
 void OHTMLReader::setTextEncoding()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::setTextEncoding" );
+    SAL_INFO("dbaccess.ui", "OHTMLReader::setTextEncoding" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     m_bMetaOptions = sal_True;
     ParseMetaOptions(NULL, NULL);
@@ -547,14 +546,14 @@ void OHTMLReader::setTextEncoding()
 // -----------------------------------------------------------------------------
 void OHTMLReader::release()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::release" );
+    SAL_INFO("dbaccess.ui", "OHTMLReader::release" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     ReleaseRef();
 }
 // -----------------------------------------------------------------------------
 TypeSelectionPageFactory OHTMLReader::getTypeSelectionPageFactory()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::getTypeSelectionPageFactory" );
+    SAL_INFO("dbaccess.ui", "OHTMLReader::getTypeSelectionPageFactory" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     return &OWizHTMLExtend::Create;
 }

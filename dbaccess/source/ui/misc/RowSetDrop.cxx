@@ -28,7 +28,6 @@
 #include "dbustrings.hrc"
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <functional>
-#include <rtl/logfile.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -52,13 +51,13 @@ ORowSetImportExport::ORowSetImportExport(   Window* _pParent,
                                             ,m_pParent(_pParent)
                                             ,m_bAlreadyAsked(sal_False)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::ORowSetImportExport" );
+    SAL_INFO("dbaccess.ui", "ORowSetImportExport::ORowSetImportExport" );
     OSL_ENSURE(_pParent,"Window can't be null!");
 }
 // -----------------------------------------------------------------------------
 void ORowSetImportExport::initialize()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::initialize" );
+    SAL_INFO("dbaccess.ui", "ORowSetImportExport::initialize" );
     ODatabaseImportExport::initialize();
     // do namemapping
     Reference<XColumnLocate> xColumnLocate(m_xResultSet,UNO_QUERY);
@@ -98,13 +97,13 @@ void ORowSetImportExport::initialize()
 // -----------------------------------------------------------------------------
 sal_Bool ORowSetImportExport::Write()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::Write" );
+    SAL_INFO("dbaccess.ui", "ORowSetImportExport::Write" );
     return sal_True;
 }
 // -----------------------------------------------------------------------------
 sal_Bool ORowSetImportExport::Read()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::Read" );
+    SAL_INFO("dbaccess.ui", "ORowSetImportExport::Read" );
     // check if there is any column to copy
     if(::std::find_if(m_aColumnMapping.begin(),m_aColumnMapping.end(),
                         ::std::bind2nd(::std::greater<sal_Int32>(),0)) == m_aColumnMapping.end())
@@ -159,7 +158,7 @@ sal_Bool ORowSetImportExport::Read()
 // -----------------------------------------------------------------------------
 sal_Bool ORowSetImportExport::insertNewRow()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::insertNewRow" );
+    SAL_INFO("dbaccess.ui", "ORowSetImportExport::insertNewRow" );
     try
     {
         m_xTargetResultSetUpdate->moveToInsertRow();
@@ -231,7 +230,7 @@ sal_Bool ORowSetImportExport::insertNewRow()
                         aValue <<= m_xRow->getClob(*aIter);
                         break;
                     default:
-                        OSL_FAIL("Unknown type");
+                        SAL_WARN("dbaccess.ui", "Unknown type");
                 }
                 if(m_xRow->wasNull())
                     m_xTargetRowUpdate->updateNull(i);

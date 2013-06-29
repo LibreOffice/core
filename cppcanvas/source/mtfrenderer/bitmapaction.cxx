@@ -18,7 +18,6 @@
  */
 
 
-#include <rtl/logfile.hxx>
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/RepaintResult.hpp>
 #include <com/sun/star/rendering/XCachedPrimitive.hpp>

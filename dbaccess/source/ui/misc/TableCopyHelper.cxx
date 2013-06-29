@@ -55,7 +55,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include "dbexchange.hxx"
-#include <rtl/logfile.hxx>
 //........................................................................
 namespace dbaui
 {
@@ -88,7 +87,7 @@ void OTableCopyHelper::insertTable( const OUString& i_rSourceDataSource, const R
 {
     if ( CommandType::QUERY != i_nCommandType && CommandType::TABLE != i_nCommandType )
     {
-        OSL_FAIL( "OTableCopyHelper::insertTable: invalid call (no supported format found)!" );
+        SAL_WARN("dbaccess.ui", "OTableCopyHelper::insertTable: invalid call (no supported format found)!" );
         return;
     }
 
@@ -100,7 +99,7 @@ void OTableCopyHelper::insertTable( const OUString& i_rSourceDataSource, const R
 
         if ( !xSrcConnection.is() || !i_rDestConnection.is() )
         {
-            OSL_FAIL( "OTableCopyHelper::insertTable: no connection/s!" );
+            SAL_WARN("dbaccess.ui", "OTableCopyHelper::insertTable: no connection/s!" );
             return;
         }
 

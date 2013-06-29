@@ -65,7 +65,6 @@
 #include "UpdateHelperImpl.hxx"
 #include <vcl/msgbox.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace dbaui;
 using namespace utl;
@@ -115,7 +114,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     ,m_bCheckOnly(sal_False)
     ,m_bAppendFirstLine(false)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::ODatabaseExport" );
+    SAL_INFO("dbaccess.ui", "ODatabaseExport::ODatabaseExport" );
     DBG_CTOR(ODatabaseExport,NULL);
 
     m_nRows += nRows;
@@ -172,7 +171,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     ,m_bCheckOnly(sal_False)
     ,m_bAppendFirstLine(false)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::ODatabaseExport" );
+    SAL_INFO("dbaccess.ui", "ODatabaseExport::ODatabaseExport" );
     DBG_CTOR(ODatabaseExport,NULL);
     try
     {
@@ -302,7 +301,7 @@ ODatabaseExport::~ODatabaseExport()
 // -----------------------------------------------------------------------------
 void ODatabaseExport::insertValueIntoColumn()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::insertValueIntoColumn" );
+    SAL_INFO("dbaccess.ui", "ODatabaseExport::insertValueIntoColumn" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
     if(m_nColumnPos < sal_Int32(m_vDestVector.size()))
     {
@@ -324,7 +323,7 @@ void ODatabaseExport::insertValueIntoColumn()
                         OSL_ENSURE((nNewPos) < static_cast<sal_Int32>(m_vColumnTypes.size()),"Illegal index for vector");
                         if (m_vColumnTypes[nNewPos] != DataType::VARCHAR && m_vColumnTypes[nNewPos] != DataType::CHAR && m_vColumnTypes[nNewPos] != DataType::LONGVARCHAR )
                         {
-                            RTL_LOGFILE_CONTEXT_TRACE( aLogger, "ODatabaseExport::insertValueIntoColumn != DataType::VARCHAR" );
+                            SAL_INFO("dbaccess", "ODatabaseExport::insertValueIntoColumn != DataType::VARCHAR" );
                             ensureFormatter();
                             sal_Int32 nNumberFormat = 0;
                             double fOutNumber = 0.0;
@@ -417,7 +416,7 @@ void ODatabaseExport::insertValueIntoColumn()
 // -----------------------------------------------------------------------------
 sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOldNumberFormat)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::CheckString" );
+    SAL_INFO("dbaccess.ui", "ODatabaseExport::CheckString" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
     double fOutNumber = 0.0;
     sal_Int16 nNumberFormat = 0;
@@ -551,7 +550,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
                     }
                     break;
                 default:
-                    OSL_FAIL("ODatabaseExport: Unbekanntes Format");
+                    SAL_WARN("dbaccess.ui", "ODatabaseExport: Unbekanntes Format");
             }
         }
     }
@@ -565,7 +564,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
 // -----------------------------------------------------------------------------
 void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfoMap* _pInfoMap)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::SetColumnTypes" );
+    SAL_INFO("dbaccess.ui", "ODatabaseExport::SetColumnTypes" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
     if(_pList && _pInfoMap)
     {
@@ -638,7 +637,7 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
 // -----------------------------------------------------------------------------
 void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::CreateDefaultColumn" );
+    SAL_INFO("dbaccess.ui", "ODatabaseExport::CreateDefaultColumn" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
     Reference< XDatabaseMetaData>  xDestMetaData(m_xConnection->getMetaData());
     sal_Int32 nMaxNameLen(xDestMetaData->getMaxColumnNameLength());
@@ -691,7 +690,7 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
 // -----------------------------------------------------------------------------
 sal_Bool ODatabaseExport::createRowSet()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::createRowSet" );
+    SAL_INFO("dbaccess.ui", "ODatabaseExport::createRowSet" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
     m_pUpdateHelper.reset(new OParameterUpdateHelper(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumns)));
 
@@ -700,7 +699,7 @@ sal_Bool ODatabaseExport::createRowSet()
 // -----------------------------------------------------------------------------
 sal_Bool ODatabaseExport::executeWizard(const OUString& _rTableName,const Any& _aTextColor,const FontDescriptor& _rFont)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::executeWizard" );
+    SAL_INFO("dbaccess.ui", "ODatabaseExport::executeWizard" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
 
     bool bHaveDefaultTable =  !m_sDefaultTableName.isEmpty();
@@ -767,7 +766,7 @@ sal_Bool ODatabaseExport::executeWizard(const OUString& _rTableName,const Any& _
 //---------------------------------------------------------------------------------
 void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException& e)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::showErrorDialog" );
+    SAL_INFO("dbaccess.ui", "ODatabaseExport::showErrorDialog" );
     if(!m_bDontAskAgain)
     {
         String aMsg(e.Message);
@@ -784,7 +783,7 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
 // -----------------------------------------------------------------------------
 void ODatabaseExport::adjustFormat()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::adjustFormat" );
+    SAL_INFO("dbaccess.ui", "ODatabaseExport::adjustFormat" );
     if ( m_sTextToken.Len() )
     {
         sal_Int32 nNewPos = m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos;
@@ -807,7 +806,7 @@ void ODatabaseExport::adjustFormat()
 // -----------------------------------------------------------------------------
 void ODatabaseExport::eraseTokens()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::eraseTokens" );
+    SAL_INFO("dbaccess.ui", "ODatabaseExport::eraseTokens" );
     m_sTextToken.Erase();
     m_sNumToken.Erase();
     m_sValToken.Erase();
@@ -815,7 +814,7 @@ void ODatabaseExport::eraseTokens()
 // -----------------------------------------------------------------------------
 void ODatabaseExport::ensureFormatter()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::ensureFormatter" );
+    SAL_INFO("dbaccess.ui", "ODatabaseExport::ensureFormatter" );
     if ( !m_pFormatter )
     {
         Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
@@ -831,7 +830,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
                                                        ,const Reference<XPropertySet>& _xDestTable
                                                        ,const TPositions& _rvColumns)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::createPreparedStatment" );
+    SAL_INFO("dbaccess.ui", "ODatabaseExport::createPreparedStatment" );
     OUString aSql(OUString("INSERT INTO "));
     OUString sComposedTableName = ::dbtools::composeTableName( _xMetaData, _xDestTable, ::dbtools::eInDataManipulation, false, false, true );
 

@@ -71,7 +71,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/typeprovider.hxx>
-#include <rtl/logfile.hxx>
 #include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -221,7 +220,7 @@ ORowSet::~ORowSet()
 {
     if ( !m_rBHelper.bDisposed && !m_rBHelper.bInDispose )
     {
-        OSL_FAIL("Please check who doesn't dispose this component!");
+        SAL_WARN("dbaccess", "Please check who doesn't dispose this component!");
         osl_atomic_increment( &m_refCount );
         dispose();
     }
@@ -1484,7 +1483,7 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
     }
     catch(Exception&)
     {
-        OSL_FAIL("ORowSet::executeWithCompletion: caught an unexpected exception type while filling in the parameters!");
+        SAL_WARN("dbaccess", "ORowSet::executeWithCompletion: caught an unexpected exception type while filling in the parameters!");
     }
 
     // we're done with the parameters, now for the real execution
@@ -1773,7 +1772,7 @@ void ORowSet::impl_initializeColumnSettings_nothrow( const Reference< XPropertyS
 
 void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotification)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", "ORowSet::execute_NoApprove_NoNewConn" );
+    SAL_INFO("dbaccess", "ORowSet::execute_NoApprove_NoNewConn" );
 
     // now we can dispose our old connection
     ::comphelper::disposeComponent(m_xOldConnection);
@@ -1799,7 +1798,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
             aComposedUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), m_aUpdateCatalogName, m_aUpdateSchemaName, m_aUpdateTableName, sal_False, ::dbtools::eInDataManipulation );
 
         {
-            RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", "ORowSet::execute_NoApprove_NoNewConn: creating cache" );
+            SAL_INFO("dbaccess", "ORowSet::execute_NoApprove_NoNewConn: creating cache" );
             m_pCache = new ORowSetCache( xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName, m_bModified, m_bNew,m_aParameterValueForCache,m_aFilter,m_nMaxRows );
             if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
             {
@@ -1829,7 +1828,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
         const ::std::map<sal_Int32,sal_Int32>& rKeyColumns = m_pCache->getKeyColumns();
         if(!m_xColumns.is())
         {
-            RTL_LOGFILE_CONTEXT_AUTHOR( aColumnCreateLog, "dbaccess", "frank.schoenheit@sun.com", "ORowSet::execute_NoApprove_NoNewConn::creating columns" );
+            SAL_INFO("dbaccess", "ORowSet::execute_NoApprove_NoNewConn::creating columns" );
             // use the meta data
             Reference<XResultSetMetaDataSupplier> xMetaSup(m_xStatement,UNO_QUERY);
             try

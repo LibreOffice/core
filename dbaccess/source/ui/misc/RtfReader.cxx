@@ -46,7 +46,6 @@
 #include "QEnumTypes.hxx"
 #include "UITools.hxx"
 #include <vcl/svapp.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -69,7 +68,7 @@ ORTFReader::ORTFReader( SvStream& rIn,
     :SvRTFParser(rIn)
     ,ODatabaseExport( _rxConnection, _rxNumberF, _rxContext, pList, _pInfoMap, rIn )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::ORTFReader" );
+    SAL_INFO("dbaccess.ui", "ORTFReader::ORTFReader" );
     DBG_CTOR(ORTFReader,NULL);
     m_bAppendFirstLine = false;
 }
@@ -85,7 +84,7 @@ ORTFReader::ORTFReader(SvStream& rIn,
    :SvRTFParser(rIn)
    ,ODatabaseExport( nRows, _rColumnPositions, _rxNumberF, _rxContext, pList, _pInfoMap, _bAutoIncrementEnabled, rIn )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::ORTFReader" );
+    SAL_INFO("dbaccess.ui", "ORTFReader::ORTFReader" );
     DBG_CTOR(ORTFReader,NULL);
     m_bAppendFirstLine = false;
 }
@@ -97,7 +96,7 @@ ORTFReader::~ORTFReader()
 // ---------------------------------------------------------------------------
 SvParserState ORTFReader::CallParser()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::CallParser" );
+    SAL_INFO("dbaccess.ui", "ORTFReader::CallParser" );
     DBG_CHKTHIS(ORTFReader,NULL);
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
@@ -108,7 +107,7 @@ SvParserState ORTFReader::CallParser()
 // ---------------------------------------------------------------------------
 void ORTFReader::NextToken( int nToken )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::NextToken" );
+    SAL_INFO("dbaccess.ui", "ORTFReader::NextToken" );
     DBG_CHKTHIS(ORTFReader,NULL);
     if(m_bError || !m_nRows) // if there is an error or no more rows to check, return immediatelly
         return;
@@ -262,7 +261,7 @@ void ORTFReader::NextToken( int nToken )
 // ---------------------------------------------------------------------------
 sal_Bool ORTFReader::CreateTable(int nToken)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::CreateTable" );
+    SAL_INFO("dbaccess.ui", "ORTFReader::CreateTable" );
     DBG_CHKTHIS(ORTFReader,NULL);
     String aTableName(ModuleRes(STR_TBL_TITLE));
     aTableName = aTableName.GetToken(0,' ');
@@ -346,7 +345,7 @@ sal_Bool ORTFReader::CreateTable(int nToken)
 // -----------------------------------------------------------------------------
 void ORTFReader::release()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::release" );
+    SAL_INFO("dbaccess.ui", "ORTFReader::release" );
     DBG_CHKTHIS(ORTFReader,NULL);
     ReleaseRef();
 }
@@ -354,7 +353,7 @@ void ORTFReader::release()
 // -----------------------------------------------------------------------------
 TypeSelectionPageFactory ORTFReader::getTypeSelectionPageFactory()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFReader::getTypeSelectionPageFactory" );
+    SAL_INFO("dbaccess.ui", "ORTFReader::getTypeSelectionPageFactory" );
     DBG_CHKTHIS(ORTFReader,NULL);
     return &OWizRTFExtend::Create;
 }

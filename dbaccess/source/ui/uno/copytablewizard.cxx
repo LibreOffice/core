@@ -64,7 +64,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/logfile.hxx>
 #include <svtools/genericunodialog.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
@@ -1092,7 +1091,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
             case CopyTableContinuation::AskUser:            break;          // stop asking the listeners, ask the user
 
             default:
-                OSL_FAIL( "CopyTableWizard::impl_processCopyError_nothrow: invalid listener response!" );
+                SAL_WARN("dbaccess.ui", "CopyTableWizard::impl_processCopyError_nothrow: invalid listener response!" );
                 // ask next listener
                 continue;
             }
@@ -1391,7 +1390,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
 
                 if( !xTable.is() )
                 {
-                    OSL_FAIL( "CopyTableWizard::impl_doCopy_nothrow: createTable should throw here, shouldn't it?" );
+                    SAL_WARN("dbaccess.ui", "CopyTableWizard::impl_doCopy_nothrow: createTable should throw here, shouldn't it?" );
                     break;
                 }
 
@@ -1408,7 +1407,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
                     xTable = rWizard.createTable();
                     if ( !xTable.is() )
                     {
-                        OSL_FAIL( "CopyTableWizard::impl_doCopy_nothrow: createTable should throw here, shouldn't it?" );
+                        SAL_WARN("dbaccess.ui", "CopyTableWizard::impl_doCopy_nothrow: createTable should throw here, shouldn't it?" );
                         break;
                     }
                 }
@@ -1456,7 +1455,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
                 break;
 
             default:
-                OSL_FAIL( "CopyTableWizard::impl_doCopy_nothrow: What operation, please?" );
+                SAL_WARN("dbaccess.ui", "CopyTableWizard::impl_doCopy_nothrow: What operation, please?" );
                 break;
         }
     }

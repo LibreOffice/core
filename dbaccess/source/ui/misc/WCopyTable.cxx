@@ -55,7 +55,6 @@
 #include <connectivity/dbmetadata.hxx>
 #include <connectivity/dbexception.hxx>
 
-#include <rtl/logfile.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -469,14 +468,14 @@ const DummyCopySource& DummyCopySource::Instance()
 //------------------------------------------------------------------------
 OUString DummyCopySource::getQualifiedObjectName() const
 {
-    OSL_FAIL( "DummyCopySource::getQualifiedObjectName: not to be called!" );
+    SAL_WARN("dbaccess.ui",  "DummyCopySource::getQualifiedObjectName: not to be called!" );
     return OUString();
 }
 
 //------------------------------------------------------------------------
 bool DummyCopySource::isView() const
 {
-    OSL_FAIL( "DummyCopySource::isView: not to be called!" );
+    SAL_WARN("dbaccess.ui",  "DummyCopySource::isView: not to be called!" );
     return false;
 }
 
@@ -498,27 +497,27 @@ Sequence< OUString > DummyCopySource::getColumnNames() const
 //------------------------------------------------------------------------
 Sequence< OUString > DummyCopySource::getPrimaryKeyColumnNames() const
 {
-    OSL_FAIL( "DummyCopySource::getPrimaryKeyColumnNames: not to be called!" );
+    SAL_WARN("dbaccess.ui",  "DummyCopySource::getPrimaryKeyColumnNames: not to be called!" );
     return Sequence< OUString >();
 }
 
 //------------------------------------------------------------------------
 OFieldDescription* DummyCopySource::createFieldDescription( const OUString& /*_rColumnName*/ ) const
 {
-    OSL_FAIL( "DummyCopySource::createFieldDescription: not to be called!" );
+    SAL_WARN("dbaccess.ui",  "DummyCopySource::createFieldDescription: not to be called!" );
     return NULL;
 }
 //------------------------------------------------------------------------
 OUString DummyCopySource::getSelectStatement() const
 {
-    OSL_FAIL( "DummyCopySource::getSelectStatement: not to be called!" );
+    SAL_WARN("dbaccess.ui",  "DummyCopySource::getSelectStatement: not to be called!" );
     return OUString();
 }
 
 //------------------------------------------------------------------------
 ::utl::SharedUNOComponent< XPreparedStatement > DummyCopySource::getPreparedSelectStatement() const
 {
-    OSL_FAIL( "DummyCopySource::getPreparedSelectStatement: not to be called!" );
+    SAL_WARN("dbaccess.ui",  "DummyCopySource::getPreparedSelectStatement: not to be called!" );
     return ::utl::SharedUNOComponent< XPreparedStatement >();
 }
 
@@ -571,7 +570,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const OUString& _rDefaultN
     ,m_ePressed( WIZARD_NONE )
     ,m_bCreatePrimaryKeyColumn(sal_False)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::OCopyTableWizard" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::OCopyTableWizard" );
     DBG_CTOR(OCopyTableWizard,NULL);
     construct();
 
@@ -671,7 +670,7 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const OUString& _rDefaultNa
     ,m_ePressed( WIZARD_NONE )
     ,m_bCreatePrimaryKeyColumn(sal_False)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::OCopyTableWizard" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::OCopyTableWizard" );
     DBG_CTOR(OCopyTableWizard,NULL);
     construct();
     ODatabaseExport::TColumnVector::const_iterator aIter = _rSourceColVec.begin();
@@ -701,7 +700,7 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const OUString& _rDefaultNa
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::construct()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::construct" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::construct" );
     AddButton( &m_pbHelp, WIZARDDIALOG_BUTTON_STDOFFSET_X );
     AddButton( &m_pbCancel, WIZARDDIALOG_BUTTON_STDOFFSET_X );
     AddButton( &m_pbPrev );
@@ -797,7 +796,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplNextHdl)
 // -----------------------------------------------------------------------
 sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::CheckColumns" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::CheckColumns" );
     sal_Bool bRet = sal_True;
     m_vColumnPos.clear();
     m_vColumnTypes.clear();
@@ -962,7 +961,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
                 break;
             default:
             {
-                OSL_FAIL("OCopyTableWizard::ImplOKHdl: invalid creation style!");
+                SAL_WARN("dbaccess.ui", "OCopyTableWizard::ImplOKHdl: invalid creation style!");
             }
         }
 
@@ -973,14 +972,14 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
 //------------------------------------------------------------------------
 sal_Bool OCopyTableWizard::shouldCreatePrimaryKey() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::shouldCreatePrimaryKey" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::shouldCreatePrimaryKey" );
     return m_bCreatePrimaryKeyColumn;
 }
 
 // -----------------------------------------------------------------------
 void OCopyTableWizard::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::setCreatePrimaryKey" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::setCreatePrimaryKey" );
     m_bCreatePrimaryKeyColumn = _bDoCreate;
     if ( !_rSuggestedName.isEmpty() )
         m_aKeyName = _rSuggestedName;
@@ -1012,7 +1011,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplActivateHdl)
 // -----------------------------------------------------------------------
 void OCopyTableWizard::CheckButtons()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::CheckButtons" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::CheckButtons" );
     if(GetCurLevel() == 0) // the first page has no back button
     {
         if(m_nPageCount > 1)
@@ -1036,7 +1035,7 @@ void OCopyTableWizard::CheckButtons()
 // -----------------------------------------------------------------------
 void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::EnableButton" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::EnableButton" );
     Button* pButton;
     if(eStyle == WIZARD_NEXT)
         pButton = &m_pbNext;
@@ -1050,21 +1049,21 @@ void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable)
 // -----------------------------------------------------------------------
 long OCopyTableWizard::DeactivatePage()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::DeactivatePage" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::DeactivatePage" );
     OWizardPage* pPage = (OWizardPage*)GetPage(GetCurLevel());
     return pPage ? pPage->LeavePage() : sal_False;
 }
 // -----------------------------------------------------------------------
 void OCopyTableWizard::AddWizardPage(OWizardPage* pPage)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::AddWizardPage" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::AddWizardPage" );
     AddPage(pPage);
     ++m_nPageCount;
 }
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::insertColumn" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::insertColumn" );
     OSL_ENSURE(_pField,"FieldDescrioption is null!");
     if ( _pField )
     {
@@ -1083,7 +1082,7 @@ void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,const OUString& _sOldName)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::replaceColumn" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::replaceColumn" );
     OSL_ENSURE(_pField,"FieldDescrioption is null!");
     if ( _pField )
     {
@@ -1097,14 +1096,14 @@ void OCopyTableWizard::replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::impl_loadSourceData()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::impl_loadSourceData" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::impl_loadSourceData" );
     loadData( m_rSourceObject, m_vSourceColumns, m_vSourceVec );
 }
 
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, ODatabaseExport::TColumns& _rColumns, ODatabaseExport::TColumnVector& _rColVector )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::loadData" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::loadData" );
     ODatabaseExport::TColumns::iterator colEnd = _rColumns.end();
     for ( ODatabaseExport::TColumns::iterator col = _rColumns.begin(); col != colEnd; ++col )
         delete col->second;
@@ -1165,7 +1164,7 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::clearDestColumns()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::clearDestColumns" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::clearDestColumns" );
     clearColumns(m_vDestColumns,m_aDestVec);
     m_bAddPKFirstTime = sal_True;
     m_mNameMapping.clear();
@@ -1174,7 +1173,7 @@ void OCopyTableWizard::clearDestColumns()
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, const ODatabaseExport::TColumnVector* _pVec, sal_Bool _bKeyColumns) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::appendColumns" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::appendColumns" );
     // now append the columns
     OSL_ENSURE(_rxColSup.is(),"No columns supplier");
     if(!_rxColSup.is())
@@ -1216,7 +1215,7 @@ void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, co
             }
             else
             {
-                OSL_FAIL("OCopyTableWizard::appendColumns: invalid field name!");
+                SAL_WARN("dbaccess.ui", "OCopyTableWizard::appendColumns: invalid field name!");
             }
 
         }
@@ -1225,7 +1224,7 @@ void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, co
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::appendKey( Reference<XKeysSupplier>& _rxSup, const ODatabaseExport::TColumnVector* _pVec) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::appendKey" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::appendKey" );
     if(!_rxSup.is())
         return; // the database doesn't support keys
     OSL_ENSURE(_rxSup.is(),"No XKeysSupplier!");
@@ -1253,7 +1252,7 @@ void OCopyTableWizard::appendKey( Reference<XKeysSupplier>& _rxSup, const ODatab
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > OCopyTableWizard::createView() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::createView" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::createView" );
     OUString sCommand( m_rSourceObject.getSelectStatement() );
     OSL_ENSURE( !sCommand.isEmpty(), "OCopyTableWizard::createView: no statement in the source object!" );
         // there are legitimate cases in which getSelectStatement does not provide a statement,
@@ -1263,7 +1262,7 @@ Reference< XPropertySet > OCopyTableWizard::createView() const
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > OCopyTableWizard::createTable()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::createTable" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::createTable" );
     Reference< XPropertySet > xTable;
 
     Reference<XTablesSupplier> xSup( m_xDestConnection, UNO_QUERY );
@@ -1397,7 +1396,7 @@ bool OCopyTableWizard::supportsPrimaryKey( const Reference< XConnection >& _rxCo
 // -----------------------------------------------------------------------------
 bool OCopyTableWizard::supportsViews( const Reference< XConnection >& _rxConnection )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::supportsViews" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::supportsViews" );
     OSL_PRECOND( _rxConnection.is(), "OCopyTableWizard::supportsViews: invalid connection!" );
     if ( !_rxConnection.is() )
         return false;
@@ -1440,7 +1439,7 @@ bool OCopyTableWizard::supportsViews( const Reference< XConnection >& _rxConnect
 // -----------------------------------------------------------------------------
 sal_Int32 OCopyTableWizard::getMaxColumnNameLength() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::getMaxColumnNameLength" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::getMaxColumnNameLength" );
     sal_Int32 nLen = 0;
     if ( m_xDestConnection.is() )
     {
@@ -1459,13 +1458,13 @@ sal_Int32 OCopyTableWizard::getMaxColumnNameLength() const
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::setOperation( const sal_Int16 _nOperation )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::setOperation" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::setOperation" );
     m_nOperation = _nOperation;
 }
 // -----------------------------------------------------------------------------
 sal_Int16 OCopyTableWizard::getOperation() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::getOperation" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::getOperation" );
     return m_nOperation;
 }
 // -----------------------------------------------------------------------------
@@ -1474,7 +1473,7 @@ OUString OCopyTableWizard::convertColumnName(const TColumnFindFunctor&   _rCmpFu
                                                     const OUString&  _sExtraChars,
                                                     sal_Int32               _nMaxNameLen)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::convertColumnName" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::convertColumnName" );
     OUString sAlias = _sColumnName;
     if ( isSQL92CheckEnabled( m_xDestConnection ) )
         sAlias = ::dbtools::convertName2SQLName(_sColumnName,_sExtraChars);
@@ -1509,14 +1508,14 @@ OUString OCopyTableWizard::convertColumnName(const TColumnFindFunctor&   _rCmpFu
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::removeColumnNameFromNameMap(const OUString& _sName)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::removeColumnNameFromNameMap" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::removeColumnNameFromNameMap" );
     m_mNameMapping.erase(_sName);
 }
 
 // -----------------------------------------------------------------------------
 sal_Bool OCopyTableWizard::supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDataType)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::supportsType" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::supportsType" );
     sal_Bool bRet = m_aDestTypeInfo.find(_nDataType) != m_aDestTypeInfo.end();
     if ( bRet )
         _rNewDataType = _nDataType;
@@ -1526,7 +1525,7 @@ sal_Bool OCopyTableWizard::supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDat
 // -----------------------------------------------------------------------------
 TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& _bNotConvert)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::convertType" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::convertType" );
     if ( !m_bInterConnectionCopy )
         // no need to convert if the source and destination connection are the same
         return _pType;
@@ -1625,7 +1624,7 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& 
 // -----------------------------------------------------------------------------
 OUString OCopyTableWizard::createUniqueName(const OUString& _sName)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::createUniqueName" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::createUniqueName" );
     OUString sName = _sName;
     Sequence< OUString > aColumnNames( m_rSourceObject.getColumnNames() );
     if ( aColumnNames.getLength() )
@@ -1647,7 +1646,7 @@ OUString OCopyTableWizard::createUniqueName(const OUString& _sName)
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::showColumnTypeNotSupported(const OUString& _rColumnName)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::showColumnTypeNotSupported" );
+    SAL_INFO("dbaccess.ui", "OCopyTableWizard::showColumnTypeNotSupported" );
     String sMessage( ModuleRes( STR_UNKNOWN_TYPE_FOUND ) );
     sMessage.SearchAndReplaceAscii("#1",_rColumnName);
     showError(sMessage);
