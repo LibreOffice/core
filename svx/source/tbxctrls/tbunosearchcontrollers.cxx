@@ -48,6 +48,7 @@ static const char SEARCHITEM_SEARCHSTRING[] = "SearchItem.SearchString";
 static const char SEARCHITEM_SEARCHBACKWARD[] = "SearchItem.Backward";
 static const char SEARCHITEM_SEARCHFLAGS[] = "SearchItem.SearchFlags";
 static const char SEARCHITEM_TRANSLITERATEFLAGS[] = "SearchItem.TransliterateFlags";
+static const char SEARCHITEM_ALGORITHMTYPE[] = "SearchItem.AlgorithmType";
 
 static const char COMMAND_EXECUTESEARCH[] = ".uno:ExecuteSearch";
 static const char COMMAND_FINDTEXT[] = ".uno:FindText";
@@ -92,7 +93,7 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
         }
     }
 
-    css::uno::Sequence< css::beans::PropertyValue > lArgs(5);
+    css::uno::Sequence< css::beans::PropertyValue > lArgs(6);
     lArgs[0].Name = OUString(SEARCHITEM_SEARCHSTRING);
     lArgs[0].Value <<= sFindText;
     lArgs[1].Name = OUString(SEARCHITEM_SEARCHBACKWARD);
@@ -108,6 +109,8 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
     lArgs[4].Name = OUString(SEARCHITEM_COMMAND);
     lArgs[4].Value <<= (sal_Int16)(aFindAll ?
         SVX_SEARCHCMD_FIND_ALL : SVX_SEARCHCMD_FIND );
+    lArgs[5].Name = OUString(SEARCHITEM_ALGORITHMTYPE);
+    lArgs[5].Value <<= (sal_Int16)0;  // 0 == SearchAlgorithms_ABSOLUTE
 
     css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(xFrame, css::uno::UNO_QUERY);
     if ( xDispatchProvider.is() )
