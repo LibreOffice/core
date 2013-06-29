@@ -25,7 +25,6 @@
 #include "cppu/helper/purpenv/Environment.hxx"
 #include "cppu/helper/purpenv/Mapping.hxx"
 #include "cppu/EnvDcp.hxx"
-#include "rtl/logfile.hxx"
 #include "uno/environment.hxx"
 #include <com/sun/star/uno/Type.hxx>
 #include <boost/unordered_map.hpp>
@@ -135,63 +134,63 @@ int LogBridge::v_isValid(rtl::OUString * pReason)
             case typelib_TypeClass_STRING:
                 {
                     const ::rtl::OString sValue( ::rtl::OUStringToOString(*static_cast< ::rtl::OUString*>(pArg),osl_getThreadTextEncoding()));
-                    rtl_logfile_trace( "%s", sValue.getStr());
+                    SAL_INFO("cppu", "" << sValue.getStr());
                 }
                 break;
             case typelib_TypeClass_BOOLEAN:
-                rtl_logfile_trace( "%d", *static_cast<sal_Bool*>(pArg));
+               SAL_INFO("cppu", "" << *static_cast<sal_Bool*>(pArg));
                 break;
             case typelib_TypeClass_BYTE:
-                rtl_logfile_trace( "%d", *static_cast<sal_Int8*>(pArg));
+               SAL_INFO("cppu", "" << *static_cast<sal_Int8*>(pArg));
                 break;
             case typelib_TypeClass_CHAR:
-                rtl_logfile_trace( "%c", *static_cast<sal_Char*>(pArg));
+               SAL_INFO("cppu", "" << *static_cast<sal_Char*>(pArg));
                 break;
             case typelib_TypeClass_SHORT:
             case typelib_TypeClass_UNSIGNED_SHORT:
-                rtl_logfile_trace( "%d", *static_cast<sal_Int16*>(pArg));
+               SAL_INFO("cppu", "" << *static_cast<sal_Int16*>(pArg));
                 break;
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
             case typelib_TypeClass_ENUM:
-                rtl_logfile_trace( "%d", *static_cast<sal_Int32*>(pArg));
+               SAL_INFO("cppu", "" << *static_cast<sal_Int32*>(pArg));
                 break;
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
-                rtl_logfile_trace( "%d", *static_cast<sal_Int64*>(pArg));
+               SAL_INFO("cppu", "" << *static_cast<sal_Int64*>(pArg));
                 break;
             case typelib_TypeClass_FLOAT:
-                rtl_logfile_trace( "%f", *static_cast<float*>(pArg));
+               SAL_INFO("cppu", "" << *static_cast<float*>(pArg));
                 break;
             case typelib_TypeClass_DOUBLE:
-                rtl_logfile_trace( "%f", *static_cast<double*>(pArg));
+               SAL_INFO("cppu", "" << *static_cast<double*>(pArg));
                 break;
             case typelib_TypeClass_TYPE:
                 {
                     const ::rtl::OString sValue( ::rtl::OUStringToOString(((com::sun::star::uno::Type*)pArg)->getTypeName(),osl_getThreadTextEncoding()));
-                    rtl_logfile_trace( "%s", sValue.getStr());
+                   SAL_INFO("cppu", "" << sValue.getStr());
                 }
                 break;
             case typelib_TypeClass_ANY:
                 if ( static_cast<uno_Any*>(pArg)->pData )
                     traceValue(static_cast<uno_Any*>(pArg)->pType,static_cast<uno_Any*>(pArg)->pData);
                 else
-                    rtl_logfile_trace( "void");
+                   SAL_INFO("cppu", "void");
                 break;
             case typelib_TypeClass_EXCEPTION:
-                rtl_logfile_trace( "exception");
+               SAL_INFO("cppu", "exception");
                 break;
             case typelib_TypeClass_INTERFACE:
                 {
                     const ::rtl::OString sValue( ::rtl::OUStringToOString(_pTypeRef->pTypeName,osl_getThreadTextEncoding()));
-                    rtl_logfile_trace( "%s 0x%p", sValue.getStr(),pArg);
+                   SAL_INFO("cppu", "" << sValue.getStr() << "0x" << std::hex << pArg);
                 }
                 break;
             case typelib_TypeClass_VOID:
-                rtl_logfile_trace( "void");
+               SAL_INFO("cppu", "void");
                 break;
             default:
-                rtl_logfile_trace( "0x%p", pArg);
+               SAL_INFO("cppu", "0x" << std::hex << pArg);
                 break;
         } // switch(pParams[i].pTypeRef->eTypeClass)
     }
@@ -209,46 +208,45 @@ void LogProbe(
     void                              * pArgs[],
     uno_Any                          ** ppException )
 {
-    static ::std::auto_ptr< ::rtl::Logfile> pLogger;
     ::rtl::OString sTemp;
     if ( pMemberType && pMemberType->pTypeName )
         sTemp = ::rtl::OUStringToOString(pMemberType->pTypeName,RTL_TEXTENCODING_ASCII_US);
     if ( pre  )
     {
-        rtl_logfile_longTrace( "{ LogBridge () %s", sTemp.getStr() );
+        SAL_INFO("cppu", "{ LogBridge () " << sTemp.getStr() );
         if ( nParams )
         {
-            rtl_logfile_trace( "\n| : ( LogBridge ");
+           SAL_INFO("cppu", "\n| : ( LogBridge ");
             for(sal_Int32 i = 0;i < nParams;++i)
             {
                 if ( i > 0 )
-                    rtl_logfile_trace( ",");
+                   SAL_INFO("cppu", ",");
                 traceValue(pParams[i].pTypeRef,pArgs[i]);
 
             }
-            rtl_logfile_trace( ")");
+           SAL_INFO("cppu", ")");
         } // if ( nParams )
-        rtl_logfile_trace( "\n");
+       SAL_INFO("cppu", "\n");
     }
     else if ( !pre )
     {
-        rtl_logfile_longTrace( "} LogBridge () %s",sTemp.getStr());
+        SAL_INFO("cppu", "} LogBridge () " << sTemp.getStr());
         if ( ppException && *ppException )
         {
-            rtl_logfile_trace( " excption occurred : ");
+           SAL_INFO("cppu", " exception occurred : ");
             typelib_TypeDescription * pElementTypeDescr = 0;
             TYPELIB_DANGER_GET( &pElementTypeDescr, (*ppException)->pType );
             const ::rtl::OString sValue( ::rtl::OUStringToOString(pElementTypeDescr->pTypeName,osl_getThreadTextEncoding()));
-            rtl_logfile_trace( "%s", sValue.getStr());
+           SAL_INFO("cppu", "" << sValue.getStr());
             TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         }
         else if ( pReturnTypeRef )
         {
-            rtl_logfile_trace( " return : ");
+           SAL_INFO("cppu", " return : ");
             traceValue(pReturnTypeRef,pReturn);
         } // if ( pReturn && pReturnTypeRef )
 
-        rtl_logfile_trace( "\n");
+       SAL_INFO("cppu", "\n");
     }
 }
 

@@ -30,7 +30,6 @@
 #include <tools/diagnose_ex.h>
 
 #include <comphelper/sequence.hxx>
-#include <rtl/logfile.hxx>
 #include "rtl/instance.hxx"
 
 

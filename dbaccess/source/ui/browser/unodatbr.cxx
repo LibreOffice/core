@@ -126,7 +126,6 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/wrkwin.hxx>
-#include <rtl/logfile.hxx>
 
 #include <memory>
 
@@ -241,7 +240,7 @@ SbaTableQueryBrowser::~SbaTableQueryBrowser()
     DBG_DTOR(SbaTableQueryBrowser,NULL);
     if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
-        OSL_FAIL("Please check who doesn't dispose this component!");
+        SAL_WARN("dbaccess", "Please check who doesn't dispose this component!");
         // increment ref count to prevent double call of Dtor
         osl_atomic_increment( &m_refCount );
         dispose();
@@ -367,7 +366,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
     }
     catch(const Exception&)
     {
-        OSL_FAIL("SbaTableQueryBrowser::Construct: could not create (or start listening at) the database context!");
+        SAL_WARN("dbaccess", "SbaTableQueryBrowser::Construct: could not create (or start listening at) the database context!");
     }
     // some help ids
     if (getBrowserView() && getBrowserView()->getVclControl())
@@ -1274,7 +1273,7 @@ SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const OUString& _rDataSour
                             }
                             catch(const Exception&)
                             {
-                                OSL_FAIL("SbaTableQueryBrowser::populateTree: could not fill the tree");
+                                SAL_WARN("dbaccess", "SbaTableQueryBrowser::populateTree: could not fill the tree");
                             }
                         }
                     }
@@ -1344,7 +1343,7 @@ void SbaTableQueryBrowser::connectExternalDispatches()
 
             if ( feature->second.xDispatcher.get() == static_cast< XDispatch* >( this ) )
             {
-                OSL_FAIL( "SbaTableQueryBrowser::connectExternalDispatches: this should not happen anymore!" );
+                SAL_WARN("dbaccess",  "SbaTableQueryBrowser::connectExternalDispatches: this should not happen anymore!" );
                     // (nowadays, the URLs aren't in our SupportedFeatures list anymore, so we should
                     // not supply a dispatcher for this)
                 feature->second.xDispatcher.clear();
@@ -1466,7 +1465,7 @@ void SbaTableQueryBrowser::implRemoveStatusListeners()
             }
             catch (Exception&)
             {
-                OSL_FAIL("SbaTableQueryBrowser::implRemoveStatusListeners: could not remove a status listener!");
+                SAL_WARN("dbaccess", "SbaTableQueryBrowser::implRemoveStatusListeners: could not remove a status listener!");
             }
         }
     }
@@ -1491,7 +1490,7 @@ sal_Bool SAL_CALL SbaTableQueryBrowser::select( const Any& _rSelection ) throw (
     }
     catch(const Exception&)
     {
-        OSL_FAIL("SbaTableQueryBrowser::select: could not extract the descriptor!");
+        SAL_WARN("dbaccess", "SbaTableQueryBrowser::select: could not extract the descriptor!");
     }
 
     // check the precense of the props we need
@@ -1824,7 +1823,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                 }
                 catch(DisposedException&)
                 {
-                    OSL_FAIL("SbaTableQueryBrowser::GetState: object already disposed!");
+                    SAL_WARN("dbaccess", "SbaTableQueryBrowser::GetState: object already disposed!");
                 }
                 catch( const Exception& )
                 {
@@ -1847,7 +1846,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                         case CommandType::COMMAND:
                             sTitle = OUString(ModuleRes(STR_QRY_TITLE)); break;
                         default:
-                            OSL_FAIL("SbaTableQueryBrowser::GetState: unknown command type!");
+                            SAL_WARN("dbaccess", "SbaTableQueryBrowser::GetState: unknown command type!");
                     }
                     OUString aName;
                     xProp->getPropertyValue(PROPERTY_COMMAND) >>= aName;
@@ -2022,11 +2021,11 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                     }
                     catch(DisposedException&)
                     {
-                        OSL_FAIL("Object already disposed!");
+                        SAL_WARN("dbaccess", "Object already disposed!");
                     }
                     catch(const Exception&)
                     {
-                        OSL_FAIL("SbaTableQueryBrowser::Execute(ID_BROWSER_?): could not clone the cursor!");
+                        SAL_WARN("dbaccess", "SbaTableQueryBrowser::Execute(ID_BROWSER_?): could not clone the cursor!");
                     }
 
                     Reference<XPropertySet> xProp(getRowSet(),UNO_QUERY);
@@ -2193,7 +2192,7 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
     }
     catch(const Exception&)
     {
-        OSL_FAIL("SbaTableQueryBrowser::populateTree: could not fill the tree");
+        SAL_WARN("dbaccess", "SbaTableQueryBrowser::populateTree: could not fill the tree");
     }
 }
 
@@ -2299,7 +2298,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvTreeListEntry*, _pParent)
                 if(e.TargetException >>= aSql)
                     aInfo = aSql;
                 else
-                    OSL_FAIL("SbaTableQueryBrowser::OnExpandEntry: something strange happended!");
+                    SAL_WARN("dbaccess", "SbaTableQueryBrowser::OnExpandEntry: something strange happended!");
             }
             catch( const Exception& )
             {
@@ -2389,7 +2388,7 @@ sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvTreeListEntry* _pEntry )
                             bSuccess = pEntryData->xContainer.is();
                         }
                         else {
-                            OSL_FAIL("SbaTableQueryBrowser::ensureEntryObject: no XQueryDefinitionsSupplier interface!");
+                            SAL_WARN("dbaccess", "SbaTableQueryBrowser::ensureEntryObject: no XQueryDefinitionsSupplier interface!");
                         }
                     }
                     catch( const Exception& )
@@ -2401,7 +2400,7 @@ sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvTreeListEntry* _pEntry )
             break;
 
         default:
-            OSL_FAIL("SbaTableQueryBrowser::ensureEntryObject: ooops ... missing some implementation here!");
+            SAL_WARN("dbaccess", "SbaTableQueryBrowser::ensureEntryObject: ooops ... missing some implementation here!");
             // TODO ...
             break;
     }
@@ -2772,7 +2771,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
             if(e.TargetException >>= aSql)
                 showError(SQLExceptionInfo(aSql));
             else
-                OSL_FAIL("SbaTableQueryBrowser::implSelect: something strange happended!");
+                SAL_WARN("dbaccess", "SbaTableQueryBrowser::implSelect: something strange happended!");
             // reset the values
             xRowSetProps->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
             xRowSetProps->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,Any());
@@ -2973,7 +2972,7 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
     }
     else if (xNames.get() == m_xDatabaseContext.get())
     {   // a datasource has been replaced in the context
-        OSL_FAIL("SbaTableQueryBrowser::elementReplaced: no support for replaced data sources!");
+        SAL_WARN("dbaccess", "SbaTableQueryBrowser::elementReplaced: no support for replaced data sources!");
             // very suspicious: the database context should not allow to replace data source, only to register
             // and revoke them
     }
@@ -3111,11 +3110,11 @@ void SbaTableQueryBrowser::unloadAndCleanup( sal_Bool _bDisposeConnection )
         if(e.TargetException >>= aSql)
             showError(SQLExceptionInfo(aSql));
         else
-            OSL_FAIL("SbaTableQueryBrowser::unloadAndCleanup: something strange happended!");
+            SAL_WARN("dbaccess", "SbaTableQueryBrowser::unloadAndCleanup: something strange happended!");
     }
     catch(const Exception&)
     {
-        OSL_FAIL("SbaTableQueryBrowser::unloadAndCleanup: could not reset the form");
+        SAL_WARN("dbaccess", "SbaTableQueryBrowser::unloadAndCleanup: could not reset the form");
     }
 }
 
@@ -3276,7 +3275,7 @@ void SbaTableQueryBrowser::impl_initialize()
                     }
                     catch( const Exception& )
                     {
-                        OSL_FAIL( "SbaTableQueryBrowser::impl_initialize: a connection parent which does not have a 'Name'!??" );
+                        SAL_WARN("dbaccess",  "SbaTableQueryBrowser::impl_initialize: a connection parent which does not have a 'Name'!??" );
                     }
                 }
             }
@@ -3313,7 +3312,7 @@ void SbaTableQueryBrowser::impl_initialize()
         }
         catch(const Exception&)
         {
-            OSL_FAIL("SbaTableQueryBrowser::impl_initialize: could not set the update related names!");
+            SAL_WARN("dbaccess", "SbaTableQueryBrowser::impl_initialize: could not set the update related names!");
         }
     }
 
@@ -3474,7 +3473,7 @@ IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortDa
         if ( ( eLeft == etQueryContainer ) && ( eRight == etTableContainer ) )
             return COMPARE_LESS;
 
-        OSL_FAIL( "SbaTableQueryBrowser::OnTreeEntryCompare: unexpected case!" );
+        SAL_WARN("dbaccess",  "SbaTableQueryBrowser::OnTreeEntryCompare: unexpected case!" );
         return COMPARE_EQUAL;
     }
 
@@ -3624,7 +3623,7 @@ Any SbaTableQueryBrowser::getCurrentSelection( Control& _rControl ) const
         break;
 
     default:
-        OSL_FAIL( "SbaTableQueryBrowser::getCurrentSelection: invalid (unexpected) object type!" );
+        SAL_WARN("dbaccess",  "SbaTableQueryBrowser::getCurrentSelection: invalid (unexpected) object type!" );
         break;
     }
 

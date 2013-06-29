@@ -22,7 +22,6 @@
 #include <osl/process.h>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/implementationentry.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 

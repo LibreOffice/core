@@ -23,7 +23,6 @@
 #include <list>
 #include <memory>
 #include <editeng/unolingu.hxx>
-#include <rtl/logfile.hxx>
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -849,7 +848,7 @@ short SvxDicError( Window *pParent, sal_Int16 nError )
             case DIC_ERR_READONLY : nRid = RID_SVXSTR_DIC_ERR_READONLY;  break;
             default:
                 nRid = RID_SVXSTR_DIC_ERR_UNKNOWN;
-                OSL_FAIL("unexpected case");
+                SAL_WARN("editeng", "unexpected case");
         }
         nRes = InfoBox( pParent, EE_RESSTR( nRid ) ).Execute();
     }

@@ -50,7 +50,6 @@
 #include "definitioncolumn.hxx"
 #include "objectnameapproval.hxx"
 #include <tools/string.hxx>
-#include <rtl/logfile.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace dbaccess;
@@ -87,7 +86,7 @@ namespace
                 }
                 catch(const Exception&)
                 {
-                    OSL_FAIL( "lcl_isPropertySetDefaulted: Exception caught!" );
+                    SAL_WARN("dbaccess", "lcl_isPropertySetDefaulted: Exception caught!" );
                 }
             }
             return ( pIter == pEnd );
@@ -118,13 +117,13 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
 
 OTableContainer::~OTableContainer()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::OTableContainer" );
+   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::OTableContainer" );
     DBG_DTOR(OTableContainer, NULL);
 }
 
 void OTableContainer::removeMasterContainerListener()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::removeMasterContainerListener" );
+   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::removeMasterContainerListener" );
     try
     {
         Reference<XContainer> xCont( m_xMasterContainer, UNO_QUERY_THROW );
@@ -174,7 +173,7 @@ void lcl_createDefintionObject(const OUString& _rName
 
 connectivity::sdbcx::ObjectType OTableContainer::createObject(const OUString& _rName)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::createObject" );
+   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::createObject" );
     Reference<XColumnsSupplier > xSup;
     if(m_xMasterContainer.is() && m_xMasterContainer->hasByName(_rName))
         xSup.set(m_xMasterContainer->getByName(_rName),UNO_QUERY);
@@ -246,7 +245,7 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const OUString& _r
 
 Reference< XPropertySet > OTableContainer::createDescriptor()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::createDescriptor" );
+   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::createDescriptor" );
     Reference< XPropertySet > xRet;
 
     // first we have to look if the master tables support this
@@ -272,7 +271,7 @@ Reference< XPropertySet > OTableContainer::createDescriptor()
 // XAppend
 ObjectType OTableContainer::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::appendObject" );
+   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::appendObject" );
     // append the new table with a create stmt
     OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
     if(m_xMasterContainer.is() && m_xMasterContainer->hasByName(aName))
@@ -359,7 +358,7 @@ ObjectType OTableContainer::appendObject( const OUString& _rForName, const Refer
 // XDrop
 void OTableContainer::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::dropObject" );
+   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::dropObject" );
     m_bInDrop = sal_True;
     try
     {
@@ -423,7 +422,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 
 void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::elementInserted" );
+   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::elementInserted" );
     ::osl::MutexGuard aGuard(m_rMutex);
     OUString sName;
     Event.Accessor >>= sName;
@@ -442,12 +441,12 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
 
 void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::elementRemoved" );
+   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::elementRemoved" );
 }
 
 void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::elementReplaced" );
+   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::elementReplaced" );
     // create a new config entry
     {
         OUString sOldComposedName,sNewComposedName;
@@ -460,7 +459,7 @@ void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event ) th
 
 void SAL_CALL OTableContainer::disposing()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::disposing" );
+   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::disposing" );
     OFilteredContainer::disposing();
     // say goodbye to our listeners
     m_xTableDefinitions = NULL;
@@ -469,7 +468,7 @@ void SAL_CALL OTableContainer::disposing()
 
 void SAL_CALL OTableContainer::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::disposing" );
+   SAL_INFO("dbaccess", "dbaccess Ocke.Janssen@sun.com OTableContainer::disposing" );
 }
 
 void OTableContainer::addMasterContainerListener()
