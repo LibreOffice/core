@@ -963,10 +963,10 @@ void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogic
     }
 }
 
-void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries
-                            , const uno::Reference< drawing::XShapes >& xTarget
-                            , const uno::Reference< drawing::XShapes >& xEquationTarget
-                            , bool bMaySkipPointsInRegressionCalculation )
+void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
+                            const uno::Reference< drawing::XShapes >& xTarget,
+                            const uno::Reference< drawing::XShapes >& xEquationTarget,
+                            bool bMaySkipPointsInRegressionCalculation )
 {
     if(m_nDimension!=2)
         return;
@@ -977,6 +977,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries
 
     uno::Sequence< uno::Reference< XRegressionCurve > > aCurveList =
         xRegressionContainer->getRegressionCurves();
+
     for(sal_Int32 nN=0; nN<aCurveList.getLength(); nN++)
     {
         uno::Reference< beans::XPropertySet > xProperties( aCurveList[nN], uno::UNO_QUERY );
@@ -1039,6 +1040,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries
                 fMinX, fMaxX, nRegressionPointCount, xScalingX, xScalingY, bMaySkipPointsInRegressionCalculation ));
         nRegressionPointCount = aCalculatedPoints.getLength();
         bool bAverageLine = RegressionCurveHelper::isMeanValueLine( aCurveList[nN] );
+
         for(sal_Int32 nP=0; nP<nRegressionPointCount; nP++)
         {
             double fLogicX = aCalculatedPoints[nP].X;
@@ -1049,9 +1051,9 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries
             if(!bAverageLine)
                 m_pPosHelper->doLogicScaling( &fLogicX, &fLogicY, &fLogicZ );
 
-            if(    !::rtl::math::isNan(fLogicX) && !::rtl::math::isInf(fLogicX)
-                    && !::rtl::math::isNan(fLogicY) && !::rtl::math::isInf(fLogicY)
-                    && !::rtl::math::isNan(fLogicZ) && !::rtl::math::isInf(fLogicZ) )
+            if(!rtl::math::isNan(fLogicX) && !rtl::math::isInf(fLogicX) &&
+               !rtl::math::isNan(fLogicY) && !rtl::math::isInf(fLogicY) &&
+               !rtl::math::isNan(fLogicZ) && !rtl::math::isInf(fLogicZ) )
             {
                 aRegressionPoly.SequenceX[0][nRealPointCount] = fLogicX;
                 aRegressionPoly.SequenceY[0][nRealPointCount] = fLogicY;
@@ -1070,9 +1072,8 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries
         awt::Point aDefaultPos;
         if( aRegressionPoly.SequenceX.getLength() && aRegressionPoly.SequenceX[0].getLength() )
         {
-            uno::Reference< beans::XPropertySet > xCurveModelProp( aCurveList[nN], uno::UNO_QUERY );
             VLineProperties aVLineProperties;
-            aVLineProperties.initFromPropertySet( xCurveModelProp );
+            aVLineProperties.initFromPropertySet( xProperties );
 
             //create an extra group shape for each curve for selection handling
             uno::Reference< drawing::XShapes > xRegressionGroupShapes =
