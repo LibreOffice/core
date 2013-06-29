@@ -11,6 +11,8 @@
 #include "conditio.hxx"
 #include <formula/funcutl.hxx>
 
+#include <svl/lstner.hxx>
+
 class ScIconSetFrmtDataEntry;
 
 namespace condformat {
@@ -76,7 +78,7 @@ public:
     virtual condformat::entry::ScCondFrmtEntryType GetType() = 0;
 };
 
-class ScConditionFrmtEntry : public ScCondFrmtEntry
+class ScConditionFrmtEntry : public ScCondFrmtEntry, public SfxListener
 {
     //cond format ui elements
     ListBox maLbCondType;
@@ -85,6 +87,7 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry
     FixedText maFtStyle;
     ListBox maLbStyle;
     SvxFontPrevWindow maWdPreview;
+    bool mbIsInStyleCreate;
 
     ScFormatEntry* createConditionEntry() const;
 
@@ -99,6 +102,9 @@ public:
     virtual ScFormatEntry* GetEntry() const;
     virtual void SetActive();
     virtual void SetInactive();
+
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    using ScCondFrmtEntry::Notify;
 
     virtual condformat::entry::ScCondFrmtEntryType GetType() { return condformat::entry::CONDITION; }
 };
@@ -219,7 +225,7 @@ public:
     virtual condformat::entry::ScCondFrmtEntryType GetType() { return condformat::entry::DATABAR; }
 };
 
-class ScDateFrmtEntry : public ScCondFrmtEntry
+class ScDateFrmtEntry : public ScCondFrmtEntry, public SfxListener
 {
 public:
     ScDateFrmtEntry( Window* pParent, ScDocument* pDoc, const ScCondDateFormatEntry* pFormat = NULL );
@@ -228,6 +234,8 @@ public:
     virtual void SetInactive();
     virtual condformat::entry::ScCondFrmtEntryType GetType() { return condformat::entry::DATE; }
 
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    using ScCondFrmtEntry::Notify;
 protected:
     virtual OUString GetExpressionString();
 
@@ -240,6 +248,8 @@ private:
     FixedText maFtStyle;
     ListBox maLbStyle;
     SvxFontPrevWindow maWdPreview;
+
+    bool mbIsInStyleCreate;
 };
 
 class ScIconSetFrmtEntry : public ScCondFrmtEntry
