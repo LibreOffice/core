@@ -654,7 +654,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         case MailMergeType::FILE    : nMergeType = DBMGR_MERGE_MAILFILES; break;
         case MailMergeType::MAIL    : nMergeType = DBMGR_MERGE_MAILING; break;
         default:
-            throw IllegalArgumentException( OUString( "Invalid value of property:" ) + "OutputType", static_cast < cppu::OWeakObject * > ( this ), 0 );
+            throw IllegalArgumentException("Invalid value of property: OutputType", static_cast < cppu::OWeakObject * > ( this ), 0 );
     }
 
     SwNewDBMgr* pMgr = rSh.GetNewDBMgr();
