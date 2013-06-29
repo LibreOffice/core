@@ -192,8 +192,10 @@ void ConverterTest::testDateTime()
     doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1), "0001-01-01T00:00:00" );
     doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1),
             "0001-01-01T00:00:00Z", "0001-01-01T00:00:00" );
-//    doTest( util::DateTime(0, 0, 0, 0, 1, 1, -1), "-0001-01-01T00:00:00" );
-//    doTest( util::DateTime(0, 0, 0, 0, 1, 1, -1), "-0001-01-01T00:00:00Z" );
+    doTest( util::DateTime(0, 0, 0, 0, 1, 1, -1), "-0001-01-01T00:00:00");
+//    doTest( util::DateTime(0, 0, 0, 0, 1, 1, -1), "-0001-01-01T00:00:00Z");
+    doTest( util::DateTime(0, 0, 0, 0, 1, 1, -324),
+            "-0324-01-01T00:00:00" );
     doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1),
             "0001-01-01T00:00:00-00:00", "0001-01-01T00:00:00" );
     doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1),
