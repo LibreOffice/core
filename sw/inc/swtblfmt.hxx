@@ -77,10 +77,7 @@ protected:
     SwTableLineFormat* m_pEvnColFormat;
 
 public:
-    TYPEINFO_OVERRIDE();     // Already in base class Content.
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwTableFormat)
-
+    SwTableFormat( SwTableFormat& rNew );
     SwTableFormat& operator=( const SwTableFormat& rNew );
 
     void SetFirstLineFormat( SwTableLineFormat* pNew ) { m_pFstLineFormat = pNew; }
@@ -118,6 +115,12 @@ public:
     sal_Bool GetRowSplit() const;
     sal_uInt16 GetRepeatHeading() const;
 
+    void CopyTableFormatInfo( SwTableFormat* pTableFormat );
+
+    TYPEINFO_OVERRIDE();     // Already in base class Content.
+
+    DECL_FIXEDMEMPOOL_NEWDEL(SwTableFormat)
+
     virtual bool supportsFullDrawingLayerFillAttributeSet() const SAL_OVERRIDE;
 };
 
@@ -136,9 +139,8 @@ protected:
     SwTableBoxFormat* m_pEvnBoxFormat;
 
 public:
-    TYPEINFO_OVERRIDE();     // Already in base class Content.
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwTableLineFormat)
+    SwTableLineFormat( SwTableLineFormat& rNew );
+    SwTableLineFormat& operator=( const SwTableLineFormat& rNew );
 
     void SetFirstBoxFormat( SwTableBoxFormat* pNew ) { m_pFstBoxFormat = pNew; }
     void SetLastBoxFormat( SwTableBoxFormat* pNew ) { m_pLstBoxFormat = pNew; }
@@ -149,6 +151,10 @@ public:
     SwTableBoxFormat* GetLastBoxFormat() { return m_pLstBoxFormat; }
     SwTableBoxFormat* GetOddBoxFormat() { return m_pOddBoxFormat; }
     SwTableBoxFormat* GetEvenBoxFormat() { return m_pEvnBoxFormat; }
+
+    TYPEINFO_OVERRIDE();     // Already in base class Content.
+
+    DECL_FIXEDMEMPOOL_NEWDEL(SwTableLineFormat)
 
     virtual bool supportsFullDrawingLayerFillAttributeSet() const SAL_OVERRIDE;
 };

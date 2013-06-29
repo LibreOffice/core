@@ -69,6 +69,20 @@ SwTableFormat::SwTableFormat( SwAttrPool& rPool, const OUString &rFormatNm,
         m_pEvnColFormat = pDoc->MakeTableLineFormat();
     }
 
+SwTableFormat::SwTableFormat( SwTableFormat& rNew )
+    : SwFrameFormat( (SwFrameFormat)rNew )
+    {
+        *m_pFstLineFormat = SwTableLineFormat( *rNew.GetFirstLineFormat() );
+        *m_pLstLineFormat = SwTableLineFormat( *rNew.GetLastLineFormat() );
+        *m_pOddLineFormat = SwTableLineFormat( *rNew.GetOddLineFormat() );
+        *m_pEvnLineFormat = SwTableLineFormat( *rNew.GetEvenLineFormat() );
+
+        *m_pFstColFormat = SwTableLineFormat( *rNew.GetFirstColFormat() );
+        *m_pLstColFormat = SwTableLineFormat( *rNew.GetLastColFormat() );
+        *m_pOddColFormat = SwTableLineFormat( *rNew.GetOddColFormat() );
+        *m_pEvnColFormat = SwTableLineFormat( *rNew.GetEvenColFormat() );
+    }
+
 SwTableFormat& SwTableFormat::operator=( const SwTableFormat& rNew )
     {
         if (&rNew == this)
@@ -152,6 +166,19 @@ sal_uInt16 SwTableFormat::GetRepeatHeading() const
     return (static_cast<const SfxUInt16Item&>( GetFormatAttr( FN_PARAM_TABLE_HEADLINE ) )).GetValue();
 }
 
+void SwTableFormat::CopyTableFormatInfo( SwTableFormat* pTableFormat )
+{
+    *m_pFstLineFormat = SwTableLineFormat ( *pTableFormat->GetFirstLineFormat() );
+    *m_pLstLineFormat = SwTableLineFormat ( *pTableFormat->GetLastLineFormat() );
+    *m_pOddLineFormat = SwTableLineFormat ( *pTableFormat->GetOddLineFormat() );
+    *m_pEvnLineFormat = SwTableLineFormat ( *pTableFormat->GetEvenLineFormat() );
+
+    *m_pFstColFormat = SwTableLineFormat ( *pTableFormat->GetFirstColFormat() );
+    *m_pLstColFormat = SwTableLineFormat ( *pTableFormat->GetLastColFormat() );
+    *m_pOddColFormat = SwTableLineFormat ( *pTableFormat->GetOddColFormat() );
+    *m_pEvnColFormat = SwTableLineFormat ( *pTableFormat->GetEvenColFormat() );
+}
+
 SwTableLineFormat::SwTableLineFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
                     SwFrameFormat *pDrvdFrm )
     : SwFrameFormat( rPool, pFormatNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
@@ -174,6 +201,28 @@ SwTableLineFormat::SwTableLineFormat( SwAttrPool& rPool, const OUString &rFormat
         m_pLstBoxFormat = pDoc->MakeTableBoxFormat();
         m_pOddBoxFormat = pDoc->MakeTableBoxFormat();
         m_pEvnBoxFormat = pDoc->MakeTableBoxFormat();
+    }
+
+SwTableLineFormat::SwTableLineFormat( SwTableLineFormat& rNew )
+    : SwFrameFormat( (SwFrameFormat)rNew )
+    {
+        *m_pFstBoxFormat = SwTableBoxFormat( *rNew.GetFirstBoxFormat() );
+        *m_pLstBoxFormat = SwTableBoxFormat( *rNew.GetLastBoxFormat() );
+        *m_pOddBoxFormat = SwTableBoxFormat( *rNew.GetOddBoxFormat() );
+        *m_pEvnBoxFormat = SwTableBoxFormat( *rNew.GetEvenBoxFormat() );
+    }
+
+SwTableLineFormat& SwTableLineFormat::operator=( const SwTableLineFormat& rNew )
+    {
+        if (&rNew == this)
+                return *this;
+
+        m_pFstBoxFormat = rNew.m_pFstBoxFormat;
+        m_pLstBoxFormat = rNew.m_pLstBoxFormat;
+        m_pOddBoxFormat = rNew.m_pOddBoxFormat;
+        m_pEvnBoxFormat = rNew.m_pEvnBoxFormat;
+
+        return *this;
     }
 
 SwTableBoxFormat::SwTableBoxFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
