@@ -60,7 +60,7 @@ public:
     ::com::sun::star::uno::Reference< css::media::XFrameGrabber > SAL_CALL createFrameGrabber();
 
     ::rtl::OUString SAL_CALL getImplementationName();
-    ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName );
+    ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName );
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames();
 };
 
