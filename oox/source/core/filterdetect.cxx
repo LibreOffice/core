@@ -633,7 +633,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
 #if USE_TLS_NSS
                 // Retrieve the valid key so we can get its size later
                 SequenceAsHashMap aHashData( aEncryptionData );
-                Sequence<sal_Int8> validKey( aHashData.getUnpackedValueOrDefault( OUString("AES128EncryptionKey"), Sequence<sal_Int8>() ) );
+                Sequence<sal_Int8> validKey( aHashData.getUnpackedValueOrDefault("AES128EncryptionKey", Sequence<sal_Int8>() ) );
 
                 PK11SlotInfo *aSlot( PK11_GetBestSlot( CKM_AES_ECB, NULL ) );
                 sal_uInt8 *key = new sal_uInt8[ validKey.getLength() ];

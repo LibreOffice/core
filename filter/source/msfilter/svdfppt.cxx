@@ -7358,7 +7358,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                         aXFillBitmapItem.GetGraphicObject().GetUniqueID(),
                         RTL_TEXTENCODING_ASCII_US);
 
-                    xPropSet->setPropertyValue( OUString("FillBitmapURL"), Any( aURL ) );
+                    xPropSet->setPropertyValue("FillBitmapURL", Any( aURL ) );
 
                     const XFillBmpStretchItem aStretchItem(( const XFillBmpStretchItem&)pObj->GetMergedItem( XATTR_FILLBMP_STRETCH ));
                     const XFillBmpTileItem aTileItem(( const XFillBmpTileItem&)pObj->GetMergedItem( XATTR_FILLBMP_TILE ));

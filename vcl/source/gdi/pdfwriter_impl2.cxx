@@ -220,7 +220,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                         if ( xPropSet.is() )
                         {
                             sal_Int16 nBitsPerPixel = 24;
-                            if ( xPropSet->getPropertyValue( OUString("BitsPerPixel") ) >>= nBitsPerPixel )
+                            if ( xPropSet->getPropertyValue("BitsPerPixel") >>= nBitsPerPixel )
                             {
                                 bTrueColorJPG = nBitsPerPixel != 8;
                             }

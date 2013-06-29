@@ -1226,7 +1226,7 @@ void AssignmentPersistentData::Commit()
                 if ( xProp.is() )
                 {
                     OUString sName;
-                    xProp->getPropertyValue(OUString("DataSourceName")) >>= sName;
+                    xProp->getPropertyValue("DataSourceName") >>= sName;
 
                     INetURLObject aURL( sName );
                     if( aURL.GetProtocol() != INET_PROT_NOT_VALID )

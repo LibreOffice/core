@@ -596,7 +596,7 @@ void ToolbarMenuAcc::ThrowIfDisposed (void) throw (DisposedException)
 {
     if(rBHelper.bDisposed || rBHelper.bInDispose || !mpParent)
     {
-        throw DisposedException ( OUString("object has been already disposed"), static_cast<XWeak*>(this));
+        throw DisposedException ("object has been already disposed", static_cast<XWeak*>(this));
     }
 }
 

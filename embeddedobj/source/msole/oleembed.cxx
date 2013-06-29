@@ -274,7 +274,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
           && ( aFilterName == "Calc MS Excel 2007 XML" || aFilterName == "Impress MS PowerPoint 2007 XML" || aFilterName == "MS Word 2007 XML" ) )
         {
             uno::Reference< container::XNameAccess > xFilterFactory(
-                m_xFactory->createInstance( OUString( "com.sun.star.document.FilterFactory" )),
+                m_xFactory->createInstance("com.sun.star.document.FilterFactory"),
                 uno::UNO_QUERY_THROW );
 
             OUString aDocServiceName;
@@ -326,7 +326,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 xDocument->close( sal_True );
                 uno::Reference< beans::XPropertySet > xStorProps( xTmpStorage, uno::UNO_QUERY_THROW );
                 OUString aMediaType;
-                xStorProps->getPropertyValue( OUString( "MediaType" ) ) >>= aMediaType;
+                xStorProps->getPropertyValue("MediaType") >>= aMediaType;
                 xTmpStorage->dispose();
 
                 // look for the related embedded object factory
@@ -728,9 +728,9 @@ namespace
 
         if (bCopied)
         {
-            xNativeTempFile->setPropertyValue(OUString("RemoveFile"),
+            xNativeTempFile->setPropertyValue("RemoveFile",
                 uno::makeAny(sal_False));
-            uno::Any aUrl = xNativeTempFile->getPropertyValue(OUString("Uri"));
+            uno::Any aUrl = xNativeTempFile->getPropertyValue("Uri");
             aUrl >>= sUrl;
 
             xNativeTempFile = uno::Reference<beans::XPropertySet>();
@@ -742,7 +742,7 @@ namespace
         }
         else
         {
-            xNativeTempFile->setPropertyValue(OUString("RemoveFile"),
+            xNativeTempFile->setPropertyValue("RemoveFile",
                 uno::makeAny(sal_True));
         }
 #else

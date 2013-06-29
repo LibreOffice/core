@@ -138,33 +138,33 @@ ImpXMLEXPPageMasterInfo::ImpXMLEXPPageMasterInfo(
         Any aAny;
 
         Reference< beans::XPropertySetInfo > xPropsInfo( xPropSet->getPropertySetInfo() );
-        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString("BorderBottom" )))
+        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName("BorderBottom"))
         {
-            aAny = xPropSet->getPropertyValue(OUString("BorderBottom"));
+            aAny = xPropSet->getPropertyValue("BorderBottom");
             aAny >>= mnBorderBottom;
 
-            aAny = xPropSet->getPropertyValue(OUString("BorderLeft"));
+            aAny = xPropSet->getPropertyValue("BorderLeft");
             aAny >>= mnBorderLeft;
 
-            aAny = xPropSet->getPropertyValue(OUString("BorderRight"));
+            aAny = xPropSet->getPropertyValue("BorderRight");
             aAny >>= mnBorderRight;
 
-            aAny = xPropSet->getPropertyValue(OUString("BorderTop"));
+            aAny = xPropSet->getPropertyValue("BorderTop");
             aAny >>= mnBorderTop;
         }
 
-        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString("Width")))
+        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName("Width"))
         {
-            aAny = xPropSet->getPropertyValue(OUString("Width"));
+            aAny = xPropSet->getPropertyValue("Width");
             aAny >>= mnWidth;
 
-            aAny = xPropSet->getPropertyValue(OUString("Height"));
+            aAny = xPropSet->getPropertyValue("Height");
             aAny >>= mnHeight;
         }
 
-        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString("Orientation")))
+        if( xPropsInfo.is() && xPropsInfo->hasPropertyByName("Orientation"))
         {
-            aAny = xPropSet->getPropertyValue(OUString("Orientation"));
+            aAny = xPropSet->getPropertyValue("Orientation");
             aAny >>= meOrientation;
         }
     }
@@ -776,7 +776,7 @@ sal_Bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, O
         sal_uInt16 nType = sal_uInt16();
         Any aAny;
 
-        aAny = xPropSet->getPropertyValue(OUString("Layout"));
+        aAny = xPropSet->getPropertyValue("Layout");
         if(aAny >>= nType)
         {
             if(ImpXMLAutoLayoutInfo::IsCreateNecessary(nType))
@@ -1554,8 +1554,8 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
             sal_Bool bFixed = false;
             sal_Int32 nFormat = 0;
             xSet->getPropertyValue( aStrDateTimeTextProp ) >>= aStrText;
-            xSet->getPropertyValue( OUString( "IsDateTimeFixed" ) ) >>= bFixed;
-            xSet->getPropertyValue( OUString( "DateTimeFormat" ) ) >>= nFormat;
+            xSet->getPropertyValue("IsDateTimeFixed") >>= bFixed;
+            xSet->getPropertyValue("DateTimeFormat") >>= nFormat;
 
             if( !bFixed || !aStrText.isEmpty() )
             {
@@ -1864,7 +1864,7 @@ void SdXMLExport::_ExportContent()
                 try
                 {
                     OUString aBookmarkURL;
-                    xProps->getPropertyValue( OUString( "BookmarkURL" ) ) >>= aBookmarkURL;
+                    xProps->getPropertyValue("BookmarkURL") >>= aBookmarkURL;
 
                     if( !aBookmarkURL.isEmpty() )
                     {
@@ -2016,11 +2016,11 @@ void SdXMLExport::exportPresentationSettings()
         sal_Bool bTemp = false;
 
         // export range
-        xPresProps->getPropertyValue( OUString( "IsShowAll" ) ) >>= bTemp;
+        xPresProps->getPropertyValue("IsShowAll") >>= bTemp;
         if( !bTemp )
         {
             OUString aFirstPage;
-            xPresProps->getPropertyValue( OUString( "FirstPage" ) ) >>= aFirstPage;
+            xPresProps->getPropertyValue("FirstPage") >>= aFirstPage;
             if( !aFirstPage.isEmpty() )
             {
                 AddAttribute(XML_NAMESPACE_PRESENTATION, XML_START_PAGE, aFirstPage );
@@ -2029,7 +2029,7 @@ void SdXMLExport::exportPresentationSettings()
             else
             {
                 OUString aCustomShow;
-                xPresProps->getPropertyValue( OUString( "CustomShow" ) ) >>= aCustomShow;
+                xPresProps->getPropertyValue("CustomShow") >>= aCustomShow;
                 if( !aCustomShow.isEmpty() )
                 {
                     AddAttribute(XML_NAMESPACE_PRESENTATION, XML_SHOW, aCustomShow );
@@ -2038,14 +2038,14 @@ void SdXMLExport::exportPresentationSettings()
             }
         }
 
-        xPresProps->getPropertyValue( OUString( "IsEndless" ) ) >>= bTemp;
+        xPresProps->getPropertyValue("IsEndless") >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_ENDLESS, XML_TRUE );
             bHasAttr = sal_True;
 
             sal_Int32 nPause = 0;
-            xPresProps->getPropertyValue( OUString( "Pause" ) ) >>= nPause;
+            xPresProps->getPropertyValue("Pause") >>= nPause;
 
             util::Duration aDuration;
             aDuration.Seconds = static_cast<sal_uInt16>(nPause);
@@ -2055,63 +2055,63 @@ void SdXMLExport::exportPresentationSettings()
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PAUSE, aOut.makeStringAndClear() );
         }
 
-        xPresProps->getPropertyValue( OUString( "AllowAnimations" ) ) >>= bTemp;
+        xPresProps->getPropertyValue("AllowAnimations") >>= bTemp;
         if( !bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_ANIMATIONS, XML_DISABLED );
             bHasAttr = sal_True;
         }
 
-        xPresProps->getPropertyValue( OUString( "IsAlwaysOnTop" ) ) >>= bTemp;
+        xPresProps->getPropertyValue("IsAlwaysOnTop") >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_STAY_ON_TOP, XML_TRUE );
             bHasAttr = sal_True;
         }
 
-        xPresProps->getPropertyValue( OUString( "IsAutomatic" ) ) >>= bTemp;
+        xPresProps->getPropertyValue("IsAutomatic") >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_FORCE_MANUAL, XML_TRUE );
             bHasAttr = sal_True;
         }
 
-        xPresProps->getPropertyValue( OUString( "IsFullScreen" ) ) >>= bTemp;
+        xPresProps->getPropertyValue("IsFullScreen") >>= bTemp;
         if( !bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_FULL_SCREEN, XML_FALSE );
             bHasAttr = sal_True;
         }
 
-        xPresProps->getPropertyValue( OUString( "IsMouseVisible" ) ) >>= bTemp;
+        xPresProps->getPropertyValue("IsMouseVisible") >>= bTemp;
         if( !bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_MOUSE_VISIBLE, XML_FALSE );
             bHasAttr = sal_True;
         }
 
-        xPresProps->getPropertyValue( OUString( "StartWithNavigator" ) ) >>= bTemp;
+        xPresProps->getPropertyValue("StartWithNavigator") >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_START_WITH_NAVIGATOR, XML_TRUE );
             bHasAttr = sal_True;
         }
 
-        xPresProps->getPropertyValue( OUString( "UsePen" ) ) >>= bTemp;
+        xPresProps->getPropertyValue("UsePen") >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_MOUSE_AS_PEN, XML_TRUE );
             bHasAttr = sal_True;
         }
 
-        xPresProps->getPropertyValue( OUString( "IsTransitionOnClick" ) ) >>= bTemp;
+        xPresProps->getPropertyValue("IsTransitionOnClick") >>= bTemp;
         if( !bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_TRANSITION_ON_CLICK, XML_DISABLED );
             bHasAttr = sal_True;
         }
 
-        xPresProps->getPropertyValue( OUString( "IsShowLogo" ) ) >>= bTemp;
+        xPresProps->getPropertyValue("IsShowLogo") >>= bTemp;
         if( bTemp )
         {
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_SHOW_LOGO, XML_TRUE );
@@ -2576,7 +2576,7 @@ void SdXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
             return;
 
         awt::Rectangle aVisArea;
-        xPropSet->getPropertyValue( OUString( "VisibleArea" ) ) >>= aVisArea;
+        xPropSet->getPropertyValue("VisibleArea") >>= aVisArea;
 
         sal_uInt16 i = 0;
         pProps[i].Name = OUString("VisibleAreaTop");
@@ -2595,7 +2595,7 @@ void SdXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
     Reference< lang::XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
     if( xFac.is() )
     {
-        Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( "com.sun.star.document.Settings" ) ), UNO_QUERY );
+        Reference< beans::XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), UNO_QUERY );
         if( xProps.is() )
             SvXMLUnitConverter::convertPropertySet( rProps, xProps );
         DocumentSettingsSerializer *pFilter;
@@ -2671,7 +2671,7 @@ OUString SdXMLExport::getNavigationOrder( const Reference< XDrawPage >& xDrawPag
     try
     {
         Reference< XPropertySet > xSet( xDrawPage, UNO_QUERY_THROW );
-        Reference< XIndexAccess > xNavOrder( xSet->getPropertyValue( OUString( "NavigationOrder" ) ), UNO_QUERY_THROW );
+        Reference< XIndexAccess > xNavOrder( xSet->getPropertyValue("NavigationOrder"), UNO_QUERY_THROW );
 
         Reference< XIndexAccess > xZOrderAccess( xDrawPage, UNO_QUERY );
 
@@ -2934,7 +2934,7 @@ XMLFontAutoStylePool* SdXMLExport::CreateFontAutoStylePool()
     Reference< beans::XPropertySet > xProps( GetModel(), UNO_QUERY );
     if ( xProps.is() ) {
         Sequence<Any> aAnySeq;
-        if( xProps->getPropertyValue(OUString("Fonts")) >>= aAnySeq )
+        if( xProps->getPropertyValue("Fonts") >>= aAnySeq )
         {
             if( aAnySeq.getLength() % 5 == 0 )
             {

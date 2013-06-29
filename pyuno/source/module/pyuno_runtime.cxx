@@ -136,7 +136,7 @@ static void getRuntimeImpl( PyRef & globalDict, PyRef &runtimeImpl )
 
     if( ! globalDict.is() ) // FATAL !
     {
-        throw RuntimeException( OUString( "can't find __main__ module" ), Reference< XInterface > ());
+        throw RuntimeException("can't find __main__ module", Reference< XInterface > ());
     }
     runtimeImpl = PyDict_GetItemString( globalDict.get() , "pyuno_runtime" );
 }
@@ -272,7 +272,7 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
 
     c->xIntrospection = Introspection::create(ctx);
 
-    Any a = ctx->getValueByName(OUString( "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) );
+    Any a = ctx->getValueByName("/singletons/com.sun.star.reflection.theTypeDescriptionManager");
     a >>= c->xTdMgr;
     if( ! c->xTdMgr.is() )
         throw RuntimeException(
@@ -302,7 +302,7 @@ void Runtime::initialize( const Reference< XComponentContext > & ctx )
 
     if( runtime.is() && impl->cargo->valid )
     {
-        throw RuntimeException( OUString( "pyuno runtime has already been initialized before"  ),
+        throw RuntimeException("pyuno runtime has already been initialized before",
                                 Reference< XInterface > () );
     }
     PyRef keep( RuntimeImpl::create( ctx ) );
@@ -362,7 +362,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
 {
     if( ! impl->cargo->valid )
     {
-        throw RuntimeException( OUString( "pyuno runtime must be initialized before calling any2PyObject" ),
+        throw RuntimeException("pyuno runtime must be initialized before calling any2PyObject",
                                 Reference< XInterface > () );
     }
 
@@ -615,7 +615,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
 {
     if( ! impl->cargo->valid )
     {
-        throw RuntimeException( OUString( "pyuno runtime must be initialized before calling any2PyObject" ),
+        throw RuntimeException("pyuno runtime must be initialized before calling any2PyObject",
                                 Reference< XInterface > () );
     }
 

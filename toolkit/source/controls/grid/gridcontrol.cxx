@@ -318,7 +318,7 @@ namespace
         try
         {
             Reference< XContainer > const xColModel(
-                xModelProps->getPropertyValue( OUString( "ColumnModel" ) ),
+                xModelProps->getPropertyValue("ColumnModel"),
                 UNO_QUERY_THROW );
             if ( i_add )
                 xColModel->addContainerListener( i_listener.get() );
@@ -326,7 +326,7 @@ namespace
                 xColModel->removeContainerListener( i_listener.get() );
 
             Reference< XGridDataModel > const xDataModel(
-                xModelProps->getPropertyValue( OUString( "GridDataModel" ) ),
+                xModelProps->getPropertyValue("GridDataModel"),
                 UNO_QUERY_THROW
             );
             Reference< XMutableGridDataModel > const xMutableDataModel( xDataModel, UNO_QUERY );

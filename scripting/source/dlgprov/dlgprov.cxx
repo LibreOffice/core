@@ -124,7 +124,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
     Reference< container::XNameContainer > lcl_createControlModel(const Reference< XComponentContext >& i_xContext)
     {
         Reference< XMultiComponentFactory > xSMgr_( i_xContext->getServiceManager(), UNO_QUERY_THROW );
-        Reference< container::XNameContainer > xControlModel( xSMgr_->createInstanceWithContext( OUString( "com.sun.star.awt.UnoControlDialogModel"  ), i_xContext ), UNO_QUERY_THROW );
+        Reference< container::XNameContainer > xControlModel( xSMgr_->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", i_xContext ), UNO_QUERY_THROW );
         return xControlModel;
     }
     Reference< container::XNameContainer > lcl_createDialogModel( const Reference< XComponentContext >& i_xContext,
@@ -268,7 +268,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
     {
         if ( !m_BasicInfo.get() )
             // shouln't get here
-            throw RuntimeException( OUString( "No information to create dialog"  ), Reference< XInterface >() );
+            throw RuntimeException("No information to create dialog", Reference< XInterface >() );
         Reference< resource::XStringResourceManager > xStringResourceManager = getStringResourceFromDialogLibrary( m_BasicInfo->mxDlgLib );
 
         OUString aURL("" );

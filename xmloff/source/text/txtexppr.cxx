@@ -851,7 +851,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         pAnchorTypeState->maValue >>= eAnchor;
     else if( bNeedsAnchor )
     {
-        Any aAny = rPropSet->getPropertyValue( OUString( "AnchorType" ) );
+        Any aAny = rPropSet->getPropertyValue("AnchorType");
         aAny >>= eAnchor;
     }
 

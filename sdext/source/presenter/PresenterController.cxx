@@ -1105,8 +1105,8 @@ double PresenterController::GetSlideAspectRatio (void) const
                 Reference<beans::XPropertySet> xProperties(xSlides->getByIndex(0),UNO_QUERY_THROW);
                 sal_Int32 nWidth (28000);
                 sal_Int32 nHeight (21000);
-                if ((xProperties->getPropertyValue(OUString("Width")) >>= nWidth)
-                    && (xProperties->getPropertyValue(OUString("Height")) >>= nHeight)
+                if ((xProperties->getPropertyValue("Width") >>= nWidth)
+                    && (xProperties->getPropertyValue("Height") >>= nHeight)
                     && nHeight > 0)
                 {
                     nSlideAspectRatio = double(nWidth) / double(nHeight);

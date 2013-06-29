@@ -47,7 +47,7 @@ ScVbaComment::ScVbaComment(
     mxRange( xRange )
 {
     if  ( !xRange.is() )
-        throw lang::IllegalArgumentException( OUString( "range is not set " ), uno::Reference< uno::XInterface >() , 1 );
+        throw lang::IllegalArgumentException("range is not set ", uno::Reference< uno::XInterface >() , 1 );
     uno::Reference< text::XSimpleText > xAnnoText( getAnnotation(), uno::UNO_QUERY );
 }
 
@@ -200,7 +200,7 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
             xAnnoText->insertString( xRange, sText, bOverwrite );
             return xAnnoText->getString();
         }
-        throw uno::RuntimeException( OUString( "ScVbaComment::Text - bad Start value " ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("ScVbaComment::Text - bad Start value ", uno::Reference< uno::XInterface >() );
     }
     else if ( aText.hasValue() )
     {

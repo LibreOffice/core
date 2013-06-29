@@ -502,7 +502,7 @@ SAL_IMPLEMENT_MAIN()
         }
 
         if (!(aImplName.isEmpty() || aServiceName.isEmpty()))
-            throw RuntimeException( OUString("give component exOR service name!" ), Reference< XInterface >() );
+            throw RuntimeException("give component exOR service name!", Reference< XInterface >() );
         if (aImplName.isEmpty() && aServiceName.isEmpty())
         {
             if (! aUnoUrl.endsWithIgnoreAsciiCaseAsciiL(
@@ -516,7 +516,7 @@ SAL_IMPLEMENT_MAIN()
                     Reference<XInterface>() );
         }
         if (!aImplName.isEmpty() && aLocation.isEmpty())
-            throw RuntimeException( OUString("give component location!" ), Reference< XInterface >() );
+            throw RuntimeException("give component location!", Reference< XInterface >() );
         if (!aServiceName.isEmpty() && !aLocation.isEmpty())
             out( "\n> warning: service name given, will ignore location!" );
 
@@ -541,7 +541,7 @@ SAL_IMPLEMENT_MAIN()
             if (nTokens != 3 || aUnoUrl.getLength() < 10 ||
                 !aUnoUrl.copy( 0, 4 ).equalsIgnoreAsciiCase( OUString("uno:") ))
             {
-                throw RuntimeException( OUString("illegal uno url given!" ), Reference< XInterface >() );
+                throw RuntimeException("illegal uno url given!", Reference< XInterface >() );
             }
             nIndex = 0;
             OUString aConnectDescr( aUnoUrl.getToken( 0, ';', nIndex ).copy( 4 ) ); // uno:CONNECTDESCR;iiop;InstanceName

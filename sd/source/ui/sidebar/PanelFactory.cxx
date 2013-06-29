@@ -168,7 +168,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
             pBase = pController->GetViewShellBase();
     }
     if (pBase == NULL)
-        throw RuntimeException(OUString("can not get ViewShellBase for frame"), NULL);
+        throw RuntimeException("can not get ViewShellBase for frame", NULL);
 
     // Get bindings from given arguments.
     const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));

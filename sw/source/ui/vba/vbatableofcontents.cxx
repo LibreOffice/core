@@ -38,13 +38,13 @@ SwVbaTableOfContents::~SwVbaTableOfContents()
 ::sal_Int32 SAL_CALL SwVbaTableOfContents::getLowerHeadingLevel() throw (uno::RuntimeException)
 {
     sal_Int16 nLevel = 0;
-    mxTocProps->getPropertyValue(OUString("Level") ) >>= nLevel;
+    mxTocProps->getPropertyValue("Level") >>= nLevel;
     return nLevel;
 }
 
 void SAL_CALL SwVbaTableOfContents::setLowerHeadingLevel( ::sal_Int32 _lowerheadinglevel ) throw (uno::RuntimeException)
 {
-    mxTocProps->setPropertyValue( OUString("Level"), uno::makeAny( sal_Int8( _lowerheadinglevel ) ) );
+    mxTocProps->setPropertyValue("Level", uno::makeAny( sal_Int8( _lowerheadinglevel ) ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaTableOfContents::getTabLeader() throw (uno::RuntimeException)
@@ -61,25 +61,25 @@ void SAL_CALL SwVbaTableOfContents::setTabLeader( ::sal_Int32 /*_tableader*/ ) t
 ::sal_Bool SAL_CALL SwVbaTableOfContents::getUseFields() throw (css::uno::RuntimeException)
 {
     sal_Bool bUseFields = sal_False;
-    mxTocProps->getPropertyValue(OUString("CreateFromMarks") ) >>= bUseFields;
+    mxTocProps->getPropertyValue("CreateFromMarks") >>= bUseFields;
     return bUseFields;
 }
 
 void SAL_CALL SwVbaTableOfContents::setUseFields( ::sal_Bool _useFields ) throw (css::uno::RuntimeException)
 {
-    mxTocProps->setPropertyValue( OUString("CreateFromMarks"), uno::makeAny( _useFields ) );
+    mxTocProps->setPropertyValue("CreateFromMarks", uno::makeAny( _useFields ) );
 }
 
 ::sal_Bool SAL_CALL SwVbaTableOfContents::getUseOutlineLevels() throw (css::uno::RuntimeException)
 {
     sal_Bool bUseOutlineLevels = sal_False;
-    mxTocProps->getPropertyValue(OUString("CreateFromOutline") ) >>= bUseOutlineLevels;
+    mxTocProps->getPropertyValue("CreateFromOutline") >>= bUseOutlineLevels;
     return bUseOutlineLevels;
 }
 
 void SAL_CALL SwVbaTableOfContents::setUseOutlineLevels( ::sal_Bool _useOutlineLevels ) throw (css::uno::RuntimeException)
 {
-    mxTocProps->setPropertyValue( OUString("CreateFromOutline"), uno::makeAny( _useOutlineLevels ) );
+    mxTocProps->setPropertyValue("CreateFromOutline", uno::makeAny( _useOutlineLevels ) );
 }
 
 void SAL_CALL SwVbaTableOfContents::Delete(  ) throw (uno::RuntimeException)

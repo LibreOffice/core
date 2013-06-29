@@ -292,7 +292,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
         {
             Reference< frame::XModel > xModel( mxOwnerDocument );   // weak-ref -> ref
             Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
-            xFactory->createInstance( OUString( "ooo.vba.VBAGlobals"  ) );
+            xFactory->createInstance("ooo.vba.VBAGlobals");
         }
         catch(const Exception& )
         {
@@ -322,7 +322,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
             {
                 Reference<frame::XModel > xModel( mxOwnerDocument );
                 Reference< XMultiServiceFactory> xSF( xModel, UNO_QUERY_THROW );
-                mxCodeNameAccess.set( xSF->createInstance( OUString("ooo.vba.VBAObjectModuleObjectProvider"  ) ), UNO_QUERY );
+                mxCodeNameAccess.set( xSF->createInstance("ooo.vba.VBAObjectModuleObjectProvider"), UNO_QUERY );
             }
             catch(const Exception& ) {}
 
@@ -699,7 +699,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                         throw uno::RuntimeException();
                     }
                     OUString aMime( "text/xml" );
-                    xProps->setPropertyValue( OUString("MediaType"), uno::makeAny( aMime ) );
+                    xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
 
                     // Set encryption key
                     setStreamKey( xSourceStream, pLib->maPassword );
@@ -843,7 +843,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                         throw uno::RuntimeException();
                     }
                     OUString aMime( "text/xml" );
-                    xProps->setPropertyValue( OUString("MediaType"), uno::makeAny( aMime ) );
+                    xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
 
                     Reference< XOutputStream > xOut = xSourceStream->getOutputStream();
                     Reference< XNameContainer > xLib( pLib );

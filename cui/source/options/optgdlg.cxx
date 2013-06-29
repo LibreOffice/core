@@ -433,7 +433,7 @@ CanvasSettings::CanvasSettings() :
             if( xEntryNameAccess.is() )
             {
                 Sequence<OUString> preferredImplementations;
-                if( (xEntryNameAccess->getByName( OUString("PreferredImplementations") ) >>= preferredImplementations) )
+                if( (xEntryNameAccess->getByName("PreferredImplementations") >>= preferredImplementations) )
                     maAvailableImplementations.push_back( std::make_pair(*pCurr,preferredImplementations) );
             }
 
@@ -471,7 +471,7 @@ sal_Bool CanvasSettings::IsHardwareAccelerationAvailable() const
                                                           pCurrImpl->trim() ),
                                                       UNO_QUERY_THROW );
                     bool bHasAccel(false);
-                    if( (xPropSet->getPropertyValue(OUString("HardwareAcceleration")) >>= bHasAccel) )
+                    if( (xPropSet->getPropertyValue("HardwareAcceleration") >>= bHasAccel) )
                         if( bHasAccel )
                         {
                             mbHWAccelAvailable = true;
@@ -499,7 +499,7 @@ sal_Bool CanvasSettings::IsHardwareAccelerationEnabled() const
     if( !mxForceFlagNameAccess.is() )
         return true;
 
-    if( !(mxForceFlagNameAccess->getByName( OUString("ForceSafeServiceImpl") ) >>= bForceLastEntry) )
+    if( !(mxForceFlagNameAccess->getByName("ForceSafeServiceImpl") >>= bForceLastEntry) )
         return true;
 
     return !bForceLastEntry;

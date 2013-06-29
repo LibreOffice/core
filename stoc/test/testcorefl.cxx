@@ -86,9 +86,9 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     Reference< XHierarchicalNameAccess > xHNameAccess( xRefl, UNO_QUERY );
     OSL_ENSURE(xHNameAccess.is(), "### cannot get XHierarchicalNameAccess!" );
 
-    OSL_ENSURE(xRefl->forName(OUString("ModuleA.StructA"))->getName() == OUString("ModuleA.StructA"), "test_RegCoreReflection(): error 2b");
-    OSL_ENSURE(xRefl->forName(OUString("ModuleA.ExceptionB"))->getTypeClass() == TypeClass_EXCEPTION, "test_RegCoreReflection(): error 2c");
-    OSL_ENSURE(xRefl->forName(OUString("ModuleA.ModuleB.EnumA")).is(), "test_RegCoreReflection(): error 2e");
+    OSL_ENSURE(xRefl->forName("ModuleA.StructA")->getName() == OUString("ModuleA.StructA"), "test_RegCoreReflection(): error 2b");
+    OSL_ENSURE(xRefl->forName("ModuleA.ExceptionB")->getTypeClass() == TypeClass_EXCEPTION, "test_RegCoreReflection(): error 2c");
+    OSL_ENSURE(xRefl->forName("ModuleA.ModuleB.EnumA").is(), "test_RegCoreReflection(): error 2e");
 
 
     OSL_ENSURE(*(const sal_Bool *)xHNameAccess->getByHierarchicalName(OUString("ModuleC.aConstBoolean")).getValue() == aConstBoolean, "test_RegCoreReflection(): error 4c");
@@ -100,7 +100,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     // Enums
 
-    xClass = xRefl->forName(OUString("ModuleA.ModuleB.EnumA"));
+    xClass = xRefl->forName("ModuleA.ModuleB.EnumA");
 
     OSL_ENSURE(xClass.is(), "test_RegCoreReflection(): error 5");
 
@@ -119,9 +119,9 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     // Interface
 
-    Reference< XIdlClass > xA = xRefl->forName( OUString("ModuleC.XInterfaceB") );
+    Reference< XIdlClass > xA = xRefl->forName("ModuleC.XInterfaceB");
 
-    xClass = xRefl->forName(OUString("ModuleC.XInterfaceB"));
+    xClass = xRefl->forName("ModuleC.XInterfaceB");
 
     OSL_ENSURE(xClass == xA, "test_RegCoreReflection(): error 7");
     OSL_ENSURE(xClass.is(), "test_RegCoreReflection(): error 7a");
@@ -150,7 +150,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     OSL_ENSURE(xClass->getMethods().getArray()[4]->getParameterTypes().getLength() == 1, "test_RegCoreReflection(): error 17");
     OSL_ENSURE(xClass->getMethods().getArray()[4]->getParameterTypes().getArray()[0]->getTypeClass() == TypeClass_SHORT, "test_RegCoreReflection(): error 18");
     OSL_ENSURE(xClass->getMethods().getArray()[4]->getParameterInfos().getArray()[0].aName == OUString( "aShort" ), "test_RegCoreReflection(): error 18a");
-    OSL_ENSURE(xClass->getMethods().getArray()[4]->getParameterInfos().getArray()[0].aType == xRefl->forName( OUString( "short" ) ), "test_RegCoreReflection(): error 18b");
+    OSL_ENSURE(xClass->getMethods().getArray()[4]->getParameterInfos().getArray()[0].aType == xRefl->forName("short"), "test_RegCoreReflection(): error 18b");
     OSL_ENSURE(xClass->getMethods().getArray()[4]->getParameterInfos().getArray()[0].aMode == ParamMode_IN, "test_RegCoreReflection(): error 18c");
     OSL_ENSURE(xClass->getMethods().getArray()[4]->getExceptionTypes().getLength() == 0, "test_RegCoreReflection(): error 19");
     OSL_ENSURE(xClass->getMethods().getArray()[5]->getName() == OUString("methodC"), "test_RegCoreReflection(): error 20");
@@ -187,10 +187,10 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     // SequenceReflections
 
-    OSL_ENSURE(xRefl->forName( OUString("[]ModuleA.StructA") )->getTypeClass() == TypeClass_SEQUENCE, "test_RegCoreReflection(): error 48");
-    OSL_ENSURE(xRefl->forName( OUString("[]ModuleA.StructA") )->getComponentType().is(), "test_RegCoreReflection(): error 49");
-    OSL_ENSURE(xRefl->forName( OUString("[][]ModuleA.StructA") )->getComponentType()->getComponentType()->getName() == OUString("ModuleA.StructA"), "test_RegCoreReflection(): error 50");
-    OSL_ENSURE(xRefl->forName( OUString("[]com.sun.star.uno.XInterface") ) == xRefl->forName(OUString( "ModuleA.StructC" ))->getField(OUString("aInterfaceSeq"))->getType(), "test_RegCoreReflection(): error 51");
+    OSL_ENSURE(xRefl->forName("[]ModuleA.StructA")->getTypeClass() == TypeClass_SEQUENCE, "test_RegCoreReflection(): error 48");
+    OSL_ENSURE(xRefl->forName("[]ModuleA.StructA")->getComponentType().is(), "test_RegCoreReflection(): error 49");
+    OSL_ENSURE(xRefl->forName("[][]ModuleA.StructA")->getComponentType()->getComponentType()->getName() == OUString("ModuleA.StructA"), "test_RegCoreReflection(): error 50");
+    OSL_ENSURE(xRefl->forName("[]com.sun.star.uno.XInterface") == xRefl->forName("ModuleA.StructC")->getField(OUString("aInterfaceSeq"))->getType(), "test_RegCoreReflection(): error 51");
 
     StructC aStructC;
     aStructC.aLong = aConstLong;
@@ -201,7 +201,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     Any aAny;
 
-    xRefl->forName(OUString("ModuleA.StructC"))->getField(OUString("aInterfaceSeq"))->getType()->createObject(aAny);
+    xRefl->forName("ModuleA.StructC")->getField(OUString("aInterfaceSeq"))->getType()->createObject(aAny);
 
     OSL_ENSURE(aAny.getValueType() == ::getCppuType( (const Sequence<Reference< XInterface > > *)0 ), "test_RegCoreReflection(): error 51a");
 
@@ -210,26 +210,26 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     sal_Int32 nLong = aConstLong * 2;
     aAny.setValue( &nLong, ::getCppuType( (const sal_Int32 *)0 ) );
 
-    OSL_ENSURE(*(sal_Int32*)xRefl->forName(OUString( "ModuleA.StructA" ))->getField(OUString( "aLong" ))->get(
+    OSL_ENSURE(*(sal_Int32*)xRefl->forName("ModuleA.StructA")->getField(OUString( "aLong" ))->get(
         Any(&aStructC, ::getCppuType( (const StructC *)0 ))).getValue() == aConstLong, "test_RegCoreReflection(): error 52");
-    OSL_ENSURE(xRefl->forName(OUString("ModuleA.StructA"))->getField(OUString( "aLong" ))->getAccessMode() == FieldAccessMode_READWRITE, "test_RegCoreReflection(): error 52a");
-    Reference< XIdlField2 > rField ( xRefl->forName(OUString( "ModuleA.StructC" ))->getField(OUString( "aLong" )) , UNO_QUERY );
+    OSL_ENSURE(xRefl->forName("ModuleA.StructA")->getField(OUString( "aLong" ))->getAccessMode() == FieldAccessMode_READWRITE, "test_RegCoreReflection(): error 52a");
+    Reference< XIdlField2 > rField ( xRefl->forName("ModuleA.StructC")->getField(OUString( "aLong" )) , UNO_QUERY );
     rField->set(aStructAny, aAny);
-    OSL_ENSURE(*(sal_Int32*)xRefl->forName(OUString("ModuleA.StructB"))->getField(OUString( "aLong" ))->get(aStructAny).getValue() == *(sal_Int32*)aAny.getValue(), "test_RegCoreReflection(): error 53");
+    OSL_ENSURE(*(sal_Int32*)xRefl->forName("ModuleA.StructB")->getField(OUString( "aLong" ))->get(aStructAny).getValue() == *(sal_Int32*)aAny.getValue(), "test_RegCoreReflection(): error 53");
 
-    xRefl->forName( OUString("[]ModuleA.StructA") )->createObject(aAny);
+    xRefl->forName("[]ModuleA.StructA")->createObject(aAny);
 
     OSL_ENSURE( aAny.getValueTypeName() == "[]ModuleA.StructA", "test_RegCoreReflection(): error 54" );
-    xRefl->forName(OUString("[][]ModuleA.StructA"))->createObject(aAny);
+    xRefl->forName("[][]ModuleA.StructA")->createObject(aAny);
 
     OSL_ENSURE( aAny.getValueTypeName() == "[][]ModuleA.StructA", "test_RegCoreReflection(): error 56" );
 
-    OSL_ENSURE(xRefl->forName(OUString("[][][]unsigned long"))->getComponentType()->getComponentType()->getComponentType()->getTypeClass() == TypeClass_UNSIGNED_LONG, "test_RegCoreReflection(): error 62");
+    OSL_ENSURE(xRefl->forName("[][][]unsigned long")->getComponentType()->getComponentType()->getComponentType()->getTypeClass() == TypeClass_UNSIGNED_LONG, "test_RegCoreReflection(): error 62");
 
     try
     {
         fprintf( stderr, "%1\n" );
-        Any bla = xRefl->forName(OUString("ModuleA.StructC"))->getField(OUString("aString"))->get(Any());
+        Any bla = xRefl->forName("ModuleA.StructC")->getField(OUString("aString"))->get(Any());
         OSL_ENSURE(sal_False, "test_RegCoreReflection(): error 63");
         return sal_False;
     }
@@ -243,7 +243,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
         Any blup;
         blup <<= aStructC;
         Any gulp;
-        rField = Reference< XIdlField2 > ( xRefl->forName(OUString("ModuleA.StructC"))->getField(OUString("aString")) , UNO_QUERY);
+        rField = Reference< XIdlField2 > ( xRefl->forName("ModuleA.StructC")->getField(OUString("aString")) , UNO_QUERY);
         rField->set( blup, gulp);
         OSL_ENSURE(sal_False, "test_RegCoreReflection(): error 64");
         return sal_False;
@@ -260,8 +260,8 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
         Any blup;
         blup <<= aStructC;
         rField = Reference< XIdlField2 > (
-            xRefl->forName(OUString("ModuleA.StructC"))->getField(OUString("aString")) , UNO_QUERY);
-        xRefl->forName(OUString("ModuleA.StructC"))->getField(OUString("aString"))->set(blup, gulp);
+            xRefl->forName("ModuleA.StructC")->getField(OUString("aString")) , UNO_QUERY);
+        xRefl->forName("ModuleA.StructC")->getField(OUString("aString"))->set(blup, gulp);
         OSL_ENSURE(sal_False, "test_RegCoreReflection(): error 65");
         return sal_False;
     }
@@ -273,7 +273,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
     gulp <<= OUString(OUString("Test"));
     Any blup;
     blup <<= aStructC;
-    xRefl->forName(OUString("ModuleA.StructC"))->getField(OUString("aString"))->set(blup, gulp);
+    xRefl->forName("ModuleA.StructC")->getField(OUString("aString"))->set(blup, gulp);
 
     Reference< XInterfaceA > xAI = new OInterfaceA();
 
@@ -284,7 +284,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
         Any a;
         a <<= xAI;
-        Any bla = xRefl->forName(OUString("ModuleC.XInterfaceA"))->getMethod(OUString("methodC"))->invoke(a, params);
+        Any bla = xRefl->forName("ModuleC.XInterfaceA")->getMethod(OUString("methodC"))->invoke(a, params);
         OSL_ENSURE(sal_False, "test_RegCoreReflection(): error 66");
         return sal_False;
     }
@@ -302,7 +302,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
         Any a;
         a <<= xAI;
-        Any bla = xRefl->forName(OUString("ModuleC.XInterfaceA"))->getMethod(OUString("methodC"))->invoke(a, params);
+        Any bla = xRefl->forName("ModuleC.XInterfaceA")->getMethod(OUString("methodC"))->invoke(a, params);
     }
     try
     {
@@ -313,7 +313,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
         Any a;
         a <<= xAI;
-        Any bla = xRefl->forName(OUString("ModuleC.XInterfaceA"))->getMethod(OUString("methodC"))->invoke(a, params);
+        Any bla = xRefl->forName("ModuleC.XInterfaceA")->getMethod(OUString("methodC"))->invoke(a, params);
         OSL_ENSURE(sal_False, "test_RegCoreReflection(): error 67");
         return sal_False;
     }
@@ -328,7 +328,7 @@ static sal_Bool test_corefl( const Reference< XIdlReflection > & xRefl )
 
     Any a;
     a <<= xAI;
-    bool result = (xRefl->forName(OUString("ModuleC.XInterfaceA"))->getMethod(OUString("methodC"))->invoke(a, params).getValueType()
+    bool result = (xRefl->forName("ModuleC.XInterfaceA")->getMethod(OUString("methodC"))->invoke(a, params).getValueType()
                     == ::getCppuType( (const Sequence<StructB> *)0 )); (void)result;
     OSL_ENSURE(result, "test_RegCoreReflection(): error 68");
 

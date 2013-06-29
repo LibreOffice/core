@@ -894,7 +894,7 @@ sal_Bool SvtLinguConfig::GetElementNamesFor(
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName(OUString("ServiceManager")), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName("ServiceManager"), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rNodeName ), uno::UNO_QUERY_THROW );
         rElementNames = xNA->getElementNames();
         bSuccess = true;
@@ -916,7 +916,7 @@ sal_Bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName(OUString("ServiceManager")), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName("ServiceManager"), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rSetName ), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rSetEntry ), uno::UNO_QUERY_THROW );
         if (xNA->getByName( OUString(aG_SupportedDictionaryFormats) ) >>= rFormatList)
@@ -980,7 +980,7 @@ sal_Bool SvtLinguConfig::GetDictionaryEntry(
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName(OUString("ServiceManager")), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName("ServiceManager"), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName(OUString(aG_Dictionaries)), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rNodeName ), uno::UNO_QUERY_THROW );
 
@@ -1027,7 +1027,7 @@ uno::Sequence< OUString > SvtLinguConfig::GetDisabledDictionaries() const
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName(OUString("ServiceManager")), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName("ServiceManager"), uno::UNO_QUERY_THROW );
         xNA->getByName( OUString(aG_DisabledDictionaries) ) >>= aResult;
     }
     catch (uno::Exception &)
@@ -1126,16 +1126,16 @@ OUString SvtLinguConfig::GetVendorImageUrl_Impl(
     try
     {
         uno::Reference< container::XNameAccess > xImagesNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xImagesNA.set( xImagesNA->getByName(OUString("Images")), uno::UNO_QUERY_THROW );
+        xImagesNA.set( xImagesNA->getByName("Images"), uno::UNO_QUERY_THROW );
 
-        uno::Reference< container::XNameAccess > xNA( xImagesNA->getByName(OUString("ServiceNameEntries")), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameAccess > xNA( xImagesNA->getByName("ServiceNameEntries"), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rServiceImplName ), uno::UNO_QUERY_THROW );
-        uno::Any aAny(xNA->getByName(OUString("VendorImagesNode")));
+        uno::Any aAny(xNA->getByName("VendorImagesNode"));
         OUString aVendorImagesNode;
         if (aAny >>= aVendorImagesNode)
         {
             xNA = xImagesNA;
-            xNA.set( xNA->getByName(OUString("VendorImages")), uno::UNO_QUERY_THROW );
+            xNA.set( xNA->getByName("VendorImages"), uno::UNO_QUERY_THROW );
             xNA.set( xNA->getByName( aVendorImagesNode ), uno::UNO_QUERY_THROW );
             aAny = xNA->getByName( rImageName );
             OUString aTmp;
@@ -1204,8 +1204,8 @@ bool SvtLinguConfig::HasGrammarChecker() const
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( OUString("ServiceManager") ), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( OUString("GrammarCheckerList") ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName("ServiceManager"), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName("GrammarCheckerList"), uno::UNO_QUERY_THROW );
 
         uno::Sequence< OUString > aElementNames( xNA->getElementNames() );
         bRes = aElementNames.getLength() > 0;

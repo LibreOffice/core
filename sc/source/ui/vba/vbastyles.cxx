@@ -121,7 +121,7 @@ ScVbaStyles::Add( const OUString& _sName, const uno::Any& _aBasedOn ) throw (scr
             }
         }
 
-        uno::Reference< style::XStyle > xStyle( mxMSF->createInstance( OUString("com.sun.star.style.CellStyle")), uno::UNO_QUERY_THROW );
+        uno::Reference< style::XStyle > xStyle( mxMSF->createInstance("com.sun.star.style.CellStyle"), uno::UNO_QUERY_THROW );
 
         if (!mxNameContainerCellStyles->hasByName(_sName))
         {

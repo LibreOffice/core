@@ -174,7 +174,7 @@ int SAL_CALL main( int argc, char * argv[] )
         createRegistryServiceFactory( OUString( "applicat.rdb") ) );
 
     Reference< XImplementationRegistration > xImplReg(
-        xMgr->createInstance( OUString("com.sun.star.registry.ImplementationRegistration") ), UNO_QUERY );
+        xMgr->createInstance("com.sun.star.registry.ImplementationRegistration"), UNO_QUERY );
     OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
     OUString aLibName =
@@ -195,7 +195,7 @@ int SAL_CALL main( int argc, char * argv[] )
             OUString("com.sun.star.connection.Acceptor") ) , UNO_QUERY );
 
     Reference < XConnector >  rConnector(
-        xMgr->createInstance( OUString("com.sun.star.connection.Connector") ) , UNO_QUERY );
+        xMgr->createInstance("com.sun.star.connection.Connector") , UNO_QUERY );
 
 
     printf( "Testing sockets" );
@@ -210,7 +210,7 @@ int SAL_CALL main( int argc, char * argv[] )
 
     // check, if errornous strings make any problem
     rAcceptor = Reference< XAcceptor > (
-        xMgr->createInstance( OUString("com.sun.star.connection.Acceptor") ),
+        xMgr->createInstance("com.sun.star.connection.Acceptor"),
         UNO_QUERY );
 
     try

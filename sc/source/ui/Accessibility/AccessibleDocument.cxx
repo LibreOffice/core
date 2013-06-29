@@ -1040,7 +1040,7 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, s
         uno::Reference< beans::XPropertySet > xShapeProp(xShape, uno::UNO_QUERY);
         if (xShapeProp.is())
         {
-            uno::Any aPropAny = xShapeProp->getPropertyValue(OUString(  "LayerID" ));
+            uno::Any aPropAny = xShapeProp->getPropertyValue("LayerID");
             sal_Int16 nLayerID = 0;
             if( aPropAny >>= nLayerID )
             {

@@ -2644,10 +2644,10 @@ namespace pcr
 
             // initialize the dialog
             Reference< XPropertySet > xDialogProps( xDialog, UNO_QUERY_THROW );
-            xDialogProps->setPropertyValue( OUString(  "QueryComposer"  ), makeAny( xComposer ) );
-            xDialogProps->setPropertyValue( OUString(  "RowSet"  ),        makeAny( m_xComponent ) );
-            xDialogProps->setPropertyValue( OUString(  "ParentWindow"  ),  makeAny( VCLUnoHelper::GetInterface( impl_getDefaultDialogParent_nothrow() ) ) );
-            xDialogProps->setPropertyValue( OUString(  "Title"  ),         makeAny( sPropertyUIName ) );
+            xDialogProps->setPropertyValue("QueryComposer", makeAny( xComposer ) );
+            xDialogProps->setPropertyValue("RowSet",        makeAny( m_xComponent ) );
+            xDialogProps->setPropertyValue("ParentWindow",  makeAny( VCLUnoHelper::GetInterface( impl_getDefaultDialogParent_nothrow() ) ) );
+            xDialogProps->setPropertyValue("Title",         makeAny( sPropertyUIName ) );
 
             _rClearBeforeDialog.clear();
             bSuccess = ( xDialog->execute() != 0 );

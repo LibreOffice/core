@@ -239,7 +239,7 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
         if ( nLineSpacing > 0 ) // if nLinespacing is < 0 the linespacing is an absolute spacing
         {
             sal_Bool bFixedLineSpacing = sal_False;
-            uno::Any aAny = rXPropSet->getPropertyValue( OUString( "FontIndependentLineSpacing" ) );
+            uno::Any aAny = rXPropSet->getPropertyValue("FontIndependentLineSpacing");
             if( !(aAny >>= bFixedLineSpacing) || !bFixedLineSpacing )
             {
                 const FontCollectionEntry* pDesc = rFontCollection.GetById( rCharLevel.mnFont );

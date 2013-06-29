@@ -105,8 +105,8 @@ ScVbaFont::setSuperscript( const uno::Any& aValue ) throw ( uno::RuntimeExceptio
         nValue = SUPERSCRIPT;
             nValue2 = SUPERSCRIPTHEIGHT;
     }
-    xProps->setPropertyValue( OUString( "CharEscapement" ), ( uno::Any )nValue );
-     xProps->setPropertyValue( OUString( "CharEscapementHeight" ), ( uno::Any )nValue2 );
+    xProps->setPropertyValue("CharEscapement", ( uno::Any )nValue );
+     xProps->setPropertyValue("CharEscapementHeight", ( uno::Any )nValue2 );
 }
 
 uno::Any SAL_CALL
@@ -138,7 +138,7 @@ ScVbaFont::getSuperscript() throw ( uno::RuntimeException )
         xCell.set( xCellRange->getCellByPosition( 0,0 ) );
     uno::Reference< beans::XPropertySet > xProps = lcl_TextProperties( xCell );
     short nValue = 0;
-    xProps->getPropertyValue( OUString( "CharEscapement" ) ) >>= nValue;
+    xProps->getPropertyValue("CharEscapement") >>= nValue;
     return uno::makeAny( ( nValue == SUPERSCRIPT ) );
 }
 
@@ -178,8 +178,8 @@ ScVbaFont::setSubscript( const uno::Any& aValue ) throw ( uno::RuntimeException 
             nValue2 = SUBSCRIPTHEIGHT;
     }
 
-     xProps->setPropertyValue( OUString( "CharEscapementHeight" ), ( uno::Any )nValue2 );
-    xProps->setPropertyValue( OUString( "CharEscapement" ), ( uno::Any )nValue );
+     xProps->setPropertyValue("CharEscapementHeight", ( uno::Any )nValue2 );
+    xProps->setPropertyValue("CharEscapement", ( uno::Any )nValue );
 
 }
 
@@ -213,7 +213,7 @@ ScVbaFont::getSubscript() throw ( uno::RuntimeException )
     uno::Reference< beans::XPropertySet > xProps = lcl_TextProperties( xCell );
 
     short nValue = NORMAL;
-    xProps->getPropertyValue( OUString( "CharEscapement" ) ) >>= nValue;
+    xProps->getPropertyValue("CharEscapement") >>= nValue;
     return uno::makeAny( ( nValue == SUBSCRIPT ) );
 }
 
@@ -258,7 +258,7 @@ void  SAL_CALL
 ScVbaFont::setStandardFontSize( const uno::Any& /*aValue*/ ) throw( uno::RuntimeException )
 {
 //XXX #TODO# #FIXME#
-    //mxFont->setPropertyValue( OUString( "CharSize" ), ( uno::Any )fValue );
+    //mxFont->setPropertyValue("CharSize", ( uno::Any )fValue );
     throw uno::RuntimeException(
         OUString("setStandardFontSize not supported"), uno::Reference< uno::XInterface >() );
 }
@@ -379,10 +379,10 @@ ScVbaFont::setUnderline( const uno::Any& aValue ) throw ( uno::RuntimeException 
             nValue = awt::FontUnderline::DOUBLE;
             break;
         default:
-            throw uno::RuntimeException( OUString("Unknown value for Underline"), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Unknown value for Underline", uno::Reference< uno::XInterface >() );
     }
 
-    mxFont->setPropertyValue( OUString( "CharUnderline" ), ( uno::Any )nValue );
+    mxFont->setPropertyValue("CharUnderline", ( uno::Any )nValue );
 
 }
 
@@ -394,7 +394,7 @@ ScVbaFont::getUnderline() throw ( uno::RuntimeException )
             return aNULL();
 
     sal_Int32 nValue = awt::FontUnderline::NONE;
-    mxFont->getPropertyValue( OUString( "CharUnderline" ) ) >>= nValue;
+    mxFont->getPropertyValue("CharUnderline") >>= nValue;
     switch ( nValue )
     {
         case  awt::FontUnderline::DOUBLE:
@@ -407,7 +407,7 @@ ScVbaFont::getUnderline() throw ( uno::RuntimeException )
             nValue = excel::XlUnderlineStyle::xlUnderlineStyleNone;
             break;
         default:
-            throw uno::RuntimeException( OUString("Unknown value retrieved for Underline"), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Unknown value retrieved for Underline", uno::Reference< uno::XInterface >() );
 
     }
     return uno::makeAny( nValue );
@@ -454,14 +454,14 @@ ScVbaFont::getColor() throw (uno::RuntimeException)
 {
     // #TODO #FIXME - behave like getXXX above ( wrt. GetDataSet )
     uno::Any aAny;
-    aAny = OORGBToXLRGB( mxFont->getPropertyValue( OUString( "CharColor" ) ) );
+    aAny = OORGBToXLRGB( mxFont->getPropertyValue("CharColor") );
     return aAny;
 }
 
 void  SAL_CALL
 ScVbaFont::setOutlineFont( const uno::Any& aValue ) throw ( uno::RuntimeException )
 {
-    mxFont->setPropertyValue( OUString( "CharContoured" ), aValue );
+    mxFont->setPropertyValue("CharContoured", aValue );
 }
 
 uno::Any SAL_CALL
@@ -470,7 +470,7 @@ ScVbaFont::getOutlineFont() throw (uno::RuntimeException)
     if ( GetDataSet() )
         if (  GetDataSet()->GetItemState( ATTR_FONT_CONTOUR, sal_True, NULL) == SFX_ITEM_DONTCARE )
             return aNULL();
-    return mxFont->getPropertyValue( OUString( "CharContoured" ) );
+    return mxFont->getPropertyValue("CharContoured");
 }
 
 OUString

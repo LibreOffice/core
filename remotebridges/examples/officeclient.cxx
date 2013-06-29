@@ -145,7 +145,7 @@ sal_Int32 OfficeClientMain::run( const Sequence< OUString > & aArguments ) throw
         try {
             registerServices();
             Reference < XInterface > r =
-                m_xSMgr->createInstance( OUString("com.sun.star.bridge.UnoUrlResolver") );
+                m_xSMgr->createInstance("com.sun.star.bridge.UnoUrlResolver");
             Reference < XUnoUrlResolver > rResolver( r , UNO_QUERY );
             r = rResolver->resolve( aArguments.getConstArray()[0] );
 

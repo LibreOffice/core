@@ -1536,7 +1536,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame 
     try
     {
         Reference< lang::XServiceInfo > xServices( rFrame->getController()->getModel(), UNO_QUERY_THROW );
-        m_bIsWriter = xServices->supportsService(OUString("com.sun.star.text.TextDocument"));
+        m_bIsWriter = xServices->supportsService("com.sun.star.text.TextDocument");
     }
     catch(const uno::Exception& )
     {
@@ -1739,11 +1739,11 @@ struct SvxStyleToolBoxControl::Impl
         {
             Reference< style::XStyleFamiliesSupplier > xStylesSupplier( xModel, UNO_QUERY_THROW );
             Reference< lang::XServiceInfo > xServices( xModel, UNO_QUERY_THROW );
-            bSpecModeWriter = xServices->supportsService(OUString("com.sun.star.text.TextDocument"));
+            bSpecModeWriter = xServices->supportsService("com.sun.star.text.TextDocument");
             if(bSpecModeWriter)
             {
                 Reference<container::XNameAccess> xParaStyles;
-                    xStylesSupplier->getStyleFamilies()->getByName(OUString("ParagraphStyles")) >>=
+                    xStylesSupplier->getStyleFamilies()->getByName("ParagraphStyles") >>=
                     xParaStyles;
                 static const sal_Char* aWriterStyles[] =
                 {
@@ -1762,7 +1762,7 @@ struct SvxStyleToolBoxControl::Impl
                         Reference< beans::XPropertySet > xStyle;
                         xParaStyles->getByName( OUString::createFromAscii( aWriterStyles[nStyle] )) >>= xStyle;
                         OUString sName;
-                        xStyle->getPropertyValue(OUString("DisplayName")) >>= sName;
+                        xStyle->getPropertyValue("DisplayName") >>= sName;
                         if( !sName.isEmpty() )
                             aDefaultStyles.push_back(sName);
                     }
@@ -1795,7 +1795,7 @@ struct SvxStyleToolBoxControl::Impl
                         {
                             Reference< beans::XPropertySet > xStyle( xCellStyles->getByName( sStyleName), UNO_QUERY_THROW );
                             OUString sName;
-                            xStyle->getPropertyValue(OUString("DisplayName")) >>= sName;
+                            xStyle->getPropertyValue("DisplayName") >>= sName;
                             if( !sName.isEmpty() )
                                 aDefaultStyles.push_back(sName);
                         }

@@ -1662,7 +1662,7 @@ sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
         {
             try
             {
-                Any aVal( xSet->getPropertyValue(OUString("TwoDigitDateStart")) );
+                Any aVal( xSet->getPropertyValue("TwoDigitDateStart") );
                 aVal >>= n;
                 return sal_True;
             }
@@ -1695,7 +1695,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 {
                     Any aVal;
                     aVal <<= n;
-                    xSet->setPropertyValue(OUString("TwoDigitDateStart"), aVal);
+                    xSet->setPropertyValue("TwoDigitDateStart", aVal);
                 }
                 catch(Exception&)
                 {
@@ -1736,7 +1736,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 {
                     Any aVal;
                     aVal <<= n;
-                    xSet->setPropertyValue(OUString("TwoDigitDateStart"), aVal);
+                    xSet->setPropertyValue("TwoDigitDateStart", aVal);
                 }
                 catch(Exception&)
                 {

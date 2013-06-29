@@ -160,7 +160,7 @@ sal_Bool EmbeddedObjectContainer::CommitImageSubStorage()
             {
                 // get the open mode from the parent storage
                 sal_Int32 nMode = 0;
-                uno::Any aAny = xSet->getPropertyValue( OUString("OpenMode") );
+                uno::Any aAny = xSet->getPropertyValue("OpenMode");
                 if ( aAny >>= nMode )
                     bReadOnlyMode = !(nMode & embed::ElementModes::WRITE );
             } // if ( xSet.is() )
@@ -352,7 +352,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::Get_Impl( con
         {
             // get the open mode from the parent storage
             sal_Int32 nMode = 0;
-            uno::Any aAny = xSet->getPropertyValue( OUString("OpenMode") );
+            uno::Any aAny = xSet->getPropertyValue("OpenMode");
             if ( aAny >>= nMode )
                 bReadOnlyMode = !(nMode & embed::ElementModes::WRITE );
         }
@@ -584,7 +584,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
             // it is correct so for now, but what if somebody introduces a new stream based embedded object?
             // Probably introducing of such an object must be restricted ( a storage must be used! ).
             uno::Reference< beans::XPropertySet > xProps( xNewStream, uno::UNO_QUERY_THROW );
-            xProps->setPropertyValue( OUString( "MediaType" ),
+            xProps->setPropertyValue("MediaType",
                     uno::makeAny( OUString( "application/vnd.sun.star.oleobject" ) ) );
         }
         catch (uno::Exception const& e)
@@ -1185,7 +1185,7 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
                 uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
                 if ( xSet.is() )
                 {
-                    uno::Any aAny = xSet->getPropertyValue( OUString("MediaType") );
+                    uno::Any aAny = xSet->getPropertyValue("MediaType");
                     aAny >>= *pMediaType;
                 }
             }
@@ -1240,13 +1240,13 @@ sal_Bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno
         if ( !xPropSet.is() )
             throw uno::RuntimeException();
 
-        xPropSet->setPropertyValue( OUString("UseCommonStoragePasswordEncryption"),
+        xPropSet->setPropertyValue("UseCommonStoragePasswordEncryption",
                                     uno::makeAny( (sal_Bool)sal_True ) );
         uno::Any aAny;
         aAny <<= rMediaType;
-        xPropSet->setPropertyValue( OUString("MediaType"), aAny );
+        xPropSet->setPropertyValue("MediaType", aAny );
 
-        xPropSet->setPropertyValue( OUString("Compressed"),
+        xPropSet->setPropertyValue("Compressed",
                                     uno::makeAny( (sal_Bool)sal_True ) );
     }
     catch (const uno::Exception&)

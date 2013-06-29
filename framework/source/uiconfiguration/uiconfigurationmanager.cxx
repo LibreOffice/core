@@ -1137,7 +1137,7 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
             try
             {
                 long nOpenMode = 0;
-                Any a = xPropSet->getPropertyValue( OUString( "OpenMode" ));
+                Any a = xPropSet->getPropertyValue("OpenMode");
                 if ( a >>= nOpenMode )
                     m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
             }

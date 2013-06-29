@@ -103,7 +103,7 @@ namespace pcr
             if ( _rxContext.is() )
             {
                 Reference< XHierarchicalNameAccess > xTypeDescProv(
-                    _rxContext->getValueByName( OUString( "/singletons/com.sun.star.reflection.theTypeDescriptionManager" ) ),
+                    _rxContext->getValueByName("/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
                     UNO_QUERY_THROW );
 
                 m_xTypeDescription = Reference< XEnumTypeDescription >( xTypeDescProv->getByHierarchicalName( m_aEnumType.getTypeName() ), UNO_QUERY_THROW );
@@ -380,7 +380,7 @@ namespace pcr
 
         Reference< XIntrospectionAccess > xIntrospectionAccess( xIntrospection->inspect( makeAny( _rxIntrospectee ) ) );
         if ( !xIntrospectionAccess.is() )
-            throw RuntimeException( OUString( "The introspection service could not handle the given component." ), *this );
+            throw RuntimeException("The introspection service could not handle the given component.", *this );
 
         m_xComponent = Reference< XPropertySet >( xIntrospectionAccess->queryAdapter( XPropertySet::static_type() ), UNO_QUERY_THROW );
         // now that we survived so far, remember m_xComponentIntrospectionAccess

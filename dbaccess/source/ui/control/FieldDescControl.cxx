@@ -1822,7 +1822,7 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
             Reference<XPropertySet> xFormSet = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
             OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
             OUString sFormat;
-            xFormSet->getPropertyValue(OUString("FormatString")) >>= sFormat;
+            xFormSet->getPropertyValue("FormatString") >>= sFormat;
 
             if ( !bTextFormat )
             {

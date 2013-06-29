@@ -219,7 +219,7 @@ void AccessibleShape::UpdateStates (void)
                 try
                 {
                     drawing::FillStyle aFillStyle;
-                    bShapeIsOpaque =  ( xSet->getPropertyValue (OUString("FillStyle")) >>= aFillStyle)
+                    bShapeIsOpaque =  ( xSet->getPropertyValue ("FillStyle") >>= aFillStyle)
                                         && aFillStyle == drawing::FillStyle_SOLID;
                 }
                 catch (::com::sun::star::beans::UnknownPropertyException&)
@@ -642,7 +642,7 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (OUString("LineColor"));
+            aColor = aSet->getPropertyValue ("LineColor");
             aColor >>= nColor;
         }
     }
@@ -668,7 +668,7 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (OUString("FillColor"));
+            aColor = aSet->getPropertyValue ("FillColor");
             aColor >>= nColor;
         }
     }
@@ -984,7 +984,7 @@ OUString
             uno::Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
             if (xSet.is())
             {
-                uno::Any aZOrder (xSet->getPropertyValue (OUString("ZOrder")));
+                uno::Any aZOrder (xSet->getPropertyValue ("ZOrder"));
                 aZOrder >>= nIndex;
 
                 // Add one to be not zero based.

@@ -49,7 +49,7 @@ OUString SAL_CALL ORptTypeDetection::detect( Sequence< ::com::sun::star::beans::
 {
 
     ::comphelper::SequenceAsHashMap aTemp(Descriptor);
-    OUString sTemp = aTemp.getUnpackedValueOrDefault(OUString("URL"),OUString());
+    OUString sTemp = aTemp.getUnpackedValueOrDefault("URL",OUString());
 
     if ( !sTemp.isEmpty() )
     {
@@ -64,7 +64,7 @@ OUString SAL_CALL ORptTypeDetection::detect( Sequence< ::com::sun::star::beans::
                 if ( xProp.is() )
                 {
                     OUString sMediaType;
-                    xProp->getPropertyValue( OUString("MediaType") ) >>= sMediaType;
+                    xProp->getPropertyValue("MediaType") >>= sMediaType;
                     if ( sMediaType == MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII )
                         return OUString("StarBaseReport");
                     ::comphelper::disposeComponent(xProp);

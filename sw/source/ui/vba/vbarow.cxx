@@ -47,7 +47,7 @@ uno::Any SAL_CALL SwVbaRow::getHeight() throw (css::uno::RuntimeException)
         return uno::makeAny( sal_Int32( word::WdConstants::wdUndefined ) );
 
     sal_Int32 nHeight = 0;
-    mxRowProps->getPropertyValue( OUString("Height") ) >>= nHeight;
+    mxRowProps->getPropertyValue("Height") >>= nHeight;
     return uno::makeAny( (float)Millimeter::getInPoints( nHeight ) );
 }
 
@@ -57,20 +57,20 @@ void SAL_CALL SwVbaRow::setHeight( const uno::Any& _height ) throw (css::uno::Ru
     _height >>= height;
 
     sal_Int32 nHeight = Millimeter::getInHundredthsOfOneMillimeter( height );
-    mxRowProps->setPropertyValue( OUString("Height"), uno::makeAny( nHeight ) );
+    mxRowProps->setPropertyValue("Height", uno::makeAny( nHeight ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaRow::getHeightRule() throw (css::uno::RuntimeException)
 {
     sal_Bool isAutoHeight = sal_False;
-    mxRowProps->getPropertyValue( OUString("IsAutoHeight") ) >>= isAutoHeight;
+    mxRowProps->getPropertyValue("IsAutoHeight") >>= isAutoHeight;
     return isAutoHeight ? word::WdRowHeightRule::wdRowHeightAuto : word::WdRowHeightRule::wdRowHeightExactly;
 }
 
 void SAL_CALL SwVbaRow::setHeightRule( ::sal_Int32 _heightrule ) throw (css::uno::RuntimeException)
 {
     sal_Bool isAutoHeight = ( _heightrule == word::WdRowHeightRule::wdRowHeightAuto );
-    mxRowProps->setPropertyValue( OUString("IsAutoHeight"), uno::makeAny( isAutoHeight ) );
+    mxRowProps->setPropertyValue("IsAutoHeight", uno::makeAny( isAutoHeight ) );
 }
 
 void SAL_CALL

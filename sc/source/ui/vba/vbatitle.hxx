@@ -68,7 +68,7 @@ public:
     {
         try
         {
-            xShapePropertySet->setPropertyValue( OUString("String"), css::uno::makeAny( Text ));
+            xShapePropertySet->setPropertyValue("String", css::uno::makeAny( Text ));
         }
         catch ( css::uno::Exception& )
         {
@@ -80,7 +80,7 @@ public:
         OUString sText;
         try
         {
-            xShapePropertySet->getPropertyValue( OUString("String") ) >>= sText;
+            xShapePropertySet->getPropertyValue("String") >>= sText;
         }
         catch ( css::uno::Exception& )
         {
@@ -117,7 +117,7 @@ public:
     {
         try
         {
-            xShapePropertySet->setPropertyValue(OUString("TextRotation"), css::uno::makeAny(_nOrientation*100));
+            xShapePropertySet->setPropertyValue("TextRotation", css::uno::makeAny(_nOrientation*100));
         }
         catch (css::uno::Exception& )
         {
@@ -129,7 +129,7 @@ public:
         sal_Int32 nSOOrientation = 0;
         try
         {
-            xShapePropertySet->getPropertyValue( OUString("TextRotation")) >>= nSOOrientation;
+            xShapePropertySet->getPropertyValue("TextRotation") >>= nSOOrientation;
         }
         catch (css::uno::Exception& )
         {

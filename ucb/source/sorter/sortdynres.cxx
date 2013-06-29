@@ -324,7 +324,7 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     Any  aRet;
 
     try {
-        aRet = pCurSet->getPropertyValue( OUString("IsRowCountFinal") );
+        aRet = pCurSet->getPropertyValue("IsRowCountFinal");
     }
     catch (const UnknownPropertyException&) {}
     catch (const WrappedTargetException&) {}

@@ -408,7 +408,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                 OUString aMime("application/binary");
                 uno::Any aAny2;
                 aAny2 <<= aMime;
-                xSet->setPropertyValue( OUString("MediaType"), aAny2 );
+                xSet->setPropertyValue("MediaType", aAny2 );
                 pDoc->WriteLayoutCache( *pStream );
             }
 
@@ -522,7 +522,7 @@ bool SwXMLWriter::WriteThroughComponent(
         OUString aMime("text/xml");
         uno::Any aAny;
         aAny <<= aMime;
-        xSet->setPropertyValue( OUString("MediaType"), aAny );
+        xSet->setPropertyValue("MediaType", aAny );
 
         OUString aUseCommonPassPropName("UseCommonStoragePasswordEncryption");
 

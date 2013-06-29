@@ -1195,7 +1195,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( sal_Bool bOverwrite )
             if( !xFactory.is() )
                 return;
 
-            Reference < XInterface > xIfc = xFactory->createInstance(OUString("com.sun.star.style.NumberingStyle") );
+            Reference < XInterface > xIfc = xFactory->createInstance("com.sun.star.style.NumberingStyle");
             if( !xIfc.is() )
                 return;
             Reference < XStyle > xTmp( xIfc, UNO_QUERY );
@@ -1272,7 +1272,7 @@ Reference < XIndexReplace > SvxXMLListStyleContext::CreateNumRule(
     if( !xFactory.is() )
         return xNumRule;
 
-    Reference < XInterface > xIfc = xFactory->createInstance(OUString("com.sun.star.text.NumberingRules") );
+    Reference < XInterface > xIfc = xFactory->createInstance("com.sun.star.text.NumberingRules");
     if( !xIfc.is() )
         return xNumRule;
 

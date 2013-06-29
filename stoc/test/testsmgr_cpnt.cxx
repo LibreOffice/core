@@ -222,14 +222,14 @@ extern "C" void SAL_CALL test_ServiceManager()
     OSL_ENSURE( nLen == 8, "more than 6 factories" );
 
     // try to get an instance for a unknown service
-    OSL_VERIFY( !xSMgr->createInstance(OUString("bla.blup.Q")).is() );
+    OSL_VERIFY( !xSMgr->createInstance("bla.blup.Q").is() );
 
     //
     // First test : register service via the internal function of the component itself
     //
     {
         Reference< XImplementationRegistration >
-            xInst( xSMgr->createInstance(OUString("com.sun.star.registry.ImplementationRegistration")), UNO_QUERY );
+            xInst( xSMgr->createInstance("com.sun.star.registry.ImplementationRegistration"), UNO_QUERY );
         OSL_ENSURE( xInst.is(), "no ImplementationRegistration" );
 
         try {
@@ -248,7 +248,7 @@ extern "C" void SAL_CALL test_ServiceManager()
 
         // tests, if a service provider can be instantiated.
 
-        Reference< XInterface > xIFace(xSMgr->createInstance(OUString("com.sun.star.ts.TestManagerImpl")));
+        Reference< XInterface > xIFace(xSMgr->createInstance("com.sun.star.ts.TestManagerImpl"));
         OSL_ENSURE( xIFace.is(), "loadable service not found" );
 
         // remove the service

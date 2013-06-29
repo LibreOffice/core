@@ -101,7 +101,7 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
                 setup::UpdateCheckConfig::create(xContext);
 
             sal_Bool bUpdateCheckEnabled = sal_False;
-            OSL_VERIFY( xUpdateConfig->getByName( OUString( "AutoCheckEnabled" ) ) >>= bUpdateCheckEnabled );
+            OSL_VERIFY( xUpdateConfig->getByName("AutoCheckEnabled") >>= bUpdateCheckEnabled );
 
             // TODO: do we need to respect the bUpdateCheckEnabled flag? Finally, its meaning is "are automatic
             // updates enabled", but this here is not an automatic update, but one triggered explicitly by the user.

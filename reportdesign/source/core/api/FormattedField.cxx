@@ -262,7 +262,7 @@ uno::Reference< util::XNumberFormatsSupplier > SAL_CALL OFormattedField::getForm
         {
             uno::Reference< beans::XPropertySet> xProp(::dbtools::findDataSource(getParent()),uno::UNO_QUERY);
             if ( xProp.is() )
-                m_xFormatsSupplier.set(xProp->getPropertyValue(OUString("NumberFormatsSupplier")),uno::UNO_QUERY);
+                m_xFormatsSupplier.set(xProp->getPropertyValue("NumberFormatsSupplier"),uno::UNO_QUERY);
         }
     }
     return m_xFormatsSupplier;

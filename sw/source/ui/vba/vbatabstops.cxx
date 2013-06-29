@@ -28,13 +28,13 @@ using namespace ::com::sun::star;
 static uno::Sequence< style::TabStop > lcl_getTabStops( const uno::Reference< beans::XPropertySet >& xParaProps ) throw (uno::RuntimeException)
 {
     uno::Sequence< style::TabStop > aSeq;
-    xParaProps->getPropertyValue( OUString("ParaTabStops") ) >>= aSeq;
+    xParaProps->getPropertyValue("ParaTabStops") >>= aSeq;
     return aSeq;
 }
 
 static void lcl_setTabStops( const uno::Reference< beans::XPropertySet >& xParaProps, const uno::Sequence< style::TabStop >& aSeq ) throw (uno::RuntimeException)
 {
-    xParaProps->setPropertyValue( OUString("ParaTabStops"), uno::makeAny( aSeq ) );
+    xParaProps->setPropertyValue("ParaTabStops", uno::makeAny( aSeq ) );
 }
 
 typedef ::cppu::WeakImplHelper2< container::XIndexAccess, container::XEnumerationAccess > TabStopCollectionHelper_Base;

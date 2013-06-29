@@ -249,7 +249,7 @@ ScCellRangesBase* ScVbaRange::getCellRangesBase() throw ( uno::RuntimeException 
         return ScCellRangesBase::getImplementation( mxRanges );
     if( mxRange.is() )
         return ScCellRangesBase::getImplementation( mxRange );
-    throw uno::RuntimeException( OUString("General Error creating range - Unknown" ), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("General Error creating range - Unknown", uno::Reference< uno::XInterface >() );
 }
 
 ScCellRangeObj* ScVbaRange::getCellRangeObj() throw ( uno::RuntimeException )
@@ -261,7 +261,7 @@ SfxItemSet*  ScVbaRange::getCurrentDataSet( ) throw ( uno::RuntimeException )
 {
     SfxItemSet* pDataSet = excel::ScVbaCellRangeAccess::GetDataSet( getCellRangesBase() );
     if ( !pDataSet )
-        throw uno::RuntimeException( OUString(  "Can't access Itemset for range"  ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Can't access Itemset for range", uno::Reference< uno::XInterface >() );
     return pDataSet;
 }
 
@@ -390,7 +390,7 @@ getDocShellFromIf( const uno::Reference< uno::XInterface >& xIf ) throw ( uno::R
 {
 	ScCellRangesBase* pUno = ScCellRangesBase::getImplementation( xIf );
 	if ( !pUno )
-            throw uno::RuntimeException( OUString( "Failed to access underlying uno range object" ), uno::Reference< uno::XInterface >()  );
+            throw uno::RuntimeException("Failed to access underlying uno range object", uno::Reference< uno::XInterface >()  );
 	return pUno->GetDocShell();
 }
 
@@ -428,7 +428,7 @@ getDocumentFromRange( const uno::Reference< table::XCellRange >& xRange )
 {
 	ScDocShell* pDocShell = getDocShellFromRange( xRange );
 	if ( !pDocShell )
-            throw uno::RuntimeException( OUString( "Failed to access underlying docshell from uno range object" ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Failed to access underlying docshell from uno range object", uno::Reference< uno::XInterface >() );
 	ScDocument* pDoc = pDocShell->GetDocument();
 	return pDoc;
 }
@@ -481,14 +481,14 @@ const ScRangeList& ScVbaRange::getScRangeList() throw (uno::RuntimeException)
 {
     if( ScCellRangesBase* pScRangesBase = getCellRangesBase() )
         return pScRangesBase->GetRangeList();
-    throw uno::RuntimeException( OUString(  "Cannot obtain UNO range implementation object"  ), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("Cannot obtain UNO range implementation object", uno::Reference< uno::XInterface >() );
 }
 
 const ScRangeList& ScVbaRange::getScRangeList( const uno::Reference< excel::XRange >& rxRange ) throw (uno::RuntimeException)
 {
     if( ScVbaRange* pScVbaRange = getImplementation( rxRange ) )
         return pScVbaRange->getScRangeList();
-    throw uno::RuntimeException( OUString(  "Cannot obtain VBA range implementation object"  ), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("Cannot obtain VBA range implementation object", uno::Reference< uno::XInterface >() );
 }
 
 
@@ -1311,10 +1311,10 @@ uno::Reference< sheet::XSheetCellRange > lclExpandToMerged( const uno::Reference
 uno::Reference< sheet::XSheetCellRangeContainer > lclExpandToMerged( const uno::Reference< sheet::XSheetCellRangeContainer >& rxCellRanges, bool bRecursive ) throw (uno::RuntimeException)
 {
     if( !rxCellRanges.is() )
-        throw uno::RuntimeException( OUString(  "Missing cell ranges object"  ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Missing cell ranges object", uno::Reference< uno::XInterface >() );
     sal_Int32 nCount = rxCellRanges->getCount();
     if( nCount < 1 )
-        throw uno::RuntimeException( OUString(  "Missing cell ranges object"  ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Missing cell ranges object", uno::Reference< uno::XInterface >() );
 
     ScRangeList aScRanges;
     for( sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex )
@@ -1418,7 +1418,7 @@ table::CellRangeAddress getCellRangeAddressForVBARange( const uno::Any& aParam, 
             break;
         }
         default:
-            throw uno::RuntimeException( OUString( "Can't extact CellRangeAddress from type"  ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Can't extact CellRangeAddress from type", uno::Reference< uno::XInterface >() );
     }
     return lclGetRangeAddress( xRangeParam );
 }
@@ -1429,7 +1429,7 @@ lcl_setupBorders( const uno::Reference< excel::XRange >& xParentRange, const uno
     uno::Reference< XHelperInterface > xParent( xParentRange, uno::UNO_QUERY_THROW );
     ScDocument* pDoc = getDocumentFromRange(xRange);
     if ( !pDoc )
-        throw uno::RuntimeException( OUString(  "Failed to access document from shell"  ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Failed to access document from shell", uno::Reference< uno::XInterface >() );
     ScVbaPalette aPalette( pDoc->GetDocumentShell() );
      uno::Reference< XCollection > borders( new ScVbaBorders( xParent, xContext, xRange, aPalette ) );
     return borders;
@@ -1458,9 +1458,9 @@ ScVbaRange::ScVbaRange( const uno::Reference< XHelperInterface >& xParent, const
                 mbIsColumns( bIsColumns )
 {
     if  ( !xContext.is() )
-        throw lang::IllegalArgumentException( OUString(  "context is not set "  ), uno::Reference< uno::XInterface >() , 1 );
+        throw lang::IllegalArgumentException("context is not set ", uno::Reference< uno::XInterface >() , 1 );
     if  ( !xRange.is() )
-        throw lang::IllegalArgumentException( OUString(  "range is not set "  ), uno::Reference< uno::XInterface >() , 1 );
+        throw lang::IllegalArgumentException("range is not set ", uno::Reference< uno::XInterface >() , 1 );
 
     uno::Reference< container::XIndexAccess > xIndex( new SingleRangeIndexAccess( mxParent, mxContext, xRange ) );
     m_Areas = new ScVbaRangeAreas( mxParent, mxContext, xIndex, mbIsRows, mbIsColumns );
@@ -2116,7 +2116,7 @@ ScVbaRange::Font() throw ( script::BasicErrorException, uno::RuntimeException)
     else if ( mxRanges.is() )
         xProps.set(mxRanges, ::uno::UNO_QUERY );
     if ( !pDoc )
-        throw uno::RuntimeException( OUString(  "Failed to access document from shell"  ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Failed to access document from shell", uno::Reference< uno::XInterface >() );
 
     ScVbaPalette aPalette( pDoc->GetDocumentShell() );
     ScCellRangeObj* pRangeObj = NULL;
@@ -2238,7 +2238,7 @@ ScVbaRange::Select() throw (uno::RuntimeException)
 {
     ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
     if ( !pUnoRangesBase )
-        throw uno::RuntimeException( OUString(  "Failed to access underlying uno range object"  ), uno::Reference< uno::XInterface >()  );
+        throw uno::RuntimeException("Failed to access underlying uno range object", uno::Reference< uno::XInterface >()  );
     ScDocShell* pShell = pUnoRangesBase->GetDocShell();
     if ( pShell )
     {
@@ -2372,10 +2372,10 @@ ScVbaRange::Rows(const uno::Any& aIndex ) throw (uno::RuntimeException)
             aRange.aEnd.SetRow( aRange.aStart.Row() + ( nEndRow  - nStartRow ));
         }
         else
-            throw uno::RuntimeException( OUString( "Illegal param"  ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Illegal param", uno::Reference< uno::XInterface >() );
 
         if ( aRange.aStart.Row() < 0 || aRange.aEnd.Row() < 0 )
-            throw uno::RuntimeException( OUString("Internal failure, illegal param"), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Internal failure, illegal param", uno::Reference< uno::XInterface >() );
         // return a normal range ( even for multi-selection
         uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pUnoRangesBase->GetDocShell(), aRange ) );
         return new ScVbaRange( mxParent, mxContext, xRange, true  );
@@ -2416,10 +2416,10 @@ ScVbaRange::Columns(const uno::Any& aIndex ) throw (uno::RuntimeException)
             aRange.aEnd.SetCol( aRange.aStart.Col() + ( nEndCol  - nStartCol ));
         }
         else
-            throw uno::RuntimeException( OUString( "Illegal param"  ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Illegal param", uno::Reference< uno::XInterface >() );
 
         if ( aRange.aStart.Col() < 0 || aRange.aEnd.Col() < 0 )
-            throw uno::RuntimeException( OUString("Internal failure, illegal param"), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Internal failure, illegal param", uno::Reference< uno::XInterface >() );
     }
     // Columns() - no params
     uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pUnoRangesBase->GetDocShell(), aRange ) );
@@ -2493,7 +2493,7 @@ void
 ScVbaRange::Copy(const ::uno::Any& Destination) throw (uno::RuntimeException)
 {
     if ( m_Areas->getCount() > 1 )
-        throw uno::RuntimeException( OUString("That command cannot be used on multiple selections" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("That command cannot be used on multiple selections", uno::Reference< uno::XInterface >() );
     if ( Destination.hasValue() )
     {
         uno::Reference< excel::XRange > xRange( Destination, uno::UNO_QUERY_THROW );
@@ -2523,7 +2523,7 @@ void
 ScVbaRange::Cut(const ::uno::Any& Destination) throw (uno::RuntimeException)
 {
     if ( m_Areas->getCount() > 1 )
-        throw uno::RuntimeException( OUString( "That command cannot be used on multiple selections"  ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("That command cannot be used on multiple selections", uno::Reference< uno::XInterface >() );
     if (Destination.hasValue())
     {
         uno::Reference< excel::XRange > xRange( Destination, uno::UNO_QUERY_THROW );
@@ -2850,7 +2850,7 @@ void SAL_CALL
 ScVbaRange::PasteSpecial( const uno::Any& Paste, const uno::Any& Operation, const uno::Any& SkipBlanks, const uno::Any& Transpose ) throw (::com::sun::star::uno::RuntimeException)
 {
     if ( m_Areas->getCount() > 1 )
-        throw uno::RuntimeException( OUString( "That command cannot be used on multiple selections"  ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("That command cannot be used on multiple selections", uno::Reference< uno::XInterface >() );
     ScDocShell* pShell = getScDocShell();
 
         uno::Reference< frame::XModel > xModel( ( pShell ? pShell->GetModel() : NULL ), uno::UNO_QUERY_THROW );
@@ -2983,7 +2983,7 @@ ScVbaRange::getHidden() throw (uno::RuntimeException)
     {
         uno::Reference< beans::XPropertySet > xProps = getRowOrColumnProps( mxRange, mbIsRows );
         if ( !( xProps->getPropertyValue( ISVISIBLE ) >>= bIsVisible ) )
-            throw uno::RuntimeException( OUString(  "Failed to get IsVisible property"), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Failed to get IsVisible property", uno::Reference< uno::XInterface >() );
     }
     catch( const uno::Exception& e )
     {
@@ -3033,7 +3033,7 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
 
     // sanity check required params
     if ( What.isEmpty()  )
-        throw uno::RuntimeException( OUString( "Range::Replace, missing params" ) , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Range::Replace, missing params", uno::Reference< uno::XInterface >() );
     OUString sWhat = VBAToRegexp( What);
     // #TODO #FIXME SearchFormat & ReplacesFormat are not processed
     // What do we do about MatchByte.. we don't seem to support that
@@ -3063,7 +3063,7 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
             else if ( nLook == excel::XlLookAt::xlWhole )
                 bSearchWords = sal_True;
             else
-                throw uno::RuntimeException( OUString( "Range::Replace, illegal value for LookAt" ) , uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Range::Replace, illegal value for LookAt", uno::Reference< uno::XInterface >() );
             // set global search props ( affects the find dialog
             // and of course the defaults for this method
             newOptions.SetWordOnly( bSearchWords );
@@ -3079,7 +3079,7 @@ ScVbaRange::Replace( const OUString& What, const OUString& Replacement, const un
             else if ( nSearchOrder == excel::XlSearchOrder::xlByRows )
                 bSearchByRow = sal_True;
             else
-                throw uno::RuntimeException( OUString( "Range::Replace, illegal value for SearchOrder" ) , uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Range::Replace, illegal value for SearchOrder", uno::Reference< uno::XInterface >() );
 
             newOptions.SetRowDirection( bSearchByRow );
             xDescriptor->setPropertyValue( SC_UNO_SRCHBYROW, uno::makeAny( bSearchByRow ) );
@@ -3134,7 +3134,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
     if( What >>= sWhat )
     {
         if( sWhat.isEmpty() )
-            throw uno::RuntimeException( OUString( "Range::Find, missing params" ) , uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Range::Find, missing params", uno::Reference< uno::XInterface >() );
     }
     else if( What >>= nWhat )
     {
@@ -3145,7 +3145,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
         sWhat = OUString::valueOf( fWhat );
     }
     else
-        throw uno::RuntimeException( OUString( "Range::Find, missing params" ) , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Range::Find, missing params", uno::Reference< uno::XInterface >() );
 
     OUString sSearch = VBAToRegexp( sWhat );
 
@@ -3168,10 +3168,10 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
         {
             // After must be a single cell in the range
             if( xAfterRange->getCount() > 1 )
-                throw uno::RuntimeException( OUString( "After must be a single cell." ) , uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("After must be a single cell.", uno::Reference< uno::XInterface >() );
             uno::Reference< excel::XRange > xCell( Cells( uno::makeAny( xAfterRange->getRow() ), uno::makeAny( xAfterRange->getColumn() ) ), uno::UNO_QUERY );
             if( !xCell.is() )
-                throw uno::RuntimeException( OUString( "After must be in range." ) , uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("After must be in range.", uno::Reference< uno::XInterface >() );
             xStartCell.set( xAfterRange->getCellRange(), uno::UNO_QUERY_THROW );
         }
 
@@ -3194,7 +3194,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
                         nSearchType = SVX_SEARCHIN_VALUE;
                     break;
                     default:
-                        throw uno::RuntimeException( OUString( "Range::Replace, illegal value for LookIn." ) , uno::Reference< uno::XInterface >() );
+                        throw uno::RuntimeException("Range::Replace, illegal value for LookIn.", uno::Reference< uno::XInterface >() );
                 }
                 newOptions.SetCellType( nSearchType );
                 xDescriptor->setPropertyValue( "SearchType", uno::makeAny( nSearchType ) );
@@ -3211,7 +3211,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
             else if ( nLookAt == excel::XlLookAt::xlWhole )
                 bSearchWords = sal_True;
             else
-                throw uno::RuntimeException( OUString( "Range::Replace, illegal value for LookAt" ) , uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Range::Replace, illegal value for LookAt", uno::Reference< uno::XInterface >() );
             newOptions.SetWordOnly( bSearchWords );
             xDescriptor->setPropertyValue( SC_UNO_SRCHWORDS, uno::makeAny( bSearchWords ) );
         }
@@ -3226,7 +3226,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
             else if ( nSearchOrder == excel::XlSearchOrder::xlByRows )
                 bSearchByRow = sal_True;
             else
-                throw uno::RuntimeException( OUString( "Range::Replace, illegal value for SearchOrder" ) , uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Range::Replace, illegal value for SearchOrder", uno::Reference< uno::XInterface >() );
 
             newOptions.SetRowDirection( bSearchByRow );
             xDescriptor->setPropertyValue( SC_UNO_SRCHBYROW, uno::makeAny( bSearchByRow ) );
@@ -3244,7 +3244,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
                 else if( nSearchDirection == excel::XlSearchDirection::xlPrevious )
                     bSearchBackwards = sal_True;
                 else
-                    throw uno::RuntimeException( OUString( "Range::Replace, illegal value for SearchDirection" ) , uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException("Range::Replace, illegal value for SearchDirection", uno::Reference< uno::XInterface >() );
                 newOptions.SetBackward( bSearchBackwards );
                 xDescriptor->setPropertyValue( "SearchBackwards", uno::makeAny( bSearchBackwards ) );
             }
@@ -3256,7 +3256,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
         {
             // SearchCaseSensitive
             if( !( MatchCase >>= bMatchCase ) )
-                throw uno::RuntimeException( OUString( "Range::Replace, illegal value for MatchCase" ) , uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Range::Replace, illegal value for MatchCase", uno::Reference< uno::XInterface >() );
         }
         xDescriptor->setPropertyValue( SC_UNO_SRCHCASE, uno::makeAny( bMatchCase ) );
 
@@ -3303,11 +3303,11 @@ uno::Reference< table::XCellRange > processKey( const uno::Any& Key, uno::Refere
         OUString sRangeName = ::comphelper::getString( Key );
         table::CellRangeAddress  aRefAddr;
         if ( !pDocSh )
-            throw uno::RuntimeException( OUString("Range::Sort no docshell to calculate key param"), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Range::Sort no docshell to calculate key param", uno::Reference< uno::XInterface >() );
         xKeyRange = getRangeForName( xContext, sRangeName, pDocSh, aRefAddr );
     }
     else
-        throw uno::RuntimeException( OUString("Range::Sort illegal type value for key param"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Range::Sort illegal type value for key param", uno::Reference< uno::XInterface >() );
     uno::Reference< table::XCellRange > xKey;
     xKey.set( xKeyRange->getCellRange(), uno::UNO_QUERY_THROW );
     return xKey;
@@ -3325,7 +3325,7 @@ const OUString& sPropName ) throw( uno::RuntimeException )
         if ( pProp->Name.equals( sPropName ) )
             return count;
     if ( count == nItems )
-        throw uno::RuntimeException( OUString("Range::Sort unknown sort property"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Range::Sort unknown sort property", uno::Reference< uno::XInterface >() );
     return -1; //should never reach here ( satisfy compiler )
 }
 
@@ -3361,7 +3361,7 @@ void updateTableSortField( const uno::Reference< table::XCellRange >& xParentRan
                 aTableField.IsAscending = false;
         }
         else
-            throw uno::RuntimeException( OUString(  "Illegal Key param"  ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Illegal Key param", uno::Reference< uno::XInterface >() );
 
 
 }
@@ -3371,7 +3371,7 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
 {
     // #TODO# #FIXME# can we do something with Type
     if ( m_Areas->getCount() > 1 )
-        throw uno::RuntimeException( OUString( "That command cannot be used on multiple selections"  ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("That command cannot be used on multiple selections", uno::Reference< uno::XInterface >() );
 
     sal_Int16 nDataOption1 = excel::XlSortDataOption::xlSortNormal;
     sal_Int16 nDataOption2 = excel::XlSortDataOption::xlSortNormal;
@@ -3379,7 +3379,7 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
 
     ScDocument* pDoc = getScDocument();
     if ( !pDoc )
-        throw uno::RuntimeException( OUString(  "Failed to access document from shell"  ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Failed to access document from shell", uno::Reference< uno::XInterface >() );
 
     RangeHelper thisRange( mxRange );
     table::CellRangeAddress thisRangeAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
@@ -3503,7 +3503,7 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
     ScDocShell* pDocShell = getScDocShell();
     xKey1 = processKey( Key1, mxContext, pDocShell );
     if ( !xKey1.is() )
-        throw uno::RuntimeException( OUString("Range::Sort needs a key1 param"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Range::Sort needs a key1 param", uno::Reference< uno::XInterface >() );
 
     if ( Key2.hasValue() )
         xKey2 = processKey( Key2, mxContext, pDocShell );
@@ -3598,7 +3598,7 @@ ScVbaRange::End( ::sal_Int32 Direction )  throw (uno::RuntimeException)
                 nSID = SID_CURSORBLKRIGHT;
                 break;
             default:
-                throw uno::RuntimeException( OUString( ": Invalid ColumnIndex" ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException(": Invalid ColumnIndex", uno::Reference< uno::XInterface >() );
         }
         if ( pDispatcher )
         {
@@ -3638,11 +3638,11 @@ uno::Reference< excel::XCharacters > SAL_CALL
 ScVbaRange::characters( const uno::Any& Start, const uno::Any& Length ) throw (uno::RuntimeException)
 {
     if ( !isSingleCellRange() )
-        throw uno::RuntimeException( OUString( "Can't create Characters property for multicell range " ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Can't create Characters property for multicell range ", uno::Reference< uno::XInterface >() );
     uno::Reference< text::XSimpleText > xSimple(mxRange->getCellByPosition(0,0) , uno::UNO_QUERY_THROW );
     ScDocument* pDoc = getDocumentFromRange(mxRange);
     if ( !pDoc )
-        throw uno::RuntimeException( OUString(  "Failed to access document from shell"  ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Failed to access document from shell", uno::Reference< uno::XInterface >() );
 
     ScVbaPalette aPalette( pDoc->GetDocumentShell() );
     return  new ScVbaCharacters( this, mxContext, aPalette, xSimple, Start, Length );
@@ -3677,7 +3677,7 @@ ScVbaRange::Delete( const uno::Any& Shift ) throw (uno::RuntimeException)
                 mode = sheet::CellDeleteMode_LEFT;
                 break;
             default:
-                throw uno::RuntimeException( OUString( "Illegal parameter " ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Illegal parameter ", uno::Reference< uno::XInterface >() );
         }
     }
     else
@@ -3872,7 +3872,7 @@ uno::Reference< excel::XRange >
 ScVbaRange::getArea( sal_Int32 nIndex ) throw( css::uno::RuntimeException )
 {
     if ( !m_Areas.is() )
-        throw uno::RuntimeException( OUString("No areas available"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("No areas available", uno::Reference< uno::XInterface >() );
     uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::makeAny( ++nIndex ), uno::Any() ), uno::UNO_QUERY_THROW );
     return xRange;
 }
@@ -4409,7 +4409,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
                 if ( pRange )
                 {
                     if ( pRange->isSingleCellRange() )
-                       throw uno::RuntimeException( OUString( "Can't create AutoFilter" ), uno::Reference< uno::XInterface >() );
+                       throw uno::RuntimeException("Can't create AutoFilter", uno::Reference< uno::XInterface >() );
                     RangeHelper currentRegion( pRange->mxRange );
                     autoFiltAddress = currentRegion.getCellRangeAddressable()->getRangeAddress();
                 }
@@ -4444,7 +4444,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
             xDataBaseRange.set( xDBRanges->getByTable(nSheet ), uno::UNO_QUERY_THROW );
         }
         if ( !xDataBaseRange.is() )
-            throw uno::RuntimeException( OUString( "Failed to find the autofilter placeholder range"  ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Failed to find the autofilter placeholder range", uno::Reference< uno::XInterface >() );
 
         uno::Reference< beans::XPropertySet > xDBRangeProps( xDataBaseRange, uno::UNO_QUERY_THROW );
         // set autofilt
@@ -4556,7 +4556,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
                     nConn = sheet::FilterConnection_AND;
                     break;
                 default:
-                    throw uno::RuntimeException( OUString( "UnknownOption" ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException("UnknownOption", uno::Reference< uno::XInterface >() );
 
             }
 
@@ -4651,7 +4651,7 @@ ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& /*CopyOrigin*/ ) thro
                 mode = sheet::CellInsertMode_DOWN;
                 break;
             default:
-                throw uno::RuntimeException( OUString( "Illegal parameter " ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Illegal parameter ", uno::Reference< uno::XInterface >() );
         }
     }
     else
@@ -4730,7 +4730,7 @@ ScVbaRange::Hyperlinks( const uno::Any& aIndex ) throw (uno::RuntimeException)
     uno::Reference< excel::XHyperlinks > xSheetHlinks( xWorksheet->Hyperlinks( uno::Any() ), uno::UNO_QUERY_THROW );
     ScVbaHyperlinksRef xScSheetHlinks( dynamic_cast< ScVbaHyperlinks* >( xSheetHlinks.get() ) );
     if( !xScSheetHlinks.is() )
-        throw uno::RuntimeException( OUString(  "Cannot obtain hyperlinks implementation object"  ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Cannot obtain hyperlinks implementation object", uno::Reference< uno::XInterface >() );
 
     // create a new local hyperlinks object based on the sheet hyperlinks
     ScVbaHyperlinksRef xHlinks( new ScVbaHyperlinks( getParent(), mxContext, xScSheetHlinks, getScRangeList() ) );
@@ -4835,7 +4835,7 @@ uno::Any SAL_CALL ScVbaRange::getPrefixCharacter() throw (uno::RuntimeException)
         return lclGetPrefixVariant( lclGetPrefixChar( mxRange ) );
     if( mxRanges.is() )
         return lclGetPrefixVariant( lclGetPrefixChar( mxRanges ) );
-    throw uno::RuntimeException( OUString(  "Unexpected empty Range object"  ), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException("Unexpected empty Range object", uno::Reference< uno::XInterface >() );
 }
 
 uno::Any ScVbaRange::getShowDetail() throw ( css::uno::RuntimeException)
@@ -4844,7 +4844,7 @@ uno::Any ScVbaRange::getShowDetail() throw ( css::uno::RuntimeException)
 
     // In MSO VBA, the specified range must be a single summary column or row in an outline. otherwise throw exception
     if( m_Areas->getCount() > 1 )
-        throw uno::RuntimeException( OUString( "Can not get Range.ShowDetail attribute "), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Can not get Range.ShowDetail attribute ", uno::Reference< uno::XInterface >() );
 
     sal_Bool bShowDetail = false;
 
@@ -4876,7 +4876,7 @@ uno::Any ScVbaRange::getShowDetail() throw ( css::uno::RuntimeException)
     }
     else
     {
-        throw uno::RuntimeException( OUString( "Can not set Range.ShowDetail attribute "), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Can not set Range.ShowDetail attribute ", uno::Reference< uno::XInterface >() );
     }
     return aNULL();
 }
@@ -4887,7 +4887,7 @@ void ScVbaRange::setShowDetail(const uno::Any& aShowDetail) throw ( css::uno::Ru
 
     // In MSO VBA, the specified range must be a single summary column or row in an outline. otherwise throw exception
     if( m_Areas->getCount() > 1 )
-        throw uno::RuntimeException( OUString( "Can not set Range.ShowDetail attribute "), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Can not set Range.ShowDetail attribute ", uno::Reference< uno::XInterface >() );
 
     bool bShowDetail = extractBoolFromAny( aShowDetail );
 
@@ -4912,7 +4912,7 @@ void ScVbaRange::setShowDetail(const uno::Any& aShowDetail) throw ( css::uno::Ru
     }
     else
     {
-        throw uno::RuntimeException( OUString( "Can not set Range.ShowDetail attribute "), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Can not set Range.ShowDetail attribute ", uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -5077,7 +5077,7 @@ ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const
                 eCmd = FILL_GROWTH;
                 break;
             case excel::XlAutoFillType::xlFillFormats:
-                throw uno::RuntimeException( OUString(  "xlFillFormat not supported for AutoFill"  ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("xlFillFormat not supported for AutoFill", uno::Reference< uno::XInterface >() );
             case excel::XlAutoFillType::xlFillValues:
             case excel::XlAutoFillType::xlFillSeries:
             case excel::XlAutoFillType::xlLinearTrend:

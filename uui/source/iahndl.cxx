@@ -917,7 +917,7 @@ UUIInteractionHelper::handleRequest_impl(
     }
     catch (std::bad_alloc const &)
     {
-        throw uno::RuntimeException(OUString("out of memory"),
+        throw uno::RuntimeException("out of memory",
             uno::Reference< uno::XInterface >());
     }
     catch( const uno::RuntimeException& )
@@ -956,7 +956,7 @@ UUIInteractionHelper::getInteractionHandlerList(
                     "com.sun.star.configuration.ConfigurationAccess" , aArguments ) );
 
         if ( !xInterface.is() )
-            throw uno::RuntimeException(OUString("unable to instanciate config access"),
+            throw uno::RuntimeException("unable to instanciate config access",
                 uno::Reference< uno::XInterface >());
 
         uno::Reference< container::XNameAccess > xNameAccess(

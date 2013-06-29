@@ -585,7 +585,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         m_settings.pConnection = PQconnectdbParams( keywords.c_array(), values.c_array(), 0 );
     }
     if( ! m_settings.pConnection )
-        throw RuntimeException( OUString( "pq_driver: out of memory" ),
+        throw RuntimeException("pq_driver: out of memory",
                                 Reference< XInterface > () );
     if( PQstatus( m_settings.pConnection ) == CONNECTION_BAD )
     {

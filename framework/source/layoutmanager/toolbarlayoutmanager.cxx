@@ -1596,7 +1596,7 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
         try
         {
             // Check persistent flag of the user interface element
-            xPropSet->getPropertyValue( OUString( "Persistent" )) >>= bPersistent;
+            xPropSet->getPropertyValue("Persistent") >>= bPersistent;
         }
         catch (const beans::UnknownPropertyException&)
         {
@@ -3888,7 +3888,7 @@ throw (uno::RuntimeException)
                     xPropSet = uno::Reference< beans::XPropertySet >( xCfgMgr->getSettings( rEvent.ResourceURL, sal_False ), uno::UNO_QUERY );
 
                     if ( xPropSet.is() )
-                        xPropSet->getPropertyValue( OUString( "UIName" )) >>= aUIName;
+                        xPropSet->getPropertyValue("UIName") >>= aUIName;
                 }
                 catch (const container::NoSuchElementException&)
                 {

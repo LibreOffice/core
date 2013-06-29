@@ -1749,7 +1749,7 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
         if (xMultiServiceFactory.is())
         {
-            uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance(OUString("com.sun.star.sheet.Defaults")), uno::UNO_QUERY);
+            uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance("com.sun.star.sheet.Defaults"), uno::UNO_QUERY);
             if (xProperties.is())
                 aStylesExp.exportDefaultStyle(xProperties, OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), xCellStylesExportPropertySetMapper);
             if (pSharedData->HasShapes())
@@ -1763,7 +1763,7 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
             uno::Reference <container::XNameAccess> xStylesFamilies(xStyleFamiliesSupplier->getStyleFamilies());
             if (xStylesFamilies.is())
             {
-                uno::Reference <container::XIndexAccess> xCellStyles(xStylesFamilies->getByName(OUString("CellStyles")), uno::UNO_QUERY);
+                uno::Reference <container::XIndexAccess> xCellStyles(xStylesFamilies->getByName("CellStyles"), uno::UNO_QUERY);
                 if (xCellStyles.is())
                 {
                     sal_Int32 nCount(xCellStyles->getCount());
@@ -3009,7 +3009,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
     if (xShapeProps.is())
     {
         sal_Int32 nZOrder = 0;
-        if (xShapeProps->getPropertyValue(OUString("ZOrder")) >>= nZOrder)
+        if (xShapeProps->getPropertyValue("ZOrder") >>= nZOrder)
         {
             OUStringBuffer sBuffer;
             ::sax::Converter::convertNumber(sBuffer, nZOrder);
@@ -4490,7 +4490,7 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
         if (xMultiServiceFactory.is())
         {
-            uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance(OUString("com.sun.star.comp.SpreadsheetSettings")), uno::UNO_QUERY);
+            uno::Reference <beans::XPropertySet> xProperties(xMultiServiceFactory->createInstance("com.sun.star.comp.SpreadsheetSettings"), uno::UNO_QUERY);
             if (xProperties.is())
                 SvXMLUnitConverter::convertPropertySet(rProps, xProperties);
 

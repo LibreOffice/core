@@ -185,11 +185,11 @@ namespace param
             {
                 // TODO : aParamType & nScale can be obtained within the constructor ....
                 sal_Int32 nParamType = DataType::VARCHAR;
-                OSL_VERIFY( m_xDelegator->getPropertyValue( OUString( "Type" ) ) >>= nParamType );
+                OSL_VERIFY( m_xDelegator->getPropertyValue("Type") >>= nParamType );
 
                 sal_Int32 nScale = 0;
-                if ( m_xDelegatorPSI->hasPropertyByName( OUString( "Scale" ) ) )
-                    OSL_VERIFY( m_xDelegator->getPropertyValue( OUString( "Scale" ) ) >>= nScale );
+                if ( m_xDelegatorPSI->hasPropertyByName("Scale") )
+                    OSL_VERIFY( m_xDelegator->getPropertyValue("Scale") >>= nScale );
 
                 if ( m_xValueDestination.is() )
                 {

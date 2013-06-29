@@ -157,7 +157,7 @@ Any SAL_CALL PresenterScreenJob::execute(
     }
 
     Reference< XServiceInfo > xInfo( xModel, UNO_QUERY );
-    if( xInfo.is() && xInfo->supportsService( OUString( "com.sun.star.presentation.PresentationDocument"  ) ) )
+    if( xInfo.is() && xInfo->supportsService("com.sun.star.presentation.PresentationDocument") )
     {
         // Create a new listener that waits for the full screen presentation
         // to start and to end.  It takes care of its own lifetime.

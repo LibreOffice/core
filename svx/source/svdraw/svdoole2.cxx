@@ -452,7 +452,7 @@ uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SdrLightEmbed
     uno::Reference < beans::XPropertySet > xFrame( lcl_getFrame_throw(mpObj));
     try
     {
-        xMan.set(xFrame->getPropertyValue( OUString("LayoutManager") ),uno::UNO_QUERY);
+        xMan.set(xFrame->getPropertyValue("LayoutManager"),uno::UNO_QUERY);
     }
     catch ( uno::Exception& )
     {

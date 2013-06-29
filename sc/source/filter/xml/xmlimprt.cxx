@@ -2585,7 +2585,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
                     }
                 }
             }
-            uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance(OUString("com.sun.star.comp.SpreadsheetSettings"));
+            uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance("com.sun.star.comp.SpreadsheetSettings");
             uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
             if (xProperties.is())
                 SvXMLUnitConverter::convertPropertySet(xProperties, aConfigProps);
@@ -2765,7 +2765,7 @@ void ScXMLImport::AddStyleRange(const table::CellRangeAddress& rCellRange)
     {
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
         if (xMultiServiceFactory.is())
-            xSheetCellRanges.set(uno::Reference <sheet::XSheetCellRangeContainer>(xMultiServiceFactory->createInstance(OUString("com.sun.star.sheet.SheetCellRanges")), uno::UNO_QUERY));
+            xSheetCellRanges.set(uno::Reference <sheet::XSheetCellRangeContainer>(xMultiServiceFactory->createInstance("com.sun.star.sheet.SheetCellRanges"), uno::UNO_QUERY));
         OSL_ENSURE(xSheetCellRanges.is(), "didn't get SheetCellRanges");
 
     }

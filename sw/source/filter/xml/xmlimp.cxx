@@ -1088,7 +1088,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !xFac.is() )
         return;
 
-    Reference< XPropertySet > xProps( xFac->createInstance( OUString( "com.sun.star.document.Settings" ) ), UNO_QUERY );
+    Reference< XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), UNO_QUERY );
     if( !xProps.is() )
         return;
 

@@ -278,7 +278,7 @@ static sal_Bool lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, 
         uno::Reference < beans::XPropertySet > xShapeProp (xShape, uno::UNO_QUERY);
         if (xShapeProp.is())
         {
-            xShapeProp->getPropertyValue( OUString( "CaptionPoint" ) ) >>= rCaptionPoint;
+            xShapeProp->getPropertyValue("CaptionPoint") >>= rCaptionPoint;
             bReturn = sal_True;
         }
     }
@@ -446,7 +446,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
             }
         }
         else
-            throw lang::IllegalArgumentException(OUString("only XCell or XSpreadsheet objects allowed"), static_cast<cppu::OWeakObject*>(this), 0);
+            throw lang::IllegalArgumentException("only XCell or XSpreadsheet objects allowed", static_cast<cppu::OWeakObject*>(this), 0);
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
     {

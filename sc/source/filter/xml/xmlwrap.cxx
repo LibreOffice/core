@@ -134,7 +134,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
             aParserInput.aInputStream = xDocStream->getInputStream();
             uno::Reference < beans::XPropertySet > xSet( xDocStream, uno::UNO_QUERY );
 
-            uno::Any aAny = xSet->getPropertyValue( OUString("Encrypted") );
+            uno::Any aAny = xSet->getPropertyValue("Encrypted");
             aAny >>= bEncrypted;
         }
         catch( const packages::WrongPasswordException& )
@@ -381,7 +381,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         {
             sal_Int32 nProgressRange(1000000);
             xStatusIndicator->start(ScGlobal::GetRscString(STR_LOAD_DOC), nProgressRange);
-            xInfoSet->setPropertyValue(OUString("ProgressRange"), uno::makeAny(nProgressRange));
+            xInfoSet->setPropertyValue("ProgressRange", uno::makeAny(nProgressRange));
         }
 
         // Set base URI
@@ -601,14 +601,14 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             }
 
             // Set Code Names
-            uno::Any aAny = xInfoSet->getPropertyValue(OUString("ScriptConfiguration"));
+            uno::Any aAny = xInfoSet->getPropertyValue("ScriptConfiguration");
             uno::Reference <container::XNameAccess> xCodeNameAccess;
             if( aAny >>= xCodeNameAccess )
                 XMLCodeNameProvider::set( xCodeNameAccess, &rDoc );
 
             // VBA compatibility
             bool bVBACompat = false;
-            if ( (xInfoSet->getPropertyValue(OUString("VBACompatibilityMode")) >>= bVBACompat) && bVBACompat )
+            if ( (xInfoSet->getPropertyValue("VBACompatibilityMode") >>= bVBACompat) && bVBACompat )
             {
                 /*  Set library container to VBA compatibility mode, this
                     forces loading the Basic project, which in turn creates the
@@ -673,7 +673,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XCompon
         uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
         if (xSet.is())
         {
-            xSet->setPropertyValue(OUString("MediaType"), uno::makeAny(sMediaType));
+            xSet->setPropertyValue("MediaType", uno::makeAny(sMediaType));
             OUString aUseCommonPassPropName("UseCommonStoragePasswordEncryption");
 
             // advise storage impl to use common encryption

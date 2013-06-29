@@ -1144,7 +1144,7 @@ Sequence< OUString > InvocationService::getSupportedServiceNames(void) throw( Ru
 //--------------------------------------------------------------------------------------------------
 Reference<XInterface> InvocationService::createInstance(void) throw( Exception, RuntimeException )
 {
-    //TODO:throw( Exception(OUString("no default construction of invocation adapter possible!"), *this) );
+    //TODO:throw( Exception("no default construction of invocation adapter possible!", *this) );
     return Reference<XInterface>(); // dummy
 }
 
@@ -1160,7 +1160,7 @@ Reference<XInterface> InvocationService::createInstanceWithArguments(
     }
     else
     {
-        //TODO:throw( Exception(OUString("no default construction of invocation adapter possible!"), *this) );
+        //TODO:throw( Exception("no default construction of invocation adapter possible!", *this) );
         return Reference<XInterface>();
     }
 }

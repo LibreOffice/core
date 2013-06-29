@@ -151,7 +151,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             throw uno::RuntimeException();
 
         try {
-            uno::Any aAny = xPropSet->getPropertyValue( OUString( "MediaType" ));
+            uno::Any aAny = xPropSet->getPropertyValue("MediaType");
             aAny >>= aMediaType;
         }
         catch ( const uno::Exception& )
@@ -183,7 +183,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             throw uno::RuntimeException();
 
         try {
-            uno::Any aAny = xPropSet->getPropertyValue( OUString( "MediaType" ));
+            uno::Any aAny = xPropSet->getPropertyValue("MediaType");
             aAny >>= aMediaType;
             if ( aMediaType == "application/vnd.sun.star.oleobject" )
                 aEmbedFactory = OUString( "com.sun.star.embed.OLEEmbeddedObjectFactory" );

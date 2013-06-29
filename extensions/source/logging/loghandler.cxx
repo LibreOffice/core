@@ -81,10 +81,10 @@ namespace logging
         m_rMutex.acquire();
 
         if ( !getIsInitialized() )
-            throw DisposedException( OUString( "component not initialized" ), NULL );
+            throw DisposedException("component not initialized", NULL );
 
         if ( m_rBHelper.bDisposed )
-            throw DisposedException( OUString( "component already disposed" ), NULL );
+            throw DisposedException("component already disposed", NULL );
 
         // fallback settings, in case they weren't passed at construction time
         if ( !getFormatter().is() )

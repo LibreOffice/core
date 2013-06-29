@@ -115,7 +115,7 @@ static bool checkComponent( Reference< XComponent >& rxComponent, const OUString
                 if ( rServiceName == "com.sun.star.drawing.DrawingDocument" )
                 {
                     // so if we want a draw we need to check if its not an impress
-                    if( !xInfo->supportsService( OUString( "com.sun.star.presentation.PresentationDocument") ) )
+                    if( !xInfo->supportsService("com.sun.star.presentation.PresentationDocument") )
                         return true;
                 }
                 else
@@ -475,8 +475,8 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                     {
                         try
                         {
-                            xGrfResolver = Reference< XGraphicObjectResolver >::query( xDocFac->createInstance( OUString( "com.sun.star.document.ExportGraphicObjectResolver" ) ) );
-                            xObjectResolver = Reference< XEmbeddedObjectResolver >::query( xDocFac->createInstance( OUString( "com.sun.star.document.ExportEmbeddedObjectResolver" ) ) );
+                            xGrfResolver = Reference< XGraphicObjectResolver >::query( xDocFac->createInstance("com.sun.star.document.ExportGraphicObjectResolver") );
+                            xObjectResolver = Reference< XEmbeddedObjectResolver >::query( xDocFac->createInstance("com.sun.star.document.ExportEmbeddedObjectResolver") );
                         }
                         catch( const Exception& )
                         {

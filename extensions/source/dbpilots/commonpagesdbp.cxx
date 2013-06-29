@@ -111,7 +111,7 @@ namespace dbp
         try
         {
             OUString sDataSourceName;
-            rContext.xForm->getPropertyValue(OUString("DataSourceName")) >>= sDataSourceName;
+            rContext.xForm->getPropertyValue("DataSourceName") >>= sDataSourceName;
 
             Reference< XConnection > xConnection;
             bool bEmbedded = ::dbtools::isEmbeddedInDatabase( rContext.xForm, xConnection );
@@ -129,9 +129,9 @@ namespace dbp
             implFillTables(xConnection);
 
             OUString sCommand;
-            OSL_VERIFY( rContext.xForm->getPropertyValue( OUString("Command") ) >>= sCommand );
+            OSL_VERIFY( rContext.xForm->getPropertyValue("Command") >>= sCommand );
             sal_Int32 nCommandType = CommandType::TABLE;
-            OSL_VERIFY( rContext.xForm->getPropertyValue( OUString("CommandType") ) >>= nCommandType );
+            OSL_VERIFY( rContext.xForm->getPropertyValue("CommandType") >>= nCommandType );
 
             // search the entry of the given type with the given name
             for ( sal_uInt16 nLookup = 0; nLookup < m_aTable.GetEntryCount(); ++nLookup )
@@ -167,13 +167,13 @@ namespace dbp
                 xOldConn = getFormConnection();
 
                 OUString sDataSource = m_aDatasource.GetSelectEntry();
-                rContext.xForm->setPropertyValue( OUString("DataSourceName"), makeAny( sDataSource ) );
+                rContext.xForm->setPropertyValue("DataSourceName", makeAny( sDataSource ) );
             }
             OUString sCommand = m_aTable.GetSelectEntry();
             sal_Int32 nCommandType = reinterpret_cast< sal_IntPtr >( m_aTable.GetEntryData( m_aTable.GetSelectEntryPos() ) );
 
-            rContext.xForm->setPropertyValue( OUString("Command"), makeAny( sCommand ) );
-            rContext.xForm->setPropertyValue( OUString("CommandType"), makeAny( nCommandType ) );
+            rContext.xForm->setPropertyValue("Command", makeAny( sCommand ) );
+            rContext.xForm->setPropertyValue("CommandType", makeAny( nCommandType ) );
 
             if ( !rContext.bEmbedded )
                 setFormConnection( xOldConn, sal_False );

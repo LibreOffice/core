@@ -653,7 +653,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 {
                     try
                     {
-                        Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
+                        Any aValue = xPropSet->getPropertyValue("LayoutManager");
                         aValue >>= xLayoutManager;
                     }
                     catch ( const ::com::sun::star::uno::RuntimeException& )

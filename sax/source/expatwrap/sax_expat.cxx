@@ -492,7 +492,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
 
     if( ! entity.structSource.aInputStream.is() )
     {
-        throw SAXException( OUString("No input source") ,
+        throw SAXException("No input source",
                             Reference< XInterface > () , Any() );
     }
 
@@ -507,7 +507,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     entity.pParser = XML_ParserCreate( 0 );
     if( ! entity.pParser )
     {
-        throw SAXException( OUString("Couldn't create parser") ,
+        throw SAXException("Couldn't create parser",
                             Reference< XInterface > (), Any() );
     }
 

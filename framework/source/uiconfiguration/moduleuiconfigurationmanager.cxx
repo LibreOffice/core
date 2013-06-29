@@ -810,8 +810,8 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
     if ( !m_bInitialized )
     {
         ::comphelper::SequenceAsHashMap lArgs(aArguments);
-        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(OUString("ModuleIdentifier"), OUString());
-        m_aModuleShortName  = lArgs.getUnpackedValueOrDefault(OUString("ModuleShortName"), OUString());
+        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault("ModuleIdentifier", OUString());
+        m_aModuleShortName  = lArgs.getUnpackedValueOrDefault("ModuleShortName", OUString());
 
         for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
         {
@@ -847,7 +847,7 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
             if ( xPropSet.is() )
             {
                 long nOpenMode = 0;
-                Any a = xPropSet->getPropertyValue( OUString( "OpenMode" ));
+                Any a = xPropSet->getPropertyValue("OpenMode");
                 if ( a >>= nOpenMode )
                     m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
             }

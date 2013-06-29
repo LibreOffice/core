@@ -616,9 +616,9 @@ void SbaTableQueryBrowser::initializePreviewMode()
     Reference< XPropertySet >  xDataSourceSet(getRowSet(), UNO_QUERY);
     if ( xDataSourceSet.is() )
     {
-        xDataSourceSet->setPropertyValue(OUString("AllowInserts"),makeAny(sal_False));
-        xDataSourceSet->setPropertyValue(OUString("AllowUpdates"),makeAny(sal_False));
-        xDataSourceSet->setPropertyValue(OUString("AllowDeletes"),makeAny(sal_False));
+        xDataSourceSet->setPropertyValue("AllowInserts",makeAny(sal_False));
+        xDataSourceSet->setPropertyValue("AllowUpdates",makeAny(sal_False));
+        xDataSourceSet->setPropertyValue("AllowDeletes",makeAny(sal_False));
     }
 }
 
@@ -1563,7 +1563,7 @@ void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame:
         {
             Reference< XPropertySet > xFrameProps( m_aCurrentFrame.getFrame(), UNO_QUERY_THROW );
             Reference< XLayoutManager > xLayouter(
-                xFrameProps->getPropertyValue( OUString( "LayoutManager" ) ),
+                xFrameProps->getPropertyValue("LayoutManager"),
                 UNO_QUERY );
 
             if ( xLayouter.is() )

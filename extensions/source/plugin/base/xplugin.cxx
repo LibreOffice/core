@@ -320,7 +320,7 @@ void XPlugin_Impl::handleSpecialArgs()
             try
             {
                 uno::Reference< XPropertySet > xProp( m_xModel, UNO_QUERY );
-                Any aProp = xProp->getPropertyValue( OUString(  "URL"  ) );
+                Any aProp = xProp->getPropertyValue("URL");
                 aProp >>= aURL;
             }
             catch(const UnknownPropertyException &)
@@ -390,7 +390,7 @@ void XPlugin_Impl::handleSpecialArgs()
             try
             {
                 uno::Reference< XPropertySet > xProp( m_xModel, UNO_QUERY );
-                Any aProp = xProp->getPropertyValue( OUString(  "URL"  ) );
+                Any aProp = xProp->getPropertyValue("URL");
                 aProp >>= aURL;
             }
             catch(const UnknownPropertyException &)
@@ -462,7 +462,7 @@ OUString XPlugin_Impl::getCreationURL()
     uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
     if( xPS.is() )
     {
-        Any aValue = xPS->getPropertyValue( OUString("URL") );
+        Any aValue = xPS->getPropertyValue("URL");
         aValue >>= aRet;
     }
     return aRet;
@@ -660,9 +660,9 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
         {
             try
             {
-                xPS->setPropertyValue( OUString("URL"), aAny );
+                xPS->setPropertyValue("URL", aAny );
                 aAny <<= mimetype;
-                xPS->setPropertyValue( OUString("TYPE"), aAny );
+                xPS->setPropertyValue("TYPE", aAny );
             }
             catch(...)
             {
@@ -724,7 +724,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
              {
                  Any aAny;
                  aAny <<= m_aDescription.Mimetype;
-                 xPS->setPropertyValue( OUString("TYPE"), aAny );
+                 xPS->setPropertyValue("TYPE", aAny );
              }
              catch(...)
              {
@@ -1140,7 +1140,7 @@ PluginOutputStream::PluginOutputStream( XPlugin_Impl* pPlugin,
                                         sal_uInt32 len,
                                         sal_uInt32 lastmod ) :
         PluginStream( pPlugin, url, len, lastmod ),
-        m_xStream( pPlugin->getServiceManager()->createInstance( OUString("com.sun.star.io.DataOutputStream") ), UNO_QUERY )
+        m_xStream( pPlugin->getServiceManager()->createInstance("com.sun.star.io.DataOutputStream"), UNO_QUERY )
 {
     Guard< Mutex > aGuard( m_pPlugin->getMutex() );
 

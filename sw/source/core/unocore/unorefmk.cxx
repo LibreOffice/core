@@ -1223,7 +1223,7 @@ void SAL_CALL
 SwXMeta::setParent(uno::Reference< uno::XInterface > const& /*xParent*/)
     throw (uno::RuntimeException, lang::NoSupportException)
 {
-    throw lang::NoSupportException(OUString("setting parent not supported"), *this);
+    throw lang::NoSupportException("setting parent not supported", *this);
 }
 
 // XElementAccess

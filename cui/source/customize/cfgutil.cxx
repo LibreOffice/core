@@ -738,7 +738,7 @@ Image SfxConfigGroupListBox_Impl::GetImage(
                 Any aAny = xModuleManager->getByName(appModule);
                 if( sal_True != ( aAny >>= moduleDescr ) )
                 {
-                    throw RuntimeException(OUString("SFTreeListBox::Init: failed to get PropertyValue"), Reference< XInterface >());
+                    throw RuntimeException("SFTreeListBox::Init: failed to get PropertyValue", Reference< XInterface >());
                 }
                 beans::PropertyValue const * pmoduleDescr =
                     moduleDescr.getConstArray();
@@ -812,7 +812,7 @@ OUString SfxConfigGroupListBox_Impl::MapCommand2UIName(const OUString& sCommand)
         if (xModuleConf.is())
         {
             ::comphelper::SequenceAsHashMap lProps(xModuleConf->getByName(sCommand));
-            sUIName = lProps.getUnpackedValueOrDefault(OUString("Name"), OUString());
+            sUIName = lProps.getUnpackedValueOrDefault("Name", OUString());
         }
     }
     catch(const css::uno::RuntimeException&)
@@ -898,7 +898,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                                 }
 
                                 Any value =
-                                    xPropSet->getPropertyValue( OUString("URI") );
+                                    xPropSet->getPropertyValue("URI");
                                 value >>= uri;
 
                                 String* pScriptURI = new String( uri );

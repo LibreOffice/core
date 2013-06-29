@@ -515,7 +515,7 @@ vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, co
 
     // problems with decoding
     OSL_FAIL( "Problem with decoding\n" );
-    throw RuntimeException( OUString("Can't decode!"), Reference< XInterface >() );
+    throw RuntimeException("Can't decode!", Reference< XInterface >() );
 }
 
 
@@ -595,7 +595,7 @@ OUString PasswordContainer::EncodePasswords( vector< OUString > lines, const OUS
 
     // problems with encoding
     OSL_FAIL( "Problem with encoding\n" );
-    throw RuntimeException( OUString("Can't encode!"), Reference< XInterface >() );
+    throw RuntimeException("Can't encode!", Reference< XInterface >() );
 }
 
 //-------------------------------------------------------------------------
@@ -889,7 +889,7 @@ OUString PasswordContainer::GetMasterPassword( const Reference< XInteractionHand
 {
     PasswordRequestMode aRMode = PasswordRequestMode_PASSWORD_ENTER;
     if( !m_pStorageFile || !m_pStorageFile->useStorage() )
-        throw NoMasterException( OUString("Password storing is not active!"), Reference< XInterface >(), aRMode );
+        throw NoMasterException("Password storing is not active!", Reference< XInterface >(), aRMode );
 
     if( m_aMasterPasswd.isEmpty() && aHandler.is() )
     {
@@ -938,7 +938,7 @@ OUString PasswordContainer::GetMasterPassword( const Reference< XInteractionHand
     }
 
     if ( m_aMasterPasswd.isEmpty() )
-        throw NoMasterException( OUString("No master password!"), Reference< XInterface >(), aRMode );
+        throw NoMasterException("No master password!", Reference< XInterface >(), aRMode );
 
     return m_aMasterPasswd;
 }

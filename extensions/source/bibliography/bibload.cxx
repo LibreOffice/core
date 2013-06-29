@@ -316,7 +316,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
     {
         try
         {
-            Any a = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
+            Any a = xPropSet->getPropertyValue("LayoutManager");
             a >>= xLayoutManager;
         }
         catch ( const uno::Exception& )

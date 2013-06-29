@@ -573,7 +573,7 @@ int main (int argc, char **argv)
     //----------------------
     // The SAX-Writer demo
     //----------------------
-    x= xSMgr->createInstance( OUString("com.sun.star.xml.sax.Writer") );
+    x= xSMgr->createInstance("com.sun.star.xml.sax.Writer");
     if( x.is() )
     {
         printf( "start writing to %s\n" , argv[2] );

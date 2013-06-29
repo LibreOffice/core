@@ -71,7 +71,7 @@ SwVbaView::getSeekView() throw (css::uno::RuntimeException)
     uno::Reference< text::XText > xCurrentText = mxViewCursor->getText();
     uno::Reference< beans::XPropertySet > xCursorProps( mxViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextContent > xTextContent;
-    while( xCursorProps->getPropertyValue( OUString("TextTable") ) >>= xTextContent )
+    while( xCursorProps->getPropertyValue("TextTable") >>= xTextContent )
     {
         xCurrentText = xTextContent->getAnchor()->getText();
         xCursorProps.set( xCurrentText->createTextCursor(), uno::UNO_QUERY_THROW );
@@ -105,7 +105,7 @@ SwVbaView::getSeekView() throw (css::uno::RuntimeException)
     }
     else if ( aImplName == "SwXFootnote" )
     {
-        if( xServiceInfo->supportsService( OUString("com.sun.star.text.Endnote") ) )
+        if( xServiceInfo->supportsService("com.sun.star.text.Endnote") )
             return word::WdSeekView::wdSeekEndnotes;
         else
             return word::WdSeekView::wdSeekFootnotes;
@@ -193,14 +193,14 @@ SwVbaView::setSplitSpecial( ::sal_Int32/* _splitspecial */) throw (css::uno::Run
 SwVbaView::getTableGridLines() throw (css::uno::RuntimeException)
 {
     sal_Bool bShowTableGridLine = sal_False;
-    mxViewSettings->getPropertyValue( OUString("ShowTableBoundaries")) >>= bShowTableGridLine;
+    mxViewSettings->getPropertyValue("ShowTableBoundaries") >>= bShowTableGridLine;
     return bShowTableGridLine;
 }
 
 void SAL_CALL
 SwVbaView::setTableGridLines( ::sal_Bool _tablegridlines ) throw (css::uno::RuntimeException)
 {
-    mxViewSettings->setPropertyValue( OUString("ShowTableBoundaries"), uno::makeAny( _tablegridlines ) );
+    mxViewSettings->setPropertyValue("ShowTableBoundaries", uno::makeAny( _tablegridlines ) );
 }
 
 ::sal_Int32 SAL_CALL
@@ -208,7 +208,7 @@ SwVbaView::getType() throw (css::uno::RuntimeException)
 {
     // FIXME: handle wdPrintPreview type
     sal_Bool bOnlineLayout = sal_False;
-    mxViewSettings->getPropertyValue( OUString("ShowOnlineLayout")) >>= bOnlineLayout;
+    mxViewSettings->getPropertyValue("ShowOnlineLayout") >>= bOnlineLayout;
     return bOnlineLayout ? word::WdViewType::wdWebView : word::WdViewType::wdPrintView;
 }
 
@@ -221,12 +221,12 @@ SwVbaView::setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException)
         case word::WdViewType::wdPrintView:
         case word::WdViewType::wdNormalView:
         {
-            mxViewSettings->setPropertyValue( OUString("ShowOnlineLayout"), uno::makeAny( sal_False ) );
+            mxViewSettings->setPropertyValue("ShowOnlineLayout", uno::makeAny( sal_False ) );
             break;
         }
         case word::WdViewType::wdWebView:
         {
-            mxViewSettings->setPropertyValue( OUString("ShowOnlineLayout"), uno::makeAny( sal_True ) );
+            mxViewSettings->setPropertyValue("ShowOnlineLayout", uno::makeAny( sal_True ) );
             break;
         }
         case word::WdViewType::wdPrintPreview:
@@ -303,7 +303,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
             // an even page number
             uno::Reference< beans::XPropertySet > xCursorProps( mxViewCursor, uno::UNO_QUERY_THROW );
             OUString aPageStyleName;
-            xCursorProps->getPropertyValue( OUString("PageStyleName")) >>= aPageStyleName;
+            xCursorProps->getPropertyValue("PageStyleName") >>= aPageStyleName;
             if ( aPageStyleName == "First Page" )
             {
                 // go to the beginning of where the next style is used

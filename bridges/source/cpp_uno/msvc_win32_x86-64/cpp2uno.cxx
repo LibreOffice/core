@@ -242,7 +242,7 @@ extern "C" typelib_TypeClass cpp_vtable_call(
 
     OSL_ENSURE( nFunctionIndex < pTD->nMapFunctionIndexToMemberIndex, "### illegal vtable index!\n" );
     if ( nFunctionIndex >= pTD->nMapFunctionIndexToMemberIndex )
-        throw RuntimeException( OUString("Illegal vtable index!"),
+        throw RuntimeException("Illegal vtable index!",
                                 reinterpret_cast<XInterface *>( pCppI ) );
 
     // Determine called method
@@ -345,7 +345,7 @@ extern "C" typelib_TypeClass cpp_vtable_call(
         }
         default:
         {
-            throw RuntimeException( OUString("No member description found!"),
+            throw RuntimeException("No member description found!",
                                     reinterpret_cast<XInterface *>( pCppI ) );
         }
     }

@@ -217,7 +217,7 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
 
             if ( xSet.is() )
             {
-                com::sun::star::uno::Any aProp = xSet->getPropertyValue(OUString("DispatchRecorderSupplier"));
+                com::sun::star::uno::Any aProp = xSet->getPropertyValue("DispatchRecorderSupplier");
                 com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
                 com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
                 aProp >>= xSupplier;
@@ -1250,7 +1250,7 @@ void SfxDispatcher::SetMenu_Impl()
                 if ( xPropSet.is() )
                 {
                     com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
-                    com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
+                    com::sun::star::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
                     aValue >>= xLayoutManager;
                     if ( xLayoutManager.is() )
                     {
@@ -1314,7 +1314,7 @@ void SfxDispatcher::Update_Impl( sal_Bool bForce )
     {
         try
         {
-            com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ) );
+            com::sun::star::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
             aValue >>= xLayoutManager;
         }
         catch (const com::sun::star::uno::Exception&)
@@ -2160,7 +2160,7 @@ void SfxDispatcher::HideUI( sal_Bool bHide )
                 if ( xPropSet.is() )
                 {
                     com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
-                    com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
+                    com::sun::star::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
                     aValue >>= xLayoutManager;
                     if ( xLayoutManager.is() )
                         xLayoutManager->setVisible( !bHide );

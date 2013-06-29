@@ -388,8 +388,8 @@ sal_Bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _r
 
     Reference<XPropertySet> xProp(xAdminDialog,UNO_QUERY);
     sal_Bool bSuccess = sal_False;
-    xProp->getPropertyValue(OUString("OpenDatabase")) >>= bSuccess;
-    xProp->getPropertyValue(OUString("StartTableWizard")) >>= _bShouldStartTableWizard;
+    xProp->getPropertyValue("OpenDatabase") >>= bSuccess;
+    xProp->getPropertyValue("StartTableWizard") >>= _bShouldStartTableWizard;
     return bSuccess;
 }
 

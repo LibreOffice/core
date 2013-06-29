@@ -815,7 +815,7 @@ com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRe
 
     if(xSet.is())
     {
-        com::sun::star::uno::Any aProp = xSet->getPropertyValue(OUString("DispatchRecorderSupplier"));
+        com::sun::star::uno::Any aProp = xSet->getPropertyValue("DispatchRecorderSupplier");
         com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
         aProp >>= xSupplier;
         if(xSupplier.is())

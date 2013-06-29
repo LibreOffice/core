@@ -366,7 +366,7 @@ sal_Bool DocumentHolder::SetFrameLMVisibility( const uno::Reference< frame::XFra
     {
         uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
         uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY_THROW );
-        xPropSet->getPropertyValue( OUString( "LayoutManager" )) >>= xLayoutManager;
+        xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
         if ( xLayoutManager.is() )
         {
             xLayoutManager->setVisible( bVisible );
@@ -690,7 +690,7 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
         try
         {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
-            xPropSet->getPropertyValue( OUString( "LayoutManager" )) >>= xOwnLM;
+            xPropSet->getPropertyValue("LayoutManager") >>= xOwnLM;
             xDocAreaAcc = xContainerLM->getDockingAreaAcceptor();
         }
         catch( const uno::Exception& ){}
@@ -783,7 +783,7 @@ sal_Bool DocumentHolder::HideUI( const uno::Reference< ::com::sun::star::frame::
 
         try {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
-            xPropSet->getPropertyValue( OUString( "LayoutManager" )) >>= xOwnLM;
+            xPropSet->getPropertyValue("LayoutManager") >>= xOwnLM;
         } catch( const uno::Exception& )
         {}
 
@@ -860,7 +860,7 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
         uno::Reference< ::com::sun::star::frame::XLayoutManager > xOwnLM;
         try {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
-            xPropSet->getPropertyValue( OUString( "LayoutManager" )) >>= xOwnLM;
+            xPropSet->getPropertyValue("LayoutManager") >>= xOwnLM;
         } catch( const uno::Exception& )
         {}
 
@@ -972,12 +972,12 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
             OUString sUrl;
             uno::Reference< lang::XServiceInfo> xServiceInfo(xDoc,uno::UNO_QUERY);
             if (    xServiceInfo.is()
-                &&  xServiceInfo->supportsService(OUString("com.sun.star.report.ReportDefinition")) )
+                &&  xServiceInfo->supportsService("com.sun.star.report.ReportDefinition") )
             {
                 sUrl = OUString(".component:DB/ReportDesign");
             }
             else if( xServiceInfo.is()
-                &&   xServiceInfo->supportsService( OUString("com.sun.star.chart2.ChartDocument") ))
+                &&   xServiceInfo->supportsService("com.sun.star.chart2.ChartDocument"))
                 sUrl = OUString("private:factory/schart");
             else
                 sUrl = OUString("private:object");

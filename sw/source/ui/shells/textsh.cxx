@@ -237,7 +237,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
                     if ( xSet.is() )
                     {
-                        xSet->setPropertyValue( OUString("PluginURL"),
+                        xSet->setPropertyValue("PluginURL",
                                 uno::makeAny( OUString( url.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                     }
                 }
@@ -288,7 +288,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     try
                     {
                         if ( sClassLocation.Len() )
-                            xSet->setPropertyValue( OUString("PluginURL"),
+                            xSet->setPropertyValue("PluginURL",
                                 uno::makeAny(
                                     OUString(
                                         URIHelper::SmartRel2Abs(
@@ -298,7 +298,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                         if ( aCommandList.size() )
                         {
                             aCommandList.FillSequence( aSeq );
-                            xSet->setPropertyValue( OUString("PluginCommands"), uno::makeAny( aSeq ) );
+                            xSet->setPropertyValue("PluginCommands", uno::makeAny( aSeq ) );
                         }
                     }
                     catch (const uno::Exception&)
@@ -348,27 +348,27 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                         aMargin = pMarginItem->GetSize();
 
                     if ( pURLItem )
-                        xSet->setPropertyValue( OUString("FrameURL"), uno::makeAny( OUString( pURLItem->GetValue() ) ) );
+                        xSet->setPropertyValue("FrameURL", uno::makeAny( OUString( pURLItem->GetValue() ) ) );
                     if ( pNameItem )
-                        xSet->setPropertyValue( OUString("FrameName"), uno::makeAny( OUString( pNameItem->GetValue() ) ) );
+                        xSet->setPropertyValue("FrameName", uno::makeAny( OUString( pNameItem->GetValue() ) ) );
 
                     if ( eScroll == ScrollingAuto )
-                        xSet->setPropertyValue( OUString("FrameIsAutoScroll"),
+                        xSet->setPropertyValue("FrameIsAutoScroll",
                             uno::makeAny( sal_True ) );
                     else
-                        xSet->setPropertyValue( OUString("FrameIsScrollingMode"),
+                        xSet->setPropertyValue("FrameIsScrollingMode",
                             uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
 
                     if ( pBorderItem )
-                        xSet->setPropertyValue( OUString("FrameIsBorder"),
+                        xSet->setPropertyValue("FrameIsBorder",
                             uno::makeAny( (sal_Bool) pBorderItem->GetValue() ) );
 
                     if ( pMarginItem )
                     {
-                        xSet->setPropertyValue( OUString("FrameMarginWidth"),
+                        xSet->setPropertyValue("FrameMarginWidth",
                             uno::makeAny( sal_Int32( aMargin.Width() ) ) );
 
-                        xSet->setPropertyValue( OUString("FrameMarginHeight"),
+                        xSet->setPropertyValue("FrameMarginHeight",
                             uno::makeAny( sal_Int32( aMargin.Height() ) ) );
                     }
                 }

@@ -129,13 +129,13 @@ namespace {
                                 uno::UNO_QUERY_THROW );
             OUString aFilename( rFilename.copy(rFilename.lastIndexOf('/')+1) );
             OUString aLabel;
-            xPropSet->getPropertyValue(OUString( "Label" )) >>= aLabel;
+            xPropSet->getPropertyValue("Label") >>= aLabel;
             const char pFileName[] = "%FILENAME";
             aLabel = aLabel.replaceAt(
                 aLabel.indexOfAsciiL(pFileName,SAL_N_ELEMENTS(pFileName)-1),
                 SAL_N_ELEMENTS(pFileName)-1,
                 aFilename );
-            xPropSet->setPropertyValue(OUString( "Label" ),
+            xPropSet->setPropertyValue("Label",
                                        uno::makeAny(aLabel));
 
             uno::Sequence<OUString> aListboxItems(3);

@@ -937,7 +937,7 @@ Any SAL_CALL SortedResultSet::getPropertyValue( const OUString& PropertyName )
         if ( bOrgFinal )
         {
             aOrgRet = Reference< XPropertySet >::query(mxOriginal)->
-                getPropertyValue( OUString("RowCount") );
+                getPropertyValue("RowCount");
             sal_uInt32  nOrgCount = 0;
             aOrgRet >>= nOrgCount;
             if ( nOrgCount == maS2O.Count() )

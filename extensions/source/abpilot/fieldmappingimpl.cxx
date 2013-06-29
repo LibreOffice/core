@@ -104,7 +104,7 @@ namespace abp
 #ifdef DBG_UTIL
                     sal_Bool bSuccess =
 #endif
-                    xDialogProps->getPropertyValue( OUString( "FieldMapping" ) ) >>= aMapping;
+                    xDialogProps->getPropertyValue("FieldMapping") >>= aMapping;
                     DBG_ASSERT( bSuccess, "fieldmapping::invokeDialog: invalid property type for FieldMapping!" );
 
                     // and copy it into the map

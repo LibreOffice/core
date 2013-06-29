@@ -84,8 +84,8 @@ OUString GetNewTempFileURL_Impl( const uno::Reference< lang::XMultiServiceFactor
             uno::UNO_QUERY_THROW );
 
     try {
-        xTempFile->setPropertyValue( OUString( "RemoveFile" ), uno::makeAny( sal_False ) );
-        uno::Any aUrl = xTempFile->getPropertyValue( OUString( "Uri" ));
+        xTempFile->setPropertyValue("RemoveFile", uno::makeAny( sal_False ) );
+        uno::Any aUrl = xTempFile->getPropertyValue("Uri");
         aUrl >>= aResult;
     }
     catch ( const uno::Exception& )
@@ -164,8 +164,8 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimizedStora
 
         xParentStorage->copyStreamElementData( aEntryName, xTempStream );
 
-        xTempFile->setPropertyValue( OUString( "RemoveFile" ), uno::makeAny( sal_False ) );
-        uno::Any aUrl = xTempFile->getPropertyValue( OUString( "Uri" ));
+        xTempFile->setPropertyValue("RemoveFile", uno::makeAny( sal_False ) );
+        uno::Any aUrl = xTempFile->getPropertyValue("Uri");
         aUrl >>= aResult;
     }
     catch( const uno::RuntimeException& )
@@ -189,7 +189,7 @@ void SetStreamMediaType_Impl( const uno::Reference< io::XStream >& xStream, cons
     if ( !xPropSet.is() )
         throw uno::RuntimeException(); // TODO: all the storage streams must support XPropertySet
 
-    xPropSet->setPropertyValue( OUString( "MediaType" ), uno::makeAny( aMediaType ) );
+    xPropSet->setPropertyValue("MediaType", uno::makeAny( aMediaType ) );
 }
 #endif
 //------------------------------------------------------
@@ -199,7 +199,7 @@ void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >& xStre
     if ( !xPropSet.is() )
         throw uno::RuntimeException(); // Only StorageStreams must be provided here, they must implement the interface
 
-    xPropSet->setPropertyValue( OUString( "UseCommonStoragePasswordEncryption" ),
+    xPropSet->setPropertyValue("UseCommonStoragePasswordEncryption",
                                 uno::makeAny( (sal_Bool)sal_True ) );
 }
 #ifdef WNT

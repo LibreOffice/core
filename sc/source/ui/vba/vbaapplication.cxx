@@ -282,15 +282,15 @@ ScVbaApplication::getSelection() throw (uno::RuntimeException)
     if ( ScVbaShape::getType( xShape ) == office::MsoShapeType::msoAutoShape )
     {
         uno::Reference< lang::XServiceInfo > xShapeServiceInfo( xShape, uno::UNO_QUERY_THROW );
-        if ( xShapeServiceInfo->supportsService( OUString( "com.sun.star.drawing.Text" ) )  )
+        if ( xShapeServiceInfo->supportsService("com.sun.star.drawing.Text")  )
         {
                 return uno::makeAny( uno::Reference< msforms::XTextBoxShape >(new ScVbaTextBoxShape( mxContext, xShape, xShapes, xModel ) ) );
         }
     }
         return uno::makeAny( uno::Reference< msforms::XShape >(new ScVbaShape( this, mxContext, xShape, xShapes, xModel, ScVbaShape::getType( xShape ) ) ) );
     }
-    else if( xServiceInfo->supportsService( OUString("com.sun.star.sheet.SheetCellRange") ) ||
-             xServiceInfo->supportsService( OUString("com.sun.star.sheet.SheetCellRanges") ) )
+    else if( xServiceInfo->supportsService("com.sun.star.sheet.SheetCellRange") ||
+             xServiceInfo->supportsService("com.sun.star.sheet.SheetCellRanges") )
     {
         uno::Reference< table::XCellRange > xRange( aSelection, ::uno::UNO_QUERY);
         if ( !xRange.is() )
@@ -316,10 +316,10 @@ ScVbaApplication::getActiveCell() throw (uno::RuntimeException )
     uno::Reference< table::XCellRange > xRange( xView->getActiveSheet(), ::uno::UNO_QUERY_THROW);
     ScTabViewShell* pViewShell = excel::getCurrentBestViewShell(mxContext);
     if ( !pViewShell )
-        throw uno::RuntimeException( OUString("No ViewShell available"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("No ViewShell available", uno::Reference< uno::XInterface >() );
     ScViewData* pTabView = pViewShell->GetViewData();
     if ( !pTabView )
-        throw uno::RuntimeException( OUString("No ViewData available"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("No ViewData available", uno::Reference< uno::XInterface >() );
 
     sal_Int32 nCursorX = pTabView->GetCurX();
     sal_Int32 nCursorY = pTabView->GetCurY();
@@ -438,7 +438,7 @@ ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::Runtime
         }
     }
     else
-        throw uno::RuntimeException( OUString( "Invalid prarameter. It should be a string or False" ),
+        throw uno::RuntimeException("Invalid prarameter. It should be a string or False",
             uno::Reference< uno::XInterface >() );
 }
 
@@ -539,7 +539,7 @@ ScVbaApplication::getActiveSheet() throw (uno::RuntimeException)
     if ( !result.is() )
     {
         // Fixme - check if this is reasonable/desired behavior
-        throw uno::RuntimeException( OUString( "No activeSheet available" ),
+        throw uno::RuntimeException("No activeSheet available",
             uno::Reference< uno::XInterface >() );
     }
     return result;
@@ -571,7 +571,7 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
             bScroll = aScroll;
         }
         else
-            throw uno::RuntimeException( OUString( "second parameter should be boolean" ),
+            throw uno::RuntimeException("second parameter should be boolean",
                     uno::Reference< uno::XInterface >() );
     }
 
@@ -617,7 +617,7 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
             //and the createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) to get a root browse::XBrowseNode.
             //for query XInvocation interface.
             //but how to directly get the XInvocation?
-            throw uno::RuntimeException( OUString( "invalid reference for range name, it should be procedure name" ),
+            throw uno::RuntimeException("invalid reference for range name, it should be procedure name",
                     uno::Reference< uno::XInterface >() );
         }
         return;
@@ -652,7 +652,7 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
         }
         return;
     }
-    throw uno::RuntimeException( OUString( "invalid reference or name" ),
+    throw uno::RuntimeException("invalid reference or name",
             uno::Reference< uno::XInterface >() );
 }
 
@@ -705,7 +705,7 @@ ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
                 break;
             }
             default:
-                throw uno::RuntimeException( OUString("Unknown value for Cursor pointer"), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException("Unknown value for Cursor pointer", uno::Reference< uno::XInterface >() );
                 // TODO: isn't this a flaw in the API? It should be allowed to throw an
                 // IllegalArgumentException, or so
         }
@@ -803,8 +803,8 @@ ScVbaApplication::setDisplayScrollBars( sal_Bool bSet )  throw (uno::RuntimeExce
     // use uno here as it does all he repainting etc. magic
     uno::Reference< sheet::XSpreadsheetView > xView( getCurrentDocument()->getCurrentController(), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xProps( xView, uno::UNO_QUERY );
-    xProps->setPropertyValue( OUString("HasVerticalScrollBar"), uno::makeAny( bSet ) );
-    xProps->setPropertyValue( OUString("HasHorizontalScrollBar"), uno::makeAny( bSet ) );
+    xProps->setPropertyValue("HasVerticalScrollBar", uno::makeAny( bSet ) );
+    xProps->setPropertyValue("HasHorizontalScrollBar", uno::makeAny( bSet ) );
 }
 
 sal_Bool SAL_CALL

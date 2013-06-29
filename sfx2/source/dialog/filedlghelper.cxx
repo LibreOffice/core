@@ -1805,7 +1805,7 @@ void FileDialogHelper_Impl::addFilters( const String& rFactory,
 
     uno::Reference< XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
     uno::Reference< XContainerQuery > xFilterCont(
-        xSMGR->createInstance(OUString("com.sun.star.document.FilterFactory")),
+        xSMGR->createInstance("com.sun.star.document.FilterFactory"),
         UNO_QUERY);
     if ( ! xFilterCont.is() )
         return;

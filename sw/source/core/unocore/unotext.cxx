@@ -2537,7 +2537,7 @@ throw (uno::RuntimeException)
     if (::sw::XTextRangeToSwPaM(aPam, xTextPosition))
     {
         if ( !aPam.GetNode()->GetTxtNode() )
-            throw uno::RuntimeException( OUString("Invalid text range"), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Invalid text range", uno::Reference< uno::XInterface >() );
 
         SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
 

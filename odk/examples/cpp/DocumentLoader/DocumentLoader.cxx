@@ -123,7 +123,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     // gets the server component context as property of the office component factory
     Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
-    xPropSet->getPropertyValue( OUString("DefaultContext") ) >>= xComponentContext;
+    xPropSet->getPropertyValue("DefaultContext") >>= xComponentContext;
 
     // gets the service manager from the office
     Reference< XMultiComponentFactory > xMultiComponentFactoryServer(

@@ -95,7 +95,7 @@ void SdXML3DObjectContext::StartElement(const uno::Reference< xml::sax::XAttribu
         {
             uno::Any aAny;
             aAny <<= mxHomMat;
-            xPropSet->setPropertyValue(OUString("D3DTransformMatrix"), aAny);
+            xPropSet->setPropertyValue("D3DTransformMatrix", aAny);
         }
 
         // call parent
@@ -207,9 +207,9 @@ void SdXML3DCubeObjectShapeContext::StartElement(const uno::Reference< xml::sax:
 
             uno::Any aAny;
             aAny <<= aPosition3D;
-            xPropSet->setPropertyValue(OUString("D3DPosition"), aAny);
+            xPropSet->setPropertyValue("D3DPosition", aAny);
             aAny <<= aDirection3D;
-            xPropSet->setPropertyValue(OUString("D3DSize"), aAny);
+            xPropSet->setPropertyValue("D3DSize", aAny);
         }
     }
 }
@@ -315,9 +315,9 @@ void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sa
 
             uno::Any aAny;
             aAny <<= aPosition3D;
-            xPropSet->setPropertyValue(OUString("D3DPosition"), aAny);
+            xPropSet->setPropertyValue("D3DPosition", aAny);
             aAny <<= aDirection3D;
-            xPropSet->setPropertyValue(OUString("D3DSize"), aAny);
+            xPropSet->setPropertyValue("D3DSize", aAny);
         }
     }
 }
@@ -433,7 +433,7 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
             // set poly
             uno::Any aAny;
             aAny <<= xPolyPolygon3D;
-            xPropSet->setPropertyValue(OUString("D3DPolyPolygon3D"), aAny);
+            xPropSet->setPropertyValue("D3DPolyPolygon3D", aAny);
         }
 
         // call parent

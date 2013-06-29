@@ -1378,14 +1378,14 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
                             Reference< XTransitionFilter > xTransFilter( xChildNode, UNO_QUERY_THROW );
 
 
-                            xPageProps->setPropertyValue( OUString( "TransitionType" ), Any( xTransFilter->getTransition() ) );
-                            xPageProps->setPropertyValue( OUString( "TransitionSubtype" ), Any( xTransFilter->getSubtype() ) );
-                            xPageProps->setPropertyValue( OUString( "TransitionDirection" ), Any( xTransFilter->getDirection() ) );
-                            xPageProps->setPropertyValue( OUString( "TransitionFadeColor" ), Any( xTransFilter->getFadeColor() ) );
+                            xPageProps->setPropertyValue("TransitionType", Any( xTransFilter->getTransition() ) );
+                            xPageProps->setPropertyValue("TransitionSubtype", Any( xTransFilter->getSubtype() ) );
+                            xPageProps->setPropertyValue("TransitionDirection", Any( xTransFilter->getDirection() ) );
+                            xPageProps->setPropertyValue("TransitionFadeColor", Any( xTransFilter->getFadeColor() ) );
 
                             double fDuration;
                             if( xTransFilter->getDuration() >>= fDuration )
-                                xPageProps->setPropertyValue( OUString( "TransitionDuration" ), Any( fDuration ) );
+                                xPageProps->setPropertyValue("TransitionDuration", Any( fDuration ) );
 
                         }
                         break;
@@ -1395,7 +1395,7 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
                             Reference< XCommand > xCommand( xChildNode, UNO_QUERY_THROW );
                             if( xCommand->getCommand() == EffectCommands::STOPAUDIO )
                             {
-                                xPageProps->setPropertyValue( OUString( "Sound" ), Any(sal_True) );
+                                xPageProps->setPropertyValue("Sound", Any(sal_True) );
                             }
                         }
                         break;
@@ -1406,11 +1406,11 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
                             OUString sSoundURL;
                             if( (xAudio->getSource() >>= sSoundURL) && !sSoundURL.isEmpty() )
                             {
-                                xPageProps->setPropertyValue( OUString( "Sound" ), Any(sSoundURL) );
+                                xPageProps->setPropertyValue("Sound", Any(sSoundURL) );
 
                                 Timing eTiming;
                                 if( (xAudio->getRepeatCount() >>= eTiming) && (eTiming == Timing_INDEFINITE) )
-                                    xPageProps->setPropertyValue( OUString( "LoopSound" ), Any( sal_True ) );
+                                    xPageProps->setPropertyValue("LoopSound", Any( sal_True ) );
                             }
                         }
                         break;

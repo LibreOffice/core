@@ -702,7 +702,7 @@ throw (::com::sun::star::uno::RuntimeException)
         {
             try
             {
-                xPropSet->getPropertyValue( OUString( "ResourceURL" )) >>= aSubToolBarResName;
+                xPropSet->getPropertyValue("ResourceURL") >>= aSubToolBarResName;
             }
             catch ( com::sun::star::beans::UnknownPropertyException& )
             {
@@ -752,7 +752,7 @@ throw (::com::sun::star::uno::RuntimeException)
                         xLayoutManager->setElementPos( aSubToolBarResName, aEvent.FloatingPosition );
                         xLayoutManager->showElement( aSubToolBarResName );
 
-                        xProp->setPropertyValue( OUString( "Persistent" ), a );
+                        xProp->setPropertyValue("Persistent", a );
                     }
                 }
                 catch ( ::com::sun::star::uno::RuntimeException& )

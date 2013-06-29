@@ -1802,7 +1802,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                 {
                     Reference< beans::XPropertySet > xSeqProp( xLS->getValues(), uno::UNO_QUERY );
                     OUString aRole;
-                    if( xSeqProp.is() && (xSeqProp->getPropertyValue(OUString("Role")) >>= aRole) &&
+                    if( xSeqProp.is() && (xSeqProp->getPropertyValue("Role") >>= aRole) &&
                         aRole.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("categories")) )
                         bThisIsCategories = bHasCategories = true;
                 }

@@ -97,20 +97,20 @@ namespace svxform
             Reference< XServiceInfo > xDocumentSI( _rxDocument, UNO_QUERY );
             if ( xDocumentSI.is() )
             {
-                if (  xDocumentSI->supportsService( OUString( "com.sun.star.text.TextDocument" ) )
-                   || xDocumentSI->supportsService( OUString( "com.sun.star.text.WebDocument" ) )
+                if (  xDocumentSI->supportsService("com.sun.star.text.TextDocument")
+                   || xDocumentSI->supportsService("com.sun.star.text.WebDocument")
                    )
                 {
                     _rFamilyName = OUString( "ParagraphStyles" );
                     _rStyleName = OUString( "Standard" );
                 }
-                else if ( xDocumentSI->supportsService( OUString( "com.sun.star.sheet.SpreadsheetDocument" ) ) )
+                else if ( xDocumentSI->supportsService("com.sun.star.sheet.SpreadsheetDocument") )
                 {
                     _rFamilyName = OUString( "CellStyles" );
                     _rStyleName = OUString( "Default" );
                 }
-                else if (  xDocumentSI->supportsService( OUString( "com.sun.star.drawing.DrawingDocument" ) )
-                        || xDocumentSI->supportsService( OUString( "com.sun.star.presentation.PresentationDocument" ) )
+                else if (  xDocumentSI->supportsService("com.sun.star.drawing.DrawingDocument")
+                        || xDocumentSI->supportsService("com.sun.star.presentation.PresentationDocument")
                         )
                 {
                     _rFamilyName = OUString( "graphics" );
@@ -203,7 +203,7 @@ namespace svxform
         // the names of the family, and the style - depends on the document type we live in
         OUString sFamilyName, sStyleName;
         if ( !lcl_getDocumentDefaultStyleAndFamily( xSuppStyleFamilies.get(), sFamilyName, sStyleName ) )
-            throw RuntimeException( OUString( "unknown document type!" ), NULL );
+            throw RuntimeException("unknown document type!", NULL );
 
         // the concrete style
         Reference< XNameAccess > xStyleFamily( xStyleFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );

@@ -326,7 +326,7 @@ void SfxFrame::SetPresentationMode( sal_Bool bSet )
 
     if ( xPropSet.is() )
     {
-        Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
+        Any aValue = xPropSet->getPropertyValue("LayoutManager");
         aValue >>= xLayoutManager;
     }
 
@@ -378,7 +378,7 @@ void SfxFrame::SetMenuBarOn_Impl( sal_Bool bOn )
 
     if ( xPropSet.is() )
     {
-        Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
+        Any aValue = xPropSet->getPropertyValue("LayoutManager");
         aValue >>= xLayoutManager;
     }
 

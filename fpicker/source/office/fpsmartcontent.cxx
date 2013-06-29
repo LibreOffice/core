@@ -224,7 +224,7 @@ namespace svt
         try
         {
             OUString sTitle;
-            m_pContent->getPropertyValue( OUString( "Title" ) ) >>= sTitle;
+            m_pContent->getPropertyValue("Title") >>= sTitle;
             _rTitle =  sTitle;
 
             // from here on, we definitely know that the content is valid

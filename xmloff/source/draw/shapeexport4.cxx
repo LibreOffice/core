@@ -1196,7 +1196,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
         {
             if( !bIsEmptyPresObj )
             {
-                uno::Reference< container::XNamed > xTemplate( xPropSet->getPropertyValue( OUString( "TableTemplate" ) ), uno::UNO_QUERY );
+                uno::Reference< container::XNamed > xTemplate( xPropSet->getPropertyValue("TableTemplate"), uno::UNO_QUERY );
                 if( xTemplate.is() )
                 {
                     const OUString sTemplate( xTemplate->getName() );
@@ -1231,7 +1231,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
 
         if( !bIsEmptyPresObj )
         {
-            uno::Reference< graphic::XGraphic > xGraphic( xPropSet->getPropertyValue( OUString( "ReplacementGraphic" ) ), uno::UNO_QUERY );
+            uno::Reference< graphic::XGraphic > xGraphic( xPropSet->getPropertyValue("ReplacementGraphic"), uno::UNO_QUERY );
             if( xGraphic.is() ) try
             {
                 Reference< uno::XComponentContext > xContext = GetExport().getComponentContext();

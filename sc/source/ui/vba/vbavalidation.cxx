@@ -233,10 +233,10 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
     sheet::ValidationType nValType = sheet::ValidationType_ANY;
     xProps->getPropertyValue( STYPE )  >>= nValType;
     if ( nValType  != sheet::ValidationType_ANY  )
-        throw uno::RuntimeException( OUString( "validation object already exists" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("validation object already exists", uno::Reference< uno::XInterface >() );
     sal_Int32 nType = -1;
     if ( !Type.hasValue()  || !( Type >>= nType ) )
-        throw uno::RuntimeException( OUString( "missing required param" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("missing required param", uno::Reference< uno::XInterface >() );
 
     Delete(); // set up defaults
     OUString sFormula1;
@@ -250,7 +250,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
                 // for validate list
                 // at least formula1 is required
                 if ( !Formula1.hasValue() )
-                    throw uno::RuntimeException( OUString( "missing param" ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException("missing param", uno::Reference< uno::XInterface >() );
                 nValType = sheet::ValidationType_LIST;
                 xProps->setPropertyValue( STYPE, uno::makeAny(nValType ));
                 // #TODO validate required params
@@ -262,7 +262,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
             xProps->setPropertyValue( STYPE, uno::makeAny(nValType ));
             break;
         default:
-            throw uno::RuntimeException( OUString( "unsupported operation..." ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("unsupported operation...", uno::Reference< uno::XInterface >() );
     }
 
     sheet::ValidationAlertStyle eStyle = sheet::ValidationAlertStyle_STOP;
@@ -283,7 +283,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
                 eStyle = sheet::ValidationAlertStyle_INFO;
                 break;
             default:
-            throw uno::RuntimeException( OUString( "bad param..." ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("bad param...", uno::Reference< uno::XInterface >() );
 
         }
     }

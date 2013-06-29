@@ -38,11 +38,11 @@ XSecParser::XSecParser(
 
 OUString XSecParser::getIdAttr(const cssu::Reference< cssxs::XAttributeList >& xAttribs )
 {
-    OUString ouIdAttr = xAttribs->getValueByName(OUString("id"));
+    OUString ouIdAttr = xAttribs->getValueByName("id");
 
     if (ouIdAttr == NULL)
     {
-        ouIdAttr = xAttribs->getValueByName(OUString("Id"));
+        ouIdAttr = xAttribs->getValueByName("Id");
     }
 
     return ouIdAttr;

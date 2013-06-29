@@ -135,8 +135,8 @@ void SvObjectServerList::FillInsertObjects()
                 {
                     OUString aUIName;
                     OUString aClassID;
-                    xEntry->getByName( OUString( "ObjectUIName" ) ) >>= aUIName;
-                    xEntry->getByName( OUString( "ClassID" ) ) >>= aClassID;
+                    xEntry->getByName("ObjectUIName") >>= aUIName;
+                    xEntry->getByName("ClassID") >>= aClassID;
 
                     if ( !aUIName.isEmpty() )
                     {

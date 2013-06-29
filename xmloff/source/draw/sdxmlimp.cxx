@@ -366,7 +366,7 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
     if( !xDocServices.is() )
         throw lang::IllegalArgumentException();
 
-    mbIsDraw = !xDocServices->supportsService( OUString(  "com.sun.star.presentation.PresentationDocument"  ) );
+    mbIsDraw = !xDocServices->supportsService("com.sun.star.presentation.PresentationDocument");
 
     // prepare access to styles
     uno::Reference< style::XStyleFamiliesSupplier > xFamSup( GetModel(), uno::UNO_QUERY );
@@ -876,7 +876,7 @@ void SdXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::
 
     try
     {
-        xPropSet->setPropertyValue( OUString(  "VisibleArea"  ), uno::makeAny( aVisArea )  );
+        xPropSet->setPropertyValue("VisibleArea", uno::makeAny( aVisArea )  );
     }
     catch(const com::sun::star::uno::Exception&)
     {
@@ -893,7 +893,7 @@ void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<c
     if( !xFac.is() )
         return;
 
-    uno::Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString(  "com.sun.star.document.Settings"  ) ), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY );
     if( !xProps.is() )
         return;
 
@@ -1071,7 +1071,7 @@ void SdXMLImport::NotifyEmbeddedFontRead()
     uno::Reference< lang::XMultiServiceFactory > xFac( GetModel(), uno::UNO_QUERY );
     if( xFac.is() )
     {
-        uno::Reference< beans::XPropertySet > xProps( xFac->createInstance( OUString( "com.sun.star.document.Settings" ) ), uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY );
         if( xProps.is() )
             xProps->setPropertyValue("EmbedFonts", uno::makeAny( true ) );
     }

@@ -376,7 +376,7 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const la
                     pShell->TakeFrameOwnership_Impl();
             }
 
-            throw util::CloseVetoException(OUString("Controller disagree ..."),static_cast< ::cppu::OWeakObject*>(this));
+            throw util::CloseVetoException("Controller disagree ...",static_cast< ::cppu::OWeakObject*>(this));
         }
     }
 }
@@ -1260,8 +1260,8 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                     {
                         Reference< beans::XPropertySet > xFrameProps( m_pData->m_xFrame, uno::UNO_QUERY_THROW );
                         Reference< beans::XPropertySet > xLayouterProps(
-                            xFrameProps->getPropertyValue( OUString( "LayoutManager"  ) ), uno::UNO_QUERY_THROW );
-                        xLayouterProps->setPropertyValue( OUString( "PreserveContentSize"  ), uno::makeAny( sal_True ) );
+                            xFrameProps->getPropertyValue("LayoutManager"), uno::UNO_QUERY_THROW );
+                        xLayouterProps->setPropertyValue("PreserveContentSize", uno::makeAny( sal_True ) );
                     }
                     catch (const uno::Exception&)
                     {

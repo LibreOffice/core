@@ -518,7 +518,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
         // is this a calc document
         Reference< XServiceInfo > xSI( pDocSh->GetModel(), UNO_QUERY );
         if ( xSI.is() )
-            bUseStarFormat = xSI->supportsService( OUString( "com.sun.star.sheet.SpreadsheetDocument" ) );
+            bUseStarFormat = xSI->supportsService("com.sun.star.sheet.SpreadsheetDocument");
     }
     pNumFmtShell->SetUseStarFormat( bUseStarFormat );
 

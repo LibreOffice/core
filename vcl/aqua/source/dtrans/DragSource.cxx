@@ -177,7 +177,7 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
 {
   if (aArguments.getLength() < 2)
     {
-      throw Exception(OUString("DragSource::initialize: Not enough parameter."),
+      throw Exception("DragSource::initialize: Not enough parameter.",
                       static_cast<OWeakObject*>(this));
     }
 
@@ -195,13 +195,13 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
   if (![mView respondsToSelector: @selector(registerMouseEventListener:)] ||
       ![mView respondsToSelector: @selector(unregisterMouseEventListener:)])
     {
-      throw Exception(OUString("DragSource::initialize: Provided view doesn't support mouse listener"),
+      throw Exception("DragSource::initialize: Provided view doesn't support mouse listener",
                       static_cast<OWeakObject*>(this));
     }
   NSWindow* pWin = [mView window];
   if( ! pWin || ![pWin respondsToSelector: @selector(getSalFrame)] )
   {
-      throw Exception(OUString("DragSource::initialize: Provided view is not attached to a vcl frame"),
+      throw Exception("DragSource::initialize: Provided view is not attached to a vcl frame",
                       static_cast<OWeakObject*>(this));
   }
   mpFrame = (AquaSalFrame*)[pWin performSelector: @selector(getSalFrame)];
@@ -210,7 +210,7 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
 
   if (mDragSourceHelper == nil)
     {
-      throw Exception(OUString("DragSource::initialize: Cannot initialize DragSource"),
+      throw Exception("DragSource::initialize: Cannot initialize DragSource",
                       static_cast<OWeakObject*>(this));
     }
 

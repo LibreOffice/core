@@ -2462,7 +2462,7 @@ void SAL_CALL SfxBaseModel::removeDocumentEventListener( const Reference< docume
 void SAL_CALL SfxBaseModel::notifyDocumentEvent( const OUString&, const Reference< frame::XController2 >&, const Any& )
     throw ( lang::IllegalArgumentException, lang::NoSupportException, RuntimeException )
 {
-    throw lang::NoSupportException( OUString( "SfxBaseModel controlls all the sent notifications itself!"  ), Reference< XInterface >() );
+    throw lang::NoSupportException("SfxBaseModel controlls all the sent notifications itself!", Reference< XInterface >() );
 }
 
 Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getCmisPropertiesValues()
@@ -2980,10 +2980,10 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                                 m_pData->m_pObjectShell->AddLog( OUString( OSL_LOG_PREFIX "Can't store shared document!" ) );
                                 m_pData->m_pObjectShell->StoreLog();
 
-                                uno::Sequence< beans::NamedValue > aNewEncryptionData = aArgHash.getUnpackedValueOrDefault( OUString( "EncryptionData" ), uno::Sequence< beans::NamedValue >() );
+                                uno::Sequence< beans::NamedValue > aNewEncryptionData = aArgHash.getUnpackedValueOrDefault("EncryptionData", uno::Sequence< beans::NamedValue >() );
                                 if ( !aNewEncryptionData.getLength() )
                                 {
-                                    OUString aNewPassword = aArgHash.getUnpackedValueOrDefault( OUString( "Password" ), OUString() );
+                                    OUString aNewPassword = aArgHash.getUnpackedValueOrDefault("Password", OUString() );
                                     aNewEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( aNewPassword );
                                 }
 
@@ -2995,7 +2995,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                                 else
                                 {
                                     // if the password is changed a special error should be used in case of shared document
-                                    throw task::ErrorCodeIOException( OUString( "Cant change password for shared document." ), uno::Reference< uno::XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
+                                    throw task::ErrorCodeIOException("Cant change password for shared document.", uno::Reference< uno::XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
                                 }
                             }
 #endif

@@ -329,7 +329,7 @@ sal_Int32 ReadThroughComponent(
             xDocStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
 
             uno::Reference< beans::XPropertySet > xProps( xDocStream, uno::UNO_QUERY_THROW );
-            uno::Any aAny = xProps->getPropertyValue( OUString("Encrypted" ) );
+            uno::Any aAny = xProps->getPropertyValue("Encrypted");
             aAny >>= bEncrypted;
         }
         catch (const packages::WrongPasswordException&)

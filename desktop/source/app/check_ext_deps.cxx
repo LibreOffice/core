@@ -332,7 +332,7 @@ static void impl_setNeedsCompatCheck()
 
         Any value = makeAny( OUString("never") );
 
-        pset->setPropertyValue( OUString("LastCompatibilityCheckID"), value );
+        pset->setPropertyValue("LastCompatibilityCheckID", value );
         Reference< util::XChangesBatch >( pset, UNO_QUERY_THROW )->commitChanges();
     }
     catch (const Exception&) {}
@@ -361,14 +361,14 @@ static bool impl_needsCompatCheck()
         Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(
             theConfigProvider->createInstanceWithArguments( OUString(aAccessSrvc), theArgs ), UNO_QUERY_THROW );
 
-        Any result = pset->getPropertyValue( OUString("LastCompatibilityCheckID") );
+        Any result = pset->getPropertyValue("LastCompatibilityCheckID");
 
         result >>= aLastCheckBuildID;
         if ( aLastCheckBuildID != aCurrentBuildID )
         {
             bNeedsCheck = true;
             result <<= aCurrentBuildID;
-            pset->setPropertyValue( OUString("LastCompatibilityCheckID"), result );
+            pset->setPropertyValue("LastCompatibilityCheckID", result );
             Reference< util::XChangesBatch >( pset, UNO_QUERY_THROW )->commitChanges();
         }
 #ifdef DEBUG

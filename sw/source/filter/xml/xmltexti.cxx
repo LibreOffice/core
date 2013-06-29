@@ -716,10 +716,10 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
             if ( xSet.is() )
             {
                 if( bValidURL )
-                    xSet->setPropertyValue( OUString("PluginURL"),
+                    xSet->setPropertyValue("PluginURL",
                         makeAny( OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                 if( bValidMimeType )
-                    xSet->setPropertyValue( OUString("PluginMimeType"),
+                    xSet->setPropertyValue("PluginMimeType",
                         makeAny( OUString( rMimeType ) ) );
             }
 
@@ -846,31 +846,31 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
             if ( xSet.is() )
             {
-                xSet->setPropertyValue( OUString("FrameURL"),
+                xSet->setPropertyValue("FrameURL",
                     makeAny( OUString( URIHelper::SmartRel2Abs(
                             INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) ) ) );
 
-                xSet->setPropertyValue( OUString("FrameName"),
+                xSet->setPropertyValue("FrameName",
                     makeAny( OUString( rName ) ) );
 
                 if ( eScrollMode == ScrollingAuto )
-                    xSet->setPropertyValue( OUString("FrameIsAutoScroll"),
+                    xSet->setPropertyValue("FrameIsAutoScroll",
                         makeAny( sal_True ) );
                 else
-                    xSet->setPropertyValue( OUString("FrameIsScrollingMode"),
+                    xSet->setPropertyValue("FrameIsScrollingMode",
                         makeAny( (sal_Bool) (eScrollMode == ScrollingYes) ) );
 
                 if ( bIsBorderSet )
-                    xSet->setPropertyValue( OUString("FrameIsBorder"),
+                    xSet->setPropertyValue("FrameIsBorder",
                         makeAny( bHasBorder ) );
                 else
-                    xSet->setPropertyValue( OUString("FrameIsAutoBorder"),
+                    xSet->setPropertyValue("FrameIsAutoBorder",
                         makeAny( sal_True ) );
 
-                xSet->setPropertyValue( OUString("FrameMarginWidth"),
+                xSet->setPropertyValue("FrameMarginWidth",
                     makeAny( sal_Int32( aMargin.Width() ) ) );
 
-                xSet->setPropertyValue( OUString("FrameMarginHeight"),
+                xSet->setPropertyValue("FrameMarginHeight",
                     makeAny( sal_Int32( aMargin.Height() ) ) );
             }
 

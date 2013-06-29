@@ -66,7 +66,7 @@ public:
 
         // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
         // which is a private symbol to us, gets called
-        m_xDrawComponent = getMultiServiceFactory()->createInstance(OUString("com.sun.star.comp.Draw.PresentationDocument"));
+        m_xDrawComponent = getMultiServiceFactory()->createInstance("com.sun.star.comp.Draw.PresentationDocument");
         CPPUNIT_ASSERT_MESSAGE("no impress component!", m_xDrawComponent.is());
     }
 

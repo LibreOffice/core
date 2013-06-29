@@ -848,7 +848,7 @@ void DocumentHolder::show()
             uno::Reference< beans::XPropertySet > xLMProps( m_xFrame->getLayoutManager(), uno::UNO_QUERY );
             if ( xLMProps.is() )
             {
-                xLMProps->setPropertyValue( OUString( "MenuBarCloser" ),
+                xLMProps->setPropertyValue("MenuBarCloser",
                                             uno::makeAny( uno::Reference< frame::XStatusListener >() ) );
             }
 

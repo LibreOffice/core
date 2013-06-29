@@ -171,7 +171,7 @@ uno::Any RangePageBreaks::Add( const css::uno::Any& Before ) throw ( css::script
     sal_Int32 nAPIRowColIndex = getAPIStartofRange( xRange );
     uno::Reference< container::XIndexAccess > xIndexAccess = getRowColContainer();
     uno::Reference< beans::XPropertySet > xRowColPropertySet( xIndexAccess->getByIndex(nAPIRowColIndex), uno::UNO_QUERY_THROW );
-    xRowColPropertySet->setPropertyValue( OUString( "IsStartOfNewPage" ), uno::makeAny(sal_True));
+    xRowColPropertySet->setPropertyValue("IsStartOfNewPage", uno::makeAny(sal_True));
     sheet::TablePageBreakData aTablePageBreakData;
     aTablePageBreakData.ManualBreak = sal_True;
     aTablePageBreakData.Position = nAPIRowColIndex;

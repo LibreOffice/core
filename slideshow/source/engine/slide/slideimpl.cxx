@@ -1231,8 +1231,8 @@ basegfx::B2ISize SlideImpl::getSlideSizeImpl() const
 
     sal_Int32 nDocWidth = 0;
     sal_Int32 nDocHeight = 0;
-    xPropSet->getPropertyValue( OUString("Width") ) >>= nDocWidth;
-    xPropSet->getPropertyValue( OUString("Height") ) >>= nDocHeight;
+    xPropSet->getPropertyValue("Width") >>= nDocWidth;
+    xPropSet->getPropertyValue("Height") >>= nDocHeight;
 
     return basegfx::B2ISize( nDocWidth, nDocHeight );
 }

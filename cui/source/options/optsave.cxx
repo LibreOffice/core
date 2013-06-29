@@ -436,10 +436,10 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
                     while(xList->hasMoreElements())
                     {
                         SequenceAsHashMap aFilter(xList->nextElement());
-                        OUString sFilter = aFilter.getUnpackedValueOrDefault(OUString("Name"),OUString());
+                        OUString sFilter = aFilter.getUnpackedValueOrDefault("Name",OUString());
                         if (!sFilter.isEmpty())
                         {
-                            sal_Int32 nFlags = aFilter.getUnpackedValueOrDefault(OUString("Flags"),sal_Int32());
+                            sal_Int32 nFlags = aFilter.getUnpackedValueOrDefault("Flags",sal_Int32());
                             lList.push_back(sFilter);
                             lAlienList.push_back(0 != (nFlags & SFX_FILTER_ALIEN));
                             lODFList.push_back( isODFFormat( sFilter ) );

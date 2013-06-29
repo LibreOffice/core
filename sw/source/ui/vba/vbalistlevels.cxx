@@ -63,7 +63,7 @@ uno::Any SAL_CALL SwVbaListLevels::Item( const uno::Any& Index1, const uno::Any&
     if( ( Index1 >>= nIndex ) == sal_False )
         throw uno::RuntimeException();
     if( nIndex <=0 || nIndex > getCount() )
-        throw  uno::RuntimeException( OUString("Index out of bounds"), uno::Reference< uno::XInterface >() );
+        throw  uno::RuntimeException("Index out of bounds", uno::Reference< uno::XInterface >() );
 
     return uno::makeAny( uno::Reference< word::XListLevel >( new SwVbaListLevel( this, mxContext, pListHelper, nIndex - 1 ) ) );
 }

@@ -148,7 +148,7 @@ sal_Bool HasDocumentValidSignature( const css::uno::Reference< css::frame::XMode
         css::uno::Reference< css::beans::XPropertySet > xPropSet( xModel, css::uno::UNO_QUERY );
         if ( xPropSet.is() )
         {
-            Any a = xPropSet->getPropertyValue( OUString( "HasValidSignatures" ));
+            Any a = xPropSet->getPropertyValue("HasValidSignatures");
             sal_Bool bReturn = sal_Bool();
             if ( a >>= bReturn )
                 return bReturn;

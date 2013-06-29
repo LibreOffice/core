@@ -508,7 +508,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
             // no need to let the file stay after the stream is removed since the embedded document
             // can not be stored directly
             uno::Reference< beans::XPropertySet > xTempStreamProps( xTempInpStream, uno::UNO_QUERY_THROW );
-            xTempStreamProps->getPropertyValue( OUString( "Uri" ) ) >>= aTempFileURL;
+            xTempStreamProps->getPropertyValue("Uri") >>= aTempFileURL;
         }
         catch( const uno::Exception& )
         {
@@ -857,7 +857,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
             // no need to let the file stay after the stream is removed since the embedded document
             // can not be stored directly
             uno::Reference< beans::XPropertySet > xTempStreamProps( xTempStream, uno::UNO_QUERY_THROW );
-            xTempStreamProps->getPropertyValue( OUString( "Uri" ) ) >>= aTempFileURL;
+            xTempStreamProps->getPropertyValue("Uri") >>= aTempFileURL;
         }
         catch( const uno::Exception& )
         {

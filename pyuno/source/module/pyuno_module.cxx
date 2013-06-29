@@ -95,7 +95,7 @@ public:
         , nMembersSet (0)
     {
         if ( ! used )
-            throw RuntimeException(OUString("pyuno._createUnoStructHelper failed to create new dictionary"), Reference< XInterface > ());
+            throw RuntimeException("pyuno._createUnoStructHelper failed to create new dictionary", Reference< XInterface > ());
     }
     ~fillStructState()
     {

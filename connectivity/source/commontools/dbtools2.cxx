@@ -563,7 +563,7 @@ bool getBooleanDataSourceSetting( const Reference< XConnection >& _rxConnection,
         if ( xDataSourceProperties.is() )
         {
             Reference< XPropertySet > xSettings(
-                xDataSourceProperties->getPropertyValue( OUString( "Settings") ),
+                xDataSourceProperties->getPropertyValue("Settings"),
                 UNO_QUERY_THROW
             );
             OSL_VERIFY( xSettings->getPropertyValue( OUString::createFromAscii( _pAsciiSettingName ) ) >>= bValue );
@@ -587,7 +587,7 @@ bool getDataSourceSetting( const Reference< XInterface >& _xChild, const OUStrin
             return false;
 
         const Reference< XPropertySet > xSettings(
-                xDataSourceProperties->getPropertyValue( OUString( "Settings") ),
+                xDataSourceProperties->getPropertyValue("Settings"),
                 UNO_QUERY_THROW
             );
 
@@ -617,7 +617,7 @@ sal_Bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp,const O
         if ( xProp.is() )
         {
             Sequence< PropertyValue > aInfo;
-            xProp->getPropertyValue(OUString("Info")) >>= aInfo;
+            xProp->getPropertyValue("Info") >>= aInfo;
             const PropertyValue* pValue =::std::find_if(aInfo.getConstArray(),
                                                 aInfo.getConstArray() + aInfo.getLength(),
                                                 ::std::bind2nd(TPropertyValueEqualFunctor(),_sProperty));

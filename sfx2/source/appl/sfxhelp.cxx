@@ -177,7 +177,7 @@ sal_Bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
         ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
                              Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                              comphelper::getProcessComponentContext() );
-        if ( ( aCnt.getPropertyValue( OUString("AnchorName") ) >>= sAnchor ) )
+        if ( ( aCnt.getPropertyValue("AnchorName") >>= sAnchor ) )
         {
 
             if ( !sAnchor.isEmpty() )
@@ -435,7 +435,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
     if (xHelpTask->setComponent( xHelpWindow, Reference< XController >() ))
     {
         // Customize UI ...
-        xHelpTask->setName( OUString("OFFICE_HELP_TASK") );
+        xHelpTask->setName("OFFICE_HELP_TASK");
 
         Reference< XPropertySet > xProps(xHelpTask, UNO_QUERY);
         if (xProps.is())
@@ -458,7 +458,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
         return NULL;
     }
 
-    xHelpContent->setName(OUString("OFFICE_HELP"));
+    xHelpContent->setName("OFFICE_HELP");
 
     rHelpTask    = xHelpTask;
     rHelpContent = xHelpContent;

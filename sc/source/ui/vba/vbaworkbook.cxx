@@ -371,7 +371,7 @@ ScVbaWorkbook::Names( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
     uno::Reference< beans::XPropertySet > xProps( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue( OUString("NamedRanges") ), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue("NamedRanges"), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, xModel ) );
     if ( aIndex.hasValue() )
         return uno::Any( xNames->Item( aIndex, uno::Any() ) );
@@ -400,7 +400,7 @@ OUString SAL_CALL
 ScVbaWorkbook::getCodeName() throw (css::uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xModelProp( getModel(), uno::UNO_QUERY_THROW );
-    return xModelProp->getPropertyValue( OUString( "CodeName" ) ).get< OUString >();
+    return xModelProp->getPropertyValue("CodeName").get< OUString >();
 }
 
 sal_Int64

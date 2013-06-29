@@ -914,7 +914,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
 
                 Reference< XMultiServiceFactory > xFactory(xConnection, UNO_QUERY);
                 if ( xFactory.is() )
-                    m_xParser.set( xFactory->createInstance( OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ), UNO_QUERY );
+                    m_xParser.set( xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"), UNO_QUERY );
 
                 OUString aString("SELECT * FROM ");
 
@@ -1074,7 +1074,7 @@ void BibDataManager::setActiveDataSource(const OUString& rURL)
         aPropertySet->setPropertyValue("ActiveConnection", aVal);
         Reference< XMultiServiceFactory >   xFactory(xConnection, UNO_QUERY);
         if ( xFactory.is() )
-            m_xParser.set( xFactory->createInstance( OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ), UNO_QUERY );
+            m_xParser.set( xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"), UNO_QUERY );
 
         if(xOldConnection.is())
             xOldConnection->dispose();
@@ -1167,7 +1167,7 @@ void BibDataManager::setActiveDataTable(const OUString& rTable)
 
                 Reference< XMultiServiceFactory > xFactory(xConnection, UNO_QUERY);
                 if ( xFactory.is() )
-                    m_xParser.set( xFactory->createInstance( OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ), UNO_QUERY );
+                    m_xParser.set( xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"), UNO_QUERY );
 
                 OUString aString("SELECT * FROM ");
 
@@ -1408,7 +1408,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
 
             xPropSet->setPropertyValue( FM_PROP_NAME,aFieldName);
             xPropSet->setPropertyValue( FM_PROP_CONTROLSOURCE, makeAny( rName ) );
-            xPropSet->setPropertyValue( OUString( "NativeWidgetLook" ), makeAny( (sal_Bool)sal_True ) );
+            xPropSet->setPropertyValue("NativeWidgetLook", makeAny( (sal_Bool)sal_True ) );
 
             Reference< XFormComponent >  aFormComp(xModel,UNO_QUERY );
 

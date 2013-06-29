@@ -171,7 +171,7 @@ public:
         // we only concern about the Paragraph styles
         uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( _xModel, uno::UNO_QUERY_THROW);
         uno::Reference< container::XNameAccess > xStyleFamilies = xStyleSupplier->getStyleFamilies();
-        mxParaStyles.set( xStyleFamilies->getByName( OUString("ParagraphStyles") ), uno::UNO_QUERY_THROW  );
+        mxParaStyles.set( xStyleFamilies->getByName("ParagraphStyles"), uno::UNO_QUERY_THROW  );
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  style::XStyle::static_type(0); }
@@ -243,7 +243,7 @@ public:
     // XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
     {
-        throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
     }
 };
 
@@ -333,14 +333,14 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 ) throw (uno::
                     // set the property "NumberingStyleName" if it is a listbullet
                     if( pTable->wdStyleType == word::WdStyleType::wdStyleTypeList )
                     {
-                        xStyleProps->setPropertyValue( OUString("NumberingStyleName"), uno::makeAny( aStyleName ) );
+                        xStyleProps->setPropertyValue("NumberingStyleName", uno::makeAny( aStyleName ) );
                     }
                     return uno::makeAny( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxModel, xStyleProps ) ) );
                 }
                 else
                 {
                     OSL_TRACE("SwVbaStyles::Item: the builtin style type is not implemented");
-                    throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
                 }
             }
         }

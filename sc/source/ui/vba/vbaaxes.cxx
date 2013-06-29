@@ -64,7 +64,7 @@ ScVbaAxes::createAxis( const uno::Reference< excel::XChart >& xChart, const uno:
 {
     ScVbaChart* pChart = static_cast< ScVbaChart* >( xChart.get() );
     if ( !pChart )
-        throw uno::RuntimeException( OUString( "Object failure, can't access chart implementation" ), uno::Reference< uno::XInterface >()  );
+        throw uno::RuntimeException("Object failure, can't access chart implementation", uno::Reference< uno::XInterface >()  );
 
     uno::Reference< beans::XPropertySet > xAxisPropertySet;
     if (((nType == xlCategory) || (nType == xlSeriesAxis) || (nType == xlValue)))
@@ -96,18 +96,18 @@ public:
             // primary
             sal_Bool bBool = false;
             uno::Reference< beans::XPropertySet > xDiagramPropertySet( pChart->xDiagramPropertySet() );
-            if ( ( xDiagramPropertySet->getPropertyValue( OUString( "HasXAxis" ) ) >>= bBool )  && bBool )
+            if ( ( xDiagramPropertySet->getPropertyValue("HasXAxis") >>= bBool )  && bBool )
                 mCoordinates.push_back( AxesCoordinate( xlPrimary, xlCategory ) );
-            if ( ( xDiagramPropertySet->getPropertyValue( OUString( "HasYAxis" ) ) >>= bBool )  && bBool )
+            if ( ( xDiagramPropertySet->getPropertyValue("HasYAxis") >>= bBool )  && bBool )
                 mCoordinates.push_back( AxesCoordinate( xlPrimary, xlSeriesAxis ) );
 
             if (  pChart->is3D() )
                 mCoordinates.push_back( AxesCoordinate( xlPrimary, xlValue ) );
 
             // secondary
-            if ( ( xDiagramPropertySet->getPropertyValue( OUString( "HasSecondaryXAxis" ) ) >>= bBool )  && bBool )
+            if ( ( xDiagramPropertySet->getPropertyValue("HasSecondaryXAxis") >>= bBool )  && bBool )
                 mCoordinates.push_back( AxesCoordinate( xlSecondary, xlCategory ) );
-            if ( ( xDiagramPropertySet->getPropertyValue( OUString( "HasSecondaryYAxis" ) ) >>= bBool )  && bBool )
+            if ( ( xDiagramPropertySet->getPropertyValue("HasSecondaryYAxis") >>= bBool )  && bBool )
                 mCoordinates.push_back( AxesCoordinate( xlSecondary, xlSeriesAxis ) );
         }
 
@@ -160,7 +160,7 @@ ScVbaAxes::Item( const css::uno::Any& _nType, const css::uno::Any& _oAxisGroup) 
     sal_Int32 nAxisGroup = xlPrimary;
     sal_Int32 nType = -1;
     if ( !_nType.hasValue() || ( ( _nType >>= nType ) == false )  )
-        throw uno::RuntimeException( OUString( "Axes::Item Failed to extract type" ), uno::Reference< uno::XInterface >()  );
+        throw uno::RuntimeException("Axes::Item Failed to extract type", uno::Reference< uno::XInterface >()  );
 
     if ( _oAxisGroup.hasValue() )
         _oAxisGroup >>= nAxisGroup ;

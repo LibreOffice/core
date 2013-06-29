@@ -211,7 +211,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                            {
                                try
                                {
-                                   aCaller = xProps->getPropertyValue( OUString("Name") );
+                                   aCaller = xProps->getPropertyValue("Name");
                                }
                                catch( uno::Exception& ) {}
                            }

@@ -161,7 +161,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
             // Retrieve the value for "Program" node and append it feed senddoc with it
             // using the (undocumented) --mailclient switch
-            xNameAccess->getByName( OUString("Program") ) >>= aMailer;
+            xNameAccess->getByName("Program") >>= aMailer;
 
             if( !aMailer.isEmpty() )
             {

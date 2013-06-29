@@ -256,8 +256,8 @@ namespace svt
                                 ::ucbhelper::Content aCnt( aTargetURL, xEnvironment, comphelper::getProcessComponentContext() );
                                 try
                                 {
-                                aCnt.getPropertyValue( OUString( "Size" ) ) >>= pData->maSize;
-                                aCnt.getPropertyValue( OUString( "DateModified" ) ) >>= aDT;
+                                aCnt.getPropertyValue("Size") >>= pData->maSize;
+                                aCnt.getPropertyValue("DateModified") >>= aDT;
                                 }
                                 catch (...) {}
                             }

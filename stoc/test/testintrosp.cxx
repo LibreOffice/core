@@ -1186,7 +1186,7 @@ SAL_IMPLEMENT_MAIN()
     try
     {
         Reference< XImplementationRegistration > xImplReg(
-            xMgr->createInstance( OUString("com.sun.star.registry.ImplementationRegistration") ), UNO_QUERY );
+            xMgr->createInstance("com.sun.star.registry.ImplementationRegistration"), UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
         // Register services
@@ -1195,7 +1195,7 @@ SAL_IMPLEMENT_MAIN()
         xImplReg->registerImplementation(OUString("com.sun.star.loader.SharedLibrary"),
                                          libName, Reference< XSimpleRegistry >() );
         fprintf(stderr, "2\n" );
-        Reference< XIdlReflection > xRefl( xMgr->createInstance( OUString("com.sun.star.reflection.CoreReflection") ), UNO_QUERY );
+        Reference< XIdlReflection > xRefl( xMgr->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY );
         OSL_ENSURE( xRefl.is(), "### no corereflection!" );
 
         // Introspection
@@ -1205,7 +1205,7 @@ SAL_IMPLEMENT_MAIN()
         xImplReg->registerImplementation(OUString("com.sun.star.loader.SharedLibrary"),
                                          libName, Reference< XSimpleRegistry >() );
         fprintf(stderr, "4\n" );
-        Reference< XIntrospection > xIntrosp( xMgr->createInstance( OUString("com.sun.star.beans.Introspection") ), UNO_QUERY );
+        Reference< XIntrospection > xIntrosp( xMgr->createInstance("com.sun.star.beans.Introspection"), UNO_QUERY );
         OSL_ENSURE( xRefl.is(), "### no corereflection!" );
 
         fprintf(stderr, "before test_introsp\n" );

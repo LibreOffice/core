@@ -1039,7 +1039,7 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
                     try
                     {
                         xProperties->
-                            setPropertyValue(OUString( "FetchSize"),
+                            setPropertyValue("FetchSize",
                                              uno::makeAny(nFetchSize));
                         bSet = true;
                     }

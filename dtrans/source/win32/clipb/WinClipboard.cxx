@@ -83,7 +83,7 @@ Reference< XTransferable > SAL_CALL CWinClipboard::getContents( ) throw( Runtime
     MutexGuard aGuard( m_aMutex );
 
     if ( rBHelper.bDisposed )
-        throw DisposedException( OUString("object is already disposed"),
+        throw DisposedException("object is already disposed",
                                  static_cast< XClipboardEx* >( this ) );
 
     if ( NULL != m_pImpl.get( ) )
@@ -103,7 +103,7 @@ void SAL_CALL CWinClipboard::setContents( const Reference< XTransferable >& xTra
     MutexGuard aGuard( m_aMutex );
 
     if ( rBHelper.bDisposed )
-        throw DisposedException( OUString("object is already disposed"),
+        throw DisposedException("object is already disposed",
                                  static_cast< XClipboardEx* >( this ) );
 
     if ( NULL != m_pImpl.get( ) )
@@ -117,7 +117,7 @@ void SAL_CALL CWinClipboard::setContents( const Reference< XTransferable >& xTra
 OUString SAL_CALL CWinClipboard::getName(  ) throw( RuntimeException )
 {
     if ( rBHelper.bDisposed )
-        throw DisposedException( OUString("object is already disposed"),
+        throw DisposedException("object is already disposed",
                                  static_cast< XClipboardEx* >( this ) );
 
     if ( NULL != m_pImpl.get( ) )
@@ -135,7 +135,7 @@ void SAL_CALL CWinClipboard::flushClipboard( ) throw( RuntimeException )
     MutexGuard aGuard( m_aMutex );
 
     if ( rBHelper.bDisposed )
-        throw DisposedException( OUString("object is already disposed"),
+        throw DisposedException("object is already disposed",
                                  static_cast< XClipboardEx* >( this ) );
 
     if ( NULL != m_pImpl.get( ) )
@@ -149,7 +149,7 @@ void SAL_CALL CWinClipboard::flushClipboard( ) throw( RuntimeException )
 sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities(  ) throw( RuntimeException )
 {
     if ( rBHelper.bDisposed )
-        throw DisposedException( OUString("object is already disposed"),
+        throw DisposedException("object is already disposed",
                                  static_cast< XClipboardEx* >( this ) );
 
     if ( NULL != m_pImpl.get( ) )
@@ -170,12 +170,12 @@ void SAL_CALL CWinClipboard::addClipboardListener( const Reference< XClipboardLi
     throw( RuntimeException )
 {
     if ( rBHelper.bDisposed )
-        throw DisposedException( OUString("object is already disposed"),
+        throw DisposedException("object is already disposed",
                                  static_cast< XClipboardEx* >( this ) );
 
     // check input parameter
     if ( !listener.is( ) )
-        throw IllegalArgumentException( OUString("empty reference"),
+        throw IllegalArgumentException("empty reference",
                                         static_cast< XClipboardEx* >( this ),
                                         1 );
 
@@ -190,12 +190,12 @@ void SAL_CALL CWinClipboard::removeClipboardListener( const Reference< XClipboar
     throw( RuntimeException )
 {
     if ( rBHelper.bDisposed )
-        throw DisposedException( OUString("object is already disposed"),
+        throw DisposedException("object is already disposed",
                                  static_cast< XClipboardEx* >( this ) );
 
     // check input parameter
     if ( !listener.is( ) )
-        throw IllegalArgumentException( OUString("empty reference"),
+        throw IllegalArgumentException("empty reference",
                                         static_cast< XClipboardEx* >( this ),
                                         1 );
 

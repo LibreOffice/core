@@ -1661,7 +1661,7 @@ ImplIntrospection::ImplIntrospection( const Reference<XMultiServiceFactory> & rX
     mpTypeProviderCache = NULL;
 
     // Spezielle Klassen holen
-//     Reference< XInterface > xServiceIface = m_xSMgr->createInstance( OUString("com.sun.star.reflection.CoreReflection") );
+//     Reference< XInterface > xServiceIface = m_xSMgr->createInstance("com.sun.star.reflection.CoreReflection");
 //     if( xServiceIface.is() )
 //         mxCoreReflection = Reference< XIdlReflection >::query( xServiceIface );
     Reference< XPropertySet > xProps( rXSMgr, UNO_QUERY );
@@ -1686,14 +1686,14 @@ ImplIntrospection::ImplIntrospection( const Reference<XMultiServiceFactory> & rX
             Reference< XInterface >() );
     }
 
-    mxElementAccessClass = mxCoreReflection->forName( OUString("com.sun.star.container.XElementAccess") );
-    mxNameContainerClass = mxCoreReflection->forName( OUString("com.sun.star.container.XNameContainer") );
-    mxNameAccessClass = mxCoreReflection->forName( OUString("com.sun.star.container.XNameAccess") );
-    mxIndexContainerClass = mxCoreReflection->forName( OUString("com.sun.star.container.XIndexContainer") );
-    mxIndexAccessClass = mxCoreReflection->forName( OUString("com.sun.star.container.XIndexAccess") );
-    mxEnumerationAccessClass = mxCoreReflection->forName( OUString("com.sun.star.container.XEnumerationAccess") );
-    mxInterfaceClass = mxCoreReflection->forName( OUString("com.sun.star.uno.XInterface") );
-    mxAggregationClass = mxCoreReflection->forName( OUString("com.sun.star.uno.XAggregation") );
+    mxElementAccessClass = mxCoreReflection->forName("com.sun.star.container.XElementAccess");
+    mxNameContainerClass = mxCoreReflection->forName("com.sun.star.container.XNameContainer");
+    mxNameAccessClass = mxCoreReflection->forName("com.sun.star.container.XNameAccess");
+    mxIndexContainerClass = mxCoreReflection->forName("com.sun.star.container.XIndexContainer");
+    mxIndexAccessClass = mxCoreReflection->forName("com.sun.star.container.XIndexAccess");
+    mxEnumerationAccessClass = mxCoreReflection->forName("com.sun.star.container.XEnumerationAccess");
+    mxInterfaceClass = mxCoreReflection->forName("com.sun.star.uno.XInterface");
+    mxAggregationClass = mxCoreReflection->forName("com.sun.star.uno.XAggregation");
     mbDisposed = sal_False;
 }
 
@@ -1888,7 +1888,7 @@ Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XMultiS
         OUString sOWName( pTD->pTypeName );
         if( !xRefl.is() )
         {
-            xRefl = Reference< XIdlReflection >( xMgr->createInstance( OUString("com.sun.star.reflection.CoreReflection") ), UNO_QUERY );
+            xRefl = Reference< XIdlReflection >( xMgr->createInstance("com.sun.star.reflection.CoreReflection"), UNO_QUERY );
             OSL_ENSURE( xRefl.is(), "### no corereflection!" );
         }
         xRetClass = xRefl->forName( sOWName );
