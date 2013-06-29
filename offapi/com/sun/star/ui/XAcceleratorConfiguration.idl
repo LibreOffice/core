@@ -251,8 +251,8 @@ interface XAcceleratorConfiguration
 
     /** connects this configuration to a new storage
         which must be used further on subsequent calls of
-        com::sun::star::util::::XConfigurationPersistence.load()
-        and com::sun::star::util::::XConfigurationPersistence.store().
+        com::sun::star::util::XConfigurationPersistence.load()
+        and com::sun::star::util::XConfigurationPersistence.store().
      */
     interface com::sun::star::ui::XUIConfigurationStorage;
 
