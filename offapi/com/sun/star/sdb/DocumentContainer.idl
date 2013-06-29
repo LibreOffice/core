@@ -67,7 +67,7 @@ service DocumentContainer
         of a <code>DocumentDefinition</code> supports at least the following commands, additionally to
         the ones already supported by the DefinitionContent:
         <ul>
-            <li><strong>open</strong>: provides a com::sun::star::ucb::::XDynamicResultSet
+            <li><strong>open</strong>: provides a com::sun::star::ucb::XDynamicResultSet
                 to enumerate the content of the document container.</li>
             <li><strong>delete</strong>: deletes the document container, including all contained documents.</li>
         </ul>

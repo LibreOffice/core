@@ -255,7 +255,7 @@ interface XReportDefinition
     */
     [attribute,readonly] com::sun::star::report::XGroups Groups;
 
-    /** returns the report header if the #ReportHeaderOnis `TRUE`.
+    /** returns the report header if the #ReportHeaderOn is `TRUE`.
         @throws com::sun::star::container::NoSuchElementException
             If the report has the report header disabled.
         @see XSection
@@ -265,7 +265,7 @@ interface XReportDefinition
         get raises (com::sun::star::container::NoSuchElementException);
     };
 
-    /** returns the page header if the #PageHeaderOnis `TRUE`.
+    /** returns the page header if the #PageHeaderOn is `TRUE`.
         @throws com::sun::star::container::NoSuchElementException
             If the report has the page header disabled.
         @see XSection
@@ -280,7 +280,7 @@ interface XReportDefinition
     */
     [attribute,readonly] com::sun::star::report::XSection Detail;
 
-    /** returns the page footer if the #PageFooterOnis `TRUE`.
+    /** returns the page footer if the #PageFooterOn is `TRUE`.
         @throws com::sun::star::container::NoSuchElementException
             If the report has the page footer disabled.
         @see XSection
@@ -290,7 +290,7 @@ interface XReportDefinition
         get raises (com::sun::star::container::NoSuchElementException);
     };
 
-    /** returns the report footer if the #ReportFooterOnis `TRUE`.
+    /** returns the report footer if the #ReportFooterOn is `TRUE`.
         @throws com::sun::star::container::NullPointerException
             If the report has the report footer disabled.
         @see XSection

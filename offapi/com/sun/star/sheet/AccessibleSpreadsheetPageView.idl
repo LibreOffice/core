@@ -55,7 +55,7 @@ service AccessibleSpreadsheetPageView
                 every header and footer that is at least partially visible.</li>
             <li>::com::sun::star::table::AccessibleTableView:
                 A child where calling
-                ::com::sun::star::accessibility::XAccessibleChild::getAccessibleChild()
+                ::com::sun::star::accessibility::XAccessibleContext::getAccessibleChild()
                 an object that supports this service is returned for
                 every table fragment that is contained in the document body
                 and is at least partially visible. A table fragment is the

@@ -143,7 +143,7 @@ published service DataSource
         of an existing value), the #Settings property wraps the #Info
         property for easier single-value access.</p>
 
-        <p>You should use the #Setting property if you need to access a few properties only,
+        <p>You should use the #Settings property if you need to access a few properties only,
         and the #Info property if you need access to all existent settings at once.</p>
 
         <p>The object represented by this property supports the com::sun::star::beans::PropertyBag
@@ -164,7 +164,7 @@ published service DataSource
         Such properties are not removable from the bag, that is, their
         com::sun::star::beans::PropertyAttribute::REMOVABLE attribute is <em>not</em> set.<br/>
         Usually, you'll find that all of this properties have the
-        com::sun::star::beans::::PropertyState::PropertyState_DEFAULT_VALUE state.</p>
+        com::sun::star::beans::PropertyState::PropertyState_DEFAULT_VALUE state.</p>
 
         <p><em>User-defined</em> properties are the ones which are added at runtime by any instance. They might or might
         not be removable, this depends on whether or not the code adding them specifies the
