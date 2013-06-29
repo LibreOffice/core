@@ -66,10 +66,15 @@ protected:
     SwTableLineFormat* pOddLineFormat;
     SwTableLineFormat* pEvnLineFormat;
 
-    SwTableLineFormat* pFstColFormat;
-    SwTableLineFormat* pLstColFormat;
-    SwTableLineFormat* pOddColFormat;
-    SwTableLineFormat* pEvnColFormat;
+    SwTableLineFormat* m_pFstLineFormat;
+    SwTableLineFormat* m_pLstLineFormat;
+    SwTableLineFormat* m_pOddLineFormat;
+    SwTableLineFormat* m_pEvnLineFormat;
+
+    SwTableLineFormat* m_pFstColFormat;
+    SwTableLineFormat* m_pLstColFormat;
+    SwTableLineFormat* m_pOddColFormat;
+    SwTableLineFormat* m_pEvnColFormat;
 
 public:
     TYPEINFO_OVERRIDE();     // Already in base class Content.
@@ -78,25 +83,25 @@ public:
 
     SwTableFormat& operator=( const SwTableFormat& rNew );
 
-    void SetFirstLineFormat( SwTableLineFormat* pNew ) { pFstLineFormat = pNew; }
-    void SetLastLineFormat( SwTableLineFormat* pNew ) { pLstLineFormat = pNew; }
-    void SetOddLineFormat( SwTableLineFormat* pNew ) { pOddLineFormat = pNew; }
-    void SetEvenLineFormat( SwTableLineFormat* pNew ) { pEvnLineFormat = pNew; }
+    void SetFirstLineFormat( SwTableLineFormat* pNew ) { m_pFstLineFormat = pNew; }
+    void SetLastLineFormat( SwTableLineFormat* pNew ) { m_pLstLineFormat = pNew; }
+    void SetOddLineFormat( SwTableLineFormat* pNew ) { m_pOddLineFormat = pNew; }
+    void SetEvenLineFormat( SwTableLineFormat* pNew ) { m_pEvnLineFormat = pNew; }
 
-    void SetFirstColFormat( SwTableLineFormat* pNew ) { pFstColFormat = pNew; }
-    void SetLastColFormat( SwTableLineFormat* pNew ) { pLstColFormat = pNew; }
-    void SetOddColFormat( SwTableLineFormat* pNew ) { pOddColFormat = pNew; }
-    void SetEvenColFormat( SwTableLineFormat* pNew ) { pEvnColFormat = pNew; }
+    void SetFirstColFormat( SwTableLineFormat* pNew ) { m_pFstColFormat = pNew; }
+    void SetLastColFormat( SwTableLineFormat* pNew ) { m_pLstColFormat = pNew; }
+    void SetOddColFormat( SwTableLineFormat* pNew ) { m_pOddColFormat = pNew; }
+    void SetEvenColFormat( SwTableLineFormat* pNew ) { m_pEvnColFormat = pNew; }
 
-    SwTableLineFormat* GetFirstLineFormat() { return pFstLineFormat; }
-    SwTableLineFormat* GetLastLineFormat() { return pLstLineFormat; }
-    SwTableLineFormat* GetOddLineFormat() { return pOddLineFormat; }
-    SwTableLineFormat* GetEvenLineFormat() { return pEvnLineFormat; }
+    SwTableLineFormat* GetFirstLineFormat() { return m_pFstLineFormat; }
+    SwTableLineFormat* GetLastLineFormat() { return m_pLstLineFormat; }
+    SwTableLineFormat* GetOddLineFormat() { return m_pOddLineFormat; }
+    SwTableLineFormat* GetEvenLineFormat() { return m_pEvnLineFormat; }
 
-    SwTableLineFormat* GetFirstColFormat() { return pFstColFormat; }
-    SwTableLineFormat* GetLastColFormat() { return pLstColFormat; }
-    SwTableLineFormat* GetOddColFormat() { return pOddColFormat; }
-    SwTableLineFormat* GetEvenColFormat() { return pEvnColFormat; }
+    SwTableLineFormat* GetFirstColFormat() { return m_pFstColFormat; }
+    SwTableLineFormat* GetLastColFormat() { return m_pLstColFormat; }
+    SwTableLineFormat* GetOddColFormat() { return m_pOddColFormat; }
+    SwTableLineFormat* GetEvenColFormat() { return m_pEvnColFormat; }
 
     void SetBreak( const SvxFormatBreakItem& rNew );
     void SetPageDesc( const SwFormatPageDesc& rNew );
@@ -125,25 +130,25 @@ protected:
     SwTableLineFormat(SwAttrPool& rPool, const OUString &rFormatNm, SwFrameFormat *pDrvdFrm);
 
     // Odd and Even Box formats will be used to handle alternating columns
-    SwTableBoxFormat* pFstBoxFormat;
-    SwTableBoxFormat* pLstBoxFormat;
-    SwTableBoxFormat* pOddBoxFormat;
-    SwTableBoxFormat* pEvnBoxFormat;
+    SwTableBoxFormat* m_pFstBoxFormat;
+    SwTableBoxFormat* m_pLstBoxFormat;
+    SwTableBoxFormat* m_pOddBoxFormat;
+    SwTableBoxFormat* m_pEvnBoxFormat;
 
 public:
     TYPEINFO_OVERRIDE();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableLineFormat)
 
-    void SetFirstBoxFormat( SwTableBoxFormat* pNew ) { pFstBoxFormat = pNew; }
-    void SetLastBoxFormat( SwTableBoxFormat* pNew ) { pLstBoxFormat = pNew; }
-    void SetOddBoxFormat( SwTableBoxFormat* pNew ) { pOddBoxFormat = pNew; }
-    void SetEvenBoxFormat( SwTableBoxFormat* pNew ) { pEvnBoxFormat = pNew; }
+    void SetFirstBoxFormat( SwTableBoxFormat* pNew ) { m_pFstBoxFormat = pNew; }
+    void SetLastBoxFormat( SwTableBoxFormat* pNew ) { m_pLstBoxFormat = pNew; }
+    void SetOddBoxFormat( SwTableBoxFormat* pNew ) { m_pOddBoxFormat = pNew; }
+    void SetEvenBoxFormat( SwTableBoxFormat* pNew ) { m_pEvnBoxFormat = pNew; }
 
-    SwTableBoxFormat* GetFirstBoxFormat() { return pFstBoxFormat; }
-    SwTableBoxFormat* GetLastBoxFormat() { return pLstBoxFormat; }
-    SwTableBoxFormat* GetOddBoxFormat() { return pOddBoxFormat; }
-    SwTableBoxFormat* GetEvenBoxFormat() { return pEvnBoxFormat; }
+    SwTableBoxFormat* GetFirstBoxFormat() { return m_pFstBoxFormat; }
+    SwTableBoxFormat* GetLastBoxFormat() { return m_pLstBoxFormat; }
+    SwTableBoxFormat* GetOddBoxFormat() { return m_pOddBoxFormat; }
+    SwTableBoxFormat* GetEvenBoxFormat() { return m_pEvnBoxFormat; }
 
     virtual bool supportsFullDrawingLayerFillAttributeSet() const SAL_OVERRIDE;
 };

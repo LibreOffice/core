@@ -33,15 +33,15 @@ SwTableFormat::SwTableFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
 
         SwDoc* pDoc = GetDoc();
 
-        pFstLineFormat = pDoc->MakeTableLineFormat();
-        pLstLineFormat = pDoc->MakeTableLineFormat();
-        pOddLineFormat = pDoc->MakeTableLineFormat();
-        pEvnLineFormat = pDoc->MakeTableLineFormat();
+        m_pFstLineFormat = pDoc->MakeTableLineFormat();
+        m_pLstLineFormat = pDoc->MakeTableLineFormat();
+        m_pOddLineFormat = pDoc->MakeTableLineFormat();
+        m_pEvnLineFormat = pDoc->MakeTableLineFormat();
 
-        pFstColFormat = pDoc->MakeTableLineFormat();
-        pLstColFormat = pDoc->MakeTableLineFormat();
-        pOddColFormat = pDoc->MakeTableLineFormat();
-        pEvnColFormat = pDoc->MakeTableLineFormat();
+        m_pFstColFormat = pDoc->MakeTableLineFormat();
+        m_pLstColFormat = pDoc->MakeTableLineFormat();
+        m_pOddColFormat = pDoc->MakeTableLineFormat();
+        m_pEvnColFormat = pDoc->MakeTableLineFormat();
     }
 
 SwTableFormat::SwTableFormat( SwAttrPool& rPool, const OUString &rFormatNm,
@@ -58,15 +58,15 @@ SwTableFormat::SwTableFormat( SwAttrPool& rPool, const OUString &rFormatNm,
 
         SwDoc* pDoc = GetDoc();
 
-        pFstLineFormat = pDoc->MakeTableLineFormat();
-        pLstLineFormat = pDoc->MakeTableLineFormat();
-        pOddLineFormat = pDoc->MakeTableLineFormat();
-        pEvnLineFormat = pDoc->MakeTableLineFormat();
+        m_pFstLineFormat = pDoc->MakeTableLineFormat();
+        m_pLstLineFormat = pDoc->MakeTableLineFormat();
+        m_pOddLineFormat = pDoc->MakeTableLineFormat();
+        m_pEvnLineFormat = pDoc->MakeTableLineFormat();
 
-        pFstColFormat = pDoc->MakeTableLineFormat();
-        pLstColFormat = pDoc->MakeTableLineFormat();
-        pOddColFormat = pDoc->MakeTableLineFormat();
-        pEvnColFormat = pDoc->MakeTableLineFormat();
+        m_pFstColFormat = pDoc->MakeTableLineFormat();
+        m_pLstColFormat = pDoc->MakeTableLineFormat();
+        m_pOddColFormat = pDoc->MakeTableLineFormat();
+        m_pEvnColFormat = pDoc->MakeTableLineFormat();
     }
 
 SwTableFormat& SwTableFormat::operator=( const SwTableFormat& rNew )
@@ -74,15 +74,15 @@ SwTableFormat& SwTableFormat::operator=( const SwTableFormat& rNew )
         if (&rNew == this)
             return *this;
 
-        pFstLineFormat = rNew.pFstLineFormat;
-        pLstLineFormat = rNew.pLstLineFormat;
-        pOddLineFormat = rNew.pOddLineFormat;
-        pEvnLineFormat = rNew.pEvnLineFormat;
+        m_pFstLineFormat = rNew.m_pFstLineFormat;
+        m_pLstLineFormat = rNew.m_pLstLineFormat;
+        m_pOddLineFormat = rNew.m_pOddLineFormat;
+        m_pEvnLineFormat = rNew.m_pEvnLineFormat;
 
-        pFstColFormat = rNew.pFstColFormat;
-        pLstColFormat = rNew.pLstColFormat;
-        pOddColFormat = rNew.pOddColFormat;
-        pEvnColFormat = rNew.pEvnColFormat;
+        m_pFstColFormat = rNew.m_pFstColFormat;
+        m_pLstColFormat = rNew.m_pLstColFormat;
+        m_pOddColFormat = rNew.m_pOddColFormat;
+        m_pEvnColFormat = rNew.m_pEvnColFormat;
 
         return *this;
     }
@@ -158,10 +158,10 @@ SwTableLineFormat::SwTableLineFormat( SwAttrPool& rPool, const sal_Char* pFormat
     {
         SwDoc* pDoc = GetDoc();
 
-        pFstBoxFormat = pDoc->MakeTableBoxFormat();
-        pLstBoxFormat = pDoc->MakeTableBoxFormat();
-        pOddBoxFormat = pDoc->MakeTableBoxFormat();
-        pEvnBoxFormat = pDoc->MakeTableBoxFormat();
+        m_pFstBoxFormat = pDoc->MakeTableBoxFormat();
+        m_pLstBoxFormat = pDoc->MakeTableBoxFormat();
+        m_pOddBoxFormat = pDoc->MakeTableBoxFormat();
+        m_pEvnBoxFormat = pDoc->MakeTableBoxFormat();
     }
 
 SwTableLineFormat::SwTableLineFormat( SwAttrPool& rPool, const OUString &rFormatNm,
@@ -170,10 +170,10 @@ SwTableLineFormat::SwTableLineFormat( SwAttrPool& rPool, const OUString &rFormat
     {
         SwDoc* pDoc = GetDoc();
 
-        pFstBoxFormat = pDoc->MakeTableBoxFormat();
-        pLstBoxFormat = pDoc->MakeTableBoxFormat();
-        pOddBoxFormat = pDoc->MakeTableBoxFormat();
-        pEvnBoxFormat = pDoc->MakeTableBoxFormat();
+        m_pFstBoxFormat = pDoc->MakeTableBoxFormat();
+        m_pLstBoxFormat = pDoc->MakeTableBoxFormat();
+        m_pOddBoxFormat = pDoc->MakeTableBoxFormat();
+        m_pEvnBoxFormat = pDoc->MakeTableBoxFormat();
     }
 
 SwTableBoxFormat::SwTableBoxFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
