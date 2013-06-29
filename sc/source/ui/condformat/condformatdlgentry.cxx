@@ -1216,6 +1216,7 @@ void ScDateFrmtEntry::SetActive()
     maLbDateEntry.Show();
     maFtStyle.Show();
     maWdPreview.Show();
+    maLbStyle.Show();
 
     Select();
 }
@@ -1225,6 +1226,7 @@ void ScDateFrmtEntry::SetInactive()
     maLbDateEntry.Hide();
     maFtStyle.Hide();
     maWdPreview.Hide();
+    maLbStyle.Hide();
 
     Deselect();
 }
