@@ -1256,8 +1256,8 @@ Size ListBox::CalcMinimumSize() const
         Rectangle aContent, aBound;
         Size aTestSize( 100, 20 );
         Rectangle aArea( aPoint, aTestSize );
-        if( const_cast<ListBox*>(this)->GetNativeControlRegion(
-                       CTRL_LISTBOX, PART_SUB_EDIT, aArea, 0, aControlValue, OUString(), aBound, aContent) )
+        if( GetNativeControlRegion( CTRL_LISTBOX, PART_SUB_EDIT, aArea, 0,
+                    aControlValue, OUString(), aBound, aContent) )
         {
             // use the themes drop down size
             aSz.Width() += aTestSize.Width() - aContent.GetWidth();
@@ -1273,8 +1273,8 @@ Size ListBox::CalcMinimumSize() const
         ImplControlValue aControlValue;
         Rectangle aRect( Point( 0, 0 ), aSz );
         Rectangle aContent, aBound;
-        if( const_cast<ListBox*>(this)->GetNativeControlRegion(
-                       CTRL_LISTBOX, PART_ENTIRE_CONTROL, aRect, 0, aControlValue, OUString(), aBound, aContent) )
+        if( GetNativeControlRegion( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aRect, 0,
+                    aControlValue, OUString(), aBound, aContent) )
         {
             if( aBound.GetHeight() > aSz.Height() )
                 aSz.Height() = aBound.GetHeight();

@@ -147,7 +147,7 @@ PushButtonValue* PushButtonValue::clone() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPart )
+sal_Bool OutputDevice::IsNativeControlSupported( ControlType nType, ControlPart nPart ) const
 {
     if( !lcl_enableNativeWidget( *this ) )
         return sal_False;

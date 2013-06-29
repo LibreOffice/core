@@ -1602,9 +1602,9 @@ Size StatusBar::CalcWindowSizePixel() const
         ImplControlValue aValue;
         Rectangle aControlRegion( (const Point&)Point(), Size( nCalcWidth, nMinHeight ) );
         Rectangle aNativeControlRegion, aNativeContentRegion;
-        if( pThis->GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
-                                           CTRL_STATE_ENABLED, aValue, OUString(),
-                                           aNativeControlRegion, aNativeContentRegion ) )
+        if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL,
+                    aControlRegion, CTRL_STATE_ENABLED, aValue, OUString(),
+                    aNativeControlRegion, aNativeContentRegion ) )
         {
             nProgressHeight = aNativeControlRegion.GetHeight();
         }
@@ -1616,8 +1616,8 @@ Size StatusBar::CalcWindowSizePixel() const
         ImplControlValue aControlValue( FRAME_DRAW_NODRAW );
         Rectangle aBound, aContent;
         Rectangle aNatRgn( Point( 0, 0 ), Size( 150, 50 ) );
-        if( pThis->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
-            aNatRgn, 0, aControlValue, OUString(), aBound, aContent) )
+        if( GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
+                    aNatRgn, 0, aControlValue, OUString(), aBound, aContent) )
         {
             mpImplData->mnItemBorderWidth =
                 ( aBound.GetHeight() - aContent.GetHeight() ) / 2;

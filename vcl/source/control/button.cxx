@@ -2903,7 +2903,7 @@ Size RadioButton::ImplGetRadioImageSize() const
         Rectangle aBoundingRgn, aContentRgn;
 
         // get native size of a radio button
-        if( pThis->GetNativeControlRegion( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion,
+        if( GetNativeControlRegion( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion,
                                            nState, aControlValue, OUString(),
                                            aBoundingRgn, aContentRgn ) )
         {
@@ -3837,7 +3837,7 @@ Size CheckBox::ImplGetCheckImageSize() const
         Rectangle aBoundingRgn, aContentRgn;
 
         // get native size of a check box
-        if( pThis->GetNativeControlRegion( CTRL_CHECKBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
+        if( GetNativeControlRegion( CTRL_CHECKBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
                                            nState, aControlValue, OUString(),
                                            aBoundingRgn, aContentRgn ) )
         {

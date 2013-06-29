@@ -1187,7 +1187,7 @@ public:
     // These all just call through to the private mpGraphics functions of the same name.
 
     // Query the platform layer for control support
-    sal_Bool                IsNativeControlSupported( ControlType nType, ControlPart nPart );
+    sal_Bool                IsNativeControlSupported( ControlType nType, ControlPart nPart ) const;
 
     // Query the native control to determine if it was acted upon
     sal_Bool                HitTestNativeControl(   ControlType nType,

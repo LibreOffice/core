@@ -2926,7 +2926,7 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
     ImplControlValue aControlValue;
     Rectangle aRect( Point( 0, 0 ), aSize );
     Rectangle aContent, aBound;
-    if( const_cast<Edit*>(this)->GetNativeControlRegion(
+    if( GetNativeControlRegion(
                    eCtrlType, PART_ENTIRE_CONTROL,
                    aRect, 0, aControlValue, OUString(), aBound, aContent) )
     {
