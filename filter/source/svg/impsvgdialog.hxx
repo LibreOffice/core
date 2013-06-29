@@ -34,9 +34,8 @@
 #define SVG_PROP_TINYPROFILE                "TinyMode"
 #define SVG_PROP_EMBEDFONTS                 "EmbedFonts"
 #define SVG_PROP_NATIVEDECORATION           "UseNativeTextDecoration"
-#define SVG_PROP_GLYPHPLACEMENT             "GlyphPlacement"
 #define SVG_PROP_OPACITY                    "Opacity"
-#define SVG_PROP_GRADIENT                   "Gradient"
+#define SVG_PROP_POSITIONED_CHARACTERS      "UsePositionedCharacters"
 
 // ----------------
 // - ImpSVGDialog -
