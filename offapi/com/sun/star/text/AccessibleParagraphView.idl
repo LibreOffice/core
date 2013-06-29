@@ -69,7 +69,7 @@ service AccessibleParagraphView
                 the paragraph.
             <li>There are no relations.
             <li>The following states are supported by the
-                ::com::sun::star::accessibility::AccessibleStateSet returned by
+                ::com::sun::star::accessibility::XAccessibleStateSet returned by
                 ::com::sun::star::accessibility::XAccessibleContext::getAccessibleStateSet().
                 <ul>
                     <li>::com::sun::star::accessibility::AccessibleStateType::DEFUNC
@@ -79,9 +79,9 @@ service AccessibleParagraphView
                     <li>::com::sun::star::accessibility::AccessibleStateType::EDITABLE
                     <li>::com::sun::star::accessibility::AccessibleStateType::ENABLED
                         (always contained)
-                    <li>::com::sun::star::accessibility::AccessibleStateType::MULTILINE
+                    <li>::com::sun::star::accessibility::AccessibleStateType::MULTI_LINE
                         (always contained)
-                    <li>::com::sun::star::accessibility::AccessibleStateType::MULTISELECTABLE
+                    <li>::com::sun::star::accessibility::AccessibleStateType::MULTI_SELECTABLE
                         (always contained)
                     <li>::com::sun::star::accessibility::AccessibleStateType::OPAQUE
                     <li>::com::sun::star::accessibility::AccessibleStateType::SHOWING

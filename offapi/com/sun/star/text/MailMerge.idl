@@ -66,7 +66,7 @@ published service MailMerge
 
         <p>This service describe the interaction between all data access related properties,
         namely #DataSourceName, #Command, #CommandType,
-        #Connection, #Selection, #ResultSet,
+        #ActiveConnection, #Selection, #ResultSet,
         #Filter and #EscapeProcessing
     */
     service com::sun::star::sdb::DataAccessDescriptor;
@@ -129,8 +129,8 @@ published service MailMerge
         com::sun::star::sdbcx::XRowLocate interface.</p>
 
         <p>If this array is empty, the whole result set, as described by #ResultSet
-        respectively the triple (#DataSourceName, #DataCommandType,
-        #DataCommand).</p>
+        respectively the triple (#DataSourceName, #CommandType,
+        #Command).</p>
 
         <p>For the interaction of this property with other data access relevant properties, see
         the com::sun::star::sdb::DataAccessDescriptor service.</p>

@@ -78,7 +78,7 @@ service AccessibleFootnoteView
                 to the footnote anchor's paragraph.</em>
             <li>The following states might be contained in the state set
                 returned by
-                ::com::sun::star::accessibility::XAccessible::getAccessibleStateSet():
+                com::sun::star::accessibility::XAccessibleContext::getAccessibleStateSet():
                 <ul>
                     <li>::com::sun::star::accessibility::AccessibleStateType::DEFUNC
                         (indicates that
