@@ -319,7 +319,7 @@ namespace sdecl = comphelper::service_decl;
      "com.sun.star.document.ExportFilter;"
      "com.sun.star.document.ExtendedTypeDetection" );
 
- sdecl::class_<SVGWriter, sdecl::with_args<true>> serviceWriterImpl;
+ sdecl::class_<SVGWriter, sdecl::with_args<true> > serviceWriterImpl;
  const sdecl::ServiceDecl svgWriter(
      serviceWriterImpl,
      SVG_WRITER_IMPL_NAME,
