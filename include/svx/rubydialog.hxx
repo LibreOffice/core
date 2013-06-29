@@ -87,8 +87,8 @@ public:
 
 class SvxRubyDialog : public SfxModelessDialog
 {
-    using Window::SetText;
-    using Window::GetText;
+    using Dialog::SetText;
+    using Dialog::GetText;
 
     friend class RubyPreview;
 
