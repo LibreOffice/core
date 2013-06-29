@@ -121,6 +121,7 @@
 #include "stringutil.hxx"
 #include "formulaiter.hxx"
 #include "tokenarray.hxx"
+#include "stylehelper.hxx"
 
 #include <list>
 #include <boost/scoped_ptr.hpp>

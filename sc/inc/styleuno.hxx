@@ -43,15 +43,6 @@ class ScDocShell;
 class ScStyleFamilyObj;
 class ScStyleObj;
 
-
-class ScStyleNameConversion
-{
-public:
-    static String DisplayToProgrammaticName( const String& rDispName, sal_uInt16 nType );
-    static String ProgrammaticToDisplayName( const String& rProgName, sal_uInt16 nType );
-};
-
-
 class ScStyleFamiliesObj : public ::cppu::WeakImplHelper4<
                             ::com::sun::star::container::XIndexAccess,
                             ::com::sun::star::container::XNameAccess,
