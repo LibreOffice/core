@@ -9483,41 +9483,41 @@ class ShapeCflowChartProcess : public CustomShapeProvider
 } // anonymous namespace
 void CustomShapeProperties::initializePresetsMap5()
 {
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "accentCallout3" ) ) ] = new ShapeCaccentCallout3();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "leftCircularArrow" ) ) ] = new ShapeCleftCircularArrow();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "rightArrow" ) ) ] = new ShapeCrightArrow();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "flowChartPunchedCard" ) ) ] = new ShapeCflowChartPunchedCard();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "snip2DiagRect" ) ) ] = new ShapeCsnip2DiagRect();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "verticalScroll" ) ) ] = new ShapeCverticalScroll();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "star7" ) ) ] = new ShapeCstar7();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "chartX" ) ) ] = new ShapeCchartX();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "cloud" ) ) ] = new ShapeCcloud();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "cube" ) ) ] = new ShapeCcube();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "round2DiagRect" ) ) ] = new ShapeCround2DiagRect();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "flowChartMultidocument" ) ) ] = new ShapeCflowChartMultidocument();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "actionButtonDocument" ) ) ] = new ShapeCactionButtonDocument();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "flowChartTerminator" ) ) ] = new ShapeCflowChartTerminator();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "flowChartDelay" ) ) ] = new ShapeCflowChartDelay();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "curvedConnector5" ) ) ] = new ShapeCcurvedConnector5();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "horizontalScroll" ) ) ] = new ShapeChorizontalScroll();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "bentConnector4" ) ) ] = new ShapeCbentConnector4();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "leftRightCircularArrow" ) ) ] = new ShapeCleftRightCircularArrow();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "wedgeRectCallout" ) ) ] = new ShapeCwedgeRectCallout();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "accentCallout2" ) ) ] = new ShapeCaccentCallout2();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "flowChartMagneticDrum" ) ) ] = new ShapeCflowChartMagneticDrum();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "corner" ) ) ] = new ShapeCcorner();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "borderCallout2" ) ) ] = new ShapeCborderCallout2();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "donut" ) ) ] = new ShapeCdonut();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "flowChartCollate" ) ) ] = new ShapeCflowChartCollate();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "mathNotEqual" ) ) ] = new ShapeCmathNotEqual();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "bentConnector2" ) ) ] = new ShapeCbentConnector2();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "mathMultiply" ) ) ] = new ShapeCmathMultiply();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "heptagon" ) ) ] = new ShapeCheptagon();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "rect" ) ) ] = new ShapeCrect();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "accentBorderCallout2" ) ) ] = new ShapeCaccentBorderCallout2();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "pieWedge" ) ) ] = new ShapeCpieWedge();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "upArrowCallout" ) ) ] = new ShapeCupArrowCallout();
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( "flowChartProcess" ) ) ] = new ShapeCflowChartProcess();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "accentCallout3" ) ] = new ShapeCaccentCallout3();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "leftCircularArrow" ) ] = new ShapeCleftCircularArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "rightArrow" ) ] = new ShapeCrightArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "flowChartPunchedCard" ) ] = new ShapeCflowChartPunchedCard();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "snip2DiagRect" ) ] = new ShapeCsnip2DiagRect();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "verticalScroll" ) ] = new ShapeCverticalScroll();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "star7" ) ] = new ShapeCstar7();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "chartX" ) ] = new ShapeCchartX();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "cloud" ) ] = new ShapeCcloud();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "cube" ) ] = new ShapeCcube();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "round2DiagRect" ) ] = new ShapeCround2DiagRect();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "flowChartMultidocument" ) ] = new ShapeCflowChartMultidocument();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "actionButtonDocument" ) ] = new ShapeCactionButtonDocument();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "flowChartTerminator" ) ] = new ShapeCflowChartTerminator();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "flowChartDelay" ) ] = new ShapeCflowChartDelay();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "curvedConnector5" ) ] = new ShapeCcurvedConnector5();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "horizontalScroll" ) ] = new ShapeChorizontalScroll();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "bentConnector4" ) ] = new ShapeCbentConnector4();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "leftRightCircularArrow" ) ] = new ShapeCleftRightCircularArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "wedgeRectCallout" ) ] = new ShapeCwedgeRectCallout();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "accentCallout2" ) ] = new ShapeCaccentCallout2();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "flowChartMagneticDrum" ) ] = new ShapeCflowChartMagneticDrum();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "corner" ) ] = new ShapeCcorner();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "borderCallout2" ) ] = new ShapeCborderCallout2();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "donut" ) ] = new ShapeCdonut();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "flowChartCollate" ) ] = new ShapeCflowChartCollate();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "mathNotEqual" ) ] = new ShapeCmathNotEqual();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "bentConnector2" ) ] = new ShapeCbentConnector2();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "mathMultiply" ) ] = new ShapeCmathMultiply();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "heptagon" ) ] = new ShapeCheptagon();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "rect" ) ] = new ShapeCrect();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "accentBorderCallout2" ) ] = new ShapeCaccentBorderCallout2();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "pieWedge" ) ] = new ShapeCpieWedge();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "upArrowCallout" ) ] = new ShapeCupArrowCallout();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( "flowChartProcess" ) ] = new ShapeCflowChartProcess();
 }
 
 } } // oox // drawingml
