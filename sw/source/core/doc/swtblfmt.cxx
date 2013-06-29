@@ -33,15 +33,15 @@ SwTableFmt::SwTableFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
 
         SwDoc* pDoc = GetDoc();
 
-        pFstLineFmt = pDoc->MakeTableLineFmt();
-        pLstLineFmt = pDoc->MakeTableLineFmt();
-        pOddLineFmt = pDoc->MakeTableLineFmt();
-        pEvnLineFmt = pDoc->MakeTableLineFmt();
+        m_pFstLineFmt = pDoc->MakeTableLineFmt();
+        m_pLstLineFmt = pDoc->MakeTableLineFmt();
+        m_pOddLineFmt = pDoc->MakeTableLineFmt();
+        m_pEvnLineFmt = pDoc->MakeTableLineFmt();
 
-        pFstColFmt = pDoc->MakeTableLineFmt();
-        pLstColFmt = pDoc->MakeTableLineFmt();
-        pOddColFmt = pDoc->MakeTableLineFmt();
-        pEvnColFmt = pDoc->MakeTableLineFmt();
+        m_pFstColFmt = pDoc->MakeTableLineFmt();
+        m_pLstColFmt = pDoc->MakeTableLineFmt();
+        m_pOddColFmt = pDoc->MakeTableLineFmt();
+        m_pEvnColFmt = pDoc->MakeTableLineFmt();
     }
 
 SwTableFmt::SwTableFmt( SwAttrPool& rPool, const String &rFmtNm,
@@ -58,15 +58,15 @@ SwTableFmt::SwTableFmt( SwAttrPool& rPool, const String &rFmtNm,
 
         SwDoc* pDoc = GetDoc();
 
-        pFstLineFmt = pDoc->MakeTableLineFmt();
-        pLstLineFmt = pDoc->MakeTableLineFmt();
-        pOddLineFmt = pDoc->MakeTableLineFmt();
-        pEvnLineFmt = pDoc->MakeTableLineFmt();
+        m_pFstLineFmt = pDoc->MakeTableLineFmt();
+        m_pLstLineFmt = pDoc->MakeTableLineFmt();
+        m_pOddLineFmt = pDoc->MakeTableLineFmt();
+        m_pEvnLineFmt = pDoc->MakeTableLineFmt();
 
-        pFstColFmt = pDoc->MakeTableLineFmt();
-        pLstColFmt = pDoc->MakeTableLineFmt();
-        pOddColFmt = pDoc->MakeTableLineFmt();
-        pEvnColFmt = pDoc->MakeTableLineFmt();
+        m_pFstColFmt = pDoc->MakeTableLineFmt();
+        m_pLstColFmt = pDoc->MakeTableLineFmt();
+        m_pOddColFmt = pDoc->MakeTableLineFmt();
+        m_pEvnColFmt = pDoc->MakeTableLineFmt();
     }
 
 SwTableFmt& SwTableFmt::operator=( const SwTableFmt& rNew )
@@ -74,15 +74,15 @@ SwTableFmt& SwTableFmt::operator=( const SwTableFmt& rNew )
         if (&rNew == this)
             return *this;
 
-        pFstLineFmt = rNew.pFstLineFmt;
-        pLstLineFmt = rNew.pLstLineFmt;
-        pOddLineFmt = rNew.pOddLineFmt;
-        pEvnLineFmt = rNew.pEvnLineFmt;
+        m_pFstLineFmt = rNew.m_pFstLineFmt;
+        m_pLstLineFmt = rNew.m_pLstLineFmt;
+        m_pOddLineFmt = rNew.m_pOddLineFmt;
+        m_pEvnLineFmt = rNew.m_pEvnLineFmt;
 
-        pFstColFmt = rNew.pFstColFmt;
-        pLstColFmt = rNew.pLstColFmt;
-        pOddColFmt = rNew.pOddColFmt;
-        pEvnColFmt = rNew.pEvnColFmt;
+        m_pFstColFmt = rNew.m_pFstColFmt;
+        m_pLstColFmt = rNew.m_pLstColFmt;
+        m_pOddColFmt = rNew.m_pOddColFmt;
+        m_pEvnColFmt = rNew.m_pEvnColFmt;
 
         return *this;
     }
@@ -158,10 +158,10 @@ SwTableLineFmt::SwTableLineFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
     {
         SwDoc* pDoc = GetDoc();
 
-        pFstBoxFmt = pDoc->MakeTableBoxFmt();
-        pLstBoxFmt = pDoc->MakeTableBoxFmt();
-        pOddBoxFmt = pDoc->MakeTableBoxFmt();
-        pEvnBoxFmt = pDoc->MakeTableBoxFmt();
+        m_pFstBoxFmt = pDoc->MakeTableBoxFmt();
+        m_pLstBoxFmt = pDoc->MakeTableBoxFmt();
+        m_pOddBoxFmt = pDoc->MakeTableBoxFmt();
+        m_pEvnBoxFmt = pDoc->MakeTableBoxFmt();
     }
 
 SwTableLineFmt::SwTableLineFmt( SwAttrPool& rPool, const String &rFmtNm,
@@ -170,10 +170,10 @@ SwTableLineFmt::SwTableLineFmt( SwAttrPool& rPool, const String &rFmtNm,
     {
         SwDoc* pDoc = GetDoc();
 
-        pFstBoxFmt = pDoc->MakeTableBoxFmt();
-        pLstBoxFmt = pDoc->MakeTableBoxFmt();
-        pOddBoxFmt = pDoc->MakeTableBoxFmt();
-        pEvnBoxFmt = pDoc->MakeTableBoxFmt();
+        m_pFstBoxFmt = pDoc->MakeTableBoxFmt();
+        m_pLstBoxFmt = pDoc->MakeTableBoxFmt();
+        m_pOddBoxFmt = pDoc->MakeTableBoxFmt();
+        m_pEvnBoxFmt = pDoc->MakeTableBoxFmt();
     }
 
 SwTableBoxFmt::SwTableBoxFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
