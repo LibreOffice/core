@@ -91,31 +91,31 @@ inline reference_type * WeakReference< reference_type >::operator->() const
 }
 
 template< class reference_type >
-inline sal_Bool WeakReference< reference_type >::operator==(const reference_type * pReferenceObject) const
+inline bool WeakReference< reference_type >::operator==(const reference_type * pReferenceObject) const
 {
     return mpWeakConnection->mpReference == pReferenceObject;
 }
 
 template< class reference_type >
-inline sal_Bool WeakReference< reference_type >::operator==(const WeakReference<reference_type> & handle) const
+inline bool WeakReference< reference_type >::operator==(const WeakReference<reference_type> & handle) const
 {
     return mpWeakConnection == handle.mpWeakConnection;
 }
 
 template< class reference_type >
-inline sal_Bool WeakReference< reference_type >::operator!=(const WeakReference<reference_type> & handle) const
+inline bool WeakReference< reference_type >::operator!=(const WeakReference<reference_type> & handle) const
 {
     return mpWeakConnection != handle.mpWeakConnection;
 }
 
 template< class reference_type >
-inline sal_Bool WeakReference< reference_type >::operator<(const WeakReference<reference_type> & handle) const
+inline bool WeakReference< reference_type >::operator<(const WeakReference<reference_type> & handle) const
 {
     return mpWeakConnection->mpReference < handle.mpWeakConnection->mpReference;
 }
 
 template< class reference_type >
-inline sal_Bool WeakReference< reference_type >::operator>(const WeakReference<reference_type> & handle) const
+inline bool WeakReference< reference_type >::operator>(const WeakReference<reference_type> & handle) const
 {
     return mpWeakConnection->mpReference > handle.mpWeakConnection->mpReference;
 }

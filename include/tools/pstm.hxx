@@ -202,11 +202,11 @@ class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
 
 protected:
     void                WriteObj( sal_uInt8 nHdr, SvPersistBase * pObj );
-    sal_uInt32          ReadObj( SvPersistBase * & rpObj, sal_Bool bRegister );
+    sal_uInt32          ReadObj( SvPersistBase * & rpObj, bool bRegister );
 
 public:
-    sal_Bool            IsStreamed( SvPersistBase * pObj ) const
-                        { return 0 != GetIndex( pObj ); }
+    bool                IsStreamed( SvPersistBase * pObj ) const
+                            { return 0 != GetIndex( pObj ); }
     virtual void        ResetError();
 
                         SvPersistStream( SvClassManager &, SvStream * pStream,

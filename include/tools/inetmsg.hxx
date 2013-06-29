@@ -408,7 +408,7 @@ class TOOLS_DLLPUBLIC INetMIMEMessage : public INetRFC822Message
 
     void CleanupImp();
     void CopyImp    (const INetMIMEMessage& rMsg);
-    void SetHeaderParsed() { bHeaderParsed = sal_True; }
+    void SetHeaderParsed() { bHeaderParsed = true; }
 
 protected:
     virtual SvStream& operator<< (SvStream& rStrm) const;

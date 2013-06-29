@@ -30,8 +30,8 @@ protected:
     ResMgr* m_pResMgr;
 
     // check availability of Resource
-    sal_Bool                IsAvailableRes( const ResId& rId ) const
-    { return m_pResMgr->IsAvailable( rId, this ); }
+    bool                IsAvailableRes( const ResId& rId ) const
+        { return m_pResMgr->IsAvailable( rId, this ); }
 
     // Load a Resource
     void                GetRes( const ResId& rResId );

@@ -19,9 +19,11 @@
 #ifndef _SFX_DOCFILT_HACK_HXX
 #define _SFX_DOCFILT_HACK_HXX
 
-#include "sal/config.h"
-#include "sfx2/dllapi.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+#include <sal/types.h>
+#include <tools/solar.h>
+#include <tools/string.hxx>
 #include <com/sun/star/plugin/PluginDescription.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>

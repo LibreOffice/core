@@ -325,7 +325,7 @@ Time operator -( const Time& rTime1, const Time& rTime2 )
                           TimeToNanoSec( rTime2 ) );
 }
 
-sal_Bool Time::IsEqualIgnoreNanoSec( const Time& rTime ) const
+bool Time::IsEqualIgnoreNanoSec( const Time& rTime ) const
 {
     sal_Int32 n1 = (nTime       < 0 ? -static_cast<sal_Int32>(GetNanoSec())       : GetNanoSec() );
     sal_Int32 n2 = (rTime.nTime < 0 ? -static_cast<sal_Int32>(rTime.GetNanoSec()) : rTime.GetNanoSec() );

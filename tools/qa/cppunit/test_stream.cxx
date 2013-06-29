@@ -219,7 +219,7 @@ namespace
         SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, STREAM_READ);
 
         OString aFoo;
-        sal_Bool bRet;
+        bool bRet;
 
         bRet = aMemStream.ReadLine(aFoo);
         CPPUNIT_ASSERT(bRet);

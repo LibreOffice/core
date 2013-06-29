@@ -137,9 +137,9 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 
     do
     {
-        xub_StrLen nStartPosHeaderLine = 0; // use for efficient way to get the tokens
-        xub_StrLen nStartPosFirstLine = 0; // use for efficient way to get the tokens
-        xub_StrLen nStartPosFirstLine2 = 0;
+        sal_Int32 nStartPosHeaderLine = 0; // use for efficient way to get the tokens
+        sal_Int32 nStartPosFirstLine = 0; // use for efficient way to get the tokens
+        sal_Int32 nStartPosFirstLine2 = 0;
         for (xub_StrLen i = 0; i < nFieldCount; i++)
         {
             if ( nRowCount == 0)
@@ -160,7 +160,11 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                 aColumnNames.push_back(aColumnName);
             }
             if(bRead)
-                impl_fillColumnInfo_nothrow(m_aCurrentLine,nStartPosFirstLine,nStartPosFirstLine2,m_aTypes[i],m_aPrecisions[i],m_aScales[i],m_aTypeNames[i],cDecimalDelimiter,cThousandDelimiter,aCharClass);
+            {
+                impl_fillColumnInfo_nothrow(m_aCurrentLine, nStartPosFirstLine, nStartPosFirstLine2,
+                                            m_aTypes[i], m_aPrecisions[i], m_aScales[i], m_aTypeNames[i],
+                                            cDecimalDelimiter, cThousandDelimiter, aCharClass);
+            }
         }
         ++nRowCount;
         bRead = readLine(&rowPos.second, &rowPos.first, false);
@@ -197,9 +201,10 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 
     m_pFileStream->Seek(m_aRowPosToFilePos[0].second);
 }
-void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,xub_StrLen& nStartPosFirstLine,xub_StrLen& nStartPosFirstLine2
-                                             ,sal_Int32& io_nType,sal_Int32& io_nPrecisions,sal_Int32& io_nScales,String& o_sTypeName
-                                             ,const sal_Unicode cDecimalDelimiter,const sal_Unicode cThousandDelimiter,const CharClass&  aCharClass)
+
+void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, sal_Int32& nStartPosFirstLine, sal_Int32& nStartPosFirstLine2,
+                                             sal_Int32& io_nType, sal_Int32& io_nPrecisions, sal_Int32& io_nScales, String& o_sTypeName,
+                                             const sal_Unicode cDecimalDelimiter, const sal_Unicode cThousandDelimiter, const CharClass&  aCharClass)
 {
     if ( io_nType != DataType::VARCHAR )
     {
@@ -630,7 +635,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, s
     const sal_Unicode cDecimalDelimiter = pConnection->getDecimalDelimiter();
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
     // Fields:
-    xub_StrLen nStartPos = 0;
+    sal_Int32 nStartPos = 0;
     OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
     OSQLColumns::Vector::const_iterator aEnd = _rCols.get().end();
     const OValueRefVector::Vector::size_type nCount = _rRow->get().size();
@@ -935,7 +940,7 @@ bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos
     {
         if (pStartPos)
             *pStartPos = m_pFileStream->Tell();
-        m_pFileStream->ReadByteStringLine(m_aCurrentLine,nEncoding);
+        m_pFileStream->ReadByteStringLine(m_aCurrentLine, nEncoding);
         if (m_pFileStream->IsEof())
             return false;
 
@@ -945,8 +950,8 @@ bool OFlatTable::readLine(sal_Int32 * const pEndPos, sal_Int32 * const pStartPos
             m_pFileStream->ReadByteStringLine(sLine,nEncoding);
             if ( !m_pFileStream->IsEof() )
             {
-                m_aCurrentLine.GetString().Append('\n');
-                m_aCurrentLine.GetString() += sLine.GetString();
+                OUString aStr = m_aCurrentLine.GetString() + "\n" + sLine.GetString();
+                m_aCurrentLine.SetString(aStr);
                 sLine = m_aCurrentLine;
             }
             else

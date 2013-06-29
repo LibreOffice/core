@@ -18,8 +18,10 @@
  */
 
 #include <limits.h>
+#include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
+#include <tools/lineend.hxx>
 #include <tools/stream.hxx>
 #include <tools/bigint.hxx>
 

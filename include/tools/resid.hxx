@@ -132,7 +132,7 @@ public:
         return *this;
     }
 
-    const ResId &  SetAutoRelease(sal_Bool bRelease) const
+    const ResId &  SetAutoRelease(bool bRelease) const
     {
         if( bRelease )
             m_nResId &= ~RSC_DONTRELEASE;
@@ -141,8 +141,8 @@ public:
         return *this;
     }
 
-    sal_Bool        IsAutoRelease()  const
-    { return !(m_nResId & RSC_DONTRELEASE); }
+    bool        IsAutoRelease()  const
+        { return !(m_nResId & RSC_DONTRELEASE); }
 
     sal_uInt32      GetId()        const { return m_nResId & ~RSC_DONTRELEASE; }
     RSHEADER_TYPE*  GetpResource() const { return m_pResource; }
