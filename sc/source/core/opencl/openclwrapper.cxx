@@ -419,10 +419,13 @@ int OpenclDevice::CompileKernelFile(GPUEnv *gpuInfo, const char *buildOption) {
     source_size[0] = strlen(source);
     binaryExisted = 0;
     if ((binaryExisted = BinaryGenerated(filename, &fd)) == 1) {
+#ifdef CL_CONTEXT_NUM_DEVICES
         status = clGetContextInfo(gpuInfo->context, CL_CONTEXT_NUM_DEVICES,
                 sizeof(numDevices), &numDevices, NULL);
         CHECK_OPENCL(status)
-
+#else
+        numDevices = 1; // ???
+#endif
         devices = (cl_device_id*) malloc(sizeof(cl_device_id) * numDevices);
         if (devices == NULL) {
             return 0;
