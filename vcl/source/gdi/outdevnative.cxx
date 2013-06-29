@@ -166,7 +166,7 @@ sal_Bool OutputDevice::HitTestNativeControl( ControlType nType,
                               ControlPart nPart,
                               const Rectangle& rControlRegion,
                               const Point& aPos,
-                              sal_Bool& rIsInside )
+                              sal_Bool& rIsInside ) const
 {
     if( !lcl_enableNativeWidget( *this ) )
         return sal_False;
