@@ -252,6 +252,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/tool/scopetools \
 	sc/source/core/tool/simplerangelist \
 	sc/source/core/tool/stringutil \
+	sc/source/core/tool/stylehelper \
 	sc/source/core/tool/subtotal \
 	sc/source/core/tool/token \
 	sc/source/core/tool/typedstrdata \
