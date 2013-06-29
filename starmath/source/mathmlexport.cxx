@@ -799,9 +799,25 @@ void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel)
 void SmXMLExport::ExportBinaryVertical(const SmNode *pNode, int nLevel)
 {
     OSL_ENSURE(pNode->GetNumSubNodes()==3,"Bad Fraction");
+    const SmNode *pNum = pNode->GetSubNode(0);
+    const SmNode *pDenom = pNode->GetSubNode(2);
+    if (pNum->GetType() == NALIGN && pNum->GetToken().eType != TALIGNC)
+    {
+        // A left or right alignment is specified on the numerator:
+        // attach the corresponding numalign attribute.
+        AddAttribute(XML_NAMESPACE_MATH, XML_NUMALIGN,
+            pNum->GetToken().eType == TALIGNL ? XML_LEFT : XML_RIGHT);
+    }
+    if (pDenom->GetType() == NALIGN && pDenom->GetToken().eType != TALIGNC)
+    {
+        // A left or right alignment is specified on the denominator:
+        // attach the corresponding denomalign attribute.
+        AddAttribute(XML_NAMESPACE_MATH, XML_DENOMALIGN,
+            pDenom->GetToken().eType == TALIGNL ? XML_LEFT : XML_RIGHT);
+    }
     SvXMLElementExport aFraction(*this, XML_NAMESPACE_MATH, XML_MFRAC, sal_True, sal_True);
-    ExportNodes(pNode->GetSubNode(0), nLevel);
-    ExportNodes(pNode->GetSubNode(2), nLevel);
+    ExportNodes(pNum, nLevel);
+    ExportNodes(pDenom, nLevel);
 }
 
 void SmXMLExport::ExportBinaryDiagonal(const SmNode *pNode, int nLevel)
@@ -866,6 +882,19 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
             if (pTable)
             {
                 pRow  = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTR, sal_True, sal_True);
+                if (pTemp->GetNumSubNodes() > 0)
+                {
+                  const SmNode *pFirstChild = pTemp->GetSubNode(0);
+                  if (pFirstChild->GetType() == NALIGN &&
+                      pFirstChild->GetToken().eType != TALIGNC)
+                  {
+                      // If a left or right alignment is specified on this line,
+                      // attach the corresponding columnalign attribute.
+                      AddAttribute(XML_NAMESPACE_MATH, XML_COLUMNALIGN,
+                          pFirstChild->GetToken().eType == TALIGNL ?
+                          XML_LEFT : XML_RIGHT);
+                  }
+                }
                 pCell = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTD, sal_True, sal_True);
             }
             ExportNodes(pTemp, nLevel+1);
@@ -1481,6 +1510,15 @@ void SmXMLExport::ExportMatrix(const SmNode *pNode, int nLevel)
         for (sal_uLong x = 0; x < pMatrix->GetNumCols(); x++)
             if (const SmNode *pTemp = pNode->GetSubNode(i++))
             {
+                if (pTemp->GetType() == NALIGN &&
+                    pTemp->GetToken().eType != TALIGNC)
+                {
+                    // A left or right alignment is specified on this cell,
+                    // attach the corresponding columnalign attribute.
+                    AddAttribute(XML_NAMESPACE_MATH, XML_COLUMNALIGN,
+                        pTemp->GetToken().eType == TALIGNL ?
+                        XML_LEFT : XML_RIGHT);
+                }
                 SvXMLElementExport aCell(*this, XML_NAMESPACE_MATH, XML_MTD, sal_True, sal_True);
                 ExportNodes(pTemp, nLevel+1);
             }
