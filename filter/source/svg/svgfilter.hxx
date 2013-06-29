@@ -105,6 +105,12 @@ class SVGExport : public SvXMLExport
 {
     typedef ::std::list< ::basegfx::B2DPolyPolygon > B2DPolyPolygonList;
 
+    sal_Bool    mbIsUseTinyProfile;
+    sal_Bool    mbIsEmbedFonts;
+    sal_Bool    mbIsUseOpacity;
+    sal_Bool    mbIsUseNativeTextDecoration;
+    sal_Bool    mbIsUsePositionedCharacters;
+
 public:
 
     SVGExport( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
@@ -113,11 +119,11 @@ public:
 
     virtual ~SVGExport();
 
-    sal_Bool IsUseTinyProfile() const;
-    sal_Bool IsEmbedFonts() const;
-    sal_Bool IsUsePositionedCharacters() const;
-    sal_Bool IsUseNativeTextDecoration() const;
-    sal_Bool IsUseOpacity() const;
+    sal_Bool IsUseTinyProfile() const { return mbIsUseTinyProfile; };
+    sal_Bool IsEmbedFonts() const { return mbIsEmbedFonts; };
+    sal_Bool IsUseOpacity() const { return mbIsUseOpacity; };
+    sal_Bool IsUseNativeTextDecoration() const { return mbIsUseNativeTextDecoration; };
+    sal_Bool IsUsePositionedCharacters() const { return mbIsUsePositionedCharacters; };
 
     void writeMtf( const GDIMetaFile& rMtf );
 
@@ -130,8 +136,6 @@ protected:
     virtual sal_uInt32        exportDoc( enum ::xmloff::token::XMLTokenEnum /* eClass */ ) { return 0; }
 
 private:
-
-    const Sequence< PropertyValue >&    mrFilterData;
 
     SVGExport();
 };

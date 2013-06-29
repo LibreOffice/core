@@ -2012,11 +2012,11 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
 
                         css::uno::Reference< css::xml::sax::XDocumentHandler > xSaxWriter(
                             xml::sax::Writer::create( xContext ), uno::UNO_QUERY_THROW);
-
+                        css::uno::Sequence< css::uno::Any > aArguments( 1 );
+                        aArguments[ 0 ] <<= aConfigItem.GetFilterData();
                         css::uno::Reference< css::svg::XSVGWriter > xSVGWriter(
-                            xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.svg.SVGWriter", xContext ),
-                            css::uno::UNO_QUERY );
-
+                            xContext->getServiceManager()->createInstanceWithArgumentsAndContext( "com.sun.star.svg.SVGWriter", aArguments, xContext),
+                                css::uno::UNO_QUERY );
                         if( xSaxWriter.is() && xSVGWriter.is() )
                         {
                             css::uno::Reference< css::io::XActiveDataSource > xActiveDataSource(

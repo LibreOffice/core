@@ -60,7 +60,6 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/svg/XSVGWriter.hpp>
 
-
 // -----------------------------------------------------------------------------
 
 using namespace ::com::sun::star::uno;
@@ -407,12 +406,13 @@ public:
 class SVGWriter : public cppu::WeakImplHelper1< XSVGWriter >
 {
 private:
-    Reference< XComponentContext >      mxContext;
-
+    Reference< XComponentContext >                      mxContext;
+    Sequence< com::sun::star::beans::PropertyValue >    maFilterData;
     SVGWriter();
 
 public:
-    explicit SVGWriter( const Reference< XComponentContext >& rxCtx );
+    explicit SVGWriter( const Sequence<Any>& args,
+                        const Reference< XComponentContext >& rxCtx );
     virtual ~SVGWriter();
 
     // XSVGWriter
