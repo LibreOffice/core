@@ -55,7 +55,6 @@
 #include <svtools/htmlcfg.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <unotools/syslocale.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace dbaui;
 using namespace dbtools;
@@ -103,7 +102,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
     ,m_bInInitialize(sal_False)
     ,m_bCheckOnly(sal_False)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseImportExport::ODatabaseImportExport" );
+    SAL_INFO("dbaccess.ui", "ODatabaseImportExport::ODatabaseImportExport" );
     DBG_CTOR(ODatabaseImportExport,NULL);
 
     m_eDestEnc = osl_getThreadTextEncoding();
@@ -135,7 +134,7 @@ ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection&
     ,m_bInInitialize(sal_False)
     ,m_bCheckOnly(sal_False)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseImportExport::ODatabaseImportExport" );
+    SAL_INFO("dbaccess.ui", "ODatabaseImportExport::ODatabaseImportExport" );
     DBG_CTOR(ODatabaseImportExport,NULL);
     m_eDestEnc = osl_getThreadTextEncoding();
     try
@@ -162,7 +161,7 @@ ODatabaseImportExport::~ODatabaseImportExport()
 // -----------------------------------------------------------------------------
 void ODatabaseImportExport::dispose()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseImportExport::disposing" );
+    SAL_INFO("dbaccess.ui", "ODatabaseImportExport::disposing" );
     DBG_CHKTHIS(ODatabaseImportExport,NULL);
     // remove me as listener
     Reference< XComponent >  xComponent(m_xConnection, UNO_QUERY);
@@ -185,7 +184,7 @@ void ODatabaseImportExport::dispose()
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseImportExport::disposing" );
+    SAL_INFO("dbaccess.ui", "ODatabaseImportExport::disposing" );
     DBG_CHKTHIS(ODatabaseImportExport,NULL);
     Reference<XConnection> xCon(Source.Source,UNO_QUERY);
     if(m_xConnection.is() && m_xConnection == xCon)
@@ -198,14 +197,14 @@ void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) thro
 // -----------------------------------------------------------------------------
 void ODatabaseImportExport::initialize( const ODataAccessDescriptor& _aDataDescriptor )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseImportExport::initialize" );
+    SAL_INFO("dbaccess.ui", "ODatabaseImportExport::initialize" );
     impl_initFromDescriptor( _aDataDescriptor, true );
 }
 
 // -----------------------------------------------------------------------------
 void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor& _aDataDescriptor, bool _bPlusDefaultInit)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseImportExport::impl_initFromDescriptor" );
+    SAL_INFO("dbaccess.ui", "ODatabaseImportExport::impl_initFromDescriptor" );
     DBG_CHKTHIS(ODatabaseImportExport,NULL);
     if ( !_bPlusDefaultInit )
     {
@@ -239,7 +238,7 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
         {
             if ( !m_xResultSet.is() )
             {
-                OSL_FAIL( "ODatabaseImportExport::impl_initFromDescriptor: selection without result set is nonsense!" );
+                SAL_WARN("dbaccess.ui", "ODatabaseImportExport::impl_initFromDescriptor: selection without result set is nonsense!" );
                 m_aSelection.realloc( 0 );
             }
         }
@@ -248,7 +247,7 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
         {
             if ( m_bBookmarkSelection && !m_xRowLocate.is() )
             {
-                OSL_FAIL( "ODatabaseImportExport::impl_initFromDescriptor: no XRowLocate -> no bookmars!" );
+                SAL_WARN("dbaccess.ui", "ODatabaseImportExport::impl_initFromDescriptor: no XRowLocate -> no bookmars!" );
                 m_aSelection.realloc( 0 );
             }
         }
@@ -268,7 +267,7 @@ void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor
 // -----------------------------------------------------------------------------
 void ODatabaseImportExport::initialize()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseImportExport::initialize" );
+    SAL_INFO("dbaccess.ui", "ODatabaseImportExport::initialize" );
     DBG_CHKTHIS(ODatabaseImportExport,NULL);
     m_bInInitialize = sal_True;
     m_bNeedToReInitialize = false;
@@ -375,7 +374,7 @@ sal_Bool ODatabaseImportExport::Read()
 // -----------------------------------------------------------------------------
 void ODatabaseImportExport::impl_initializeRowMember_throw()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseImportExport::impl_initializeRowMember_throw" );
+    SAL_INFO("dbaccess.ui", "ODatabaseImportExport::impl_initializeRowMember_throw" );
     if ( !m_xRow.is() && m_xResultSet.is() )
     {
         m_xRow.set( m_xResultSet, UNO_QUERY );
@@ -388,7 +387,7 @@ void ODatabaseImportExport::impl_initializeRowMember_throw()
 //======================================================================
 sal_Bool ORTFImportExport::Write()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFImportExport::Write" );
+    SAL_INFO("dbaccess.ui", "ORTFImportExport::Write" );
     ODatabaseImportExport::Write();
     (*m_pStream) << '{'     << OOO_STRING_SVTOOLS_RTF_RTF;
     (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ANSI << ODatabaseImportExport::sNewLine;
@@ -612,7 +611,7 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
             }
             catch (Exception&)
             {
-                OSL_FAIL("RTF WRITE!");
+                SAL_WARN("dbaccess.ui","RTF WRITE!");
             }
 
             (*m_pStream) << OOO_STRING_SVTOOLS_RTF_CELL;
@@ -628,7 +627,7 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
 //-------------------------------------------------------------------
 sal_Bool ORTFImportExport::Read()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORTFImportExport::Read" );
+    SAL_INFO("dbaccess.ui", "ORTFImportExport::Read" );
     ODatabaseImportExport::Read();
     SvParserState eState = SVPAR_ERROR;
     if ( m_pStream )
@@ -677,7 +676,7 @@ OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataD
     ,m_bCheckFont(sal_False)
 #endif
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::OHTMLImportExport" );
+    SAL_INFO("dbaccess.ui", "OHTMLImportExport::OHTMLImportExport" );
     // set HTML configuration
     SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
     m_eDestEnc = rHtmlOptions.GetTextEncoding();
@@ -687,7 +686,7 @@ OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataD
 //-------------------------------------------------------------------
 sal_Bool OHTMLImportExport::Write()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::Write" );
+    SAL_INFO("dbaccess.ui", "OHTMLImportExport::Write" );
     ODatabaseImportExport::Write();
     if(m_xObject.is())
     {
@@ -706,7 +705,7 @@ sal_Bool OHTMLImportExport::Write()
 //-------------------------------------------------------------------
 sal_Bool OHTMLImportExport::Read()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::Read" );
+    SAL_INFO("dbaccess.ui", "OHTMLImportExport::Read" );
     ODatabaseImportExport::Read();
     SvParserState eState = SVPAR_ERROR;
     if ( m_pStream )
@@ -726,7 +725,7 @@ sal_Bool OHTMLImportExport::Read()
 //-------------------------------------------------------------------
 void OHTMLImportExport::WriteHeader()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::WriteHeader" );
+    SAL_INFO("dbaccess.ui", "OHTMLImportExport::WriteHeader" );
     uno::Reference<document::XDocumentProperties> xDocProps(
         document::DocumentProperties::create( m_xContext ) );
     if (xDocProps.is()) {
@@ -743,7 +742,7 @@ void OHTMLImportExport::WriteHeader()
 //-----------------------------------------------------------------------
 void OHTMLImportExport::WriteBody()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::WriteBody" );
+    SAL_INFO("dbaccess.ui", "OHTMLImportExport::WriteBody" );
 
     IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_style );
 
@@ -779,7 +778,7 @@ void OHTMLImportExport::WriteBody()
 //-----------------------------------------------------------------------
 void OHTMLImportExport::WriteTables()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::WriteTables" );
+    SAL_INFO("dbaccess.ui", "OHTMLImportExport::WriteTables" );
     OString aStrOut  = OOO_STRING_SVTOOLS_HTML_table;
     aStrOut = aStrOut + " ";
     aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_frame;
@@ -953,7 +952,7 @@ void OHTMLImportExport::WriteTables()
 void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_Int32 nHeightPixel,const char* pChar,
                                    const String& rValue,const char* pHtmlTag)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::WriteCell" );
+    SAL_INFO("dbaccess.ui", "OHTMLImportExport::WriteCell" );
     OString aStrTD = pHtmlTag;
 
     nWidthPixel  = nWidthPixel  ? nWidthPixel   : 86;
@@ -1027,7 +1026,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
 //-----------------------------------------------------------------------
 void OHTMLImportExport::FontOn()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::FontOn" );
+    SAL_INFO("dbaccess.ui", "OHTMLImportExport::FontOn" );
 #if OSL_DEBUG_LEVEL > 0
         m_bCheckFont = sal_True;
 #endif
@@ -1058,7 +1057,7 @@ void OHTMLImportExport::FontOn()
 //-----------------------------------------------------------------------
 inline void OHTMLImportExport::FontOff()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::FontOff" );
+    SAL_INFO("dbaccess.ui", "OHTMLImportExport::FontOff" );
     OSL_ENSURE(m_bCheckFont,"Kein FontOn() gerufen");
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_font );
 #if OSL_DEBUG_LEVEL > 0
@@ -1068,7 +1067,7 @@ inline void OHTMLImportExport::FontOff()
 //-----------------------------------------------------------------------
 void OHTMLImportExport::IncIndent( sal_Int16 nVal )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::IncIndent" );
+    SAL_INFO("dbaccess.ui", "OHTMLImportExport::IncIndent" );
     sIndent[m_nIndent] = '\t';
     m_nIndent = m_nIndent + nVal;
     if ( m_nIndent < 0 )

@@ -68,7 +68,6 @@
 #include <typelib/typedescription.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/sharedunocomponent.hxx>
-#include <rtl/logfile.hxx>
 #include <rtl/digest.h>
 #include <algorithm>
 #include <iterator>
@@ -205,7 +204,7 @@ sal_Bool SAL_CALL OAuthenticationContinuation::canSetRealm(  ) throw(RuntimeExce
 
 void SAL_CALL OAuthenticationContinuation::setRealm( const OUString& /*Realm*/ ) throw(RuntimeException)
 {
-    OSL_FAIL("OAuthenticationContinuation::setRealm: not supported!");
+    SAL_WARN("dbaccess","OAuthenticationContinuation::setRealm: not supported!");
 }
 
 sal_Bool SAL_CALL OAuthenticationContinuation::canSetUserName(  ) throw(RuntimeException)
@@ -249,7 +248,7 @@ sal_Bool SAL_CALL OAuthenticationContinuation::canSetAccount(  ) throw(RuntimeEx
 
 void SAL_CALL OAuthenticationContinuation::setAccount( const OUString& ) throw(RuntimeException)
 {
-    OSL_FAIL("OAuthenticationContinuation::setAccount: not supported!");
+    SAL_WARN("dbaccess","OAuthenticationContinuation::setAccount: not supported!");
 }
 
 Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getRememberAccountModes( RememberAuthentication& _reDefault ) throw(RuntimeException)
@@ -262,7 +261,7 @@ Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getReme
 
 void SAL_CALL OAuthenticationContinuation::setRememberAccount( RememberAuthentication /*Remember*/ ) throw(RuntimeException)
 {
-    OSL_FAIL("OAuthenticationContinuation::setRememberAccount: not supported!");
+    SAL_WARN("dbaccess","OAuthenticationContinuation::setRememberAccount: not supported!");
 }
 
 /** The class OSharedConnectionManager implements a structure to share connections.
@@ -503,12 +502,12 @@ ODatabaseSource::ODatabaseSource(const ::rtl::Reference<ODatabaseModelImpl>& _pI
 {
     // some kind of default
     DBG_CTOR(ODatabaseSource,NULL);
-    OSL_TRACE( "DS: ctor: %p: %p", this, m_pImpl.get() );
+    SAL_INFO("dbaccess", "DS: ctor: " << std::hex << this << ": " << std::hex << m_pImpl.get() );
 }
 
 ODatabaseSource::~ODatabaseSource()
 {
-    OSL_TRACE( "DS: dtor: %p: %p", this, m_pImpl.get() );
+    SAL_INFO("dbaccess", "DS: dtor: " << std::hex << this << ": " << std::hex << m_pImpl.get() );
     DBG_DTOR(ODatabaseSource,NULL);
     if ( !ODatabaseSource_Base::rBHelper.bInDispose && !ODatabaseSource_Base::rBHelper.bDisposed )
     {
@@ -519,7 +518,7 @@ ODatabaseSource::~ODatabaseSource()
 
 void ODatabaseSource::setName( const Reference< XDocumentDataSource >& _rxDocument, const OUString& _rNewName, DBContextAccess )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::setName" );
+    SAL_INFO("dbaccess", "ODatabaseSource::setName" );
     ODatabaseSource& rModelImpl = dynamic_cast< ODatabaseSource& >( *_rxDocument.get() );
 
     ::osl::MutexGuard aGuard( rModelImpl.m_aMutex );
@@ -530,7 +529,7 @@ void ODatabaseSource::setName( const Reference< XDocumentDataSource >& _rxDocume
 // com::sun::star::lang::XTypeProvider
 Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getTypes" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getTypes" );
     OTypeCollection aPropertyHelperTypes(   ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
                                             ::getCppuType( (const Reference< XPropertySet > *)0 ),
                                             ::getCppuType( (const Reference< XMultiPropertySet > *)0 ));
@@ -543,7 +542,7 @@ Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException)
 
 Sequence< sal_Int8 > ODatabaseSource::getImplementationId() throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getImplementationId" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getImplementationId" );
     static OImplementationId * pId = 0;
     if (! pId)
     {
@@ -584,32 +583,32 @@ void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObj
 // XServiceInfo
 OUString ODatabaseSource::getImplementationName(  ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getImplementationName" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getImplementationName" );
     return getImplementationName_static();
 }
 
 OUString ODatabaseSource::getImplementationName_static(  ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getImplementationName_static" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getImplementationName_static" );
     return OUString("com.sun.star.comp.dba.ODatabaseSource");
 }
 
 Sequence< OUString > ODatabaseSource::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getSupportedServiceNames" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getSupportedServiceNames" );
     return getSupportedServiceNames_static();
 }
 
 Reference< XInterface > ODatabaseSource::Create( const Reference< XComponentContext >& _rxContext )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::Create" );
+    SAL_INFO("dbaccess", "ODatabaseSource::Create" );
     Reference< XDatabaseContext > xDBContext( DatabaseContext::create(_rxContext) );
     return xDBContext->createInstance();
 }
 
 Sequence< OUString > ODatabaseSource::getSupportedServiceNames_static(  ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getSupportedServiceNames_static" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getSupportedServiceNames_static" );
     Sequence< OUString > aSNS( 2 );
     aSNS[0] = SERVICE_SDB_DATASOURCE;
     aSNS[1] = "com.sun.star.sdb.DocumentDataSource";
@@ -618,14 +617,14 @@ Sequence< OUString > ODatabaseSource::getSupportedServiceNames_static(  ) throw 
 
 sal_Bool ODatabaseSource::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::supportsService" );
+    SAL_INFO("dbaccess", "ODatabaseSource::supportsService" );
     return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
 // OComponentHelper
 void ODatabaseSource::disposing()
 {
-    OSL_TRACE( "DS: disp: %p, %p", this, m_pImpl.get() );
+    SAL_INFO("dbaccess", "DS: disp: " << std::hex << this << ", " << std::hex << m_pImpl.get() );
     ODatabaseSource_Base::WeakComponentImplHelperBase::disposing();
     OPropertySetHelper::disposing();
 
@@ -639,7 +638,7 @@ void ODatabaseSource::disposing()
 
 Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString& _rUid, const OUString& _rPwd)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::buildLowLevelConnection" );
+    SAL_INFO("dbaccess", "ODatabaseSource::buildLowLevelConnection" );
     Reference< XConnection > xReturn;
 
     Reference< XDriverManager > xManager;
@@ -689,7 +688,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "ODatabaseSource::buildLowLevelConnection: got a strange exception while analyzing the error!" );
+            SAL_WARN("dbaccess",  "ODatabaseSource::buildLowLevelConnection: got a strange exception while analyzing the error!" );
         }
         if ( !xDriver.is() || !xDriver->acceptsURL( m_pImpl->m_sConnectURL ) )
         {
@@ -752,14 +751,14 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 // OPropertySetHelper
 Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo() throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getPropertySetInfo" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getPropertySetInfo" );
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
 // comphelper::OPropertyArrayUsageHelper
 ::cppu::IPropertyArrayHelper* ODatabaseSource::createArrayHelper( ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::createArrayHelper" );
+    SAL_INFO("dbaccess", "ODatabaseSource::createArrayHelper" );
     BEGIN_PROPERTY_HELPER(13)
         DECL_PROP1(INFO,                        Sequence< PropertyValue >,  BOUND);
         DECL_PROP1_BOOL(ISPASSWORDREQUIRED,                                 BOUND);
@@ -850,7 +849,7 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
             }
             break;
             default:
-                OSL_FAIL( "ODatabaseSource::convertFastPropertyValue: unknown or readonly Property!" );
+                SAL_WARN("dbaccess", "ODatabaseSource::convertFastPropertyValue: unknown or readonly Property!" );
         }
     }
     return bModified;
@@ -928,7 +927,7 @@ namespace
 
 void ODatabaseSource::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::setFastPropertyValue_NoBroadcast" );
+    SAL_INFO("dbaccess", "ODatabaseSource::setFastPropertyValue_NoBroadcast" );
     if ( m_pImpl.is() )
     {
         switch(nHandle)
@@ -973,7 +972,6 @@ void ODatabaseSource::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const
 
 void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getFastPropertyValue" );
     if ( m_pImpl.is() )
     {
         switch (nHandle)
@@ -1053,7 +1051,7 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                 rValue <<= m_pImpl->m_aLayoutInformation;
                 break;
             default:
-                OSL_FAIL("unknown Property");
+                SAL_WARN("dbaccess","unknown Property");
         }
     }
 }
@@ -1061,14 +1059,14 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
 // XDataSource
 void ODatabaseSource::setLoginTimeout(sal_Int32 seconds) throw( SQLException, RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::setLoginTimeout" );
+    SAL_INFO("dbaccess", "ODatabaseSource::setLoginTimeout" );
     ModelMethodGuard aGuard( *this );
     m_pImpl->m_nLoginTimeout = seconds;
 }
 
 sal_Int32 ODatabaseSource::getLoginTimeout(void) throw( SQLException, RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getLoginTimeout" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getLoginTimeout" );
     ModelMethodGuard aGuard( *this );
     return m_pImpl->m_nLoginTimeout;
 }
@@ -1076,36 +1074,36 @@ sal_Int32 ODatabaseSource::getLoginTimeout(void) throw( SQLException, RuntimeExc
 // XCompletedConnection
 Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::connectWithCompletion" );
+    SAL_INFO("dbaccess", "ODatabaseSource::connectWithCompletion" );
     return connectWithCompletion(_rxHandler,sal_False);
 }
 
 Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, const OUString& password) throw( SQLException, RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getConnection" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getConnection" );
     return getConnection(user,password,sal_False);
 }
 
 Reference< XConnection > SAL_CALL ODatabaseSource::getIsolatedConnection( const OUString& user, const OUString& password ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getIsolatedConnection" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getIsolatedConnection" );
     return getConnection(user,password,sal_True);
 }
 
 Reference< XConnection > SAL_CALL ODatabaseSource::getIsolatedConnectionWithCompletion( const Reference< XInteractionHandler >& _rxHandler ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getIsolatedConnectionWithCompletion" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getIsolatedConnectionWithCompletion" );
     return connectWithCompletion(_rxHandler,sal_True);
 }
 
 Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler,sal_Bool _bIsolated ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::connectWithCompletion" );
+    SAL_INFO("dbaccess", "ODatabaseSource::connectWithCompletion" );
     ModelMethodGuard aGuard( *this );
 
     if (!_rxHandler.is())
     {
-        OSL_FAIL("ODatabaseSource::connectWithCompletion: invalid interaction handler!");
+        SAL_WARN("dbaccess","ODatabaseSource::connectWithCompletion: invalid interaction handler!");
         return getConnection(m_pImpl->m_sUser, m_pImpl->m_aPassword,_bIsolated);
     }
 
@@ -1187,7 +1185,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
 
 Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const OUString& user, const OUString& password)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::buildIsolatedConnection" );
+    SAL_INFO("dbaccess", "ODatabaseSource::buildIsolatedConnection" );
     Reference< XConnection > xConn;
     Reference< XConnection > xSdbcConn = buildLowLevelConnection(user, password);
     OSL_ENSURE( xSdbcConn.is(), "ODatabaseSource::buildIsolatedConnection: invalid return value of buildLowLevelConnection!" );
@@ -1202,7 +1200,7 @@ Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const OUString
 
 Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, const OUString& password,sal_Bool _bIsolated) throw( SQLException, RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getConnection" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getConnection" );
     ModelMethodGuard aGuard( *this );
 
     Reference< XConnection > xConn;
@@ -1234,14 +1232,14 @@ Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, co
 
 Reference< XNameAccess > SAL_CALL ODatabaseSource::getBookmarks(  ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getBookmarks" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getBookmarks" );
     ModelMethodGuard aGuard( *this );
     return static_cast< XNameContainer* >(&m_aBookmarks);
 }
 
 Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getQueryDefinitions" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getQueryDefinitions" );
     ModelMethodGuard aGuard( *this );
 
     Reference< XNameAccess > xContainer = m_pImpl->m_xCommandDefinitions;
@@ -1273,7 +1271,7 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(
 // XTablesSupplier
 Reference< XNameAccess >  ODatabaseSource::getTables() throw( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getTables" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getTables" );
     ModelMethodGuard aGuard( *this );
 
     Reference< XNameAccess > xContainer = m_pImpl->m_xTableDefinitions;
@@ -1288,7 +1286,7 @@ Reference< XNameAccess >  ODatabaseSource::getTables() throw( RuntimeException )
 
 void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::flush" );
+    SAL_INFO("dbaccess", "ODatabaseSource::flush" );
     try
     {
         // SYNCHRONIZED ->
@@ -1317,7 +1315,7 @@ void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException)
 
 void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::flushed" );
+    SAL_INFO("dbaccess", "ODatabaseSource::flushed" );
     ModelMethodGuard aGuard( *this );
 
     // Okay, this is some hack.
@@ -1350,19 +1348,19 @@ void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ ) throw (R
 
 void SAL_CALL ODatabaseSource::addFlushListener( const Reference< ::com::sun::star::util::XFlushListener >& _xListener ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::addFlushListener" );
+    SAL_INFO("dbaccess", "ODatabaseSource::addFlushListener" );
     m_aFlushListeners.addInterface(_xListener);
 }
 
 void SAL_CALL ODatabaseSource::removeFlushListener( const Reference< ::com::sun::star::util::XFlushListener >& _xListener ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::removeFlushListener" );
+    SAL_INFO("dbaccess", "ODatabaseSource::removeFlushListener" );
     m_aFlushListeners.removeInterface(_xListener);
 }
 
 void SAL_CALL ODatabaseSource::elementInserted( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::elementInserted" );
+    SAL_INFO("dbaccess", "ODatabaseSource::elementInserted" );
     ModelMethodGuard aGuard( *this );
     if ( m_pImpl.is() )
         m_pImpl->setModified(sal_True);
@@ -1370,7 +1368,7 @@ void SAL_CALL ODatabaseSource::elementInserted( const ContainerEvent& /*Event*/ 
 
 void SAL_CALL ODatabaseSource::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::elementRemoved" );
+    SAL_INFO("dbaccess", "ODatabaseSource::elementRemoved" );
     ModelMethodGuard aGuard( *this );
     if ( m_pImpl.is() )
         m_pImpl->setModified(sal_True);
@@ -1378,7 +1376,7 @@ void SAL_CALL ODatabaseSource::elementRemoved( const ContainerEvent& /*Event*/ )
 
 void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::elementReplaced" );
+    SAL_INFO("dbaccess", "ODatabaseSource::elementReplaced" );
     ModelMethodGuard aGuard( *this );
     if ( m_pImpl.is() )
         m_pImpl->setModified(sal_True);
@@ -1387,7 +1385,7 @@ void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& /*Event*/ 
 // XDocumentDataSource
 Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocument() throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getDatabaseDocument" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getDatabaseDocument" );
     ModelMethodGuard aGuard( *this );
 
     Reference< XModel > xModel( m_pImpl->getModel_noCreate() );
@@ -1399,7 +1397,7 @@ Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocume
 
 Reference< XInterface > ODatabaseSource::getThis() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::getThis" );
+    SAL_INFO("dbaccess", "ODatabaseSource::getThis" );
     return *const_cast< ODatabaseSource* >( this );
 }
 

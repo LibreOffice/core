@@ -26,7 +26,6 @@
 #include "cmdlineargs.hxx"
 #include "cmdlinehelp.hxx"
 
-#include <rtl/logfile.hxx>
 #include <rtl/bootstrap.hxx>
 #include <tools/extendapplicationenvironment.hxx>
 
@@ -50,7 +49,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 #endif
     tools::extendApplicationEnvironment();
 
-    RTL_LOGFILE_PRODUCT_TRACE( "PERFORMANCE - enter Main()" );
+    SAL_INFO("desktop.app", "PERFORMANCE - enter Main()" );
 
     desktop::Desktop aDesktop;
     // This string is used during initialization of the Gtk+ VCL module

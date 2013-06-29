@@ -20,7 +20,6 @@
 #include "RowSetCacheIterator.hxx"
 #include "RowSetCache.hxx"
 #include "RowSetBase.hxx"
-#include <rtl/logfile.hxx>
 
 using namespace dbaccess;
 ORowSetCacheIterator::ORowSetCacheIterator(const ORowSetCacheIterator& _rRH)
@@ -28,7 +27,7 @@ ORowSetCacheIterator::ORowSetCacheIterator(const ORowSetCacheIterator& _rRH)
 , m_pCache(_rRH.m_pCache)
 ,m_pRowSet(_rRH.m_pRowSet)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCacheIterator::ORowSetCacheIterator" );
+    SAL_INFO("dbaccess", "ORowSetCacheIterator::ORowSetCacheIterator" );
 }
 
 ORowSetCacheIterator::operator ORowSetMatrix::iterator()
@@ -108,13 +107,13 @@ bool ORowSetCacheIterator::operator ==(const ORowSetMatrix::iterator& _rRH) cons
 
 void ORowSetCacheIterator::setBookmark(const ::com::sun::star::uno::Any&    _rBookmark)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCacheIterator::setBookmark" );
+    SAL_INFO("dbaccess", "ORowSetCacheIterator::setBookmark" );
     m_aIter->second.aBookmark = _rBookmark;
 }
 
 sal_Bool ORowSetCacheIterator::isNull() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCacheIterator::isNull" );
+    SAL_INFO("dbaccess", "ORowSetCacheIterator::isNull" );
     sal_Bool bRet = !m_pCache || !m_pRowSet || m_aIter == m_pCache->m_aCacheIterators.end();
     if ( !bRet )
     {
@@ -130,7 +129,7 @@ sal_Bool ORowSetCacheIterator::isNull() const
 
 ::osl::Mutex* ORowSetCacheIterator::getMutex() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCacheIterator::getMutex" );
+    SAL_INFO("dbaccess", "ORowSetCacheIterator::getMutex" );
     return m_pRowSet ? m_pRowSet->getMutex() : NULL;
 }
 

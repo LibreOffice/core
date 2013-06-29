@@ -34,7 +34,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <rtl/logfile.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <xmloff/ProgressBarHelper.hxx>
@@ -227,7 +226,7 @@ sal_Int32 ReadThroughComponent(
     OSL_ENSURE(xModelComponent.is(), "document missing");
     OSL_ENSURE(rxContext.is(), "factory missing");
 
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "dbaxml", "oj", "ReadThroughComponent" );
+   SAL_INFO("dbaccess", "dbaxml ReadThroughComponent" );
 
     // prepare ParserInputSrouce
     InputSource aParserInput;
@@ -235,7 +234,7 @@ sal_Int32 ReadThroughComponent(
 
     // get parser
     uno::Reference< XParser > xParser = Parser::create(rxContext);
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
+    SAL_INFO("dbaccess", "parser created" );
 
     // get filter
     OSL_ENSURE( _xFilter.is(), "Can't instantiate filter component." );
@@ -259,14 +258,7 @@ sal_Int32 ReadThroughComponent(
     catch (const SAXParseException& r)
     {
 #if OSL_DEBUG_LEVEL > 1
-        OStringBuffer aError(
-            "SAX parse exception catched while importing:\n");
-        aError.append(OUStringToOString(r.Message,
-            RTL_TEXTENCODING_ASCII_US));
-        aError.append(r.LineNumber);
-        aError.append(',');
-        aError.append(r.ColumnNumber);
-        OSL_FAIL(aError.getStr());
+        SAL_WARN("dbaccess", "SAX parse exception catched while importing:\n" << r.Message << r.LineNumber << "," << r.ColumnNumber);
 #else
         (void)r;
 #endif
@@ -343,8 +335,7 @@ sal_Int32 ReadThroughComponent(
 
 #ifdef TIMELOG
         // if we do profiling, we want to know the stream
-        RTL_LOGFILE_TRACE_AUTHOR1( "dbaxml", "oj",
-                               "ReadThroughComponent : parsing \"%s\"", pStreamName );
+       SAL_INFO("dbaccess", "dbaxml ReadThroughComponent : parsing \"" << pStreamName << "\"" );
 #endif
 
         uno::Reference< XInputStream > xInputStream = xDocStream->getInputStream();

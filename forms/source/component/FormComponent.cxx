@@ -44,7 +44,6 @@
 #include <comphelper/property.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <rtl/logfile.hxx>
 #include <toolkit/helper/emptyfontdescriptor.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -551,7 +550,7 @@ void OControlModel::readHelpTextCompatibly(const staruno::Reference< stario::XOb
     }
     catch(const Exception&)
     {
-        OSL_FAIL("OControlModel::readHelpTextCompatibly: could not forward the property value to the aggregate!");
+        SAL_WARN("forms.component", "OControlModel::readHelpTextCompatibly: could not forward the property value to the aggregate!");
     }
 }
 
@@ -566,7 +565,7 @@ void OControlModel::writeHelpTextCompatibly(const staruno::Reference< stario::XO
     }
     catch(const Exception&)
     {
-        OSL_FAIL("OControlModel::writeHelpTextCompatibly: could not retrieve the property value from the aggregate!");
+        SAL_WARN("forms.component", "OControlModel::writeHelpTextCompatibly: could not retrieve the property value from the aggregate!");
     }
     ::comphelper::operator<<( _rxOutStream, sHelpText);
 }
@@ -609,7 +608,7 @@ OControlModel::OControlModel(
                 }
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "OControlModel::OControlModel: caught an exception!" );
+                    SAL_WARN("forms.component",  "OControlModel::OControlModel: caught an exception!" );
                 }
             }
         }
@@ -997,7 +996,7 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 m_aPropertyBagHelper.getDynamicPropertyDefaultByHandle( _nHandle, aReturn );
             else
-                OSL_FAIL( "OControlModel::convertFastPropertyValue: unknown handle!" );
+                SAL_WARN("forms.component",  "OControlModel::convertFastPropertyValue: unknown handle!" );
     }
     return aReturn;
 }
@@ -1074,7 +1073,7 @@ sal_Bool OControlModel::convertFastPropertyValue(
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 bModified = m_aPropertyBagHelper.convertDynamicFastPropertyValue( _nHandle, _rValue, _rConvertedValue, _rOldValue );
             else
-                OSL_FAIL( "OControlModel::convertFastPropertyValue: unknown handle!" );
+                SAL_WARN("forms.component",  "OControlModel::convertFastPropertyValue: unknown handle!" );
             break;
     }
     return bModified;
@@ -1118,7 +1117,7 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 m_aPropertyBagHelper.setDynamicFastPropertyValue( _nHandle, _rValue );
             else
-                OSL_FAIL( "OControlModel::setFastPropertyValue_NoBroadcast: unknown handle!" );
+                SAL_WARN("forms.component",  "OControlModel::setFastPropertyValue_NoBroadcast: unknown handle!" );
             break;
     }
 }
@@ -1841,7 +1840,7 @@ sal_Bool OBoundControlModel::convertFastPropertyValue(
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_aControlSource);
             break;
         case PROPERTY_ID_BOUNDFIELD:
-            OSL_FAIL( "OBoundControlModel::convertFastPropertyValue: BoundField should be a read-only property !" );
+            SAL_WARN("forms.component",  "OBoundControlModel::convertFastPropertyValue: BoundField should be a read-only property !" );
             throw com::sun::star::lang::IllegalArgumentException();
         case PROPERTY_ID_CONTROLLABEL:
             if (!_rValue.hasValue())
@@ -1897,7 +1896,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
             OSL_VERIFY( rValue >>= m_aControlSource );
             break;
         case PROPERTY_ID_BOUNDFIELD:
-            OSL_FAIL("OBoundControlModel::setFastPropertyValue_NoBroadcast : BoundField should be a read-only property !");
+            SAL_WARN("forms.component", "OBoundControlModel::setFastPropertyValue_NoBroadcast : BoundField should be a read-only property !");
             throw com::sun::star::lang::IllegalArgumentException();
         case PROPERTY_ID_CONTROLLABEL:
         {
@@ -2003,7 +2002,7 @@ void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt
         }
         catch( const Exception& )
         {
-            OSL_FAIL( "OBoundControlModel::propertyChange: could not adjust my binding-controlled property!" );
+            SAL_WARN("forms.component",  "OBoundControlModel::propertyChange: could not adjust my binding-controlled property!" );
         }
     }
 }
@@ -2169,7 +2168,7 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
                 }
                 else
                 {
-                    OSL_FAIL("OBoundControlModel::connectToField: property NAME not supported!");
+                    SAL_WARN("forms.component", "OBoundControlModel::connectToField: property NAME not supported!");
                     impl_setField_noNotify( NULL );
                 }
             }
@@ -2378,7 +2377,7 @@ void OBoundControlModel::doSetControlValue( const Any& _rValue )
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "OBoundControlModel::doSetControlValue: caught an exception!" );
+        SAL_WARN("forms.component",  "OBoundControlModel::doSetControlValue: caught an exception!" );
     }
 }
 
@@ -2398,7 +2397,7 @@ void OBoundControlModel::onConnectedValidator( )
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "OBoundControlModel::onConnectedValidator: caught an exception!" );
+        SAL_WARN("forms.component",  "OBoundControlModel::onConnectedValidator: caught an exception!" );
     }
     recheckValidity( false );
 }
@@ -2416,7 +2415,7 @@ void OBoundControlModel::onDisconnectedValidator( )
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "OBoundControlModel::onDisconnectedValidator: caught an exception!" );
+        SAL_WARN("forms.component",  "OBoundControlModel::onDisconnectedValidator: caught an exception!" );
     }
     recheckValidity( false );
 }
@@ -2504,7 +2503,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
     }
     catch( const SQLException& )
     {
-        OSL_FAIL( "OBoundControlModel::reset: caught an SQL exception!" );
+        SAL_WARN("forms.component",  "OBoundControlModel::reset: caught an SQL exception!" );
     }
     // #i24495# - don't count the insert row as "invalid"
 
@@ -2550,7 +2549,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
         }
         catch(const Exception&)
         {
-            OSL_FAIL("OBoundControlModel::reset: this should have succeeded in all cases!");
+            SAL_WARN("forms.component", "OBoundControlModel::reset: this should have succeeded in all cases!");
         }
 
         sal_Bool bNeedValueTransfer = sal_True;
@@ -2713,7 +2712,7 @@ void OBoundControlModel::disconnectExternalValueBinding( )
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "OBoundControlModel::disconnectExternalValueBinding: caught an exception!" );
+        SAL_WARN("forms.component",  "OBoundControlModel::disconnectExternalValueBinding: caught an exception!" );
     }
 
     // if the binding also acts as our validator, disconnect the validator, too
@@ -3082,7 +3081,7 @@ void OBoundControlModel::recheckValidity( bool _bForceNotification )
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "OBoundControlModel::recheckValidity: caught an exception!" );
+        SAL_WARN("forms.component",  "OBoundControlModel::recheckValidity: caught an exception!" );
     }
 }
 

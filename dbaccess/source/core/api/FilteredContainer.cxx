@@ -25,7 +25,6 @@
 #include <connectivity/dbtools.hxx>
 #include <tools/wldcrd.hxx>
 #include <tools/diagnose_ex.h>
-#include <rtl/logfile.hxx>
 #include <boost/optional.hpp>
 
 namespace dbaccess
@@ -48,7 +47,7 @@ namespace dbaccess
 */
 sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vector< WildCard >& _rOut)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OFilteredContainer::createWildCardVector" );
+    SAL_INFO("dbaccess", "api OFilteredContainer::createWildCardVector" );
     // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
     // for them
     OUString* pTableFilters = _rTableFilter.getArray();
@@ -396,7 +395,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
 
     void OFilteredContainer::impl_refresh() throw(RuntimeException)
     {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OFilteredContainer::impl_refresh" );
+        SAL_INFO("dbaccess", "api OFilteredContainer::impl_refresh" );
         if ( m_pRefreshListener )
         {
             m_bConstructed = sal_False;
@@ -446,7 +445,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
         switch ( nFilterMode )
         {
         default:
-            OSL_FAIL( "OTableContainer::getAllTableTypeFilter: unknown TableTypeFilterMode!" );
+            SAL_WARN("dbaccess",  "OTableContainer::getAllTableTypeFilter: unknown TableTypeFilterMode!" );
         case FILTER_MODE_MIX_ALL:
             _rFilter.realloc( 3 );
             _rFilter[0] = sView;

@@ -48,7 +48,6 @@
 #include "querycomposer.hxx"
 #include "composertools.hxx"
 #include <tools/debug.hxx>
-#include <rtl/logfile.hxx>
 
 using namespace dbaccess;
 using namespace ::connectivity;
@@ -95,7 +94,7 @@ OptimisticSet::OptimisticSet(const Reference<XComponentContext>& _rContext,
             ,m_aSqlIterator( i_xConnection, Reference<XTablesSupplier>(_xComposer,UNO_QUERY)->getTables(), m_aSqlParser, NULL )
             ,m_bResultSetChanged(false)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::OptimisticSet" );
+    SAL_INFO("dbaccess", "OptimisticSet::OptimisticSet" );
     DBG_CTOR(OptimisticSet,NULL);
 }
 
@@ -106,7 +105,7 @@ OptimisticSet::~OptimisticSet()
 
 void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::construct" );
+    SAL_INFO("dbaccess", "OptimisticSet::construct" );
 
     OCacheSet::construct(_xDriverSet,i_sRowSetFilter);
 
@@ -186,7 +185,7 @@ Sequence< sal_Int32 > SAL_CALL OptimisticSet::deleteRows( const Sequence< Any >&
 
 void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::updateRow" );
+    SAL_INFO("dbaccess", "OptimisticSet::updateRow" );
     if ( m_aJoinedKeyColumns.empty() )
         throw SQLException();
     // list all cloumns that should be set
@@ -261,7 +260,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
 
 void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& /*_xTable*/ ) throw(SQLException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::insertRow" );
+    SAL_INFO("dbaccess", "OptimisticSet::insertRow" );
     TSQLStatements aSql;
     TSQLStatements aParameter;
     TSQLStatements aKeyConditions;
@@ -395,7 +394,7 @@ void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const conne
 
 void OptimisticSet::executeDelete(const ORowSetRow& _rDeleteRow,const OUString& i_sSQL,const OUString& i_sTableName)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::executeDelete" );
+    SAL_INFO("dbaccess", "OptimisticSet::executeDelete" );
 
     // now create and execute the prepared statement
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(i_sSQL));

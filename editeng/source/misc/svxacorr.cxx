@@ -60,7 +60,6 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <xmloff/xmltoken.hxx>
 #include <vcl/help.hxx>
-#include <rtl/logfile.hxx>
 
 #define CHAR_HARDBLANK      ((sal_Unicode)0x00A0)
 
@@ -1435,7 +1434,7 @@ void SvxAutoCorrect::SaveCplSttExceptList( LanguageType eLang )
 #ifdef DBG_UTIL
     else
     {
-        OSL_FAIL("Save an empty list? ");
+        SAL_WARN("editeng", "Save an empty list? ");
     }
 #endif
 }
@@ -1448,7 +1447,7 @@ void SvxAutoCorrect::SaveWrdSttExceptList(LanguageType eLang)
 #ifdef DBG_UTIL
     else
     {
-        OSL_FAIL("Save an empty list? ");
+        SAL_WARN("editeng", "Save an empty list? ");
     }
 #endif
 }
@@ -2070,7 +2069,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
 
         // get parser
         uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
-        RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "AutoCorrect Import" );
+        SAL_INFO("editeng", "AutoCorrect Import" );
         uno::Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xContext, pAutocorr_List, rAutoCorrect, xStg );
 
         // connect parser and filter

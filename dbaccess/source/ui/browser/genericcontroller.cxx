@@ -52,7 +52,6 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <rtl/ustring.hxx>
-#include <rtl/logfile.hxx>
 #include <algorithm>
 #include <o3tl/compat_functional.hxx>
 #include <boost/unordered_map.hpp>
@@ -141,7 +140,7 @@ void UserDefinedFeatures::execute( const URL& _rFeatureURL, const Sequence< Prop
 
         if ( xDispatch == xController )
         {
-            OSL_FAIL( "UserDefinedFeatures::execute: the controller shouldn't be the dispatcher here!" );
+            SAL_WARN("dbaccess.ui", "UserDefinedFeatures::execute: the controller shouldn't be the dispatcher here!" );
             xDispatch.clear();
         }
 
@@ -225,7 +224,7 @@ OGenericUnoController::OGenericUnoController()
     ,m_bReadOnly(sal_False)
     ,m_bCurrentlyModified(sal_False)
 {
-    OSL_FAIL( "OGenericUnoController::OGenericUnoController: illegal call!" );
+    SAL_WARN("dbaccess.ui", "OGenericUnoController::OGenericUnoController: illegal call!" );
     // This ctor only exists because the MSVC compiler complained about an unresolved external
     // symbol. It should not be used at all. Since using it yields strange runtime problems,
     // we simply abort here.
@@ -265,7 +264,7 @@ sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
     }
     catch(const Exception&)
     {
-        OSL_FAIL("OGenericUnoController::Construct: could not create (or start listening at) the database context!");
+        SAL_WARN("dbaccess.ui","OGenericUnoController::Construct: could not create (or start listening at) the database context!");
         // at least notify the user. Though the whole component does not make any sense without the database context ...
         ShowServiceNotAvailableError(getView(), OUString("com.sun.star.sdb.DatabaseContext"), sal_True);
     }
@@ -605,7 +604,7 @@ void OGenericUnoController::InvalidateFeature_Impl()
                 OString sMessage( "OGenericUnoController::InvalidateFeature_Impl: feature id " );
                 sMessage += OString::valueOf( aNextFeature.nId );
                 sMessage += OString( " has been invalidated, but is not supported!" );
-                OSL_FAIL( sMessage.getStr() );
+                SAL_WARN("dbaccess.ui", sMessage.getStr() );
             }
 #endif
             if ( m_aSupportedFeatures.end() != aFeaturePos )
@@ -777,7 +776,7 @@ void OGenericUnoController::dispatch(const URL& _aURL, const Sequence< PropertyV
     OString sLog( "OGenericUnoController::dispatch( '" );
     sLog += OString( _aURL.Main.getStr(), _aURL.Main.getLength(), osl_getThreadTextEncoding() );
     sLog += OString( "' )" );
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", sLog.getStr() );
+    SAL_INFO("dbaccess.ui", "dbaccess frank.schoenheit@sun.com" << sLog.getStr() );
 #endif
 
     executeChecked(_aURL,aArgs);
@@ -1162,7 +1161,7 @@ Reference< XFrame > SAL_CALL OGenericUnoController::getFrame(void) throw( Runtim
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OGenericUnoController::attachModel(const Reference< XModel > & /*xModel*/) throw( RuntimeException )
 {
-    OSL_FAIL( "OGenericUnoController::attachModel: not supported!" );
+    SAL_WARN("dbaccess.ui", "OGenericUnoController::attachModel: not supported!" );
     return sal_False;
 }
 
@@ -1293,7 +1292,7 @@ namespace
                     pReturn = "sbasic";
                 else
                 {
-                    OSL_FAIL( "lcl_getModuleHelpModuleName: no installed module found" );
+                    SAL_WARN("dbaccess.ui", "lcl_getModuleHelpModuleName: no installed module found" );
                 }
             }
         }
@@ -1494,7 +1493,7 @@ sal_uInt16 OGenericUnoController::registerCommandURL( const OUString& _rComplete
         ++nFeatureId;
     if ( nFeatureId == LAST_USER_DEFINED_FEATURE )
     {
-        OSL_FAIL( "OGenericUnoController::registerCommandURL: no more space for user defined features!" );
+        SAL_WARN("dbaccess.ui", "OGenericUnoController::registerCommandURL: no more space for user defined features!" );
         return 0L;
     }
 

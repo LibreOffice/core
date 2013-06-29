@@ -41,7 +41,6 @@
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <rtl/logfile.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -594,7 +593,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                 }
                 catch( const Exception& )
                 {
-                    OSL_FAIL( "OInterfaceContainerHelper::read: reading succeeded, but not inserting!" );
+                    SAL_WARN("forms", "OInterfaceContainerHelper::read: reading succeeded, but not inserting!" );
                     // create a placeholder
                     xElement = xElement.query( lcl_createPlaceHolder( m_xContext ) );
                     if ( !xElement.is() )
@@ -1137,7 +1136,7 @@ void SAL_CALL OInterfaceContainer::insertByName(const OUString& _rName, const An
     }
     catch( const Exception& )
     {
-        OSL_FAIL( "OInterfaceContainer::insertByName: caught an exception!" );
+        SAL_WARN("forms", "OInterfaceContainer::insertByName: caught an exception!" );
     }
     implInsert( m_aItems.size(), xElementProps, sal_True, aElementMetaData.get(), sal_True );
 }
