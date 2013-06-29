@@ -26,10 +26,6 @@
 
 #include <svx/selectioncontroller.hxx>
 
-//************************************************************
-//   Vorausdeklarationen
-//************************************************************
-
 #include <boost/shared_ptr.hpp>
 
 class SdrOutliner;
@@ -48,31 +44,15 @@ namespace sdr {
     class SelectionController;
 }
 
-//************************************************************
-//   Defines
-//************************************************************
-
 enum SdrEndTextEditKind {SDRENDTEXTEDIT_UNCHANGED, // Textobjekt unveraendert
                          SDRENDTEXTEDIT_CHANGED,   // Textobjekt wurde geaendert
                          SDRENDTEXTEDIT_DELETED,   // Textobjekt implizit geloescht
                          SDRENDTEXTEDIT_SHOULDBEDELETED}; // Fuer Writer: Textobjekt sollte geloescht werden
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//   @@@@  @@@@@  @@@@@@  @@@@@ @@@@@  @@ @@@@@@  @@ @@ @@ @@@@@ @@   @@
-//  @@  @@ @@  @@     @@  @@    @@  @@ @@   @@    @@ @@ @@ @@    @@   @@
-//  @@  @@ @@  @@     @@  @@    @@  @@ @@   @@    @@ @@ @@ @@    @@ @ @@
-//  @@  @@ @@@@@      @@  @@@@  @@  @@ @@   @@    @@@@@ @@ @@@@  @@@@@@@
-//  @@  @@ @@  @@     @@  @@    @@  @@ @@   @@     @@@  @@ @@    @@@@@@@
-//  @@  @@ @@  @@ @@  @@  @@    @@  @@ @@   @@     @@@  @@ @@    @@@ @@@
-//   @@@@  @@@@@   @@@@   @@@@@ @@@@@  @@   @@      @   @@ @@@@@ @@   @@
-//
 // - Allgemeines Edit fuer objektspeziefische Eigenschaften
 // - Textedit fuer alle vom SdrTextObj abgeleiteten Zeichenobjekte
 // - Macromodus
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SVX_DLLPUBLIC SdrObjEditView: public SdrGlueEditView

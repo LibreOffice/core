@@ -25,20 +25,12 @@
 #include <svx/svdmodel.hxx>
 #include "svx/svxdllapi.h"
 
-//************************************************************
-//   Vorausdeklarationen
-//************************************************************
-
 class SfxUndoAction;
 class SdrUndoAction;
 class SdrUndoGroup;
 class SfxStyleSheet;
 class SdrLayer;
 class SvdProgressInfo;
-
-//************************************************************
-//   Defines
-//************************************************************
 
 enum SdrHorAlign  {
     SDRHALIGN_NONE,
@@ -66,20 +58,6 @@ enum SdrMergeMode {
 #define SDRINSERT_SETDEFATTR  0x0004 /* Die aktuellen Attribute (+StyleSheet) werden dem Obj zugewiesen */
 #define SDRINSERT_SETDEFLAYER 0x0008 /* Der aktuelle Layer wird dem Obj zugewiesen */
 #define SDRINSERT_NOBROADCAST 0x0010 /* Einfuegen mit NbcInsertObject() fuer SolidDragging */
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  @@@@@ @@@@@  @@ @@@@@@  @@ @@ @@ @@@@@ @@   @@
-//  @@    @@  @@ @@   @@    @@ @@ @@ @@    @@   @@
-//  @@    @@  @@ @@   @@    @@ @@ @@ @@    @@ @ @@
-//  @@@@  @@  @@ @@   @@    @@@@@ @@ @@@@  @@@@@@@
-//  @@    @@  @@ @@   @@     @@@  @@ @@    @@@@@@@
-//  @@    @@  @@ @@   @@     @@@  @@ @@    @@@ @@@
-//  @@@@@ @@@@@  @@   @@      @   @@ @@@@@ @@   @@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SVX_DLLPUBLIC SdrEditView: public SdrMarkView
 {
