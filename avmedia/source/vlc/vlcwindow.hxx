@@ -23,18 +23,21 @@
 
 namespace avmedia {
 namespace vlc {
+class VLCPlayer;
 
 class VLCWindow : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XPlayerWindow,
                                                    ::com::sun::star::lang::XServiceInfo >
 {
+    VLCPlayer& mPlayer;
 public:
+    SAL_CALL VLCWindow(VLCPlayer& player);
     void SAL_CALL update();
     ::sal_Bool SAL_CALL setZoomLevel( css::media::ZoomLevel ZoomLevel );
     css::media::ZoomLevel SAL_CALL getZoomLevel();
     void SAL_CALL setPointerType( ::sal_Int32 SystemPointerType );
 
     ::rtl::OUString SAL_CALL getImplementationName();
-    ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName );
+    ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName );
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames();
 
     void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);

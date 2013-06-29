@@ -1,10 +1,14 @@
 #include "vlcplayer.hxx"
 #include "vlcwindow.hxx"
+#include "vlcframegrabber.hxx"
 
 using namespace ::com::sun::star;
 
 namespace avmedia {
 namespace vlc {
+
+const ::rtl::OUString AVMEDIA_VLC_PLAYER_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.Player_VLC";
+const ::rtl::OUString AVMEDIA_VLC_PLAYER_SERVICENAME = "com.sun.star.media.Player_VLC";
 
 const char * const VLC_ARGS[] = {
     "-I",
@@ -105,28 +109,30 @@ css::awt::Size SAL_CALL VLCPlayer::getPreferredPlayerWindowSize()
 uno::Reference< css::media::XPlayerWindow > SAL_CALL VLCPlayer::createPlayerWindow( const uno::Sequence< uno::Any >& aArguments )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return uno::Reference< css::media::XPlayerWindow >(new VLCWindow());
+    return uno::Reference< css::media::XPlayerWindow >(new VLCWindow( *this ));
 }
 
 uno::Reference< css::media::XFrameGrabber > SAL_CALL VLCPlayer::createFrameGrabber()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return uno::Reference< css::media::XFrameGrabber >();
+    return uno::Reference< css::media::XFrameGrabber >(new VLCFrameGrabber());
 }
 
 ::rtl::OUString SAL_CALL VLCPlayer::getImplementationName()
 {
-    return ::rtl::OUString();
+    return AVMEDIA_VLC_PLAYER_IMPLEMENTATIONNAME;
 }
 
-::sal_Bool SAL_CALL VLCPlayer::supportsService( const ::rtl::OUString& ServiceName )
+::sal_Bool SAL_CALL VLCPlayer::supportsService( const ::rtl::OUString& serviceName )
 {
-    return false;
+    return serviceName == AVMEDIA_VLC_PLAYER_SERVICENAME;
 }
 
 ::uno::Sequence< ::rtl::OUString > SAL_CALL VLCPlayer::getSupportedServiceNames()
 {
-    return ::uno::Sequence< ::rtl::OUString >();
+    uno::Sequence< OUString > aRet(1);
+    aRet[0] = AVMEDIA_VLC_PLAYER_SERVICENAME;
+    return aRet;
 }
 
 }
