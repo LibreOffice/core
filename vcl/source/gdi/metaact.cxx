@@ -144,9 +144,9 @@ void MetaAction::Write( SvStream& rOStm, ImplMetaWriteData* )
 
 // ------------------------------------------------------------------------
 
-void MetaAction::Read( SvStream& rIStm, ImplMetaReadData* )
+void MetaAction::Read( SvStream&, ImplMetaReadData* )
 {
-    rIStm >> mnType;
+    // DO NOT read mnType - ReadMetaAction already did that!
 }
 
 // ------------------------------------------------------------------------
