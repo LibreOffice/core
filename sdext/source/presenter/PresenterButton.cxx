@@ -498,7 +498,7 @@ Reference<beans::XPropertySet> PresenterButton::GetConfigurationProperties (
                 UNO_QUERY),
             ::boost::bind(&PresenterConfigurationAccess::IsStringPropertyEqual,
                 rsConfgurationName,
-                OUString::createFromAscii("Name"),
+                OUString("Name"),
                 _2)),
         UNO_QUERY);
 }

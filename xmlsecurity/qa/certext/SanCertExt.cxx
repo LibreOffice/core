@@ -179,7 +179,7 @@ namespace {
                 ::com::sun::star::beans::NamedValue otherNameProp;
                 if (altNames[n].Value >>= otherNameProp)
                 {
-                    CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii("1.2.3.4"), otherNameProp.Name);
+                    CPPUNIT_ASSERT_EQUAL( OUString("1.2.3.4"), otherNameProp.Name);
                     uno::Sequence< sal_Int8 > ipAddress;
                     otherNameProp.Value >>= ipAddress;
                     CPPUNIT_ASSERT_ASSERTION_PASS( CPPUNIT_ASSERT( ipAddress.getLength() > 0 ) );
@@ -196,7 +196,7 @@ namespace {
             {
                 OUString value;
                 altNames[n].Value >>= value;
-                CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii("my@other.address"), value);
+                CPPUNIT_ASSERT_EQUAL( OUString("my@other.address"), value);
             }
         }
     }
@@ -209,7 +209,7 @@ namespace {
             {
                 OUString value;
                 altNames[n].Value >>= value;
-                CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii("alt.openoffice.org"), value);
+                CPPUNIT_ASSERT_EQUAL( OUString("alt.openoffice.org"), value);
             }
         }
     }
@@ -226,7 +226,7 @@ namespace {
             {
                 OUString value;
                 altNames[n].Value >>= value;
-                CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii("http://my.url.here/"), value);
+                CPPUNIT_ASSERT_EQUAL( OUString("http://my.url.here/"), value);
             }
         }
     }
@@ -253,7 +253,7 @@ namespace {
             {
                 OUString value;
                 altNames[n].Value >>= value;
-                CPPUNIT_ASSERT( OUString::createFromAscii("1.2.3.4").equals(value));
+                CPPUNIT_ASSERT( OUString("1.2.3.4").equals(value));
             }
         }
     }

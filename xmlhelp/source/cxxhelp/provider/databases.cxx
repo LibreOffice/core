@@ -877,7 +877,7 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
         {
             OUString fileNameHDFHelp( fileURL );
             if( bExtension )
-                fileNameHDFHelp += OUString::createFromAscii( "_" );
+                fileNameHDFHelp += "_";
             if( m_xSFA->exists( fileNameHDFHelp ) )
             {
                 helpdatafileproxy::Hdf aHdf( fileNameHDFHelp, m_xSFA );

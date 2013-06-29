@@ -469,7 +469,7 @@ bool getJavaProps(const OUString & exePath,
         OUString sHomeProperty("java.home");
         if(sHomeProperty.equals(sKey))
         {
-            sVal = homePath + OUString::createFromAscii("/jre");
+            sVal = homePath + "/jre";
         }
 #endif
 

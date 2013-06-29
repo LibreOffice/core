@@ -98,8 +98,7 @@ Reference<XInterface> SAL_CALL PanelFactory_createInstance (
 Sequence<rtl::OUString> SAL_CALL PanelFactory_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.framework.PanelFactory"));
+    static const ::rtl::OUString sServiceName("com.sun.star.drawing.framework.PanelFactory");
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 

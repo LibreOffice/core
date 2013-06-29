@@ -107,7 +107,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
             SAL_INFO("connectivity.mork", "TableName: " << aTableName);
 
             aRow.push_back( new ORowSetValueDecorator( aTableName ) ); // Table name
-            aRow.push_back( new ORowSetValueDecorator( OUString::createFromAscii("TABLE") ) ); // Table type
+            aRow.push_back( new ORowSetValueDecorator( OUString("TABLE") ) ); // Table type
             aRow.push_back( ODatabaseMetaDataResultSet::getEmptyValue() ); // Remarks
             aRows.push_back(aRow);
         }

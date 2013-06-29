@@ -334,7 +334,7 @@ namespace svt
                 // ensure a NullDate we will assume later on
                 UnoDate const aNullDate( 1, 1, 1900 );
                 Reference< XPropertySet > const xFormatSettings( xSupplier->getNumberFormatSettings(), UNO_SET_THROW );
-                xFormatSettings->setPropertyValue( OUString::createFromAscii( "NullDate" ), makeAny( aNullDate ) );
+                xFormatSettings->setPropertyValue( "NullDate", makeAny( aNullDate ) );
 
                 // knit
                 xFormatter->attachNumberFormatsSupplier( xSupplier );

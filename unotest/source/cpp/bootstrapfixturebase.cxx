@@ -35,15 +35,15 @@ test::BootstrapFixtureBase::BootstrapFixtureBase()
 #ifdef WNT
     if (pSrcRoot[1] == ':')
     {
-        m_aSrcRootURL += OUString::createFromAscii( "/" );
+        m_aSrcRootURL += "/";
     }
     if (pSolverRoot[1] == ':')
     {
-        m_aSolverRootURL += OUString::createFromAscii( "/" );
+        m_aSolverRootURL += "/";
     }
     if (pWorkdirRoot[1] == ':')
     {
-        m_aWorkdirRootURL += OUString::createFromAscii( "/" );
+        m_aWorkdirRootURL += "/";
     }
 #endif
 #else

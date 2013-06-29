@@ -182,7 +182,7 @@ void GalApp::Init()
                 lastSlash = fileName.lastIndexOf( '\\' );
 #endif
             OUString baseBinDir = fileName.copy( 0, lastSlash );
-            OUString installPrefix = baseBinDir + OUString::createFromAscii( "/../.." );
+            OUString installPrefix = baseBinDir + "/../..";
 
             OUString envVar( "OOO_INSTALL_PREFIX");
             osl_setEnvironment(envVar.pData, installPrefix.pData);

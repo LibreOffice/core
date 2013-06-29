@@ -960,9 +960,7 @@ OUString SbxBasicFormater::BasicFormatNull( OUString sFormatStrg )
     {
         return sNullFormatStrg;
     }
-    OUString aRetStr;
-    aRetStr = OUString::createFromAscii( "null" );
-    return aRetStr;
+    return OUString("null");
 }
 
 OUString SbxBasicFormater::BasicFormat( double dNumber, OUString sFormatStrg )

@@ -1918,17 +1918,17 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool
         {
             // miter is Svg default, so no need to write until the exporter might write styles.
             // If this happens, activate here
-            // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, OUString::createFromAscii("miter"));
+            // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "miter");
             break;
         }
         case basegfx::B2DLINEJOIN_BEVEL:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, OUString::createFromAscii("bevel"));
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "bevel");
             break;
         }
         case basegfx::B2DLINEJOIN_ROUND:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, OUString::createFromAscii("round"));
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, "round");
             break;
         }
     }
@@ -1940,17 +1940,17 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool
         {
             // butt is Svg default, so no need to write until the exporter might write styles.
             // If this happens, activate here
-            // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, OUString::createFromAscii("butt"));
+            // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "butt");
             break;
         }
         case com::sun::star::drawing::LineCap_ROUND:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, OUString::createFromAscii("round"));
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "round");
             break;
         }
         case com::sun::star::drawing::LineCap_SQUARE:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, OUString::createFromAscii("square"));
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, "square");
             break;
         }
     }

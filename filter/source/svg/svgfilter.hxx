@@ -99,7 +99,7 @@ using namespace ::std;
 
 
 // Placeholder tag used into the ImplWriteActions method to filter text placeholder fields
-static const OUString sPlaceholderTag = OUString::createFromAscii( "<[:isPlaceholder:]>" );
+static const OUString sPlaceholderTag( "<[:isPlaceholder:]>" );
 
 class SVGExport : public SvXMLExport
 {

@@ -149,7 +149,7 @@ static sal_Int32 readLogLevelFromConfiguration()
     osl_getModuleURLFromAddress(
         (void*) readLogLevelFromConfiguration, (rtl_uString **) &fileName );
     fileName = OUString( fileName.getStr(), fileName.lastIndexOf( '/' )+1 );
-    fileName += OUString::createFromAscii( "postgresql-sdbc.ini" );
+    fileName += "postgresql-sdbc.ini";
     rtl::Bootstrap bootstrapHandle( fileName );
 
     OUString str;

@@ -795,7 +795,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             OUString msg( ::comphelper::anyToString( exc ) );
             const SolarMutexGuard guard;
             ErrorBox aErrorBox( NULL, WB_OK, msg );
-            aErrorBox.SetText( OUString::createFromAscii( "Explanations" ) );
+            aErrorBox.SetText( "Explanations" );
             aErrorBox.Execute();
         }
     }

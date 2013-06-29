@@ -225,12 +225,12 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
         else
         {
             Reference< XPropertySet > xPropSet( xShape, UNO_QUERY_THROW );
-            xPropSet->setPropertyValue( OUString::createFromAscii( "HoriOrient" ), makeAny( HoriOrientation::NONE ) );
-            xPropSet->setPropertyValue( OUString::createFromAscii( "VertOrient" ), makeAny( VertOrientation::NONE ) );
-            xPropSet->setPropertyValue( OUString::createFromAscii( "HoriOrientPosition" ), makeAny( rShapeRect.X ) );
-            xPropSet->setPropertyValue( OUString::createFromAscii( "VertOrientPosition" ), makeAny( rShapeRect.Y ) );
-            xPropSet->setPropertyValue( OUString::createFromAscii( "HoriOrientRelation" ), makeAny( RelOrientation::FRAME ) );
-            xPropSet->setPropertyValue( OUString::createFromAscii( "VertOrientRelation" ), makeAny( RelOrientation::FRAME ) );
+            xPropSet->setPropertyValue( "HoriOrient", makeAny( HoriOrientation::NONE ) );
+            xPropSet->setPropertyValue( "VertOrient", makeAny( VertOrientation::NONE ) );
+            xPropSet->setPropertyValue( "HoriOrientPosition", makeAny( rShapeRect.X ) );
+            xPropSet->setPropertyValue( "VertOrientPosition", makeAny( rShapeRect.Y ) );
+            xPropSet->setPropertyValue( "HoriOrientRelation", makeAny( RelOrientation::FRAME ) );
+            xPropSet->setPropertyValue( "VertOrientRelation", makeAny( RelOrientation::FRAME ) );
         }
         xShape->setSize( awt::Size( rShapeRect.Width, rShapeRect.Height ) );
     }

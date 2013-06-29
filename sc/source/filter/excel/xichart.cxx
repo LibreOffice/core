@@ -846,7 +846,7 @@ Reference< XDataSequence > XclImpChSourceLink::CreateDataSequence( const OUStrin
     {
         try
         {
-            OUString aString = OUString::createFromAscii("\"");
+            OUString aString("\"");
             xDataSeq = xDataProv->createDataSequenceByRangeRepresentation( aString + mxString->GetText() + aString );
             // set sequence role
             ScfPropertySet aSeqProp( xDataSeq );

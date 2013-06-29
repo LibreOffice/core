@@ -385,7 +385,7 @@ bool PresenterTheme::ConvertToColor (
         pConfiguration->GoToChild(
             ::boost::bind(&PresenterConfigurationAccess::IsStringPropertyEqual,
                 rsStyleName,
-                OUString::createFromAscii("StyleName"),
+                OUString("StyleName"),
                 _2));
     }
     return pConfiguration;

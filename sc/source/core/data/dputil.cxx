@@ -132,7 +132,7 @@ OUString ScDPUtil::getDateGroupName(
             OSL_FAIL("invalid date part");
     }
 
-    return OUString::createFromAscii("FIXME: unhandled value");
+    return OUString("FIXME: unhandled value");
 }
 
 double ScDPUtil::getNumGroupStartValue(double fValue, const ScDPNumGroupInfo& rInfo)

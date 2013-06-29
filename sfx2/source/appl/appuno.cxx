@@ -2029,7 +2029,7 @@ css::uno::Sequence< OUString > SfxAppDispatchProvider::impl_getStaticSupportedSe
 /* Helper for XServiceInfo */
 OUString SfxAppDispatchProvider::impl_getStaticImplementationName()
 {
-    return OUString::createFromAscii( "com.sun.star.comp.sfx2.AppDispatchProvider" );
+    return OUString( "com.sun.star.comp.sfx2.AppDispatchProvider" );
 }
 
 /* Helper for registry */

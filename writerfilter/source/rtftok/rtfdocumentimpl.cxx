@@ -3176,16 +3176,16 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_TRRH:
             {
-                OUString hRule = OUString::createFromAscii("auto");
+                OUString hRule("auto");
                 if ( nParam < 0 )
                 {
                     RTFValue::Pointer_t pAbsValue(new RTFValue(-nParam));
                     pIntValue.swap( pAbsValue );
 
-                    hRule = OUString::createFromAscii("exact");
+                    hRule = "exact";
                 }
                 else if ( nParam > 0 )
-                    hRule = OUString::createFromAscii("atLeast");
+                    hRule = "atLeast";
 
                 lcl_putNestedAttribute(m_aStates.top().aTableRowSprms,
                         NS_ooxml::LN_CT_TrPrBase_trHeight, NS_ooxml::LN_CT_Height_val, pIntValue);

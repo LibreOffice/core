@@ -1850,7 +1850,7 @@ void SwXText::Impl::ConvertCell(
     if (rCell.getLength() != 2)
     {
         throw lang::IllegalArgumentException(
-                OUString::createFromAscii( "rCell needs to contain 2 elements" ),
+                "rCell needs to contain 2 elements",
                 uno::Reference< text::XTextCopy >( &m_rThis ), sal_Int16( 2 ) );
     }
     const uno::Reference<text::XTextRange> xStartRange = rCell[0];
@@ -1865,7 +1865,7 @@ void SwXText::Impl::ConvertCell(
         !::sw::XTextRangeToSwPaM(aEndCellPam, xEndRange))
     {
         throw lang::IllegalArgumentException(
-                OUString::createFromAscii( "Start or End range cannot be resolved to a SwPaM" ),
+                "Start or End range cannot be resolved to a SwPaM",
                 uno::Reference< text::XTextCopy >( &m_rThis ), sal_Int16( 2 ) );
     }
 
@@ -2558,7 +2558,7 @@ throw (uno::RuntimeException)
     }
     if(!aRef.is())
     {
-        throw uno::RuntimeException( OUString::createFromAscii( "End of content node doesn't have the proper start node" ),
+        throw uno::RuntimeException( "End of content node doesn't have the proper start node",
                uno::Reference< uno::XInterface >( *this ) );
     }
     return aRef;

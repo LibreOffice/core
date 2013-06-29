@@ -87,7 +87,7 @@ private:
         {
             if (xPropertyBag.is())
             {
-                const ::rtl::OUString colorKey  = ::rtl::OUString::createFromAscii ("LineColor");
+                const ::rtl::OUString colorKey("LineColor");
                 com::sun::star::uno::Any aLineColor = xPropertyBag->getValue(colorKey).get< com::sun::star::uno::Any>();
                 com::sun::star::util::Color lineColor = 0;
 
@@ -113,7 +113,7 @@ private:
         {
             if (xPropertyBag.is())
             {
-                const ::rtl::OUString typeKey  = ::rtl::OUString::createFromAscii ("LineType");
+                const ::rtl::OUString typeKey("LineType");
                 com::sun::star::uno::Any aLineType = xPropertyBag->getValue(typeKey).get< com::sun::star::uno::Any>();
                 ::sal_Int16 lineType = 0;
 

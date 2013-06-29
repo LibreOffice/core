@@ -516,7 +516,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
 
                 if ( !sDatabaseName.isEmpty() )
                 {
-                    sNewUrl += OUString::createFromAscii("/") + sDatabaseName;
+                    sNewUrl += "/" + sDatabaseName;
                 }
             }
             break;
@@ -533,7 +533,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                         sDatabaseName = pCollection->cutPrefix( pUrlItem->GetValue() );
                     if ( !sDatabaseName.isEmpty() )
                     {
-                        sNewUrl += OUString::createFromAscii(":") + sDatabaseName;
+                        sNewUrl += ":" + sDatabaseName;
                     }
                 }
                 else

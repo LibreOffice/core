@@ -108,7 +108,7 @@ OUString ScVbaName::getContent( const formula::FormulaGrammar::Grammar eGrammar,
     if ( bPrependEquals )
     {
         if (aContent.indexOf('=') != 0)
-            aContent = OUString::createFromAscii("=") + aContent;
+            aContent = "=" + aContent;
     }
     return aContent;
 }

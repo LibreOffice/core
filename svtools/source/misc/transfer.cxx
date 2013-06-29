@@ -775,7 +775,7 @@ sal_Bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataF
     {
         SvMemoryStream aMemStm( 65535, 65535 );
 
-        if(rFlavor.MimeType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("image/png")))
+        if(rFlavor.MimeType.equalsIgnoreAsciiCase("image/png"))
         {
             // write a PNG
             ::vcl::PNGWriter aPNGWriter(rBitmapEx);
@@ -1733,7 +1733,7 @@ sal_Bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapE
 
     if(bRet)
     {
-        if(rFlavor.MimeType.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("image/png")))
+        if(rFlavor.MimeType.equalsIgnoreAsciiCase("image/png"))
         {
             // it's a PNG, import to BitmapEx
             ::vcl::PNGReader aPNGReader(*xStm);

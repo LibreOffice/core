@@ -43,9 +43,9 @@ How to add a new image set:
   and 
     sal_uLong StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) const
   both in vcl/source/app/settings.cxx, e.g.
-    case STYLE_SYMBOLS_NEW_SET: return ::rtl::OUString::createFromAscii( "new_set" );
+    case STYLE_SYMBOLS_NEW_SET: return ::rtl::OUString( "new_set" );
   and 
-    else if ( rName == ::rtl::OUString::createFromAscii( "new_set" ) )
+    else if ( rName == "new_set" )
     	return STYLE_SYMBOLS_NEW_SET;
 
 - Add localized item names to 'ListBox LB_ICONSTYLE' to

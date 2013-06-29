@@ -302,7 +302,7 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
     OUString aError( rErrorText );
     if( aError.isEmpty() )
-        aError = OUString::createFromAscii("Unknown application error");
+        aError = "Unknown application error";
     LOGI("%s", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
 
     LOGI("SalAbort: '%s'",

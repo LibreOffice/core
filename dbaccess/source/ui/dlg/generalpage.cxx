@@ -609,7 +609,7 @@ namespace dbaui
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                0, OUString::createFromAscii("sdatabase") );
+                0, OUString("sdatabase") );
         const SfxFilter* pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {

@@ -311,13 +311,11 @@ namespace svt { namespace table
                 //if the name is equal to cell content, it'll be read twice
                 if(GetModel()->hasColumnHeaders())
                 {
-                    aRetText = GetColumnName(_nCol);
-                    aRetText += OUString::createFromAscii(" , ");
+                    aRetText = GetColumnName(_nCol) + " , ";
                 }
                 if(GetModel()->hasRowHeaders())
                 {
-                    aRetText += GetRowName(_nRow);
-                    aRetText += OUString::createFromAscii(" , ");
+                    aRetText += GetRowName(_nRow) + " , ";
                 }
                 //aRetText = GetAccessibleCellText(_nRow, _nCol);
                 break;
@@ -356,8 +354,7 @@ namespace svt { namespace table
                 // if the name is equal to cell content, it'll be read twice
                 if ( GetModel()->hasColumnHeaders() )
                 {
-                    aRetText = GetColumnName( GetCurrentColumn() );
-                    aRetText += OUString::createFromAscii( " , " );
+                    aRetText = GetColumnName( GetCurrentColumn() ) + " , ";
                 }
                 if ( GetModel()->hasRowHeaders() )
                 {
