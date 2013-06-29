@@ -460,12 +460,12 @@ Reference<XComponentContext> getUNO(
     {
         if (! s_lockfile.check( 0 ))
         {
-            String sMsg(ResId(RID_STR_CONCURRENTINSTANCE, *DeploymentResMgr::get()));
+            OUString sMsg(ResId(RID_STR_CONCURRENTINSTANCE, *DeploymentResMgr::get()));
             //Create this string before we call DeInitVCL, because this will kill
             //the ResMgr
-            String sError(ResId(RID_STR_UNOPKG_ERROR, *DeploymentResMgr::get()));
+            OUString sError(ResId(RID_STR_UNOPKG_ERROR, *DeploymentResMgr::get()));
 
-            sMsg = sMsg + OUString("\n") + getLockFilePath();
+            sMsg += "\n" + getLockFilePath();
 
             if (bGui)
             {
@@ -483,7 +483,7 @@ Reference<XComponentContext> getUNO(
                 DeInitVCL();
             }
 
-            throw LockFileException(OUString("\n") + sError + sMsg + "\n");
+            throw LockFileException("\n" + sError + sMsg + "\n");
         }
     }
 
