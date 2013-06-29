@@ -51,6 +51,9 @@ public:
     virtual void    Simplify( bool bIsBase );
 
 private:
+    CGPoint         GetTextDrawPosition(void) const;
+    double          GetWidth(void) const;
+
     const CTTextStyle* const    mpTextStyle;
 
     // CoreText specific objects
@@ -65,7 +68,7 @@ private:
 
     // x-offset relative to layout origin
     // currently only used in RTL-layouts
-    mutable long    mnBaseAdv;
+    mutable double  mfBaseAdv;
 };
 
 // =======================================================================
@@ -76,7 +79,7 @@ CTLayout::CTLayout( const CTTextStyle* pTextStyle )
 ,   mpCTLine( NULL )
 ,   mnCharCount( 0 )
 ,   mfCachedWidth( -1 )
-,   mnBaseAdv( 0 )
+,   mfBaseAdv( 0 )
 {
     CFRetain( mpTextStyle->GetStyleDict() );
 }
@@ -144,7 +147,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     // in RTL-layouts trailing spaces are leftmost
     // TODO: use BiDi-algorithm to thoroughly check this assumption
     if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
-        mnBaseAdv = rint( fTrailingSpace );
+        mfBaseAdv = fTrailingSpace;
 
     // return early if there is nothing to do
     if( nPixelWidth <= 0 )
@@ -166,10 +169,41 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     }
     CFRelease( mpCTLine );
     mpCTLine = pNewCTLine;
-    mfCachedWidth = -1; // TODO: can we set it directly to target width we requested? For now we re-measure
+    mfCachedWidth = nPixelWidth;
 }
 
 // -----------------------------------------------------------------------
+
+// When drawing right aligned text, rounding errors in the position returned by
+// GetDrawPosition() cause the right margin of the text to change whenever text
+// width changes causing "jumping letters" effect. So here we calculate the
+// drawing position relative to the right margin on our own to avoid the
+// rounding errors. That is basically a hack, and it should go away if one day
+// we managed to get rid of those rounding errors.
+//
+// We continue using GetDrawPosition() for non-right aligned text, to minimize
+// any unforeseen side effects.
+CGPoint CTLayout::GetTextDrawPosition(void) const
+{
+    float fPosX, fPosY;
+
+    if (mnLayoutFlags & SAL_LAYOUT_RIGHT_ALIGN)
+    {
+        // text is always drawn at its leftmost point
+        const Point aPos = DrawBase();
+        fPosX = aPos.X() + mfBaseAdv - GetWidth();
+        fPosY = aPos.Y();
+    }
+    else
+    {
+        const Point aPos = GetDrawPosition(Point(mfBaseAdv, 0));
+        fPosX = aPos.X();
+        fPosY = aPos.Y();
+    }
+
+    CGPoint aTextPos = { +fPosX, -fPosY };
+    return aTextPos;
+}
 
 void CTLayout::DrawText( SalGraphics& rGraphics ) const
 {
@@ -188,8 +222,7 @@ void CTLayout::DrawText( SalGraphics& rGraphics ) const
     CGContextSetShouldAntialias( rAquaGraphics.mrContext, !rAquaGraphics.mbNonAntialiasedText );
 
     // Draw the text
-    const Point aVclPos = GetDrawPosition( Point(mnBaseAdv,0) );
-    CGPoint aTextPos = { (CGFloat) +aVclPos.X(), (CGFloat) -aVclPos.Y() };
+    CGPoint aTextPos = GetTextDrawPosition();
 
     if( mpTextStyle->mfFontRotation != 0.0 )
     {
@@ -328,7 +361,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos, int&
 
 // -----------------------------------------------------------------------
 
-long CTLayout::GetTextWidth() const
+double CTLayout::GetWidth() const
 {
     if( (mnCharCount <= 0) || !mpCTLine )
         return 0;
@@ -337,10 +370,13 @@ long CTLayout::GetTextWidth() const
         mfCachedWidth = CTLineGetTypographicBounds( mpCTLine, NULL, NULL, NULL);
     }
 
-    const long nScaledWidth = lrint( mfCachedWidth );
-    return nScaledWidth;
+    return mfCachedWidth;
 }
 
+long CTLayout::GetTextWidth() const
+{
+    return lrint(GetWidth());
+}
 // -----------------------------------------------------------------------
 
 long CTLayout::FillDXArray( sal_Int32* pDXArray ) const
@@ -441,8 +477,8 @@ bool CTLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
     CGContextScaleCTM( rAquaGraphics.mrContext, 1.0, -1.0 );
     CGContextSetShouldAntialias( rAquaGraphics.mrContext, !rAquaGraphics.mbNonAntialiasedText );
 
-    const Point aVclPos = GetDrawPosition( Point(mnBaseAdv,0) );
-    CGPoint aTextPos = { (CGFloat) +aVclPos.X(), (CGFloat) -aVclPos.Y() };
+    const CGPoint aVclPos = GetTextDrawPosition();
+    CGPoint aTextPos = GetTextDrawPosition();
 
     if( mpTextStyle->mfFontRotation != 0.0 )
     {
@@ -465,10 +501,10 @@ bool CTLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect ) const
 
     CGContextRestoreGState( rAquaGraphics.mrContext );
 
-    rVCLRect.Left()   = aVclPos.X() + aMacRect.origin.x;
-    rVCLRect.Right()  = aVclPos.X() + (aMacRect.origin.x + aMacRect.size.width);
-    rVCLRect.Bottom() = aVclPos.Y() - (aMacRect.origin.y);
-    rVCLRect.Top()    = aVclPos.Y() - (aMacRect.origin.y + aMacRect.size.height);
+    rVCLRect.Left()   = aVclPos.x + aMacRect.origin.x;
+    rVCLRect.Right()  = aVclPos.x + (aMacRect.origin.x + aMacRect.size.width);
+    rVCLRect.Bottom() = aVclPos.x - (aMacRect.origin.y);
+    rVCLRect.Top()    = aVclPos.x - (aMacRect.origin.y + aMacRect.size.height);
 
     return true;
 }
