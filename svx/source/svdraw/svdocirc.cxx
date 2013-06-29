@@ -17,35 +17,38 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svl/style.hxx>
-#include <svx/xlnwtit.hxx>
-#include <svx/xlnedwit.hxx>
-#include <svx/xlnstwit.hxx>
-#include <svx/xlnstit.hxx>
-#include <svx/xlnedit.hxx>
-#include <svx/svdocirc.hxx>
-#include <math.h>
-#include <svx/xpool.hxx>
-#include <svx/svdattr.hxx>
-#include <svx/svdpool.hxx>
-#include <svx/svdattrx.hxx>
-#include <svx/svdtrans.hxx>
-#include <svx/svdetc.hxx>
-#include <svx/svddrag.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdopath.hxx> // for the object conversion
-#include <svx/svdview.hxx>  // for dragging (Ortho)
-#include "svx/svdglob.hxx"   // StringCache
-#include "svx/svdstr.hrc"    // the object's name
-#include <editeng/eeitem.hxx>
-#include <svx/sdr/properties/circleproperties.hxx>
-#include <svx/sdr/contact/viewcontactofsdrcircobj.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <editeng/eeitem.hxx>
+#include <math.h>
+#include <svl/style.hxx>
+
+#include "svx/svdglob.hxx"   // StringCache
+#include "svx/svdstr.hrc"    // the object's name
+
+#include <svx/sdr/contact/viewcontactofsdrcircobj.hxx>
+#include <svx/sdr/properties/circleproperties.hxx>
+#include <svx/svdattr.hxx>
+#include <svx/svddrag.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdocirc.hxx>
+#include <svx/svdopath.hxx> // for the object conversion
+#include <svx/svdpage.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/svdview.hxx>  // for dragging (Ortho)
+#include <svx/sxciaitm.hxx>
+#include <svx/sxcikitm.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/xlnedwit.hxx>
+#include <svx/xlnstit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xpool.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

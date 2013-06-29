@@ -21,95 +21,109 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 
+#include "svdconv.hxx"
+
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <drawinglayer/processor2d/contourextractor2d.hxx>
+#include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/eeitem.hxx>
 #include <math.h>
-#include <vcl/metaact.hxx>   // for TakeContour
-#include <vcl/cvtsvm.hxx>
-#include <tools/line.hxx>
+#include <sfx2/objface.hxx>
+#include <sfx2/objsh.hxx>
+#include <svl/whiter.hxx>
+#include <svtools/colorcfg.hxx>
 #include <tools/bigint.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>
+#include <tools/line.hxx>
+#include <vcl/cvtsvm.hxx>
+#include <vcl/graphictools.hxx>
+#include <vcl/metaact.hxx>   // for TakeContour
+#include <vcl/virdev.hxx>
 #include <vector>
-#include <svx/svdobj.hxx>
-#include <svx/xpoly.hxx>
-#include <svx/svdetc.hxx>
-#include <svx/svdtrans.hxx>
-#include <svx/svdhdl.hxx>
-#include <svx/svddrag.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdovirt.hxx>  // for Add/Del Ref
-#include <svx/svdview.hxx>   // for Dragging (check Ortho)
+
+#include "svx/shapepropertynotifier.hxx"
 #include "svx/svdglob.hxx"   // StringCache
-#include <svx/svdstr.hrc>    // the object's name
-#include <svx/svdogrp.hxx>   // Factory
-#include <svx/svdopath.hxx>  // Factory
-#include <svx/svdoedge.hxx>  // Factory
-#include <svx/svdorect.hxx>  // Factory
-#include <svx/svdocirc.hxx>  // Factory
-#include <svx/svdotext.hxx>  // Factory
-#include <svx/svdomeas.hxx>  // Factory
-#include <svx/svdograf.hxx>  // Factory
-#include <svx/svdoole2.hxx>  // Factory
-#include <svx/svdocapt.hxx>  // Factory
-#include <svx/svdopage.hxx>  // Factory
-#include <svx/svdouno.hxx>   // Factory
-#include <svx/svdattrx.hxx> // NotPersistItems
-#include <svx/svdoashp.hxx>
-#include <svx/svdomedia.hxx>
-#include <svx/xlnwtit.hxx>
-#include <svx/xlnstwit.hxx>
-#include <svx/xlnedwit.hxx>
-#include <svx/xlnstit.hxx>
-#include <svx/xlnedit.hxx>
-#include <svx/xlnstcit.hxx>
-#include <svx/xlnedcit.hxx>
-#include <svx/xlndsit.hxx>
-#include <svx/xlnclit.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/svditer.hxx>
-#include <svx/xlntrit.hxx>
-#include <svx/xfltrit.hxx>
-#include <svx/xflftrit.hxx>
+#include "svx/svdotable.hxx"
 #include "svx/xlinjoit.hxx"
-#include <svx/unopage.hxx>
-#include <editeng/eeitem.hxx>
-#include <svx/xenum.hxx>
-#include <svx/xgrad.hxx>
-#include <svx/xhatch.hxx>
-#include <svx/xflhtit.hxx>
-#include <svx/xbtmpit.hxx>
-#include <svx/svdpool.hxx>
-#include <editeng/editeng.hxx>
-#include <svl/whiter.hxx>
 
 #include <svx/fmmodel.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/objface.hxx>
-#include <vcl/graphictools.hxx>
-#include <svtools/colorcfg.hxx>
-#include <svx/sdr/properties/emptyproperties.hxx>
-#include <svx/sdr/contact/viewcontactofsdrobj.hxx>
-#include <svx/sdr/contact/viewcontactofgraphic.hxx>
-#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/range/b2drange.hxx>
-#include <svx/unoshape.hxx>
-#include <vcl/virdev.hxx>
-#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
-#include <drawinglayer/processor2d/contourextractor2d.hxx>
-#include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
 #include <svx/polysc3d.hxx>
-#include "svx/svdotable.hxx"
-#include "svx/shapepropertynotifier.hxx"
+#include <svx/sdr/contact/displayinfo.hxx>
+#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#include <svx/sdr/contact/viewcontactofgraphic.hxx>
+#include <svx/sdr/contact/viewcontactofsdrobj.hxx>
+#include <svx/sdr/properties/emptyproperties.hxx>
 #include <svx/sdrhittesthelper.hxx>
-#include <svx/svdundo.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/sdrobjectfilter.hxx>
-#include "svdconv.hxx"
+#include <svx/svddrag.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svdhdl.hxx>
+#include <svx/svditer.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdoashp.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdocapt.hxx>  // Factory
+#include <svx/svdocirc.hxx>  // Factory
+#include <svx/svdoedge.hxx>  // Factory
+#include <svx/svdograf.hxx>  // Factory
+#include <svx/svdogrp.hxx>   // Factory
+#include <svx/svdomeas.hxx>  // Factory
+#include <svx/svdomedia.hxx>
+#include <svx/svdoole2.hxx>  // Factory
+#include <svx/svdopage.hxx>  // Factory
+#include <svx/svdopath.hxx>  // Factory
+#include <svx/svdorect.hxx>  // Factory
+#include <svx/svdotext.hxx>  // Factory
+#include <svx/svdouno.hxx>   // Factory
+#include <svx/svdovirt.hxx>  // for Add/Del Ref
+#include <svx/svdpage.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdstr.hrc>    // the object's name
+#include <svx/svdtrans.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/svdview.hxx>   // for Dragging (check Ortho)
+#include <svx/sxlayitm.hxx>
+#include <svx/sxlogitm.hxx>
+#include <svx/sxmovitm.hxx>
+#include <svx/sxmspitm.hxx>
+#include <svx/sxoneitm.hxx>
+#include <svx/sxonitm.hxx>
+#include <svx/sxopitm.hxx>
+#include <svx/sxraitm.hxx>
+#include <svx/sxreoitm.hxx>
+#include <svx/sxrooitm.hxx>
+#include <svx/sxsaitm.hxx>
+#include <svx/sxsoitm.hxx>
+#include <svx/sxtraitm.hxx>
+#include <svx/unopage.hxx>
+#include <svx/unoshape.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xenum.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xfltrit.hxx>
+#include <svx/xgrad.hxx>
+#include <svx/xhatch.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xlndsit.hxx>
+#include <svx/xlnedcit.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/xlnedwit.hxx>
+#include <svx/xlnstcit.hxx>
+#include <svx/xlnstit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlntrit.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xpoly.hxx>
 
 using namespace ::com::sun::star;
 

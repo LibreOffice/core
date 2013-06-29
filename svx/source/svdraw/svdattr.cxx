@@ -30,38 +30,76 @@
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <unotools/intlwrapper.hxx>
-#include <comphelper/processfactory.hxx>
-#include <vcl/svapp.hxx>
-#include <svx/svdattr.hxx>
-#include <svx/svdattrx.hxx>
-#include <svx/svdpool.hxx>
-
-#include <svl/solar.hrc>
+#include "editeng/boxitem.hxx"
+#include "editeng/lineitem.hxx"
+#include "editeng/shaditem.hxx"
 #include "editeng/xmlcnitm.hxx"
-#include <editeng/editdata.hxx>
-
-#include <svx/svxids.hrc>
-#include <svx/xtable.hxx>    // for RGB_Color()
-#include <svx/svdmodel.hxx>  // for DEGREE_CHAR
-#include <svx/svdtrans.hxx>
-#include "svx/svdglob.hxx"  // string cache
-#include "svx/svdstr.hrc"
-#include <svx/sdgcpitm.hxx>
+#include <comphelper/processfactory.hxx>
 #include <editeng/adjustitem.hxx>
-#include <svx/sdtfchim.hxx>
+#include <editeng/editdata.hxx>
 #include <editeng/writingmodeitem.hxx>
+#include <svl/solar.hrc>
 #include <tools/bigint.hxx>
 #include <tools/stream.hxx>
+#include <unotools/intlwrapper.hxx>
+#include <vcl/svapp.hxx>
 
+#include "svx/svdglob.hxx"  // string cache
+#include "svx/svdstr.hrc"
+
+#include <svx/sdgcpitm.hxx>
+#include <svx/sdtfchim.hxx>
+#include <svx/svdattr.hxx>
+#include <svx/svdmodel.hxx>  // for DEGREE_CHAR
+#include <svx/svdpool.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/svx3ditems.hxx>
+#include <svx/svxids.hrc>
+#include <svx/sxallitm.hxx>
+#include <svx/sxcaitm.hxx>
+#include <svx/sxcecitm.hxx>
+#include <svx/sxcgitm.hxx>
+#include <svx/sxciaitm.hxx>
+#include <svx/sxcikitm.hxx>
+#include <svx/sxcllitm.hxx>
+#include <svx/sxctitm.hxx>
+#include <svx/sxekitm.hxx>
+#include <svx/sxelditm.hxx>
+#include <svx/sxenditm.hxx>
+#include <svx/sxfiitm.hxx>
+#include <svx/sxlayitm.hxx>
+#include <svx/sxlogitm.hxx>
+#include <svx/sxmbritm.hxx>
+#include <svx/sxmfsitm.hxx>
+#include <svx/sxmkitm.hxx>
+#include <svx/sxmlhitm.hxx>
+#include <svx/sxmoitm.hxx>
+#include <svx/sxmovitm.hxx>
+#include <svx/sxmsitm.hxx>
+#include <svx/sxmspitm.hxx>
+#include <svx/sxmsuitm.hxx>
+#include <svx/sxmtaitm.hxx>
+#include <svx/sxmtfitm.hxx>
+#include <svx/sxmtpitm.hxx>
+#include <svx/sxmtritm.hxx>
+#include <svx/sxmuitm.hxx>
+#include <svx/sxoneitm.hxx>
+#include <svx/sxonitm.hxx>
+#include <svx/sxopitm.hxx>
+#include <svx/sxraitm.hxx>
+#include <svx/sxreaitm.hxx>
+#include <svx/sxreoitm.hxx>
+#include <svx/sxroaitm.hxx>
+#include <svx/sxrooitm.hxx>
+#include <svx/sxsaitm.hxx>
+#include <svx/sxsalitm.hxx>
+#include <svx/sxsiitm.hxx>
+#include <svx/sxsoitm.hxx>
+#include <svx/sxtraitm.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlineit0.hxx>
-#include <svx/svx3ditems.hxx>
-
-#include "editeng/boxitem.hxx"
-#include "editeng/shaditem.hxx"
-#include "editeng/lineitem.hxx"
+#include <svx/xtable.hxx>    // for RGB_Color()
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

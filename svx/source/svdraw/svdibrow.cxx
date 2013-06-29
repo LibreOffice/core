@@ -17,42 +17,43 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/eeitem.hxx>
-
-#include "svdibrow.hxx"
-
 #include <stdlib.h>
 
-#include <editeng/flditem.hxx>
-#include <editeng/editdata.hxx>
-#include <svx/svdpool.hxx>
-#include <svx/svdattr.hxx>
-#include <svx/svdattrx.hxx>
-#include <svx/svdview.hxx>
-#include <svx/xenum.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/xlnstwit.hxx>
-#include <svx/xlnedwit.hxx>
-#include <svx/xfillit0.hxx>
-#include <svx/xflbmtit.hxx>
-#include <svx/xtextit0.hxx>
-#include <svx/xflbstit.hxx>
-#include <svx/xflbtoxy.hxx>
-#include <svx/xftshit.hxx>
-#include <editeng/colritem.hxx>
-
-
 #include "editeng/fontitem.hxx"
-#include <editeng/fhgtitem.hxx>
-
+#include "svdibrow.hxx"
 #include <editeng/charscaleitem.hxx>
-#include <svl/whiter.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/flditem.hxx>
 #include <svl/flagitem.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/rectitem.hxx>
-
 #include <svl/rngitem.hxx>
+#include <svl/whiter.hxx>
+
 #include <svx/sdrpaintwindow.hxx>
+#include <svx/svdattr.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdview.hxx>
+#include <svx/sxcaitm.hxx>
+#include <svx/sxcecitm.hxx>
+#include <svx/sxcikitm.hxx>
+#include <svx/sxcllitm.hxx>
+#include <svx/sxekitm.hxx>
+#include <svx/sxelditm.hxx>
+#include <svx/sxfiitm.hxx>
+#include <svx/xenum.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflbmtit.hxx>
+#include <svx/xflbstit.hxx>
+#include <svx/xflbtoxy.hxx>
+#include <svx/xftshit.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xlnedwit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xtextit0.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

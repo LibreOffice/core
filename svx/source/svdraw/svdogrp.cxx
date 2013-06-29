@@ -36,7 +36,6 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/svdattrx.hxx>  // NotPersistItems
 #include <svx/svdoedge.hxx>  // broadcast connectors to Move
 #include "svx/svdglob.hxx"   // StringCache
 #include "svx/svdstr.hrc"    // the object's name

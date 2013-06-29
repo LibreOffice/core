@@ -17,38 +17,44 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/bigint.hxx>
-#include <tools/helpers.hxx>
-#include <svx/xlnwtit.hxx>
-#include <svl/style.hxx>
-#include <svx/svdocapt.hxx>
-#include <svx/xpool.hxx>
-#include <svx/xpoly.hxx>
-#include <svx/svdattrx.hxx>
-#include <svx/svdpool.hxx>
-#include <svx/svdetc.hxx>
-#include <svx/svdtrans.hxx>
-#include <svx/svdhdl.hxx>
-#include <svx/svddrag.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/svdview.hxx>   // for RectSnap
-#include "svx/svdglob.hxx"   // StringCache
-#include "svx/svdstr.hrc"    // the object's name
-#include <svx/svdogrp.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/xflhtit.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/xfltrit.hxx>
-#include <editeng/eeitem.hxx>
-#include <svx/sdr/properties/captionproperties.hxx>
-#include <svx/sdr/contact/viewcontactofsdrcaptionobj.hxx>
-#include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <svx/sdrhittesthelper.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
+#include <editeng/eeitem.hxx>
+#include <svl/style.hxx>
+#include <tools/bigint.hxx>
+#include <tools/helpers.hxx>
+
 #include "svdconv.hxx"
+#include "svx/svdglob.hxx"   // StringCache
+#include "svx/svdstr.hrc"    // the object's name
+
+#include <svx/sdr/contact/viewcontactofsdrcaptionobj.hxx>
+#include <svx/sdr/properties/captionproperties.hxx>
+#include <svx/sdrhittesthelper.hxx>
+#include <svx/svddrag.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svdhdl.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdocapt.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/svdview.hxx>   // for RectSnap
+#include <svx/sxcaitm.hxx>
+#include <svx/sxcecitm.hxx>
+#include <svx/sxcgitm.hxx>
+#include <svx/sxcllitm.hxx>
+#include <svx/sxctitm.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xfltrit.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xpoly.hxx>
+#include <svx/xpool.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

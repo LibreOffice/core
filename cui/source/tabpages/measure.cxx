@@ -17,26 +17,36 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cuires.hrc>
+#include <dialmgr.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
+#include <sfx2/request.hxx>
 #include <tools/shl.hxx>
 
-#include <cuires.hrc>
-
-#include <svx/svdomeas.hxx>
-#include <svx/svdattr.hxx>
-#include <svx/svdattrx.hxx>
-#include <svx/svdview.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-#include "svx/measctrl.hxx"
-#include "measure.hxx"
-#include "measure.hrc"
-#include <dialmgr.hxx>
-#include "svx/dlgutil.hxx"
+#include <svx/dialogs.hrc>
+#include <svx/dlgutil.hxx>
+#include <svx/measctrl.hxx>
+#include <svx/ofaitem.hxx>
 #include <svx/strarray.hxx>
-#include <sfx2/request.hxx>
-#include "svx/ofaitem.hxx"
+#include <svx/svdattr.hxx>
+#include <svx/svdomeas.hxx>
+#include <svx/svdview.hxx>
+#include <svx/sxekitm.hxx>
+#include <svx/sxelditm.hxx>
+#include <svx/sxenditm.hxx>
+#include <svx/sxmbritm.hxx>
+#include <svx/sxmfsitm.hxx>
+#include <svx/sxmlhitm.hxx>
+#include <svx/sxmsuitm.hxx>
+#include <svx/sxmtfitm.hxx>
+#include <svx/sxmtpitm.hxx>
+#include <svx/sxmtritm.hxx>
+#include <svx/sxmuitm.hxx>
+
+#include "measure.hrc"
+#include "measure.hxx"
 
 static sal_uInt16 pRanges[] =
 {
