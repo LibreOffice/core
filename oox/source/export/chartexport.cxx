@@ -491,7 +491,7 @@ OUString ChartExport::parseFormula( const OUString& rRange )
         OSL_TRACE("ChartExport::parseFormula, parser is invalid");
         //FIXME: currently just using simple converter, e.g $Sheet1.$A$1:$C$1 -> Sheet1!$A$1:$C$1
         OUString aRange( rRange );
-        if( aRange.indexOf("$") == 0 )
+        if( aRange.indexOf('$') == 0 )
             aRange = aRange.copy(1);
         aRange = aRange.replaceAll(".$", "!$" );
         aResult = aRange;

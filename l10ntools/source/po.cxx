@@ -245,7 +245,7 @@ PoEntry::PoEntry(
         throw WRONGHELPTEXT;
 
     m_pGenPo = new GenPoEntry();
-    m_pGenPo->setReference(rSourceFile.copy(rSourceFile.lastIndexOf("/")+1));
+    m_pGenPo->setReference(rSourceFile.copy(rSourceFile.lastIndexOf('/')+1));
 
     OString sMsgCtxt =
         rGroupId + "\n" +

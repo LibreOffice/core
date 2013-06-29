@@ -181,7 +181,7 @@ sal_Bool MergeEntrys::GetText( OString &rReturn,
 
 OString MergeEntrys::GetQTZText(const ResData& rResData, const OString& rOrigText)
 {
-    const OString sFilename = rResData.sFilename.copy(rResData.sFilename.lastIndexOf("/")+1);
+    const OString sFilename = rResData.sFilename.copy(rResData.sFilename.lastIndexOf('/')+1);
     const OString sKey =
         PoEntry::genKeyId(sFilename + rResData.sGId + rResData.sId + rResData.sResTyp + rOrigText);
     return sKey + "||" + rOrigText;
@@ -310,7 +310,7 @@ MergeDataFile::MergeDataFile(
             const sal_Int32 nStart =
                 sPoFileName.indexOf(sTransSource)+sTransSource.getLength();
             const sal_Int32 nCount =
-                sPoFileName.indexOf("/",nStart) - nStart;
+                sPoFileName.indexOf('/',nStart) - nStart;
             sLang = sPoFileName.copy(nStart,nCount);
         }
         aLanguageSet.insert( sLang );

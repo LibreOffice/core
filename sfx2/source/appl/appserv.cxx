@@ -439,7 +439,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
             OUString module = SfxHelp::GetCurrentModuleIdentifier();
             OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
-                "&LOlocale=" + utl::ConfigManager::getLocale() + "&LOmodule=" + module.copy(module.lastIndexOf(".") + 1 )  );
+                "&LOlocale=" + utl::ConfigManager::getLocale() + "&LOmodule=" + module.copy(module.lastIndexOf('.') + 1 )  );
             try
             {
                 uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(

@@ -1063,7 +1063,7 @@ sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString
                 delete pStream;
                 pStream = 0;
             }
-            sal_Int32 nSepInd = aFileName.lastIndexOf(".");
+            sal_Int32 nSepInd = aFileName.lastIndexOf('.');
             OUString aExtension = aFileName.copy( nSepInd + 1, aFileName.getLength() - nSepInd - 1 );
             INetContentType eContentType = INetContentTypes::GetContentType4Extension( aExtension );
             if (eContentType != CONTENT_TYPE_UNKNOWN)

@@ -191,7 +191,7 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
         if( !sLine.startsWith(" *") && !sLine.startsWith("/*") &&
             nEqualSign != -1 )
         {
-            const OString sID( sLine.copy( 0, sLine.indexOf("=") ).trim() );
+            const OString sID( sLine.copy( 0, sLine.indexOf('=') ).trim() );
             ResData  aResData( sID, m_sSource );
             aResData.sResTyp = "property";
             OString sNewText;

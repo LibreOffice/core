@@ -964,7 +964,7 @@ PluginInputStream::PluginInputStream( XPlugin_Impl* pPlugin,
     // set correct extension, some plugins need that
     OUString aName( m_aNPStream.url, strlen( m_aNPStream.url ), m_pPlugin->getTextEncoding() );
     OUString aExtension;
-    sal_Int32 nSepInd = aName.lastIndexOf(".");
+    sal_Int32 nSepInd = aName.lastIndexOf('.');
     if( nSepInd != -1 )
     {
        aExtension = aName.copy( nSepInd + 1, aName.getLength() - nSepInd - 1 );

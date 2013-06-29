@@ -92,7 +92,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
                 HelpParser aParser( sXhpFile );
                 const OString sOutput(
                     aArgs.m_sOutputFile +
-                    sXhpFile.copy( sXhpFile.lastIndexOf("/") ));
+                    sXhpFile.copy( sXhpFile.lastIndexOf('/') ));
                 if( !aParser.Merge( aArgs.m_sMergeSrc, sOutput,
                     aArgs.m_sLanguage, pMergeDataFile ))
                 {

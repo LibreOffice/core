@@ -127,7 +127,7 @@ sal_Bool Append(const OString &rOutputSrs, const OString &rTmpFile)
 /* replaces extension of a file name */
 OString OutputFile(const OString &rInput, const char * pExt)
 {
-    sal_Int32 nSepInd = rInput.lastIndexOf(".");
+    sal_Int32 nSepInd = rInput.lastIndexOf('.');
 
     if( nSepInd != -1 )
     {

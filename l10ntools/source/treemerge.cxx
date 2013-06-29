@@ -68,13 +68,13 @@ namespace
             helper::xmlStrToOString( pID );
         xmlFree( pID );
 
-        const sal_Int32 nFirstSlash = sID.indexOf("/");
+        const sal_Int32 nFirstSlash = sID.indexOf('/');
         // Update id attribute of topic
         {
             OString sNewID =
                 sID.copy( 0, nFirstSlash + 1 ) +
-                rXhpRoot.copy( rXhpRoot.lastIndexOf("/") + 1 ) +
-                sID.copy( sID.indexOf( "/", nFirstSlash + 1 ) );
+                rXhpRoot.copy( rXhpRoot.lastIndexOf('/') + 1 ) +
+                sID.copy( sID.indexOf( '/', nFirstSlash + 1 ) );
             xmlSetProp(
                 pReturn, (const xmlChar*)("id"),
                 reinterpret_cast<const xmlChar*>(sNewID.getStr()));
@@ -82,7 +82,7 @@ namespace
 
         const OString sXhpPath =
             rXhpRoot +
-            sID.copy(sID.indexOf("/", nFirstSlash + 1));
+            sID.copy(sID.indexOf('/', nFirstSlash + 1));
         xmlDocPtr pXhpFile = xmlParseFile( sXhpPath.getStr() );
         // if xhpfile is missing than put this topic into comment
         if ( !pXhpFile )
