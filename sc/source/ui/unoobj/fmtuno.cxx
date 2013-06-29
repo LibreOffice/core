@@ -35,6 +35,7 @@
 #include "styleuno.hxx"     // ScStyleNameConversion
 #include "tokenarray.hxx"
 #include "tokenuno.hxx"
+#include "stylehelper.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::formula;
