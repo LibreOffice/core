@@ -17,41 +17,49 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <svx/svdedtv.hxx>
-#include <math.h>
-
-#include <tools/bigint.hxx>
-#include <svl/itemiter.hxx>
-#include <vcl/msgbox.hxx>
-#include <svx/rectenum.hxx>
-#include <svx/svxids.hrc>   // for SID_ATTR_TRANSFORM_...
-#include <svx/svdattr.hxx>  // for Get/SetGeoAttr
-#include "svx/svditer.hxx"
-#include <svx/svdtrans.hxx>
-#include <svx/svdundo.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdlayer.hxx> // for MergeNotPersistAttr
-#include <svx/svdattrx.hxx> // for MergeNotPersistAttr
-#include <svx/svdetc.hxx>   // for SearchOutlinerItems
-#include <svx/svdopath.hxx>  // for Crook
-#include "svx/svdstr.hrc"   // names taken from the resource
-#include "svx/svdglob.hxx"  // StringCache
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
+#include <math.h>
 #include <svl/aeitem.hxx>
+#include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
-#include <svx/sdr/contact/objectcontact.hxx>
-#include <svx/sdr/contact/viewcontact.hxx>
+#include <tools/bigint.hxx>
+#include <vcl/msgbox.hxx>
+
+#include "svx/svdglob.hxx"  // StringCache
+#include "svx/svditer.hxx"
+#include "svx/svdstr.hrc"   // names taken from the resource
+
+#include <svx/AffineMatrixItem.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/obj3d.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <svx/AffineMatrixItem.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <svx/xlnwtit.hxx>
-#include <svx/xlnstwit.hxx>
+#include <svx/rectenum.hxx>
+#include <svx/sdr/contact/objectcontact.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/svdattr.hxx>  // for Get/SetGeoAttr
+#include <svx/svdedtv.hxx>
+#include <svx/svdetc.hxx>   // for SearchOutlinerItems
+#include <svx/svdlayer.hxx> // for MergeNotPersistAttr
+#include <svx/svdopath.hxx>  // for Crook
+#include <svx/svdpage.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/svxids.hrc>   // for SID_ATTR_TRANSFORM_...
+#include <svx/sxallitm.hxx>
+#include <svx/sxmovitm.hxx>
+#include <svx/sxreaitm.hxx>
+#include <svx/sxreoitm.hxx>
+#include <svx/sxroaitm.hxx>
+#include <svx/sxrooitm.hxx>
+#include <svx/sxsalitm.hxx>
+#include <svx/sxsoitm.hxx>
+#include <svx/sxtraitm.hxx>
 #include <svx/xlnedwit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlnwtit.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////

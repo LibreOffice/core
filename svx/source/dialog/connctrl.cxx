@@ -17,21 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/svdoedge.hxx>
-#include <svx/svdattrx.hxx>
-#include <svx/svdmark.hxx>
-#include <svx/svdview.hxx>
-
-#include <svx/svdpage.hxx> // SdrObjList
+#include <vcl/svapp.hxx>
 
 #include "svx/connctrl.hxx"
-#include <svx/dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 
-#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
-
+#include <svx/dialmgr.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-#include <vcl/svapp.hxx>
+#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#include <svx/svdmark.hxx>
+#include <svx/svdoedge.hxx>
+#include <svx/svdpage.hxx> // SdrObjList
+#include <svx/svdview.hxx>
+#include <svx/sxelditm.hxx>
+#include <svx/sxmkitm.hxx>
 
 SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, const ResId& rResId,
                             const SfxItemSet& rInAttrs ) :

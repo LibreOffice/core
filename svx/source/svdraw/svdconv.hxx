@@ -10,6 +10,8 @@
 #ifndef _SVDCONV_HXX
 #define _SVDCONV_HXX
 
+#include <sal/types.h>
+
 template<typename T> inline T ImplMMToTwips(T val);
 template<>
 inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }

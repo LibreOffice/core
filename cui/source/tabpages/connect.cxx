@@ -17,26 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cuires.hrc>
+#include <dialmgr.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
-#include <tools/shl.hxx>
-#include "svx/ofaitem.hxx"
 #include <sfx2/request.hxx>
+#include <tools/shl.hxx>
+
+#include <svx/connctrl.hxx>
 #include <svx/dialogs.hrc>
-
-#include <svx/svdoedge.hxx>
+#include <svx/dlgutil.hxx>
+#include <svx/ofaitem.hxx>
 #include <svx/svdattr.hxx>
-#include <svx/svdattrx.hxx>
+#include <svx/svdoedge.hxx>
 #include <svx/svdview.hxx>
+#include <svx/sxekitm.hxx>
+#include <svx/sxelditm.hxx>
+#include <svx/sxenditm.hxx>
 
-#include "svx/connctrl.hxx"
-#include "connect.hxx"
 #include "connect.hrc"
-#include <dialmgr.hxx>
-#include "svx/dlgutil.hxx"
-
+#include "connect.hxx"
 #include "paragrph.hrc"
-#include <cuires.hrc>
 
 static sal_uInt16 pRanges[] =
 {

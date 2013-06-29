@@ -18,20 +18,25 @@
  */
 
 #include <comphelper/string.hxx>
-#include <tools/shl.hxx>
+#include <cuires.hrc>
+#include <dialmgr.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <swpossizetabpage.hxx>
+#include <tools/shl.hxx>
+
 #include <svx/dialogs.hrc>
+#include <svx/svddef.hxx>
+#include <svx/sxcaitm.hxx>
+#include <svx/sxcecitm.hxx>
+#include <svx/sxcgitm.hxx>
+#include <svx/sxcllitm.hxx>
+#include <svx/sxctitm.hxx>
 
-#include <svx/svdattrx.hxx>
-#include <cuires.hrc>
-#include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
-#include "transfrm.hxx"
-
 #include "labdlg.hrc"
 #include "labdlg.hxx"
+#include "transfrm.hxx"
 
 // define ----------------------------------------------------------------
 

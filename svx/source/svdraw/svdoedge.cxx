@@ -17,33 +17,36 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <svx/svdoedge.hxx>
-#include <svx/xpool.hxx>
-#include <svx/xpoly.hxx>
-#include <svx/svdattrx.hxx>
-#include <svx/svdpool.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdpagv.hxx>
-#include <svx/svdview.hxx>
-#include <svx/svddrag.hxx>
-#include <svx/svddrgv.hxx>
 #include "svddrgm1.hxx"
-#include <svx/svdhdl.hxx>
-#include <svx/svdtrans.hxx>
-#include <svx/svdetc.hxx>
 #include "svx/svdglob.hxx"   // StringCache
 #include "svx/svdstr.hrc"    // the object's name
-#include <svl/style.hxx>
-#include <svl/smplhint.hxx>
-#include <editeng/eeitem.hxx>
-#include <svx/sdr/properties/connectorproperties.hxx>
-#include <svx/sdr/contact/viewcontactofsdredgeobj.hxx>
+
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <editeng/eeitem.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/style.hxx>
+
+#include <svx/sdr/contact/viewcontactofsdredgeobj.hxx>
+#include <svx/sdr/properties/connectorproperties.hxx>
 #include <svx/sdrhittesthelper.hxx>
+#include <svx/svddrag.hxx>
+#include <svx/svddrgv.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svdhdl.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdoedge.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/svdview.hxx>
+#include <svx/sxekitm.hxx>
+#include <svx/sxelditm.hxx>
+#include <svx/sxenditm.hxx>
+#include <svx/xpoly.hxx>
+#include <svx/xpool.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

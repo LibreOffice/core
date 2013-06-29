@@ -17,48 +17,61 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <svx/svdomeas.hxx>
-#include <math.h>
-#include <svx/xpoly.hxx>
-#include <svx/svdtrans.hxx>
-#include <svx/svdhdl.hxx>
-#include <svx/svdoutl.hxx>
-#include <svx/svddrag.hxx>
-#include <svx/svdpool.hxx>
-#include <svx/svdattrx.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/svdview.hxx>
+#include "svdconv.hxx"
 #include "svx/svdglob.hxx"   // StringCache
 #include "svx/svdstr.hrc"    // the object's name
-#include <svl/style.hxx>
-#include <svl/smplhint.hxx>
-#include <editeng/editdata.hxx>
-#include <editeng/eeitem.hxx>
-#include <svx/xlnstit.hxx>
-#include <svx/xlnstwit.hxx>
-#include <svx/xlnedit.hxx>
-#include <svx/xlnwtit.hxx>
-#include <svx/xlnedwit.hxx>
-#include <svx/xlnstcit.hxx>
-#include <svx/xlnedcit.hxx>
-#include <editeng/outlobj.hxx>
-#include <editeng/outliner.hxx>
-#include <editeng/editobj.hxx>
-#include <editeng/measfld.hxx>
-#include <editeng/flditem.hxx>
-#include <svx/svdogrp.hxx>
-#include <svx/svdopath.hxx>
-#include <svx/svdpage.hxx>
-#include <unotools/syslocale.hxx>
-#include <svx/sdr/properties/measureproperties.hxx>
-#include <svx/sdr/contact/viewcontactofsdrmeasureobj.hxx>
+
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include "svdconv.hxx"
+#include <editeng/editdata.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/measfld.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
+#include <math.h>
+#include <svl/smplhint.hxx>
+#include <svl/style.hxx>
+
+#include <svx/sdr/contact/viewcontactofsdrmeasureobj.hxx>
+#include <svx/sdr/properties/measureproperties.hxx>
+#include <svx/svddrag.hxx>
+#include <svx/svdhdl.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/svdomeas.hxx>
+#include <svx/svdopath.hxx>
+#include <svx/svdoutl.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/svdview.hxx>
+#include <svx/sxmbritm.hxx>
+#include <svx/sxmfsitm.hxx>
+#include <svx/sxmkitm.hxx>
+#include <svx/sxmlhitm.hxx>
+#include <svx/sxmoitm.hxx>
+#include <svx/sxmsitm.hxx>
+#include <svx/sxmsuitm.hxx>
+#include <svx/sxmtaitm.hxx>
+#include <svx/sxmtfitm.hxx>
+#include <svx/sxmtpitm.hxx>
+#include <svx/sxmtritm.hxx>
+#include <svx/sxmtritm.hxx>
+#include <svx/sxmuitm.hxx>
+#include <svx/xlnedcit.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/xlnedwit.hxx>
+#include <svx/xlnstcit.hxx>
+#include <svx/xlnstit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xpoly.hxx>
+#include <unotools/syslocale.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

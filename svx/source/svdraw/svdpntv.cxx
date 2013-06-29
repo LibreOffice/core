@@ -38,7 +38,6 @@
 #include <svx/svdglue.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/svdattrx.hxx>
 #include "svdibrow.hxx"
 #include "svx/svditer.hxx"
 #include <svx/svdouno.hxx>
