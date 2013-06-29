@@ -69,6 +69,20 @@ SwTableFmt::SwTableFmt( SwAttrPool& rPool, const String &rFmtNm,
         m_pEvnColFmt = pDoc->MakeTableLineFmt();
     }
 
+SwTableFmt::SwTableFmt( SwTableFmt& rNew )
+    : SwFrmFmt( (SwFrmFmt)rNew )
+    {
+        *m_pFstLineFmt = SwTableLineFmt( *rNew.GetFirstLineFmt() );
+        *m_pLstLineFmt = SwTableLineFmt( *rNew.GetLastLineFmt() );
+        *m_pOddLineFmt = SwTableLineFmt( *rNew.GetOddLineFmt() );
+        *m_pEvnLineFmt = SwTableLineFmt( *rNew.GetEvenLineFmt() );
+
+        *m_pFstColFmt = SwTableLineFmt( *rNew.GetFirstColFmt() );
+        *m_pLstColFmt = SwTableLineFmt( *rNew.GetLastColFmt() );
+        *m_pOddColFmt = SwTableLineFmt( *rNew.GetOddColFmt() );
+        *m_pEvnColFmt = SwTableLineFmt( *rNew.GetEvenColFmt() );
+    }
+
 SwTableFmt& SwTableFmt::operator=( const SwTableFmt& rNew )
     {
         if (&rNew == this)
@@ -152,6 +166,19 @@ sal_uInt16 SwTableFmt::GetRepeatHeading() const
     return (static_cast<const SfxUInt16Item&>( GetFmtAttr( FN_PARAM_TABLE_HEADLINE ) )).GetValue();
 }
 
+void SwTableFmt::CopyTableFormatInfo( SwTableFmt* pTableFormat )
+{
+    *m_pFstLineFmt = SwTableLineFmt ( *pTableFormat->GetFirstLineFmt() );
+    *m_pLstLineFmt = SwTableLineFmt ( *pTableFormat->GetLastLineFmt() );
+    *m_pOddLineFmt = SwTableLineFmt ( *pTableFormat->GetOddLineFmt() );
+    *m_pEvnLineFmt = SwTableLineFmt ( *pTableFormat->GetEvenLineFmt() );
+
+    *m_pFstColFmt = SwTableLineFmt ( *pTableFormat->GetFirstColFmt() );
+    *m_pLstColFmt = SwTableLineFmt ( *pTableFormat->GetLastColFmt() );
+    *m_pOddColFmt = SwTableLineFmt ( *pTableFormat->GetOddColFmt() );
+    *m_pEvnColFmt = SwTableLineFmt ( *pTableFormat->GetEvenColFmt() );
+}
+
 SwTableLineFmt::SwTableLineFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
                     SwFrmFmt *pDrvdFrm )
     : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_FRMFMT, aTableLineSetRange )
@@ -174,6 +201,28 @@ SwTableLineFmt::SwTableLineFmt( SwAttrPool& rPool, const String &rFmtNm,
         m_pLstBoxFmt = pDoc->MakeTableBoxFmt();
         m_pOddBoxFmt = pDoc->MakeTableBoxFmt();
         m_pEvnBoxFmt = pDoc->MakeTableBoxFmt();
+    }
+
+SwTableLineFmt::SwTableLineFmt( SwTableLineFmt& rNew )
+    : SwFrmFmt( (SwFrmFmt)rNew )
+    {
+        *m_pFstBoxFmt = SwTableBoxFmt( *rNew.GetFirstBoxFmt() );
+        *m_pLstBoxFmt = SwTableBoxFmt( *rNew.GetLastBoxFmt() );
+        *m_pOddBoxFmt = SwTableBoxFmt( *rNew.GetOddBoxFmt() );
+        *m_pEvnBoxFmt = SwTableBoxFmt( *rNew.GetEvenBoxFmt() );
+    }
+
+SwTableLineFmt& SwTableLineFmt::operator=( const SwTableLineFmt& rNew )
+    {
+        if (&rNew == this)
+                return *this;
+
+        m_pFstBoxFmt = rNew.m_pFstBoxFmt;
+        m_pLstBoxFmt = rNew.m_pLstBoxFmt;
+        m_pOddBoxFmt = rNew.m_pOddBoxFmt;
+        m_pEvnBoxFmt = rNew.m_pEvnBoxFmt;
+
+        return *this;
     }
 
 SwTableBoxFmt::SwTableBoxFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,

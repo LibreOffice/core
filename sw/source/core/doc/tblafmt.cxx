@@ -850,6 +850,7 @@ void SwTableAutoFmt::RestoreTableProperties(SwTable &table) const
         return;
 
     pFormat->SetFmtAttr( m_pTableStyle->GetAttrSet() );
+    pFormat->CopyTableFormatInfo( m_pTableStyle );
 
     SwEditShell *pShell = pDoc->GetEditShell();
     pDoc->SetRowSplit(*pShell->getShellCrsr(false), SwFmtRowSplit(m_pTableStyle->GetRowSplit()));
@@ -875,6 +876,7 @@ void SwTableAutoFmt::StoreTableProperties(const SwTable &table)
     pRowSplit = 0;
 
     m_pTableStyle->SetFmtAttr( pFormat->GetAttrSet() );
+    m_pTableStyle->CopyTableFormatInfo( pFormat );
 }
 
 SwTableAutoFmt* SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, SwDoc* pDoc )

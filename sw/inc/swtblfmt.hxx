@@ -75,6 +75,7 @@ protected:
     SwTableLineFmt* m_pEvnColFmt;
 
 public:
+    SwTableFmt( SwTableFmt& rNew );
     SwTableFmt& operator=( const SwTableFmt& rNew );
 
     void SetFirstLineFmt( SwTableLineFmt* pNew ) { m_pFstLineFmt = pNew; }
@@ -112,6 +113,8 @@ public:
     sal_Bool GetRowSplit() const;
     sal_uInt16 GetRepeatHeading() const;
 
+    void CopyTableFormatInfo( SwTableFmt* pTableFormat );
+
     TYPEINFO();     // Already in base class Content.
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableFmt)
@@ -135,6 +138,8 @@ protected:
     SwTableBoxFmt* m_pEvnBoxFmt;
 
 public:
+    SwTableLineFmt( SwTableLineFmt& rNew );
+    SwTableLineFmt& operator=( const SwTableLineFmt& rNew );
 
     void SetFirstBoxFmt( SwTableBoxFmt* pNew ) { m_pFstBoxFmt = pNew; }
     void SetLastBoxFmt( SwTableBoxFmt* pNew ) { m_pLstBoxFmt = pNew; }
