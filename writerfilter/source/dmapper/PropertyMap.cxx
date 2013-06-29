@@ -998,7 +998,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             xDocProperties = uno::Reference< beans::XPropertySet >( rDM_Impl.GetTextDocument(), uno::UNO_QUERY_THROW );
             sal_Bool bSquaredPageMode = sal_False;
             operator[]( PropertyDefinition( PROP_GRID_STANDARD_MODE, false )) = uno::makeAny( !bSquaredPageMode );
-            xDocProperties->setPropertyValue( OUString("DefaultPageMode"), uno::makeAny( bSquaredPageMode ));
+            xDocProperties->setPropertyValue("DefaultPageMode", uno::makeAny( bSquaredPageMode ));
         }
         catch (const uno::Exception& rEx)
         {

@@ -311,14 +311,14 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
     try
     {
         if ( !xFrame.is() )
-            throw IllegalArgumentException( OUString( "need a frame" ), *this, 1 );
+            throw IllegalArgumentException("need a frame", *this, 1 );
 
         xParent = xFrame->getContainerWindow();
         VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(xParent);
         Window* pParentWin = pParentComponent ? pParentComponent->GetWindow() : NULL;
         if (!pParentWin)
         {
-            throw IllegalArgumentException( OUString( "Parent window is null" ), *this, 1 );
+            throw IllegalArgumentException("Parent window is null", *this, 1 );
         }
 
         m_aInitParameters.assign( aArguments );
@@ -326,7 +326,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
 
         ODataView* pView = getView();
         if ( !pView )
-            throw RuntimeException( OUString( "unable to create a view" ), *this );
+            throw RuntimeException("unable to create a view", *this );
 
         if ( m_bReadOnly || m_bPreview )
             pView->EnableInput( sal_False );
@@ -1084,7 +1084,7 @@ Reference< XLayoutManager > OGenericUnoController::getLayoutManager(const Refere
     {
         try
         {
-            xLayoutManager.set(xPropSet->getPropertyValue( OUString( "LayoutManager" )),UNO_QUERY);
+            xLayoutManager.set(xPropSet->getPropertyValue("LayoutManager"),UNO_QUERY);
         }
         catch ( Exception& )
         {

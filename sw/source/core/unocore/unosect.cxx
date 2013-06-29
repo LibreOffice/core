@@ -1290,12 +1290,12 @@ throw (uno::RuntimeException)
     }
     catch (beans::UnknownPropertyException &)
     {
-        throw uno::RuntimeException(OUString("Unknown property exception caught"),
+        throw uno::RuntimeException("Unknown property exception caught",
             static_cast<cppu::OWeakObject *>(this));
     }
     catch (lang::WrappedTargetException &)
     {
-        throw uno::RuntimeException(OUString("WrappedTargetException caught"),
+        throw uno::RuntimeException("WrappedTargetException caught",
             static_cast<cppu::OWeakObject *>(this));
     }
 

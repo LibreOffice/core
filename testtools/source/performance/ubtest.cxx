@@ -479,7 +479,7 @@ Reference< XInterface > TestImpl::getDirect()
                 OUString("com.sun.star.comp.performance.PerformanceTestObject"),
                 _xSMgr, Reference< XRegistryKey >() ) );
             if (! xFac.is())
-                throw RuntimeException( OUString("no test object available!"), Reference< XInterface >() );
+                throw RuntimeException("no test object available!", Reference< XInterface >() );
             _xDirect = xFac->createInstance();
         }
     }
@@ -566,7 +566,7 @@ static void benchmark(
 {
     Reference< XPerformanceTest > xBench( xInstance, UNO_QUERY );
     if (! xBench.is())
-        throw RuntimeException( OUString("illegal test object!"), Reference< XInterface >() );
+        throw RuntimeException("illegal test object!", Reference< XInterface >() );
 
     sal_Int64 i;
     sal_uInt32 tStart, tEnd;
@@ -1060,14 +1060,14 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             // pseudo mapping uno<->uno: does nothing!
             Mapping aMapping( aCppEnv.get(), aAnoCppEnv.get(), OUString("pseudo") );
             if (! aMapping.is())
-                throw RuntimeException( OUString("no pseudo mapping available!"), Reference< XInterface >() );
+                throw RuntimeException("no pseudo mapping available!", Reference< XInterface >() );
 
             Reference< XInterface > xMapped;
             Reference< XInterface > xDirect( getDirect() );
             aMapping.mapInterface( reinterpret_cast< void ** >( &xMapped ), xDirect.get(),
                                    ::getCppuType( &xDirect ) );
             if (! xMapped.is())
-                throw RuntimeException( OUString("mapping object failed!"), Reference< XInterface >() );
+                throw RuntimeException("mapping object failed!", Reference< XInterface >() );
 
             sal_uInt32 nStart = getSystemTicks();
             benchmark( aSheets[ "mapped in process" ], xMapped, nLoop / 100 );
@@ -1082,7 +1082,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
             // start server process
             oslSecurity hSecurity = osl_getCurrentSecurity();
             if (! hSecurity)
-                throw RuntimeException( OUString("cannot get current security handle!"), Reference< XInterface >() );
+                throw RuntimeException("cannot get current security handle!", Reference< XInterface >() );
 
             OUString aArgs[] = {
                 OUString("-c"),
@@ -1129,7 +1129,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
 
             osl_freeSecurityHandle( hSecurity );
             if (! hProcess)
-                throw RuntimeException( OUString("cannot start server process!"), Reference< XInterface >() );
+                throw RuntimeException("cannot start server process!", Reference< XInterface >() );
             osl_freeProcessHandle( hProcess );
 
             // wait three seconds
@@ -1168,7 +1168,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
         {
             // java
               benchmark( aSheets[ "java in process" ],
-                       _xSMgr->createInstance(OUString("com.sun.star.comp.benchmark.JavaTestObject")),
+                       _xSMgr->createInstance("com.sun.star.comp.benchmark.JavaTestObject"),
                        nLoop / 1000 );
         }
 

@@ -347,9 +347,9 @@ awt::Size ExportDialog::GetOriginalSize()
             sal_Int32 nWidth = 0;
             sal_Int32 nHeight= 0;
             com::sun::star::uno::Any aAny;
-            aAny = xPagePropSet->getPropertyValue(OUString("Width"));
+            aAny = xPagePropSet->getPropertyValue("Width");
             aAny >>= nWidth;
-            aAny = xPagePropSet->getPropertyValue(OUString("Height"));
+            aAny = xPagePropSet->getPropertyValue("Height");
             aAny >>= nHeight;
             aShapesRange = basegfx::B2DRange( 0, 0, nWidth, nHeight );
         }

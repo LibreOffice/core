@@ -939,7 +939,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
 static sal_Bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
 {
     Reference< XInvocationAdapterFactory > xAdapFac(
-        xMgr->createInstance( OUString("com.sun.star.script.InvocationAdapterFactory") ), UNO_QUERY );
+        xMgr->createInstance("com.sun.star.script.InvocationAdapterFactory"), UNO_QUERY );
     Reference< XInvocationAdapterFactory2 > xAdapFac2( xAdapFac, UNO_QUERY_THROW );
 
     Reference< XLanguageBindingTest > xOriginal( (XLanguageBindingTest *)new Test_Impl() );
@@ -984,9 +984,9 @@ static sal_Bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
 static sal_Bool test_invocation( const Reference< XMultiServiceFactory > & xMgr )
 {
     Reference< XInvocationAdapterFactory > xAdapFac(
-        xMgr->createInstance( OUString("com.sun.star.script.InvocationAdapterFactory") ), UNO_QUERY );
+        xMgr->createInstance("com.sun.star.script.InvocationAdapterFactory"), UNO_QUERY );
     Reference< XSingleServiceFactory > xInvocFac(
-        xMgr->createInstance( OUString("com.sun.star.script.Invocation") ), UNO_QUERY );
+        xMgr->createInstance("com.sun.star.script.Invocation"), UNO_QUERY );
 
     Reference< XLanguageBindingTest > xOriginal( (XLanguageBindingTest *)new Test_Impl() );
     Any aOriginal( &xOriginal, ::getCppuType( &xOriginal ) );

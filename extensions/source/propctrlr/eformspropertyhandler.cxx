@@ -512,15 +512,15 @@ namespace pcr
             if ( !( xModel.is() && xBinding.is() && !sFacetName.isEmpty() ) )
                 return InteractiveSelectionResult_Cancelled;
 
-            xDialogProps->setPropertyValue( OUString( "FormModel" ), makeAny( xModel ) );
-            xDialogProps->setPropertyValue( OUString( "Binding" ), makeAny( xBinding ) );
-            xDialogProps->setPropertyValue( OUString( "FacetName" ), makeAny( sFacetName ) );
+            xDialogProps->setPropertyValue("FormModel", makeAny( xModel ) );
+            xDialogProps->setPropertyValue("Binding", makeAny( xBinding ) );
+            xDialogProps->setPropertyValue("FacetName", makeAny( sFacetName ) );
 
             if ( !xDialog->execute() )
                 // cancelled
                 return InteractiveSelectionResult_Cancelled;
 
-            _rData = xDialogProps->getPropertyValue( OUString( "ConditionValue" ) );
+            _rData = xDialogProps->getPropertyValue("ConditionValue");
             return InteractiveSelectionResult_ObtainedValue;
         }
         catch( const Exception& )

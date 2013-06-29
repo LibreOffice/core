@@ -1108,9 +1108,9 @@ void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteract
     try
     {
         uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
-        xPropSet->getPropertyValue( OUString( "Version"  ) ) >>= aVersion;
-        xPropSet->getPropertyValue( OUString( "HasEncryptedEntries"  ) ) >>= bIsEncrypted;
-        xPropSet->getPropertyValue( OUString( "HasNonEncryptedEntries"  ) ) >>= bHasNonEncrypted;
+        xPropSet->getPropertyValue("Version") >>= aVersion;
+        xPropSet->getPropertyValue("HasEncryptedEntries") >>= bIsEncrypted;
+        xPropSet->getPropertyValue("HasNonEncryptedEntries") >>= bHasNonEncrypted;
     }
     catch( uno::Exception& )
     {
@@ -1561,7 +1561,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
             {
                 Sequence< uno::Any > aArgs( 1 );
                 aArgs[ 0 ] = *pCaller;
-                xProps->setPropertyValue( OUString("Caller"), uno::makeAny( aArgs ) );
+                xProps->setPropertyValue("Caller", uno::makeAny( aArgs ) );
             }
         }
         aRet = xScript->invoke( aParams, aOutParamIndex, aOutParam );
@@ -1962,7 +1962,7 @@ sal_Bool SfxObjectShell_Impl::hasTrustedScriptingSignature( sal_Bool bAllowUIToA
         try
         {
             uno::Reference < beans::XPropertySet > xPropSet( rDocShell.GetStorage(), uno::UNO_QUERY_THROW );
-            xPropSet->getPropertyValue( OUString( "Version"  ) ) >>= aVersion;
+            xPropSet->getPropertyValue("Version") >>= aVersion;
         }
         catch( uno::Exception& )
         {

@@ -239,9 +239,9 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
             ( xDoc, uno::UNO_QUERY );
     if ( xServiceInfo.is() )
     {
-        if ( xServiceInfo->supportsService( OUString( "com.sun.star.presentation.PresentationDocument" ) ) )
+        if ( xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument") )
             aConfigPath = String( RTL_CONSTASCII_USTRINGPARAM( "Office.Impress/Layout/Other/MeasureUnit" ) );
-        else if ( xServiceInfo->supportsService( OUString( "com.sun.star.drawing.DrawingDocument" ) ) )
+        else if ( xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument") )
             aConfigPath = String( RTL_CONSTASCII_USTRINGPARAM( "Office.Draw/Layout/Other/MeasureUnit" ) );
         if ( aConfigPath.Len() )
         {

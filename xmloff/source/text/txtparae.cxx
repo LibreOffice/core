@@ -1515,7 +1515,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( sal_Bool bIsProgres
             {
                 Reference < XPropertySet > xSet( xTextField, UNO_QUERY );
                 Reference < XText > xText;
-                Any a = xSet->getPropertyValue( OUString("TextRange") );
+                Any a = xSet->getPropertyValue("TextRange");
                 a >>= xText;
                 if ( xText.is() )
                 {
@@ -3813,7 +3813,7 @@ void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(
         {
             //            Reference<XPropertySet> xPropSet( xControlShape, UNO_QUERY );
             //            Reference<XTextContent> xTextContent;
-            //            xPropSet->getPropertyValue( OUString( "TextRange"  ) ) >>= xTextContent;
+            //            xPropSet->getPropertyValue("TextRange") >>= xTextContent;
 
             Reference<XTextContent> xTextContent( xControlShape, UNO_QUERY );
             if( xTextContent.is() )

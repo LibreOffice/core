@@ -341,7 +341,7 @@ namespace utl
         Reference< XServiceInfo > xSI(m_xHierarchyAccess, UNO_QUERY);
         if (xSI.is())
         {
-            try { bIsSet = xSI->supportsService(OUString("com.sun.star.configuration.SetAccess")); }
+            try { bIsSet = xSI->supportsService("com.sun.star.configuration.SetAccess"); }
             catch(Exception&) { }
         }
         return bIsSet;

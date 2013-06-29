@@ -656,7 +656,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
         try
         {
             Reference < XInterface > xIfc =
-                xFactory->createInstance(OUString( "com.sun.star.xml.NamespaceMap") );
+                xFactory->createInstance("com.sun.star.xml.NamespaceMap");
             if( xIfc.is() )
             {
                 Reference< XNameAccess > xNamespaceMap( xIfc, UNO_QUERY );
@@ -1489,7 +1489,7 @@ void SvXMLExport::_ExportScripts()
         {
             Reference< beans::XPropertySet > xPSet( mxModel, UNO_QUERY );
             if ( xPSet.is() )
-                xPSet->getPropertyValue( OUString(  "BasicLibraries"  ) );
+                xPSet->getPropertyValue("BasicLibraries");
         }
 
         Reference < XDocumentHandler > xHdl( new XMLBasicExportFilter( mxHandler ) );
@@ -1520,7 +1520,7 @@ void SvXMLExport::_ExportStyles( sal_Bool )
         // export (fill-)gradient-styles
         try
         {
-            uno::Reference< container::XNameAccess > xGradient( xFact->createInstance( OUString("com.sun.star.drawing.GradientTable" ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xGradient( xFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
             if( xGradient.is() )
             {
                 XMLGradientStyleExport aGradientStyle( *this );
@@ -1553,7 +1553,7 @@ void SvXMLExport::_ExportStyles( sal_Bool )
         // export (fill-)hatch-styles
         try
         {
-            uno::Reference< container::XNameAccess > xHatch( xFact->createInstance( OUString("com.sun.star.drawing.HatchTable" ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xHatch( xFact->createInstance("com.sun.star.drawing.HatchTable"), uno::UNO_QUERY );
             if( xHatch.is() )
             {
                 XMLHatchStyleExport aHatchStyle( *this );
@@ -1585,7 +1585,7 @@ void SvXMLExport::_ExportStyles( sal_Bool )
         // export (fill-)bitmap-styles
         try
         {
-            uno::Reference< container::XNameAccess > xBitmap( xFact->createInstance( OUString("com.sun.star.drawing.BitmapTable" ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xBitmap( xFact->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
             if( xBitmap.is() )
             {
                 XMLImageStyle aImageStyle;
@@ -1618,7 +1618,7 @@ void SvXMLExport::_ExportStyles( sal_Bool )
         // export transparency-gradient -styles
         try
         {
-            uno::Reference< container::XNameAccess > xTransGradient( xFact->createInstance( OUString("com.sun.star.drawing.TransparencyGradientTable" ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xTransGradient( xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY );
             if( xTransGradient.is() )
             {
                 XMLTransGradientStyleExport aTransGradientstyle( *this );
@@ -1651,7 +1651,7 @@ void SvXMLExport::_ExportStyles( sal_Bool )
         // export marker-styles
         try
         {
-            uno::Reference< container::XNameAccess > xMarker( xFact->createInstance( OUString("com.sun.star.drawing.MarkerTable" ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xMarker( xFact->createInstance("com.sun.star.drawing.MarkerTable"), uno::UNO_QUERY );
             if( xMarker.is() )
             {
                 XMLMarkerStyleExport aMarkerStyle( *this );
@@ -1684,7 +1684,7 @@ void SvXMLExport::_ExportStyles( sal_Bool )
         // export dash-styles
         try
         {
-            uno::Reference< container::XNameAccess > xDashes( xFact->createInstance( OUString("com.sun.star.drawing.DashTable" ) ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xDashes( xFact->createInstance("com.sun.star.drawing.DashTable"), uno::UNO_QUERY );
             if( xDashes.is() )
             {
                 XMLDashStyleExport aDashStyle( *this );
@@ -2103,7 +2103,7 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
                 new ::comphelper::PropertySetInfo( aInfoMap )));
 
         if( bIsChart )
-            xInfoProp->setPropertyValue( OUString( "ExportTableNumberList"), makeAny( true ));
+            xInfoProp->setPropertyValue("ExportTableNumberList", makeAny( true ));
 
         aArgs.realloc( 2 );
         aArgs[1] <<= xInfoProp;

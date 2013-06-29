@@ -125,13 +125,13 @@ void SdXMLLayerContext::EndElement()
             DBG_ASSERT( xLayer.is(), "xmloff::SdXMLLayerContext::EndElement(), failed to create new XLayer!" );
 
             if( xLayer.is() )
-                xLayer->setPropertyValue( OUString( "Name" ), Any( msName ) );
+                xLayer->setPropertyValue("Name", Any( msName ) );
         }
 
         if( xLayer.is() )
         {
-            xLayer->setPropertyValue( OUString( "Title" ), Any( sTitleBuffer.makeStringAndClear() ) );
-            xLayer->setPropertyValue( OUString( "Description" ), Any( sDescriptionBuffer.makeStringAndClear() ) );
+            xLayer->setPropertyValue("Title", Any( sTitleBuffer.makeStringAndClear() ) );
+            xLayer->setPropertyValue("Description", Any( sDescriptionBuffer.makeStringAndClear() ) );
         }
     }
     catch( Exception& )

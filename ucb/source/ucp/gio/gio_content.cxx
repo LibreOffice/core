@@ -522,7 +522,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 static lang::IllegalAccessException
 getReadOnlyException( const uno::Reference< uno::XInterface >& rContext )
 {
-    return lang::IllegalAccessException ( OUString("Property is read-only!"), rContext );
+    return lang::IllegalAccessException ("Property is read-only!", rContext );
 }
 
 void Content::queryChildren( ContentRefList& rChildren )

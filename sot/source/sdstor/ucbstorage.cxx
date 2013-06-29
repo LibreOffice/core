@@ -674,7 +674,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
                 ::com::sun::star::uno::Sequence < sal_Int8 > aSequ( (sal_Int8*) pBuffer, RTL_DIGEST_LENGTH_SHA1 );
                 ::com::sun::star::uno::Any aAny;
                 aAny <<= aSequ;
-                m_pContent->setPropertyValue( OUString("EncryptionKey"), aAny );
+                m_pContent->setPropertyValue("EncryptionKey", aAny );
             }
         }
     }
@@ -1719,7 +1719,7 @@ void UCBStorage_Impl::Init()
         {
             // get the manifest information from the package
             try {
-                Any aAny = m_pContent->getPropertyValue( OUString("MediaType") );
+                Any aAny = m_pContent->getPropertyValue("MediaType");
                 OUString aTmp;
                 if ( ( aAny >>= aTmp ) && !aTmp.isEmpty() )
                     m_aContentType = m_aOriginalContentType = aTmp;
@@ -1855,7 +1855,7 @@ void UCBStorage_Impl::ReadContent()
                     ::ucbhelper::Content aContent( aName, xComEnv, comphelper::getProcessComponentContext() );
 
                     OUString aMediaType;
-                    Any aAny = aContent.getPropertyValue( OUString("MediaType") );
+                    Any aAny = aContent.getPropertyValue("MediaType");
                     if ( ( aAny >>= aMediaType ) && ( aMediaType.compareToAscii("application/vnd.sun.star.oleobject") == 0 ) )
                         pElement->m_bIsStorage = sal_True;
                     else if ( aMediaType.isEmpty() )
@@ -2191,7 +2191,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             pElement->m_xStream->m_aContentType = OUString("application/vnd.sun.star.oleobject");
                             Any aValue;
                             aValue <<= (sal_Bool) sal_True;
-                            pElement->m_xStream->m_pContent->setPropertyValue(OUString("Encrypted"), aValue );
+                            pElement->m_xStream->m_pContent->setPropertyValue("Encrypted", aValue );
                         }
 
                         pContent = pElement->GetContent();
@@ -2203,7 +2203,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         nLocalRet = COMMIT_RESULT_SUCCESS;
                         Any aAny;
                         aAny <<= (OUString) pElement->m_aName;
-                        pContent->setPropertyValue( OUString("Title"), aAny );
+                        pContent->setPropertyValue("Title", aAny );
                     }
 
                     if ( pElement->IsLoaded() && pElement->GetContentType() != pElement->GetOriginalContentType() )
@@ -2212,7 +2212,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         nLocalRet = COMMIT_RESULT_SUCCESS;
                         Any aAny;
                         aAny <<= (OUString) pElement->GetContentType();
-                        pContent->setPropertyValue( OUString("MediaType"), aAny );
+                        pContent->setPropertyValue("MediaType", aAny );
                     }
 
                     if ( nLocalRet != COMMIT_RESULT_NOTHING_TO_DO )
@@ -2263,7 +2263,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                     // clipboard format and ClassId will be retrieved from the media type when the file is loaded again
                     Any aType;
                     aType <<= (OUString) m_aContentType;
-                    m_pContent->setPropertyValue( OUString("MediaType"), aType );
+                    m_pContent->setPropertyValue("MediaType", aType );
 
                     if (  m_bIsLinked )
                     {

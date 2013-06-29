@@ -2768,18 +2768,18 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         try
         {
             uno::Sequence< beans::PropertyValue > aPropSeq;
-            uno::Any aCommand = xUICommands->getByName(OUString(".uno:StyleNewByExample"));
+            uno::Any aCommand = xUICommands->getByName(".uno:StyleNewByExample");
             OUString sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
             pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
-            aCommand = xUICommands->getByName(OUString(".uno:StyleUpdateByExample"));
+            aCommand = xUICommands->getByName(".uno:StyleUpdateByExample");
             sLabel = lcl_GetLabel( aCommand );
 
             pMenu->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
             pMenu->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
-            aCommand = xUICommands->getByName(OUString(".uno:LoadStyles"));
+            aCommand = xUICommands->getByName(".uno:LoadStyles");
             sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_TEMPLATE_LOAD, sLabel );
             pMenu->SetHelpId(SID_TEMPLATE_LOAD, ".uno:LoadStyles");

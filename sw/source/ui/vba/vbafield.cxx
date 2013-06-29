@@ -338,7 +338,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
     }
     else
     {
-        throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
     }
 
     SwVbaRange* pVbaRange = dynamic_cast< SwVbaRange* >( Range.get() );
@@ -350,7 +350,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
 
 uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const OUString _text ) throw (uno::RuntimeException)
 {
-    uno::Reference< text::XTextField > xTextField( mxMSF->createInstance( OUString("com.sun.star.text.TextField.FileName") ), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextField > xTextField( mxMSF->createInstance("com.sun.star.text.TextField.FileName"), uno::UNO_QUERY_THROW );
     sal_Int16 nFileFormat = text::FilenameDisplayFormat::NAME_AND_EXT;
     if( !_text.isEmpty() )
     {
@@ -375,7 +375,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const OUS
     }
 
     uno::Reference< beans::XPropertySet > xProps( xTextField, uno::UNO_QUERY_THROW );
-    xProps->setPropertyValue( OUString("FileFormat"), uno::makeAny( nFileFormat ) );
+    xProps->setPropertyValue("FileFormat", uno::makeAny( nFileFormat ) );
 
     return xTextField;
 }
@@ -463,7 +463,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
     }
     else if( sFieldService.isEmpty() )
     {
-        throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
     }
 
     uno::Reference< text::XTextField > xTextField( mxMSF->createInstance( sFieldService ), uno::UNO_QUERY_THROW );
@@ -472,7 +472,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
     {
         uno::Reference< beans::XPropertySet > xProps( xTextField, uno::UNO_QUERY_THROW );
         OUString sDocPropertyName( aDocProperty );
-        xProps->setPropertyValue( OUString("Name"), uno::makeAny( sDocPropertyName ) );
+        xProps->setPropertyValue("Name", uno::makeAny( sDocPropertyName ) );
     }
 
     return xTextField;

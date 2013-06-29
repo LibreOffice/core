@@ -295,7 +295,7 @@ Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const :
 
         // Transform coordinates from internal to pixel.
         if (maShapeTreeInfo.GetViewForwarder() == NULL)
-            throw uno::RuntimeException (OUString("AccessibleCell has no valid view forwarder"),static_cast<uno::XWeak*>(this));
+            throw uno::RuntimeException ("AccessibleCell has no valid view forwarder",static_cast<uno::XWeak*>(this));
 
         ::Size aPixelSize( maShapeTreeInfo.GetViewForwarder()->LogicToPixel(::Size(aCellRect.GetWidth(), aCellRect.GetHeight())) );
         ::Point aPixelPosition( maShapeTreeInfo.GetViewForwarder()->LogicToPixel( aCellRect.TopLeft() ));

@@ -522,7 +522,7 @@ void OComboBoxModel::loadData( bool _bForce )
                     // otherwise look for the alias
                     Reference<XPropertySet> xFormProp(xForm,UNO_QUERY);
                     Reference< XColumnsSupplier > xSupplyFields;
-                    xFormProp->getPropertyValue(OUString("SingleSelectQueryComposer")) >>= xSupplyFields;
+                    xFormProp->getPropertyValue("SingleSelectQueryComposer") >>= xSupplyFields;
 
                     // search the field
                     DBG_ASSERT(xSupplyFields.is(), "OComboBoxModel::loadData : invalid query composer !");

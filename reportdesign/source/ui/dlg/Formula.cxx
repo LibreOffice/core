@@ -64,7 +64,7 @@ FormulaDialog::FormulaDialog(Window* pParent
         else
             m_sFormula = _sFormula;
     }
-    m_xParser.set(_xServiceFactory->createInstance(OUString("org.libreoffice.report.pentaho.SOFormulaParser")),uno::UNO_QUERY);
+    m_xParser.set(_xServiceFactory->createInstance("org.libreoffice.report.pentaho.SOFormulaParser"),uno::UNO_QUERY);
     if ( m_xParser.is() )
         m_xOpCodeMapper = m_xParser->getFormulaOpCodeMapper();
     fill();

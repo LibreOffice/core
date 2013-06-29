@@ -403,7 +403,7 @@ void SdXMLShapeContext::EndElement()
             // in draw use the Bookmark property
             Reference< beans::XPropertySet > xSet( mxShape, UNO_QUERY_THROW );
             xSet->setPropertyValue( sBookmark, Any( msHyperlink ) );
-            xSet->setPropertyValue( OUString(  "OnClick"  ), Any( ::com::sun::star::presentation::ClickAction_DOCUMENT ) );
+            xSet->setPropertyValue("OnClick", Any( ::com::sun::star::presentation::ClickAction_DOCUMENT ) );
         }
     }
     catch(const Exception&)
@@ -445,10 +445,10 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
         {
             uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY_THROW );
             if( !mbVisible )
-                xSet->setPropertyValue( OUString(  "Visible"  ), uno::Any( sal_False ) );
+                xSet->setPropertyValue("Visible", uno::Any( sal_False ) );
 
             if( !mbPrintable )
-                xSet->setPropertyValue( OUString(  "Printable"  ), uno::Any( sal_False ) );
+                xSet->setPropertyValue("Printable", uno::Any( sal_False ) );
         }
         catch(const Exception&)
         {
@@ -502,7 +502,7 @@ void SdXMLShapeContext::AddShape(const char* pServiceName )
             if ( OUString::createFromAscii(pServiceName).compareToAscii( "com.sun.star.drawing.OLE2Shape" ) == 0 &&
                  uno::Reference< text::XTextDocument >(GetImport().GetModel(), uno::UNO_QUERY).is() )
             {
-                xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance(OUString("com.sun.star.drawing.temporaryForXMLImportOLE2Shape")), uno::UNO_QUERY);
+                xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance("com.sun.star.drawing.temporaryForXMLImportOLE2Shape"), uno::UNO_QUERY);
             }
             else
             {
@@ -667,7 +667,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                             else
                             {
                                 // get graphics familie
-                                xFamilies->getByName( OUString(  "graphics"  ) ) >>= xFamily;
+                                xFamilies->getByName("graphics") >>= xFamily;
                                 aStyleName = GetImport().GetStyleDisplayName(
                                     XML_STYLE_FAMILY_SD_GRAPHICS_ID,
                                     aStyleName );
@@ -691,7 +691,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                     // set style on object
                     uno::Any aAny;
                     aAny <<= xStyle;
-                    xPropSet->setPropertyValue(OUString("Style"), aAny);
+                    xPropSet->setPropertyValue("Style", aAny);
                 }
                 catch(const uno::Exception&)
                 {
@@ -745,7 +745,7 @@ void SdXMLShapeContext::SetLayer()
                 uno::Any aAny;
                 aAny <<= maLayerName;
 
-                xPropSet->setPropertyValue(OUString("LayerName"), aAny);
+                xPropSet->setPropertyValue("LayerName", aAny);
                 return;
             }
         }
@@ -983,7 +983,7 @@ void SdXMLRectShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
             {
                 try
                 {
-                    xPropSet->setPropertyValue(OUString("CornerRadius"), uno::makeAny( mnRadius ) );
+                    xPropSet->setPropertyValue("CornerRadius", uno::makeAny( mnRadius ) );
                 }
                 catch(const uno::Exception&)
                 {
@@ -1251,13 +1251,13 @@ void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             {
                 uno::Any aAny;
                 aAny <<= (drawing::CircleKind)meKind;
-                xPropSet->setPropertyValue( OUString("CircleKind"), aAny );
+                xPropSet->setPropertyValue("CircleKind", aAny );
 
                 aAny <<= mnStartAngle;
-                xPropSet->setPropertyValue( OUString("CircleStartAngle"), aAny );
+                xPropSet->setPropertyValue("CircleStartAngle", aAny );
 
                 aAny <<= mnEndAngle;
-                xPropSet->setPropertyValue( OUString("CircleEndAngle"), aAny );
+                xPropSet->setPropertyValue("CircleEndAngle", aAny );
             }
         }
 
@@ -1617,11 +1617,11 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
                 if( xPropsInfo.is() )
                 {
-                    if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName(OUString("IsEmptyPresentationObject" )))
-                        xProps->setPropertyValue( OUString("IsEmptyPresentationObject" ), ::cppu::bool2any( sal_False ) );
+                    if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
+                        xProps->setPropertyValue("IsEmptyPresentationObject", ::cppu::bool2any( sal_False ) );
 
-                    if( mbIsUserTransformed && xPropsInfo->hasPropertyByName(OUString("IsPlaceholderDependent" )))
-                        xProps->setPropertyValue( OUString("IsPlaceholderDependent" ), ::cppu::bool2any( sal_False ) );
+                    if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
+                        xProps->setPropertyValue("IsPlaceholderDependent", ::cppu::bool2any( sal_False ) );
                 }
             }
         }
@@ -1653,7 +1653,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             {
                 try
                 {
-                    xPropSet->setPropertyValue(OUString("CornerRadius"), uno::makeAny( mnRadius ) );
+                    xPropSet->setPropertyValue("CornerRadius", uno::makeAny( mnRadius ) );
                 }
                 catch(const uno::Exception&)
                 {
@@ -1952,22 +1952,22 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
             {
                 uno::Any aAny;
                 aAny <<= maStart;
-                xProps->setPropertyValue(OUString("StartPosition"), aAny);
+                xProps->setPropertyValue("StartPosition", aAny);
 
                 aAny <<= maEnd;
-                xProps->setPropertyValue(OUString("EndPosition"), aAny );
+                xProps->setPropertyValue("EndPosition", aAny );
 
                 aAny <<= (drawing::ConnectorType)mnType;
-                xProps->setPropertyValue(OUString("EdgeKind"), aAny );
+                xProps->setPropertyValue("EdgeKind", aAny );
 
                 aAny <<= mnDelta1;
-                xProps->setPropertyValue(OUString("EdgeLine1Delta"), aAny );
+                xProps->setPropertyValue("EdgeLine1Delta", aAny );
 
                 aAny <<= mnDelta2;
-                xProps->setPropertyValue(OUString("EdgeLine2Delta"), aAny );
+                xProps->setPropertyValue("EdgeLine2Delta", aAny );
 
                 aAny <<= mnDelta3;
-                xProps->setPropertyValue(OUString("EdgeLine3Delta"), aAny );
+                xProps->setPropertyValue("EdgeLine3Delta", aAny );
             }
             SetStyle();
             SetLayer();
@@ -1998,7 +1998,7 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
 
                 if ( bApplySVGD )
                 {
-                    xProps->setPropertyValue( OUString("PolyPolygonBezier" ), maPath );
+                    xProps->setPropertyValue("PolyPolygonBezier", maPath );
                 }
             }
 
@@ -2085,10 +2085,10 @@ void SdXMLMeasureShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         {
             uno::Any aAny;
             aAny <<= maStart;
-            xProps->setPropertyValue(OUString("StartPosition"), aAny);
+            xProps->setPropertyValue("StartPosition", aAny);
 
             aAny <<= maEnd;
-            xProps->setPropertyValue(OUString("EndPosition"), aAny );
+            xProps->setPropertyValue("EndPosition", aAny );
         }
 
         // delete pre created fields
@@ -2179,7 +2179,7 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
            GetImport().GetShapeImport()->IsPresentationShapesSupported();
 
     uno::Reference< lang::XServiceInfo > xInfo( mxShapes, uno::UNO_QUERY );
-    const sal_Bool bIsOnHandoutPage = xInfo.is() && xInfo->supportsService( OUString( "com.sun.star.presentation.HandoutMasterPage") );
+    const sal_Bool bIsOnHandoutPage = xInfo.is() && xInfo->supportsService("com.sun.star.presentation.HandoutMasterPage");
 
     if( bIsOnHandoutPage )
     {
@@ -2269,20 +2269,20 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         sal_Bool bIsAutoGrowWidth = sal_False;
         if ( xProps.is() )
         {
-            uno::Any aAny( xProps->getPropertyValue( OUString("TextAutoGrowWidth" ) ) );
+            uno::Any aAny( xProps->getPropertyValue("TextAutoGrowWidth") );
             aAny >>= bIsAutoGrowWidth;
 
             if ( bIsAutoGrowWidth )
-                xProps->setPropertyValue( OUString("TextAutoGrowWidth"), uno::makeAny( sal_False ) );
+                xProps->setPropertyValue("TextAutoGrowWidth", uno::makeAny( sal_False ) );
         }
 
         // set pos, size, shear and rotate
         SetTransformation();
         if( xProps.is() )
-            xProps->setPropertyValue(OUString("CaptionPoint"), uno::makeAny( maCaptionPoint ) );
+            xProps->setPropertyValue("CaptionPoint", uno::makeAny( maCaptionPoint ) );
 
         if ( bIsAutoGrowWidth )
-            xProps->setPropertyValue( OUString("TextAutoGrowWidth"), uno::makeAny( sal_True ) );
+            xProps->setPropertyValue("TextAutoGrowWidth", uno::makeAny( sal_True ) );
 
         if(mnRadius)
         {
@@ -2291,7 +2291,7 @@ void SdXMLCaptionShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             {
                 try
                 {
-                    xPropSet->setPropertyValue(OUString("CornerRadius"), uno::makeAny( mnRadius ) );
+                    xPropSet->setPropertyValue("CornerRadius", uno::makeAny( mnRadius ) );
                 }
                 catch(const uno::Exception&)
                 {
@@ -2396,16 +2396,16 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
             sal_Int32 nUPD, nBuildId;
             if( GetImport().getBuildIds( nUPD, nBuildId ) && (nUPD == 645) ) try
             {
-                xPropset->setPropertyValue( OUString("FillStyle"), Any( FillStyle_NONE ) );
-                xPropset->setPropertyValue( OUString("LineStyle"), Any( LineStyle_NONE ) );
+                xPropset->setPropertyValue("FillStyle", Any( FillStyle_NONE ) );
+                xPropset->setPropertyValue("LineStyle", Any( LineStyle_NONE ) );
             }
             catch(const Exception&)
             {
             }
 
             uno::Reference< beans::XPropertySetInfo > xPropsInfo( xPropset->getPropertySetInfo() );
-            if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString("IsEmptyPresentationObject" )))
-                xPropset->setPropertyValue( OUString("IsEmptyPresentationObject" ), ::cppu::bool2any( mbIsPlaceholder ) );
+            if( xPropsInfo.is() && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
+                xPropset->setPropertyValue("IsEmptyPresentationObject", ::cppu::bool2any( mbIsPlaceholder ) );
 
             if( !mbIsPlaceholder )
             {
@@ -2415,8 +2415,8 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
                     aAny <<= GetImport().ResolveGraphicObjectURL( maURL, GetImport().isGraphicLoadOnDemandSupported() );
                     try
                     {
-                        xPropset->setPropertyValue( OUString("GraphicURL" ), aAny );
-                        xPropset->setPropertyValue( OUString("GraphicStreamURL" ), aAny );
+                        xPropset->setPropertyValue("GraphicURL", aAny );
+                        xPropset->setPropertyValue("GraphicStreamURL", aAny );
                     }
                     catch (const lang::IllegalArgumentException&)
                     {
@@ -2433,8 +2433,8 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
                 uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
                 if( xPropsInfo.is() )
                 {
-                    if( xPropsInfo->hasPropertyByName(OUString("IsPlaceholderDependent" )))
-                        xProps->setPropertyValue( OUString("IsPlaceholderDependent" ), ::cppu::bool2any( sal_False ) );
+                    if( xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
+                        xProps->setPropertyValue("IsPlaceholderDependent", ::cppu::bool2any( sal_False ) );
                 }
             }
         }
@@ -2459,8 +2459,8 @@ void SdXMLGraphicObjectShapeContext::EndElement()
                 if(xProps.is())
                 {
                     const uno::Any aAny( uno::makeAny( sURL ) );
-                    xProps->setPropertyValue( OUString("GraphicURL" ), aAny );
-                    xProps->setPropertyValue( OUString("GraphicStreamURL" ), aAny );
+                    xProps->setPropertyValue("GraphicURL", aAny );
+                    xProps->setPropertyValue("GraphicStreamURL", aAny );
                 }
             }
             catch (const lang::IllegalArgumentException&)
@@ -2553,17 +2553,17 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
             if(xProps.is())
             {
                 uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
-                if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString("IsEmptyPresentationObject" )))
-                    xProps->setPropertyValue( OUString("IsEmptyPresentationObject" ), ::cppu::bool2any( sal_False ) );
+                if( xPropsInfo.is() && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
+                    xProps->setPropertyValue("IsEmptyPresentationObject", ::cppu::bool2any( sal_False ) );
 
                 uno::Any aAny;
 
                 const OUString aCLSID( "12DCAE26-281F-416F-a234-c3086127382e");
 
                 aAny <<= aCLSID;
-                xProps->setPropertyValue( OUString("CLSID" ), aAny );
+                xProps->setPropertyValue("CLSID", aAny );
 
-                aAny = xProps->getPropertyValue( OUString("Model" ) );
+                aAny = xProps->getPropertyValue("Model");
                 uno::Reference< frame::XModel > xChartModel;
                 if( aAny >>= xChartModel )
                 {
@@ -2580,8 +2580,8 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
                 uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
                 if( xPropsInfo.is() )
                 {
-                    if( xPropsInfo->hasPropertyByName(OUString("IsPlaceholderDependent" )))
-                        xProps->setPropertyValue( OUString("IsPlaceholderDependent" ), ::cppu::bool2any( sal_False ) );
+                    if( xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
+                        xProps->setPropertyValue("IsPlaceholderDependent", ::cppu::bool2any( sal_False ) );
                 }
             }
         }
@@ -2687,11 +2687,11 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
                 uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
                 if( xPropsInfo.is() )
                 {
-                    if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName(OUString("IsEmptyPresentationObject" )))
-                        xProps->setPropertyValue( OUString("IsEmptyPresentationObject" ), ::cppu::bool2any( sal_False ) );
+                    if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
+                        xProps->setPropertyValue("IsEmptyPresentationObject", ::cppu::bool2any( sal_False ) );
 
-                    if( mbIsUserTransformed && xPropsInfo->hasPropertyByName(OUString("IsPlaceholderDependent" )))
-                        xProps->setPropertyValue( OUString("IsPlaceholderDependent" ), ::cppu::bool2any( sal_False ) );
+                    if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
+                        xProps->setPropertyValue("IsPlaceholderDependent", ::cppu::bool2any( sal_False ) );
                 }
             }
         }
@@ -2711,13 +2711,13 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
                     if ( aPersistName.startsWith( sURL ) )
                         aPersistName = aPersistName.copy( sURL.getLength() );
 
-                    xProps->setPropertyValue( OUString(  "PersistName"  ),
+                    xProps->setPropertyValue("PersistName",
                                               uno::makeAny( aPersistName ) );
                 }
                 else
                 {
                     // this is OOo link object
-                    xProps->setPropertyValue( OUString(  "LinkURL"  ),
+                    xProps->setPropertyValue("LinkURL",
                                               uno::makeAny( aPersistName ) );
                 }
             }
@@ -2747,8 +2747,8 @@ void SdXMLObjectShapeContext::EndElement()
 
         if( xProps.is() )
         {
-            xProps->setPropertyValue(OUString("FillStyle"), uno::makeAny(drawing::FillStyle_NONE));
-            xProps->setPropertyValue(OUString("LineStyle"), uno::makeAny(drawing::LineStyle_NONE));
+            xProps->setPropertyValue("FillStyle", uno::makeAny(drawing::FillStyle_NONE));
+            xProps->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
         }
     }
 
@@ -2762,7 +2762,7 @@ void SdXMLObjectShapeContext::EndElement()
 
         uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
         if( xProps.is() )
-            xProps->setPropertyValue( OUString(  "PersistName"  ), uno::makeAny( aPersistName ) );
+            xProps->setPropertyValue("PersistName", uno::makeAny( aPersistName ) );
     }
 
     SdXMLShapeContext::EndElement();
@@ -2819,10 +2819,10 @@ SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
             uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
             if( xPropSet.is() )
             {
-                xPropSet->setPropertyValue( OUString("CLSID" ), uno::makeAny( maCLSID ) );
+                xPropSet->setPropertyValue("CLSID", uno::makeAny( maCLSID ) );
 
                 uno::Reference< lang::XComponent > xComp;
-                xPropSet->getPropertyValue( OUString("Model" ) ) >>= xComp;
+                xPropSet->getPropertyValue("Model") >>= xComp;
                 DBG_ASSERT( xComp.is(), "no xModel for own OLE format" );
                 pEContext->SetComponent( xComp );
             }
@@ -2916,42 +2916,42 @@ void SdXMLAppletShapeContext::EndElement()
             // the visual area for applet must be set on loading
             awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
             aAny <<= aRect;
-            xProps->setPropertyValue( OUString(  "VisibleArea"  ), aAny );
+            xProps->setPropertyValue("VisibleArea", aAny );
         }
 
         if( maParams.getLength() )
         {
             aAny <<= maParams;
-            xProps->setPropertyValue( OUString(  "AppletCommands"  ), aAny );
+            xProps->setPropertyValue("AppletCommands", aAny );
         }
 
         if( !maHref.isEmpty() )
         {
             aAny <<= maHref;
-            xProps->setPropertyValue( OUString(  "AppletCodeBase"  ), aAny );
+            xProps->setPropertyValue("AppletCodeBase", aAny );
         }
 
         if( !maAppletName.isEmpty() )
         {
             aAny <<= maAppletName;
-            xProps->setPropertyValue( OUString(  "AppletName"  ), aAny );
+            xProps->setPropertyValue("AppletName", aAny );
         }
 
         if( mbIsScript )
         {
             aAny <<= mbIsScript;
-            xProps->setPropertyValue( OUString(  "AppletIsScript"  ), aAny );
+            xProps->setPropertyValue("AppletIsScript", aAny );
 
         }
 
         if( !maAppletCode.isEmpty() )
         {
             aAny <<= maAppletCode;
-            xProps->setPropertyValue( OUString(  "AppletCode"  ), aAny );
+            xProps->setPropertyValue("AppletCode", aAny );
         }
 
         aAny <<= OUString( GetImport().GetDocumentBase() );
-        xProps->setPropertyValue( OUString(  "AppletDocBase"  ), aAny );
+        xProps->setPropertyValue("AppletDocBase", aAny );
 
         SetThumbnail();
     }
@@ -3072,11 +3072,11 @@ void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Referen
                 uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
                 if( xPropsInfo.is() )
                 {
-                    if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName(OUString("IsEmptyPresentationObject" )))
-                        xProps->setPropertyValue( OUString("IsEmptyPresentationObject" ), ::cppu::bool2any( sal_False ) );
+                    if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
+                        xProps->setPropertyValue("IsEmptyPresentationObject", ::cppu::bool2any( sal_False ) );
 
-                    if( mbIsUserTransformed && xPropsInfo->hasPropertyByName(OUString("IsPlaceholderDependent" )))
-                        xProps->setPropertyValue( OUString("IsPlaceholderDependent" ), ::cppu::bool2any( sal_False ) );
+                    if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
+                        xProps->setPropertyValue("IsPlaceholderDependent", ::cppu::bool2any( sal_False ) );
                 }
             }
         }
@@ -3151,19 +3151,19 @@ void SdXMLPluginShapeContext::EndElement()
             if( maParams.getLength() )
             {
                 aAny <<= maParams;
-                xProps->setPropertyValue( OUString(  "PluginCommands"  ), aAny );
+                xProps->setPropertyValue("PluginCommands", aAny );
             }
 
             if( !maMimeType.isEmpty() )
             {
                 aAny <<= maMimeType;
-                xProps->setPropertyValue( OUString(  "PluginMimeType"  ), aAny );
+                xProps->setPropertyValue("PluginMimeType", aAny );
             }
 
             if( !maHref.isEmpty() )
             {
                 aAny <<= maHref;
-                xProps->setPropertyValue( OUString(  "PluginURL"  ), aAny );
+                xProps->setPropertyValue("PluginURL", aAny );
             }
         }
         else
@@ -3181,21 +3181,21 @@ void SdXMLPluginShapeContext::EndElement()
                 {
                     OUString aValueStr;
                     maParams[ nParam ].Value >>= aValueStr;
-                    xProps->setPropertyValue( OUString(  "Loop"  ),
+                    xProps->setPropertyValue("Loop",
                         uno::makeAny( static_cast< sal_Bool >( 0 == aValueStr.compareToAscii( "true" ) ) ) );
                 }
                 else if( 0 == rName.compareToAscii( "Mute" ) )
                 {
                     OUString aValueStr;
                     maParams[ nParam ].Value >>= aValueStr;
-                    xProps->setPropertyValue( OUString(  "Mute"  ),
+                    xProps->setPropertyValue("Mute",
                         uno::makeAny( static_cast< sal_Bool >( 0 == aValueStr.compareToAscii( "true" ) ) ) );
                 }
                 else if( 0 == rName.compareToAscii( "VolumeDB" ) )
                 {
                     OUString aValueStr;
                     maParams[ nParam ].Value >>= aValueStr;
-                    xProps->setPropertyValue( OUString(  "VolumeDB"  ),
+                    xProps->setPropertyValue("VolumeDB",
                                                 uno::makeAny( static_cast< sal_Int16 >( aValueStr.toInt32() ) ) );
                 }
                 else if( 0 == rName.compareToAscii( "Zoom" ) )
@@ -3224,7 +3224,7 @@ void SdXMLPluginShapeContext::EndElement()
                     else
                         eZoomLevel = media::ZoomLevel_NOT_AVAILABLE;
 
-                    xProps->setPropertyValue( OUString(  "Zoom"  ), uno::makeAny( eZoomLevel ) );
+                    xProps->setPropertyValue("Zoom", uno::makeAny( eZoomLevel ) );
                 }
             }
         }
@@ -3315,13 +3315,13 @@ void SdXMLFloatingFrameShapeContext::StartElement( const ::com::sun::star::uno::
             if( !maFrameName.isEmpty() )
             {
                 aAny <<= maFrameName;
-                xProps->setPropertyValue( OUString(  "FrameName"  ), aAny );
+                xProps->setPropertyValue("FrameName", aAny );
             }
 
             if( !maHref.isEmpty() )
             {
                 aAny <<= maHref;
-                xProps->setPropertyValue( OUString(  "FrameURL"  ), aAny );
+                xProps->setPropertyValue("FrameURL", aAny );
             }
         }
 
@@ -3367,7 +3367,7 @@ void SdXMLFloatingFrameShapeContext::EndElement()
             awt::Rectangle aRect( 0, 0, maSize.Width, maSize.Height );
             uno::Any aAny;
             aAny <<= aRect;
-            xProps->setPropertyValue( OUString(  "VisibleArea"  ), aAny );
+            xProps->setPropertyValue("VisibleArea", aAny );
         }
     }
 
@@ -3451,12 +3451,12 @@ OUString SdXMLFrameShapeContext::getGraphicURLFromImportContext(const SvXMLImpor
 
             if(xPropSet.is())
             {
-                xPropSet->getPropertyValue(OUString("GraphicStreamURL")) >>= aRetval;
+                xPropSet->getPropertyValue("GraphicStreamURL") >>= aRetval;
 
                 if(!aRetval.getLength())
                 {
                     // it maybe a link, try GraphicURL
-                    xPropSet->getPropertyValue(OUString("GraphicURL")) >>= aRetval;
+                    xPropSet->getPropertyValue("GraphicURL") >>= aRetval;
                 }
             }
         }
@@ -3895,11 +3895,11 @@ void SdXMLTableShapeContext::StartElement( const ::com::sun::star::uno::Referenc
                 uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
                 if( xPropsInfo.is() )
                 {
-                    if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName(OUString("IsEmptyPresentationObject" )))
-                        xProps->setPropertyValue( OUString("IsEmptyPresentationObject" ), ::cppu::bool2any( sal_False ) );
+                    if( !mbIsPlaceholder && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
+                        xProps->setPropertyValue("IsEmptyPresentationObject", ::cppu::bool2any( sal_False ) );
 
-                    if( mbIsUserTransformed && xPropsInfo->hasPropertyByName(OUString("IsPlaceholderDependent" )))
-                        xProps->setPropertyValue( OUString("IsPlaceholderDependent" ), ::cppu::bool2any( sal_False ) );
+                    if( mbIsUserTransformed && xPropsInfo->hasPropertyByName("IsPlaceholderDependent"))
+                        xProps->setPropertyValue("IsPlaceholderDependent", ::cppu::bool2any( sal_False ) );
                 }
             }
         }
@@ -3915,7 +3915,7 @@ void SdXMLTableShapeContext::StartElement( const ::com::sun::star::uno::Referenc
                 const OUString sFamilyName( "table"  );
                 Reference< XNameAccess > xTableFamily( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
                 Reference< XStyle > xTableStyle( xTableFamily->getByName( msTemplateStyleName ), UNO_QUERY_THROW );
-                xProps->setPropertyValue( OUString(  "TableTemplate"  ), Any( xTableStyle ) );
+                xProps->setPropertyValue("TableTemplate", Any( xTableStyle ) );
             }
             catch(const Exception&)
             {
@@ -3943,7 +3943,7 @@ void SdXMLTableShapeContext::StartElement( const ::com::sun::star::uno::Referenc
         if( xTableImport.is() && xProps.is() )
         {
             uno::Reference< table::XColumnRowRange > xColumnRowRange(
-                xProps->getPropertyValue( OUString("Model" ) ), uno::UNO_QUERY );
+                xProps->getPropertyValue("Model"), uno::UNO_QUERY );
 
             if( xColumnRowRange.is() )
                 mxTableImportContext = xTableImport->CreateTableContext( GetPrefix(), GetLocalName(), xColumnRowRange );

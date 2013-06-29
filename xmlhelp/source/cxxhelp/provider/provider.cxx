@@ -276,7 +276,7 @@ void ContentProvider::init()
         if( xAccess.is() )
         {
             uno::Any aAny =
-                xAccess->getByName( OUString( "Help" ) );
+                xAccess->getByName("Help");
             aAny >>= m_xContainer;
             if( m_xContainer.is() )
                 m_xContainer->addContainerListener( this );
@@ -309,7 +309,7 @@ void ContentProvider::init()
                     lParams) );
 
         uno::Reference< container::XNameAccess > xDirectAccess(xCFG, uno::UNO_QUERY);
-        uno::Any aRet = xDirectAccess->getByName(OUString("ooSetupExtension"));
+        uno::Any aRet = xDirectAccess->getByName("ooSetupExtension");
 
         aRet >>= setupextension;
     }

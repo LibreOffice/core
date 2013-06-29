@@ -360,7 +360,7 @@ void SAL_CALL OLESimpleStorage::insertByName( const OUString& aName, const uno::
     }
     catch( const uno::Exception& e )
     {
-        throw lang::WrappedTargetException( OUString(  "Insert has failed!"  ),
+        throw lang::WrappedTargetException("Insert has failed!",
                                             uno::Reference< uno::XInterface >(),
                                             uno::makeAny( e ) );
     }
@@ -417,7 +417,7 @@ void SAL_CALL OLESimpleStorage::replaceByName( const OUString& aName, const uno:
     {
            uno::Any aCaught( ::cppu::getCaughtException() );
 
-        throw lang::WrappedTargetException( OUString("Can't copy raw stream"),
+        throw lang::WrappedTargetException("Can't copy raw stream",
                                             uno::Reference< uno::XInterface >(),
                                             aCaught );
     }

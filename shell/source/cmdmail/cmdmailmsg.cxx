@@ -153,7 +153,7 @@ Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
     else if( 0 == aName.compareToAscii( "attachment" ) &&  m_Attachments.getLength() )
         return makeAny( m_Attachments );
 
-   throw NoSuchElementException( OUString("key not found: ") + aName,
+   throw NoSuchElementException("key not found: " + aName,
         static_cast < XNameAccess * > (this) );
 }
 

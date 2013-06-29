@@ -439,7 +439,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     uno::RuntimeException)
 {
     // nothing to set here
-    throw lang::IllegalArgumentException( OUString("Property is read-only: ")
+    throw lang::IllegalArgumentException("Property is read-only: "
             + PropertyName, static_cast< cppu::OWeakObject * >(this), 0 );
 }
 

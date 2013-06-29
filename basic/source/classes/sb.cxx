@@ -221,7 +221,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
             {
                 try
                 {
-                    xDocFac->createInstance( OUString( "ooo.vba.VBAGlobals" ) );
+                    xDocFac->createInstance("ooo.vba.VBAGlobals");
                 }
                 catch(const Exception& )
                 {

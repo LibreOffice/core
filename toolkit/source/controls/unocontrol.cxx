@@ -236,7 +236,7 @@ bool UnoControl::ImplCheckLocalize( OUString& _rPossiblyLocalizable )
     {
         Reference< XPropertySet > xPropSet( mxModel, UNO_QUERY_THROW );
         Reference< resource::XStringResourceResolver > xStringResourceResolver(
-            xPropSet->getPropertyValue( OUString( "ResourceResolver" ) ),
+            xPropSet->getPropertyValue("ResourceResolver"),
             UNO_QUERY
         );
         if ( xStringResourceResolver.is() )
@@ -1355,7 +1355,7 @@ sal_Bool UnoControl::setModel( const Reference< XControlModel >& rxModel ) throw
             Sequence< OUString> aNames = lcl_ImplGetPropertyNames( xPropSet );
             xPropSet->addPropertiesChangeListener( aNames, xListener );
 
-            mpData->bLocalizationSupport = xPSI->hasPropertyByName( OUString( "ResourceResolver" ) );
+            mpData->bLocalizationSupport = xPSI->hasPropertyByName("ResourceResolver");
         }
         catch( const Exception& )
         {

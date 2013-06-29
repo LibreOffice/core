@@ -236,7 +236,7 @@ namespace
         sal_Int32 nResult = 0x000000;
         try
         {
-            xSceneProperties->getPropertyValue(OUString("D3DSceneAmbientColor")) >>= nResult;
+            xSceneProperties->getPropertyValue("D3DSceneAmbientColor") >>= nResult;
         }
         catch( const uno::Exception & ex )
         {
@@ -253,7 +253,7 @@ namespace
     {
         try
         {
-            xSceneProperties->setPropertyValue(OUString("D3DSceneAmbientColor"),
+            xSceneProperties->setPropertyValue("D3DSceneAmbientColor",
                                                uno::makeAny( rColor.GetColor()));
         }
         catch( const uno::Exception & ex )

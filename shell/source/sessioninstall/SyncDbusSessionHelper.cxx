@@ -53,7 +53,7 @@ namespace
                                NULL,
                                error.getRef());
         if(!proxy)
-            throw RuntimeException(OUString("couldnt get a proxy!"),NULL);
+            throw RuntimeException("couldnt get a proxy!",NULL);
         return proxy;
     }
 }

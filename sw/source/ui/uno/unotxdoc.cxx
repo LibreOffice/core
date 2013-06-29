@@ -3165,7 +3165,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     const bool bComplex = 0 != (nScriptTypes & nComplex);
 
     if (nScriptTypes < nLatin || nScriptTypes > (nLatin | nAsian | nComplex))
-        throw IllegalArgumentException(OUString("nScriptTypes ranges from 1 to 7!"), Reference< XInterface >(), 1);
+        throw IllegalArgumentException("nScriptTypes ranges from 1 to 7!", Reference< XInterface >(), 1);
     if (!pDocShell)
         throw DisposedException();
     SwDoc* pDoc = pDocShell->GetDoc();

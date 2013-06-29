@@ -271,7 +271,7 @@ sal_Bool FileExists( const INetURLObject& rURL )
             ::ucbhelper::Content        aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
             OUString    aTitle;
 
-            aCnt.getPropertyValue( OUString("Title") ) >>= aTitle;
+            aCnt.getPropertyValue("Title") >>= aTitle;
             bRet = ( !aTitle.isEmpty() );
         }
         catch( const ucb::ContentCreationException& )

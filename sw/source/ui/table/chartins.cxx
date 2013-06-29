@@ -208,7 +208,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                     {
                         //get dialog size:
                         awt::Size aDialogAWTSize;
-                        if( xDialogProps->getPropertyValue( OUString("Size") )
+                        if( xDialogProps->getPropertyValue("Size")
                             >>= aDialogAWTSize )
                         {
                             Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
@@ -220,7 +220,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                                     aSwRect = pFlyFrmFmt->GetAnchoredObj()->GetObjRectWithSpaces();
                                 Rectangle aRect( aSwRect.SVRect() );
                                 Point aDialogPos = SwGetChartDialogPos( &rWrtShell.GetView().GetEditWin(), aDialogSize, aRect );
-                                xDialogProps->setPropertyValue( OUString("Position"),
+                                xDialogProps->setPropertyValue("Position",
                                     uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
                             }
                         }

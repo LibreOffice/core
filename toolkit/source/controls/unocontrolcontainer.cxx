@@ -289,7 +289,7 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_getFreeIdenti
         if ( existent == maControls.end() )
             return candidateId;
     }
-    throw uno::RuntimeException( OUString( "out of identifiers" ), NULL );
+    throw uno::RuntimeException("out of identifiers", NULL );
 }
 
 //------------------------------------------------------------------------
@@ -308,7 +308,7 @@ OUString UnoControlHolderList::impl_getFreeName_throw()
         if ( loop == maControls.end() )
             return candidateName;
     }
-    throw uno::RuntimeException( OUString( "out of identifiers" ), NULL );
+    throw uno::RuntimeException("out of identifiers", NULL );
 }
 //  ----------------------------------------------------
 //  Function to set the controls' visibility according

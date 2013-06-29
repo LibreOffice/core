@@ -62,13 +62,13 @@ void SwVbaWrapFormat::makeWrap() throw (uno::RuntimeException)
             case word::WdWrapType::wdWrapSquare:
             {
                 eTextMode = text::WrapTextMode_PARALLEL;
-                m_xPropertySet->setPropertyValue( OUString("SurroundContour"), uno::makeAny( sal_False ) );
+                m_xPropertySet->setPropertyValue("SurroundContour", uno::makeAny( sal_False ) );
                 break;
             }
             case word::WdWrapType::wdWrapTight:
             {
                 eTextMode = text::WrapTextMode_PARALLEL;
-                m_xPropertySet->setPropertyValue( OUString("SurroundContour"), uno::makeAny( sal_True ) );
+                m_xPropertySet->setPropertyValue("SurroundContour", uno::makeAny( sal_True ) );
                 break;
             }
             default:
@@ -77,14 +77,14 @@ void SwVbaWrapFormat::makeWrap() throw (uno::RuntimeException)
             }
         }
     }
-    m_xPropertySet->setPropertyValue( OUString("TextWrap"), uno::makeAny( eTextMode ) );
+    m_xPropertySet->setPropertyValue("TextWrap", uno::makeAny( eTextMode ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaWrapFormat::getType() throw (uno::RuntimeException)
 {
     sal_Int32 nType = word::WdWrapType::wdWrapSquare;
     text::WrapTextMode eTextMode;
-    m_xPropertySet->getPropertyValue( OUString("TextWrap")) >>= eTextMode;
+    m_xPropertySet->getPropertyValue("TextWrap") >>= eTextMode;
     switch( eTextMode )
     {
         case text::WrapTextMode_NONE:
@@ -100,7 +100,7 @@ void SwVbaWrapFormat::makeWrap() throw (uno::RuntimeException)
         case text::WrapTextMode_PARALLEL:
         {
             sal_Bool bContour = sal_False;
-            m_xPropertySet->getPropertyValue( OUString("SurroundContour")) >>= bContour;
+            m_xPropertySet->getPropertyValue("SurroundContour") >>= bContour;
             if( bContour )
                 nType = word::WdWrapType::wdWrapTight;
             else
@@ -132,7 +132,7 @@ void SAL_CALL SwVbaWrapFormat::setType( ::sal_Int32 _type ) throw (uno::RuntimeE
 {
     sal_Int32 nSide = word::WdWrapSideType::wdWrapBoth;
     text::WrapTextMode eTextMode;
-    m_xPropertySet->getPropertyValue( OUString("TextWrap")) >>= eTextMode;
+    m_xPropertySet->getPropertyValue("TextWrap") >>= eTextMode;
     switch( eTextMode )
     {
         case text::WrapTextMode_LEFT:

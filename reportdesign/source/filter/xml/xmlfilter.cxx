@@ -247,7 +247,7 @@ sal_Int32 ReadThroughComponent(
             xDocStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
 
             uno::Reference< beans::XPropertySet > xProps( xDocStream, uno::UNO_QUERY_THROW );
-            xProps->getPropertyValue( OUString("Encrypted") ) >>= bEncrypted;
+            xProps->getPropertyValue("Encrypted") >>= bEncrypted;
         }
         catch (const packages::WrongPasswordException&)
         {
@@ -551,9 +551,9 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         ::comphelper::MediaDescriptor aDescriptor(rDescriptor);
         uno::Reference<beans::XPropertySet> xProp = comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
         const OUString sVal( aDescriptor.getUnpackedValueOrDefault(aDescriptor.PROP_DOCUMENTBASEURL(),OUString()) );
-        xProp->setPropertyValue(OUString("BaseURI"), uno::makeAny(sVal));
-        const OUString sHierarchicalDocumentName( aDescriptor.getUnpackedValueOrDefault(OUString("HierarchicalDocumentName"),OUString()) );
-        xProp->setPropertyValue(OUString("StreamRelPath"), uno::makeAny(sHierarchicalDocumentName));
+        xProp->setPropertyValue("BaseURI", uno::makeAny(sVal));
+        const OUString sHierarchicalDocumentName( aDescriptor.getUnpackedValueOrDefault("HierarchicalDocumentName",OUString()) );
+        xProp->setPropertyValue("StreamRelPath", uno::makeAny(sHierarchicalDocumentName));
 
         uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
         static const OUString s_sMeta("meta.xml");

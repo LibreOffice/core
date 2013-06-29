@@ -142,7 +142,7 @@ void ODataStreamTest::testInvariant(
     if( info.is() )
     {
         ERROR_ASSERT( info->supportsService( TestName ), "XServiceInfo test failed" );
-        ERROR_ASSERT( ! info->supportsService( OUString("bla bluzb") ) , "XServiceInfo test failed" );
+        ERROR_ASSERT( ! info->supportsService("bla bluzb") , "XServiceInfo test failed" );
     }
 
 }
@@ -694,7 +694,7 @@ void OObjectStreamTest::testInvariant( const OUString& TestName,
     if( info.is() )
     {
         ERROR_ASSERT( info->supportsService( TestName ), "XServiceInfo test failed" );
-        ERROR_ASSERT( ! info->supportsService( OUString("bla bluzb") ) , "XServiceInfo test failed" );
+        ERROR_ASSERT( ! info->supportsService("bla bluzb") , "XServiceInfo test failed" );
     }
 
 }
@@ -812,57 +812,57 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
 {
     sal_Bool b = sal_True;
 
-    if( r1->getPropertyValue( OUString("long") ).getValueType() == getCppuVoidType() ||
-        r2->getPropertyValue( OUString("long") ).getValueType() == getCppuVoidType() ) {
+    if( r1->getPropertyValue("long").getValueType() == getCppuVoidType() ||
+        r2->getPropertyValue("long").getValueType() == getCppuVoidType() ) {
 
         // one of the objects is not the correct propertyset !
         fprintf( stderr, "compareMyPropertySet: 1\n" );
         return sal_False;
     }
 
-    b = b && (  r1->getPropertyValue( OUString("long") ) ==
-                r2->getPropertyValue( OUString("long") ) );
+    b = b && (  r1->getPropertyValue("long") ==
+                r2->getPropertyValue("long") );
     if( ! b ) fprintf( stderr, "compareMyPropertySet: 2\n" );
 
-    b = b && (  r1->getPropertyValue( OUString("float") ) ==
-                r2->getPropertyValue( OUString("float") ) );
+    b = b && (  r1->getPropertyValue("float") ==
+                r2->getPropertyValue("float") );
     if( ! b ){
         float f1(0.0);
         float f2(0.0);
-        r1->getPropertyValue( OUString("float") ) >>= f1;
-        r2->getPropertyValue( OUString("float") ) >>= f2;
+        r1->getPropertyValue("float") >>= f1;
+        r2->getPropertyValue("float") >>= f2;
         fprintf( stderr, "compareMyPropertySet: %f %f 3\n",f1,f2 );
     }
 
-    b = b && (  r1->getPropertyValue( OUString("double") ) ==
-                r2->getPropertyValue( OUString("double" )) );
+    b = b && (  r1->getPropertyValue("double") ==
+                r2->getPropertyValue("double") );
     if( ! b ) fprintf( stderr, "compareMyPropertySet: 4\n" );
 
     sal_Bool b1(sal_False), b2(sal_False);
-    Any a =r1->getPropertyValue( OUString("bool") );
+    Any a =r1->getPropertyValue("bool");
     a >>= b1;
-    a = r2->getPropertyValue( OUString("bool") );
+    a = r2->getPropertyValue("bool");
     a >>= b2;
     b = b && ( (b1 && b2) || b1 == b2 );
     if( ! b ) fprintf( stderr, "compareMyPropertySet: 5\n" );
 
-//      b = b &&    r1->getPropertyValue( OUString("bool") ) ==
-//                  r2->getPropertyValue( OUString("bool") ) );
+//      b = b &&    r1->getPropertyValue("bool") ==
+//                  r2->getPropertyValue("bool") );
 
-    b = b && (  r1->getPropertyValue( OUString("byte") ) ==
-                r2->getPropertyValue( OUString("byte") ) );
+    b = b && (  r1->getPropertyValue("byte") ==
+                r2->getPropertyValue("byte") );
     if( ! b ) fprintf( stderr, "compareMyPropertySet: 6\n" );
 
-    b = b && (  r1->getPropertyValue( OUString("char") ) ==
-                r2->getPropertyValue( OUString("char") ) );
+    b = b && (  r1->getPropertyValue("char") ==
+                r2->getPropertyValue("char") );
     if( ! b ) fprintf( stderr, "compareMyPropertySet: 7\n" );
 
-    b = b && (  r1->getPropertyValue( OUString("string") ) ==
-                r2->getPropertyValue( OUString("string") ));
+    b = b && (  r1->getPropertyValue("string") ==
+                r2->getPropertyValue("string"));
     if( ! b ) fprintf( stderr, "compareMyPropertySet: 8\n" );
 
-    Any o1 = r1->getPropertyValue( OUString("object") );
-    Any o2 = r2->getPropertyValue( OUString("object") );
+    Any o1 = r1->getPropertyValue("object");
+    Any o2 = r2->getPropertyValue("object");
 
     if( o1.getValueType() == getCppuType( (Reference<XPersistObject>*)0 ) ) {
 
@@ -943,34 +943,34 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         Any any;
         sal_Int32 i = 0x83482;
         any <<= i;
-        rProp->setPropertyValue( OUString( "long") , any );
+        rProp->setPropertyValue("long", any );
 
         float f = (float)42.23;
         any <<= f;
-        rProp->setPropertyValue( OUString( "float") , any );
+        rProp->setPropertyValue("float", any );
 
         double d = 233.321412;
         any <<= d;
-        rProp->setPropertyValue( OUString( "double") , any );
+        rProp->setPropertyValue("double", any );
 
         sal_Bool b = sal_True;
         any.setValue( &b , getCppuBooleanType() );
-        rProp->setPropertyValue( OUString( "bool") , any );
+        rProp->setPropertyValue("bool", any );
 
         sal_Int8 by = 120;
         any <<= by;
-        rProp->setPropertyValue( OUString( "byte") , any );
+        rProp->setPropertyValue("byte", any );
 
         sal_Unicode c = 'h';
         any.setValue( &c , getCppuCharType() );
-        rProp->setPropertyValue( OUString( "char") , any );
+        rProp->setPropertyValue("char", any );
 
         OUString str( "hi du !"  );
         any <<= str;
-        rProp->setPropertyValue( OUString( "string") , any );
+        rProp->setPropertyValue("string", any );
 
         any <<= persistRef;
-        rProp->setPropertyValue( OUString( "object") , any );
+        rProp->setPropertyValue("object", any );
 
         // do read and write
         rOut->writeObject( persistRef );
@@ -981,8 +981,8 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         ERROR_ASSERT( compareMyPropertySet( rProp , rPropRead ) , "objects has not been read properly !" );
 
         // destroy selfreferences
-        rProp->setPropertyValue( OUString("object"), Any() );
-        rPropRead->setPropertyValue( OUString("object"), Any() );
+        rProp->setPropertyValue("object", Any() );
+        rPropRead->setPropertyValue("object", Any() );
     }
 
     {
@@ -993,7 +993,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         // buffering and marks work correctly
         for( int i = 0 ; i < 2000 ; i ++ ) {
 
-            Reference < XInterface > x = m_rFactory->createInstance(OUString("test.com.sun.star.io.PersistTest"));
+            Reference < XInterface > x = m_rFactory->createInstance("test.com.sun.star.io.PersistTest");
             Reference< XPersistObject >  persistRef( x , UNO_QUERY );
 
             Reference < XPropertySet >  rProp( persistRef , UNO_QUERY );
@@ -1002,39 +1002,39 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
             Any any;
             sal_Int32 i = 0x83482;
             any <<= i;
-            rProp->setPropertyValue( OUString( "long") , any );
+            rProp->setPropertyValue("long", any );
 
             float f = 42.23;
             any <<= f;
-            rProp->setPropertyValue( OUString( "float") , any );
+            rProp->setPropertyValue("float", any );
 
             double d = 233.321412;
             any <<= d;
-            rProp->setPropertyValue( OUString( "double") , any );
+            rProp->setPropertyValue("double", any );
 
             sal_Bool b = sal_True;
             any.setValue( &b , getCppuBooleanType() );
-            rProp->setPropertyValue( OUString( "bool") , any );
+            rProp->setPropertyValue("bool", any );
 
             sal_Int8 by = 120;
             any <<= by;
-            rProp->setPropertyValue( OUString( "byte") , any );
+            rProp->setPropertyValue("byte", any );
 
             sal_Unicode c = 'h';
             any.setValue( &c , getCppuCharType() );
-            rProp->setPropertyValue( OUString( "char") , any );
+            rProp->setPropertyValue("char", any );
 
             OUString str( "hi du !"  );
             any <<= str;
-            rProp->setPropertyValue( OUString( "string") , any );
+            rProp->setPropertyValue("string", any );
 
-            x = m_rFactory->createInstance(OUString("test.com.sun.star.io.PersistTest"));
+            x = m_rFactory->createInstance("test.com.sun.star.io.PersistTest");
             Reference <XPersistObject > persist2ndRef( x , UNO_QUERY );
 
             // Note : persist2ndRef contains coincident values, but also coincident values must be
             // saved properly !
             any <<= persist2ndRef;
-            rProp->setPropertyValue( OUString("object") , any );
+            rProp->setPropertyValue("object", any );
 
             // simply test, if markable operations and object operations do not interfere
             sal_Int32 nMark = markableOut->createMark();

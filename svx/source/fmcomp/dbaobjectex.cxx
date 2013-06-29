@@ -82,7 +82,7 @@ namespace svx
             Reference<XPropertySet> xProp;
             m_aDescriptor[daComponent] >>= xProp;
             if ( xProp.is() )
-                xProp->getPropertyValue(OUString("IsForm")) >>= bForm;
+                xProp->getPropertyValue("IsForm") >>= bForm;
         }
         catch(Exception)
         {}

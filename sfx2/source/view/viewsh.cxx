@@ -456,7 +456,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             {
                 try
                 {
-                    Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
+                    Any aValue = xPropSet->getPropertyValue("LayoutManager");
                     aValue >>= xLayoutManager;
                     if ( xLayoutManager.is() )
                     {

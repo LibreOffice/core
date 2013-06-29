@@ -109,7 +109,7 @@ void SAL_CALL NumberedCollection::releaseNumber(::sal_Int32 nNumber)
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
     if (nNumber == css::frame::UntitledNumbersConst::INVALID_NUMBER)
-        throw css::lang::IllegalArgumentException (OUString("Special valkud INVALID_NUMBER not allowed as input parameter."), m_xOwner.get(), 1);
+        throw css::lang::IllegalArgumentException ("Special valkud INVALID_NUMBER not allowed as input parameter.", m_xOwner.get(), 1);
 
     TDeadItemList               lDeadItems;
     TNumberedItemHash::iterator pComponent;

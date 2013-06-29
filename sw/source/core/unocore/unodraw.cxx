@@ -1107,7 +1107,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
         if(pEntry)
         {
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw beans::PropertyVetoException ( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::PropertyVetoException ("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             //mit Layout kann der Anker umgesetzt werden, ohne dass sich die Position aendert
             if(pFmt)
             {
@@ -1828,7 +1828,7 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
         if(pEntry)
         {
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw uno::RuntimeException( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw uno::RuntimeException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             if(pFmt)
             {
                 const SfxItemSet& rSet = pFmt->GetAttrSet();
@@ -1922,7 +1922,7 @@ void SwXShape::addPropertyChangeListener(
            uno::RuntimeException )
 {
     if ( !xShapeAgg.is() )
-        throw uno::RuntimeException( OUString( "no shape aggregate" ), *this );
+        throw uno::RuntimeException("no shape aggregate", *this );
 
     // must be handled by the aggregate
     uno::Reference< beans::XPropertySet > xShapeProps;
@@ -1937,7 +1937,7 @@ void SwXShape::removePropertyChangeListener(
            uno::RuntimeException )
 {
     if ( !xShapeAgg.is() )
-        throw uno::RuntimeException( OUString( "no shape aggregate" ), *this );
+        throw uno::RuntimeException("no shape aggregate", *this );
 
     // must be handled by the aggregate
     uno::Reference< beans::XPropertySet > xShapeProps;
@@ -2366,9 +2366,9 @@ awt::Point SwXShape::_GetAttrPosition()
 {
     awt::Point aAttrPos;
 
-    uno::Any aHoriPos( getPropertyValue( OUString("HoriOrientPosition") ) );
+    uno::Any aHoriPos( getPropertyValue("HoriOrientPosition") );
     aHoriPos >>= aAttrPos.X;
-    uno::Any aVertPos( getPropertyValue( OUString("VertOrientPosition") ) );
+    uno::Any aVertPos( getPropertyValue("VertOrientPosition") );
     aVertPos >>= aAttrPos.Y;
     // #i35798# - fallback, if attribute position is (0,0)
     // and no anchor position is applied to the drawing object

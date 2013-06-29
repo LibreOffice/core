@@ -405,7 +405,7 @@ namespace frm
 
             // create a query composer
             Reference< XColumnsSupplier > xSuppColumns;
-            xFormProps->getPropertyValue(OUString("SingleSelectQueryComposer")) >>= xSuppColumns;
+            xFormProps->getPropertyValue("SingleSelectQueryComposer") >>= xSuppColumns;
 
             const Reference< XConnection > xConnection( ::dbtools::getConnection( xForm ), UNO_SET_THROW );
             const Reference< XNameAccess > xFieldNames( xSuppColumns->getColumns(), UNO_SET_THROW );

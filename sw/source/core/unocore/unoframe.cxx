@@ -842,7 +842,7 @@ SwXFrame::SwXFrame(FlyCntType eSet, const :: SfxItemPropertySet* pSet, SwDoc *pD
     // Get the style families
     uno::Reference < XNameAccess > xFamilies = xFamilySupplier->getStyleFamilies();
     // Get the Frame family (and keep it for later)
-    const ::uno::Any aAny = xFamilies->getByName ( OUString( "FrameStyles" ) );
+    const ::uno::Any aAny = xFamilies->getByName ("FrameStyles");
     aAny >>= mxStyleFamily;
     // In the derived class, we'll ask mxStyleFamily for the relevant default style
     // mxStyleFamily is initialised in the SwXFrame constructor
@@ -850,21 +850,21 @@ SwXFrame::SwXFrame(FlyCntType eSet, const :: SfxItemPropertySet* pSet, SwDoc *pD
     {
         case FLYCNTTYPE_FRM:
         {
-            uno::Any aAny2 = mxStyleFamily->getByName ( OUString( "Frame" ) );
+            uno::Any aAny2 = mxStyleFamily->getByName ("Frame");
             aAny2 >>= mxStyleData;
             pProps = new SwFrameProperties_Impl( );
         }
         break;
         case FLYCNTTYPE_GRF:
         {
-            uno::Any aAny2 = mxStyleFamily->getByName ( OUString( "Graphics" ) );
+            uno::Any aAny2 = mxStyleFamily->getByName ("Graphics");
             aAny2 >>= mxStyleData;
             pProps = new SwGraphicProperties_Impl( );
         }
         break;
         case FLYCNTTYPE_OLE:
         {
-            uno::Any aAny2 = mxStyleFamily->getByName ( OUString( "OLE" ) );
+            uno::Any aAny2 = mxStyleFamily->getByName ("OLE");
             aAny2 >>= mxStyleData;
             pProps = new SwOLEProperties_Impl( );
         }
@@ -1023,7 +1023,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
     {
         bool bNextFrame = false;
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw beans::PropertyVetoException( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
         SwDoc* pDoc = pFmt->GetDoc();
         if ( ((eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID)) ||
@@ -1903,7 +1903,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
         if (!pEntry)
             throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw uno::RuntimeException( OUString( "setPropertyToDefault: property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw uno::RuntimeException("setPropertyToDefault: property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
         bool bNextFrame;
         if( pEntry->nWID &&

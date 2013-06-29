@@ -1907,7 +1907,7 @@ SfxDocumentMetaData::loadFromStorage(
     css::uno::Reference<css::beans::XPropertySet> xPropArg =
         getURLProperties(Medium);
     try {
-        xPropArg->getPropertyValue(OUString("BaseURI"))
+        xPropArg->getPropertyValue("BaseURI")
             >>= input.sSystemId;
         input.sSystemId += OUString("/").concat(
                 OUString(s_meta));

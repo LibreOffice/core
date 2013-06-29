@@ -3101,7 +3101,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         {
             Reference< XMultiServiceFactory > xFactory( xConnection, UNO_QUERY_THROW );
             m_xComposer.set(
-                xFactory->createInstance( OUString( "com.sun.star.sdb.SingleSelectQueryComposer"  ) ),
+                xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"),
                 UNO_QUERY_THROW );
 
             Reference< XPropertySet > xSet( xForm, UNO_QUERY );
@@ -3181,7 +3181,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         xQueryColumns->getByName(pRefValues[j].Name) >>= xSet;
 
                         // get the RealName
-                        xSet->getPropertyValue(OUString("RealName")) >>= aRealName;
+                        xSet->getPropertyValue("RealName") >>= aRealName;
 
                         // compare the condition field name and the RealName
                         if (aCompare(aRealName, pRefValues[j].Name))
@@ -3194,7 +3194,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         for (sal_Int32 n = 0, nCount = xColumnsByIndex->getCount(); n < nCount; n++)
                         {
                             xColumnsByIndex->getByIndex(n) >>= xSet;
-                            xSet->getPropertyValue(OUString("RealName")) >>= aRealName;
+                            xSet->getPropertyValue("RealName") >>= aRealName;
                             if (aCompare(aRealName, pRefValues[j].Name))
                             {
                                 // get the column by its alias
@@ -3694,7 +3694,7 @@ namespace
                 return sal_True;
 
             Reference< XPropertySet > xDataSourceSettings(
-                xDataSource->getPropertyValue( OUString( "Settings"  ) ),
+                xDataSource->getPropertyValue("Settings"),
                 UNO_QUERY_THROW );
 
             sal_Bool bShouldValidate = true;

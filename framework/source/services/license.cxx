@@ -255,7 +255,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
 
         // if we find a date there, compare it to baseinstall license date
         OUString aAcceptDate;
-        if (pset->getPropertyValue(OUString("ooLicenseAcceptDate")) >>= aAcceptDate)
+        if (pset->getPropertyValue("ooLicenseAcceptDate") >>= aAcceptDate)
         {
             // get LicenseFileDate from base install
             OUString aLicenseURL = aLicensePath;
@@ -290,7 +290,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
 
             // write org.openoffice.Setup/ooLicenseAcceptDate
             aAcceptDate = _getCurrentDateString();
-            pset->setPropertyValue(OUString("ooLicenseAcceptDate"), makeAny(aAcceptDate));
+            pset->setPropertyValue("ooLicenseAcceptDate", makeAny(aAcceptDate));
             Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
 
             // enable quickstarter

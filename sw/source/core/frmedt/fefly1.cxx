@@ -2130,7 +2130,7 @@ void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedO
             {
                 try
                 {
-                    aBaseline = xSet->getPropertyValue( OUString( "BaseLine" ) );
+                    aBaseline = xSet->getPropertyValue("BaseLine");
                 }
                 catch ( uno::Exception& )
                 {

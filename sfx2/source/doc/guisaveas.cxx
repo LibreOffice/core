@@ -461,7 +461,7 @@ const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetModuleProps()
 //-------------------------------------------------------------------------
 OUString ModelData_Impl::GetDocServiceName()
 {
-    return GetModuleProps().getUnpackedValueOrDefault(OUString("ooSetupFactoryDocumentService"), OUString());
+    return GetModuleProps().getUnpackedValueOrDefault("ooSetupFactoryDocumentService", OUString());
 }
 
 //-------------------------------------------------------------------------
@@ -510,7 +510,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
     if ( aProps.getLength() )
     {
         ::comphelper::SequenceAsHashMap aFiltHM( aProps );
-        sal_Int32 nFlags = aFiltHM.getUnpackedValueOrDefault( OUString("Flags"),
+        sal_Int32 nFlags = aFiltHM.getUnpackedValueOrDefault("Flags",
                                                         (sal_Int32)0 );
         if ( ( ( nFlags & nMust ) == nMust ) && !( nFlags & nDont ) )
             aFilterProps = aProps;
@@ -768,13 +768,13 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
             m_pOwner->GetFilterConfiguration()->getByName( aFilterName ) >>= aFilterProps;
 
         aFiltPropsHM = ::comphelper::SequenceAsHashMap( aFilterProps );
-        nFiltFlags = aFiltPropsHM.getUnpackedValueOrDefault( OUString("Flags"), (sal_Int32)0 );
+        nFiltFlags = aFiltPropsHM.getUnpackedValueOrDefault("Flags", (sal_Int32)0 );
     }
 
     // only a temporary solution until default filter retrieving feature is implemented
     // then GetDocServiceDefaultFilter() must be used
     ::comphelper::SequenceAsHashMap aDefFiltPropsHM = GetDocServiceDefaultFilterCheckFlags( 3, 0 );
-    sal_Int32 nDefFiltFlags = aDefFiltPropsHM.getUnpackedValueOrDefault( OUString("Flags"), (sal_Int32)0 );
+    sal_Int32 nDefFiltFlags = aDefFiltPropsHM.getUnpackedValueOrDefault("Flags", (sal_Int32)0 );
 
     // if the old filter is not acceptable
     // and there is no default filter or it is not acceptable for requested parameters then proceed with saveAs
@@ -794,9 +794,9 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
     {
         // the default filter is acceptable and the old filter is alian one
         // so ask to make a saveAs operation
-        OUString aUIName = aFiltPropsHM.getUnpackedValueOrDefault( OUString("UIName"),
+        OUString aUIName = aFiltPropsHM.getUnpackedValueOrDefault("UIName",
                                                                                 OUString() );
-        OUString aDefUIName = aDefFiltPropsHM.getUnpackedValueOrDefault( OUString("UIName"),
+        OUString aDefUIName = aDefFiltPropsHM.getUnpackedValueOrDefault("UIName",
                                                                                 OUString() );
         OUString aPreusedFilterName = GetDocProps().getUnpackedValueOrDefault(
                                                     OUString("PreusedFilterName"),
@@ -1014,7 +1014,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
             m_pOwner->GetFilterConfiguration()->getByName( aOldFilterName ) >>= aOldFilterProps;
 
         ::comphelper::SequenceAsHashMap aOldFiltPropsHM( aOldFilterProps );
-        sal_Int32 nOldFiltFlags = aOldFiltPropsHM.getUnpackedValueOrDefault( OUString("Flags"), (sal_Int32)0 );
+        sal_Int32 nOldFiltFlags = aOldFiltPropsHM.getUnpackedValueOrDefault("Flags", (sal_Int32)0 );
 
         if ( bSetStandardName || ( nOldFiltFlags & nMust ) != nMust || nOldFiltFlags & nDont )
         {
@@ -1225,7 +1225,7 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
     OUString aRecommendedDir;
 
     if ( ( !aSuggestedDir.isEmpty() || GetStorable()->hasLocation() )
-      && !GetMediaDescr().getUnpackedValueOrDefault( OUString("RepairPackage"),
+      && !GetMediaDescr().getUnpackedValueOrDefault("RepairPackage",
                                                                       sal_False ) )
     {
         INetURLObject aLocation;
@@ -1280,7 +1280,7 @@ OUString ModelData_Impl::GetRecommendedName( const OUString& aSuggestedName, con
         {
             // adjust the extension to the type
             uno::Reference< container::XNameAccess > xTypeDetection = uno::Reference< container::XNameAccess >(
-                comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.document.TypeDetection") ),
+                comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.TypeDetection"),
                 uno::UNO_QUERY );
             if ( xTypeDetection.is() )
             {
@@ -1320,7 +1320,7 @@ uno::Reference< container::XNameAccess > SfxStoringHelper::GetFilterConfiguratio
     if ( !m_xFilterCFG.is() )
     {
         m_xFilterCFG = uno::Reference< container::XNameAccess >(
-            comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.document.FilterFactory") ),
+            comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.FilterFactory"),
             uno::UNO_QUERY );
 
         if ( !m_xFilterCFG.is() )
@@ -1533,17 +1533,17 @@ sal_Bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel
         }
 
         // The Dispatch supports parameter FolderName that overwrites SuggestedSaveAsDir
-        OUString aSuggestedDir = aModelData.GetMediaDescr().getUnpackedValueOrDefault( OUString( "FolderName" ), OUString() );
+        OUString aSuggestedDir = aModelData.GetMediaDescr().getUnpackedValueOrDefault("FolderName", OUString() );
         if ( aSuggestedDir.isEmpty() )
         {
-            aSuggestedDir = aModelData.GetMediaDescr().getUnpackedValueOrDefault( OUString( "SuggestedSaveAsDir" ), OUString() );
+            aSuggestedDir = aModelData.GetMediaDescr().getUnpackedValueOrDefault("SuggestedSaveAsDir", OUString() );
             if ( aSuggestedDir.isEmpty() )
-                aSuggestedDir = aModelData.GetDocProps().getUnpackedValueOrDefault( OUString( "SuggestedSaveAsDir" ), OUString() );
+                aSuggestedDir = aModelData.GetDocProps().getUnpackedValueOrDefault("SuggestedSaveAsDir", OUString() );
         }
 
-        aSuggestedName = aModelData.GetMediaDescr().getUnpackedValueOrDefault( OUString( "SuggestedSaveAsName" ), OUString() );
+        aSuggestedName = aModelData.GetMediaDescr().getUnpackedValueOrDefault("SuggestedSaveAsName", OUString() );
         if ( aSuggestedName.isEmpty() )
-            aSuggestedName = aModelData.GetDocProps().getUnpackedValueOrDefault( OUString( "SuggestedSaveAsName" ), OUString() );
+            aSuggestedName = aModelData.GetDocProps().getUnpackedValueOrDefault("SuggestedSaveAsName", OUString() );
 
         OUString sStandardDir;
         ::comphelper::SequenceAsHashMap::const_iterator aStdDirIter =

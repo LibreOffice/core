@@ -1088,7 +1088,7 @@ void ScInputBarGroup::TriggerToolboxLayout()
 
         if ( xPropSet.is() )
         {
-            com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
+            com::sun::star::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
             aValue >>= xLayoutManager;
         }
 

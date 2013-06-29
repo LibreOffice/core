@@ -1351,7 +1351,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName,
             if (!pEntry)
                 throw beans::UnknownPropertyException(OUString( "Unknown property: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw beans::PropertyVetoException( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
             switch(pEntry->nWID)
             {
@@ -1724,7 +1724,7 @@ sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal) th
 {
     SolarMutexGuard aGuard;
     if (Count <= 0)
-        throw uno::RuntimeException( OUString( "Illegal first argument: needs to be > 0" ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException("Illegal first argument: needs to be > 0", static_cast < cppu::OWeakObject * > ( this ) );
     sal_Bool bRet = sal_False;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
@@ -1772,7 +1772,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
         if(pEntry)
         {
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw beans::PropertyVetoException( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             pTblCrsr->MakeBoxSels();
             SwDoc* pDoc = pUnoCrsr->GetDoc();
             switch(pEntry->nWID )
@@ -2293,7 +2293,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
 {
     // attachToRange must only be called once
     if(!bIsDescriptor)  /* already attached ? */
-        throw uno::RuntimeException( OUString( "SwXTextTable: already attached to range." ), static_cast < cppu::OWeakObject * > ( this ) );
+        throw uno::RuntimeException("SwXTextTable: already attached to range.", static_cast < cppu::OWeakObject * > ( this ) );
 
     uno::Reference<XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = 0;
@@ -3037,7 +3037,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
     if(pFmt)
     {
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw beans::PropertyVetoException( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
         if(0xFF == pEntry->nMemberId)
         {
@@ -3860,7 +3860,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
         if(pEntry)
         {
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw beans::PropertyVetoException( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
             SwDoc* pDoc = pTblCrsr->GetDoc();
             {

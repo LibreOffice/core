@@ -1551,7 +1551,7 @@ sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
             Any aCol = xCols->getByName(rColNm);
             uno::Reference<XPropertySet> xCol;
             aCol >>= xCol;
-            Any aType = xCol->getPropertyValue(OUString("Type"));
+            Any aType = xCol->getPropertyValue("Type");
             aType >>= nRet;
         }
         if(bDispose)

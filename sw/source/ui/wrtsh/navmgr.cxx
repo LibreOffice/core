@@ -207,7 +207,7 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
         if (xPropSet.is())
         {
             css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-            css::uno::Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ) );
+            css::uno::Any aValue = xPropSet->getPropertyValue("LayoutManager");
 
             aValue >>= xLayoutManager;
             if (xLayoutManager.is())

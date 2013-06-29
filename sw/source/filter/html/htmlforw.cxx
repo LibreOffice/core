@@ -974,7 +974,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             append('=').append(TypeNames[eType]);
     }
 
-    aTmp = xPropSet->getPropertyValue( OUString("Name") );
+    aTmp = xPropSet->getPropertyValue("Name");
     if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
         !((OUString*)aTmp.getValue())->isEmpty() )
     {
@@ -986,7 +986,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         sOut.append('\"');
     }
 
-    aTmp = xPropSet->getPropertyValue( OUString("Enabled") );
+    aTmp = xPropSet->getPropertyValue("Enabled");
     if( aTmp.getValueType() == ::getBooleanCppuType() &&
         !*(sal_Bool*)aTmp.getValue() )
     {
@@ -1314,7 +1314,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     }
     else if( TYPE_CHECKBOX == eType || TYPE_RADIO == eType )
     {
-        aTmp = xPropSet->getPropertyValue(OUString("Label"));
+        aTmp = xPropSet->getPropertyValue("Label");
         if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
             !((OUString*)aTmp.getValue())->isEmpty() )
         {

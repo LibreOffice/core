@@ -144,7 +144,7 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
             if( xSet.is() )
             {
                 OUString aEngine;
-                xSet->getPropertyValue( OUString(  "CustomShapeEngine"  ) ) >>= aEngine;
+                xSet->getPropertyValue("CustomShapeEngine") >>= aEngine;
                 if ( aEngine.isEmpty() )
                 {
                     aEngine = "com.sun.star.drawing.EnhancedCustomShapeEngine";
@@ -269,8 +269,8 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
         if( bObjSupportsStyle )
         {
-            if( xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName( OUString("Style")) )
-                xPropSet->getPropertyValue(OUString("Style")) >>= xStyle;
+            if( xPropertySetInfo.is() && xPropertySetInfo->hasPropertyByName("Style") )
+                xPropSet->getPropertyValue("Style") >>= xStyle;
 
             if(xStyle.is())
             {
@@ -282,7 +282,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     if(xStylePropSet.is())
                     {
                         OUString aFamilyName;
-                        xStylePropSet->getPropertyValue(OUString("Family")) >>= aFamilyName;
+                        xStylePropSet->getPropertyValue("Family") >>= aFamilyName;
                         if( !aFamilyName.isEmpty() && aFamilyName != "graphics" )
                             aShapeInfo.mnFamily = XML_STYLE_FAMILY_SD_PRESENTATION_ID;
                     }
@@ -531,7 +531,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     if( xSet.is() && (GetExport().GetModelType() == SvtModuleOptions::E_DRAW) ) try
     {
         presentation::ClickAction eAction = presentation::ClickAction_NONE;
-        xSet->getPropertyValue(OUString("OnClick")) >>= eAction;
+        xSet->getPropertyValue("OnClick") >>= eAction;
 
         if( (eAction == presentation::ClickAction_DOCUMENT) ||
             (eAction == presentation::ClickAction_BOOKMARK) )
@@ -667,7 +667,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             {
                 uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
                 OUString aLayerName;
-                xProps->getPropertyValue( OUString( "LayerName" ) ) >>= aLayerName;
+                xProps->getPropertyValue("LayerName") >>= aLayerName;
                 mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_LAYER, aLayerName );
 
             }
@@ -1079,7 +1079,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                     if(xPropSet.is())
                     {
                         OUString sCLSID;
-                        if(xPropSet->getPropertyValue(OUString("CLSID")) >>= sCLSID)
+                        if(xPropSet->getPropertyValue("CLSID") >>= sCLSID)
                         {
                             if (sCLSID.equals(mrExport.GetChartExport()->getChartCLSID()) ||
                                 sCLSID.equals(OUString( SvGlobalName( SO3_RPTCH_CLASSID ).GetHexName())))
@@ -1130,7 +1130,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                     if(xPropSet.is()) try
                     {
                         OUString sCLSID;
-                        if(xPropSet->getPropertyValue(OUString("CLSID")) >>= sCLSID)
+                        if(xPropSet->getPropertyValue("CLSID") >>= sCLSID)
                         {
                             if( sCLSID.equals(OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName())) )
                             {
@@ -1235,7 +1235,7 @@ void XMLShapeExport::ExportGraphicDefaults()
     {
         try
         {
-            uno::Reference< beans::XPropertySet > xDefaults( xFact->createInstance( OUString("com.sun.star.drawing.Defaults" ) ), uno::UNO_QUERY );
+            uno::Reference< beans::XPropertySet > xDefaults( xFact->createInstance("com.sun.star.drawing.Defaults"), uno::UNO_QUERY );
             if( xDefaults.is() )
             {
                 aStEx.exportDefaultStyle( xDefaults, OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper );

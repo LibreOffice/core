@@ -105,7 +105,7 @@ void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Refe
         if( xProp.is() )
         {
             drawing::CameraGeometry aCamGeo;
-            xProp->getPropertyValue( OUString( "D3DCameraGeometry" )) >>= aCamGeo;
+            xProp->getPropertyValue("D3DCameraGeometry") >>= aCamGeo;
             maVRP.setX( aCamGeo.vrp.PositionX );
             maVRP.setY( aCamGeo.vrp.PositionY );
             maVRP.setZ( aCamGeo.vrp.PositionZ );
@@ -221,7 +221,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
             uno::Any aAny;
             chart::ChartDataRowSource eSource = chart::ChartDataRowSource_COLUMNS;
             aAny <<= eSource;
-            xProp->setPropertyValue( OUString( "DataRowSource" ), aAny );
+            xProp->setPropertyValue("DataRowSource", aAny );
         }
         catch( const beans::UnknownPropertyException & )
         {
@@ -334,7 +334,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                     pPropStyleContext->FillPropertySet( xProp );
 
                     // get the data row source that was set without having data
-                    xProp->getPropertyValue( OUString( "DataRowSource" ))
+                    xProp->getPropertyValue("DataRowSource")
                         >>= mrDataRowSource;
 
                     //lines on/off
@@ -349,7 +349,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                     if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan3_0( GetImport().GetModel() ) )
                     {
                         bool bIs3d = false;
-                        if( xProp.is() && ( xProp->getPropertyValue(OUString("Dim3D")) >>= bIs3d ) &&
+                        if( xProp.is() && ( xProp->getPropertyValue("Dim3D") >>= bIs3d ) &&
                             bIs3d )
                         {
                             if( maChartTypeServiceName == "com.sun.star.chart2.PieChartType" || maChartTypeServiceName == "com.sun.star.chart2.DonutChartType" )
@@ -371,28 +371,28 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
     {
     try
     {
-        mrSeriesDefaultsAndStyles.maSymbolTypeDefault = xProp->getPropertyValue(OUString("SymbolType"));
-        mrSeriesDefaultsAndStyles.maDataCaptionDefault = xProp->getPropertyValue(OUString("DataCaption"));
+        mrSeriesDefaultsAndStyles.maSymbolTypeDefault = xProp->getPropertyValue("SymbolType");
+        mrSeriesDefaultsAndStyles.maDataCaptionDefault = xProp->getPropertyValue("DataCaption");
 
-        mrSeriesDefaultsAndStyles.maMeanValueDefault = xProp->getPropertyValue(OUString("MeanValue"));
-        mrSeriesDefaultsAndStyles.maRegressionCurvesDefault = xProp->getPropertyValue(OUString("RegressionCurves"));
+        mrSeriesDefaultsAndStyles.maMeanValueDefault = xProp->getPropertyValue("MeanValue");
+        mrSeriesDefaultsAndStyles.maRegressionCurvesDefault = xProp->getPropertyValue("RegressionCurves");
 
         bool bStacked = false;
-        mrSeriesDefaultsAndStyles.maStackedDefault = xProp->getPropertyValue(OUString("Stacked"));
+        mrSeriesDefaultsAndStyles.maStackedDefault = xProp->getPropertyValue("Stacked");
         mrSeriesDefaultsAndStyles.maStackedDefault >>= bStacked;
-        mrSeriesDefaultsAndStyles.maPercentDefault = xProp->getPropertyValue(OUString("Percent"));
+        mrSeriesDefaultsAndStyles.maPercentDefault = xProp->getPropertyValue("Percent");
         mrSeriesDefaultsAndStyles.maPercentDefault >>= mbPercentStacked;
-        mrSeriesDefaultsAndStyles.maStackedBarsConnectedDefault = xProp->getPropertyValue(OUString("StackedBarsConnected"));
+        mrSeriesDefaultsAndStyles.maStackedBarsConnectedDefault = xProp->getPropertyValue("StackedBarsConnected");
 
         // deep
-        uno::Any aDeepProperty( xProp->getPropertyValue(OUString("Deep")));
+        uno::Any aDeepProperty( xProp->getPropertyValue("Deep"));
         // #124488# old versions store a 3d area and 3D line deep chart with Deep==false => workaround for this
         if( ! (bStacked || mbPercentStacked ))
         {
             if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( GetImport().GetModel() ) )
             {
                 bool bIs3d = false;
-                if( ( xProp->getPropertyValue(OUString("Dim3D")) >>= bIs3d ) &&
+                if( ( xProp->getPropertyValue("Dim3D") >>= bIs3d ) &&
                     bIs3d )
                 {
                     if( maChartTypeServiceName == "com.sun.star.chart2.AreaChartType" || maChartTypeServiceName == "com.sun.star.chart2.LineChartType" )
@@ -404,8 +404,8 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         }
         mrSeriesDefaultsAndStyles.maDeepDefault = aDeepProperty;
 
-        xProp->getPropertyValue(OUString("NumberOfLines")) >>= mnNumOfLinesProp;
-        xProp->getPropertyValue(OUString("Volume")) >>= mbStockHasVolume;
+        xProp->getPropertyValue("NumberOfLines") >>= mnNumOfLinesProp;
+        xProp->getPropertyValue("Volume") >>= mbStockHasVolume;
     }
     catch( const uno::Exception & rEx )
     {
@@ -431,7 +431,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         // data yet.
         mxNewDoc->createInternalDataProvider( false /* bCloneExistingData */ );
         if( xProp.is() && mrDataRowSource!=chart::ChartDataRowSource_COLUMNS )
-            xProp->setPropertyValue( OUString( "DataRowSource" ), uno::makeAny(mrDataRowSource) );
+            xProp->setPropertyValue("DataRowSource", uno::makeAny(mrDataRowSource) );
     }
 }
 
@@ -559,7 +559,7 @@ void SchXMLPlotAreaContext::EndElement()
     if( xDiaProp.is())
     {
         sal_Bool bIsThreeDim = sal_False;
-        uno::Any aAny = xDiaProp->getPropertyValue( OUString( "Dim3D" ));
+        uno::Any aAny = xDiaProp->getPropertyValue("Dim3D");
         aAny >>= bIsThreeDim;
 
         // set 3d scene attributes
@@ -574,7 +574,7 @@ void SchXMLPlotAreaContext::EndElement()
         {
             try
             {
-                xDiaProp->setPropertyValue( OUString(  "NumberOfLines" ),
+                xDiaProp->setPropertyValue("NumberOfLines",
                                             uno::makeAny( mnNumOfLinesProp ));
             }
             catch( const uno::Exception & rEx )
@@ -590,7 +590,7 @@ void SchXMLPlotAreaContext::EndElement()
         {
             try
             {
-                xDiaProp->setPropertyValue( OUString(  "Volume" ),
+                xDiaProp->setPropertyValue("Volume",
                                             uno::makeAny( true ));
             }
             catch( const uno::Exception & rEx )
@@ -1331,15 +1331,15 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
                     pPropStyleContext->FillPropertySet( xEqProp );
             }
         }
-        xEqProp->setPropertyValue( OUString( "ShowEquation"), uno::makeAny( bShowEquation ));
-        xEqProp->setPropertyValue( OUString( "ShowCorrelationCoefficient"), uno::makeAny( bShowRSquare ));
+        xEqProp->setPropertyValue("ShowEquation", uno::makeAny( bShowEquation ));
+        xEqProp->setPropertyValue("ShowCorrelationCoefficient", uno::makeAny( bShowRSquare ));
 
         if( bHasXPos && bHasYPos )
         {
             chart2::RelativePosition aRelPos;
             aRelPos.Primary = static_cast< double >( aPosition.X ) / static_cast< double >( maChartSize.Width );
             aRelPos.Secondary = static_cast< double >( aPosition.Y ) / static_cast< double >( maChartSize.Height );
-            xEqProp->setPropertyValue( OUString(  "RelativePosition" ),
+            xEqProp->setPropertyValue("RelativePosition",
                                        uno::makeAny( aRelPos ));
         }
         SAL_WARN_IF( mrRegressionStyle.meType != DataRowPointStyle::REGRESSION, "xmloff.chart", "mrRegressionStyle.meType != DataRowPointStyle::REGRESSION" );

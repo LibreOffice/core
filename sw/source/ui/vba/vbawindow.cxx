@@ -108,7 +108,7 @@ SwVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeE
         else if (nwindowState == word::WdWindowState::wdWindowStateNormal)
             pWork -> Restore();
         else
-            throw uno::RuntimeException( OUString( "Invalid Parameter" ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("Invalid Parameter", uno::Reference< uno::XInterface >() );
     }
 }
 

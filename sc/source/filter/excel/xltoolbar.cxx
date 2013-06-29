@@ -158,7 +158,7 @@ bool ScCTB::ImportCustomToolBar( ScCTBWrapper& rWrapper, CustomToolBarImportHelp
         uno::Reference< beans::XPropertySet > xProps( xIndexContainer, uno::UNO_QUERY_THROW );
         WString& name = tb.getName();
         // set UI name for toolbar
-        xProps->setPropertyValue( OUString("UIName"), uno::makeAny( name.getString() ) );
+        xProps->setPropertyValue("UIName", uno::makeAny( name.getString() ) );
 
         OUString sToolBarName = sToolbarPrefix.concat( name.getString() );
         for ( std::vector< ScTBC >::iterator it =  rTBC.begin(); it != rTBC.end(); ++it )

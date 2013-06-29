@@ -120,7 +120,7 @@ bool DocumentLockFile::CreateOwnLockFile()
 
         // try to let the file be hidden if possible
         try {
-            aTargetContent.setPropertyValue( OUString( "IsHidden"  ), uno::makeAny( sal_True ) );
+            aTargetContent.setPropertyValue("IsHidden", uno::makeAny( sal_True ) );
         } catch( uno::Exception& ) {}
     }
     catch( ucb::NameClashException& )

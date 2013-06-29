@@ -237,7 +237,7 @@ sal_uInt32 CheckPasswd_Impl
             {
                 sal_Bool bIsEncrypted = sal_False;
                 try {
-                    xStorageProps->getPropertyValue( OUString("HasEncryptedEntries") )
+                    xStorageProps->getPropertyValue("HasEncryptedEntries")
                         >>= bIsEncrypted;
                 } catch( uno::Exception& )
                 {
@@ -914,7 +914,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                                 if ( xSet.is() )
                                 {
                                     // copy protocols
-                                    aRet = xSet->getPropertyValue( OUString("Protocols") );
+                                    aRet = xSet->getPropertyValue("Protocols");
                                     Sequence < OUString > aTmp;
                                     aRet >>= aTmp;
 

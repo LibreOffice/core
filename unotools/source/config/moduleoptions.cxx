@@ -1277,13 +1277,13 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
     ::comphelper::SequenceAsHashMap stlDesc(lMediaDescriptor);
 
     // is there already a filter inside the descriptor?
-    OUString sFilterName = stlDesc.getUnpackedValueOrDefault(OUString("FilterName"), OUString());
+    OUString sFilterName = stlDesc.getUnpackedValueOrDefault("FilterName", OUString());
     if (!sFilterName.isEmpty())
     {
         try
         {
             ::comphelper::SequenceAsHashMap stlFilterProps   (xFilterCfg->getByName(sFilterName));
-            OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(OUString("DocumentService"), OUString());
+            OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault("DocumentService", OUString());
             SvtModuleOptions::EFactory      eApp             = SvtModuleOptions::ClassifyFactoryByServiceName(sDocumentService);
 
             if (eApp != E_UNKNOWN_FACTORY)
@@ -1296,7 +1296,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
     }
 
     // is there already a type inside the descriptor?
-    OUString sTypeName = stlDesc.getUnpackedValueOrDefault(OUString("TypeName"), OUString());
+    OUString sTypeName = stlDesc.getUnpackedValueOrDefault("TypeName", OUString());
     if (sTypeName.isEmpty())
     {
         // no :-(
@@ -1313,9 +1313,9 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
     try
     {
         ::comphelper::SequenceAsHashMap stlTypeProps     (xTypeCfg->getByName(sTypeName));
-        OUString                 sPreferredFilter = stlTypeProps.getUnpackedValueOrDefault(OUString("PreferredFilter"), OUString());
+        OUString                 sPreferredFilter = stlTypeProps.getUnpackedValueOrDefault("PreferredFilter", OUString());
         ::comphelper::SequenceAsHashMap stlFilterProps   (xFilterCfg->getByName(sPreferredFilter));
-        OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(OUString("DocumentService"), OUString());
+        OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault("DocumentService", OUString());
         SvtModuleOptions::EFactory      eApp             = SvtModuleOptions::ClassifyFactoryByServiceName(sDocumentService);
 
         if (eApp != E_UNKNOWN_FACTORY)

@@ -62,7 +62,7 @@ uno::Any SAL_CALL SwVbaListGalleries::Item( const uno::Any& Index1, const uno::A
             || nIndex == word::WdListGalleryType::wdOutlineNumberGallery )
             return uno::makeAny( uno::Reference< word::XListGallery >( new SwVbaListGallery( this, mxContext, mxTextDocument, nIndex ) ) );
     }
-    throw  uno::RuntimeException( OUString("Index out of bounds"), uno::Reference< uno::XInterface >() );
+    throw  uno::RuntimeException("Index out of bounds", uno::Reference< uno::XInterface >() );
 }
 
 // XEnumerationAccess

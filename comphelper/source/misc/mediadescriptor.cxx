@@ -463,7 +463,7 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
         // b) ... or we must get it from the given URL
         OUString sURL = getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), OUString());
         if (sURL.isEmpty())
-            throw css::uno::Exception( OUString( "Found no URL." ),
+            throw css::uno::Exception("Found no URL.",
                     css::uno::Reference< css::uno::XInterface >());
 
         // Parse URL! Only the main part has to be used further. E.g. a jumpmark can make trouble
@@ -482,7 +482,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
     throw(::com::sun::star::uno::RuntimeException)
 {
     if ( !_rxPostData.is() )
-        throw css::lang::IllegalArgumentException( OUString( "Found invalid PostData." ),
+        throw css::lang::IllegalArgumentException("Found invalid PostData.",
                 css::uno::Reference< css::uno::XInterface >(), 1);
 
     // PostData can't be used in read/write mode!
@@ -642,7 +642,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
             else
             {
                 sal_Bool bRequestReadOnly = bReadOnly;
-                aContent.getPropertyValue( OUString( "IsReadOnly" ) ) >>= bReadOnly;
+                aContent.getPropertyValue("IsReadOnly") >>= bReadOnly;
                 if ( bReadOnly && !bRequestReadOnly && bModeRequestedExplicitly )
                         return sal_False; // the document is explicitly requested with WRITEABLE mode
             }

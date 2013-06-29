@@ -137,7 +137,7 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
         uno::Reference< container::XIndexContainer > xPopup( xCfgManager->createSettings(), uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xProps( xPopup, uno::UNO_QUERY_THROW );
         // set name for menubar
-        xProps->setPropertyValue( OUString("UIName"), uno::makeAny( rName ) );
+        xProps->setPropertyValue("UIName", uno::makeAny( rName ) );
         if ( xPopup.is() )
         {
             uno::Sequence< beans::PropertyValue > aPopupMenu( 4 );

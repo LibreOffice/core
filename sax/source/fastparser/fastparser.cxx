@@ -441,7 +441,7 @@ void FastSaxParser::parseStream( const InputSource& maStructSource) throw (SAXEx
     entity.maStructSource = maStructSource;
 
     if( !entity.maStructSource.aInputStream.is() )
-        throw SAXException( OUString(  "No input source" ), Reference< XInterface >(), Any() );
+        throw SAXException("No input source", Reference< XInterface >(), Any() );
 
     entity.maConverter.setInputStream( entity.maStructSource.aInputStream );
     if( !entity.maStructSource.sEncoding.isEmpty() )
@@ -450,7 +450,7 @@ void FastSaxParser::parseStream( const InputSource& maStructSource) throw (SAXEx
     // create parser with proper encoding
     entity.mpParser = XML_ParserCreate( 0 );
     if( !entity.mpParser )
-        throw SAXException( OUString( "Couldn't create parser" ), Reference< XInterface >(), Any() );
+        throw SAXException("Couldn't create parser", Reference< XInterface >(), Any() );
 
     // set all necessary C-Callbacks
     XML_SetUserData( entity.mpParser, this );

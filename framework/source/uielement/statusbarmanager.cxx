@@ -605,7 +605,7 @@ void StatusBarManager::DataChanged( const DataChangedEvent& rDCEvt )
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
         css::uno::Reference< css::beans::XPropertySet > xPropSet( m_xFrame, css::uno::UNO_QUERY );
         if ( xPropSet.is() )
-            xPropSet->getPropertyValue( OUString( "LayoutManager" )) >>= xLayoutManager;
+            xPropSet->getPropertyValue("LayoutManager") >>= xLayoutManager;
         if ( xLayoutManager.is() )
         {
             aGuard.unlock();

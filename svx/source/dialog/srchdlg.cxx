@@ -464,10 +464,10 @@ void SvxSearchDialog::Construct_Impl()
                 uno::Any aRet = xDirectAccess->getByName(sProperty);
                 aRet >>= sTemp;
                 m_pComponentFrame->get_label_widget()->SetText(sTemp);
-                aRet = xDirectAccess->getByName(OUString( "ComponentSearchCommandLabel1"));
+                aRet = xDirectAccess->getByName("ComponentSearchCommandLabel1");
                 aRet >>= sTemp;
                 m_pSearchComponent1PB->SetText( sTemp );
-                aRet = xDirectAccess->getByName(OUString( "ComponentSearchCommandLabel2"));
+                aRet = xDirectAccess->getByName("ComponentSearchCommandLabel2");
                 aRet >>= sTemp;
                 m_pSearchComponent2PB->SetText( sTemp );
             }

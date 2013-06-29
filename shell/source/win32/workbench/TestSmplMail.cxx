@@ -88,7 +88,7 @@ int SAL_CALL main(int , char*, char* )
     try
     {
         Reference< XSimpleMailClientSupplier > xSmplMailClientSuppl(
-            g_xFactory->createInstance( OUString("com.sun.star.system.SimpleSystemMail") ), UNO_QUERY );
+            g_xFactory->createInstance("com.sun.star.system.SimpleSystemMail"), UNO_QUERY );
 
         if ( !xSmplMailClientSuppl.is() )
         {

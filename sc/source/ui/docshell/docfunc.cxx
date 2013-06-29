@@ -2851,7 +2851,7 @@ uno::Reference< uno::XInterface > GetDocModuleObject( SfxObjectShell& rDocSh, St
     uno::Reference< uno::XInterface > xDocModuleApiObject;
     if ( xSF.is() )
     {
-        xVBACodeNamedObjectAccess.set( xSF->createInstance( OUString( "ooo.vba.VBAObjectModuleObjectProvider")), uno::UNO_QUERY );
+        xVBACodeNamedObjectAccess.set( xSF->createInstance("ooo.vba.VBAObjectModuleObjectProvider"), uno::UNO_QUERY );
         xDocModuleApiObject.set( xVBACodeNamedObjectAccess->getByName( sCodeName ), uno::UNO_QUERY );
     }
     return xDocModuleApiObject;

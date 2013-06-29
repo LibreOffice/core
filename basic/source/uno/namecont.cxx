@@ -1455,10 +1455,10 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
 
                 if ( xProps.is() )
                 {
-                    xProps->setPropertyValue( OUString("MediaType"), uno::makeAny( aMime ) );
+                    xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
 
                     // #87671 Allow encryption
-                    xProps->setPropertyValue( OUString("UseCommonStoragePasswordEncryption"), uno::makeAny( sal_True ) );
+                    xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( sal_True ) );
 
                     Reference< XOutputStream > xOutput = xElementStream->getOutputStream();
                     Reference< XNameContainer > xLib( pLib );
@@ -1596,10 +1596,10 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
             if ( xProps.is() )
             {
                 OUString aMime("text/xml");
-                xProps->setPropertyValue( OUString("MediaType"), uno::makeAny( aMime ) );
+                xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
 
                 // #87671 Allow encryption
-                xProps->setPropertyValue( OUString("UseCommonStoragePasswordEncryption"), uno::makeAny( sal_True ) );
+                xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( sal_True ) );
 
                 xOut = xInfoStream->getOutputStream();
             }
@@ -2070,10 +2070,10 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 throw uno::RuntimeException();
             }
             OUString aMime( "text/xml" );
-            xProps->setPropertyValue( OUString("MediaType"), uno::makeAny( aMime ) );
+            xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
 
             // #87671 Allow encryption
-            xProps->setPropertyValue( OUString("UseCommonStoragePasswordEncryption"), uno::makeAny( sal_True ) );
+            xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( sal_True ) );
 
             xOut = xInfoStream->getOutputStream();
         }
@@ -2698,7 +2698,7 @@ void SAL_CALL SfxLibraryContainer::initializeFromDocument( const Reference< XSto
     try
     {
         Reference< XServiceInfo > xSI( _rxDocument, UNO_QUERY_THROW );
-        if ( xSI->supportsService( OUString("com.sun.star.document.OfficeDocument")))
+        if ( xSI->supportsService("com.sun.star.document.OfficeDocument"))
         {
             xDocStorage.set( _rxDocument->getDocumentStorage(), UNO_QUERY_THROW );
         }
@@ -2913,7 +2913,7 @@ void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( ::sal_Bool _vbacompa
         {
             Reference< XModel > xModel( mxOwnerDocument );   // weak-ref -> ref
             Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
-            xFactory->createInstance( OUString( "ooo.vba.VBAGlobals"));
+            xFactory->createInstance("ooo.vba.VBAGlobals");
         }
         catch(const Exception& )
         {

@@ -549,7 +549,7 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
     if(pEntry)
     {
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-            throw beans::PropertyVetoException ( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw beans::PropertyVetoException ("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         sal_Bool bVal = sal_False;
         if(aValue.getValueType() == ::getBooleanCppuType())
             bVal = *(sal_Bool*)aValue.getValue();

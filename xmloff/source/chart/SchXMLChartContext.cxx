@@ -76,7 +76,7 @@ void lcl_setRoleAtLabeledSequence(
     {
         uno::Reference< beans::XPropertySet > xProp( xValues, uno::UNO_QUERY );
         if( xProp.is())
-            xProp->setPropertyValue(OUString( "Role" ), uno::makeAny( rRole ));
+            xProp->setPropertyValue("Role", uno::makeAny( rRole ));
     }
 }
 
@@ -355,9 +355,9 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
         {
             try
             {
-                xDocProp->getPropertyValue( OUString( "BaseDiagram" )) >>= aOldChartTypeName;
+                xDocProp->getPropertyValue("BaseDiagram") >>= aOldChartTypeName;
                 maChartTypeServiceName =  SchXMLTools::GetNewChartTypeName( aOldChartTypeName );
-                xDocProp->setPropertyValue( OUString( "RefreshAddInAllowed" ) , uno::makeAny( sal_False) );
+                xDocProp->setPropertyValue("RefreshAddInAllowed", uno::makeAny( sal_False) );
             }
             catch(const uno::Exception&)
             {
@@ -695,7 +695,7 @@ void SchXMLChartContext::EndElement()
                 {
                     uno::Any aAny;
                     aAny <<= maMainTitle;
-                    xTitleProp->setPropertyValue( OUString(  "String" ), aAny );
+                    xTitleProp->setPropertyValue("String", aAny );
                 }
                 catch(const beans::UnknownPropertyException&)
                 {
@@ -712,7 +712,7 @@ void SchXMLChartContext::EndElement()
                 {
                     uno::Any aAny;
                     aAny <<= maSubTitle;
-                    xTitleProp->setPropertyValue( OUString(  "String" ), aAny );
+                    xTitleProp->setPropertyValue("String", aAny );
                 }
                 catch(const beans::UnknownPropertyException&)
                 {
@@ -731,13 +731,13 @@ void SchXMLChartContext::EndElement()
     if( xDiaProp.is())
     {
         if( maSeriesDefaultsAndStyles.maStackedDefault.hasValue())
-            xDiaProp->setPropertyValue(OUString("Stacked"),maSeriesDefaultsAndStyles.maStackedDefault);
+            xDiaProp->setPropertyValue("Stacked",maSeriesDefaultsAndStyles.maStackedDefault);
         if( maSeriesDefaultsAndStyles.maPercentDefault.hasValue())
-            xDiaProp->setPropertyValue(OUString("Percent"),maSeriesDefaultsAndStyles.maPercentDefault);
+            xDiaProp->setPropertyValue("Percent",maSeriesDefaultsAndStyles.maPercentDefault);
         if( maSeriesDefaultsAndStyles.maDeepDefault.hasValue())
-            xDiaProp->setPropertyValue(OUString("Deep"),maSeriesDefaultsAndStyles.maDeepDefault);
+            xDiaProp->setPropertyValue("Deep",maSeriesDefaultsAndStyles.maDeepDefault);
         if( maSeriesDefaultsAndStyles.maStackedBarsConnectedDefault.hasValue())
-            xDiaProp->setPropertyValue(OUString("StackedBarsConnected"),maSeriesDefaultsAndStyles.maStackedBarsConnectedDefault);
+            xDiaProp->setPropertyValue("StackedBarsConnected",maSeriesDefaultsAndStyles.maStackedBarsConnectedDefault);
     }
 
     //the OOo 2.0 implementation and older has a bug with donuts
@@ -808,7 +808,7 @@ void SchXMLChartContext::EndElement()
             try
             {
                 if( bOlderThan2_3 && xDiaProp.is() )//for older charts the hidden cells were removed by calc on the fly
-                    xDiaProp->setPropertyValue(OUString("IncludeHiddenCells"),uno::makeAny(false));
+                    xDiaProp->setPropertyValue("IncludeHiddenCells",uno::makeAny(false));
 
                 // note: mbRowHasLabels means the first row contains labels, that means we have "column-descriptions",
                 // (analogously mbColHasLabels means we have "row-descriptions")
@@ -906,7 +906,7 @@ void SchXMLChartContext::EndElement()
     }
 
     if( xProp.is())
-        xProp->setPropertyValue( OUString( "RefreshAddInAllowed" ) , uno::makeAny( sal_True) );
+        xProp->setPropertyValue("RefreshAddInAllowed", uno::makeAny( sal_True) );
 }
 
 void SchXMLChartContext::MergeSeriesForStockChart()
@@ -934,7 +934,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
                 {
                     xDSContainer.set( aChartTypes[nCTIdx], uno::UNO_QUERY_THROW );
                     uno::Reference< beans::XPropertySet > xCTProp( aChartTypes[nCTIdx], uno::UNO_QUERY_THROW );
-                    xCTProp->getPropertyValue( OUString( "Japanese" )) >>= bHasJapaneseCandlestick;
+                    xCTProp->getPropertyValue("Japanese") >>= bHasJapaneseCandlestick;
                     break;
                 }
             }
@@ -1019,7 +1019,7 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
             {
                 if( xProp.is())
                 {
-                    xProp->setPropertyValue( OUString( "HasMainTitle" ), aTrueBool );
+                    xProp->setPropertyValue("HasMainTitle", aTrueBool );
                 }
                 uno::Reference< drawing::XShape > xTitleShape( xDoc->getTitle(), uno::UNO_QUERY );
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),
@@ -1032,7 +1032,7 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
             {
                 if( xProp.is())
                 {
-                    xProp->setPropertyValue( OUString( "HasSubTitle" ), aTrueBool );
+                    xProp->setPropertyValue("HasSubTitle", aTrueBool );
                 }
                 uno::Reference< drawing::XShape > xTitleShape( xDoc->getSubTitle(), uno::UNO_QUERY );
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),

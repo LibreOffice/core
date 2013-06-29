@@ -85,7 +85,7 @@ public:
     {
         ScDocument* pDoc = mpDocShell->GetDocument();
         if ( !pDoc )
-            throw uno::RuntimeException( OUString(""), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException("", uno::Reference< uno::XInterface >() );
 
         uno::Sequence< uno::Any > aArgs(2);
         // access the application object ( parent for workbook )

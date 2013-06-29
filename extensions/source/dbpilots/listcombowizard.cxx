@@ -176,12 +176,12 @@ namespace dbp
             }
 
             // ListSourceType: SQL
-            getContext().xObjectModel->setPropertyValue(OUString("ListSourceType"), makeAny((sal_Int32)ListSourceType_SQL));
+            getContext().xObjectModel->setPropertyValue("ListSourceType", makeAny((sal_Int32)ListSourceType_SQL));
 
             if (isListBox())
             {
                 // BoundColumn: 1
-                getContext().xObjectModel->setPropertyValue(OUString("BoundColumn"), makeAny((sal_Int16)1));
+                getContext().xObjectModel->setPropertyValue("BoundColumn", makeAny((sal_Int16)1));
 
                 // build the statement to set as list source
                 OUString sStatement = "SELECT " +
@@ -189,7 +189,7 @@ namespace dbp
                     " FROM " + OUString( getSettings().sListContentTable );
                 Sequence< OUString > aListSource(1);
                 aListSource[0] = sStatement;
-                getContext().xObjectModel->setPropertyValue(OUString("ListSource"), makeAny(aListSource));
+                getContext().xObjectModel->setPropertyValue("ListSource", makeAny(aListSource));
             }
             else
             {
@@ -201,7 +201,7 @@ namespace dbp
             }
 
             // the bound field
-            getContext().xObjectModel->setPropertyValue(OUString("DataField"), makeAny(OUString(getSettings().sLinkedFormField)));
+            getContext().xObjectModel->setPropertyValue("DataField", makeAny(OUString(getSettings().sLinkedFormField)));
         }
         catch(const Exception&)
         {

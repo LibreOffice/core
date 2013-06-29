@@ -202,7 +202,7 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
         throw uno::RuntimeException();
 
     uno::Reference< document::XTypeDetection > xTypeDetection(
-            xFactory->createInstance( OUString( "com.sun.star.document.TypeDetection" )),
+            xFactory->createInstance("com.sun.star.document.TypeDetection"),
             uno::UNO_QUERY_THROW );
 
     OUString aTypeName;
@@ -273,8 +273,8 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
         throw uno::RuntimeException();
 
     try {
-        xNativeTempFile->setPropertyValue( OUString( "RemoveFile" ), uno::makeAny( sal_False ) );
-        uno::Any aUrl = xNativeTempFile->getPropertyValue( OUString( "Uri" ));
+        xNativeTempFile->setPropertyValue("RemoveFile", uno::makeAny( sal_False ) );
+        uno::Any aUrl = xNativeTempFile->getPropertyValue("Uri");
         aUrl >>= aNativeTempURL;
     }
     catch ( uno::Exception& )

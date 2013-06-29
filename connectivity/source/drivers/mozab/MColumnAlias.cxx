@@ -100,7 +100,7 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
         {
             //.............................................................
             Reference< XNameAccess > xAliasesNode;
-            xDriverNode->getPropertyValue( OUString("ColumnAliases") ) >>= xAliasesNode;
+            xDriverNode->getPropertyValue("ColumnAliases") >>= xAliasesNode;
             OSL_ENSURE( xAliasesNode.is(), "OColumnAlias::setAlias: missing the aliases node!" );
 
             // this is a set of string nodes

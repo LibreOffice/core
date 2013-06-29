@@ -2091,8 +2091,8 @@ void SvxPropertyValuesToItemSet(
 
             if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
                 // should be PropertyVetoException which is not yet defined for the new import API's functions
-                throw uno::RuntimeException( OUString( "Property is read-only: " ) + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
-                //throw PropertyVetoException ( OUString( "Property is read-only: " ) + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
+                throw uno::RuntimeException("Property is read-only: " + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
+                //throw PropertyVetoException ("Property is read-only: " + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
 
             if (pEntry->nWID == WID_FONTDESC)
             {

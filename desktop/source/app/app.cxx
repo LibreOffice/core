@@ -2028,8 +2028,8 @@ void Desktop::EnableOleAutomation()
       SAL_INFO( "desktop.app",  "desktop (jl97489) ::Desktop::EnableOleAutomation" );
 #ifdef WNT
     Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
-    xSMgr->createInstance(OUString("com.sun.star.bridge.OleApplicationRegistration"));
-    xSMgr->createInstance(OUString("com.sun.star.comp.ole.EmbedServer"));
+    xSMgr->createInstance("com.sun.star.bridge.OleApplicationRegistration");
+    xSMgr->createInstance("com.sun.star.comp.ole.EmbedServer");
 #endif
 }
 
@@ -2110,8 +2110,8 @@ void Desktop::PreloadConfigurationData()
         a >>= xCmdAccess;
         if ( xCmdAccess.is() )
         {
-            xCmdAccess->getByName( OUString( ".uno:BasicShapes" ));
-            xCmdAccess->getByName( OUString( ".uno:EditGlossary" ));
+            xCmdAccess->getByName(".uno:BasicShapes");
+            xCmdAccess->getByName(".uno:EditGlossary");
         }
     }
     catch ( const ::com::sun::star::uno::Exception& )
@@ -2123,7 +2123,7 @@ void Desktop::PreloadConfigurationData()
         a = xNameAccess->getByName( aCalcDoc );
         a >>= xCmdAccess;
         if ( xCmdAccess.is() )
-            xCmdAccess->getByName( OUString( ".uno:InsertObjectStarMath" ));
+            xCmdAccess->getByName(".uno:InsertObjectStarMath");
     }
     catch ( const ::com::sun::star::uno::Exception& )
     {
@@ -2135,7 +2135,7 @@ void Desktop::PreloadConfigurationData()
         a = xNameAccess->getByName( aDrawDoc );
         a >>= xCmdAccess;
         if ( xCmdAccess.is() )
-            xCmdAccess->getByName( OUString( ".uno:Polygon" ));
+            xCmdAccess->getByName(".uno:Polygon");
     }
     catch ( const ::com::sun::star::uno::Exception& )
     {
@@ -2149,7 +2149,7 @@ void Desktop::PreloadConfigurationData()
         a = xNameAccess->getByName( aWriterDoc );
         a >>= xWindowAccess;
         if ( xWindowAccess.is() )
-            xWindowAccess->getByName( OUString( "private:resource/toolbar/standardbar" ));
+            xWindowAccess->getByName("private:resource/toolbar/standardbar");
     }
     catch ( const ::com::sun::star::uno::Exception& )
     {
@@ -2159,7 +2159,7 @@ void Desktop::PreloadConfigurationData()
         a = xNameAccess->getByName( aCalcDoc );
         a >>= xWindowAccess;
         if ( xWindowAccess.is() )
-            xWindowAccess->getByName( OUString( "private:resource/toolbar/standardbar" ));
+            xWindowAccess->getByName("private:resource/toolbar/standardbar");
     }
     catch ( const ::com::sun::star::uno::Exception& )
     {
@@ -2169,7 +2169,7 @@ void Desktop::PreloadConfigurationData()
         a = xNameAccess->getByName( aDrawDoc );
         a >>= xWindowAccess;
         if ( xWindowAccess.is() )
-            xWindowAccess->getByName( OUString( "private:resource/toolbar/standardbar" ));
+            xWindowAccess->getByName("private:resource/toolbar/standardbar");
     }
     catch ( const ::com::sun::star::uno::Exception& )
     {
@@ -2179,7 +2179,7 @@ void Desktop::PreloadConfigurationData()
         a = xNameAccess->getByName( aImpressDoc );
         a >>= xWindowAccess;
         if ( xWindowAccess.is() )
-            xWindowAccess->getByName( OUString( "private:resource/toolbar/standardbar" ));
+            xWindowAccess->getByName("private:resource/toolbar/standardbar");
     }
     catch ( const ::com::sun::star::uno::Exception& )
     {

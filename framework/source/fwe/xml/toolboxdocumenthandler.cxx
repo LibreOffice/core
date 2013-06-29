@@ -262,7 +262,7 @@ throw(  SAXException, RuntimeException )
                                 {
                                     try
                                     {
-                                        xPropSet->setPropertyValue( OUString( "UIName" ), makeAny( aUIName ) );
+                                        xPropSet->setPropertyValue("UIName", makeAny( aUIName ) );
                                     }
                                     catch ( const UnknownPropertyException& )
                                     {
@@ -699,7 +699,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
     {
         try
         {
-            xPropSet->getPropertyValue( OUString( "UIName" )) >>= aUIName;
+            xPropSet->getPropertyValue("UIName") >>= aUIName;
         }
         catch ( const UnknownPropertyException& )
         {

@@ -94,7 +94,7 @@ RootItemContainer::RootItemContainer( const Reference< XIndexAccess >& rSourceCo
         Reference< XPropertySet > xPropSet( rSourceContainer, UNO_QUERY );
         if ( xPropSet.is() )
         {
-            xPropSet->getPropertyValue( OUString( "UIName" )) >>= m_aUIName;
+            xPropSet->getPropertyValue("UIName") >>= m_aUIName;
         }
     }
     catch ( const Exception& )

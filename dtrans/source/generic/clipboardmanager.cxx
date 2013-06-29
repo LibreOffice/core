@@ -84,7 +84,7 @@ Reference< XClipboard > SAL_CALL ClipboardManager::getClipboard( const OUString&
 
     // object is disposed already
     if (rBHelper.bDisposed)
-        throw DisposedException(OUString("object is disposed."),
+        throw DisposedException("object is disposed.",
                                 static_cast < XClipboardManager * > (this));
 
     ClipboardMap::iterator iter =
@@ -105,13 +105,13 @@ void SAL_CALL ClipboardManager::addClipboard( const Reference< XClipboard >& xCl
 
     // check parameter
     if (!xClipboard.is())
-        throw IllegalArgumentException(OUString("empty reference"),
+        throw IllegalArgumentException("empty reference",
                                        static_cast < XClipboardManager * > (this), 1);
 
     // the name "default" is reserved for internal use
     OUString aName = xClipboard->getName();
     if ( m_aDefaultName == aName )
-        throw IllegalArgumentException(OUString("name reserved"),
+        throw IllegalArgumentException("name reserved",
                                        static_cast < XClipboardManager * > (this), 1);
 
     // try to add new clipboard to the list
@@ -154,7 +154,7 @@ Sequence< OUString > SAL_CALL ClipboardManager::listClipboardNames()
     MutexGuard aGuard(m_aMutex);
 
     if (rBHelper.bDisposed)
-        throw DisposedException(OUString("object is disposed."),
+        throw DisposedException("object is disposed.",
                                 static_cast < XClipboardManager * > (this));
 
     if (rBHelper.bInDispose)

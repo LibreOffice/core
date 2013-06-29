@@ -2553,7 +2553,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     // try to get the aspect when available
                     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         xShapeProps( mXShape, ::com::sun::star::uno::UNO_QUERY_THROW );
-                    xShapeProps->getPropertyValue( OUString( "Aspect" ) ) >>= nAspect;
+                    xShapeProps->getPropertyValue("Aspect") >>= nAspect;
                 }
                 catch( ::com::sun::star::uno::Exception& )
                 {}
@@ -3125,7 +3125,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         // try to get the aspect when available
                         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                             xShapeProps( mXShape, ::com::sun::star::uno::UNO_QUERY_THROW );
-                        xShapeProps->getPropertyValue( OUString( "Aspect" ) ) >>= nAspect;
+                        xShapeProps->getPropertyValue("Aspect") >>= nAspect;
                     }
                     catch( ::com::sun::star::uno::Exception& )
                     {}

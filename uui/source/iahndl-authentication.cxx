@@ -125,7 +125,7 @@ executeLoginDialog(
     }
     catch (std::bad_alloc const &)
     {
-        throw uno::RuntimeException(OUString("out of memory"),
+        throw uno::RuntimeException("out of memory",
                   uno::Reference< uno::XInterface >());
     }
 }
@@ -438,7 +438,7 @@ executeMasterPasswordDialog(
     }
     catch (std::bad_alloc const &)
     {
-        throw uno::RuntimeException(OUString("out of memory"),
+        throw uno::RuntimeException("out of memory",
                   uno::Reference< uno::XInterface >());
     }
 
@@ -558,7 +558,7 @@ executePasswordDialog(
     }
     catch (std::bad_alloc const &)
     {
-        throw uno::RuntimeException(OUString("out of memory"),
+        throw uno::RuntimeException("out of memory",
             uno::Reference< uno::XInterface>());
     }
 }

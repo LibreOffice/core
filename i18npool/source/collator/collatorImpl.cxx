@@ -153,7 +153,7 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
         }
     }
     Reference < XInterface > xI =
-        m_xContext->getServiceManager()->createInstanceWithContext( OUString("com.sun.star.i18n.Collator_") + serviceName, m_xContext );
+        m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.i18n.Collator_" + serviceName, m_xContext );
 
     if (xI.is()) {
         Reference < XCollator > xC;

@@ -2868,7 +2868,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             {
                 try
                 {
-                    Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
+                    Any aValue = xPropSet->getPropertyValue("LayoutManager");
                     aValue >>= xLayoutManager;
                 }
                 catch ( Exception& )
@@ -2922,7 +2922,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                     {
                         try
                         {
-                            Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
+                            Any aValue = xPropSet->getPropertyValue("LayoutManager");
                             aValue >>= xLayoutManager;
                         }
                         catch ( Exception& )

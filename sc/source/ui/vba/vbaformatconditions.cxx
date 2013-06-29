@@ -203,7 +203,7 @@ ScVbaFormatConditions::notifyRange() throw ( script::BasicErrorException )
 {
     try
     {
-        mxParentRangePropertySet->setPropertyValue( OUString("ConditionalFormat"), uno::makeAny( mxSheetConditionalEntries ));
+        mxParentRangePropertySet->setPropertyValue("ConditionalFormat", uno::makeAny( mxSheetConditionalEntries ));
     }
     catch (uno::Exception& )
     {

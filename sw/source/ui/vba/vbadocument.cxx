@@ -326,7 +326,7 @@ void SAL_CALL SwVbaDocument::setUpdateStylesOnOpen( ::sal_Bool /*_updatestyleson
     // check this property only in default paragraph style
     sal_Bool IsAutoHyphenation = sal_False;
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
-    xParaProps->getPropertyValue( OUString("ParaIsHyphenation") ) >>= IsAutoHyphenation;
+    xParaProps->getPropertyValue("ParaIsHyphenation") >>= IsAutoHyphenation;
     return IsAutoHyphenation;
 }
 
@@ -334,7 +334,7 @@ void SAL_CALL SwVbaDocument::setAutoHyphenation( ::sal_Bool _autohyphenation ) t
 {
     //TODO
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
-    xParaProps->setPropertyValue( OUString("ParaIsHyphenation"), uno::makeAny( _autohyphenation ) );
+    xParaProps->setPropertyValue("ParaIsHyphenation", uno::makeAny( _autohyphenation ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaDocument::getHyphenationZone() throw (uno::RuntimeException)
@@ -353,7 +353,7 @@ void SAL_CALL SwVbaDocument::setHyphenationZone( ::sal_Int32 /*_hyphenationzone*
     //TODO
     sal_Int16 nHyphensLimit = 0;
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
-    xParaProps->getPropertyValue( OUString("ParaHyphenationMaxHyphens") ) >>= nHyphensLimit;
+    xParaProps->getPropertyValue("ParaHyphenationMaxHyphens") >>= nHyphensLimit;
     return nHyphensLimit;
 }
 
@@ -361,7 +361,7 @@ void SAL_CALL SwVbaDocument::setConsecutiveHyphensLimit( ::sal_Int32 _consecutiv
 {
     sal_Int16 nHyphensLimit = static_cast< sal_Int16 >( _consecutivehyphenslimit );
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
-    xParaProps->setPropertyValue( OUString("ParaHyphenationMaxHyphens"), uno::makeAny( nHyphensLimit ) );
+    xParaProps->setPropertyValue("ParaHyphenationMaxHyphens", uno::makeAny( nHyphensLimit ) );
 }
 
 void SAL_CALL SwVbaDocument::Protect( ::sal_Int32 /*Type*/, const uno::Any& /*NOReset*/, const uno::Any& /*Password*/, const uno::Any& /*UseIRM*/, const uno::Any& /*EnforceStyleLock*/ ) throw (uno::RuntimeException)
@@ -459,7 +459,7 @@ SwVbaDocument::getValue( const OUString& aPropertyName ) throw (beans::UnknownPr
     uno::Reference< drawing::XControlShape > xControlShape( getControlShape( aPropertyName ), uno::UNO_QUERY_THROW );
 
     uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext( OUString( "ooo.vba.ControlProvider" ), mxContext ), uno::UNO_QUERY_THROW );
+    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext("ooo.vba.ControlProvider", mxContext ), uno::UNO_QUERY_THROW );
     uno::Reference< msforms::XControl > xControl( xControlProvider->createControl(  xControlShape, getModel() ) );
     return uno::makeAny( xControl );
 }

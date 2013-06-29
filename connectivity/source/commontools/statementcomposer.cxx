@@ -148,12 +148,12 @@ namespace dbtools
 
                         //  a native query ?
                         sal_Bool bQueryEscapeProcessing = sal_False;
-                        xQuery->getPropertyValue( OUString( "EscapeProcessing" ) ) >>= bQueryEscapeProcessing;
+                        xQuery->getPropertyValue("EscapeProcessing") >>= bQueryEscapeProcessing;
                         if ( !bQueryEscapeProcessing )
                             break;
 
                         // the command used by the query
-                        xQuery->getPropertyValue( OUString( "Command" ) ) >>= sStatement;
+                        xQuery->getPropertyValue("Command") >>= sStatement;
                         if ( sStatement.isEmpty() )
                             break;
 
@@ -161,7 +161,7 @@ namespace dbtools
                         Reference< XMultiServiceFactory > xFactory( _rData.xConnection, UNO_QUERY_THROW );
                         ::utl::SharedUNOComponent< XSingleSelectQueryComposer > xComposer;
                         xComposer.set(
-                            xFactory->createInstance( OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ),
+                            xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"),
                             UNO_QUERY_THROW
                         );
 
@@ -188,7 +188,7 @@ namespace dbtools
                         if ( bApplyFilter )
                         {
                             OUString sFilter;
-                            OSL_VERIFY( xQuery->getPropertyValue( OUString( "Filter" ) ) >>= sFilter );
+                            OSL_VERIFY( xQuery->getPropertyValue("Filter") >>= sFilter );
                             xComposer->setFilter( sFilter );
                         }
 
@@ -206,7 +206,7 @@ namespace dbtools
                 {
                     // create an composer
                     Reference< XMultiServiceFactory > xFactory( _rData.xConnection, UNO_QUERY_THROW );
-                    Reference< XSingleSelectQueryComposer > xComposer( xFactory->createInstance( OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ),
+                    Reference< XSingleSelectQueryComposer > xComposer( xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"),
                         UNO_QUERY_THROW );
                     xComposer->setElementaryQuery( sStatement );
 

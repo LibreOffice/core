@@ -1377,7 +1377,7 @@ sal_Bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const OUString&
                 uno::UNO_QUERY_THROW );
 
         OUString aTempURL;
-        uno::Any aUrl = xTempFile->getPropertyValue( OUString("Uri") );
+        uno::Any aUrl = xTempFile->getPropertyValue("Uri");
         aUrl >>= aTempURL;
 
         uno::Reference< io::XStream > xStream( xTempFile, uno::UNO_QUERY_THROW );
@@ -1835,14 +1835,14 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         if ( !xApplConfig.is() )
             throw uno::RuntimeException();
 
-        xApplConfig->getByName( OUString( "ooSetupFactoryActualTemplateFilter"  ) ) >>= aFilterName;
+        xApplConfig->getByName("ooSetupFactoryActualTemplateFilter") >>= aFilterName;
         if ( aFilterName.isEmpty() )
             throw uno::RuntimeException();
 
         // find the related type name
         OUString aTypeName;
         uno::Reference< container::XNameAccess > xFilterFactory(
-            xFactory->createInstance( OUString("com.sun.star.document.FilterFactory") ),
+            xFactory->createInstance("com.sun.star.document.FilterFactory"),
             uno::UNO_QUERY_THROW );
 
         uno::Sequence< beans::PropertyValue > aFilterData;
@@ -1861,16 +1861,16 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
             mxType.is() ?
                 uno::Reference< container::XNameAccess >( mxType, uno::UNO_QUERY_THROW ) :
                 uno::Reference< container::XNameAccess >(
-                    xFactory->createInstance( OUString("com.sun.star.document.TypeDetection") ),
+                    xFactory->createInstance("com.sun.star.document.TypeDetection"),
                     uno::UNO_QUERY_THROW );
 
         SequenceAsHashMap aTypeProps( xTypeDetection->getByName( aTypeName ) );
         uno::Sequence< OUString > aAllExt =
-            aTypeProps.getUnpackedValueOrDefault( OUString("Extensions"), Sequence< OUString >() );
+            aTypeProps.getUnpackedValueOrDefault("Extensions", Sequence< OUString >() );
         if ( !aAllExt.getLength() )
             throw uno::RuntimeException();
 
-        OUString aMediaType = aTypeProps.getUnpackedValueOrDefault( OUString("MediaType"), OUString() );
+        OUString aMediaType = aTypeProps.getUnpackedValueOrDefault("MediaType", OUString() );
         OUString aExt = aAllExt[0];
 
         if ( aMediaType.isEmpty() || aExt.isEmpty() )

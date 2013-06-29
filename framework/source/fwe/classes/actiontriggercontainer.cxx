@@ -81,7 +81,7 @@ throw ( ::com::sun::star::uno::Exception, RuntimeException)
     else if ( aServiceSpecifier.equalsAscii( SERVICENAME_ACTIONTRIGGERSEPARATOR ))
         return (OWeakObject *)( new ActionTriggerSeparatorPropertySet());
     else
-        throw com::sun::star::uno::RuntimeException( OUString( "Unknown service specifier!" ), (OWeakObject *)this );
+        throw com::sun::star::uno::RuntimeException("Unknown service specifier!", (OWeakObject *)this );
 }
 
 

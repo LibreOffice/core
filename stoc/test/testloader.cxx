@@ -103,7 +103,7 @@ SAL_IMPLEMENT_MAIN()
     OSL_ENSURE( xServInfo.is(), "testloader error4");
 
     OSL_ENSURE( xServInfo->getImplementationName() == "com.sun.star.comp.stoc.DLLComponentLoader", "testloader error5");
-    OSL_ENSURE( xServInfo->supportsService(OUString( "com.sun.star.loader.SharedLibrary") ), "testloader error6");
+    OSL_ENSURE( xServInfo->supportsService("com.sun.star.loader.SharedLibrary"), "testloader error6");
     OSL_ENSURE( xServInfo->getSupportedServiceNames().getLength() == 1, "testloader error7");
 
     xIFace.clear();

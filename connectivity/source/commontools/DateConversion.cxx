@@ -219,7 +219,7 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
         {
             // get the null date
             Date aDate;
-            xSupplier->getNumberFormatSettings()->getPropertyValue(OUString("NullDate")) >>= aDate;
+            xSupplier->getNumberFormatSettings()->getPropertyValue("NullDate") >>= aDate;
             return aDate;
         }
         catch ( const Exception&  )
@@ -459,7 +459,7 @@ OUString DBTypeConversion::getFormattedValue(const Reference<XColumn>& xVariant,
                          {
                              Reference< XNumberFormatsSupplier > xSupplier( xFormatter->getNumberFormatsSupplier(), UNO_SET_THROW );
                              Reference< XPropertySet > xFormatterSettings( xSupplier->getNumberFormatSettings(), UNO_SET_THROW );
-                             OSL_VERIFY( xFormatterSettings->getPropertyValue( OUString( "NullDate" ) ) >>= aFormatterNullDate );
+                             OSL_VERIFY( xFormatterSettings->getPropertyValue("NullDate") >>= aFormatterNullDate );
                          }
                          catch( const Exception& )
                          {

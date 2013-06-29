@@ -145,7 +145,7 @@ sal_Int32 PipeClientMain::run( const Sequence< OUString > & aArguments ) throw (
     {
         try {
             Reference < XInterface > r =
-                m_xSMgr->createInstance( OUString("com.sun.star.bridge.UnoUrlResolver") );
+                m_xSMgr->createInstance("com.sun.star.bridge.UnoUrlResolver");
             Reference < XUnoUrlResolver > rResolver( r , UNO_QUERY );
 
             // connect to the remote process and retrieve the initial object

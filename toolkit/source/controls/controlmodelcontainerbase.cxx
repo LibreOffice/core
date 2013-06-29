@@ -395,7 +395,7 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const OUStrin
         Reference< XAggregation > xAgg( xCloneAccess, UNO_QUERY );
         if ( xAgg.is() )
         {
-            if ( xSI->supportsService(OUString("com.sun.star.awt.UnoControlModel")) )
+            if ( xSI->supportsService("com.sun.star.awt.UnoControlModel") )
             {
                 // release 3 of the 4 references we have to the object
                 xAgg.clear();
@@ -991,8 +991,8 @@ void ControlModelContainerBase::implUpdateGroupStructure()
 #if OSL_DEBUG_LEVEL > 1
                 Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
                 OUString sLabel;
-                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( OUString("Label") ) )
-                    xModelProps->getPropertyValue( OUString("Label") ) >>= sLabel;
+                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName("Label") )
+                    xModelProps->getPropertyValue("Label") >>= sLabel;
                 aCurrentGroupLabels.push_back( sLabel );
 #endif
             }
@@ -1024,8 +1024,8 @@ void ControlModelContainerBase::implUpdateGroupStructure()
 #if OSL_DEBUG_LEVEL > 1
                     Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
                     OUString sLabel;
-                    if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( OUString("Label") ) )
-                        xModelProps->getPropertyValue( OUString("Label") ) >>= sLabel;
+                    if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName("Label") )
+                        xModelProps->getPropertyValue("Label") >>= sLabel;
                     aCurrentGroupLabels.push_back( sLabel );
 #endif
                     continue;
@@ -1054,8 +1054,8 @@ void ControlModelContainerBase::implUpdateGroupStructure()
 #if OSL_DEBUG_LEVEL > 1
                 Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
                 OUString sLabel;
-                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( OUString("Label") ) )
-                    xModelProps->getPropertyValue( OUString("Label") ) >>= sLabel;
+                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName("Label") )
+                    xModelProps->getPropertyValue("Label") >>= sLabel;
                 aCurrentGroupLabels.push_back( sLabel );
 #endif
             }
@@ -1418,10 +1418,10 @@ void ControlContainerBase::ImplSetPosSize( Reference< XControl >& rxCtrl )
     Reference< XPropertySet > xP( rxCtrl->getModel(), UNO_QUERY );
 
     sal_Int32 nX = 0, nY = 0, nWidth = 0, nHeight = 0;
-    xP->getPropertyValue( OUString( "PositionX" ) ) >>= nX;
-    xP->getPropertyValue( OUString( "PositionY" ) ) >>= nY;
-    xP->getPropertyValue( OUString( "Width" ) ) >>= nWidth;
-    xP->getPropertyValue( OUString( "Height" ) ) >>= nHeight;
+    xP->getPropertyValue("PositionX") >>= nX;
+    xP->getPropertyValue("PositionY") >>= nY;
+    xP->getPropertyValue("Width") >>= nWidth;
+    xP->getPropertyValue("Height") >>= nHeight;
     MapMode aMode( MAP_APPFONT );
     OutputDevice*pOutDev = Application::GetDefaultDevice();
     if ( pOutDev )

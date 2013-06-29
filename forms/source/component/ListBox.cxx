@@ -765,7 +765,7 @@ namespace frm
                         {
                             // otherwise look for the alias
                             Reference< XColumnsSupplier > xSupplyFields;
-                            xFormProps->getPropertyValue(OUString("SingleSelectQueryComposer")) >>= xSupplyFields;
+                            xFormProps->getPropertyValue("SingleSelectQueryComposer") >>= xSupplyFields;
 
                             // search the field
                             DBG_ASSERT(xSupplyFields.is(), "OListBoxModel::loadData : invalid query composer !");
@@ -891,7 +891,7 @@ namespace frm
                         try
                         {
                             Reference< XPropertySet > xBoundField( xColumns->getByIndex( *aBoundColumn ), UNO_QUERY_THROW );
-                            OSL_VERIFY( xBoundField->getPropertyValue( OUString("Type") ) >>= m_nBoundColumnType );
+                            OSL_VERIFY( xBoundField->getPropertyValue("Type") >>= m_nBoundColumnType );
                         }
                         catch( const Exception& )
                         {

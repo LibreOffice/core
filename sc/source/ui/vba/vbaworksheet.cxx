@@ -362,7 +362,7 @@ ScVbaWorksheet::getEnableSelection() throw (uno::RuntimeException)
         return excel::XlEnableSelection::xlNoSelection;
     }
     else
-        throw uno::RuntimeException(OUString( "Sheet Name does not exist. "),
+        throw uno::RuntimeException("Sheet Name does not exist. ",
                                 uno::Reference< XInterface >() );
 }
 
@@ -403,7 +403,7 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection ) throw (uno::RuntimeEx
         }
     }
     else
-        throw uno::RuntimeException(OUString( "Sheet Name does not exist. "),
+        throw uno::RuntimeException("Sheet Name does not exist. ",
                                 uno::Reference< XInterface >() );
 
 }
@@ -802,7 +802,7 @@ ScVbaWorksheet::Names( const css::uno::Any& aIndex ) throw (uno::RuntimeExceptio
     // #163498# initialize Names object with correct parent (this worksheet)
     // TODO: real sheet-local names...
     uno::Reference< beans::XPropertySet > xProps( mxModel, uno::UNO_QUERY_THROW );
-    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue( OUString("NamedRanges") ), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue("NamedRanges"), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, mxModel ) );
     if ( aIndex.hasValue() )
         return uno::Any( xNames->Item( aIndex, uno::Any() ) );
@@ -950,7 +950,7 @@ ScVbaWorksheet::getValue( const OUString& aPropertyName ) throw (beans::UnknownP
     uno::Reference< drawing::XControlShape > xControlShape( getControlShape( aPropertyName ), uno::UNO_QUERY_THROW );
 
     uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext( OUString( "ooo.vba.ControlProvider" ), mxContext ), uno::UNO_QUERY_THROW );
+    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext("ooo.vba.ControlProvider", mxContext ), uno::UNO_QUERY_THROW );
     uno::Reference< msforms::XControl > xControl( xControlProvider->createControl(  xControlShape, getModel() ) );
     return uno::makeAny( xControl );
 }
@@ -1062,7 +1062,7 @@ OUString SAL_CALL
 ScVbaWorksheet::getCodeName() throw (css::uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xSheetProp( mxSheet, uno::UNO_QUERY_THROW );
-    return xSheetProp->getPropertyValue( OUString( "CodeName" ) ).get< OUString >();
+    return xSheetProp->getPropertyValue("CodeName").get< OUString >();
 }
 
 sal_Int16

@@ -341,7 +341,7 @@ sal_Bool OFileAccess::isReadOnly( const OUString& FileURL )
 {
     INetURLObject aURLObj( FileURL, INET_PROT_FILE );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
-    Any aRetAny = aCnt.getPropertyValue( OUString( "IsReadOnly"  ) );
+    Any aRetAny = aCnt.getPropertyValue("IsReadOnly");
     sal_Bool bRet = sal_False;
     aRetAny >>= bRet;
     return bRet;
@@ -354,7 +354,7 @@ void OFileAccess::setReadOnly( const OUString& FileURL, sal_Bool bReadOnly )
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
     Any aAny;
     aAny <<= bReadOnly;
-    aCnt.setPropertyValue( OUString( "IsReadOnly"  ), aAny );
+    aCnt.setPropertyValue("IsReadOnly", aAny );
 }
 
 void OFileAccess::createFolder( const OUString& NewFolderURL )
@@ -457,7 +457,7 @@ DateTime OFileAccess::getDateTimeModified( const OUString& FileURL )
 
     Reference< XCommandEnvironment > aCmdEnv;
     ucbhelper::Content aYoung( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, comphelper::getProcessComponentContext() );
-    aYoung.getPropertyValue( OUString("DateModified" ) ) >>= aDateTime;
+    aYoung.getPropertyValue("DateModified") >>= aDateTime;
     return aDateTime;
 }
 
@@ -758,7 +758,7 @@ sal_Bool OFileAccess::isHidden( const OUString& FileURL )
 {
     INetURLObject aURLObj( FileURL, INET_PROT_FILE );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
-    Any aRetAny = aCnt.getPropertyValue( OUString( "IsHidden"  ) );
+    Any aRetAny = aCnt.getPropertyValue("IsHidden");
     sal_Bool bRet = sal_False;
     aRetAny >>= bRet;
     return bRet;
@@ -771,7 +771,7 @@ void OFileAccess::setHidden( const OUString& FileURL, sal_Bool bHidden )
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
     Any aAny;
     aAny <<= bHidden;
-    aCnt.setPropertyValue( OUString( "IsHidden"  ), aAny );
+    aCnt.setPropertyValue("IsHidden", aAny );
 }
 
 //==================================================================================================

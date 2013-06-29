@@ -1452,9 +1452,9 @@ bool XMLTransformerBase::isWriter() const
 {
     Reference< XServiceInfo > xSI( mxModel, UNO_QUERY );
     return  xSI.is() &&
-        (   xSI->supportsService( OUString( "com.sun.star.text.TextDocument"  ) ) ||
-            xSI->supportsService( OUString( "com.sun.star.text.WebDocument"  ) ) ||
-            xSI->supportsService( OUString( "com.sun.star.text.GlobalDocument"  ) ) );
+        (   xSI->supportsService("com.sun.star.text.TextDocument") ||
+            xSI->supportsService("com.sun.star.text.WebDocument") ||
+            xSI->supportsService("com.sun.star.text.GlobalDocument") );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

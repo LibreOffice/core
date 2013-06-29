@@ -102,7 +102,7 @@ namespace
         try
         {
             Reference< XPropertySetInfo > const xPSI( i_parentModel->getPropertySetInfo() );
-            bool const isGeometryControlModel = xPSI.is() && xPSI->hasPropertyByName( OUString( "PositionX" ) );
+            bool const isGeometryControlModel = xPSI.is() && xPSI->hasPropertyByName("PositionX");
 
             Reference< XInterface > xInstance;
             if ( isGeometryControlModel )

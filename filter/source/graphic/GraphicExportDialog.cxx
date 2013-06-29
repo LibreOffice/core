@@ -126,15 +126,15 @@ void GraphicExportDialog::setSourceDocument( const Reference<XComponent>& xDocum
 
     if ( xServiceInfo.is() )
     {
-        if ( xServiceInfo->supportsService( OUString( "com.sun.star.presentation.PresentationDocument" ) ) )
+        if ( xServiceInfo->supportsService("com.sun.star.presentation.PresentationDocument") )
         {
             aConfigPath = OUString( "Office.Impress/Layout/Other/MeasureUnit" );
         }
-        else if ( xServiceInfo->supportsService( OUString( "com.sun.star.drawing.DrawingDocument" ) ) )
+        else if ( xServiceInfo->supportsService("com.sun.star.drawing.DrawingDocument") )
         {
             aConfigPath = OUString( "Office.Draw/Layout/Other/MeasureUnit" );
         }
-        else if ( xServiceInfo->supportsService( OUString( "com.sun.star.text.TextDocument" ) ) )
+        else if ( xServiceInfo->supportsService("com.sun.star.text.TextDocument") )
         {
             aConfigPath = OUString( "Office.Writer/Layout/Other/MeasureUnit" );
         }

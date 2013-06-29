@@ -251,7 +251,7 @@ namespace rptui
         if ( !m_xComponent.is() )
             try
             {
-                m_xComponent.set(m_xContext->getServiceManager()->createInstanceWithContext(OUString("com.sun.star.form.inspection.DefaultFormComponentInspectorModel"),m_xContext),UNO_QUERY_THROW);
+                m_xComponent.set(m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.form.inspection.DefaultFormComponentInspectorModel",m_xContext),UNO_QUERY_THROW);
             }
             catch(const Exception &)
             {

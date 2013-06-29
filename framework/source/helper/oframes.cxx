@@ -262,7 +262,7 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsExce
 
       sal_uInt32 nCount = m_pFrameContainer->getCount();
       if ( nIndex < 0 || ( sal::static_int_cast< sal_uInt32 >( nIndex ) >= nCount ))
-          throw IndexOutOfBoundsException( OUString("OFrames::getByIndex - Index out of bounds"),
+          throw IndexOutOfBoundsException("OFrames::getByIndex - Index out of bounds",
                                            (OWeakObject *)this );
 
     // Set default return value.

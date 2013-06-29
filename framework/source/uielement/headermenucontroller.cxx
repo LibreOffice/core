@@ -104,7 +104,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
         try
         {
             Reference< XNameContainer > xNameContainer;
-            if ( xStyleFamilies->getByName( OUString(  "PageStyles" )) >>= xNameContainer )
+            if ( xStyleFamilies->getByName("PageStyles") >>= xNameContainer )
             {
                 Sequence< OUString > aSeqNames = xNameContainer->getElementNames();
 

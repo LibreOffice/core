@@ -141,7 +141,7 @@ namespace dbtools
                 {
                     Reference< XPropertySet > xDataSource( xConnectionAsChild->getParent(), UNO_QUERY_THROW );
                     Reference< XPropertySet > xDataSourceSettings(
-                        xDataSource->getPropertyValue( OUString( "Settings" ) ),
+                        xDataSource->getPropertyValue("Settings"),
                         UNO_QUERY_THROW );
 
                     _out_setting = xDataSourceSettings->getPropertyValue( OUString::createFromAscii( _asciiName ) );

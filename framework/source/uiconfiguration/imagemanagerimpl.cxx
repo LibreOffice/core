@@ -773,7 +773,7 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
             if ( xPropSet.is() )
             {
                 long nOpenMode = 0;
-                if ( xPropSet->getPropertyValue( OUString( "OpenMode" )) >>= nOpenMode )
+                if ( xPropSet->getPropertyValue("OpenMode") >>= nOpenMode )
                     m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
             }
         }

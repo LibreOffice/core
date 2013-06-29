@@ -231,7 +231,7 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
     uno::Reference< beans::XPropertySet > xStorProps( xStorage, uno::UNO_QUERY_THROW );
 
     OUString aMediaType;
-    xStorProps->getPropertyValue( OUString( "MediaType" ) ) >>= aMediaType;
+    xStorProps->getPropertyValue("MediaType") >>= aMediaType;
 
     sal_Int32 nResult = 0;
 

@@ -1196,7 +1196,7 @@ sal_Bool GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, s
         ::ucbhelper::Content         aCnt( rFileOrDirURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         sal_Bool        bFolder = false;
 
-        aCnt.getPropertyValue( OUString("IsFolder") ) >>= bFolder;
+        aCnt.getPropertyValue("IsFolder") >>= bFolder;
 
         if( bFolder )
         {

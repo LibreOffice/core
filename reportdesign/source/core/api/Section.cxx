@@ -317,7 +317,7 @@ void OSection::checkNotPageHeaderFooter()
 void SAL_CALL OSection::setForceNewPage( ::sal_Int16 _forcenewpage ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     if ( _forcenewpage < report::ForceNewPage::NONE || _forcenewpage > report::ForceNewPage::BEFORE_AFTER_SECTION )
-        throwIllegallArgumentException(OUString("com::sun::star::report::ForceNewPage")
+        throwIllegallArgumentException("com::sun::star::report::ForceNewPage"
                         ,*this
                         ,1
                         ,m_xContext);
@@ -335,7 +335,7 @@ void SAL_CALL OSection::setForceNewPage( ::sal_Int16 _forcenewpage ) throw (lang
 void SAL_CALL OSection::setNewRowOrCol( ::sal_Int16 _newroworcol ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     if ( _newroworcol < report::ForceNewPage::NONE || _newroworcol > report::ForceNewPage::BEFORE_AFTER_SECTION )
-        throwIllegallArgumentException(OUString("com::sun::star::report::ForceNewPage")
+        throwIllegallArgumentException("com::sun::star::report::ForceNewPage"
                         ,*this
                         ,1
                         ,m_xContext);
@@ -450,19 +450,19 @@ uno::Reference< report::XReportComponent > SAL_CALL OSection::createReportCompon
     switch( aFind - aRet.begin()  )
     {
         case 0:
-            xRet.set(xFac->createInstance(OUString("com.sun.star.form.component.FixedText")),uno::UNO_QUERY);
+            xRet.set(xFac->createInstance("com.sun.star.form.component.FixedText"),uno::UNO_QUERY);
             break;
         case 1:
-            xRet.set(xFac->createInstance(OUString("com.sun.star.awt.UnoControlFixedLineModel")),uno::UNO_QUERY);
+            xRet.set(xFac->createInstance("com.sun.star.awt.UnoControlFixedLineModel"),uno::UNO_QUERY);
             break;
         case 2:
-            xRet.set(xFac->createInstance(OUString("com.sun.star.form.component.DatabaseImageControl")),uno::UNO_QUERY);
+            xRet.set(xFac->createInstance("com.sun.star.form.component.DatabaseImageControl"),uno::UNO_QUERY);
             break;
         case 3:
-            xRet.set(xFac->createInstance(OUString("com.sun.star.form.component.FormattedField")),uno::UNO_QUERY);
+            xRet.set(xFac->createInstance("com.sun.star.form.component.FormattedField"),uno::UNO_QUERY);
             break;
         case 4:
-            xRet.set(xFac->createInstance(OUString("com.sun.star.drawing.ControlShape")),uno::UNO_QUERY);
+            xRet.set(xFac->createInstance("com.sun.star.drawing.ControlShape"),uno::UNO_QUERY);
             break;
         default:
             break;

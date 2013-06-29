@@ -123,7 +123,7 @@ Reference< XLayoutManager > ToolboxController::getLayoutManager() const
     {
         try
         {
-            xLayoutManager.set(xPropSet->getPropertyValue( OUString( "LayoutManager" )),UNO_QUERY);
+            xLayoutManager.set(xPropSet->getPropertyValue("LayoutManager"),UNO_QUERY);
         }
         catch ( Exception& )
         {

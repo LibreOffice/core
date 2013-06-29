@@ -156,7 +156,7 @@ namespace toolkit
                 if ( i_graphic.is() )
                 {
                     const Reference< XPropertySet > xGraphicProps( i_graphic, UNO_QUERY_THROW );
-                    OSL_VERIFY( xGraphicProps->getPropertyValue( OUString( "SizePixel" ) ) >>= aSizePixel );
+                    OSL_VERIFY( xGraphicProps->getPropertyValue("SizePixel") >>= aSizePixel );
                 }
             }
             catch( const Exception& )
