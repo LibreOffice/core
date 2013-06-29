@@ -224,8 +224,8 @@ void RegionBand::load(SvStream& rIStrm)
         // insert new band or new separation?
         if(STREAMENTRY_BANDHEADER == (StreamEntryType)nTmp16)
         {
-            long nYTop;
-            long nYBottom;
+            sal_Int32 nYTop(0);
+            sal_Int32 nYBottom(0);
 
             rIStrm >> nYTop;
             rIStrm >> nYBottom;
@@ -248,8 +248,8 @@ void RegionBand::load(SvStream& rIStrm)
         }
         else
         {
-            long nXLeft;
-            long nXRight;
+            sal_Int32 nXLeft(0);
+            sal_Int32 nXRight(0);
 
             rIStrm >> nXLeft;
             rIStrm >> nXRight;
@@ -284,8 +284,8 @@ void RegionBand::save(SvStream& rOStrm) const
     {
         // put boundaries
         rOStrm << (sal_uInt16)STREAMENTRY_BANDHEADER;
-        rOStrm << pBand->mnYTop;
-        rOStrm << pBand->mnYBottom;
+        rOStrm << static_cast<sal_Int32>(pBand->mnYTop);
+        rOStrm << static_cast<sal_Int32>(pBand->mnYBottom);
 
         // put separations of current band
         ImplRegionBandSep* pSep = pBand->mpFirstSep;
@@ -294,8 +294,8 @@ void RegionBand::save(SvStream& rOStrm) const
         {
             // put separation
             rOStrm << (sal_uInt16)STREAMENTRY_SEPARATION;
-            rOStrm << pSep->mnXLeft;
-            rOStrm << pSep->mnXRight;
+            rOStrm << static_cast<sal_Int32>(pSep->mnXLeft);
+            rOStrm << static_cast<sal_Int32>(pSep->mnXRight);
 
             // next separation from current band
             pSep = pSep->mpNextSep;
