@@ -1207,16 +1207,20 @@ void Converter::convertDateTime(
     const sal_Unicode zero('0');
     const sal_Unicode tee ('T');
 
-    if (i_rDateTime.Year < 1000) {
+    sal_Int32 const nYear(abs(i_rDateTime.Year));
+    if (i_rDateTime.Year < 0) {
+        i_rBuffer.append(dash); // negative
+    }
+    if (nYear < 1000) {
         i_rBuffer.append(zero);
     }
-    if (i_rDateTime.Year < 100) {
+    if (nYear < 100) {
         i_rBuffer.append(zero);
     }
-    if (i_rDateTime.Year < 10) {
+    if (nYear < 10) {
         i_rBuffer.append(zero);
     }
-    i_rBuffer.append( static_cast<sal_Int32>(i_rDateTime.Year)  ).append(dash);
+    i_rBuffer.append(nYear).append(dash);
     if( i_rDateTime.Month < 10 ) {
         i_rBuffer.append(zero);
     }
@@ -1330,6 +1334,7 @@ bool Converter::convertDateOrDateTime(
                 bool & rbDateTime, const OUString & rString )
 {
     bool bSuccess = true;
+    bool isNegative(false);
 
     const OUString string = rString.trim().toAsciiUpperCase();
     sal_Int32 nPos(0);
@@ -1337,7 +1342,7 @@ bool Converter::convertDateOrDateTime(
     {
         if (sal_Unicode('-') == string[nPos])
         {
-            //Negative Number
+            isNegative = true;
             ++nPos;
         }
     }
@@ -1530,8 +1535,8 @@ bool Converter::convertDateOrDateTime(
     {
         if (bHaveTime) // time is optional
         {
-            // util::DateTime does not support negative years!
-            rDateTime.Year = static_cast<sal_uInt16>(nYear);
+            rDateTime.Year =
+                ((isNegative) ? (-1) : (+1)) * static_cast<sal_Int16>(nYear);
             rDateTime.Month = static_cast<sal_uInt16>(nMonth);
             rDateTime.Day = static_cast<sal_uInt16>(nDay);
             rDateTime.Hours = static_cast<sal_uInt16>(nHours);
@@ -1542,7 +1547,8 @@ bool Converter::convertDateOrDateTime(
         }
         else
         {
-            rDate.Year = static_cast<sal_uInt16>(nYear);
+            rDate.Year =
+                ((isNegative) ? (-1) : (+1)) * static_cast<sal_Int16>(nYear);
             rDate.Month = static_cast<sal_uInt16>(nMonth);
             rDate.Day = static_cast<sal_uInt16>(nDay);
             rbDateTime = false;
