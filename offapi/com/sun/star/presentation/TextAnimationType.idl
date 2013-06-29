@@ -24,12 +24,12 @@
 
 
 /** Defines how a target ::com::sun::star::text::XTextRange
-    is animated inside an ::com::sun::star::animations::IterateContainer.
+    is animated inside an ::com::sun::star::animations::XIterateContainer.
     <br>
     This is stored inside the attribute
-    ::com::sun::star::animations::IterateContainer::IterateType.
+    ::com::sun::star::animations::XIterateContainer::IterateType.
     <br>
-    @see ::com::sun::star::animations::IterateContainer
+    @see ::com::sun::star::animations::XIterateContainer
 */
 constants TextAnimationType
 {

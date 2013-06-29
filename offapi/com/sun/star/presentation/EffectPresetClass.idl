@@ -31,7 +31,7 @@
     This does not manipulate the timing or synchronization.
     It can be used to quickly identify preset animations inside an animation hierarchy.
 
-    @see ::com::sun::star::animations::AnimationNode
+    @see ::com::sun::star::animations::XAnimationNode
 */
 constants EffectPresetClass
 {

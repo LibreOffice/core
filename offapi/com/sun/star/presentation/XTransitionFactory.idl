@@ -47,10 +47,10 @@ interface XTransitionFactory : ::com::sun::star::uno::XInterface
     /** Actually create a transition for the given transition id
 
         @param transitionType
-        Main type of transition (@see ::com::sun::star::animation::TransitionType)
+        Main type of transition (@see ::com::sun::star::animations::TransitionType)
 
         @param transitionSubType
-        Subtype for the transition (@see ::com::sun::star::animation::TransitionSubType)
+        Subtype for the transition (@see ::com::sun::star::animations::TransitionSubType)
 
         @param view
         Slide show view to display on

@@ -35,8 +35,6 @@ service UpdateRequiredDialog : com::sun::star::ui::dialogs::XExecutableDialog
     /** Create a GUI using the specific parent window and focus on the
         given context.
 
-        @param xParent
-               parent window
     */
     create();
 };
