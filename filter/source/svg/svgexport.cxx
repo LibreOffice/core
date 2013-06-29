@@ -38,6 +38,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/numitem.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <i18nlangtag/lang.h>
 #include <svl/zforlist.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
@@ -317,10 +318,41 @@ SVGExport::SVGExport(
                    xContext,
                    xmloff::token::XML_TOKEN_INVALID,
                    EXPORT_META|EXPORT_PRETTY )
-        , mrFilterData( rFilterData )
 {
     SetDocHandler( rxHandler );
     GetDocHandler()->startDocument();
+
+    // initializing filter settings from filter data
+    comphelper::SequenceAsHashMap aFilterDataHashMap = rFilterData;
+
+    // TinyProfile
+    mbIsUseTinyProfile = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_TINYPROFILE, sal_True);
+
+    // Font Embedding
+    comphelper::SequenceAsHashMap::const_iterator iter = aFilterDataHashMap.find(SVG_PROP_EMBEDFONTS);
+    if(iter==aFilterDataHashMap.end())
+    {
+        const char* pSVGDisableFontEmbedding = getenv( "SVG_DISABLE_FONT_EMBEDDING" );
+        OUString aEmbedFontEnv("${SVG_DISABLE_FONT_EMBEDDING}");
+        rtl::Bootstrap::expandMacros(aEmbedFontEnv);
+        mbIsEmbedFonts=pSVGDisableFontEmbedding ? sal_False : (
+            aEmbedFontEnv.getLength() ? sal_False : sal_True);
+    }
+    else
+    {
+        if(!(iter->second >>= mbIsEmbedFonts))
+            mbIsEmbedFonts = sal_False;
+    }
+
+    // Native Decoration
+    mbIsUseNativeTextDecoration = mbIsUseTinyProfile ? sal_False : aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_NATIVEDECORATION, sal_False);
+
+    // Tiny Opacity
+    mbIsUseOpacity = mbIsUseTinyProfile ? sal_False : aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_OPACITY, sal_True);
+
+    // Positioned Characters    (Seems to be experimental, as it was always initialized with false)
+    mbIsUsePositionedCharacters = aFilterDataHashMap.getUnpackedValueOrDefault(SVG_PROP_POSITIONED_CHARACTERS, sal_False);
+
 }
 
 // -----------------------------------------------------------------------------
@@ -328,65 +360,6 @@ SVGExport::SVGExport(
 SVGExport::~SVGExport()
 {
     GetDocHandler()->endDocument();
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SVGExport::IsUseTinyProfile() const
-{
-    sal_Bool bRet = sal_False;
-
-    if( IsUsePositionedCharacters() && mrFilterData.getLength() > 0 )
-        mrFilterData[ 0 ].Value >>= bRet;
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SVGExport::IsEmbedFonts() const
-{
-    sal_Bool bRet = sal_False;
-
-    if( IsUsePositionedCharacters() && mrFilterData.getLength() > 1 )
-        mrFilterData[ 1 ].Value >>= bRet;
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SVGExport::IsUseNativeTextDecoration() const
-{
-    sal_Bool bRet = !IsUseTinyProfile();
-
-    if( bRet && ( mrFilterData.getLength() > 2 ) )
-        mrFilterData[ 2 ].Value >>= bRet;
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SVGExport::IsUseOpacity() const
-{
-    sal_Bool bRet = !IsUseTinyProfile();
-
-    if( !bRet && ( mrFilterData.getLength() > 4 ) )
-        mrFilterData[ 4 ].Value >>= bRet;
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool SVGExport::IsUsePositionedCharacters() const
-{
-    sal_Bool bRet = sal_False;
-    if( mrFilterData.getLength() > 6 )
-        mrFilterData[ 6 ].Value >>= bRet;
-
-    return bRet;
 }
 
 
@@ -574,47 +547,6 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         {
             pValue[ i ].Value >>= maFilterData;
         }
-    }
-
-    // if no filter data is given use stored/prepared ones
-    if( !maFilterData.getLength() )
-    {
-        maFilterData.realloc( 6 );
-
-        maFilterData[ 0 ].Name = SVG_PROP_TINYPROFILE;
-        maFilterData[ 0 ].Value <<= (sal_Bool) sal_True;
-
-        // font embedding
-        const char* pSVGDisableFontEmbedding = getenv( "SVG_DISABLE_FONT_EMBEDDING" );
-        OUString aEmbedFontEnv("${SVG_DISABLE_FONT_EMBEDDING}");
-        rtl::Bootstrap::expandMacros(aEmbedFontEnv);
-        const bool bEmbedFonts=pSVGDisableFontEmbedding ? false : (
-            aEmbedFontEnv.getLength() ? false : true);
-
-        maFilterData[ 1 ].Name = SVG_PROP_EMBEDFONTS;
-        maFilterData[ 1 ].Value <<= (sal_Bool) (bEmbedFonts);
-
-        // Native decoration
-        maFilterData[ 2 ].Name = SVG_PROP_NATIVEDECORATION;
-        maFilterData[ 2 ].Value <<= (sal_Bool) sal_False;
-
-        // glyph placement
-        const char* pSVGGlyphPlacement = getenv( "SVG_GLYPH_PLACEMENT" );
-
-        maFilterData[ 3 ].Name = SVG_PROP_GLYPHPLACEMENT;
-
-        if( pSVGGlyphPlacement )
-            maFilterData[ 3 ].Value <<= OUString::createFromAscii( pSVGGlyphPlacement );
-        else
-            maFilterData[ 3 ].Value <<= OUString("xlist");
-
-        // Tiny Opacity
-        maFilterData[ 4 ].Name = SVG_PROP_OPACITY;
-        maFilterData[ 4 ].Value <<= (sal_Bool) sal_True;
-
-        // Tiny Gradient
-        maFilterData[ 5 ].Name = SVG_PROP_GRADIENT;
-        maFilterData[ 5 ].Value <<= (sal_Bool) sal_False;
     }
 
     if( xOStm.is() )

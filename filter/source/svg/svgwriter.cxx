@@ -3578,9 +3578,11 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
 // - SVGWriter -
 // -------------
 
-SVGWriter::SVGWriter( const Reference< XComponentContext >& rxCtx )
+SVGWriter::SVGWriter( const Sequence<Any>& args, const Reference< XComponentContext >& rxCtx )
     : mxContext(rxCtx)
 {
+    if(args.getLength()==1)
+        args[0]>>=maFilterData;
 }
 
 // -----------------------------------------------------------------------------
@@ -3600,9 +3602,7 @@ void SAL_CALL SVGWriter::write( const Reference<XDocumentHandler>& rxDocHandler,
     aMemStm >> aMtf;
 
     const Reference< XDocumentHandler > xDocumentHandler( rxDocHandler );
-    const Sequence< PropertyValue > aFilterData;
-
-    SVGExport* pWriter = new SVGExport( mxContext, xDocumentHandler, aFilterData );
+    SVGExport* pWriter = new SVGExport( mxContext, xDocumentHandler, maFilterData );
     pWriter->writeMtf( aMtf );
     delete pWriter;
 }
